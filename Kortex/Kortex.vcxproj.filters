@@ -1422,13 +1422,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\Future updates.txt">
+    <Text Include="Resources\ChangeLog EN.md">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Resources\ChangeLog RU.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="Resources\ChangeLog EN.txt">
+    <Text Include="Resources\ChangeLog RU.md">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

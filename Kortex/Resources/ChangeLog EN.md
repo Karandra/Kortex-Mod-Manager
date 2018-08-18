@@ -1,0 +1,103 @@
+Version 1.4 - x
+[General] Added network functionality, sign-in system for NexusMods.
+[General] Removed refresh button from toolbar.
+[General] Drag and drop will cause scroll on attempt to drop to first or last visible row.
+[General] Fixed loading profile when Kortex is unable to locate game directory automatically.
+[Download Manager] Support for assaciation with NXM links.
+[Download Manager] Version 1.0.
+[Mod Manager] Search by mod name also searches by its ID.
+[Mod Manager] Add grouping by priority.
+[Mod Manager] Added import from Nexus Mod Manager.
+[Mod Manager] Fixed import from MO when data folders (mods, downloads, etc) is not located in specified folder.
+[Mod Manager] Fixed reversed mod order for MO import.
+[Mod Manager] Removed save-undo functions. All changes applied immediately.
+[Mod Manager] Version 1.2.1.
+[Package Manager] Fixed assigning image as main or as header in "Interface" page.
+[Package Manager] Added back "Import from files" option to components.
+[Package Manager] Version 1.2.2.
+[Plugin Manager] For Morrowind, Oblivion, Fallout 3 and Fallout: New Vegas disabled forced sorting by plugin modification date.
+[Plugin Manager] Version 1.2.1
+[Save Manager] Improved saves list performace.
+[Save Manager] Version 1.0.2
+
+Version 1.3 - 12.07.2018
+[General] The ability to specify a folder for program settings via command-line arguments is added. Syntax: -GlobalConfigPath "Path to folder"
+[General] Changed the interface of several windows.
+[General] Added background color selection in the image viewer.
+[General] Added clearing of log files when the program is terminated. It is allowed to store no more than 10 files.
+[General] Added saving the width of columns and the ability to hide columns in some lists (in the context menu of the header).
+[General] Added support for versions using the date format "YYYY-MM-DD HH: MM: SS" (ISO 8601).
+[General] The active profile folder is no longer available for deletion while the program is running.
+[General] The text view window now supports displaying images from the internet.
+[General] Profile templates for Skyrim VR and Fallout 4 VR were added.
+[Config Manager] The "Mouse Acceleration" setting (Controls::bMouseAcceleration) for supported games was deleted.
+[Config Manager] Added several new settings.
+[Config Manager] Added displaying of all available files regardless of VFS activity.
+[Config Manager] Version 1.1.
+[Package Manager] Added tracking of identifiers for flags. Also, tracking is also performed when items are deleted.
+[Package Manager] Added the function of replacing the contents of a folder in the project without deleting its entry and re-adding it to the project.
+[Package Manager] Removed the toolbars in package creator pages, its functions were moved its list context menu. Lists now supports drag-and-drop.
+[Package Manager] Added check for scripted FOMod install (with the file "Script.cs").
+[Package Manager] Components configuaration page was updated.
+[Package Manager] Version 1.2.1.
+[Mod Manager] Added a window to view the mod files and their collisions.
+[Mod Manager] Deleted mods no longer save the status of active after a re-installation.
+[Mod Manager] Added a cross-selection between the list of plugins and the list of mods.
+[Mod Manager] Added the ability to use multiple mod lists in one profile.
+[Mod Manager] Added import from Mod Organizer (1 and 2).
+[Mod Manager] Added search in the mod list.
+[Mod Manager] Added the ability to move the installed mod files to any folder on the computer (thereby making this mod a linked mod).
+[Mod Manager] Each mod list have its own overwrites folder.
+[Mod Manager] Version 1.2.
+[Plugin Manager] Added plugins list import and export.
+[Plugin Manager] A more detailed description of the type for .esl files.
+[Plugin Manager] Added counter of פסורלף plugins (for each type separately and for all together).
+[Plugin Manager] No more activation of VFS is required to manage plugins.
+[Plugin Manager] Added sorting using the LOOT API v13.
+[Plugin Manager] The workspace is moved to the "Mod manager" window.
+[Plugin Manager] Added search by plugin file name.
+[Plugin Manager] Version 1.2
+[Save Manager] The workspace is moved to the "Mod manager" window.
+[Save Manager] Version 1.0.1
+[Run Manager] The ability to specify the working folder of the program is added.
+[Run Manager] Version 1.0.1.
+
+Version 1.2 - 02.05.2018
+[Package Manager] Fixed bug due to which conditions for the installation step were not saved.
+[Package Manager] The Install Wizard now does not close after displaying the list of files in the preview mode and goes back to the first page instead.
+[Package Manager] Added the ability to change the target path at once for all folders and files through the appropriate editing menu by right-clicking on the column header.
+[Package Manager] Added tracking of item IDs in the project. Now when you change the ID of an element, it changes in the whole project.
+[Package Manager] Added the ability to specify the use of the HTTPS protocol for XML schemas in the FOMod configuration files.
+[Package Manager] Fixed deletion of stages and requirement groups from the project. Now the removal of one stage or requirements group does not cause the removal of others.
+[Package Manager] Version 1.2.
+[Mod Manager] A little faster start of the game.
+[Mod Manager] Added the ability to create a linked mod.
+[Mod Manager] The calculation of the mod signatures when non-Latin characters is used in identifiers has been changed.
+[Mod Manager] Version 1.1.
+[Plugin Manager] Added support for .esl files for games which uses BethesdaGeneric2 interface (SkyrimSE, Fallout 4).
+[Plugin Manager] Version 1.1.
+
+Version 1.1 - 21.04.2018
+[General] When creating a profile, the folder with settings and game save is now copied to the profile folder and renamed, and not just moved to the profile folder.
+[General] Fixed the definition of the folder with the game when creating a new profile.
+[General] English localization is added. Thank you Monday for the translation.
+[Package Manager] Fixed display of images in the interface of creating installers.
+[Package Manager] Importing the project from the installer now specifies this installer as the destination path for the build.
+[Package Manager] Fixed the name of the Required Files item in the project XML file. This means that the list of required installer files will be empty and such installers must be rebuilt with the reassignment of the required files (if they were used). Excuse me.
+[Package Manager] Added an explicit indication of priorities for folders and files when creating the installer.
+[Package Manager] Added context menu items for importing the project and unpacking the archive in the list of available installers.
+[Package Manager] Added the ability to import information to create a project from the installation log.
+[Package Manager] Added the creation of a list of components from the folders added to the project.
+[Package Manager] Added the ability to change the properties of all components at once in the group through the appropriate editing menu by calling it by right-clicking on the column header.
+[Package Manager] You can now add multiple files at the same time when you add documents to the installer project.
+[Package Manager] Module Version 1.1.
+[Manage Mods] Fixed the impossibility of changing the name of an unset mod in the "Manage Mods" window.
+[Manage Modes] Added a request to unmount VFS when trying to close the program instead of minimizing the window.
+[Manage Modes] Added export of a list of mods in HTML format.
+[Manage mods] Mods in the download list can be moved by dragging the selected range with the mouse. Both continuous and unbound bands are supported.
+[Modulation Control] Module Version 1.0.1.
+[Manage plugins] Added transition to the mode when double clicking on the column "Part" in the list of plug-ins.
+[Plugin Management] Drag and drop is available in the list of plug-ins.
+[Plugin Management] Module Version 1.0.1.
+
+Version 1.0 - 09.04.2018

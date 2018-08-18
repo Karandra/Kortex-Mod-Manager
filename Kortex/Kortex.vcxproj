@@ -441,9 +441,8 @@
     <None Include="Bin\Data\PackageCreator\Templates\Default.kmpproj" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\ChangeLog EN.txt" />
-    <Text Include="Resources\ChangeLog RU.txt" />
-    <Text Include="Resources\Future updates.txt" />
+    <Text Include="Resources\ChangeLog EN.md" />
+    <Text Include="Resources\ChangeLog RU.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

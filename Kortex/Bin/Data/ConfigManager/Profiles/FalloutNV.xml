@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config>
+	<FormatOptions>
+		<float>.4</float>
+		<bool>i</bool>
+	</FormatOptions>
+	<TypeDetection>
+		<HungarianNotation>
+			<Entry Prefix="i">int32</Entry>
+			<Entry Prefix="u">uint32</Entry>
+			<Entry Prefix="f">float32</Entry>
+			<Entry Prefix="d">float64</Entry>
+			<Entry Prefix="b">bool</Entry>
+			<Entry Prefix="s">string</Entry>
+			<Entry Prefix="S">string</Entry>
+			<Entry Prefix="r">string</Entry>
+		</HungarianNotation>
+	</TypeDetection>
+	
+	<Data>
+	</Data>
+</Config>

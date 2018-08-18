@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Profile ID="Morrowind" SortOrder="11">
+	<Name Short="Morrowind">The Elder Scrolls III: Morrowind</Name>
+	
+	<Variables>
+		<!--Required-->
+		<Entry ID="GameRoot" SubType="FolderPath" UseOverride="1"/>
+		<Entry ID="ConfigRoot">$(GameRoot)\Saves</Entry>
+		<Entry ID="GameExecutable">$(GameRoot)\Morrowind.exe</Entry>
+		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\Morrowind.exe</Entry>
+		<Entry ID="NexusID">$(ID)</Entry>
+
+		<!--Names-->
+		<Entry ID="EditorName">Construction Set</Entry>
+		<Entry ID="LauncherName">$(NameShort) Launcher</Entry>
+		<Entry ID="ScriptExtenderName">$(NameShort) Script Extender</Entry>
+		<Entry ID="ScriptExtenderNameShort">MWSE</Entry>
+		
+		<!--Misc-->
+		<Entry ID="DataFilesPath">$(GameRoot)\Data Files</Entry>
+		<Entry ID="SavesPath">$(GameRoot)\Saves</Entry>
+		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(ID) Launcher.exe</Entry>
+		<Entry ID="GameEditorPath">$(VirtualGameRoot)\TES Construction Set.exe</Entry>
+		<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderNameShort)_Loader.exe</Entry>
+		<Entry ID="MCPPath">$(VirtualGameRoot)\Morrowind Code Patch.exe</Entry>
+		<Entry ID="MGEXEPath">$(VirtualGameRoot)\MGEXEGUI.exe</Entry>
+	</Variables>
+
+	<Network>
+		<NexusID>Morrowind</NexusID>
+	</Network>
+
+	<LocationsConfig>
+		<Entry Label="$T(OpenLocation.Saves)">$(VirtualConfigRoot)\Saves</Entry>
+	</LocationsConfig>
+
+	<Virtualization>
+		<MandatoryVirtualFolders>
+			<Entry>$(VirtualConfigRoot)</Entry>
+		</MandatoryVirtualFolders>
+	</Virtualization>
+	
+	<RunConfig Enabled="1">
+		<Main>
+			<Entry>
+				<Name>$(NameShort)</Name>
+				<Icon>$(ID).exe</Icon>
+				<Executable>$(VirtualGameExecutable)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(LauncherName)</Name>
+				<Icon>$(ID)Launcher.exe</Icon>
+				<Executable>$(GameLauncherPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(EditorName)</Name>
+				<Icon>TES Construction Set.exe</Icon>
+				<Executable>$(GameEditorPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(NameShort) Code Patch</Name>
+				<Icon>Morrowind Code Patch.exe</Icon>
+				<Executable>$(MCPPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(NameShort) Graphics Extender XE</Name>
+				<Icon>MGEXEGUI.exe</Icon>
+				<Executable>$(MGEXEPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+		</Main>
+	</RunConfig>
+
+	<GameConfig Enabled="1" ENB="0">
+		<Entry ID="0" Format="INI" TypeDetectionMethod="DataAnalysis">$(VirtualConfigRoot)\$(ID).ini</Entry>
+	</GameConfig>
+
+	<PluginManager Enabled="1" InterfaceName="BethesdaMorrowind" PluginFileFormat="BethesdaMorrowind">
+		<Limit Value="255"/>
+		
+		<ChangeFileModificationDate>1</ChangeFileModificationDate>
+		<SortByFileModificationDate>0</SortByFileModificationDate>
+
+		<StandardContent MainID="Morrowind.esm">
+			<Entry ID="Morrowind.esm" Name="$(NameShort)" Logo="Morrowind.png"/>
+			<Entry ID="Tribunal.esm" Name="$(NameShort): Tribunal" Logo="MTB.png"/>
+			<Entry ID="Bloodmoon.esm" Name="$(NameShort): Bloodmoon" Logo="MTB.png"/>
+		</StandardContent>
+	</PluginManager>
+
+	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
+		<Locations>
+			<Entry>$(GameRoot)</Entry>
+			<Entry>$(GameRoot)\Screenshots</Entry>
+			<Entry>$(WriteTargetRoot)</Entry>
+			<Entry>$(WriteTargetRoot)\Screenshots</Entry>
+			<Entry>$(VirtualConfigRoot)</Entry>
+			<Entry>$(VirtualConfigRoot)\Screenshots</Entry>
+		</Locations>
+	</ScreenshotsGallery>
+
+	<SaveManager Enabled="1" RequiresVFS="0" SaveFileFormat="BethesdaMorrowind">
+		<SavesFolder>$(VirtualConfigRoot)\Saves</SavesFolder>
+		<FileFilters>
+			<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
+		</FileFilters>
+
+		<PrimaryExtension>ess</PrimaryExtension>
+	</SaveManager>
+</Profile>

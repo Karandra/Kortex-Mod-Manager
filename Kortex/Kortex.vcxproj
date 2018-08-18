@@ -1,0 +1,625 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\DownloadManager\KDownloadEntry.cpp" />
+    <ClCompile Include="Source\DownloadManager\KDownloadManager.cpp" />
+    <ClCompile Include="Source\DownloadManager\KDownloadManagerView.cpp" />
+    <ClCompile Include="Source\DownloadManager\KDownloadManagerWorkspace.cpp" />
+    <ClCompile Include="Source\InstallWizard\KInstallWizardInfoModel.cpp" />
+    <ClCompile Include="Source\IPC\KIPC.cpp" />
+    <ClCompile Include="Source\IPC\KIPCClient.cpp" />
+    <ClCompile Include="Source\IPC\KIPCConnection.cpp" />
+    <ClCompile Include="Source\IPC\KIPCRequest.cpp" />
+    <ClCompile Include="Source\IPC\KIPCServer.cpp" />
+    <ClCompile Include="Source\ModManager\KFileTreeNode.cpp" />
+    <ClCompile Include="Source\ModManager\KFixedModEntry.cpp" />
+    <ClCompile Include="Source\ModManager\KMirroredVirtualFolder.cpp" />
+    <ClCompile Include="Source\ModManager\KModCollisionViewerModel.cpp" />
+    <ClCompile Include="Source\ModManager\KModEntry.cpp" />
+    <ClCompile Include="Source\ModManager\KModFilesExplorerDialog.cpp" />
+    <ClCompile Include="Source\ModManager\KModFilesExplorerModel.cpp" />
+    <ClCompile Include="Source\ModManager\KModManager.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerDispatcher.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerImport.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerImportMO.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerImportNMM.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerModList.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerModListEditor.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerSitesEditor.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerStatistics.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerTagSelector.cpp" />
+    <ClCompile Include="Source\ModManager\KPriorityGroupEntry.cpp" />
+    <ClCompile Include="Source\Network\KNetwork.cpp" />
+    <ClCompile Include="Source\Network\KNetworkProviderLoversLab.cpp" />
+    <ClCompile Include="Source\Network\KNetworkProviderNexus.cpp" />
+    <ClCompile Include="Source\Network\KNetworkProvider.cpp" />
+    <ClCompile Include="Source\Network\KNetworkProviderTESALL.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorIDTracker.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.cpp" />
+    <ClCompile Include="Source\PluginManager\KPluginManagerListModel.cpp" />
+    <ClCompile Include="Source\PluginManager\LOOT API\KLootAPI.cpp" />
+    <ClCompile Include="Source\Profile\KNetworkConfig.cpp" />
+    <ClCompile Include="Source\Profile\KProfileID.cpp" />
+    <ClCompile Include="Source\RunManager\KRunManagerWorkspace.cpp" />
+    <ClCompile Include="Source\RunManager\KRunManagerWorkspaceView.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerModel.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerTags.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerWorkspace.cpp" />
+    <ClCompile Include="Source\Archive\KArchive.cpp" />
+    <ClCompile Include="Source\Archive\KArchiveImpl.cpp" />
+    <ClCompile Include="Source\Events\KBroadcastEvent.cpp" />
+    <ClCompile Include="Source\Events\KVFSEvent.cpp" />
+    <ClCompile Include="Source\InstallWizard\KInstallWizardComponnetsModel.cpp" />
+    <ClCompile Include="Source\InstallWizard\KInstallWizardDialog.cpp" />
+    <ClCompile Include="Source\InstallWizard\KInstallWizardRequirementsModel.cpp" />
+    <ClCompile Include="Source\InstallWizard\KInstallWizardStepStack.cpp" />
+    <ClCompile Include="Source\KDynamicVariablesTable.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorBuilder.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorController.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCConditionalStepsModel.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectSerializerSMI.cpp" />
+    <ClCompile Include="Source\SaveManager\KSaveManagerListModel.cpp" />
+    <ClCompile Include="Source\Utility\KINetFSHandler.cpp" />
+    <ClCompile Include="Source\Utility\KOperationWithProgress.cpp" />
+    <ClCompile Include="Source\Utility\KProgramOptions.cpp" />
+    <ClCompile Include="Source\Utility\KTempFolderKeeper.cpp" />
+    <ClCompile Include="Source\PackageManager\KModPackage.cpp" />
+    <ClCompile Include="Source\PackageManager\KPackageManagerWorkspace.cpp" />
+    <ClCompile Include="Source\PackageManager\KPackageManagerListModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorFOModIEDialog.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorListModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageBase.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageComponents.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageFileData.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageRequirements.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCFileDataSelectorModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoAdditionalInfoModel.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectSerializerFOMod.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoDocumentsModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCFlagsSelectorModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCRequirementsSelectorModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageFileData\KPCFileDataFolderContentModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageFileData\KPCFileDataMainListModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoTagsListModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageInterface\KPCIImagesListModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageRequirements\KPCREntriesListModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageRequirements\KPCRGroupsModel.cpp" />
+    <ClCompile Include="Source\PackageManager\KPackageManager.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectComponents.cpp" />
+    <ClCompile Include="Source\Profile\KPackageManagerConfig.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageInfo.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageInterface.cpp" />
+    <ClCompile Include="Source\PackageCreator\KPackageCreatorWorkspace.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProject.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectConfig.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectFileData.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectInfo.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectInterface.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectPart.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectRequirements.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectSerializer.cpp" />
+    <ClCompile Include="Source\PackageProject\KPackageProjectSerializerKMP.cpp" />
+    <ClCompile Include="Source\UI\KTextEditorDialog.cpp" />
+    <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
+    <ClCompile Include="Source\Profile\KLocationsManagerConfig.cpp" />
+    <ClCompile Include="Source\SaveManager\KSaveManagerWorkspace.cpp" />
+    <ClCompile Include="Source\SaveManager\KSMSaveFile.cpp" />
+    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaFallout3.cpp" />
+    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaFallout4.cpp" />
+    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaFalloutNV.cpp" />
+    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaMorrowind.cpp" />
+    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaOblivion.cpp" />
+    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaSkyrim.cpp" />
+    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaSkyrimSE.cpp" />
+    <ClCompile Include="Source\KPluggableManager.cpp" />
+    <ClCompile Include="Source\KManager.cpp" />
+    <ClCompile Include="Source\PluginManager\KPluginManager.cpp" />
+    <ClCompile Include="Source\PluginManager\KPluginManagerBethesdaGeneric.cpp" />
+    <ClCompile Include="Source\PluginManager\KPluginManagerBethesdaGeneric2.cpp" />
+    <ClCompile Include="Source\PluginManager\KPluginManagerBethesdaMorrowind.cpp" />
+    <ClCompile Include="Source\PluginManager\KPluginManagerWorkspace.cpp" />
+    <ClCompile Include="Source\PluginManager\KPMPluginEntry.cpp" />
+    <ClCompile Include="Source\PluginManager\KPMPluginReader.cpp" />
+    <ClCompile Include="Source\PluginManager\KPMPluginReaderBethesdaMorrowind.cpp" />
+    <ClCompile Include="Source\PluginManager\KPMPluginReaderBethesdaOblivion.cpp" />
+    <ClCompile Include="Source\PluginManager\KPMPluginReaderBethesdaSkyrim.cpp" />
+    <ClCompile Include="Source\Profile\KProfile.cpp" />
+    <ClCompile Include="Source\Profile\KConfigManagerConfig.cpp" />
+    <ClCompile Include="Source\Profile\KPluginManagerConfig.cpp" />
+    <ClCompile Include="Source\Profile\KRunManagerConfig.cpp" />
+    <ClCompile Include="Source\Profile\KSaveManagerConfig.cpp" />
+    <ClCompile Include="Source\Profile\KScreenshotsGalleryConfig.cpp" />
+    <ClCompile Include="Source\Profile\KVirtualizationConfig.cpp" />
+    <ClCompile Include="Source\RunManager\KRunManager.cpp" />
+    <ClCompile Include="Source\SaveManager\KSaveManager.cpp" />
+    <ClCompile Include="Source\UI\KAboutDialog.cpp" />
+    <ClCompile Include="Source\UI\KImageViewerDialog.cpp" />
+    <ClCompile Include="Source\Utility\Themes\KThemeVisualStudio.cpp" />
+    <ClCompile Include="Source\ScreenshotsGallery\KScreenshotsGalleryManager.cpp" />
+    <ClCompile Include="Source\ScreenshotsGallery\KScreenshotsGalleryWorkspace.cpp" />
+    <ClCompile Include="Source\SettingsWindow\KSettingsWindow.cpp" />
+    <ClCompile Include="Source\SettingsWindow\KSettingsWindowController.cpp" />
+    <ClCompile Include="Source\SettingsWindow\KSettingsWindowManager.cpp" />
+    <ClCompile Include="Source\UI\KNewModDialog.cpp" />
+    <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
+    <ClCompile Include="Source\Utility\Themes\KThemeDefault.cpp" />
+    <ClCompile Include="Source\VFS\KVirtualFileSystemBase.cpp" />
+    <ClCompile Include="Source\VFS\KVirtualFileSystemMirror.cpp" />
+    <ClCompile Include="Source\VFS\KVirtualFileSystemConvergence.cpp" />
+    <ClCompile Include="Source\VFS\KVirtualFileSystemConvergenceImpl.cpp" />
+    <ClCompile Include="Source\VFS\KVirtualFileSystemService.cpp" />
+    <ClCompile Include="Source\VFS\KVirtualFileSystemMirrorImpl.cpp" />
+    <ClCompile Include="Source\ConfigManager\KCMConfigEntry.cpp" />
+    <ClCompile Include="Source\ConfigManager\KConfigManager.cpp" />
+    <ClCompile Include="Source\ConfigManager\KCMController.cpp" />
+    <ClCompile Include="Source\ConfigManager\KCMDataProviderINI.cpp" />
+    <ClCompile Include="Source\ConfigManager\KCMFileEntry.cpp" />
+    <ClCompile Include="Source\ConfigManager\KCMIDataProvider.cpp" />
+    <ClCompile Include="Source\ConfigManager\KCMOptionsFormatter.cpp" />
+    <ClCompile Include="Source\ConfigManager\KCMSampleValue.cpp" />
+    <ClCompile Include="Source\ConfigManager\KCMValueTypeDetector.cpp" />
+    <ClCompile Include="Source\Events\KLogEvent.cpp" />
+    <ClCompile Include="Source\GameConfig\KGameConfigWorkspace.cpp" />
+    <ClCompile Include="Source\GameConfig\KGameConfigWorkspaceController.cpp" />
+    <ClCompile Include="Source\KApp.cpp" />
+    <ClCompile Include="Source\KVariablesTable.cpp" />
+    <ClCompile Include="Source\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\UI\KMainWindow.cpp" />
+    <ClCompile Include="Source\UI\KProfileCreatorDialog.cpp" />
+    <ClCompile Include="Source\UI\KProfileSelectionDialog.cpp" />
+    <ClCompile Include="Source\UI\KWorkspace.cpp" />
+    <ClCompile Include="Source\Utility\KAux.cpp" />
+    <ClCompile Include="Source\Utility\KImageProvider.cpp" />
+    <ClCompile Include="Source\Utility\KQuickThread.cpp" />
+    <ClCompile Include="Source\Utility\KThemeManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="Source\DownloadManager\KDownloadEntry.h" />
+    <ClInclude Include="Source\DownloadManager\KDownloadManager.h" />
+    <ClInclude Include="Source\DownloadManager\KDownloadManagerView.h" />
+    <ClInclude Include="Source\DownloadManager\KDownloadManagerWorkspace.h" />
+    <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h" />
+    <ClInclude Include="Source\IPC\KIPC.h" />
+    <ClInclude Include="Source\IPC\KIPCClient.h" />
+    <ClInclude Include="Source\IPC\KIPCConnection.h" />
+    <ClInclude Include="Source\IPC\KIPCRequest.h" />
+    <ClInclude Include="Source\IPC\KIPCServer.h" />
+    <ClInclude Include="Source\ModManager\KFileTreeNode.h" />
+    <ClInclude Include="Source\ModManager\KFixedModEntry.h" />
+    <ClInclude Include="Source\ModManager\KMirroredVirtualFolder.h" />
+    <ClInclude Include="Source\ModManager\KModCollisionViewerModel.h" />
+    <ClInclude Include="Source\ModManager\KModEntry.h" />
+    <ClInclude Include="Source\ModManager\KModFilesExplorerDialog.h" />
+    <ClInclude Include="Source\ModManager\KModFilesExplorerModel.h" />
+    <ClInclude Include="Source\ModManager\KModFilesExplorerModelNode.h" />
+    <ClInclude Include="Source\ModManager\KModManager.h" />
+    <ClInclude Include="Source\ModManager\KModManagerDispatcher.h" />
+    <ClInclude Include="Source\ModManager\KModManagerImport.h" />
+    <ClInclude Include="Source\ModManager\KModManagerImportMO.h" />
+    <ClInclude Include="Source\ModManager\KModManagerImportNMM.h" />
+    <ClInclude Include="Source\ModManager\KModManagerList.h" />
+    <ClInclude Include="Source\ModManager\KModManagerModListEditor.h" />
+    <ClInclude Include="Source\ModManager\KModManagerSitesEditor.h" />
+    <ClInclude Include="Source\ModManager\KModManagerStatistics.h" />
+    <ClInclude Include="Source\ModManager\KModManagerTagSelector.h" />
+    <ClInclude Include="Source\ModManager\KPriorityGroupEntry.h" />
+    <ClInclude Include="Source\Network\KNetwork.h" />
+    <ClInclude Include="Source\Network\KNetworkConstants.h" />
+    <ClInclude Include="Source\Network\KNetworkProviderLoversLab.h" />
+    <ClInclude Include="Source\Network\KNetworkProviderNexus.h" />
+    <ClInclude Include="Source\Network\KNetworkProvider.h" />
+    <ClInclude Include="Source\Network\KNetworkProviderTESALL.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorIDTracker.h" />
+    <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.h" />
+    <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.h" />
+    <ClInclude Include="Source\PluginManager\KPluginManagerListModel.h" />
+    <ClInclude Include="Source\PluginManager\LOOT API\KLootAPI.h" />
+    <ClInclude Include="Source\Profile\KNetworkConfig.h" />
+    <ClInclude Include="Source\Profile\KProfileID.h" />
+    <ClInclude Include="Source\RunManager\KRunManagerWorkspace.h" />
+    <ClInclude Include="Source\RunManager\KRunManagerWorkspaceView.h" />
+    <ClInclude Include="Source\ModManager\KModManagerModel.h" />
+    <ClInclude Include="Source\ModManager\KModManagerModelNode.h" />
+    <ClInclude Include="Source\ModManager\KModManagerTags.h" />
+    <ClInclude Include="Source\ModManager\KModManagerWorkspace.h" />
+    <ClInclude Include="Source\SaveManager\KSaveManagerListModel.h" />
+    <ClInclude Include="Source\Utility\KComparator.h" />
+    <ClInclude Include="Source\Utility\KINetFSHandler.h" />
+    <ClInclude Include="Source\Utility\KProgramOptions.h" />
+    <ClInclude Include="Source\Utility\KUnsortedUnique.h" />
+    <ClInclude Include="Source\Utility\KWithBitmap.h" />
+    <ClInclude Include="Source\Archive\KArchive.h" />
+    <ClInclude Include="Source\Archive\KArchiveImpl.h" />
+    <ClInclude Include="Source\Events\KBroadcastEvent.h" />
+    <ClInclude Include="Source\Events\KVFSEvent.h" />
+    <ClInclude Include="Source\InstallWizard\KInstallWizardComponnetsModel.h" />
+    <ClInclude Include="Source\InstallWizard\KInstallWizardDefs.h" />
+    <ClInclude Include="Source\InstallWizard\KInstallWizardDialog.h" />
+    <ClInclude Include="Source\InstallWizard\KInstallWizardRequirementsModel.h" />
+    <ClInclude Include="Source\InstallWizard\KInstallWizardStepStack.h" />
+    <ClInclude Include="Source\InstallWizard\KInstallWizardComponnetsModelNode.h" />
+    <ClInclude Include="Source\KDynamicVariablesTable.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorBuilder.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorController.h" />
+    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCConditionalStepsModel.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectSerializerSMI.h" />
+    <ClInclude Include="Source\Utility\KDataViewModelBase.h" />
+    <ClInclude Include="Source\Utility\KDataViewTreeModel.h" />
+    <ClInclude Include="Source\Utility\KOperationWithProgress.h" />
+    <ClInclude Include="Source\Utility\KTempFolderKeeper.h" />
+    <ClInclude Include="Source\PackageManager\KModPackage.h" />
+    <ClInclude Include="Source\PackageManager\KPackageManagerWorkspace.h" />
+    <ClInclude Include="Source\PackageManager\KPackageManagerListModel.h" />
+    <ClInclude Include="Source\Utility\KDataViewListModel.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorFOModIEDialog.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorListModel.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageBase.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageComponents.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageFileData.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageRequirements.h" />
+    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCFileDataSelectorModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoAdditionalInfoModel.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectSerializerFOMod.h" />
+    <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoDocumentsModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCFlagsSelectorModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCRequirementsSelectorModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageFileData\KPCFileDataFolderContentModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageFileData\KPCFileDataMainListModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoTagsListModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageInterface\KPCIImagesListModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageRequirements\KPCREntriesListModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageRequirements\KPCRGroupsModel.h" />
+    <ClInclude Include="Source\PackageManager\KPackageManager.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectComponents.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectDefs.h" />
+    <ClInclude Include="Source\Profile\KPackageManagerConfig.h" />
+    <ClInclude Include="Source\Utility\KWithIDName.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageInfo.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageInterface.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorVectorModel.h" />
+    <ClInclude Include="Source\PackageCreator\KPackageCreatorWorkspace.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProject.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectConfig.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectFileData.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectInfo.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectInterface.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectPart.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectRequirements.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectSerializer.h" />
+    <ClInclude Include="Source\PackageProject\KPackageProjectSerializerKMP.h" />
+    <ClInclude Include="Source\UI\KTextEditorDialog.h" />
+    <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
+    <ClInclude Include="Source\Profile\KLocationsManagerConfig.h" />
+    <ClInclude Include="Source\SaveManager\KSaveManagerWorkspace.h" />
+    <ClInclude Include="Source\SaveManager\KSMSaveFile.h" />
+    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaFallout3.h" />
+    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaFallout4.h" />
+    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaFalloutNV.h" />
+    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaMorrowind.h" />
+    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaOblivion.h" />
+    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaSkyrim.h" />
+    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaSkyrimSE.h" />
+    <ClInclude Include="Source\KPluggableManager.h" />
+    <ClInclude Include="Source\KManager.h" />
+    <ClInclude Include="Source\KVariablesDatabase.h" />
+    <ClInclude Include="Source\PluginManager\KPluginManager.h" />
+    <ClInclude Include="Source\PluginManager\KPluginManagerBethesdaGeneric.h" />
+    <ClInclude Include="Source\PluginManager\KPluginManagerBethesdaGeneric2.h" />
+    <ClInclude Include="Source\PluginManager\KPluginManagerBethesdaMorrowind.h" />
+    <ClInclude Include="Source\PluginManager\KPluginManagerWorkspace.h" />
+    <ClInclude Include="Source\PluginManager\KPMPluginEntry.h" />
+    <ClInclude Include="Source\PluginManager\KPMPluginReader.h" />
+    <ClInclude Include="Source\PluginManager\KPMPluginReaderBethesdaMorrowind.h" />
+    <ClInclude Include="Source\PluginManager\KPMPluginReaderBethesdaOblivion.h" />
+    <ClInclude Include="Source\PluginManager\KPMPluginReaderBethesdaSkyrim.h" />
+    <ClInclude Include="Source\Profile\KProfile.h" />
+    <ClInclude Include="Source\Profile\KConfigManagerConfig.h" />
+    <ClInclude Include="Source\Profile\KPluginManagerConfig.h" />
+    <ClInclude Include="Source\Profile\KRunManagerConfig.h" />
+    <ClInclude Include="Source\Profile\KSaveManagerConfig.h" />
+    <ClInclude Include="Source\Profile\KScreenshotsGalleryConfig.h" />
+    <ClInclude Include="Source\Profile\KVirtualizationConfig.h" />
+    <ClInclude Include="Source\RunManager\KRunManager.h" />
+    <ClInclude Include="Source\SaveManager\KSaveManager.h" />
+    <ClInclude Include="Source\UI\KAboutDialog.h" />
+    <ClInclude Include="Source\UI\KImageViewerDialog.h" />
+    <ClInclude Include="Source\Utility\KLabeledValue.h" />
+    <ClInclude Include="Source\Utility\Themes\KThemeVisualStudio.h" />
+    <ClInclude Include="Source\ScreenshotsGallery\KScreenshotsGalleryManager.h" />
+    <ClInclude Include="Source\ScreenshotsGallery\KScreenshotsGalleryWorkspace.h" />
+    <ClInclude Include="Source\SettingsWindow\KSettingsWindow.h" />
+    <ClInclude Include="Source\SettingsWindow\KSettingsWindowController.h" />
+    <ClInclude Include="Source\SettingsWindow\KSettingsWindowManager.h" />
+    <ClInclude Include="Source\UI\KNewModDialog.h" />
+    <ClInclude Include="Source\UI\KWorkspaceController.h" />
+    <ClInclude Include="Source\Utility\KEntryRefT.h" />
+    <ClInclude Include="Source\Utility\Themes\KThemeDefault.h" />
+    <ClInclude Include="Source\VFS\KVirtualFileSystemBase.h" />
+    <ClInclude Include="Source\VFS\KVirtualFileSystemMirror.h" />
+    <ClInclude Include="Source\VFS\KVirtualFileSystemConvergence.h" />
+    <ClInclude Include="Source\VFS\KVirtualFileSystemConvergenceImpl.h" />
+    <ClInclude Include="Source\VFS\KVirtualFileSystemService.h" />
+    <ClInclude Include="Source\VFS\KVirtualFileSystemMirrorImpl.h" />
+    <ClInclude Include="Source\ConfigManager\KCMConfigEntry.h" />
+    <ClInclude Include="Source\ConfigManager\KConfigManager.h" />
+    <ClInclude Include="Source\ConfigManager\KCMController.h" />
+    <ClInclude Include="Source\ConfigManager\KCMDataProviderINI.h" />
+    <ClInclude Include="Source\ConfigManager\KCMFileEntry.h" />
+    <ClInclude Include="Source\ConfigManager\KCMIDataProvider.h" />
+    <ClInclude Include="Source\ConfigManager\KCMOptionsFormatter.h" />
+    <ClInclude Include="Source\ConfigManager\KCMSampleValue.h" />
+    <ClInclude Include="Source\ConfigManager\KCMValueTypeDetector.h" />
+    <ClInclude Include="Source\Events\KLogEvent.h" />
+    <ClInclude Include="Source\GameConfig\KGameConfigWorkspace.h" />
+    <ClInclude Include="Source\GameConfig\KGameConfigWorkspaceController.h" />
+    <ClInclude Include="Source\KApp.h" />
+    <ClInclude Include="Source\KVariablesTable.h" />
+    <ClInclude Include="Source\stdafx.h" />
+    <ClInclude Include="Source\UI\KMainWindow.h" />
+    <ClInclude Include="Source\UI\KProfileCreatorDialog.h" />
+    <ClInclude Include="Source\UI\KProfileSelectionDialog.h" />
+    <ClInclude Include="Source\UI\KWorkspace.h" />
+    <ClInclude Include="Source\Utility\KAux.h" />
+    <ClInclude Include="Source\Utility\KImageProvider.h" />
+    <ClInclude Include="Source\Utility\KQuickThread.h" />
+    <ClInclude Include="Source\Utility\KThemeManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Kortex.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\App.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Bin\Data\ConfigManager\ENB.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Profiles\Fallout3.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Profiles\Fallout4.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Profiles\FalloutNV.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Profiles\Morrowind.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Profiles\Oblivion.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Profiles\Sacred2.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Profiles\Skyrim.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Profiles\SkyrimSE.xml" />
+    <Xml Include="Bin\Data\ConfigManager\Settings.xml" />
+    <Xml Include="Bin\Data\ConfigManager\VirtualKeys.xml" />
+    <Xml Include="Bin\Data\Lang\en-US.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Bin\Data\Lang\ru-RU.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Bin\Data\ModManager\DefaultTags.xml" />
+    <Xml Include="Bin\Data\PackageManager\Requirements\Fallout3.xml" />
+    <Xml Include="Bin\Data\PackageManager\Requirements\Fallout4.xml" />
+    <Xml Include="Bin\Data\PackageManager\Requirements\FalloutNV.xml" />
+    <Xml Include="Bin\Data\PackageManager\Requirements\Morrowind.xml" />
+    <Xml Include="Bin\Data\PackageManager\Requirements\Oblivion.xml" />
+    <Xml Include="Bin\Data\PackageManager\Requirements\Sacred2.xml" />
+    <Xml Include="Bin\Data\PackageManager\Requirements\Skyrim.xml" />
+    <Xml Include="Bin\Data\PackageManager\Requirements\SkyrimSE.xml" />
+    <Xml Include="Bin\Data\Profile Templates\Fallout3.xml" />
+    <Xml Include="Bin\Data\Profile Templates\Fallout4.xml" />
+    <Xml Include="Bin\Data\Profile Templates\Fallout4VR.xml" />
+    <Xml Include="Bin\Data\Profile Templates\FalloutNV.xml" />
+    <Xml Include="Bin\Data\Profile Templates\Morrowind.xml" />
+    <Xml Include="Bin\Data\Profile Templates\Oblivion.xml" />
+    <Xml Include="Bin\Data\Profile Templates\Sacred2.xml" />
+    <Xml Include="Bin\Data\Profile Templates\Skyrim.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Bin\Data\Profile Templates\SkyrimSE.xml" />
+    <Xml Include="Bin\Data\Profile Templates\SkyrimVR.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Bin\Data\PackageCreator\Templates\Default.kmpproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\ChangeLog EN.txt" />
+    <Text Include="Resources\ChangeLog RU.txt" />
+    <Text Include="Resources\Future updates.txt" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>KMM</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>Kortex</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
+    <TargetName>$(ProjectName) x64</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utility;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Source;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2\sys;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2;$(ProjectDir)Source\PluginManager\LOOT API\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Resources;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Lib\Win32;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\Bin x86;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utility;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Source;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2\sys;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2;$(ProjectDir)Source\PluginManager\LOOT API\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Resources;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Lib\x64;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\Bin x64;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utility;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Source;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2\sys;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2;$(ProjectDir)Source\PluginManager\LOOT API\Includes;$(ProjectDir)Source\Network\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>false</BrowseInformation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Resources;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Lib\Win32;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\Bin x86;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SetChecksum>true</SetChecksum>
+      <DelayLoadDLLs>KxVirtualFileSystem.dll;loot_api.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying to Bin</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utility;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Source;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2\sys;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2;$(ProjectDir)Source\PluginManager\LOOT API\Includes;$(ProjectDir)Source\Network\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Resources;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Lib\x64;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\Bin x64;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SetChecksum>true</SetChecksum>
+      <DelayLoadDLLs>KxVirtualFileSystem x64.dll;loot_api.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
+      <Message>Copying to Bin</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

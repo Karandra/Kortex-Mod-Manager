@@ -1,0 +1,1304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Lang>
+	<Info>
+		<Translator>Kerber</Translator>
+	</Info>
+	<StringTable>
+		<!-- Stock IDs -->
+		<String ID="ID_ABOUT">О программе</String>
+		<String ID="ID_ADD">Добавить</String>
+		<String ID="ID_APPLY">Применить</String>
+		<String ID="ID_BACKWARD">Назад</String>
+		<String ID="ID_IGNORE">Пропустить</String>
+		<String ID="ID_BOLD">Полужирный</String>
+		<String ID="ID_BOTTOM">Низ</String>
+		<String ID="ID_CANCEL">Отмена</String>
+		<String ID="ID_CDROM">CD-ROM</String>
+		<String ID="ID_CLEAR">Очистить</String>
+		<String ID="ID_CLOSE">Закрыть</String>
+		<String ID="ID_CONVERT">Конвертировать</String>
+		<String ID="ID_MOVE">Переместить</String>
+		<String ID="ID_COPY">Копировать</String>
+		<String ID="ID_CUT">Вырезать</String>
+		<String ID="ID_DELETE">Удалить</String>
+		<String ID="ID_DOWN">Вниз</String>
+		<String ID="ID_EDIT">Изменить</String>
+		<String ID="ID_EXECUTE">Выполнить</String>
+		<String ID="ID_EXIT">Выход</String>
+		<String ID="ID_FILE">Файл</String>
+		<String ID="ID_FOLDER">Папка</String>
+		<String ID="ID_FIND">Искать</String>
+		<String ID="ID_SEARCH">Поиск</String>
+		<String ID="ID_FIRST">Первый</String>
+		<String ID="ID_FLOPPY">Дискета</String>
+		<String ID="ID_FORWARD">Вперёд</String>
+		<String ID="ID_HARDDISK">Жёсткий диск</String>
+		<String ID="ID_HELP">Справка</String>
+		<String ID="ID_HOME">Домой</String>
+		<String ID="ID_INDENT">Отступ</String>
+		<String ID="ID_INDEX">Индекс</String>
+		<String ID="ID_INFO">Информация</String>
+		<String ID="ID_ITALIC">Курсив</String>
+		<String ID="ID_JUMP_TO">Перейти к</String>
+		<String ID="ID_JUSTIFY_CENTER">По центру</String>
+		<String ID="ID_JUSTIFY_FILL">По ширине</String>
+		<String ID="ID_JUSTIFY_LEFT">По левому краю</String>
+		<String ID="ID_JUSTIFY_RIGHT">По правому краю</String>
+		<String ID="ID_LAST">Последний</String>
+		<String ID="ID_NETWORK">Сеть</String>
+		<String ID="ID_NEW">Новый</String>
+		<String ID="ID_NO">Нет</String>
+		<String ID="ID_NONE">Нет</String>
+		<String ID="ID_OK">OK</String>
+		<String ID="ID_OPEN">Открыть</String>
+		<String ID="ID_PASTE">Вставить</String>
+		<String ID="ID_PREFERENCES">Предпочтения</String>
+		<String ID="ID_PREVIEW">Предпросмотр</String>
+		<String ID="ID_PRINT">Печать</String>
+		<String ID="ID_PROPERTIES">Свойства</String>
+		<String ID="ID_REDO">Вернуть</String>
+		<String ID="ID_REFRESH">Перезагрузить</String>
+		<String ID="ID_REMOVE">Удалить</String>
+		<String ID="ID_REPLACE">Заменить</String>
+		<String ID="ID_RENAME">Переименовать</String>
+		<String ID="ID_REVERT_TO_SAVED">Вернуть к сохранённому состоянию</String>
+		<String ID="ID_SAVE">Сохранить</String>
+		<String ID="ID_SAVEAS">Сохранить как</String>
+		<String ID="ID_SELECTALL">Выбрать всё</String>
+		<String ID="ID_SELECT_COLOR">Выбрать цвет</String>
+		<String ID="ID_SELECT_FONT">Выбрать шрифт</String>
+		<String ID="ID_SELECT_FILE">Выбрать файл</String>
+		<String ID="ID_SELECT_FOLDER">Выбрать папку</String>
+		<String ID="ID_SORT_ASCENDING">По возрастанию</String>
+		<String ID="ID_SORT_DESCENDING">По убыванию</String>
+		<String ID="ID_SPELL_CHECK">Проверка орфографии</String>
+		<String ID="ID_STOP">Стоп</String>
+		<String ID="ID_STRIKETHROUGH">Зачёркнутый</String>
+		<String ID="ID_TOP">Верх</String>
+		<String ID="ID_UNDELETE">Отменить удаление</String>
+		<String ID="ID_UNDERLINE">Подчёркнутый</String>
+		<String ID="ID_UNDO">Отменить</String>
+		<String ID="ID_UNINDENT">Убрать отступ</String>
+		<String ID="ID_UP">Верх</String>
+		<String ID="ID_YES">Да</String>
+		<String ID="ID_ZOOM_100">Фактический размер</String>
+		<String ID="ID_ZOOM_FIT">Подогнать по размеру</String>
+		<String ID="ID_ZOOM_IN">Увеличить масштаб</String>
+		<String ID="ID_ZOOM_OUT">Уменьшить масштаб</String>
+		<String ID="ID_ERROR">Ошибка</String>
+
+		<String ID="ID_ABOUT_LONG">Показать информацию о программе</String>
+		<String ID="ID_COPY_LONG">Копировать выделенное</String>
+		<String ID="ID_CUT_LONG">Вырезать выделенное</String>
+		<String ID="ID_DELETE_LONG">Удалить выделенное</String>
+		<String ID="ID_REPLACE_LONG">Заменить выделенное</String>
+		<String ID="ID_PASTE_LONG">Вставить выделенное</String>
+		<String ID="ID_EXIT_LONG">Выйти из программы</String>
+		<String ID="ID_UNDO_LONG">Отменить последнее действие</String>
+		<String ID="ID_REDO_LONG">Вернуть последнее действие</String>
+		<String ID="ID_CLOSE_LONG">Закрыть текущий документ</String>
+		<String ID="ID_SAVE_LONG">Сохранить текущий документ</String>
+		<String ID="ID_SAVEAS_LONG">Сохранить текущий документ под другим именем</String>
+		
+		<!-- KMM -->
+		<String ID="Generic.Run">Запустить</String>
+		<String ID="Generic.All">Все</String>
+		<String ID="Generic.using">используя</String>
+		<String ID="Generic.MilliSec">мс</String>
+		<String ID="Generic.Sec">с</String>
+		<String ID="Generic.Min">мин</String>
+		<String ID="Generic.SelectFolder">Выбор папки</String>
+		<String ID="Generic.Select">Выбрать</String>
+		<String ID="Generic.Import">Импорт</String>
+		<String ID="Generic.Export">Экспорт</String>
+		<String ID="Generic.Info">Информация</String>
+		<String ID="Generic.Description">Описание</String>
+		<String ID="Generic.Size">Размер</String>
+		<String ID="Generic.Author">Автор</String>
+		<String ID="Generic.ID">Идентификатор</String>
+		<String ID="Generic.IDInvalid">Некорретный идентификатор</String>
+		<String ID="Generic.Name">Название</String>
+		<String ID="Generic.Value">Значение</String>
+		<String ID="Generic.Address">Адрес</String>
+		<String ID="Generic.Size">Размер</String>
+		<String ID="Generic.Type">Тип</String>
+		<String ID="Generic.Priority">Приоритет</String>
+		<String ID="Generic.Status">Статус</String>
+		<String ID="Generic.Date">Дата</String>
+		<String ID="Generic.Game">Игра</String>
+		<String ID="Generic.ModificationDate">Дата изменения</String>
+		<String ID="Generic.Version">Версия</String>
+		<String ID="Generic.EnterData">Введите данные</String>
+		<String ID="Generic.DefaultValue">Значение по умолчанию</String>
+		<String ID="Generic.UseDefaultValue">Использовать значение по умолчанию</String>
+		<String ID="Generic.SystemMenu">Системное меню</String>
+		<String ID="Generic.CriticalError">Произошла критическая ошибка. Программа будет завершена.</String>
+		<String ID="Generic.OpenWebSiteDialog.Caption">Открыть данную веб-страницу?</String>
+		<String ID="Generic.OpenWebSiteListDialog.Caption">Выберите веб-страницу, которую хотите открыть</String>
+		<String ID="Generic.FileFindInProgress">Выполняется поиск файлов</String>
+		
+		<String ID="FileFilter">Фильтр файлов</String>
+		<String ID="FileFilter.AllFiles">Все файлы</String>
+		<String ID="FileFilter.AllSupportedFormats">Все поддерживаемые форматы</String>
+		<String ID="FileFilter.ModPackage">Установочный пакет</String>
+		<String ID="FileFilter.ModPackageSMI">Установочный пакет для KMM 1.x и SKSM</String>
+		<String ID="FileFilter.ModPackageFOMod">FOMod</String>
+		<String ID="FileFilter.ModProject">Проект установочного пакета</String>
+		<String ID="FileFilter.ModProjectSMP">Проект установочного пакета для KMM 1.x и SKSM</String>
+		<String ID="FileFilter.XML">Файлы XML</String>
+		<String ID="FileFilter.Programs">Программы</String>
+		<String ID="FileFilter.Image">Изображение</String>
+		<String ID="FileFilter.Images">Изображения</String>
+		<String ID="FileFilter.Text">Текстовые файлы</String>
+		<String ID="FileFilter.HTML">HTML документы</String>
+		<String ID="FileFilter.Shortcuts">Ярлыки</String>
+		<String ID="FileFilter.Archives">Архивы</String>
+		<String ID="FileFilter.7ZipArchive">Архив 7-Zip</String>
+		
+		<String ID="Init.Caption">Инициализация настроек</String>
+		<String ID="Init.AnotherInstanceRunning">Другая копия программы уже запущена.</String>
+		<String ID="Init.Status1">Чтение параметров</String>
+		<String ID="Init.Status2">Загрузка данных профиля</String>
+		<String ID="Init.StatusDone">Инициализация завершена</String>
+		<String ID="Init.Error1">Конфигурация профиля не загружена. Продолжение невозможно.</String>
+		<String ID="Init.Error2"><![CDATA[Файл конфигурации для профиля "%s" не найден. Будет использована конфигурация по умолчанию.]]></String>
+		<String ID="Init.Error3">Не удалось создать рабочее пространство</String>
+		<String ID="Init.ProfilesPath1">Папка с данными профилей не указана или не существует</String>
+		<String ID="Init.ProfilesPath2"><![CDATA[Вы можете использовать папку по умолчанию или выбрать другую.
+Использование папки по умолчанию не рекомендуется так как данные профилей могут занимать значительный размер, что может быть нежелательно для системного диска.]]></String>
+		
+		<!-- Settings Window -->
+		<String ID="Settings.Caption">Настройки программы</String>
+		<String ID="Settings.SaveMessage">Некоторые изменения будут применены только после перезапуска программы</String>
+		
+		<String ID="Settings.PrepareUninstall">Удаление программы</String>
+		<String ID="Settings.PrepareUninstall.Button">Подготовить к удалению</String>
+		<String ID="Settings.PrepareUninstall.Caption"><![CDATA[Вы уверены, что хотите удалить %s?]]></String>
+		<String ID="Settings.PrepareUninstall.Message"><![CDATA[Это действие удалит службу виртуальной файловой системы и позволит корректно выполнить удаление программы. После этого требуется удалить все файлы программы и перезагрузить компьютер.]]></String>
+		<String ID="Settings.PrepareUninstall.Success">Удаление службы виртуальной файловой системы успешно завершено. Для полного завершения процесса удаления необходимо перезагрузить компьютер.</String>
+		<String ID="Settings.PrepareUninstall.Error">Не удалось выполнить удаление службы виртуальной файловой системы.</String>
+		<String ID="Settings.PrepareUninstall.RebootNow">Перезагрузить сейчас</String>
+		<String ID="Settings.PrepareUninstall.RebootLater">Перезагрузить позже</String>
+		
+		<String ID="Settings.Categories.General">Основные параметры</String>
+		<String ID="Settings.Categories.VFS">Виртуальная файловая система (VFS)</String>
+		<String ID="Settings.Categories.VariablesOverride">Переопределение переменных</String>
+		<String ID="Settings.Categories.RunManager">Конфигурация запуска программ</String>
+		<String ID="Settings.Categories.PackageManager">Установщики</String>
+
+		<String ID="Settings.Value.Language">Язык интерфейса</String>
+		<String ID="Settings.Value.Workspace">Начальная страница</String>
+		<String ID="Settings.Value.ProfilesLocation">Папка хранения профилей</String>
+
+		<String ID="Settings.Value.MainEnabled">Активные основные программы</String>
+		<String ID="Settings.Value.PreMainSequence">Последовательность запуска предварительных программ</String>
+		<String ID="Settings.Value.PreMainTimeout">Интервал между запуском предварительных программ (мс)</String>
+		<String ID="Settings.Value.PreMainTimeoutAfter">Время ожидания после запуска предварительных программ (мс)</String>
+
+		<String ID="Settings.Value.PackagesLocation">Папка установочных пакетов</String>
+		<String ID="Settings.Value.GameRoot">Установочная папка $(NameShort)</String>
+		<String ID="Settings.Value.AutoShowPackageInfo">Автоматически показывать информацию об установочном пакете</String>
+		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</String>
+		
+		<!-- About dialog -->
+		<String ID="About.Version">Версия</String>
+		<String ID="About.Developer">Разработчик</String>
+		
+		<String ID="About.Tabs.Info">Информация</String>
+		<String ID="About.Tabs.Modules">Модули</String>
+		<String ID="About.Tabs.Permissions">Разрешения</String>
+		
+		<String ID="About.Info.Libraries">Используемые библиотеки</String>
+		<String ID="About.Info.IconPack">Используются иконки из набора %s от %s.</String>
+		
+		<String ID="About.Permissions"><![CDATA[
+Запрещено распространение этой программы без указания ссылки на официальный сайт.
+Официальным сайтом является %s.
+Если вы желаете разместить программу на другом сайте, прежде свяжитесь со мной - разработчиком программы.
+Вы можете сделать это на сайте %s через %s или написать в тему обсуждения программы на форуме.]]></String>
+		<String ID="About.Permissions.ContactMethod">личное сообщение</String>
+		<String ID="About.Permissions.DownloadPage">Страница загрузки</String>
+		<String ID="About.Permissions.SupportPage">Обсуждение и поддержка</String>
+
+		<!-- Profile selection -->
+		<String ID="ProfileSelection.Caption">Выбор профилей</String>
+		<String ID="ProfileSelection.CreateProfile">Создать профиль</String>
+		<String ID="ProfileSelection.RemoveProfile">Удалить профиль</String>
+		<String ID="ProfileSelection.CreateShortcut">Создать ярлык</String>
+		
+		<String ID="ProfileSelection.GameNotFound.Caption">Расположение $(NameShort) не найдено</String>
+		<String ID="ProfileSelection.GameNotFound.Message">Установочная папка $(Name) не найдена или не существует. Укажите папку вручную, чтобы продолжить.</String>
+		
+		<String ID="ProfileSelection.ChangeProfileDialog.Caption">Для смены профиля требуется перезапуск программы</String>
+		<String ID="ProfileSelection.ChangeProfileDialog.Message">Выполнить перезапуск?</String>
+		<String ID="ProfileSelection.ChangeProfileDialog.Yes">Перезапустить сейчас</String>
+		<String ID="ProfileSelection.ChangeProfileDialog.No">Не перезапускать</String>
+		<String ID="ProfileSelection.ChangeProfileDialog.Cancel">Отменить изменение профиля</String>
+		
+		<String ID="ProfileSelection.ConfirmRemoving.Caption"><![CDATA[Вы уверены, что хотите удалить пофиль "%s"?]]></String>
+		<String ID="ProfileSelection.ConfirmRemoving.Message"><![CDATA[Эту операцию невозможно отменить.
+
+Будет удалена следующая папка и всё её содержимое: %s]]></String>
+
+		<!-- Profile creation/editing -->
+		<String ID="ProfileCreatorDialog.Caption"><![CDATA[Создание нового профиля для "%s"]]></String>
+		<String ID="ProfileCreatorDialog.NameLabel">Название профиля</String>
+		<String ID="ProfileCreatorDialog.CopyFromLabel">Скопировать данные из профиля</String>
+		<String ID="ProfileCreatorDialog.CopyModsLabel">Копировать моды</String>
+		<String ID="ProfileCreatorDialog.CopyModTags">Копировать теги модов</String>
+		<String ID="ProfileCreatorDialog.CopyProfileConfigLabel">Копировать настройки профиля</String>
+		<String ID="ProfileCreatorDialog.CopyRunManagerPrograms">Копировать список программ для запуска</String>
+		<String ID="ProfileCreatorDialog.CopyGameConfigLabel">Копировать настройки игры</String>
+		<String ID="ProfileCreatorDialog.ProfileNameInvalid">Некорректное название профиля. Выберите другое название.</String>
+		<String ID="ProfileCreatorDialog.ProfileNameCollision">Профиль с данным названием уже существует. Выберите другое название.</String>
+		<String ID="ProfileCreatorDialog.CreationError">Не удалось создать новый профиль</String>
+		<String ID="ProfileCreatorDialog.CopyingProfileData">Копирование данных профиля</String>
+		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigCaption">Обнаружены файлы конфигурации игры</String>
+		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage"><![CDATA[Для %s возможно использовать виртуальную папку для %s. В папке "%s" обнаружены файлы, которые можно использовать для создания виртуальной папки.
+
+Рекомендуется скопировать эти файлы]]></String>
+		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage2">настроек и сохранений</String>
+
+		<String ID="OpenLocation.AppSettings">Настройки программы</String>
+		<String ID="OpenLocation.GameRoot">Папка игры</String>
+		<String ID="OpenLocation.VirtualGameRoot">Виртуальная папка игры</String>
+		<String ID="OpenLocation.ConfigRoot">Папка настроек игры</String>
+		<String ID="OpenLocation.VirtualConfigRoot">Виртуальная папка настроек игры</String>
+		<String ID="OpenLocation.WriteTargetRoot">Папка перезаписи</String>
+		<String ID="OpenLocation.CurrentProfileRoot">Папка выбранного профиля</String>
+		<String ID="OpenLocation.ProfilesRoot">Папка хранения данных профилей</String>
+		<String ID="OpenLocation.ModsRoot">Папка с модами</String>
+		<String ID="OpenLocation.ModPackages">Установочные пакеты</String>
+		<String ID="OpenLocation.Saves">Папка с сохранениями</String>
+		
+		<!-- ToolBar -->
+		<String ID="ToolBar.ConfigManager">Конфигурация игры</String>
+		<String ID="ToolBar.ModManager">Управление модами</String>
+		<String ID="ToolBar.PackageCreator">Создание установщиков</String>
+		<String ID="ToolBar.PackageManager">Установочные пакеты</String>
+		<String ID="ToolBar.PluginManager">Управление плагинами</String>
+		<String ID="ToolBar.PluginManagerShort">Плагины</String>
+		<String ID="ToolBar.ScreenshotsGalleryManager">Галерея скриншотов</String>
+		<String ID="ToolBar.SaveManager">Управление сохранениями</String>
+		<String ID="ToolBar.SaveManagerShort">Сохранения</String>
+		<String ID="ToolBar.DownloadManager">Менеджер загрузок</String>
+		<String ID="ToolBar.DownloadManagerShort">Загрузки</String>
+		<String ID="ToolBar.RunManager">Запуск программ</String>
+		<String ID="ToolBar.QuickSettingsMenu">Меню быстрых настроек</String>
+		<String ID="ToolBar.Help">Справка</String>
+		
+		<!-- Main menu -->
+		<String ID="MainMenu.Settings">Настройки программы</String>
+		<String ID="MainMenu.ChangeProfile">Сменить профиль. Выбран: $(NameShort) - $(CurrentProfileConfig)</String>
+		<String ID="MainMenu.Run">Запустить</String>
+		<String ID="MainMenu.OpenLocation">Открыть расположение</String>
+		<String ID="MainMenu.About">О программе</String>
+
+		<!-- Console -->
+		<String ID="Console.Message">Сообщение</String>
+
+		<!-- Workspace controller -->
+		<String ID="Controller.SaveChanges.Caption">Имеются несохранённые изменения</String>
+		<String ID="Controller.SaveChanges.Message">Сохранить внесённые изменения?</String>
+		<String ID="Controller.SaveChanges.Save">Сохранить изменения</String>
+		<String ID="Controller.SaveChanges.Discard">Отменить изменения</String>
+
+		<!-- Image viewer -->
+		<String ID="ImageViewer.Caption">Просмотр изображения</String>
+		
+		<!-- Text editor -->
+		<String ID="TextEditor.Caption">Просмотр и редактирование текста</String>
+		<String ID="TextEditor.ToolBar.Mode">Переключить режим редактора</String>
+		<String ID="TextEditor.ToolBar.Heading">Заголовок</String>
+
+		<!-- Config manager -->
+		<String ID="ConfigManager.EditValue.EnterVirtualKey"><![CDATA[Выберите значение из списка ниже или нажмите
+нужную клавишу на клавиутуре]]></String>
+		<String ID="ConfigManager.EditValue.ValuesRange">Допустимые значения</String>
+		<String ID="ConfigManager.EditValue.Success">Все параметры успешно сохранены</String>
+		<String ID="ConfigManager.EditValue.Error">Ошибка при сохранении параметров</String>
+		<String ID="ConfigManager.EditValue.Discarded">Изменения параметров отменены</String>
+		<String ID="ConfigManager.EditValue.Loading"><![CDATA[Загрузка "%s"]]></String>
+		<String ID="ConfigManager.EditValue.Saving">Сохранение...</String>
+		<String ID="ConfigManager.EditValue.ModifyValue">Изменить значение</String>
+		<String ID="ConfigManager.EditValue.CreateValue.Caption">Добавление параметра</String>
+		<String ID="ConfigManager.EditValue.CreateValue.PathHint">Введите название секции</String>
+		<String ID="ConfigManager.EditValue.CreateValue.ValueNameHint">Введите название параметра</String>
+		<String ID="ConfigManager.EditValue.CreateValue.ValueDataHint">Введите значение</String>
+		<String ID="ConfigManager.EditValue.CreateValue.NameCollision">Новый параметр совпадает с одним из известных параметров. Выберите другие путь и/или название</String>
+		<String ID="ConfigManager.EditValue.CreateValue.EmptyFields">Пустые поля не допускаются</String>
+		<String ID="ConfigManager.EditValue.CreateValue">Добавить параметр</String>
+		<String ID="ConfigManager.EditValue.RemoveValue">Удалить параметр</String>
+		<String ID="ConfigManager.EditValue.RemovePath">Удалить секцию</String>
+
+		<String ID="ConfigManager.View.Path">Путь</String>
+		<String ID="ConfigManager.View.Value">Значение</String>
+		<String ID="ConfigManager.View.Name">Параметр</String>
+		<String ID="ConfigManager.View.Type">Тип</String>
+		<String ID="ConfigManager.View.NoValue">Нет</String>
+		<String ID="ConfigManager.View.EmptyStringValue">Пустая строка</String>
+
+		<String ID="ConfigManager.Types.Unknown">unknown</String>
+		<String ID="ConfigManager.Types.int">int</String>
+		<String ID="ConfigManager.Types.uint">uint</String>
+		<String ID="ConfigManager.Types.int8">int8</String>
+		<String ID="ConfigManager.Types.uint8">uint8</String>
+		<String ID="ConfigManager.Types.int16">int16</String>
+		<String ID="ConfigManager.Types.uint16">uint16</String>
+		<String ID="ConfigManager.Types.int32">int32</String>
+		<String ID="ConfigManager.Types.uint32">uint32</String>
+		<String ID="ConfigManager.Types.int64">int64</String>
+		<String ID="ConfigManager.Types.uint64">uint64</String>
+		<String ID="ConfigManager.Types.float">float</String>
+		<String ID="ConfigManager.Types.float32">float32</String>
+		<String ID="ConfigManager.Types.float64">float64</String>
+		<String ID="ConfigManager.Types.string">string</String>
+		<String ID="ConfigManager.Types.wstring">wstring</String>
+		<String ID="ConfigManager.Types.bool">bool</String>
+		<String ID="ConfigManager.Types.struct">struct</String>
+
+		<String ID="ConfigManager.VirtualKey.VK_NONE">Не назначено</String>
+		<String ID="ConfigManager.VirtualKey.VK_LBUTTON">Левая кнопка мыши</String>
+		<String ID="ConfigManager.VirtualKey.VK_RBUTTON">Правая кнопка мыши</String>
+		<String ID="ConfigManager.VirtualKey.VK_MBUTTON">Средняя кнопка мыши</String>
+		<String ID="ConfigManager.VirtualKey.VK_XBUTTON1">Кнопка мыши X1</String>
+		<String ID="ConfigManager.VirtualKey.VK_XBUTTON2">Кнопка мыши X2</String>
+		<String ID="ConfigManager.VirtualKey.VK_SPACE">Пробел</String>
+		<String ID="ConfigManager.VirtualKey.VK_LWIN">Левая кнопка Windows</String>
+		<String ID="ConfigManager.VirtualKey.VK_RWIN">Правая кнопка Windows</String>
+		<String ID="ConfigManager.VirtualKey.VK_LSHIFT">Левый Shift</String>
+		<String ID="ConfigManager.VirtualKey.VK_RSHIFT">Правый Shift</String>
+		<String ID="ConfigManager.VirtualKey.VK_LCONTROL">Левый Ctrl</String>
+		<String ID="ConfigManager.VirtualKey.VK_RCONTROL">Правый Ctrl</String>
+		<String ID="ConfigManager.VirtualKey.VK_LMENU">Левый Alt</String>
+		<String ID="ConfigManager.VirtualKey.VK_RMENU">Правый Alt</String>
+		<String ID="ConfigManager.VirtualKey.VK_LEFT">Стрелка влево</String>
+		<String ID="ConfigManager.VirtualKey.VK_UP">Стрелка вверх</String>
+		<String ID="ConfigManager.VirtualKey.VK_RIGHT">Стрелка вправо</String>
+		<String ID="ConfigManager.VirtualKey.VK_DOWN">Стрелка вниз</String>
+
+		<String ID="ConfigManager.Categories.None">Неизвестные параметры</String>
+
+		<String ID="ConfigManager.Samples.None">Нет</String>
+		<String ID="ConfigManager.Samples.VeryLow">Очень низкий</String>
+		<String ID="ConfigManager.Samples.Low">Низкий</String>
+		<String ID="ConfigManager.Samples.Mid">Средний</String>
+		<String ID="ConfigManager.Samples.High">Высокий</String>
+		<String ID="ConfigManager.Samples.VeryHigh">Очень высокий</String>
+		<String ID="ConfigManager.Samples.Ultra">Ультра</String>
+		<String ID="ConfigManager.Samples.Extreme">Экстремальный</String>
+		<String ID="ConfigManager.Samples.VideoMode.RatioUnknown">Неизвестное соотношение сторон</String>
+
+		<String ID="GameConfig.Samples.Language.RUSSIAN">Русский</String>
+		<String ID="GameConfig.Samples.Language.ENGLISH">Английский</String>
+		<String ID="GameConfig.Samples.Language.GERMAN">Немецкий</String>
+		<String ID="GameConfig.Samples.Language.FRENCH">Французский</String>
+		<String ID="GameConfig.Samples.Language.CZECH">Чешский</String>
+		<String ID="GameConfig.Samples.Language.ITALIAN">Итальянский</String>
+		<String ID="GameConfig.Samples.Language.POLISH">Польский</String>
+		<String ID="GameConfig.Samples.Language.SPANISH">Испанский</String>
+		<String ID="GameConfig.Samples.Language.CHINESE">Китайский</String>
+		<String ID="GameConfig.Samples.Language.DANISH">Датский</String>
+		<String ID="GameConfig.Samples.Language.FINNISH">Финский</String>
+		<String ID="GameConfig.Samples.Language.GREEK">Греческий</String>
+		<String ID="GameConfig.Samples.Language.JAPANESE">Японский</String>
+		<String ID="GameConfig.Samples.Language.NORWEGIAN">Норвежский</String>
+		<String ID="GameConfig.Samples.Language.PORTUGUESE">Португальский</String>
+		<String ID="GameConfig.Samples.Language.SWEDISH">Шведский</String>
+		<String ID="GameConfig.Samples.Language.TURKISH">Турецкий</String>
+
+		<!-- GameConfig -->
+		<String ID="GameConfig.Categories.Game">Игра</String>
+		<String ID="GameConfig.Categories.Editor">Редактор</String>
+		<String ID="GameConfig.Categories.Graphics">Графика</String>
+		<String ID="GameConfig.Categories.Shadows">Тени</String>
+		<String ID="GameConfig.Categories.Water">Вода</String>
+		<String ID="GameConfig.Categories.Audio">Звук</String>
+		<String ID="GameConfig.Categories.Gameplay">Геймплей</String>
+		<String ID="GameConfig.Categories.Interface">Интерфейс</String>
+		<String ID="GameConfig.Categories.Vegetation">Растительность</String>
+		<String ID="GameConfig.Categories.LevelOfDetail">Уровень детализации</String>
+		<String ID="GameConfig.Categories.Grass">Трава</String>
+		<String ID="GameConfig.Categories.Trees">Деревья</String>
+		<String ID="GameConfig.Categories.Misc">Разное</String>
+		<String ID="GameConfig.Categories.Archives">Архивы</String>
+		<String ID="GameConfig.Categories.MemoryManagement">Управление памятью</String>
+		<String ID="GameConfig.Categories.BackgroudLoading">Фоновая загрузка</String>
+		<String ID="GameConfig.Categories.Debug">Отладка</String>
+		<String ID="GameConfig.Categories.ENB">ENB</String>
+		<String ID="GameConfig.Categories.ENB.General">Общие параметры</String>
+		<String ID="GameConfig.Categories.ENB.Effects">Эффекты</String>
+		<String ID="GameConfig.Categories.ENB.Bloom">Свечение (Bloom)</String>
+		<String ID="GameConfig.Categories.ENB.AmbientOcclusion">Ambient Occlusion</String>
+		<String ID="GameConfig.Categories.ENB.ProxyLibrary">Прокси-библиотека</String>
+		<String ID="GameConfig.Categories.ENB.FPSLimit">Ограничение FPS</String>
+		<String ID="GameConfig.Categories.ENB.Controls">Настройка управления</String>
+		<String ID="GameConfig.Categories.ENB.Antialiasing">Сглаживание</String>
+		<String ID="GameConfig.Categories.ENB.Fixes">Исправления</String>
+		<String ID="GameConfig.Categories.ENB.Performance">Производительность</String>
+		<String ID="GameConfig.Categories.ENB.Memory">Память</String>
+		<String ID="GameConfig.Categories.ENB.AdaptiveQuality">Адаптивное качество</String>
+		<String ID="GameConfig.Categories.ENB.Multihead">Настройки для нескольких GPU</String>
+		<String ID="GameConfig.Categories.ENB.ColorCorrection">Коррекция цвета</String>
+		<String ID="GameConfig.Categories.ENB.Weather">Погода</String>
+
+		<String ID="GameConfig.Samples.TexturesExtra">Повышенная резкость</String>
+		
+		<String ID="GameConfig.Samples.Difficulty0">Новичок</String>
+		<String ID="GameConfig.Samples.Difficulty1">Ученик</String>
+		<String ID="GameConfig.Samples.Difficulty2">Адепт</String>
+		<String ID="GameConfig.Samples.Difficulty3">Эксперт</String>
+		<String ID="GameConfig.Samples.Difficulty4">Мастер</String>
+		<String ID="GameConfig.Samples.Difficulty5">Легендарный</String>
+		
+		<!-- Graphics -->
+		<String ID="GameConfig.Values.sD3DDevice">Название видеоадаптера</String>
+		<String ID="GameConfig.Values.bFull Screen">Полноэкранный режим</String>
+		<String ID="GameConfig.Values.bFXAAEnabled">Использовать FXAA сглаживание</String>
+		<String ID="GameConfig.Values.iPresentInterval">Вертикальная синхронизация</String>
+		<String ID="GameConfig.Values.bTransparencyMultisampling">Сглаживание прозрачных поверхностей</String>
+		<String ID="GameConfig.Values.bDoHighDynamicRange">Использовать HDR</String>
+		<String ID="GameConfig.Values.bUseBlurShader">Использовать шейдер размытия</String>
+		<String ID="GameConfig.Values.bDoDepthOfField">Глубина резкости</String>
+		<String ID="GameConfig.Values.bDoRadialBlur">Радиальное размытие</String>
+		<String ID="GameConfig.Values.bDisableAllGore">Отключить все эффекты насилия</String>
+		<String ID="GameConfig.Values.bBloodSplatterEnabled">Брызги крови на экране</String>
+		<String ID="GameConfig.Values.bFloatPointRenderTarget">bFloatPointRenderTarget</String>
+		<String ID="GameConfig.Values.iMultiSample">Сглаживание</String>
+		<String ID="GameConfig.Values.iMaxAnisotropy">Анизотропная фильтрация</String>
+		<String ID="GameConfig.Values.iTexMipMapSkip">Качество текстур</String>
+		<String ID="GameConfig.Values.fGamma">Гамма-коррекция</String>
+		<String ID="GameConfig.Values.ScreenResolution">Разрешение экрана</String>
+
+		<!-- Shadows -->
+		<String ID="GameConfig.Values.bTreesReceiveShadows">Тени на деревьях</String>
+		<String ID="GameConfig.Values.bDrawLandShadows">Тени от ландшафта</String>
+		<String ID="GameConfig.Values.bActorSelfShadowing">Тени на персонажах</String>
+		<String ID="GameConfig.Values.iShadowMapResolution">Разрешение теней</String>
+		<String ID="GameConfig.Values.iBlurDeferredShadowMask">Размытие теней</String>
+		<String ID="GameConfig.Values.iShadowMaskQuarter">Чёткость теней</String>
+		<String ID="GameConfig.Values.fShadowDistance">Дистанция теней</String>
+		<String ID="GameConfig.Values.fInteriorShadowDistance">Дистанция в интерьерах</String>
+		<String ID="GameConfig.Values.fShadowBiasScale">Смещение теней</String>
+		<String ID="GameConfig.Values.fSunUpdateThreshold">Допуск обновления теней от солнца</String>
+		<String ID="GameConfig.Values.fSunShadowUpdateTime">Длительность обновления теней от солнца</String>
+
+		<!-- Water -->
+		<String ID="GameConfig.Values.bUseWaterReflections">Отражения на воде</String>
+		<String ID="GameConfig.Values.bReflectLODObjects">Отражать удалённые объекты</String>
+		<String ID="GameConfig.Values.bReflectLODLand">Отражать удалённый ландшафт</String>
+		<String ID="GameConfig.Values.bReflectSky">Отражать небо</String>
+		<String ID="GameConfig.Values.bReflectLODTrees">Отражать удалённые деревья</String>
+		<String ID="GameConfig.Values.bUseWaterRefractions">Преломление света в воде</String>
+		<String ID="GameConfig.Values.bUseWaterDepth">Эффекты глубины</String>
+		<String ID="GameConfig.Values.bUseWaterDisplacements">Эффекты водоизмещения</String>
+		<String ID="GameConfig.Values.iWaterMultiSamples">Сглаживание</String>
+		<String ID="GameConfig.Values.WaterReflectionsResolution">Разрешение отражений</String>
+
+		<!-- Audio -->
+		<String ID="GameConfig.Values.bEnableAudio">Включить звук</String>
+		<String ID="GameConfig.Values.fAudioMasterVolume">Общая громкость</String>
+		<String ID="GameConfig.Values.fVal0">Эффекты</String>
+		<String ID="GameConfig.Values.fVal1">Шаги</String>
+		<String ID="GameConfig.Values.fVal2">Голос</String>
+		<String ID="GameConfig.Values.fVal3">Музыка</String>
+		<String ID="GameConfig.Values.fVal4">Шаги NPC</String>
+		<String ID="GameConfig.Values.fVal5">Меню</String>
+		<String ID="GameConfig.Values.fVal6">Магия</String>
+		<String ID="GameConfig.Values.fVal7">Голос</String>
+
+		<!-- Gameplay -->
+		<String ID="GameConfig.Values.bGamepadEnable">Активировать геймпад</String>
+		<String ID="GameConfig.Values.bGamePadRumble">Вибрация геймпада</String>
+		<String ID="GameConfig.Values.bSaveOnPause">Сохранять в меню паузы</String>
+		<String ID="GameConfig.Values.bSaveOnWait">Сохранять при ожидании</String>
+		<String ID="GameConfig.Values.bSaveOnTravel">Сохранять при путешествии</String>
+		<String ID="GameConfig.Values.bSaveOnRest">Сохранять при отдыхе</String>
+		<String ID="GameConfig.Values.iDifficulty">Уровень сложности</String>
+		<String ID="GameConfig.Values.fAutosaveEveryXMins">Интервал автосохранения (в минутах)</String>
+
+		<!-- Interface -->
+		<String ID="GameConfig.Values.sLanguage">Язык</String>
+		<String ID="GameConfig.Values.bDialogueSubtitles">Субтитры диалогов</String>
+		<String ID="GameConfig.Values.bGeneralSubtitles">Общие субтитры</String>
+		<String ID="GameConfig.Values.bShowCompass">Показывать компас</String>
+		<String ID="GameConfig.Values.bShowQuestMarkers">Показывать квестовые маркеры</String>
+		<String ID="GameConfig.Values.bShowFloatingQuestMarkers">Показывать плавающие квестовые маркеры</String>
+		<String ID="GameConfig.Values.bCrosshairEnabled">Включить перекрестие</String>
+		<String ID="GameConfig.Values.bShowHUDMessages">Показывать HUD-сообщения</String>
+		<String ID="GameConfig.Values.bShowTutorials">Показывать обучающие сообщения</String>
+		<String ID="GameConfig.Values.bShowSubtitleSpeakerName">Показывать имя говорящего персонажа в субтитрах</String>
+		<String ID="GameConfig.Values.bTrackProgress">Показывать шкалу прогресса уровня</String>
+		<String ID="GameConfig.Values.bHealthBarShowing">Показывать шкалу здоровья</String>
+		<String ID="GameConfig.Values.fHUDOpacity">Прозрачность HUD</String>
+		<String ID="GameConfig.Values.fMaxSubtitleDistance">Максимальное расстояние отображения субтитров</String>
+		<String ID="GameConfig.Values.fMouseCursorSpeed">Скорость указателя мыши</String>
+		<String ID="GameConfig.Values.sIntroSequence">Вступительные видео</String>
+
+		<!-- Vegetation -->
+		<String ID="GameConfig.Values.bAllowCreateGrass">Включить траву</String>
+		<String ID="GameConfig.Values.bGrassPointLighting">Точечное освещение травы</String>
+		<String ID="GameConfig.Values.bDrawShaderGrass">Улучшенный шейдер травы</String>
+		<String ID="GameConfig.Values.fGrassFadeRange">Дистанция исчезновения травы</String>
+		<String ID="GameConfig.Values.iMinGrassSize">Плотность травяного покрова</String>
+		<String ID="GameConfig.Values.iMaxGrassTypesPerTexure">Разнообразие типов травы</String>
+		<String ID="GameConfig.Values.bRenderSkinnedTrees">Использовать скиннинг деревьев</String>
+		<String ID="GameConfig.Values.uiMaxSkinnedTreesToRender">Максимальное количество отскиненных деревьев</String>
+		<String ID="GameConfig.Values.fTreeLoadDistance">Расстояние видимости деревьев</String>
+		
+		<!-- Level of Detail -->
+		<String ID="GameConfig.Values.bPrecipitation">Погодные эффекты</String>
+		<String ID="GameConfig.Values.bDecals">Включить декали</String>
+		<String ID="GameConfig.Values.fLODFadeOutMultObjects">Видимость объектов</String>
+		<String ID="GameConfig.Values.fLODFadeOutMultItems">Видимость предметов</String>
+		<String ID="GameConfig.Values.fLODFadeOutMultActors">Видимость персонажей</String>
+		<String ID="GameConfig.Values.fSkyCellRefFadeDistance">Видимость облаков</String>
+		<String ID="GameConfig.Values.fBlockMaximumDistance">fBlockMaximumDistance</String>
+		<String ID="GameConfig.Values.fBlockLevel1Distance">fBlockLevel1Distance</String>
+		<String ID="GameConfig.Values.fBlockLevel0Distance">fBlockLevel0Distance</String>
+		<String ID="GameConfig.Values.fSplitDistanceMult">fSplitDistanceMult</String>
+		<String ID="GameConfig.Values.uGridsToLoad">Ячеек для загрузки</String>
+		<String ID="GameConfig.Values.iMaxDesired">Количество частиц</String>
+		<String ID="GameConfig.Values.fTreesMidLODSwitchDist">Расстояние переключения детализации деревьев</String>
+
+		<!-- Misc -->
+		<String ID="GameConfig.Values.bAlwaysRunByDefault">Бег включен по умолчанию</String>
+		<String ID="GameConfig.Values.bMouseAcceleration">Ускорение мыши</String>
+		<String ID="GameConfig.Values.bInvertYValues">Инверсия мыши по оси Y</String>
+		<String ID="GameConfig.Values.bEnableFileSelection">Активировать подключение плагинов в $(LauncherName)</String>
+		<String ID="GameConfig.Values.bAllowScreenshot">Разрешить скриншоты</String>
+		<String ID="GameConfig.Values.bAlwaysActive">Игра всегда активна</String>
+		<String ID="GameConfig.Values.bPreemptivelyUnloadCells">Выгружать ненужные ячейки</String>
+		<String ID="GameConfig.Values.bPreCullActors">Предварительная отбраковка персонажей</String>
+		<String ID="GameConfig.Values.bSelectivePurgeUnusedOnFastTravel">Выборочная очистка неиспользуемых данных при быстром путешествии</String>
+		<String ID="GameConfig.Values.bEnableLogging">Включить журналирование</String>
+		<String ID="GameConfig.Values.bEnableTrace">Включить трассировку</String>
+		<String ID="GameConfig.Values.bEnableProfiling">Включить профайлинг</String>
+		<String ID="GameConfig.Values.bEnableStoryManagerLogging">Включить журналирование менеджера событий</String>
+		<String ID="GameConfig.Values.bUseBackgroundFileLoader">Использовать фоновый загрузчик файлов</String>
+		<String ID="GameConfig.Values.bBackgroundLoadLipFiles">Загрузка LIP файлов</String>
+		<String ID="GameConfig.Values.bLoadBackgroundFaceGen">Загрузка файлов FaceGen</String>
+		<String ID="GameConfig.Values.bUseMultiThreadedFaceGen">Многопоточность FaceGen</String>
+		<String ID="GameConfig.Values.bBackgroundCellLoads">Использовать фоновую загрузку локаций</String>
+		<String ID="GameConfig.Values.bLoadHelmetsInBackground">Использовать фоновую загрузку для шлемов</String>
+		<String ID="GameConfig.Values.bUseMultiThreadedTrees">Многопоточность для деревьев</String>
+		<String ID="GameConfig.Values.fMouseHeadingSensitivity">Чувствительность мыши</String>
+		<String ID="GameConfig.Values.fMouseWheelZoomSpeed">Скорость масштабирования камеры</String>
+		<String ID="GameConfig.Values.iScreenShotIndex">Индекс файла скриншота</String>
+		<String ID="GameConfig.Values.fInAirFallingCharGravityMult">Множитель силы гравитации для персонажей</String>
+		<String ID="GameConfig.Values.bInvalidateOlderFiles">Инвалидация архивов</String>
+
+		<!-- ENB: General -->
+		<String ID="GameConfig.Values.MaxAnisotropy">Анизотропная фильтрация</String>
+		<String ID="GameConfig.Values.ForceAnisotropicFiltering">Принудительная анизотропная фильтрация</String>
+		<String ID="GameConfig.Values.UseDefferedRendering">Отложенный рендеринг</String>
+		<String ID="GameConfig.Values.ForceBorderless">Окно без рамки</String>
+		<String ID="GameConfig.Values.ForceBorderlessFullscreen">Окно без рамки и полноэкранный режим</String>
+		<String ID="GameConfig.Values.EnableVSync">Вертикальная синхронизация</String>
+		<String ID="GameConfig.Values.VSyncSkipNumFrames">Количество пропускаемых кадров в режиме вертикальной синхронизации</String>
+		<String ID="GameConfig.Values.ForceLodBias">Использовать смещение для LOD текстур</String>
+		<String ID="GameConfig.Values.LodBias">Величина смещения для LOD текстур</String>
+		<String ID="GameConfig.Values.AddDisplaySuperSamplingResolutions">Активировать даунсемплинг</String>
+
+		<!-- ENB: Effects -->
+		<String ID="GameConfig.Values.UseEffect">Включить графические эффекты</String>
+		<String ID="GameConfig.Values.UseOriginalPostProcessing">Оригинальная постобработка</String>
+		<String ID="GameConfig.Values.UseOriginalObjectsProcessing">Оригинальная постобработка объектов</String>
+		<String ID="GameConfig.Values.EnableAdaptation">Включить эффект адаптации к освещению</String>
+		<String ID="GameConfig.Values.EnableAmbientOcclusion">Включить Ambient Occlusion (AO)</String>
+		<String ID="GameConfig.Values.EnableDepthOfField">Глубина резкости</String>
+		<String ID="GameConfig.Values.EnableDetailedShadow">Детальные тени</String>
+		<String ID="GameConfig.Values.EnableCloudShadows">Тени от облаков</String>
+		<String ID="GameConfig.Values.EnableImageBasedLighting">Включить ImageBased-освещение</String>
+		<String ID="GameConfig.Values.EnableSunRays">Солнечные лучи</String>
+		<String ID="GameConfig.Values.EnableSunGlare">Солнечные блики</String>
+		<String ID="GameConfig.Values.EnableSkyLighting">Освещение неба</String>
+		<String ID="GameConfig.Values.EnableReflection">Отражения</String>
+		<String ID="GameConfig.Values.EnableLens">Эффект линз</String>
+		<String ID="GameConfig.Values.EnableMist">Туман</String>
+		<String ID="GameConfig.Values.EnableParticleLights">Освещение частицами</String>
+		<String ID="GameConfig.Values.EnableSoftParticles">Сглаживание эффектов частиц</String>
+		<String ID="GameConfig.Values.EnableProceduralSun">Процедурная генерация солнечных эффектов</String>
+		<String ID="GameConfig.Values.EnableSubSurfaceScattering">Подповерхностное рассеивание (SSS)</String>
+		<String ID="GameConfig.Values.EnableWater">Включить водные эффекты</String>
+		<String ID="GameConfig.Values.EnableUnderwater">Включить подводные эффекты</String>
+		<String ID="GameConfig.Values.EnableVolumetricRays">Объёмные лучи</String>
+
+		<!-- ENB: Bloom -->
+		<String ID="GameConfig.Values.EnableBloom">Включить свечение</String>
+		<String ID="GameConfig.Values.BloomQuality">Качество свечения</String>
+
+		<!-- ENB: Ambient Occlusion -->
+		<String ID="GameConfig.Values.UseIndirectLighting">Использовать отражённое освещение (IL)</String>
+		<String ID="GameConfig.Values.UseComplexIndirectLighting">Использовать сложное отражённое освещение</String>
+		<String ID="GameConfig.Values.UseComplexAmbientOcclusion">Использовать комплексный AO</String>
+		<String ID="GameConfig.Values.UseAmbientIndirectLighting">Использовать IL окружения</String>
+		<String ID="GameConfig.Values.SamplingQuality">Качество выборки</String>
+		<String ID="GameConfig.Values.FilterQuality">Качество фильтрации</String>
+		<String ID="GameConfig.Values.FilterType">Тип фильтра</String>
+		<String ID="GameConfig.Values.SamplingRange">Диапазон выборки</String>
+		<String ID="GameConfig.Values.SamplingPrecision">Точность выборки</String>
+		<String ID="GameConfig.Values.EnableDenoiser">Включить фильтр шумов</String>
+		<String ID="GameConfig.Values.EnableSupersampling">Включить избыточную выборку</String>
+		<String ID="GameConfig.Values.EnableComplexFilter">Включить комплексный фильтр</String>
+		<String ID="GameConfig.Values.AOType">Тип AO</String>
+		<String ID="GameConfig.Values.ILType">Тип IL</String>
+		<String ID="GameConfig.Values.AOMixingType">Тип смешивания AO</String>
+		<String ID="GameConfig.Values.AOMixingTypeInterior">Тип смешивания AO в интерьерах</String>
+
+		<!-- ENB: Shadows -->
+		<String ID="GameConfig.Values.UseShadowFilter">Использовать фильтрацию</String>
+		<String ID="GameConfig.Values.ShadowObjectsFix">Исправление теней на объектах</String>
+		<String ID="GameConfig.Values.ShadowCastersFix">Исправление ступенчатости</String>
+		<String ID="GameConfig.Values.UseBilateralShadowFilter">Двустронняя фильтрация теней</String>
+		<String ID="GameConfig.Values.ShadowQualityFix">Исправление качества</String>
+		<String ID="GameConfig.Values.ShadowFilterQuality">Качество фильтрации</String>
+		<String ID="GameConfig.Values.DetailedShadowQuality">Качество детализации</String>
+		<String ID="GameConfig.Values.ShadowBlurRange">Диапазон размытия</String>
+		<String ID="GameConfig.Values.ShadowBlurRangeInterior">Диапазон размытия в интерьерах</String>
+
+		<!-- ENB: FPS Limit -->
+		<String ID="GameConfig.Values.EnableFPSLimit">Включить ограничение FPS</String>
+		<String ID="GameConfig.Values.WaitBusyRenderer">Ждать завершения рендеринга кадра</String>
+		<String ID="GameConfig.Values.FPSLimit">Максимум FPS</String>
+
+		<!-- ENB: ProxyLibrary -->
+		<String ID="GameConfig.Values.EnableProxyLibrary">Активировать прокси-библиотеку</String>
+		<String ID="GameConfig.Values.InitProxyFunctions">Инициализация функций прокси</String>
+		<String ID="GameConfig.Values.ProxyLibrary">Путь к файлу библиотеки</String>
+
+		<!-- ENB: Controls -->
+		<String ID="GameConfig.Values.KeyReadConfig">Чтение параметров</String>
+		<String ID="GameConfig.Values.KeyCombination">Клавиша комбинации</String>
+		<String ID="GameConfig.Values.KeyUseEffect">Переключение использования графических эффектов</String>
+		<String ID="GameConfig.Values.KeyFPSLimit">Переключение ограничения FPS</String>
+		<String ID="GameConfig.Values.KeyShowFPS">Включение отображения FPS на экране</String>
+		<String ID="GameConfig.Values.KeyScreenshot">Сделать скриншот</String>
+		<String ID="GameConfig.Values.KeyEditor">Вызов внутриигрового редактора параметров</String>
+		<String ID="GameConfig.Values.KeyFreeVRAM">Освободить видеопамять</String>
+		<String ID="GameConfig.Values.KeyBruteForce"><![CDATA[Активация пресета "грубая сила"]]></String>
+		
+		<!-- ENB: Fixes -->
+		<String ID="GameConfig.Values.FixPhysics">Исправлять физику</String>
+		<String ID="GameConfig.Values.FixGameBugs">Исправлять ошибки игры</String>
+		<String ID="GameConfig.Values.FixParallaxBugs">Исправлять ошибки параллакса</String>
+		<String ID="GameConfig.Values.FixAliasedTextures">Исправлять несглаженные текстуры</String>
+		<String ID="GameConfig.Values.IgnoreLoadingScreen">Игнорировать загрузочные экраны</String>
+		<String ID="GameConfig.Values.IgnoreInventory">Игнорировать инвентарь</String>
+		<String ID="GameConfig.Values.FixSsaoWaterTransparency">Исправлять прозрачность воды для SSAO</String>
+		<String ID="GameConfig.Values.FixSsaoHairTransparency">Исправлять прозрачность волос для SSAO</String>
+		<String ID="GameConfig.Values.FixTintGamma">Исправлять гамму оттенков</String>
+		<String ID="GameConfig.Values.RemoveBlur">Убрать размытие</String>
+		<String ID="GameConfig.Values.FixSubSurfaceScattering">Исправлять подповерхностное рассеивание (SSS)</String>
+		<String ID="GameConfig.Values.FixParallaxTerrain">Исправлять параллакс местности</String>
+		<String ID="GameConfig.Values.FixSkyReflection">Исправлять отражения неба</String>
+		<String ID="GameConfig.Values.FixCursorVisibility">Исправлять отображение курсора мыши</String>
+		<String ID="GameConfig.Values.FixLag">Исправлять зависания</String>
+		<String ID="GameConfig.Values.IgnoreCreationKit">Игнорировать $(EditorName)</String>
+
+		<!-- ENB: Antialiasing -->
+		<String ID="GameConfig.Values.EnableEdgeAA">Сглаживание рёбер</String>
+		<String ID="GameConfig.Values.EnableSubPixelAA">Субпиксельное сглаживание</String>
+		<String ID="GameConfig.Values.EnableTemporalAA">Временно́е сглаживание</String>
+
+		<!-- ENB: Performance -->
+		<String ID="GameConfig.Values.UsePatchSpeedhackWithoutGraphics">Использовать ускорение без графических эффектов</String>
+		<String ID="GameConfig.Values.SpeedHack">SpeedHack</String>
+		<String ID="GameConfig.Values.EnableOcclusionCulling">Отбраковка невидимых объектов</String>
+		<String ID="GameConfig.Values.DataSyncMode">DataSyncMode</String>
+		<String ID="GameConfig.Values.PriorityMode">PriorityMode</String>
+
+		<!-- ENB: Memory -->
+		<String ID="GameConfig.Values.ExpandSystemMemoryX64">Расширить системную память для платформы x64</String>
+		<String ID="GameConfig.Values.ReduceSystemMemoryUsage">Уменьшить потребление памяти системой</String>
+		<String ID="GameConfig.Values.DisableDriverMemoryManager">Отключить управление памятью драйвером</String>
+		<String ID="GameConfig.Values.DisablePreloadToVRAM">Отключить предзагрузку в видеопамять</String>
+		<String ID="GameConfig.Values.ReservedMemorySizeMb">Количество зарезервированной видеопамяти (МБ)</String>
+		<String ID="GameConfig.Values.AutodetectVideoMemorySize">Автоопределение количества видеопамяти</String>
+		<String ID="GameConfig.Values.VideoMemorySizeMb">Размер видеопамяти (МБ)</String>
+		<String ID="GameConfig.Values.EnableCompression">Использовать сжатие данных в памяти</String>
+		<String ID="GameConfig.Values.EnableUnsafeMemoryHacks">Активировать небезопасные правки памяти</String>
+
+		<!-- ENB: AdaptiveQuality -->
+		<String ID="GameConfig.Values.EnableAdaptiveQuality">Активировать адаптивное качество</String>
+		<String ID="GameConfig.Values.AdaptiveQuality">Требуемое качество</String>
+		<String ID="GameConfig.Values.AdaptiveQualityDesiredFPS">Желаемый FPS</String>
+
+		<!-- ENB: ColorCorrection -->
+		<String ID="GameConfig.Values.UsePaletteTexture">Использовать текстуру палитры</String>
+		<String ID="GameConfig.Values.UseProceduralCorrection">Процедурная коррекция цвета</String>
+		<String ID="GameConfig.Values.Brightness">Яркость</String>
+		<String ID="GameConfig.Values.GammaCurve">Гамма</String>
+
+		<!-- ENB: Multihead -->
+		<String ID="GameConfig.Values.ForceVideoAdapterIndex">Использовать указанный видеоадаптер</String>
+		<String ID="GameConfig.Values.VideoAdapterIndex">Индекс видеоадаптера</String>
+		
+		<!-- ENB: Weather -->
+		<String ID="GameConfig.Values.EnableMultipleWeathers">Использовать разные погодные конфигурации</String>
+		<String ID="GameConfig.Values.EnableLocationWeather">Использовать погодные конфигурации в зависимости от локации</String>
+	
+		<!-- Run Manager -->
+		<String ID="RunManager.FileNotFound">Не удалось найти файл для запуска</String>
+		<String ID="RunManager.PreMainFileNotFound1">Не удалось найти некоторые программы для предварительного запуска</String>
+		<String ID="RunManager.PreMainFileNotFound2">Установите требуемые программы или отключите их запуск.</String>
+		<String ID="RunManager.NoPrograms">Нет доступных программ</String>
+		<String ID="RunManager.ExecutingPreMain">Запуск предварительных программ</String>
+		<String ID="RunManager.ExecutingMain">Запуск основной программы</String>
+		<String ID="RunManager.Executing">Запуск $(Name)</String>
+		<String ID="RunManager.PreparingRun">Подготовка</String>
+		<String ID="RunManager.RunFailed">Не удалось создать процесс</String>
+		<String ID="RunManager.WaitingReturn">Ожидание завершения</String>
+		<String ID="RunManager.WaitingReturnAttach">Ожидание завершения вспомогательной программы для присоединения к основному процессу</String>
+		<String ID="RunManager.TryAttach">Попытка прикрепления к основному процессу</String>
+		<String ID="RunManager.TryAttachFailed">Не удалось прикрепиться к основному процессу</String>
+		<String ID="RunManager.Terminated">Программа завершила работу с кодом %d</String>
+		
+		<String ID="RunManager.List.RequiresVFS">Требует VFS</String>
+		<String ID="RunManager.List.Arguments">Аргументы командной строки</String>
+		<String ID="RunManager.List.Executable">Исполняемый файл</String>
+		<String ID="RunManager.List.WorkingDirectory">Рабочая папка</String>
+		
+		<!-- Mod Manager -->
+		<String ID="ModManager.ExtractingPackageFiles">Распаковка файлов установщика</String>
+		<String ID="ModManager.TagsDialog">Изменение тегов</String>
+		<String ID="ModManager.SitesEditor">Изменение сайтов</String>
+		<String ID="ModManager.Tools">Инструменты</String>
+		
+		<String ID="ModManager.ModList.Name">Название</String>
+		<String ID="ModManager.ModList.ID">Идентификатор</String>
+		<String ID="ModManager.ModList.Version">Версия</String>
+		<String ID="ModManager.ModList.Author">Автор</String>
+		<String ID="ModManager.ModList.Sites">Сайты</String>
+		<String ID="ModManager.ModList.DateInstall">Дата установки</String>
+		<String ID="ModManager.ModList.DateUninstall">Дата деинсталляции</String>
+		<String ID="ModManager.ModList.ModFolder">Папка</String>
+		<String ID="ModManager.ModList.PackagePath">Установочный пакет</String>
+		<String ID="ModManager.ModList.Signature">Сигнатура</String>
+		
+		<String ID="ModManager.Tags">Теги</String>
+		<String ID="ModManager.Tags.PriorityGroup">Группа приоритета</String>
+		
+		<String ID="ModManager.Tag.Animation">Анимация</String>
+		<String ID="ModManager.Tag.Armor">Броня</String>
+		<String ID="ModManager.Tag.Clothing">Одежда</String>
+		<String ID="ModManager.Tag.Jewelry">Украшения</String>
+		<String ID="ModManager.Tag.Weapons">Оружие</String>
+		<String ID="ModManager.Tag.Gameplay">Геймплей</String>
+		<String ID="ModManager.Tag.Immersion">Атмосфера и погружение</String>
+		<String ID="ModManager.Tag.Environment">Окружающая обстановка</String>
+		<String ID="ModManager.Tag.GuildsFactions">Гильдии и фракции</String>
+		<String ID="ModManager.Tag.Combat">Схватки и сражения</String>
+		<String ID="ModManager.Tag.Crafting">Создание вещей и ремёсла</String>
+		<String ID="ModManager.Tag.Magic">Магия</String>
+		<String ID="ModManager.Tag.MagicSpells">Магия - заклинания и зачарования</String>
+		<String ID="ModManager.Tag.MagicGameplay">Магия - геймплей</String>
+		<String ID="ModManager.Tag.Alchemy">Алхимия</String>
+		<String ID="ModManager.Tag.BooksScrolls">Книги и свитки</String>
+		<String ID="ModManager.Tag.Quests">Квесты и приключения</String>
+		<String ID="ModManager.Tag.Buildings">Замки, дворцы, особняки и поместья</String>
+		<String ID="ModManager.Tag.Settlements">Города, деревни и поселения</String>
+		<String ID="ModManager.Tag.Mercantiles">Магазины, лавки и таверны</String>
+		<String ID="ModManager.Tag.NewLands">Новые миры</String>
+		<String ID="ModManager.Tag.Dungeons">Подземелья</String>
+		<String ID="ModManager.Tag.AbandonedStructures">Форты, руины и заброшенные места</String>
+		<String ID="ModManager.Tag.PlayerHomes">Дома для игрока</String>
+		<String ID="ModManager.Tag.Landscape">Ландшафт</String>
+		<String ID="ModManager.Tag.Overhauls">Глобальные изменения</String>
+		<String ID="ModManager.Tag.Conversions">Тотальные конверсии</String>
+		<String ID="ModManager.Tag.Audio">Музыка, звуки SFX и голос</String>
+		<String ID="ModManager.Tag.Interface">Интерфейс и управление</String>
+		<String ID="ModManager.Tag.NPC">Неигровые персонажи (NPC)</String>
+		<String ID="ModManager.Tag.Body">Тела</String>
+		<String ID="ModManager.Tag.Face">Лица</String>
+		<String ID="ModManager.Tag.Hair">Причёски</String>
+		<String ID="ModManager.Tag.Races">Расы</String>
+		<String ID="ModManager.Tag.Followers">Компаньоны</String>
+		<String ID="ModManager.Tag.Creatures">Существа</String>
+		<String ID="ModManager.Tag.Mounts">Ездовые животные</String>
+		<String ID="ModManager.Tag.ModelsTextures">Модели и текстуры</String>
+		<String ID="ModManager.Tag.Graphics">Графика и визуальные эффекты</String>
+		<String ID="ModManager.Tag.ENBPresets">Пресеты для ENB</String>
+		<String ID="ModManager.Tag.Collectables">Сокровища и коллекционные предметы</String>
+		<String ID="ModManager.Tag.ItemsObjects">Разные предметы и объекты</String>
+		<String ID="ModManager.Tag.Cheats">Читы и "божественные" вещи</String>
+		<String ID="ModManager.Tag.Fixes">Исправления и патчи</String>
+		<String ID="ModManager.Tag.ScriptExtenderPlugins">Плагины для $(ScriptExtenderNameShort)</String>
+		<String ID="ModManager.Tag.Utilities">Программы</String>
+		<String ID="ModManager.Tag.Resources">Инструкции и ресурсы для модмейкеров</String>
+		<String ID="ModManager.Tag.GameSaves">Сохранения игры</String>
+		<String ID="ModManager.Tag.Misc">Разное</String>
+
+		<String ID="ModManager.DisplayMode.Caption">Сменить представление</String>
+		<String ID="ModManager.DisplayMode.Connector">Режим активации</String>
+		<String ID="ModManager.DisplayMode.Log">Режим журнала</String>
+		<String ID="ModManager.DisplayMode.ShowPriorityGroups">Показывать группы приоритетов</String>
+		
+		<String ID="ModManager.VFS.Activate">Включить VFS</String>
+		<String ID="ModManager.VFS.Deactivate">Выключить VFS</String>
+		<String ID="ModManager.VFSActiveWarning">Это действие не может быть выполнено, пока VFS активна</String>
+		<String ID="ModManager.WriteTargetName">Папка перезаписи</String>
+		
+		<String ID="ModManager.NewMod.NewEmptyMod">Новый пустой мод</String>
+		<String ID="ModManager.NewMod.NewModFromFolder">Новый мод из имеющихся файлов</String>
+		<String ID="ModManager.NewMod.InstallPackage">Выбрать установщик</String>
+		<String ID="ModManager.NewMod.ImportFrom">Импорт из %s</String>
+		
+		<String ID="ModManager.NewMod.DialogCaption">Добавление нового мода</String>
+		<String ID="ModManager.NewMod.DialogMessage">Введите название мода</String>
+		<String ID="ModManager.NewMod.NameInvalid">Некорректное название мода</String>
+		<String ID="ModManager.NewMod.NameCollision">Мод с данным названием уже существует. Выберите другое название.</String>
+		<String ID="ModManager.NewMod.CopyDialogCaption">Копирование данных мода</String>
+		<String ID="ModManager.NewMod.FromFolderMessageCopy">Содержимое указанной папки будет скопировано в папку с файлами мода</String>
+		<String ID="ModManager.NewMod.FromFolderMessageLink">Содержимое указанной папки будет использовано в качесве файлов мода</String>
+		<String ID="ModManager.NewMod.SelectedFolder">Выбранная папка</String>
+		<String ID="ModManager.NewMod.SelectedFolderNone">Папка не выбрана</String>
+		<String ID="ModManager.NewMod.CreateAsLinkedMod">Создать как ссылку</String>
+		
+		<String ID="ModManager.RemoveMod.CaptionUninstall"><![CDATA[Вы действительно хотите удалить "%s"?]]></String>
+		<String ID="ModManager.RemoveMod.CaptionUninstallAndErase"><![CDATA[Вы действительно хотите удалить "%s" и стереть запись о нём из журнала?]]></String>
+		<String ID="ModManager.RemoveMod.CaptionErase"><![CDATA[Вы действительно хотите стереть запись о моде "%s" из журнала?]]></String>
+		<String ID="ModManager.RemoveMod.Message">Это действие невозможно отменить</String>
+		<String ID="ModManager.RemoveMod.RemovingMessage">Удаление данных мода</String>
+		
+		<String ID="ModManager.SaveChanges.Caption">Обнаружены несохранённые изменения</String>
+		<String ID="ModManager.SaveChanges.Message">Сохранить сейчас?</String>
+		
+		<String ID="ModManager.Menu.UninstallMod">Деинсталляция</String>
+		<String ID="ModManager.Menu.UninstallAndErase">Деинсталляция и удаление из журнала</String>
+		<String ID="ModManager.Menu.Erase">Удаление из журнала</String>
+		<String ID="ModManager.Menu.OpenModFilesLocation">Расположение файлов мода</String>
+		<String ID="ModManager.Menu.ChnageModFilesLocation">Изменить расположение файлов мода</String>
+		<String ID="ModManager.Menu.RevertModFilesLocation">Переместить файлы мода в профиль</String>
+		<String ID="ModManager.Menu.Image">Изображение</String>
+		<String ID="ModManager.Menu.Image.Show">Открыть изображение</String>
+		<String ID="ModManager.Menu.Image.Assign">Изменить изображение</String>
+		<String ID="ModManager.Menu.EditDescription">Изменить описание</String>
+		<String ID="ModManager.Menu.EditTags">Изменить теги</String>
+		<String ID="ModManager.Menu.EditSites">Изменить список сайтов</String>
+		<String ID="ModManager.Menu.ChangeID">Сменить идентификатор</String>
+		<String ID="ModManager.Menu.ExploreFiles">Просмотр файлов</String>
+		<String ID="ModManager.Menu.ShowCollisions">Просмотр коллизий</String>
+		<String ID="ModManager.Menu.Properties">Свойства</String>
+		<String ID="ModManager.Menu.Package">Установщик</String>
+		<String ID="ModManager.Menu.Package.Open">Открыть</String>
+		<String ID="ModManager.Menu.Package.OpenLocation">Расположение файла</String>
+		<String ID="ModManager.Menu.Package.Assign">Назначить файл</String>
+		<String ID="ModManager.Menu.Package.Remove">Удалить файл</String>
+		<String ID="ModManager.Menu.Package.Extract">Извлечь файлы</String>
+		<String ID="ModManager.Menu.Package.ImportProject">Импортировать проект</String>
+		<String ID="ModManager.Menu.Package.CreateProject">Создать проект</String>
+
+		<String ID="ModManager.Menu.Tag.ActivateAll">Активировать все</String>
+		<String ID="ModManager.Menu.Tag.DeactivateAll">Деактивировать все</String>
+
+		<String ID="ModManager.ModList">Список модов</String>
+		<String ID="ModManager.ModList.Manage">Изменить список модов</String>
+		<String ID="ModManager.ModList.Export">Экспорт списка модов</String>
+		<String ID="ModManager.ModList.RemoveDialog">Вы уверены, что хотите удалить этот список модов? Эту операцию невозможно отменить.</String>
+		<String ID="ModManager.ModList.AlreadyExist">Список модов с таким названием уже существует</String>
+		
+		<String ID="ModManager.Statistics">Статистика</String>
+		<String ID="ModManager.Statistics.Status">Подсчёт статистики</String>
+		<String ID="ModManager.Statistics.ModCountAll">Всего модов</String>
+		<String ID="ModManager.Statistics.ModCountActive">Активно модов</String>
+		<String ID="ModManager.Statistics.ModCountInactive">Неактивные моды</String>
+		<String ID="ModManager.Statistics.ModsSize">Занимаемое модами пространство</String>
+		
+		<String ID="ModManager.Import.Caption">Импорт из другого мод-менеджера</String>
+		<String ID="ModManager.Import.ManagedGame">Управляемая игра</String>
+		<String ID="ModManager.Import.OverwriteWarning">Импорт данных из другого мод-менеджера может повлечь потерю данных в этом профиле.</String>
+		<String ID="ModManager.Import.TargetProfileMismatch">Текущая выбранная игра не совпадает с игрой, управляемой данным мод-менеджером. Выполняйте импорт на свой страх и риск.</String>
+		<String ID="ModManager.Import.TargetProfileNotFound">Не обнаружены данные об игре, управляемой данным мод-менеджером. Выполняйте импорт на свой страх и риск.</String>
+		<String ID="ModManager.Import.SkipExisingMods">Пропускать существующие моды</String>
+		<String ID="ModManager.Import.InfoFound">Обнаружены данные от %s. Выполнить импорт?</String>
+		<String ID="ModManager.Import.CanNotImport">Не обнаружены данные для импорта</String>
+		
+		<String ID="ModExplorer.Caption">Просмотр файлов</String>
+		<String ID="ModExplorer.Collisions">Коллизии</String>
+		<String ID="ModExplorer.Collisions.Count">Всего коллизий</String>
+		<String ID="ModExplorer.Collisions.Searching">Поиск коллизий</String>
+		<String ID="ModExplorer.Collisions.NoneFound">Коллизий не найдено</String>
+		
+		<String ID="ModExplorer.Collision.Unknown">Неизвестный тип коллизии</String>
+		<String ID="ModExplorer.Collision.Overwritten">Перезаписан</String>
+		<String ID="ModExplorer.Collision.Owerwrites">Перезаписывает</String>
+
+		<!-- Network -->
+		<String ID="Network.Provider">Поставщик</String>
+		
+		<String ID="Network.AuthCaption">Аутентификация на %s</String>
+		<String ID="Network.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
+		<String ID="Network.AuthSuccess">Аутентификация на %s успешно выполнена</String>
+		<String ID="Network.AuthFail">Не удалось выполнить аутентификацию на %s</String>
+		
+		<String ID="Network.SignIn">Выполнить вход</String>
+		<String ID="Network.SignOut">Выйти из аккаунта</String>
+		<String ID="Network.SignedIn">Вход выполнен</String>
+		<String ID="Network.NotSignedIn">Вход не выполнен</String>
+		<String ID="Network.SignOutMessage">Вы действительно хотите выйти из аккаунта %s?</String>
+
+		<!-- Download Manager -->
+		<String ID="DownloadManager.DownloadLocation">Папка загрузок</String>
+		<String ID="DownloadManager.DownloadLocationInaccessible">Папка загрузок не указана или не существует. Выберите папку для сохранения загрузок.</String>
+		
+		<String ID="DownloadManager.RemoveDownloadsCaption">Удаление загрузок</String>
+		<String ID="DownloadManager.RemoveDownloadsMessage">Вы действительно хотите удалить все загрузки?</String>
+		<String ID="DownloadManager.RemoveInstalledDownloadsMessage">Вы действительно хотите удалить все загрузки с установленными модами?</String>
+		
+		<String ID="DownloadManager.Menu.Install">Установить</String>
+		<String ID="DownloadManager.Menu.Add">Добавить загрузку</String>
+		<String ID="DownloadManager.Menu.Pause">Приостановить</String>
+		<String ID="DownloadManager.Menu.Abort">Прервать</String>
+		<String ID="DownloadManager.Menu.Resume">Продолжить</String>
+		<String ID="DownloadManager.Menu.Restart">Перезапустить</String>
+		<String ID="DownloadManager.Menu.Remove">Удалить загрузку</String>
+		<String ID="DownloadManager.Menu.RemoveAll">Удалить все загрузки</String>
+		<String ID="DownloadManager.Menu.RemoveInstalled">Удалить все загрузки с установленными модами</String>
+		<String ID="DownloadManager.Menu.ShowHidden">Показывать скытые загрузки</String>
+		<String ID="DownloadManager.Menu.Hide">Скрыть</String>
+		<String ID="DownloadManager.Menu.HideAll">Скрыть все загрузки</String>
+		<String ID="DownloadManager.Menu.HideInstalled">Скрыть все загрузки с установленными модами</String>
+		<String ID="DownloadManager.Menu.AssociateWithNXM">Ассоциировать NXM</String>
+		<String ID="DownloadManager.Menu.AssocianedWithNXM">Ассоциирован с NXM</String>
+		<String ID="DownloadManager.Menu.CopyNXM">Сопировать NXM-ссылку</String>
+
+		<!-- VFS -->
+		<String ID="VFSService.InitFailed">Не удалось загрузить библиотеку виртуальной файловой системы. Продолжение невозможно.</String>
+		<String ID="VFSService.InstallCaption">Установка службы виртуальной файловой системы</String>
+		<String ID="VFSService.InstallMessage">Служба виртуальной файловой системы (VFS) не установлена. После закрытия этого окна будет произведена установка службы и драйвера ФС.</String>
+		<String ID="VFSService.InstallFailed">Не удалось установить службу виртуальной файловой системы.</String>
+		<String ID="VFS.MountingCaptionEnable">Монтирование виртуальной файловой системы</String>
+		<String ID="VFS.MountingCaptionDisable">Размонтирование виртуальной файловой системы</String>
+		<String ID="VFS.MountingMessage">Это может занять некоторое время.</String>
+		<String ID="VFS.MountFailed">Не удалось смонтировать виртуальную файловую систему.</String>
+		<String ID="VFS.UnMountFailed">Не удалось размонтировать виртуальную файловую систему.</String>
+		<String ID="VFS.PrepareMountPointFailed">Ошибка подготовки точки монтирования.</String>
+		<String ID="VFS.MountPoint">Точка монтирования</String>
+		<String ID="VFS.MountPointNotEmpty.Caption">Невозможно смонтировать файловую систему в непустую папку</String>
+		<String ID="VFS.MountPointNotEmpty.Message">Удалите эту папку целиком или удалите из неё все файлы и повторите попытку.</String>
+		<String ID="VFS.AskUnmountOnExit">Размонтировать VFS и завершить работу программы?</String>
+		
+		<String ID="VFS.Status.Active">Виртуальная файловая система активна</String>
+		<String ID="VFS.Status.Inactive">Виртуальная файловая система не активна</String>
+		
+		<String ID="VFS.WriteMode.Caption">Режим записи VFS</String>
+		<String ID="VFS.WriteMode.Disabled">Запись запрещена</String>
+		<String ID="VFS.WriteMode.TargetFile">В исходный файл</String>
+		<String ID="VFS.WriteMode.SpecialWriteTarget">В копию исходного файла</String>
+		
+		<String ID="VFS.Error0">Виртуальная файловую систему успешно смонтирована.</String>
+		<String ID="VFS.Error1">Ошибка монтирования.</String>
+		<String ID="VFS.Error2">Неверная буква диска.</String>
+		<String ID="VFS.Error3">Ошибка установки драйвера. Возможно, драйвер не установлен.</String>
+		<String ID="VFS.Error4">Ошибка инициализации.</String>
+		<String ID="VFS.Error5">Невозможно назначить букву диска или точку монтирования. Возможно, точка монтирования не является пустой папкой или занята другим устройством.</String>
+		<String ID="VFS.Error6">Неверная точка монтирования.</String>
+		<String ID="VFS.Error7">Запрошена несовместимая версия.</String>
+		<String ID="VFS.Error1000">Виртуальная файловая система не была запущена.</String>
+		<String ID="VFS.Error10000">Неизвестная ошибка.</String>
+
+		<!-- PluginManager -->
+		<String ID="PluginManager.List.Name">Файл</String>
+		<String ID="PluginManager.List.Index">Индекс</String>
+		<String ID="PluginManager.List.Type">Тип</String>
+		<String ID="PluginManager.List.PartOf">Часть</String>
+
+		<String ID="PluginManager.SaveChanges.Caption">В порядке загрузки плагинов есть несохранённые изменения</String>
+		<String ID="PluginManager.SaveChanges.Message">Сохранить текущий порядок?</String>
+		
+		<String ID="PluginManager.PluginType.Normal">Обычный</String>
+		<String ID="PluginManager.PluginType.Master">Мастер</String>
+		<String ID="PluginManager.PluginType.Light">Лёгкий</String>
+		
+		<String ID="PluginManager.EnableAll">Включить все</String>
+		<String ID="PluginManager.DisableAll">Отключить все</String>
+		<String ID="PluginManager.Sorting">Сортировка</String>
+		<String ID="PluginManager.PluginDependencies">Зависимости плагина</String>
+		<String ID="PluginManager.DependentPlugins">Зависимые плагины</String>
+
+		<String ID="PluginManager.Tools.ImportList">Импорт списка плагинов</String>
+		<String ID="PluginManager.Tools.ExportList">Экспорт списка плагинов</String>
+		<String ID="PluginManager.Tools.ExportListActive">Экспорт списка активных плагинов</String>
+		
+		<String ID="PluginManager.Sorting.Missing.Caption"><![CDATA[Программа "%s" не найдена на вашем компьютере]]></String>
+		<String ID="PluginManager.Sorting.Missing.Message">Укажите путь к программе, чтобы выполнить сортировку.</String>
+		<String ID="PluginManager.Sorting.Waiting.Caption">Ожидание завершения</String>
+		
+		<String ID="PluginManager.LootAPI.CanNotUpdateMasterlist">Невозможно обновить мастерлист</String>
+
+		<!-- Screenshots Gallery -->
+		<String ID="ScreenshotsGallery.FileName">Имя файла</String>
+		<String ID="ScreenshotsGallery.FilePath">Путь к файлу</String>
+		
+		<!-- Save Manager -->
+		<String ID="SaveManager.InvalidFile">Неподдерживаемый формат файла</String>
+		
+		<String ID="SaveManager.SyncPluginsList">Синхронизировать список плагинов</String>
+		<String ID="SaveManager.SavePluginsList">Сохранить список плагинов</String>
+		
+		<String ID="SaveManager.Filter.Saves">Сохранения</String>
+		<String ID="SaveManager.Filter.CoSaves">Дополняющие файлы сохранений</String>
+		<String ID="SaveManager.Filter.Backups">Резервные копии</String>
+		
+		<String ID="SaveManager.List.File">Файл</String>
+		<String ID="SaveManager.List.Size">Размер</String>
+		<String ID="SaveManager.List.ModificationDate">Дата изменения</String>
+		
+		<String ID="SaveManager.InfoList.Label">Параметр</String>
+		<String ID="SaveManager.InfoList.Value">Значение</String>
+		
+		<String ID="SaveManager.Tab.BasicInfo">Информация</String>
+		<String ID="SaveManager.Tab.PluginsList">Список плагинов</String>
+		
+		<String ID="SaveManager.Info.SaveIndex">Сохранение</String>
+		<String ID="SaveManager.Info.SaveName">Название сохранения</String>
+		<String ID="SaveManager.Info.GameVersion">Версия игры</String>
+		<String ID="SaveManager.Info.Language">Язык</String>
+		<String ID="SaveManager.Info.Name">Имя</String>
+		<String ID="SaveManager.Info.Level">Уровень</String>
+		<String ID="SaveManager.Info.Location">Локация</String>
+		<String ID="SaveManager.Info.TimeInGame">Время в игре</String>
+		<String ID="SaveManager.Info.Sex">Пол</String>
+		<String ID="SaveManager.Info.SexMale">Мужской</String>
+		<String ID="SaveManager.Info.SexFemale">Женский</String>
+		<String ID="SaveManager.Info.Race">Раса</String>
+		<String ID="SaveManager.Info.Karma">Карма</String>
+
+		<!-- Package Manager -->
+		<String ID="PackageManager">Менеджер пакетов</String>
+		
+		<String ID="PackageManager.ReqCategory.General">Основное</String>
+		<String ID="PackageManager.ReqCategory.DLC">DLC</String>
+		<String ID="PackageManager.ReqCategory.Conversions">Конверсии</String>
+		<String ID="PackageManager.ReqCategory.Frameworks">Фреймворки</String>
+		<String ID="PackageManager.ReqCategory.BodyReplacers">Реплейсеры тел</String>
+		<String ID="PackageManager.ReqCategory.Patches">Исправления и патчи</String>
+		<String ID="PackageManager.ReqCategory.Extra">Дополнительно</String>
+		<String ID="PackageManager.ReqCategory.Misc">Разное</String>
+
+		<!-- Package Creator -->
+		<String ID="PackageCreator.MenuBar.Project">Проект</String>
+		<String ID="PackageCreator.MenuBar.Import">Импорт</String>
+		<String ID="PackageCreator.MenuBar.Build">Сборка</String>
+		
+		<String ID="PackageCreator.MenuProject.New">Новый</String>
+		<String ID="PackageCreator.MenuProject.Open">Открыть</String>
+		<String ID="PackageCreator.MenuProject.Save">Сохранить</String>
+		<String ID="PackageCreator.MenuProject.SaveAs">Сохранить как</String>
+		<String ID="PackageCreator.MenuProject.SaveAsFOMod">Сохранить как FOMod</String>
+		<String ID="PackageCreator.MenuProject.SaveAsKMP">Сохранить как KMP</String>
+		
+		<String ID="PackageCreator.MenuImport.FOModXML">Импорт из FOMod (XML)</String>
+		<String ID="PackageCreator.MenuImport.Package">Импорт из установочного пакета</String>
+		
+		<String ID="PackageCreator.MenuBuild.Build">Собрать</String>
+		<String ID="PackageCreator.MenuBuild.UpdateInfo">Обновить информацию</String>
+		<String ID="PackageCreator.MenuBuild.Preview">Собрать для предпросмотра</String>
+
+		<String ID="PackageCreator.Build.Caption"><![CDATA[Сборка "%s"]]></String>
+		<String ID="PackageCreator.Build.Complete">Сборка завершена</String>
+		<String ID="PackageCreator.Build.BuildError">Ошибка сборки</String>
+		<String ID="PackageCreator.Build.CheckError">При проверке проекта найдены ошибки</String>
+		<String ID="PackageCreator.Build.CheckError.PackagePath">Некорректное имя файла установочного пакета</String>
+		<String ID="PackageCreator.Build.CheckError.MissingFiles">Не найдены следующие файлы</String>
+		
+		<String ID="PackageCreator.NewProjectName">Новый проект</String>
+		<String ID="PackageCreator.SaveChanges.Caption">Проект не сохранён</String>
+		<String ID="PackageCreator.SaveChanges.Message">Сохранить сейчас?</String>
+		<String ID="PackageCreator.IDCollision">Элемент с таким идентификатором уже есть в проекте.</String>
+		<String ID="PackageCreator.InvalidFlagName">Некорректное название флага</String>
+		<String ID="PackageCreator.Operator">Оператор</String>
+
+		<String ID="PackageCreator.AddFile">Добавить файл</String>
+		<String ID="PackageCreator.AddMultipleFiles">Добавить файлы</String>
+		<String ID="PackageCreator.AddFolder">Добавить папку</String>
+		<String ID="PackageCreator.AddMultipleFolders">Добавить несколько папок</String>
+		<String ID="PackageCreator.ImportFiles">Импорт файлов</String>
+		
+		<String ID="PackageCreator.ImportFOMod">Импорт FOMod</String>
+		<String ID="PackageCreator.ExportFOMod">Экспорт FOMod</String>
+		<String ID="PackageCreator.ProjectFolder">Папка проекта</String>
+		<String ID="PackageCreator.NewStepDialog">Добавление нового этапа</String>
+		<String ID="PackageCreator.NewGroupDialog">Добавление новой группы</String>
+		<String ID="PackageCreator.RemoveStepDialog"><![CDATA[Вы уверены, что хотите удалить этап "%s"? Все группы, входящие в этот этап, также будут удалены.]]></String>
+		<String ID="PackageCreator.RemoveGroupDialog"><![CDATA[Вы уверены, что хотите удалить группу "%s"? Все элементы, входящие в эту группу, также будут удалены.]]></String>
+		
+		<String ID="PackageCreator.RemoveFlagDialog.Caption"><![CDATA[Удаление флага "%s"]]></String>
+		<String ID="PackageCreator.RemoveFlagDialog.Message"><![CDATA[Удалить данный флаг из всего проекта? Удаление приведёт к удалению всех ссылок на этот флаг во всём проекте.
+
+Также можно переименовать флаг в "%s" и вручную изменить ссылки на него.]]></String>
+		<String ID="PackageCreator.RemoveFlagDialog.Remove">Удалить во всём проекте</String>
+		<String ID="PackageCreator.RemoveFlagDialog.Rename">Выполнить переименование</String>
+
+		<!-- Page: Info -->
+		<String ID="PackageCreator.PageInfo.Name">Информация</String>
+		
+		<String ID="PackageCreator.PageInfo.BasicInfo">Базовая информация</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.ID">Идентификатор мода</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Name">Название</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Version">Версия</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Author">Автор</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Description">Описание</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Tags">Теги</String>
+		
+		<String ID="PackageCreator.PageInfo.BasicInfo.AdditionalData">Дополнительные данные</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Documents">Документы</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.TranslatedName">Локализованное название</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Translatior">Переводчик</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.UserData">Пользовательские данные</String>
+		
+		<String ID="PackageCreator.PageInfo.Sites">Сайты</String>
+		<String ID="PackageCreator.PageInfo.Sites.AdditionalSites">Дополнительные сайты</String>
+
+		<String ID="PackageCreator.PageInfo.Config">Конфигурация</String>
+		<String ID="PackageCreator.PageInfo.Config.PackageOutputFile">Файл установочного пакета</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel">Уровень сжатия</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.None">Без сжатия</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Fastest">Скоростной</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Fast">Быстрый</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Normal">Обычный</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Maximum">Максимальный</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Ultra">Ультра</String>
+		
+		<String ID="PackageCreator.PageInfo.Config.CompressionAdvanced">Дополнительные настройки сжатия</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionMethod">Метод сжатия</String>
+		<String ID="PackageCreator.PageInfo.Config.DictionarySize">Размер словаря</String>
+		<String ID="PackageCreator.PageInfo.Config.DictionarySize.Memory">Объём памяти для упаковки</String>
+		<String ID="PackageCreator.PageInfo.Config.UseMultithreadedCompression">Многопоточное сжатие</String>
+		<String ID="PackageCreator.PageInfo.Config.SolidArchive">Непрерывный архив</String>
+
+		<!-- Page: FileData -->
+		<String ID="PackageCreator.PageFileData.Name">Файлы</String>
+		<String ID="PackageCreator.PageFileData.FolderContent">Содержимое папки</String>
+		<String ID="PackageCreator.PageFileData.ReplaceFolderContent">Заменить содержимое папки</String>
+		
+		<String ID="PackageCreator.PageFileData.MainList">Файлы и папки</String>
+		<String ID="PackageCreator.PageFileData.MainList.InPackagePath">Путь в установщике</String>
+		<String ID="PackageCreator.PageFileData.MainList.Source">Исходный объект</String>
+		<String ID="PackageCreator.PageFileData.MainList.Destination">Целевое расположение</String>
+
+		<!-- Page: Interface -->
+		<String ID="PackageCreator.PageInterface.Name">Интерфейс</String>
+		
+		<String ID="PackageCreator.PageInterface.ImageList">Список изображений</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Main">Основное</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Header">Заголовок</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Show">Показывать</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Value">Файл</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Label">Описание</String>
+
+		<!-- Page: Requirements -->
+		<String ID="PackageCreator.PageRequirements.Name">Требования</String>
+		<String ID="PackageCreator.PageRequirements.Groups">Группы</String>
+		<String ID="PackageCreator.PageRequirements.DefaultGroups">Группы по умолчанию</String>
+		
+		<String ID="PackageCreator.PageRequirements.Type">Тип</String>
+		<String ID="PackageCreator.PageRequirements.Type.System">Системный</String>
+		<String ID="PackageCreator.PageRequirements.Type.User">Пользовательский</String>
+		<String ID="PackageCreator.PageRequirements.Type.Auto">Автоматический</String>
+		<String ID="PackageCreator.PageRequirements.CurrentVersion">Текущая версия</String>
+		<String ID="PackageCreator.PageRequirements.RequiredVersion">Требуемая версия</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState">Требуемое состояние</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.ModActive">Мод активен</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.ModInactive">Мод не активен</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.PluginActive">Плагин активен</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.PluginInactive">Плагин не активен</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.FileExist">Файл существует</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.FileNotExist">Файл не существует</String>
+		<String ID="PackageCreator.PageRequirements.CurrentState">Текущее состояние</String>
+		<String ID="PackageCreator.PageRequirements.Object">Объект</String>
+		
+		<String ID="PackageCreator.PageRequirements.StdReqs">Стандартные требования</String>
+
+		<!-- Page: Components -->
+		<String ID="PackageCreator.PageComponents.Name">Компоненты</String>
+		
+		<String ID="PackageCreator.PageComponents.Step">Этап</String>
+		<String ID="PackageCreator.PageComponents.Group">Группа</String>
+		<String ID="PackageCreator.PageComponents.Entry">Компонент</String>
+		
+		<String ID="PackageCreator.PageComponents.AddStep">Добавить этап</String>
+		<String ID="PackageCreator.PageComponents.AddGroup">Добавить группу</String>
+		<String ID="PackageCreator.PageComponents.AddEntry">Добавить компонент</String>
+		<String ID="PackageCreator.PageComponents.AddEntriesFromFiles">Добавить компоненты из файлов</String>
+		
+		<String ID="PackageCreator.PageComponents.RemoveStep">Удалить этап</String>
+		<String ID="PackageCreator.PageComponents.RemoveGroup">Удалить группу</String>
+		<String ID="PackageCreator.PageComponents.RemoveEntry">Удалить компонент</String>
+
+		<String ID="PackageCreator.PageComponents.AllSteps">Все этапы</String>
+		<String ID="PackageCreator.PageComponents.AllGroupsOf">Все группы этапа "%s"</String>
+		<String ID="PackageCreator.PageComponents.AllEntriesOf">Все компоненты группы "%s"</String>
+		
+		<String ID="PackageCreator.PageComponents.FileData">Файлы</String>
+		<String ID="PackageCreator.PageComponents.Requirements">Требования</String>
+		<String ID="PackageCreator.PageComponents.Image">Изображение</String>
+		<String ID="PackageCreator.PageComponents.Description">Описание</String>
+		<String ID="PackageCreator.PageComponents.Conditions">Условия</String>
+		<String ID="PackageCreator.PageComponents.AssignedFlags">Назначенные флаги</String>
+		
+		<String ID="PackageCreator.PageComponents.SelectionMode">Режим выбора</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.Any">Любой</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.ExactlyOne">Только один</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.AtLeastOne">Не менее одного</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.AtMostOne">Не более одного</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.All">Все</String>
+		
+		<String ID="PackageCreator.PageComponents.TypeDescriptor">Десксриптор типа по умолчанию</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptorConditional">Новый дескриптор типа</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.Optional">Необязательный</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.Required">Необходимый</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.Recommended">Рекомендуемый</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.CouldBeUsable">Может быть использован</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.NotUsable">Не используемый</String>
+
+		<String ID="PackageCreator.PageComponents.Advanced">Дополнительно</String>
+		<String ID="PackageCreator.PageComponents.RequiredFiles">Требуемые файлы</String>
+		<String ID="PackageCreator.PageComponents.ConditionalInstall">Условная установка</String>
+		
+		<String ID="PackageCreator.TypeDescriptor.Optional">Этот компонент не является обязательным</String>
+		<String ID="PackageCreator.TypeDescriptor.Required">Этот компонент обязателен к установке</String>
+		<String ID="PackageCreator.TypeDescriptor.Recommended">Этот компонент не является обязательным, но рекомендуется для текущей конфигурации.</String>
+		<String ID="PackageCreator.TypeDescriptor.NotUsable">Этот компонент не может быть использован в текущей конфигурации. Например, отсутствуют некоторые требуемые моды.</String>
+		<String ID="PackageCreator.TypeDescriptor.CouldBeUsable">Этот компонент может быть использован в текущей конфигурации, но его правильная работа не гарантируется. Например, не совпадают версии требуемых модов.</String>
+
+		<!-- Install Wizard -->
+		<String ID="InstallWizard.WindowCaption"><![CDATA[Установка "%s"]]></String>
+		<String ID="InstallWizard.CancelMessage">Вы уверены, что хотите отменить установку?</String>
+		<String ID="InstallWizard.InstallationComplete"><![CDATA[Установка "%s" завершена]]></String>
+		<String ID="InstallWizard.InstalledXOfY">Установлено %d из %d элементов</String>
+		<String ID="InstallWizard.BackwardButton">Назад</String>
+		<String ID="InstallWizard.ForwardButton">Далее</String>
+		<String ID="InstallWizard.SelectDocumentHint">Выберите документ для просмотра</String>
+		<String ID="InstallWizard.SelectComponentHint">Выберите элемент для просмотра информации о нём</String>
+		<String ID="InstallWizard.NoDescriptionHint">Для этого элемента нет описания</String>
+		<String ID="InstallWizard.InvalidStepsConfig.Caption">Некорректная конфигурация этапов установки</String>
+		<String ID="InstallWizard.InvalidStepsConfig.Message">Выполнение мастера установки будет прервано.</String>	
+		<String ID="InstallWizard.NoFiles.Caption">Нет файлов для установки</String>
+		<String ID="InstallWizard.NoFiles.Message"><![CDATA[Мастер установки не обнаружил файлов подходящих для установки.
+
+Возможные причины:
+- Ваша копия $(NameShort) и набор установленных модов не удовлетворяют требованиям данного мода.
+- Вы выбрали неверную конфигурацию компонентов. В этом случае обратитесь к автору мода или создателю установочного пакета для решения проблемы.]]></String>
+		<String ID="InstallWizard.ChangeID.Invalid">Некорретный идентификатор</String>
+		<String ID="InstallWizard.ChangeID.Used"><![CDATA[Указанный идентификатор уже используется модом "%s"]]></String>
+		<String ID="InstallWizard.CollectedFiles.Caption">Будут установлены следующие файлы</String>
+		
+		<String ID="InstallWizard.Page.Info">Информация</String>
+		<String ID="InstallWizard.Page.Documnets">Документы</String>
+		<String ID="InstallWizard.Page.Screenshots">Скриншоты</String>
+		<String ID="InstallWizard.Page.Requirements">Требования</String>
+		<String ID="InstallWizard.Page.Components">Компоненты</String>
+		<String ID="InstallWizard.Page.Installing">Установка</String>
+		<String ID="InstallWizard.Page.Done">Завершение</String>
+		
+		<String ID="InstallWizard.LoadFailed.Caption"><![CDATA[Не удалось загрузить установочный пакет "%s"]]></String>
+		<String ID="InstallWizard.LoadFailed.Message">Возможно, файл повреждён или его формат не поддерживается.</String>
+
+		<String ID="InstallWizard.Reinstall.Caption">Переустановка мода</String>
+		<String ID="InstallWizard.Reinstall.Message"><![CDATA[Данный мод уже установлен. Для переустановки рекомендуется выполнить деинсталляцию и заново запустить установку.
+		
+Вы уверены, что хотите переустановить этот мод поверх существующих файлов?]]></String>
+	</StringTable>
+</Lang>

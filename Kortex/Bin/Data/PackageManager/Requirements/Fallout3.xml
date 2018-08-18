@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Requirements>
+	<!-- General -->
+	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(Name)</Name>
+		<Object Function="FileExist">Fallout3.exe</Object>
+		<Version Function="GTEQ">1.7.0.3</Version>
+	</Entry>
+	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(ScriptExtenderName)</Name>
+		<Object Function="FileExist">FOSE_Loader.exe</Object>
+		<Version Function="GTEQ">0.1.2.2</Version>
+	</Entry>
+
+	<!-- DLC -->
+	<Entry ID="DLC-Anchorage" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Operation Anchorage</Name>
+		<Object Function="PluginActive">Anchorage.esm</Object>
+	</Entry>
+	<Entry ID="DLC-ThePitt" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: The Pitt</Name>
+		<Object Function="PluginActive">ThePitt.esm</Object>
+	</Entry>
+	<Entry ID="DLC-BrokenSteel" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Broken Steel</Name>
+		<Object Function="PluginActive">BrokenSteel.esm</Object>
+	</Entry>
+	<Entry ID="DLC-PointLookout" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Point Lookout</Name>
+		<Object Function="PluginActive">PointLookout.esm</Object>
+	</Entry>
+	<Entry ID="DLC-Zeta" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Mothership Zeta</Name>
+		<Object Function="PluginActive">Zeta.esm</Object>
+	</Entry>
+	
+	<!-- Body replacers -->
+	<Entry ID="Type3" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Dimonized TYPE3 Female Body</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="T6M" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Type 6 Modification Body</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="BreezeBody" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Breezes FO3 Males</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+</Requirements>

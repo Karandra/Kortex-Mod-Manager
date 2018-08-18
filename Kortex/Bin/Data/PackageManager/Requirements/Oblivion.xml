@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Requirements>
+	<!-- General -->
+	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(Name)</Name>
+		<Object Function="FileExist">Oblivion.exe</Object>
+		<Version Function="GTEQ">1.2.0.416</Version>
+	</Entry>
+	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(ScriptExtenderName)</Name>
+		<Object Function="FileExist">OBSE_Loader.exe</Object>
+		<Version Function="GTEQ">0.0.21.4</Version>
+	</Entry>
+
+	<!-- DLC -->
+	<Entry ID="DLC-SI" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Shivering Isles</Name>
+		<Object Function="PluginActive">DLCShiveringIsles.esp</Object>
+	</Entry>
+	<Entry ID="DLC-KotN" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Knights of the Nine</Name>
+		<Object Function="PluginActive">Knights.esp</Object>
+	</Entry>
+	<Entry ID="DLC-SpellTomes" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Spell Tomes</Name>
+		<Object Function="PluginActive">DLCSpellTomes.esp</Object>
+	</Entry>
+	<Entry ID="DLC-TheVileLair" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: The Vile Lair</Name>
+		<Object Function="PluginActive">DLCVileLair.esp</Object>
+	</Entry>
+	<Entry ID="DLC-MehrunesRazor" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Mehrunes Razor</Name>
+		<Object Function="PluginActive">DLCMehrunesRazor.esp</Object>
+	</Entry>
+	<Entry ID="DLC-TheThievesDen" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: The Thieves Den</Name>
+		<Object Function="PluginActive">DLCThievesDen.esp</Object>
+	</Entry>
+	<Entry ID="DLC-Frostcrag" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Wizard's Tower</Name>
+		<Object Function="PluginActive">DLCFrostcrag.esp</Object>
+	</Entry>
+	<Entry ID="DLC-Orrery" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Orrery</Name>
+		<Object Function="PluginActive">DLCOrrery.esp.esp</Object>
+	</Entry>
+	<Entry ID="DLC-HorseArmor" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Horse Armor</Name>
+		<Object Function="PluginActive">DLCHorseArmor.esp.esp</Object>
+	</Entry>
+	<Entry ID="DLC-FightersStronghold" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Fighter's Stronghold</Name>
+		<Object Function="PluginActive">DLCFightersStronghold.esp</Object>
+	</Entry>
+
+	<!-- Conversions -->
+	<Entry ID="Nehrim" Category="$T(PackageManager.ReqCategory.Conversions)">
+		<Name>Nehrim: At Fate's Edge</Name>
+		<Object Function="PluginActive">Nehrim.esm</Object>
+		<Version Function="GTEQ">1.5</Version>
+	</Entry>
+
+	<!-- Frameworks -->
+	<Entry ID="VipCxjPluginCollection" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Vipcxj's Plugin Collection</Name>
+		<Object Function="FileExist">Data\OBSE\Plugins\VipCxj_Plugin_Collection.dll</Object>
+		<Version Function="GTEQ">3.0</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="RHHS" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>VipCxj's Real High Heels System</Name>
+		<Object Function="PluginActive">VipCxj_HighHeels.esp</Object>
+		<Version Function="GTEQ">0.93</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+			<Entry>VipCxjPluginCollection</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="MenuQue" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Object Function="FileExist">Data\OBSE\Plugins\MenuQue.dll</Object>
+		<Version Function="GTEQ">16</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="TSFC" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Tibixe's String Function Collection</Name>
+		<RequiredState>ModActive</RequiredState>
+		<Version Function="GTEQ">0.5</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="Pluggy" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<RequiredState>ModActive</RequiredState>
+		<Version Function="GTEQ">1.32</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="Blockhead" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Object Function="PluginActive">Data\OBSE\Plugins\Blockhead.dll</Object>
+		<Version Function="GTEQ">10.3</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="DarNifiedUI" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>DarNified UI</Name>
+		<RequiredState>ModActive</RequiredState>
+		<Version Function="GTEQ">1.3</Version>
+	</Entry>
+	<Entry ID="DarkUIdDarN" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>DarkUId DarN</Name>
+		<RequiredState>ModActive</RequiredState>
+		<Version Function="GTEQ">1.6</Version>
+	</Entry>
+	<Entry ID="OBGE" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Oblivion Graphics Extender</Name>
+		<Object Function="FileExist">Data\OBSE\Plugins\OBGEv2.dll</Object>
+		<Version Function="GTEQ">3.0</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="OR" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Oblivion Reloaded</Name>
+		<Object Function="FileExist">Data\OBSE\Plugins\OblivionReloaded.dll</Object>
+		<Version Function="GTEQ">4.0</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+
+	<!-- Body replacers -->
+	<Entry ID="HGEC" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Hentai Gentlemen's EyeCandy Body</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="FF" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Fantasy Figures</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="RM" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Robert Male Body Replacer</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="RF" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Robert Female Body Replacer</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="DMRA" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Double Melon & Round Ass</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+
+	<!-- Pacthes -->
+	<Entry ID="UOB" Category="$T(PackageManager.ReqCategory.Patches)">
+		<Name>Unofficial Oblivion Patch</Name>
+		<RequiredState>PluginActive</RequiredState>
+		<FilePath>Unofficial Oblivion Patch.esp</FilePath>
+		<Version Function="GTEQ">3.5</Version>
+	</Entry>
+	<Entry ID="USIP" Category="$T(PackageManager.ReqCategory.Patches)">
+		<Name>Unofficial Shivering Isles Patch</Name>
+		<RequiredState>PluginActive</RequiredState>
+		<FilePath>Unofficial Shivering Isles Patch.esp</FilePath>
+		<Version Function="GTEQ">1.5</Version>
+	</Entry>
+	<Entry ID="UODLCP" Category="$T(PackageManager.ReqCategory.Patches)">
+		<Name>Unofficial Oblivion DLC Patches</Name>
+		<RequiredState>PluginActive</RequiredState>
+		<Version Function="GTEQ">24</Version>
+	</Entry>
+	
+	<!-- Misc -->
+	<Entry ID="CMCS" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Coronerras Maximum Compatibility Skeletons</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="UniqueLandscapesCompilation" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Unique Landscapes Compilation</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="OXP" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Oblivion XP</Name>
+		<Object Function="PluginActive">Oblivion XP.esp</Object>
+		<Version Function="GTEQ">4.3</Version>
+	</Entry>
+	
+	<Entry ID="FLCI" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Francesco's Leveled Creatures-Items Mod</Name>
+		<FilePath>Francesco's Leveled Creatures-Items Mod.esm</FilePath>
+		<RequiredState>PluginActive</RequiredState>
+		<Version Function="GTEQ">5.0</Version>
+	</Entry>
+	<Entry ID="OWC" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Oblivion WarCry</Name>
+		<Object Function="PluginActive">Oblivion WarCry.esp</Object>
+		<Version Function="GTEQ">1.09</Version>
+	</Entry>
+	<Entry ID="OWC-ND" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Oblivion WarCry - New Dimension</Name>
+		<FilePath>OWC - New Dimension.esp</FilePath>
+		<RequiredState>PluginActive</RequiredState>
+		<Version Function="EQ">SILVER</Version>
+		<Dependencies>
+			<Entry>SI</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="OOO" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Oscuro's Oblivion Overhaul</Name>
+		<Object Function="PluginActive">Oscuro's_Oblivion_Overhau.esm</Object>
+		<Version Function="GTEQ">1.36</Version>
+	</Entry>
+	<Entry ID="MMM" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Martigen's Monster Mod</Name>
+		<Object Function="PluginActive">Mart's Monster Mod.esm</Object>
+		<Version Function="GTEQ">3.8</Version>
+	</Entry>
+	<Entry ID="FCOM" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>FCOM Convergence</Name>
+		<Object Function="PluginActive">FCOM_Convergence.esm</Object>
+		<Version Function="GTEQ">1.0</Version>
+	</Entry>
+	<Entry ID="COBL" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Common Oblivion</Name>
+		<Object Function="PluginActive">Cobl Main.esm</Object>
+		<Version Function="GTEQ">1.72</Version>
+		<Dependencies>
+			<Entry>TSFC</Entry>
+			<Entry>Pluggy</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="AliveAndDead" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Alive and Dead</Name>
+		<Object Function="PluginActive">7roads.esp</Object>
+		<Version Function="GTEQ">2013.09.17</Version>
+	</Entry>
+</Requirements>

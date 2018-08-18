@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config>
+	<FormatOptions>
+		<float>.4</float>
+		<bool>i</bool>
+	</FormatOptions>
+	<Categories>
+		<Entry>Game</Entry>
+		<Entry>Editor</Entry>
+		<Entry>Graphics</Entry>
+		<Entry>Shadows</Entry>
+		<Entry>Water</Entry>
+		<Entry>Audio</Entry>
+		<Entry>Gameplay</Entry>
+		<Entry>Interface</Entry>
+		<Entry>Vegetation</Entry>
+		<Entry>LevelOfDetail</Entry>
+		<Entry>Misc</Entry>
+		<Entry>Archives</Entry>
+		<Entry>Grass</Entry>
+		<Entry>Trees</Entry>
+		<Entry>Debug</Entry>
+		<Entry>MemoryManagement</Entry>
+		<Entry>BackgroudLoading</Entry>
+	</Categories>
+	<TypeDetection>
+		<HungarianNotation>
+			<Entry Prefix="i">int32</Entry>
+			<Entry Prefix="u">uint32</Entry>
+			<Entry Prefix="f">float32</Entry>
+			<Entry Prefix="d">float64</Entry>
+			<Entry Prefix="b">bool</Entry>
+			<Entry Prefix="s">string</Entry>
+			<Entry Prefix="S">string</Entry>
+			<Entry Prefix="r">string</Entry>
+		</HungarianNotation>
+	</TypeDetection>
+
+	<Data>
+		<File ID="0">
+			<Values>
+				<!-- Graphics -->
+				<Entry Category="Game/Graphics" Path="Display" Name="iPresentInterval" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="Imagespace" Name="bDoRadialBlur" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="General" Name="bDisableAllGore" Type="bool"></Entry>
+
+				<!-- Shadows -->
+				<Entry Category="Game/Shadows" Path="Display" Name="bActorSelfShadowing" Type="bool"></Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="fSunUpdateThreshold" Type="float32">
+					<SampleValues Min="0" Max="1" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="fSunShadowUpdateTime" Type="float32">
+					<SampleValues Min="0" Max="1" Step="0.1"></SampleValues>
+				</Entry>
+
+				<!-- Water -->
+				<Entry Category="Game/Water" Path="Water" Name="bReflectLODObjects" Type="bool"></Entry>
+				<Entry Category="Game/Water" Path="Water" Name="bReflectLODLand" Type="bool"></Entry>
+				<Entry Category="Game/Water" Path="Water" Name="bReflectSky" Type="bool"></Entry>
+				<Entry Category="Game/Water" Path="Water" Name="bReflectLODTrees" Type="bool"></Entry>
+
+				<!-- Audio -->
+				<Entry Category="Game/Audio" Path="Audio" Name="bEnableAudio" Type="bool"></Entry>
+
+				<!-- Gameplay -->
+
+				<!-- Interface -->
+				<Entry Category="Game/Interface" Path="General" Name="sLanguage" Type="string">
+					<SampleValues>
+						<Entry Label="$T(GameConfig.Samples.Language.RUSSIAN)">RUSSIAN</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.ENGLISH)">ENGLISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.GERMAN)">GERMAN</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.FRENCH)">FRENCH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.CZECH)">CZECH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.ITALIAN)">ITALIAN</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.POLISH)">POLISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.SPANISH)">SPANISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.CHINESE)">CHINESE</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.DANISH)">DANISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.FINNISH)">FINNISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.GREEK)">GREEK</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.JAPANESE)">JAPANESE</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.NORWEGIAN)">NORWEGIAN</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.PORTUGUESE)">PORTUGUESE</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.SWEDISH)">SWEDISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.TURKISH)">TURKISH</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Interface" Path="Interface" Name="bShowHUDMessages" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="Interface" Name="bShowTutorials" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="Interface" Name="bShowSubtitleSpeakerName" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="GamePlay" Name="bTrackProgress" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="GamePlay" Name="bHealthBarShowing" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="Interface" Name="fMaxSubtitleDistance" Type="float32">
+					<SampleValues Min="0" Max="2500" Step="250"></SampleValues>
+				</Entry>
+
+				<!-- Vegetation -->
+				<Entry Category="Game/Vegetation/Grass" Path="Grass" Name="bAllowCreateGrass" Type="bool"></Entry>
+				<Entry Category="Game/Vegetation/Grass" Path="Grass" Name="bGrassPointLighting" Type="bool"></Entry>
+				<Entry Category="Game/Vegetation/Grass" Path="Grass" Name="bDrawShaderGrass" Type="bool"></Entry>
+				<Entry Category="Game/Vegetation/Grass" Path="Grass" Name="fGrassFadeRange" Type="float32">
+					<SampleValues Min="0" Max="16000" Step="2000"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Vegetation/Grass" Path="Grass" Name="iMinGrassSize" Type="int32">
+					<SampleValues Min="0" Max="150" Step="10"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Vegetation/Grass" Path="Grass" Name="iMaxGrassTypesPerTexure" Type="int32">
+					<SampleValues Min="0" Max="15" Step="1"></SampleValues>
+				</Entry>
+
+				<!-- LevelOfDetail -->
+				<Entry Category="Game/LevelOfDetail" Path="General" Name="uGridsToLoad" Type="int32">
+					<SampleValues Min="3" Max="17" Step="2"></SampleValues>
+				</Entry>
+
+				<!-- Misc -->
+				<Entry Category="Game/Misc" Path="Display" Name="bAllowScreenshot" Type="bool"></Entry>
+				<Entry Category="Game/Misc" Path="General" Name="bAlwaysActive" Type="bool"></Entry>
+				<Entry Category="Game/Misc" Path="Camera" Name="fMouseWheelZoomSpeed" Type="float32">
+					<SampleValues Min="0" Max="5" Step="1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Misc" Path="Havok" Name="fInAirFallingCharGravityMult" Type="float32">
+					<SampleValues Min="0" Max="2" Step="0.25"></SampleValues>
+				</Entry>
+
+				<Entry Category="Game/Misc/Archives" Path="Archive" Name="bInvalidateOlderFiles" Type="bool"></Entry>
+				<Entry Category="Game/Misc/Archives" Path="Archive" Name="sResourceArchiveList" Type="string" SubType="Array">
+					<Separator>, </Separator>
+					<SampleValues FillFunction="FindFiles" Folder="$(VirtualGameRoot)\Data" Filter="*.bsa"/>
+				</Entry>
+				<Entry Category="Game/Misc/Archives" Path="Archive" Name="sResourceArchiveList2" Type="string" SubType="Array">
+					<Separator>, </Separator>
+					<SampleValues FillFunction="FindFiles" Folder="$(VirtualGameRoot)\Data" Filter="*.bsa"/>
+				</Entry>
+
+				<Entry Category="Game/Misc/MemoryManagement" Path="General" Name="bPreemptivelyUnloadCells" Type="bool"></Entry>
+				<Entry Category="Game/Misc/MemoryManagement" Path="General" Name="bPreCullActors" Type="bool"></Entry>
+				<Entry Category="Game/Misc/MemoryManagement" Path="BackgroundLoad" Name="bSelectivePurgeUnusedOnFastTravel" Type="bool"></Entry>
+
+				<Entry Category="Game/Misc/BackgroudLoading" Path="BackgroundLoad" Name="bUseBackgroundFileLoader" Type="bool"></Entry>
+				<Entry Category="Game/Misc/BackgroudLoading" Path="BackgroundLoad" Name="bBackgroundLoadLipFiles" Type="bool"></Entry>
+				<Entry Category="Game/Misc/BackgroudLoading" Path="BackgroundLoad" Name="bLoadBackgroundFaceGen" Type="bool"></Entry>
+				<Entry Category="Game/Misc/BackgroudLoading" Path="BackgroundLoad" Name="bUseBackgroundFileLoader" Type="bool"></Entry>
+				<Entry Category="Game/Misc/BackgroudLoading" Path="BackgroundLoad" Name="bUseMultiThreadedFaceGen" Type="bool"></Entry>
+				<Entry Category="Game/Misc/BackgroudLoading" Path="BackgroundLoad" Name="bBackgroundCellLoads" Type="bool"></Entry>
+				<Entry Category="Game/Misc/BackgroudLoading" Path="BackgroundLoad" Name="bLoadHelmetsInBackground" Type="bool"></Entry>
+				<Entry Category="Game/Misc/BackgroudLoading" Path="BackgroundLoad" Name="bUseMultiThreadedTrees" Type="bool"></Entry>
+
+				<Entry Category="Game/Misc/Debug" Path="Papyrus" Name="bEnableLogging" Type="bool"></Entry>
+				<Entry Category="Game/Misc/Debug" Path="Papyrus" Name="bEnableTrace" Type="bool"></Entry>
+			</Values>
+		</File>
+
+		<File ID="1">
+			<Values>
+				<!-- Graphics -->
+				<Entry Category="Game/Graphics" Path="Display" Name="bFull Screen" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="bFXAAEnabled" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="bTransparencyMultisampling" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="BlurShaderHDR" Name="bDoHighDynamicRange" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="BlurShader" Name="bUseBlurShader" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="Imagespace" Name="bDoDepthOfField" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="bFloatPointRenderTarget" Type="bool"></Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="sD3DDevice" Type="string" Editable="0">
+					<FormatOptions>
+						<Pattern><![CDATA["$"]]></Pattern>
+					</FormatOptions>
+					<SampleValues FillFunction="GetVideoAdapterList"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="fGamma" Type="float32">
+					<SampleValues Min="0" Max="2" Step="0.25"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="iMultiSample" Type="int32">
+					<SampleValues>
+						<Entry Label="$T(ConfigManager.Samples.None)">0</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Low)">1</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Mid)">2</Entry>
+						<Entry Label="$T(ConfigManager.Samples.High)">4</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Ultra)">8</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="iMaxAnisotropy" Type="int32">
+					<SampleValues>
+						<Entry Label="$T(ConfigManager.Samples.None)">0</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Low)">2</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Mid)">4</Entry>
+						<Entry Label="$T(ConfigManager.Samples.High)">8</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Ultra)">12</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Extreme)">16</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="iTexMipMapSkip" Type="int32">
+					<SampleValues>
+						<Entry Label="$T(ConfigManager.Samples.VeryLow)">4</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Low)">3</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Mid)">2</Entry>
+						<Entry Label="$T(ConfigManager.Samples.High)">1</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Ultra)">0</Entry>
+						<Entry Label="$T(GameConfig.Samples.TexturesExtra)">-1</Entry>
+						<Entry Label="$T(GameConfig.Samples.TexturesExtra)">-2</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="int32" SubType="DoubleValue" Editable="0">
+					<ValueName1>iSize W</ValueName1>
+					<ValueName2>iSize H</ValueName2>
+					<Separator>×</Separator>
+					<SampleValues FillFunction="GetVideoModesList"></SampleValues>
+				</Entry>
+
+				<!-- Shadows -->
+				<Entry Category="Game/Shadows" Path="Display" Name="bTreesReceiveShadows" Type="bool"></Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="bDrawLandShadows" Type="bool"></Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="iShadowMapResolution" Type="int32">
+					<SampleValues>
+						<Entry Label="$T(ConfigManager.Samples.VeryLow)">512</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Low)">1024</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Mid)">2048</Entry>
+						<Entry Label="$T(ConfigManager.Samples.High)">4096</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Ultra)">8192</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="iBlurDeferredShadowMask" Type="int32" Editable="0">
+					<SampleValues Min="0" Max="7" Step="1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="iShadowMaskQuarter" Type="int32" Editable="0">
+					<SampleValues Min="0" Max="7" Step="1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="fShadowDistance" Type="float32">
+					<SampleValues Min="500" Max="16000" Step="2000"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="fInteriorShadowDistance" Type="float32">
+					<SampleValues Min="0" Max="8000" Step="1000"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Shadows" Path="Display" Name="fShadowBiasScale" Type="float32">
+					<SampleValues Min="0" Max="1" Step="0.1"></SampleValues>
+				</Entry>
+
+				<!-- Water -->
+				<Entry Category="Game/Water" Path="Water" Name="WaterReflectionsResolution" Type="int32" SubType="DoubleValue">
+					<ValueName1>iWaterReflectWidth</ValueName1>
+					<ValueName2>iWaterReflectHeight</ValueName2>
+					<Separator>×</Separator>
+					<SampleValues Sort="0">
+						<Entry>512×512</Entry>
+						<Entry>1024×1024</Entry>
+						<Entry>2048×2048</Entry>
+						<Entry>4096×4096</Entry>
+						<Entry>8192×8192</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Water" Path="Display" Name="iWaterMultiSamples" Type="int32">
+					<SampleValues>
+						<Entry Label="$T(ConfigManager.Samples.None)">0</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Low)">1</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Mid)">2</Entry>
+						<Entry Label="$T(ConfigManager.Samples.High)">4</Entry>
+						<Entry Label="$T(ConfigManager.Samples.Ultra)">8</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Water" Path="Water" Name="bUseWaterReflections" Type="bool"></Entry>
+				<Entry Category="Game/Water" Path="Water" Name="bUseWaterRefractions" Type="bool"></Entry>
+				<Entry Category="Game/Water" Path="Water" Name="bUseWaterDepth" Type="bool"></Entry>
+				<Entry Category="Game/Water" Path="Water" Name="bUseWaterDisplacements" Type="bool"></Entry>
+
+				<!-- Audio -->
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fAudioMasterVolume" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fVal0" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fVal1" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fVal2" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fVal3" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fVal4" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fVal5" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fVal6" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Audio" Path="AudioMenu" Name="fVal7" Type="float32">
+					<SampleValues Min="0" Max="5" Step="0.1"></SampleValues>
+				</Entry>
+
+				<!-- Gameplay -->
+				<Entry Category="Game/Gameplay" Path="GamePlay" Name="iDifficulty" Type="int32">
+					<SampleValues>
+						<Entry Label="$T(GameConfig.Samples.Difficulty0)">0</Entry>
+						<Entry Label="$T(GameConfig.Samples.Difficulty1)">1</Entry>
+						<Entry Label="$T(GameConfig.Samples.Difficulty2)">2</Entry>
+						<Entry Label="$T(GameConfig.Samples.Difficulty3)">3</Entry>
+						<Entry Label="$T(GameConfig.Samples.Difficulty4)">4</Entry>
+						<Entry Label="$T(GameConfig.Samples.Difficulty5)">5</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Gameplay" Path="SaveGame" Name="fAutosaveEveryXMins" Type="float32">
+					<SampleValues Min="0" Max="60" Step="5"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Gameplay" Path="MAIN" Name="bGamepadEnable" Type="bool"></Entry>
+				<Entry Category="Game/Gameplay" Path="Controls" Name="bGamePadRumble" Type="bool"></Entry>
+				<Entry Category="Game/Gameplay" Path="MAIN" Name="bSaveOnPause" Type="bool"></Entry>
+				<Entry Category="Game/Gameplay" Path="MAIN" Name="bSaveOnWait" Type="bool"></Entry>
+				<Entry Category="Game/Gameplay" Path="MAIN" Name="bSaveOnTravel" Type="bool"></Entry>
+				<Entry Category="Game/Gameplay" Path="MAIN" Name="bSaveOnRest" Type="bool"></Entry>
+
+				<!-- Interface -->
+				<Entry Category="Game/Interface" Path="Interface" Name="bGeneralSubtitles" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="Interface" Name="bDialogueSubtitles" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="GamePlay" Name="bShowQuestMarkers" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="GamePlay" Name="bShowFloatingQuestMarkers" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="MAIN" Name="bCrosshairEnabled" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="Interface" Name="bShowCompass" Type="bool"></Entry>
+				<Entry Category="Game/Interface" Path="Interface" Name="fMouseCursorSpeed" Type="float32">
+					<SampleValues Min="0" Max="1" Step="0.1"></SampleValues>
+				</Entry>
+				<Entry Category="Game/Interface" Path="General" Name="sIntroSequence" Type="string"></Entry>
+
+				<!-- Vegetation -->
+				<Entry Category="Game/Vegetation/Trees" Path="Trees" Name="bRenderSkinnedTrees" Type="bool"></Entry>
+				<Entry Category="Game/Vegetation/Trees" Path="TerrainManager" Name="fTreeLoadDistance" Type="float32">
+					<SampleValues>
+						<Entry>3600</Entry>
+						<Entry>5000</Entry>
+						<Entry>10000000</Entry>
+						<Entry>15000000</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/Vegetation/Trees" Path="Trees" Name="uiMaxSkinnedTreesToRender" Type="int32">
+					<SampleValues Min="0" Max="100" Step="20"></SampleValues>
+				</Entry>
+
+				<!-- LevelOfDetail -->
+				<Entry Category="Game/LevelOfDetail" Path="LOD" Name="fLODFadeOutMultObjects" Type="float32">
+					<SampleValues Min="0" Max="50" Step="10">
+						<Entry>2.5</Entry>
+						<Entry>7.5</Entry>
+						<Entry>15</Entry>
+						<Entry>22.5</Entry>
+						<Entry>26.25</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="LOD" Name="fLODFadeOutMultItems" Type="float32">
+					<SampleValues Min="0" Max="50" Step="10">
+						<Entry>2.5</Entry>
+						<Entry>7.5</Entry>
+						<Entry>15</Entry>
+						<Entry>22.5</Entry>
+						<Entry>26.25</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="LOD" Name="fLODFadeOutMultActors" Type="float32">
+					<SampleValues Min="0" Max="50" Step="10">
+						<Entry>2.5</Entry>
+						<Entry>7.5</Entry>
+						<Entry>15</Entry>
+						<Entry>22.5</Entry>
+						<Entry>26.25</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="MAIN" Name="fSkyCellRefFadeDistance" Type="float32">
+					<SampleValues Min="0" Max="50000" Step="100000">
+						<Entry>150000</Entry>
+						<Entry>225000</Entry>
+						<Entry>262500</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="TerrainManager" Name="fBlockMaximumDistance" Type="float32">
+					<SampleValues Min="25000" Max="250000" Step="25000"></SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="TerrainManager" Name="fBlockLevel0Distance" Type="float32">
+					<SampleValues Min="15000" Max="75000" Step="15000"></SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="TerrainManager" Name="fBlockLevel1Distance" Type="float32">
+					<SampleValues Min="25000" Max="125000" Step="25000"></SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="TerrainManager" Name="fSplitDistanceMult" Type="float32">
+					<SampleValues Min="0.1" Max="3" Step="0.5"></SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="Display" Name="fTreesMidLODSwitchDist" Type="float32">
+					<SampleValues Min="0" Max="15000000" Step="3000000">
+						<Entry>3600</Entry>
+						<Entry>5000</Entry>
+						<Entry>10000000</Entry>
+						<Entry>15000000</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Game/LevelOfDetail" Path="Particles" Name="iMaxDesired" Type="int32" Editable="1">
+					<SampleValues Min="0" Max="2000" Step="250"></SampleValues>
+				</Entry>
+
+				<!-- Misc -->
+				<Entry Category="Game/Misc/Debug" Path="General" Name="bEnableStoryManagerLogging" Type="bool"></Entry>
+				<Entry Category="Game/Misc" Path="Controls" Name="bAlwaysRunByDefault" Type="bool"></Entry>
+				<Entry Category="Game/Misc" Path="Controls" Name="bInvertYValues" Type="bool"></Entry>
+				<Entry Category="Game/Misc" Path="Launcher" Name="bEnableFileSelection" Type="bool"></Entry>
+				<Entry Category="Game/Misc" Path="Display" Name="iScreenShotIndex" Type="int32"></Entry>
+				<Entry Category="Game/Misc" Path="Controls" Name="fMouseHeadingSensitivity" Type="float32">
+					<SampleValues Min="-1" Max="1" Step="0.1">
+						<Entry Label="$T(Generic.DefaultValue)">0.0125000002</Entry>
+					</SampleValues>
+				</Entry>
+			</Values>
+		</File>
+
+		<File ID="1000">
+			<Values>
+				<Entry Category="Editor" Path="General" Name="sLanguage" Type="string">
+					<SampleValues Sort="1">
+						<Entry Label="$T(GameConfig.Samples.Language.RUSSIAN)">RUSSIAN</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.ENGLISH)">ENGLISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.GERMAN)">GERMAN</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.FRENCH)">FRENCH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.CZECH)">CZECH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.ITALIAN)">ITALIAN</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.POLISH)">POLISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.SPANISH)">SPANISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.CHINESE)">CHINESE</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.DANISH)">DANISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.FINNISH)">FINNISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.GREEK)">GREEK</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.JAPANESE)">JAPANESE</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.NORWEGIAN)">NORWEGIAN</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.PORTUGUESE)">PORTUGUESE</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.SWEDISH)">SWEDISH</Entry>
+						<Entry Label="$T(GameConfig.Samples.Language.TURKISH)">TURKISH</Entry>
+					</SampleValues>
+				</Entry>
+				<Entry Category="Editor/Messages" Path="MESSAGES" Name="bSkipInitializationFlows" Type="bool"></Entry>
+				<Entry Category="Editor/Messages" Path="MESSAGES" Name="bSkipProgramFlows" Type="bool"></Entry>
+				<Entry Category="Editor/Messages" Path="MESSAGES" Name="bAllowYesToAll" Type="bool"></Entry>
+				<Entry Category="Editor/Messages" Path="MESSAGES" Name="bBlockMessageBoxes" Type="bool"></Entry>
+				<Entry Category="Editor/Messages" Path="MESSAGES" Name="iFileLogging" Type="int32"></Entry>
+
+				<Entry Category="Editor" Path="SpellCheck" Name="bSpellCheckEnabled" Type="bool"></Entry>
+			</Values>
+		</File>
+	</Data>
+</Config>

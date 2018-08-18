@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Requirements>
+	<!-- General -->
+	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(Name)</Name>
+		<Object Function="FileExist">SkyrimSE.exe</Object>
+		<Version Function="GTEQ">1.1.47.0</Version>
+	</Entry>
+	<Entry ID="Update" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(NameShort): Update</Name>
+		<Object Function="PluginActive">Update.esm</Object>
+	</Entry>
+	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(ScriptExtenderName)</Name>
+		<Object Function="FileExist">SKSE64_Loader.exe</Object>
+		<Version Function="GTEQ">0.2.0.6</Version>
+	</Entry>
+
+	<!-- DLC -->
+	<Entry ID="DLC-DG" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Dawnguard</Name>
+		<Object Function="PluginActive">Dawnguard.esm</Object>
+	</Entry>
+	<Entry ID="DLC-HF" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: HearthFire</Name>
+		<Object Function="PluginActive">HearthFires.esm</Object>
+	</Entry>
+	<Entry ID="DLC-DB" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Dragonborn</Name>
+		<Object Function="PluginActive">Dragonborn.esm</Object>
+	</Entry>
+</Requirements>

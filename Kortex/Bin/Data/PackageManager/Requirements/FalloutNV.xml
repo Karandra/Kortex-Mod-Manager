@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Requirements>
+	<!-- General -->
+	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(Name)</Name>
+		<Object Function="FileExist">FalloutNV.exe</Object>
+		<Version Function="GTEQ">1.4.0.525</Version>
+	</Entry>
+	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(ScriptExtenderName)</Name>
+		<Object Function="FileExist">NVSE_Loader.exe</Object>
+		<Version Function="GTEQ">0.5.1.4</Version>
+	</Entry>
+
+	<!-- DLC -->
+	<Entry ID="DLC-DeadMoney" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Dead Money</Name>
+		<Object Function="PluginActive">DeadMoney.esm</Object>
+	</Entry>
+	<Entry ID="DLC-HonestHearts" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Honest Hearts</Name>
+		<Object Function="PluginActive">HonestHearts.esm</Object>
+	</Entry>
+	<Entry ID="DLC-OldWorldBlues" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Old World Blues</Name>
+		<Object Function="PluginActive">OldWorldBlues.esm</Object>
+	</Entry>
+	<Entry ID="DLC-LonesomeRoad" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Lonesome Road</Name>
+		<Object Function="PluginActive">LonesomeRoad.esm</Object>
+	</Entry>
+	<Entry ID="DLC-GunRunnersArsenal" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Gun Runners Arsenal</Name>
+		<Object Function="PluginActive">GunRunnersArsenal.esm</Object>
+	</Entry>
+	<Entry ID="DLC-CouriersStash" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Courier's Stash</Name>
+		<Dependencies>
+			<Entry>DLC-CS-ClassicPack</Entry>
+			<Entry>DLC-CS-MercenaryPack</Entry>
+			<Entry>DLC-CS-CaravanPack</Entry>
+			<Entry>DLC-CS-TribalPack</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="DLC-CS-ClassicPack" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Courier's Stash - Classic Pack</Name>
+		<Object Function="PluginActive">ClassicPack.esm</Object>
+	</Entry>
+	<Entry ID="DLC-CS-MercenaryPack" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Courier's Stash - Mercenary Pack</Name>
+		<Object Function="PluginActive">MercenaryPack.esm</Object>
+	</Entry>
+	<Entry ID="DLC-CS-CaravanPack" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Courier's Stash - Caravan Pack</Name>
+		<Object Function="PluginActive">CaravanPack.esm</Object>
+	</Entry>
+	<Entry ID="DLC-CS-TribalPack" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Courier's Stash - Tribal Pack</Name>
+		<Object Function="PluginActive">TribalPack.esm</Object>
+	</Entry>
+	
+	<!-- Frameworks -->
+	<Entry ID="MCM" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Mod Configuration Menu</Name>
+		<Object Function="FileExist">Data\NVSE\Plugins\MCM.dll</Object>
+		<Version Function="GTEQ">1.5</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="Lutana" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Lutana NVSE Plugin</Name>
+		<Object Function="FileExist">NVSE\Plugins\Lutana_NVSE.dll</Object>
+		<Version Function="GTEQ">16.2</Version>
+		<Description>Look for JIP LN NVSE Plugin v40.0+</Description>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	<Entry ID="JIP-LN" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>JIP LN NVSE Plugin</Name>
+		<Object Function="FileExist">NVSE\Plugins\JIP_NVSE.dll</Object>
+		<Version Function="GTEQ">53.6</Version>
+		<Description>As of v40.0, this plugin also includes all the functions from the (now defunct) Lutana NVSE Plugin.</Description>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+		</Dependencies>
+	</Entry>
+	
+	<!-- Body replacers -->
+	<Entry ID="Type3" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Dimonized TYPE3 Female Body</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="T6M" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Type 6 Modification Body</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+	<Entry ID="RM" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Robert Male Body Replacer</Name>
+		<RequiredState>ModActive</RequiredState>
+	</Entry>
+
+	<!-- Misc -->
+	<Entry ID="Project Nevada" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Object Function="ModActive">NVSE\Plugins\PN_NVSE.dll</Object>
+		<Version Function="GTEQ">2.5</Version>
+		<Dependencies>
+			<Entry>$(ScriptExtenderNameShort)</Entry>
+			<Entry>MCM</Entry>
+		</Dependencies>
+	</Entry>
+</Requirements>

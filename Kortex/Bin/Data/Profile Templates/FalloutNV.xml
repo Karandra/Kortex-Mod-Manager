@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Profile ID="FalloutNV" SortOrder="22">
+	<Name Short="Fallout NV">Fallout: New Vegas</Name>
+
+	<Variables>
+		<!--Required-->
+		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
+			<Node>32</Node>
+			<Root>HKEY_LOCAL_MACHINE</Root>
+			<Path>SOFTWARE\Bethesda Softworks\$(ID)</Path>
+			<ValueName>Installed Path</ValueName>
+			<ValueType>REG_SZ</ValueType>
+		</Entry>
+		<Entry ID="ConfigRoot">$SH(SHF_DOCUMENTS)\My Games\$(ID)</Entry>
+		<Entry ID="GameExecutable">$(GameRoot)\$(ID).exe</Entry>
+		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(ID).exe</Entry>
+		<Entry ID="NexusID">NewVegas</Entry>
+
+		<!--Names-->
+		<Entry ID="EditorName">Creation Kit</Entry>
+		<Entry ID="LauncherName">$(NameShort) Launcher</Entry>
+		<Entry ID="ScriptExtenderName">$(NameShort) Script Extender</Entry>
+		<Entry ID="ScriptExtenderNameShort">NVSE</Entry>
+
+		<!-- INI -->
+		<Entry ID="FalloutNVINI">$(VirtualConfigRoot)\Fallout.ini</Entry>
+		<Entry ID="FalloutNVPrefsINI">$(VirtualConfigRoot)\FalloutPrefs.ini</Entry>
+		<Entry ID="FalloutNVEditorINI">$(VirtualConfigRoot)\GECKCustom.ini</Entry>
+		<Entry ID="FalloutNVEditorPrefsINI">$(VirtualConfigRoot)\GECKPrefs.ini</Entry>
+
+		<!--Misc-->
+		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(ID)Launcher.exe</Entry>
+		<Entry ID="GameEditorPath">$(VirtualGameRoot)\GECK.exe</Entry>
+		<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderNameShort)_Loader.exe</Entry>
+		<Entry ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Entry>
+	</Variables>
+
+	<Network>
+		<NexusID>NewVegas</NexusID>
+	</Network>
+
+	<LocationsConfig>
+		<Entry Label="$T(OpenLocation.Saves)">$(VirtualConfigRoot)\Saves</Entry>
+	</LocationsConfig>
+
+	<Virtualization>
+		<MirroredLocations>
+			<Entry>
+				<Source>$(VirtualConfigRoot)</Source>
+				<Target>$(ConfigRoot)</Target>
+			</Entry>
+			<Entry>
+				<Source>$(CurrentProfileRoot)\PluginsOrder</Source>
+				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\$(ID)</Target>
+			</Entry>
+		</MirroredLocations>
+	</Virtualization>
+
+	<RunConfig Enabled="1">
+		<Main>
+			<Entry>
+				<Name>$(NameShort)</Name>
+				<Icon>$(ID).exe</Icon>
+				<Executable>$(VirtualGameExecutable)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(NameShort) ($(ScriptExtenderNameShort))</Name>
+				<Icon>$(ScriptExtenderNameShort)_Loader.exe</Icon>
+				<Executable>$(ScriptExtenderPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(LauncherName)</Name>
+				<Icon>$(ID)Launcher.exe</Icon>
+				<Executable>$(GameLauncherPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(EditorName)</Name>
+				<Icon>GECK.exe</Icon>
+				<Executable>$(GameEditorPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+		</Main>
+		<PreMain>
+			<Entry>
+				<Name>ENB Injector</Name>
+				<Icon>ENB_Injector.exe</Icon>
+				<Executable>$(ENBInjectorPath)</Executable>
+				<Command></Command>
+			</Entry>
+		</PreMain>
+	</RunConfig>
+
+	<GameConfig Enabled="1" ENB="1">
+		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(FalloutNVINI)</Entry>
+		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(FalloutNVPrefsINI)</Entry>
+		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">$(FalloutNVEditorINI)</Entry>
+		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">$(FalloutNVEditorPrefsINI)</Entry>
+	</GameConfig>
+
+	<PluginManager Enabled="1" InterfaceName="BethesdaGeneric" PluginFileFormat="BethesdaSkyrim">
+		<Limit Value="255"/>
+
+		<ActiveList>$(CurrentProfileRoot)\PluginsOrder\Plugins.txt</ActiveList>
+		<OrderList>$(CurrentProfileRoot)\PluginsOrder\LoadOrder.txt</OrderList>
+
+		<ChangeFileModificationDate>1</ChangeFileModificationDate>
+		<SortByFileModificationDate>0</SortByFileModificationDate>
+
+		<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
+		<OrderListHeader>
+			<![CDATA[# This file is used by $(NameShort) to keep track of your downloaded content.
+# Please do not modify this file.
+# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]>
+		</OrderListHeader>
+
+		<SortingTools>
+			<Entry ID="LOOT" Name="LOOT - Load Order Optimization">
+				<Command><![CDATA[--game=$(ID)]]></Command>
+			</Entry>
+		</SortingTools>
+
+		<LOOTAPI>
+			<Branch>v0.13</Branch>
+			<Repository>https://github.com/loot/falloutnv.git</Repository>
+			<FolderName>FalloutNV</FolderName>
+			<LocalGamePath>$(CurrentProfileRoot)\PluginsOrder</LocalGamePath>
+		</LOOTAPI>
+
+		<StandardContent MainID="FalloutNV.esm">
+			<Entry ID="FalloutNV.esm" Name="$(NameShort)" Logo="FalloutNV.png"/>
+			<Entry ID="FalloutNV_lang.esp" Name="$(NameShort)" Logo="FalloutNV.png"/>
+			<Entry ID="OldWorldBlues.esm" Name="$(NameShort): Old World Blues" Logo="OldWorldBlues.png"/>
+			<Entry ID="OldWorldBlues_lang.esp" Name="$(NameShort): Old World Blues" Logo="OldWorldBlues.png"/>
+			<Entry ID="DeadMoney.esm" Name="$(NameShort): Dead Money" Logo="DeadMoney.png"/>
+			<Entry ID="DeadMoney_lang.esp" Name="$(NameShort): Dead Money" Logo="DeadMoney.png"/>
+			<Entry ID="LonesomeRoad.esm" Name="$(NameShort): Lonesome Road" Logo="LonesomeRoad.png"/>
+			<Entry ID="LonesomeRoad_lang.esp" Name="$(NameShort): Lonesome Road" Logo="LonesomeRoad.png"/>
+			<Entry ID="HonestHearts.esm" Name="$(NameShort): Honest Hearts" Logo="HonestHearts.png"/>
+			<Entry ID="HonestHearts_lang.esp" Name="$(NameShort): Honest Hearts" Logo="HonestHearts.png"/>
+			<Entry ID="GunRunnersArsenal.esm" Name="$(NameShort): Gun Runners Arsenal" Logo="GunRunnersArsenal.png"/>
+			<Entry ID="GunRunnersArsenal_lang.esp" Name="$(NameShort): Gun Runners Arsenal" Logo="GunRunnersArsenal.png"/>
+			<Entry ID="ClassicPack.esm" Name="$(NameShort): Courier's Stash - Classic Pack" Logo="CouriersStash.png"/>
+			<Entry ID="ClassicPack_lang.esp" Name="$(NameShort): Courier's Stash - Classic Pack" Logo="CouriersStash.png"/>
+			<Entry ID="MercenaryPack.esm" Name="$(NameShort): Courier's Stash - Mercenary Pack" Logo="CouriersStash.png"/>
+			<Entry ID="MercenaryPack_lang.esp" Name="$(NameShort): Courier's Stash - Mercenary Pack" Logo="CouriersStash.png"/>
+			<Entry ID="CaravanPack.esm" Name="$(NameShort): Courier's Stash - Caravan Pack" Logo="CouriersStash.png"/>
+			<Entry ID="CaravanPack_lang.esp" Name="$(NameShort): Courier's Stash - Caravan Pack" Logo="CouriersStash.png"/>
+			<Entry ID="TribalPack.esm" Name="$(NameShort): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
+			<Entry ID="TribalPack_lang.esp" Name="$(NameShort): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
+		</StandardContent>
+	</PluginManager>
+
+	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
+		<Locations>
+			<Entry>$(GameRoot)</Entry>
+			<Entry>$(GameRoot)\Screenshots</Entry>
+			<Entry>$(WriteTargetRoot)</Entry>
+			<Entry>$(WriteTargetRoot)\Screenshots</Entry>
+			<Entry>$(VirtualConfigRoot)</Entry>
+			<Entry>$(VirtualConfigRoot)\Screenshots</Entry>
+		</Locations>
+	</ScreenshotsGallery>
+
+	<SaveManager Enabled="1" RequiresVFS="0" SaveFileFormat="BethesdaFalloutNV">
+		<SavesFolder>$(VirtualConfigRoot)\Saves</SavesFolder>
+		<FileFilters>
+			<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
+			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
+			<Entry Label="$T(SaveManager.Filter.CoSaves) (*.nvse)">*.nvse</Entry>
+		</FileFilters>
+
+		<PrimaryExtension>fos</PrimaryExtension>
+		<SecondaryExtension>nvse</SecondaryExtension>
+	</SaveManager>
+</Profile>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Profile ID="Fallout4" SortOrder="23">
+	<Name>Fallout 4</Name>
+
+	<Variables>
+		<!--Required-->
+		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
+			<Node>32</Node>
+			<Root>HKEY_LOCAL_MACHINE</Root>
+			<Path>SOFTWARE\Bethesda Softworks\$(ID)</Path>
+			<ValueName>Installed Path</ValueName>
+			<ValueType>REG_SZ</ValueType>
+		</Entry>
+		<Entry ID="ConfigRoot">$SH(SHF_DOCUMENTS)\My Games\$(ID)</Entry>
+		<Entry ID="GameExecutable">$(GameRoot)\$(ID).exe</Entry>
+		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(ID).exe</Entry>
+		<Entry ID="NexusID">$(ID)</Entry>
+
+		<!--Names-->
+		<Entry ID="EditorName">Creation Kit</Entry>
+		<Entry ID="LauncherName">$(NameShort) Launcher</Entry>
+		<Entry ID="ScriptExtenderName">$(NameShort) Script Extender</Entry>
+		<Entry ID="ScriptExtenderNameShort">F4SE</Entry>
+
+		<!-- INI -->
+		<Entry ID="Fallout4INI">$(VirtualConfigRoot)\$(ID).ini</Entry>
+		<Entry ID="Fallout4PrefsINI">$(VirtualConfigRoot)\$(ID)Prefs.ini</Entry>
+		<Entry ID="Fallout4CustomINI">$(VirtualConfigRoot)\$(ID)Custom.ini</Entry>
+		<Entry ID="Fallout4EditorINI">$(VirtualGameRoot)\CreationKit.ini</Entry>
+		<Entry ID="Fallout4EditorPrefsINI">$(VirtualGameRoot)\CreationKitPrefs.ini</Entry>
+
+		<!--Misc-->
+		<Entry ID="DataFilesPath">$(GameRoot)\Data</Entry>
+		<Entry ID="SavesPath">$SH(SHF_DOCUMENTS)\My Games\$(ID)\Saves</Entry>
+		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(ID)Launcher.exe</Entry>
+		<Entry ID="GameEditorPath">$(VirtualGameRoot)\CreationKit.exe</Entry>
+		<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderNameShort)_Loader.exe</Entry>
+		<Entry ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Entry>
+	</Variables>
+
+	<Network>
+		<NexusID>Fallout4</NexusID>
+	</Network>
+
+	<LocationsConfig>
+		<Entry Label="$T(OpenLocation.Saves)">$(VirtualConfigRoot)\Saves</Entry>
+	</LocationsConfig>
+
+	<Virtualization>
+		<MirroredLocations>
+			<Entry>
+				<Source>$(VirtualConfigRoot)</Source>
+				<Target>$(ConfigRoot)</Target>
+			</Entry>
+			<Entry>
+				<Source>$(CurrentProfileRoot)\PluginsOrder</Source>
+				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\$(ID)</Target>
+			</Entry>
+		</MirroredLocations>
+	</Virtualization>
+
+	<RunConfig Enabled="1">
+		<Main>
+			<Entry>
+				<Name>$(NameShort)</Name>
+				<Icon>$(ID).exe</Icon>
+				<Executable>$(VirtualGameExecutable)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(NameShort) ($(ScriptExtenderNameShort))</Name>
+				<Icon>$(ScriptExtenderNameShort)_Loader.exe</Icon>
+				<Executable>$(ScriptExtenderPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(LauncherName)</Name>
+				<Icon>$(ID)Launcher.exe</Icon>
+				<Executable>$(GameLauncherPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(EditorName)</Name>
+				<Icon>CreationKit.exe</Icon>
+				<Executable>$(GameEditorPath)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+		</Main>
+		<PreMain>
+			<Entry>
+				<Name>ENB Injector</Name>
+				<Icon>ENB_Injector.exe</Icon>
+				<Executable>$(ENBInjectorPath)</Executable>
+				<Command></Command>
+			</Entry>
+		</PreMain>
+	</RunConfig>
+
+	<GameConfig Enabled="1" ENB="1">
+		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(Fallout4INI)</Entry>
+		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(Fallout4PrefsINI)</Entry>
+		<Entry Format="INI" ID="2" TypeDetectionMethod="HungarianNotation">$(Fallout4CustomINI)</Entry>
+		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">CreationKit.ini</Entry>
+		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">CreationKitPrefs.ini</Entry>
+	</GameConfig>
+
+	<PluginManager Enabled="1" InterfaceName="BethesdaGeneric2" PluginFileFormat="BethesdaSkyrim">
+		<Limit Value="254"/>
+
+		<ActiveList>$(CurrentProfileRoot)\PluginsOrder\Plugins.txt</ActiveList>
+		<OrderList>$(CurrentProfileRoot)\PluginsOrder\LoadOrder.txt</OrderList>
+
+		<ChangeFileModificationDate>0</ChangeFileModificationDate>
+		<SortByFileModificationDate>0</SortByFileModificationDate>
+
+		<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
+		<OrderListHeader><![CDATA[# This file is used by $(NameShort) to keep track of your downloaded content.
+# Please do not modify this file.
+# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]>
+		</OrderListHeader>
+
+		<SortingTools>
+			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+				<Command><![CDATA[--game=$(ID)]]></Command>
+			</Entry>
+		</SortingTools>
+
+		<LOOTAPI>
+			<Branch>v0.13</Branch>
+			<Repository>https://github.com/loot/fallout4.git</Repository>
+			<FolderName>Fallout4</FolderName>
+			<LocalGamePath>$(CurrentProfileRoot)\PluginsOrder</LocalGamePath>
+		</LOOTAPI>
+
+		<StandardContent MainID="Fallout4.esm">
+			<Entry ID="Fallout4.esm" Name="$(NameShort)" Logo="Fallout4.png"/>
+			<Entry ID="DLCWorkshop01.esm" Name="$(NameShort): Wasteland Workshop" Logo="WastelandWorkshop01.png"/>
+			<Entry ID="DLCWorkshop02.esm" Name="$(NameShort): Wasteland Workshop" Logo="WastelandWorkshop02.png"/>
+			<Entry ID="DLCWorkshop03.esm" Name="$(NameShort): Wasteland Workshop" Logo="WastelandWorkshop03.png"/>
+			<Entry ID="DLCRobot.esm" Name="$(NameShort): Automatron" Logo="Automatron.png"/>
+			<Entry ID="DLCCoast.esm" Name="$(NameShort): Far Harbor" Logo="FarHarbor.png"/>
+			<Entry ID="DLCNukaWorld.esm" Name="$(NameShort): Nuka World" Logo="NukaWorld.png"/>
+		</StandardContent>
+	</PluginManager>
+
+	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
+		<Locations>
+			<Entry>$(GameRoot)</Entry>
+			<Entry>$(GameRoot)\Screenshots</Entry>
+			<Entry>$(WriteTargetRoot)</Entry>
+			<Entry>$(WriteTargetRoot)\Screenshots</Entry>
+			<Entry>$(VirtualConfigRoot)</Entry>
+			<Entry>$(VirtualConfigRoot)\Screenshots</Entry>
+		</Locations>
+	</ScreenshotsGallery>
+
+	<SaveManager Enabled="1" RequiresVFS="0" SaveFileFormat="BethesdaFallout4">
+		<SavesFolder>$(VirtualConfigRoot)\Saves</SavesFolder>
+		<FileFilters>
+			<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
+			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
+			<Entry Label="$T(SaveManager.Filter.CoSaves) (*.f4se)">*.f4se</Entry>
+		</FileFilters>
+
+		<PrimaryExtension>fos</PrimaryExtension>
+		<SecondaryExtension>f4se</SecondaryExtension>
+	</SaveManager>
+</Profile>

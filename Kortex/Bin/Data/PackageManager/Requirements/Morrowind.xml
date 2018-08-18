@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Requirements>
+	<!-- General -->
+	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(Name)</Name>
+		<Object Function="FileExist">Morrowind.exe</Object>
+		<Version Function="GTEQ">1.6.0.1820</Version>
+	</Entry>
+	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(ScriptExtenderName)</Name>
+		<Object Function="FileExist">MWSE.dll</Object>
+		<Version Function="GTEQ">0.9.4</Version>
+	</Entry>
+
+	<!-- DLC -->
+	<Entry ID="DLC-Tribunal" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Tribunal</Name>
+		<Object Function="PluginActive">Tribunal.esm</Object>
+	</Entry>
+	<Entry ID="DLC-Bloodmoon" Category="$T(PackageManager.ReqCategory.DLC)">
+		<Name>DLC: Bloodmoon</Name>
+		<Object Function="PluginActive">Bloodmoon.esp</Object>
+	</Entry>
+
+	<!-- Frameworks -->
+	<Entry ID="MCP" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Morrowind Code Patch</Name>
+		<Object Function="FileExist">Morrowind Code Patch.exe</Object>
+		<Version Function="GTEQ">2.4</Version>
+	</Entry>
+	<Entry ID="MGE" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Morrowind Graphics Extender</Name>
+		<Object Function="FileExist">MGEgui.exe</Object>
+		<Version Function="GTEQ">3.8</Version>
+	</Entry>
+	<Entry ID="MGE-XE" Category="$T(PackageManager.ReqCategory.Frameworks)">
+		<Name>Morrowind Graphics Extender: XE</Name>
+		<Object Function="FileExist">MGEgui.exe</Object>
+		<Version Function="GTEQ">0.9</Version>
+	</Entry>
+
+	<!-- Body replacers -->
+	<Entry ID="BetterBodies" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Better Bodies</Name>
+		<Object Function="PluginActive">Better Bodies.esp</Object>
+	</Entry>
+	<Entry ID="BetterHeads" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+		<Name>Better Heads</Name>
+		<Object Function="PluginActive">Better Heads.esp</Object>
+	</Entry>
+	
+	<!-- Misc -->
+	<Entry ID="TR" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Tamriel Rebuilt</Name>
+		<Object Function="PluginActive">TR_Data.esm</Object>
+	</Entry>
+	<Entry ID="CH" Category="$T(PackageManager.ReqCategory.Misc)">
+		<Name>Chaos Heart</Name>
+		<Object Function="PluginActive">ChaosHeart.esp</Object>
+	</Entry>
+</Requirements>

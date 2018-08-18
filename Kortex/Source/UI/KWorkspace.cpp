@@ -1,0 +1,198 @@
+#include "stdafx.h"
+#include "KWorkspace.h"
+#include "KWorkspaceController.h"
+#include "KMainWindow.h"
+#include "KThemeManager.h"
+#include "Profile/KProfile.h"
+#include "Events/KBroadcastEvent.h"
+#include "Events/KVFSEvent.h"
+#include "KApp.h"
+
+bool KWorkspace::OnOpenWorkspaceInternal()
+{
+	if (m_IsRefreshSheduled)
+	{
+		m_IsRefreshSheduled = false;
+		ReloadWorkspace();
+	}
+	
+	RefreshWindowTitle();
+	if (OnOpenWorkspace())
+	{
+		m_IsFirstTimeOpen = false;
+		return true;
+	}
+	return false;
+}
+bool KWorkspace::OnCloseWorkspaceInternal()
+{
+	return OnCloseWorkspace();
+}
+bool KWorkspace::OnCreateWorkspaceInternal()
+{
+	if (IsWorkspaceCreated())
+	{
+		return true;
+	}
+	else
+	{
+		m_CreatingWorkspace = true;
+		if (OnCreateWorkspace())
+		{
+			m_CreatingWorkspace = false;
+			m_IsCreated = true;
+			m_Sizer->Add(GetWorkspaceSizer(), 1, wxEXPAND|wxALL, std::min(KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING));
+			Layout();
+			return true;
+		}
+	}
+	return false;
+}
+void KWorkspace::Init()
+{
+	m_Sizer = new wxBoxSizer(wxVERTICAL);
+	SetSizer(m_Sizer);
+}
+
+wxString KWorkspace::OnGetWindowTitle() const
+{
+	return wxString::Format("%s – %s – %s", GetApp().GetAppDisplayName(), GetApp().GetCurrentProfile()->GetShortName(), GetName());
+}
+bool KWorkspace::OnOpenWorkspace()
+{
+	return true;
+}
+bool KWorkspace::OnCloseWorkspace()
+{
+	return true;
+}
+KApp& KWorkspace::GetApp() const
+{
+	return KApp::Get();
+}
+
+KxAuiToolBarItem* KWorkspace::CreateToolBarButton()
+{
+	m_ToolBarButton = KMainWindow::CreateToolBarButton(GetMainWindow()->GetMainToolBar(), GetName(), GetImageID());
+	m_ToolBarButton->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KWorkspace::SwitchHereEvent, this);
+
+	return m_ToolBarButton;
+}
+KxMenuItem* KWorkspace::CreateItemInManagersMenu()
+{
+	m_ManagersMenuItem = GetMainWindow()->GetManagersMenu()->Add(new KxMenuItem(GetName()));
+	m_ManagersMenuItem->SetBitmap(KGetBitmap(GetImageID()));
+	m_ManagersMenuItem->Bind(KxEVT_MENU_SELECT, &KWorkspace::SwitchHereEvent, this);
+
+	return m_ManagersMenuItem;
+}
+
+KWorkspace::KWorkspace(KMainWindow* mainWindow, wxWindow* parentWindow)
+	:KxPanel(parentWindow, KxID_NONE), m_MainWindow(mainWindow)
+{
+	Init();
+}
+KWorkspace::KWorkspace(KMainWindow* mainWindow)
+	:KxPanel(mainWindow->GetWorkspaceContainer(), KxID_NONE), m_MainWindow(mainWindow)
+{
+	Init();
+}
+KWorkspace::~KWorkspace()
+{
+	delete m_WorkspaceController;
+	delete GetQuickSettingsMenu();
+}
+
+void KWorkspace::SwitchHereEvent(wxNotifyEvent& event)
+{
+	SwitchHere();
+}
+void KWorkspace::RefreshWorkspaceEvent(KBroadcastEvent& event)
+{
+	if (event.GetTargetWorkspaceID().IsEmpty() || event.GetTargetWorkspaceID() == GetID())
+	{
+		ScheduleRefresh();
+	}
+	event.Skip();
+}
+
+int KWorkspace::GetWorkspaceIndex() const
+{
+	if (!IsSubWorkspace())
+	{
+		return m_MainWindow->GetWorkspaceContainer()->FindPage(this);
+	}
+	return wxNOT_FOUND;
+}
+
+void KWorkspace::RefreshWindowTitle()
+{
+	if (!IsSubWorkspace())
+	{
+		m_MainWindow->SetTitle(OnGetWindowTitle());
+	}
+}
+bool KWorkspace::IsWorkspaceVisible() const
+{
+	if (IsSubWorkspace())
+	{
+		return IsShown();
+	}
+	else
+	{
+		return m_MainWindow->GetCurrentWorkspace() == this;
+	}
+}
+bool KWorkspace::ReloadWorkspace()
+{
+	if (IsWorkspaceCreated() || m_CreatingWorkspace)
+	{
+		OnReloadWorkspace();
+		return true;
+	}
+	return false;
+}
+bool KWorkspace::SwitchHere()
+{
+	if (IsSubWorkspace())
+	{
+		wxBookCtrlBase* tabs = dynamic_cast<wxBookCtrlBase*>(GetParent());
+		if (tabs)
+		{
+			tabs->SetSelection(GetTabIndex());
+		}
+	}
+	else
+	{
+		return GetMainWindow()->SwitchWorkspace(this);
+	}
+	return false;
+}
+bool KWorkspace::CreateNow()
+{
+	if (!IsWorkspaceCreated())
+	{
+		return OnCreateWorkspaceInternal();
+	}
+	return true;
+}
+bool KWorkspace::ScheduleRefresh()
+{
+	if (IsWorkspaceCreated())
+	{
+		if (IsWorkspaceVisible())
+		{
+			return ReloadWorkspace();
+		}
+		else
+		{
+			m_IsRefreshSheduled = true;
+			return false;
+		}
+	}
+	else
+	{
+		return CreateNow();
+	}
+	return false;
+}

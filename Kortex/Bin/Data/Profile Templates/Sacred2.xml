@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Profile ID="Sacred2" SortOrder="31">
+	<Name Short="Sacred 2">Sacred 2: Fallen Angel</Name>
+	
+	<Variables>
+		<!--Required-->
+		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
+			<Node>32</Node>
+			<Root>HKEY_LOCAL_MACHINE</Root>
+			<Path>SOFTWARE\Ascaron Entertainment\Sacred 2</Path>
+			<ValueName>InstallPath</ValueName>
+			<ValueType>REG_SZ</ValueType>
+		</Entry>
+		<Entry ID="ConfigRoot">$SH(SHF_SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
+		<Entry ID="GameExecutable">$(GameRoot)\System\Sacred2.exe</Entry>
+		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\System\Sacred2.exe</Entry>
+		<Entry ID="NexusID">$(ID)</Entry>
+	</Variables>
+
+	<Network>
+		<NexusID>Sacred2</NexusID>
+	</Network>
+
+	<LocationsConfig>
+		<Entry Label="$T(OpenLocation.Saves)">$(VirtualConfigRoot)</Entry>
+	</LocationsConfig>
+
+	<Virtualization>
+		<MirroredLocations>
+			<Entry>
+				<Source>$(VirtualConfigRoot)</Source>
+				<Target>$(ConfigRoot)</Target>
+			</Entry>
+		</MirroredLocations>
+	</Virtualization>
+
+	<RunConfig Enabled="1">
+		<Main>
+			<Entry>
+				<Name>$(NameShort)</Name>
+				<Icon>System\Sacred2.exe</Icon>
+				<Executable>$(VirtualGameExecutable)</Executable>
+				<Arguments></Arguments>
+			</Entry>
+		</Main>
+	</RunConfig>
+
+	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
+		<Locations>
+			<Entry>$SH(SHF_PICTURES)\Ascaron Entertainment\Sacred 2</Entry>
+			<Entry>$(VirtualGameRoot)</Entry>
+			<Entry>$(VirtualGameRoot)\Screenshots</Entry>
+			<Entry>$(VirtualConfigRoot)</Entry>
+		</Locations>
+	</ScreenshotsGallery>
+</Profile>

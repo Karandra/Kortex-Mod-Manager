@@ -1,0 +1,85 @@
+#include "stdafx.h"
+#include "KPackageProjectFileData.h"
+#include "KPackageProject.h"
+#include "KApp.h"
+#include "KAux.h"
+#include <KxFramework/KxString.h>
+
+KPPFFileEntry::KPPFFileEntry()
+	:m_Priority(KPackageProjectFileData::ms_DefaultPriority)
+{
+}
+KPPFFileEntry::~KPPFFileEntry()
+{
+}
+
+void KPPFFileEntry::MakeUniqueID()
+{
+	if (m_ID.IsEmpty())
+	{
+		m_ID = wxString::Format("0x%p", m_ID, this);
+	}
+	else
+	{
+		m_ID = wxString::Format("%s!0x%p", m_ID, this);
+	}
+}
+
+bool KPPFFileEntry::IsDefaultPriority() const
+{
+	return m_Priority == KPackageProjectFileData::ms_DefaultPriority;
+}
+int32_t KPPFFileEntry::GetPriority() const
+{
+	return m_Priority;
+}
+void KPPFFileEntry::SetPriority(int32_t value)
+{
+	m_Priority = KPackageProjectFileData::IsPriorityValid(value) ? value : KPackageProjectFileData::ms_DefaultPriority;
+}
+
+//////////////////////////////////////////////////////////////////////////
+KPPFFolderEntry::KPPFFolderEntry()
+{
+}
+KPPFFolderEntry::~KPPFFolderEntry()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+bool KPackageProjectFileData::IsFileIDValid(const wxString& id)
+{
+	if (!id.IsEmpty() && !KAux::HasForbiddenFileNameChars(id))
+	{
+		wxString idLower = KxString::ToLower(id);
+		return idLower != "fomod";
+	}
+	return false;
+}
+
+KPackageProjectFileData::KPackageProjectFileData(KPackageProject& project)
+	:KPackageProjectPart(project)
+{
+}
+KPackageProjectFileData::~KPackageProjectFileData()
+{
+}
+
+KPPFFileEntry* KPackageProjectFileData::FindEntryWithID(const wxString& id, size_t* index) const
+{
+	const wxString idLower = KxString::ToLower(id);
+	auto it = std::find_if(m_Data.cbegin(), m_Data.cend(), [&idLower](const KPPFFileEntryArray::value_type& entry)
+	{
+		return KxString::ToLower(entry->GetID()) == idLower;
+	});
+
+	if (it != m_Data.cend())
+	{
+		if (index)
+		{
+			*index = std::distance(m_Data.cbegin(), it);
+		}
+		return it->get();
+	}
+	return NULL;
+}

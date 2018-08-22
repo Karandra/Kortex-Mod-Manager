@@ -118,6 +118,8 @@
 		<String ID="Generic.ID">Identifier</String>
 		<String ID="Generic.IDInvalid">Invalid identifier</String>
 		<String ID="Generic.Name">Name</String>
+		<String ID="Generic.Index">Index</String>
+		<String ID="Generic.PartOf">Part of</String>
 		<String ID="Generic.Value">Value</String>
 		<String ID="Generic.Address">Address</String>
 		<String ID="Generic.Size">Size</String>
@@ -995,14 +997,9 @@ the corresponding button on your keyboard]]></String>
 		<String ID="VFS.Error6">Invalid mount point.</String>
 		<String ID="VFS.Error7">Incompatible version.</String>
 		<String ID="VFS.Error1000">Virtual file system is not running.</String>
-		<String ID="VFS.Error10000">Unknown error.</String>
+		<String ID="VFS.Error10000">Unknown error</String>
 
 		<!-- PluginManager -->
-		<String ID="PluginManager.List.Name">File</String>
-		<String ID="PluginManager.List.Index">Index</String>
-		<String ID="PluginManager.List.Type">Type</String>
-		<String ID="PluginManager.List.PartOf">Part of</String>
-
 		<String ID="PluginManager.SaveChanges.Caption">You have unsaved changes in the plugin load order</String>
 		<String ID="PluginManager.SaveChanges.Message">Do you want to save current order?</String>
 

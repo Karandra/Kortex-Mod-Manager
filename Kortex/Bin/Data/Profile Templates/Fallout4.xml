@@ -104,7 +104,7 @@
 		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">CreationKitPrefs.ini</Entry>
 	</GameConfig>
 
-	<PluginManager Enabled="1" InterfaceName="BethesdaGeneric2" PluginFileFormat="BethesdaSkyrim">
+	<PluginManager Enabled="1" InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
 		<Limit Value="254"/>
 
 		<ActiveList>$(CurrentProfileRoot)\PluginsOrder\Plugins.txt</ActiveList>

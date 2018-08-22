@@ -100,7 +100,7 @@
 		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">$(Fallout3EditorPrefsINI)</Entry>
 	</GameConfig>
 
-	<PluginManager Enabled="1" InterfaceName="BethesdaGeneric" PluginFileFormat="BethesdaSkyrim">
+	<PluginManager Enabled="1" InterfaceName="Bethesda" PluginFileFormat="BethesdaSkyrim">
 		<Limit Value="255"/>
 
 		<ActiveList>$(CurrentProfileRoot)\PluginsOrder\Plugins.txt</ActiveList>

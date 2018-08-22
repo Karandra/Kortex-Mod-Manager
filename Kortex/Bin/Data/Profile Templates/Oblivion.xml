@@ -100,7 +100,7 @@
 		<Entry ID="1000" Format="INI" TypeDetectionMethod="HungarianNotation">$(VirtualConfigRoot)\ConstructionSet.ini</Entry>
 	</GameConfig>
 
-	<PluginManager Enabled="1" InterfaceName="BethesdaGeneric" PluginFileFormat="BethesdaOblivion">
+	<PluginManager Enabled="1" InterfaceName="Bethesda" PluginFileFormat="BethesdaOblivion">
 		<Limit Value="255"/>
 
 		<ActiveList>$(CurrentProfileRoot)\PluginsOrder\Plugins.txt</ActiveList>

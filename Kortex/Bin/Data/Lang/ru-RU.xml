@@ -118,6 +118,8 @@
 		<String ID="Generic.ID">Идентификатор</String>
 		<String ID="Generic.IDInvalid">Некорретный идентификатор</String>
 		<String ID="Generic.Name">Название</String>
+		<String ID="Generic.Index">Индекс</String>
+		<String ID="Generic.PartOf">Часть</String>
 		<String ID="Generic.Value">Значение</String>
 		<String ID="Generic.Address">Адрес</String>
 		<String ID="Generic.Size">Размер</String>
@@ -996,14 +998,9 @@
 		<String ID="VFS.Error6">Неверная точка монтирования.</String>
 		<String ID="VFS.Error7">Запрошена несовместимая версия.</String>
 		<String ID="VFS.Error1000">Виртуальная файловая система не была запущена.</String>
-		<String ID="VFS.Error10000">Неизвестная ошибка.</String>
+		<String ID="VFS.Error10000">Неизвестная ошибка</String>
 
 		<!-- PluginManager -->
-		<String ID="PluginManager.List.Name">Файл</String>
-		<String ID="PluginManager.List.Index">Индекс</String>
-		<String ID="PluginManager.List.Type">Тип</String>
-		<String ID="PluginManager.List.PartOf">Часть</String>
-
 		<String ID="PluginManager.SaveChanges.Caption">В порядке загрузки плагинов есть несохранённые изменения</String>
 		<String ID="PluginManager.SaveChanges.Message">Сохранить текущий порядок?</String>
 		

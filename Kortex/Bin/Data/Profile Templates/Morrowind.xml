@@ -79,7 +79,7 @@
 		<Entry ID="0" Format="INI" TypeDetectionMethod="DataAnalysis">$(VirtualConfigRoot)\$(ID).ini</Entry>
 	</GameConfig>
 
-	<PluginManager Enabled="1" InterfaceName="BethesdaMorrowind" PluginFileFormat="BethesdaMorrowind">
+	<PluginManager Enabled="1" InterfaceName="BethesdaMW" PluginFileFormat="BethesdaMorrowind">
 		<Limit Value="255"/>
 		
 		<ChangeFileModificationDate>1</ChangeFileModificationDate>

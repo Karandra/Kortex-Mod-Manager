@@ -333,22 +333,10 @@
     <ClCompile Include="Source\VFS\KVirtualFileSystemMirror.cpp">
       <Filter>Code\Source Files\VFS</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPluginManagerBethesdaGeneric.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPluginManagerBethesdaGeneric2.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PluginManager\KPluginManagerWorkspace.cpp">
       <Filter>Code\Source Files\PluginManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPMPluginEntry.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PluginManager\KPluginManager.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPluginManagerBethesdaMorrowind.cpp">
       <Filter>Code\Source Files\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\ScreenshotsGallery\KScreenshotsGalleryWorkspace.cpp">
@@ -558,9 +546,6 @@
     <ClCompile Include="Source\ModManager\KModManagerModel.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPluginManagerListModel.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModManager\KModManagerTagSelector.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
@@ -591,15 +576,6 @@
     <ClCompile Include="Source\IPC\KIPCServer.cpp">
       <Filter>Code\Source Files\IPC</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPMPluginReader.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPMPluginReaderBethesdaMorrowind.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPMPluginReaderBethesdaOblivion.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModManager\KModManagerDispatcher.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
@@ -623,9 +599,6 @@
     </ClCompile>
     <ClCompile Include="Source\ModManager\KModFilesExplorerDialog.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PluginManager\KPMPluginReaderBethesdaSkyrim.cpp">
-      <Filter>Code\Source Files\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModManager\KModManagerModList.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
@@ -731,6 +704,42 @@
     </ClCompile>
     <ClCompile Include="Source\ModManager\KFileTreeNode.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginEntry.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginReader.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginReaderBethesdaMorrowind.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginReaderBethesdaOblivion.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginReaderBethesdaSkyrim.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginEntryBethesda.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginManagerBethesda.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginManagerBethesda2.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginEntryBethesda2.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginManagerBethesdaMW.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginViewBaseModel.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PluginManager\KPluginViewModelBethesda.cpp">
+      <Filter>Code\Source Files\PluginManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -860,19 +869,7 @@
     <ClInclude Include="Source\PluginManager\KPluginManager.h">
       <Filter>Code\Header Files\PluginManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPluginManagerBethesdaGeneric.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPluginManagerBethesdaGeneric2.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PluginManager\KPluginManagerWorkspace.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPMPluginEntry.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPluginManagerBethesdaMorrowind.h">
       <Filter>Code\Header Files\PluginManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\KVariablesDatabase.h">
@@ -1118,9 +1115,6 @@
     <ClInclude Include="Source\ModManager\KModManagerModel.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPluginManagerListModel.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModManager\KModManagerTagSelector.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
@@ -1150,15 +1144,6 @@
     </ClInclude>
     <ClInclude Include="Source\IPC\KIPCServer.h">
       <Filter>Code\Header Files\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPMPluginReader.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPMPluginReaderBethesdaMorrowind.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPMPluginReaderBethesdaOblivion.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KUnsortedUnique.h">
       <Filter>Code\Header Files\Utility</Filter>
@@ -1192,9 +1177,6 @@
     </ClInclude>
     <ClInclude Include="Source\ModManager\KModFilesExplorerModelNode.h">
       <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PluginManager\KPMPluginReaderBethesdaSkyrim.h">
-      <Filter>Code\Header Files\PluginManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModManager\KModManagerList.h">
       <Filter>Code\Header Files\ModManager</Filter>
@@ -1306,6 +1288,54 @@
     </ClInclude>
     <ClInclude Include="Source\ModManager\KFileTreeNode.h">
       <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginEntry.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginReader.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginReaderBethesda.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginReaderBethesdaMorrowind.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginReaderBethesdaOblivion.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginReaderBethesdaSkyrim.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginEntryBethesda.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginManagerBethesda.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginManagerBethesda2.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginEntryBethesda2.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginManagerBethesdaMW.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginEntryTypesInterface.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginViewModel.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginViewBaseModel.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PluginManager\KPluginViewModelBethesda.h">
+      <Filter>Code\Header Files\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\KRTTI.h">
+      <Filter>Code\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

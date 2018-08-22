@@ -34,16 +34,6 @@ wxCheckBoxState KPackageManager::CheckRequirementStateStep1(const KPPRRequiremen
 		case KPPR_OBJFUNC_PLUGIN_ACTIVE:
 		case KPPR_OBJFUNC_PLUGIN_INACTIVE:
 		{
-			bool bFileExist = KxFile(GetPluginRequirementFilePath(entry)).IsFileExist();
-			if (nObjFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE && !bFileExist)
-			{
-				return wxCHK_UNCHECKED;
-			}
-			else if (nObjFunc == KPPR_OBJFUNC_PLUGIN_INACTIVE && !bFileExist)
-			{
-				return wxCHK_CHECKED;
-			}
-
 			KPluginManager* manager = KPluginManager::GetInstance();
 			if (manager)
 			{
@@ -119,15 +109,7 @@ wxString KPackageManager::GetRequirementFilePath(const KPPRRequirementEntry* ent
 		return KModManager::GetDispatcher().GetTargetPath(path);
 	}
 }
-wxString KPackageManager::GetPluginRequirementFilePath(const KPPRRequirementEntry* entry)
-{
-	wxString path = V(entry->GetObject());
-	if (KPluginManager* manager = KPluginManager::GetInstance())
-	{
-		path = manager->GetPluginRootRelativePath(path);
-	}
-	return KModManager::GetDispatcher().GetTargetPath(path);
-}
+
 wxCheckBoxState KPackageManager::CheckRequirementState(const KPPRRequirementEntry* entry, KPPRObjectFunction* finalObjFunc)
 {
 	KPPRObjectFunction nObjectFunction = entry->GetObjectFunction();

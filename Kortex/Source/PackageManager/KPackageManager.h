@@ -23,7 +23,6 @@ class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
 	public:
 		static bool IsPathAbsolute(const wxString& path);
 		static wxString GetRequirementFilePath(const KPPRRequirementEntry* entry);
-		static wxString GetPluginRequirementFilePath(const KPPRRequirementEntry* entry);
 		static wxCheckBoxState CheckRequirementState(const KPPRRequirementEntry* entry, KPPRObjectFunction* finalObjFunc = NULL);
 		static KxVersion GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry);
 		static KxVersion GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry);

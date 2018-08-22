@@ -1094,9 +1094,9 @@ void KInstallWizardDialog::SortInstallableFiles()
 	}
 
 	// Sort non-default
-	std::sort(tNonDefaultPriority.begin(), tNonDefaultPriority.end(), [](const KPPFFileEntry* pEntry1, const KPPFFileEntry* pEntry2)
+	std::sort(tNonDefaultPriority.begin(), tNonDefaultPriority.end(), [](const KPPFFileEntry* entry1, const KPPFFileEntry* entry2)
 	{
-		return pEntry1->GetPriority() < pEntry2->GetPriority();
+		return entry1->GetPriority() < entry2->GetPriority();
 	});
 
 	// Merge back

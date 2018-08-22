@@ -1,15 +1,18 @@
 #include "stdafx.h"
 #include "KVariablesDatabase.h"
-#include "KPluginManagerBethesdaGeneric.h"
+#include "KPluginManagerBethesda.h"
 #include "KPluginManagerWorkspace.h"
+#include "KPluginViewModelBethesda.h"
 #include "KPluginManager.h"
-#include "KPMPluginReader.h"
+#include "KPluginReader.h"
+#include "KPluginReaderBethesda.h"
 #include "UI/KWorkspace.h"
 #include "UI/KWorkspaceController.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModEntry.h"
 #include "RunManager/KRunManager.h"
 #include "ModManager/KModManagerDispatcher.h"
+#include "Profile/KPluginManagerConfig.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
@@ -19,92 +22,76 @@
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
-void KPMPluginEntryBethesdaGeneric::UpdateHasDependentPlugins()
+void KPluginManagerBethesda::SortByDate()
 {
-	m_HasDependentPlugins = KPluginManager::GetInstance()->HasDependentPlugins(this);
-}
-
-KPMPluginEntryBethesdaGeneric::KPMPluginEntryBethesdaGeneric(const wxString& name, bool isActive, KPMPluginEntryType type)
-	:KPMPluginEntry(name, isActive, type)
-{
-	//UpdateHasDependentPlugins();
-}
-
-void KPMPluginEntryBethesdaGeneric::OnUpdate()
-{
-	//UpdateHasDependentPlugins();
-	KPMPluginEntry::OnUpdate();
-}
-
-bool KPMPluginEntryBethesdaGeneric::CanToggleEnabled() const
-{
-	//return !m_HasDependentPlugins;
-	return KPMPluginEntry::CanToggleEnabled();
-}
-bool KPMPluginEntryBethesdaGeneric::IsEnabled() const
-{
-	//return m_HasDependentPlugins || KPMPluginEntry::IsEnabled();
-	return KPMPluginEntry::IsEnabled();
-}
-
-//////////////////////////////////////////////////////////////////////////
-void KPluginManagerBethesdaGeneric::Clear()
-{
-	m_Entries.clear();
-}
-void KPluginManagerBethesdaGeneric::SortByDate()
-{
-	std::sort(GetEntries().begin(), GetEntries().end(), [this](const auto& pEntry1, const auto& pEntry2)
+	std::sort(GetEntries().begin(), GetEntries().end(), [this](const auto& entry1, const auto& entry2)
 	{
-		wxFileName tFile1(pEntry1->GetFullPath());
-		wxFileName tFile2(pEntry2->GetFullPath());
+		wxFileName file1(entry1->GetFullPath());
+		wxFileName file2(entry2->GetFullPath());
 
-		return tFile1.GetModificationTime() < tFile2.GetModificationTime();
+		return file1.GetModificationTime() < file2.GetModificationTime();
 	});
 }
 
-KPMPluginEntryType KPluginManagerBethesdaGeneric::GetPluginTypeFromPath(const wxString& name) const
+KPluginEntry::RefVector KPluginManagerBethesda::CollectDependentPlugins(const KPluginEntry& pluginEntry, bool firstOnly) const
+{
+	KPluginEntry::RefVector dependentList;
+	if (firstOnly)
+	{
+		dependentList.reserve(1);
+	}
+
+	const wxString nameL = KxString::ToLower(pluginEntry.GetName());
+	for (auto& entry: GetEntries())
+	{
+		if (entry->IsEnabled())
+		{
+			const KPluginReaderBethesda* bethesdaReader = NULL;
+			if (entry->HasReader() && entry->GetReader()->As(bethesdaReader))
+			{
+				KxStringVector dependenciesList = bethesdaReader->GetRequiredPlugins();
+				auto it = std::find_if(dependenciesList.begin(), dependenciesList.end(), [&nameL](const wxString& sDepName)
+				{
+					return nameL == KxString::ToLower(sDepName);
+				});
+				if (it != dependenciesList.end())
+				{
+					dependentList.push_back(entry.get());
+					if (firstOnly)
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	return dependentList;
+}
+bool KPluginManagerBethesda::CheckExtension(const wxString& name) const
 {
 	wxString ext = name.AfterLast('.');
-	if (ext.IsSameAs("esm", false))
-	{
-		return KPMPE_TYPE_MASTER;
-	}
-	else if (ext.IsSameAs("esp", false))
-	{
-		return KPMPE_TYPE_NORMAL;
-	}
-	return KPMPE_TYPE_INVALID;
-}
-void KPluginManagerBethesdaGeneric::SetParentModAndPluginFile(KPMPluginEntry* entry)
-{
-	entry->SetParentMod(GetParentMod(entry));
-	
-	if (KPMPluginReader* reader = entry->GetPluginReader())
-	{
-		reader->Create(entry->GetFullPath());
-	}
+	return ext == "esp" || ext == "esm";
 }
 
-wxString KPluginManagerBethesdaGeneric::OnWriteToLoadOrder(const KPMPluginEntry* entry) const
+wxString KPluginManagerBethesda::OnWriteToLoadOrder(const KPluginEntry& entry) const
 {
-	return entry->GetName();
+	return entry.GetName();
 }
-wxString KPluginManagerBethesdaGeneric::OnWriteToActiveOrder(const KPMPluginEntry* entry) const
+wxString KPluginManagerBethesda::OnWriteToActiveOrder(const KPluginEntry& entry) const
 {
-	return entry->GetName();
+	return entry.GetName();
 }
-KWorkspace* KPluginManagerBethesdaGeneric::CreateWorkspace(KMainWindow* mainWindow)
+KWorkspace* KPluginManagerBethesda::CreateWorkspace(KMainWindow* mainWindow)
 {
-	m_Workspace = new KPluginManagerWorkspace(mainWindow, this);
-	return m_Workspace;
+	return new KPluginManagerWorkspace(mainWindow);
 }
 
-void KPluginManagerBethesdaGeneric::LoadNativeOrderBG()
+void KPluginManagerBethesda::LoadNativeOrderBG()
 {
 	Clear();
-	auto files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
-	KModList& tLoadOrder = KModManager::GetListManager().GetCurrentList();
+	KModManagerDispatcher::FilesVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
+	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
 
 	// Load from 'LoadOrder.txt'
 	for (const wxString& name: KxTextFile::ReadToArray(m_ActiveListFile))
@@ -118,12 +105,11 @@ void KPluginManagerBethesdaGeneric::LoadNativeOrderBG()
 
 		if (!nameL.StartsWith('#') && it != files.end())
 		{
-			KPMPluginEntryType type = GetPluginTypeFromPath(nameL);
-			if (type != KPMPE_TYPE_INVALID)
+			if (CheckExtension(nameL))
 			{
-				KPMPluginEntry* entry = EmplacePluginEntry(name, false, type);
+				auto& entry = GetEntries().emplace_back(NewPluginEntry(name, false));
 				entry->SetFullPath(it->GetFullPath());
-				SetParentModAndPluginFile(entry);
+				entry->SetParentMod(FindParentMod(*entry));
 			}
 		}
 	}
@@ -131,11 +117,11 @@ void KPluginManagerBethesdaGeneric::LoadNativeOrderBG()
 	// Load new plugins from folder
 	for (const KxFileFinderItem& item: files)
 	{
-		if (!FindPluginByName(item.GetName()))
+		if (CheckExtension(KxString::ToLower(item.GetName())) && !FindPluginByName(item.GetName()))
 		{
-			KPMPluginEntry* entry = EmplacePluginEntry(item.GetName(), false, GetPluginTypeFromPath(item.GetName()));
+			auto& entry = GetEntries().emplace_back(NewPluginEntry(item.GetName(), false));
 			entry->SetFullPath(item.GetFullPath());
-			SetParentModAndPluginFile(entry);
+			entry->SetParentMod(FindParentMod(*entry));
 		}
 	}
 
@@ -154,21 +140,21 @@ void KPluginManagerBethesdaGeneric::LoadNativeOrderBG()
 		}
 	}
 }
-void KPluginManagerBethesdaGeneric::LoadNativeActiveBG()
+void KPluginManagerBethesda::LoadNativeActiveBG()
 {
 	// Load names from 'Plugins.txt' it they are not already added.
 	// Activate all new added and existing items with same name.
 	for (const wxString& name: KxTextFile::ReadToArray(m_ActiveListFile))
 	{
-		if (KPMPluginEntry* entry = FindPluginByName(name))
+		if (KPluginEntry* entry = FindPluginByName(name))
 		{
 			entry->SetEnabled(true);
 		}
 	}
 }
-void KPluginManagerBethesdaGeneric::SaveNativeOrderBG() const
+void KPluginManagerBethesda::SaveNativeOrderBG() const
 {
-	bool bModFileDate = ShouldChangeFileModificationDate();
+	bool modFileDate = ShouldChangeFileModificationDate();
 
 	// Initialize starting time point to (current time - entries count) minutes,
 	// so incrementing it by one minute gives no "overflows" into future.
@@ -176,24 +162,24 @@ void KPluginManagerBethesdaGeneric::SaveNativeOrderBG() const
 	const wxTimeSpan tTimeStep(0, 1);
 
 	// Lists
-	KxStringVector tLoadOrder;
-	tLoadOrder.emplace_back(V(m_OrderFileHeader));
+	KxStringVector loadOrder;
+	loadOrder.emplace_back(V(m_OrderFileHeader));
 
-	KxStringVector tActiveOrder;
-	tActiveOrder.emplace_back(V(m_ActiveFileHeader));
+	KxStringVector activeOrder;
+	activeOrder.emplace_back(V(m_ActiveFileHeader));
 
 	// Write order
-	for (const KModListPluginEntry& tListItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
+	for (const KModListPluginEntry& listItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
 	{
-		if (const KPMPluginEntry* entry = tListItem.GetPluginEntry())
+		if (const KPluginEntry* entry = listItem.GetPluginEntry())
 		{
-			tLoadOrder.emplace_back(OnWriteToLoadOrder(entry));
-			if (tListItem.IsEnabled())
+			loadOrder.emplace_back(OnWriteToLoadOrder(*entry));
+			if (listItem.IsEnabled())
 			{
-				tActiveOrder.emplace_back(OnWriteToActiveOrder(entry));
+				activeOrder.emplace_back(OnWriteToActiveOrder(*entry));
 			}
 
-			if (bModFileDate)
+			if (modFileDate)
 			{
 				KxFile(entry->GetFullPath()).SetFileTime(tFileTime, KxFILETIME_MODIFICATION);
 				tFileTime.Add(tTimeStep);
@@ -203,14 +189,14 @@ void KPluginManagerBethesdaGeneric::SaveNativeOrderBG() const
 
 	// Save files
 	KxFile(m_OrderListFile.BeforeLast('\\')).CreateFolder();
-	KxTextFile::WriteToFile(m_OrderListFile, tLoadOrder, wxTextFileType_Dos);
+	KxTextFile::WriteToFile(m_OrderListFile, loadOrder, wxTextFileType_Dos);
 
 	KxFile(m_ActiveListFile.BeforeLast('\\')).CreateFolder();
-	KxTextFile::WriteToFile(m_ActiveListFile, tActiveOrder, wxTextFileType_Dos);
+	KxTextFile::WriteToFile(m_ActiveListFile, activeOrder, wxTextFileType_Dos);
 }
 
-KPluginManagerBethesdaGeneric::KPluginManagerBethesdaGeneric(const wxString& interfaceName, const KxXMLNode& configNode, const KPluginManagerConfig* profilePluginConfig)
-	:KPluginManager(interfaceName, configNode, profilePluginConfig), m_PluginsLocation("Data")
+KPluginManagerBethesda::KPluginManagerBethesda(const wxString& interfaceName, const KxXMLNode& configNode)
+	:KPluginManager(interfaceName, configNode), m_PluginsLocation("Data")
 {
 	m_ActiveListFile = V(configNode.GetFirstChildElement("ActiveList").GetValue());
 	m_OrderListFile = V(configNode.GetFirstChildElement("OrderList").GetValue());
@@ -219,38 +205,70 @@ KPluginManagerBethesdaGeneric::KPluginManagerBethesdaGeneric(const wxString& int
 	m_ActiveFileHeader = configNode.GetFirstChildElement("ActiveListHeader").GetValue();
 	m_OrderFileHeader = configNode.GetFirstChildElement("OrderListHeader").GetValue();
 
-	m_ChangeFileModificationDate = KAux::StringToBool(configNode.GetFirstChildElement("ChangeFileModificationDate").GetValue());
-	m_SortByFileModificationDate = KAux::StringToBool(configNode.GetFirstChildElement("SortByFileModificationDate").GetValue());
+	m_ShouldChangeFileModificationDate = configNode.GetFirstChildElement("ChangeFileModificationDate").GetValueBool();
+	m_ShouldSortByFileModificationDate = configNode.GetFirstChildElement("SortByFileModificationDate").GetValueBool();
+
+	m_ViewModel = std::make_unique<KPluginViewModelBethesda>();
 }
-KPluginManagerBethesdaGeneric::~KPluginManagerBethesdaGeneric()
+KPluginManagerBethesda::~KPluginManagerBethesda()
 {
 }
 
-bool KPluginManagerBethesdaGeneric::IsOK() const
+KWorkspace* KPluginManagerBethesda::GetWorkspace() const
 {
-	return true;
+	return KPluginManagerWorkspace::GetInstance();
 }
-KWorkspace* KPluginManagerBethesdaGeneric::GetWorkspace() const
+KPluginViewModel* KPluginManagerBethesda::GetViewModel() const
 {
-	return m_Workspace;
+	return m_ViewModel.get();
 }
 
-bool KPluginManagerBethesdaGeneric::Save()
+KPluginEntryBethesda* KPluginManagerBethesda::NewPluginEntry(const wxString& name, bool isActive) const
+{
+	return new KPluginEntryBethesda(name, isActive);
+}
+wxString KPluginManagerBethesda::GetPluginTypeName(const KPluginEntry& pluginEntry) const
+{
+	const KPluginEntryBethesda* bethesdaPlugin = NULL;
+	if (pluginEntry.As(bethesdaPlugin))
+	{
+		return GetPluginTypeName(bethesdaPlugin->IsMaster(), bethesdaPlugin->IsLight());
+	}
+	return GetPluginTypeName(false, false);
+}
+wxString KPluginManagerBethesda::GetPluginTypeName(bool isMaster, bool isLight) const
+{
+	if (isMaster && isLight)
+	{
+		return wxString::Format("%s (%s)", T("PluginManager.PluginType.Master"), T("PluginManager.PluginType.Light"));
+	}
+	if (isMaster)
+	{
+		return T("PluginManager.PluginType.Master");
+	}
+	if (isLight)
+	{
+		return T("PluginManager.PluginType.Light");
+	}
+	return T("PluginManager.PluginType.Normal");
+}
+
+bool KPluginManagerBethesda::Save()
 {
 	SaveNativeOrderBG();
 	return true;
 }
-bool KPluginManagerBethesdaGeneric::Load()
+bool KPluginManagerBethesda::Load()
 {
 	Clear();
 
 	auto files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
-	KModList& tLoadOrder = KModManager::GetListManager().GetCurrentList();
+	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
 
-	for (const KModListPluginEntry& tListEntry: tLoadOrder.GetPlugins())
+	for (const KModListPluginEntry& listEntry: loadOrder.GetPlugins())
 	{
 		// Find whether plugin with this name exist
-		wxString nameL = KxString::ToLower(tListEntry.GetPluginName());
+		wxString nameL = KxString::ToLower(listEntry.GetPluginName());
 		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KxFileFinderItem& item)
 		{
 			return KxString::ToLower(item.GetName()) == nameL;
@@ -258,12 +276,11 @@ bool KPluginManagerBethesdaGeneric::Load()
 
 		if (!nameL.StartsWith('#') && it != files.end())
 		{
-			KPMPluginEntryType type = GetPluginTypeFromPath(nameL);
-			if (type != KPMPE_TYPE_INVALID)
+			if (CheckExtension(nameL))
 			{
-				KPMPluginEntry* entry = EmplacePluginEntry(tListEntry.GetPluginName(), false, type);
+				auto& entry = GetEntries().emplace_back(NewPluginEntry(listEntry.GetPluginName(), false));
 				entry->SetFullPath(it->GetFullPath());
-				SetParentModAndPluginFile(entry);
+				entry->SetParentMod(FindParentMod(*entry));
 			}
 		}
 	}
@@ -271,47 +288,78 @@ bool KPluginManagerBethesdaGeneric::Load()
 	// Load files form 'Data' folder. Don't add already existing
 	for (const KxFileFinderItem& item: files)
 	{
-		KPMPluginEntryType type = GetPluginTypeFromPath(item.GetName());
-		if (type != KPMPE_TYPE_INVALID)
+		if (CheckExtension(KxString::ToLower(item.GetName())))
 		{
 			if (FindPluginByName(item.GetName()) == NULL)
 			{
-				KPMPluginEntry* entry = EmplacePluginEntry(item.GetName(), false, type);
+				auto& entry = GetEntries().emplace_back(NewPluginEntry(item.GetName(), false));
 				entry->SetFullPath(item.GetFullPath());
-				SetParentModAndPluginFile(entry);
+				entry->SetParentMod(FindParentMod(*entry));
 			}
 		}
 	}
 
 	// Check active
-	for (const KModListPluginEntry& tListEntry: tLoadOrder.GetPlugins())
+	for (const KModListPluginEntry& listEntry: loadOrder.GetPlugins())
 	{
-		KPMPluginEntry* entry = FindPluginByName(tListEntry.GetPluginName());
+		KPluginEntry* entry = FindPluginByName(listEntry.GetPluginName());
 		if (entry)
 		{
-			entry->SetEnabled(tListEntry.IsEnabled());
+			entry->SetEnabled(listEntry.IsEnabled());
 		}
 	}
 
-	// Sort by file modification date if needed otherwise all elements already in right order
+	// Sort by file modification date if needed otherwise all elements already in correct order
 	if (ShouldSortByFileModificationDate())
 	{
 		SortByDate();
 	}
 
-	KModManager::GetListManager().SyncList(tLoadOrder.GetID());
+	ReadPluginsData();
+	KModManager::GetListManager().SyncList(loadOrder.GetID());
 	return true;
 }
-bool KPluginManagerBethesdaGeneric::LoadNativeOrder()
+bool KPluginManagerBethesda::LoadNativeOrder()
 {
 	LoadNativeOrderBG();
+	ReadPluginsData();
+
 	Save();
 	return true;
 }
 
-const KModEntry* KPluginManagerBethesdaGeneric::GetParentMod(const KPMPluginEntry* pluginEntry) const
+bool KPluginManagerBethesda::HasDependentPlugins(const KPluginEntry& pluginEntry) const
 {
-	KModEntry* pOwningMod = NULL;
-	KModManager::GetDispatcher().GetTargetPath(GetPluginRootRelativePath(pluginEntry->GetName()), &pOwningMod);
-	return pOwningMod;
+	return !CollectDependentPlugins(pluginEntry, true).empty();
+}
+KPluginEntry::RefVector KPluginManagerBethesda::GetDependentPlugins(const KPluginEntry& pluginEntry) const
+{
+	return CollectDependentPlugins(pluginEntry, false);
+}
+const KModEntry* KPluginManagerBethesda::FindParentMod(const KPluginEntry& pluginEntry) const
+{
+	KModEntry* owningMod = NULL;
+	KModManager::GetDispatcher().GetTargetPath(GetPluginRootRelativePath(pluginEntry.GetName()), &owningMod);
+	return owningMod;
+}
+
+intptr_t KPluginManagerBethesda::GetPluginPriority(const KPluginEntry& modEntry) const
+{
+	intptr_t priority = 0;
+	intptr_t inactive = 0;
+
+	for (const auto& entry: GetEntries())
+	{
+		if (entry.get() == &modEntry)
+		{
+			return priority - inactive;
+		}
+
+		priority++;
+		if (!entry->IsEnabled())
+		{
+			inactive++;
+		}
+	}
+	return -1;
 }

@@ -2,6 +2,7 @@
 #include "KSaveManagerListModel.h"
 #include "KSaveManager.h"
 #include "KSaveManagerWorkspace.h"
+#include "Profile/KSaveManagerConfig.h"
 #include "UI/KImageViewerDialog.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -94,7 +95,7 @@ bool KSaveManagerListModel::SetValueByRow(const wxAny& value, size_t row, const 
 		{
 			case ColumnID::Name:
 			{
-				const KSaveManagerConfig* savesConfig = m_Manager->GetProfileSaveManager();
+				const KSaveManagerConfig* savesConfig = KSaveManagerConfig::GetInstance();
 				KxFileFinderItem& infoPrimary = entry->GetFileInfo();
 
 				if (savesConfig->HasMultiFileSaveConfig())
@@ -264,7 +265,7 @@ void KSaveManagerListModel::SetDataVector(const wxString& folder, const KxString
 			item = tFinder.FindNext();
 			if (item.IsOK())
 			{
-				m_DataVector.emplace_back(m_Manager->GetProfileSaveManager()->QuerySaveFile(item.GetFullPath()));
+				m_DataVector.emplace_back(KSaveManagerConfig::GetInstance()->QuerySaveFile(item.GetFullPath()));
 			}
 		}
 		while (item.IsOK());

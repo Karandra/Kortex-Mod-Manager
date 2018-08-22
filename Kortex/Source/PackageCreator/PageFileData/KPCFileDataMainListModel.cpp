@@ -429,19 +429,19 @@ void KPCFileDataMainListModel::OnAddFolder()
 			entry->MakeUniqueID();
 		}
 
-		auto pOperation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
-		pOperation->OnRun([this, entry, source](KOperationWithProgressBase* self)
+		auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
+		operation->OnRun([this, entry, source](KOperationWithProgressBase* self)
 		{
 			AddEverythingFromPath(source, entry, self);
 		});
-		pOperation->OnEnd([this](KOperationWithProgressBase* self)
+		operation->OnEnd([this](KOperationWithProgressBase* self)
 		{
 			KxDataViewItem item = GetItem(GetItemCount() - 1);
 			NotifyAddedItem(item);
 			SelectItem(item);
 		});
-		pOperation->SetDialogCaption(T("Generic.FileFindInProgress"));
-		pOperation->Run();
+		operation->SetDialogCaption(T("Generic.FileFindInProgress"));
+		operation->Run();
 	}
 }
 void KPCFileDataMainListModel::OnAddMultipleFolders()
@@ -450,8 +450,8 @@ void KPCFileDataMainListModel::OnAddMultipleFolders()
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		wxString source = dialog.GetResult();
-		auto pOperation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
-		pOperation->OnRun([this, source](KOperationWithProgressBase* self)
+		auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
+		operation->OnRun([this, source](KOperationWithProgressBase* self)
 		{
 			KxStringVector folders = KxFile(source).Find(KxFile::NullFilter, KxFS_FOLDER, false);
 			for (const wxString folderPath: folders)
@@ -471,13 +471,13 @@ void KPCFileDataMainListModel::OnAddMultipleFolders()
 				AddEverythingFromPath(folderPath, entry, self);
 			}
 		});
-		pOperation->OnEnd([this](KOperationWithProgressBase* self)
+		operation->OnEnd([this](KOperationWithProgressBase* self)
 		{
 			RefreshItems();
 			ChangeNotify();
 		});
-		pOperation->SetDialogCaption(T("Generic.FileFindInProgress"));
-		pOperation->Run();
+		operation->SetDialogCaption(T("Generic.FileFindInProgress"));
+		operation->Run();
 	}
 }
 void KPCFileDataMainListModel::OnReplaceFolderContent(const KxDataViewItem& item, KPPFFolderEntry* folderEntry)
@@ -487,20 +487,20 @@ void KPCFileDataMainListModel::OnReplaceFolderContent(const KxDataViewItem& item
 	{
 		wxString source = dialog.GetResult();
 
-		auto pOperation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
-		pOperation->OnRun([this, folderEntry, source](KOperationWithProgressBase* self)
+		auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
+		operation->OnRun([this, folderEntry, source](KOperationWithProgressBase* self)
 		{
 			folderEntry->GetFiles().clear();
 			folderEntry->SetSource(source);
 			AddEverythingFromPath(source, folderEntry, self);
 		});
-		pOperation->OnEnd([this, item](KOperationWithProgressBase* self)
+		operation->OnEnd([this, item](KOperationWithProgressBase* self)
 		{
 			NotifyChangedItem(item);
 			SelectItem(item);
 		});
-		pOperation->SetDialogCaption(T("Generic.FileFindInProgress"));
-		pOperation->Run();
+		operation->SetDialogCaption(T("Generic.FileFindInProgress"));
+		operation->Run();
 	}
 }
 void KPCFileDataMainListModel::OnRemoveElement(const KxDataViewItem& item)

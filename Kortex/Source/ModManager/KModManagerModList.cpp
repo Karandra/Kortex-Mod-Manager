@@ -13,7 +13,7 @@ KModListModEntry::KModListModEntry(const wxString& signature, bool enabled)
 {
 }
 
-KModListPluginEntry::KModListPluginEntry(KPMPluginEntry* pluginEntry, bool enabled)
+KModListPluginEntry::KModListPluginEntry(KPluginEntry* pluginEntry, bool enabled)
 	:m_PluginName(pluginEntry->GetName()), m_IsEnabled(enabled)
 {
 }
@@ -22,7 +22,7 @@ KModListPluginEntry::KModListPluginEntry(const wxString& name, bool enabled)
 {
 }
 
-KPMPluginEntry* KModListPluginEntry::GetPluginEntry() const
+KPluginEntry* KModListPluginEntry::GetPluginEntry() const
 {
 	if (KPluginManager* manager = KPluginManager::GetInstance())
 	{

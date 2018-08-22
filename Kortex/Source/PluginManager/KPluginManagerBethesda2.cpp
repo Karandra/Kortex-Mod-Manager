@@ -1,18 +1,15 @@
 #include "stdafx.h"
-#include "KPluginManagerBethesdaGeneric2.h"
+#include "KPluginManagerBethesda2.h"
+#include "KPluginEntryBethesda2.h"
 #include "Profile/KPluginManagerConfig.h"
 #include <KxFramework/KxTextFile.h>
 
-KPMPluginEntryType KPluginManagerBethesdaGeneric2::GetPluginTypeFromPath(const wxString& name) const
+bool KPluginManagerBethesda2::CheckExtension(const wxString& name) const
 {
-	if (name.AfterLast('.').IsSameAs("esl", false))
-	{
-		return KPMPE_TYPE_LIGHT;
-	}
-	return KPluginManagerBethesdaGeneric::GetPluginTypeFromPath(name);
+	wxString ext = name.AfterLast('.');
+	return ext == "esp" || ext == "esm" || ext == "esl";
 }
-
-void KPluginManagerBethesdaGeneric2::LoadNativeActiveBG()
+void KPluginManagerBethesda2::LoadNativeActiveBG()
 {
 	// Load names from 'Plugins.txt' it they are not already added.
 	// Activate all new added and existing items with same name.
@@ -27,7 +24,7 @@ void KPluginManagerBethesdaGeneric2::LoadNativeActiveBG()
 				name = name.AfterFirst('*');
 			}
 
-			if (KPMPluginEntry* entry = FindPluginByName(name))
+			if (KPluginEntry* entry = FindPluginByName(name))
 			{
 				entry->SetEnabled(true);
 			}
@@ -35,23 +32,70 @@ void KPluginManagerBethesdaGeneric2::LoadNativeActiveBG()
 	}
 }
 
-wxString KPluginManagerBethesdaGeneric2::OnWriteToLoadOrder(const KPMPluginEntry* entry) const
+wxString KPluginManagerBethesda2::OnWriteToLoadOrder(const KPluginEntry& entry) const
 {
-	return entry->GetName();
+	return entry.GetName();
 }
-wxString KPluginManagerBethesdaGeneric2::OnWriteToActiveOrder(const KPMPluginEntry* entry) const
+wxString KPluginManagerBethesda2::OnWriteToActiveOrder(const KPluginEntry& entry) const
 {
-	if (!entry->GetStdContentEntry())
+	if (!entry.IsStdContent())
 	{
-		return '*' + entry->GetName();
+		return '*' + entry.GetName();
 	}
-	return entry->GetName();
+	return entry.GetName();
 }
 
-KPluginManagerBethesdaGeneric2::KPluginManagerBethesdaGeneric2(const wxString& interfaceName, const KxXMLNode& configNode, const KPluginManagerConfig* profilePluginConfig)
-	:KPluginManagerBethesdaGeneric(interfaceName, configNode, profilePluginConfig)
+intptr_t KPluginManagerBethesda2::CountLightActiveBefore(const KPluginEntry& modEntry) const
+{
+	intptr_t count = 0;
+	for (const auto& entry: GetEntries())
+	{
+		if (entry.get() == &modEntry)
+		{
+			break;
+		}
+
+		const KPluginEntryBethesda* bethesdaPlugin = NULL;
+		if (entry->IsEnabled() && entry->As(bethesdaPlugin) && bethesdaPlugin->IsLight())
+		{
+			count++;
+		}
+	}
+	return count;
+}
+
+KPluginManagerBethesda2::KPluginManagerBethesda2(const wxString& interfaceName, const KxXMLNode& configNode)
+	:KPluginManagerBethesda(interfaceName, configNode)
 {
 }
-KPluginManagerBethesdaGeneric2::~KPluginManagerBethesdaGeneric2()
+KPluginManagerBethesda2::~KPluginManagerBethesda2()
 {
+}
+
+KPluginEntryBethesda2* KPluginManagerBethesda2::NewPluginEntry(const wxString& name, bool isActive) const
+{
+	return new KPluginEntryBethesda2(name, isActive);
+}
+
+intptr_t KPluginManagerBethesda2::GetPluginDisplayPriority(const KPluginEntry& modEntry) const
+{
+	const KPluginEntryBethesda* bethesdaPlugin = NULL;
+	if (modEntry.As(bethesdaPlugin) && bethesdaPlugin->IsLight())
+	{
+		return 0xFE;
+	}
+	return GetPluginPriority(modEntry);
+}
+wxString KPluginManagerBethesda2::FormatPriority(const KPluginEntry& modEntry, intptr_t value) const
+{
+	if (modEntry.IsEnabled())
+	{
+		const KPluginEntryBethesda* bethesdaPlugin = NULL;
+		if (modEntry.As(bethesdaPlugin) && bethesdaPlugin->IsLight())
+		{
+			return wxString::Format("0x%02X:%03X", (int)value, (int)CountLightActiveBefore(modEntry));
+		}
+		return KPluginManager::FormatPriority(modEntry, value);
+	}
+	return wxEmptyString;
 }

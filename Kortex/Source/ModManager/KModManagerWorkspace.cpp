@@ -572,8 +572,8 @@ void KModManagerWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
 			// Copy files
 			wxString sourcePath = dialog.GetFolderPath();
 			wxString destinationPath = entry.GetLocation(KMM_LOCATION_MOD_FILES);
-			auto pOperation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
-			pOperation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
+			auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
+			operation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
 			{
 				KxEvtFile folder(sourcePath);
 				self->LinkHandler(&folder, KxEVT_FILEOP_COPY_FOLDER);
@@ -582,20 +582,20 @@ void KModManagerWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
 
 			// If canceled, remove entire mod folder
 			wxString modRoot = entry.GetLocation(KMM_LOCATION_MOD_ROOT);
-			pOperation->OnCancel([modRoot](KOperationWithProgressBase* self)
+			operation->OnCancel([modRoot](KOperationWithProgressBase* self)
 			{
 				KxFile(modRoot).RemoveFolderTree(true);
 			});
 
 			// Reload after task is completed (successfully or not)
-			pOperation->OnEnd([this](KOperationWithProgressBase* self)
+			operation->OnEnd([this](KOperationWithProgressBase* self)
 			{
 				ReloadWorkspace();
 			});
 
 			// Configure and run
-			pOperation->SetDialogCaption(T("ModManager.NewMod.CopyDialogCaption"));
-			pOperation->Run();
+			operation->SetDialogCaption(T("ModManager.NewMod.CopyDialogCaption"));
+			operation->Run();
 		}
 	}
 }

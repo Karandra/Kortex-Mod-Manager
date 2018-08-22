@@ -427,8 +427,8 @@ bool KProfile::AddConfig(const wxString& configID, const wxString& sBaseConfigID
 		
 
 		// Do copy
-		KOperationWithProgressDialogBase* pOperation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, parent);
-		pOperation->OnRun([this, configID, sBaseConfigID, sModsFolder, sConfigFolder, tCopyConfig, pOperation](KOperationWithProgressBase* self)
+		KOperationWithProgressDialogBase* operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, parent);
+		operation->OnRun([this, configID, sBaseConfigID, sModsFolder, sConfigFolder, tCopyConfig, operation](KOperationWithProgressBase* self)
 		{
 			// Begin copying data
 			if (!sBaseConfigID.IsEmpty())
@@ -473,7 +473,7 @@ bool KProfile::AddConfig(const wxString& configID, const wxString& sBaseConfigID
 
 					KxTaskDialog msg
 					(
-						pOperation->GetDialog(),
+						operation->GetDialog(),
 						KxID_NONE,
 						T("ProfileCreatorDialog.CopyNonVirtualGameConfigCaption"),
 						T("ProfileCreatorDialog.CopyNonVirtualGameConfigMessage", GetShortName(), sMessageLink, source.GetFullPath()),
@@ -497,13 +497,13 @@ bool KProfile::AddConfig(const wxString& configID, const wxString& sBaseConfigID
 		});
 
 		// If canceled, remove added profile
-		pOperation->OnCancel([this, configID](KOperationWithProgressBase* self)
+		operation->OnCancel([this, configID](KOperationWithProgressBase* self)
 		{
 			RemoveConfig(configID);
 		});
 
 		// Reload after task is completed (successfully or not)
-		pOperation->OnEnd([this, parent, configID](KOperationWithProgressBase* self)
+		operation->OnEnd([this, parent, configID](KOperationWithProgressBase* self)
 		{
 			m_ConfigsList.push_back(configID);
 
@@ -512,8 +512,8 @@ bool KProfile::AddConfig(const wxString& configID, const wxString& sBaseConfigID
 		});
 
 		// Configure and run
-		pOperation->SetDialogCaption(T("ProfileCreatorDialog.CopyingProfileData"));
-		pOperation->Run();
+		operation->SetDialogCaption(T("ProfileCreatorDialog.CopyingProfileData"));
+		operation->Run();
 		return true;
 	}
 	return false;

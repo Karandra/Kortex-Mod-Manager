@@ -1,73 +1,16 @@
 #pragma once
 #include "stdafx.h"
-enum KPMPluginEntryType;
+#include "KRTTI.h"
+class KPluginEntry;
 
-class KPMPluginReader
+class KPluginReader: public KRTTI::CastAsIs<KPluginReader>
 {
-	private:
-		bool m_IsRead = false;
-		wxString m_FullPath;
+	friend class KPluginEntry;
 
 	protected:
-		virtual void DoReadData() = 0;
-		virtual KPMPluginEntryType DoGetFormat() const = 0;
-		virtual KxStringVector DoGetDependencies() const = 0;
-		virtual wxString DoGetAuthor() const = 0;
-		virtual wxString DoGetDescription() const = 0;
-
-		const wxString& GetFullPath() const
-		{
-			return m_FullPath;
-		}
+		virtual bool IsOK() const = 0;
+		virtual void DoReadData(const KPluginEntry& pluginEntry) = 0;
 
 	public:
-		KPMPluginReader()
-		{
-		}
-		virtual ~KPMPluginReader()
-		{
-		}
-
-		virtual void Create(const wxString& fullPath);
-
-	public:
-		bool IsOK() const;
-		bool IsMaster() const;
-
-		KPMPluginEntryType GetFormat()
-		{
-			if (!m_IsRead)
-			{
-				DoReadData();
-				m_IsRead = true;
-			}
-			return DoGetFormat();
-		}
-		KxStringVector GetDependencies()
-		{
-			if (!m_IsRead)
-			{
-				DoReadData();
-				m_IsRead = true;
-			}
-			return DoGetDependencies();
-		}
-		wxString GetAuthor()
-		{
-			if (!m_IsRead)
-			{
-				DoReadData();
-				m_IsRead = true;
-			}
-			return DoGetAuthor();
-		}
-		wxString GetDescription()
-		{
-			if (!m_IsRead)
-			{
-				DoReadData();
-				m_IsRead = true;
-			}
-			return DoGetDescription();
-		}
+		virtual ~KPluginReader() = default;
 };

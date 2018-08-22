@@ -3,7 +3,7 @@
 #include "KProgramOptions.h"
 class KModEntry;
 class KModManager;
-class KPMPluginEntry;
+class KPluginEntry;
 
 class KModListModEntry
 {
@@ -41,7 +41,7 @@ class KModListPluginEntry
 		bool m_IsEnabled;
 
 	public:
-		KModListPluginEntry(KPMPluginEntry* pluginEntry, bool enabled);
+		KModListPluginEntry(KPluginEntry* pluginEntry, bool enabled);
 		KModListPluginEntry(const wxString& name, bool enabled);
 
 	public:
@@ -54,7 +54,7 @@ class KModListPluginEntry
 		{
 			return m_PluginName;
 		}
-		KPMPluginEntry* GetPluginEntry() const;
+		KPluginEntry* GetPluginEntry() const;
 		
 		bool IsEnabled() const
 		{

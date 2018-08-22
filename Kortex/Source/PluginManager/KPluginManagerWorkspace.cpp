@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "KPluginManagerWorkspace.h"
-#include "KPluginManagerBethesdaGeneric.h"
-#include "KPluginManagerListModel.h"
-#include "KPMPluginReader.h"
+#include "KPluginManagerBethesda.h"
+#include "KPluginManagerBethesda2.h"
+#include "KPluginViewBaseModel.h"
 #include "LOOT API/KLootAPI.h"
 #include "UI/KImageViewerDialog.h"
 #include "Profile/KPluginManagerConfig.h"
@@ -26,7 +26,59 @@
 
 KxSingletonPtr_Define(KPluginManagerWorkspace);
 
-KImageEnum KPluginManagerWorkspace::GetStatusImageForPlugin(const KPMPluginEntry* pluginEntry)
+enum PluginType: uint32_t
+{
+	Normal = 0,
+	Master = 1 << 0,
+	Light = 1 << 1,
+
+	AllTypes = ~PluginType()
+};
+namespace MenuCounterNS
+{
+	bool CheckType(const KPluginEntryBethesda& pluginEntry, uint32_t type)
+	{
+		if (type == PluginType::AllTypes)
+		{
+			return true;
+		}
+
+		bool ok = true;
+		if (type & PluginType::Normal)
+		{
+			ok = ok && pluginEntry.IsNormal();
+		}
+		if (type & PluginType::Master)
+		{
+			ok = ok && pluginEntry.IsMaster();
+		}
+		if (type & PluginType::Light)
+		{
+			ok = ok && pluginEntry.IsLight();
+		}
+		return ok;
+	}
+
+	class CounterData: public wxClientData
+	{
+		private:
+			uint32_t m_Type = PluginType::Normal;
+
+		public:
+			CounterData(uint32_t type)
+				:m_Type(type)
+			{
+			}
+
+		public:
+			uint32_t GetType() const
+			{
+				return m_Type;
+			}
+	};
+}
+
+KImageEnum KPluginManagerWorkspace::GetStatusImageForPlugin(const KPluginEntry* pluginEntry)
 {
 	if (pluginEntry)
 	{
@@ -38,8 +90,8 @@ KImageEnum KPluginManagerWorkspace::GetStatusImageForPlugin(const KPMPluginEntry
 	}
 }
 
-KPluginManagerWorkspace::KPluginManagerWorkspace(KMainWindow* mainWindow, KPluginManagerBethesdaGeneric* manager)
-	:KWorkspace(mainWindow), m_Manager(manager), m_PluginListViewOptions(this, "PluginListView")
+KPluginManagerWorkspace::KPluginManagerWorkspace(KMainWindow* mainWindow)
+	:KWorkspace(mainWindow), m_PluginListViewOptions(this, "PluginListView")
 {
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 }
@@ -68,9 +120,9 @@ bool KPluginManagerWorkspace::OnCreateWorkspace()
 
 void KPluginManagerWorkspace::CreateModelView()
 {
-	m_ModelView = new KPluginManagerListModel(this);
+	m_ModelView = new KPluginViewBaseModel();
 	m_ModelView->Create(this);
-	m_ModelView->SetDataVector(m_Manager->GetEntries());
+	m_ModelView->SetDataVector(KPluginManager::GetInstance()->GetEntries());
 }
 
 bool KPluginManagerWorkspace::OnOpenWorkspace()
@@ -84,9 +136,9 @@ bool KPluginManagerWorkspace::OnCloseWorkspace()
 }
 void KPluginManagerWorkspace::OnReloadWorkspace()
 {
-	m_Manager->Load();
+	KPluginManager::GetInstance()->Load();
 	m_ModelView->RefreshItems();
-	ProcessSelection(NULL);
+	ProcessSelection();
 }
 
 void KPluginManagerWorkspace::OnModSerach(wxCommandEvent& event)
@@ -113,43 +165,58 @@ wxString KPluginManagerWorkspace::GetNameShort() const
 void KPluginManagerWorkspace::UpdatePluginTypeCounter(KxMenuItem* item)
 {
 	const KPluginManagerConfig* pluginsConfig = KPluginManagerConfig::GetInstance();
-
-	auto type = (KPMPluginEntryType)(size_t)item->GetClientData();
-	if (type != KPMPE_TYPE_INVALID)
+	MenuCounterNS::CounterData* clientData = static_cast<MenuCounterNS::CounterData*>(item->GetClientObject());
+	if (clientData)
 	{
 		int count = 0;
-		for (const auto& entry: m_Manager->GetEntries())
+		for (const auto& entry: KPluginManager::GetInstance()->GetEntries())
 		{
-			if (entry->IsEnabled() && (entry->GetFormat() == type || type == KPMPE_TYPE_ALL))
+			if (entry->IsEnabled())
 			{
-				count++;
+				bool typeOK = false;
+				const KPluginEntryBethesda* bethesdaPlugin = NULL;
+				if (entry->As(bethesdaPlugin))
+				{
+					typeOK = MenuCounterNS::CheckType(*bethesdaPlugin, clientData->GetType());
+				}
+
+				if (typeOK || clientData->GetType() == PluginType::AllTypes)
+				{
+					count++;
+				}
 			}
 		}
 
-		if (type == KPMPE_TYPE_ALL && pluginsConfig->HasPluginLimit())
+		if (clientData->GetType() == PluginType::AllTypes && pluginsConfig->HasPluginLimit())
 		{
 			item->SetItemLabel(wxString::Format("%s: %d/%d", T("Generic.All"), count, pluginsConfig->GetPluginLimit()));
 			item->SetBitmap(KGetBitmap(count >= pluginsConfig->GetPluginLimit() ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
 		}
 		else
 		{
-			wxString label = type == KPMPE_TYPE_ALL ? T("Generic.All") : m_Manager->GetPluginTypeName(type);
+			wxString label;
+			if (clientData->GetType() == PluginType::AllTypes)
+			{
+				label = T("Generic.All");
+			}
+			else if (KPluginManagerBethesda* bethesda = dynamic_cast<KPluginManagerBethesda*>(KPluginManager::GetInstance()))
+			{
+				label = bethesda->GetPluginTypeName(clientData->GetType() & PluginType::Master, clientData->GetType() & PluginType::Light);
+			}
+
 			item->SetItemLabel(wxString::Format("%s: %d", label, count));
 		}
 	}
 }
 
-void KPluginManagerWorkspace::OnCreateViewContextMenu(KxMenu& menu, const KPMPluginEntry* entry)
+void KPluginManagerWorkspace::OnCreateViewContextMenu(KxMenu& menu, const KPluginEntry* entry)
 {
 	/* Plugin type counter */
-	auto AddCounter = [this, &menu](KPMPluginEntryType type)
+	auto AddCounter = [this, &menu](uint32_t type)
 	{
-		if (m_Manager->IsEntryTypeSupported(type) || type == KPMPE_TYPE_ALL)
-		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(wxEmptyString));
-			item->SetClientData(reinterpret_cast<void*>(type));
-			item->Enable(false);
-		}
+		KxMenuItem* item = menu.Add(new KxMenuItem(wxEmptyString));
+		item->SetClientObject(new MenuCounterNS::CounterData(type));
+		item->Enable(false);
 	};
 	menu.Bind(KxEVT_MENU_OPEN, [this](KxMenuEvent& event)
 	{
@@ -160,17 +227,23 @@ void KPluginManagerWorkspace::OnCreateViewContextMenu(KxMenu& menu, const KPMPlu
 		event.Skip();
 	});
 
-	AddCounter(KPMPE_TYPE_ALL);
-	AddCounter(KPMPE_TYPE_NORMAL);
-	AddCounter(KPMPE_TYPE_MASTER);
-	AddCounter(KPMPE_TYPE_NORMAL|KPMPE_TYPE_LIGHT);
-	AddCounter(KPMPE_TYPE_MASTER|KPMPE_TYPE_LIGHT);
+	AddCounter(PluginType::AllTypes);
+
+	if (dynamic_cast<KPluginManagerBethesda*>(KPluginManager::GetInstance()))
+	{
+		AddCounter(PluginType::Normal);
+		AddCounter(PluginType::Master);
+	}
+	if (dynamic_cast<KPluginManagerBethesda2*>(KPluginManager::GetInstance()))
+	{
+		AddCounter(PluginType::Light);
+	}
 }
-void KPluginManagerWorkspace::OnCreateSortingToolsMenu(KxMenu& menu, const KPMPluginEntry* entry)
+void KPluginManagerWorkspace::OnCreateSortingToolsMenu(KxMenu& menu, const KPluginEntry* entry)
 {
 	KxMenu* sortingMenu = NULL;
-	const KPluginManagerConfig* pOptions = KPluginManagerConfig::GetInstance();
-	if (pOptions->HasSortingTools() || pOptions->HasLootAPI())
+	const KPluginManagerConfig* options = KPluginManagerConfig::GetInstance();
+	if (options->HasSortingTools() || options->HasLootAPI())
 	{
 		sortingMenu = new KxMenu();
 		menu.AddSeparator();
@@ -186,30 +259,30 @@ void KPluginManagerWorkspace::OnCreateSortingToolsMenu(KxMenu& menu, const KPMPl
 			KxMenuItem* item = sortingMenu->Add(new KxMenuItem("LOOT API"));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
-				auto pOperation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
-				pOperation->OnRun([pOperation](KOperationWithProgressBase* self)
+				auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
+				operation->OnRun([operation](KOperationWithProgressBase* self)
 				{
 					KxStringVector sortedList;
-					if (KLootAPI::GetInstance()->SortPlugins(sortedList, pOperation))
+					if (KLootAPI::GetInstance()->SortPlugins(sortedList, operation))
 					{
-						KPluginManager::GetInstance()->SyncWithPluginsList(sortedList, KPluginManager::DoNotChange);
+						KPluginManager::GetInstance()->SyncWithPluginsList(sortedList, KPluginManager::SyncListMode::DoNotChange);
 						KPluginManager::GetInstance()->Save();
 					}
 				});
-				pOperation->OnEnd([this](KOperationWithProgressBase* self)
+				operation->OnEnd([this](KOperationWithProgressBase* self)
 				{
 					ReloadWorkspace();
 				});
-				pOperation->SetDialogCaption(event.GetItem()->GetItemLabelText());
-				pOperation->Run();
+				operation->SetDialogCaption(event.GetItem()->GetItemLabelText());
+				operation->Run();
 			});
 		}
 
 		// Sorting tools
 		{
-			for (const KPluginManagerConfigSortingToolEntry& entry: pOptions->GetSortingTools())
+			for (const KPluginManagerConfigSortingToolEntry& entry: options->GetSortingTools())
 			{
-				if (pOptions->HasLootAPI())
+				if (options->HasLootAPI())
 				{
 					sortingMenu->AddSeparator();
 				}
@@ -218,14 +291,14 @@ void KPluginManagerWorkspace::OnCreateSortingToolsMenu(KxMenu& menu, const KPMPl
 				item->SetBitmap(KAux::ExtractIconFromBinaryFile(entry.GetExecutable()));
 				item->Bind(KxEVT_MENU_SELECT, [this, entry](KxMenuEvent& event)
 				{
-					m_Manager->Save();
-					m_Manager->RunSortingTool(entry);
+					KPluginManager::GetInstance()->Save();
+					KPluginManager::GetInstance()->RunSortingTool(entry);
 				});
 			}
 		}
 	}
 }
-void KPluginManagerWorkspace::OnCreateImportExportMenu(KxMenu& menu, const KPMPluginEntry* entry)
+void KPluginManagerWorkspace::OnCreateImportExportMenu(KxMenu& menu, const KPluginEntry* entry)
 {
 	menu.AddSeparator();
 
@@ -238,15 +311,15 @@ void KPluginManagerWorkspace::OnCreateImportExportMenu(KxMenu& menu, const KPMPl
 			dialog.AddFilter("*", T("FileFilter.AllFiles"));
 			if (dialog.ShowModal() == KxID_OK)
 			{
-				m_Manager->SyncWithPluginsList(KxTextFile::ReadToArray(dialog.GetResult()));
+				KPluginManager::GetInstance()->SyncWithPluginsList(KxTextFile::ReadToArray(dialog.GetResult()));
 			}
 		});
 	}
 	{
-		KxMenuItem* pItemAll = menu.Add(new KxMenuItem(T("PluginManager.Tools.ExportList")));
-		KxMenuItem* pItemActive = menu.Add(new KxMenuItem(T("PluginManager.Tools.ExportListActive")));
+		KxMenuItem* itemAll = menu.Add(new KxMenuItem(T("PluginManager.Tools.ExportList")));
+		KxMenuItem* itemActive = menu.Add(new KxMenuItem(T("PluginManager.Tools.ExportListActive")));
 
-		auto Event = [this, pItemActive](KxMenuEvent& event)
+		auto Event = [this, itemActive](KxMenuEvent& event)
 		{
 			KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 			dialog.AddFilter("*.txt", T("FileFilter.Text"));
@@ -255,16 +328,16 @@ void KPluginManagerWorkspace::OnCreateImportExportMenu(KxMenu& menu, const KPMPl
 
 			if (dialog.ShowModal() == KxID_OK)
 			{
-				bool bActiveOnly = event.GetId() == pItemActive->GetId();
-				KxTextFile::WriteToFile(dialog.GetResult(), m_Manager->GetPluginsList(bActiveOnly));
+				bool activeOnly = event.GetId() == itemActive->GetId();
+				KxTextFile::WriteToFile(dialog.GetResult(), KPluginManager::GetInstance()->GetPluginsList(activeOnly));
 			}
 		};
-		pItemAll->Bind(KxEVT_MENU_SELECT, Event);
-		pItemActive->Bind(KxEVT_MENU_SELECT, Event);
+		itemAll->Bind(KxEVT_MENU_SELECT, Event);
+		itemActive->Bind(KxEVT_MENU_SELECT, Event);
 	}
 }
 
-void KPluginManagerWorkspace::ProcessSelection(const KPMPluginEntry* entry)
+void KPluginManagerWorkspace::ProcessSelection(const KPluginEntry* entry)
 {
 	const int statusIndex = 1;
 	KMainWindow* mainWindow = KMainWindow::GetInstance();
@@ -282,7 +355,7 @@ void KPluginManagerWorkspace::ProcessSelection(const KPMPluginEntry* entry)
 		}
 	}
 }
-void KPluginManagerWorkspace::HighlightPlugin(const KPMPluginEntry* entry)
+void KPluginManagerWorkspace::HighlightPlugin(const KPluginEntry* entry)
 {
 	if (entry)
 	{

@@ -225,7 +225,6 @@ void KMainWindow::CreatePluggableManagersWorkspaces(KWorkspace* pParentWorkspace
 					AddWorkspace(workspace);
 
 					KxMenuItem* item = workspace->CreateItemInManagersMenu();
-					item->Enable(!pPluggable->IsActiveVFSNeeded());
 					item->SetClientData(manager);
 				}
 			}
@@ -441,9 +440,9 @@ void KMainWindow::OnPluggableManagersMenuVFSToggled(KVFSEvent& event)
 	for (wxMenuItem* item: m_ManagersMenu->GetMenuItems())
 	{
 		KPluggableManager* manager = static_cast<KPluggableManager*>(static_cast<KxMenuItem*>(item)->GetClientData());
-		if (manager && manager->IsActiveVFSNeeded())
+		if (manager)
 		{
-			item->Enable(event.IsActivated());
+			//item->Enable(event.IsActivated());
 		}
 	}
 }

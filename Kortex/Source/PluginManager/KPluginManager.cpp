@@ -1,15 +1,21 @@
 #include "stdafx.h"
 #include "KPluginManager.h"
-#include "KPluginManagerBethesdaGeneric.h"
-#include "KPluginManagerBethesdaGeneric2.h"
-#include "KPluginManagerBethesdaMorrowind.h"
 #include "KPluginManagerWorkspace.h"
-#include "KPMPluginReader.h"
+
+#include "KPluginManagerBethesda.h"
+#include "KPluginManagerBethesda2.h"
+#include "KPluginManagerBethesdaMW.h"
+
+#include "KPluginReaderBethesdaMorrowind.h"
+#include "KPluginReaderBethesdaOblivion.h"
+#include "KPluginReaderBethesdaSkyrim.h"
+
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerDispatcher.h"
 #include "Profile/KPluginManagerConfig.h"
 #include "RunManager/KRunManager.h"
 #include "UI/KWorkspace.h"
+
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxProgressDialog.h>
@@ -17,66 +23,55 @@
 
 KxSingletonPtr_Define(KPluginManager);
 
-KPluginManager* KPluginManager::QueryInterface(const wxString& interfaceName, const KxXMLNode& configNode, const KPluginManagerConfig* profilePluginConfig)
+std::unique_ptr<KPluginManager> KPluginManager::QueryInterface(const wxString& interfaceName, const KxXMLNode& configNode)
 {
-	if (!HasInstance() && configNode.IsOK())
+	if (!HasInstance())
 	{
-		if (interfaceName == "BethesdaGeneric")
+		if (interfaceName == KPLUGIN_IMANAGER_BETHESDA)
 		{
-			new KPluginManagerBethesdaGeneric(interfaceName, configNode, profilePluginConfig);
+			return std::make_unique<KPluginManagerBethesda>(interfaceName, configNode);
 		}
-		else if (interfaceName == "BethesdaGeneric2")
+		else if (interfaceName == KPLUGIN_IMANAGER_BETHESDA2)
 		{
-			new KPluginManagerBethesdaGeneric2(interfaceName, configNode, profilePluginConfig);
+			return std::make_unique<KPluginManagerBethesda2>(interfaceName, configNode);
 		}
-		else if (interfaceName == "BethesdaMorrowind")
+		else if (interfaceName == KPLUGIN_IMANAGER_BETHESDAMW)
 		{
-			new KPluginManagerBethesdaMorrowind(interfaceName, configNode, profilePluginConfig);
+			return std::make_unique<KPluginManagerBethesdaMW>(interfaceName, configNode);
 		}
 		else
 		{
 			KLogMessage("KPluginManager::QueryInterface: Unknown interface requested \"%s\"", interfaceName);
 		}
 	}
-	return GetInstance();
+	return NULL;
 }
-
-KPMPluginEntryRefVector KPluginManager::CollectDependentPlugins(const KPMPluginEntry* pluginEntry, bool bFirstOnly) const
+std::unique_ptr<KPluginReader> KPluginManager::QueryPluginReader(const wxString& formatName)
 {
-	KPMPluginEntryRefVector tDependentList;
-	if (bFirstOnly)
+	if (formatName == KPLUGIN_IFILE_BETHESDA_MORROWIND)
 	{
-		tDependentList.reserve(1);
+		return std::make_unique<KPluginReaderBethesdaMorrowind>();
 	}
-
-	const wxString nameL = KxString::ToLower(pluginEntry->GetName());
-	for (auto& entry: GetEntries())
+	else if (formatName == KPLUGIN_IFILE_BETHESDA_OBLIVION)
 	{
-		if (entry->IsEnabled())
-		{
-			if (KPMPluginReader* reader = entry->GetPluginReader())
-			{
-				KxStringVector dependenciesList = reader->GetDependencies();
-				auto it = std::find_if(dependenciesList.begin(), dependenciesList.end(), [&nameL](const wxString& sDepName)
-				{
-					return nameL == KxString::ToLower(sDepName);
-				});
-				if (it != dependenciesList.end())
-				{
-					tDependentList.push_back(entry.get());
-					if (bFirstOnly)
-					{
-						break;
-					}
-				}
-			}
-		}
+		return std::make_unique<KPluginReaderBethesdaOblivion>();
 	}
-
-	return tDependentList;
+	else if (formatName == KPLUGIN_IFILE_BETHESDA_SKYRIM)
+	{
+		return std::make_unique<KPluginReaderBethesdaSkyrim>();
+	}
+	return NULL;
 }
 
-KPluginManager::KPluginManager(const wxString& interfaceName, const KxXMLNode& configNode, const KPluginManagerConfig* profilePluginConfig)
+void KPluginManager::ReadPluginsData()
+{
+	for (auto& pluginEntry: m_Entries)
+	{
+		pluginEntry->ReadPluginData();
+	}
+}
+
+KPluginManager::KPluginManager(const wxString& interfaceName, const KxXMLNode& configNode)
 	:m_GeneralOptions(this, "General"), m_SortingToolsOptions(this, "SortingTools")
 {
 }
@@ -97,152 +92,41 @@ wxString KPluginManager::GetVersion() const
 	return "1.2.1";
 }
 
-KPMPluginEntry* KPluginManager::NewPluginEntry(const wxString& name, bool isActive, KPMPluginEntryType type)
+bool KPluginManager::IsValidModIndex(intptr_t modIndex) const
 {
-	return new KPMPluginEntry(name, isActive, type);
+	return modIndex >= 0 && (size_t)modIndex < GetEntries().size();
 }
-
-bool KPluginManager::HasDependentPlugins(const KPMPluginEntry* pluginEntry) const
+intptr_t KPluginManager::GetPluginOrderIndex(const KPluginEntry& modEntry) const
 {
-	auto list = CollectDependentPlugins(pluginEntry, true);
-	return !list.empty() && list.front()->IsEnabled();
-}
-KPMPluginEntryRefVector KPluginManager::GetDependentPlugins(const KPMPluginEntry* pluginEntry) const
-{
-	return CollectDependentPlugins(pluginEntry, false);
-}
-const KModEntry* KPluginManager::GetParentMod(const KPMPluginEntry* pluginEntry) const
-{
-	return NULL;
-}
-bool KPluginManager::IsPluginActive(const wxString& sPluginName) const
-{
-	const KPMPluginEntry* entry = FindPluginByName(sPluginName);
-	return entry ? entry->IsEnabled() : false;
-}
-void KPluginManager::SyncWithPluginsList(const KxStringVector& tPluginNamesList, SyncListMode mode)
-{
-	KModList::PluginEntryVector& list = KModManager::GetListManager().GetCurrentList().GetPlugins();
-	list.clear();
-	for (const wxString& name: tPluginNamesList)
+	auto it = std::find_if(m_Entries.begin(), m_Entries.end(), [&modEntry](const auto& v)
 	{
-		bool isEnabled = false;
-		switch (mode)
-		{
-			case EnableAll:
-			{
-				isEnabled = true;
-				break;
-			}
-			case DisableAll:
-			{
-				isEnabled = false;
-				break;
-			}
-			case DoNotChange:
-			{
-				const KPMPluginEntry* pPlugin = FindPluginByName(name);
-				isEnabled = pPlugin && pPlugin->IsEnabled();
-				break;
-			}
-		};
-		list.emplace_back(name, isEnabled);
-	}
-	KModManager::GetListManager().SaveLists();
-}
-KxStringVector KPluginManager::GetPluginsList(bool bActiveOnly) const
-{
-	KxStringVector list;
-	list.reserve(GetEntries().size());
-
-	for (const auto& entry: GetEntries())
-	{
-		if (bActiveOnly && !entry->IsEnabled())
-		{
-			continue;
-		}
-
-		list.push_back(entry->GetName());
-	}
-	return list;
-}
-KPMPluginEntry* KPluginManager::FindPluginByName(const wxString& name) const
-{
-	wxString nameL = KxString::ToLower(name);
-	auto it = std::find_if(GetEntries().cbegin(), GetEntries().cend(), [&nameL](const auto& entry)
-	{
-		return KxString::ToLower(entry->GetName()) == nameL;
+		return v.get() == &modEntry;
 	});
-	if (it != GetEntries().cend())
+	if (it != m_Entries.end())
 	{
-		return it->get();
-	}
-	return NULL;
-}
-void KPluginManager::UpdateAllPlugins()
-{
-	for (auto& entry: GetEntries())
-	{
-		entry->OnUpdate();
-	}
-}
-
-wxString KPluginManager::GetPluginTypeName(KPMPluginEntryType type) const
-{
-	if (type & KPMPE_TYPE_NORMAL && type & KPMPE_TYPE_LIGHT)
-	{
-		return wxString::Format("%s (%s)", T("PluginManager.PluginType.Normal"), T("PluginManager.PluginType.Light"));
-	}
-	if (type & KPMPE_TYPE_MASTER && type & KPMPE_TYPE_LIGHT)
-	{
-		return wxString::Format("%s (%s)", T("PluginManager.PluginType.Master"), T("PluginManager.PluginType.Light"));
-	}
-
-	if (type & KPMPE_TYPE_MASTER)
-	{
-		return T("PluginManager.PluginType.Master");
-	}
-	if (type & KPMPE_TYPE_NORMAL)
-	{
-		return T("PluginManager.PluginType.Normal");
-	}
-
-	return wxEmptyString;
-}
-bool KPluginManager::IsValidModIndex(int nModIndex) const
-{
-	return nModIndex >= 0 && (size_t)nModIndex < GetEntries().size();
-}
-int KPluginManager::GetPluginIndex(const KPMPluginEntry* modEntry) const
-{
-	auto it = std::find_if(GetEntries().cbegin(), GetEntries().cend(), [modEntry](const auto& v)
-	{
-		return v.get() == modEntry;
-	});
-	if (it != GetEntries().cend())
-	{
-		return std::distance(GetEntries().cbegin(), it);
+		return std::distance(m_Entries.begin(), it);
 	}
 	return wxNOT_FOUND;
 }
-bool KPluginManager::MovePluginsIntoThis(const KPMPluginEntryRefVector& entriesToMove, const KPMPluginEntry* pAnchor)
+
+bool KPluginManager::MovePluginsIntoThis(const KPluginEntry::RefVector& entriesToMove, const KPluginEntry& anchor)
 {
-	auto Compare = [pAnchor](const KPMPluginEntryVector::value_type& entry)
+	auto Compare = [&anchor](const auto& entry)
 	{
-		return entry.get() == pAnchor;
+		return entry.get() == &anchor;
 	};
 
 	// Check if anchor is not one of moved elements
-	if (std::find(entriesToMove.begin(), entriesToMove.end(), pAnchor) != entriesToMove.end())
+	if (std::find(entriesToMove.begin(), entriesToMove.end(), &anchor) != entriesToMove.end())
 	{
 		return false;
 	}
 
-	auto it = std::find_if(GetEntries().begin(), GetEntries().end(), Compare);
-	if (it != GetEntries().end())
+	auto it = std::find_if(m_Entries.begin(), m_Entries.end(), Compare);
+	if (it != m_Entries.end())
 	{
 		// Remove from existing place
-		GetEntries().erase(std::remove_if(GetEntries().begin(), GetEntries().end(), [&entriesToMove](KPMPluginEntryVector::value_type& entry)
+		m_Entries.erase(std::remove_if(m_Entries.begin(), m_Entries.end(), [&entriesToMove](auto& entry)
 		{
 			// Release unique_ptr's and remove them
 			if (std::find(entriesToMove.begin(), entriesToMove.end(), entry.get()) != entriesToMove.end())
@@ -251,17 +135,17 @@ bool KPluginManager::MovePluginsIntoThis(const KPMPluginEntryRefVector& entriesT
 				return true;
 			}
 			return false;
-		}), GetEntries().end());
+		}), m_Entries.end());
 
 		// Iterator may have been invalidated
-		it = std::find_if(GetEntries().begin(), GetEntries().end(), Compare);
-		if (it != GetEntries().end())
+		it = std::find_if(m_Entries.begin(), m_Entries.end(), Compare);
+		if (it != m_Entries.end())
 		{
 			// Insert after anchor
 			size_t index = 1;
 			for (auto i = entriesToMove.begin(); i != entriesToMove.end(); ++i)
 			{
-				GetEntries().emplace(it + index, *i);
+				m_Entries.emplace(it + index, *i);
 				index++;
 			}
 			return true;
@@ -271,18 +155,83 @@ bool KPluginManager::MovePluginsIntoThis(const KPMPluginEntryRefVector& entriesT
 }
 void KPluginManager::SetAllPluginsEnabled(bool isEnabled)
 {
-	for (auto& entry: GetEntries())
+	for (auto& entry: m_Entries)
 	{
 		entry->SetEnabled(isEnabled);
 	}
+}
+
+bool KPluginManager::IsPluginActive(const wxString& pluginName) const
+{
+	const KPluginEntry* entry = FindPluginByName(pluginName);
+	return entry ? entry->IsEnabled() : false;
+}
+void KPluginManager::SyncWithPluginsList(const KxStringVector& pluginNamesList, SyncListMode mode)
+{
+	KModList::PluginEntryVector& list = KModManager::GetListManager().GetCurrentList().GetPlugins();
+	list.clear();
+	for (const wxString& name: pluginNamesList)
+	{
+		bool isEnabled = false;
+		switch (mode)
+		{
+			case SyncListMode::EnableAll:
+			{
+				isEnabled = true;
+				break;
+			}
+			case SyncListMode::DisableAll:
+			{
+				isEnabled = false;
+				break;
+			}
+			case SyncListMode::DoNotChange:
+			{
+				const KPluginEntry* plugin = FindPluginByName(name);
+				isEnabled = plugin && plugin->IsEnabled();
+				break;
+			}
+		};
+		list.emplace_back(name, isEnabled);
+	}
+	KModManager::GetListManager().SaveLists();
+}
+KxStringVector KPluginManager::GetPluginsList(bool activeOnly) const
+{
+	KxStringVector list;
+	list.reserve(m_Entries.size());
+
+	for (const auto& entry: m_Entries)
+	{
+		if (activeOnly && !entry->IsEnabled())
+		{
+			continue;
+		}
+
+		list.push_back(entry->GetName());
+	}
+	return list;
+}
+KPluginEntry* KPluginManager::FindPluginByName(const wxString& name) const
+{
+	wxString nameL = KxString::ToLower(name);
+	auto it = std::find_if(m_Entries.begin(), m_Entries.end(), [&nameL](const auto& entry)
+	{
+		return KxString::ToLower(entry->GetName()) == nameL;
+	});
+	if (it != m_Entries.end())
+	{
+		return it->get();
+	}
+	return NULL;
 }
 
 bool KPluginManager::CheckSortingTool(const KPluginManagerConfigSortingToolEntry& entry)
 {
 	if (entry.GetExecutable().IsEmpty() || !KxFile(entry.GetExecutable()).IsFileExist())
 	{
-		KxTaskDialog tDalog(KApp::Get().GetMainWindow(), KxID_NONE, T("PluginManager.Sorting.Missing.Caption", entry.GetName()), T("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
-		if (tDalog.ShowModal() == KxID_OK)
+		KxTaskDialog dalog(KApp::Get().GetMainWindow(), KxID_NONE, T("PluginManager.Sorting.Missing.Caption", entry.GetName()), T("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
+		if (dalog.ShowModal() == KxID_OK)
 		{
 			KxFileBrowseDialog browseDialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN);
 			browseDialog.AddFilter("*.exe", T("FileFilter.Programs"));

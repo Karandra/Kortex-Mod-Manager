@@ -139,11 +139,11 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		KWorkspace* GetFirstWorkspace() const;
 		bool SwitchWorkspace(KWorkspace* nextWorkspace);
 		bool SwitchWorkspace(const wxString& id);
-		template<class ManagerType, class ConfigType> ManagerType* CreateWorkspaceOf(const ConfigType* pConfig)
+		template<class ManagerType, class ConfigType> ManagerType* CreateWorkspaceOf(const ConfigType* config)
 		{
-			if (pConfig)
+			if (config)
 			{
-				ManagerType* manager = pConfig->GetManager();
+				ManagerType* manager = config->GetManager();
 				if (manager)
 				{
 					KWorkspace* workspace = manager->GetWorkspace();

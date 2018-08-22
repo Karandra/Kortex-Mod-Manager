@@ -6,7 +6,7 @@
 #include "Network/KNetwork.h"
 #include "PluginManager/KPluginManager.h"
 #include "PluginManager/KPluginManagerWorkspace.h"
-#include "PluginManager/KPluginManagerListModel.h"
+#include "PluginManager/KPluginViewBaseModel.h"
 #include "UI/KMainWindow.h"
 #include "KComparator.h"
 #include "KApp.h"
@@ -570,59 +570,59 @@ bool KModManagerModel::Compare(const KxDataViewItem& tItem1, const KxDataViewIte
 	{
 		ColumnID columnID = column ? (ColumnID)column->GetID() : ColumnID::Priority;
 
-		KModEntry* pEntry1 = pNode1->GetEntry();
-		KModEntry* pEntry2 = pNode2->GetEntry();
-		if (pEntry1 && pEntry2)
+		KModEntry* entry1 = pNode1->GetEntry();
+		KModEntry* entry2 = pNode2->GetEntry();
+		if (entry1 && entry2)
 		{
 			using KComparator::KCompare;
 
 			if (IsSpecialSiteColumn(columnID))
 			{
 				KNetworkProviderID index = ColumnToSpecialSite(columnID);
-				return pEntry1->GetWebSiteModID(index) < pEntry2->GetWebSiteModID(index);
+				return entry1->GetWebSiteModID(index) < entry2->GetWebSiteModID(index);
 			}
 
 			switch (columnID)
 			{
 				case ColumnID::Name:
 				{
-					return KCompare(pEntry1->GetName(), pEntry2->GetName()) < 0;
+					return KCompare(entry1->GetName(), entry2->GetName()) < 0;
 				}
 				case ColumnID::Priority:
 				{
-					return pEntry1->GetOrderIndex() < pEntry2->GetOrderIndex();
+					return entry1->GetOrderIndex() < entry2->GetOrderIndex();
 				}
 				case ColumnID::Version:
 				{
-					return pEntry1->GetVersion() < pEntry2->GetVersion();
+					return entry1->GetVersion() < entry2->GetVersion();
 				}
 				case ColumnID::Author:
 				{
-					return KCompare(pEntry1->GetAuthor(), pEntry2->GetAuthor()) < 0;
+					return KCompare(entry1->GetAuthor(), entry2->GetAuthor()) < 0;
 				}
 				case ColumnID::Tags:
 				{
-					return KCompare(FormatTagList(pEntry1), FormatTagList(pEntry2)) < 0;
+					return KCompare(FormatTagList(entry1), FormatTagList(entry2)) < 0;
 				}
 				case ColumnID::DateInstall:
 				{
-					return pEntry1->GetTime(KME_TIME_INSTALL) < pEntry2->GetTime(KME_TIME_INSTALL);
+					return entry1->GetTime(KME_TIME_INSTALL) < entry2->GetTime(KME_TIME_INSTALL);
 				}
 				case ColumnID::DateUninstall:
 				{
-					return pEntry1->GetTime(KME_TIME_UNINSTALL) < pEntry2->GetTime(KME_TIME_UNINSTALL);
+					return entry1->GetTime(KME_TIME_UNINSTALL) < entry2->GetTime(KME_TIME_UNINSTALL);
 				}
 				case ColumnID::ModFolder:
 				{
-					return KCompare(pEntry1->GetLocation(KMM_LOCATION_MOD_FILES), pEntry2->GetLocation(KMM_LOCATION_MOD_FILES)) < 0;
+					return KCompare(entry1->GetLocation(KMM_LOCATION_MOD_FILES), entry2->GetLocation(KMM_LOCATION_MOD_FILES)) < 0;
 				}
 				case ColumnID::PackagePath:
 				{
-					return KCompare(pEntry1->GetInstallPackageFile(), pEntry2->GetInstallPackageFile()) < 0;
+					return KCompare(entry1->GetInstallPackageFile(), entry2->GetInstallPackageFile()) < 0;
 				}
 				case ColumnID::Signature:
 				{
-					return KCompare(pEntry1->GetSignature(), pEntry2->GetSignature()) < 0;
+					return KCompare(entry1->GetSignature(), entry2->GetSignature()) < 0;
 				}
 			};
 		}

@@ -15,9 +15,6 @@ class KScreenshotsGalleryManager: public KPluggableManager
 		static bool IsAnimationFile(const wxString& filePath);
 
 	private:
-		KScreenshotsGalleryWorkspace* m_Workspace = NULL;
-
-	private:
 		virtual KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
 
 	public:
@@ -34,9 +31,5 @@ class KScreenshotsGalleryManager: public KPluggableManager
 		}
 
 	public:
-		virtual bool IsActiveVFSNeeded() const override;
-		virtual KWorkspace* GetWorkspace() const override
-		{
-			return m_Workspace;
-		}
+		virtual KWorkspace* GetWorkspace() const override;
 };

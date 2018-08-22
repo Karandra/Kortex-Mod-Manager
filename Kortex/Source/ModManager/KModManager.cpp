@@ -59,14 +59,14 @@ wxString KModManager::GetLocation(KModManagerLocation nLocation, const wxString&
 void KModManager::SortEntries()
 {
 	size_t index = 0;
-	for (const KModListModEntry& tListEntry: m_ModListManager.GetCurrentList().GetMods())
+	for (const KModListModEntry& listEntry: m_ModListManager.GetCurrentList().GetMods())
 	{
 		if (index < m_ModEntries.size())
 		{
-			int64_t currentElement = GetModIndex(tListEntry.GetMod());
+			int64_t currentElement = GetModIndex(listEntry.GetMod());
 			if (currentElement != -1)
 			{
-				m_ModEntries[currentElement]->SetEnabled(tListEntry.IsEnabled());
+				m_ModEntries[currentElement]->SetEnabled(listEntry.IsEnabled());
 				std::swap(m_ModEntries[currentElement], m_ModEntries[index]);
 			}
 			index++;
@@ -96,20 +96,20 @@ void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* wind
 		}
 		wxString path = modEntry->GetLocation(erase ? KMM_LOCATION_MOD_ROOT : KMM_LOCATION_MOD_FILES);
 
-		KOperationWithProgressDialogBase* pOperation = new KOperationWithProgressDialogBase(true, window);	
-		pOperation->OnRun([path = path.Clone(), modEntry](KOperationWithProgressBase* self)
+		KOperationWithProgressDialogBase* operation = new KOperationWithProgressDialogBase(true, window);	
+		operation->OnRun([path = path.Clone(), modEntry](KOperationWithProgressBase* self)
 		{
 			KxEvtFile folder(path);
 			self->LinkHandler(&folder, KxEVT_FILEOP_REMOVE_FOLDER);
 			folder.RemoveFolderTree(true);
 		});
-		pOperation->OnEnd([this](KOperationWithProgressBase* self)
+		operation->OnEnd([this](KOperationWithProgressBase* self)
 		{
 			SaveSate();
 			KModManagerWorkspace::GetInstance()->ReloadWorkspace();
 		});
-		pOperation->SetDialogCaption(T("ModManager.RemoveMod.RemovingMessage"));
-		pOperation->Run();
+		operation->SetDialogCaption(T("ModManager.RemoveMod.RemovingMessage"));
+		operation->Run();
 	}
 }
 

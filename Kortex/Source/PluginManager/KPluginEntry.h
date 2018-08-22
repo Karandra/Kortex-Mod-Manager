@@ -1,86 +1,57 @@
 #pragma once
 #include "stdafx.h"
+#include "KPluginEntryTypesInterface.h"
+#include "KPluginReader.h"
+#include "KRTTI.h"
 class KModEntry;
-class KPMPluginReader;
-class KPluginManagerConfigStandardContentEntry;
+class KPluginManagerConfigStdContentEntry;
 
-enum KPMPluginEntryType
+class KPluginEntry: public KRTTI::CastAsIs<KPluginEntry>
 {
-	KPMPE_TYPE_INVALID = 0,
-	KPMPE_TYPE_ALL = -1,
+	public:
+		using Vector = std::vector<std::unique_ptr<KPluginEntry>>;
+		using RefVector = std::vector<KPluginEntry*>;
 
-	KPMPE_TYPE_NORMAL = 1 << 0,
-	KPMPE_TYPE_MASTER = 1 << 1,
-	KPMPE_TYPE_LIGHT = 1 << 2,
-};
-
-KPMPluginEntryType operator|(const KPMPluginEntryType& arg1, const KPMPluginEntryType& arg2);
-KPMPluginEntryType& operator|=(KPMPluginEntryType& arg1, const KPMPluginEntryType& arg2);
-
-class KPMPluginEntry
-{
 	private:
-		wxString m_Name;
-		wxString m_FullPath;
+		mutable const KPluginManagerConfigStdContentEntry* m_StdContent = NULL;
+		mutable std::unique_ptr<KPluginReader> m_Reader;
 
-		KPMPluginEntryType m_Type = KPMPE_TYPE_INVALID;
-		bool m_IsEnabled = false;
-		const KModEntry* m_ParentMod = NULL;
-		mutable KPMPluginReader* m_PluginReader = NULL;
-
-		mutable bool m_StdContentEntryChecked = false;
-		mutable const KPluginManagerConfigStandardContentEntry* m_StdContentEntry = NULL;
+	protected:
+		virtual void OnPluginRead(const KPluginReader& reader) = 0;
 
 	public:
-		KPMPluginEntry(const wxString& name, bool isActive, KPMPluginEntryType type);
-		virtual ~KPMPluginEntry();
+		virtual ~KPluginEntry();
 
 	public:
-		bool IsOK() const
-		{
-			return !m_Name.IsEmpty();
-		}
-		virtual void OnUpdate()
-		{
-		}
+		virtual bool IsOK() const = 0;
 
-		const wxString& GetName() const
-		{
-			return m_Name;
-		}
-		void SetName(const wxString& name)
-		{
-			m_Name = name;
-		}
+	public:
+		virtual wxString GetName() const = 0;
+		virtual void SetName(const wxString& name) = 0;
 		
-		const wxString& GetFullPath() const
-		{
-			return m_FullPath;
-		}
-		void SetFullPath(const wxString& fullPath)
-		{
-			m_FullPath = fullPath;
-		}
+		virtual wxString GetFullPath() const = 0;
+		virtual void SetFullPath(const wxString& fullPath) = 0;
 
-		virtual bool CanToggleEnabled() const;
-		virtual bool IsEnabled() const;
-		virtual void SetEnabled(bool isActive);
+		virtual bool CanToggleEnabled() const = 0;
+		virtual bool IsEnabled() const = 0;
+		virtual void SetEnabled(bool isActive) = 0;
+
+		virtual const KModEntry* GetParentMod() const = 0;
+		virtual void SetParentMod(const KModEntry* modEntry) = 0;
+
+		bool IsStdContent() const
+		{
+			return GetStdContentEntry() != NULL;
+		}
+		const KPluginManagerConfigStdContentEntry* GetStdContentEntry() const;
 		
-		virtual KPMPluginEntryType GetFormat() const;
-		void SetFormat(KPMPluginEntryType type);
-
-		virtual const KModEntry* GetParentMod() const
+		bool HasReader() const
 		{
-			return m_ParentMod;
+			return GetReader() != NULL;
 		}
-		void SetParentMod(const KModEntry* modEntry)
+		const KPluginReader* GetReader() const
 		{
-			m_ParentMod = modEntry;
+			return m_Reader.get();
 		}
-
-		virtual KPMPluginReader* GetPluginReader() const;
-		const KPluginManagerConfigStandardContentEntry* GetStdContentEntry() const;
+		bool ReadPluginData();
 };
-typedef std::vector<std::unique_ptr<KPMPluginEntry>> KPMPluginEntryVector;
-typedef std::vector<KPMPluginEntry*> KPMPluginEntryRefVector;
-typedef std::vector<const KPMPluginEntry*> KPMPluginEntryCRefVector;

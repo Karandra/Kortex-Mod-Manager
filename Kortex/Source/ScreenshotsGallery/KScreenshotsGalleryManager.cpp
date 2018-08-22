@@ -22,8 +22,7 @@ bool KScreenshotsGalleryManager::IsAnimationFile(const wxString& filePath)
 
 KWorkspace* KScreenshotsGalleryManager::CreateWorkspace(KMainWindow* mainWindow)
 {
-	m_Workspace = new KScreenshotsGalleryWorkspace(mainWindow, this);
-	return m_Workspace;
+	return new KScreenshotsGalleryWorkspace(mainWindow, this);
 }
 
 KScreenshotsGalleryManager::KScreenshotsGalleryManager()
@@ -46,7 +45,7 @@ wxString KScreenshotsGalleryManager::GetVersion() const
 	return "1.0";
 }
 
-bool KScreenshotsGalleryManager::IsActiveVFSNeeded() const
+KWorkspace* KScreenshotsGalleryManager::GetWorkspace() const
 {
-	return KScreenshotsGalleryConfig::GetInstance()->IsRequiresVFS();
+	return KScreenshotsGalleryWorkspace::GetInstance();
 }

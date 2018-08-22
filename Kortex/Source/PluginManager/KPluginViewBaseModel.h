@@ -2,29 +2,25 @@
 #include "stdafx.h"
 #include "KDataViewListModel.h"
 #include "KPluginManager.h"
-#include "KPluginManagerBethesdaGeneric.h"
+#include "KPluginManagerBethesda.h"
 #include "KProgramOptions.h"
-class KPluginManagerWorkspace;
-class KPluginManagerConfigStandardContentEntry;
-class KPluginManagerListModelDataObject;
+class KPluginViewBaseModelDataObject;
 
-class KPluginManagerListModel:
-	public KDataViewVectorListModel<KPMPluginEntryVector, KDataViewListModel>,
-	public KDataViewModelDragDropEnabled<KPluginManagerListModelDataObject>
+class KPluginViewBaseModel:
+	public KxDataViewVectorListModelEx<KPluginEntry::Vector, KxDataViewListModelEx>,
+	public KxDataViewModelExDragDropEnabled<KPluginViewBaseModelDataObject>
 {
-	public:
-		static const int ms_LightPluginIndex = 0xFE;
-
 	private:
-		KPluginManagerWorkspace* m_Workspace = NULL;
+		KPluginEntry::Vector& m_Entries;
 		wxString m_SearchMask;
 
 	private:
 		virtual void OnInitControl() override;
 
 		virtual void GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const override;
-		virtual void GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
-		virtual bool SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column) override;
+		virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
+		virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
+		virtual bool IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
 		virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
 		virtual bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
 		virtual bool HasDefaultCompare() const override
@@ -32,12 +28,6 @@ class KPluginManagerListModel:
 			return true;
 		}
 		virtual bool CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const override;
-
-		bool GetPluginIndex(const KPMPluginEntry* entry, int& index) const;
-		int CountLightActiveBefore(size_t index) const;
-		int CountInactiveBefore(size_t index) const;
-		const wxString& GetPartOfName(const KPMPluginEntry* entry) const;
-		wxString GetPluginAuthor(const KPMPluginEntry* entry) const;
 
 		void OnSelectItem(KxDataViewEvent& event);
 		void OnActivateItem(KxDataViewEvent& event);
@@ -52,44 +42,37 @@ class KPluginManagerListModel:
 		bool CanDragDropNow() const;
 
 	public:
-		KPluginManagerListModel(KPluginManagerWorkspace* workspace);
+		KPluginViewBaseModel();
 
 	public:
-		KPluginManagerWorkspace* GetWorkspace() const
-		{
-			return m_Workspace;
-		}
 		void ChangeNotify();
-
 		void SetDataVector();
-		void SetDataVector(KPMPluginEntryVector& array);
+		void SetDataVector(KPluginEntry::Vector& array);
+		KPluginViewModel* GetCoModel() const;
 
-		const KPMPluginEntry* GetDataEntry(size_t index) const
+		const KPluginEntry* GetDataEntry(size_t index) const
 		{
-			const KPMPluginEntryVector& items = *GetDataVector();
-			return index < items.size() ? items[index].get() : NULL;
+			return index < m_Entries.size() ? &*m_Entries[index] : NULL;
 		}
-		KPMPluginEntry* GetDataEntry(size_t index)
+		KPluginEntry* GetDataEntry(size_t index)
 		{
-			const KPMPluginEntryVector& items = *GetDataVector();
-			return index < items.size() ? items[index].get() : NULL;
+			return index < m_Entries.size() ? &*m_Entries[index] : NULL;
 		}
-		KxDataViewItem GetItemByEntry(const KPMPluginEntry* entry) const
+		KxDataViewItem GetItemByEntry(const KPluginEntry* entry) const
 		{
-			const KPMPluginEntryVector& items = *GetDataVector();
-			auto it = std::find_if(items.begin(), items.end(), [entry](const ValueType& v)
+			auto it = std::find_if(m_Entries.begin(), m_Entries.end(), [entry](const auto& v)
 			{
 				return v.get() == entry;
 			});
-			if (it != items.end())
+			if (it != m_Entries.end())
 			{
-				return GetItem(std::distance(items.begin(), it));
+				return GetItem(std::distance(m_Entries.begin(), it));
 			}
 			return KxDataViewItem();
 		}
 
 		void SetAllEnabled(bool value);
-		KPMPluginEntry* GetSelectedMod()
+		KPluginEntry* GetSelectedMod()
 		{
 			return GetDataEntry(GetSelectedModIndex());
 		}
@@ -105,23 +88,24 @@ class KPluginManagerListModel:
 		}
 };
 
-class KPluginManagerListModelDataObject: public KDataViewModelDragDropData
+//////////////////////////////////////////////////////////////////////////
+class KPluginViewBaseModelDataObject: public KxDataViewModelExDragDropData
 {
 	private:
-		KPMPluginEntryRefVector m_Entries;
+		KPluginEntry::RefVector m_Entries;
 
 	public:
-		KPluginManagerListModelDataObject(size_t count = 0)
+		KPluginViewBaseModelDataObject(size_t count = 0)
 		{
 			m_Entries.reserve(count);
 		}
 
 	public:
-		const KPMPluginEntryRefVector& GetEntries() const
+		const KPluginEntry::RefVector& GetEntries() const
 		{
 			return m_Entries;
 		}
-		void AddEntry(KPMPluginEntry* entry)
+		void AddEntry(KPluginEntry* entry)
 		{
 			m_Entries.push_back(entry);
 		}

@@ -31,7 +31,7 @@ KSaveManagerWorkspace::~KSaveManagerWorkspace()
 	{
 		KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_SavesListViewOptions);
 
-		for (const auto& v: m_Manager->GetProfileSaveManager()->GetFileFilters())
+		for (const auto& v: KSaveManagerConfig::GetInstance()->GetFileFilters())
 		{
 			m_FileFiltersOptions.SetAttribute(v.GetValue(), FiltersMenu_IsFilterActive(v.GetValue()));
 		}
@@ -45,11 +45,11 @@ bool KSaveManagerWorkspace::OnCreateWorkspace()
 	// Load options
 	KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_SavesListViewOptions);
 
-	const KSaveManagerConfig* pProfileConfig = m_Manager->GetProfileSaveManager();
+	const KSaveManagerConfig* profileConfig = KSaveManagerConfig::GetInstance();
 	m_ActiveFilters.clear();
 
 	KxStringVector tFilters;
-	for (const auto& v: pProfileConfig->GetFileFilters())
+	for (const auto& v: profileConfig->GetFileFilters())
 	{
 		const wxString& value = v.GetValue();
 		if (m_FileFiltersOptions.GetAttributeBool(value, true))
@@ -71,40 +71,40 @@ void KSaveManagerWorkspace::CreateViewPane()
 }
 void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSMSaveFile* saveEntry)
 {
-	KPluginManager* pPluginManager = KPluginManager::GetInstance();
+	KPluginManager* pluginManager = KPluginManager::GetInstance();
 	KPluginManagerWorkspace* pPluginWorkspace = KPluginManagerWorkspace::GetInstance();
-	bool bMultiSelect = m_ViewModel->GetView()->GetSelectedItemsCount() > 1;
+	bool isMultiSelect = m_ViewModel->GetView()->GetSelectedItemsCount() > 1;
 
 	// Plugins list
-	if (pPluginManager && pPluginWorkspace && saveEntry)
+	if (pluginManager && pPluginWorkspace && saveEntry)
 	{
 		const KxStringVector& list = saveEntry->GetPluginsList();
 
-		KxMenu* pPluginsListMenu = new KxMenu();
-		KxMenuItem* pPluginsListMenuItem = menu.Add(pPluginsListMenu, wxString::Format("%s (%zu)", T("SaveManager.Tab.PluginsList"), list.size()));
+		KxMenu* pluginsListMenu = new KxMenu();
+		KxMenuItem* pPluginsListMenuItem = menu.Add(pluginsListMenu, wxString::Format("%s (%zu)", T("SaveManager.Tab.PluginsList"), list.size()));
 		pPluginsListMenuItem->Enable(!list.empty());
 
 		for (const wxString& name: list)
 		{
-			KxMenuItem* item = pPluginsListMenu->Add(new KxMenuItem(name));
-			item->SetBitmap(KGetBitmap(pPluginWorkspace->GetStatusImageForPlugin(pPluginManager->FindPluginByName(name))));
+			KxMenuItem* item = pluginsListMenu->Add(new KxMenuItem(name));
+			item->SetBitmap(KGetBitmap(pPluginWorkspace->GetStatusImageForPlugin(pluginManager->FindPluginByName(name))));
 		}
 	}
 
 	// Basic info
 	{
-		KxMenu* pBasicInfoMenu = new KxMenu();
-		KxMenuItem* pBasicInfoMenuItem = menu.Add(pBasicInfoMenu, T("SaveManager.Tab.BasicInfo"));
+		KxMenu* basicInfoMenu = new KxMenu();
+		KxMenuItem* pBasicInfoMenuItem = menu.Add(basicInfoMenu, T("SaveManager.Tab.BasicInfo"));
 		pBasicInfoMenuItem->Enable(saveEntry && !saveEntry->GetBasicInfo().empty());
 
 		if (saveEntry)
 		{
 			for (const KLabeledValue& entry: saveEntry->GetBasicInfo())
 			{
-				KxMenuItem* item = pBasicInfoMenu->Add(new KxMenuItem(wxString::Format("%s: %s", entry.GetLabel(), entry.GetValue())));
+				KxMenuItem* item = basicInfoMenu->Add(new KxMenuItem(wxString::Format("%s: %s", entry.GetLabel(), entry.GetValue())));
 			}
 
-			pBasicInfoMenu->Bind(KxEVT_MENU_SELECT, [](KxMenuEvent& event)
+			basicInfoMenu->Bind(KxEVT_MENU_SELECT, [](KxMenuEvent& event)
 			{
 				if (wxTheClipboard->Open())
 				{
@@ -121,35 +121,35 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSMSaveFile* s
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_APPLY, T("SaveManager.SyncPluginsList")));
 		item->SetBitmap(KGetBitmap(KIMG_PLUG_DISCONNECT));
-		item->Enable(!bMultiSelect && saveEntry && saveEntry->HasPluginsList() && pPluginManager && pPluginManager->IsOK());
+		item->Enable(!isMultiSelect && saveEntry && saveEntry->HasPluginsList() && pluginManager);
 	}
 
 	// Save
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_SAVE, T("SaveManager.SavePluginsList")));
 		item->SetBitmap(KGetBitmap(KIMG_DISK));
-		item->Enable(!bMultiSelect && saveEntry && saveEntry->HasPluginsList());
+		item->Enable(!isMultiSelect && saveEntry && saveEntry->HasPluginsList());
 	}
 	menu.AddSeparator();
 
 	// File filter
 	{
-		const KSaveManagerConfig* pProfileConfig = m_Manager->GetProfileSaveManager();
+		const KSaveManagerConfig* profileConfig = KSaveManagerConfig::GetInstance();
 
-		KxMenu* pFiltersMenu = new KxMenu();
-		menu.Add(pFiltersMenu, T("FileFilter"));
+		KxMenu* filtersMenu = new KxMenu();
+		menu.Add(filtersMenu, T("FileFilter"));
 
 		// All files
-		KxMenuItem* pAllFilesItem = pFiltersMenu->Add(new KxMenuItem(T("FileFilter.AllFiles"), wxEmptyString, wxITEM_CHECK));
-		pAllFilesItem->Check(FiltersMenu_IsAllFiltersActive());
-		pAllFilesItem->Bind(KxEVT_MENU_SELECT, &KSaveManagerWorkspace::FiltersMenu_AllFiles, this);
+		KxMenuItem* allFilesItem = filtersMenu->Add(new KxMenuItem(T("FileFilter.AllFiles"), wxEmptyString, wxITEM_CHECK));
+		allFilesItem->Check(FiltersMenu_IsAllFiltersActive());
+		allFilesItem->Bind(KxEVT_MENU_SELECT, &KSaveManagerWorkspace::FiltersMenu_AllFiles, this);
 
-		pFiltersMenu->AddSeparator();
+		filtersMenu->AddSeparator();
 
 		// Specific
-		for (const KLabeledValue& v: pProfileConfig->GetFileFilters())
+		for (const KLabeledValue& v: profileConfig->GetFileFilters())
 		{
-			KxMenuItem* item = pFiltersMenu->Add(new KxMenuItem(v.GetLabel(), wxEmptyString, wxITEM_CHECK));
+			KxMenuItem* item = filtersMenu->Add(new KxMenuItem(v.GetLabel(), wxEmptyString, wxITEM_CHECK));
 			item->Bind(KxEVT_MENU_SELECT, &KSaveManagerWorkspace::FiltersMenu_SpecificFilter, this);
 			item->SetClientData(const_cast<KLabeledValue*>(&v));
 			item->Check(FiltersMenu_IsFilterActive(v.GetValue()));
@@ -170,7 +170,7 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSMSaveFile* s
 
 bool KSaveManagerWorkspace::FiltersMenu_IsAllFiltersActive() const
 {
-	return m_ActiveFilters.size() == m_Manager->GetProfileSaveManager()->GetFileFilters().size();
+	return m_ActiveFilters.size() == KSaveManagerConfig::GetInstance()->GetFileFilters().size();
 }
 void KSaveManagerWorkspace::FiltersMenu_AllFiles(KxMenuEvent& event)
 {
@@ -180,7 +180,7 @@ void KSaveManagerWorkspace::FiltersMenu_AllFiles(KxMenuEvent& event)
 	}
 	else
 	{
-		for (const auto& v: m_Manager->GetProfileSaveManager()->GetFileFilters())
+		for (const auto& v: KSaveManagerConfig::GetInstance()->GetFileFilters())
 		{
 			m_ActiveFilters.insert(v.GetValue());
 		}
@@ -235,14 +235,14 @@ void KSaveManagerWorkspace::OnRemoveSave(KSMSaveFile* saveEntry)
 {
 	if (saveEntry)
 	{
-		const KSaveManagerConfig* pConfig = m_Manager->GetProfileSaveManager();
-		const KxFileFinderItem& tPrimaryInfo = saveEntry->GetFileInfo();
+		const KSaveManagerConfig* config = KSaveManagerConfig::GetInstance();
+		const KxFileFinderItem& primaryInfo = saveEntry->GetFileInfo();
 
-		KxFile(tPrimaryInfo.GetFullPath()).RemoveFile(true);
-		if (pConfig->HasMultiFileSaveConfig())
+		KxFile(primaryInfo.GetFullPath()).RemoveFile(true);
+		if (config->HasMultiFileSaveConfig())
 		{
-			KxFileFinderItem tSecondaryInfo = tPrimaryInfo;
-			tSecondaryInfo.SetName(tPrimaryInfo.GetName().BeforeLast('.') + '.' + pConfig->GetSecondarySaveExtension());
+			KxFileFinderItem tSecondaryInfo = primaryInfo;
+			tSecondaryInfo.SetName(primaryInfo.GetName().BeforeLast('.') + '.' + config->GetSecondarySaveExtension());
 			KxFile(tSecondaryInfo.GetFullPath()).RemoveFile(true);
 		}
 	}
@@ -286,7 +286,7 @@ void KSaveManagerWorkspace::LoadData()
 	{
 		tFilters.push_back(v);
 	}
-	m_ViewModel->SetDataVector(m_Manager->GetProfileSaveManager()->GetSavesFolder(), tFilters);
+	m_ViewModel->SetDataVector(KSaveManagerConfig::GetInstance()->GetSavesFolder(), tFilters);
 }
 
 void KSaveManagerWorkspace::ProcessSelection(const KSMSaveFile* saveEntry)

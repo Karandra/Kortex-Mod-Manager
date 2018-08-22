@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "KPluginManagerBethesdaGeneric.h"
+#include "KPluginManagerBethesda.h"
 class KxINI;
 
-class KPluginManagerBethesdaMorrowind: public KPluginManagerBethesdaGeneric
+class KPluginManagerBethesdaMW: public KPluginManagerBethesda
 {
 	private:
 		wxString m_PluginsListFile;
@@ -20,8 +20,8 @@ class KPluginManagerBethesdaMorrowind: public KPluginManagerBethesdaGeneric
 		virtual void SaveNativeOrderBG() const override;
 
 	public:
-		KPluginManagerBethesdaMorrowind(const wxString& interfaceName, const KxXMLNode& configNode, const KPluginManagerConfig* profilePluginConfig);
-		virtual ~KPluginManagerBethesdaMorrowind();
+		KPluginManagerBethesdaMW(const wxString& interfaceName, const KxXMLNode& configNode);
+		virtual ~KPluginManagerBethesdaMW();
 
 	public:
 		virtual bool ShouldChangeFileModificationDate() const override
@@ -32,10 +32,10 @@ class KPluginManagerBethesdaMorrowind: public KPluginManagerBethesdaGeneric
 		{
 			return true;
 		}
-
+		
 		virtual wxString GetPluginRootRelativePath(const wxString& fileName) const override
 		{
-			return "Data Files\\" + fileName;
+			return m_PluginsLocation + '\\' + fileName;
 		}
 
 		virtual bool Save() override;

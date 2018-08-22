@@ -53,10 +53,6 @@ class KDownloadManager: public wxEvtHandler, public KPluggableManager, public Kx
 		{
 			return KIMG_ARROW_270;
 		}
-		virtual bool IsActiveVFSNeeded() const override
-		{
-			return false;
-		}
 
 	public:
 		bool IsAssociatedWithNXM() const

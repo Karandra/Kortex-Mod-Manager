@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KVariablesDatabase.h"
-#include "KPluginManagerBethesdaMorrowind.h"
+#include "KPluginManagerBethesdaMW.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerDispatcher.h"
 #include "Profile/KPluginManagerConfig.h"
@@ -11,7 +11,7 @@
 #include <KxFramework/KxINI.h>
 #include <KxFramework/KxFile.h>
 
-void KPluginManagerBethesdaMorrowind::ReadOrderMW(const KxINI& ini)
+void KPluginManagerBethesdaMW::ReadOrderMW(const KxINI& ini)
 {
 	auto files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
 
@@ -28,12 +28,11 @@ void KPluginManagerBethesdaMorrowind::ReadOrderMW(const KxINI& ini)
 
 		if (it != files.end())
 		{
-			KPMPluginEntryType type = GetPluginTypeFromPath(nameL);
-			if (type != KPMPE_TYPE_INVALID)
+			if (CheckExtension(nameL))
 			{
-				KPMPluginEntry* entry = GetEntries().emplace_back(NewPluginEntry(name, false, type)).get();
+				auto& entry = GetEntries().emplace_back(NewPluginEntry(name, false));
 				entry->SetFullPath(it->GetFullPath());
-				SetParentModAndPluginFile(entry);
+				entry->SetParentMod(FindParentMod(*entry));
 			}
 		}
 	}
@@ -41,40 +40,39 @@ void KPluginManagerBethesdaMorrowind::ReadOrderMW(const KxINI& ini)
 	// Load files form 'Data Files' folder. Don't add already existing
 	for (const KxFileFinderItem& item: files)
 	{
-		KPMPluginEntryType type = GetPluginTypeFromPath(item.GetName());
-		if (type != KPMPE_TYPE_INVALID && !FindPluginByName(item.GetName()))
+		if (CheckExtension(item.GetName()))
 		{
-			KPMPluginEntry* entry = GetEntries().emplace_back(NewPluginEntry(item.GetName(), false, type)).get();
+			auto& entry = GetEntries().emplace_back(NewPluginEntry(item.GetName(), false));
 			entry->SetFullPath(item.GetFullPath());
-			SetParentModAndPluginFile(entry);
+			entry->SetParentMod(FindParentMod(*entry));
 		}
 	}
 }
-void KPluginManagerBethesdaMorrowind::ReadActiveMW(const KxINI& ini)
+void KPluginManagerBethesdaMW::ReadActiveMW(const KxINI& ini)
 {
 	KxStringVector activeOrder = ini.GetKeyNames("Game Files");
 	for (const wxString& nameID: activeOrder)
 	{
 		wxString name = ini.GetValue("Game Files", nameID);
-		KPMPluginEntry* entry = FindPluginByName(name);
+		KPluginEntry* entry = FindPluginByName(name);
 		if (entry)
 		{
 			entry->SetEnabled(true);
 		}
 	}
 }
-void KPluginManagerBethesdaMorrowind::WriteOrderMW(KxINI& ini) const
+void KPluginManagerBethesdaMW::WriteOrderMW(KxINI& ini) const
 {
 	wxDateTime fileTime = wxDateTime::Now() - wxTimeSpan(0, GetEntries().size());
-	const wxTimeSpan timeStep(0, 1);
+	const wxTimeSpan timeStep(0, 1); // One minute
 
 	int i = 0;
 	ini.RemoveSection("Game Files Order");
-	for (const KModListPluginEntry& tListItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
+	for (const KModListPluginEntry& listItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
 	{
-		if (const KPMPluginEntry* entry = tListItem.GetPluginEntry())
+		if (const KPluginEntry* entry = listItem.GetPluginEntry())
 		{
-			ini.SetValue("Game Files Order", wxString::Format("GameFile%d", i), OnWriteToLoadOrder(entry));
+			ini.SetValue("Game Files Order", wxString::Format("GameFile%d", i), OnWriteToLoadOrder(*entry));
 			i++;
 
 			if (ShouldChangeFileModificationDate())
@@ -85,7 +83,7 @@ void KPluginManagerBethesdaMorrowind::WriteOrderMW(KxINI& ini) const
 		}
 	}
 }
-void KPluginManagerBethesdaMorrowind::WriteActiveMW(KxINI& ini) const
+void KPluginManagerBethesdaMW::WriteActiveMW(KxINI& ini) const
 {
 	int i = 0;
 	ini.RemoveSection("Game Files");
@@ -93,18 +91,18 @@ void KPluginManagerBethesdaMorrowind::WriteActiveMW(KxINI& ini) const
 	{
 		if (entry->IsEnabled())
 		{
-			ini.SetValue("Game Files", wxString::Format("GameFile%d", i), OnWriteToActiveOrder(entry.get()));
+			ini.SetValue("Game Files", wxString::Format("GameFile%d", i), OnWriteToActiveOrder(*entry));
 			i++;
 		}
 	}
 }
 
-void KPluginManagerBethesdaMorrowind::LoadNativeOrderBG()
+void KPluginManagerBethesdaMW::LoadNativeOrderBG()
 {
 	Clear();
 
-	KxFileStream file(KModManager::GetDispatcher().GetTargetPath(m_PluginsListFile), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
-	KxINI ini(file);
+	KxFileStream stream(KModManager::GetDispatcher().GetTargetPath(m_PluginsListFile), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxINI ini(stream);
 	if (ini.IsOK())
 	{
 		ReadOrderMW(ini);
@@ -116,19 +114,19 @@ void KPluginManagerBethesdaMorrowind::LoadNativeOrderBG()
 		}
 	}
 }
-void KPluginManagerBethesdaMorrowind::LoadNativeActiveBG()
+void KPluginManagerBethesdaMW::LoadNativeActiveBG()
 {
 }
-void KPluginManagerBethesdaMorrowind::SaveNativeOrderBG() const
+void KPluginManagerBethesdaMW::SaveNativeOrderBG() const
 {
-	KxFileStream file(m_PluginsListFile, KxFS_ACCESS_RW, KxFS_DISP_OPEN_ALWAYS, KxFS_SHARE_READ);
-	KxINI ini(file);
+	KxFileStream stream(m_PluginsListFile, KxFS_ACCESS_RW, KxFS_DISP_OPEN_ALWAYS, KxFS_SHARE_READ);
+	KxINI ini(stream);
 	if (ini.IsOK())
 	{
 		WriteActiveMW(ini);
 		WriteOrderMW(ini);
-		ini.Save(file);
-		file.Close();
+		ini.Save(stream);
+		stream.Close();
 
 		if (KGameConfigWorkspace* workspace = KGameConfigWorkspace::GetInstance())
 		{
@@ -137,25 +135,25 @@ void KPluginManagerBethesdaMorrowind::SaveNativeOrderBG() const
 	}
 }
 
-KPluginManagerBethesdaMorrowind::KPluginManagerBethesdaMorrowind(const wxString& interfaceName, const KxXMLNode& configNode, const KPluginManagerConfig* profilePluginConfig)
-	:KPluginManagerBethesdaGeneric(interfaceName, configNode, profilePluginConfig)
+KPluginManagerBethesdaMW::KPluginManagerBethesdaMW(const wxString& interfaceName, const KxXMLNode& configNode)
+	:KPluginManagerBethesda(interfaceName, configNode)
 {
 	m_PluginsLocation = "Data Files";
 	m_PluginsListFile = "Morrowind.ini";
 }
-KPluginManagerBethesdaMorrowind::~KPluginManagerBethesdaMorrowind()
+KPluginManagerBethesdaMW::~KPluginManagerBethesdaMW()
 {
 }
 
-bool KPluginManagerBethesdaMorrowind::Save()
+bool KPluginManagerBethesdaMW::Save()
 {
-	return KPluginManagerBethesdaGeneric::Save();
+	return KPluginManagerBethesda::Save();
 }
-bool KPluginManagerBethesdaMorrowind::Load()
+bool KPluginManagerBethesdaMW::Load()
 {
-	return KPluginManagerBethesdaGeneric::Load();
+	return KPluginManagerBethesda::Load();
 }
-bool KPluginManagerBethesdaMorrowind::LoadNativeOrder()
+bool KPluginManagerBethesdaMW::LoadNativeOrder()
 {
-	return KPluginManagerBethesdaGeneric::LoadNativeOrder();
+	return KPluginManagerBethesda::LoadNativeOrder();
 }

@@ -1,16 +1,15 @@
 #pragma once
 #include "stdafx.h"
-#include "PluginManager/KPMPluginReader.h"
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxSingleton.h>
 class KProfile;
 class KPluginManager;
-class KPMPluginReader;
+class KPluginReader;
 
-class KPluginManagerConfigStandardContentEntry
+class KPluginManagerConfigStdContentEntry
 {
 	public:
-		using Vector = std::vector<KPluginManagerConfigStandardContentEntry>;
+		using Vector = std::vector<KPluginManagerConfigStdContentEntry>;
 
 	private:
 		wxString m_ID;
@@ -18,8 +17,8 @@ class KPluginManagerConfigStandardContentEntry
 		wxString m_Logo;
 
 	public:
-		KPluginManagerConfigStandardContentEntry(KxXMLNode& node);
-		~KPluginManagerConfigStandardContentEntry();
+		KPluginManagerConfigStdContentEntry(KxXMLNode& node);
+		~KPluginManagerConfigStdContentEntry();
 
 	public:
 		const wxString& GetID() const
@@ -111,14 +110,14 @@ class KPluginManagerConfigLootAPI
 class KPluginManagerConfig: public KxSingletonPtr<KPluginManagerConfig>
 {
 	public:
-		using StandardContentEntry = KPluginManagerConfigStandardContentEntry;
+		using StandardContentEntry = KPluginManagerConfigStdContentEntry;
 		using SortingToolEntry = KPluginManagerConfigSortingToolEntry;
 		using LootAPI = KPluginManagerConfigLootAPI;
 
 	private:
 		const wxString m_InterfaceName;
 		const wxString m_PluginFileFormat;
-		KPluginManager* m_Manager = NULL;
+		std::unique_ptr<KPluginManager> m_Manager;
 
 		int m_PluginLimit = -1;
 		wxString m_StandardContent_MainID;
@@ -140,13 +139,10 @@ class KPluginManagerConfig: public KxSingletonPtr<KPluginManagerConfig>
 		{
 			return m_InterfaceName;
 		}
-		KPluginManager* GetManager() const;
-		
 		const wxString& GetPluginFileFormat() const
 		{
 			return m_PluginFileFormat;
 		}
-		KPMPluginReader* GetPluginReader() const;
 
 		bool HasPluginLimit() const
 		{
@@ -187,6 +183,6 @@ class KPluginManagerConfig: public KxSingletonPtr<KPluginManagerConfig>
 		}
 		const LootAPI& GetLootAPI() const
 		{
-			return *m_LootAPI.get();
+			return *m_LootAPI;
 		}
 };

@@ -8,12 +8,10 @@ KxSingletonPtr_Define(KSaveManager);
 
 KWorkspace* KSaveManager::CreateWorkspace(KMainWindow* mainWindow)
 {
-	m_Workspace = new KSaveManagerWorkspace(mainWindow, this);
-	return m_Workspace;
+	return new KSaveManagerWorkspace(mainWindow, this);
 }
 
 KSaveManager::KSaveManager(const KxXMLNode& configNode, const KSaveManagerConfig* profileSaveManager)
-	:m_ProfileSaveManager(profileSaveManager), m_RequiresVFS(configNode.GetAttributeBool("RequiresVFS", true))
 {
 }
 KSaveManager::~KSaveManager()
@@ -31,6 +29,11 @@ wxString KSaveManager::GetName() const
 wxString KSaveManager::GetVersion() const
 {
 	return "1.0.2";
+}
+
+KWorkspace* KSaveManager::GetWorkspace() const
+{
+	return KSaveManagerWorkspace::GetInstance();
 }
 
 bool KSaveManager::Save()

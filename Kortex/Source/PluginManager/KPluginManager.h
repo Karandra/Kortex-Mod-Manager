@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KPluggableManager.h"
-#include "KPMPluginEntry.h"
+#include "KPluginEntry.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerModList.h"
 #include "KProgramOptions.h"
@@ -10,31 +10,47 @@ class KPluginManagerWorkspace;
 class KPluginManagerConfig;
 class KPluginManagerConfigSortingToolEntry;
 class KModEntry;
+class KPluginViewModel;
 class KxXMLNode;
+
+#define KPLUGIN_IMANAGER_BETHESDA "Bethesda"
+#define KPLUGIN_IMANAGER_BETHESDA2 "Bethesda2"
+#define KPLUGIN_IMANAGER_BETHESDAMW "BethesdaMW"
+
+#define KPLUGIN_IFILE_BETHESDA_MORROWIND "BethesdaMorrowind"
+#define KPLUGIN_IFILE_BETHESDA_OBLIVION "BethesdaOblivion"
+#define KPLUGIN_IFILE_BETHESDA_SKYRIM "BethesdaSkyrim"
 
 class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginManager>
 {
 	friend class KPluginManagerConfig;
 
 	public:
-		enum SyncListMode
+		enum class SyncListMode
 		{
-			EnableAll = 0,
-			DisableAll = 1,
-			DoNotChange = 2,
+			EnableAll,
+			DisableAll,
+			DoNotChange,
 		};
 
-		static KPluginManager* QueryInterface(const wxString& name, const KxXMLNode& configNode = KxXMLNode(), const KPluginManagerConfig* profilePluginConfig = NULL);
+		static std::unique_ptr<KPluginManager> QueryInterface(const wxString& name, const KxXMLNode& configNode = KxXMLNode());
+		static std::unique_ptr<KPluginReader> QueryPluginReader(const wxString& formatName);
 
 	private:
 		KProgramOptionUI m_GeneralOptions;
 		KProgramOptionUI m_SortingToolsOptions;
 
-	private:
-		KPMPluginEntryRefVector CollectDependentPlugins(const KPMPluginEntry* pluginEntry, bool bFirstOnly) const;
+		KPluginEntry::Vector m_Entries;
+
+	protected:
+		void Clear()
+		{
+			m_Entries.clear();
+		}
+		void ReadPluginsData();
 
 	public:
-		KPluginManager(const wxString& interfaceName, const KxXMLNode& configNode, const KPluginManagerConfig* profilePluginConfig);
+		KPluginManager(const wxString& interfaceName, const KxXMLNode& configNode);
 		virtual ~KPluginManager();
 
 	public:
@@ -47,7 +63,6 @@ class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginMan
 		}
 
 	public:
-		virtual bool IsOK() const = 0;
 		KProgramOption& GetGeneralOptions()
 		{
 			return m_GeneralOptions;
@@ -57,49 +72,58 @@ class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginMan
 			return m_SortingToolsOptions;
 		}
 
-		virtual KPMPluginEntry* NewPluginEntry(const wxString& name, bool isActive, KPMPluginEntryType type);
-		KPMPluginEntry* EmplacePluginEntry(const wxString& name, bool isActive, KPMPluginEntryType type)
+		virtual KPluginViewModel* GetViewModel() const = 0;
+		virtual wxString GetPluginsLocation() const = 0;
+		virtual wxString GetPluginTypeName(const KPluginEntry& pluginEntry) const = 0;
+
+		bool HasEntries() const
 		{
-			return GetEntries().emplace_back(NewPluginEntry(name, isActive, type)).get();
+			return !m_Entries.empty();
+		}
+		const KPluginEntry::Vector& GetEntries() const
+		{
+			return m_Entries;
+		}
+		KPluginEntry::Vector& GetEntries()
+		{
+			return m_Entries;
 		}
 
-		virtual const wxString& GetPluginsLocation() const = 0;
-		virtual wxString GetPluginRootRelativePath(const wxString& fileName) const = 0;
-		virtual wxString GetPluginTypeName(KPMPluginEntryType type) const;
-		virtual bool IsEntryTypeSupported(KPMPluginEntryType type) const = 0;
-
-		virtual KPMPluginEntryVector& GetEntries() = 0;
-		virtual const KPMPluginEntryVector& GetEntries() const = 0;
-		bool IsPluginsDataLoaded() const
-		{
-			return !GetEntries().empty();
-		}
-
-		virtual bool IsActiveVFSNeeded() const override
-		{
-			return false;
-		}
 		virtual bool Save() = 0;
 		virtual bool Load() = 0;
 		virtual bool LoadNativeOrder() = 0;
 		bool LoadIfNeeded()
 		{
-			return !IsPluginsDataLoaded() ? Load() : true;
+			return !HasEntries() ? Load() : true;
 		}
 
-		int GetPluginIndex(const KPMPluginEntry* modEntry) const;
-		bool IsValidModIndex(int nModIndex) const;;
-		bool MovePluginsIntoThis(const KPMPluginEntryRefVector& entriesToMove, const KPMPluginEntry* pAnchor);
+		virtual bool HasDependentPlugins(const KPluginEntry& pluginEntry) const = 0;
+		virtual KPluginEntry::RefVector GetDependentPlugins(const KPluginEntry& pluginEntry) const = 0;
+		virtual const KModEntry* FindParentMod(const KPluginEntry& pluginEntry) const = 0;
+
+		bool IsValidModIndex(intptr_t modIndex) const;
+		intptr_t GetPluginOrderIndex(const KPluginEntry& modEntry) const;
+		virtual intptr_t GetPluginPriority(const KPluginEntry& modEntry) const = 0;
+		virtual intptr_t GetPluginDisplayPriority(const KPluginEntry& modEntry) const
+		{
+			return GetPluginPriority(modEntry);
+		}
+		virtual wxString FormatPriority(const KPluginEntry& modEntry, intptr_t value) const
+		{
+			return modEntry.IsEnabled() ? wxString::Format("0x%02X (%d)", (int)value, (int)value) : wxEmptyString;
+		}
+		wxString FormatPriority(const KPluginEntry& modEntry) const
+		{
+			return FormatPriority(modEntry, GetPluginDisplayPriority(modEntry));
+		}
+
+		bool MovePluginsIntoThis(const KPluginEntry::RefVector& entriesToMove, const KPluginEntry& anchor);
 		void SetAllPluginsEnabled(bool isEnabled);
 
-		virtual bool HasDependentPlugins(const KPMPluginEntry* pluginEntry) const;
-		virtual KPMPluginEntryRefVector GetDependentPlugins(const KPMPluginEntry* pluginEntry) const;
-		virtual const KModEntry* GetParentMod(const KPMPluginEntry* pluginEntry) const;
-		virtual bool IsPluginActive(const wxString& sPluginName) const;
-		virtual void SyncWithPluginsList(const KxStringVector& tPluginNamesList, SyncListMode mode = EnableAll);
-		virtual KxStringVector GetPluginsList(bool bActiveOnly = false) const;
-		KPMPluginEntry* FindPluginByName(const wxString& name) const;
-		void UpdateAllPlugins();
+		virtual bool IsPluginActive(const wxString& pluginName) const;
+		virtual void SyncWithPluginsList(const KxStringVector& pluginNamesList, SyncListMode mode = SyncListMode::EnableAll);
+		virtual KxStringVector GetPluginsList(bool activeOnly = false) const;
+		KPluginEntry* FindPluginByName(const wxString& name) const;
 
 		virtual bool CheckSortingTool(const KPluginManagerConfigSortingToolEntry& entry);
 		virtual void RunSortingTool(const KPluginManagerConfigSortingToolEntry& entry);

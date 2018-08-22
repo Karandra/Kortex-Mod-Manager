@@ -10,11 +10,8 @@
 #include <KxFramework/KxTreeList.h>
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxSingleton.h>
-class KPluginManager;
-class KPluginManagerBethesdaGeneric;
-class KPluginManagerListModel;
-class KPMPluginEntry;
-class KPluginManagerConfigSortingToolEntry;
+class KPluginViewBaseModel;
+class KPluginEntry;
 
 class KxSearchBox;
 class KxHTMLWindow;
@@ -22,18 +19,17 @@ class KxHTMLWindow;
 class KPluginManagerWorkspace: public KWorkspace, public KxSingletonPtr<KPluginManagerWorkspace>
 {
 	public:
-		static KImageEnum GetStatusImageForPlugin(const KPMPluginEntry* pluginEntry);
+		static KImageEnum GetStatusImageForPlugin(const KPluginEntry* pluginEntry = NULL);
 
 	private:
 		KProgramOptionUI m_PluginListViewOptions;
-		KPluginManagerBethesdaGeneric* m_Manager = NULL;
 
 		wxBoxSizer* m_MainSizer = NULL;
-		KPluginManagerListModel* m_ModelView = NULL;
+		KPluginViewBaseModel* m_ModelView = NULL;
 		KxSearchBox* m_SearchBox = NULL;
 
 	public:
-		KPluginManagerWorkspace(KMainWindow* mainWindow, KPluginManagerBethesdaGeneric* manager);
+		KPluginManagerWorkspace(KMainWindow* mainWindow);
 		virtual ~KPluginManagerWorkspace();
 		virtual bool OnCreateWorkspace() override;
 
@@ -76,15 +72,15 @@ class KPluginManagerWorkspace: public KWorkspace, public KxSingletonPtr<KPluginM
 		void UpdatePluginTypeCounter(KxMenuItem* item);
 
 	public:
-		KPluginManagerListModel* GetModel() const
+		KPluginViewBaseModel* GetModel() const
 		{
 			return m_ModelView;
 		}
 		
-		void OnCreateViewContextMenu(KxMenu& menu, const KPMPluginEntry* entry);
-		void OnCreateSortingToolsMenu(KxMenu& menu, const KPMPluginEntry* entry);
-		void OnCreateImportExportMenu(KxMenu& menu, const KPMPluginEntry* entry);
+		void OnCreateViewContextMenu(KxMenu& menu, const KPluginEntry* entry);
+		void OnCreateSortingToolsMenu(KxMenu& menu, const KPluginEntry* entry);
+		void OnCreateImportExportMenu(KxMenu& menu, const KPluginEntry* entry);
 
-		void ProcessSelection(const KPMPluginEntry* entry = NULL);
-		void HighlightPlugin(const KPMPluginEntry* entry = NULL);
+		void ProcessSelection(const KPluginEntry* entry = NULL);
+		void HighlightPlugin(const KPluginEntry* entry = NULL);
 };

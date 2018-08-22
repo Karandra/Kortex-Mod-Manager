@@ -330,8 +330,8 @@ void KPCIImagesListModel::OnImportFiles()
 	{
 		GetView()->Freeze();
 		wxString source = dialog.GetResult();
-		auto pOperation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
-		pOperation->OnRun([this, source](KOperationWithProgressBase* self)
+		auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
+		operation->OnRun([this, source](KOperationWithProgressBase* self)
 		{
 			KxEvtFile source(source);
 			self->LinkHandler(&source, KxEVT_FILEOP_SEARCH);
@@ -351,14 +351,14 @@ void KPCIImagesListModel::OnImportFiles()
 				}
 			}
 		});
-		pOperation->OnEnd([this](KOperationWithProgressBase* self)
+		operation->OnEnd([this](KOperationWithProgressBase* self)
 		{
 			RefreshItems();
 			ChangeNotify();
 			GetView()->Thaw();
 		});
-		pOperation->SetDialogCaption(T("Generic.FileFindInProgress"));
-		pOperation->Run();
+		operation->SetDialogCaption(T("Generic.FileFindInProgress"));
+		operation->Run();
 	}
 }
 void KPCIImagesListModel::OnAddMultipleItems()

@@ -17,7 +17,4 @@ class KPluggableManager: public KManager
 	public:
 		KPluggableManager();
 		virtual ~KPluggableManager();
-
-	public:
-		virtual bool IsActiveVFSNeeded() const = 0;
 };

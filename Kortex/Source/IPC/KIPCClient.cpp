@@ -78,9 +78,9 @@ void KIPCClient::OnVFSStateChanged(const KIPCRequest_VFSStateChanged& config)
 		// Force load of plugin manager so plugin data will be loaded
 		if (KVirtualFileSystemBase::IsSuccessCode(status) && config.IsEnabled())
 		{
-			if (KPluginManager* pPluginManager = KPluginManager::GetInstance())
+			if (KPluginManager* pluginManager = KPluginManager::GetInstance())
 			{
-				pPluginManager->LoadIfNeeded();
+				pluginManager->LoadIfNeeded();
 			}
 		}
 

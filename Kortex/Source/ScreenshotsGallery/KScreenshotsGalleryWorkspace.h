@@ -2,12 +2,13 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
+#include <KxFramework/KxSingleton.h>
 class KScreenshotsGalleryManager;
 class KImageViewerEvent;
 class KxTextBox;
 class KxThumbView;
 
-class KScreenshotsGalleryWorkspace: public KWorkspace
+class KScreenshotsGalleryWorkspace: public KWorkspace, public KxSingletonPtr<KScreenshotsGalleryWorkspace>
 {
 	private:
 		KScreenshotsGalleryManager* m_Manager = NULL;

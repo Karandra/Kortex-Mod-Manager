@@ -14,7 +14,7 @@
 #include "ConfigManager/KConfigManager.h"
 #include "ConfigManager/KCMConfigEntry.h"
 #include "VFS/KVirtualFileSystemService.h"
-#include "RunManager/KRunManager.h"
+#include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerWorkspace.h"
 #include "DownloadManager/KDownloadManager.h"
@@ -586,8 +586,8 @@ void KApp::UnInitVFS()
 }
 void KApp::InitRunManager()
 {
-	wxLogInfo("Initializing KRunManager");
-	m_RunManager = new KRunManager();
+	wxLogInfo("Initializing KProgramManager");
+	m_RunManager = new KProgramManager();
 }
 void KApp::AddDownloadToAlreadyRunningInstance(const wxString& link)
 {
@@ -619,11 +619,11 @@ void KApp::SaveSettings() const
 }
 bool KApp::ShowChageProfileDialog()
 {
-	KProfileSelectionDialog dialog(GetMainWindow());
+	KProfileSelectionDialog dialog(m_MainWindow);
 	wxWindowID ret = dialog.ShowModal();
 	if (ret == KxID_OK && (GetCurrentTemplateID() != dialog.GetNewTemplate() || GetCurrentConfigID() != dialog.GetNewConfig()))
 	{
-		KxTaskDialog tConfirmDialog(GetMainWindow(), KxID_NONE, T("ProfileSelection.ChangeProfileDialog.Caption"), T("ProfileSelection.ChangeProfileDialog.Message"), KxBTN_NONE, KxICON_WARNING);
+		KxTaskDialog tConfirmDialog(m_MainWindow, KxID_NONE, T("ProfileSelection.ChangeProfileDialog.Caption"), T("ProfileSelection.ChangeProfileDialog.Message"), KxBTN_NONE, KxICON_WARNING);
 		tConfirmDialog.AddButton(KxID_YES, T("ProfileSelection.ChangeProfileDialog.Yes"));
 		tConfirmDialog.AddButton(KxID_NO, T("ProfileSelection.ChangeProfileDialog.No"));
 		tConfirmDialog.AddButton(KxID_CANCEL, T("ProfileSelection.ChangeProfileDialog.Cancel"));

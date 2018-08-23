@@ -56,7 +56,7 @@
 		</MirroredLocations>
 	</Virtualization>
 	
-	<RunConfig Enabled="1">
+	<ProgramConfig Enabled="1">
 		<Main>
 			<Entry RequiresVFS="1">
 				<Name>$(NameShort)</Name>
@@ -91,7 +91,7 @@
 				<Command></Command>
 			</Entry>
 		</PreMain>
-	</RunConfig>
+	</ProgramConfig>
 
 	<PackageManager>
 		

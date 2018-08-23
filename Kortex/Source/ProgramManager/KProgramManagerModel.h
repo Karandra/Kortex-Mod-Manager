@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "KDataViewListModel.h"
-#include "KRunManager.h"
+#include "KProgramManager.h"
 
-class KRunManagerWorkspaceView: public KDataViewVectorListModel<KRMProgramEntryArray, KDataViewListModel>
+class KProgramManagerModel: public KDataViewVectorListModel<KRMProgramEntryArray, KDataViewListModel>
 {
 	private:
 		virtual void OnInitControl() override;
@@ -20,9 +20,9 @@ class KRunManagerWorkspaceView: public KDataViewVectorListModel<KRMProgramEntryA
 
 		KRMProgramEntryArray& GetProgramsList() const
 		{
-			return KRunManager::Get().GetProgramList();
+			return KProgramManager::GetInstance()->GetProgramList();
 		}
-		KRunManagerProgram* GetDataEntry(size_t i)
+		KProgramManagerEntry* GetDataEntry(size_t i)
 		{
 			if (i < GetItemCount())
 			{
@@ -31,12 +31,12 @@ class KRunManagerWorkspaceView: public KDataViewVectorListModel<KRMProgramEntryA
 			return NULL;
 		}
 		
-		wxString AskSelectExecutablePath(const KRunManagerProgram* entry = NULL) const;
+		wxString AskSelectExecutablePath(const KProgramManagerEntry* entry = NULL) const;
 		bool AddProgram();
-		void RemoveProgram(KRunManagerProgram* entry);
+		void RemoveProgram(KProgramManagerEntry* entry);
 
 	public:
-		KRunManagerWorkspaceView()
+		KProgramManagerModel()
 		{
 			SetDataVector(&GetProgramsList());
 		}
@@ -48,7 +48,7 @@ class KRunManagerWorkspaceView: public KDataViewVectorListModel<KRMProgramEntryA
 		}
 		virtual void RefreshItems() override;
 
-		const KRunManagerProgram* GetDataEntry(size_t i) const
+		const KProgramManagerEntry* GetDataEntry(size_t i) const
 		{
 			if (i < GetItemCount())
 			{
@@ -56,7 +56,7 @@ class KRunManagerWorkspaceView: public KDataViewVectorListModel<KRMProgramEntryA
 			}
 			return NULL;
 		}
-		const KRunManagerProgram* GetDataEntry(const KxDataViewItem& item) const
+		const KProgramManagerEntry* GetDataEntry(const KxDataViewItem& item) const
 		{
 			return GetDataEntry(GetRow(item));
 		}

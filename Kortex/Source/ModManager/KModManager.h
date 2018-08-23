@@ -81,7 +81,6 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		KModManagerTags m_TagManager;
 		KModManagerDispatcher m_Dispatcher;
 		KModManagerModList m_ModListManager;
-		KVirtualFileSystemService* m_VFSService = NULL;
 		bool m_Mounted = false;
 		KxProgressDialog* m_MountStatusDialog = NULL;
 
@@ -122,7 +121,6 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		}
 
 	public:
-		bool IsOK() const;
 		KProgramOption& GetOptions()
 		{
 			return m_Options;

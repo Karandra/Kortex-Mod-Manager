@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KProfileCreatorDialog.h"
-#include "RunManager/KRunManager.h"
+#include "ProgramManager/KProgramManager.h"
 #include "Events/KLogEvent.h"
 #include "Profile/KProfile.h"
 #include "KApp.h"
@@ -56,7 +56,7 @@ bool KProfileCreatorDialog::Create(wxWindow* parent,
 		m_CopyProfileConfigCheckBox = new KxCheckBox(canvas, KxID_NONE, T("ProfileCreatorDialog.CopyProfileConfigLabel"));
 		copyOptionsSizer->Add(m_CopyProfileConfigCheckBox, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
-		// Copy RunManager programs
+		// Copy ProgramManager programs
 		m_CopyRunManagerProgramsCheckBox = new KxCheckBox(canvas, KxID_NONE, T("ProfileCreatorDialog.CopyRunManagerPrograms"));
 		copyOptionsSizer->Add(m_CopyRunManagerProgramsCheckBox, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
@@ -83,7 +83,7 @@ bool KProfileCreatorDialog::Create(wxWindow* parent,
 KProfileCreatorDialog::KProfileCreatorDialog(wxWindow* parent, KProfile* profileTemplate)
 	:m_Template(profileTemplate)
 {
-	Create(parent, KxID_NONE, T("ProfileCreatorDialog.Caption", profileTemplate->GetName()), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY);
+	Create(parent, KxID_NONE, TF("ProfileCreatorDialog.Caption").arg(profileTemplate->GetName()), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY);
 
 	Bind(KxEVT_STDDIALOG_BUTTON, &KProfileCreatorDialog::OnButtonClick, this);
 	m_ProfilesList->Bind(wxEVT_COMBOBOX, &KProfileCreatorDialog::OnSelectConfiguration, this);

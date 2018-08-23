@@ -13,10 +13,8 @@
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxProgressDialog.h>
 
-KIPCClient& KIPCClient::Get()
-{
-	return *KApp::Get().GetVFSServiceClient();
-}
+KxSingletonPtr_Define(KIPCClient);
+
 wxString KIPCClient::GetServerFileName()
 {
 	wxString path = "Kortex Server";

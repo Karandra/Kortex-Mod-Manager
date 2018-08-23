@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "IPC/KIPC.h"
 #include "VFS/KVirtualFileSystemMirror.h"
+#include <KxFramework/KxSingleton.h>
 class KIPCConnection;
 class KIPCRequest_InitVFSService;
 class KIPCRequest_UninstallVFSService;
@@ -14,14 +15,11 @@ class KIPCRequest_EnableVFS;
 class KVirtualFileSystemService;
 class KVirtualFileSystemConvergence;
 
-class KIPCServer: public wxServer
+class KIPCServer: public wxServer, public KxSingleton<KIPCServer>
 {
 	friend class KIPCConnection;
 
 	public:
-	#if KIPC_SERVER
-		static KIPCServer& Get();
-	#endif
 		static wxString GetClientFileName();
 
 	private:

@@ -190,7 +190,7 @@ void KPackageCreatorController::ExportProject(KPackageProjectSerializer& seriali
 void KPackageCreatorController::BuildProject(bool buildPreview)
 {
 	auto thread = new KPackageCreatorBuilderOperation(m_Project.get(), buildPreview);
-	thread->SetDialogCaption(T("PackageCreator.Build.Caption", GetProjectName()));
+	thread->SetDialogCaption(TF("PackageCreator.Build.Caption").arg(GetProjectName()));
 	thread->Run();
 }
 

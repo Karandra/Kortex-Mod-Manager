@@ -167,5 +167,5 @@ wxString KPackageManagerWorkspace::GetID() const
 }
 wxString KPackageManagerWorkspace::GetName() const
 {
-	return T("ToolBar.PackageManager");
+	return T("PackageManager.PackagesListName");
 }

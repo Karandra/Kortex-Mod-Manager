@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KRunManagerWorkspaceView.h"
+#include "KProgramManagerModel.h"
 #include "ModManager/KModManager.h"
 #include <KxFramework/KxMenu.h>
 #include "KVariablesDatabase.h"
@@ -18,11 +18,11 @@ enum ColumnID
 	WorkingDirectory,
 };
 
-void KRunManagerWorkspaceView::OnInitControl()
+void KProgramManagerModel::OnInitControl()
 {
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KRunManagerWorkspaceView::OnActivateItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KRunManagerWorkspaceView::OnSelectItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KRunManagerWorkspaceView::OnContextMenu, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KProgramManagerModel::OnActivateItem, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KProgramManagerModel::OnSelectItem, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KProgramManagerModel::OnContextMenu, this);
 	GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, [this](KxDataViewEvent& event)
 	{
 		KxMenu menu;
@@ -32,16 +32,16 @@ void KRunManagerWorkspaceView::OnInitControl()
 		}
 	});
 
-	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("RunManager.List.RequiresVFS"), ColumnID::RequiresVFS, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
+	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ProgramManager.List.RequiresVFS"), ColumnID::RequiresVFS, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
 	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 300);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("RunManager.List.Arguments"), ColumnID::Arguments, KxDATAVIEW_CELL_EDITABLE, 300);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("RunManager.List.Executable"), ColumnID::Executable, KxDATAVIEW_CELL_INERT, 100);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("RunManager.List.WorkingDirectory"), ColumnID::WorkingDirectory, KxDATAVIEW_CELL_INERT);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("ProgramManager.List.Arguments"), ColumnID::Arguments, KxDATAVIEW_CELL_EDITABLE, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ProgramManager.List.Executable"), ColumnID::Executable, KxDATAVIEW_CELL_INERT, 100);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ProgramManager.List.WorkingDirectory"), ColumnID::WorkingDirectory, KxDATAVIEW_CELL_INERT);
 }
 
-void KRunManagerWorkspaceView::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KProgramManagerModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	const KRunManagerProgram* entry = GetDataEntry(row);
+	const KProgramManagerEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -55,9 +55,9 @@ void KRunManagerWorkspaceView::GetEditorValueByRow(wxAny& value, size_t row, con
 	}
 	GetValueByRow(value, row, column);
 }
-void KRunManagerWorkspaceView::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KProgramManagerModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	const KRunManagerProgram* entry = GetDataEntry(row);
+	const KProgramManagerEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -91,9 +91,9 @@ void KRunManagerWorkspaceView::GetValueByRow(wxAny& value, size_t row, const KxD
 		};
 	}
 }
-bool KRunManagerWorkspaceView::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+bool KProgramManagerModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 {
-	KRunManagerProgram* entry = GetDataEntry(row);
+	KProgramManagerEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -112,9 +112,9 @@ bool KRunManagerWorkspaceView::SetValueByRow(const wxAny& value, size_t row, con
 	}
 	return false;
 }
-bool KRunManagerWorkspaceView::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
+bool KProgramManagerModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
-	const KRunManagerProgram* entry = GetDataEntry(row);
+	const KProgramManagerEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -130,21 +130,21 @@ bool KRunManagerWorkspaceView::IsEnabledByRow(size_t row, const KxDataViewColumn
 	return false;
 }
 
-void KRunManagerWorkspaceView::OnSelectItem(KxDataViewEvent& event)
+void KProgramManagerModel::OnSelectItem(KxDataViewEvent& event)
 {
-	const KRunManagerProgram* entry = GetDataEntry(GetRow(event.GetItem()));
+	const KProgramManagerEntry* entry = GetDataEntry(GetRow(event.GetItem()));
 	if (entry)
 	{
-		KApp::Get().GetMainWindow()->SetStatus(entry->GetName() + ": " + entry->GetExecutable());
+		KMainWindow::GetInstance()->SetStatus(entry->GetName() + ": " + entry->GetExecutable());
 		return;
 	}
-	KApp::Get().GetMainWindow()->ClearStatus();
+	KMainWindow::GetInstance()->ClearStatus();
 }
-void KRunManagerWorkspaceView::OnActivateItem(KxDataViewEvent& event)
+void KProgramManagerModel::OnActivateItem(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	KxDataViewColumn* column = event.GetColumn();
-	KRunManagerProgram* entry = GetDataEntry(GetRow(item));
+	KProgramManagerEntry* entry = GetDataEntry(GetRow(item));
 	if (entry && column)
 	{
 		switch (column->GetID())
@@ -155,7 +155,7 @@ void KRunManagerWorkspaceView::OnActivateItem(KxDataViewEvent& event)
 				if (!path.IsEmpty() && path != entry->GetExecutable())
 				{
 					entry->SetExecutable(path);
-					KRunManager::Get().OnQueryItemImage(*entry);
+					KProgramManager::GetInstance()->OnQueryItemImage(*entry);
 					ItemChanged(item);
 				}
 				break;
@@ -168,7 +168,7 @@ void KRunManagerWorkspaceView::OnActivateItem(KxDataViewEvent& event)
 				}
 				else
 				{
-					KRunManager::Get().RunEntry(*entry);
+					KProgramManager::GetInstance()->RunEntry(*entry);
 				}
 				break;
 			}
@@ -198,9 +198,9 @@ void KRunManagerWorkspaceView::OnActivateItem(KxDataViewEvent& event)
 		};
 	}
 }
-void KRunManagerWorkspaceView::OnContextMenu(KxDataViewEvent& event)
+void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 {
-	KRunManagerProgram* entry = GetDataEntry(GetRow(event.GetItem()));
+	KProgramManagerEntry* entry = GetDataEntry(GetRow(event.GetItem()));
 
 	KxMenu menu;
 	menu.Add(new KxMenuItem(KxID_ADD, T(KxID_ADD)));
@@ -237,7 +237,7 @@ void KRunManagerWorkspaceView::OnContextMenu(KxDataViewEvent& event)
 	};
 }
 
-wxString KRunManagerWorkspaceView::AskSelectExecutablePath(const KRunManagerProgram* entry) const
+wxString KProgramManagerModel::AskSelectExecutablePath(const KProgramManagerEntry* entry) const
 {
 	KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
 	dialog.SetFolder(V(KVAR(KVAR_VIRTUAL_GAME_ROOT)));
@@ -254,25 +254,25 @@ wxString KRunManagerWorkspaceView::AskSelectExecutablePath(const KRunManagerProg
 	}
 	return wxEmptyString;
 }
-bool KRunManagerWorkspaceView::AddProgram()
+bool KProgramManagerModel::AddProgram()
 {
 	wxString path = AskSelectExecutablePath();
 	if (!path.IsEmpty())
 	{
-		KRunManagerProgram& entry = GetDataVector()->emplace_back();
+		KProgramManagerEntry& entry = GetDataVector()->emplace_back();
 		entry.SetName(path.AfterLast('\\').BeforeLast('.'));
 		entry.SetExecutable(path);
-		entry.SetBitmap(KRunManager::Get().OnQueryItemImage(entry));
+		entry.SetBitmap(KProgramManager::GetInstance()->OnQueryItemImage(entry));
 		
-		// Let 'KRunManagerProgram::IsRequiresVFS' decide if this program needs VFS.
+		// Let 'KProgramManagerEntry::IsRequiresVFS' decide if this program needs VFS.
 		entry.SetRequiresVFS(false);
 		return true;
 	}
 	return false;
 }
-void KRunManagerWorkspaceView::RemoveProgram(KRunManagerProgram* entry)
+void KProgramManagerModel::RemoveProgram(KProgramManagerEntry* entry)
 {
-	auto it = std::remove_if(GetDataVector()->begin(), GetDataVector()->end(), [entry](const KRunManagerProgram& v)
+	auto it = std::remove_if(GetDataVector()->begin(), GetDataVector()->end(), [entry](const KProgramManagerEntry& v)
 	{
 		return &v == entry;
 	});
@@ -282,8 +282,8 @@ void KRunManagerWorkspaceView::RemoveProgram(KRunManagerProgram* entry)
 	}
 }
 
-void KRunManagerWorkspaceView::RefreshItems()
+void KProgramManagerModel::RefreshItems()
 {
-	KRunManager::Get().UpdateProgramListImages();
+	KProgramManager::GetInstance()->UpdateProgramListImages();
 	KDataViewVectorListModel::RefreshItems();
 }

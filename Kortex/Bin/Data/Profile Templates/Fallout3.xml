@@ -56,7 +56,7 @@
 		</MirroredLocations>
 	</Virtualization>
 
-	<RunConfig Enabled="1">
+	<ProgramConfig Enabled="1">
 		<Main>
 			<Entry>
 				<Name>$(NameShort)</Name>
@@ -91,7 +91,7 @@
 				<Command></Command>
 			</Entry>
 		</PreMain>
-	</RunConfig>
+	</ProgramConfig>
 
 	<GameConfig Enabled="1" ENB="1">
 		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(Fallout3INI)</Entry>

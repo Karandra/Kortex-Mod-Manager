@@ -134,7 +134,7 @@ void KPackageManagerListModel::OnSelectItem(KxDataViewEvent& event)
 	const KxFileFinderItem* entry = GetDataEntry(event.GetItem());
 	if (entry && entry->IsFile())
 	{
-		KApp::Get().GetMainWindow()->SetStatus(entry->GetName());
+		KMainWindow::GetInstance()->SetStatus(entry->GetName());
 		if (CanAutoShowPackageInfo())
 		{
 			auto thread = new KPackageManagerListModelThread(entry->GetFullPath(), this);
@@ -412,7 +412,7 @@ void KPackageManagerListModel::LoadInfo()
 	if (IsPackageOK())
 	{
 		// Name
-		KApp::Get().GetMainWindow()->SetStatus(m_Package->GetName(), 0, KIMG_TICK_CIRCLE_FRAME);
+		KMainWindow::GetInstance()->SetStatus(m_Package->GetName(), 0, KIMG_TICK_CIRCLE_FRAME);
 
 		// Logo
 		const KPPIImageEntry* pLogo = m_Package->GetLogoImage();
@@ -428,7 +428,7 @@ void KPackageManagerListModel::ClearInfo()
 	m_ImageView->SetBitmap(wxNullBitmap);
 	m_Description->Clear();
 	m_Description->Enable(false);
-	KApp::Get().GetMainWindow()->ClearStatus();
+	KMainWindow::GetInstance()->ClearStatus();
 }
 
 //////////////////////////////////////////////////////////////////////////

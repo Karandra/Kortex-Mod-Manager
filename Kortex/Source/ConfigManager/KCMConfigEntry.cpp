@@ -179,41 +179,41 @@ void KCMConfigEntryStd::CreateSamplesFromSequence(KxXMLNode& node)
 		if (KConfigManager::IsIntType(m_Type))
 		{
 			int64_t nMin = node.GetAttributeInt("Min");
-			auto nMax = node.GetAttributeInt("Max", nMin);
+			auto max = node.GetAttributeInt("Max", nMin);
 			auto nStep = node.GetAttributeInt("Step", 1);
 
-			for (auto i = nMin; i <= nMax; i += nStep)
+			for (auto i = nMin; i <= max; i += nStep)
 			{
 				m_SampleValues.push_back(KCMSampleValue(this, GetFormatter()(i)));
 			}
 
 			m_MinValue.first = nMin;
 			m_MinValue.second = true;
-			m_MaxValue.first = nMax;
+			m_MaxValue.first = max;
 			m_MaxValue.second = true;
 		}
 		else if (KConfigManager::IsFloatType(m_Type))
 		{
 			auto nMin = node.GetAttributeFloat("Min");
-			auto nMax = node.GetAttributeFloat("Max", nMin);
+			auto max = node.GetAttributeFloat("Max", nMin);
 			auto nStep = node.GetAttributeFloat("Step", 0.1);
 
 			auto value = nMin;
 			auto nLast = nMin;
-			while (value <= nMax)
+			while (value <= max)
 			{
 				m_SampleValues.push_back(KCMSampleValue(this, GetFormatter()(value)));
 				nLast = value;
 				value += nStep;
 			}
-			if (nMax - nLast > 0.001)
+			if (max - nLast > 0.001)
 			{
-				m_SampleValues.push_back(KCMSampleValue(this, GetFormatter()(nMax)));
+				m_SampleValues.push_back(KCMSampleValue(this, GetFormatter()(max)));
 			}
 
 			m_MinValue.first = nMin;
 			m_MinValue.second = true;
-			m_MaxValue.first = nMax;
+			m_MaxValue.first = max;
 			m_MaxValue.second = true;
 		}
 	}

@@ -13,7 +13,7 @@
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerDispatcher.h"
 #include "Profile/KPluginManagerConfig.h"
-#include "RunManager/KRunManager.h"
+#include "ProgramManager/KProgramManager.h"
 #include "UI/KWorkspace.h"
 
 #include <KxFramework/KxString.h>
@@ -85,7 +85,7 @@ wxString KPluginManager::GetID() const
 }
 wxString KPluginManager::GetName() const
 {
-	return T("ToolBar.PluginManager");
+	return T("PluginManager.Name");
 }
 wxString KPluginManager::GetVersion() const
 {
@@ -230,10 +230,10 @@ bool KPluginManager::CheckSortingTool(const KPluginManagerConfigSortingToolEntry
 {
 	if (entry.GetExecutable().IsEmpty() || !KxFile(entry.GetExecutable()).IsFileExist())
 	{
-		KxTaskDialog dalog(KApp::Get().GetMainWindow(), KxID_NONE, T("PluginManager.Sorting.Missing.Caption", entry.GetName()), T("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
+		KxTaskDialog dalog(KMainWindow::GetInstance(), KxID_NONE, TF("PluginManager.Sorting.Missing.Caption").arg(entry.GetName()), T("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
 		if (dalog.ShowModal() == KxID_OK)
 		{
-			KxFileBrowseDialog browseDialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN);
+			KxFileBrowseDialog browseDialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 			browseDialog.AddFilter("*.exe", T("FileFilter.Programs"));
 			if (browseDialog.ShowModal() == KxID_OK)
 			{
@@ -250,13 +250,13 @@ void KPluginManager::RunSortingTool(const KPluginManagerConfigSortingToolEntry& 
 {
 	if (CheckSortingTool(entry))
 	{
-		KRunManagerProgram runEntry;
+		KProgramManagerEntry runEntry;
 		runEntry.SetName(entry.GetName());
 		runEntry.SetExecutable(entry.GetExecutable());
 		runEntry.SetArguments(entry.GetArguments());
 
-		KxProgressDialog* dialog = new KxProgressDialog(KApp::Get().GetMainWindow(), KxID_NONE, T("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
-		KxProcess* process = KRunManager::Get().RunEntryDelayed(runEntry, dialog);
+		KxProgressDialog* dialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, T("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
+		KxProcess* process = KProgramManager::GetInstance()->RunEntryDelayed(runEntry, dialog);
 
 		dialog->Bind(KxEVT_STDDIALOG_BUTTON, [process](wxNotifyEvent& event)
 		{
@@ -269,11 +269,11 @@ void KPluginManager::RunSortingTool(const KPluginManagerConfigSortingToolEntry& 
 		process->Bind(wxEVT_END_PROCESS, [this, process, dialog](wxProcessEvent& event)
 		{
 			LoadNativeOrder();
-			KApp::Get().GetMainWindow()->Show();
+			KMainWindow::GetInstance()->Show();
 			event.Skip();
 		});
 
-		KApp::Get().GetMainWindow()->Hide();
+		KMainWindow::GetInstance()->Hide();
 		dialog->SetMainIcon(KxICON_INFORMATION);
 		dialog->Pulse();
 		dialog->Show();

@@ -34,7 +34,7 @@
 		</MirroredLocations>
 	</Virtualization>
 
-	<RunConfig Enabled="1">
+	<ProgramConfig Enabled="1">
 		<Main>
 			<Entry>
 				<Name>$(NameShort)</Name>
@@ -43,7 +43,7 @@
 				<Arguments></Arguments>
 			</Entry>
 		</Main>
-	</RunConfig>
+	</ProgramConfig>
 
 	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
 		<Locations>

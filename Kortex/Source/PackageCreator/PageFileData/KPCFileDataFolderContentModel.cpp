@@ -110,7 +110,7 @@ void KPCFileDataFolderContentModel::OnActivateItem(KxDataViewEvent& event)
 			KPPFFolderEntryItem* entry = GetDataEntry(GetRow(event.GetItem()));
 			if (entry)
 			{
-				KxFileBrowseDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN);
+				KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 				dialog.SetFolder(entry->GetSource().BeforeLast('\\'));
 				dialog.AddFilter("*", T("FileFilter.AllFiles"));
 				if (dialog.ShowModal() == KxID_OK)
@@ -168,7 +168,7 @@ void KPCFileDataFolderContentModel::OnContextMenu(KxDataViewEvent& event)
 
 void KPCFileDataFolderContentModel::OnAddMultipleFiles()
 {
-	KxFileBrowseDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN);
+	KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 	dialog.AddFilter("*", T("FileFilter.AllFiles"));
 	dialog.SetOptionEnabled(KxFBD_ALLOW_MULTISELECT);
 	if (dialog.ShowModal() == KxID_OK)

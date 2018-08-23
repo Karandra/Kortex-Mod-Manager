@@ -7,7 +7,7 @@
 #include "ModManager/KModManagerWorkspace.h"
 #include "DownloadManager/KDownloadManagerWorkspace.h"
 #include "GameConfig/KGameConfigWorkspace.h"
-#include "RunManager/KRunManagerWorkspace.h"
+#include "ProgramManager/KProgramManagerWorkspace.h"
 #include <KxFramework/KxFileBrowseDialog.h>
 
 std::unique_ptr<KModManagerImport> KModManagerImport::Create(Type type)
@@ -44,7 +44,7 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 			{
 				KxTaskDialog profileSelectDialog(window, KxID_NONE, T("ModManager.Import.Caption"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_INFO);
 
-				profileSelectDialog.SetMessage(T("ModManager.Import.InfoFound", importer->GetModManagerName()));
+				profileSelectDialog.SetMessage(TF("ModManager.Import.InfoFound").arg(importer->GetModManagerName()));
 				profileSelectDialog.SetExMessage(importer->GetAdditionalInfo());
 				profileSelectDialog.SetCheckBoxLabel(T("ModManager.Import.SkipExisingMods"));
 
@@ -91,7 +91,7 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 							// These workspaces are safe
 							KModManagerWorkspace::GetInstance()->ScheduleRefresh();
 							KGameConfigWorkspace::GetInstance()->ScheduleRefresh();
-							KRunManagerWorkspace::GetInstance()->ScheduleRefresh();
+							KProgramManagerWorkspace::GetInstance()->ScheduleRefresh();
 							KDownloadManagerWorkspace::GetInstance()->ScheduleRefresh();
 						});
 					});

@@ -256,8 +256,8 @@ void KProfileSelectionDialog::OnSelectProfile(wxNotifyEvent& event)
 				wxWindowID ret = KxTaskDialog(
 					this,
 					KxID_NONE,
-					T("ProfileSelection.ConfirmRemoving.Caption", configID),
-					T("ProfileSelection.ConfirmRemoving.Message", profileTemplate->GetDataPath(profileTemplate->GetID(), configID)),
+					TF("ProfileSelection.ConfirmRemoving.Caption").arg(configID),
+					TF("ProfileSelection.ConfirmRemoving.Message").arg(profileTemplate->GetDataPath(profileTemplate->GetID())).arg(configID),
 					KxBTN_YES|KxBTN_NO, KxICON_WARNING
 				).ShowModal();
 				if (ret == KxID_YES)

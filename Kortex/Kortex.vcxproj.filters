@@ -59,9 +59,6 @@
     <Filter Include="Code\Source Files\SettingsWindow">
       <UniqueIdentifier>{e9b8debe-3e5f-4a98-b530-52a2df3ad7a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source Files\RunManager">
-      <UniqueIdentifier>{ea90ff45-611e-4a67-9994-23816ff6b21a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source Files\Profile">
       <UniqueIdentifier>{e2fa4a12-f854-4d5e-bf75-319fa3d22c5f}</UniqueIdentifier>
     </Filter>
@@ -138,9 +135,6 @@
     <Filter Include="Code\Header Files\SettingsWindow">
       <UniqueIdentifier>{e905e6c3-93c4-4dfe-a7e4-e8e63dfc9180}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Header Files\RunManager">
-      <UniqueIdentifier>{12602aa1-3fe1-499e-8830-e016580559ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Header Files\Profile">
       <UniqueIdentifier>{54ac776c-e622-4870-98cd-91257f2147f3}</UniqueIdentifier>
     </Filter>
@@ -210,6 +204,12 @@
     </Filter>
     <Filter Include="Code\Source Files\DownloadManager">
       <UniqueIdentifier>{2aa0000a-d18a-4bd0-bf20-e5ff1ba9483b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source Files\ProgramManager">
+      <UniqueIdentifier>{ea90ff45-611e-4a67-9994-23816ff6b21a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Header Files\ProgramManager">
+      <UniqueIdentifier>{12602aa1-3fe1-499e-8830-e016580559ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -299,9 +299,6 @@
     </ClCompile>
     <ClCompile Include="Source\SettingsWindow\KSettingsWindowManager.cpp">
       <Filter>Code\Source Files\SettingsWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\RunManager\KRunManager.cpp">
-      <Filter>Code\Source Files\RunManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Profile\KProfile.cpp">
       <Filter>Code\Source Files\Profile</Filter>
@@ -555,12 +552,6 @@
     <ClCompile Include="Source\ModManager\KModManagerSitesEditor.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\RunManager\KRunManagerWorkspace.cpp">
-      <Filter>Code\Source Files\RunManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\RunManager\KRunManagerWorkspaceView.cpp">
-      <Filter>Code\Source Files\RunManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\IPC\KIPC.cpp">
       <Filter>Code\Source Files\IPC</Filter>
     </ClCompile>
@@ -663,9 +654,6 @@
     <ClCompile Include="Source\Profile\KPluginManagerConfig.cpp">
       <Filter>Code\Source Files\Profile</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Profile\KRunManagerConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Profile\KSaveManagerConfig.cpp">
       <Filter>Code\Source Files\Profile</Filter>
     </ClCompile>
@@ -740,6 +728,21 @@
     </ClCompile>
     <ClCompile Include="Source\PluginManager\KPluginViewModelBethesda.cpp">
       <Filter>Code\Source Files\PluginManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KTranslation.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Profile\KProgramManagerConfig.cpp">
+      <Filter>Code\Source Files\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ProgramManager\KProgramManager.cpp">
+      <Filter>Code\Source Files\ProgramManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ProgramManager\KProgramManagerModel.cpp">
+      <Filter>Code\Source Files\ProgramManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ProgramManager\KProgramManagerWorkspace.cpp">
+      <Filter>Code\Source Files\ProgramManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -832,9 +835,6 @@
     </ClInclude>
     <ClInclude Include="Source\SettingsWindow\KSettingsWindowManager.h">
       <Filter>Code\Header Files\SettingsWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\RunManager\KRunManager.h">
-      <Filter>Code\Header Files\RunManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Profile\KProfile.h">
       <Filter>Code\Header Files\Profile</Filter>
@@ -1124,12 +1124,6 @@
     <ClInclude Include="Source\ModManager\KModManagerSitesEditor.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\RunManager\KRunManagerWorkspace.h">
-      <Filter>Code\Header Files\RunManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\RunManager\KRunManagerWorkspaceView.h">
-      <Filter>Code\Header Files\RunManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\IPC\KIPC.h">
       <Filter>Code\Header Files\IPC</Filter>
     </ClInclude>
@@ -1247,9 +1241,6 @@
     <ClInclude Include="Source\Profile\KPluginManagerConfig.h">
       <Filter>Code\Header Files\Profile</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Profile\KRunManagerConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Profile\KSaveManagerConfig.h">
       <Filter>Code\Header Files\Profile</Filter>
     </ClInclude>
@@ -1336,6 +1327,21 @@
     </ClInclude>
     <ClInclude Include="Source\KRTTI.h">
       <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\KTranslation.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Profile\KProgramManagerConfig.h">
+      <Filter>Code\Header Files\Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ProgramManager\KProgramManager.h">
+      <Filter>Code\Header Files\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ProgramManager\KProgramManagerModel.h">
+      <Filter>Code\Header Files\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ProgramManager\KProgramManagerWorkspace.h">
+      <Filter>Code\Header Files\ProgramManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

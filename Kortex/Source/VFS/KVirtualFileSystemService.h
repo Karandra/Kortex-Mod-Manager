@@ -1,8 +1,9 @@
 #pragma once
 #include "stdafx.h"
+#include <KxFramework/KxSingleton.h>
 
 class KxVFSService;
-class KVirtualFileSystemService
+class KVirtualFileSystemService: public KxSingletonPtr<KVirtualFileSystemService>
 {
 	public:
 		static wxString GetLibraryVersion();

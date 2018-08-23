@@ -163,7 +163,7 @@
 		<String ID="Init.Status2">Загрузка данных профиля</String>
 		<String ID="Init.StatusDone">Инициализация завершена</String>
 		<String ID="Init.Error1">Конфигурация профиля не загружена. Продолжение невозможно.</String>
-		<String ID="Init.Error2"><![CDATA[Файл конфигурации для профиля "%s" не найден. Будет использована конфигурация по умолчанию.]]></String>
+		<String ID="Init.Error2">Файл конфигурации для профиля "%1" не найден. Будет использована конфигурация по умолчанию.</String>
 		<String ID="Init.Error3">Не удалось создать рабочее пространство</String>
 		<String ID="Init.ProfilesPath1">Папка с данными профилей не указана или не существует</String>
 		<String ID="Init.ProfilesPath2"><![CDATA[Вы можете использовать папку по умолчанию или выбрать другую.
@@ -175,8 +175,8 @@
 		
 		<String ID="Settings.PrepareUninstall">Удаление программы</String>
 		<String ID="Settings.PrepareUninstall.Button">Подготовить к удалению</String>
-		<String ID="Settings.PrepareUninstall.Caption"><![CDATA[Вы уверены, что хотите удалить %s?]]></String>
-		<String ID="Settings.PrepareUninstall.Message"><![CDATA[Это действие удалит службу виртуальной файловой системы и позволит корректно выполнить удаление программы. После этого требуется удалить все файлы программы и перезагрузить компьютер.]]></String>
+		<String ID="Settings.PrepareUninstall.Caption">Вы уверены, что хотите удалить %1?</String>
+		<String ID="Settings.PrepareUninstall.Message">Это действие удалит службу виртуальной файловой системы и позволит корректно выполнить удаление программы. После этого требуется удалить все файлы программы и перезагрузить компьютер.</String>
 		<String ID="Settings.PrepareUninstall.Success">Удаление службы виртуальной файловой системы успешно завершено. Для полного завершения процесса удаления необходимо перезагрузить компьютер.</String>
 		<String ID="Settings.PrepareUninstall.Error">Не удалось выполнить удаление службы виртуальной файловой системы.</String>
 		<String ID="Settings.PrepareUninstall.RebootNow">Перезагрузить сейчас</String>
@@ -185,7 +185,7 @@
 		<String ID="Settings.Categories.General">Основные параметры</String>
 		<String ID="Settings.Categories.VFS">Виртуальная файловая система (VFS)</String>
 		<String ID="Settings.Categories.VariablesOverride">Переопределение переменных</String>
-		<String ID="Settings.Categories.RunManager">Конфигурация запуска программ</String>
+		<String ID="Settings.Categories.ProgramManager">Конфигурация запуска программ</String>
 		<String ID="Settings.Categories.PackageManager">Установщики</String>
 
 		<String ID="Settings.Value.Language">Язык интерфейса</String>
@@ -196,7 +196,7 @@
 		<String ID="Settings.Value.PreMainSequence">Последовательность запуска предварительных программ</String>
 		<String ID="Settings.Value.PreMainTimeout">Интервал между запуском предварительных программ (мс)</String>
 		<String ID="Settings.Value.PreMainTimeoutAfter">Время ожидания после запуска предварительных программ (мс)</String>
-
+		
 		<String ID="Settings.Value.PackagesLocation">Папка установочных пакетов</String>
 		<String ID="Settings.Value.GameRoot">Установочная папка $(NameShort)</String>
 		<String ID="Settings.Value.AutoShowPackageInfo">Автоматически показывать информацию об установочном пакете</String>
@@ -211,13 +211,13 @@
 		<String ID="About.Tabs.Permissions">Разрешения</String>
 		
 		<String ID="About.Info.Libraries">Используемые библиотеки</String>
-		<String ID="About.Info.IconPack">Используются иконки из набора %s от %s.</String>
+		<String ID="About.Info.IconPack">Используются иконки из набора %1 от %2.</String>
 		
 		<String ID="About.Permissions"><![CDATA[
 Запрещено распространение этой программы без указания ссылки на официальный сайт.
-Официальным сайтом является %s.
+Официальным сайтом является %1.
 Если вы желаете разместить программу на другом сайте, прежде свяжитесь со мной - разработчиком программы.
-Вы можете сделать это на сайте %s через %s или написать в тему обсуждения программы на форуме.]]></String>
+Вы можете сделать это на сайте %2 через %3 или написать в тему обсуждения программы на форуме.]]></String>
 		<String ID="About.Permissions.ContactMethod">личное сообщение</String>
 		<String ID="About.Permissions.DownloadPage">Страница загрузки</String>
 		<String ID="About.Permissions.SupportPage">Обсуждение и поддержка</String>
@@ -237,13 +237,13 @@
 		<String ID="ProfileSelection.ChangeProfileDialog.No">Не перезапускать</String>
 		<String ID="ProfileSelection.ChangeProfileDialog.Cancel">Отменить изменение профиля</String>
 		
-		<String ID="ProfileSelection.ConfirmRemoving.Caption"><![CDATA[Вы уверены, что хотите удалить пофиль "%s"?]]></String>
+		<String ID="ProfileSelection.ConfirmRemoving.Caption">Вы уверены, что хотите удалить пофиль "%1"</String>
 		<String ID="ProfileSelection.ConfirmRemoving.Message"><![CDATA[Эту операцию невозможно отменить.
 
-Будет удалена следующая папка и всё её содержимое: %s]]></String>
+Будет удалена следующая папка и всё её содержимое: %1]]></String>
 
 		<!-- Profile creation/editing -->
-		<String ID="ProfileCreatorDialog.Caption"><![CDATA[Создание нового профиля для "%s"]]></String>
+		<String ID="ProfileCreatorDialog.Caption">Создание нового профиля для "%1"</String>
 		<String ID="ProfileCreatorDialog.NameLabel">Название профиля</String>
 		<String ID="ProfileCreatorDialog.CopyFromLabel">Скопировать данные из профиля</String>
 		<String ID="ProfileCreatorDialog.CopyModsLabel">Копировать моды</String>
@@ -256,7 +256,7 @@
 		<String ID="ProfileCreatorDialog.CreationError">Не удалось создать новый профиль</String>
 		<String ID="ProfileCreatorDialog.CopyingProfileData">Копирование данных профиля</String>
 		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigCaption">Обнаружены файлы конфигурации игры</String>
-		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage"><![CDATA[Для %s возможно использовать виртуальную папку для %s. В папке "%s" обнаружены файлы, которые можно использовать для создания виртуальной папки.
+		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage"><![CDATA[Для %1 возможно использовать виртуальную папку для %2. В папке "%3" обнаружены файлы, которые можно использовать для создания виртуальной папки.
 
 Рекомендуется скопировать эти файлы]]></String>
 		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage2">настроек и сохранений</String>
@@ -274,18 +274,6 @@
 		<String ID="OpenLocation.Saves">Папка с сохранениями</String>
 		
 		<!-- ToolBar -->
-		<String ID="ToolBar.ConfigManager">Конфигурация игры</String>
-		<String ID="ToolBar.ModManager">Управление модами</String>
-		<String ID="ToolBar.PackageCreator">Создание установщиков</String>
-		<String ID="ToolBar.PackageManager">Установочные пакеты</String>
-		<String ID="ToolBar.PluginManager">Управление плагинами</String>
-		<String ID="ToolBar.PluginManagerShort">Плагины</String>
-		<String ID="ToolBar.ScreenshotsGalleryManager">Галерея скриншотов</String>
-		<String ID="ToolBar.SaveManager">Управление сохранениями</String>
-		<String ID="ToolBar.SaveManagerShort">Сохранения</String>
-		<String ID="ToolBar.DownloadManager">Менеджер загрузок</String>
-		<String ID="ToolBar.DownloadManagerShort">Загрузки</String>
-		<String ID="ToolBar.RunManager">Запуск программ</String>
 		<String ID="ToolBar.QuickSettingsMenu">Меню быстрых настроек</String>
 		<String ID="ToolBar.Help">Справка</String>
 		
@@ -314,13 +302,14 @@
 		<String ID="TextEditor.ToolBar.Heading">Заголовок</String>
 
 		<!-- Config manager -->
-		<String ID="ConfigManager.EditValue.EnterVirtualKey"><![CDATA[Выберите значение из списка ниже или нажмите
-нужную клавишу на клавиутуре]]></String>
+		<String ID="ConfigManager.Name">Конфигурация игры</String>
+		
+		<String ID="ConfigManager.EditValue.EnterVirtualKey">Выберите значение из списка ниже или нажмите нужную клавишу на клавиутуре</String>
 		<String ID="ConfigManager.EditValue.ValuesRange">Допустимые значения</String>
 		<String ID="ConfigManager.EditValue.Success">Все параметры успешно сохранены</String>
 		<String ID="ConfigManager.EditValue.Error">Ошибка при сохранении параметров</String>
 		<String ID="ConfigManager.EditValue.Discarded">Изменения параметров отменены</String>
-		<String ID="ConfigManager.EditValue.Loading"><![CDATA[Загрузка "%s"]]></String>
+		<String ID="ConfigManager.EditValue.Loading">Загрузка "%1"</String>
 		<String ID="ConfigManager.EditValue.Saving">Сохранение...</String>
 		<String ID="ConfigManager.EditValue.ModifyValue">Изменить значение</String>
 		<String ID="ConfigManager.EditValue.CreateValue.Caption">Добавление параметра</String>
@@ -678,7 +667,7 @@
 		<String ID="GameConfig.Values.KeyScreenshot">Сделать скриншот</String>
 		<String ID="GameConfig.Values.KeyEditor">Вызов внутриигрового редактора параметров</String>
 		<String ID="GameConfig.Values.KeyFreeVRAM">Освободить видеопамять</String>
-		<String ID="GameConfig.Values.KeyBruteForce"><![CDATA[Активация пресета "грубая сила"]]></String>
+		<String ID="GameConfig.Values.KeyBruteForce">Активация пресета "грубая сила"</String>
 		
 		<!-- ENB: Fixes -->
 		<String ID="GameConfig.Values.FixPhysics">Исправлять физику</String>
@@ -740,28 +729,34 @@
 		<String ID="GameConfig.Values.EnableMultipleWeathers">Использовать разные погодные конфигурации</String>
 		<String ID="GameConfig.Values.EnableLocationWeather">Использовать погодные конфигурации в зависимости от локации</String>
 	
-		<!-- Run Manager -->
-		<String ID="RunManager.FileNotFound">Не удалось найти файл для запуска</String>
-		<String ID="RunManager.PreMainFileNotFound1">Не удалось найти некоторые программы для предварительного запуска</String>
-		<String ID="RunManager.PreMainFileNotFound2">Установите требуемые программы или отключите их запуск.</String>
-		<String ID="RunManager.NoPrograms">Нет доступных программ</String>
-		<String ID="RunManager.ExecutingPreMain">Запуск предварительных программ</String>
-		<String ID="RunManager.ExecutingMain">Запуск основной программы</String>
-		<String ID="RunManager.Executing">Запуск $(Name)</String>
-		<String ID="RunManager.PreparingRun">Подготовка</String>
-		<String ID="RunManager.RunFailed">Не удалось создать процесс</String>
-		<String ID="RunManager.WaitingReturn">Ожидание завершения</String>
-		<String ID="RunManager.WaitingReturnAttach">Ожидание завершения вспомогательной программы для присоединения к основному процессу</String>
-		<String ID="RunManager.TryAttach">Попытка прикрепления к основному процессу</String>
-		<String ID="RunManager.TryAttachFailed">Не удалось прикрепиться к основному процессу</String>
-		<String ID="RunManager.Terminated">Программа завершила работу с кодом %d</String>
+		<!-- Program Manager -->
+		<String ID="ProgramManager.Name">Менеджер программ</String>
+		<String ID="ProgramManager.NameShort">Программы</String>
 		
-		<String ID="RunManager.List.RequiresVFS">Требует VFS</String>
-		<String ID="RunManager.List.Arguments">Аргументы командной строки</String>
-		<String ID="RunManager.List.Executable">Исполняемый файл</String>
-		<String ID="RunManager.List.WorkingDirectory">Рабочая папка</String>
+		<String ID="ProgramManager.FileNotFound">Не удалось найти файл для запуска</String>
+		<String ID="ProgramManager.PreMainFileNotFound1">Не удалось найти некоторые программы для предварительного запуска</String>
+		<String ID="ProgramManager.PreMainFileNotFound2">Установите требуемые программы или отключите их запуск.</String>
+		<String ID="ProgramManager.NoPrograms">Нет доступных программ</String>
+		<String ID="ProgramManager.ExecutingPreMain">Запуск предварительных программ</String>
+		<String ID="ProgramManager.ExecutingMain">Запуск основной программы</String>
+		<String ID="ProgramManager.Executing">Запуск $(Name)</String>
+		<String ID="ProgramManager.PreparingRun">Подготовка</String>
+		<String ID="ProgramManager.RunFailed">Не удалось создать процесс</String>
+		<String ID="ProgramManager.WaitingReturn">Ожидание завершения</String>
+		<String ID="ProgramManager.WaitingReturnAttach">Ожидание завершения вспомогательной программы для присоединения к основному процессу</String>
+		<String ID="ProgramManager.TryAttach">Попытка прикрепления к основному процессу</String>
+		<String ID="ProgramManager.TryAttachFailed">Не удалось прикрепиться к основному процессу</String>
+		<String ID="ProgramManager.Terminated">Программа завершила работу с кодом %1</String>
+		
+		<String ID="ProgramManager.List.RequiresVFS">Требует VFS</String>
+		<String ID="ProgramManager.List.Arguments">Аргументы командной строки</String>
+		<String ID="ProgramManager.List.Executable">Исполняемый файл</String>
+		<String ID="ProgramManager.List.WorkingDirectory">Рабочая папка</String>
 		
 		<!-- Mod Manager -->
+		<String ID="ModManager.Name">Управление модами</String>
+		<String ID="ModManager.NameShort">Моды</String>
+		
 		<String ID="ModManager.ExtractingPackageFiles">Распаковка файлов установщика</String>
 		<String ID="ModManager.TagsDialog">Изменение тегов</String>
 		<String ID="ModManager.SitesEditor">Изменение сайтов</String>
@@ -844,7 +839,7 @@
 		<String ID="ModManager.NewMod.NewEmptyMod">Новый пустой мод</String>
 		<String ID="ModManager.NewMod.NewModFromFolder">Новый мод из имеющихся файлов</String>
 		<String ID="ModManager.NewMod.InstallPackage">Выбрать установщик</String>
-		<String ID="ModManager.NewMod.ImportFrom">Импорт из %s</String>
+		<String ID="ModManager.NewMod.ImportFrom">Импорт из %1</String>
 		
 		<String ID="ModManager.NewMod.DialogCaption">Добавление нового мода</String>
 		<String ID="ModManager.NewMod.DialogMessage">Введите название мода</String>
@@ -857,14 +852,11 @@
 		<String ID="ModManager.NewMod.SelectedFolderNone">Папка не выбрана</String>
 		<String ID="ModManager.NewMod.CreateAsLinkedMod">Создать как ссылку</String>
 		
-		<String ID="ModManager.RemoveMod.CaptionUninstall"><![CDATA[Вы действительно хотите удалить "%s"?]]></String>
-		<String ID="ModManager.RemoveMod.CaptionUninstallAndErase"><![CDATA[Вы действительно хотите удалить "%s" и стереть запись о нём из журнала?]]></String>
-		<String ID="ModManager.RemoveMod.CaptionErase"><![CDATA[Вы действительно хотите стереть запись о моде "%s" из журнала?]]></String>
+		<String ID="ModManager.RemoveMod.CaptionUninstall">Вы действительно хотите удалить "%1"?</String>
+		<String ID="ModManager.RemoveMod.CaptionUninstallAndErase">Вы действительно хотите удалить "%1" и стереть запись о нём из журнала?</String>
+		<String ID="ModManager.RemoveMod.CaptionErase">Вы действительно хотите стереть запись о моде "%1" из журнала?</String>
 		<String ID="ModManager.RemoveMod.Message">Это действие невозможно отменить</String>
 		<String ID="ModManager.RemoveMod.RemovingMessage">Удаление данных мода</String>
-		
-		<String ID="ModManager.SaveChanges.Caption">Обнаружены несохранённые изменения</String>
-		<String ID="ModManager.SaveChanges.Message">Сохранить сейчас?</String>
 		
 		<String ID="ModManager.Menu.UninstallMod">Деинсталляция</String>
 		<String ID="ModManager.Menu.UninstallAndErase">Деинсталляция и удаление из журнала</String>
@@ -913,7 +905,7 @@
 		<String ID="ModManager.Import.TargetProfileMismatch">Текущая выбранная игра не совпадает с игрой, управляемой данным мод-менеджером. Выполняйте импорт на свой страх и риск.</String>
 		<String ID="ModManager.Import.TargetProfileNotFound">Не обнаружены данные об игре, управляемой данным мод-менеджером. Выполняйте импорт на свой страх и риск.</String>
 		<String ID="ModManager.Import.SkipExisingMods">Пропускать существующие моды</String>
-		<String ID="ModManager.Import.InfoFound">Обнаружены данные от %s. Выполнить импорт?</String>
+		<String ID="ModManager.Import.InfoFound">Обнаружены данные от %1. Выполнить импорт?</String>
 		<String ID="ModManager.Import.CanNotImport">Не обнаружены данные для импорта</String>
 		
 		<String ID="ModExplorer.Caption">Просмотр файлов</String>
@@ -929,18 +921,21 @@
 		<!-- Network -->
 		<String ID="Network.Provider">Поставщик</String>
 		
-		<String ID="Network.AuthCaption">Аутентификация на %s</String>
+		<String ID="Network.AuthCaption">Аутентификация на %1</String>
 		<String ID="Network.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
-		<String ID="Network.AuthSuccess">Аутентификация на %s успешно выполнена</String>
-		<String ID="Network.AuthFail">Не удалось выполнить аутентификацию на %s</String>
+		<String ID="Network.AuthSuccess">Аутентификация на %1 успешно выполнена</String>
+		<String ID="Network.AuthFail">Не удалось выполнить аутентификацию на %1</String>
 		
 		<String ID="Network.SignIn">Выполнить вход</String>
 		<String ID="Network.SignOut">Выйти из аккаунта</String>
 		<String ID="Network.SignedIn">Вход выполнен</String>
 		<String ID="Network.NotSignedIn">Вход не выполнен</String>
-		<String ID="Network.SignOutMessage">Вы действительно хотите выйти из аккаунта %s?</String>
+		<String ID="Network.SignOutMessage">Вы действительно хотите выйти из аккаунта %1?</String>
 
 		<!-- Download Manager -->
+		<String ID="DownloadManager.Name">Менеджер загрузок</String>
+		<String ID="DownloadManager.NameShort">Загрузки</String>
+		
 		<String ID="DownloadManager.DownloadLocation">Папка загрузок</String>
 		<String ID="DownloadManager.DownloadLocationInaccessible">Папка загрузок не указана или не существует. Выберите папку для сохранения загрузок.</String>
 		
@@ -963,7 +958,7 @@
 		<String ID="DownloadManager.Menu.HideInstalled">Скрыть все загрузки с установленными модами</String>
 		<String ID="DownloadManager.Menu.AssociateWithNXM">Ассоциировать NXM</String>
 		<String ID="DownloadManager.Menu.AssocianedWithNXM">Ассоциирован с NXM</String>
-		<String ID="DownloadManager.Menu.CopyNXM">Сопировать NXM-ссылку</String>
+		<String ID="DownloadManager.Menu.CopyNXM">Скопировать NXM-ссылку</String>
 
 		<!-- VFS -->
 		<String ID="VFSService.InitFailed">Не удалось загрузить библиотеку виртуальной файловой системы. Продолжение невозможно.</String>
@@ -998,11 +993,11 @@
 		<String ID="VFS.Error6">Неверная точка монтирования.</String>
 		<String ID="VFS.Error7">Запрошена несовместимая версия.</String>
 		<String ID="VFS.Error1000">Виртуальная файловая система не была запущена.</String>
-		<String ID="VFS.Error10000">Неизвестная ошибка</String>
+		<String ID="VFS.Error10000">Неизвестная ошибка.</String>
 
 		<!-- PluginManager -->
-		<String ID="PluginManager.SaveChanges.Caption">В порядке загрузки плагинов есть несохранённые изменения</String>
-		<String ID="PluginManager.SaveChanges.Message">Сохранить текущий порядок?</String>
+		<String ID="PluginManager.Name">Управление плагинами</String>
+		<String ID="PluginManager.NameShort">Плагины</String>
 		
 		<String ID="PluginManager.PluginType.Normal">Обычный</String>
 		<String ID="PluginManager.PluginType.Master">Мастер</String>
@@ -1018,13 +1013,16 @@
 		<String ID="PluginManager.Tools.ExportList">Экспорт списка плагинов</String>
 		<String ID="PluginManager.Tools.ExportListActive">Экспорт списка активных плагинов</String>
 		
-		<String ID="PluginManager.Sorting.Missing.Caption"><![CDATA[Программа "%s" не найдена на вашем компьютере]]></String>
+		<String ID="PluginManager.Sorting.Missing.Caption">Программа "%1" не найдена на вашем компьютере</String>
 		<String ID="PluginManager.Sorting.Missing.Message">Укажите путь к программе, чтобы выполнить сортировку.</String>
 		<String ID="PluginManager.Sorting.Waiting.Caption">Ожидание завершения</String>
 		
 		<String ID="PluginManager.LootAPI.CanNotUpdateMasterlist">Невозможно обновить мастерлист</String>
 
 		<!-- Screenshots Gallery -->
+		<String ID="ScreenshotsGallery.Name">Галерея скриншотов</String>
+		<String ID="ScreenshotsGallery.Name">Скриншоты</String>
+		
 		<String ID="ScreenshotsGallery.FileName">Имя файла</String>
 		<String ID="ScreenshotsGallery.FilePath">Путь к файлу</String>
 		
@@ -1063,8 +1061,10 @@
 		<String ID="SaveManager.Info.Karma">Карма</String>
 
 		<!-- Package Manager -->
-		<String ID="PackageManager">Менеджер пакетов</String>
-		
+		<String ID="PackageManager.Name">Менеджер пакетов</String>
+		<String ID="PackageManager.CreatorName">Создание установщиков</String>
+		<String ID="PackageManager.PackagesListName">Установочные пакеты</String>
+				
 		<String ID="PackageManager.ReqCategory.General">Основное</String>
 		<String ID="PackageManager.ReqCategory.DLC">DLC</String>
 		<String ID="PackageManager.ReqCategory.Conversions">Конверсии</String>
@@ -1093,7 +1093,7 @@
 		<String ID="PackageCreator.MenuBuild.UpdateInfo">Обновить информацию</String>
 		<String ID="PackageCreator.MenuBuild.Preview">Собрать для предпросмотра</String>
 
-		<String ID="PackageCreator.Build.Caption"><![CDATA[Сборка "%s"]]></String>
+		<String ID="PackageCreator.Build.Caption">Сборка "%1"</String>
 		<String ID="PackageCreator.Build.Complete">Сборка завершена</String>
 		<String ID="PackageCreator.Build.BuildError">Ошибка сборки</String>
 		<String ID="PackageCreator.Build.CheckError">При проверке проекта найдены ошибки</String>
@@ -1112,19 +1112,20 @@
 		<String ID="PackageCreator.AddFolder">Добавить папку</String>
 		<String ID="PackageCreator.AddMultipleFolders">Добавить несколько папок</String>
 		<String ID="PackageCreator.ImportFiles">Импорт файлов</String>
+		<String ID="PackageCreator.ImportFromFiles">Импорт из файлов</String>
 		
 		<String ID="PackageCreator.ImportFOMod">Импорт FOMod</String>
 		<String ID="PackageCreator.ExportFOMod">Экспорт FOMod</String>
 		<String ID="PackageCreator.ProjectFolder">Папка проекта</String>
 		<String ID="PackageCreator.NewStepDialog">Добавление нового этапа</String>
 		<String ID="PackageCreator.NewGroupDialog">Добавление новой группы</String>
-		<String ID="PackageCreator.RemoveStepDialog"><![CDATA[Вы уверены, что хотите удалить этап "%s"? Все группы, входящие в этот этап, также будут удалены.]]></String>
-		<String ID="PackageCreator.RemoveGroupDialog"><![CDATA[Вы уверены, что хотите удалить группу "%s"? Все элементы, входящие в эту группу, также будут удалены.]]></String>
+		<String ID="PackageCreator.RemoveStepDialog">Вы уверены, что хотите удалить этап "%1"? Все группы, входящие в этот этап, также будут удалены.</String>
+		<String ID="PackageCreator.RemoveGroupDialog">Вы уверены, что хотите удалить группу "%1"? Все элементы, входящие в эту группу, также будут удалены.</String>
 		
-		<String ID="PackageCreator.RemoveFlagDialog.Caption"><![CDATA[Удаление флага "%s"]]></String>
+		<String ID="PackageCreator.RemoveFlagDialog.Caption">Удаление флага "%1"></String>
 		<String ID="PackageCreator.RemoveFlagDialog.Message"><![CDATA[Удалить данный флаг из всего проекта? Удаление приведёт к удалению всех ссылок на этот флаг во всём проекте.
 
-Также можно переименовать флаг в "%s" и вручную изменить ссылки на него.]]></String>
+Также можно переименовать флаг в "%2" и вручную изменить ссылки на него.]]></String>
 		<String ID="PackageCreator.RemoveFlagDialog.Remove">Удалить во всём проекте</String>
 		<String ID="PackageCreator.RemoveFlagDialog.Rename">Выполнить переименование</String>
 
@@ -1225,8 +1226,8 @@
 		<String ID="PackageCreator.PageComponents.RemoveEntry">Удалить компонент</String>
 
 		<String ID="PackageCreator.PageComponents.AllSteps">Все этапы</String>
-		<String ID="PackageCreator.PageComponents.AllGroupsOf">Все группы этапа "%s"</String>
-		<String ID="PackageCreator.PageComponents.AllEntriesOf">Все компоненты группы "%s"</String>
+		<String ID="PackageCreator.PageComponents.AllGroupsOf">Все группы этапа "%1"</String>
+		<String ID="PackageCreator.PageComponents.AllEntriesOf">Все компоненты группы "%1"</String>
 		
 		<String ID="PackageCreator.PageComponents.FileData">Файлы</String>
 		<String ID="PackageCreator.PageComponents.Requirements">Требования</String>
@@ -1261,10 +1262,10 @@
 		<String ID="PackageCreator.TypeDescriptor.CouldBeUsable">Этот компонент может быть использован в текущей конфигурации, но его правильная работа не гарантируется. Например, не совпадают версии требуемых модов.</String>
 
 		<!-- Install Wizard -->
-		<String ID="InstallWizard.WindowCaption"><![CDATA[Установка "%s"]]></String>
+		<String ID="InstallWizard.WindowCaption">Установка "%1"></String>
 		<String ID="InstallWizard.CancelMessage">Вы уверены, что хотите отменить установку?</String>
-		<String ID="InstallWizard.InstallationComplete"><![CDATA[Установка "%s" завершена]]></String>
-		<String ID="InstallWizard.InstalledXOfY">Установлено %d из %d элементов</String>
+		<String ID="InstallWizard.InstallationComplete">Установка "%1" завершена></String>
+		<String ID="InstallWizard.InstalledXOfY">Установлено %1 из %2 элементов</String>
 		<String ID="InstallWizard.BackwardButton">Назад</String>
 		<String ID="InstallWizard.ForwardButton">Далее</String>
 		<String ID="InstallWizard.SelectDocumentHint">Выберите документ для просмотра</String>
@@ -1279,7 +1280,7 @@
 - Ваша копия $(NameShort) и набор установленных модов не удовлетворяют требованиям данного мода.
 - Вы выбрали неверную конфигурацию компонентов. В этом случае обратитесь к автору мода или создателю установочного пакета для решения проблемы.]]></String>
 		<String ID="InstallWizard.ChangeID.Invalid">Некорретный идентификатор</String>
-		<String ID="InstallWizard.ChangeID.Used"><![CDATA[Указанный идентификатор уже используется модом "%s"]]></String>
+		<String ID="InstallWizard.ChangeID.Used">Указанный идентификатор уже используется модом "%1"</String>
 		<String ID="InstallWizard.CollectedFiles.Caption">Будут установлены следующие файлы</String>
 		
 		<String ID="InstallWizard.Page.Info">Информация</String>
@@ -1290,7 +1291,7 @@
 		<String ID="InstallWizard.Page.Installing">Установка</String>
 		<String ID="InstallWizard.Page.Done">Завершение</String>
 		
-		<String ID="InstallWizard.LoadFailed.Caption"><![CDATA[Не удалось загрузить установочный пакет "%s"]]></String>
+		<String ID="InstallWizard.LoadFailed.Caption">Не удалось загрузить установочный пакет "%1"</String>
 		<String ID="InstallWizard.LoadFailed.Message">Возможно, файл повреждён или его формат не поддерживается.</String>
 
 		<String ID="InstallWizard.Reinstall.Caption">Переустановка мода</String>

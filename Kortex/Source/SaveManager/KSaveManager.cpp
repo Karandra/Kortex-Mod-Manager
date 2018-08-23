@@ -24,7 +24,7 @@ wxString KSaveManager::GetID() const
 }
 wxString KSaveManager::GetName() const
 {
-	return T("ToolBar.SaveManager");
+	return T("SaveManager.Name");
 }
 wxString KSaveManager::GetVersion() const
 {

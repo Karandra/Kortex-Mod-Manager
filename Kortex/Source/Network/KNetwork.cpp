@@ -157,7 +157,7 @@ void KNetwork::OnSignInOut(KxMenuEvent& event)
 	KNetworkProvider* provider = static_cast<KNetworkProvider*>(event.GetItem()->GetClientData());
 	if (provider->IsAuthenticated())
 	{
-		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, T("Network.SignOutMessage", provider->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, TF("Network.SignOutMessage").arg(provider->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (dialog.ShowModal() == KxID_YES)
 		{
 			provider->SignOut();

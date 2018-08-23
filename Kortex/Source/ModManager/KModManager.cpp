@@ -126,13 +126,13 @@ bool KModManager::InitMainVirtualFolder()
 				folders.push_back(entry->GetLocation(KMM_LOCATION_MOD_FILES));
 			}
 		}
-		return KIPCClient::Get().CreateVFS_Convergence(mountPoint, m_ModEntry_WriteTarget.GetLocation(KMM_LOCATION_MOD_FILES), folders, true);
+		return KIPCClient::GetInstance()->CreateVFS_Convergence(mountPoint, m_ModEntry_WriteTarget.GetLocation(KMM_LOCATION_MOD_FILES), folders, true);
 	}
 	return false;
 }
 bool KModManager::InitMirroredLocations()
 {
-	KIPCClient::Get().MirrorVFS_ClearList();
+	KIPCClient::GetInstance()->MirrorVFS_ClearList();
 
 	const KVirtualizationConfig* virtualizationConfig = KVirtualizationConfig::GetInstance();
 
@@ -152,7 +152,7 @@ bool KModManager::InitMirroredLocations()
 		const KVirtualizationEntry* entry = virtualizationConfig->GetEntryAt(KPVE_MIRRORED, i);
 		if (entry)
 		{
-			KIPCClient::Get().CreateVFS_Mirror(entry->GetSource(), entry->GetDestination());
+			KIPCClient::GetInstance()->CreateVFS_Mirror(entry->GetSource(), entry->GetDestination());
 		}
 	}
 	return true;
@@ -196,7 +196,7 @@ bool KModManager::CheckMountPoint(const wxString& folderPath)
 }
 void KModManager::ReportNonEmptyMountPoint(const wxString& folderPath)
 {
-	KxTaskDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, T("VFS.MountPointNotEmpty.Caption"), T("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
+	KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, T("VFS.MountPointNotEmpty.Caption"), T("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
 	dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
 	dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
 	dialog.SetExMessage(wxString::Format("<a href=\"%s\">%s</a>", folderPath, folderPath));
@@ -209,7 +209,7 @@ void KModManager::ReportNonEmptyMountPoint(const wxString& folderPath)
 }
 
 KModManager::KModManager(KWorkspace* workspace)
-	:m_VFSService(KApp::Get().GetVFSService()),	m_Options(this, "General"),
+	:m_Options(this, "General"),
 	m_ModEntry_BaseGame(std::numeric_limits<int>::min()), m_ModEntry_WriteTarget(std::numeric_limits<int>::max())
 {
 	// Mandatory locations
@@ -259,7 +259,7 @@ wxString KModManager::GetID() const
 }
 wxString KModManager::GetName() const
 {
-	return T("ToolBar.ModManager");
+	return T("ModManager.Name");
 }
 wxString KModManager::GetVersion() const
 {
@@ -268,11 +268,6 @@ wxString KModManager::GetVersion() const
 KWorkspace* KModManager::GetWorkspace() const
 {
 	return KModManagerWorkspace::GetInstance();
-}
-
-bool KModManager::IsOK() const
-{
-	return m_VFSService != NULL;
 }
 
 KModEntryArray KModManager::GetAllEntries(bool includeWriteTarget)
@@ -470,13 +465,13 @@ void KModManager::MountVFS()
 	CreateMountStatusDialog();
 	KApp::Get().CallAfter([this]()
 	{
-		wxWindowUpdateLocker lock(KApp::Get().GetMainWindow());
+		wxWindowUpdateLocker lock(KMainWindow::GetInstance());
 
 		// Init and mount
 		bool ok = InitMainVirtualFolder() && InitMirroredLocations();
 		if (ok)
 		{
-			KIPCClient::Get().EnableVFS();
+			KIPCClient::GetInstance()->EnableVFS();
 		}
 		else
 		{
@@ -489,8 +484,8 @@ void KModManager::UnMountVFS()
 	CreateMountStatusDialog();
 	KApp::Get().CallAfter([this]()
 	{
-		wxWindowUpdateLocker lock(KApp::Get().GetMainWindow());
-		KIPCClient::Get().DisableVFS();
+		wxWindowUpdateLocker lock(KMainWindow::GetInstance());
+		KIPCClient::GetInstance()->DisableVFS();
 	});
 }
 

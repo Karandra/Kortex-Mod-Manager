@@ -84,7 +84,7 @@ void KPackageManager::ExtractAcrhiveThreaded(wxWindow* window, const wxString& f
 		// Show warning message if something went wrong
 		if (self->GetClientData() == NULL)
 		{
-			KxTaskDialog dialog(window, KxID_NONE, T("InstallWizard.LoadFailed.Caption", outPath), T("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
+			KxTaskDialog dialog(window, KxID_NONE, TF("InstallWizard.LoadFailed.Caption").arg(outPath), T("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
 			dialog.ShowModal();
 		}
 	});
@@ -257,7 +257,7 @@ wxString KPackageManager::GetID() const
 }
 wxString KPackageManager::GetName() const
 {
-	return T("PackageManager");
+	return T("PackageManager.Name");
 }
 wxString KPackageManager::GetVersion() const
 {

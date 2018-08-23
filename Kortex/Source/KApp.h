@@ -14,7 +14,7 @@ class KProfile;
 class KLogEvent;
 class KMainWindow;
 class KModManager;
-class KRunManager;
+class KProgramManager;
 class KSettingsWindowManager;
 class KVirtualFileSystemService;
 class KCMConfigEntryStd;
@@ -43,7 +43,7 @@ class KApp: public KxApp<wxApp, KApp>
 		KDynamicVariablesTable m_Variables;
 		KProfile* m_CurrentProfile = NULL;
 		KMainWindow* m_MainWindow = NULL;
-		KRunManager* m_RunManager = NULL;
+		KProgramManager* m_RunManager = NULL;
 		KModManager* m_ModManager = NULL;
 		mutable KSettingsWindowManager* m_SettingsManager = NULL;
 		bool m_AllowSaveSettinsgAtExit = true;
@@ -124,23 +124,6 @@ class KApp: public KxApp<wxApp, KApp>
 		void SetCurrentConfigID(const wxString& configID);
 		void ConfigureInternetExplorer(bool init);
 
-		KMainWindow* GetMainWindow() const
-		{
-			return m_MainWindow;
-		}
-		KIPCClient* GetVFSServiceClient() const
-		{
-			return m_VFSServiceClient;
-		}
-		KVirtualFileSystemService* GetVFSService() const
-		{
-			return m_VFSService;
-		}
-		KRunManager* GetRunManager() const
-		{
-			return m_RunManager;
-		}
-
 		void BroadcastEvent(KBroadcastEvent& event);
 		void SubscribeBroadcasting(wxEvtHandler* pHandler, wxEventType type);
 		void SubscribeBroadcasting(wxWindow* window, wxEventType type);
@@ -181,64 +164,3 @@ class KApp: public KxApp<wxApp, KApp>
 		FILE* OpenLogFile();
 		void CleanupLogs();
 };
-
-//////////////////////////////////////////////////////////////////////////
-namespace
-{
-	template<class Type> wxString T_Fallback(const Type& id)
-	{
-		if constexpr(std::is_integral<Type>::value || std::is_enum<Type>::value)
-		{
-			return wxString::Format("$T(%d)", id);
-		}
-		else
-		{
-			return wxString::Format("$T(%s)", id);
-		}
-	}
-}
-
-template<class Type> wxString V(const Type& source)
-{
-	return KApp::Get().ExpandVariables(source);
-}
-template<class Type> wxString V(KProfile* profile, const Type& source)
-{
-	return profile->ExpandVariables(source);
-}
-
-template<class Type> wxString T(const Type& id)
-{
-	bool isSuccess = false;
-	wxString out = KxTranslation::GetString(id, &isSuccess);
-	if (isSuccess)
-	{
-		return V(out);
-	}
-	else
-	{
-		return T_Fallback(id);
-	}
-}
-template<class Type> wxString T(KProfile* profile, const Type& id)
-{
-	bool isSuccess = false;
-	wxString out = KxTranslation::GetString(id, &isSuccess);
-	if (isSuccess)
-	{
-		return V(profile, out);
-	}
-	else
-	{
-		return T_Fallback(id);
-	}
-}
-
-template<class Type, class ...Args> wxString T(const Type& id, Args... args)
-{
-	return wxString::Format(T(id), std::forward<Args>(args)...);
-}
-template<class Type, class ...Args> wxString T(KProfile* profile, const Type& id, Args... args)
-{
-	return wxString::Format(T(profile, id), std::forward<Args>(args)...);
-}

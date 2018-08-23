@@ -12,7 +12,7 @@ class KLocationsManagerConfig;
 class KConfigManagerConfig;
 class KVirtualizationConfig;
 class KPackageManagerConfig;
-class KRunManagerConfig;
+class KProgramManagerConfig;
 class KPluginManagerConfig;
 class KScreenshotsGalleryConfig;
 class KSaveManagerConfig;
@@ -80,7 +80,7 @@ class KProfile
 		KConfigManagerConfig* m_GameConfig = NULL;
 		KVirtualizationConfig* m_VirtualizationConfig = NULL;
 		KPackageManagerConfig* m_PackageManagerConfig = NULL;
-		KRunManagerConfig* m_RunConfig = NULL;
+		KProgramManagerConfig* m_ProgramConfig = NULL;
 		KPluginManagerConfig* m_PluginManagerConfig = NULL;
 		KScreenshotsGalleryConfig* m_ScreenshotsGallery = NULL;
 		KSaveManagerConfig* m_SaveManagerConfig = NULL;

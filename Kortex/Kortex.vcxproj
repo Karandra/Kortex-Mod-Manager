@@ -29,6 +29,7 @@
     <ClCompile Include="Source\IPC\KIPCConnection.cpp" />
     <ClCompile Include="Source\IPC\KIPCRequest.cpp" />
     <ClCompile Include="Source\IPC\KIPCServer.cpp" />
+    <ClCompile Include="Source\KTranslation.cpp" />
     <ClCompile Include="Source\ModManager\KFileTreeNode.cpp" />
     <ClCompile Include="Source\ModManager\KFixedModEntry.cpp" />
     <ClCompile Include="Source\ModManager\KMirroredVirtualFolder.cpp" />
@@ -65,8 +66,6 @@
     <ClCompile Include="Source\PluginManager\LOOT API\KLootAPI.cpp" />
     <ClCompile Include="Source\Profile\KNetworkConfig.cpp" />
     <ClCompile Include="Source\Profile\KProfileID.cpp" />
-    <ClCompile Include="Source\RunManager\KRunManagerWorkspace.cpp" />
-    <ClCompile Include="Source\RunManager\KRunManagerWorkspaceView.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerModel.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerTags.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerWorkspace.cpp" />
@@ -83,6 +82,9 @@
     <ClCompile Include="Source\PackageCreator\KPackageCreatorController.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCCConditionalStepsModel.cpp" />
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerSMI.cpp" />
+    <ClCompile Include="Source\ProgramManager\KProgramManager.cpp" />
+    <ClCompile Include="Source\ProgramManager\KProgramManagerModel.cpp" />
+    <ClCompile Include="Source\ProgramManager\KProgramManagerWorkspace.cpp" />
     <ClCompile Include="Source\SaveManager\KSaveManagerListModel.cpp" />
     <ClCompile Include="Source\Utility\KINetFSHandler.cpp" />
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp" />
@@ -149,11 +151,10 @@
     <ClCompile Include="Source\Profile\KProfile.cpp" />
     <ClCompile Include="Source\Profile\KConfigManagerConfig.cpp" />
     <ClCompile Include="Source\Profile\KPluginManagerConfig.cpp" />
-    <ClCompile Include="Source\Profile\KRunManagerConfig.cpp" />
+    <ClCompile Include="Source\Profile\KProgramManagerConfig.cpp" />
     <ClCompile Include="Source\Profile\KSaveManagerConfig.cpp" />
     <ClCompile Include="Source\Profile\KScreenshotsGalleryConfig.cpp" />
     <ClCompile Include="Source\Profile\KVirtualizationConfig.cpp" />
-    <ClCompile Include="Source\RunManager\KRunManager.cpp" />
     <ClCompile Include="Source\SaveManager\KSaveManager.cpp" />
     <ClCompile Include="Source\UI\KAboutDialog.cpp" />
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="Source\IPC\KIPCRequest.h" />
     <ClInclude Include="Source\IPC\KIPCServer.h" />
     <ClInclude Include="Source\KRTTI.h" />
+    <ClInclude Include="Source\KTranslation.h" />
     <ClInclude Include="Source\ModManager\KFileTreeNode.h" />
     <ClInclude Include="Source\ModManager\KFixedModEntry.h" />
     <ClInclude Include="Source\ModManager\KMirroredVirtualFolder.h" />
@@ -255,12 +257,13 @@
     <ClInclude Include="Source\PluginManager\LOOT API\KLootAPI.h" />
     <ClInclude Include="Source\Profile\KNetworkConfig.h" />
     <ClInclude Include="Source\Profile\KProfileID.h" />
-    <ClInclude Include="Source\RunManager\KRunManagerWorkspace.h" />
-    <ClInclude Include="Source\RunManager\KRunManagerWorkspaceView.h" />
     <ClInclude Include="Source\ModManager\KModManagerModel.h" />
     <ClInclude Include="Source\ModManager\KModManagerModelNode.h" />
     <ClInclude Include="Source\ModManager\KModManagerTags.h" />
     <ClInclude Include="Source\ModManager\KModManagerWorkspace.h" />
+    <ClInclude Include="Source\ProgramManager\KProgramManager.h" />
+    <ClInclude Include="Source\ProgramManager\KProgramManagerModel.h" />
+    <ClInclude Include="Source\ProgramManager\KProgramManagerWorkspace.h" />
     <ClInclude Include="Source\SaveManager\KSaveManagerListModel.h" />
     <ClInclude Include="Source\Utility\KComparator.h" />
     <ClInclude Include="Source\Utility\KINetFSHandler.h" />
@@ -352,11 +355,10 @@
     <ClInclude Include="Source\Profile\KProfile.h" />
     <ClInclude Include="Source\Profile\KConfigManagerConfig.h" />
     <ClInclude Include="Source\Profile\KPluginManagerConfig.h" />
-    <ClInclude Include="Source\Profile\KRunManagerConfig.h" />
+    <ClInclude Include="Source\Profile\KProgramManagerConfig.h" />
     <ClInclude Include="Source\Profile\KSaveManagerConfig.h" />
     <ClInclude Include="Source\Profile\KScreenshotsGalleryConfig.h" />
     <ClInclude Include="Source\Profile\KVirtualizationConfig.h" />
-    <ClInclude Include="Source\RunManager\KRunManager.h" />
     <ClInclude Include="Source\SaveManager\KSaveManager.h" />
     <ClInclude Include="Source\UI\KAboutDialog.h" />
     <ClInclude Include="Source\UI\KImageViewerDialog.h" />

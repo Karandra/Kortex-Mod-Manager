@@ -156,7 +156,7 @@ wxString  KScreenshotsGalleryWorkspace::GetID() const
 }
 wxString  KScreenshotsGalleryWorkspace::GetName() const
 {
-	return T("ToolBar.ScreenshotsGalleryManager");
+	return T("ScreenshotsGallery.Name");
 }
 
 void KScreenshotsGalleryWorkspace::DisplayInfo(const wxString& filePath)

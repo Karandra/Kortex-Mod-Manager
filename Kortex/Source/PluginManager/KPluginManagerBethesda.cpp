@@ -10,7 +10,7 @@
 #include "UI/KWorkspaceController.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModEntry.h"
-#include "RunManager/KRunManager.h"
+#include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManagerDispatcher.h"
 #include "Profile/KPluginManagerConfig.h"
 #include "KApp.h"

@@ -3,19 +3,19 @@
 #include "UI/KWorkspace.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
-class KRunManagerWorkspaceView;
+class KProgramManagerModel;
 
-class KRunManagerWorkspace: public KWorkspace, public KxSingletonPtr<KRunManagerWorkspace>
+class KProgramManagerWorkspace: public KWorkspace, public KxSingletonPtr<KProgramManagerWorkspace>
 {
 	private:
 		KProgramOptionUI m_ProgramListViewOptions;
 
 		wxBoxSizer* m_MainSizer = NULL;
-		KRunManagerWorkspaceView* m_ViewModel = NULL;
+		KProgramManagerModel* m_ViewModel = NULL;
 
 	public:
-		KRunManagerWorkspace(KMainWindow* mainWindow);
-		virtual ~KRunManagerWorkspace();
+		KProgramManagerWorkspace(KMainWindow* mainWindow);
+		virtual ~KProgramManagerWorkspace();
 		virtual bool OnCreateWorkspace() override;
 
 	private:

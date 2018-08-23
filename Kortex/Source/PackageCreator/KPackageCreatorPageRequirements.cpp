@@ -73,7 +73,7 @@ void KPackageCreatorPageRequirements::CreateGroupsControls()
 	m_DefaultGroupsButton = new KxButton(this, KxID_NONE, T("PackageCreator.PageRequirements.DefaultGroups"));
 	m_DefaultGroupsButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		KPCCRequirementsSelectorModelDialog dialog(KApp::Get().GetMainWindow(), m_DefaultGroupsButton->GetLabel(), m_Controller);
+		KPCCRequirementsSelectorModelDialog dialog(KMainWindow::GetInstance(), m_DefaultGroupsButton->GetLabel(), m_Controller);
 		dialog.SetDataVector(GetProjectRequirements().GetDefaultGroup(), &m_Controller->GetProject()->GetRequirements());
 		if (dialog.ShowModal() == KxID_OK)
 		{

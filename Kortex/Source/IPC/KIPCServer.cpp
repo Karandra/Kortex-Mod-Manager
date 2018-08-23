@@ -8,12 +8,8 @@
 #include "VFS/KVirtualFileSystemConvergence.h"
 #include <KxFramework/KxFile.h>
 
-#if KIPC_SERVER
-KIPCServer& KIPCServer::Get()
-{
-	return *KApp::Get().GetServer();
-}
-#endif
+KxSingletonPtr_Define(KIPCServer);
+
 wxString KIPCServer::GetClientFileName()
 {
 	wxString path = "Kortex";

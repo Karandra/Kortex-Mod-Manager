@@ -235,7 +235,7 @@ wxString KPackageCreatorWorkspace::GetID() const
 }
 wxString KPackageCreatorWorkspace::GetName() const
 {
-	return T("ToolBar.PackageCreator");
+	return T("PackageManager.CreatorName");
 }
 
 KPackageCreatorPageBase* KPackageCreatorWorkspace::GetCurrentPage() const

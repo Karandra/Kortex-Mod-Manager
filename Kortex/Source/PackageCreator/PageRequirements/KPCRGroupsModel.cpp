@@ -244,7 +244,7 @@ void KPCRGroupsModel::OnRemoveGroup(const KxDataViewItem& item)
 {
 	if (KPPRRequirementsGroup* group = GetDataEntry(item))
 	{
-		KxTaskDialog dialog(m_Controller->GetWorkspace(), KxID_NONE, T("PackageCreator.RemoveGroupDialog", group->GetID()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		KxTaskDialog dialog(m_Controller->GetWorkspace(), KxID_NONE, TF("PackageCreator.RemoveGroupDialog").arg(group->GetID()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (dialog.ShowModal() == KxID_YES)
 		{
 			if (IsEmpty())

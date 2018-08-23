@@ -189,7 +189,7 @@ void KPCIImagesListModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (entry && entry->HasBitmap())
 				{
-					KImageViewerDialog dialog(KApp::Get().GetMainWindow(), entry->GetPath());
+					KImageViewerDialog dialog(KMainWindow::GetInstance(), entry->GetPath());
 					
 					KImageViewerEvent imageEvent;
 					imageEvent.SetFilePath(entry->GetPath());
@@ -203,7 +203,7 @@ void KPCIImagesListModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (entry)
 				{
-					KxFileBrowseDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN);
+					KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 					dialog.SetFolder(entry->GetPath().BeforeLast('\\'));
 					dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), T("FileFilter.Images"));
 					dialog.AddFilter("*", T("FileFilter.AllFiles"));
@@ -223,7 +223,7 @@ void KPCIImagesListModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (entry)
 				{
-					KTextEditorDialog dialog(KApp::Get().GetMainWindow());
+					KTextEditorDialog dialog(KMainWindow::GetInstance());
 					dialog.SetText(entry->GetDescriptionRaw());
 					if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 					{
@@ -325,7 +325,7 @@ void KPCIImagesListModel::OnAllItemsMenuSelect(KxDataViewColumn* column)
 
 void KPCIImagesListModel::OnImportFiles()
 {
-	KxFileBrowseDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
+	KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN_FOLDER);
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		GetView()->Freeze();

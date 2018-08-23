@@ -629,7 +629,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KPCCFlagsSelectorModelDialog dialog(KApp::Get().GetMainWindow(), column->GetTitle(), m_Controller, true);
+						KPCCFlagsSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller, true);
 						dialog.SetDataVector(entry->GetAssignedFlags());
 						dialog.ShowModal();
 						NotifyChangedItem(item);
@@ -640,7 +640,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KPCCFlagsTDSelectorModelDialog dialog(KApp::Get().GetMainWindow(), column->GetTitle(), m_Controller, entry);
+						KPCCFlagsTDSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller, entry);
 						dialog.SetDataVector(entry->GetTDConditions());
 						dialog.ShowModal();
 						NotifyChangedItem(item);
@@ -651,7 +651,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KPCCFileDataSelectorModelDialog dialog(KApp::Get().GetMainWindow(), column->GetTitle(), m_Controller);
+						KPCCFileDataSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller);
 						dialog.SetDataVector(entry->GetFileData(), &m_Controller->GetProject()->GetFileData());
 						if (dialog.ShowModal() == KxID_OK)
 						{
@@ -665,7 +665,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KPCCRequirementsSelectorModelDialog dialog(KApp::Get().GetMainWindow(), column->GetTitle(), m_Controller);
+						KPCCRequirementsSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller);
 						dialog.SetDataVector(entry->GetRequirements(), &m_Controller->GetProject()->GetRequirements());
 						if (dialog.ShowModal() == KxID_OK)
 						{
@@ -679,7 +679,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KTextEditorDialog dialog(KApp::Get().GetMainWindow());
+						KTextEditorDialog dialog(KMainWindow::GetInstance());
 						dialog.SetText(entry->GetDescription());
 						if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 						{
@@ -726,7 +726,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 				CreateAllItemsMenuEntry(allItemsMenu, parent, T("Generic.Name"), &KPCComponentsModel::AllGroups_Name);
 				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.SelectionMode"), &KPCComponentsModel::AllGroups_SelectionMode);
 
-				KxMenuItem* item = contextMenu.Add(allItemsMenu, T("PackageCreator.PageComponents.AllGroupsOf", parent->GetStep()->GetName()));
+				KxMenuItem* item = contextMenu.Add(allItemsMenu, TF("PackageCreator.PageComponents.AllGroupsOf").arg(parent->GetStep()->GetName()));
 				item->SetBitmap(KGetBitmap(KIMG_FOLDER));
 			}
 		}
@@ -745,7 +745,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.Conditions"), &KPCComponentsModel::AllEntries_Conditions);
 				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.AssignedFlags"), &KPCComponentsModel::AllEntries_AssignedFlags);
 
-				KxMenuItem* item = contextMenu.Add(allItemsMenu, T("PackageCreator.PageComponents.AllEntriesOf", parent->GetGroup()->GetName()));
+				KxMenuItem* item = contextMenu.Add(allItemsMenu, TF("PackageCreator.PageComponents.AllEntriesOf").arg(parent->GetGroup()->GetName()));
 				item->SetBitmap(KGetBitmap(KIMG_BLOCK));
 				item->SetClientData(node);
 			}
@@ -1054,7 +1054,7 @@ void KPCComponentsModel::AddEntriesFromFiles(KPCComponentsModelNode* node, KxDat
 }
 void KPCComponentsModel::RemoveStep(KPCComponentsModelNode* node, const KPPCStep* step)
 {
-	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, T("PackageCreator.RemoveStepDialog", step->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, TF("PackageCreator.RemoveStepDialog").arg(step->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (dialog.ShowModal() == KxID_YES)
 	{
 		KPPCStepArray& steps = GetComponents().GetSteps();
@@ -1067,7 +1067,7 @@ void KPCComponentsModel::RemoveStep(KPCComponentsModelNode* node, const KPPCStep
 }
 void KPCComponentsModel::RemoveGroup(KPCComponentsModelNode* node, const KPPCGroup* group)
 {
-	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, T("PackageCreator.RemoveGroupDialog", group->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, TF("PackageCreator.RemoveGroupDialog").arg(group->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (dialog.ShowModal() == KxID_YES)
 	{
 		KPPCGroupArray& groups = node->GetParent()->GetStep()->GetGroups();

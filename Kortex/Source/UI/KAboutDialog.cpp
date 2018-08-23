@@ -51,7 +51,7 @@ wxWindow* KAboutDialog::CreateTab_Info()
 	wxString iconPacks;
 	auto AddIconPack = [&iconPacks](const char* sPackName, const char* sAuthorName, const char* url)
 	{
-		iconPacks << T("About.Info.IconPack", sPackName, wxString::Format("<a href=\"%s\">%s</a>", url, sAuthorName));
+		iconPacks << TF("About.Info.IconPack").arg(sPackName).arg(wxString::Format("<a href=\"%s\">%s</a>", url, sAuthorName));
 		iconPacks << "<br>";
 	};
 	AddIconPack("Fugue Icons", "Yusuke Kamiyamane", "http://p.yusukekamiyamane.com");
@@ -157,7 +157,7 @@ wxWindow* KAboutDialog::CreateTab_Permissions()
 		return link;
 	};
 
-	wxString firstPart = T("About.Permissions", MakeLink(sSiteNameTA, sSiteTA), sSiteNameTA, MakeLink(T("About.Permissions.ContactMethod"), sDeveloperProfileTA));
+	wxString firstPart = TF("About.Permissions").arg(MakeLink(sSiteNameTA, sSiteTA)).arg(sSiteNameTA).arg(MakeLink(T("About.Permissions.ContactMethod"), sDeveloperProfileTA));
 	wxString secondPart1 = MakePageLink(T("About.Permissions.DownloadPage"), sDownloadPageTA, sSiteNameTA);
 	wxString secondPart2 = MakePageLink(T("About.Permissions.DownloadPage"), sDownloadPageNexus, sSiteNameNexus);
 	wxString secondPart3 = MakePageLink(T("About.Permissions.SupportPage"), sSupportPageTA, sSiteNameTA);

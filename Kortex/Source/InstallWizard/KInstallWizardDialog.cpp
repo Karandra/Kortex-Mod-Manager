@@ -30,7 +30,7 @@ enum ComponentsTabIndex
 
 void KInstallWizardDialog::ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath)
 {
-	KxTaskDialog dialog(window, KxID_NONE, T("InstallWizard.LoadFailed.Caption", packagePath), T("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
+	KxTaskDialog dialog(window, KxID_NONE, TF("InstallWizard.LoadFailed.Caption").arg(packagePath), T("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
 	dialog.ShowModal();
 }
 
@@ -324,7 +324,7 @@ bool KInstallWizardDialog::LoadPackage()
 		/* Info and misc */
 		
 		// Window caption
-		SetCaption(T("InstallWizard.WindowCaption", m_Package->GetName()) + ' ' + info.GetVersion());
+		SetCaption(TF("InstallWizard.WindowCaption").arg(m_Package->GetName()) + ' ' + info.GetVersion());
 
 		// Try to find existing mod for this package
 		m_ExistingMod = KModManager::Get().FindMod(GetConfig().ComputeModID());
@@ -1229,8 +1229,8 @@ void KInstallWizardDialog::OnMajorProgress(KxFileOperationEvent& event)
 	}
 
 	int64_t current = event.GetMajorProcessed();
-	int64_t nMax = event.GetMajorTotal();
-	m_Installing_MajorStatus->SetLabel(T("InstallWizard.InstalledXOfY", (int)current, (int)nMax) + ". " + event.GetSource());
+	int64_t max = event.GetMajorTotal();
+	m_Installing_MajorStatus->SetLabel(TF("InstallWizard.InstalledXOfY").arg(current).arg(max) + ". " + event.GetSource());
 }
 
 void KInstallWizardDialog::SetModEntryData()
@@ -1305,13 +1305,13 @@ void KInstallWizardDialog::RunInstall()
 		installLocation.RemoveLast(1);
 	}
 
-	auto NotifyMajor = [this](size_t current, size_t nMax, const wxString& sStatus)
+	auto NotifyMajor = [this](size_t current, size_t max, const wxString& sStatus)
 	{
 		KxFileOperationEvent* event = new KxFileOperationEvent(KxEVT_ARCHIVE);
 		event->SetEventObject(this);
 		event->SetSource(sStatus.Clone());
 		event->SetMajorProcessed(current);
-		event->SetMajorTotal(nMax);
+		event->SetMajorTotal(max);
 		QueueEvent(event);
 	};
 
@@ -1488,7 +1488,7 @@ void KInstallWizardDialog::SwitchPage(KInstallWizardPages page)
 				m_ForwardButton->Enable();
 
 				m_ForwardButton->SetLabel(T(KxID_CLOSE));
-				m_Done_Label->SetLabel(T("InstallWizard.InstallationComplete", m_Package->GetName()));
+				m_Done_Label->SetLabel(TF("InstallWizard.InstallationComplete").arg(m_Package->GetName()));
 
 				m_CurrentPage = page;
 				SetLabelByCurrentPage();

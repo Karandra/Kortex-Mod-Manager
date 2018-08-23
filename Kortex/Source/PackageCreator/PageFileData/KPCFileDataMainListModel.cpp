@@ -224,7 +224,7 @@ void KPCFileDataMainListModel::OnActivateItem(KxDataViewEvent& event)
 				KPPFFileEntry* entry = GetDataEntry(GetRow(event.GetItem()));
 				if (entry)
 				{
-					KxFileBrowseDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN);
+					KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 					if (entry->ToFolderEntry())
 					{
 						dialog.SetFolder(entry->GetSource());
@@ -386,7 +386,7 @@ void KPCFileDataMainListModel::OnAllItemsMenuSelect(KxDataViewColumn* column)
 
 void KPCFileDataMainListModel::OnAddFile()
 {
-	KxFileBrowseDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN);
+	KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 	dialog.AddFilter("*", T("FileFilter.AllFiles"));
 	if (dialog.ShowModal() == KxID_OK)
 	{
@@ -412,7 +412,7 @@ void KPCFileDataMainListModel::OnAddFile()
 }
 void KPCFileDataMainListModel::OnAddFolder()
 {
-	KxFileBrowseDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
+	KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN_FOLDER);
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		wxString source = dialog.GetResult();
@@ -446,7 +446,7 @@ void KPCFileDataMainListModel::OnAddFolder()
 }
 void KPCFileDataMainListModel::OnAddMultipleFolders()
 {
-	KxFileBrowseDialog dialog(KApp::Get().GetMainWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
+	KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN_FOLDER);
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		wxString source = dialog.GetResult();

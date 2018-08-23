@@ -13,6 +13,9 @@
 #pragma comment(lib, "KxVirtualFileSystem.lib")
 #endif
 
+//////////////////////////////////////////////////////////////////////////
+KxSingletonPtr_Define(KVirtualFileSystemService);
+
 wxString KVirtualFileSystemService::GetLibraryVersion()
 {
 	return KxVFSService::GetLibraryVersion();

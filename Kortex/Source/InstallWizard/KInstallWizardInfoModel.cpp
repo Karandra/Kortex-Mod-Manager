@@ -169,7 +169,7 @@ bool KInstallWizardInfoModel::CheckModID(const wxString& id)
 	{
 		if (exisingMod != m_InstallWizard.GetExistingMod())
 		{
-			KxTaskDialog msg(GetViewTLW(), KxID_NONE, T("InstallWizard.ChangeID.Used", exisingMod->GetName()), wxEmptyString, KxBTN_OK, KxICON_WARNING);
+			KxTaskDialog msg(GetViewTLW(), KxID_NONE, TF("InstallWizard.ChangeID.Used").arg(exisingMod->GetName()), wxEmptyString, KxBTN_OK, KxICON_WARNING);
 			msg.ShowModal();
 			return false;
 		}

@@ -272,11 +272,11 @@ wxString KSaveManagerWorkspace::GetID() const
 }
 wxString KSaveManagerWorkspace::GetName() const
 {
-	return T("ToolBar.SaveManager");
+	return T("SaveManager.Name");
 }
 wxString KSaveManagerWorkspace::GetNameShort() const
 {
-	return T("ToolBar.SaveManagerShort");
+	return T("SaveManager.NameShort");
 }
 
 void KSaveManagerWorkspace::LoadData()

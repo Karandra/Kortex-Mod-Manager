@@ -368,7 +368,7 @@ wxString KDownloadManager::GetID() const
 }
 wxString KDownloadManager::GetName() const
 {
-	return T("ToolBar.DownloadManager");
+	return T("DownloadManager.Name");
 }
 wxString KDownloadManager::GetVersion() const
 {

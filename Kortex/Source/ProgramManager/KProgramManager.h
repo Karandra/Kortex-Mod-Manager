@@ -4,15 +4,16 @@
 #include "KWithBitmap.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxMenu.h>
-class KRunManagerConfig;
-class KRunManagerWorkspaceView;
+#include <KxFramework/KxSingleton.h>
+class KProgramManagerConfig;
+class KProgramManagerModel;
 class KVFSEvent;
 class KxMenu;
 class KxMenuItem;
 class KxProgressDialog;
 class KxProcess;
 
-class KRunManagerProgram: public KWithBitmap
+class KProgramManagerEntry: public KWithBitmap
 {
 	private:
 		wxString m_Name;
@@ -23,8 +24,8 @@ class KRunManagerProgram: public KWithBitmap
 		bool m_RequiresVFS = true;
 
 	public:
-		KRunManagerProgram();
-		KRunManagerProgram(const KxXMLNode& node);
+		KProgramManagerEntry();
+		KProgramManagerEntry(const KxXMLNode& node);
 
 	public:
 		bool IsOK() const;
@@ -84,15 +85,14 @@ class KRunManagerProgram: public KWithBitmap
 			m_RequiresVFS = value;
 		}
 };
-typedef std::vector<KRunManagerProgram> KRMProgramEntryArray;
+typedef std::vector<KProgramManagerEntry> KRMProgramEntryArray;
 
 //////////////////////////////////////////////////////////////////////////
-class KRunManager: public wxEvtHandler, public KManager
+class KProgramManager: public wxEvtHandler, public KManager, public KxSingletonPtr<KProgramManager>
 {
-	friend class KRunManagerWorkspaceView;
+	friend class KProgramManagerModel;
 
 	public:
-		static KRunManager& Get();
 		static wxString GetProgramsListFile(const wxString& templateID, const wxString& configID);
 
 	public:
@@ -100,15 +100,15 @@ class KRunManager: public wxEvtHandler, public KManager
 		static const int ms_DefaultPreMainTimeout = 500;
 
 	public:
-		static const KRunManagerConfig* GetRunConfig();
+		static const KProgramManagerConfig* GetRunConfig();
 		static wxString GetKExecutePath();
 		static void InitKExecute(KxProcess& process, const wxString& executable, const wxString& arguments = wxEmptyString, const wxString& workingDirectory = wxEmptyString);
-		static void InitKExecute(KxProcess& process, const KRunManagerProgram& runEntry);
+		static void InitKExecute(KxProcess& process, const KProgramManagerEntry& runEntry);
 
 	private:
 		KProgramOptionUI m_RunMainOptions;
 
-		const KRunManagerConfig* m_RunConfig = NULL;
+		const KProgramManagerConfig* m_RunConfig = NULL;
 		KRMProgramEntryArray m_ProgramList;
 
 		KxMenu* m_Menu = NULL;
@@ -116,14 +116,14 @@ class KRunManager: public wxEvtHandler, public KManager
 		bool m_IconsExtracted = false;
 
 	private:
-		virtual wxBitmap OnQueryItemImage(const KRunManagerProgram& runEntry) const;
+		virtual wxBitmap OnQueryItemImage(const KProgramManagerEntry& runEntry) const;
 		void OnVFSToggled(KVFSEvent& event);
 		void OnMenuOpen(KxMenuEvent& event);
 
 		// If 'processOut' not NULL, then created process object will not be run in this function
 		// and will be returned in provided pointer.
-		void DoRunEntry(const KRunManagerProgram& runEntry, KxProgressDialog* dialog, KxProcess** processOut = NULL);
-		bool CheckEntry(const KRunManagerProgram& runEntry);
+		void DoRunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog, KxProcess** processOut = NULL);
+		bool CheckEntry(const KProgramManagerEntry& runEntry);
 		
 		KxProgressDialog* BeginRunProcess();
 		void EndRunProcess(KxProgressDialog* dialog, KxProcess* process);
@@ -131,11 +131,11 @@ class KRunManager: public wxEvtHandler, public KManager
 		int GetPreMainTimeout() const;
 		KxStringVector CheckPreMain();
 		void RunPreMain(KxProgressDialog* dialog);
-		void RunMain(KxProgressDialog* dialog, const KRunManagerProgram& runEntry);
+		void RunMain(KxProgressDialog* dialog, const KProgramManagerEntry& runEntry);
 
 	public:
-		KRunManager();
-		virtual ~KRunManager();
+		KProgramManager();
+		virtual ~KProgramManager();
 
 	public:
 		virtual wxString GetID() const override;
@@ -164,7 +164,7 @@ class KRunManager: public wxEvtHandler, public KManager
 
 	public:
 		virtual void OnAddMenuItems(KxMenu* menu);
-		virtual void OnRunEntry(KxMenuItem* menuItem, const KRunManagerProgram& runEntry);
+		virtual void OnRunEntry(KxMenuItem* menuItem, const KProgramManagerEntry& runEntry);
 
 	public:
 		KProgramOption& GetOptions()
@@ -176,9 +176,9 @@ class KRunManager: public wxEvtHandler, public KManager
 		void SaveProgramList() const;
 
 		// Never destroy provided dialog yourself!
-		bool RunEntry(const KRunManagerProgram& runEntry, KxProgressDialog* dialog = NULL);
+		bool RunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog = NULL);
 		
 		// Returned process can be run with either 'KxPROCESS_WAIT_SYNC' or 'KxPROCESS_WAIT_ASYNC' flag.
 		// If you bind 'wxEVT_END_PROCESS' handler to the process make sure you wxEvent::Skip() it!
-		KxProcess* RunEntryDelayed(const KRunManagerProgram& runEntry, KxProgressDialog* dialog = NULL);
+		KxProcess* RunEntryDelayed(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog = NULL);
 };

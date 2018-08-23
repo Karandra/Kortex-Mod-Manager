@@ -101,7 +101,7 @@ wxString KGameConfigWorkspace::GetID() const
 }
 wxString KGameConfigWorkspace::GetName() const
 {
-	return T("ToolBar.ConfigManager");
+	return T("ConfigManager.Name");
 }
 
 void KGameConfigWorkspace::OnSaveButton(wxCommandEvent& event)

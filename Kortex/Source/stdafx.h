@@ -22,6 +22,8 @@
 
 #pragma comment(lib, "delayimp")
 
+#include "KTranslation.h"
+
 enum KLayoutConstants
 {
 	KLC_VERTICAL_SPACING = 3,

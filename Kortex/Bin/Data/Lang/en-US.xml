@@ -157,13 +157,13 @@
 		<String ID="FileFilter.Archives">Archives</String>
 		<String ID="FileFilter.7ZipArchive">7-Zip archive</String>
 
-		<String ID="Init.Caption">Initializing settings</String>
 		<String ID="Init.AnotherInstanceRunning">Another instance of this application is already running.</String>
+		<String ID="Init.Caption">Initializing settings</String>
 		<String ID="Init.Status1">Reading parameters</String>
 		<String ID="Init.Status2">Loading profile data</String>
 		<String ID="Init.StatusDone">Initialization complete</String>
 		<String ID="Init.Error1">Profile configuration hasn't been loaded. Unable to continue.</String>
-		<String ID="Init.Error2"><![CDATA[Configuration file for profile "%s" not found. Default configuration will be used.]]></String>
+		<String ID="Init.Error2">Configuration file for profile "%1" not found. Default configuration will be used.</String>
 		<String ID="Init.Error3">Failed to create workspace</String>
 		<String ID="Init.ProfilesPath1">Profile folder not specified or doesn't exist</String>
 		<String ID="Init.ProfilesPath2"><![CDATA[You can use the default folder or select a different one.
@@ -175,8 +175,8 @@ Using the default folder is not recommended because profile data can occupy a lo
 
 		<String ID="Settings.PrepareUninstall">Uninstall</String>
 		<String ID="Settings.PrepareUninstall.Button">Prepare to uninstall</String>
-		<String ID="Settings.PrepareUninstall.Caption"><![CDATA[Are you sure you want to uninstall %s?]]></String>
-		<String ID="Settings.PrepareUninstall.Message"><![CDATA[This action will uninstall the virtual file system service and allow you to uninstall this appliction correctly. Afterwards, you should delete all application files and restart your computer.]]></String>
+		<String ID="Settings.PrepareUninstall.Caption">Are you sure you want to uninstall %1</String>
+		<String ID="Settings.PrepareUninstall.Message">This action will uninstall the virtual file system service and allow you to uninstall this appliction correctly. Afterwards, you should delete all application files and restart your computer.</String>
 		<String ID="Settings.PrepareUninstall.Success">Virtual file system has been successfully uninstalled. Restart your computer to complete the uninstallation procedure.</String>
 		<String ID="Settings.PrepareUninstall.Error">Failed to uninstall the virtual file system service.</String>
 		<String ID="Settings.PrepareUninstall.RebootNow">Restart now</String>
@@ -185,7 +185,7 @@ Using the default folder is not recommended because profile data can occupy a lo
 		<String ID="Settings.Categories.General">General settings</String>
 		<String ID="Settings.Categories.VFS">Virtual file system (VFS)</String>
 		<String ID="Settings.Categories.VariablesOverride">Variables override</String>
-		<String ID="Settings.Categories.RunManager">Launch</String>
+		<String ID="Settings.Categories.ProgramManager">Launch</String>
 		<String ID="Settings.Categories.PackageManager">Package manager</String>
 
 		<String ID="Settings.Value.Language">UI language</String>
@@ -197,7 +197,7 @@ Using the default folder is not recommended because profile data can occupy a lo
 		<String ID="Settings.Value.PreMainTimeout">Timeout between launching additional software (ms)</String>
 		<String ID="Settings.Value.PreMainTimeoutAfter">Timeout after launching main programs (ms)</String>
 
-		<String ID="Settings.Value.PackagesLocation">Installation package folder</String>
+		<String ID="Settings.Value.PackagesLocation">Installation package folder</String>		
 		<String ID="Settings.Value.GameRoot">$(NameShort) installation folder</String>
 		<String ID="Settings.Value.AutoShowPackageInfo">Automatically show information about the installation package</String>
 		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Use HTTPS protocol in FOMod XML-scheme</String>
@@ -211,13 +211,13 @@ Using the default folder is not recommended because profile data can occupy a lo
 		<String ID="About.Tabs.Permissions">Permissions</String>
 
 		<String ID="About.Info.Libraries">Libraries used</String>
-		<String ID="About.Info.IconPack">Icon set %s by %s is used.</String>
+		<String ID="About.Info.IconPack">Icon set %1 by %2 is used.</String>
 
 		<String ID="About.Permissions"><![CDATA[
 Distribution of this software without providing a link to the official website is not allowed.
-The official website is %s.
+The official website is %1.
 In case you would like to upload this software to a different website, you must contact me (the developer) first.
-You can do this at %s website via %s or a post at the forums.]]></String>
+You can do this at %2 website via %3 or a post at the forums.]]></String>
 		<String ID="About.Permissions.ContactMethod">private message</String>
 		<String ID="About.Permissions.DownloadPage">Download page</String>
 		<String ID="About.Permissions.SupportPage">Discussion and support</String>
@@ -237,14 +237,13 @@ You can do this at %s website via %s or a post at the forums.]]></String>
 		<String ID="ProfileSelection.ChangeProfileDialog.No">Don't restart</String>
 		<String ID="ProfileSelection.ChangeProfileDialog.Cancel">Cancel profile change</String>
 
-		<String ID="ProfileSelection.ConfirmRemoving.Caption"><![CDATA[Are you sure you want to delete profile "%s"?]]></String>
+		<String ID="ProfileSelection.ConfirmRemoving.Caption">Are you sure you want to delete profile "%1"</String>
 		<String ID="ProfileSelection.ConfirmRemoving.Message"><![CDATA[This cannot be undone.
 
-This folder and all its contents will be deleted: %s]]>
-		</String>
+This folder and all its contents will be deleted: %1]]></String>
 
 		<!-- Profile creation/editing -->
-		<String ID="ProfileCreatorDialog.Caption"><![CDATA[Create new profile for "%s"]]></String>
+		<String ID="ProfileCreatorDialog.Caption">Create new profile for "%1"</String>
 		<String ID="ProfileCreatorDialog.NameLabel">Profile name</String>
 		<String ID="ProfileCreatorDialog.CopyFromLabel">Copy data from profile</String>
 		<String ID="ProfileCreatorDialog.CopyModsLabel">Copy mods</String>
@@ -252,11 +251,12 @@ This folder and all its contents will be deleted: %s]]>
 		<String ID="ProfileCreatorDialog.CopyProfileConfigLabel">Copy profile settings</String>
 		<String ID="ProfileCreatorDialog.CopyRunManagerPrograms">Copy programs list</String>
 		<String ID="ProfileCreatorDialog.CopyGameConfigLabel">Copy game settings</String>
+		<String ID="ProfileCreatorDialog.ProfileNameInvalid">Invalid profile name. Choose another name.</String>
 		<String ID="ProfileCreatorDialog.ProfileNameCollision">A profile with this name already exists. Specify a different name.</String>
 		<String ID="ProfileCreatorDialog.CreationError">Failed to create a new profile</String>
 		<String ID="ProfileCreatorDialog.CopyingProfileData">Copying profile data</String>
 		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigCaption">Game settings files have been found</String>
-		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage"><![CDATA[%s can use %s virtual folder. There are some files in the "%s" folder that can be used to create a virtual folder.
+		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage"><![CDATA[%1 can use %2 virtual folder. There are some files in the "%3" folder that can be used to create a virtual folder.
 
 It is recommended that you move these files]]></String>
 		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage2">settings and saves</String>
@@ -274,18 +274,6 @@ It is recommended that you move these files]]></String>
 		<String ID="OpenLocation.Saves">Saves folder</String>
 
 		<!-- ToolBar -->
-		<String ID="ToolBar.ConfigManager">Game configuration</String>
-		<String ID="ToolBar.ModManager">Mod manager</String>
-		<String ID="ToolBar.PackageCreator">Package creator</String>
-		<String ID="ToolBar.PackageManager">Installation packages</String>
-		<String ID="ToolBar.PluginManager">Plugin manager</String>
-		<String ID="ToolBar.PluginManagerShort">Plugins</String>
-		<String ID="ToolBar.ScreenshotsGalleryManager">Screenshot gallery</String>
-		<String ID="ToolBar.SaveManager">Saves manager</String>
-		<String ID="ToolBar.SaveManagerShort">Saves</String>
-		<String ID="ToolBar.DownloadManager">Download manager</String>
-		<String ID="ToolBar.DownloadManagerShort">Downloads</String>
-		<String ID="ToolBar.RunManager">Programs</String>
 		<String ID="ToolBar.QuickSettingsMenu">Quick settings menu</String>
 		<String ID="ToolBar.Help">Help</String>
 
@@ -314,13 +302,14 @@ It is recommended that you move these files]]></String>
 		<String ID="TextEditor.ToolBar.Heading">Header</String>
 
 		<!-- Config manager -->
-		<String ID="ConfigManager.EditValue.EnterVirtualKey"><![CDATA[Select a value from the list below or press 
-the corresponding button on your keyboard]]></String>
+		<String ID="ConfigManager.Name">Game configuration</String>
+
+		<String ID="ConfigManager.EditValue.EnterVirtualKey">Select a value from the list below or press the corresponding button on your keyboard</String>
 		<String ID="ConfigManager.EditValue.ValuesRange">Value range</String>
 		<String ID="ConfigManager.EditValue.Success">All parameters have been successfully saved</String>
 		<String ID="ConfigManager.EditValue.Error">Failed to save parameters</String>
 		<String ID="ConfigManager.EditValue.Discarded">Parameter changes have been discarded</String>
-		<String ID="ConfigManager.EditValue.Loading"><![CDATA[Loading "%s"]]></String>
+		<String ID="ConfigManager.EditValue.Loading">Loading "%1"</String>
 		<String ID="ConfigManager.EditValue.Saving">Saving...</String>
 		<String ID="ConfigManager.EditValue.ModifyValue">Modify value</String>
 		<String ID="ConfigManager.EditValue.CreateValue.Caption">Add parameter</String>
@@ -678,7 +667,7 @@ the corresponding button on your keyboard]]></String>
 		<String ID="GameConfig.Values.KeyScreenshot">Take screenshot</String>
 		<String ID="GameConfig.Values.KeyEditor">Show editor</String>
 		<String ID="GameConfig.Values.KeyFreeVRAM">Free VRAM</String>
-		<String ID="GameConfig.Values.KeyBruteForce"><![CDATA[Activate "Brute Force" preset]]></String>
+		<String ID="GameConfig.Values.KeyBruteForce">Activate "Brute Force" preset</String>
 		
 		<!-- ENB: Fixes -->
 		<String ID="GameConfig.Values.FixPhysics">Fix physics</String>
@@ -740,28 +729,34 @@ the corresponding button on your keyboard]]></String>
 		<String ID="GameConfig.Values.EnableMultipleWeathers">Enable multiple weathers</String>
 		<String ID="GameConfig.Values.EnableLocationWeather">Enable location weather</String>
 
-		<!-- Run Manager -->
-		<String ID="RunManager.FileNotFound">File not found</String>
-		<String ID="RunManager.PreMainFileNotFound1">Some additional software could not be found on your computer</String>
-		<String ID="RunManager.PreMainFileNotFound2">Install this software or disable it in the manager.</String>
-		<String ID="RunManager.NoPrograms">No programs are available</String>
-		<String ID="RunManager.ExecutingPreMain">Launching additional software</String>
-		<String ID="RunManager.ExecutingMain">Launching the game</String>
-		<String ID="RunManager.Executing">Launching $(Name)</String>
-		<String ID="RunManager.PreparingRun">Preparing</String>
-		<String ID="RunManager.RunFailed">Failed to create process</String>
-		<String ID="RunManager.WaitingReturn">Waiting to complete</String>
-		<String ID="RunManager.WaitingReturnAttach">Waiting for the additional software to terminate in order to attach it to the main process</String>
-		<String ID="RunManager.TryAttach">Attaching to the main process</String>
-		<String ID="RunManager.TryAttachFailed">Failed to attach to the main process</String>
-		<String ID="RunManager.Terminated">The program completed processing %d code</String>
+		<!-- Program Manager -->
+		<String ID="ProgramManager.Name">Program manager</String>
+		<String ID="ProgramManager.NameShort">Programs</String>
 
-		<String ID="RunManager.List.RequiresVFS">Requires VFS</String>
-		<String ID="RunManager.List.Arguments">Command line arguments</String>
-		<String ID="RunManager.List.Executable">Executable</String>
-		<String ID="RunManager.List.WorkingDirectory">Working вirectory</String>
+		<String ID="ProgramManager.FileNotFound">File not found</String>
+		<String ID="ProgramManager.PreMainFileNotFound1">Some additional software could not be found on your computer</String>
+		<String ID="ProgramManager.PreMainFileNotFound2">Install this software or disable it in the manager.</String>
+		<String ID="ProgramManager.NoPrograms">No programs are available</String>
+		<String ID="ProgramManager.ExecutingPreMain">Launching additional software</String>
+		<String ID="ProgramManager.ExecutingMain">Launching the game</String>
+		<String ID="ProgramManager.Executing">Launching $(Name)</String>
+		<String ID="ProgramManager.PreparingRun">Preparing</String>
+		<String ID="ProgramManager.RunFailed">Failed to create process</String>
+		<String ID="ProgramManager.WaitingReturn">Waiting to complete</String>
+		<String ID="ProgramManager.WaitingReturnAttach">Waiting for the additional software to terminate in order to attach it to the main process</String>
+		<String ID="ProgramManager.TryAttach">Attaching to the main process</String>
+		<String ID="ProgramManager.TryAttachFailed">Failed to attach to the main process</String>
+		<String ID="ProgramManager.Terminated">The program completed processing %1 code</String>
+
+		<String ID="ProgramManager.List.RequiresVFS">Requires VFS</String>
+		<String ID="ProgramManager.List.Arguments">Command line arguments</String>
+		<String ID="ProgramManager.List.Executable">Executable</String>
+		<String ID="ProgramManager.List.WorkingDirectory">Working Directory</String>
 
 		<!-- Mod Manager -->
+		<String ID="ModManager.Name">Mod manager</String>
+		<String ID="ModManager.NameShort">Mods</String>
+		
 		<String ID="ModManager.ExtractingPackageFiles">Extract installer files</String>
 		<String ID="ModManager.TagsDialog">Edit tags</String>
 		<String ID="ModManager.SitesEditor">Edit websites</String>
@@ -844,7 +839,7 @@ the corresponding button on your keyboard]]></String>
 		<String ID="ModManager.NewMod.NewEmptyMod">New empty mod</String>
 		<String ID="ModManager.NewMod.NewModFromFolder">New mod from folder</String>
 		<String ID="ModManager.NewMod.InstallPackage">Select installer</String>
-		<String ID="ModManager.NewMod.ImportFrom">Import from %s</String>
+		<String ID="ModManager.NewMod.ImportFrom">Import from %1</String>
 		
 		<String ID="ModManager.NewMod.DialogCaption">Add new mod</String>
 		<String ID="ModManager.NewMod.DialogMessage">Enter mod name</String>
@@ -857,14 +852,11 @@ the corresponding button on your keyboard]]></String>
 		<String ID="ModManager.NewMod.SelectedFolderNone">No folder selected</String>
 		<String ID="ModManager.NewMod.CreateAsLinkedMod">Create as linked mod</String>
 
-		<String ID="ModManager.RemoveMod.CaptionUninstall"><![CDATA[Are you sure you want to uninstall "%s"?]]></String>
-		<String ID="ModManager.RemoveMod.CaptionUninstallAndErase"><![CDATA[Are you sure you want to uninstall "%s" and delete the corresponding log entry?]]></String>
-		<String ID="ModManager.RemoveMod.CaptionErase"><![CDATA[Вre you sure you want to delete "%s" entry from log?]]></String>
+		<String ID="ModManager.RemoveMod.CaptionUninstall">Are you sure you want to uninstall "%1"?</String>
+		<String ID="ModManager.RemoveMod.CaptionUninstallAndErase">Are you sure you want to uninstall "%1" and delete the corresponding log entry?</String>
+		<String ID="ModManager.RemoveMod.CaptionErase">Are you sure you want to delete "%1" entry from log?></String>
 		<String ID="ModManager.RemoveMod.Message">This action cannot be undone</String>
 		<String ID="ModManager.RemoveMod.RemovingMessage">Delete mod data</String>
-
-		<String ID="ModManager.SaveChanges.Caption">You have unsaved changes</String>
-		<String ID="ModManager.SaveChanges.Message">Do you want to save now?</String>
 
 		<String ID="ModManager.Menu.UninstallMod">Uninstall</String>
 		<String ID="ModManager.Menu.UninstallAndErase">Unistall and delete from log</String>
@@ -913,7 +905,7 @@ the corresponding button on your keyboard]]></String>
 		<String ID="ModManager.Import.TargetProfileMismatch">The current selected game does not match the game controlled by this mod-manager. Import at your own risk.</String>
 		<String ID="ModManager.Import.TargetProfileNotFound">Data on the game managed by this mod manager is not found. Import at your own risk.</String>
 		<String ID="ModManager.Import.SkipExisingMods">Skip existing mods</String>
-		<String ID="ModManager.Import.InfoFound">Data from %s was found. Begin import?</String>
+		<String ID="ModManager.Import.InfoFound">Data from %1 was found. Begin import?</String>
 		<String ID="ModManager.Import.CanNotImport">Can't find data to import</String>
 
 		<String ID="ModExplorer.Caption">Show mod files</String>
@@ -929,17 +921,21 @@ the corresponding button on your keyboard]]></String>
 		<!-- Network -->
 		<String ID="Network.Provider">Provider</String>
 		
-		<String ID="Network.AuthCaption">Authentication on %s</String>
+		<String ID="Network.AuthCaption">Authentication on %1</String>
 		<String ID="Network.AuthMessage">Enter your username and password to log in to your account.</String>
-		<String ID="Network.AuthSuccess">Authentication on %s completed successfully</String>
-		<String ID="Network.AuthFail">Authentication on %s failed</String>
+		<String ID="Network.AuthSuccess">Authentication on %1 completed successfully</String>
+		<String ID="Network.AuthFail">Authentication on %1 failed</String>
+		
 		<String ID="Network.SignIn">Sign in</String>
 		<String ID="Network.SignOut">Sign out</String>
 		<String ID="Network.SignedIn">Signed in</String>
 		<String ID="Network.NotSignedIn">Not signed in</String>
-		<String ID="Network.SignOutMessage">Are you sure you want to sign out of "%s" account?</String>
+		<String ID="Network.SignOutMessage">Are you sure you want to sign out of "%1" account?</String>
 
 		<!-- Download Manager -->
+		<String ID="DownloadManager.Name">Download manager</String>
+		<String ID="DownloadManager.NameShort">Downloads</String>
+		
 		<String ID="DownloadManager.DownloadLocation">Downloads folder</String>
 		<String ID="DownloadManager.DownloadLocationInaccessible">The downloads folder is not specified or does not exist. Select the folder where you want to store the downloads.</String>
 		
@@ -997,11 +993,11 @@ the corresponding button on your keyboard]]></String>
 		<String ID="VFS.Error6">Invalid mount point.</String>
 		<String ID="VFS.Error7">Incompatible version.</String>
 		<String ID="VFS.Error1000">Virtual file system is not running.</String>
-		<String ID="VFS.Error10000">Unknown error</String>
+		<String ID="VFS.Error10000">Unknown error.</String>
 
 		<!-- PluginManager -->
-		<String ID="PluginManager.SaveChanges.Caption">You have unsaved changes in the plugin load order</String>
-		<String ID="PluginManager.SaveChanges.Message">Do you want to save current order?</String>
+		<String ID="PluginManager.Name">Plugin manager</String>
+		<String ID="PluginManager.NameShort">Plugins</String>
 
 		<String ID="PluginManager.PluginType.Normal">Normal</String>
 		<String ID="PluginManager.PluginType.Master">Master</String>
@@ -1017,17 +1013,20 @@ the corresponding button on your keyboard]]></String>
 		<String ID="PluginManager.Tools.ExportList">Export plugins list</String>
 		<String ID="PluginManager.Tools.ExportListActive">Export active plugins list</String>
 
-		<String ID="PluginManager.Sorting.Missing.Caption"><![CDATA[Program "%s" could not be found on your computer]]></String>
+		<String ID="PluginManager.Sorting.Missing.Caption">Program "%1" could not be found on your computer</String>
 		<String ID="PluginManager.Sorting.Missing.Message">Specify the program's location to perform the sorting.</String>
 		<String ID="PluginManager.Sorting.Waiting.Caption">Waiting to complete</String>
 
 		<String ID="PluginManager.LootAPI.CanNotUpdateMasterlist">Can't update masterlist</String>
 
 		<!-- Screenshots Gallery -->
-		<String ID="ScreenshotsGallery.FileName">File name</String>
-		<String ID="ScreenshotsGallery.FilePath">File location</String>
+		<String ID="ScreenshotsGallery.Name">Screenshot gallery</String>
+		<String ID="ScreenshotsGallery.Name">Screenshots</String>
 
 		<!-- Save Manager -->
+		<String ID="SaveManager.Name">Saves manager</String>
+		<String ID="SaveManager.NameShort">Saves</String>
+
 		<String ID="SaveManager.InvalidFile">Invalid file format</String>
 
 		<String ID="SaveManager.SyncPluginsList">Synchronize plugin list</String>
@@ -1062,7 +1061,9 @@ the corresponding button on your keyboard]]></String>
 		<String ID="SaveManager.Info.Karma">Karma</String>
 
 		<!-- Package Manager -->
-		<String ID="PackageManager">Package manager</String>
+		<String ID="PackageManager.Name">Package manager</String>
+		<String ID="PackageManager.CreatorName">Package creator</String>
+		<String ID="PackageManager.PackagesListName">Installation packages</String>
 
 		<String ID="PackageManager.ReqCategory.General">General</String>
 		<String ID="PackageManager.ReqCategory.DLC">DLC</String>
@@ -1092,7 +1093,7 @@ the corresponding button on your keyboard]]></String>
 		<String ID="PackageCreator.MenuBuild.UpdateInfo">Update info</String>
 		<String ID="PackageCreator.MenuBuild.Preview">Build for preview</String>
 
-		<String ID="PackageCreator.Build.Caption"><![CDATA[Building "%s"]]></String>
+		<String ID="PackageCreator.Build.Caption">Building "%1"</String>
 		<String ID="PackageCreator.Build.Complete">Build comolete</String>
 		<String ID="PackageCreator.Build.BuildError">Failed to build</String>
 		<String ID="PackageCreator.Build.CheckError">Some errors have been found while checking the project</String>
@@ -1118,15 +1119,15 @@ the corresponding button on your keyboard]]></String>
 		<String ID="PackageCreator.ProjectFolder">Rroject folder</String>
 		<String ID="PackageCreator.NewStepDialog">Add new step</String>
 		<String ID="PackageCreator.NewGroupDialog">Add new group</String>
-		<String ID="PackageCreator.RemoveStepDialog"><![CDATA[Are you sure you want to delete the step "%s"? All groups in this step will be deleted as well.]]></String>
-		<String ID="PackageCreator.RemoveGroupDialog"><![CDATA[Are you sure you want to delete the group "%s"? All elements in this group will be deleted as well.]]></String>
+		<String ID="PackageCreator.RemoveStepDialog">Are you sure you want to delete the step "%1"? All groups in this step will be deleted as well.</String>
+		<String ID="PackageCreator.RemoveGroupDialog">Are you sure you want to delete the group "%1"? All elements in this group will be deleted as well.</String>
 
-		<String ID="PackageCreator.RemoveFlagDialog.Caption"><![CDATA[Deleting flag "%s"]]></String>
+		<String ID="PackageCreator.RemoveFlagDialog.Caption">Deleting flag "%1"</String>
 		<String ID="PackageCreator.RemoveFlagDialog.Message"><![CDATA[Delete this flag from the whole project? This will delete all references to this flag in the entire project.
 
-You can also rename the flag to "%s" and manually change the references to it.]]></String>
-		<String ID="PackageCreator.RemoveFlagDialog.Remove">Удалить во всём проекте</String>
-		<String ID="PackageCreator.RemoveFlagDialog.Rename">Выполнить переименование</String>
+You can also rename the flag to "%1" and manually change the references to it.]]></String>
+		<String ID="PackageCreator.RemoveFlagDialog.Remove">Remove from project</String>
+		<String ID="PackageCreator.RemoveFlagDialog.Rename">Rename</String>
 
 		<!-- Page: Info -->
 		<String ID="PackageCreator.PageInfo.Name">Information</String>
@@ -1197,10 +1198,10 @@ You can also rename the flag to "%s" and manually change the references to it.]]
 		<String ID="PackageCreator.PageRequirements.CurrentVersion">Current version</String>
 		<String ID="PackageCreator.PageRequirements.RequiredVersion">Required version</String>
 		<String ID="PackageCreator.PageRequirements.RequiredState">Required state</String>
-		<String ID="PackageCreator.PageRequirements.RequiredState.ModActive">Mod enabled</String>
-		<String ID="PackageCreator.PageRequirements.RequiredState.ModInactive">Mod disabled</String>
-		<String ID="PackageCreator.PageRequirements.RequiredState.PluginActive">Plugin enabled</String>
-		<String ID="PackageCreator.PageRequirements.RequiredState.PluginInactive">Plugin disabled</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.ModActive">Mod active</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.ModInactive">Mod inactive</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.PluginActive">Plugin active</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.PluginInactive">Plugin inactive</String>
 		<String ID="PackageCreator.PageRequirements.RequiredState.FileExist">File exists</String>
 		<String ID="PackageCreator.PageRequirements.RequiredState.FileNotExist">File doesn't exist</String>
 		<String ID="PackageCreator.PageRequirements.CurrentState">Current state</String>
@@ -1225,8 +1226,8 @@ You can also rename the flag to "%s" and manually change the references to it.]]
 		<String ID="PackageCreator.PageComponents.RemoveEntry">Remove component</String>
 
 		<String ID="PackageCreator.PageComponents.AllSteps">All steps</String>
-		<String ID="PackageCreator.PageComponents.AllGroupsOf">All groups of "%s"</String>
-		<String ID="PackageCreator.PageComponents.AllEntriesOf">All components of "%s"</String>
+		<String ID="PackageCreator.PageComponents.AllGroupsOf">All groups of "%1"</String>
+		<String ID="PackageCreator.PageComponents.AllEntriesOf">All components of "%1"</String>
 
 		<String ID="PackageCreator.PageComponents.FileData">Files</String>
 		<String ID="PackageCreator.PageComponents.Requirements">Requirements</String>
@@ -1261,10 +1262,10 @@ You can also rename the flag to "%s" and manually change the references to it.]]
 		<String ID="PackageCreator.TypeDescriptor.CouldBeUsable">This component can be used in the current configuration, but its correct operation is not guaranteed. For example, the versions of the required mods do not match.</String>
 
 		<!-- Install Wizard -->
-		<String ID="InstallWizard.WindowCaption"><![CDATA[Installing "%s"]]></String>
+		<String ID="InstallWizard.WindowCaption">Installing "%1"</String>
 		<String ID="InstallWizard.CancelMessage">Are you sure you want to cancel the installation?</String>
-		<String ID="InstallWizard.InstallationComplete"><![CDATA["%s" successfully installed]]></String>
-		<String ID="InstallWizard.InstalledXOfY">%d of %d elements installed</String>
+		<String ID="InstallWizard.InstallationComplete">"%1" successfully installed</String>
+		<String ID="InstallWizard.InstalledXOfY">%1 of %2 elements installed</String>
 		<String ID="InstallWizard.BackwardButton">Back</String>
 		<String ID="InstallWizard.ForwardButton">Next</String>
 		<String ID="InstallWizard.SelectDocumentHint">Select a document to browse</String>
@@ -1279,7 +1280,7 @@ This might be because:
 - Your $(NameShort) copy and installed mods do not match this mod's requirements.
 - The components configuration is invalid. In order to solve this problem, contact either the mod's author or the installer's author.]]></String>
 		<String ID="InstallWizard.ChangeID.Invalid">Invalid ID</String>
-		<String ID="InstallWizard.ChangeID.Used"><![CDATA[This ID is already used by "%s"]]></String>
+		<String ID="InstallWizard.ChangeID.Used">This ID is already used by "%1"</String>
 		<String ID="InstallWizard.CollectedFiles.Caption">Following files will be installed</String>
 
 		<String ID="InstallWizard.Page.Info">Information</String>
@@ -1290,7 +1291,7 @@ This might be because:
 		<String ID="InstallWizard.Page.Installing">Install</String>
 		<String ID="InstallWizard.Page.Done">Done</String>
 
-		<String ID="InstallWizard.LoadFailed.Caption"><![CDATA[Failed to load "%s" installation package]]></String>
+		<String ID="InstallWizard.LoadFailed.Caption">Failed to load "%1" installation package</String>
 		<String ID="InstallWizard.LoadFailed.Message">The file might be corrupted or its format is not supported.</String>
 
 		<String ID="InstallWizard.Reinstall.Caption">Mod reinstalling</String>

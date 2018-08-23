@@ -7,7 +7,7 @@
 #include "UI/KImageViewerDialog.h"
 #include "Profile/KPluginManagerConfig.h"
 #include "Profile/KConfigManagerConfig.h"
-#include "RunManager/KRunManager.h"
+#include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModEntry.h"
 #include "ModManager/KModManagerWorkspace.h"
@@ -155,11 +155,11 @@ wxString KPluginManagerWorkspace::GetID() const
 }
 wxString KPluginManagerWorkspace::GetName() const
 {
-	return T("ToolBar.PluginManager");
+	return T("PluginManager.Name");
 }
 wxString KPluginManagerWorkspace::GetNameShort() const
 {
-	return T("ToolBar.PluginManagerShort");
+	return T("PluginManager.NameShort");
 }
 
 void KPluginManagerWorkspace::UpdatePluginTypeCounter(KxMenuItem* item)

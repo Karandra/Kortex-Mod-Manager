@@ -19,12 +19,12 @@
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxShell.h>
 
-#include "RunManager/KRunManager.h"
+#include "ProgramManager/KProgramManager.h"
 #include "GameConfig/KGameConfigWorkspace.h"
 #include "ModManager/KModManagerWorkspace.h"
 #include "PackageManager/KPackageManagerWorkspace.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
-#include "RunManager/KRunManagerWorkspace.h"
+#include "ProgramManager/KProgramManagerWorkspace.h"
 
 KxSingletonPtr_Define(KMainWindow);
 
@@ -258,7 +258,7 @@ void KMainWindow::CreateMainWorkspaces()
 
 	AddWorkspace(new KPackageCreatorWorkspace(this));
 	AddWorkspace(new KPackageManagerWorkspace(this));
-	AddWorkspace(new KRunManagerWorkspace(this));
+	AddWorkspace(new KProgramManagerWorkspace(this));
 	CreatePluggableManagersWorkspaces(pModsWorkspace);
 
 	/* Create toolbar button and assign menu to it */
@@ -294,7 +294,7 @@ void KMainWindow::CreateMainMenu()
 
 	m_MainMenu->AddSeparator();
 
-	KApp::Get().GetRunManager()->OnAddMenuItems(m_MainMenu);
+	KProgramManager::GetInstance()->OnAddMenuItems(m_MainMenu);
 
 	m_MainMenu->AddSeparator();
 

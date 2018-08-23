@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "KRunManager.h"
+#include "KProgramManager.h"
 #include "Profile/KProfile.h"
 #include "Events/KVFSEvent.h"
 #include "Events/KLogEvent.h"
 #include "UI/KMainWindow.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerDispatcher.h"
-#include "Profile/KRunManagerConfig.h"
+#include "Profile/KProgramManagerConfig.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
@@ -21,10 +21,10 @@
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 
-KRunManagerProgram::KRunManagerProgram()
+KProgramManagerEntry::KProgramManagerEntry()
 {
 }
-KRunManagerProgram::KRunManagerProgram(const KxXMLNode& node)
+KProgramManagerEntry::KProgramManagerEntry(const KxXMLNode& node)
 {
 	m_RequiresVFS = node.GetAttributeBool("RequiresVFS", true);
 
@@ -35,11 +35,11 @@ KRunManagerProgram::KRunManagerProgram(const KxXMLNode& node)
 	m_WorkingDirectory = V(node.GetFirstChildElement("WorkingDirectory").GetValue());
 }
 
-bool KRunManagerProgram::IsOK() const
+bool KProgramManagerEntry::IsOK() const
 {
 	return !m_Name.IsEmpty() && !m_Executable.IsEmpty();
 }
-bool KRunManagerProgram::CalcRequiresVFS() const
+bool KProgramManagerEntry::CalcRequiresVFS() const
 {
 	if (!IsRequiresVFS())
 	{
@@ -49,20 +49,18 @@ bool KRunManagerProgram::CalcRequiresVFS() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KRunManager& KRunManager::Get()
-{
-	return *KApp::Get().GetRunManager();
-}
-wxString KRunManager::GetProgramsListFile(const wxString& templateID, const wxString& configID)
+KxSingletonPtr_Define(KProgramManager);
+
+wxString KProgramManager::GetProgramsListFile(const wxString& templateID, const wxString& configID)
 {
 	return KProfile::GetDataPath(templateID, configID) + '\\' + "RunManagerPrograms.xml";
 }
 
-const KRunManagerConfig* KRunManager::GetRunConfig()
+const KProgramManagerConfig* KProgramManager::GetRunConfig()
 {
-	return KRunManagerConfig::GetInstance();
+	return KProgramManagerConfig::GetInstance();
 }
-wxString KRunManager::GetKExecutePath()
+wxString KProgramManager::GetKExecutePath()
 {
 	if (KxSystem::Is64Bit())
 	{
@@ -73,18 +71,18 @@ wxString KRunManager::GetKExecutePath()
 		return KApp::Get().GetDataFolder() + "\\VFS\\KExecute.exe";
 	}
 }
-void KRunManager::InitKExecute(KxProcess& process, const wxString& executable, const wxString& arguments, const wxString& workingDirectory)
+void KProgramManager::InitKExecute(KxProcess& process, const wxString& executable, const wxString& arguments, const wxString& workingDirectory)
 {
 	process.SetExecutablePath(executable);
 	process.SetWorkingFolder(workingDirectory.IsEmpty() ? executable.BeforeLast('\\') : workingDirectory);
 	process.SetArguments(arguments);
 }
-void KRunManager::InitKExecute(KxProcess& process, const KRunManagerProgram& runEntry)
+void KProgramManager::InitKExecute(KxProcess& process, const KProgramManagerEntry& runEntry)
 {
 	return InitKExecute(process, runEntry.GetExecutable(), runEntry.GetArguments(), runEntry.GetWorkingDirectory());
 }
 
-wxBitmap KRunManager::OnQueryItemImage(const KRunManagerProgram& runEntry) const
+wxBitmap KProgramManager::OnQueryItemImage(const KProgramManagerEntry& runEntry) const
 {
 	wxString iconPath = runEntry.GetIconPath();
 	if (iconPath.IsEmpty())
@@ -122,21 +120,21 @@ wxBitmap KRunManager::OnQueryItemImage(const KRunManagerProgram& runEntry) const
 		return wxBitmap(KAux::ExtractIconFromBinaryFile(KModManager::GetDispatcher().GetTargetPath(runEntry.GetExecutable())));
 	}
 }
-void KRunManager::OnVFSToggled(KVFSEvent& event)
+void KProgramManager::OnVFSToggled(KVFSEvent& event)
 {
 	if (event.IsActivated())
 	{
 		UpdateProgramListImages();
 	}
 }
-void KRunManager::OnMenuOpen(KxMenuEvent& event)
+void KProgramManager::OnMenuOpen(KxMenuEvent& event)
 {
 	// Extract icons for profile run entries
 	bool isVFSEnabled = KModManager::Get().IsVFSMounted();
 
 	for (KxMenuItem* item: m_MenuItems)
 	{
-		KRunManagerProgram* entry = (KRunManagerProgram*)item->GetClientData();
+		KProgramManagerEntry* entry = (KProgramManagerEntry*)item->GetClientData();
 		if (entry)
 		{
 			item->Enable(entry->IsRequiresVFS() ? isVFSEnabled : true);
@@ -153,7 +151,7 @@ void KRunManager::OnMenuOpen(KxMenuEvent& event)
 	event.Skip();
 }
 
-void KRunManager::DoRunEntry(const KRunManagerProgram& runEntry, KxProgressDialog* dialog, KxProcess** processOut)
+void KProgramManager::DoRunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog, KxProcess** processOut)
 {
 	auto OnProcessEnd = [this, dialog](wxProcessEvent& event)
 	{
@@ -174,7 +172,7 @@ void KRunManager::DoRunEntry(const KRunManagerProgram& runEntry, KxProgressDialo
 		process->Run(KxPROCESS_RUN_SYNC);
 	}
 }
-bool KRunManager::CheckEntry(const KRunManagerProgram& runEntry)
+bool KProgramManager::CheckEntry(const KProgramManagerEntry& runEntry)
 {
 	if (KxFile(runEntry.GetExecutable()).IsFileExist())
 	{
@@ -182,14 +180,14 @@ bool KRunManager::CheckEntry(const KRunManagerProgram& runEntry)
 	}
 	else
 	{
-		KLogEvent(T("RunManager.FileNotFound") + ":\r\n" + runEntry.GetExecutable(), KLOG_ERROR);
+		KLogEvent(T("ProgramManager.FileNotFound") + ":\r\n" + runEntry.GetExecutable(), KLOG_ERROR);
 		return false;
 	}
 }
 
-KxProgressDialog* KRunManager::BeginRunProcess()
+KxProgressDialog* KProgramManager::BeginRunProcess()
 {
-	KxProgressDialog* dialog = new KxProgressDialog(wxTheApp->GetTopWindow(), KxID_NONE, T("RunManager.Executing"), wxDefaultPosition, wxDefaultSize, KxBTN_NONE);
+	KxProgressDialog* dialog = new KxProgressDialog(wxTheApp->GetTopWindow(), KxID_NONE, T("ProgramManager.Executing"), wxDefaultPosition, wxDefaultSize, KxBTN_NONE);
 	dialog->Pulse();
 	dialog->Bind(wxEVT_CHAR_HOOK, [](wxKeyEvent& event)
 	{
@@ -199,11 +197,11 @@ KxProgressDialog* KRunManager::BeginRunProcess()
 	KApp::Get().Yield();
 	return dialog;
 }
-void KRunManager::EndRunProcess(KxProgressDialog* dialog, KxProcess* process)
+void KProgramManager::EndRunProcess(KxProgressDialog* dialog, KxProcess* process)
 {
 	if (!process->GetRunStatus())
 	{
-		KLogEvent(T("RunManager.RunFailed") + "\r\n\r\n" + KxSystem::GetErrorMessage(process->GetRunLastErrorCode()), KLOG_ERROR, dialog);
+		KLogEvent(T("ProgramManager.RunFailed") + "\r\n\r\n" + KxSystem::GetErrorMessage(process->GetRunLastErrorCode()), KLOG_ERROR, dialog);
 	}
 
 	if (dialog)
@@ -212,15 +210,15 @@ void KRunManager::EndRunProcess(KxProgressDialog* dialog, KxProcess* process)
 	}
 	delete process;
 }
-int KRunManager::GetPreMainInterval() const
+int KProgramManager::GetPreMainInterval() const
 {
 	return m_RunMainOptions.GetAttributeInt("PreMainInterval", ms_DefaultPreMainInterval);
 }
-int KRunManager::GetPreMainTimeout() const
+int KProgramManager::GetPreMainTimeout() const
 {
 	return m_RunMainOptions.GetAttributeInt("PreMainTimeout", ms_DefaultPreMainTimeout);
 }
-KxStringVector KRunManager::CheckPreMain()
+KxStringVector KProgramManager::CheckPreMain()
 {
 	KxStringVector missing;
 	KxIntVector list = m_RunMainOptions.GetAttributeVectorInt("PreMainSequence");
@@ -228,7 +226,7 @@ KxStringVector KRunManager::CheckPreMain()
 	{
 		for (int i: list)
 		{
-			auto entry = m_RunConfig->GetEntryAt(KPRCE_TYPE_PREMAIN, i);
+			auto entry = m_RunConfig->GetEntryAt(KProgramManagerConfig::ProgramType::Main, i);
 			if (entry)
 			{
 				if (!KxFile(entry->GetExecutable()).IsFileExist())
@@ -240,18 +238,18 @@ KxStringVector KRunManager::CheckPreMain()
 	}
 	return missing;
 }
-void KRunManager::RunPreMain(KxProgressDialog* dialog)
+void KProgramManager::RunPreMain(KxProgressDialog* dialog)
 {
 	KxIntVector list = m_RunMainOptions.GetAttributeVectorInt("PreMainSequence");
 	if (!list.empty())
 	{
-		dialog->SetLabel(T("RunManager.ExecutingPreMain"));
+		dialog->SetLabel(T("ProgramManager.ExecutingPreMain"));
 		dialog->SetValue(0);
 
 		int inverval = GetPreMainInterval();
 		for (int i: list)
 		{
-			auto entry = m_RunConfig->GetEntryAt(KPRCE_TYPE_PREMAIN, i);
+			auto entry = m_RunConfig->GetEntryAt(KProgramManagerConfig::ProgramType::PreMain, i);
 			if (entry)
 			{
 				KxProcess process(entry->GetExecutable(), entry->GetArguments(), V("$(VirtualRoot)"));
@@ -266,47 +264,47 @@ void KRunManager::RunPreMain(KxProgressDialog* dialog)
 		wxThread::Sleep(GetPreMainTimeout());
 	}
 }
-void KRunManager::RunMain(KxProgressDialog* dialog, const KRunManagerProgram& runEntry)
+void KProgramManager::RunMain(KxProgressDialog* dialog, const KProgramManagerEntry& runEntry)
 {
-	dialog->SetLabel(T("RunManager.ExecutingMain"));
+	dialog->SetLabel(T("ProgramManager.ExecutingMain"));
 	dialog->Pulse();
 
 	DoRunEntry(runEntry, dialog);
 }
 
-KRunManager::KRunManager()
+KProgramManager::KProgramManager()
 	:m_RunConfig(GetRunConfig()), m_RunMainOptions(this, "RunMain")
 {
 	KApp::Get().SubscribeBroadcasting(this, KEVT_BROADCAST_VFS_TOGGLED);
-	Bind(KEVT_BROADCAST_VFS_TOGGLED, &KRunManager::OnVFSToggled, this);
+	Bind(KEVT_BROADCAST_VFS_TOGGLED, &KProgramManager::OnVFSToggled, this);
 
 	LoadProgramList();
 }
-KRunManager::~KRunManager()
+KProgramManager::~KProgramManager()
 {
 	SaveProgramList();
 }
 
-wxString KRunManager::GetID() const
+wxString KProgramManager::GetID() const
 {
-	return "KRunManager";
+	return "KProgramManager";
 }
-wxString KRunManager::GetName() const
+wxString KProgramManager::GetName() const
 {
-	return T("ToolBar.RunManager");
+	return T("ProgramManager.Name");
 }
-wxString KRunManager::GetVersion() const
+wxString KProgramManager::GetVersion() const
 {
 	return "1.0.1";
 }
 
-wxString KRunManager::GetProgramsListFile() const
+wxString KProgramManager::GetProgramsListFile() const
 {
 	return GetProgramsListFile(KApp::Get().GetCurrentTemplateID(), KApp::Get().GetCurrentConfigID());
 }
-void KRunManager::UpdateProgramListImages()
+void KProgramManager::UpdateProgramListImages()
 {
-	for (KRunManagerProgram& entry: m_ProgramList)
+	for (KProgramManagerEntry& entry: m_ProgramList)
 	{
 		if (!entry.HasBitmap())
 		{
@@ -315,7 +313,7 @@ void KRunManager::UpdateProgramListImages()
 	}
 }
 
-void KRunManager::OnAddMenuItems(KxMenu* menu)
+void KProgramManager::OnAddMenuItems(KxMenu* menu)
 {
 	m_Menu = menu;
 	KxIntVector list = m_RunMainOptions.GetAttributeVectorInt("MainEnabled");
@@ -324,7 +322,7 @@ void KRunManager::OnAddMenuItems(KxMenu* menu)
 	if (!list.empty() && list.front() == -1)
 	{
 		list.clear();
-		for (size_t i = 0; i < m_RunConfig->GetEntriesCount(KPRCE_TYPE_MAIN); i++)
+		for (size_t i = 0; i < m_RunConfig->GetEntriesCount(KProgramManagerConfig::ProgramType::Main); i++)
 		{
 			list.emplace_back((int)i);
 		}
@@ -336,7 +334,7 @@ void KRunManager::OnAddMenuItems(KxMenu* menu)
 	{
 		for (int index: list)
 		{
-			const KRunManagerProgram* entry = m_RunConfig->GetEntryAt(KPRCE_TYPE_MAIN, index);
+			const KProgramManagerEntry* entry = m_RunConfig->GetEntryAt(KProgramManagerConfig::ProgramType::Main, index);
 			if (entry)
 			{
 				KxMenuItem* item = menu->Add(new KxMenuItem(wxString::Format("%s %s", T("Generic.Run"), entry->GetName())));
@@ -353,12 +351,12 @@ void KRunManager::OnAddMenuItems(KxMenu* menu)
 	}
 	else
 	{
-		menu->Add(new KxMenuItem(V("<$T(RunManager.NoPrograms)>")))->Enable(false);
+		menu->Add(new KxMenuItem(V("<$T(ProgramManager.NoPrograms)>")))->Enable(false);
 	}
 
-	m_Menu->Bind(KxEVT_MENU_OPEN, &KRunManager::OnMenuOpen, this);
+	m_Menu->Bind(KxEVT_MENU_OPEN, &KProgramManager::OnMenuOpen, this);
 }
-void KRunManager::OnRunEntry(KxMenuItem* menuItem, const KRunManagerProgram& runEntry)
+void KProgramManager::OnRunEntry(KxMenuItem* menuItem, const KProgramManagerEntry& runEntry)
 {
 	KxStringVector missing = CheckPreMain();
 	if (missing.empty())
@@ -375,8 +373,8 @@ void KRunManager::OnRunEntry(KxMenuItem* menuItem, const KRunManagerProgram& run
 	}
 	else
 	{
-		KxTaskDialog dialog(wxTheApp->GetTopWindow(), KxID_NONE, T("RunManager.PreMainFileNotFound1"));
-		dialog.SetMessage(T("RunManager.PreMainFileNotFound2"));
+		KxTaskDialog dialog(wxTheApp->GetTopWindow(), KxID_NONE, T("ProgramManager.PreMainFileNotFound1"));
+		dialog.SetMessage(T("ProgramManager.PreMainFileNotFound2"));
 		dialog.SetExMessage(KxString::Join(missing, "\r\n"));
 		dialog.SetMainIcon(KxICON_ERROR);
 		dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED, true);
@@ -385,7 +383,7 @@ void KRunManager::OnRunEntry(KxMenuItem* menuItem, const KRunManagerProgram& run
 	}
 }
 
-void KRunManager::LoadProgramList()
+void KProgramManager::LoadProgramList()
 {
 	KxFileStream stream(GetProgramsListFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	KxXMLDocument xml(stream);
@@ -393,19 +391,19 @@ void KRunManager::LoadProgramList()
 	m_ProgramList.clear();
 	for (KxXMLNode node = xml.GetFirstChildElement("Programs").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
-		KRunManagerProgram& entry = m_ProgramList.emplace_back(KRunManagerProgram(node));
+		KProgramManagerEntry& entry = m_ProgramList.emplace_back(KProgramManagerEntry(node));
 		if (!entry.IsOK())
 		{
 			m_ProgramList.pop_back();
 		}
 	}
 }
-void KRunManager::SaveProgramList() const
+void KProgramManager::SaveProgramList() const
 {
 	KxXMLDocument xml;
 	KxXMLNode rootNode = xml.NewElement("Programs");
 
-	for (const KRunManagerProgram& entry: m_ProgramList)
+	for (const KProgramManagerEntry& entry: m_ProgramList)
 	{
 		KxXMLNode node = rootNode.NewElement("Entry");
 		node.SetAttribute("RequiresVFS", entry.IsRequiresVFS());
@@ -423,7 +421,7 @@ void KRunManager::SaveProgramList() const
 	xml.Save(stream);
 }
 
-bool KRunManager::RunEntry(const KRunManagerProgram& runEntry, KxProgressDialog* dialog)
+bool KProgramManager::RunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog)
 {
 	if (CheckEntry(runEntry))
 	{
@@ -432,7 +430,7 @@ bool KRunManager::RunEntry(const KRunManagerProgram& runEntry, KxProgressDialog*
 	}
 	return false;
 }
-KxProcess* KRunManager::RunEntryDelayed(const KRunManagerProgram& runEntry, KxProgressDialog* dialog)
+KxProcess* KProgramManager::RunEntryDelayed(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog)
 {
 	if (CheckEntry(runEntry))
 	{

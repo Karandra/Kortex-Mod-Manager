@@ -12,7 +12,7 @@
 #include "KConfigManagerConfig.h"
 #include "KVirtualizationConfig.h"
 #include "KPackageManagerConfig.h"
-#include "KRunManagerConfig.h"
+#include "KProgramManagerConfig.h"
 #include "KPluginManagerConfig.h"
 #include "KScreenshotsGalleryConfig.h"
 #include "KSaveManagerConfig.h"
@@ -147,7 +147,7 @@ void KProfile::CheckConfigFile()
 	KxFile sConfigFile(KProfile::GetConfigFilePath(GetID(), m_ConfigID));
 	if (!sConfigFile.IsFileExist())
 	{
-		KLogEvent(T("Init.Error2", m_ConfigID), KLOG_INFO).Send();
+		KLogEvent(TF("Init.Error2").arg(m_ConfigID), KLOG_INFO).Send();
 		KxFile(KApp::Get().GetDataFolder() + "\\ProfileConfigTemplate.ini").CopyFile(sConfigFile, true);
 	}
 }
@@ -210,7 +210,7 @@ void KProfile::LoadConfig()
 	m_NetworkConfig = InitModuleConfig<KNetworkConfig>("Network", true);
 
 	// Can be disabled
-	m_RunConfig = InitModuleConfig<KRunManagerConfig>("RunConfig");
+	m_ProgramConfig = InitModuleConfig<KProgramManagerConfig>("ProgramConfig");
 	m_PluginManagerConfig = InitModuleConfig<KPluginManagerConfig>("PluginManager");
 	m_ScreenshotsGallery = InitModuleConfig<KScreenshotsGalleryConfig>("ScreenshotsGallery");
 	m_SaveManagerConfig = InitModuleConfig<KSaveManagerConfig>("SaveManager");
@@ -370,7 +370,7 @@ KProfile::~KProfile()
 	delete m_PackageManagerConfig;
 	delete m_NetworkConfig;
 
-	delete m_RunConfig;
+	delete m_ProgramConfig;
 	delete m_PluginManagerConfig;
 	delete m_ScreenshotsGallery;
 	delete m_SaveManagerConfig;
@@ -456,9 +456,9 @@ bool KProfile::AddConfig(const wxString& configID, const wxString& sBaseConfigID
 
 				if (tCopyConfig.CopyRunManagerPrograms)
 				{
-					KxEvtFile source(KRunManager::GetProgramsListFile(GetID(), sBaseConfigID));
+					KxEvtFile source(KProgramManager::GetProgramsListFile(GetID(), sBaseConfigID));
 					self->LinkHandler(&source, KxEVT_FILEOP_COPY);
-					source.CopyFile(KRunManager::GetProgramsListFile(GetID(), configID), true);
+					source.CopyFile(KProgramManager::GetProgramsListFile(GetID(), configID), true);
 				}
 			}
 
@@ -469,14 +469,14 @@ bool KProfile::AddConfig(const wxString& configID, const wxString& sBaseConfigID
 				if (source.IsFolderExist() && !KxFileFinder::IsDirectoryEmpty(source.GetFullPath()))
 				{
 					// Copy destination link
-					wxString sMessageLink = wxString::Format("<a href=\"%s\">%s</a>", source.GetFullPath(), T("ProfileCreatorDialog.CopyNonVirtualGameConfigMessage2"));
+					wxString messageLink = wxString::Format("<a href=\"%s\">%s</a>", source.GetFullPath(), T("ProfileCreatorDialog.CopyNonVirtualGameConfigMessage2"));
 
 					KxTaskDialog msg
 					(
 						operation->GetDialog(),
 						KxID_NONE,
 						T("ProfileCreatorDialog.CopyNonVirtualGameConfigCaption"),
-						T("ProfileCreatorDialog.CopyNonVirtualGameConfigMessage", GetShortName(), sMessageLink, source.GetFullPath()),
+						TF("ProfileCreatorDialog.CopyNonVirtualGameConfigMessage").arg(GetShortName()).arg(messageLink).arg(source.GetFullPath()),
 						KxBTN_CANCEL
 					);
 					msg.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);

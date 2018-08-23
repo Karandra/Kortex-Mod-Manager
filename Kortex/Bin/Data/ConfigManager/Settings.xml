@@ -8,7 +8,7 @@
 		<Entry Label="$T(Settings.Categories.General)">General</Entry>
 		<Entry Label="$T(Settings.Categories.VFS)">VFS</Entry>
 		<Entry Label="$T(Settings.Categories.VariablesOverride)">VariablesOverride</Entry>
-		<Entry Label="$T(Settings.Categories.RunManager)">RunManager</Entry>
+		<Entry Label="$T(Settings.Categories.ProgramManager)">ProgramManager</Entry>
 		<Entry Label="$T(Settings.Categories.PackageManager)">PackageManager</Entry>
 	</Categories>
 	
@@ -41,19 +41,19 @@
 				<Entry Category="PackageManager" Path="KPackageManager::General" Name="AutoShowPackageInfo" Label="$T(Settings.Value.AutoShowPackageInfo)" Type="bool"/>
 				<Entry Category="PackageManager" Path="KPackageManager::General" Name="FOModUseHTTPSForXMLScheme" Label="$T(Settings.Value.FOModUseHTTPSForXMLScheme)" Type="bool"/>
 				
-				<!-- RunManager -->
-				<Entry Category="RunManager" Path="KRunManager::RunMain" Name="MainEnabled" Label="$T(Settings.Value.MainEnabled)" Type="int32" SubType="Array">
+				<!-- ProgramManager -->
+				<Entry Category="ProgramManager" Path="KRunManager::RunMain" Name="MainEnabled" Label="$T(Settings.Value.MainEnabled)" Type="int32" SubType="Array">
 					<Separator>;</Separator>
 					<SampleValues FillFunction="GetMainProgramsIndexes"/>
 				</Entry>
-				<Entry Category="RunManager" Path="KRunManager::RunMain" Name="PreMainSequence" Label="$T(Settings.Value.PreMainSequence)" Type="int32" SubType="Array">
+				<Entry Category="ProgramManager" Path="KRunManager::RunMain" Name="PreMainSequence" Label="$T(Settings.Value.PreMainSequence)" Type="int32" SubType="Array">
 					<Separator>;</Separator>
 					<SampleValues FillFunction="GetPreMainProgramsIndexes"/>
 				</Entry>
-				<Entry Category="RunManager" Path="KRunManager::RunMain" Name="PreMainInterval" Label="$T(Settings.Value.PreMainTimeout)" Type="int32">
+				<Entry Category="ProgramManager" Path="KRunManager::RunMain" Name="PreMainInterval" Label="$T(Settings.Value.PreMainTimeout)" Type="int32">
 					<SampleValues Min="100" Max="1000" Step="100"/>
 				</Entry>
-				<Entry Category="RunManager" Path="KRunManager::RunMain" Name="PreMainTimeout" Label="$T(Settings.Value.PreMainTimeoutAfter)" Type="int32">
+				<Entry Category="ProgramManager" Path="KRunManager::RunMain" Name="PreMainTimeout" Label="$T(Settings.Value.PreMainTimeoutAfter)" Type="int32">
 					<SampleValues Min="100" Max="1000" Step="100"/>
 				</Entry>
 			</Values>

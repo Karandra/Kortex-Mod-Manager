@@ -214,8 +214,8 @@ void KPCCFlagsSelectorModel::OnRemoveFlag(const KxDataViewItem& item)
 {
 	if (KPPCFlagEntry* entry = GetDataEntry(GetRow(item)))
 	{
-		wxString sDeletedName = entry->GetDeletedName();
-		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, T("PackageCreator.RemoveFlagDialog.Caption", entry->GetName()), T("PackageCreator.RemoveFlagDialog.Message", sDeletedName), KxBTN_CANCEL, KxICON_WARNING);
+		wxString deletedName = entry->GetDeletedName();
+		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, TF("PackageCreator.RemoveFlagDialog.Caption").arg(entry->GetName()), TF("PackageCreator.RemoveFlagDialog.Message").arg(deletedName), KxBTN_CANCEL, KxICON_WARNING);
 		dialog.AddButton(KxID_REMOVE, T("PackageCreator.RemoveFlagDialog.Remove"));
 		dialog.AddButton(KxID_RENAME, T("PackageCreator.RemoveFlagDialog.Rename"));
 
@@ -230,7 +230,7 @@ void KPCCFlagsSelectorModel::OnRemoveFlag(const KxDataViewItem& item)
 			case KxID_RENAME:
 			{
 				TrackChangeID(entry->GetName(), entry->GetDeletedName());
-				entry->SetName(sDeletedName);
+				entry->SetName(deletedName);
 				NotifyChangedItem(item);
 				return;
 			}

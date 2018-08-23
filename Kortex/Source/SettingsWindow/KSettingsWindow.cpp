@@ -19,7 +19,7 @@ void KSettingsWindow::ResetState()
 }
 void KSettingsWindow::OnPrepareUninstall(wxCommandEvent& event)
 {
-	KxTaskDialog askDialog(this, KxID_NONE, T("Settings.PrepareUninstall.Caption", KApp::Get().GetAppDisplayName()), T("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+	KxTaskDialog askDialog(this, KxID_NONE, TF("Settings.PrepareUninstall.Caption").arg(KApp::Get().GetAppDisplayName()), T("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (askDialog.ShowModal() == KxID_YES)
 	{
 		if (KApp::Get().Uninstall())

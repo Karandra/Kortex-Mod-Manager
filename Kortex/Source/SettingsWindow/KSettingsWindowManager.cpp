@@ -5,7 +5,7 @@
 #include "UI/KWorkspace.h"
 #include "Profile/KProfile.h"
 #include "Profile/KConfigManagerConfig.h"
-#include "Profile/KRunManagerConfig.h"
+#include "Profile/KProgramManagerConfig.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
@@ -13,10 +13,10 @@
 #include <KxFramework/KxTranslation.h>
 #include <KxFramework/KxXML.h>
 
-KCMSampleValueArray KSettingsWindowManager::FF_GetProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node, KPRCEType index)
+KCMSampleValueArray KSettingsWindowManager::FF_GetProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node, KProgramManagerConfig::ProgramType index)
 {
 	KCMSampleValueArray outList;
-	KRunManagerConfig* runConfig = KRunManagerConfig::GetInstance();
+	KProgramManagerConfig* runConfig = KProgramManagerConfig::GetInstance();
 	for (size_t i = 0; i < runConfig->GetEntriesCount(index); i++)
 	{
 		auto entry = runConfig->GetEntryAt(index, i);
@@ -40,7 +40,7 @@ KCMSampleValueArray KSettingsWindowManager::FF_GetLanguagesList(KCMConfigEntrySt
 KCMSampleValueArray KSettingsWindowManager::FF_GetWorkspacesList(KCMConfigEntryStd* configEntry, KxXMLNode& node)
 {
 	KCMSampleValueArray outList;
-	const auto& tWorkspaces = KApp::Get().GetMainWindow()->GetWorkspacesList();
+	const auto& tWorkspaces = KMainWindow::GetInstance()->GetWorkspacesList();
 	for (const auto& v: tWorkspaces)
 	{
 		if (v.second->CanBeStartPage())
@@ -52,11 +52,11 @@ KCMSampleValueArray KSettingsWindowManager::FF_GetWorkspacesList(KCMConfigEntryS
 }
 KCMSampleValueArray KSettingsWindowManager::FF_GetMainProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node)
 {
-	return FF_GetProgramsIndexes(configEntry, node, KPRCE_TYPE_MAIN);
+	return FF_GetProgramsIndexes(configEntry, node, KProgramManagerConfig::ProgramType::Main);
 }
 KCMSampleValueArray KSettingsWindowManager::FF_GetPreMainProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node)
 {
-	return FF_GetProgramsIndexes(configEntry, node, KPRCE_TYPE_PREMAIN);
+	return FF_GetProgramsIndexes(configEntry, node, KProgramManagerConfig::ProgramType::PreMain);
 }
 
 KCMDataProviderINI* KSettingsWindowManager::GetProvider(KPGCFileID id)

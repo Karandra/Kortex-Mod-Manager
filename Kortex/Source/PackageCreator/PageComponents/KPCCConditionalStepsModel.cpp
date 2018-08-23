@@ -69,7 +69,7 @@ void KPCCConditionalStepsModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (step)
 				{
-					KPCCFlagsSelectorModelDialog dialog(KApp::Get().GetMainWindow(), column->GetTitle(), m_Controller, false);
+					KPCCFlagsSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller, false);
 					dialog.SetDataVector(step->GetConditions());
 					dialog.ShowModal();
 					NotifyChangedItem(event.GetItem());
@@ -80,7 +80,7 @@ void KPCCConditionalStepsModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (step)
 				{
-					KPCCFileDataSelectorModelDialog dialog(KApp::Get().GetMainWindow(), column->GetTitle(), m_Controller);
+					KPCCFileDataSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller);
 					dialog.SetDataVector(step->GetEntries(), &m_Controller->GetProject()->GetFileData());
 					if (dialog.ShowModal() == KxID_OK)
 					{

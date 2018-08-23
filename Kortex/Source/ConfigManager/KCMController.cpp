@@ -174,7 +174,7 @@ void KCMController::SetDialogValidator(KxDialog* dialog, KCMConfigEntryStd* conf
 			{
 				wxIntegerValidator<int64_t> tValidator;
 				int64_t nMin;
-				int64_t nMax;
+				int64_t max;
 
 				if (configEntry->GetMinValue().second)
 				{
@@ -186,23 +186,23 @@ void KCMController::SetDialogValidator(KxDialog* dialog, KCMConfigEntryStd* conf
 				}
 				if (configEntry->GetMaxValue().second)
 				{
-					nMax = std::get<0>(configEntry->GetMaxValue().first);
+					max = std::get<0>(configEntry->GetMaxValue().first);
 				}
 				else
 				{
-					nMax = KConfigManager::GetMinMaxSignedValue(type).second;
+					max = KConfigManager::GetMinMaxSignedValue(type).second;
 				}
 				tValidator.SetMin(nMin);
-				tValidator.SetMax(nMax);
+				tValidator.SetMax(max);
 
 				pStdDialog->GetDialogMainCtrl()->SetValidator(tValidator);
-				pStdDialog->SetLabel(wxString::Format("%s: [%s; %s]", T("ConfigManager.EditValue.ValuesRange"), configEntry->GetFormatter()(nMin), configEntry->GetFormatter()(nMax)));
+				pStdDialog->SetLabel(wxString::Format("%s: [%s; %s]", T("ConfigManager.EditValue.ValuesRange"), configEntry->GetFormatter()(nMin), configEntry->GetFormatter()(max)));
 			}
 			else if (KConfigManager::IsUnsignedIntType(type))
 			{
 				wxIntegerValidator<uint64_t> tValidator;
 				uint64_t nMin;
-				uint64_t nMax;
+				uint64_t max;
 
 				if (configEntry->GetMinValue().second)
 				{
@@ -214,24 +214,24 @@ void KCMController::SetDialogValidator(KxDialog* dialog, KCMConfigEntryStd* conf
 				}
 				if (configEntry->GetMaxValue().second)
 				{
-					nMax = std::get<1>(configEntry->GetMaxValue().first);
+					max = std::get<1>(configEntry->GetMaxValue().first);
 				}
 				else
 				{
-					nMax = KConfigManager::GetMinMaxUnsignedValue(type).second;
+					max = KConfigManager::GetMinMaxUnsignedValue(type).second;
 				}
 				tValidator.SetMin(nMin);
-				tValidator.SetMax(nMax);
+				tValidator.SetMax(max);
 
 				pStdDialog->GetDialogMainCtrl()->SetValidator(tValidator);
-				pStdDialog->SetLabel(wxString::Format("%s: [%s; %s]", T("ConfigManager.EditValue.ValuesRange"), configEntry->GetFormatter()(nMin), configEntry->GetFormatter()(nMax)));
+				pStdDialog->SetLabel(wxString::Format("%s: [%s; %s]", T("ConfigManager.EditValue.ValuesRange"), configEntry->GetFormatter()(nMin), configEntry->GetFormatter()(max)));
 			}
 			else if (KConfigManager::IsFloatType(type))
 			{
 				wxFloatingPointValidator<double> tValidator;
 				int nPrecision = configEntry->GetFormatter().GetFloatPrecision();
 				double nMin;
-				double nMax;
+				double max;
 
 				if (configEntry->GetMinValue().second)
 				{
@@ -243,18 +243,18 @@ void KCMController::SetDialogValidator(KxDialog* dialog, KCMConfigEntryStd* conf
 				}
 				if (configEntry->GetMaxValue().second)
 				{
-					nMax = std::get<2>(configEntry->GetMaxValue().first);
+					max = std::get<2>(configEntry->GetMaxValue().first);
 				}
 				else
 				{
-					nMax = KConfigManager::GetMinMaxFloatValue(type).second;
+					max = KConfigManager::GetMinMaxFloatValue(type).second;
 				}
 				tValidator.SetMin(nMin);
-				tValidator.SetMax(nMax);
+				tValidator.SetMax(max);
 				tValidator.SetPrecision(nPrecision);
 
 				pStdDialog->GetDialogMainCtrl()->SetValidator(tValidator);
-				pStdDialog->SetLabel(wxString::Format("%s: [%g; %g]", T("ConfigManager.EditValue.ValuesRange"), nMin, nMax));
+				pStdDialog->SetLabel(wxString::Format("%s: [%g; %g]", T("ConfigManager.EditValue.ValuesRange"), nMin, max));
 			}
 		}
 	}

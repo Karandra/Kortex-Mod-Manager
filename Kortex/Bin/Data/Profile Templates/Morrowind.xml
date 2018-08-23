@@ -40,7 +40,7 @@
 		</MandatoryVirtualFolders>
 	</Virtualization>
 	
-	<RunConfig Enabled="1">
+	<ProgramConfig Enabled="1">
 		<Main>
 			<Entry>
 				<Name>$(NameShort)</Name>
@@ -73,7 +73,7 @@
 				<Arguments></Arguments>
 			</Entry>
 		</Main>
-	</RunConfig>
+	</ProgramConfig>
 
 	<GameConfig Enabled="1" ENB="0">
 		<Entry ID="0" Format="INI" TypeDetectionMethod="DataAnalysis">$(VirtualConfigRoot)\$(ID).ini</Entry>

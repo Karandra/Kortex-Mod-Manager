@@ -94,7 +94,7 @@ void KPCInfoAdditionalInfoModel::OnActivateItem(KxDataViewEvent& event)
 					KLabeledValue* entry = GetDataEntry(GetRow(event.GetItem()));
 					if (entry)
 					{
-						KTextEditorDialog dialog(KApp::Get().GetMainWindow());
+						KTextEditorDialog dialog(KMainWindow::GetInstance());
 						dialog.SetText(entry->GetValue());
 						if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 						{

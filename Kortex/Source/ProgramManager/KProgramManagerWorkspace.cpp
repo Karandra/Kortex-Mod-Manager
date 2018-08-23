@@ -1,54 +1,54 @@
 #include "stdafx.h"
-#include "KRunManagerWorkspace.h"
-#include "KRunManagerWorkspaceView.h"
+#include "KProgramManagerWorkspace.h"
+#include "KProgramManagerModel.h"
 #include "KThemeManager.h"
 #include "KApp.h"
 #include "KAux.h"
 
-KxSingletonPtr_Define(KRunManagerWorkspace);
+KxSingletonPtr_Define(KProgramManagerWorkspace);
 
-KRunManagerWorkspace::KRunManagerWorkspace(KMainWindow* mainWindow)
+KProgramManagerWorkspace::KProgramManagerWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_ProgramListViewOptions(this, "ProgramListView")
 {
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	CreateItemInManagersMenu();
 }
-KRunManagerWorkspace::~KRunManagerWorkspace()
+KProgramManagerWorkspace::~KProgramManagerWorkspace()
 {
 	if (IsWorkspaceCreated())
 	{
 		KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_ProgramListViewOptions);
 	}
 }
-bool KRunManagerWorkspace::OnCreateWorkspace()
+bool KProgramManagerWorkspace::OnCreateWorkspace()
 {
-	m_ViewModel = new KRunManagerWorkspaceView();
+	m_ViewModel = new KProgramManagerModel();
 	m_ViewModel->Create(this, m_MainSizer);
 
 	KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_ProgramListViewOptions);
 	return true;
 }
 
-bool KRunManagerWorkspace::OnOpenWorkspace()
+bool KProgramManagerWorkspace::OnOpenWorkspace()
 {
 	size_t sel = m_ViewModel->GetRow(m_ViewModel->GetView()->GetSelection());
 	m_ViewModel->RefreshItems();
 	m_ViewModel->SelectItem(sel);
 	return true;
 }
-bool KRunManagerWorkspace::OnCloseWorkspace()
+bool KProgramManagerWorkspace::OnCloseWorkspace()
 {
 	return true;
 }
-void KRunManagerWorkspace::OnReloadWorkspace()
+void KProgramManagerWorkspace::OnReloadWorkspace()
 {
 }
 
-wxString KRunManagerWorkspace::GetID() const
+wxString KProgramManagerWorkspace::GetID() const
 {
-	return "KRunManagerWorkspace";
+	return "KProgramManagerWorkspace";
 }
-wxString KRunManagerWorkspace::GetName() const
+wxString KProgramManagerWorkspace::GetName() const
 {
-	return T("ToolBar.RunManager");
+	return T("ProgramManager.Name");
 }

@@ -1,16 +1,16 @@
 #pragma once
 #include "stdafx.h"
 #include "IPC/KIPC.h"
+#include <KxFramework/KxSingleton.h>
 class KIPCConnection;
 class KIPCRequest_VFSStateChanged;
 class KIPCRequest_AddDownload;
 
-class KIPCClient: public wxClient
+class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 {
 	friend class KIPCConnection;
 
 	public:
-		static KIPCClient& Get();
 		static wxString GetServerFileName();
 		static bool RunServerAndConnect(KIPCClient** clientInstance);
 

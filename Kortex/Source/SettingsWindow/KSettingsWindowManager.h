@@ -2,10 +2,10 @@
 #include "stdafx.h"
 #include "ConfigManager/KConfigManager.h"
 #include "ConfigManager/KCMDataProviderINI.h"
+#include "Profile/KProgramManagerConfig.h"
 class KApp;
 class KWorkspace;
 class KxXMLNode;
-enum KPRCEType;
 
 class KSettingsWindowManager: public KConfigManager
 {
@@ -38,7 +38,7 @@ class KSettingsWindowManager: public KConfigManager
 		void Save();
 
 	private:
-		static KCMSampleValueArray FF_GetProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node, KPRCEType index);
+		static KCMSampleValueArray FF_GetProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node, KProgramManagerConfig::ProgramType index);
 
 		static KCMSampleValueArray FF_GetLanguagesList(KCMConfigEntryStd* configEntry, KxXMLNode& node);
 		static KCMSampleValueArray FF_GetWorkspacesList(KCMConfigEntryStd* configEntry, KxXMLNode& node);

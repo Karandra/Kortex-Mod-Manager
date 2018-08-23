@@ -4,8 +4,8 @@
 #include "PluginManager/KPluginManager.h"
 #include "PackageProject/KPackageProjectSerializer.h"
 #include "GameConfig/KGameConfigWorkspace.h"
-#include "RunManager/KRunManager.h"
-#include "RunManager/KRunManagerWorkspace.h"
+#include "ProgramManager/KProgramManager.h"
+#include "ProgramManager/KProgramManagerWorkspace.h"
 #include "Network/KNetwork.h"
 #include "DownloadManager/KDownloadManager.h"
 #include "Profile/KSaveManagerConfig.h"
@@ -181,10 +181,10 @@ wxString KModManagerImportMO::GetProfileDirectory() const
 
 void KModManagerImportMO::ReadExecutables(KOperationWithProgressDialogBase* context)
 {
-	context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KRunManager::Get().GetName()));
+	context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KProgramManager::GetInstance()->GetName()));
 
-	KRMProgramEntryArray& tProgramList = KRunManager::Get().GetProgramList();
-	KRunManagerProgram* pCurrentEntry = NULL;
+	KRMProgramEntryArray& programList = KProgramManager::GetInstance()->GetProgramList();
+	KProgramManagerEntry* pCurrentEntry = NULL;
 
 	const wxString sectionName("customExecutables");
 	long count = -1;
@@ -202,7 +202,7 @@ void KModManagerImportMO::ReadExecutables(KOperationWithProgressDialogBase* cont
 				return m_Options.GetValue(sectionName, wxString::Format("%d\\%s", i, name));
 			};
 
-			KRunManagerProgram& entry = tProgramList.emplace_back();
+			KProgramManagerEntry& entry = programList.emplace_back();
 			entry.SetName(GetValue("title"));
 			entry.SetExecutable(ProcessFilePath(GetValue("binary")));
 			entry.SetArguments(ProcessFilePath(GetValue("arguments")));
@@ -213,7 +213,7 @@ void KModManagerImportMO::ReadExecutables(KOperationWithProgressDialogBase* cont
 				entry.SetName(entry.GetExecutable().AfterLast('\\').BeforeLast('.'));
 			}
 		}
-		KRunManager::Get().SaveProgramList();
+		KProgramManager::GetInstance()->SaveProgramList();
 	}
 }
 void KModManagerImportMO::CopySaves(KOperationWithProgressDialogBase* context)

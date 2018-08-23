@@ -435,7 +435,7 @@ wxString KConfigManager::GetID() const
 }
 wxString KConfigManager::GetName() const
 {
-	return T("ToolBar.ConfigManager");
+	return T("ConfigManager.Name");
 }
 wxString KConfigManager::GetVersion() const
 {

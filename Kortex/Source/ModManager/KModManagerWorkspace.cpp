@@ -239,14 +239,14 @@ void KModManagerWorkspace::CreateAddModMenu()
 
 	m_ToolBar_AddModMenu->AddSeparator();
 
-	item = m_ToolBar_AddModMenu->Add(new KxMenuItem(T("ModManager.NewMod.ImportFrom", "Mod Organizer")));
+	item = m_ToolBar_AddModMenu->Add(new KxMenuItem(TF("ModManager.NewMod.ImportFrom").arg("Mod Organizer")));
 	item->SetBitmap(KGetBitmap(KIMG_MO2));
 	item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 	{
 		KModManagerImport::ShowImportDialog(KModManagerImport::ModOrganizer, this);
 	});
 
-	item = m_ToolBar_AddModMenu->Add(new KxMenuItem(T("ModManager.NewMod.ImportFrom", "Nexus Mod Manager")));
+	item = m_ToolBar_AddModMenu->Add(new KxMenuItem(TF("ModManager.NewMod.ImportFrom").arg("Nexus Mod Manager")));
 	item->SetBitmap(KGetBitmap(KIMG_SITE_NEXUS));
 	item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 	{
@@ -369,7 +369,7 @@ wxString KModManagerWorkspace::GetID() const
 }
 wxString KModManagerWorkspace::GetName() const
 {
-	return T("ToolBar.ModManager");
+	return T("ModManager.Name");
 }
 
 KWorkspace* KModManagerWorkspace::AddSubWorkspace(KWorkspace* workspace)
@@ -439,7 +439,7 @@ bool KModManagerWorkspace::ShowChangeModIDDialog(KModEntry* entry)
 			{
 				if (existingMod != entry)
 				{
-					KxTaskDialog(&dialog, KxID_NONE, T("InstallWizard.ChangeID.Used", existingMod->GetName()), wxEmptyString, KxBTN_OK, KxICON_WARNING).ShowModal();
+					KxTaskDialog(&dialog, KxID_NONE, TF("InstallWizard.ChangeID.Used").arg(existingMod->GetName()), wxEmptyString, KxBTN_OK, KxICON_WARNING).ShowModal();
 					event.Veto();
 				}
 			}
@@ -618,11 +618,11 @@ void KModManagerWorkspace::UninstallMod(KModEntry* entry, bool eraseLog)
 		KxTaskDialog dialog(GetMainWindow(), KxID_NONE, wxEmptyString, T("ModManager.RemoveMod.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (entry->IsInstalled())
 		{
-			dialog.SetCaption(eraseLog ? T("ModManager.RemoveMod.CaptionUninstallAndErase", entry->GetName()) : T("ModManager.RemoveMod.CaptionUninstall", entry->GetName()));
+			dialog.SetCaption(eraseLog ? TF("ModManager.RemoveMod.CaptionUninstallAndErase").arg(entry->GetName()) : TF("ModManager.RemoveMod.CaptionUninstall").arg(entry->GetName()));
 		}
 		else
 		{
-			dialog.SetCaption(T("ModManager.RemoveMod.CaptionErase", entry->GetName()));
+			dialog.SetCaption(TF("ModManager.RemoveMod.CaptionErase").arg(entry->GetName()));
 			eraseLog = true;
 		}
 

@@ -299,25 +299,25 @@ void KMainWindow::CreateMainMenu()
 	m_MainMenu->AddSeparator();
 
 	// Add locations
-	KxMenu* pLocationsMenu = new KxMenu();
-	const KLocationsManagerConfig* pLocationsManager = KLocationsManagerConfig::GetInstance();
-	for (const KLabeledValue& entry: pLocationsManager->GetLocations())
+	KxMenu* locationsMenu = new KxMenu();
+	const KLocationsManagerConfig* locationsManager = KLocationsManagerConfig::GetInstance();
+	for (const KLabeledValue& entry: locationsManager->GetLocations())
 	{
 		if (entry.GetValue().IsEmpty() && entry.GetLabel().IsEmpty())
 		{
-			pLocationsMenu->AddSeparator();
+			locationsMenu->AddSeparator();
 		}
 		else
 		{
-			KxMenuItem* item = pLocationsMenu->Add(new KxMenuItem(entry.GetLabel()));
+			KxMenuItem* item = locationsMenu->Add(new KxMenuItem(entry.GetLabel()));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER));
-			item->Bind(KxEVT_MENU_SELECT, [pLocationsManager, entry](KxMenuEvent& event)
+			item->Bind(KxEVT_MENU_SELECT, [locationsManager, entry](KxMenuEvent& event)
 			{
-				pLocationsManager->OpenLocation(entry);
+				locationsManager->OpenLocation(entry);
 			});
 		}
 	}
-	m_MainMenu->AppendSubMenu(pLocationsMenu, T("MainMenu.OpenLocation"))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+	m_MainMenu->AppendSubMenu(locationsMenu, T("MainMenu.OpenLocation"))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
 	m_MainMenu->AddSeparator();
 
 	KxMenuItem* pAboutItem = m_MainMenu->Add(new KxMenuItem(T("MainMenu.About")));

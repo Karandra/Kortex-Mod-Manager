@@ -53,7 +53,7 @@ KxSingletonPtr_Define(KProgramManager);
 
 wxString KProgramManager::GetProgramsListFile(const wxString& templateID, const wxString& configID)
 {
-	return KProfile::GetDataPath(templateID, configID) + '\\' + "RunManagerPrograms.xml";
+	return KProfile::GetDataPath(templateID, configID) + '\\' + "Programs.xml";
 }
 
 const KProgramManagerConfig* KProgramManager::GetRunConfig()

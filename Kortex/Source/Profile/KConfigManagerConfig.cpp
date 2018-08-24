@@ -3,6 +3,7 @@
 #include "KConfigManagerConfig.h"
 #include "KProfile.h"
 #include "KApp.h"
+#include <KxFramework/KxXML.h>
 
 //////////////////////////////////////////////////////////////////////////
 KPGCFormat KConfigManagerConfigEntry::NameToFormatID(const wxString& format)

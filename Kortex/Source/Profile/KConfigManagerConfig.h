@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxSingleton.h>
+class KxXMLNode;
 class KProfile;
 enum KCMTypeDetector;
 

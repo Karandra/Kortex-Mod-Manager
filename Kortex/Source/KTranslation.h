@@ -3,18 +3,13 @@
 #include <KxFramework/KxFormat.h>
 class KProfile;
 
-namespace
+namespace KTranslation
 {
+	const KxTranslation& GetTranslation();
+
 	template<class Type> wxString T_Fallback(const Type& id)
 	{
-		if constexpr(std::is_integral<Type>::value || std::is_enum<Type>::value)
-		{
-			return wxString::Format("$T(%d)", id);
-		}
-		else
-		{
-			return wxString::Format("$T(%s)", id);
-		}
+		return KxFormat("$T(%1)").arg(id);
 	}
 }
 
@@ -26,28 +21,22 @@ wxString V(KProfile* profile, const wxString& source);
 template<class Type> wxString T(const Type& id)
 {
 	bool isSuccess = false;
-	wxString out = KxTranslation::GetString(id, &isSuccess);
+	wxString out = KTranslation::GetTranslation().GetString(id, &isSuccess);
 	if (isSuccess)
 	{
 		return V(out);
 	}
-	else
-	{
-		return T_Fallback(id);
-	}
+	return KTranslation::T_Fallback(id);
 }
 template<class Type> wxString T(KProfile* profile, const Type& id)
 {
 	bool isSuccess = false;
-	wxString out = KxTranslation::GetString(id, &isSuccess);
+	wxString out = KTranslation::GetTranslation().GetString(id, &isSuccess);
 	if (isSuccess)
 	{
 		return V(profile, out);
 	}
-	else
-	{
-		return T_Fallback(id);
-	}
+	return KTranslation::T_Fallback(id);
 }
 
 template<class Type> KxFormat TF(const Type& id)

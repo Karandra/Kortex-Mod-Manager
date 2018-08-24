@@ -89,8 +89,8 @@ void KModEntry::CreateFromSignature(const wxString& signature)
 
 	if (!m_Signature.IsEmpty())
 	{
-		KxFileStream tXMLStream(GetLocation(KMM_LOCATION_MOD_INFO), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
-		KxXMLDocument xml(tXMLStream);
+		KxFileStream xmlStream(GetLocation(KMM_LOCATION_MOD_INFO), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+		KxXMLDocument xml(xmlStream);
 		if (xml.IsOK())
 		{
 			KxXMLNode tRoot = xml.GetFirstChildElement("Mod");

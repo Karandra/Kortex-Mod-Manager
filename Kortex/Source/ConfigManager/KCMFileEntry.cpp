@@ -63,16 +63,16 @@ void KCMFileEntry::InitDataProvider()
 	m_DataProvider = GetConfigManager()->OnQueryDataProvider(this);
 }
 
-KCMFileEntry::KCMFileEntry(KConfigManager* pConfigManager, KxXMLNode& node, const KCMOptionsFormatter& tDefaultOptions)
-	:m_ConfigManager(pConfigManager), m_Formatter(KCMOptionsFormatter::LoadFormatOptions(node, tDefaultOptions))
+KCMFileEntry::KCMFileEntry(KConfigManager* pConfigManager, KxXMLNode& node, const KCMOptionsFormatter& defaultOptions)
+	:m_ConfigManager(pConfigManager), m_Formatter(KCMOptionsFormatter::LoadFormatOptions(node, defaultOptions))
 {
 	m_ProfileEntry = KConfigManager::GetGameConfig()->GetEntry(LoadID(node));
 	InitDataProvider();
 	LoadEntries(node);
 	LoadUnknownEntries();
 }
-KCMFileEntry::KCMFileEntry(KConfigManager* pConfigManager, const KConfigManagerConfigEntry* pProfileEntry, const KCMOptionsFormatter& tDefaultOptions)
-	:m_ConfigManager(pConfigManager), m_ProfileEntry(pProfileEntry), m_Formatter(tDefaultOptions)
+KCMFileEntry::KCMFileEntry(KConfigManager* pConfigManager, const KConfigManagerConfigEntry* profileEntry, const KCMOptionsFormatter& defaultOptions)
+	:m_ConfigManager(pConfigManager), m_ProfileEntry(profileEntry), m_Formatter(defaultOptions)
 {
 	InitDataProvider();
 	LoadUnknownEntries();

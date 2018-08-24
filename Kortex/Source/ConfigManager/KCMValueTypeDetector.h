@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+class KxXMLNode;
 
 enum KCMTypeDetector
 {
@@ -17,7 +18,7 @@ class KCMValueTypeDetector
 		virtual ~KCMValueTypeDetector() {}
 
 	public:
-		virtual KCMDataType operator()(const wxString& sValueName, const wxString& sValueData) = 0;
+		virtual KCMDataType operator()(const wxString& valueName, const wxString& valueData) = 0;
 		virtual void Clear() = 0;
 };
 
@@ -28,7 +29,7 @@ class KCMHungarianNotationDetector: public KCMValueTypeDetector
 		
 	public:
 		void Init(KxXMLNode& node);
-		virtual KCMDataType operator()(const wxString& sValueName, const wxString& sValueData) override;
+		virtual KCMDataType operator()(const wxString& valueName, const wxString& valueData) override;
 		virtual void Clear() override
 		{
 			m_TypesMap.clear();
@@ -38,7 +39,7 @@ class KCMHungarianNotationDetector: public KCMValueTypeDetector
 class KCMDataAnalysisDetector: public KCMValueTypeDetector
 {
 	public:
-		virtual KCMDataType operator()(const wxString& sValueName, const wxString& sValueData) override;
+		virtual KCMDataType operator()(const wxString& valueName, const wxString& valueData) override;
 		virtual void Clear() override
 		{
 		}

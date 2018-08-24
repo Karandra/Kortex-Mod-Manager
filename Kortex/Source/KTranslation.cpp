@@ -3,6 +3,11 @@
 #include "KApp.h"
 #include "Profile/KProfile.h"
 
+const KxTranslation& KTranslation::GetTranslation()
+{
+	return KApp::Get().GetTranslation();
+}
+
 wxString V(const wxString& source)
 {
 	return KApp::Get().ExpandVariables(source);

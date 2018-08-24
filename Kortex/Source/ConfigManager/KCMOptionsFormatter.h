@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+class KxXMLNode;
 enum KCMDataType;
 
 enum KCMOFMode
@@ -12,7 +13,7 @@ enum KCMOFMode
 class KCMOptionsFormatter
 {
 	public:
-		static KCMOptionsFormatter LoadFormatOptions(KxXMLNode& node, const KCMOptionsFormatter& tDefaultOptions);
+		static KCMOptionsFormatter LoadFormatOptions(KxXMLNode& node, const KCMOptionsFormatter& defaultOptions);
 
 	private:
 		wxString m_Pattern;

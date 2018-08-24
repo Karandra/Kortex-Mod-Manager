@@ -43,10 +43,10 @@ void KModManagerTags::LoadTagsFromFile(const wxString& filePath)
 		wxString id = node.GetAttribute("ID");
 		wxString label = node.GetAttribute("Label", id);
 		bool isSuccess = false;
-		wxString sLabelT = KxTranslation::GetString("ModManager.Tag." + label, &isSuccess);
+		wxString labelT = KTranslation::GetTranslation().GetString("ModManager.Tag." + label, &isSuccess);
 		if (isSuccess)
 		{
-			label = sLabelT;
+			label = labelT;
 		}
 
 		m_Tags.emplace_back(KModTag(id, V(label), isSuccess));

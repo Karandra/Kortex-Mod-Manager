@@ -14,13 +14,13 @@ void KCMHungarianNotationDetector::Init(KxXMLNode& node)
 		}
 	}
 }
-KCMDataType KCMHungarianNotationDetector::operator()(const wxString& sValueName, const wxString& sValueData)
+KCMDataType KCMHungarianNotationDetector::operator()(const wxString& valueName, const wxString& valueData)
 {
-	if (!sValueName.IsEmpty())
+	if (!valueName.IsEmpty())
 	{
 		for (const auto& v: m_TypesMap)
 		{
-			if (sValueName.StartsWith(v.first))
+			if (valueName.StartsWith(v.first))
 			{
 				return v.second;
 			}
@@ -29,9 +29,9 @@ KCMDataType KCMHungarianNotationDetector::operator()(const wxString& sValueName,
 	return KCMDT_UNKNOWN;
 }
 
-KCMDataType KCMDataAnalysisDetector::operator()(const wxString& sValueName, const wxString& sValueData)
+KCMDataType KCMDataAnalysisDetector::operator()(const wxString& valueName, const wxString& valueData)
 {
-	if (!sValueData.IsEmpty())
+	if (!valueData.IsEmpty())
 	{
 		double dValue = 0;
 		long iValue = 0;
@@ -39,28 +39,28 @@ KCMDataType KCMDataAnalysisDetector::operator()(const wxString& sValueName, cons
 		long long llValue = 0;
 		unsigned long long ullValue = 0;
 
-		if (sValueData.IsSameAs("true", false) || sValueData.IsSameAs("false", false))
+		if (valueData.IsSameAs("true", false) || valueData.IsSameAs("false", false))
 		{
 			return KCMDT_BOOL;
 		}
-		else if (sValueData.Find('.') != wxNOT_FOUND && sValueData.ToCDouble(&dValue))
+		else if (valueData.Find('.') != wxNOT_FOUND && valueData.ToCDouble(&dValue))
 		{
 			// Can't really distinguish float32 from float64 here so use float32
 			return KCMDT_FLOAT32;
 		}
-		else if (sValueData.ToCLong(&iValue))
+		else if (valueData.ToCLong(&iValue))
 		{
 			return KCMDT_INT32;
 		}
-		else if (sValueData.ToCULong(&uValue))
+		else if (valueData.ToCULong(&uValue))
 		{
 			return KCMDT_UINT32;
 		}
-		else if (sValueData.ToLongLong(&llValue))
+		else if (valueData.ToLongLong(&llValue))
 		{
 			return KCMDT_INT64;
 		}
-		else if (sValueData.ToULongLong(&ullValue))
+		else if (valueData.ToULongLong(&ullValue))
 		{
 			return KCMDT_UINT64;
 		}

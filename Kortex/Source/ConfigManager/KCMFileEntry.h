@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KCMConfigEntry.h"
+class KxXMLNode;
 class KConfigManager;
 class KConfigManagerConfigEntry;
 class KCMIDataProvider;
@@ -22,8 +23,8 @@ class KCMFileEntry
 		void InitDataProvider();
 
 	public:
-		KCMFileEntry(KConfigManager* pConfigManager, KxXMLNode& node, const KCMOptionsFormatter& tDefaultOptions);
-		KCMFileEntry(KConfigManager* pConfigManager, const KConfigManagerConfigEntry* pProfileEntry, const KCMOptionsFormatter& tDefaultOptions);
+		KCMFileEntry(KConfigManager* pConfigManager, KxXMLNode& node, const KCMOptionsFormatter& defaultOptions);
+		KCMFileEntry(KConfigManager* pConfigManager, const KConfigManagerConfigEntry* profileEntry, const KCMOptionsFormatter& defaultOptions);
 		void ClearEntries();
 		virtual ~KCMFileEntry();
 

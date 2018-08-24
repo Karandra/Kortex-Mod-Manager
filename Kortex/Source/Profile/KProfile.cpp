@@ -157,8 +157,8 @@ bool KProfile::LoadGeneric(const wxString& sTemplatePath)
 	m_Variables.SetVariable("ProfileTemplateFile", sTemplatePath);
 
 	// Load template XML
-	KxFileStream tXMLStream(sTemplatePath);
-	m_ProfileXML.Load(tXMLStream);
+	KxFileStream xmlStream(sTemplatePath);
+	m_ProfileXML.Load(xmlStream);
 
 	// Load ID and SortOrder
 	KxXMLNode node = m_ProfileXML.QueryElement("Profile");
@@ -312,7 +312,7 @@ wxString KProfile::LoadRegistryVariable(const KxXMLNode& node)
 	}
 
 	wxString path = ExpandVariables(node.GetFirstChildElement("Path").GetValue());
-	wxString sValueName = ExpandVariables(node.GetFirstChildElement("ValueName").GetValue());
+	wxString valueName = ExpandVariables(node.GetFirstChildElement("ValueName").GetValue());
 	
 	KxRegistryValueType type = KxREG_VALUE_ANY;
 	wxString sValueType = node.GetFirstChildElement("ValueType").GetValue();
@@ -321,7 +321,7 @@ wxString KProfile::LoadRegistryVariable(const KxXMLNode& node)
 		type = ms_NameToRegType.at(sValueType);
 	}
 
-	wxAny vData = KxRegistry::GetValue(nMainKey, path, sValueName, type, nRegNode, true);
+	wxAny vData = KxRegistry::GetValue(nMainKey, path, valueName, type, nRegNode, true);
 	if (type == KxREG_VALUE_DWORD || type == KxREG_VALUE_QWORD)
 	{
 		return std::to_string(vData.As<int64_t>());

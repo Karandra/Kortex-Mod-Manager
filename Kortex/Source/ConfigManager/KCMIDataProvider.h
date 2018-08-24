@@ -1,10 +1,11 @@
 #pragma once
 #include "stdafx.h"
-
+class KxXMLNode;
 class KCMConfigEntryBase;
 class KCMConfigEntryPath;
 class KCMConfigEntryStd;
 class KCMFileEntry;
+
 class KCMIDataProvider
 {
 	public:

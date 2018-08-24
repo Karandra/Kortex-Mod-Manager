@@ -4,7 +4,7 @@
 #include "KConfigManager.h"
 #include "KAux.h"
 
-KCMOptionsFormatter KCMOptionsFormatter::LoadFormatOptions(KxXMLNode& node, const KCMOptionsFormatter& tDefaultOptions)
+KCMOptionsFormatter KCMOptionsFormatter::LoadFormatOptions(KxXMLNode& node, const KCMOptionsFormatter& defaultOptions)
 {
 	KxXMLNode tOptionsNode = node.GetFirstChildElement("FormatOptions");
 	if (tOptionsNode.IsOK())
@@ -13,7 +13,7 @@ KCMOptionsFormatter KCMOptionsFormatter::LoadFormatOptions(KxXMLNode& node, cons
 	}
 	else
 	{
-		return tDefaultOptions;
+		return defaultOptions;
 	}
 }
 

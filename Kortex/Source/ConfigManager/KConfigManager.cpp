@@ -357,16 +357,16 @@ void KConfigManager::LoadFileRecords(KxXMLDocument& xml, bool bAllowENB)
 	// Add files not listed in XML
 	for (size_t i = 0; i < GetGameConfig()->GetEntriesCount(); i++)
 	{
-		const KConfigManagerConfigEntry* pProfileEntry = GetGameConfig()->GetEntryAt(i);
-		if (pProfileEntry->IsGameConfigID() && (bAllowENB || !pProfileEntry->IsENBID()))
+		const KConfigManagerConfigEntry* profileEntry = GetGameConfig()->GetEntryAt(i);
+		if (profileEntry->IsGameConfigID() && (bAllowENB || !profileEntry->IsENBID()))
 		{
-			auto tElement = std::find_if(m_Files.cbegin(), m_Files.cend(), [pProfileEntry](const KCMFileEntry* fileEntry)
+			auto tElement = std::find_if(m_Files.cbegin(), m_Files.cend(), [profileEntry](const KCMFileEntry* fileEntry)
 			{
-				return pProfileEntry->GetID() == fileEntry->GetID();
+				return profileEntry->GetID() == fileEntry->GetID();
 			});
 			if (tElement == m_Files.cend())
 			{
-				KCMFileEntry* fileEntry = m_Files.emplace_back(new KCMFileEntry(this, pProfileEntry, m_Formatter));
+				KCMFileEntry* fileEntry = m_Files.emplace_back(new KCMFileEntry(this, profileEntry, m_Formatter));
 				fileEntry->Load();
 			}
 		}
@@ -375,27 +375,27 @@ void KConfigManager::LoadFileRecords(KxXMLDocument& xml, bool bAllowENB)
 
 void KConfigManager::LoadVirtualKeys()
 {
-	KxFileStream tXMLStream(GetConfigFile("VirtualKeys"), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
-	KxXMLDocument xml(tXMLStream);
+	KxFileStream xmlStream(GetConfigFile("VirtualKeys"), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	KxXMLDocument xml(xmlStream);
 
 	KxXMLNode node = xml.QueryElement("VirtualKeys");
 	for (node = node.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
-		unsigned long nKeyCode = WXK_NONE;
+		unsigned long keyCode = WXK_NONE;
 		wxString value = node.GetValue();
-		if (value.Mid(2).ToCULong(&nKeyCode, 16) || value.ToCULong(&nKeyCode, 16))
+		if (value.Mid(2).ToCULong(&keyCode, 16) || value.ToCULong(&keyCode, 16))
 		{
-			wxString sVKID = node.GetAttribute("VKID");
-			wxString name = KAux::StrOr(node.GetAttribute("Name"), sVKID, std::to_wstring(nKeyCode));
+			wxString vkid = node.GetAttribute("VKID");
+			wxString name = KAux::StrOr(node.GetAttribute("Name"), vkid, std::to_wstring(keyCode));
 
-			bool bHasTranslation = false;
-			wxString label = KxTranslation::GetString(wxString::Format("ConfigManager.VirtualKey.%s", sVKID), &bHasTranslation);
-			if (bHasTranslation)
+			bool hasTranslation = false;
+			wxString label = KTranslation::GetTranslation().GetString(wxString::Format("ConfigManager.VirtualKey.%s", vkid), &hasTranslation);
+			if (hasTranslation)
 			{
 				name = label;
 			}
 
-			m_VirtualKeys.emplace(std::make_pair((wxKeyCode)nKeyCode, std::make_pair(sVKID, name)));
+			m_VirtualKeys.emplace(std::make_pair((wxKeyCode)keyCode, std::make_pair(vkid, name)));
 		}
 	}
 
@@ -415,8 +415,8 @@ KConfigManager::KConfigManager(KWorkspace* workspace, const wxString& templateID
 {
 	LoadVirtualKeys();
 
-	KxFileStream tXMLStream(m_FilePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
-	m_XML.Load(tXMLStream);
+	KxFileStream xmlStream(m_FilePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	m_XML.Load(xmlStream);
 
 	LoadMainFile(m_XML);
 }
@@ -444,8 +444,8 @@ wxString KConfigManager::GetVersion() const
 
 void KConfigManager::AddFile(const wxString& fileName, bool bAllowENB)
 {
-	KxFileStream tXMLStream(fileName, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
-	m_AdditionalXML.push_back(std::make_pair(fileName, new KxXMLDocument(tXMLStream)));
+	KxFileStream xmlStream(fileName, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	m_AdditionalXML.push_back(std::make_pair(fileName, new KxXMLDocument(xmlStream)));
 
 	LoadAdditionalFile(*(m_AdditionalXML.back().second), bAllowENB);
 }
@@ -466,11 +466,11 @@ KCMFileEntry* KConfigManager::GetEntry(KPGCFileID id) const
 	}
 	return NULL;
 }
-const KConfigManager::VirtualKeyMapInfo& KConfigManager::GetVirtualKeyInfo(wxKeyCode nKeyCode) const
+const KConfigManager::VirtualKeyMapInfo& KConfigManager::GetVirtualKeyInfo(wxKeyCode keyCode) const
 {
-	if (m_VirtualKeys.count(nKeyCode))
+	if (m_VirtualKeys.count(keyCode))
 	{
-		return m_VirtualKeys.at(nKeyCode);
+		return m_VirtualKeys.at(keyCode);
 	}
 	return m_VirtualKeys.at(WXK_NONE);
 }
@@ -533,17 +533,17 @@ KCMIDataProvider* KConfigManager::OnQueryDataProvider(const KCMFileEntry* fileEn
 	}
 	else
 	{
-		const KConfigManagerConfigEntry* pProfileEntry = fileEntry->GetProfileEntry();
-		if (pProfileEntry)
+		const KConfigManagerConfigEntry* profileEntry = fileEntry->GetProfileEntry();
+		if (profileEntry)
 		{
-			switch (pProfileEntry->GetFormat())
+			switch (profileEntry->GetFormat())
 			{
 				case KPGC_FORMAT_INI:
 				{
 					KCMDataProviderINI* pDataProvider = NULL;
-					if (pProfileEntry->IsFilePathRelative())
+					if (profileEntry->IsFilePathRelative())
 					{
-						wxString path = KModManager::GetDispatcher().GetTargetPath(pProfileEntry->GetFilePath());
+						wxString path = KModManager::GetDispatcher().GetTargetPath(profileEntry->GetFilePath());
 						if (!path.IsEmpty())
 						{
 							pDataProvider = new KCMDataProviderINI(path);
@@ -551,7 +551,7 @@ KCMIDataProvider* KConfigManager::OnQueryDataProvider(const KCMFileEntry* fileEn
 					}
 					else
 					{
-						pDataProvider = new KCMDataProviderINI(pProfileEntry->GetFilePath());
+						pDataProvider = new KCMDataProviderINI(profileEntry->GetFilePath());
 					}
 
 					if (pDataProvider)

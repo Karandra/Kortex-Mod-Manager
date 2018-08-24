@@ -135,7 +135,7 @@ class KConfigManager: public KManager//, public KxSingletonPtr<KConfigManager>
 		{
 			return m_VirtualKeys;
 		}
-		const VirtualKeyMapInfo& GetVirtualKeyInfo(wxKeyCode nKeyCode) const;
+		const VirtualKeyMapInfo& GetVirtualKeyInfo(wxKeyCode keyCode) const;
 
 		virtual void Clear();
 		virtual void Reload();

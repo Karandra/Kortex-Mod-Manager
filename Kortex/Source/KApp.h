@@ -29,8 +29,11 @@ class KApp: public KxApp<wxApp, KApp>
 
 	private:
 		wxSingleInstanceChecker m_SingleInstanceChecker;
-		KxTranslationTable m_AvailableTranslations;
-		wxString m_LoadedTranslation;
+
+		KxStringToStringUMap m_AvailableTranslations;
+		wxString m_LoadedTranslationLocale;
+		KxTranslation m_Translation;
+
 		wxString m_UserSettingsFolder;
 		wxWindow* m_InitProgressDialog = NULL;
 
@@ -93,13 +96,18 @@ class KApp: public KxApp<wxApp, KApp>
 		{
 			return GetCurrentProfile() != NULL;
 		}
+		
 		bool IsTranslationLoaded() const
 		{
-			return !m_LoadedTranslation.IsEmpty() && !m_AvailableTranslations.empty();
+			return !m_LoadedTranslationLocale.IsEmpty() && !m_AvailableTranslations.empty();
 		}
-		const KxTranslationTable& GetAvailableTranslations() const
+		const KxStringToStringUMap& GetAvailableTranslations() const
 		{
 			return m_AvailableTranslations;
+		}
+		const KxTranslation& GetTranslation() const
+		{
+			return m_Translation;
 		}
 
 		KSettingsWindowManager* GetSettingsManager() const;

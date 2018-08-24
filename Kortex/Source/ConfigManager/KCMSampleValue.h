@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+class KxXMLNode;
 
 class KCMConfigEntryStd;
 class KCMSampleValue

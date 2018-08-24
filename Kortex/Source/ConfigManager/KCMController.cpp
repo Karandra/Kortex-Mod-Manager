@@ -538,10 +538,10 @@ void KCMController::OnEditEntry(KCMConfigEntryStd* configEntry)
 			{
 				if (KCMConfigEntryVK* pVK = configEntry->ToVKEntry())
 				{
-					wxUint32 nKeyCode = (wxUint32)dialog->GetClientData();
-					if (nKeyCode != pVK->GetDataKeyCode())
+					wxUint32 keyCode = (wxUint32)dialog->GetClientData();
+					if (keyCode != pVK->GetDataKeyCode())
 					{
-						pVK->SetDataKeyCode((wxKeyCode)nKeyCode);
+						pVK->SetDataKeyCode((wxKeyCode)keyCode);
 					}
 					else
 					{

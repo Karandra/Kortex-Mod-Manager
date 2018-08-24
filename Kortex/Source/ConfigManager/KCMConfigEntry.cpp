@@ -102,9 +102,9 @@ void KCMConfigEntryStd::LoadMain(KxXMLNode& node)
 	}
 	else
 	{
-		bool bTranslated = false;
-		m_Label = KAux::StrOr(KxTranslation::GetString(wxString::Format("GameConfig.Values.%s", m_Name), &bTranslated), m_Name);
-		if (bTranslated)
+		bool isTranslated = false;
+		m_Label = KAux::StrOr(KTranslation::GetTranslation().GetString(wxString::Format("GameConfig.Values.%s", m_Name), &isTranslated), m_Name);
+		if (isTranslated)
 		{
 			m_Label = KApp::Get().ExpandVariables(m_Label);
 		}
@@ -237,8 +237,8 @@ void KCMConfigEntryStd::CleanSamplesArray()
 	}
 }
 
-KCMConfigEntryStd::KCMConfigEntryStd(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions)
-	:KCMConfigEntryPath(fileEntry, wxEmptyString), m_Formatter(tDefaultOptions)
+KCMConfigEntryStd::KCMConfigEntryStd(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions)
+	:KCMConfigEntryPath(fileEntry, wxEmptyString), m_Formatter(defaultOptions)
 {
 }
 void KCMConfigEntryStd::Create(KxXMLNode& node)
@@ -401,8 +401,8 @@ KCMSampleValue KCMConfigEntryDV::OnLoadSampleValue(KxXMLNode& node) const
 	return KCMSampleValue(this, value, label);
 }
 
-KCMConfigEntryDV::KCMConfigEntryDV(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions)
-	:KCMConfigEntryStd(fileEntry, tDefaultOptions)
+KCMConfigEntryDV::KCMConfigEntryDV(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions)
+	:KCMConfigEntryStd(fileEntry, defaultOptions)
 {
 }
 void KCMConfigEntryDV::Create(KxXMLNode& node)
@@ -424,12 +424,12 @@ void KCMConfigEntryDV::SaveEntry(KxINI& tDocument) const
 }
 void KCMConfigEntryDV::LoadEntry(const KxINI& tDocument)
 {
-	auto LoadField = [this, &tDocument](DataType& tFieled, const wxString& sValueName)
+	auto LoadField = [this, &tDocument](DataType& tFieled, const wxString& valueName)
 	{
-		tFieled.second = tDocument.HasValue(m_Path, sValueName);
+		tFieled.second = tDocument.HasValue(m_Path, valueName);
 		if (tFieled.second)
 		{
-			tFieled.first = tDocument.GetValue(m_Path, sValueName);
+			tFieled.first = tDocument.GetValue(m_Path, valueName);
 		}
 	};
 
@@ -506,8 +506,8 @@ void KCMConfigEntryDV::SetData(const wxString& sData, bool bFormat)
 }
 
 //////////////////////////////////////////////////////////////////////////
-KCMConfigEntryVK::KCMConfigEntryVK(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions)
-	:KCMConfigEntryStd(fileEntry, tDefaultOptions), m_DataVK(std::make_pair(WXK_NONE, false))
+KCMConfigEntryVK::KCMConfigEntryVK(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions)
+	:KCMConfigEntryStd(fileEntry, defaultOptions), m_DataVK(std::make_pair(WXK_NONE, false))
 {
 }
 KCMConfigEntryVK::~KCMConfigEntryVK()
@@ -561,8 +561,8 @@ void KCMConfigEntryArray::LoadEntry(const KxINI& tDocument)
 	SetData(tDocument.GetValue(m_Path, m_Name), false);
 }
 
-KCMConfigEntryArray::KCMConfigEntryArray(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions)
-	:KCMConfigEntryStd(fileEntry, tDefaultOptions)
+KCMConfigEntryArray::KCMConfigEntryArray(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions)
+	:KCMConfigEntryStd(fileEntry, defaultOptions)
 {
 }
 void KCMConfigEntryArray::Create(KxXMLNode& node)
@@ -651,8 +651,8 @@ void KCMConfigEntryArray::SetData(const wxString& sData, bool bFormat)
 }
 
 //////////////////////////////////////////////////////////////////////////
-KCMConfigEntryFileBrowse::KCMConfigEntryFileBrowse(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions)
-	:KCMConfigEntryStd(fileEntry, tDefaultOptions)
+KCMConfigEntryFileBrowse::KCMConfigEntryFileBrowse(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions)
+	:KCMConfigEntryStd(fileEntry, defaultOptions)
 {
 }
 void KCMConfigEntryFileBrowse::Create(KxXMLNode& node)

@@ -192,7 +192,7 @@ class KCMConfigEntryStd: public KCMConfigEntryPath
 		void CleanSamplesArray();
 
 	public:
-		KCMConfigEntryStd(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions);
+		KCMConfigEntryStd(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions);
 		virtual void Create(KxXMLNode& node);
 		void Create(const wxString& path, const wxString& name, KCMDataType type = KCMDT_UNKNOWN);
 		virtual ~KCMConfigEntryStd();
@@ -281,7 +281,7 @@ class KCMConfigEntryDV: public KCMConfigEntryStd
 		virtual KCMSampleValue OnLoadSampleValue(KxXMLNode& node) const override;
 
 	public:
-		KCMConfigEntryDV(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions);
+		KCMConfigEntryDV(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions);
 		virtual void Create(KxXMLNode& node) override;
 		virtual ~KCMConfigEntryDV();
 
@@ -335,7 +335,7 @@ class KCMConfigEntryVK: public KCMConfigEntryStd
 		DataTypeVK m_DataVK;
 
 	public:
-		KCMConfigEntryVK(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions);
+		KCMConfigEntryVK(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions);
 		virtual ~KCMConfigEntryVK();
 
 	public:
@@ -353,9 +353,9 @@ class KCMConfigEntryVK: public KCMConfigEntryStd
 		{
 			return m_DataVK.first;
 		}
-		void SetDataKeyCode(wxKeyCode nKeyCode)
+		void SetDataKeyCode(wxKeyCode keyCode)
 		{
-			m_DataVK.first = nKeyCode;
+			m_DataVK.first = keyCode;
 			m_DataVK.second = true;
 		}
 		
@@ -390,7 +390,7 @@ class KCMConfigEntryArray: public KCMConfigEntryStd
 		virtual void LoadEntry(const KxINI& tDocument) override;
 
 	public:
-		KCMConfigEntryArray(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions);
+		KCMConfigEntryArray(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions);
 		virtual void Create(KxXMLNode& node) override;
 		virtual ~KCMConfigEntryArray();
 
@@ -436,7 +436,7 @@ class KCMConfigEntryFileBrowse: public KCMConfigEntryStd
 		bool m_IsFolder = false;
 
 	public:
-		KCMConfigEntryFileBrowse(KCMFileEntry* fileEntry, const KCMOptionsFormatter& tDefaultOptions);
+		KCMConfigEntryFileBrowse(KCMFileEntry* fileEntry, const KCMOptionsFormatter& defaultOptions);
 		virtual void Create(KxXMLNode& node) override;
 		virtual ~KCMConfigEntryFileBrowse();
 

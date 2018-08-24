@@ -299,36 +299,46 @@ void KApp::LoadTranslation()
 		auto it = m_AvailableTranslations.find(locale);
 		if (it != m_AvailableTranslations.end())
 		{
-			m_LoadedTranslation = locale;
-			m_GeneralOptions_AppWide.SetAttribute("Language", locale);
-			return KxTranslation::LoadTranslationFromFile(it->second);
+			if (m_Translation.LoadFromFile(it->second))
+			{
+				KxTranslation::SetCurrent(m_Translation);
+				m_LoadedTranslationLocale = locale;
+				m_GeneralOptions_AppWide.SetAttribute("Language", locale);
+				return true;
+			}
 		}
 		return false;
 	};
 	
-	wxString selectedLang = m_GeneralOptions_AppWide.GetAttribute("Language");
-	if (!selectedLang.IsEmpty() && LoadLang(selectedLang))
+	if (!m_AvailableTranslations.empty())
 	{
-		return;
+		// Try load saved translation
+		wxString selectedLang = m_GeneralOptions_AppWide.GetAttribute("Language");
+		if (LoadLang(selectedLang))
+		{
+			return;
+		}
+
+		// Try default locales
+		if (LoadLang(KxTranslation::GetUserDefaultLocale()) ||
+			LoadLang(KxTranslation::GetSystemPreferredLocale()) ||
+			LoadLang(KxTranslation::GetSystemDefaultLocale()) || 
+			LoadLang("en-US"))
+		{
+			return;
+		}
+
+		// Try first available
+		const auto& first = *m_AvailableTranslations.begin();
+		if (LoadLang(first.first))
+		{
+			return;
+		}
+		KLogEvent(wxString::Format("Can't load translation from file \"%s\".\r\n\r\nTerminating.", first.second), KLOG_CRITICAL).Send();
 	}
-	
-	if (!LoadLang(KxTranslation::GetSystemPreferredLocale()))
+	else
 	{
-		if (!m_AvailableTranslations.empty())
-		{
-			if (!LoadLang("en-US"))
-			{
-				const auto& first = *m_AvailableTranslations.begin();
-				if (!LoadLang(first.first))
-				{
-					KLogEvent(wxString::Format("Can't load translation from file \"%s\".\r\n\r\nTerminating.", first.second), KLOG_CRITICAL).Send();
-				}
-			}
-		}
-		else
-		{
-			KLogEvent("No translations found. Terminating.", KLOG_CRITICAL).Send();
-		}
+		KLogEvent("No translations found. Terminating.", KLOG_CRITICAL).Send();
 	}
 }
 void KApp::LoadImages()
@@ -594,7 +604,7 @@ void KApp::AddDownloadToAlreadyRunningInstance(const wxString& link)
 	KxProcess process(KxLibrary(NULL).GetFileName());
 	if (process.Find())
 	{
-		for (HWND hWnd : process.EnumWindows())
+		for (HWND hWnd: process.EnumWindows())
 		{
 			if (KxTLWInternal::GetWindowUserData(hWnd) == KMainWindow::GetUniqueID())
 			{

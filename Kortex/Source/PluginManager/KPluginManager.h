@@ -6,6 +6,7 @@
 #include "ModManager/KModManagerModList.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
+#include <KxFramework/KxXML.h>
 class KPluginManagerWorkspace;
 class KPluginManagerConfig;
 class KPluginManagerConfigSortingToolEntry;

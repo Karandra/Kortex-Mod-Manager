@@ -2,6 +2,7 @@
 #include "KCMSampleValue.h"
 #include "KCMConfigEntry.h"
 #include "KApp.h"
+#include <KxFramework/KxXML.h>
 
 bool KCMSampleValue::SortComparator(const KCMSampleValue& v1, const KCMSampleValue& v2)
 {

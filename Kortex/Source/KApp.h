@@ -140,6 +140,7 @@ class KApp: public KxApp<wxApp, KApp>
 			m_BroadcastingEnabled = isEnabled;
 		}
 
+		bool ScheduleRestart();
 		bool Uninstall();
 
 	public:

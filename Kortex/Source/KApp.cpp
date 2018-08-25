@@ -32,6 +32,7 @@
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxRegistry.h>
 #include <KxFramework/KxSplashWindow.h>
+#include <KxFramework/KxTaskScheduler.h>
 
 wxString KApp::ExpandVariablesUsing(const wxString& variables, const KVariablesTable& variablesTable)
 {
@@ -663,8 +664,7 @@ bool KApp::ShowChageProfileDialog()
 			// Restart if user agreed
 			if (ret == KxID_YES)
 			{
-				KxProcess process(0);
-				KxShell::Execute(NULL, process.GetExecutablePath(), "open", wxEmptyString, process.GetExecutablePath().BeforeLast('\\'));
+				ScheduleRestart();
 			}
 			return true;
 		}
@@ -768,6 +768,21 @@ void KApp::SubscribeBroadcasting(wxWindow* window, wxEventType type)
 	SubscribeBroadcasting(window->GetEventHandler(), type);
 }
 
+bool KApp::ScheduleRestart()
+{
+	int delaySec = m_GeneralOptions_AppWide.GetAttributeInt("RestartDelay", 5);
+	const wxString taskName = "KortexRestart";
+
+	KxTaskScheduler taskSheduler;
+
+	KxTaskSchedulerTask task = taskSheduler.NewTask();
+	task.SetExecutable(KxProcess(0).GetImageName());
+	task.SetRegistrationTrigger("Restart", wxTimeSpan(0, 0, delaySec), wxDateTime::Now());
+	task.DeleteExpiredTaskAfter(wxTimeSpan(0, 0, 5));
+
+	taskSheduler.DeleteTask(taskName);
+	taskSheduler.SaveTask(task, taskName);
+}
 bool KApp::Uninstall()
 {
 	ConfigureInternetExplorer(false);

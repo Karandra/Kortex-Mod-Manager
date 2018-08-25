@@ -3,20 +3,21 @@ Version 1.4 - x
 [General] Removed refresh button from toolbar.
 [General] Drag and drop will cause scroll on attempt to drop to first or last visible row.
 [General] Fixed loading profile when Kortex is unable to locate game directory automatically.
-[Download Manager] Support for assaciation with NXM links.
+[Download Manager] Support for association with NXM links.
 [Download Manager] Version 1.0.
 [Mod Manager] Search by mod name also searches by its ID.
-[Mod Manager] Add grouping by priority.
+[Mod Manager] Added grouping by priority.
 [Mod Manager] Added import from Nexus Mod Manager.
 [Mod Manager] Fixed import from MO when data folders (mods, downloads, etc) is not located in specified folder.
 [Mod Manager] Fixed reversed mod order for MO import.
 [Mod Manager] Removed save-undo functions. All changes applied immediately.
-[Mod Manager] Version 1.2.1.
+[Mod Manager] Improved performance of statistics window.
+[Mod Manager] Version 1.3
 [Package Manager] Fixed assigning image as main or as header in "Interface" page.
 [Package Manager] Added back "Import from files" option to components.
 [Package Manager] Version 1.2.2.
 [Plugin Manager] For Morrowind, Oblivion, Fallout 3 and Fallout: New Vegas disabled forced sorting by plugin modification date.
-[Plugin Manager] Version 1.2.1
+[Plugin Manager] Version 1.3
 [Save Manager] Improved saves list performace.
 [Save Manager] Version 1.0.2
 

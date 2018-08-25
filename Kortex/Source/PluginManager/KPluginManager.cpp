@@ -89,7 +89,7 @@ wxString KPluginManager::GetName() const
 }
 wxString KPluginManager::GetVersion() const
 {
-	return "1.2.1";
+	return "1.3";
 }
 
 bool KPluginManager::IsValidModIndex(intptr_t modIndex) const

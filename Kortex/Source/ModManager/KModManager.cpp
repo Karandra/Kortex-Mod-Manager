@@ -263,7 +263,7 @@ wxString KModManager::GetName() const
 }
 wxString KModManager::GetVersion() const
 {
-	return "1.2.1";
+	return "1.3";
 }
 KWorkspace* KModManager::GetWorkspace() const
 {

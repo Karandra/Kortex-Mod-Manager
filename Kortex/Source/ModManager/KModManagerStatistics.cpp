@@ -128,7 +128,28 @@ int64_t KModManagerStatisticsModel::CountMods(CountMode mode) const
 }
 int64_t KModManagerStatisticsModel::CalcModStoreSize() const
 {
-	return KxFile(KModManager::Get().GetLocation(KMM_LOCATION_MODS_FOLDER)).GetFolderSize();
+	int64_t totalSize = 0;
+	std::function<void(const KFileTreeNode&)> ScanTree = [&ScanTree, &totalSize](const KFileTreeNode& rootNode)
+	{
+		for (const KFileTreeNode& node: rootNode.GetChildren())
+		{
+			if (node.IsFile())
+			{
+				totalSize += node.GetFileSize();
+			}
+			else
+			{
+				ScanTree(node);
+			}
+		}
+	};
+
+	// Only real mods, no base game and no overwrite.
+	for (const KModEntry* modEntry: KModManager::Get().GetEntries())
+	{
+		ScanTree(modEntry->GetFileTree());
+	}
+	return totalSize;
 }
 
 void KModManagerStatisticsModel::RefreshItems()

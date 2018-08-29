@@ -9,7 +9,7 @@
 
 void KModFilesExplorerDialog::CreateUI(wxWindow* parent)
 {
-	wxString caption = HasModEntry() ? wxString::Format("%s \"%s\"", T("ModExplorer.Caption"), m_ModEntry->GetName()) : T("ModExplorer.Caption");
+	wxString caption = wxString::Format("%s \"%s\"", T("ModExplorer.Caption"), m_ModEntry.GetName());
 	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
 		SetMainIcon(KxICON_NONE);
@@ -20,7 +20,7 @@ void KModFilesExplorerDialog::CreateUI(wxWindow* parent)
 		m_ViewPane->SetSizer(sizer);
 		PostCreate();
 
-		m_ViewModel = new KModFilesExplorerModel(m_ExplorerRoot, m_ModEntry);
+		m_ViewModel = new KModFilesExplorerModel(m_ModEntry);
 		m_ViewModel->Create(m_ViewPane, sizer);
 		m_ViewModel->RefreshItems();
 
@@ -30,18 +30,9 @@ void KModFilesExplorerDialog::CreateUI(wxWindow* parent)
 	}
 }
 
-KModFilesExplorerDialog::KModFilesExplorerDialog(wxWindow* 
-												 parent, const KModEntry& modEntry)
-	:m_ModEntry(&modEntry), m_ExplorerRoot(modEntry.GetLocation(KMM_LOCATION_MOD_FILES)),
-	m_ViewOptions("KModFilesExplorerDialog", "FilesView"),
-	m_WindowOptions("KModFilesExplorerDialog", "Window")
-{
-	CreateUI(parent);
-}
-KModFilesExplorerDialog::KModFilesExplorerDialog(wxWindow* parent, const wxString& explorerRoot)
-	:m_ModEntry(NULL), m_ExplorerRoot(explorerRoot),
-	m_ViewOptions("KModFilesExplorerDialog", "FilesView"),
-	m_WindowOptions("KModFilesExplorerDialog", "Window")
+KModFilesExplorerDialog::KModFilesExplorerDialog(wxWindow* parent, const KModEntry& modEntry)
+	:m_ModEntry(modEntry),
+	m_ViewOptions("KModFilesExplorerDialog", "FilesView"), m_WindowOptions("KModFilesExplorerDialog", "Window")
 {
 	CreateUI(parent);
 }

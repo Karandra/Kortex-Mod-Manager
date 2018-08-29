@@ -5,7 +5,7 @@ class KWorkspace;
 class KMainWindow;
 class KPluggableManager;
 
-class KManager
+class KManager: public wxEvtHandler
 {
 	friend class KMainWindow;
 
@@ -35,6 +35,10 @@ class KManager
 		virtual wxString GetVersion() const = 0;
 		virtual KImageEnum GetImageID() const = 0;
 
+		virtual const KPluggableManager* ToPluggableManager() const
+		{
+			return NULL;
+		}
 		virtual KPluggableManager* ToPluggableManager()
 		{
 			return NULL;

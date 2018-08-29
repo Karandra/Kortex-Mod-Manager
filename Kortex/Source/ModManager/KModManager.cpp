@@ -30,7 +30,7 @@
 
 KxSingletonPtr_Define(KModManager);
 
-wxString KModManager::GetLocation(KModManagerLocation nLocation, const wxString& sSignature)
+wxString KModManager::GetLocation(KModManagerLocation nLocation, const wxString& signature)
 {
 	const KProfile* profile = KApp::Get().GetCurrentProfile();
 	switch (nLocation)
@@ -45,7 +45,7 @@ wxString KModManager::GetLocation(KModManagerLocation nLocation, const wxString&
 		}
 		case KMM_LOCATION_MOD_ROOT:
 		{
-			return profile->GetVariables().GetVariable(KVAR_MODS_ROOT) + '\\' + sSignature;
+			return profile->GetVariables().GetVariable(KVAR_MODS_ROOT) + '\\' + signature;
 		}
 		default:
 		{
@@ -310,11 +310,11 @@ void KModManager::Reload()
 		m_ModEntries.reserve(filesList.size());
 		for (size_t i = 0; i < filesList.size(); i++)
 		{
-			wxString sSignature = KxFile(filesList[i]).GetFullName();
-			if (!sSignature.IsEmpty())
+			wxString signature = KxFile(filesList[i]).GetFullName();
+			if (!signature.IsEmpty())
 			{
 				auto entry = std::make_unique<KModEntry>();
-				entry->CreateFromSignature(sSignature);
+				entry->CreateFromSignature(signature);
 				if (entry->IsOK())
 				{
 					m_TagManager.LoadTagsFromEntry(entry.get());
@@ -399,12 +399,12 @@ bool KModManager::ChangeModID(KModEntry* entry, const wxString& newID)
 	return false;
 }
 
-int64_t KModManager::GetModIndex(const KModEntry* modEntry) const
+intptr_t KModManager::GetModIndex(const KModEntry* modEntry) const
 {
-	auto it = std::find(m_ModEntries.cbegin(), m_ModEntries.cend(), modEntry);
-	if (it != m_ModEntries.cend())
+	auto it = std::find(m_ModEntries.begin(), m_ModEntries.end(), modEntry);
+	if (it != m_ModEntries.end())
 	{
-		return std::distance(m_ModEntries.cbegin(), it);
+		return std::distance(m_ModEntries.begin(), it);
 	}
 	return -1;
 }
@@ -465,8 +465,6 @@ void KModManager::MountVFS()
 	CreateMountStatusDialog();
 	KApp::Get().CallAfter([this]()
 	{
-		wxWindowUpdateLocker lock(KMainWindow::GetInstance());
-
 		// Init and mount
 		bool ok = InitMainVirtualFolder() && InitMirroredLocations();
 		if (ok)
@@ -482,9 +480,8 @@ void KModManager::MountVFS()
 void KModManager::UnMountVFS()
 {
 	CreateMountStatusDialog();
-	KApp::Get().CallAfter([this]()
+	KApp::Get().CallAfter([]()
 	{
-		wxWindowUpdateLocker lock(KMainWindow::GetInstance());
 		KIPCClient::GetInstance()->DisableVFS();
 	});
 }

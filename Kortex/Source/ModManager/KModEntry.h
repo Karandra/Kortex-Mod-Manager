@@ -38,7 +38,7 @@ class KModEntry: public KWithBitmap
 
 		static int64_t GetWebSiteModID(const FixedWebSitesArray& array, KNetworkProviderID index);
 		static bool HasWebSite(const FixedWebSitesArray& array, KNetworkProviderID index);
-		static KLabeledValue GetWebSite(const FixedWebSitesArray& array, KNetworkProviderID index, const wxString& sSignature = wxEmptyString);
+		static KLabeledValue GetWebSite(const FixedWebSitesArray& array, KNetworkProviderID index, const wxString& signature = wxEmptyString);
 		static void SetWebSite(FixedWebSitesArray& array, KNetworkProviderID index, int64_t modID);
 		static bool HasTag(KxStringVector& array, const wxString& value);
 		static bool ToggleTag(KxStringVector& array, const wxString& value, bool setTag);
@@ -222,10 +222,6 @@ class KModEntry: public KWithBitmap
 		}
 		void UpdateFileTree();
 
-		bool IsEnabledUnchecked() const
-		{
-			return m_IsEnabled;
-		}
 		virtual bool IsEnabled() const;
 		virtual void SetEnabled(bool value);
 		virtual bool IsInstalled() const;
@@ -240,8 +236,8 @@ class KModEntry: public KWithBitmap
 		}
 		
 		virtual KImageEnum GetIcon() const;
-		virtual int GetPriority() const;
-		virtual int GetOrderIndex() const;
+		virtual intptr_t GetPriority() const;
+		virtual intptr_t GetOrderIndex() const;
 		virtual wxString GetLocation(KModManagerLocation index) const;
 };
 typedef std::vector<KModEntry*> KModEntryArray;

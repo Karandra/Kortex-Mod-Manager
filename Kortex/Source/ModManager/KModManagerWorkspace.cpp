@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "KModManagerWorkspace.h"
+#include "KModManagerVirtualGameFolderWS.h"
 #include "KModManagerModel.h"
 #include "KModManager.h"
 #include "KModEntry.h"
@@ -122,6 +123,8 @@ bool KModManagerWorkspace::OnCreateWorkspace()
 
 	KApp::Get().SubscribeBroadcasting(this, KEVT_BROADCAST_VFS_TOGGLED);
 	Bind(KEVT_BROADCAST_VFS_TOGGLED, &KModManagerWorkspace::OnVFSToggled, this);
+
+	//KModManagerVirtualGameFolderWS* virtualGameFoldeWS = CreateAsSubWorkspace<KModManagerVirtualGameFolderWS>();
 	return true;
 }
 
@@ -277,14 +280,14 @@ void KModManagerWorkspace::CreateModsView()
 }
 void KModManagerWorkspace::CreateControls()
 {
-	wxBoxSizer* pControlsSizer = new wxBoxSizer(wxHORIZONTAL);
-	m_MainSizer->Add(pControlsSizer, 0, wxEXPAND|wxALIGN_RIGHT|wxTOP, KLC_VERTICAL_SPACING);
+	wxBoxSizer* controlsSizer = new wxBoxSizer(wxHORIZONTAL);
+	m_MainSizer->Add(controlsSizer, 0, wxEXPAND|wxALIGN_RIGHT|wxTOP, KLC_VERTICAL_SPACING);
 
 	m_ActivateButton = new KxButton(this, KxID_NONE, T("ModManager.VFS.Activate"));
 	m_ActivateButton->SetBitmap(KGetBitmap(KIMG_TICK_CIRCLE_FRAME_EMPTY));
 	m_ActivateButton->Bind(wxEVT_BUTTON, &KModManagerWorkspace::OnMountButton, this);
 
-	pControlsSizer->Add(m_ActivateButton);
+	controlsSizer->Add(m_ActivateButton);
 }
 void KModManagerWorkspace::CreateRightPane()
 {
@@ -293,43 +296,6 @@ void KModManagerWorkspace::CreateRightPane()
 
 	m_PaneRight_Tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &KModManagerWorkspace::OnSubWorkspaceOpening, this);
 	m_PaneRight_Tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &KModManagerWorkspace::OnSubWorkspaceOpened, this);
-
-	#if 0
-	m_PaneRight = new KxSplitterWindow(m_SplitterLeftRight, KxID_NONE);
-	m_PaneRight->SetMinimumPaneSize(150);
-	m_PaneRight->SetSashColor(m_PaneRight->GetBackgroundColour());
-
-	// Logo
-	m_InfoPaneRight_Image = new KxPanel(m_PaneRight, KxID_NONE, wxBORDER_THEME);
-	m_InfoPaneRight_Image->SetScaleMode(KxPanel::ScaleMode::Scale_AspectFit);
-	m_InfoPaneRight_Image->SetBGMode((KxPanelBGMode)(KxPANEL_FG_IMAGE|KxPANEL_BG_SOLID));
-	m_InfoPaneRight_Image->Bind(wxEVT_LEFT_DCLICK, [this](wxMouseEvent& event)
-	{
-		event.Skip();
-		const KModEntry* modEntry = m_ViewModel->GetSelectedModEntry();
-		if (modEntry && modEntry->HasBitmap())
-		{
-			KImageViewerDialog dialog(GetMainWindow());
-
-			KImageViewerEvent evt;
-			evt.SetBitmap(modEntry->GetBitmap());
-			dialog.Navigate(evt);
-
-			dialog.ShowModal();
-		}
-	});
-	LoadModLogo(NULL);
-
-	// Description
-	m_InfoPaneRight_Description = new KxHTMLWindow(m_PaneRight, KxID_NONE, wxEmptyString, KxTextBox::DefaultStyle|wxBORDER_THEME);
-	m_InfoPaneRight_Description->SetEditable(false);
-	m_InfoPaneRight_Description->Bind(wxEVT_HTML_LINK_CLICKED, [this](wxHtmlLinkEvent& event)
-	{
-		KAux::AskOpenURL(event.GetLinkInfo().GetHref(), GetMainWindow());
-	});
-
-	m_PaneRight->SplitHorizontally(m_InfoPaneRight_Image, m_InfoPaneRight_Description, m_PaneRight->GetMinimumPaneSize());
-	#endif
 }
 
 bool KModManagerWorkspace::OnOpenWorkspace()
@@ -372,20 +338,20 @@ wxString KModManagerWorkspace::GetName() const
 	return T("ModManager.Name");
 }
 
-KWorkspace* KModManagerWorkspace::AddSubWorkspace(KWorkspace* workspace)
+bool KModManagerWorkspace::AddSubWorkspace(KWorkspace* workspace)
 {
 	m_PaneRight_Tabs->InsertPage(workspace->GetTabIndex(), workspace, workspace->GetNameShort(), workspace->GetTabIndex() == 0, workspace->GetImageID());
-	return workspace;
+	return true;
 }
 void KModManagerWorkspace::OnSubWorkspaceOpening(wxAuiNotebookEvent& event)
 {
 	event.Skip();
-	KWorkspace* pOldWorkspace = static_cast<KWorkspace*>(m_PaneRight_Tabs->GetPage(event.GetOldSelection()));
+	KWorkspace* oldWorkspace = static_cast<KWorkspace*>(m_PaneRight_Tabs->GetPage(event.GetOldSelection()));
 	KWorkspace* workspace = static_cast<KWorkspace*>(m_PaneRight_Tabs->GetPage(event.GetSelection()));
 
-	if (pOldWorkspace != workspace)
+	if (oldWorkspace != workspace)
 	{
-		if (pOldWorkspace && !pOldWorkspace->OnCloseWorkspaceInternal())
+		if (oldWorkspace && !oldWorkspace->OnCloseWorkspaceInternal())
 		{
 			event.Veto();
 			return;

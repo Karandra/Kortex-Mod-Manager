@@ -99,7 +99,7 @@ class KModManagerWorkspace: public KWorkspace, public KxSingletonPtr<KModManager
 			return true;
 		}
 
-		virtual KWorkspace* AddSubWorkspace(KWorkspace* workspace) override;
+		virtual bool AddSubWorkspace(KWorkspace* workspace) override;
 		virtual wxBookCtrlBase* GetSubWorkspaceContainer() override
 		{
 			return m_PaneRight_Tabs;

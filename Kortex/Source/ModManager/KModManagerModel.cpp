@@ -280,7 +280,7 @@ void KModManagerModel::GetValue(wxAny& value, const KxDataViewItem& item, const 
 		}
 		case ColumnID::Priority:
 		{
-			if (entry->IsEnabledUnchecked())
+			if (entry->IsEnabled())
 			{
 				value = entry->GetPriority();
 			}
@@ -450,7 +450,8 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 				}
 				else
 				{
-					entry->SetEnabled(value.As<bool>() && entry->IsInstalled());
+					bool checked = value.As<bool>();
+					entry->SetEnabled(checked);
 					isChanged = true;
 				}
 

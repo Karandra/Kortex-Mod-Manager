@@ -11,6 +11,7 @@
 KModListModEntry::KModListModEntry(const wxString& signature, bool enabled)
 	:m_ModEntry(KModManager::Get().FindModBySignature(signature)), m_IsEnabled(enabled)
 {
+	m_IsEnabled = m_IsEnabled && (m_ModEntry ? m_ModEntry->IsInstalled() : false);
 }
 
 KModListPluginEntry::KModListPluginEntry(KPluginEntry* pluginEntry, bool enabled)

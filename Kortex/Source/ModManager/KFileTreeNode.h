@@ -51,6 +51,10 @@ class KFileTreeNode
 		{
 			return !m_Children.empty();
 		}
+		size_t GetChildrenCount() const
+		{
+			return m_Children.size();
+		}
 		const Vector& GetChildren() const
 		{
 			return m_Children;

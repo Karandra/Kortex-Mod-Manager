@@ -333,7 +333,7 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 
 		if (KModEntry* existingMod = KModManager::Get().FindMod(name))
 		{
-			tCurrentModList.emplace_back(KModListModEntry(existingMod, existingMod->IsEnabledUnchecked()));
+			tCurrentModList.emplace_back(KModListModEntry(existingMod, existingMod->IsEnabled()));
 		}
 	}
 

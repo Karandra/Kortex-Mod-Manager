@@ -55,15 +55,15 @@ bool KModEntry::HasTag(KxStringVector& array, const wxString& value)
 }
 bool KModEntry::ToggleTag(KxStringVector& array, const wxString& value, bool setTag)
 {
-	auto tElement = std::find(array.begin(), array.end(), value);
-	if (setTag && tElement == array.cend())
+	auto it = std::find(array.begin(), array.end(), value);
+	if (setTag && it == array.cend())
 	{
 		array.push_back(value);
 		return true;
 	}
-	else if (!setTag && tElement != array.cend())
+	else if (!setTag && it != array.cend())
 	{
-		array.erase(tElement);
+		array.erase(it);
 		return true;
 	}
 	return false;
@@ -397,7 +397,7 @@ void KModEntry::UpdateFileTree()
 
 bool KModEntry::IsEnabled() const
 {
-	return IsEnabledUnchecked() && IsInstalled();
+	return m_IsEnabled;
 }
 void KModEntry::SetEnabled(bool value)
 {
@@ -415,9 +415,9 @@ KImageEnum KModEntry::GetIcon() const
 {
 	return KIMG_NONE;
 }
-int KModEntry::GetPriority() const
+intptr_t KModEntry::GetPriority() const
 {
-	if (IsEnabledUnchecked())
+	if (IsEnabled())
 	{
 		int priority = 0;
 		for (const KModEntry* entry: KModManager::Get().GetEntries())
@@ -427,7 +427,7 @@ int KModEntry::GetPriority() const
 				break;
 			}
 
-			if (entry->IsEnabledUnchecked())
+			if (entry->IsEnabled())
 			{
 				priority++;
 			}
@@ -436,10 +436,10 @@ int KModEntry::GetPriority() const
 	}
 	return -1;
 }
-int KModEntry::GetOrderIndex() const
+intptr_t KModEntry::GetOrderIndex() const
 {
-	// x10 to support priority groups
-	return KModManager::Get().GetModIndex(this) * 10;
+	// x2 reserve space for priority groups
+	return 2 * KModManager::Get().GetModIndex(this);
 }
 wxString KModEntry::GetLocation(KModManagerLocation index) const
 {

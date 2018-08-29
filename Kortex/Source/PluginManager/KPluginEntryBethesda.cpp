@@ -14,7 +14,7 @@ bool KPluginEntryBethesda::CanToggleEnabled() const
 {
 	if (const KModEntry* modEntry = GetParentMod())
 	{
-		return modEntry->IsEnabledUnchecked();
+		return modEntry->IsEnabled();
 	}
 	return true;
 }

@@ -179,7 +179,7 @@ bool KApp::OnInit()
 		wxLogInfo("Begin initializing core systems");
 		InitSettings();
 		InitVFS();
-		InitRunManager();
+		InitProgramManager();
 		KArchive::Init();
 		wxLogInfo("Core systems initialized");
 
@@ -222,7 +222,7 @@ int KApp::OnExit()
 	UnInitVFS();
 
 	// Destroy other managers
-	delete m_RunManager;
+	delete m_ProgramManager;
 	delete m_CurrentProfile;
 	KThemeManager::Cleanup();
 	KArchive::UnInit();
@@ -554,36 +554,6 @@ void KApp::InitVFS()
 		wxLogInfo("Server: Not started.");
 		KLogEvent(T("VFSService.InstallFailed"), KLOG_CRITICAL).Send();
 	}
-	#if 0
-	m_VFSService = new KVirtualFileSystemService();
-	if (m_VFSService && m_VFSService->Init())
-	{
-		if (!m_VFSService->IsInstalled())
-		{
-			KxTaskDialog(GetTopWindow(), KxID_NONE, T("VFSService.InstallCaption"), T("VFSService.InstallMessage"), KxBTN_OK, KxICON_INFORMATION).ShowModal();
-			if (!m_VFSService->Install())
-			{
-				wxString sError = KxSystem::GetErrorMessage(KxSystem::GetLastError()) + "\r\n" + T(KxID_FILE) + ": " + m_VFSService->GetDriverPath();
-				KLogEvent(T("VFSService.InstallFailed") + "\r\n\r\n " + sError, KLOG_CRITICAL).Send();
-				return;
-			}
-		}
-		else
-		{
-			// Try reconfigure service
-			m_VFSService->Install();
-		}
-
-		m_VFSService->Start();
-		m_ModManager = new KModManager(NULL);
-	}
-	else
-	{
-		wxString sSystemError = KxSystem::GetErrorMessage(KxSystem::GetLastError());
-		KLogEvent(T("VFSService.InitFailed") + ' ' + T(KxID_FILE) + ": " + m_VFSService->GetLibraryPath() + "\r\n\r\n" + sSystemError, KLOG_CRITICAL).Send();
-		return;
-	}
-	#endif
 }
 void KApp::UnInitVFS()
 {
@@ -595,10 +565,10 @@ void KApp::UnInitVFS()
 	delete m_VFSService;
 	delete m_ModManager;
 }
-void KApp::InitRunManager()
+void KApp::InitProgramManager()
 {
 	wxLogInfo("Initializing KProgramManager");
-	m_RunManager = new KProgramManager();
+	m_ProgramManager = new KProgramManager();
 }
 void KApp::AddDownloadToAlreadyRunningInstance(const wxString& link)
 {
@@ -634,13 +604,13 @@ bool KApp::ShowChageProfileDialog()
 	wxWindowID ret = dialog.ShowModal();
 	if (ret == KxID_OK && (GetCurrentTemplateID() != dialog.GetNewTemplate() || GetCurrentConfigID() != dialog.GetNewConfig()))
 	{
-		KxTaskDialog tConfirmDialog(m_MainWindow, KxID_NONE, T("ProfileSelection.ChangeProfileDialog.Caption"), T("ProfileSelection.ChangeProfileDialog.Message"), KxBTN_NONE, KxICON_WARNING);
-		tConfirmDialog.AddButton(KxID_YES, T("ProfileSelection.ChangeProfileDialog.Yes"));
-		tConfirmDialog.AddButton(KxID_NO, T("ProfileSelection.ChangeProfileDialog.No"));
-		tConfirmDialog.AddButton(KxID_CANCEL, T("ProfileSelection.ChangeProfileDialog.Cancel"));
-		tConfirmDialog.SetDefaultButton(KxID_CANCEL);
+		KxTaskDialog confirmDialog(m_MainWindow, KxID_NONE, T("ProfileSelection.ChangeProfileDialog.Caption"), T("ProfileSelection.ChangeProfileDialog.Message"), KxBTN_NONE, KxICON_WARNING);
+		confirmDialog.AddButton(KxID_YES, T("ProfileSelection.ChangeProfileDialog.Yes"));
+		confirmDialog.AddButton(KxID_NO, T("ProfileSelection.ChangeProfileDialog.No"));
+		confirmDialog.AddButton(KxID_CANCEL, T("ProfileSelection.ChangeProfileDialog.Cancel"));
+		confirmDialog.SetDefaultButton(KxID_CANCEL);
 
-		ret = tConfirmDialog.ShowModal();
+		ret = confirmDialog.ShowModal();
 		if (ret != KxID_CANCEL)
 		{
 			// Set new game root
@@ -680,11 +650,11 @@ KCMConfigEntryStd* KApp::GetSettingsEntry(KPGCFileID id, const wxString& section
 		for (size_t i = 0; i < fileEntry->GetEntriesCount(); i++)
 		{
 			KCMConfigEntryBase* configEntry = fileEntry->GetEntryAt(i);
-			if (KCMConfigEntryStd* pStd = configEntry->ToStdEntry())
+			if (KCMConfigEntryStd* stdEntry = configEntry->ToStdEntry())
 			{
-				if (pStd->GetPath() == section && pStd->GetName() == name)
+				if (stdEntry->GetPath() == section && stdEntry->GetName() == name)
 				{
-					return pStd;
+					return stdEntry;
 				}
 			}
 		}
@@ -693,19 +663,19 @@ KCMConfigEntryStd* KApp::GetSettingsEntry(KPGCFileID id, const wxString& section
 }
 wxString KApp::GetSettingsValue(KPGCFileID id, const wxString& section, const wxString& name) const
 {
-	KCMDataProviderINI* pDataProvider = m_SettingsManager->GetProvider(id);
-	if (pDataProvider)
+	KCMDataProviderINI* dataProvider = m_SettingsManager->GetProvider(id);
+	if (dataProvider)
 	{
-		return pDataProvider->GetDocument().GetValue(section, name);
+		return dataProvider->GetDocument().GetValue(section, name);
 	}
 	return wxEmptyString;
 }
 void KApp::SetSettingsValue(KPGCFileID id, const wxString& section, const wxString& name, const wxString& value)
 {
-	KCMDataProviderINI* pDataProvider = m_SettingsManager->GetProvider(id);
-	if (pDataProvider)
+	KCMDataProviderINI* dataProvider = m_SettingsManager->GetProvider(id);
+	if (dataProvider)
 	{
-		pDataProvider->GetDocument().SetValue(section, name, value);
+		dataProvider->GetDocument().SetValue(section, name, value);
 	}
 }
 wxString KApp::GetCurrentTemplateID() const
@@ -728,18 +698,18 @@ void KApp::SetCurrentConfigID(const wxString& configID)
 }
 void KApp::ConfigureInternetExplorer(bool init)
 {
-	wxString sAppName = KxLibrary(NULL).GetFileName().AfterLast('\\');
+	wxString appName = KxLibrary(NULL).GetFileName().AfterLast('\\');
 
 	#define IERegPath	"SOFTWARE\\Microsoft\\Internet Explorer\\MAIN\\FeatureControl\\"
 	if (init)
 	{
-		KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BEHAVIORS", sAppName, 1, KxREG_VALUE_DWORD);
-		KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BROWSER_EMULATION", sAppName, 10000, KxREG_VALUE_DWORD);
+		KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BEHAVIORS", appName, 1, KxREG_VALUE_DWORD);
+		KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BROWSER_EMULATION", appName, 10000, KxREG_VALUE_DWORD);
 	}
 	else
 	{
-		KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BEHAVIORS", sAppName);
-		KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BROWSER_EMULATION", sAppName);
+		KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BEHAVIORS", appName);
+		KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BROWSER_EMULATION", appName);
 	}
 	#undef IERegPath
 }

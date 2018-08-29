@@ -30,23 +30,23 @@ KxSingletonPtr_Define(KMainWindow);
 
 KxAuiToolBarItem* KMainWindow::CreateToolBarButton(KxAuiToolBar* toolBar, const wxString& label, KImageEnum imageID, wxItemKind kind, int index)
 {
-	wxBitmap icon = wxNullBitmap;
+	wxBitmap bitmap = wxNullBitmap;
 	if (imageID != KIMG_NONE)
 	{
-		icon = KApp::Get().GetImageList()->GetBitmap(imageID);
+		bitmap = KApp::Get().GetImageList()->GetBitmap(imageID);
 	}
 
-	KxAuiToolBarItem* button = toolBar->AddTool(label, icon, kind);
+	KxAuiToolBarItem* button = toolBar->AddTool(label, bitmap, kind);
 	if (!toolBar->HasFlag(wxAUI_TB_TEXT))
 	{
 		button->SetShortHelp(label);
 	}
 	
 	#if 0
-	if (bImageHoverEffects && icon.IsOk())
+	if (imageHoverEffects && bitmap.IsOk())
 	{
-		wxImage tTemp = icon.ConvertToImage();
-		button->SetHoverBitmap(wxBitmap(KAux::ChangeLightness(tTemp, 200), 32));
+		wxImage temp = bitmap.ConvertToImage();
+		button->SetHoverBitmap(wxBitmap(KAux::ChangeLightness(temp, 200), 32));
 	}
 	#endif
 
@@ -80,8 +80,8 @@ void KMainWindow::CreateToolBar()
 			flags |= wxAUI_TB_TEXT;
 		}
 
-		auto toolBar = new KxAuiToolBar(this, KxID_NONE, flags);
-		toolBar->SetToolBorderPadding(2);
+		KxAuiToolBar* toolBar = new KxAuiToolBar(this, KxID_NONE, flags);
+		toolBar->SetToolBorderPadding(KLC_HORIZONTAL_SPACING_SMALL);
 		toolBar->SetMargins(KLC_HORIZONTAL_SPACING, KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING, KLC_VERTICAL_SPACING + 1);
 		KThemeManager::Get().ProcessWindow(toolBar);
 
@@ -166,110 +166,75 @@ bool KMainWindow::Create(wxWindow* parent,
 		KApp::Get().SubscribeBroadcasting(this, KEVT_BROADCAST_VFS_TOGGLED);
 		Bind(KEVT_BROADCAST_VFS_TOGGLED, &KMainWindow::OnVFSToggled, this);
 
-		#if 0
-		Bind(wxEVT_MOUSEWHEEL, [this](wxMouseEvent& event)
-		{
-			event.Skip();
-
-			wxWindow* window = wxFindWindowAtPoint(event.GetPosition());
-			if (window && window->IsEnabled())
-			{
-				const wxSize scrollRate = FromDIP(wxSize(5, 5));
-				const wxPoint scrollStart(0, 0);
-
-				wxCoord value = -event.GetWheelRotation();
-				if (event.GetWheelAxis() == wxMOUSE_WHEEL_VERTICAL && window->CanScroll(wxVERTICAL))
-				{
-					window->ScrollWindow(wxDefaultCoord, scrollStart.y + (float)value / (scrollRate.y != 0 ? scrollRate.y : 1));
-				}
-				else if (event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL && window->CanScroll(wxHORIZONTAL))
-				{
-					window->ScrollWindow(scrollStart.x + (float)value / (scrollRate.x != 0 ? scrollRate.x : 1), wxDefaultCoord);
-				}
-			}
-		});
-		#endif
-
 		KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 		return true;
 	}
 	return false;
 }
 
-void KMainWindow::CreatePluggableManagersWorkspaces(KWorkspace* pParentWorkspace)
+void KMainWindow::CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace)
 {
-	KWorkspace* pFirstSubWorkspace = NULL;
+	KWorkspace* firstSubWorkspace = NULL;
 
-	KPluggableManager::InstancesListType list = KPluggableManager::GetInstances();
-	for (KManager* manager: list)
+	for (KManager* manager: KPluggableManager::GetInstances())
 	{
-		KPluggableManager* pPluggable = manager->ToPluggableManager();
-		if (pPluggable)
+		if (KPluggableManager* pluggableManager = manager->ToPluggableManager())
 		{
-			KWorkspace* workspace = pPluggable->CreateWorkspace(this);
+			KWorkspace* workspace = pluggableManager->CreateWorkspace(this);
 			if (workspace)
 			{
 				KThemeManager::Get().ProcessWindow(workspace);
-				if (pParentWorkspace && workspace->IsSubWorkspace())
+				if (parentWorkspace && workspace->IsSubWorkspace())
 				{
-					if (!pFirstSubWorkspace)
+					if (!firstSubWorkspace)
 					{
-						pFirstSubWorkspace = workspace;
+						firstSubWorkspace = workspace;
 					}
-
-					workspace->Reparent(pParentWorkspace->GetSubWorkspaceContainer());
-					pParentWorkspace->AddSubWorkspace(workspace);
+					
+					if (parentWorkspace->MakeSubWorkspace(workspace))
+					{
+						parentWorkspace->AddSubWorkspace(workspace);
+						continue;
+					}
 				}
-				else
-				{
-					AddWorkspace(workspace);
 
-					KxMenuItem* item = workspace->CreateItemInManagersMenu();
-					item->SetClientData(manager);
-				}
+				AddWorkspace(workspace);
+				KxMenuItem* item = workspace->CreateItemInManagersMenu();
+				item->SetClientData(manager);
 			}
 		}
 	}
 
-	if (pFirstSubWorkspace)
+	if (firstSubWorkspace)
 	{
-		pFirstSubWorkspace->CreateNow();
+		firstSubWorkspace->CreateNow();
 	}
 }
 void KMainWindow::CreateMainWorkspaces()
 {
-	/* Create menu and subscribe it to VFS events */
+	// Create menu and subscribe it to VFS events
 	m_ManagersMenu = new KxMenu();
 
 	GetApp().SubscribeBroadcasting(m_ManagersMenu, KEVT_BROADCAST_VFS_TOGGLED);
 	m_ManagersMenu->Bind(KEVT_BROADCAST_VFS_TOGGLED, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
 
-	/* Add workspaces */
+	// Add workspaces
 	AddWorkspace(new KGameConfigWorkspace(this))->CreateNow();
-
-	// Mods workspace must be loaded event if it's not the start page
-	// because this workspace creates 'KModManager' instance and without it
-	// a half of the program won't work.
-
-	// It created after 'KGameConfigWorkspace' only because I want its
-	// toolbar button be after it.
-	KModManagerWorkspace* pModsWorkspace = AddWorkspace(new KModManagerWorkspace(this));
-	pModsWorkspace->CreateNow();
-
+	AddWorkspace(new KModManagerWorkspace(this))->CreateNow();
 	AddWorkspace(new KPackageCreatorWorkspace(this));
 	AddWorkspace(new KPackageManagerWorkspace(this));
 	AddWorkspace(new KProgramManagerWorkspace(this));
-	CreatePluggableManagersWorkspaces(pModsWorkspace);
+	CreatePluggableManagersWorkspaces(KModManagerWorkspace::GetInstance());
 
-	/* Create toolbar button and assign menu to it */
+	// Create toolbar button and assign menu to it
 	m_ToolBar->AddSeparator();
 
-	KxAuiToolBarItem* pToolBarButton = CreateToolBarButton(m_ToolBar, V("$(Name)"));
+	KxAuiToolBarItem* toolBarButton = CreateToolBarButton(m_ToolBar, V("$(Name)"));
 	wxImage tGameIcon = GetApp().GetCurrentProfile()->GetIcon();
-	pToolBarButton->SetBitmap(tGameIcon.Rescale(m_ToolBar->GetToolBitmapSize().GetWidth(), m_ToolBar->GetToolBitmapSize().GetHeight(), wxIMAGE_QUALITY_HIGH));
+	toolBarButton->SetBitmap(tGameIcon.Rescale(m_ToolBar->GetToolBitmapSize().GetWidth(), m_ToolBar->GetToolBitmapSize().GetHeight(), wxIMAGE_QUALITY_HIGH));
 
-	pToolBarButton->AssignDropdownMenu(m_ManagersMenu);
-	pToolBarButton->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
+	toolBarButton->AssignDropdownMenu(m_ManagersMenu);
+	toolBarButton->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 
 	m_ToolBar->Realize();
 	m_ToolBar->SetOverflowVisible(!m_ToolBar->IsItemsFits());
@@ -354,15 +319,15 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 			}
 		}
 
-		bool bVeto = false;
-		auto AskForSave = [&event, &bVeto](KWorkspace* workspace) -> bool
+		bool veto = false;
+		auto AskForSave = [&event, &veto](KWorkspace* workspace)
 		{
 			if (workspace && workspace->IsWorkspaceCreated())
 			{
 				KWorkspaceController* controller = workspace->GetWorkspaceController();
 				if (controller && controller->AskForSave(event.CanVeto()) != KxID_OK)
 				{
-					bVeto = true;
+					veto = true;
 					return false;
 				}
 			}
@@ -384,7 +349,7 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 			}
 		}
 
-		if (bVeto)
+		if (veto)
 		{
 			event.Veto();
 		}

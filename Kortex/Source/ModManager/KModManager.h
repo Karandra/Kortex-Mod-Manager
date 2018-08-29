@@ -65,7 +65,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 
 			To use any other constant use function KModEntry::GetLocation.
 		*/
-		static wxString GetLocation(KModManagerLocation nLocation, const wxString& sSignature = wxEmptyString);
+		static wxString GetLocation(KModManagerLocation nLocation, const wxString& signature = wxEmptyString);
 
 	private:
 		using MandatotyModEntriesVector = std::vector<KFixedModEntry>;
@@ -170,7 +170,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		}
 		bool ChangeModID(KModEntry* entry, const wxString& newID);
 
-		int64_t GetModIndex(const KModEntry* modEntry) const;
+		intptr_t GetModIndex(const KModEntry* modEntry) const;
 		bool MoveModsIntoThis(const KModEntryArray& entriesToMove, const KModEntry* anchor, KModManagerModsMoveType moveMode = KMM_MOVEMOD_AFTER);
 
 		wxString GetVirtualGameRoot() const;

@@ -12,7 +12,7 @@ KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, c
 		{
 			for (const KFileTreeNode& node: rootNode.GetChildren())
 			{
-				if (node.GetItem().IsElementType(type) && folderName == KxString::ToLower(node.GetName()))
+				if (folderName == KxString::ToLower(node.GetName()))
 				{
 					return const_cast<KFileTreeNode*>(&node);
 				}
@@ -29,7 +29,11 @@ KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, c
 				break;
 			}
 		}
-		return finalNode;
+
+		if (finalNode && finalNode->GetItem().IsElementType(type))
+		{
+			return finalNode;
+		}
 	}
 	return NULL;
 }

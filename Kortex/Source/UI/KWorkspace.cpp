@@ -54,9 +54,18 @@ void KWorkspace::Init()
 	SetSizer(m_Sizer);
 }
 
+bool KWorkspace::MakeSubWorkspace(KWorkspace* workspace)
+{
+	if (workspace->IsSubWorkspace())
+	{
+		return workspace->Reparent(GetSubWorkspaceContainer());
+	}
+	return false;
+}
+
 wxString KWorkspace::OnGetWindowTitle() const
 {
-	return wxString::Format("%s – %s – %s", GetApp().GetAppDisplayName(), GetApp().GetCurrentProfile()->GetShortName(), GetName());
+	return wxString::Format("%s – %s – %s", KApp::Get().GetAppDisplayName(), KProfile::GetCurrent()->GetShortName(), GetName());
 }
 bool KWorkspace::OnOpenWorkspace()
 {
@@ -65,10 +74,6 @@ bool KWorkspace::OnOpenWorkspace()
 bool KWorkspace::OnCloseWorkspace()
 {
 	return true;
-}
-KApp& KWorkspace::GetApp() const
-{
-	return KApp::Get();
 }
 
 KxAuiToolBarItem* KWorkspace::CreateToolBarButton()

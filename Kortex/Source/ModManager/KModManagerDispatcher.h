@@ -3,6 +3,7 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
 class KModEntry;
+class KFileTreeNode;
 
 enum KMMDispatcherCollisionType
 {
@@ -18,17 +19,17 @@ class KMMDispatcherCollision
 		static wxString GetLocalizedCollisionName(KMMDispatcherCollisionType type);
 
 	private:
-		KModEntry* m_Mod = NULL;
+		const KModEntry* m_Mod = NULL;
 		KMMDispatcherCollisionType m_Type = KMM_DCT_NONE;
 
 	public:
-		KMMDispatcherCollision(KModEntry* mod, KMMDispatcherCollisionType type)
+		KMMDispatcherCollision(const KModEntry* mod, KMMDispatcherCollisionType type)
 			:m_Mod(mod), m_Type(type)
 		{
 		}
 
 	public:
-		KModEntry* GetMod() const
+		const KModEntry* GetMod() const
 		{
 			return m_Mod;
 		}
@@ -45,41 +46,39 @@ class KModManagerDispatcher
 		using CollisionVector = std::vector<KMMDispatcherCollision>;
 		using FilesVector = std::vector<KxFileFinderItem>;
 
+	private:
 		enum class IterationOrder
 		{
 			Direct,
 			Reversed
 		};
+		using IterationFunctor = std::function<bool(const KModEntry&)>;
+
+		struct FinderHashComparator
+		{
+			bool operator()(const wxString& lhs, const wxString& rhs) const
+			{
+				return KxString::ToLower(lhs) == KxString::ToLower(rhs);
+			}
+		};
+		using FinderHash = std::unordered_set<wxString, std::hash<wxString>, FinderHashComparator>;
 
 	private:
-		template<class Functor> KModEntry* IterateOverMods(Functor& functor, IterationOrder order) const
-		{
-			KModEntryArray entries = KModManager::Get().GetAllEntries(true);
-			if (order == IterationOrder::Direct)
-			{
-				for (KModEntry* entry: entries)
-				{
-					if (functor(entry))
-					{
-						return entry;
-					}
-				}
-			}
-			else
-			{
-				for (auto it = entries.rbegin(); it != entries.rend(); ++it)
-				{
-					if (functor(*it))
-					{
-						return *it;
-					}
-				}
-			}
-			return NULL;
-		}
+		KModEntry* IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget = true) const;
+
+		void FindFilesInTree(FilesVector& files,
+							 FinderHash* hash,
+							 const KFileTreeNode& rootNode,
+							 const wxString& filter,
+							 KxFileSearchType type,
+							 bool recurse 
+		) const;
 
 	public:
 		wxString GetTargetPath(const wxString& relativePath, KModEntry** owningMod = NULL) const;
+		
+		FilesVector FindFiles(const KModEntry& modEntry, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false) const;
 		FilesVector FindFiles(const wxString& relativePath, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false) const;
-		CollisionVector FindCollisions(const KModEntry* scannedMod, const wxString& relativePath) const;
+		
+		CollisionVector FindCollisions(const KModEntry& scannedMod, const wxString& relativePath) const;
 };

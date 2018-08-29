@@ -46,7 +46,7 @@ class KApp: public KxApp<wxApp, KApp>
 		KDynamicVariablesTable m_Variables;
 		KProfile* m_CurrentProfile = NULL;
 		KMainWindow* m_MainWindow = NULL;
-		KProgramManager* m_RunManager = NULL;
+		KProgramManager* m_ProgramManager = NULL;
 		KModManager* m_ModManager = NULL;
 		mutable KSettingsWindowManager* m_SettingsManager = NULL;
 		bool m_AllowSaveSettinsgAtExit = true;
@@ -163,7 +163,7 @@ class KApp: public KxApp<wxApp, KApp>
 
 		void InitVFS();
 		void UnInitVFS();
-		void InitRunManager();
+		void InitProgramManager();
 		void AddDownloadToAlreadyRunningInstance(const wxString& link);
 
 	private:

@@ -7,7 +7,7 @@
 #include <KxFramework/KxSingleton.h>
 class KDownloadManagerWorkspace;
 
-class KDownloadManager: public wxEvtHandler, public KPluggableManager, public KxSingletonPtr<KDownloadManager>
+class KDownloadManager: public KPluggableManager, public KxSingletonPtr<KDownloadManager>
 {
 	friend class KDownloadEntry;
 	friend class KDownloadManagerWorkspace;

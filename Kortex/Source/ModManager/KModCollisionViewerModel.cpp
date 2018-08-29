@@ -10,12 +10,12 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
 
-bool KModCollisionViewerModelEntry::FindCollisions(const KModEntry* modEntry)
+bool KModCollisionViewerModelNS::ModelEntry::FindCollisions(const KModEntry& modEntry)
 {
-	if (m_File.IsNormalItem() && m_File.IsFile())
+	if (m_Item.IsNormalItem() && m_Item.IsFile())
 	{
-		m_RelativePath = m_File.GetFullPath();
-		m_RelativePath.Remove(0, modEntry->GetLocation(KMM_LOCATION_MOD_FILES).Length() + 1); // Plus 1 for slash
+		m_RelativePath = m_Item.GetFullPath();
+		m_RelativePath.Remove(0, modEntry.GetLocation(KMM_LOCATION_MOD_FILES).Length() + 1); // Plus 1 for slash
 		m_Collisions = KModManager::GetDispatcher().FindCollisions(modEntry, m_RelativePath);
 
 		return true;
@@ -35,7 +35,10 @@ enum ColumnID
 
 wxString KModCollisionViewerModel::FormatSingleCollision(const KMMDispatcherCollision& collision)
 {
-	return wxString::Format("%s \"%s\"", KMMDispatcherCollision::GetLocalizedCollisionName(collision.GetType()), collision.GetMod()->GetName());
+	const KModEntry* mod = collision.GetMod();
+	const KMMDispatcherCollisionType type = collision.GetType();
+
+	return KxFormat(KMMDispatcherCollision::GetLocalizedCollisionName(type)).arg(mod->GetName());
 }
 wxString KModCollisionViewerModel::FormatCollisionsCount(const CollisionVector& collisions)
 {
@@ -43,7 +46,7 @@ wxString KModCollisionViewerModel::FormatCollisionsCount(const CollisionVector& 
 	{
 		return FormatSingleCollision(collisions.front());
 	}
-	return wxString::Format("%zu", collisions.size());
+	return KxFormat("%1").arg(collisions.size());
 }
 wxString KModCollisionViewerModel::FormatCollisionsView(const CollisionVector& collisions)
 {
@@ -72,7 +75,7 @@ void KModCollisionViewerModel::OnInitControl()
 
 void KModCollisionViewerModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	const KModCollisionViewerModelEntry* entry = GetDataEntry(row);
+	const ModelEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		const KxFileFinderItem& fileItem = entry->GetFileItem();
@@ -85,7 +88,7 @@ void KModCollisionViewerModel::GetValueByRow(wxAny& value, size_t row, const KxD
 			}
 			case ColumnID::Collisions:
 			{
-				value = KModCollisionViewerModel::FormatCollisionsCount(entry->GetCollisions());
+				value = FormatCollisionsCount(entry->GetCollisions());
 				break;
 			}
 			case ColumnID::ModificationDate:
@@ -122,7 +125,7 @@ void KModCollisionViewerModel::OnActivateItem(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	KxDataViewColumn* column = event.GetColumn();
-	const KModCollisionViewerModelEntry* entry = GetDataEntry(GetRow(item));
+	const ModelEntry* entry = GetDataEntry(GetRow(item));
 	if (entry && entry->HasCollisions())
 	{
 		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, column->GetTitle(), FormatCollisionsView(entry->GetCollisions()));
@@ -135,12 +138,7 @@ void KModCollisionViewerModel::OnContextMenu(KxDataViewEvent& event)
 
 void KModCollisionViewerModel::RunCollisionsSearch(KOperationWithProgressBase* context)
 {
-	KxEvtFile location(m_ModEntry->GetLocation(KMM_LOCATION_MOD_FILES));
-	context->LinkHandler(&location, KxEVT_FILEOP_SEARCH);
-
-	size_t processedCount = 0;
-	KxStringVector filesList = location.Find(KxFile::NullFilter, KxFS_FILE, true);
-	for (const wxString& path: filesList)
+	for (const KxFileFinderItem& item: KModManager::GetDispatcher().FindFiles(*m_ModEntry, KxFile::NullFilter, KxFS_FILE, true))
 	{
 		if (!context->CanContinue())
 		{
@@ -148,20 +146,9 @@ void KModCollisionViewerModel::RunCollisionsSearch(KOperationWithProgressBase* c
 			return;
 		}
 
-		KxFileOperationEvent event(KxEVT_FILEOP_SEARCH);
-		event.SetEventObject(&location);
-		event.SetCurrent(path);
-		event.SetMajorProcessed(++processedCount);
-		event.SetMajorTotal(filesList.size());
-		location.ProcessEvent(event);
-
-		KModCollisionViewerModelEntry& modelEntry = m_DataVector.emplace_back(KxFileFinderItem(path));
-		modelEntry.FindCollisions(m_ModEntry);
-		if (modelEntry.HasCollisions())
-		{
-			modelEntry.GetFileItem().UpdateInfo();
-		}
-		else
+		ModelEntry& modelEntry = m_DataVector.emplace_back(item);
+		modelEntry.FindCollisions(*m_ModEntry);
+		if (!modelEntry.HasCollisions())
 		{
 			m_DataVector.pop_back();
 		}
@@ -184,23 +171,20 @@ void KModCollisionViewerModelDialog::RunThread()
 	});
 	operation->OnEnd([this](KOperationWithProgressBase* self)
 	{
-		CallAfter([this]()
+		if (GetItemCount() != 0)
 		{
-			if (GetItemCount() != 0)
-			{
-				SetLabel(wxString::Format("%s: %zu", T("ModExplorer.Collisions.Count"), GetItemCount()));
-				KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-				KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+			SetLabel(KxFormat("%1: %2").arg(T("ModExplorer.Collisions.Count")).arg(GetItemCount()));
+			KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+			KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 
-				ShowModal();
-			}
-			else
-			{
-				Close(true);
-				KxTaskDialog dialog(KxStdDialog::GetParent(), KxID_NONE, GetCaption(), T("ModExplorer.Collisions.NoneFound"));
-				dialog.ShowModal();
-			}
-		});
+			ShowModal();
+		}
+		else
+		{
+			Close(true);
+			KxTaskDialog dialog(KxStdDialog::GetParent(), KxID_NONE, GetCaption(), T("ModExplorer.Collisions.NoneFound"));
+			dialog.ShowModal();
+		}
 	});
 	operation->SetDialogCaption(T("ModExplorer.Collisions.Searching"));
 	operation->Run();

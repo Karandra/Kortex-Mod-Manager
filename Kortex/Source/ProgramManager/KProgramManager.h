@@ -88,7 +88,7 @@ class KProgramManagerEntry: public KWithBitmap
 typedef std::vector<KProgramManagerEntry> KRMProgramEntryArray;
 
 //////////////////////////////////////////////////////////////////////////
-class KProgramManager: public wxEvtHandler, public KManager, public KxSingletonPtr<KProgramManager>
+class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 {
 	friend class KProgramManagerModel;
 

@@ -7,11 +7,11 @@ KImageEnum KPriorityGroupEntry::GetIcon() const
 	return KIMG_NONE;
 }
 
-int KPriorityGroupEntry::GetPriority() const
+intptr_t KPriorityGroupEntry::GetPriority() const
 {
 	return m_BaseMod->GetPriority();
 }
-int KPriorityGroupEntry::GetOrderIndex() const
+intptr_t KPriorityGroupEntry::GetOrderIndex() const
 {
 	return m_BaseMod->GetOrderIndex() + (m_IsBegin ? -1 : +1);
 }

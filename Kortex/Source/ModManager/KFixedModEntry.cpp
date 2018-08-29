@@ -4,7 +4,7 @@
 
 bool KFixedModEntry::IsEnabled() const
 {
-	return KModEntry::IsEnabledUnchecked();
+	return KModEntry::IsEnabled();
 }
 bool KFixedModEntry::IsInstalled() const
 {
@@ -19,7 +19,7 @@ KImageEnum KFixedModEntry::GetIcon() const
 {
 	return KIMG_FOLDERS;
 }
-int KFixedModEntry::GetOrderIndex() const
+intptr_t KFixedModEntry::GetOrderIndex() const
 {
 	return m_Priority;
 }

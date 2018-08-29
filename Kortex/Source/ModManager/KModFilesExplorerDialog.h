@@ -11,8 +11,7 @@ class KModFilesExplorerDialog: public KxStdDialog
 	private:
 		KxPanel* m_ViewPane = NULL;
 		KModFilesExplorerModel* m_ViewModel = NULL;
-		const KModEntry* m_ModEntry = NULL;
-		const wxString m_ExplorerRoot;
+		const KModEntry& m_ModEntry;
 
 		KProgramOptionUI m_ViewOptions;
 		KProgramOptionUI m_WindowOptions;
@@ -43,12 +42,5 @@ class KModFilesExplorerDialog: public KxStdDialog
 
 	public:
 		KModFilesExplorerDialog(wxWindow* parent, const KModEntry& modEntry);
-		KModFilesExplorerDialog(wxWindow* parent, const wxString& explorerRoot);
 		virtual ~KModFilesExplorerDialog();
-
-	public:
-		bool HasModEntry() const
-		{
-			return m_ModEntry != NULL;
-		}
 };

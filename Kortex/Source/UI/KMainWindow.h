@@ -77,7 +77,7 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 					long style = DefaultStyle
 		);
 
-		void CreatePluggableManagersWorkspaces(KWorkspace* pParentWorkspace = NULL);
+		void CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace = NULL);
 		void CreateMainWorkspaces();
 		void CreateMainMenu();
 
@@ -139,34 +139,6 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		KWorkspace* GetFirstWorkspace() const;
 		bool SwitchWorkspace(KWorkspace* nextWorkspace);
 		bool SwitchWorkspace(const wxString& id);
-		template<class ManagerType, class ConfigType> ManagerType* CreateWorkspaceOf(const ConfigType* config)
-		{
-			if (config)
-			{
-				ManagerType* manager = config->GetManager();
-				if (manager)
-				{
-					KWorkspace* workspace = manager->GetWorkspace();
-					if (workspace)
-					{
-						if (!workspace->IsWorkspaceCreated() && manager->IsActiveVFSNeeded() && !KModManager::Get().IsVFSMounted())
-						{
-							return NULL;
-						}
-
-						if (workspace->CreateNow())
-						{
-							return manager;
-						}
-					}
-					else if (!manager->IsActiveVFSNeeded() || KModManager::Get().IsVFSMounted())
-					{
-						return manager;
-					}
-				}
-			}
-			return NULL;
-		}
 
 		void ClearStatus(int index = 0);
 		void SetStatus(const wxString& label, int index = 0, KImageEnum image = KIMG_NONE);

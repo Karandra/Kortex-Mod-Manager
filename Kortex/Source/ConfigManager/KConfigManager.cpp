@@ -540,24 +540,24 @@ KCMIDataProvider* KConfigManager::OnQueryDataProvider(const KCMFileEntry* fileEn
 			{
 				case KPGC_FORMAT_INI:
 				{
-					KCMDataProviderINI* pDataProvider = NULL;
+					KCMDataProviderINI* dataProvider = NULL;
 					if (profileEntry->IsFilePathRelative())
 					{
 						wxString path = KModManager::GetDispatcher().GetTargetPath(profileEntry->GetFilePath());
 						if (!path.IsEmpty())
 						{
-							pDataProvider = new KCMDataProviderINI(path);
+							dataProvider = new KCMDataProviderINI(path);
 						}
 					}
 					else
 					{
-						pDataProvider = new KCMDataProviderINI(profileEntry->GetFilePath());
+						dataProvider = new KCMDataProviderINI(profileEntry->GetFilePath());
 					}
 
-					if (pDataProvider)
+					if (dataProvider)
 					{
-						m_Providers.emplace(std::make_pair(fileEntry->GetID(), pDataProvider));
-						return pDataProvider;
+						m_Providers.emplace(std::make_pair(fileEntry->GetID(), dataProvider));
+						return dataProvider;
 					}
 				}
 			};

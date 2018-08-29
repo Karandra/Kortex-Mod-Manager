@@ -18,6 +18,7 @@ class KxAuiToolBarItem;
 enum KWorkspaceTabIndex
 {
 	KWS_TABINDEX_PLUGINS,
+	KWS_TABINDEX_VIRTUAL_GAME_FOLDER,
 	KWS_TABINDEX_SAVES,
 	KWS_TABINDEX_DOWNLOADS,
 };
@@ -51,13 +52,13 @@ class KWorkspace: public KxPanel
 		virtual bool OnOpenWorkspace();
 		virtual bool OnCloseWorkspace();
 		virtual bool OnCreateWorkspace() = 0;
-
+		
 		virtual bool DoCanBeStartPage() const
 		{
 			return false;
 		}
-
-		KApp& GetApp() const;
+		
+		bool MakeSubWorkspace(KWorkspace* workspace);
 		KxAuiToolBarItem* CreateToolBarButton();
 		KxMenuItem* CreateItemInManagersMenu();
 
@@ -111,13 +112,22 @@ class KWorkspace: public KxPanel
 		{
 			return NULL;
 		}
-		virtual KWorkspace* AddSubWorkspace(KWorkspace* workspace)
+		virtual bool AddSubWorkspace(KWorkspace* workspace)
 		{
-			return NULL;
+			return false;
 		}
 		virtual size_t GetTabIndex() const
 		{
 			return (size_t)-1;
+		}
+		template<class T> T* CreateAsSubWorkspace()
+		{
+			T* workspace = new T(KMainWindow::GetInstance());
+			if (MakeSubWorkspace(workspace))
+			{
+				AddSubWorkspace(workspace);
+			}
+			return workspace;
 		}
 
 		bool HasQuickSettingsMenu() const

@@ -324,9 +324,9 @@ bool KCMController::AddToHash(KCMConfigEntryPath* entry)
 		auto t2 = m_AddedItems.emplace(pDV->GetFullPathFor(pDV->GetName2()));
 		return t1.second || t2.second;
 	}
-	else if (KCMConfigEntryStd* pStd = entry->ToStdEntry())
+	else if (KCMConfigEntryStd* stdEntry = entry->ToStdEntry())
 	{
-		return m_AddedItems.emplace(pStd->GetFullPath()).second;
+		return m_AddedItems.emplace(stdEntry->GetFullPath()).second;
 	}
 	else if (KCMConfigEntryPath* pPath = entry->ToPathEntry())
 	{
@@ -343,9 +343,9 @@ bool KCMController::IsInHash(KCMConfigEntryPath* entry)
 	{
 		return m_AddedItems.count(pDV->GetFullPathFor(pDV->GetName1())) && m_AddedItems.count(pDV->GetFullPathFor(pDV->GetName2()));
 	}
-	else if (KCMConfigEntryStd* pStd = entry->ToStdEntry())
+	else if (KCMConfigEntryStd* stdEntry = entry->ToStdEntry())
 	{
-		return m_AddedItems.count(pStd->GetFullPath());
+		return m_AddedItems.count(stdEntry->GetFullPath());
 	}
 	else if (KCMConfigEntryPath* pPath = entry->ToPathEntry())
 	{
@@ -679,15 +679,15 @@ void KCMController::OnContextMenu(wxTreeListEvent& event)
 		wxWindowID id = m_ContextMenu->Show(m_View);
 		if (entry)
 		{
-			if (KCMConfigEntryStd* pStd = entry->ToStdEntry())
+			if (KCMConfigEntryStd* stdEntry = entry->ToStdEntry())
 			{
 				if (id == m_ContextMenu_EditValue->GetId())
 				{
-					OnEditEntry(pStd);
+					OnEditEntry(stdEntry);
 				}
 				else if (id == m_ContextMenu_RemoveValue->GetId())
 				{
-					OnRemoveEntry(pStd, entryRef);
+					OnRemoveEntry(stdEntry, entryRef);
 				}
 			}
 			else if (KCMConfigEntryPath* pPath = entry->ToPathEntry())
@@ -862,32 +862,32 @@ void KCMController::SaveChanges()
 			KCMFileEntry* fileEntry = v.first->GetFileEntry();
 			if (fileEntry && fileEntry->IsOK())
 			{
-				KCMIDataProvider* pDataProvider = fileEntry->GetProvider();
-				tDataProviders.emplace(pDataProvider);
+				KCMIDataProvider* dataProvider = fileEntry->GetProvider();
+				tDataProviders.emplace(dataProvider);
 
 				switch (v.second)
 				{
 					case KCMCC_REMOVE_PATH:
 					{
-						if (KCMConfigEntryPath* pStd = v.first->ToPathEntry())
+						if (KCMConfigEntryPath* stdEntry = v.first->ToPathEntry())
 						{
-							pDataProvider->ProcessRemovePath(pStd);
+							dataProvider->ProcessRemovePath(stdEntry);
 						}
 						break;
 					}
 					case KCMCC_REMOVE_ENTRY:
 					{
-						if (KCMConfigEntryStd* pStd = v.first->ToStdEntry())
+						if (KCMConfigEntryStd* stdEntry = v.first->ToStdEntry())
 						{
-							pDataProvider->ProcessRemoveEntry(pStd);
+							dataProvider->ProcessRemoveEntry(stdEntry);
 						}
 						break;
 					}
 					case KCMCC_MODIFY_ENTRY:
 					{
-						if (KCMConfigEntryStd* pStd = v.first->ToStdEntry())
+						if (KCMConfigEntryStd* stdEntry = v.first->ToStdEntry())
 						{
-							pDataProvider->ProcessSaveEntry(pStd);
+							dataProvider->ProcessSaveEntry(stdEntry);
 						}
 						break;
 					}
@@ -900,9 +900,9 @@ void KCMController::SaveChanges()
 		}
 
 		// Save changed files
-		for (auto& pDataProvider: tDataProviders)
+		for (auto& dataProvider: tDataProviders)
 		{
-			pDataProvider->Save();
+			dataProvider->Save();
 		}
 
 		// All saved, now clear items
@@ -999,10 +999,10 @@ void KCMCAddEntryDialog::CreateNameInput()
 	// Name
 	m_NameInput = new KxTextBox(GetContentWindow(), KxID_NONE);
 	m_NameInput->SetHint(T("ConfigManager.EditValue.CreateValue.ValueNameHint"));
-	if (KCMConfigEntryStd* pStd = m_ConfigEntry->ToStdEntry())
+	if (KCMConfigEntryStd* stdEntry = m_ConfigEntry->ToStdEntry())
 	{
-		m_NameInput->SetValue(pStd->GetName());
-		m_TypeList->SetValue(pStd->GetTypeName());
+		m_NameInput->SetValue(stdEntry->GetName());
+		m_TypeList->SetValue(stdEntry->GetTypeName());
 	}
 	else
 	{

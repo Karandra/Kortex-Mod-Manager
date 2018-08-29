@@ -9,51 +9,56 @@
 #include <KxFramework/KxFileFinder.h>
 class KOperationWithProgressBase;
 
-class KModCollisionViewerModelEntry
+namespace KModCollisionViewerModelNS
+{
+	class ModelEntry
+	{
+		public:
+			using Vector = std::vector<ModelEntry>;
+			using CollisionVector = KModManagerDispatcher::CollisionVector;
+
+		private:
+			KxFileFinderItem m_Item;
+			wxString m_RelativePath;
+			CollisionVector m_Collisions;
+
+		public:
+			ModelEntry(const KxFileFinderItem& item)
+				:m_Item(item)
+			{
+			}
+
+		public:
+			bool FindCollisions(const KModEntry& modEntry);
+			const CollisionVector& GetCollisions() const
+			{
+				return m_Collisions;
+			}
+			bool HasCollisions() const
+			{
+				return !m_Collisions.empty();
+			}
+
+			const KxFileFinderItem& GetFileItem() const
+			{
+				return m_Item;
+			}
+			KxFileFinderItem& GetFileItem()
+			{
+				return m_Item;
+			}
+			const wxString& GetRelativePath() const
+			{
+				return m_RelativePath;
+			}
+	};
+}
+
+//////////////////////////////////////////////////////////////////////////
+class KModCollisionViewerModel: public KxDataViewVectorListModelEx<KModCollisionViewerModelNS::ModelEntry::Vector, KxDataViewListModelEx>
 {
 	public:
-		using CollisionVector = KModManagerDispatcher::CollisionVector;
-
-	private:
-		KxFileFinderItem m_File;
-		wxString m_RelativePath;
-		CollisionVector m_Collisions;
-
-	public:
-		KModCollisionViewerModelEntry(const KxFileFinderItem& item)
-			:m_File(item)
-		{
-		}
-
-	public:
-		bool FindCollisions(const KModEntry* modEntry);
-		const CollisionVector& GetCollisions() const
-		{
-			return m_Collisions;
-		}
-		bool HasCollisions() const
-		{
-			return !m_Collisions.empty();
-		}
-
-		const KxFileFinderItem& GetFileItem() const
-		{
-			return m_File;
-		}
-		KxFileFinderItem& GetFileItem()
-		{
-			return m_File;
-		}
-		const wxString& GetRelativePath() const
-		{
-			return m_RelativePath;
-		}
-};
-using KModCollisionViewerModelEntryVector = std::vector<KModCollisionViewerModelEntry>;
-
-class KModCollisionViewerModel: public KDataViewVectorListModel<KModCollisionViewerModelEntryVector, KDataViewListModel>
-{
-	public:
+		using ModelEntry = KModCollisionViewerModelNS::ModelEntry;
 		using CollisionVector = KModManagerDispatcher::CollisionVector;
 
 		static wxString FormatSingleCollision(const KMMDispatcherCollision& collision);
@@ -61,7 +66,7 @@ class KModCollisionViewerModel: public KDataViewVectorListModel<KModCollisionVie
 		static wxString FormatCollisionsView(const CollisionVector& collisions);
 
 	private:
-		KModCollisionViewerModelEntryVector m_DataVector;
+		ModelEntry::Vector m_DataVector;
 		const KModEntry* m_ModEntry = NULL;
 
 	private:

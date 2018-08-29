@@ -744,6 +744,9 @@
     <ClCompile Include="Source\ProgramManager\KProgramManagerWorkspace.cpp">
       <Filter>Code\Source Files\ProgramManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderWS.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1169,9 +1172,6 @@
     <ClInclude Include="Source\ModManager\KModFilesExplorerModel.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModManager\KModFilesExplorerModelNode.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModManager\KModManagerList.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
@@ -1342,6 +1342,9 @@
     </ClInclude>
     <ClInclude Include="Source\ProgramManager\KProgramManagerWorkspace.h">
       <Filter>Code\Header Files\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderWS.h">
+      <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

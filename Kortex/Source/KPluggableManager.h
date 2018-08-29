@@ -9,12 +9,18 @@ class KPluggableManager: public KManager
 
 	protected:
 		virtual KWorkspace* CreateWorkspace(KMainWindow* mainWindow) = 0;
-		virtual KPluggableManager* ToPluggableManager() override
-		{
-			return this;
-		}
 
 	public:
 		KPluggableManager();
 		virtual ~KPluggableManager();
+
+	public:
+		virtual const KPluggableManager* ToPluggableManager() const override
+		{
+			return this;
+		}
+		virtual KPluggableManager* ToPluggableManager() override
+		{
+			return this;
+		}
 };

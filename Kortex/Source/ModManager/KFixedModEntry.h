@@ -6,10 +6,10 @@ enum KImageEnum;
 class KFixedModEntry: public KModEntry
 {
 	private:
-		int m_Priority = -1;
+		intptr_t m_Priority = -1;
 
 	public:
-		KFixedModEntry(int priority = -1)
+		KFixedModEntry(intptr_t priority = -1)
 			:m_Priority(priority)
 		{
 		}
@@ -29,10 +29,10 @@ class KFixedModEntry: public KModEntry
 		virtual bool IsLinkedMod() const override;
 
 		virtual KImageEnum GetIcon() const override;
-		virtual int GetPriority() const override
+		virtual intptr_t GetPriority() const override
 		{
 			return m_Priority;
 		}
-		virtual int GetOrderIndex() const override;
+		virtual intptr_t GetOrderIndex() const override;
 };
 

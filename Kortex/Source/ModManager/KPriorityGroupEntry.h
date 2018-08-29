@@ -27,7 +27,7 @@ class KPriorityGroupEntry: public KFixedModEntry
 
 		virtual bool IsEnabled() const override
 		{
-			return KModEntry::IsEnabledUnchecked();
+			return KModEntry::IsEnabled();
 		}
 		virtual bool IsInstalled() const override
 		{
@@ -39,8 +39,8 @@ class KPriorityGroupEntry: public KFixedModEntry
 		}
 
 		virtual KImageEnum GetIcon() const override;
-		virtual int GetPriority() const override;
-		virtual int GetOrderIndex() const override;
+		virtual intptr_t GetPriority() const override;
+		virtual intptr_t GetOrderIndex() const override;
 
 		bool IsBegin() const
 		{

@@ -1,15 +1,16 @@
 #pragma once
 #include "stdafx.h"
-#include "KModFilesExplorerModelNode.h"
+#include "KModManagerDispatcher.h"
 #include "KDataViewListModel.h"
 #include "KImageProvider.h"
+class KModEntry;
+class KFileTreeNode;
 
-class KModFilesExplorerModel: public KDataViewModelBase
+class KModFilesExplorerModel: public KxDataViewModelExBase<KxDataViewModel>
 {
 	private:
-		const wxString m_ExplorerRoot;
-		const KModEntry* m_ModEntry = NULL;
-		KMFEModelNode::NodeVector m_Entries;
+		const KModEntry& m_ModEntry;
+		std::unordered_map<const KFileTreeNode*, KModManagerDispatcher::CollisionVector> m_Collisions;
 
 	private:
 		virtual void OnInitControl() override;
@@ -29,28 +30,30 @@ class KModFilesExplorerModel: public KDataViewModelBase
 		void OnSelectItem(KxDataViewEvent& event);
 		void OnActivateItem(KxDataViewEvent& event);
 		void OnContextMenu(KxDataViewEvent& event);
+		void OnExpandingItem(KxDataViewEvent& event);
+
+		const KModManagerDispatcher::CollisionVector* GetCollisions(const KFileTreeNode& node) const;
+		const KModManagerDispatcher::CollisionVector& GetOrUpdateCollisions(const KFileTreeNode& node);
 
 	public:
-		KModFilesExplorerModel(const wxString& sExplorerRoot, const KModEntry* modEntry = NULL);
+		KModFilesExplorerModel(const KModEntry& modEntry)
+			:m_ModEntry(modEntry)
+		{
+		}
 
 	public:
 		virtual void RefreshItems() override;
 
-		KxDataViewItem MakeItem(const KMFEModelNode* node) const
+		KxDataViewItem MakeItem(const KFileTreeNode* node) const
 		{
-			return KxDataViewItem(reinterpret_cast<void*>(const_cast<KMFEModelNode*>(node)));
+			return KxDataViewItem(node);
 		}
-		KxDataViewItem MakeItem(const KMFEModelNode& node) const
+		KxDataViewItem MakeItem(const KFileTreeNode& node) const
 		{
 			return MakeItem(&node);
 		}
-		KMFEModelNode* GetNode(const KxDataViewItem& item) const
+		KFileTreeNode* GetNode(const KxDataViewItem& item) const
 		{
-			return item.GetValuePtr<KMFEModelNode>();
-		}
-
-		bool HasModEntry() const
-		{
-			return m_ModEntry != NULL;
+			return item.GetValuePtr<KFileTreeNode>();
 		}
 };

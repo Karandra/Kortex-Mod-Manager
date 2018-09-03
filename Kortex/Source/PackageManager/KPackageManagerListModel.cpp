@@ -291,17 +291,13 @@ wxBitmap KPackageManagerListModel::GetIcon(const KxFileFinderItem& entry) const
 	{
 		icon = KGetBitmap(KIMG_SKSM_LOGO_SMALL);
 	}
-	else if (KAux::IsSingleFileExtensionMatches(entry.GetName(), "7z"))
-	{
-		icon = KGetBitmap(KIMG_7ZIP);
-	}
-	else if (KAux::IsFileExtensionMatches(entry.GetName(), KPackageManager::GetSuppoptedExtensions()))
-	{
-		icon = KGetBitmap(KIMG_FOLDER_ZIPPER);
-	}
 	else
 	{
-		icon = KGetBitmap(KIMG_DOCUMENT);
+		icon = KxShell::GetFileIcon(entry.GetFullPath(), true);
+		if (!icon.IsOk())
+		{
+			icon = KGetBitmap(KIMG_DOCUMENT);
+		}
 	}
 	return icon;
 }

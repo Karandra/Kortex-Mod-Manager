@@ -8,6 +8,8 @@
 #include "KComparator.h"
 #include "KAux.h"
 #include <KxFramework/KxShell.h>
+#include <KxFramework/KxLibrary.h>
+#include <wx/mimetype.h>
 
 enum ColumnID
 {
@@ -38,6 +40,7 @@ void KModManagerVirtualGameFolderModel::OnInitControl()
 	KxDataViewColumnFlags flags = KxDV_COL_DEFAULT_FLAGS|KxDV_COL_SORTABLE;
 	{
 		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 300, flags);
+		info.GetRenderer()->SetOptionEnabled(KxDataViewRendererOptions::KxDVR_ALLOW_BITMAP_SCALEDOWN);
 	}
 	{
 		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_INERT, 300, flags);
@@ -102,7 +105,20 @@ void KModManagerVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewI
 		{
 			case ColumnID::Name:
 			{
-				value = KxDataViewBitmapTextValue(fileNode.GetName(), fileNode.IsDirectory() ? KGetBitmap(KIMG_FOLDER) : KGetBitmap(KIMG_DOCUMENT));
+				KxDataViewBitmapTextValue valueData(fileNode.GetName());
+				if (fileNode.IsFile())
+				{
+					valueData.SetBitmap(KxShell::GetFileIcon(fileNode.GetFullPath(), true));
+					if (!valueData.HasBitmap())
+					{
+						valueData.SetBitmap(KGetBitmap(KIMG_DOCUMENT));
+					}
+				}
+				else
+				{
+					valueData.SetBitmap(KGetBitmap(KIMG_FOLDER));
+				}
+				value = valueData;
 				break;
 			}
 			case ColumnID::PartOf:

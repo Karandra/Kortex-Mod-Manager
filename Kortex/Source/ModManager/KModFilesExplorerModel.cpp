@@ -103,7 +103,21 @@ void KModFilesExplorerModel::GetValue(wxAny& value, const KxDataViewItem& item, 
 		{
 			case ColumnID::Name:
 			{
-				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->IsDirectory() ? KIMG_FOLDER : KIMG_DOCUMENT));
+				wxIcon icon;
+				if (node->IsFile())
+				{
+					icon = KxShell::GetFileIcon(node->GetFullPath(), true);
+					if (!icon.IsOk())
+					{
+						icon = KGetIcon(KIMG_DOCUMENT);
+					}
+				}
+				else
+				{
+					icon = KGetIcon(KIMG_FOLDER);
+				}
+
+				value = KxDataViewBitmapTextValue(node->GetName(), icon);
 				break;
 			}
 			case ColumnID::Collisions:

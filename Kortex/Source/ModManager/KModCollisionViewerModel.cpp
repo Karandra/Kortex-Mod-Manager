@@ -66,7 +66,7 @@ void KModCollisionViewerModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KModCollisionViewerModel::OnContextMenu, this);
 
 	/* Columns */
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 300);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 300);
 	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModExplorer.Collisions"), ColumnID::Collisions, KxDATAVIEW_CELL_INERT, 200);
 	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125);
 	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, 175);
@@ -83,7 +83,21 @@ void KModCollisionViewerModel::GetValueByRow(wxAny& value, size_t row, const KxD
 		{
 			case ColumnID::Name:
 			{
-				value = entry->GetRelativePath();
+				wxIcon icon;
+				if (fileItem.IsFile())
+				{
+					icon = KxShell::GetFileIcon(fileItem.GetFullPath(), true);
+					if (!icon.IsOk())
+					{
+						icon = KGetIcon(KIMG_DOCUMENT);
+					}
+				}
+				else
+				{
+					icon = KGetIcon(KIMG_FOLDER);
+				}
+
+				value = KxDataViewBitmapTextValue(entry->GetRelativePath(), icon);
 				break;
 			}
 			case ColumnID::Collisions:

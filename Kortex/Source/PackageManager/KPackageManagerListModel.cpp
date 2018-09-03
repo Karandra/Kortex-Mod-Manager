@@ -382,8 +382,11 @@ void KPackageManagerListModel::Search(const wxString& mask)
 	m_Data.clear();
 	m_PrevPath.clear();
 	m_IsRoot = true;
+	
+	wxString searchMask;
+	KAux::SetSearchMask(searchMask, mask);
 
-	std::function<void(const wxString&)> Recurse = [this, &Recurse, &mask](const wxString& path)
+	std::function<void(const wxString&)> Recurse = [this, &Recurse, &searchMask](const wxString& path)
 	{
 		KxFileFinder finder(path, "*");
 		KxFileFinderItem item = finder.FindNext();
@@ -391,11 +394,11 @@ void KPackageManagerListModel::Search(const wxString& mask)
 		{
 			if (item.IsNormalItem())
 			{
-				if (item.IsFile() && KAux::CheckSearchMask(mask, item.GetName()))
+				if (item.IsFile() && KAux::CheckSearchMask(searchMask, item.GetName()))
 				{
 					m_Data.push_back(item);
 				}
-				else
+				else if (item.IsDirectory())
 				{
 					Recurse(item.GetFullPath());
 				}

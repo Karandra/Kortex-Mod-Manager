@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "KFileTreeNode.h"
+#include "KModEntry.h"
+#include "KModManager.h"
 
 KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, const wxString& relativePath, KxFileSearchType type)
 {
@@ -36,4 +38,15 @@ KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, c
 		}
 	}
 	return NULL;
+}
+
+wxString KFileTreeNode::GetRelativePath() const
+{
+	wxString path = m_Item.GetFullPath();
+	if (path.Replace(m_Mod->GetLocation(KMM_LOCATION_MOD_FILES), wxEmptyString, false) == 1 && !path.IsEmpty() && path[0] == wxS('\\'))
+	{
+		// Remove leading slash
+		path.Remove(0, 1);
+	}
+	return path;
 }

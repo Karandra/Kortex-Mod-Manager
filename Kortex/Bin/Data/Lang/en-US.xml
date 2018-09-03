@@ -915,8 +915,11 @@ It is recommended that you move these files]]></String>
 		<String ID="ModExplorer.Collisions.NoneFound">No collisions found</String>
 
 		<String ID="ModExplorer.Collision.Unknown">Unknown collision</String>
-		<String ID="ModExplorer.Collision.Overwritten">Overwritten</String>
-		<String ID="ModExplorer.Collision.Owerwrites">Owerwrites</String>
+		<String ID="ModExplorer.Collision.Overwritten">Overwritten by "%1"</String>
+		<String ID="ModExplorer.Collision.Owerwrites">Owerwrites "%1"</String>
+
+		<String ID="VirtualGameFolderWS.Name">Virtual game folder</String>
+		<String ID="VirtualGameFolderWS.NameShort">Game data</String>
 
 		<!-- Network -->
 		<String ID="Network.Provider">Provider</String>

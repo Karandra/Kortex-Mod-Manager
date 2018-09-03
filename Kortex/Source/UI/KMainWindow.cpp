@@ -163,8 +163,8 @@ bool KMainWindow::Create(wxWindow* parent,
 		CreateMainWorkspaces();
 		CreateMainMenu();
 
-		KApp::Get().SubscribeBroadcasting(this, KEVT_BROADCAST_VFS_TOGGLED);
-		Bind(KEVT_BROADCAST_VFS_TOGGLED, &KMainWindow::OnVFSToggled, this);
+		KEvent::Bind(KEVT_VFS_TOGGLED, &KMainWindow::OnVFSToggled, this);
+		KEvent::Bind(KEVT_VFS_TOGGLED, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
 
 		KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 		return true;
@@ -183,7 +183,6 @@ void KMainWindow::CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace)
 			KWorkspace* workspace = pluggableManager->CreateWorkspace(this);
 			if (workspace)
 			{
-				KThemeManager::Get().ProcessWindow(workspace);
 				if (parentWorkspace && workspace->IsSubWorkspace())
 				{
 					if (!firstSubWorkspace)
@@ -212,11 +211,7 @@ void KMainWindow::CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace)
 }
 void KMainWindow::CreateMainWorkspaces()
 {
-	// Create menu and subscribe it to VFS events
 	m_ManagersMenu = new KxMenu();
-
-	GetApp().SubscribeBroadcasting(m_ManagersMenu, KEVT_BROADCAST_VFS_TOGGLED);
-	m_ManagersMenu->Bind(KEVT_BROADCAST_VFS_TOGGLED, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
 
 	// Add workspaces
 	AddWorkspace(new KGameConfigWorkspace(this))->CreateNow();

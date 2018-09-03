@@ -121,10 +121,9 @@ bool KModManagerWorkspace::OnCreateWorkspace()
 	ReloadView();
 	UpdateModListContent();
 
-	KApp::Get().SubscribeBroadcasting(this, KEVT_BROADCAST_VFS_TOGGLED);
-	Bind(KEVT_BROADCAST_VFS_TOGGLED, &KModManagerWorkspace::OnVFSToggled, this);
+	KEvent::Bind(KEVT_VFS_TOGGLED, &KModManagerWorkspace::OnVFSToggled, this);
 
-	//KModManagerVirtualGameFolderWS* virtualGameFoldeWS = CreateAsSubWorkspace<KModManagerVirtualGameFolderWS>();
+	CreateAsSubWorkspace<KModManagerVirtualGameFolderWS>();
 	return true;
 }
 
@@ -357,7 +356,7 @@ void KModManagerWorkspace::OnSubWorkspaceOpening(wxAuiNotebookEvent& event)
 			return;
 		}
 
-		if (workspace && workspace->IsWorkspaceCreated() && workspace->OnOpenWorkspaceInternal())
+		if (workspace && workspace->CreateNow() && workspace->OnOpenWorkspaceInternal())
 		{
 			event.Allow();
 		}
@@ -368,7 +367,7 @@ void KModManagerWorkspace::OnSubWorkspaceOpened(wxAuiNotebookEvent& event)
 	event.Skip();
 
 	KWorkspace* workspace = static_cast<KWorkspace*>(m_PaneRight_Tabs->GetPage(event.GetSelection()));
-	if (workspace && workspace->CreateNow())
+	if (workspace && workspace->IsWorkspaceCreated())
 	{
 		event.Allow();
 	}
@@ -849,6 +848,15 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 					KxFile(modEntry->GetLocation(KMM_LOCATION_MOD_FILES)).RemoveFolder(true);
 					modEntry->SetLinkedModLocation(dialog.GetResult());
 					modEntry->Save();
+
+					{
+						KModEvent event(KEVT_MOD_FILES_CHNAGED, *modEntry);
+						ProcessEvent(event);
+					}
+					{
+						KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+						ProcessEvent(event);
+					}
 				}
 			}
 			break;
@@ -862,6 +870,15 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 
 				modEntry->SetLinkedModLocation(wxEmptyString);
 				modEntry->Save();
+
+				{
+					KModEvent event(KEVT_MOD_FILES_CHNAGED, *modEntry);
+					ProcessEvent(event);
+				}
+				{
+					KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+					ProcessEvent(event);
+				}
 			}
 			break;
 		}
@@ -889,6 +906,9 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 				KxFile(dialog.GetResult()).CopyFile(modEntry->GetLocation(KMM_LOCATION_MOD_LOGO), true);
 				modEntry->ResetBitmap();
 				modEntry->Save();
+
+				KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+				ProcessEvent(event);
 			}
 			break;
 		}
@@ -902,6 +922,9 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			{
 				modEntry->SetDescription(dialog.GetText());
 				modEntry->Save();
+
+				KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+				ProcessEvent(event);
 			}
 			break;
 		}
@@ -926,6 +949,9 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 							entry->GetTags() = tempEntry.GetTags();
 							entry->SetPriorityGroupTag(tempEntry.GetPriorityGroupTag());
 							entry->Save();
+
+							KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+							ProcessEvent(event);
 						}
 
 					}
@@ -941,6 +967,9 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			if (dialog.IsModified())
 			{
 				modEntry->Save();
+
+				KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+				ProcessEvent(event);
 			}
 			break;
 		}
@@ -993,6 +1022,9 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			{
 				modEntry->SetInstallPackageFile(dialog.GetResult());
 				modEntry->Save();
+
+				KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+				ProcessEvent(event);
 			}
 			break;
 		}

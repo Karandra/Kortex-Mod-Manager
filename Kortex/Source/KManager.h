@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KApp.h"
+#include "KEvents.h"
 class KWorkspace;
 class KMainWindow;
 class KPluggableManager;

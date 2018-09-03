@@ -216,7 +216,6 @@ int KApp::OnExit()
 {
 	wxLog::FlushActive();
 	wxLogInfo("Exiting app");
-	SetBroadcastingEnabled(false);
 
 	// VFS should be uninitialized first
 	UnInitVFS();
@@ -714,30 +713,6 @@ void KApp::ConfigureInternetExplorer(bool init)
 	#undef IERegPath
 }
 
-void KApp::BroadcastEvent(KBroadcastEvent& event)
-{
-	if (m_BroadcastingEnabled)
-	{
-		int n = 0;
-		for (auto& p: m_BroadcastingRecievers)
-		{
-			p.first->ProcessEvent(event);
-		}
-	}
-
-	m_MainWindow->UpdateWindowUI();
-	m_MainWindow->Refresh();
-	m_MainWindow->Update();
-}
-void KApp::SubscribeBroadcasting(wxEvtHandler* pHandler, wxEventType type)
-{
-	m_BroadcastingRecievers.push_back(std::make_pair(pHandler, type));
-}
-void KApp::SubscribeBroadcasting(wxWindow* window, wxEventType type)
-{
-	SubscribeBroadcasting(window->GetEventHandler(), type);
-}
-
 bool KApp::ScheduleRestart()
 {
 	int delaySec = m_GeneralOptions_AppWide.GetAttributeInt("RestartDelay", 5);
@@ -751,7 +726,7 @@ bool KApp::ScheduleRestart()
 	task.DeleteExpiredTaskAfter(wxTimeSpan(0, 0, 5));
 
 	taskSheduler.DeleteTask(taskName);
-	taskSheduler.SaveTask(task, taskName);
+	return taskSheduler.SaveTask(task, taskName);
 }
 bool KApp::Uninstall()
 {

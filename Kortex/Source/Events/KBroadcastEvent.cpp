@@ -1,16 +1,8 @@
 #include "stdafx.h"
 #include "KBroadcastEvent.h"
-#include "KApp.h"
+#include "UI/KWorkspace.h"
 
-KBroadcastEvent::KBroadcastEvent(wxEventType type)
-	:wxNotifyEvent(type, 0)
+bool KBroadcastEvent::IsTargetWorkspace(const KWorkspace* workspace) const
 {
-
-}
-KBroadcastEvent::~KBroadcastEvent()
-{
-}
-KBroadcastEvent* KBroadcastEvent::Clone() const
-{
-	return new KBroadcastEvent(*this);
+	return workspace->GetID() == m_TargetWorkspaceID;
 }

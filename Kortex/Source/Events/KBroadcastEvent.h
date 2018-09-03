@@ -1,15 +1,22 @@
 #pragma once
 #include "stdafx.h"
+#include "KEvent.h"
+class KWorkspace;
 
-class KBroadcastEvent: public wxNotifyEvent
+class KBroadcastEvent: public KEvent
 {
 	private:
 		wxString m_TargetWorkspaceID;
 
 	public:
-		KBroadcastEvent(wxEventType type = wxEVT_NULL);
-		virtual ~KBroadcastEvent();
-		KBroadcastEvent* Clone() const override;
+		KBroadcastEvent(wxEventType type = wxEVT_NULL)
+			:KEvent(type)
+		{
+		}
+		KBroadcastEvent* Clone() const override
+		{
+			return new KBroadcastEvent(*this);
+		}
 
 	public:
 		const wxString& GetTargetWorkspaceID() const
@@ -20,4 +27,5 @@ class KBroadcastEvent: public wxNotifyEvent
 		{
 			m_TargetWorkspaceID = id;
 		}
+		bool IsTargetWorkspace(const KWorkspace* workspace) const;
 };

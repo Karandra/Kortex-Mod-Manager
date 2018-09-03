@@ -58,6 +58,7 @@ bool KWorkspace::MakeSubWorkspace(KWorkspace* workspace)
 {
 	if (workspace->IsSubWorkspace())
 	{
+		KThemeManager::Get().ProcessWindow(workspace);
 		return workspace->Reparent(GetSubWorkspaceContainer());
 	}
 	return false;

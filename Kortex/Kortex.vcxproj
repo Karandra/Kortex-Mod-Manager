@@ -23,6 +23,8 @@
     <ClCompile Include="Source\DownloadManager\KDownloadManager.cpp" />
     <ClCompile Include="Source\DownloadManager\KDownloadManagerView.cpp" />
     <ClCompile Include="Source\DownloadManager\KDownloadManagerWorkspace.cpp" />
+    <ClCompile Include="Source\Events\KEvent.cpp" />
+    <ClCompile Include="Source\Events\KModEvent.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardInfoModel.cpp" />
     <ClCompile Include="Source\IPC\KIPC.cpp" />
     <ClCompile Include="Source\IPC\KIPCClient.cpp" />
@@ -47,6 +49,8 @@
     <ClCompile Include="Source\ModManager\KModManagerSitesEditor.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerStatistics.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerTagSelector.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderModel.cpp" />
+    <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderModelNode.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderWS.cpp" />
     <ClCompile Include="Source\ModManager\KPriorityGroupEntry.cpp" />
     <ClCompile Include="Source\Network\KNetwork.cpp" />
@@ -209,12 +213,15 @@
     <ClInclude Include="Source\DownloadManager\KDownloadManager.h" />
     <ClInclude Include="Source\DownloadManager\KDownloadManagerView.h" />
     <ClInclude Include="Source\DownloadManager\KDownloadManagerWorkspace.h" />
+    <ClInclude Include="Source\Events\KEvent.h" />
+    <ClInclude Include="Source\Events\KModEvent.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h" />
     <ClInclude Include="Source\IPC\KIPC.h" />
     <ClInclude Include="Source\IPC\KIPCClient.h" />
     <ClInclude Include="Source\IPC\KIPCConnection.h" />
     <ClInclude Include="Source\IPC\KIPCRequest.h" />
     <ClInclude Include="Source\IPC\KIPCServer.h" />
+    <ClInclude Include="Source\KEvents.h" />
     <ClInclude Include="Source\KRTTI.h" />
     <ClInclude Include="Source\KTranslation.h" />
     <ClInclude Include="Source\ModManager\KFileTreeNode.h" />
@@ -234,6 +241,8 @@
     <ClInclude Include="Source\ModManager\KModManagerSitesEditor.h" />
     <ClInclude Include="Source\ModManager\KModManagerStatistics.h" />
     <ClInclude Include="Source\ModManager\KModManagerTagSelector.h" />
+    <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderModel.h" />
+    <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderModelNode.h" />
     <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderWS.h" />
     <ClInclude Include="Source\ModManager\KPriorityGroupEntry.h" />
     <ClInclude Include="Source\Network\KNetwork.h" />

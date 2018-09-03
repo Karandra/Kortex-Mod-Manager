@@ -1,17 +1,23 @@
 #pragma once
 #include "stdafx.h"
-#include "KBroadcastEvent.h"
+#include "KEvent.h"
 
-class KVFSEvent: public KBroadcastEvent
+class KVFSEvent: public KEvent
 {
 	private:
 		bool m_Activated = false;
 
 	public:
-		KVFSEvent(wxEventType type = wxEVT_NULL);
-		KVFSEvent(bool isEnabled);
-		virtual ~KVFSEvent();
-		KVFSEvent* Clone() const override;
+		KVFSEvent(wxEventType type = wxEVT_NULL)
+			:KEvent(type)
+		{
+		}
+		KVFSEvent(bool activated);
+
+		KVFSEvent* Clone() const override
+		{
+			return new KVFSEvent(*this);
+		}
 
 	public:
 		bool IsActivated() const
@@ -20,4 +26,5 @@ class KVFSEvent: public KBroadcastEvent
 		}
 };
 
-wxDECLARE_EVENT(KEVT_BROADCAST_VFS_TOGGLED, KVFSEvent);
+//////////////////////////////////////////////////////////////////////////
+wxDECLARE_EVENT(KEVT_VFS_TOGGLED, KVFSEvent);

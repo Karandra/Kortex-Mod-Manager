@@ -90,7 +90,7 @@ KWorkspace* KPluginManagerBethesda::CreateWorkspace(KMainWindow* mainWindow)
 void KPluginManagerBethesda::LoadNativeOrderBG()
 {
 	Clear();
-	KModManagerDispatcher::FilesVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
+	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
 	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
 
 	// Load from 'LoadOrder.txt'
@@ -98,9 +98,9 @@ void KPluginManagerBethesda::LoadNativeOrderBG()
 	{
 		// Find whether plugin with this name exist
 		wxString nameL = KxString::ToLower(name);
-		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KxFileFinderItem& item)
+		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KFileTreeNode* node)
 		{
-			return KxString::ToLower(item.GetName()) == nameL;
+			return KxString::ToLower(node->GetName()) == nameL;
 		});
 
 		if (!nameL.StartsWith('#') && it != files.end())
@@ -108,19 +108,19 @@ void KPluginManagerBethesda::LoadNativeOrderBG()
 			if (CheckExtension(nameL))
 			{
 				auto& entry = GetEntries().emplace_back(NewPluginEntry(name, false));
-				entry->SetFullPath(it->GetFullPath());
+				entry->SetFullPath((*it)->GetFullPath());
 				entry->SetParentMod(FindParentMod(*entry));
 			}
 		}
 	}
 
 	// Load new plugins from folder
-	for (const KxFileFinderItem& item: files)
+	for (const KFileTreeNode* fileNode: files)
 	{
-		if (CheckExtension(KxString::ToLower(item.GetName())) && !FindPluginByName(item.GetName()))
+		if (CheckExtension(KxString::ToLower(fileNode->GetName())) && !FindPluginByName(fileNode->GetName()))
 		{
-			auto& entry = GetEntries().emplace_back(NewPluginEntry(item.GetName(), false));
-			entry->SetFullPath(item.GetFullPath());
+			auto& entry = GetEntries().emplace_back(NewPluginEntry(fileNode->GetName(), false));
+			entry->SetFullPath(fileNode->GetFullPath());
 			entry->SetParentMod(FindParentMod(*entry));
 		}
 	}
@@ -262,16 +262,16 @@ bool KPluginManagerBethesda::Load()
 {
 	Clear();
 
-	auto files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
+	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
 	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
 
 	for (const KModListPluginEntry& listEntry: loadOrder.GetPlugins())
 	{
 		// Find whether plugin with this name exist
 		wxString nameL = KxString::ToLower(listEntry.GetPluginName());
-		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KxFileFinderItem& item)
+		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KFileTreeNode* item)
 		{
-			return KxString::ToLower(item.GetName()) == nameL;
+			return KxString::ToLower(item->GetName()) == nameL;
 		});
 
 		if (!nameL.StartsWith('#') && it != files.end())
@@ -279,21 +279,21 @@ bool KPluginManagerBethesda::Load()
 			if (CheckExtension(nameL))
 			{
 				auto& entry = GetEntries().emplace_back(NewPluginEntry(listEntry.GetPluginName(), false));
-				entry->SetFullPath(it->GetFullPath());
+				entry->SetFullPath((*it)->GetFullPath());
 				entry->SetParentMod(FindParentMod(*entry));
 			}
 		}
 	}
 
 	// Load files form 'Data' folder. Don't add already existing
-	for (const KxFileFinderItem& item: files)
+	for (const KFileTreeNode* fileNode: files)
 	{
-		if (CheckExtension(KxString::ToLower(item.GetName())))
+		if (CheckExtension(KxString::ToLower(fileNode->GetName())))
 		{
-			if (FindPluginByName(item.GetName()) == NULL)
+			if (FindPluginByName(fileNode->GetName()) == NULL)
 			{
-				auto& entry = GetEntries().emplace_back(NewPluginEntry(item.GetName(), false));
-				entry->SetFullPath(item.GetFullPath());
+				auto& entry = GetEntries().emplace_back(NewPluginEntry(fileNode->GetName(), false));
+				entry->SetFullPath(fileNode->GetFullPath());
 				entry->SetParentMod(FindParentMod(*entry));
 			}
 		}

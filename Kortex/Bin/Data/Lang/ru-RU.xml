@@ -915,8 +915,11 @@
 		<String ID="ModExplorer.Collisions.NoneFound">Коллизий не найдено</String>
 		
 		<String ID="ModExplorer.Collision.Unknown">Неизвестный тип коллизии</String>
-		<String ID="ModExplorer.Collision.Overwritten">Перезаписан</String>
-		<String ID="ModExplorer.Collision.Owerwrites">Перезаписывает</String>
+		<String ID="ModExplorer.Collision.Overwritten">Перезаписан "%1"</String>
+		<String ID="ModExplorer.Collision.Owerwrites">Перезаписывает "%1"</String>
+
+		<String ID="VirtualGameFolderWS.Name">Виртуальная папка игры</String>
+		<String ID="VirtualGameFolderWS.NameShort">Данные игры</String>
 
 		<!-- Network -->
 		<String ID="Network.Provider">Поставщик</String>

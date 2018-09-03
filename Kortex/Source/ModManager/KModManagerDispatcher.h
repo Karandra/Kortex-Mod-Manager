@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
+#include "KFileTreeNode.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
 class KModEntry;
-class KFileTreeNode;
 
 enum KMMDispatcherCollisionType
 {
@@ -46,7 +46,6 @@ class KModManagerDispatcher
 		using CollisionVector = std::vector<KMMDispatcherCollision>;
 		using FilesVector = std::vector<KxFileFinderItem>;
 
-	private:
 		enum class IterationOrder
 		{
 			Direct,
@@ -64,21 +63,23 @@ class KModManagerDispatcher
 		using FinderHash = std::unordered_set<wxString, std::hash<wxString>, FinderHashComparator>;
 
 	private:
-		KModEntry* IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget = true) const;
-
-		void FindFilesInTree(FilesVector& files,
+		void FindFilesInTree(KFileTreeNode::CRefVector& nodes,
 							 FinderHash* hash,
 							 const KFileTreeNode& rootNode,
 							 const wxString& filter,
 							 KxFileSearchType type,
-							 bool recurse 
+							 bool recurse,
+							 const wxString& absolutePath = wxEmptyString
 		) const;
 
 	public:
+		KModEntry* IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget = true, bool activeOnly = true) const;
+		
 		wxString GetTargetPath(const wxString& relativePath, KModEntry** owningMod = NULL) const;
 		
-		FilesVector FindFiles(const KModEntry& modEntry, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false) const;
-		FilesVector FindFiles(const wxString& relativePath, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false) const;
+		KFileTreeNode::CRefVector FindFiles(const KFileTreeNode& rootNode, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, FinderHash* hash = NULL) const;
+		KFileTreeNode::CRefVector FindFiles(const KModEntry& modEntry, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, FinderHash* hash = NULL) const;
+		KFileTreeNode::CRefVector FindFiles(const wxString& relativePath, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, FinderHash* hash = NULL) const;
 		
 		CollisionVector FindCollisions(const KModEntry& scannedMod, const wxString& relativePath) const;
 };

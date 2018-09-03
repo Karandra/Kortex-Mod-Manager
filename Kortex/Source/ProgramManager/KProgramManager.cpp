@@ -275,8 +275,7 @@ void KProgramManager::RunMain(KxProgressDialog* dialog, const KProgramManagerEnt
 KProgramManager::KProgramManager()
 	:m_RunConfig(GetRunConfig()), m_RunMainOptions(this, "RunMain")
 {
-	KApp::Get().SubscribeBroadcasting(this, KEVT_BROADCAST_VFS_TOGGLED);
-	Bind(KEVT_BROADCAST_VFS_TOGGLED, &KProgramManager::OnVFSToggled, this);
+	KEvent::Bind(KEVT_VFS_TOGGLED, &KProgramManager::OnVFSToggled, this);
 
 	LoadProgramList();
 }

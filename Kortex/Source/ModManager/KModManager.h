@@ -7,6 +7,7 @@
 #include "KModManagerDispatcher.h"
 #include "KModManagerModList.h"
 #include "KMirroredVirtualFolder.h"
+#include "KEvents.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
 class KVirtualFileSystemService;
@@ -34,6 +35,7 @@ enum KModManagerModsMoveType
 	KMM_MOVEMOD_AFTER,
 };
 
+//////////////////////////////////////////////////////////////////////////
 class KModManager: public KManager, public KxSingletonPtr<KModManager>
 {
 	friend class KIPCClient;
@@ -92,7 +94,6 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		}
 		void DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* window = NULL);
 
-	private:
 		bool InitMainVirtualFolder();
 		bool InitMirroredLocations();
 
@@ -101,6 +102,9 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 
 		bool CheckMountPoint(const wxString& folderPath);
 		void ReportNonEmptyMountPoint(const wxString& folderPath);
+
+	private:
+		void OnModFilesChnaged(KModEvent& event);
 
 	public:
 		KModManager(KWorkspace* workspace);

@@ -5,7 +5,7 @@
 wxDEFINE_EVENT(KEVT_LOG, KLogEvent);
 
 KLogEvent::KLogEvent(const wxString& message, KLogLevel level, wxWindow* window)
-	:wxNotifyEvent(KEVT_LOG), m_Level(level), m_Window(window)
+	:KEvent(KEVT_LOG), m_Level(level), m_Window(window)
 {
 	SetString(message);
 }
@@ -24,22 +24,19 @@ KLogEvent* KLogEvent::Clone() const
 	return event;
 }
 
-void KLogEvent::Abandon()
-{
-	m_EventSent = true;
-}
-void KLogEvent::Send()
+bool KLogEvent::Send()
 {
 	if (!m_EventSent)
 	{
 		m_EventSent = true;
 		if (wxThread::IsMain())
 		{
-			KApp::Get().ProcessEvent(*this);
+			return KEvent::SendEvent(*this);
 		}
 		else
 		{
-			KApp::Get().QueueEvent(Clone());
+			KEvent::QueueEvent(Clone());
 		}
 	}
+	return false;
 }

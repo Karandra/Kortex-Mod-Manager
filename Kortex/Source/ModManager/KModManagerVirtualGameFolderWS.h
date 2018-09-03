@@ -4,14 +4,18 @@
 #include "UI/KMainWindow.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
+class KxSearchBox;
+class KModManagerVirtualGameFolderModel;
 
 class KModManagerVirtualGameFolderWS: public KWorkspace, public KxSingletonPtr<KModManagerVirtualGameFolderWS>
 {
 	private:
 		KProgramOptionUI m_OptionsUI;
-		KProgramOptionUI m_ModListViewOptions;
+		KProgramOptionUI m_ViewOptions;
 
 		wxBoxSizer* m_MainSizer = NULL;
+		KModManagerVirtualGameFolderModel* m_Model = NULL;
+		KxSearchBox* m_SearchBox = NULL;
 
 	public:
 		KModManagerVirtualGameFolderWS(KMainWindow* mainWindow);
@@ -22,6 +26,8 @@ class KModManagerVirtualGameFolderWS: public KWorkspace, public KxSingletonPtr<K
 		virtual bool OnOpenWorkspace() override;
 		virtual bool OnCloseWorkspace() override;
 		virtual void OnReloadWorkspace() override;
+
+		void OnModSerach(wxCommandEvent& event);
 
 	public:
 		virtual wxString GetID() const override;

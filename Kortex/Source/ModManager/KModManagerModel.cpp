@@ -80,9 +80,9 @@ void KModManagerModel::OnInitControl()
 
 	/* Columns */
 	KxDataViewColumnFlags defaultFlags = KxDV_COL_RESIZEABLE|KxDV_COL_REORDERABLE|KxDV_COL_SORTABLE;
-	KxDataViewColumnFlags nDefaultFlagsNoSort = (KxDataViewColumnFlags)(defaultFlags & ~KxDV_COL_SORTABLE);
-	KxDataViewColumnFlags nDefaultFlagsNoOrder = (KxDataViewColumnFlags)(defaultFlags & ~KxDV_COL_REORDERABLE);
-	KxDataViewColumnFlags nDefaultFlagsNoSortNoOrder = KxDV_COL_RESIZEABLE;
+	KxDataViewColumnFlags defaultFlagsNoSort = (KxDataViewColumnFlags)(defaultFlags & ~KxDV_COL_SORTABLE);
+	KxDataViewColumnFlags defaultFlagsNoOrder = (KxDataViewColumnFlags)(defaultFlags & ~KxDV_COL_REORDERABLE);
+	KxDataViewColumnFlags defaultFlagsNoSortNoOrder = KxDV_COL_RESIZEABLE;
 
 	GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(T("ModManager.ModList.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE|KxDATAVIEW_CELL_EDITABLE, 400, defaultFlags);
 
@@ -99,7 +99,7 @@ void KModManagerModel::OnInitControl()
 	{
 		int spacing = 1;
 		int width = (spacing +  16) * (KNETWORK_PROVIDER_ID_MAX + 1);
-		auto info = GetView()->AppendColumn<SitesRenderer>(T("ModManager.ModList.Sites"), ColumnID::Sites, KxDATAVIEW_CELL_INERT, width, nDefaultFlagsNoSort);
+		auto info = GetView()->AppendColumn<SitesRenderer>(T("ModManager.ModList.Sites"), ColumnID::Sites, KxDATAVIEW_CELL_INERT, width, defaultFlagsNoSort);
 
 		info.GetRenderer()->SetImageList(KApp::Get().GetImageList());
 		info.GetRenderer()->SetSpacing(1);
@@ -453,6 +453,8 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 					bool checked = value.As<bool>();
 					entry->SetEnabled(checked);
 					isChanged = true;
+
+					KModEvent(KEVT_MOD_FILES_CHNAGED, *entry).Send();
 				}
 
 				if (isChanged)
@@ -460,6 +462,8 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 					entry->Save();
 					KModManager::Get().SaveSate();
 					KModManagerWorkspace::GetInstance()->RefreshPlugins();
+
+					KModEvent(KEVT_MOD_CHNAGED, *entry).Send();
 					return true;
 				}
 				return false;
@@ -471,6 +475,8 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 				{
 					entry->SetVersion(newVersion);
 					entry->Save();
+
+					KModEvent(KEVT_MOD_CHNAGED, *entry).Send();
 					return true;
 				}
 				return false;
@@ -482,6 +488,8 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 				{
 					entry->SetAuthor(author);
 					entry->Save();
+
+					KModEvent(KEVT_MOD_CHNAGED, *entry).Send();
 					return true;
 				}
 				break;
@@ -563,10 +571,10 @@ bool KModManagerModel::GetItemAttributes(const KxDataViewItem& item, const KxDat
 	}
 	return false;
 }
-bool KModManagerModel::Compare(const KxDataViewItem& tItem1, const KxDataViewItem& tItem2, const KxDataViewColumn* column) const
+bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const
 {
-	const KMMModelNode* pNode1 = GetNode(tItem1);
-	const KMMModelNode* pNode2 = GetNode(tItem2);
+	const KMMModelNode* pNode1 = GetNode(item1);
+	const KMMModelNode* pNode2 = GetNode(item2);
 	if (pNode1 && pNode2)
 	{
 		ColumnID columnID = column ? (ColumnID)column->GetID() : ColumnID::Priority;
@@ -628,7 +636,7 @@ bool KModManagerModel::Compare(const KxDataViewItem& tItem1, const KxDataViewIte
 			};
 		}
 	}
-	return 0;
+	return false;
 }
 
 void KModManagerModel::OnSelectItem(KxDataViewEvent& event)
@@ -836,6 +844,8 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 
 				SelectItem(GetItemByEntry(entriesToMove.front()));
 				event.SetDropEffect(wxDragMove);
+
+				KModEvent(KEVT_MOD_CHNAGED).Send();
 				return true;
 			}
 		}
@@ -871,12 +881,6 @@ void KModManagerModel::SetDisplayMode(KModManagerModelType mode)
 	{
 		m_DisplayMode = mode;
 	}
-}
-
-void KModManagerModel::ChangeNotify(KModEntry* entry)
-{
-	entry->Save();
-	ItemChanged(MakeItem(entry));
 }
 
 const KModTagArray& KModManagerModel::GetTags() const
@@ -1071,7 +1075,8 @@ void KModManagerModel::RefreshItems()
 }
 void KModManagerModel::UpdateUI()
 {
-	SelectItem(GetView()->GetSelection());
+	//SelectItem(GetView()->GetSelection());
+	GetView()->Refresh();
 }
 
 void KModManagerModel::CreateSearchColumnsMenu(KxMenu& menu)

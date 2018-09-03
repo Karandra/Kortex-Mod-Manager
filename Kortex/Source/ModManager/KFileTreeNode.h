@@ -1,15 +1,27 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxFileFinder.h>
+class KModEntry;
 
 class KFileTreeNode
 {
 	public:
 		using FilesVector = std::vector<KxFileFinderItem>;
 		using Vector = std::vector<KFileTreeNode>;
+		using RefVector = std::vector<KFileTreeNode*>;
+		using CRefVector = std::vector<const KFileTreeNode*>;
 
 	private:
 		static KFileTreeNode* NavigateToElement(const KFileTreeNode& rootNode, const wxString& relativePath, KxFileSearchType type);
+		template<class T> static T* FindRootNode(T* thisNode)
+		{
+			T* node = thisNode;
+			while (node && !node->IsRootNode() && node->IsOK())
+			{
+				node = node->GetParent();
+			}
+			return node;
+		}
 
 	public:
 		static KFileTreeNode* NavigateToFolder(const KFileTreeNode& rootNode, const wxString& relativePath)
@@ -29,15 +41,20 @@ class KFileTreeNode
 		KxFileFinderItem m_Item;
 		Vector m_Children;
 		KFileTreeNode* m_Parent = NULL;
+		const KModEntry* m_Mod = NULL;
 
 	public:
 		KFileTreeNode() = default;
-		KFileTreeNode(const KxFileFinderItem& item, KFileTreeNode* parent = NULL)
-			:m_Item(item), m_Parent(parent)
+		KFileTreeNode(const KModEntry& modEntry, const KxFileFinderItem& item, KFileTreeNode* parent = NULL)
+			:m_Mod(&modEntry), m_Item(item), m_Parent(parent)
 		{
 		}
 
 	public:
+		bool IsOK() const
+		{
+			return m_Mod != NULL;
+		}
 		bool IsRootNode() const
 		{
 			return m_Parent == NULL && !m_Item.IsOK();
@@ -45,6 +62,11 @@ class KFileTreeNode
 		void MakeNull()
 		{
 			*this = KFileTreeNode();
+		}
+
+		const KModEntry& GetMod() const
+		{
+			return *m_Mod;
 		}
 
 		bool HasChildren() const
@@ -85,6 +107,15 @@ class KFileTreeNode
 		{
 			return m_Parent;
 		}
+		
+		const KFileTreeNode* GetRootNode() const
+		{
+			return FindRootNode(this);
+		}
+		KFileTreeNode* GetRootNode()
+		{
+			return FindRootNode(this);
+		}
 
 		const wxString& GetName() const
 		{
@@ -98,6 +129,7 @@ class KFileTreeNode
 		{
 			return m_Item.GetFullPath();
 		}
+		wxString GetRelativePath() const;
 
 		bool IsDirectory() const
 		{

@@ -53,8 +53,6 @@ class KApp: public KxApp<wxApp, KApp>
 		
 		KIPCClient* m_VFSServiceClient = NULL;
 		KVirtualFileSystemService* m_VFSService = NULL;
-		std::vector<std::pair<wxEvtHandler*, wxEventType>> m_BroadcastingRecievers;
-		bool m_BroadcastingEnabled = true;
 
 		wxString m_CurrentTemplateID;
 		wxString m_CurrentConfigID;
@@ -131,14 +129,6 @@ class KApp: public KxApp<wxApp, KApp>
 		void SetCurrentTemplateID(const wxString& templateID);
 		void SetCurrentConfigID(const wxString& configID);
 		void ConfigureInternetExplorer(bool init);
-
-		void BroadcastEvent(KBroadcastEvent& event);
-		void SubscribeBroadcasting(wxEvtHandler* pHandler, wxEventType type);
-		void SubscribeBroadcasting(wxWindow* window, wxEventType type);
-		void SetBroadcastingEnabled(bool isEnabled)
-		{
-			m_BroadcastingEnabled = isEnabled;
-		}
 
 		bool ScheduleRestart();
 		bool Uninstall();

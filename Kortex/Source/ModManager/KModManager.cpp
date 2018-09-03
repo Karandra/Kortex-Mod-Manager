@@ -4,6 +4,7 @@
 #include "KModManagerWorkspace.h"
 #include "KModManagerModel.h"
 #include "KModEntry.h"
+#include "KModManagerVirtualGameFolderWS.h"
 #include "Profile/KProfile.h"
 #include "Profile/KVirtualizationConfig.h"
 #include "VFS/KVirtualFileSystemService.h"
@@ -80,11 +81,13 @@ void KModManager::SortEntries()
 }
 void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* window)
 {
+	KModEvent event(KEVT_MOD_UNINSTALLING, *modEntry);
+	ProcessEvent(event);
+
 	// If signature is empty, removing this mod can cause removing ALL other mods
 	// because mod folder path will point to all mods directory instead of its own.
 	// Just ignore this. User can always delete this folder manually.
-
-	if (!modEntry->GetSignature().IsEmpty())
+	if (event.IsAllowed() && !modEntry->GetSignature().IsEmpty())
 	{
 		// Disable it
 		modEntry->SetEnabled(false);
@@ -103,10 +106,13 @@ void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* wind
 			self->LinkHandler(&folder, KxEVT_FILEOP_REMOVE_FOLDER);
 			folder.RemoveFolderTree(true);
 		});
-		operation->OnEnd([this](KOperationWithProgressBase* self)
+		operation->OnEnd([this, modID = modEntry->GetID().Clone()](KOperationWithProgressBase* self)
 		{
 			SaveSate();
 			KModManagerWorkspace::GetInstance()->ReloadWorkspace();
+
+			KModEvent event(KEVT_MOD_UNINSTALLED, modID);
+			ProcessEvent(event);
 		});
 		operation->SetDialogCaption(T("ModManager.RemoveMod.RemovingMessage"));
 		operation->Run();
@@ -208,6 +214,19 @@ void KModManager::ReportNonEmptyMountPoint(const wxString& folderPath)
 	dialog.ShowModal();
 }
 
+void KModManager::OnModFilesChnaged(KModEvent& event)
+{
+	if (event.HasMod())
+	{
+		event.GetMod()->UpdateFileTree();
+	}
+
+	if (KModManagerVirtualGameFolderWS* workspace = KModManagerVirtualGameFolderWS::GetInstance())
+	{
+		workspace->ScheduleRefresh();
+	}
+}
+
 KModManager::KModManager(KWorkspace* workspace)
 	:m_Options(this, "General"),
 	m_ModEntry_BaseGame(std::numeric_limits<int>::min()), m_ModEntry_WriteTarget(std::numeric_limits<int>::max())
@@ -234,6 +253,10 @@ KModManager::KModManager(KWorkspace* workspace)
 	m_ModEntry_WriteTarget.SetName(T("ModManager.WriteTargetName"));
 	m_ModEntry_WriteTarget.SetEnabled(true);
 
+	// Events
+	KEvent::Bind(KEVT_MOD_FILES_CHNAGED, &KModManager::OnModFilesChnaged, this);
+	
+	// Load data
 	Reload();
 }
 void KModManager::Clear()
@@ -331,6 +354,8 @@ void KModManager::Reload()
 	}
 	m_ModListManager.ReloadLists();
 	SortEntries();
+
+	KModEvent(KEVT_MOD_FILES_CHNAGED).Send();
 }
 void KModManager::SaveSate()
 {
@@ -393,6 +418,9 @@ bool KModManager::ChangeModID(KModEntry* entry, const wxString& newID)
 			// Save new mod order with changed signature.
 			// Reloading manager data is not needed
 			SaveSate();
+
+			KModEvent event(KEVT_MOD_FILES_CHNAGED, *entry);
+			ProcessEvent(event);
 			return true;
 		}
 	}

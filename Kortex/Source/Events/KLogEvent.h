@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "KEvent.h"
 
 enum KLogLevel
 {
@@ -8,7 +9,7 @@ enum KLogLevel
 	KLOG_ERROR,
 	KLOG_CRITICAL,
 };
-class KLogEvent: public wxNotifyEvent
+class KLogEvent: public KEvent
 {
 	private:
 		KLogLevel m_Level = KLOG_INFO;
@@ -21,8 +22,7 @@ class KLogEvent: public wxNotifyEvent
 		KLogEvent* Clone() const override;
 
 	public:
-		void Send();
-		void Abandon();
+		bool Send();
 
 		bool IsCritical() const
 		{

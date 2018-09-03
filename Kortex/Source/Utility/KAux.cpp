@@ -377,6 +377,12 @@ wxString KAux::MakeExtensionsFilter(const KxStringVector& extensions)
 
 bool KAux::SetSearchMask(wxString& storage, const wxString& newMask)
 {
+	if (storage.Length() != newMask.Length())
+	{
+		storage = '*' + KxString::ToLower(newMask) + '*';
+		return true;
+	}
+
 	wxString newMaskLower = KxString::ToLower(newMask);
 	if (storage != newMaskLower)
 	{

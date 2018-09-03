@@ -68,7 +68,7 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		virtual bool IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
 		virtual bool IsEditorEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
 		virtual bool GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
-		virtual bool Compare(const KxDataViewItem& tItem1, const KxDataViewItem& tItem2, const KxDataViewColumn* column) const override;
+		virtual bool Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const override;
 
 		void OnSelectItem(KxDataViewEvent& event);
 		void OnActivateItem(KxDataViewEvent& event);
@@ -105,7 +105,6 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 			m_ShowPriorityGroups = show;
 		}
 
-		void ChangeNotify(KModEntry* entry);
 		void RefreshItem(KModEntry* entry)
 		{
 			ItemChanged(MakeItem(entry));

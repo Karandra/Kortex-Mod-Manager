@@ -33,46 +33,16 @@ wxString KMMDispatcherCollision::GetLocalizedCollisionName(KMMDispatcherCollisio
 }
 
 //////////////////////////////////////////////////////////////////////////
-KModEntry* KModManagerDispatcher::IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget) const
-{
-	KModEntryArray entries = KModManager::Get().GetAllEntries(includeWriteTarget);
-	switch (order)
-	{
-		case IterationOrder::Direct:
-		{
-			for (KModEntry* entry: entries)
-			{
-				if (functor(*entry))
-				{
-					return entry;
-				}
-			}
-			break;
-		}
-		case IterationOrder::Reversed:
-		{
-			for (auto it = entries.rbegin(); it != entries.rend(); ++it)
-			{
-				if (functor(**it))
-				{
-					return *it;
-				}
-			}
-			break;
-		}
-	};
-	return NULL;
-}
-
-void KModManagerDispatcher::FindFilesInTree(FilesVector& files,
+void KModManagerDispatcher::FindFilesInTree(KFileTreeNode::CRefVector& nodes,
 											FinderHash* hash,
 											const KFileTreeNode& rootNode,
 											const wxString& filter,
 											KxFileSearchType type,
-											bool recurse
+											bool recurse,
+											const wxString& absolutePath
 ) const
 {
-	std::function<void(const KFileTreeNode&)> ScanTree = [&ScanTree, &filter, type, hash, &files, recurse](const KFileTreeNode& folderNode)
+	std::function<void(const KFileTreeNode&)> ScanTree = [&ScanTree, &nodes, &filter, type, hash, recurse, &absolutePath](const KFileTreeNode& folderNode)
 	{
 		for (const KFileTreeNode& node: folderNode.GetChildren())
 		{
@@ -87,21 +57,58 @@ void KModManagerDispatcher::FindFilesInTree(FilesVector& files,
 				{
 					if (hash)
 					{
-						const auto& v = hash->insert(node.GetFullPath());
-						if (v.second)
+						wxString id = node.GetFullPath();
+						if (!absolutePath.IsEmpty())
 						{
-							files.push_back(node.GetItem());
+							id.Replace(absolutePath, wxEmptyString, false);
+						}
+						KxString::MakeLower(id);
+
+						if (hash->insert(id).second)
+						{
+							nodes.push_back(&node);
 						}
 					}
 					else
 					{
-						files.push_back(node.GetItem());
+						nodes.push_back(&node);
 					}
 				}
 			}
 		}
 	};
 	ScanTree(rootNode);
+}
+
+KModEntry* KModManagerDispatcher::IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget, bool activeOnly) const
+{
+	KModEntryArray entries = KModManager::Get().GetAllEntries(includeWriteTarget);
+	switch (order)
+	{
+		case IterationOrder::Direct:
+		{
+			for (KModEntry* entry: entries)
+			{
+				if ((activeOnly && entry->IsEnabled() || !activeOnly) && functor(*entry))
+				{
+					return entry;
+				}
+			}
+			break;
+		}
+		case IterationOrder::Reversed:
+		{
+			for (auto it = entries.rbegin(); it != entries.rend(); ++it)
+			{
+				if ((activeOnly && (*it)->IsEnabled() || !activeOnly) && functor(**it))
+				{
+					return *it;
+				}
+			}
+			break;
+		}
+	};
+	return NULL;
 }
 
 wxString KModManagerDispatcher::GetTargetPath(const wxString& relativePath, KModEntry** owningMod) const
@@ -139,32 +146,41 @@ wxString KModManagerDispatcher::GetTargetPath(const wxString& relativePath, KMod
 	return outPath;
 }
 
-KModManagerDispatcher::FilesVector KModManagerDispatcher::FindFiles(const wxString& relativePath, const wxString& filter, KxFileSearchType type, bool recurse) const
+KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const KFileTreeNode& rootNode, const wxString& filter, KxFileSearchType type, bool recurse, FinderHash* hash) const
 {
-	FinderHash hash;
-	FilesVector foundFiles;
-	auto FindIn = [this, &relativePath, &foundFiles, &hash, &filter, type, recurse](const KModEntry& modEntry)
+	KFileTreeNode::CRefVector nodes;
+	FindFilesInTree(nodes, hash, rootNode, filter, type, recurse, rootNode.GetMod().GetLocation(KMM_LOCATION_MOD_FILES));
+
+	return nodes;
+}
+KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const KModEntry& modEntry, const wxString& filter, KxFileSearchType type, bool recurse, FinderHash* hash) const
+{
+	KFileTreeNode::CRefVector nodes;
+	FindFilesInTree(nodes, hash, modEntry.GetFileTree(), filter, type, recurse, modEntry.GetLocation(KMM_LOCATION_MOD_FILES));
+
+	return nodes;
+}
+KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const wxString& relativePath, const wxString& filter, KxFileSearchType type, bool recurse, FinderHash* hash) const
+{
+	FinderHash localHash;
+	FinderHash* activeHash = hash ? hash : &localHash;
+
+	KFileTreeNode::CRefVector nodes;
+	auto FindIn = [this, &relativePath, &nodes, activeHash, &filter, type, recurse](const KModEntry& modEntry)
 	{
 		if (modEntry.IsEnabled())
 		{
 			KFileTreeNode* folderNode = KFileTreeNode::NavigateToFolder(modEntry.GetFileTree(), relativePath);
 			if (folderNode)
 			{
-				FindFilesInTree(foundFiles, &hash, *folderNode, filter, type, recurse);
+				FindFilesInTree(nodes, activeHash, *folderNode, filter, type, recurse, modEntry.GetLocation(KMM_LOCATION_MOD_FILES));
 			}
 		}
 		return false;
 	};
 
 	IterateOverMods(FindIn, IterationOrder::Reversed);
-	return foundFiles;
-}
-KModManagerDispatcher::FilesVector KModManagerDispatcher::FindFiles(const KModEntry& modEntry, const wxString& filter, KxFileSearchType type, bool recurse) const
-{
-	FilesVector foundFiles;
-	FindFilesInTree(foundFiles, NULL, modEntry.GetFileTree(), filter, type, recurse);
-
-	return foundFiles;
+	return nodes;
 }
 
 KModManagerDispatcher::CollisionVector KModManagerDispatcher::FindCollisions(const KModEntry& scannedMod, const wxString& relativePath) const

@@ -27,21 +27,21 @@ wxString KIPCClient::GetServerFileName()
 }
 bool KIPCClient::RunServerAndConnect(KIPCClient** clientInstance)
 {
-	bool bRunSuccess = false;
-	KxProcess tServerExec(GetServerFileName());
-	tServerExec.SetOptionEnabled(KxPROCESS_SYNC_EVENTS, true);
-	tServerExec.SetOptionEnabled(KxPROCESS_WAIT_INPUT_IDLE, true);
-	tServerExec.SetOptionEnabled(KxPROCESS_WAIT_END, false);
-	tServerExec.Bind(KxEVT_PROCESS_IDLE, [clientInstance, &bRunSuccess](wxProcessEvent& event)
+	bool isRunSuccess = false;
+	KxProcess serverExec(GetServerFileName());
+	serverExec.SetOptionEnabled(KxPROCESS_SYNC_EVENTS, true);
+	serverExec.SetOptionEnabled(KxPROCESS_WAIT_INPUT_IDLE, true);
+	serverExec.SetOptionEnabled(KxPROCESS_WAIT_END, false);
+	serverExec.Bind(KxEVT_PROCESS_IDLE, [clientInstance, &isRunSuccess](wxProcessEvent& event)
 	{
 		KIPCClient* client = new KIPCClient();
 		client->InitConnection();
 		
 		*clientInstance = client;
-		bRunSuccess = true;
+		isRunSuccess = true;
 	});
-	tServerExec.Run(KxPROCESS_RUN_SYNC);
-	return bRunSuccess;
+	serverExec.Run(KxPROCESS_RUN_SYNC);
+	return isRunSuccess;
 }
 
 bool KIPCClient::CreateConnection()
@@ -71,7 +71,7 @@ void KIPCClient::OnVFSStateChanged(const KIPCRequest_VFSStateChanged& config)
 		// Send event before reloading 'KPluginManager'
 		KVFSEvent event(config.IsEnabled());
 		event.SetInt(status);
-		KApp::Get().BroadcastEvent(event);
+		event.Send();
 
 		// Force load of plugin manager so plugin data will be loaded
 		if (KVirtualFileSystemBase::IsSuccessCode(status) && config.IsEnabled())

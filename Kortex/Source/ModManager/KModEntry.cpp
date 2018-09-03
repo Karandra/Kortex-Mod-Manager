@@ -380,7 +380,7 @@ void KModEntry::UpdateFileTree()
 				KFileTreeNode* node = NULL;
 				if (treeNode)
 				{
-					node = &treeNode->GetChildren().emplace_back(item, parentNode);
+					node = &treeNode->GetChildren().emplace_back(*this, item, parentNode);
 				}
 
 				if (node && item.IsDirectory())

@@ -6,7 +6,6 @@
 #include "ConfigManager/KCMController.h"
 #include "Profile/KProfile.h"
 #include "KApp.h"
-#include "Events/KVFSEvent.h"
 
 KxTreeListItem KGameConfigWorkspaceController::CreateUnknownItemsRoot()
 {
@@ -41,8 +40,7 @@ KGameConfigWorkspaceController::KGameConfigWorkspaceController(KGameConfigWorksp
 	}
 	view->Bind(KxEVT_TREELIST_SELECTION_CHANGED, &KGameConfigWorkspaceController::OnSelectControllerView, this);
 
-	KApp::Get().SubscribeBroadcasting(this, KEVT_BROADCAST_VFS_TOGGLED);
-	Bind(KEVT_BROADCAST_VFS_TOGGLED, &KGameConfigWorkspaceController::OnVFSToggled, this);
+	KEvent::Bind(KEVT_VFS_TOGGLED, &KGameConfigWorkspaceController::OnVFSToggled, this);
 }
 KGameConfigWorkspaceController::~KGameConfigWorkspaceController()
 {

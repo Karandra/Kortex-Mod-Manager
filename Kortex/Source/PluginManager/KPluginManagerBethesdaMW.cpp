@@ -21,9 +21,9 @@ void KPluginManagerBethesdaMW::ReadOrderMW(const KxINI& ini)
 	{
 		// Check whether plugin with this name exist
 		wxString nameL = KxString::ToLower(name);
-		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KxFileFinderItem& item)
+		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KFileTreeNode* node)
 		{
-			return KxString::ToLower(item.GetName()) == nameL;
+			return KxString::ToLower(node->GetName()) == nameL;
 		});
 
 		if (it != files.end())
@@ -31,19 +31,19 @@ void KPluginManagerBethesdaMW::ReadOrderMW(const KxINI& ini)
 			if (CheckExtension(nameL))
 			{
 				auto& entry = GetEntries().emplace_back(NewPluginEntry(name, false));
-				entry->SetFullPath(it->GetFullPath());
+				entry->SetFullPath((*it)->GetFullPath());
 				entry->SetParentMod(FindParentMod(*entry));
 			}
 		}
 	}
 
 	// Load files form 'Data Files' folder. Don't add already existing
-	for (const KxFileFinderItem& item: files)
+	for (const KFileTreeNode* fileNode: files)
 	{
-		if (CheckExtension(item.GetName()))
+		if (CheckExtension(fileNode->GetName()))
 		{
-			auto& entry = GetEntries().emplace_back(NewPluginEntry(item.GetName(), false));
-			entry->SetFullPath(item.GetFullPath());
+			auto& entry = GetEntries().emplace_back(NewPluginEntry(fileNode->GetName(), false));
+			entry->SetFullPath(fileNode->GetFullPath());
 			entry->SetParentMod(FindParentMod(*entry));
 		}
 	}

@@ -226,12 +226,12 @@ void KAux::LoadLabeledValueArray(KLabeledValueArray& array, const KxXMLNode& arr
 		array.emplace_back(KLabeledValue(node.GetValue(), node.GetAttribute(labelName)));
 	}
 }
-void KAux::SaveStringArray(const KxStringVector& array, KxXMLNode& arrayNode, const wxString& sElementNodeName)
+void KAux::SaveStringArray(const KxStringVector& array, KxXMLNode& arrayNode, const wxString& elementNodeName)
 {
 	arrayNode.ClearChildren();
 	for (const wxString& value: array)
 	{
-		KxXMLNode elementNode = arrayNode.NewElement(sElementNodeName);
+		KxXMLNode elementNode = arrayNode.NewElement(elementNodeName);
 
 		elementNode.SetValue(value);
 	}
@@ -262,48 +262,6 @@ wxString KAux::MakeHTMLWindowPlaceholder(const wxString& text, const wxWindow* w
 	}
 	return wxString::Format("<br><br><font color=\"%s\"><div align=\"center\">%s</div></font>", color, text);
 }
-
-wxIcon KAux::ExtractIconFromBinaryFile(const wxString& path, int index)
-{
-	KxLibrary library(path, LOAD_LIBRARY_AS_DATAFILE);
-	if (library.IsOK())
-	{
-		auto resourcesList = library.EnumResources(KxLibrary::ResIDToName(RT_GROUP_ICON));
-		if (!resourcesList.empty())
-		{
-			wxString resName;
-			if (index == -1)
-			{
-				if (resourcesList[0].CheckType<wxString>())
-				{
-					resName = resourcesList[0].As<wxString>();
-				}
-				else
-				{
-					resName = KxLibrary::ResIDToName(resourcesList[0].As<size_t>());
-				}
-			}
-			else
-			{
-				resName = KxLibrary::ResIDToName(index);
-			}
-
-			KxIntVector langIDs = library.EnumResourceLanguages(KxLibrary::ResIDToName(RT_GROUP_ICON), resName);
-			WORD localeID = KxLibrary::DefaultLocaleID;
-			if (!langIDs.empty())
-			{
-				localeID = langIDs[0];
-			}
-			return library.GetIcon(resName, wxSize(16, 16), localeID);
-		}
-	}
-	return wxNullIcon;
-}
-wxIcon KAux::GetShellFileIcon(const wxString& ext)
-{
-	return ExtractIconFromBinaryFile(KxShell::GetDefaultViewer(ext));
-}
-
 wxString KAux::ExtractDomainName(const wxString& url)
 {
 	wxString urlLower = KxString::ToLower(url);

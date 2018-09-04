@@ -92,7 +92,7 @@ class KProfile
 		void InitConfigsList();
 		void CheckConfigFile();
 
-		bool LoadGeneric(const wxString& sTemplatePath);
+		bool LoadGeneric(const wxString& templatePath);
 		void LoadConfig();
 		void InitVariables();
 		wxString LoadRegistryVariable(const KxXMLNode& node);
@@ -109,8 +109,8 @@ class KProfile
 
 	public:
 		KProfile();
-		KProfile(const wxString& sTemplatePath);
-		void Create(const wxString& sTemplatePath, const wxString& configID);
+		KProfile(const wxString& templatePath);
+		void Create(const wxString& templatePath, const wxString& configID);
 		virtual ~KProfile();
 
 	public:
@@ -171,10 +171,7 @@ class KProfile
 		{
 			return wxString::Format("%s\\Icons\\%s.ico", GetTemplatesFolder(), GetID());
 		}
-		wxImage GetIcon() const
-		{
-			return wxImage(GetIconPath(), wxBITMAP_TYPE_ICO);
-		}
+		wxBitmap GetIcon() const;
 		wxString GetGameRoot() const
 		{
 			return m_Variables.GetVariable(KVAR_GAME_ROOT);
@@ -200,6 +197,11 @@ class KProfile
 		KVariablesTable& GetVariables()
 		{
 			return m_Variables;
+		}
+		
+		wxString ExpandVariablesLocally(const wxString& variables) const
+		{
+			return m_Variables.Expand(variables);
 		}
 		wxString ExpandVariables(const wxString& variables) const;
 

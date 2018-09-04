@@ -2,6 +2,8 @@
 #include "KImageProvider.h"
 #include "KApp.h"
 #include "KAux.h"
+#include <KxFramework/KxShell.h>
+#include <KxFramework/KxFileFinder.h>
 
 namespace KImageProvider
 {
@@ -78,7 +80,11 @@ namespace KImageProvider
 		Add(KIMG_SITE_LOVERSLAB, "LoverLab");
 
 		// Unknown icon
-		AddItem(KIMG_SITE_UNKNOWN, "UnknownSite", KAux::GetShellFileIcon(".htm"));
+		KxFileFinderItem item(KApp::Get().GetUserSettingsFile());
+		item.UpdateInfo();
+		item.SetName(".url");
+
+		AddItem(KIMG_SITE_UNKNOWN, "UnknownSite", KxShell::GetFileIcon(item, true));
 
 		// Normal icons
 		Add(KIMG_7ZIP, "7zip");

@@ -229,7 +229,7 @@ void KModManagerVirtualGameFolderModel::OnSelectItem(KxDataViewEvent& event)
 		const KModEntry* modEntry = node->GetMod();
 		workspace->HighlightMod();
 
-		if (modEntry && node->GetFileNode().IsFile())
+		if (modEntry)
 		{
 			workspace->HighlightMod(modEntry);
 		}

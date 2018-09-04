@@ -104,20 +104,23 @@ wxBitmap KProgramManager::OnQueryItemImage(const KProgramManagerEntry& runEntry)
 
 	if (KAux::IsSingleFileExtensionMatches(iconPath, "exe") || KAux::IsSingleFileExtensionMatches(iconPath, "dll"))
 	{
-		return wxBitmap(KAux::ExtractIconFromBinaryFile(iconPath));
+		return KxShell::GetFileIcon(iconPath, true);
 	}
 	else if (!iconPath.IsEmpty())
 	{
+		const int width = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
+		const int height = wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y);
+
 		wxImage image(runEntry.GetIconPath(), wxBITMAP_TYPE_ANY);
-		if (image.GetSize().GetWidth() > 16 || image.GetSize().GetHeight() > 16)
+		if (image.GetSize().GetWidth() > width || image.GetSize().GetHeight() > height)
 		{
-			image.Rescale(16, 16, wxIMAGE_QUALITY_HIGH);
+			image.Rescale(width, height, wxIMAGE_QUALITY_HIGH);
 		}
 		return wxBitmap(image, 32);
 	}
 	else
 	{
-		return wxBitmap(KAux::ExtractIconFromBinaryFile(KModManager::GetDispatcher().GetTargetPath(runEntry.GetExecutable())));
+		return KxShell::GetFileIcon(KModManager::GetDispatcher().GetTargetPath(runEntry.GetExecutable()), true);
 	}
 }
 void KProgramManager::OnVFSToggled(KVFSEvent& event)

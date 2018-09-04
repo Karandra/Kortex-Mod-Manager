@@ -65,7 +65,7 @@ class KAux
 		static void LoadLabeledValueArray(KLabeledValueArray& array, const KxXMLNode& arrayNode, const wxString& labelName = "Label");
 
 		// Saves KxStringVector into specified node, clearing the node first.
-		static void SaveStringArray(const KxStringVector& array, KxXMLNode& arrayNode, const wxString& sElementNodeName = "Entry");
+		static void SaveStringArray(const KxStringVector& array, KxXMLNode& arrayNode, const wxString& elementNodeName = "Entry");
 
 		// Loads KxStringVector from specified node.
 		// Does NOT clears 'array'.
@@ -87,12 +87,6 @@ class KAux
 		// Creates placeholder for KxHTMLWindow to be showed when actual content is unavailable.
 		// Window is required if you want correct text color.
 		static wxString MakeHTMLWindowPlaceholder(const wxString& text, const wxWindow* window = NULL);
-
-		// Extracts icon from specified binary file (exe, dll).
-		static wxIcon ExtractIconFromBinaryFile(const wxString& path, int index = -1);
-
-		// Retrieves icon used by the Windows Explorer for this extension
-		static wxIcon GetShellFileIcon(const wxString& ext);
 
 		// Extracts domain name from provided URL (without www. part if any).
 		static wxString ExtractDomainName(const wxString& url);

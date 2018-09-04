@@ -45,7 +45,7 @@ bool KProfileCreatorDialog::Create(wxWindow* parent,
 
 		mainSizer->Detach(m_ProfilesList);
 		copyOptionsSizer->Add(m_ProfilesList, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
-		m_ProfilesList->AddItem(KApp::ExpandVariables("<$T(ID_NONE)>"));
+		m_ProfilesList->AddItem(V("<$T(ID_NONE)>"));
 		for (const wxString& name: m_Template->GetConfigsList())
 		{
 			m_ProfilesList->AddItem(name);

@@ -23,10 +23,6 @@ enum KPGCFileID;
 
 class KApp: public KxApp<wxApp, KApp>
 {
-	public:
-		static wxString ExpandVariablesUsing(const wxString& variables, const KVariablesTable& variablesTable);
-		static wxString ExpandVariables(const wxString& variables);
-
 	private:
 		wxSingleInstanceChecker m_SingleInstanceChecker;
 
@@ -86,8 +82,10 @@ class KApp: public KxApp<wxApp, KApp>
 
 		wxString ExpandVariablesLocally(const wxString& variables) const
 		{
-			return ExpandVariablesUsing(variables, m_Variables);
+			return m_Variables.Expand(variables);
 		}
+		wxString ExpandVariables(const wxString& variables) const;
+
 		KProfile* GetCurrentProfile() const;
 		KProfile* SetCurrentProfile(KProfile* profile);
 		bool IsProfileLoaded() const

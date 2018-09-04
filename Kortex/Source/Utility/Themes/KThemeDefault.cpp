@@ -121,6 +121,6 @@ void KThemeDefault::ProcessWindow(KxStatusBarEx* window, bool isActive)
 	window->SetSeparatorsVisible(false);
 	window->SetBorderColor(wxNullColour);
 	
-	KxColor tTextColor = GetColor(KTMC_WINDOW_FG);
-	window->SetForegroundColour(isActive ? tTextColor.Negate() : tTextColor);
+	KxColor textColor = GetColor(KTMC_WINDOW_FG);
+	window->SetForegroundColour(isActive ? textColor.Negate() : textColor);
 }

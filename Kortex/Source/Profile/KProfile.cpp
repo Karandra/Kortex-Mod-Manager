@@ -152,12 +152,12 @@ void KProfile::CheckConfigFile()
 	}
 }
 
-bool KProfile::LoadGeneric(const wxString& sTemplatePath)
+bool KProfile::LoadGeneric(const wxString& templatePath)
 {
-	m_Variables.SetVariable("ProfileTemplateFile", sTemplatePath);
+	m_Variables.SetVariable("ProfileTemplateFile", templatePath);
 
 	// Load template XML
-	KxFileStream xmlStream(sTemplatePath);
+	KxFileStream xmlStream(templatePath);
 	m_ProfileXML.Load(xmlStream);
 
 	// Load ID and SortOrder
@@ -343,15 +343,15 @@ void KProfile::DetectArchitecture()
 KProfile::KProfile()
 {
 }
-KProfile::KProfile(const wxString& sTemplatePath)
+KProfile::KProfile(const wxString& templatePath)
 {
-	LoadGeneric(sTemplatePath);
+	LoadGeneric(templatePath);
 }
-void KProfile::Create(const wxString& sTemplatePath, const wxString& configID)
+void KProfile::Create(const wxString& templatePath, const wxString& configID)
 {
 	m_ConfigID = configID;
 
-	if (LoadGeneric(sTemplatePath))
+	if (LoadGeneric(templatePath))
 	{
 		// Lock this folder
 		if (IsFullProfile())
@@ -375,10 +375,33 @@ KProfile::~KProfile()
 	delete m_ScreenshotsGallery;
 	delete m_SaveManagerConfig;
 }
+wxBitmap KProfile::GetIcon() const
+{
+	wxBitmap icon(GetIconPath(), wxBITMAP_TYPE_ANY);
+	if (!icon.IsOk())
+	{
+		if (KProgramManagerConfig* programsConfig = KProgramManagerConfig::GetInstance())
+		{
+			const KProgramManagerEntry* programEntry = programsConfig->GetEntryAt(KProgramManagerConfig::ProgramType::Main, 0);
+			if (programEntry)
+			{
+				if (!programEntry->GetIconPath().IsEmpty())
+				{
+					icon = KxShell::GetFileIcon(KModManager::GetDispatcher().GetTargetPath(programEntry->GetIconPath()));
+				}
+				else
+				{
+					icon = KxShell::GetFileIcon(KModManager::GetDispatcher().GetTargetPath(programEntry->GetExecutable()));
+				}
+			}
+		}
+	}
+	return icon;
+}
 
 wxString KProfile::ExpandVariables(const wxString& variables) const
 {
-	return KApp::Get().ExpandVariablesLocally(KApp::ExpandVariablesUsing(variables, m_Variables));
+	return KApp::Get().ExpandVariablesLocally(ExpandVariablesLocally(variables));
 }
 
 bool KProfile::RemoveConfig(const wxString& configID)

@@ -23,6 +23,7 @@
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxFile.h>
+#include <KxFramework/KxShell.h>
 
 KxSingletonPtr_Define(KPluginManagerWorkspace);
 
@@ -288,7 +289,7 @@ void KPluginManagerWorkspace::OnCreateSortingToolsMenu(KxMenu& menu, const KPlug
 				}
 
 				KxMenuItem* item = sortingMenu->Add(new KxMenuItem(entry.GetName()));
-				item->SetBitmap(KAux::ExtractIconFromBinaryFile(entry.GetExecutable()));
+				item->SetBitmap(KxShell::GetFileIcon(entry.GetExecutable(), true));
 				item->Bind(KxEVT_MENU_SELECT, [this, entry](KxMenuEvent& event)
 				{
 					KPluginManager::GetInstance()->Save();

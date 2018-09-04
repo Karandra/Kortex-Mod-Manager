@@ -91,7 +91,7 @@ void KThemeVisualStudio::ProcessWindow(KxAuiToolBar* window)
 
 	window->SetBorderColor(GetColor(KTMC_BORDER));
 	window->SetForegroundColour(GetColor(KTMC_WINDOW_FG));
-	window->SetBackgroundColour(GetColor(KTMC_TOOLBAR_BG));
+	window->SetBackgroundColour(KxColor(207, 214, 229));
 }
 void KThemeVisualStudio::ProcessWindow(KxStatusBarEx* window, bool isActive)
 {

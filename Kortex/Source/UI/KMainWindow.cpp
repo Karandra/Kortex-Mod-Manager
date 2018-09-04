@@ -225,8 +225,8 @@ void KMainWindow::CreateMainWorkspaces()
 	m_ToolBar->AddSeparator();
 
 	KxAuiToolBarItem* toolBarButton = CreateToolBarButton(m_ToolBar, V("$(Name)"));
-	wxImage tGameIcon = GetApp().GetCurrentProfile()->GetIcon();
-	toolBarButton->SetBitmap(tGameIcon.Rescale(m_ToolBar->GetToolBitmapSize().GetWidth(), m_ToolBar->GetToolBitmapSize().GetHeight(), wxIMAGE_QUALITY_HIGH));
+	wxImage gameIcon = KProfile::GetCurrent()->GetIcon().ConvertToImage();
+	toolBarButton->SetBitmap(gameIcon.Rescale(m_ToolBar->GetToolBitmapSize().GetWidth(), m_ToolBar->GetToolBitmapSize().GetHeight(), wxIMAGE_QUALITY_HIGH));
 
 	toolBarButton->AssignDropdownMenu(m_ManagersMenu);
 	toolBarButton->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);

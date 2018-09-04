@@ -34,19 +34,6 @@
 #include <KxFramework/KxSplashWindow.h>
 #include <KxFramework/KxTaskScheduler.h>
 
-wxString KApp::ExpandVariablesUsing(const wxString& variables, const KVariablesTable& variablesTable)
-{
-	return variablesTable.Expand(variables);
-}
-wxString KApp::ExpandVariables(const wxString& variables)
-{
-	if (Get().GetCurrentProfile())
-	{
-		return ExpandVariablesUsing(Get().ExpandVariablesLocally(variables), Get().GetCurrentProfile()->GetVariables());
-	}
-	return Get().ExpandVariablesLocally(variables);
-}
-
 KApp::KApp()
 	:m_ImageList(16, 16, false, KIMG_COUNT),
 	m_GeneralOptions(KPGC_ID_CURRENT_PROFILE, "KApp", "General"),
@@ -106,6 +93,15 @@ const wxString& KApp::GetUserSettingsFile()
 	return ms_UserSettingsFile;
 }
 
+wxString KApp::ExpandVariables(const wxString& variables) const
+{
+	if (KProfile* profile = KProfile::GetCurrent())
+	{
+		return profile->ExpandVariables(variables);
+	}
+	return ExpandVariablesLocally(variables);
+}
+
 KProfile* KApp::GetCurrentProfile() const
 {
 	return m_CurrentProfile;
@@ -134,7 +130,7 @@ bool KApp::OnInit()
 	m_LogTarget = new wxLogStderr(m_LogTargetFILE);
 	wxLog::SetActiveTarget(m_LogTarget);
 	wxLog::SetVerbose(true);
-	Bind(KEVT_LOG, &KApp::OnErrorOccurred, this);
+	KEvent::Bind(KEVT_LOG, &KApp::OnErrorOccurred, this);
 
 	// Check download
 	wxString downloadLink;

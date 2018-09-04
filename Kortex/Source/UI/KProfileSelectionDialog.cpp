@@ -136,13 +136,16 @@ void KProfileSelectionDialog::LoadTemplatesList()
 	wxString templateID = KApp::Get().GetCurrentTemplateID();
 
 	auto list = KProfile::GetTemplatesList();
-	KxImageList* pImageList = new KxImageList(32, 32, false, list.size());
-	m_TemplatesList->AssignImageList(pImageList);
+	KxImageList* imageList = new KxImageList(32, 32, false, list.size());
+	m_TemplatesList->AssignImageList(imageList);
 
 	int select = 0;
 	for (const KProfile* profileTemplate: list)
 	{
-		int imageID = pImageList->Add(profileTemplate->GetIcon().Rescale(32, 32, wxIMAGE_QUALITY_HIGH));
+		const int maxWidth = wxSystemSettings::GetMetric(wxSYS_ICON_X);
+		const int maxHeight = wxSystemSettings::GetMetric(wxSYS_ICON_Y);
+
+		int imageID = imageList->Add(profileTemplate->GetIcon().ConvertToImage().Rescale(maxWidth, maxHeight, wxIMAGE_QUALITY_HIGH));
 		int index = m_TemplatesList->AddItem(profileTemplate->GetName(), imageID);
 		m_TemplatesList->SetClientData(index, (void*)profileTemplate);
 

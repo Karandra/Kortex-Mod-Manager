@@ -282,7 +282,7 @@ void KModManagerVirtualGameFolderModel::OnExpandingItem(KxDataViewEvent& event)
 
 KModManagerVirtualGameFolderModel::KModManagerVirtualGameFolderModel()
 {
-	SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_DOUBLE_CLICK_EXPAND);
+	SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_DOUBLE_CLICK_EXPAND|KxDV_VERT_RULES);
 }
 
 void KModManagerVirtualGameFolderModel::RefreshItems()

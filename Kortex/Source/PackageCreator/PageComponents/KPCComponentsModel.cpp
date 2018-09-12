@@ -434,7 +434,6 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 				}
 				case ColumnID::Value:
 				{
-					const int maxLength = 96;
 					if (editor)
 					{
 						value = entry->GetDescription();
@@ -442,10 +441,6 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 					else if (entry->GetDescription().IsEmpty())
 					{
 						value = KAux::MakeNoneLabel();
-					}
-					else if (entry->GetDescription().Length() > maxLength)
-					{
-						value = entry->GetDescription().Left(maxLength) + "...";
 					}
 					else
 					{

@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "KWithBitmap.h"
 #include <KxFramework/KxFileFinder.h>
 class KModEntry;
 class KFileTreeNode;
@@ -7,7 +8,7 @@ class KModManagerVirtualGameFolderModel;
 
 namespace KModManagerVirtualGameFolderModelNS
 {
-	class ModelNode
+	class ModelNode: public KWithBitmap
 	{
 		friend class KModManagerVirtualGameFolderModel;
 

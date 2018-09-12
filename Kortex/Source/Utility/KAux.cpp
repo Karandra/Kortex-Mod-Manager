@@ -335,16 +335,16 @@ wxString KAux::MakeExtensionsFilter(const KxStringVector& extensions)
 
 bool KAux::SetSearchMask(wxString& storage, const wxString& newMask)
 {
-	if (storage.Length() != newMask.Length())
+	if (storage != newMask)
 	{
-		storage = '*' + KxString::ToLower(newMask) + '*';
-		return true;
-	}
-
-	wxString newMaskLower = KxString::ToLower(newMask);
-	if (storage != newMaskLower)
-	{
-		storage = '*' + newMaskLower + '*';
+		if (!newMask.IsEmpty())
+		{
+			storage = '*' + KxString::ToLower(newMask) + '*';
+		}
+		else
+		{
+			storage.clear();
+		}
 		return true;
 	}
 	return false;

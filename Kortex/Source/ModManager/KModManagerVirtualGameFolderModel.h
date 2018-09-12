@@ -43,6 +43,8 @@ class KModManagerVirtualGameFolderModel: public KxDataViewModelExBase<KxDataView
 		void OnContextMenu(KxDataViewEvent& event);
 		void OnExpandingItem(KxDataViewEvent& event);
 
+		void BuildBranch(ModelNode::Vector& children, ModelNode* rootItem = NULL, const wxString& searchPath = wxEmptyString);
+
 	public:
 		KModManagerVirtualGameFolderModel();
 

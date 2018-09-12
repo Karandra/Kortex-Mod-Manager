@@ -87,7 +87,7 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		bool CanDragDropNow() const;
 
 	public:
-		KModManagerModel(KModManagerModelType initialDisplayMode = KMM_TYPE_CONNECTOR);
+		KModManagerModel();
 
 	public:
 		KModManagerModelType GetDisplayMode() const

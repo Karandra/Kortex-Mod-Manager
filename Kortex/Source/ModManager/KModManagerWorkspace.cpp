@@ -271,11 +271,12 @@ void KModManagerWorkspace::CreateToolsMenu()
 
 void KModManagerWorkspace::CreateModsView()
 {
-	m_ViewModel = new KModManagerModel((KModManagerModelType)m_ModListViewOptions.GetAttributeInt("DisplayMode"));
+	m_ViewModel = new KModManagerModel();
 	m_ViewModel->ShowPriorityGroups(m_ModListViewOptions.GetAttributeBool("ShowPriorityGroups"));
 	
 	m_ViewModel->Create(m_ModsPane);
 	m_ViewModel->SetDataVector(KModManager::Get().GetEntries());
+	m_ViewModel->SetDisplayMode((KModManagerModelType)m_ModListViewOptions.GetAttributeInt("DisplayMode"));
 }
 void KModManagerWorkspace::CreateControls()
 {

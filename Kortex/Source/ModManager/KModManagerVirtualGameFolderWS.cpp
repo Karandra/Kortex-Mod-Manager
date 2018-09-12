@@ -21,6 +21,7 @@ bool KModManagerVirtualGameFolderWS::OnCreateWorkspace()
 {
 	m_Model = new KModManagerVirtualGameFolderModel();
 	m_Model->Create(this, m_MainSizer);
+	m_Model->RefreshItems();
 
 	m_SearchBox = new KxSearchBox(this, wxID_NONE);
 	m_SearchBox->Bind(wxEVT_SEARCHCTRL_SEARCH_BTN, &KModManagerVirtualGameFolderWS::OnModSerach, this);
@@ -33,7 +34,6 @@ bool KModManagerVirtualGameFolderWS::OnCreateWorkspace()
 
 bool KModManagerVirtualGameFolderWS::OnOpenWorkspace()
 {
-	m_Model->RefreshItems();
 	return true;
 }
 bool KModManagerVirtualGameFolderWS::OnCloseWorkspace()

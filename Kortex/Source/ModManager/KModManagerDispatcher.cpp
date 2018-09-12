@@ -170,7 +170,16 @@ KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const wxString& relat
 	{
 		if (modEntry.IsEnabled())
 		{
-			KFileTreeNode* folderNode = KFileTreeNode::NavigateToFolder(modEntry.GetFileTree(), relativePath);
+			const KFileTreeNode* folderNode = NULL;
+			if (relativePath.IsEmpty() || *relativePath.begin() == wxS('\\') || *relativePath.begin() == wxS('/') || *relativePath.begin() == wxS('.'))
+			{
+				folderNode = &modEntry.GetFileTree();
+			}
+			else
+			{
+				folderNode = KFileTreeNode::NavigateToFolder(modEntry.GetFileTree(), relativePath);
+			}
+
 			if (folderNode)
 			{
 				FindFilesInTree(nodes, activeHash, *folderNode, filter, type, recurse, modEntry.GetLocation(KMM_LOCATION_MOD_FILES));

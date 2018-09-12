@@ -141,7 +141,21 @@ bool KModManagerModel::IsContainer(const KxDataViewItem& item) const
 		}
 		return item.IsTreeRootItem();
 	}
-	return KxDataViewItem();
+	else
+	{
+		const KMMModelNode* node = GetNode(item);
+		if (node)
+		{
+			if (KModEntry* entry = node->GetEntry())
+			{
+				if (KPriorityGroupEntry* priorityGroup = entry->ToPriorityGroup())
+				{
+					return priorityGroup->IsBegin();
+				}
+			}
+		}
+	}
+	return item.IsTreeRootItem();
 }
 bool KModManagerModel::HasContainerColumns(const KxDataViewItem& item) const
 {
@@ -149,14 +163,11 @@ bool KModManagerModel::HasContainerColumns(const KxDataViewItem& item) const
 }
 KxDataViewItem KModManagerModel::GetParent(const KxDataViewItem& item) const
 {
-	if (IsTree())
+	if (const KMMModelNode* node = GetNode(item))
 	{
-		if (const KMMModelNode* node = GetNode(item))
+		if (node->IsEntry() && node->HasParentNode())
 		{
-			if (node->IsEntry() && node->HasParentNode())
-			{
-				return MakeItem(node->GetParentNode());
-			}
+			return MakeItem(node->GetParentNode());
 		}
 	}
 	return KxDataViewItem();
@@ -164,42 +175,40 @@ KxDataViewItem KModManagerModel::GetParent(const KxDataViewItem& item) const
 
 void KModManagerModel::GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const
 {
-	if (IsTree())
+	// Root item, read groups
+	if (item.IsTreeRootItem())
 	{
-		// Root item, read groups
-		if (item.IsTreeRootItem())
+		children.reserve(m_DataVector.size());
+		for (const KMMModelNode& node: m_DataVector)
 		{
-			for (const KMMModelNode& node: m_DataVector)
+			if (IsTree())
 			{
 				if (node.IsGroup())
 				{
 					children.push_back(MakeItem(node));
 				}
 			}
-		}
-		else
-		{
-			// Group item, read entries
-			const KMMModelNode* node = GetNode(item);
-			if (const KModTag* group = node->GetGroup())
+			else
 			{
-				for (const KMMModelNode& entryNode: node->GetChildren())
+				if (node.IsEntry())
 				{
-					children.push_back(MakeItem(entryNode));
+					children.push_back(MakeItem(node));
 				}
 			}
 		}
 	}
 	else
 	{
-		if (item.IsTreeRootItem())
+		// Group (priority group) item, read entries
+		const KMMModelNode* node = GetNode(item);
+		children.reserve(node->GetChildrenCount());
+
+		const KModTag* group = node->GetGroup();
+		if (group || node->GetEntry()->ToPriorityGroup())
 		{
-			for (const KMMModelNode& node: m_DataVector)
+			for (const KMMModelNode& entryNode: node->GetChildren())
 			{
-				if (node.IsEntry())
-				{
-					children.push_back(MakeItem(node));
-				}
+				children.push_back(MakeItem(entryNode));
 			}
 		}
 	}
@@ -724,6 +733,8 @@ void KModManagerModel::OnActivateItem(KxDataViewEvent& event)
 			}
 		};
 	}
+
+	event.Skip();
 }
 void KModManagerModel::OnContextMenu(KxDataViewEvent& event)
 {
@@ -868,19 +879,30 @@ bool KModManagerModel::CanDragDropNow() const
 	return false;
 }
 
-KModManagerModel::KModManagerModel(KModManagerModelType initialDisplayMode)
-	:m_DisplayMode(initialDisplayMode), m_NoneTag(wxEmptyString, KAux::MakeNoneLabel(), true),
+KModManagerModel::KModManagerModel()
+	:m_NoneTag(wxEmptyString, KAux::MakeNoneLabel(), true),
 	m_SearchFilterOptions(KModManagerWorkspace::GetInstance(), "SearchFilter")
 {
-	SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES);
+	SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES|KxDV_DOUBLE_CLICK_EXPAND);
 }
 
 void KModManagerModel::SetDisplayMode(KModManagerModelType mode)
 {
-	if (mode == KMM_TYPE_CONNECTOR || mode == KMM_TYPE_MANAGER)
+	switch (mode)
 	{
-		m_DisplayMode = mode;
-	}
+		case KMM_TYPE_CONNECTOR:
+		{
+			m_DisplayMode = mode;
+			GetView()->SetIndent(0);
+			break;
+		}
+		case KMM_TYPE_MANAGER:
+		{
+			m_DisplayMode = mode;
+			GetView()->SetIndent(KGetImageList()->GetSize().GetWidth());
+			break;
+		}
+	};
 }
 
 const KModTagArray& KModManagerModel::GetTags() const
@@ -1017,6 +1039,8 @@ void KModManagerModel::RefreshItems()
 
 		// Actual mods
 		KModEntry* lastEntry = baseGameNode.GetEntry();
+		KMMModelNode* priorityGroupNode = NULL;
+
 		for (KModEntry* currentEntry: *m_Entries)
 		{
 			if (FilterMod(currentEntry) && currentEntry->IsInstalled())
@@ -1043,13 +1067,29 @@ void KModManagerModel::RefreshItems()
 						}
 
 						KMMModelNode& node = m_DataVector.emplace_back(&entry);
-						ItemAdded(MakeItem(node));
+						KxDataViewItem item = MakeItem(node);
+						ItemAdded(item);
+						GetView()->Expand(item);
+
+						if (begin)
+						{
+							priorityGroupNode = &node;
+
+							// Preallocate this size, a bit excessive, but whatever.
+							// I need to rewrite all this anyway.
+							node.GetChildren().reserve(m_DataVector.capacity());
+						}
+						else
+						{
+							priorityGroupNode = NULL;
+						}
 					}
 					lastEntry = currentEntry;
 				}
 
-				KMMModelNode& node = m_DataVector.emplace_back(currentEntry);
-				ItemAdded(MakeItem(node));
+				KMMModelNode& node = (priorityGroupNode ? priorityGroupNode->GetChildren() : m_DataVector).emplace_back(currentEntry);
+				node.SetParentNode(*priorityGroupNode);
+				ItemAdded(MakeItem(priorityGroupNode), MakeItem(node));
 			}
 		}
 
@@ -1193,32 +1233,30 @@ KxDataViewItem KModManagerModel::GetItemByEntry(const KModEntry* entry) const
 {
 	if (entry)
 	{
-		auto FindIn = [this, entry](const KMMLogModelNodeVector& tVector)
+		auto FindIn = [this, entry](const KMMLogModelNodeVector& vector, const KMMModelNode*& nodeOut)
 		{
-			auto it = std::find_if(tVector.cbegin(), tVector.cend(), [entry](const KMMModelNode& node)
+			auto it = std::find_if(vector.begin(), vector.end(), [entry](const KMMModelNode& node)
 			{
 				return node.GetEntry() == entry;
 			});
-			return it != tVector.cend() ? &*it : NULL;
+
+			nodeOut = it != vector.end() ? &*it : NULL;
+			return nodeOut != NULL;
 		};
 
 		const KMMModelNode* itemNode = NULL;
-		if (IsTree())
+		if (FindIn(m_DataVector, itemNode))
 		{
-			for (const KMMModelNode& node: m_DataVector)
+			return MakeItem(itemNode);
+		}
+
+		for (const KMMModelNode& node: m_DataVector)
+		{
+			if (FindIn(node.GetChildren(), itemNode))
 			{
-				itemNode = FindIn(node.GetChildren());
-				if (itemNode)
-				{
-					break;
-				}
+				return MakeItem(itemNode);
 			}
 		}
-		else
-		{
-			itemNode = FindIn(m_DataVector);
-		}
-		return MakeItem(itemNode);
 	}
 	return KxDataViewItem();
 }

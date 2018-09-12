@@ -17,6 +17,7 @@ enum ColumnID
 	PartOf,
 	Size,
 	ModificationDate,
+	SourceLocation,
 };
 
 void KModManagerVirtualGameFolderModel::OnInitControl()
@@ -48,6 +49,7 @@ void KModManagerVirtualGameFolderModel::OnInitControl()
 	}
 	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 100, flags);
 	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125, flags);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.SourceLocation"), ColumnID::SourceLocation, KxDATAVIEW_CELL_INERT, 100, flags);
 }
 
 bool KModManagerVirtualGameFolderModel::IsContainer(const KxDataViewItem& item) const
@@ -105,20 +107,7 @@ void KModManagerVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewI
 		{
 			case ColumnID::Name:
 			{
-				KxDataViewBitmapTextValue valueData(fileNode.GetName());
-				if (fileNode.IsFile())
-				{
-					valueData.SetBitmap(KxShell::GetFileIcon(fileNode.GetFullPath(), true));
-					if (!valueData.HasBitmap())
-					{
-						valueData.SetBitmap(KGetBitmap(KIMG_DOCUMENT));
-					}
-				}
-				else
-				{
-					valueData.SetBitmap(KGetBitmap(KIMG_FOLDER));
-				}
-				value = valueData;
+				value = KxDataViewBitmapTextValue(fileNode.GetName(), node->GetBitmap());
 				break;
 			}
 			case ColumnID::PartOf:
@@ -140,6 +129,11 @@ void KModManagerVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewI
 			case ColumnID::ModificationDate:
 			{
 				value = KAux::FormatDateTime(fileNode.GetItem().GetModificationTime());
+				break;
+			}
+			case ColumnID::SourceLocation:
+			{
+				value = fileNode.GetFullPath();
 				break;
 			}
 		};
@@ -261,23 +255,48 @@ void KModManagerVirtualGameFolderModel::OnExpandingItem(KxDataViewEvent& event)
 	ModelNode* rootNode = GetNode(event.GetItem());
 	if (rootNode && !rootNode->IsVisited())
 	{
-		wxString searchPath = rootNode->GetFileNode().GetRelativePath();
-		KModManagerDispatcher::FinderHash hash;
-		KModManager::GetDispatcher().IterateOverMods([this, &event, rootNode, &hash, &searchPath](const KModEntry& modEntry)
-		{
-			for (const KFileTreeNode* node: KModManager::GetDispatcher().FindFiles(searchPath, KxFile::NullFilter, KxFS_ALL, false, &hash))
-			{
-				if (node->IsDirectory() || KAux::CheckSearchMask(m_SearchMask, node->GetName()))
-				{
-					ModelNode& modelNode = *rootNode->GetChildren().emplace_back(new ModelNode(rootNode, *node, &node->GetMod()));
-					ItemAdded(event.GetItem(), MakeItem(modelNode));
-				}
-			}
-			return false;
-		}, KModManagerDispatcher::IterationOrder::Reversed);
-
+		BuildBranch(rootNode->GetChildren(), rootNode, rootNode->GetFileNode().GetRelativePath());
 		rootNode->MarkVisited();
 	}
+}
+
+void KModManagerVirtualGameFolderModel::BuildBranch(ModelNode::Vector& children, ModelNode* rootNode, const wxString& searchPath)
+{
+	KModManagerDispatcher::FinderHash hash;
+	KModManager::GetDispatcher().IterateOverMods([this, &hash, &children, rootNode, &searchPath](const KModEntry& modEntry)
+	{
+		KFileTreeNode::CRefVector fileNodes;
+		if (searchPath.IsEmpty())
+		{
+			fileNodes = KModManager::GetDispatcher().FindFiles(modEntry, KxFile::NullFilter, KxFS_ALL, false, &hash);
+		}
+		else
+		{
+			fileNodes = KModManager::GetDispatcher().FindFiles(searchPath, KxFile::NullFilter, KxFS_ALL, false, &hash);
+		}
+
+		for (const KFileTreeNode* node: fileNodes)
+		{
+			ModelNode& modelNode = *children.emplace_back(new ModelNode(rootNode, *node, &node->GetMod()));
+
+			// Set icon
+			if (node->IsFile())
+			{
+				modelNode.SetBitmap(KxShell::GetFileIcon(node->GetFullPath(), true));
+				if (!modelNode.HasBitmap())
+				{
+					modelNode.SetBitmap(KGetBitmap(KIMG_DOCUMENT));
+				}
+			}
+			else
+			{
+				modelNode.SetBitmap(KGetBitmap(KIMG_FOLDER));
+			}
+
+			ItemAdded(MakeItem(rootNode), MakeItem(modelNode));
+		}
+		return false;
+	}, KModManagerDispatcher::IterationOrder::Reversed);
 }
 
 KModManagerVirtualGameFolderModel::KModManagerVirtualGameFolderModel()
@@ -289,20 +308,23 @@ void KModManagerVirtualGameFolderModel::RefreshItems()
 {
 	m_TreeItems.clear();
 	ItemsCleared();
-
-	KModManagerDispatcher::FinderHash hash;
-	KModManager::GetDispatcher().IterateOverMods([this, &hash](const KModEntry& modEntry)
+	
+	if (!m_SearchMask.IsEmpty())
 	{
-		for (const KFileTreeNode* node: KModManager::GetDispatcher().FindFiles(modEntry, KxFile::NullFilter, KxFS_ALL, false, &hash))
+		KModManagerDispatcher::FinderHash hash;
+		for (const KFileTreeNode* node: KModManager::GetDispatcher().FindFiles(wxEmptyString, KxFile::NullFilter, KxFS_FILE, true, &hash))
 		{
-			if (node->IsDirectory() || KAux::CheckSearchMask(m_SearchMask, node->GetName()))
+			if (KAux::CheckSearchMask(m_SearchMask, node->GetName()))
 			{
-				ModelNode& modelNode = *m_TreeItems.emplace_back(new ModelNode(NULL, *node, &modEntry));
+				ModelNode& modelNode = *m_TreeItems.emplace_back(new ModelNode(NULL, *node, &node->GetMod()));
 				ItemAdded(MakeItem(modelNode));
 			}
 		}
-		return false;
-	}, KModManagerDispatcher::IterationOrder::Reversed);
+	}
+	else
+	{
+		BuildBranch(m_TreeItems);
+	}
 
 	// Reset scrolling
 	GetView()->Scroll(0, 0);

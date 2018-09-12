@@ -77,6 +77,10 @@ class KMMModelNode
 		{
 			return !m_Children.empty();
 		}
+		size_t GetChildrenCount() const
+		{
+			return m_Children.size();
+		}
 		const NodeVector& GetChildren() const
 		{
 			return m_Children;

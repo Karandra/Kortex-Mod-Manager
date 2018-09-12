@@ -129,6 +129,10 @@
 		<String ID="Generic.Date">Дата</String>
 		<String ID="Generic.Game">Игра</String>
 		<String ID="Generic.ModificationDate">Дата изменения</String>
+		<String ID="Generic.Location">Расположение</String>
+		<String ID="Generic.FileLocation">Расположение файла</String>
+		<String ID="Generic.FolderLocation">Расположение папки</String>
+		<String ID="Generic.SourceLocation">Исходное расположение</String>
 		<String ID="Generic.Version">Версия</String>
 		<String ID="Generic.EnterData">Введите данные</String>
 		<String ID="Generic.DefaultValue">Значение по умолчанию</String>

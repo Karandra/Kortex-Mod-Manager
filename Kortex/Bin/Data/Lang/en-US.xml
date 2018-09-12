@@ -129,6 +129,10 @@
 		<String ID="Generic.Date">Date</String>
 		<String ID="Generic.Game">Game</String>
 		<String ID="Generic.ModificationDate">Date modified</String>
+		<String ID="Generic.Location">Location</String>
+		<String ID="Generic.FileLocation">File location</String>
+		<String ID="Generic.FolderLocation">Folder location</String>
+		<String ID="Generic.SourceLocation">Source location</String>
 		<String ID="Generic.Version">Version</String>
 		<String ID="Generic.EnterData">Enter data</String>
 		<String ID="Generic.DefaultValue">Default value</String>

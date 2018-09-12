@@ -417,6 +417,7 @@ KPackageProjectSerializerFOMod::FilePriorityArray KPackageProjectSerializerFOMod
 			fileEntry->SetPriority(fileDataNode.GetAttributeInt("priority", KPackageProjectFileData::ms_DefaultPriority));
 
 			wxString destination = fileDataNode.GetAttribute("destination");
+			fileEntry->SetDestination(GetDataFolderName(true) + (!destination.IsEmpty() ? destination : source));
 
 			priorityList.push_back(std::make_pair(fileEntry, fileDataNode.GetAttributeInt("priority", std::numeric_limits<int64_t>::max())));
 

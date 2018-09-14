@@ -226,6 +226,20 @@ void KModManager::OnModFilesChnaged(KModEvent& event)
 		workspace->ScheduleRefresh();
 	}
 }
+void KModManager::OnModToggled(KModEvent& event)
+{
+	if (KModManagerVirtualGameFolderWS* workspace = KModManagerVirtualGameFolderWS::GetInstance())
+	{
+		workspace->ScheduleRefresh();
+	}
+}
+void KModManager::OnModsReordered(KModEvent& event)
+{
+	if (KModManagerVirtualGameFolderWS* workspace = KModManagerVirtualGameFolderWS::GetInstance())
+	{
+		workspace->ScheduleRefresh();
+	}
+}
 
 KModManager::KModManager(KWorkspace* workspace)
 	:m_Options(this, "General"),
@@ -255,6 +269,8 @@ KModManager::KModManager(KWorkspace* workspace)
 
 	// Events
 	KEvent::Bind(KEVT_MOD_FILES_CHNAGED, &KModManager::OnModFilesChnaged, this);
+	KEvent::Bind(KEVT_MOD_TOGGLED, &KModManager::OnModToggled, this);
+	KEvent::Bind(KEVT_MODS_REORDERED, &KModManager::OnModsReordered, this);
 	
 	// Load data
 	Reload();

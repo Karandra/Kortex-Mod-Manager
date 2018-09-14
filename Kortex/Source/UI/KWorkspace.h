@@ -4,7 +4,6 @@
 #include <KxFramework/KxAuiToolBar.h>
 #include "KApp.h"
 #include "KImageProvider.h"
-#include "Events/KBroadcastEvent.h"
 class KManager;
 class KMainWindow;
 class KWorkspaceController;
@@ -69,7 +68,6 @@ class KWorkspace: public KxPanel
 
 	protected:
 		void SwitchHereEvent(wxNotifyEvent& event);
-		void RefreshWorkspaceEvent(KBroadcastEvent& event);
 
 		void SetWorkspaceController(KWorkspaceController* controller)
 		{

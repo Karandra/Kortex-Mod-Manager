@@ -2,11 +2,11 @@
 #include "stdafx.h"
 #include "KPluginEntryTypesInterface.h"
 #include "KPluginReader.h"
-#include "KRTTI.h"
+#include <KxFramework/KxRTTI.h>
 class KModEntry;
 class KPluginManagerConfigStdContentEntry;
 
-class KPluginEntry: public KRTTI::CastAsIs<KPluginEntry>
+class KPluginEntry: public KxRTTI::DynamicCastAsIs<KPluginEntry>
 {
 	public:
 		using Vector = std::vector<std::unique_ptr<KPluginEntry>>;

@@ -76,7 +76,6 @@
     <ClCompile Include="Source\ModManager\KModManagerWorkspace.cpp" />
     <ClCompile Include="Source\Archive\KArchive.cpp" />
     <ClCompile Include="Source\Archive\KArchiveImpl.cpp" />
-    <ClCompile Include="Source\Events\KBroadcastEvent.cpp" />
     <ClCompile Include="Source\Events\KVFSEvent.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardComponnetsModel.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardDialog.cpp" />
@@ -282,7 +281,6 @@
     <ClInclude Include="Source\Utility\KWithBitmap.h" />
     <ClInclude Include="Source\Archive\KArchive.h" />
     <ClInclude Include="Source\Archive\KArchiveImpl.h" />
-    <ClInclude Include="Source\Events\KBroadcastEvent.h" />
     <ClInclude Include="Source\Events\KVFSEvent.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardComponnetsModel.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardDefs.h" />

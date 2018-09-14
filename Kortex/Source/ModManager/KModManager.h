@@ -105,6 +105,8 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 
 	private:
 		void OnModFilesChnaged(KModEvent& event);
+		void OnModToggled(KModEvent& event);
+		void OnModsReordered(KModEvent& event);
 
 	public:
 		KModManager(KWorkspace* workspace);

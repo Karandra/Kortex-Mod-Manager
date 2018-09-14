@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Events/KBroadcastEvent.h"
 #include "KVariablesTable.h"
 #include "KDynamicVariablesTable.h"
 #include "KImageProvider.h"

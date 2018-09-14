@@ -10,6 +10,7 @@
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxTextBox.h>
 #include <KxFramework/KxThumbView.h>
+#include <KxFramework/KxShellMenu.h>
 #include <KxFramework/KxFile.h>
 
 KxSingletonPtr_Define(KScreenshotsGalleryWorkspace);
@@ -49,12 +50,12 @@ void KScreenshotsGalleryWorkspace::LoadData()
 	m_ViewPane->ClearThumbs();
 	m_LoadedImages.clear();
 
-	const KScreenshotsGalleryConfig* pGallery = KScreenshotsGalleryConfig::GetInstance();
-	if (pGallery)
+	const KScreenshotsGalleryConfig* galleryConfig = KScreenshotsGalleryConfig::GetInstance();
+	if (galleryConfig)
 	{
-		for (const wxString& folderPath: pGallery->GetLocations())
+		for (const wxString& folderPath: galleryConfig->GetLocations())
 		{
-			KxStringVector files = KxFile(folderPath).Find(m_Manager->GetSupportedExtensions(), KxFS_FILE, false);
+			KxStringVector files = KxFile(V(folderPath)).Find(m_Manager->GetSupportedExtensions(), KxFS_FILE, false);
 			for (const wxString& path: files)
 			{
 				m_LoadedImages.emplace_back(path);
@@ -96,15 +97,15 @@ void KScreenshotsGalleryWorkspace::OnItemMenu(wxContextMenuEvent& event)
 {
 	if (event.GetInt() != wxNOT_FOUND)
 	{
-		KxMenu* menu = KxFile(m_LoadedImages[event.GetInt()]).GetShellMenu();
-		if (menu)
+		const wxString path = m_LoadedImages[event.GetInt()];
+		KxShellMenu menu(path);
+		if (menu.IsOK())
 		{
-			menu->Bind(KxEVT_MENU_HOVER, [this](KxMenuEvent& event)
+			menu.Bind(KxEVT_MENU_HOVER, [this](KxMenuEvent& event)
 			{
 				GetMainWindow()->SetStatus(event.GetHelpString());
 			});
-			menu->Show(GetMainWindow(), event.GetPosition());
-			delete menu;
+			menu.Show(GetMainWindow(), event.GetPosition());
 		}
 	}
 }
@@ -150,11 +151,11 @@ void KScreenshotsGalleryWorkspace::OnReloadWorkspace()
 	LoadData();
 }
 
-wxString  KScreenshotsGalleryWorkspace::GetID() const
+wxString KScreenshotsGalleryWorkspace::GetID() const
 {
 	return "KScreenshotsGalleryWorkspace";
 }
-wxString  KScreenshotsGalleryWorkspace::GetName() const
+wxString KScreenshotsGalleryWorkspace::GetName() const
 {
 	return T("ScreenshotsGallery.Name");
 }

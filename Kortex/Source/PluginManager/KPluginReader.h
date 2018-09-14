@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "KRTTI.h"
+#include <KxFramework/KxRTTI.h>
 class KPluginEntry;
 
-class KPluginReader: public KRTTI::CastAsIs<KPluginReader>
+class KPluginReader: public KxRTTI::DynamicCastAsIs<KPluginReader>
 {
 	friend class KPluginEntry;
 

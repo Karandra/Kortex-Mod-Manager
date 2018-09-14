@@ -303,9 +303,6 @@
     <ClCompile Include="Source\Profile\KProfile.cpp">
       <Filter>Code\Source Files\Profile</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Events\KBroadcastEvent.cpp">
-      <Filter>Code\Source Files\Events</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Events\KVFSEvent.cpp">
       <Filter>Code\Source Files\Events</Filter>
     </ClCompile>
@@ -853,9 +850,6 @@
     </ClInclude>
     <ClInclude Include="Source\Profile\KProfile.h">
       <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Events\KBroadcastEvent.h">
-      <Filter>Code\Header Files\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\Events\KVFSEvent.h">
       <Filter>Code\Header Files\Events</Filter>

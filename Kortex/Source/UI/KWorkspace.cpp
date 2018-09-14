@@ -4,7 +4,6 @@
 #include "KMainWindow.h"
 #include "KThemeManager.h"
 #include "Profile/KProfile.h"
-#include "Events/KBroadcastEvent.h"
 #include "Events/KVFSEvent.h"
 #include "KApp.h"
 
@@ -112,14 +111,6 @@ KWorkspace::~KWorkspace()
 void KWorkspace::SwitchHereEvent(wxNotifyEvent& event)
 {
 	SwitchHere();
-}
-void KWorkspace::RefreshWorkspaceEvent(KBroadcastEvent& event)
-{
-	if (event.GetTargetWorkspaceID().IsEmpty() || event.GetTargetWorkspaceID() == GetID())
-	{
-		ScheduleRefresh();
-	}
-	event.Skip();
 }
 
 int KWorkspace::GetWorkspaceIndex() const

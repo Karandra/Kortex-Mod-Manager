@@ -456,6 +456,8 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 				{
 					entry->SetName(value.As<wxString>());
 					isChanged = true;
+
+					KModEvent(KEVT_MOD_CHNAGED, *entry).Send();
 				}
 				else
 				{
@@ -463,7 +465,7 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 					entry->SetEnabled(checked);
 					isChanged = true;
 
-					KModEvent(KEVT_MOD_FILES_CHNAGED, *entry).Send();
+					KModEvent(KEVT_MOD_TOGGLED, *entry).Send();
 				}
 
 				if (isChanged)
@@ -471,8 +473,6 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 					entry->Save();
 					KModManager::Get().SaveSate();
 					KModManagerWorkspace::GetInstance()->RefreshPlugins();
-
-					KModEvent(KEVT_MOD_CHNAGED, *entry).Send();
 					return true;
 				}
 				return false;
@@ -856,7 +856,7 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 				SelectItem(GetItemByEntry(entriesToMove.front()));
 				event.SetDropEffect(wxDragMove);
 
-				KModEvent(KEVT_MOD_CHNAGED).Send();
+				KModEvent(KEVT_MODS_REORDERED, entriesToMove).Send();
 				return true;
 			}
 		}

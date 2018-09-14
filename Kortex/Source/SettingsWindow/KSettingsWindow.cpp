@@ -14,9 +14,6 @@ wxWindow* KSettingsWindow::GetDialogMainCtrl() const
 {
 	return m_Workspace;
 }
-void KSettingsWindow::ResetState()
-{
-}
 void KSettingsWindow::OnPrepareUninstall(wxCommandEvent& event)
 {
 	KxTaskDialog askDialog(this, KxID_NONE, TF("Settings.PrepareUninstall.Caption").arg(KApp::Get().GetAppDisplayName()), T("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);

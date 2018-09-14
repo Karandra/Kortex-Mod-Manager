@@ -29,7 +29,6 @@ class KSettingsWindow: public KxStdDialog
 			return true;
 		}
 		virtual wxWindow* GetDialogMainCtrl() const override;
-		virtual void ResetState() override;
 
 		void OnPrepareUninstall(wxCommandEvent& event);
 

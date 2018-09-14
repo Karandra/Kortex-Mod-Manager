@@ -457,7 +457,7 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 					entry->SetName(value.As<wxString>());
 					isChanged = true;
 
-					KModEvent(KEVT_MOD_CHNAGED, *entry).Send();
+					KModEvent(KEVT_MOD_CHANGED, *entry).Send();
 				}
 				else
 				{
@@ -485,7 +485,7 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 					entry->SetVersion(newVersion);
 					entry->Save();
 
-					KModEvent(KEVT_MOD_CHNAGED, *entry).Send();
+					KModEvent(KEVT_MOD_CHANGED, *entry).Send();
 					return true;
 				}
 				return false;
@@ -498,7 +498,7 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 					entry->SetAuthor(author);
 					entry->Save();
 
-					KModEvent(KEVT_MOD_CHNAGED, *entry).Send();
+					KModEvent(KEVT_MOD_CHANGED, *entry).Send();
 					return true;
 				}
 				break;

@@ -851,11 +851,11 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 					modEntry->Save();
 
 					{
-						KModEvent event(KEVT_MOD_FILES_CHNAGED, *modEntry);
+						KModEvent event(KEVT_MOD_FILES_CHANGED, *modEntry);
 						ProcessEvent(event);
 					}
 					{
-						KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+						KModEvent event(KEVT_MOD_CHANGED, *modEntry);
 						ProcessEvent(event);
 					}
 				}
@@ -873,11 +873,11 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 				modEntry->Save();
 
 				{
-					KModEvent event(KEVT_MOD_FILES_CHNAGED, *modEntry);
+					KModEvent event(KEVT_MOD_FILES_CHANGED, *modEntry);
 					ProcessEvent(event);
 				}
 				{
-					KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+					KModEvent event(KEVT_MOD_CHANGED, *modEntry);
 					ProcessEvent(event);
 				}
 			}
@@ -908,7 +908,7 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 				modEntry->ResetBitmap();
 				modEntry->Save();
 
-				KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+				KModEvent event(KEVT_MOD_CHANGED, *modEntry);
 				ProcessEvent(event);
 			}
 			break;
@@ -924,7 +924,7 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 				modEntry->SetDescription(dialog.GetText());
 				modEntry->Save();
 
-				KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+				KModEvent event(KEVT_MOD_CHANGED, *modEntry);
 				ProcessEvent(event);
 			}
 			break;
@@ -951,7 +951,7 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 							entry->SetPriorityGroupTag(tempEntry.GetPriorityGroupTag());
 							entry->Save();
 
-							KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+							KModEvent event(KEVT_MOD_CHANGED, *modEntry);
 							ProcessEvent(event);
 						}
 
@@ -969,7 +969,7 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			{
 				modEntry->Save();
 
-				KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+				KModEvent event(KEVT_MOD_CHANGED, *modEntry);
 				ProcessEvent(event);
 			}
 			break;
@@ -1024,7 +1024,7 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 				modEntry->SetInstallPackageFile(dialog.GetResult());
 				modEntry->Save();
 
-				KModEvent event(KEVT_MOD_CHNAGED, *modEntry);
+				KModEvent event(KEVT_MOD_CHANGED, *modEntry);
 				ProcessEvent(event);
 			}
 			break;

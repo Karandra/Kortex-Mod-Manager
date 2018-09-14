@@ -268,7 +268,7 @@ KModManager::KModManager(KWorkspace* workspace)
 	m_ModEntry_WriteTarget.SetEnabled(true);
 
 	// Events
-	KEvent::Bind(KEVT_MOD_FILES_CHNAGED, &KModManager::OnModFilesChnaged, this);
+	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KModManager::OnModFilesChnaged, this);
 	KEvent::Bind(KEVT_MOD_TOGGLED, &KModManager::OnModToggled, this);
 	KEvent::Bind(KEVT_MODS_REORDERED, &KModManager::OnModsReordered, this);
 	
@@ -371,7 +371,7 @@ void KModManager::Reload()
 	m_ModListManager.ReloadLists();
 	SortEntries();
 
-	KModEvent(KEVT_MOD_FILES_CHNAGED).Send();
+	KModEvent(KEVT_MOD_FILES_CHANGED).Send();
 }
 void KModManager::SaveSate()
 {
@@ -435,7 +435,7 @@ bool KModManager::ChangeModID(KModEntry* entry, const wxString& newID)
 			// Reloading manager data is not needed
 			SaveSate();
 
-			KModEvent event(KEVT_MOD_FILES_CHNAGED, *entry);
+			KModEvent event(KEVT_MOD_FILES_CHANGED, *entry);
 			ProcessEvent(event);
 			return true;
 		}

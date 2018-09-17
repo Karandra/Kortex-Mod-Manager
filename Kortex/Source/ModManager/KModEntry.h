@@ -10,6 +10,8 @@ class KFixedModEntry;
 class KPriorityGroupEntry;
 class KPackageProject;
 class KModManager;
+class KModManagerDispatcher;
+
 enum KModManagerLocation;
 enum KImageEnum;
 
@@ -29,6 +31,8 @@ enum
 
 class KModEntry: public KWithBitmap
 {
+	friend class KModManagerDispatcher;
+
 	public:
 		using FixedWebSitePair = std::pair<int64_t, KNetworkProviderID>;
 		using FixedWebSitesArray = std::array<int64_t, KNETWORK_PROVIDER_ID_MAX>;
@@ -63,6 +67,9 @@ class KModEntry: public KWithBitmap
 		wxString m_LinkedModFilesPath;
 
 		KFileTreeNode m_FileTree;
+
+	private:
+		bool IsInstalledReal() const;
 
 	public:
 		KModEntry();
@@ -212,10 +219,7 @@ class KModEntry: public KWithBitmap
 		{
 			return m_FileTree;
 		}
-		void ClearFileTree()
-		{
-			m_FileTree.GetChildren().clear();
-		}
+		void ClearFileTree();
 		void UpdateFileTree();
 
 		virtual bool IsEnabled() const;

@@ -69,6 +69,11 @@ bool KModEntry::ToggleTag(KxStringVector& array, const wxString& value, bool set
 	return false;
 }
 
+bool KModEntry::IsInstalledReal() const
+{
+	return KxFile(GetLocation(KMM_LOCATION_MOD_FILES)).IsFolderExist();
+}
+
 KModEntry::KModEntry()
 {
 }
@@ -356,6 +361,10 @@ void KModEntry::SetWebSite(KNetworkProviderID index, int64_t modID)
 	SetWebSite(m_FixedWebSites, index, modID);
 }
 
+void KModEntry::ClearFileTree()
+{
+	m_FileTree.GetChildren().clear();
+}
 void KModEntry::UpdateFileTree()
 {
 	ClearFileTree();
@@ -397,7 +406,7 @@ void KModEntry::UpdateFileTree()
 
 bool KModEntry::IsEnabled() const
 {
-	return m_IsEnabled;
+	return m_IsEnabled && IsInstalled();
 }
 void KModEntry::SetEnabled(bool value)
 {
@@ -405,10 +414,7 @@ void KModEntry::SetEnabled(bool value)
 }
 bool KModEntry::IsInstalled() const
 {
-	wxString path = GetLocation(KMM_LOCATION_MOD_FILES);
-	path.Prepend("\\\\?\\");
-	DWORD attributes = ::GetFileAttributesW(path);
-	return attributes != INVALID_FILE_ATTRIBUTES && attributes & FILE_ATTRIBUTE_DIRECTORY;
+	return m_FileTree.HasChildren();
 }
 
 KImageEnum KModEntry::GetIcon() const

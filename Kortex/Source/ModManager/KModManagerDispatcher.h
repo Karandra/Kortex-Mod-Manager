@@ -47,6 +47,7 @@ class KModManagerDispatcher
 	public:
 		using CollisionVector = std::vector<KMMDispatcherCollision>;
 		using FilesVector = std::vector<KxFileFinderItem>;
+		using ModsVector = std::vector<KModEntry*>;
 
 		enum class IterationOrder
 		{
@@ -69,13 +70,16 @@ class KModManagerDispatcher
 		bool m_VirtualTreeNeedsRefresh = false;
 
 	private:
-		void BuildTreeBranch(KFileTreeNode::Vector& children, const KFileTreeNode* rootNode, KFileTreeNode::RefVector& directories);
+		KModEntry* IterateOverModsEx(const ModsVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly, bool realMode) const;
+		bool CheckConditionsAndCallFunctor(const IterationFunctor& functor, const KModEntry& modEntry, bool activeOnly, bool realMode) const;
+
+		void BuildTreeBranch(const ModsVector& mods, KFileTreeNode::Vector& children, const KFileTreeNode* rootNode, KFileTreeNode::RefVector& directories);
 		void RebuildTreeIfNeeded() const;
 
 		void OnVirtualTreeInvalidated(KModEvent& event);
 
 	public:
-		// Root node to virtual files tree
+		// Root node to virtual files tree.
 		const KFileTreeNode& GetVirtualTree() const
 		{
 			return m_VirtualTree;

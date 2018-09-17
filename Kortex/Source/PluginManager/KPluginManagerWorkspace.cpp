@@ -115,7 +115,6 @@ bool KPluginManagerWorkspace::OnCreateWorkspace()
 	m_MainSizer->Add(m_SearchBox, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 
 	KProgramOptionSerializer::LoadDataViewLayout(m_ModelView->GetView(), m_PluginListViewOptions);
-	ReloadWorkspace();
 	return true;
 }
 
@@ -128,6 +127,11 @@ void KPluginManagerWorkspace::CreateModelView()
 
 bool KPluginManagerWorkspace::OnOpenWorkspace()
 {
+	if (IsFirstTimeOpen())
+	{
+		KPluginManager::GetInstance()->LoadIfNeeded();
+		m_ModelView->RefreshItems();
+	}
 	return true;
 }
 bool KPluginManagerWorkspace::OnCloseWorkspace()
@@ -137,7 +141,6 @@ bool KPluginManagerWorkspace::OnCloseWorkspace()
 }
 void KPluginManagerWorkspace::OnReloadWorkspace()
 {
-	KPluginManager::GetInstance()->Load();
 	m_ModelView->RefreshItems();
 	ProcessSelection();
 }

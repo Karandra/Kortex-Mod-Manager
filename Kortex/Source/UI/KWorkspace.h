@@ -28,6 +28,15 @@ class KWorkspace: public KxPanel
 	friend class KPackageCreatorWorkspace;
 	friend class KModManagerWorkspace;
 
+	public:
+		template<class T> static void ScheduleReloadOf()
+		{
+			if (T* workspace = T::GetInstance())
+			{
+				workspace->ScheduleReload();
+			}
+		}
+
 	private:
 		KMainWindow* m_MainWindow = NULL;
 		KWorkspaceController* m_WorkspaceController = NULL;
@@ -38,7 +47,7 @@ class KWorkspace: public KxPanel
 		bool m_CreatingWorkspace = false;
 		bool m_IsCreated = false;
 		bool m_IsFirstTimeOpen = true;
-		bool m_IsRefreshSheduled = false;
+		bool m_IsReloadSheduled = false;
 
 	private:
 		bool OnOpenWorkspaceInternal();
@@ -182,7 +191,7 @@ class KWorkspace: public KxPanel
 		}
 		bool SwitchHere();
 		bool CreateNow();
-		bool ScheduleRefresh();
+		void ScheduleReload();
 
 		virtual bool HasHelpEntry() const
 		{

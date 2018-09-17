@@ -213,7 +213,7 @@ void KModManagerImportMO::ReadExecutables(KOperationWithProgressDialogBase* cont
 				entry.SetName(entry.GetExecutable().AfterLast('\\').BeforeLast('.'));
 			}
 		}
-		KProgramManager::GetInstance()->SaveProgramList();
+		KProgramManager::GetInstance()->Save();
 	}
 }
 void KModManagerImportMO::CopySaves(KOperationWithProgressDialogBase* context)
@@ -263,7 +263,7 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 				context->SetDialogCaption(wxString::Format("%s \"%s\", %zu/%zu", T("Generic.Import"), name, counter, modsList.size()));
 
 				// Check mod existence
-				KModEntry* existingMod = KModManager::Get().FindMod(name);
+				KModEntry* existingMod = KModManager::Get().FindModByID(name);
 				if (existingMod && ShouldSkipExistingMods())
 				{
 					existingMod->SetEnabled(isModEnabled);
@@ -331,7 +331,7 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 			return;
 		}
 
-		if (KModEntry* existingMod = KModManager::Get().FindMod(name))
+		if (KModEntry* existingMod = KModManager::Get().FindModByID(name))
 		{
 			tCurrentModList.emplace_back(KModListModEntry(existingMod, existingMod->IsEnabled()));
 		}

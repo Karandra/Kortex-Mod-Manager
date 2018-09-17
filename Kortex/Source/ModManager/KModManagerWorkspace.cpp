@@ -322,7 +322,6 @@ void KModManagerWorkspace::OnReloadWorkspace()
 {
 	ClearControls();
 	
-	KModManager::Get().Reload();
 	m_ViewModel->RefreshItems();
 	ProcessSelection();
 	UpdateModListContent();
@@ -401,7 +400,7 @@ bool KModManagerWorkspace::ShowChangeModIDDialog(KModEntry* entry)
 				KxTaskDialog(&dialog, KxID_NONE, T("InstallWizard.ChangeID.Invalid"), wxEmptyString, KxBTN_OK, KxICON_WARNING).ShowModal();
 				event.Veto();
 			}
-			else if (const KModEntry* existingMod = KModManager::Get().FindMod(newID))
+			else if (const KModEntry* existingMod = KModManager::Get().FindModByID(newID))
 			{
 				if (existingMod != entry)
 				{
@@ -787,6 +786,7 @@ void KModManagerWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry*
 		item->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
+			KModManager::Get().Load();
 			ReloadWorkspace();
 		});
 	}
@@ -1136,7 +1136,7 @@ void KModManagerWorkspace::RefreshPlugins()
 	}
 	if (KPluginManagerWorkspace* pluginWorkspace = KPluginManagerWorkspace::GetInstance())
 	{
-		pluginWorkspace->ScheduleRefresh();
+		pluginWorkspace->ScheduleReload();
 	}
 }
 

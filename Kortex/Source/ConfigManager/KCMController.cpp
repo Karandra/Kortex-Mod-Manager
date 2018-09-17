@@ -743,7 +743,7 @@ void KCMController::ResetView()
 }
 void KCMController::Reload()
 {
-	GetConfigManager()->Reload();
+	GetConfigManager()->Load();
 	LoadView();
 }
 void KCMController::LoadView()

@@ -9,9 +9,9 @@
 
 bool KWorkspace::OnOpenWorkspaceInternal()
 {
-	if (m_IsRefreshSheduled)
+	if (m_IsReloadSheduled)
 	{
-		m_IsRefreshSheduled = false;
+		m_IsReloadSheduled = false;
 		ReloadWorkspace();
 	}
 	
@@ -173,23 +173,25 @@ bool KWorkspace::CreateNow()
 	}
 	return true;
 }
-bool KWorkspace::ScheduleRefresh()
+void KWorkspace::ScheduleReload()
 {
-	if (IsWorkspaceCreated())
+	CallAfter([this]()
 	{
-		if (IsWorkspaceVisible())
+		if (IsWorkspaceCreated())
 		{
-			return ReloadWorkspace();
+			if (IsWorkspaceVisible())
+			{
+				ReloadWorkspace();
+			}
+			else
+			{
+				// ReloadWorkspace will be called when workspace is opened next time
+				m_IsReloadSheduled = true;
+			}
 		}
 		else
 		{
-			m_IsRefreshSheduled = true;
-			return false;
+			CreateNow();
 		}
-	}
-	else
-	{
-		return CreateNow();
-	}
-	return false;
+	});
 }

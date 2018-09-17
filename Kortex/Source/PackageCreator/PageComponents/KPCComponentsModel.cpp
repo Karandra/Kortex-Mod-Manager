@@ -26,6 +26,93 @@ namespace
 		});
 	};
 	
+	template<class EntryT> void SwapNodesInSameBranch(KPCComponentsModelNode* thisNode, KPCComponentsModelNode* draggedNode, std::vector<std::unique_ptr<EntryT>>* entries = NULL)
+	{
+		EntryT* thisEntry = NULL;
+		EntryT* draggedEntry = NULL;
+
+		if constexpr(std::is_same<EntryT, KPPCStep>::value)
+		{
+			thisEntry = thisNode->GetStep();
+			draggedEntry = draggedNode->GetStep();
+		}
+		else if constexpr(std::is_same<EntryT, KPPCGroup>::value)
+		{
+			entries = &thisNode->GetParent()->GetStep()->GetGroups();
+
+			thisEntry = thisNode->GetGroup();
+			draggedEntry = draggedNode->GetGroup();
+		}
+		else if constexpr(std::is_same<EntryT, KPPCEntry>::value)
+		{
+			entries = &thisNode->GetParent()->GetGroup()->GetEntries();
+
+			thisEntry = thisNode->GetEntry();
+			draggedEntry = draggedNode->GetEntry();
+		}
+
+		if (thisEntry && entries)
+		{
+			auto thisNodeIter = FindElement(*entries, thisEntry);
+			auto draggedNodeIter = FindElement(*entries, draggedEntry);
+			std::iter_swap(thisNodeIter, draggedNodeIter);
+		}
+	}
+	template<class EntryT> void MoveNodeToDifferentBranch(KPCComponentsModelNode* thisNode, KPCComponentsModelNode* draggedNode, KPCComponentsModel* model)
+	{
+		std::vector<std::unique_ptr<EntryT>>* thisItems = NULL;
+		std::vector<std::unique_ptr<EntryT>>* draggedItems = NULL;
+		
+		EntryT* thisEntry = NULL;
+		EntryT* draggedEntry = NULL;
+
+		if constexpr(std::is_same<EntryT, KPPCGroup>::value)
+		{
+			thisItems = &thisNode->GetParent()->GetStep()->GetGroups();
+			draggedItems = &draggedNode->GetParent()->GetStep()->GetGroups();
+
+			thisEntry = thisNode->GetGroup();
+			draggedEntry = draggedNode->GetGroup();
+		}
+		else if constexpr(std::is_same<EntryT, KPPCEntry>::value)
+		{
+			thisItems = &thisNode->GetParent()->GetGroup()->GetEntries();
+			draggedItems = &draggedNode->GetParent()->GetGroup()->GetEntries();
+
+			thisEntry = thisNode->GetEntry();
+			draggedEntry = draggedNode->GetEntry();
+		}
+
+		if (thisItems && draggedItems)
+		{
+			// Move project items
+			auto draggedGroupIt = FindElement(*draggedItems, draggedEntry);
+			draggedGroupIt->release();
+			draggedItems->erase(draggedGroupIt);
+
+			auto thisGroupIt = FindElement(*thisItems, thisEntry);
+			thisItems->emplace(thisGroupIt, draggedEntry);
+
+			// Now move view tree nodes
+			{
+				KPCComponentsModelNode::Vector& thisNodes = thisNode->GetParent()->GetChildren();
+				KPCComponentsModelNode::Vector& draggedNodes = draggedNode->GetParent()->GetChildren();
+
+				auto draggedNodeIt = FindElement(draggedNodes, draggedNode);
+				draggedNodeIt->release();
+				draggedNodes.erase(draggedNodeIt);
+				model->ItemDeleted(model->GetItem(draggedNode->GetParent()), model->GetItem(draggedNode));
+
+				auto thisNodeIt = FindElement(thisNodes, thisNode);
+				auto& draggedNodeNew = *thisNodes.emplace(thisNodeIt, draggedNode);
+				draggedNodeNew->SetParent(thisNode->GetParent());
+
+				KxDataViewItem newItem = model->GetItem(draggedNodeNew.get());
+				model->ItemAdded(model->GetItem(thisNode->GetParent()), newItem);
+			}
+		}
+	}
+
 	KPCComponentsModelNode* GetParentStep(KPCComponentsModelNode* node)
 	{
 		KPCComponentsModelNode* parent = node;
@@ -935,33 +1022,43 @@ bool KPCComponentsModel::OnDropItems(KxDataViewEventDND& event)
 	KPCComponentsModelNode* thisNode = GetNode(event.GetItem());
 	if (draggedNode && thisNode)
 	{
+		// All this moving shit below is extremely inefficient. I need to rework it someday.
 		KxDataViewItem draggedItem = GetItem(draggedNode);
-		if (GetView()->GetMainWindow()->SwapTreeNodes(GetItem(thisNode), draggedItem))
+
+		// Nodes of same branch can be swapped more easily
+		if (thisNode->IsSameBranch(draggedNode))
 		{
-			// Nodes was swapped, it's safe to swap actual items. Node types are equal.
-			if (const KPPCStep* step = thisNode->GetStep())
+			if (GetView()->GetMainWindow()->SwapTreeNodes(GetItem(thisNode), draggedItem))
 			{
-				KPPCStepArray& steps = GetComponents().GetSteps();
-				auto thisNodeIter = FindElement(steps, step);
-				auto draggedNodeIter = FindElement(steps, draggedNode->GetStep());
+				// Nodes was swapped, it's safe to swap actual items. Node types are equal.
+				if (const KPPCStep* step = thisNode->GetStep())
+				{
+					SwapNodesInSameBranch<KPPCStep>(thisNode, draggedNode, &GetComponents().GetSteps());
+				}
+				else if (const KPPCGroup* group = thisNode->GetGroup())
+				{
+					SwapNodesInSameBranch<KPPCGroup>(thisNode, draggedNode);
+				}
+				else if (const KPPCEntry* entry = thisNode->GetEntry())
+				{
+					SwapNodesInSameBranch<KPPCEntry>(thisNode, draggedNode);
+				}
 
-				std::iter_swap(thisNodeIter, draggedNodeIter);
+				GetView()->Select(draggedItem);
+				GetView()->EnsureVisible(draggedItem);
+				return true;
 			}
-			else if (const KPPCGroup* group = thisNode->GetGroup())
+		}
+		else
+		{
+			// Step nodes will be handled in 'SameBranch'
+			if (const KPPCGroup* group = thisNode->GetGroup())
 			{
-				KPPCGroupArray& groups = thisNode->GetParent()->GetStep()->GetGroups();
-				auto thisNodeIter = FindElement(groups, group);
-				auto draggedNodeIter = FindElement(groups, draggedNode->GetGroup());
-
-				std::iter_swap(thisNodeIter, draggedNodeIter);
+				MoveNodeToDifferentBranch<KPPCGroup>(thisNode, draggedNode, this);
 			}
-			else if (const KPPCEntry* entry = thisNode->GetEntry())
+			else if (const KPPCEntry* group = thisNode->GetEntry())
 			{
-				KPPCEntryArray& entries = thisNode->GetParent()->GetGroup()->GetEntries();
-				auto thisNodeIter = FindElement(entries, entry);
-				auto draggedNodeIter = FindElement(entries, draggedNode->GetEntry());
-
-				std::iter_swap(thisNodeIter, draggedNodeIter);
+				MoveNodeToDifferentBranch<KPPCEntry>(thisNode, draggedNode, this);
 			}
 
 			GetView()->Select(draggedItem);
@@ -976,7 +1073,7 @@ bool KPCComponentsModel::OnDropItemsPossible(KxDataViewEventDND& event)
 	KPCComponentsModelNode* draggedNode = GetNode(GetDragDropDataObject()->GetItem());
 	KPCComponentsModelNode* thisNode = GetNode(event.GetItem());
 	
-	return (draggedNode && thisNode) && (draggedNode != thisNode) && thisNode->IsSameType(draggedNode) && (thisNode->GetParent() == draggedNode->GetParent());
+	return (draggedNode && thisNode) && (draggedNode != thisNode) && thisNode->IsSameType(draggedNode);
 }
 
 void KPCComponentsModel::AddStep(KPCComponentsModelNode* node, const KxDataViewItem& item)
@@ -1350,11 +1447,11 @@ void KPCComponentsModel::NotifyChangedItem(const KxDataViewItem& item)
 	ItemChanged(item);
 	ChangeNotify();
 }
-void KPCComponentsModel::SetProject(KPackageProject& project)
+
+void KPCComponentsModel::RefreshItems()
 {
 	m_Steps.clear();
-
-	for (const auto& step: project.GetComponents().GetSteps())
+	for (const auto& step: GetComponents().GetSteps())
 	{
 		auto& stepNode = m_Steps.emplace_back(new KPCComponentsModelNode(step.get()));
 		for (const auto& group: step->GetGroups())
@@ -1367,5 +1464,9 @@ void KPCComponentsModel::SetProject(KPackageProject& project)
 			}
 		}
 	}
+	ItemsCleared();
+}
+void KPCComponentsModel::SetProject(KPackageProject& project)
+{
 	RefreshItems();
 }

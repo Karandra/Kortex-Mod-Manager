@@ -15,7 +15,7 @@ class KCMIDataProvider
 	public:
 		virtual bool IsOK() const = 0;
 
-		virtual void Save() = 0;
+		virtual void Save() const = 0;
 		virtual void Load() = 0;
 		virtual void UnLoad() = 0;
 

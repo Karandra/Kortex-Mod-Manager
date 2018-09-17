@@ -148,7 +148,7 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 		context->SetDialogCaption(wxString::Format("%s \"%s\", %zu/%zu", T("Generic.Import"), modName, modsProcessed, modsTotal));
 
 		// Check mod existence
-		KModEntry* existingModEntry = KModManager::Get().FindMod(modName);
+		KModEntry* existingModEntry = KModManager::Get().FindModByID(modName);
 		if (existingModEntry && ShouldSkipExistingMods())
 		{
 			existingModEntry->SetEnabled(true);
@@ -209,7 +209,7 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 			return;
 		}
 
-		if (KModEntry* existingMod = KModManager::Get().FindMod(name))
+		if (KModEntry* existingMod = KModManager::Get().FindModByID(name))
 		{
 			tCurrentModList.emplace_back(KModListModEntry(existingMod, existingMod->IsEnabled()));
 		}

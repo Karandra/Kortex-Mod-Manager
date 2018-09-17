@@ -67,7 +67,7 @@ bool KDownloadManagerWorkspace::OnOpenWorkspace()
 	{
 		CallAfter([this]()
 		{
-			ScheduleRefresh();
+			ScheduleReload();
 		});
 	}
 	return true;

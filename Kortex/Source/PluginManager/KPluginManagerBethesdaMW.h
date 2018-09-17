@@ -38,7 +38,7 @@ class KPluginManagerBethesdaMW: public KPluginManagerBethesda
 			return m_PluginsLocation + '\\' + fileName;
 		}
 
-		virtual bool Save() override;
-		virtual bool Load() override;
-		virtual bool LoadNativeOrder() override;
+		virtual void Save() const override;
+		virtual void Load() override;
+		virtual void LoadNativeOrder() override;
 };

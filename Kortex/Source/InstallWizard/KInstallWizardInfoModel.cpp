@@ -165,7 +165,7 @@ bool KInstallWizardInfoModel::CheckModID(const wxString& id)
 		msg.ShowModal();
 		return false;
 	}
-	else if (const KModEntry* exisingMod = KModManager::Get().FindMod(id))
+	else if (const KModEntry* exisingMod = KModManager::Get().FindModByID(id))
 	{
 		if (exisingMod != m_InstallWizard.GetExistingMod())
 		{

@@ -35,7 +35,7 @@ class KSettingsWindowManager: public KConfigManager
 		void InitCurrentProfileConfig();
 		void InitControllerData();
 
-		void Save();
+		virtual void Save() const override;
 
 	private:
 		static KCMSampleValueArray FF_GetProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node, KProgramManagerConfig::ProgramType index);

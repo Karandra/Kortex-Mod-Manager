@@ -28,7 +28,7 @@ bool KCMDataProviderINI::IsOK() const
 	return m_Document.IsOK();
 }
 
-void KCMDataProviderINI::Save()
+void KCMDataProviderINI::Save() const
 {
 	KxFileStream file(m_DocumentPath, KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
 	m_Document.Save(file);

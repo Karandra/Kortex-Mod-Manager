@@ -36,15 +36,3 @@ KWorkspace* KSaveManager::GetWorkspace() const
 	return KSaveManagerWorkspace::GetInstance();
 }
 
-bool KSaveManager::Save()
-{
-	return false;
-}
-bool KSaveManager::Load()
-{
-	return false;
-}
-bool KSaveManager::Reload()
-{
-	return false;
-}

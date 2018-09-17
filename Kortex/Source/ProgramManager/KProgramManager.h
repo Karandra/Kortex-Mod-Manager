@@ -133,6 +133,9 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 		void RunPreMain(KxProgressDialog* dialog);
 		void RunMain(KxProgressDialog* dialog, const KProgramManagerEntry& runEntry);
 
+		void LoadProgramList();
+		void SaveProgramList() const;
+
 	public:
 		KProgramManager();
 		virtual ~KProgramManager();
@@ -172,8 +175,8 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 			return m_RunMainOptions;
 		}
 
-		void LoadProgramList();
-		void SaveProgramList() const;
+		virtual void Save() const override;
+		virtual void Load() override;
 
 		// Never destroy provided dialog yourself!
 		bool RunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog = NULL);

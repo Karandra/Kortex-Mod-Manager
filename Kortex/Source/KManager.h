@@ -31,6 +31,13 @@ class KManager: public wxEvtHandler
 			return GetWorkspace() != NULL;
 		}
 
+		virtual void Load()
+		{
+		}
+		virtual void Save() const
+		{
+		}
+
 		virtual wxString GetID() const = 0;
 		virtual wxString GetName() const = 0;
 		virtual wxString GetVersion() const = 0;

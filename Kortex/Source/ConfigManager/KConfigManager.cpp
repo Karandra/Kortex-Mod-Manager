@@ -494,7 +494,7 @@ void KConfigManager::Clear()
 	}
 	m_Providers.clear();
 }
-void KConfigManager::Reload()
+void KConfigManager::Load()
 {
 	Clear();
 
@@ -503,6 +503,9 @@ void KConfigManager::Reload()
 	{
 		LoadAdditionalFile(*v.second);
 	}
+}
+void KConfigManager::Save() const
+{
 }
 
 KConfigManager::FillFunnctionType KConfigManager::OnQueryFillFunction(const wxString& name)
@@ -543,7 +546,7 @@ KCMIDataProvider* KConfigManager::OnQueryDataProvider(const KCMFileEntry* fileEn
 					KCMDataProviderINI* dataProvider = NULL;
 					if (profileEntry->IsFilePathRelative())
 					{
-						wxString path = KModManager::GetDispatcher().GetTargetPath(profileEntry->GetFilePath());
+						wxString path = KModManager::GetDispatcher().ResolveLocationPath(profileEntry->GetFilePath());
 						if (!path.IsEmpty())
 						{
 							dataProvider = new KCMDataProviderINI(path);

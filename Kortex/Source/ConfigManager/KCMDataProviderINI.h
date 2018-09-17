@@ -34,7 +34,7 @@ class KCMDataProviderINI: public KCMIDataProvider
 	public:
 		virtual bool IsOK() const override;
 
-		virtual void Save() override;
+		virtual void Save() const override;
 		virtual void Load() override;
 		virtual void UnLoad() override;
 

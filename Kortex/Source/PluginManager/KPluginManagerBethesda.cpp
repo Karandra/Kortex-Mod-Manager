@@ -253,12 +253,11 @@ wxString KPluginManagerBethesda::GetPluginTypeName(bool isMaster, bool isLight) 
 	return T("PluginManager.PluginType.Normal");
 }
 
-bool KPluginManagerBethesda::Save()
+void KPluginManagerBethesda::Save() const
 {
 	SaveNativeOrderBG();
-	return true;
 }
-bool KPluginManagerBethesda::Load()
+void KPluginManagerBethesda::Load()
 {
 	Clear();
 
@@ -317,15 +316,13 @@ bool KPluginManagerBethesda::Load()
 
 	ReadPluginsData();
 	KModManager::GetListManager().SyncList(loadOrder.GetID());
-	return true;
 }
-bool KPluginManagerBethesda::LoadNativeOrder()
+void KPluginManagerBethesda::LoadNativeOrder()
 {
 	LoadNativeOrderBG();
 	ReadPluginsData();
 
 	Save();
-	return true;
 }
 
 bool KPluginManagerBethesda::HasDependentPlugins(const KPluginEntry& pluginEntry) const
@@ -338,8 +335,8 @@ KPluginEntry::RefVector KPluginManagerBethesda::GetDependentPlugins(const KPlugi
 }
 const KModEntry* KPluginManagerBethesda::FindParentMod(const KPluginEntry& pluginEntry) const
 {
-	KModEntry* owningMod = NULL;
-	KModManager::GetDispatcher().GetTargetPath(GetPluginRootRelativePath(pluginEntry.GetName()), &owningMod);
+	const KModEntry* owningMod = NULL;
+	KModManager::GetDispatcher().ResolveLocationPath(GetPluginRootRelativePath(pluginEntry.GetName()), &owningMod);
 	return owningMod;
 }
 

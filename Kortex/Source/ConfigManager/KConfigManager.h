@@ -138,7 +138,8 @@ class KConfigManager: public KManager//, public KxSingletonPtr<KConfigManager>
 		const VirtualKeyMapInfo& GetVirtualKeyInfo(wxKeyCode keyCode) const;
 
 		virtual void Clear();
-		virtual void Reload();
+		virtual void Load() override;
+		virtual void Save() const override;
 
 		virtual FillFunnctionType OnQueryFillFunction(const wxString& name);
 		virtual KCMIDataProvider* OnQueryDataProvider(const KCMFileEntry* fileEntry);

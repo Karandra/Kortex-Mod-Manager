@@ -1,20 +1,19 @@
 #pragma once
 #include "stdafx.h"
-#include "KModManagerVirtualGameFolderModelNode.h"
 #include "KModManagerDispatcher.h"
 #include "KDataViewListModel.h"
 #include "KImageProvider.h"
+#include "KFileTreeNode.h"
 class KModEntry;
 class KFileTreeNode;
 
 class KModManagerVirtualGameFolderModel: public KxDataViewModelExBase<KxDataViewModel>
 {
-	public:
-		using ModelNode = KModManagerVirtualGameFolderModelNS::ModelNode;
-
 	private:
-		ModelNode::Vector m_TreeItems;
 		wxString m_SearchMask;
+
+		const KFileTreeNode::Vector* m_TreeItems = NULL;
+		KFileTreeNode::Vector m_FoundItems;
 
 	private:
 		virtual void OnInitControl() override;
@@ -41,27 +40,29 @@ class KModManagerVirtualGameFolderModel: public KxDataViewModelExBase<KxDataView
 		void OnSelectItem(KxDataViewEvent& event);
 		void OnActivateItem(KxDataViewEvent& event);
 		void OnContextMenu(KxDataViewEvent& event);
-		void OnExpandingItem(KxDataViewEvent& event);
-
-		void BuildBranch(ModelNode::Vector& children, ModelNode* rootItem = NULL, const wxString& searchPath = wxEmptyString);
 
 	public:
 		KModManagerVirtualGameFolderModel();
 
 	public:
 		virtual void RefreshItems() override;
+
+		bool IsInSearchMode() const
+		{
+			return !m_SearchMask.IsEmpty();
+		}
 		bool SetSearchMask(const wxString& mask);
 
-		KxDataViewItem MakeItem(const ModelNode* node) const
+		KxDataViewItem MakeItem(const KFileTreeNode* node) const
 		{
 			return KxDataViewItem(node);
 		}
-		KxDataViewItem MakeItem(const ModelNode& node) const
+		KxDataViewItem MakeItem(const KFileTreeNode& node) const
 		{
 			return MakeItem(&node);
 		}
-		ModelNode* GetNode(const KxDataViewItem& item) const
+		KFileTreeNode* GetNode(const KxDataViewItem& item) const
 		{
-			return item.GetValuePtr<ModelNode>();
+			return item.GetValuePtr<KFileTreeNode>();
 		}
 };

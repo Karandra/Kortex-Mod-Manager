@@ -90,12 +90,15 @@ class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginMan
 			return m_Entries;
 		}
 
-		virtual bool Save() = 0;
-		virtual bool Load() = 0;
-		virtual bool LoadNativeOrder() = 0;
-		bool LoadIfNeeded()
+		virtual void Save() const = 0;
+		virtual void Load() = 0;
+		virtual void LoadNativeOrder() = 0;
+		void LoadIfNeeded()
 		{
-			return !HasEntries() ? Load() : true;
+			if (!HasEntries())
+			{
+				Load();
+			}
 		}
 
 		virtual bool HasDependentPlugins(const KPluginEntry& pluginEntry) const = 0;

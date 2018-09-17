@@ -114,9 +114,11 @@ class KPCComponentsModel:
 
 		void ChangeNotify();
 		void NotifyChangedItem(const KxDataViewItem& item);
-		void SetProject(KPackageProject& project);
 		void SetEntryImageView(KxImageView* pEntryImage)
 		{
 			m_EntryImageView = pEntryImage;
 		}
+		
+		virtual void RefreshItems() override;
+		void SetProject(KPackageProject& project);
 };

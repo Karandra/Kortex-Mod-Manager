@@ -207,14 +207,14 @@ void KSaveManagerWorkspace::FiltersMenu_SpecificFilter(KxMenuEvent& event)
 
 void KSaveManagerWorkspace::OnSyncPluginsList(const KSMSaveFile* saveEntry)
 {
-	if (KPluginManager* pPM = KPluginManager::GetInstance())
+	if (KPluginManager* manager = KPluginManager::GetInstance())
 	{
-		pPM->SyncWithPluginsList(saveEntry->GetPluginsList());
-		pPM->Save();
+		manager->SyncWithPluginsList(saveEntry->GetPluginsList(), KPluginManager::SyncListMode::EnableAll);
+		manager->Save();
 
-		if (KWorkspace* workspace = pPM->GetWorkspace())
+		if (KWorkspace* workspace = manager->GetWorkspace())
 		{
-			workspace->ScheduleRefresh();
+			workspace->ScheduleReload();
 		}
 	}
 }

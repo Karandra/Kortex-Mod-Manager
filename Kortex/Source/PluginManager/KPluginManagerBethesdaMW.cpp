@@ -101,7 +101,7 @@ void KPluginManagerBethesdaMW::LoadNativeOrderBG()
 {
 	Clear();
 
-	KxFileStream stream(KModManager::GetDispatcher().GetTargetPath(m_PluginsListFile), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream stream(KModManager::GetDispatcher().ResolveLocationPath(m_PluginsListFile), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	KxINI ini(stream);
 	if (ini.IsOK())
 	{
@@ -130,7 +130,7 @@ void KPluginManagerBethesdaMW::SaveNativeOrderBG() const
 
 		if (KGameConfigWorkspace* workspace = KGameConfigWorkspace::GetInstance())
 		{
-			workspace->ScheduleRefresh();
+			workspace->ScheduleReload();
 		}
 	}
 }
@@ -145,15 +145,15 @@ KPluginManagerBethesdaMW::~KPluginManagerBethesdaMW()
 {
 }
 
-bool KPluginManagerBethesdaMW::Save()
+void KPluginManagerBethesdaMW::Save() const
 {
-	return KPluginManagerBethesda::Save();
+	KPluginManagerBethesda::Save();
 }
-bool KPluginManagerBethesdaMW::Load()
+void KPluginManagerBethesdaMW::Load()
 {
-	return KPluginManagerBethesda::Load();
+	KPluginManagerBethesda::Load();
 }
-bool KPluginManagerBethesdaMW::LoadNativeOrder()
+void KPluginManagerBethesdaMW::LoadNativeOrder()
 {
-	return KPluginManagerBethesda::LoadNativeOrder();
+	KPluginManagerBethesda::LoadNativeOrder();
 }

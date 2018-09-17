@@ -2,33 +2,61 @@
 #include "KFileTreeNode.h"
 #include "KModEntry.h"
 #include "KModManager.h"
+#include "KComparator.h"
 
-KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, const wxString& relativePath, KxFileSearchType type)
+const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, const wxString& relativePath, KxFileSearchType type)
 {
-	if (rootNode.HasChildren() && !relativePath.IsEmpty())
+	if (type == KxFileSearchType::KxFS_FOLDER)
 	{
-		wxString relativePathL = KxString::ToLower(relativePath);
-		relativePathL.Replace("/", "\\");
+		if (relativePath.IsEmpty() || *relativePath.begin() == wxS('\\') || *relativePath.begin() == wxS('/') || *relativePath.begin() == wxS('.'))
+		{
+			return rootNode.GetRootNode();
+		}
+	}
 
-		auto Recurse = [type](const KFileTreeNode& rootNode, const wxString& folderName) -> KFileTreeNode*
+	if (rootNode.HasChildren())
+	{
+		auto ScanChildren = [](const KFileTreeNode& rootNode, const wxString& folderName) -> const KFileTreeNode*
 		{
 			for (const KFileTreeNode& node: rootNode.GetChildren())
 			{
-				if (folderName == KxString::ToLower(node.GetName()))
+				if (KComparator::KEqual(folderName, node.GetName(), true))
 				{
-					return const_cast<KFileTreeNode*>(&node);
+					return &node;
 				}
 			}
 			return NULL;
 		};
 
-		KFileTreeNode* finalNode = NULL;
-		for (const wxString& folderName: KxString::Split(relativePathL, "\\"))
+		const KFileTreeNode* finalNode = NULL;
+
+		// This ugly construction is faster than
+		// for (const wxString& folderName: KxString::Split(relativePath, wxS("\\")))
+		// So using it.
+		const wxChar separator = wxS('\\');
+		size_t pos = 0;
+		size_t separatorPos = relativePath.find(separator);
+		if (separatorPos == wxString::npos)
 		{
-			finalNode = Recurse(finalNode ? *finalNode : rootNode, folderName);
+			separatorPos = relativePath.length();
+		}
+
+		while (pos < relativePath.length() && separatorPos <= relativePath.length())
+		{
+			const wxString folderName = relativePath.SubString(pos, separatorPos - 1);
+			finalNode = ScanChildren(finalNode ? *finalNode : rootNode, folderName);
 			if (finalNode == NULL)
 			{
 				break;
+			}
+
+			pos += folderName.length() + 1;
+			separatorPos = relativePath.find(separator, pos);
+
+			// No separator found, but this is not the last element
+			if (separatorPos == wxString::npos && pos < relativePath.length())
+			{
+				separatorPos = relativePath.length();
 			}
 		}
 

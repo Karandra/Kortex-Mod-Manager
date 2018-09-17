@@ -100,7 +100,7 @@ wxBitmap KProgramManager::OnQueryItemImage(const KProgramManagerEntry& runEntry)
 			iconPath.RemoveLast(1);
 		}
 	}
-	iconPath = KModManager::GetDispatcher().GetTargetPath(iconPath);
+	iconPath = KModManager::GetDispatcher().ResolveLocationPath(iconPath);
 
 	if (KAux::IsSingleFileExtensionMatches(iconPath, "exe") || KAux::IsSingleFileExtensionMatches(iconPath, "dll"))
 	{
@@ -120,7 +120,7 @@ wxBitmap KProgramManager::OnQueryItemImage(const KProgramManagerEntry& runEntry)
 	}
 	else
 	{
-		return KxShell::GetFileIcon(KModManager::GetDispatcher().GetTargetPath(runEntry.GetExecutable()), true);
+		return KxShell::GetFileIcon(KModManager::GetDispatcher().ResolveLocationPath(runEntry.GetExecutable()), true);
 	}
 }
 void KProgramManager::OnVFSToggled(KVFSEvent& event)
@@ -275,6 +275,44 @@ void KProgramManager::RunMain(KxProgressDialog* dialog, const KProgramManagerEnt
 	DoRunEntry(runEntry, dialog);
 }
 
+void KProgramManager::LoadProgramList()
+{
+	KxFileStream stream(GetProgramsListFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxXMLDocument xml(stream);
+
+	m_ProgramList.clear();
+	for (KxXMLNode node = xml.GetFirstChildElement("Programs").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+	{
+		KProgramManagerEntry& entry = m_ProgramList.emplace_back(KProgramManagerEntry(node));
+		if (!entry.IsOK())
+		{
+			m_ProgramList.pop_back();
+		}
+	}
+}
+void KProgramManager::SaveProgramList() const
+{
+	KxXMLDocument xml;
+	KxXMLNode rootNode = xml.NewElement("Programs");
+
+	for (const KProgramManagerEntry& entry: m_ProgramList)
+	{
+		KxXMLNode node = rootNode.NewElement("Entry");
+		node.SetAttribute("RequiresVFS", entry.IsRequiresVFS());
+		node.NewElement("Name").SetValue(entry.GetName());
+		if (!entry.GetIconPath().IsEmpty())
+		{
+			node.NewElement("Icon").SetValue(entry.GetIconPath());
+		}
+		node.NewElement("Executable").SetValue(entry.GetExecutable());
+		node.NewElement("Arguments").SetValue(entry.GetArguments());
+		node.NewElement("WorkingDirectory").SetValue(entry.GetWorkingDirectory());
+	}
+
+	KxFileStream stream(GetProgramsListFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
+	xml.Save(stream);
+}
+
 KProgramManager::KProgramManager()
 	:m_RunConfig(GetRunConfig()), m_RunMainOptions(this, "RunMain")
 {
@@ -385,42 +423,13 @@ void KProgramManager::OnRunEntry(KxMenuItem* menuItem, const KProgramManagerEntr
 	}
 }
 
-void KProgramManager::LoadProgramList()
+void KProgramManager::Save() const
 {
-	KxFileStream stream(GetProgramsListFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
-	KxXMLDocument xml(stream);
-
-	m_ProgramList.clear();
-	for (KxXMLNode node = xml.GetFirstChildElement("Programs").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
-	{
-		KProgramManagerEntry& entry = m_ProgramList.emplace_back(KProgramManagerEntry(node));
-		if (!entry.IsOK())
-		{
-			m_ProgramList.pop_back();
-		}
-	}
+	SaveProgramList();
 }
-void KProgramManager::SaveProgramList() const
+void KProgramManager::Load()
 {
-	KxXMLDocument xml;
-	KxXMLNode rootNode = xml.NewElement("Programs");
-
-	for (const KProgramManagerEntry& entry: m_ProgramList)
-	{
-		KxXMLNode node = rootNode.NewElement("Entry");
-		node.SetAttribute("RequiresVFS", entry.IsRequiresVFS());
-		node.NewElement("Name").SetValue(entry.GetName());
-		if (!entry.GetIconPath().IsEmpty())
-		{
-			node.NewElement("Icon").SetValue(entry.GetIconPath());
-		}
-		node.NewElement("Executable").SetValue(entry.GetExecutable());
-		node.NewElement("Arguments").SetValue(entry.GetArguments());
-		node.NewElement("WorkingDirectory").SetValue(entry.GetWorkingDirectory());
-	}
-
-	KxFileStream stream(GetProgramsListFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
-	xml.Save(stream);
+	LoadProgramList();
 }
 
 bool KProgramManager::RunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog)

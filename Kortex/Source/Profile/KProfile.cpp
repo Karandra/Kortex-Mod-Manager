@@ -387,11 +387,11 @@ wxBitmap KProfile::GetIcon() const
 			{
 				if (!programEntry->GetIconPath().IsEmpty())
 				{
-					icon = KxShell::GetFileIcon(KModManager::GetDispatcher().GetTargetPath(programEntry->GetIconPath()));
+					icon = KxShell::GetFileIcon(KModManager::GetDispatcher().ResolveLocationPath(programEntry->GetIconPath()));
 				}
 				else
 				{
-					icon = KxShell::GetFileIcon(KModManager::GetDispatcher().GetTargetPath(programEntry->GetExecutable()));
+					icon = KxShell::GetFileIcon(KModManager::GetDispatcher().ResolveLocationPath(programEntry->GetExecutable()));
 				}
 			}
 		}

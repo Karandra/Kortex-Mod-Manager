@@ -351,5 +351,5 @@ bool KAux::SetSearchMask(wxString& storage, const wxString& newMask)
 }
 bool KAux::CheckSearchMask(const wxString& mask, const wxString& string)
 {
-	return mask.IsEmpty() || KxString::ToLower(string).Matches(mask);
+	return mask.IsEmpty() || (mask.length() == 1 && *mask.begin() == wxS('*')) || KxString::ToLower(string).Matches(mask);
 }

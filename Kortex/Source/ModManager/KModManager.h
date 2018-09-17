@@ -83,14 +83,14 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		KModManagerTags m_TagManager;
 		KModManagerDispatcher m_Dispatcher;
 		KModManagerModList m_ModListManager;
-		bool m_Mounted = false;
+		bool m_IsMounted = false;
 		KxProgressDialog* m_MountStatusDialog = NULL;
 
 	private:
 		void SortEntries();
 		void SetMounted(bool value)
 		{
-			m_Mounted = value;
+			m_IsMounted = value;
 		}
 		void DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* window = NULL);
 
@@ -107,6 +107,9 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		void OnModFilesChnaged(KModEvent& event);
 		void OnModToggled(KModEvent& event);
 		void OnModsReordered(KModEvent& event);
+		
+		void OnModInstalled(KModEvent& event);
+		void OnModUninstalled(KModEvent& event);
 
 	public:
 		KModManager(KWorkspace* workspace);
@@ -155,17 +158,15 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 			return &m_ModEntry_WriteTarget;
 		}
 
-		void Reload();
-		void SaveSate();
+		virtual void Load() override;
+		virtual void Save() const override;
 		bool ChangeModListAndResort(const wxString& newModListID);
 		
-		auto FindModIterator(KModEntry* entry) const
-		{
-			return std::find(m_ModEntries.begin(), m_ModEntries.end(), entry);
-		}
-		KModEntry* FindMod(const wxString& modID) const;
+		KModEntry* FindModByID(const wxString& modID) const;
+		KModEntry* FindModByName(const wxString& modName) const;
 		KModEntry* FindModBySignature(const wxString& signature) const;
-		bool IsModActive(const wxString& sModID) const;
+		
+		bool IsModActive(const wxString& modID) const;
 		void UninstallMod(KModEntry* entry, wxWindow* window = NULL)
 		{
 			DoUninstallMod(entry, false, window);
@@ -187,13 +188,10 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		
 		bool IsVFSMounted() const
 		{
-			return m_Mounted;
+			return m_IsMounted;
 		}
 		void MountVFS();
 		void UnMountVFS();
 
 		void ExportModList(const wxString& outputFilePath) const;
-
-	public:
-		void NotifyModInstalled(const wxString& modID);
 };

@@ -13,7 +13,7 @@ void KNewModDialog::OnOK(wxNotifyEvent& event)
 		wxString name = GetValue();
 		if (!name.IsEmpty())
 		{
-			const KModEntry* existingMod = KModManager::Get().FindMod(name);
+			const KModEntry* existingMod = KModManager::Get().FindModByID(name);
 			if (existingMod)
 			{
 				KLogEvent(T("ModManager.NewMod.NameCollision"), KLOG_WARNING, this);

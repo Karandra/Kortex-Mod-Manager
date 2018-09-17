@@ -89,10 +89,10 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 						KApp::Get().CallAfter([]()
 						{
 							// These workspaces are safe
-							KModManagerWorkspace::GetInstance()->ScheduleRefresh();
-							KGameConfigWorkspace::GetInstance()->ScheduleRefresh();
-							KProgramManagerWorkspace::GetInstance()->ScheduleRefresh();
-							KDownloadManagerWorkspace::GetInstance()->ScheduleRefresh();
+							KModManagerWorkspace::GetInstance()->ScheduleReload();
+							KGameConfigWorkspace::GetInstance()->ScheduleReload();
+							KProgramManagerWorkspace::GetInstance()->ScheduleReload();
+							KDownloadManagerWorkspace::GetInstance()->ScheduleReload();
 						});
 					});
 					operation->SetDialogCaption(T("ModManager.Import.Caption"));

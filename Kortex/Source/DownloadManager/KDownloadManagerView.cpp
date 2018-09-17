@@ -226,13 +226,12 @@ bool KDownloadManagerView::CompareByRow(size_t row1, size_t row2, const KxDataVi
 {
 	const KDownloadEntry* entry1 = GetDataEntry(row1);
 	const KDownloadEntry* entry2 = GetDataEntry(row2);
-	using KComparator::KCompare;
 
 	switch (column ? column->GetID() : ColumnID::Date)
 	{
 		case ColumnID::Name:
 		{
-			return KCompare(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName()) < 0;
+			return KComparator::KLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
 		}
 		case ColumnID::Version:
 		{
@@ -247,7 +246,7 @@ bool KDownloadManagerView::CompareByRow(size_t row1, size_t row2, const KxDataVi
 			const wxString name1 = entry1->GetTargetProfile() ? entry1->GetTargetProfile()->GetShortName() : wxEmptyString;
 			const wxString name2 = entry2->GetTargetProfile() ? entry2->GetTargetProfile()->GetShortName() : wxEmptyString;
 			
-			return KCompare(name1, name2) < 0;
+			return KComparator::KLess(name1, name2);
 		}
 		case ColumnID::Provider:
 		{

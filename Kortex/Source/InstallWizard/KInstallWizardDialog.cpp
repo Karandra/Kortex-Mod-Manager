@@ -12,9 +12,9 @@
 #include "ModManager/KModManager.h"
 #include "Network/KNetwork.h"
 #include "KThemeManager.h"
+#include "KEvents.h"
 #include "KAux.h"
 #include "KApp.h"
-#include "KEntryRefT.h"
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileStream.h>
@@ -327,7 +327,7 @@ bool KInstallWizardDialog::LoadPackage()
 		SetCaption(TF("InstallWizard.WindowCaption").arg(m_Package->GetName()) + ' ' + info.GetVersion());
 
 		// Try to find existing mod for this package
-		m_ExistingMod = KModManager::Get().FindMod(GetConfig().ComputeModID());
+		m_ExistingMod = KModManager::Get().FindModByID(GetConfig().ComputeModID());
 		if (m_ExistingMod)
 		{
 			AcceptExistingMod(*m_ExistingMod);
@@ -387,6 +387,8 @@ bool KInstallWizardDialog::ProcessLoadPackage()
 
 	Show();
 	Raise();
+
+	KModEvent(KEVT_MOD_INSTALLING, m_ModEntry).Send();
 
 	return ret;
 }
@@ -637,7 +639,7 @@ void KInstallWizardDialog::OnClose(wxCloseEvent& event)
 	}
 	else
 	{
-		KModManager::Get().NotifyModInstalled(m_ModEntry.GetID());
+		KModEvent(KEVT_MOD_INSTALLED, m_ModEntry).Send();
 
 		wxNotifyEvent doneEvent(KEVT_IW_DONE);
 		doneEvent.SetEventObject(this);

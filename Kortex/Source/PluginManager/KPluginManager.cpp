@@ -15,6 +15,7 @@
 #include "Profile/KPluginManagerConfig.h"
 #include "ProgramManager/KProgramManager.h"
 #include "UI/KWorkspace.h"
+#include "KComparator.h"
 
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxProcess.h>
@@ -195,6 +196,9 @@ void KPluginManager::SyncWithPluginsList(const KxStringVector& pluginNamesList, 
 		list.emplace_back(name, isEnabled);
 	}
 	KModManager::GetListManager().SaveLists();
+
+	// Reload to update internal state
+	Load();
 }
 KxStringVector KPluginManager::GetPluginsList(bool activeOnly) const
 {
@@ -214,10 +218,9 @@ KxStringVector KPluginManager::GetPluginsList(bool activeOnly) const
 }
 KPluginEntry* KPluginManager::FindPluginByName(const wxString& name) const
 {
-	wxString nameL = KxString::ToLower(name);
-	auto it = std::find_if(m_Entries.begin(), m_Entries.end(), [&nameL](const auto& entry)
+	auto it = std::find_if(m_Entries.begin(), m_Entries.end(), [&name](const auto& entry)
 	{
-		return KxString::ToLower(entry->GetName()) == nameL;
+		return KComparator::KEqual(name, entry->GetName(), true);
 	});
 	if (it != m_Entries.end())
 	{

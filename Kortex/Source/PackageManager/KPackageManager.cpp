@@ -106,7 +106,7 @@ wxString KPackageManager::GetRequirementFilePath(const KPPRRequirementEntry* ent
 	}
 	else
 	{
-		return KModManager::GetDispatcher().GetTargetPath(path);
+		return KModManager::GetDispatcher().ResolveLocationPath(path);
 	}
 }
 
@@ -197,7 +197,7 @@ KxVersion KPackageManager::GetRequirementVersionFromBinaryFile(const KPPRRequire
 }
 KxVersion KPackageManager::GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry)
 {
-	const KModEntry* modEntry = KModManager::Get().FindMod(entry->GetID());
+	const KModEntry* modEntry = KModManager::Get().FindModByID(entry->GetID());
 	if (modEntry)
 	{
 		return modEntry->GetVersion();

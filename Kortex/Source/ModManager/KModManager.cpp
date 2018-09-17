@@ -46,7 +46,7 @@ wxString KModManager::GetLocation(KModManagerLocation nLocation, const wxString&
 		}
 		case KMM_LOCATION_MOD_ROOT:
 		{
-			return profile->GetVariables().GetVariable(KVAR_MODS_ROOT) + '\\' + signature;
+			return profile->GetVariables().GetVariable(KVAR_MODS_ROOT) + wxS('\\') + signature;
 		}
 		default:
 		{
@@ -76,13 +76,13 @@ void KModManager::SortEntries()
 
 	if (KPluginManagerWorkspace* pluginsWorkspace = KPluginManagerWorkspace::GetInstance())
 	{
-		pluginsWorkspace->ScheduleRefresh();
+		pluginsWorkspace->ScheduleReload();
 	}
 }
 void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* window)
 {
 	KModEvent event(KEVT_MOD_UNINSTALLING, *modEntry);
-	ProcessEvent(event);
+	event.Send();
 
 	// If signature is empty, removing this mod can cause removing ALL other mods
 	// because mod folder path will point to all mods directory instead of its own.
@@ -108,11 +108,9 @@ void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* wind
 		});
 		operation->OnEnd([this, modID = modEntry->GetID().Clone()](KOperationWithProgressBase* self)
 		{
-			SaveSate();
-			KModManagerWorkspace::GetInstance()->ReloadWorkspace();
+			Save();
 
-			KModEvent event(KEVT_MOD_UNINSTALLED, modID);
-			ProcessEvent(event);
+			KModEvent(KEVT_MOD_UNINSTALLED, modID).Send();
 		});
 		operation->SetDialogCaption(T("ModManager.RemoveMod.RemovingMessage"));
 		operation->Run();
@@ -221,24 +219,29 @@ void KModManager::OnModFilesChnaged(KModEvent& event)
 		event.GetMod()->UpdateFileTree();
 	}
 
-	if (KModManagerVirtualGameFolderWS* workspace = KModManagerVirtualGameFolderWS::GetInstance())
-	{
-		workspace->ScheduleRefresh();
-	}
+	KWorkspace::ScheduleReloadOf<KModManagerVirtualGameFolderWS>();
+	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 }
 void KModManager::OnModToggled(KModEvent& event)
 {
-	if (KModManagerVirtualGameFolderWS* workspace = KModManagerVirtualGameFolderWS::GetInstance())
-	{
-		workspace->ScheduleRefresh();
-	}
+	KWorkspace::ScheduleReloadOf<KModManagerVirtualGameFolderWS>();
+	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 }
 void KModManager::OnModsReordered(KModEvent& event)
 {
-	if (KModManagerVirtualGameFolderWS* workspace = KModManagerVirtualGameFolderWS::GetInstance())
-	{
-		workspace->ScheduleRefresh();
-	}
+	KWorkspace::ScheduleReloadOf<KModManagerVirtualGameFolderWS>();
+	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
+}
+
+void KModManager::OnModInstalled(KModEvent& event)
+{
+	Load();
+	KWorkspace::ScheduleReloadOf<KModManagerWorkspace>();
+}
+void KModManager::OnModUninstalled(KModEvent& event)
+{
+	Load();
+	KWorkspace::ScheduleReloadOf<KModManagerWorkspace>();
 }
 
 KModManager::KModManager(KWorkspace* workspace)
@@ -271,9 +274,12 @@ KModManager::KModManager(KWorkspace* workspace)
 	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KModManager::OnModFilesChnaged, this);
 	KEvent::Bind(KEVT_MOD_TOGGLED, &KModManager::OnModToggled, this);
 	KEvent::Bind(KEVT_MODS_REORDERED, &KModManager::OnModsReordered, this);
+
+	KEvent::Bind(KEVT_MOD_INSTALLED, &KModManager::OnModInstalled, this);
+	KEvent::Bind(KEVT_MOD_UNINSTALLED, &KModManager::OnModUninstalled, this);
 	
 	// Load data
-	Reload();
+	Load();
 }
 void KModManager::Clear()
 {
@@ -338,7 +344,7 @@ KModEntryArray KModManager::GetAllEntries(bool includeWriteTarget)
 	return entries;
 }
 
-void KModManager::Reload()
+void KModManager::Load()
 {
 	Clear();
 
@@ -371,12 +377,13 @@ void KModManager::Reload()
 	m_ModListManager.ReloadLists();
 	SortEntries();
 
+	// Causes rebuild of virtual file tree
 	KModEvent(KEVT_MOD_FILES_CHANGED).Send();
 }
-void KModManager::SaveSate()
+void KModManager::Save() const
 {
-	m_ModListManager.SyncCurrentList();
-	m_ModListManager.SaveLists();
+	const_cast<KModManagerModList&>(m_ModListManager).SyncCurrentList();
+	const_cast<KModManagerModList&>(m_ModListManager).SaveLists();
 }
 bool KModManager::ChangeModListAndResort(const wxString& newModListID)
 {
@@ -387,11 +394,23 @@ bool KModManager::ChangeModListAndResort(const wxString& newModListID)
 	}
 	return false;
 }
-KModEntry* KModManager::FindMod(const wxString& modID) const
+
+KModEntry* KModManager::FindModByID(const wxString& modID) const
 {
 	for (KModEntry* entry: m_ModEntries)
 	{
 		if (entry->GetID() == modID)
+		{
+			return entry;
+		}
+	}
+	return NULL;
+}
+KModEntry* KModManager::FindModByName(const wxString& modName) const
+{
+	for (KModEntry* entry: m_ModEntries)
+	{
+		if (entry->GetName() == modName)
 		{
 			return entry;
 		}
@@ -410,9 +429,9 @@ KModEntry* KModManager::FindModBySignature(const wxString& signature) const
 	return NULL;
 }
 
-bool KModManager::IsModActive(const wxString& sModID) const
+bool KModManager::IsModActive(const wxString& modID) const
 {
-	const KModEntry* entry = FindMod(sModID);
+	const KModEntry* entry = FindModByID(modID);
 	if (entry)
 	{
 		return entry->IsEnabled();
@@ -421,7 +440,7 @@ bool KModManager::IsModActive(const wxString& sModID) const
 }
 bool KModManager::ChangeModID(KModEntry* entry, const wxString& newID)
 {
-	if (!FindMod(newID))
+	if (FindModByID(newID) == NULL)
 	{
 		wxString oldPath = GetLocation(KMM_LOCATION_MOD_ROOT, entry->GetSignature());
 		wxString newPath = GetLocation(KMM_LOCATION_MOD_ROOT, KModEntry::GetSignatureFromID(newID));
@@ -433,10 +452,10 @@ bool KModManager::ChangeModID(KModEntry* entry, const wxString& newID)
 
 			// Save new mod order with changed signature.
 			// Reloading manager data is not needed
-			SaveSate();
+			Save();
 
-			KModEvent event(KEVT_MOD_FILES_CHANGED, *entry);
-			ProcessEvent(event);
+			// This will take care of file tree
+			KModEvent(KEVT_MOD_FILES_CHANGED, *entry).Send();
 			return true;
 		}
 	}
@@ -492,7 +511,7 @@ bool KModManager::MoveModsIntoThis(const KModEntryArray& entriesToMove, const KM
 				}
 			};
 
-			SaveSate();
+			Save();
 			return true;
 		}
 	}
@@ -632,25 +651,4 @@ void KModManager::ExportModList(const wxString& outputFilePath) const
 
 	KxFileStream stream(outputFilePath, KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
 	stream.WriteStringUTF8(xml.GetXML(KxXML_PRINT_HTML5));
-}
-
-void KModManager::NotifyModInstalled(const wxString& modID)
-{
-	const KModEntry* modEntry = FindMod(modID);
-	auto model = KModManagerWorkspace::GetInstance()->GetModel();
-	KxDataViewItem item;
-
-	if (modEntry)
-	{
-		model->RefreshItems();
-		item = model->GetItemByEntry(modEntry);
-	}
-	else
-	{
-		Reload();
-		item = model->GetItemByEntry(FindMod(modID));
-	}
-
-	model->GetView()->EnsureVisible(item);
-	model->SelectItem(item);
 }

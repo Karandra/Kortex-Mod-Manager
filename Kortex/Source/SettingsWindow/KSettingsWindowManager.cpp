@@ -113,7 +113,7 @@ void KSettingsWindowManager::InitControllerData()
 	LoadMainFile(m_XML);
 }
 
-void KSettingsWindowManager::Save()
+void KSettingsWindowManager::Save() const
 {
 	m_AppConfig.Save();
 	m_CurrentProfileConfig.Save();

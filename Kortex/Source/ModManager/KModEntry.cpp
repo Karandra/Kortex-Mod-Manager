@@ -451,7 +451,7 @@ wxString KModEntry::GetLocation(KModManagerLocation index) const
 		}
 		case KMM_LOCATION_MOD_INFO:
 		{
-			return GetLocation(KMM_LOCATION_MOD_ROOT) + "\\Info.xml";
+			return GetLocation(KMM_LOCATION_MOD_ROOT) + wxS("\\Info.xml");
 		}
 		case KMM_LOCATION_MOD_FILES:
 		case KMM_LOCATION_MOD_FILES_DEFAULT:
@@ -462,16 +462,16 @@ wxString KModEntry::GetLocation(KModManagerLocation index) const
 			}
 			else
 			{
-				return GetLocation(KMM_LOCATION_MOD_ROOT) + "\\ModFiles";
+				return GetLocation(KMM_LOCATION_MOD_ROOT) + wxS("\\ModFiles");
 			}
 		}
 		case KMM_LOCATION_MOD_LOGO:
 		{
-			return GetLocation(KMM_LOCATION_MOD_ROOT) + "\\Image.img";
+			return GetLocation(KMM_LOCATION_MOD_ROOT) + wxS("\\Image.img");
 		}
 		case KMM_LOCATION_MOD_DESCRIPTION:
 		{
-			return GetLocation(KMM_LOCATION_MOD_ROOT) + "\\Description.txt";
+			return GetLocation(KMM_LOCATION_MOD_ROOT) + wxS("\\Description.txt");
 		}
 	};
 	return KModManager::GetLocation(index, m_Signature);

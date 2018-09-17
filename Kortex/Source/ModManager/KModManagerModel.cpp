@@ -471,7 +471,7 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 				if (isChanged)
 				{
 					entry->Save();
-					KModManager::Get().SaveSate();
+					KModManager::Get().Save();
 					KModManagerWorkspace::GetInstance()->RefreshPlugins();
 					return true;
 				}
@@ -592,8 +592,6 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 		KModEntry* entry2 = pNode2->GetEntry();
 		if (entry1 && entry2)
 		{
-			using KComparator::KCompare;
-
 			if (IsSpecialSiteColumn(columnID))
 			{
 				KNetworkProviderID index = ColumnToSpecialSite(columnID);
@@ -604,7 +602,7 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 			{
 				case ColumnID::Name:
 				{
-					return KCompare(entry1->GetName(), entry2->GetName()) < 0;
+					return KComparator::KLess(entry1->GetName(), entry2->GetName());
 				}
 				case ColumnID::Priority:
 				{
@@ -616,11 +614,11 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 				}
 				case ColumnID::Author:
 				{
-					return KCompare(entry1->GetAuthor(), entry2->GetAuthor()) < 0;
+					return KComparator::KLess(entry1->GetAuthor(), entry2->GetAuthor());
 				}
 				case ColumnID::Tags:
 				{
-					return KCompare(FormatTagList(entry1), FormatTagList(entry2)) < 0;
+					return KComparator::KLess(FormatTagList(entry1), FormatTagList(entry2));
 				}
 				case ColumnID::DateInstall:
 				{
@@ -632,15 +630,15 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 				}
 				case ColumnID::ModFolder:
 				{
-					return KCompare(entry1->GetLocation(KMM_LOCATION_MOD_FILES), entry2->GetLocation(KMM_LOCATION_MOD_FILES)) < 0;
+					return KComparator::KLess(entry1->GetLocation(KMM_LOCATION_MOD_FILES), entry2->GetLocation(KMM_LOCATION_MOD_FILES));
 				}
 				case ColumnID::PackagePath:
 				{
-					return KCompare(entry1->GetInstallPackageFile(), entry2->GetInstallPackageFile()) < 0;
+					return KComparator::KLess(entry1->GetInstallPackageFile(), entry2->GetInstallPackageFile());
 				}
 				case ColumnID::Signature:
 				{
-					return KCompare(entry1->GetSignature(), entry2->GetSignature()) < 0;
+					return KComparator::KLess(entry1->GetSignature(), entry2->GetSignature());
 				}
 			};
 		}

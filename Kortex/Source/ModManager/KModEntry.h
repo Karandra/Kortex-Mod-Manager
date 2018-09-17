@@ -212,10 +212,6 @@ class KModEntry: public KWithBitmap
 		{
 			return m_FileTree;
 		}
-		KFileTreeNode& GetFileTree()
-		{
-			return m_FileTree;
-		}
 		void ClearFileTree()
 		{
 			m_FileTree.GetChildren().clear();

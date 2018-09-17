@@ -115,12 +115,21 @@ class KPCComponentsModelNode
 		{
 			return m_Parent;
 		}
+		void SetParent(KPCComponentsModelNode* node)
+		{
+			m_Parent = node;
+		}
 
 	public:
 		bool IsSameType(const KPCComponentsModelNode* other) const
 		{
 			return m_Value.index() == other->m_Value.index();
 		}
+		bool IsSameBranch(const KPCComponentsModelNode* other) const
+		{
+			return m_Parent == other->GetParent();
+		}
+		
 		bool operator==(const KPCComponentsModelNode& other) const
 		{
 			return m_Value == other.m_Value && m_Parent == other.m_Parent && m_Children.size() == other.m_Children.size();

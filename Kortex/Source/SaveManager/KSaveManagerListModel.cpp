@@ -164,13 +164,12 @@ bool KSaveManagerListModel::CompareByRow(size_t row1, size_t row2, const KxDataV
 {
 	const KSMSaveFile* entry1 = GetDataEntry(row1);
 	const KSMSaveFile* entry2 = GetDataEntry(row2);
-	using KComparator::KCompare;
 
 	switch (column ? column->GetID() : ColumnID::ModificationDate)
 	{
 		case ColumnID::Name:
 		{
-			return KCompare(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName()) < 0;
+			return KComparator::KLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
 		}
 		case ColumnID::Size:
 		{

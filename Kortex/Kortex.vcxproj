@@ -50,7 +50,6 @@
     <ClCompile Include="Source\ModManager\KModManagerStatistics.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerTagSelector.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderModel.cpp" />
-    <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderModelNode.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderWS.cpp" />
     <ClCompile Include="Source\ModManager\KPriorityGroupEntry.cpp" />
     <ClCompile Include="Source\Network\KNetwork.cpp" />
@@ -241,7 +240,6 @@
     <ClInclude Include="Source\ModManager\KModManagerStatistics.h" />
     <ClInclude Include="Source\ModManager\KModManagerTagSelector.h" />
     <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderModel.h" />
-    <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderModelNode.h" />
     <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderWS.h" />
     <ClInclude Include="Source\ModManager\KPriorityGroupEntry.h" />
     <ClInclude Include="Source\Network\KNetwork.h" />

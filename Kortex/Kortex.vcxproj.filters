@@ -747,9 +747,6 @@
     <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderModel.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderModelNode.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Events\KModEvent.cpp">
       <Filter>Code\Source Files\Events</Filter>
     </ClCompile>
@@ -1353,9 +1350,6 @@
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderModel.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderModelNode.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Events\KModEvent.h">

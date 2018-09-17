@@ -61,6 +61,7 @@ bool KPluginViewModelBethesda::SetValue(const wxAny& value, KPluginEntry& plugin
 			return true;
 		}
 	};
+	return false;
 }
 
 bool KPluginViewModelBethesda::IsEnabled(const KPluginEntry& pluginEntry, const KxDataViewColumn* column) const
@@ -108,13 +109,11 @@ bool KPluginViewModelBethesda::GetAttributes(const KPluginEntry& pluginEntry, co
 }
 bool KPluginViewModelBethesda::Compare(const KPluginEntry& pluginEntry1, const KPluginEntry& pluginEntry2, const KxDataViewColumn* column) const
 {
-	using KComparator::KCompare;
-
 	switch (column->GetID())
 	{
 		case ColumnID::Name:
 		{
-			return KCompare(pluginEntry1.GetName(), pluginEntry1.GetName()) < 0;
+			return KComparator::KLess(pluginEntry1.GetName(), pluginEntry1.GetName());
 		}
 		default:
 		case ColumnID::Index:
@@ -131,11 +130,11 @@ bool KPluginViewModelBethesda::Compare(const KPluginEntry& pluginEntry1, const K
 		#endif
 		case ColumnID::PartOf:
 		{
-			return KCompare(GetPartOfName(pluginEntry1), GetPartOfName(pluginEntry2)) < 0;
+			return KComparator::KLess(GetPartOfName(pluginEntry1), GetPartOfName(pluginEntry2));
 		}
 		case ColumnID::Author:
 		{
-			return KCompare(GetPluginAuthor(pluginEntry1), GetPluginAuthor(pluginEntry2)) < 0;
+			return KComparator::KLess(GetPluginAuthor(pluginEntry1), GetPluginAuthor(pluginEntry2));
 		}
 	};
 	return false;

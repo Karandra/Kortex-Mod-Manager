@@ -28,8 +28,4 @@ class KSaveManager: public KPluggableManager, public KxSingletonPtr<KSaveManager
 
 	public:
 		virtual KWorkspace* GetWorkspace() const override;
-		
-		virtual bool Save();
-		virtual bool Load();
-		virtual bool Reload();
 };

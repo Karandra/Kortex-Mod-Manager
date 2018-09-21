@@ -5,24 +5,30 @@
 #include "KFileTreeNode.h"
 #include "KVariablesDatabase.h"
 #include "KModManagerVirtualGameFolderWS.h"
-#include "KApp.h"
+#include "KComparator.h"
 #include "KAux.h"
 #include <KxFramework/KxFileFinder.h>
 
 namespace
 {
+	struct FinderHashComparator
+	{
+		bool operator()(const wxString& lhs, const wxString& rhs) const
+		{
+			return KComparator::KEqual(lhs, rhs, true);
+		}
+	};
+	using FinderHash = std::unordered_map<wxString, size_t, std::hash<wxString>, FinderHashComparator>;
+
 	void FindFilesInTree(KFileTreeNode::CRefVector& nodes,
-						 KModManagerDispatcher::FinderHash* hash,
 						 const KFileTreeNode& rootNode,
 						 const wxString& filter,
 						 KxFileSearchType type,
 						 bool recurse,
-						 const wxString& absolutePath = wxEmptyString,
 						 bool activeOnly = false
 	)
 	{
-		std::function<void(const KFileTreeNode&)> ScanTree;
-		ScanTree = [&ScanTree, &nodes, &filter, type, hash, recurse, &absolutePath, activeOnly](const KFileTreeNode& folderNode)
+		auto ScanTree = [&nodes, &filter, type, recurse, activeOnly](KFileTreeNode::CRefVector& directories, const KFileTreeNode& folderNode)
 		{
 			for (const KFileTreeNode& node: folderNode.GetChildren())
 			{
@@ -30,37 +36,31 @@ namespace
 				{
 					if (recurse && node.IsDirectory())
 					{
-						ScanTree(node);
+						directories.push_back(&node);
 					}
 
-					if (KAux::CheckSearchMask(filter, node.GetName()))
+					if (node.GetItem().IsElementType(type) && KAux::CheckSearchMask(filter, node.GetName()))
 					{
-						if (node.GetItem().IsElementType(type))
-						{
-							if (hash)
-							{
-								wxString id = node.GetFullPath();
-								if (!absolutePath.IsEmpty())
-								{
-									id.Replace(absolutePath, wxEmptyString, false);
-								}
-								KxString::MakeLower(id);
-
-								if (hash->insert(id).second)
-								{
-									nodes.push_back(&node);
-								}
-							}
-							else
-							{
-								nodes.push_back(&node);
-							}
-						}
+						nodes.push_back(&node);
 					}
 				}
 			}
 		};
-		ScanTree(rootNode);
+
+		// Top level
+		KFileTreeNode::CRefVector directories;
+		ScanTree(directories, rootNode);
+		
+		// Subdirectories
+		while (!directories.empty())
+		{
+			KFileTreeNode::CRefVector roundDirectories;
+			for (const KFileTreeNode* node: directories)
+			{
+				ScanTree(roundDirectories, *node);
+			}
+			directories = std::move(roundDirectories);
+		}
 	}
 }
 
@@ -89,7 +89,7 @@ wxString KMMDispatcherCollision::GetLocalizedCollisionName(KMMDispatcherCollisio
 }
 
 //////////////////////////////////////////////////////////////////////////
-KModEntry* KModManagerDispatcher::IterateOverModsEx(const ModsVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly, bool realMode) const
+KModEntry* KModManagerDispatcher::IterateOverModsEx(const ModsVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly) const
 {
 	switch (order)
 	{
@@ -97,7 +97,7 @@ KModEntry* KModManagerDispatcher::IterateOverModsEx(const ModsVector& mods, cons
 		{
 			for (KModEntry* entry: mods)
 			{
-				if (CheckConditionsAndCallFunctor(functor, *entry, activeOnly, realMode))
+				if (CheckConditionsAndCallFunctor(functor, *entry, activeOnly))
 				{
 					return entry;
 				}
@@ -108,7 +108,7 @@ KModEntry* KModManagerDispatcher::IterateOverModsEx(const ModsVector& mods, cons
 		{
 			for (auto it = mods.rbegin(); it != mods.rend(); ++it)
 			{
-				if (CheckConditionsAndCallFunctor(functor, **it, activeOnly, realMode))
+				if (CheckConditionsAndCallFunctor(functor, **it, activeOnly))
 				{
 					return *it;
 				}
@@ -118,41 +118,56 @@ KModEntry* KModManagerDispatcher::IterateOverModsEx(const ModsVector& mods, cons
 	};
 	return NULL;
 }
-bool KModManagerDispatcher::CheckConditionsAndCallFunctor(const IterationFunctor& functor, const KModEntry& modEntry, bool activeOnly, bool realMode) const
+bool KModManagerDispatcher::CheckConditionsAndCallFunctor(const IterationFunctor& functor, const KModEntry& modEntry, bool activeOnly) const
 {
-	return (realMode ? modEntry.IsInstalledReal() : modEntry.IsInstalled()) && (activeOnly && modEntry.IsEnabled() || !activeOnly) && functor(modEntry);
+	return modEntry.IsInstalled() && (activeOnly && modEntry.IsEnabled() || !activeOnly) && functor(modEntry);
 }
 
 void KModManagerDispatcher::BuildTreeBranch(const ModsVector& mods, KFileTreeNode::Vector& children, const KFileTreeNode* rootNode, KFileTreeNode::RefVector& directories)
 {
 	FinderHash hash;
-	const bool isRealMode = rootNode == NULL;
 
-	IterateOverModsEx(mods, [&children, &hash, rootNode, &directories](const KModEntry& modEntry)
+	// Iterate manually, without using 'IterateOverModsEx'
+	for (auto it = mods.rbegin(); it != mods.rend(); ++it)
 	{
-		KFileTreeNode::CRefVector fileNodes;
-		if (rootNode)
+		const KModEntry& modEntry = **it;
+		if (modEntry.IsInstalled())
 		{
 			// If we have root node, look for files in real file tree
-			const KFileTreeNode* folderNode = KFileTreeNode::NavigateToFolder(modEntry.GetFileTree(), rootNode->GetRelativePath());
-			if (folderNode)
+			// Otherwise use mod's tree root
+			const KFileTreeNode* searchNode = &modEntry.GetFileTree();
+			if (rootNode)
 			{
-				FindFilesInTree(fileNodes, &hash, *folderNode, KxFile::NullFilter, KxFS_ALL, false, modEntry.GetLocation(KMM_LOCATION_MOD_FILES));
+				searchNode = KFileTreeNode::NavigateToFolder(modEntry.GetFileTree(), rootNode->GetRelativePath());
+			}
+
+			if (searchNode)
+			{
+				// Not enough, but at least something
+				children.reserve(searchNode->GetChildrenCount());
+
+				for (const KFileTreeNode& node: searchNode->GetChildren())
+				{
+					auto hashIt = hash.emplace(node.GetName(), 0);
+					if (hashIt.second)
+					{
+						KFileTreeNode& newNode = children.emplace_back(KFileTreeNode(modEntry, node.GetItem(), rootNode));
+						
+						// Save index to new node to add alternatives to it later
+						// I'd use pointer, but it can be invalidated on reallocation
+						hashIt.first->second = children.size() - 1;
+					}
+					else
+					{
+						const size_t index = hashIt.first->second;
+						children[index].GetAlternatives().push_back(KFileTreeNode(modEntry, node.GetItem(), rootNode));
+					}
+				}
 			}
 		}
-		else
-		{
-			// Here we have real tree anyway
-			FindFilesInTree(fileNodes, &hash, modEntry.GetFileTree(), KxFile::NullFilter, KxFS_ALL, false, modEntry.GetLocation(KMM_LOCATION_MOD_FILES));
-		}
+	}
 
-		for (const KFileTreeNode* node: fileNodes)
-		{
-			children.push_back(KFileTreeNode(modEntry, node->GetItem(), rootNode));
-		}
-		return false;
-	}, IterationOrder::Reversed, false, isRealMode);
-
+	// Fill directories array
 	for (KFileTreeNode& node: children)
 	{
 		if (node.IsDirectory())
@@ -181,7 +196,6 @@ void KModManagerDispatcher::OnVirtualTreeInvalidated(KModEvent& event)
 		workspace->ScheduleReload();
 	}
 }
-
 void KModManagerDispatcher::UpdateVirtualTree()
 {
 	m_VirtualTree.ClearChildren();
@@ -207,7 +221,7 @@ KModEntry* KModManagerDispatcher::IterateOverMods(IterationFunctor functor, Iter
 {
 	RebuildTreeIfNeeded();
 
-	return IterateOverModsEx(KModManager::Get().GetAllEntries(includeWriteTarget), functor, order, activeOnly, false);
+	return IterateOverModsEx(KModManager::Get().GetAllEntries(includeWriteTarget), functor, order, activeOnly);
 }
 
 const KFileTreeNode* KModManagerDispatcher::ResolveLocation(const wxString& relativePath) const
@@ -236,25 +250,15 @@ wxString KModManagerDispatcher::ResolveLocationPath(const wxString& relativePath
 	return KModManager::Get().GetModEntry_WriteTarget()->GetLocation(KMM_LOCATION_MOD_FILES) + wxS('\\') + relativePath;
 }
 
-KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const KFileTreeNode& rootNode, const wxString& filter, KxFileSearchType type, bool recurse, FinderHash* hash) const
+const KFileTreeNode* KModManagerDispatcher::BackTrackFullPath(const wxString& fullPath) const
 {
-	RebuildTreeIfNeeded();
-
-	KFileTreeNode::CRefVector nodes;
-	FindFilesInTree(nodes, hash, rootNode, filter, type, recurse, rootNode.GetMod().GetLocation(KMM_LOCATION_MOD_FILES));
-
-	return nodes;
+	return m_VirtualTree.WalkTree([&fullPath](const KFileTreeNode& node)
+	{
+		return KComparator::KEqual(node.GetFullPath(), fullPath);
+	});
 }
-KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const KModEntry& modEntry, const wxString& filter, KxFileSearchType type, bool recurse, FinderHash* hash) const
-{
-	RebuildTreeIfNeeded();
 
-	KFileTreeNode::CRefVector nodes;
-	FindFilesInTree(nodes, hash, modEntry.GetFileTree(), filter, type, recurse, modEntry.GetLocation(KMM_LOCATION_MOD_FILES));
-
-	return nodes;
-}
-KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const wxString& relativePath, const wxString& filter, KxFileSearchType type, bool recurse, FinderHash* hash) const
+KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const wxString& relativePath, const wxString& filter, KxFileSearchType type, bool recurse, bool activeOnly) const
 {
 	RebuildTreeIfNeeded();
 
@@ -262,8 +266,26 @@ KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const wxString& relat
 	const KFileTreeNode* folderNode = KFileTreeNode::NavigateToFolder(m_VirtualTree, relativePath);
 	if (folderNode)
 	{
-		FindFilesInTree(nodes, NULL, *folderNode, filter, type, recurse, wxEmptyString, true);
+		FindFilesInTree(nodes, *folderNode, filter, type, recurse, activeOnly);
 	}
+	return nodes;
+}
+KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const KFileTreeNode& rootNode, const wxString& filter, KxFileSearchType type, bool recurse, bool activeOnly) const
+{
+	RebuildTreeIfNeeded();
+
+	KFileTreeNode::CRefVector nodes;
+	FindFilesInTree(nodes, rootNode, filter, type, recurse, activeOnly);
+
+	return nodes;
+}
+KFileTreeNode::CRefVector KModManagerDispatcher::FindFiles(const KModEntry& modEntry, const wxString& filter, KxFileSearchType type, bool recurse) const
+{
+	RebuildTreeIfNeeded();
+
+	KFileTreeNode::CRefVector nodes;
+	FindFilesInTree(nodes, modEntry.GetFileTree(), filter, type, recurse);
+
 	return nodes;
 }
 

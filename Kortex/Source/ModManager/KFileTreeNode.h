@@ -14,6 +14,8 @@ class KFileTreeNode
 		using RefVector = std::vector<KFileTreeNode*>;
 		using CRefVector = std::vector<const KFileTreeNode*>;
 
+		using TreeWalker = std::function<bool(const KFileTreeNode&)>;
+
 	private:
 		static const KFileTreeNode* NavigateToElement(const KFileTreeNode& rootNode, const wxString& relativePath, KxFileSearchType type);
 		template<class T> static T* FindRootNode(T* thisNode)
@@ -108,6 +110,9 @@ class KFileTreeNode
 		{
 			return m_Parent == NULL && !m_Item.IsOK();
 		}
+
+		const KFileTreeNode* WalkTree(const TreeWalker& functor) const;
+		const KFileTreeNode* WalkToRoot(const TreeWalker& functor) const;
 
 		const KModEntry& GetMod() const
 		{

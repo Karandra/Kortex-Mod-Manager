@@ -13,6 +13,7 @@
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManagerDispatcher.h"
 #include "Profile/KPluginManagerConfig.h"
+#include "KComparator.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
@@ -41,7 +42,6 @@ KPluginEntry::RefVector KPluginManagerBethesda::CollectDependentPlugins(const KP
 		dependentList.reserve(1);
 	}
 
-	const wxString nameL = KxString::ToLower(pluginEntry.GetName());
 	for (auto& entry: GetEntries())
 	{
 		if (entry->IsEnabled())
@@ -50,9 +50,9 @@ KPluginEntry::RefVector KPluginManagerBethesda::CollectDependentPlugins(const KP
 			if (entry->HasReader() && entry->GetReader()->As(bethesdaReader))
 			{
 				KxStringVector dependenciesList = bethesdaReader->GetRequiredPlugins();
-				auto it = std::find_if(dependenciesList.begin(), dependenciesList.end(), [&nameL](const wxString& sDepName)
+				auto it = std::find_if(dependenciesList.begin(), dependenciesList.end(), [&pluginEntry](const wxString& depName)
 				{
-					return nameL == KxString::ToLower(sDepName);
+					return KComparator::KEqual(pluginEntry.GetName(), depName);
 				});
 				if (it != dependenciesList.end())
 				{
@@ -70,8 +70,8 @@ KPluginEntry::RefVector KPluginManagerBethesda::CollectDependentPlugins(const KP
 }
 bool KPluginManagerBethesda::CheckExtension(const wxString& name) const
 {
-	wxString ext = name.AfterLast('.');
-	return ext == "esp" || ext == "esm";
+	const wxString ext = name.AfterLast('.');
+	return KComparator::KEqual(ext, wxS("esp")) || KComparator::KEqual(ext, wxS("esm"));
 }
 
 wxString KPluginManagerBethesda::OnWriteToLoadOrder(const KPluginEntry& entry) const
@@ -97,15 +97,14 @@ void KPluginManagerBethesda::LoadNativeOrderBG()
 	for (const wxString& name: KxTextFile::ReadToArray(m_ActiveListFile))
 	{
 		// Find whether plugin with this name exist
-		wxString nameL = KxString::ToLower(name);
-		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KFileTreeNode* node)
+		auto it = std::find_if(files.begin(), files.end(), [&name](const KFileTreeNode* node)
 		{
-			return KxString::ToLower(node->GetName()) == nameL;
+			return KComparator::KEqual(node->GetName(), name);
 		});
 
-		if (!nameL.StartsWith('#') && it != files.end())
+		if (!name.StartsWith('#') && it != files.end())
 		{
-			if (CheckExtension(nameL))
+			if (CheckExtension(name))
 			{
 				auto& entry = GetEntries().emplace_back(NewPluginEntry(name, false));
 				entry->SetFullPath((*it)->GetFullPath());
@@ -158,8 +157,8 @@ void KPluginManagerBethesda::SaveNativeOrderBG() const
 
 	// Initialize starting time point to (current time - entries count) minutes,
 	// so incrementing it by one minute gives no "overflows" into future.
-	wxDateTime tFileTime = wxDateTime::Now() - wxTimeSpan(0, GetEntries().size());
-	const wxTimeSpan tTimeStep(0, 1);
+	wxDateTime fileTime = wxDateTime::Now() - wxTimeSpan(0, GetEntries().size());
+	const wxTimeSpan timeStep(0, 1);
 
 	// Lists
 	KxStringVector loadOrder;
@@ -181,8 +180,8 @@ void KPluginManagerBethesda::SaveNativeOrderBG() const
 
 			if (modFileDate)
 			{
-				KxFile(entry->GetFullPath()).SetFileTime(tFileTime, KxFILETIME_MODIFICATION);
-				tFileTime.Add(tTimeStep);
+				KxFile(entry->GetFullPath()).SetFileTime(fileTime, KxFILETIME_MODIFICATION);
+				fileTime.Add(timeStep);
 			}
 		}
 	}
@@ -240,7 +239,7 @@ wxString KPluginManagerBethesda::GetPluginTypeName(bool isMaster, bool isLight) 
 {
 	if (isMaster && isLight)
 	{
-		return wxString::Format("%s (%s)", T("PluginManager.PluginType.Master"), T("PluginManager.PluginType.Light"));
+		return V("$T(PluginManager.PluginType.Master) ($T(PluginManager.PluginType.Light))");
 	}
 	if (isMaster)
 	{
@@ -261,21 +260,20 @@ void KPluginManagerBethesda::Load()
 {
 	Clear();
 
-	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
+	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
 	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
 
 	for (const KModListPluginEntry& listEntry: loadOrder.GetPlugins())
 	{
 		// Find whether plugin with this name exist
-		wxString nameL = KxString::ToLower(listEntry.GetPluginName());
-		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KFileTreeNode* item)
+		auto it = std::find_if(files.begin(), files.end(), [&listEntry](const KFileTreeNode* item)
 		{
-			return KxString::ToLower(item->GetName()) == nameL;
+			return KComparator::KEqual(item->GetName(), listEntry.GetPluginName());
 		});
 
-		if (!nameL.StartsWith('#') && it != files.end())
+		if (it != files.end())
 		{
-			if (CheckExtension(nameL))
+			if (CheckExtension(listEntry.GetPluginName()))
 			{
 				auto& entry = GetEntries().emplace_back(NewPluginEntry(listEntry.GetPluginName(), false));
 				entry->SetFullPath((*it)->GetFullPath());
@@ -287,7 +285,7 @@ void KPluginManagerBethesda::Load()
 	// Load files form 'Data' folder. Don't add already existing
 	for (const KFileTreeNode* fileNode: files)
 	{
-		if (CheckExtension(KxString::ToLower(fileNode->GetName())))
+		if (CheckExtension(fileNode->GetName()))
 		{
 			if (FindPluginByName(fileNode->GetName()) == NULL)
 			{
@@ -335,9 +333,12 @@ KPluginEntry::RefVector KPluginManagerBethesda::GetDependentPlugins(const KPlugi
 }
 const KModEntry* KPluginManagerBethesda::FindParentMod(const KPluginEntry& pluginEntry) const
 {
-	const KModEntry* owningMod = NULL;
-	KModManager::GetDispatcher().ResolveLocationPath(GetPluginRootRelativePath(pluginEntry.GetName()), &owningMod);
-	return owningMod;
+	const KFileTreeNode* node = KModManager::GetDispatcher().ResolveLocation(GetPluginRootRelativePath(pluginEntry.GetName()));
+	if (node)
+	{
+		return &node->GetMod();
+	}
+	return NULL;
 }
 
 intptr_t KPluginManagerBethesda::GetPluginPriority(const KPluginEntry& modEntry) const

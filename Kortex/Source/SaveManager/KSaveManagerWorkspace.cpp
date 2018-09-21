@@ -72,11 +72,13 @@ void KSaveManagerWorkspace::CreateViewPane()
 void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSMSaveFile* saveEntry)
 {
 	KPluginManager* pluginManager = KPluginManager::GetInstance();
-	KPluginManagerWorkspace* pPluginWorkspace = KPluginManagerWorkspace::GetInstance();
-	bool isMultiSelect = m_ViewModel->GetView()->GetSelectedItemsCount() > 1;
+	KPluginManagerWorkspace* pluginWorkspace = KPluginManagerWorkspace::GetInstance();
+	
+	const size_t selectedItemCount = m_ViewModel->GetView()->GetSelectedItemsCount();
+	const bool isMultiSelect = selectedItemCount > 1;
 
 	// Plugins list
-	if (pluginManager && pPluginWorkspace && saveEntry)
+	if (pluginManager && pluginWorkspace && saveEntry)
 	{
 		const KxStringVector& list = saveEntry->GetPluginsList();
 
@@ -87,7 +89,7 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSMSaveFile* s
 		for (const wxString& name: list)
 		{
 			KxMenuItem* item = pluginsListMenu->Add(new KxMenuItem(name));
-			item->SetBitmap(KGetBitmap(pPluginWorkspace->GetStatusImageForPlugin(pluginManager->FindPluginByName(name))));
+			item->SetBitmap(KGetBitmap(pluginWorkspace->GetStatusImageForPlugin(pluginManager->FindPluginByName(name))));
 		}
 	}
 
@@ -164,7 +166,8 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSMSaveFile* s
 	}
 	// Remove
 	{
-		menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		item->Enable(selectedItemCount != 0);
 	}
 }
 

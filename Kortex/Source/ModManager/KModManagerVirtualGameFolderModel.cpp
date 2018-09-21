@@ -43,7 +43,8 @@ void KModManagerVirtualGameFolderModel::OnInitControl()
 		info.GetRenderer()->SetOptionEnabled(KxDataViewRendererOptions::KxDVR_ALLOW_BITMAP_SCALEDOWN);
 	}
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_INERT, 300, flags);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(T("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_EDITABLE, 300, flags);
+		m_PartOfEditor = info.GetEditor();
 		info.GetColumn()->SortAscending();
 	}
 	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 100, flags);
@@ -102,6 +103,25 @@ void KModManagerVirtualGameFolderModel::GetChildren(const KxDataViewItem& item, 
 
 void KModManagerVirtualGameFolderModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 {
+	if (const KFileTreeNode* node = GetNode(item))
+	{
+		switch (column->GetID())
+		{
+			case ColumnID::PartOf:
+			{
+				KxStringVector items(1, node->GetMod().GetName());
+				for (const KFileTreeNode& node: node->GetAlternatives())
+				{
+					items.push_back(node.GetMod().GetName());
+				}
+				m_PartOfEditor->SetItems(items);
+
+				// Item index
+				value = 0;
+				break;
+			}
+		};
+	}
 }
 void KModManagerVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 {

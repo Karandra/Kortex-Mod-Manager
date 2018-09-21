@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "KFileTreeNode.h"
 #include "KEvents.h"
-#include "KComparator.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
 class KModEntry;
@@ -56,22 +55,13 @@ class KModManagerDispatcher
 		};
 		using IterationFunctor = std::function<bool(const KModEntry&)>;
 
-		struct FinderHashComparator
-		{
-			bool operator()(const wxString& lhs, const wxString& rhs) const
-			{
-				return KComparator::KEqual(lhs, rhs, true);
-			}
-		};
-		using FinderHash = std::unordered_set<wxString, std::hash<wxString>, FinderHashComparator>;
-
 	private:
 		KFileTreeNode m_VirtualTree;
 		bool m_VirtualTreeNeedsRefresh = false;
 
 	private:
-		KModEntry* IterateOverModsEx(const ModsVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly, bool realMode) const;
-		bool CheckConditionsAndCallFunctor(const IterationFunctor& functor, const KModEntry& modEntry, bool activeOnly, bool realMode) const;
+		KModEntry* IterateOverModsEx(const ModsVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly) const;
+		bool CheckConditionsAndCallFunctor(const IterationFunctor& functor, const KModEntry& modEntry, bool activeOnly) const;
 
 		void BuildTreeBranch(const ModsVector& mods, KFileTreeNode::Vector& children, const KFileTreeNode* rootNode, KFileTreeNode::RefVector& directories);
 		void RebuildTreeIfNeeded() const;
@@ -97,15 +87,18 @@ class KModManagerDispatcher
 		// A different variant of 'ResolveLocation'. If 'relativePath' is not found, returns it as relative to write target.
 		// Returns absolute paths unchanged.
 		wxString ResolveLocationPath(const wxString& relativePath, const KModEntry** owningMod = NULL) const;
-		
-		// Searches files in specified node. This can be 'KModEntry' tree or virtual tree.
-		KFileTreeNode::CRefVector FindFiles(const KFileTreeNode& rootNode, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, FinderHash* hash = NULL) const;
-		
-		// Searches files in specified mod. It's basically short-circuit to previous function with mod's file tree.
-		KFileTreeNode::CRefVector FindFiles(const KModEntry& modEntry, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, FinderHash* hash = NULL) const;
+
+		// Searches virtual tree for specified file given its fill path.
+		const KFileTreeNode* BackTrackFullPath(const wxString& fullPath) const;
 		
 		// Searches files in virtual tree in specified directory.
-		KFileTreeNode::CRefVector FindFiles(const wxString& relativePath, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, FinderHash* hash = NULL) const;
+		KFileTreeNode::CRefVector FindFiles(const wxString& relativePath, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, bool activeOnly = false) const;
+
+		// Searches files in specified node. This can be 'KModEntry' tree or virtual tree.
+		KFileTreeNode::CRefVector FindFiles(const KFileTreeNode& rootNode, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, bool activeOnly = false) const;
+		
+		// Searches files in specified mod. It's basically short-circuit to previous function with mod's file tree.
+		KFileTreeNode::CRefVector FindFiles(const KModEntry& modEntry, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false) const;
 		
 		// Searches for collisions of file specified by 'relativePath' for a mod.
 		CollisionVector FindCollisions(const KModEntry& scannedMod, const wxString& relativePath) const;

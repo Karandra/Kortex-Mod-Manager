@@ -10,7 +10,7 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 	{
 		if (relativePath.IsEmpty() || *relativePath.begin() == wxS('\\') || *relativePath.begin() == wxS('/') || *relativePath.begin() == wxS('.'))
 		{
-			return rootNode.GetRootNode();
+			return &rootNode;
 		}
 	}
 
@@ -66,6 +66,44 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 		}
 	}
 	return NULL;
+}
+
+const KFileTreeNode* KFileTreeNode::WalkTree(const TreeWalker& functor) const
+{
+	std::function<const KFileTreeNode*(const KFileTreeNode::Vector&)> Recurse =
+		[&Recurse, &functor](const KFileTreeNode::Vector& children) -> const KFileTreeNode*
+	{
+		for (const KFileTreeNode& node: children)
+		{
+			if (!functor(node))
+			{
+				return &node;
+			}
+
+			if (node.HasChildren())
+			{
+				Recurse(node.GetChildren());
+			}
+		}
+		return NULL;
+	};
+	return Recurse(m_Children);
+}
+const KFileTreeNode* KFileTreeNode::WalkToRoot(const TreeWalker& functor) const
+{
+	const KFileTreeNode* node = this;
+	while (node && !node->IsRootNode() && node->IsOK())
+	{
+		if (functor(*node))
+		{
+			node = node->GetParent();
+		}
+		else
+		{
+			break;
+		}
+	}
+	return node;
 }
 
 wxString KFileTreeNode::GetRelativePath() const

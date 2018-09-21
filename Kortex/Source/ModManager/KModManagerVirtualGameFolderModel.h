@@ -10,10 +10,11 @@ class KFileTreeNode;
 class KModManagerVirtualGameFolderModel: public KxDataViewModelExBase<KxDataViewModel>
 {
 	private:
-		wxString m_SearchMask;
-
 		const KFileTreeNode::Vector* m_TreeItems = NULL;
 		KFileTreeNode::Vector m_FoundItems;
+
+		wxString m_SearchMask;
+		KxDataViewComboBoxEditor* m_PartOfEditor = NULL;
 
 	private:
 		virtual void OnInitControl() override;

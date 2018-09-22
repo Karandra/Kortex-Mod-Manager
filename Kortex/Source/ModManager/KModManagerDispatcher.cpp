@@ -18,7 +18,27 @@ namespace
 			return KComparator::KEqual(lhs, rhs, true);
 		}
 	};
-	using FinderHash = std::unordered_map<wxString, size_t, std::hash<wxString>, FinderHashComparator>;
+	struct FinderHashHasher
+	{
+		// From Boost
+		template<class T> static void hash_combine(size_t& seed, const T& v)
+		{
+			std::hash<T> hasher;
+			seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+		}
+
+		size_t operator()(const wxString& value) const
+		{
+			size_t hashValue = 0;
+			for (const wxUniChar& c: value)
+			{
+				hash_combine(hashValue, KxString::ToLower(c).GetValue());
+			}
+			return hashValue;
+		}
+	};
+
+	using FinderHash = std::unordered_map<wxString, size_t, FinderHashHasher, FinderHashComparator>;
 
 	void FindFilesInTree(KFileTreeNode::CRefVector& nodes,
 						 const KFileTreeNode& rootNode,
@@ -148,7 +168,7 @@ void KModManagerDispatcher::BuildTreeBranch(const ModsVector& mods, KFileTreeNod
 
 				for (const KFileTreeNode& node: searchNode->GetChildren())
 				{
-					auto hashIt = hash.emplace(node.GetName(), 0);
+					auto hashIt = hash.try_emplace(node.GetName(), 0);
 					if (hashIt.second)
 					{
 						KFileTreeNode& newNode = children.emplace_back(KFileTreeNode(modEntry, node.GetItem(), rootNode));

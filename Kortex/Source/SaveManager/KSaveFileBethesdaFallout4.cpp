@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "KSMSaveFileBethesdaFallout4.h"
-#include "KSMSaveFile.h"
+#include "KSaveFileBethesdaFallout4.h"
+#include "KSaveFile.h"
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
 
-wxImage KSMSaveFileBethesdaFallout4::ReadImageRGBA(const std::vector<unsigned char>& RGBAData, int width, int height)
+wxImage KSaveFileBethesdaFallout4::ReadImageRGBA(const std::vector<unsigned char>& RGBAData, int width, int height)
 {
 	// Create image with correct size and copy RGB and alpha values separately
 	wxImage image(width, height);
@@ -31,7 +31,7 @@ wxImage KSMSaveFileBethesdaFallout4::ReadImageRGBA(const std::vector<unsigned ch
 	return image;
 }
 
-bool KSMSaveFileBethesdaFallout4::DoReadData()
+bool KSaveFileBethesdaFallout4::DoReadData()
 {
 	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (file.IsOk())

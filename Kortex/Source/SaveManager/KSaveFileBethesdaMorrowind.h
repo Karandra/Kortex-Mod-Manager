@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "KSMSaveFile.h"
+#include "KSaveFile.h"
 
-class KSMSaveFileBethesdaMorrowind: public KSMSaveFile
+class KSaveFileBethesdaMorrowind: public KSaveFile
 {
 	private:
 		KLabeledValueArray m_BasicInfo;
@@ -13,8 +13,8 @@ class KSMSaveFileBethesdaMorrowind: public KSMSaveFile
 		virtual bool DoReadData() override;
 
 	public:
-		KSMSaveFileBethesdaMorrowind(const wxString& filePath)
-			:KSMSaveFile(filePath)
+		KSaveFileBethesdaMorrowind(const wxString& filePath)
+			:KSaveFile(filePath)
 		{
 		}
 

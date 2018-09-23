@@ -1,12 +1,12 @@
 #pragma once
 #include "stdafx.h"
-#include "ModManager/KModManagerTagSelector.h"
+#include "ModManager/KModTagsSelector.h"
 #include "KLabeledValue.h"
 class KPackageCreatorController;
 class KModTag;
 class KxDataViewComboBox;
 
-class KPCInfoTagsListModel: public KModManagerTagSelectorCB
+class KPCInfoTagsListModel: public KModTagsSelectorCB
 {
 	private:
 		KPackageCreatorController* m_Controller = NULL;

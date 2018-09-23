@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "KSMSaveFileBethesdaFalloutNV.h"
-#include "KSMSaveFile.h"
+#include "KSaveFileBethesdaFalloutNV.h"
+#include "KSaveFile.h"
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
 
-bool KSMSaveFileBethesdaFalloutNV::DoReadData()
+bool KSaveFileBethesdaFalloutNV::DoReadData()
 {
 	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (file.IsOk())

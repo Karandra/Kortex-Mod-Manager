@@ -1,14 +1,23 @@
 #include "stdafx.h"
 #include "KIPCRequest.h"
 
-//////////////////////////////////////////////////////////////////////////
-KIPCRequest_CreateMirrorVFS::KIPCRequest_CreateMirrorVFS(const wxString& source, const wxString& target)
-	:m_Source(source), m_Target(target)
+namespace KIPCRequestNS
 {
-}
+	const wxChar* TypeName[(size_t)Type::COUNT] =
+	{
+		wxS("None"),
 
-//////////////////////////////////////////////////////////////////////////
-KIPCRequest_CreateConvergenceVFS::KIPCRequest_CreateConvergenceVFS(const wxString& mountPoint, const wxString& writeTarget, bool canDeleteInVirtualFolder)
-	: m_MountPoint(mountPoint), m_WriteTarget(writeTarget), m_CanDeleteInVirtualFolder(canDeleteInVirtualFolder)
-{
-}
+		wxS("InitVFSService"),
+		wxS("UninstallVFSService"),
+
+		wxS("EnableVFS"),
+		wxS("VFSStateChanged"),
+
+		wxS("CreateMirrorVFS"),
+		wxS("ClearMirrorVFSList"),
+
+		wxS("CreateConvergenceVFS"),
+		wxS("AddConvergenceVirtualFolder"),
+		wxS("ClearConvergenceVirtualFolders"),
+	};
+};

@@ -2,14 +2,14 @@
 #include "KSaveManagerConfig.h"
 #include "KProfile.h"
 #include "SaveManager/KSaveManager.h"
-#include "SaveManager/KSMSaveFile.h"
-#include "SaveManager/KSMSaveFileBethesdaMorrowind.h"
-#include "SaveManager/KSMSaveFileBethesdaOblivion.h"
-#include "SaveManager/KSMSaveFileBethesdaSkyrim.h"
-#include "SaveManager/KSMSaveFileBethesdaSkyrimSE.h"
-#include "SaveManager/KSMSaveFileBethesdaFallout3.h"
-#include "SaveManager/KSMSaveFileBethesdaFalloutNV.h"
-#include "SaveManager/KSMSaveFileBethesdaFallout4.h"
+#include "SaveManager/KSaveFile.h"
+#include "SaveManager/KSaveFileBethesdaMorrowind.h"
+#include "SaveManager/KSaveFileBethesdaOblivion.h"
+#include "SaveManager/KSaveFileBethesdaSkyrim.h"
+#include "SaveManager/KSaveFileBethesdaSkyrimSE.h"
+#include "SaveManager/KSaveFileBethesdaFallout3.h"
+#include "SaveManager/KSaveFileBethesdaFalloutNV.h"
+#include "SaveManager/KSaveFileBethesdaFallout4.h"
 #include "KApp.h"
 #include "KAux.h"
 
@@ -42,35 +42,35 @@ KSaveManager* KSaveManagerConfig::GetManager() const
 	return m_Manager;
 }
 
-KSMSaveFile* KSaveManagerConfig::QuerySaveFile(const wxString& fullPath) const
+KSaveFile* KSaveManagerConfig::QuerySaveFile(const wxString& fullPath) const
 {
 	if (GetSaveFileFormat() == "BethesdaMorrowind")
 	{
-		return new KSMSaveFileBethesdaMorrowind(fullPath);
+		return new KSaveFileBethesdaMorrowind(fullPath);
 	}
 	if (GetSaveFileFormat() == "BethesdaOblivion")
 	{
-		return new KSMSaveFileBethesdaOblivion(fullPath);
+		return new KSaveFileBethesdaOblivion(fullPath);
 	}
 	if (GetSaveFileFormat() == "BethesdaSkyrim")
 	{
-		return new KSMSaveFileBethesdaSkyrim(fullPath);
+		return new KSaveFileBethesdaSkyrim(fullPath);
 	}
 	if (GetSaveFileFormat() == "BethesdaSkyrimSE")
 	{
-		return new KSMSaveFileBethesdaSkyrimSE(fullPath);
+		return new KSaveFileBethesdaSkyrimSE(fullPath);
 	}
 	if (GetSaveFileFormat() == "BethesdaFallout3")
 	{
-		return new KSMSaveFileBethesdaFallout3(fullPath);
+		return new KSaveFileBethesdaFallout3(fullPath);
 	}
 	if (GetSaveFileFormat() == "BethesdaFalloutNV")
 	{
-		return new KSMSaveFileBethesdaFalloutNV(fullPath);
+		return new KSaveFileBethesdaFalloutNV(fullPath);
 	}
 	if (GetSaveFileFormat() == "BethesdaFallout4")
 	{
-		return new KSMSaveFileBethesdaFallout4(fullPath);
+		return new KSaveFileBethesdaFallout4(fullPath);
 	}
 	if (GetSaveFileFormat() == "Sacred2")
 	{

@@ -12,7 +12,10 @@ class KVFSEvent: public KEvent
 			:KEvent(type)
 		{
 		}
-		KVFSEvent(bool activated);
+		KVFSEvent(wxEventType type, bool activated)
+			:KEvent(type), m_Activated(activated)
+		{
+		}
 
 		KVFSEvent* Clone() const override
 		{

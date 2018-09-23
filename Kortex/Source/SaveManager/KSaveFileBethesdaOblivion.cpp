@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "KSMSaveFileBethesdaOblivion.h"
-#include "KSMSaveFile.h"
+#include "KSaveFileBethesdaOblivion.h"
+#include "KSaveFile.h"
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
 
-bool KSMSaveFileBethesdaOblivion::DoReadData()
+bool KSaveFileBethesdaOblivion::DoReadData()
 {
 	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (file.IsOk())

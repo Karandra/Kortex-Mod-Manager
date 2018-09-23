@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "IPC/KIPC.h"
-class KIPCRequest;
+#include "IPC/KIPCRequest.h"
 class KIPCClient;
 class KIPCServer;
 
@@ -22,7 +22,7 @@ class KIPCConnection: public wxConnection
 		KIPCClient* m_Client = NULL;
 
 	private:
-		typedef bool(KIPCConnection::*SendFunctionType)(const wxString&, const void*, size_t, wxIPCFormat);
+		using SendFunctionType = bool(KIPCConnection::*)(const wxString&, const void*, size_t, wxIPCFormat);
 		template<class T> bool SendRequestBase(const T& request, SendFunctionType func)
 		{
 			static_assert(std::is_trivially_copyable_v<T>, "T is not trivially copyable");
@@ -55,15 +55,15 @@ class KIPCConnection: public wxConnection
 			return m_Client;
 		}
 
-		template<class T = KIPCRequest> const T* ReceiveRequest(const wxString& item, const void* data, size_t nSize) const
+		template<class T> const T* ReceiveRequest(const wxString& item, const void* data, size_t dataSize) const
 		{
 			static_assert(std::is_trivially_copyable<T>::value, "T is not trivially copyable");
 			wxLogInfo("Client: Receive request \"%s\"", item);
 
-			if (nSize == sizeof(T) && !item.IsEmpty())
+			if (dataSize == sizeof(T) && !item.IsEmpty())
 			{
 				const KIPCRequest* baseRequest = reinterpret_cast<const KIPCRequest*>(data);
-				if (baseRequest && T::GetClassName() == item)
+				if (baseRequest && item == T::GetClassName())
 				{
 					return static_cast<const T*>(baseRequest);
 				}

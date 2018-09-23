@@ -1,17 +1,17 @@
 #include "stdafx.h"
-#include "KSMSaveFile.h"
+#include "KSaveFile.h"
 #include "KAux.h"
 
-KSMSaveFile::KSMSaveFile(const wxString& filePath)
+KSaveFile::KSaveFile(const wxString& filePath)
 	:m_FileInfo(filePath)
 {
 	m_FileInfo.UpdateInfo();
 }
-KSMSaveFile::~KSMSaveFile()
+KSaveFile::~KSaveFile()
 {
 }
 
-const wxBitmap& KSMSaveFile::CreateThumbBitmap(int width, int height)
+const wxBitmap& KSaveFile::CreateThumbBitmap(int width, int height)
 {
 	m_Thumb = KAux::ScaleImageAspect(GetBitmap(), width, height);
 	return m_Thumb;

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "KIPCServer.h"
 #include "KIPCConnection.h"
-#include "KIPCRequest.h"
 #include "KApp.h"
 #include "VFS/KVirtualFileSystemService.h"
 #include "VFS/KVirtualFileSystemMirror.h"
@@ -35,7 +34,7 @@ void KIPCServer::OnDisconnect()
 	KApp::Get().ExitApp();
 }
 
-void KIPCServer::OnInitService(const KIPCRequest_InitVFSService& config)
+void KIPCServer::OnInitService(const KIPCRequestNS::InitVFSService& config)
 {
 	m_Service = std::make_unique<KVirtualFileSystemService>();
 	if (m_Service->Init())
@@ -60,7 +59,7 @@ void KIPCServer::OnInitService(const KIPCRequest_InitVFSService& config)
 		// Init failed
 	}
 }
-void KIPCServer::OnUninstallService(const KIPCRequest_UninstallVFSService& config)
+void KIPCServer::OnUninstallService(const KIPCRequestNS::UninstallVFSService& config)
 {
 	if (m_Service)
 	{
@@ -68,7 +67,7 @@ void KIPCServer::OnUninstallService(const KIPCRequest_UninstallVFSService& confi
 		m_Service->Uninstall();
 	}
 }
-void KIPCServer::OnCreateConvergenceVFS(const KIPCRequest_CreateConvergenceVFS& config)
+void KIPCServer::OnCreateConvergenceVFS(const KIPCRequestNS::CreateConvergenceVFS& config)
 {
 	m_Convergence = std::make_unique<KVirtualFileSystemConvergence>(GetServiceVFS(), config.GetMountPoint(), config.GetWriteTarget());
 	m_Convergence->SetCanDeleteInVirtualFolder(config.CanDeleteInVirtualFolder());
@@ -78,30 +77,30 @@ void KIPCServer::OnCreateConvergenceVFS(const KIPCRequest_CreateConvergenceVFS& 
 	KxFile(config.GetMountPoint()).CreateFolder();
 	KxFile(config.GetWriteTarget()).CreateFolder();
 }
-void KIPCServer::OnAddConvergenceVirtualFolder(const KIPCRequest_AddConvergenceVirtualFolder& config)
+void KIPCServer::OnAddConvergenceVirtualFolder(const KIPCRequestNS::AddConvergenceVirtualFolder& config)
 {
 	if (m_Convergence)
 	{
 		m_Convergence->AddVirtualFolder(config.GetPath());
 	}
 }
-void KIPCServer::OnClearConvergenceVirtualFolders(const KIPCRequest_ClearConvergenceVirtualFolders& config)
+void KIPCServer::OnClearConvergenceVirtualFolders(const KIPCRequestNS::ClearConvergenceVirtualFolders& config)
 {
 	if (m_Convergence)
 	{
 		m_Convergence->ClearVirtualFolders();
 	}
 }
-void KIPCServer::OnCreateMirrorVFS(const KIPCRequest_CreateMirrorVFS& config)
+void KIPCServer::OnCreateMirrorVFS(const KIPCRequestNS::CreateMirrorVFS& config)
 {
 	auto& mirror = m_MirrorVFSList.emplace_back(std::make_unique<KVirtualFileSystemMirror>(GetServiceVFS(), config.GetTarget(), config.GetSource()));
 	mirror->Bind(KVFSEVT_UNMOUNTED, &KIPCServer::OnVFSUnmounted, this);
 }
-void KIPCServer::OnClearMirrorVFSList(const KIPCRequest_ClearMirrorVFSList& config)
+void KIPCServer::OnClearMirrorVFSList(const KIPCRequestNS::ClearMirrorVFSList& config)
 {
 	m_MirrorVFSList.clear();
 }
-void KIPCServer::OnEnableVFS(const KIPCRequest_EnableVFS& config)
+void KIPCServer::OnEnableVFS(const KIPCRequestNS::EnableVFS& config)
 {
 	config.ShouldEnable() ? EnableVFS() : DisableVFS();
 }
@@ -115,7 +114,7 @@ void KIPCServer::OnVFSUnmounted(wxNotifyEvent& event)
 
 		if (m_Connection)
 		{
-			m_Connection->SendToClient(KIPCRequest_VFSStateChanged(false, event.GetInt()));
+			m_Connection->SendToClient(KIPCRequestNS::VFSStateChanged(false, event.GetInt()));
 		}
 	}
 }
@@ -189,7 +188,7 @@ int KIPCServer::EnableVFS()
 		// Notify client
 		if (m_Connection)
 		{
-			m_Connection->SendToClient(KIPCRequest_VFSStateChanged(IsVFSEnabled(), status));
+			m_Connection->SendToClient(KIPCRequestNS::VFSStateChanged(IsVFSEnabled(), status));
 		}
 		return status;
 	}

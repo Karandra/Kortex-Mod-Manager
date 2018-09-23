@@ -2,7 +2,7 @@
 #include "KSaveManagerWorkspace.h"
 #include "KSaveManager.h"
 #include "KSaveManagerListModel.h"
-#include "KSMSaveFile.h"
+#include "KSaveFile.h"
 #include "UI/KImageViewerDialog.h"
 #include "Profile/KProfile.h"
 #include "PluginManager/KPluginManager.h"
@@ -44,6 +44,7 @@ bool KSaveManagerWorkspace::OnCreateWorkspace()
 
 	// Load options
 	KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_SavesListViewOptions);
+	m_ViewModel->UpdateRowHeight();
 
 	const KSaveManagerConfig* profileConfig = KSaveManagerConfig::GetInstance();
 	m_ActiveFilters.clear();
@@ -69,7 +70,7 @@ void KSaveManagerWorkspace::CreateViewPane()
 	m_ViewModel->Create(this);
 	m_ViewModel->SetDataVector();
 }
-void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSMSaveFile* saveEntry)
+void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSaveFile* saveEntry)
 {
 	KPluginManager* pluginManager = KPluginManager::GetInstance();
 	KPluginManagerWorkspace* pluginWorkspace = KPluginManagerWorkspace::GetInstance();
@@ -208,7 +209,7 @@ void KSaveManagerWorkspace::FiltersMenu_SpecificFilter(KxMenuEvent& event)
 	LoadData();
 }
 
-void KSaveManagerWorkspace::OnSyncPluginsList(const KSMSaveFile* saveEntry)
+void KSaveManagerWorkspace::OnSyncPluginsList(const KSaveFile* saveEntry)
 {
 	if (KPluginManager* manager = KPluginManager::GetInstance())
 	{
@@ -221,7 +222,7 @@ void KSaveManagerWorkspace::OnSyncPluginsList(const KSMSaveFile* saveEntry)
 		}
 	}
 }
-void KSaveManagerWorkspace::OnSavePluginsList(const KSMSaveFile* saveEntry)
+void KSaveManagerWorkspace::OnSavePluginsList(const KSaveFile* saveEntry)
 {
 	KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_SAVE);
 	dialog.SetDefaultExtension("txt");
@@ -234,7 +235,7 @@ void KSaveManagerWorkspace::OnSavePluginsList(const KSMSaveFile* saveEntry)
 		KxTextFile::WriteToFile(dialog.GetResult(), saveEntry->GetPluginsList());
 	}
 }
-void KSaveManagerWorkspace::OnRemoveSave(KSMSaveFile* saveEntry)
+void KSaveManagerWorkspace::OnRemoveSave(KSaveFile* saveEntry)
 {
 	if (saveEntry)
 	{
@@ -292,7 +293,7 @@ void KSaveManagerWorkspace::LoadData()
 	m_ViewModel->SetDataVector(KSaveManagerConfig::GetInstance()->GetSavesFolder(), tFilters);
 }
 
-void KSaveManagerWorkspace::ProcessSelection(const KSMSaveFile* saveEntry)
+void KSaveManagerWorkspace::ProcessSelection(const KSaveFile* saveEntry)
 {
 	const int statusIndex = 1;
 	KMainWindow* mainWindow = KMainWindow::GetInstance();
@@ -310,7 +311,7 @@ void KSaveManagerWorkspace::ProcessSelection(const KSMSaveFile* saveEntry)
 		}
 	}
 }
-void KSaveManagerWorkspace::ProcessContextMenu(const KSMSaveFile* saveEntry)
+void KSaveManagerWorkspace::ProcessContextMenu(const KSaveFile* saveEntry)
 {
 	KxMenu menu;
 	CreateContextMenu(menu, saveEntry);

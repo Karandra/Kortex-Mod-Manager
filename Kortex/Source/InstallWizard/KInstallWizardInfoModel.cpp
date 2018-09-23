@@ -3,7 +3,7 @@
 #include "KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorPageComponents.h"
 #include "ModManager/KModManager.h"
-#include "ModManager/KModManagerTagSelector.h"
+#include "ModManager/KModTagsSelector.h"
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "KApp.h"
@@ -206,7 +206,7 @@ void KInstallWizardInfoModel::OnActivateItem(KxDataViewEvent& event)
 			}
 			case KIWI_TYPE_TAGS:
 			{
-				KModManagerTagSelectorDialog dialog(GetViewTLW(), entry->Value.GetLabel());
+				KModTagsSelectorDialog dialog(GetViewTLW(), entry->Value.GetLabel());
 				dialog.SetDataVector(&GetTags(), m_InstallWizard.GetModEntry());
 				dialog.ShowModal();
 				if (dialog.IsModified())

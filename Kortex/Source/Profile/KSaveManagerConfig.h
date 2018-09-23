@@ -4,7 +4,7 @@
 #include <KxFramework/KxSingleton.h>
 class KProfile;
 class KSaveManager;
-class KSMSaveFile;
+class KSaveFile;
 
 class KSaveManagerConfig: public KxSingletonPtr<KSaveManagerConfig>
 {
@@ -23,7 +23,7 @@ class KSaveManagerConfig: public KxSingletonPtr<KSaveManagerConfig>
 
 	public:
 		KSaveManager* GetManager() const;
-		KSMSaveFile* QuerySaveFile(const wxString& fullPath) const;
+		KSaveFile* QuerySaveFile(const wxString& fullPath) const;
 
 		const wxString& GetSaveFileFormat() const
 		{

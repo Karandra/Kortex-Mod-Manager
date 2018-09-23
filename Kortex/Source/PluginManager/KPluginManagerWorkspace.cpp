@@ -10,7 +10,7 @@
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModEntry.h"
-#include "ModManager/KModManagerWorkspace.h"
+#include "ModManager/KModWorkspace.h"
 #include "KThemeManager.h"
 #include "KApp.h"
 #include "KAux.h"

@@ -41,7 +41,7 @@ void KSaveManagerListModel::OnInitControl()
 }
 void KSaveManagerListModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	const KSMSaveFile* entry = GetDataEntry(row);
+	const KSaveFile* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -57,7 +57,7 @@ void KSaveManagerListModel::GetEditorValueByRow(wxAny& value, size_t row, const 
 }
 void KSaveManagerListModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	KSMSaveFile* entry = GetDataEntry(row);
+	KSaveFile* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -88,7 +88,7 @@ void KSaveManagerListModel::GetValueByRow(wxAny& value, size_t row, const KxData
 }
 bool KSaveManagerListModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 {
-	KSMSaveFile* entry = GetDataEntry(row);
+	KSaveFile* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -157,13 +157,13 @@ bool KSaveManagerListModel::SetValueByRow(const wxAny& value, size_t row, const 
 }
 bool KSaveManagerListModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
-	const KSMSaveFile* entry = GetDataEntry(row);
+	const KSaveFile* entry = GetDataEntry(row);
 	return entry && entry->IsOK();
 }
 bool KSaveManagerListModel::CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const
 {
-	const KSMSaveFile* entry1 = GetDataEntry(row1);
-	const KSMSaveFile* entry2 = GetDataEntry(row2);
+	const KSaveFile* entry1 = GetDataEntry(row1);
+	const KSaveFile* entry2 = GetDataEntry(row2);
 
 	switch (column ? column->GetID() : ColumnID::ModificationDate)
 	{
@@ -190,7 +190,7 @@ void KSaveManagerListModel::OnSelectItem(KxDataViewEvent& event)
 void KSaveManagerListModel::OnActivateItem(KxDataViewEvent& event)
 {
 	KxDataViewColumn* column = event.GetColumn();
-	const KSMSaveFile* entry = GetDataEntry(GetRow(event.GetItem()));
+	const KSaveFile* entry = GetDataEntry(GetRow(event.GetItem()));
 	if (column && entry && entry->IsOK())
 	{
 		switch (column->GetID())
@@ -224,6 +224,7 @@ void KSaveManagerListModel::OnHeaderContextMenu(KxDataViewEvent& event)
 	if (GetView()->CreateColumnSelectionMenu(menu))
 	{
 		GetView()->OnColumnSelectionMenu(menu);
+		UpdateRowHeight();
 	}
 }
 void KSaveManagerListModel::OnCacheHint(KxDataViewEvent& event)
@@ -231,7 +232,7 @@ void KSaveManagerListModel::OnCacheHint(KxDataViewEvent& event)
 	for (size_t row = event.GetCacheHintFrom(); row <= event.GetCacheHintTo(); row++)
 	{
 		KxDataViewItem item = GetView()->GetMainWindow()->GetItemByRow(row);
-		KSMSaveFile* entry = GetDataEntry(GetRow(item));
+		KSaveFile* entry = GetDataEntry(GetRow(item));
 		if (entry && (!entry->IsOK() || !entry->HasThumbBitmap()))
 		{
 			entry->ReadData();
@@ -270,4 +271,20 @@ void KSaveManagerListModel::SetDataVector(const wxString& folder, const KxString
 		while (item.IsOK());
 	}
 	KDataViewVectorListModel::SetDataVector(&m_DataVector);
+}
+
+void KSaveManagerListModel::UpdateRowHeight()
+{
+	KxDataViewColumn* column = GetView()->GetColumnByID(ColumnID::Bitmap);
+	if (column)
+	{
+		if (column->IsExposed())
+		{
+			GetView()->SetUniformRowHeight(m_RowHeight);
+		}
+		else
+		{
+			GetView()->SetUniformRowHeight(-1);
+		}
+	}
 }

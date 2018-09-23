@@ -1,10 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "IPC/KIPC.h"
+#include "IPC/KIPCRequest.h"
 #include <KxFramework/KxSingleton.h>
 class KIPCConnection;
-class KIPCRequest_VFSStateChanged;
-class KIPCRequest_AddDownload;
 
 class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 {
@@ -22,7 +21,7 @@ class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 		virtual wxConnectionBase* OnMakeConnection() override;
 		virtual void OnDisconnect();
 
-		void OnVFSStateChanged(const KIPCRequest_VFSStateChanged& config);
+		void OnVFSStateChanged(const KIPCRequestNS::VFSStateChanged& config);
 
 	public:
 		KIPCClient();

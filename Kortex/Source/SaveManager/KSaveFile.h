@@ -3,7 +3,7 @@
 #include "KLabeledValue.h"
 #include <KxFramework/KxFileFinder.h>
 
-class KSMSaveFile: public wxClientData
+class KSaveFile: public wxClientData
 {
 	private:
 		KxFileFinderItem m_FileInfo;
@@ -15,8 +15,8 @@ class KSMSaveFile: public wxClientData
 		virtual bool DoReadData() = 0;
 
 	public:
-		KSMSaveFile(const wxString& filePath);
-		virtual ~KSMSaveFile();
+		KSaveFile(const wxString& filePath);
+		virtual ~KSaveFile();
 
 	public:
 		bool IsOK() const
@@ -70,4 +70,4 @@ class KSMSaveFile: public wxClientData
 			m_Thumb = wxNullBitmap;
 		}
 };
-typedef std::vector<std::unique_ptr<KSMSaveFile>> KSMSaveFileArray;
+typedef std::vector<std::unique_ptr<KSaveFile>> KSMSaveFileArray;

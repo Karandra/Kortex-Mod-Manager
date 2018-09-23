@@ -18,14 +18,14 @@ class KModEvent: public KEvent
 			:KEvent(type), m_Mod(&modEntry)
 		{
 		}
-		KModEvent(wxEventType type, const wxString& modID)
-			:KEvent(type)
-		{
-			wxNotifyEvent::SetString(modID);
-		}
 		KModEvent(wxEventType type, std::vector<KModEntry*> modsArray)
 			:KEvent(type), m_ModsArray(modsArray)
 		{
+		}
+		KModEvent(wxEventType type, const wxString& id)
+			:KEvent(type)
+		{
+			wxNotifyEvent::SetString(id);
 		}
 
 		KModEvent* Clone() const override
@@ -52,6 +52,7 @@ class KModEvent: public KEvent
 		{
 			return m_ModsArray;
 		}
+
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -61,9 +62,8 @@ wxDECLARE_EVENT(KEVT_MOD_INSTALLED, KModEvent);
 wxDECLARE_EVENT(KEVT_MOD_UNINSTALLING, KModEvent);
 wxDECLARE_EVENT(KEVT_MOD_UNINSTALLED, KModEvent);
 
-wxDECLARE_EVENT(KEVT_MOD_REORDERED, KModEvent);
-wxDECLARE_EVENT(KEVT_MODS_REORDERED, KModEvent);
-
 wxDECLARE_EVENT(KEVT_MOD_TOGGLED, KModEvent);
 wxDECLARE_EVENT(KEVT_MOD_CHANGED, KModEvent);
 wxDECLARE_EVENT(KEVT_MOD_FILES_CHANGED, KModEvent);
+
+wxDECLARE_EVENT(KEVT_MODS_REORDERED, KModEvent);

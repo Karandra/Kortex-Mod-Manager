@@ -21,7 +21,7 @@
 
 #include "ProgramManager/KProgramManager.h"
 #include "GameConfig/KGameConfigWorkspace.h"
-#include "ModManager/KModManagerWorkspace.h"
+#include "ModManager/KModWorkspace.h"
 #include "PackageManager/KPackageManagerWorkspace.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "ProgramManager/KProgramManagerWorkspace.h"
@@ -215,11 +215,11 @@ void KMainWindow::CreateMainWorkspaces()
 
 	// Add workspaces
 	AddWorkspace(new KGameConfigWorkspace(this))->CreateNow();
-	AddWorkspace(new KModManagerWorkspace(this))->CreateNow();
+	AddWorkspace(new KModWorkspace(this))->CreateNow();
 	AddWorkspace(new KPackageCreatorWorkspace(this));
 	AddWorkspace(new KPackageManagerWorkspace(this));
 	AddWorkspace(new KProgramManagerWorkspace(this));
-	CreatePluggableManagersWorkspaces(KModManagerWorkspace::GetInstance());
+	CreatePluggableManagersWorkspaces(KModWorkspace::GetInstance());
 
 	// Create toolbar button and assign menu to it
 	m_ToolBar->AddSeparator();

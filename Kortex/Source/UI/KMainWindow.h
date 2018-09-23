@@ -111,6 +111,10 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		{
 			return m_QuickToolBar;
 		}
+		KxStatusBarEx* GetStatusBar() const
+		{
+			return m_StatusBar;
+		}
 		KxMenu* GetManagersMenu() const
 		{
 			return m_ManagersMenu;

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KDataViewListModel.h"
-#include "KSMSaveFile.h"
+#include "KSaveFile.h"
 class KSaveManager;
 class KSaveManagerWorkspace;
 
@@ -41,7 +41,7 @@ class KSaveManagerListModel: public KDataViewVectorListModel<KSMSaveFileArray, K
 		void SetDataVector();
 		void SetDataVector(const wxString& folder, const KxStringVector& filtersList);
 
-		KSMSaveFile* GetDataEntry(size_t row) const
+		KSaveFile* GetDataEntry(size_t row) const
 		{
 			if (row < GetItemCount())
 			{
@@ -49,4 +49,6 @@ class KSaveManagerListModel: public KDataViewVectorListModel<KSMSaveFileArray, K
 			}
 			return NULL;
 		}
+
+		void UpdateRowHeight();
 };

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "KIPCClient.h"
 #include "KIPCConnection.h"
-#include "KIPCRequest.h"
 #include "KApp.h"
 #include "ModManager/KModManager.h"
 #include "PluginManager/KPluginManager.h"
@@ -60,7 +59,7 @@ void KIPCClient::OnDisconnect()
 	KLogEvent(T("VFSService.InstallFailed"), KLOG_CRITICAL).Send();
 }
 
-void KIPCClient::OnVFSStateChanged(const KIPCRequest_VFSStateChanged& config)
+void KIPCClient::OnVFSStateChanged(const KIPCRequestNS::VFSStateChanged& config)
 {
 	KApp::Get().CallAfter([config]()
 	{
@@ -69,7 +68,7 @@ void KIPCClient::OnVFSStateChanged(const KIPCRequest_VFSStateChanged& config)
 		int status = config.GetStatus();
 
 		// Send event before reloading 'KPluginManager'
-		KVFSEvent event(config.IsEnabled());
+		KVFSEvent event(KEVT_VFS_TOGGLED, config.IsEnabled());
 		event.SetInt(status);
 		event.Send();
 
@@ -99,7 +98,7 @@ KIPCClient::~KIPCClient()
 {
 	if (m_Connection)
 	{
-		m_Connection->StopAdvise(KIPCRequest_VFSStateChanged::GetClassName());
+		m_Connection->StopAdvise(KIPCRequestNS::VFSStateChanged::GetClassName());
 		m_Connection->Disconnect();
 	}
 }
@@ -109,7 +108,7 @@ bool KIPCClient::InitConnection()
 	CreateConnection();
 	if (m_Connection)
 	{
-		return m_Connection->StartAdvise(KIPCRequest_VFSStateChanged::GetClassName());
+		return m_Connection->StartAdvise(KIPCRequestNS::VFSStateChanged::GetClassName());
 	}
 	return false;
 }
@@ -129,7 +128,7 @@ bool KIPCClient::InitVFSService()
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequest_InitVFSService());
+		return m_Connection->SendToServer(KIPCRequestNS::InitVFSService());
 	}
 	return false;
 }
@@ -137,7 +136,7 @@ bool KIPCClient::UninstallVFSService()
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequest_UninstallVFSService());
+		return m_Connection->SendToServer(KIPCRequestNS::UninstallVFSService());
 	}
 	return false;
 }
@@ -146,7 +145,7 @@ bool KIPCClient::CreateVFS_Mirror(const wxString& source, const wxString& target
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequest_CreateMirrorVFS(source, target));
+		return m_Connection->SendToServer(KIPCRequestNS::CreateMirrorVFS(source, target));
 	}
 	return false;
 }
@@ -154,7 +153,7 @@ bool KIPCClient::MirrorVFS_ClearList()
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequest_ClearMirrorVFSList());
+		return m_Connection->SendToServer(KIPCRequestNS::ClearMirrorVFSList());
 	}
 	return false;
 }
@@ -164,10 +163,10 @@ bool KIPCClient::CreateVFS_Convergence(const wxString& source, const wxString& w
 	if (m_Connection)
 	{
 		bool isOK = false;
-		isOK = m_Connection->SendToServer(KIPCRequest_CreateConvergenceVFS(source, writeTarget, canDeleteInVirtualFolder));
+		isOK = m_Connection->SendToServer(KIPCRequestNS::CreateConvergenceVFS(source, writeTarget, canDeleteInVirtualFolder));
 		for (const wxString& path: virtualFolders)
 		{
-			m_Connection->SendToServer(KIPCRequest_AddConvergenceVirtualFolder(path));
+			m_Connection->SendToServer(KIPCRequestNS::AddConvergenceVirtualFolder(path));
 		}
 		return isOK;
 	}
@@ -177,7 +176,7 @@ bool KIPCClient::ConvergenceVFS_ClearVirtualFolders()
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequest_ClearConvergenceVirtualFolders());
+		return m_Connection->SendToServer(KIPCRequestNS::ClearConvergenceVirtualFolders());
 	}
 	return false;
 }
@@ -186,7 +185,7 @@ bool KIPCClient::EnableVFS()
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequest_EnableVFS(true));
+		return m_Connection->SendToServer(KIPCRequestNS::EnableVFS(true));
 	}
 	return false;
 }
@@ -194,7 +193,7 @@ bool KIPCClient::DisableVFS()
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequest_EnableVFS(false));
+		return m_Connection->SendToServer(KIPCRequestNS::EnableVFS(false));
 	}
 	return false;
 }

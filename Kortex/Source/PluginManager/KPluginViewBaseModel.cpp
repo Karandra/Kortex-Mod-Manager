@@ -6,7 +6,7 @@
 #include "KPluginReaderBethesda.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModEntry.h"
-#include "ModManager/KModManagerWorkspace.h"
+#include "ModManager/KModWorkspace.h"
 #include "ModManager/KModManagerModel.h"
 #include "Profile/KPluginManagerConfig.h"
 #include "UI/KMainWindow.h"
@@ -102,7 +102,7 @@ void KPluginViewBaseModel::OnSelectItem(KxDataViewEvent& event)
 
 	if (column && column->GetID() == ColumnID::PartOf)
 	{
-		KModManagerWorkspace* workspace = KModManagerWorkspace::GetInstance();
+		KModWorkspace* workspace = KModWorkspace::GetInstance();
 		wxWindowUpdateLocker lock(workspace);
 		workspace->HighlightMod();
 

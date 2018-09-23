@@ -22,44 +22,44 @@ bool KIPCConnection::OnPoke(const wxString& topic, const wxString& item, const v
 {
 	if constexpr(IsServer())
 	{
-		if (auto service = ReceiveRequest<KIPCRequest_InitVFSService>(item, data, nSize))
+		if (auto service = ReceiveRequest<KIPCRequestNS::InitVFSService>(item, data, nSize))
 		{
 			GetServer()->OnInitService(*service);
 			return true;
 		}
-		else if (auto pUninstall = ReceiveRequest<KIPCRequest_UninstallVFSService>(item, data, nSize))
+		else if (auto uninstall = ReceiveRequest<KIPCRequestNS::UninstallVFSService>(item, data, nSize))
 		{
-			GetServer()->OnUninstallService(*pUninstall);
+			GetServer()->OnUninstallService(*uninstall);
 			return true;
 		}
-		else if (auto pEnable = ReceiveRequest<KIPCRequest_EnableVFS>(item, data, nSize))
+		else if (auto enable = ReceiveRequest<KIPCRequestNS::EnableVFS>(item, data, nSize))
 		{
-			GetServer()->OnEnableVFS(*pEnable);
+			GetServer()->OnEnableVFS(*enable);
 			return true;
 		}
-		else if (auto mirror = ReceiveRequest<KIPCRequest_CreateMirrorVFS>(item, data, nSize))
+		else if (auto mirror = ReceiveRequest<KIPCRequestNS::CreateMirrorVFS>(item, data, nSize))
 		{
 			GetServer()->OnCreateMirrorVFS(*mirror);
 			return true;
 		}
-		else if (auto pMirrorClearList = ReceiveRequest<KIPCRequest_ClearMirrorVFSList>(item, data, nSize))
+		else if (auto mirrorClearList = ReceiveRequest<KIPCRequestNS::ClearMirrorVFSList>(item, data, nSize))
 		{
-			GetServer()->OnClearMirrorVFSList(*pMirrorClearList);
+			GetServer()->OnClearMirrorVFSList(*mirrorClearList);
 			return true;
 		}
-		else if (auto pConvergence = ReceiveRequest<KIPCRequest_CreateConvergenceVFS>(item, data, nSize))
+		else if (auto convergence = ReceiveRequest<KIPCRequestNS::CreateConvergenceVFS>(item, data, nSize))
 		{
-			GetServer()->OnCreateConvergenceVFS(*pConvergence);
+			GetServer()->OnCreateConvergenceVFS(*convergence);
 			return true;
 		}
-		else if (auto pConvergenceAddFolder = ReceiveRequest<KIPCRequest_AddConvergenceVirtualFolder>(item, data, nSize))
+		else if (auto convergenceAddFolder = ReceiveRequest<KIPCRequestNS::AddConvergenceVirtualFolder>(item, data, nSize))
 		{
-			GetServer()->OnAddConvergenceVirtualFolder(*pConvergenceAddFolder);
+			GetServer()->OnAddConvergenceVirtualFolder(*convergenceAddFolder);
 			return true;
 		}
-		else if (auto pConvergenceClearFolders = ReceiveRequest<KIPCRequest_ClearConvergenceVirtualFolders>(item, data, nSize))
+		else if (auto convergenceClearFolders = ReceiveRequest<KIPCRequestNS::ClearConvergenceVirtualFolders>(item, data, nSize))
 		{
-			GetServer()->OnClearConvergenceVirtualFolders(*pConvergenceClearFolders);
+			GetServer()->OnClearConvergenceVirtualFolders(*convergenceClearFolders);
 			return true;
 		}
 	}
@@ -69,7 +69,7 @@ bool KIPCConnection::OnAdvise(const wxString& topic, const wxString& item, const
 {
 	if constexpr(IsClient())
 	{
-		if (auto stateChanged = ReceiveRequest<KIPCRequest_VFSStateChanged>(item, data, nSize))
+		if (auto stateChanged = ReceiveRequest<KIPCRequestNS::VFSStateChanged>(item, data, nSize))
 		{
 			GetClient()->OnVFSStateChanged(*stateChanged);
 			return true;

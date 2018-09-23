@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "KSMSaveFile.h"
+#include "KSaveFile.h"
 
-class KSMSaveFileBethesdaFallout4: public KSMSaveFile
+class KSaveFileBethesdaFallout4: public KSaveFile
 {
 	public:
 		static wxImage ReadImageRGBA(const std::vector<unsigned char>& RGBAData, int width, int height);
@@ -16,8 +16,8 @@ class KSMSaveFileBethesdaFallout4: public KSMSaveFile
 		virtual bool DoReadData() override;
 
 	public:
-		KSMSaveFileBethesdaFallout4(const wxString& filePath)
-			:KSMSaveFile(filePath)
+		KSaveFileBethesdaFallout4(const wxString& filePath)
+			:KSaveFile(filePath)
 		{
 		}
 

@@ -1,17 +1,10 @@
 #pragma once
 #include "stdafx.h"
 #include "IPC/KIPC.h"
+#include "IPC/KIPCRequest.h"
 #include "VFS/KVirtualFileSystemMirror.h"
 #include <KxFramework/KxSingleton.h>
 class KIPCConnection;
-class KIPCRequest_InitVFSService;
-class KIPCRequest_UninstallVFSService;
-class KIPCRequest_CreateMirrorVFS;
-class KIPCRequest_ClearMirrorVFSList;
-class KIPCRequest_CreateConvergenceVFS;
-class KIPCRequest_AddConvergenceVirtualFolder;
-class KIPCRequest_ClearConvergenceVirtualFolders;
-class KIPCRequest_EnableVFS;
 class KVirtualFileSystemService;
 class KVirtualFileSystemConvergence;
 
@@ -35,14 +28,14 @@ class KIPCServer: public wxServer, public KxSingleton<KIPCServer>
 		virtual wxConnectionBase* OnAcceptConnection(const wxString& topic) override;
 		virtual void OnDisconnect();
 
-		void OnInitService(const KIPCRequest_InitVFSService& config);
-		void OnUninstallService(const KIPCRequest_UninstallVFSService& config);
-		void OnCreateConvergenceVFS(const KIPCRequest_CreateConvergenceVFS& config);
-		void OnClearConvergenceVirtualFolders(const KIPCRequest_ClearConvergenceVirtualFolders& config);
-		void OnAddConvergenceVirtualFolder(const KIPCRequest_AddConvergenceVirtualFolder& config);
-		void OnCreateMirrorVFS(const KIPCRequest_CreateMirrorVFS& config);
-		void OnClearMirrorVFSList(const KIPCRequest_ClearMirrorVFSList& config);
-		void OnEnableVFS(const KIPCRequest_EnableVFS& config);
+		void OnInitService(const KIPCRequestNS::InitVFSService& config);
+		void OnUninstallService(const KIPCRequestNS::UninstallVFSService& config);
+		void OnCreateConvergenceVFS(const KIPCRequestNS::CreateConvergenceVFS& config);
+		void OnClearConvergenceVirtualFolders(const KIPCRequestNS::ClearConvergenceVirtualFolders& config);
+		void OnAddConvergenceVirtualFolder(const KIPCRequestNS::AddConvergenceVirtualFolder& config);
+		void OnCreateMirrorVFS(const KIPCRequestNS::CreateMirrorVFS& config);
+		void OnClearMirrorVFSList(const KIPCRequestNS::ClearMirrorVFSList& config);
+		void OnEnableVFS(const KIPCRequestNS::EnableVFS& config);
 
 		void OnVFSUnmounted(wxNotifyEvent& event);
 		void ReportMountError(int code, KVirtualFileSystemBase* vfs);

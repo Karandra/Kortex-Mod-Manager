@@ -11,7 +11,7 @@
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxSingleton.h>
 class KSaveManager;
-class KSMSaveFile;
+class KSaveFile;
 class KSaveManagerListModel;
 class KPluginManager;
 
@@ -36,7 +36,7 @@ class KSaveManagerWorkspace: public KWorkspace, public KxSingletonPtr<KSaveManag
 
 	private:
 		void CreateViewPane();
-		void CreateContextMenu(KxMenu& menu, const KSMSaveFile* saveEntry);
+		void CreateContextMenu(KxMenu& menu, const KSaveFile* saveEntry);
 
 		bool FiltersMenu_IsAllFiltersActive() const;
 		bool FiltersMenu_IsFilterActive(const wxString& filter) const
@@ -46,9 +46,9 @@ class KSaveManagerWorkspace: public KWorkspace, public KxSingletonPtr<KSaveManag
 		void FiltersMenu_AllFiles(KxMenuEvent& event);
 		void FiltersMenu_SpecificFilter(KxMenuEvent& event);
 
-		void OnSyncPluginsList(const KSMSaveFile* saveEntry);
-		void OnSavePluginsList(const KSMSaveFile* saveEntry);
-		void OnRemoveSave(KSMSaveFile* saveEntry);
+		void OnSyncPluginsList(const KSaveFile* saveEntry);
+		void OnSavePluginsList(const KSaveFile* saveEntry);
+		void OnRemoveSave(KSaveFile* saveEntry);
 
 		virtual bool IsSubWorkspace() const override
 		{
@@ -84,6 +84,6 @@ class KSaveManagerWorkspace: public KWorkspace, public KxSingletonPtr<KSaveManag
 		void LoadData();
 
 	public:
-		void ProcessSelection(const KSMSaveFile* saveEntry);
-		void ProcessContextMenu(const KSMSaveFile* saveEntry);
+		void ProcessSelection(const KSaveFile* saveEntry);
+		void ProcessContextMenu(const KSaveFile* saveEntry);
 };

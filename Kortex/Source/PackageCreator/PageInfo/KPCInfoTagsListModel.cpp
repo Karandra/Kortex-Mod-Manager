@@ -7,7 +7,7 @@
 
 bool KPCInfoTagsListModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 {
-	bool bRet = KModManagerTagSelectorCB::SetValueByRow(data, row, column);
+	bool bRet = KModTagsSelectorCB::SetValueByRow(data, row, column);
 	if (bRet)
 	{
 		m_Controller->ChangeNotify();
@@ -18,5 +18,5 @@ bool KPCInfoTagsListModel::SetValueByRow(const wxAny& data, size_t row, const Kx
 void KPCInfoTagsListModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* pSzier)
 {
 	m_Controller = controller;
-	KModManagerTagSelectorCB::Create(window, pSzier);
+	KModTagsSelectorCB::Create(window, pSzier);
 }

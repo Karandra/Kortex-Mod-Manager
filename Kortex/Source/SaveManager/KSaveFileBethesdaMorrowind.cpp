@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "KSMSaveFileBethesdaMorrowind.h"
-#include "KSMSaveFile.h"
+#include "KSaveFileBethesdaMorrowind.h"
+#include "KSaveFile.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFileStream.h>
 
-bool KSMSaveFileBethesdaMorrowind::DoReadData()
+bool KSaveFileBethesdaMorrowind::DoReadData()
 {
 	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (file.IsOk())

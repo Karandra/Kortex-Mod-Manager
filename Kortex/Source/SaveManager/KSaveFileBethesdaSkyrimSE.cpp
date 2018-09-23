@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "KSMSaveFileBethesdaSkyrimSE.h"
-#include "KSMSaveFileBethesdaFallout4.h"
-#include "KSMSaveFile.h"
+#include "KSaveFileBethesdaSkyrimSE.h"
+#include "KSaveFileBethesdaFallout4.h"
+#include "KSaveFile.h"
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
 
-bool KSMSaveFileBethesdaSkyrimSE::DoReadData()
+bool KSaveFileBethesdaSkyrimSE::DoReadData()
 {
 	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (file.IsOk())
@@ -35,7 +35,7 @@ bool KSMSaveFileBethesdaSkyrimSE::DoReadData()
 
 			// Skip unknown 2 bytes
 			file.Seek(2);
-			m_Bitmap = wxBitmap(KSMSaveFileBethesdaFallout4::ReadImageRGBA(file.ReadData<std::vector<unsigned char>>(width * height * 4), width, height), 32);
+			m_Bitmap = wxBitmap(KSaveFileBethesdaFallout4::ReadImageRGBA(file.ReadData<std::vector<unsigned char>>(width * height * 4), width, height), 32);
 
 			// Skip 'formVersion' field, unknown 10 bytes and 'pluginInfoSize' field
 			file.Seek(1 + 10 + 4);

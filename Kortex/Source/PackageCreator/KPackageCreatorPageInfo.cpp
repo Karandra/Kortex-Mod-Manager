@@ -10,7 +10,7 @@
 #include "PackageProject/KPackageProject.h"
 #include "PackageProject/KPackageProjectInfo.h"
 #include "ModManager/KModManager.h"
-#include "ModManager/KModManagerWorkspace.h"
+#include "ModManager/KModWorkspace.h"
 #include "ModManager/KModEntry.h"
 #include "Network/KNetwork.h"
 #include "Network/KNetworkProviderNexus.h"

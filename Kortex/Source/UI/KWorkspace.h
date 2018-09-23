@@ -8,7 +8,7 @@ class KManager;
 class KMainWindow;
 class KWorkspaceController;
 class KPackageCreatorWorkspace;
-class KModManagerWorkspace;
+class KModWorkspace;
 
 class KxMenu;
 class KxMenuItem;
@@ -26,7 +26,7 @@ class KWorkspace: public KxPanel
 {
 	friend class KMainWindow;
 	friend class KPackageCreatorWorkspace;
-	friend class KModManagerWorkspace;
+	friend class KModWorkspace;
 
 	public:
 		template<class T> static void ScheduleReloadOf()

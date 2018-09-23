@@ -3,7 +3,7 @@
 #include "KPluggableManager.h"
 #include "KPluginEntry.h"
 #include "ModManager/KModManager.h"
-#include "ModManager/KModManagerModList.h"
+#include "ModManager/KModListManager.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxXML.h>

@@ -16,7 +16,7 @@
 #include "VFS/KVirtualFileSystemService.h"
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManager.h"
-#include "ModManager/KModManagerWorkspace.h"
+#include "ModManager/KModWorkspace.h"
 #include "DownloadManager/KDownloadManager.h"
 #include "Archive/KArchive.h"
 #include "IPC/KIPCClient.h"
@@ -343,7 +343,7 @@ void KApp::LoadImages()
 }
 void KApp::ShowWorkspace()
 {
-	wxString startPage = m_GeneralOptions.GetAttribute("Workspace", KModManagerWorkspace::GetInstance()->GetID());
+	wxString startPage = m_GeneralOptions.GetAttribute("Workspace", KModWorkspace::GetInstance()->GetID());
 	wxLogInfo("Start page is: %s", startPage);
 
 	KWorkspace* workspace = m_MainWindow->GetWorkspace(startPage);

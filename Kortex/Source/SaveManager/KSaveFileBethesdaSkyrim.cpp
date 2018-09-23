@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "KSMSaveFileBethesdaSkyrim.h"
-#include "KSMSaveFile.h"
+#include "KSaveFileBethesdaSkyrim.h"
+#include "KSaveFile.h"
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
 
-bool KSMSaveFileBethesdaSkyrim::DoReadData()
+bool KSaveFileBethesdaSkyrim::DoReadData()
 {
 	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (file.IsOk())

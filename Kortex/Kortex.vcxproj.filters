@@ -360,30 +360,6 @@
     <ClCompile Include="Source\SaveManager\KSaveManagerWorkspace.cpp">
       <Filter>Code\Source Files\SaveManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSMSaveFile.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaSkyrim.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaOblivion.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaMorrowind.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaFallout4.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaFalloutNV.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaFallout3.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSMSaveFileBethesdaSkyrimSE.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\UI\KTextEditorDialog.cpp">
       <Filter>Code\Source Files\UI</Filter>
     </ClCompile>
@@ -540,15 +516,6 @@
     <ClCompile Include="Source\ModManager\KModManagerModel.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerTagSelector.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerTags.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerSitesEditor.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\IPC\KIPC.cpp">
       <Filter>Code\Source Files\IPC</Filter>
     </ClCompile>
@@ -573,9 +540,6 @@
     <ClCompile Include="Source\PackageManager\KPackageManagerListModel.cpp">
       <Filter>Code\Source Files\PackageManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerStatistics.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.cpp">
       <Filter>Code\Source Files\PackageCreator\PageInfo</Filter>
     </ClCompile>
@@ -588,20 +552,11 @@
     <ClCompile Include="Source\ModManager\KModFilesExplorerDialog.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerModList.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerModListEditor.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModManager\KModCollisionViewerModel.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\KProgramOptions.cpp">
       <Filter>Code\Source Files\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerWorkspace.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\PluginManager\LOOT API\KLootAPI.cpp">
       <Filter>Code\Source Files\PluginManager\LOOT API</Filter>
@@ -741,17 +696,65 @@
     <ClCompile Include="Source\ProgramManager\KProgramManagerWorkspace.cpp">
       <Filter>Code\Source Files\ProgramManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderWS.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerVirtualGameFolderModel.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Events\KModEvent.cpp">
       <Filter>Code\Source Files\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\Events\KEvent.cpp">
       <Filter>Code\Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\KModListEvent.cpp">
+      <Filter>Code\Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFileBethesdaFallout3.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFile.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFileBethesdaFallout4.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFileBethesdaFalloutNV.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFileBethesdaMorrowind.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFileBethesdaOblivion.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFileBethesdaSkyrim.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFileBethesdaSkyrimSE.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KModListManager.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KModSites.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KModStatistics.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KModTagsManager.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KModTagsSelector.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KModWorkspace.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KVirtualGameFolderWorkspace.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KVirtualGameFolderModel.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KModListManagerEditor.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -909,30 +912,6 @@
       <Filter>Code\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\SaveManager\KSaveManagerWorkspace.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSMSaveFile.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaSkyrim.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaOblivion.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaMorrowind.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaFallout4.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaFalloutNV.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaFallout3.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSMSaveFileBethesdaSkyrimSE.h">
       <Filter>Code\Header Files\SaveManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KTextEditorDialog.h">
@@ -1121,15 +1100,6 @@
     <ClInclude Include="Source\ModManager\KModManagerModel.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerTagSelector.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerTags.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerSitesEditor.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\IPC\KIPC.h">
       <Filter>Code\Header Files\IPC</Filter>
     </ClInclude>
@@ -1160,9 +1130,6 @@
     <ClInclude Include="Source\PackageManager\KPackageManagerListModel.h">
       <Filter>Code\Header Files\PackageManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerStatistics.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.h">
       <Filter>Code\Header Files\PackageCreator\PageInfo</Filter>
     </ClInclude>
@@ -1175,20 +1142,11 @@
     <ClInclude Include="Source\ModManager\KModFilesExplorerModel.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerList.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerModListEditor.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModManager\KModCollisionViewerModel.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KProgramOptions.h">
       <Filter>Code\Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerWorkspace.h">
-      <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KComparator.h">
       <Filter>Code\Header Files\Utility</Filter>
@@ -1346,12 +1304,6 @@
     <ClInclude Include="Source\ProgramManager\KProgramManagerWorkspace.h">
       <Filter>Code\Header Files\ProgramManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderWS.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerVirtualGameFolderModel.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Events\KModEvent.h">
       <Filter>Code\Header Files\Events</Filter>
     </ClInclude>
@@ -1360,6 +1312,63 @@
     </ClInclude>
     <ClInclude Include="Source\KEvents.h">
       <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\KModListEvent.h">
+      <Filter>Code\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFileBethesdaFallout3.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFile.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFileBethesdaFallout4.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFileBethesdaFalloutNV.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFileBethesdaMorrowind.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFileBethesdaOblivion.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFileBethesdaSkyrim.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFileBethesdaSkyrimSE.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModListManager.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModListManagerDialog.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModSites.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModStatistics.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModTagsManager.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModTagsSelector.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModWorkspace.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KVirtualGameFolderWorkspace.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KVirtualGameFolderModel.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KModListManagerEditor.h">
+      <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1028,7 +1028,7 @@ It is recommended that you move these files]]></String>
 
 		<!-- Screenshots Gallery -->
 		<String ID="ScreenshotsGallery.Name">Screenshot gallery</String>
-		<String ID="ScreenshotsGallery.Name">Screenshots</String>
+		<String ID="ScreenshotsGallery.NameShort">Screenshots</String>
 
 		<!-- Save Manager -->
 		<String ID="SaveManager.Name">Saves manager</String>

@@ -1030,10 +1030,10 @@
 		<String ID="ScreenshotsGallery.Name">Галерея скриншотов</String>
 		<String ID="ScreenshotsGallery.Name">Скриншоты</String>
 		
-		<String ID="ScreenshotsGallery.FileName">Имя файла</String>
-		<String ID="ScreenshotsGallery.FilePath">Путь к файлу</String>
-		
 		<!-- Save Manager -->
+		<String ID="SaveManager.Name">Менеджер сохранений</String>
+		<String ID="SaveManager.NameShort">Сохранения</String>
+
 		<String ID="SaveManager.InvalidFile">Неподдерживаемый формат файла</String>
 		
 		<String ID="SaveManager.SyncPluginsList">Синхронизировать список плагинов</String>

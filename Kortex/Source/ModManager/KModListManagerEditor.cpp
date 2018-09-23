@@ -1,6 +1,7 @@
 #include "stdafx.h"
-#include "KModManagerModListEditor.h"
+#include "KModListManagerEditor.h"
 #include "KModManager.h"
+#include "KEvents.h"
 #include "KAux.h"
 #include "KApp.h"
 #include <KxFramework/KxButton.h>
@@ -12,9 +13,9 @@ enum ColumnID
 	Name,
 };
 
-void KModManagerModListEditor::OnInitControl()
+void KModListManagerEditor::OnInitControl()
 {
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KModManagerModListEditor::OnActivate, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KModListManagerEditor::OnActivate, this);
 
 	// Columns
 	{
@@ -24,11 +25,11 @@ void KModManagerModListEditor::OnInitControl()
 	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
 }
 
-void KModManagerModListEditor::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KModListManagerEditor::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
 	GetValueByRow(value, row, column);
 }
-void KModManagerModListEditor::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KModListManagerEditor::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
 	const KModList* entry = GetDataEntry(row);
 	if (entry)
@@ -48,9 +49,9 @@ void KModManagerModListEditor::GetValueByRow(wxAny& value, size_t row, const KxD
 		};
 	}
 }
-bool KModManagerModListEditor::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+bool KModListManagerEditor::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 {
-	ValueType* entry = GetDataEntry(row);
+	KModList* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -75,6 +76,8 @@ bool KModManagerModListEditor::SetValueByRow(const wxAny& value, size_t row, con
 					entry->SetID(name);
 					SetCurrentList(name);
 					MarkModified();
+
+					KModListEvent(KEVT_MODLIST_CHANGED, *entry).Send();
 					return true;
 				}
 			}
@@ -82,12 +85,12 @@ bool KModManagerModListEditor::SetValueByRow(const wxAny& value, size_t row, con
 	}
 	return false;
 }
-bool KModManagerModListEditor::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
+bool KModListManagerEditor::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
 	return true;
 }
 
-void KModManagerModListEditor::OnActivate(KxDataViewEvent& event)
+void KModListManagerEditor::OnActivate(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	if (item.IsOK())
@@ -96,13 +99,13 @@ void KModManagerModListEditor::OnActivate(KxDataViewEvent& event)
 	}
 }
 
-KModManagerModListEditor::KModManagerModListEditor()
+KModListManagerEditor::KModListManagerEditor()
 	:m_CurrentList(KModManager::GetListManager().GetCurrentListID())
 {
 }
 
 //////////////////////////////////////////////////////////////////////////
-void KModManagerModListEditorDialog::OnSelectItem(KxDataViewEvent& event)
+void KModListManagerEditorDialog::OnSelectItem(KxDataViewEvent& event)
 {
 	const KModList* entry = GetDataEntry(GetRow(event.GetItem()));
 	if (entry)
@@ -116,45 +119,73 @@ void KModManagerModListEditorDialog::OnSelectItem(KxDataViewEvent& event)
 		m_RemoveButton->Disable();
 	}
 }
-void KModManagerModListEditorDialog::OnAddList(wxCommandEvent& event)
+void KModListManagerEditorDialog::OnAddList(wxCommandEvent& event)
 {
-	KModManager::GetListManager().CreateNewList(wxEmptyString);
+	KModListEvent listEvent(KEVT_MODLIST_ADDING);
+	listEvent.Send();
+	if (!listEvent.IsAllowed())
+	{
+		return;
+	}
+
+	KModList& newModList = KModManager::GetListManager().CreateNewList(listEvent.GetModListID());
+	KModListEvent(KEVT_MODLIST_ADDED, newModList).Send();
+
 	MarkModified();
 	RefreshItems();
 	m_RemoveButton->Enable(!IsEmpty());
 
-	KxDataViewItem tNewItem = GetItem(GetItemCount() - 1);
-	SelectItem(tNewItem);
-	GetView()->EditItem(tNewItem, GetView()->GetColumn(ColumnID::Name));
+	KxDataViewItem newItem = GetItem(GetItemCount() - 1);
+	SelectItem(newItem);
+	GetView()->EditItem(newItem, GetView()->GetColumn(ColumnID::Name));
 }
-void KModManagerModListEditorDialog::OnCopyList(wxCommandEvent& event)
+void KModListManagerEditorDialog::OnCopyList(wxCommandEvent& event)
 {
 	KxDataViewItem item = GetView()->GetSelection();
-	if (const KModList* entry = GetDataEntry(GetRow(item)))
+	if (KModList* entry = GetDataEntry(GetRow(item)))
 	{
-		KModManager::GetListManager().CreateListCopy(*entry, wxEmptyString);
+		KModListEvent listEvent(KEVT_MODLIST_ADDING, *entry);
+		listEvent.Send();
+		if (!listEvent.IsAllowed())
+		{
+			return;
+		}
+
+		KModList& newModList = KModManager::GetListManager().CreateListCopy(*entry, listEvent.GetModListID());
+		KModListEvent(KEVT_MODLIST_ADDED, newModList).Send();
+
 		MarkModified();
 		RefreshItems();
 
-		KxDataViewItem tNewItem = GetItem(GetItemCount() - 1);
-		SelectItem(tNewItem);
-		GetView()->EditItem(tNewItem, GetView()->GetColumn(ColumnID::Name));
+		KxDataViewItem newItem = GetItem(GetItemCount() - 1);
+		SelectItem(newItem);
+		GetView()->EditItem(newItem, GetView()->GetColumn(ColumnID::Name));
 	}
 }
-void KModManagerModListEditorDialog::OnRemoveList(wxCommandEvent& event)
+void KModListManagerEditorDialog::OnRemoveList(wxCommandEvent& event)
 {
 	if (KModManager::GetListManager().GetListsCount() > 1)
 	{
-		KxTaskDialog dialog(GetView(), KxID_NONE, T(KxID_REMOVE), T("ModManager.ModList.RemoveDialog"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
-		if (dialog.ShowModal() == KxID_YES)
+		KxDataViewItem item = GetView()->GetSelection();
+		if (KModList* entry = GetDataEntry(GetRow(item)))
 		{
-			KxDataViewItem item = GetView()->GetSelection();
-			if (const KModList* entry = GetDataEntry(GetRow(item)))
+			KModListEvent listEvent(KEVT_MODLIST_REMOVING, *entry);
+			listEvent.Send();
+			if (!listEvent.IsAllowed())
 			{
-				bool bLocalCurrent = entry->GetID() == GetCurrentList();
+				return;
+			}
+
+			KxTaskDialog dialog(GetView(), KxID_NONE, T(KxID_REMOVE), T("ModManager.ModList.RemoveDialog"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+			if (dialog.ShowModal() == KxID_YES)
+			{
+				const wxString modListID = entry->GetID();
+				bool isLocalCurrent = modListID == GetCurrentList();
 				if (KModManager::GetListManager().RemoveList(*entry))
 				{
-					if (bLocalCurrent)
+					KModListEvent(KEVT_MODLIST_REMOVED, modListID).Send();
+
+					if (isLocalCurrent)
 					{
 						SetCurrentList(KModManager::GetListManager().GetCurrentListID());
 					}
@@ -172,7 +203,7 @@ void KModManagerModListEditorDialog::OnRemoveList(wxCommandEvent& event)
 	}
 }
 
-KModManagerModListEditorDialog::KModManagerModListEditorDialog(wxWindow* parent)
+KModListManagerEditorDialog::KModListManagerEditorDialog(wxWindow* parent)
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, T("ModManager.ModList.Manage"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -180,14 +211,14 @@ KModManagerModListEditorDialog::KModManagerModListEditorDialog(wxWindow* parent)
 		SetWindowResizeSide(wxBOTH);
 
 		m_RemoveButton = AddButton(KxID_REMOVE, wxEmptyString, true).As<KxButton>();
-		m_RemoveButton->Bind(wxEVT_BUTTON, &KModManagerModListEditorDialog::OnRemoveList, this);
+		m_RemoveButton->Bind(wxEVT_BUTTON, &KModListManagerEditorDialog::OnRemoveList, this);
 		m_RemoveButton->Disable();
 
 		m_AddButton = AddButton(KxID_ADD, wxEmptyString, true).As<KxButton>();
-		m_AddButton->Bind(wxEVT_BUTTON, &KModManagerModListEditorDialog::OnAddList, this);
+		m_AddButton->Bind(wxEVT_BUTTON, &KModListManagerEditorDialog::OnAddList, this);
 		
 		m_CopyButton = AddButton(KxID_COPY, wxEmptyString, true).As<KxButton>();
-		m_CopyButton->Bind(wxEVT_BUTTON, &KModManagerModListEditorDialog::OnCopyList, this);
+		m_CopyButton->Bind(wxEVT_BUTTON, &KModListManagerEditorDialog::OnCopyList, this);
 		m_CopyButton->Disable();
 
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -197,8 +228,8 @@ KModManagerModListEditorDialog::KModManagerModListEditorDialog(wxWindow* parent)
 
 		// List
 		SetDataViewFlags(KxDV_NO_HEADER);
-		KModManagerModListEditor::Create(m_ViewPane, sizer);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KModManagerModListEditorDialog::OnSelectItem, this);
+		KModListManagerEditor::Create(m_ViewPane, sizer);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KModListManagerEditorDialog::OnSelectItem, this);
 		SetDataVector(&KModManager::GetListManager().GetLists());
 		RefreshItems();
 
@@ -206,7 +237,7 @@ KModManagerModListEditorDialog::KModManagerModListEditorDialog(wxWindow* parent)
 		GetView()->SetFocus();
 	}
 }
-KModManagerModListEditorDialog::~KModManagerModListEditorDialog()
+KModListManagerEditorDialog::~KModListManagerEditorDialog()
 {
 	IncRef();
 }

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KModManagerStatistics.h"
+#include "KModStatistics.h"
 #include "KModManager.h"
 #include "KAux.h"
 #include "KApp.h"
@@ -12,15 +12,15 @@ enum ColumnID
 	Value
 };
 
-void KModManagerStatisticsModel::OnInitControl()
+void KModStatisticsModel::OnInitControl()
 {
 	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 250);
 	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
 }
 
-void KModManagerStatisticsModel::GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
+void KModStatisticsModel::GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
 {
-	KMMStatisticsEnum index = GetIndex(row);
+	KModStatisticsType index = GetIndex(row);
 	if (index != KMM_STAT_INVALID)
 	{
 		switch (column->GetID())
@@ -38,12 +38,12 @@ void KModManagerStatisticsModel::GetValueByRow(wxAny& data, size_t row, const Kx
 		};
 	}
 }
-bool KModManagerStatisticsModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
+bool KModStatisticsModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 {
 	return false;
 }
 
-wxString KModManagerStatisticsModel::GetStatName(KMMStatisticsEnum index) const
+wxString KModStatisticsModel::GetStatName(KModStatisticsType index) const
 {
 	switch (index)
 	{
@@ -66,11 +66,11 @@ wxString KModManagerStatisticsModel::GetStatName(KMMStatisticsEnum index) const
 	};
 	return wxEmptyString;
 }
-const wxString& KModManagerStatisticsModel::GetStatValue(KMMStatisticsEnum index) const
+const wxString& KModStatisticsModel::GetStatValue(KModStatisticsType index) const
 {
 	return m_DataVector[index - 1];
 }
-wxString KModManagerStatisticsModel::CalcStatValue(KMMStatisticsEnum index) const
+wxString KModStatisticsModel::CalcStatValue(KModStatisticsType index) const
 {
 	switch (index)
 	{
@@ -94,7 +94,7 @@ wxString KModManagerStatisticsModel::CalcStatValue(KMMStatisticsEnum index) cons
 	return wxEmptyString;
 }
 
-int64_t KModManagerStatisticsModel::CountMods(CountMode mode) const
+int64_t KModStatisticsModel::CountMods(CountMode mode) const
 {
 	int64_t count = 0;
 	for (const KModEntry* entry: KModManager::Get().GetEntries())
@@ -126,7 +126,7 @@ int64_t KModManagerStatisticsModel::CountMods(CountMode mode) const
 	}
 	return count;
 }
-int64_t KModManagerStatisticsModel::CalcModStoreSize() const
+int64_t KModStatisticsModel::CalcModStoreSize() const
 {
 	int64_t totalSize = 0;
 	std::function<void(const KFileTreeNode&)> ScanTree = [&ScanTree, &totalSize](const KFileTreeNode& rootNode)
@@ -152,20 +152,20 @@ int64_t KModManagerStatisticsModel::CalcModStoreSize() const
 	return totalSize;
 }
 
-void KModManagerStatisticsModel::RefreshItems()
+void KModStatisticsModel::RefreshItems()
 {
 	m_DataVector.clear();
 
 	for (int i = KMM_STAT_MIN + 1; i < KMM_STAT_MAX; i++)
 	{
-		KMMStatisticsEnum index = (KMMStatisticsEnum)i;
+		KModStatisticsType index = (KModStatisticsType)i;
 		m_DataVector[i - 1] = CalcStatValue(index);
 	}
 	KDataViewVectorListModel::RefreshItems();
 }
 
 //////////////////////////////////////////////////////////////////////////
-KModManagerStatisticsDialog::KModManagerStatisticsDialog(wxWindow* parent)
+KModStatisticsDialog::KModStatisticsDialog(wxWindow* parent)
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, T("ModManager.Statistics"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -183,7 +183,7 @@ KModManagerStatisticsDialog::KModManagerStatisticsDialog(wxWindow* parent)
 		PostCreate();
 
 		// List
-		KModManagerStatisticsModel::Create(m_ViewPane, sizer);
+		KModStatisticsModel::Create(m_ViewPane, sizer);
 		RefreshItems();
 		dialog.Hide();
 
@@ -191,7 +191,7 @@ KModManagerStatisticsDialog::KModManagerStatisticsDialog(wxWindow* parent)
 		GetView()->SetFocus();
 	}
 }
-KModManagerStatisticsDialog::~KModManagerStatisticsDialog()
+KModStatisticsDialog::~KModStatisticsDialog()
 {
 	IncRef();
 }

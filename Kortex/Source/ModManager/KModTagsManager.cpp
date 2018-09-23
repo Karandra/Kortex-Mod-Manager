@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KModManagerTags.h"
+#include "KModTagsManager.h"
 #include "KModEntry.h"
 #include "Profile/KProfile.h"
 #include "PackageManager/KPackageManager.h"
@@ -17,16 +17,16 @@ KModTag::~KModTag()
 }
 
 //////////////////////////////////////////////////////////////////////////
-wxString KModManagerTags::GetDefaultTagsFile()
+wxString KModTagsManager::GetDefaultTagsFile()
 {
 	return KApp::Get().GetDataFolder() + "\\ModManager\\DefaultTags.xml";
 }
-wxString KModManagerTags::GetUserTagsFile(const wxString& templateID, const wxString& configID)
+wxString KModTagsManager::GetUserTagsFile(const wxString& templateID, const wxString& configID)
 {
 	return KProfile::GetDataPath(templateID, configID) + '\\' + "ModTags.xml";
 }
 
-void KModManagerTags::LoadTagsFromFile(const wxString& filePath)
+void KModTagsManager::LoadTagsFromFile(const wxString& filePath)
 {
 	KxFileStream stream(filePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	KxXMLDocument xml(stream);
@@ -53,7 +53,7 @@ void KModManagerTags::LoadTagsFromFile(const wxString& filePath)
 	}
 }
 
-KModManagerTags::KModManagerTags()
+KModTagsManager::KModTagsManager()
 {
 	LoadUserTags();
 	if (IsTagListEmpty())
@@ -61,12 +61,12 @@ KModManagerTags::KModManagerTags()
 		LoadDefaultTags();
 	}
 }
-KModManagerTags::~KModManagerTags()
+KModTagsManager::~KModTagsManager()
 {
 	SaveUserTags();
 }
 
-const KModTag* KModManagerTags::FindModTag(const wxString& tagValue, KModTagArray::const_iterator* itOut) const
+const KModTag* KModTagsManager::FindModTag(const wxString& tagValue, KModTagArray::const_iterator* itOut) const
 {
 	auto it = std::find_if(m_Tags.begin(), m_Tags.end(), [tagValue](const KModTag& tag)
 	{
@@ -84,7 +84,7 @@ const KModTag* KModManagerTags::FindModTag(const wxString& tagValue, KModTagArra
 		return NULL;
 	}
 }
-const KModTag* KModManagerTags::AddModTag(const KModTag& tag)
+const KModTag* KModTagsManager::AddModTag(const KModTag& tag)
 {
 	const KModTag* thisTag = FindModTag(tag.GetValue());
 	if (!thisTag)
@@ -94,7 +94,7 @@ const KModTag* KModManagerTags::AddModTag(const KModTag& tag)
 	}
 	return thisTag;
 }
-bool KModManagerTags::RemoveModTag(const wxString& tagValue)
+bool KModTagsManager::RemoveModTag(const wxString& tagValue)
 {
 	KModTagArray::const_iterator it;
 	const KModTag* tag = FindModTag(tagValue, &it);
@@ -105,7 +105,7 @@ bool KModManagerTags::RemoveModTag(const wxString& tagValue)
 	}
 	return false;
 }
-const wxString& KModManagerTags::GetTagName(const wxString& tagID) const
+const wxString& KModTagsManager::GetTagName(const wxString& tagID) const
 {
 	const KModTag* tag = FindModTag(tagID);
 	if (tag)
@@ -114,7 +114,7 @@ const wxString& KModManagerTags::GetTagName(const wxString& tagID) const
 	}
 	return wxNullString;
 }
-void KModManagerTags::LoadTagsFromEntry(const KModEntry* entry)
+void KModTagsManager::LoadTagsFromEntry(const KModEntry* entry)
 {
 	for (const wxString& tagName: entry->GetTags())
 	{
@@ -122,11 +122,11 @@ void KModManagerTags::LoadTagsFromEntry(const KModEntry* entry)
 	}
 }
 
-wxString KModManagerTags::GetUserTagsFile() const
+wxString KModTagsManager::GetUserTagsFile() const
 {
 	return GetUserTagsFile(KApp::Get().GetCurrentTemplateID(), KApp::Get().GetCurrentConfigID());
 }
-void KModManagerTags::SaveUserTags() const
+void KModTagsManager::SaveUserTags() const
 {
 	KxXMLDocument xml;
 	KxXMLNode rootNode = xml.NewElement("Tags");

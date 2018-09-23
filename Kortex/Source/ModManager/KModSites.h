@@ -7,7 +7,7 @@
 #include <KxFramework/KxStdDialog.h>
 class KxButton;
 
-class KMMSitesEditorNode
+class KModSitesEditorNode
 {
 	enum Type
 	{
@@ -38,11 +38,11 @@ class KMMSitesEditorNode
 		} m_Values;
 
 	public:
-		KMMSitesEditorNode(KNetworkProviderID index, int64_t fixedSiteID)
+		KModSitesEditorNode(KNetworkProviderID index, int64_t fixedSiteID)
 			:m_Type(Fixed), m_Values(index, fixedSiteID)
 		{
 		}
-		KMMSitesEditorNode(KLabeledValue& tNormalValue)
+		KModSitesEditorNode(KLabeledValue& tNormalValue)
 			:m_Type(Normal), m_Values(tNormalValue)
 		{
 		}
@@ -79,7 +79,7 @@ class KMMSitesEditorNode
 			return *m_Values.Normal;
 		}
 
-		bool operator==(const KMMSitesEditorNode& other) const
+		bool operator==(const KModSitesEditorNode& other) const
 		{
 			if (m_Type == other.m_Type)
 			{
@@ -97,12 +97,12 @@ class KMMSitesEditorNode
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KModManagerSitesEditor: public KDataViewListModel
+class KModSitesEditor: public KxDataViewListModelEx
 {
 	using FixedWebSitesArray = KModEntry::FixedWebSitesArray;
 
 	private:
-		std::vector<KMMSitesEditorNode> m_DataVector;
+		std::vector<KModSitesEditorNode> m_DataVector;
 		bool m_IsModified = false;
 
 	protected:
@@ -119,7 +119,7 @@ class KModManagerSitesEditor: public KDataViewListModel
 		void OnActivate(KxDataViewEvent& event);
 
 	public:
-		KModManagerSitesEditor(KLabeledValueArray& sites, FixedWebSitesArray& fixedSites)
+		KModSitesEditor(KLabeledValueArray& sites, FixedWebSitesArray& fixedSites)
 			:m_Sites(sites), m_FixedSites(fixedSites)
 		{
 		}
@@ -130,26 +130,26 @@ class KModManagerSitesEditor: public KDataViewListModel
 			return m_DataVector.size();
 		}
 		virtual void RefreshItems() override;
-		const KMMSitesEditorNode* GetLastNode() const
+		const KModSitesEditorNode* GetLastNode() const
 		{
 			return m_DataVector.empty() ? NULL : &m_DataVector.back();
 		}
 		
-		KMMSitesEditorNode& AddItem(KNetworkProviderID index, int64_t fixedSiteID)
+		KModSitesEditorNode& AddItem(KNetworkProviderID index, int64_t fixedSiteID)
 		{
 			return m_DataVector.emplace_back(index, m_FixedSites[index]);
 		}
-		KMMSitesEditorNode& AddItem(KLabeledValue& v)
+		KModSitesEditorNode& AddItem(KLabeledValue& v)
 		{
 			return m_DataVector.emplace_back(m_Sites.emplace_back(v));
 		}
-		bool RemoveItem(KMMSitesEditorNode& node);
+		bool RemoveItem(KModSitesEditorNode& node);
 
-		KMMSitesEditorNode& GetNode(size_t row) const
+		KModSitesEditorNode& GetNode(size_t row) const
 		{
-			return const_cast<KMMSitesEditorNode&>(m_DataVector[row]);
+			return const_cast<KModSitesEditorNode&>(m_DataVector[row]);
 		}
-		KMMSitesEditorNode& GetNode(const KxDataViewItem& item) const
+		KModSitesEditorNode& GetNode(const KxDataViewItem& item) const
 		{
 			return GetNode(GetRow(item));
 		}
@@ -161,7 +161,7 @@ class KModManagerSitesEditor: public KDataViewListModel
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KModManagerSitesEditorDialog: public KxStdDialog, public KModManagerSitesEditor
+class KModSitesEditorDialog: public KxStdDialog, public KModSitesEditor
 {
 	private:
 		wxWindow* m_ViewPane = NULL;
@@ -178,6 +178,6 @@ class KModManagerSitesEditorDialog: public KxStdDialog, public KModManagerSitesE
 		void OnRemoveTag(wxCommandEvent& event);
 
 	public:
-		KModManagerSitesEditorDialog(wxWindow* parent, KLabeledValueArray& sites, KModEntry::FixedWebSitesArray& fixedSites);
-		virtual ~KModManagerSitesEditorDialog();
+		KModSitesEditorDialog(wxWindow* parent, KLabeledValueArray& sites, KModEntry::FixedWebSitesArray& fixedSites);
+		virtual ~KModSitesEditorDialog();
 };

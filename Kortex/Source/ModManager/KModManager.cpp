@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "KVariablesDatabase.h"
 #include "KModManager.h"
-#include "KModManagerWorkspace.h"
+#include "KModWorkspace.h"
 #include "KModManagerModel.h"
 #include "KModEntry.h"
-#include "KModManagerVirtualGameFolderWS.h"
+#include "KVirtualGameFolderWorkspace.h"
 #include "Profile/KProfile.h"
 #include "Profile/KVirtualizationConfig.h"
 #include "VFS/KVirtualFileSystemService.h"
@@ -219,29 +219,39 @@ void KModManager::OnModFilesChnaged(KModEvent& event)
 		event.GetMod()->UpdateFileTree();
 	}
 
-	KWorkspace::ScheduleReloadOf<KModManagerVirtualGameFolderWS>();
+	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
 	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 }
 void KModManager::OnModToggled(KModEvent& event)
 {
-	KWorkspace::ScheduleReloadOf<KModManagerVirtualGameFolderWS>();
+	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
 	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 }
 void KModManager::OnModsReordered(KModEvent& event)
 {
-	KWorkspace::ScheduleReloadOf<KModManagerVirtualGameFolderWS>();
+	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
+	KWorkspace::ScheduleReloadOf<KModWorkspace>();
 	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 }
 
 void KModManager::OnModInstalled(KModEvent& event)
 {
 	Load();
-	KWorkspace::ScheduleReloadOf<KModManagerWorkspace>();
+	KWorkspace::ScheduleReloadOf<KModWorkspace>();
 }
 void KModManager::OnModUninstalled(KModEvent& event)
 {
 	Load();
-	KWorkspace::ScheduleReloadOf<KModManagerWorkspace>();
+	KWorkspace::ScheduleReloadOf<KModWorkspace>();
+}
+
+void KModManager::OnModListSelected(KModListEvent& event)
+{
+	Load();
+
+	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
+	KWorkspace::ScheduleReloadOf<KModWorkspace>();
+	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 }
 
 KModManager::KModManager(KWorkspace* workspace)
@@ -277,6 +287,8 @@ KModManager::KModManager(KWorkspace* workspace)
 
 	KEvent::Bind(KEVT_MOD_INSTALLED, &KModManager::OnModInstalled, this);
 	KEvent::Bind(KEVT_MOD_UNINSTALLED, &KModManager::OnModUninstalled, this);
+
+	KEvent::Bind(KEVT_MODLIST_SELECTED, &KModManager::OnModListSelected, this);
 	
 	// Load data
 	Load();
@@ -312,7 +324,7 @@ wxString KModManager::GetVersion() const
 }
 KWorkspace* KModManager::GetWorkspace() const
 {
-	return KModManagerWorkspace::GetInstance();
+	return KModWorkspace::GetInstance();
 }
 
 KModEntryArray KModManager::GetAllEntries(bool includeWriteTarget)
@@ -382,8 +394,8 @@ void KModManager::Load()
 }
 void KModManager::Save() const
 {
-	const_cast<KModManagerModList&>(m_ModListManager).SyncCurrentList();
-	const_cast<KModManagerModList&>(m_ModListManager).SaveLists();
+	const_cast<KModListManager&>(m_ModListManager).SyncCurrentList();
+	const_cast<KModListManager&>(m_ModListManager).SaveLists();
 }
 bool KModManager::ChangeModListAndResort(const wxString& newModListID)
 {

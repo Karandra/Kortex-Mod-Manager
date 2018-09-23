@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KModEntry.h"
-#include "KModManagerTags.h"
+#include "KModTagsManager.h"
 
 class KMMModelNode
 {

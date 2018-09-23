@@ -22,7 +22,7 @@ class KModTag: public KLabeledValue
 typedef std::vector<KModTag> KModTagArray;
 
 //////////////////////////////////////////////////////////////////////////
-class KModManagerTags
+class KModTagsManager
 {
 	public:
 		static wxString GetDefaultTagsFile();
@@ -35,8 +35,8 @@ class KModManagerTags
 		void LoadTagsFromFile(const wxString& filePath);
 
 	public:
-		KModManagerTags();
-		virtual ~KModManagerTags();
+		KModTagsManager();
+		virtual ~KModTagsManager();
 
 	public:
 		KModTagArray& GetTagList()

@@ -5,7 +5,7 @@
 #include "KProgramOptions.h"
 #include "KImageProvider.h"
 class KModController;
-class KModManagerWorkspace;
+class KModWorkspace;
 class KxDataViewBitmapTextToggleRenderer;
 
 enum KModManagerModelType

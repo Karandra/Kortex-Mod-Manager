@@ -105,7 +105,7 @@ class KModList
 		}
 };
 
-class KModManagerModList
+class KModListManager
 {
 	friend class KModManager;
 	friend class KModList;
@@ -140,8 +140,8 @@ class KModManagerModList
 		wxString CreateListName(size_t pos) const;
 
 	public:
-		KModManagerModList();
-		virtual ~KModManagerModList();
+		KModListManager();
+		virtual ~KModListManager();
 
 	public:
 		KProgramOption& GetOptions()
@@ -164,7 +164,7 @@ class KModManagerModList
 		
 		const KModList& GetCurrentList() const
 		{
-			return const_cast<KModManagerModList*>(this)->GetCurrentList();
+			return const_cast<KModListManager*>(this)->GetCurrentList();
 		}
 		KModList& GetCurrentList()
 		{
@@ -184,7 +184,7 @@ class KModManagerModList
 		}
 		bool HasList(const wxString& sID) const
 		{
-			return const_cast<KModManagerModList*>(this)->FindModList(sID) != NULL;
+			return const_cast<KModListManager*>(this)->FindModList(sID) != NULL;
 		}
 
 		bool IsCurrentListID(const wxString& id) const

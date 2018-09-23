@@ -5,21 +5,21 @@
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
 class KxSearchBox;
-class KModManagerVirtualGameFolderModel;
+class KVirtualGameFolderModel;
 
-class KModManagerVirtualGameFolderWS: public KWorkspace, public KxSingletonPtr<KModManagerVirtualGameFolderWS>
+class KVirtualGameFolderWorkspace: public KWorkspace, public KxSingletonPtr<KVirtualGameFolderWorkspace>
 {
 	private:
 		KProgramOptionUI m_OptionsUI;
 		KProgramOptionUI m_ViewOptions;
 
 		wxBoxSizer* m_MainSizer = NULL;
-		KModManagerVirtualGameFolderModel* m_Model = NULL;
+		KVirtualGameFolderModel* m_Model = NULL;
 		KxSearchBox* m_SearchBox = NULL;
 
 	public:
-		KModManagerVirtualGameFolderWS(KMainWindow* mainWindow);
-		virtual ~KModManagerVirtualGameFolderWS();
+		KVirtualGameFolderWorkspace(KMainWindow* mainWindow);
+		virtual ~KVirtualGameFolderWorkspace();
 		virtual bool OnCreateWorkspace() override;
 
 	private:

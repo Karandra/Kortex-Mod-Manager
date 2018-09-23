@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "KModManagerVirtualGameFolderModel.h"
+#include "KVirtualGameFolderModel.h"
 #include "KModManager.h"
 #include "KModManagerDispatcher.h"
-#include "KModManagerWorkspace.h"
+#include "KModWorkspace.h"
 #include "KFileTreeNode.h"
 #include "KModEntry.h"
 #include "KComparator.h"
@@ -20,12 +20,12 @@ enum ColumnID
 	SourceLocation,
 };
 
-void KModManagerVirtualGameFolderModel::OnInitControl()
+void KVirtualGameFolderModel::OnInitControl()
 {
 	/* View */
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KModManagerVirtualGameFolderModel::OnSelectItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KModManagerVirtualGameFolderModel::OnActivateItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KModManagerVirtualGameFolderModel::OnContextMenu, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KVirtualGameFolderModel::OnSelectItem, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KVirtualGameFolderModel::OnActivateItem, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KVirtualGameFolderModel::OnContextMenu, this);
 	GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, [this](KxDataViewEvent& event)
 	{
 		KxMenu menu;
@@ -52,7 +52,7 @@ void KModManagerVirtualGameFolderModel::OnInitControl()
 	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.SourceLocation"), ColumnID::SourceLocation, KxDATAVIEW_CELL_INERT, 100, flags);
 }
 
-bool KModManagerVirtualGameFolderModel::IsContainer(const KxDataViewItem& item) const
+bool KVirtualGameFolderModel::IsContainer(const KxDataViewItem& item) const
 {
 	if (const KFileTreeNode* node = GetNode(item))
 	{
@@ -60,7 +60,7 @@ bool KModManagerVirtualGameFolderModel::IsContainer(const KxDataViewItem& item) 
 	}
 	return false;
 }
-KxDataViewItem KModManagerVirtualGameFolderModel::GetParent(const KxDataViewItem& item) const
+KxDataViewItem KVirtualGameFolderModel::GetParent(const KxDataViewItem& item) const
 {
 	if (const KFileTreeNode* node = GetNode(item))
 	{
@@ -71,7 +71,7 @@ KxDataViewItem KModManagerVirtualGameFolderModel::GetParent(const KxDataViewItem
 	}
 	return KxDataViewItem();
 }
-void KModManagerVirtualGameFolderModel::GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const
+void KVirtualGameFolderModel::GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const
 {
 	// Root item
 	if (item.IsTreeRootItem())
@@ -101,7 +101,7 @@ void KModManagerVirtualGameFolderModel::GetChildren(const KxDataViewItem& item, 
 	}
 }
 
-void KModManagerVirtualGameFolderModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
+void KVirtualGameFolderModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 {
 	if (const KFileTreeNode* node = GetNode(item))
 	{
@@ -123,7 +123,7 @@ void KModManagerVirtualGameFolderModel::GetEditorValue(wxAny& value, const KxDat
 		};
 	}
 }
-void KModManagerVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
+void KVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 {
 	if (const KFileTreeNode* node = GetNode(item))
 	{
@@ -173,16 +173,16 @@ void KModManagerVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewI
 		};
 	}
 }
-bool KModManagerVirtualGameFolderModel::SetValue(const wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column)
+bool KVirtualGameFolderModel::SetValue(const wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column)
 {
 	return false;
 }
-bool KModManagerVirtualGameFolderModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
+bool KVirtualGameFolderModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
 {
 	return true;
 }
 
-bool KModManagerVirtualGameFolderModel::GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const
+bool KVirtualGameFolderModel::GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const
 {
 	const KFileTreeNode* node = GetNode(item);
 	switch (column->GetID())
@@ -199,7 +199,7 @@ bool KModManagerVirtualGameFolderModel::GetItemAttributes(const KxDataViewItem& 
 	};
 	return false;
 }
-bool KModManagerVirtualGameFolderModel::Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const
+bool KVirtualGameFolderModel::Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const
 {
 	const KFileTreeNode& node1 = *GetNode(item1);
 	const KFileTreeNode& node2 = *GetNode(item2);
@@ -237,7 +237,7 @@ bool KModManagerVirtualGameFolderModel::Compare(const KxDataViewItem& item1, con
 	return false;
 }
 
-void KModManagerVirtualGameFolderModel::OnSelectItem(KxDataViewEvent& event)
+void KVirtualGameFolderModel::OnSelectItem(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	KxDataViewColumn* column = event.GetColumn();
@@ -245,14 +245,14 @@ void KModManagerVirtualGameFolderModel::OnSelectItem(KxDataViewEvent& event)
 
 	if (node && column && column->GetID() == ColumnID::PartOf)
 	{
-		KModManagerWorkspace* workspace = KModManagerWorkspace::GetInstance();
+		KModWorkspace* workspace = KModWorkspace::GetInstance();
 		wxWindowUpdateLocker lock(workspace);
 
 		workspace->HighlightMod();
 		workspace->HighlightMod(&node->GetMod());
 	}
 }
-void KModManagerVirtualGameFolderModel::OnActivateItem(KxDataViewEvent& event)
+void KVirtualGameFolderModel::OnActivateItem(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	KxDataViewColumn* column = event.GetColumn();
@@ -270,16 +270,16 @@ void KModManagerVirtualGameFolderModel::OnActivateItem(KxDataViewEvent& event)
 		}
 	}
 }
-void KModManagerVirtualGameFolderModel::OnContextMenu(KxDataViewEvent& event)
+void KVirtualGameFolderModel::OnContextMenu(KxDataViewEvent& event)
 {
 }
 
-KModManagerVirtualGameFolderModel::KModManagerVirtualGameFolderModel()
+KVirtualGameFolderModel::KVirtualGameFolderModel()
 {
 	SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_DOUBLE_CLICK_EXPAND|KxDV_VERT_RULES);
 }
 
-void KModManagerVirtualGameFolderModel::RefreshItems()
+void KVirtualGameFolderModel::RefreshItems()
 {
 	m_FoundItems.clear();
 	ItemsCleared();
@@ -312,7 +312,7 @@ void KModManagerVirtualGameFolderModel::RefreshItems()
 	// Reset scrolling
 	GetView()->Scroll(0, 0);
 }
-bool KModManagerVirtualGameFolderModel::SetSearchMask(const wxString& mask)
+bool KVirtualGameFolderModel::SetSearchMask(const wxString& mask)
 {
 	return KAux::SetSearchMask(m_SearchMask, mask);
 }

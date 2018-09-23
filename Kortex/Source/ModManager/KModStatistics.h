@@ -6,7 +6,7 @@
 #include <KxFramework/KxStdDialog.h>
 class KxButton;
 
-enum KMMStatisticsEnum
+enum KModStatisticsType
 {
 	KMM_STAT_INVALID = -1,
 	KMM_STAT_MIN = 0,
@@ -20,7 +20,7 @@ enum KMMStatisticsEnum
 	KMM_STAT_COUNT = KMM_STAT_MAX - 1
 };
 
-class KModManagerStatisticsModel: public KDataViewVectorListModel<KxStringVector, KDataViewListModel>
+class KModStatisticsModel: public KxDataViewVectorListModelEx<KxStringVector, KxDataViewListModelEx>
 {
 	enum CountMode
 	{
@@ -39,15 +39,15 @@ class KModManagerStatisticsModel: public KDataViewVectorListModel<KxStringVector
 		virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
 
 	private:
-		wxString GetStatName(KMMStatisticsEnum index) const;
-		const wxString& GetStatValue(KMMStatisticsEnum index) const;
-		wxString CalcStatValue(KMMStatisticsEnum index) const;
+		wxString GetStatName(KModStatisticsType index) const;
+		const wxString& GetStatValue(KModStatisticsType index) const;
+		wxString CalcStatValue(KModStatisticsType index) const;
 
 		int64_t CountMods(CountMode mode) const;
 		int64_t CalcModStoreSize() const;
 
 	public:
-		KModManagerStatisticsModel()
+		KModStatisticsModel()
 		{
 			m_DataVector.resize(KMM_STAT_COUNT);
 			SetDataVector(&m_DataVector);
@@ -60,22 +60,22 @@ class KModManagerStatisticsModel: public KDataViewVectorListModel<KxStringVector
 		}
 		virtual void RefreshItems() override;
 
-		KMMStatisticsEnum GetIndex(size_t row) const
+		KModStatisticsType GetIndex(size_t row) const
 		{
 			if (row < KMM_STAT_COUNT)
 			{
-				return static_cast<KMMStatisticsEnum>(row + 1);
+				return static_cast<KModStatisticsType>(row + 1);
 			}
 			return KMM_STAT_INVALID;
 		}
-		KxDataViewItem MakeItem(KMMStatisticsEnum index) const
+		KxDataViewItem MakeItem(KModStatisticsType index) const
 		{
 			return KxDataViewItem((intptr_t)index);
 		}
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KModManagerStatisticsDialog: public KxStdDialog, public KModManagerStatisticsModel
+class KModStatisticsDialog: public KxStdDialog, public KModStatisticsModel
 {
 	private:
 		wxWindow* m_ViewPane = NULL;
@@ -89,6 +89,6 @@ class KModManagerStatisticsDialog: public KxStdDialog, public KModManagerStatist
 		}
 
 	public:
-		KModManagerStatisticsDialog(wxWindow* parent);
-		virtual ~KModManagerStatisticsDialog();
+		KModStatisticsDialog(wxWindow* parent);
+		virtual ~KModStatisticsDialog();
 };

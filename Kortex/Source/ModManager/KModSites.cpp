@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KModManagerSitesEditor.h"
+#include "KModSites.h"
 #include "KModManager.h"
 #include "Network/KNetwork.h"
 #include "KAux.h"
@@ -13,18 +13,18 @@ enum ColumnID
 	Value
 };
 
-void KModManagerSitesEditor::OnInitControl()
+void KModSitesEditor::OnInitControl()
 {
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KModManagerSitesEditor::OnActivate, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KModSitesEditor::OnActivate, this);
 
 	// Columns
 	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 150);
 	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
 }
 
-bool KModManagerSitesEditor::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
+bool KModSitesEditor::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
-	const KMMSitesEditorNode& node = GetNode(row);
+	const KModSitesEditorNode& node = GetNode(row);
 	if (node.IsFixed())
 	{
 		return column->GetID() == ColumnID::Value;
@@ -42,9 +42,9 @@ bool KModManagerSitesEditor::IsEnabledByRow(size_t row, const KxDataViewColumn* 
 	}
 	return false;
 }
-void KModManagerSitesEditor::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KModSitesEditor::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	const KMMSitesEditorNode& node = GetNode(row);
+	const KModSitesEditorNode& node = GetNode(row);
 	if (node.IsFixed())
 	{
 		switch (column->GetID())
@@ -58,9 +58,9 @@ void KModManagerSitesEditor::GetEditorValueByRow(wxAny& value, size_t row, const
 	}
 	GetValueByRow(value, row, column);
 }
-void KModManagerSitesEditor::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KModSitesEditor::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	const KMMSitesEditorNode& node = GetNode(row);
+	const KModSitesEditorNode& node = GetNode(row);
 	if (node.IsFixed())
 	{
 		switch (column->GetID())
@@ -112,9 +112,9 @@ void KModManagerSitesEditor::GetValueByRow(wxAny& value, size_t row, const KxDat
 		};
 	}
 }
-bool KModManagerSitesEditor::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
+bool KModSitesEditor::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 {
-	KMMSitesEditorNode& node = GetNode(row);
+	KModSitesEditorNode& node = GetNode(row);
 	if (node.IsFixed())
 	{
 		switch (column->GetID())
@@ -168,12 +168,12 @@ bool KModManagerSitesEditor::SetValueByRow(const wxAny& data, size_t row, const 
 	return false;
 }
 
-void KModManagerSitesEditor::OnActivate(KxDataViewEvent& event)
+void KModSitesEditor::OnActivate(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	if (item.IsOK())
 	{
-		const KMMSitesEditorNode& node = GetNode(GetRow(item));
+		const KModSitesEditorNode& node = GetNode(GetRow(item));
 		KxDataViewColumn* column = node.IsNormal() ? event.GetColumn() : GetView()->GetColumnByID(ColumnID::Value);
 		if (column)
 		{
@@ -182,7 +182,7 @@ void KModManagerSitesEditor::OnActivate(KxDataViewEvent& event)
 	}
 }
 
-void KModManagerSitesEditor::RefreshItems()
+void KModSitesEditor::RefreshItems()
 {
 	m_DataVector.clear();
 	m_DataVector.reserve(KNETWORK_PROVIDER_ID_MAX + m_Sites.size());
@@ -200,7 +200,7 @@ void KModManagerSitesEditor::RefreshItems()
 	}
 	ItemsCleared();
 }
-bool KModManagerSitesEditor::RemoveItem(KMMSitesEditorNode& node)
+bool KModSitesEditor::RemoveItem(KModSitesEditorNode& node)
 {
 	if (node.IsNormal())
 	{
@@ -226,11 +226,11 @@ bool KModManagerSitesEditor::RemoveItem(KMMSitesEditorNode& node)
 }
 
 //////////////////////////////////////////////////////////////////////////
-void KModManagerSitesEditorDialog::OnSelectItem(KxDataViewEvent& event)
+void KModSitesEditorDialog::OnSelectItem(KxDataViewEvent& event)
 {
 	if (event.GetItem().IsOK())
 	{
-		const KMMSitesEditorNode& node = GetNode(event.GetItem());
+		const KModSitesEditorNode& node = GetNode(event.GetItem());
 		m_RemoveButton->Enable(node.IsNormal() || (node.IsFixed() && node.HasFixedSiteModID()));
 	}
 	else
@@ -238,19 +238,19 @@ void KModManagerSitesEditorDialog::OnSelectItem(KxDataViewEvent& event)
 		m_RemoveButton->Disable();
 	}
 }
-void KModManagerSitesEditorDialog::OnAddTag(wxCommandEvent& event)
+void KModSitesEditorDialog::OnAddTag(wxCommandEvent& event)
 {
-	KMMSitesEditorNode& node = AddItem(KLabeledValue(wxEmptyString));
+	KModSitesEditorNode& node = AddItem(KLabeledValue(wxEmptyString));
 	RefreshItems();
 
-	KxDataViewItem tNewItem = GetItem(GetItemCount() - 1);
-	SelectItem(tNewItem);
-	GetView()->EditItem(tNewItem, GetView()->GetColumn(ColumnID::Name));
+	KxDataViewItem newItem = GetItem(GetItemCount() - 1);
+	SelectItem(newItem);
+	GetView()->EditItem(newItem, GetView()->GetColumn(ColumnID::Name));
 }
-void KModManagerSitesEditorDialog::OnRemoveTag(wxCommandEvent& event)
+void KModSitesEditorDialog::OnRemoveTag(wxCommandEvent& event)
 {
 	KxDataViewItem item = GetView()->GetSelection();
-	KMMSitesEditorNode& node = GetNode(item);
+	KModSitesEditorNode& node = GetNode(item);
 
 	if (RemoveItem(node) && node.IsNormal())
 	{
@@ -264,8 +264,8 @@ void KModManagerSitesEditorDialog::OnRemoveTag(wxCommandEvent& event)
 	GetView()->SetFocus();
 }
 
-KModManagerSitesEditorDialog::KModManagerSitesEditorDialog(wxWindow* parent, KLabeledValueArray& sites, KModEntry::FixedWebSitesArray& fixedSites)
-	:KModManagerSitesEditor(sites, fixedSites)
+KModSitesEditorDialog::KModSitesEditorDialog(wxWindow* parent, KLabeledValueArray& sites, KModEntry::FixedWebSitesArray& fixedSites)
+	:KModSitesEditor(sites, fixedSites)
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, T("ModManager.SitesEditor"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -273,11 +273,11 @@ KModManagerSitesEditorDialog::KModManagerSitesEditorDialog(wxWindow* parent, KLa
 		SetWindowResizeSide(wxBOTH);
 
 		m_RemoveButton = AddButton(KxID_REMOVE, wxEmptyString, true).As<KxButton>();
-		m_RemoveButton->Bind(wxEVT_BUTTON, &KModManagerSitesEditorDialog::OnRemoveTag, this);
+		m_RemoveButton->Bind(wxEVT_BUTTON, &KModSitesEditorDialog::OnRemoveTag, this);
 		m_RemoveButton->Disable();
 
 		m_AddButton = AddButton(KxID_ADD, wxEmptyString, true).As<KxButton>();
-		m_AddButton->Bind(wxEVT_BUTTON, &KModManagerSitesEditorDialog::OnAddTag, this);
+		m_AddButton->Bind(wxEVT_BUTTON, &KModSitesEditorDialog::OnAddTag, this);
 
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 		m_ViewPane = new KxPanel(GetContentWindow(), KxID_NONE);
@@ -285,14 +285,14 @@ KModManagerSitesEditorDialog::KModManagerSitesEditorDialog(wxWindow* parent, KLa
 		PostCreate();
 
 		// List
-		KModManagerSitesEditor::Create(m_ViewPane, sizer);
+		KModSitesEditor::Create(m_ViewPane, sizer);
 		RefreshItems();
 
 		AdjustWindow(wxDefaultPosition, wxSize(500, 350));
 		GetView()->SetFocus();
 	}
 }
-KModManagerSitesEditorDialog::~KModManagerSitesEditorDialog()
+KModSitesEditorDialog::~KModSitesEditorDialog()
 {
 	IncRef();
 }

@@ -66,17 +66,14 @@ class KModManagerDispatcher
 		void BuildTreeBranch(const ModsVector& mods, KFileTreeNode::Vector& children, const KFileTreeNode* rootNode, KFileTreeNode::RefVector& directories);
 		void RebuildTreeIfNeeded() const;
 
-		void OnVirtualTreeInvalidated(KModEvent& event);
+		void OnVirtualTreeInvalidated(KEvent& event);
 
 	public:
-		// Root node to virtual files tree.
-		const KFileTreeNode& GetVirtualTree() const
-		{
-			return m_VirtualTree;
-		}
-		
 		// Full rebuild of file tree. Invalidates all references to old tree nodes.
 		void UpdateVirtualTree();
+
+		// Root node of virtual files tree.
+		const KFileTreeNode& GetVirtualTree() const;
 
 		// Iterates over all mods in specified order calling provided functor.
 		KModEntry* IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget = true, bool activeOnly = true) const;

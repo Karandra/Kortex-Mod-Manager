@@ -4,7 +4,7 @@
 #include "KModManagerImportNMM.h"
 #include "KOperationWithProgress.h"
 #include "Profile/KProfile.h"
-#include "ModManager/KModManagerWorkspace.h"
+#include "ModManager/KModWorkspace.h"
 #include "DownloadManager/KDownloadManagerWorkspace.h"
 #include "GameConfig/KGameConfigWorkspace.h"
 #include "ProgramManager/KProgramManagerWorkspace.h"
@@ -89,7 +89,7 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 						KApp::Get().CallAfter([]()
 						{
 							// These workspaces are safe
-							KModManagerWorkspace::GetInstance()->ScheduleReload();
+							KModWorkspace::GetInstance()->ScheduleReload();
 							KGameConfigWorkspace::GetInstance()->ScheduleReload();
 							KProgramManagerWorkspace::GetInstance()->ScheduleReload();
 							KDownloadManagerWorkspace::GetInstance()->ScheduleReload();

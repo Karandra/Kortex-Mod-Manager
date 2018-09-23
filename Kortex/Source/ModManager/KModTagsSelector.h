@@ -10,7 +10,7 @@ class KModController;
 class KxDataViewComboBox;
 class KxButton;
 
-class KModManagerTagSelector: public KxDataViewListModelEx
+class KModTagsSelector: public KxDataViewListModelEx
 {
 	private:
 		const bool m_FullFeatured = false;
@@ -46,7 +46,7 @@ class KModManagerTagSelector: public KxDataViewListModelEx
 		}
 
 	public:
-		KModManagerTagSelector(bool bFullFeatured = false);
+		KModTagsSelector(bool bFullFeatured = false);
 
 	public:
 		virtual void SetDataVector(KxStringVector* data = NULL, KModEntry* modEntry = NULL);
@@ -74,7 +74,7 @@ class KModManagerTagSelector: public KxDataViewListModelEx
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KModManagerTagSelectorCB: public KModManagerTagSelector
+class KModTagsSelectorCB: public KModTagsSelector
 {
 	private:
 		KxDataViewComboBox* m_ComboView = NULL;
@@ -95,7 +95,7 @@ class KModManagerTagSelectorCB: public KModManagerTagSelector
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KModManagerTagSelectorDialog: public KxStdDialog, public KModManagerTagSelector
+class KModTagsSelectorDialog: public KxStdDialog, public KModTagsSelector
 {
 	private:
 		wxWindow* m_ViewPane = NULL;
@@ -114,6 +114,6 @@ class KModManagerTagSelectorDialog: public KxStdDialog, public KModManagerTagSel
 		void OnRemoveTag(wxCommandEvent& event);
 
 	public:
-		KModManagerTagSelectorDialog(wxWindow* parent, const wxString& caption);
-		virtual ~KModManagerTagSelectorDialog();
+		KModTagsSelectorDialog(wxWindow* parent, const wxString& caption);
+		virtual ~KModTagsSelectorDialog();
 };

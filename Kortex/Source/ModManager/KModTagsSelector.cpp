@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KModManagerTagSelector.h"
+#include "KModTagsSelector.h"
 #include "KModManager.h"
 #include "KModEntry.h"
 #include "KAux.h"
@@ -13,9 +13,9 @@ enum ColumnID
 	PriorityGroup,
 };
 
-void KModManagerTagSelector::OnInitControl()
+void KModTagsSelector::OnInitControl()
 {
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KModManagerTagSelector::OnActivate, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KModTagsSelector::OnActivate, this);
 
 	// Override tag
 	if (IsFullFeatured())
@@ -35,7 +35,7 @@ void KModManagerTagSelector::OnInitControl()
 	}
 }
 
-void KModManagerTagSelector::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KModTagsSelector::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
 	const KModTag* entry = GetDataEntry(row);
 	if (entry)
@@ -50,7 +50,7 @@ void KModManagerTagSelector::GetEditorValueByRow(wxAny& value, size_t row, const
 		};
 	}
 }
-void KModManagerTagSelector::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KModTagsSelector::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
 	const KModTag* entry = GetDataEntry(row);
 	if (entry)
@@ -70,7 +70,7 @@ void KModManagerTagSelector::GetValueByRow(wxAny& value, size_t row, const KxDat
 		};
 	}
 }
-bool KModManagerTagSelector::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+bool KModTagsSelector::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 {
 	KModTag* entry = GetDataEntry(row);
 	if (entry)
@@ -122,12 +122,12 @@ bool KModManagerTagSelector::SetValueByRow(const wxAny& value, size_t row, const
 	}
 	return false;
 }
-bool KModManagerTagSelector::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
+bool KModTagsSelector::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
 	return true;
 }
 
-void KModManagerTagSelector::OnActivate(KxDataViewEvent& event)
+void KModTagsSelector::OnActivate(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	KxDataViewColumn* column = event.GetColumn();
@@ -137,18 +137,18 @@ void KModManagerTagSelector::OnActivate(KxDataViewEvent& event)
 	}
 }
 
-const KModTag* KModManagerTagSelector::FindStdTag(const wxString& tagValue) const
+const KModTag* KModTagsSelector::FindStdTag(const wxString& tagValue) const
 {
 	return KModManager::GetTagManager().FindModTag(tagValue);
 }
-KxStringVector::const_iterator KModManagerTagSelector::FindTag(const KModTag* entry) const
+KxStringVector::const_iterator KModTagsSelector::FindTag(const KModTag* entry) const
 {
 	return std::find_if(m_Data->cbegin(), m_Data->cend(), [entry](const wxString& sTag)
 	{
 		return sTag == entry->GetValue();
 	});
 }
-bool KModManagerTagSelector::ToggleTag(const KModTag* entry, bool add)
+bool KModTagsSelector::ToggleTag(const KModTag* entry, bool add)
 {
 	auto it = FindTag(entry);
 	if (add && it == m_Data->cend())
@@ -166,13 +166,13 @@ bool KModManagerTagSelector::ToggleTag(const KModTag* entry, bool add)
 	return false;
 }
 
-KModManagerTagSelector::KModManagerTagSelector(bool bFullFeatured)
+KModTagsSelector::KModTagsSelector(bool bFullFeatured)
 	:m_FullFeatured(bFullFeatured)
 {
 	SetDataViewFlags(GetDataViewFlags()|KxDV_NO_TIMEOUT_EDIT);
 }
 
-void KModManagerTagSelector::SetDataVector(KxStringVector* data, KModEntry* modEntry)
+void KModTagsSelector::SetDataVector(KxStringVector* data, KModEntry* modEntry)
 {
 	m_Data = data;
 	m_ModEntry = modEntry;
@@ -183,11 +183,11 @@ void KModManagerTagSelector::SetDataVector(KxStringVector* data, KModEntry* modE
 	}
 	RefreshItems();
 }
-size_t KModManagerTagSelector::GetItemCount() const
+size_t KModTagsSelector::GetItemCount() const
 {
 	return m_Data ? KModManager::GetTagManager().GetTagsCount() : 0;
 }
-KModTag* KModManagerTagSelector::GetDataEntry(size_t index) const
+KModTag* KModTagsSelector::GetDataEntry(size_t index) const
 {
 	KModTagArray& tTags = KModManager::GetTagManager().GetTagList();
 	if (m_Data && index < tTags.size())
@@ -197,7 +197,7 @@ KModTag* KModManagerTagSelector::GetDataEntry(size_t index) const
 	return NULL;
 }
 
-void KModManagerTagSelector::ApplyChanges()
+void KModTagsSelector::ApplyChanges()
 {
 	if (m_ModEntry)
 	{
@@ -206,7 +206,7 @@ void KModManagerTagSelector::ApplyChanges()
 }
 
 //////////////////////////////////////////////////////////////////////////
-KxDataViewCtrl* KModManagerTagSelectorCB::OnCreateDataView(wxWindow* window)
+KxDataViewCtrl* KModTagsSelectorCB::OnCreateDataView(wxWindow* window)
 {
 	m_ComboView = new KxDataViewComboBox();
 	m_ComboView->SetDataViewFlags(KxDV_NO_HEADER);
@@ -214,15 +214,15 @@ KxDataViewCtrl* KModManagerTagSelectorCB::OnCreateDataView(wxWindow* window)
 	m_ComboView->SetOptionEnabled(KxDVCB_OPTION_FORCE_GET_STRING_VALUE_ON_DISMISS);
 	m_ComboView->Create(window, KxID_NONE);
 
-	m_ComboView->Bind(KxEVT_DVCB_GET_STRING_VALUE, &KModManagerTagSelectorCB::OnGetStringValue, this);
+	m_ComboView->Bind(KxEVT_DVCB_GET_STRING_VALUE, &KModTagsSelectorCB::OnGetStringValue, this);
 	return m_ComboView;
 }
-wxWindow* KModManagerTagSelectorCB::OnGetDataViewWindow()
+wxWindow* KModTagsSelectorCB::OnGetDataViewWindow()
 {
 	return m_ComboView->GetComboControl();
 }
 
-wxString KModManagerTagSelectorCB::DoGetStingValue() const
+wxString KModTagsSelectorCB::DoGetStingValue() const
 {
 	if (m_Data->size() != 0)
 	{
@@ -245,36 +245,36 @@ wxString KModManagerTagSelectorCB::DoGetStingValue() const
 		return V("<$T(ID_NONE)>");
 	}
 }
-void KModManagerTagSelectorCB::SetStringValue(const wxString& value)
+void KModTagsSelectorCB::SetStringValue(const wxString& value)
 {
 	m_ComboView->GetComboControl()->SetText(value);
 }
-void KModManagerTagSelectorCB::OnGetStringValue(KxDataViewEvent& event)
+void KModTagsSelectorCB::OnGetStringValue(KxDataViewEvent& event)
 {
 	event.SetString(DoGetStingValue());
 }
-bool KModManagerTagSelectorCB::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
+bool KModTagsSelectorCB::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 {
-	bool bRet = KModManagerTagSelector::SetValueByRow(data, row, column);
+	bool bRet = KModTagsSelector::SetValueByRow(data, row, column);
 	if (bRet)
 	{
 		SetStringValue(DoGetStingValue());
 	}
 	return bRet;
 }
-bool KModManagerTagSelectorCB::IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const
+bool KModTagsSelectorCB::IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
 	return false;
 }
 
-void KModManagerTagSelectorCB::SetDataVector(KxStringVector* data)
+void KModTagsSelectorCB::SetDataVector(KxStringVector* data)
 {
-	KModManagerTagSelector::SetDataVector(data);
+	KModTagsSelector::SetDataVector(data);
 	SetStringValue(m_Data ? DoGetStingValue() : wxEmptyString);
 }
 
 //////////////////////////////////////////////////////////////////////////
-bool KModManagerTagSelectorDialog::IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const
+bool KModTagsSelectorDialog::IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
 	const KModTag* entry = GetDataEntry(row);
 	if (entry)
@@ -287,24 +287,24 @@ bool KModManagerTagSelectorDialog::IsEditorEnabledByRow(size_t row, const KxData
 			}
 		};
 	}
-	return KModManagerTagSelector::IsEditorEnabledByRow(row, column);
+	return KModTagsSelector::IsEditorEnabledByRow(row, column);
 }
-void KModManagerTagSelectorDialog::OnSelectItem(KxDataViewEvent& event)
+void KModTagsSelectorDialog::OnSelectItem(KxDataViewEvent& event)
 {
 	const KModTag* entry = GetDataEntry(event.GetItem());
 	m_RemoveButton->Enable(entry);
 }
 
-void KModManagerTagSelectorDialog::OnAddTag(wxCommandEvent& event)
+void KModTagsSelectorDialog::OnAddTag(wxCommandEvent& event)
 {
 	const KModTag* pNewTag = KModManager::GetTagManager().AddModTag(KAux::MakeBracketedLabel(T(KxID_NEW)));
 	RefreshItems();
 
-	KxDataViewItem tNewItem = GetItem(GetItemCount() - 1);
-	SelectItem(tNewItem);
-	GetView()->EditItem(tNewItem, GetView()->GetColumnByID(ColumnID::Name));
+	KxDataViewItem newItem = GetItem(GetItemCount() - 1);
+	SelectItem(newItem);
+	GetView()->EditItem(newItem, GetView()->GetColumnByID(ColumnID::Name));
 }
-void KModManagerTagSelectorDialog::OnRemoveTag(wxCommandEvent& event)
+void KModTagsSelectorDialog::OnRemoveTag(wxCommandEvent& event)
 {
 	KxDataViewItem item = GetView()->GetSelection();
 	const KModTag* entry = GetDataEntry(item);
@@ -334,8 +334,8 @@ void KModManagerTagSelectorDialog::OnRemoveTag(wxCommandEvent& event)
 	}
 }
 
-KModManagerTagSelectorDialog::KModManagerTagSelectorDialog(wxWindow* parent, const wxString& caption)
-	:KModManagerTagSelector(true)
+KModTagsSelectorDialog::KModTagsSelectorDialog(wxWindow* parent, const wxString& caption)
+	:KModTagsSelector(true)
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -343,11 +343,11 @@ KModManagerTagSelectorDialog::KModManagerTagSelectorDialog(wxWindow* parent, con
 		SetWindowResizeSide(wxBOTH);
 
 		m_RemoveButton = AddButton(KxID_REMOVE, wxEmptyString, true).As<KxButton>();
-		m_RemoveButton->Bind(wxEVT_BUTTON, &KModManagerTagSelectorDialog::OnRemoveTag, this);
+		m_RemoveButton->Bind(wxEVT_BUTTON, &KModTagsSelectorDialog::OnRemoveTag, this);
 		m_RemoveButton->Disable();
 
 		m_AddButton = AddButton(KxID_ADD, wxEmptyString, true).As<KxButton>();
-		m_AddButton->Bind(wxEVT_BUTTON, &KModManagerTagSelectorDialog::OnAddTag, this);
+		m_AddButton->Bind(wxEVT_BUTTON, &KModTagsSelectorDialog::OnAddTag, this);
 
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 		m_ViewPane = new KxPanel(GetContentWindow(), KxID_NONE);
@@ -355,13 +355,13 @@ KModManagerTagSelectorDialog::KModManagerTagSelectorDialog(wxWindow* parent, con
 		PostCreate();
 
 		// List
-		KModManagerTagSelector::Create(m_ViewPane, sizer);
+		KModTagsSelector::Create(m_ViewPane, sizer);
 
 		AdjustWindow(wxDefaultPosition, wxSize(400, 550));
 		GetView()->SetFocus();
 	}
 }
-KModManagerTagSelectorDialog::~KModManagerTagSelectorDialog()
+KModTagsSelectorDialog::~KModTagsSelectorDialog()
 {
 	IncRef();
 }

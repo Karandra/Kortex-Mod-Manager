@@ -3,12 +3,12 @@
 #include "KImageProvider.h"
 #include "KDataViewListModel.h"
 #include "KModEntry.h"
-#include "KModManagerModList.h"
+#include "KModListManager.h"
 #include "KLabeledValue.h"
 #include <KxFramework/KxStdDialog.h>
 class KxButton;
 
-class KModManagerModListEditor:	public KxDataViewVectorListModelEx<KModManagerModList::ListVector, KxDataViewListModelEx>
+class KModListManagerEditor: public KxDataViewVectorListModelEx<KModListManager::ListVector, KxDataViewListModelEx>
 {
 	private:
 		bool m_IsModified = false;
@@ -33,7 +33,7 @@ class KModManagerModListEditor:	public KxDataViewVectorListModelEx<KModManagerMo
 		}
 
 	public:
-		KModManagerModListEditor();
+		KModListManagerEditor();
 
 	public:
 		bool IsModified() const
@@ -64,7 +64,7 @@ class KModManagerModListEditor:	public KxDataViewVectorListModelEx<KModManagerMo
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KModManagerModListEditorDialog: public KxStdDialog, public KModManagerModListEditor
+class KModListManagerEditorDialog: public KxStdDialog, public KModListManagerEditor
 {
 	private:
 		wxWindow* m_ViewPane = NULL;
@@ -84,6 +84,6 @@ class KModManagerModListEditorDialog: public KxStdDialog, public KModManagerModL
 		void OnRemoveList(wxCommandEvent& event);
 
 	public:
-		KModManagerModListEditorDialog(wxWindow* parent);
-		virtual ~KModManagerModListEditorDialog();
+		KModListManagerEditorDialog(wxWindow* parent);
+		virtual ~KModListManagerEditorDialog();
 };

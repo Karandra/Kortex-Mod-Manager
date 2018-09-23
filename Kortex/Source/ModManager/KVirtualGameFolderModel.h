@@ -7,7 +7,7 @@
 class KModEntry;
 class KFileTreeNode;
 
-class KModManagerVirtualGameFolderModel: public KxDataViewModelExBase<KxDataViewModel>
+class KVirtualGameFolderModel: public KxDataViewModelExBase<KxDataViewModel>
 {
 	private:
 		const KFileTreeNode::Vector* m_TreeItems = NULL;
@@ -43,7 +43,7 @@ class KModManagerVirtualGameFolderModel: public KxDataViewModelExBase<KxDataView
 		void OnContextMenu(KxDataViewEvent& event);
 
 	public:
-		KModManagerVirtualGameFolderModel();
+		KVirtualGameFolderModel();
 
 	public:
 		virtual void RefreshItems() override;

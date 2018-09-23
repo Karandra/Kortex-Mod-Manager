@@ -4,8 +4,9 @@
 #include "KModEntry.h"
 #include "KFileTreeNode.h"
 #include "KVariablesDatabase.h"
-#include "KModManagerVirtualGameFolderWS.h"
+#include "KVirtualGameFolderWorkspace.h"
 #include "KComparator.h"
+#include "UI/KMainWindow.h"
 #include "KAux.h"
 #include <KxFramework/KxFileFinder.h>
 
@@ -37,7 +38,6 @@ namespace
 			return hashValue;
 		}
 	};
-
 	using FinderHash = std::unordered_map<wxString, size_t, FinderHashHasher, FinderHashComparator>;
 
 	void FindFilesInTree(KFileTreeNode::CRefVector& nodes,
@@ -205,17 +205,18 @@ void KModManagerDispatcher::RebuildTreeIfNeeded() const
 	}
 }
 
-void KModManagerDispatcher::OnVirtualTreeInvalidated(KModEvent& event)
+void KModManagerDispatcher::OnVirtualTreeInvalidated(KEvent& event)
 {
 	m_VirtualTreeNeedsRefresh = true;
 
-	KModManagerVirtualGameFolderWS* workspace = KModManagerVirtualGameFolderWS::GetInstance();
+	KVirtualGameFolderWorkspace* workspace = KVirtualGameFolderWorkspace::GetInstance();
 	if (workspace && workspace->IsWorkspaceVisible())
 	{
 		RebuildTreeIfNeeded();
 		workspace->ScheduleReload();
 	}
 }
+
 void KModManagerDispatcher::UpdateVirtualTree()
 {
 	m_VirtualTree.ClearChildren();
@@ -235,6 +236,11 @@ void KModManagerDispatcher::UpdateVirtualTree()
 		}
 		directories = std::move(roundDirectories);
 	}
+}
+const KFileTreeNode& KModManagerDispatcher::GetVirtualTree() const
+{
+	RebuildTreeIfNeeded();
+	return m_VirtualTree;
 }
 
 KModEntry* KModManagerDispatcher::IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget, bool activeOnly) const
@@ -346,9 +352,9 @@ KModManagerDispatcher::CollisionVector KModManagerDispatcher::FindCollisions(con
 KModManagerDispatcher::KModManagerDispatcher()
 {
 	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
-	//KEvent::Bind(KEVT_MOD_TOGGLED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
 	KEvent::Bind(KEVT_MOD_INSTALLED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
 	KEvent::Bind(KEVT_MOD_UNINSTALLED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
-	KEvent::Bind(KEVT_MOD_REORDERED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
 	KEvent::Bind(KEVT_MODS_REORDERED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
+
+	KEvent::Bind(KEVT_MODLIST_SELECTED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
 }

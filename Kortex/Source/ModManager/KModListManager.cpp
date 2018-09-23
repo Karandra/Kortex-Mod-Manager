@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KModManagerModList.h"
+#include "KModListManager.h"
 #include "KModManager.h"
 #include "KModEntry.h"
 #include "PluginManager/KPluginManager.h"
@@ -40,14 +40,14 @@ void KModList::SetID(const wxString& id)
 }
 
 //////////////////////////////////////////////////////////////////////////
-void KModManagerModList::DoChangeCurrentListID(const wxString& id)
+void KModListManager::DoChangeCurrentListID(const wxString& id)
 {
 	m_CurrentListID = id;
 	m_Options.SetAttribute("CurrentList", m_CurrentListID);
 
 	UpdateWriteTargetLocation();
 }
-void KModManagerModList::UpdateWriteTargetLocation()
+void KModListManager::UpdateWriteTargetLocation()
 {
 	KModEntry* writeTargetRoot = KModManager::Get().GetModEntry_WriteTarget();
 	writeTargetRoot->SetLinkedModLocation(GetWriteTargetFullPath(m_CurrentListID));
@@ -60,7 +60,7 @@ void KModManagerModList::UpdateWriteTargetLocation()
 	KProfile* profile = KApp::Get().GetCurrentProfile();
 	profile->GetVariables().SetVariable(KVAR_WRITE_TARGET_ROOT, writeTargetRoot->GetLocation(KMM_LOCATION_MOD_FILES));
 }
-void KModManagerModList::DoRenameList(KModList& list, const wxString& newID)
+void KModListManager::DoRenameList(KModList& list, const wxString& newID)
 {
 	// Rename write target folder
 	KxFile(GetWriteTargetFullPath(list.GetID())).Rename(GetWriteTargetFullPath(newID), false);
@@ -70,20 +70,20 @@ void KModManagerModList::DoRenameList(KModList& list, const wxString& newID)
 	}
 }
 
-wxString KModManagerModList::CreateListName(size_t pos) const
+wxString KModListManager::CreateListName(size_t pos) const
 {
 	return wxString::Format("List #%zu", pos);
 }
 
-KModManagerModList::KModManagerModList()
+KModListManager::KModListManager()
 	:m_Options(&KModManager::Get(), "ListManager")
 {
 }
-KModManagerModList::~KModManagerModList()
+KModListManager::~KModListManager()
 {
 }
 
-bool KModManagerModList::SetCurrentListID(const wxString& id)
+bool KModListManager::SetCurrentListID(const wxString& id)
 {
 	// Change list only if new ID is valid
 	if (FindModList(id))
@@ -94,7 +94,7 @@ bool KModManagerModList::SetCurrentListID(const wxString& id)
 	return false;
 }
 
-void KModManagerModList::ReloadLists()
+void KModListManager::ReloadLists()
 {
 	ClearLists();
 	wxString currentListID = m_Options.GetAttribute("CurrentList", GetDefaultListID());
@@ -169,7 +169,7 @@ void KModManagerModList::ReloadLists()
 	// Change now
 	DoChangeCurrentListID(currentListID);
 }
-void KModManagerModList::SaveLists()
+void KModListManager::SaveLists()
 {
 	KxFileStream stream(KModManager::Get().GetLocation(KMM_LOCATION_MODS_ORDER), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
 	if (stream.IsOk())
@@ -206,7 +206,7 @@ void KModManagerModList::SaveLists()
 		xml.Save(stream);
 	}
 }
-bool KModManagerModList::SyncList(const wxString& id)
+bool KModListManager::SyncList(const wxString& id)
 {
 	KModList* list = FindModList(id);
 	if (list)
@@ -232,17 +232,17 @@ bool KModManagerModList::SyncList(const wxString& id)
 	return false;
 }
 
-KModList& KModManagerModList::CreateNewList(const wxString& id)
+KModList& KModListManager::CreateNewList(const wxString& id)
 {
 	return m_Lists.emplace_back(id.IsEmpty() ? CreateListName(m_Lists.size() + 1) : id);
 }
-KModList& KModManagerModList::CreateListCopy(const KModList& list, const wxString& newID)
+KModList& KModListManager::CreateListCopy(const KModList& list, const wxString& newID)
 {
 	KModList& newList = m_Lists.emplace_back(list);
 	newList.SetID(newID.IsEmpty() ? CreateListName(m_Lists.size()) : newID);
 	return newList;
 }
-KModList* KModManagerModList::RenameList(const wxString& oldID, const wxString& newID)
+KModList* KModListManager::RenameList(const wxString& oldID, const wxString& newID)
 {
 	auto it = FindModListIterator(oldID);
 	if (it != m_Lists.end())
@@ -252,7 +252,7 @@ KModList* KModManagerModList::RenameList(const wxString& oldID, const wxString& 
 	}
 	return NULL;
 }
-bool KModManagerModList::RemoveList(const wxString& id)
+bool KModListManager::RemoveList(const wxString& id)
 {
 	// Original can be reference to removed item
 	wxString idCopy = id;
@@ -280,11 +280,11 @@ bool KModManagerModList::RemoveList(const wxString& id)
 	return false;
 }
 
-wxString KModManagerModList::GetWriteTargetName(const wxString& id) const
+wxString KModListManager::GetWriteTargetName(const wxString& id) const
 {
 	return "WriteTargetRoot-" + KModEntry::GetSignatureFromID(id);
 }
-wxString KModManagerModList::GetWriteTargetFullPath(const wxString& id) const
+wxString KModListManager::GetWriteTargetFullPath(const wxString& id) const
 {
 	return KProfile::GetCurrent()->GetRCPD({GetWriteTargetName(id)});
 }

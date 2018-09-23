@@ -23,7 +23,7 @@ class KxSearchBox;
 class KxHTMLWindow;
 class KxParagraph;
 
-class KModManagerWorkspace: public KWorkspace, public KxSingletonPtr<KModManagerWorkspace>
+class KModWorkspace: public KWorkspace, public KxSingletonPtr<KModWorkspace>
 {
 	private:
 		KProgramOptionUI m_OptionsUI;
@@ -61,8 +61,8 @@ class KModManagerWorkspace: public KWorkspace, public KxSingletonPtr<KModManager
 		KxSearchBox* m_SearchBox = NULL;
 
 	public:
-		KModManagerWorkspace(KMainWindow* mainWindow);
-		virtual ~KModManagerWorkspace();
+		KModWorkspace(KMainWindow* mainWindow);
+		virtual ~KModWorkspace();
 		virtual bool OnCreateWorkspace() override;
 
 	private:

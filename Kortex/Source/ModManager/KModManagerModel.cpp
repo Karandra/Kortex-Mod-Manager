@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KModManagerModel.h"
-#include "KModManagerWorkspace.h"
+#include "KModWorkspace.h"
 #include "KModManager.h"
 #include "KPriorityGroupEntry.h"
 #include "Network/KNetwork.h"
@@ -55,7 +55,7 @@ KNetworkProviderID KModManagerModel::ColumnToSpecialSite(int column) const
 }
 wxString KModManagerModel::FormatTagList(const KModEntry* entry) const
 {
-	const KModManagerTags& tagManager = KModManager::GetTagManager();
+	const KModTagsManager& tagManager = KModManager::GetTagManager();
 	KxStringVector tags;
 	tags.reserve(entry->GetTags().size());
 
@@ -472,7 +472,7 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 				{
 					entry->Save();
 					KModManager::Get().Save();
-					KModManagerWorkspace::GetInstance()->RefreshPlugins();
+					KModWorkspace::GetInstance()->RefreshPlugins();
 					return true;
 				}
 				return false;
@@ -521,7 +521,7 @@ bool KModManagerModel::IsEnabled(const KxDataViewItem& item, const KxDataViewCol
 			return false;
 		}
 
-		bool bChangesAllowed = KModManagerWorkspace::GetInstance()->IsChangingModsAllowed();
+		bool bChangesAllowed = KModWorkspace::GetInstance()->IsChangingModsAllowed();
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
@@ -677,7 +677,7 @@ void KModManagerModel::OnSelectItem(KxDataViewEvent& event)
 		};
 	};
 
-	KModManagerWorkspace::GetInstance()->ProcessSelection(entry);
+	KModWorkspace::GetInstance()->ProcessSelection(entry);
 }
 void KModManagerModel::OnActivateItem(KxDataViewEvent& event)
 {
@@ -715,7 +715,7 @@ void KModManagerModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (!entry->ToFixedEntry() && entry->IsInstallPackageFileExist())
 				{
-					KModManagerWorkspace::GetInstance()->OpenPackage(entry->GetInstallPackageFile());
+					KModWorkspace::GetInstance()->OpenPackage(entry->GetInstallPackageFile());
 				}
 				break;
 			}
@@ -742,11 +742,11 @@ void KModManagerModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		if (const KModTag* group = node->GetGroup())
 		{
-			KModManagerWorkspace::GetInstance()->ShowViewContextMenu(group);
+			KModWorkspace::GetInstance()->ShowViewContextMenu(group);
 			return;
 		}
 	}
-	KModManagerWorkspace::GetInstance()->ShowViewContextMenu(node && column ? node->GetEntry() : NULL);
+	KModWorkspace::GetInstance()->ShowViewContextMenu(node && column ? node->GetEntry() : NULL);
 }
 void KModManagerModel::OnHeaderContextMenu(KxDataViewEvent& event)
 {
@@ -834,14 +834,29 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 	const KMMModelNode* node = GetNode(event.GetItem());
 	if (node)
 	{
-		KModEntry* entry = node->GetEntry();
-		if (entry && !entry->ToFixedEntry() && HasDragDropDataObject())
+		KModEntry* thisEntry = node->GetEntry();
+		if (thisEntry && HasDragDropDataObject())
 		{
 			const KModEntryArray& entriesToMove = GetDragDropDataObject()->GetEntries();
+			KPriorityGroupEntry* priorityGroup = thisEntry->ToPriorityGroup();
+			if (priorityGroup)
+			{
+				thisEntry = priorityGroup->GetBaseMod();
+			}
 
 			// Move and refresh
-			if (KModManager::Get().MoveModsIntoThis(entriesToMove, entry))
+			if (KModManager::Get().MoveModsIntoThis(entriesToMove, thisEntry))
 			{
+				// If items dragged over priority group, assign them to it
+				if (priorityGroup)
+				{
+					for (KModEntry* entry: entriesToMove)
+					{
+						entry->SetPriorityGroupTag(thisEntry->GetPriorityGroupTag());
+					}
+				}
+
+				// Reload control data
 				RefreshItems();
 
 				// Select moved items and Event-select the first one
@@ -850,9 +865,7 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 					entry->Save();
 					GetView()->Select(GetItemByEntry(entry));
 				}
-
 				SelectItem(GetItemByEntry(entriesToMove.front()));
-				event.SetDropEffect(wxDragMove);
 
 				KModEvent(KEVT_MODS_REORDERED, entriesToMove).Send();
 				return true;
@@ -860,13 +873,11 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 		}
 	}
 
-	wxBell();
-	event.SetDropEffect(wxDragError);
 	return false;
 }
 bool KModManagerModel::CanDragDropNow() const
 {
-	if (KModManagerWorkspace::GetInstance()->IsMovingModsAllowed())
+	if (KModWorkspace::GetInstance()->IsMovingModsAllowed())
 	{
 		if (KxDataViewColumn* column = GetView()->GetSortingColumn())
 		{
@@ -879,7 +890,7 @@ bool KModManagerModel::CanDragDropNow() const
 
 KModManagerModel::KModManagerModel()
 	:m_NoneTag(wxEmptyString, KAux::MakeNoneLabel(), true),
-	m_SearchFilterOptions(KModManagerWorkspace::GetInstance(), "SearchFilter")
+	m_SearchFilterOptions(KModWorkspace::GetInstance(), "SearchFilter")
 {
 	SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES|KxDV_DOUBLE_CLICK_EXPAND);
 }

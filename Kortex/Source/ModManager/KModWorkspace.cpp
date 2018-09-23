@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "KModManagerWorkspace.h"
-#include "KModManagerVirtualGameFolderWS.h"
+#include "KModWorkspace.h"
+#include "KVirtualGameFolderWorkspace.h"
 #include "KModManagerModel.h"
 #include "KModManager.h"
 #include "KModEntry.h"
-#include "KModManagerStatistics.h"
-#include "KModManagerModListEditor.h"
-#include "KModManagerTagSelector.h"
-#include "KModManagerSitesEditor.h"
+#include "KModStatistics.h"
+#include "KModListManagerEditor.h"
+#include "KModTagsSelector.h"
+#include "KModSites.h"
 #include "KModFilesExplorerDialog.h"
 #include "KModCollisionViewerModel.h"
 #include "KModManagerImport.h"
@@ -35,7 +35,7 @@
 #include <KxFramework/KxDualProgressDialog.h>
 #include <KxFramework/KxFileOperationEvent.h>
 
-KxSingletonPtr_Define(KModManagerWorkspace);
+KxSingletonPtr_Define(KModWorkspace);
 
 enum DisplayModeMenuID
 {
@@ -80,13 +80,13 @@ enum ContextMenuID
 	KMC_ID_TAG_DISABLE_ALL,
 };
 
-KModManagerWorkspace::KModManagerWorkspace(KMainWindow* mainWindow)
+KModWorkspace::KModWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_OptionsUI(this, "MainUI"), m_ModListViewOptions(this, "ModListView")
 {
 	CreateToolBarButton();
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 }
-KModManagerWorkspace::~KModManagerWorkspace()
+KModWorkspace::~KModWorkspace()
 {
 	if (IsWorkspaceCreated())
 	{
@@ -96,7 +96,7 @@ KModManagerWorkspace::~KModManagerWorkspace()
 		KProgramOptionSerializer::SaveSplitterLayout(m_SplitterLeftRight, m_OptionsUI);
 	}
 }
-bool KModManagerWorkspace::OnCreateWorkspace()
+bool KModWorkspace::OnCreateWorkspace()
 {
 	m_SplitterLeftRight = new KxSplitterWindow(this, KxID_NONE);
 	m_SplitterLeftRight->SetName("ModViewPaneSize");
@@ -121,13 +121,13 @@ bool KModManagerWorkspace::OnCreateWorkspace()
 	ReloadView();
 	UpdateModListContent();
 
-	KEvent::Bind(KEVT_VFS_TOGGLED, &KModManagerWorkspace::OnVFSToggled, this);
+	KEvent::Bind(KEVT_VFS_TOGGLED, &KModWorkspace::OnVFSToggled, this);
 
-	CreateAsSubWorkspace<KModManagerVirtualGameFolderWS>();
+	CreateAsSubWorkspace<KVirtualGameFolderWorkspace>();
 	return true;
 }
 
-void KModManagerWorkspace::CreateToolBar()
+void KModWorkspace::CreateToolBar()
 {
 	m_ModsToolBar = new KxAuiToolBar(m_ModsPane, KxID_NONE, wxAUI_TB_HORZ_TEXT|wxAUI_TB_PLAIN_BACKGROUND);
 	m_ModsToolBar->SetBackgroundColour(GetBackgroundColour());
@@ -141,7 +141,8 @@ void KModManagerWorkspace::CreateToolBar()
 		{
 			KModManager::GetListManager().SaveLists();
 			KModManager::GetListManager().SetCurrentListID(newID);
-			ReloadWorkspace();
+
+			KModListEvent(KEVT_MODLIST_SELECTED).Send();
 		}
 		else
 		{
@@ -157,15 +158,15 @@ void KModManagerWorkspace::CreateToolBar()
 	m_ToolBar_ManageModList->SetShortHelp(T("ModManager.ModList.Manage"));
 	m_ToolBar_ManageModList->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 	{
-		KModManagerModListEditorDialog dialog(this);
+		KModListManagerEditorDialog dialog(this);
 		dialog.ShowModal();
 		if (dialog.IsModified())
 		{
 			KModManager::GetListManager().SaveLists();
 			KModManager::GetListManager().SetCurrentListID(dialog.GetCurrentList());
 			
-			ReloadWorkspace();
 			UpdateModListContent();
+			KModListEvent(KEVT_MODLIST_SELECTED).Send();
 		}
 	});
 	m_ModsToolBar->AddSeparator();
@@ -173,18 +174,18 @@ void KModManagerWorkspace::CreateToolBar()
 	m_ToolBar_AddMod = KMainWindow::CreateToolBarButton(m_ModsToolBar, T(KxID_ADD), KIMG_PLUS_SMALL);
 	
 	m_ToolBar_ChangeDisplayMode = KMainWindow::CreateToolBarButton(m_ModsToolBar, T("ModManager.DisplayMode.Caption"), KIMG_PROJECTION_SCREEN);
-	m_ToolBar_ChangeDisplayMode->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KModManagerWorkspace::OnDisplayModeMenu, this);
+	m_ToolBar_ChangeDisplayMode->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KModWorkspace::OnDisplayModeMenu, this);
 	
 	m_ToolBar_Tools = KMainWindow::CreateToolBarButton(m_ModsToolBar, wxEmptyString, KIMG_WRENCH_SCREWDRIVER);
 	m_ToolBar_Tools->SetShortHelp(T("ModManager.Tools"));
-	m_ToolBar_Tools->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KModManagerWorkspace::OnToolsMenu, this);
+	m_ToolBar_Tools->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KModWorkspace::OnToolsMenu, this);
 
 	m_SearchBox = new KxSearchBox(m_ModsToolBar, KxID_NONE);
-	m_SearchBox->Bind(wxEVT_SEARCHCTRL_SEARCH_BTN, &KModManagerWorkspace::OnModSerach, this);
-	m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &KModManagerWorkspace::OnModSerach, this);
+	m_SearchBox->Bind(wxEVT_SEARCHCTRL_SEARCH_BTN, &KModWorkspace::OnModSerach, this);
+	m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &KModWorkspace::OnModSerach, this);
 
 	KxMenu* searchMenu = new KxMenu();
-	searchMenu->Bind(KxEVT_MENU_SELECT, &KModManagerWorkspace::OnModSerachColumnsChanged, this);
+	searchMenu->Bind(KxEVT_MENU_SELECT, &KModWorkspace::OnModSerachColumnsChanged, this);
 	m_ViewModel->CreateSearchColumnsMenu(*searchMenu);
 	m_SearchBox->SetMenu(searchMenu);
 
@@ -196,7 +197,7 @@ void KModManagerWorkspace::CreateToolBar()
 	CreateAddModMenu();
 	CreateToolsMenu();
 }
-void KModManagerWorkspace::CreateDisplayModeMenu()
+void KModWorkspace::CreateDisplayModeMenu()
 {
 	m_ToolBar_DisplayModeMenu = new KxMenu();
 	m_ToolBar_ChangeDisplayMode->AssignDropdownMenu(m_ToolBar_DisplayModeMenu);
@@ -220,7 +221,7 @@ void KModManagerWorkspace::CreateDisplayModeMenu()
 		item->Check(m_ViewModel->ShouldShowPriorityGroups());
 	}
 }
-void KModManagerWorkspace::CreateAddModMenu()
+void KModWorkspace::CreateAddModMenu()
 {
 	m_ToolBar_AddModMenu = new KxMenu();
 	m_ToolBar_AddMod->AssignDropdownMenu(m_ToolBar_AddModMenu);
@@ -229,15 +230,15 @@ void KModManagerWorkspace::CreateAddModMenu()
 
 	item = m_ToolBar_AddModMenu->Add(new KxMenuItem(T("ModManager.NewMod.NewEmptyMod")));
 	item->SetBitmap(KGetBitmap(KIMG_FOLDER_PLUS));
-	item->Bind(KxEVT_MENU_SELECT, &KModManagerWorkspace::OnAddMod_Empty, this);
+	item->Bind(KxEVT_MENU_SELECT, &KModWorkspace::OnAddMod_Empty, this);
 
 	item = m_ToolBar_AddModMenu->Add(new KxMenuItem(T("ModManager.NewMod.NewModFromFolder")));
 	item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
-	item->Bind(KxEVT_MENU_SELECT, &KModManagerWorkspace::OnAddMod_FromFolder, this);
+	item->Bind(KxEVT_MENU_SELECT, &KModWorkspace::OnAddMod_FromFolder, this);
 	
 	item = m_ToolBar_AddModMenu->Add(new KxMenuItem(T("ModManager.NewMod.InstallPackage")));
 	item->SetBitmap(KGetBitmap(KIMG_BOX_SEARCH_RESULT));
-	item->Bind(KxEVT_MENU_SELECT, &KModManagerWorkspace::OnAddMod_InstallPackage, this);
+	item->Bind(KxEVT_MENU_SELECT, &KModWorkspace::OnAddMod_InstallPackage, this);
 
 	m_ToolBar_AddModMenu->AddSeparator();
 
@@ -255,7 +256,7 @@ void KModManagerWorkspace::CreateAddModMenu()
 		KModManagerImport::ShowImportDialog(KModManagerImport::NexusModManager, this);
 	});
 }
-void KModManagerWorkspace::CreateToolsMenu()
+void KModWorkspace::CreateToolsMenu()
 {
 	KxMenu* menu = new KxMenu();
 	m_ToolBar_Tools->AssignDropdownMenu(menu);
@@ -269,7 +270,7 @@ void KModManagerWorkspace::CreateToolsMenu()
 	item->SetBitmap(KGetBitmap(KIMG_DISK));
 }
 
-void KModManagerWorkspace::CreateModsView()
+void KModWorkspace::CreateModsView()
 {
 	m_ViewModel = new KModManagerModel();
 	m_ViewModel->ShowPriorityGroups(m_ModListViewOptions.GetAttributeBool("ShowPriorityGroups"));
@@ -278,27 +279,27 @@ void KModManagerWorkspace::CreateModsView()
 	m_ViewModel->SetDataVector(KModManager::Get().GetEntries());
 	m_ViewModel->SetDisplayMode((KModManagerModelType)m_ModListViewOptions.GetAttributeInt("DisplayMode"));
 }
-void KModManagerWorkspace::CreateControls()
+void KModWorkspace::CreateControls()
 {
 	wxBoxSizer* controlsSizer = new wxBoxSizer(wxHORIZONTAL);
 	m_MainSizer->Add(controlsSizer, 0, wxEXPAND|wxALIGN_RIGHT|wxTOP, KLC_VERTICAL_SPACING);
 
 	m_ActivateButton = new KxButton(this, KxID_NONE, T("ModManager.VFS.Activate"));
 	m_ActivateButton->SetBitmap(KGetBitmap(KIMG_TICK_CIRCLE_FRAME_EMPTY));
-	m_ActivateButton->Bind(wxEVT_BUTTON, &KModManagerWorkspace::OnMountButton, this);
+	m_ActivateButton->Bind(wxEVT_BUTTON, &KModWorkspace::OnMountButton, this);
 
 	controlsSizer->Add(m_ActivateButton);
 }
-void KModManagerWorkspace::CreateRightPane()
+void KModWorkspace::CreateRightPane()
 {
 	m_PaneRight_Tabs = new KxAuiNotebook(m_SplitterLeftRight, KxID_NONE);
 	m_PaneRight_Tabs->SetImageList(KGetImageList());
 
-	m_PaneRight_Tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &KModManagerWorkspace::OnSubWorkspaceOpening, this);
-	m_PaneRight_Tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &KModManagerWorkspace::OnSubWorkspaceOpened, this);
+	m_PaneRight_Tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &KModWorkspace::OnSubWorkspaceOpening, this);
+	m_PaneRight_Tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &KModWorkspace::OnSubWorkspaceOpened, this);
 }
 
-bool KModManagerWorkspace::OnOpenWorkspace()
+bool KModWorkspace::OnOpenWorkspace()
 {
 	if (IsFirstTimeOpen())
 	{
@@ -313,12 +314,12 @@ bool KModManagerWorkspace::OnOpenWorkspace()
 	}
 	return true;
 }
-bool KModManagerWorkspace::OnCloseWorkspace()
+bool KModWorkspace::OnCloseWorkspace()
 {
 	GetMainWindow()->ClearStatus();
 	return true;
 }
-void KModManagerWorkspace::OnReloadWorkspace()
+void KModWorkspace::OnReloadWorkspace()
 {
 	ClearControls();
 	
@@ -328,21 +329,21 @@ void KModManagerWorkspace::OnReloadWorkspace()
 	RefreshPlugins();
 }
 
-wxString KModManagerWorkspace::GetID() const
+wxString KModWorkspace::GetID() const
 {
-	return "KModManagerWorkspace";
+	return "KModWorkspace";
 }
-wxString KModManagerWorkspace::GetName() const
+wxString KModWorkspace::GetName() const
 {
 	return T("ModManager.Name");
 }
 
-bool KModManagerWorkspace::AddSubWorkspace(KWorkspace* workspace)
+bool KModWorkspace::AddSubWorkspace(KWorkspace* workspace)
 {
 	m_PaneRight_Tabs->InsertPage(workspace->GetTabIndex(), workspace, workspace->GetNameShort(), workspace->GetTabIndex() == 0, workspace->GetImageID());
 	return true;
 }
-void KModManagerWorkspace::OnSubWorkspaceOpening(wxAuiNotebookEvent& event)
+void KModWorkspace::OnSubWorkspaceOpening(wxAuiNotebookEvent& event)
 {
 	event.Skip();
 	KWorkspace* oldWorkspace = static_cast<KWorkspace*>(m_PaneRight_Tabs->GetPage(event.GetOldSelection()));
@@ -362,7 +363,7 @@ void KModManagerWorkspace::OnSubWorkspaceOpening(wxAuiNotebookEvent& event)
 		}
 	}
 }
-void KModManagerWorkspace::OnSubWorkspaceOpened(wxAuiNotebookEvent& event)
+void KModWorkspace::OnSubWorkspaceOpened(wxAuiNotebookEvent& event)
 {
 	event.Skip();
 
@@ -373,7 +374,7 @@ void KModManagerWorkspace::OnSubWorkspaceOpened(wxAuiNotebookEvent& event)
 	}
 }
 
-void KModManagerWorkspace::OnMountButton(wxCommandEvent& event)
+void KModWorkspace::OnMountButton(wxCommandEvent& event)
 {
 	KModManager& manager = KModManager::Get();
 	if (manager.IsVFSMounted())
@@ -385,7 +386,7 @@ void KModManagerWorkspace::OnMountButton(wxCommandEvent& event)
 		manager.MountVFS();
 	}
 }
-bool KModManagerWorkspace::ShowChangeModIDDialog(KModEntry* entry)
+bool KModWorkspace::ShowChangeModIDDialog(KModEntry* entry)
 {
 	wxString newID;
 	KxTextBoxDialog dialog(GetMainWindow(), KxID_NONE, T("ModManager.Menu.ChangeID"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL);
@@ -417,7 +418,7 @@ bool KModManagerWorkspace::ShowChangeModIDDialog(KModEntry* entry)
 	}
 	return false;
 }
-void KModManagerWorkspace::OpenPackage(const wxString& path)
+void KModWorkspace::OpenPackage(const wxString& path)
 {
 	KInstallWizardDialog* dialog = new KInstallWizardDialog(GetMainWindow(), path);
 	dialog->Bind(KEVT_IW_DONE, [this](wxNotifyEvent& event)
@@ -426,7 +427,7 @@ void KModManagerWorkspace::OpenPackage(const wxString& path)
 	});
 }
 
-void KModManagerWorkspace::OnDisplayModeMenu(KxAuiToolBarEvent& event)
+void KModWorkspace::OnDisplayModeMenu(KxAuiToolBarEvent& event)
 {
 	wxWindowID id = m_ToolBar_ChangeDisplayMode->ShowDropdownMenu();
 	if (id != KxID_NONE)
@@ -457,14 +458,14 @@ void KModManagerWorkspace::OnDisplayModeMenu(KxAuiToolBarEvent& event)
 		};
 	}
 }
-void KModManagerWorkspace::OnToolsMenu(KxAuiToolBarEvent& event)
+void KModWorkspace::OnToolsMenu(KxAuiToolBarEvent& event)
 {
 	wxWindowID id = m_ToolBar_Tools->ShowDropdownMenu();
 	switch (id)
 	{
 		case TOOLS_ID_STATISTICS:
 		{
-			KModManagerStatisticsDialog dialog(this);
+			KModStatisticsDialog dialog(this);
 			dialog.ShowModal();
 			break;
 		}
@@ -484,7 +485,7 @@ void KModManagerWorkspace::OnToolsMenu(KxAuiToolBarEvent& event)
 	};
 }
 
-void KModManagerWorkspace::OnVFSToggled(KVFSEvent& event)
+void KModWorkspace::OnVFSToggled(KVFSEvent& event)
 {
 	m_ToolBar_ModList->Enable(!event.IsActivated());
 	m_ToolBar_ManageModList->SetEnabled(!event.IsActivated());
@@ -502,7 +503,7 @@ void KModManagerWorkspace::OnVFSToggled(KVFSEvent& event)
 	}
 	m_ViewModel->UpdateUI();
 }
-void KModManagerWorkspace::OnAddMod_Empty(KxMenuEvent& event)
+void KModWorkspace::OnAddMod_Empty(KxMenuEvent& event)
 {
 	KNewModDialog dialog(this);
 	if (dialog.ShowModal() == KxID_OK)
@@ -516,7 +517,7 @@ void KModManagerWorkspace::OnAddMod_Empty(KxMenuEvent& event)
 		ReloadWorkspace();
 	}
 }
-void KModManagerWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
+void KModWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
 {
 	KNewModDialogEx dialog(this);
 	if (dialog.ShowModal() == KxID_OK)
@@ -564,7 +565,7 @@ void KModManagerWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
 		}
 	}
 }
-void KModManagerWorkspace::OnAddMod_InstallPackage(KxMenuEvent& event)
+void KModWorkspace::OnAddMod_InstallPackage(KxMenuEvent& event)
 {
 	KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN);
 	dialog.AddFilter("*.kmp;*.smi;*.7z;*.zip;*.fomod", T("FileFilter.AllSupportedFormats"));
@@ -576,7 +577,7 @@ void KModManagerWorkspace::OnAddMod_InstallPackage(KxMenuEvent& event)
 	}
 }
 
-void KModManagerWorkspace::UninstallMod(KModEntry* entry, bool eraseLog)
+void KModWorkspace::UninstallMod(KModEntry* entry, bool eraseLog)
 {
 	if (entry)
 	{
@@ -604,14 +605,14 @@ void KModManagerWorkspace::UninstallMod(KModEntry* entry, bool eraseLog)
 		}
 	}
 }
-void KModManagerWorkspace::OnModSerach(wxCommandEvent& event)
+void KModWorkspace::OnModSerach(wxCommandEvent& event)
 {
 	if (m_ViewModel->SetSearchMask(event.GetEventType() == wxEVT_SEARCHCTRL_SEARCH_BTN ? event.GetString() : wxEmptyString))
 	{
 		m_ViewModel->RefreshItems();
 	}
 }
-void KModManagerWorkspace::OnModSerachColumnsChanged(KxMenuEvent& event)
+void KModWorkspace::OnModSerachColumnsChanged(KxMenuEvent& event)
 {
 	KxMenuItem* item = event.GetItem();
 	item->Check(!item->IsChecked());
@@ -627,12 +628,12 @@ void KModManagerWorkspace::OnModSerachColumnsChanged(KxMenuEvent& event)
 	m_ViewModel->SetSearchColumns(columns);
 }
 
-void KModManagerWorkspace::ClearControls()
+void KModWorkspace::ClearControls()
 {
 	m_SearchBox->Clear();
 	GetMainWindow()->ClearStatus();
 }
-void KModManagerWorkspace::DisplayModInfo(KModEntry* entry)
+void KModWorkspace::DisplayModInfo(KModEntry* entry)
 {
 	wxWindowUpdateLocker lock(this);
 	ClearControls();
@@ -642,7 +643,7 @@ void KModManagerWorkspace::DisplayModInfo(KModEntry* entry)
 		GetMainWindow()->SetStatus(entry->GetName());
 	}
 }
-void KModManagerWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEntry)
+void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEntry)
 {
 	if (modEntry)
 	{
@@ -792,15 +793,15 @@ void KModManagerWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry*
 	}
 }
 
-void KModManagerWorkspace::SelectMod(const KModEntry* entry)
+void KModWorkspace::SelectMod(const KModEntry* entry)
 {
 	m_ViewModel->SelectMod(entry);
 }
-void KModManagerWorkspace::ProcessSelection(KModEntry* entry)
+void KModWorkspace::ProcessSelection(KModEntry* entry)
 {
 	DisplayModInfo(entry);
 }
-void KModManagerWorkspace::HighlightMod(const KModEntry* entry)
+void KModWorkspace::HighlightMod(const KModEntry* entry)
 {
 	if (entry)
 	{
@@ -813,13 +814,13 @@ void KModManagerWorkspace::HighlightMod(const KModEntry* entry)
 		m_ViewModel->GetView()->UnselectAll();
 	}
 }
-void KModManagerWorkspace::ReloadView()
+void KModWorkspace::ReloadView()
 {
 	m_ViewModel->RefreshItems();
 	ProcessSelection();
 }
 
-void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
+void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 {
 	// Get mouse position before doing anything else,
 	// as mouse pointer can move before displaying showing the menu.
@@ -932,7 +933,7 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 		case KMC_ID_MOD_EDIT_TAGS:
 		{
 			KModEntry tempEntry(*modEntry);
-			KModManagerTagSelectorDialog dialog(GetMainWindow(), T("ModManager.TagsDialog"));
+			KModTagsSelectorDialog dialog(GetMainWindow(), T("ModManager.TagsDialog"));
 			dialog.SetDataVector(&tempEntry.GetTags(), &tempEntry);
 			dialog.ShowModal();
 			if (dialog.IsModified())
@@ -963,7 +964,7 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 		}
 		case KMC_ID_MOD_EDIT_SITES:
 		{
-			KModManagerSitesEditorDialog dialog(GetMainWindow(), modEntry->GetWebSites(), modEntry->GetFixedWebSites());
+			KModSitesEditorDialog dialog(GetMainWindow(), modEntry->GetWebSites(), modEntry->GetFixedWebSites());
 			dialog.ShowModal();
 			if (dialog.IsModified())
 			{
@@ -1067,7 +1068,7 @@ void KModManagerWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 		}
 	};
 }
-void KModManagerWorkspace::ShowViewContextMenu(const KModTag* modTag)
+void KModWorkspace::ShowViewContextMenu(const KModTag* modTag)
 {
 	if (modTag)
 	{
@@ -1113,14 +1114,14 @@ void KModManagerWorkspace::ShowViewContextMenu(const KModTag* modTag)
 		};
 	}
 }
-void KModManagerWorkspace::UpdateModListContent()
+void KModWorkspace::UpdateModListContent()
 {
 	m_ToolBar_ModList->Clear();
 	int selectIndex = 0;
-	for (const KModList& v: KModManager::GetListManager().GetLists())
+	for (const KModList& modList: KModManager::GetListManager().GetLists())
 	{
-		int index = m_ToolBar_ModList->Append(v.GetID());
-		if (v.GetID() == KModManager::GetListManager().GetCurrentListID())
+		int index = m_ToolBar_ModList->Append(modList.GetID());
+		if (modList.GetID() == KModManager::GetListManager().GetCurrentListID())
 		{
 			selectIndex = index;
 		}
@@ -1128,7 +1129,7 @@ void KModManagerWorkspace::UpdateModListContent()
 
 	m_ToolBar_ModList->SetSelection(selectIndex);
 }
-void KModManagerWorkspace::RefreshPlugins()
+void KModWorkspace::RefreshPlugins()
 {
 	if (KPluginManager* pluginManager = KPluginManager::GetInstance())
 	{
@@ -1140,15 +1141,15 @@ void KModManagerWorkspace::RefreshPlugins()
 	}
 }
 
-bool KModManagerWorkspace::IsAnyChangeAllowed() const
+bool KModWorkspace::IsAnyChangeAllowed() const
 {
 	return IsMovingModsAllowed();
 }
-bool KModManagerWorkspace::IsMovingModsAllowed() const
+bool KModWorkspace::IsMovingModsAllowed() const
 {
 	return m_ViewModel->GetDisplayMode() == KMM_TYPE_CONNECTOR && IsChangingModsAllowed();
 }
-bool KModManagerWorkspace::IsChangingModsAllowed() const
+bool KModWorkspace::IsChangingModsAllowed() const
 {
 	return !KModManager::Get().IsVFSMounted();
 }

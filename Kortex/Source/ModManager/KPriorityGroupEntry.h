@@ -42,6 +42,11 @@ class KPriorityGroupEntry: public KFixedModEntry
 		virtual intptr_t GetPriority() const override;
 		virtual intptr_t GetOrderIndex() const override;
 
+		KModEntry* GetBaseMod() const
+		{
+			return m_BaseMod;
+		}
+
 		bool IsBegin() const
 		{
 			return m_IsBegin;

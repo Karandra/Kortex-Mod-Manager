@@ -3,9 +3,9 @@
 #include "KManager.h"
 #include "KModEntry.h"
 #include "KFixedModEntry.h"
-#include "KModManagerTags.h"
+#include "KModTagsManager.h"
 #include "KModManagerDispatcher.h"
-#include "KModManagerModList.h"
+#include "KModListManager.h"
 #include "KMirroredVirtualFolder.h"
 #include "KEvents.h"
 #include "KProgramOptions.h"
@@ -45,7 +45,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		{
 			return *GetInstance();
 		}
-		static KModManagerTags& GetTagManager()
+		static KModTagsManager& GetTagManager()
 		{
 			return Get().m_TagManager;
 		}
@@ -53,7 +53,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		{
 			return Get().m_Dispatcher;
 		}
-		static KModManagerModList& GetListManager()
+		static KModListManager& GetListManager()
 		{
 			return Get().m_ModListManager;
 		}
@@ -80,9 +80,9 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		KFixedModEntry m_ModEntry_BaseGame;
 		KFixedModEntry m_ModEntry_WriteTarget;
 		
-		KModManagerTags m_TagManager;
+		KModTagsManager m_TagManager;
 		KModManagerDispatcher m_Dispatcher;
-		KModManagerModList m_ModListManager;
+		KModListManager m_ModListManager;
 		bool m_IsMounted = false;
 		KxProgressDialog* m_MountStatusDialog = NULL;
 
@@ -110,6 +110,8 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		
 		void OnModInstalled(KModEvent& event);
 		void OnModUninstalled(KModEvent& event);
+
+		void OnModListSelected(KModListEvent& event);
 
 	public:
 		KModManager(KWorkspace* workspace);

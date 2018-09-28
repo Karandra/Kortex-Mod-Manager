@@ -130,7 +130,12 @@ bool KModManager::InitMainVirtualFolder()
 				folders.push_back(entry->GetLocation(KMM_LOCATION_MOD_FILES));
 			}
 		}
-		return KIPCClient::GetInstance()->CreateVFS_Convergence(mountPoint, m_ModEntry_WriteTarget.GetLocation(KMM_LOCATION_MOD_FILES), folders, true);
+
+		if (KIPCClient::GetInstance()->CreateVFS_Convergence(mountPoint, m_ModEntry_WriteTarget.GetLocation(KMM_LOCATION_MOD_FILES), folders, true))
+		{
+			//return KIPCClient::GetInstance()->ConvergenceVFS_BuildDispatcherIndex();
+			return KIPCClient::GetInstance()->ConvergenceVFS_SetDispatcherIndex();
+		}
 	}
 	return false;
 }

@@ -282,9 +282,9 @@ int64_t KArchiveImpl::GetOriginalSize()
 		m_OriginalSize = 0;
 
 		const std::vector<size_t> sizes = m_Archive.GetOrigSizes();
-		for (size_t nSize: sizes)
+		for (size_t size: sizes)
 		{
-			m_OriginalSize += nSize;
+			m_OriginalSize += size;
 		}
 	}
 	return m_OriginalSize;

@@ -42,3 +42,12 @@ bool KVirtualFileSystemConvergence::ClearVirtualFolders()
 {
 	return m_Impl->ClearVirtualFolders();
 }
+
+void KVirtualFileSystemConvergence::BuildDispatcherIndex()
+{
+	m_Impl->BuildDispatcherIndex();
+}
+void KVirtualFileSystemConvergence::SetDispatcherIndex(const ExternalDispatcherIndexT& index)
+{
+	m_Impl->SetDispatcherIndex(index);
+}

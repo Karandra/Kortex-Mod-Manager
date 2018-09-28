@@ -43,6 +43,8 @@ class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 
 		bool CreateVFS_Convergence(const wxString& source, const wxString& writeTarget, const KxStringVector& virtualFolders, bool canDeleteInVirtualFolder);
 		bool ConvergenceVFS_ClearVirtualFolders();
+		bool ConvergenceVFS_BuildDispatcherIndex();
+		bool ConvergenceVFS_SetDispatcherIndex();
 		
 		bool EnableVFS();
 		bool DisableVFS();

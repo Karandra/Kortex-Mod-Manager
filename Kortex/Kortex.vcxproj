@@ -553,6 +553,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Resources;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Lib\Win32;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\Bin x86;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <ShowProgress>NotSet</ShowProgress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -571,6 +572,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Resources;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Lib\x64;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\Bin x64;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <ShowProgress>NotSet</ShowProgress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -598,6 +600,7 @@
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <ShowProgress>NotSet</ShowProgress>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -633,6 +636,7 @@
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <ShowProgress>NotSet</ShowProgress>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>

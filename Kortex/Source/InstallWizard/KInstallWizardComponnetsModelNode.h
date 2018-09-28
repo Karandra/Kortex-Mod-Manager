@@ -85,10 +85,10 @@ class KIWCModelNode
 		{
 			return m_Begin < m_Size;
 		}
-		void SetBounds(size_t nBegin, size_t nSize)
+		void SetBounds(size_t beginIndex, size_t size)
 		{
-			m_Begin = nBegin;
-			m_Size = nSize;
+			m_Begin = beginIndex;
+			m_Size = size;
 		}
 
 		bool IsRequiredEntry() const

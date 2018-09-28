@@ -180,12 +180,43 @@ bool KIPCClient::ConvergenceVFS_ClearVirtualFolders()
 	}
 	return false;
 }
+bool KIPCClient::ConvergenceVFS_BuildDispatcherIndex()
+{
+	if (m_Connection)
+	{
+		return m_Connection->SendToServer(KIPCRequestNS::BuildConvergenceIndex());
+	}
+	return false;
+}
+bool KIPCClient::ConvergenceVFS_SetDispatcherIndex()
+{
+	if (m_Connection)
+	{
+		if (m_Connection->SendToServer(KIPCRequestNS::BeginConvergenceIndex()))
+		{
+			KModManager::GetDispatcher().GetVirtualTree().WalkTree([this](const KFileTreeNode& node)
+			{
+				if (node.GetMod().IsEnabled())
+				{
+					return m_Connection->SendToServer(KIPCRequestNS::AddConvergenceIndex(node.GetRelativePath(), node.GetFullPath()));
+				}
+				return true;
+			});
+			return m_Connection->SendToServer(KIPCRequestNS::CommitConvergenceIndex());
+		}
+	}
+	return false;
+}
 
 bool KIPCClient::EnableVFS()
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequestNS::EnableVFS(true));
+		KIPCRequestNS::EnableVFS request(true);
+		auto memory = request.CreateSharedMemoryRegion<KIPCRequestNS::StaticString>(L"test static string");
+
+		return m_Connection->SendToServer(request);
+		//return m_Connection->SendToServer(KIPCRequestNS::EnableVFS(true));
 	}
 	return false;
 }

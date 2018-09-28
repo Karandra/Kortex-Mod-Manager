@@ -23,9 +23,14 @@ class KIPCConnection: public wxConnection
 
 	private:
 		using SendFunctionType = bool(KIPCConnection::*)(const wxString&, const void*, size_t, wxIPCFormat);
-		template<class T> bool SendRequestBase(const T& request, SendFunctionType func)
+		
+		template<class T> static void AssertRequest()
 		{
 			static_assert(std::is_trivially_copyable_v<T>, "T is not trivially copyable");
+		}
+		template<class T> bool SendRequestBase(const T& request, SendFunctionType func)
+		{
+			AssertRequest<T>();
 
 			auto itemName = request.GetClassName();
 			wxLogInfo("Client: Sending request \"%s\"", itemName);
@@ -35,8 +40,8 @@ class KIPCConnection: public wxConnection
 
 	protected:
 		virtual bool OnDisconnect() override;
-		virtual bool OnPoke(const wxString& topic, const wxString& item, const void* data, size_t nSize, wxIPCFormat format) override;
-		virtual bool OnAdvise(const wxString& topic, const wxString& item, const void* data, size_t nSize, wxIPCFormat format) override;
+		virtual bool OnPoke(const wxString& topic, const wxString& item, const void* data, size_t size, wxIPCFormat format) override;
+		virtual bool OnAdvise(const wxString& topic, const wxString& item, const void* data, size_t size, wxIPCFormat format) override;
 		virtual bool OnStartAdvise(const wxString& topic, const wxString& item) override;
 		virtual bool OnStopAdvise(const wxString& topic, const wxString& item) override;
 
@@ -57,7 +62,7 @@ class KIPCConnection: public wxConnection
 
 		template<class T> const T* ReceiveRequest(const wxString& item, const void* data, size_t dataSize) const
 		{
-			static_assert(std::is_trivially_copyable<T>::value, "T is not trivially copyable");
+			AssertRequest<T>();
 			wxLogInfo("Client: Receive request \"%s\"", item);
 
 			if (dataSize == sizeof(T) && !item.IsEmpty())

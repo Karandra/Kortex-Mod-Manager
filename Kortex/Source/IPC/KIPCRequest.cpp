@@ -19,5 +19,10 @@ namespace KIPCRequestNS
 		wxS("CreateConvergenceVFS"),
 		wxS("AddConvergenceVirtualFolder"),
 		wxS("ClearConvergenceVirtualFolders"),
+		wxS("BuildConvergenceIndex"),
+
+		wxS("BeginConvergenceIndex"),
+		wxS("CommitConvergenceIndex"),
+		wxS("AddConvergenceIndex"),
 	};
 };

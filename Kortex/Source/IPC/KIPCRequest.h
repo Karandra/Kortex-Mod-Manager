@@ -2,6 +2,9 @@
 #include "stdafx.h"
 #include "IPC/KIPC.h"
 #include "VFS/KVirtualFileSystemBase.h"
+#include "VFS/KVirtualFileSystemMirror.h"
+#include "VFS/KVirtualFileSystemConvergence.h"
+#include <KxFramework/KxSharedMemory.h>
 
 namespace KIPCRequestNS
 {
@@ -65,6 +68,11 @@ namespace KIPCRequestNS
 		CreateConvergenceVFS,
 		AddConvergenceVirtualFolder,
 		ClearConvergenceVirtualFolders,
+		BuildConvergenceIndex,
+
+		BeginConvergenceIndex,
+		CommitConvergenceIndex,
+		AddConvergenceIndex,
 
 		COUNT,
 	};
@@ -72,6 +80,10 @@ namespace KIPCRequestNS
 
 	class BaseRequest
 	{
+		private:
+			template<class T> using MemRegionRO = KxSharedMemory<T, KxSharedMemoryNS::Protection::Read>;
+			template<class T> using MemRegionRW = KxSharedMemory<T, KxSharedMemoryNS::Protection::RW>;
+
 		private:
 			Type m_Type = Type::None;
 
@@ -86,6 +98,24 @@ namespace KIPCRequestNS
 			{
 				return m_Type;
 			}
+			const wxChar* GetRequestName() const
+			{
+				return TypeName[(size_t)m_Type];
+			}
+			
+			wxString GetSharedRegionName() const
+			{
+				return wxString(wxS("Kortex/IPC/")) + GetRequestName();
+			}
+			template<class T, class... Args> MemRegionRW<T> CreateSharedMemoryRegion(Args&&... args) const
+			{
+				return MemRegionRW<T>(GetSharedRegionName(), std::forward<Args>(args)...);
+			}
+			template<class T> MemRegionRO<T> GetSharedMemoryRegion() const
+			{
+				return MemRegionRO<T>(GetSharedRegionName());
+			}
+
 			bool IsSameType(const BaseRequest& other) const
 			{
 				return m_Type == other.GetRequestType();
@@ -186,7 +216,6 @@ namespace KIPCRequestNS
 	//////////////////////////////////////////////////////////////////////////
 	class CreateConvergenceVFS: public BaseRequestType<Type::CreateConvergenceVFS>
 	{
-
 		private:
 			StaticString m_MountPoint;
 			StaticString m_WriteTarget;
@@ -231,6 +260,53 @@ namespace KIPCRequestNS
 	};
 	class ClearConvergenceVirtualFolders: public BaseRequestType<Type::ClearConvergenceVirtualFolders>
 	{
+	};
+	class BuildConvergenceIndex: public BaseRequestType<Type::BuildConvergenceIndex>
+	{
+	};
+
+	//////////////////////////////////////////////////////////////////////////
+	class BeginConvergenceIndex: public BaseRequestType<Type::BeginConvergenceIndex>
+	{
+		private:
+			size_t m_InitialSize = 0;
+
+		public:
+			BeginConvergenceIndex(size_t initialiIze = 0)
+				:m_InitialSize(initialiIze)
+			{
+			}
+
+		public:
+			size_t GetInitialSize() const
+			{
+				return m_InitialSize;
+			}
+	};
+	class CommitConvergenceIndex: public BaseRequestType<Type::CommitConvergenceIndex>
+	{
+	};
+	class AddConvergenceIndex: public BaseRequestType<Type::AddConvergenceIndex>
+	{
+		private:
+			StaticString m_RequestPath;
+			StaticString m_TargetPath;
+
+		public:
+			AddConvergenceIndex(const wxString& requestPath, const wxString& targetPath)
+				:m_RequestPath(requestPath), m_TargetPath(targetPath)
+			{
+			}
+
+		public:
+			wxString GetRequestPath() const
+			{
+				return m_RequestPath;
+			}
+			wxString GetTargetPath() const
+			{
+				return m_TargetPath;
+			}
 	};
 };
 

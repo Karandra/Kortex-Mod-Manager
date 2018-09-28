@@ -67,6 +67,7 @@ void KIPCServer::OnUninstallService(const KIPCRequestNS::UninstallVFSService& co
 		m_Service->Uninstall();
 	}
 }
+
 void KIPCServer::OnCreateConvergenceVFS(const KIPCRequestNS::CreateConvergenceVFS& config)
 {
 	m_Convergence = std::make_unique<KVirtualFileSystemConvergence>(GetServiceVFS(), config.GetMountPoint(), config.GetWriteTarget());
@@ -79,18 +80,41 @@ void KIPCServer::OnCreateConvergenceVFS(const KIPCRequestNS::CreateConvergenceVF
 }
 void KIPCServer::OnAddConvergenceVirtualFolder(const KIPCRequestNS::AddConvergenceVirtualFolder& config)
 {
-	if (m_Convergence)
-	{
-		m_Convergence->AddVirtualFolder(config.GetPath());
-	}
+	m_Convergence->AddVirtualFolder(config.GetPath());
 }
 void KIPCServer::OnClearConvergenceVirtualFolders(const KIPCRequestNS::ClearConvergenceVirtualFolders& config)
 {
-	if (m_Convergence)
-	{
-		m_Convergence->ClearVirtualFolders();
-	}
+	m_Convergence->ClearVirtualFolders();
 }
+void KIPCServer::OnBuildConvergenceIndex(const KIPCRequestNS::BuildConvergenceIndex& config)
+{
+	m_Convergence->BuildDispatcherIndex();
+}
+
+void KIPCServer::OnBeginConvergenceIndex(const KIPCRequestNS::BeginConvergenceIndex& config)
+{
+	m_ConvergenceIndex.clear();
+	m_ConvergenceIndex.reserve(config.GetInitialSize());
+}
+void KIPCServer::OnCommitConvergenceIndex(const KIPCRequestNS::CommitConvergenceIndex& config)
+{
+	KVirtualFileSystemConvergence::ExternalDispatcherIndexT index;
+	index.reserve(m_ConvergenceIndex.size());
+
+	for (const auto& value: m_ConvergenceIndex)
+	{
+		index.emplace_back(value.first.wc_str(), value.second.wc_str());
+	}
+	m_Convergence->SetDispatcherIndex(index);
+
+	m_ConvergenceIndex.clear();
+	m_ConvergenceIndex.shrink_to_fit();
+}
+void KIPCServer::OnAddConvergenceIndex(const KIPCRequestNS::AddConvergenceIndex& config)
+{
+	m_ConvergenceIndex.push_back(std::make_pair(config.GetRequestPath(), config.GetTargetPath()));
+}
+
 void KIPCServer::OnCreateMirrorVFS(const KIPCRequestNS::CreateMirrorVFS& config)
 {
 	auto& mirror = m_MirrorVFSList.emplace_back(std::make_unique<KVirtualFileSystemMirror>(GetServiceVFS(), config.GetTarget(), config.GetSource()));
@@ -100,6 +124,7 @@ void KIPCServer::OnClearMirrorVFSList(const KIPCRequestNS::ClearMirrorVFSList& c
 {
 	m_MirrorVFSList.clear();
 }
+
 void KIPCServer::OnEnableVFS(const KIPCRequestNS::EnableVFS& config)
 {
 	config.ShouldEnable() ? EnableVFS() : DisableVFS();

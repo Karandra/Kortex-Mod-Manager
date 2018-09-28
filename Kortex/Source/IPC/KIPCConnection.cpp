@@ -18,58 +18,86 @@ bool KIPCConnection::OnDisconnect()
 	}
 	return wxConnection::OnDisconnect();
 }
-bool KIPCConnection::OnPoke(const wxString& topic, const wxString& item, const void* data, size_t nSize, wxIPCFormat format)
+bool KIPCConnection::OnPoke(const wxString& topic, const wxString& item, const void* data, size_t size, wxIPCFormat format)
 {
 	if constexpr(IsServer())
 	{
-		if (auto service = ReceiveRequest<KIPCRequestNS::InitVFSService>(item, data, nSize))
+		if (auto service = ReceiveRequest<KIPCRequestNS::InitVFSService>(item, data, size))
 		{
 			GetServer()->OnInitService(*service);
 			return true;
 		}
-		else if (auto uninstall = ReceiveRequest<KIPCRequestNS::UninstallVFSService>(item, data, nSize))
+		if (auto uninstall = ReceiveRequest<KIPCRequestNS::UninstallVFSService>(item, data, size))
 		{
 			GetServer()->OnUninstallService(*uninstall);
 			return true;
 		}
-		else if (auto enable = ReceiveRequest<KIPCRequestNS::EnableVFS>(item, data, nSize))
+
+		//////////////////////////////////////////////////////////////////////////
+		if (auto enable = ReceiveRequest<KIPCRequestNS::EnableVFS>(item, data, size))
 		{
 			GetServer()->OnEnableVFS(*enable);
 			return true;
 		}
-		else if (auto mirror = ReceiveRequest<KIPCRequestNS::CreateMirrorVFS>(item, data, nSize))
+
+		//////////////////////////////////////////////////////////////////////////
+		if (auto mirror = ReceiveRequest<KIPCRequestNS::CreateMirrorVFS>(item, data, size))
 		{
 			GetServer()->OnCreateMirrorVFS(*mirror);
 			return true;
 		}
-		else if (auto mirrorClearList = ReceiveRequest<KIPCRequestNS::ClearMirrorVFSList>(item, data, nSize))
+		if (auto mirrorClearList = ReceiveRequest<KIPCRequestNS::ClearMirrorVFSList>(item, data, size))
 		{
 			GetServer()->OnClearMirrorVFSList(*mirrorClearList);
 			return true;
 		}
-		else if (auto convergence = ReceiveRequest<KIPCRequestNS::CreateConvergenceVFS>(item, data, nSize))
+
+		//////////////////////////////////////////////////////////////////////////
+		if (auto convergence = ReceiveRequest<KIPCRequestNS::CreateConvergenceVFS>(item, data, size))
 		{
 			GetServer()->OnCreateConvergenceVFS(*convergence);
 			return true;
 		}
-		else if (auto convergenceAddFolder = ReceiveRequest<KIPCRequestNS::AddConvergenceVirtualFolder>(item, data, nSize))
+		if (auto convergenceAddFolder = ReceiveRequest<KIPCRequestNS::AddConvergenceVirtualFolder>(item, data, size))
 		{
 			GetServer()->OnAddConvergenceVirtualFolder(*convergenceAddFolder);
 			return true;
 		}
-		else if (auto convergenceClearFolders = ReceiveRequest<KIPCRequestNS::ClearConvergenceVirtualFolders>(item, data, nSize))
+		if (auto convergenceClearFolders = ReceiveRequest<KIPCRequestNS::ClearConvergenceVirtualFolders>(item, data, size))
 		{
 			GetServer()->OnClearConvergenceVirtualFolders(*convergenceClearFolders);
+			return true;
+		}
+		if (auto convergenceBuildIndex = ReceiveRequest<KIPCRequestNS::BuildConvergenceIndex>(item, data, size))
+		{
+			GetServer()->OnBuildConvergenceIndex(*convergenceBuildIndex);
+			return true;
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		if (auto convergenceBeginIndex = ReceiveRequest<KIPCRequestNS::BeginConvergenceIndex>(item, data, size))
+		{
+			GetServer()->OnBeginConvergenceIndex(*convergenceBeginIndex);
+			return true;
+		}
+		if (auto convergenceCommitIndex = ReceiveRequest<KIPCRequestNS::CommitConvergenceIndex>(item, data, size))
+		{
+			GetServer()->OnCommitConvergenceIndex(*convergenceCommitIndex);
+			return true;
+		}
+		if (auto convergenceAddIndex = ReceiveRequest<KIPCRequestNS::AddConvergenceIndex>(item, data, size))
+		{
+			GetServer()->OnAddConvergenceIndex(*convergenceAddIndex);
 			return true;
 		}
 	}
 	return false;
 }
-bool KIPCConnection::OnAdvise(const wxString& topic, const wxString& item, const void* data, size_t nSize, wxIPCFormat format)
+bool KIPCConnection::OnAdvise(const wxString& topic, const wxString& item, const void* data, size_t size, wxIPCFormat format)
 {
 	if constexpr(IsClient())
 	{
-		if (auto stateChanged = ReceiveRequest<KIPCRequestNS::VFSStateChanged>(item, data, nSize))
+		if (auto stateChanged = ReceiveRequest<KIPCRequestNS::VFSStateChanged>(item, data, size))
 		{
 			GetClient()->OnVFSStateChanged(*stateChanged);
 			return true;

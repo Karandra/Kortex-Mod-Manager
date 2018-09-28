@@ -4,11 +4,11 @@
 
 bool KFixedModEntry::IsEnabled() const
 {
-	return KModEntry::IsEnabled();
+	return true;
 }
 bool KFixedModEntry::IsInstalled() const
 {
-	return KModEntry::IsInstalled();
+	return true;
 }
 bool KFixedModEntry::IsLinkedMod() const
 {

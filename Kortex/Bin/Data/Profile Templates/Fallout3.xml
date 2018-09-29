@@ -37,6 +37,7 @@
 
 	<Network>
 		<NexusID>Fallout3</NexusID>
+		<SteamID>22370</SteamID>
 	</Network>
 
 	<LocationsConfig>

@@ -37,6 +37,7 @@
 
 	<Network>
 		<NexusID>NewVegas</NexusID>
+		<SteamID>22490</SteamID>
 	</Network>
 
 	<LocationsConfig>

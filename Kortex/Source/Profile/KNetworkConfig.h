@@ -9,7 +9,9 @@ class KNetworkConfig: public KxSingletonPtr<KNetworkConfig>
 {
 	private:
 		KNetwork* m_Network = NULL;
+
 		wxString m_NexusID;
+		int64_t m_SteamID = -1;
 
 	public:
 		KNetworkConfig(KProfile& profile, KxXMLNode& node);
@@ -23,5 +25,14 @@ class KNetworkConfig: public KxSingletonPtr<KNetworkConfig>
 		const wxString& GetNexusID() const
 		{
 			return m_NexusID;
+		}
+
+		bool HasSteamID() const
+		{
+			return m_SteamID > 0;
+		}
+		int64_t GetSteamID() const
+		{
+			return m_SteamID;
 		}
 };

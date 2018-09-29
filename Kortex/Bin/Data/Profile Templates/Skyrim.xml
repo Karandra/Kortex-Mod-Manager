@@ -37,6 +37,7 @@
 
 	<Network>
 		<NexusID>Skyrim</NexusID>
+		<SteamID>72850</SteamID>
 	</Network>
 
 	<LocationsConfig>
@@ -184,9 +185,4 @@
 		
 		<Invalidation Method="BethesdaGeneric" ConfigRoot="$(SkyrimINI)" EditorConfig="$(SkyrimEditorINI)"></Invalidation>
 	</GameArchives>
-	
-	<WebClient Enabled="1" Type="Steam">
-		<SteamID>72850</SteamID>
-		<Path>$(DataFilesPath)</Path>
-	</WebClient>
 </Profile>

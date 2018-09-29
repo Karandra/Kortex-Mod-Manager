@@ -19,6 +19,7 @@
 
 	<Network>
 		<NexusID>Sacred2</NexusID>
+		<SteamID>225640</SteamID>
 	</Network>
 
 	<LocationsConfig>

@@ -28,6 +28,7 @@
 
 	<Network>
 		<NexusID>Morrowind</NexusID>
+		<SteamID>22320</SteamID>
 	</Network>
 
 	<LocationsConfig>

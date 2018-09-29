@@ -33,6 +33,7 @@
 
 	<Network>
 		<NexusID>Oblivion</NexusID>
+		<SteamID>22330</SteamID>
 	</Network>
 
 	<LocationsConfig>

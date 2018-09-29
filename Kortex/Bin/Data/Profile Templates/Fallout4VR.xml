@@ -39,6 +39,7 @@
 
 	<Network>
 		<NexusID>Fallout4</NexusID>
+		<SteamID>611660</SteamID>
 	</Network>
 
 	<LocationsConfig>

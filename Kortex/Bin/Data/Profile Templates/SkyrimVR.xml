@@ -37,6 +37,7 @@
 
 	<Network>
 		<NexusID>SkyrimSpecialEdition</NexusID>
+		<SteamID>611670</SteamID>
 	</Network>
 
 	<LocationsConfig>

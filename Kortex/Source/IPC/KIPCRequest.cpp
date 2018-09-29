@@ -3,14 +3,14 @@
 
 namespace KIPCRequestNS
 {
-	const wxChar* TypeName[(size_t)Type::COUNT] =
+	const wxChar* TypeName[] =
 	{
 		wxS("None"),
 
 		wxS("InitVFSService"),
 		wxS("UninstallVFSService"),
 
-		wxS("EnableVFS"),
+		wxS("ToggleVFS"),
 		wxS("VFSStateChanged"),
 
 		wxS("CreateMirrorVFS"),

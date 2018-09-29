@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "KMirroredVirtualFolder.h"
-#include "VFS/KVirtualFileSystemMirror.h"
+#include "VFS/KVFSMirror.h"
 
-KMirroredVirtualFolder::KMirroredVirtualFolder(KVirtualFileSystemService* service, const wxString& source, const wxString& target)
+KMirroredVirtualFolder::KMirroredVirtualFolder(KVFSService* service, const wxString& source, const wxString& target)
 	:m_Source(source), m_Target(target)
 {
-	m_VFS = new KVirtualFileSystemMirror(service, target, source);
+	m_VFS = new KVFSMirror(service, target, source);
 }
 KMirroredVirtualFolder::~KMirroredVirtualFolder()
 {

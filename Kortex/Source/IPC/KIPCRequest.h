@@ -1,10 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "IPC/KIPC.h"
-#include "VFS/KVirtualFileSystemBase.h"
-#include "VFS/KVirtualFileSystemMirror.h"
-#include "VFS/KVirtualFileSystemConvergence.h"
+#include "VFS/KVFSService.h"
+#include "VFS/KVFSMirror.h"
+#include "VFS/KVFSConvergence.h"
 #include <KxFramework/KxSharedMemory.h>
+class KIPCConnection;
+class KIPCClient;
+class KIPCServer;
 
 namespace KIPCRequestNS
 {
@@ -12,28 +15,47 @@ namespace KIPCRequestNS
 	{
 		private:
 			wchar_t m_Buffer[t_Length] = {0};
+			size_t m_Length = 0;
 
 		public:
 			BasicStaticString(const wchar_t* s = NULL)
 			{
 				if (s)
 				{
-					wcscpy_s(m_Buffer, s);
+					m_Length = wcslen(s);
+					wcsncpy_s(m_Buffer, s, m_Length);
 				}
 			}
 
 		public:
-			constexpr size_t GetLength() const
+			constexpr size_t GetLength() const noexcept
 			{
 				return t_Length;
 			}
-			const wchar_t* GetBuffer() const
+			const wchar_t* GetBuffer() const noexcept
 			{
 				return m_Buffer;
 			}
-			wchar_t* GetBuffer()
+			wchar_t* GetBuffer() noexcept
 			{
 				return m_Buffer;
+			}
+
+			const wchar_t* data() const noexcept
+			{
+				return m_Buffer;
+			}
+			wchar_t* data() noexcept
+			{
+				return m_Buffer;
+			}
+			size_t size() const noexcept
+			{
+				return m_Length;
+			}
+			size_t length() const noexcept
+			{
+				return m_Length;
 			}
 
 			bool operator==(const wxString& other) const
@@ -46,20 +68,21 @@ namespace KIPCRequestNS
 			}
 			operator wxString() const
 			{
-				return wxString(m_Buffer);
+				return wxString(m_Buffer, m_Length);
 			}
 	};
 	using StaticString = BasicStaticString<INT16_MAX>; // INT16_MAX is maximum file path length in Windows
 
 	//////////////////////////////////////////////////////////////////////////
-	enum class Type
+	extern const wxChar* TypeName[];
+	enum class TypeID
 	{
 		None = 0,
 
 		InitVFSService,
 		UninstallVFSService,
 
-		EnableVFS,
+		ToggleVFS,
 		VFSStateChanged,
 
 		CreateMirrorVFS,
@@ -74,86 +97,95 @@ namespace KIPCRequestNS
 		CommitConvergenceIndex,
 		AddConvergenceIndex,
 
-		COUNT,
+		MAX,
 	};
-	extern const wxChar* TypeName[(size_t)Type::COUNT];
 
 	class BaseRequest
 	{
-		private:
+		friend class KIPCConnection;
+
+		public:
+			using TypeID = KIPCRequestNS::TypeID;
 			template<class T> using MemRegionRO = KxSharedMemory<T, KxSharedMemoryNS::Protection::Read>;
 			template<class T> using MemRegionRW = KxSharedMemory<T, KxSharedMemoryNS::Protection::RW>;
 
 		private:
-			Type m_Type = Type::None;
+			TypeID m_TypeID = TypeID::None;
+
+		protected:
+			wxString GetSharedDataName() const
+			{
+				return wxString(wxS("Kortex/IPC/")) + GetTypeName();
+			}
+			template<class T> static MemRegionRO<T> GetSharedData(const wxString& name)
+			{
+				MemRegionRO<T> region;
+				region.Open(name);
+				return region;
+			}
 
 		public:
-			BaseRequest(Type type)
-				:m_Type(type)
+			BaseRequest(TypeID typeID)
+				:m_TypeID(typeID)
 			{
 			}
 
 		public:
-			Type GetRequestType() const
+			TypeID GetTypeID() const
 			{
-				return m_Type;
+				return m_TypeID;
 			}
-			const wxChar* GetRequestName() const
+			const wxChar* GetTypeName() const
 			{
-				return TypeName[(size_t)m_Type];
+				return TypeName[(size_t)m_TypeID];
 			}
-			
-			wxString GetSharedRegionName() const
-			{
-				return wxString(wxS("Kortex/IPC/")) + GetRequestName();
-			}
-			template<class T, class... Args> MemRegionRW<T> CreateSharedMemoryRegion(Args&&... args) const
-			{
-				return MemRegionRW<T>(GetSharedRegionName(), std::forward<Args>(args)...);
-			}
-			template<class T> MemRegionRO<T> GetSharedMemoryRegion() const
-			{
-				return MemRegionRO<T>(GetSharedRegionName());
-			}
-
 			bool IsSameType(const BaseRequest& other) const
 			{
-				return m_Type == other.GetRequestType();
+				return m_TypeID == other.m_TypeID;
+			}
+			
+			template<class T, class... Args> MemRegionRW<T> CreateSharedData(Args&&... args) const
+			{
+				return MemRegionRW<T>(GetSharedDataName(), std::forward<Args>(args)...);
+			}
+			template<class T> MemRegionRO<T> GetSharedData() const
+			{
+				return GetSharedData<T>(GetSharedDataName());
 			}
 	};
 
-	template<Type t_Type = Type::None> class BaseRequestType: public BaseRequest
+	template<TypeID t_TypeID> class BaseRequestType: public BaseRequest
 	{
 		public:
-			static const wxChar* GetClassName()
+			static constexpr TypeID GetClassTypeID()
 			{
-				return TypeName[(size_t)t_Type];
+				return t_TypeID;
+			}
+			static constexpr const wxChar* GetClassTypeName()
+			{
+				return TypeName[(size_t)t_TypeID];
 			}
 
 		public:
 			BaseRequestType()
-				:BaseRequest(t_Type)
+				:BaseRequest(t_TypeID)
 			{
 			}
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	class InitVFSService: public BaseRequestType<Type::InitVFSService>
-	{
-	};
-	class UninstallVFSService: public BaseRequestType<Type::UninstallVFSService>
-	{
-	};
-
+	using InitVFSService = BaseRequestType<TypeID::InitVFSService>;
+	using UninstallVFSService = BaseRequestType<TypeID::UninstallVFSService>;
+	
 	//////////////////////////////////////////////////////////////////////////
-	class EnableVFS: public BaseRequestType<Type::EnableVFS>
+	class ToggleVFS: public BaseRequestType<TypeID::ToggleVFS>
 	{
 		private:
 			bool m_ShouldEnable = false;
 
 		public:
-			EnableVFS(bool bShouldEnable)
-				:m_ShouldEnable(bShouldEnable)
+			ToggleVFS(bool shouldEnable)
+				:m_ShouldEnable(shouldEnable)
 			{
 			}
 
@@ -163,7 +195,7 @@ namespace KIPCRequestNS
 				return m_ShouldEnable;
 			}
 	};
-	class VFSStateChanged: public BaseRequestType<Type::VFSStateChanged>
+	class VFSStateChanged: public BaseRequestType<TypeID::VFSStateChanged>
 	{
 		private:
 			bool m_IsEnabled = false;
@@ -187,7 +219,7 @@ namespace KIPCRequestNS
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	class CreateMirrorVFS: public BaseRequestType<Type::CreateMirrorVFS>
+	class CreateMirrorVFS: public BaseRequestType<TypeID::CreateMirrorVFS>
 	{
 		private:
 			StaticString m_Source;
@@ -209,12 +241,10 @@ namespace KIPCRequestNS
 				return m_Target;
 			}
 	};
-	class ClearMirrorVFSList: public BaseRequestType<Type::ClearMirrorVFSList>
-	{
-	};
+	using ClearMirrorVFSList = BaseRequestType<TypeID::ClearMirrorVFSList>;
 
 	//////////////////////////////////////////////////////////////////////////
-	class CreateConvergenceVFS: public BaseRequestType<Type::CreateConvergenceVFS>
+	class CreateConvergenceVFS: public BaseRequestType<TypeID::CreateConvergenceVFS>
 	{
 		private:
 			StaticString m_MountPoint;
@@ -223,7 +253,7 @@ namespace KIPCRequestNS
 
 		public:
 			CreateConvergenceVFS(const wxString& mountPoint, const wxString& writeTarget, bool canDeleteInVirtualFolder)
-				: m_MountPoint(mountPoint), m_WriteTarget(writeTarget), m_CanDeleteInVirtualFolder(canDeleteInVirtualFolder)
+				:m_MountPoint(mountPoint), m_WriteTarget(writeTarget), m_CanDeleteInVirtualFolder(canDeleteInVirtualFolder)
 			{
 			}
 
@@ -241,7 +271,7 @@ namespace KIPCRequestNS
 				return m_CanDeleteInVirtualFolder;
 			}
 	};
-	class AddConvergenceVirtualFolder: public BaseRequestType<Type::AddConvergenceVirtualFolder>
+	class AddConvergenceVirtualFolder: public BaseRequestType<TypeID::AddConvergenceVirtualFolder>
 	{
 		private:
 			StaticString m_Path;
@@ -258,35 +288,14 @@ namespace KIPCRequestNS
 				return m_Path;
 			}
 	};
-	class ClearConvergenceVirtualFolders: public BaseRequestType<Type::ClearConvergenceVirtualFolders>
-	{
-	};
-	class BuildConvergenceIndex: public BaseRequestType<Type::BuildConvergenceIndex>
-	{
-	};
+	using BuildConvergenceIndex = BaseRequestType<TypeID::BuildConvergenceIndex>;
+	using ClearConvergenceVirtualFolders = BaseRequestType<TypeID::ClearConvergenceVirtualFolders>;
 
 	//////////////////////////////////////////////////////////////////////////
-	class BeginConvergenceIndex: public BaseRequestType<Type::BeginConvergenceIndex>
-	{
-		private:
-			size_t m_InitialSize = 0;
+	using BeginConvergenceIndex = BaseRequestType<TypeID::BeginConvergenceIndex>;
+	using CommitConvergenceIndex = BaseRequestType<TypeID::CommitConvergenceIndex>;
 
-		public:
-			BeginConvergenceIndex(size_t initialiIze = 0)
-				:m_InitialSize(initialiIze)
-			{
-			}
-
-		public:
-			size_t GetInitialSize() const
-			{
-				return m_InitialSize;
-			}
-	};
-	class CommitConvergenceIndex: public BaseRequestType<Type::CommitConvergenceIndex>
-	{
-	};
-	class AddConvergenceIndex: public BaseRequestType<Type::AddConvergenceIndex>
+	class AddConvergenceIndex: public BaseRequestType<TypeID::AddConvergenceIndex>
 	{
 		private:
 			StaticString m_RequestPath;

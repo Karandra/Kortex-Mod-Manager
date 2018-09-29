@@ -282,9 +282,6 @@
     <ClCompile Include="Source\ConfigManager\KConfigManager.cpp">
       <Filter>Code\Source Files\ConfigManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\VFS\KVirtualFileSystemService.cpp">
-      <Filter>Code\Source Files\VFS</Filter>
-    </ClCompile>
     <ClCompile Include="Source\UI\KWorkspaceController.cpp">
       <Filter>Code\Source Files\UI</Filter>
     </ClCompile>
@@ -311,21 +308,6 @@
     </ClCompile>
     <ClCompile Include="Source\KDynamicVariablesTable.cpp">
       <Filter>Code\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VFS\KVirtualFileSystemMirrorImpl.cpp">
-      <Filter>Code\Source Files\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VFS\KVirtualFileSystemConvergence.cpp">
-      <Filter>Code\Source Files\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VFS\KVirtualFileSystemConvergenceImpl.cpp">
-      <Filter>Code\Source Files\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VFS\KVirtualFileSystemBase.cpp">
-      <Filter>Code\Source Files\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VFS\KVirtualFileSystemMirror.cpp">
-      <Filter>Code\Source Files\VFS</Filter>
     </ClCompile>
     <ClCompile Include="Source\PluginManager\KPluginManagerWorkspace.cpp">
       <Filter>Code\Source Files\PluginManager</Filter>
@@ -756,6 +738,15 @@
     <ClCompile Include="Source\ModManager\KModListManagerEditor.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\VFS\KVFSService.cpp">
+      <Filter>Code\Source Files\VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VFS\KVFSConvergence.cpp">
+      <Filter>Code\Source Files\VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VFS\KVFSMirror.cpp">
+      <Filter>Code\Source Files\VFS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -830,9 +821,6 @@
     <ClInclude Include="Source\Utility\KEntryRefT.h">
       <Filter>Code\Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\VFS\KVirtualFileSystemService.h">
-      <Filter>Code\Header Files\VFS</Filter>
-    </ClInclude>
     <ClInclude Include="Source\UI\KWorkspaceController.h">
       <Filter>Code\Header Files\UI</Filter>
     </ClInclude>
@@ -859,21 +847,6 @@
     </ClInclude>
     <ClInclude Include="Source\KDynamicVariablesTable.h">
       <Filter>Code\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VFS\KVirtualFileSystemMirrorImpl.h">
-      <Filter>Code\Header Files\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VFS\KVirtualFileSystemConvergenceImpl.h">
-      <Filter>Code\Header Files\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VFS\KVirtualFileSystemConvergence.h">
-      <Filter>Code\Header Files\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VFS\KVirtualFileSystemBase.h">
-      <Filter>Code\Header Files\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VFS\KVirtualFileSystemMirror.h">
-      <Filter>Code\Header Files\VFS</Filter>
     </ClInclude>
     <ClInclude Include="Source\PluginManager\KPluginManager.h">
       <Filter>Code\Header Files\PluginManager</Filter>
@@ -1370,6 +1343,15 @@
     <ClInclude Include="Source\ModManager\KModListManagerEditor.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
+    <ClInclude Include="Source\VFS\KVFSService.h">
+      <Filter>Code\Header Files\VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VFS\KVFSConvergence.h">
+      <Filter>Code\Header Files\VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VFS\KVFSMirror.h">
+      <Filter>Code\Header Files\VFS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc">
@@ -1485,10 +1467,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\ChangeLog EN.md">
+    <Text Include="Resources\ChangeLog EN.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Resources\ChangeLog RU.md">
+    <Text Include="Resources\ChangeLog RU.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

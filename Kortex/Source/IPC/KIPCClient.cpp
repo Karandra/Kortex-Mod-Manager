@@ -7,7 +7,7 @@
 #include "PluginManager/KPluginManagerWorkspace.h"
 #include "Events/KVFSEvent.h"
 #include "Events/KLogEvent.h"
-#include "VFS/KVirtualFileSystemBase.h"
+#include "VFS/KVFSService.h"
 #include <KxFramework/KxSystem.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxProgressDialog.h>
@@ -59,7 +59,7 @@ void KIPCClient::OnDisconnect()
 	KLogEvent(T("VFSService.InstallFailed"), KLOG_CRITICAL).Send();
 }
 
-void KIPCClient::OnVFSStateChanged(const KIPCRequestNS::VFSStateChanged& config)
+void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
 {
 	KApp::Get().CallAfter([config]()
 	{
@@ -73,7 +73,7 @@ void KIPCClient::OnVFSStateChanged(const KIPCRequestNS::VFSStateChanged& config)
 		event.Send();
 
 		// Force load of plugin manager so plugin data will be loaded
-		if (KVirtualFileSystemBase::IsSuccessCode(status) && config.IsEnabled())
+		if (KVFSService::IsSuccessCode(status) && config.IsEnabled())
 		{
 			if (KPluginManager* pluginManager = KPluginManager::GetInstance())
 			{
@@ -81,9 +81,9 @@ void KIPCClient::OnVFSStateChanged(const KIPCRequestNS::VFSStateChanged& config)
 			}
 		}
 
-		if (!KVirtualFileSystemBase::IsSuccessCode(status))
+		if (!KVFSService::IsSuccessCode(status))
 		{
-			wxString message = wxString::Format("%s\r\n\r\n%s: %s", KVirtualFileSystemBase::GetStatusCodeMessage(status), T("VFS.MountPoint"), event.GetString());
+			wxString message = wxString::Format("%s\r\n\r\n%s: %s", KVFSService::GetStatusCodeMessage(status), T("VFS.MountPoint"), event.GetString());
 			KLogEvent(message, KLOG_ERROR).Send();
 		}
 
@@ -98,7 +98,7 @@ KIPCClient::~KIPCClient()
 {
 	if (m_Connection)
 	{
-		m_Connection->StopAdvise(KIPCRequestNS::VFSStateChanged::GetClassName());
+		m_Connection->StopAdvise(KIPCRequestNS::VFSStateChanged::GetClassTypeName());
 		m_Connection->Disconnect();
 	}
 }
@@ -108,7 +108,7 @@ bool KIPCClient::InitConnection()
 	CreateConnection();
 	if (m_Connection)
 	{
-		return m_Connection->StartAdvise(KIPCRequestNS::VFSStateChanged::GetClassName());
+		return m_Connection->StartAdvise(KIPCRequestNS::VFSStateChanged::GetClassTypeName());
 	}
 	return false;
 }
@@ -208,15 +208,11 @@ bool KIPCClient::ConvergenceVFS_SetDispatcherIndex()
 	return false;
 }
 
-bool KIPCClient::EnableVFS()
+bool KIPCClient::ToggleVFS()
 {
 	if (m_Connection)
 	{
-		KIPCRequestNS::EnableVFS request(true);
-		auto memory = request.CreateSharedMemoryRegion<KIPCRequestNS::StaticString>(L"test static string");
-
-		return m_Connection->SendToServer(request);
-		//return m_Connection->SendToServer(KIPCRequestNS::EnableVFS(true));
+		return m_Connection->SendToServer(KIPCRequestNS::ToggleVFS(true));
 	}
 	return false;
 }
@@ -224,7 +220,7 @@ bool KIPCClient::DisableVFS()
 {
 	if (m_Connection)
 	{
-		return m_Connection->SendToServer(KIPCRequestNS::EnableVFS(false));
+		return m_Connection->SendToServer(KIPCRequestNS::ToggleVFS(false));
 	}
 	return false;
 }

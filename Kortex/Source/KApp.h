@@ -15,7 +15,7 @@ class KMainWindow;
 class KModManager;
 class KProgramManager;
 class KSettingsWindowManager;
-class KVirtualFileSystemService;
+class KVFSService;
 class KCMConfigEntryStd;
 class KIPCClient;
 enum KPGCFileID;
@@ -47,7 +47,7 @@ class KApp: public KxApp<wxApp, KApp>
 		bool m_AllowSaveSettinsgAtExit = true;
 		
 		KIPCClient* m_VFSServiceClient = NULL;
-		KVirtualFileSystemService* m_VFSService = NULL;
+		KVFSService* m_VFSService = NULL;
 
 		wxString m_CurrentTemplateID;
 		wxString m_CurrentConfigID;

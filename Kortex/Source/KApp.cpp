@@ -13,7 +13,7 @@
 #include "SettingsWindow/KSettingsWindowManager.h"
 #include "ConfigManager/KConfigManager.h"
 #include "ConfigManager/KCMConfigEntry.h"
-#include "VFS/KVirtualFileSystemService.h"
+#include "VFS/KVFSService.h"
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModWorkspace.h"
@@ -538,7 +538,7 @@ void KApp::InitVFS()
 		}
 
 		wxLogInfo("Client: Initializing driver service.");
-		m_VFSService = new KVirtualFileSystemService();
+		m_VFSService = new KVFSService();
 		wxLogInfo("Client: Driver service init %s.", m_VFSService->IsOK() ? "success" : "failed");
 
 		wxLogInfo("Client: Initializing KModManager.");

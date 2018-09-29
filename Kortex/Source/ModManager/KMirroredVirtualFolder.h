@@ -1,17 +1,17 @@
 #pragma once
 #include "stdafx.h"
-class KVirtualFileSystemMirror;
-class KVirtualFileSystemService;
+class KVFSMirror;
+class KVFSService;
 
 class KMirroredVirtualFolder
 {
 	private:
-		KVirtualFileSystemMirror* m_VFS = NULL;
+		KVFSMirror* m_VFS = NULL;
 		wxString m_Source;
 		wxString m_Target;
 
 	public:
-		KMirroredVirtualFolder(KVirtualFileSystemService* service, const wxString& source, const wxString& target);
+		KMirroredVirtualFolder(KVFSService* service, const wxString& source, const wxString& target);
 		~KMirroredVirtualFolder();
 
 	public:
@@ -19,7 +19,7 @@ class KMirroredVirtualFolder
 		{
 			return m_VFS;
 		}
-		KVirtualFileSystemMirror* GetVFS() const
+		KVFSMirror* GetVFS() const
 		{
 			return m_VFS;
 		}

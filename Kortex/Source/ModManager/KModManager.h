@@ -10,9 +10,9 @@
 #include "KEvents.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
-class KVirtualFileSystemService;
-class KVirtualFileSystemConvergence;
-class KVirtualFileSystemMirror;
+class KVFSService;
+class KVFSConvergence;
+class KVFSMirror;
 class KVirtualFileSystemBase;
 class KIPCClient;
 class KxProgressDialog;

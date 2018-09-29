@@ -21,7 +21,7 @@ class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 		virtual wxConnectionBase* OnMakeConnection() override;
 		virtual void OnDisconnect();
 
-		void OnVFSStateChanged(const KIPCRequestNS::VFSStateChanged& config);
+		void OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config);
 
 	public:
 		KIPCClient();
@@ -46,6 +46,6 @@ class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 		bool ConvergenceVFS_BuildDispatcherIndex();
 		bool ConvergenceVFS_SetDispatcherIndex();
 		
-		bool EnableVFS();
+		bool ToggleVFS();
 		bool DisableVFS();
 };

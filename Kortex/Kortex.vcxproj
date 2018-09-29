@@ -171,12 +171,9 @@
     <ClCompile Include="Source\UI\KNewModDialog.cpp" />
     <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
     <ClCompile Include="Source\Utility\Themes\KThemeDefault.cpp" />
-    <ClCompile Include="Source\VFS\KVirtualFileSystemBase.cpp" />
-    <ClCompile Include="Source\VFS\KVirtualFileSystemMirror.cpp" />
-    <ClCompile Include="Source\VFS\KVirtualFileSystemConvergence.cpp" />
-    <ClCompile Include="Source\VFS\KVirtualFileSystemConvergenceImpl.cpp" />
-    <ClCompile Include="Source\VFS\KVirtualFileSystemService.cpp" />
-    <ClCompile Include="Source\VFS\KVirtualFileSystemMirrorImpl.cpp" />
+    <ClCompile Include="Source\VFS\KVFSConvergence.cpp" />
+    <ClCompile Include="Source\VFS\KVFSService.cpp" />
+    <ClCompile Include="Source\VFS\KVFSMirror.cpp" />
     <ClCompile Include="Source\ConfigManager\KCMConfigEntry.cpp" />
     <ClCompile Include="Source\ConfigManager\KConfigManager.cpp" />
     <ClCompile Include="Source\ConfigManager\KCMController.cpp" />
@@ -382,12 +379,9 @@
     <ClInclude Include="Source\UI\KWorkspaceController.h" />
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
     <ClInclude Include="Source\Utility\Themes\KThemeDefault.h" />
-    <ClInclude Include="Source\VFS\KVirtualFileSystemBase.h" />
-    <ClInclude Include="Source\VFS\KVirtualFileSystemMirror.h" />
-    <ClInclude Include="Source\VFS\KVirtualFileSystemConvergence.h" />
-    <ClInclude Include="Source\VFS\KVirtualFileSystemConvergenceImpl.h" />
-    <ClInclude Include="Source\VFS\KVirtualFileSystemService.h" />
-    <ClInclude Include="Source\VFS\KVirtualFileSystemMirrorImpl.h" />
+    <ClInclude Include="Source\VFS\KVFSConvergence.h" />
+    <ClInclude Include="Source\VFS\KVFSService.h" />
+    <ClInclude Include="Source\VFS\KVFSMirror.h" />
     <ClInclude Include="Source\ConfigManager\KCMConfigEntry.h" />
     <ClInclude Include="Source\ConfigManager\KConfigManager.h" />
     <ClInclude Include="Source\ConfigManager\KCMController.h" />
@@ -462,8 +456,8 @@
     <None Include="Bin\Data\PackageCreator\Templates\Default.kmpproj" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\ChangeLog EN.md" />
-    <Text Include="Resources\ChangeLog RU.md" />
+    <Text Include="Resources\ChangeLog EN.txt" />
+    <Text Include="Resources\ChangeLog RU.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

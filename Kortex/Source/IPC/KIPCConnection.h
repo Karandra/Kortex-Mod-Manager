@@ -31,11 +31,9 @@ class KIPCConnection: public wxConnection
 		template<class T> bool SendRequestBase(const T& request, SendFunctionType func)
 		{
 			AssertRequest<T>();
+			wxLogInfo("Client: Sending request \"%s\"", request.GetTypeName());
 
-			auto itemName = request.GetClassName();
-			wxLogInfo("Client: Sending request \"%s\"", itemName);
-
-			return (this->*func)(itemName, &static_cast<const KIPCRequest&>(request), sizeof(T), wxIPC_PRIVATE);
+			return (this->*func)(request.GetTypeName(), &static_cast<const KIPCRequest&>(request), sizeof(T), wxIPC_PRIVATE);
 		}
 
 	protected:
@@ -60,25 +58,35 @@ class KIPCConnection: public wxConnection
 			return m_Client;
 		}
 
-		template<class T> const T* ReceiveRequest(const wxString& item, const void* data, size_t dataSize) const
+		KIPCRequest::TypeID TestRequest(const wxString& item, const void* data, size_t dataSize)
 		{
-			AssertRequest<T>();
 			wxLogInfo("Client: Receive request \"%s\"", item);
-
-			if (dataSize == sizeof(T) && !item.IsEmpty())
+			if (data && dataSize >= sizeof(KIPCRequest))
 			{
 				const KIPCRequest* baseRequest = reinterpret_cast<const KIPCRequest*>(data);
-				if (baseRequest && item == T::GetClassName())
+				if (baseRequest->GetTypeName() == item)
 				{
-					return static_cast<const T*>(baseRequest);
+					return baseRequest->GetTypeID();
+				}
+				else
+				{
+					wxLogInfo("Client: invalid request type. Type \"%s\" expected, \"%s\" is received", item, baseRequest->GetTypeName());
 				}
 			}
 			else
 			{
-				wxLogInfo("Client: Invalid request size for \"%s\"", item);
+				wxLogInfo("Client: invalid request binary data received");
 			}
-			return NULL;
+			return KIPCRequest::TypeID::None;
 		}
+		template<class T> const T& ReceiveRequest(const void* data) const
+		{
+			AssertRequest<T>();
+
+			const KIPCRequest* baseRequest = reinterpret_cast<const KIPCRequest*>(data);
+			return *static_cast<const T*>(baseRequest);
+		}
+		
 		template<class T> bool SendToServer(const T& request)
 		{
 			return SendRequestBase(request, &KIPCConnection::Poke);

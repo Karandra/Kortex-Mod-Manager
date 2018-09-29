@@ -16,7 +16,7 @@
 #include <KxFramework/KxWebSockets.h>
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
-#include "VFS/KVirtualFileSystemService.h"
+#include "VFS/KVFSService.h"
 
 wxWindow* KAboutDialog::CreateTab_Info()
 {
@@ -95,7 +95,7 @@ wxWindow* KAboutDialog::CreateTab_Modules()
 
 	// KxVFS
 	{
-		KxTreeListItem item = list->GetRoot().Add(KxStringVector{"KxVirtualFileSystem", KVirtualFileSystemService::GetLibraryVersion()});
+		KxTreeListItem item = list->GetRoot().Add(KxStringVector{"KxVirtualFileSystem", KVFSService::GetLibraryVersion()});
 		item.SetImage(KIMG_FOLDERS);
 	}
 

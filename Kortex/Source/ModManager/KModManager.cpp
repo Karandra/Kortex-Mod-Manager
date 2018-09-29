@@ -7,9 +7,9 @@
 #include "KVirtualGameFolderWorkspace.h"
 #include "Profile/KProfile.h"
 #include "Profile/KVirtualizationConfig.h"
-#include "VFS/KVirtualFileSystemService.h"
-#include "VFS/KVirtualFileSystemConvergence.h"
-#include "VFS/KVirtualFileSystemMirror.h"
+#include "VFS/KVFSService.h"
+#include "VFS/KVFSConvergence.h"
+#include "VFS/KVFSMirror.h"
 #include "Events/KVFSEvent.h"
 #include "Events/KLogEvent.h"
 #include "UI/KMainWindow.h"
@@ -549,7 +549,7 @@ void KModManager::MountVFS()
 		bool ok = InitMainVirtualFolder() && InitMirroredLocations();
 		if (ok)
 		{
-			KIPCClient::GetInstance()->EnableVFS();
+			KIPCClient::GetInstance()->ToggleVFS();
 		}
 		else
 		{

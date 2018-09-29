@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "KIPCConnection.h"
 #include "KIPCRequest.h"
-#include "KIPCServer.h"
 #include "KIPCClient.h"
-#include "VFS/KVirtualFileSystemConvergence.h"
-#include "VFS/KVirtualFileSystemMirror.h"
+#include "KIPCServer.h"
+#include "VFS/KVFSConvergence.h"
+#include "VFS/KVFSMirror.h"
 
 bool KIPCConnection::OnDisconnect()
 {
@@ -20,88 +20,110 @@ bool KIPCConnection::OnDisconnect()
 }
 bool KIPCConnection::OnPoke(const wxString& topic, const wxString& item, const void* data, size_t size, wxIPCFormat format)
 {
+	using TypeID = KIPCRequest::TypeID;
+
 	if constexpr(IsServer())
 	{
-		if (auto service = ReceiveRequest<KIPCRequestNS::InitVFSService>(item, data, size))
+		switch (TestRequest(item, data, size))
 		{
-			GetServer()->OnInitService(*service);
-			return true;
-		}
-		if (auto uninstall = ReceiveRequest<KIPCRequestNS::UninstallVFSService>(item, data, size))
-		{
-			GetServer()->OnUninstallService(*uninstall);
-			return true;
-		}
+			//////////////////////////////////////////////////////////////////////////
+			case TypeID::InitVFSService:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::InitVFSService>(data));
+				break;
+			}
+			case TypeID::UninstallVFSService:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::UninstallVFSService>(data));
+				break;
+			}
 
-		//////////////////////////////////////////////////////////////////////////
-		if (auto enable = ReceiveRequest<KIPCRequestNS::EnableVFS>(item, data, size))
-		{
-			GetServer()->OnEnableVFS(*enable);
-			return true;
-		}
+			//////////////////////////////////////////////////////////////////////////
+			case TypeID::ToggleVFS:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::ToggleVFS>(data));
+				break;
+			}
 
-		//////////////////////////////////////////////////////////////////////////
-		if (auto mirror = ReceiveRequest<KIPCRequestNS::CreateMirrorVFS>(item, data, size))
-		{
-			GetServer()->OnCreateMirrorVFS(*mirror);
-			return true;
-		}
-		if (auto mirrorClearList = ReceiveRequest<KIPCRequestNS::ClearMirrorVFSList>(item, data, size))
-		{
-			GetServer()->OnClearMirrorVFSList(*mirrorClearList);
-			return true;
-		}
+			//////////////////////////////////////////////////////////////////////////
+			case TypeID::CreateMirrorVFS:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::CreateMirrorVFS>(data));
+				break;
+			}
+			case TypeID::ClearMirrorVFSList:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::ClearMirrorVFSList>(data));
+				break;
+			}
+			
+			//////////////////////////////////////////////////////////////////////////
+			case TypeID::CreateConvergenceVFS:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::CreateConvergenceVFS>(data));
+				break;
+			}
+			case TypeID::AddConvergenceVirtualFolder:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::AddConvergenceVirtualFolder>(data));
+				break;
+			}
+			case TypeID::ClearConvergenceVirtualFolders:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::ClearConvergenceVirtualFolders>(data));
+				break;
+			}
+			case TypeID::BuildConvergenceIndex:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::BuildConvergenceIndex>(data));
+				break;
+			}
 
-		//////////////////////////////////////////////////////////////////////////
-		if (auto convergence = ReceiveRequest<KIPCRequestNS::CreateConvergenceVFS>(item, data, size))
-		{
-			GetServer()->OnCreateConvergenceVFS(*convergence);
-			return true;
-		}
-		if (auto convergenceAddFolder = ReceiveRequest<KIPCRequestNS::AddConvergenceVirtualFolder>(item, data, size))
-		{
-			GetServer()->OnAddConvergenceVirtualFolder(*convergenceAddFolder);
-			return true;
-		}
-		if (auto convergenceClearFolders = ReceiveRequest<KIPCRequestNS::ClearConvergenceVirtualFolders>(item, data, size))
-		{
-			GetServer()->OnClearConvergenceVirtualFolders(*convergenceClearFolders);
-			return true;
-		}
-		if (auto convergenceBuildIndex = ReceiveRequest<KIPCRequestNS::BuildConvergenceIndex>(item, data, size))
-		{
-			GetServer()->OnBuildConvergenceIndex(*convergenceBuildIndex);
-			return true;
-		}
+			case TypeID::BeginConvergenceIndex:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::BeginConvergenceIndex>(data));
+				break;
+			}
+			case TypeID::CommitConvergenceIndex:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::CommitConvergenceIndex>(data));
+				break;
+			}
+			case TypeID::AddConvergenceIndex:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::AddConvergenceIndex>(data));
+				break;
+			}
 
-		//////////////////////////////////////////////////////////////////////////
-		if (auto convergenceBeginIndex = ReceiveRequest<KIPCRequestNS::BeginConvergenceIndex>(item, data, size))
-		{
-			GetServer()->OnBeginConvergenceIndex(*convergenceBeginIndex);
-			return true;
-		}
-		if (auto convergenceCommitIndex = ReceiveRequest<KIPCRequestNS::CommitConvergenceIndex>(item, data, size))
-		{
-			GetServer()->OnCommitConvergenceIndex(*convergenceCommitIndex);
-			return true;
-		}
-		if (auto convergenceAddIndex = ReceiveRequest<KIPCRequestNS::AddConvergenceIndex>(item, data, size))
-		{
-			GetServer()->OnAddConvergenceIndex(*convergenceAddIndex);
-			return true;
-		}
+			default:
+			{
+				return false;
+			}
+		};
+		return true;
 	}
 	return false;
 }
 bool KIPCConnection::OnAdvise(const wxString& topic, const wxString& item, const void* data, size_t size, wxIPCFormat format)
 {
-	if constexpr(IsClient())
+	using TypeID = KIPCRequest::TypeID;
+
+	if constexpr (IsClient())
 	{
-		if (auto stateChanged = ReceiveRequest<KIPCRequestNS::VFSStateChanged>(item, data, size))
+		switch (TestRequest(item, data, size))
 		{
-			GetClient()->OnVFSStateChanged(*stateChanged);
-			return true;
-		}
+			case TypeID::VFSStateChanged:
+			{
+				GetClient()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::VFSStateChanged>(data));
+				break;
+			}
+
+			default:
+			{
+				return false;
+			}
+		};
+		return true;
 	}
 	return false;
 }

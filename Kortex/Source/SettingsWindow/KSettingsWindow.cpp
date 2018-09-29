@@ -4,7 +4,7 @@
 #include "KThemeManager.h"
 #include "KSettingsWindowController.h"
 #include "KApp.h"
-#include "VFS/KVirtualFileSystemService.h"
+#include "VFS/KVFSService.h"
 #include "ModManager/KModManager.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxButton.h>

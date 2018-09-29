@@ -13,8 +13,6 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KxSingletonPtr_Define(KSaveManagerConfig);
-
 KSaveManagerConfig::KSaveManagerConfig(KProfile& profile, KxXMLNode& node)
 	:m_SaveFileFormat(node.GetAttribute("SaveFileFormat"))
 {

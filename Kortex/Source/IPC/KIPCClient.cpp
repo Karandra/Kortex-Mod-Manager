@@ -12,8 +12,6 @@
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxProgressDialog.h>
 
-KxSingletonPtr_Define(KIPCClient);
-
 wxString KIPCClient::GetServerFileName()
 {
 	wxString path = "Kortex Server";
@@ -61,7 +59,7 @@ void KIPCClient::OnDisconnect()
 
 void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
 {
-	KApp::Get().CallAfter([config]()
+	KEvent::CallAfter([config]()
 	{
 		// Set mounted status
 		KModManager::Get().SetMounted(config.IsEnabled());

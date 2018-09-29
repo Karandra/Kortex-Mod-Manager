@@ -3,8 +3,6 @@
 #include "KVirtualGameFolderModel.h"
 #include <KxFramework/KxSearchBox.h>
 
-KxSingletonPtr_Define(KVirtualGameFolderWorkspace);
-
 KVirtualGameFolderWorkspace::KVirtualGameFolderWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_OptionsUI(this, "MainUI"), m_ViewOptions(this, "View")
 {

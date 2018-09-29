@@ -15,8 +15,6 @@
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxTextFile.h>
 
-KxSingletonPtr_Define(KPackageManagerWorkspace);
-
 KPackageManagerWorkspace::KPackageManagerWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_PackageListViewOptions(this, "PackageListView"), m_MainOptions(this, "MainUI")
 {

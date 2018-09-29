@@ -4,8 +4,6 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KxSingletonPtr_Define(KProgramManagerConfig);
-
 KProgramManagerConfig::KProgramManagerConfig(KProfile& profile, KxXMLNode& node)
 {
 	auto LoadArray = [&node](KRMProgramEntryArray& array, const char* name)

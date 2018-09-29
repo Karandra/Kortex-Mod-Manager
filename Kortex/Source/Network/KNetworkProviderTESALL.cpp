@@ -5,8 +5,6 @@
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxHTML.h>
 
-KxSingletonPtr_Define(KNetworkProviderTESALL);
-
 bool KNetworkProviderTESALL::DoAuthenticate(wxWindow* window)
 {
 	bool cancelled = false;

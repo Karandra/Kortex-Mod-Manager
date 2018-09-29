@@ -4,8 +4,6 @@
 #include "KProfile.h"
 #include "KApp.h"
 
-KxSingletonPtr_Define(KScreenshotsGalleryConfig);
-
 KScreenshotsGalleryConfig::KScreenshotsGalleryConfig(KProfile& profile, KxXMLNode& node)
 {
 	m_RequiresVFS = node.GetAttributeBool("RequiresVFS");

@@ -7,8 +7,6 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 
-KxSingletonPtr_Define(KLocationsManagerConfig);
-
 KLocationsManagerConfig::KLocationsManagerConfig(KProfile& profile, KxXMLNode& node)
 {
 	// Set predefined locations

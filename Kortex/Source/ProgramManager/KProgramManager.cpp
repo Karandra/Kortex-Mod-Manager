@@ -49,8 +49,6 @@ bool KProgramManagerEntry::CalcRequiresVFS() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KxSingletonPtr_Define(KProgramManager);
-
 wxString KProgramManager::GetProgramsListFile(const wxString& templateID, const wxString& configID)
 {
 	return KProfile::GetDataPath(templateID, configID) + '\\' + "Programs.xml";

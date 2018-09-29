@@ -17,8 +17,6 @@
 #include <KxFramework/KxTextFile.h>
 #include <wx/clipbrd.h>
 
-KxSingletonPtr_Define(KSaveManagerWorkspace);
-
 KSaveManagerWorkspace::KSaveManagerWorkspace(KMainWindow* mainWindow, KSaveManager* manager)
 	:KWorkspace(mainWindow), m_Manager(manager),
 	m_SavesListViewOptions(this, "SavesListView"), m_FileFiltersOptions(this, "FileFilters")

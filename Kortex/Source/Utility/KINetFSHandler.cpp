@@ -7,8 +7,6 @@
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxINet.h>
 
-KxSingletonPtr_Define(KINetFSHandler);
-
 wxString KINetFSHandler::GetCacheFolder() const
 {
 	return KNetwork::GetInstance()->GetCacheFolder();

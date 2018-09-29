@@ -10,8 +10,6 @@
 #include <KxFramework/KxRegistry.h>
 #include <KxFramework/KxLibrary.h>
 
-KxSingletonPtr_Define(KDownloadManager);
-
 namespace
 {
 	KDownloadManagerView* GetViewAndItem(const KDownloadEntry& entry, KxDataViewItem& item)

@@ -5,8 +5,6 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KxSingletonPtr_Define(KProgramManagerWorkspace);
-
 KProgramManagerWorkspace::KProgramManagerWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_ProgramListViewOptions(this, "ProgramListView")
 {

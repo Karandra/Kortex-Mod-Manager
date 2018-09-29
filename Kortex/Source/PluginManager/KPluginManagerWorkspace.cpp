@@ -25,8 +25,6 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 
-KxSingletonPtr_Define(KPluginManagerWorkspace);
-
 enum PluginType: uint32_t
 {
 	Normal = 0,

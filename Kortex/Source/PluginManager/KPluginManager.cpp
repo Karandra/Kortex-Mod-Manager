@@ -22,8 +22,6 @@
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
-KxSingletonPtr_Define(KPluginManager);
-
 std::unique_ptr<KPluginManager> KPluginManager::QueryInterface(const wxString& interfaceName, const KxXMLNode& configNode)
 {
 	if (!HasInstance())

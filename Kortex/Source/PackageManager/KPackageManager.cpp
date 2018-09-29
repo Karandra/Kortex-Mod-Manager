@@ -15,8 +15,6 @@
 #include <KxFramework/KxArchiveEvent.h>
 #include <KxFramework/KxTaskDialog.h>
 
-KxSingletonPtr_Define(KPackageManager);
-
 wxCheckBoxState KPackageManager::CheckRequirementStateStep1(const KPPRRequirementEntry* entry, KPPRObjectFunction nObjFunc)
 {
 	switch (nObjFunc)

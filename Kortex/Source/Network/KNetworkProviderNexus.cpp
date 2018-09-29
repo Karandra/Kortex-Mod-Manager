@@ -7,8 +7,6 @@
 #include <KxFramework/KxJSON.h>
 #include <KxFramework/KxShell.h>
 
-KxSingletonPtr_Define(KNetworkProviderNexus);
-
 void KNetworkProviderNexus::OnAuthSuccess(wxWindow* window)
 {
 	KNetwork::GetInstance()->CallAfter([this, window]()

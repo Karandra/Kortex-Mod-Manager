@@ -19,8 +19,6 @@
 #include <KxFramework/KxFileStream.h>
 #pragma warning (disable: 4302)
 
-KxSingletonPtr_Define(KPackageCreatorWorkspace);
-
 KPackageCreatorWorkspace::KPackageCreatorWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow)
 {

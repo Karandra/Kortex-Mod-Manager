@@ -29,8 +29,6 @@
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
 
-KxSingletonPtr_Define(KModManager);
-
 wxString KModManager::GetLocation(KModManagerLocation nLocation, const wxString& signature)
 {
 	const KProfile* profile = KApp::Get().GetCurrentProfile();

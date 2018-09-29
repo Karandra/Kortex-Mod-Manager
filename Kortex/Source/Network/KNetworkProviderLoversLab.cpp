@@ -4,8 +4,6 @@
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxCURL.h>
 
-KxSingletonPtr_Define(KNetworkProviderLoversLab);
-
 KNetworkProviderLoversLab::KNetworkProviderLoversLab(KNetworkProviderID providerID)
 	:KNetworkProvider(providerID)
 {

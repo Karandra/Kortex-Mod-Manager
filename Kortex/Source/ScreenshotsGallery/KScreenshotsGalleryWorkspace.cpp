@@ -13,8 +13,6 @@
 #include <KxFramework/KxShellMenu.h>
 #include <KxFramework/KxFile.h>
 
-KxSingletonPtr_Define(KScreenshotsGalleryWorkspace);
-
 template<class T> static T* AddControlsRow(wxSizer* sizer, const wxString& label, T* control)
 {
 	sizer->Add(new KxLabel(control->GetParent(), KxID_NONE, label + ':'), 0, wxEXPAND|wxALIGN_TOP);

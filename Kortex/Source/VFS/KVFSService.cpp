@@ -17,8 +17,6 @@ wxDEFINE_EVENT(KEVT_VFS_MOUNTED, KxBroadcastEvent);
 wxDEFINE_EVENT(KEVT_VFS_UNMOUNTED, KxBroadcastEvent);
 
 //////////////////////////////////////////////////////////////////////////
-KxSingletonPtr_Define(KVFSService);
-
 wxString KVFSService::GetLibraryVersion()
 {
 	return KxVFSService::GetLibraryVersion();

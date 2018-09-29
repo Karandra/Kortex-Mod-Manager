@@ -22,7 +22,6 @@
 #endif
 
 wxDEFINE_EVENT(KEVT_LOOTAPI, KxFileOperationEvent);
-KxSingletonPtr_Define(KLootAPI);
 
 namespace
 {

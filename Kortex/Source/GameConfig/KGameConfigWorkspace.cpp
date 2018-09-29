@@ -5,8 +5,6 @@
 #include "Profile/KProfile.h"
 #include "KApp.h"
 
-KxSingletonPtr_Define(KGameConfigWorkspace);
-
 KGameConfigWorkspace::KGameConfigWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_GameConfigViewOptions(this, "GameConfigView")
 {

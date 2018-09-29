@@ -26,8 +26,6 @@
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "ProgramManager/KProgramManagerWorkspace.h"
 
-KxSingletonPtr_Define(KMainWindow);
-
 KxAuiToolBarItem* KMainWindow::CreateToolBarButton(KxAuiToolBar* toolBar, const wxString& label, KImageEnum imageID, wxItemKind kind, int index)
 {
 	wxBitmap bitmap = wxNullBitmap;

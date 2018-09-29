@@ -9,8 +9,6 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
-KxSingletonPtr_Define(KDownloadManagerWorkspace);
-
 bool KDownloadManagerWorkspace::CheckDownloadLocation()
 {
 	wxString sLocation = KDownloadManager::GetInstance()->GetDownloadsLocation();

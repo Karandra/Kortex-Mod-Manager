@@ -12,8 +12,6 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxMenu.h>
 
-KxSingletonPtr_Define(KNetwork);
-
 void KNetwork::ValidateAuth()
 {
 	for (auto& provider: m_Providers)

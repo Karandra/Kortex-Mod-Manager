@@ -36,8 +36,6 @@ KConfigManagerConfigEntry::KConfigManagerConfigEntry(KPGCFileID id, KPGCFormat f
 }
 
 //////////////////////////////////////////////////////////////////////////
-KxSingletonPtr_Define(KConfigManagerConfig);
-
 KConfigManagerConfig::KConfigManagerConfig(KProfile& profile, KxXMLNode& node)
 {
 	m_EnableENB = node.GetAttributeBool("ENB");

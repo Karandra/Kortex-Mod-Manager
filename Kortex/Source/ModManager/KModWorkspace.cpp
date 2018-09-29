@@ -35,8 +35,6 @@
 #include <KxFramework/KxDualProgressDialog.h>
 #include <KxFramework/KxFileOperationEvent.h>
 
-KxSingletonPtr_Define(KModWorkspace);
-
 enum DisplayModeMenuID
 {
 	Connector,

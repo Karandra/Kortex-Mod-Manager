@@ -4,8 +4,6 @@
 #include "UI/KWorkspace.h"
 #include "KSaveManagerWorkspace.h"
 
-KxSingletonPtr_Define(KSaveManager);
-
 KWorkspace* KSaveManager::CreateWorkspace(KMainWindow* mainWindow)
 {
 	return new KSaveManagerWorkspace(mainWindow, this);

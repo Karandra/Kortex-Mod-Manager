@@ -70,8 +70,6 @@ KPluginManagerConfigLootAPI::~KPluginManagerConfigLootAPI()
 }
 
 //////////////////////////////////////////////////////////////////////////
-KxSingletonPtr_Define(KPluginManagerConfig);
-
 KPluginManagerConfig::KPluginManagerConfig(KProfile& profile, KxXMLNode& node)
 	:m_InterfaceName(node.GetAttribute("InterfaceName")),
 	m_PluginFileFormat(node.GetAttribute("PluginFileFormat"))

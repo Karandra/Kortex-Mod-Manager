@@ -3,7 +3,7 @@
 #include "KVariablesDatabase.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxINI.h>
-#include "KVariablesTable.h"
+#include "KStaticVariablesTable.h"
 #include "KProfileID.h"
 #include "KAux.h"
 #include <KxFramework/KxFileStream.h>
@@ -68,7 +68,7 @@ class KProfile
 		wxString m_ID;
 		wxString m_Name;
 		wxString m_NameShort;
-		KVariablesTable m_Variables;
+		KStaticVariablesTable m_Variables;
 		long m_SortOrder = -1;
 
 		wxString m_ConfigID;
@@ -190,11 +190,11 @@ class KProfile
 			return true;
 		}
 
-		const KVariablesTable& GetVariables() const
+		const KStaticVariablesTable& GetVariables() const
 		{
 			return m_Variables;
 		}
-		KVariablesTable& GetVariables()
+		KStaticVariablesTable& GetVariables()
 		{
 			return m_Variables;
 		}

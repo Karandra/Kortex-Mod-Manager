@@ -12,8 +12,6 @@ KVirtualizationEntry::KVirtualizationEntry(KxXMLNode& node)
 }
 
 //////////////////////////////////////////////////////////////////////////
-KxSingletonPtr_Define(KVirtualizationConfig);
-
 KVirtualizationConfig::KVirtualizationConfig(KProfile& profile, KxXMLNode& node)
 {
 	auto ReadMirroredLocation = [](KVirtualizationEntry::Vector& array, const KxXMLNode& node, const wxString& name)

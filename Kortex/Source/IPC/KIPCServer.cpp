@@ -7,15 +7,12 @@
 #include "VFS/KVFSConvergence.h"
 #include <KxFramework/KxFile.h>
 
-KxSingletonPtr_Define(KIPCServer);
-
 wxString KIPCServer::GetClientFileName()
 {
 	wxString path = "Kortex";
-	if (KxSystem::Is64Bit())
-	{
-		path += " x64";
-	}
+	#if _WIN64
+	path += " x64";
+	#endif
 	path += ".exe";
 	return path;
 }

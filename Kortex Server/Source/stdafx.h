@@ -17,5 +17,6 @@
 #include "KxFramework/KxAuiToolBar.h"
 
 /* Kortex */
+#pragma warning (disable: 4005) // macro redefinition
 #define KIPC_SERVER 1
 #define KLogMessage	wxLogMessage

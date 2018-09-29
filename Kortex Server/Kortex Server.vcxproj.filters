@@ -25,6 +25,12 @@
     <Filter Include="Файлы заголовков\VFS">
       <UniqueIdentifier>{45f5a63a-ad72-4f19-aebb-38acff649418}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Events">
+      <UniqueIdentifier>{d1c2d028-45b5-403f-bc4a-b1aea8e12717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Events">
+      <UniqueIdentifier>{7b4d4593-d1ba-4d7a-ae14-5a650b8fa0ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -45,22 +51,13 @@
     <ClCompile Include="..\Kortex\Source\IPC\KIPC.cpp">
       <Filter>Исходные файлы\IPC</Filter>
     </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemService.cpp">
+    <ClCompile Include="..\Kortex\Source\VFS\KVFSService.cpp">
       <Filter>Исходные файлы\VFS</Filter>
     </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemMirrorImpl.cpp">
+    <ClCompile Include="..\Kortex\Source\VFS\KVFSConvergence.cpp">
       <Filter>Исходные файлы\VFS</Filter>
     </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemConvergenceImpl.cpp">
-      <Filter>Исходные файлы\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemMirror.cpp">
-      <Filter>Исходные файлы\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemConvergence.cpp">
-      <Filter>Исходные файлы\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemBase.cpp">
+    <ClCompile Include="..\Kortex\Source\VFS\KVFSMirror.cpp">
       <Filter>Исходные файлы\VFS</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,22 +80,13 @@
     <ClInclude Include="..\Kortex\Source\IPC\KIPCServer.h">
       <Filter>Файлы заголовков\IPC</Filter>
     </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemConvergence.h">
+    <ClInclude Include="..\Kortex\Source\VFS\KVFSService.h">
       <Filter>Файлы заголовков\VFS</Filter>
     </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemConvergenceImpl.h">
+    <ClInclude Include="..\Kortex\Source\VFS\KVFSConvergence.h">
       <Filter>Файлы заголовков\VFS</Filter>
     </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemMirror.h">
-      <Filter>Файлы заголовков\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemMirrorImpl.h">
-      <Filter>Файлы заголовков\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemService.h">
-      <Filter>Файлы заголовков\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemBase.h">
+    <ClInclude Include="..\Kortex\Source\VFS\KVFSMirror.h">
       <Filter>Файлы заголовков\VFS</Filter>
     </ClInclude>
   </ItemGroup>

@@ -32,42 +32,42 @@ int KApp::OnExit()
 }
 bool KApp::OnExceptionInMainLoop()
 {
-	wxString sMessage = "Unknown";
-	wxString sOrigin = "Unknown";
+	wxString message = "Unknown";
+	wxString origin = "Unknown";
 	try
 	{
 		throw;
 	}
 	catch (const std::exception& e)
 	{
-		sOrigin = "C++ Standard Library";
-		sMessage = e.what();
+		origin = "C++ Standard Library";
+		message = e.what();
 	}
 	catch (const std::string& e)
 	{
-		sOrigin = "C++ std::string";
-		sMessage = e;
+		origin = "C++ std::string";
+		message = e;
 	}
 	catch (const std::wstring& e)
 	{
-		sOrigin = "C++ std::wstring";
-		sMessage = e;
+		origin = "C++ std::wstring";
+		message = e;
 	}
 	catch (const char* e)
 	{
-		sOrigin = "C Narrow String";
-		sMessage = e;
+		origin = "C Narrow String";
+		message = e;
 	}
 	catch (const wchar_t* e)
 	{
-		sOrigin = "C Wide String";
-		sMessage = e;
+		origin = "C Wide String";
+		message = e;
 	}
 	catch (...)
 	{
-		sMessage = "unknown error.";
+		message = "unknown error.";
 	}
-	wxMessageBox(wxString::Format("Unexpected exception has occurred: %s.\r\n\r\nThe program will terminate.\r\n\r\nException origin: %s", sMessage, sOrigin));
+	wxMessageBox(wxString::Format("Unexpected exception has occurred: %s.\r\n\r\nThe program will terminate.\r\n\r\nException origin: %s", message, origin));
 	ExitApp(std::numeric_limits<int>::min());
 
 	// Exit the main loop and terminate the program.

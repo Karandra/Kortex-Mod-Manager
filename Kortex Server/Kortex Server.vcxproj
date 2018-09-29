@@ -23,37 +23,19 @@
     <ClCompile Include="..\Kortex\Source\IPC\KIPCConnection.cpp" />
     <ClCompile Include="..\Kortex\Source\IPC\KIPCRequest.cpp" />
     <ClCompile Include="..\Kortex\Source\IPC\KIPCServer.cpp" />
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemBase.cpp">
+    <ClCompile Include="..\Kortex\Source\VFS\KVFSConvergence.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemConvergence.cpp">
+    <ClCompile Include="..\Kortex\Source\VFS\KVFSMirror.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemConvergenceImpl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemMirror.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemMirrorImpl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\Kortex\Source\VFS\KVirtualFileSystemService.cpp">
+    <ClCompile Include="..\Kortex\Source\VFS\KVFSService.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -70,37 +52,19 @@
     <ClInclude Include="..\Kortex\Source\IPC\KIPCConnection.h" />
     <ClInclude Include="..\Kortex\Source\IPC\KIPCRequest.h" />
     <ClInclude Include="..\Kortex\Source\IPC\KIPCServer.h" />
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemBase.h">
+    <ClInclude Include="..\Kortex\Source\VFS\KVFSConvergence.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemConvergence.h">
+    <ClInclude Include="..\Kortex\Source\VFS\KVFSMirror.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemConvergenceImpl.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemMirror.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemMirrorImpl.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\Kortex\Source\VFS\KVirtualFileSystemService.h">
+    <ClInclude Include="..\Kortex\Source\VFS\KVFSService.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

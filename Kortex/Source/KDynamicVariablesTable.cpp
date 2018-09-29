@@ -1,12 +1,10 @@
 #include "stdafx.h"
-#include "KVariablesTable.h"
 #include "KDynamicVariablesTable.h"
-#include "KApp.h"
 #include "KAux.h"
 
-void KDynamicVariablesTable::NewVariable(const wxString& id, const EntryType& functor)
+void KDynamicVariablesTable::NewVariable(const wxString& id, const VariableFunctor& functor)
 {
-	m_DynamicVariables.emplace(std::make_pair(id, functor));
+	m_DynamicVariables.emplace(id, functor);
 }
 
 KDynamicVariablesTable::KDynamicVariablesTable()
@@ -32,12 +30,12 @@ KDynamicVariablesTable::~KDynamicVariablesTable()
 
 bool KDynamicVariablesTable::IsEmpty() const
 {
-	return m_DynamicVariables.empty() && KVariablesTable::IsEmpty();
+	return m_DynamicVariables.empty() && KStaticVariablesTable::IsEmpty();
 }
 
 bool KDynamicVariablesTable::HasVariable(const wxString& id) const
 {
-	return m_DynamicVariables.count(id) || KVariablesTable::HasVariable(id);
+	return m_DynamicVariables.count(id) || KStaticVariablesTable::HasVariable(id);
 }
 wxString KDynamicVariablesTable::GetVariable(const wxString& id) const
 {
@@ -49,5 +47,5 @@ wxString KDynamicVariablesTable::GetVariable(const wxString& id) const
 	{
 		return it->second();
 	}
-	return KVariablesTable::GetVariable(id);
+	return KStaticVariablesTable::GetVariable(id);
 }

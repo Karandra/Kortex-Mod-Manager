@@ -1,39 +1,9 @@
 #include "stdafx.h"
 #include "KVariablesTable.h"
 #include "KApp.h"
-#include "KAux.h"
 #include <KxFramework/KxShell.h>
 
-KVariablesTable::KVariablesTable()
-{
-}
-KVariablesTable::~KVariablesTable()
-{
-}
-
-bool KVariablesTable::HasVariable(const wxString& id) const
-{
-	return m_Impl.count(id);
-}
-wxString KVariablesTable::GetVariable(const wxString& id) const
-{
-	auto it = m_Impl.find(id);
-	if (it != m_Impl.end())
-	{
-		return it->second.GetValue();
-	}
-	else
-	{
-		//KLogMessage("Can't expand variable \"%s\"", id);
-		return wxEmptyString;
-	}
-}
-void KVariablesTable::SetVariable(const wxString& id, const wxString& value, KVariableTypeEnum type)
-{
-	m_Impl.insert_or_assign(id, KVariableValue(value, type));
-}
-
-wxString KVariablesTable::Expand(const wxString& variables) const
+wxString KIVariablesTable::Expand(const wxString& variables) const
 {
 	if (!variables.IsEmpty() && (!IsEmpty() || KApp::Get().IsTranslationLoaded()))
 	{

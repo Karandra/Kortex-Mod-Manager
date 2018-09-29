@@ -1,17 +1,18 @@
 #pragma once
 #include "stdafx.h"
 #include "KVariablesTable.h"
+#include "KStaticVariablesTable.h"
 
-// KDynamicVariablesTable can expand variables whose values can change during runtime by themselves
+// Class 'KDynamicVariablesTable' can expand variables whose values can change during runtime by themselves
 // like date-time or say used memory.
-class KDynamicVariablesTable: public KVariablesTable
+class KDynamicVariablesTable: public KStaticVariablesTable
 {
 	private:
-		typedef std::function<wxString(void)> EntryType;
-		std::unordered_map<wxString, EntryType> m_DynamicVariables;
+		using VariableFunctor = std::function<wxString(void)>;
+		std::unordered_map<wxString, VariableFunctor> m_DynamicVariables;
 
 	private:
-		void NewVariable(const wxString& id, const EntryType& functor);
+		void NewVariable(const wxString& id, const VariableFunctor& functor);
 
 	public:
 		KDynamicVariablesTable();

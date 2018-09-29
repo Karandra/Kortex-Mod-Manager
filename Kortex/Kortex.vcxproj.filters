@@ -747,6 +747,9 @@
     <ClCompile Include="Source\VFS\KVFSMirror.cpp">
       <Filter>Code\Source Files\VFS</Filter>
     </ClCompile>
+    <ClCompile Include="Source\KStaticVariablesTable.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1351,6 +1354,9 @@
     </ClInclude>
     <ClInclude Include="Source\VFS\KVFSMirror.h">
       <Filter>Code\Header Files\VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\KStaticVariablesTable.h">
+      <Filter>Code\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

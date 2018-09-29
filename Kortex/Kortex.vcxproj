@@ -32,6 +32,7 @@
     <ClCompile Include="Source\IPC\KIPCConnection.cpp" />
     <ClCompile Include="Source\IPC\KIPCRequest.cpp" />
     <ClCompile Include="Source\IPC\KIPCServer.cpp" />
+    <ClCompile Include="Source\KStaticVariablesTable.cpp" />
     <ClCompile Include="Source\KTranslation.cpp" />
     <ClCompile Include="Source\ModManager\KFileTreeNode.cpp" />
     <ClCompile Include="Source\ModManager\KFixedModEntry.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Source\IPC\KIPCServer.h" />
     <ClInclude Include="Source\KEvents.h" />
     <ClInclude Include="Source\KRTTI.h" />
+    <ClInclude Include="Source\KStaticVariablesTable.h" />
     <ClInclude Include="Source\KTranslation.h" />
     <ClInclude Include="Source\ModManager\KFileTreeNode.h" />
     <ClInclude Include="Source\ModManager\KFixedModEntry.h" />

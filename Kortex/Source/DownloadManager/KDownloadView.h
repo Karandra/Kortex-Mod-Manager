@@ -4,11 +4,8 @@
 #include "KDownloadManager.h"
 class KxMenuEvent;
 
-class KDownloadManagerView: public KDataViewVectorListModel<KDownloadEntry::Container, KDataViewListModel>
+class KDownloadView: public KDataViewVectorListModel<KDownloadEntry::Vector, KDataViewListModel>
 {
-	private:
-		bool m_InstallWizardActive = false;
-
 	private:
 		virtual void OnInitControl() override;
 
@@ -34,7 +31,7 @@ class KDownloadManagerView: public KDataViewVectorListModel<KDownloadEntry::Cont
 		void Install(KDownloadEntry& entry);
 
 	public:
-		KDownloadManagerView();
+		KDownloadView();
 
 	public:
 		virtual size_t GetItemCount() const override
@@ -60,7 +57,7 @@ class KDownloadManagerView: public KDataViewVectorListModel<KDownloadEntry::Cont
 		}
 		KxDataViewItem FindItem(const KDownloadEntry& entry) const
 		{
-			auto it = KDownloadManager::GetInstance()->FindEntryIter(entry);
+			auto it = KDownloadManager::GetInstance()->GetDownloadIterator(entry);
 			if (it != KDownloadManager::GetInstance()->GetDownloads().end())
 			{
 				return GetItem(std::distance(GetDataVector()->begin(), it));

@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "KDownloadManager.h"
-#include "KDownloadManagerWorkspace.h"
-#include "KDownloadManagerView.h"
+#include "KDownloadWorkspace.h"
+#include "KDownloadView.h"
 #include "Network/KNetwork.h"
 #include "Network/KNetworkProviderNexus.h"
 #include "UI/KMainWindow.h"
+#include "Profile/KProfile.h"
+#include "KAux.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxDataView.h>
 #include <KxFramework/KxRegistry.h>
@@ -12,12 +14,12 @@
 
 namespace
 {
-	KDownloadManagerView* GetViewAndItem(const KDownloadEntry& entry, KxDataViewItem& item)
+	KDownloadView* GetViewAndItem(const KDownloadEntry& entry, KxDataViewItem& item)
 	{
-		KDownloadManagerWorkspace* workspace = KDownloadManagerWorkspace::GetInstance();
+		KDownloadWorkspace* workspace = KDownloadWorkspace::GetInstance();
 		if (workspace)
 		{
-			KDownloadManagerView* view = workspace->GetModelView();
+			KDownloadView* view = workspace->GetModelView();
 			if (view)
 			{
 				item = view->FindItem(entry);
@@ -76,7 +78,7 @@ bool KDownloadManager::CheckCmdLineArgs(const wxCmdLineParser& args, wxString& l
 
 KWorkspace* KDownloadManager::CreateWorkspace(KMainWindow* mainWindow)
 {
-	return new KDownloadManagerWorkspace(mainWindow, this);
+	return new KDownloadWorkspace(mainWindow, this);
 }
 
 void KDownloadManager::OnChangeEntry(const KDownloadEntry& entry, bool noSerialize) const
@@ -89,7 +91,7 @@ void KDownloadManager::OnChangeEntry(const KDownloadEntry& entry, bool noSeriali
 	if (m_IsReady)
 	{
 		KxDataViewItem item;
-		KDownloadManagerView* view = GetViewAndItem(entry, item);
+		KDownloadView* view = GetViewAndItem(entry, item);
 		view->ItemChanged(item);
 	}
 }
@@ -100,7 +102,7 @@ void KDownloadManager::OnAddEntry(const KDownloadEntry& entry) const
 	if (m_IsReady)
 	{
 		KxDataViewItem item;
-		KDownloadManagerView* view = GetViewAndItem(entry, item);
+		KDownloadView* view = GetViewAndItem(entry, item);
 		view->ItemAdded(item);
 	}
 }
@@ -111,7 +113,7 @@ void KDownloadManager::OnRemoveEntry(const KDownloadEntry& entry) const
 	if (m_IsReady)
 	{
 		KxDataViewItem item;
-		KDownloadManagerView* view = GetViewAndItem(entry, item);
+		KDownloadView* view = GetViewAndItem(entry, item);
 		view->ItemDeleted(item);
 	}
 }
@@ -130,7 +132,7 @@ void KDownloadManager::OnDownloadStopped(KDownloadEntry& entry)
 }
 void KDownloadManager::OnDownloadResumed(KDownloadEntry& entry)
 {
-	OnChangeEntry(entry, true);
+	OnChangeEntry(entry);
 }
 void KDownloadManager::OnDownloadFailed(KDownloadEntry& entry)
 {
@@ -184,16 +186,28 @@ void KDownloadManager::LoadDownloads()
 
 	bool showHidden = ShouldShowHiddenDownloads();
 
-	KxFileFinder finder(GetDownloadsLocation(), "*.xml");
+	KxFileFinder finder(GetDownloadsLocation(), "*");
 	KxFileFinderItem item = finder.FindNext();
 	while (item.IsOK())
 	{
 		if (item.IsNormalItem() && item.IsFile() && !item.GetName().IsEmpty())
 		{
-			auto& entry = m_Downloads.emplace_back(new KDownloadEntry());
-			if (!entry->DeSerialize(item.GetFullPath()) || (entry->IsHidden() && !showHidden))
+			// Load everything that's not XML file
+			if (!KAux::IsSingleFileExtensionMatches(item.GetName(), wxS("xml")))
 			{
-				m_Downloads.pop_back();
+				const wxString xmlPath = item.GetFullPath() + wxS(".xml");
+				auto& entry = m_Downloads.emplace_back(new KDownloadEntry());
+
+				// Try to load from download xml or load as much as possible from download itself
+				if (!entry->DeSerialize(xmlPath, item))
+				{
+					entry->DeSerializeDefault(item);
+					entry->Serialize();
+				}
+				if (entry->IsHidden() && !showHidden)
+				{
+					m_Downloads.pop_back();
+				}
 			}
 		}
 		item = finder.FindNext();
@@ -224,9 +238,25 @@ void KDownloadManager::PauseAllActive()
 	}
 }
 
-KDownloadEntry::RefContainer KDownloadManager::GetNotRunningItems(bool installedOnly) const
+wxString KDownloadManager::GetDownloadsLocation() const
 {
-	KDownloadEntry::RefContainer items;
+	wxString location = m_Options.GetAttribute("DownloadsLocation");
+	if (location.IsEmpty())
+	{
+		location = KProfile::GetCurrent()->GetRCPD({"Downloads"});
+		KxFile(location).CreateFolder();
+	}
+	return location;
+}
+void KDownloadManager::SetDownloadsLocation(const wxString& location)
+{
+	m_Options.SetAttribute("DownloadsLocation", location);
+	KxFile(location).CreateFolder();
+}
+
+KDownloadEntry::RefVector KDownloadManager::GetNotRunningDownloads(bool installedOnly) const
+{
+	KDownloadEntry::RefVector items;
 	for (const auto& entry: m_Downloads)
 	{
 		if (!entry->IsRunning())
@@ -240,7 +270,7 @@ KDownloadEntry::RefContainer KDownloadManager::GetNotRunningItems(bool installed
 	}
 	return items;
 }
-KDownloadEntry* KDownloadManager::FindEntryWithFileName(const wxString& name, const KDownloadEntry* except) const
+KDownloadEntry* KDownloadManager::FindDownloadByFileName(const wxString& name, const KDownloadEntry* except) const
 {
 	const wxString nameL = KxString::ToLower(name);
 	for (const auto& entry: m_Downloads)
@@ -271,7 +301,7 @@ wxString KDownloadManager::RenameIncrement(const wxString& name) const
 }
 void KDownloadManager::AutoRenameIncrement(KDownloadEntry& entry) const
 {
-	while (FindEntryWithFileName(entry.GetFileInfo().GetName(), &entry))
+	while (FindDownloadByFileName(entry.GetFileInfo().GetName(), &entry))
 	{
 		entry.GetFileInfo().SetName(RenameIncrement(entry.GetFileInfo().GetName()));
 	}
@@ -281,7 +311,7 @@ bool KDownloadManager::RemoveDownload(KDownloadEntry& download)
 {
 	if (!download.IsRunning())
 	{
-		auto it = FindEntryIter(download);
+		auto it = GetDownloadIterator(download);
 		if (it != m_Downloads.end())
 		{
 			if (KxFile(download.GetFullPath()).RemoveFile(true) && KxFile(download.GetMetaFilePath()).RemoveFile(true))
@@ -314,7 +344,7 @@ bool KDownloadManager::QueueFromOutside(const wxString& link)
 {
 	if (KDownloadManager::GetInstance()->QueueNXM(link))
 	{
-		KDownloadManagerWorkspace* workspace = KDownloadManagerWorkspace::GetInstance();
+		KDownloadWorkspace* workspace = KDownloadWorkspace::GetInstance();
 		workspace->SwitchHere();
 
 		KMainWindow* mainWindow = KMainWindow::GetInstance();

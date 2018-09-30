@@ -7,12 +7,16 @@
 #include <KxFramework/KxFileStream.h>
 class KQuickThread;
 class KProfile;
+class KModEntry;
+class KxFileFinderItem;
 
 class KDownloadEntry: public KxISerializer
 {
+	friend class KDownloadManager;
+
 	public:
-		using Container = std::vector<std::unique_ptr<KDownloadEntry>>;
-		using RefContainer = std::vector<std::reference_wrapper<KDownloadEntry>>;
+		using Vector = std::vector<std::unique_ptr<KDownloadEntry>>;
+		using RefVector = std::vector<std::reference_wrapper<KDownloadEntry>>;
 
 	private:
 		KNetworkProvider::DownloadInfo m_DownloadInfo;
@@ -29,7 +33,6 @@ class KDownloadEntry: public KxISerializer
 		int64_t m_DownloadedSize = 0;
 		int64_t m_Speed = 0;
 
-		bool m_IsInstalled = false;
 		bool m_IsPaused = false;
 		bool m_IsHidden = false;
 		bool m_IsFailed = false;
@@ -38,6 +41,11 @@ class KDownloadEntry: public KxISerializer
 		void Create();
 		void CleanupDownload();
 		bool RequestNewLink();
+
+		void DeSerializeDefault(const KxFileFinderItem& fileItem);
+		bool RestoreDownloadNexus();
+		bool RestoreDownloadTESALL();
+		bool RestoreDownloadLoversLab();
 
 		void OnDownload(KxCURLEvent& event);
 		void OnThreadExit(wxNotifyEvent& event);
@@ -49,6 +57,7 @@ class KDownloadEntry: public KxISerializer
 					   const KNetworkProvider::FileInfo& fileInfo,
 					   const KNetworkProvider* provider,
 					   const KProfileID& id);
+		~KDownloadEntry();
 
 	public:
 		bool IsOK() const
@@ -58,6 +67,7 @@ class KDownloadEntry: public KxISerializer
 		wxString GetFullPath() const;
 		wxString GetMetaFilePath() const;
 		
+		KProfileID GetTargetProfileID() const;
 		const KProfile* GetTargetProfile() const
 		{
 			return m_TargetProfile;
@@ -68,9 +78,19 @@ class KDownloadEntry: public KxISerializer
 		}
 		void SetTargetProfile(const KProfileID& id);
 
+		const KModEntry* GetMod() const;
+
 		bool HasProvider() const
 		{
 			return m_Provider != NULL;
+		}
+		bool IsProviderType(KNetworkProviderID providerID) const
+		{
+			if (m_Provider)
+			{
+				return m_Provider->GetID() == providerID;
+			}
+			return providerID == KNETWORK_PROVIDER_ID_INVALID;
 		}
 		const KNetworkProvider* GetProvider() const
 		{
@@ -105,11 +125,15 @@ class KDownloadEntry: public KxISerializer
 		}
 		bool IsCompleted() const
 		{
-			return m_FileInfo.IsOK() && !IsFailed() && m_FileInfo.GetSize() == m_DownloadedSize;
+			return !IsFailed() && m_FileInfo.GetSize() == m_DownloadedSize;
+		}
+		bool IsFileInfoOK() const
+		{
+			return m_FileInfo.IsOK();
 		}
 		bool CanRestart() const
 		{
-			return !IsRunning() && m_Provider;
+			return !IsRunning() && m_Provider && m_FileInfo.IsOK();
 		}
 
 		const KNetworkProvider::FileInfo& GetFileInfo() const
@@ -156,14 +180,7 @@ class KDownloadEntry: public KxISerializer
 			m_IsHidden = value;
 		}
 
-		bool IsInstalled() const
-		{
-			return m_IsInstalled;
-		}
-		void SetInstalled(bool value)
-		{
-			m_IsInstalled = value;
-		}
+		bool IsInstalled() const;
 
 		void Stop();
 		void Pause();
@@ -171,10 +188,17 @@ class KDownloadEntry: public KxISerializer
 		void Run(int64_t resumePos = 0);
 		bool Restart();
 
+		// Restores download info depending of this download provider and its filename
+		// which is set in 'KDownloadEntry::DeSerializeDefault' if something goes wrong.
+		// Restoration is performed by analyzing file name to get file id and mod id
+		// and querying rest of the information form internet.
+		bool RepairBrokedDownload();
+		bool QueryInfo();
+
 	public:
 		virtual bool Serialize(wxOutputStream& stream) const override;
 		virtual bool DeSerialize(wxInputStream& stream) override;
 		
 		bool Serialize() const;
-		bool DeSerialize(const wxString& path);
+		bool DeSerialize(const wxString& xmlFile, const KxFileFinderItem& fileItem);
 };

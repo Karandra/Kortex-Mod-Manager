@@ -5,19 +5,19 @@
 #include "Profile/KProfileID.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
-class KDownloadManagerWorkspace;
+class KDownloadWorkspace;
 
 class KDownloadManager: public KPluggableManager, public KxSingletonPtr<KDownloadManager>
 {
 	friend class KDownloadEntry;
-	friend class KDownloadManagerWorkspace;
+	friend class KDownloadWorkspace;
 
 	public:
 		static KProfileID TranslateNxmGameID(const wxString& id);
 		static bool CheckCmdLineArgs(const wxCmdLineParser& args, wxString& link);
 
 	private:
-		KDownloadEntry::Container m_Downloads;
+		KDownloadEntry::Vector m_Downloads;
 		KProgramOptionUI m_Options;
 		bool m_IsAssociatedWithNXM = false;
 		bool m_IsReady = false;
@@ -75,32 +75,27 @@ class KDownloadManager: public KPluggableManager, public KxSingletonPtr<KDownloa
 			m_Options.SetAttribute("ShowHiddenDownloads", show);
 		}
 
-		wxString GetDownloadsLocation() const
-		{
-			return m_Options.GetAttribute("DownloadsLocation");
-		}
-		void SetDownloadsLocation(const wxString& location)
-		{
-			m_Options.SetAttribute("DownloadsLocation", location);
-		}
+		wxString GetDownloadsLocation() const;
+		void SetDownloadsLocation(const wxString& location);
 
-		KDownloadEntry::RefContainer GetNotRunningItems(bool installedOnly = false) const;
-		const KDownloadEntry::Container& GetDownloads() const
+		const KDownloadEntry::Vector& GetDownloads() const
 		{
 			return m_Downloads;
 		}
-		KDownloadEntry::Container& GetDownloads()
+		KDownloadEntry::Vector& GetDownloads()
 		{
 			return m_Downloads;
 		}
-		auto FindEntryIter(const KDownloadEntry& entry) const
+		KDownloadEntry::RefVector GetNotRunningDownloads(bool installedOnly = false) const;
+		
+		auto GetDownloadIterator(const KDownloadEntry& entry) const
 		{
 			return std::find_if(m_Downloads.begin(), m_Downloads.end(), [&entry](const auto& v)
 			{
 				return v.get() == &entry;
 			});
 		}
-		KDownloadEntry* FindEntryWithFileName(const wxString& name, const KDownloadEntry* except = NULL) const;
+		KDownloadEntry* FindDownloadByFileName(const wxString& name, const KDownloadEntry* except = NULL) const;
 		wxString RenameIncrement(const wxString& name) const;
 		void AutoRenameIncrement(KDownloadEntry& entry) const;
 

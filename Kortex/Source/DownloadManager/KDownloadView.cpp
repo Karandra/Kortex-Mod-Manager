@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KDownloadManagerView.h"
+#include "KDownloadView.h"
 #include "Network/KNetwork.h"
 #include "Network/KNetworkProviderNexus.h"
 #include "Network/KNetworkProviderTESALL.h"
@@ -36,6 +36,9 @@ enum MenuID
 	Resume,
 	Restart,
 
+	QueryInfo,
+	ShowChangeLog,
+
 	Remove,
 	RemoveAll,
 	RemoveInstalled,
@@ -52,11 +55,11 @@ enum MenuID
 	CopyNXM,
 };
 
-void KDownloadManagerView::OnInitControl()
+void KDownloadView::OnInitControl()
 {
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KDownloadManagerView::OnActivateItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KDownloadManagerView::OnSelectItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KDownloadManagerView::OnContextMenu, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KDownloadView::OnActivateItem, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KDownloadView::OnSelectItem, this);
+	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KDownloadView::OnContextMenu, this);
 	GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, [this](KxDataViewEvent& event)
 	{
 		KxMenu menu;
@@ -83,7 +86,7 @@ void KDownloadManagerView::OnInitControl()
 	RefreshItems();
 }
 
-void KDownloadManagerView::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KDownloadView::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
 	const KDownloadEntry* entry = GetDataEntry(row);
 	if (entry)
@@ -98,7 +101,7 @@ void KDownloadManagerView::GetEditorValueByRow(wxAny& value, size_t row, const K
 	}
 	GetValueByRow(value, row, column);
 }
-void KDownloadManagerView::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+void KDownloadView::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
 	const KDownloadEntry* entry = GetDataEntry(row);
 	if (entry)
@@ -179,11 +182,11 @@ void KDownloadManagerView::GetValueByRow(wxAny& value, size_t row, const KxDataV
 				if (entry->IsRunning())
 				{
 					static wxString sec = T("Generic.Sec");
-					label = wxString::Format("%d%%, %s/%s", percent, KxFile::FormatFileSize(entry->GetSpeed(), 0), sec);
+					label = KxFormat("%1%, %2/%3").arg(percent).arg(KxFile::FormatFileSize(entry->GetSpeed(), 0)).arg(sec);
 				}
 				else
 				{
-					label = wxString::Format("%d%%", percent);
+					label = KxFormat("%1%").arg(percent);
 				}
 
 				value = KxDataViewProgressValue(percent, label, state);
@@ -192,7 +195,7 @@ void KDownloadManagerView::GetValueByRow(wxAny& value, size_t row, const KxDataV
 		};
 	}
 }
-bool KDownloadManagerView::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+bool KDownloadView::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 {
 	KDownloadEntry* entry = GetDataEntry(row);
 	if (entry)
@@ -207,7 +210,7 @@ bool KDownloadManagerView::SetValueByRow(const wxAny& value, size_t row, const K
 	}
 	return false;
 }
-bool KDownloadManagerView::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
+bool KDownloadView::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
 	const KDownloadEntry* entry = GetDataEntry(row);
 	if (entry)
@@ -222,7 +225,7 @@ bool KDownloadManagerView::IsEnabledByRow(size_t row, const KxDataViewColumn* co
 	}
 	return false;
 }
-bool KDownloadManagerView::CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const
+bool KDownloadView::CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const
 {
 	const KDownloadEntry* entry1 = GetDataEntry(row1);
 	const KDownloadEntry* entry2 = GetDataEntry(row2);
@@ -263,21 +266,21 @@ bool KDownloadManagerView::CompareByRow(size_t row1, size_t row2, const KxDataVi
 	return false;
 }
 
-void KDownloadManagerView::OnSelectItem(KxDataViewEvent& event)
+void KDownloadView::OnSelectItem(KxDataViewEvent& event)
 {
 	const KDownloadEntry* enry = GetDataEntry(GetRow(event.GetItem()));
 }
-void KDownloadManagerView::OnActivateItem(KxDataViewEvent& event)
+void KDownloadView::OnActivateItem(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	KxDataViewColumn* column = event.GetColumn();
 	KDownloadEntry* entry = GetDataEntry(GetRow(item));
-	if (entry && column && !m_InstallWizardActive)
+	if (entry && column)
 	{
 		Install(*entry);
 	}
 }
-void KDownloadManagerView::OnContextMenu(KxDataViewEvent& event)
+void KDownloadView::OnContextMenu(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	KDownloadEntry* entry = GetDataEntry(GetRow(item));
@@ -289,7 +292,7 @@ void KDownloadManagerView::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Install, T("DownloadManager.Menu.Install")));
 		item->SetBitmap(KGetBitmap(KIMG_BOX));
-		item->Enable(entry && entry->IsCompleted() && !m_InstallWizardActive);
+		item->Enable(entry && entry->IsCompleted());
 	}
 	contextMenu.AddSeparator();
 	
@@ -304,7 +307,7 @@ void KDownloadManagerView::OnContextMenu(KxDataViewEvent& event)
 	}
 	{
 		KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Abort, T("DownloadManager.Menu.Abort")));
-		item->Enable(entry && isRunning && !entry->IsCompleted() && !entry->IsFailed() && !entry->IsPaused());
+		item->Enable(entry && isRunning && !entry->IsCompleted() && !entry->IsFailed());
 	}
 	{
 		KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Resume, T("DownloadManager.Menu.Resume")));
@@ -313,6 +316,33 @@ void KDownloadManagerView::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Restart, T("DownloadManager.Menu.Restart")));
 		item->Enable(entry && entry->CanRestart());
+	}
+
+	contextMenu.AddSeparator();
+	{
+		KxMenu* providerMenu = new KxMenu();
+		if (entry && !entry->IsRunning())
+		{
+			for (KNetworkProvider* provider: KNetwork::GetInstance()->GetProviders())
+			{
+				KxMenuItem* item = providerMenu->Add(new KxMenuItem(provider->GetName(), wxEmptyString, wxITEM_CHECK));
+				item->Check(provider == entry->GetProvider());
+				item->Bind(KxEVT_MENU_SELECT, [entry, provider](KxMenuEvent& event)
+				{
+					entry->SetProvider(provider);
+					entry->Serialize();
+				});
+			}
+		}
+		contextMenu.Add(providerMenu, T("DownloadManager.Menu.SetProvider"));
+	}
+	{
+		KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::QueryInfo, T("DownloadManager.Menu.QueryInfo")));
+		item->Enable(entry && !entry->IsRunning() && entry->HasProvider());
+	}
+	{
+		KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ShowChangeLog, T("DownloadManager.Menu.ShowChangeLog")));
+		item->Enable(entry && entry->GetFileInfo().HasChangeLog());
 	}
 	contextMenu.AddSeparator();
 
@@ -367,7 +397,7 @@ void KDownloadManagerView::OnContextMenu(KxDataViewEvent& event)
 		item->Check(assocOK);
 		item->SetBitmap(KGetBitmap(KIMG_SITE_NEXUS));
 	}
-	if (entry && entry->HasProvider() && entry->GetProvider()->GetID() == KNETWORK_PROVIDER_ID_NEXUS)
+	if (entry && entry->IsProviderType(KNETWORK_PROVIDER_ID_NEXUS))
 	{
 		KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::CopyNXM, T("DownloadManager.Menu.CopyNXM")));
 	}
@@ -375,10 +405,11 @@ void KDownloadManagerView::OnContextMenu(KxDataViewEvent& event)
 	contextMenu.Bind(KxEVT_MENU_SELECT, [this, entry](KxMenuEvent& event)
 	{
 		OnContextMenuSelected(event, entry);
+		event.Skip();
 	});
 	contextMenu.Show(GetView());
 }
-void KDownloadManagerView::OnContextMenuSelected(KxMenuEvent& event, KDownloadEntry* entry)
+void KDownloadView::OnContextMenuSelected(KxMenuEvent& event, KDownloadEntry* entry)
 {
 	KDownloadManager* downloadManager = KDownloadManager::GetInstance();
 
@@ -412,6 +443,47 @@ void KDownloadManagerView::OnContextMenuSelected(KxMenuEvent& event, KDownloadEn
 		case MenuID::Restart:
 		{
 			entry->Restart();
+			break;
+		}
+
+		case MenuID::QueryInfo:
+		{
+			bool isSucceed = false;
+			bool isQueryInfo = false;
+			if (entry->IsOK())
+			{
+				isQueryInfo = true;
+				isSucceed = entry->QueryInfo();
+			}
+			else
+			{
+				isQueryInfo = false;
+				isSucceed = entry->RepairBrokedDownload();
+			}
+
+			if (!isSucceed)
+			{
+				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, entry->GetFileInfo().GetName(), wxEmptyString, KxBTN_OK, KxICON_WARNING);
+				if (isQueryInfo)
+				{
+					dialog.SetMessage(T("DownloadManager.QueryDownloadInfoFailed"));
+				}
+				else
+				{
+					dialog.SetMessage(T("DownloadManager.RestoreDownloadFailed"));
+				}
+				dialog.ShowModal();
+			}
+			break;
+		}
+		case MenuID::ShowChangeLog:
+		{
+			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, entry->GetFileInfo().GetDisplayName(), wxEmptyString, KxBTN_OK, KxICON_NONE);
+			dialog.SetMessage(KxFormat("%1 %2").arg(T("Generic.Version")).arg(entry->GetFileInfo().GetVersion()));
+			dialog.SetExMessage(entry->GetFileInfo().GetChangeLog());
+			dialog.SetMainIcon(KxShell::GetFileIcon(entry->GetFullPath()));
+			dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
+			dialog.ShowModal();
 			break;
 		}
 
@@ -496,30 +568,34 @@ void KDownloadManagerView::OnContextMenuSelected(KxMenuEvent& event, KDownloadEn
 	};
 }
 
-wxBitmap KDownloadManagerView::GetStateBitmap(const KDownloadEntry& entry) const
+wxBitmap KDownloadView::GetStateBitmap(const KDownloadEntry& entry) const
 {
+	if (!entry.IsFileInfoOK())
+	{
+		return KGetBitmap(KIMG_EXCLAMATION_CIRCLE_FRAME);
+	}
 	if (entry.IsCompleted())
 	{
 		return KGetBitmap(KIMG_TICK_CIRCLE_FRAME);
 	}
-	else if (entry.IsFailed())
+	if (entry.IsFailed())
 	{
 		return KGetBitmap(KIMG_CROSS_CIRCLE_FRAME);
 	}
-	else if (entry.IsPaused())
+	if (entry.IsPaused())
 	{
 		return KGetBitmap(KIMG_EXCLAMATION_CIRCLE_FRAME_EMPTY);
 	}
 	return KGetBitmap(KIMG_TICK_CIRCLE_FRAME_EMPTY);
 }
-void KDownloadManagerView::RemoveAll(bool installedOnly)
+void KDownloadView::RemoveAll(bool installedOnly)
 {
 	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, T("DownloadManager.RemoveDownloadsCaption"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	dialog.SetMessage(installedOnly ? T("DownloadManager.RemoveInstalledDownloadsMessage") : T("DownloadManager.RemoveDownloadsMessage"));
 
 	if (dialog.ShowModal() == KxID_YES)
 	{
-		KDownloadEntry::RefContainer items = KDownloadManager::GetInstance()->GetNotRunningItems(installedOnly);
+		KDownloadEntry::RefVector items = KDownloadManager::GetInstance()->GetNotRunningDownloads(installedOnly);
 		if (!items.empty())
 		{
 			for (KDownloadEntry& entry: items)
@@ -530,9 +606,9 @@ void KDownloadManagerView::RemoveAll(bool installedOnly)
 		}
 	}
 }
-void KDownloadManagerView::SetAllHidden(bool isHidden, bool installedOnly)
+void KDownloadView::SetAllHidden(bool isHidden, bool installedOnly)
 {
-	KDownloadEntry::RefContainer items = KDownloadManager::GetInstance()->GetNotRunningItems(installedOnly);
+	KDownloadEntry::RefVector items = KDownloadManager::GetInstance()->GetNotRunningDownloads(installedOnly);
 	if (!items.empty())
 	{
 		for (KDownloadEntry& entry: items)
@@ -545,22 +621,13 @@ void KDownloadManagerView::SetAllHidden(bool isHidden, bool installedOnly)
 		RefreshItems();
 	}
 }
-void KDownloadManagerView::Install(KDownloadEntry& entry)
+void KDownloadView::Install(KDownloadEntry& entry)
 {
-	m_InstallWizardActive = true;
-	KInstallWizardDialog* installWizard = new KInstallWizardDialog(GetViewTLW(), entry.GetFullPath());
-
-	installWizard->Bind(wxEVT_CLOSE_WINDOW, [this, installWizard, &entry](wxCloseEvent& event)
-	{
-		entry.SetInstalled(installWizard->IsCompleted());
-		entry.Serialize();
-
-		m_InstallWizardActive = false;
-		event.Skip();
-	});
+	entry.Serialize();
+	new KInstallWizardDialog(GetViewTLW(), entry.GetFullPath());
 }
 
-KDownloadManagerView::KDownloadManagerView()
+KDownloadView::KDownloadView()
 {
 	SetDataViewFlags(KxDV_VERT_RULES);
 	SetDataVector(&KDownloadManager::GetInstance()->GetDownloads());

@@ -4,22 +4,19 @@
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
 class KDownloadManager;
-class KDownloadManagerView;
+class KDownloadView;
 
-class KDownloadManagerWorkspace: public KWorkspace, public KxSingletonPtr<KDownloadManagerWorkspace>
+class KDownloadWorkspace: public KWorkspace, public KxSingletonPtr<KDownloadWorkspace>
 {
 	private:
 		wxBoxSizer* m_MainSizer = NULL;
-		KDownloadManagerView* m_ViewModel = NULL;
+		KDownloadView* m_ViewModel = NULL;
 
 		KProgramOptionUI m_ViewOptions;
 
-	private:
-		bool CheckDownloadLocation();
-
 	public:
-		KDownloadManagerWorkspace(KMainWindow* mainWindow, KDownloadManager* manager);
-		virtual ~KDownloadManagerWorkspace();
+		KDownloadWorkspace(KMainWindow* mainWindow, KDownloadManager* manager);
+		virtual ~KDownloadWorkspace();
 		virtual bool OnCreateWorkspace() override;
 
 	private:
@@ -54,7 +51,7 @@ class KDownloadManagerWorkspace: public KWorkspace, public KxSingletonPtr<KDownl
 		}
 
 	public:
-		KDownloadManagerView* GetModelView() const
+		KDownloadView* GetModelView() const
 		{
 			return m_ViewModel;
 		}

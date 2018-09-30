@@ -564,12 +564,6 @@
     <ClCompile Include="Source\DownloadManager\KDownloadManager.cpp">
       <Filter>Code\Source Files\DownloadManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\DownloadManager\KDownloadManagerWorkspace.cpp">
-      <Filter>Code\Source Files\DownloadManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\DownloadManager\KDownloadManagerView.cpp">
-      <Filter>Code\Source Files\DownloadManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Network\KNetwork.cpp">
       <Filter>Code\Source Files\Network</Filter>
     </ClCompile>
@@ -749,6 +743,12 @@
     </ClCompile>
     <ClCompile Include="Source\KStaticVariablesTable.cpp">
       <Filter>Code\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DownloadManager\KDownloadWorkspace.cpp">
+      <Filter>Code\Source Files\DownloadManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DownloadManager\KDownloadView.cpp">
+      <Filter>Code\Source Files\DownloadManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1151,12 +1151,6 @@
     <ClInclude Include="Source\DownloadManager\KDownloadManager.h">
       <Filter>Code\Header Files\DownloadManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\DownloadManager\KDownloadManagerWorkspace.h">
-      <Filter>Code\Header Files\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\DownloadManager\KDownloadManagerView.h">
-      <Filter>Code\Header Files\DownloadManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\KNetwork.h">
       <Filter>Code\Header Files\Network</Filter>
     </ClInclude>
@@ -1357,6 +1351,24 @@
     </ClInclude>
     <ClInclude Include="Source\KStaticVariablesTable.h">
       <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DownloadManager\KDownloadWorkspace.h">
+      <Filter>Code\Header Files\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DownloadManager\KDownloadView.h">
+      <Filter>Code\Header Files\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\KNetworkProviderModInfo.h">
+      <Filter>Code\Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\KNetworkProviderNexusModInfo.h">
+      <Filter>Code\Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\KNetworkProviderTESALLModInfo.h">
+      <Filter>Code\Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\KNetworkProviderLoversLabModInfo.h">
+      <Filter>Code\Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

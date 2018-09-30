@@ -21,8 +21,8 @@
   <ItemGroup>
     <ClCompile Include="Source\DownloadManager\KDownloadEntry.cpp" />
     <ClCompile Include="Source\DownloadManager\KDownloadManager.cpp" />
-    <ClCompile Include="Source\DownloadManager\KDownloadManagerView.cpp" />
-    <ClCompile Include="Source\DownloadManager\KDownloadManagerWorkspace.cpp" />
+    <ClCompile Include="Source\DownloadManager\KDownloadView.cpp" />
+    <ClCompile Include="Source\DownloadManager\KDownloadWorkspace.cpp" />
     <ClCompile Include="Source\Events\KEvent.cpp" />
     <ClCompile Include="Source\Events\KModEvent.cpp" />
     <ClCompile Include="Source\Events\KModListEvent.cpp" />
@@ -208,8 +208,8 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Source\DownloadManager\KDownloadEntry.h" />
     <ClInclude Include="Source\DownloadManager\KDownloadManager.h" />
-    <ClInclude Include="Source\DownloadManager\KDownloadManagerView.h" />
-    <ClInclude Include="Source\DownloadManager\KDownloadManagerWorkspace.h" />
+    <ClInclude Include="Source\DownloadManager\KDownloadView.h" />
+    <ClInclude Include="Source\DownloadManager\KDownloadWorkspace.h" />
     <ClInclude Include="Source\Events\KEvent.h" />
     <ClInclude Include="Source\Events\KModEvent.h" />
     <ClInclude Include="Source\Events\KModListEvent.h" />
@@ -247,9 +247,13 @@
     <ClInclude Include="Source\Network\KNetwork.h" />
     <ClInclude Include="Source\Network\KNetworkConstants.h" />
     <ClInclude Include="Source\Network\KNetworkProviderLoversLab.h" />
+    <ClInclude Include="Source\Network\KNetworkProviderLoversLabModInfo.h" />
+    <ClInclude Include="Source\Network\KNetworkProviderModInfo.h" />
     <ClInclude Include="Source\Network\KNetworkProviderNexus.h" />
     <ClInclude Include="Source\Network\KNetworkProvider.h" />
+    <ClInclude Include="Source\Network\KNetworkProviderNexusModInfo.h" />
     <ClInclude Include="Source\Network\KNetworkProviderTESALL.h" />
+    <ClInclude Include="Source\Network\KNetworkProviderTESALLModInfo.h" />
     <ClInclude Include="Source\PackageCreator\KPackageCreatorIDTracker.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModel.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.h" />

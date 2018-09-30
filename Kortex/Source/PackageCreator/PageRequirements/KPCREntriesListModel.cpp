@@ -161,12 +161,12 @@ void KPCREntriesListModel::GetValueByRow(wxAny& value, size_t row, const KxDataV
 			}
 			case ColumnID::ID:
 			{
-				value = entry->GetID();
+				value = entry->IsEmptyID() ? KAux::MakeNoneLabel() : entry->GetID();
 				break;
 			}
 			case ColumnID::Name:
 			{
-				value = entry->GetName();
+				value = entry->IsEmptyName() ? KAux::MakeNoneLabel() : entry->GetName();
 				break;
 			}
 			case ColumnID::RequiredVersion:
@@ -177,15 +177,27 @@ void KPCREntriesListModel::GetValueByRow(wxAny& value, size_t row, const KxDataV
 			case ColumnID::CurrentVersion:
 			{
 				wxString operatorName = KPackageProjectRequirements::OperatorToSymbolicName(entry->GetRVFunction());
-				wxString CV = entry->GetCurrentVersion().ToString();
-				wxString RV = entry->GetRequiredVersion().ToString();
+				wxString cv = entry->GetCurrentVersion().ToString();
+				wxString rv = entry->GetRequiredVersion().ToString();
 
-				value = wxString::Format("CV(%s) %s RV(%s) %c %s", CV, operatorName, RV, KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT), entry->CheckVersion() ? "true" : "false");
+				KxFormat format("CV(%1) %2 RV(%3) %4 %5");
+				format.arg(cv);
+				format.arg(operatorName);
+				format.arg(rv);
+				format.arg(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
+				format.arg(entry->CheckVersion() ? "true" : "false");
+
+				value = format.ToString();
 				break;
 			}
 			case ColumnID::RequiredState:
 			{
-				value = wxString::Format("%s %c %s", m_ObjectFunctionEditor->GetItems()[entry->GetObjectFunction()], KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT), entry->GetObjectFunctionResult() ? "true" : "false");
+				KxFormat format("%1 %2 %3");
+				format.arg(m_ObjectFunctionEditor->GetItems()[entry->GetObjectFunction()]);
+				format.arg(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
+				format.arg(entry->GetObjectFunctionResult() == KPPReqState::True ? "true" : "false");
+
+				value = format.ToString();
 				break;
 			}
 			case ColumnID::Object:

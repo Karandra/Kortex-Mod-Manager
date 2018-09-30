@@ -34,8 +34,8 @@ class KModEntry: public KWithBitmap
 	friend class KModManagerDispatcher;
 
 	public:
-		using FixedWebSitePair = std::pair<int64_t, KNetworkProviderID>;
-		using FixedWebSitesArray = std::array<int64_t, KNETWORK_PROVIDER_ID_MAX>;
+		using FixedWebSitePair = std::pair<KNetworkModID, KNetworkProviderID>;
+		using FixedWebSitesArray = std::array<KNetworkModID, KNETWORK_PROVIDER_ID_MAX>;
 
 	public:
 		static wxString GetSignatureFromID(const wxString& id);
@@ -43,7 +43,7 @@ class KModEntry: public KWithBitmap
 		static int64_t GetWebSiteModID(const FixedWebSitesArray& array, KNetworkProviderID index);
 		static bool HasWebSite(const FixedWebSitesArray& array, KNetworkProviderID index);
 		static KLabeledValue GetWebSite(const FixedWebSitesArray& array, KNetworkProviderID index, const wxString& signature = wxEmptyString);
-		static void SetWebSite(FixedWebSitesArray& array, KNetworkProviderID index, int64_t modID);
+		static void SetWebSite(FixedWebSitesArray& array, KNetworkProviderID index, KNetworkModID modID);
 		static bool HasTag(KxStringVector& array, const wxString& value);
 		static bool ToggleTag(KxStringVector& array, const wxString& value, bool setTag);
 
@@ -186,10 +186,10 @@ class KModEntry: public KWithBitmap
 			m_InstallPackageFile = value;
 		}
 		
-		int64_t GetWebSiteModID(KNetworkProviderID index) const;
+		KNetworkModID GetWebSiteModID(KNetworkProviderID index) const;
 		bool HasWebSite(KNetworkProviderID index) const;
 		KLabeledValue GetWebSite(KNetworkProviderID index) const;
-		void SetWebSite(KNetworkProviderID index, int64_t modID);
+		void SetWebSite(KNetworkProviderID index, KNetworkModID modID);
 		
 		const KLabeledValueArray& GetWebSites() const
 		{

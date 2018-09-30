@@ -42,7 +42,7 @@ KLabeledValue KModEntry::GetWebSite(const FixedWebSitesArray& array, KNetworkPro
 	}
 	return KLabeledValue(wxEmptyString);
 }
-void KModEntry::SetWebSite(FixedWebSitesArray& array, KNetworkProviderID index, int64_t modID)
+void KModEntry::SetWebSite(FixedWebSitesArray& array, KNetworkProviderID index, KNetworkModID modID)
 {
 	if (index > KNETWORK_PROVIDER_ID_INVALID && index < KNETWORK_PROVIDER_ID_MAX)
 	{
@@ -356,7 +356,7 @@ KLabeledValue KModEntry::GetWebSite(KNetworkProviderID index) const
 {
 	return GetWebSite(m_FixedWebSites, index, m_Signature);
 }
-void KModEntry::SetWebSite(KNetworkProviderID index, int64_t modID)
+void KModEntry::SetWebSite(KNetworkProviderID index, KNetworkModID modID)
 {
 	SetWebSite(m_FixedWebSites, index, modID);
 }

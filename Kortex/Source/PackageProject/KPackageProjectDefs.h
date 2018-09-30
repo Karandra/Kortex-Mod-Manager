@@ -39,3 +39,10 @@ enum KPPOperator
 	KPP_OPERATOR_COUNT_COMPARISON = KPP_OPERATOR_AND,
 	KPP_OPERATOR_MIN = KPP_OPERATOR_NONE + 1,
 };
+
+enum class KPPReqState
+{
+	Unknown = -1,
+	True = 1,
+	False = 0
+};

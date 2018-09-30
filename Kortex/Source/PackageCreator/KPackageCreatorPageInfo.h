@@ -4,7 +4,7 @@
 #include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
 #include "KProgramOptions.h"
-enum KNetworkProviderID;
+#include "Network/KNetworkConstants.h"
 class KPackageCreatorWorkspace;
 class KPackageProjectInfo;
 class KPackageProjectConfig;

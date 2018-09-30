@@ -11,9 +11,6 @@ class KxXMLNode;
 
 class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
 {
-	private:
-		static wxCheckBoxState CheckRequirementStateStep1(const KPPRRequirementEntry* entry, KPPRObjectFunction nObjFunc);
-
 	public:
 		static KPackageManager& Get();
 		static const KxStringVector& GetSuppoptedExtensions();
@@ -23,7 +20,7 @@ class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
 	public:
 		static bool IsPathAbsolute(const wxString& path);
 		static wxString GetRequirementFilePath(const KPPRRequirementEntry* entry);
-		static wxCheckBoxState CheckRequirementState(const KPPRRequirementEntry* entry, KPPRObjectFunction* finalObjFunc = NULL);
+		static KPPReqState CheckRequirementState(const KPPRRequirementEntry* entry);
 		static KxVersion GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry);
 		static KxVersion GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry);
 		static KxVersion GetRequirementVersion(const KPPRRequirementEntry* entry);

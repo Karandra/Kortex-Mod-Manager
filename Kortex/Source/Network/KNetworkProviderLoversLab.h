@@ -2,14 +2,10 @@
 #include "stdafx.h"
 #include "KNetworkConstants.h"
 #include "KNetworkProvider.h"
+#include "KNetworkProviderLoversLabModInfo.h"
 #include <KxFramework/KxSingleton.h>
 class KNetworkProviderLoversLab;
 class KxCURLSession;
-
-namespace KNetworkProviderLoversLabNS
-{
-	using InfoBase = KNetworkProviderNS::InfoBase;
-}
 
 //////////////////////////////////////////////////////////////////////////
 class KNetworkProviderLoversLab: public KNetworkProvider, public KxSingletonPtr<KNetworkProviderLoversLab>
@@ -33,10 +29,6 @@ class KNetworkProviderLoversLab: public KNetworkProvider, public KxSingletonPtr<
 		KNetworkProviderLoversLab(KNetworkProviderID providerID);
 
 	public:
-		virtual KNetworkProviderID GetID() const override
-		{
-			return GetTypeID();
-		}
 		virtual KImageEnum GetIcon() const override;
 		virtual wxString GetName() const override;
 		virtual wxString GetGameID(const KProfileID& id = KProfileIDs::NullProfileID) const override;

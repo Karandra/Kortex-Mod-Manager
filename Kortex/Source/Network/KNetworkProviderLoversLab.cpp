@@ -5,7 +5,7 @@
 #include <KxFramework/KxCURL.h>
 
 KNetworkProviderLoversLab::KNetworkProviderLoversLab(KNetworkProviderID providerID)
-	:KNetworkProvider(providerID)
+	:KNetworkProvider(providerID, wxS("LoversLab"))
 {
 }
 

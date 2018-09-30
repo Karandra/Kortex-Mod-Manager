@@ -6,6 +6,7 @@
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
 #include <KxFramework/KxShell.h>
+#include <KxFramework/KxString.h>
 
 void KNetworkProviderNexus::OnAuthSuccess(wxWindow* window)
 {
@@ -74,6 +75,26 @@ void KNetworkProviderNexus::RequestUserAvatar(ValidationInfo& info)
 	}
 }
 
+wxString& KNetworkProviderNexus::ConvertChangeLog(wxString& changeLog) const
+{
+	changeLog.Replace(wxS("<br>"), wxS("\r\n"));
+	changeLog.Replace(wxS("<br/>"), wxS("\r\n"));
+	changeLog.Replace(wxS("<br />"), wxS("\r\n"));
+	changeLog.Replace(wxS("</br>"), wxS("\r\n"));
+
+	changeLog.Replace(wxS("\n\r\n"), wxS("\r\n"));
+	KxString::Trim(changeLog, true, true);
+
+	return changeLog;
+}
+wxString& KNetworkProviderNexus::ConvertDisplayName(wxString& name) const
+{
+	name.Replace(wxS("_"), wxS(" "));
+	KxString::Trim(name, true, true);
+
+	return name;
+}
+
 bool KNetworkProviderNexus::DoAuthenticate(wxWindow* window)
 {
 	KxWebSocketClient* client = new KxWebSocketClient("wss://sso.nexusmods.com");
@@ -135,7 +156,7 @@ bool KNetworkProviderNexus::DoIsAuthenticated() const
 }
 
 KNetworkProviderNexus::KNetworkProviderNexus(KNetworkProviderID providerID)
-	:KNetworkProvider(providerID)
+	:KNetworkProvider(providerID, wxS("Nexus"))
 {
 }
 
@@ -192,6 +213,9 @@ wxString& KNetworkProviderNexus::ConvertDescriptionToHTML(wxString& description)
 	{
 		return wxString::FromUTF8Unchecked(s);
 	};
+
+	// Trimming
+	KxString::Trim(description, true, true);
 
 	// Quotes: \" -> " and \' -> '
 	description.Replace("\\\"", "\"", true);

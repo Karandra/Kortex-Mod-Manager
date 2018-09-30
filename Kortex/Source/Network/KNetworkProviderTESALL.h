@@ -2,14 +2,10 @@
 #include "stdafx.h"
 #include "KNetworkConstants.h"
 #include "KNetworkProvider.h"
+#include "KNetworkProviderTESALLModInfo.h"
 #include <KxFramework/KxSingleton.h>
 class KNetworkProviderTESALL;
 class KxCURLSession;
-
-namespace KNetworkProviderTESALLNS
-{
-	using InfoBase = KNetworkProviderNS::InfoBase;
-}
 
 //////////////////////////////////////////////////////////////////////////
 class KNetworkProviderTESALL: public KNetworkProvider, public KxSingletonPtr<KNetworkProviderTESALL>
@@ -30,10 +26,6 @@ class KNetworkProviderTESALL: public KNetworkProvider, public KxSingletonPtr<KNe
 		KNetworkProviderTESALL(KNetworkProviderID providerID);
 
 	public:
-		virtual KNetworkProviderID GetID() const override
-		{
-			return GetTypeID();
-		}
 		virtual KImageEnum GetIcon() const override;
 		virtual wxString GetName() const override;
 		virtual wxString GetGameID(const KProfileID& id = KProfileIDs::NullProfileID) const override;

@@ -33,7 +33,7 @@ bool KNetworkProviderTESALL::DoIsAuthenticated() const
 }
 
 KNetworkProviderTESALL::KNetworkProviderTESALL(KNetworkProviderID providerID)
-	:KNetworkProvider(providerID)
+	:KNetworkProvider(providerID, wxS("TESALL"))
 {
 }
 

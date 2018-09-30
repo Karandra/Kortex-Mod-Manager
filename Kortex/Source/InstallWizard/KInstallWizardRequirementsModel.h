@@ -17,10 +17,10 @@ class KInstallWizardRequirementsModel: public KDataViewVectorListModel<KPPRRequi
 		virtual bool SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column) override;
 		virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
 
-		wxIcon GetIconByState(wxCheckBoxState state) const;
+		wxIcon GetIconByState(KPPReqState state) const;
 		wxIcon GetIconByState(bool state) const
 		{
-			return GetIconByState(state ? wxCHK_CHECKED : wxCHK_UNCHECKED);
+			return GetIconByState(state ? KPPReqState::True : KPPReqState::False);
 		}
 		void OnActivateItem(KxDataViewEvent& event);
 

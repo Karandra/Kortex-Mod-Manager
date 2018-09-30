@@ -430,7 +430,6 @@ void KModManagerImportMO::CopyDownloads(KOperationWithProgressDialogBase* contex
 			entry.GetFileInfo().SetSize(size);
 			entry.SetDownloadedSize(size);
 
-			entry.SetInstalled(ini.GetValueBool("General", "installed", false));
 			entry.SetPaused(ini.GetValueBool("General", "paused", false));
 			entry.SetHidden(ini.GetValueBool("General", "removed", false));
 

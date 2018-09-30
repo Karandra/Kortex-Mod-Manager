@@ -5,7 +5,7 @@
 #include "KOperationWithProgress.h"
 #include "Profile/KProfile.h"
 #include "ModManager/KModWorkspace.h"
-#include "DownloadManager/KDownloadManagerWorkspace.h"
+#include "DownloadManager/KDownloadWorkspace.h"
 #include "GameConfig/KGameConfigWorkspace.h"
 #include "ProgramManager/KProgramManagerWorkspace.h"
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -92,7 +92,7 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 							KModWorkspace::GetInstance()->ScheduleReload();
 							KGameConfigWorkspace::GetInstance()->ScheduleReload();
 							KProgramManagerWorkspace::GetInstance()->ScheduleReload();
-							KDownloadManagerWorkspace::GetInstance()->ScheduleReload();
+							KDownloadWorkspace::GetInstance()->ScheduleReload();
 						});
 					});
 					operation->SetDialogCaption(T("ModManager.Import.Caption"));

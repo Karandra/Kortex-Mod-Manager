@@ -279,7 +279,6 @@ void KModManagerImportNMM::CopyDownloads(KOperationWithProgressDialogBase* conte
 			entry.GetFileInfo().SetSize(size);
 			entry.SetDownloadedSize(size);
 
-			entry.SetInstalled(false);
 			entry.SetPaused(false);
 			entry.SetHidden(false);
 

@@ -226,8 +226,8 @@ class KProfile
 		bool AddConfig(const wxString& configID, const wxString& sBaseConfigID, wxWindow* parent, const KProfileAddConfig& tCopyConfig);
 
 		// Get 'Relative to Current Profile Directory' path.
-		// This concatenates strings in 'tElements' using '\' as separator.
-		// Will result in call to 'GetDataPath(GetID(), GetConfigID())' if 'tElements' is empty.
-		static wxString GetRCPD(const wxString& templateID, const wxString& configID, const KxStringVector& tElements);
-		wxString GetRCPD(const KxStringVector& tElements) const;
+		// This concatenates strings in 'elements' using '\' as separator.
+		// Will result in call to 'GetDataPath(GetID(), GetConfigID())' if 'elements' is empty.
+		static wxString GetRCPD(const wxString& templateID, const wxString& configID, const KxStringVector& elements);
+		wxString GetRCPD(const KxStringVector& elements) const;
 };

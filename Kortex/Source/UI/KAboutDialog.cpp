@@ -27,12 +27,12 @@ wxWindow* KAboutDialog::CreateTab_Info()
 	info->Bind(wxEVT_HTML_LINK_CLICKED, &KAboutDialog::OnLinkClick, this);
 
 	wxString libraries;
-	auto AddLibrary = [&libraries](const char* name, const char* url, const char* sExtraName = NULL, const char* sExtraURL = NULL)
+	auto AddLibrary = [&libraries](const char* name, const char* url, const char* extraName = NULL, const char* extraURL = NULL)
 	{
 		libraries << wxString::Format("<a href=\"%s\">%s</a>", url, name);
-		if (sExtraName && sExtraURL)
+		if (extraName && extraURL)
 		{
-			libraries << wxString::Format(" (<a href=\"%s\">%s</a>)", sExtraURL, sExtraName);
+			libraries << wxString::Format(" (<a href=\"%s\">%s</a>)", extraURL, extraName);
 		}
 		libraries << "<br>";
 	};
@@ -49,9 +49,9 @@ wxWindow* KAboutDialog::CreateTab_Info()
 	AddLibrary(KxJSON::GetLibraryName(), "https://github.com/nlohmann/json");
 
 	wxString iconPacks;
-	auto AddIconPack = [&iconPacks](const char* sPackName, const char* sAuthorName, const char* url)
+	auto AddIconPack = [&iconPacks](const char* packName, const char* authorName, const char* url)
 	{
-		iconPacks << TF("About.Info.IconPack").arg(sPackName).arg(wxString::Format("<a href=\"%s\">%s</a>", url, sAuthorName));
+		iconPacks << TF("About.Info.IconPack").arg(packName).arg(wxString::Format("<a href=\"%s\">%s</a>", url, authorName));
 		iconPacks << "<br>";
 	};
 	AddIconPack("Fugue Icons", "Yusuke Kamiyamane", "http://p.yusukekamiyamane.com");

@@ -1013,12 +1013,12 @@ wxSize KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const 
 				}
 				else
 				{
-					KPPRObjectFunction nObjFunc = entry->GetObjectFunction();
-					if (nObjFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE || nObjFunc == KPPR_OBJFUNC_PLUGIN_INACTIVE)
+					KPPRObjectFunction objectFunc = entry->GetObjectFunction();
+					if (objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE || objectFunc == KPPR_OBJFUNC_PLUGIN_INACTIVE)
 					{
 						KxXMLNode tDepNode = node.NewElement("fileDependency");
 						tDepNode.SetAttribute("file", entry->GetObject());
-						tDepNode.SetAttribute("state", nObjFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? "Active" : "Inactive");
+						tDepNode.SetAttribute("state", objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? "Active" : "Inactive");
 					}
 				}
 			}

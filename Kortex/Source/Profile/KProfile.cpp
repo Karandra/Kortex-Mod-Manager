@@ -542,17 +542,17 @@ bool KProfile::AddConfig(const wxString& configID, const wxString& sBaseConfigID
 	return false;
 }
 
-wxString KProfile::GetRCPD(const wxString& templateID, const wxString& configID, const KxStringVector& tElements)
+wxString KProfile::GetRCPD(const wxString& templateID, const wxString& configID, const KxStringVector& elements)
 {
 	wxString path = GetDataPath(templateID, configID);
-	if (!tElements.empty())
+	if (!elements.empty())
 	{
 		path.Append('\\');
-		path.Append(KxString::Join(tElements, "\\"));
+		path.Append(KxString::Join(elements, "\\"));
 	}
 	return path;
 }
-wxString KProfile::GetRCPD(const KxStringVector& tElements) const
+wxString KProfile::GetRCPD(const KxStringVector& elements) const
 {
-	return GetRCPD(GetID(), GetConfigID(), tElements);
+	return GetRCPD(GetID(), GetConfigID(), elements);
 }

@@ -28,6 +28,7 @@ class KInstallWizardRequirementsModel;
 class KInstallWizardComponnetsModel;
 class KImageViewerEvent;
 class KIWDInstallOperation;
+class KInstallWizardInfoModel;
 
 wxDECLARE_EVENT(KEVT_IW_DONE, wxNotifyEvent);
 
@@ -53,6 +54,7 @@ class KInstallWizardDialog:
 	public KxWithOptions<KInstallWizardDialogOptions, KIWD_OPTION_NONE>
 {
 	friend class KIWDInstallOperation;
+	friend class KInstallWizardInfoModel;
 
 	public:
 		static void ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath);
@@ -142,6 +144,7 @@ class KInstallWizardDialog:
 		void OpenPackage(const wxString& packagePath);
 		bool LoadPackage();
 		bool ProcessLoadPackage();
+		void FindExistingMod();
 		void AcceptExistingMod(const KModEntry& modEntry);
 		void LoadHeaderImage();
 		void LoadInfoList();

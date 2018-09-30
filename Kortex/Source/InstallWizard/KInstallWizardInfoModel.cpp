@@ -127,6 +127,7 @@ bool KInstallWizardInfoModel::SetValueByRow(const wxAny& data, size_t row, const
 				if (id != m_Config.ComputeModID() && CheckModID(id))
 				{
 					m_Config.SetModID(id);
+					m_InstallWizard.FindExistingMod();
 					return true;
 				}
 				break;
@@ -164,15 +165,6 @@ bool KInstallWizardInfoModel::CheckModID(const wxString& id)
 		KxTaskDialog msg(GetViewTLW(), KxID_NONE, T("InstallWizard.ChangeID.Invalid"), wxEmptyString, KxBTN_OK, KxICON_WARNING);
 		msg.ShowModal();
 		return false;
-	}
-	else if (const KModEntry* exisingMod = KModManager::Get().FindModByID(id))
-	{
-		if (exisingMod != m_InstallWizard.GetExistingMod())
-		{
-			KxTaskDialog msg(GetViewTLW(), KxID_NONE, TF("InstallWizard.ChangeID.Used").arg(exisingMod->GetName()), wxEmptyString, KxBTN_OK, KxICON_WARNING);
-			msg.ShowModal();
-			return false;
-		}
 	}
 	return true;
 }

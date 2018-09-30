@@ -75,9 +75,9 @@ void KInstallWizardRequirementsModel::GetValueByRow(wxAny& data, size_t row, con
 			case ColumnID::ObjectState:
 			{
 				const wxString& sObject = entry->GetObject();
-				KPPRObjectFunction nObjFunc = entry->GetObjectFunction();
-				wxBitmap icon = GetIconByState(entry->GetObjectFunctionResult(&nObjFunc));
-				bool bFileFunction = nObjFunc == KPPR_OBJFUNC_FILE_EXIST || nObjFunc == KPPR_OBJFUNC_FILE_NOT_EXIST;
+				KPPRObjectFunction objectFunc = entry->GetObjectFunction();
+				wxBitmap icon = GetIconByState(entry->GetObjectFunctionResult());
+				bool bFileFunction = objectFunc == KPPR_OBJFUNC_FILE_EXIST || objectFunc == KPPR_OBJFUNC_FILE_NOT_EXIST;
 
 				// There's not much sense displaying required state string under this conditions
 				if (bFileFunction && sObject.IsEmpty())
@@ -86,7 +86,7 @@ void KInstallWizardRequirementsModel::GetValueByRow(wxAny& data, size_t row, con
 				}
 				else
 				{
-					wxString sReqState = T("PackageCreator.PageRequirements.RequiredState." + KPackageProjectRequirements::ObjectFunctionToString(nObjFunc));
+					wxString sReqState = T("PackageCreator.PageRequirements.RequiredState." + KPackageProjectRequirements::ObjectFunctionToString(objectFunc));
 					if (!sObject.IsEmpty())
 					{
 						data = KxDataViewBitmapTextValue(wxString::Format("%s: \"%s\"", sReqState, sObject), icon);
@@ -115,15 +115,15 @@ bool KInstallWizardRequirementsModel::IsEnabledByRow(size_t row, const KxDataVie
 	return false;
 }
 
-wxIcon KInstallWizardRequirementsModel::GetIconByState(wxCheckBoxState state) const
+wxIcon KInstallWizardRequirementsModel::GetIconByState(KPPReqState state) const
 {
 	switch (state)
 	{
-		case wxCHK_UNCHECKED:
+		case KPPReqState::False:
 		{
 			return KGetIcon(KIMG_CROSS_CIRCLE_FRAME);
 		}
-		case wxCHK_UNDETERMINED:
+		case KPPReqState::Unknown:
 		{
 			return KGetIcon(KIMG_EXCLAMATION);
 		}

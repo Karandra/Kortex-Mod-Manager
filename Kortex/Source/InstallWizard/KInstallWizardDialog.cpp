@@ -327,7 +327,7 @@ bool KInstallWizardDialog::LoadPackage()
 		SetCaption(TF("InstallWizard.WindowCaption").arg(m_Package->GetName()) + ' ' + info.GetVersion());
 
 		// Try to find existing mod for this package
-		m_ExistingMod = KModManager::Get().FindModByID(GetConfig().ComputeModID());
+		FindExistingMod();
 		if (m_ExistingMod)
 		{
 			AcceptExistingMod(*m_ExistingMod);
@@ -393,6 +393,10 @@ bool KInstallWizardDialog::ProcessLoadPackage()
 	return ret;
 }
 
+void KInstallWizardDialog::FindExistingMod()
+{
+	m_ExistingMod = KModManager::Get().FindModByID(GetConfig().ComputeModID());
+}
 void KInstallWizardDialog::AcceptExistingMod(const KModEntry& existringMod)
 {
 	// Info

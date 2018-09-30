@@ -88,7 +88,7 @@ void KPackageCreatorController::ChangeNotify()
 	m_HasChanges = true;
 	m_Workspace->RefreshWindowTitleForProject();
 
-	wxNotifyEvent event(KEVT_CONTROLLER_CHNAGED);
+	wxNotifyEvent event(KEVT_CONTROLLER_CHANGED);
 	ProcessEvent(event);
 }
 void KPackageCreatorController::SaveChanges()

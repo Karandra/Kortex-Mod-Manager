@@ -51,7 +51,7 @@ enum ContextMenuID
 	KMC_ID_START = KxID_HIGHEST,
 
 	KMC_ID_MOD_OPEN_LOCATION,
-	KMC_ID_MOD_CHNAGE_LOCATION,
+	KMC_ID_MOD_CHANGE_LOCATION,
 	KMC_ID_MOD_REVERT_LOCATION,
 	KMC_ID_MOD_UNINSTALL,
 	KMC_ID_MOD_UNINSTALL_AND_ERASE,
@@ -758,7 +758,7 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 			item->Enable(bIsInstalled);
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHNAGE_LOCATION, T("ModManager.Menu.ChnageModFilesLocation")));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHANGE_LOCATION, T("ModManager.Menu.ChangeModFilesLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
 			item->Enable(!bIsFixedMod);
 		}
@@ -838,7 +838,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			KxShell::Execute(GetMainWindow(), location, "open");
 			break;
 		}
-		case KMC_ID_MOD_CHNAGE_LOCATION:
+		case KMC_ID_MOD_CHANGE_LOCATION:
 		{
 			KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
 			if (dialog.ShowModal() == KxID_OK)

@@ -106,7 +106,7 @@ bool KSettingsWorkspace::OnCreateWorkspace()
 	m_Controller = new KSettingsWindowController(this, m_ControllerView);
 	m_Controller->Bind(KEVT_CONTROLLER_SAVED, &KSettingsWorkspace::OnControllerSaveDiscard, this);
 	m_Controller->Bind(KEVT_CONTROLLER_DISCARDED, &KSettingsWorkspace::OnControllerSaveDiscard, this);
-	m_Controller->Bind(KEVT_CONTROLLER_CHNAGED, [this](wxNotifyEvent& event)
+	m_Controller->Bind(KEVT_CONTROLLER_CHANGED, [this](wxNotifyEvent& event)
 	{
 		m_SaveButton->Enable();
 		m_DiscardButton->Enable();

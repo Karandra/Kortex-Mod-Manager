@@ -18,6 +18,7 @@
 #include "PluginManager/KPluginManager.h"
 #include "PluginManager/KPluginManagerWorkspace.h"
 #include "IPC/KIPCClient.h"
+#include "Network/KNetwork.h"
 #include "KOperationWithProgress.h"
 #include "KApp.h"
 #include <KxFramework/KxXML.h>
@@ -215,7 +216,7 @@ void KModManager::ReportNonEmptyMountPoint(const wxString& folderPath)
 	dialog.ShowModal();
 }
 
-void KModManager::OnModFilesChnaged(KModEvent& event)
+void KModManager::OnModFilesChanged(KModEvent& event)
 {
 	if (event.HasMod())
 	{
@@ -284,7 +285,7 @@ KModManager::KModManager(KWorkspace* workspace)
 	m_ModEntry_WriteTarget.SetEnabled(true);
 
 	// Events
-	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KModManager::OnModFilesChnaged, this);
+	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KModManager::OnModFilesChanged, this);
 	KEvent::Bind(KEVT_MOD_TOGGLED, &KModManager::OnModToggled, this);
 	KEvent::Bind(KEVT_MODS_REORDERED, &KModManager::OnModsReordered, this);
 
@@ -439,6 +440,20 @@ KModEntry* KModManager::FindModBySignature(const wxString& signature) const
 		if (entry->GetSignature() == signature)
 		{
 			return entry;
+		}
+	}
+	return NULL;
+}
+KModEntry* KModManager::FindModByNetworkModID(KNetworkProviderID providerID, KNetworkModID id) const
+{
+	if (KNetwork::GetInstance()->IsValidProviderID(providerID))
+	{
+		for (KModEntry* entry: m_ModEntries)
+		{
+			if (entry->GetFixedWebSites()[providerID] == id)
+			{
+				return entry;
+			}
 		}
 	}
 	return NULL;

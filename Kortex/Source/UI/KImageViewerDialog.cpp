@@ -166,7 +166,7 @@ void KImageViewerDialog::OnSaveImage(wxCommandEvent& event)
 		m_ImageView->GetBitmap().SaveFile(dialog.GetResult(), formats[dialog.GetSelectedFilter()]);
 	}
 }
-void KImageViewerDialog::OnChnageColor(wxColourPickerEvent& event)
+void KImageViewerDialog::OnChangeColor(wxColourPickerEvent& event)
 {
 	wxColour color = event.GetColour();
 	if (event.GetEventObject() == m_ColorBGCtrl)
@@ -240,7 +240,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 
 		// BG color
 		m_ColorBGCtrl = new wxColourPickerCtrl(m_ToolBar, KxID_NONE, m_ImageView->GetBackgroundColour());
-		m_ColorBGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &KImageViewerDialog::OnChnageColor, this);
+		m_ColorBGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &KImageViewerDialog::OnChangeColor, this);
 		m_ToolBar->AddControl(m_ColorBGCtrl);
 
 		// Backward
@@ -256,7 +256,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 		
 		// FG color
 		m_ColorFGCtrl = new wxColourPickerCtrl(m_ToolBar, KxID_NONE, m_ImageView->GetForegroundColour());
-		m_ColorFGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &KImageViewerDialog::OnChnageColor, this);
+		m_ColorFGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &KImageViewerDialog::OnChangeColor, this);
 		m_ToolBar->AddControl(m_ColorFGCtrl);
 		
 		m_ToolBar->AddStretchSpacer(1);

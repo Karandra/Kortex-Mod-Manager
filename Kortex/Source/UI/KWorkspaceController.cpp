@@ -6,7 +6,7 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
 
-wxDEFINE_EVENT(KEVT_CONTROLLER_CHNAGED, wxNotifyEvent);
+wxDEFINE_EVENT(KEVT_CONTROLLER_CHANGED, wxNotifyEvent);
 wxDEFINE_EVENT(KEVT_CONTROLLER_SAVED, wxNotifyEvent);
 wxDEFINE_EVENT(KEVT_CONTROLLER_DISCARDED, wxNotifyEvent);
 wxDEFINE_EVENT(KEVT_CONTROLLER_SELECTED, wxNotifyEvent);

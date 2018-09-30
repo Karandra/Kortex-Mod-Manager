@@ -151,7 +151,7 @@ class KImageViewerDialog: public KxStdDialog
 		void OnAcceptNavigation(KImageViewerEvent& event);
 		void OnScaleChanged(wxCommandEvent& event);
 		void OnSaveImage(wxCommandEvent& event);
-		void OnChnageColor(wxColourPickerEvent& event);
+		void OnChangeColor(wxColourPickerEvent& event);
 
 	public:
 		bool Create(wxWindow* parent, const wxString& caption = wxEmptyString);

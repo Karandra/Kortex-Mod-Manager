@@ -631,7 +631,7 @@ void KCMController::OnAddModifiedEntry(KCMConfigEntryBase* entry, KCMControllerC
 	UpdateItemImages(entry, nCommandImage, false);
 	m_View->Thaw();
 
-	wxNotifyEvent event(KEVT_CONTROLLER_CHNAGED);
+	wxNotifyEvent event(KEVT_CONTROLLER_CHANGED);
 	ProcessEvent(event);
 }
 void KCMController::OnActivateView(wxTreeListEvent& event)

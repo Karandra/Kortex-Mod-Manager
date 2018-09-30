@@ -55,7 +55,7 @@ bool KGameConfigWorkspace::OnCreateWorkspace()
 	m_Controller = new KGameConfigWorkspaceController(this, m_ControllerView);
 	m_Controller->Bind(KEVT_CONTROLLER_SAVED, &KGameConfigWorkspace::OnControllerSaveDiscard, this);
 	m_Controller->Bind(KEVT_CONTROLLER_DISCARDED, &KGameConfigWorkspace::OnControllerSaveDiscard, this);
-	m_Controller->Bind(KEVT_CONTROLLER_CHNAGED, [this](wxNotifyEvent& event)
+	m_Controller->Bind(KEVT_CONTROLLER_CHANGED, [this](wxNotifyEvent& event)
 	{
 		m_SaveButton->Enable();
 		m_DiscardButton->Enable();

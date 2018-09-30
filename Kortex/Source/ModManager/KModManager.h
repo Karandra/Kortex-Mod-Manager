@@ -7,6 +7,7 @@
 #include "KModManagerDispatcher.h"
 #include "KModListManager.h"
 #include "KMirroredVirtualFolder.h"
+#include "KNetworkConstants.h"
 #include "KEvents.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
@@ -104,7 +105,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		void ReportNonEmptyMountPoint(const wxString& folderPath);
 
 	private:
-		void OnModFilesChnaged(KModEvent& event);
+		void OnModFilesChanged(KModEvent& event);
 		void OnModToggled(KModEvent& event);
 		void OnModsReordered(KModEvent& event);
 		
@@ -167,6 +168,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		KModEntry* FindModByID(const wxString& modID) const;
 		KModEntry* FindModByName(const wxString& modName) const;
 		KModEntry* FindModBySignature(const wxString& signature) const;
+		KModEntry* FindModByNetworkModID(KNetworkProviderID providerID, KNetworkModID id) const;
 		
 		bool IsModActive(const wxString& modID) const;
 		void UninstallMod(KModEntry* entry, wxWindow* window = NULL)

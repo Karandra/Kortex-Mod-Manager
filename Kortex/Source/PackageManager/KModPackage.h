@@ -47,7 +47,10 @@ class KModPackage
 		void LoadConfigNative(KPackageProject& project, size_t index);
 		void LoadConfigSMI(KPackageProject& project, size_t index);
 		void LoadConfigFOMod(KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex);
+		
 		const wxString& DetectEffectiveArchiveRoot(size_t index);
+		void SetModIDIfNone();
+
 		void LoadBasicResources();
 		void LoadImageResources();
 		void LoadDocumentResources();

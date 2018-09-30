@@ -35,10 +35,13 @@ wxString KModPackage::ReadString(const KAcrhiveBuffer& buffer, bool isASCII) con
 		return wxString((const char*)buffer.data(), buffer.size());
 	}
 }
+
 void KModPackage::LoadConfig(KPackageProject& project)
 {
 	if (m_Archive.GetProperty_CompressionFormat() != KARC_FORMAT_UNKNOWN)
 	{
+		SetModIDIfNone();
+
 		// Native format
 		{
 			size_t index = m_Archive.FindFirstFile("KortexPackage.xml");
@@ -124,6 +127,7 @@ void KModPackage::LoadConfigFOMod(KPackageProject& project, size_t infoIndex, si
 	serializer.SetEffectiveArchiveRoot(DetectEffectiveArchiveRoot(infoIndex != ms_InvalidIndex ? infoIndex : moduleConfigIndex));
 	serializer.Structurize(&project);
 }
+
 const wxString& KModPackage::DetectEffectiveArchiveRoot(size_t index)
 {
 	// This currently only works for FOMod's
@@ -142,6 +146,14 @@ const wxString& KModPackage::DetectEffectiveArchiveRoot(size_t index)
 	}
 	return m_EffectiveArchiveRoot;
 }
+void KModPackage::SetModIDIfNone()
+{
+	if (m_Config.ComputeModID().IsEmpty())
+	{
+		m_Config.SetModID(m_PackageFilePath.AfterLast('\\').BeforeLast('.'));
+	}
+}
+
 void KModPackage::LoadBasicResources()
 {
 	KPPIImageEntry* pLogo = m_Config.GetInterface().GetMainImageEntry();

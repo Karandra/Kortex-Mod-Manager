@@ -184,7 +184,8 @@ void KNetwork::OnSelectProvider(KxMenuEvent& event)
 }
 void KNetwork::OnLoginButton(KxAuiToolBarEvent& event)
 {
-	m_Menu->Show(m_LoginButton->GetToolBar(), m_LoginButton->GetDropdownMenuPosition(), TPM_RIGHTALIGN);
+	wxPoint pos = m_LoginButton->GetDropdownMenuPosition();
+	m_Menu->Show(m_LoginButton->GetToolBar(), pos);
 }
 
 KNetwork::KNetwork()

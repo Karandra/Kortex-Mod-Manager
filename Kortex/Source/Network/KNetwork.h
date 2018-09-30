@@ -75,16 +75,21 @@ class KNetwork: public wxEvtHandler, public KxSingletonPtr<KNetwork>
 			{
 				list[i] = m_Providers[i].get();
 			}
+			return list;
 		}
 		
+		bool IsValidProviderID(KNetworkProviderID providerID) const
+		{
+			return (size_t)providerID < m_Providers.size();
+		}
 		KNetworkProvider* FindProvider(const wxString& name) const;
-		KNetworkProvider* GetProvider(int providerID) const
+		KNetworkProvider* GetProvider(intptr_t providerID) const
 		{
 			return GetProvider(static_cast<KNetworkProviderID>(providerID));
 		}
 		KNetworkProvider* GetProvider(KNetworkProviderID providerID) const
 		{
-			if ((size_t)providerID < m_Providers.size())
+			if (IsValidProviderID(providerID))
 			{
 				return m_Providers[providerID].get();
 			}

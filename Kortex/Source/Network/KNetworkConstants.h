@@ -1,6 +1,9 @@
 #pragma once
 
-enum KNetworkProviderID
+using KNetworkModID = int64_t;
+using KNetworkFileID = int64_t;
+
+enum KNetworkProviderID: intptr_t
 {
 	KNETWORK_PROVIDER_ID_INVALID = -1,
 

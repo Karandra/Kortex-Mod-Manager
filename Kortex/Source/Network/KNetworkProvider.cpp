@@ -9,25 +9,6 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxCredentialsDialog.h>
 
-wxString KNetworkProvider::GetStoreServiceName(KNetworkProviderID providerID)
-{
-	switch (providerID)
-	{
-		case KNETWORK_PROVIDER_ID_NEXUS:
-		{
-			return "Kortex/Nexus";
-		}
-		case KNETWORK_PROVIDER_ID_TESALL:
-		{
-			return "Kortex/TESALL";
-		}
-		case KNETWORK_PROVIDER_ID_LOVERSLAB:
-		{
-			return "Kortex/LoversLab";
-		}
-	};
-	return wxEmptyString;
-}
 KImageEnum KNetworkProvider::GetGenericIcon()
 {
 	return KIMG_SITE_UNKNOWN;
@@ -74,12 +55,17 @@ bool KNetworkProvider::DoSignOut(wxWindow* window)
 	return m_LoginStore.Delete();
 }
 
-KNetworkProvider::KNetworkProvider(KNetworkProviderID providerID)
-	:m_LoginStore(GetStoreServiceName(providerID))
+KNetworkProvider::KNetworkProvider(KNetworkProviderID providerID, const wxString& name)
+	:m_LoginStore(wxS("Kortex/") + name), m_TypeID(providerID)
 {
 }
 KNetworkProvider::~KNetworkProvider()
 {
+}
+
+bool KNetworkProvider::IsDefault() const
+{
+	return this == KNetwork::GetInstance()->GetCurrentProvider();
 }
 
 wxString KNetworkProvider::GetCacheFolder() const

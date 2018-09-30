@@ -866,7 +866,7 @@
 		<String ID="ModManager.Menu.UninstallAndErase">Деинсталляция и удаление из журнала</String>
 		<String ID="ModManager.Menu.Erase">Удаление из журнала</String>
 		<String ID="ModManager.Menu.OpenModFilesLocation">Расположение файлов мода</String>
-		<String ID="ModManager.Menu.ChnageModFilesLocation">Изменить расположение файлов мода</String>
+		<String ID="ModManager.Menu.ChangeModFilesLocation">Изменить расположение файлов мода</String>
 		<String ID="ModManager.Menu.RevertModFilesLocation">Переместить файлы мода в профиль</String>
 		<String ID="ModManager.Menu.Image">Изображение</String>
 		<String ID="ModManager.Menu.Image.Show">Открыть изображение</String>
@@ -926,7 +926,7 @@
 		<String ID="VirtualGameFolderWS.NameShort">Данные игры</String>
 
 		<!-- Network -->
-		<String ID="Network.Provider">Поставщик</String>
+		<String ID="Network.Provider">Провайдер</String>
 		
 		<String ID="Network.AuthCaption">Аутентификация на %1</String>
 		<String ID="Network.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
@@ -949,20 +949,32 @@
 		<String ID="DownloadManager.RemoveDownloadsCaption">Удаление загрузок</String>
 		<String ID="DownloadManager.RemoveDownloadsMessage">Вы действительно хотите удалить все загрузки?</String>
 		<String ID="DownloadManager.RemoveInstalledDownloadsMessage">Вы действительно хотите удалить все загрузки с установленными модами?</String>
+
+		<String ID="DownloadManager.QueryDownloadInfoFailed">Не удалось запросить информацию о загрузке от %1</String>
+		<String ID="DownloadManager.RestoreDownloadFailed">Не удалось восстановить информацию о загрузке от %1</String>
 		
+		<!-- Context menu -->
 		<String ID="DownloadManager.Menu.Install">Установить</String>
 		<String ID="DownloadManager.Menu.Add">Добавить загрузку</String>
+		
 		<String ID="DownloadManager.Menu.Pause">Приостановить</String>
 		<String ID="DownloadManager.Menu.Abort">Прервать</String>
 		<String ID="DownloadManager.Menu.Resume">Продолжить</String>
 		<String ID="DownloadManager.Menu.Restart">Перезапустить</String>
+		
+		<String ID="DownloadManager.Menu.SetProvider">Изменить провайдер</String>
+		<String ID="DownloadManager.Menu.QueryInfo">Запросить информацию</String>
+		<String ID="DownloadManager.Menu.ShowChangeLog">Показать список изменений</String>
+		
 		<String ID="DownloadManager.Menu.Remove">Удалить загрузку</String>
 		<String ID="DownloadManager.Menu.RemoveAll">Удалить все загрузки</String>
 		<String ID="DownloadManager.Menu.RemoveInstalled">Удалить все загрузки с установленными модами</String>
 		<String ID="DownloadManager.Menu.ShowHidden">Показывать скытые загрузки</String>
+		
 		<String ID="DownloadManager.Menu.Hide">Скрыть</String>
 		<String ID="DownloadManager.Menu.HideAll">Скрыть все загрузки</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Скрыть все загрузки с установленными модами</String>
+		
 		<String ID="DownloadManager.Menu.AssociateWithNXM">Ассоциировать NXM</String>
 		<String ID="DownloadManager.Menu.AssocianedWithNXM">Ассоциирован с NXM</String>
 		<String ID="DownloadManager.Menu.CopyNXM">Скопировать NXM-ссылку</String>

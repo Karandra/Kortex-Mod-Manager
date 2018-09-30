@@ -866,7 +866,7 @@ It is recommended that you move these files]]></String>
 		<String ID="ModManager.Menu.UninstallAndErase">Unistall and delete from log</String>
 		<String ID="ModManager.Menu.Erase">Delete from log</String>
 		<String ID="ModManager.Menu.OpenModFilesLocation">Mod files location</String>
-		<String ID="ModManager.Menu.ChnageModFilesLocation">Change mod files location</String>
+		<String ID="ModManager.Menu.ChangeModFilesLocation">Change mod files location</String>
 		<String ID="ModManager.Menu.RevertModFilesLocation">Move mod files into profile</String>
 		<String ID="ModManager.Menu.Image">Image</String>
 		<String ID="ModManager.Menu.Image.Show">Show image</String>
@@ -949,20 +949,32 @@ It is recommended that you move these files]]></String>
 		<String ID="DownloadManager.RemoveDownloadsCaption">Deleting downloads</String>
 		<String ID="DownloadManager.RemoveDownloadsMessage">Are you sure you want to delete all downloads?</String>
 		<String ID="DownloadManager.RemoveInstalledDownloadsMessage">Are you sure you want to delete all installed downloads?</String>
-		
+
+		<String ID="DownloadManager.QueryDownloadInfoFailed">Could not request download information from %1</String>
+		<String ID="DownloadManager.RestoreDownloadFailed">Failed to restore download information from %1</String>
+
+		<!-- Context menu -->
 		<String ID="DownloadManager.Menu.Install">Install</String>
 		<String ID="DownloadManager.Menu.Add">Add download</String>
+		
 		<String ID="DownloadManager.Menu.Pause">Pause</String>
 		<String ID="DownloadManager.Menu.Abort">Abort</String>
 		<String ID="DownloadManager.Menu.Resume">Resume</String>
 		<String ID="DownloadManager.Menu.Restart">Restart</String>
+		
+		<String ID="DownloadManager.Menu.SetProvider">Change provider</String>
+		<String ID="DownloadManager.Menu.QueryInfo">Query info</String>
+		<String ID="DownloadManager.Menu.ShowChangeLog">Show change log</String>
+		
 		<String ID="DownloadManager.Menu.Remove">Remove download</String>
 		<String ID="DownloadManager.Menu.RemoveAll">Remove all downloads</String>
 		<String ID="DownloadManager.Menu.RemoveInstalled">Remove all installed</String>
+		
 		<String ID="DownloadManager.Menu.ShowHidden">Show hidden</String>
 		<String ID="DownloadManager.Menu.Hide">Hide</String>
 		<String ID="DownloadManager.Menu.HideAll">Hide all downloads</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Hide all installed downloads</String>
+		
 		<String ID="DownloadManager.Menu.AssociateWithNXM">Associate with NXM</String>
 		<String ID="DownloadManager.Menu.AssocianedWithNXM">Associated with NXM</String>
 		<String ID="DownloadManager.Menu.CopyNXM">Copy NXM-link</String>

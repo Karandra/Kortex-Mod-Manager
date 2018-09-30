@@ -5,8 +5,10 @@ Version 1.4 - x
 [General] Fixed loading profile when Kortex is unable to locate game directory automatically.
 [Download Manager] Support for association with NXM links.
 [Download Manager] Support for mod downloads from NexusMods.
+[Download Manager] Support for querying info for unknown downloads.
+[Download Manager] Support for file change log displaying.
 [Download Manager] Version 1.0.
-[Mod Manager] Added grouping by priority.
+[Mod Manager] Added grouping by priority with collapsible groups.
 [Mod Manager] Added import from Nexus Mod Manager.
 [Mod Manager] Fixed import from MO when data folders (mods, downloads, etc) is not located in specified folder.
 [Mod Manager] Fixed reversed mod order for MO import.
@@ -18,10 +20,14 @@ Version 1.4 - x
 [Package Manager] Fixed assigning image as main or as header in "Interface" page.
 [Package Manager] Added back "Import from files" option to components.
 [Package Manager] Fixed search in packages list.
+[Package Manager] Changing mod ID to existing mod's ID in install wizard is now allowed.
+[Package Manager] Fixed requirements check (removed two-phased checking).
+[Package Manager] Component entries in package creator view can now be dragged to different branch.
 [Package Manager] Version 1.2.2.
 [Plugin Manager] For Morrowind, Oblivion, Fallout 3 and Fallout: New Vegas forced sorting by plugin modification date is disabled.
 [Plugin Manager] Version 1.3
 [Save Manager] Improved saves list performace.
+[Save Manager] Hiding screenshot column changes rows height.
 [Save Manager] Version 1.0.2
 
 Version 1.3 - 12.07.2018

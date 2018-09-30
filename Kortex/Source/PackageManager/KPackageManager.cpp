@@ -15,42 +15,6 @@
 #include <KxFramework/KxArchiveEvent.h>
 #include <KxFramework/KxTaskDialog.h>
 
-wxCheckBoxState KPackageManager::CheckRequirementStateStep1(const KPPRRequirementEntry* entry, KPPRObjectFunction nObjFunc)
-{
-	switch (nObjFunc)
-	{
-		case KPPR_OBJFUNC_NONE:
-		{
-			return wxCHK_CHECKED;
-		}
-		case KPPR_OBJFUNC_MOD_ACTIVE:
-		case KPPR_OBJFUNC_MOD_INACTIVE:
-		{
-			bool isActive = KModManager::Get().IsModActive(entry->GetID());
-			return (wxCheckBoxState)(nObjFunc == KPPR_OBJFUNC_MOD_ACTIVE ? isActive : !isActive);
-		}
-		case KPPR_OBJFUNC_PLUGIN_ACTIVE:
-		case KPPR_OBJFUNC_PLUGIN_INACTIVE:
-		{
-			KPluginManager* manager = KPluginManager::GetInstance();
-			if (manager)
-			{
-				manager->LoadIfNeeded();
-				bool isActive = manager->IsPluginActive(entry->GetObject());
-				return (wxCheckBoxState)(nObjFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? isActive : !isActive);
-			}
-			return wxCHK_UNDETERMINED;
-		}
-		case KPPR_OBJFUNC_FILE_EXIST:
-		case KPPR_OBJFUNC_FILE_NOT_EXIST:
-		{
-			bool isExist = KxFile(GetRequirementFilePath(entry)).IsExist();
-			return (wxCheckBoxState)(nObjFunc == KPPR_OBJFUNC_FILE_EXIST ? isExist : !isExist);
-		}
-	};
-	return wxCHK_UNDETERMINED;
-}
-
 KPackageManager& KPackageManager::Get()
 {
 	return *KPackageManagerConfig::GetInstance()->GetManager();
@@ -108,43 +72,53 @@ wxString KPackageManager::GetRequirementFilePath(const KPPRRequirementEntry* ent
 	}
 }
 
-wxCheckBoxState KPackageManager::CheckRequirementState(const KPPRRequirementEntry* entry, KPPRObjectFunction* finalObjFunc)
+KPPReqState KPackageManager::CheckRequirementState(const KPPRRequirementEntry* entry)
 {
-	KPPRObjectFunction nObjectFunction = entry->GetObjectFunction();
-	wxCheckBoxState result = CheckRequirementStateStep1(entry, nObjectFunction);
-
-	KxUtility::SetIfNotNull(finalObjFunc, nObjectFunction);
-	if (result == wxCHK_UNCHECKED)
+	KPPRObjectFunction objectFunc = entry->GetObjectFunction();
+	switch (objectFunc)
 	{
-		switch (nObjectFunction)
+		case KPPR_OBJFUNC_NONE:
 		{
-			case KPPR_OBJFUNC_PLUGIN_ACTIVE:
-			case KPPR_OBJFUNC_FILE_EXIST:
+			return KPPReqState::True;
+		}
+		case KPPR_OBJFUNC_MOD_ACTIVE:
+		case KPPR_OBJFUNC_MOD_INACTIVE:
+		{
+			if (!entry->GetID().IsEmpty())
 			{
-				KxUtility::SetIfNotNull(finalObjFunc, KPPR_OBJFUNC_MOD_ACTIVE);
-				return CheckRequirementStateStep1(entry, KPPR_OBJFUNC_MOD_ACTIVE);
+				bool isActive = KModManager::Get().IsModActive(entry->GetID());
+				return (KPPReqState)(objectFunc == KPPR_OBJFUNC_MOD_ACTIVE ? isActive : !isActive);
 			}
-			case KPPR_OBJFUNC_PLUGIN_INACTIVE:
-			case KPPR_OBJFUNC_FILE_NOT_EXIST:
+			return KPPReqState::False;
+		}
+		case KPPR_OBJFUNC_PLUGIN_ACTIVE:
+		case KPPR_OBJFUNC_PLUGIN_INACTIVE:
+		{
+			if (!entry->GetObject().IsEmpty())
 			{
-				KxUtility::SetIfNotNull(finalObjFunc, KPPR_OBJFUNC_MOD_INACTIVE);
-				return CheckRequirementStateStep1(entry, KPPR_OBJFUNC_MOD_INACTIVE);
+				KPluginManager* manager = KPluginManager::GetInstance();
+				if (manager)
+				{
+					manager->LoadIfNeeded();
+					bool isActive = manager->IsPluginActive(entry->GetObject());
+					return (KPPReqState)(objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? isActive : !isActive);
+				}
+				return KPPReqState::Unknown;
 			}
-
-			case KPPR_OBJFUNC_MOD_ACTIVE:
+			return KPPReqState::False;
+		}
+		case KPPR_OBJFUNC_FILE_EXIST:
+		case KPPR_OBJFUNC_FILE_NOT_EXIST:
+		{
+			if (!entry->GetObject().IsEmpty())
 			{
-				KxUtility::SetIfNotNull(finalObjFunc, KPPR_OBJFUNC_PLUGIN_ACTIVE);
-				return CheckRequirementStateStep1(entry, KPPR_OBJFUNC_PLUGIN_ACTIVE);
+				bool isExist = KxFile(GetRequirementFilePath(entry)).IsExist();
+				return (KPPReqState)(objectFunc == KPPR_OBJFUNC_FILE_EXIST ? isExist : !isExist);
 			}
-			case KPPR_OBJFUNC_MOD_INACTIVE:
-			{
-				KxUtility::SetIfNotNull(finalObjFunc, KPPR_OBJFUNC_PLUGIN_INACTIVE);
-				return CheckRequirementStateStep1(entry, KPPR_OBJFUNC_PLUGIN_INACTIVE);
-			}
-		};
-		return wxCHK_UNDETERMINED;
-	}
-	return result;
+			return KPPReqState::False;
+		}
+	};
+	return KPPReqState::Unknown;
 }
 KxVersion KPackageManager::GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry)
 {

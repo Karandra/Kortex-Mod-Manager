@@ -38,7 +38,7 @@ class KPPRRequirementEntry: public KWithIDName
 		KPPRObjectFunction m_ObjectFunction;
 
 		mutable bool m_ObjectFunctionResultChecked = false;
-		mutable wxCheckBoxState m_ObjectFunctionResult = wxCHK_UNDETERMINED;
+		mutable KPPReqState m_ObjectFunctionResult = KPPReqState::Unknown;
 
 		wxString m_Description;
 		wxString m_BinaryVersionKind = "FileVersion";
@@ -106,7 +106,7 @@ class KPPRRequirementEntry: public KWithIDName
 		{
 			m_ObjectFunction = state;
 		}
-		wxCheckBoxState GetObjectFunctionResult(KPPRObjectFunction* finalObjFunc = NULL) const;
+		KPPReqState GetObjectFunctionResult() const;
 		void ResetObjectFunctionResult();
 		
 		const wxString& GetDescription() const

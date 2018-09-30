@@ -36,18 +36,18 @@ bool KPPRRequirementEntry::CheckVersion() const
 	return KPackageProjectRequirements::CompareVersions(GetRVFunction(), GetCurrentVersion(), GetRequiredVersion());
 }
 
-wxCheckBoxState KPPRRequirementEntry::GetObjectFunctionResult(KPPRObjectFunction* finalObjFunc) const
+KPPReqState KPPRRequirementEntry::GetObjectFunctionResult() const
 {
 	if (!m_ObjectFunctionResultChecked)
 	{
-		m_ObjectFunctionResult = KPackageManager::Get().CheckRequirementState(this, finalObjFunc);
+		m_ObjectFunctionResult = KPackageManager::Get().CheckRequirementState(this);
 		m_ObjectFunctionResultChecked = true;
 	}
 	return m_ObjectFunctionResult;
 }
 void KPPRRequirementEntry::ResetObjectFunctionResult()
 {
-	m_ObjectFunctionResult = wxCHK_UNDETERMINED;
+	m_ObjectFunctionResult = KPPReqState::Unknown;
 	m_ObjectFunctionResultChecked = false;
 }
 
@@ -123,7 +123,7 @@ bool KPPRRequirementEntry::CalcOverallStatus()
 {
 	if (!m_OverallStatusCalculated)
 	{
-		m_OverallStatus = CheckVersion() && GetObjectFunctionResult() == wxCHK_CHECKED;
+		m_OverallStatus = CheckVersion() && GetObjectFunctionResult() == KPPReqState::True;
 		m_OverallStatusCalculated = true;
 	}
 	return m_OverallStatus;

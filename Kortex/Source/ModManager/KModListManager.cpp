@@ -4,26 +4,28 @@
 #include "KModEntry.h"
 #include "PluginManager/KPluginManager.h"
 #include "Profile/KProfile.h"
+#include "Profile/KSaveManagerConfig.h"
+#include "Events/KModListEventInternal.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFileStream.h>
 
-KModListModEntry::KModListModEntry(const wxString& signature, bool enabled)
+KModListMod::KModListMod(const wxString& signature, bool enabled)
 	:m_ModEntry(KModManager::Get().FindModBySignature(signature)), m_IsEnabled(enabled)
 {
 	m_IsEnabled = m_IsEnabled && (m_ModEntry ? m_ModEntry->IsInstalled() : false);
 }
 
-KModListPluginEntry::KModListPluginEntry(KPluginEntry* pluginEntry, bool enabled)
+KModListPlugin::KModListPlugin(KPluginEntry* pluginEntry, bool enabled)
 	:m_PluginName(pluginEntry->GetName()), m_IsEnabled(enabled)
 {
 }
-KModListPluginEntry::KModListPluginEntry(const wxString& name, bool enabled)
+KModListPlugin::KModListPlugin(const wxString& name, bool enabled)
 	: m_PluginName(name), m_IsEnabled(enabled)
 {
 }
 
-KPluginEntry* KModListPluginEntry::GetPluginEntry() const
+KPluginEntry* KModListPlugin::GetPluginEntry() const
 {
 	if (KPluginManager* manager = KPluginManager::GetInstance())
 	{
@@ -32,52 +34,190 @@ KPluginEntry* KModListPluginEntry::GetPluginEntry() const
 	return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-void KModList::SetID(const wxString& id)
+wxString KModList::CreateSignature(const wxString& listID)
 {
-	KModManager::GetListManager().DoRenameList(*this, id);
-	m_ID = id;
+	return KModEntry::GetSignatureFromID(listID);
+}
+
+wxString KModList::GetGlobalFolderPath(const wxString& folderName)
+{
+	return KProfile::GetCurrent()->GetRCPD({folderName});
+}
+wxString KModList::GetLocalRootPath(const wxString& listID)
+{
+	return KProfile::GetCurrent()->GetRCPD({CreateSignature(listID)});
+}
+wxString KModList::GetLocalFolderPath(const wxString& listID, const wxString& folderName)
+{
+	return KProfile::GetCurrent()->GetRCPD({CreateSignature(listID), folderName});
+}
+
+bool KModList::RemoveLocalRoot(const wxString& listID)
+{
+	// Remove to recycle bin
+	return KxFile(GetLocalRootPath(listID)).RemoveFolderTree(true, true);
+}
+bool KModList::CreateLocalRoot(const wxString& listID)
+{
+	return KxFile(GetLocalRootPath(listID)).CreateFolder();
+}
+bool KModList::CreateLocalFolder(const wxString& listID, const wxString& folderName)
+{
+	return KxFile(GetLocalFolderPath(listID, folderName)).CreateFolder();
+}
+bool KModList::RemoveLocalFolder(const wxString& listID, const wxString& folderName)
+{
+	// Remove to recycle bin
+	return KxFile(GetLocalFolderPath(listID, folderName)).RemoveFolderTree(true, true);
+}
+bool KModList::RenameLocalRoot(const wxString& oldID, const wxString& newID, wxString* newPathOut)
+{
+	wxString newPath = GetLocalRootPath(newID);
+	if (newPathOut)
+	{
+		*newPathOut = newPath;
+	}
+
+	// Rename or create required folder
+	return KxFile(GetLocalRootPath(oldID)).Rename(newPath, false) || KxFile(newPath).CreateFolder();
+}
+
+void KModList::OnRemove()
+{
+	RemoveLocalRoot();
+}
+bool KModList::IsCurrentList() const
+{
+	return m_ID == KModListManager::GetInstance()->GetCurrentListID();
+}
+
+//////////////////////////////////////////////////////////////////////////
+bool KModList::SetID(const wxString& id)
+{
+	if (RenameLocalRoot(m_ID, id))
+	{
+		m_ID = id;
+
+		// Current list updating
+		if (IsCurrentList())
+		{
+			KModListManager::GetInstance()->DoChangeCurrentListID(m_ID);
+		}
+		
+		// Save
+		KModListManager::GetInstance()->SaveLists();
+		KModListEvent(KEVT_MODLIST_INT_SELECTED, *this).Send();
+		return true;
+	}
+	return false;
+}
+void KModList::SetLocalSavesEnabled(bool value)
+{
+	m_LocalSavesEnabled = value;
+	KModListManager::GetInstance()->SaveLists();
+
+	if (value)
+	{
+		CreateLocalFolder(m_ID, LocalFolderNames::Saves);
+	}
+	KModListEvent(KEVT_MODLIST_INT_SELECTED, *this).Send();
+}
+void KModList::SetLocalConfigEnabled(bool value)
+{
+	m_LocalConfigEnabled = value;
+	KModListManager::GetInstance()->SaveLists();
+
+	if (value)
+	{
+		CreateLocalFolder(m_ID, LocalFolderNames::Config);
+	}
+	KModListEvent(KEVT_MODLIST_INT_SELECTED, *this).Send();
 }
 
 //////////////////////////////////////////////////////////////////////////
 void KModListManager::DoChangeCurrentListID(const wxString& id)
 {
+	m_Options.SetAttribute("CurrentList", id);
 	m_CurrentListID = id;
-	m_Options.SetAttribute("CurrentList", m_CurrentListID);
-
-	UpdateWriteTargetLocation();
 }
-void KModListManager::UpdateWriteTargetLocation()
-{
-	KModEntry* writeTargetRoot = KModManager::Get().GetModEntry_WriteTarget();
-	writeTargetRoot->SetLinkedModLocation(GetWriteTargetFullPath(m_CurrentListID));
-	writeTargetRoot->UpdateFileTree();
-
-	// Create folder
-	KxFile(writeTargetRoot->GetLocation(KMM_LOCATION_MOD_FILES)).CreateFolder();
-
-	// Update variable
-	KProfile* profile = KApp::Get().GetCurrentProfile();
-	profile->GetVariables().SetVariable(KVAR_WRITE_TARGET_ROOT, writeTargetRoot->GetLocation(KMM_LOCATION_MOD_FILES));
-}
-void KModListManager::DoRenameList(KModList& list, const wxString& newID)
-{
-	// Rename write target folder
-	KxFile(GetWriteTargetFullPath(list.GetID())).Rename(GetWriteTargetFullPath(newID), false);
-	if (IsCurrentListID(newID))
-	{
-		UpdateWriteTargetLocation();
-	}
-}
-
 wxString KModListManager::CreateListName(size_t pos) const
 {
 	return wxString::Format("List #%zu", pos);
 }
 
+void KModListManager::SetupGlobalFolders()
+{
+	auto SetVariableAndCreateFolder = [](const wxString& varName, const wxString& folderName)
+	{
+		wxString path = KModList::GetGlobalFolderPath(folderName);
+
+		KxFile(path).CreateFolder();
+		KProfile::GetCurrent()->GetVariables().SetVariable(varName, path);
+	};
+	SetVariableAndCreateFolder(KVAR_SAVES_ROOT_GLOBAL, GlobalFolderNames::Saves);
+	SetVariableAndCreateFolder(KVAR_CONFIG_ROOT_GLOBAL, GlobalFolderNames::Config);
+}
+void KModListManager::OnModListSelected(KModListEvent& event)
+{
+	const KModList* modList = event.GetModList();
+	if (modList && modList->IsCurrentList())
+	{
+		KIVariablesTable& variables = KProfile::GetCurrent()->GetVariables();
+
+		// Generic variables
+		variables.SetVariable(KVAR_CURRENT_MOD_LIST_ID, modList->GetID());
+		variables.SetVariable(KVAR_CURRENT_MOD_LIST_SIGNATURE, modList->GetSignature());
+		variables.SetVariable(KVAR_CURRENT_MOD_LIST_ROOT, modList->GetLocalRootPath());
+
+		// Overwrites (local only)
+		wxString overwitesPath = modList->GetLocalFolderPath(KModList::LocalFolderNames::Overwrites);
+		variables.SetVariable(KVAR_OVERWRITES_ROOT, overwitesPath);
+
+		KModEntry& writeTarget = *KModManager::Get().GetModEntry_WriteTarget();
+		writeTarget.SetLinkedModLocation(overwitesPath);
+		KxFile(overwitesPath).CreateFolder();
+
+		// Local folders
+		auto SetVariable = [&variables, modList](bool isLocal, const wxString& varName, const wxString& localName, const wxString& globalName)
+		{
+			wxString path;
+			if (isLocal)
+			{
+				path = modList->GetLocalFolderPath(localName);
+			}
+			else
+			{
+				path = KModList::GetGlobalFolderPath(globalName);
+			}
+
+			KxFile(path).CreateFolder();
+			variables.SetVariable(varName, path);
+		};
+		SetVariable(modList->IsLocalSavesEnabled(), KVAR_SAVES_ROOT_LOCAL, LocalFolderNames::Saves, GlobalFolderNames::Saves);
+		SetVariable(modList->IsLocalConfigEnabled(), KVAR_CONFIG_ROOT_LOCAL, LocalFolderNames::Config, GlobalFolderNames::Config);
+
+		// Update mods
+		KModEvent::RefVector changedMods(1, &writeTarget);
+		for (KModEntry& mod: KModManager::Get().GetModEntry_Mandatory())
+		{
+			changedMods.push_back(&mod);
+		}
+		KModEvent(KEVT_MOD_FILES_CHANGED, changedMods).Send();
+	}
+}
+void KModListManager::OnInit()
+{
+	KModListEvent(KEVT_MODLIST_INT_SELECTED, GetCurrentList()).Send();
+}
+
 KModListManager::KModListManager()
 	:m_Options(&KModManager::Get(), "ListManager")
 {
+	// Create global folders
+	SetupGlobalFolders();
+
+	// Events
+	KEvent::Bind(KEVT_MODLIST_INT_SELECTED, &KModListManager::OnModListSelected, this);
 }
 KModListManager::~KModListManager()
 {
@@ -89,14 +229,15 @@ bool KModListManager::SetCurrentListID(const wxString& id)
 	if (FindModList(id))
 	{
 		DoChangeCurrentListID(id);
+		GetCurrentList().SetID(id);
 		return true;
 	}
 	return false;
 }
 
-void KModListManager::ReloadLists()
+void KModListManager::LoadLists()
 {
-	ClearLists();
+	m_Lists.clear();
 	wxString currentListID = m_Options.GetAttribute("CurrentList", GetDefaultListID());
 
 	KxFileStream stream(KModManager::Get().GetLocation(KMM_LOCATION_MODS_ORDER), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
@@ -105,16 +246,21 @@ void KModListManager::ReloadLists()
 	{
 		auto LoadList = [this](const KxXMLNode& listNode, const wxString& id)
 		{
-			KModList& list = CreateNewList(id);
+			KModList& modList = CreateNewList(id);
+
+			// Config
+			KxXMLNode configNode = listNode.GetFirstChildElement("Config");
+			modList.SetLocalSavesEnabled(configNode.GetFirstChildElement("LocalSaves").GetAttributeBool("Enabled", false));
+			modList.SetLocalConfigEnabled(configNode.GetFirstChildElement("LocalConfig").GetAttributeBool("Enabled", false));
 
 			// Mods
-			KxXMLNode tModsNode = listNode.GetFirstChildElement("Mods");
-			for (KxXMLNode entryNode = tModsNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
+			KxXMLNode modsNode = listNode.GetFirstChildElement("Mods");
+			for (KxXMLNode entryNode = modsNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 			{
-				KModListModEntry& listEntry = list.GetMods().emplace_back(entryNode.GetAttribute("Signature"), entryNode.GetAttributeBool("Enabled", false));
+				KModListMod& listEntry = modList.GetMods().emplace_back(entryNode.GetAttribute("Signature"), entryNode.GetAttributeBool("Enabled", false));
 				if (!listEntry.IsOK())
 				{
-					list.GetMods().pop_back();
+					modList.GetMods().pop_back();
 				}
 			}
 
@@ -124,10 +270,10 @@ void KModListManager::ReloadLists()
 				KxXMLNode pluginsNode = listNode.GetFirstChildElement("Plugins");
 				for (KxXMLNode entryNode = pluginsNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 				{
-					KModListPluginEntry& listEntry = list.GetPlugins().emplace_back(entryNode.GetAttribute("Name"), entryNode.GetAttributeBool("Enabled", false));
+					KModListPlugin& listEntry = modList.GetPlugins().emplace_back(entryNode.GetAttribute("Name"), entryNode.GetAttributeBool("Enabled", false));
 					if (!listEntry.IsOK())
 					{
-						list.GetPlugins().pop_back();
+						modList.GetPlugins().pop_back();
 					}
 				}
 			}
@@ -167,7 +313,7 @@ void KModListManager::ReloadLists()
 	}
 
 	// Change now
-	DoChangeCurrentListID(currentListID);
+	SetCurrentListID(currentListID);
 }
 void KModListManager::SaveLists()
 {
@@ -182,9 +328,14 @@ void KModListManager::SaveLists()
 			KxXMLNode listNode = orderNode.NewElement("List");
 			listNode.SetAttribute("ID", modList.GetID());
 
+			// Config
+			KxXMLNode configNode = listNode.NewElement("Config");
+			configNode.NewElement("LocalSaves").SetAttribute("Enabled", modList.IsLocalSavesEnabled());
+			configNode.NewElement("LocalConfig").SetAttribute("Enabled", modList.IsLocalConfigEnabled());
+
 			// Mods
 			KxXMLNode modsNode = listNode.NewElement("Mods");
-			for (const KModListModEntry& listEntry: modList.GetMods())
+			for (const KModListMod& listEntry: modList.GetMods())
 			{
 				KxXMLNode node = modsNode.NewElement("Entry");
 				node.SetAttribute("Signature", listEntry.GetMod()->GetSignature());
@@ -195,7 +346,7 @@ void KModListManager::SaveLists()
 			if (KPluginManager* pluginManager = KPluginManager::GetInstance())
 			{
 				KxXMLNode pluginsNode = listNode.NewElement("Plugins");
-				for (const KModListPluginEntry& listEntry: modList.GetPlugins())
+				for (const KModListPlugin& listEntry: modList.GetPlugins())
 				{
 					KxXMLNode node = pluginsNode.NewElement("Entry");
 					node.SetAttribute("Name", listEntry.GetPluginName());
@@ -244,11 +395,11 @@ KModList& KModListManager::CreateListCopy(const KModList& list, const wxString& 
 }
 KModList* KModListManager::RenameList(const wxString& oldID, const wxString& newID)
 {
-	auto it = FindModListIterator(oldID);
-	if (it != m_Lists.end())
+	KModList* list = FindModList(oldID);
+	if (list)
 	{
-		DoRenameList(*it, newID);
-		return &*it;
+		list->SetID(newID);
+		return list;
 	}
 	return NULL;
 }
@@ -257,11 +408,11 @@ bool KModListManager::RemoveList(const wxString& id)
 	// Original can be reference to removed item
 	wxString idCopy = id;
 
-	auto it = FindModListIterator(idCopy);
+	auto it = FindModListIterator(m_Lists, idCopy);
 	if (it != m_Lists.end())
 	{
+		it->OnRemove();
 		m_Lists.erase(it);
-		KxFile(GetWriteTargetFullPath(idCopy)).RemoveFolderTree(true, true);
 
 		// If no lists left, create default list
 		if (m_Lists.empty())
@@ -274,17 +425,7 @@ bool KModListManager::RemoveList(const wxString& id)
 			// If current list was deleted, set current to the first list.
 			SetCurrentListID(m_Lists.front().GetID());
 		}
-
 		return true;
 	}
 	return false;
-}
-
-wxString KModListManager::GetWriteTargetName(const wxString& id) const
-{
-	return "WriteTargetRoot-" + KModEntry::GetSignatureFromID(id);
-}
-wxString KModListManager::GetWriteTargetFullPath(const wxString& id) const
-{
-	return KProfile::GetCurrent()->GetRCPD({GetWriteTargetName(id)});
 }

@@ -5,66 +5,65 @@
 #include "KApp.h"
 
 //////////////////////////////////////////////////////////////////////////
-KVirtualizationEntry::KVirtualizationEntry(KxXMLNode& node)
+KVirtualizationMirroredEntry::KVirtualizationMirroredEntry(KxXMLNode& parentNode)
 {
-	m_Source = V(node.GetFirstChildElement("Source").GetValue());
-	m_Target = V(node.GetFirstChildElement("Target").GetValue());
+	for (KxXMLNode node = parentNode.GetFirstChildElement("Sources").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+	{
+		m_Sources.push_back(node.GetValue());
+	}
+	m_Target = parentNode.GetFirstChildElement("Target").GetValue();
+}
+
+KxStringVector KVirtualizationMirroredEntry::GetSources() const
+{
+	KxStringVector sources = m_Sources;
+	std::transform(sources.begin(), sources.end(), sources.begin(), [](const wxString& s)
+	{
+		return V(s);
+	});
+	return sources;
+}
+
+wxString KVirtualizationMirroredEntry::GetSource() const
+{
+	return !m_Sources.empty() ? V(m_Sources.front()) : wxNullString;
+}
+wxString KVirtualizationMirroredEntry::GetTarget() const
+{
+	return V(m_Target);
+}
+
+//////////////////////////////////////////////////////////////////////////
+KVirtualizationMandatoryEntry::KVirtualizationMandatoryEntry(KxXMLNode& parentNode)
+{
+	// Folder path will not be expanded here
+	m_Source = parentNode.GetValue();
+	m_Name = V(parentNode.GetAttribute("Name"));
+}
+
+wxString KVirtualizationMandatoryEntry::GetSource() const
+{
+	return V(m_Source);
+}
+wxString KVirtualizationMandatoryEntry::GetName() const
+{
+	return V(m_Name);
 }
 
 //////////////////////////////////////////////////////////////////////////
 KVirtualizationConfig::KVirtualizationConfig(KProfile& profile, KxXMLNode& node)
 {
-	auto ReadMirroredLocation = [](KVirtualizationEntry::Vector& array, const KxXMLNode& node, const wxString& name)
+	auto ReadEntries = [](auto& array, const KxXMLNode& rootNode, const wxString& name)
 	{
-		for (KxXMLNode entryNode = node.GetFirstChildElement(name).GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
+		for (KxXMLNode node = rootNode.GetFirstChildElement(name).GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			if (!array.emplace_back(KVirtualizationEntry(entryNode)).IsOK())
-			{
-				array.pop_back();
-			}
-		}
-	};
-	auto ReadMandatoryLocation = [](KxStringVector& array, const KxXMLNode& node, const wxString& name)
-	{
-		for (KxXMLNode entryNode = node.GetFirstChildElement(name).GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
-		{
-			if (array.emplace_back(V(entryNode.GetValue())).IsEmpty())
+			if (!array.emplace_back(node).IsOK())
 			{
 				array.pop_back();
 			}
 		}
 	};
 
-	ReadMirroredLocation(m_MirroredLocations, node, "MirroredLocations");
-	ReadMandatoryLocation(m_MandatoryVirtualFolders, node, "MandatoryVirtualFolders");
-}
-
-size_t KVirtualizationConfig::GetEntriesCount(KPVEntryType index) const
-{
-	switch (index)
-	{
-		case KPVE_MIRRORED:
-		{
-			return m_MirroredLocations.size();
-		}
-	};
-	return 0;
-}
-const KVirtualizationEntry* KVirtualizationConfig::GetEntryAt(KPVEntryType index, size_t i) const
-{
-	const KVirtualizationEntry::Vector* pArray = NULL;
-	switch (index)
-	{
-		case KPVE_MIRRORED:
-		{
-			pArray = &m_MirroredLocations;
-			break;
-		}
-	};
-
-	if (pArray && i < pArray->size())
-	{
-		return &pArray->at(i);
-	}
-	return NULL;
+	ReadEntries(m_MirroredLocations, node, "MirroredLocations");
+	ReadEntries(m_MandatoryVirtualFolders, node, "MandatoryLocations");
 }

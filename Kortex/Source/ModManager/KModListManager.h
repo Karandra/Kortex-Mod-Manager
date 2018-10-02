@@ -1,22 +1,24 @@
 #pragma once
 #include "stdafx.h"
 #include "KProgramOptions.h"
+#include "KEvents.h"
+#include <KxFramework/KxSingleton.h>
 class KModEntry;
 class KModManager;
 class KPluginEntry;
 
-class KModListModEntry
+class KModListMod
 {
 	public:
 		KModEntry* m_ModEntry = NULL;
-		bool m_IsEnabled;
+		bool m_IsEnabled = false;
 
 	public:
-		KModListModEntry(KModEntry* modEntry, bool enabled)
+		KModListMod(KModEntry* modEntry, bool enabled)
 			:m_ModEntry(modEntry), m_IsEnabled(enabled)
 		{
 		}
-		KModListModEntry(const wxString& signature, bool bEnabled);
+		KModListMod(const wxString& signature, bool bEnabled);
 
 	public:
 		bool IsOK() const
@@ -34,15 +36,15 @@ class KModListModEntry
 		}
 };
 
-class KModListPluginEntry
+class KModListPlugin
 {
 	public:
 		wxString m_PluginName;
-		bool m_IsEnabled;
+		bool m_IsEnabled = false;
 
 	public:
-		KModListPluginEntry(KPluginEntry* pluginEntry, bool enabled);
-		KModListPluginEntry(const wxString& name, bool enabled);
+		KModListPlugin(KPluginEntry* pluginEntry, bool enabled);
+		KModListPlugin(const wxString& name, bool enabled);
 
 	public:
 		bool IsOK() const
@@ -62,16 +64,62 @@ class KModListPluginEntry
 		}
 };
 
+//////////////////////////////////////////////////////////////////////////
 class KModList
 {
+	friend class KModListManager;
+
+	private:
+		struct LocalFolderNames
+		{
+			constexpr static const auto Overwrites = wxS("LocalOverwrites");
+			constexpr static const auto Saves = wxS("LocalSaves");
+			constexpr static const auto Config = wxS("LocalConfig");
+		};
+		struct GlobalFolderNames
+		{
+			constexpr static const auto Saves = wxS("GlobalSaves");
+			constexpr static const auto Config = wxS("GlobalConfig");
+		};
+
 	public:
-		using ModEntryVector = std::vector<KModListModEntry>;
-		using PluginEntryVector = std::vector<KModListPluginEntry>;
+		using ModEntryVector = std::vector<KModListMod>;
+		using PluginEntryVector = std::vector<KModListPlugin>;
 
 	private:
 		wxString m_ID;
+		bool m_LocalSavesEnabled = false;
+		bool m_LocalConfigEnabled = false;
+
 		ModEntryVector m_Mods;
 		PluginEntryVector m_Plugins;
+
+	private:
+		static wxString CreateSignature(const wxString& listID);
+
+		static wxString GetGlobalFolderPath(const wxString& folderName);
+		static wxString GetLocalRootPath(const wxString& listID);
+		static wxString GetLocalFolderPath(const wxString& listID, const wxString& folderName);
+
+		static bool RemoveLocalRoot(const wxString& listID);
+		static bool CreateLocalRoot(const wxString& listID);
+		static bool CreateLocalFolder(const wxString& listID, const wxString& folderName);
+		static bool RemoveLocalFolder(const wxString& listID, const wxString& folderName);
+		static bool RenameLocalRoot(const wxString& oldID, const wxString& newID, wxString* newPathOut = NULL);
+		
+		wxString GetLocalRootPath() const
+		{
+			return GetLocalRootPath(m_ID);
+		}
+		wxString GetLocalFolderPath(const wxString& folderName) const
+		{
+			return GetLocalFolderPath(m_ID, folderName);
+		}
+		bool RemoveLocalRoot()
+		{
+			return RemoveLocalRoot(m_ID);
+		}
+		void OnRemove();
 
 	public:
 		KModList(const wxString& id)
@@ -80,11 +128,29 @@ class KModList
 		}
 
 	public:
+		bool IsCurrentList() const;
+
+		wxString GetSignature() const
+		{
+			return CreateSignature(m_ID);
+		}
 		const wxString& GetID() const
 		{
 			return m_ID;
 		}
-		void SetID(const wxString& id);
+		bool SetID(const wxString& id);
+
+		bool IsLocalSavesEnabled() const
+		{
+			return m_LocalSavesEnabled;
+		}
+		void SetLocalSavesEnabled(bool value);
+
+		bool IsLocalConfigEnabled() const
+		{
+			return m_LocalConfigEnabled;
+		}
+		void SetLocalConfigEnabled(bool value);
 
 		const ModEntryVector& GetMods() const
 		{
@@ -105,10 +171,13 @@ class KModList
 		}
 };
 
-class KModListManager
+class KModListManager: public KxSingletonPtr<KModListManager>
 {
 	friend class KModManager;
 	friend class KModList;
+
+	using LocalFolderNames = KModList::LocalFolderNames;
+	using GlobalFolderNames = KModList::GlobalFolderNames;
 
 	public:
 		using ListVector = std::vector<KModList>;
@@ -120,24 +189,25 @@ class KModListManager
 		wxString m_CurrentListID;
 
 	private:
-		ListVector::iterator FindModListIterator(const wxString& id)
+		template<class T> static auto FindModListIterator(T& lists, const wxString& id)
 		{
-			return std::find_if(m_Lists.begin(), m_Lists.end(), [&id](const KModList& v)
+			const wxString uid = KModList::CreateSignature(id);
+			return std::find_if(lists.begin(), lists.end(), [&uid](const KModList& modList)
 			{
-				return v.GetID() == id;
+				return KModList::CreateSignature(modList.GetID()) == uid;
 			});
 		}
-		KModList* FindModList(const wxString& id)
-		{
-			auto it = FindModListIterator(id);
-			return it != m_Lists.end() ? &*it : NULL;
-		}
-		
-		void DoChangeCurrentListID(const wxString& id);
-		void UpdateWriteTargetLocation();
-		void DoRenameList(KModList& list, const wxString& newID);
 
+		void DoChangeCurrentListID(const wxString& id);
+		void ClearLists()
+		{
+			m_Lists.clear();
+		}
 		wxString CreateListName(size_t pos) const;
+
+		void SetupGlobalFolders();
+		void OnModListSelected(KModListEvent& event);
+		void OnInit();
 
 	public:
 		KModListManager();
@@ -182,9 +252,20 @@ class KModListManager
 		{
 			return !m_Lists.empty();
 		}
-		bool HasList(const wxString& sID) const
+		bool HasList(const wxString& id) const
 		{
-			return const_cast<KModListManager*>(this)->FindModList(sID) != NULL;
+			return FindModList(id) != NULL;
+		}
+
+		const KModList* FindModList(const wxString& id) const
+		{
+			auto it = FindModListIterator(m_Lists, id);
+			return it != m_Lists.end() ? &*it : NULL;
+		}
+		KModList* FindModList(const wxString& id)
+		{
+			auto it = FindModListIterator(m_Lists, id);
+			return it != m_Lists.end() ? &*it : NULL;
 		}
 
 		bool IsCurrentListID(const wxString& id) const
@@ -208,22 +289,16 @@ class KModListManager
 			return SyncList(m_CurrentListID);
 		}
 
-		void ClearLists()
-		{
-			m_Lists.clear();
-		}
-		void ReloadLists();
+		void LoadLists();
 		void SaveLists();
 
 		KModList& CreateNewList(const wxString& id);
 		KModList& CreateListCopy(const KModList& list, const wxString& newID);
 		KModList* RenameList(const wxString& oldID, const wxString& newID);
+		
 		bool RemoveList(const wxString& id);
 		bool RemoveList(const KModList& list)
 		{
 			return RemoveList(list.GetID());
 		}
-
-		wxString GetWriteTargetName(const wxString& id) const;
-		wxString GetWriteTargetFullPath(const wxString& id) const;
 };

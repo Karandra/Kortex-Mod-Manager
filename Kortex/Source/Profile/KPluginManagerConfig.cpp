@@ -3,33 +3,56 @@
 #include "KProfile.h"
 #include "PluginManager/KPluginManager.h"
 #include "PluginManager/LOOT API/KLootAPI.h"
+#include "KComparator.h"
 #include "KApp.h"
 #include "KAux.h"
 
 KPluginManagerConfigStdContentEntry::KPluginManagerConfigStdContentEntry(KxXMLNode& node)
 {
 	m_ID = node.GetAttribute("ID");
-	m_Name = V(node.GetAttribute("Name"));
-	m_Logo = V(node.GetAttribute("Logo"));
+	m_Name = node.GetAttribute("Name");
+	m_Logo = node.GetAttribute("Logo");
 }
 KPluginManagerConfigStdContentEntry::~KPluginManagerConfigStdContentEntry()
 {
 }
 
+wxString KPluginManagerConfigStdContentEntry::GetID() const
+{
+	return m_ID;
+}
+wxString KPluginManagerConfigStdContentEntry::GetName() const
+{
+	return V(m_Name);
+}
+wxString KPluginManagerConfigStdContentEntry::GetLogo() const
+{
+	return V(m_Logo);
+}
+
 wxString KPluginManagerConfigStdContentEntry::GetLogoFullPath() const
 {
-	return wxString::Format("%s\\PluginManager\\Logos\\%s\\%s", KApp::Get().GetDataFolder(), V("$(ID)"), GetLogo());
+	return V(wxString::Format("%s\\PluginManager\\Logos\\%s\\%s", KApp::Get().GetDataFolder(), "$(ID)", GetLogo()));
 }
 
 //////////////////////////////////////////////////////////////////////////
 KPluginManagerConfigSortingToolEntry::KPluginManagerConfigSortingToolEntry(KxXMLNode& node)
 {
 	m_ID = node.GetAttribute("ID");
-	m_Name = V(node.GetAttribute("Name"));
-	m_Command = V(node.GetFirstChildElement("Command").GetValue());
+	m_Name = node.GetAttribute("Name");
+	m_Command = node.GetFirstChildElement("Command").GetValue();
 }
 KPluginManagerConfigSortingToolEntry::~KPluginManagerConfigSortingToolEntry()
 {
+}
+
+wxString KPluginManagerConfigSortingToolEntry::GetID() const
+{
+	return m_ID;
+}
+wxString KPluginManagerConfigSortingToolEntry::GetName() const
+{
+	return V(m_Name);
 }
 
 wxString KPluginManagerConfigSortingToolEntry::GetExecutable() const
@@ -48,6 +71,11 @@ void KPluginManagerConfigSortingToolEntry::SetExecutable(const wxString& path) c
 	}
 }
 
+wxString KPluginManagerConfigSortingToolEntry::GetArguments() const
+{
+	return V(m_Command);
+}
+
 //////////////////////////////////////////////////////////////////////////
 KPluginManagerConfigLootAPI::KPluginManagerConfigLootAPI(KProfile& profile, const KxXMLNode& node)
 {
@@ -57,16 +85,33 @@ KPluginManagerConfigLootAPI::KPluginManagerConfigLootAPI(KProfile& profile, cons
 	m_Librray.Load(KApp::Get().GetDataFolder() + "\\PluginManager\\LOOT API x86\\loot_api.dll");
 	#endif
 
-	m_Branch = V(node.GetFirstChildElement("Branch").GetValue());
-	m_Repository = V(node.GetFirstChildElement("Repository").GetValue());
-	m_FolderName = V(node.GetFirstChildElement("FolderName").GetValue());
-	m_LocalGamePath = V(node.GetFirstChildElement("LocalGamePath").GetValue());
+	m_Branch = node.GetFirstChildElement("Branch").GetValue();
+	m_Repository = node.GetFirstChildElement("Repository").GetValue();
+	m_FolderName = node.GetFirstChildElement("FolderName").GetValue();
+	m_LocalGamePath = node.GetFirstChildElement("LocalGamePath").GetValue();
 
 	m_LootInstance = new KLootAPI();
 }
 KPluginManagerConfigLootAPI::~KPluginManagerConfigLootAPI()
 {
 	delete m_LootInstance;
+}
+
+wxString KPluginManagerConfigLootAPI::GetBranch() const
+{
+	return V(m_Branch);
+}
+wxString KPluginManagerConfigLootAPI::GetRepository() const
+{
+	return V(m_Repository);
+}
+wxString KPluginManagerConfigLootAPI::GetFolderName() const
+{
+	return V(m_FolderName);
+}
+wxString KPluginManagerConfigLootAPI::GetLocalGamePath() const
+{
+	return V(m_LocalGamePath);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -108,15 +153,24 @@ KPluginManagerConfig::~KPluginManagerConfig()
 {
 }
 
+bool KPluginManagerConfig::HasMainStdContentID() const
+{
+	return !m_StandardContent_MainID.IsEmpty();
+}
+wxString KPluginManagerConfig::GetMainStdContentID() const
+{
+	return V(m_StandardContent_MainID);
+}
+
 const KPluginManagerConfig::StandardContentEntry* KPluginManagerConfig::GetStandardContent(const wxString& id) const
 {
-	auto it = std::find_if(m_StandardContent.cbegin(), m_StandardContent.cend(), [&id](const KPluginManagerConfigStdContentEntry& entry)
+	auto it = std::find_if(m_StandardContent.begin(), m_StandardContent.end(), [&id](const KPluginManagerConfigStdContentEntry& entry)
 	{
-		return entry.GetID().IsSameAs(id, false);
+		return KComparator::KEqual(entry.GetID(), id);
 	});
 	if (it != m_StandardContent.cend())
 	{
-		return &(*it);
+		return &*it;
 	}
 	return NULL;
 }

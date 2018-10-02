@@ -3,6 +3,7 @@
 #include "KManager.h"
 #include "KModEntry.h"
 #include "KFixedModEntry.h"
+#include "KMandatoryModEntry.h"
 #include "KModTagsManager.h"
 #include "KModManagerDispatcher.h"
 #include "KModListManager.h"
@@ -71,7 +72,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		static wxString GetLocation(KModManagerLocation nLocation, const wxString& signature = wxEmptyString);
 
 	private:
-		using MandatotyModEntriesVector = std::vector<KFixedModEntry>;
+		using MandatotyModEntriesVector = std::vector<KMandatoryModEntry>;
 
 	private:
 		KProgramOptionUI m_Options;
@@ -113,6 +114,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		void OnModUninstalled(KModEvent& event);
 
 		void OnModListSelected(KModListEvent& event);
+		void OnModListChanged(KModListEvent& event);
 
 	public:
 		KModManager(KWorkspace* workspace);

@@ -25,9 +25,18 @@ class KxParagraph;
 
 class KModWorkspace: public KWorkspace, public KxSingletonPtr<KModWorkspace>
 {
+	public:
+		enum class ImageResizeMode
+		{
+			Scale,
+			Stretch,
+			Fill,
+		};
+
 	private:
 		KProgramOptionUI m_OptionsUI;
 		KProgramOptionUI m_ModListViewOptions;
+		ImageResizeMode m_ImageResizeMode = ImageResizeMode::Scale;
 
 		wxBoxSizer* m_MainSizer = NULL;
 		KxSplitterWindow* m_SplitterLeftRight = NULL;
@@ -126,11 +135,16 @@ class KModWorkspace: public KWorkspace, public KxSingletonPtr<KModWorkspace>
 		void ClearControls();
 		void DisplayModInfo(KModEntry* entry);
 		void CreateViewContextMenu(KxMenu& contextMenu, KModEntry* entry);
+		void ChangeImageResizeMode(ImageResizeMode mode);
 
 	public:
 		KModManagerModel* GetModel() const
 		{
 			return m_ViewModel;
+		}
+		ImageResizeMode GetImageResizeMode() const
+		{
+			return m_ImageResizeMode;
 		}
 
 		void OpenPackage(const wxString& path);

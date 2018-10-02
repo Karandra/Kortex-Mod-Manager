@@ -68,7 +68,7 @@ void KPluginManagerBethesdaMW::WriteOrderMW(KxINI& ini) const
 
 	int i = 0;
 	ini.RemoveSection("Game Files Order");
-	for (const KModListPluginEntry& listItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
+	for (const KModListPlugin& listItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
 	{
 		if (const KPluginEntry* entry = listItem.GetPluginEntry())
 		{

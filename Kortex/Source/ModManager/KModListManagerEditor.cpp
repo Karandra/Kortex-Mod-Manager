@@ -6,6 +6,7 @@
 #include "KApp.h"
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxString.h>
+#include <KxFramework/KxCheckBox.h>
 
 enum ColumnID
 {
@@ -69,16 +70,22 @@ bool KModListManagerEditor::SetValueByRow(const wxAny& value, size_t row, const 
 				{
 					if (KModManager::GetListManager().HasList(name))
 					{
-						KxTaskDialog(GetView(), KxID_NONE, T(KxID_RENAME), T("ModManager.ModList.AlreadyExist"), KxBTN_OK, KxICON_ERROR).ShowModal();
+						KxTaskDialog(GetViewTLW(), KxID_NONE, T(KxID_RENAME), T("ModManager.ModList.AlreadyExist"), KxBTN_OK, KxICON_WARNING).ShowModal();
 						return false;
 					}
 
-					entry->SetID(name);
-					SetCurrentList(name);
-					MarkModified();
+					if (entry->SetID(name))
+					{
+						SetCurrentList(name);
+						MarkModified();
 
-					KModListEvent(KEVT_MODLIST_CHANGED, *entry).Send();
-					return true;
+						KModListEvent(KEVT_MODLIST_CHANGED, *entry).Send();
+						return true;
+					}
+					else
+					{
+						KxTaskDialog(GetViewTLW(), KxID_NONE, T(KxID_RENAME), T("ModManager.ModList.RenameFailed"), KxBTN_OK, KxICON_ERROR).ShowModal();
+					}
 				}
 			}
 		};
@@ -112,11 +119,23 @@ void KModListManagerEditorDialog::OnSelectItem(KxDataViewEvent& event)
 	{
 		m_CopyButton->Enable();
 		m_RemoveButton->Enable(GetItemCount() > 1);
+		
+		m_LocalSavesCHK->Enable();
+		m_LocalSavesCHK->SetValue(entry->IsLocalSavesEnabled());
+		
+		m_LocalConfigCHK->Enable();
+		m_LocalConfigCHK->SetValue(entry->IsLocalConfigEnabled());
 	}
 	else
 	{
 		m_CopyButton->Disable();
 		m_RemoveButton->Disable();
+
+		m_LocalSavesCHK->Disable();
+		m_LocalSavesCHK->SetValue(false);
+		
+		m_LocalConfigCHK->Disable();
+		m_LocalConfigCHK->SetValue(false);
 	}
 }
 void KModListManagerEditorDialog::OnAddList(wxCommandEvent& event)
@@ -203,6 +222,27 @@ void KModListManagerEditorDialog::OnRemoveList(wxCommandEvent& event)
 	}
 }
 
+void KModListManagerEditorDialog::OnLocalSavesEnabled(wxCommandEvent& event)
+{
+	KxDataViewItem item = GetView()->GetSelection();
+	KModList* entry = GetDataEntry(GetRow(item));
+	if (entry)
+	{
+		entry->SetLocalSavesEnabled(m_LocalSavesCHK->IsChecked());
+		KModListEvent(KEVT_MODLIST_CHANGED, *entry).Send();
+	}
+}
+void KModListManagerEditorDialog::OnLocalConfigEnabled(wxCommandEvent& event)
+{
+	KxDataViewItem item = GetView()->GetSelection();
+	KModList* entry = GetDataEntry(GetRow(item));
+	if (entry)
+	{
+		entry->SetLocalConfigEnabled(m_LocalConfigCHK->IsChecked());
+		KModListEvent(KEVT_MODLIST_CHANGED, *entry).Send();
+	}
+}
+
 KModListManagerEditorDialog::KModListManagerEditorDialog(wxWindow* parent)
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, T("ModManager.ModList.Manage"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
@@ -233,7 +273,18 @@ KModListManagerEditorDialog::KModListManagerEditorDialog(wxWindow* parent)
 		SetDataVector(&KModManager::GetListManager().GetLists());
 		RefreshItems();
 
-		AdjustWindow(wxDefaultPosition, wxSize(500, 350));
+		// Check boxes
+		m_LocalSavesCHK = new KxCheckBox(m_ViewPane, KxID_NONE, T("ModManager.ModList.LocalSaves"));
+		m_LocalSavesCHK->Bind(wxEVT_CHECKBOX, &KModListManagerEditorDialog::OnLocalSavesEnabled, this);
+		m_LocalSavesCHK->Disable();
+		sizer->Add(m_LocalSavesCHK, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
+		
+		m_LocalConfigCHK = new KxCheckBox(m_ViewPane, KxID_NONE, T("ModManager.ModList.LocalConfig"));
+		m_LocalConfigCHK->Bind(wxEVT_CHECKBOX, &KModListManagerEditorDialog::OnLocalConfigEnabled, this);
+		m_LocalConfigCHK->Disable();
+		sizer->Add(m_LocalConfigCHK, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
+
+		AdjustWindow(wxDefaultPosition, wxSize(500, 375));
 		GetView()->SetFocus();
 	}
 }

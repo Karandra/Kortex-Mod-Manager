@@ -7,6 +7,7 @@
 #include "KLabeledValue.h"
 #include <KxFramework/KxStdDialog.h>
 class KxButton;
+class KxCheckBox;
 
 class KModListManagerEditor: public KxDataViewVectorListModelEx<KModListManager::ListVector, KxDataViewListModelEx>
 {
@@ -72,6 +73,9 @@ class KModListManagerEditorDialog: public KxStdDialog, public KModListManagerEdi
 		KxButton* m_CopyButton = NULL;
 		KxButton* m_RemoveButton = NULL;
 
+		KxCheckBox* m_LocalSavesCHK = NULL;
+		KxCheckBox* m_LocalConfigCHK = NULL;
+
 	private:
 		virtual wxWindow* GetDialogMainCtrl() const override
 		{
@@ -82,6 +86,9 @@ class KModListManagerEditorDialog: public KxStdDialog, public KModListManagerEdi
 		void OnAddList(wxCommandEvent& event);
 		void OnCopyList(wxCommandEvent& event);
 		void OnRemoveList(wxCommandEvent& event);
+
+		void OnLocalSavesEnabled(wxCommandEvent& event);
+		void OnLocalConfigEnabled(wxCommandEvent& event);
 
 	public:
 		KModListManagerEditorDialog(wxWindow* parent);

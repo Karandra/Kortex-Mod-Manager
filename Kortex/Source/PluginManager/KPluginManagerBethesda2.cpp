@@ -13,7 +13,7 @@ void KPluginManagerBethesda2::LoadNativeActiveBG()
 {
 	// Load names from 'Plugins.txt' it they are not already added.
 	// Activate all new added and existing items with same name.
-	KxStringVector activeOrder = KxTextFile::ReadToArray(m_ActiveListFile);
+	KxStringVector activeOrder = KxTextFile::ReadToArray(V(m_ActiveListFile));
 	for (wxString& name: activeOrder)
 	{
 		if (!name.IsEmpty() && !name.StartsWith('#'))

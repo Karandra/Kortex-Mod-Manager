@@ -140,7 +140,7 @@ bool KPluginViewModelBethesda::Compare(const KPluginEntry& pluginEntry1, const K
 	return false;
 }
 
-const wxString& KPluginViewModelBethesda::GetPartOfName(const KPluginEntry& entry) const
+wxString KPluginViewModelBethesda::GetPartOfName(const KPluginEntry& entry) const
 {
 	if (const KPluginManagerConfigStdContentEntry* standardContentEntry = entry.GetStdContentEntry())
 	{

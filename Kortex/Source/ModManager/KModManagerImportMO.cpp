@@ -218,14 +218,13 @@ void KModManagerImportMO::ReadExecutables(KOperationWithProgressDialogBase* cont
 }
 void KModManagerImportMO::CopySaves(KOperationWithProgressDialogBase* context)
 {
-	const KSaveManagerConfig* options = KSaveManagerConfig::GetInstance();
-	if (options)
+	if (const KSaveManager* saveManager = KSaveManager::GetInstance())
 	{
 		context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KSaveManager::GetInstance()->GetName()));
 
 		KxEvtFile source(GetProfileDirectory() + "\\Saves");
 		context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
-		source.CopyFolder(KxFile::NullFilter, options->GetSavesFolder(), true, true);
+		source.CopyFolder(KxFile::NullFilter, saveManager->GetSavesLocation(), true, true);
 	}
 }
 void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
@@ -333,7 +332,7 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 
 		if (KModEntry* existingMod = KModManager::Get().FindModByID(name))
 		{
-			tCurrentModList.emplace_back(KModListModEntry(existingMod, existingMod->IsEnabled()));
+			tCurrentModList.emplace_back(KModListMod(existingMod, existingMod->IsEnabled()));
 		}
 	}
 
@@ -368,7 +367,7 @@ void KModManagerImportMO::ReadPlugins(KOperationWithProgressDialogBase* context)
 					name.Remove(0, 1);
 				}
 			}
-			currentPluginsList.emplace_back(KModListPluginEntry(name, KAux::IsStringsContain(activePlugins, name, false)));
+			currentPluginsList.emplace_back(KModListPlugin(name, KAux::IsStringsContain(activePlugins, name, false)));
 		}
 		KModManager::GetListManager().SaveLists();
 	}

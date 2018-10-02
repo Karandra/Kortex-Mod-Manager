@@ -21,7 +21,8 @@
 #include "ScreenshotsGallery/KScreenshotsGalleryManager.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "Network/KNetwork.h"
-#include "Events/KVFSEvent.h"
+#include "KEvents.h"
+#include "Events/KModListEventInternal.h"
 #include "KThemeManager.h"
 #include "KOperationWithProgress.h"
 #include "KAux.h"
@@ -91,6 +92,8 @@ KModWorkspace::~KModWorkspace()
 		KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_ModListViewOptions);
 		m_ModListViewOptions.SetAttribute("DisplayMode", m_ViewModel->GetDisplayMode());
 		m_ModListViewOptions.SetAttribute("ShowPriorityGroups", m_ViewModel->ShouldShowPriorityGroups());
+		m_ModListViewOptions.SetAttribute("ImageResizeMode", (int)m_ImageResizeMode);
+
 		KProgramOptionSerializer::SaveSplitterLayout(m_SplitterLeftRight, m_OptionsUI);
 	}
 }
@@ -140,6 +143,7 @@ void KModWorkspace::CreateToolBar()
 			KModManager::GetListManager().SaveLists();
 			KModManager::GetListManager().SetCurrentListID(newID);
 
+			KModListEvent(KEVT_MODLIST_INT_SELECTED, KModListManager::GetInstance()->GetCurrentList()).Send();
 			KModListEvent(KEVT_MODLIST_SELECTED).Send();
 		}
 		else
@@ -164,6 +168,7 @@ void KModWorkspace::CreateToolBar()
 			KModManager::GetListManager().SetCurrentListID(dialog.GetCurrentList());
 			
 			UpdateModListContent();
+			KModListEvent(KEVT_MODLIST_INT_SELECTED, KModListManager::GetInstance()->GetCurrentList()).Send();
 			KModListEvent(KEVT_MODLIST_SELECTED).Send();
 		}
 	});
@@ -309,6 +314,9 @@ bool KModWorkspace::OnOpenWorkspace()
 
 		KProgramOptionSerializer::LoadSplitterLayout(m_SplitterLeftRight, m_OptionsUI);
 		KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_ModListViewOptions);
+
+		m_ImageResizeMode = (ImageResizeMode)m_ModListViewOptions.GetAttributeInt("ImageResizeMode", (int)m_ImageResizeMode);
+		m_ViewModel->UpdateRowHeight();
 	}
 	return true;
 }
@@ -512,7 +520,7 @@ void KModWorkspace::OnAddMod_Empty(KxMenuEvent& event)
 		entry.SetTime(KME_TIME_INSTALL, wxDateTime::Now());
 		entry.Save();
 
-		ReloadWorkspace();
+		KModEvent(KEVT_MOD_INSTALLED, entry).Send();
 	}
 }
 void KModWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
@@ -520,22 +528,22 @@ void KModWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
 	KNewModDialogEx dialog(this);
 	if (dialog.ShowModal() == KxID_OK)
 	{
-		KModEntry entry;
-		entry.SetID(dialog.GetFolderName());
-		entry.CreateAllFolders();
-		entry.SetTime(KME_TIME_INSTALL, wxDateTime::Now());
+		KModEntry modEntry;
+		modEntry.SetID(dialog.GetFolderName());
+		modEntry.CreateAllFolders();
+		modEntry.SetTime(KME_TIME_INSTALL, wxDateTime::Now());
 
 		if (dialog.IsCreateAsLinkedMod())
 		{
-			entry.SetLinkedModLocation(dialog.GetFolderPath());
+			modEntry.SetLinkedModLocation(dialog.GetFolderPath());
 		}
-		entry.Save();
+		modEntry.Save();
 
 		if (!dialog.IsCreateAsLinkedMod())
 		{
 			// Copy files
 			wxString sourcePath = dialog.GetFolderPath();
-			wxString destinationPath = entry.GetLocation(KMM_LOCATION_MOD_FILES);
+			wxString destinationPath = modEntry.GetLocation(KMM_LOCATION_MOD_FILES);
 			auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
 			operation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
 			{
@@ -545,21 +553,26 @@ void KModWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
 			});
 
 			// If canceled, remove entire mod folder
-			wxString modRoot = entry.GetLocation(KMM_LOCATION_MOD_ROOT);
+			wxString modRoot = modEntry.GetLocation(KMM_LOCATION_MOD_ROOT);
 			operation->OnCancel([modRoot](KOperationWithProgressBase* self)
 			{
 				KxFile(modRoot).RemoveFolderTree(true);
 			});
 
 			// Reload after task is completed (successfully or not)
-			operation->OnEnd([this](KOperationWithProgressBase* self)
+			operation->OnEnd([this, name = modEntry.GetID().Clone()](KOperationWithProgressBase* self)
 			{
+				KModEvent(KEVT_MOD_INSTALLED, name).Send();
 				ReloadWorkspace();
 			});
 
 			// Configure and run
 			operation->SetDialogCaption(T("ModManager.NewMod.CopyDialogCaption"));
 			operation->Run();
+		}
+		else
+		{
+			KModEvent(KEVT_MOD_INSTALLED, modEntry).Send();
 		}
 	}
 }
@@ -645,23 +658,23 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 {
 	if (modEntry)
 	{
-		bool bIsFixedMod = modEntry->ToFixedEntry();
-		bool bIsLinkedMod = modEntry->IsLinkedMod();
-		bool bIsInstalled = modEntry->IsInstalled();
-		bool bIsPackageExist = modEntry->IsInstallPackageFileExist() && !bIsFixedMod;
-		bool bIsVFSActive = KModManager::Get().IsVFSMounted();
+		bool isFixedMod = modEntry->ToFixedEntry();
+		bool isLinkedMod = modEntry->IsLinkedMod();
+		bool isInstalled = modEntry->IsInstalled();
+		bool isPackageExist = modEntry->IsInstallPackageFileExist() && !isFixedMod;
+		bool isVFSActive = KModManager::Get().IsVFSMounted();
 
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_UNINSTALL, T("ModManager.Menu.UninstallMod")));
 			item->SetBitmap(KGetBitmap(KIMG_BOX_MINUS));
-			item->Enable(!bIsVFSActive && bIsInstalled && !bIsFixedMod);
+			item->Enable(!isVFSActive && isInstalled && !isFixedMod);
 		}
 		{
 			// Linked mods can't be uninstalled on erase
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_UNINSTALL_AND_ERASE));
-			item->SetItemLabel(bIsInstalled && !bIsLinkedMod ? T("ModManager.Menu.UninstallAndErase") : T("ModManager.Menu.Erase"));
+			item->SetItemLabel(isInstalled && !isLinkedMod ? T("ModManager.Menu.UninstallAndErase") : T("ModManager.Menu.Erase"));
 			item->SetBitmap(KGetBitmap(KIMG_ERASER));
-			item->Enable(!bIsFixedMod && !bIsVFSActive);
+			item->Enable(!isFixedMod && !isVFSActive);
 		}
 		contextMenu.AddSeparator();
 
@@ -669,35 +682,49 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 			/* Image menu */
 			KxMenu* imageMenu = new KxMenu();
 			contextMenu.Add(imageMenu, T("ModManager.Menu.Image"));
+
 			{
 				KxMenuItem* item = imageMenu->Add(new KxMenuItem(KMC_ID_MOD_IMAGE_SHOW, T("ModManager.Menu.Image.Show")));
-				item->Enable(modEntry->HasBitmap());
 			}
 			{
 				KxMenuItem* item = imageMenu->Add(new KxMenuItem(KMC_ID_MOD_IMAGE_ASSIGN, T("ModManager.Menu.Image.Assign")));
 				item->SetBitmap(KGetBitmap(KIMG_IMAGE));
-				item->Enable(!bIsFixedMod);
+				item->Enable(!isFixedMod);
 			}
+			imageMenu->AddSeparator();
+
+			auto AddOption = [this, imageMenu](ImageResizeMode mode, const wxString& anme)
+			{
+				KxMenuItem* item = imageMenu->Add(new KxMenuItem(anme, wxEmptyString, wxITEM_RADIO));
+				item->Check(mode == m_ImageResizeMode);
+				item->Bind(KxEVT_MENU_SELECT, [this, mode](KxMenuEvent& event)
+				{
+					ChangeImageResizeMode(mode);
+				});
+			};
+			AddOption(ImageResizeMode::Scale, T("ModManager.Menu.Image.ScaleAspect"));
+			AddOption(ImageResizeMode::Stretch, T("ModManager.Menu.Image.Stretch"));
+			AddOption(ImageResizeMode::Fill, T("ModManager.Menu.Image.Fill"));
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_DESCRIPTION, T("ModManager.Menu.EditDescription")));
 			item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_PENICL));
-			item->Enable(!bIsFixedMod);
+			item->Enable(!isFixedMod);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_TAGS, T("ModManager.Menu.EditTags")));
 			item->SetBitmap(KGetBitmap(KIMG_TAGS));
-			item->Enable(!bIsFixedMod);
+			item->Enable(!isFixedMod);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_SITES, T("ModManager.Menu.EditSites")));
 			item->SetBitmap(KGetBitmap(KNetworkProvider::GetGenericIcon()));
-			item->Enable(!bIsFixedMod);
+			item->Enable(!isFixedMod);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHANGE_ID, T("ModManager.Menu.ChangeID")));
 			item->SetBitmap(KGetBitmap(KIMG_KEY));
-			item->Enable(!bIsVFSActive && !bIsFixedMod);
+			item->Enable(!isVFSActive && !isFixedMod);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EXPLORE_FILES, T("ModManager.Menu.ExploreFiles")));
@@ -708,46 +735,46 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 
 		/* Package menu */
 		{
-			KxMenu* pPackageMenu = new KxMenu();
-			contextMenu.Add(pPackageMenu, T("ModManager.Menu.Package"));
+			KxMenu* packageMenu = new KxMenu();
+			contextMenu.Add(packageMenu, T("ModManager.Menu.Package"));
 			{
-				KxMenuItem* item = pPackageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_OPEN, T("ModManager.Menu.Package.Open")));
+				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_OPEN, T("ModManager.Menu.Package.Open")));
 				item->SetDefault();
-				item->Enable(bIsPackageExist);
+				item->Enable(isPackageExist);
 			}
 			{
-				KxMenuItem* item = pPackageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_OPEN_LOCATION, T("ModManager.Menu.Package.OpenLocation")));
+				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_OPEN_LOCATION, T("ModManager.Menu.Package.OpenLocation")));
 				item->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
-				item->Enable(bIsPackageExist);
+				item->Enable(isPackageExist);
 			}
-			pPackageMenu->AddSeparator();
+			packageMenu->AddSeparator();
 
 			{
-				KxMenuItem* item = pPackageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_ASSIGN, T("ModManager.Menu.Package.Assign")));
+				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_ASSIGN, T("ModManager.Menu.Package.Assign")));
 				item->SetBitmap(KGetBitmap(KIMG_BOX_SEARCH_RESULT));
-				item->Enable(!bIsFixedMod);
+				item->Enable(!isFixedMod);
 			}
 			{
-				KxMenuItem* item = pPackageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_REMOVE, T("ModManager.Menu.Package.Remove")));
-				item->Enable(bIsPackageExist);
+				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_REMOVE, T("ModManager.Menu.Package.Remove")));
+				item->Enable(isPackageExist);
 			}
 			{
-				KxMenuItem* item = pPackageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_EXTRACT, T("ModManager.Menu.Package.Extract")));
-				item->Enable(bIsPackageExist);
+				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_EXTRACT, T("ModManager.Menu.Package.Extract")));
+				item->Enable(isPackageExist);
 			}
 			{
-				KxMenuItem* item = pPackageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_IMPORT_PROJECT, T("ModManager.Menu.Package.ImportProject")));
-				item->Enable(bIsPackageExist);
+				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_IMPORT_PROJECT, T("ModManager.Menu.Package.ImportProject")));
+				item->Enable(isPackageExist);
 			}
 			{
-				KxMenuItem* item = pPackageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_CREATE_PROJECT, T("ModManager.Menu.Package.CreateProject")));
-				item->Enable(bIsPackageExist);
+				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_CREATE_PROJECT, T("ModManager.Menu.Package.CreateProject")));
+				item->Enable(isPackageExist);
 			}
-			pPackageMenu->AddSeparator();
+			packageMenu->AddSeparator();
 
 			{
-				KxMenuItem* item = pPackageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_PROPERTIES, T("ModManager.Menu.Properties")));
-				item->Enable(bIsPackageExist);
+				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_PROPERTIES, T("ModManager.Menu.Properties")));
+				item->Enable(isPackageExist);
 			}
 		}
 		contextMenu.AddSeparator();
@@ -755,14 +782,13 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_OPEN_LOCATION, T("ModManager.Menu.OpenModFilesLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
-			item->Enable(bIsInstalled);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHANGE_LOCATION, T("ModManager.Menu.ChangeModFilesLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
-			item->Enable(!bIsFixedMod);
+			item->Enable(!isFixedMod);
 		}
-		if (bIsLinkedMod && !bIsFixedMod)
+		if (isLinkedMod && !isFixedMod)
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_REVERT_LOCATION, T("ModManager.Menu.RevertModFilesLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
@@ -789,6 +815,15 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 			ReloadWorkspace();
 		});
 	}
+}
+void KModWorkspace::ChangeImageResizeMode(ImageResizeMode mode)
+{
+	m_ImageResizeMode = mode;
+	for (KModEntry* mod: KModManager::Get().GetAllEntries())
+	{
+		mod->ResetBitmap();
+	}
+	m_ViewModel->UpdateUI();
 }
 
 void KModWorkspace::SelectMod(const KModEntry* entry)
@@ -892,7 +927,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 		{
 			KImageViewerDialog dialog(this);
 
-			KImageViewerEvent event(wxEVT_NULL, modEntry->GetBitmap());
+			KImageViewerEvent event(wxEVT_NULL, modEntry->GetLocation(KMM_LOCATION_MOD_LOGO));
 			dialog.Navigate(event);
 			dialog.ShowModal();
 			break;
@@ -905,6 +940,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			{
 				KxFile(dialog.GetResult()).CopyFile(modEntry->GetLocation(KMM_LOCATION_MOD_LOGO), true);
 				modEntry->ResetBitmap();
+				modEntry->ResetNoBitmap();
 				modEntry->Save();
 
 				KModEvent event(KEVT_MOD_CHANGED, *modEntry);

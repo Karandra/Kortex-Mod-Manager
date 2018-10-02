@@ -94,7 +94,7 @@ void KPluginManagerBethesda::LoadNativeOrderBG()
 	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
 
 	// Load from 'LoadOrder.txt'
-	for (const wxString& name: KxTextFile::ReadToArray(m_ActiveListFile))
+	for (const wxString& name: KxTextFile::ReadToArray(V(m_OrderListFile)))
 	{
 		// Find whether plugin with this name exist
 		auto it = std::find_if(files.begin(), files.end(), [&name](const KFileTreeNode* node)
@@ -143,7 +143,7 @@ void KPluginManagerBethesda::LoadNativeActiveBG()
 {
 	// Load names from 'Plugins.txt' it they are not already added.
 	// Activate all new added and existing items with same name.
-	for (const wxString& name: KxTextFile::ReadToArray(m_ActiveListFile))
+	for (const wxString& name: KxTextFile::ReadToArray(V(m_ActiveListFile)))
 	{
 		if (KPluginEntry* entry = FindPluginByName(name))
 		{
@@ -168,7 +168,7 @@ void KPluginManagerBethesda::SaveNativeOrderBG() const
 	activeOrder.emplace_back(V(m_ActiveFileHeader));
 
 	// Write order
-	for (const KModListPluginEntry& listItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
+	for (const KModListPlugin& listItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
 	{
 		if (const KPluginEntry* entry = listItem.GetPluginEntry())
 		{
@@ -187,18 +187,20 @@ void KPluginManagerBethesda::SaveNativeOrderBG() const
 	}
 
 	// Save files
-	KxFile(m_OrderListFile.BeforeLast('\\')).CreateFolder();
-	KxTextFile::WriteToFile(m_OrderListFile, loadOrder, wxTextFileType_Dos);
+	const wxString orderListFile = V(m_OrderListFile);
+	KxFile(orderListFile.BeforeLast('\\')).CreateFolder();
+	KxTextFile::WriteToFile(orderListFile, loadOrder, wxTextFileType_Dos);
 
-	KxFile(m_ActiveListFile.BeforeLast('\\')).CreateFolder();
-	KxTextFile::WriteToFile(m_ActiveListFile, activeOrder, wxTextFileType_Dos);
+	const wxString activeListFile = V(m_ActiveListFile);
+	KxFile(activeListFile.BeforeLast('\\')).CreateFolder();
+	KxTextFile::WriteToFile(activeListFile, activeOrder, wxTextFileType_Dos);
 }
 
 KPluginManagerBethesda::KPluginManagerBethesda(const wxString& interfaceName, const KxXMLNode& configNode)
 	:KPluginManager(interfaceName, configNode), m_PluginsLocation("Data")
 {
-	m_ActiveListFile = V(configNode.GetFirstChildElement("ActiveList").GetValue());
-	m_OrderListFile = V(configNode.GetFirstChildElement("OrderList").GetValue());
+	m_ActiveListFile = configNode.GetFirstChildElement("ActiveList").GetValue();
+	m_OrderListFile = configNode.GetFirstChildElement("OrderList").GetValue();
 
 	// Don't expand them here. These strings may contain date-time variables
 	m_ActiveFileHeader = configNode.GetFirstChildElement("ActiveListHeader").GetValue();
@@ -263,7 +265,7 @@ void KPluginManagerBethesda::Load()
 	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
 	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
 
-	for (const KModListPluginEntry& listEntry: loadOrder.GetPlugins())
+	for (const KModListPlugin& listEntry: loadOrder.GetPlugins())
 	{
 		// Find whether plugin with this name exist
 		auto it = std::find_if(files.begin(), files.end(), [&listEntry](const KFileTreeNode* item)
@@ -297,7 +299,7 @@ void KPluginManagerBethesda::Load()
 	}
 
 	// Check active
-	for (const KModListPluginEntry& listEntry: loadOrder.GetPlugins())
+	for (const KModListPlugin& listEntry: loadOrder.GetPlugins())
 	{
 		KPluginEntry* entry = FindPluginByName(listEntry.GetPluginName());
 		if (entry)

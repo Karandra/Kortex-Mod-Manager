@@ -16,7 +16,7 @@
 KSaveManagerConfig::KSaveManagerConfig(KProfile& profile, KxXMLNode& node)
 	:m_SaveFileFormat(node.GetAttribute("SaveFileFormat"))
 {
-	m_SavesFolder = V(node.GetFirstChildElement("SavesFolder").GetValue());
+	m_RelativeLocation = V(node.GetFirstChildElement("RelativeLocation").GetValue());
 
 	// Load file filters
 	for (KxXMLNode entryNode = node.GetFirstChildElement("FileFilters").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
@@ -34,10 +34,6 @@ KSaveManagerConfig::KSaveManagerConfig(KProfile& profile, KxXMLNode& node)
 KSaveManagerConfig::~KSaveManagerConfig()
 {
 	delete m_Manager;
-}
-KSaveManager* KSaveManagerConfig::GetManager() const
-{
-	return m_Manager;
 }
 
 KSaveFile* KSaveManagerConfig::QuerySaveFile(const wxString& fullPath) const

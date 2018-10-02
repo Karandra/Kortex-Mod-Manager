@@ -71,7 +71,7 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 
 	if (oldVariableFixed == "SettingsPath")
 	{
-		return KVAR(KVAR_VIRTUAL_CONFIG_ROOT);
+		return KVAR(KVAR_CONFIG_ROOT_LOCAL);
 	}
 
 	if (oldVariableFixed == "SavesPath")

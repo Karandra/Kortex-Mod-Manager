@@ -59,7 +59,7 @@ wxString KModManager::GetLocation(KModManagerLocation nLocation, const wxString&
 void KModManager::SortEntries()
 {
 	size_t index = 0;
-	for (const KModListModEntry& listEntry: m_ModListManager.GetCurrentList().GetMods())
+	for (const KModListMod& listEntry: m_ModListManager.GetCurrentList().GetMods())
 	{
 		if (index < m_ModEntries.size())
 		{
@@ -132,7 +132,6 @@ bool KModManager::InitMainVirtualFolder()
 
 		if (KIPCClient::GetInstance()->CreateVFS_Convergence(mountPoint, m_ModEntry_WriteTarget.GetLocation(KMM_LOCATION_MOD_FILES), folders, true))
 		{
-			//return KIPCClient::GetInstance()->ConvergenceVFS_BuildDispatcherIndex();
 			return KIPCClient::GetInstance()->ConvergenceVFS_SetDispatcherIndex();
 		}
 	}
@@ -142,25 +141,27 @@ bool KModManager::InitMirroredLocations()
 {
 	KIPCClient::GetInstance()->MirrorVFS_ClearList();
 
-	const KVirtualizationConfig* virtualizationConfig = KVirtualizationConfig::GetInstance();
+	const KVirtualizationMirroredEntry::Vector& locations = KVirtualizationConfig::GetInstance()->GetMirroredLocations();
 
 	// Check folders first
-	for (size_t i = 0; i < virtualizationConfig->GetEntriesCount(KPVE_MIRRORED); i++)
+	for (const KVirtualizationMirroredEntry& entry: locations)
 	{
-		const KVirtualizationEntry* entry = virtualizationConfig->GetEntryAt(KPVE_MIRRORED, i);
-		if (entry && !CheckMountPoint(entry->GetDestination()))
+		if (!CheckMountPoint(entry.GetTarget()))
 		{
 			return false;
 		}
 	}
 
 	// Initialize them
-	for (size_t i = 0; i < virtualizationConfig->GetEntriesCount(KPVE_MIRRORED); i++)
+	for (const KVirtualizationMirroredEntry& entry: locations)
 	{
-		const KVirtualizationEntry* entry = virtualizationConfig->GetEntryAt(KPVE_MIRRORED, i);
-		if (entry)
+		if (entry.ShouldUseMultiMirror())
 		{
-			KIPCClient::GetInstance()->CreateVFS_Mirror(entry->GetSource(), entry->GetDestination());
+			KIPCClient::GetInstance()->CreateVFS_MultiMirror(entry.GetSources(), entry.GetTarget());
+		}
+		else
+		{
+			KIPCClient::GetInstance()->CreateVFS_Mirror(entry.GetSource(), entry.GetTarget());
 		}
 	}
 	return true;
@@ -222,6 +223,10 @@ void KModManager::OnModFilesChanged(KModEvent& event)
 	{
 		event.GetMod()->UpdateFileTree();
 	}
+	for (KModEntry* mod: event.GetModsArray())
+	{
+		mod->UpdateFileTree();
+	}
 
 	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
 	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
@@ -257,20 +262,23 @@ void KModManager::OnModListSelected(KModListEvent& event)
 	KWorkspace::ScheduleReloadOf<KModWorkspace>();
 	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 }
+void KModManager::OnModListChanged(KModListEvent& event)
+{
+}
 
 KModManager::KModManager(KWorkspace* workspace)
 	:m_Options(this, "General"),
 	m_ModEntry_BaseGame(std::numeric_limits<int>::min()), m_ModEntry_WriteTarget(std::numeric_limits<int>::max())
 {
 	// Mandatory locations
-	for (const wxString& folderPath: KVirtualizationConfig::GetInstance()->GetMandatoryVirtualFolders())
+	for (const KVirtualizationMandatoryEntry& mandatoryEntry: KVirtualizationConfig::GetInstance()->GetMandatoryLocations())
 	{
 		int orderIndex = m_ModEntry_BaseGame.GetOrderIndex() + m_ModEntry_Mandatory.size() + 1;
 		KFixedModEntry& entry = m_ModEntry_Mandatory.emplace_back(orderIndex);
 
-		entry.SetID(folderPath.AfterLast('\\'));
+		entry.SetID(mandatoryEntry.GetName());
 		entry.SetEnabled(true);
-		entry.SetLinkedModLocation(folderPath);
+		entry.SetLinkedModLocation(mandatoryEntry.GetSource());
 	}
 
 	// Base game
@@ -280,7 +288,7 @@ KModManager::KModManager(KWorkspace* workspace)
 	m_ModEntry_BaseGame.SetLinkedModLocation(V(KVAR(KVAR_GAME_ROOT)));
 
 	// Write target
-	m_ModEntry_WriteTarget.SetID("WriteTargetRoot");
+	m_ModEntry_WriteTarget.SetID(KVAR_OVERWRITES_ROOT);
 	m_ModEntry_WriteTarget.SetName(T("ModManager.WriteTargetName"));
 	m_ModEntry_WriteTarget.SetEnabled(true);
 
@@ -293,9 +301,11 @@ KModManager::KModManager(KWorkspace* workspace)
 	KEvent::Bind(KEVT_MOD_UNINSTALLED, &KModManager::OnModUninstalled, this);
 
 	KEvent::Bind(KEVT_MODLIST_SELECTED, &KModManager::OnModListSelected, this);
+	KEvent::Bind(KEVT_MODLIST_CHANGED, &KModManager::OnModListChanged, this);
 	
 	// Load data
 	Load();
+	m_ModListManager.OnInit();
 }
 void KModManager::Clear()
 {
@@ -337,7 +347,7 @@ KModEntryArray KModManager::GetAllEntries(bool includeWriteTarget)
 	entries.reserve(m_ModEntries.size() + m_ModEntry_Mandatory.size() + 2);
 
 	// Add mandatory virtual folders
-	for (KFixedModEntry& entry: m_ModEntry_Mandatory)
+	for (KMandatoryModEntry& entry: m_ModEntry_Mandatory)
 	{
 		entries.push_back(&entry);
 	}
@@ -390,7 +400,7 @@ void KModManager::Load()
 	{
 		entry->UpdateFileTree();
 	}
-	m_ModListManager.ReloadLists();
+	m_ModListManager.LoadLists();
 	SortEntries();
 
 	// Causes rebuild of virtual file tree

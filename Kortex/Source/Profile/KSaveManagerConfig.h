@@ -11,7 +11,7 @@ class KSaveManagerConfig: public KxSingletonPtr<KSaveManagerConfig>
 	private:
 		const wxString m_SaveFileFormat;
 		KSaveManager* m_Manager = NULL;
-		wxString m_SavesFolder;
+		wxString m_RelativeLocation;
 		KLabeledValueArray m_FileFilters;
 
 		wxString m_PrimarySaveExt;
@@ -22,17 +22,17 @@ class KSaveManagerConfig: public KxSingletonPtr<KSaveManagerConfig>
 		~KSaveManagerConfig();
 
 	public:
-		KSaveManager* GetManager() const;
 		KSaveFile* QuerySaveFile(const wxString& fullPath) const;
 
 		const wxString& GetSaveFileFormat() const
 		{
 			return m_SaveFileFormat;
 		}
-		const wxString& GetSavesFolder() const
+		const wxString& GetRelativeLocation() const
 		{
-			return m_SavesFolder;
+			return m_RelativeLocation;
 		}
+		
 		bool HasFileFilter() const
 		{
 			return !m_FileFilters.empty();

@@ -123,9 +123,9 @@ void KModManagerImportNMM::CopySavesAndConfig(KOperationWithProgressDialogBase* 
 	context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KSaveManager::GetInstance()->GetName()));
 
 	// Copy saves from real saves folder to virtual
-	KxEvtFile savesSource(KVAR_EXP(KVAR_CONFIG_ROOT));
+	KxEvtFile savesSource(KVAR_EXP(KVAR_CONFIG_ROOT_TARGET));
 	context->LinkHandler(&savesSource, KxEVT_FILEOP_COPY_FOLDER);
-	savesSource.CopyFolder(KxFile::NullFilter, KVAR_EXP(KVAR_VIRTUAL_CONFIG_ROOT), true, true);
+	savesSource.CopyFolder(KxFile::NullFilter, KVAR_EXP(KVAR_CONFIG_ROOT_LOCAL), true, true);
 }
 void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 {
@@ -211,7 +211,7 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 
 		if (KModEntry* existingMod = KModManager::Get().FindModByID(name))
 		{
-			tCurrentModList.emplace_back(KModListModEntry(existingMod, existingMod->IsEnabled()));
+			tCurrentModList.emplace_back(KModListMod(existingMod, existingMod->IsEnabled()));
 		}
 	}
 
@@ -240,7 +240,7 @@ void KModManagerImportNMM::ReadPlugins(KOperationWithProgressDialogBase* context
 			wxString enabledValue = value.AfterFirst('=');
 			bool enabled = !enabledValue.IsEmpty() && enabledValue[0] == '1';
 
-			currentPluginsList.emplace_back(KModListPluginEntry(value.BeforeFirst('='), enabled));
+			currentPluginsList.emplace_back(KModListPlugin(value.BeforeFirst('='), enabled));
 		}
 		KModManager::GetListManager().SaveLists();
 	}

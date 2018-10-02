@@ -8,13 +8,16 @@
 #include "PluginManager/KPluginManagerWorkspace.h"
 #include "PluginManager/KPluginViewBaseModel.h"
 #include "UI/KMainWindow.h"
+#include "UI/KImageViewerDialog.h"
 #include "KComparator.h"
 #include "KApp.h"
 #include "KAux.h"
+#include <KxFramework/DataView/KxDataViewMainWindow.h>
 
 enum ColumnID
 {
 	Name,
+	Bitmap,
 	Priority,
 	Version,
 	Author,
@@ -74,6 +77,7 @@ void KModManagerModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KModManagerModel::OnContextMenu, this);
 	GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &KModManagerModel::OnHeaderContextMenu, this);
 	GetView()->Bind(KxEVT_DATAVIEW_COLUMN_SORTED, &KModManagerModel::OnColumnSorted, this);
+	GetView()->Bind(KxEVT_DATAVIEW_CACHE_HINT, &KModManagerModel::OnCacheHint, this);
 	
 	EnableDragAndDrop();
 	m_PriortyGroupColor = KxUtility::GetThemeColor_Caption(GetView());
@@ -84,8 +88,14 @@ void KModManagerModel::OnInitControl()
 	KxDataViewColumnFlags defaultFlagsNoOrder = (KxDataViewColumnFlags)(defaultFlags & ~KxDV_COL_REORDERABLE);
 	KxDataViewColumnFlags defaultFlagsNoSortNoOrder = KxDV_COL_RESIZEABLE;
 
-	GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(T("ModManager.ModList.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE|KxDATAVIEW_CELL_EDITABLE, 400, defaultFlags);
-
+	{
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(T("ModManager.ModList.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE|KxDATAVIEW_CELL_EDITABLE, 400, defaultFlags);;
+		m_NameColumn = info.GetColumn();
+	}
+	{
+		auto info = GetView()->AppendColumn<KxDataViewBitmapRenderer>(T("Generic.Image"), ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, m_BitmapSize.GetWidth() + 4, KxDV_COL_REORDERABLE);
+		m_BitmapColumn = info.GetColumn();
+	}
 	{
 		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
 		m_PriorityColumn = info.GetColumn();
@@ -250,9 +260,14 @@ void KModManagerModel::GetValue(wxAny& value, const KxDataViewItem& item, const 
 	}
 	else if (KModEntry* entry = node->GetEntry())
 	{
+		if (column->GetID() == ColumnID::Bitmap)
+		{
+			value = entry->HasBitmap() ? entry->GetBitmap() : KGetBitmap(KIMG_CROSS_WHITE);
+			return;
+		}
+
 		const KFixedModEntry* fixedEntry = entry->ToFixedEntry();
 		const KPriorityGroupEntry* priorityGroupEntry = entry->ToPriorityGroup();
-
 		if (priorityGroupEntry)
 		{
 			GetValue(value, item, column, priorityGroupEntry);
@@ -580,6 +595,17 @@ bool KModManagerModel::GetItemAttributes(const KxDataViewItem& item, const KxDat
 	}
 	return false;
 }
+bool KModManagerModel::GetCellHeight(const KxDataViewItem& item, int& height) const
+{
+	const KMMModelNode* node = GetNode(item);
+	KModEntry* entry = node->GetEntry();
+	if (entry && !entry->ToPriorityGroup() && !entry->ToFixedEntry())
+	{
+		height = m_BitmapSize.GetHeight() + 2;
+		return true;
+	}
+	return false;
+}
 bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const
 {
 	const KMMModelNode* pNode1 = GetNode(item1);
@@ -686,17 +712,17 @@ void KModManagerModel::OnActivateItem(KxDataViewEvent& event)
 	const KMMModelNode* node = GetNode(item);
 	KModEntry* entry = node->GetEntry();
 
-	if (node->IsGroup())
+	if (node->IsGroup() || node->GetEntry()->ToPriorityGroup())
 	{
 		GetView()->ToggleItemExpanded(item);
 	}
 	else if (column && entry)
 	{
-		int nColumn = column->GetID();
+		int columnID = column->GetID();
 
 		// If this is a site open click
-		KNetworkProviderID providerID = ColumnToSpecialSite(nColumn);
-		if (IsSpecialSiteColumn(nColumn))
+		KNetworkProviderID providerID = ColumnToSpecialSite(columnID);
+		if (IsSpecialSiteColumn(columnID))
 		{
 			if (entry->HasWebSite(providerID))
 			{
@@ -719,6 +745,18 @@ void KModManagerModel::OnActivateItem(KxDataViewEvent& event)
 				}
 				break;
 			}
+			case ColumnID::Bitmap:
+			{
+				if (entry->HasBitmap())
+				{
+					KImageViewerDialog dialog(GetViewTLW(), entry->GetName());
+
+					KImageViewerEvent imageEvent(wxEVT_NULL, entry->GetLocation(KMM_LOCATION_MOD_LOGO));
+					dialog.Navigate(imageEvent);
+					dialog.ShowModal();
+				}
+				break;
+			}
 			case ColumnID::Sites:
 			{
 				AskOpenSites(entry);
@@ -731,22 +769,29 @@ void KModManagerModel::OnActivateItem(KxDataViewEvent& event)
 			}
 		};
 	}
-
-	event.Skip();
 }
 void KModManagerModel::OnContextMenu(KxDataViewEvent& event)
 {
 	const KMMModelNode* node = GetNode(event.GetItem());
 	KxDataViewColumn* column = event.GetColumn();
+	KModEntry* entry = NULL;
+
 	if (node && column)
 	{
+		// I need simple entry
+		entry = node->GetEntry();
+		if (entry && entry->ToPriorityGroup())
+		{
+			entry = NULL;
+		}
+
 		if (const KModTag* group = node->GetGroup())
 		{
 			KModWorkspace::GetInstance()->ShowViewContextMenu(group);
 			return;
 		}
 	}
-	KModWorkspace::GetInstance()->ShowViewContextMenu(node && column ? node->GetEntry() : NULL);
+	KModWorkspace::GetInstance()->ShowViewContextMenu(node && column ? entry : NULL);
 }
 void KModManagerModel::OnHeaderContextMenu(KxDataViewEvent& event)
 {
@@ -754,6 +799,7 @@ void KModManagerModel::OnHeaderContextMenu(KxDataViewEvent& event)
 	if (GetView()->CreateColumnSelectionMenu(menu))
 	{
 		GetView()->OnColumnSelectionMenu(menu);
+		UpdateRowHeight();
 	}
 }
 void KModManagerModel::OnColumnSorted(KxDataViewEvent& event)
@@ -776,6 +822,27 @@ void KModManagerModel::OnColumnSorted(KxDataViewEvent& event)
 		}
 	}
 }
+void KModManagerModel::OnCacheHint(KxDataViewEvent& event)
+{
+	if (m_BitmapColumn->IsExposed())
+	{
+		for (size_t row = event.GetCacheHintFrom(); row <= event.GetCacheHintTo(); row++)
+		{
+			KxDataViewItem item = GetView()->GetMainWindow()->GetItemByRow(row);
+			if (const KMMModelNode* node = GetNode(item))
+			{
+				if (KModEntry* entry = node->GetEntry())
+				{
+					if (!entry->IsNoBitmap() && !entry->HasBitmap())
+					{
+						entry->SetBitmap(CreateModThumbnail(entry));
+						entry->SetNoBitmap(!entry->HasBitmap());
+					}
+				}
+			}
+		}
+	}
+}
 
 void KModManagerModel::AskOpenSites(const KModEntry* entry) const
 {
@@ -790,6 +857,34 @@ void KModManagerModel::AskOpenSites(const KModEntry* entry) const
 
 	// Show dialog
 	KAux::AskOpenURL(urlList, GetViewTLW());
+}
+wxBitmap KModManagerModel::CreateModThumbnail(const KModEntry* entry) const
+{
+	const int magrinX = 2;
+	const int magrinY = 2;
+	switch (KModWorkspace::GetInstance()->GetImageResizeMode())
+	{
+		case KModWorkspace::ImageResizeMode::Scale:
+		{
+			return m_BitmapSize.ScaleBitmapAspect(wxBitmap(entry->GetLocation(KMM_LOCATION_MOD_LOGO), wxBITMAP_TYPE_ANY), magrinX, magrinY);
+		}
+		case KModWorkspace::ImageResizeMode::Stretch:
+		{
+			return m_BitmapSize.ScaleBitmapStretch(wxBitmap(entry->GetLocation(KMM_LOCATION_MOD_LOGO), wxBITMAP_TYPE_ANY), magrinX, magrinY);
+		}
+		case KModWorkspace::ImageResizeMode::Fill:
+		{
+			wxImage image = wxImage(entry->GetLocation(KMM_LOCATION_MOD_LOGO), wxBITMAP_TYPE_ANY);
+			image = KAux::ScaleImageAspect(image, m_BitmapSize.GetWidth());
+
+			if (image.GetHeight() >= m_BitmapSize.GetHeight())
+			{
+				image.Resize(wxSize(image.GetWidth(), m_BitmapSize.GetHeight()), wxPoint(0, 0));
+			}
+			return wxBitmap(image, 32);
+		}
+	};
+	return wxNullBitmap;
 }
 
 bool KModManagerModel::OnDragItems(KxDataViewEventDND& event)
@@ -892,7 +987,8 @@ KModManagerModel::KModManagerModel()
 	:m_NoneTag(wxEmptyString, KAux::MakeNoneLabel(), true),
 	m_SearchFilterOptions(KModWorkspace::GetInstance(), "SearchFilter")
 {
-	SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES|KxDV_DOUBLE_CLICK_EXPAND);
+	m_BitmapSize.FromHeight(80, KBitmapSize::r16_9);
+	SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES);
 }
 
 void KModManagerModel::SetDisplayMode(KModManagerModelType mode)
@@ -1124,8 +1220,21 @@ void KModManagerModel::RefreshItems()
 }
 void KModManagerModel::UpdateUI()
 {
-	//SelectItem(GetView()->GetSelection());
 	GetView()->Refresh();
+}
+void KModManagerModel::UpdateRowHeight()
+{
+	KxDataViewColumn* column = GetView()->GetColumnByID(ColumnID::Bitmap);
+	if (column)
+	{
+		auto EnableFlag = [this](bool enable)
+		{
+			GetView()->SetWindowStyle(KxUtility::ModFlag(GetView()->GetWindowStyle(), KxDV_MODEL_ROW_HEIGHT, enable));
+		};
+
+		EnableFlag(column->IsExposed());
+		UpdateUI();
+	}
 }
 
 void KModManagerModel::CreateSearchColumnsMenu(KxMenu& menu)

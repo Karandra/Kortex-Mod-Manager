@@ -3,54 +3,71 @@
 #include <KxFramework/KxSingleton.h>
 class KProfile;
 
-enum KPVEntryType
-{
-	KPVE_MIRRORED,
-};
-
-class KVirtualizationEntry
+class KVirtualizationMirroredEntry
 {
 	public:
-		using Vector = std::vector<KVirtualizationEntry>;
+		using Vector = std::vector<KVirtualizationMirroredEntry>;
 
 	private:
-		wxString m_Source;
+		KxStringVector m_Sources;
 		wxString m_Target;
 
 	public:
-		KVirtualizationEntry(KxXMLNode& node);
+		KVirtualizationMirroredEntry(KxXMLNode& parentNode);
 
 	public:
 		bool IsOK() const
 		{
-			return !m_Source.IsEmpty() && !m_Target.IsEmpty();
+			return !m_Sources.empty() && !m_Target.IsEmpty();
+		}
+		bool ShouldUseMultiMirror() const
+		{
+			return m_Sources.size() > 1;
 		}
 
-		const wxString& GetSource() const
+		KxStringVector GetSources() const;
+		wxString GetSource() const;
+		wxString GetTarget() const;
+};
+
+class KVirtualizationMandatoryEntry
+{
+	public:
+		using Vector = std::vector<KVirtualizationMandatoryEntry>;
+
+	private:
+		wxString m_Source;
+		wxString m_Name;
+
+	public:
+		KVirtualizationMandatoryEntry(KxXMLNode& parentNode);
+
+	public:
+		bool IsOK() const
 		{
-			return m_Source;
+			return !m_Source.IsEmpty();
 		}
-		const wxString& GetDestination() const
-		{
-			return m_Target;
-		}
+
+		wxString GetSource() const;
+		wxString GetName() const;
 };
 
 //////////////////////////////////////////////////////////////////////////
 class KVirtualizationConfig: public KxSingletonPtr<KVirtualizationConfig>
 {
 	private:
-		KVirtualizationEntry::Vector m_MirroredLocations;
-		KxStringVector m_MandatoryVirtualFolders;
+		KVirtualizationMirroredEntry::Vector m_MirroredLocations;
+		KVirtualizationMandatoryEntry::Vector m_MandatoryVirtualFolders;
 
 	public:
 		KVirtualizationConfig(KProfile& profile, KxXMLNode& node);
 
 	public:
-		size_t GetEntriesCount(KPVEntryType index) const;
-		const KVirtualizationEntry* GetEntryAt(KPVEntryType index, size_t i) const;
-
-		const KxStringVector& GetMandatoryVirtualFolders() const
+		const KVirtualizationMirroredEntry::Vector& GetMirroredLocations() const
+		{
+			return m_MirroredLocations;
+		}
+		const KVirtualizationMandatoryEntry::Vector& GetMandatoryLocations() const
 		{
 			return m_MandatoryVirtualFolders;
 		}

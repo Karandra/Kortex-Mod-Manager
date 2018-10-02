@@ -19,6 +19,6 @@ class KPluginViewModelBethesda: public KPluginViewModel
 		virtual bool Compare(const KPluginEntry& pluginEntry1, const KPluginEntry& pluginEntry2, const KxDataViewColumn* column) const override;
 
 	public:
-		const wxString& GetPartOfName(const KPluginEntry& entry) const;
+		wxString GetPartOfName(const KPluginEntry& entry) const;
 		wxString GetPluginAuthor(const KPluginEntry& entry) const;
 };

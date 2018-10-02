@@ -21,18 +21,9 @@ class KPluginManagerConfigStdContentEntry
 		~KPluginManagerConfigStdContentEntry();
 
 	public:
-		const wxString& GetID() const
-		{
-			return m_ID;
-		}
-		const wxString& GetName() const
-		{
-			return m_Name;
-		}
-		const wxString& GetLogo() const
-		{
-			return m_Logo;
-		}
+		wxString GetID() const;
+		wxString GetName() const;
+		wxString GetLogo() const;
 		wxString GetLogoFullPath() const;
 };
 
@@ -52,22 +43,13 @@ class KPluginManagerConfigSortingToolEntry
 		~KPluginManagerConfigSortingToolEntry();
 
 	public:
-		const wxString& GetID() const
-		{
-			return m_ID;
-		}
-		const wxString& GetName() const
-		{
-			return m_Name;
-		}
+		wxString GetID() const;
+		wxString GetName() const;
 		
 		wxString GetExecutable() const;
 		void SetExecutable(const wxString& path) const;
 		
-		const wxString& GetArguments() const
-		{
-			return m_Command;
-		}
+		wxString GetArguments() const;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -88,22 +70,10 @@ class KPluginManagerConfigLootAPI
 		~KPluginManagerConfigLootAPI();
 
 	public:
-		const wxString& GetBranch() const
-		{
-			return m_Branch;
-		}
-		const wxString& GetRepository() const
-		{
-			return m_Repository;
-		}
-		const wxString& GetFolderName() const
-		{
-			return m_FolderName;
-		}
-		const wxString& GetLocalGamePath() const
-		{
-			return m_LocalGamePath;
-		}
+		wxString GetBranch() const;
+		wxString GetRepository() const;
+		wxString GetFolderName() const;
+		wxString GetLocalGamePath() const;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -153,14 +123,8 @@ class KPluginManagerConfig: public KxSingletonPtr<KPluginManagerConfig>
 			return m_PluginLimit;
 		}
 
-		bool HasMainStdContentID() const
-		{
-			return !m_StandardContent_MainID.IsEmpty();
-		}
-		const wxString& GetMainStdContentID() const
-		{
-			return m_StandardContent_MainID;
-		}
+		bool HasMainStdContentID() const;
+		wxString GetMainStdContentID() const;
 
 		const StandardContentEntry* GetStandardContent(const wxString& id) const;
 		bool IsStandardContent(const wxString& id) const

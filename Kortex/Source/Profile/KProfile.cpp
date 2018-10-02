@@ -220,9 +220,9 @@ void KProfile::InitVariables()
 	// System variables
 	if (IsFullProfile())
 	{
-		m_Variables.SetVariable(KVAR_CURRENT_PROFILE_ROOT, GetRCPD({}));
+		m_Variables.SetVariable(KVAR_PROFILE_ROOT, GetRCPD({}));
 		m_Variables.SetVariable(KVAR_VIRTUAL_GAME_ROOT, GetRCPD({"VirtualGameRoot"}));
-		m_Variables.SetVariable(KVAR_VIRTUAL_CONFIG_ROOT, GetRCPD({"VirtualGameConfig"}));
+		m_Variables.SetVariable(KVAR_CONFIG_ROOT_LOCAL, GetRCPD({"VirtualGameConfig"}));
 		m_Variables.SetVariable(KVAR_MODS_ROOT, GetRCPD({"Mods"}));
 	}
 
@@ -251,14 +251,14 @@ void KProfile::InitVariables()
 		{
 			// Load variable value from overrides if it's present there
 			// or save variable value to overrides if this variable needs to be overridden
-			wxString sOverrideValue = m_ProfileConfig.GetValue("KProfile::VariablesOverride", id);
-			if (node.GetAttributeBool("UseOverride") && sOverrideValue.IsEmpty())
+			wxString overrideValue = m_ProfileConfig.GetValue("KProfile::VariablesOverride", id);
+			if (node.GetAttributeBool("UseOverride") && overrideValue.IsEmpty())
 			{
 				m_ProfileConfig.SetValue("KProfile::VariablesOverride", id, value);
 			}
-			if (!sOverrideValue.IsEmpty())
+			if (!overrideValue.IsEmpty())
 			{
-				value = sOverrideValue;
+				value = overrideValue;
 			}
 		}
 		m_Variables.SetVariable(id, value);
@@ -291,24 +291,24 @@ wxString KProfile::LoadRegistryVariable(const KxXMLNode& node)
 	};
 
 	// 32 or 64 bit registry branch
-	long nNodeValue = 0;
-	KxRegistryNode nRegNode = KxREG_NODE_SYS;
-	node.GetFirstChildElement("Node").GetValue().ToLong(&nNodeValue);
-	if (nNodeValue == 32)
+	long nodeValue = 0;
+	KxRegistryNode regNode = KxREG_NODE_SYS;
+	node.GetFirstChildElement("Node").GetValue().ToLong(&nodeValue);
+	if (nodeValue == 32)
 	{
-		nRegNode = KxREG_NODE_32;
+		regNode = KxREG_NODE_32;
 	}
-	else if (nNodeValue == 64)
+	else if (nodeValue == 64)
 	{
-		nRegNode = KxREG_NODE_64;
+		regNode = KxREG_NODE_64;
 	}
 
 	// Main key
-	KxRegistryHKey nMainKey = KxREG_HKEY_MAX;
+	KxRegistryHKey mainKey = KxREG_HKEY_MAX;
 	wxString root = node.GetFirstChildElement("Root").GetValue();
 	if (ms_NameToRegKey.count(root))
 	{
-		nMainKey = ms_NameToRegKey.at(root);
+		mainKey = ms_NameToRegKey.at(root);
 	}
 
 	wxString path = ExpandVariables(node.GetFirstChildElement("Path").GetValue());
@@ -321,23 +321,23 @@ wxString KProfile::LoadRegistryVariable(const KxXMLNode& node)
 		type = ms_NameToRegType.at(sValueType);
 	}
 
-	wxAny vData = KxRegistry::GetValue(nMainKey, path, valueName, type, nRegNode, true);
+	wxAny data = KxRegistry::GetValue(mainKey, path, valueName, type, regNode, true);
 	if (type == KxREG_VALUE_DWORD || type == KxREG_VALUE_QWORD)
 	{
-		return std::to_string(vData.As<int64_t>());
+		return std::to_string(data.As<int64_t>());
 	}
 	else
 	{
-		return vData.As<wxString>();
+		return data.As<wxString>();
 	}
 }
 void KProfile::DetectArchitecture()
 {
 	KxFileBinaryFormat type = KxFile(m_Variables.GetVariable("GameExecutable")).GetBinaryType();
-	bool bIs32Bit = type != KxFBF_WIN64;
+	bool is32Bit = type != KxFBF_WIN64;
 
-	m_Variables.SetVariable("Architecture", KAux::ArchitectureToNumber(bIs32Bit));
-	m_Variables.SetVariable("ArchitectureName", KAux::ArchitectureToString(bIs32Bit));
+	m_Variables.SetVariable("Architecture", KAux::ArchitectureToNumber(is32Bit));
+	m_Variables.SetVariable("ArchitectureName", KAux::ArchitectureToString(is32Bit));
 }
 
 KProfile::KProfile()
@@ -346,6 +346,7 @@ KProfile::KProfile()
 KProfile::KProfile(const wxString& templatePath)
 {
 	LoadGeneric(templatePath);
+	m_ProfileXML.Load(wxEmptyString);
 }
 void KProfile::Create(const wxString& templatePath, const wxString& configID)
 {
@@ -358,9 +359,9 @@ void KProfile::Create(const wxString& templatePath, const wxString& configID)
 		{
 			m_ProfileFolderLock.Open(GetDataPath(m_ID, m_ConfigID), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ|KxFS_SHARE_WRITE, KxFS_FLAG_BACKUP_SEMANTICS);
 		}
-
 		LoadConfig();
 	}
+	m_ProfileXML.Load(wxEmptyString);
 }
 KProfile::~KProfile()
 {
@@ -488,7 +489,7 @@ bool KProfile::AddConfig(const wxString& configID, const wxString& sBaseConfigID
 			// Ask user to copy game config to profile if we aren't copying config from another profile
 			if (IsVirtualConfigEnabled() && !tCopyConfig.CopyGameConfig)
 			{
-				KxEvtFile source(m_Variables.GetVariable(KVAR_CONFIG_ROOT));
+				KxEvtFile source(m_Variables.GetVariable(KVAR_CONFIG_ROOT_TARGET));
 				if (source.IsFolderExist() && !KxFileFinder::IsDirectoryEmpty(source.GetFullPath()))
 				{
 					// Copy destination link

@@ -4,6 +4,7 @@
 #include "KDataViewListModel.h"
 #include "KProgramOptions.h"
 #include "KImageProvider.h"
+#include "KBitmapSize.h"
 class KModController;
 class KModWorkspace;
 class KxDataViewBitmapTextToggleRenderer;
@@ -21,6 +22,10 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		KModManagerModelType m_DisplayMode = KMM_TYPE_CONNECTOR;
 		bool m_ShowPriorityGroups = false;
 		bool m_ShowPriorityGroupsSuppress = false;
+
+		KBitmapSize m_BitmapSize;
+		KxDataViewColumn* m_NameColumn = NULL;
+		KxDataViewColumn* m_BitmapColumn = NULL;
 		KxDataViewColumn* m_PriorityColumn = NULL;
 		KxColor m_PriortyGroupColor;
 
@@ -68,6 +73,7 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		virtual bool IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
 		virtual bool IsEditorEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
 		virtual bool GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
+		virtual bool GetCellHeight(const KxDataViewItem& item, int& height) const override;
 		virtual bool Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const override;
 
 		void OnSelectItem(KxDataViewEvent& event);
@@ -75,8 +81,10 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		void OnContextMenu(KxDataViewEvent& event);
 		void OnHeaderContextMenu(KxDataViewEvent& event);
 		void OnColumnSorted(KxDataViewEvent& event);
+		void OnCacheHint(KxDataViewEvent& event);
 
 		void AskOpenSites(const KModEntry* entry) const;
+		wxBitmap CreateModThumbnail(const KModEntry* entry) const;
 
 		virtual KxDataViewCtrl* GetViewCtrl() const override
 		{
@@ -115,6 +123,7 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		void SetDataVector(KModEntryArray& array);
 		virtual void RefreshItems() override;
 		void UpdateUI();
+		void UpdateRowHeight();
 		
 		void CreateSearchColumnsMenu(KxMenu& menu);
 		bool SetSearchMask(const wxString& mask)

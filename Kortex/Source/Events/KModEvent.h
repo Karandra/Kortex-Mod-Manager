@@ -5,9 +5,12 @@ class KModEntry;
 
 class KModEvent: public KEvent
 {
+	public:
+		using RefVector = std::vector<KModEntry*>;
+
 	private:
 		KModEntry* m_Mod = NULL;
-		std::vector<KModEntry*> m_ModsArray;
+		RefVector m_ModsArray;
 
 	public:
 		KModEvent(wxEventType type = wxEVT_NULL)
@@ -18,7 +21,7 @@ class KModEvent: public KEvent
 			:KEvent(type), m_Mod(&modEntry)
 		{
 		}
-		KModEvent(wxEventType type, std::vector<KModEntry*> modsArray)
+		KModEvent(wxEventType type, RefVector modsArray)
 			:KEvent(type), m_ModsArray(modsArray)
 		{
 		}
@@ -48,7 +51,7 @@ class KModEvent: public KEvent
 		{
 			return !m_ModsArray.empty();
 		}
-		const std::vector<KModEntry*>& GetModsArray() const
+		const RefVector& GetModsArray() const
 		{
 			return m_ModsArray;
 		}

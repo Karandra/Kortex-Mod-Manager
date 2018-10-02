@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "KModListEvent.h"
+#include "KModListEventInternal.h"
 #include "ModManager/KModListManager.h"
 
 wxString KModListEvent::GetModListID() const
@@ -16,3 +17,5 @@ wxDEFINE_EVENT(KEVT_MODLIST_REMOVED, KModListEvent);
 
 wxDEFINE_EVENT(KEVT_MODLIST_CHANGED, KModListEvent);
 wxDEFINE_EVENT(KEVT_MODLIST_SELECTED, KModListEvent);
+
+wxDEFINE_EVENT(KEVT_MODLIST_INT_SELECTED, KModListEvent);

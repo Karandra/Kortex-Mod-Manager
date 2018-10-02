@@ -12,7 +12,7 @@
 #include <KxFramework/KxSingleton.h>
 class KSaveManager;
 class KSaveFile;
-class KSaveManagerListModel;
+class KSaveManagerView;
 class KPluginManager;
 
 class KSaveManagerWorkspace: public KWorkspace, public KxSingletonPtr<KSaveManagerWorkspace>
@@ -27,7 +27,7 @@ class KSaveManagerWorkspace: public KWorkspace, public KxSingletonPtr<KSaveManag
 		wxBoxSizer* m_MainSizer = NULL;
 		wxBoxSizer* m_ViewSizer = NULL;
 		KxSplitterWindow* m_Splitter = NULL;
-		KSaveManagerListModel* m_ViewModel = NULL;
+		KSaveManagerView* m_ViewModel = NULL;
 
 	public:
 		KSaveManagerWorkspace(KMainWindow* mainWindow, KSaveManager* manager);

@@ -60,6 +60,9 @@
     <ClCompile Include="..\Kortex\Source\VFS\KVFSMirror.cpp">
       <Filter>Исходные файлы\VFS</Filter>
     </ClCompile>
+    <ClCompile Include="..\Kortex\Source\VFS\KVFSMultiMirror.cpp">
+      <Filter>Исходные файлы\VFS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -87,6 +90,9 @@
       <Filter>Файлы заголовков\VFS</Filter>
     </ClInclude>
     <ClInclude Include="..\Kortex\Source\VFS\KVFSMirror.h">
+      <Filter>Файлы заголовков\VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Kortex\Source\VFS\KVFSMultiMirror.h">
       <Filter>Файлы заголовков\VFS</Filter>
     </ClInclude>
   </ItemGroup>

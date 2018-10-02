@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KSaveManagerWorkspace.h"
 #include "KSaveManager.h"
-#include "KSaveManagerListModel.h"
+#include "KSaveManagerView.h"
 #include "KSaveFile.h"
 #include "UI/KImageViewerDialog.h"
 #include "Profile/KProfile.h"
@@ -47,14 +47,14 @@ bool KSaveManagerWorkspace::OnCreateWorkspace()
 	const KSaveManagerConfig* profileConfig = KSaveManagerConfig::GetInstance();
 	m_ActiveFilters.clear();
 
-	KxStringVector tFilters;
+	KxStringVector filters;
 	for (const auto& v: profileConfig->GetFileFilters())
 	{
 		const wxString& value = v.GetValue();
 		if (m_FileFiltersOptions.GetAttributeBool(value, true))
 		{
 			m_ActiveFilters.insert(value);
-			tFilters.push_back(value);
+			filters.push_back(value);
 		}
 	}
 
@@ -64,7 +64,7 @@ bool KSaveManagerWorkspace::OnCreateWorkspace()
 
 void KSaveManagerWorkspace::CreateViewPane()
 {
-	m_ViewModel = new KSaveManagerListModel(m_Manager, this);
+	m_ViewModel = new KSaveManagerView(m_Manager, this);
 	m_ViewModel->Create(this);
 	m_ViewModel->SetDataVector();
 }
@@ -283,12 +283,12 @@ wxString KSaveManagerWorkspace::GetNameShort() const
 
 void KSaveManagerWorkspace::LoadData()
 {
-	KxStringVector tFilters;
-	for (const wxString& v: m_ActiveFilters)
+	KxStringVector filterList;
+	for (const wxString& filter: m_ActiveFilters)
 	{
-		tFilters.push_back(v);
+		filterList.push_back(filter);
 	}
-	m_ViewModel->SetDataVector(KSaveManagerConfig::GetInstance()->GetSavesFolder(), tFilters);
+	m_ViewModel->SetDataVector(KSaveManager::GetInstance()->GetSavesLocation(), filterList);
 }
 
 void KSaveManagerWorkspace::ProcessSelection(const KSaveFile* saveEntry)

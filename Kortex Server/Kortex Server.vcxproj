@@ -35,6 +35,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Kortex\Source\VFS\KVFSMultiMirror.cpp" />
     <ClCompile Include="..\Kortex\Source\VFS\KVFSService.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
@@ -64,6 +65,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Kortex\Source\VFS\KVFSMultiMirror.h" />
     <ClInclude Include="..\Kortex\Source\VFS\KVFSService.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>

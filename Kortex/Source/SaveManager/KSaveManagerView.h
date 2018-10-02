@@ -2,18 +2,19 @@
 #include "stdafx.h"
 #include "KDataViewListModel.h"
 #include "KSaveFile.h"
+#include "KBitmapSize.h"
 class KSaveManager;
 class KSaveManagerWorkspace;
 
-class KSaveManagerListModel: public KDataViewVectorListModel<KSMSaveFileArray, KDataViewListModel>
+class KSaveManagerView: public KDataViewVectorListModel<KSMSaveFileArray, KDataViewListModel>
 {
 	private:
 		KSaveManager* m_Manager = NULL;
 		KSaveManagerWorkspace* m_Workspace = NULL;
 		KSMSaveFileArray m_DataVector;
 
-		int ms_BitmapWidth;
-		int m_RowHeight;
+		KxDataViewColumn* m_BitmapColumn = NULL;
+		KBitmapSize m_BitmapSize;
 
 	private:
 		virtual void OnInitControl() override;
@@ -35,7 +36,7 @@ class KSaveManagerListModel: public KDataViewVectorListModel<KSMSaveFileArray, K
 		void OnCacheHint(KxDataViewEvent& event);
 
 	public:
-		KSaveManagerListModel(KSaveManager* manager, KSaveManagerWorkspace* workspace);
+		KSaveManagerView(KSaveManager* manager, KSaveManagerWorkspace* workspace);
 
 	public:
 		void SetDataVector();

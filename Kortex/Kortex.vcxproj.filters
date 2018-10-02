@@ -516,9 +516,6 @@
     <ClCompile Include="Source\ModManager\KModManagerDispatcher.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SaveManager\KSaveManagerListModel.cpp">
-      <Filter>Code\Source Files\SaveManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageManager\KPackageManagerListModel.cpp">
       <Filter>Code\Source Files\PackageManager</Filter>
     </ClCompile>
@@ -749,6 +746,24 @@
     </ClCompile>
     <ClCompile Include="Source\DownloadManager\KDownloadView.cpp">
       <Filter>Code\Source Files\DownloadManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\KSaveEvent.cpp">
+      <Filter>Code\Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\KPluginEvent.cpp">
+      <Filter>Code\Header Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KMandatoryModEntry.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveManagerView.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\KBitmapSize.cpp">
+      <Filter>Code\Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VFS\KVFSMultiMirror.cpp">
+      <Filter>Code\Source Files\VFS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1100,9 +1115,6 @@
     <ClInclude Include="Resource.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SaveManager\KSaveManagerListModel.h">
-      <Filter>Code\Header Files\SaveManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PackageManager\KPackageManagerListModel.h">
       <Filter>Code\Header Files\PackageManager</Filter>
     </ClInclude>
@@ -1369,6 +1381,27 @@
     </ClInclude>
     <ClInclude Include="Source\Network\KNetworkProviderLoversLabModInfo.h">
       <Filter>Code\Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\KSaveEvent.h">
+      <Filter>Code\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\KPluginEvent.h">
+      <Filter>Code\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KMandatoryModEntry.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\KModListEventInternal.h">
+      <Filter>Code\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveManagerView.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\KBitmapSize.h">
+      <Filter>Code\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VFS\KVFSMultiMirror.h">
+      <Filter>Code\Header Files\VFS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,8 @@
     <ClCompile Include="Source\Events\KEvent.cpp" />
     <ClCompile Include="Source\Events\KModEvent.cpp" />
     <ClCompile Include="Source\Events\KModListEvent.cpp" />
+    <ClCompile Include="Source\Events\KPluginEvent.cpp" />
+    <ClCompile Include="Source\Events\KSaveEvent.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardInfoModel.cpp" />
     <ClCompile Include="Source\IPC\KIPC.cpp" />
     <ClCompile Include="Source\IPC\KIPCClient.cpp" />
@@ -36,6 +38,7 @@
     <ClCompile Include="Source\KTranslation.cpp" />
     <ClCompile Include="Source\ModManager\KFileTreeNode.cpp" />
     <ClCompile Include="Source\ModManager\KFixedModEntry.cpp" />
+    <ClCompile Include="Source\ModManager\KMandatoryModEntry.cpp" />
     <ClCompile Include="Source\ModManager\KMirroredVirtualFolder.cpp" />
     <ClCompile Include="Source\ModManager\KModCollisionViewerModel.cpp" />
     <ClCompile Include="Source\ModManager\KModEntry.cpp" />
@@ -90,7 +93,8 @@
     <ClCompile Include="Source\ProgramManager\KProgramManager.cpp" />
     <ClCompile Include="Source\ProgramManager\KProgramManagerModel.cpp" />
     <ClCompile Include="Source\ProgramManager\KProgramManagerWorkspace.cpp" />
-    <ClCompile Include="Source\SaveManager\KSaveManagerListModel.cpp" />
+    <ClCompile Include="Source\SaveManager\KSaveManagerView.cpp" />
+    <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
     <ClCompile Include="Source\Utility\KINetFSHandler.cpp" />
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp" />
     <ClCompile Include="Source\Utility\KProgramOptions.cpp" />
@@ -173,6 +177,7 @@
     <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
     <ClCompile Include="Source\Utility\Themes\KThemeDefault.cpp" />
     <ClCompile Include="Source\VFS\KVFSConvergence.cpp" />
+    <ClCompile Include="Source\VFS\KVFSMultiMirror.cpp" />
     <ClCompile Include="Source\VFS\KVFSService.cpp" />
     <ClCompile Include="Source\VFS\KVFSMirror.cpp" />
     <ClCompile Include="Source\ConfigManager\KCMConfigEntry.cpp" />
@@ -213,6 +218,9 @@
     <ClInclude Include="Source\Events\KEvent.h" />
     <ClInclude Include="Source\Events\KModEvent.h" />
     <ClInclude Include="Source\Events\KModListEvent.h" />
+    <ClInclude Include="Source\Events\KModListEventInternal.h" />
+    <ClInclude Include="Source\Events\KPluginEvent.h" />
+    <ClInclude Include="Source\Events\KSaveEvent.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h" />
     <ClInclude Include="Source\IPC\KIPC.h" />
     <ClInclude Include="Source\IPC\KIPCClient.h" />
@@ -225,6 +233,7 @@
     <ClInclude Include="Source\KTranslation.h" />
     <ClInclude Include="Source\ModManager\KFileTreeNode.h" />
     <ClInclude Include="Source\ModManager\KFixedModEntry.h" />
+    <ClInclude Include="Source\ModManager\KMandatoryModEntry.h" />
     <ClInclude Include="Source\ModManager\KMirroredVirtualFolder.h" />
     <ClInclude Include="Source\ModManager\KModCollisionViewerModel.h" />
     <ClInclude Include="Source\ModManager\KModEntry.h" />
@@ -277,7 +286,8 @@
     <ClInclude Include="Source\ProgramManager\KProgramManager.h" />
     <ClInclude Include="Source\ProgramManager\KProgramManagerModel.h" />
     <ClInclude Include="Source\ProgramManager\KProgramManagerWorkspace.h" />
-    <ClInclude Include="Source\SaveManager\KSaveManagerListModel.h" />
+    <ClInclude Include="Source\SaveManager\KSaveManagerView.h" />
+    <ClInclude Include="Source\Utility\KBitmapSize.h" />
     <ClInclude Include="Source\Utility\KComparator.h" />
     <ClInclude Include="Source\Utility\KINetFSHandler.h" />
     <ClInclude Include="Source\Utility\KProgramOptions.h" />
@@ -386,6 +396,7 @@
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
     <ClInclude Include="Source\Utility\Themes\KThemeDefault.h" />
     <ClInclude Include="Source\VFS\KVFSConvergence.h" />
+    <ClInclude Include="Source\VFS\KVFSMultiMirror.h" />
     <ClInclude Include="Source\VFS\KVFSService.h" />
     <ClInclude Include="Source\VFS\KVFSMirror.h" />
     <ClInclude Include="Source\ConfigManager\KCMConfigEntry.h" />
@@ -449,7 +460,9 @@
     <Xml Include="Bin\Data\Profile Templates\Fallout4.xml" />
     <Xml Include="Bin\Data\Profile Templates\Fallout4VR.xml" />
     <Xml Include="Bin\Data\Profile Templates\FalloutNV.xml" />
-    <Xml Include="Bin\Data\Profile Templates\Morrowind.xml" />
+    <Xml Include="Bin\Data\Profile Templates\Morrowind.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Bin\Data\Profile Templates\Oblivion.xml" />
     <Xml Include="Bin\Data\Profile Templates\Sacred2.xml" />
     <Xml Include="Bin\Data\Profile Templates\Skyrim.xml">

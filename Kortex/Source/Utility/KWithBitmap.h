@@ -5,6 +5,7 @@ class KWithBitmap
 {
 	private:
 		wxBitmap m_Bitmap;
+		bool m_NoBitmap = false;
 
 	public:
 		KWithBitmap(const wxBitmap& bitmap = wxNullBitmap)
@@ -31,5 +32,18 @@ class KWithBitmap
 		void ResetBitmap()
 		{
 			m_Bitmap = wxNullBitmap;
+		}
+
+		bool IsNoBitmap() const
+		{
+			return m_NoBitmap;
+		}
+		void SetNoBitmap(bool value)
+		{
+			m_NoBitmap = value;
+		}
+		void ResetNoBitmap()
+		{
+			m_NoBitmap = false;
 		}
 };

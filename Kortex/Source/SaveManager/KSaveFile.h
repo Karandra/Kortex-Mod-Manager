@@ -1,9 +1,10 @@
 #pragma once
 #include "stdafx.h"
 #include "KLabeledValue.h"
+#include "KWithBitmap.h"
 #include <KxFramework/KxFileFinder.h>
 
-class KSaveFile: public wxClientData
+class KSaveFile//: public wxClientData
 {
 	private:
 		KxFileFinderItem m_FileInfo;
@@ -60,10 +61,13 @@ class KSaveFile: public wxClientData
 		{
 			return m_Thumb;
 		}
-		const wxBitmap& CreateThumbBitmap(int width, int height = -1);
 		bool HasThumbBitmap() const
 		{
 			return m_Thumb.IsOk();
+		}
+		void SetThumbBitmap(const wxBitmap& bitmap)
+		{
+			m_Thumb = bitmap;
 		}
 		void ResetThumbBitmap()
 		{

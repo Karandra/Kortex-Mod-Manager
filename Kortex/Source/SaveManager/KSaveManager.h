@@ -2,9 +2,10 @@
 #include "stdafx.h"
 #include "KPluggableManager.h"
 #include "Profile/KSaveManagerConfig.h"
+#include "KEvents.h"
 #include <KxFramework/KxSingleton.h>
-class KxXMLNode;
 class KWorkspace;
+class KxXMLNode;
 
 class KSaveManager: public KPluggableManager, public KxSingletonPtr<KSaveManager>
 {
@@ -12,6 +13,8 @@ class KSaveManager: public KPluggableManager, public KxSingletonPtr<KSaveManager
 
 	private:
 		KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+
+		void OnSavesLocationChanged(KModListEvent& event);
 
 	public:
 		KSaveManager(const KxXMLNode& configNode, const KSaveManagerConfig* profileSaveManager);
@@ -28,4 +31,6 @@ class KSaveManager: public KPluggableManager, public KxSingletonPtr<KSaveManager
 
 	public:
 		virtual KWorkspace* GetWorkspace() const override;
+
+		wxString GetSavesLocation() const;
 };

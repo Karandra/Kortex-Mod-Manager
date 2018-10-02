@@ -204,7 +204,7 @@ bool KIPCClient::ConvergenceVFS_SetDispatcherIndex()
 			{
 				if (node.GetMod().IsEnabled())
 				{
-					return m_Connection->SendToServer(KIPCRequestNS::AddConvergenceIndex(node.GetRelativeLocation(), node.GetFullPath()));
+					return m_Connection->SendToServer(KIPCRequestNS::AddConvergenceIndex(node.GetRelativePath(), node.GetFullPath()));
 				}
 				return true;
 			});

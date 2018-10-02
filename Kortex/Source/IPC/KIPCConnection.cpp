@@ -51,6 +51,11 @@ bool KIPCConnection::OnPoke(const wxString& topic, const wxString& item, const v
 				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::CreateMirrorVFS>(data));
 				break;
 			}
+			case TypeID::CreateMultiMirrorVFS:
+			{
+				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::CreateMultiMirrorVFS>(data));
+				break;
+			}
 			case TypeID::ClearMirrorVFSList:
 			{
 				GetServer()->OnAcceptRequest(ReceiveRequest<KIPCRequestNS::ClearMirrorVFSList>(data));

@@ -147,6 +147,14 @@ bool KIPCClient::CreateVFS_Mirror(const wxString& source, const wxString& target
 	}
 	return false;
 }
+bool KIPCClient::CreateVFS_MultiMirror(const KxStringVector& sources, const wxString& target)
+{
+	if (m_Connection)
+	{
+		return m_Connection->SendToServer(KIPCRequestNS::CreateMultiMirrorVFS(sources, target));
+	}
+	return false;
+}
 bool KIPCClient::MirrorVFS_ClearList()
 {
 	if (m_Connection)
@@ -196,7 +204,7 @@ bool KIPCClient::ConvergenceVFS_SetDispatcherIndex()
 			{
 				if (node.GetMod().IsEnabled())
 				{
-					return m_Connection->SendToServer(KIPCRequestNS::AddConvergenceIndex(node.GetRelativePath(), node.GetFullPath()));
+					return m_Connection->SendToServer(KIPCRequestNS::AddConvergenceIndex(node.GetRelativeLocation(), node.GetFullPath()));
 				}
 				return true;
 			});

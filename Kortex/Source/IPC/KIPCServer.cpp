@@ -4,6 +4,7 @@
 #include "KApp.h"
 #include "VFS/KVFSService.h"
 #include "VFS/KVFSMirror.h"
+#include "VFS/KVFSMultiMirror.h"
 #include "VFS/KVFSConvergence.h"
 #include <KxFramework/KxFile.h>
 
@@ -113,6 +114,20 @@ void KIPCServer::OnAcceptRequest(const KIPCRequestNS::AddConvergenceIndex& confi
 void KIPCServer::OnAcceptRequest(const KIPCRequestNS::CreateMirrorVFS& config)
 {
 	m_MirrorVFSList.emplace_back(std::make_unique<KVFSMirror>(GetServiceVFS(), config.GetTarget(), config.GetSource()));
+}
+void KIPCServer::OnAcceptRequest(const KIPCRequestNS::CreateMultiMirrorVFS& config)
+{
+	// Sources never empty and there is always more than one item
+	KxStringVector sources = config.GetSources();
+	KVFSMultiMirror* vfs = new KVFSMultiMirror(GetServiceVFS(), config.GetTarget(), sources.front());
+
+	// Add additional sources
+	for (size_t i = 1; i < sources.size(); i++)
+	{
+		vfs->AddVirtualFolder(sources[i]);
+	}
+
+	m_MirrorVFSList.emplace_back(vfs);
 }
 void KIPCServer::OnAcceptRequest(const KIPCRequestNS::ClearMirrorVFSList& config)
 {

@@ -1,16 +1,16 @@
 #include "stdafx.h"
-#include "KVFSConvergence.h"
+#include "KVFSMultiMirror.h"
 #include "KVFSService.h"
 
-KVFSConvergence::KVFSConvergence(KVFSService* service, const wxString& mountPoint, const wxString& writeTarget)
-	:KxVFSConvergence(service->GetServiceImpl(), mountPoint, writeTarget)
+KVFSMultiMirror::KVFSMultiMirror(KVFSService* service, const wxString& mountPoint, const wxString& source)
+	:KxVFSMultiMirror(service->GetServiceImpl(), mountPoint, source)
 {
 }
-KVFSConvergence::~KVFSConvergence()
+KVFSMultiMirror::~KVFSMultiMirror()
 {
 }
 
-NTSTATUS KVFSConvergence::OnMount(EvtMounted& eventInfo)
+NTSTATUS KVFSMultiMirror::OnMount(EvtMounted& eventInfo)
 {
 	NTSTATUS statusCode = KxVFSConvergence::OnMount(eventInfo);
 
@@ -19,7 +19,7 @@ NTSTATUS KVFSConvergence::OnMount(EvtMounted& eventInfo)
 
 	return statusCode;
 }
-NTSTATUS KVFSConvergence::OnUnMount(EvtUnMounted& eventInfo)
+NTSTATUS KVFSMultiMirror::OnUnMount(EvtUnMounted& eventInfo)
 {
 	NTSTATUS statusCode = KxVFSConvergence::OnUnMount(eventInfo);
 

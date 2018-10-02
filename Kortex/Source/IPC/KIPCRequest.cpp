@@ -14,6 +14,7 @@ namespace KIPCRequestNS
 		wxS("VFSStateChanged"),
 
 		wxS("CreateMirrorVFS"),
+		wxS("CreateMultiMirrorVFS"),
 		wxS("ClearMirrorVFSList"),
 
 		wxS("CreateConvergenceVFS"),

@@ -14,13 +14,17 @@ NTSTATUS KVFSMirror::OnMount(EvtMounted& eventInfo)
 {
 	NTSTATUS statusCode = KxVFSMirror::OnMount(eventInfo);
 
-	KxBroadcastEvent(KEVT_VFS_MOUNTED).QueueClone();
+	KxBroadcastEvent* event = new KxBroadcastEvent(KEVT_VFS_MOUNTED);
+	event->Queue();
+
 	return statusCode;
 }
 NTSTATUS KVFSMirror::OnUnMount(EvtUnMounted& eventInfo)
 {
 	NTSTATUS statusCode = KxVFSMirror::OnUnMount(eventInfo);
 
-	KxBroadcastEvent(KEVT_VFS_UNMOUNTED).QueueClone();
+	KxBroadcastEvent* event = new KxBroadcastEvent(KEVT_VFS_UNMOUNTED);
+	event->Queue();
+
 	return statusCode;
 }

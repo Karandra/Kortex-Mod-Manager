@@ -22,7 +22,7 @@ class KIPCServer: public wxServer, public KxSingleton<KIPCServer>
 		bool m_ManualDisablingInProgress = false;
 		std::unique_ptr<KVFSService> m_Service;
 		std::unique_ptr<KVFSConvergence> m_Convergence;
-		std::vector<std::unique_ptr<KVFSMirror>> m_MirrorVFSList;
+		std::vector<std::unique_ptr<KxVFSMirror>> m_MirrorVFSList;
 
 		std::vector<std::pair<wxString, wxString>> m_ConvergenceIndex;
 
@@ -43,6 +43,7 @@ class KIPCServer: public wxServer, public KxSingleton<KIPCServer>
 		void OnAcceptRequest(const KIPCRequestNS::AddConvergenceIndex& config);
 
 		void OnAcceptRequest(const KIPCRequestNS::CreateMirrorVFS& config);
+		void OnAcceptRequest(const KIPCRequestNS::CreateMultiMirrorVFS& config);
 		void OnAcceptRequest(const KIPCRequestNS::ClearMirrorVFSList& config);
 
 		void OnAcceptRequest(const KIPCRequestNS::ToggleVFS& config);

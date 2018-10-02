@@ -5,6 +5,7 @@
 #include "VFS/KVFSMirror.h"
 #include "VFS/KVFSConvergence.h"
 #include <KxFramework/KxSharedMemory.h>
+#include <array>
 class KIPCConnection;
 class KIPCClient;
 class KIPCServer;
@@ -25,6 +26,10 @@ namespace KIPCRequestNS
 					m_Length = wcslen(s);
 					wcsncpy_s(m_Buffer, s, m_Length);
 				}
+			}
+			BasicStaticString(const wxString& s)
+				:BasicStaticString(s.wc_str())
+			{
 			}
 
 		public:
@@ -57,6 +62,10 @@ namespace KIPCRequestNS
 			{
 				return m_Length;
 			}
+			bool empry() const
+			{
+				return m_Length == 0;
+			}
 
 			bool operator==(const wxString& other) const
 			{
@@ -86,6 +95,7 @@ namespace KIPCRequestNS
 		VFSStateChanged,
 
 		CreateMirrorVFS,
+		CreateMultiMirrorVFS,
 		ClearMirrorVFSList,
 
 		CreateConvergenceVFS,
@@ -235,6 +245,41 @@ namespace KIPCRequestNS
 			wxString GetSource() const
 			{
 				return m_Source;
+			}
+			wxString GetTarget() const
+			{
+				return m_Target;
+			}
+	};
+	class CreateMultiMirrorVFS: public BaseRequestType<TypeID::CreateMultiMirrorVFS>
+	{
+		private:
+			std::array<StaticString, 8> m_Sources;
+			StaticString m_Target;
+
+		public:
+			CreateMultiMirrorVFS(const KxStringVector& sources, const wxString& target)
+				:m_Target(target)
+			{
+				m_Sources.fill(StaticString());
+				for (size_t i = 0; i < std::min(sources.size(), m_Sources.size()); i++)
+				{
+					m_Sources[i] = sources[i];
+				}
+			}
+
+		public:
+			KxStringVector GetSources() const
+			{
+				KxStringVector sources;
+				for (const StaticString& s: m_Sources)
+				{
+					if (!s.empry())
+					{
+						sources.push_back(s);
+					}
+				}
+				return sources;
 			}
 			wxString GetTarget() const
 			{

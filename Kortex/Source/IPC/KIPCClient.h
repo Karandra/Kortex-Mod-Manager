@@ -39,6 +39,7 @@ class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 		bool UninstallVFSService();
 
 		bool CreateVFS_Mirror(const wxString& source, const wxString& target);
+		bool CreateVFS_MultiMirror(const KxStringVector& sources, const wxString& target);
 		bool MirrorVFS_ClearList();
 
 		bool CreateVFS_Convergence(const wxString& source, const wxString& writeTarget, const KxStringVector& virtualFolders, bool canDeleteInVirtualFolder);

@@ -6,7 +6,6 @@
 #include "Themes/KThemeDefault.h"
 #include "Themes/KThemeVisualStudio.h"
 #include "Profile/KProfile.h"
-#include "Events/KLogEvent.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "UI/KProfileSelectionDialog.h"
@@ -14,12 +13,14 @@
 #include "ConfigManager/KConfigManager.h"
 #include "ConfigManager/KCMConfigEntry.h"
 #include "VFS/KVFSService.h"
+#include "PackageManager/KPackageManager.h"
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModWorkspace.h"
 #include "DownloadManager/KDownloadManager.h"
 #include "Archive/KArchive.h"
 #include "IPC/KIPCClient.h"
+#include "KEvents.h"
 #include "KINetFSHandler.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxProgressDialog.h>
@@ -175,8 +176,7 @@ bool KApp::OnInit()
 		wxLogInfo("Begin initializing core systems");
 		InitSettings();
 		InitVFS();
-		InitProgramManager();
-		KArchive::Init();
+		InitGlobalManagers();
 		wxLogInfo("Core systems initialized");
 
 		// All required managers initialized, can create main window now
@@ -217,7 +217,7 @@ int KApp::OnExit()
 	UnInitVFS();
 
 	// Destroy other managers
-	delete m_ProgramManager;
+	UnInitGlobalManagers();
 	delete m_CurrentProfile;
 	KThemeManager::Cleanup();
 	KArchive::UnInit();
@@ -541,8 +541,7 @@ void KApp::InitVFS()
 		m_VFSService = new KVFSService();
 		wxLogInfo("Client: Driver service init %s.", m_VFSService->IsOK() ? "success" : "failed");
 
-		wxLogInfo("Client: Initializing KModManager.");
-		m_ModManager = new KModManager(NULL);
+		
 	}
 	else
 	{
@@ -558,13 +557,36 @@ void KApp::UnInitVFS()
 	wxLogInfo("Uninitializing VFS services");
 	delete m_VFSServiceClient;
 	delete m_VFSService;
-	delete m_ModManager;
 }
-void KApp::InitProgramManager()
+void KApp::InitGlobalManagers()
 {
+	wxLogInfo("Initializing KArchive");
+	KArchive::Init();
+
+	wxLogInfo("Initializing KModManager");
+	m_ModManager = new KModManager(NULL);
+
+	wxLogInfo("Initializing KPackageManager");
+	m_PackageManager = new KPackageManager();
+	
 	wxLogInfo("Initializing KProgramManager");
 	m_ProgramManager = new KProgramManager();
+
+	// Complete initialization
+	m_ModManager->OnInit();
 }
+void KApp::UnInitGlobalManagers()
+{
+	wxLogInfo("UnInitializing KModManager.");
+	delete m_ModManager;
+
+	wxLogInfo("UnInitializing KPackageManager");
+	delete m_PackageManager;
+
+	wxLogInfo("UnInitializing KProgramManager");
+	delete m_ProgramManager;
+}
+
 void KApp::AddDownloadToAlreadyRunningInstance(const wxString& link)
 {
 	KxProcess process(KxLibrary(NULL).GetFileName());

@@ -3,6 +3,7 @@
 #include "KModEntry.h"
 #include "Profile/KProfile.h"
 #include "PackageManager/KPackageManager.h"
+#include "KComparator.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFileStream.h>
@@ -31,7 +32,7 @@ void KModTagsManager::LoadTagsFromFile(const wxString& filePath)
 	KxFileStream stream(filePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	KxXMLDocument xml(stream);
 
-	bool hasSE = KPackageManager::Get().HasScriptExtender();
+	bool hasSE = KPackageManager::GetInstance()->HasScriptExtender();
 	for (KxXMLNode node = xml.GetFirstChildElement("Tags").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
 		bool requiresSE = node.GetAttributeBool("RequiresSE");
@@ -52,14 +53,24 @@ void KModTagsManager::LoadTagsFromFile(const wxString& filePath)
 		m_Tags.emplace_back(KModTag(id, V(label), isSuccess));
 	}
 }
-
-KModTagsManager::KModTagsManager()
+void KModTagsManager::OnInit()
 {
 	LoadUserTags();
 	if (IsTagListEmpty())
 	{
 		LoadDefaultTags();
 	}
+	
+	// Remove duplicates
+	auto it = std::unique(m_Tags.begin(), m_Tags.end(), [](const KModTag& tag1, const KModTag& tag2)
+	{
+		return KComparator::KEqual(tag1.GetValue(), tag2.GetValue(), false);
+	});
+	m_Tags.erase(it, m_Tags.end());
+}
+
+KModTagsManager::KModTagsManager()
+{
 }
 KModTagsManager::~KModTagsManager()
 {

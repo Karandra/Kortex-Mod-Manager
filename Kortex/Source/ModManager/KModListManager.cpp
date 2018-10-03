@@ -207,20 +207,31 @@ void KModListManager::OnModListSelected(KModListEvent& event)
 }
 void KModListManager::OnInit()
 {
+	SetupGlobalFolders();
+	LoadLists();
+
 	KModListEvent(KEVT_MODLIST_INT_SELECTED, GetCurrentList()).Send();
 }
 
 KModListManager::KModListManager()
 	:m_Options(&KModManager::Get(), "ListManager")
 {
-	// Create global folders
-	SetupGlobalFolders();
-
-	// Events
 	KEvent::Bind(KEVT_MODLIST_INT_SELECTED, &KModListManager::OnModListSelected, this);
 }
 KModListManager::~KModListManager()
 {
+}
+
+const KModList& KModListManager::GetCurrentList() const
+{
+	return const_cast<KModListManager*>(this)->GetCurrentList();
+}
+KModList& KModListManager::GetCurrentList()
+{
+	KModList* modList = FindModList(m_CurrentListID);
+
+	// Default list must always exist
+	return modList ? *modList : *FindModList(GetDefaultListID());
 }
 
 bool KModListManager::SetCurrentListID(const wxString& id)

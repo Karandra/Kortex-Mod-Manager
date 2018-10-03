@@ -217,6 +217,13 @@ void KModManager::ReportNonEmptyMountPoint(const wxString& folderPath)
 	dialog.ShowModal();
 }
 
+void KModManager::OnInit()
+{
+	m_TagManager.OnInit();
+	m_ModListManager.OnInit();
+	Load();
+}
+
 void KModManager::OnModFilesChanged(KModEvent& event)
 {
 	if (event.HasMod())
@@ -302,10 +309,6 @@ KModManager::KModManager(KWorkspace* workspace)
 
 	KEvent::Bind(KEVT_MODLIST_SELECTED, &KModManager::OnModListSelected, this);
 	KEvent::Bind(KEVT_MODLIST_CHANGED, &KModManager::OnModListChanged, this);
-	
-	// Load data
-	Load();
-	m_ModListManager.OnInit();
 }
 void KModManager::Clear()
 {

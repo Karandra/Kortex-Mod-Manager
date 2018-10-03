@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KLabeledValue.h"
+class KModManager;
 class KModEntry;
 class KProfile;
 
@@ -10,7 +11,7 @@ class KModTag: public KLabeledValue
 		bool m_IsSystemTag = false;
 
 	public:
-		KModTag(const wxString& value, const wxString& label = wxEmptyString, bool bSystemTag = false);
+		KModTag(const wxString& value, const wxString& label = wxEmptyString, bool isSystemTag = false);
 		~KModTag();
 
 	public:
@@ -24,6 +25,8 @@ typedef std::vector<KModTag> KModTagArray;
 //////////////////////////////////////////////////////////////////////////
 class KModTagsManager
 {
+	friend class KModManager;
+
 	public:
 		static wxString GetDefaultTagsFile();
 		static wxString GetUserTagsFile(const wxString& templateID, const wxString& configID);
@@ -33,6 +36,7 @@ class KModTagsManager
 
 	private:
 		void LoadTagsFromFile(const wxString& filePath);
+		void OnInit();
 
 	public:
 		KModTagsManager();

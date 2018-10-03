@@ -13,6 +13,7 @@ class KProfile;
 class KLogEvent;
 class KMainWindow;
 class KModManager;
+class KPackageManager;
 class KProgramManager;
 class KSettingsWindowManager;
 class KVFSService;
@@ -41,6 +42,7 @@ class KApp: public KxApp<wxApp, KApp>
 		KDynamicVariablesTable m_Variables;
 		KProfile* m_CurrentProfile = NULL;
 		KMainWindow* m_MainWindow = NULL;
+		KPackageManager* m_PackageManager = NULL;
 		KProgramManager* m_ProgramManager = NULL;
 		KModManager* m_ModManager = NULL;
 		mutable KSettingsWindowManager* m_SettingsManager = NULL;
@@ -150,7 +152,8 @@ class KApp: public KxApp<wxApp, KApp>
 
 		void InitVFS();
 		void UnInitVFS();
-		void InitProgramManager();
+		void InitGlobalManagers();
+		void UnInitGlobalManagers();
 		void AddDownloadToAlreadyRunningInstance(const wxString& link);
 
 	private:

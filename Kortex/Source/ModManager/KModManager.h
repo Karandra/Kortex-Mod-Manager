@@ -12,6 +12,7 @@
 #include "KEvents.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
+class KApp;
 class KVFSService;
 class KVFSConvergence;
 class KVFSMirror;
@@ -41,6 +42,7 @@ enum KModManagerModsMoveType
 class KModManager: public KManager, public KxSingletonPtr<KModManager>
 {
 	friend class KIPCClient;
+	friend class KApp;
 
 	public:
 		static KModManager& Get()
@@ -83,8 +85,8 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		KFixedModEntry m_ModEntry_WriteTarget;
 		
 		KModTagsManager m_TagManager;
-		KModManagerDispatcher m_Dispatcher;
 		KModListManager m_ModListManager;
+		KModManagerDispatcher m_Dispatcher;
 		bool m_IsMounted = false;
 		KxProgressDialog* m_MountStatusDialog = NULL;
 
@@ -106,6 +108,8 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		void ReportNonEmptyMountPoint(const wxString& folderPath);
 
 	private:
+		void OnInit();
+
 		void OnModFilesChanged(KModEvent& event);
 		void OnModToggled(KModEvent& event);
 		void OnModsReordered(KModEvent& event);

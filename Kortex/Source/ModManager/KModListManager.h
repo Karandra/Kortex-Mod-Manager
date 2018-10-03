@@ -232,17 +232,8 @@ class KModListManager: public KxSingletonPtr<KModListManager>
 			return m_Lists;
 		}
 		
-		const KModList& GetCurrentList() const
-		{
-			return const_cast<KModListManager*>(this)->GetCurrentList();
-		}
-		KModList& GetCurrentList()
-		{
-			KModList* pModList = FindModList(m_CurrentListID);
-
-			// Default list must always exist
-			return pModList ? *pModList : *FindModList(GetDefaultListID());
-		}
+		const KModList& GetCurrentList() const;
+		KModList& GetCurrentList();
 		
 		size_t GetListsCount() const
 		{

@@ -97,10 +97,10 @@ class KProfile
 		void InitVariables();
 		wxString LoadRegistryVariable(const KxXMLNode& node);
 		void DetectArchitecture();
-		template<class T> T* InitModuleConfig(const wxString& name, bool bAlwaysEnabled = false)
+		template<class T> T* InitModuleConfig(const wxString& name, bool isAlwaysEnabled = false)
 		{
-			KxXMLNode node = m_ProfileXML.QueryElement("Profile/" + name);
-			if (bAlwaysEnabled || (node.IsOK() && (node.GetAttributeBool("Enabled") || !node.HasAttribute("Enabled"))))
+			const KxXMLNode node = m_ProfileXML.QueryElement("Profile/" + name);
+			if (node.IsOK() && (isAlwaysEnabled || node.GetAttributeBool("Enabled", true)))
 			{
 				return new T(*this, node);
 			}

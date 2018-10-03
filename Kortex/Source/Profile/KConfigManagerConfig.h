@@ -98,7 +98,7 @@ class KConfigManagerConfig: public KxSingletonPtr<KConfigManagerConfig>
 		std::vector<KConfigManagerConfigEntry> m_Entries;
 
 	public:
-		KConfigManagerConfig(KProfile& profile, KxXMLNode& node);
+		KConfigManagerConfig(KProfile& profile, const KxXMLNode& node);
 
 	public:
 		bool IsENBEnabled() const

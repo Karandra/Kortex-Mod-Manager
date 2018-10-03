@@ -13,7 +13,7 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KSaveManagerConfig::KSaveManagerConfig(KProfile& profile, KxXMLNode& node)
+KSaveManagerConfig::KSaveManagerConfig(KProfile& profile, const KxXMLNode& node)
 	:m_SaveFileFormat(node.GetAttribute("SaveFileFormat"))
 {
 	m_RelativeLocation = V(node.GetFirstChildElement("RelativeLocation").GetValue());

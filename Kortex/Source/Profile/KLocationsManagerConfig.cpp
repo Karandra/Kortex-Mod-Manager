@@ -7,7 +7,7 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 
-KLocationsManagerConfig::KLocationsManagerConfig(KProfile& profile, KxXMLNode& node)
+KLocationsManagerConfig::KLocationsManagerConfig(KProfile& profile, const KxXMLNode& node)
 {
 	// Set predefined locations
 	m_Locations.emplace_back(KLabeledValue("$(AppSettings)", T("OpenLocation.AppSettings")));
@@ -19,6 +19,7 @@ KLocationsManagerConfig::KLocationsManagerConfig(KProfile& profile, KxXMLNode& n
 	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_PROFILE_ROOT), T("OpenLocation.CurrentProfileRoot")));
 	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_PROFILES_ROOT), T("OpenLocation.ProfilesRoot")));
 	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_MODS_ROOT), T("OpenLocation.ModsRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_SAVES_ROOT_LOCAL), T("OpenLocation.Saves")));
 
 	if (node.HasChildren())
 	{
@@ -40,6 +41,16 @@ KLocationsManagerConfig::~KLocationsManagerConfig()
 {
 }
 
+KLabeledValueArray KLocationsManagerConfig::GetLocations() const
+{
+	KLabeledValueArray locations = m_Locations;
+	for (KLabeledValue& value: locations)
+	{
+		value.SetLabel(V(value.GetLabelRaw()));
+		value.SetValue(V(value.GetValue()));
+	}
+	return locations;
+}
 bool KLocationsManagerConfig::OpenLocation(const KLabeledValue& entry) const
 {
 	// Create the folder, shouldn't be harmful.

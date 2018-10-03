@@ -14,7 +14,7 @@ class KNetworkConfig: public KxSingletonPtr<KNetworkConfig>
 		int64_t m_SteamID = -1;
 
 	public:
-		KNetworkConfig(KProfile& profile, KxXMLNode& node);
+		KNetworkConfig(KProfile& profile, const KxXMLNode& node);
 		~KNetworkConfig();
 
 	public:

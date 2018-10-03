@@ -4,11 +4,9 @@
 #include "PackageManager/KPackageManager.h"
 #include "KApp.h"
 
-KPackageManagerConfig::KPackageManagerConfig(KProfile& profile, KxXMLNode& node)
+KPackageManagerConfig::KPackageManagerConfig(KProfile& profile, const KxXMLNode& node)
 {
-	m_Manager = new KPackageManager(node);
 }
 KPackageManagerConfig::~KPackageManagerConfig()
 {
-	delete m_Manager;
 }

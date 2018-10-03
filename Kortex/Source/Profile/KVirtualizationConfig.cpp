@@ -5,7 +5,7 @@
 #include "KApp.h"
 
 //////////////////////////////////////////////////////////////////////////
-KVirtualizationMirroredEntry::KVirtualizationMirroredEntry(KxXMLNode& parentNode)
+KVirtualizationMirroredEntry::KVirtualizationMirroredEntry(const KxXMLNode& parentNode)
 {
 	for (KxXMLNode node = parentNode.GetFirstChildElement("Sources").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
@@ -34,7 +34,7 @@ wxString KVirtualizationMirroredEntry::GetTarget() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KVirtualizationMandatoryEntry::KVirtualizationMandatoryEntry(KxXMLNode& parentNode)
+KVirtualizationMandatoryEntry::KVirtualizationMandatoryEntry(const KxXMLNode& parentNode)
 {
 	// Folder path will not be expanded here
 	m_Source = parentNode.GetValue();
@@ -51,7 +51,7 @@ wxString KVirtualizationMandatoryEntry::GetName() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KVirtualizationConfig::KVirtualizationConfig(KProfile& profile, KxXMLNode& node)
+KVirtualizationConfig::KVirtualizationConfig(KProfile& profile, const KxXMLNode& node)
 {
 	auto ReadEntries = [](auto& array, const KxXMLNode& rootNode, const wxString& name)
 	{

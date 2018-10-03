@@ -13,7 +13,7 @@ class KVirtualizationMirroredEntry
 		wxString m_Target;
 
 	public:
-		KVirtualizationMirroredEntry(KxXMLNode& parentNode);
+		KVirtualizationMirroredEntry(const KxXMLNode& parentNode);
 
 	public:
 		bool IsOK() const
@@ -40,7 +40,7 @@ class KVirtualizationMandatoryEntry
 		wxString m_Name;
 
 	public:
-		KVirtualizationMandatoryEntry(KxXMLNode& parentNode);
+		KVirtualizationMandatoryEntry(const KxXMLNode& parentNode);
 
 	public:
 		bool IsOK() const
@@ -60,7 +60,7 @@ class KVirtualizationConfig: public KxSingletonPtr<KVirtualizationConfig>
 		KVirtualizationMandatoryEntry::Vector m_MandatoryVirtualFolders;
 
 	public:
-		KVirtualizationConfig(KProfile& profile, KxXMLNode& node);
+		KVirtualizationConfig(KProfile& profile, const KxXMLNode& node);
 
 	public:
 		const KVirtualizationMirroredEntry::Vector& GetMirroredLocations() const

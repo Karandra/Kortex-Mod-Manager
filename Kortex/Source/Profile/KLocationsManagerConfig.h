@@ -10,13 +10,10 @@ class KLocationsManagerConfig: public KxSingletonPtr<KLocationsManagerConfig>
 		KLabeledValueArray m_Locations;
 
 	public:
-		KLocationsManagerConfig(KProfile& profile, KxXMLNode& node);
+		KLocationsManagerConfig(KProfile& profile, const KxXMLNode& node);
 		~KLocationsManagerConfig();
 
 	public:
-		const KLabeledValueArray& GetLocations() const
-		{
-			return m_Locations;
-		}
+		KLabeledValueArray GetLocations() const;
 		bool OpenLocation(const KLabeledValue& entry) const;
 };

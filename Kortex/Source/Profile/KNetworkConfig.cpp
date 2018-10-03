@@ -3,7 +3,7 @@
 #include "Network/KNetwork.h"
 #include "KApp.h"
 
-KNetworkConfig::KNetworkConfig(KProfile& profile, KxXMLNode& node)
+KNetworkConfig::KNetworkConfig(KProfile& profile, const KxXMLNode& node)
 {
 	m_Network = new KNetwork();
 

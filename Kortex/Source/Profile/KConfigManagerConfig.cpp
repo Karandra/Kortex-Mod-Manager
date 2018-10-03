@@ -36,10 +36,9 @@ KConfigManagerConfigEntry::KConfigManagerConfigEntry(KPGCFileID id, KPGCFormat f
 }
 
 //////////////////////////////////////////////////////////////////////////
-KConfigManagerConfig::KConfigManagerConfig(KProfile& profile, KxXMLNode& node)
+KConfigManagerConfig::KConfigManagerConfig(KProfile& profile, const KxXMLNode& node)
+	:m_EnableENB(node.GetAttributeBool("EnableENB"))
 {
-	m_EnableENB = node.GetAttributeBool("ENB");
-
 	for (KxXMLNode entryNode = node.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 	{
 		m_Entries.push_back(KConfigManagerConfigEntry(entryNode));
@@ -50,7 +49,6 @@ KConfigManagerConfig::KConfigManagerConfig(KProfile& profile, KxXMLNode& node)
 		m_Entries.push_back(KConfigManagerConfigEntry(KPGC_ID_ENB_LOCAL, KPGC_FORMAT_INI, KCM_DETECTOR_DATA_ANALYSIS, "ENBLocal.ini"));
 		m_Entries.push_back(KConfigManagerConfigEntry(KPGC_ID_ENB_SERIES, KPGC_FORMAT_INI, KCM_DETECTOR_DATA_ANALYSIS, "ENBSeries.ini"));
 	}
-
 	m_Entries.push_back(KConfigManagerConfigEntry(KPGC_ID_APP, KPGC_FORMAT_INI, KCM_DETECTOR_HUNGARIAN_NOTATION, KApp::Get().GetUserSettingsFile()));
 	m_Entries.push_back(KConfigManagerConfigEntry(KPGC_ID_CURRENT_PROFILE, KPGC_FORMAT_INI, KCM_DETECTOR_HUNGARIAN_NOTATION, profile.GetConfigFilePath()));
 }

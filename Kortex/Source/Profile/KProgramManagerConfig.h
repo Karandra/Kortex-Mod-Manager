@@ -21,7 +21,7 @@ class KProgramManagerConfig: public KxSingletonPtr<KProgramManagerConfig>
 		KRMProgramEntryArray m_EntriesPost;
 
 	public:
-		KProgramManagerConfig(KProfile& profile, KxXMLNode& node);
+		KProgramManagerConfig(KProfile& profile, const KxXMLNode& node);
 
 	public:
 		size_t GetEntriesCount(ProgramType type) const;

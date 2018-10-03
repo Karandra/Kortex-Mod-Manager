@@ -8,11 +8,10 @@ class KScreenshotsGalleryConfig: public KxSingletonPtr<KScreenshotsGalleryConfig
 {
 	private:
 		KScreenshotsGalleryManager* m_Manager = NULL;
-		bool m_RequiresVFS = true;
 		KxStringVector m_Locations;
 
 	public:
-		KScreenshotsGalleryConfig(KProfile& profile, KxXMLNode& node);
+		KScreenshotsGalleryConfig(KProfile& profile, const KxXMLNode& node);
 		~KScreenshotsGalleryConfig();
 
 	public:
@@ -20,14 +19,7 @@ class KScreenshotsGalleryConfig: public KxSingletonPtr<KScreenshotsGalleryConfig
 		{
 			return m_Manager != NULL;
 		}
-		KScreenshotsGalleryManager* GetManager() const
-		{
-			return m_Manager;
-		}
-		bool IsRequiresVFS() const
-		{
-			return m_RequiresVFS;
-		}
+
 		const KxStringVector& GetLocations() const
 		{
 			return m_Locations;

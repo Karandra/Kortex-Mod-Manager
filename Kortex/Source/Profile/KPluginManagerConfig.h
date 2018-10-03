@@ -17,7 +17,7 @@ class KPluginManagerConfigStdContentEntry
 		wxString m_Logo;
 
 	public:
-		KPluginManagerConfigStdContentEntry(KxXMLNode& node);
+		KPluginManagerConfigStdContentEntry(const KxXMLNode& node);
 		~KPluginManagerConfigStdContentEntry();
 
 	public:
@@ -39,7 +39,7 @@ class KPluginManagerConfigSortingToolEntry
 		wxString m_Command;
 
 	public:
-		KPluginManagerConfigSortingToolEntry(KxXMLNode& node);
+		KPluginManagerConfigSortingToolEntry(const KxXMLNode& node);
 		~KPluginManagerConfigSortingToolEntry();
 
 	public:
@@ -97,7 +97,7 @@ class KPluginManagerConfig: public KxSingletonPtr<KPluginManagerConfig>
 		std::unique_ptr<LootAPI> m_LootAPI;
 
 	public:
-		KPluginManagerConfig(KProfile& profile, KxXMLNode& node);
+		KPluginManagerConfig(KProfile& profile, const KxXMLNode& node);
 		~KPluginManagerConfig();
 
 	public:

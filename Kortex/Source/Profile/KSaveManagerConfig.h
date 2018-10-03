@@ -18,7 +18,7 @@ class KSaveManagerConfig: public KxSingletonPtr<KSaveManagerConfig>
 		wxString m_SecondarySaveExt;
 
 	public:
-		KSaveManagerConfig(KProfile& profile, KxXMLNode& node);
+		KSaveManagerConfig(KProfile& profile, const KxXMLNode& node);
 		~KSaveManagerConfig();
 
 	public:

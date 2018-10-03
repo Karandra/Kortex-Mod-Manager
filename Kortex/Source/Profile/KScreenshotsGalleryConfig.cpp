@@ -4,14 +4,12 @@
 #include "KProfile.h"
 #include "KApp.h"
 
-KScreenshotsGalleryConfig::KScreenshotsGalleryConfig(KProfile& profile, KxXMLNode& node)
+KScreenshotsGalleryConfig::KScreenshotsGalleryConfig(KProfile& profile, const KxXMLNode& node)
 {
-	m_RequiresVFS = node.GetAttributeBool("RequiresVFS");
 	for (KxXMLNode entryNode = node.GetFirstChildElement("Locations").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 	{
 		m_Locations.emplace_back(V(entryNode.GetValue()));
 	}
-
 	m_Manager = new KScreenshotsGalleryManager();
 }
 KScreenshotsGalleryConfig::~KScreenshotsGalleryConfig()

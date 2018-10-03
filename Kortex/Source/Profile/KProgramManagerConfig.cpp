@@ -4,7 +4,7 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KProgramManagerConfig::KProgramManagerConfig(KProfile& profile, KxXMLNode& node)
+KProgramManagerConfig::KProgramManagerConfig(KProfile& profile, const KxXMLNode& node)
 {
 	auto LoadArray = [&node](KRMProgramEntryArray& array, const char* name)
 	{

@@ -7,7 +7,7 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KPluginManagerConfigStdContentEntry::KPluginManagerConfigStdContentEntry(KxXMLNode& node)
+KPluginManagerConfigStdContentEntry::KPluginManagerConfigStdContentEntry(const KxXMLNode& node)
 {
 	m_ID = node.GetAttribute("ID");
 	m_Name = node.GetAttribute("Name");
@@ -36,7 +36,7 @@ wxString KPluginManagerConfigStdContentEntry::GetLogoFullPath() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KPluginManagerConfigSortingToolEntry::KPluginManagerConfigSortingToolEntry(KxXMLNode& node)
+KPluginManagerConfigSortingToolEntry::KPluginManagerConfigSortingToolEntry(const KxXMLNode& node)
 {
 	m_ID = node.GetAttribute("ID");
 	m_Name = node.GetAttribute("Name");
@@ -115,7 +115,7 @@ wxString KPluginManagerConfigLootAPI::GetLocalGamePath() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KPluginManagerConfig::KPluginManagerConfig(KProfile& profile, KxXMLNode& node)
+KPluginManagerConfig::KPluginManagerConfig(KProfile& profile, const KxXMLNode& node)
 	:m_InterfaceName(node.GetAttribute("InterfaceName")),
 	m_PluginFileFormat(node.GetAttribute("PluginFileFormat"))
 {

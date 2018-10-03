@@ -6,16 +6,7 @@ class KPackageManager;
 
 class KPackageManagerConfig: public KxSingletonPtr<KPackageManagerConfig>
 {
-	private:
-		KPackageManager* m_Manager = NULL;
-
 	public:
-		KPackageManagerConfig(KProfile& profile, KxXMLNode& node);
-		virtual ~KPackageManagerConfig();
-
-	public:
-		KPackageManager* GetManager() const
-		{
-			return m_Manager;
-		}
+		KPackageManagerConfig(KProfile& profile, const KxXMLNode& node);
+		~KPackageManagerConfig();
 };

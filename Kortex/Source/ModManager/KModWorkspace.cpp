@@ -40,7 +40,8 @@ enum DisplayModeMenuID
 {
 	Connector,
 	Manager,
-	PriorityGroups,
+	ShowPriorityGroups,
+	ShowNotInstalledMods,
 };
 enum ToolsMenuID
 {
@@ -54,6 +55,7 @@ enum ContextMenuID
 	KMC_ID_MOD_OPEN_LOCATION,
 	KMC_ID_MOD_CHANGE_LOCATION,
 	KMC_ID_MOD_REVERT_LOCATION,
+	KMC_ID_MOD_INSTALL,
 	KMC_ID_MOD_UNINSTALL,
 	KMC_ID_MOD_UNINSTALL_AND_ERASE,
 	KMC_ID_MOD_IMAGE_SHOW,
@@ -92,6 +94,7 @@ KModWorkspace::~KModWorkspace()
 		KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_ModListViewOptions);
 		m_ModListViewOptions.SetAttribute("DisplayMode", m_ViewModel->GetDisplayMode());
 		m_ModListViewOptions.SetAttribute("ShowPriorityGroups", m_ViewModel->ShouldShowPriorityGroups());
+		m_ModListViewOptions.SetAttribute("ShowNotInstalledMods", m_ViewModel->ShouldShowNotInstalledMods());
 		m_ModListViewOptions.SetAttribute("ImageResizeMode", (int)m_ImageResizeMode);
 
 		KProgramOptionSerializer::SaveSplitterLayout(m_SplitterLeftRight, m_OptionsUI);
@@ -219,9 +222,13 @@ void KModWorkspace::CreateDisplayModeMenu()
 	m_ToolBar_DisplayModeMenu->AddSeparator();
 
 	{
-		KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::PriorityGroups, T("ModManager.DisplayMode.ShowPriorityGroups"), wxEmptyString, wxITEM_CHECK));
+		KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::ShowPriorityGroups, T("ModManager.DisplayMode.ShowPriorityGroups"), wxEmptyString, wxITEM_CHECK));
 		item->SetBitmap(KGetBitmap(KIMG_FOLDERS));
 		item->Check(m_ViewModel->ShouldShowPriorityGroups());
+	}
+	{
+		KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::ShowNotInstalledMods, T("ModManager.DisplayMode.ShowNotInstalledMods"), wxEmptyString, wxITEM_CHECK));
+		item->Check(m_ViewModel->ShouldShowNotInstalledMods());
 	}
 }
 void KModWorkspace::CreateAddModMenu()
@@ -277,6 +284,7 @@ void KModWorkspace::CreateModsView()
 {
 	m_ViewModel = new KModManagerModel();
 	m_ViewModel->ShowPriorityGroups(m_ModListViewOptions.GetAttributeBool("ShowPriorityGroups"));
+	m_ViewModel->ShowNotInstalledMods(m_ModListViewOptions.GetAttributeBool("ShowNotInstalledMods"));
 	
 	m_ViewModel->Create(m_ModsPane);
 	m_ViewModel->SetDataVector(KModManager::Get().GetEntries());
@@ -454,9 +462,16 @@ void KModWorkspace::OnDisplayModeMenu(KxAuiToolBarEvent& event)
 				ProcessSelection();
 				break;
 			}
-			case DisplayModeMenuID::PriorityGroups:
+			case DisplayModeMenuID::ShowPriorityGroups:
 			{
 				m_ViewModel->ShowPriorityGroups(!m_ViewModel->ShouldShowPriorityGroups());
+				m_ViewModel->RefreshItems();
+				ProcessSelection();
+				break;
+			}
+			case DisplayModeMenuID::ShowNotInstalledMods:
+			{
+				m_ViewModel->ShowNotInstalledMods(!m_ViewModel->ShouldShowNotInstalledMods());
 				m_ViewModel->RefreshItems();
 				ProcessSelection();
 				break;
@@ -588,6 +603,10 @@ void KModWorkspace::OnAddMod_InstallPackage(KxMenuEvent& event)
 	}
 }
 
+void KModWorkspace::InstallMod(KModEntry* entry)
+{
+	new KInstallWizardDialog(this, entry->GetInstallPackageFile());
+}
 void KModWorkspace::UninstallMod(KModEntry* entry, bool eraseLog)
 {
 	if (entry)
@@ -664,10 +683,17 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 		bool isPackageExist = modEntry->IsInstallPackageFileExist() && !isFixedMod;
 		bool isVFSActive = KModManager::Get().IsVFSMounted();
 
+		if (isInstalled)
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_UNINSTALL, T("ModManager.Menu.UninstallMod")));
 			item->SetBitmap(KGetBitmap(KIMG_BOX_MINUS));
-			item->Enable(!isVFSActive && isInstalled && !isFixedMod);
+			item->Enable(!isVFSActive && !isFixedMod);
+		}
+		else
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_INSTALL, T("ModManager.Menu.InstallMod")));
+			item->SetBitmap(KGetBitmap(KIMG_BOX));
+			item->Enable(isPackageExist && !isFixedMod);
 		}
 		{
 			// Linked mods can't be uninstalled on erase
@@ -915,6 +941,11 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 					ProcessEvent(event);
 				}
 			}
+			break;
+		}
+		case KMC_ID_MOD_INSTALL:
+		{
+			InstallMod(modEntry);
 			break;
 		}
 		case KMC_ID_MOD_UNINSTALL:

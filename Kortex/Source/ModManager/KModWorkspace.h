@@ -128,6 +128,7 @@ class KModWorkspace: public KWorkspace, public KxSingletonPtr<KModWorkspace>
 		void OnAddMod_FromFolder(KxMenuEvent& event);
 		void OnAddMod_InstallPackage(KxMenuEvent& event);
 
+		void InstallMod(KModEntry* entry);
 		void UninstallMod(KModEntry* entry, bool eraseLog);
 		void OnModSerach(wxCommandEvent& event);
 		void OnModSerachColumnsChanged(KxMenuEvent& event);

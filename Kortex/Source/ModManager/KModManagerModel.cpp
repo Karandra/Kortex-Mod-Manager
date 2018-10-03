@@ -940,7 +940,8 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 			}
 
 			// Move and refresh
-			if (KModManager::Get().MoveModsIntoThis(entriesToMove, thisEntry))
+			KModManagerModsMoveType moveType = entriesToMove.size() > 1 ? KMM_MOVEMOD_AFTER : KMM_MOVEMOD_BEFORE;
+			if (KModManager::Get().MoveModsIntoThis(entriesToMove, thisEntry, moveType))
 			{
 				// If items dragged over priority group, assign them to it
 				if (priorityGroup)
@@ -1148,7 +1149,7 @@ void KModManagerModel::RefreshItems()
 
 		for (KModEntry* currentEntry: *m_Entries)
 		{
-			if (FilterMod(currentEntry) && currentEntry->IsInstalled())
+			if (FilterMod(currentEntry))
 			{
 				// Add priority group
 				if (CanShowPriorityGroups())
@@ -1286,9 +1287,12 @@ void KModManagerModel::SetSearchColumns(const KxDataViewColumn::Vector& columns)
 	m_SearchColumns = columns;
 	Save(true);
 }
-
 bool KModManagerModel::FilterMod(const KModEntry* modEntry) const
 {
+	if (!modEntry->IsInstalled() && !ShouldShowNotInstalledMods())
+	{
+		return false;
+	}
 	if (m_SearchColumns.empty() || m_SearchMask.IsEmpty())
 	{
 		return true;

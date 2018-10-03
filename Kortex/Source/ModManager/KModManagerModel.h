@@ -22,6 +22,7 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		KModManagerModelType m_DisplayMode = KMM_TYPE_CONNECTOR;
 		bool m_ShowPriorityGroups = false;
 		bool m_ShowPriorityGroupsSuppress = false;
+		bool m_ShowNotInstalledMods = false;
 
 		KBitmapSize m_BitmapSize;
 		KxDataViewColumn* m_NameColumn = NULL;
@@ -108,9 +109,18 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		{
 			return m_ShowPriorityGroups;
 		}
-		void ShowPriorityGroups(bool show)
+		void ShowPriorityGroups(bool value)
 		{
-			m_ShowPriorityGroups = show;
+			m_ShowPriorityGroups = value;
+		}
+		
+		bool ShouldShowNotInstalledMods() const
+		{
+			return m_ShowNotInstalledMods;
+		}
+		void ShowNotInstalledMods(bool value)
+		{
+			m_ShowNotInstalledMods = value;
 		}
 
 		void RefreshItem(KModEntry* entry)

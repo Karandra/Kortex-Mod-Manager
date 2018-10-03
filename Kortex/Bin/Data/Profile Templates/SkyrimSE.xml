@@ -11,7 +11,7 @@
 			<ValueName>Installed Path</ValueName>
 			<ValueType>REG_SZ</ValueType>
 		</Entry>
-		<Entry ID="ConfigRoot">$SH(SHF_DOCUMENTS)\My Games\Skyrim Special Edition</Entry>
+		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\Skyrim Special Edition</Entry>
 		<Entry ID="GameExecutable">$(GameRoot)\$(ID).exe</Entry>
 		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(ID).exe</Entry>
 		<Entry ID="NexusID">SkyrimSpecialEdition</Entry>
@@ -23,8 +23,8 @@
 		<Entry ID="ScriptExtenderNameShort">SKSE64</Entry>
 		
 		<!-- INI -->
-		<Entry ID="SkyrimINI">$(VirtualConfigRoot)\Skyrim.ini</Entry>
-		<Entry ID="SkyrimPrefsINI">$(VirtualConfigRoot)\SkyrimPrefs.ini</Entry>
+		<Entry ID="SkyrimINI">$(ConfigRootLocal)\Skyrim.ini</Entry>
+		<Entry ID="SkyrimPrefsINI">$(ConfigRootLocal)\SkyrimPrefs.ini</Entry>
 		<Entry ID="SkyrimEditorINI">$(VirtualGameRoot)\CreationKit.ini</Entry>
 		<Entry ID="SkyrimEditorPrefsINI">$(VirtualGameRoot)\CreationKitPrefs.ini</Entry>
 		
@@ -41,23 +41,27 @@
 	</Network>
 
 	<LocationsConfig>
-		<Entry Label="$T(OpenLocation.Saves)">$(VirtualConfigRoot)\Saves</Entry>
 	</LocationsConfig>
 
 	<Virtualization>
 		<MirroredLocations>
 			<Entry>
-				<Source>$(VirtualConfigRoot)</Source>
-				<Target>$(ConfigRoot)</Target>
+				<Sources>
+					<Entry>$(ConfigRootLocal)</Entry>
+					<Entry>$(SavesRootLocal)</Entry>
+				</Sources>
+				<Target>$(ConfigRootTarget)</Target>
 			</Entry>
 			<Entry>
-				<Source>$(CurrentProfileRoot)\PluginsOrder</Source>
+				<Sources>
+					<Entry>$(ModListRoot)\LocalPlugins</Entry>
+				</Sources>
 				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\Skyrim Special Edition</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
 	
-	<ProgramConfig Enabled="1">
+	<ProgramConfig>
 		<Main>
 			<Entry RequiresVFS="1">
 				<Name>$(NameShort)</Name>
@@ -94,7 +98,7 @@
 		</PreMain>
 	</ProgramConfig>
 
-	<GameConfig Enabled="1" ENB="1">
+	<GameConfig EnableENB="1">
 		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(SkyrimINI)</Entry>
 		<Entry ID="1" Format="INI" TypeDetectionMethod="HungarianNotation">$(SkyrimPrefsINI)</Entry>
 		<Entry ID="1000" Format="INI" TypeDetectionMethod="HungarianNotation">CreationKit.ini</Entry>
@@ -104,8 +108,8 @@
 	<PluginManager Enabled="1" InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
 		<Limit Value="254"/>
 		
-		<ActiveList>$(CurrentProfileRoot)\PluginsOrder\Plugins.txt</ActiveList>
-		<OrderList>$(CurrentProfileRoot)\PluginsOrder\LoadOrder.txt</OrderList>
+		<ActiveList>$(ModListRoot)\LocalPlugins\Plugins.txt</ActiveList>
+		<OrderList>$(ModListRoot)\LocalPlugins\LoadOrder.txt</OrderList>
 		
 		<ChangeFileModificationDate>0</ChangeFileModificationDate>
 		<SortByFileModificationDate>0</SortByFileModificationDate>
@@ -125,7 +129,7 @@
 			<Branch>v0.13</Branch>
 			<Repository>https://github.com/loot/skyrimse.git</Repository>
 			<FolderName>Skyrim Special Edition</FolderName>
-			<LocalGamePath>$(CurrentProfileRoot)\PluginsOrder</LocalGamePath>
+			<LocalGamePath>$(ModListRoot)\LocalPlugins</LocalGamePath>
 		</LOOTAPI>
 
 		<StandardContent MainID="Skyrim.esm">
@@ -137,19 +141,19 @@
 		</StandardContent>
 	</PluginManager>
 
-	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
+	<ScreenshotsGallery>
 		<Locations>
 			<Entry>$(GameRoot)</Entry>
 			<Entry>$(GameRoot)\Screenshots</Entry>
-			<Entry>$(WriteTargetRoot)</Entry>
-			<Entry>$(WriteTargetRoot)\Screenshots</Entry>
-			<Entry>$(VirtualConfigRoot)</Entry>
-			<Entry>$(VirtualConfigRoot)\Screenshots</Entry>
+			<Entry>$(OverwritesRoot)</Entry>
+			<Entry>$(OverwritesRoot)\Screenshots</Entry>
+			<Entry>$(ConfigRootLocal)</Entry>
+			<Entry>$(ConfigRootLocal)\Screenshots</Entry>
 		</Locations>
 	</ScreenshotsGallery>
 
-	<SaveManager Enabled="1" RequiresVFS="0" SaveFileFormat="BethesdaSkyrimSE">
-		<SavesFolder>$(VirtualConfigRoot)\Saves</SavesFolder>
+	<SaveManager SaveFileFormat="BethesdaSkyrimSE">
+		<RelativeLocation>Saves</RelativeLocation>
 		<FileFilters>
 			<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
 			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>

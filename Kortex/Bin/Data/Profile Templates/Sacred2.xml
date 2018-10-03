@@ -11,7 +11,7 @@
 			<ValueName>InstallPath</ValueName>
 			<ValueType>REG_SZ</ValueType>
 		</Entry>
-		<Entry ID="ConfigRoot">$SH(SHF_SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
+		<Entry ID="ConfigRootTarget">$SH(SHF_SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
 		<Entry ID="GameExecutable">$(GameRoot)\System\Sacred2.exe</Entry>
 		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\System\Sacred2.exe</Entry>
 		<Entry ID="NexusID">$(ID)</Entry>
@@ -23,19 +23,20 @@
 	</Network>
 
 	<LocationsConfig>
-		<Entry Label="$T(OpenLocation.Saves)">$(VirtualConfigRoot)</Entry>
 	</LocationsConfig>
 
 	<Virtualization>
 		<MirroredLocations>
 			<Entry>
-				<Source>$(VirtualConfigRoot)</Source>
-				<Target>$(ConfigRoot)</Target>
+				<Sources>
+					<Entry>$(SavesRootLocal)</Entry>
+				</Sources>
+				<Target>$(ConfigRootTarget)</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
 
-	<ProgramConfig Enabled="1">
+	<ProgramConfig>
 		<Main>
 			<Entry>
 				<Name>$(NameShort)</Name>
@@ -46,12 +47,21 @@
 		</Main>
 	</ProgramConfig>
 
-	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
+	<ScreenshotsGallery>
 		<Locations>
 			<Entry>$SH(SHF_PICTURES)\Ascaron Entertainment\Sacred 2</Entry>
 			<Entry>$(VirtualGameRoot)</Entry>
 			<Entry>$(VirtualGameRoot)\Screenshots</Entry>
-			<Entry>$(VirtualConfigRoot)</Entry>
+			<Entry>$(ConfigRootLocal)</Entry>
 		</Locations>
 	</ScreenshotsGallery>
+
+	<SaveManager SaveFileFormat="Sacred2">
+		<RelativeLocation></RelativeLocation>
+		<FileFilters>
+			<Entry Label="$T(SaveManager.Filter.Saves) (*.sacred2save)">*.sacred2save</Entry>
+			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
+		</FileFilters>
+		<PrimaryExtension>sacred2save</PrimaryExtension>
+	</SaveManager>
 </Profile>

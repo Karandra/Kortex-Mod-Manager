@@ -5,7 +5,7 @@
 	<Variables>
 		<!--Required-->
 		<Entry ID="GameRoot" SubType="FolderPath" UseOverride="1"/>
-		<Entry ID="ConfigRoot">$(GameRoot)\Saves</Entry>
+		<Entry ID="ConfigRootTarget">$(GameRoot)\Saves</Entry>
 		<Entry ID="GameExecutable">$(GameRoot)\Morrowind.exe</Entry>
 		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\Morrowind.exe</Entry>
 		<Entry ID="NexusID">$(ID)</Entry>
@@ -32,16 +32,15 @@
 	</Network>
 
 	<LocationsConfig>
-		<Entry Label="$T(OpenLocation.Saves)">$(VirtualConfigRoot)\Saves</Entry>
 	</LocationsConfig>
 
 	<Virtualization>
-		<MandatoryVirtualFolders>
-			<Entry>$(VirtualConfigRoot)</Entry>
-		</MandatoryVirtualFolders>
+		<MandatoryLocations>
+			<Entry Name="$T(SaveManager.NameShort)">$(SavesRootLocal)</Entry>
+		</MandatoryLocations>
 	</Virtualization>
 	
-	<ProgramConfig Enabled="1">
+	<ProgramConfig>
 		<Main>
 			<Entry>
 				<Name>$(NameShort)</Name>
@@ -76,11 +75,11 @@
 		</Main>
 	</ProgramConfig>
 
-	<GameConfig Enabled="1" ENB="0">
-		<Entry ID="0" Format="INI" TypeDetectionMethod="DataAnalysis">$(VirtualConfigRoot)\$(ID).ini</Entry>
+	<GameConfig EnableENB="0">
+		<Entry ID="0" Format="INI" TypeDetectionMethod="DataAnalysis">$(ConfigRootLocal)\$(ID).ini</Entry>
 	</GameConfig>
 
-	<PluginManager Enabled="1" InterfaceName="BethesdaMW" PluginFileFormat="BethesdaMorrowind">
+	<PluginManager InterfaceName="BethesdaMW" PluginFileFormat="BethesdaMorrowind">
 		<Limit Value="255"/>
 		
 		<ChangeFileModificationDate>1</ChangeFileModificationDate>
@@ -93,19 +92,19 @@
 		</StandardContent>
 	</PluginManager>
 
-	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
+	<ScreenshotsGallery>
 		<Locations>
 			<Entry>$(GameRoot)</Entry>
 			<Entry>$(GameRoot)\Screenshots</Entry>
-			<Entry>$(WriteTargetRoot)</Entry>
-			<Entry>$(WriteTargetRoot)\Screenshots</Entry>
-			<Entry>$(VirtualConfigRoot)</Entry>
-			<Entry>$(VirtualConfigRoot)\Screenshots</Entry>
+			<Entry>$(OverwritesRoot)</Entry>
+			<Entry>$(OverwritesRoot)\Screenshots</Entry>
+			<Entry>$(ConfigRootLocal)</Entry>
+			<Entry>$(ConfigRootLocal)\Screenshots</Entry>
 		</Locations>
 	</ScreenshotsGallery>
 
-	<SaveManager Enabled="1" RequiresVFS="0" SaveFileFormat="BethesdaMorrowind">
-		<SavesFolder>$(VirtualConfigRoot)\Saves</SavesFolder>
+	<SaveManager SaveFileFormat="BethesdaMorrowind">
+		<RelativeLocation>Saves</RelativeLocation>
 		<FileFilters>
 			<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
 		</FileFilters>

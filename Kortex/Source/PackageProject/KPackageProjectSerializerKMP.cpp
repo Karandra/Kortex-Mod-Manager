@@ -304,7 +304,7 @@ void KPackageProjectSerializerKMP::ReadComponents()
 KxXMLNode KPackageProjectSerializerKMP::WriteBase()
 {
 	KxXMLNode baseNode = m_XML.NewElement("Package");
-	baseNode.SetAttribute("FormatVersion", KPackageManager::Get().GetVersion());
+	baseNode.SetAttribute("FormatVersion", KPackageManager::GetInstance()->GetVersion());
 	baseNode.SetAttribute("ID", m_ProjectSave->GetModID());
 
 	KxXMLNode targetProfileNode = baseNode.NewElement("TargetProfile");

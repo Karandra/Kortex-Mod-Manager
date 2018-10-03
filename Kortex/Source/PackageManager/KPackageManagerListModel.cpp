@@ -358,7 +358,7 @@ void KPackageManagerListModel::Navigate(const wxString& sNavigatePath)
 	RefreshItems();
 
 	// Not the best place but whatever
-	m_AutoShowPackageInfo = KPackageManager::Get().GetOptions().GetAttributeBool("AutoShowPackageInfo", true);
+	m_AutoShowPackageInfo = KPackageManager::GetInstance()->GetOptions().GetAttributeBool("AutoShowPackageInfo", true);
 }
 void KPackageManagerListModel::NavigateUp()
 {

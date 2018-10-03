@@ -15,10 +15,6 @@
 #include <KxFramework/KxArchiveEvent.h>
 #include <KxFramework/KxTaskDialog.h>
 
-KPackageManager& KPackageManager::Get()
-{
-	return *KPackageManagerConfig::GetInstance()->GetManager();
-}
 const KxStringVector& KPackageManager::GetSuppoptedExtensions()
 {
 	static const KxStringVector ms_SupportedExtensions = {"kmp", "smi", "fomod", "7z", "zip"};
@@ -214,7 +210,7 @@ void KPackageManager::LoadStdRequirements()
 	}
 }
 
-KPackageManager::KPackageManager(const KxXMLNode& configNode)
+KPackageManager::KPackageManager()
 	:m_Options(this, "General")
 {
 	LoadStdRequirements();

@@ -21,7 +21,7 @@ const KxVersion& KPPRRequirementEntry::GetCurrentVersion() const
 {
 	if (!m_CurrentVersionChecked)
 	{
-		m_CurrentVersion = KPackageManager::Get().GetRequirementVersion(this);
+		m_CurrentVersion = KPackageManager::GetInstance()->GetRequirementVersion(this);
 		m_CurrentVersionChecked = true;
 	}
 	return m_CurrentVersion;
@@ -40,7 +40,7 @@ KPPReqState KPPRRequirementEntry::GetObjectFunctionResult() const
 {
 	if (!m_ObjectFunctionResultChecked)
 	{
-		m_ObjectFunctionResult = KPackageManager::Get().CheckRequirementState(this);
+		m_ObjectFunctionResult = KPackageManager::GetInstance()->CheckRequirementState(this);
 		m_ObjectFunctionResultChecked = true;
 	}
 	return m_ObjectFunctionResult;
@@ -53,7 +53,7 @@ void KPPRRequirementEntry::ResetObjectFunctionResult()
 
 bool KPPRRequirementEntry::IsStd() const
 {
-	return KPackageManager::Get().IsStdReqirement(GetID());
+	return KPackageManager::GetInstance()->IsStdReqirement(GetID());
 }
 bool KPPRRequirementEntry::IsSystem() const
 {
@@ -104,7 +104,7 @@ bool KPPRRequirementEntry::ConformToTypeDescriptor()
 {
 	if (m_TypeDescriptor == KPPR_TYPE_SYSTEM || m_TypeDescriptor == KPPR_TYPE_AUTO)
 	{
-		const KPPRRequirementEntry* stdEntry = KPackageManager::Get().FindStdReqirement(GetID());
+		const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindStdReqirement(GetID());
 		if (stdEntry)
 		{
 			SetName(stdEntry->GetName());
@@ -148,14 +148,14 @@ KPPRRequirementsGroup::~KPPRRequirementsGroup()
 
 KPPRRequirementEntry* KPPRRequirementsGroup::FindEntry(const wxString& id) const
 {
-	auto tElement = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const KPPRRequirementEntryArray::value_type& entry)
+	auto it = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const KPPRRequirementEntryArray::value_type& entry)
 	{
 		return entry->GetID() == id;
 	});
 
-	if (tElement != m_Entries.cend())
+	if (it != m_Entries.cend())
 	{
-		return tElement->get();
+		return it->get();
 	}
 	return NULL;
 }

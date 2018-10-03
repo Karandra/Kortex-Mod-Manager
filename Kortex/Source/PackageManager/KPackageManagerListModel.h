@@ -59,7 +59,7 @@ class KPackageManagerListModel: public KDataViewListModel
 		virtual size_t GetItemCount() const override;
 		wxString GetHomePath() const
 		{
-			return KPackageManager::Get().GetPackagesFolder();
+			return KPackageManager::GetInstance()->GetPackagesFolder();
 		}
 		
 		bool IsInRoot() const

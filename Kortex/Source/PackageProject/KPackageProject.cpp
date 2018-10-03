@@ -43,7 +43,7 @@ KPackageProject::KPackageProject()
 	m_Requirements(*this),
 	m_Components(*this),
 
-	m_FormatVersion(KPackageManager::Get().GetVersion()),
+	m_FormatVersion(KPackageManager::GetInstance()->GetVersion()),
 	m_TargetProfileID(KApp::Get().GetCurrentTemplateID())
 {
 }

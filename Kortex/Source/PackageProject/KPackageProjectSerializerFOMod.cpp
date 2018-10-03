@@ -509,7 +509,7 @@ KPPOperator KPackageProjectSerializerFOMod::ReadCompositeDependencies(const KxXM
 			reqEntry = new KPPRRequirementEntry();
 
 			// Copy std requirement for current game and set required version from FOMod
-			const KPPRRequirementEntry* stdEntry = KPackageManager::Get().FindStdReqirement(KApp::Get().GetCurrentTemplateID());
+			const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindStdReqirement(KApp::Get().GetCurrentTemplateID());
 			
 			// This check probably redundant, but just in case
 			if (stdEntry)
@@ -527,7 +527,7 @@ KPPOperator KPackageProjectSerializerFOMod::ReadCompositeDependencies(const KxXM
 			reqEntry = new KPPRRequirementEntry();
 
 			// Although it's named 'fose' I will interpret this as generic Script Extender requirement
-			const KPPRRequirementEntry* stdEntry = KPackageManager::Get().FindScriptExtenderRequirement();
+			const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindScriptExtenderRequirement();
 
 			// There may be no Script Extender
 			if (stdEntry)
@@ -695,7 +695,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 	KxXMLNode configRootNode = m_XML.NewElement("config");
 
 	// Write XML-Schema
-	if (KPackageManager::Get().GetOptions().GetAttributeBool("FOModUseHTTPSForXMLScheme", true))
+	if (KPackageManager::GetInstance()->GetOptions().GetAttributeBool("FOModUseHTTPSForXMLScheme", true))
 	{
 		configRootNode.SetAttribute("xmlns:xsi", "https://www.w3.org/2001/XMLSchema-instance");
 		configRootNode.SetAttribute("xsi:noNamespaceSchemaLocation", "https://qconsulting.ca/fo3/ModConfig5.0.xsd");
@@ -998,7 +998,7 @@ wxSize KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const 
 		KPPRRequirementsGroup* group = requirements.FindGroupWithID(id);
 		if (group)
 		{
-			const KPPRRequirementEntry* scriptExtenderReqEntry = KPackageManager::Get().FindScriptExtenderRequirement();
+			const KPPRRequirementEntry* scriptExtenderReqEntry = KPackageManager::GetInstance()->FindScriptExtenderRequirement();
 			for (const auto& entry: group->GetEntries())
 			{
 				entry->GetOperator() == KPP_OPERATOR_AND ? andCount++ : orCount++;

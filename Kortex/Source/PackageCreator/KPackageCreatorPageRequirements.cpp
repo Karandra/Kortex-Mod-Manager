@@ -133,7 +133,7 @@ void KPackageCreatorPageRequirements::LoadStdReqs()
 	m_StdReqs_Categories->AddItem(V("<$T(Generic.All)>"));
 
 	std::unordered_set<wxString> categoriesSet;
-	for (const auto& entry: KPackageManager::Get().GetStdRequirements())
+	for (const auto& entry: KPackageManager::GetInstance()->GetStdRequirements())
 	{
 		if (categoriesSet.emplace(entry->GetCategory()).second)
 		{
@@ -157,7 +157,7 @@ void KPackageCreatorPageRequirements::OnSelectStdReqCategory(wxCommandEvent& eve
 
 		m_StdReqs_List->Clear();
 
-		for (const auto& entry: KPackageManager::Get().GetStdRequirements())
+		for (const auto& entry: KPackageManager::GetInstance()->GetStdRequirements())
 		{
 			if (requestedCategory.IsEmpty() || requestedCategory == entry->GetCategory())
 			{

@@ -12,7 +12,6 @@ class KxXMLNode;
 class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
 {
 	public:
-		static KPackageManager& Get();
 		static const KxStringVector& GetSuppoptedExtensions();
 		static const wxString& GetSuppoptedExtensionsFilter();
 		static void ExtractAcrhiveThreaded(wxWindow* window, const wxString& filePath, const wxString& outPath);
@@ -33,7 +32,7 @@ class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
 		void LoadStdRequirements();
 
 	public:
-		KPackageManager(const KxXMLNode& configNode);
+		KPackageManager();
 		virtual ~KPackageManager();
 
 	public:

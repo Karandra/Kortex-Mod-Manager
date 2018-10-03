@@ -143,7 +143,7 @@ bool KPackageManagerWorkspace::OnCloseWorkspace()
 }
 void KPackageManagerWorkspace::OnReloadWorkspace()
 {
-	m_MainView->Navigate(KPackageManager::Get().GetPackagesFolder());
+	m_MainView->Navigate(KPackageManager::GetInstance()->GetPackagesFolder());
 }
 
 void KPackageManagerWorkspace::OnSerach(wxCommandEvent& event)

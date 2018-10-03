@@ -128,6 +128,8 @@
 		<String ID="Generic.Status">Status</String>
 		<String ID="Generic.Date">Date</String>
 		<String ID="Generic.Game">Game</String>
+		<String ID="Generic.Image">Image</String>
+		<String ID="Generic.Screenshot">Screenshot</String>
 		<String ID="Generic.ModificationDate">Date modified</String>
 		<String ID="Generic.Location">Location</String>
 		<String ID="Generic.FileLocation">File location</String>
@@ -268,7 +270,7 @@ It is recommended that you move these files]]></String>
 		<String ID="OpenLocation.AppSettings">Manager settings</String>
 		<String ID="OpenLocation.GameRoot">Game folder</String>
 		<String ID="OpenLocation.VirtualGameRoot">Virtual game folder</String>
-		<String ID="OpenLocation.ConfigRoot">Game settings folder</String>
+		<String ID="OpenLocation.ConfigRootTarget">Game settings folder</String>
 		<String ID="OpenLocation.VirtualConfigRoot">Virtual game settings folder</String>
 		<String ID="OpenLocation.WriteTargetRoot">Overwrite folder</String>
 		<String ID="OpenLocation.CurrentProfileRoot">Current profile folder</String>
@@ -834,6 +836,7 @@ It is recommended that you move these files]]></String>
 		<String ID="ModManager.DisplayMode.Connector">Activation</String>
 		<String ID="ModManager.DisplayMode.Log">Log</String>
 		<String ID="ModManager.DisplayMode.ShowPriorityGroups">Show priority groups</String>
+		<String ID="ModManager.DisplayMode.ShowNotInstalledMods">Show not installed mods</String>
 
 		<String ID="ModManager.VFS.Activate">Enable virtual file system</String>
 		<String ID="ModManager.VFS.Deactivate">Disable virtual file system</String>
@@ -862,6 +865,7 @@ It is recommended that you move these files]]></String>
 		<String ID="ModManager.RemoveMod.Message">This action cannot be undone</String>
 		<String ID="ModManager.RemoveMod.RemovingMessage">Delete mod data</String>
 
+		<String ID="ModManager.Menu.InstallMod">Install</String>
 		<String ID="ModManager.Menu.UninstallMod">Uninstall</String>
 		<String ID="ModManager.Menu.UninstallAndErase">Unistall and delete from log</String>
 		<String ID="ModManager.Menu.Erase">Delete from log</String>
@@ -871,6 +875,9 @@ It is recommended that you move these files]]></String>
 		<String ID="ModManager.Menu.Image">Image</String>
 		<String ID="ModManager.Menu.Image.Show">Show image</String>
 		<String ID="ModManager.Menu.Image.Assign">Assign image</String>
+		<String ID="ModManager.Menu.Image.ScaleAspect">Scale maintaining aspect ratio</String>
+		<String ID="ModManager.Menu.Image.Stretch">Stretch</String>
+		<String ID="ModManager.Menu.Image.Fill">Fill</String>
 		<String ID="ModManager.Menu.EditDescription">Edit description</String>
 		<String ID="ModManager.Menu.EditTags">Edit tags</String>
 		<String ID="ModManager.Menu.EditSites">Edit websites</String>
@@ -895,6 +902,10 @@ It is recommended that you move these files]]></String>
 		<String ID="ModManager.ModList.Export">Export mod list</String>
 		<String ID="ModManager.ModList.RemoveDialog">Are you sure you want to delete this mod list? This operation can not be undone.</String>
 		<String ID="ModManager.ModList.AlreadyExist">Mod list with this name already exist</String>
+		<String ID="ModManager.ModList.RenameFailed">Failed to rename mod list</String>
+
+		<String ID="ModManager.ModList.LocalSaves">Local saves</String>
+		<String ID="ModManager.ModList.LocalConfig">Local game config</String>
 		
 		<String ID="ModManager.Statistics">Statistics</String>
 		<String ID="ModManager.Statistics.Status">Calculating statistics</String>

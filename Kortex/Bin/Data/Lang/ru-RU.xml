@@ -128,6 +128,8 @@
 		<String ID="Generic.Status">Статус</String>
 		<String ID="Generic.Date">Дата</String>
 		<String ID="Generic.Game">Игра</String>
+		<String ID="Generic.Image">Изображение</String>
+		<String ID="Generic.Screenshot">Скриншот</String>
 		<String ID="Generic.ModificationDate">Дата изменения</String>
 		<String ID="Generic.Location">Расположение</String>
 		<String ID="Generic.FileLocation">Расположение файла</String>
@@ -268,7 +270,7 @@
 		<String ID="OpenLocation.AppSettings">Настройки программы</String>
 		<String ID="OpenLocation.GameRoot">Папка игры</String>
 		<String ID="OpenLocation.VirtualGameRoot">Виртуальная папка игры</String>
-		<String ID="OpenLocation.ConfigRoot">Папка настроек игры</String>
+		<String ID="OpenLocation.ConfigRootTarget">Папка настроек игры</String>
 		<String ID="OpenLocation.VirtualConfigRoot">Виртуальная папка настроек игры</String>
 		<String ID="OpenLocation.WriteTargetRoot">Папка перезаписи</String>
 		<String ID="OpenLocation.CurrentProfileRoot">Папка выбранного профиля</String>
@@ -834,6 +836,7 @@
 		<String ID="ModManager.DisplayMode.Connector">Режим активации</String>
 		<String ID="ModManager.DisplayMode.Log">Режим журнала</String>
 		<String ID="ModManager.DisplayMode.ShowPriorityGroups">Показывать группы приоритетов</String>
+		<String ID="ModManager.DisplayMode.ShowNotInstalledMods">Показывать не установленные моды</String>
 		
 		<String ID="ModManager.VFS.Activate">Включить VFS</String>
 		<String ID="ModManager.VFS.Deactivate">Выключить VFS</String>
@@ -861,7 +864,8 @@
 		<String ID="ModManager.RemoveMod.CaptionErase">Вы действительно хотите стереть запись о моде "%1" из журнала?</String>
 		<String ID="ModManager.RemoveMod.Message">Это действие невозможно отменить</String>
 		<String ID="ModManager.RemoveMod.RemovingMessage">Удаление данных мода</String>
-		
+
+		<String ID="ModManager.Menu.InstallMod">Установить</String>
 		<String ID="ModManager.Menu.UninstallMod">Деинсталляция</String>
 		<String ID="ModManager.Menu.UninstallAndErase">Деинсталляция и удаление из журнала</String>
 		<String ID="ModManager.Menu.Erase">Удаление из журнала</String>
@@ -871,6 +875,9 @@
 		<String ID="ModManager.Menu.Image">Изображение</String>
 		<String ID="ModManager.Menu.Image.Show">Открыть изображение</String>
 		<String ID="ModManager.Menu.Image.Assign">Изменить изображение</String>
+		<String ID="ModManager.Menu.Image.ScaleAspect">Масштабировать сохраняя соотношение сторон</String>
+		<String ID="ModManager.Menu.Image.Stretch">Растянуть</String>
+		<String ID="ModManager.Menu.Image.Fill">Заполнить</String>
 		<String ID="ModManager.Menu.EditDescription">Изменить описание</String>
 		<String ID="ModManager.Menu.EditTags">Изменить теги</String>
 		<String ID="ModManager.Menu.EditSites">Изменить список сайтов</String>
@@ -895,6 +902,10 @@
 		<String ID="ModManager.ModList.Export">Экспорт списка модов</String>
 		<String ID="ModManager.ModList.RemoveDialog">Вы уверены, что хотите удалить этот список модов? Эту операцию невозможно отменить.</String>
 		<String ID="ModManager.ModList.AlreadyExist">Список модов с таким названием уже существует</String>
+		<String ID="ModManager.ModList.RenameFailed">Не удалось переименовать список модов</String>
+		
+		<String ID="ModManager.ModList.LocalSaves">Локальные сохранения</String>
+		<String ID="ModManager.ModList.LocalConfig">Локальные настройки игры</String>
 		
 		<String ID="ModManager.Statistics">Статистика</String>
 		<String ID="ModManager.Statistics.Status">Подсчёт статистики</String>

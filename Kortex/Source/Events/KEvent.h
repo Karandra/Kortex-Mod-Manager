@@ -9,4 +9,10 @@ class KEvent: public KxBroadcastEvent
 			:KxBroadcastEvent(type)
 		{
 		}
+
+	public:
+		virtual KEvent* Clone() const override
+		{
+			return new KEvent();
+		}
 };

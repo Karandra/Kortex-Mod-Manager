@@ -16,6 +16,9 @@ Version 1.4 - x
 [Mod Manager] Removed save-undo functions. All changes applied immediately.
 [Mod Manager] Improved performance of statistics calculation.
 [Mod Manager] Added game data window with entire virtual files tree.
+[Mod Manager] Added column with mod main image.
+[Mod Manager] Added optional local saves and local game configuration.
+[Mod Manager] Fixed drropped mod position when only one mod is selected in drag and drop operation.
 [Mod Manager] Version 1.3
 [Package Manager] Fixed assigning image as main or as header in "Interface" page.
 [Package Manager] Added back "Import from files" option to components.

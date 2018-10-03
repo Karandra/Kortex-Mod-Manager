@@ -43,22 +43,22 @@ wxImage& KAux::ChangeLightness(wxImage& image, int alphaValue)
 }
 wxString KAux::GetResolutionRatio(const wxSize& resolution, const wxString& unknown)
 {
-	auto MakeRatio = [](float X, float Y) constexpr -> int
+	auto MakeRatio = [](float x, float y) constexpr -> int
 	{
-		return ((X / Y) * 100) + 0.1;
+		return ((x / y) * 100) + 0.1;
 	};
 
-	static const int r3_2 = MakeRatio(3, 2);
-	static const int r4_3 = MakeRatio(4, 3);
-	static const int r5_3 = MakeRatio(5, 3);
-	static const int r5_4 = MakeRatio(5, 4);
-	static const int r11_4 = MakeRatio(11, 4);
-	static const int r14_9 = MakeRatio(14, 9);
-	static const int r16_9 = MakeRatio(16, 9);
-	static const int r16_10 = MakeRatio(16, 10);
-	static const int r17_8 = MakeRatio(17, 8) + 1; // Because 17:8 is 212 and I need 213
-	static const int r18_9 = MakeRatio(18, 9);
-	static const int r21_9 = MakeRatio(21, 9);
+	static constexpr const int r3_2 = MakeRatio(3, 2);
+	static constexpr const int r4_3 = MakeRatio(4, 3);
+	static constexpr const int r5_3 = MakeRatio(5, 3);
+	static constexpr const int r5_4 = MakeRatio(5, 4);
+	static constexpr const int r11_4 = MakeRatio(11, 4);
+	static constexpr const int r14_9 = MakeRatio(14, 9);
+	static constexpr const int r16_9 = MakeRatio(16, 9);
+	static constexpr const int r16_10 = MakeRatio(16, 10);
+	static constexpr const int r17_8 = MakeRatio(17, 8) + 1; // Because 17:8 is 212 and I need 213
+	static constexpr const int r18_9 = MakeRatio(18, 9);
+	static constexpr const int r21_9 = MakeRatio(21, 9);
 
 	switch (MakeRatio(resolution.GetWidth(), resolution.GetHeight()))
 	{

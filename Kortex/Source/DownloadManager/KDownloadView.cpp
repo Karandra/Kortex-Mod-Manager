@@ -5,6 +5,7 @@
 #include "Network/KNetworkProviderTESALL.h"
 #include "Network/KNetworkProviderLoversLab.h"
 #include "InstallWizard/KInstallWizardDialog.h"
+#include "NotificationCenter/KNotificationCenter.h"
 #include "Profile/KProfile.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -463,16 +464,16 @@ void KDownloadView::OnContextMenuSelected(KxMenuEvent& event, KDownloadEntry* en
 
 			if (!isSucceed)
 			{
-				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, entry->GetFileInfo().GetName(), wxEmptyString, KxBTN_OK, KxICON_WARNING);
+				wxString message;
 				if (isQueryInfo)
 				{
-					dialog.SetMessage(T("DownloadManager.QueryDownloadInfoFailed"));
+					message = TF("DownloadManager.Notification.QueryDownloadInfoFailed").arg(entry->GetFileInfo().GetName());
 				}
 				else
 				{
-					dialog.SetMessage(T("DownloadManager.RestoreDownloadFailed"));
+					message = TF("DownloadManager.Notification.RestoreDownloadFailed").arg(entry->GetFileInfo().GetName());
 				}
-				dialog.ShowModal();
+				KNotificationCenter::GetInstance()->Notify(KDownloadManager::GetInstance(), message, KxICON_WARNING);
 			}
 			break;
 		}

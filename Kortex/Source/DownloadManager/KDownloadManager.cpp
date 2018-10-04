@@ -4,6 +4,7 @@
 #include "KDownloadView.h"
 #include "Network/KNetwork.h"
 #include "Network/KNetworkProviderNexus.h"
+#include "NotificationCenter/KNotificationCenter.h"
 #include "UI/KMainWindow.h"
 #include "Profile/KProfile.h"
 #include "KAux.h"
@@ -121,6 +122,7 @@ void KDownloadManager::OnRemoveEntry(const KDownloadEntry& entry) const
 void KDownloadManager::OnDownloadComplete(KDownloadEntry& entry)
 {
 	OnChangeEntry(entry);
+	KNotificationCenter::GetInstance()->Notify(this, TF("DownloadManager.Notification.DownloadCompleted").arg(entry.GetFileInfo().GetName()), KxICON_INFORMATION);
 }
 void KDownloadManager::OnDownloadPaused(KDownloadEntry& entry)
 {
@@ -137,6 +139,7 @@ void KDownloadManager::OnDownloadResumed(KDownloadEntry& entry)
 void KDownloadManager::OnDownloadFailed(KDownloadEntry& entry)
 {
 	OnChangeEntry(entry);
+	KNotificationCenter::GetInstance()->Notify(this, TF("DownloadManager.Notification.DownloadFailed").arg(entry.GetFileInfo().GetName()), KxICON_WARNING);
 }
 
 bool KDownloadManager::CheckIsAssociatedWithNXM() const

@@ -3,6 +3,7 @@
 #include "KDownloadView.h"
 #include "KDownloadManager.h"
 #include "KThemeManager.h"
+#include "NotificationCenter/KNotificationCenter.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>

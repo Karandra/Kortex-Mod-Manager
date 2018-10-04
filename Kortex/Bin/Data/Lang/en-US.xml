@@ -961,8 +961,10 @@ It is recommended that you move these files]]></String>
 		<String ID="DownloadManager.RemoveDownloadsMessage">Are you sure you want to delete all downloads?</String>
 		<String ID="DownloadManager.RemoveInstalledDownloadsMessage">Are you sure you want to delete all installed downloads?</String>
 
-		<String ID="DownloadManager.QueryDownloadInfoFailed">Could not request download information from %1</String>
-		<String ID="DownloadManager.RestoreDownloadFailed">Failed to restore download information from %1</String>
+		<String ID="DownloadManager.Notification.DownloadCompleted">Downloading of "%1" completed</String>
+		<String ID="DownloadManager.Notification.DownloadFailed">Downloading of "%1" failed</String>
+		<String ID="DownloadManager.Notification.QueryDownloadInfoFailed">Could not request download information for %1</String>
+		<String ID="DownloadManager.Notification.RestoreDownloadFailed">Failed to restore download information from %1</String>
 
 		<!-- Context menu -->
 		<String ID="DownloadManager.Menu.Install">Install</String>

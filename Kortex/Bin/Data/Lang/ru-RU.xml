@@ -961,8 +961,10 @@
 		<String ID="DownloadManager.RemoveDownloadsMessage">Вы действительно хотите удалить все загрузки?</String>
 		<String ID="DownloadManager.RemoveInstalledDownloadsMessage">Вы действительно хотите удалить все загрузки с установленными модами?</String>
 
-		<String ID="DownloadManager.QueryDownloadInfoFailed">Не удалось запросить информацию о загрузке от %1</String>
-		<String ID="DownloadManager.RestoreDownloadFailed">Не удалось восстановить информацию о загрузке от %1</String>
+		<String ID="DownloadManager.Notification.DownloadCompleted">Загрузка файла "%1" завершена</String>
+		<String ID="DownloadManager.Notification.DownloadFailed">Загрузка файла "%1" не удалась</String>
+		<String ID="DownloadManager.Notification.QueryDownloadInfoFailed">Не удалось запросить информацию о загрузке для %1</String>
+		<String ID="DownloadManager.Notification.RestoreDownloadFailed">Не удалось восстановить информацию о загрузке для %1</String>
 		
 		<!-- Context menu -->
 		<String ID="DownloadManager.Menu.Install">Установить</String>

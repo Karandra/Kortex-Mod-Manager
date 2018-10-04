@@ -211,6 +211,12 @@
     <Filter Include="Code\Header Files\ProgramManager">
       <UniqueIdentifier>{12602aa1-3fe1-499e-8830-e016580559ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source Files\NotificationCenter">
+      <UniqueIdentifier>{41f68988-7646-4ebc-ad46-f6ec722fc3ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Header Files\NotificationCenter">
+      <UniqueIdentifier>{4bcd5849-822a-4fb6-b85a-97c10b1dc01c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -764,6 +770,15 @@
     </ClCompile>
     <ClCompile Include="Source\VFS\KVFSMultiMirror.cpp">
       <Filter>Code\Source Files\VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NotificationCenter\KNotificationCenter.cpp">
+      <Filter>Code\Source Files\NotificationCenter</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NotificationCenter\KNotification.cpp">
+      <Filter>Code\Source Files\NotificationCenter</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NotificationCenter\KNotificationPopup.cpp">
+      <Filter>Code\Source Files\NotificationCenter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1402,6 +1417,15 @@
     </ClInclude>
     <ClInclude Include="Source\VFS\KVFSMultiMirror.h">
       <Filter>Code\Header Files\VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NotificationCenter\KNotification.h">
+      <Filter>Code\Header Files\NotificationCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NotificationCenter\KNotificationCenter.h">
+      <Filter>Code\Header Files\NotificationCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NotificationCenter\KNotificationPopup.h">
+      <Filter>Code\Header Files\NotificationCenter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

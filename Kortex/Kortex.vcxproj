@@ -62,6 +62,9 @@
     <ClCompile Include="Source\Network\KNetworkProviderNexus.cpp" />
     <ClCompile Include="Source\Network\KNetworkProvider.cpp" />
     <ClCompile Include="Source\Network\KNetworkProviderTESALL.cpp" />
+    <ClCompile Include="Source\NotificationCenter\KNotification.cpp" />
+    <ClCompile Include="Source\NotificationCenter\KNotificationCenter.cpp" />
+    <ClCompile Include="Source\NotificationCenter\KNotificationPopup.cpp" />
     <ClCompile Include="Source\PackageCreator\KPackageCreatorIDTracker.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.cpp" />
@@ -263,6 +266,9 @@
     <ClInclude Include="Source\Network\KNetworkProviderNexusModInfo.h" />
     <ClInclude Include="Source\Network\KNetworkProviderTESALL.h" />
     <ClInclude Include="Source\Network\KNetworkProviderTESALLModInfo.h" />
+    <ClInclude Include="Source\NotificationCenter\KNotification.h" />
+    <ClInclude Include="Source\NotificationCenter\KNotificationCenter.h" />
+    <ClInclude Include="Source\NotificationCenter\KNotificationPopup.h" />
     <ClInclude Include="Source\PackageCreator\KPackageCreatorIDTracker.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModel.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.h" />

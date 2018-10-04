@@ -30,7 +30,29 @@ class KBitmapSize
 			m_Width = (double)height * ratio;
 			m_Height = height;
 		}
+		void FromSystemIcon();
+		void FromSystemSmallIcon();
 
+		bool IsFullySpecified() const
+		{
+			return m_Width > 0 && m_Height > 0;
+		}
+		double GetRatio() const
+		{
+			if (IsFullySpecified())
+			{
+				return (double)m_Width / m_Height;
+			}
+			return 0;
+		}
+		double GetReversedRatio() const
+		{
+			if (IsFullySpecified())
+			{
+				return (double)m_Height / m_Width;
+			}
+			return 0;
+		}
 		int GetWidth() const
 		{
 			return m_Width;

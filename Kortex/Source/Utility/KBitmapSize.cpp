@@ -10,6 +10,17 @@ namespace
 	}
 }
 
+void KBitmapSize::FromSystemIcon()
+{
+	m_Width = wxSystemSettings::GetMetric(wxSYS_ICON_X);
+	m_Height = wxSystemSettings::GetMetric(wxSYS_ICON_Y);
+}
+void KBitmapSize::FromSystemSmallIcon()
+{
+	m_Width = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
+	m_Height = wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y);
+}
+
 wxBitmap KBitmapSize::ScaleBitmapAspect(const wxBitmap& bitmap, int marginsX, int marginsY) const
 {
 	return KAux::ScaleImageAspect(bitmap, ProcessMargin(m_Width, marginsX), ProcessMargin(m_Height, marginsY));

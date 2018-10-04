@@ -3,13 +3,10 @@
 #include "KLabeledValue.h"
 #include <KxFramework/KxSingleton.h>
 class KProfile;
-class KNetwork;
 
 class KNetworkConfig: public KxSingletonPtr<KNetworkConfig>
 {
 	private:
-		KNetwork* m_Network = NULL;
-
 		wxString m_NexusID;
 		int64_t m_SteamID = -1;
 

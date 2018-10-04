@@ -17,7 +17,9 @@
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModWorkspace.h"
+#include "Network/KNetwork.h"
 #include "DownloadManager/KDownloadManager.h"
+#include "NotificationCenter/KNotificationCenter.h"
 #include "Archive/KArchive.h"
 #include "IPC/KIPCClient.h"
 #include "KEvents.h"
@@ -564,27 +566,39 @@ void KApp::InitGlobalManagers()
 	KArchive::Init();
 
 	wxLogInfo("Initializing KModManager");
-	m_ModManager = new KModManager(NULL);
+	new KModManager(NULL);
 
 	wxLogInfo("Initializing KPackageManager");
-	m_PackageManager = new KPackageManager();
+	new KPackageManager();
 	
 	wxLogInfo("Initializing KProgramManager");
-	m_ProgramManager = new KProgramManager();
+	new KProgramManager();
+
+	wxLogInfo("Initializing KNetwork");
+	new KNetwork();
+	
+	wxLogInfo("Initializing KNotificationCenter");
+	new KNotificationCenter();
 
 	// Complete initialization
-	m_ModManager->OnInit();
+	KModManager::GetInstance()->OnInit();
 }
 void KApp::UnInitGlobalManagers()
 {
 	wxLogInfo("UnInitializing KModManager.");
-	delete m_ModManager;
+	delete KModManager::GetInstance();
 
 	wxLogInfo("UnInitializing KPackageManager");
-	delete m_PackageManager;
+	delete KPackageManager::GetInstance();
 
 	wxLogInfo("UnInitializing KProgramManager");
-	delete m_ProgramManager;
+	delete KProgramManager::GetInstance();
+
+	wxLogInfo("UnInitializing KNetwork");
+	delete KNetwork::GetInstance();
+	
+	wxLogInfo("UnInitializing KNotificationCenter");
+	delete KNotificationCenter::GetInstance();
 }
 
 void KApp::AddDownloadToAlreadyRunningInstance(const wxString& link)
@@ -749,7 +763,7 @@ bool KApp::ScheduleRestart()
 bool KApp::Uninstall()
 {
 	ConfigureInternetExplorer(false);
-	m_ModManager->UnMountVFS();
+	KModManager::GetInstance()->UnMountVFS();
 	return m_VFSServiceClient->UninstallVFSService();
 }
 

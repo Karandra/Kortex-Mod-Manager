@@ -1,46 +1,98 @@
 #pragma once
 #include "stdafx.h"
+#include <KxFramework/KxIArchive.h>
 #include <KxFramework/KxArchiveEvent.h>
-#undef FindFirstFile
-#undef FindNextFile
-class KArchiveImpl;
+#include <KxFramework/KxFileItem.h>
 
-enum KArchiveFormat
+namespace SevenZip
 {
-	KARC_FORMAT_UNKNOWN = -1,
-	KARC_FORMAT_7Z,
-	KARC_FORMAT_ZIP,
-	KARC_FORMAT_RAR,
-	KARC_FORMAT_RAR5,
-	KARC_FORMAT_GZIP,
-	KARC_FORMAT_BZIP2,
-	KARC_FORMAT_TAR,
-	KARC_FORMAT_ISO,
-	KARC_FORMAT_CAB,
-	KARC_FORMAT_LZMA,
-	KARC_FORMAT_LZMA86,
-};
-enum KArchiveMethod
-{
-	KARC_METHOD_LZMA,
-	KARC_METHOD_LZMA2,
-	KARC_METHOD_PPMD,
-	KARC_METHOD_BZIP2,
-};
-typedef std::vector<uint8_t> KAcrhiveBuffer;
-typedef std::unordered_map<size_t, KAcrhiveBuffer> KAcrhiveBufferMap;
+	class SevenZipArchive;
+	class SevenZipLibrary;
+}
 
-class KArchive: public wxEvtHandler
+namespace KArchiveNS
 {
+	struct PropertyBool
+	{
+		enum _Enum
+		{
+			Solid,
+			MultiThreaded,
+		};
+	};
+	struct PropertyInt
+	{
+		enum _Enum
+		{
+			CompressionLevel,
+			DictionarySize,
+			Format,
+			Method,
+		};
+	};
+
+	struct Method
+	{
+		enum _Enum
+		{
+			Unknown = -1,
+
+			LZMA,
+			LZMA2,
+			PPMd,
+			BZip2,
+		};
+	};
+	struct Format
+	{
+		enum _Enum
+		{
+			Unknown = -1,
+			SevenZip,
+			Zip,
+			RAR,
+			RAR5,
+			GZip,
+			BZip2,
+			Tar,
+			ISO,
+			CAB,
+			LZMA,
+			LZMA86,
+		};
+	};
+}
+
+class KArchive:
+	public wxEvtHandler,
+
+	public KxIArchive,
+	public KxIArchiveSearch,
+	public KxIArchiveExtraction,
+	public KxIArchiveCompression,
+
+	public KxIArchivePropertiesBool<KArchiveNS::PropertyBool::_Enum>,
+	public KxIArchivePropertiesInt<KArchiveNS::PropertyInt::_Enum>
+{
+	public:
+		using IndexVector = KxIArchiveNS::IndexVector;
+		using Buffer = KxIArchiveNS::Buffer;
+		using BufferMap = KxIArchiveNS::BufferMap;
+
 	public:
 		static wxString GetLibraryPath();
 		static wxString GetLibraryVersion();
+
 		static bool IsLibraryLoaded();
 		static bool Init();
 		static bool UnInit();
 
 	private:
-		KArchiveImpl* m_Impl = NULL;
+		SevenZip::SevenZipArchive* m_Impl = NULL;
+		wxString m_FilePath;
+		
+		int64_t m_CompressedSize = -1;
+		mutable int64_t m_OriginalSize = -1;
 
 	public:
 		KArchive();
@@ -48,50 +100,44 @@ class KArchive: public wxEvtHandler
 		virtual ~KArchive();
 
 	public:
-		bool IsOpened() const;
-		bool Open(const wxString& filePath);
-		void Close();
+		// KxIArchive
+		virtual bool IsOK() const override;
+		virtual bool Open(const wxString& filePath) override;
+		virtual void Close() override;
+		virtual wxString GetFilePath() const override;
 
-		const wxString& GetFilePath() const;
-		wxString GetItemName(size_t index) const;
-		size_t GetItemCount() const;
-		int64_t GetOriginalSize() const;
-		int64_t GetCompressedSize() const;
-		float GetRatio() const;
+		virtual size_t GetItemCount() const override;
+		virtual wxString GetItemName(size_t index) const override;
+		virtual int64_t GetOriginalSize() const override;
+		virtual int64_t GetCompressedSize() const override;
 
-		KArchiveFormat GetProperty_CompressionFormat() const;
-		void SetProperty_CompressionFormat(KArchiveFormat value);
+		// KxIArchiveSearch
+		virtual void* FindFirstFile(const wxString& filter, KxFileItem& fileItem) const override;
+		virtual bool FindNextFile(void* handle, KxFileItem& item) const override;
+		virtual void FindClose(void* handle) const override;
 
-		int GetProperty_CompressionLevel() const;
-		void SetProperty_CompressionLevel(int value);
+		// KxIArchiveExtraction
+	protected:
+		virtual bool DoExtractAll(const wxString& directory) const override;
+		virtual bool DoExtractToDirectory(const IndexVector& indexes, const wxString& directory) const override;
+		virtual bool DoExtractToFiles(const IndexVector& indexes, const KxStringVector& filePaths) const override;
+		virtual Buffer DoExtractToMemory(size_t index) const override;
+		virtual BufferMap DoExtractToMemory(const IndexVector& indexes) const override;
 
-		int GetProperty_DictionarySize() const;
-		void SetProperty_DictionarySize(int value);
+		// KxIArchiveCompression
+	protected:
+		virtual bool DoCompressFiles(const wxString& directory, const wxString& searchFilter, bool recursive) override;
+		virtual bool DoCompressDirectory(const wxString& directory, bool recursive) override;
+		virtual bool DoCompressSpecifiedFiles(const KxStringVector& sourcePaths, const KxStringVector& archivePaths) override;
+		virtual bool DoCompressFile(const wxString& sourcePath) override;
+		virtual bool DoCompressFile(const wxString& sourcePath, const wxString& archivePath) override;
 
-		KArchiveMethod GetProperty_CompressionMethod() const;
-		void SetProperty_CompressionMethod(KArchiveMethod method);
+	public:
+		// KxIArchivePropertiesBool
+		virtual bool GetPropertyBool(BoolProperties property) const override;
+		virtual void SetPropertyBool(BoolProperties property, bool value) override;
 
-		bool GetProperty_Solid() const;
-		void SetProperty_Solid(bool bSolid);
-
-		bool GetProperty_MultiThreaded() const;
-		void SetProperty_MultiThreaded(bool bMT);
-
-		size_t FindFirstFileIn(const wxString& folder, const wxString& pattern) const;
-		size_t FindNextFileIn(size_t index, const wxString& folder, const wxString& pattern) const;
-		size_t FindFirstFile(const wxString& pattern, bool fileNameOnly = true) const;
-		size_t FindNextFile(size_t index, const wxString& pattern, bool fileNameOnly = true) const;
-
-		bool ExtractAll(const wxString& folderPath) const;
-		bool Extract(const wxString& folderPath, const KxUInt32Vector& indexes) const;
-		bool Extract(const KxUInt32Vector& indexes, const KxStringVector& tFinalPaths) const;
-		KAcrhiveBuffer Extract(uint32_t index) const;
-		KAcrhiveBufferMap Extract(const KxUInt32Vector& indexes) const;
-
-		bool CompressFiles(const wxString& directory, const wxString& sSearchFilter, bool recursive = true);
-		bool CompressAllFiles(const wxString& directory, bool recursive = true);
-		bool CompressDirectory(const wxString& directory, bool recursive = true);
-		bool CompressSpecifiedFiles(const KxStringVector& sourceFiles, const KxStringVector& archivePaths);
-		bool CompressFile(const wxString& filePath);
-		bool CompressFile(const wxString& filePath, const wxString& archivePath);
+		// KxIArchivePropertiesInt
+		virtual int GetPropertyInt(IntProperties property) const override;
+		virtual void SetPropertyInt(IntProperties property, int value) override;
 };

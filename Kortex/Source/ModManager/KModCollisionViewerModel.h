@@ -18,12 +18,12 @@ namespace KModCollisionViewerModelNS
 			using CollisionVector = KModManagerDispatcher::CollisionVector;
 
 		private:
-			KxFileFinderItem m_Item;
+			KxFileItem m_Item;
 			wxString m_RelativePath;
 			CollisionVector m_Collisions;
 
 		public:
-			ModelEntry(const KxFileFinderItem& item)
+			ModelEntry(const KxFileItem& item)
 				:m_Item(item)
 			{
 			}
@@ -39,11 +39,11 @@ namespace KModCollisionViewerModelNS
 				return !m_Collisions.empty();
 			}
 
-			const KxFileFinderItem& GetFileItem() const
+			const KxFileItem& GetFileItem() const
 			{
 				return m_Item;
 			}
-			KxFileFinderItem& GetFileItem()
+			KxFileItem& GetFileItem()
 			{
 				return m_Item;
 			}

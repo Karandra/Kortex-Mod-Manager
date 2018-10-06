@@ -251,7 +251,7 @@ void KModManagerImportNMM::CopyDownloads(KOperationWithProgressDialogBase* conte
 	manager->PauseAllActive();
 
 	KxFileFinder fileFinder(m_InstanceDirectory);
-	KxFileFinderItem fileItem = fileFinder.FindNext();
+	KxFileItem fileItem = fileFinder.FindNext();
 	while (fileItem.IsOK())
 	{
 		if (fileItem.IsNormalItem() && fileItem.IsFile())

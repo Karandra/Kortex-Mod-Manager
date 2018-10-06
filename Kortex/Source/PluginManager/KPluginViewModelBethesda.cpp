@@ -3,7 +3,7 @@
 #include "KPluginEntry.h"
 #include "KPluginReaderBethesda.h"
 #include "KPluginManager.h"
-#include "KComparator.h"
+#include <KxFramework/KxComparator.h>
 #include "Profile/KPluginManagerConfig.h"
 
 void KPluginViewModelBethesda::OnInitControl()
@@ -113,7 +113,7 @@ bool KPluginViewModelBethesda::Compare(const KPluginEntry& pluginEntry1, const K
 	{
 		case ColumnID::Name:
 		{
-			return KComparator::KLess(pluginEntry1.GetName(), pluginEntry1.GetName());
+			return KxComparator::IsLess(pluginEntry1.GetName(), pluginEntry1.GetName());
 		}
 		default:
 		case ColumnID::Index:
@@ -130,11 +130,11 @@ bool KPluginViewModelBethesda::Compare(const KPluginEntry& pluginEntry1, const K
 		#endif
 		case ColumnID::PartOf:
 		{
-			return KComparator::KLess(GetPartOfName(pluginEntry1), GetPartOfName(pluginEntry2));
+			return KxComparator::IsLess(GetPartOfName(pluginEntry1), GetPartOfName(pluginEntry2));
 		}
 		case ColumnID::Author:
 		{
-			return KComparator::KLess(GetPluginAuthor(pluginEntry1), GetPluginAuthor(pluginEntry2));
+			return KxComparator::IsLess(GetPluginAuthor(pluginEntry1), GetPluginAuthor(pluginEntry2));
 		}
 	};
 	return false;

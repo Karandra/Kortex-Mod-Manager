@@ -8,7 +8,7 @@
 class KQuickThread;
 class KProfile;
 class KModEntry;
-class KxFileFinderItem;
+class KxFileItem;
 
 class KDownloadEntry: public KxISerializer
 {
@@ -42,7 +42,7 @@ class KDownloadEntry: public KxISerializer
 		void CleanupDownload();
 		bool RequestNewLink();
 
-		void DeSerializeDefault(const KxFileFinderItem& fileItem);
+		void DeSerializeDefault(const KxFileItem& fileItem);
 		bool RestoreDownloadNexus();
 		bool RestoreDownloadTESALL();
 		bool RestoreDownloadLoversLab();
@@ -200,5 +200,5 @@ class KDownloadEntry: public KxISerializer
 		virtual bool DeSerialize(wxInputStream& stream) override;
 		
 		bool Serialize() const;
-		bool DeSerialize(const wxString& xmlFile, const KxFileFinderItem& fileItem);
+		bool DeSerialize(const wxString& xmlFile, const KxFileItem& fileItem);
 };

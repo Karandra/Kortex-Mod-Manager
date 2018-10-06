@@ -864,10 +864,10 @@ void KApp::CleanupLogs()
 	const size_t countToKeep = 10;
 
 	KxFileFinder finder(GetLogsFolder(), "*.log");
-	std::vector<KxFileFinderItem> items;
+	std::vector<KxFileItem> items;
 	items.reserve(countToKeep);
 
-	KxFileFinderItem item = finder.FindNext();
+	KxFileItem item = finder.FindNext();
 	while (item.IsOK())
 	{
 		if (item.IsNormalItem() && item.IsFile())
@@ -878,7 +878,7 @@ void KApp::CleanupLogs()
 	}
 
 	// Sort by creation date. Most recent first.
-	std::sort(items.begin(), items.end(), [](const KxFileFinderItem& v1, const KxFileFinderItem& v2)
+	std::sort(items.begin(), items.end(), [](const KxFileItem& v1, const KxFileItem& v2)
 	{
 		return v1.GetCreationTime() > v2.GetCreationTime();
 	});

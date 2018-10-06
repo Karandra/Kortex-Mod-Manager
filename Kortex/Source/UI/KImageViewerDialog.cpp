@@ -49,12 +49,12 @@ wxMemoryInputStream KImageViewerEvent::GetInputSteram()
 {
 	if (IsInputStream())
 	{
-		const KAcrhiveBuffer* pBuffer = std::get<InputStream>(m_Data);
+		const KArchive::Buffer* pBuffer = std::get<InputStream>(m_Data);
 		return wxMemoryInputStream(pBuffer->data(), pBuffer->size());
 	}
 	return wxMemoryInputStream(NULL, 0);
 }
-void KImageViewerEvent::SetInputStream(const KAcrhiveBuffer& buffer)
+void KImageViewerEvent::SetInputStream(const KArchive::Buffer& buffer)
 {
 	m_Data = &buffer;
 }

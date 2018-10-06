@@ -5,8 +5,8 @@
 #include "KModWorkspace.h"
 #include "KFileTreeNode.h"
 #include "KModEntry.h"
-#include "KComparator.h"
 #include "KAux.h"
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLibrary.h>
 #include <wx/mimetype.h>
@@ -214,7 +214,7 @@ bool KVirtualGameFolderModel::Compare(const KxDataViewItem& item1, const KxDataV
 	{
 		case ColumnID::Name:
 		{
-			return KComparator::KLess(node1.GetName(), node2.GetName());
+			return KxComparator::IsLess(node1.GetName(), node2.GetName());
 		}
 		case ColumnID::PartOf:
 		{

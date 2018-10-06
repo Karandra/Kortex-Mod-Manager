@@ -7,7 +7,7 @@
 class KSaveFile//: public wxClientData
 {
 	private:
-		KxFileFinderItem m_FileInfo;
+		KxFileItem m_FileInfo;
 		wxBitmap m_Thumb;
 		bool m_IsDataRead = false;
 		bool m_IsOK = false;
@@ -44,11 +44,11 @@ class KSaveFile//: public wxClientData
 			return !GetPluginsList().empty();
 		}
 
-		const KxFileFinderItem& GetFileInfo() const
+		const KxFileItem& GetFileInfo() const
 		{
 			return m_FileInfo;
 		}
-		KxFileFinderItem& GetFileInfo()
+		KxFileItem& GetFileInfo()
 		{
 			return m_FileInfo;
 		}

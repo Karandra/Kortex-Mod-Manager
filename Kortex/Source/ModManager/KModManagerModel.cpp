@@ -9,9 +9,9 @@
 #include "PluginManager/KPluginViewBaseModel.h"
 #include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
-#include "KComparator.h"
 #include "KApp.h"
 #include "KAux.h"
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
 
 enum ColumnID
@@ -608,14 +608,14 @@ bool KModManagerModel::GetCellHeight(const KxDataViewItem& item, int& height) co
 }
 bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const
 {
-	const KMMModelNode* pNode1 = GetNode(item1);
-	const KMMModelNode* pNode2 = GetNode(item2);
-	if (pNode1 && pNode2)
+	const KMMModelNode* node1 = GetNode(item1);
+	const KMMModelNode* node2 = GetNode(item2);
+	if (node1 && node2)
 	{
 		ColumnID columnID = column ? (ColumnID)column->GetID() : ColumnID::Priority;
 
-		KModEntry* entry1 = pNode1->GetEntry();
-		KModEntry* entry2 = pNode2->GetEntry();
+		KModEntry* entry1 = node1->GetEntry();
+		KModEntry* entry2 = node2->GetEntry();
 		if (entry1 && entry2)
 		{
 			if (IsSpecialSiteColumn(columnID))
@@ -628,7 +628,7 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 			{
 				case ColumnID::Name:
 				{
-					return KComparator::KLess(entry1->GetName(), entry2->GetName());
+					return KxComparator::IsLess(entry1->GetName(), entry2->GetName());
 				}
 				case ColumnID::Priority:
 				{
@@ -640,11 +640,11 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 				}
 				case ColumnID::Author:
 				{
-					return KComparator::KLess(entry1->GetAuthor(), entry2->GetAuthor());
+					return KxComparator::IsLess(entry1->GetAuthor(), entry2->GetAuthor());
 				}
 				case ColumnID::Tags:
 				{
-					return KComparator::KLess(FormatTagList(entry1), FormatTagList(entry2));
+					return KxComparator::IsLess(FormatTagList(entry1), FormatTagList(entry2));
 				}
 				case ColumnID::DateInstall:
 				{
@@ -656,15 +656,15 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 				}
 				case ColumnID::ModFolder:
 				{
-					return KComparator::KLess(entry1->GetLocation(KMM_LOCATION_MOD_FILES), entry2->GetLocation(KMM_LOCATION_MOD_FILES));
+					return KxComparator::IsLess(entry1->GetLocation(KMM_LOCATION_MOD_FILES), entry2->GetLocation(KMM_LOCATION_MOD_FILES));
 				}
 				case ColumnID::PackagePath:
 				{
-					return KComparator::KLess(entry1->GetInstallPackageFile(), entry2->GetInstallPackageFile());
+					return KxComparator::IsLess(entry1->GetInstallPackageFile(), entry2->GetInstallPackageFile());
 				}
 				case ColumnID::Signature:
 				{
-					return KComparator::KLess(entry1->GetSignature(), entry2->GetSignature());
+					return KxComparator::IsLess(entry1->GetSignature(), entry2->GetSignature());
 				}
 			};
 		}

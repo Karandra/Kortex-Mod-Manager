@@ -18,7 +18,7 @@ class KPackageManagerListModel: public KDataViewListModel
 
 	private:
 		bool m_AutoShowPackageInfo = false;
-		std::vector<KxFileFinderItem> m_Data;
+		std::vector<KxFileItem> m_Data;
 		std::unique_ptr<KModPackage> m_Package;
 
 		KxMenu m_ContextMenu;
@@ -40,17 +40,18 @@ class KPackageManagerListModel: public KDataViewListModel
 		virtual bool SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column) override;
 		virtual bool HasDefaultCompare() const override
 		{
-			return false;
+			return true;
 		}
+		bool CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const override;
 
 		void OnSelectItem(KxDataViewEvent& event);
 		void OnActivateItem(KxDataViewEvent& event);
 		void OnContextMenu(KxDataViewEvent& event);
 
 		void CreateContextMenu();
-		void RunInstallWizard(const KxFileFinderItem& entry);
-		wxBitmap GetIcon(const KxFileFinderItem& entry) const;
-		wxString GetType(const KxFileFinderItem& entry) const;
+		void RunInstallWizard(const KxFileItem& entry);
+		wxBitmap GetIcon(const KxFileItem& entry) const;
+		wxString GetType(const KxFileItem& entry) const;
 
 	public:
 		KPackageManagerListModel();
@@ -87,7 +88,7 @@ class KPackageManagerListModel: public KDataViewListModel
 		void LoadInfo();
 		void ClearInfo();
 
-		const KxFileFinderItem* GetDataEntry(size_t index) const
+		const KxFileItem* GetDataEntry(size_t index) const
 		{
 			if (index < m_Data.size())
 			{
@@ -95,7 +96,7 @@ class KPackageManagerListModel: public KDataViewListModel
 			}
 			return NULL;
 		}
-		KxFileFinderItem* GetDataEntry(size_t index)
+		KxFileItem* GetDataEntry(size_t index)
 		{
 			if (index < m_Data.size())
 			{
@@ -103,11 +104,11 @@ class KPackageManagerListModel: public KDataViewListModel
 			}
 			return NULL;
 		}
-		const KxFileFinderItem* GetDataEntry(const KxDataViewItem& item) const
+		const KxFileItem* GetDataEntry(const KxDataViewItem& item) const
 		{
 			return GetDataEntry(GetRow(item));
 		}
-		KxFileFinderItem* GetDataEntry(const KxDataViewItem& item)
+		KxFileItem* GetDataEntry(const KxDataViewItem& item)
 		{
 			return GetDataEntry(GetRow(item));
 		}

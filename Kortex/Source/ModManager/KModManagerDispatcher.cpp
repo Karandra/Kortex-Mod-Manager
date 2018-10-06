@@ -5,9 +5,9 @@
 #include "KFileTreeNode.h"
 #include "KVariablesDatabase.h"
 #include "KVirtualGameFolderWorkspace.h"
-#include "KComparator.h"
 #include "UI/KMainWindow.h"
 #include "KAux.h"
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileFinder.h>
 
 namespace
@@ -16,7 +16,7 @@ namespace
 	{
 		bool operator()(const wxString& lhs, const wxString& rhs) const
 		{
-			return KComparator::KEqual(lhs, rhs, true);
+			return KxComparator::IsEqual(lhs, rhs, true);
 		}
 	};
 	struct FinderHashHasher
@@ -280,7 +280,7 @@ const KFileTreeNode* KModManagerDispatcher::BackTrackFullPath(const wxString& fu
 {
 	return m_VirtualTree.WalkTree([&fullPath](const KFileTreeNode& node)
 	{
-		return KComparator::KEqual(node.GetFullPath(), fullPath);
+		return KxComparator::IsEqual(node.GetFullPath(), fullPath);
 	});
 }
 

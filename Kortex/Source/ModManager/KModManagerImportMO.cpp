@@ -403,7 +403,7 @@ void KModManagerImportMO::CopyDownloads(KOperationWithProgressDialogBase* contex
 	manager->PauseAllActive();
 
 	KxFileFinder finder(m_DownloadsDirectory, "*.meta");
-	KxFileFinderItem item = finder.FindNext();
+	KxFileItem item = finder.FindNext();
 	while (item.IsOK())
 	{
 		KxEvtFile archiveFile(item.GetFullPath().BeforeLast('.'));
@@ -537,7 +537,7 @@ KxStringVector KModManagerImportMO::GetProfilesList() const
 	KxStringVector list;
 
 	KxFileFinder finder(m_InstanceDirectory + "\\profiles");
-	KxFileFinderItem item = finder.FindNext();
+	KxFileItem item = finder.FindNext();
 	while (item.IsOK())
 	{
 		if (item.IsNormalItem() && item.IsDirectory() && !KxFileFinder::IsDirectoryEmpty(item.GetFullPath()))

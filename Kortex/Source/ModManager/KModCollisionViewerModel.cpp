@@ -78,7 +78,7 @@ void KModCollisionViewerModel::GetValueByRow(wxAny& value, size_t row, const KxD
 	const ModelEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
-		const KxFileFinderItem& fileItem = entry->GetFileItem();
+		const KxFileItem& fileItem = entry->GetFileItem();
 		switch (column->GetID())
 		{
 			case ColumnID::Name:

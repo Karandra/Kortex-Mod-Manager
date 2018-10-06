@@ -13,6 +13,7 @@
 #include <KxFramework/KxHTMLWindow.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
 enum ColumnID
@@ -49,17 +50,21 @@ void KPackageManagerListModel::OnInitControl()
 		}
 	});
 
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 450);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, 125);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 150);
+	KxDataViewColumnFlags flags = KxDV_COL_DEFAULT_FLAGS|KxDV_COL_SORTABLE;
+	{
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 450, flags);
+		info.GetColumn()->SortAscending();
+	}
+	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125, flags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, 125, flags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 150, flags);
 }
 
 void KPackageManagerListModel::GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
 {
 	if (row < m_Data.size())
 	{
-		const KxFileFinderItem& item = m_Data[row];
+		const KxFileItem& item = m_Data[row];
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
@@ -74,7 +79,7 @@ void KPackageManagerListModel::GetValueByRow(wxAny& data, size_t row, const KxDa
 {
 	if (row < m_Data.size())
 	{
-		const KxFileFinderItem& item = m_Data[row];
+		const KxFileItem& item = m_Data[row];
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
@@ -104,7 +109,7 @@ bool KPackageManagerListModel::SetValueByRow(const wxAny& data, size_t row, cons
 {
 	if (row < m_Data.size())
 	{
-		KxFileFinderItem& item = m_Data[row];
+		KxFileItem& item = m_Data[row];
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
@@ -126,12 +131,47 @@ bool KPackageManagerListModel::SetValueByRow(const wxAny& data, size_t row, cons
 	}
 	return false;
 }
+bool KPackageManagerListModel::CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const
+{
+	const KxFileItem& item1 = m_Data[row1];
+	const KxFileItem& item2 = m_Data[row2];
+
+	// Folders first
+	if (item1.IsFile() != item2.IsFile())
+	{
+		return item1.IsFile() < item2.IsFile();
+	}
+
+	switch (column ? column->GetID() : ColumnID::Name)
+	{
+		case ColumnID::Name:
+		{
+			return KxComparator::IsEqual(item1.GetName(), item2.GetName());
+		}
+		case ColumnID::Size:
+		{
+			if (item1.IsFile() && item2.IsFile())
+			{
+				return item1.GetFileSize() < item2.GetFileSize();
+			}
+		}
+		case ColumnID::Type:
+		{
+			return KxComparator::IsEqual(GetType(item1), GetType(item2));
+		}
+		case ColumnID::ModificationDate:
+		{
+			return item1.GetModificationTime() < item2.GetModificationTime();
+		}
+	};
+	return false;
+}
 
 void KPackageManagerListModel::OnSelectItem(KxDataViewEvent& event)
 {
 	ClearInfo();
 
-	const KxFileFinderItem* entry = GetDataEntry(event.GetItem());
+	const KxFileItem* entry = GetDataEntry(event.GetItem());
 	if (entry && entry->IsFile())
 	{
 		KMainWindow::GetInstance()->SetStatus(entry->GetName());
@@ -145,7 +185,7 @@ void KPackageManagerListModel::OnSelectItem(KxDataViewEvent& event)
 }
 void KPackageManagerListModel::OnActivateItem(KxDataViewEvent& event)
 {
-	const KxFileFinderItem* entry = GetDataEntry(event.GetItem());
+	const KxFileItem* entry = GetDataEntry(event.GetItem());
 	if (entry)
 	{
 		if (entry->IsDirectory())
@@ -171,7 +211,7 @@ void KPackageManagerListModel::OnActivateItem(KxDataViewEvent& event)
 }
 void KPackageManagerListModel::OnContextMenu(KxDataViewEvent& event)
 {
-	const KxFileFinderItem* entry = GetDataEntry(event.GetItem());
+	const KxFileItem* entry = GetDataEntry(event.GetItem());
 	KxDataViewColumn* column = event.GetColumn();
 	if (entry && column)
 	{
@@ -264,7 +304,7 @@ void KPackageManagerListModel::CreateContextMenu()
 	m_ContextMenu.AddSeparator();
 	m_ContextMenu.Add(new KxMenuItem(MenuID::Properties, T(KxID_PROPERTIES)));
 }
-void KPackageManagerListModel::RunInstallWizard(const KxFileFinderItem& entry)
+void KPackageManagerListModel::RunInstallWizard(const KxFileItem& entry)
 {
 	KInstallWizardDialog* installWizard = new KInstallWizardDialog();
 	if (m_Package && m_Package->IsOK())
@@ -276,7 +316,7 @@ void KPackageManagerListModel::RunInstallWizard(const KxFileFinderItem& entry)
 		installWizard->Create(GetViewTLW(), entry.GetFullPath());
 	}
 }
-wxBitmap KPackageManagerListModel::GetIcon(const KxFileFinderItem& entry) const
+wxBitmap KPackageManagerListModel::GetIcon(const KxFileItem& entry) const
 {
 	wxBitmap icon;
 	if (entry.IsDirectory())
@@ -301,7 +341,7 @@ wxBitmap KPackageManagerListModel::GetIcon(const KxFileFinderItem& entry) const
 	}
 	return icon;
 }
-wxString KPackageManagerListModel::GetType(const KxFileFinderItem& entry) const
+wxString KPackageManagerListModel::GetType(const KxFileItem& entry) const
 {
 	return entry.IsFile() ? KxShell::GetTypeName(entry.GetName().AfterLast('.')) : T(KxID_FOLDER);
 }
@@ -331,7 +371,7 @@ void KPackageManagerListModel::Navigate(const wxString& sNavigatePath)
 	// Folders
 	{
 		KxFileFinder tFinder(m_CurrentPath, "*");
-		KxFileFinderItem item = tFinder.FindNext();
+		KxFileItem item = tFinder.FindNext();
 		while (item.IsOK())
 		{
 			if (item.IsNormalItem() && item.IsDirectory())
@@ -345,7 +385,7 @@ void KPackageManagerListModel::Navigate(const wxString& sNavigatePath)
 	// Files
 	{
 		KxFileFinder tFinder(m_CurrentPath, "*");
-		KxFileFinderItem item = tFinder.FindNext();
+		KxFileItem item = tFinder.FindNext();
 		while (item.IsOK())
 		{
 			if (item.IsNormalItem() && item.IsFile())
@@ -385,7 +425,7 @@ void KPackageManagerListModel::Search(const wxString& mask)
 	std::function<void(const wxString&)> Recurse = [this, &Recurse, &searchMask](const wxString& path)
 	{
 		KxFileFinder finder(path, "*");
-		KxFileFinderItem item = finder.FindNext();
+		KxFileItem item = finder.FindNext();
 		while (item.IsOK())
 		{
 			if (item.IsNormalItem())

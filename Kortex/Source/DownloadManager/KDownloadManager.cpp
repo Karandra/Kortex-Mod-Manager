@@ -190,7 +190,7 @@ void KDownloadManager::LoadDownloads()
 	bool showHidden = ShouldShowHiddenDownloads();
 
 	KxFileFinder finder(GetDownloadsLocation(), "*");
-	KxFileFinderItem item = finder.FindNext();
+	KxFileItem item = finder.FindNext();
 	while (item.IsOK())
 	{
 		if (item.IsNormalItem() && item.IsFile() && !item.GetName().IsEmpty())

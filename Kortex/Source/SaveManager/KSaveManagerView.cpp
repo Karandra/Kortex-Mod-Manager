@@ -6,9 +6,9 @@
 #include "UI/KImageViewerDialog.h"
 #include "KApp.h"
 #include "KAux.h"
-#include "KComparator.h"
-#include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxFile.h>
+#include <KxFramework/KxFileFinder.h>
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
 
 enum ColumnID
@@ -98,13 +98,13 @@ bool KSaveManagerView::SetValueByRow(const wxAny& value, size_t row, const KxDat
 			case ColumnID::Name:
 			{
 				const KSaveManagerConfig* savesConfig = KSaveManagerConfig::GetInstance();
-				KxFileFinderItem& infoPrimary = entry->GetFileInfo();
+				KxFileItem& infoPrimary = entry->GetFileInfo();
 
 				if (savesConfig->HasMultiFileSaveConfig())
 				{
-					KxFileFinderItem infoSecondary(infoPrimary);
-					KxFileFinderItem newInfoPrimary(infoPrimary);
-					KxFileFinderItem newInfoSecondary(infoPrimary);
+					KxFileItem infoSecondary(infoPrimary);
+					KxFileItem newInfoPrimary(infoPrimary);
+					KxFileItem newInfoSecondary(infoPrimary);
 
 					// Set new name
 					infoSecondary.SetName(infoPrimary.GetName().BeforeLast('.') + '.' + savesConfig->GetSecondarySaveExtension());
@@ -130,7 +130,7 @@ bool KSaveManagerView::SetValueByRow(const wxAny& value, size_t row, const KxDat
 				}
 				else
 				{
-					KxFileFinderItem newPrimaryInfo(infoPrimary);
+					KxFileItem newPrimaryInfo(infoPrimary);
 
 					wxString ext = infoPrimary.GetName().AfterLast('.');
 					if (ext != infoPrimary.GetName())
@@ -171,7 +171,7 @@ bool KSaveManagerView::CompareByRow(size_t row1, size_t row2, const KxDataViewCo
 	{
 		case ColumnID::Name:
 		{
-			return KComparator::KLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
+			return KxComparator::IsLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
 		}
 		case ColumnID::Size:
 		{
@@ -264,7 +264,7 @@ void KSaveManagerView::SetDataVector(const wxString& folder, const KxStringVecto
 	for (const wxString& filter: filtersList)
 	{
 		KxFileFinder finder(folder, filter);
-		KxFileFinderItem item;
+		KxFileItem item;
 		do
 		{
 			item = finder.FindNext();

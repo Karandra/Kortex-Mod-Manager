@@ -379,7 +379,7 @@ void KModEntry::UpdateFileTree()
 		}
 
 		KxFileFinder finder(path, "*");
-		KxFileFinderItem item = finder.FindNext();
+		KxFileItem item = finder.FindNext();
 		while (item.IsOK())
 		{
 			if (item.IsNormalItem())

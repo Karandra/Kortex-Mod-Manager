@@ -238,12 +238,12 @@ void KSaveManagerWorkspace::OnRemoveSave(KSaveFile* saveEntry)
 	if (saveEntry)
 	{
 		const KSaveManagerConfig* config = KSaveManagerConfig::GetInstance();
-		const KxFileFinderItem& primaryInfo = saveEntry->GetFileInfo();
+		const KxFileItem& primaryInfo = saveEntry->GetFileInfo();
 
 		KxFile(primaryInfo.GetFullPath()).RemoveFile(true);
 		if (config->HasMultiFileSaveConfig())
 		{
-			KxFileFinderItem tSecondaryInfo = primaryInfo;
+			KxFileItem tSecondaryInfo = primaryInfo;
 			tSecondaryInfo.SetName(primaryInfo.GetName().BeforeLast('.') + '.' + config->GetSecondarySaveExtension());
 			KxFile(tSecondaryInfo.GetFullPath()).RemoveFile(true);
 		}

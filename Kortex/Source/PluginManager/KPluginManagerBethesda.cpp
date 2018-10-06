@@ -13,13 +13,13 @@
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManagerDispatcher.h"
 #include "Profile/KPluginManagerConfig.h"
-#include "KComparator.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxTaskDialog.h>
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
@@ -52,7 +52,7 @@ KPluginEntry::RefVector KPluginManagerBethesda::CollectDependentPlugins(const KP
 				KxStringVector dependenciesList = bethesdaReader->GetRequiredPlugins();
 				auto it = std::find_if(dependenciesList.begin(), dependenciesList.end(), [&pluginEntry](const wxString& depName)
 				{
-					return KComparator::KEqual(pluginEntry.GetName(), depName);
+					return KxComparator::IsEqual(pluginEntry.GetName(), depName);
 				});
 				if (it != dependenciesList.end())
 				{
@@ -71,7 +71,7 @@ KPluginEntry::RefVector KPluginManagerBethesda::CollectDependentPlugins(const KP
 bool KPluginManagerBethesda::CheckExtension(const wxString& name) const
 {
 	const wxString ext = name.AfterLast('.');
-	return KComparator::KEqual(ext, wxS("esp")) || KComparator::KEqual(ext, wxS("esm"));
+	return KxComparator::IsEqual(ext, wxS("esp")) || KxComparator::IsEqual(ext, wxS("esm"));
 }
 
 wxString KPluginManagerBethesda::OnWriteToLoadOrder(const KPluginEntry& entry) const
@@ -99,7 +99,7 @@ void KPluginManagerBethesda::LoadNativeOrderBG()
 		// Find whether plugin with this name exist
 		auto it = std::find_if(files.begin(), files.end(), [&name](const KFileTreeNode* node)
 		{
-			return KComparator::KEqual(node->GetName(), name);
+			return KxComparator::IsEqual(node->GetName(), name);
 		});
 
 		if (!name.StartsWith('#') && it != files.end())
@@ -270,7 +270,7 @@ void KPluginManagerBethesda::Load()
 		// Find whether plugin with this name exist
 		auto it = std::find_if(files.begin(), files.end(), [&listEntry](const KFileTreeNode* item)
 		{
-			return KComparator::KEqual(item->GetName(), listEntry.GetPluginName());
+			return KxComparator::IsEqual(item->GetName(), listEntry.GetPluginName());
 		});
 
 		if (it != files.end())

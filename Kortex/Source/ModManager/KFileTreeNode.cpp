@@ -2,7 +2,7 @@
 #include "KFileTreeNode.h"
 #include "KModEntry.h"
 #include "KModManager.h"
-#include "KComparator.h"
+#include <KxFramework/KxComparator.h>
 
 const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, const wxString& relativePath, KxFileSearchType type)
 {
@@ -20,7 +20,7 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 		{
 			for (const KFileTreeNode& node: rootNode.GetChildren())
 			{
-				if (KComparator::KEqual(folderName, node.GetName(), true))
+				if (KxComparator::IsEqual(folderName, node.GetName(), true))
 				{
 					return &node;
 				}

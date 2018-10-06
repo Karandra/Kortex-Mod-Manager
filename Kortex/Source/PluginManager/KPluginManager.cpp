@@ -15,10 +15,9 @@
 #include "Profile/KPluginManagerConfig.h"
 #include "ProgramManager/KProgramManager.h"
 #include "UI/KWorkspace.h"
-#include "KComparator.h"
 
-#include <KxFramework/KxString.h>
 #include <KxFramework/KxProcess.h>
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
@@ -218,7 +217,7 @@ KPluginEntry* KPluginManager::FindPluginByName(const wxString& name) const
 {
 	auto it = std::find_if(m_Entries.begin(), m_Entries.end(), [&name](const auto& entry)
 	{
-		return KComparator::KEqual(name, entry->GetName(), true);
+		return KxComparator::IsEqual(name, entry->GetName(), true);
 	});
 	if (it != m_Entries.end())
 	{

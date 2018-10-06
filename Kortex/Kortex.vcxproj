@@ -82,7 +82,6 @@
     <ClCompile Include="Source\ModManager\KModTagsManager.cpp" />
     <ClCompile Include="Source\ModManager\KModWorkspace.cpp" />
     <ClCompile Include="Source\Archive\KArchive.cpp" />
-    <ClCompile Include="Source\Archive\KArchiveImpl.cpp" />
     <ClCompile Include="Source\Events\KVFSEvent.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardComponnetsModel.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardDialog.cpp" />
@@ -294,13 +293,11 @@
     <ClInclude Include="Source\ProgramManager\KProgramManagerWorkspace.h" />
     <ClInclude Include="Source\SaveManager\KSaveManagerView.h" />
     <ClInclude Include="Source\Utility\KBitmapSize.h" />
-    <ClInclude Include="Source\Utility\KComparator.h" />
     <ClInclude Include="Source\Utility\KINetFSHandler.h" />
     <ClInclude Include="Source\Utility\KProgramOptions.h" />
     <ClInclude Include="Source\Utility\KUnsortedUnique.h" />
     <ClInclude Include="Source\Utility\KWithBitmap.h" />
     <ClInclude Include="Source\Archive\KArchive.h" />
-    <ClInclude Include="Source\Archive\KArchiveImpl.h" />
     <ClInclude Include="Source\Events\KVFSEvent.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardComponnetsModel.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardDefs.h" />

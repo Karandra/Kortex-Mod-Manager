@@ -9,12 +9,12 @@
 #include "Profile/KProfile.h"
 #include "KApp.h"
 #include "KAux.h"
-#include "KComparator.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxTaskDialog.h>
+#include <KxFramework/KxComparator.h>
 #include <wx/clipbrd.h>
 
 enum ColumnID
@@ -235,7 +235,7 @@ bool KDownloadView::CompareByRow(size_t row1, size_t row2, const KxDataViewColum
 	{
 		case ColumnID::Name:
 		{
-			return KComparator::KLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
+			return KxComparator::IsLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
 		}
 		case ColumnID::Version:
 		{
@@ -250,7 +250,7 @@ bool KDownloadView::CompareByRow(size_t row1, size_t row2, const KxDataViewColum
 			const wxString name1 = entry1->GetTargetProfile() ? entry1->GetTargetProfile()->GetShortName() : wxEmptyString;
 			const wxString name2 = entry2->GetTargetProfile() ? entry2->GetTargetProfile()->GetShortName() : wxEmptyString;
 			
-			return KComparator::KLess(name1, name2);
+			return KxComparator::IsLess(name1, name2);
 		}
 		case ColumnID::Provider:
 		{

@@ -40,7 +40,7 @@ bool KDownloadEntry::RequestNewLink()
 	return false;
 }
 
-void KDownloadEntry::DeSerializeDefault(const KxFileFinderItem& fileItem)
+void KDownloadEntry::DeSerializeDefault(const KxFileItem& fileItem)
 {
 	m_Provider = KNetwork::GetInstance()->GetCurrentProvider();
 	m_TargetProfile = KProfile::GetCurrent();
@@ -457,7 +457,7 @@ bool KDownloadEntry::Serialize() const
 	KxFileStream stream(GetMetaFilePath(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
 	return stream.IsOk() && Serialize(stream);
 }
-bool KDownloadEntry::DeSerialize(const wxString& xmlFile, const KxFileFinderItem& fileItem)
+bool KDownloadEntry::DeSerialize(const wxString& xmlFile, const KxFileItem& fileItem)
 {
 	KxFileStream stream(xmlFile, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (stream.IsOk() && DeSerialize(stream))

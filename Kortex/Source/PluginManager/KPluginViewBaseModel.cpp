@@ -13,7 +13,7 @@
 #include "UI/KTextEditorDialog.h"
 #include "KApp.h"
 #include "KAux.h"
-#include "KComparator.h"
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxMenu.h>
 
 enum ColumnID

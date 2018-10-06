@@ -486,9 +486,6 @@
     <ClCompile Include="Source\Archive\KArchive.cpp">
       <Filter>Code\Source Files\Archive</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Archive\KArchiveImpl.cpp">
-      <Filter>Code\Source Files\Archive</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModManager\KMirroredVirtualFolder.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
@@ -1082,9 +1079,6 @@
     <ClInclude Include="Source\Archive\KArchive.h">
       <Filter>Code\Header Files\Archive</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Archive\KArchiveImpl.h">
-      <Filter>Code\Header Files\Archive</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModManager\KMirroredVirtualFolder.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
@@ -1149,9 +1143,6 @@
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KProgramOptions.h">
-      <Filter>Code\Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KComparator.h">
       <Filter>Code\Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\PluginManager\LOOT API\KLootAPI.h">

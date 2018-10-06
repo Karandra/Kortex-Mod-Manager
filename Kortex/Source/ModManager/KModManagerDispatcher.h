@@ -45,7 +45,7 @@ class KModManagerDispatcher
 {
 	public:
 		using CollisionVector = std::vector<KMMDispatcherCollision>;
-		using FilesVector = std::vector<KxFileFinderItem>;
+		using FilesVector = std::vector<KxFileItem>;
 		using ModsVector = std::vector<KModEntry*>;
 
 		enum class IterationOrder

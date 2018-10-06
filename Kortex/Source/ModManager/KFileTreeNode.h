@@ -62,7 +62,7 @@ class KFileTreeNode
 	private:
 		Vector m_Children;
 		Vector m_Alternatives;
-		KxFileFinderItem m_Item;
+		KxFileItem m_Item;
 		const KFileTreeNode* m_Parent = NULL;
 		const KModEntry* m_Mod = NULL;
 
@@ -96,7 +96,7 @@ class KFileTreeNode
 
 	public:
 		KFileTreeNode() = default;
-		KFileTreeNode(const KModEntry& modEntry, const KxFileFinderItem& item, const KFileTreeNode* parent = NULL)
+		KFileTreeNode(const KModEntry& modEntry, const KxFileItem& item, const KFileTreeNode* parent = NULL)
 			:m_Mod(&modEntry), m_Item(item), m_Parent(parent)
 		{
 		}
@@ -145,11 +145,11 @@ class KFileTreeNode
 			return m_Alternatives;
 		}
 		
-		const KxFileFinderItem& GetItem() const
+		const KxFileItem& GetItem() const
 		{
 			return m_Item;
 		}
-		KxFileFinderItem& GetItem()
+		KxFileItem& GetItem()
 		{
 			return m_Item;
 		}

@@ -22,7 +22,7 @@ class KImageViewerEvent: public wxNotifyEvent
 		};
 
 	private:
-		std::variant<wxString, const wxBitmap*, const KAcrhiveBuffer*> m_Data;
+		std::variant<wxString, const wxBitmap*, const KArchive::Buffer*> m_Data;
 		bool m_HasPrev = false;
 		bool m_HasNext = false;
 
@@ -42,7 +42,7 @@ class KImageViewerEvent: public wxNotifyEvent
 		{
 			SetFilePath(filePath);
 		}
-		KImageViewerEvent(wxEventType type, const KAcrhiveBuffer& buffer)
+		KImageViewerEvent(wxEventType type, const KArchive::Buffer& buffer)
 			:wxNotifyEvent(type)
 		{
 			SetInputStream(buffer);
@@ -96,7 +96,7 @@ class KImageViewerEvent: public wxNotifyEvent
 
 		bool IsInputStream() const;
 		wxMemoryInputStream GetInputSteram();
-		void SetInputStream(const KAcrhiveBuffer& buffer);
+		void SetInputStream(const KArchive::Buffer& buffer);
 };
 
 wxDECLARE_EVENT(KEVT_IMAGEVIEWER_NEXT_IMAGE, KImageViewerEvent);

@@ -3,9 +3,9 @@
 #include "KProfile.h"
 #include "PluginManager/KPluginManager.h"
 #include "PluginManager/LOOT API/KLootAPI.h"
-#include "KComparator.h"
 #include "KApp.h"
 #include "KAux.h"
+#include <KxFramework/KxComparator.h>
 
 KPluginManagerConfigStdContentEntry::KPluginManagerConfigStdContentEntry(const KxXMLNode& node)
 {
@@ -166,7 +166,7 @@ const KPluginManagerConfig::StandardContentEntry* KPluginManagerConfig::GetStand
 {
 	auto it = std::find_if(m_StandardContent.begin(), m_StandardContent.end(), [&id](const KPluginManagerConfigStdContentEntry& entry)
 	{
-		return KComparator::KEqual(entry.GetID(), id);
+		return KxComparator::IsEqual(entry.GetID(), id);
 	});
 	if (it != m_StandardContent.cend())
 	{

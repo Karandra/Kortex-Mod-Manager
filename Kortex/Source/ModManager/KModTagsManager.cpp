@@ -3,9 +3,9 @@
 #include "KModEntry.h"
 #include "Profile/KProfile.h"
 #include "PackageManager/KPackageManager.h"
-#include "KComparator.h"
 #include "KApp.h"
 #include "KAux.h"
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxXML.h>
 
@@ -64,7 +64,7 @@ void KModTagsManager::OnInit()
 	// Remove duplicates
 	auto it = std::unique(m_Tags.begin(), m_Tags.end(), [](const KModTag& tag1, const KModTag& tag2)
 	{
-		return KComparator::KEqual(tag1.GetValue(), tag2.GetValue(), false);
+		return KxComparator::IsEqual(tag1.GetValue(), tag2.GetValue(), false);
 	});
 	m_Tags.erase(it, m_Tags.end());
 }

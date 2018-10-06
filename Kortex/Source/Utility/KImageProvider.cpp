@@ -80,8 +80,8 @@ namespace KImageProvider
 		Add(KIMG_SITE_LOVERSLAB, "LoverLab");
 
 		// Unknown icon
-		KxFileFinderItem item(KApp::Get().GetUserSettingsFile());
-		item.UpdateInfo();
+		KxFileItem item(wxEmptyString);
+		item.SetNormalAttributes();
 		item.SetName(".url");
 
 		AddItem(KIMG_SITE_UNKNOWN, "UnknownSite", KxShell::GetFileIcon(item, true));

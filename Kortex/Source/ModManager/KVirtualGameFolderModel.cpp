@@ -112,7 +112,10 @@ void KVirtualGameFolderModel::GetEditorValue(wxAny& value, const KxDataViewItem&
 				KxStringVector items(1, node->GetMod().GetName());
 				for (const KFileTreeNode& node: node->GetAlternatives())
 				{
-					items.push_back(node.GetMod().GetName());
+					if (node.GetMod().IsEnabled())
+					{
+						items.push_back(node.GetMod().GetName());
+					}
 				}
 				m_PartOfEditor->SetItems(items);
 

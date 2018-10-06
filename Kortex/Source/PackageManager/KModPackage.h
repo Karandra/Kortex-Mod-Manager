@@ -20,24 +20,24 @@ class KModPackage
 
 		wxString m_EffectiveArchiveRoot;
 		bool m_DocumentsLoaded = false;
-		KAcrhiveBufferMap m_DocumentsBuffer;
+		KArchive::BufferMap m_DocumentsBuffer;
 
 	public:
-		wxBitmap ReadImage(const KAcrhiveBuffer& buffer) const;
+		wxBitmap ReadImage(const KArchive::Buffer& buffer) const;
 		wxBitmap ReadImage(size_t index) const
 		{
 			if (index != ms_InvalidIndex)
 			{
-				return ReadImage(m_Archive.Extract(index));
+				return ReadImage(m_Archive.ExtractToMemory(index));
 			}
 			return wxNullBitmap;
 		}
-		wxString ReadString(const KAcrhiveBuffer& buffer, bool isASCII = false) const;
+		wxString ReadString(const KArchive::Buffer& buffer, bool isASCII = false) const;
 		wxString ReadString(size_t index, bool isASCII = false) const
 		{
 			if (index != ms_InvalidIndex)
 			{
-				return ReadString(m_Archive.Extract(index), isASCII);
+				return ReadString(m_Archive.ExtractToMemory(index), isASCII);
 			}
 			return wxEmptyString;
 		}
@@ -110,11 +110,11 @@ class KModPackage
 			return m_Config.GetInfo().GetDescription();
 		}
 		
-		const KAcrhiveBufferMap& GetDocumentsBuffer() const
+		const KArchive::BufferMap& GetDocumentsBuffer() const
 		{
 			return m_DocumentsBuffer;
 		}
-		const KAcrhiveBuffer& GetDocumentBuffer(const KLabeledValue& entry) const
+		const KArchive::Buffer& GetDocumentBuffer(const KLabeledValue& entry) const
 		{
 			return m_DocumentsBuffer.at((size_t)entry.GetClientData());
 		}

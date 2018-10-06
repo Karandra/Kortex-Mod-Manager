@@ -18,6 +18,8 @@
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileStream.h>
+#include <KxFramework/KxArchiveFileFinder.h>
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxString.h>
 
 wxDEFINE_EVENT(KEVT_IW_DONE, wxNotifyEvent);
@@ -574,7 +576,7 @@ void KInstallWizardDialog::OnSelectDocument(int index, bool useAdvancedEditor)
 			if (useAdvancedEditor || KAux::IsFileExtensionMatches(entry.GetValue(), {"pdf", "xml", "htm", "html", "doc", "docx"}))
 			{
 				KxFileStream file(CreateTempFile(entry.GetValue().AfterLast('\\')), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_ALL);
-				const KAcrhiveBuffer& fileBuffer = m_Package->GetDocumentBuffer(entry);
+				const KArchive::Buffer& fileBuffer = m_Package->GetDocumentBuffer(entry);
 				file.Write(fileBuffer.data(), fileBuffer.size());
 
 				m_Info_DocumentAdvanced->LoadURL(file.GetFileName());
@@ -582,7 +584,7 @@ void KInstallWizardDialog::OnSelectDocument(int index, bool useAdvancedEditor)
 			}
 			else
 			{
-				const KAcrhiveBuffer& buffer = m_Package->GetDocumentBuffer(entry);
+				const KArchive::Buffer& buffer = m_Package->GetDocumentBuffer(entry);
 				wxString text = m_Package->ReadString(buffer);
 				if (text.IsEmpty() && !buffer.empty())
 				{
@@ -1249,24 +1251,14 @@ void KInstallWizardDialog::SetModEntryData()
 KxUInt32Vector KInstallWizardDialog::GetFilesOfFolder(const KPPFFolderEntry* folder) const
 {
 	KxUInt32Vector indexes;
-	wxString path = folder->GetSource() + "\\*";
+	const wxString path = folder->GetSource();
 
-	size_t index = GetArchive().FindFirstFile(path, false);
-	if (index != (size_t)-1)
+	KxArchiveFileFinder finder(GetArchive(), path, wxS('*'));
+	KxFileItem item = finder.FindNext();
+	while (item.IsOK())
 	{
-		indexes.push_back(index);
-		while (true)
-		{
-			index = GetArchive().FindNextFile(index, path, false);
-			if (index != (size_t)-1)
-			{
-				indexes.push_back(index);
-			}
-			else
-			{
-				break;
-			}
-		}
+		indexes.push_back(item.GetExtraData<size_t>());
+		item = finder.FindNext();
 	}
 	return indexes;
 }
@@ -1330,17 +1322,17 @@ void KInstallWizardDialog::RunInstall()
 
 			if (const KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
 			{
-				KxUInt32Vector tFilesIndexes = GetFilesOfFolder(folderEntry);
-				KxStringVector tFinalPaths = GetFinalPaths(tFilesIndexes, installLocation, folderEntry);
-				GetArchive().Extract(tFilesIndexes, tFinalPaths);
+				KxUInt32Vector filesIndexes = GetFilesOfFolder(folderEntry);
+				KxStringVector finalPaths = GetFinalPaths(filesIndexes, installLocation, folderEntry);
+				GetArchive().ExtractToFiles(filesIndexes, finalPaths);
 			}
 			else
 			{
-				size_t index = GetArchive().FindFirstFile(fileEntry->GetSource(), false);
-				if (index != (size_t)-1)
+				KxFileItem item;
+				if (GetArchive().FindFileInFolder(fileEntry->GetSource(), wxEmptyString, item))
 				{
-					wxString path = installLocation + '\\' + fileEntry->GetDestination();
-					GetArchive().Extract({(uint32_t)index}, {path});
+					wxString path = installLocation + wxS('\\') + fileEntry->GetDestination();
+					GetArchive().ExtractToFiles({item.GetExtraData<uint32_t>()}, {path});
 				}
 			}
 

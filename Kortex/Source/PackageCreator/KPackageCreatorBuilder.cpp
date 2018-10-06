@@ -101,35 +101,34 @@ void KPackageCreatorBuilder::CheckProject()
 }
 void KPackageCreatorBuilder::Configure()
 {
-	auto ConvertMethod = [](const wxString& sMethodName)
+	auto ConvertMethod = [](const wxString& methodName)
 	{
-		if (sMethodName == "LZMA")
+		if (methodName == "LZMA")
 		{
-			return KARC_METHOD_LZMA;
+			return KArchiveNS::Method::LZMA;
 		}
-		if (sMethodName == "LZMA2")
+		if (methodName == "LZMA2")
 		{
-			return KARC_METHOD_LZMA2;
+			return KArchiveNS::Method::LZMA2;
 		}
-		if (sMethodName == "PPMd")
+		if (methodName == "PPMd")
 		{
-			return KARC_METHOD_PPMD;
+			return KArchiveNS::Method::PPMd;
 		}
-		if (sMethodName == "BZip2")
+		if (methodName == "BZip2")
 		{
-			return KARC_METHOD_BZIP2;
+			return KArchiveNS::Method::BZip2;
 		}
-
-		return KARC_METHOD_LZMA2;
+		return KArchiveNS::Method::LZMA;
 	};
 
 	const KPackageProjectConfig& config = m_Project->GetConfig();
 
-	m_Archive.SetProperty_Solid(config.IsSolidArchive());
-	m_Archive.SetProperty_MultiThreaded(config.IsMultithreadingUsed());
-	m_Archive.SetProperty_CompressionMethod(ConvertMethod(config.GetCompressionMethod()));
-	m_Archive.SetProperty_CompressionLevel(config.GetCompressionLevel());
-	m_Archive.SetProperty_DictionarySize(config.GetCompressionDictionarySize());
+	m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsSolidArchive());
+	m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsMultithreadingUsed());
+	m_Archive.SetPropertyInt(KArchiveNS::PropertyInt::Method, ConvertMethod(config.GetCompressionMethod()));
+	m_Archive.SetPropertyInt(KArchiveNS::PropertyInt::CompressionLevel, config.GetCompressionLevel());
+	m_Archive.SetPropertyInt(KArchiveNS::PropertyInt::DictionarySize, config.GetCompressionDictionarySize());
 }
 void KPackageCreatorBuilder::WritePackageConfig()
 {

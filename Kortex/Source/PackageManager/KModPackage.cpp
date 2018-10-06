@@ -7,7 +7,7 @@
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxShell.h>
 
-wxBitmap KModPackage::ReadImage(const KAcrhiveBuffer& buffer) const
+wxBitmap KModPackage::ReadImage(const KArchive::Buffer& buffer) const
 {
 	wxMemoryInputStream stream(buffer.data(), buffer.size());
 	wxImage image;
@@ -15,7 +15,7 @@ wxBitmap KModPackage::ReadImage(const KAcrhiveBuffer& buffer) const
 
 	return wxBitmap(image, 32);
 }
-wxString KModPackage::ReadString(const KAcrhiveBuffer& buffer, bool isASCII) const
+wxString KModPackage::ReadString(const KArchive::Buffer& buffer, bool isASCII) const
 {
 	if (!isASCII)
 	{
@@ -38,32 +38,32 @@ wxString KModPackage::ReadString(const KAcrhiveBuffer& buffer, bool isASCII) con
 
 void KModPackage::LoadConfig(KPackageProject& project)
 {
-	if (m_Archive.GetProperty_CompressionFormat() != KARC_FORMAT_UNKNOWN)
+	if (m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != KArchiveNS::Format::Unknown)
 	{
 		SetModIDIfNone();
 
 		// Native format
 		{
-			size_t index = m_Archive.FindFirstFile("KortexPackage.xml");
-			if (index != ms_InvalidIndex)
+			KxFileItem item;
+			if (m_Archive.FindFile("KortexPackage.xml", item))
 			{
 				m_PackageType = KPP_PACCKAGE_NATIVE;
-				LoadConfigNative(project, index);
+				LoadConfigNative(project, item.GetExtraData<size_t>());
 				return;
 			}
 		}
 
 		// SMI/AMI legacy format
 		{
-			size_t index = m_Archive.FindFirstFileIn("SetupInfo", "Setup.xml");
-			if (index == ms_InvalidIndex)
+			KxFileItem item;
+			if (!m_Archive.FindFileInFolder("SetupInfo", "Setup.xml", item))
 			{
-				index = m_Archive.FindFirstFileIn("SetupInfo", "Project.smp");
+				m_Archive.FindFileInFolder("SetupInfo", "Project.smp", item);
 			}
-			if (index != ms_InvalidIndex)
+			if (item.IsOK())
 			{
 				m_PackageType = KPP_PACCKAGE_LEGACY;
-				LoadConfigSMI(project, index);
+				LoadConfigSMI(project, item.GetExtraData<size_t>());
 				return;
 			}
 		}
@@ -71,31 +71,35 @@ void KModPackage::LoadConfig(KPackageProject& project)
 		// FOMod (Configurable)
 		auto TryScriptedFOMod = [this]()
 		{
-			size_t index = m_Archive.FindFirstFile("Script.cs");
-			if (index != ms_InvalidIndex)
+			KxFileItem item;
+			if (m_Archive.FindFile("Script.cs", item))
 			{
-				return index;
+				return item.GetExtraData<size_t>();
 			}
 			return ms_InvalidIndex;
 		};
 
 		{
-			size_t infoIndex = m_Archive.FindFirstFile("Info.xml");
-			size_t moduleConfigIndex = m_Archive.FindFirstFile("ModuleConfig.xml");
-			if (infoIndex != ms_InvalidIndex || moduleConfigIndex != ms_InvalidIndex)
+			KxFileItem infoItem;
+			KxFileItem moduleConfigItem;
+
+			m_Archive.FindFile("Info.xml", infoItem);
+			m_Archive.FindFile("ModuleConfig.xml", moduleConfigItem);
+
+			if (infoItem.IsOK() || moduleConfigItem.IsOK())
 			{
 				// No module config
-				if (moduleConfigIndex == ms_InvalidIndex && TryScriptedFOMod() != ms_InvalidIndex)
+				if (!moduleConfigItem.IsOK() && TryScriptedFOMod() != ms_InvalidIndex)
 				{
 					// Set as scripted but load available XMLs
 					m_PackageType = KPP_PACCKAGE_FOMOD_CSHARP;
-					LoadConfigFOMod(project, infoIndex, moduleConfigIndex);
+					LoadConfigFOMod(project, infoItem.GetExtraData<size_t>(), moduleConfigItem.GetExtraData<size_t>());
 					return;
 				}
 
 				// This is valid configurable FOMod
 				m_PackageType = KPP_PACCKAGE_FOMOD_XML;
-				LoadConfigFOMod(project, infoIndex, moduleConfigIndex);
+				LoadConfigFOMod(project, infoItem.GetExtraData<size_t>(), moduleConfigItem.GetExtraData<size_t>());
 				return;
 			}
 		}
@@ -121,7 +125,7 @@ void KModPackage::LoadConfigSMI(KPackageProject& project, size_t index)
 }
 void KModPackage::LoadConfigFOMod(KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex)
 {
-	KAcrhiveBufferMap buffers = m_Archive.Extract({(uint32_t)infoIndex, (uint32_t)moduleConfigIndex});
+	KArchive::BufferMap buffers = m_Archive.ExtractToMemory({(uint32_t)infoIndex, (uint32_t)moduleConfigIndex});
 
 	KPackageProjectSerializerFOMod serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
 	serializer.SetEffectiveArchiveRoot(DetectEffectiveArchiveRoot(infoIndex != ms_InvalidIndex ? infoIndex : moduleConfigIndex));
@@ -156,10 +160,14 @@ void KModPackage::SetModIDIfNone()
 
 void KModPackage::LoadBasicResources()
 {
-	KPPIImageEntry* pLogo = m_Config.GetInterface().GetMainImageEntry();
-	if (pLogo)
+	KPPIImageEntry* logo = m_Config.GetInterface().GetMainImageEntry();
+	if (logo)
 	{
-		pLogo->SetBitmap(ReadImage(m_Archive.FindFirstFile(pLogo->GetPath(), false)));
+		KxFileItem item;
+		if (m_Archive.FindFile(logo->GetPath(), item))
+		{
+			logo->SetBitmap(ReadImage(item.GetExtraData<size_t>()));
+		}
 	}
 }
 void KModPackage::LoadImageResources()
@@ -168,9 +176,10 @@ void KModPackage::LoadImageResources()
 	std::unordered_map<size_t, KPPIImageEntry*> entriesMap;
 	for (KPPIImageEntry& entry: m_Config.GetInterface().GetImages())
 	{
-		size_t index = m_Archive.FindFirstFile(entry.GetPath(), false);
-		if (index != ms_InvalidIndex)
+		KxFileItem item;
+		if (m_Archive.FindFile(entry.GetPath(), item))
 		{
+			size_t index = item.GetExtraData<size_t>();
 			entriesMap.insert_or_assign(index, &entry);
 			indexes.push_back(index);
 		}
@@ -178,7 +187,7 @@ void KModPackage::LoadImageResources()
 
 	if (!indexes.empty())
 	{
-		KAcrhiveBufferMap buffers = m_Archive.Extract(indexes);
+		KArchive::BufferMap buffers = m_Archive.ExtractToMemory(indexes);
 		for (auto& v: buffers)
 		{
 			entriesMap[v.first]->SetBitmap(ReadImage(v.second));
@@ -193,9 +202,10 @@ void KModPackage::LoadDocumentResources()
 		std::unordered_map<size_t, KLabeledValue*> entriesMap;
 		for (KLabeledValue& entry: m_Config.GetInfo().GetDocuments())
 		{
-			size_t index = m_Archive.FindFirstFile(entry.GetValue(), false);
-			if (index != ms_InvalidIndex)
+			KxFileItem item;
+			if (m_Archive.FindFile(entry.GetValue(), item))
 			{
+				size_t index = item.GetExtraData<size_t>();
 				entriesMap.insert_or_assign(index, &entry);
 				indexes.push_back(index);
 			}
@@ -203,7 +213,7 @@ void KModPackage::LoadDocumentResources()
 
 		if (!indexes.empty())
 		{
-			m_DocumentsBuffer = m_Archive.Extract(indexes);
+			m_DocumentsBuffer = m_Archive.ExtractToMemory(indexes);
 			for (auto& v: m_DocumentsBuffer)
 			{
 				entriesMap[v.first]->SetClientData((void*)v.first);
@@ -265,7 +275,7 @@ KModPackage::~KModPackage()
 bool KModPackage::IsOK() const
 {
 	return !m_PackageFilePath.IsEmpty() &&
-		m_Archive.GetProperty_CompressionFormat() != KARC_FORMAT_UNKNOWN &&
+		m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown &&
 		m_PackageType != KPP_PACCKAGE_UNKNOWN &&
 		!m_Config.ComputeModID().IsEmpty();
 }

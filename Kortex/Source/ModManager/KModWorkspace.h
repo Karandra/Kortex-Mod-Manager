@@ -131,7 +131,7 @@ class KModWorkspace: public KWorkspace, public KxSingletonPtr<KModWorkspace>
 		void InstallMod(KModEntry* entry);
 		void UninstallMod(KModEntry* entry, bool eraseLog);
 		void OnModSerach(wxCommandEvent& event);
-		void OnModSerachColumnsChanged(KxMenuEvent& event);
+		void OnModSearchColumnsChanged(KxMenuEvent& event);
 
 		void ClearControls();
 		void DisplayModInfo(KModEntry* entry);

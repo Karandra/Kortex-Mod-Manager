@@ -187,11 +187,12 @@ void KModWorkspace::CreateToolBar()
 	m_ToolBar_Tools->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KModWorkspace::OnToolsMenu, this);
 
 	m_SearchBox = new KxSearchBox(m_ModsToolBar, KxID_NONE);
+	m_SearchBox->SetName("KModWorkspace search box");
 	m_SearchBox->Bind(wxEVT_SEARCHCTRL_SEARCH_BTN, &KModWorkspace::OnModSerach, this);
 	m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &KModWorkspace::OnModSerach, this);
 
 	KxMenu* searchMenu = new KxMenu();
-	searchMenu->Bind(KxEVT_MENU_SELECT, &KModWorkspace::OnModSerachColumnsChanged, this);
+	searchMenu->Bind(KxEVT_MENU_SELECT, &KModWorkspace::OnModSearchColumnsChanged, this);
 	m_ViewModel->CreateSearchColumnsMenu(*searchMenu);
 	m_SearchBox->SetMenu(searchMenu);
 
@@ -642,7 +643,7 @@ void KModWorkspace::OnModSerach(wxCommandEvent& event)
 		m_ViewModel->RefreshItems();
 	}
 }
-void KModWorkspace::OnModSerachColumnsChanged(KxMenuEvent& event)
+void KModWorkspace::OnModSearchColumnsChanged(KxMenuEvent& event)
 {
 	KxMenuItem* item = event.GetItem();
 	item->Check(!item->IsChecked());

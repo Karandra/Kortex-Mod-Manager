@@ -123,7 +123,7 @@ void KMainWindow::CreateBaseLayout()
 {
 	m_WorkspaceContainer = new wxSimplebook(this, KxID_NONE);
 	m_WorkspaceContainer->SetBackgroundColour(GetBackgroundColour());
-	m_WorkspaceContainer->SetImageList(const_cast<KxImageList*>(m_App.GetImageList()));
+	m_WorkspaceContainer->SetImageList(const_cast<KxImageList*>(KGetImageList()));
 	m_MainSizer->Add(m_WorkspaceContainer, 1, wxEXPAND);
 }
 WXLRESULT KMainWindow::MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
@@ -359,6 +359,7 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 	if (skip)
 	{
 		event.Skip();
+		KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 		KDownloadManager::GetInstance()->OnShutdown();
 	}
 }
@@ -370,7 +371,7 @@ void KMainWindow::OnChangeProfile(KxMenuEvent& event)
 		return;
 	}
 
-	if (GetApp().ShowChageProfileDialog())
+	if (KApp::Get().ShowChageProfileDialog())
 	{
 		Close(true);
 	}
@@ -406,9 +407,9 @@ void KMainWindow::OnPluggableManagersMenuVFSToggled(KVFSEvent& event)
 }
 
 KMainWindow::KMainWindow()
-	:m_App(KApp::Get()), m_WindowOptions("KMainWindow", wxEmptyString)
+	:m_WindowOptions("KMainWindow", wxEmptyString)
 {
-	if (Create(NULL, KxID_NONE, m_App.GetAppDisplayName(), wxDefaultPosition, wxSize(850, 600), DefaultStyle))
+	if (Create(NULL, KxID_NONE, KApp::Get().GetAppDisplayName(), wxDefaultPosition, wxSize(850, 600), DefaultStyle))
 	{
 		Bind(wxEVT_CLOSE_WINDOW, &KMainWindow::OnWindowClose, this);
 
@@ -419,7 +420,6 @@ KMainWindow::KMainWindow()
 }
 KMainWindow::~KMainWindow()
 {
-	KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 }
 
 bool KMainWindow::SwitchWorkspaceHelper(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace)

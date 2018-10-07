@@ -30,7 +30,6 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		static const void* GetUniqueID();
 
 	private:
-		KApp& m_App;
 		wxBoxSizer* m_MainSizer = NULL;
 		wxBoxSizer* m_ToolBarSizer = NULL;
 
@@ -99,10 +98,6 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		KWorkspace* DoAddWorkspace(KWorkspace* workspace);
 
 	public:
-		KApp& GetApp() const
-		{
-			return m_App;
-		}
 		KxAuiToolBar* GetMainToolBar() const
 		{
 			return m_ToolBar;

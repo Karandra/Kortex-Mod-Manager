@@ -38,6 +38,8 @@ bool KWorkspace::OnCreateWorkspaceInternal()
 		m_CreatingWorkspace = true;
 		if (OnCreateWorkspace())
 		{
+			m_QSM = GetQuickSettingsMenu();
+
 			m_CreatingWorkspace = false;
 			m_IsCreated = true;
 			m_Sizer->Add(GetWorkspaceSizer(), 1, wxEXPAND|wxALL, std::min(KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING));
@@ -105,7 +107,7 @@ KWorkspace::KWorkspace(KMainWindow* mainWindow)
 KWorkspace::~KWorkspace()
 {
 	delete m_WorkspaceController;
-	delete GetQuickSettingsMenu();
+	delete m_QSM;
 }
 
 void KWorkspace::SwitchHereEvent(wxNotifyEvent& event)

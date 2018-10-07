@@ -43,6 +43,7 @@ class KWorkspace: public KxPanel
 		wxBoxSizer* m_Sizer = NULL;
 		KxAuiToolBarItem* m_ToolBarButton = NULL;
 		KxMenuItem* m_ManagersMenuItem = NULL;
+		KxMenu* m_QSM = NULL;
 		
 		bool m_CreatingWorkspace = false;
 		bool m_IsCreated = false;

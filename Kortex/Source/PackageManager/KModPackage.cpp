@@ -38,7 +38,7 @@ wxString KModPackage::ReadString(const KArchive::Buffer& buffer, bool isASCII) c
 
 void KModPackage::LoadConfig(KPackageProject& project)
 {
-	if (m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != KArchiveNS::Format::Unknown)
+	if (m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown)
 	{
 		SetModIDIfNone();
 

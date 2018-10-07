@@ -1,0 +1,17 @@
+.vs/*
+*.vcxproj.user
+
+Kortex/Junk/*
+Kortex/Release/*
+Kortex/Debug/*
+
+Kortex Server/Junk/*
+Kortex Server/Release/*
+Kortex Server/Debug/*
+
+Kortex/Release/Kortex.exe
+Kortex/Release/Kortex x64.exe
+Kortex/Bin/Kortex Server x64.exe
+Kortex/Bin/Kortex x64.exe
+Kortex/Bin/Kortex Server.exe
+Kortex/Bin/Kortex.exe

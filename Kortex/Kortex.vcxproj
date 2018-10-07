@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Archive\KBethesdaArchive.cpp" />
     <ClCompile Include="Source\DownloadManager\KDownloadEntry.cpp" />
     <ClCompile Include="Source\DownloadManager\KDownloadManager.cpp" />
     <ClCompile Include="Source\DownloadManager\KDownloadView.cpp" />
@@ -213,6 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Source\Archive\KBethesdaArchive.h" />
     <ClInclude Include="Source\DownloadManager\KDownloadEntry.h" />
     <ClInclude Include="Source\DownloadManager\KDownloadManager.h" />
     <ClInclude Include="Source\DownloadManager\KDownloadView.h" />

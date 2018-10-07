@@ -777,6 +777,9 @@
     <ClCompile Include="Source\NotificationCenter\KNotificationPopup.cpp">
       <Filter>Code\Source Files\NotificationCenter</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
+      <Filter>Code\Source Files\Archive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1417,6 +1420,9 @@
     </ClInclude>
     <ClInclude Include="Source\NotificationCenter\KNotificationPopup.h">
       <Filter>Code\Header Files\NotificationCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Archive\KBethesdaArchive.h">
+      <Filter>Code\Header Files\Archive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

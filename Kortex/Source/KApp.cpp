@@ -185,7 +185,6 @@ bool KApp::OnInit()
 		wxLogInfo("Creating main window");
 		m_MainWindow = new KMainWindow();
 		SetTopWindow(m_MainWindow);
-		wxWindowUpdateLocker lockMainWindow(m_MainWindow);
 
 		// Only after main window is created settings manager can load its controller data
 		m_SettingsManager->InitControllerData();
@@ -542,8 +541,6 @@ void KApp::InitVFS()
 		wxLogInfo("Client: Initializing driver service.");
 		m_VFSService = new KVFSService();
 		wxLogInfo("Client: Driver service init %s.", m_VFSService->IsOK() ? "success" : "failed");
-
-		
 	}
 	else
 	{

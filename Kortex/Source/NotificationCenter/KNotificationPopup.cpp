@@ -33,19 +33,27 @@ void KNotificationPopup::CreateUI()
 }
 
 KNotificationPopup::KNotificationPopup(KNotification* notification)
-	:wxPopupWindow(KMainWindow::GetInstance(), wxBORDER_THEME), m_Notification(notification)
+	:wxPopupWindow(KMainWindow::GetInstance() ? KMainWindow::GetInstance() : KApp::Get().GetTopWindow(), wxBORDER_THEME), m_Notification(notification)
 {
 	CreateUI();
 
-	const int edgeMargin = 10;
-	const wxSize size = FromDIP(wxSize(275, 125));
+	const int edgeMargin = KLC_VERTICAL_SPACING * 3;
+	const wxSize size = FromDIP(wxSize(300, 125));
 	const wxSize posMagrins = FromDIP(wxSize(edgeMargin, edgeMargin));
 
-	int offsetY = 0;
+	int offsetY = KLC_VERTICAL_SPACING;
+	if (KMainWindow* mainWindow = KMainWindow::GetInstance())
+	{
+		if (KxStatusBarEx* statusBar = mainWindow->GetStatusBar())
+		{
+			offsetY += statusBar->GetSize().GetHeight();
+		}
+	}
+
 	size_t popupCount = KNotificationCenter::GetInstance()->GetActivePopupsCount();
 	if (popupCount >= 1)
 	{
-		offsetY = popupCount * (size.GetHeight() + edgeMargin);
+		offsetY += popupCount * (size.GetHeight() + KLC_VERTICAL_SPACING * 2);
 	}
 
 	SetInitialSize(size);

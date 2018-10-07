@@ -20,11 +20,11 @@ namespace
 		return SevenZip::TStringView(value.wc_str(), value.length());
 	}
 
-	const wxString ToWxString(const SevenZip::TString& value)
+	wxString ToWxString(const SevenZip::TString& value)
 	{
 		return wxString(value.data(), value.length());
 	}
-	const wxString ToWxString(const SevenZip::TStringView& value)
+	wxString ToWxString(const SevenZip::TStringView& value)
 	{
 		return wxString(value.data(), value.length());
 	}
@@ -167,7 +167,7 @@ namespace
 
 namespace FormatNS
 {
-	using KAEnum = KArchiveNS::Format::_Enum;
+	using KAEnum = KArchiveNS::Format;
 	using SZEnum = SevenZip::CompressionFormat::_Enum;
 
 	KAEnum Convert(SZEnum type)
@@ -276,7 +276,7 @@ namespace FormatNS
 
 namespace MethodNS
 {
-	using KAEnum = KArchiveNS::Method::_Enum;
+	using KAEnum = KArchiveNS::Method;
 	using SZEnum = SevenZip::CompressionMethod;
 
 	KAEnum Convert(SZEnum type)
@@ -361,16 +361,35 @@ bool KArchive::UnInit()
 	return false;
 }
 
+void KArchive::OpenArchive(const wxString& filePath)
+{
+	AcrhiveNotifier notifier(this);
+	m_Impl = new SevenZip::SevenZipArchive(ArchiveLibrary, ToTString(filePath), &notifier);
+	m_Impl->ReadInArchiveMetadata();
+
+	m_FilePath = filePath;
+	m_CompressedSize = KxFile(filePath).GetFileSize();
+}
+void KArchive::CloseArchive()
+{
+	delete m_Impl;
+
+	m_FilePath.clear();
+	m_CompressedSize = -1;
+	m_OriginalSize = -1;
+	m_Impl = NULL;
+}
+
 KArchive::KArchive()
 {
 }
 KArchive::KArchive(const wxString& filePath)
 {
-	Open(filePath);
+	OpenArchive(filePath);
 }
 KArchive::~KArchive()
 {
-	Close();
+	CloseArchive();
 }
 
 // KxIArchive
@@ -380,24 +399,13 @@ bool KArchive::IsOK() const
 }
 bool KArchive::Open(const wxString& filePath)
 {
-	Close();
-
-	AcrhiveNotifier notifier(this);
-	m_Impl = new SevenZip::SevenZipArchive(ArchiveLibrary, ToTString(filePath), &notifier);
-	m_Impl->ReadInArchiveMetadata();
-
-	m_FilePath = filePath;
-	m_CompressedSize = KxFile(filePath).GetFileSize();
+	CloseArchive();
+	OpenArchive(filePath);
 	return IsOK();
 }
 void KArchive::Close()
 {
-	delete m_Impl;
-
-	m_FilePath.clear();
-	m_CompressedSize = -1;
-	m_OriginalSize = -1;
-	m_Impl = NULL;
+	CloseArchive();
 }
 wxString KArchive::GetFilePath() const
 {
@@ -566,7 +574,7 @@ int KArchive::GetPropertyInt(IntProperties property) const
 		}
 		case IntProperties::Format:
 		{
-			KArchiveNS::Format::_Enum format = FormatNS::Convert(m_Impl->GetProperty_CompressionFormat());
+			KArchiveNS::Format format = FormatNS::Convert(m_Impl->GetProperty_CompressionFormat());
 
 			// This library can't detect 7z archive for some reason, but can perfectly read other data from it.
 			// So check for original size validity and set format manually.
@@ -574,7 +582,7 @@ int KArchive::GetPropertyInt(IntProperties property) const
 			{
 				format = KArchiveNS::Format::SevenZip;
 			}
-			return format;
+			return (int)format;
 		}
 		case IntProperties::Method:
 		{
@@ -597,11 +605,11 @@ void KArchive::SetPropertyInt(IntProperties property, int value)
 		}
 		case IntProperties::Format:
 		{
-			return m_Impl->SetProperty_CompressionFormat(FormatNS::Convert((KArchiveNS::Format::_Enum)value));
+			return m_Impl->SetProperty_CompressionFormat(FormatNS::Convert((KArchiveNS::Format)value));
 		}
 		case IntProperties::Method:
 		{
-			return m_Impl->SetProperty_CompressionMethod(MethodNS::Convert((KArchiveNS::Method::_Enum)value));
+			return m_Impl->SetProperty_CompressionMethod(MethodNS::Convert((KArchiveNS::Method)value));
 		}
 	};
 }

@@ -12,54 +12,42 @@ namespace SevenZip
 
 namespace KArchiveNS
 {
-	struct PropertyBool
+	enum class PropertyBool
 	{
-		enum _Enum
-		{
-			Solid,
-			MultiThreaded,
-		};
+		Solid,
+		MultiThreaded,
 	};
-	struct PropertyInt
+	enum class PropertyInt
 	{
-		enum _Enum
-		{
-			CompressionLevel,
-			DictionarySize,
-			Format,
-			Method,
-		};
+		CompressionLevel,
+		DictionarySize,
+		Format,
+		Method,
 	};
 
-	struct Method
+	enum Method
 	{
-		enum _Enum
-		{
-			Unknown = -1,
+		Unknown = -1,
 
-			LZMA,
-			LZMA2,
-			PPMd,
-			BZip2,
-		};
+		LZMA,
+		LZMA2,
+		PPMd,
+		BZip2,
 	};
-	struct Format
+	enum class Format
 	{
-		enum _Enum
-		{
-			Unknown = -1,
-			SevenZip,
-			Zip,
-			RAR,
-			RAR5,
-			GZip,
-			BZip2,
-			Tar,
-			ISO,
-			CAB,
-			LZMA,
-			LZMA86,
-		};
+		Unknown = -1,
+		SevenZip,
+		Zip,
+		RAR,
+		RAR5,
+		GZip,
+		BZip2,
+		Tar,
+		ISO,
+		CAB,
+		LZMA,
+		LZMA86,
 	};
 }
 
@@ -71,8 +59,8 @@ class KArchive:
 	public KxIArchiveExtraction,
 	public KxIArchiveCompression,
 
-	public KxIArchivePropertiesBool<KArchiveNS::PropertyBool::_Enum>,
-	public KxIArchivePropertiesInt<KArchiveNS::PropertyInt::_Enum>
+	public KxIArchivePropertiesBool<KArchiveNS::PropertyBool>,
+	public KxIArchivePropertiesInt<KArchiveNS::PropertyInt>
 {
 	public:
 		using IndexVector = KxIArchiveNS::IndexVector;
@@ -93,6 +81,10 @@ class KArchive:
 		
 		int64_t m_CompressedSize = -1;
 		mutable int64_t m_OriginalSize = -1;
+
+	private:
+		void OpenArchive(const wxString& filePath);
+		void CloseArchive();
 
 	public:
 		KArchive();

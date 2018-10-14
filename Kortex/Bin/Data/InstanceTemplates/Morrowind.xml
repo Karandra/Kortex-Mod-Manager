@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Profile ID="Morrowind" SortOrder="11">
+<Instance ID="Morrowind" SortOrder="11">
 	<Name Short="Morrowind">The Elder Scrolls III: Morrowind</Name>
 	
 	<Variables>
@@ -111,4 +111,4 @@
 
 		<PrimaryExtension>ess</PrimaryExtension>
 	</SaveManager>
-</Profile>
+</Instance>

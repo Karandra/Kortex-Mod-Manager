@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Profile ID="Fallout4" SortOrder="23">
+<Instance ID="Fallout4" SortOrder="23">
 	<Name>Fallout 4</Name>
 
 	<Variables>
@@ -171,4 +171,4 @@
 		<PrimaryExtension>fos</PrimaryExtension>
 		<SecondaryExtension>f4se</SecondaryExtension>
 	</SaveManager>
-</Profile>
+</Instance>

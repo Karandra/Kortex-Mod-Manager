@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Instance GameID="Skyrim" SortOrder="13">
+	<Name Short="Skyrim">The Elder Scrolls V: Skyrim</Name>
+	
+	<Variables>
+		<!--Required-->
+		<Entry ID="ActualGameDir" Type="Registry" SaveAsOverride="1">
+			<Branch>32</Branch>
+			<Root>HKEY_LOCAL_MACHINE</Root>
+			<Path>SOFTWARE\Bethesda Softworks\$(GameID)</Path>
+			<Name>Installed Path</Name>
+			<Type>REG_SZ</Type>
+		</Entry>
+		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\$(GameID)</Entry>
+		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		<Entry ID="GameExecutable">TESV.exe</Entry>
+		<Entry ID="ScriptExtenderID">SKSE</Entry>
+	</Variables>
+
+	<Network>
+		<NexusID>Skyrim</NexusID>
+		<SteamID>72850</SteamID>
+	</Network>
+
+	<Virtualization>
+		<MirroredLocations>
+			<Entry>
+				<Sources>
+					<Entry>$(SavesDir)</Entry>
+					<Entry>$(ConfigDir)</Entry>
+				</Sources>
+				<Target>$(RealConfigDir)</Target>
+			</Entry>
+			<Entry>
+				<Sources>
+					<Entry>$(ProfileDir)\Plugins</Entry>
+				</Sources>
+				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\Skyrim</Target>
+			</Entry>
+		</MirroredLocations>
+	</Virtualization>
+
+	<ProgramManager>
+		<Programs>
+			<Entry>
+				<Name>$(GameNameShort)</Name>
+				<Icon>TESV.exe</Icon>
+				<Executable>TESV.exe</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+				<Icon>SKSE_Loader.exe</Icon>
+				<Executable>SKSE_Loader.exe</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>Skyrim Launcher</Name>
+				<Icon>SkyrimLauncher.exe</Icon>
+				<Executable>SkyrimLauncher.exe</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>Creation Kit</Name>
+				<Icon>CreationKit.exe</Icon>
+				<Executable>CreationKit.exe</Executable>
+				<Arguments></Arguments>
+			</Entry>
+			<Entry>
+				<Name>ENB Injector</Name>
+				<Icon>ENBInjector.exe</Icon>
+				<Executable>ENBInjector.exe</Executable>
+				<Command></Command>
+			</Entry>
+		</Programs>
+	</ProgramManager>
+
+	<GameConfig EnableENB="1">
+		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Skyrim.ini</Entry>
+		<Entry ID="1" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\SkyrimPrefs.ini</Entry>
+		<Entry ID="1000" Format="INI" TypeDetectionMethod="HungarianNotation">SkyrimEditor.ini</Entry>
+		<Entry ID="1001" Format="INI" TypeDetectionMethod="HungarianNotation">SkyrimEditorPrefs.ini</Entry>
+	</GameConfig>
+
+	<PluginManager InterfaceName="Bethesda" PluginFileFormat="BethesdaSkyrim">
+		<Limit Value="255"/>
+		
+		<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
+		<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
+		
+		<ChangeFileModificationDate>0</ChangeFileModificationDate>
+		<SortByFileModificationDate>0</SortByFileModificationDate>
+
+		<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
+		<OrderListHeader><![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
+# Please do not modify this file.
+# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></OrderListHeader>
+
+		<SortingTools>
+			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+				<Command><![CDATA[--game=Skyrim]]></Command>
+			</Entry>
+		</SortingTools>
+
+		<LootAPI>
+			<Branch>v0.13</Branch>
+			<Repository>https://github.com/loot/skyrim.git</Repository>
+			<FolderName>Skyrim</FolderName>
+			<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
+		</LootAPI>
+
+		<StandardContent MainID="Skyrim.esm">
+			<Entry ID="Skyrim.esm" Name="$(GameShortName)" Logo="Skyrim.png"/>
+			<Entry ID="Update.esm" Name="$(GameShortName): Update" Logo="Skyrim.png"/>
+			<Entry ID="Dawnguard.esm" Name="$(GameShortName): Dawnguard" Logo="Dawnguard.png"/>
+			<Entry ID="HearthFires.esm" Name="$(GameShortName): HearthFires" Logo="HearthFires.png"/>
+			<Entry ID="Dragonborn.esm" Name="$(GameShortName): Dragonborn" Logo="Dragonborn.png"/>
+			<Entry ID="HighResTexturePack01.esp" Name="$(GameShortName): High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
+			<Entry ID="HighResTexturePack02.esp" Name="$(GameShortName): High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
+			<Entry ID="HighResTexturePack03.esp" Name="$(GameShortName): High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
+		</StandardContent>
+	</PluginManager>
+
+	<ScreenshotsGallery>
+		<Locations>
+			<Entry>$(GameDir)</Entry>
+			<Entry>$(GameDir)\Screenshots</Entry>
+			<Entry>$(ConfigDir)</Entry>
+			<Entry>$(ConfigDir)\Screenshots</Entry>
+		</Locations>
+	</ScreenshotsGallery>
+
+	<SaveManager SaveFileFormat="BethesdaSkyrim">
+		<Location>$(SavesDir)\Saves</Location>
+		<FileFilters>
+			<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
+			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
+			<Entry Label="$T(SaveManager.Filter.CoSaves) (*.skse)">*.skse</Entry>
+		</FileFilters>
+
+		<PrimaryExtension>ess</PrimaryExtension>
+		<SecondaryExtension>skse</SecondaryExtension>
+	</SaveManager>
+</Instance>

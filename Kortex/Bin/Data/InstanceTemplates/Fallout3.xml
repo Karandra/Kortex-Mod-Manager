@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Profile ID="FalloutNV" SortOrder="22">
-	<Name Short="Fallout NV">Fallout: New Vegas</Name>
+<Instance ID="Fallout3" SortOrder="21">
+	<Name>Fallout 3</Name>
 
 	<Variables>
 		<!--Required-->
@@ -14,30 +14,30 @@
 		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\$(ID)</Entry>
 		<Entry ID="GameExecutable">$(GameRoot)\$(ID).exe</Entry>
 		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(ID).exe</Entry>
-		<Entry ID="NexusID">NewVegas</Entry>
+		<Entry ID="NexusID">$(ID)</Entry>
 
 		<!--Names-->
 		<Entry ID="EditorName">Creation Kit</Entry>
 		<Entry ID="LauncherName">$(NameShort) Launcher</Entry>
 		<Entry ID="ScriptExtenderName">$(NameShort) Script Extender</Entry>
-		<Entry ID="ScriptExtenderNameShort">NVSE</Entry>
+		<Entry ID="ScriptExtenderNameShort">FOSE</Entry>
 
 		<!-- INI -->
-		<Entry ID="FalloutNVINI">$(ConfigRootLocal)\Fallout.ini</Entry>
-		<Entry ID="FalloutNVPrefsINI">$(ConfigRootLocal)\FalloutPrefs.ini</Entry>
-		<Entry ID="FalloutNVEditorINI">$(ConfigRootLocal)\GECKCustom.ini</Entry>
-		<Entry ID="FalloutNVEditorPrefsINI">$(ConfigRootLocal)\GECKPrefs.ini</Entry>
+		<Entry ID="Fallout3INI">$(ConfigRootLocal)\Fallout.ini</Entry>
+		<Entry ID="Fallout3PrefsINI">$(ConfigRootLocal)\FalloutPrefs.ini</Entry>
+		<Entry ID="Fallout3EditorINI">$(ConfigRootLocal)\GECKCustom.ini</Entry>
+		<Entry ID="Fallout3EditorPrefsINI">$(ConfigRootLocal)\GECKPrefs.ini</Entry>
 
 		<!--Misc-->
-		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(ID)Launcher.exe</Entry>
+		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\FalloutLauncher.exe</Entry>
 		<Entry ID="GameEditorPath">$(VirtualGameRoot)\GECK.exe</Entry>
 		<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderNameShort)_Loader.exe</Entry>
 		<Entry ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Entry>
 	</Variables>
 
 	<Network>
-		<NexusID>NewVegas</NexusID>
-		<SteamID>22490</SteamID>
+		<NexusID>Fallout3</NexusID>
+		<SteamID>22370</SteamID>
 	</Network>
 
 	<LocationsConfig>
@@ -61,7 +61,7 @@
 		</MirroredLocations>
 	</Virtualization>
 
-	<ProgramConfig Enabled="1">
+	<ProgramConfig>
 		<Main>
 			<Entry>
 				<Name>$(NameShort)</Name>
@@ -99,10 +99,10 @@
 	</ProgramConfig>
 
 	<GameConfig EnableENB="1">
-		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(FalloutNVINI)</Entry>
-		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(FalloutNVPrefsINI)</Entry>
-		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">$(FalloutNVEditorINI)</Entry>
-		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">$(FalloutNVEditorPrefsINI)</Entry>
+		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(Fallout3INI)</Entry>
+		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(Fallout3PrefsINI)</Entry>
+		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">$(Fallout3EditorINI)</Entry>
+		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">$(Fallout3EditorPrefsINI)</Entry>
 	</GameConfig>
 
 	<PluginManager InterfaceName="Bethesda" PluginFileFormat="BethesdaSkyrim">
@@ -122,39 +122,27 @@
 		</OrderListHeader>
 
 		<SortingTools>
-			<Entry ID="LOOT" Name="LOOT - Load Order Optimization">
+			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
 				<Command><![CDATA[--game=$(ID)]]></Command>
 			</Entry>
 		</SortingTools>
 
 		<LOOTAPI>
 			<Branch>v0.13</Branch>
-			<Repository>https://github.com/loot/falloutnv.git</Repository>
-			<FolderName>FalloutNV</FolderName>
+			<Repository>https://github.com/loot/fallout3.git</Repository>
+			<FolderName>Fallout3</FolderName>
 			<LocalGamePath>$(ModListRoot)\LocalPlugins</LocalGamePath>
 		</LOOTAPI>
 
-		<StandardContent MainID="FalloutNV.esm">
-			<Entry ID="FalloutNV.esm" Name="$(NameShort)" Logo="FalloutNV.png"/>
-			<Entry ID="FalloutNV_lang.esp" Name="$(NameShort)" Logo="FalloutNV.png"/>
-			<Entry ID="OldWorldBlues.esm" Name="$(NameShort): Old World Blues" Logo="OldWorldBlues.png"/>
-			<Entry ID="OldWorldBlues_lang.esp" Name="$(NameShort): Old World Blues" Logo="OldWorldBlues.png"/>
-			<Entry ID="DeadMoney.esm" Name="$(NameShort): Dead Money" Logo="DeadMoney.png"/>
-			<Entry ID="DeadMoney_lang.esp" Name="$(NameShort): Dead Money" Logo="DeadMoney.png"/>
-			<Entry ID="LonesomeRoad.esm" Name="$(NameShort): Lonesome Road" Logo="LonesomeRoad.png"/>
-			<Entry ID="LonesomeRoad_lang.esp" Name="$(NameShort): Lonesome Road" Logo="LonesomeRoad.png"/>
-			<Entry ID="HonestHearts.esm" Name="$(NameShort): Honest Hearts" Logo="HonestHearts.png"/>
-			<Entry ID="HonestHearts_lang.esp" Name="$(NameShort): Honest Hearts" Logo="HonestHearts.png"/>
-			<Entry ID="GunRunnersArsenal.esm" Name="$(NameShort): Gun Runners Arsenal" Logo="GunRunnersArsenal.png"/>
-			<Entry ID="GunRunnersArsenal_lang.esp" Name="$(NameShort): Gun Runners Arsenal" Logo="GunRunnersArsenal.png"/>
-			<Entry ID="ClassicPack.esm" Name="$(NameShort): Courier's Stash - Classic Pack" Logo="CouriersStash.png"/>
-			<Entry ID="ClassicPack_lang.esp" Name="$(NameShort): Courier's Stash - Classic Pack" Logo="CouriersStash.png"/>
-			<Entry ID="MercenaryPack.esm" Name="$(NameShort): Courier's Stash - Mercenary Pack" Logo="CouriersStash.png"/>
-			<Entry ID="MercenaryPack_lang.esp" Name="$(NameShort): Courier's Stash - Mercenary Pack" Logo="CouriersStash.png"/>
-			<Entry ID="CaravanPack.esm" Name="$(NameShort): Courier's Stash - Caravan Pack" Logo="CouriersStash.png"/>
-			<Entry ID="CaravanPack_lang.esp" Name="$(NameShort): Courier's Stash - Caravan Pack" Logo="CouriersStash.png"/>
-			<Entry ID="TribalPack.esm" Name="$(NameShort): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
-			<Entry ID="TribalPack_lang.esp" Name="$(NameShort): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
+		<StandardContent MainID="Fallout3.esm">
+			<Entry ID="Fallout3.esm" Name="$(NameShort)" Logo="Fallout3.png"/>
+			<Entry ID="Anchorage.esm" Name="$(NameShort): Operation Anchorage" Logo="Anchorage.png"/>
+			<Entry ID="ThePitt.esm" Name="$(NameShort): The Pitt" Logo="ThePitt.png"/>
+			<Entry ID="BrokenSteel.esm" Name="$(NameShort): Broken Steel" Logo="BrokenSteel.png"/>
+			<Entry ID="BrokenSteel1.esp" Name="$(NameShort): Broken Steel" Logo="BrokenSteel.png"/>
+			<Entry ID="BrokenSteel2.esp" Name="$(NameShort): Broken Steel" Logo="BrokenSteel.png"/>
+			<Entry ID="PointLookout.esm" Name="$(NameShort): Point Lookout" Logo="PointLookout.png"/>
+			<Entry ID="Zeta.esm" Name="$(NameShort): Mothership Zeta" Logo="Zeta.png"/>
 		</StandardContent>
 	</PluginManager>
 
@@ -169,15 +157,15 @@
 		</Locations>
 	</ScreenshotsGallery>
 
-	<SaveManager SaveFileFormat="BethesdaFalloutNV">
+	<SaveManager SaveFileFormat="BethesdaFallout3">
 		<RelativeLocation>Saves</RelativeLocation>
 		<FileFilters>
 			<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
 			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
-			<Entry Label="$T(SaveManager.Filter.CoSaves) (*.nvse)">*.nvse</Entry>
+			<Entry Label="$T(SaveManager.Filter.CoSaves) (*.fose)">*.fose</Entry>
 		</FileFilters>
 
 		<PrimaryExtension>fos</PrimaryExtension>
-		<SecondaryExtension>nvse</SecondaryExtension>
+		<SecondaryExtension>fose</SecondaryExtension>
 	</SaveManager>
-</Profile>
+</Instance>

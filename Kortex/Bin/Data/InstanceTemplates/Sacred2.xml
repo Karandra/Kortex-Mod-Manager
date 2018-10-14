@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Profile ID="Sacred2" SortOrder="31">
+<Instance ID="Sacred2" SortOrder="31">
 	<Name Short="Sacred 2">Sacred 2: Fallen Angel</Name>
 	
 	<Variables>
@@ -64,4 +64,4 @@
 		</FileFilters>
 		<PrimaryExtension>sacred2save</PrimaryExtension>
 	</SaveManager>
-</Profile>
+</Instance>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Profile ID="SkyrimSE" SortOrder="13">
-	<Name Short="Skyrim SE">The Elder Scrolls V: Skyrim - Special Edition</Name>
+<Instance ID="SkyrimVR" SortOrder="13">
+	<Name Short="Skyrim VR">The Elder Scrolls V: Skyrim - VR Edition</Name>
 	
 	<Variables>
 		<!--Required-->
 		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
 			<Node>32</Node>
 			<Root>HKEY_LOCAL_MACHINE</Root>
-			<Path>SOFTWARE\Bethesda Softworks\Skyrim Special Edition</Path>
+			<Path>SOFTWARE\Bethesda Softworks\Skyrim VR</Path>
 			<ValueName>Installed Path</ValueName>
 			<ValueType>REG_SZ</ValueType>
 		</Entry>
-		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\Skyrim Special Edition</Entry>
+		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\Skyrim VR</Entry>
 		<Entry ID="GameExecutable">$(GameRoot)\$(ID).exe</Entry>
 		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(ID).exe</Entry>
 		<Entry ID="NexusID">SkyrimSpecialEdition</Entry>
@@ -20,7 +20,7 @@
 		<Entry ID="EditorName">Creation Kit</Entry>
 		<Entry ID="LauncherName">$(NameShort) Launcher</Entry>
 		<Entry ID="ScriptExtenderName">$(NameShort) Script Extender</Entry>
-		<Entry ID="ScriptExtenderNameShort">SKSE64</Entry>
+		<Entry ID="ScriptExtenderNameShort">SKSEVR</Entry>
 		
 		<!-- INI -->
 		<Entry ID="SkyrimINI">$(ConfigRootLocal)\Skyrim.ini</Entry>
@@ -37,7 +37,7 @@
 
 	<Network>
 		<NexusID>SkyrimSpecialEdition</NexusID>
-		<SteamID>489830</SteamID>
+		<SteamID>611670</SteamID>
 	</Network>
 
 	<LocationsConfig>
@@ -56,7 +56,7 @@
 				<Sources>
 					<Entry>$(ModListRoot)\LocalPlugins</Entry>
 				</Sources>
-				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\Skyrim Special Edition</Target>
+				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\Skyrim VR</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
@@ -105,7 +105,7 @@
 		<Entry ID="1001" Format="INI" TypeDetectionMethod="HungarianNotation">CreationKitPrefs.ini</Entry>
 	</GameConfig>
 
-	<PluginManager Enabled="1" InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
+	<PluginManager InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
 		<Limit Value="254"/>
 		
 		<ActiveList>$(ModListRoot)\LocalPlugins\Plugins.txt</ActiveList>
@@ -121,19 +121,20 @@
 
 		<SortingTools>
 			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
-				<Command><![CDATA[--game=$(ID)]]></Command>
+				<Command><![CDATA[--game=Skyrim VR]]></Command>
 			</Entry>
 		</SortingTools>
 
 		<LOOTAPI>
 			<Branch>v0.13</Branch>
 			<Repository>https://github.com/loot/skyrimse.git</Repository>
-			<FolderName>Skyrim Special Edition</FolderName>
+			<FolderName>Skyrim VR</FolderName>
 			<LocalGamePath>$(ModListRoot)\LocalPlugins</LocalGamePath>
 		</LOOTAPI>
 
 		<StandardContent MainID="Skyrim.esm">
 			<Entry ID="Skyrim.esm" Name="$(NameShort)" Logo="Skyrim.png"/>
+			<Entry ID="SkyrimVR.esm" Name="$(NameShort)" Logo="Skyrim.png"/>
 			<Entry ID="Update.esm" Name="$(NameShort): Update" Logo="Skyrim.png"/>
 			<Entry ID="Dawnguard.esm" Name="$(NameShort): Dawnguard" Logo="Dawnguard.png"/>
 			<Entry ID="HearthFires.esm" Name="$(NameShort): HearthFires" Logo="HearthFires.png"/>
@@ -163,4 +164,4 @@
 		<PrimaryExtension>ess</PrimaryExtension>
 		<SecondaryExtension>skse</SecondaryExtension>
 	</SaveManager>
-</Profile>
+</Instance>

@@ -70,15 +70,6 @@ void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
 		event.SetInt(status);
 		event.Send();
 
-		// Force load of plugin manager so plugin data will be loaded
-		if (KVFSService::IsSuccessCode(status) && config.IsEnabled())
-		{
-			if (KPluginManager* pluginManager = KPluginManager::GetInstance())
-			{
-				pluginManager->LoadIfNeeded();
-			}
-		}
-
 		if (!KVFSService::IsSuccessCode(status))
 		{
 			wxString message = wxString::Format("%s\r\n\r\n%s: %s", KVFSService::GetStatusCodeMessage(status), T("VFS.MountPoint"), event.GetString());

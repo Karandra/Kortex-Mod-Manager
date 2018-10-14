@@ -147,7 +147,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utility;$(SolutionDir)Kortex\Source;$(SolutionDir)Kortex\Source\Utility;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Source;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2\sys;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -168,6 +168,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utility;$(SolutionDir)Kortex\Source;$(SolutionDir)Kortex\Source\Utility;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Source;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2\sys;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir);C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\Bin x86;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_lib;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -180,6 +181,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utility;$(SolutionDir)Kortex\Source;$(SolutionDir)Kortex\Source\Utility;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Source;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2\sys;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir);C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework\Bin x64;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_x64_lib;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -196,7 +198,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utility;$(SolutionDir)Kortex\Source;$(SolutionDir)Kortex\Source\Utility;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\include;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Source;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2\sys;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

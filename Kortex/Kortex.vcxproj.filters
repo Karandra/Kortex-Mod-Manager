@@ -10,9 +10,6 @@
     <Filter Include="Misc\PackageManager">
       <UniqueIdentifier>{0cf9efe5-6cc5-49b2-ae5f-1c86f5aa91d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Misc\Profile Templates">
-      <UniqueIdentifier>{0989cc56-192d-4358-962b-2f3822e190b2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Misc\Translations">
       <UniqueIdentifier>{643fe7f0-efc0-4c29-850b-62cd63e54149}</UniqueIdentifier>
     </Filter>
@@ -217,6 +214,24 @@
     <Filter Include="Code\Header Files\NotificationCenter">
       <UniqueIdentifier>{4bcd5849-822a-4fb6-b85a-97c10b1dc01c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Header Files\GameInstance">
+      <UniqueIdentifier>{1e072cee-0e2c-4fc2-9f84-f016c2f83098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc\InstanceTemplates">
+      <UniqueIdentifier>{0989cc56-192d-4358-962b-2f3822e190b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc\InstanceTemplates\Icons">
+      <UniqueIdentifier>{62a74ac0-dd4d-4d27-8025-329b14e7bec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Header Files\GameInstance\Config">
+      <UniqueIdentifier>{04a98a9d-f008-41e3-886d-d303bfcbb8df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source Files\GameInstance">
+      <UniqueIdentifier>{baf9614d-07aa-47eb-8665-ead79d31a066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source Files\GameInstance\Config">
+      <UniqueIdentifier>{3e6b9084-f94f-476d-9b43-fb88c706680f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -230,12 +245,6 @@
     </ClCompile>
     <ClCompile Include="Source\Events\KLogEvent.cpp">
       <Filter>Code\Source Files\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\KProfileSelectionDialog.cpp">
-      <Filter>Code\Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\KProfileCreatorDialog.cpp">
-      <Filter>Code\Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\KMainWindow.cpp">
       <Filter>Code\Source Files\UI</Filter>
@@ -302,9 +311,6 @@
     </ClCompile>
     <ClCompile Include="Source\SettingsWindow\KSettingsWindowManager.cpp">
       <Filter>Code\Source Files\SettingsWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KProfile.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
     </ClCompile>
     <ClCompile Include="Source\Events\KVFSEvent.cpp">
       <Filter>Code\Source Files\Events</Filter>
@@ -567,30 +573,6 @@
     <ClCompile Include="Source\Network\KNetwork.cpp">
       <Filter>Code\Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Profile\KConfigManagerConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KLocationsManagerConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KNetworkConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KPackageManagerConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KPluginManagerConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KSaveManagerConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KScreenshotsGalleryConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KVirtualizationConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Network\KNetworkProvider.cpp">
       <Filter>Code\Source Files\Network</Filter>
     </ClCompile>
@@ -605,9 +587,6 @@
     </ClCompile>
     <ClCompile Include="Source\DownloadManager\KDownloadEntry.cpp">
       <Filter>Code\Source Files\DownloadManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Profile\KProfileID.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModManager\KModManagerImportNMM.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
@@ -660,9 +639,6 @@
     <ClCompile Include="Source\KTranslation.cpp">
       <Filter>Code\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Profile\KProgramManagerConfig.cpp">
-      <Filter>Code\Source Files\Profile</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ProgramManager\KProgramManager.cpp">
       <Filter>Code\Source Files\ProgramManager</Filter>
     </ClCompile>
@@ -676,9 +652,6 @@
       <Filter>Code\Source Files\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\Events\KEvent.cpp">
-      <Filter>Code\Source Files\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Events\KModListEvent.cpp">
       <Filter>Code\Source Files\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\SaveManager\KSaveFileBethesdaFallout3.cpp">
@@ -705,9 +678,6 @@
     <ClCompile Include="Source\SaveManager\KSaveFileBethesdaSkyrimSE.cpp">
       <Filter>Code\Source Files\SaveManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModManager\KModListManager.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModManager\KModSites.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
@@ -727,9 +697,6 @@
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModManager\KVirtualGameFolderModel.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModManager\KModListManagerEditor.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\VFS\KVFSService.cpp">
@@ -752,9 +719,6 @@
     </ClCompile>
     <ClCompile Include="Source\Events\KSaveEvent.cpp">
       <Filter>Code\Source Files\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Events\KPluginEvent.cpp">
-      <Filter>Code\Header Files\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModManager\KMandatoryModEntry.cpp">
       <Filter>Code\Source Files\ModManager</Filter>
@@ -780,6 +744,60 @@
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
       <Filter>Code\Source Files\Archive</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameInstance\KGameInstance.cpp">
+      <Filter>Code\Source Files\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\KGameID.cpp">
+      <Filter>Code\Source Files\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\KInstanceSelectionDialog.cpp">
+      <Filter>Code\Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\KInstanceCreatorDialog.cpp">
+      <Filter>Code\Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KConfigManagerConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KLocationsManagerConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KNetworkConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KPackageManagerConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KPluginManagerConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KProgramManagerConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KSaveManagerConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KScreenshotsGalleryConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Config\KVirtualizationConfig.cpp">
+      <Filter>Code\Source Files\GameInstance\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\KActiveGameInstance.cpp">
+      <Filter>Code\Source Files\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\KProfileEvent.cpp">
+      <Filter>Code\Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\KPluginEvent.cpp">
+      <Filter>Code\Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Profile\KProfile.cpp">
+      <Filter>Code\Source Files\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Profile\KProfileEditor.cpp">
+      <Filter>Code\Source Files\Profile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -793,12 +811,6 @@
     </ClInclude>
     <ClInclude Include="Source\Events\KLogEvent.h">
       <Filter>Code\Header Files\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KProfileSelectionDialog.h">
-      <Filter>Code\Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KProfileCreatorDialog.h">
-      <Filter>Code\Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KMainWindow.h">
       <Filter>Code\Header Files\UI</Filter>
@@ -868,9 +880,6 @@
     </ClInclude>
     <ClInclude Include="Source\SettingsWindow\KSettingsWindowManager.h">
       <Filter>Code\Header Files\SettingsWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KProfile.h">
-      <Filter>Code\Header Files\Profile</Filter>
     </ClInclude>
     <ClInclude Include="Source\Events\KVFSEvent.h">
       <Filter>Code\Header Files\Events</Filter>
@@ -1178,30 +1187,6 @@
     <ClInclude Include="Source\Network\KNetworkConstants.h">
       <Filter>Code\Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Profile\KConfigManagerConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KLocationsManagerConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KNetworkConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KPackageManagerConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KPluginManagerConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KSaveManagerConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KScreenshotsGalleryConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KVirtualizationConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\KNetworkProvider.h">
       <Filter>Code\Header Files\Network</Filter>
     </ClInclude>
@@ -1216,9 +1201,6 @@
     </ClInclude>
     <ClInclude Include="Source\DownloadManager\KDownloadEntry.h">
       <Filter>Code\Header Files\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Profile\KProfileID.h">
-      <Filter>Code\Header Files\Profile</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModManager\KModManagerImportNMM.h">
       <Filter>Code\Header Files\PackageManager</Filter>
@@ -1283,9 +1265,6 @@
     <ClInclude Include="Source\KTranslation.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Profile\KProgramManagerConfig.h">
-      <Filter>Code\Header Files\Profile</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ProgramManager\KProgramManager.h">
       <Filter>Code\Header Files\ProgramManager</Filter>
     </ClInclude>
@@ -1303,9 +1282,6 @@
     </ClInclude>
     <ClInclude Include="Source\KEvents.h">
       <Filter>Code\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Events\KModListEvent.h">
-      <Filter>Code\Header Files\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\SaveManager\KSaveFileBethesdaFallout3.h">
       <Filter>Code\Header Files\SaveManager</Filter>
@@ -1331,12 +1307,6 @@
     <ClInclude Include="Source\SaveManager\KSaveFileBethesdaSkyrimSE.h">
       <Filter>Code\Header Files\SaveManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModManager\KModListManager.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModManager\KModListManagerDialog.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModManager\KModSites.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
@@ -1356,9 +1326,6 @@
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModManager\KVirtualGameFolderModel.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModManager\KModListManagerEditor.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\VFS\KVFSService.h">
@@ -1400,9 +1367,6 @@
     <ClInclude Include="Source\ModManager\KMandatoryModEntry.h">
       <Filter>Code\Header Files\ModManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Events\KModListEventInternal.h">
-      <Filter>Code\Header Files\Events</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SaveManager\KSaveManagerView.h">
       <Filter>Code\Header Files\SaveManager</Filter>
     </ClInclude>
@@ -1424,6 +1388,60 @@
     <ClInclude Include="Source\Archive\KBethesdaArchive.h">
       <Filter>Code\Header Files\Archive</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameInstance\KGameID.h">
+      <Filter>Code\Header Files\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\KGameInstance.h">
+      <Filter>Code\Header Files\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\KInstanceSelectionDialog.h">
+      <Filter>Code\Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\KInstanceCreatorDialog.h">
+      <Filter>Code\Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KConfigManagerConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KLocationsManagerConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KNetworkConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KPackageManagerConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KPluginManagerConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KProgramManagerConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KSaveManagerConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KScreenshotsGalleryConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Config\KVirtualizationConfig.h">
+      <Filter>Code\Header Files\GameInstance\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\KActiveGameInstance.h">
+      <Filter>Code\Header Files\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\KProfileEvent.h">
+      <Filter>Code\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Profile\KProfile.h">
+      <Filter>Code\Header Files\Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Profile\KProfileEditor.h">
+      <Filter>Code\Header Files\Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\KEventsFwd.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc">
@@ -1434,14 +1452,38 @@
     <Image Include="Resources\App.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\Fallout3.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\Fallout4.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\FalloutNV.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\Generic.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\Morrowind.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\Oblivion.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\Sacred2.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\Skyrim.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\SkyrimSE.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
+    <Image Include="Bin\Data\InstanceTemplates\Icons\SkyrimVR.ico">
+      <Filter>Misc\InstanceTemplates\Icons</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Bin\Data\Profile Templates\Fallout4.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Profile Templates\Skyrim.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
     <Xml Include="Bin\Data\ConfigManager\ENB.xml">
       <Filter>Misc\ConfigManager</Filter>
     </Xml>
@@ -1456,24 +1498,6 @@
     </Xml>
     <Xml Include="Bin\Data\ConfigManager\Profiles\Fallout4.xml">
       <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Profile Templates\Oblivion.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Profile Templates\Morrowind.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Profile Templates\Sacred2.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Profile Templates\FalloutNV.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Profile Templates\Fallout3.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Profile Templates\SkyrimSE.xml">
-      <Filter>Misc\Profile Templates</Filter>
     </Xml>
     <Xml Include="Bin\Data\PackageManager\Requirements\Skyrim.xml">
       <Filter>Misc\PackageManager\Requirements</Filter>
@@ -1520,17 +1544,41 @@
     <Xml Include="Bin\Data\ConfigManager\Profiles\Fallout3.xml">
       <Filter>Misc\ConfigManager\Profiles</Filter>
     </Xml>
-    <Xml Include="Bin\Data\Profile Templates\SkyrimVR.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Profile Templates\Fallout4VR.xml">
-      <Filter>Misc\Profile Templates</Filter>
-    </Xml>
     <Xml Include="Bin\Data\Lang\ru-RU.xml">
       <Filter>Misc\Translations</Filter>
     </Xml>
     <Xml Include="Bin\Data\Lang\en-US.xml">
       <Filter>Misc\Translations</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\Fallout3.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\Fallout4.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\Fallout4VR.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\FalloutNV.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\Morrowind.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\Oblivion.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\Sacred2.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\Skyrim.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\SkyrimSE.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\InstanceTemplates\SkyrimVR.xml">
+      <Filter>Misc\InstanceTemplates</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

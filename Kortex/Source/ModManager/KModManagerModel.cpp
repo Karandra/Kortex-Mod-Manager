@@ -932,7 +932,7 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 		KModEntry* thisEntry = node->GetEntry();
 		if (thisEntry && HasDragDropDataObject())
 		{
-			const KModEntryArray& entriesToMove = GetDragDropDataObject()->GetEntries();
+			const KModEntry::Vector& entriesToMove = GetDragDropDataObject()->GetEntries();
 			KPriorityGroupEntry* priorityGroup = thisEntry->ToPriorityGroup();
 			if (priorityGroup)
 			{
@@ -1021,7 +1021,7 @@ void KModManagerModel::SetDataVector()
 	m_DataVector.clear();
 	ItemsCleared();
 }
-void KModManagerModel::SetDataVector(KModEntryArray& array)
+void KModManagerModel::SetDataVector(KModEntry::Vector& array)
 {
 	SetDataVector();
 

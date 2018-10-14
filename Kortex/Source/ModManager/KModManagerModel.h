@@ -32,7 +32,7 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 
 		const KModTag m_NoneTag;
 		KMMLogModelNodeVector m_DataVector;
-		KModEntryArray* m_Entries = NULL;
+		KModEntry::Vector* m_Entries = NULL;
 		std::vector<KPriorityGroupEntry> m_PriortyGroups;
 		
 		wxString m_SearchMask;
@@ -130,7 +130,7 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 
 		const KModTagArray& GetTags() const;
 		void SetDataVector();
-		void SetDataVector(KModEntryArray& array);
+		void SetDataVector(KModEntry::Vector& array);
 		virtual void RefreshItems() override;
 		void UpdateUI();
 		void UpdateRowHeight();
@@ -171,7 +171,7 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 class KModManagerModelDataObject: public KDataViewModelDragDropData
 {
 	private:
-		KModEntryArray m_Entries;
+		KModEntry::Vector m_Entries;
 
 	public:
 		KModManagerModelDataObject(size_t count = 0)
@@ -180,7 +180,7 @@ class KModManagerModelDataObject: public KDataViewModelDragDropData
 		}
 
 	public:
-		const KModEntryArray& GetEntries() const
+		const KModEntry::Vector& GetEntries() const
 		{
 			return m_Entries;
 		}

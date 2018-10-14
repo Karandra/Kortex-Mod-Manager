@@ -34,6 +34,10 @@ class KModEntry: public KWithBitmap
 	friend class KModManagerDispatcher;
 
 	public:
+		using Vector = std::vector<KModEntry*>;
+		using RefVector = std::vector<KModEntry*>;
+		using CRefVector = std::vector<const KModEntry*>;
+
 		using FixedWebSitePair = std::pair<KNetworkModID, KNetworkProviderID>;
 		using FixedWebSitesArray = std::array<KNetworkModID, KNETWORK_PROVIDER_ID_MAX>;
 
@@ -240,4 +244,3 @@ class KModEntry: public KWithBitmap
 		virtual intptr_t GetOrderIndex() const;
 		virtual wxString GetLocation(KModManagerLocation index) const;
 };
-typedef std::vector<KModEntry*> KModEntryArray;

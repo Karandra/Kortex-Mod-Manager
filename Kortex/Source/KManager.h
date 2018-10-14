@@ -8,6 +8,7 @@ class KPluggableManager;
 
 class KManager: public wxEvtHandler
 {
+	friend class KApp;
 	friend class KMainWindow;
 
 	private:
@@ -16,6 +17,11 @@ class KManager: public wxEvtHandler
 
 	public:
 		static InstancesListType& GetInstances();
+
+	protected:
+		virtual void OnInit()
+		{
+		}
 
 	public:
 		KManager();

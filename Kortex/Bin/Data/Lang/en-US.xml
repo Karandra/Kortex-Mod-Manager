@@ -100,7 +100,7 @@
 		<String ID="ID_SAVE_LONG">Save current document</String>
 		<String ID="ID_SAVEAS_LONG">Save current document with a different filename</String>
 
-		<!-- KMM -->
+		<!-- Generic -->
 		<String ID="Generic.Run">Run</String>
 		<String ID="Generic.All">All</String>
 		<String ID="Generic.using">using</String>
@@ -143,7 +143,8 @@
 		<String ID="Generic.CriticalError">The application has encountered a critical error and will be closed.</String>
 		<String ID="Generic.OpenWebSiteDialog.Caption">Do you want to open this webpage?</String>
 		<String ID="Generic.OpenWebSiteListDialog.Caption">Choose a webpage you want to open</String>
-		<String ID="Generic.FileFindInProgress">File search in progress</String>
+		<String ID="Generic.FileSearchInProgress">File search in progress</String>
+		<String ID="Generic.FileCopyInProgress">File copy in progress</String>
 
 		<String ID="FileFilter">File filter</String>
 		<String ID="FileFilter.AllFiles">All files</String>
@@ -204,7 +205,7 @@ Using the default folder is not recommended because profile data can occupy a lo
 		<String ID="Settings.Value.PreMainTimeoutAfter">Timeout after launching main programs (ms)</String>
 
 		<String ID="Settings.Value.PackagesLocation">Installation package folder</String>		
-		<String ID="Settings.Value.GameRoot">$(NameShort) installation folder</String>
+		<String ID="Settings.Value.GameRoot">$(GameShortName) installation folder</String>
 		<String ID="Settings.Value.AutoShowPackageInfo">Automatically show information about the installation package</String>
 		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Use HTTPS protocol in FOMod XML-scheme</String>
 
@@ -228,44 +229,39 @@ You can do this at %2 website via %3 or a post at the forums.]]></String>
 		<String ID="About.Permissions.DownloadPage">Download page</String>
 		<String ID="About.Permissions.SupportPage">Discussion and support</String>
 
-		<!-- Profile selection -->
-		<String ID="ProfileSelection.Caption">Select profile</String>
-		<String ID="ProfileSelection.CreateProfile">Create profile</String>
-		<String ID="ProfileSelection.RemoveProfile">Delete profile</String>
-		<String ID="ProfileSelection.CreateShortcut">Create shortcut</String>
+		<!-- Instance selection -->
+		<String ID="InstanceSelection.Caption">Select instance</String>
+		<String ID="InstanceSelection.CreateInstance">Create instance</String>
+		<String ID="InstanceSelection.RemoveInstance">Delete instance</String>
+		<String ID="InstanceSelection.CreateShortcut">Create shortcut</String>
 
-		<String ID="ProfileSelection.GameNotFound.Caption">Failed to locate $(NameShort)</String>
-		<String ID="ProfileSelection.GameNotFound.Message">$(Name) installation folder not found or doesn't exist. Select the folder manually to continue.</String>
+		<String ID="InstanceSelection.GameNotFound.Caption">Failed to locate $(GameShortName)</String>
+		<String ID="InstanceSelection.GameNotFound.Message">$(GameName) installation folder not found or doesn't exist. Select the folder manually to continue.</String>
 
-		<String ID="ProfileSelection.ChangeProfileDialog.Caption">To change profile, the application must be restarted</String>
-		<String ID="ProfileSelection.ChangeProfileDialog.Message">Do you want to restart now?</String>
-		<String ID="ProfileSelection.ChangeProfileDialog.Yes">Restart now</String>
-		<String ID="ProfileSelection.ChangeProfileDialog.No">Don't restart</String>
-		<String ID="ProfileSelection.ChangeProfileDialog.Cancel">Cancel profile change</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Caption">To change instance, the application must be restarted</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Message">Do you want to restart now?</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Yes">Restart now</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.No">Don't restart</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Cancel">Cancel instance change</String>
 
-		<String ID="ProfileSelection.ConfirmRemoving.Caption">Are you sure you want to delete profile "%1"</String>
-		<String ID="ProfileSelection.ConfirmRemoving.Message"><![CDATA[This cannot be undone.
+		<String ID="InstanceSelection.ConfirmRemoving.Caption">Are you sure you want to delete instance "%1"?</String>
+		<String ID="InstanceSelection.ConfirmRemoving.Message"><![CDATA[This cannot be undone.
 
 This folder and all its contents will be deleted: %1]]></String>
 
-		<!-- Profile creation/editing -->
-		<String ID="ProfileCreatorDialog.Caption">Create new profile for "%1"</String>
-		<String ID="ProfileCreatorDialog.NameLabel">Profile name</String>
-		<String ID="ProfileCreatorDialog.CopyFromLabel">Copy data from profile</String>
-		<String ID="ProfileCreatorDialog.CopyModsLabel">Copy mods</String>
-		<String ID="ProfileCreatorDialog.CopyModTags">Copy mod tags</String>
-		<String ID="ProfileCreatorDialog.CopyProfileConfigLabel">Copy profile settings</String>
-		<String ID="ProfileCreatorDialog.CopyRunManagerPrograms">Copy programs list</String>
-		<String ID="ProfileCreatorDialog.CopyGameConfigLabel">Copy game settings</String>
-		<String ID="ProfileCreatorDialog.ProfileNameInvalid">Invalid profile name. Choose another name.</String>
-		<String ID="ProfileCreatorDialog.ProfileNameCollision">A profile with this name already exists. Specify a different name.</String>
-		<String ID="ProfileCreatorDialog.CreationError">Failed to create a new profile</String>
-		<String ID="ProfileCreatorDialog.CopyingProfileData">Copying profile data</String>
-		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigCaption">Game settings files have been found</String>
-		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage"><![CDATA[%1 can use %2 virtual folder. There are some files in the "%3" folder that can be used to create a virtual folder.
-
-It is recommended that you move these files]]></String>
-		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage2">settings and saves</String>
+		<!-- Instance creation/editing -->
+		<String ID="InstanceCreatorDialog.Caption">Create new instance for "%1"</String>
+		<String ID="InstanceCreatorDialog.NameLabel">Instance name</String>
+		
+		<String ID="InstanceCreatorDialog.CopyFrom">Copy data from instance</String>
+		<String ID="InstanceCreatorDialog.CopyInstanceConfig">Copy instance settings</String>
+		<String ID="InstanceCreatorDialog.CopyModTags">Copy mod tags</String>
+		<String ID="InstanceCreatorDialog.CopyPrograms">Copy programs list</String>
+		
+		<String ID="InstanceCreatorDialog.InstanceNameInvalid">Invalid Instance name. Choose another name.</String>
+		<String ID="InstanceCreatorDialog.InstanceNameCollision">A instance with this name already exists. Specify a different name.</String>
+		<String ID="InstanceCreatorDialog.CreationError">Failed to create a new instance</String>
+		<String ID="InstanceCreatorDialog.DeletionError">Failed to delete this instance</String>
 
 		<String ID="OpenLocation.AppSettings">Manager settings</String>
 		<String ID="OpenLocation.GameRoot">Game folder</String>
@@ -285,13 +281,10 @@ It is recommended that you move these files]]></String>
 
 		<!-- Main menu -->
 		<String ID="MainMenu.Settings">Settings</String>
-		<String ID="MainMenu.ChangeProfile">Change profile. Current: $(NameShort) - $(CurrentProfileConfig)</String>
+		<String ID="MainMenu.ChangeProfile">Change instance. Current: $(GameShortName) - $(InstanceID)</String>
 		<String ID="MainMenu.Run">Run</String>
 		<String ID="MainMenu.OpenLocation">Open location</String>
 		<String ID="MainMenu.About">About</String>
-
-		<!-- Console -->
-		<String ID="Console.Message">Message</String>
 
 		<!-- Workspace controller -->
 		<String ID="Controller.SaveChanges.Caption">You have unsaved changes</String>
@@ -745,7 +738,7 @@ It is recommended that you move these files]]></String>
 		<String ID="ProgramManager.NoPrograms">No programs are available</String>
 		<String ID="ProgramManager.ExecutingPreMain">Launching additional software</String>
 		<String ID="ProgramManager.ExecutingMain">Launching the game</String>
-		<String ID="ProgramManager.Executing">Launching $(Name)</String>
+		<String ID="ProgramManager.Executing">Launching $(GameName)</String>
 		<String ID="ProgramManager.PreparingRun">Preparing</String>
 		<String ID="ProgramManager.RunFailed">Failed to create process</String>
 		<String ID="ProgramManager.WaitingReturn">Waiting to complete</String>
@@ -826,7 +819,7 @@ It is recommended that you move these files]]></String>
 		<String ID="ModManager.Tag.ItemsObjects">Items and objects</String>
 		<String ID="ModManager.Tag.Cheats">Cheats and God items</String>
 		<String ID="ModManager.Tag.Fixes">Bug fixes</String>
-		<String ID="ModManager.Tag.ScriptExtenderPlugins">Plugins for $(ScriptExtenderNameShort)</String>
+		<String ID="ModManager.Tag.ScriptExtenderPlugins">Plugins for $(ScriptExtenderID)</String>
 		<String ID="ModManager.Tag.Utilities">Utilities</String>
 		<String ID="ModManager.Tag.Resources">Modders resources and tutorials</String>
 		<String ID="ModManager.Tag.GameSaves">Save Games</String>
@@ -897,15 +890,15 @@ It is recommended that you move these files]]></String>
 		<String ID="ModManager.Menu.Tag.ActivateAll">Activate all</String>
 		<String ID="ModManager.Menu.Tag.DeactivateAll">Deactivate all</String>
 
-		<String ID="ModManager.ModList">Mod list</String>
-		<String ID="ModManager.ModList.Manage">Manage mod list</String>
-		<String ID="ModManager.ModList.Export">Export mod list</String>
-		<String ID="ModManager.ModList.RemoveDialog">Are you sure you want to delete this mod list? This operation can not be undone.</String>
-		<String ID="ModManager.ModList.AlreadyExist">Mod list with this name already exist</String>
-		<String ID="ModManager.ModList.RenameFailed">Failed to rename mod list</String>
+		<String ID="ModManager.Profile">Profile</String>
+		<String ID="ModManager.Profile.Configure">Configure profiles</String>
+		<String ID="ModManager.Profile.Export">Export profile</String>
+		<String ID="ModManager.Profile.RemoveDialog">Are you sure you want to delete this profile? This operation can not be undone.</String>
+		<String ID="ModManager.Profile.AlreadyExist">Profile with this name already exist</String>
+		<String ID="ModManager.Profile.RenameFailed">Failed to rename profile list</String>
 
-		<String ID="ModManager.ModList.LocalSaves">Local saves</String>
-		<String ID="ModManager.ModList.LocalConfig">Local game config</String>
+		<String ID="ModManager.Profile.LocalSaves">Local saves</String>
+		<String ID="ModManager.Profile.LocalConfig">Local game config</String>
 		
 		<String ID="ModManager.Statistics">Statistics</String>
 		<String ID="ModManager.Statistics.Status">Calculating statistics</String>
@@ -1309,7 +1302,7 @@ You can also rename the flag to "%1" and manually change the references to it.]]
 		<String ID="InstallWizard.NoFiles.Message"><![CDATA[Installation Wizard didn't find any valid files to install.
 
 This might be because:
-- Your $(NameShort) copy and installed mods do not match this mod's requirements.
+- Your $(GameShortName) copy and installed mods do not match this mod's requirements.
 - The components configuration is invalid. In order to solve this problem, contact either the mod's author or the installer's author.]]></String>
 		<String ID="InstallWizard.ChangeID.Invalid">Invalid ID</String>
 		<String ID="InstallWizard.ChangeID.Used">This ID is already used by "%1"</String>

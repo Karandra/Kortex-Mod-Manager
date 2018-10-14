@@ -44,7 +44,7 @@
 	<Entry NexusID="85" ID="ItemsObjects"/>
 	<Entry NexusID="40" ID="Cheats"/>
 	<Entry NexusID="95" ID="Fixes"/>
-	<Entry NexusID="-1" ID="ScriptExtenderPlugins" RequiresSE="1"/>
+	<Entry NexusID="-1" ID="ScriptExtenderPlugins" RequiresScriptExtender="1"/>
 	<Entry NexusID="39" ID="Utilities"/>
 	<Entry NexusID="82" ID="Resources"/>
 	<Entry NexusID="43" ID="GameSaves"/>

@@ -440,7 +440,7 @@ void KPCFileDataMainListModel::OnAddFolder()
 			NotifyAddedItem(item);
 			SelectItem(item);
 		});
-		operation->SetDialogCaption(T("Generic.FileFindInProgress"));
+		operation->SetDialogCaption(T("Generic.FileSearchInProgress"));
 		operation->Run();
 	}
 }
@@ -476,7 +476,7 @@ void KPCFileDataMainListModel::OnAddMultipleFolders()
 			RefreshItems();
 			ChangeNotify();
 		});
-		operation->SetDialogCaption(T("Generic.FileFindInProgress"));
+		operation->SetDialogCaption(T("Generic.FileSearchInProgress"));
 		operation->Run();
 	}
 }
@@ -499,7 +499,7 @@ void KPCFileDataMainListModel::OnReplaceFolderContent(const KxDataViewItem& item
 			NotifyChangedItem(item);
 			SelectItem(item);
 		});
-		operation->SetDialogCaption(T("Generic.FileFindInProgress"));
+		operation->SetDialogCaption(T("Generic.FileSearchInProgress"));
 		operation->Run();
 	}
 }

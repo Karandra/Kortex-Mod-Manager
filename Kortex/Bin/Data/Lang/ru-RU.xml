@@ -100,7 +100,7 @@
 		<String ID="ID_SAVE_LONG">Сохранить текущий документ</String>
 		<String ID="ID_SAVEAS_LONG">Сохранить текущий документ под другим именем</String>
 		
-		<!-- KMM -->
+		<!-- Generic -->
 		<String ID="Generic.Run">Запустить</String>
 		<String ID="Generic.All">Все</String>
 		<String ID="Generic.using">используя</String>
@@ -143,7 +143,8 @@
 		<String ID="Generic.CriticalError">Произошла критическая ошибка. Программа будет завершена.</String>
 		<String ID="Generic.OpenWebSiteDialog.Caption">Открыть данную веб-страницу?</String>
 		<String ID="Generic.OpenWebSiteListDialog.Caption">Выберите веб-страницу, которую хотите открыть</String>
-		<String ID="Generic.FileFindInProgress">Выполняется поиск файлов</String>
+		<String ID="Generic.FileSearchInProgress">Выполняется поиск файлов</String>
+		<String ID="Generic.FileCopyInProgress">Выполняется копирование файлов</String>
 		
 		<String ID="FileFilter">Фильтр файлов</String>
 		<String ID="FileFilter.AllFiles">Все файлы</String>
@@ -204,7 +205,7 @@
 		<String ID="Settings.Value.PreMainTimeoutAfter">Время ожидания после запуска предварительных программ (мс)</String>
 		
 		<String ID="Settings.Value.PackagesLocation">Папка установочных пакетов</String>
-		<String ID="Settings.Value.GameRoot">Установочная папка $(NameShort)</String>
+		<String ID="Settings.Value.GameRoot">Установочная папка $(GameShortName)</String>
 		<String ID="Settings.Value.AutoShowPackageInfo">Автоматически показывать информацию об установочном пакете</String>
 		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</String>
 		
@@ -228,44 +229,39 @@
 		<String ID="About.Permissions.DownloadPage">Страница загрузки</String>
 		<String ID="About.Permissions.SupportPage">Обсуждение и поддержка</String>
 
-		<!-- Profile selection -->
-		<String ID="ProfileSelection.Caption">Выбор профилей</String>
-		<String ID="ProfileSelection.CreateProfile">Создать профиль</String>
-		<String ID="ProfileSelection.RemoveProfile">Удалить профиль</String>
-		<String ID="ProfileSelection.CreateShortcut">Создать ярлык</String>
+		<!-- Instance selection -->
+		<String ID="InstanceSelection.Caption">Выбор инстанса</String>
+		<String ID="InstanceSelection.CreateInstance">Создать инстанс</String>
+		<String ID="InstanceSelection.RemoveInstance">Удалить инстанс</String>
+		<String ID="InstanceSelection.CreateShortcut">Создать ярлык</String>
 		
-		<String ID="ProfileSelection.GameNotFound.Caption">Расположение $(NameShort) не найдено</String>
-		<String ID="ProfileSelection.GameNotFound.Message">Установочная папка $(Name) не найдена или не существует. Укажите папку вручную, чтобы продолжить.</String>
+		<String ID="InstanceSelection.GameNotFound.Caption">Расположение $(GameShortName) не найдено</String>
+		<String ID="InstanceSelection.GameNotFound.Message">Установочная папка $(GameName) не найдена или не существует. Укажите папку вручную, чтобы продолжить.</String>
 		
-		<String ID="ProfileSelection.ChangeProfileDialog.Caption">Для смены профиля требуется перезапуск программы</String>
-		<String ID="ProfileSelection.ChangeProfileDialog.Message">Выполнить перезапуск?</String>
-		<String ID="ProfileSelection.ChangeProfileDialog.Yes">Перезапустить сейчас</String>
-		<String ID="ProfileSelection.ChangeProfileDialog.No">Не перезапускать</String>
-		<String ID="ProfileSelection.ChangeProfileDialog.Cancel">Отменить изменение профиля</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Caption">Для смены инстанса требуется перезапуск программы</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Message">Выполнить перезапуск?</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Yes">Перезапустить сейчас</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.No">Не перезапускать</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Cancel">Отменить смену инстанса</String>
 		
-		<String ID="ProfileSelection.ConfirmRemoving.Caption">Вы уверены, что хотите удалить пофиль "%1"</String>
-		<String ID="ProfileSelection.ConfirmRemoving.Message"><![CDATA[Эту операцию невозможно отменить.
+		<String ID="InstanceSelection.ConfirmRemoving.Caption">Вы уверены, что хотите удалить инстанс "%1"?</String>
+		<String ID="InstanceSelection.ConfirmRemoving.Message"><![CDATA[Эту операцию невозможно отменить.
 
 Будет удалена следующая папка и всё её содержимое: %1]]></String>
 
-		<!-- Profile creation/editing -->
-		<String ID="ProfileCreatorDialog.Caption">Создание нового профиля для "%1"</String>
-		<String ID="ProfileCreatorDialog.NameLabel">Название профиля</String>
-		<String ID="ProfileCreatorDialog.CopyFromLabel">Скопировать данные из профиля</String>
-		<String ID="ProfileCreatorDialog.CopyModsLabel">Копировать моды</String>
-		<String ID="ProfileCreatorDialog.CopyModTags">Копировать теги модов</String>
-		<String ID="ProfileCreatorDialog.CopyProfileConfigLabel">Копировать настройки профиля</String>
-		<String ID="ProfileCreatorDialog.CopyRunManagerPrograms">Копировать список программ для запуска</String>
-		<String ID="ProfileCreatorDialog.CopyGameConfigLabel">Копировать настройки игры</String>
-		<String ID="ProfileCreatorDialog.ProfileNameInvalid">Некорректное название профиля. Выберите другое название.</String>
-		<String ID="ProfileCreatorDialog.ProfileNameCollision">Профиль с данным названием уже существует. Выберите другое название.</String>
-		<String ID="ProfileCreatorDialog.CreationError">Не удалось создать новый профиль</String>
-		<String ID="ProfileCreatorDialog.CopyingProfileData">Копирование данных профиля</String>
-		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigCaption">Обнаружены файлы конфигурации игры</String>
-		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage"><![CDATA[Для %1 возможно использовать виртуальную папку для %2. В папке "%3" обнаружены файлы, которые можно использовать для создания виртуальной папки.
-
-Рекомендуется скопировать эти файлы]]></String>
-		<String ID="ProfileCreatorDialog.CopyNonVirtualGameConfigMessage2">настроек и сохранений</String>
+		<!-- Instance creation/editing -->
+		<String ID="InstanceCreatorDialog.Caption">Создание нового инстанса для "%1"</String>
+		<String ID="InstanceCreatorDialog.NameLabel">Название инстанса</String>
+		
+		<String ID="InstanceCreatorDialog.CopyFrom">Скопировать данные из инстанса</String>
+		<String ID="InstanceCreatorDialog.CopyInstanceConfig">Копировать настройки инстанса</String>
+		<String ID="InstanceCreatorDialog.CopyModTags">Копировать теги модов</String>
+		<String ID="InstanceCreatorDialog.CopyPrograms">Копировать программы</String>
+		
+		<String ID="InstanceCreatorDialog.InstanceNameInvalid">Некорректное название инсстанса. Выберите другое название.</String>
+		<String ID="InstanceCreatorDialog.InstanceNameCollision">Инстанс с данным названием уже существует. Выберите другое название.</String>
+		<String ID="InstanceCreatorDialog.CreationError">Не удалось создать новый инстанс</String>
+		<String ID="InstanceCreatorDialog.DeletionError">Не удалось удалить этот инстанс</String>
 
 		<String ID="OpenLocation.AppSettings">Настройки программы</String>
 		<String ID="OpenLocation.GameRoot">Папка игры</String>
@@ -285,13 +281,10 @@
 		
 		<!-- Main menu -->
 		<String ID="MainMenu.Settings">Настройки программы</String>
-		<String ID="MainMenu.ChangeProfile">Сменить профиль. Выбран: $(NameShort) - $(CurrentProfileConfig)</String>
+		<String ID="MainMenu.ChangeInstance">Сменить инстанс. Выбран: $(GameShortName) - $(InstanceID)</String>
 		<String ID="MainMenu.Run">Запустить</String>
 		<String ID="MainMenu.OpenLocation">Открыть расположение</String>
 		<String ID="MainMenu.About">О программе</String>
-
-		<!-- Console -->
-		<String ID="Console.Message">Сообщение</String>
 
 		<!-- Workspace controller -->
 		<String ID="Controller.SaveChanges.Caption">Имеются несохранённые изменения</String>
@@ -745,7 +738,7 @@
 		<String ID="ProgramManager.NoPrograms">Нет доступных программ</String>
 		<String ID="ProgramManager.ExecutingPreMain">Запуск предварительных программ</String>
 		<String ID="ProgramManager.ExecutingMain">Запуск основной программы</String>
-		<String ID="ProgramManager.Executing">Запуск $(Name)</String>
+		<String ID="ProgramManager.Executing">Запуск $(GameName)</String>
 		<String ID="ProgramManager.PreparingRun">Подготовка</String>
 		<String ID="ProgramManager.RunFailed">Не удалось создать процесс</String>
 		<String ID="ProgramManager.WaitingReturn">Ожидание завершения</String>
@@ -826,7 +819,7 @@
 		<String ID="ModManager.Tag.ItemsObjects">Разные предметы и объекты</String>
 		<String ID="ModManager.Tag.Cheats">Читы и "божественные" вещи</String>
 		<String ID="ModManager.Tag.Fixes">Исправления и патчи</String>
-		<String ID="ModManager.Tag.ScriptExtenderPlugins">Плагины для $(ScriptExtenderNameShort)</String>
+		<String ID="ModManager.Tag.ScriptExtenderPlugins">Плагины для $(ScriptExtenderID)</String>
 		<String ID="ModManager.Tag.Utilities">Программы</String>
 		<String ID="ModManager.Tag.Resources">Инструкции и ресурсы для модмейкеров</String>
 		<String ID="ModManager.Tag.GameSaves">Сохранения игры</String>
@@ -897,15 +890,15 @@
 		<String ID="ModManager.Menu.Tag.ActivateAll">Активировать все</String>
 		<String ID="ModManager.Menu.Tag.DeactivateAll">Деактивировать все</String>
 
-		<String ID="ModManager.ModList">Список модов</String>
-		<String ID="ModManager.ModList.Manage">Изменить список модов</String>
-		<String ID="ModManager.ModList.Export">Экспорт списка модов</String>
-		<String ID="ModManager.ModList.RemoveDialog">Вы уверены, что хотите удалить этот список модов? Эту операцию невозможно отменить.</String>
-		<String ID="ModManager.ModList.AlreadyExist">Список модов с таким названием уже существует</String>
-		<String ID="ModManager.ModList.RenameFailed">Не удалось переименовать список модов</String>
+		<String ID="ModManager.Profile">Профиль</String>
+		<String ID="ModManager.Profile.Configure">Настроить профили</String>
+		<String ID="ModManager.Profile.Export">Экспорт профиля</String>
+		<String ID="ModManager.Profile.RemoveDialog">Вы уверены, что хотите удалить этот профиль? Эту операцию невозможно отменить.</String>
+		<String ID="ModManager.Profile.AlreadyExist">Профиль с таким названием уже существует</String>
+		<String ID="ModManager.Profile.RenameFailed">Не удалось переименовать профиль</String>
 		
-		<String ID="ModManager.ModList.LocalSaves">Локальные сохранения</String>
-		<String ID="ModManager.ModList.LocalConfig">Локальные настройки игры</String>
+		<String ID="ModManager.Profile.LocalSaves">Локальные сохранения</String>
+		<String ID="ModManager.Profile.LocalConfig">Локальные настройки игры</String>
 		
 		<String ID="ModManager.Statistics">Статистика</String>
 		<String ID="ModManager.Statistics.Status">Подсчёт статистики</String>
@@ -1309,7 +1302,7 @@
 		<String ID="InstallWizard.NoFiles.Message"><![CDATA[Мастер установки не обнаружил файлов подходящих для установки.
 
 Возможные причины:
-- Ваша копия $(NameShort) и набор установленных модов не удовлетворяют требованиям данного мода.
+- Ваша копия $(GameShortName) и набор установленных модов не удовлетворяют требованиям данного мода.
 - Вы выбрали неверную конфигурацию компонентов. В этом случае обратитесь к автору мода или создателю установочного пакета для решения проблемы.]]></String>
 		<String ID="InstallWizard.ChangeID.Invalid">Некорретный идентификатор</String>
 		<String ID="InstallWizard.ChangeID.Used">Указанный идентификатор уже используется модом "%1"</String>

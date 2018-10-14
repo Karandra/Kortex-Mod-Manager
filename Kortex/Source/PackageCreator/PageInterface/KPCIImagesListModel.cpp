@@ -357,7 +357,7 @@ void KPCIImagesListModel::OnImportFiles()
 			ChangeNotify();
 			GetView()->Thaw();
 		});
-		operation->SetDialogCaption(T("Generic.FileFindInProgress"));
+		operation->SetDialogCaption(T("Generic.FileSearchInProgress"));
 		operation->Run();
 	}
 }

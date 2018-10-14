@@ -20,18 +20,22 @@ class KBitmapSize
 		}
 
 	public:
-		void FromWidth(int width, double ratio)
+		KBitmapSize& FromWidth(int width, double ratio)
 		{
 			m_Width = width;
 			m_Height = (double)width / ratio;
+
+			return *this;
 		}
-		void FromHeight(int height, double ratio)
+		KBitmapSize& FromHeight(int height, double ratio)
 		{
 			m_Width = (double)height * ratio;
 			m_Height = height;
+
+			return *this;
 		}
-		void FromSystemIcon();
-		void FromSystemSmallIcon();
+		KBitmapSize& FromSystemIcon();
+		KBitmapSize& FromSystemSmallIcon();
 
 		bool IsFullySpecified() const
 		{

@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Profile/KProfileID.h"
 class KIPCServer;
 
 class KApp: public KxApp<wxApp, KApp>

@@ -45,7 +45,7 @@ void KInstallWizardRequirementsModel::GetValueByRow(wxAny& data, size_t row, con
 			case ColumnID::Name:
 			{
 				wxString label;
-				if (entry->GetName() != entry->GetID() && entry->GetID() != KApp::Get().GetCurrentTemplateID())
+				if (entry->GetName() != entry->GetID() && entry->GetID() != KApp::Get().GetCurrentGameID())
 				{
 					label = wxString::Format("%s (%s)", entry->GetName(), entry->GetID());
 				}

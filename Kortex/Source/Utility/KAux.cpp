@@ -324,7 +324,7 @@ wxString KAux::MakeSafeFileName(const wxString& string)
 	wxString out = string;
 	for (auto& c: KxFile::GetForbiddenChars())
 	{
-		out.Replace(c, "_", true);
+		out.Replace(c, wxS("_"), true);
 	}
 	return out;
 }

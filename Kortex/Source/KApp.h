@@ -4,12 +4,12 @@
 #include "KDynamicVariablesTable.h"
 #include "KImageProvider.h"
 #include "KProgramOptions.h"
+#include "GameInstance/KGameID.h"
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxImageList.h>
 #include <KxFramework/KxImageSet.h>
 #include <KxFramework/KxINI.h>
 #include <wx/snglinst.h>
-class KProfile;
 class KLogEvent;
 class KMainWindow;
 class KModManager;
@@ -38,7 +38,6 @@ class KApp: public KxApp<wxApp, KApp>
 		KxImageSet m_ImageSet;
 
 		KDynamicVariablesTable m_Variables;
-		KProfile* m_CurrentProfile = NULL;
 		KMainWindow* m_MainWindow = NULL;
 		mutable KSettingsWindowManager* m_SettingsManager = NULL;
 		bool m_AllowSaveSettinsgAtExit = true;
@@ -46,12 +45,12 @@ class KApp: public KxApp<wxApp, KApp>
 		KIPCClient* m_VFSServiceClient = NULL;
 		KVFSService* m_VFSService = NULL;
 
-		wxString m_CurrentTemplateID;
-		wxString m_CurrentConfigID;
+		KGameID m_CurrentGameID;
+		wxString m_CurrentInstanceID;
 
 		KProgramOption m_GeneralOptions;
 		KProgramOption m_GeneralOptions_AppWide;
-		KProgramOption m_ProfileOptions_AppWide;
+		KProgramOption m_InstanceOptions_AppWide;
 
 	public:
 		KApp();
@@ -75,19 +74,13 @@ class KApp: public KxApp<wxApp, KApp>
 		const wxString& GetDataFolder() const;
 		const wxString& GetUserSettingsFolder();
 		const wxString& GetUserSettingsFile();
+		wxString GetInstancesRoot() const;
 
 		wxString ExpandVariablesLocally(const wxString& variables) const
 		{
 			return m_Variables.Expand(variables);
 		}
 		wxString ExpandVariables(const wxString& variables) const;
-
-		KProfile* GetCurrentProfile() const;
-		KProfile* SetCurrentProfile(KProfile* profile);
-		bool IsProfileLoaded() const
-		{
-			return GetCurrentProfile() != NULL;
-		}
 		
 		bool IsTranslationLoaded() const
 		{
@@ -104,7 +97,7 @@ class KApp: public KxApp<wxApp, KApp>
 
 		KSettingsWindowManager* GetSettingsManager() const;
 		void SaveSettings() const;
-		bool ShowChageProfileDialog();
+		bool ShowChageInstanceDialog();
 
 		KProgramOption& GetOptionsGeneral()
 		{
@@ -112,16 +105,16 @@ class KApp: public KxApp<wxApp, KApp>
 		}
 		KProgramOption& GetOptionsProfile()
 		{
-			return m_ProfileOptions_AppWide;
+			return m_InstanceOptions_AppWide;
 		}
 
 		KCMConfigEntryStd* GetSettingsEntry(KPGCFileID id, const wxString& section, const wxString& name) const;
 		wxString GetSettingsValue(KPGCFileID id, const wxString& section, const wxString& name) const;
 		void SetSettingsValue(KPGCFileID id, const wxString& section, const wxString& name, const wxString& value);
-		wxString GetCurrentTemplateID() const;
-		wxString GetCurrentConfigID() const;
-		void SetCurrentTemplateID(const wxString& templateID);
-		void SetCurrentConfigID(const wxString& configID);
+		KGameID GetCurrentGameID() const;
+		wxString GetCurrentInstanceID() const;
+		void SetCurrentGameID(const wxString& templateID);
+		void SetCurrentInstanceID(const wxString& configID);
 		void ConfigureInternetExplorer(bool init);
 
 		bool ScheduleRestart();
@@ -141,9 +134,9 @@ class KApp: public KxApp<wxApp, KApp>
 		void InitSettings();
 		bool IsPreStartConfigNeeded();
 		bool ShowFirstTimeConfigDialog(wxWindow* parent);
-		void InitProfilesData(wxWindow* parent);
-		bool LoadProfile();
-		void LoadCurrentTemplateAndConfig();
+		void InitInstancesData(wxWindow* parent);
+		bool LoadInstance();
+		void LoadCurrentGameIDAndInstanceID();
 
 		void InitVFS();
 		void UnInitVFS();

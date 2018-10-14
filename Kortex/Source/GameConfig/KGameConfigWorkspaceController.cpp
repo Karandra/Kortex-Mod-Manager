@@ -4,7 +4,7 @@
 #include "KGameConfigWorkspace.h"
 #include "ConfigManager/KConfigManager.h"
 #include "ConfigManager/KCMController.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KApp.h"
 
 KxTreeListItem KGameConfigWorkspaceController::CreateUnknownItemsRoot()
@@ -32,7 +32,7 @@ void KGameConfigWorkspaceController::OnVFSToggled(KVFSEvent& event)
 }
 
 KGameConfigWorkspaceController::KGameConfigWorkspaceController(KGameConfigWorkspace* workspace, KxTreeList* view)
-	:KCMController(workspace, new KConfigManager(workspace, KApp::Get().GetCurrentProfile()->GetID()), view)
+	:KCMController(workspace, new KConfigManager(workspace, KGameInstance::GetActive()->GetGameID()), view)
 {
 	if (GetConfigManager()->GetGameConfig()->IsENBEnabled())
 	{

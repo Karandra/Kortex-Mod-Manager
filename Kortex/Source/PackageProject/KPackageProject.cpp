@@ -2,7 +2,7 @@
 #include "KPackageProject.h"
 #include "PackageManager/KPackageManager.h"
 #include "ModManager/KModManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KApp.h"
 #include "KAux.h"
 
@@ -44,7 +44,7 @@ KPackageProject::KPackageProject()
 	m_Components(*this),
 
 	m_FormatVersion(KPackageManager::GetInstance()->GetVersion()),
-	m_TargetProfileID(KApp::Get().GetCurrentTemplateID())
+	m_TargetProfileID(KApp::Get().GetCurrentGameID())
 {
 }
 KPackageProject::~KPackageProject()

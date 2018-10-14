@@ -1,12 +1,12 @@
 #pragma once
 #include "stdafx.h"
-#include "Profile/KProfileID.h"
+#include "GameInstance/KGameID.h"
 #include "Network/KNetworkProvider.h"
 #include <KxFramework/KxISerializer.h>
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxFileStream.h>
 class KQuickThread;
-class KProfile;
+class KGameInstance;
 class KModEntry;
 class KxFileItem;
 
@@ -27,7 +27,7 @@ class KDownloadEntry: public KxISerializer
 		std::unique_ptr<KxFileStream> m_Stream;
 		std::unique_ptr<KxCURLSession> m_Session;
 
-		const KProfile* m_TargetProfile = NULL;
+		const KGameInstance* m_TargetProfile = NULL;
 		const KNetworkProvider* m_Provider = NULL;
 		wxDateTime m_Date;
 		int64_t m_DownloadedSize = 0;
@@ -56,7 +56,7 @@ class KDownloadEntry: public KxISerializer
 		KDownloadEntry(const KNetworkProvider::DownloadInfo& downloadInfo,
 					   const KNetworkProvider::FileInfo& fileInfo,
 					   const KNetworkProvider* provider,
-					   const KProfileID& id);
+					   const KGameID& id);
 		~KDownloadEntry();
 
 	public:
@@ -67,16 +67,16 @@ class KDownloadEntry: public KxISerializer
 		wxString GetFullPath() const;
 		wxString GetMetaFilePath() const;
 		
-		KProfileID GetTargetProfileID() const;
-		const KProfile* GetTargetProfile() const
+		KGameID GetTargetProfileID() const;
+		const KGameInstance* GetTargetProfile() const
 		{
 			return m_TargetProfile;
 		}
-		void SetTargetProfile(const KProfile* profile)
+		void SetTargetProfile(const KGameInstance* profile)
 		{
 			m_TargetProfile = profile;
 		}
-		void SetTargetProfile(const KProfileID& id);
+		void SetTargetProfile(const KGameID& id);
 
 		const KModEntry* GetMod() const;
 

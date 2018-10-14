@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "KLabeledValue.h"
 #include <KxFramework/KxSingleton.h>
-class KProfile;
+class KGameInstance;
 
 class KNetworkConfig: public KxSingletonPtr<KNetworkConfig>
 {
@@ -11,7 +11,7 @@ class KNetworkConfig: public KxSingletonPtr<KNetworkConfig>
 		int64_t m_SteamID = -1;
 
 	public:
-		KNetworkConfig(KProfile& profile, const KxXMLNode& node);
+		KNetworkConfig(KGameInstance& profile, const KxXMLNode& node);
 		~KNetworkConfig();
 
 	public:

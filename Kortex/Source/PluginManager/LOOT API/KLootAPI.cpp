@@ -2,9 +2,9 @@
 #include "KLootAPI.h"
 #include "PluginManager/KPluginManager.h"
 #include "ModManager/KModManager.h"
-#include "Profile/KProfile.h"
-#include "Profile/KProfileID.h"
-#include "Profile/KPluginManagerConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KGameID.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
 #include "KApp.h"
 #include "KOperationWithProgress.h"
 #include "Events/KLogEvent.h"
@@ -41,40 +41,40 @@ int KLootAPI::GetLootGameID() const
 	loot::GameType gameType = (loot::GameType)INVALID_GAME_ID;
 	if (KPluginManager::HasInstance())
 	{
-		const wxString& templateID = KApp::Get().GetCurrentTemplateID();
+		const wxString& templateID = KApp::Get().GetCurrentGameID();
 
 		// TES
-		if (templateID == KProfileIDs::Oblivion)
+		if (templateID == KGameIDs::Oblivion)
 		{
 			gameType = loot::GameType::tes4;
 		}
-		else if (templateID == KProfileIDs::Skyrim)
+		else if (templateID == KGameIDs::Skyrim)
 		{
 			gameType = loot::GameType::tes5;
 		}
-		else if (templateID == KProfileIDs::SkyrimSE)
+		else if (templateID == KGameIDs::SkyrimSE)
 		{
 			gameType = loot::GameType::tes5se;
 		}
-		else if (templateID == KProfileIDs::SkyrimVR)
+		else if (templateID == KGameIDs::SkyrimVR)
 		{
 			gameType = loot::GameType::tes5vr;
 		}
 
 		// Fallout
-		else if (templateID == KProfileIDs::Fallout3)
+		else if (templateID == KGameIDs::Fallout3)
 		{
 			gameType = loot::GameType::fo3;
 		}
-		else if (templateID == KProfileIDs::FalloutNV)
+		else if (templateID == KGameIDs::FalloutNV)
 		{
 			gameType = loot::GameType::fonv;
 		}
-		else if (templateID == KProfileIDs::Fallout4)
+		else if (templateID == KGameIDs::Fallout4)
 		{
 			gameType = loot::GameType::fo4;
 		}
-		else if (templateID == KProfileIDs::Fallout4VR)
+		else if (templateID == KGameIDs::Fallout4VR)
 		{
 			gameType = loot::GameType::fo4vr;
 		}

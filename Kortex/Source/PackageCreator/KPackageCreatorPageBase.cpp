@@ -4,7 +4,7 @@
 #include "KPackageCreatorWorkspace.h"
 #include "KPackageCreatorController.h"
 #include "PackageManager/KPackageManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "Events/KLogEvent.h"
 #include "KThemeManager.h"
 #include "KApp.h"

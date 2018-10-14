@@ -4,6 +4,7 @@
 #include "KEvents.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
+#include <KxFramework/KxSingleton.h>
 class KModEntry;
 
 enum KMMDispatcherCollisionType
@@ -41,7 +42,7 @@ class KMMDispatcherCollision
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KModManagerDispatcher
+class KModManagerDispatcher: public KxSingletonPtr<KModManagerDispatcher>
 {
 	public:
 		using CollisionVector = std::vector<KMMDispatcherCollision>;
@@ -71,6 +72,7 @@ class KModManagerDispatcher
 	public:
 		// Full rebuild of file tree. Invalidates all references to old tree nodes.
 		void UpdateVirtualTree();
+		void InvalidateVirtualTree();
 
 		// Root node of virtual files tree.
 		const KFileTreeNode& GetVirtualTree() const;

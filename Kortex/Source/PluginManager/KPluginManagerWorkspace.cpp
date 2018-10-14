@@ -5,8 +5,10 @@
 #include "KPluginViewBaseModel.h"
 #include "LOOT API/KLootAPI.h"
 #include "UI/KImageViewerDialog.h"
-#include "Profile/KPluginManagerConfig.h"
-#include "Profile/KConfigManagerConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "Profile/KProfile.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
+#include "GameInstance/Config/KConfigManagerConfig.h"
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModEntry.h"
@@ -98,7 +100,7 @@ KPluginManagerWorkspace::~KPluginManagerWorkspace()
 {
 	if (IsWorkspaceCreated())
 	{
-		KModManager::GetListManager().SyncCurrentList();
+		KGameInstance::GetActive()->GetCurrentProfile()->SyncWithCurrentState();
 		KProgramOptionSerializer::SaveDataViewLayout(m_ModelView->GetView(), m_PluginListViewOptions);
 	}
 }

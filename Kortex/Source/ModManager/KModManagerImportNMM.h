@@ -10,14 +10,14 @@ class KModManagerImportNMM: public KModManagerImport
 		KxXMLDocument m_ProfileManagerXML;
 
 		bool m_CanImport = false;
-		KProfileID m_TargetProfile;
-		const KProfile* m_TargetProfileTemplate = NULL;
+		KGameID m_TargetProfile;
+		const KGameInstance* m_TargetProfileTemplate = NULL;
 		std::vector<std::pair<wxString, wxString>> m_ProfilesList;
 
 	private:
 		wxString ProcessDescription(const wxString& path) const;
 
-		KProfileID GetGameID(const wxString& name);
+		KGameID GetGameID(const wxString& name);
 		void LoadOptions();
 		wxString GetDataFolderName() const;
 		wxString GetProfileDirectory() const;
@@ -32,7 +32,7 @@ class KModManagerImportNMM: public KModManagerImport
 		virtual void Import(KOperationWithProgressDialogBase* context) override;
 		
 		virtual bool CanImport() const override;
-		virtual KProfileID GetTargetProfileID() const override
+		virtual KGameID GetTargetProfileID() const override
 		{
 			return m_TargetProfile;
 		}

@@ -3,6 +3,7 @@
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
 #include "KProgramOptions.h"
+#include "KEventsFwd.h"
 #include <KxFramework/KxSingleton.h>
 class KxSearchBox;
 class KVirtualGameFolderModel;
@@ -28,6 +29,7 @@ class KVirtualGameFolderWorkspace: public KWorkspace, public KxSingletonPtr<KVir
 		virtual void OnReloadWorkspace() override;
 
 		void OnModSerach(wxCommandEvent& event);
+		void OnViewInvalidated(KEvent& event);
 
 	public:
 		virtual wxString GetID() const override;

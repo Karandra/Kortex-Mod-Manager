@@ -5,8 +5,8 @@
 #include "KNetworkProviderLoversLab.h"
 #include "UI/KMainWindow.h"
 #include "DownloadManager/KDownloadManager.h"
-#include "Profile/KProfileID.h"
-#include "Profile/KNetworkConfig.h"
+#include "GameInstance/KGameID.h"
+#include "GameInstance/Config/KNetworkConfig.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxFile.h>

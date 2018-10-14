@@ -168,39 +168,39 @@ wxString KNetworkProviderNexus::GetName() const
 {
 	return "Nexus";
 }
-wxString KNetworkProviderNexus::GetGameID(const KProfileID& id) const
+wxString KNetworkProviderNexus::GetGameID(const KGameID& id) const
 {
 	// If invalid profile is passed, return ID for current profile.
 	if (id.IsOK())
 	{
 		// TES
-		if (id == KProfileIDs::Morrowind)
+		if (id == KGameIDs::Morrowind)
 		{
 			return "Morrowind";
 		}
-		if (id == KProfileIDs::Oblivion)
+		if (id == KGameIDs::Oblivion)
 		{
 			return "Oblivion";
 		}
-		if (id == KProfileIDs::Skyrim)
+		if (id == KGameIDs::Skyrim)
 		{
 			return "Skyrim";
 		}
-		if (id == KProfileIDs::SkyrimSE)
+		if (id == KGameIDs::SkyrimSE)
 		{
 			return "SkyrimSpecialEdition";
 		}
 
 		// Fallout
-		if (id == KProfileIDs::Fallout3)
+		if (id == KGameIDs::Fallout3)
 		{
 			return "Fallout3";
 		}
-		if (id == KProfileIDs::FalloutNV)
+		if (id == KGameIDs::FalloutNV)
 		{
 			return "NewVegas";
 		}
-		if (id == KProfileIDs::Fallout4)
+		if (id == KGameIDs::Fallout4)
 		{
 			return "Fallout4";
 		}
@@ -317,16 +317,16 @@ wxString& KNetworkProviderNexus::ConvertDescriptionToHTML(wxString& description)
 
 	return description;
 }
-wxString KNetworkProviderNexus::GetModURLBasePart(const KProfileID& id) const
+wxString KNetworkProviderNexus::GetModURLBasePart(const KGameID& id) const
 {
 	return wxString::Format("https://www.nexusmods.com/%s/mods", GetGameID(id)).MakeLower();
 }
-wxString KNetworkProviderNexus::GetModURL(int64_t modID, const wxString& modSignature, const KProfileID& id)
+wxString KNetworkProviderNexus::GetModURL(int64_t modID, const wxString& modSignature, const KGameID& id)
 {
 	return wxString::Format("%s/%lld", GetModURLBasePart(id), modID);
 }
 
-KNetworkProvider::ModInfo KNetworkProviderNexus::GetModInfo(int64_t modID, const KProfileID& id) const
+KNetworkProvider::ModInfo KNetworkProviderNexus::GetModInfo(int64_t modID, const KGameID& id) const
 {
 	KxCURLSession connection(wxString::Format("%s/games/%s/mods/%lld", GetAPIURL(), GetGameID(id), modID));
 	KxCURLReply reply = ConfigureRequest(connection).Send();
@@ -388,7 +388,7 @@ KNetworkProvider::ModInfo KNetworkProviderNexus::GetModInfo(int64_t modID, const
 	}
 	return info;
 }
-KNetworkProvider::FileInfo KNetworkProviderNexus::GetFileInfo(int64_t modID, int64_t fileID, const KProfileID& id) const
+KNetworkProvider::FileInfo KNetworkProviderNexus::GetFileInfo(int64_t modID, int64_t fileID, const KGameID& id) const
 {
 	KxCURLSession connection(wxString::Format("%s/games/%s/mods/%lld/files/%lld", GetAPIURL(), GetGameID(id), modID, fileID));
 	KxCURLReply reply = ConfigureRequest(connection).Send();
@@ -413,7 +413,7 @@ KNetworkProvider::FileInfo KNetworkProviderNexus::GetFileInfo(int64_t modID, int
 	}
 	return info;
 }
-KNetworkProvider::FileInfo::Vector KNetworkProviderNexus::GetFilesList(int64_t modID, const KProfileID& id) const
+KNetworkProvider::FileInfo::Vector KNetworkProviderNexus::GetFilesList(int64_t modID, const KGameID& id) const
 {
 	KxCURLSession connection(wxString::Format("%s/games/%s/mods/%lld/files", GetAPIURL(), GetGameID(id), modID));
 	KxCURLReply reply = ConfigureRequest(connection).Send();
@@ -443,7 +443,7 @@ KNetworkProvider::FileInfo::Vector KNetworkProviderNexus::GetFilesList(int64_t m
 	}
 	return infoVector;
 }
-KNetworkProvider::DownloadInfo::Vector KNetworkProviderNexus::GetFileDownloadLinks(int64_t modID, int64_t fileID, const KProfileID& id) const
+KNetworkProvider::DownloadInfo::Vector KNetworkProviderNexus::GetFileDownloadLinks(int64_t modID, int64_t fileID, const KGameID& id) const
 {
 	KxCURLSession connection(wxString::Format("%s/games/%s/mods/%lld/files/%lld/download_link", GetAPIURL(), GetGameID(id), modID, fileID));
 	KxCURLReply reply = ConfigureRequest(connection).Send();
@@ -475,7 +475,7 @@ KNetworkProvider::DownloadInfo::Vector KNetworkProviderNexus::GetFileDownloadLin
 	}
 	return infoVector;
 }
-KNetworkProvider::EndorsedInfo KNetworkProviderNexus::EndorseMod(int64_t modID, EndorsementState::Value state, const KProfileID& id)
+KNetworkProvider::EndorsedInfo KNetworkProviderNexus::EndorseMod(int64_t modID, EndorsementState::Value state, const KGameID& id)
 {
 	KxCURLSession connection(wxString::Format("%s/games/%s/mods/%lld/%s", GetAPIURL(), GetGameID(id), modID, EndorsementStateToString(state)));
 	
@@ -548,7 +548,7 @@ KNetworkProviderNexus::ValidationInfo KNetworkProviderNexus::GetValidationInfo(c
 	}
 	return info;
 }
-KNetworkProviderNexus::GameInfo KNetworkProviderNexus::GetGameInfo(const KProfileID& id) const
+KNetworkProviderNexus::GameInfo KNetworkProviderNexus::GetGameInfo(const KGameID& id) const
 {
 	KxCURLSession connection(GetAPIURL() + "/games/" + GetGameID(id));
 	KxCURLReply reply = ConfigureRequest(connection).Send();
@@ -631,7 +631,7 @@ KNetworkProviderNexus::IssueInfo::Vector KNetworkProviderNexus::GetIssues() cons
 	return infoVector;
 }
 
-wxString KNetworkProviderNexus::ConstructNXM(const FileInfo& fileInfo, const KProfileID& id) const
+wxString KNetworkProviderNexus::ConstructNXM(const FileInfo& fileInfo, const KGameID& id) const
 {
 	return wxString::Format("nxm://%s/mods/%lld/files/%lld", GetGameID(id), fileInfo.GetModID(), fileInfo.GetID()).Lower();
 }

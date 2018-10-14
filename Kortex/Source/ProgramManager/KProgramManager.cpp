@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "KProgramManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "Events/KVFSEvent.h"
 #include "Events/KLogEvent.h"
 #include "UI/KMainWindow.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerDispatcher.h"
-#include "Profile/KProgramManagerConfig.h"
+#include "GameInstance/Config/KProgramManagerConfig.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
@@ -43,21 +43,12 @@ bool KProgramManagerEntry::CalcRequiresVFS() const
 {
 	if (!IsRequiresVFS())
 	{
-		return KxString::ToLower(m_Executable).StartsWith(KxString::ToLower(V(KVAR(KVAR_VIRTUAL_GAME_ROOT))));
+		return KxString::ToLower(m_Executable).StartsWith(KxString::ToLower(V(KVAR(KVAR_VIRTUAL_GAME_DIR))));
 	}
 	return m_RequiresVFS;
 }
 
 //////////////////////////////////////////////////////////////////////////
-wxString KProgramManager::GetProgramsListFile(const wxString& templateID, const wxString& configID)
-{
-	return KProfile::GetDataPath(templateID, configID) + '\\' + "Programs.xml";
-}
-
-const KProgramManagerConfig* KProgramManager::GetRunConfig()
-{
-	return KProgramManagerConfig::GetInstance();
-}
 wxString KProgramManager::GetKExecutePath()
 {
 	if (KxSystem::Is64Bit())
@@ -80,6 +71,10 @@ void KProgramManager::InitKExecute(KxProcess& process, const KProgramManagerEntr
 	return InitKExecute(process, runEntry.GetExecutable(), runEntry.GetArguments(), runEntry.GetWorkingDirectory());
 }
 
+void KProgramManager::OnInit()
+{
+	LoadProgramList();
+}
 wxBitmap KProgramManager::OnQueryItemImage(const KProgramManagerEntry& runEntry) const
 {
 	wxString iconPath = runEntry.GetIconPath();
@@ -87,7 +82,7 @@ wxBitmap KProgramManager::OnQueryItemImage(const KProgramManagerEntry& runEntry)
 	{
 		iconPath = runEntry.GetExecutable();
 	}
-	if (iconPath.StartsWith(V(KVAR(KVAR_VIRTUAL_GAME_ROOT)), &iconPath) && !iconPath.IsEmpty())
+	if (iconPath.StartsWith(V(KVAR(KVAR_VIRTUAL_GAME_DIR)), &iconPath) && !iconPath.IsEmpty())
 	{
 		if (iconPath[0] == '\\')
 		{
@@ -211,60 +206,6 @@ void KProgramManager::EndRunProcess(KxProgressDialog* dialog, KxProcess* process
 	}
 	delete process;
 }
-int KProgramManager::GetPreMainInterval() const
-{
-	return m_RunMainOptions.GetAttributeInt("PreMainInterval", ms_DefaultPreMainInterval);
-}
-int KProgramManager::GetPreMainTimeout() const
-{
-	return m_RunMainOptions.GetAttributeInt("PreMainTimeout", ms_DefaultPreMainTimeout);
-}
-KxStringVector KProgramManager::CheckPreMain()
-{
-	KxStringVector missing;
-	KxIntVector list = m_RunMainOptions.GetAttributeVectorInt("PreMainSequence");
-	if (!list.empty())
-	{
-		for (int i: list)
-		{
-			auto entry = m_RunConfig->GetEntryAt(KProgramManagerConfig::ProgramType::Main, i);
-			if (entry)
-			{
-				if (!KxFile(entry->GetExecutable()).IsFileExist())
-				{
-					missing.emplace_back(wxString::Format("%s: %s", entry->GetName(), entry->GetExecutable()));
-				}
-			}
-		}
-	}
-	return missing;
-}
-void KProgramManager::RunPreMain(KxProgressDialog* dialog)
-{
-	KxIntVector list = m_RunMainOptions.GetAttributeVectorInt("PreMainSequence");
-	if (!list.empty())
-	{
-		dialog->SetLabel(T("ProgramManager.ExecutingPreMain"));
-		dialog->SetValue(0);
-
-		int inverval = GetPreMainInterval();
-		for (int i: list)
-		{
-			auto entry = m_RunConfig->GetEntryAt(KProgramManagerConfig::ProgramType::PreMain, i);
-			if (entry)
-			{
-				KxProcess process(entry->GetExecutable(), entry->GetArguments(), V("$(VirtualRoot)"));
-				process.SetOptionEnabled(KxPROCESS_WAIT_END, false);
-				process.Run(KxPROCESS_RUN_SYNC);
-
-				dialog->SetValue(i, list.size());
-				KApp::Get().Yield();
-				wxThread::Sleep(inverval);
-			}
-		}
-		wxThread::Sleep(GetPreMainTimeout());
-	}
-}
 void KProgramManager::RunMain(KxProgressDialog* dialog, const KProgramManagerEntry& runEntry)
 {
 	dialog->SetLabel(T("ProgramManager.ExecutingMain"));
@@ -312,11 +253,9 @@ void KProgramManager::SaveProgramList() const
 }
 
 KProgramManager::KProgramManager()
-	:m_RunConfig(GetRunConfig()), m_RunMainOptions(this, "RunMain")
+	:m_RunOptions(this, "Options")
 {
 	KEvent::Bind(KEVT_VFS_TOGGLED, &KProgramManager::OnVFSToggled, this);
-
-	LoadProgramList();
 }
 KProgramManager::~KProgramManager()
 {
@@ -338,7 +277,7 @@ wxString KProgramManager::GetVersion() const
 
 wxString KProgramManager::GetProgramsListFile() const
 {
-	return GetProgramsListFile(KApp::Get().GetCurrentTemplateID(), KApp::Get().GetCurrentConfigID());
+	return KGameInstance::GetActive()->GetProgramsFile();
 }
 void KProgramManager::UpdateProgramListImages()
 {
@@ -354,33 +293,33 @@ void KProgramManager::UpdateProgramListImages()
 void KProgramManager::OnAddMenuItems(KxMenu* menu)
 {
 	m_Menu = menu;
-	KxIntVector list = m_RunMainOptions.GetAttributeVectorInt("MainEnabled");
+	KxIntVector list = m_RunOptions.GetAttributeVectorInt("MainEnabled");
 	
 	// If the list contains -1 as its first element, fill it with all indexes and save it back to settings
 	if (!list.empty() && list.front() == -1)
 	{
 		list.clear();
-		for (size_t i = 0; i < m_RunConfig->GetEntriesCount(KProgramManagerConfig::ProgramType::Main); i++)
+		for (size_t i = 0; i < KProgramManagerConfig::GetInstance()->GetProgramsCount(); i++)
 		{
 			list.emplace_back((int)i);
 		}
-
-		m_RunMainOptions.SetAttributeVectorInt("MainEnabled", list);
+		m_RunOptions.SetAttributeVectorInt("MainEnabled", list);
 	}
 
 	if (!list.empty())
 	{
 		for (int index: list)
 		{
-			const KProgramManagerEntry* entry = m_RunConfig->GetEntryAt(KProgramManagerConfig::ProgramType::Main, index);
-			if (entry)
+			if (index < KProgramManagerConfig::GetInstance()->GetProgramsCount())
 			{
-				KxMenuItem* item = menu->Add(new KxMenuItem(wxString::Format("%s %s", T("Generic.Run"), entry->GetName())));
+				const KProgramManagerEntry& entry = KProgramManagerConfig::GetInstance()->GetPrograms()[index];
+
+				KxMenuItem* item = menu->Add(new KxMenuItem(wxString::Format("%s %s", T("Generic.Run"), entry.GetName())));
 				item->Enable(false);
-				item->SetClientData((void*)entry);
-				item->Bind(KxEVT_MENU_SELECT, [this, item, entry](KxMenuEvent& event)
+				item->SetClientData((void*)&entry);
+				item->Bind(KxEVT_MENU_SELECT, [this, item, &entry](KxMenuEvent& event)
 				{
-					OnRunEntry(item, *entry);
+					OnRunEntry(item, entry);
 				});
 
 				m_MenuItems.push_back(item);
@@ -396,28 +335,13 @@ void KProgramManager::OnAddMenuItems(KxMenu* menu)
 }
 void KProgramManager::OnRunEntry(KxMenuItem* menuItem, const KProgramManagerEntry& runEntry)
 {
-	KxStringVector missing = CheckPreMain();
-	if (missing.empty())
+	if (CheckEntry(runEntry))
 	{
-		if (CheckEntry(runEntry))
-		{
-			KxProgressDialog* dialog = BeginRunProcess();
-			dialog->Show();
+		KxProgressDialog* dialog = BeginRunProcess();
+		dialog->Show();
 
-			RunPreMain(dialog);
-			RunMain(dialog, runEntry);
-			dialog->Close();
-		}
-	}
-	else
-	{
-		KxTaskDialog dialog(wxTheApp->GetTopWindow(), KxID_NONE, T("ProgramManager.PreMainFileNotFound1"));
-		dialog.SetMessage(T("ProgramManager.PreMainFileNotFound2"));
-		dialog.SetExMessage(KxString::Join(missing, "\r\n"));
-		dialog.SetMainIcon(KxICON_ERROR);
-		dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED, true);
-		dialog.SetOptionEnabled(KxTD_SIZE_TO_CONTENT, true);
-		dialog.ShowModal();
+		RunMain(dialog, runEntry);
+		dialog->Close();
 	}
 }
 

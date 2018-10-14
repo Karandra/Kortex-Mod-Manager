@@ -8,7 +8,9 @@
 #include "ModManager/KModEntry.h"
 #include "ModManager/KModWorkspace.h"
 #include "ModManager/KModManagerModel.h"
-#include "Profile/KPluginManagerConfig.h"
+#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "KApp.h"
@@ -295,7 +297,7 @@ KPluginViewBaseModel::KPluginViewBaseModel()
 
 void KPluginViewBaseModel::ChangeNotify()
 {
-	KModManager::GetListManager().SyncCurrentList();
+	KGameInstance::GetCurrentProfile()->SyncWithCurrentState();
 	KPluginManager::GetInstance()->Save();
 }
 void KPluginViewBaseModel::SetDataVector()

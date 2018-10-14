@@ -12,7 +12,9 @@
 #include "ModManager/KModEntry.h"
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KModManagerDispatcher.h"
-#include "Profile/KPluginManagerConfig.h"
+#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
@@ -91,7 +93,6 @@ void KPluginManagerBethesda::LoadNativeOrderBG()
 {
 	Clear();
 	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
-	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
 
 	// Load from 'LoadOrder.txt'
 	for (const wxString& name: KxTextFile::ReadToArray(V(m_OrderListFile)))
@@ -168,9 +169,9 @@ void KPluginManagerBethesda::SaveNativeOrderBG() const
 	activeOrder.emplace_back(V(m_ActiveFileHeader));
 
 	// Write order
-	for (const KModListPlugin& listItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
+	for (const KProfilePlugin& listItem: KGameInstance::GetActive()->GetCurrentProfile()->GetPlugins())
 	{
-		if (const KPluginEntry* entry = listItem.GetPluginEntry())
+		if (const KPluginEntry* entry = listItem.GetPlugin())
 		{
 			loadOrder.emplace_back(OnWriteToLoadOrder(*entry));
 			if (listItem.IsEnabled())
@@ -263,9 +264,9 @@ void KPluginManagerBethesda::Load()
 	Clear();
 
 	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
-	KModList& loadOrder = KModManager::GetListManager().GetCurrentList();
+	KProfile* loadOrder = KGameInstance::GetCurrentProfile();
 
-	for (const KModListPlugin& listEntry: loadOrder.GetPlugins())
+	for (const KProfilePlugin& listEntry: loadOrder->GetPlugins())
 	{
 		// Find whether plugin with this name exist
 		auto it = std::find_if(files.begin(), files.end(), [&listEntry](const KFileTreeNode* item)
@@ -299,7 +300,7 @@ void KPluginManagerBethesda::Load()
 	}
 
 	// Check active
-	for (const KModListPlugin& listEntry: loadOrder.GetPlugins())
+	for (const KProfilePlugin& listEntry: loadOrder->GetPlugins())
 	{
 		KPluginEntry* entry = FindPluginByName(listEntry.GetPluginName());
 		if (entry)
@@ -315,7 +316,7 @@ void KPluginManagerBethesda::Load()
 	}
 
 	ReadPluginsData();
-	KModManager::GetListManager().SyncList(loadOrder.GetID());
+	loadOrder->SyncWithCurrentState();
 }
 void KPluginManagerBethesda::LoadNativeOrder()
 {

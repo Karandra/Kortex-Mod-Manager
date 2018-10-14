@@ -2,7 +2,7 @@
 #include "KCMConfigEntry.h"
 #include "KCMFileEntry.h"
 #include "KConfigManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KApp.h"
 #include <KxFramework/KxString.h>
 

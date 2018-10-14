@@ -240,7 +240,7 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 wxString KProgramManagerModel::AskSelectExecutablePath(const KProgramManagerEntry* entry) const
 {
 	KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
-	dialog.SetFolder(V(KVAR(KVAR_VIRTUAL_GAME_ROOT)));
+	dialog.SetFolder(V(KVAR(KVAR_VIRTUAL_GAME_DIR)));
 	dialog.AddFilter("*.exe", T("FileFilter.Programs"));
 	dialog.AddFilter("*", T("FileFilter.AllFiles"));
 	if (entry)

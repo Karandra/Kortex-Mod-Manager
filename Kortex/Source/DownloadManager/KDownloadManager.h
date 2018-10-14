@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "KDownloadEntry.h"
 #include "KPluggableManager.h"
-#include "Profile/KProfileID.h"
+#include "GameInstance/KGameID.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
 class KDownloadWorkspace;
@@ -13,7 +13,7 @@ class KDownloadManager: public KPluggableManager, public KxSingletonPtr<KDownloa
 	friend class KDownloadWorkspace;
 
 	public:
-		static KProfileID TranslateNxmGameID(const wxString& id);
+		static KGameID TranslateNxmGameID(const wxString& id);
 		static bool CheckCmdLineArgs(const wxCmdLineParser& args, wxString& link);
 
 	private:
@@ -103,7 +103,7 @@ class KDownloadManager: public KPluggableManager, public KxSingletonPtr<KDownloa
 		bool QueueDownload(const KNetworkProvider::DownloadInfo& downloadInfo,
 						   const KNetworkProvider::FileInfo& fileInfo,
 						   const KNetworkProvider* provider,
-						   const KProfileID& id = KProfileIDs::NullProfileID
+						   const KGameID& id = KGameIDs::NullGameID
 		);
 		bool QueueFromOutside(const wxString& link);
 		bool QueueNXM(const wxString& link);

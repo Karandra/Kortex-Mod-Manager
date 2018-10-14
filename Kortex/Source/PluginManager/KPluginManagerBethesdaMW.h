@@ -6,7 +6,7 @@ class KxINI;
 class KPluginManagerBethesdaMW: public KPluginManagerBethesda
 {
 	private:
-		wxString m_PluginsListFile;
+		const wxString m_PluginsListFile;
 
 	private:
 		void ReadOrderMW(const KxINI& ini);

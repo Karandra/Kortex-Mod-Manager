@@ -6,7 +6,7 @@
 #include "Network/KNetworkProviderLoversLab.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include "NotificationCenter/KNotificationCenter.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KApp.h"
 #include "KAux.h"
 #include "UI/KMainWindow.h"
@@ -135,7 +135,7 @@ void KDownloadView::GetValueByRow(wxAny& value, size_t row, const KxDataViewColu
 			}
 			case ColumnID::Game:
 			{
-				const KProfile* profile = entry->GetTargetProfile();
+				const KGameInstance* profile = entry->GetTargetProfile();
 				if (profile)
 				{
 					value = profile->GetShortName();

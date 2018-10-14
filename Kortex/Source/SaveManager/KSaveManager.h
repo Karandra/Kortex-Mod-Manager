@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KPluggableManager.h"
-#include "Profile/KSaveManagerConfig.h"
+#include "GameInstance/Config/KSaveManagerConfig.h"
 #include "KEvents.h"
 #include <KxFramework/KxSingleton.h>
 class KWorkspace;
@@ -14,7 +14,7 @@ class KSaveManager: public KPluggableManager, public KxSingletonPtr<KSaveManager
 	private:
 		KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
 
-		void OnSavesLocationChanged(KModListEvent& event);
+		void OnSavesLocationChanged(KProfileEvent& event);
 
 	public:
 		KSaveManager(const KxXMLNode& configNode, const KSaveManagerConfig* profileSaveManager);

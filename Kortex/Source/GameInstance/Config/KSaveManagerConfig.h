@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "KLabeledValue.h"
 #include <KxFramework/KxSingleton.h>
-class KProfile;
+class KGameInstance;
 class KSaveManager;
 class KSaveFile;
 
@@ -11,27 +11,21 @@ class KSaveManagerConfig: public KxSingletonPtr<KSaveManagerConfig>
 	private:
 		const wxString m_SaveFileFormat;
 		KSaveManager* m_Manager = NULL;
-		wxString m_RelativeLocation;
+		wxString m_Location;
 		KLabeledValueArray m_FileFilters;
 
 		wxString m_PrimarySaveExt;
 		wxString m_SecondarySaveExt;
 
 	public:
-		KSaveManagerConfig(KProfile& profile, const KxXMLNode& node);
+		KSaveManagerConfig(KGameInstance& profile, const KxXMLNode& node);
 		~KSaveManagerConfig();
 
 	public:
 		KSaveFile* QuerySaveFile(const wxString& fullPath) const;
 
-		const wxString& GetSaveFileFormat() const
-		{
-			return m_SaveFileFormat;
-		}
-		const wxString& GetRelativeLocation() const
-		{
-			return m_RelativeLocation;
-		}
+		wxString GetSaveFileFormat() const;
+		wxString GetLocation() const;
 		
 		bool HasFileFilter() const
 		{

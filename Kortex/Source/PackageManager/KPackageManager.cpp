@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "KPackageManager.h"
 #include "Archive/KArchive.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "ModManager/KModManager.h"
 #include "PluginManager/KPluginManager.h"
-#include "Profile/KPackageManagerConfig.h"
+#include "GameInstance/Config/KPackageManagerConfig.h"
 #include "KVariablesDatabase.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -180,7 +180,7 @@ KxVersion KPackageManager::GetRequirementVersion(const KPPRRequirementEntry* ent
 
 void KPackageManager::LoadStdRequirements()
 {
-	wxString stdReqsFilePath = wxString::Format("%s\\PackageManager\\Requirements\\%s.xml", KApp::Get().GetDataFolder(), KApp::Get().GetCurrentTemplateID());
+	wxString stdReqsFilePath = wxString::Format("%s\\PackageManager\\Requirements\\%s.xml", KApp::Get().GetDataFolder(), KApp::Get().GetCurrentGameID());
 	KxFileStream file(stdReqsFilePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	KxXMLDocument xml(file);
 
@@ -234,7 +234,7 @@ wxString KPackageManager::GetVersion() const
 
 const KPPRRequirementEntry* KPackageManager::FindScriptExtenderRequirement() const
 {
-	return FindStdReqirement(V("$(ScriptExtenderNameShort)"));
+	return FindStdReqirement(KVAR_EXP(KVAR_SCRIPT_EXTENDER_ID));
 }
 
 wxString KPackageManager::GetPackagesFolder() const

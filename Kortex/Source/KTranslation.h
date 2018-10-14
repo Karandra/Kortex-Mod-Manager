@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxFormat.h>
-class KProfile;
+class KGameInstance;
 
 namespace KTranslation
 {
@@ -15,7 +15,7 @@ namespace KTranslation
 
 //////////////////////////////////////////////////////////////////////////
 wxString V(const wxString& source);
-wxString V(KProfile* profile, const wxString& source);
+wxString V(KGameInstance* profile, const wxString& source);
 
 //////////////////////////////////////////////////////////////////////////
 template<class Type> wxString T(const Type& id)
@@ -28,7 +28,7 @@ template<class Type> wxString T(const Type& id)
 	}
 	return KTranslation::T_Fallback(id);
 }
-template<class Type> wxString T(KProfile* profile, const Type& id)
+template<class Type> wxString T(KGameInstance* profile, const Type& id)
 {
 	bool isSuccess = false;
 	wxString out = KTranslation::GetTranslation().GetString(id, &isSuccess);
@@ -43,7 +43,7 @@ template<class Type> KxFormat TF(const Type& id)
 {
 	return T(id);
 }
-template<class Type> KxFormat TF(KProfile* profile, const Type& id)
+template<class Type> KxFormat TF(KGameInstance* profile, const Type& id)
 {
 	return T(profile, id);
 }

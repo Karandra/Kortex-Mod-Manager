@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KModTagsManager.h"
 #include "KModEntry.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "PackageManager/KPackageManager.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -20,11 +20,7 @@ KModTag::~KModTag()
 //////////////////////////////////////////////////////////////////////////
 wxString KModTagsManager::GetDefaultTagsFile()
 {
-	return KApp::Get().GetDataFolder() + "\\ModManager\\DefaultTags.xml";
-}
-wxString KModTagsManager::GetUserTagsFile(const wxString& templateID, const wxString& configID)
-{
-	return KProfile::GetDataPath(templateID, configID) + '\\' + "ModTags.xml";
+	return KApp::Get().GetDataFolder() + wxS("\\ModManager\\DefaultTags.xml");
 }
 
 void KModTagsManager::LoadTagsFromFile(const wxString& filePath)
@@ -35,7 +31,7 @@ void KModTagsManager::LoadTagsFromFile(const wxString& filePath)
 	bool hasSE = KPackageManager::GetInstance()->HasScriptExtender();
 	for (KxXMLNode node = xml.GetFirstChildElement("Tags").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
-		bool requiresSE = node.GetAttributeBool("RequiresSE");
+		bool requiresSE = node.GetAttributeBool("RequiresScriptExtender");
 		if (requiresSE && !hasSE)
 		{
 			break;
@@ -50,7 +46,8 @@ void KModTagsManager::LoadTagsFromFile(const wxString& filePath)
 			label = labelT;
 		}
 
-		m_Tags.emplace_back(KModTag(id, V(label), isSuccess));
+		KModTag& tag = m_Tags.emplace_back(KModTag(id, V(label), isSuccess));
+		tag.SetNexusID(node.GetAttributeInt("NexusID"));
 	}
 }
 void KModTagsManager::OnInit()
@@ -135,7 +132,7 @@ void KModTagsManager::LoadTagsFromEntry(const KModEntry* entry)
 
 wxString KModTagsManager::GetUserTagsFile() const
 {
-	return GetUserTagsFile(KApp::Get().GetCurrentTemplateID(), KApp::Get().GetCurrentConfigID());
+	return KGameInstance::GetActive()->GetModTagsFile();
 }
 void KModTagsManager::SaveUserTags() const
 {

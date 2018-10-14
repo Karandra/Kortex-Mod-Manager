@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxSingleton.h>
-class KProfile;
+class KGameInstance;
 
 class KVirtualizationMirroredEntry
 {
@@ -60,7 +60,7 @@ class KVirtualizationConfig: public KxSingletonPtr<KVirtualizationConfig>
 		KVirtualizationMandatoryEntry::Vector m_MandatoryVirtualFolders;
 
 	public:
-		KVirtualizationConfig(KProfile& profile, const KxXMLNode& node);
+		KVirtualizationConfig(KGameInstance& profile, const KxXMLNode& node);
 
 	public:
 		const KVirtualizationMirroredEntry::Vector& GetMirroredLocations() const

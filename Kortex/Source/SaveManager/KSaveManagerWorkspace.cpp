@@ -4,7 +4,7 @@
 #include "KSaveManagerView.h"
 #include "KSaveFile.h"
 #include "UI/KImageViewerDialog.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "PluginManager/KPluginManager.h"
 #include "PluginManager/KPluginManagerWorkspace.h"
 #include "ModManager/KModManager.h"
@@ -213,11 +213,7 @@ void KSaveManagerWorkspace::OnSyncPluginsList(const KSaveFile* saveEntry)
 	{
 		manager->SyncWithPluginsList(saveEntry->GetPluginsList(), KPluginManager::SyncListMode::EnableAll);
 		manager->Save();
-
-		if (KWorkspace* workspace = manager->GetWorkspace())
-		{
-			workspace->ScheduleReload();
-		}
+		KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 	}
 }
 void KSaveManagerWorkspace::OnSavePluginsList(const KSaveFile* saveEntry)

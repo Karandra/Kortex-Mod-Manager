@@ -3,8 +3,8 @@
 #include "KPluggableManager.h"
 #include "KPluginEntry.h"
 #include "ModManager/KModManager.h"
-#include "ModManager/KModListManager.h"
 #include "KProgramOptions.h"
+#include "KEventsFwd.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxXML.h>
 class KPluginManagerWorkspace;
@@ -44,11 +44,15 @@ class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginMan
 		KPluginEntry::Vector m_Entries;
 
 	protected:
+		virtual void OnInit() override;
 		void Clear()
 		{
 			m_Entries.clear();
 		}
 		void ReadPluginsData();
+
+	private:
+		void OnVirtualTreeInvalidated(KEvent& event);
 
 	public:
 		KPluginManager(const wxString& interfaceName, const KxXMLNode& configNode);

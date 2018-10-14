@@ -3,7 +3,7 @@
 #include "KPackageManager.h"
 #include "KModPackage.h"
 #include "UI/KMainWindow.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "KOperationWithProgress.h"

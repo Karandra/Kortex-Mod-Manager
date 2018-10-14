@@ -12,9 +12,12 @@
 
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerDispatcher.h"
-#include "Profile/KPluginManagerConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "Profile/KProfile.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
 #include "ProgramManager/KProgramManager.h"
 #include "UI/KWorkspace.h"
+#include "KEvents.h"
 
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxComparator.h>
@@ -61,6 +64,9 @@ std::unique_ptr<KPluginReader> KPluginManager::QueryPluginReader(const wxString&
 	return NULL;
 }
 
+void KPluginManager::OnInit()
+{
+}
 void KPluginManager::ReadPluginsData()
 {
 	for (auto& pluginEntry: m_Entries)
@@ -69,9 +75,17 @@ void KPluginManager::ReadPluginsData()
 	}
 }
 
+void KPluginManager::OnVirtualTreeInvalidated(KEvent& event)
+{
+	Load();
+	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
+}
+
 KPluginManager::KPluginManager(const wxString& interfaceName, const KxXMLNode& configNode)
 	:m_GeneralOptions(this, "General"), m_SortingToolsOptions(this, "SortingTools")
 {
+	KEvent::Bind(KEVT_MOD_VIRTUAL_TREE_INVALIDATED, &KPluginManager::OnVirtualTreeInvalidated, this);
+	KEvent::Bind(KEVT_MOD_TOGGLED, &KPluginManager::OnVirtualTreeInvalidated, this);
 }
 KPluginManager::~KPluginManager()
 {
@@ -92,7 +106,7 @@ wxString KPluginManager::GetVersion() const
 
 bool KPluginManager::IsValidModIndex(intptr_t modIndex) const
 {
-	return modIndex >= 0 && (size_t)modIndex < GetEntries().size();
+	return modIndex >= 0 && (size_t)modIndex < m_Entries.size();
 }
 intptr_t KPluginManager::GetPluginOrderIndex(const KPluginEntry& modEntry) const
 {
@@ -166,8 +180,9 @@ bool KPluginManager::IsPluginActive(const wxString& pluginName) const
 }
 void KPluginManager::SyncWithPluginsList(const KxStringVector& pluginNamesList, SyncListMode mode)
 {
-	KModList::PluginEntryVector& list = KModManager::GetListManager().GetCurrentList().GetPlugins();
-	list.clear();
+	KProfile* profile = KGameInstance::GetCurrentProfile();
+	KProfilePlugin::Vector& pluginsList = profile->GetPlugins();
+	pluginsList.clear();
 	for (const wxString& name: pluginNamesList)
 	{
 		bool isEnabled = false;
@@ -190,9 +205,9 @@ void KPluginManager::SyncWithPluginsList(const KxStringVector& pluginNamesList, 
 				break;
 			}
 		};
-		list.emplace_back(name, isEnabled);
+		pluginsList.emplace_back(name, isEnabled);
 	}
-	KModManager::GetListManager().SaveLists();
+	profile->Save();
 
 	// Reload to update internal state
 	Load();

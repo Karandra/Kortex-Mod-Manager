@@ -3,30 +3,15 @@
 #include "ConfigManager/KCMDataProviderINI.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
-#include "Profile/KProfile.h"
-#include "Profile/KConfigManagerConfig.h"
-#include "Profile/KProgramManagerConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KConfigManagerConfig.h"
+#include "GameInstance/Config/KProgramManagerConfig.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxTranslation.h>
 #include <KxFramework/KxXML.h>
-
-KCMSampleValueArray KSettingsWindowManager::FF_GetProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node, KProgramManagerConfig::ProgramType index)
-{
-	KCMSampleValueArray outList;
-	KProgramManagerConfig* runConfig = KProgramManagerConfig::GetInstance();
-	for (size_t i = 0; i < runConfig->GetEntriesCount(index); i++)
-	{
-		auto entry = runConfig->GetEntryAt(index, i);
-		if (entry)
-		{
-			outList.push_back(KCMSampleValue(configEntry, std::to_string(i), entry->GetName()));
-		}
-	}
-	return outList;
-}
 
 KCMSampleValueArray KSettingsWindowManager::FF_GetLanguagesList(KCMConfigEntryStd* configEntry, KxXMLNode& node)
 {
@@ -50,13 +35,19 @@ KCMSampleValueArray KSettingsWindowManager::FF_GetWorkspacesList(KCMConfigEntryS
 	}
 	return outList;
 }
-KCMSampleValueArray KSettingsWindowManager::FF_GetMainProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node)
+KCMSampleValueArray KSettingsWindowManager::FF_GetProgramIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node)
 {
-	return FF_GetProgramsIndexes(configEntry, node, KProgramManagerConfig::ProgramType::Main);
-}
-KCMSampleValueArray KSettingsWindowManager::FF_GetPreMainProgramsIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node)
-{
-	return FF_GetProgramsIndexes(configEntry, node, KProgramManagerConfig::ProgramType::PreMain);
+	KCMSampleValueArray outList;
+	if (KProgramManagerConfig* programManager = KProgramManagerConfig::GetInstance())
+	{
+		size_t i = 0;
+		for (const KProgramManagerEntry& entry: programManager->GetPrograms())
+		{
+			outList.push_back(KCMSampleValue(configEntry, KxFormat("%1").arg(i), entry.GetName()));
+			i++;
+		}
+	}
+	return outList;
 }
 
 KCMDataProviderINI* KSettingsWindowManager::GetProvider(KPGCFileID id)
@@ -67,7 +58,7 @@ KCMDataProviderINI* KSettingsWindowManager::GetProvider(KPGCFileID id)
 		{
 			return &m_AppConfig;
 		}
-		case KPGC_ID_CURRENT_PROFILE:
+		case KPGC_ID_CURRENT_INSTANCE:
 		{
 			return &m_CurrentProfileConfig;
 		}
@@ -100,7 +91,7 @@ void KSettingsWindowManager::InitAppConfig()
 }
 void KSettingsWindowManager::InitCurrentProfileConfig()
 {
-	m_CurrentProfileConfig.Init(GetGameConfig()->GetEntry(KPGC_ID_CURRENT_PROFILE)->GetFilePath());
+	m_CurrentProfileConfig.Init(GetGameConfig()->GetEntry(KPGC_ID_CURRENT_INSTANCE)->GetFilePath());
 	m_CurrentProfileConfig.Load();
 }
 void KSettingsWindowManager::InitControllerData()
@@ -129,13 +120,9 @@ KConfigManager::FillFunnctionType KSettingsWindowManager::OnQueryFillFunction(co
 	{
 		return FF_GetWorkspacesList;
 	}
-	else if (name == "GetMainProgramsIndexes")
+	else if (name == "GetProgramsIndexes")
 	{
-		return FF_GetMainProgramsIndexes;
-	}
-	else if (name == "GetPreMainProgramsIndexes")
-	{
-		return FF_GetPreMainProgramsIndexes;
+		return FF_GetProgramIndexes;
 	}
 	return KConfigManager::OnQueryFillFunction(name);
 }

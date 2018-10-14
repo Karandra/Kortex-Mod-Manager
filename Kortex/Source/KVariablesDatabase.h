@@ -4,31 +4,39 @@
 #define KVAR_EXP(s)		V(KVAR(s))
 
 /* App-wide */
-// Non-profile
-#define KVAR_PROFILES_ROOT wxS("ProfilesRoot")
+// These variables are set by Kortex itself
+#define KVAR_INSTANCES_ROOT wxS("InstancesRoot")
+#define KVAR_INSTANCE_ID wxS("InstanceID")
+#define KVAR_PROFILE_ID wxS("ProfileID")
 
-// Profile-specific
-#define KVAR_CURRENT_PROFILE_CONFIG wxS("CurrentProfileConfig")
-#define KVAR_PROFILE_ROOT wxS("ProfileRoot")
-
-#define KVAR_MODS_ROOT wxS("ModsRoot")
-#define KVAR_PACKAGES_REPOSITORY wxS("PackagesRepository")
-
-#define KVAR_CURRENT_MOD_LIST_ID wxS("ModListID")
-#define KVAR_CURRENT_MOD_LIST_SIGNATURE wxS("ModListSignature")
-#define KVAR_CURRENT_MOD_LIST_ROOT wxS("ModListRoot")
-
-/* Profile-wide */
+/* Instance */
+// These are required variables for instance template
+// Except for 'KVAR_SCRIPT_EXTENDER_ID' which is optional
+#define KVAR_GAME_ID wxS("GameID")
+#define KVAR_GAME_NAME wxS("GameName")
+#define KVAR_GAME_SHORT_NAME wxS("GameShortName")
+#define KVAR_GAME_SORT_ORDER wxS("GameSortOrder")
+#define KVAR_ACTUAL_GAME_DIR wxS("ActualGameDir")
 #define KVAR_GAME_EXECUTABLE wxS("GameExecutable")
-#define KVAR_VIRTUAL_GAME_EXECUTABLE wxS("VirtualGameExecutable")
+#define KVAR_SCRIPT_EXTENDER_ID wxS("ScriptExtenderID")
 
-#define KVAR_GAME_ROOT wxS("GameRoot")
-#define KVAR_VIRTUAL_GAME_ROOT wxS("VirtualGameRoot")
-#define KVAR_OVERWRITES_ROOT wxS("OverwritesRoot")
+// Each instance will have these variables set to appropriate value
+#define KVAR_VIRTUAL_GAME_DIR wxS("VirtualGameDir")
+#define KVAR_INSTANCE_DIR wxS("InstanceDir")
+#define KVAR_MODS_DIR wxS("ModsDir")
 
-#define KVAR_SAVES_ROOT_LOCAL wxS("SavesRootLocal")
-#define KVAR_SAVES_ROOT_GLOBAL wxS("SavesRootGlobal")
+/* Profile */
+// Variables which names starts from 'Actual' and 'Global' are constant
+// during instance lifetime, anything else is changed on profile switch
+#define KVAR_PROFILE_ID wxS("ProfileID")
+#define KVAR_PROFILE_DIR wxS("ProfileDir")
 
-#define KVAR_CONFIG_ROOT_TARGET wxS("ConfigRootTarget")
-#define KVAR_CONFIG_ROOT_GLOBAL wxS("ConfigRootGlobal")
-#define KVAR_CONFIG_ROOT_LOCAL wxS("ConfigRootLocal")
+#define KVAR_OVERWRITES_DIR wxS("OverwritesDir")
+
+#define KVAR_SAVES_DIR wxS("SavesDir")
+#define KVAR_ACTUAL_SAVES_DIR wxS("ActualSavesDir")
+#define KVAR_GLOBAL_SAVES_DIR wxS("GlobalSavesDir")
+
+#define KVAR_CONFIG_DIR wxS("ConfigDir")
+#define KVAR_ACTUAL_CONFIG_DIR wxS("ActualConfigDir")
+#define KVAR_GLOBAL_CONFIG_DIR wxS("GlobalConfigDir")

@@ -4,7 +4,7 @@
 #include "KCMIDataProvider.h"
 #include "KCMDataProviderINI.h"
 #include "KConfigManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 
 KPGCFileID KCMFileEntry::LoadID(KxXMLNode& node)
 {

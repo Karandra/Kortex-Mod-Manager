@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Profile/KProfileID.h"
+#include "GameInstance/KGameID.h"
 class KOperationWithProgressDialogBase;
 
 class KModManagerImport
@@ -57,7 +57,7 @@ class KModManagerImport
 
 		// Retrieve target profile. Invalid ID is file, this just means
 		// that data can be imported into any game.
-		virtual KProfileID GetTargetProfileID() const = 0;
+		virtual KGameID GetTargetProfileID() const = 0;
 
 		// Return mod manager name.
 		virtual wxString GetModManagerName() const = 0;

@@ -3,7 +3,7 @@
 #include "KDownloadManager.h"
 #include "KDownloadWorkspace.h"
 #include "Network/KNetwork.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "ModManager/KModManager.h"
 #include "KQuickThread.h"
 #include <KxFramework/KxXML.h>
@@ -16,7 +16,7 @@ void KDownloadEntry::Create()
 
 	if (m_TargetProfile == NULL)
 	{
-		m_TargetProfile = KApp::Get().GetCurrentProfile();
+		m_TargetProfile = KGameInstance::GetActive();
 	}
 }
 void KDownloadEntry::CleanupDownload()
@@ -43,7 +43,7 @@ bool KDownloadEntry::RequestNewLink()
 void KDownloadEntry::DeSerializeDefault(const KxFileItem& fileItem)
 {
 	m_Provider = KNetwork::GetInstance()->GetCurrentProvider();
-	m_TargetProfile = KProfile::GetCurrent();
+	m_TargetProfile = KGameInstance::GetActive();
 	m_Date = fileItem.GetModificationTime();
 	m_FileInfo.SetName(fileItem.GetName());
 	
@@ -188,9 +188,9 @@ KDownloadEntry::KDownloadEntry()
 KDownloadEntry::KDownloadEntry(const KNetworkProvider::DownloadInfo& downloadInfo,
 							   const KNetworkProvider::FileInfo& fileInfo,
 							   const KNetworkProvider* provider,
-							   const KProfileID& id
+							   const KGameID& id
 )
-	:m_DownloadInfo(downloadInfo), m_FileInfo(fileInfo), m_Date(wxDateTime::Now()), m_TargetProfile(KProfile::GetProfileTemplate(id)), m_Provider(provider)
+	:m_DownloadInfo(downloadInfo), m_FileInfo(fileInfo), m_Date(wxDateTime::Now()), m_TargetProfile(KGameInstance::GetTemplate(id)), m_Provider(provider)
 {
 	Create();
 }
@@ -208,13 +208,13 @@ wxString KDownloadEntry::GetMetaFilePath() const
 	return KDownloadManager::GetInstance()->GetDownloadsLocation() + '\\' + m_FileInfo.GetName() + ".xml";
 }
 
-KProfileID KDownloadEntry::GetTargetProfileID() const
+KGameID KDownloadEntry::GetTargetProfileID() const
 {
-	return m_TargetProfile ? m_TargetProfile->GetID() : KProfileIDs::NullProfileID;
+	return m_TargetProfile ? m_TargetProfile->GetGameID() : KGameIDs::NullGameID;
 }
-void KDownloadEntry::SetTargetProfile(const KProfileID& id)
+void KDownloadEntry::SetTargetProfile(const KGameID& id)
 {
-	m_TargetProfile = KProfile::GetProfileTemplate(id);
+	m_TargetProfile = KGameInstance::GetTemplate(id);
 }
 
 const KModEntry* KDownloadEntry::GetMod() const
@@ -388,7 +388,7 @@ bool KDownloadEntry::Serialize(wxOutputStream& stream) const
 	}
 	if (m_TargetProfile)
 	{
-		rootNode.NewElement("TargetProfile").SetValue(m_TargetProfile->GetID());
+		rootNode.NewElement("Game").SetValue(m_TargetProfile->GetGameID().ToString());
 	}
 
 	rootNode.NewElement("ModID").SetValue(m_FileInfo.GetModID());
@@ -424,10 +424,10 @@ bool KDownloadEntry::DeSerialize(wxInputStream& stream)
 	if (loaded && rootNode.IsOK())
 	{
 		m_Provider = KNetwork::GetInstance()->FindProvider(rootNode.GetFirstChildElement("Provider").GetValue());
-		m_TargetProfile = KProfile::GetProfileTemplate(rootNode.GetFirstChildElement("TargetProfile").GetValue());
+		m_TargetProfile = KGameInstance::GetTemplate(rootNode.GetFirstChildElement("Game").GetValue());
 		if (m_TargetProfile == NULL)
 		{
-			m_TargetProfile = KApp::Get().GetCurrentProfile();
+			m_TargetProfile = KGameInstance::GetActive();
 		}
 
 		m_FileInfo.SetModID(rootNode.GetFirstChildElement("ModID").GetValueInt(-1));

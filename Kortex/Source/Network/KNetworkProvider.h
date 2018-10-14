@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "KNetworkConstants.h"
 #include "KNetworkProviderModInfo.h"
-#include "Profile/KProfileID.h"
+#include "GameInstance/KGameID.h"
 #include "KImageProvider.h"
 #include <KxFramework/KxSecretStore.h>
 #include <KxFramework/KxVersion.h>
@@ -73,13 +73,13 @@ class KNetworkProvider
 
 		virtual KImageEnum GetIcon() const = 0;
 		virtual wxString GetName() const = 0;
-		virtual wxString GetGameID(const KProfileID& id = KProfileIDs::NullProfileID) const = 0;
+		virtual wxString GetGameID(const KGameID& id = KGameIDs::NullGameID) const = 0;
 		virtual wxString& ConvertDescriptionToHTML(wxString& description) const
 		{
 			return description;
 		}
-		virtual wxString GetModURLBasePart(const KProfileID& id = KProfileIDs::NullProfileID) const = 0;
-		virtual wxString GetModURL(KNetworkModID modID, const wxString& modSignature = wxEmptyString, const KProfileID& id = KProfileIDs::NullProfileID) = 0;
+		virtual wxString GetModURLBasePart(const KGameID& id = KGameIDs::NullGameID) const = 0;
+		virtual wxString GetModURL(KNetworkModID modID, const wxString& modSignature = wxEmptyString, const KGameID& id = KGameIDs::NullGameID) = 0;
 
 		bool HasAuthInfo() const;
 		bool LoadAuthInfo(wxString& userName, KxSecretValue& password) const;
@@ -102,9 +102,9 @@ class KNetworkProvider
 		bool ValidateAuth(wxWindow* window = NULL);
 		bool SignOut(wxWindow* window = NULL);
 
-		virtual ModInfo GetModInfo(KNetworkModID modID, const KProfileID& id = KProfileIDs::NullProfileID) const = 0;
-		virtual FileInfo GetFileInfo(KNetworkModID modID, KNetworkFileID fileID, const KProfileID& id = KProfileIDs::NullProfileID) const = 0;
-		virtual FileInfo::Vector GetFilesList(KNetworkModID modID, const KProfileID& id = KProfileIDs::NullProfileID) const = 0;
-		virtual DownloadInfo::Vector GetFileDownloadLinks(KNetworkModID modID, KNetworkFileID fileID, const KProfileID& id = KProfileIDs::NullProfileID) const = 0;
-		virtual EndorsedInfo EndorseMod(KNetworkModID modID, EndorsementState::Value state = EndorsementState::Endorse, const KProfileID& id = KProfileIDs::NullProfileID) = 0;
+		virtual ModInfo GetModInfo(KNetworkModID modID, const KGameID& id = KGameIDs::NullGameID) const = 0;
+		virtual FileInfo GetFileInfo(KNetworkModID modID, KNetworkFileID fileID, const KGameID& id = KGameIDs::NullGameID) const = 0;
+		virtual FileInfo::Vector GetFilesList(KNetworkModID modID, const KGameID& id = KGameIDs::NullGameID) const = 0;
+		virtual DownloadInfo::Vector GetFileDownloadLinks(KNetworkModID modID, KNetworkFileID fileID, const KGameID& id = KGameIDs::NullGameID) const = 0;
+		virtual EndorsedInfo EndorseMod(KNetworkModID modID, EndorsementState::Value state = EndorsementState::Endorse, const KGameID& id = KGameIDs::NullGameID) = 0;
 };

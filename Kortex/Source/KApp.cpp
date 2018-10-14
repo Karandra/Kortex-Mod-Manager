@@ -5,10 +5,10 @@
 #include "KThemeManager.h"
 #include "Themes/KThemeDefault.h"
 #include "Themes/KThemeVisualStudio.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
-#include "UI/KProfileSelectionDialog.h"
+#include "UI/KInstanceSelectionDialog.h"
 #include "SettingsWindow/KSettingsWindowManager.h"
 #include "ConfigManager/KConfigManager.h"
 #include "ConfigManager/KCMConfigEntry.h"
@@ -24,6 +24,7 @@
 #include "IPC/KIPCClient.h"
 #include "KEvents.h"
 #include "KINetFSHandler.h"
+#include "KBitmapSize.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -37,11 +38,23 @@
 #include <KxFramework/KxSplashWindow.h>
 #include <KxFramework/KxTaskScheduler.h>
 
+namespace
+{
+	int GetSmallIconWidth()
+	{
+		return KBitmapSize().FromSystemSmallIcon().GetWidth();
+	}
+	int GetSmallIconHeight()
+	{
+		return KBitmapSize().FromSystemSmallIcon().GetHeight();
+	}
+}
+
 KApp::KApp()
-	:m_ImageList(16, 16, false, KIMG_COUNT),
-	m_GeneralOptions(KPGC_ID_CURRENT_PROFILE, "KApp", "General"),
+	:m_ImageList(GetSmallIconWidth(), GetSmallIconHeight(), false, KIMG_COUNT),
+	m_GeneralOptions(KPGC_ID_CURRENT_INSTANCE, "KApp", "General"),
 	m_GeneralOptions_AppWide(KPGC_ID_APP, "KApp", "General"),
-	m_ProfileOptions_AppWide(KPGC_ID_APP, "KApp", "Profiles")
+	m_InstanceOptions_AppWide(KPGC_ID_APP, "KApp", "Instances")
 {
 	// Set app info
 	SetAppName("KortexModManager");
@@ -62,8 +75,9 @@ KApp::KApp()
 	// Configure command line parsing options
 	wxCmdLineParser& cmdLineParser = GetCmdLineParser();
 	cmdLineParser.SetSwitchChars("-");
+	cmdLineParser.AddOption("GameID", wxEmptyString, "Game ID");
+	cmdLineParser.AddOption("InstanceID", wxEmptyString, "Instance ID");
 	cmdLineParser.AddOption("ProfileID", wxEmptyString, "Profile ID");
-	cmdLineParser.AddOption("ConfigID", wxEmptyString, "Profile configuration ID");
 	cmdLineParser.AddOption("GlobalConfigPath", wxEmptyString, "Folder path for app-wide config");
 
 	cmdLineParser.AddOption("NXM", wxEmptyString, "Nexus link");
@@ -95,26 +109,18 @@ const wxString& KApp::GetUserSettingsFile()
 	static const wxString ms_UserSettingsFile = GetUserSettingsFolder() + "\\Settings.ini";
 	return ms_UserSettingsFile;
 }
+wxString KApp::GetInstancesRoot() const
+{
+	return m_Variables.GetVariable(KVAR_INSTANCES_ROOT);
+}
 
 wxString KApp::ExpandVariables(const wxString& variables) const
 {
-	if (KProfile* profile = KProfile::GetCurrent())
+	if (KGameInstance* instance = KGameInstance::GetActive())
 	{
-		return profile->ExpandVariables(variables);
+		return instance->ExpandVariables(variables);
 	}
 	return ExpandVariablesLocally(variables);
-}
-
-KProfile* KApp::GetCurrentProfile() const
-{
-	return m_CurrentProfile;
-}
-KProfile* KApp::SetCurrentProfile(KProfile* profile)
-{
-	delete m_CurrentProfile;
-	m_CurrentProfile = profile;
-
-	return profile;
 }
 
 bool KApp::OnInit()
@@ -176,10 +182,24 @@ bool KApp::OnInit()
 
 		// Init systems
 		wxLogInfo("Begin initializing core systems");
+
+		// Init KModManager first
 		InitSettings();
 		InitVFS();
 		InitGlobalManagers();
 		wxLogInfo("Core systems initialized");
+
+		wxLogInfo("Initializing instances");
+		InitInstancesData(m_InitProgressDialog);
+		
+		wxLogInfo("Executing KManager::OnInit");
+		for (KManager* manager: KManager::GetInstances())
+		{
+			manager->OnInit();
+		}
+
+		wxLogInfo("Loading saved profile");
+		KGameInstance::GetActive()->LoadSavedProfileOrDefault();
 
 		// All required managers initialized, can create main window now
 		wxLogInfo("Creating main window");
@@ -219,7 +239,7 @@ int KApp::OnExit()
 
 	// Destroy other managers
 	UnInitGlobalManagers();
-	delete m_CurrentProfile;
+	KGameInstance::DestroyActive();
 	KThemeManager::Cleanup();
 	KArchive::UnInit();
 
@@ -385,7 +405,7 @@ void KApp::InitSettings()
 	wxLogInfo("Initializing app settings");
 
 	// Init some application-wide variables
-	m_Variables.SetVariable(KVAR_PROFILES_ROOT, m_ProfileOptions_AppWide.GetAttribute("Location", GetUserSettingsFolder()));
+	m_Variables.SetVariable(KVAR_INSTANCES_ROOT, m_InstanceOptions_AppWide.GetAttribute("Location", GetUserSettingsFolder()));
 
 	// Show first time config dialog if needed and save new 'ProfilesFolder'
 	if (IsPreStartConfigNeeded())
@@ -398,25 +418,19 @@ void KApp::InitSettings()
 		}
 	}
 
-	m_ProfileOptions_AppWide.SetAttribute("Location", ExpandVariables(KVAR(KVAR_PROFILES_ROOT)));
-	wxLogInfo("Profiles folder: %s", m_ProfileOptions_AppWide.GetAttribute("Location"));
+	m_InstanceOptions_AppWide.SetAttribute("Location", ExpandVariables(KVAR(KVAR_INSTANCES_ROOT)));
+	wxLogInfo("Profiles folder: %s", m_InstanceOptions_AppWide.GetAttribute("Location"));
 	SaveSettings();
 
 	// Init all profiles and load current one if specified (or ask user to choose it)
 	wxLogInfo("Settings initialized. Begin loading profile.");
 	m_InitProgressDialog->SetLabel(T("Init.Status2"));
-	LoadCurrentTemplateAndConfig();
-	InitProfilesData(m_InitProgressDialog);
-
-	// All done, close the dialog now
-	m_InitProgressDialog->SetLabel(T("Init.StatusDone"));
-	m_InitProgressDialog->Close();
 
 	ConfigureInternetExplorer(true);
 }
 bool KApp::IsPreStartConfigNeeded()
 {
-	wxString profilesDataPath = m_ProfileOptions_AppWide.GetAttribute("Location");
+	wxString profilesDataPath = m_InstanceOptions_AppWide.GetAttribute("Location");
 	return profilesDataPath.IsEmpty() || !KxFile(profilesDataPath).IsFolderExist();
 }
 bool KApp::ShowFirstTimeConfigDialog(wxWindow* parent)
@@ -429,7 +443,7 @@ bool KApp::ShowFirstTimeConfigDialog(wxWindow* parent)
 
 	if (dialog.ShowModal() == KxID_YES)
 	{
-		m_Variables.SetVariable(KVAR_PROFILES_ROOT, defaultPath);
+		m_Variables.SetVariable(KVAR_INSTANCES_ROOT, defaultPath);
 		return true;
 	}
 	else
@@ -438,42 +452,41 @@ bool KApp::ShowFirstTimeConfigDialog(wxWindow* parent)
 		folderDialog.SetFolder(defaultPath);
 		if (folderDialog.ShowModal() == KxID_OK)
 		{
-			m_Variables.SetVariable(KVAR_PROFILES_ROOT, folderDialog.GetResult());
+			m_Variables.SetVariable(KVAR_INSTANCES_ROOT, folderDialog.GetResult());
 			return true;
 		}
 		return false;
 	}
 }
-void KApp::InitProfilesData(wxWindow* parent)
+void KApp::InitInstancesData(wxWindow* parent)
 {
-	if (!LoadProfile())
+	LoadCurrentGameIDAndInstanceID();
+	KGameInstance::LoadTemplates();
+
+	if (!LoadInstance())
 	{
-		wxLogInfo("Unable to load saved profile. Asking user to choose one.");
+		wxLogInfo("Unable to load saved instance. Asking user to choose one.");
 
 		parent->Hide();
-		KProfileSelectionDialog dialog(parent);
+		KInstanceSelectionDialog dialog(parent);
 		wxWindowID ret = dialog.ShowModal();
 		if (ret == KxID_OK)
 		{
-			SetCurrentTemplateID(dialog.GetNewTemplate());
-			SetCurrentConfigID(dialog.GetNewConfig());
+			SetCurrentGameID(dialog.GetNewGameID());
+			SetCurrentInstanceID(dialog.GetNewInstanceID());
 			SaveSettings();
-			wxLogInfo("New TemplateID: %s, New ProfileID: %s", m_CurrentTemplateID, m_CurrentConfigID);
 
-			if (dialog.IsNewGameRootSet())
-			{
-				wxLogInfo("New game root: %s", m_CurrentTemplateID, dialog.GetNewGameRoot());
-				KProfile::SetGameRootPath(dialog.GetNewTemplate(), dialog.GetNewConfig(), dialog.GetNewGameRoot());
-			}
+			wxLogInfo("New GameID: %s, New InstanceID: %s", m_CurrentGameID, m_CurrentInstanceID);
+			wxLogInfo("Trying again");
 
-			if (!LoadProfile())
+			if (!LoadInstance())
 			{
 				KLogEvent(T("Init.Error1"), KLOG_CRITICAL).Send();
 			}
 		}
 		else if (ret == KxID_CANCEL)
 		{
-			wxLogInfo("Profile loading canceled. Exiting.");
+			wxLogInfo("Instance loading canceled. Exiting.");
 			ExitApp();
 		}
 		else
@@ -482,45 +495,45 @@ void KApp::InitProfilesData(wxWindow* parent)
 		}
 	}
 }
-bool KApp::LoadProfile()
+bool KApp::LoadInstance()
 {
-	wxString templateID = GetCurrentTemplateID();
-	wxString configID = GetCurrentConfigID();
-	wxLogInfo("Try load profile. TemplateID: %s, ProfileID: %s", templateID, configID);
+	wxString gameID = GetCurrentGameID();
+	wxString instanceID = GetCurrentInstanceID();
+	wxLogInfo("Trying load instance. GameID: %s, InstanceID: %s", gameID, instanceID);
 
-	if (!templateID.IsEmpty() && !configID.IsEmpty())
+	if (!gameID.IsEmpty() && !instanceID.IsEmpty())
 	{
-		const KProfile* profileTemplate = KProfile::GetProfileTemplate(templateID);
-		if (profileTemplate && profileTemplate->HasConfig(configID))
+		// Check that we have template for this game and required instance exist
+		const KGameInstance* instanceTemplate = KGameInstance::GetTemplate(gameID);
+		if (instanceTemplate)
 		{
-			KProfile* currentProfile = SetCurrentProfile(new KProfile());
-			currentProfile->Create(profileTemplate->GetTemplateFile(), configID);
-			
-			if (!KxFile(currentProfile->ExpandVariables(KVAR(KVAR_GAME_ROOT))).IsFolderExist())
-			{
-				SetCurrentProfile(NULL);
-				return false;
-			}
-			m_Variables.SetVariable(KVAR_CURRENT_PROFILE_CONFIG, configID);
+			m_Variables.SetVariable(KVAR_GAME_ID, gameID);
+			m_Variables.SetVariable(KVAR_INSTANCE_ID, instanceID);
 
-			wxLogInfo("Profile loaded successfully");
-			return true;
+			return KGameInstance::CreateActive(*instanceTemplate, instanceID);
 		}
 	}
 	return false;
 }
-void KApp::LoadCurrentTemplateAndConfig()
+void KApp::LoadCurrentGameIDAndInstanceID()
 {
 	wxCmdLineParser& parser = GetCmdLineParser();
-	if (!parser.Found("ProfileID", &m_CurrentTemplateID))
+
+	wxString gameID;
+	if (parser.Found("GameID", &gameID))
 	{
-		m_CurrentTemplateID = m_ProfileOptions_AppWide.GetAttribute("TemplateID");
+		m_CurrentGameID = gameID;
 	}
-	if (!parser.Found("ConfigID", &m_CurrentConfigID))
+	else
 	{
-		m_CurrentConfigID = m_ProfileOptions_AppWide.GetAttribute("ProfileID");
+		m_CurrentGameID = m_InstanceOptions_AppWide.GetAttribute("GameID");
 	}
-	wxLogInfo("TemplateID: %s, ProfileID: %s", m_CurrentTemplateID, m_CurrentConfigID);
+
+	if (!parser.Found("InstanceID", &m_CurrentInstanceID))
+	{
+		m_CurrentInstanceID = m_InstanceOptions_AppWide.GetAttribute("InstanceID");
+	}
+	wxLogInfo("InstanceTemplate: %s, Instance: %s", m_CurrentGameID, m_CurrentInstanceID);
 }
 
 void KApp::InitVFS()
@@ -576,9 +589,6 @@ void KApp::InitGlobalManagers()
 	
 	wxLogInfo("Initializing KNotificationCenter");
 	new KNotificationCenter();
-
-	// Complete initialization
-	KModManager::GetInstance()->OnInit();
 }
 void KApp::UnInitGlobalManagers()
 {
@@ -626,16 +636,16 @@ void KApp::SaveSettings() const
 {
 	m_SettingsManager->Save();
 }
-bool KApp::ShowChageProfileDialog()
+bool KApp::ShowChageInstanceDialog()
 {
-	KProfileSelectionDialog dialog(m_MainWindow);
+	KInstanceSelectionDialog dialog(m_MainWindow);
 	wxWindowID ret = dialog.ShowModal();
-	if (ret == KxID_OK && (GetCurrentTemplateID() != dialog.GetNewTemplate() || GetCurrentConfigID() != dialog.GetNewConfig()))
+	if (ret == KxID_OK && (GetCurrentGameID() != dialog.GetNewGameID() || GetCurrentInstanceID() != dialog.GetNewInstanceID()))
 	{
-		KxTaskDialog confirmDialog(m_MainWindow, KxID_NONE, T("ProfileSelection.ChangeProfileDialog.Caption"), T("ProfileSelection.ChangeProfileDialog.Message"), KxBTN_NONE, KxICON_WARNING);
-		confirmDialog.AddButton(KxID_YES, T("ProfileSelection.ChangeProfileDialog.Yes"));
-		confirmDialog.AddButton(KxID_NO, T("ProfileSelection.ChangeProfileDialog.No"));
-		confirmDialog.AddButton(KxID_CANCEL, T("ProfileSelection.ChangeProfileDialog.Cancel"));
+		KxTaskDialog confirmDialog(m_MainWindow, KxID_NONE, T("InstanceSelection.ChangeInstanceDialog.Caption"), T("InstanceSelection.ChangeInstanceDialog.Message"), KxBTN_NONE, KxICON_WARNING);
+		confirmDialog.AddButton(KxID_YES, T("InstanceSelection.ChangeInstanceDialog.Yes"));
+		confirmDialog.AddButton(KxID_NO, T("InstanceSelection.ChangeInstanceDialog.No"));
+		confirmDialog.AddButton(KxID_CANCEL, T("InstanceSelection.ChangeInstanceDialog.Cancel"));
 		confirmDialog.SetDefaultButton(KxID_CANCEL);
 
 		ret = confirmDialog.ShowModal();
@@ -644,20 +654,20 @@ bool KApp::ShowChageProfileDialog()
 			// Set new game root
 			if (dialog.IsNewGameRootSet())
 			{
-				KProfile::SetGameRootPath(dialog.GetNewTemplate(), dialog.GetNewConfig(), dialog.GetNewGameRoot());
+				//KGameInstance::SetGameRootPath(dialog.GetNewGameID(), dialog.GetNewInstanceID(), dialog.GetNewGameRoot());
 			}
 
 			// Temporary change current profile, save settings, and restore IDs.
-			wxString templateID = GetCurrentTemplateID();
-			wxString configID = GetCurrentConfigID();
+			KGameID gameID = GetCurrentGameID();
+			wxString instanceID = GetCurrentInstanceID();
 
-			SetCurrentTemplateID(dialog.GetNewTemplate());
-			SetCurrentConfigID(dialog.GetNewConfig());
+			SetCurrentGameID(dialog.GetNewGameID());
+			SetCurrentInstanceID(dialog.GetNewInstanceID());
 			SaveSettings();
 			m_AllowSaveSettinsgAtExit = false;
 
-			SetCurrentTemplateID(templateID);
-			SetCurrentConfigID(configID);
+			SetCurrentGameID(gameID);
+			SetCurrentInstanceID(instanceID);
 
 			// Restart if user agreed
 			if (ret == KxID_YES)
@@ -706,38 +716,40 @@ void KApp::SetSettingsValue(KPGCFileID id, const wxString& section, const wxStri
 		dataProvider->GetDocument().SetValue(section, name, value);
 	}
 }
-wxString KApp::GetCurrentTemplateID() const
+
+KGameID KApp::GetCurrentGameID() const
 {
-	return m_CurrentTemplateID;
+	return m_CurrentGameID;
 }
-wxString KApp::GetCurrentConfigID() const
+wxString KApp::GetCurrentInstanceID() const
 {
-	return m_CurrentConfigID;
+	return m_CurrentInstanceID;
 }
-void KApp::SetCurrentTemplateID(const wxString& templateID)
+
+void KApp::SetCurrentGameID(const wxString& templateID)
 {
-	m_CurrentTemplateID = templateID;
-	m_ProfileOptions_AppWide.SetAttribute("TemplateID", templateID);
+	m_CurrentGameID = templateID;
+	m_InstanceOptions_AppWide.SetAttribute("GameID", templateID);
 }
-void KApp::SetCurrentConfigID(const wxString& configID)
+void KApp::SetCurrentInstanceID(const wxString& configID)
 {
-	m_CurrentConfigID = configID;
-	m_ProfileOptions_AppWide.SetAttribute("ProfileID", configID);
+	m_CurrentInstanceID = configID;
+	m_InstanceOptions_AppWide.SetAttribute("InstanceID", configID);
 }
 void KApp::ConfigureInternetExplorer(bool init)
 {
 	wxString appName = KxLibrary(NULL).GetFileName().AfterLast('\\');
 
-	#define IERegPath	"SOFTWARE\\Microsoft\\Internet Explorer\\MAIN\\FeatureControl\\"
+	#define IERegPath	wxS("SOFTWARE\\Microsoft\\Internet Explorer\\MAIN\\FeatureControl\\")
 	if (init)
 	{
-		KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BEHAVIORS", appName, 1, KxREG_VALUE_DWORD);
-		KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BROWSER_EMULATION", appName, 10000, KxREG_VALUE_DWORD);
+		KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BEHAVIORS"), appName, 1, KxREG_VALUE_DWORD);
+		KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BROWSER_EMULATION"), appName, 10000, KxREG_VALUE_DWORD);
 	}
 	else
 	{
-		KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BEHAVIORS", appName);
-		KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath"FEATURE_BROWSER_EMULATION", appName);
+		KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BEHAVIORS"), appName);
+		KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BROWSER_EMULATION"), appName);
 	}
 	#undef IERegPath
 }
@@ -748,7 +760,6 @@ bool KApp::ScheduleRestart()
 	const wxString taskName = "KortexRestart";
 
 	KxTaskScheduler taskSheduler;
-
 	KxTaskSchedulerTask task = taskSheduler.NewTask();
 	task.SetExecutable(KxProcess(0).GetImageName());
 	task.SetRegistrationTrigger("Restart", wxTimeSpan(0, 0, delaySec), wxDateTime::Now());

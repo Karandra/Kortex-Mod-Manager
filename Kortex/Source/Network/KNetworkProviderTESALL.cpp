@@ -45,36 +45,36 @@ wxString KNetworkProviderTESALL::GetName() const
 {
 	return "TESALL.RU";
 }
-wxString KNetworkProviderTESALL::GetGameID(const KProfileID& id) const
+wxString KNetworkProviderTESALL::GetGameID(const KGameID& id) const
 {
 	return KNetworkProvider::GetGameID(id);
 }
-wxString KNetworkProviderTESALL::GetModURLBasePart(const KProfileID& id) const
+wxString KNetworkProviderTESALL::GetModURLBasePart(const KGameID& id) const
 {
 	return "http://tesall.ru/files/file";
 }
-wxString KNetworkProviderTESALL::GetModURL(int64_t modID, const wxString& modSignature, const KProfileID& id)
+wxString KNetworkProviderTESALL::GetModURL(int64_t modID, const wxString& modSignature, const KGameID& id)
 {
 	return ConstructIPBModURL(modID, modSignature);
 }
 
-KNetworkProvider::ModInfo KNetworkProviderTESALL::GetModInfo(int64_t modID, const KProfileID& id) const
+KNetworkProvider::ModInfo KNetworkProviderTESALL::GetModInfo(int64_t modID, const KGameID& id) const
 {
 	return ModInfo();
 }
-KNetworkProvider::FileInfo KNetworkProviderTESALL::GetFileInfo(int64_t modID, int64_t fileID, const KProfileID& id) const
+KNetworkProvider::FileInfo KNetworkProviderTESALL::GetFileInfo(int64_t modID, int64_t fileID, const KGameID& id) const
 {
 	return FileInfo();
 }
-KNetworkProvider::FileInfo::Vector KNetworkProviderTESALL::GetFilesList(int64_t modID, const KProfileID& id) const
+KNetworkProvider::FileInfo::Vector KNetworkProviderTESALL::GetFilesList(int64_t modID, const KGameID& id) const
 {
 	return FileInfo::Vector();
 }
-KNetworkProvider::DownloadInfo::Vector KNetworkProviderTESALL::GetFileDownloadLinks(int64_t modID, int64_t fileID, const KProfileID& id) const
+KNetworkProvider::DownloadInfo::Vector KNetworkProviderTESALL::GetFileDownloadLinks(int64_t modID, int64_t fileID, const KGameID& id) const
 {
 	return DownloadInfo::Vector();
 }
-KNetworkProvider::EndorsedInfo KNetworkProviderTESALL::EndorseMod(int64_t modID, EndorsementState::Value state, const KProfileID& id)
+KNetworkProvider::EndorsedInfo KNetworkProviderTESALL::EndorseMod(int64_t modID, EndorsementState::Value state, const KGameID& id)
 {
 	return EndorsedInfo();
 }

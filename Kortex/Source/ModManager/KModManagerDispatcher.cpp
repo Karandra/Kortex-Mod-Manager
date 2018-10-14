@@ -208,13 +208,6 @@ void KModManagerDispatcher::RebuildTreeIfNeeded() const
 void KModManagerDispatcher::OnVirtualTreeInvalidated(KEvent& event)
 {
 	m_VirtualTreeNeedsRefresh = true;
-
-	KVirtualGameFolderWorkspace* workspace = KVirtualGameFolderWorkspace::GetInstance();
-	if (workspace && workspace->IsWorkspaceVisible())
-	{
-		RebuildTreeIfNeeded();
-		workspace->ScheduleReload();
-	}
 }
 
 void KModManagerDispatcher::UpdateVirtualTree()
@@ -236,7 +229,14 @@ void KModManagerDispatcher::UpdateVirtualTree()
 		}
 		directories = std::move(roundDirectories);
 	}
+
+	KModEvent(KEVT_MOD_VIRTUAL_TREE_INVALIDATED).Send();
 }
+void KModManagerDispatcher::InvalidateVirtualTree()
+{
+	m_VirtualTreeNeedsRefresh = true;
+}
+
 const KFileTreeNode& KModManagerDispatcher::GetVirtualTree() const
 {
 	RebuildTreeIfNeeded();
@@ -355,6 +355,4 @@ KModManagerDispatcher::KModManagerDispatcher()
 	KEvent::Bind(KEVT_MOD_INSTALLED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
 	KEvent::Bind(KEVT_MOD_UNINSTALLED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
 	KEvent::Bind(KEVT_MODS_REORDERED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
-
-	KEvent::Bind(KEVT_MODLIST_SELECTED, &KModManagerDispatcher::OnVirtualTreeInvalidated, this);
 }

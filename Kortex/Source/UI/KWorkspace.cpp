@@ -3,7 +3,7 @@
 #include "KWorkspaceController.h"
 #include "KMainWindow.h"
 #include "KThemeManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "Events/KVFSEvent.h"
 #include "KApp.h"
 
@@ -67,7 +67,7 @@ bool KWorkspace::MakeSubWorkspace(KWorkspace* workspace)
 
 wxString KWorkspace::OnGetWindowTitle() const
 {
-	return wxString::Format("%s – %s – %s", KApp::Get().GetAppDisplayName(), KProfile::GetCurrent()->GetShortName(), GetName());
+	return wxString::Format("%s – %s – %s", KApp::Get().GetAppDisplayName(), KGameInstance::GetActive()->GetShortName(), GetName());
 }
 bool KWorkspace::OnOpenWorkspace()
 {

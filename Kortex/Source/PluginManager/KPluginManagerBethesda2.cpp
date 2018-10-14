@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPluginManagerBethesda2.h"
 #include "KPluginEntryBethesda2.h"
-#include "Profile/KPluginManagerConfig.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
 #include <KxFramework/KxTextFile.h>
 
 bool KPluginManagerBethesda2::CheckExtension(const wxString& name) const

@@ -15,7 +15,7 @@
 #include <KxFramework/KxStatusBarEx.h>
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxColor.h>
-class KProfile;
+class KGameInstance;
 class KWorkspace;
 class KVFSEvent;
 

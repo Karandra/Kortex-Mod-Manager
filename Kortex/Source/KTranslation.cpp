@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KTranslation.h"
 #include "KApp.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 
 const KxTranslation& KTranslation::GetTranslation()
 {
@@ -12,7 +12,7 @@ wxString V(const wxString& source)
 {
 	return KApp::Get().ExpandVariables(source);
 }
-wxString V(KProfile* profile, const wxString& source)
+wxString V(KGameInstance* profile, const wxString& source)
 {
 	return profile->ExpandVariables(source);
 }

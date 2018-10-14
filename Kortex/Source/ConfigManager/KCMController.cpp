@@ -3,7 +3,7 @@
 #include "KCMIDataProvider.h"
 #include "UI/KWorkspace.h"
 #include "KConfigManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "Events/KLogEvent.h"
 #include "KApp.h"
 #include <KxFramework/KxString.h>

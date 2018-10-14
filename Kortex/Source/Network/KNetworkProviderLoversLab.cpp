@@ -49,36 +49,36 @@ wxString KNetworkProviderLoversLab::GetName() const
 {
 	return "LoversLab";
 }
-wxString KNetworkProviderLoversLab::GetGameID(const KProfileID& id) const
+wxString KNetworkProviderLoversLab::GetGameID(const KGameID& id) const
 {
 	return KNetworkProvider::GetGameID(id);
 }
-wxString KNetworkProviderLoversLab::GetModURLBasePart(const KProfileID& id) const
+wxString KNetworkProviderLoversLab::GetModURLBasePart(const KGameID& id) const
 {
 	return "https://www.loverslab.com/files/file";
 }
-wxString KNetworkProviderLoversLab::GetModURL(int64_t modID, const wxString& modSignature, const KProfileID& id)
+wxString KNetworkProviderLoversLab::GetModURL(int64_t modID, const wxString& modSignature, const KGameID& id)
 {
 	return ConstructIPBModURL(modID, modSignature);
 }
 
-KNetworkProvider::ModInfo KNetworkProviderLoversLab::GetModInfo(int64_t modID, const KProfileID& id) const
+KNetworkProvider::ModInfo KNetworkProviderLoversLab::GetModInfo(int64_t modID, const KGameID& id) const
 {
 	return ModInfo();
 }
-KNetworkProvider::FileInfo KNetworkProviderLoversLab::GetFileInfo(int64_t modID, int64_t fileID, const KProfileID& id) const
+KNetworkProvider::FileInfo KNetworkProviderLoversLab::GetFileInfo(int64_t modID, int64_t fileID, const KGameID& id) const
 {
 	return FileInfo();
 }
-KNetworkProvider::FileInfo::Vector KNetworkProviderLoversLab::GetFilesList(int64_t modID, const KProfileID& id) const
+KNetworkProvider::FileInfo::Vector KNetworkProviderLoversLab::GetFilesList(int64_t modID, const KGameID& id) const
 {
 	return FileInfo::Vector();
 }
-KNetworkProvider::DownloadInfo::Vector KNetworkProviderLoversLab::GetFileDownloadLinks(int64_t modID, int64_t fileID, const KProfileID& id) const
+KNetworkProvider::DownloadInfo::Vector KNetworkProviderLoversLab::GetFileDownloadLinks(int64_t modID, int64_t fileID, const KGameID& id) const
 {
 	return DownloadInfo::Vector();
 }
-KNetworkProvider::EndorsedInfo KNetworkProviderLoversLab::EndorseMod(int64_t modID, EndorsementState::Value state, const KProfileID& id)
+KNetworkProvider::EndorsedInfo KNetworkProviderLoversLab::EndorseMod(int64_t modID, EndorsementState::Value state, const KGameID& id)
 {
 	return EndorsedInfo();
 }

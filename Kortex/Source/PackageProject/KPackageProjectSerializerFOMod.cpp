@@ -10,7 +10,7 @@
 #include "KPackageProjectComponents.h"
 #include "PackageManager/KPackageManager.h"
 #include "ModManager/KModManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KAux.h"
 #include "KUnsortedUnique.h"
 #include <KxFramework/KxString.h>
@@ -262,7 +262,7 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 			if (mainReqsGroup->GetEntries().empty())
 			{
 				KPPRRequirementEntry* entry = mainReqsGroup->GetEntries().emplace_back(new KPPRRequirementEntry()).get();
-				entry->SetID(KApp::Get().GetCurrentTemplateID());
+				entry->SetID(KApp::Get().GetCurrentGameID());
 				entry->ConformToTypeDescriptor();
 			}
 			requirements.GetDefaultGroup().push_back(mainReqsGroup->GetID());
@@ -509,7 +509,7 @@ KPPOperator KPackageProjectSerializerFOMod::ReadCompositeDependencies(const KxXM
 			reqEntry = new KPPRRequirementEntry();
 
 			// Copy std requirement for current game and set required version from FOMod
-			const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindStdReqirement(KApp::Get().GetCurrentTemplateID());
+			const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindStdReqirement(KApp::Get().GetCurrentGameID());
 			
 			// This check probably redundant, but just in case
 			if (stdEntry)
@@ -537,7 +537,7 @@ KPPOperator KPackageProjectSerializerFOMod::ReadCompositeDependencies(const KxXM
 			else
 			{
 				// Fill with something meaningful
-				reqEntry->SetName(KApp::Get().GetCurrentProfile()->GetShortName() + " Script Extender");
+				reqEntry->SetName(KGameInstance::GetActive()->GetShortName() + " Script Extender");
 				reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
 			}
 		}
@@ -1003,7 +1003,7 @@ wxSize KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const 
 			{
 				entry->GetOperator() == KPP_OPERATOR_AND ? andCount++ : orCount++;
 
-				if (entry->GetID() == KApp::Get().GetCurrentTemplateID())
+				if (entry->GetID() == KApp::Get().GetCurrentGameID())
 				{
 					node.NewElement("gameDependency").SetAttribute("version", entry->GetRequiredVersion());
 				}
@@ -1030,7 +1030,7 @@ wxSize KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const 
 
 void KPackageProjectSerializerFOMod::InitDataFolderInfo()
 {
-	wxString id = KApp::Get().GetCurrentTemplateID();
+	wxString id = KApp::Get().GetCurrentGameID();
 	m_HasDataFolderAsRoot = id == "Skyrim" || id == "SkyrimSE" || id == "Oblivion" || id == "Fallout3" || id == "FalloutNV" || id == "Fallout4";
 	m_IsMorrowind = id == "Morrowind";
 }

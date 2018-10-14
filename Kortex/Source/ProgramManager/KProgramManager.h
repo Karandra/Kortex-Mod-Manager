@@ -5,7 +5,6 @@
 #include "KProgramOptions.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxSingleton.h>
-class KProgramManagerConfig;
 class KProgramManagerModel;
 class KVFSEvent;
 class KxMenu;
@@ -15,6 +14,10 @@ class KxProcess;
 
 class KProgramManagerEntry: public KWithBitmap
 {
+	public:
+		using Vector = std::vector<KProgramManagerEntry>;
+		using RefVector = std::vector<KProgramManagerEntry*>;
+
 	private:
 		wxString m_Name;
 		wxString m_IconPath;
@@ -85,7 +88,7 @@ class KProgramManagerEntry: public KWithBitmap
 			m_RequiresVFS = value;
 		}
 };
-typedef std::vector<KProgramManagerEntry> KRMProgramEntryArray;
+
 
 //////////////////////////////////////////////////////////////////////////
 class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
@@ -93,29 +96,20 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 	friend class KProgramManagerModel;
 
 	public:
-		static wxString GetProgramsListFile(const wxString& templateID, const wxString& configID);
-
-	public:
-		static const int ms_DefaultPreMainInterval = 100;
-		static const int ms_DefaultPreMainTimeout = 500;
-
-	public:
-		static const KProgramManagerConfig* GetRunConfig();
 		static wxString GetKExecutePath();
 		static void InitKExecute(KxProcess& process, const wxString& executable, const wxString& arguments = wxEmptyString, const wxString& workingDirectory = wxEmptyString);
 		static void InitKExecute(KxProcess& process, const KProgramManagerEntry& runEntry);
 
 	private:
-		KProgramOptionUI m_RunMainOptions;
-
-		const KProgramManagerConfig* m_RunConfig = NULL;
-		KRMProgramEntryArray m_ProgramList;
+		KProgramManagerEntry::Vector m_ProgramList;
+		KProgramOptionUI m_RunOptions;
 
 		KxMenu* m_Menu = NULL;
 		std::vector<KxMenuItem*> m_MenuItems;
 		bool m_IconsExtracted = false;
 
 	private:
+		virtual void OnInit();
 		virtual wxBitmap OnQueryItemImage(const KProgramManagerEntry& runEntry) const;
 		void OnVFSToggled(KVFSEvent& event);
 		void OnMenuOpen(KxMenuEvent& event);
@@ -127,10 +121,6 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 		
 		KxProgressDialog* BeginRunProcess();
 		void EndRunProcess(KxProgressDialog* dialog, KxProcess* process);
-		int GetPreMainInterval() const;
-		int GetPreMainTimeout() const;
-		KxStringVector CheckPreMain();
-		void RunPreMain(KxProgressDialog* dialog);
 		void RunMain(KxProgressDialog* dialog, const KProgramManagerEntry& runEntry);
 
 		void LoadProgramList();
@@ -153,11 +143,11 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 		{
 			return !m_ProgramList.empty();
 		}
-		const KRMProgramEntryArray& GetProgramList() const
+		const KProgramManagerEntry::Vector& GetProgramList() const
 		{
 			return m_ProgramList;
 		}
-		KRMProgramEntryArray& GetProgramList()
+		KProgramManagerEntry::Vector& GetProgramList()
 		{
 			return m_ProgramList;
 		}
@@ -172,7 +162,7 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 	public:
 		KProgramOption& GetOptions()
 		{
-			return m_RunMainOptions;
+			return m_RunOptions;
 		}
 
 		virtual void Save() const override;

@@ -5,7 +5,8 @@
 #include "KModManager.h"
 #include "KModEntry.h"
 #include "KModStatistics.h"
-#include "KModListManagerEditor.h"
+#include "GameInstance/KGameInstance.h"
+#include "Profile/KProfileEditor.h"
 #include "KModTagsSelector.h"
 #include "KModSites.h"
 #include "KModFilesExplorerDialog.h"
@@ -22,7 +23,6 @@
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "Network/KNetwork.h"
 #include "KEvents.h"
-#include "Events/KModListEventInternal.h"
 #include "KThemeManager.h"
 #include "KOperationWithProgress.h"
 #include "KAux.h"
@@ -137,44 +137,15 @@ void KModWorkspace::CreateToolBar()
 	m_ModsToolBar->SetBackgroundColour(GetBackgroundColour());
 	m_ModsToolBar->SetMargins(0, 1, 0, 0);
 
-	m_ToolBar_ModList = new KxComboBox(m_ModsToolBar, KxID_NONE);
-	m_ToolBar_ModList->Bind(wxEVT_COMBOBOX, [this](wxCommandEvent& event)
-	{
-		wxString newID = m_ToolBar_ModList->GetString(event.GetSelection());
-		if (!KModManager::GetListManager().IsCurrentListID(newID))
-		{
-			KModManager::GetListManager().SaveLists();
-			KModManager::GetListManager().SetCurrentListID(newID);
+	m_ToolBar_Profiles = new KxComboBox(m_ModsToolBar, KxID_NONE);
+	m_ToolBar_Profiles->Bind(wxEVT_COMBOBOX, &KModWorkspace::OnSelectProfile, this);
 
-			KModListEvent(KEVT_MODLIST_INT_SELECTED, KModListManager::GetInstance()->GetCurrentList()).Send();
-			KModListEvent(KEVT_MODLIST_SELECTED).Send();
-		}
-		else
-		{
-			m_ToolBar_ModList->SetStringSelection(KModManager::GetListManager().GetCurrentListID());
-		}
-		m_ViewModel->GetView()->SetFocus();
-	});
+	m_ModsToolBar->AddLabel(T("ModManager.Profile") + ':');
+	m_ModsToolBar->AddControl(m_ToolBar_Profiles)->SetProportion(1);
 
-	m_ModsToolBar->AddLabel(T("ModManager.ModList") + ':');
-	m_ModsToolBar->AddControl(m_ToolBar_ModList)->SetProportion(1);
-
-	m_ToolBar_ManageModList = KMainWindow::CreateToolBarButton(m_ModsToolBar, wxEmptyString, KIMG_GEAR);
-	m_ToolBar_ManageModList->SetShortHelp(T("ModManager.ModList.Manage"));
-	m_ToolBar_ManageModList->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
-	{
-		KModListManagerEditorDialog dialog(this);
-		dialog.ShowModal();
-		if (dialog.IsModified())
-		{
-			KModManager::GetListManager().SaveLists();
-			KModManager::GetListManager().SetCurrentListID(dialog.GetCurrentList());
-			
-			UpdateModListContent();
-			KModListEvent(KEVT_MODLIST_INT_SELECTED, KModListManager::GetInstance()->GetCurrentList()).Send();
-			KModListEvent(KEVT_MODLIST_SELECTED).Send();
-		}
-	});
+	m_ToolBar_EditProfiles = KMainWindow::CreateToolBarButton(m_ModsToolBar, wxEmptyString, KIMG_GEAR);
+	m_ToolBar_EditProfiles->SetShortHelp(T("ModManager.Profile.Configure"));
+	m_ToolBar_EditProfiles->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KModWorkspace::OnShowProfileEditor, this);
 	m_ModsToolBar->AddSeparator();
 
 	m_ToolBar_AddMod = KMainWindow::CreateToolBarButton(m_ModsToolBar, T(KxID_ADD), KIMG_PLUS_SMALL);
@@ -433,6 +404,50 @@ bool KModWorkspace::ShowChangeModIDDialog(KModEntry* entry)
 	}
 	return false;
 }
+
+void KModWorkspace::ProcessSelectProfile(const wxString& newProfileID)
+{
+	if (!newProfileID.IsEmpty())
+	{
+		KGameInstance* instance = KGameInstance::GetActive();
+		KProfile* profile = KGameInstance::GetCurrentProfile();
+
+		if (!KGameInstance::IsCurrentProfileID(newProfileID))
+		{
+			profile->SyncWithCurrentState();
+			profile->Save();
+
+			KProfile* newProfile = instance->GetProfile(newProfileID);
+			if (newProfile)
+			{
+				instance->ChangeProfileTo(*newProfile);
+				KProfileEvent(KEVT_PROFILE_SELECTED, *newProfile).Send();
+			}
+		}
+	}
+}
+void KModWorkspace::OnSelectProfile(wxCommandEvent& event)
+{
+	ProcessSelectProfile(m_ToolBar_Profiles->GetString(event.GetSelection()));
+	m_ViewModel->GetView()->SetFocus();
+}
+void KModWorkspace::OnShowProfileEditor(KxAuiToolBarEvent& event)
+{
+	// Save current
+	KProfile* profile = KGameInstance::GetCurrentProfile();
+	profile->SyncWithCurrentState();
+	profile->Save();
+
+	KModListManagerEditorDialog dialog(this);
+	dialog.ShowModal();
+	if (dialog.IsModified())
+	{
+		ProcessSelectProfile(dialog.GetNewProfile());
+		UpdateModListContent();
+		KProfileEvent(KEVT_PROFILE_SELECTED).Send();
+	}
+}
+
 void KModWorkspace::OpenPackage(const wxString& path)
 {
 	KInstallWizardDialog* dialog = new KInstallWizardDialog(GetMainWindow(), path);
@@ -496,7 +511,7 @@ void KModWorkspace::OnToolsMenu(KxAuiToolBarEvent& event)
 			KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 			dialog.AddFilter("*.html", T("FileFilter.HTML"));
 			dialog.SetDefaultExtension("html");
-			dialog.SetFileName(KApp::Get().GetCurrentTemplateID() + " - " + KApp::Get().GetCurrentConfigID());
+			dialog.SetFileName(KApp::Get().GetCurrentGameID() + " - " + KApp::Get().GetCurrentInstanceID());
 
 			if (dialog.ShowModal() == KxID_OK)
 			{
@@ -509,8 +524,8 @@ void KModWorkspace::OnToolsMenu(KxAuiToolBarEvent& event)
 
 void KModWorkspace::OnVFSToggled(KVFSEvent& event)
 {
-	m_ToolBar_ModList->Enable(!event.IsActivated());
-	m_ToolBar_ManageModList->SetEnabled(!event.IsActivated());
+	m_ToolBar_Profiles->Enable(!event.IsActivated());
+	m_ToolBar_EditProfiles->SetEnabled(!event.IsActivated());
 
 	wxWindowUpdateLocker lock(m_ActivateButton);
 	if (event.IsActivated())
@@ -1182,18 +1197,17 @@ void KModWorkspace::ShowViewContextMenu(const KModTag* modTag)
 }
 void KModWorkspace::UpdateModListContent()
 {
-	m_ToolBar_ModList->Clear();
+	m_ToolBar_Profiles->Clear();
 	int selectIndex = 0;
-	for (const KModList& modList: KModManager::GetListManager().GetLists())
+	for (const auto& profile: KGameInstance::GetActive()->GetProfiles())
 	{
-		int index = m_ToolBar_ModList->Append(modList.GetID());
-		if (modList.GetID() == KModManager::GetListManager().GetCurrentListID())
+		int index = m_ToolBar_Profiles->Append(profile->GetID());
+		if (profile->GetID() == KGameInstance::GetCurrentProfileID())
 		{
 			selectIndex = index;
 		}
 	}
-
-	m_ToolBar_ModList->SetSelection(selectIndex);
+	m_ToolBar_Profiles->SetSelection(selectIndex);
 }
 void KModWorkspace::RefreshPlugins()
 {

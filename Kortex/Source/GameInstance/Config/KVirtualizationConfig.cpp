@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ConfigManager/KConfigManager.h"
 #include "KVirtualizationConfig.h"
-#include "KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KApp.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ wxString KVirtualizationMandatoryEntry::GetName() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KVirtualizationConfig::KVirtualizationConfig(KProfile& profile, const KxXMLNode& node)
+KVirtualizationConfig::KVirtualizationConfig(KGameInstance& profile, const KxXMLNode& node)
 {
 	auto ReadEntries = [](auto& array, const KxXMLNode& rootNode, const wxString& name)
 	{

@@ -2,7 +2,7 @@
 #include "KModEntry.h"
 #include "KModManager.h"
 #include "Network/KNetwork.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "PackageProject/KPackageProject.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -445,7 +445,7 @@ intptr_t KModEntry::GetPriority() const
 intptr_t KModEntry::GetOrderIndex() const
 {
 	// x2 reserve space for priority groups
-	return 2 * KModManager::Get().GetModIndex(this);
+	return 2 * KModManager::Get().GetModOrderIndex(this);
 }
 wxString KModEntry::GetLocation(KModManagerLocation index) const
 {

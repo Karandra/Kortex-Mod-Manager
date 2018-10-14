@@ -3,8 +3,8 @@
 #include "KScreenshotsGalleryWorkspace.h"
 #include "KThemeManager.h"
 #include "KApp.h"
-#include "Profile/KProfile.h"
-#include "Profile/KScreenshotsGalleryConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KScreenshotsGalleryConfig.h"
 #include "UI/KImageViewerDialog.h"
 #include <KxFramework/KxParagraph.h>
 #include <KxFramework/KxLabel.h>
@@ -12,13 +12,6 @@
 #include <KxFramework/KxThumbView.h>
 #include <KxFramework/KxShellMenu.h>
 #include <KxFramework/KxFile.h>
-
-template<class T> static T* AddControlsRow(wxSizer* sizer, const wxString& label, T* control)
-{
-	sizer->Add(new KxLabel(control->GetParent(), KxID_NONE, label + ':'), 0, wxEXPAND|wxALIGN_TOP);
-	sizer->Add(control, 1, wxEXPAND);
-	return control;
-}
 
 KScreenshotsGalleryWorkspace::KScreenshotsGalleryWorkspace(KMainWindow* mainWindow, KScreenshotsGalleryManager* manager)
 	:KWorkspace(mainWindow), m_Manager(manager)

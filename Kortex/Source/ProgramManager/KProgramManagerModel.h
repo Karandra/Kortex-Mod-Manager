@@ -3,12 +3,11 @@
 #include "KDataViewListModel.h"
 #include "KProgramManager.h"
 
-class KProgramManagerModel: public KDataViewVectorListModel<KRMProgramEntryArray, KDataViewListModel>
+class KProgramManagerModel: public KDataViewVectorListModel<KProgramManagerEntry::Vector, KDataViewListModel>
 {
 	private:
 		virtual void OnInitControl() override;
 		
-
 		virtual void GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
 		virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
 		virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
@@ -18,7 +17,7 @@ class KProgramManagerModel: public KDataViewVectorListModel<KRMProgramEntryArray
 		void OnSelectItem(KxDataViewEvent& event);
 		void OnContextMenu(KxDataViewEvent& event);
 
-		KRMProgramEntryArray& GetProgramsList() const
+		KProgramManagerEntry::Vector& GetProgramsList() const
 		{
 			return KProgramManager::GetInstance()->GetProgramList();
 		}

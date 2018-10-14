@@ -3,7 +3,7 @@
 #include "KModManagerImportMO.h"
 #include "KModManagerImportNMM.h"
 #include "KOperationWithProgress.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "ModManager/KModWorkspace.h"
 #include "DownloadManager/KDownloadWorkspace.h"
 #include "GameConfig/KGameConfigWorkspace.h"
@@ -119,13 +119,13 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 
 wxString KModManagerImport::GetProfileMatchingMessage(KxIconType* pIcon) const
 {
-	KProfileID targetID = GetTargetProfileID();
+	KGameID targetID = GetTargetProfileID();
 	if (!targetID.IsOK())
 	{
 		KxUtility::SetIfNotNull(pIcon, KxICON_WARNING);
 		return T("ModManager.Import.TargetProfileNotFound");
 	}
-	if (targetID != KProfile::GetCurrent()->GetID())
+	if (targetID != KGameInstance::GetActive()->GetGameID())
 	{
 		KxUtility::SetIfNotNull(pIcon, KxICON_ERROR);
 		return T("ModManager.Import.TargetProfileMismatch");

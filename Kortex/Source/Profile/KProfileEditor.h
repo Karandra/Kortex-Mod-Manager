@@ -2,18 +2,17 @@
 #include "stdafx.h"
 #include "KImageProvider.h"
 #include "KDataViewListModel.h"
-#include "KModEntry.h"
-#include "KModListManager.h"
+#include "Profile/KProfile.h"
 #include "KLabeledValue.h"
 #include <KxFramework/KxStdDialog.h>
 class KxButton;
 class KxCheckBox;
 
-class KModListManagerEditor: public KxDataViewVectorListModelEx<KModListManager::ListVector, KxDataViewListModelEx>
+class KProfileEditor: public KxDataViewVectorListModelEx<KProfile::Vector, KxDataViewListModelEx>
 {
 	private:
 		bool m_IsModified = false;
-		wxString m_CurrentList;
+		wxString m_NewCurrentProfile;
 
 	protected:
 		virtual void OnInitControl() override;
@@ -28,53 +27,50 @@ class KModListManagerEditor: public KxDataViewVectorListModelEx<KModListManager:
 		{
 			m_IsModified = true;
 		}
-		void SetCurrentList(const wxString& id)
+		void SetNewProfile(const wxString& id)
 		{
-			m_CurrentList = id;
+			m_NewCurrentProfile = id;
 		}
 
 	public:
-		KModListManagerEditor();
+		KProfileEditor();
 
 	public:
 		bool IsModified() const
 		{
 			return m_IsModified;
 		}
-		const wxString& GetCurrentList() const
+		const wxString& GetNewProfile() const
 		{
-			return m_CurrentList;
+			return m_NewCurrentProfile;
 		}
 
-		const KModList* GetDataEntry(size_t i) const
+		const KProfile* GetDataEntry(size_t i) const
 		{
 			if (i < GetItemCount())
 			{
-				return &GetDataVector()->at(i);
+				return &*GetDataVector()->at(i);
 			}
 			return NULL;
 		}
-		KModList* GetDataEntry(size_t i)
+		KProfile* GetDataEntry(size_t i)
 		{
 			if (i < GetItemCount())
 			{
-				return &GetDataVector()->at(i);
+				return &*GetDataVector()->at(i);
 			}
 			return NULL;
 		}
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KModListManagerEditorDialog: public KxStdDialog, public KModListManagerEditor
+class KModListManagerEditorDialog: public KxStdDialog, public KProfileEditor
 {
 	private:
 		wxWindow* m_ViewPane = NULL;
 		KxButton* m_AddButton = NULL;
 		KxButton* m_CopyButton = NULL;
 		KxButton* m_RemoveButton = NULL;
-
-		KxCheckBox* m_LocalSavesCHK = NULL;
-		KxCheckBox* m_LocalConfigCHK = NULL;
 
 	private:
 		virtual wxWindow* GetDialogMainCtrl() const override
@@ -86,9 +82,6 @@ class KModListManagerEditorDialog: public KxStdDialog, public KModListManagerEdi
 		void OnAddList(wxCommandEvent& event);
 		void OnCopyList(wxCommandEvent& event);
 		void OnRemoveList(wxCommandEvent& event);
-
-		void OnLocalSavesEnabled(wxCommandEvent& event);
-		void OnLocalConfigEnabled(wxCommandEvent& event);
 
 	public:
 		KModListManagerEditorDialog(wxWindow* parent);

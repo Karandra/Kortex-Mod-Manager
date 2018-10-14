@@ -7,7 +7,8 @@
 #include "Network/KNetworkProviderNexus.h"
 #include "DownloadManager/KDownloadManager.h"
 #include "Profile/KProfile.h"
-#include "Profile/KConfigManagerConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KConfigManagerConfig.h"
 #include "KOperationWithProgress.h"
 #include "KAux.h"
 #include <KxFramework/KxFileFinder.h>
@@ -19,48 +20,48 @@ wxString KModManagerImportNMM::ProcessDescription(const wxString& path) const
 	return KPackageProjectSerializer::ConvertBBCode(path);
 }
 
-KProfileID KModManagerImportNMM::GetGameID(const wxString& name)
+KGameID KModManagerImportNMM::GetGameID(const wxString& name)
 {
 	if (!name.IsEmpty())
 	{
 		// TES
 		if (name == "Morrowind")
 		{
-			return KProfileIDs::Morrowind;
+			return KGameIDs::Morrowind;
 		}
 		if (name == "Oblivion")
 		{
-			return KProfileIDs::Oblivion;
+			return KGameIDs::Oblivion;
 		}
 		if (name == "Skyrim")
 		{
-			return KProfileIDs::Skyrim;
+			return KGameIDs::Skyrim;
 		}
 		if (name == "SkyrimSE")
 		{
-			return KProfileIDs::SkyrimSE;
+			return KGameIDs::SkyrimSE;
 		}
 		if (name == "SkyrimVR")
 		{
-			return KProfileIDs::SkyrimVR;
+			return KGameIDs::SkyrimVR;
 		}
 
 		// Fallout
 		if (name == "Fallout3")
 		{
-			return KProfileIDs::Fallout3;
+			return KGameIDs::Fallout3;
 		}
 		if (name == "FalloutNV")
 		{
-			return KProfileIDs::FalloutNV;
+			return KGameIDs::FalloutNV;
 		}
 		if (name == "Fallout4")
 		{
-			return KProfileIDs::Fallout4;
+			return KGameIDs::Fallout4;
 		}
 		if (name == "Fallout4VR")
 		{
-			return KProfileIDs::Fallout4VR;
+			return KGameIDs::Fallout4VR;
 		}
 
 		/* 
@@ -71,7 +72,7 @@ KProfileID KModManagerImportNMM::GetGameID(const wxString& name)
 		Witcher3, WorldOfTanks, XCOM2, XRebirth.
 		*/
 	}
-	return KProfileIDs::NullProfileID;
+	return KGameIDs::NullGameID;
 }
 void KModManagerImportNMM::LoadOptions()
 {
@@ -92,11 +93,11 @@ void KModManagerImportNMM::LoadOptions()
 
 	// Game name
 	m_TargetProfile = GetGameID(gameModeID);
-	m_TargetProfileTemplate = KProfile::GetProfileTemplate(m_TargetProfile);
+	m_TargetProfileTemplate = KGameInstance::GetTemplate(m_TargetProfile);
 }
 wxString KModManagerImportNMM::GetDataFolderName() const
 {
-	if (m_TargetProfile == KProfileIDs::Morrowind)
+	if (m_TargetProfile == KGameIDs::Morrowind)
 	{
 		return "Data Files";
 	}
@@ -123,9 +124,9 @@ void KModManagerImportNMM::CopySavesAndConfig(KOperationWithProgressDialogBase* 
 	context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KSaveManager::GetInstance()->GetName()));
 
 	// Copy saves from real saves folder to virtual
-	KxEvtFile savesSource(KVAR_EXP(KVAR_CONFIG_ROOT_TARGET));
+	KxEvtFile savesSource(KVAR_EXP(KVAR_ACTUAL_CONFIG_DIR));
 	context->LinkHandler(&savesSource, KxEVT_FILEOP_COPY_FOLDER);
-	savesSource.CopyFolder(KxFile::NullFilter, KVAR_EXP(KVAR_CONFIG_ROOT_LOCAL), true, true);
+	savesSource.CopyFolder(KxFile::NullFilter, KVAR_EXP(KVAR_CONFIG_DIR), true, true);
 }
 void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 {
@@ -200,8 +201,10 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 	}
 
 	// Add mods to mods list
-	KModList::ModEntryVector& tCurrentModList = KModManager::GetListManager().GetCurrentList().GetMods();
-	tCurrentModList.clear();
+	KProfile* profile = KGameInstance::GetActive()->GetCurrentProfile();
+
+	KProfileMod::Vector& modList = profile->GetMods();
+	modList.clear();
 	for (const wxString& name: addedMods)
 	{
 		if (!context->CanContinue())
@@ -211,12 +214,12 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 
 		if (KModEntry* existingMod = KModManager::Get().FindModByID(name))
 		{
-			tCurrentModList.emplace_back(KModListMod(existingMod, existingMod->IsEnabled()));
+			modList.emplace_back(KProfileMod(*existingMod, existingMod->IsEnabled()));
 		}
 	}
 
 	// Save lists, without sync
-	KModManager::GetListManager().SaveLists();
+	profile->Save();
 }
 void KModManagerImportNMM::ReadPlugins(KOperationWithProgressDialogBase* context)
 {
@@ -228,8 +231,10 @@ void KModManagerImportNMM::ReadPlugins(KOperationWithProgressDialogBase* context
 		pluginManager->Load();
 		KxStringVector pluginsList = KxTextFile::ReadToArray(GetProfileDirectory() + '\\' + "LoadOrder.txt");
 
-		KModList::PluginEntryVector& currentPluginsList = KModManager::GetListManager().GetCurrentList().GetPlugins();
-		currentPluginsList.clear();
+		KProfile* profile = KGameInstance::GetActive()->GetCurrentProfile();
+
+		KProfilePlugin::Vector& profilePluginsList = profile->GetPlugins();
+		profilePluginsList.clear();
 		for (const wxString& value: pluginsList)
 		{
 			if (!context->CanContinue())
@@ -240,9 +245,9 @@ void KModManagerImportNMM::ReadPlugins(KOperationWithProgressDialogBase* context
 			wxString enabledValue = value.AfterFirst('=');
 			bool enabled = !enabledValue.IsEmpty() && enabledValue[0] == '1';
 
-			currentPluginsList.emplace_back(KModListPlugin(value.BeforeFirst('='), enabled));
+			profilePluginsList.emplace_back(KProfilePlugin(value.BeforeFirst('='), enabled));
 		}
-		KModManager::GetListManager().SaveLists();
+		profile->Save();
 	}
 }
 void KModManagerImportNMM::CopyDownloads(KOperationWithProgressDialogBase* context)

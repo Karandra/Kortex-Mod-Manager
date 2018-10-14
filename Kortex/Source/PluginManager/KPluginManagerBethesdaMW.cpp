@@ -3,7 +3,9 @@
 #include "KPluginManagerBethesdaMW.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModManagerDispatcher.h"
-#include "Profile/KPluginManagerConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
+#include "Profile/KProfile.h"
 #include "GameConfig/KGameConfigWorkspace.h"
 #include "UI/KWorkspace.h"
 #include "KApp.h"
@@ -68,9 +70,9 @@ void KPluginManagerBethesdaMW::WriteOrderMW(KxINI& ini) const
 
 	int i = 0;
 	ini.RemoveSection("Game Files Order");
-	for (const KModListPlugin& listItem: KModManager::GetListManager().GetCurrentList().GetPlugins())
+	for (const KProfilePlugin& listItem: KGameInstance::GetActive()->GetCurrentProfile()->GetPlugins())
 	{
-		if (const KPluginEntry* entry = listItem.GetPluginEntry())
+		if (const KPluginEntry* entry = listItem.GetPlugin())
 		{
 			ini.SetValue("Game Files Order", wxString::Format("GameFile%d", i), OnWriteToLoadOrder(*entry));
 			i++;
@@ -136,10 +138,9 @@ void KPluginManagerBethesdaMW::SaveNativeOrderBG() const
 }
 
 KPluginManagerBethesdaMW::KPluginManagerBethesdaMW(const wxString& interfaceName, const KxXMLNode& configNode)
-	:KPluginManagerBethesda(interfaceName, configNode)
+	:KPluginManagerBethesda(interfaceName, configNode), m_PluginsListFile(wxS("Morrowind.ini"))
 {
 	m_PluginsLocation = "Data Files";
-	m_PluginsListFile = "Morrowind.ini";
 }
 KPluginManagerBethesdaMW::~KPluginManagerBethesdaMW()
 {

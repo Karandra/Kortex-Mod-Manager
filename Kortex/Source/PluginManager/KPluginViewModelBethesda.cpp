@@ -4,7 +4,7 @@
 #include "KPluginReaderBethesda.h"
 #include "KPluginManager.h"
 #include <KxFramework/KxComparator.h>
-#include "Profile/KPluginManagerConfig.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
 
 void KPluginViewModelBethesda::OnInitControl()
 {

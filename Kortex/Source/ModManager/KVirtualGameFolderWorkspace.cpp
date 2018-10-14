@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "KVirtualGameFolderWorkspace.h"
 #include "KVirtualGameFolderModel.h"
+#include "KEvents.h"
 #include <KxFramework/KxSearchBox.h>
 
 KVirtualGameFolderWorkspace::KVirtualGameFolderWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_OptionsUI(this, "MainUI"), m_ViewOptions(this, "View")
 {
+	KEvent::Bind(KEVT_MOD_VIRTUAL_TREE_INVALIDATED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
+	KEvent::Bind(KEVT_MOD_TOGGLED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
+
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 }
 KVirtualGameFolderWorkspace::~KVirtualGameFolderWorkspace()
@@ -49,6 +53,10 @@ void KVirtualGameFolderWorkspace::OnModSerach(wxCommandEvent& event)
 	{
 		m_Model->RefreshItems();
 	}
+}
+void KVirtualGameFolderWorkspace::OnViewInvalidated(KEvent& event)
+{
+	m_Model->RefreshItems();
 }
 
 wxString KVirtualGameFolderWorkspace::GetID() const

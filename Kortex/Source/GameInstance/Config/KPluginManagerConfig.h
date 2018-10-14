@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxSingleton.h>
-class KProfile;
+class KGameInstance;
 class KPluginManager;
 class KPluginReader;
 
@@ -66,7 +66,7 @@ class KPluginManagerConfigLootAPI
 		KLootAPI* m_LootInstance = NULL;
 
 	public:
-		KPluginManagerConfigLootAPI(KProfile& profile, const KxXMLNode& node);
+		KPluginManagerConfigLootAPI(KGameInstance& profile, const KxXMLNode& node);
 		~KPluginManagerConfigLootAPI();
 
 	public:
@@ -97,7 +97,7 @@ class KPluginManagerConfig: public KxSingletonPtr<KPluginManagerConfig>
 		std::unique_ptr<LootAPI> m_LootAPI;
 
 	public:
-		KPluginManagerConfig(KProfile& profile, const KxXMLNode& node);
+		KPluginManagerConfig(KGameInstance& profile, const KxXMLNode& node);
 		~KPluginManagerConfig();
 
 	public:

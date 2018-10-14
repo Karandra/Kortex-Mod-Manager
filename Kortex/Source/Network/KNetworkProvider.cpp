@@ -2,7 +2,7 @@
 #include "KNetworkProvider.h"
 #include "KNetwork.h"
 #include "UI/KMainWindow.h"
-#include "Profile/KNetworkConfig.h"
+#include "GameInstance/Config/KNetworkConfig.h"
 #include "KAux.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxFile.h>
@@ -77,7 +77,7 @@ wxString KNetworkProvider::GetUserPictureFile() const
 	return GetCacheFolder() + "\\UserPicture.png";
 }
 
-wxString KNetworkProvider::GetGameID(const KProfileID& id) const
+wxString KNetworkProvider::GetGameID(const KGameID& id) const
 {
 	return id.IsOK() ? id : KNetworkConfig::GetInstance()->GetNexusID();
 }

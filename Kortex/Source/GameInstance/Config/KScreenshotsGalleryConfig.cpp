@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "KScreenshotsGalleryConfig.h"
 #include "ScreenshotsGallery/KScreenshotsGalleryManager.h"
-#include "KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KApp.h"
 
-KScreenshotsGalleryConfig::KScreenshotsGalleryConfig(KProfile& profile, const KxXMLNode& node)
+KScreenshotsGalleryConfig::KScreenshotsGalleryConfig(KGameInstance& profile, const KxXMLNode& node)
 {
 	for (KxXMLNode entryNode = node.GetFirstChildElement("Locations").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 	{

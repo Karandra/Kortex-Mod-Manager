@@ -1,233 +1,156 @@
 #pragma once
 #include "stdafx.h"
-#include "KVariablesDatabase.h"
-#include <KxFramework/KxXML.h>
-#include <KxFramework/KxINI.h>
-#include "KStaticVariablesTable.h"
-#include "KProfileID.h"
-#include "KAux.h"
-#include <KxFramework/KxFileStream.h>
+#include "KProgramOptions.h"
+#include "KEvents.h"
+#include <KxFramework/KxSingleton.h>
+class KIVariablesTable;
+class KModEntry;
+class KPluginEntry;
 
-class KLocationsManagerConfig;
-class KConfigManagerConfig;
-class KVirtualizationConfig;
-class KPackageManagerConfig;
-class KProgramManagerConfig;
-class KPluginManagerConfig;
-class KScreenshotsGalleryConfig;
-class KSaveManagerConfig;
-class KNetworkConfig;
-
-wxDECLARE_EVENT(KEVT_UPDATE_PROFILES, wxNotifyEvent);
-
-class KProfileAddConfig
+//////////////////////////////////////////////////////////////////////////
+class KProfileMod
 {
 	public:
-		bool CopyProfileConfig = false;
-		bool CopyGameConfig = false;
-		bool CopyMods = false;
-		bool CopyModTags = false;
-		bool CopyRunManagerPrograms = false;
-};
-
-class KProfile
-{
-	private:
-		typedef std::vector<KProfile*> ProfilesList;
-		static ProfilesList ms_ProfilesList;
+		using Vector = std::vector<KProfileMod>;
 
 	public:
-		static const wxString& GetTemplatesFolder();
-		static const ProfilesList& GetTemplatesList();
-		static const KProfile* GetProfileTemplate(const wxString& templateID);
-		static bool IsTemplateExist(const wxString& templateID)
-		{
-			return GetProfileTemplate(templateID) != NULL;
-		}
-		static bool IsProfileIDValid(const wxString& configID);
-
-		static KProfile* GetCurrent();
-
-		// Data path for profiles. This is $(ProfilesFolder) variable
-		static wxString GetDataPath();
-
-		// Data path for profiles belongs to the specified template
-		static wxString GetDataPath(const wxString& templateID);
-
-		// Data path for real profile with config ID
-		static wxString GetDataPath(const wxString& templateID, const wxString& configID);
-
-		// Path to the config file for specified profile
-		static wxString GetConfigFilePath(const wxString& templateID, const wxString& configID);
-
-		// Gets or sets game root for specified profile. This needs to be static because game path can be queried/assigned before any full profile even loaded
-		static wxString GetGameRootPath(const wxString& templateID, const wxString& configID);
-		static bool SetGameRootPath(const wxString& templateID, const wxString& configID, const wxString& newPath);
-
-	private:
-		wxString m_ID;
-		wxString m_Name;
-		wxString m_NameShort;
-		KStaticVariablesTable m_Variables;
-		long m_SortOrder = -1;
-
-		wxString m_ConfigID;
-		KxXMLDocument m_ProfileXML;
-		KxINI m_ProfileConfig;
-		KxStringVector m_ConfigsList;
-
-		KLocationsManagerConfig* m_LocationsConfig = NULL;
-		KConfigManagerConfig* m_GameConfig = NULL;
-		KVirtualizationConfig* m_VirtualizationConfig = NULL;
-		KPackageManagerConfig* m_PackageManagerConfig = NULL;
-		KProgramManagerConfig* m_ProgramConfig = NULL;
-		KPluginManagerConfig* m_PluginManagerConfig = NULL;
-		KScreenshotsGalleryConfig* m_ScreenshotsGallery = NULL;
-		KSaveManagerConfig* m_SaveManagerConfig = NULL;
-		KNetworkConfig* m_NetworkConfig = NULL;
-
-		KxFileStream m_ProfileFolderLock;
-
-	private:
-		void InitConfigsList();
-		void CheckConfigFile();
-
-		bool LoadGeneric(const wxString& templatePath);
-		void LoadConfig();
-		void InitVariables();
-		wxString LoadRegistryVariable(const KxXMLNode& node);
-		void DetectArchitecture();
-		template<class T> T* InitModuleConfig(const wxString& name, bool isAlwaysEnabled = false)
-		{
-			const KxXMLNode node = m_ProfileXML.QueryElement("Profile/" + name);
-			if (node.IsOK() && (isAlwaysEnabled || node.GetAttributeBool("Enabled", true)))
-			{
-				return new T(*this, node);
-			}
-			return NULL;
-		}
+		wxString m_Signature;
+		bool m_IsEnabled = false;
 
 	public:
-		KProfile();
-		KProfile(const wxString& templatePath);
-		void Create(const wxString& templatePath, const wxString& configID);
-		virtual ~KProfile();
+		KProfileMod(const KModEntry& modEntry, bool enabled);
+		KProfileMod(const wxString& signature, bool enabled);
 
 	public:
 		bool IsOK() const
 		{
-			return !m_ID.IsEmpty();
+			return !m_Signature.IsEmpty();
 		}
-		bool IsFullProfile() const
+		
+		const wxString& GetSignature() const
 		{
-			return !m_ConfigID.IsEmpty();
+			return m_Signature;
 		}
-		KxINI& GetConfig()
+		bool IsEnabled() const
 		{
-			return m_ProfileConfig;
+			return m_IsEnabled;
 		}
+		
+		KModEntry* GetMod() const;
+};
 
+//////////////////////////////////////////////////////////////////////////
+class KProfilePlugin
+{
+	public:
+		using Vector = std::vector<KProfilePlugin>;
+
+	public:
+		wxString m_PluginName;
+		bool m_IsEnabled = false;
+
+	public:
+		KProfilePlugin(const KPluginEntry& pluginEntry, bool enabled);
+		KProfilePlugin(const wxString& name, bool enabled);
+
+	public:
+		bool IsOK() const
+		{
+			return !m_PluginName.IsEmpty();
+		}
+		
+		const wxString& GetPluginName() const
+		{
+			return m_PluginName;
+		}
+		bool IsEnabled() const
+		{
+			return m_IsEnabled;
+		}
+		
+		KPluginEntry* GetPlugin() const;
+};
+
+//////////////////////////////////////////////////////////////////////////
+class KProfile
+{
+	friend class KGameInstance;
+
+	public:
+		using Vector = std::vector<std::unique_ptr<KProfile>>;
+		using RefVector = std::vector<KProfile*>;
+		using CRefVector = std::vector<const KProfile*>;
+
+		static void SetGlobalPaths(KIVariablesTable& variables);
+		static wxString ProcessID(const wxString& id);
+
+	private:
+		struct FolderNames
+		{
+			constexpr static const auto Overwrites = wxS("Overwrites");
+			constexpr static const auto Saves = wxS("Saves");
+			constexpr static const auto Config = wxS("Config");
+		};
+
+	private:
+		wxString m_ID;
+		bool m_LocalSavesEnabled = false;
+		bool m_LocalConfigEnabled = false;
+
+		KProfileMod::Vector m_Mods;
+		KProfilePlugin::Vector m_Plugins;
+
+	private:
+		wxString GetOrderFile() const;
+		void SetID(const wxString& id);
+
+	public:
+		KProfile(const wxString& id);
+
+	public:
+		wxString GetProfileDir() const;
+		wxString GetProfileRelativePath(const wxString& name) const;
+		wxString GetSavesDir() const;
+		wxString GetConfigDir() const;
+		wxString GetOverwritesDir() const;
+
+		void Load();
+		void Save();
+		void SyncWithCurrentState();
+
+		bool IsCurrent() const;
 		wxString GetID() const
 		{
 			return m_ID;
 		}
-		void SetID(const wxString& value)
+
+		bool IsLocalSavesEnabled() const
 		{
-			m_ID = value;
+			return m_LocalSavesEnabled;
 		}
-		
-		wxString GetName() const
+		void SetLocalSavesEnabled(bool value);
+
+		bool IsLocalConfigEnabled() const
 		{
-			return KAux::StrOr(m_Name, m_NameShort);
+			return m_LocalConfigEnabled;
 		}
-		void SetName(const wxString& value)
+		void SetLocalConfigEnabled(bool value);
+
+		const KProfileMod::Vector& GetMods() const
 		{
-			m_Name = value;
+			return m_Mods;
 		}
-		
-		wxString GetShortName() const
+		KProfileMod::Vector& GetMods()
 		{
-			return KAux::StrOr(m_NameShort, m_Name);
-		}
-		void SetShortName(const wxString& value)
-		{
-			m_NameShort = value;
-		}
-		
-		int GetSortOrder() const
-		{
-			return m_SortOrder;
-		}
-		void SetSortOrder(int value)
-		{
-			m_SortOrder = value;
-		}
-		
-		wxString GetTemplateFile() const
-		{
-			return m_Variables.GetVariable("ProfileTemplateFile");
-		}
-		wxString GetIconPath() const
-		{
-			return wxString::Format("%s\\Icons\\%s.ico", GetTemplatesFolder(), GetID());
-		}
-		wxBitmap GetIcon() const;
-		wxString GetGameRoot() const
-		{
-			return m_Variables.GetVariable(KVAR_GAME_ROOT);
-		}
-		wxString GetVirtualRoot() const
-		{
-			return m_Variables.GetVariable(KVAR_VIRTUAL_GAME_ROOT);
+			return m_Mods;
 		}
 
-		bool IsVirtualModsEnabled() const
+		const KProfilePlugin::Vector& GetPlugins() const
 		{
-			return true;
+			return m_Plugins;
 		}
-		bool IsVirtualConfigEnabled() const
+		KProfilePlugin::Vector& GetPlugins()
 		{
-			return true;
+			return m_Plugins;
 		}
-
-		const KStaticVariablesTable& GetVariables() const
-		{
-			return m_Variables;
-		}
-		KStaticVariablesTable& GetVariables()
-		{
-			return m_Variables;
-		}
-		
-		wxString ExpandVariablesLocally(const wxString& variables) const
-		{
-			return m_Variables.Expand(variables);
-		}
-		wxString ExpandVariables(const wxString& variables) const;
-
-		const wxString& GetConfigID() const
-		{
-			return m_ConfigID;
-		}
-		bool HasConfig(const wxString& configID) const
-		{
-			return std::find(m_ConfigsList.cbegin(), m_ConfigsList.cend(), configID) != m_ConfigsList.cend();
-		}
-		const KxStringVector& GetConfigsList() const
-		{
-			return m_ConfigsList;
-		}
-		wxString GetConfigFilePath()
-		{
-			return GetConfigFilePath(m_ID, m_ConfigID);
-		}
-
-		bool RemoveConfig(const wxString& configID);
-		bool AddConfig(const wxString& configID, const wxString& sBaseConfigID, wxWindow* parent, const KProfileAddConfig& tCopyConfig);
-
-		// Get 'Relative to Current Profile Directory' path.
-		// This concatenates strings in 'elements' using '\' as separator.
-		// Will result in call to 'GetDataPath(GetID(), GetConfigID())' if 'elements' is empty.
-		static wxString GetRCPD(const wxString& templateID, const wxString& configID, const KxStringVector& elements);
-		wxString GetRCPD(const KxStringVector& elements) const;
 };

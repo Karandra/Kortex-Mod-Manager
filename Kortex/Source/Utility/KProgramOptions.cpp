@@ -2,7 +2,7 @@
 #include "KProgramOptions.h"
 #include "UI/KWorkspace.h"
 #include "InstallWizard/KInstallWizardDialog.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KManager.h"
 #include "KApp.h"
 #include <KxFramework/KxDataView.h>
@@ -247,10 +247,10 @@ wxString KProgramOption::GetAttribute(const wxString& name, const wxString& defa
 
 //////////////////////////////////////////////////////////////////////////
 KProgramOptionUI::KProgramOptionUI(KInstallWizardDialog* workspace, const wxString& nameID)
-	:KProgramOption(KPGC_ID_CURRENT_PROFILE, "KInstallWizardDialog", nameID)
+	:KProgramOption(KPGC_ID_CURRENT_INSTANCE, "KInstallWizardDialog", nameID)
 {
 }
 KProgramOptionUI::KProgramOptionUI(KManager* manager, const wxString& nameID)
-	:KProgramOption(KPGC_ID_CURRENT_PROFILE, manager->GetID(), nameID)
+	:KProgramOption(KPGC_ID_CURRENT_INSTANCE, manager->GetID(), nameID)
 {
 }

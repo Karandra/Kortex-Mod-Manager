@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KSaveManagerConfig.h"
-#include "KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "SaveManager/KSaveManager.h"
 #include "SaveManager/KSaveFile.h"
 #include "SaveManager/KSaveFileBethesdaMorrowind.h"
@@ -13,10 +13,10 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KSaveManagerConfig::KSaveManagerConfig(KProfile& profile, const KxXMLNode& node)
+KSaveManagerConfig::KSaveManagerConfig(KGameInstance& profile, const KxXMLNode& node)
 	:m_SaveFileFormat(node.GetAttribute("SaveFileFormat"))
 {
-	m_RelativeLocation = V(node.GetFirstChildElement("RelativeLocation").GetValue());
+	m_Location = node.GetFirstChildElement("Location").GetValue();
 
 	// Load file filters
 	for (KxXMLNode entryNode = node.GetFirstChildElement("FileFilters").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
@@ -68,7 +68,16 @@ KSaveFile* KSaveManagerConfig::QuerySaveFile(const wxString& fullPath) const
 	}
 	if (GetSaveFileFormat() == "Sacred2")
 	{
-		//return new KSMSaveFileSacred2(fullPath);
+		//return new KSaveFileSacred2(fullPath);
 	}
 	return NULL;
+}
+
+wxString KSaveManagerConfig::GetSaveFileFormat() const
+{
+	return m_SaveFileFormat;
+}
+wxString KSaveManagerConfig::GetLocation() const
+{
+	return V(m_Location);
 }

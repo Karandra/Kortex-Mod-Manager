@@ -10,7 +10,7 @@
 #include "KPackageProjectComponents.h"
 #include "PackageManager/KPackageManager.h"
 #include "ModManager/KModManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KAux.h"
 
 static void WriteKPPCFlagEntryArray(const KPPCFlagEntryArray& array, KxXMLNode& arrayNode, bool isRequired)
@@ -308,7 +308,7 @@ KxXMLNode KPackageProjectSerializerKMP::WriteBase()
 	baseNode.SetAttribute("ID", m_ProjectSave->GetModID());
 
 	KxXMLNode targetProfileNode = baseNode.NewElement("TargetProfile");
-	targetProfileNode.SetAttribute("ID", KApp::Get().GetCurrentTemplateID());
+	targetProfileNode.SetAttribute("ID", KApp::Get().GetCurrentGameID());
 
 	return baseNode;
 }

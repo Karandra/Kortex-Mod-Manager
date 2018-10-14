@@ -6,7 +6,6 @@
 #include "KMandatoryModEntry.h"
 #include "KModTagsManager.h"
 #include "KModManagerDispatcher.h"
-#include "KModListManager.h"
 #include "KMirroredVirtualFolder.h"
 #include "KNetworkConstants.h"
 #include "KEvents.h"
@@ -57,10 +56,6 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		{
 			return Get().m_Dispatcher;
 		}
-		static KModListManager& GetListManager()
-		{
-			return Get().m_ModListManager;
-		}
 
 	public:
 		/*
@@ -79,19 +74,18 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 	private:
 		KProgramOptionUI m_Options;
 
-		KModEntryArray m_ModEntries;
+		KModEntry::Vector m_ModEntries;
 		MandatotyModEntriesVector m_ModEntry_Mandatory;
 		KFixedModEntry m_ModEntry_BaseGame;
 		KFixedModEntry m_ModEntry_WriteTarget;
 		
 		KModTagsManager m_TagManager;
-		KModListManager m_ModListManager;
 		KModManagerDispatcher m_Dispatcher;
 		bool m_IsMounted = false;
 		KxProgressDialog* m_MountStatusDialog = NULL;
 
 	private:
-		void SortEntries();
+		void DoResortMods(const KProfile& profile);
 		void SetMounted(bool value)
 		{
 			m_IsMounted = value;
@@ -108,17 +102,11 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		void ReportNonEmptyMountPoint(const wxString& folderPath);
 
 	private:
-		void OnInit();
+		void OnInit() override;
 
 		void OnModFilesChanged(KModEvent& event);
-		void OnModToggled(KModEvent& event);
-		void OnModsReordered(KModEvent& event);
-		
 		void OnModInstalled(KModEvent& event);
 		void OnModUninstalled(KModEvent& event);
-
-		void OnModListSelected(KModListEvent& event);
-		void OnModListChanged(KModListEvent& event);
 
 	public:
 		KModManager(KWorkspace* workspace);
@@ -144,15 +132,15 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 			return m_Options;
 		}
 
-		const KModEntryArray& GetEntries() const
+		const KModEntry::Vector& GetEntries() const
 		{
 			return m_ModEntries;
 		}
-		KModEntryArray& GetEntries()
+		KModEntry::Vector& GetEntries()
 		{
 			return m_ModEntries;
 		}
-		KModEntryArray GetAllEntries(bool includeWriteTarget = false);
+		KModEntry::Vector GetAllEntries(bool includeWriteTarget = false);
 
 		MandatotyModEntriesVector& GetModEntry_Mandatory()
 		{
@@ -169,12 +157,14 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 
 		virtual void Load() override;
 		virtual void Save() const override;
-		bool ChangeModListAndResort(const wxString& newModListID);
+
+		void ResortMods(const KProfile& profile);
+		void ResortMods();
 		
-		KModEntry* FindModByID(const wxString& modID) const;
-		KModEntry* FindModByName(const wxString& modName) const;
-		KModEntry* FindModBySignature(const wxString& signature) const;
-		KModEntry* FindModByNetworkModID(KNetworkProviderID providerID, KNetworkModID id) const;
+		KModEntry* FindModByID(const wxString& modID, intptr_t* index = NULL) const;
+		KModEntry* FindModByName(const wxString& modName, intptr_t* index = NULL) const;
+		KModEntry* FindModBySignature(const wxString& signature, intptr_t* index = NULL) const;
+		KModEntry* FindModByNetworkModID(KNetworkProviderID providerID, KNetworkModID id, intptr_t* index = NULL) const;
 		
 		bool IsModActive(const wxString& modID) const;
 		void UninstallMod(KModEntry* entry, wxWindow* window = NULL)
@@ -187,8 +177,8 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		}
 		bool ChangeModID(KModEntry* entry, const wxString& newID);
 
-		intptr_t GetModIndex(const KModEntry* modEntry) const;
-		bool MoveModsIntoThis(const KModEntryArray& entriesToMove, const KModEntry* anchor, KModManagerModsMoveType moveMode = KMM_MOVEMOD_AFTER);
+		intptr_t GetModOrderIndex(const KModEntry* modEntry) const;
+		bool MoveModsIntoThis(const KModEntry::Vector& entriesToMove, const KModEntry* anchor, KModManagerModsMoveType moveMode = KMM_MOVEMOD_AFTER);
 
 		wxString GetVirtualGameRoot() const;
 		KxProgressDialog* GetMountStatusDialog() const

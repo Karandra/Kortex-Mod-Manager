@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "KLabeledValue.h"
 #include <KxFramework/KxSingleton.h>
-class KProfile;
+class KGameInstance;
 
 class KLocationsManagerConfig: public KxSingletonPtr<KLocationsManagerConfig>
 {
@@ -10,7 +10,7 @@ class KLocationsManagerConfig: public KxSingletonPtr<KLocationsManagerConfig>
 		KLabeledValueArray m_Locations;
 
 	public:
-		KLocationsManagerConfig(KProfile& profile, const KxXMLNode& node);
+		KLocationsManagerConfig(KGameInstance& profile, const KxXMLNode& node);
 		~KLocationsManagerConfig();
 
 	public:

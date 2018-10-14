@@ -47,8 +47,8 @@ class KModWorkspace: public KWorkspace, public KxSingletonPtr<KModWorkspace>
 		/* ToolBar */
 		KxAuiToolBar* m_ModsToolBar = NULL;
 
-		KxComboBox* m_ToolBar_ModList = NULL;
-		KxAuiToolBarItem* m_ToolBar_ManageModList = NULL;
+		KxComboBox* m_ToolBar_Profiles = NULL;
+		KxAuiToolBarItem* m_ToolBar_EditProfiles = NULL;
 
 		KxAuiToolBarItem* m_ToolBar_AddMod = NULL;
 		KxMenu* m_ToolBar_AddModMenu = NULL;
@@ -119,6 +119,10 @@ class KModWorkspace: public KWorkspace, public KxSingletonPtr<KModWorkspace>
 	private:
 		void OnMountButton(wxCommandEvent& event);
 		bool ShowChangeModIDDialog(KModEntry* entry);
+
+		void ProcessSelectProfile(const wxString& newProfileID);
+		void OnSelectProfile(wxCommandEvent& event);
+		void OnShowProfileEditor(KxAuiToolBarEvent& event);
 		
 		void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 		void OnToolsMenu(KxAuiToolBarEvent& event);

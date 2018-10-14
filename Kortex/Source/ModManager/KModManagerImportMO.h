@@ -12,8 +12,8 @@ class KModManagerImportMO: public KModManagerImport
 		wxString m_DownloadsDirectory;
 		KxINI m_Options;
 
-		KProfileID m_TargetProfile;
-		const KProfile* m_TargetProfileTemplate = NULL;
+		KGameID m_TargetProfile;
+		const KGameInstance* m_TargetProfileTemplate = NULL;
 		wxString m_CurrentModList;
 		wxString m_ModManagerName;
 		bool m_CanImport = false;
@@ -23,7 +23,7 @@ class KModManagerImportMO: public KModManagerImport
 		wxString& ProcessFilePath(wxString& path) const;
 		wxString& ProcessDescription(wxString& path) const;
 
-		KProfileID GetGameID(const wxString& name);
+		KGameID GetGameID(const wxString& name);
 		void LoadOptions();
 		wxString GetDataFolderName() const;
 		wxString GetProfileDirectory() const;
@@ -40,7 +40,7 @@ class KModManagerImportMO: public KModManagerImport
 		virtual void Import(KOperationWithProgressDialogBase* context) override;
 		
 		virtual bool CanImport() const override;
-		virtual KProfileID GetTargetProfileID() const override
+		virtual KGameID GetTargetProfileID() const override
 		{
 			return m_TargetProfile;
 		}

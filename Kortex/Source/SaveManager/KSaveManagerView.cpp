@@ -2,7 +2,7 @@
 #include "KSaveManagerView.h"
 #include "KSaveManager.h"
 #include "KSaveManagerWorkspace.h"
-#include "Profile/KSaveManagerConfig.h"
+#include "GameInstance/Config/KSaveManagerConfig.h"
 #include "UI/KImageViewerDialog.h"
 #include "KApp.h"
 #include "KAux.h"

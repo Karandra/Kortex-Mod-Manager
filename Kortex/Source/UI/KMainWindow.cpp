@@ -4,14 +4,14 @@
 #include "ModManager/KModManager.h"
 #include "Network/KNetwork.h"
 #include "DownloadManager/KDownloadManager.h"
-#include "KProfileSelectionDialog.h"
+#include "KInstanceSelectionDialog.h"
 #include "KAboutDialog.h"
 #include "KThemeManager.h"
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
 #include "Events/KVFSEvent.h"
-#include "Profile/KProfile.h"
-#include "Profile/KLocationsManagerConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KLocationsManagerConfig.h"
 #include "KPluggableManager.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -222,8 +222,8 @@ void KMainWindow::CreateMainWorkspaces()
 	// Create toolbar button and assign menu to it
 	m_ToolBar->AddSeparator();
 
-	KxAuiToolBarItem* toolBarButton = CreateToolBarButton(m_ToolBar, V("$(Name)"));
-	wxImage gameIcon = KProfile::GetCurrent()->GetIcon().ConvertToImage();
+	KxAuiToolBarItem* toolBarButton = CreateToolBarButton(m_ToolBar, KVAR_EXP(KVAR_GAME_NAME));
+	wxImage gameIcon = KGameInstance::GetActive()->GetIcon().ConvertToImage();
 	toolBarButton->SetBitmap(gameIcon.Rescale(m_ToolBar->GetToolBitmapSize().GetWidth(), m_ToolBar->GetToolBitmapSize().GetHeight(), wxIMAGE_QUALITY_HIGH));
 
 	toolBarButton->AssignDropdownMenu(m_ManagersMenu);
@@ -371,7 +371,7 @@ void KMainWindow::OnChangeProfile(KxMenuEvent& event)
 		return;
 	}
 
-	if (KApp::Get().ShowChageProfileDialog())
+	if (KApp::Get().ShowChageInstanceDialog())
 	{
 		Close(true);
 	}

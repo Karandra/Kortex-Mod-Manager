@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KPluginManagerConfig.h"
-#include "KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "PluginManager/KPluginManager.h"
 #include "PluginManager/LOOT API/KLootAPI.h"
 #include "KApp.h"
@@ -77,7 +77,7 @@ wxString KPluginManagerConfigSortingToolEntry::GetArguments() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KPluginManagerConfigLootAPI::KPluginManagerConfigLootAPI(KProfile& profile, const KxXMLNode& node)
+KPluginManagerConfigLootAPI::KPluginManagerConfigLootAPI(KGameInstance& profile, const KxXMLNode& node)
 {
 	#if _WIN64
 	m_Librray.Load(KApp::Get().GetDataFolder() + "\\PluginManager\\LOOT API x64\\loot_api.dll");
@@ -115,7 +115,7 @@ wxString KPluginManagerConfigLootAPI::GetLocalGamePath() const
 }
 
 //////////////////////////////////////////////////////////////////////////
-KPluginManagerConfig::KPluginManagerConfig(KProfile& profile, const KxXMLNode& node)
+KPluginManagerConfig::KPluginManagerConfig(KGameInstance& profile, const KxXMLNode& node)
 	:m_InterfaceName(node.GetAttribute("InterfaceName")),
 	m_PluginFileFormat(node.GetAttribute("PluginFileFormat"))
 {
@@ -143,7 +143,7 @@ KPluginManagerConfig::KPluginManagerConfig(KProfile& profile, const KxXMLNode& n
 	}
 
 	// LootAPI
-	KxXMLNode lootAPINode = node.GetFirstChildElement("LOOTAPI");
+	KxXMLNode lootAPINode = node.GetFirstChildElement("LootAPI");
 	if (lootAPINode.IsOK())
 	{
 		m_LootAPI = std::make_unique<LootAPI>(profile, lootAPINode);

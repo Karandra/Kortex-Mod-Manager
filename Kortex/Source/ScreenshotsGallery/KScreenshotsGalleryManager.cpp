@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "KScreenshotsGalleryManager.h"
 #include "KScreenshotsGalleryWorkspace.h"
-#include "Profile/KProfile.h"
-#include "Profile/KScreenshotsGalleryConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KScreenshotsGalleryConfig.h"
 #include "KApp.h"
 
 const KxStringVector& KScreenshotsGalleryManager::GetSupportedExtensions()

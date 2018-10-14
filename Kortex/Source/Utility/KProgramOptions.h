@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Profile/KConfigManagerConfig.h"
+#include "GameInstance/Config/KConfigManagerConfig.h"
 #include <KxFramework/KxXDocumentNode.h>
 class KxDataViewCtrl;
 class KxSplitterWindow;
@@ -209,16 +209,16 @@ class KProgramOptionUI: public KProgramOption
 {
 	public:
 		KProgramOptionUI(const wxString& sSectionID = wxEmptyString, const wxString& nameID = wxEmptyString)
-			:KProgramOption(KPGC_ID_CURRENT_PROFILE, sSectionID, nameID)
+			:KProgramOption(KPGC_ID_CURRENT_INSTANCE, sSectionID, nameID)
 		{
 		}
 		KProgramOptionUI(const wxString& nameID)
-			:KProgramOption(KPGC_ID_CURRENT_PROFILE, wxEmptyString, nameID)
+			:KProgramOption(KPGC_ID_CURRENT_INSTANCE, wxEmptyString, nameID)
 		{
 		}
 
 		KProgramOptionUI(KWorkspace* workspace, const wxString& nameID = wxEmptyString)
-			:KProgramOption(workspace, KPGC_ID_CURRENT_PROFILE, nameID)
+			:KProgramOption(workspace, KPGC_ID_CURRENT_INSTANCE, nameID)
 		{
 		}
 		KProgramOptionUI(KInstallWizardDialog* workspace, const wxString& nameID = wxEmptyString);

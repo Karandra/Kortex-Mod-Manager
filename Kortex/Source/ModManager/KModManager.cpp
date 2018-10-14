@@ -6,7 +6,8 @@
 #include "KModEntry.h"
 #include "KVirtualGameFolderWorkspace.h"
 #include "Profile/KProfile.h"
-#include "Profile/KVirtualizationConfig.h"
+#include "GameInstance/KGameInstance.h"
+#include "GameInstance/Config/KVirtualizationConfig.h"
 #include "VFS/KVFSService.h"
 #include "VFS/KVFSConvergence.h"
 #include "VFS/KVFSMirror.h"
@@ -30,52 +31,54 @@
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
 
-wxString KModManager::GetLocation(KModManagerLocation nLocation, const wxString& signature)
+wxString KModManager::GetLocation(KModManagerLocation locationIndex, const wxString& signature)
 {
-	const KProfile* profile = KApp::Get().GetCurrentProfile();
-	switch (nLocation)
+	const KGameInstance* instance = KGameInstance::GetActive();
+	switch (locationIndex)
 	{
 		case KMM_LOCATION_MODS_ORDER:
 		{
-			return profile->GetRCPD({"ModOrder.xml"});
+			return instance->GetInstanceRelativePath(wxS("ModOrder.xml"));
 		}
 		case KMM_LOCATION_MODS_FOLDER:
 		{
-			return profile->GetVariables().GetVariable(KVAR_MODS_ROOT);
+			return instance->GetVariables().GetVariable(KVAR_MODS_DIR);
 		}
 		case KMM_LOCATION_MOD_ROOT:
 		{
-			return profile->GetVariables().GetVariable(KVAR_MODS_ROOT) + wxS('\\') + signature;
+			return instance->GetVariables().GetVariable(KVAR_MODS_DIR) + wxS('\\') + signature;
 		}
 		default:
 		{
-			wxLogWarning("Invalid location index in KModManager::GetLocation(nLocation = %d)", (int)nLocation);
+			wxLogWarning("Invalid location index in KModManager::GetLocation(nLocation = %d)", (int)locationIndex);
 			break;
 		}
 	};
 	return wxEmptyString;
 }
 
-void KModManager::SortEntries()
+void KModManager::DoResortMods(const KProfile& profile)
 {
-	size_t index = 0;
-	for (const KModListMod& listEntry: m_ModListManager.GetCurrentList().GetMods())
+	size_t modIndex = 0;
+	for (const KProfileMod& listEntry: profile.GetMods())
 	{
-		if (index < m_ModEntries.size())
+		if (modIndex < m_ModEntries.size())
 		{
-			int64_t currentElement = GetModIndex(listEntry.GetMod());
+			intptr_t currentElement = -1;
+			FindModBySignature(listEntry.GetSignature(), &currentElement);
+
 			if (currentElement != -1)
 			{
 				m_ModEntries[currentElement]->SetEnabled(listEntry.IsEnabled());
-				std::swap(m_ModEntries[currentElement], m_ModEntries[index]);
+				std::swap(m_ModEntries[currentElement], m_ModEntries[modIndex]);
 			}
-			index++;
+			modIndex++;
 		}
 	}
 
-	if (KPluginManagerWorkspace* pluginsWorkspace = KPluginManagerWorkspace::GetInstance())
+	if (KModManagerDispatcher::HasInstance())
 	{
-		pluginsWorkspace->ScheduleReload();
+		KModManagerDispatcher::GetInstance()->InvalidateVirtualTree();
 	}
 }
 void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* window)
@@ -219,8 +222,29 @@ void KModManager::ReportNonEmptyMountPoint(const wxString& folderPath)
 
 void KModManager::OnInit()
 {
+	// Mandatory locations
+	for (const KVirtualizationMandatoryEntry& mandatoryEntry: KVirtualizationConfig::GetInstance()->GetMandatoryLocations())
+	{
+		int orderIndex = m_ModEntry_BaseGame.GetOrderIndex() + m_ModEntry_Mandatory.size() + 1;
+		KFixedModEntry& entry = m_ModEntry_Mandatory.emplace_back(orderIndex);
+
+		entry.SetID(mandatoryEntry.GetName());
+		entry.SetEnabled(true);
+		entry.SetLinkedModLocation(mandatoryEntry.GetSource());
+	}
+
+	// Base game
+	m_ModEntry_BaseGame.SetID(KVAR_GAME_ID);
+	m_ModEntry_BaseGame.SetName(KVAR_EXP(KVAR_GAME_NAME));
+	m_ModEntry_BaseGame.SetEnabled(true);
+	m_ModEntry_BaseGame.SetLinkedModLocation(KVAR_EXP(KVAR_ACTUAL_GAME_DIR));
+
+	// Write target
+	m_ModEntry_WriteTarget.SetID(KVAR_OVERWRITES_DIR);
+	m_ModEntry_WriteTarget.SetName(T("ModManager.WriteTargetName"));
+	m_ModEntry_WriteTarget.SetEnabled(true);
+
 	m_TagManager.OnInit();
-	m_ModListManager.OnInit();
 	Load();
 }
 
@@ -234,81 +258,27 @@ void KModManager::OnModFilesChanged(KModEvent& event)
 	{
 		mod->UpdateFileTree();
 	}
-
-	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
-	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
 }
-void KModManager::OnModToggled(KModEvent& event)
-{
-	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
-	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
-}
-void KModManager::OnModsReordered(KModEvent& event)
-{
-	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
-	KWorkspace::ScheduleReloadOf<KModWorkspace>();
-	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
-}
-
 void KModManager::OnModInstalled(KModEvent& event)
 {
 	Load();
+	ResortMods();
 	KWorkspace::ScheduleReloadOf<KModWorkspace>();
 }
 void KModManager::OnModUninstalled(KModEvent& event)
 {
 	Load();
+	ResortMods();
 	KWorkspace::ScheduleReloadOf<KModWorkspace>();
-}
-
-void KModManager::OnModListSelected(KModListEvent& event)
-{
-	Load();
-
-	KWorkspace::ScheduleReloadOf<KVirtualGameFolderWorkspace>();
-	KWorkspace::ScheduleReloadOf<KModWorkspace>();
-	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
-}
-void KModManager::OnModListChanged(KModListEvent& event)
-{
 }
 
 KModManager::KModManager(KWorkspace* workspace)
 	:m_Options(this, "General"),
 	m_ModEntry_BaseGame(std::numeric_limits<int>::min()), m_ModEntry_WriteTarget(std::numeric_limits<int>::max())
 {
-	// Mandatory locations
-	for (const KVirtualizationMandatoryEntry& mandatoryEntry: KVirtualizationConfig::GetInstance()->GetMandatoryLocations())
-	{
-		int orderIndex = m_ModEntry_BaseGame.GetOrderIndex() + m_ModEntry_Mandatory.size() + 1;
-		KFixedModEntry& entry = m_ModEntry_Mandatory.emplace_back(orderIndex);
-
-		entry.SetID(mandatoryEntry.GetName());
-		entry.SetEnabled(true);
-		entry.SetLinkedModLocation(mandatoryEntry.GetSource());
-	}
-
-	// Base game
-	m_ModEntry_BaseGame.SetID(V("$(ID)"));
-	m_ModEntry_BaseGame.SetName(V("$(Name)"));
-	m_ModEntry_BaseGame.SetEnabled(true);
-	m_ModEntry_BaseGame.SetLinkedModLocation(V(KVAR(KVAR_GAME_ROOT)));
-
-	// Write target
-	m_ModEntry_WriteTarget.SetID(KVAR_OVERWRITES_ROOT);
-	m_ModEntry_WriteTarget.SetName(T("ModManager.WriteTargetName"));
-	m_ModEntry_WriteTarget.SetEnabled(true);
-
-	// Events
 	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KModManager::OnModFilesChanged, this);
-	KEvent::Bind(KEVT_MOD_TOGGLED, &KModManager::OnModToggled, this);
-	KEvent::Bind(KEVT_MODS_REORDERED, &KModManager::OnModsReordered, this);
-
 	KEvent::Bind(KEVT_MOD_INSTALLED, &KModManager::OnModInstalled, this);
 	KEvent::Bind(KEVT_MOD_UNINSTALLED, &KModManager::OnModUninstalled, this);
-
-	KEvent::Bind(KEVT_MODLIST_SELECTED, &KModManager::OnModListSelected, this);
-	KEvent::Bind(KEVT_MODLIST_CHANGED, &KModManager::OnModListChanged, this);
 }
 void KModManager::Clear()
 {
@@ -317,12 +287,9 @@ void KModManager::Clear()
 		delete entry;
 	}
 	m_ModEntries.clear();
-	m_ModListManager.ClearLists();
 }
 KModManager::~KModManager()
 {
-	m_ModListManager.SaveLists();
-
 	DestroyMountStatusDialog();
 	Clear();
 }
@@ -344,9 +311,9 @@ KWorkspace* KModManager::GetWorkspace() const
 	return KModWorkspace::GetInstance();
 }
 
-KModEntryArray KModManager::GetAllEntries(bool includeWriteTarget)
+KModEntry::Vector KModManager::GetAllEntries(bool includeWriteTarget)
 {
-	KModEntryArray entries;
+	KModEntry::Vector entries;
 	entries.reserve(m_ModEntries.size() + m_ModEntry_Mandatory.size() + 2);
 
 	// Add mandatory virtual folders
@@ -403,72 +370,99 @@ void KModManager::Load()
 	{
 		entry->UpdateFileTree();
 	}
-	m_ModListManager.LoadLists();
-	SortEntries();
+
+	if (KModManagerDispatcher::HasInstance())
+	{
+		KModManagerDispatcher::GetInstance()->InvalidateVirtualTree();
+	}
+}
+void KModManager::Save() const
+{
+	KProfile* profile = KGameInstance::GetCurrentProfile();
+	if (profile)
+	{
+		profile->SyncWithCurrentState();
+		profile->Save();
+	}
+}
+
+void KModManager::ResortMods()
+{
+	ResortMods(*KGameInstance::GetCurrentProfile());
+}
+void KModManager::ResortMods(const KProfile& profile)
+{
+	DoResortMods(profile);
 
 	// Causes rebuild of virtual file tree
 	KModEvent(KEVT_MOD_FILES_CHANGED).Send();
 }
-void KModManager::Save() const
-{
-	const_cast<KModListManager&>(m_ModListManager).SyncCurrentList();
-	const_cast<KModListManager&>(m_ModListManager).SaveLists();
-}
-bool KModManager::ChangeModListAndResort(const wxString& newModListID)
-{
-	if (m_ModListManager.SetCurrentListID(newModListID))
-	{
-		SortEntries();
-		return true;
-	}
-	return false;
-}
 
-KModEntry* KModManager::FindModByID(const wxString& modID) const
+KModEntry* KModManager::FindModByID(const wxString& modID, intptr_t* index) const
 {
+	intptr_t i = 0;
 	for (KModEntry* entry: m_ModEntries)
 	{
 		if (entry->GetID() == modID)
 		{
+			KxUtility::SetIfNotNull(index, i);
 			return entry;
 		}
+		i++;
 	}
+
+	KxUtility::SetIfNotNull(index, -1);
 	return NULL;
 }
-KModEntry* KModManager::FindModByName(const wxString& modName) const
+KModEntry* KModManager::FindModByName(const wxString& modName, intptr_t* index) const
 {
+	intptr_t i = 0;
 	for (KModEntry* entry: m_ModEntries)
 	{
 		if (entry->GetName() == modName)
 		{
+			KxUtility::SetIfNotNull(index, i);
 			return entry;
 		}
+		i++;
 	}
+
+	KxUtility::SetIfNotNull(index, -1);
 	return NULL;
 }
-KModEntry* KModManager::FindModBySignature(const wxString& signature) const
+KModEntry* KModManager::FindModBySignature(const wxString& signature, intptr_t* index) const
 {
+	intptr_t i = 0;
 	for (KModEntry* entry: m_ModEntries)
 	{
 		if (entry->GetSignature() == signature)
 		{
+			KxUtility::SetIfNotNull(index, i);
 			return entry;
 		}
+		i++;
 	}
+
+	KxUtility::SetIfNotNull(index, -1);
 	return NULL;
 }
-KModEntry* KModManager::FindModByNetworkModID(KNetworkProviderID providerID, KNetworkModID id) const
+KModEntry* KModManager::FindModByNetworkModID(KNetworkProviderID providerID, KNetworkModID id, intptr_t* index) const
 {
 	if (KNetwork::GetInstance()->IsValidProviderID(providerID))
 	{
+		intptr_t i = 0;
 		for (KModEntry* entry: m_ModEntries)
 		{
 			if (entry->GetFixedWebSites()[providerID] == id)
 			{
+				KxUtility::SetIfNotNull(index, i);
 				return entry;
 			}
+			i++;
 		}
 	}
+
+	KxUtility::SetIfNotNull(index, -1);
 	return NULL;
 }
 
@@ -505,7 +499,7 @@ bool KModManager::ChangeModID(KModEntry* entry, const wxString& newID)
 	return false;
 }
 
-intptr_t KModManager::GetModIndex(const KModEntry* modEntry) const
+intptr_t KModManager::GetModOrderIndex(const KModEntry* modEntry) const
 {
 	auto it = std::find(m_ModEntries.begin(), m_ModEntries.end(), modEntry);
 	if (it != m_ModEntries.end())
@@ -514,7 +508,7 @@ intptr_t KModManager::GetModIndex(const KModEntry* modEntry) const
 	}
 	return -1;
 }
-bool KModManager::MoveModsIntoThis(const KModEntryArray& entriesToMove, const KModEntry* anchor, KModManagerModsMoveType moveMode)
+bool KModManager::MoveModsIntoThis(const KModEntry::Vector& entriesToMove, const KModEntry* anchor, KModManagerModsMoveType moveMode)
 {
 	// Check if anchor is not one of moved elements
 	if (std::find(entriesToMove.begin(), entriesToMove.end(), anchor) != entriesToMove.end())
@@ -563,7 +557,7 @@ bool KModManager::MoveModsIntoThis(const KModEntryArray& entriesToMove, const KM
 
 wxString KModManager::GetVirtualGameRoot() const
 {
-	return V(KVAR(KVAR_VIRTUAL_GAME_ROOT));
+	return V(KVAR(KVAR_VIRTUAL_GAME_DIR));
 }
 
 void KModManager::MountVFS()

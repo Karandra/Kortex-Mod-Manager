@@ -6,7 +6,7 @@
 #include "Network/KNetworkProviderNexus.h"
 #include "NotificationCenter/KNotificationCenter.h"
 #include "UI/KMainWindow.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KAux.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxDataView.h>
@@ -33,7 +33,7 @@ namespace
 	}
 }
 
-KProfileID KDownloadManager::TranslateNxmGameID(const wxString& id)
+KGameID KDownloadManager::TranslateNxmGameID(const wxString& id)
 {
 	const wxString idLower = KxString::ToLower(id);
 	if (!idLower.IsEmpty())
@@ -41,36 +41,36 @@ KProfileID KDownloadManager::TranslateNxmGameID(const wxString& id)
 		// TES
 		if (idLower == "morrowind")
 		{
-			return KProfileIDs::Morrowind;
+			return KGameIDs::Morrowind;
 		}
 		if (idLower == "oblivion")
 		{
-			return KProfileIDs::Oblivion;
+			return KGameIDs::Oblivion;
 		}
 		if (idLower == "skyrim")
 		{
-			return KProfileIDs::Skyrim;
+			return KGameIDs::Skyrim;
 		}
 		if (idLower == "skyrimse")
 		{
-			return KProfileIDs::SkyrimSE;
+			return KGameIDs::SkyrimSE;
 		}
 
 		// Fallout
 		if (idLower == "fallout3")
 		{
-			return KProfileIDs::Fallout3;
+			return KGameIDs::Fallout3;
 		}
 		if (idLower == "falloutnv")
 		{
-			return KProfileIDs::FalloutNV;
+			return KGameIDs::FalloutNV;
 		}
 		if (idLower == "fallout4")
 		{
-			return KProfileIDs::Fallout4;
+			return KGameIDs::Fallout4;
 		}
 	}
-	return KProfileIDs::NullProfileID;
+	return KGameIDs::NullGameID;
 }
 bool KDownloadManager::CheckCmdLineArgs(const wxCmdLineParser& args, wxString& link)
 {
@@ -246,7 +246,7 @@ wxString KDownloadManager::GetDownloadsLocation() const
 	wxString location = m_Options.GetAttribute("DownloadsLocation");
 	if (location.IsEmpty())
 	{
-		location = KProfile::GetCurrent()->GetRCPD({"Downloads"});
+		location = KGameInstance::GetActive()->GetInstanceRelativePath("Downloads");
 		KxFile(location).CreateFolder();
 	}
 	return location;
@@ -329,7 +329,7 @@ bool KDownloadManager::RemoveDownload(KDownloadEntry& download)
 bool KDownloadManager::QueueDownload(const KNetworkProvider::DownloadInfo& downloadInfo,
 									 const KNetworkProvider::FileInfo& fileInfo,
 									 const KNetworkProvider* provider,
-									 const KProfileID& id
+									 const KGameID& id
 )
 {
 	if (downloadInfo.IsOK() && fileInfo.IsOK())
@@ -368,7 +368,7 @@ bool KDownloadManager::QueueNXM(const wxString& link)
 	wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+))", wxRE_EXTENDED|wxRE_ADVANCED|wxRE_ICASE);
 	if (reg.Matches(link))
 	{
-		KProfileID game = TranslateNxmGameID(reg.GetMatch(link, 1));
+		KGameID game = TranslateNxmGameID(reg.GetMatch(link, 1));
 		int64_t modID = -1;
 		int64_t fileID = -1;
 		reg.GetMatch(link, 2).ToLongLong(&modID);

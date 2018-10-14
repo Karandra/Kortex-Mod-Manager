@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include <KxFramework/KxSingleton.h>
 class KxXMLNode;
-class KProfile;
+class KGameInstance;
 enum KCMTypeDetector;
 
 enum KPGCFormat
@@ -25,7 +25,7 @@ enum KPGCFileID: int
 	KPGC_ID_ENB_LOCAL = -1000,
 	KPGC_ID_ENB_SERIES = -1001,
 	
-	KPGC_ID_CURRENT_PROFILE = INT_MAX - 1,
+	KPGC_ID_CURRENT_INSTANCE = INT_MAX - 1,
 	KPGC_ID_APP = INT_MAX,
 };
 
@@ -51,7 +51,7 @@ class KConfigManagerConfigEntry
 		}
 		bool IsGameConfigID() const
 		{
-			return IsOK() && m_ID != KPGC_ID_APP && m_ID != KPGC_ID_CURRENT_PROFILE;
+			return IsOK() && m_ID != KPGC_ID_APP && m_ID != KPGC_ID_CURRENT_INSTANCE;
 		}
 		bool IsENBID() const
 		{
@@ -98,7 +98,7 @@ class KConfigManagerConfig: public KxSingletonPtr<KConfigManagerConfig>
 		std::vector<KConfigManagerConfigEntry> m_Entries;
 
 	public:
-		KConfigManagerConfig(KProfile& profile, const KxXMLNode& node);
+		KConfigManagerConfig(KGameInstance& profile, const KxXMLNode& node);
 
 	public:
 		bool IsENBEnabled() const

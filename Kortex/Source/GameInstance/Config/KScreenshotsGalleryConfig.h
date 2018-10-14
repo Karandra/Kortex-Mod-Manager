@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxSingleton.h>
-class KProfile;
+class KGameInstance;
 class KScreenshotsGalleryManager;
 
 class KScreenshotsGalleryConfig: public KxSingletonPtr<KScreenshotsGalleryConfig>
@@ -11,7 +11,7 @@ class KScreenshotsGalleryConfig: public KxSingletonPtr<KScreenshotsGalleryConfig
 		KxStringVector m_Locations;
 
 	public:
-		KScreenshotsGalleryConfig(KProfile& profile, const KxXMLNode& node);
+		KScreenshotsGalleryConfig(KGameInstance& profile, const KxXMLNode& node);
 		~KScreenshotsGalleryConfig();
 
 	public:

@@ -2,7 +2,7 @@
 #include "KGameConfigWorkspace.h"
 #include "KGameConfigWorkspaceController.h"
 #include "ConfigManager/KConfigManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KApp.h"
 
 KGameConfigWorkspace::KGameConfigWorkspace(KMainWindow* mainWindow)

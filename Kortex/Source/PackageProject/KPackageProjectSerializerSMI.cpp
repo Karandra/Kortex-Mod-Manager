@@ -10,7 +10,7 @@
 #include "KPackageProjectComponents.h"
 #include "PackageManager/KPackageManager.h"
 #include "ModManager/KModManager.h"
-#include "Profile/KProfile.h"
+#include "GameInstance/KGameInstance.h"
 #include "KVariablesDatabase.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -53,7 +53,7 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 
 	if (oldVariableFixed == "InstallPath" || oldVariableFixed == "Root")
 	{
-		return KVAR(KVAR_VIRTUAL_GAME_ROOT);
+		return KVAR(KVAR_VIRTUAL_GAME_DIR);
 	}
 
 	if (oldVariableFixed == "Data" || oldVariableFixed == "DataFilesPath")
@@ -61,17 +61,17 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 		const wxString& id = m_Project->GetTargetProfileID();
 		if (id == "Morrowind")
 		{
-			return V(KVAR(KVAR_VIRTUAL_GAME_ROOT) "\\Data Files");
+			return V(KVAR(KVAR_VIRTUAL_GAME_DIR) "\\Data Files");
 		}
 		else
 		{
-			return V(KVAR(KVAR_VIRTUAL_GAME_ROOT) "\\Data");
+			return V(KVAR(KVAR_VIRTUAL_GAME_DIR) "\\Data");
 		}
 	}
 
 	if (oldVariableFixed == "SettingsPath")
 	{
-		return KVAR(KVAR_CONFIG_ROOT_LOCAL);
+		return KVAR(KVAR_CONFIG_DIR);
 	}
 
 	if (oldVariableFixed == "SavesPath")

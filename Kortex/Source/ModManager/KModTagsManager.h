@@ -3,18 +3,32 @@
 #include "KLabeledValue.h"
 class KModManager;
 class KModEntry;
-class KProfile;
+class KGameInstance;
 
 class KModTag: public KLabeledValue
 {
 	private:
+		int m_NexusID = -1;
 		bool m_IsSystemTag = false;
 
 	public:
 		KModTag(const wxString& value, const wxString& label = wxEmptyString, bool isSystemTag = false);
-		~KModTag();
+		virtual ~KModTag();
 
 	public:
+		bool HasNexusID() const
+		{
+			return m_NexusID >= 0;
+		}
+		int GetNexusID() const
+		{
+			return m_NexusID;
+		}
+		void SetNexusID(int value)
+		{
+			m_NexusID = value;
+		}
+
 		bool IsSystemTag() const
 		{
 			return m_IsSystemTag;
@@ -29,7 +43,6 @@ class KModTagsManager
 
 	public:
 		static wxString GetDefaultTagsFile();
-		static wxString GetUserTagsFile(const wxString& templateID, const wxString& configID);
 
 	private:
 		KModTagArray m_Tags;

@@ -2,7 +2,7 @@
 #include "KPluginEntry.h"
 #include "KPluginReader.h"
 #include "KPluginManager.h"
-#include "Profile/KPluginManagerConfig.h"
+#include "GameInstance/Config/KPluginManagerConfig.h"
 
 KPluginEntry::~KPluginEntry()
 {

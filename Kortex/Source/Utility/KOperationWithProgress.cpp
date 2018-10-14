@@ -149,7 +149,6 @@ void KOperationWithProgressDialogBase::DestroyDialog()
 }
 void KOperationWithProgressDialogBase::SetParent(wxWindow* window)
 {
-	window = window ? window : wxTheApp->GetTopWindow();
 	if (window)
 	{
 		m_ExactParent = window;

@@ -12,12 +12,24 @@ wxString KIVariablesTable::Expand(const wxString& variables) const
 		size_t varNameStartPos = wxString::npos;
 		bool isTranslationVar = false;
 		bool isShellVar = false;
+		bool isEnvVar = false;
 
 		for (size_t i = 0; i < out.Length(); i++)
 		{
-			if (out[i] == '$')
+			if (out[i] == wxS('$'))
 			{
 				entryStartPos = i;
+
+				// Check for 'T'
+				if (i + 1 < out.Length())
+				{
+					auto cNext = out[i + 1];
+					if (cNext == wxS('T'))
+					{
+						isTranslationVar = true;
+						i++;
+					}
+				}
 
 				// Look for 'SH'
 				if (i + 2 < out.Length())
@@ -25,33 +37,36 @@ wxString KIVariablesTable::Expand(const wxString& variables) const
 					auto c1 = out[i + 1];
 					auto c2 = out[i + 2];
 
-					if (c1 == 'S' && c2 == 'H')
+					if (c1 == wxS('S') && c2 == wxS('H'))
 					{
 						isShellVar = true;
 						i += 2;
 					}
 				}
 
-				// Check for 'T'
-				if (i + 1 < out.Length())
+				// Look for 'ENV'
+				if (i + 3 < out.Length())
 				{
-					auto cNext = out[i + 1];
-					if (cNext == 'T')
+					auto c1 = out[i + 1];
+					auto c2 = out[i + 2];
+					auto c3 = out[i + 3];
+
+					if (c1 == wxS('E') && c2 == wxS('N') && c3 == wxS('V'))
 					{
-						isTranslationVar = true;
-						i++;
+						isEnvVar = true;
+						i += 3;
 					}
 				}
 			}
 
 			// We are at the beginning of the variable name
-			if (entryStartPos != wxString::npos && out[i] == '(')
+			if (entryStartPos != wxString::npos && out[i] == wxS('('))
 			{
-				varNameStartPos = i+1;
+				varNameStartPos = i + 1;
 			}
 
 			// All data collected, do replace
-			if (entryStartPos != wxString::npos && varNameStartPos != wxString::npos && out[i] == ')')
+			if (entryStartPos != wxString::npos && varNameStartPos != wxString::npos && out[i] == wxS(')'))
 			{
 				size_t varEntryLength = i - entryStartPos + 1;
 				size_t varNameLength = i - varNameStartPos;
@@ -72,12 +87,16 @@ wxString KIVariablesTable::Expand(const wxString& variables) const
 						}
 						else
 						{
-							KLogMessage("Can't expand shell variable \"%s\"", varName);
+							KLogMessage("Can't expand shell variable \"%s\" (invalid variable name)", varName);
 						}
+					}
+					else if (isEnvVar)
+					{
+						value = KxSystem::GetEnvironmentVariable(varName);
 					}
 					else
 					{
-						value = GetVariable(varName);
+						value = GetVariable(varName).GetValue();
 					}
 
 					if (!value.IsEmpty())
@@ -94,6 +113,7 @@ wxString KIVariablesTable::Expand(const wxString& variables) const
 				varNameStartPos = wxString::npos;
 				isTranslationVar = false;
 				isShellVar = false;
+				isEnvVar = false;
 			}
 		}
 		return out;

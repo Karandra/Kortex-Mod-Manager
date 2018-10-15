@@ -8,32 +8,20 @@
 class KStaticVariablesTable: public KIVariablesTable
 {
 	protected:
-		std::unordered_map<wxString, wxString> m_StaticVariables;
+		std::unordered_map<wxString, KIVariableValue> m_StaticVariables;
+
+	protected:
+		bool IterateOverStatic(const Visitor& visitor) const;
 
 	public:
-		virtual bool IsEmpty() const
-		{
-			return m_StaticVariables.empty();
-		}
+		virtual bool IsEmpty() const;
 
-		virtual bool HasVariable(const wxString& id) const override
+		virtual bool HasVariable(const wxString& id) const override;
+		virtual KIVariableValue GetVariable(const wxString& id) const override;
+		virtual void SetVariable(const wxString& id, const KIVariableValue& value) override;
+
+		virtual void Accept(const Visitor& visitor) const override
 		{
-			return m_StaticVariables.count(id);
-		}
-		virtual wxString GetVariable(const wxString& id) const override
-		{
-			auto it = m_StaticVariables.find(id);
-			if (it != m_StaticVariables.end())
-			{
-				return it->second;
-			}
-			else
-			{
-				return wxEmptyString;
-			}
-		}
-		virtual void SetVariable(const wxString& id, const wxString& value) override
-		{
-			m_StaticVariables.insert_or_assign(id, value);
+			IterateOverStatic(visitor);
 		}
 };

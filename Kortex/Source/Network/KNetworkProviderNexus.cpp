@@ -148,7 +148,7 @@ bool KNetworkProviderNexus::DoValidateAuth(wxWindow* window)
 }
 bool KNetworkProviderNexus::DoSignOut(wxWindow* window)
 {
-	return KNetworkProvider::SignOut(window);
+	return KNetworkProvider::DoSignOut(window);
 }
 bool KNetworkProviderNexus::DoIsAuthenticated() const
 {

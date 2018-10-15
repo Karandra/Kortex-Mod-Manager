@@ -12,11 +12,11 @@ class KxMenuItem;
 class KxProgressDialog;
 class KxProcess;
 
-class KProgramManagerEntry: public KWithBitmap
+class KProgramEntry: public KWithBitmap
 {
 	public:
-		using Vector = std::vector<KProgramManagerEntry>;
-		using RefVector = std::vector<KProgramManagerEntry*>;
+		using Vector = std::vector<KProgramEntry>;
+		using RefVector = std::vector<KProgramEntry*>;
 
 	private:
 		wxString m_Name;
@@ -24,11 +24,10 @@ class KProgramManagerEntry: public KWithBitmap
 		wxString m_Executable;
 		wxString m_Arguments;
 		wxString m_WorkingDirectory;
-		bool m_RequiresVFS = true;
 
 	public:
-		KProgramManagerEntry();
-		KProgramManagerEntry(const KxXMLNode& node);
+		KProgramEntry();
+		KProgramEntry(const KxXMLNode& node);
 
 	public:
 		bool IsOK() const;
@@ -78,17 +77,8 @@ class KProgramManagerEntry: public KWithBitmap
 			m_WorkingDirectory = value;
 		}
 
-		bool CalcRequiresVFS() const;
-		bool IsRequiresVFS() const
-		{
-			return m_RequiresVFS;
-		}
-		void SetRequiresVFS(bool value)
-		{
-			m_RequiresVFS = value;
-		}
+		bool IsRequiresVFS() const;
 };
-
 
 //////////////////////////////////////////////////////////////////////////
 class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
@@ -98,10 +88,10 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 	public:
 		static wxString GetKExecutePath();
 		static void InitKExecute(KxProcess& process, const wxString& executable, const wxString& arguments = wxEmptyString, const wxString& workingDirectory = wxEmptyString);
-		static void InitKExecute(KxProcess& process, const KProgramManagerEntry& runEntry);
+		static void InitKExecute(KxProcess& process, const KProgramEntry& runEntry);
 
 	private:
-		KProgramManagerEntry::Vector m_ProgramList;
+		KProgramEntry::Vector m_ProgramList;
 		KProgramOptionUI m_RunOptions;
 
 		KxMenu* m_Menu = NULL;
@@ -110,18 +100,18 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 
 	private:
 		virtual void OnInit();
-		virtual wxBitmap OnQueryItemImage(const KProgramManagerEntry& runEntry) const;
+		virtual wxBitmap OnQueryItemImage(const KProgramEntry& runEntry) const;
 		void OnVFSToggled(KVFSEvent& event);
 		void OnMenuOpen(KxMenuEvent& event);
 
 		// If 'processOut' not NULL, then created process object will not be run in this function
 		// and will be returned in provided pointer.
-		void DoRunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog, KxProcess** processOut = NULL);
-		bool CheckEntry(const KProgramManagerEntry& runEntry);
+		void DoRunEntry(const KProgramEntry& runEntry, KxProgressDialog* dialog, KxProcess** processOut = NULL);
+		bool CheckEntry(const KProgramEntry& runEntry);
 		
 		KxProgressDialog* BeginRunProcess();
 		void EndRunProcess(KxProgressDialog* dialog, KxProcess* process);
-		void RunMain(KxProgressDialog* dialog, const KProgramManagerEntry& runEntry);
+		void RunMain(KxProgressDialog* dialog, const KProgramEntry& runEntry);
 
 		void LoadProgramList();
 		void SaveProgramList() const;
@@ -143,11 +133,11 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 		{
 			return !m_ProgramList.empty();
 		}
-		const KProgramManagerEntry::Vector& GetProgramList() const
+		const KProgramEntry::Vector& GetProgramList() const
 		{
 			return m_ProgramList;
 		}
-		KProgramManagerEntry::Vector& GetProgramList()
+		KProgramEntry::Vector& GetProgramList()
 		{
 			return m_ProgramList;
 		}
@@ -157,7 +147,7 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 
 	public:
 		virtual void OnAddMenuItems(KxMenu* menu);
-		virtual void OnRunEntry(KxMenuItem* menuItem, const KProgramManagerEntry& runEntry);
+		virtual void OnRunEntry(KxMenuItem* menuItem, const KProgramEntry& runEntry);
 
 	public:
 		KProgramOption& GetOptions()
@@ -169,9 +159,9 @@ class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
 		virtual void Load() override;
 
 		// Never destroy provided dialog yourself!
-		bool RunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog = NULL);
+		bool RunEntry(const KProgramEntry& runEntry, KxProgressDialog* dialog = NULL);
 		
 		// Returned process can be run with either 'KxPROCESS_WAIT_SYNC' or 'KxPROCESS_WAIT_ASYNC' flag.
 		// If you bind 'wxEVT_END_PROCESS' handler to the process make sure you wxEvent::Skip() it!
-		KxProcess* RunEntryDelayed(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog = NULL);
+		KxProcess* RunEntryDelayed(const KProgramEntry& runEntry, KxProgressDialog* dialog = NULL);
 };

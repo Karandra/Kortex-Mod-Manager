@@ -321,5 +321,5 @@ void KPluginViewBaseModel::SetAllEnabled(bool value)
 }
 void KPluginViewBaseModel::UpdateUI()
 {
-	SelectItem(GetView()->GetSelection());
+	GetView()->Refresh();
 }

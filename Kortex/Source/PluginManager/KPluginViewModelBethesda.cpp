@@ -83,7 +83,7 @@ bool KPluginViewModelBethesda::GetAttributes(const KPluginEntry& pluginEntry, co
 	{
 		case ColumnID::Index:
 		{
-			attributes.SetFontFace("Consolas");
+			attributes.SetFontFace(wxS("Consolas"));
 			return true;
 		}
 		case ColumnID::PartOf:

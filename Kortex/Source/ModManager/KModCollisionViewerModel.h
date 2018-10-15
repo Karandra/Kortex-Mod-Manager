@@ -3,7 +3,7 @@
 #include "KDataViewListModel.h"
 #include "KImageProvider.h"
 #include "KModManager.h"
-#include "KModManagerDispatcher.h"
+#include "KDispatcher.h"
 #include "KProgramOptions.h"
 #include <KxFramework/KxStdDialog.h>
 #include <KxFramework/KxFileFinder.h>
@@ -15,7 +15,7 @@ namespace KModCollisionViewerModelNS
 	{
 		public:
 			using Vector = std::vector<ModelEntry>;
-			using CollisionVector = KModManagerDispatcher::CollisionVector;
+			using CollisionVector = KDispatcherCollision::Vector;
 
 		private:
 			KxFileItem m_Item;
@@ -59,9 +59,9 @@ class KModCollisionViewerModel: public KxDataViewVectorListModelEx<KModCollision
 {
 	public:
 		using ModelEntry = KModCollisionViewerModelNS::ModelEntry;
-		using CollisionVector = KModManagerDispatcher::CollisionVector;
+		using CollisionVector = KDispatcherCollision::Vector;
 
-		static wxString FormatSingleCollision(const KMMDispatcherCollision& collision);
+		static wxString FormatSingleCollision(const KDispatcherCollision& collision);
 		static wxString FormatCollisionsCount(const CollisionVector& collisions);
 		static wxString FormatCollisionsView(const CollisionVector& collisions);
 

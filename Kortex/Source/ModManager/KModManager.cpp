@@ -6,7 +6,7 @@
 #include "KModEntry.h"
 #include "KVirtualGameFolderWorkspace.h"
 #include "Profile/KProfile.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "GameInstance/Config/KVirtualizationConfig.h"
 #include "VFS/KVFSService.h"
 #include "VFS/KVFSConvergence.h"
@@ -76,9 +76,9 @@ void KModManager::DoResortMods(const KProfile& profile)
 		}
 	}
 
-	if (KModManagerDispatcher::HasInstance())
+	if (KDispatcher::HasInstance())
 	{
-		KModManagerDispatcher::GetInstance()->InvalidateVirtualTree();
+		KDispatcher::GetInstance()->InvalidateVirtualTree();
 	}
 }
 void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* window)
@@ -371,9 +371,9 @@ void KModManager::Load()
 		entry->UpdateFileTree();
 	}
 
-	if (KModManagerDispatcher::HasInstance())
+	if (KDispatcher::HasInstance())
 	{
-		KModManagerDispatcher::GetInstance()->InvalidateVirtualTree();
+		KDispatcher::GetInstance()->InvalidateVirtualTree();
 	}
 }
 void KModManager::Save() const

@@ -124,7 +124,7 @@ void KModFilesExplorerModel::GetValue(wxAny& value, const KxDataViewItem& item, 
 			{
 				if (node->IsFile())
 				{
-					const KModManagerDispatcher::CollisionVector* collisions = GetCollisions(*node);
+					const KDispatcherCollision::Vector* collisions = GetCollisions(*node);
 					if (collisions)
 					{
 						value = KModCollisionViewerModel::FormatCollisionsCount(*collisions);
@@ -184,7 +184,7 @@ void KModFilesExplorerModel::OnActivateItem(KxDataViewEvent& event)
 		{
 			case ColumnID::Collisions:
 			{
-				const KModManagerDispatcher::CollisionVector* collisions = GetCollisions(*node);
+				const KDispatcherCollision::Vector* collisions = GetCollisions(*node);
 				if (collisions && !collisions->empty())
 				{
 					KxTaskDialog dialog(GetViewTLW(), KxID_NONE, column->GetTitle(), KModCollisionViewerModel::FormatCollisionsView(*collisions));
@@ -217,7 +217,7 @@ void KModFilesExplorerModel::OnExpandingItem(KxDataViewEvent& event)
 	}
 }
 
-const KModManagerDispatcher::CollisionVector* KModFilesExplorerModel::GetCollisions(const KFileTreeNode& node) const
+const KDispatcherCollision::Vector* KModFilesExplorerModel::GetCollisions(const KFileTreeNode& node) const
 {
 	auto it = m_Collisions.find(&node);
 	if (it != m_Collisions.end())
@@ -226,7 +226,7 @@ const KModManagerDispatcher::CollisionVector* KModFilesExplorerModel::GetCollisi
 	}
 	return NULL;
 }
-const KModManagerDispatcher::CollisionVector& KModFilesExplorerModel::GetOrUpdateCollisions(const KFileTreeNode& node)
+const KDispatcherCollision::Vector& KModFilesExplorerModel::GetOrUpdateCollisions(const KFileTreeNode& node)
 {
 	auto it = m_Collisions.find(&node);
 	if (it != m_Collisions.end())

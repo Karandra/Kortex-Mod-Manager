@@ -5,7 +5,7 @@
 #include "KFixedModEntry.h"
 #include "KMandatoryModEntry.h"
 #include "KModTagsManager.h"
-#include "KModManagerDispatcher.h"
+#include "KDispatcher.h"
 #include "KMirroredVirtualFolder.h"
 #include "KNetworkConstants.h"
 #include "KEvents.h"
@@ -52,7 +52,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		{
 			return Get().m_TagManager;
 		}
-		static KModManagerDispatcher& GetDispatcher()
+		static KDispatcher& GetDispatcher()
 		{
 			return Get().m_Dispatcher;
 		}
@@ -80,7 +80,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		KFixedModEntry m_ModEntry_WriteTarget;
 		
 		KModTagsManager m_TagManager;
-		KModManagerDispatcher m_Dispatcher;
+		KDispatcher m_Dispatcher;
 		bool m_IsMounted = false;
 		KxProgressDialog* m_MountStatusDialog = NULL;
 

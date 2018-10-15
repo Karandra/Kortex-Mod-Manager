@@ -70,8 +70,8 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 
 const KFileTreeNode* KFileTreeNode::WalkTree(const TreeWalker& functor) const
 {
-	std::function<const KFileTreeNode*(const KFileTreeNode::Vector&)> Recurse =
-		[&Recurse, &functor](const KFileTreeNode::Vector& children) -> const KFileTreeNode*
+	std::function<const KFileTreeNode*(const KFileTreeNode::Vector&)> Recurse;
+	Recurse = [&Recurse, &functor](const KFileTreeNode::Vector& children) -> const KFileTreeNode*
 	{
 		for (const KFileTreeNode& node: children)
 		{
@@ -104,6 +104,22 @@ const KFileTreeNode* KFileTreeNode::WalkToRoot(const TreeWalker& functor) const
 		}
 	}
 	return node;
+}
+
+bool KFileTreeNode::HasAlternativesFromActiveMods() const
+{
+	if (!m_Alternatives.empty())
+	{
+		for (const KFileTreeNode& node: m_Alternatives)
+		{
+			if (!node.GetMod().IsEnabled())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	return false;
 }
 
 wxString KFileTreeNode::GetRelativePath() const

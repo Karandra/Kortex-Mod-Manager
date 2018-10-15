@@ -3,7 +3,7 @@
 #include "KDataViewListModel.h"
 #include "KProgramManager.h"
 
-class KProgramManagerModel: public KDataViewVectorListModel<KProgramManagerEntry::Vector, KDataViewListModel>
+class KProgramManagerModel: public KDataViewVectorListModel<KProgramEntry::Vector, KDataViewListModel>
 {
 	private:
 		virtual void OnInitControl() override;
@@ -17,11 +17,11 @@ class KProgramManagerModel: public KDataViewVectorListModel<KProgramManagerEntry
 		void OnSelectItem(KxDataViewEvent& event);
 		void OnContextMenu(KxDataViewEvent& event);
 
-		KProgramManagerEntry::Vector& GetProgramsList() const
+		KProgramEntry::Vector& GetProgramsList() const
 		{
 			return KProgramManager::GetInstance()->GetProgramList();
 		}
-		KProgramManagerEntry* GetDataEntry(size_t i)
+		KProgramEntry* GetDataEntry(size_t i)
 		{
 			if (i < GetItemCount())
 			{
@@ -30,9 +30,9 @@ class KProgramManagerModel: public KDataViewVectorListModel<KProgramManagerEntry
 			return NULL;
 		}
 		
-		wxString AskSelectExecutablePath(const KProgramManagerEntry* entry = NULL) const;
+		wxString AskSelectExecutablePath(const KProgramEntry* entry = NULL) const;
 		bool AddProgram();
-		void RemoveProgram(KProgramManagerEntry* entry);
+		void RemoveProgram(KProgramEntry* entry);
 
 	public:
 		KProgramManagerModel()
@@ -47,7 +47,7 @@ class KProgramManagerModel: public KDataViewVectorListModel<KProgramManagerEntry
 		}
 		virtual void RefreshItems() override;
 
-		const KProgramManagerEntry* GetDataEntry(size_t i) const
+		const KProgramEntry* GetDataEntry(size_t i) const
 		{
 			if (i < GetItemCount())
 			{
@@ -55,7 +55,7 @@ class KProgramManagerModel: public KDataViewVectorListModel<KProgramManagerEntry
 			}
 			return NULL;
 		}
-		const KProgramManagerEntry* GetDataEntry(const KxDataViewItem& item) const
+		const KProgramEntry* GetDataEntry(const KxDataViewItem& item) const
 		{
 			return GetDataEntry(GetRow(item));
 		}

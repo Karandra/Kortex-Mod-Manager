@@ -2,11 +2,11 @@
 #include "stdafx.h"
 #include <KxFramework/KxFileFinder.h>
 class KModEntry;
-class KModManagerDispatcher;
+class KDispatcher;
 
 class KFileTreeNode
 {
-	friend class KModManagerDispatcher;
+	friend class KDispatcher;
 	friend class KModEntry;
 
 	public:
@@ -76,24 +76,6 @@ class KFileTreeNode
 			m_Parent = parent;
 		}
 
-		Vector& GetChildren()
-		{
-			return m_Children;
-		}
-		void ClearChildren()
-		{
-			m_Children.clear();
-		}
-		
-		Vector& GetAlternatives()
-		{
-			return m_Alternatives;
-		}
-		void ClearAlternatives()
-		{
-			m_Alternatives.clear();
-		}
-
 	public:
 		KFileTreeNode() = default;
 		KFileTreeNode(const KModEntry& modEntry, const KxFileItem& item, const KFileTreeNode* parent = NULL)
@@ -131,11 +113,20 @@ class KFileTreeNode
 		{
 			return m_Children;
 		}
-		
+		Vector& GetChildren()
+		{
+			return m_Children;
+		}
+		void ClearChildren()
+		{
+			m_Children.clear();
+		}
+
 		bool HasAlternatives() const
 		{
 			return !m_Alternatives.empty();
 		}
+		bool HasAlternativesFromActiveMods() const;
 		size_t GetAlternativesCount() const
 		{
 			return m_Alternatives.size();
@@ -144,7 +135,15 @@ class KFileTreeNode
 		{
 			return m_Alternatives;
 		}
-		
+		Vector& GetAlternatives()
+		{
+			return m_Alternatives;
+		}
+		void ClearAlternatives()
+		{
+			m_Alternatives.clear();
+		}
+
 		const KxFileItem& GetItem() const
 		{
 			return m_Item;

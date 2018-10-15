@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KModManagerDispatcher.h"
+#include "KDispatcher.h"
 #include "KDataViewListModel.h"
 #include "KImageProvider.h"
 class KModEntry;
@@ -10,7 +10,7 @@ class KModFilesExplorerModel: public KxDataViewModelExBase<KxDataViewModel>
 {
 	private:
 		const KModEntry& m_ModEntry;
-		std::unordered_map<const KFileTreeNode*, KModManagerDispatcher::CollisionVector> m_Collisions;
+		std::unordered_map<const KFileTreeNode*, KDispatcherCollision::Vector> m_Collisions;
 
 	private:
 		virtual void OnInitControl() override;
@@ -32,8 +32,8 @@ class KModFilesExplorerModel: public KxDataViewModelExBase<KxDataViewModel>
 		void OnContextMenu(KxDataViewEvent& event);
 		void OnExpandingItem(KxDataViewEvent& event);
 
-		const KModManagerDispatcher::CollisionVector* GetCollisions(const KFileTreeNode& node) const;
-		const KModManagerDispatcher::CollisionVector& GetOrUpdateCollisions(const KFileTreeNode& node);
+		const KDispatcherCollision::Vector* GetCollisions(const KFileTreeNode& node) const;
+		const KDispatcherCollision::Vector& GetOrUpdateCollisions(const KFileTreeNode& node);
 
 	public:
 		KModFilesExplorerModel(const KModEntry& modEntry)

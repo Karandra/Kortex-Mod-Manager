@@ -10,7 +10,7 @@ class KFixedModEntry;
 class KPriorityGroupEntry;
 class KPackageProject;
 class KModManager;
-class KModManagerDispatcher;
+class KDispatcher;
 
 enum KModManagerLocation;
 enum KImageEnum;
@@ -31,7 +31,7 @@ enum
 
 class KModEntry: public KWithBitmap
 {
-	friend class KModManagerDispatcher;
+	friend class KDispatcher;
 
 	public:
 		using Vector = std::vector<KModEntry*>;

@@ -33,12 +33,12 @@ enum ColumnID
 	Size,
 };
 
-wxString KModCollisionViewerModel::FormatSingleCollision(const KMMDispatcherCollision& collision)
+wxString KModCollisionViewerModel::FormatSingleCollision(const KDispatcherCollision& collision)
 {
 	const KModEntry* mod = collision.GetMod();
 	const KMMDispatcherCollisionType type = collision.GetType();
 
-	return KxFormat(KMMDispatcherCollision::GetLocalizedCollisionName(type)).arg(mod->GetName());
+	return KxFormat(KDispatcherCollision::GetLocalizedCollisionName(type)).arg(mod->GetName());
 }
 wxString KModCollisionViewerModel::FormatCollisionsCount(const CollisionVector& collisions)
 {

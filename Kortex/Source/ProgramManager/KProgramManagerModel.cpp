@@ -41,7 +41,7 @@ void KProgramManagerModel::OnInitControl()
 
 void KProgramManagerModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	const KProgramManagerEntry* entry = GetDataEntry(row);
+	const KProgramEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -57,14 +57,14 @@ void KProgramManagerModel::GetEditorValueByRow(wxAny& value, size_t row, const K
 }
 void KProgramManagerModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
-	const KProgramManagerEntry* entry = GetDataEntry(row);
+	const KProgramEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
 		{
 			case ColumnID::RequiresVFS:
 			{
-				value = entry->CalcRequiresVFS();
+				value = entry->IsRequiresVFS();
 				break;
 			}
 			case ColumnID::Name:
@@ -93,7 +93,7 @@ void KProgramManagerModel::GetValueByRow(wxAny& value, size_t row, const KxDataV
 }
 bool KProgramManagerModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 {
-	KProgramManagerEntry* entry = GetDataEntry(row);
+	KProgramEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -114,7 +114,7 @@ bool KProgramManagerModel::SetValueByRow(const wxAny& value, size_t row, const K
 }
 bool KProgramManagerModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 {
-	const KProgramManagerEntry* entry = GetDataEntry(row);
+	const KProgramEntry* entry = GetDataEntry(row);
 	if (entry)
 	{
 		switch (column->GetID())
@@ -132,7 +132,7 @@ bool KProgramManagerModel::IsEnabledByRow(size_t row, const KxDataViewColumn* co
 
 void KProgramManagerModel::OnSelectItem(KxDataViewEvent& event)
 {
-	const KProgramManagerEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+	const KProgramEntry* entry = GetDataEntry(GetRow(event.GetItem()));
 	if (entry)
 	{
 		KMainWindow::GetInstance()->SetStatus(entry->GetName() + ": " + entry->GetExecutable());
@@ -144,7 +144,7 @@ void KProgramManagerModel::OnActivateItem(KxDataViewEvent& event)
 {
 	KxDataViewItem item = event.GetItem();
 	KxDataViewColumn* column = event.GetColumn();
-	KProgramManagerEntry* entry = GetDataEntry(GetRow(item));
+	KProgramEntry* entry = GetDataEntry(GetRow(item));
 	if (entry && column)
 	{
 		switch (column->GetID())
@@ -162,7 +162,7 @@ void KProgramManagerModel::OnActivateItem(KxDataViewEvent& event)
 			}
 			case ColumnID::Name:
 			{
-				if (entry->CalcRequiresVFS() && !KModManager::Get().IsVFSMounted())
+				if (entry->IsRequiresVFS() && !KModManager::Get().IsVFSMounted())
 				{
 					wxBell();
 				}
@@ -200,7 +200,7 @@ void KProgramManagerModel::OnActivateItem(KxDataViewEvent& event)
 }
 void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 {
-	KProgramManagerEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+	KProgramEntry* entry = GetDataEntry(GetRow(event.GetItem()));
 
 	KxMenu menu;
 	menu.Add(new KxMenuItem(KxID_ADD, T(KxID_ADD)));
@@ -237,7 +237,7 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 	};
 }
 
-wxString KProgramManagerModel::AskSelectExecutablePath(const KProgramManagerEntry* entry) const
+wxString KProgramManagerModel::AskSelectExecutablePath(const KProgramEntry* entry) const
 {
 	KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
 	dialog.SetFolder(V(KVAR(KVAR_VIRTUAL_GAME_DIR)));
@@ -259,20 +259,17 @@ bool KProgramManagerModel::AddProgram()
 	wxString path = AskSelectExecutablePath();
 	if (!path.IsEmpty())
 	{
-		KProgramManagerEntry& entry = GetDataVector()->emplace_back();
+		KProgramEntry& entry = GetDataVector()->emplace_back();
 		entry.SetName(path.AfterLast('\\').BeforeLast('.'));
 		entry.SetExecutable(path);
 		entry.SetBitmap(KProgramManager::GetInstance()->OnQueryItemImage(entry));
-		
-		// Let 'KProgramManagerEntry::IsRequiresVFS' decide if this program needs VFS.
-		entry.SetRequiresVFS(false);
 		return true;
 	}
 	return false;
 }
-void KProgramManagerModel::RemoveProgram(KProgramManagerEntry* entry)
+void KProgramManagerModel::RemoveProgram(KProgramEntry* entry)
 {
-	auto it = std::remove_if(GetDataVector()->begin(), GetDataVector()->end(), [entry](const KProgramManagerEntry& v)
+	auto it = std::remove_if(GetDataVector()->begin(), GetDataVector()->end(), [entry](const KProgramEntry& v)
 	{
 		return &v == entry;
 	});

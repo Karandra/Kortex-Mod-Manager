@@ -12,6 +12,18 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxMenu.h>
 
+void KNetwork::OnInit()
+{
+	KxFile(GetCacheFolder()).CreateFolder();
+
+	// Load current provider
+	m_CurrentProvider = static_cast<KNetworkProviderID>(m_Options.GetAttributeInt("CurrentProvider", KNETWORK_PROVIDER_ID_FIRST));
+	if (m_CurrentProvider < KNETWORK_PROVIDER_ID_FIRST || m_CurrentProvider >= KNETWORK_PROVIDER_ID_MAX)
+	{
+		m_CurrentProvider = KNETWORK_PROVIDER_ID_FIRST;
+	}
+}
+
 void KNetwork::ValidateAuth()
 {
 	for (auto& provider: m_Providers)
@@ -191,24 +203,33 @@ void KNetwork::OnLoginButton(KxAuiToolBarEvent& event)
 KNetwork::KNetwork()
 	:m_Options("KNetwork", wxEmptyString)
 {
-	KxFile(GetCacheFolder()).CreateFolder();
 	m_DownloadManager = std::make_unique<KDownloadManager>();
 
 	// Init providers
 	NewProvider<KNetworkProviderNexus>();
 	NewProvider<KNetworkProviderTESALL>();
 	NewProvider<KNetworkProviderLoversLab>();
-
-	// Load current provider
-	m_CurrentProvider = static_cast<KNetworkProviderID>(m_Options.GetAttributeInt("CurrentProvider", KNETWORK_PROVIDER_ID_FIRST));
-	if (m_CurrentProvider < KNETWORK_PROVIDER_ID_FIRST || m_CurrentProvider >= KNETWORK_PROVIDER_ID_MAX)
-	{
-		m_CurrentProvider = KNETWORK_PROVIDER_ID_FIRST;
-	}
 }
 KNetwork::~KNetwork()
 {
 	m_Options.SetAttribute("CurrentProvider", m_CurrentProvider);
+}
+
+wxString KNetwork::GetID() const
+{
+	return "KNetwork";
+}
+wxString KNetwork::GetName() const
+{
+	return "KNetwork";
+}
+wxString KNetwork::GetVersion() const
+{
+	return "1.0";
+}
+KImageEnum KNetwork::GetImageID() const
+{
+	return KIMG_SITE_UNKNOWN;
 }
 
 void KNetwork::OnAuthStateChanged()

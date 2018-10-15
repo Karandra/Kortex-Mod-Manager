@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "KManager.h"
 #include "KNetworkConstants.h"
 #include "KNetworkProvider.h"
 #include "KProgramOptions.h"
@@ -11,7 +12,7 @@ class KxAuiToolBarItem;
 class KxMenuEvent;
 class KxMenu;
 
-class KNetwork: public wxEvtHandler, public KxSingletonPtr<KNetwork>
+class KNetwork: public KManager, public KxSingletonPtr<KNetwork>
 {
 	friend class KNetworkProvider;
 	friend class KMainWindow;
@@ -31,6 +32,8 @@ class KNetwork: public wxEvtHandler, public KxSingletonPtr<KNetwork>
 		KProgramOptionUI m_Options;
 
 	private:
+		virtual void OnInit() override;
+
 		template<class T> T& NewProvider()
 		{
 			const constexpr KNetworkProviderID typeID = T::GetTypeID();
@@ -55,6 +58,12 @@ class KNetwork: public wxEvtHandler, public KxSingletonPtr<KNetwork>
 	public:
 		KNetwork();
 		virtual ~KNetwork();
+
+	public:
+		virtual wxString GetID() const override;
+		virtual wxString GetName() const override;
+		virtual wxString GetVersion() const override;
+		virtual KImageEnum GetImageID() const override;
 
 	public:
 		void OnAuthStateChanged();

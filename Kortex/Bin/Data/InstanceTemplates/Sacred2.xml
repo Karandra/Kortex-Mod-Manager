@@ -14,7 +14,7 @@
 		<Entry ID="ConfigRootTarget">$SH(SHF_SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
 		<Entry ID="GameExecutable">$(GameRoot)\System\Sacred2.exe</Entry>
 		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\System\Sacred2.exe</Entry>
-		<Entry ID="NexusID">$(ID)</Entry>
+		<Entry ID="NexusID">$(GameID)</Entry>
 	</Variables>
 
 	<Network>
@@ -39,7 +39,7 @@
 	<ProgramConfig>
 		<Main>
 			<Entry>
-				<Name>$(NameShort)</Name>
+				<Name>$(GameShortName)</Name>
 				<Icon>System\Sacred2.exe</Icon>
 				<Executable>$(VirtualGameExecutable)</Executable>
 				<Arguments></Arguments>

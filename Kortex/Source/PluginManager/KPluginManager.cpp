@@ -11,7 +11,7 @@
 #include "KPluginReaderBethesdaSkyrim.h"
 
 #include "ModManager/KModManager.h"
-#include "ModManager/KModManagerDispatcher.h"
+#include "ModManager/KDispatcher.h"
 #include "GameInstance/KGameInstance.h"
 #include "Profile/KProfile.h"
 #include "GameInstance/Config/KPluginManagerConfig.h"
@@ -265,7 +265,7 @@ void KPluginManager::RunSortingTool(const KPluginManagerConfigSortingToolEntry& 
 {
 	if (CheckSortingTool(entry))
 	{
-		KProgramManagerEntry runEntry;
+		KProgramEntry runEntry;
 		runEntry.SetName(entry.GetName());
 		runEntry.SetExecutable(entry.GetExecutable());
 		runEntry.SetArguments(entry.GetArguments());

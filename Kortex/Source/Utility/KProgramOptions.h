@@ -209,16 +209,16 @@ class KProgramOptionUI: public KProgramOption
 {
 	public:
 		KProgramOptionUI(const wxString& sSectionID = wxEmptyString, const wxString& nameID = wxEmptyString)
-			:KProgramOption(KPGC_ID_CURRENT_INSTANCE, sSectionID, nameID)
+			:KProgramOption(KPGC_ID_INSTANCE, sSectionID, nameID)
 		{
 		}
 		KProgramOptionUI(const wxString& nameID)
-			:KProgramOption(KPGC_ID_CURRENT_INSTANCE, wxEmptyString, nameID)
+			:KProgramOption(KPGC_ID_INSTANCE, wxEmptyString, nameID)
 		{
 		}
 
 		KProgramOptionUI(KWorkspace* workspace, const wxString& nameID = wxEmptyString)
-			:KProgramOption(workspace, KPGC_ID_CURRENT_INSTANCE, nameID)
+			:KProgramOption(workspace, KPGC_ID_INSTANCE, nameID)
 		{
 		}
 		KProgramOptionUI(KInstallWizardDialog* workspace, const wxString& nameID = wxEmptyString);

@@ -9,6 +9,7 @@ KVirtualGameFolderWorkspace::KVirtualGameFolderWorkspace(KMainWindow* mainWindow
 {
 	KEvent::Bind(KEVT_MOD_VIRTUAL_TREE_INVALIDATED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
 	KEvent::Bind(KEVT_MOD_TOGGLED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
+	KEvent::Bind(KEVT_MODS_REORDERED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
 
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 }
@@ -56,7 +57,10 @@ void KVirtualGameFolderWorkspace::OnModSerach(wxCommandEvent& event)
 }
 void KVirtualGameFolderWorkspace::OnViewInvalidated(KEvent& event)
 {
-	m_Model->RefreshItems();
+	if (IsWorkspaceCreated() && IsWorkspaceVisible())
+	{
+		ScheduleReload();
+	}
 }
 
 wxString KVirtualGameFolderWorkspace::GetID() const

@@ -3,8 +3,8 @@
 #include "KWorkspaceController.h"
 #include "KMainWindow.h"
 #include "KThemeManager.h"
-#include "GameInstance/KGameInstance.h"
-#include "Events/KVFSEvent.h"
+#include "GameInstance/KInstnaceManagement.h"
+#include "KEvents.h"
 #include "KApp.h"
 
 bool KWorkspace::OnOpenWorkspaceInternal()

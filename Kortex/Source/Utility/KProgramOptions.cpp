@@ -247,10 +247,10 @@ wxString KProgramOption::GetAttribute(const wxString& name, const wxString& defa
 
 //////////////////////////////////////////////////////////////////////////
 KProgramOptionUI::KProgramOptionUI(KInstallWizardDialog* workspace, const wxString& nameID)
-	:KProgramOption(KPGC_ID_CURRENT_INSTANCE, "KInstallWizardDialog", nameID)
+	:KProgramOption(KPGC_ID_INSTANCE, "KInstallWizardDialog", nameID)
 {
 }
 KProgramOptionUI::KProgramOptionUI(KManager* manager, const wxString& nameID)
-	:KProgramOption(KPGC_ID_CURRENT_INSTANCE, manager->GetID(), nameID)
+	:KProgramOption(KPGC_ID_INSTANCE, manager->GetID(), nameID)
 {
 }

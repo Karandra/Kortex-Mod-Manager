@@ -8,9 +8,9 @@
 #include "KPackageProjectFileData.h"
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "PackageManager/KPackageManager.h"
 #include "ModManager/KModManager.h"
-#include "GameInstance/KGameInstance.h"
 #include "KAux.h"
 #include "KUnsortedUnique.h"
 #include <KxFramework/KxString.h>

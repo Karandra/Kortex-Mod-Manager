@@ -32,7 +32,7 @@ wxString KPluginManagerConfigStdContentEntry::GetLogo() const
 
 wxString KPluginManagerConfigStdContentEntry::GetLogoFullPath() const
 {
-	return V(wxString::Format("%s\\PluginManager\\Logos\\%s\\%s", KApp::Get().GetDataFolder(), "$(ID)", GetLogo()));
+	return V(wxString::Format("%s\\PluginManager\\Logos\\%s\\%s", KApp::Get().GetDataFolder(), "$(GameID)", GetLogo()));
 }
 
 //////////////////////////////////////////////////////////////////////////

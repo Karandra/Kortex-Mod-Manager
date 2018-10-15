@@ -8,7 +8,7 @@ KProgramManagerConfig::KProgramManagerConfig(KGameInstance& profile, const KxXML
 {
 	for (KxXMLNode node = rootNode.GetFirstChildElement("Programs").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
-		if (!m_Entries.emplace_back(KProgramManagerEntry(node)).IsOK())
+		if (!m_Entries.emplace_back(KProgramEntry(node)).IsOK())
 		{
 			m_Entries.pop_back();
 		}

@@ -5,7 +5,7 @@
 
 /* App-wide */
 // These variables are set by Kortex itself
-#define KVAR_INSTANCES_ROOT wxS("InstancesRoot")
+#define KVAR_INSTANCES_DIR wxS("InstancesDir")
 #define KVAR_INSTANCE_ID wxS("InstanceID")
 #define KVAR_PROFILE_ID wxS("ProfileID")
 
@@ -24,6 +24,7 @@
 #define KVAR_VIRTUAL_GAME_DIR wxS("VirtualGameDir")
 #define KVAR_INSTANCE_DIR wxS("InstanceDir")
 #define KVAR_MODS_DIR wxS("ModsDir")
+#define KVAR_PROFILES_DIR wxS("ProfilesDir")
 
 /* Profile */
 // Variables which names starts from 'Actual' and 'Global' are constant

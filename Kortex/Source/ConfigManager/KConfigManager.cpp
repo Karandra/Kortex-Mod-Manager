@@ -5,7 +5,7 @@
 #include "GameInstance/KGameInstance.h"
 #include "GameInstance/Config/KConfigManagerConfig.h"
 #include "ModManager/KModManager.h"
-#include "ModManager/KModManagerDispatcher.h"
+#include "ModManager/KDispatcher.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxSystem.h>

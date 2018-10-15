@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KVirtualGameFolderModel.h"
 #include "KModManager.h"
-#include "KModManagerDispatcher.h"
+#include "KDispatcher.h"
 #include "KModWorkspace.h"
 #include "KFileTreeNode.h"
 #include "KModEntry.h"
@@ -43,7 +43,7 @@ void KVirtualGameFolderModel::OnInitControl()
 		info.GetRenderer()->SetOptionEnabled(KxDataViewRendererOptions::KxDVR_ALLOW_BITMAP_SCALEDOWN);
 	}
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(T("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_EDITABLE, 300, flags);
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewComboBoxEditor>(T("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_EDITABLE, 300, flags);
 		m_PartOfEditor = info.GetEditor();
 		info.GetColumn()->SortAscending();
 	}
@@ -105,16 +105,18 @@ void KVirtualGameFolderModel::GetEditorValue(wxAny& value, const KxDataViewItem&
 {
 	if (const KFileTreeNode* node = GetNode(item))
 	{
+		const KModEntry& mod = node->GetMod();
 		switch (column->GetID())
 		{
 			case ColumnID::PartOf:
 			{
-				KxStringVector items(1, node->GetMod().GetName());
-				for (const KFileTreeNode& node: node->GetAlternatives())
+				KxStringVector items(1, mod.GetName());
+				for (const KFileTreeNode& currentNode: node->GetAlternatives())
 				{
-					if (node.GetMod().IsEnabled())
+					const KModEntry& currentNodeMod = currentNode.GetMod();
+					if (currentNodeMod.IsEnabled())
 					{
-						items.push_back(node.GetMod().GetName());
+						items.push_back(KxFormat(wxS("%1. %2")).arg(items.size()).arg(currentNodeMod.GetName()));
 					}
 				}
 				m_PartOfEditor->SetItems(items);
@@ -130,6 +132,7 @@ void KVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewItem& item,
 {
 	if (const KFileTreeNode* node = GetNode(item))
 	{
+		const KModEntry& mod = node->GetMod();
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
@@ -152,7 +155,12 @@ void KVirtualGameFolderModel::GetValue(wxAny& value, const KxDataViewItem& item,
 			}
 			case ColumnID::PartOf:
 			{
-				value = node->GetMod().GetName();
+				KxDataViewBitmapTextValue data(mod.GetName());
+				if (node->HasAlternativesFromActiveMods())
+				{
+					data.SetBitmap(KGetBitmap(node->IsDirectory() ? KIMG_EXCLAMATION_CIRCLE_FRAME_EMPTY : KIMG_EXCLAMATION));
+				}
+				value = data;
 				break;
 			}
 			case ColumnID::Size:

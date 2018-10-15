@@ -33,9 +33,6 @@ void KActiveGameInstance::InitModulesConfig(const KxXMLDocument& instanceConfig)
 	// Always enabled
 	m_GameConfig = InitModuleConfig<KConfigManagerConfig, true>(this, instanceConfig, "GameConfig");
 
-	// Init current instance config. It's depend on 'KConfigManagerConfig'.
-	KApp::Get().GetSettingsManager()->InitCurrentProfileConfig();
-
 	m_LocationsConfig = InitModuleConfig<KLocationsManagerConfig, true>(this, instanceConfig, "LocationsConfig");
 	m_VirtualizationConfig = InitModuleConfig<KVirtualizationConfig, true>(this, instanceConfig, "Virtualization");
 	m_PackageManagerConfig = InitModuleConfig<KPackageManagerConfig, true>(this, instanceConfig, "PackageManager");
@@ -114,9 +111,9 @@ void KActiveGameInstance::ChangeProfileTo(const KProfile& profile)
 		}
 		modManager->ResortMods(profile);
 	}
-	if (KModManagerDispatcher::HasInstance())
+	if (KDispatcher::HasInstance())
 	{
-		KModManagerDispatcher::GetInstance()->InvalidateVirtualTree();
+		KDispatcher::GetInstance()->InvalidateVirtualTree();
 	}
 
 	// Finally send event

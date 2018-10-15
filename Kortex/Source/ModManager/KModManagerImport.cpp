@@ -3,7 +3,7 @@
 #include "KModManagerImportMO.h"
 #include "KModManagerImportNMM.h"
 #include "KOperationWithProgress.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "ModManager/KModWorkspace.h"
 #include "DownloadManager/KDownloadWorkspace.h"
 #include "GameConfig/KGameConfigWorkspace.h"

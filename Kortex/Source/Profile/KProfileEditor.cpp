@@ -2,7 +2,7 @@
 #include "KProfileEditor.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModEntry.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "Profile/KProfile.h"
 #include "KEvents.h"
 #include "KAux.h"
@@ -24,12 +24,12 @@ void KProfileEditor::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KProfileEditor::OnActivate, this);
 
 	// Columns
-	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ModManager.Profile.LocalSaves"), ColumnID::LocalSaves, KxDATAVIEW_CELL_ACTIVATABLE);
-	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ModManager.Profile.LocalConfig"), ColumnID::LocalConfig, KxDATAVIEW_CELL_ACTIVATABLE);
 	{
-		auto info = GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE);
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, 250);
 		info.GetRenderer()->SetDefaultToggleType(KxDataViewToggleRenderer::ToggleType::RadioBox);
 	}
+	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ModManager.Profile.LocalSaves"), ColumnID::LocalSaves, KxDATAVIEW_CELL_ACTIVATABLE);
+	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ModManager.Profile.LocalConfig"), ColumnID::LocalConfig, KxDATAVIEW_CELL_ACTIVATABLE);
 }
 
 void KProfileEditor::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const

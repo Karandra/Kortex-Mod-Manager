@@ -10,7 +10,7 @@
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
 #include "Events/KVFSEvent.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "GameInstance/Config/KLocationsManagerConfig.h"
 #include "KPluggableManager.h"
 #include "KApp.h"

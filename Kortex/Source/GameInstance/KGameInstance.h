@@ -7,8 +7,9 @@
 #include "KAux.h"
 #include <KxFramework/KxINI.h>
 #include <KxFramework/KxFileStream.h>
-class KxXMLDocument;
+class KActiveGameInstance;
 class KProfile;
+class KxXMLDocument;
 
 class KGameInstance
 {
@@ -50,8 +51,8 @@ class KGameInstance
 		static void FindInstanceTemplates(const wxString& path, bool isSystem);
 
 	public:
-		static KGameInstance* GetActive();
-		static void AssignActive(KGameInstance& instance);
+		static KActiveGameInstance* GetActive();
+		static void AssignActive(KActiveGameInstance& instance);
 		static void DestroyActive();
 
 		static wxString GetCurrentProfileID();
@@ -260,6 +261,11 @@ class KConfigurableGameInstance: public KGameInstance
 	protected:
 		virtual bool OnLoadInstance(const KxXMLDocument& instanceConfig) override;
 
+	public:
+		KConfigurableGameInstance(const KGameInstance& instanceTemplate, const wxString& instanceID);
+		virtual ~KConfigurableGameInstance();
+
+	public:
 		const KxINI& GetConfig() const
 		{
 			return m_Config;
@@ -268,11 +274,6 @@ class KConfigurableGameInstance: public KGameInstance
 		{
 			return m_Config;
 		}
-
-	public:
-		KConfigurableGameInstance(const KGameInstance& instanceTemplate, const wxString& instanceID);
-		virtual ~KConfigurableGameInstance();
-
-	public:
+		
 		virtual bool SaveConfig() override;
 };

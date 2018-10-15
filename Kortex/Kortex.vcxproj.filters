@@ -522,9 +522,6 @@
     <ClCompile Include="Source\IPC\KIPCServer.cpp">
       <Filter>Code\Source Files\IPC</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModManager\KModManagerDispatcher.cpp">
-      <Filter>Code\Source Files\ModManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageManager\KPackageManagerListModel.cpp">
       <Filter>Code\Source Files\PackageManager</Filter>
     </ClCompile>
@@ -797,6 +794,9 @@
     </ClCompile>
     <ClCompile Include="Source\Profile\KProfileEditor.cpp">
       <Filter>Code\Source Files\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModManager\KDispatcher.cpp">
+      <Filter>Code\Source Files\ModManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1130,9 +1130,6 @@
     <ClInclude Include="Source\Utility\KUnsortedUnique.h">
       <Filter>Code\Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModManager\KModManagerDispatcher.h">
-      <Filter>Code\Header Files\ModManager</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
@@ -1441,6 +1438,12 @@
     </ClInclude>
     <ClInclude Include="Source\KEventsFwd.h">
       <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModManager\KDispatcher.h">
+      <Filter>Code\Header Files\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\KInstnaceManagement.h">
+      <Filter>Code\Header Files\GameInstance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

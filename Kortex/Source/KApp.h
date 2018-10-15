@@ -76,6 +76,10 @@ class KApp: public KxApp<wxApp, KApp>
 		const wxString& GetUserSettingsFile();
 		wxString GetInstancesRoot() const;
 
+		KIVariablesTable& GetVariables()
+		{
+			return m_Variables;
+		}
 		wxString ExpandVariablesLocally(const wxString& variables) const
 		{
 			return m_Variables.Expand(variables);

@@ -235,8 +235,8 @@
 		<String ID="InstanceSelection.RemoveInstance">Удалить инстанс</String>
 		<String ID="InstanceSelection.CreateShortcut">Создать ярлык</String>
 		
-		<String ID="InstanceSelection.GameNotFound.Caption">Расположение $(GameShortName) не найдено</String>
-		<String ID="InstanceSelection.GameNotFound.Message">Установочная папка $(GameName) не найдена или не существует. Укажите папку вручную, чтобы продолжить.</String>
+		<String ID="InstanceSelection.GameNotFound.Caption">Расположение %1 не найдено</String>
+		<String ID="InstanceSelection.GameNotFound.Message">Установочная папка %1 не найдена или не существует. Укажите папку вручную, чтобы продолжить.</String>
 		
 		<String ID="InstanceSelection.ChangeInstanceDialog.Caption">Для смены инстанса требуется перезапуск программы</String>
 		<String ID="InstanceSelection.ChangeInstanceDialog.Message">Выполнить перезапуск?</String>

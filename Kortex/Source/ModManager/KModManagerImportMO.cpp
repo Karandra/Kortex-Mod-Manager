@@ -184,8 +184,8 @@ void KModManagerImportMO::ReadExecutables(KOperationWithProgressDialogBase* cont
 {
 	context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KProgramManager::GetInstance()->GetName()));
 
-	KProgramManagerEntry::Vector& programList = KProgramManager::GetInstance()->GetProgramList();
-	KProgramManagerEntry* pCurrentEntry = NULL;
+	KProgramEntry::Vector& programList = KProgramManager::GetInstance()->GetProgramList();
+	KProgramEntry* pCurrentEntry = NULL;
 
 	const wxString sectionName("customExecutables");
 	long count = -1;
@@ -203,7 +203,7 @@ void KModManagerImportMO::ReadExecutables(KOperationWithProgressDialogBase* cont
 				return m_Options.GetValue(sectionName, wxString::Format("%d\\%s", i, name));
 			};
 
-			KProgramManagerEntry& entry = programList.emplace_back();
+			KProgramEntry& entry = programList.emplace_back();
 			entry.SetName(GetValue("title"));
 			entry.SetExecutable(ProcessFilePath(GetValue("binary")));
 			entry.SetArguments(ProcessFilePath(GetValue("arguments")));

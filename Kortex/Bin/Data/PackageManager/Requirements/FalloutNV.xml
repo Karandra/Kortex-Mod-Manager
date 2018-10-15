@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Requirements>
 	<!-- General -->
-	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(Name)</Name>
+	<Entry ID="$(GameID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameName)</Name>
 		<Object Function="FileExist">FalloutNV.exe</Object>
 		<Version Function="GTEQ">1.4.0.525</Version>
 	</Entry>

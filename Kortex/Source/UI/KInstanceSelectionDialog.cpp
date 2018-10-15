@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KInstanceSelectionDialog.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "UI/KInstanceCreatorDialog.h"
 #include "KThemeManager.h"
 #include "KApp.h"
@@ -13,6 +13,7 @@
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileBrowseDialog.h>
+#include <KxFramework/KxShell.h>
 #include <KxFramework/KxShellLink.h>
 #include <KxFramework/KxLibrary.h>
 
@@ -117,7 +118,6 @@ void KInstanceSelectionDialog::Configure()
 			KGameInstance* activeInstance = KGameInstance::GetActive();
 
 			LoadInstancesList(instanceTemplate, activeInstance ? activeInstance->GetInstanceID() : wxEmptyString);
-			OnDisplayTemplateInfo(instanceTemplate);
 		}
 	});
 	m_InstancesList->Bind(wxEVT_LIST_ITEM_SELECTED, [this](wxCommandEvent& event)
@@ -127,6 +127,8 @@ void KInstanceSelectionDialog::Configure()
 		m_OK->Enable(true);
 		m_Remove->Enable(!instance->IsActiveInstance());
 		m_CreateShortcut->Enable(true);
+
+		OnDisplayInstanceInfo(instance);
 		event.Skip();
 	});
 	m_InstancesList->Bind(wxEVT_LIST_ITEM_DESELECTED, [this](wxCommandEvent& event)
@@ -134,6 +136,8 @@ void KInstanceSelectionDialog::Configure()
 		m_OK->Enable(false);
 		m_Remove->Enable(false);
 		m_CreateShortcut->Enable(false);
+
+		OnDisplayInstanceInfo(NULL);
 		event.Skip();
 	});
 
@@ -219,12 +223,12 @@ bool KInstanceSelectionDialog::AskForGameFolder(const KGameInstance* instanceTem
 void KInstanceSelectionDialog::OnCreateShortcut(wxCommandEvent& event)
 {
 	const KGameInstance* instanceTemplate = GetSelectedTemplate();
-	KGameInstance* configID = GetSelectedInstance();
-	if (instanceTemplate && configID)
+	KGameInstance* instance = GetSelectedInstance();
+	if (instanceTemplate && instance)
 	{
 		KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 		dialog.SetDefaultExtension("lnk");
-		dialog.SetFileName(wxString::Format("%s - %s", instanceTemplate->GetShortName(), configID));
+		dialog.SetFileName(wxString::Format("%s - %s", instance->GetShortName(), instance->GetInstanceID()));
 		dialog.SetOptionEnabled(KxFBD_NO_DEREFERENCE_LINKS);
 
 		dialog.AddFilter("*.lnk", T("FileFilter.Shortcuts"));
@@ -234,7 +238,7 @@ void KInstanceSelectionDialog::OnCreateShortcut(wxCommandEvent& event)
 		{
 			KxShellLink link;
 			link.SetTarget(KxLibrary(NULL).GetFileName());
-			link.SetArguments(wxString::Format("-GameID \"%s\" -InstanceID \"%s\"", instanceTemplate->GetGameID(), configID));
+			link.SetArguments(wxString::Format("-GameID \"%s\" -InstanceID \"%s\"", instanceTemplate->GetGameID(), instance));
 			link.SetWorkingFolder(KxFile::GetCWD());
 			link.SetIconLocation(KxFile(instanceTemplate->GetIconLocation()).GetFullPath());
 			link.Save(dialog.GetResult());
@@ -297,7 +301,12 @@ void KInstanceSelectionDialog::OnButton(wxNotifyEvent& event)
 		// Ask user
 		if (!KxFile(gamePath).IsFolderExist())
 		{
-			if (!AskForGameFolder(instanceTemplate, gamePath))
+			if (AskForGameFolder(instanceTemplate, gamePath))
+			{
+				instance->GetVariables().SetVariable(KVAR_ACTUAL_GAME_DIR, m_NewGameRoot);
+				instance->SaveConfig();
+			}
+			else
 			{
 				return;
 			}
@@ -313,11 +322,52 @@ void KInstanceSelectionDialog::OnUpdateProfiles(wxNotifyEvent& event)
 {
 	LoadInstancesList(GetSelectedTemplate(), event.GetString());
 }
-void KInstanceSelectionDialog::OnDisplayTemplateInfo(const KGameInstance* instanceTemplate)
+void KInstanceSelectionDialog::OnDisplayInstanceInfo(const KGameInstance* instance)
 {
-	m_TextBox->Clear();
-	if (instanceTemplate)
+	auto PrintSeparator = [this]()
 	{
-		m_TextBox->SetValue(instanceTemplate->GetName());
+		*m_TextBox << wxS("\r\n\r\n");
+	};
+	auto PrintVariables = [this](const KIVariablesTable& variables)
+	{
+		variables.Accept([this](const wxString& name, const KIVariableValue& value)
+		{
+			*m_TextBox << KxFormat(wxS("$(%1)%2 = \"%3\"")).arg(name).arg(value.IsOverride() ? wxS("*") : wxS("")).arg(value) << wxS("\r\n");
+			return true;
+		});
+	};
+
+	wxWindowUpdateLocker lock(m_TextBox);
+	m_TextBox->Clear();
+	m_TextBox->Disable();
+
+	if (instance)
+	{
+		if (instance->IsActiveInstance())
+		{
+			instance = KGameInstance::GetActive();
+		}
+		m_TextBox->Enable();
+
+		// Instance variables
+		PrintVariables(instance->GetVariables());
+		PrintSeparator();
+
+		// App variables
+		PrintVariables(KApp::Get().GetVariables());
+		PrintSeparator();
+
+		// $SH(*) variables
+		for (const auto& [id, item]: KxShell::GetShellFolderList())
+		{
+			*m_TextBox << KxFormat(wxS("$SH(%1) = \"%2\"")).arg(item.second).arg(KxShell::GetFolder(id)) << wxS("\r\n");
+		}
+		PrintSeparator();
+
+		// $ENV(*) variables
+		for (const auto&[name, value]: KxSystem::GetEnvironmentVariables())
+		{
+			*m_TextBox << KxFormat(wxS("$ENV(%1) = \"%2\"")).arg(name).arg(value) << wxS("\r\n");
+		}
 	}
 }

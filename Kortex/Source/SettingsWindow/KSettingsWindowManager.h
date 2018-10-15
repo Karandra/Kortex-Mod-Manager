@@ -7,16 +7,29 @@ class KApp;
 class KWorkspace;
 class KxXMLNode;
 
+class KCMDataProviderInstance: public KCMDataProviderINIBase
+{
+	public:
+		virtual bool IsOK() const override;
+
+		virtual KxINI& GetDocument() override;
+		virtual const KxINI& GetDocument() const override;
+
+		virtual void Save() const override;
+		virtual void Load() override;
+};
+
+//////////////////////////////////////////////////////////////////////////
 class KSettingsWindowManager: public KConfigManager
 {
 	friend class KApp;
 
 	private:
 		KCMDataProviderINI m_AppConfig;
-		KCMDataProviderINI m_CurrentProfileConfig;
+		KCMDataProviderInstance m_InstanceConfig;
 
 	private:
-		KCMDataProviderINI* GetProvider(KPGCFileID id);
+		KCMDataProviderWithIniDocument* GetProvider(KPGCFileID id);
 
 	public:
 		KImageEnum GetImageID() const override
@@ -32,7 +45,6 @@ class KSettingsWindowManager: public KConfigManager
 
 	public:
 		void InitAppConfig();
-		void InitCurrentProfileConfig();
 		void InitControllerData();
 
 		virtual void Save() const override;

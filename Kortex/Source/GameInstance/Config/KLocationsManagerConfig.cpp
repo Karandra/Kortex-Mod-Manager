@@ -17,7 +17,7 @@ KLocationsManagerConfig::KLocationsManagerConfig(KGameInstance& profile, const K
 	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_CONFIG_DIR), T("OpenLocation.VirtualConfigRoot")));
 	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_OVERWRITES_DIR), T("OpenLocation.WriteTargetRoot")));
 	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_INSTANCE_DIR), T("OpenLocation.CurrentProfileRoot")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_INSTANCES_ROOT), T("OpenLocation.ProfilesRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_INSTANCES_DIR), T("OpenLocation.ProfilesRoot")));
 	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_MODS_DIR), T("OpenLocation.ModsRoot")));
 	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_SAVES_DIR), T("OpenLocation.Saves")));
 

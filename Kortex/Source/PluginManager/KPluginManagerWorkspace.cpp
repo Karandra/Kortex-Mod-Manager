@@ -5,7 +5,7 @@
 #include "KPluginViewBaseModel.h"
 #include "LOOT API/KLootAPI.h"
 #include "UI/KImageViewerDialog.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "Profile/KProfile.h"
 #include "GameInstance/Config/KPluginManagerConfig.h"
 #include "GameInstance/Config/KConfigManagerConfig.h"

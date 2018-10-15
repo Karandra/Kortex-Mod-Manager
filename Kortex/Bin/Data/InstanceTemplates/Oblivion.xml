@@ -7,25 +7,25 @@
 		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
 			<Node>32</Node>
 			<Root>HKEY_LOCAL_MACHINE</Root>
-			<Path>SOFTWARE\Bethesda Softworks\$(ID)</Path>
+			<Path>SOFTWARE\Bethesda Softworks\$(GameID)</Path>
 			<ValueName>Installed Path</ValueName>
 			<ValueType>REG_SZ</ValueType>
 		</Entry>
-		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\$(ID)</Entry>
+		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\$(GameID)</Entry>
 		<Entry ID="GameExecutable">$(GameRoot)\Oblivion.exe</Entry>
 		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\Oblivion.exe</Entry>
-		<Entry ID="NexusID">$(ID)</Entry>
+		<Entry ID="NexusID">$(GameID)</Entry>
 
 		<!--Names-->
 		<Entry ID="EditorName">Construction Set</Entry>
-		<Entry ID="LauncherName">$(NameShort) Launcher</Entry>
-		<Entry ID="ScriptExtenderName">$(NameShort) Script Extender</Entry>
+		<Entry ID="LauncherName">$(GameShortName) Launcher</Entry>
+		<Entry ID="ScriptExtenderName">$(GameShortName) Script Extender</Entry>
 		<Entry ID="ScriptExtenderNameShort">OBSE</Entry>
 		
 		<!--Misc-->
 		<Entry ID="DataFilesPath">$(GameRoot)\Data</Entry>
-		<Entry ID="SavesPath">$SH(SHF_DOCUMENTS)\My Games\$(ID)\Saves</Entry>
-		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(ID)Launcher.exe</Entry>
+		<Entry ID="SavesPath">$SH(SHF_DOCUMENTS)\My Games\$(GameID)\Saves</Entry>
+		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(GameID)Launcher.exe</Entry>
 		<Entry ID="GameEditorPath">$(VirtualGameRoot)\TESConstructionSet.exe</Entry>
 		<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderNameShort)_Loader.exe</Entry>
 		<Entry ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Entry>
@@ -52,7 +52,7 @@
 				<Sources>
 					<Entry>$(ModListRoot)\LocalPlugins</Entry>
 				</Sources>
-				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\$(ID)</Target>
+				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\$(GameID)</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
@@ -60,20 +60,20 @@
 	<ProgramConfig>
 		<Main>
 			<Entry>
-				<Name>$(NameShort)</Name>
-				<Icon>$(ID).exe</Icon>
+				<Name>$(GameShortName)</Name>
+				<Icon>$(GameID).exe</Icon>
 				<Executable>$(VirtualGameExecutable)</Executable>
 				<Arguments></Arguments>
 			</Entry>
 			<Entry>
-				<Name>$(NameShort) ($(ScriptExtenderNameShort))</Name>
+				<Name>$(GameShortName) ($(ScriptExtenderNameShort))</Name>
 				<Icon>$(ScriptExtenderNameShort)_Loader.exe</Icon>
 				<Executable>$(ScriptExtenderPath)</Executable>
 				<Arguments></Arguments>
 			</Entry>
 			<Entry>
 				<Name>$(LauncherName)</Name>
-				<Icon>$(ID)Launcher.exe</Icon>
+				<Icon>$(GameID)Launcher.exe</Icon>
 				<Executable>$(GameLauncherPath)</Executable>
 				<Arguments></Arguments>
 			</Entry>
@@ -101,7 +101,7 @@
 	</ProgramConfig>
 
 	<GameConfig EnableENB="1">
-		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigRootLocal)\$(ID).ini</Entry>
+		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigRootLocal)\$(GameID).ini</Entry>
 		<Entry ID="1000" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigRootLocal)\ConstructionSet.ini</Entry>
 	</GameConfig>
 
@@ -115,13 +115,13 @@
 		<SortByFileModificationDate>1</SortByFileModificationDate>
 
 		<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
-		<OrderListHeader><![CDATA[# This file is used by $(NameShort) to keep track of your downloaded content.
+		<OrderListHeader><![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
 # Please do not modify this file.
 # Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></OrderListHeader>
 
 		<SortingTools>
 			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
-				<Command><![CDATA[--game=$(ID)]]></Command>
+				<Command><![CDATA[--game=$(GameID)]]></Command>
 			</Entry>
 		</SortingTools>
 
@@ -133,18 +133,18 @@
 		</LOOTAPI>
 
 		<StandardContent MainID="Oblivion.esm">
-			<Entry ID="Oblivion.esm" Name="$(NameShort)" Logo="Oblivion.png"/>
-			<Entry ID="OblivionMsg.esp" Name="$(NameShort)" Logo="Oblivion.png"/>
-			<Entry ID="DLCShiveringIsles.esp" Name="$(NameShort): Shivering Isles" Logo="ShiveringIsles.png"/>
-			<Entry ID="Knights.esp" Name="$(NameShort): Knights of the Nine" Logo="Knights.png"/>
-			<Entry ID="DLCSpellTomes.esp" Name="$(NameShort): Spell Tomes" Logo="Oblivion.png"/>
-			<Entry ID="DLCVileLair.esp" Name="$(NameShort): The Vile Lair" Logo="Oblivion.png"/>
-			<Entry ID="DLCMehrunesRazor.esp" Name="$(NameShort): Mehrunes Razor" Logo="Oblivion.png"/>
-			<Entry ID="DLCThievesDen.esp" Name="$(NameShort): The Thieves Den" Logo="Oblivion.png"/>
-			<Entry ID="DLCFrostcrag.esp" Name="$(NameShort): Wizard's Tower" Logo="Oblivion.png"/>
-			<Entry ID="DLCOrrery.esp" Name="$(NameShort): Orrery" Logo="Oblivion.png"/>
-			<Entry ID="DLCHorseArmor.esp" Name="$(NameShort): Horse Armor" Logo="Oblivion.png"/>
-			<Entry ID="DLCFightersStronghold.esp" Name="$(NameShort): Fighter's Stronghold" Logo="Oblivion.png"/>
+			<Entry ID="Oblivion.esm" Name="$(GameShortName)" Logo="Oblivion.png"/>
+			<Entry ID="OblivionMsg.esp" Name="$(GameShortName)" Logo="Oblivion.png"/>
+			<Entry ID="DLCShiveringIsles.esp" Name="$(GameShortName): Shivering Isles" Logo="ShiveringIsles.png"/>
+			<Entry ID="Knights.esp" Name="$(GameShortName): Knights of the Nine" Logo="Knights.png"/>
+			<Entry ID="DLCSpellTomes.esp" Name="$(GameShortName): Spell Tomes" Logo="Oblivion.png"/>
+			<Entry ID="DLCVileLair.esp" Name="$(GameShortName): The Vile Lair" Logo="Oblivion.png"/>
+			<Entry ID="DLCMehrunesRazor.esp" Name="$(GameShortName): Mehrunes Razor" Logo="Oblivion.png"/>
+			<Entry ID="DLCThievesDen.esp" Name="$(GameShortName): The Thieves Den" Logo="Oblivion.png"/>
+			<Entry ID="DLCFrostcrag.esp" Name="$(GameShortName): Wizard's Tower" Logo="Oblivion.png"/>
+			<Entry ID="DLCOrrery.esp" Name="$(GameShortName): Orrery" Logo="Oblivion.png"/>
+			<Entry ID="DLCHorseArmor.esp" Name="$(GameShortName): Horse Armor" Logo="Oblivion.png"/>
+			<Entry ID="DLCFightersStronghold.esp" Name="$(GameShortName): Fighter's Stronghold" Logo="Oblivion.png"/>
 		</StandardContent>
 	</PluginManager>
 

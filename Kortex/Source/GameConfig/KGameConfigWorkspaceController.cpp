@@ -4,7 +4,7 @@
 #include "KGameConfigWorkspace.h"
 #include "ConfigManager/KConfigManager.h"
 #include "ConfigManager/KCMController.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "KApp.h"
 
 KxTreeListItem KGameConfigWorkspaceController::CreateUnknownItemsRoot()

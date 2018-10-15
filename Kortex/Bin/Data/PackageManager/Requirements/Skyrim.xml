@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Requirements>
 	<!-- General -->
-	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(Name)</Name>
+	<Entry ID="$(GameID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameName)</Name>
 		<Object Function="FileExist">TESV.exe</Object>
 		<Version Function="GTEQ">1.9.32.0</Version>
 	</Entry>
 	<Entry ID="Update" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(NameShort): Update</Name>
+		<Name>$(GameShortName): Update</Name>
 		<Object Function="PluginActive">Update.esm</Object>
 	</Entry>
 	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">

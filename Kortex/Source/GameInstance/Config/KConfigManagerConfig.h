@@ -25,7 +25,7 @@ enum KPGCFileID: int
 	KPGC_ID_ENB_LOCAL = -1000,
 	KPGC_ID_ENB_SERIES = -1001,
 	
-	KPGC_ID_CURRENT_INSTANCE = INT_MAX - 1,
+	KPGC_ID_INSTANCE = INT_MAX - 1,
 	KPGC_ID_APP = INT_MAX,
 };
 
@@ -51,7 +51,7 @@ class KConfigManagerConfigEntry
 		}
 		bool IsGameConfigID() const
 		{
-			return IsOK() && m_ID != KPGC_ID_APP && m_ID != KPGC_ID_CURRENT_INSTANCE;
+			return IsOK() && m_ID != KPGC_ID_APP && m_ID != KPGC_ID_INSTANCE;
 		}
 		bool IsENBID() const
 		{

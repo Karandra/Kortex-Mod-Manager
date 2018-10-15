@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "KProgramManager.h"
-#include "GameInstance/KGameInstance.h"
-#include "Events/KVFSEvent.h"
-#include "Events/KLogEvent.h"
+#include "GameInstance/KInstnaceManagement.h"
+#include "KEvents.h"
 #include "UI/KMainWindow.h"
 #include "ModManager/KModManager.h"
-#include "ModManager/KModManagerDispatcher.h"
+#include "ModManager/KDispatcher.h"
 #include "GameInstance/Config/KProgramManagerConfig.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -21,13 +20,11 @@
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 
-KProgramManagerEntry::KProgramManagerEntry()
+KProgramEntry::KProgramEntry()
 {
 }
-KProgramManagerEntry::KProgramManagerEntry(const KxXMLNode& node)
+KProgramEntry::KProgramEntry(const KxXMLNode& node)
 {
-	m_RequiresVFS = node.GetAttributeBool("RequiresVFS", true);
-
 	m_Name = V(node.GetFirstChildElement("Name").GetValue());
 	m_IconPath = V(node.GetFirstChildElement("Icon").GetValue());
 	m_Executable = V(node.GetFirstChildElement("Executable").GetValue());
@@ -35,17 +32,13 @@ KProgramManagerEntry::KProgramManagerEntry(const KxXMLNode& node)
 	m_WorkingDirectory = V(node.GetFirstChildElement("WorkingDirectory").GetValue());
 }
 
-bool KProgramManagerEntry::IsOK() const
+bool KProgramEntry::IsOK() const
 {
 	return !m_Name.IsEmpty() && !m_Executable.IsEmpty();
 }
-bool KProgramManagerEntry::CalcRequiresVFS() const
+bool KProgramEntry::IsRequiresVFS() const
 {
-	if (!IsRequiresVFS())
-	{
-		return KxString::ToLower(m_Executable).StartsWith(KxString::ToLower(V(KVAR(KVAR_VIRTUAL_GAME_DIR))));
-	}
-	return m_RequiresVFS;
+	return KDispatcher::GetInstance()->ResolveLocation(m_Executable) != NULL;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -66,7 +59,7 @@ void KProgramManager::InitKExecute(KxProcess& process, const wxString& executabl
 	process.SetWorkingFolder(workingDirectory.IsEmpty() ? executable.BeforeLast('\\') : workingDirectory);
 	process.SetArguments(arguments);
 }
-void KProgramManager::InitKExecute(KxProcess& process, const KProgramManagerEntry& runEntry)
+void KProgramManager::InitKExecute(KxProcess& process, const KProgramEntry& runEntry)
 {
 	return InitKExecute(process, runEntry.GetExecutable(), runEntry.GetArguments(), runEntry.GetWorkingDirectory());
 }
@@ -75,7 +68,7 @@ void KProgramManager::OnInit()
 {
 	LoadProgramList();
 }
-wxBitmap KProgramManager::OnQueryItemImage(const KProgramManagerEntry& runEntry) const
+wxBitmap KProgramManager::OnQueryItemImage(const KProgramEntry& runEntry) const
 {
 	wxString iconPath = runEntry.GetIconPath();
 	if (iconPath.IsEmpty())
@@ -130,7 +123,7 @@ void KProgramManager::OnMenuOpen(KxMenuEvent& event)
 
 	for (KxMenuItem* item: m_MenuItems)
 	{
-		KProgramManagerEntry* entry = (KProgramManagerEntry*)item->GetClientData();
+		KProgramEntry* entry = (KProgramEntry*)item->GetClientData();
 		if (entry)
 		{
 			item->Enable(entry->IsRequiresVFS() ? isVFSEnabled : true);
@@ -147,7 +140,7 @@ void KProgramManager::OnMenuOpen(KxMenuEvent& event)
 	event.Skip();
 }
 
-void KProgramManager::DoRunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog, KxProcess** processOut)
+void KProgramManager::DoRunEntry(const KProgramEntry& runEntry, KxProgressDialog* dialog, KxProcess** processOut)
 {
 	auto OnProcessEnd = [this, dialog](wxProcessEvent& event)
 	{
@@ -168,7 +161,7 @@ void KProgramManager::DoRunEntry(const KProgramManagerEntry& runEntry, KxProgres
 		process->Run(KxPROCESS_RUN_SYNC);
 	}
 }
-bool KProgramManager::CheckEntry(const KProgramManagerEntry& runEntry)
+bool KProgramManager::CheckEntry(const KProgramEntry& runEntry)
 {
 	if (KxFile(runEntry.GetExecutable()).IsFileExist())
 	{
@@ -206,7 +199,7 @@ void KProgramManager::EndRunProcess(KxProgressDialog* dialog, KxProcess* process
 	}
 	delete process;
 }
-void KProgramManager::RunMain(KxProgressDialog* dialog, const KProgramManagerEntry& runEntry)
+void KProgramManager::RunMain(KxProgressDialog* dialog, const KProgramEntry& runEntry)
 {
 	dialog->SetLabel(T("ProgramManager.ExecutingMain"));
 	dialog->Pulse();
@@ -222,7 +215,7 @@ void KProgramManager::LoadProgramList()
 	m_ProgramList.clear();
 	for (KxXMLNode node = xml.GetFirstChildElement("Programs").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
-		KProgramManagerEntry& entry = m_ProgramList.emplace_back(KProgramManagerEntry(node));
+		KProgramEntry& entry = m_ProgramList.emplace_back(KProgramEntry(node));
 		if (!entry.IsOK())
 		{
 			m_ProgramList.pop_back();
@@ -234,10 +227,9 @@ void KProgramManager::SaveProgramList() const
 	KxXMLDocument xml;
 	KxXMLNode rootNode = xml.NewElement("Programs");
 
-	for (const KProgramManagerEntry& entry: m_ProgramList)
+	for (const KProgramEntry& entry: m_ProgramList)
 	{
 		KxXMLNode node = rootNode.NewElement("Entry");
-		node.SetAttribute("RequiresVFS", entry.IsRequiresVFS());
 		node.NewElement("Name").SetValue(entry.GetName());
 		if (!entry.GetIconPath().IsEmpty())
 		{
@@ -281,7 +273,7 @@ wxString KProgramManager::GetProgramsListFile() const
 }
 void KProgramManager::UpdateProgramListImages()
 {
-	for (KProgramManagerEntry& entry: m_ProgramList)
+	for (KProgramEntry& entry: m_ProgramList)
 	{
 		if (!entry.HasBitmap())
 		{
@@ -312,7 +304,7 @@ void KProgramManager::OnAddMenuItems(KxMenu* menu)
 		{
 			if (index < KProgramManagerConfig::GetInstance()->GetProgramsCount())
 			{
-				const KProgramManagerEntry& entry = KProgramManagerConfig::GetInstance()->GetPrograms()[index];
+				const KProgramEntry& entry = KProgramManagerConfig::GetInstance()->GetPrograms()[index];
 
 				KxMenuItem* item = menu->Add(new KxMenuItem(wxString::Format("%s %s", T("Generic.Run"), entry.GetName())));
 				item->Enable(false);
@@ -333,7 +325,7 @@ void KProgramManager::OnAddMenuItems(KxMenu* menu)
 
 	m_Menu->Bind(KxEVT_MENU_OPEN, &KProgramManager::OnMenuOpen, this);
 }
-void KProgramManager::OnRunEntry(KxMenuItem* menuItem, const KProgramManagerEntry& runEntry)
+void KProgramManager::OnRunEntry(KxMenuItem* menuItem, const KProgramEntry& runEntry)
 {
 	if (CheckEntry(runEntry))
 	{
@@ -354,7 +346,7 @@ void KProgramManager::Load()
 	LoadProgramList();
 }
 
-bool KProgramManager::RunEntry(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog)
+bool KProgramManager::RunEntry(const KProgramEntry& runEntry, KxProgressDialog* dialog)
 {
 	if (CheckEntry(runEntry))
 	{
@@ -363,7 +355,7 @@ bool KProgramManager::RunEntry(const KProgramManagerEntry& runEntry, KxProgressD
 	}
 	return false;
 }
-KxProcess* KProgramManager::RunEntryDelayed(const KProgramManagerEntry& runEntry, KxProgressDialog* dialog)
+KxProcess* KProgramManager::RunEntryDelayed(const KProgramEntry& runEntry, KxProgressDialog* dialog)
 {
 	if (CheckEntry(runEntry))
 	{

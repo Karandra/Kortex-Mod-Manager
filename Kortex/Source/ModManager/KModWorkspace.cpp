@@ -5,7 +5,7 @@
 #include "KModManager.h"
 #include "KModEntry.h"
 #include "KModStatistics.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "Profile/KProfileEditor.h"
 #include "KModTagsSelector.h"
 #include "KModSites.h"

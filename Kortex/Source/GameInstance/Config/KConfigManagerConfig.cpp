@@ -50,7 +50,7 @@ KConfigManagerConfig::KConfigManagerConfig(KGameInstance& profile, const KxXMLNo
 		m_Entries.push_back(KConfigManagerConfigEntry(KPGC_ID_ENB_SERIES, KPGC_FORMAT_INI, KCM_DETECTOR_DATA_ANALYSIS, "ENBSeries.ini"));
 	}
 	m_Entries.push_back(KConfigManagerConfigEntry(KPGC_ID_APP, KPGC_FORMAT_INI, KCM_DETECTOR_HUNGARIAN_NOTATION, KApp::Get().GetUserSettingsFile()));
-	m_Entries.push_back(KConfigManagerConfigEntry(KPGC_ID_CURRENT_INSTANCE, KPGC_FORMAT_INI, KCM_DETECTOR_HUNGARIAN_NOTATION, profile.GetConfigFile()));
+	m_Entries.push_back(KConfigManagerConfigEntry(KPGC_ID_INSTANCE, KPGC_FORMAT_INI, KCM_DETECTOR_HUNGARIAN_NOTATION, profile.GetConfigFile()));
 }
 
 const KConfigManagerConfigEntry* KConfigManagerConfig::GetEntry(KPGCFileID id) const

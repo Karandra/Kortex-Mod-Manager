@@ -5,7 +5,7 @@
 #include "KThemeManager.h"
 #include "Themes/KThemeDefault.h"
 #include "Themes/KThemeVisualStudio.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "UI/KInstanceSelectionDialog.h"
@@ -52,7 +52,7 @@ namespace
 
 KApp::KApp()
 	:m_ImageList(GetSmallIconWidth(), GetSmallIconHeight(), false, KIMG_COUNT),
-	m_GeneralOptions(KPGC_ID_CURRENT_INSTANCE, "KApp", "General"),
+	m_GeneralOptions(KPGC_ID_INSTANCE, "KApp", "General"),
 	m_GeneralOptions_AppWide(KPGC_ID_APP, "KApp", "General"),
 	m_InstanceOptions_AppWide(KPGC_ID_APP, "KApp", "Instances")
 {
@@ -111,7 +111,7 @@ const wxString& KApp::GetUserSettingsFile()
 }
 wxString KApp::GetInstancesRoot() const
 {
-	return m_Variables.GetVariable(KVAR_INSTANCES_ROOT);
+	return m_Variables.GetVariable(KVAR_INSTANCES_DIR);
 }
 
 wxString KApp::ExpandVariables(const wxString& variables) const
@@ -239,7 +239,6 @@ int KApp::OnExit()
 
 	// Destroy other managers
 	UnInitGlobalManagers();
-	KGameInstance::DestroyActive();
 	KThemeManager::Cleanup();
 	KArchive::UnInit();
 
@@ -249,6 +248,7 @@ int KApp::OnExit()
 		SaveSettings();
 	}
 	delete m_SettingsManager;
+	KGameInstance::DestroyActive();
 
 	wxLogInfo("Log closed");
 	CleanupLogs();
@@ -405,7 +405,7 @@ void KApp::InitSettings()
 	wxLogInfo("Initializing app settings");
 
 	// Init some application-wide variables
-	m_Variables.SetVariable(KVAR_INSTANCES_ROOT, m_InstanceOptions_AppWide.GetAttribute("Location", GetUserSettingsFolder()));
+	m_Variables.SetVariable(KVAR_INSTANCES_DIR, m_InstanceOptions_AppWide.GetAttribute("Location", GetUserSettingsFolder()));
 
 	// Show first time config dialog if needed and save new 'ProfilesFolder'
 	if (IsPreStartConfigNeeded())
@@ -418,7 +418,7 @@ void KApp::InitSettings()
 		}
 	}
 
-	m_InstanceOptions_AppWide.SetAttribute("Location", ExpandVariables(KVAR(KVAR_INSTANCES_ROOT)));
+	m_InstanceOptions_AppWide.SetAttribute("Location", ExpandVariables(KVAR(KVAR_INSTANCES_DIR)));
 	wxLogInfo("Profiles folder: %s", m_InstanceOptions_AppWide.GetAttribute("Location"));
 	SaveSettings();
 
@@ -443,7 +443,7 @@ bool KApp::ShowFirstTimeConfigDialog(wxWindow* parent)
 
 	if (dialog.ShowModal() == KxID_YES)
 	{
-		m_Variables.SetVariable(KVAR_INSTANCES_ROOT, defaultPath);
+		m_Variables.SetVariable(KVAR_INSTANCES_DIR, defaultPath);
 		return true;
 	}
 	else
@@ -452,7 +452,7 @@ bool KApp::ShowFirstTimeConfigDialog(wxWindow* parent)
 		folderDialog.SetFolder(defaultPath);
 		if (folderDialog.ShowModal() == KxID_OK)
 		{
-			m_Variables.SetVariable(KVAR_INSTANCES_ROOT, folderDialog.GetResult());
+			m_Variables.SetVariable(KVAR_INSTANCES_DIR, folderDialog.GetResult());
 			return true;
 		}
 		return false;
@@ -475,6 +475,13 @@ void KApp::InitInstancesData(wxWindow* parent)
 			SetCurrentGameID(dialog.GetNewGameID());
 			SetCurrentInstanceID(dialog.GetNewInstanceID());
 			SaveSettings();
+
+			KGameInstance* activeInstnace = KGameInstance::GetActive();
+			if (activeInstnace && dialog.IsNewGameRootSet())
+			{
+				activeInstnace->GetVariables().SetVariable(KVAR_ACTUAL_GAME_DIR, dialog.GetNewGameRoot());
+				activeInstnace->SaveConfig();
+			}
 
 			wxLogInfo("New GameID: %s, New InstanceID: %s", m_CurrentGameID, m_CurrentInstanceID);
 			wxLogInfo("Trying again");
@@ -701,7 +708,7 @@ KCMConfigEntryStd* KApp::GetSettingsEntry(KPGCFileID id, const wxString& section
 }
 wxString KApp::GetSettingsValue(KPGCFileID id, const wxString& section, const wxString& name) const
 {
-	KCMDataProviderINI* dataProvider = m_SettingsManager->GetProvider(id);
+	KCMDataProviderWithIniDocument* dataProvider = m_SettingsManager->GetProvider(id);
 	if (dataProvider)
 	{
 		return dataProvider->GetDocument().GetValue(section, name);
@@ -710,7 +717,7 @@ wxString KApp::GetSettingsValue(KPGCFileID id, const wxString& section, const wx
 }
 void KApp::SetSettingsValue(KPGCFileID id, const wxString& section, const wxString& name, const wxString& value)
 {
-	KCMDataProviderINI* dataProvider = m_SettingsManager->GetProvider(id);
+	KCMDataProviderWithIniDocument* dataProvider = m_SettingsManager->GetProvider(id);
 	if (dataProvider)
 	{
 		dataProvider->GetDocument().SetValue(section, name, value);

@@ -7,7 +7,7 @@
 #include "Network/KNetworkProviderNexus.h"
 #include "DownloadManager/KDownloadManager.h"
 #include "Profile/KProfile.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "GameInstance/Config/KConfigManagerConfig.h"
 #include "KOperationWithProgress.h"
 #include "KAux.h"

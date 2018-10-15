@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Requirements>
 	<!-- General -->
-	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(Name)</Name>
+	<Entry ID="$(GameID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameName)</Name>
 		<Object Function="FileExist">System\Sacred2.exe</Object>
 		<Version Function="GTEQ">2.65.1.0</Version>
 	</Entry>
@@ -10,7 +10,7 @@
 		<Name>Community Patch</Name>
 		<RequiredState>ModActive</RequiredState>
 		<Dependencies>
-			<Entry>$(ID)</Entry>
+			<Entry>$(GameID)</Entry>
 		</Dependencies>
 	</Entry>
 </Requirements>

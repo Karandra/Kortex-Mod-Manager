@@ -235,8 +235,8 @@ You can do this at %2 website via %3 or a post at the forums.]]></String>
 		<String ID="InstanceSelection.RemoveInstance">Delete instance</String>
 		<String ID="InstanceSelection.CreateShortcut">Create shortcut</String>
 
-		<String ID="InstanceSelection.GameNotFound.Caption">Failed to locate $(GameShortName)</String>
-		<String ID="InstanceSelection.GameNotFound.Message">$(GameName) installation folder not found or doesn't exist. Select the folder manually to continue.</String>
+		<String ID="InstanceSelection.GameNotFound.Caption">Failed to locate %1</String>
+		<String ID="InstanceSelection.GameNotFound.Message">%1 installation folder not found or doesn't exist. Select the folder manually to continue.</String>
 
 		<String ID="InstanceSelection.ChangeInstanceDialog.Caption">To change instance, the application must be restarted</String>
 		<String ID="InstanceSelection.ChangeInstanceDialog.Message">Do you want to restart now?</String>

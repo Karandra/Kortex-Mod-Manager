@@ -80,5 +80,5 @@ class KInstanceSelectionDialog: public KxComboBoxDialog
 		void OnCreateShortcut(wxCommandEvent& event);
 		void OnButton(wxNotifyEvent& event);
 		void OnUpdateProfiles(wxNotifyEvent& event);
-		void OnDisplayTemplateInfo(const KGameInstance* instanceTemplate);
+		void OnDisplayInstanceInfo(const KGameInstance* instance);
 };

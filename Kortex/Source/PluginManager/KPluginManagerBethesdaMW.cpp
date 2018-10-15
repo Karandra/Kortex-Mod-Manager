@@ -2,8 +2,8 @@
 #include "KVariablesDatabase.h"
 #include "KPluginManagerBethesdaMW.h"
 #include "ModManager/KModManager.h"
-#include "ModManager/KModManagerDispatcher.h"
-#include "GameInstance/KGameInstance.h"
+#include "ModManager/KDispatcher.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "GameInstance/Config/KPluginManagerConfig.h"
 #include "Profile/KProfile.h"
 #include "GameConfig/KGameConfigWorkspace.h"
@@ -12,6 +12,7 @@
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxINI.h>
 #include <KxFramework/KxFile.h>
+#include <KxFramework/KxComparator.h>
 
 void KPluginManagerBethesdaMW::ReadOrderMW(const KxINI& ini)
 {
@@ -22,15 +23,14 @@ void KPluginManagerBethesdaMW::ReadOrderMW(const KxINI& ini)
 	for (const wxString& name: loadOrder)
 	{
 		// Check whether plugin with this name exist
-		wxString nameL = KxString::ToLower(name);
-		auto it = std::find_if(files.begin(), files.end(), [&nameL](const KFileTreeNode* node)
+		auto it = std::find_if(files.begin(), files.end(), [&name](const KFileTreeNode* node)
 		{
-			return KxString::ToLower(node->GetName()) == nameL;
+			return KxComparator::IsEqual(node->GetName(), name);
 		});
 
 		if (it != files.end())
 		{
-			if (CheckExtension(nameL))
+			if (CheckExtension(name))
 			{
 				auto& entry = GetEntries().emplace_back(NewPluginEntry(name, false));
 				entry->SetFullPath((*it)->GetFullPath());

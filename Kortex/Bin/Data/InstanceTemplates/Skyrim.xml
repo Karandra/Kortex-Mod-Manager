@@ -7,11 +7,11 @@
 		<Entry ID="ActualGameDir" Type="Registry" SaveAsOverride="1">
 			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
-			<Path>SOFTWARE\Bethesda Softworks\$(GameID)</Path>
+			<Path>SOFTWARE\Bethesda Softworks\Skyrim</Path>
 			<Name>Installed Path</Name>
 			<Type>REG_SZ</Type>
 		</Entry>
-		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\$(GameID)</Entry>
+		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\Skyrim</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
 		<Entry ID="GameExecutable">TESV.exe</Entry>
 		<Entry ID="ScriptExtenderID">SKSE</Entry>
@@ -29,7 +29,7 @@
 					<Entry>$(SavesDir)</Entry>
 					<Entry>$(ConfigDir)</Entry>
 				</Sources>
-				<Target>$(RealConfigDir)</Target>
+				<Target>$(ActualConfigDir)</Target>
 			</Entry>
 			<Entry>
 				<Sources>
@@ -44,19 +44,16 @@
 		<Programs>
 			<Entry>
 				<Name>$(GameNameShort)</Name>
-				<Icon>TESV.exe</Icon>
-				<Executable>TESV.exe</Executable>
+				<Executable>$(GameExecutable)</Executable>
 				<Arguments></Arguments>
 			</Entry>
 			<Entry>
 				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
-				<Icon>SKSE_Loader.exe</Icon>
 				<Executable>SKSE_Loader.exe</Executable>
 				<Arguments></Arguments>
 			</Entry>
 			<Entry>
 				<Name>Skyrim Launcher</Name>
-				<Icon>SkyrimLauncher.exe</Icon>
 				<Executable>SkyrimLauncher.exe</Executable>
 				<Arguments></Arguments>
 			</Entry>
@@ -123,10 +120,12 @@
 
 	<ScreenshotsGallery>
 		<Locations>
-			<Entry>$(GameDir)</Entry>
-			<Entry>$(GameDir)\Screenshots</Entry>
+			<Entry>$(ActualGameDir)</Entry>
+			<Entry>$(ActualGameDir)\Screenshots</Entry>
 			<Entry>$(ConfigDir)</Entry>
 			<Entry>$(ConfigDir)\Screenshots</Entry>
+			<Entry>$(OverwritesDir)</Entry>
+			<Entry>$(OverwritesDir)\Screenshots</Entry>
 		</Locations>
 	</ScreenshotsGallery>
 

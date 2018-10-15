@@ -4,6 +4,7 @@
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "GameInstance/KGameInstance.h"
+#include "GameInstance/KActiveGameInstance.h"
 #include "GameInstance/Config/KConfigManagerConfig.h"
 #include "GameInstance/Config/KProgramManagerConfig.h"
 #include "KApp.h"
@@ -13,6 +14,41 @@
 #include <KxFramework/KxTranslation.h>
 #include <KxFramework/KxXML.h>
 
+namespace
+{
+	KActiveGameInstance* GetActiveInstnace()
+	{
+		return KGameInstance::GetActive() ? static_cast<KActiveGameInstance*>(KGameInstance::GetActive()) : NULL;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+bool KCMDataProviderInstance::IsOK() const
+{
+	return KGameInstance::GetActive();
+}
+
+KxINI& KCMDataProviderInstance::GetDocument()
+{
+	return GetActiveInstnace()->GetConfig();
+}
+const KxINI& KCMDataProviderInstance::GetDocument() const
+{
+	return GetActiveInstnace()->GetConfig();
+}
+
+void KCMDataProviderInstance::Save() const
+{
+	if (KActiveGameInstance* instance = GetActiveInstnace())
+	{
+		instance->SaveConfig();
+	}
+}
+void KCMDataProviderInstance::Load()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
 KCMSampleValueArray KSettingsWindowManager::FF_GetLanguagesList(KCMConfigEntryStd* configEntry, KxXMLNode& node)
 {
 	KCMSampleValueArray outList;
@@ -41,7 +77,7 @@ KCMSampleValueArray KSettingsWindowManager::FF_GetProgramIndexes(KCMConfigEntryS
 	if (KProgramManagerConfig* programManager = KProgramManagerConfig::GetInstance())
 	{
 		size_t i = 0;
-		for (const KProgramManagerEntry& entry: programManager->GetPrograms())
+		for (const KProgramEntry& entry: programManager->GetPrograms())
 		{
 			outList.push_back(KCMSampleValue(configEntry, KxFormat("%1").arg(i), entry.GetName()));
 			i++;
@@ -50,7 +86,7 @@ KCMSampleValueArray KSettingsWindowManager::FF_GetProgramIndexes(KCMConfigEntryS
 	return outList;
 }
 
-KCMDataProviderINI* KSettingsWindowManager::GetProvider(KPGCFileID id)
+KCMDataProviderWithIniDocument* KSettingsWindowManager::GetProvider(KPGCFileID id)
 {
 	switch (id)
 	{
@@ -58,9 +94,9 @@ KCMDataProviderINI* KSettingsWindowManager::GetProvider(KPGCFileID id)
 		{
 			return &m_AppConfig;
 		}
-		case KPGC_ID_CURRENT_INSTANCE:
+		case KPGC_ID_INSTANCE:
 		{
-			return &m_CurrentProfileConfig;
+			return &m_InstanceConfig;
 		}
 	};
 	return NULL;
@@ -89,11 +125,6 @@ void KSettingsWindowManager::InitAppConfig()
 	m_AppConfig.Init(KApp::Get().GetUserSettingsFile());
 	m_AppConfig.Load();
 }
-void KSettingsWindowManager::InitCurrentProfileConfig()
-{
-	m_CurrentProfileConfig.Init(GetGameConfig()->GetEntry(KPGC_ID_CURRENT_INSTANCE)->GetFilePath());
-	m_CurrentProfileConfig.Load();
-}
 void KSettingsWindowManager::InitControllerData()
 {
 	// Load config entries for controller
@@ -107,7 +138,7 @@ void KSettingsWindowManager::InitControllerData()
 void KSettingsWindowManager::Save() const
 {
 	m_AppConfig.Save();
-	m_CurrentProfileConfig.Save();
+	m_InstanceConfig.Save();
 }
 
 KConfigManager::FillFunnctionType KSettingsWindowManager::OnQueryFillFunction(const wxString& name)
@@ -128,5 +159,16 @@ KConfigManager::FillFunnctionType KSettingsWindowManager::OnQueryFillFunction(co
 }
 KCMIDataProvider* KSettingsWindowManager::OnQueryDataProvider(const KCMFileEntry* fileEntry)
 {
-	return GetProvider(fileEntry->GetID());
+	switch (fileEntry->GetID())
+	{
+		case KPGC_ID_APP:
+		{
+			return &m_AppConfig;
+		}
+		case KPGC_ID_INSTANCE:
+		{
+			return m_InstanceConfig.GetProvider();
+		}
+	};
+	return NULL;
 }

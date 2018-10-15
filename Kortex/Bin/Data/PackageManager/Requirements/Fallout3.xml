@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Requirements>
 	<!-- General -->
-	<Entry ID="$(ID)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(Name)</Name>
+	<Entry ID="$(GameID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameName)</Name>
 		<Object Function="FileExist">Fallout3.exe</Object>
 		<Version Function="GTEQ">1.7.0.3</Version>
 	</Entry>

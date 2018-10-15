@@ -8,7 +8,7 @@ class KGameInstance;
 class KProgramManagerConfig: public KxSingletonPtr<KProgramManagerConfig>
 {
 	private:
-		KProgramManagerEntry::Vector m_Entries;
+		KProgramEntry::Vector m_Entries;
 
 	public:
 		KProgramManagerConfig(KGameInstance& profile, const KxXMLNode& rootNode);
@@ -18,7 +18,7 @@ class KProgramManagerConfig: public KxSingletonPtr<KProgramManagerConfig>
 		{
 			return m_Entries.size();
 		}
-		const KProgramManagerEntry::Vector& GetPrograms() const
+		const KProgramEntry::Vector& GetPrograms() const
 		{
 			return m_Entries;
 		}

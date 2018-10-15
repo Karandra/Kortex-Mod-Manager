@@ -3,7 +3,7 @@
 #include "KActiveGameInstance.h"
 #include "KVariablesDatabase.h"
 #include "Profile/KProfile.h"
-#include "ModManager/KModManagerDispatcher.h"
+#include "ModManager/KDispatcher.h"
 #include "Config/KProgramManagerConfig.h"
 #include "KOperationWithProgress.h"
 #include "KBitmapSize.h"
@@ -25,7 +25,7 @@
 
 namespace
 {
-	std::unique_ptr<KGameInstance> ms_ActiveInstance;
+	std::unique_ptr<KActiveGameInstance> ms_ActiveInstance;
 	KGameInstance::Vector ms_InstanceTemplates;
 	//////////////////////////////////////////////////////////////////////////
 
@@ -93,6 +93,11 @@ namespace
 		{
 			return KxComparator::IsLess(v1->GetInstanceID(), v2->GetInstanceID(), true);
 		});
+	}
+
+	wxString GetVariablesSectionName()
+	{
+		return wxS("KGameInstance::Variables");
 	}
 }
 
@@ -180,11 +185,11 @@ void KGameInstance::FindInstanceTemplates(const wxString& path, bool isSystem)
 	};
 }
 
-KGameInstance* KGameInstance::GetActive()
+KActiveGameInstance* KGameInstance::GetActive()
 {
 	return ms_ActiveInstance.get();
 }
-void KGameInstance::AssignActive(KGameInstance& instance)
+void KGameInstance::AssignActive(KActiveGameInstance& instance)
 {
 	ms_ActiveInstance.reset(&instance);
 }
@@ -261,10 +266,10 @@ bool KGameInstance::InitInstance()
 		m_NameShort = node.GetAttribute("Short");
 
 		// Set base variables
-		m_Variables.SetVariable(wxS("GameID"), m_GameID);
+		m_Variables.SetVariable(wxS("GameID"), KIVariableValue(m_GameID));
 		m_Variables.SetVariable(wxS("GameName"), KAux::StrOr(m_Name, m_NameShort, m_GameID));
 		m_Variables.SetVariable(wxS("GameShortName"), KAux::StrOr(m_NameShort, m_Name, m_GameID));
-		m_Variables.SetVariable(wxS("GameSortOrder"), KxFormat(wxS("%1")).arg(m_SortOrder));
+		m_Variables.SetVariable(wxS("GameSortOrder"), KIVariableValue(KxFormat(wxS("%1")).arg(m_SortOrder)));
 
 		if (IsTemplate())
 		{
@@ -330,17 +335,17 @@ wxBitmap KGameInstance::GetIcon() const
 	{
 		if (KProgramManagerConfig* programsConfig = KProgramManagerConfig::GetInstance())
 		{
-			const KProgramManagerEntry::Vector& items = programsConfig->GetPrograms();
+			const KProgramEntry::Vector& items = programsConfig->GetPrograms();
 			if (!items.empty())
 			{
-				const KProgramManagerEntry& programEntry = items.front();
+				const KProgramEntry& programEntry = items.front();
 				if (!programEntry.GetIconPath().IsEmpty())
 				{
-					bitmap = KxShell::GetFileIcon(KModManagerDispatcher::GetInstance()->ResolveLocationPath(programEntry.GetIconPath()));
+					bitmap = KxShell::GetFileIcon(KDispatcher::GetInstance()->ResolveLocationPath(programEntry.GetIconPath()));
 				}
 				else
 				{
-					bitmap = KxShell::GetFileIcon(KModManagerDispatcher::GetInstance()->ResolveLocationPath(programEntry.GetExecutable()));
+					bitmap = KxShell::GetFileIcon(KDispatcher::GetInstance()->ResolveLocationPath(programEntry.GetExecutable()));
 				}
 			}
 		}
@@ -657,18 +662,21 @@ void KGameInstance::LoadSavedProfileOrDefault()
 void KConfigurableGameInstance::LoadVariables(const KxXMLDocument& instanceConfig)
 {
 	KIVariablesTable& variables = GetVariables();
-	const wxString variablesSectionName(wxS("KGameInstance::Variables"));
+	const wxString variablesSectionName = GetVariablesSectionName();
 
 	// System variables
 	variables.SetVariable(KVAR_INSTANCE_DIR, GetInstanceDir());
 	variables.SetVariable(KVAR_VIRTUAL_GAME_DIR, GetVirtualGameDir());
 	variables.SetVariable(KVAR_MODS_DIR, GetModsDir());
+	variables.SetVariable(KVAR_PROFILES_DIR, GetProfilesDir());
 
 	KxXMLNode node = instanceConfig.QueryElement("Instance/Variables");
 	for (node = node.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
 		const wxString id = node.GetAttribute("ID");
 		const wxString type = node.GetAttribute("Type");
+		const bool saveAsOverride = node.GetAttributeBool("SaveAsOverride");
+
 		wxString value;
 		if (type == "Registry")
 		{
@@ -678,22 +686,17 @@ void KConfigurableGameInstance::LoadVariables(const KxXMLDocument& instanceConfi
 		{
 			value = ExpandVariables(node.GetValue());
 		}
-
-		// Load variable value from overrides if it's present there
-		// or save variable value to overrides if this variable needs to be overridden
-		// and there is no value.
-		bool hasOverride = m_Config.HasValue(variablesSectionName, id);
-		if (node.GetAttributeBool("SaveAsOverride") && !hasOverride)
-		{
-			m_Config.SetValue(variablesSectionName, id, value);
-		}
-		variables.SetVariable(id, value);
+		variables.SetVariable(id, KIVariableValue(value, saveAsOverride));
 	}
 
 	// Override any variables from file
 	for (const wxString& name: m_Config.GetKeyNames(variablesSectionName))
 	{
-		variables.SetVariable(name, ExpandVariables(m_Config.GetValue(variablesSectionName, name)));
+		wxString value = m_Config.GetValue(variablesSectionName, name);
+		if (!value.IsEmpty())
+		{
+			variables.SetVariable(name, KIVariableValue(ExpandVariables(value), true));
+		}
 	}
 }
 void KConfigurableGameInstance::LoadProfiles(const KxXMLDocument& instanceConfig)
@@ -797,6 +800,15 @@ KConfigurableGameInstance::~KConfigurableGameInstance()
 
 bool KConfigurableGameInstance::SaveConfig()
 {
+	GetVariables().Accept([this](const wxString& name, const KIVariableValue& value)
+	{
+		if (value.IsOverride())
+		{
+			m_Config.SetValue(GetVariablesSectionName(), name, value.GetValue());
+		}
+		return true;
+	});
+
 	KxFileStream configStream(GetConfigFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
 	return m_Config.Save(configStream);
 }

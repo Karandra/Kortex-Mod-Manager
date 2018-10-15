@@ -7,19 +7,19 @@
 		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
 			<Node>32</Node>
 			<Root>HKEY_LOCAL_MACHINE</Root>
-			<Path>SOFTWARE\Bethesda Softworks\$(ID)</Path>
+			<Path>SOFTWARE\Bethesda Softworks\$(GameID)</Path>
 			<ValueName>Installed Path</ValueName>
 			<ValueType>REG_SZ</ValueType>
 		</Entry>
-		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\$(ID)</Entry>
-		<Entry ID="GameExecutable">$(GameRoot)\$(ID).exe</Entry>
-		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(ID).exe</Entry>
-		<Entry ID="NexusID">$(ID)</Entry>
+		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\$(GameID)</Entry>
+		<Entry ID="GameExecutable">$(GameRoot)\$(GameID).exe</Entry>
+		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(GameID).exe</Entry>
+		<Entry ID="NexusID">$(GameID)</Entry>
 
 		<!--Names-->
 		<Entry ID="EditorName">Creation Kit</Entry>
-		<Entry ID="LauncherName">$(NameShort) Launcher</Entry>
-		<Entry ID="ScriptExtenderName">$(NameShort) Script Extender</Entry>
+		<Entry ID="LauncherName">$(GameShortName) Launcher</Entry>
+		<Entry ID="ScriptExtenderName">$(GameShortName) Script Extender</Entry>
 		<Entry ID="ScriptExtenderNameShort">FOSE</Entry>
 
 		<!-- INI -->
@@ -56,7 +56,7 @@
 				<Sources>
 					<Entry>$(ModListRoot)\LocalPlugins</Entry>
 				</Sources>
-				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\$(ID)</Target>
+				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\$(GameID)</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
@@ -64,20 +64,20 @@
 	<ProgramConfig>
 		<Main>
 			<Entry>
-				<Name>$(NameShort)</Name>
-				<Icon>$(ID).exe</Icon>
+				<Name>$(GameShortName)</Name>
+				<Icon>$(GameID).exe</Icon>
 				<Executable>$(VirtualGameExecutable)</Executable>
 				<Arguments></Arguments>
 			</Entry>
 			<Entry>
-				<Name>$(NameShort) ($(ScriptExtenderNameShort))</Name>
+				<Name>$(GameShortName) ($(ScriptExtenderNameShort))</Name>
 				<Icon>$(ScriptExtenderNameShort)_Loader.exe</Icon>
 				<Executable>$(ScriptExtenderPath)</Executable>
 				<Arguments></Arguments>
 			</Entry>
 			<Entry>
 				<Name>$(LauncherName)</Name>
-				<Icon>$(ID)Launcher.exe</Icon>
+				<Icon>$(GameID)Launcher.exe</Icon>
 				<Executable>$(GameLauncherPath)</Executable>
 				<Arguments></Arguments>
 			</Entry>
@@ -116,14 +116,14 @@
 
 		<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
 		<OrderListHeader>
-			<![CDATA[# This file is used by $(NameShort) to keep track of your downloaded content.
+			<![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
 # Please do not modify this file.
 # Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]>
 		</OrderListHeader>
 
 		<SortingTools>
 			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
-				<Command><![CDATA[--game=$(ID)]]></Command>
+				<Command><![CDATA[--game=$(GameID)]]></Command>
 			</Entry>
 		</SortingTools>
 
@@ -135,14 +135,14 @@
 		</LOOTAPI>
 
 		<StandardContent MainID="Fallout3.esm">
-			<Entry ID="Fallout3.esm" Name="$(NameShort)" Logo="Fallout3.png"/>
-			<Entry ID="Anchorage.esm" Name="$(NameShort): Operation Anchorage" Logo="Anchorage.png"/>
-			<Entry ID="ThePitt.esm" Name="$(NameShort): The Pitt" Logo="ThePitt.png"/>
-			<Entry ID="BrokenSteel.esm" Name="$(NameShort): Broken Steel" Logo="BrokenSteel.png"/>
-			<Entry ID="BrokenSteel1.esp" Name="$(NameShort): Broken Steel" Logo="BrokenSteel.png"/>
-			<Entry ID="BrokenSteel2.esp" Name="$(NameShort): Broken Steel" Logo="BrokenSteel.png"/>
-			<Entry ID="PointLookout.esm" Name="$(NameShort): Point Lookout" Logo="PointLookout.png"/>
-			<Entry ID="Zeta.esm" Name="$(NameShort): Mothership Zeta" Logo="Zeta.png"/>
+			<Entry ID="Fallout3.esm" Name="$(GameShortName)" Logo="Fallout3.png"/>
+			<Entry ID="Anchorage.esm" Name="$(GameShortName): Operation Anchorage" Logo="Anchorage.png"/>
+			<Entry ID="ThePitt.esm" Name="$(GameShortName): The Pitt" Logo="ThePitt.png"/>
+			<Entry ID="BrokenSteel.esm" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+			<Entry ID="BrokenSteel1.esp" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+			<Entry ID="BrokenSteel2.esp" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+			<Entry ID="PointLookout.esm" Name="$(GameShortName): Point Lookout" Logo="PointLookout.png"/>
+			<Entry ID="Zeta.esm" Name="$(GameShortName): Mothership Zeta" Logo="Zeta.png"/>
 		</StandardContent>
 	</PluginManager>
 

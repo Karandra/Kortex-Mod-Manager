@@ -58,7 +58,7 @@
     <ClCompile Include="Source\ModManager\KModFilesExplorerDialog.cpp" />
     <ClCompile Include="Source\ModManager\KModFilesExplorerModel.cpp" />
     <ClCompile Include="Source\ModManager\KModManager.cpp" />
-    <ClCompile Include="Source\ModManager\KModManagerDispatcher.cpp" />
+    <ClCompile Include="Source\ModManager\KDispatcher.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerImport.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerImportMO.cpp" />
     <ClCompile Include="Source\ModManager\KModManagerImportNMM.cpp" />
@@ -237,6 +237,7 @@
     <ClInclude Include="Source\GameInstance\KActiveGameInstance.h" />
     <ClInclude Include="Source\GameInstance\KGameID.h" />
     <ClInclude Include="Source\GameInstance\KGameInstance.h" />
+    <ClInclude Include="Source\GameInstance\KInstnaceManagement.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h" />
     <ClInclude Include="Source\IPC\KIPC.h" />
     <ClInclude Include="Source\IPC\KIPCClient.h" />
@@ -257,7 +258,7 @@
     <ClInclude Include="Source\ModManager\KModFilesExplorerDialog.h" />
     <ClInclude Include="Source\ModManager\KModFilesExplorerModel.h" />
     <ClInclude Include="Source\ModManager\KModManager.h" />
-    <ClInclude Include="Source\ModManager\KModManagerDispatcher.h" />
+    <ClInclude Include="Source\ModManager\KDispatcher.h" />
     <ClInclude Include="Source\ModManager\KModManagerImport.h" />
     <ClInclude Include="Source\ModManager\KModManagerImportMO.h" />
     <ClInclude Include="Source\ModManager\KModManagerImportNMM.h" />

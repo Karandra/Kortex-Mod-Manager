@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KModManagerDispatcher.h"
+#include "KDispatcher.h"
 #include "KDataViewListModel.h"
 #include "KImageProvider.h"
 #include "KFileTreeNode.h"

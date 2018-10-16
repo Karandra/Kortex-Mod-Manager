@@ -263,60 +263,62 @@ void KPluginManagerBethesda::Load()
 {
 	Clear();
 
-	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
-	KProfile* loadOrder = KGameInstance::GetCurrentProfile();
-
-	for (const KProfilePlugin& listEntry: loadOrder->GetPlugins())
+	if (KProfile* profile = KGameInstance::GetCurrentProfile())
 	{
-		// Find whether plugin with this name exist
-		auto it = std::find_if(files.begin(), files.end(), [&listEntry](const KFileTreeNode* item)
-		{
-			return KxComparator::IsEqual(item->GetName(), listEntry.GetPluginName());
-		});
+		KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
 
-		if (it != files.end())
+		for (const KProfilePlugin& listEntry: profile->GetPlugins())
 		{
-			if (CheckExtension(listEntry.GetPluginName()))
+			// Find whether plugin with this name exist
+			auto it = std::find_if(files.begin(), files.end(), [&listEntry](const KFileTreeNode* item)
 			{
-				auto& entry = GetEntries().emplace_back(NewPluginEntry(listEntry.GetPluginName(), false));
-				entry->SetFullPath((*it)->GetFullPath());
-				entry->SetParentMod(FindParentMod(*entry));
+				return KxComparator::IsEqual(item->GetName(), listEntry.GetPluginName());
+			});
+
+			if (it != files.end())
+			{
+				if (CheckExtension(listEntry.GetPluginName()))
+				{
+					auto& entry = GetEntries().emplace_back(NewPluginEntry(listEntry.GetPluginName(), false));
+					entry->SetFullPath((*it)->GetFullPath());
+					entry->SetParentMod(FindParentMod(*entry));
+				}
 			}
 		}
-	}
 
-	// Load files form 'Data' folder. Don't add already existing
-	for (const KFileTreeNode* fileNode: files)
-	{
-		if (CheckExtension(fileNode->GetName()))
+		// Load files form 'Data' folder. Don't add already existing
+		for (const KFileTreeNode* fileNode: files)
 		{
-			if (FindPluginByName(fileNode->GetName()) == NULL)
+			if (CheckExtension(fileNode->GetName()))
 			{
-				auto& entry = GetEntries().emplace_back(NewPluginEntry(fileNode->GetName(), false));
-				entry->SetFullPath(fileNode->GetFullPath());
-				entry->SetParentMod(FindParentMod(*entry));
+				if (FindPluginByName(fileNode->GetName()) == NULL)
+				{
+					auto& entry = GetEntries().emplace_back(NewPluginEntry(fileNode->GetName(), false));
+					entry->SetFullPath(fileNode->GetFullPath());
+					entry->SetParentMod(FindParentMod(*entry));
+				}
 			}
 		}
-	}
 
-	// Check active
-	for (const KProfilePlugin& listEntry: loadOrder->GetPlugins())
-	{
-		KPluginEntry* entry = FindPluginByName(listEntry.GetPluginName());
-		if (entry)
+		// Check active
+		for (const KProfilePlugin& listEntry: profile->GetPlugins())
 		{
-			entry->SetEnabled(listEntry.IsEnabled());
+			KPluginEntry* entry = FindPluginByName(listEntry.GetPluginName());
+			if (entry)
+			{
+				entry->SetEnabled(listEntry.IsEnabled());
+			}
 		}
-	}
 
-	// Sort by file modification date if needed otherwise all elements already in correct order
-	if (ShouldSortByFileModificationDate())
-	{
-		SortByDate();
-	}
+		// Sort by file modification date if needed otherwise all elements already in correct order
+		if (ShouldSortByFileModificationDate())
+		{
+			SortByDate();
+		}
 
-	ReadPluginsData();
-	loadOrder->SyncWithCurrentState();
+		ReadPluginsData();
+		profile->SyncWithCurrentState();
+	}
 }
 void KPluginManagerBethesda::LoadNativeOrder()
 {

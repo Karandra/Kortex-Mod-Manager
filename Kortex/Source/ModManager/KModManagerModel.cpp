@@ -78,9 +78,7 @@ void KModManagerModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &KModManagerModel::OnHeaderContextMenu, this);
 	GetView()->Bind(KxEVT_DATAVIEW_COLUMN_SORTED, &KModManagerModel::OnColumnSorted, this);
 	GetView()->Bind(KxEVT_DATAVIEW_CACHE_HINT, &KModManagerModel::OnCacheHint, this);
-	
 	EnableDragAndDrop();
-	m_PriortyGroupColor = KxUtility::GetThemeColor_Caption(GetView());
 
 	/* Columns */
 	KxDataViewColumnFlags defaultFlags = KxDV_COL_RESIZEABLE|KxDV_COL_REORDERABLE|KxDV_COL_SORTABLE;
@@ -135,6 +133,10 @@ void KModManagerModel::OnInitControl()
 	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.ModList.ModFolder"), ColumnID::ModFolder, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
 	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.ModList.PackagePath"), ColumnID::PackagePath, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
 	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.ModList.Signature"), ColumnID::Signature, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
+
+	// UI
+	m_PriorityGroupRowHeight = GetView()->GetUniformRowHeight() * 1.2;
+	m_PriortyGroupColor = KxUtility::GetThemeColor_Caption(GetView());
 }
 
 bool KModManagerModel::IsListModel() const
@@ -445,11 +447,11 @@ void KModManagerModel::GetValue(wxAny& value, const KxDataViewItem& item, const 
 			wxString label;
 			if (isBegin)
 			{
-				label = wxString::Format("<%s>", entry->GetPriorityGroupTag());
+				label = KxFormat(wxS("<%1>")).arg(entry->GetPriorityGroupTag());
 			}
 			else
 			{
-				label = wxString::Format("</%s>", entry->GetPriorityGroupTag());
+				label = KxFormat(wxS("</%1>")).arg(entry->GetPriorityGroupTag());
 			}
 			value = KxDataViewBitmapTextToggleValue(true, label, KGetBitmap(entry->GetIcon()), KxDataViewBitmapTextToggleValue::InvalidType);
 			break;
@@ -589,7 +591,7 @@ bool KModManagerModel::GetItemAttributes(const KxDataViewItem& item, const KxDat
 		if (priorityGroup)
 		{
 			attributes.SetForegroundColor(m_PriortyGroupColor);
-			attributes.SetAlignment(wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL);
+			attributes.SetCategoryLine();
 		}
 		return !attributes.IsDefault();
 	}
@@ -597,12 +599,25 @@ bool KModManagerModel::GetItemAttributes(const KxDataViewItem& item, const KxDat
 }
 bool KModManagerModel::GetCellHeight(const KxDataViewItem& item, int& height) const
 {
-	const KMMModelNode* node = GetNode(item);
-	KModEntry* entry = node->GetEntry();
-	if (entry && !entry->ToPriorityGroup() && !entry->ToFixedEntry())
+	if (const KMMModelNode* node = GetNode(item))
 	{
-		height = m_BitmapSize.GetHeight() + 2;
-		return true;
+		KModEntry* entry = node->GetEntry();
+		if (entry)
+		{
+			if (entry->ToPriorityGroup())
+			{
+				height = m_PriorityGroupRowHeight;
+				return true;
+			}
+			else if (!entry->ToFixedEntry())
+			{
+				if (m_BitmapColumn->IsExposed())
+				{
+					height = m_BitmapSize.GetHeight() + 2;
+					return true;
+				}
+			}
+		}
 	}
 	return false;
 }
@@ -1232,8 +1247,7 @@ void KModManagerModel::UpdateRowHeight()
 		{
 			GetView()->SetWindowStyle(KxUtility::ModFlag(GetView()->GetWindowStyle(), KxDV_MODEL_ROW_HEIGHT, enable));
 		};
-
-		EnableFlag(column->IsExposed());
+		EnableFlag(true);
 		UpdateUI();
 	}
 }

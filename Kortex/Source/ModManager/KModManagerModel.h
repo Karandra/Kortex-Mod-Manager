@@ -25,10 +25,12 @@ class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDrop
 		bool m_ShowNotInstalledMods = false;
 
 		KBitmapSize m_BitmapSize;
+		int m_PriorityGroupRowHeight = 0;
+		KxColor m_PriortyGroupColor;
+
 		KxDataViewColumn* m_NameColumn = NULL;
 		KxDataViewColumn* m_BitmapColumn = NULL;
 		KxDataViewColumn* m_PriorityColumn = NULL;
-		KxColor m_PriortyGroupColor;
 
 		const KModTag m_NoneTag;
 		KMMLogModelNodeVector m_DataVector;

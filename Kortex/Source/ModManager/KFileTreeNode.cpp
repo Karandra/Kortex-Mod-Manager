@@ -4,36 +4,18 @@
 #include "KModManager.h"
 #include <KxFramework/KxComparator.h>
 
-const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, const wxString& relativePath, KxFileSearchType type)
+namespace
 {
-	if (type == KxFileSearchType::KxFS_FOLDER)
+	bool IsRequestToRootNode(const wxString& relativePath)
 	{
-		if (relativePath.IsEmpty() || *relativePath.begin() == wxS('\\') || *relativePath.begin() == wxS('/') || *relativePath.begin() == wxS('.'))
-		{
-			return &rootNode;
-		}
+		return relativePath.IsEmpty() || relativePath == wxS('\\') || relativePath == wxS('/') || relativePath == wxS('.') || relativePath == wxS("..");
 	}
-
-	if (rootNode.HasChildren())
+	template<class Functor> void IterateOverPath(const wxString& relativePath, const Functor& functor)
 	{
-		auto ScanChildren = [](const KFileTreeNode& rootNode, const wxString& folderName) -> const KFileTreeNode*
-		{
-			for (const KFileTreeNode& node: rootNode.GetChildren())
-			{
-				if (KxComparator::IsEqual(folderName, node.GetName(), true))
-				{
-					return &node;
-				}
-			}
-			return NULL;
-		};
-
-		const KFileTreeNode* finalNode = NULL;
-
 		// This ugly construction is faster than
 		// for (const wxString& folderName: KxString::Split(relativePath, wxS("\\")))
 		// So using it.
-		const wxChar separator = wxS('\\');
+		const constexpr wxChar separator = wxS('\\');
 		size_t pos = 0;
 		size_t separatorPos = relativePath.find(separator);
 		if (separatorPos == wxString::npos)
@@ -43,11 +25,10 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 
 		while (pos < relativePath.length() && separatorPos <= relativePath.length())
 		{
-			const wxString folderName = relativePath.SubString(pos, separatorPos - 1);
-			finalNode = ScanChildren(finalNode ? *finalNode : rootNode, folderName);
-			if (finalNode == NULL)
+			const std::wstring_view folderName(relativePath.wc_str() + pos, separatorPos - pos);
+			if (functor(folderName))
 			{
-				break;
+				return;
 			}
 
 			pos += folderName.length() + 1;
@@ -59,6 +40,58 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 				separatorPos = relativePath.length();
 			}
 		}
+	}
+
+	struct FileNameHasher
+	{
+		// From Boost
+		template<class T> static void hash_combine(size_t& seed, const T& v)
+		{
+			std::hash<T> hasher;
+			seed ^= hasher(v) + 0x9e3779b9u + (seed << 6) + (seed >> 2);
+		}
+		
+		size_t operator()(const std::wstring_view& value) const
+		{
+			size_t hashValue = 0;
+			for (wchar_t c: value)
+			{
+				c = KxString::CharToLower(c);
+				hash_combine(hashValue, c);
+			}
+			return hashValue;
+		}
+	};
+}
+
+const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootNode, const wxString& relativePath, KxFileSearchType type)
+{
+	if (type == KxFileSearchType::KxFS_FOLDER && IsRequestToRootNode(relativePath))
+	{
+		return &rootNode;
+	}
+
+	if (rootNode.HasChildren())
+	{
+		auto ScanChildren = [](const KFileTreeNode& rootNode, const std::wstring_view& folderName) -> const KFileTreeNode*
+		{
+			for (const KFileTreeNode& node: rootNode.GetChildren())
+			{
+				const wxString& name = node.GetName();
+				if (KxComparator::IsEqual(folderName, std::wstring_view(name.wc_str(), name.length()), true))
+				{
+					return &node;
+				}
+			}
+			return NULL;
+		};
+
+		const KFileTreeNode* finalNode = NULL;
+		IterateOverPath(relativePath, [&ScanChildren, &finalNode, &rootNode](const std::wstring_view& folderName)
+		{
+			finalNode = ScanChildren(finalNode ? *finalNode : rootNode, folderName);
+			return finalNode == NULL;
+		});
 
 		if (finalNode && finalNode->GetItem().IsElementType(type))
 		{
@@ -66,6 +99,11 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 		}
 	}
 	return NULL;
+}
+
+size_t KFileTreeNode::HashFileName(const std::wstring_view& name)
+{
+	return FileNameHasher()(name);
 }
 
 const KFileTreeNode* KFileTreeNode::WalkTree(const TreeWalker& functor) const

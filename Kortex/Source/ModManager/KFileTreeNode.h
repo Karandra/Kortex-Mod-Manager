@@ -59,12 +59,19 @@ class KFileTreeNode
 			RepackToRefVector(nodes, refItems);
 		}
 
+		static size_t HashFileName(const std::wstring_view& name);
+		static size_t HashFileName(const wxString& name)
+		{
+			return HashFileName(std::wstring_view(name.wc_str(), name.length()));
+		}
+
 	private:
 		Vector m_Children;
 		Vector m_Alternatives;
 		KxFileItem m_Item;
 		const KFileTreeNode* m_Parent = NULL;
 		const KModEntry* m_Mod = NULL;
+		size_t m_NameHash = 0;
 
 	private:
 		void MakeNull()
@@ -92,13 +99,17 @@ class KFileTreeNode
 		{
 			return m_Parent == NULL && !m_Item.IsOK();
 		}
+		const KModEntry& GetMod() const
+		{
+			return *m_Mod;
+		}
 
 		const KFileTreeNode* WalkTree(const TreeWalker& functor) const;
 		const KFileTreeNode* WalkToRoot(const TreeWalker& functor) const;
 
-		const KModEntry& GetMod() const
+		void CopyBasicAttributes(const KFileTreeNode& other)
 		{
-			return *m_Mod;
+			m_NameHash = other.m_NameHash;
 		}
 
 		bool HasChildren() const
@@ -166,6 +177,15 @@ class KFileTreeNode
 			return FindRootNode(this);
 		}
 
+		size_t GetNameHash() const
+		{
+			return m_NameHash;
+		}
+		void ComputeHash()
+		{
+			m_NameHash = HashFileName(GetName());
+		}
+		
 		const wxString& GetName() const
 		{
 			return m_Item.GetName();

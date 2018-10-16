@@ -378,7 +378,7 @@ void KModEntry::UpdateFileTree()
 			treeNode->GetChildren().reserve(Recurse(path, NULL, NULL));
 		}
 
-		KxFileFinder finder(path, "*");
+		KxFileFinder finder(path, wxS("*"));
 		KxFileItem item = finder.FindNext();
 		while (item.IsOK())
 		{
@@ -390,6 +390,7 @@ void KModEntry::UpdateFileTree()
 				if (treeNode)
 				{
 					node = &treeNode->GetChildren().emplace_back(*this, item, parentNode);
+					node->ComputeHash();
 				}
 
 				if (node && item.IsDirectory())

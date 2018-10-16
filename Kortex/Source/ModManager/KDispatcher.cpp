@@ -6,6 +6,7 @@
 #include "KVariablesDatabase.h"
 #include "KVirtualGameFolderWorkspace.h"
 #include "UI/KMainWindow.h"
+#include "KEvents.h"
 #include "KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileFinder.h>
@@ -29,21 +30,9 @@ namespace
 	};
 	struct FinderHashHasher
 	{
-		// From Boost
-		template<class T> static void hash_combine(size_t& seed, const T& v)
-		{
-			std::hash<T> hasher;
-			seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-		}
-
 		size_t operator()(const wxString& value) const
 		{
-			size_t hashValue = 0;
-			for (const wxUniChar& c: value)
-			{
-				hash_combine(hashValue, KxString::ToLower(c).GetValue());
-			}
-			return hashValue;
+			return KFileTreeNode::HashFileName(value);
 		}
 	};
 	using FinderHash = std::unordered_map<wxString, size_t, FinderHashHasher, FinderHashComparator>;
@@ -144,6 +133,78 @@ namespace
 			}
 		}
 	}
+
+	struct NodesIndexItem
+	{
+		const KFileTreeNode* OtherNode = NULL;
+		KFileTreeNode::Vector* ThisNodeContainer = NULL;
+		size_t ThisNodeIndex = 0;
+	};
+	using NodesIndex = std::vector<NodesIndexItem>;
+
+	template<class T> T* FindNode(std::vector<T>& children, const T& searchNode)
+	{
+		for (T& node: children)
+		{
+			if (node.GetNameHash() == searchNode.GetNameHash())
+			{
+				return &node;
+			}
+		}
+		return NULL;
+	}
+	void AddTreeNodes(KFileTreeNode::Vector& thisChildren, const KFileTreeNode::Vector& otherChildren, NodesIndex& directories, const KFileTreeNode* rootNode = NULL)
+	{
+		for (const KFileTreeNode& otherNode: otherChildren)
+		{
+			KFileTreeNode* node = FindNode(thisChildren, otherNode);
+			size_t index = 0;
+
+			if (node == NULL)
+			{
+				KFileTreeNode& newNode = thisChildren.emplace_back(otherNode.GetMod(), otherNode.GetItem(), rootNode);
+				newNode.CopyBasicAttributes(otherNode);
+				node = &newNode;
+
+				index = thisChildren.size() - 1;
+				newNode.GetItem().SetExtraData(index);
+			}
+			else
+			{
+				index = node->GetItem().GetExtraData<size_t>();
+				KFileTreeNode& newAlternative = node->GetAlternatives().emplace_back(otherNode.GetMod(), otherNode.GetItem(), rootNode);
+				newAlternative.CopyBasicAttributes(otherNode);
+			}
+
+			if (otherNode.IsDirectory())
+			{
+				NodesIndexItem& item = directories.emplace_back();
+				item.OtherNode = &otherNode;
+				item.ThisNodeContainer = &thisChildren;
+				item.ThisNodeIndex = index;
+			}
+		}
+	}
+	void AddTree(KFileTreeNode& thisTree, const KFileTreeNode& otherTree)
+	{
+		// Build top level
+		NodesIndex directories;
+		AddTreeNodes(thisTree.GetChildren(), otherTree.GetChildren(), directories, NULL);
+
+		// Build subdirectories
+		while (!directories.empty())
+		{
+			NodesIndex roundDirectories;
+			roundDirectories.reserve(directories.size());
+
+			for (const NodesIndexItem& item: directories)
+			{
+				KFileTreeNode* node = &(*item.ThisNodeContainer)[item.ThisNodeIndex];
+				AddTreeNodes(node->GetChildren(), item.OtherNode->GetChildren(), roundDirectories, node);
+			}
+			directories = std::move(roundDirectories);
+		}
+	}
 }
 
 wxString KDispatcherCollision::GetLocalizedCollisionName(KMMDispatcherCollisionType type)
@@ -215,16 +276,31 @@ void KDispatcher::RebuildTreeIfNeeded() const
 }
 void KDispatcher::OnVirtualTreeInvalidated(KEvent& event)
 {
-	m_VirtualTreeInvalidated = true;
-	KEvent::MakeSend<KModEvent>(KEVT_MOD_VIRTUAL_TREE_INVALIDATED);
+	InvalidateVirtualTree();
 }
 
 void KDispatcher::UpdateVirtualTree()
 {
 	int64_t t1 = GetClockTime();
 
-	// Recursive (parallel)
+	// Test
 	#if 1
+	m_VirtualTree.ClearChildren();
+	KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
+
+	for (auto it = mods.rbegin(); it != mods.rend(); ++it)
+	{
+		const KModEntry& modEntry = **it;
+		if (modEntry.IsInstalled())
+		{
+			AddTree(m_VirtualTree, modEntry.GetFileTree());
+		}
+	}
+
+	#endif
+
+	// Recursive (parallel)
+	#if 0
 	m_VirtualTree.ClearChildren();
 	const KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
 
@@ -247,9 +323,9 @@ void KDispatcher::UpdateVirtualTree()
 	// Iterational (sequential)
 	#if 0
 	m_VirtualTree.ClearChildren();
+	KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
 
 	// Build top level
-	KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
 	KFileTreeNode::RefVector directories;
 	BuildTreeBranch(mods, m_VirtualTree.GetChildren(), NULL, directories);
 
@@ -258,6 +334,7 @@ void KDispatcher::UpdateVirtualTree()
 	{
 		KFileTreeNode::RefVector roundDirectories;
 		roundDirectories.reserve(directories.size());
+
 		for (KFileTreeNode* node: directories)
 		{
 			BuildTreeBranch(mods, node->GetChildren(), node, roundDirectories);
@@ -272,6 +349,7 @@ void KDispatcher::UpdateVirtualTree()
 void KDispatcher::InvalidateVirtualTree()
 {
 	m_VirtualTreeInvalidated = true;
+	KEvent::MakeSend<KModEvent>(KEVT_MOD_VIRTUAL_TREE_INVALIDATED);
 }
 
 const KFileTreeNode& KDispatcher::GetVirtualTree() const

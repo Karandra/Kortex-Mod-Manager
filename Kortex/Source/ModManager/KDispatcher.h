@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KFileTreeNode.h"
-#include "KEvents.h"
+#include "KEventsFwd.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxSingleton.h>

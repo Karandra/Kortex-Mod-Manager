@@ -66,6 +66,8 @@ std::unique_ptr<KPluginReader> KPluginManager::QueryPluginReader(const wxString&
 
 void KPluginManager::OnInit()
 {
+	KEvent::Bind(KEVT_MOD_VIRTUAL_TREE_INVALIDATED, &KPluginManager::OnVirtualTreeInvalidated, this);
+	KEvent::Bind(KEVT_MOD_TOGGLED, &KPluginManager::OnVirtualTreeInvalidated, this);
 }
 void KPluginManager::ReadPluginsData()
 {
@@ -84,8 +86,6 @@ void KPluginManager::OnVirtualTreeInvalidated(KEvent& event)
 KPluginManager::KPluginManager(const wxString& interfaceName, const KxXMLNode& configNode)
 	:m_GeneralOptions(this, "General"), m_SortingToolsOptions(this, "SortingTools")
 {
-	KEvent::Bind(KEVT_MOD_VIRTUAL_TREE_INVALIDATED, &KPluginManager::OnVirtualTreeInvalidated, this);
-	KEvent::Bind(KEVT_MOD_TOGGLED, &KPluginManager::OnVirtualTreeInvalidated, this);
 }
 KPluginManager::~KPluginManager()
 {

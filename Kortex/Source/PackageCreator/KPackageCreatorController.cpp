@@ -169,7 +169,7 @@ void KPackageCreatorController::CreateProjectFromModEntry(const KModEntry& modEn
 
 	/* Interface */
 	KPPIImageEntry& imageEntry = m_Project->GetInterface().GetImages().emplace_back(KPPIImageEntry());
-	imageEntry.SetPath(modEntry.GetLocation(KMM_LOCATION_MOD_LOGO));
+	imageEntry.SetPath(modEntry.GetInfoFile());
 	imageEntry.SetVisible(true);
 
 	m_Project->GetInterface().SetMainImage(imageEntry.GetPath());

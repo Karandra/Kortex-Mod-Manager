@@ -308,7 +308,7 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 				entry->Save();
 
 				// Copy mod contents
-				wxString destination = entry->GetLocation(KMM_LOCATION_MOD_FILES) + '\\' + GetDataFolderName();
+				wxString destination = entry->GetModFilesDir() + wxS('\\') + GetDataFolderName();
 
 				KxEvtFile source(modFolder);
 				context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);

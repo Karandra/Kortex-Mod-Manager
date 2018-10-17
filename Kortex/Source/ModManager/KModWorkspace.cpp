@@ -574,7 +574,7 @@ void KModWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
 		{
 			// Copy files
 			wxString sourcePath = dialog.GetFolderPath();
-			wxString destinationPath = modEntry.GetLocation(KMM_LOCATION_MOD_FILES);
+			wxString destinationPath = modEntry.GetModFilesDir();
 			auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
 			operation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
 			{
@@ -584,7 +584,7 @@ void KModWorkspace::OnAddMod_FromFolder(KxMenuEvent& event)
 			});
 
 			// If canceled, remove entire mod folder
-			wxString modRoot = modEntry.GetLocation(KMM_LOCATION_MOD_ROOT);
+			wxString modRoot = modEntry.GetRootDir();
 			operation->OnCancel([modRoot](KOperationWithProgressBase* self)
 			{
 				KxFile(modRoot).RemoveFolderTree(true);
@@ -911,7 +911,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 		/* Mod */
 		case KMC_ID_MOD_OPEN_LOCATION:
 		{
-			wxString location = modEntry->IsInstalled() ? modEntry->GetLocation(KMM_LOCATION_MOD_FILES) : modEntry->GetLocation(KMM_LOCATION_MOD_ROOT);
+			wxString location = modEntry->IsInstalled() ? modEntry->GetModFilesDir() : modEntry->GetRootDir();
 			KxShell::Execute(GetMainWindow(), location, "open");
 			break;
 		}
@@ -920,9 +920,9 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
 			if (dialog.ShowModal() == KxID_OK)
 			{
-				if (!modEntry->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, modEntry->GetLocation(KMM_LOCATION_MOD_FILES) + "\\*", dialog.GetResult(), this, true, false, false, true))
+				if (!modEntry->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, modEntry->GetModFilesDir() + "\\*", dialog.GetResult(), this, true, false, false, true))
 				{
-					KxFile(modEntry->GetLocation(KMM_LOCATION_MOD_FILES)).RemoveFolder(true);
+					KxFile(modEntry->GetModFilesDir()).RemoveFolder(true);
 					modEntry->SetLinkedModLocation(dialog.GetResult());
 					modEntry->Save();
 
@@ -940,10 +940,10 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 		}
 		case KMC_ID_MOD_REVERT_LOCATION:
 		{
-			if (!modEntry->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, modEntry->GetLocation(KMM_LOCATION_MOD_FILES) + "\\*", modEntry->GetLocation(KMM_LOCATION_MOD_FILES_DEFAULT), this, true, false, false, true))
+			if (!modEntry->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, modEntry->GetModFilesDir() + "\\*", modEntry->GetDefaultModFilesDir(), this, true, false, false, true))
 			{
 				// Remove file folder if it's empty
-				KxFile(modEntry->GetLocation(KMM_LOCATION_MOD_FILES)).RemoveFolder(true);
+				KxFile(modEntry->GetModFilesDir()).RemoveFolder(true);
 
 				modEntry->SetLinkedModLocation(wxEmptyString);
 				modEntry->Save();
@@ -974,7 +974,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 		{
 			KImageViewerDialog dialog(this);
 
-			KImageViewerEvent event(wxEVT_NULL, modEntry->GetLocation(KMM_LOCATION_MOD_LOGO));
+			KImageViewerEvent event(wxEVT_NULL, modEntry->GetImageFile());
 			dialog.Navigate(event);
 			dialog.ShowModal();
 			break;
@@ -985,7 +985,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), T("FileFilter.Images"));
 			if (dialog.ShowModal() == KxID_OK)
 			{
-				KxFile(dialog.GetResult()).CopyFile(modEntry->GetLocation(KMM_LOCATION_MOD_LOGO), true);
+				KxFile(dialog.GetResult()).CopyFile(modEntry->GetImageFile(), true);
 				modEntry->ResetBitmap();
 				modEntry->ResetNoBitmap();
 				modEntry->Save();
@@ -1077,7 +1077,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 		}
 		case KMC_ID_MOD_PROPERTIES:
 		{
-			KxShell::Execute(GetMainWindow(), modEntry->GetLocation(KMM_LOCATION_MOD_FILES), "properties");
+			KxShell::Execute(GetMainWindow(), modEntry->GetModFilesDir(), "properties");
 			break;
 		}
 

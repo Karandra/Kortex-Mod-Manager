@@ -123,7 +123,3 @@ wxString KPackageProject::ComputeModName() const
 	}
 	return wxEmptyString;
 }
-wxString KPackageProject::GetLocation(KModManagerLocation index) const
-{
-	return KModManager::GetLocation(index, GetSignature());
-}

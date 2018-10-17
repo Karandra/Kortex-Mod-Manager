@@ -16,5 +16,5 @@ class KMandatoryModEntry: public KFixedModEntry
 		{
 			return true;
 		}
-		virtual wxString GetLocation(KModManagerLocation index) const override;
+		virtual wxString GetModFilesDir() const override;
 };

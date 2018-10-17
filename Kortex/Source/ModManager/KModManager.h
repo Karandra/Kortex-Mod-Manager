@@ -19,18 +19,6 @@ class KVirtualFileSystemBase;
 class KIPCClient;
 class KxProgressDialog;
 
-enum KModManagerLocation
-{
-	KMM_LOCATION_MODS_ORDER,
-	KMM_LOCATION_MODS_FOLDER,
-
-	KMM_LOCATION_MOD_ROOT,
-	KMM_LOCATION_MOD_INFO,
-	KMM_LOCATION_MOD_FILES,
-	KMM_LOCATION_MOD_FILES_DEFAULT,
-	KMM_LOCATION_MOD_LOGO,
-	KMM_LOCATION_MOD_DESCRIPTION,
-};
 enum KModManagerModsMoveType
 {
 	KMM_MOVEMOD_BEFORE,
@@ -56,17 +44,6 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		{
 			return Get().m_Dispatcher;
 		}
-
-	public:
-		/*
-			This function works only for:
-			- KMM_LOCATION_MODS_ORDER
-			- KMM_LOCATION_MODS_FOLDER
-			- KMM_LOCATION_MOD_ROOT
-
-			To use any other constant use function KModEntry::GetLocation.
-		*/
-		static wxString GetLocation(KModManagerLocation nLocation, const wxString& signature = wxEmptyString);
 
 	private:
 		using MandatotyModEntriesVector = std::vector<KMandatoryModEntry>;

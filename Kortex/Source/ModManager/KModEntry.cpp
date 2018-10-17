@@ -2,7 +2,7 @@
 #include "KModEntry.h"
 #include "KModManager.h"
 #include "Network/KNetwork.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstnaceManagement.h"
 #include "PackageProject/KPackageProject.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -12,6 +12,26 @@
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxFileFinder.h>
+
+namespace Util
+{
+	wxString GetRootPath(const wxString& signature)
+	{
+		if (const KGameInstance* instance = KGameInstance::GetActive())
+		{
+			return instance->GetModsDir() + wxS('\\') + signature;
+		}
+		return wxEmptyString;
+	}
+	wxString GetRootRelativePath(const wxString& signature, const wxString& name)
+	{
+		return GetRootPath(signature) + wxS('\\') + name;
+	}
+	wxString GetRootRelativePath(const wxString& signature, const wxChar* name)
+	{
+		return GetRootPath(signature) + wxS('\\') + name;
+	}
+}
 
 wxString KModEntry::GetSignatureFromID(const wxString& id)
 {
@@ -71,7 +91,7 @@ bool KModEntry::ToggleTag(KxStringVector& array, const wxString& value, bool set
 
 bool KModEntry::IsInstalledReal() const
 {
-	return KxFile(GetLocation(KMM_LOCATION_MOD_FILES)).IsFolderExist();
+	return KxFile(GetModFilesDir()).IsFolderExist();
 }
 
 KModEntry::KModEntry()
@@ -94,7 +114,7 @@ void KModEntry::CreateFromSignature(const wxString& signature)
 
 	if (!m_Signature.IsEmpty())
 	{
-		KxFileStream xmlStream(GetLocation(KMM_LOCATION_MOD_INFO), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+		KxFileStream xmlStream(GetInfoFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
 		KxXMLDocument xml(xmlStream);
 		if (xml.IsOK())
 		{
@@ -193,19 +213,19 @@ void KModEntry::CreateFromProject(const KPackageProject& config)
 }
 void KModEntry::CreateAllFolders()
 {
-	KxFile(GetLocation(KMM_LOCATION_MOD_ROOT)).CreateFolder();
+	KxFile(GetRootDir()).CreateFolder();
 
 	if (!IsLinkedMod())
 	{
-		KxFile(GetLocation(KMM_LOCATION_MOD_FILES)).CreateFolder();
+		KxFile(GetModFilesDir()).CreateFolder();
 	}
 }
 bool KModEntry::Save()
 {
 	// Mod root is always needed here but other folders isn't
-	KxFile(GetLocation(KMM_LOCATION_MOD_ROOT)).CreateFolder();
+	KxFile(GetRootDir()).CreateFolder();
 
-	KxFileStream stream(GetLocation(KMM_LOCATION_MOD_INFO), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
+	KxFileStream stream(GetInfoFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
 	if (stream.IsOk())
 	{
 		KxXMLDocument xml;
@@ -283,9 +303,9 @@ bool KModEntry::Save()
 		// Description
 		if (IsDescriptionChanged())
 		{
-			KxFileStream tDescriptionFile(GetLocation(KMM_LOCATION_MOD_DESCRIPTION), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
-			tDescriptionFile.SetEnd();
-			tDescriptionFile.WriteStringUTF8(m_Description);
+			KxFileStream descriptionStream(GetDescriptionFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
+			descriptionStream.SetEnd();
+			descriptionStream.WriteStringUTF8(m_Description);
 
 			m_IsDescriptionChanged = false;
 		}
@@ -330,7 +350,7 @@ const wxString& KModEntry::GetDescription() const
 {
 	if (m_Description.IsEmpty() && !IsDescriptionChanged())
 	{
-		KxFileStream stream(GetLocation(KMM_LOCATION_MOD_DESCRIPTION), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+		KxFileStream stream(GetDescriptionFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
 		if (stream.IsOk())
 		{
 			m_Description = stream.ReadStringUTF8(stream.GetLength());
@@ -402,7 +422,7 @@ void KModEntry::UpdateFileTree()
 		}
 		return itemsCount;
 	};
-	Recurse(GetLocation(KMM_LOCATION_MOD_FILES), &m_FileTree, NULL);
+	Recurse(GetModFilesDir(), &m_FileTree, NULL);
 }
 
 bool KModEntry::IsEnabled() const
@@ -448,38 +468,32 @@ intptr_t KModEntry::GetOrderIndex() const
 	// x2 reserve space for priority groups
 	return 2 * KModManager::Get().GetModOrderIndex(this);
 }
-wxString KModEntry::GetLocation(KModManagerLocation index) const
+
+wxString KModEntry::GetRootDir() const
 {
-	switch (index)
+	return Util::GetRootPath(m_Signature);
+}
+wxString KModEntry::GetDescriptionFile() const
+{
+	return Util::GetRootRelativePath(m_Signature, wxS("Description.txt"));
+}
+wxString KModEntry::GetInfoFile() const
+{
+	return Util::GetRootRelativePath(m_Signature, wxS("Info.xml"));
+}
+wxString KModEntry::GetImageFile() const
+{
+	return Util::GetRootRelativePath(m_Signature, wxS("Image.img"));
+}
+wxString KModEntry::GetDefaultModFilesDir() const
+{
+	return Util::GetRootRelativePath(m_Signature, wxS("ModFiles"));
+}
+wxString KModEntry::GetModFilesDir() const
+{
+	if (IsLinkedMod())
 	{
-		case KMM_LOCATION_MOD_ROOT:
-		{
-			return KModManager::GetLocation(KMM_LOCATION_MOD_ROOT, m_Signature);
-		}
-		case KMM_LOCATION_MOD_INFO:
-		{
-			return GetLocation(KMM_LOCATION_MOD_ROOT) + wxS("\\Info.xml");
-		}
-		case KMM_LOCATION_MOD_FILES:
-		case KMM_LOCATION_MOD_FILES_DEFAULT:
-		{
-			if (IsLinkedMod() && index != KMM_LOCATION_MOD_FILES_DEFAULT)
-			{
-				return m_LinkedModFilesPath;
-			}
-			else
-			{
-				return GetLocation(KMM_LOCATION_MOD_ROOT) + wxS("\\ModFiles");
-			}
-		}
-		case KMM_LOCATION_MOD_LOGO:
-		{
-			return GetLocation(KMM_LOCATION_MOD_ROOT) + wxS("\\Image.img");
-		}
-		case KMM_LOCATION_MOD_DESCRIPTION:
-		{
-			return GetLocation(KMM_LOCATION_MOD_ROOT) + wxS("\\Description.txt");
-		}
-	};
-	return KModManager::GetLocation(index, m_Signature);
+		return m_LinkedModFilesPath;
+	}
+	return GetDefaultModFilesDir();
 }

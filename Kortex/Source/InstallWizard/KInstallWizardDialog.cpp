@@ -425,7 +425,7 @@ void KInstallWizardDialog::AcceptExistingMod(const KModEntry& existringMod)
 	// Linked mod configuration
 	if (existringMod.IsLinkedMod())
 	{
-		m_ModEntry.SetLinkedModLocation(existringMod.GetLocation(KMM_LOCATION_MOD_FILES));
+		m_ModEntry.SetLinkedModLocation(existringMod.GetModFilesDir());
 	}
 }
 void KInstallWizardDialog::LoadHeaderImage()
@@ -1173,13 +1173,13 @@ bool KInstallWizardDialog::OnEndInstall()
 	{
 		// Save main or header image
 		const KPackageProjectInterface& interfaceConfig = m_Package->GetConfig().GetInterface();
-		const KPPIImageEntry* pImage = interfaceConfig.GetMainImageEntry();
-		pImage = pImage ? pImage : interfaceConfig.GetHeaderImageEntry();
-		if (pImage && pImage->HasBitmap())
+		const KPPIImageEntry* imageEntry = interfaceConfig.GetMainImageEntry();
+		imageEntry = imageEntry ? imageEntry : interfaceConfig.GetHeaderImageEntry();
+		if (imageEntry && imageEntry->HasBitmap())
 		{
 			// Save original image
-			const wxBitmap& tOriginal = pImage->GetBitmap();
-			tOriginal.SaveFile(m_ModEntry.GetLocation(KMM_LOCATION_MOD_LOGO), tOriginal.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
+			const wxBitmap& bitmap = imageEntry->GetBitmap();
+			bitmap.SaveFile(m_ModEntry.GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
 		}
 
 		if (ShouldCancel())
@@ -1297,7 +1297,7 @@ void KInstallWizardDialog::RunInstall()
 {
 	SetModEntryData();
 
-	wxString installLocation = m_ModEntry.GetLocation(KMM_LOCATION_MOD_FILES);
+	wxString installLocation = m_ModEntry.GetModFilesDir();
 	if (installLocation.Last() == '\\')
 	{
 		installLocation.RemoveLast(1);

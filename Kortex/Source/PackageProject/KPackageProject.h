@@ -120,6 +120,4 @@ class KPackageProject
 		{
 			return m_Components;
 		}
-
-		wxString GetLocation(KModManagerLocation index) const;
 };

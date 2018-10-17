@@ -75,10 +75,12 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 	{
 		auto ScanChildren = [](const KFileTreeNode& rootNode, const std::wstring_view& folderName) -> const KFileTreeNode*
 		{
+			//const size_t hash = HashFileName(folderName);
 			for (const KFileTreeNode& node: rootNode.GetChildren())
 			{
 				const wxString& name = node.GetName();
 				if (KxComparator::IsEqual(folderName, std::wstring_view(name.wc_str(), name.length()), true))
+				//if (hash == node.GetNameHash())
 				{
 					return &node;
 				}
@@ -163,7 +165,7 @@ bool KFileTreeNode::HasAlternativesFromActiveMods() const
 wxString KFileTreeNode::GetRelativePath() const
 {
 	wxString path = m_Item.GetFullPath();
-	if (path.Replace(m_Mod->GetLocation(KMM_LOCATION_MOD_FILES), wxEmptyString, false) == 1 && !path.IsEmpty() && path[0] == wxS('\\'))
+	if (path.Replace(m_Mod->GetModFilesDir(), wxEmptyString, false) == 1 && !path.IsEmpty() && path[0] == wxS('\\'))
 	{
 		// Remove leading slash
 		path.Remove(0, 1);

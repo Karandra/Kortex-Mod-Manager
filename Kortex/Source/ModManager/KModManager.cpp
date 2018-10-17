@@ -5,7 +5,6 @@
 #include "KModManagerModel.h"
 #include "KModEntry.h"
 #include "KVirtualGameFolderWorkspace.h"
-#include "Profile/KProfile.h"
 #include "GameInstance/KInstnaceManagement.h"
 #include "GameInstance/Config/KVirtualizationConfig.h"
 #include "VFS/KVFSService.h"
@@ -30,32 +29,6 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
-
-wxString KModManager::GetLocation(KModManagerLocation locationIndex, const wxString& signature)
-{
-	const KGameInstance* instance = KGameInstance::GetActive();
-	switch (locationIndex)
-	{
-		case KMM_LOCATION_MODS_ORDER:
-		{
-			return instance->GetInstanceRelativePath(wxS("ModOrder.xml"));
-		}
-		case KMM_LOCATION_MODS_FOLDER:
-		{
-			return instance->GetVariables().GetVariable(KVAR_MODS_DIR);
-		}
-		case KMM_LOCATION_MOD_ROOT:
-		{
-			return instance->GetVariables().GetVariable(KVAR_MODS_DIR) + wxS('\\') + signature;
-		}
-		default:
-		{
-			wxLogWarning("Invalid location index in KModManager::GetLocation(nLocation = %d)", (int)locationIndex);
-			break;
-		}
-	};
-	return wxEmptyString;
-}
 
 void KModManager::DoResortMods(const KProfile& profile)
 {
@@ -99,7 +72,7 @@ void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* wind
 			modEntry->SetTime(KME_TIME_UNINSTALL, wxDateTime::Now());
 			modEntry->Save();
 		}
-		wxString path = modEntry->GetLocation(erase ? KMM_LOCATION_MOD_ROOT : KMM_LOCATION_MOD_FILES);
+		wxString path = erase ? modEntry->GetRootDir() : modEntry->GetModFilesDir();
 
 		KOperationWithProgressDialogBase* operation = new KOperationWithProgressDialogBase(true, window);	
 		operation->OnRun([path = path.Clone(), modEntry](KOperationWithProgressBase* self)
@@ -129,11 +102,11 @@ bool KModManager::InitMainVirtualFolder()
 		{
 			if (entry->IsEnabled())
 			{
-				folders.push_back(entry->GetLocation(KMM_LOCATION_MOD_FILES));
+				folders.push_back(entry->GetModFilesDir());
 			}
 		}
 
-		if (KIPCClient::GetInstance()->CreateVFS_Convergence(mountPoint, m_ModEntry_WriteTarget.GetLocation(KMM_LOCATION_MOD_FILES), folders, true))
+		if (KIPCClient::GetInstance()->CreateVFS_Convergence(mountPoint, m_ModEntry_WriteTarget.GetModFilesDir(), folders, true))
 		{
 			return KIPCClient::GetInstance()->ConvergenceVFS_SetDispatcherIndex();
 		}
@@ -345,13 +318,11 @@ void KModManager::Load()
 	Clear();
 
 	// Load entries
-	KxStringVector filesList = KxFile(GetLocation(KMM_LOCATION_MODS_FOLDER)).Find(KxFile::NullFilter, KxFS_FOLDER, false);
-	if (!filesList.empty())
+	if (KActiveGameInstance* instnace = KGameInstance::GetActive())
 	{
-		m_ModEntries.reserve(filesList.size());
-		for (size_t i = 0; i < filesList.size(); i++)
+		for (const wxString& path: KxFile(instnace->GetModsDir()).Find(KxFile::NullFilter, KxFS_FOLDER, false))
 		{
-			wxString signature = KxFile(filesList[i]).GetFullName();
+			wxString signature = KxFile(path).GetFullName();
 			if (!signature.IsEmpty())
 			{
 				auto entry = std::make_unique<KModEntry>();
@@ -479,10 +450,11 @@ bool KModManager::ChangeModID(KModEntry* entry, const wxString& newID)
 {
 	if (FindModByID(newID) == NULL)
 	{
-		wxString oldPath = GetLocation(KMM_LOCATION_MOD_ROOT, entry->GetSignature());
-		wxString newPath = GetLocation(KMM_LOCATION_MOD_ROOT, KModEntry::GetSignatureFromID(newID));
-		
-		if (KxFile(oldPath).Rename(newPath, false))
+		wxString oldPath = entry->GetRootDir();
+		KModEntry tempEntry;
+		tempEntry.SetID(newID);
+
+		if (KxFile(oldPath).Rename(tempEntry.GetRootDir(), false))
 		{
 			entry->SetID(newID);
 			entry->Save();

@@ -388,11 +388,11 @@ void KModManagerModel::GetValue(wxAny& value, const KxDataViewItem& item, const 
 		{
 			if (entry->IsLinkedMod())
 			{
-				value = entry->GetLocation(KMM_LOCATION_MOD_FILES);
+				value = entry->GetModFilesDir();
 			}
 			else
 			{
-				value = entry->GetLocation(KMM_LOCATION_MOD_ROOT);
+				value = entry->GetRootDir();
 			}
 			break;
 		}
@@ -427,7 +427,7 @@ void KModManagerModel::GetValue(wxAny& value, const KxDataViewItem& item, const 
 		}
 		case ColumnID::ModFolder:
 		{
-			value = entry->GetLocation(KMM_LOCATION_MOD_ROOT);
+			value = entry->GetRootDir();
 			break;
 		}
 	};
@@ -671,7 +671,7 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 				}
 				case ColumnID::ModFolder:
 				{
-					return KxComparator::IsLess(entry1->GetLocation(KMM_LOCATION_MOD_FILES), entry2->GetLocation(KMM_LOCATION_MOD_FILES));
+					return KxComparator::IsLess(entry1->GetModFilesDir(), entry2->GetModFilesDir());
 				}
 				case ColumnID::PackagePath:
 				{
@@ -766,7 +766,7 @@ void KModManagerModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					KImageViewerDialog dialog(GetViewTLW(), entry->GetName());
 
-					KImageViewerEvent imageEvent(wxEVT_NULL, entry->GetLocation(KMM_LOCATION_MOD_LOGO));
+					KImageViewerEvent imageEvent(wxEVT_NULL, entry->GetImageFile());
 					dialog.Navigate(imageEvent);
 					dialog.ShowModal();
 				}
@@ -881,15 +881,15 @@ wxBitmap KModManagerModel::CreateModThumbnail(const KModEntry* entry) const
 	{
 		case KModWorkspace::ImageResizeMode::Scale:
 		{
-			return m_BitmapSize.ScaleBitmapAspect(wxBitmap(entry->GetLocation(KMM_LOCATION_MOD_LOGO), wxBITMAP_TYPE_ANY), magrinX, magrinY);
+			return m_BitmapSize.ScaleBitmapAspect(wxBitmap(entry->GetImageFile(), wxBITMAP_TYPE_ANY), magrinX, magrinY);
 		}
 		case KModWorkspace::ImageResizeMode::Stretch:
 		{
-			return m_BitmapSize.ScaleBitmapStretch(wxBitmap(entry->GetLocation(KMM_LOCATION_MOD_LOGO), wxBITMAP_TYPE_ANY), magrinX, magrinY);
+			return m_BitmapSize.ScaleBitmapStretch(wxBitmap(entry->GetImageFile(), wxBITMAP_TYPE_ANY), magrinX, magrinY);
 		}
 		case KModWorkspace::ImageResizeMode::Fill:
 		{
-			wxImage image = wxImage(entry->GetLocation(KMM_LOCATION_MOD_LOGO), wxBITMAP_TYPE_ANY);
+			wxImage image = wxImage(entry->GetImageFile(), wxBITMAP_TYPE_ANY);
 			image = KAux::ScaleImageAspect(image, m_BitmapSize.GetWidth());
 
 			if (image.GetHeight() >= m_BitmapSize.GetHeight())

@@ -235,7 +235,7 @@ const KDispatcherCollision::Vector& KModFilesExplorerModel::GetOrUpdateCollision
 	}
 	else
 	{
-		wxString path = node.GetFullPath().Remove(0, m_ModEntry.GetLocation(KMM_LOCATION_MOD_FILES).Length());
+		wxString path = node.GetFullPath().Remove(0, m_ModEntry.GetModFilesDir().Length());
 		auto it = m_Collisions.insert_or_assign(&node, KModManager::GetDispatcher().FindCollisions(m_ModEntry, path));
 
 		return it.first->second;

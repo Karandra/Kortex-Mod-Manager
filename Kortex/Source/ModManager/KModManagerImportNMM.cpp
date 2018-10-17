@@ -192,10 +192,10 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 		// Do some trick:
 		// NMM can store mod files in folder named after mod's name or its ID and there is no way to
 		// know that. So I will check first file in the list, get folder from its path and construct final mod path.
-		wxString modFolder = modBaseFolder + '\\' + modInfoNode.GetFirstChildElement("fileLink").GetAttribute("realPath").BeforeFirst('\\');
+		wxString modFolder = modBaseFolder + wxS('\\') + modInfoNode.GetFirstChildElement("fileLink").GetAttribute("realPath").BeforeFirst('\\');
 		
 		KxEvtFile source(modFolder);
-		wxString destination = modEntry->GetLocation(KMM_LOCATION_MOD_FILES) + '\\' + GetDataFolderName();
+		wxString destination = modEntry->GetModFilesDir() + wxS('\\') + GetDataFolderName();
 		context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
 		source.CopyFolder(KxFile::NullFilter, destination, true, true);
 	}

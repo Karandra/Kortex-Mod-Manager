@@ -15,7 +15,7 @@ bool KModCollisionViewerModelNS::ModelEntry::FindCollisions(const KModEntry& mod
 	if (m_Item.IsNormalItem() && m_Item.IsFile())
 	{
 		m_RelativePath = m_Item.GetFullPath();
-		m_RelativePath.Remove(0, modEntry.GetLocation(KMM_LOCATION_MOD_FILES).Length() + 1); // Plus 1 for slash
+		m_RelativePath.Remove(0, modEntry.GetModFilesDir().Length() + 1); // Plus 1 for slash
 		m_Collisions = KModManager::GetDispatcher().FindCollisions(modEntry, m_RelativePath);
 
 		return true;

@@ -242,5 +242,11 @@ class KModEntry: public KWithBitmap
 		virtual KImageEnum GetIcon() const;
 		virtual intptr_t GetPriority() const;
 		virtual intptr_t GetOrderIndex() const;
-		virtual wxString GetLocation(KModManagerLocation index) const;
+
+		wxString GetRootDir() const;
+		wxString GetDescriptionFile() const;
+		wxString GetInfoFile() const;
+		wxString GetImageFile() const;
+		wxString GetDefaultModFilesDir() const;
+		virtual wxString GetModFilesDir() const;
 };

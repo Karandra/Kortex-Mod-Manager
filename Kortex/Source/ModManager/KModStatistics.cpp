@@ -47,9 +47,9 @@ wxString KModStatisticsModel::GetStatName(KModStatisticsType index) const
 {
 	switch (index)
 	{
-		case KMM_STAT_MOD_COUNT_ALL:
+		case KMM_STAT_MOD_COUNT_TOTAL:
 		{
-			return T("ModManager.Statistics.ModCountAll");
+			return T("ModManager.Statistics.ModCountTotal");
 		}
 		case KMM_STAT_MOD_COUNT_ACTIVE:
 		{
@@ -58,6 +58,14 @@ wxString KModStatisticsModel::GetStatName(KModStatisticsType index) const
 		case KMM_STAT_MOD_COUNT_INACTIVE:
 		{
 			return T("ModManager.Statistics.ModCountInactive");
+		}
+		case KMM_STAT_MOD_COUNT_FILES:
+		{
+			return T("ModManager.Statistics.FilesCount");
+		}
+		case KMM_STAT_MOD_COUNT_FOLDERS:
+		{
+			return T("ModManager.Statistics.FoldersCount");
 		}
 		case KMM_STAT_MODS_SIZE:
 		{
@@ -74,7 +82,7 @@ wxString KModStatisticsModel::CalcStatValue(KModStatisticsType index) const
 {
 	switch (index)
 	{
-		case KMM_STAT_MOD_COUNT_ALL:
+		case KMM_STAT_MOD_COUNT_TOTAL:
 		{
 			return std::to_wstring(CountMods(All));
 		}
@@ -85,6 +93,14 @@ wxString KModStatisticsModel::CalcStatValue(KModStatisticsType index) const
 		case KMM_STAT_MOD_COUNT_INACTIVE:
 		{
 			return std::to_wstring(CountMods(Inactive));
+		}
+		case KMM_STAT_MOD_COUNT_FILES:
+		{
+			return std::to_wstring(CountFilesAndFolders(KxFS_FILE, All));
+		}
+		case KMM_STAT_MOD_COUNT_FOLDERS:
+		{
+			return std::to_wstring(CountFilesAndFolders(KxFS_FOLDER, All));
 		}
 		case KMM_STAT_MODS_SIZE:
 		{
@@ -97,13 +113,13 @@ wxString KModStatisticsModel::CalcStatValue(KModStatisticsType index) const
 int64_t KModStatisticsModel::CountMods(CountMode mode) const
 {
 	int64_t count = 0;
-	for (const KModEntry* entry: KModManager::Get().GetEntries())
+	for (const KModEntry* modEentry: KModManager::Get().GetAllEntries(true))
 	{
 		switch (mode)
 		{
 			case Active:
 			{
-				if (entry->IsEnabled())
+				if (modEentry->IsEnabled())
 				{
 					count++;
 				}
@@ -111,7 +127,7 @@ int64_t KModStatisticsModel::CountMods(CountMode mode) const
 			}
 			case Inactive:
 			{
-				if (!entry->IsEnabled())
+				if (!modEentry->IsEnabled())
 				{
 					count++;
 				}
@@ -129,27 +145,63 @@ int64_t KModStatisticsModel::CountMods(CountMode mode) const
 int64_t KModStatisticsModel::CalcModStoreSize() const
 {
 	int64_t totalSize = 0;
-	std::function<void(const KFileTreeNode&)> ScanTree = [&ScanTree, &totalSize](const KFileTreeNode& rootNode)
+	for (const KModEntry* modEntry: KModManager::Get().GetAllEntries(true))
 	{
-		for (const KFileTreeNode& node: rootNode.GetChildren())
+		modEntry->GetFileTree().WalkTree([&totalSize](const KFileTreeNode& rootNode)
 		{
-			if (node.IsFile())
+			for (const KFileTreeNode& node: rootNode.GetChildren())
 			{
-				totalSize += node.GetFileSize();
+				if (node.IsFile())
+				{
+					totalSize += node.GetFileSize();
+				}
 			}
-			else
-			{
-				ScanTree(node);
-			}
-		}
-	};
-
-	// Only real mods, no base game and no overwrite.
-	for (const KModEntry* modEntry: KModManager::Get().GetEntries())
-	{
-		ScanTree(modEntry->GetFileTree());
+			return true;
+		});
 	}
 	return totalSize;
+}
+int64_t KModStatisticsModel::CountFilesAndFolders(KxFileSearchType type, CountMode mode) const
+{
+	int64_t count = 0;
+	for (const KModEntry* modEntry: KModManager::Get().GetAllEntries(true))
+	{
+		modEntry->GetFileTree().WalkTree([&count, type, mode](const KFileTreeNode& rootNode)
+		{
+			for (const KFileTreeNode& node: rootNode.GetChildren())
+			{
+				if (node.GetItem().IsElementType(type))
+				{
+					switch (mode)
+					{
+						case Active:
+						{
+							if (rootNode.GetMod().IsEnabled())
+							{
+								count++;
+							}
+							break;
+						}
+						case Inactive:
+						{
+							if (!rootNode.GetMod().IsEnabled())
+							{
+								count++;
+							}
+							break;
+						}
+						default:
+						{
+							count++;
+							break;
+						}
+					};
+				}
+			}
+			return true;
+		});
+	}
+	return count;
 }
 
 void KModStatisticsModel::RefreshItems()

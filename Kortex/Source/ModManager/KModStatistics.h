@@ -11,9 +11,11 @@ enum KModStatisticsType
 	KMM_STAT_INVALID = -1,
 	KMM_STAT_MIN = 0,
 
-	KMM_STAT_MOD_COUNT_ALL,
+	KMM_STAT_MOD_COUNT_TOTAL,
 	KMM_STAT_MOD_COUNT_ACTIVE,
 	KMM_STAT_MOD_COUNT_INACTIVE,
+	KMM_STAT_MOD_COUNT_FILES,
+	KMM_STAT_MOD_COUNT_FOLDERS,
 	KMM_STAT_MODS_SIZE,
 
 	KMM_STAT_MAX,
@@ -45,6 +47,7 @@ class KModStatisticsModel: public KxDataViewVectorListModelEx<KxStringVector, Kx
 
 		int64_t CountMods(CountMode mode) const;
 		int64_t CalcModStoreSize() const;
+		int64_t CountFilesAndFolders(KxFileSearchType type, CountMode mode) const;
 
 	public:
 		KModStatisticsModel()

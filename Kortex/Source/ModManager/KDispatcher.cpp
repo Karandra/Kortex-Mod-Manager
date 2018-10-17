@@ -82,7 +82,8 @@ namespace
 
 	void BuildTreeBranch(const KDispatcher::ModsVector& mods, KFileTreeNode::Vector& children, const KFileTreeNode* rootNode, KFileTreeNode::RefVector& directories)
 	{
-		FinderHash hash;
+		std::unordered_map<size_t, size_t> hash;
+		const wxString rootPath = rootNode ? rootNode->GetRelativePath() : wxEmptyString;
 
 		// Iterate manually, without using 'IterateOverModsEx'
 		for (auto it = mods.rbegin(); it != mods.rend(); ++it)
@@ -95,7 +96,7 @@ namespace
 				const KFileTreeNode* searchNode = &modEntry.GetFileTree();
 				if (rootNode)
 				{
-					searchNode = KFileTreeNode::NavigateToFolder(modEntry.GetFileTree(), rootNode->GetRelativePath());
+					searchNode = KFileTreeNode::NavigateToFolder(modEntry.GetFileTree(), rootPath);
 				}
 
 				if (searchNode)
@@ -105,7 +106,7 @@ namespace
 
 					for (const KFileTreeNode& node: searchNode->GetChildren())
 					{
-						auto hashIt = hash.try_emplace(node.GetName(), 0);
+						auto hashIt = hash.try_emplace(node.GetNameHash(), (size_t)-1);
 						if (hashIt.second)
 						{
 							KFileTreeNode& newNode = children.emplace_back(modEntry, node.GetItem(), rootNode);
@@ -164,8 +165,8 @@ namespace
 			{
 				KFileTreeNode& newNode = thisChildren.emplace_back(otherNode.GetMod(), otherNode.GetItem(), rootNode);
 				newNode.CopyBasicAttributes(otherNode);
+				
 				node = &newNode;
-
 				index = thisChildren.size() - 1;
 				newNode.GetItem().SetExtraData(index);
 			}
@@ -283,10 +284,10 @@ void KDispatcher::UpdateVirtualTree()
 {
 	int64_t t1 = GetClockTime();
 
-	// Test
-	#if 1
+	// Test (sequential)
+	#if 0
 	m_VirtualTree.ClearChildren();
-	KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
+	const KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
 
 	for (auto it = mods.rbegin(); it != mods.rend(); ++it)
 	{
@@ -296,11 +297,10 @@ void KDispatcher::UpdateVirtualTree()
 			AddTree(m_VirtualTree, modEntry.GetFileTree());
 		}
 	}
-
 	#endif
 
 	// Recursive (parallel)
-	#if 0
+	#if 1
 	m_VirtualTree.ClearChildren();
 	const KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
 
@@ -323,7 +323,7 @@ void KDispatcher::UpdateVirtualTree()
 	// Iterational (sequential)
 	#if 0
 	m_VirtualTree.ClearChildren();
-	KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
+	const KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
 
 	// Build top level
 	KFileTreeNode::RefVector directories;
@@ -388,7 +388,7 @@ wxString KDispatcher::ResolveLocationPath(const wxString& relativePath, const KM
 
 	// Fallback to write target
 	KxUtility::SetIfNotNull(owningMod, nullptr);
-	return KModManager::Get().GetModEntry_WriteTarget()->GetLocation(KMM_LOCATION_MOD_FILES) + wxS('\\') + relativePath;
+	return KModManager::Get().GetModEntry_WriteTarget()->GetModFilesDir() + wxS('\\') + relativePath;
 }
 
 const KFileTreeNode* KDispatcher::BackTrackFullPath(const wxString& fullPath) const

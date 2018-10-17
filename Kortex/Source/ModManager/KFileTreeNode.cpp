@@ -56,8 +56,7 @@ namespace
 			size_t hashValue = 0;
 			for (wchar_t c: value)
 			{
-				c = KxString::CharToLower(c);
-				hash_combine(hashValue, c);
+				hash_combine(hashValue, KxString::CharToLower(c));
 			}
 			return hashValue;
 		}
@@ -75,12 +74,10 @@ const KFileTreeNode* KFileTreeNode::NavigateToElement(const KFileTreeNode& rootN
 	{
 		auto ScanChildren = [](const KFileTreeNode& rootNode, const std::wstring_view& folderName) -> const KFileTreeNode*
 		{
-			//const size_t hash = HashFileName(folderName);
+			const size_t hash = HashFileName(folderName);
 			for (const KFileTreeNode& node: rootNode.GetChildren())
 			{
-				const wxString& name = node.GetName();
-				if (KxComparator::IsEqual(folderName, std::wstring_view(name.wc_str(), name.length()), true))
-				//if (hash == node.GetNameHash())
+				if (hash == node.GetNameHash())
 				{
 					return &node;
 				}

@@ -902,9 +902,11 @@
 		
 		<String ID="ModManager.Statistics">Статистика</String>
 		<String ID="ModManager.Statistics.Status">Подсчёт статистики</String>
-		<String ID="ModManager.Statistics.ModCountAll">Всего модов</String>
+		<String ID="ModManager.Statistics.ModCountTotal">Всего модов</String>
 		<String ID="ModManager.Statistics.ModCountActive">Активно модов</String>
 		<String ID="ModManager.Statistics.ModCountInactive">Неактивные моды</String>
+		<String ID="ModManager.Statistics.FilesCount">Всего файлов</String>
+		<String ID="ModManager.Statistics.FoldersCount">Всего папок</String>
 		<String ID="ModManager.Statistics.ModsSize">Занимаемое модами пространство</String>
 		
 		<String ID="ModManager.Import.Caption">Импорт из другого мод-менеджера</String>

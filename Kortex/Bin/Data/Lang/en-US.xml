@@ -902,9 +902,11 @@ This folder and all its contents will be deleted: %1]]></String>
 		
 		<String ID="ModManager.Statistics">Statistics</String>
 		<String ID="ModManager.Statistics.Status">Calculating statistics</String>
-		<String ID="ModManager.Statistics.ModCountAll">All mods</String>
+		<String ID="ModManager.Statistics.ModCountTotal">All mods</String>
 		<String ID="ModManager.Statistics.ModCountActive">Active mods</String>
 		<String ID="ModManager.Statistics.ModCountInactive">Inactive mods</String>
+		<String ID="ModManager.Statistics.FilesCount">Total files</String>
+		<String ID="ModManager.Statistics.FoldersCount">Total folders</String>
 		<String ID="ModManager.Statistics.ModsSize">Space used by mods</String>
 
 		<String ID="ModManager.Import.Caption">Import from another mod manager</String>

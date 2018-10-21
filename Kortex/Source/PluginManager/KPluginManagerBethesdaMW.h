@@ -15,6 +15,8 @@ class KPluginManagerBethesdaMW: public KPluginManagerBethesda
 		void WriteActiveMW(KxINI& ini) const;
 
 	protected:
+		wxString GetMorrowindINI() const;	
+
 		virtual void LoadNativeActiveBG() override;
 		virtual void LoadNativeOrderBG() override;
 		virtual void SaveNativeOrderBG() const override;
@@ -24,18 +26,9 @@ class KPluginManagerBethesdaMW: public KPluginManagerBethesda
 		virtual ~KPluginManagerBethesdaMW();
 
 	public:
-		virtual bool ShouldChangeFileModificationDate() const override
-		{
-			return true;
-		}
-		virtual bool ShouldSortByFileModificationDate() const override
-		{
-			return true;
-		}
-		
 		virtual wxString GetPluginRootRelativePath(const wxString& fileName) const override
 		{
-			return m_PluginsLocation + '\\' + fileName;
+			return m_PluginsLocation + wxS('\\') + fileName;
 		}
 
 		virtual void Save() const override;

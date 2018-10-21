@@ -154,7 +154,7 @@ void KPluginManagerBethesda::LoadNativeActiveBG()
 }
 void KPluginManagerBethesda::SaveNativeOrderBG() const
 {
-	bool modFileDate = ShouldChangeFileModificationDate();
+	const bool modFileDate = ShouldChangeFileModificationDate();
 
 	// Initialize starting time point to (current time - entries count) minutes,
 	// so incrementing it by one minute gives no "overflows" into future.

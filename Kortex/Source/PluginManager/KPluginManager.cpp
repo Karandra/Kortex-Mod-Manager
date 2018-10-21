@@ -66,8 +66,10 @@ std::unique_ptr<KPluginReader> KPluginManager::QueryPluginReader(const wxString&
 
 void KPluginManager::OnInit()
 {
-	KEvent::Bind(KEVT_MOD_VIRTUAL_TREE_INVALIDATED, &KPluginManager::OnVirtualTreeInvalidated, this);
+	KEvent::Bind(KEVT_PROFILE_SELECTED, &KPluginManager::OnVirtualTreeInvalidated, this);
+	KEvent::Bind(KEVT_MODS_REORDERED, &KPluginManager::OnVirtualTreeInvalidated, this);
 	KEvent::Bind(KEVT_MOD_TOGGLED, &KPluginManager::OnVirtualTreeInvalidated, this);
+	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KPluginManager::OnVirtualTreeInvalidated, this);
 }
 void KPluginManager::ReadPluginsData()
 {
@@ -271,17 +273,17 @@ void KPluginManager::RunSortingTool(const KPluginManagerConfigSortingToolEntry& 
 		runEntry.SetArguments(entry.GetArguments());
 
 		KxProgressDialog* dialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, T("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
-		KxProcess* process = KProgramManager::GetInstance()->RunEntryDelayed(runEntry, dialog);
+		KxProcess& process = KProgramManager::GetInstance()->CreateProcess(runEntry);
 
-		dialog->Bind(KxEVT_STDDIALOG_BUTTON, [process](wxNotifyEvent& event)
+		dialog->Bind(KxEVT_STDDIALOG_BUTTON, [&process](wxNotifyEvent& event)
 		{
 			if (event.GetId() == KxID_CANCEL)
 			{
-				process->Terminate(-1, true);
+				process.Terminate(-1, true);
 			}
 			event.Veto();
 		});
-		process->Bind(wxEVT_END_PROCESS, [this, process, dialog](wxProcessEvent& event)
+		process.Bind(wxEVT_END_PROCESS, [this](wxProcessEvent& event)
 		{
 			LoadNativeOrder();
 			KMainWindow::GetInstance()->Show();
@@ -293,6 +295,6 @@ void KPluginManager::RunSortingTool(const KPluginManagerConfigSortingToolEntry& 
 		dialog->Pulse();
 		dialog->Show();
 
-		process->Run(KxPROCESS_RUN_ASYNC);
+		process.Run(KxPROCESS_RUN_ASYNC);
 	}
 }

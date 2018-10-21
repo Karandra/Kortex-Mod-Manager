@@ -42,7 +42,7 @@ class KPluginManagerWorkspace: public KWorkspace, public KxSingletonPtr<KPluginM
 		}
 		virtual size_t GetTabIndex() const
 		{
-			return KWS_TABINDEX_PLUGINS;
+			return (size_t)TabIndex::Plugins;
 		}
 		
 		virtual bool OnOpenWorkspace() override;

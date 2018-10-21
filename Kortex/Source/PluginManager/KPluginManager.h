@@ -14,13 +14,13 @@ class KModEntry;
 class KPluginViewModel;
 class KxXMLNode;
 
-#define KPLUGIN_IMANAGER_BETHESDA "Bethesda"
-#define KPLUGIN_IMANAGER_BETHESDA2 "Bethesda2"
-#define KPLUGIN_IMANAGER_BETHESDAMW "BethesdaMW"
+#define KPLUGIN_IMANAGER_BETHESDA wxS("Bethesda")
+#define KPLUGIN_IMANAGER_BETHESDA2 wxS("Bethesda2")
+#define KPLUGIN_IMANAGER_BETHESDAMW wxS("BethesdaMW")
 
-#define KPLUGIN_IFILE_BETHESDA_MORROWIND "BethesdaMorrowind"
-#define KPLUGIN_IFILE_BETHESDA_OBLIVION "BethesdaOblivion"
-#define KPLUGIN_IFILE_BETHESDA_SKYRIM "BethesdaSkyrim"
+#define KPLUGIN_IFILE_BETHESDA_MORROWIND wxS("BethesdaMorrowind")
+#define KPLUGIN_IFILE_BETHESDA_OBLIVION wxS("BethesdaOblivion")
+#define KPLUGIN_IFILE_BETHESDA_SKYRIM wxS("BethesdaSkyrim")
 
 class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginManager>
 {

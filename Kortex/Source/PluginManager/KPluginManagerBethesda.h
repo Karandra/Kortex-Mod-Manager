@@ -60,11 +60,11 @@ class KPluginManagerBethesda: public KPluginManager
 		virtual void Load() override;
 		virtual void LoadNativeOrder() override;
 
-		virtual bool ShouldChangeFileModificationDate() const
+		bool ShouldChangeFileModificationDate() const
 		{
 			return m_ShouldChangeFileModificationDate;
 		}
-		virtual bool ShouldSortByFileModificationDate() const
+		bool ShouldSortByFileModificationDate() const
 		{
 			return m_ShouldSortByFileModificationDate;
 		}

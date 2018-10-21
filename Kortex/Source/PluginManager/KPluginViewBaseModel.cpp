@@ -297,7 +297,11 @@ KPluginViewBaseModel::KPluginViewBaseModel()
 
 void KPluginViewBaseModel::ChangeNotify()
 {
-	KGameInstance::GetCurrentProfile()->SyncWithCurrentState();
+	if (KProfile* profile = KGameInstance::GetCurrentProfile())
+	{
+		profile->SyncWithCurrentState();
+		profile->Save();
+	}
 	KPluginManager::GetInstance()->Save();
 }
 void KPluginViewBaseModel::SetDataVector()

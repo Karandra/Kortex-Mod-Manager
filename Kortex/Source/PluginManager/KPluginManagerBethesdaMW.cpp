@@ -99,11 +99,16 @@ void KPluginManagerBethesdaMW::WriteActiveMW(KxINI& ini) const
 	}
 }
 
+wxString KPluginManagerBethesdaMW::GetMorrowindINI() const
+{
+	return KGameInstance::GetCurrentProfile()->GetConfigDir() + wxS('\\') + m_PluginsListFile;
+}
+
 void KPluginManagerBethesdaMW::LoadNativeOrderBG()
 {
 	Clear();
 
-	KxFileStream stream(KModManager::GetDispatcher().ResolveLocationPath(m_PluginsListFile), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream stream(GetMorrowindINI(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	KxINI ini(stream);
 	if (ini.IsOK())
 	{
@@ -121,26 +126,26 @@ void KPluginManagerBethesdaMW::LoadNativeActiveBG()
 }
 void KPluginManagerBethesdaMW::SaveNativeOrderBG() const
 {
-	KxFileStream stream(m_PluginsListFile, KxFS_ACCESS_RW, KxFS_DISP_OPEN_ALWAYS, KxFS_SHARE_READ);
+	KxFileStream stream(GetMorrowindINI(), KxFS_ACCESS_RW, KxFS_DISP_OPEN_ALWAYS, KxFS_SHARE_READ);
 	KxINI ini(stream);
-	if (ini.IsOK())
-	{
-		WriteActiveMW(ini);
-		WriteOrderMW(ini);
-		ini.Save(stream);
-		stream.Close();
 
-		if (KGameConfigWorkspace* workspace = KGameConfigWorkspace::GetInstance())
-		{
-			workspace->ScheduleReload();
-		}
+	WriteActiveMW(ini);
+	WriteOrderMW(ini);
+
+	stream.Seek(0, KxFS_SEEK_BEGIN);
+	stream.SetEnd();
+	ini.Save(stream);
+
+	if (KGameConfigWorkspace* workspace = KGameConfigWorkspace::GetInstance())
+	{
+		workspace->ScheduleReload();
 	}
 }
 
 KPluginManagerBethesdaMW::KPluginManagerBethesdaMW(const wxString& interfaceName, const KxXMLNode& configNode)
 	:KPluginManagerBethesda(interfaceName, configNode), m_PluginsListFile(wxS("Morrowind.ini"))
 {
-	m_PluginsLocation = "Data Files";
+	m_PluginsLocation = wxS("Data Files");
 }
 KPluginManagerBethesdaMW::~KPluginManagerBethesdaMW()
 {

@@ -6,6 +6,7 @@
 #include "ModManager/KModManager.h"
 #include "ModManager/KDispatcher.h"
 #include "GameInstance/Config/KProgramManagerConfig.h"
+#include "KBitmapSize.h"
 #include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
@@ -20,238 +21,173 @@
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 
-KProgramEntry::KProgramEntry()
+namespace
 {
-}
-KProgramEntry::KProgramEntry(const KxXMLNode& node)
-{
-	m_Name = V(node.GetFirstChildElement("Name").GetValue());
-	m_IconPath = V(node.GetFirstChildElement("Icon").GetValue());
-	m_Executable = V(node.GetFirstChildElement("Executable").GetValue());
-	m_Arguments = V(node.GetFirstChildElement("Arguments").GetValue());
-	m_WorkingDirectory = V(node.GetFirstChildElement("WorkingDirectory").GetValue());
-}
-
-bool KProgramEntry::IsOK() const
-{
-	return !m_Name.IsEmpty() && !m_Executable.IsEmpty();
-}
-bool KProgramEntry::IsRequiresVFS() const
-{
-	return KDispatcher::GetInstance()->ResolveLocation(m_Executable) != NULL;
-}
-
-//////////////////////////////////////////////////////////////////////////
-wxString KProgramManager::GetKExecutePath()
-{
-	if (KxSystem::Is64Bit())
+	void LoadProgramsFromXML(KProgramEntry::Vector& programs, const KxXMLNode& rootNode)
 	{
-		return KApp::Get().GetDataFolder() + "\\VFS\\KExecute x64.exe";
+		for (KxXMLNode node = rootNode.GetFirstChildElement("Programs").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+		{
+			KProgramEntry& entry = programs.emplace_back(node);
+			if (!entry.IsOK())
+			{
+				programs.pop_back();
+			}
+		}
 	}
-	else
+
+	void InitProcessOptions(KxProcess& process)
 	{
-		return KApp::Get().GetDataFolder() + "\\VFS\\KExecute.exe";
+		process.SetOptionEnabled(KxPROCESS_WAIT_END, false);
+		process.SetOptionEnabled(KxPROCESS_WAIT_INPUT_IDLE, false);
+		process.SetOptionEnabled(KxPROCESS_DETACHED, true);
 	}
-}
-void KProgramManager::InitKExecute(KxProcess& process, const wxString& executable, const wxString& arguments, const wxString& workingDirectory)
-{
-	process.SetExecutablePath(executable);
-	process.SetWorkingFolder(workingDirectory.IsEmpty() ? executable.BeforeLast('\\') : workingDirectory);
-	process.SetArguments(arguments);
-}
-void KProgramManager::InitKExecute(KxProcess& process, const KProgramEntry& runEntry)
-{
-	return InitKExecute(process, runEntry.GetExecutable(), runEntry.GetArguments(), runEntry.GetWorkingDirectory());
+	void InitProcessPaths(KxProcess& process, const wxString& executable, const wxString& arguments = wxEmptyString, const wxString& workingDirectory = wxEmptyString)
+	{
+		process.SetExecutablePath(executable);
+		process.SetWorkingFolder(workingDirectory.IsEmpty() ? executable.BeforeLast(wxS('\\')) : workingDirectory);
+		process.SetArguments(arguments);
+	}
+	void InitProcessPaths(KxProcess& process, const KProgramEntry& runEntry)
+	{
+		InitProcessPaths(process, runEntry.GetExecutable(), runEntry.GetArguments(), runEntry.GetWorkingDirectory());
+	}
 }
 
 void KProgramManager::OnInit()
 {
-	LoadProgramList();
+	LoadUserPrograms();
 }
-wxBitmap KProgramManager::OnQueryItemImage(const KProgramEntry& runEntry) const
+void KProgramManager::OnLoadConfig(const KxXMLNode& configNode)
 {
-	wxString iconPath = runEntry.GetIconPath();
-	if (iconPath.IsEmpty())
-	{
-		iconPath = runEntry.GetExecutable();
-	}
-	if (iconPath.StartsWith(V(KVAR(KVAR_VIRTUAL_GAME_DIR)), &iconPath) && !iconPath.IsEmpty())
-	{
-		if (iconPath[0] == '\\')
-		{
-			iconPath.Remove(0, 1);
-		}
-		if (iconPath.Last() == '\\')
-		{
-			iconPath.RemoveLast(1);
-		}
-	}
-	iconPath = KModManager::GetDispatcher().ResolveLocationPath(iconPath);
+	LoadProgramsFromXML(m_DefaultPrograms, configNode);
+}
+void KProgramManager::LoadUserPrograms()
+{
+	KxFileStream stream(KGameInstance::GetActive()->GetProgramsFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxXMLDocument xml(stream);
+	LoadProgramsFromXML(m_UserPrograms, xml);
+}
+void KProgramManager::SaveUserPrograms() const
+{
+	KxXMLDocument xml;
+	KxXMLNode rootNode = xml.NewElement("Programs");
 
-	if (KAux::IsSingleFileExtensionMatches(iconPath, "exe") || KAux::IsSingleFileExtensionMatches(iconPath, "dll"))
+	for (const KProgramEntry& entry: m_UserPrograms)
 	{
-		return KxShell::GetFileIcon(iconPath, true);
+		entry.Save(rootNode);
 	}
-	else if (!iconPath.IsEmpty())
-	{
-		const int width = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
-		const int height = wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y);
 
-		wxImage image(runEntry.GetIconPath(), wxBITMAP_TYPE_ANY);
-		if (image.GetSize().GetWidth() > width || image.GetSize().GetHeight() > height)
-		{
-			image.Rescale(width, height, wxIMAGE_QUALITY_HIGH);
-		}
-		return wxBitmap(image, 32);
+	KxFileStream stream(KGameInstance::GetActive()->GetProgramsFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
+	xml.Save(stream);
+}
+
+void KProgramManager::LoadEntryImages(KProgramEntry& entry) const
+{
+	entry.GetSmallBitmap().SetBitmap(LoadEntryImage(entry, true));
+	entry.GetLargeBitmap().SetBitmap(LoadEntryImage(entry, false));
+}
+bool KProgramManager::CheckEntryImages(const KProgramEntry& entry) const
+{
+	return entry.GetSmallBitmap().HasBitmap() && entry.GetLargeBitmap().HasBitmap();
+}
+wxBitmap KProgramManager::LoadEntryImage(const KProgramEntry& entry, bool smallBitmap) const
+{
+	wxBitmap bitmap;
+	wxString path = entry.GetIconPath();
+
+	if (KAux::IsSingleFileExtensionMatches(path, wxS("exe")))
+	{
+		bitmap = KxShell::GetFileIcon(path, smallBitmap);
 	}
 	else
 	{
-		return KxShell::GetFileIcon(KModManager::GetDispatcher().ResolveLocationPath(runEntry.GetExecutable()), true);
+		bitmap.LoadFile(path, wxBITMAP_TYPE_ANY);
 	}
-}
-void KProgramManager::OnVFSToggled(KVFSEvent& event)
-{
-	if (event.IsActivated())
-	{
-		UpdateProgramListImages();
-	}
-}
-void KProgramManager::OnMenuOpen(KxMenuEvent& event)
-{
-	// Extract icons for profile run entries
-	bool isVFSEnabled = KModManager::Get().IsVFSMounted();
 
-	for (KxMenuItem* item: m_MenuItems)
+	if (bitmap.IsOk())
 	{
-		KProgramEntry* entry = (KProgramEntry*)item->GetClientData();
-		if (entry)
+		KBitmapSize bitmapSize;
+		if (smallBitmap)
 		{
-			item->Enable(entry->IsRequiresVFS() ? isVFSEnabled : true);
+			bitmapSize.FromSystemSmallIcon();
+		}
+		else
+		{
+			bitmapSize.FromSystemIcon();
+		}
 
-			if (!m_IconsExtracted && !entry->HasBitmap())
+		if (bitmap.GetWidth() != bitmapSize.GetWidth() || bitmap.GetHeight() != bitmapSize.GetHeight())
+		{
+			bitmap = bitmapSize.ScaleBitmapAspect(bitmap);
+		}
+	}
+	else
+	{
+		KxFileItem item;
+		item.SetName(wxS(".exe"));
+		item.SetNormalAttributes();
+		bitmap = KxShell::GetFileIcon(item, smallBitmap);
+	}
+	return bitmap;
+}
+void KProgramManager::OnAddMainMenuItems(KxMenu& menu)
+{
+	for (KProgramEntry& entry: m_UserPrograms)
+	{
+		if (entry.ShouldShowInMainMenu())
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(wxString::Format("%s %s", T("Generic.Run"), entry.GetName())));
+			item->Enable(entry.CanRunNow());
+			item->Bind(KxEVT_MENU_SELECT, [this, &entry](KxMenuEvent& event)
 			{
-				wxBitmap icon = OnQueryItemImage(*entry);
-				entry->SetBitmap(icon);
-				item->SetBitmap(icon);
+				RunEntry(entry);
+			});
+
+			if (!CheckEntryImages(entry))
+			{
+				LoadEntryImages(entry);
 			}
+			item->SetBitmap(entry.GetSmallBitmap().GetBitmap());
 		}
 	}
-	m_IconsExtracted = true;
-	event.Skip();
 }
 
-void KProgramManager::DoRunEntry(const KProgramEntry& runEntry, KxProgressDialog* dialog, KxProcess** processOut)
+KxProcess& KProgramManager::DoCreateProcess(const KProgramEntry& entry) const
 {
-	auto OnProcessEnd = [this, dialog](wxProcessEvent& event)
-	{
-		EndRunProcess(dialog, static_cast<KxProcess*>(event.GetEventObject()));
-	};
-
 	KxProcess* process = new KxProcess();
-	InitKExecute(*process, runEntry);
-	process->Bind(wxEVT_END_PROCESS, OnProcessEnd);
+	InitProcessPaths(*process, entry);
+	InitProcessOptions(*process);
+	process->SetClientData(const_cast<KProgramEntry*>(&entry));
 
-	if (processOut)
-	{
-		*processOut = process;
-	}
-	else
-	{
-		process->SetOptionEnabled(KxPROCESS_WAIT_END, false);
-		process->Run(KxPROCESS_RUN_SYNC);
-	}
+	return *process;
 }
-bool KProgramManager::CheckEntry(const KProgramEntry& runEntry)
+int KProgramManager::DoRunProcess(KxProcess& process) const
 {
-	if (KxFile(runEntry.GetExecutable()).IsFileExist())
+	KProgramEntry* entry = static_cast<KProgramEntry*>(process.GetClientData());
+	entry->OnRun();
+
+	return process.Run(KxPROCESS_RUN_SYNC);
+}
+bool KProgramManager::DoCheckEntry(const KProgramEntry& entry) const
+{
+	if (KxFile(entry.GetExecutable()).IsFileExist())
 	{
 		return true;
 	}
 	else
 	{
-		KLogEvent(T("ProgramManager.FileNotFound") + ":\r\n" + runEntry.GetExecutable(), KLOG_ERROR);
+		KLogEvent(T("ProgramManager.FileNotFound") + ":\r\n" + entry.GetExecutable(), KLOG_ERROR);
 		return false;
 	}
 }
 
-KxProgressDialog* KProgramManager::BeginRunProcess()
-{
-	KxProgressDialog* dialog = new KxProgressDialog(wxTheApp->GetTopWindow(), KxID_NONE, T("ProgramManager.Executing"), wxDefaultPosition, wxDefaultSize, KxBTN_NONE);
-	dialog->Pulse();
-	dialog->Bind(wxEVT_CHAR_HOOK, [](wxKeyEvent& event)
-	{
-		// Don't skip
-	});
-
-	KApp::Get().Yield();
-	return dialog;
-}
-void KProgramManager::EndRunProcess(KxProgressDialog* dialog, KxProcess* process)
-{
-	if (!process->GetRunStatus())
-	{
-		KLogEvent(T("ProgramManager.RunFailed") + "\r\n\r\n" + KxSystem::GetErrorMessage(process->GetRunLastErrorCode()), KLOG_ERROR, dialog);
-	}
-
-	if (dialog)
-	{
-		dialog->Destroy();
-	}
-	delete process;
-}
-void KProgramManager::RunMain(KxProgressDialog* dialog, const KProgramEntry& runEntry)
-{
-	dialog->SetLabel(T("ProgramManager.ExecutingMain"));
-	dialog->Pulse();
-
-	DoRunEntry(runEntry, dialog);
-}
-
-void KProgramManager::LoadProgramList()
-{
-	KxFileStream stream(GetProgramsListFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
-	KxXMLDocument xml(stream);
-
-	m_ProgramList.clear();
-	for (KxXMLNode node = xml.GetFirstChildElement("Programs").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
-	{
-		KProgramEntry& entry = m_ProgramList.emplace_back(KProgramEntry(node));
-		if (!entry.IsOK())
-		{
-			m_ProgramList.pop_back();
-		}
-	}
-}
-void KProgramManager::SaveProgramList() const
-{
-	KxXMLDocument xml;
-	KxXMLNode rootNode = xml.NewElement("Programs");
-
-	for (const KProgramEntry& entry: m_ProgramList)
-	{
-		KxXMLNode node = rootNode.NewElement("Entry");
-		node.NewElement("Name").SetValue(entry.GetName());
-		if (!entry.GetIconPath().IsEmpty())
-		{
-			node.NewElement("Icon").SetValue(entry.GetIconPath());
-		}
-		node.NewElement("Executable").SetValue(entry.GetExecutable());
-		node.NewElement("Arguments").SetValue(entry.GetArguments());
-		node.NewElement("WorkingDirectory").SetValue(entry.GetWorkingDirectory());
-	}
-
-	KxFileStream stream(GetProgramsListFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
-	xml.Save(stream);
-}
-
 KProgramManager::KProgramManager()
-	:m_RunOptions(this, "Options")
+	:m_Options(this, "Options")
 {
-	KEvent::Bind(KEVT_VFS_TOGGLED, &KProgramManager::OnVFSToggled, this);
 }
 KProgramManager::~KProgramManager()
 {
-	SaveProgramList();
+	SaveUserPrograms();
 }
 
 wxString KProgramManager::GetID() const
@@ -264,104 +200,43 @@ wxString KProgramManager::GetName() const
 }
 wxString KProgramManager::GetVersion() const
 {
-	return "1.0.1";
-}
-
-wxString KProgramManager::GetProgramsListFile() const
-{
-	return KGameInstance::GetActive()->GetProgramsFile();
-}
-void KProgramManager::UpdateProgramListImages()
-{
-	for (KProgramEntry& entry: m_ProgramList)
-	{
-		if (!entry.HasBitmap())
-		{
-			entry.SetBitmap(OnQueryItemImage(entry));
-		}
-	}
-}
-
-void KProgramManager::OnAddMenuItems(KxMenu* menu)
-{
-	m_Menu = menu;
-	KxIntVector list = m_RunOptions.GetAttributeVectorInt("MainEnabled");
-	
-	// If the list contains -1 as its first element, fill it with all indexes and save it back to settings
-	if (!list.empty() && list.front() == -1)
-	{
-		list.clear();
-		for (size_t i = 0; i < KProgramManagerConfig::GetInstance()->GetProgramsCount(); i++)
-		{
-			list.emplace_back((int)i);
-		}
-		m_RunOptions.SetAttributeVectorInt("MainEnabled", list);
-	}
-
-	if (!list.empty())
-	{
-		for (int index: list)
-		{
-			if (index < KProgramManagerConfig::GetInstance()->GetProgramsCount())
-			{
-				const KProgramEntry& entry = KProgramManagerConfig::GetInstance()->GetPrograms()[index];
-
-				KxMenuItem* item = menu->Add(new KxMenuItem(wxString::Format("%s %s", T("Generic.Run"), entry.GetName())));
-				item->Enable(false);
-				item->SetClientData((void*)&entry);
-				item->Bind(KxEVT_MENU_SELECT, [this, item, &entry](KxMenuEvent& event)
-				{
-					OnRunEntry(item, entry);
-				});
-
-				m_MenuItems.push_back(item);
-			}
-		}
-	}
-	else
-	{
-		menu->Add(new KxMenuItem(V("<$T(ProgramManager.NoPrograms)>")))->Enable(false);
-	}
-
-	m_Menu->Bind(KxEVT_MENU_OPEN, &KProgramManager::OnMenuOpen, this);
-}
-void KProgramManager::OnRunEntry(KxMenuItem* menuItem, const KProgramEntry& runEntry)
-{
-	if (CheckEntry(runEntry))
-	{
-		KxProgressDialog* dialog = BeginRunProcess();
-		dialog->Show();
-
-		RunMain(dialog, runEntry);
-		dialog->Close();
-	}
+	return "1.1";
 }
 
 void KProgramManager::Save() const
 {
-	SaveProgramList();
+	SaveUserPrograms();
 }
 void KProgramManager::Load()
 {
-	LoadProgramList();
+	LoadUserPrograms();
+}
+void KProgramManager::LoadDefaultPrograms()
+{
+	for (const KProgramEntry& entry: m_DefaultPrograms)
+	{
+		m_UserPrograms.emplace_back(entry);
+	}
 }
 
-bool KProgramManager::RunEntry(const KProgramEntry& runEntry, KxProgressDialog* dialog)
+KxProcess& KProgramManager::CreateProcess(const KProgramEntry& entry) const
 {
-	if (CheckEntry(runEntry))
-	{
-		DoRunEntry(runEntry, dialog);
-		return true;
-	}
-	return false;
+	return DoCreateProcess(entry);
 }
-KxProcess* KProgramManager::RunEntryDelayed(const KProgramEntry& runEntry, KxProgressDialog* dialog)
+void KProgramManager::DestroyProcess(KxProcess& process)
 {
-	if (CheckEntry(runEntry))
+	delete &process;
+}
+int KProgramManager::RunProcess(KxProcess& process) const
+{
+	return DoRunProcess(process);
+}
+int KProgramManager::RunEntry(const KProgramEntry& entry) const
+{
+	if (DoCheckEntry(entry))
 	{
-		KxProcess* process = NULL;
-		DoRunEntry(runEntry, dialog, &process);
-		return process;
+		KxProcess& process = DoCreateProcess(entry);
+		return DoRunProcess(process);
 	}
-	return NULL;
+	return -1;
 }

@@ -4,12 +4,13 @@
 #include "ModManager/KModManager.h"
 #include "Network/KNetwork.h"
 #include "DownloadManager/KDownloadManager.h"
+#include "ProgramManager/KProgramManager.h"
 #include "KInstanceSelectionDialog.h"
 #include "KAboutDialog.h"
 #include "KThemeManager.h"
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
-#include "Events/KVFSEvent.h"
+#include "KEvents.h"
 #include "GameInstance/KInstnaceManagement.h"
 #include "GameInstance/Config/KLocationsManagerConfig.h"
 #include "KPluggableManager.h"
@@ -19,12 +20,11 @@
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxShell.h>
 
-#include "ProgramManager/KProgramManager.h"
 #include "GameConfig/KGameConfigWorkspace.h"
 #include "ModManager/KModWorkspace.h"
 #include "PackageManager/KPackageManagerWorkspace.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
-#include "ProgramManager/KProgramManagerWorkspace.h"
+#include "ProgramManager/KProgramWorkspace.h"
 
 KxAuiToolBarItem* KMainWindow::CreateToolBarButton(KxAuiToolBar* toolBar, const wxString& label, KImageEnum imageID, wxItemKind kind, int index)
 {
@@ -92,6 +92,16 @@ void KMainWindow::CreateToolBar()
 	{
 		m_ToolBar_MainMenu = m_ToolBar->AddTool(wxString::Format("%8s%s%8s", "", "Kortex", ""), KGetBitmap(KIMG_APPLICATION_LOGO_SMALL), wxITEM_DROPDOWN);
 		m_ToolBar_MainMenu->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
+		m_ToolBar_MainMenu->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& evnt)
+		{
+			KxMenu menu;
+			CreateMainMenu(menu);
+
+			DWORD alignment = 0;
+			wxPoint pos = m_ToolBar_MainMenu->GetDropdownMenuPosition(&alignment);
+			menu.Show(m_ToolBar, pos, alignment);
+		});
+
 		m_ToolBar_InsertionIndex = m_ToolBar->AddSeparator()->GetIndex();
 	}
 	m_ToolBar->Realize();
@@ -159,7 +169,6 @@ bool KMainWindow::Create(wxWindow* parent,
 		CreateStatusBar();
 		CreateBaseLayout();
 		CreateMainWorkspaces();
-		CreateMainMenu();
 
 		KEvent::Bind(KEVT_VFS_TOGGLED, &KMainWindow::OnVFSToggled, this);
 		KEvent::Bind(KEVT_VFS_TOGGLED, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
@@ -174,7 +183,7 @@ void KMainWindow::CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace)
 {
 	KWorkspace* firstSubWorkspace = NULL;
 
-	for (KManager* manager: KPluggableManager::GetInstances())
+	for (KManager* manager: KPluggableManager::GetActiveInstances())
 	{
 		if (KPluggableManager* pluggableManager = manager->ToPluggableManager())
 		{
@@ -216,7 +225,6 @@ void KMainWindow::CreateMainWorkspaces()
 	AddWorkspace(new KModWorkspace(this))->CreateNow();
 	AddWorkspace(new KPackageCreatorWorkspace(this));
 	AddWorkspace(new KPackageManagerWorkspace(this));
-	AddWorkspace(new KProgramManagerWorkspace(this));
 	CreatePluggableManagersWorkspaces(KModWorkspace::GetInstance());
 
 	// Create toolbar button and assign menu to it
@@ -232,58 +240,45 @@ void KMainWindow::CreateMainWorkspaces()
 	m_ToolBar->Realize();
 	m_ToolBar->SetOverflowVisible(!m_ToolBar->IsItemsFits());
 }
-void KMainWindow::CreateMainMenu()
+void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 {
-	m_MainMenu = new KxMenu();
-	m_ToolBar_MainMenu->AssignDropdownMenu(m_MainMenu);
-
-	m_MainMenu_Settings = m_MainMenu->Add(new KxMenuItem(T("MainMenu.Settings")));
-	m_MainMenu_Settings->SetBitmap(KGetBitmap(KIMG_APPLICATION_TASK));
-	m_MainMenu_Settings->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 	{
-		KSettingsWindow(this).ShowModal();
-	});
+		KxMenuItem* item = mainMenu.Add(new KxMenuItem(T("MainMenu.Settings")));
+		item->SetBitmap(KGetBitmap(KIMG_APPLICATION_TASK));
+		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+		{
+			KSettingsWindow(this).ShowModal();
+		});
+	}
+	mainMenu.AddSeparator();
+	{
+		KxMenuItem* item = mainMenu.Add(new KxMenuItem(T("MainMenu.ChangeInstance")));
+		item->Bind(KxEVT_MENU_SELECT, &KMainWindow::OnChangeInstance, this);
+		item->Enable(!KModManager::GetInstance()->IsVFSMounted());
+	}
+	mainMenu.AddSeparator();
 
-	m_MainMenu->AddSeparator();
-
-	m_MainMenu_ChangeProfile = m_MainMenu->Add(new KxMenuItem(T("MainMenu.ChangeProfile")));
-	m_MainMenu_ChangeProfile->Bind(KxEVT_MENU_SELECT, &KMainWindow::OnChangeProfile, this);
-	m_MainMenu_ChangeProfile->Enable(false);
-
-	m_MainMenu->AddSeparator();
-
-	KProgramManager::GetInstance()->OnAddMenuItems(m_MainMenu);
-
-	m_MainMenu->AddSeparator();
+	// Add programs
+	size_t count = mainMenu.GetMenuItemCount();
+	KProgramManager::GetInstance()->OnAddMainMenuItems(mainMenu);
+	if (count != mainMenu.GetMenuItemCount())
+	{
+		mainMenu.AddSeparator();
+	}
 
 	// Add locations
-	KxMenu* locationsMenu = new KxMenu();
-	const KLocationsManagerConfig* locationsManager = KLocationsManagerConfig::GetInstance();
-	for (const KLabeledValue& entry: locationsManager->GetLocations())
 	{
-		if (entry.GetValue().IsEmpty() && entry.GetLabel().IsEmpty())
-		{
-			locationsMenu->AddSeparator();
-		}
-		else
-		{
-			KxMenuItem* item = locationsMenu->Add(new KxMenuItem(entry.GetLabel()));
-			item->SetBitmap(KGetBitmap(KIMG_FOLDER));
-			item->Bind(KxEVT_MENU_SELECT, [locationsManager, entry](KxMenuEvent& event)
-			{
-				locationsManager->OpenLocation(entry);
-			});
-		}
+		KLocationsManagerConfig::GetInstance()->OnAddMainMenuItems(mainMenu);
 	}
-	m_MainMenu->AppendSubMenu(locationsMenu, T("MainMenu.OpenLocation"))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
-	m_MainMenu->AddSeparator();
-
-	KxMenuItem* pAboutItem = m_MainMenu->Add(new KxMenuItem(T("MainMenu.About")));
-	pAboutItem->SetBitmap(KGetBitmap(KIMG_INFORMATION_FRAME));
-	pAboutItem->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 	{
-		KAboutDialog(this).ShowModal();
-	});
+		KxMenuItem* item = mainMenu.Add(new KxMenuItem(T("MainMenu.About")));
+		item->SetBitmap(KGetBitmap(KIMG_INFORMATION_FRAME));
+		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+		{
+			KAboutDialog(this).ShowModal();
+		});
+	}
+	
 }
 
 void KMainWindow::OnQSMButton(KxAuiToolBarEvent& event)
@@ -363,7 +358,7 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 		KDownloadManager::GetInstance()->OnShutdown();
 	}
 }
-void KMainWindow::OnChangeProfile(KxMenuEvent& event)
+void KMainWindow::OnChangeInstance(KxMenuEvent& event)
 {
 	KWorkspaceController* controller = GetCurrentWorkspace()->GetWorkspaceController();
 	if (controller && controller->AskForSave() == KxID_CANCEL)
@@ -379,9 +374,6 @@ void KMainWindow::OnChangeProfile(KxMenuEvent& event)
 
 void KMainWindow::OnVFSToggled(KVFSEvent& event)
 {
-	m_MainMenu_ChangeProfile->Enable(!event.IsActivated());
-
-	// StatusBar
 	if (event.IsActivated())
 	{
 		m_StatusBar->SetStatusText(T("VFS.Status.Active"));

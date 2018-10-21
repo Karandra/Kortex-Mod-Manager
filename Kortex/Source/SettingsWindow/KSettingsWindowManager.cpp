@@ -74,10 +74,10 @@ KCMSampleValueArray KSettingsWindowManager::FF_GetWorkspacesList(KCMConfigEntryS
 KCMSampleValueArray KSettingsWindowManager::FF_GetProgramIndexes(KCMConfigEntryStd* configEntry, KxXMLNode& node)
 {
 	KCMSampleValueArray outList;
-	if (KProgramManagerConfig* programManager = KProgramManagerConfig::GetInstance())
+	if (KProgramManager* programManager = KProgramManager::GetInstance())
 	{
 		size_t i = 0;
-		for (const KProgramEntry& entry: programManager->GetPrograms())
+		for (const KProgramEntry& entry: programManager->GetProgramList())
 		{
 			outList.push_back(KCMSampleValue(configEntry, KxFormat("%1").arg(i), entry.GetName()));
 			i++;

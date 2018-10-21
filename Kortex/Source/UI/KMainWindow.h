@@ -51,11 +51,6 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		wxSimplebook* m_WorkspaceContainer = NULL;
 		bool m_HasCurrentWorkspace = false;
 
-		/* MainMenu */
-		KxMenu* m_MainMenu = NULL;
-		KxMenuItem* m_MainMenu_Settings = NULL;
-		KxMenuItem* m_MainMenu_ChangeProfile = NULL;
-
 		/* Loadable managers menu */
 		KxMenu* m_ManagersMenu = NULL;
 
@@ -78,12 +73,12 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 
 		void CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace = NULL);
 		void CreateMainWorkspaces();
-		void CreateMainMenu();
+		void CreateMainMenu(KxMenu& mainMenu);
 
 	private:
 		void OnQSMButton(KxAuiToolBarEvent& event);
 		void OnWindowClose(wxCloseEvent& event);
-		void OnChangeProfile(KxMenuEvent& event);
+		void OnChangeInstance(KxMenuEvent& event);
 
 		void OnVFSToggled(KVFSEvent& event);
 		void OnPluggableManagersMenuVFSToggled(KVFSEvent& event);

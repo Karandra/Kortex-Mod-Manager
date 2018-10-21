@@ -1,52 +1,63 @@
 #include "stdafx.h"
-#include "KProgramManagerWorkspace.h"
+#include "KProgramWorkspace.h"
 #include "KProgramManagerModel.h"
-#include "KThemeManager.h"
+#include "KEvents.h"
 #include "KApp.h"
 #include "KAux.h"
 
-KProgramManagerWorkspace::KProgramManagerWorkspace(KMainWindow* mainWindow)
+KProgramWorkspace::KProgramWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_ProgramListViewOptions(this, "ProgramListView")
 {
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	CreateItemInManagersMenu();
 }
-KProgramManagerWorkspace::~KProgramManagerWorkspace()
+KProgramWorkspace::~KProgramWorkspace()
 {
 	if (IsWorkspaceCreated())
 	{
 		KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_ProgramListViewOptions);
 	}
 }
-bool KProgramManagerWorkspace::OnCreateWorkspace()
+bool KProgramWorkspace::OnCreateWorkspace()
 {
 	m_ViewModel = new KProgramManagerModel();
 	m_ViewModel->Create(this, m_MainSizer);
-
 	KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_ProgramListViewOptions);
+
+	KEvent::Bind(KEVT_VFS_TOGGLED, &KProgramWorkspace::OnVFSToggled, this);
 	return true;
 }
 
-bool KProgramManagerWorkspace::OnOpenWorkspace()
+bool KProgramWorkspace::OnOpenWorkspace()
 {
 	size_t sel = m_ViewModel->GetRow(m_ViewModel->GetView()->GetSelection());
 	m_ViewModel->RefreshItems();
 	m_ViewModel->SelectItem(sel);
 	return true;
 }
-bool KProgramManagerWorkspace::OnCloseWorkspace()
+bool KProgramWorkspace::OnCloseWorkspace()
 {
 	return true;
 }
-void KProgramManagerWorkspace::OnReloadWorkspace()
+void KProgramWorkspace::OnReloadWorkspace()
 {
+	m_ViewModel->RefreshItems();
 }
 
-wxString KProgramManagerWorkspace::GetID() const
+void KProgramWorkspace::OnVFSToggled(KVFSEvent& event)
+{
+	ScheduleReload();
+}
+
+wxString KProgramWorkspace::GetID() const
 {
 	return "KProgramManagerWorkspace";
 }
-wxString KProgramManagerWorkspace::GetName() const
+wxString KProgramWorkspace::GetName() const
 {
 	return T("ProgramManager.Name");
+}
+wxString KProgramWorkspace::GetNameShort() const
+{
+	return T("ProgramManager.NameShort");
 }

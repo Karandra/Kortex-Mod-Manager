@@ -103,9 +103,10 @@
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerSMI.cpp" />
     <ClCompile Include="Source\Profile\KProfileEditor.cpp" />
     <ClCompile Include="Source\Profile\KProfile.cpp" />
+    <ClCompile Include="Source\ProgramManager\KProgramEntry.cpp" />
     <ClCompile Include="Source\ProgramManager\KProgramManager.cpp" />
     <ClCompile Include="Source\ProgramManager\KProgramManagerModel.cpp" />
-    <ClCompile Include="Source\ProgramManager\KProgramManagerWorkspace.cpp" />
+    <ClCompile Include="Source\ProgramManager\KProgramWorkspace.cpp" />
     <ClCompile Include="Source\SaveManager\KSaveManagerView.cpp" />
     <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
     <ClCompile Include="Source\Utility\KINetFSHandler.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="Source\KRTTI.h" />
     <ClInclude Include="Source\KStaticVariablesTable.h" />
     <ClInclude Include="Source\KTranslation.h" />
+    <ClInclude Include="Source\KVariablesTableValue.h" />
     <ClInclude Include="Source\ModManager\KFileTreeNode.h" />
     <ClInclude Include="Source\ModManager\KFixedModEntry.h" />
     <ClInclude Include="Source\ModManager\KMandatoryModEntry.h" />
@@ -301,9 +303,10 @@
     <ClInclude Include="Source\ModManager\KModWorkspace.h" />
     <ClInclude Include="Source\Profile\KProfileEditor.h" />
     <ClInclude Include="Source\Profile\KProfile.h" />
+    <ClInclude Include="Source\ProgramManager\KProgramEntry.h" />
     <ClInclude Include="Source\ProgramManager\KProgramManager.h" />
     <ClInclude Include="Source\ProgramManager\KProgramManagerModel.h" />
-    <ClInclude Include="Source\ProgramManager\KProgramManagerWorkspace.h" />
+    <ClInclude Include="Source\ProgramManager\KProgramWorkspace.h" />
     <ClInclude Include="Source\SaveManager\KSaveManagerView.h" />
     <ClInclude Include="Source\Utility\KBitmapSize.h" />
     <ClInclude Include="Source\Utility\KINetFSHandler.h" />

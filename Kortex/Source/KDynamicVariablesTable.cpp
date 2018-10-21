@@ -60,7 +60,7 @@ KIVariableValue KDynamicVariablesTable::GetVariable(const wxString& id) const
 }
 void KDynamicVariablesTable::SetVariable(const wxString& id, const KIVariableValue& value)
 {
-	// Add new only if this is not one of dynamic variables
+	// Add new static variable only if this is not one of dynamic variables
 	if (m_DynamicVariables.count(id) == 0)
 	{
 		KStaticVariablesTable::SetVariable(id, value);
@@ -68,6 +68,7 @@ void KDynamicVariablesTable::SetVariable(const wxString& id, const KIVariableVal
 }
 void KDynamicVariablesTable::SetDynamicVariable(const wxString& id, const VariableFunctor& functor)
 {
+	// Add new dynamic variable only if this is not one of static variables
 	if (m_StaticVariables.count(id) == 0)
 	{
 		DoSetDynamicVariable(id, functor);

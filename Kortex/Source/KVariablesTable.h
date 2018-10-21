@@ -1,63 +1,34 @@
 #pragma once
 #include "stdafx.h"
+#include "KVariablesTableValue.h"
 
 class KIVariableValue
 {
 	public:
-		class Override
-		{
-			public:
-				enum _Enum: int
-				{
-					False = 0,
-					True = 1,
-					DoNotChange = 2
-				};
-
-			private:
-				_Enum m_Value = _Enum::DoNotChange;
-
-			public:
-				Override()
-					:m_Value(_Enum::DoNotChange)
-				{
-				}
-				Override(_Enum value)
-					:m_Value(value)
-				{
-				}
-				Override(bool value)
-					:m_Value(value ? _Enum::True : _Enum::False)
-				{
-				}
-		
-			public:
-				operator _Enum() const
-				{
-					return m_Value;
-				}
-		};
+		using Override = KIVariableValueNS::Override;
+		using Type = KIVariableValueNS::Type;
 
 	private:
 		wxString m_Value;
-		Override m_IsOverride = Override::DoNotChange;
+		Type m_Type = Type::DoNotChange;
+		Override m_Override = Override::DoNotChange;
 
 	public:
-		KIVariableValue(const wxString& value = wxEmptyString, Override isOverride = Override::DoNotChange)
-			:m_Value(value), m_IsOverride(isOverride)
+		KIVariableValue(const wxString& value = wxEmptyString, Override isOverride = Override::DoNotChange, Type type = Type::DoNotChange)
+			:m_Value(value), m_Override(isOverride), m_Type(type)
 		{
 		}
-		KIVariableValue(const wchar_t* value, Override isOverride = Override::DoNotChange)
-			:m_Value(value), m_IsOverride(isOverride)
+		KIVariableValue(const wchar_t* value, Override isOverride = Override::DoNotChange, Type type = Type::DoNotChange)
+			:m_Value(value), m_Override(isOverride), m_Type(type)
 		{
 		}
-		KIVariableValue(const char* value, Override isOverride = Override::DoNotChange)
-			:m_Value(value), m_IsOverride(isOverride)
+		KIVariableValue(const char* value, Override isOverride = Override::DoNotChange, Type type = Type::DoNotChange)
+			:m_Value(value), m_Override(isOverride), m_Type(type)
 		{
 		}
 
 	public:
-		wxString GetValue() const
+		const wxString& GetValue() const
 		{
 			return m_Value;
 		}
@@ -66,20 +37,33 @@ class KIVariableValue
 			m_Value = value;
 		}
 
-		Override GetOverrideState() const
+		Override GetOverride() const
 		{
-			return m_IsOverride;
+			return m_Override;
 		}
 		bool IsOverride() const
 		{
-			return m_IsOverride == Override::True;
+			return m_Override == Override::True;
+		}
+		void SetOverride(Override value)
+		{
+			m_Override = value;
 		}
 		void SetOverride(bool value)
 		{
-			m_IsOverride = value;
+			m_Override = value;
 		}
 
-		operator wxString() const
+		Type GetType() const
+		{
+			return m_Type;
+		}
+		void SetType(Type type)
+		{
+			m_Type = type;
+		}
+
+		operator const wxString&() const
 		{
 			return m_Value;
 		}

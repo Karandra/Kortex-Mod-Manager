@@ -95,6 +95,10 @@ void KActiveGameInstance::SetCurrentProfileID(const wxString& id)
 
 void KActiveGameInstance::ChangeProfileTo(const KProfile& profile)
 {
+	KxFile(profile.GetConfigDir()).CreateFolder();
+	KxFile(profile.GetSavesDir()).CreateFolder();
+	KxFile(profile.GetOverwritesDir()).CreateFolder();
+
 	SetCurrentProfileID(profile.GetID());
 	InitVariables(profile);
 
@@ -109,11 +113,9 @@ void KActiveGameInstance::ChangeProfileTo(const KProfile& profile)
 		{
 			mod.UpdateFileTree();
 		}
+
+		// This will invalidate virtual tree
 		modManager->ResortMods(profile);
-	}
-	if (KDispatcher::HasInstance())
-	{
-		KDispatcher::GetInstance()->InvalidateVirtualTree();
 	}
 
 	// Finally send event

@@ -33,18 +33,23 @@ KIVariableValue KStaticVariablesTable::GetVariable(const wxString& id) const
 }
 void KStaticVariablesTable::SetVariable(const wxString& id, const KIVariableValue& value)
 {
-	if (value.GetOverrideState() == KIVariableValue::Override::DoNotChange)
+	auto it = m_StaticVariables.find(id);
+	if (it != m_StaticVariables.end())
 	{
-		auto it = m_StaticVariables.find(id);
-		if (it != m_StaticVariables.end())
+		KIVariableValue& variable = it->second;
+
+		variable.SetValue(value.GetValue());
+		if (value.GetOverride() != KIVariableValue::Override::DoNotChange)
 		{
-			it->second.SetValue(value.GetValue());
+			variable.SetOverride(value.GetOverride());
 		}
-		else
+		if (value.GetType() != KIVariableValue::Type::DoNotChange)
 		{
-			m_StaticVariables.insert_or_assign(id, KIVariableValue(value.GetValue(), false));
+			variable.SetType(value.GetType());
 		}
-		return;
 	}
-	m_StaticVariables.insert_or_assign(id, value);
+	else
+	{
+		m_StaticVariables.insert_or_assign(id, KIVariableValue(value.GetValue(), KIVariableValue::Override::False, KIVariableValue::Type::None));
+	}
 }

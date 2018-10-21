@@ -3,6 +3,7 @@
 #include "KLabeledValue.h"
 #include <KxFramework/KxSingleton.h>
 class KGameInstance;
+class KxMenu;
 
 class KLocationsManagerConfig: public KxSingletonPtr<KLocationsManagerConfig>
 {
@@ -16,4 +17,6 @@ class KLocationsManagerConfig: public KxSingletonPtr<KLocationsManagerConfig>
 	public:
 		KLabeledValueArray GetLocations() const;
 		bool OpenLocation(const KLabeledValue& entry) const;
+
+		void OnAddMainMenuItems(KxMenu& mainMenu);
 };

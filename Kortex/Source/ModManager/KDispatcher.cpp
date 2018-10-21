@@ -276,14 +276,12 @@ const KFileTreeNode& KDispatcher::GetVirtualTree() const
 KModEntry* KDispatcher::IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget, bool activeOnly) const
 {
 	RebuildTreeIfNeeded();
-
 	return IterateOverModsEx(KModManager::Get().GetAllEntries(includeWriteTarget), functor, order, activeOnly);
 }
 
 const KFileTreeNode* KDispatcher::ResolveLocation(const wxString& relativePath) const
 {
 	RebuildTreeIfNeeded();
-
 	return KFileTreeNode::NavigateToAny(m_VirtualTree, relativePath);
 }
 wxString KDispatcher::ResolveLocationPath(const wxString& relativePath, const KModEntry** owningMod) const
@@ -308,9 +306,10 @@ wxString KDispatcher::ResolveLocationPath(const wxString& relativePath, const KM
 
 const KFileTreeNode* KDispatcher::BackTrackFullPath(const wxString& fullPath) const
 {
+	RebuildTreeIfNeeded();
 	return m_VirtualTree.WalkTree([&fullPath](const KFileTreeNode& node)
 	{
-		return KxComparator::IsEqual(node.GetFullPath(), fullPath);
+		return KxComparator::IsEqual(node.GetFullPath(), fullPath, true);
 	});
 }
 

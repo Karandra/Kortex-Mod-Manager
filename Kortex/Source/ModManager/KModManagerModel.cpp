@@ -488,8 +488,7 @@ bool KModManagerModel::SetValue(const wxAny& value, const KxDataViewItem& item, 
 				if (isChanged)
 				{
 					entry->Save();
-					KModManager::Get().Save();
-					KModWorkspace::GetInstance()->RefreshPlugins();
+					KModManager::GetInstance()->Save();
 					return true;
 				}
 				return false;

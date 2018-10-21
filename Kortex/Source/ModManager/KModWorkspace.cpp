@@ -21,6 +21,7 @@
 #include "PluginManager/KPluginManagerWorkspace.h"
 #include "ScreenshotsGallery/KScreenshotsGalleryManager.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
+#include "ProgramManager/KProgramWorkspace.h"
 #include "Network/KNetwork.h"
 #include "KEvents.h"
 #include "KThemeManager.h"
@@ -128,6 +129,7 @@ bool KModWorkspace::OnCreateWorkspace()
 	KEvent::Bind(KEVT_VFS_TOGGLED, &KModWorkspace::OnVFSToggled, this);
 
 	CreateAsSubWorkspace<KVirtualGameFolderWorkspace>();
+	CreateAsSubWorkspace<KProgramWorkspace>();
 	return true;
 }
 
@@ -312,7 +314,6 @@ void KModWorkspace::OnReloadWorkspace()
 	m_ViewModel->RefreshItems();
 	ProcessSelection();
 	UpdateModListContent();
-	RefreshPlugins();
 }
 
 wxString KModWorkspace::GetID() const
@@ -421,7 +422,6 @@ void KModWorkspace::ProcessSelectProfile(const wxString& newProfileID)
 			if (newProfile)
 			{
 				instance->ChangeProfileTo(*newProfile);
-				KProfileEvent(KEVT_PROFILE_SELECTED, *newProfile).Send();
 			}
 		}
 	}
@@ -444,7 +444,6 @@ void KModWorkspace::OnShowProfileEditor(KxAuiToolBarEvent& event)
 	{
 		ProcessSelectProfile(dialog.GetNewProfile());
 		UpdateModListContent();
-		KProfileEvent(KEVT_PROFILE_SELECTED).Send();
 	}
 }
 
@@ -853,7 +852,8 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 		item->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
-			KModManager::Get().Load();
+			KModManager::GetInstance()->Load();
+			KModManager::GetInstance()->ResortMods();
 			ReloadWorkspace();
 		});
 	}
@@ -1208,17 +1208,6 @@ void KModWorkspace::UpdateModListContent()
 		}
 	}
 	m_ToolBar_Profiles->SetSelection(selectIndex);
-}
-void KModWorkspace::RefreshPlugins()
-{
-	if (KPluginManager* pluginManager = KPluginManager::GetInstance())
-	{
-		pluginManager->Load();
-	}
-	if (KPluginManagerWorkspace* pluginWorkspace = KPluginManagerWorkspace::GetInstance())
-	{
-		pluginWorkspace->ScheduleReload();
-	}
 }
 
 bool KModWorkspace::IsAnyChangeAllowed() const

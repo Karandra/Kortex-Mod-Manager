@@ -6,6 +6,7 @@
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
+#include <KxFramework/KxMenu.h>
 
 KLocationsManagerConfig::KLocationsManagerConfig(KGameInstance& profile, const KxXMLNode& node)
 {
@@ -58,4 +59,27 @@ bool KLocationsManagerConfig::OpenLocation(const KLabeledValue& entry) const
 	tFolder.CreateFolder();
 
 	return KxShell::Execute(KApp::Get().GetTopWindow(), tFolder.GetFullPath(), "open");
+}
+
+void KLocationsManagerConfig::OnAddMainMenuItems(KxMenu& mainMenu)
+{
+	KxMenu* locationsMenu = new KxMenu();
+	for (const KLabeledValue& entry: m_Locations)
+	{
+		if (!entry.HasLabel() && !entry.HasLabel())
+		{
+			locationsMenu->AddSeparator();
+		}
+		else
+		{
+			KxMenuItem* item = locationsMenu->Add(new KxMenuItem(V(entry.GetLabel())));
+			item->SetBitmap(KGetBitmap(KIMG_FOLDER));
+			item->Bind(KxEVT_MENU_SELECT, [this, &entry](KxMenuEvent& event)
+			{
+				OpenLocation(KLabeledValue(V(entry.GetValue())));
+			});
+		}
+	}
+	mainMenu.Add(locationsMenu, T("MainMenu.OpenLocation"))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+	mainMenu.AddSeparator();
 }

@@ -10,14 +10,14 @@
 
 void KNetworkProviderNexus::OnAuthSuccess(wxWindow* window)
 {
-	KNetwork::GetInstance()->CallAfter([this, window]()
+	KEvent::CallAfter([this, window]()
 	{
 		KNetworkProvider::OnAuthSuccess(window);
 	});
 }
 void KNetworkProviderNexus::OnAuthFail(wxWindow* window)
 {
-	KNetwork::GetInstance()->CallAfter([this, window]()
+	KEvent::CallAfter([this, window]()
 	{
 		KNetworkProvider::OnAuthFail(window);
 	});

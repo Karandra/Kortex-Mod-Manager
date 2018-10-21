@@ -161,7 +161,6 @@ class KModWorkspace: public KWorkspace, public KxSingletonPtr<KModWorkspace>
 		void ShowViewContextMenu(KModEntry* entry);
 		void ShowViewContextMenu(const KModTag* modTag);
 		void UpdateModListContent();
-		void RefreshPlugins();
 
 		bool IsAnyChangeAllowed() const;
 		bool IsMovingModsAllowed() const;

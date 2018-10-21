@@ -155,7 +155,7 @@ void KNetwork::CreateMenu()
 
 void KNetwork::QueueUIUpdate()
 {
-	CallAfter([this]()
+	KEvent::CallAfter([this]()
 	{
 		CreateMenu();
 		UpdateButton();

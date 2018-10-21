@@ -234,12 +234,14 @@ void KModManager::OnModFilesChanged(KModEvent& event)
 }
 void KModManager::OnModInstalled(KModEvent& event)
 {
+	Save();
 	Load();
 	ResortMods();
 	KWorkspace::ScheduleReloadOf<KModWorkspace>();
 }
 void KModManager::OnModUninstalled(KModEvent& event)
 {
+	Save();
 	Load();
 	ResortMods();
 	KWorkspace::ScheduleReloadOf<KModWorkspace>();
@@ -289,14 +291,14 @@ KModEntry::Vector KModManager::GetAllEntries(bool includeWriteTarget)
 	KModEntry::Vector entries;
 	entries.reserve(m_ModEntries.size() + m_ModEntry_Mandatory.size() + 2);
 
+	// Add game root as first virtual folder
+	entries.push_back(&m_ModEntry_BaseGame);
+
 	// Add mandatory virtual folders
 	for (KMandatoryModEntry& entry: m_ModEntry_Mandatory)
 	{
 		entries.push_back(&entry);
 	}
-
-	// Add game root as first (after mandatory) virtual folder
-	entries.push_back(&m_ModEntry_BaseGame);
 
 	// Add mods
 	for (KModEntry* entry: m_ModEntries)

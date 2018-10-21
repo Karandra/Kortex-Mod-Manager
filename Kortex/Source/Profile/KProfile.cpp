@@ -202,8 +202,6 @@ void KProfile::Save()
 }
 void KProfile::SyncWithCurrentState()
 {
-	return;
-
 	// Mods
 	m_Mods.clear();
 	for (KModEntry* entry: KModManager::Get().GetEntries())

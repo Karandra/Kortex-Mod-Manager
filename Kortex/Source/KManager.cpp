@@ -6,8 +6,12 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KManager::InstancesListType KManager::ms_Instances;
-KManager::InstancesListType& KManager::GetInstances()
+namespace
+{
+	KManager::RefVector ms_Instances;
+}
+
+KManager::RefVector& KManager::GetActiveInstances()
 {
 	return ms_Instances;
 }

@@ -6,17 +6,16 @@ class KWorkspace;
 class KMainWindow;
 class KPluggableManager;
 
-class KManager: public wxEvtHandler
+class KManager
 {
 	friend class KApp;
 	friend class KMainWindow;
 
-	private:
-		typedef std::vector<KManager*> InstancesListType;
-		static InstancesListType ms_Instances;
+	public:
+		using RefVector = std::vector<KManager*>;
 
 	public:
-		static InstancesListType& GetInstances();
+		static RefVector& GetActiveInstances();
 
 	protected:
 		virtual void OnInit()

@@ -60,7 +60,7 @@ class KDispatcher: public KxSingletonPtr<KDispatcher>
 
 	private:
 		KFileTreeNode m_VirtualTree;
-		bool m_VirtualTreeInvalidated = false;
+		bool m_VirtualTreeInvalidated = true;
 
 	private:
 		KModEntry* IterateOverModsEx(const ModsVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly) const;

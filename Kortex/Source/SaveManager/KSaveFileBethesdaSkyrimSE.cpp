@@ -35,7 +35,7 @@ bool KSaveFileBethesdaSkyrimSE::DoReadData()
 
 			// Skip unknown 2 bytes
 			file.Seek(2);
-			m_Bitmap = wxBitmap(KSaveFileBethesdaFallout4::ReadImageRGBA(file.ReadData<std::vector<unsigned char>>(width * height * 4), width, height), 32);
+			m_Bitmap = wxBitmap(ReadImageRGBA(file.ReadData<KxUInt8Vector>(width * height * 4), width, height), 32);
 
 			// Skip 'formVersion' field, unknown 10 bytes and 'pluginInfoSize' field
 			file.Seek(1 + 10 + 4);

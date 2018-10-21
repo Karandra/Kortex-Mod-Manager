@@ -32,8 +32,7 @@ bool KSaveFileBethesdaSkyrim::DoReadData()
 			// Read image
 			int width = file.ReadObject<uint32_t>();
 			int height = file.ReadObject<uint32_t>();
-			auto data = file.ReadData<std::vector<unsigned char>>(width * height * 3);
-			m_Bitmap = wxBitmap(wxImage(width, height, data.data(), true), 32);
+			m_Bitmap = wxBitmap(ReadImageRGB(file.ReadData<KxUInt8Vector>(width * height * 3), width, height, -1, true), 32);
 
 			// Skip 'formVersion' and 'pluginInfoSize' fields.
 			file.Seek(1 + 4);

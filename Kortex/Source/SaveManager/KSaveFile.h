@@ -4,8 +4,12 @@
 #include "KWithBitmap.h"
 #include <KxFramework/KxFileFinder.h>
 
-class KSaveFile//: public wxClientData
+class KSaveFile
 {
+	public:
+		static wxImage ReadImageRGB(const KxUInt8Vector& rgbData, int width, int height, int alphaOverride = -1, bool isStaticData = false);
+		static wxImage ReadImageRGBA(const KxUInt8Vector& rgbaData, int width, int height, int alphaOverride = -1);
+
 	private:
 		KxFileItem m_FileInfo;
 		wxBitmap m_Thumb;

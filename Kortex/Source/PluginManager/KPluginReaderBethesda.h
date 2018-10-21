@@ -16,6 +16,7 @@ class KPluginReaderBethesda: public KPluginReader
 
 	protected:
 		uint32_t m_HeaderFlags = HeaderFlags::None;
+		uint32_t m_FormVersion = 0;
 		KxStringVector m_RequiredPlugins;
 		wxString m_Author;
 		wxString m_Description;
@@ -32,6 +33,19 @@ class KPluginReaderBethesda: public KPluginReader
 		const wxString& GetDescription() const
 		{
 			return m_Description;
+		}
+
+		uint32_t GetFormVersion() const
+		{
+			return m_FormVersion;
+		}
+		bool IsForm43() const
+		{
+			return m_FormVersion == 43;
+		}
+		bool IsForm44() const
+		{
+			return m_FormVersion == 44;
 		}
 
 		bool IsLocalized() const

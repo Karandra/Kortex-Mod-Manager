@@ -14,8 +14,12 @@ void KPluginReaderBethesdaSkyrim::DoReadData(const KPluginEntry& pluginEntry)
 			stream.Seek(4);
 			m_HeaderFlags = stream.ReadObject<uint32_t>();
 
-			// Skip (FormID + Version + Data) + (HEDR struct)
-			stream.Seek(12 + 18);
+			// Skip (FormID + Version control info)
+			stream.Seek(8);
+			m_FormVersion = stream.ReadObject<uint32_t>();
+
+			// Skip HEDR struct
+			stream.Seek(18);
 
 			wxString recordName = stream.ReadStringASCII(4);
 			if (recordName == "CNAM")

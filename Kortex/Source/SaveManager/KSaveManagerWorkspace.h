@@ -56,7 +56,7 @@ class KSaveManagerWorkspace: public KWorkspace, public KxSingletonPtr<KSaveManag
 		}
 		virtual size_t GetTabIndex() const
 		{
-			return KWS_TABINDEX_SAVES;
+			return (size_t)TabIndex::Saves;
 		}
 		
 		virtual bool OnOpenWorkspace() override;

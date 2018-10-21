@@ -178,7 +178,7 @@ bool KApp::OnInit()
 
 	if (!anotherInstanceRunning)
 	{
-		wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", m_InitProgressDialog->FromDIP(19));
+		wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", GetSmallIconHeight() + m_InitProgressDialog->FromDIP(3));
 
 		// Init systems
 		wxLogInfo("Begin initializing core systems");
@@ -193,7 +193,7 @@ bool KApp::OnInit()
 		InitInstancesData(m_InitProgressDialog);
 		
 		wxLogInfo("Executing KManager::OnInit");
-		for (KManager* manager: KManager::GetInstances())
+		for (KManager* manager: KManager::GetActiveInstances())
 		{
 			manager->OnInit();
 		}

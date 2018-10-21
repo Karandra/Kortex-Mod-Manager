@@ -16,7 +16,7 @@ enum KModManagerModelType
 };
 
 class KModManagerModelDataObject;
-class KModManagerModel:	public KDataViewModelBase, public KDataViewModelDragDropEnabled<KModManagerModelDataObject>
+class KModManagerModel:	public KxDataViewModelExBase<KxDataViewModel>, public KxDataViewModelExDragDropEnabled<KModManagerModelDataObject>
 {
 	private:
 		KModManagerModelType m_DisplayMode = KMM_TYPE_CONNECTOR;

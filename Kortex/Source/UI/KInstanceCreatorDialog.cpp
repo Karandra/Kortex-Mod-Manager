@@ -50,7 +50,7 @@ bool KInstanceCreatorDialog::Create(wxWindow* parent,
 		copyOptionsSizer->Add(m_InstancesList, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 		m_InstancesList->AddItem(V("<$T(ID_NONE)>"));
 
-		for (const auto& instance: m_InstanceTemplate->GetInstances())
+		for (const auto& instance: m_InstanceTemplate->GetActiveInstances())
 		{
 			int index = m_InstancesList->AddItem(instance->GetInstanceID());
 			m_InstancesList->SetClientData(index, (void*)instance.get());

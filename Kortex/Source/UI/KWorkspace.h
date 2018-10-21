@@ -14,19 +14,21 @@ class KxMenu;
 class KxMenuItem;
 class KxAuiToolBarItem;
 
-enum KWorkspaceTabIndex
-{
-	KWS_TABINDEX_PLUGINS,
-	KWS_TABINDEX_VIRTUAL_GAME_FOLDER,
-	KWS_TABINDEX_SAVES,
-	KWS_TABINDEX_DOWNLOADS,
-};
-
 class KWorkspace: public KxPanel
 {
 	friend class KMainWindow;
 	friend class KPackageCreatorWorkspace;
 	friend class KModWorkspace;
+
+	public:
+		enum class TabIndex
+		{
+			Plugins,
+			VirtualGameFolder,
+			Saves,
+			Downloads,
+			Programs,
+		};
 
 	public:
 		template<class T> static void ScheduleReloadOf()

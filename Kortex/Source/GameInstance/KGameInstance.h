@@ -173,11 +173,11 @@ class KGameInstance
 		{
 			return m_Instances.size();
 		}
-		const Vector& GetInstances() const
+		const Vector& GetActiveInstances() const
 		{
 			return m_Instances;
 		}
-		Vector& GetInstances()
+		Vector& GetActiveInstances()
 		{
 			return m_Instances;
 		}

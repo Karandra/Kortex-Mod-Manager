@@ -26,7 +26,7 @@ class KDownloadWorkspace: public KWorkspace, public KxSingletonPtr<KDownloadWork
 		}
 		virtual size_t GetTabIndex() const
 		{
-			return KWS_TABINDEX_DOWNLOADS;
+			return (size_t)TabIndex::Downloads;
 		}
 		
 		virtual bool OnOpenWorkspace() override;

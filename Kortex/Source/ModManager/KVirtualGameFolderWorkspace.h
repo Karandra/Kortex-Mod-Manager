@@ -43,13 +43,17 @@ class KVirtualGameFolderWorkspace: public KWorkspace, public KxSingletonPtr<KVir
 		{
 			return m_MainSizer;
 		}
-		
-		virtual bool IsSubWorkspace() const
-		{
-			return true;
-		}
 		virtual bool CanReload() const override
 		{
 			return true;
+		}
+		
+		virtual bool IsSubWorkspace() const override
+		{
+			return true;
+		}
+		virtual size_t GetTabIndex() const override
+		{
+			return (size_t)TabIndex::VirtualGameFolder;
 		}
 };

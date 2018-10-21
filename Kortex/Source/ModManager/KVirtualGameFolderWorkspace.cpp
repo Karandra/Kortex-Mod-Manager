@@ -7,9 +7,10 @@
 KVirtualGameFolderWorkspace::KVirtualGameFolderWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_OptionsUI(this, "MainUI"), m_ViewOptions(this, "View")
 {
-	KEvent::Bind(KEVT_MOD_VIRTUAL_TREE_INVALIDATED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
-	KEvent::Bind(KEVT_MOD_TOGGLED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
+	KEvent::Bind(KEVT_PROFILE_SELECTED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
 	KEvent::Bind(KEVT_MODS_REORDERED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
+	KEvent::Bind(KEVT_MOD_TOGGLED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
+	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KVirtualGameFolderWorkspace::OnViewInvalidated, this);
 
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 }

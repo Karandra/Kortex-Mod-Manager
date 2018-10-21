@@ -118,7 +118,6 @@ void KDownloadEntry::OnDownload(KxCURLEvent& event)
 {
 	m_Thread->TestDestroy();
 	KxCURLStreamReply& reply = static_cast<KxCURLStreamReply&>(event.GetReply());
-	KDownloadManager* manager = KDownloadManager::GetInstance();
 
 	// Update file size. Nexus reports file size in KB, so initial info maybe
 	// incorrect, see 'KNetworkProviderNexus::ReadFileInfo<T>' function for details.
@@ -138,9 +137,9 @@ void KDownloadEntry::OnDownload(KxCURLEvent& event)
 	// Queue update view
 	if (KDownloadWorkspace::GetInstance()->IsWorkspaceVisible())
 	{
-		manager->CallAfter([this, manager]()
+		KEvent::CallAfter([this]()
 		{
-			manager->OnChangeEntry(*this, true);
+			KDownloadManager::GetInstance()->OnChangeEntry(*this, true);
 		});
 	}
 }

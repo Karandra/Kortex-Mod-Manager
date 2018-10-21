@@ -184,7 +184,7 @@ void KInstanceSelectionDialog::LoadInstancesList(const KGameInstance* instanceTe
 	if (instanceTemplate)
 	{
 		size_t select = 0;
-		for (const auto& instanceTemplate: instanceTemplate->GetInstances())
+		for (const auto& instanceTemplate: instanceTemplate->GetActiveInstances())
 		{
 			int index = m_InstancesList->AddItem(instanceTemplate->GetInstanceID());
 			m_InstancesList->SetItemPtrData(index, (intptr_t)instanceTemplate.get());

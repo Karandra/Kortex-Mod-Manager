@@ -71,7 +71,7 @@ wxWindow* KAboutDialog::CreateTab_Modules()
 	list->AddColumn(wxEmptyString, 300);
 	list->AddColumn(wxEmptyString, 75);
 
-	for (KManager* manager: KManager::GetInstances())
+	for (KManager* manager: KManager::GetActiveInstances())
 	{
 		// ConfigManager used by SettingsWindow should not be shown in this window
 		if (manager != KApp::Get().GetSettingsManager())

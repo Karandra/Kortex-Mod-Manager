@@ -7,7 +7,7 @@
 #include "ModManager/KModWorkspace.h"
 #include "DownloadManager/KDownloadWorkspace.h"
 #include "GameConfig/KGameConfigWorkspace.h"
-#include "ProgramManager/KProgramManagerWorkspace.h"
+#include "ProgramManager/KProgramWorkspace.h"
 #include <KxFramework/KxFileBrowseDialog.h>
 
 std::unique_ptr<KModManagerImport> KModManagerImport::Create(Type type)
@@ -91,7 +91,7 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 							// These workspaces are safe
 							KModWorkspace::GetInstance()->ScheduleReload();
 							KGameConfigWorkspace::GetInstance()->ScheduleReload();
-							KProgramManagerWorkspace::GetInstance()->ScheduleReload();
+							KProgramWorkspace::GetInstance()->ScheduleReload();
 							KDownloadWorkspace::GetInstance()->ScheduleReload();
 						});
 					});

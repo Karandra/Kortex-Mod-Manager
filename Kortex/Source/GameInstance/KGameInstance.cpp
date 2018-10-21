@@ -333,9 +333,9 @@ wxBitmap KGameInstance::GetIcon() const
 	wxBitmap bitmap(GetIconLocation(), wxBITMAP_TYPE_ANY);
 	if (!bitmap.IsOk())
 	{
-		if (KProgramManagerConfig* programsConfig = KProgramManagerConfig::GetInstance())
+		if (KProgramManager* programsConfig = KProgramManager::GetInstance())
 		{
-			const KProgramEntry::Vector& items = programsConfig->GetPrograms();
+			const KProgramEntry::Vector& items = programsConfig->GetProgramList();
 			if (!items.empty())
 			{
 				const KProgramEntry& programEntry = items.front();
@@ -402,7 +402,7 @@ wxString KGameInstance::GetGameDir() const
 }
 wxString KGameInstance::GetVirtualGameDir() const
 {
-	return GetInstanceRelativePath(wxS("Virtual") + m_GameID);
+	return GetInstanceRelativePath(wxS("VirtualGameDir"));
 }
 
 // Instances
@@ -479,7 +479,7 @@ bool KGameInstance::WithdrawDeploy()
 		path.RemoveFolder(true);
 
 		Vector::const_iterator it;
-		Vector& items = GetTemplate().GetInstances();
+		Vector& items = GetTemplate().GetActiveInstances();
 		if (FindObjectInVector<KGameInstance, FindBy::InstanceID>(items, m_InstanceID, &it))
 		{
 			items.erase(it);
@@ -674,11 +674,15 @@ void KConfigurableGameInstance::LoadVariables(const KxXMLDocument& instanceConfi
 	for (node = node.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{
 		const wxString id = node.GetAttribute("ID");
-		const wxString type = node.GetAttribute("Type");
+		const wxString typeString = node.GetAttribute("Type");
+		const wxString source = node.GetAttribute("Source");
 		const bool saveAsOverride = node.GetAttributeBool("SaveAsOverride");
 
 		wxString value;
-		if (type == "Registry")
+		KIVariableValue::Type type = KIVariableValue::Type::None;
+
+		// Load from source
+		if (source == wxS("Registry"))
 		{
 			value = LoadRegistryVariable(node);
 		}
@@ -686,7 +690,15 @@ void KConfigurableGameInstance::LoadVariables(const KxXMLDocument& instanceConfi
 		{
 			value = ExpandVariables(node.GetValue());
 		}
-		variables.SetVariable(id, KIVariableValue(value, saveAsOverride));
+
+		// Process depending on type
+		if (typeString == wxS("FSPath"))
+		{
+			type = KIVariableValue::Type::FSPath;
+			value = KxFile(value).GetPath();
+		}
+
+		variables.SetVariable(id, KIVariableValue(value, saveAsOverride, type));
 	}
 
 	// Override any variables from file

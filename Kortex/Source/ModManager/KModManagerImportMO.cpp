@@ -5,7 +5,7 @@
 #include "PackageProject/KPackageProjectSerializer.h"
 #include "GameConfig/KGameConfigWorkspace.h"
 #include "ProgramManager/KProgramManager.h"
-#include "ProgramManager/KProgramManagerWorkspace.h"
+#include "ProgramManager/KProgramWorkspace.h"
 #include "Network/KNetwork.h"
 #include "DownloadManager/KDownloadManager.h"
 #include "GameInstance/Config/KSaveManagerConfig.h"

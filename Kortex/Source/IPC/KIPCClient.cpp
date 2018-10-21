@@ -26,7 +26,6 @@ bool KIPCClient::RunServerAndConnect(KIPCClient** clientInstance)
 {
 	bool isRunSuccess = false;
 	KxProcess serverExec(GetServerFileName());
-	serverExec.SetOptionEnabled(KxPROCESS_SYNC_EVENTS, true);
 	serverExec.SetOptionEnabled(KxPROCESS_WAIT_INPUT_IDLE, true);
 	serverExec.SetOptionEnabled(KxPROCESS_WAIT_END, false);
 	serverExec.Bind(KxEVT_PROCESS_IDLE, [clientInstance, &isRunSuccess](wxProcessEvent& event)

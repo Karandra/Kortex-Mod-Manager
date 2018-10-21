@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "KSaveFileBethesdaMorrowind.h"
+#include "KSaveFileBethesdaFallout4.h"
 #include "KSaveFile.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -50,11 +51,10 @@ bool KSaveFileBethesdaMorrowind::DoReadData()
 			// Skip entire SCRD record and SCRS record name
 			file.Seek(28 + 4);
 
-			// Read image (best guess is 171x127)
-			int width = 171;
-			int height = 127;
-			auto data = file.ReadData<std::vector<unsigned char>>(width * height * 3);
-			m_Bitmap = wxBitmap(wxImage(width, height, data.data(), true), 32);
+			// Read image
+			const int width = 128;
+			const int height = 128;
+			m_Bitmap = wxBitmap(ReadImageRGBA(file.ReadData<KxUInt8Vector>(width * height * 4), width, height, 255), 32);
 
 			return true;
 		}

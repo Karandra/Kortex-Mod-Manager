@@ -4,9 +4,6 @@
 
 class KSaveFileBethesdaFallout4: public KSaveFile
 {
-	public:
-		static wxImage ReadImageRGBA(const std::vector<unsigned char>& RGBAData, int width, int height);
-
 	private:
 		KLabeledValueArray m_BasicInfo;
 		KxStringVector m_PluginsList;

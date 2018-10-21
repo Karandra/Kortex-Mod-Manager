@@ -302,6 +302,7 @@
 
 		<!-- Config manager -->
 		<String ID="ConfigManager.Name">Конфигурация игры</String>
+		<String ID="ConfigManager.NameShort">Конфигурация игры</String>
 		
 		<String ID="ConfigManager.EditValue.EnterVirtualKey">Выберите значение из списка ниже или нажмите нужную клавишу на клавиутуре</String>
 		<String ID="ConfigManager.EditValue.ValuesRange">Допустимые значения</String>
@@ -748,9 +749,25 @@
 		<String ID="ProgramManager.Terminated">Программа завершила работу с кодом %1</String>
 		
 		<String ID="ProgramManager.List.RequiresVFS">Требует VFS</String>
+		<String ID="ProgramManager.List.ShowInMainMenu">Показывать в главном меню</String>
 		<String ID="ProgramManager.List.Arguments">Аргументы командной строки</String>
 		<String ID="ProgramManager.List.Executable">Исполняемый файл</String>
 		<String ID="ProgramManager.List.WorkingDirectory">Рабочая папка</String>
+
+		<String ID="ProgramManager.Menu.RunProgram">Запустить программу</String>
+		<String ID="ProgramManager.Menu.AddProgram">Добавить программу</String>
+		<String ID="ProgramManager.Menu.RemoveProgram">Удалить программу</String>
+		
+		<String ID="ProgramManager.Menu.ClearPrograms">Удалить все программы</String>
+		<String ID="ProgramManager.Menu.ClearPrograms.Message">Вы уверены, что хотите удалить все программы? Это действие невозможно отменить.</String>
+		<String ID="ProgramManager.Menu.LoadDefaultPrograms">Загрузить программы по умолчанию</String>
+
+		<String ID="ProgramManager.Menu.EditProgram">Изменить "%1"</String>
+		<String ID="ProgramManager.Menu.ChooseIcon">Choose icon</String>
+		<String ID="ProgramManager.Menu.ChooseExecutable">Choose executable file</String>
+		<String ID="ProgramManager.Menu.ChooseWorkingDirectory">Choose working directory</String>
+
+		<String ID="ProgramManager.Menu.ShowExpandedValues">Show expanded values</String>
 		
 		<!-- Mod Manager -->
 		<String ID="ModManager.Name">Управление модами</String>

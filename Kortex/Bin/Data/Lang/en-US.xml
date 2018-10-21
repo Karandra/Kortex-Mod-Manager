@@ -281,7 +281,7 @@ This folder and all its contents will be deleted: %1]]></String>
 
 		<!-- Main menu -->
 		<String ID="MainMenu.Settings">Settings</String>
-		<String ID="MainMenu.ChangeProfile">Change instance. Current: $(GameShortName) - $(InstanceID)</String>
+		<String ID="MainMenu.ChangeInstance">Change instance. Current: $(GameShortName) - $(InstanceID)</String>
 		<String ID="MainMenu.Run">Run</String>
 		<String ID="MainMenu.OpenLocation">Open location</String>
 		<String ID="MainMenu.About">About</String>
@@ -302,6 +302,7 @@ This folder and all its contents will be deleted: %1]]></String>
 
 		<!-- Config manager -->
 		<String ID="ConfigManager.Name">Game configuration</String>
+		<String ID="ConfigManager.NameShort">Game configuration</String>
 
 		<String ID="ConfigManager.EditValue.EnterVirtualKey">Select a value from the list below or press the corresponding button on your keyboard</String>
 		<String ID="ConfigManager.EditValue.ValuesRange">Value range</String>
@@ -748,9 +749,25 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="ProgramManager.Terminated">The program completed processing %1 code</String>
 
 		<String ID="ProgramManager.List.RequiresVFS">Requires VFS</String>
+		<String ID="ProgramManager.List.ShowInMainMenu">Show in main menu</String>
 		<String ID="ProgramManager.List.Arguments">Command line arguments</String>
 		<String ID="ProgramManager.List.Executable">Executable</String>
 		<String ID="ProgramManager.List.WorkingDirectory">Working Directory</String>
+		
+		<String ID="ProgramManager.Menu.RunProgram">Run program</String>
+		<String ID="ProgramManager.Menu.AddProgram">Add program</String>
+		<String ID="ProgramManager.Menu.RemoveProgram">Remove program</String>
+		
+		<String ID="ProgramManager.Menu.ClearPrograms">Clear programs</String>
+		<String ID="ProgramManager.Menu.ClearPrograms.Message">Are you sure you want to remove all programs? This action cannot be undone.</String>
+		<String ID="ProgramManager.Menu.LoadDefaultPrograms">Load default programs</String>
+		
+		<String ID="ProgramManager.Menu.EditProgram">Edit "%1"</String>
+		<String ID="ProgramManager.Menu.ChooseIcon">Выбрать иконку</String>
+		<String ID="ProgramManager.Menu.ChooseExecutable">Выбрать исполняемый файл</String>
+		<String ID="ProgramManager.Menu.ChooseWorkingDirectory">Выбрать рабочую папку</String>
+		
+		<String ID="ProgramManager.Menu.ShowExpandedValues">Показывать раскрытые значения</String>
 
 		<!-- Mod Manager -->
 		<String ID="ModManager.Name">Mod manager</String>

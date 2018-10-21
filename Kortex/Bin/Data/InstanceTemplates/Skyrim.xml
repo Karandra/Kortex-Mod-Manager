@@ -4,7 +4,7 @@
 	
 	<Variables>
 		<!--Required-->
-		<Entry ID="ActualGameDir" Type="Registry" SaveAsOverride="1">
+		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
 			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Bethesda Softworks\Skyrim</Path>
@@ -13,7 +13,6 @@
 		</Entry>
 		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\Skyrim</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
-		<Entry ID="GameExecutable">TESV.exe</Entry>
 		<Entry ID="ScriptExtenderID">SKSE</Entry>
 	</Variables>
 
@@ -43,31 +42,25 @@
 	<ProgramManager>
 		<Programs>
 			<Entry>
-				<Name>$(GameNameShort)</Name>
-				<Executable>$(GameExecutable)</Executable>
-				<Arguments></Arguments>
+				<Name>$(GameShortName)</Name>
+				<Executable>TESV.exe</Executable>
 			</Entry>
 			<Entry>
 				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
 				<Executable>SKSE_Loader.exe</Executable>
-				<Arguments></Arguments>
 			</Entry>
 			<Entry>
-				<Name>Skyrim Launcher</Name>
+				<Name>$(GameShortName) Launcher</Name>
 				<Executable>SkyrimLauncher.exe</Executable>
-				<Arguments></Arguments>
 			</Entry>
 			<Entry>
 				<Name>Creation Kit</Name>
-				<Icon>CreationKit.exe</Icon>
 				<Executable>CreationKit.exe</Executable>
 				<Arguments></Arguments>
 			</Entry>
 			<Entry>
 				<Name>ENB Injector</Name>
-				<Icon>ENBInjector.exe</Icon>
 				<Executable>ENBInjector.exe</Executable>
-				<Command></Command>
 			</Entry>
 		</Programs>
 	</ProgramManager>

@@ -1,38 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance ID="SkyrimSE" SortOrder="13">
+<Instance GameID="SkyrimSE" SortOrder="13">
 	<Name Short="Skyrim SE">The Elder Scrolls V: Skyrim - Special Edition</Name>
 	
 	<Variables>
 		<!--Required-->
-		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
-			<Node>32</Node>
+		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Bethesda Softworks\Skyrim Special Edition</Path>
-			<ValueName>Installed Path</ValueName>
-			<ValueType>REG_SZ</ValueType>
+			<Name>Installed Path</Name>
+			<Type>REG_SZ</Type>
 		</Entry>
-		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\Skyrim Special Edition</Entry>
-		<Entry ID="GameExecutable">$(GameRoot)\$(GameID).exe</Entry>
-		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(GameID).exe</Entry>
-		<Entry ID="NexusID">SkyrimSpecialEdition</Entry>
-
-		<!--Names-->
-		<Entry ID="EditorName">Creation Kit</Entry>
-		<Entry ID="LauncherName">$(GameShortName) Launcher</Entry>
-		<Entry ID="ScriptExtenderName">$(GameShortName) Script Extender</Entry>
-		<Entry ID="ScriptExtenderNameShort">SKSE64</Entry>
-		
-		<!-- INI -->
-		<Entry ID="SkyrimINI">$(ConfigRootLocal)\Skyrim.ini</Entry>
-		<Entry ID="SkyrimPrefsINI">$(ConfigRootLocal)\SkyrimPrefs.ini</Entry>
-		<Entry ID="SkyrimEditorINI">$(VirtualGameRoot)\CreationKit.ini</Entry>
-		<Entry ID="SkyrimEditorPrefsINI">$(VirtualGameRoot)\CreationKitPrefs.ini</Entry>
-		
-		<!--Misc-->
-		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(GameID)Launcher.exe</Entry>
-		<Entry ID="GameEditorPath">$(VirtualGameRoot)\CreationKit.exe</Entry>
-		<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderNameShort)_Loader.exe</Entry>
-		<Entry ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Entry>
+		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\Skyrim Special Edition</Entry>
+		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		<Entry ID="ScriptExtenderID">SKSE64</Entry>
 	</Variables>
 
 	<Network>
@@ -40,76 +21,62 @@
 		<SteamID>489830</SteamID>
 	</Network>
 
-	<LocationsConfig>
-	</LocationsConfig>
-
 	<Virtualization>
 		<MirroredLocations>
 			<Entry>
 				<Sources>
-					<Entry>$(ConfigRootLocal)</Entry>
-					<Entry>$(SavesRootLocal)</Entry>
+					<Entry>$(SavesDir)</Entry>
+					<Entry>$(ConfigDir)</Entry>
 				</Sources>
-				<Target>$(ConfigRootTarget)</Target>
+				<Target>$(ActualConfigDir)</Target>
 			</Entry>
 			<Entry>
 				<Sources>
-					<Entry>$(ModListRoot)\LocalPlugins</Entry>
+					<Entry>$(ProfileDir)\Plugins</Entry>
 				</Sources>
 				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\Skyrim Special Edition</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
-	
-	<ProgramConfig>
-		<Main>
-			<Entry RequiresVFS="1">
+
+	<ProgramManager>
+		<Programs>
+			<Entry>
 				<Name>$(GameShortName)</Name>
-				<Icon>$(GameID).exe</Icon>
-				<Executable>$(VirtualGameExecutable)</Executable>
+				<Executable>SkyrimSE.exe</Executable>
+			</Entry>
+			<Entry>
+				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+				<Executable>SKSE64_Loader.exe</Executable>
+			</Entry>
+			<Entry>
+				<Name>$(GameShortName) Launcher</Name>
+				<Executable>Skyrim64Launcher.exe</Executable>
+			</Entry>
+			<Entry>
+				<Name>Creation Kit</Name>
+				<Executable>CreationKit.exe</Executable>
 				<Arguments></Arguments>
 			</Entry>
-			<Entry RequiresVFS="1">
-				<Name>$(GameShortName) ($(ScriptExtenderNameShort))</Name>
-				<Icon>$(ScriptExtenderNameShort)_Loader.exe</Icon>
-				<Executable>$(ScriptExtenderPath)</Executable>
-				<Arguments></Arguments>
-			</Entry>
-			<Entry RequiresVFS="1">
-				<Name>$(LauncherName)</Name>
-				<Icon>$(GameID)Launcher.exe</Icon>
-				<Executable>$(GameLauncherPath)</Executable>
-				<Arguments></Arguments>
-			</Entry>
-			<Entry RequiresVFS="1">
-				<Name>$(EditorName)</Name>
-				<Icon>CreationKit.exe</Icon>
-				<Executable>$(GameEditorPath)</Executable>
-				<Arguments></Arguments>
-			</Entry>
-		</Main>
-		<PreMain>
 			<Entry>
 				<Name>ENB Injector</Name>
-				<Icon>ENB_Injector.exe</Icon>
-				<Executable>$(ENBInjectorPath)</Executable>
-				<Command></Command>
+				<Executable>ENBInjector.exe</Executable>
 			</Entry>
-		</PreMain>
-	</ProgramConfig>
-
+		</Programs>
+	</ProgramManager>
+	
 	<GameConfig EnableENB="1">
-		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(SkyrimINI)</Entry>
-		<Entry ID="1" Format="INI" TypeDetectionMethod="HungarianNotation">$(SkyrimPrefsINI)</Entry>
+		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Skyrim.ini</Entry>
+		<Entry ID="1" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\SkyrimPrefs.ini</Entry>
 		<Entry ID="1000" Format="INI" TypeDetectionMethod="HungarianNotation">CreationKit.ini</Entry>
 		<Entry ID="1001" Format="INI" TypeDetectionMethod="HungarianNotation">CreationKitPrefs.ini</Entry>
 	</GameConfig>
 
-	<PluginManager Enabled="1" InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
+	<PluginManager InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
 		<Limit Value="254"/>
-		
-		<ActiveList>$(ModListRoot)\LocalPlugins\Plugins.txt</ActiveList>
-		<OrderList>$(ModListRoot)\LocalPlugins\LoadOrder.txt</OrderList>
+
+		<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
+		<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
 		
 		<ChangeFileModificationDate>0</ChangeFileModificationDate>
 		<SortByFileModificationDate>0</SortByFileModificationDate>
@@ -121,7 +88,7 @@
 
 		<SortingTools>
 			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
-				<Command><![CDATA[--game=$(GameID)]]></Command>
+				<Command><![CDATA[--game=SkyrimSE]]></Command>
 			</Entry>
 		</SortingTools>
 
@@ -129,7 +96,7 @@
 			<Branch>v0.13</Branch>
 			<Repository>https://github.com/loot/skyrimse.git</Repository>
 			<FolderName>Skyrim Special Edition</FolderName>
-			<LocalGamePath>$(ModListRoot)\LocalPlugins</LocalGamePath>
+			<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
 		</LOOTAPI>
 
 		<StandardContent MainID="Skyrim.esm">
@@ -143,17 +110,17 @@
 
 	<ScreenshotsGallery>
 		<Locations>
-			<Entry>$(GameRoot)</Entry>
-			<Entry>$(GameRoot)\Screenshots</Entry>
-			<Entry>$(OverwritesRoot)</Entry>
-			<Entry>$(OverwritesRoot)\Screenshots</Entry>
-			<Entry>$(ConfigRootLocal)</Entry>
-			<Entry>$(ConfigRootLocal)\Screenshots</Entry>
+			<Entry>$(ActualGameDir)</Entry>
+			<Entry>$(ActualGameDir)\Screenshots</Entry>
+			<Entry>$(ConfigDir)</Entry>
+			<Entry>$(ConfigDir)\Screenshots</Entry>
+			<Entry>$(OverwritesDir)</Entry>
+			<Entry>$(OverwritesDir)\Screenshots</Entry>
 		</Locations>
 	</ScreenshotsGallery>
 
 	<SaveManager SaveFileFormat="BethesdaSkyrimSE">
-		<RelativeLocation>Saves</RelativeLocation>
+		<Location>$(SavesDir)\Saves</Location>
 		<FileFilters>
 			<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
 			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>

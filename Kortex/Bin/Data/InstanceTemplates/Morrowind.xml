@@ -18,6 +18,7 @@
 
 	<Virtualization>
 		<MandatoryLocations>
+			<Entry Name="$T(ConfigManager.NameShort)">$(ConfigDir)</Entry>
 			<Entry Name="$T(SaveManager.NameShort)">$(SavesDir)</Entry>
 		</MandatoryLocations>
 	</Virtualization>
@@ -79,7 +80,7 @@
 	</ScreenshotsGallery>
 
 	<SaveManager SaveFileFormat="BethesdaMorrowind">
-		<Location>$(SavesDir)</Location>
+		<Location>$(SavesDir)\Saves</Location>
 		<FileFilters>
 			<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
 		</FileFilters>

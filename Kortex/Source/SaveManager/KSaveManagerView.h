@@ -6,12 +6,12 @@
 class KSaveManager;
 class KSaveManagerWorkspace;
 
-class KSaveManagerView: public KDataViewVectorListModel<KSMSaveFileArray, KDataViewListModel>
+class KSaveManagerView: public KxDataViewVectorListModelEx<KSaveFile::Vector, KxDataViewListModelEx>
 {
 	private:
 		KSaveManager* m_Manager = NULL;
 		KSaveManagerWorkspace* m_Workspace = NULL;
-		KSMSaveFileArray m_DataVector;
+		KSaveFile::Vector m_DataVector;
 
 		KxDataViewColumn* m_BitmapColumn = NULL;
 		KBitmapSize m_BitmapSize;

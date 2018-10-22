@@ -42,11 +42,8 @@ wxImage KSaveFile::ReadImageRGBA(const KxUInt8Vector& rgbaData, int width, int h
 	return image;
 }
 
-KSaveFile::KSaveFile(const wxString& filePath)
-	:m_FileInfo(filePath)
+bool KSaveFile::Create(const wxString& filePath)
 {
-	m_FileInfo.UpdateInfo();
-}
-KSaveFile::~KSaveFile()
-{
+	m_FileInfo = KxFileItem(filePath);
+	return m_FileInfo.UpdateInfo();
 }

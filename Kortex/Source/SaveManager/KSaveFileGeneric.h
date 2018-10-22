@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "KSaveFile.h"
 
-class KSaveFileBethesdaSkyrim: public KSaveFile
+class KSaveFileGeneric: public KSaveFile
 {
 	private:
 		KLabeledValueArray m_BasicInfo;
@@ -10,7 +10,10 @@ class KSaveFileBethesdaSkyrim: public KSaveFile
 		wxBitmap m_Bitmap;
 
 	protected:
-		virtual bool DoInitializeSaveData() override;
+		virtual bool DoInitializeSaveData() override
+		{
+			return true;
+		}
 
 	public:
 		virtual const KLabeledValueArray& GetBasicInfo() const override

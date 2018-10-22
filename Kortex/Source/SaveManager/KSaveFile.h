@@ -7,6 +7,11 @@
 class KSaveFile
 {
 	public:
+		using Vector = std::vector<std::unique_ptr<KSaveFile>>;
+		using RefVector = std::vector<KSaveFile*>;
+		using CRefVector = std::vector<const KSaveFile*>;
+
+	public:
 		static wxImage ReadImageRGB(const KxUInt8Vector& rgbData, int width, int height, int alphaOverride = -1, bool isStaticData = false);
 		static wxImage ReadImageRGBA(const KxUInt8Vector& rgbaData, int width, int height, int alphaOverride = -1);
 
@@ -17,22 +22,25 @@ class KSaveFile
 		bool m_IsOK = false;
 
 	protected:
-		virtual bool DoReadData() = 0;
+		virtual bool DoInitializeSaveData() = 0;
+
+	protected:
+		KSaveFile() = default;
 
 	public:
-		KSaveFile(const wxString& filePath);
-		virtual ~KSaveFile();
+		virtual ~KSaveFile() = default;
 
 	public:
 		bool IsOK() const
 		{
 			return m_IsOK;
 		}
-		void ReadData()
+		bool Create(const wxString& filePath);
+		void InitializeSaveData()
 		{
 			if (!m_IsDataRead)
 			{
-				m_IsOK = DoReadData();
+				m_IsOK = DoInitializeSaveData();
 				m_IsDataRead = true;
 			}
 		}
@@ -78,4 +86,3 @@ class KSaveFile
 			m_Thumb = wxNullBitmap;
 		}
 };
-typedef std::vector<std::unique_ptr<KSaveFile>> KSMSaveFileArray;

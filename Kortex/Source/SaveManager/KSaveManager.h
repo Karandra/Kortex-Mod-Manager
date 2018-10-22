@@ -32,5 +32,6 @@ class KSaveManager: public KPluggableManager, public KxSingletonPtr<KSaveManager
 	public:
 		virtual KWorkspace* GetWorkspace() const override;
 
+		std::unique_ptr<KSaveFile> QuerySaveInterface() const;
 		wxString GetSavesLocation() const;
 };

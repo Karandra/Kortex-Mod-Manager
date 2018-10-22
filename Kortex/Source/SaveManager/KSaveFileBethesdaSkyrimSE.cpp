@@ -5,7 +5,7 @@
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
 
-bool KSaveFileBethesdaSkyrimSE::DoReadData()
+bool KSaveFileBethesdaSkyrimSE::DoInitializeSaveData()
 {
 	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (file.IsOk())

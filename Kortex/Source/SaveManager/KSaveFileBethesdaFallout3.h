@@ -10,13 +10,7 @@ class KSaveFileBethesdaFallout3: public KSaveFile
 		wxBitmap m_Bitmap = wxNullBitmap;
 
 	protected:
-		virtual bool DoReadData() override;
-
-	public:
-		KSaveFileBethesdaFallout3(const wxString& filePath)
-			:KSaveFile(filePath)
-		{
-		}
+		virtual bool DoInitializeSaveData() override;
 
 	public:
 		virtual const KLabeledValueArray& GetBasicInfo() const override

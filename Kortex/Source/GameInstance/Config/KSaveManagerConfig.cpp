@@ -2,19 +2,11 @@
 #include "KSaveManagerConfig.h"
 #include "GameInstance/KGameInstance.h"
 #include "SaveManager/KSaveManager.h"
-#include "SaveManager/KSaveFile.h"
-#include "SaveManager/KSaveFileBethesdaMorrowind.h"
-#include "SaveManager/KSaveFileBethesdaOblivion.h"
-#include "SaveManager/KSaveFileBethesdaSkyrim.h"
-#include "SaveManager/KSaveFileBethesdaSkyrimSE.h"
-#include "SaveManager/KSaveFileBethesdaFallout3.h"
-#include "SaveManager/KSaveFileBethesdaFalloutNV.h"
-#include "SaveManager/KSaveFileBethesdaFallout4.h"
 #include "KApp.h"
 #include "KAux.h"
 
-KSaveManagerConfig::KSaveManagerConfig(KGameInstance& profile, const KxXMLNode& node)
-	:m_SaveFileFormat(node.GetAttribute("SaveFileFormat"))
+KSaveManagerConfig::KSaveManagerConfig(KGameInstance& instance, const KxXMLNode& node)
+	:m_SaveInterface(node.GetAttribute("SaveFileFormat"))
 {
 	m_Location = node.GetFirstChildElement("Location").GetValue();
 
@@ -36,46 +28,9 @@ KSaveManagerConfig::~KSaveManagerConfig()
 	delete m_Manager;
 }
 
-KSaveFile* KSaveManagerConfig::QuerySaveFile(const wxString& fullPath) const
+wxString KSaveManagerConfig::GetSaveInterface() const
 {
-	if (GetSaveFileFormat() == "BethesdaMorrowind")
-	{
-		return new KSaveFileBethesdaMorrowind(fullPath);
-	}
-	if (GetSaveFileFormat() == "BethesdaOblivion")
-	{
-		return new KSaveFileBethesdaOblivion(fullPath);
-	}
-	if (GetSaveFileFormat() == "BethesdaSkyrim")
-	{
-		return new KSaveFileBethesdaSkyrim(fullPath);
-	}
-	if (GetSaveFileFormat() == "BethesdaSkyrimSE")
-	{
-		return new KSaveFileBethesdaSkyrimSE(fullPath);
-	}
-	if (GetSaveFileFormat() == "BethesdaFallout3")
-	{
-		return new KSaveFileBethesdaFallout3(fullPath);
-	}
-	if (GetSaveFileFormat() == "BethesdaFalloutNV")
-	{
-		return new KSaveFileBethesdaFalloutNV(fullPath);
-	}
-	if (GetSaveFileFormat() == "BethesdaFallout4")
-	{
-		return new KSaveFileBethesdaFallout4(fullPath);
-	}
-	if (GetSaveFileFormat() == "Sacred2")
-	{
-		//return new KSaveFileSacred2(fullPath);
-	}
-	return NULL;
-}
-
-wxString KSaveManagerConfig::GetSaveFileFormat() const
-{
-	return m_SaveFileFormat;
+	return V(m_SaveInterface);
 }
 wxString KSaveManagerConfig::GetLocation() const
 {

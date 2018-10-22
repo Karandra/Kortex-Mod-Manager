@@ -9,7 +9,7 @@ class KSaveFile;
 class KSaveManagerConfig: public KxSingletonPtr<KSaveManagerConfig>
 {
 	private:
-		const wxString m_SaveFileFormat;
+		const wxString m_SaveInterface;
 		KSaveManager* m_Manager = NULL;
 		wxString m_Location;
 		KLabeledValueArray m_FileFilters;
@@ -18,13 +18,11 @@ class KSaveManagerConfig: public KxSingletonPtr<KSaveManagerConfig>
 		wxString m_SecondarySaveExt;
 
 	public:
-		KSaveManagerConfig(KGameInstance& profile, const KxXMLNode& node);
+		KSaveManagerConfig(KGameInstance& instance, const KxXMLNode& node);
 		~KSaveManagerConfig();
 
 	public:
-		KSaveFile* QuerySaveFile(const wxString& fullPath) const;
-
-		wxString GetSaveFileFormat() const;
+		wxString GetSaveInterface() const;
 		wxString GetLocation() const;
 		
 		bool HasFileFilter() const

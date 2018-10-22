@@ -167,21 +167,24 @@ bool KSaveManagerView::CompareByRow(size_t row1, size_t row2, const KxDataViewCo
 	const KSaveFile* entry1 = GetDataEntry(row1);
 	const KSaveFile* entry2 = GetDataEntry(row2);
 
-	switch (column ? column->GetID() : ColumnID::ModificationDate)
+	if (entry1 && entry2)
 	{
-		case ColumnID::Name:
+		switch (column ? column->GetID() : ColumnID::ModificationDate)
 		{
-			return KxComparator::IsLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
-		}
-		case ColumnID::Size:
-		{
-			return entry1->GetFileInfo().GetFileSize() < entry2->GetFileInfo().GetFileSize();
-		}
-		case ModificationDate:
-		{
-			return entry1->GetFileInfo().GetModificationTime() < entry2->GetFileInfo().GetModificationTime();
-		}
-	};
+			case ColumnID::Name:
+			{
+				return KxComparator::IsLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
+			}
+			case ColumnID::Size:
+			{
+				return entry1->GetFileInfo().GetFileSize() < entry2->GetFileInfo().GetFileSize();
+			}
+			case ModificationDate:
+			{
+				return entry1->GetFileInfo().GetModificationTime() < entry2->GetFileInfo().GetModificationTime();
+			}
+		};
+	}
 	return false;
 }
 
@@ -239,7 +242,7 @@ void KSaveManagerView::OnCacheHint(KxDataViewEvent& event)
 			KSaveFile* entry = GetDataEntry(GetRow(item));
 			if (entry && (!entry->IsOK() || !entry->HasThumbBitmap()))
 			{
-				entry->ReadData();
+				entry->InitializeSaveData();
 				entry->SetThumbBitmap(m_BitmapSize.ScaleBitmapAspect(entry->GetBitmap(), 0, 4));
 			}
 		}
@@ -270,12 +273,16 @@ void KSaveManagerView::SetDataVector(const wxString& folder, const KxStringVecto
 			item = finder.FindNext();
 			if (item.IsOK())
 			{
-				m_DataVector.emplace_back(KSaveManagerConfig::GetInstance()->QuerySaveFile(item.GetFullPath()));
+				auto& entry = m_DataVector.emplace_back(KSaveManager::GetInstance()->QuerySaveInterface());
+				if (!entry->Create(item.GetFullPath()))
+				{
+					m_DataVector.pop_back();
+				}
 			}
 		}
 		while (item.IsOK());
 	}
-	KDataViewVectorListModel::SetDataVector(&m_DataVector);
+	KxDataViewVectorListModelEx::SetDataVector(&m_DataVector);
 }
 
 void KSaveManagerView::UpdateRowHeight()

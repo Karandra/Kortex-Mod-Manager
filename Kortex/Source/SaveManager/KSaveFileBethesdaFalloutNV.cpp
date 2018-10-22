@@ -4,7 +4,7 @@
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
 
-bool KSaveFileBethesdaFalloutNV::DoReadData()
+bool KSaveFileBethesdaFalloutNV::DoInitializeSaveData()
 {
 	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
 	if (file.IsOk())

@@ -10,13 +10,7 @@ class KSaveFileBethesdaOblivion: public KSaveFile
 		wxBitmap m_Bitmap;
 
 	protected:
-		virtual bool DoReadData() override;
-
-	public:
-		KSaveFileBethesdaOblivion(const wxString& filePath)
-			:KSaveFile(filePath)
-		{
-		}
+		virtual bool DoInitializeSaveData() override;
 
 	public:
 		virtual const KLabeledValueArray& GetBasicInfo() const override

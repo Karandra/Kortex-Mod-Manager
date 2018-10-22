@@ -14,6 +14,7 @@
 		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\Skyrim Special Edition</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
 		<Entry ID="ScriptExtenderID">SKSE64</Entry>
+		<Entry ID="xEditID">sse</Entry>
 	</Variables>
 
 	<Network>

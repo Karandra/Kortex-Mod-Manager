@@ -9,6 +9,7 @@
 		<Entry ID="ActualSavesDir">$(ActualGameDir)\Saves</Entry>
 		<Entry ID="GameExecutable">Morrowind.exe</Entry>
 		<!--<Entry ID="ScriptExtenderID">MWSE</Entry>-->
+		<!--<Entry ID="xEditID">tes3</Entry>-->
 	</Variables>
 
 	<Network>
@@ -26,12 +27,12 @@
 	<ProgramManager>
 		<Programs>
 			<Entry>
-				<Name>$(GameNameShort)</Name>
-				<Executable>$(GameExecutable)</Executable>
+				<Name>$(GameShortName)</Name>
+				<Executable>Morrowind.exe</Executable>
 				<Arguments></Arguments>
 			</Entry>
 			<Entry>
-				<Name>$(LauncherName)</Name>
+				<Name>$(GameShortName) Launcher</Name>
 				<Executable>Morrowind Launcher.exe</Executable>
 				<Arguments></Arguments>
 			</Entry>

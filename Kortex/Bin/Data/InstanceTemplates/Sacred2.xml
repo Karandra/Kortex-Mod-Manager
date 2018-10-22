@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance ID="Sacred2" SortOrder="31">
+<Instance GameID="Sacred2" SortOrder="31">
 	<Name Short="Sacred 2">Sacred 2: Fallen Angel</Name>
 	
 	<Variables>
 		<!--Required-->
-		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
-			<Node>32</Node>
+		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Ascaron Entertainment\Sacred 2</Path>
-			<ValueName>InstallPath</ValueName>
-			<ValueType>REG_SZ</ValueType>
+			<Name>InstallPath</Name>
+			<Type>REG_SZ</Type>
 		</Entry>
-		<Entry ID="ConfigRootTarget">$SH(SHF_SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
+		<Entry ID="ActualConfigDir">$SH(SHF_SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
+
 		<Entry ID="GameExecutable">$(GameRoot)\System\Sacred2.exe</Entry>
 		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\System\Sacred2.exe</Entry>
-		<Entry ID="NexusID">$(GameID)</Entry>
 	</Variables>
 
 	<Network>
@@ -22,42 +22,41 @@
 		<SteamID>225640</SteamID>
 	</Network>
 
-	<LocationsConfig>
-	</LocationsConfig>
-
 	<Virtualization>
 		<MirroredLocations>
 			<Entry>
 				<Sources>
-					<Entry>$(SavesRootLocal)</Entry>
+					<Entry>$(SavesDir)</Entry>
+					<!--<Entry>$(ConfigDir)</Entry>-->
 				</Sources>
-				<Target>$(ConfigRootTarget)</Target>
+				<Target>$(ActualConfigDir)</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
 
-	<ProgramConfig>
-		<Main>
+	<ProgramManager>
+		<Programs>
 			<Entry>
 				<Name>$(GameShortName)</Name>
-				<Icon>System\Sacred2.exe</Icon>
-				<Executable>$(VirtualGameExecutable)</Executable>
-				<Arguments></Arguments>
+				<Executable>System\Sacred2.exe</Executable>
 			</Entry>
-		</Main>
-	</ProgramConfig>
+		</Programs>
+	</ProgramManager>
 
 	<ScreenshotsGallery>
 		<Locations>
 			<Entry>$SH(SHF_PICTURES)\Ascaron Entertainment\Sacred 2</Entry>
-			<Entry>$(VirtualGameRoot)</Entry>
-			<Entry>$(VirtualGameRoot)\Screenshots</Entry>
-			<Entry>$(ConfigRootLocal)</Entry>
+			<Entry>$(ActualGameDir)</Entry>
+			<Entry>$(ActualGameDir)\Screenshots</Entry>
+			<Entry>$(ConfigDir)</Entry>
+			<Entry>$(ConfigDir)\Screenshots</Entry>
+			<Entry>$(OverwritesDir)</Entry>
+			<Entry>$(OverwritesDir)\Screenshots</Entry>
 		</Locations>
 	</ScreenshotsGallery>
 
 	<SaveManager SaveFileFormat="Sacred2">
-		<RelativeLocation></RelativeLocation>
+		<Location>$(SavesDir)</Location>
 		<FileFilters>
 			<Entry Label="$T(SaveManager.Filter.Saves) (*.sacred2save)">*.sacred2save</Entry>
 			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>

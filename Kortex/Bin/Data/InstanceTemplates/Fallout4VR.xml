@@ -1,40 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance ID="Fallout4VR" SortOrder="23">
-	<Name Short="Fallout 4 VR">Fallout 4 - VR Edition</Name>
+<Instance GameID="Fallout4VR" SortOrder="23">
+	<Name Short="Fallout 4 - VR">Fallout 4 - VR Edition</Name>
 
 	<Variables>
 		<!--Required-->
-		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
-			<Node>32</Node>
+		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Bethesda Softworks\Fallout 4 VR</Path>
-			<ValueName>Installed Path</ValueName>
-			<ValueType>REG_SZ</ValueType>
+			<Name>Installed Path</Name>
+			<Type>REG_SZ</Type>
 		</Entry>
-		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\$(GameID)</Entry>
-		<Entry ID="GameExecutable">$(GameRoot)\$(GameID).exe</Entry>
-		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(GameID).exe</Entry>
-		<Entry ID="NexusID">$(GameID)</Entry>
-
-		<!--Names-->
-		<Entry ID="EditorName">Creation Kit</Entry>
-		<Entry ID="LauncherName">$(GameShortName) Launcher</Entry>
-		<!--<Entry ID="ScriptExtenderName">$(GameShortName) Script Extender</Entry>-->
-		<!--<Entry ID="ScriptExtenderNameShort">F4SE</Entry>-->
-
-		<!-- INI -->
-		<Entry ID="Fallout4INI">$(ConfigRootLocal)\Fallout4.ini</Entry>
-		<Entry ID="Fallout4PrefsINI">$(ConfigRootLocal)\Fallout4Prefs.ini</Entry>
-		<Entry ID="Fallout4CustomINI">$(ConfigRootLocal)\Fallout4Custom.ini</Entry>
-		<Entry ID="Fallout4EditorINI">$(VirtualGameRoot)\CreationKit.ini</Entry>
-		<Entry ID="Fallout4EditorPrefsINI">$(VirtualGameRoot)\CreationKitPrefs.ini</Entry>
-
-		<!--Misc-->
-		<Entry ID="DataFilesPath">$(GameRoot)\Data</Entry>
-		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(GameID)Launcher.exe</Entry>
-		<Entry ID="GameEditorPath">$(VirtualGameRoot)\CreationKit.exe</Entry>
-		<!--<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderNameShort)_Loader.exe</Entry>-->
-		<Entry ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Entry>
+		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\Fallout4VR</Entry>
+		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		<!--<Entry ID="ScriptExtenderID">F4SEVR</Entry>-->
+		<Entry ID="xEditID">fo4vr</Entry>
 	</Variables>
 
 	<Network>
@@ -42,68 +22,53 @@
 		<SteamID>611660</SteamID>
 	</Network>
 
-	<LocationsConfig>
-	</LocationsConfig>
-
 	<Virtualization>
 		<MirroredLocations>
 			<Entry>
 				<Sources>
-					<Entry>$(ConfigRootLocal)</Entry>
-					<Entry>$(SavesRootLocal)</Entry>
+					<Entry>$(SavesDir)</Entry>
+					<Entry>$(ConfigDir)</Entry>
 				</Sources>
-				<Target>$(ConfigRootTarget)</Target>
+				<Target>$(ActualConfigDir)</Target>
 			</Entry>
 			<Entry>
 				<Sources>
-					<Entry>$(ModListRoot)\LocalPlugins</Entry>
+					<Entry>$(ProfileDir)\Plugins</Entry>
 				</Sources>
-				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\$(GameID)</Target>
+				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\Fallout4VR</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
 
-	<ProgramConfig Enabled="1">
-		<Main>
+	<ProgramManager>
+		<Programs>
 			<Entry>
 				<Name>$(GameShortName)</Name>
-				<Icon>$(GameID).exe</Icon>
-				<Executable>$(VirtualGameExecutable)</Executable>
-				<Arguments></Arguments>
+				<Executable>Fallout4VR.exe</Executable>
 			</Entry>
 			<!--<Entry>
-				<Name>$(GameShortName) ($(ScriptExtenderNameShort))</Name>
-				<Icon>$(ScriptExtenderNameShort)_Loader.exe</Icon>
-				<Executable>$(ScriptExtenderPath)</Executable>
-				<Arguments></Arguments>
-			</Entry>-->
-			<!--<Entry>
-				<Name>$(LauncherName)</Name>
-				<Icon>$(GameID)Launcher.exe</Icon>
-				<Executable>$(GameLauncherPath)</Executable>
-				<Arguments></Arguments>
+				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+				<Executable>F4SEVR_Loader.exe</Executable>
 			</Entry>-->
 			<Entry>
-				<Name>$(EditorName)</Name>
-				<Icon>CreationKit.exe</Icon>
-				<Executable>$(GameEditorPath)</Executable>
-				<Arguments></Arguments>
+				<Name>$(GameShortName) Launcher</Name>
+				<Executable>Fallout4VRLauncher.exe</Executable>
 			</Entry>
-		</Main>
-		<PreMain>
+			<Entry>
+				<Name>Creation Kit</Name>
+				<Executable>CreationKit.exe</Executable>
+			</Entry>
 			<Entry>
 				<Name>ENB Injector</Name>
-				<Icon>ENB_Injector.exe</Icon>
-				<Executable>$(ENBInjectorPath)</Executable>
-				<Command></Command>
+				<Executable>ENBInjector.exe</Executable>
 			</Entry>
-		</PreMain>
-	</ProgramConfig>
+		</Programs>
+	</ProgramManager>
 
-	<GameConfig Enabled="1" EnableENB="1">
-		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(Fallout4INI)</Entry>
-		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(Fallout4PrefsINI)</Entry>
-		<Entry Format="INI" ID="2" TypeDetectionMethod="HungarianNotation">$(Fallout4CustomINI)</Entry>
+	<GameConfig EnableENB="1">
+		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout4.ini</Entry>
+		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout4Prefs.ini</Entry>
+		<Entry Format="INI" ID="2" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout4Custom.ini</Entry>
 		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">CreationKit.ini</Entry>
 		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">CreationKitPrefs.ini</Entry>
 	</GameConfig>
@@ -111,8 +76,8 @@
 	<PluginManager Enabled="1" InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
 		<Limit Value="254"/>
 
-		<ActiveList>$(ModListRoot)\LocalPlugins\Plugins.txt</ActiveList>
-		<OrderList>$(ModListRoot)\LocalPlugins\LoadOrder.txt</OrderList>
+		<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
+		<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
 
 		<ChangeFileModificationDate>0</ChangeFileModificationDate>
 		<SortByFileModificationDate>0</SortByFileModificationDate>
@@ -151,17 +116,17 @@
 
 	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
 		<Locations>
-			<Entry>$(GameRoot)</Entry>
-			<Entry>$(GameRoot)\Screenshots</Entry>
-			<Entry>$(OverwritesRoot)</Entry>
-			<Entry>$(OverwritesRoot)\Screenshots</Entry>
-			<Entry>$(ConfigRootLocal)</Entry>
-			<Entry>$(ConfigRootLocal)\Screenshots</Entry>
+			<Entry>$(ActualGameDir)</Entry>
+			<Entry>$(ActualGameDir)\Screenshots</Entry>
+			<Entry>$(ConfigDir)</Entry>
+			<Entry>$(ConfigDir)\Screenshots</Entry>
+			<Entry>$(OverwritesDir)</Entry>
+			<Entry>$(OverwritesDir)\Screenshots</Entry>
 		</Locations>
 	</ScreenshotsGallery>
 
 	<SaveManager Enabled="1" RequiresVFS="0" SaveFileFormat="BethesdaFallout4">
-		<SavesFolder>$(ConfigRootLocal)\Saves</SavesFolder>
+		<Location>$(SavesDir)\Saves</Location>
 		<FileFilters>
 			<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
 			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>

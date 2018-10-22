@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance ID="FalloutNV" SortOrder="22">
+<Instance GameID="FalloutNV" SortOrder="22">
 	<Name Short="Fallout NV">Fallout: New Vegas</Name>
 
 	<Variables>
 		<!--Required-->
-		<Entry ID="GameRoot" EntryType="Registry" SubType="FolderPath" UseOverride="1">
-			<Node>32</Node>
+		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
-			<Path>SOFTWARE\Bethesda Softworks\$(GameID)</Path>
-			<ValueName>Installed Path</ValueName>
-			<ValueType>REG_SZ</ValueType>
+			<Path>SOFTWARE\Bethesda Softworks\FalloutNV</Path>
+			<Name>Installed Path</Name>
+			<Type>REG_SZ</Type>
 		</Entry>
-		<Entry ID="ConfigRootTarget">$SH(SHF_DOCUMENTS)\My Games\$(GameID)</Entry>
-		<Entry ID="GameExecutable">$(GameRoot)\$(GameID).exe</Entry>
-		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\$(GameID).exe</Entry>
-		<Entry ID="NexusID">NewVegas</Entry>
-
-		<!--Names-->
-		<Entry ID="EditorName">Creation Kit</Entry>
-		<Entry ID="LauncherName">$(GameShortName) Launcher</Entry>
-		<Entry ID="ScriptExtenderName">$(GameShortName) Script Extender</Entry>
-		<Entry ID="ScriptExtenderNameShort">NVSE</Entry>
+		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\FalloutNV</Entry>
+		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		<Entry ID="ScriptExtenderID">NVSE</Entry>
+		<Entry ID="xEditID">fnv</Entry>
 
 		<!-- INI -->
 		<Entry ID="FalloutNVINI">$(ConfigRootLocal)\Fallout.ini</Entry>
@@ -40,76 +34,61 @@
 		<SteamID>22490</SteamID>
 	</Network>
 
-	<LocationsConfig>
-	</LocationsConfig>
-
 	<Virtualization>
 		<MirroredLocations>
 			<Entry>
 				<Sources>
-					<Entry>$(ConfigRootLocal)</Entry>
-					<Entry>$(SavesRootLocal)</Entry>
+					<Entry>$(SavesDir)</Entry>
+					<Entry>$(ConfigDir)</Entry>
 				</Sources>
-				<Target>$(ConfigRootTarget)</Target>
+				<Target>$(ActualConfigDir)</Target>
 			</Entry>
 			<Entry>
 				<Sources>
-					<Entry>$(ModListRoot)\LocalPlugins</Entry>
+					<Entry>$(ProfileDir)\Plugins</Entry>
 				</Sources>
-				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\$(GameID)</Target>
+				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\FalloutNV</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>
 
-	<ProgramConfig Enabled="1">
-		<Main>
+	<ProgramManager>
+		<Programs>
 			<Entry>
 				<Name>$(GameShortName)</Name>
-				<Icon>$(GameID).exe</Icon>
-				<Executable>$(VirtualGameExecutable)</Executable>
-				<Arguments></Arguments>
+				<Executable>FalloutNV.exe</Executable>
 			</Entry>
 			<Entry>
-				<Name>$(GameShortName) ($(ScriptExtenderNameShort))</Name>
-				<Icon>$(ScriptExtenderNameShort)_Loader.exe</Icon>
-				<Executable>$(ScriptExtenderPath)</Executable>
-				<Arguments></Arguments>
+				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+				<Executable>NVSE_Loader.exe</Executable>
 			</Entry>
 			<Entry>
-				<Name>$(LauncherName)</Name>
-				<Icon>$(GameID)Launcher.exe</Icon>
-				<Executable>$(GameLauncherPath)</Executable>
-				<Arguments></Arguments>
+				<Name>$(GameShortName) Launcher</Name>
+				<Executable>FalloutNVLauncher.exe</Executable>
 			</Entry>
 			<Entry>
-				<Name>$(EditorName)</Name>
-				<Icon>GECK.exe</Icon>
-				<Executable>$(GameEditorPath)</Executable>
-				<Arguments></Arguments>
+				<Name>Creation Kit</Name>
+				<Executable>GECK.exe</Executable>
 			</Entry>
-		</Main>
-		<PreMain>
 			<Entry>
 				<Name>ENB Injector</Name>
-				<Icon>ENB_Injector.exe</Icon>
-				<Executable>$(ENBInjectorPath)</Executable>
-				<Command></Command>
+				<Executable>ENBInjector.exe</Executable>
 			</Entry>
-		</PreMain>
-	</ProgramConfig>
+		</Programs>
+	</ProgramManager>
 
 	<GameConfig EnableENB="1">
-		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(FalloutNVINI)</Entry>
-		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(FalloutNVPrefsINI)</Entry>
-		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">$(FalloutNVEditorINI)</Entry>
-		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">$(FalloutNVEditorPrefsINI)</Entry>
+		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout.ini</Entry>
+		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\FalloutPrefs.ini</Entry>
+		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\GECKCustom.ini</Entry>
+		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\GECKPrefs.ini</Entry>
 	</GameConfig>
 
 	<PluginManager InterfaceName="Bethesda" PluginFileFormat="BethesdaSkyrim">
 		<Limit Value="255"/>
 
-		<ActiveList>$(ModListRoot)\LocalPlugins\Plugins.txt</ActiveList>
-		<OrderList>$(ModListRoot)\LocalPlugins\LoadOrder.txt</OrderList>
+		<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
+		<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
 
 		<ChangeFileModificationDate>1</ChangeFileModificationDate>
 		<SortByFileModificationDate>0</SortByFileModificationDate>
@@ -123,7 +102,7 @@
 
 		<SortingTools>
 			<Entry ID="LOOT" Name="LOOT - Load Order Optimization">
-				<Command><![CDATA[--game=$(GameID)]]></Command>
+				<Command><![CDATA[--game=FalloutNV]]></Command>
 			</Entry>
 		</SortingTools>
 
@@ -131,7 +110,7 @@
 			<Branch>v0.13</Branch>
 			<Repository>https://github.com/loot/falloutnv.git</Repository>
 			<FolderName>FalloutNV</FolderName>
-			<LocalGamePath>$(ModListRoot)\LocalPlugins</LocalGamePath>
+			<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
 		</LOOTAPI>
 
 		<StandardContent MainID="FalloutNV.esm">
@@ -160,17 +139,17 @@
 
 	<ScreenshotsGallery>
 		<Locations>
-			<Entry>$(GameRoot)</Entry>
-			<Entry>$(GameRoot)\Screenshots</Entry>
-			<Entry>$(OverwritesRoot)</Entry>
-			<Entry>$(OverwritesRoot)\Screenshots</Entry>
-			<Entry>$(ConfigRootLocal)</Entry>
-			<Entry>$(ConfigRootLocal)\Screenshots</Entry>
+			<Entry>$(ActualGameDir)</Entry>
+			<Entry>$(ActualGameDir)\Screenshots</Entry>
+			<Entry>$(ConfigDir)</Entry>
+			<Entry>$(ConfigDir)\Screenshots</Entry>
+			<Entry>$(OverwritesDir)</Entry>
+			<Entry>$(OverwritesDir)\Screenshots</Entry>
 		</Locations>
 	</ScreenshotsGallery>
 
 	<SaveManager SaveFileFormat="BethesdaFalloutNV">
-		<RelativeLocation>Saves</RelativeLocation>
+		<Location>$(SavesDir)\Saves</Location>
 		<FileFilters>
 			<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
 			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>

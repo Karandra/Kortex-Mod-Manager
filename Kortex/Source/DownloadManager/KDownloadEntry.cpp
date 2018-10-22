@@ -3,7 +3,7 @@
 #include "KDownloadManager.h"
 #include "KDownloadWorkspace.h"
 #include "Network/KNetwork.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "ModManager/KModManager.h"
 #include "KQuickThread.h"
 #include <KxFramework/KxXML.h>

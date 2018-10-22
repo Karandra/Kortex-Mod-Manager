@@ -198,26 +198,26 @@ void KGameInstance::DestroyActive()
 	ms_ActiveInstance.reset();
 }
 
-wxString KGameInstance::GetCurrentProfileID()
+wxString KGameInstance::GetActiveProfileID()
 {
-	if (const KProfile* profile = GetCurrentProfile())
+	if (const KProfile* profile = GetActiveProfile())
 	{
 		return profile->GetID();
 	}
 	return wxEmptyString;
 }
-KProfile* KGameInstance::GetCurrentProfile()
+KProfile* KGameInstance::GetActiveProfile()
 {
 	if (KGameInstance::GetActive())
 	{
 		KActiveGameInstance* instance = static_cast<KActiveGameInstance*>(KGameInstance::GetActive());
-		return instance->GetCurrentProfile();
+		return instance->GetActiveProfile();
 	}
 	return NULL;
 }
-bool KGameInstance::IsCurrentProfileID(const wxString& id)
+bool KGameInstance::IsActiveProfileID(const wxString& id)
 {
-	if (const KProfile* profile = GetCurrentProfile())
+	if (const KProfile* profile = GetActiveProfile())
 	{
 		return KxComparator::IsEqual(profile->GetID(), id, true);
 	}
@@ -326,7 +326,12 @@ bool KGameInstance::IsActiveInstance() const
 
 wxString KGameInstance::GetIconLocation() const
 {
-	return KxFormat(wxS("%1\\Icons\\%2.ico")).arg(KGameInstance::GetTemplatesFolder()).arg(GetGameID());
+	wxString path = KxFormat(wxS("%1\\Icons\\%2.ico")).arg(KGameInstance::GetTemplatesFolder()).arg(GetGameID());
+	if (!KxFile(path).IsFileExist())
+	{
+		path = KxFormat(wxS("%1\\Icons\\Generic.ico")).arg(KGameInstance::GetTemplatesFolder());
+	}
+	return path;
 }
 wxBitmap KGameInstance::GetIcon() const
 {
@@ -582,7 +587,7 @@ bool KGameInstance::RemoveProfile(KProfile& profile)
 	KProfileEvent addingEvent(KEVT_PROFILE_REMOVING);
 	addingEvent.Send();
 
-	bool isCurrent = profile.IsCurrent();
+	bool isCurrent = profile.IsActive();
 	if (addingEvent.IsAllowed() && !isCurrent && HasProfile(profile.GetID()))
 	{
 		// Move files to recycle bin
@@ -621,7 +626,7 @@ bool KGameInstance::RenameProfile(KProfile& profile, const wxString& newID)
 {
 	const wxString oldPath = profile.GetProfileDir();
 	const wxString oldID = profile.GetID();
-	const bool isCurrent = profile.IsCurrent();
+	const bool isCurrent = profile.IsActive();
 
 	profile.SetID(newID);
 	if (KxFile(oldPath).Rename(profile.GetProfileDir(), false))

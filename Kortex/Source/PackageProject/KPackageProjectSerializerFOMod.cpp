@@ -8,7 +8,7 @@
 #include "KPackageProjectFileData.h"
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "PackageManager/KPackageManager.h"
 #include "ModManager/KModManager.h"
 #include "KAux.h"

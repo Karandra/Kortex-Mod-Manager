@@ -7,7 +7,7 @@
 #include "Network/KNetworkProviderNexus.h"
 #include "DownloadManager/KDownloadManager.h"
 #include "Profile/KProfile.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "GameInstance/Config/KConfigManagerConfig.h"
 #include "KOperationWithProgress.h"
 #include "KAux.h"
@@ -201,7 +201,7 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 	}
 
 	// Add mods to mods list
-	KProfile* profile = KGameInstance::GetActive()->GetCurrentProfile();
+	KProfile* profile = KGameInstance::GetActive()->GetActiveProfile();
 
 	KProfileMod::Vector& modList = profile->GetMods();
 	modList.clear();
@@ -231,7 +231,7 @@ void KModManagerImportNMM::ReadPlugins(KOperationWithProgressDialogBase* context
 		pluginManager->Load();
 		KxStringVector pluginsList = KxTextFile::ReadToArray(GetProfileDirectory() + '\\' + "LoadOrder.txt");
 
-		KProfile* profile = KGameInstance::GetActive()->GetCurrentProfile();
+		KProfile* profile = KGameInstance::GetActive()->GetActiveProfile();
 
 		KProfilePlugin::Vector& profilePluginsList = profile->GetPlugins();
 		profilePluginsList.clear();

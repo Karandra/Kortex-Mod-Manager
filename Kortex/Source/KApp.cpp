@@ -5,7 +5,7 @@
 #include "KThemeManager.h"
 #include "Themes/KThemeDefault.h"
 #include "Themes/KThemeVisualStudio.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "UI/KInstanceSelectionDialog.h"

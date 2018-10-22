@@ -3,7 +3,7 @@
 #include "KPluginManagerBethesdaMW.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KDispatcher.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "GameInstance/Config/KPluginManagerConfig.h"
 #include "Profile/KProfile.h"
 #include "GameConfig/KGameConfigWorkspace.h"
@@ -70,7 +70,7 @@ void KPluginManagerBethesdaMW::WriteOrderMW(KxINI& ini) const
 
 	int i = 0;
 	ini.RemoveSection("Game Files Order");
-	for (const KProfilePlugin& listItem: KGameInstance::GetActive()->GetCurrentProfile()->GetPlugins())
+	for (const KProfilePlugin& listItem: KGameInstance::GetActive()->GetActiveProfile()->GetPlugins())
 	{
 		if (const KPluginEntry* entry = listItem.GetPlugin())
 		{
@@ -101,7 +101,7 @@ void KPluginManagerBethesdaMW::WriteActiveMW(KxINI& ini) const
 
 wxString KPluginManagerBethesdaMW::GetMorrowindINI() const
 {
-	return KGameInstance::GetCurrentProfile()->GetConfigDir() + wxS('\\') + m_PluginsListFile;
+	return KGameInstance::GetActiveProfile()->GetConfigDir() + wxS('\\') + m_PluginsListFile;
 }
 
 void KPluginManagerBethesdaMW::LoadNativeOrderBG()

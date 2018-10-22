@@ -11,7 +11,7 @@
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
 #include "KEvents.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "GameInstance/Config/KLocationsManagerConfig.h"
 #include "KPluggableManager.h"
 #include "KApp.h"

@@ -107,6 +107,7 @@
     <ClCompile Include="Source\ProgramManager\KProgramManager.cpp" />
     <ClCompile Include="Source\ProgramManager\KProgramManagerModel.cpp" />
     <ClCompile Include="Source\ProgramManager\KProgramWorkspace.cpp" />
+    <ClCompile Include="Source\SaveManager\KSaveFileGeneric.cpp" />
     <ClCompile Include="Source\SaveManager\KSaveManagerView.cpp" />
     <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
     <ClCompile Include="Source\Utility\KINetFSHandler.cpp" />
@@ -238,7 +239,7 @@
     <ClInclude Include="Source\GameInstance\KActiveGameInstance.h" />
     <ClInclude Include="Source\GameInstance\KGameID.h" />
     <ClInclude Include="Source\GameInstance\KGameInstance.h" />
-    <ClInclude Include="Source\GameInstance\KInstnaceManagement.h" />
+    <ClInclude Include="Source\GameInstance\KInstanceManagement.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h" />
     <ClInclude Include="Source\IPC\KIPC.h" />
     <ClInclude Include="Source\IPC\KIPCClient.h" />
@@ -307,6 +308,7 @@
     <ClInclude Include="Source\ProgramManager\KProgramManager.h" />
     <ClInclude Include="Source\ProgramManager\KProgramManagerModel.h" />
     <ClInclude Include="Source\ProgramManager\KProgramWorkspace.h" />
+    <ClInclude Include="Source\SaveManager\KSaveFileGeneric.h" />
     <ClInclude Include="Source\SaveManager\KSaveManagerView.h" />
     <ClInclude Include="Source\Utility\KBitmapSize.h" />
     <ClInclude Include="Source\Utility\KINetFSHandler.h" />

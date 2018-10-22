@@ -82,7 +82,7 @@ KActiveGameInstance::~KActiveGameInstance()
 {
 }
 
-const wxString& KActiveGameInstance::GetCurrentProfileID() const
+const wxString& KActiveGameInstance::GetActiveProfileID() const
 {
 	return m_CurrentProfileID;
 }

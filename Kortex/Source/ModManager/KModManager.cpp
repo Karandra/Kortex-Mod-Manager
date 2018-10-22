@@ -5,7 +5,7 @@
 #include "KModManagerModel.h"
 #include "KModEntry.h"
 #include "KVirtualGameFolderWorkspace.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "GameInstance/Config/KVirtualizationConfig.h"
 #include "VFS/KVFSService.h"
 #include "VFS/KVFSConvergence.h"
@@ -351,7 +351,7 @@ void KModManager::Load()
 }
 void KModManager::Save() const
 {
-	KProfile* profile = KGameInstance::GetCurrentProfile();
+	KProfile* profile = KGameInstance::GetActiveProfile();
 	if (profile)
 	{
 		profile->SyncWithCurrentState();
@@ -361,7 +361,7 @@ void KModManager::Save() const
 
 void KModManager::ResortMods()
 {
-	ResortMods(*KGameInstance::GetCurrentProfile());
+	ResortMods(*KGameInstance::GetActiveProfile());
 }
 void KModManager::ResortMods(const KProfile& profile)
 {

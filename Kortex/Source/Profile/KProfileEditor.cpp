@@ -2,7 +2,7 @@
 #include "KProfileEditor.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KModEntry.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "Profile/KProfile.h"
 #include "KEvents.h"
 #include "KAux.h"
@@ -82,7 +82,7 @@ bool KProfileEditor::SetValueByRow(const wxAny& value, size_t row, const KxDataV
 							return false;
 						}
 
-						bool isCurrent = entry->IsCurrent();
+						bool isCurrent = entry->IsActive();
 						if (KGameInstance::GetActive()->RenameProfile(*entry, name))
 						{
 							if (!isCurrent)
@@ -138,7 +138,7 @@ void KProfileEditor::OnActivate(KxDataViewEvent& event)
 }
 
 KProfileEditor::KProfileEditor()
-	:m_NewCurrentProfile(KGameInstance::GetActive()->GetCurrentProfileID())
+	:m_NewCurrentProfile(KGameInstance::GetActive()->GetActiveProfileID())
 {
 }
 
@@ -226,7 +226,7 @@ void KModListManagerEditorDialog::OnRemoveList(wxCommandEvent& event)
 				const wxString profileID = entry->GetID();
 				if (KGameInstance::GetActive()->RemoveProfile(*entry))
 				{
-					SetNewProfile(KGameInstance::GetActive()->GetCurrentProfileID());
+					SetNewProfile(KGameInstance::GetActive()->GetActiveProfileID());
 					KProfileEvent(KEVT_PROFILE_REMOVED, profileID).Send();
 
 					size_t index = GetRow(item);

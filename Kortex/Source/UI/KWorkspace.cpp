@@ -3,7 +3,7 @@
 #include "KWorkspaceController.h"
 #include "KMainWindow.h"
 #include "KThemeManager.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "KEvents.h"
 #include "KApp.h"
 

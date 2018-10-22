@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KProgramEntry.h"
 #include "KProgramManager.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "ModManager/KModManager.h"
 #include "ModManager/KDispatcher.h"
 #include <KxFramework/KxFile.h>

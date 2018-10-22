@@ -5,7 +5,7 @@
 #include "KModManager.h"
 #include "KModEntry.h"
 #include "KModStatistics.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "Profile/KProfileEditor.h"
 #include "KModTagsSelector.h"
 #include "KModSites.h"
@@ -250,7 +250,7 @@ void KModWorkspace::CreateToolsMenu()
 	item = menu->Add(new KxMenuItem(TOOLS_ID_STATISTICS, T("ModManager.Statistics")));
 	item->SetBitmap(KGetBitmap(KIMG_CHART));
 
-	item = menu->Add(new KxMenuItem(TOOLS_ID_EXPORT_MOD_LIST, T("ModManager.ModList.Export")));
+	item = menu->Add(new KxMenuItem(TOOLS_ID_EXPORT_MOD_LIST, T("Generic.Export")));
 	item->SetBitmap(KGetBitmap(KIMG_DISK));
 }
 
@@ -411,9 +411,9 @@ void KModWorkspace::ProcessSelectProfile(const wxString& newProfileID)
 	if (!newProfileID.IsEmpty())
 	{
 		KGameInstance* instance = KGameInstance::GetActive();
-		KProfile* profile = KGameInstance::GetCurrentProfile();
+		KProfile* profile = KGameInstance::GetActiveProfile();
 
-		if (!KGameInstance::IsCurrentProfileID(newProfileID))
+		if (!KGameInstance::IsActiveProfileID(newProfileID))
 		{
 			profile->SyncWithCurrentState();
 			profile->Save();
@@ -434,7 +434,7 @@ void KModWorkspace::OnSelectProfile(wxCommandEvent& event)
 void KModWorkspace::OnShowProfileEditor(KxAuiToolBarEvent& event)
 {
 	// Save current
-	KProfile* profile = KGameInstance::GetCurrentProfile();
+	KProfile* profile = KGameInstance::GetActiveProfile();
 	profile->SyncWithCurrentState();
 	profile->Save();
 
@@ -1202,7 +1202,7 @@ void KModWorkspace::UpdateModListContent()
 	for (const auto& profile: KGameInstance::GetActive()->GetProfiles())
 	{
 		int index = m_ToolBar_Profiles->Append(profile->GetID());
-		if (profile->GetID() == KGameInstance::GetCurrentProfileID())
+		if (profile->GetID() == KGameInstance::GetActiveProfileID())
 		{
 			selectIndex = index;
 		}

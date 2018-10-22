@@ -2,7 +2,7 @@
 #include "KModEntry.h"
 #include "KModManager.h"
 #include "Network/KNetwork.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "PackageProject/KPackageProject.h"
 #include "KApp.h"
 #include "KAux.h"

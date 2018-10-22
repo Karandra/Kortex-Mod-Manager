@@ -13,7 +13,7 @@
 #include "ProgramManager/KProgramManager.h"
 #include "ModManager/KDispatcher.h"
 #include "Profile/KProfile.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "GameInstance/Config/KPluginManagerConfig.h"
 #include "KApp.h"
 #include "KAux.h"
@@ -169,7 +169,7 @@ void KPluginManagerBethesda::SaveNativeOrderBG() const
 	activeOrder.emplace_back(V(m_ActiveFileHeader));
 
 	// Write order
-	for (const KProfilePlugin& listItem: KGameInstance::GetActive()->GetCurrentProfile()->GetPlugins())
+	for (const KProfilePlugin& listItem: KGameInstance::GetActive()->GetActiveProfile()->GetPlugins())
 	{
 		if (const KPluginEntry* entry = listItem.GetPlugin())
 		{
@@ -263,7 +263,7 @@ void KPluginManagerBethesda::Load()
 {
 	Clear();
 
-	if (KProfile* profile = KGameInstance::GetCurrentProfile())
+	if (KProfile* profile = KGameInstance::GetActiveProfile())
 	{
 		KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
 

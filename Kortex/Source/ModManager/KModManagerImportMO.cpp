@@ -322,7 +322,7 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 
 	// Sort mods. If mod entries was created here, they already sorted,
 	// if they was skipped, sort is needed.
-	KProfile* profile = KGameInstance::GetCurrentProfile();
+	KProfile* profile = KGameInstance::GetActiveProfile();
 
 	KProfileMod::Vector& currentModList = profile->GetMods();
 	currentModList.clear();
@@ -351,7 +351,7 @@ void KModManagerImportMO::ReadPlugins(KOperationWithProgressDialogBase* context)
 
 		KxStringVector activePlugins = KxTextFile::ReadToArray(GetProfileDirectory() + "\\Plugins.txt");
 
-		KProfile* profile = KGameInstance::GetCurrentProfile();
+		KProfile* profile = KGameInstance::GetActiveProfile();
 
 		KProfilePlugin::Vector& currentPluginsList = profile->GetPlugins();
 		currentPluginsList.clear();

@@ -182,7 +182,7 @@ bool KPluginManager::IsPluginActive(const wxString& pluginName) const
 }
 void KPluginManager::SyncWithPluginsList(const KxStringVector& pluginNamesList, SyncListMode mode)
 {
-	KProfile* profile = KGameInstance::GetCurrentProfile();
+	KProfile* profile = KGameInstance::GetActiveProfile();
 	KProfilePlugin::Vector& pluginsList = profile->GetPlugins();
 	pluginsList.clear();
 	for (const wxString& name: pluginNamesList)

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KModTagsManager.h"
 #include "KModEntry.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "PackageManager/KPackageManager.h"
 #include "KApp.h"
 #include "KAux.h"

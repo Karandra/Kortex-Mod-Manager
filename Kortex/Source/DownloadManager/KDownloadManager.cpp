@@ -6,7 +6,7 @@
 #include "Network/KNetworkProviderNexus.h"
 #include "NotificationCenter/KNotificationCenter.h"
 #include "UI/KMainWindow.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "KAux.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxDataView.h>

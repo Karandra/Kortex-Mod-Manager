@@ -55,9 +55,9 @@ class KGameInstance
 		static void AssignActive(KActiveGameInstance& instance);
 		static void DestroyActive();
 
-		static wxString GetCurrentProfileID();
-		static KProfile* GetCurrentProfile();
-		static bool IsCurrentProfileID(const wxString& id);
+		static wxString GetActiveProfileID();
+		static KProfile* GetActiveProfile();
+		static bool IsActiveProfileID(const wxString& id);
 
 	private:
 		KGameID m_GameID;

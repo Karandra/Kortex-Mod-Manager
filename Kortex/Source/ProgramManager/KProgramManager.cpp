@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KProgramManager.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "KEvents.h"
 #include "UI/KMainWindow.h"
 #include "ModManager/KModManager.h"

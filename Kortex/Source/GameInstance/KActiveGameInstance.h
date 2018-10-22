@@ -42,14 +42,14 @@ class KActiveGameInstance: public KConfigurableGameInstance
 		virtual ~KActiveGameInstance();
 
 	public:
-		const wxString& GetCurrentProfileID() const;
+		const wxString& GetActiveProfileID() const;
 		void SetCurrentProfileID(const wxString& id);
 
-		const KProfile* GetCurrentProfile() const
+		const KProfile* GetActiveProfile() const
 		{
 			return GetProfile(m_CurrentProfileID);
 		}
-		KProfile* GetCurrentProfile()
+		KProfile* GetActiveProfile()
 		{
 			return GetProfile(m_CurrentProfileID);
 		}

@@ -72,10 +72,7 @@ class KProgramManagerModel:
 		bool SaveLoadExpandedValues(bool save, bool value = false) const;;
 
 	public:
-		KProgramManagerModel()
-		{
-			SetDataVector(&GetProgramsList());
-		}
+		KProgramManagerModel();
 
 	public:
 		virtual size_t GetItemCount() const override

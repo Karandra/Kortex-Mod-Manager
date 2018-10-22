@@ -510,6 +510,12 @@ bool KProgramManagerModel::SaveLoadExpandedValues(bool save, bool value) const
 	}
 }
 
+KProgramManagerModel::KProgramManagerModel()
+{
+	SetDataViewFlags(KxDV_VERT_RULES);
+	SetDataVector(&GetProgramsList());
+}
+
 void KProgramManagerModel::RefreshItems()
 {
 	for (KProgramEntry& entry: GetProgramsList())

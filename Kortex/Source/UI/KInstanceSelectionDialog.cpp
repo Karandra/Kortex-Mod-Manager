@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KInstanceSelectionDialog.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "UI/KInstanceCreatorDialog.h"
 #include "KThemeManager.h"
 #include "KApp.h"
@@ -238,7 +238,7 @@ void KInstanceSelectionDialog::OnCreateShortcut(wxCommandEvent& event)
 		{
 			KxShellLink link;
 			link.SetTarget(KxLibrary(NULL).GetFileName());
-			link.SetArguments(wxString::Format("-GameID \"%s\" -InstanceID \"%s\"", instanceTemplate->GetGameID(), instance));
+			link.SetArguments(KxFormat("-GameID \"%1\" -InstanceID \"%2\"").arg(instanceTemplate->GetGameID()).arg(instance->GetInstanceID()));
 			link.SetWorkingFolder(KxFile::GetCWD());
 			link.SetIconLocation(KxFile(instanceTemplate->GetIconLocation()).GetFullPath());
 			link.Save(dialog.GetResult());

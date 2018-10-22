@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KProfile.h"
-#include "GameInstance/KInstnaceManagement.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "ModManager/KModManager.h"
 #include "PluginManager/KPluginManager.h"
 #include "KApp.h"
@@ -220,11 +220,11 @@ void KProfile::SyncWithCurrentState()
 	}
 }
 
-bool KProfile::IsCurrent() const
+bool KProfile::IsActive() const
 {
 	if (KGameInstance* instance = KGameInstance::GetActive())
 	{
-		return instance->GetCurrentProfileID() == m_ID;
+		return instance->GetActiveProfileID() == m_ID;
 	}
 	return false;
 }
@@ -232,8 +232,11 @@ bool KProfile::IsCurrent() const
 void KProfile::SetLocalSavesEnabled(bool value)
 {
 	m_LocalSavesEnabled = value;
-	KGameInstance::GetActive()->GetVariables().SetVariable(KVAR_SAVES_DIR, GetSavesDir());
 	Save();
+	if (IsActive())
+	{
+		KGameInstance::GetActive()->GetVariables().SetVariable(KVAR_SAVES_DIR, GetSavesDir());
+	}
 
 	if (value)
 	{
@@ -243,8 +246,11 @@ void KProfile::SetLocalSavesEnabled(bool value)
 void KProfile::SetLocalConfigEnabled(bool value)
 {
 	m_LocalConfigEnabled = value;
-	KGameInstance::GetActive()->GetVariables().SetVariable(KVAR_CONFIG_DIR, GetConfigDir());
 	Save();
+	if (IsActive())
+	{
+		KGameInstance::GetActive()->GetVariables().SetVariable(KVAR_CONFIG_DIR, GetConfigDir());
+	}
 
 	if (value)
 	{

@@ -118,7 +118,7 @@ class KProfile
 		void Save();
 		void SyncWithCurrentState();
 
-		bool IsCurrent() const;
+		bool IsActive() const;
 		wxString GetID() const
 		{
 			return m_ID;

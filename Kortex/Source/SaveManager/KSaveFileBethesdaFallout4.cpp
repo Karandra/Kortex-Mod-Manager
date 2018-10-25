@@ -4,61 +4,65 @@
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
 
+namespace
+{
+	template<class CounterType> void ReadPluginList(KxFileStream& stream, KxStringVector& plugins)
+	{
+		size_t count = stream.ReadObject<CounterType>();
+		for (size_t i = 0; i < count; i++)
+		{
+			plugins.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()));
+		}
+	}
+}
+
 bool KSaveFileBethesdaFallout4::DoInitializeSaveData()
 {
-	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
-	if (file.IsOk())
+	KxFileStream stream(GetFilePath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+	if (stream.IsOk())
 	{
-		if (file.ReadStringASCII(12) == "FO4_SAVEGAME")
+		if (stream.ReadStringASCII(12) == wxS("FO4_SAVEGAME"))
 		{
-			// Skip 'headerSize' and 'version' fields
-			file.Seek(4 + 4);
+			// Skip 'headerSize'
+			stream.Skip<uint32_t>();
 
-			m_BasicInfo.push_back(KLabeledValue(std::to_string(file.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.Name")));
-			m_BasicInfo.push_back(KLabeledValue(std::to_string(file.ReadObject<uint32_t>()), T("SaveManager.Info.Level")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.Location")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.TimeInGame")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.Race")));
+			// Read version
+			m_SaveVersion = stream.ReadObject<uint32_t>();
+
+			// Read basic info
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex"));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Name"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.Level"));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Location"));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.TimeInGame"));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Race"));
 
 			// Player sex
-			auto nSex = file.ReadObject<uint16_t>();
-			m_BasicInfo.push_back(KLabeledValue(nSex == 0 ? T("SaveManager.Info.SexMale") : T("SaveManager.Info.SexFemale"), T("SaveManager.Info.Sex")));
+			uint16_t playerSex = stream.ReadObject<uint16_t>();
+			m_BasicInfo.emplace_back(playerSex == 0 ? T("SaveManager.Info.SexMale") : T("SaveManager.Info.SexFemale"), T("SaveManager.Info.Sex"));
 
 			// Skip 'playerCurExp', 'playerLvlUpExp', 'filetime' fields
-			file.Seek(4 + 4 + 8);
+			stream.Skip<float32_t, float32_t, FILETIME>();
 
 			// Read image
-			int width = file.ReadObject<uint32_t>();
-			int height = file.ReadObject<uint32_t>();
-			m_Bitmap = wxBitmap(ReadImageRGBA(file.ReadData<KxUInt8Vector>(width * height * 4), width, height), 32);
+			uint32_t width = stream.ReadObject<uint32_t>();
+			uint32_t height = stream.ReadObject<uint32_t>();
+			m_Bitmap = ReadBitmapRGBA(stream.ReadVector<uint8_t>(width * height * 4), width, height);
 
 			// Skip 'formVersion' field
-			file.Seek(1);
+			stream.Skip<uint8_t>();
 
 			// Read game version
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.GameVersion")));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.GameVersion"));
 
 			// Skip 'pluginInfoSize' field
-			file.Seek(4);
+			stream.Skip<uint32_t>();
 
 			// Read plugins list (ESM + ESP)
-			{
-				size_t count = file.ReadObject<uint8_t>();
-				for (size_t i = 0; i < count; i++)
-				{
-					m_PluginsList.push_back(file.ReadStringUTF8(file.ReadObject<uint16_t>()));
-				}
-			}
+			ReadPluginList<uint8_t>(stream, m_PluginsList);
 
 			// ESL
-			{
-				size_t count = file.ReadObject<uint16_t>();
-				for (size_t i = 0; i < count; i++)
-				{
-					m_PluginsList.push_back(file.ReadStringUTF8(file.ReadObject<uint16_t>()));
-				}
-			}
+			ReadPluginList<uint16_t>(stream, m_PluginsList);
 			return true;
 		}
 	}

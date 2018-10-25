@@ -6,35 +6,41 @@
 
 bool KSaveFileBethesdaFalloutNV::DoInitializeSaveData()
 {
-	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
-	if (file.IsOk())
+	KxFileStream stream(GetFilePath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+	if (stream.IsOk())
 	{
-		if (file.ReadStringASCII(11) == "FO3SAVEGAME")
+		if (stream.ReadStringASCII(11) == wxS("FO3SAVEGAME"))
 		{
-			// Skip 'headerSize' field, unknown field and separator
-			file.Seek(4 + 5);
+			// Skip 'headerSize' field
+			stream.Skip<uint32_t>();
 
-			// Read game language (seems to to fixed length)
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringCurrentLocale(64), T("SaveManager.Info.Language")));
-
-			// Seek to screenshort dimensions data
-			file.Seek(85, KxFS_SEEK_BEGIN);
-			int width = file.ReadObject<uint32_t>();
+			// Unknown, possibly file version number, always 0x30
+			m_SaveVersion = stream.ReadObject<uint32_t>();
 
 			// Skip separator
-			file.Seek(1);
-			int height = file.ReadObject<uint32_t>();
+			stream.Skip<uint8_t>();
+
+			// Read game language (seems to have fixed length)
+			m_BasicInfo.emplace_back(stream.ReadStringACP(64), T("SaveManager.Info.Language"));
+
+			// Seek to screenshort dimensions data
+			stream.SeekFromStart(85);
+			uint32_t width = stream.ReadObject<uint32_t>();
+			stream.Skip<uint8_t>();
+			uint32_t height = stream.ReadObject<uint32_t>();
 
 			// Skip another separator
-			file.Seek(1);
-			m_BasicInfo.push_back(KLabeledValue(std::to_string(file.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex")));
+			stream.Skip<uint8_t>();
 
-			auto ReadWZString = [this, &file](const wxString& fieldName)
+			// Read save index
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex"));
+
+			auto ReadWZString = [this, &stream](const wxString& fieldName)
 			{
-				file.Seek(1);
-				auto length = file.ReadObject<uint16_t>();
-				file.Seek(1);
-				m_BasicInfo.push_back(KLabeledValue(file.ReadStringCurrentLocale(length), T(fieldName)));
+				stream.Skip<uint8_t>();
+				uint16_t length = stream.ReadObject<uint16_t>();
+				stream.Skip<uint8_t>();
+				m_BasicInfo.emplace_back(stream.ReadStringACP(length), T(fieldName));
 			};
 
 			// Read name
@@ -42,8 +48,8 @@ bool KSaveFileBethesdaFalloutNV::DoInitializeSaveData()
 			ReadWZString("SaveManager.Info.Karma");
 			
 			// Read level
-			file.Seek(1);
-			m_BasicInfo.push_back(KLabeledValue(std::to_string(file.ReadObject<uint32_t>()), T("SaveManager.Info.Level")));
+			stream.Skip<uint8_t>();
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.Level"));
 
 			// Read location
 			ReadWZString("SaveManager.Info.Location");
@@ -52,24 +58,22 @@ bool KSaveFileBethesdaFalloutNV::DoInitializeSaveData()
 			ReadWZString("SaveManager.Info.TimeInGame");
 
 			// Skip separator
-			file.Seek(1);
+			stream.Skip<uint8_t>();
 
 			// Read image
-			auto data = file.ReadData<std::vector<unsigned char>>(width * height * 3);
-			m_Bitmap = wxBitmap(wxImage(width, height, data.data(), true), 32);
+			m_Bitmap = ReadBitmapRGB(stream.ReadVector<uint8_t>(width * height * 3), width, height);
 
 			// Skip 'formVersion' and 'pluginInfoSize' fields
-			file.Seek(1 + 4);
+			stream.Skip<uint8_t, uint32_t>();
 
 			// Read plugins list
-			size_t count = file.ReadObject<uint8_t>();
-
+			size_t count = stream.ReadObject<uint8_t>();
 			for (size_t i = 0; i < count; i++)
 			{
-				file.Seek(1);
-				auto length = file.ReadObject<uint16_t>();
-				file.Seek(1);
-				m_PluginsList.push_back(file.ReadStringCurrentLocale(length));
+				stream.Skip<uint8_t>();
+				uint16_t length = stream.ReadObject<uint16_t>();
+				stream.Skip<uint8_t>();
+				m_PluginsList.push_back(stream.ReadStringACP(length));
 			}
 			return true;
 		}

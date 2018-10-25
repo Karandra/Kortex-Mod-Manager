@@ -6,32 +6,39 @@
 
 bool KSaveFileBethesdaOblivion::DoInitializeSaveData()
 {
-	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
-	if (file.IsOk())
+	KxFileStream stream(GetFilePath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+	if (stream.IsOk())
 	{
-		if (file.ReadStringASCII(12) == "TES4SAVEGAME")
+		if (stream.ReadStringASCII(12) == wxS("TES4SAVEGAME"))
 		{
-			file.Seek(2 + 16 + 4 + 4);
+			// Skip 'majorVersion', 'minorVersion' and exeTime.
+			stream.Skip<uint8_t, uint8_t, SYSTEMTIME>();
 
-			m_BasicInfo.push_back(KLabeledValue(std::to_string(file.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringCurrentLocale(file.ReadObject<uint8_t>()), T("SaveManager.Info.Name")));
-			m_BasicInfo.push_back(KLabeledValue(std::to_string(file.ReadObject<uint16_t>()), T("SaveManager.Info.Level")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringCurrentLocale(file.ReadObject<uint8_t>()), T("SaveManager.Info.Location")));
-			m_BasicInfo.push_back(KLabeledValue(wxString::FromCDouble(file.ReadObject<float>(), 2), T("SaveManager.Info.TimeInGame")));
+			// Read 'headerVersion' field
+			m_SaveVersion = stream.ReadObject<uint32_t>();
 
-			file.Seek(4 + 16 + 4);
+			// Skip 'saveHeaderSize' field
+			stream.Skip<uint32_t>();
+
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), T("SaveManager.Info.Name"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Level"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), T("SaveManager.Info.Location"));
+			m_BasicInfo.emplace_back(wxString::FromCDouble(stream.ReadObject<float32_t>(), 2), T("SaveManager.Info.TimeInGame"));
+
+			// Skip 'gameTicks', 'gameTime' and screenshot struct size
+			stream.Skip<uint32_t, SYSTEMTIME, uint32_t>();
 
 			// Read image
-			int width = file.ReadObject<uint32_t>();
-			int height = file.ReadObject<uint32_t>();
-			auto data = file.ReadData<std::vector<unsigned char>>(width * height * 3);
-			m_Bitmap = wxBitmap(wxImage(width, height, data.data(), true), 32);
+			uint32_t width = stream.ReadObject<uint32_t>();
+			uint32_t height = stream.ReadObject<uint32_t>();
+			m_Bitmap = ReadBitmapRGB(stream.ReadVector<uint8_t>(width * height * 3), width, height);
 
 			// Read plugins list
-			size_t count = file.ReadObject<uint8_t>();
+			size_t count = stream.ReadObject<uint8_t>();
 			for (size_t i = 0; i < count; i++)
 			{
-				m_PluginsList.push_back(file.ReadStringCurrentLocale(file.ReadObject<uint8_t>()));
+				m_PluginsList.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()));
 			}
 			return true;
 		}

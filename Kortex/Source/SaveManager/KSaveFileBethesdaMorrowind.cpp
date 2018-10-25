@@ -8,54 +8,53 @@
 
 bool KSaveFileBethesdaMorrowind::DoInitializeSaveData()
 {
-	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
-	if (file.IsOk())
+	KxFileStream stream(GetFilePath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+	if (stream.IsOk())
 	{
-		if (file.ReadStringASCII(4) == "TES3")
+		if (stream.ReadStringASCII(4) == wxS("TES3"))
 		{
 			// Seek to beginning of HEDR data
-			file.Seek(16);
+			stream.Skip(16);
 
-			uint32_t nHeaderSize = file.ReadObject<uint32_t>();
+			uint32_t headerSize = stream.ReadObject<uint32_t>();
 			
 			// Seek to save file name (fixed length)
-			file.Seek(64, KxFS_SEEK_BEGIN);
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringCurrentLocale(256), T("SaveManager.Info.SaveName")));
+			stream.SeekFromStart(64);
+			m_BasicInfo.emplace_back(stream.ReadStringACP(256), T("SaveManager.Info.SaveName"));
 
-			// Seek unknown  bytes
-			file.Seek(4);
+			// Seek unknown bytes
+			stream.Skip<uint32_t>();
 
 			// Read plugins list
-			wxString nextRecordName = file.ReadStringASCII(4);
-			while (nextRecordName == "MAST")
+			wxString nextRecordName = stream.ReadStringASCII(4);
+			while (nextRecordName == wxS("MAST"))
 			{
-				m_PluginsList.push_back(file.ReadStringCurrentLocale(file.ReadObject<uint32_t>()));
+				m_PluginsList.push_back(stream.ReadStringACP(stream.ReadObject<uint32_t>()));
 
 				// Skip entire 'DATA' record
-				file.Seek(16);
-				nextRecordName = file.ReadStringASCII(4);
+				stream.Skip(16);
+				nextRecordName = stream.ReadStringASCII(4);
 			}
 
 			// Skip unknown 28 bytes of GMDT record
-			file.Seek(28);
+			stream.Skip(28);
 
 			// 64 bytes of location name
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringCurrentLocale(64), T("SaveManager.Info.Location")));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(64), T("SaveManager.Info.Location"));
 
 			// Unknown float
-			file.Seek(4);
+			stream.Skip<float>();
 
 			// 32 bytes of character name
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringCurrentLocale(32), T("SaveManager.Info.Name")));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(32), T("SaveManager.Info.Name"));
 
 			// Skip entire SCRD record and SCRS record name
-			file.Seek(28 + 4);
+			stream.Skip(28 + 4);
 
 			// Read image
 			const int width = 128;
 			const int height = 128;
-			m_Bitmap = wxBitmap(ReadImageRGBA(file.ReadData<KxUInt8Vector>(width * height * 4), width, height, 255), 32);
-
+			m_Bitmap = ReadBitmapRGBA(stream.ReadVector<uint8_t>(width * height * 4), width, height, wxALPHA_OPAQUE);
 			return true;
 		}
 	}

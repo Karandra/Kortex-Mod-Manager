@@ -15,6 +15,15 @@ class KSaveFile
 		static wxImage ReadImageRGB(const KxUInt8Vector& rgbData, int width, int height, int alphaOverride = -1, bool isStaticData = false);
 		static wxImage ReadImageRGBA(const KxUInt8Vector& rgbaData, int width, int height, int alphaOverride = -1);
 
+		static wxBitmap ReadBitmapRGB(const KxUInt8Vector& rgbData, int width, int height, int alphaOverride = -1)
+		{
+			return wxBitmap(ReadImageRGB(rgbData, width, height, alphaOverride, true), 32);
+		}
+		static wxBitmap ReadBitmapRGBA(const KxUInt8Vector& rgbaData, int width, int height, int alphaOverride = -1)
+		{
+			return wxBitmap(ReadImageRGBA(rgbaData, width, height, alphaOverride), 32);
+		}
+
 	private:
 		KxFileItem m_FileInfo;
 		wxBitmap m_Thumb;

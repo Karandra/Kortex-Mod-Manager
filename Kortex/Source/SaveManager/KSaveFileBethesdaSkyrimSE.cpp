@@ -4,47 +4,87 @@
 #include "KSaveFile.h"
 #include "KApp.h"
 #include <KxFramework/KxFileStream.h>
+#include <KxFramework/KxLZ4Stream.h>
+#include <KxFramework/KxMemoryStream.h>
+
+namespace
+{
+	template<class CounterType, class StreamType> void ReadPluginList(StreamType& stream, KxStringVector& plugins)
+	{
+		size_t pluginCount = stream.ReadObject<CounterType>();
+		for (size_t i = 0; i < pluginCount; i++)
+		{
+			uint16_t length = stream.ReadObject<uint16_t>();
+			plugins.emplace_back(stream.ReadStringUTF8(length));
+		}
+	}
+}
 
 bool KSaveFileBethesdaSkyrimSE::DoInitializeSaveData()
 {
-	KxFileStream file(GetFilePath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
-	if (file.IsOk())
+	KxFileStream stream(GetFilePath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+	if (stream.IsOk())
 	{
-		if (file.ReadStringASCII(13) == "TESV_SAVEGAME")
+		if (stream.ReadStringASCII(13) == wxS("TESV_SAVEGAME"))
 		{
-			// Skip 'headerSize' and 'version' fields
-			file.Seek(4 + 4);
+			// Skip 'headerSize'
+			stream.Skip<uint32_t>();
 
-			m_BasicInfo.push_back(KLabeledValue(std::to_string(file.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.Name")));
-			m_BasicInfo.push_back(KLabeledValue(std::to_string(file.ReadObject<uint32_t>()), T("SaveManager.Info.Level")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.Location")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.TimeInGame")));
-			m_BasicInfo.push_back(KLabeledValue(file.ReadStringUTF8(file.ReadObject<uint16_t>()), T("SaveManager.Info.Race")));
+			// Read version
+			m_SaveVersion = stream.ReadObject<uint32_t>();
+
+			// Read basic info
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex"));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Name"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.Level"));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Location"));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.TimeInGame"));
+			m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Race"));
 
 			// Player sex
-			auto nSex = file.ReadObject<uint16_t>();
-			m_BasicInfo.push_back(KLabeledValue(nSex == 0 ? T("SaveManager.Info.SexMale") : T("SaveManager.Info.SexFemale"), T("SaveManager.Info.Sex")));
+			uint16_t playerSex = stream.ReadObject<uint16_t>();
+			m_BasicInfo.emplace_back(playerSex == 0 ? T("SaveManager.Info.SexMale") : T("SaveManager.Info.SexFemale"), T("SaveManager.Info.Sex"));
 
-			// Skip 'playerCurExp', 'playerLvlUpExp', 'filetime' fields
-			file.Seek(4 + 4 + 8);
+			// Skip 'playerCurExp', 'playerLvlUpExp' and 'filetime' fields
+			stream.Skip<float32_t, float32_t, FILETIME>();
 
 			// Read image
-			int width = file.ReadObject<uint32_t>();
-			int height = file.ReadObject<uint32_t>();
+			uint32_t width = stream.ReadObject<uint32_t>();
+			uint32_t height = stream.ReadObject<uint32_t>();
 
 			// Skip unknown 2 bytes
-			file.Seek(2);
-			m_Bitmap = wxBitmap(ReadImageRGBA(file.ReadData<KxUInt8Vector>(width * height * 4), width, height), 32);
+			stream.Skip<uint16_t>();
+			m_Bitmap = ReadBitmapRGBA(stream.ReadVector<uint8_t>(width * height * 4), width, height);
 
-			// Skip 'formVersion' field, unknown 10 bytes and 'pluginInfoSize' field
-			file.Seek(1 + 10 + 4);
-
-			// Read plugins list
-			size_t count = file.ReadObject<uint8_t>();
-			for (size_t i = 0; i < count; i++)
+			if (m_SaveVersion >= 12)
 			{
-				m_PluginsList.push_back(file.ReadStringUTF8(file.ReadObject<uint16_t>()));
+				uint32_t uncompressedSize = stream.ReadObject<uint32_t>();
+				uint32_t compressedSize = stream.ReadObject<uint32_t>();
+
+				// Read and decompress.
+				// Not very efficient, but LZ4 docs is too much awful to write decompressing stream.
+				KxUInt8Vector compressedData = stream.ReadVector<uint8_t>(compressedSize);
+				KxUInt8Vector uncompressedData(uncompressedSize, 0);
+				KxLZ4::Decompress(compressedData.data(), compressedData.size(), uncompressedData.data(), uncompressedData.size());
+
+				KxIOStreamWrapper<KxMemoryInputStream> memoryStream(uncompressedData.data(), uncompressedData.size());
+				
+				// Skip unknown 5 bytes
+				memoryStream.Skip(5);
+
+				// ESM + ESP
+				ReadPluginList<uint8_t>(memoryStream, m_PluginsList);
+
+				// ESL
+				ReadPluginList<uint16_t>(memoryStream, m_PluginsList);
+			}
+			else
+			{
+				// Skip 'formVersion' field, unknown 10 bytes and 'pluginInfoSize' field
+				stream.Skip(1 + 10 + 4);
+
+				// Read plugins list
+				ReadPluginList<uint8_t>(stream, m_PluginsList);
 			}
 			return true;
 		}

@@ -1043,6 +1043,9 @@
 		<String ID="PluginManager.Name">Управление плагинами</String>
 		<String ID="PluginManager.NameShort">Плагины</String>
 		
+		<String ID="PluginManager.PluginCounter.Total">Всего</String>
+		<String ID="PluginManager.PluginCounter.Active">Активные</String>
+		
 		<String ID="PluginManager.PluginType.Normal">Обычный</String>
 		<String ID="PluginManager.PluginType.Master">Мастер</String>
 		<String ID="PluginManager.PluginType.Light">Лёгкий</String>

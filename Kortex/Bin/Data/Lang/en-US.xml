@@ -1043,6 +1043,9 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="PluginManager.Name">Plugin manager</String>
 		<String ID="PluginManager.NameShort">Plugins</String>
 
+		<String ID="PluginManager.PluginCounter.Total">Total</String>
+		<String ID="PluginManager.PluginCounter.Active">Active</String>
+
 		<String ID="PluginManager.PluginType.Normal">Normal</String>
 		<String ID="PluginManager.PluginType.Master">Master</String>
 		<String ID="PluginManager.PluginType.Light">Light</String>

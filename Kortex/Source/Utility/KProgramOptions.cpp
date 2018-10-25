@@ -37,14 +37,15 @@ void KProgramOptionSerializer::DoSaveLoadDataViewLayout(KxDataViewCtrl* viewCtrl
 		indexes.resize(viewCtrl->GetColumnCount());
 	}
 
+	const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
 	for (size_t i = 0; i < viewCtrl->GetColumnCount(); i++)
 	{
 		KxDataViewColumn* column = viewCtrl->GetColumn(i);
-		int columnID = column->GetID();
+		const int columnID = column->GetID();
 
-		wxString widthName = wxString::Format("Column[%d].Width", columnID);
-		wxString visibleName = wxString::Format("Column[%d].Visible", columnID);
-		wxString displayIndexName = wxString::Format("Column[%d].DisplayIndex", columnID);
+		const wxString widthName = wxString::Format("Column[%d].Width", columnID);
+		const wxString visibleName = wxString::Format("Column[%d].Visible", columnID);
+		const wxString displayIndexName = wxString::Format("Column[%d].DisplayIndex", columnID);
 
 		if (save)
 		{
@@ -59,7 +60,8 @@ void KProgramOptionSerializer::DoSaveLoadDataViewLayout(KxDataViewCtrl* viewCtrl
 		{
 			if (column->IsResizeable())
 			{
-				column->SetWidth(option.GetAttributeInt(widthName, std::max(wxDVC_DEFAULT_WIDTH, column->GetMinWidth())));
+				int width = option.GetAttributeInt(widthName, KxDVC_DEFAULT_WIDTH);
+				column->SetWidth(std::clamp(width, column->GetMinWidth(), screenWidth));
 			}
 			column->SetHidden(!option.GetAttributeBool(visibleName, true));
 			indexes[i] = option.GetAttributeInt(displayIndexName, columnID);

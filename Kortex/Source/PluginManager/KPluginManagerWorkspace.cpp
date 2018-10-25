@@ -14,6 +14,7 @@
 #include "ModManager/KModEntry.h"
 #include "ModManager/KModWorkspace.h"
 #include "KThemeManager.h"
+#include "KEvents.h"
 #include "KApp.h"
 #include "KAux.h"
 #include "KOperationWithProgress.h"
@@ -33,13 +34,14 @@ enum PluginType: uint32_t
 	Master = 1 << 0,
 	Light = 1 << 1,
 
-	AllTypes = ~PluginType()
+	Total = ~PluginType() - 1,
+	Active = ~PluginType()
 };
 namespace MenuCounterNS
 {
 	bool CheckType(const KPluginEntryBethesda& pluginEntry, uint32_t type)
 	{
-		if (type == PluginType::AllTypes)
+		if (type == PluginType::Active)
 		{
 			return true;
 		}
@@ -129,7 +131,7 @@ bool KPluginManagerWorkspace::OnOpenWorkspace()
 {
 	if (IsFirstTimeOpen())
 	{
-		KPluginManager::GetInstance()->LoadIfNeeded();
+		KPluginManager::GetInstance()->Load();
 		m_ModelView->RefreshItems();
 	}
 	return true;
@@ -172,34 +174,48 @@ void KPluginManagerWorkspace::UpdatePluginTypeCounter(KxMenuItem* item)
 	MenuCounterNS::CounterData* clientData = static_cast<MenuCounterNS::CounterData*>(item->GetClientObject());
 	if (clientData)
 	{
-		int count = 0;
-		for (const auto& entry: KPluginManager::GetInstance()->GetEntries())
+		size_t count = 0;
+		if (clientData->GetType() == PluginType::Total)
 		{
-			if (entry->IsEnabled())
+			count = KPluginManager::GetInstance()->GetEntries().size();
+		}
+		else
+		{
+			for (const auto& entry: KPluginManager::GetInstance()->GetEntries())
 			{
-				bool typeOK = false;
-				const KPluginEntryBethesda* bethesdaPlugin = NULL;
-				if (entry->As(bethesdaPlugin))
+				if (entry->IsEnabled())
 				{
-					typeOK = MenuCounterNS::CheckType(*bethesdaPlugin, clientData->GetType());
-				}
+					bool typeOK = false;
+					const KPluginEntryBethesda* bethesdaPlugin = NULL;
+					if (entry->As(bethesdaPlugin))
+					{
+						typeOK = MenuCounterNS::CheckType(*bethesdaPlugin, clientData->GetType());
+					}
 
-				if (typeOK || clientData->GetType() == PluginType::AllTypes)
-				{
-					count++;
+					if (typeOK || clientData->GetType() == PluginType::Active)
+					{
+						count++;
+					}
 				}
 			}
 		}
 
-		if (clientData->GetType() == PluginType::AllTypes && pluginsConfig->HasPluginLimit())
+		if (clientData->GetType() == PluginType::Total)
 		{
-			item->SetItemLabel(wxString::Format("%s: %d/%d", T("Generic.All"), count, pluginsConfig->GetPluginLimit()));
-			item->SetBitmap(KGetBitmap(count >= pluginsConfig->GetPluginLimit() ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
+			item->SetItemLabel(KxString::Format("%1: %2", T("PluginManager.PluginCounter.Total"), count));
+		}
+		else if (clientData->GetType() == PluginType::Active)
+		{
+			if (pluginsConfig->HasPluginLimit())
+			{
+				item->SetItemLabel(KxString::Format("%1: %2/%3", T("PluginManager.PluginCounter.Active"), count, pluginsConfig->GetPluginLimit()));
+				item->SetBitmap(KGetBitmap(count >= pluginsConfig->GetPluginLimit() ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
+			}
 		}
 		else
 		{
 			wxString label;
-			if (clientData->GetType() == PluginType::AllTypes)
+			if (clientData->GetType() == PluginType::Active)
 			{
 				label = T("Generic.All");
 			}
@@ -207,10 +223,28 @@ void KPluginManagerWorkspace::UpdatePluginTypeCounter(KxMenuItem* item)
 			{
 				label = bethesda->GetPluginTypeName(clientData->GetType() & PluginType::Master, clientData->GetType() & PluginType::Light);
 			}
-
-			item->SetItemLabel(wxString::Format("%s: %d", label, count));
+			item->SetItemLabel(KxString::Format("%1: %2", label, count));
 		}
 	}
+}
+void KPluginManagerWorkspace::OnRunLootAPI(KxMenuEvent& event)
+{
+	auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
+	operation->OnRun([operation](KOperationWithProgressBase* self)
+	{
+		KxStringVector sortedList;
+		if (KLootAPI::GetInstance()->SortPlugins(sortedList, operation))
+		{
+			KPluginManager::GetInstance()->SyncWithPluginsList(sortedList, KPluginManager::SyncListMode::DoNotChange);
+			KPluginManager::GetInstance()->Save();
+		}
+	});
+	operation->OnEnd([this](KOperationWithProgressBase* self)
+	{
+		KPluginEvent(KEVT_PLUGINS_REORDERED).Send();
+	});
+	operation->SetDialogCaption(event.GetItem()->GetItemLabelText());
+	operation->Run();
 }
 
 void KPluginManagerWorkspace::OnCreateViewContextMenu(KxMenu& menu, const KPluginEntry* entry)
@@ -231,7 +265,8 @@ void KPluginManagerWorkspace::OnCreateViewContextMenu(KxMenu& menu, const KPlugi
 		event.Skip();
 	});
 
-	AddCounter(PluginType::AllTypes);
+	AddCounter(PluginType::Total);
+	AddCounter(PluginType::Active);
 
 	if (dynamic_cast<KPluginManagerBethesda*>(KPluginManager::GetInstance()))
 	{
@@ -261,25 +296,7 @@ void KPluginManagerWorkspace::OnCreateSortingToolsMenu(KxMenu& menu, const KPlug
 		// LootAPI
 		{
 			KxMenuItem* item = sortingMenu->Add(new KxMenuItem("LOOT API"));
-			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
-			{
-				auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
-				operation->OnRun([operation](KOperationWithProgressBase* self)
-				{
-					KxStringVector sortedList;
-					if (KLootAPI::GetInstance()->SortPlugins(sortedList, operation))
-					{
-						KPluginManager::GetInstance()->SyncWithPluginsList(sortedList, KPluginManager::SyncListMode::DoNotChange);
-						KPluginManager::GetInstance()->Save();
-					}
-				});
-				operation->OnEnd([this](KOperationWithProgressBase* self)
-				{
-					ReloadWorkspace();
-				});
-				operation->SetDialogCaption(event.GetItem()->GetItemLabelText());
-				operation->Run();
-			});
+			item->Bind(KxEVT_MENU_SELECT, &KPluginManagerWorkspace::OnRunLootAPI, this);
 		}
 
 		// Sorting tools

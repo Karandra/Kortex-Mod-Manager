@@ -70,6 +70,7 @@ class KPluginManagerWorkspace: public KWorkspace, public KxSingletonPtr<KPluginM
 
 	private:
 		void UpdatePluginTypeCounter(KxMenuItem* item);
+		void OnRunLootAPI(KxMenuEvent& event);
 
 	public:
 		KPluginViewBaseModel* GetModel() const

@@ -31,7 +31,7 @@ wxFSFile* KINetFSHandler::DoOpenFile(const wxString& location) const
 		wxString fullPath = ConstructFullPath(location);
 		KLogMessage("[KINetFSHandler] Using cached copy: \"%s\"", fullPath);
 
-		KxFileStream* stream = new KxFileStream(fullPath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_ALL);
+		KxFileStream* stream = new KxFileStream(fullPath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Everything);
 		return new wxFSFile(stream, fullPath, wxEmptyString, GetAnchor(location), wxFileName(fullPath).GetModificationTime());
 	}
 	else if (KxINet::IsInternetAvailable())
@@ -39,15 +39,14 @@ wxFSFile* KINetFSHandler::DoOpenFile(const wxString& location) const
 		KLogMessage("[KINetFSHandler] No cached copy, downloading");
 
 		wxString fullPath = ConstructFullPath(location);
-		KxFileStream* stream = new KxFileStream(fullPath, KxFS_ACCESS_RW, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_ALL);
+		KxFileStream* stream = new KxFileStream(fullPath, KxFileStream::Access::RW, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Everything);
 
 		KxCURLSession session(location);		
 		KxCURLStreamReply reply(*stream);
 		session.Download(reply);
 		if (reply.IsOK() && reply.GetResponseCode() == 200)
 		{
-			// Rewind stream
-			stream->Seek(0, KxFS_SEEK_BEGIN);
+			stream->Rewind();
 
 			KLogMessage("[KINetFSHandler] Resource downloaded to: \"%s\"", fullPath);
 			return new wxFSFile(stream, fullPath, wxEmptyString, GetAnchor(location), wxFileName(fullPath).GetModificationTime());

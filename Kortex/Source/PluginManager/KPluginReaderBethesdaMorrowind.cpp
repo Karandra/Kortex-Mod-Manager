@@ -5,7 +5,7 @@
 
 void KPluginReaderBethesdaMorrowind::DoReadData(const KPluginEntry& pluginEntry)
 {
-	KxFileStream stream(pluginEntry.GetFullPath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream stream(pluginEntry.GetFullPath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 	if (stream.IsOk())
 	{
 		if (stream.ReadStringASCII(4) == "TES3")
@@ -14,8 +14,8 @@ void KPluginReaderBethesdaMorrowind::DoReadData(const KPluginEntry& pluginEntry)
 			stream.Seek(16 + 12);
 
 			// These are fixed length
-			m_Author = stream.ReadStringCurrentLocale(32);
-			m_Description = stream.ReadStringCurrentLocale(256);
+			m_Author = stream.ReadStringACP(32);
+			m_Description = stream.ReadStringACP(256);
 
 			// Skip unknown 32-bit value
 			stream.Seek(4);
@@ -24,7 +24,7 @@ void KPluginReaderBethesdaMorrowind::DoReadData(const KPluginEntry& pluginEntry)
 			wxString recordName = stream.ReadStringASCII(4);
 			while (recordName == "MAST")
 			{
-				m_RequiredPlugins.emplace_back(stream.ReadStringCurrentLocale(stream.ReadObject<uint32_t>()));
+				m_RequiredPlugins.emplace_back(stream.ReadStringACP(stream.ReadObject<uint32_t>()));
 
 				// Skip DATA 
 				stream.Seek(16);

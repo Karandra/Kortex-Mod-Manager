@@ -228,7 +228,7 @@ void KModPackage::Init(const wxString& archivePath)
 	m_PackageFilePath = archivePath;
 
 	m_Stream.Close();
-	m_Stream.Open(m_PackageFilePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	m_Stream.Open(m_PackageFilePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 }
 
 KModPackage::KModPackage()

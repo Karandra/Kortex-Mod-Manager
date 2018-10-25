@@ -133,7 +133,7 @@ wxString KProfile::GetOverwritesDir() const
 
 void KProfile::Load()
 {
-	KxFileStream stream(GetOrderFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream stream(GetOrderFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 	KxXMLDocument xml(stream);
 	if (xml.IsOK())
 	{
@@ -197,7 +197,7 @@ void KProfile::Save()
 		}
 	}
 
-	KxFileStream stream(GetOrderFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
+	KxFileStream stream(GetOrderFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 	xml.Save(stream);
 }
 void KProfile::SyncWithCurrentState()

@@ -567,15 +567,15 @@ void KInstallWizardDialog::OnSelectDocument(int index, bool useAdvancedEditor)
 		m_Info_DocumentsSplitter->SplitVertically(m_Info_DocumentsList, m_Info_DocumentAdvanced, m_Info_DocumentsSplitter->GetSashPosition());
 	};
 
-	const KLabeledValueArray& tDocuments = m_Package->GetConfig().GetInfo().GetDocuments();
-	if (index != -1 && (size_t)index < tDocuments.size())
+	const KLabeledValueArray& documents = m_Package->GetConfig().GetInfo().GetDocuments();
+	if (index != -1 && (size_t)index < documents.size())
 	{
 		try
 		{
-			const KLabeledValue& entry = tDocuments[index];
+			const KLabeledValue& entry = documents[index];
 			if (useAdvancedEditor || KAux::IsFileExtensionMatches(entry.GetValue(), {"pdf", "xml", "htm", "html", "doc", "docx"}))
 			{
-				KxFileStream file(CreateTempFile(entry.GetValue().AfterLast('\\')), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_ALL);
+				KxFileStream file(CreateTempFile(entry.GetValue().AfterLast('\\')), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Everything);
 				const KArchive::Buffer& fileBuffer = m_Package->GetDocumentBuffer(entry);
 				file.Write(fileBuffer.data(), fileBuffer.size());
 

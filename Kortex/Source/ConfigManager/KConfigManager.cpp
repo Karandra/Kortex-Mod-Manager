@@ -375,7 +375,7 @@ void KConfigManager::LoadFileRecords(KxXMLDocument& xml, bool bAllowENB)
 
 void KConfigManager::LoadVirtualKeys()
 {
-	KxFileStream xmlStream(GetConfigFile("VirtualKeys"), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	KxFileStream xmlStream(GetConfigFile("VirtualKeys"), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 	KxXMLDocument xml(xmlStream);
 
 	KxXMLNode node = xml.QueryElement("VirtualKeys");
@@ -415,7 +415,7 @@ KConfigManager::KConfigManager(KWorkspace* workspace, const wxString& templateID
 {
 	LoadVirtualKeys();
 
-	KxFileStream xmlStream(m_FilePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	KxFileStream xmlStream(m_FilePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 	m_XML.Load(xmlStream);
 
 	LoadMainFile(m_XML);
@@ -444,7 +444,7 @@ wxString KConfigManager::GetVersion() const
 
 void KConfigManager::AddFile(const wxString& fileName, bool bAllowENB)
 {
-	KxFileStream xmlStream(fileName, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	KxFileStream xmlStream(fileName, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 	m_AdditionalXML.push_back(std::make_pair(fileName, new KxXMLDocument(xmlStream)));
 
 	LoadAdditionalFile(*(m_AdditionalXML.back().second), bAllowENB);

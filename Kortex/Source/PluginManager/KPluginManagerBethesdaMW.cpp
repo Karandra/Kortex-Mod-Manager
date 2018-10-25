@@ -108,7 +108,7 @@ void KPluginManagerBethesdaMW::LoadNativeOrderBG()
 {
 	Clear();
 
-	KxFileStream stream(GetMorrowindINI(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream stream(GetMorrowindINI(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 	KxINI ini(stream);
 	if (ini.IsOK())
 	{
@@ -126,14 +126,14 @@ void KPluginManagerBethesdaMW::LoadNativeActiveBG()
 }
 void KPluginManagerBethesdaMW::SaveNativeOrderBG() const
 {
-	KxFileStream stream(GetMorrowindINI(), KxFS_ACCESS_RW, KxFS_DISP_OPEN_ALWAYS, KxFS_SHARE_READ);
+	KxFileStream stream(GetMorrowindINI(), KxFileStream::Access::RW, KxFileStream::Disposition::OpenAlways, KxFileStream::Share::Read);
 	KxINI ini(stream);
 
 	WriteActiveMW(ini);
 	WriteOrderMW(ini);
 
-	stream.Seek(0, KxFS_SEEK_BEGIN);
-	stream.SetEnd();
+	stream.Rewind();
+	stream.SetAllocationSize();
 	ini.Save(stream);
 
 	if (KGameConfigWorkspace* workspace = KGameConfigWorkspace::GetInstance())

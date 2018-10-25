@@ -129,7 +129,7 @@ void KSettingsWindowManager::InitControllerData()
 {
 	// Load config entries for controller
 	m_FilePath = GetConfigFile("Settings");
-	KxFileStream xmlStream(m_FilePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	KxFileStream xmlStream(m_FilePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 	m_XML.Load(xmlStream);
 
 	LoadMainFile(m_XML);

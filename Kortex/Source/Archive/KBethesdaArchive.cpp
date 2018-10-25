@@ -13,11 +13,9 @@ namespace
 	{
 		return header.Version == (uint32_t)KBethesdaArchive::Version::Skyrim && header.ArchiveFlags & (uint32_t)KBethesdaArchive::ArchiveFlags::EmbedFileNames;
 	}
-	bool SkipBString(KxFileStream& stream)
+	void SkipBString(KxFileStream& stream)
 	{
-		bool isSuccess = false;
-		stream.Seek(stream.ReadObject<uint8_t>(&isSuccess));
-		return isSuccess;
+		stream.Skip(stream.ReadObject<uint8_t>());
 	}
 
 	struct SearchData
@@ -233,9 +231,7 @@ bool KBethesdaArchive::IsFlagsSupported() const
 
 bool KBethesdaArchive::ReadHeader()
 {
-	bool isSuccess = false;
-	m_Header = m_Stream.ReadObject<Header>(&isSuccess);
-	if (isSuccess)
+	if (m_Stream.ReadObject(m_Header))
 	{
 		m_Status = IsHeaderOK();
 		m_IsHeaderOK = m_Status == Status::Success;
@@ -257,8 +253,8 @@ bool KBethesdaArchive::ReadDirectoryRecods()
 	m_DirectoryRecods.reserve(m_Header.FoldersCount + 1);
 	for (size_t i = 0; i < m_Header.FoldersCount; i++)
 	{
-		m_DirectoryRecods.emplace_back(m_Stream.ReadObject<DirectoryRecord>(&success));
-		if (!success)
+		m_DirectoryRecods.emplace_back(m_Stream.ReadObject<DirectoryRecord>());
+		if (m_Stream.LastReadSuccess())
 		{
 			m_Status = Status::FolderRecords;
 			return false;
@@ -277,13 +273,18 @@ bool KBethesdaArchive::ReadFileRecords()
 		// Read and save folder name
 		uint8_t length = m_Stream.ReadObject<uint8_t>();
 
-		m_Stream.ReadData(folderNameBuffer, length);
+		m_Stream.ReadBuffer(folderNameBuffer, length);
 		m_DirectoryRecods[i].Name = wxString::FromUTF8(folderNameBuffer, length - 1);
 
 		// Read file record
 		for (size_t filesRecordIndex = 0; filesRecordIndex < m_DirectoryRecods[i].Record.Count; filesRecordIndex++)
 		{
-			m_FileRecords.emplace_back(m_Stream.ReadObject<FileRecord>(&isSuccess));
+			m_FileRecords.emplace_back(m_Stream.ReadObject<FileRecord>());
+			if (!m_Stream.LastReadSuccess())
+			{
+				isSuccess = false;
+				break;
+			}
 		}
 
 		if (!isSuccess)
@@ -296,7 +297,6 @@ bool KBethesdaArchive::ReadFileRecords()
 }
 bool KBethesdaArchive::ReadFileNamesRecords()
 {
-	bool isSuccess = false;
 	char folderNameBuffer[255] = {0};
 	char* folderName = folderNameBuffer;
 
@@ -305,8 +305,7 @@ bool KBethesdaArchive::ReadFileNamesRecords()
 		char c = NULL;
 		do
 		{
-			c = m_Stream.ReadObject<char>(&isSuccess);
-			if (!isSuccess)
+			if (!m_Stream.ReadObject(c))
 			{
 				m_Status = Status::FileNames;
 				return false;
@@ -323,13 +322,13 @@ bool KBethesdaArchive::ReadFileNamesRecords()
 }
 bool KBethesdaArchive::ReadFileDataRecords()
 {
-	m_OriginalSize = m_Stream.GetPosition();
+	m_OriginalSize = m_Stream.Tell();
 
 	bool isSuccess = true;
 	for (size_t i = 0; i < m_Header.FilesCount; i++)
 	{
 		const FileRecord& fileRecord = m_FileRecords[i].Record;
-		m_Stream.Seek(fileRecord.Offset, KxFS_SEEK_BEGIN);
+		m_Stream.Seek(fileRecord.Offset, KxFileStream::SeekMode::FromStart);
 		if (IsFileNamesEmbedded(m_Header))
 		{
 			SkipBString(m_Stream);
@@ -363,7 +362,7 @@ bool KBethesdaArchive::ReadFileDataRecords()
 
 bool KBethesdaArchive::OpenArchive(const wxString& filePath)
 {
-	if (m_Stream.Open(filePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ))
+	if (m_Stream.Open(filePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read))
 	{
 		if (ReadHeader() && ReadDirectoryRecods() && ReadFileRecords() && ReadFileNamesRecords() && ReadFileDataRecords())
 		{

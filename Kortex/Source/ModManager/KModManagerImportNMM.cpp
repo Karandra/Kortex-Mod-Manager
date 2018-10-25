@@ -130,7 +130,7 @@ void KModManagerImportNMM::CopySavesAndConfig(KOperationWithProgressDialogBase* 
 }
 void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 {
-	KxFileStream installConfigStream(m_InstanceDirectory + "\\VirtualInstall\\VirtualModConfig.xml", KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	KxFileStream installConfigStream(m_InstanceDirectory + "\\VirtualInstall\\VirtualModConfig.xml", KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 	KxXMLDocument installConfig(installConfigStream);
 
 	KxXMLNode modListNode = installConfig.QueryElement("virtualModActivator/modList");
@@ -159,7 +159,7 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 		// Write data
 		KModEntry* modEntry = KModManager::Get().GetEntries().emplace_back(new KModEntry());
 
-		KxFileStream infoStream(m_InstanceDirectory + "\\cache\\" + modFileName.BeforeLast('.') + "\\Data\\fomod\\info.xml", KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+		KxFileStream infoStream(m_InstanceDirectory + "\\cache\\" + modFileName.BeforeLast('.') + "\\Data\\fomod\\info.xml", KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 		KxXMLDocument info(infoStream);
 		KxXMLNode infoNode = info.QueryElement("fomod");
 
@@ -263,7 +263,7 @@ void KModManagerImportNMM::CopyDownloads(KOperationWithProgressDialogBase* conte
 		{
 			KxEvtFile archiveFile(fileItem.GetFullPath());
 
-			KxFileStream stream(m_InstanceDirectory + "\\cache\\" + fileItem.GetName().BeforeLast('.') + "\\Data\\fomod\\info.xml", KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+			KxFileStream stream(m_InstanceDirectory + "\\cache\\" + fileItem.GetName().BeforeLast('.') + "\\Data\\fomod\\info.xml", KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 			KxXMLDocument info(stream);
 			KxXMLNode infoNode = info.QueryElement("fomod");
 
@@ -309,7 +309,7 @@ void KModManagerImportNMM::SetDirectory(const wxString& path)
 	m_InstanceDirectory = path;
 	if (!KxFileFinder::IsDirectoryEmpty(m_InstanceDirectory))
 	{
-		KxFileStream stream(m_InstanceDirectory + "\\ModProfiles\\ProfileManagerCfg.xml", KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+		KxFileStream stream(m_InstanceDirectory + "\\ModProfiles\\ProfileManagerCfg.xml", KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 		m_ProfileManagerXML.Load(stream);
 		if (m_ProfileManagerXML.IsOK())
 		{

@@ -114,7 +114,7 @@ void KModEntry::CreateFromSignature(const wxString& signature)
 
 	if (!m_Signature.IsEmpty())
 	{
-		KxFileStream xmlStream(GetInfoFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+		KxFileStream xmlStream(GetInfoFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 		KxXMLDocument xml(xmlStream);
 		if (xml.IsOK())
 		{
@@ -225,7 +225,7 @@ bool KModEntry::Save()
 	// Mod root is always needed here but other folders isn't
 	KxFile(GetRootDir()).CreateFolder();
 
-	KxFileStream stream(GetInfoFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
+	KxFileStream stream(GetInfoFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways);
 	if (stream.IsOk())
 	{
 		KxXMLDocument xml;
@@ -303,10 +303,8 @@ bool KModEntry::Save()
 		// Description
 		if (IsDescriptionChanged())
 		{
-			KxFileStream descriptionStream(GetDescriptionFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
-			descriptionStream.SetEnd();
+			KxFileStream descriptionStream(GetDescriptionFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways);
 			descriptionStream.WriteStringUTF8(m_Description);
-
 			m_IsDescriptionChanged = false;
 		}
 
@@ -350,7 +348,7 @@ const wxString& KModEntry::GetDescription() const
 {
 	if (m_Description.IsEmpty() && !IsDescriptionChanged())
 	{
-		KxFileStream stream(GetDescriptionFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+		KxFileStream stream(GetDescriptionFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 		if (stream.IsOk())
 		{
 			m_Description = stream.ReadStringUTF8(stream.GetLength());

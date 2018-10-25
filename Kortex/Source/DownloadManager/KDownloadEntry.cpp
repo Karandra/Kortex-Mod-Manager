@@ -150,7 +150,8 @@ void KDownloadEntry::OnThreadExit(wxNotifyEvent& event)
 }
 void KDownloadEntry::DoRun(int64_t resumePos)
 {
-	m_Stream = std::make_unique<KxFileStream>(GetFullPath(), KxFS_ACCESS_WRITE, resumePos > 0 ? KxFS_DISP_OPEN_EXISTING : KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
+	KxFileStream::Disposition disposition = resumePos > 0 ? KxFileStream::Disposition::OpenExisting : KxFileStream::Disposition::CreateAlways;
+	m_Stream = std::make_unique<KxFileStream>(GetFullPath(), KxFileStream::Access::Write, disposition, KxFileStream::Share::Read);
 	if (m_Stream->IsOk())
 	{
 		// Download session
@@ -453,12 +454,12 @@ bool KDownloadEntry::DeSerialize(wxInputStream& stream)
 
 bool KDownloadEntry::Serialize() const
 {
-	KxFileStream stream(GetMetaFilePath(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
+	KxFileStream stream(GetMetaFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 	return stream.IsOk() && Serialize(stream);
 }
 bool KDownloadEntry::DeSerialize(const wxString& xmlFile, const KxFileItem& fileItem)
 {
-	KxFileStream stream(xmlFile, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream stream(xmlFile, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 	if (stream.IsOk() && DeSerialize(stream))
 	{
 		if (fileItem.IsOK())

@@ -796,7 +796,7 @@ void KConfigurableGameInstance::DetectGameArchitecture(const KxXMLDocument& inst
 bool KConfigurableGameInstance::OnLoadInstance(const KxXMLDocument& instanceConfig)
 {
 	// Load config file
-	KxFileStream configStream(GetConfigFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream configStream(GetConfigFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 	m_Config.Load(configStream);
 
 	// Load data
@@ -826,6 +826,6 @@ bool KConfigurableGameInstance::SaveConfig()
 		return true;
 	});
 
-	KxFileStream configStream(GetConfigFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
+	KxFileStream configStream(GetConfigFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 	return m_Config.Save(configStream);
 }

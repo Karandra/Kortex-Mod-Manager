@@ -5,7 +5,7 @@
 
 void KPluginReaderBethesdaOblivion::DoReadData(const KPluginEntry& pluginEntry)
 {
-	KxFileStream stream(pluginEntry.GetFullPath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream stream(pluginEntry.GetFullPath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 	if (stream.IsOk())
 	{
 		if (stream.ReadStringASCII(4) == "TES4")
@@ -18,19 +18,19 @@ void KPluginReaderBethesdaOblivion::DoReadData(const KPluginEntry& pluginEntry)
 			wxString recordName = stream.ReadStringASCII(4);
 			if (recordName == "CNAM")
 			{
-				m_Author = stream.ReadStringCurrentLocale(stream.ReadObject<uint16_t>());
+				m_Author = stream.ReadStringACP(stream.ReadObject<uint16_t>());
 				recordName = stream.ReadStringASCII(4);
 			}
 			if (recordName == "SNAM")
 			{
-				m_Description = stream.ReadStringCurrentLocale(stream.ReadObject<uint16_t>());
+				m_Description = stream.ReadStringACP(stream.ReadObject<uint16_t>());
 				recordName = stream.ReadStringASCII(4);
 			}
 			if (recordName == "MAST")
 			{
 				do
 				{
-					m_RequiredPlugins.emplace_back(stream.ReadStringCurrentLocale(stream.ReadObject<uint16_t>()));
+					m_RequiredPlugins.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()));
 					
 					// Skip DATA 
 					stream.Seek(14);

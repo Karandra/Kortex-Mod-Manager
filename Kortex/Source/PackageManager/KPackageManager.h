@@ -30,6 +30,7 @@ class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
 
 	private:
 		void LoadStdRequirements();
+		virtual void OnInit() override;
 
 	public:
 		KPackageManager();

@@ -412,7 +412,7 @@ void KModManagerImportMO::CopyDownloads(KOperationWithProgressDialogBase* contex
 		KxEvtFile archiveFile(item.GetFullPath().BeforeLast('.'));
 		if (item.IsNormalItem() && item.IsFile())
 		{
-			KxFileStream stream(item.GetFullPath(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+			KxFileStream stream(item.GetFullPath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 			KxINI ini(stream);
 
 			KDownloadEntry& entry = *manager->GetDownloads().emplace_back(new KDownloadEntry());
@@ -457,7 +457,7 @@ void KModManagerImportMO::SetDirectory(const wxString& path)
 	m_InstanceDirectory = path;
 	if (!KxFileFinder::IsDirectoryEmpty(m_InstanceDirectory))
 	{
-		KxFileStream stream(m_InstanceDirectory + '\\' + "ModOrganizer.ini", KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+		KxFileStream stream(m_InstanceDirectory + '\\' + "ModOrganizer.ini", KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 		m_Options.Load(stream);
 		if (m_Options.IsOK())
 		{

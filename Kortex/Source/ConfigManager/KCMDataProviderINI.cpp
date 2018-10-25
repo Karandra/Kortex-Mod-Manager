@@ -76,11 +76,11 @@ KCMDataProviderINI::~KCMDataProviderINI()
 
 void KCMDataProviderINI::Save() const
 {
-	KxFileStream file(m_DocumentPath, KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
+	KxFileStream file(m_DocumentPath, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways);
 	m_Document.Save(file);
 }
 void KCMDataProviderINI::Load()
 {
-	KxFileStream file(m_DocumentPath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING);
+	KxFileStream file(m_DocumentPath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 	m_Document.Load(file);
 }

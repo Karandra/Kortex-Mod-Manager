@@ -59,7 +59,7 @@ void KActiveGameInstance::InitVariables(const KProfile& profile)
 bool KActiveGameInstance::OnLoadInstance(const KxXMLDocument& instanceConfig)
 {
 	// Lock instance folder
-	m_DirectoryLock.Open(GetInstanceDir(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ|KxFS_SHARE_WRITE, KxFS_FLAG_BACKUP_SEMANTICS);
+	m_DirectoryLock.Open(GetInstanceDir(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read|KxFileStream::Share::Write, KxFileStream::Flags::BackupSemantics);
 	
 	if (KConfigurableGameInstance::OnLoadInstance(instanceConfig))
 	{

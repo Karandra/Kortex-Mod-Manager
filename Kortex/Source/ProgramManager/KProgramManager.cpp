@@ -63,7 +63,7 @@ void KProgramManager::OnLoadConfig(const KxXMLNode& configNode)
 }
 void KProgramManager::LoadUserPrograms()
 {
-	KxFileStream stream(KGameInstance::GetActive()->GetProgramsFile(), KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	KxFileStream stream(KGameInstance::GetActive()->GetProgramsFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 	KxXMLDocument xml(stream);
 	LoadProgramsFromXML(m_UserPrograms, xml);
 }
@@ -77,7 +77,7 @@ void KProgramManager::SaveUserPrograms() const
 		entry.Save(rootNode);
 	}
 
-	KxFileStream stream(KGameInstance::GetActive()->GetProgramsFile(), KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS, KxFS_SHARE_READ);
+	KxFileStream stream(KGameInstance::GetActive()->GetProgramsFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 	xml.Save(stream);
 }
 

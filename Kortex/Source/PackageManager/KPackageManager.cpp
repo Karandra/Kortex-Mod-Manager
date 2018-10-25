@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPackageManager.h"
 #include "Archive/KArchive.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "ModManager/KModManager.h"
 #include "PluginManager/KPluginManager.h"
 #include "GameInstance/Config/KPackageManagerConfig.h"
@@ -180,8 +180,8 @@ KxVersion KPackageManager::GetRequirementVersion(const KPPRRequirementEntry* ent
 
 void KPackageManager::LoadStdRequirements()
 {
-	wxString stdReqsFilePath = wxString::Format("%s\\PackageManager\\Requirements\\%s.xml", KApp::Get().GetDataFolder(), KApp::Get().GetCurrentGameID());
-	KxFileStream file(stdReqsFilePath, KxFS_ACCESS_READ, KxFS_DISP_OPEN_EXISTING, KxFS_SHARE_READ);
+	wxString stdReqsFilePath = KxFormat("%1\\PackageManager\\Requirements\\%2.xml").arg(KApp::Get().GetDataFolder()).arg(KGameInstance::GetActive()->GetGameID());
+	KxFileStream file(stdReqsFilePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 	KxXMLDocument xml(file);
 
 	for (KxXMLNode entryNode = xml.GetFirstChildElement("Requirements").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
@@ -209,11 +209,14 @@ void KPackageManager::LoadStdRequirements()
 		KAux::LoadStringArray(entry->GetDependencies(), entryNode.GetFirstChildElement("Dependencies"));
 	}
 }
+void KPackageManager::OnInit()
+{
+	LoadStdRequirements();
+}
 
 KPackageManager::KPackageManager()
 	:m_Options(this, "General")
 {
-	LoadStdRequirements();
 }
 KPackageManager::~KPackageManager()
 {

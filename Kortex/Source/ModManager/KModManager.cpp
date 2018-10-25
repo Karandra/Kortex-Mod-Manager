@@ -660,6 +660,6 @@ void KModManager::ExportModList(const wxString& outputFilePath) const
 		}
 	}
 
-	KxFileStream stream(outputFilePath, KxFS_ACCESS_WRITE, KxFS_DISP_CREATE_ALWAYS);
+	KxFileStream stream(outputFilePath, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways);
 	stream.WriteStringUTF8(xml.GetXML(KxXML_PRINT_HTML5));
 }

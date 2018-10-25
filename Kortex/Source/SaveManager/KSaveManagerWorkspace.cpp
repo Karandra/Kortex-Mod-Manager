@@ -82,8 +82,13 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSaveFile* sav
 		const KxStringVector& list = saveEntry->GetPluginsList();
 
 		KxMenu* pluginsListMenu = new KxMenu();
-		KxMenuItem* pPluginsListMenuItem = menu.Add(pluginsListMenu, wxString::Format("%s (%zu)", T("SaveManager.Tab.PluginsList"), list.size()));
-		pPluginsListMenuItem->Enable(!list.empty());
+		KxMenuItem* pluginsListMenuItem = menu.Add(pluginsListMenu, wxString::Format("%s (%zu)", T("SaveManager.Tab.PluginsList"), list.size()));
+		pluginsListMenuItem->Enable(!list.empty());
+
+		if (!pluginManager->HasEntries())
+		{
+			pluginManager->Load();
+		}
 
 		for (const wxString& name: list)
 		{
@@ -95,8 +100,8 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSaveFile* sav
 	// Basic info
 	{
 		KxMenu* basicInfoMenu = new KxMenu();
-		KxMenuItem* pBasicInfoMenuItem = menu.Add(basicInfoMenu, T("SaveManager.Tab.BasicInfo"));
-		pBasicInfoMenuItem->Enable(saveEntry && !saveEntry->GetBasicInfo().empty());
+		KxMenuItem* basicInfoMenuItem = menu.Add(basicInfoMenu, T("SaveManager.Tab.BasicInfo"));
+		basicInfoMenuItem->Enable(saveEntry && !saveEntry->GetBasicInfo().empty());
 
 		if (saveEntry)
 		{
@@ -248,10 +253,6 @@ void KSaveManagerWorkspace::OnRemoveSave(KSaveFile* saveEntry)
 
 bool KSaveManagerWorkspace::OnOpenWorkspace()
 {
-	if (KPluginManager* pPM = KPluginManager::GetInstance())
-	{
-		pPM->LoadIfNeeded();
-	}
 	return true;
 }
 bool KSaveManagerWorkspace::OnCloseWorkspace()

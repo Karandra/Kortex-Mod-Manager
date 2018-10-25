@@ -67,6 +67,7 @@ std::unique_ptr<KPluginReader> KPluginManager::QueryPluginReader(const wxString&
 void KPluginManager::OnInit()
 {
 	KEvent::Bind(KEVT_PROFILE_SELECTED, &KPluginManager::OnVirtualTreeInvalidated, this);
+
 	KEvent::Bind(KEVT_MODS_REORDERED, &KPluginManager::OnVirtualTreeInvalidated, this);
 	KEvent::Bind(KEVT_MOD_TOGGLED, &KPluginManager::OnVirtualTreeInvalidated, this);
 	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KPluginManager::OnVirtualTreeInvalidated, this);
@@ -81,8 +82,7 @@ void KPluginManager::ReadPluginsData()
 
 void KPluginManager::OnVirtualTreeInvalidated(KEvent& event)
 {
-	Load();
-	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
+	Invalidate();
 }
 
 KPluginManager::KPluginManager(const wxString& interfaceName, const KxXMLNode& configNode)
@@ -104,6 +104,13 @@ wxString KPluginManager::GetName() const
 wxString KPluginManager::GetVersion() const
 {
 	return "1.3";
+}
+
+void KPluginManager::Invalidate()
+{
+	Load();
+	KWorkspace::ScheduleReloadOf<KPluginManagerWorkspace>();
+	KEvent::MakeSend<KPluginEvent>(KEVT_PLUGINS_REORDERED);
 }
 
 bool KPluginManager::IsValidModIndex(intptr_t modIndex) const
@@ -210,9 +217,7 @@ void KPluginManager::SyncWithPluginsList(const KxStringVector& pluginNamesList, 
 		pluginsList.emplace_back(name, isEnabled);
 	}
 	profile->Save();
-
-	// Reload to update internal state
-	Load();
+	Invalidate();
 }
 KxStringVector KPluginManager::GetPluginsList(bool activeOnly) const
 {

@@ -97,13 +97,7 @@ class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginMan
 		virtual void Save() const = 0;
 		virtual void Load() = 0;
 		virtual void LoadNativeOrder() = 0;
-		void LoadIfNeeded()
-		{
-			if (!HasEntries())
-			{
-				Load();
-			}
-		}
+		void Invalidate();
 
 		virtual bool HasDependentPlugins(const KPluginEntry& pluginEntry) const = 0;
 		virtual KPluginEntry::RefVector GetDependentPlugins(const KPluginEntry& pluginEntry) const = 0;

@@ -273,8 +273,9 @@ bool KPluginViewBaseModel::OnDropItems(KxDataViewEventDND& event)
 			{
 				GetView()->Select(GetItemByEntry(entry));
 			}
-
 			SelectItem(GetItemByEntry(entriesToMove.front()));
+
+			KEvent::MakeSend<KPluginEvent>(KEVT_PLUGINS_REORDERED, entriesToMove);
 			return true;
 		}
 	}

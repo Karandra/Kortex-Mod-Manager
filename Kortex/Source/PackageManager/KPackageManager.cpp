@@ -95,7 +95,11 @@ KPPReqState KPackageManager::CheckRequirementState(const KPPRRequirementEntry* e
 				KPluginManager* manager = KPluginManager::GetInstance();
 				if (manager)
 				{
-					manager->LoadIfNeeded();
+					if (!manager->HasEntries())
+					{
+						manager->Load();
+					}
+
 					bool isActive = manager->IsPluginActive(entry->GetObject());
 					return (KPPReqState)(objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? isActive : !isActive);
 				}

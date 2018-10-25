@@ -2,8 +2,7 @@
 #include "KLootAPI.h"
 #include "PluginManager/KPluginManager.h"
 #include "ModManager/KModManager.h"
-#include "GameInstance/KGameInstance.h"
-#include "GameInstance/KGameID.h"
+#include "GameInstance/KInstanceManagement.h"
 #include "GameInstance/Config/KPluginManagerConfig.h"
 #include "KApp.h"
 #include "KOperationWithProgress.h"
@@ -39,42 +38,42 @@ namespace
 int KLootAPI::GetLootGameID() const
 {
 	loot::GameType gameType = (loot::GameType)INVALID_GAME_ID;
-	if (KPluginManager::HasInstance())
+	if (KPluginManager::HasInstance() && KGameInstance::GetActive())
 	{
-		const wxString& templateID = KApp::Get().GetCurrentGameID();
+		const KGameID gameID = KGameInstance::GetActive()->GetGameID();
 
 		// TES
-		if (templateID == KGameIDs::Oblivion)
+		if (gameID == KGameIDs::Oblivion)
 		{
 			gameType = loot::GameType::tes4;
 		}
-		else if (templateID == KGameIDs::Skyrim)
+		else if (gameID == KGameIDs::Skyrim)
 		{
 			gameType = loot::GameType::tes5;
 		}
-		else if (templateID == KGameIDs::SkyrimSE)
+		else if (gameID == KGameIDs::SkyrimSE)
 		{
 			gameType = loot::GameType::tes5se;
 		}
-		else if (templateID == KGameIDs::SkyrimVR)
+		else if (gameID == KGameIDs::SkyrimVR)
 		{
 			gameType = loot::GameType::tes5vr;
 		}
 
 		// Fallout
-		else if (templateID == KGameIDs::Fallout3)
+		else if (gameID == KGameIDs::Fallout3)
 		{
 			gameType = loot::GameType::fo3;
 		}
-		else if (templateID == KGameIDs::FalloutNV)
+		else if (gameID == KGameIDs::FalloutNV)
 		{
 			gameType = loot::GameType::fonv;
 		}
-		else if (templateID == KGameIDs::Fallout4)
+		else if (gameID == KGameIDs::Fallout4)
 		{
 			gameType = loot::GameType::fo4;
 		}
-		else if (templateID == KGameIDs::Fallout4VR)
+		else if (gameID == KGameIDs::Fallout4VR)
 		{
 			gameType = loot::GameType::fo4vr;
 		}
@@ -141,17 +140,17 @@ wxString KLootAPI::GetDataPath() const
 {
 	const KPluginManagerConfig::LootAPI& lootAPI = KPluginManagerConfig::GetInstance()->GetLootAPI();
 
-	KxFile folder(KxShell::GetFolder(KxSHF_APPLICATIONDATA_LOCAL) + "\\LOOT\\" + lootAPI.GetFolderName());
+	KxFile folder(KxShell::GetFolder(KxSHF_APPLICATIONDATA_LOCAL) + wxS("\\LOOT\\") + lootAPI.GetFolderName());
 	folder.CreateFolder();
 	return folder.GetFullPath();
 }
 wxString KLootAPI::GetMasterListPath() const
 {
-	return GetDataPath() + '\\' + "MasterList.yaml";
+	return GetDataPath() + wxS("\\MasterList.yaml");
 }
 wxString KLootAPI::GetUserListPath() const
 {
-	return GetDataPath() + '\\' + "UserList.yaml";
+	return GetDataPath() + wxS("\\UserList.yaml");
 }
 
 bool KLootAPI::SortPlugins(KxStringVector& sortedList, KOperationWithProgressDialogBase* context)
@@ -164,67 +163,67 @@ bool KLootAPI::SortPlugins(KxStringVector& sortedList, KOperationWithProgressDia
 
 	try
 	{
-		std::locale locale("");
-		std::string gamePath = ToLootString(KModManager::Get().GetVirtualGameRoot());
-
-		KPluginManager* pluginManager = KPluginManager::GetInstance();
-		const KPluginManagerConfig* pluginManagerOptions = KPluginManagerConfig::GetInstance();
-		const KPluginManagerConfig::LootAPI& lootAPI = pluginManagerOptions->GetLootAPI();
-
 		int gameID = GetLootGameID();
 		if (gameID != INVALID_GAME_ID)
 		{
+			KPluginManager* pluginManager = KPluginManager::GetInstance();
+			const KPluginManagerConfig* pluginManagerOptions = KPluginManagerConfig::GetInstance();
+			const KPluginManagerConfig::LootAPI& lootAPI = pluginManagerOptions->GetLootAPI();
+
+			std::locale locale("");
+			loot::InitialiseLocale("en.UTF-8");
 			loot::SetLoggingCallback([this, context](loot::LogLevel level, const char* s)
 			{
 				LoggerCallback((int)level, s, context);
 			});
 
-			loot::InitialiseLocale("en.UTF-8");
-			auto gameInterface = loot::CreateGameHandle((loot::GameType)gameID, gamePath, ToLootString(lootAPI.GetLocalGamePath()));
+			
+			const std::string virtualGameDir = ToLootString(KGameInstance::GetActive()->GetVirtualGameDir());
+			auto gameInterface = loot::CreateGameHandle((loot::GameType)gameID, virtualGameDir, ToLootString(lootAPI.GetLocalGamePath()));
 			if (gameInterface)
 			{
 				auto dataBase = gameInterface->GetDatabase();
 				if (dataBase)
 				{
-					std::string sMasterListPath = ToLootString(GetMasterListPath());
-					std::string sUserListPath = ToLootString(GetUserListPath());
-					std::string sRepositoryBranch = ToLootString(lootAPI.GetBranch());
-					std::string sRepositoryURL = ToLootString(lootAPI.GetRepository());
+					const std::string masterListPath = ToLootString(GetMasterListPath());
+					const std::string userListPath = ToLootString(GetUserListPath());
+					const std::string repositoryBranch = ToLootString(lootAPI.GetBranch());
+					const std::string repositoryURL = ToLootString(lootAPI.GetRepository());
 
 					// Update masterlist
-					bool isMasterListUpdated = dataBase->UpdateMasterlist(sMasterListPath, sRepositoryURL, sRepositoryBranch);
-					if (isMasterListUpdated && !dataBase->IsLatestMasterlist(sMasterListPath, sRepositoryBranch))
+					bool isMasterListUpdated = dataBase->UpdateMasterlist(masterListPath, repositoryURL, repositoryBranch);
+					if (isMasterListUpdated && !dataBase->IsLatestMasterlist(masterListPath, repositoryBranch))
 					{
 						ThrowError(T("PluginManager.LootAPI.CanNotUpdateMasterlist"));
 					}
 
 					// Load list
-					dataBase->LoadLists(sMasterListPath, KxFile(sUserListPath).IsFileExist() ? sUserListPath : "");
-					
+					dataBase->LoadLists(masterListPath, KxFile(userListPath).IsFileExist() ? userListPath : "");
+
 					// Main ESM
 					if (pluginManagerOptions->HasMainStdContentID())
 					{
 						gameInterface->IdentifyMainMasterFile(ToLootString(pluginManagerOptions->GetMainStdContentID()));
 					}
 
-					KxStdStringVector pluginsList;
-					for (const auto& pPlugnEntry: pluginManager->GetEntries())
+					KxStdStringVector pluginList;
+					for (const auto& plugnEntry: pluginManager->GetEntries())
 					{
-						std::string name = ToLootString(pPlugnEntry->GetName());
+						std::string name = ToLootString(plugnEntry->GetName());
 						if (gameInterface->IsValidPlugin(name))
 						{
-							pluginsList.push_back(name);
+							pluginList.push_back(name);
 						}
 					}
 
 					pluginManager->Save();
 					gameInterface->LoadCurrentLoadOrderState();
-					pluginsList = gameInterface->SortPlugins(pluginsList);
+					pluginList = gameInterface->SortPlugins(pluginList);
 
 					// Return sorted list
 					sortedList.clear();
-					sortedList.reserve(pluginsList.size());
-					for (const std::string& s: pluginsList)
+					sortedList.reserve(pluginList.size());
+					for (const std::string& s: pluginList)
 					{
 						sortedList.push_back(FromLootString(s));
 					}

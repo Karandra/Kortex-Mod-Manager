@@ -804,6 +804,9 @@
     <ClCompile Include="Source\SaveManager\KSaveFileGeneric.cpp">
       <Filter>Code\Source Files\SaveManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SaveManager\KSaveFileBethesdaBase.cpp">
+      <Filter>Code\Source Files\SaveManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1459,6 +1462,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameInstance\KInstanceManagement.h">
       <Filter>Code\Header Files\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SaveManager\KSaveFileBethesdaBase.h">
+      <Filter>Code\Header Files\SaveManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,6 @@ class KProgramEntry
 		wxString m_Arguments;
 		wxString m_WorkingDirectory;
 
-		wxDateTime m_LastRunTime;
 		bool m_ShowInMainMenu = false;
 
 	public:
@@ -51,11 +50,6 @@ class KProgramEntry
 		{
 			return HasName() && HasExecutable();
 		}
-		wxDateTime GetLastRunTime() const
-		{
-			return m_LastRunTime;
-		}
-		
 		bool IsRequiresVFS() const;
 		bool CanRunNow() const;
 		

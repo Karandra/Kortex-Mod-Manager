@@ -65,8 +65,6 @@ KProgramEntry::KProgramEntry(const KxXMLNode& node)
 	m_IconPath = node.GetFirstChildElement("Icon").GetValue();
 	m_Arguments = node.GetFirstChildElement("Arguments").GetValue();
 	m_WorkingDirectory = node.GetFirstChildElement("WorkingDirectory").GetValue();
-
-	m_LastRunTime.ParseISOCombined(node.GetFirstChildElement("LastRunTime").GetValue());
 }
 
 bool KProgramEntry::IsRequiresVFS() const
@@ -123,7 +121,6 @@ wxString KProgramEntry::GetWorkingDirectory() const
 
 void KProgramEntry::OnRun()
 {
-	m_LastRunTime = wxDateTime::Now();
 }
 void KProgramEntry::Save(KxXMLNode& rootNode) const
 {
@@ -144,10 +141,5 @@ void KProgramEntry::Save(KxXMLNode& rootNode) const
 	if (!m_WorkingDirectory.IsEmpty())
 	{
 		node.NewElement("WorkingDirectory").SetValue(m_WorkingDirectory);
-	}
-
-	if (m_LastRunTime.IsValid())
-	{
-		node.NewElement("LastRunTime").SetValue(m_LastRunTime.FormatISOCombined());
 	}
 }

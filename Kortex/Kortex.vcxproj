@@ -76,6 +76,7 @@
     <ClCompile Include="Source\NotificationCenter\KNotification.cpp" />
     <ClCompile Include="Source\NotificationCenter\KNotificationCenter.cpp" />
     <ClCompile Include="Source\NotificationCenter\KNotificationPopup.cpp" />
+    <ClCompile Include="Source\NotificationCenter\KNotificationPopupList.cpp" />
     <ClCompile Include="Source\PackageCreator\KPackageCreatorIDTracker.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="Source\NotificationCenter\KNotification.h" />
     <ClInclude Include="Source\NotificationCenter\KNotificationCenter.h" />
     <ClInclude Include="Source\NotificationCenter\KNotificationPopup.h" />
+    <ClInclude Include="Source\NotificationCenter\KNotificationPopupList.h" />
     <ClInclude Include="Source\PackageCreator\KPackageCreatorIDTracker.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModel.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.h" />
@@ -316,6 +318,7 @@
     <ClInclude Include="Source\Utility\KINetFSHandler.h" />
     <ClInclude Include="Source\Utility\KProgramOptions.h" />
     <ClInclude Include="Source\Utility\KUnsortedUnique.h" />
+    <ClInclude Include="Source\Utility\KUPtrVectorUtil.h" />
     <ClInclude Include="Source\Utility\KWithBitmap.h" />
     <ClInclude Include="Source\Archive\KArchive.h" />
     <ClInclude Include="Source\Events\KVFSEvent.h" />

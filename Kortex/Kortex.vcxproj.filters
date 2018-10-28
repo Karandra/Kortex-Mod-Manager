@@ -807,6 +807,9 @@
     <ClCompile Include="Source\SaveManager\KSaveFileBethesdaBase.cpp">
       <Filter>Code\Source Files\SaveManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\NotificationCenter\KNotificationPopupList.cpp">
+      <Filter>Code\Source Files\NotificationCenter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1465,6 +1468,12 @@
     </ClInclude>
     <ClInclude Include="Source\SaveManager\KSaveFileBethesdaBase.h">
       <Filter>Code\Header Files\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NotificationCenter\KNotificationPopupList.h">
+      <Filter>Code\Header Files\NotificationCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\KUPtrVectorUtil.h">
+      <Filter>Code\Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

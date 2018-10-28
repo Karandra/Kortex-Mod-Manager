@@ -32,6 +32,7 @@ class KDownloadEntry: public KxISerializer
 		wxDateTime m_Date;
 		int64_t m_DownloadedSize = 0;
 		int64_t m_Speed = 0;
+		int64_t m_TimeStamp = 0;
 
 		bool m_IsPaused = false;
 		bool m_IsHidden = false;

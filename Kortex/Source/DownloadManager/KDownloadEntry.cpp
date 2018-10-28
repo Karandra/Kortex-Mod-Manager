@@ -2,6 +2,7 @@
 #include "KDownloadEntry.h"
 #include "KDownloadManager.h"
 #include "KDownloadWorkspace.h"
+#include "KDownloadView.h"
 #include "Network/KNetwork.h"
 #include "GameInstance/KInstanceManagement.h"
 #include "ModManager/KModManager.h"
@@ -9,6 +10,16 @@
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
+#include <chrono>
+
+namespace
+{
+	int64_t GetClockTime()
+	{
+		using namespace std::chrono;
+		return duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
+	};
+}
 
 void KDownloadEntry::Create()
 {
@@ -25,6 +36,7 @@ void KDownloadEntry::CleanupDownload()
 	m_Stream.reset();
 	m_IsPaused = false;
 	m_Speed = 0;
+	m_TimeStamp = 0;
 
 	delete m_Thread;
 	m_Thread = NULL;
@@ -134,12 +146,19 @@ void KDownloadEntry::OnDownload(KxCURLEvent& event)
 	// Speed
 	m_Speed = event.GetSpeed();
 
-	// Queue update view
-	if (KDownloadWorkspace::GetInstance()->IsWorkspaceVisible())
+	// Queue update
+	int64_t time = GetClockTime();
+	if (time - m_TimeStamp >= 100)
 	{
+		m_TimeStamp = time;
+
 		KEvent::CallAfter([this]()
 		{
-			KDownloadManager::GetInstance()->OnChangeEntry(*this, true);
+			if (KDownloadWorkspace::GetInstance()->IsWorkspaceVisible())
+			{
+				KDownloadManager::GetInstance()->OnChangeEntry(*this, true);
+
+			}
 		});
 	}
 }
@@ -158,7 +177,11 @@ void KDownloadEntry::DoRun(int64_t resumePos)
 		m_Session = std::make_unique<KxCURLSession>(m_DownloadInfo.GetURL());
 		m_Session->Bind(KxEVT_CURL_DOWNLOAD, &KDownloadEntry::OnDownload, this);
 
+		// Initial view update
+		KDownloadManager::GetInstance()->OnChangeEntry(*this, true);
+
 		// Begin download, blocking operation.
+		m_TimeStamp = GetClockTime();
 		KxCURLStreamReply reply(*m_Stream, resumePos);
 		m_Session->Download(reply);
 
@@ -220,7 +243,7 @@ void KDownloadEntry::SetTargetProfile(const KGameID& id)
 const KModEntry* KDownloadEntry::GetMod() const
 {
 	// Try to find download by its file name first
-	KModEntry* mod = KModManager::Get().FindModByName(m_FileInfo.GetName());
+	KModEntry* mod = KModManager::GetInstance()->FindModByName(m_FileInfo.GetName());
 	if (mod)
 	{
 		return mod;
@@ -229,7 +252,7 @@ const KModEntry* KDownloadEntry::GetMod() const
 	// Try to find download by its file ID
 	if (m_Provider)
 	{
-		return KModManager::Get().FindModByNetworkModID(m_Provider->GetID(), m_FileInfo.GetModID());
+		return KModManager::GetInstance()->FindModByNetworkModID(m_Provider->GetID(), m_FileInfo.GetModID());
 	}
 	return NULL;
 }

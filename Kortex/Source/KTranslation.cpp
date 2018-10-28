@@ -3,16 +3,17 @@
 #include "KApp.h"
 #include "GameInstance/KGameInstance.h"
 
-const KxTranslation& KTranslation::GetTranslation()
+const KxTranslation& KTranslation::GetAppTranslation()
 {
 	return KApp::Get().GetTranslation();
 }
 
-wxString V(const wxString& source)
+//////////////////////////////////////////////////////////////////////////
+wxString KVarExp(const wxString& source)
 {
 	return KApp::Get().ExpandVariables(source);
 }
-wxString V(KGameInstance* profile, const wxString& source)
+wxString KVarExp(const KGameInstance* instance, const wxString& source)
 {
-	return profile->ExpandVariables(source);
+	return instance->ExpandVariables(source);
 }

@@ -33,6 +33,11 @@ class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginMan
 			DisableAll,
 			DoNotChange,
 		};
+		enum class MoveMode
+		{
+			Before,
+			After,
+		};
 
 		static std::unique_ptr<KPluginManager> QueryInterface(const wxString& name, const KxXMLNode& configNode = KxXMLNode());
 		static std::unique_ptr<KPluginReader> QueryPluginReader(const wxString& formatName);
@@ -119,7 +124,7 @@ class KPluginManager: public KPluggableManager, public KxSingletonPtr<KPluginMan
 			return FormatPriority(modEntry, GetPluginDisplayPriority(modEntry));
 		}
 
-		bool MovePluginsIntoThis(const KPluginEntry::RefVector& entriesToMove, const KPluginEntry& anchor);
+		bool MovePluginsIntoThis(const KPluginEntry::RefVector& entriesToMove, const KPluginEntry& anchor, MoveMode moveMode = MoveMode::After);
 		void SetAllPluginsEnabled(bool isEnabled);
 
 		virtual bool IsPluginActive(const wxString& pluginName) const;

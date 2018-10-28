@@ -18,6 +18,7 @@
 #include "ProgramManager/KProgramManager.h"
 #include "UI/KWorkspace.h"
 #include "KEvents.h"
+#include "KUPtrVectorUtil.h"
 
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxComparator.h>
@@ -99,7 +100,7 @@ wxString KPluginManager::GetID() const
 }
 wxString KPluginManager::GetName() const
 {
-	return T("PluginManager.Name");
+	return KTr("PluginManager.Name");
 }
 wxString KPluginManager::GetVersion() const
 {
@@ -130,49 +131,16 @@ intptr_t KPluginManager::GetPluginOrderIndex(const KPluginEntry& modEntry) const
 	return wxNOT_FOUND;
 }
 
-bool KPluginManager::MovePluginsIntoThis(const KPluginEntry::RefVector& entriesToMove, const KPluginEntry& anchor)
+bool KPluginManager::MovePluginsIntoThis(const KPluginEntry::RefVector& entriesToMove, const KPluginEntry& anchor, MoveMode moveMode)
 {
-	auto Compare = [&anchor](const auto& entry)
+	if (moveMode == MoveMode::Before)
 	{
-		return entry.get() == &anchor;
-	};
-
-	// Check if anchor is not one of moved elements
-	if (std::find(entriesToMove.begin(), entriesToMove.end(), &anchor) != entriesToMove.end())
-	{
-		return false;
+		return KUPtrVectorUtil::MoveBefore(m_Entries, entriesToMove, anchor);
 	}
-
-	auto it = std::find_if(m_Entries.begin(), m_Entries.end(), Compare);
-	if (it != m_Entries.end())
+	else
 	{
-		// Remove from existing place
-		m_Entries.erase(std::remove_if(m_Entries.begin(), m_Entries.end(), [&entriesToMove](auto& entry)
-		{
-			// Release unique_ptr's and remove them
-			if (std::find(entriesToMove.begin(), entriesToMove.end(), entry.get()) != entriesToMove.end())
-			{
-				entry.release();
-				return true;
-			}
-			return false;
-		}), m_Entries.end());
-
-		// Iterator may have been invalidated
-		it = std::find_if(m_Entries.begin(), m_Entries.end(), Compare);
-		if (it != m_Entries.end())
-		{
-			// Insert after anchor
-			size_t index = 1;
-			for (auto i = entriesToMove.begin(); i != entriesToMove.end(); ++i)
-			{
-				m_Entries.emplace(it + index, *i);
-				index++;
-			}
-			return true;
-		}
+		return KUPtrVectorUtil::MoveAfter(m_Entries, entriesToMove, anchor);
 	}
-	return false;
 }
 void KPluginManager::SetAllPluginsEnabled(bool isEnabled)
 {
@@ -252,11 +220,11 @@ bool KPluginManager::CheckSortingTool(const KPluginManagerConfigSortingToolEntry
 {
 	if (entry.GetExecutable().IsEmpty() || !KxFile(entry.GetExecutable()).IsFileExist())
 	{
-		KxTaskDialog dalog(KMainWindow::GetInstance(), KxID_NONE, TF("PluginManager.Sorting.Missing.Caption").arg(entry.GetName()), T("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
+		KxTaskDialog dalog(KMainWindow::GetInstance(), KxID_NONE, KTrf("PluginManager.Sorting.Missing.Caption", entry.GetName()), KTr("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
 		if (dalog.ShowModal() == KxID_OK)
 		{
 			KxFileBrowseDialog browseDialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
-			browseDialog.AddFilter("*.exe", T("FileFilter.Programs"));
+			browseDialog.AddFilter("*.exe", KTr("FileFilter.Programs"));
 			if (browseDialog.ShowModal() == KxID_OK)
 			{
 				entry.SetExecutable(browseDialog.GetResult());
@@ -277,7 +245,7 @@ void KPluginManager::RunSortingTool(const KPluginManagerConfigSortingToolEntry& 
 		runEntry.SetExecutable(entry.GetExecutable());
 		runEntry.SetArguments(entry.GetArguments());
 
-		KxProgressDialog* dialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, T("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
+		KxProgressDialog* dialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
 		KxProcess& process = KProgramManager::GetInstance()->CreateProcess(runEntry);
 
 		dialog->Bind(KxEVT_STDDIALOG_BUTTON, [&process](wxNotifyEvent& event)

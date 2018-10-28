@@ -72,6 +72,13 @@ KApp::KApp()
 	m_Variables.SetVariable("SystemArchitecture", KAux::ArchitectureToNumber(KxSystem::Is64Bit()));
 	m_Variables.SetVariable("SystemArchitectureName", KAux::ArchitectureToString(KxSystem::Is64Bit()));
 
+	// Revision variable
+	m_Variables.SetVariable("AppRevisionFull", "cb53d2777634bc18d9993c45523714b7cd95a32b");
+	m_Variables.SetDynamicVariable("AppRevision", [this]()
+	{
+		return m_Variables.GetVariable(wxS("AppRevisionFull")).GetValue().Left(7);
+	});
+
 	// Configure command line parsing options
 	wxCmdLineParser& cmdLineParser = GetCmdLineParser();
 	cmdLineParser.SetSwitchChars("-");

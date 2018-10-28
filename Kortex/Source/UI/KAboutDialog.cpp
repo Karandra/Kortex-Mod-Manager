@@ -189,7 +189,11 @@ KAboutDialog::KAboutDialog(wxWindow* parent)
 		m_View->AddPage(CreateTab_Permissions(), KTr("About.Tabs.Permissions"));
 
 		PostCreate(wxDefaultPosition);
-		SetLabel(wxString::Format("%s: %s\r\n%s: %s", KTr("About.Version"), KApp::Get().GetAppVersion(), KTr("About.Developer"), KApp::Get().GetVendorDisplayName()));
+		SetLabel(KxString::Format("%1: %2\r\n%3: %4\r\n%5: %6",
+								  KTr("Generic.Version"), KApp::Get().GetAppVersion(),
+								  KTr("Generic.Revision"), KApp::Get().GetVariables().GetVariable("AppRevision"),
+								  KTr("Generic.Developer"), KApp::Get().GetVendorDisplayName())
+		);
 		AdjustWindow(wxDefaultPosition, wxSize(650, 425));
 	}
 }

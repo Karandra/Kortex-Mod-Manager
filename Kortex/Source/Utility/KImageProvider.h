@@ -17,7 +17,7 @@ namespace KImageProvider
 	wxImage KGetImage(const wxString& id);
 	wxIcon KGetIcon(const wxString& id);
 
-	void KLoadImages(KxImageList& tImageList, KxImageSet& tImageSet);
+	void KLoadImages(KxImageList& imageList, KxImageSet& imageSet);
 }
 
 enum KImageEnum: int
@@ -171,6 +171,13 @@ enum KImageEnum: int
 	KIMG_EDIT_ALIGNMENT_RIGHT,
 	KIMG_EDIT_ALIGNMENT_CENTER,
 	KIMG_EDIT_ALIGNMENT_JUSTIFY,
+
+	KIMG_BELL,
+	KIMG_BELL_EXCLAMATION,
+	KIMG_BELL_RED_CIRCLE,
+	KIMG_BELL_PENCIL,
+	KIMG_BELL_MINUS,
+	KIMG_BELL_PLUS,
 
 	KIMG_COUNT
 };

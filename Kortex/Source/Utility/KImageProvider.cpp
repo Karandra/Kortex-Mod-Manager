@@ -42,24 +42,24 @@ namespace KImageProvider
 		return KGetImageSet()->GetIcon(id);
 	}
 
-	void KLoadImages(KxImageList& tImageList, KxImageSet& tImageSet)
+	void KLoadImages(KxImageList& imageList, KxImageSet& imageSet)
 	{
 		wxIcon tempIcon = wxICON(IDS_ICON_APP);
 		for (size_t i = 0; i < KIMG_COUNT; i++)
 		{
-			tImageList.Add(tempIcon);
+			imageList.Add(tempIcon);
 		}
-		auto AddItem = [&tImageList, &tImageSet](KImageEnum id, const char* name, const auto& v)
+		auto AddItem = [&imageList, &imageSet](KImageEnum id, const char* name, const auto& v)
 		{
-			tImageList.Replace(id, v);
-			tImageSet.Set(name, v);
+			imageList.Replace(id, v);
+			imageSet.Set(name, v);
 		};
 		auto Add = [&AddItem](KImageEnum id, const char* name, int type = 0)
 		{
-			auto tImg = wxBitmap(wxString::Format("%s\\UI\\%s.%s", KApp::Get().GetDataFolder(), name, type == 0 ? "png" : "ico"), type == 0 ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_ICO);
-			if (tImg.IsOk())
+			wxBitmap img(KxString::Format(wxS("%1\\UI\\%2.%3"), KApp::Get().GetDataFolder(), name, type == 0 ? wxS("png") : wxS("ico")), type == 0 ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_ICO);
+			if (img.IsOk())
 			{
-				AddItem(id, name, tImg);
+				AddItem(id, name, img);
 			}
 		};
 
@@ -71,8 +71,8 @@ namespace KImageProvider
 			*(nullIcon.GetAlpha() + i) = 0;
 		}
 
-		tImageList.Replace(KIMG_NULL, nullIcon);
-		tImageSet.Set("Null", nullIcon);
+		imageList.Replace(KIMG_NULL, nullIcon);
+		imageSet.Set("Null", nullIcon);
 
 		/* Site icons */
 		Add(KIMG_SITE_TESALL, "TESALL");
@@ -228,5 +228,12 @@ namespace KImageProvider
 		Add(KIMG_EDIT_ALIGNMENT_RIGHT, "edit-alignment-right");
 		Add(KIMG_EDIT_ALIGNMENT_CENTER, "edit-alignment-center");
 		Add(KIMG_EDIT_ALIGNMENT_JUSTIFY, "edit-alignment-justify");
+
+		Add(KIMG_BELL, "bell");
+		Add(KIMG_BELL_EXCLAMATION, "bell--exclamation");
+		Add(KIMG_BELL_RED_CIRCLE, "bell--red-circle");
+		Add(KIMG_BELL_PENCIL, "bell--pencil");
+		Add(KIMG_BELL_PLUS, "bell--plus");
+		Add(KIMG_BELL_MINUS, "bell--minus");
 	}
 }

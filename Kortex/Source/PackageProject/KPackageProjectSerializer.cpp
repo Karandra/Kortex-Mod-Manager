@@ -65,7 +65,7 @@ wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, 
 }
 bool KPackageProjectSerializer::CheckTag(const wxString& tagName) const
 {
-	return KModManager::GetTagManager().FindModTag(tagName) != NULL;
+	return KModTagsManager::GetInstance()->FindModTag(tagName) != NULL;
 }
 
 KPackageProjectSerializer::KPackageProjectSerializer()

@@ -204,7 +204,7 @@ void KProfile::SyncWithCurrentState()
 {
 	// Mods
 	m_Mods.clear();
-	for (KModEntry* entry: KModManager::Get().GetEntries())
+	for (auto& entry: KModManager::GetInstance()->GetEntries())
 	{
 		m_Mods.emplace_back(*entry, entry->IsEnabled());
 	}

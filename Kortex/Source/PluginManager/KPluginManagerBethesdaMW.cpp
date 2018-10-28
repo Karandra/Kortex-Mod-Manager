@@ -16,7 +16,7 @@
 
 void KPluginManagerBethesdaMW::ReadOrderMW(const KxINI& ini)
 {
-	auto files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
+	auto files = KDispatcher::GetInstance()->FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
 
 	// Load all names from 'Game Files Order' section. Discard non-existing files.
 	KxStringVector loadOrder = ini.GetKeyNames("Game Files Order");

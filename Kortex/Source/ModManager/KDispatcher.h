@@ -49,7 +49,7 @@ class KDispatcher: public KxSingletonPtr<KDispatcher>
 {
 	public:
 		using FilesVector = std::vector<KxFileItem>;
-		using ModsVector = std::vector<KModEntry*>;
+		using ModRefVector = std::vector<KModEntry*>;
 
 		enum class IterationOrder
 		{
@@ -63,7 +63,7 @@ class KDispatcher: public KxSingletonPtr<KDispatcher>
 		bool m_VirtualTreeInvalidated = true;
 
 	private:
-		KModEntry* IterateOverModsEx(const ModsVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly) const;
+		KModEntry* IterateOverModsEx(const ModRefVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly) const;
 		bool CheckConditionsAndCallFunctor(const IterationFunctor& functor, const KModEntry& modEntry, bool activeOnly) const;
 
 		void RebuildTreeIfNeeded() const;

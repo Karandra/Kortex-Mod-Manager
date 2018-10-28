@@ -34,7 +34,7 @@ class KModEntry: public KWithBitmap
 	friend class KDispatcher;
 
 	public:
-		using Vector = std::vector<KModEntry*>;
+		using Vector = std::vector<std::unique_ptr<KModEntry>>;
 		using RefVector = std::vector<KModEntry*>;
 		using CRefVector = std::vector<const KModEntry*>;
 
@@ -48,7 +48,7 @@ class KModEntry: public KWithBitmap
 		static bool HasWebSite(const FixedWebSitesArray& array, KNetworkProviderID index);
 		static KLabeledValue GetWebSite(const FixedWebSitesArray& array, KNetworkProviderID index, const wxString& signature = wxEmptyString);
 		static void SetWebSite(FixedWebSitesArray& array, KNetworkProviderID index, KNetworkModID modID);
-		static bool HasTag(KxStringVector& array, const wxString& value);
+		static bool HasTag(const KxStringVector& array, const wxString& value);
 		static bool ToggleTag(KxStringVector& array, const wxString& value, bool setTag);
 
 	private:

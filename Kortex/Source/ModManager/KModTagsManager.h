@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KLabeledValue.h"
+#include <KxFramework/KxSingleton.h>
 class KModManager;
 class KModEntry;
 class KGameInstance;
@@ -37,7 +38,7 @@ class KModTag: public KLabeledValue
 typedef std::vector<KModTag> KModTagArray;
 
 //////////////////////////////////////////////////////////////////////////
-class KModTagsManager
+class KModTagsManager: public KxSingletonPtr<KModTagsManager>
 {
 	friend class KModManager;
 
@@ -78,7 +79,7 @@ class KModTagsManager
 		}
 		bool RemoveModTag(const wxString& tagValue);
 		const wxString& GetTagName(const wxString& tagID) const;
-		void LoadTagsFromEntry(const KModEntry* entry);
+		void LoadTagsFromEntry(const KModEntry& entry);
 
 		wxString GetUserTagsFile() const;
 		void LoadDefaultTags()

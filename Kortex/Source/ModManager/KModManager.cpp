@@ -20,6 +20,7 @@
 #include "IPC/KIPCClient.h"
 #include "Network/KNetwork.h"
 #include "KOperationWithProgress.h"
+#include "KUPtrVectorUtil.h"
 #include "KApp.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxFile.h>
@@ -84,10 +85,9 @@ void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* wind
 		operation->OnEnd([this, modID = modEntry->GetID().Clone()](KOperationWithProgressBase* self)
 		{
 			Save();
-
-			KModEvent(KEVT_MOD_UNINSTALLED, modID).Send();
+			NotifyModUninstalled(modID);
 		});
-		operation->SetDialogCaption(T("ModManager.RemoveMod.RemovingMessage"));
+		operation->SetDialogCaption(KTr("ModManager.RemoveMod.RemovingMessage"));
 		operation->Run();
 	}
 }
@@ -151,8 +151,8 @@ void KModManager::CreateMountStatusDialog()
 	}
 
 	m_MountStatusDialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, wxEmptyString, wxDefaultPosition, wxDefaultSize, KxBTN_NONE);
-	m_MountStatusDialog->SetCaption(IsVFSMounted() ? T("VFS.MountingCaptionDisable") : T("VFS.MountingCaptionEnable"));
-	m_MountStatusDialog->SetLabel(T("VFS.MountingMessage"));
+	m_MountStatusDialog->SetCaption(IsVFSMounted() ? KTr("VFS.MountingCaptionDisable") : KTr("VFS.MountingCaptionEnable"));
+	m_MountStatusDialog->SetLabel(KTr("VFS.MountingMessage"));
 	m_MountStatusDialog->Pulse();
 	m_MountStatusDialog->Show();
 }
@@ -181,7 +181,7 @@ bool KModManager::CheckMountPoint(const wxString& folderPath)
 }
 void KModManager::ReportNonEmptyMountPoint(const wxString& folderPath)
 {
-	KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, T("VFS.MountPointNotEmpty.Caption"), T("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
+	KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
 	dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
 	dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
 	dialog.SetExMessage(wxString::Format("<a href=\"%s\">%s</a>", folderPath, folderPath));
@@ -214,7 +214,7 @@ void KModManager::OnInit()
 
 	// Write target
 	m_ModEntry_WriteTarget.SetID(KVAR_OVERWRITES_DIR);
-	m_ModEntry_WriteTarget.SetName(T("ModManager.WriteTargetName"));
+	m_ModEntry_WriteTarget.SetName(KTr("ModManager.WriteTargetName"));
 	m_ModEntry_WriteTarget.SetEnabled(true);
 
 	m_TagManager.OnInit();
@@ -257,10 +257,6 @@ KModManager::KModManager(KWorkspace* workspace)
 }
 void KModManager::Clear()
 {
-	for (KModEntry* entry: m_ModEntries)
-	{
-		delete entry;
-	}
 	m_ModEntries.clear();
 }
 KModManager::~KModManager()
@@ -275,7 +271,7 @@ wxString KModManager::GetID() const
 }
 wxString KModManager::GetName() const
 {
-	return T("ModManager.Name");
+	return KTr("ModManager.Name");
 }
 wxString KModManager::GetVersion() const
 {
@@ -286,9 +282,9 @@ KWorkspace* KModManager::GetWorkspace() const
 	return KModWorkspace::GetInstance();
 }
 
-KModEntry::Vector KModManager::GetAllEntries(bool includeWriteTarget)
+KModEntry::RefVector KModManager::GetAllEntries(bool includeWriteTarget)
 {
-	KModEntry::Vector entries;
+	KModEntry::RefVector entries;
 	entries.reserve(m_ModEntries.size() + m_ModEntry_Mandatory.size() + 2);
 
 	// Add game root as first virtual folder
@@ -301,9 +297,9 @@ KModEntry::Vector KModManager::GetAllEntries(bool includeWriteTarget)
 	}
 
 	// Add mods
-	for (KModEntry* entry: m_ModEntries)
+	for (auto& entry: m_ModEntries)
 	{
-		entries.push_back(entry);
+		entries.push_back(&*entry);
 	}
 
 	// Add write target
@@ -327,12 +323,15 @@ void KModManager::Load()
 			wxString signature = KxFile(path).GetFullName();
 			if (!signature.IsEmpty())
 			{
-				auto entry = std::make_unique<KModEntry>();
-				entry->CreateFromSignature(signature);
-				if (entry->IsOK())
+				KModEntry& entry = *m_ModEntries.emplace_back(new KModEntry());
+				entry.CreateFromSignature(signature);
+				if (entry.IsOK())
 				{
-					m_TagManager.LoadTagsFromEntry(entry.get());
-					m_ModEntries.push_back(entry.release());
+					m_TagManager.LoadTagsFromEntry(entry);
+				}
+				else
+				{
+					m_ModEntries.pop_back();
 				}
 			}
 		}
@@ -374,12 +373,12 @@ void KModManager::ResortMods(const KProfile& profile)
 KModEntry* KModManager::FindModByID(const wxString& modID, intptr_t* index) const
 {
 	intptr_t i = 0;
-	for (KModEntry* entry: m_ModEntries)
+	for (auto& entry: m_ModEntries)
 	{
 		if (entry->GetID() == modID)
 		{
 			KxUtility::SetIfNotNull(index, i);
-			return entry;
+			return &*entry;
 		}
 		i++;
 	}
@@ -390,12 +389,12 @@ KModEntry* KModManager::FindModByID(const wxString& modID, intptr_t* index) cons
 KModEntry* KModManager::FindModByName(const wxString& modName, intptr_t* index) const
 {
 	intptr_t i = 0;
-	for (KModEntry* entry: m_ModEntries)
+	for (auto& entry: m_ModEntries)
 	{
 		if (entry->GetName() == modName)
 		{
 			KxUtility::SetIfNotNull(index, i);
-			return entry;
+			return &*entry;
 		}
 		i++;
 	}
@@ -406,12 +405,12 @@ KModEntry* KModManager::FindModByName(const wxString& modName, intptr_t* index) 
 KModEntry* KModManager::FindModBySignature(const wxString& signature, intptr_t* index) const
 {
 	intptr_t i = 0;
-	for (KModEntry* entry: m_ModEntries)
+	for (auto& entry: m_ModEntries)
 	{
 		if (entry->GetSignature() == signature)
 		{
 			KxUtility::SetIfNotNull(index, i);
-			return entry;
+			return &*entry;
 		}
 		i++;
 	}
@@ -424,12 +423,12 @@ KModEntry* KModManager::FindModByNetworkModID(KNetworkProviderID providerID, KNe
 	if (KNetwork::GetInstance()->IsValidProviderID(providerID))
 	{
 		intptr_t i = 0;
-		for (KModEntry* entry: m_ModEntries)
+		for (auto& entry: m_ModEntries)
 		{
 			if (entry->GetFixedWebSites()[providerID] == id)
 			{
 				KxUtility::SetIfNotNull(index, i);
-				return entry;
+				return &*entry;
 			}
 			i++;
 		}
@@ -475,63 +474,31 @@ bool KModManager::ChangeModID(KModEntry* entry, const wxString& newID)
 
 intptr_t KModManager::GetModOrderIndex(const KModEntry* modEntry) const
 {
-	auto it = std::find(m_ModEntries.begin(), m_ModEntries.end(), modEntry);
+	auto it = std::find_if(m_ModEntries.begin(), m_ModEntries.end(), [modEntry](const auto& mod)
+	{
+		return mod.get() == modEntry;
+	});
 	if (it != m_ModEntries.end())
 	{
 		return std::distance(m_ModEntries.begin(), it);
 	}
 	return -1;
 }
-bool KModManager::MoveModsIntoThis(const KModEntry::Vector& entriesToMove, const KModEntry* anchor, KModManagerModsMoveType moveMode)
+bool KModManager::MoveModsIntoThis(const KModEntry::RefVector& entriesToMove, const KModEntry& anchor, MoveMode moveMode)
 {
-	// Check if anchor is not one of moved elements
-	if (std::find(entriesToMove.begin(), entriesToMove.end(), anchor) != entriesToMove.end())
+	if (moveMode == MoveMode::Before)
 	{
-		return false;
+		return KUPtrVectorUtil::MoveBefore(m_ModEntries, entriesToMove, anchor);
 	}
-
-	auto it = std::find(m_ModEntries.begin(), m_ModEntries.end(), anchor);
-	if (it != m_ModEntries.end())
+	else
 	{
-		// Remove from existing place
-		m_ModEntries.erase(std::remove_if(m_ModEntries.begin(), m_ModEntries.end(), [&entriesToMove](const KModEntry* entry)
-		{
-			return std::find(entriesToMove.begin(), entriesToMove.end(), entry) != entriesToMove.end();
-		}), m_ModEntries.end());
-
-		// Iterator may have been invalidated
-		it = std::find(m_ModEntries.begin(), m_ModEntries.end(), anchor);
-		if (it != m_ModEntries.end())
-		{
-			switch (moveMode)
-			{
-				case KMM_MOVEMOD_BEFORE:
-				{
-					m_ModEntries.insert(it, entriesToMove.begin(), entriesToMove.end());
-					break;
-				}
-				default:
-				{
-					size_t index = 1;
-					for (auto i = entriesToMove.begin(); i != entriesToMove.end(); ++i)
-					{
-						m_ModEntries.insert(it + index, *i);
-						index++;
-					}
-					break;
-				}
-			};
-
-			Save();
-			return true;
-		}
+		return KUPtrVectorUtil::MoveAfter(m_ModEntries, entriesToMove, anchor);
 	}
-	return false;
 }
 
 wxString KModManager::GetVirtualGameRoot() const
 {
-	return V(KVAR(KVAR_VIRTUAL_GAME_DIR));
+	return KVarExp(KVAR(KVAR_VIRTUAL_GAME_DIR));
 }
 
 void KModManager::MountVFS()
@@ -602,7 +569,7 @@ void KModManager::ExportModList(const wxString& outputFilePath) const
 	};
 
 	AddRow({"Installed", "Active", "Name (ID)", "Version", "Author", "Sites", "Description"}, true);
-	for (const KModEntry* modEntry: m_ModEntries)
+	for (const auto& modEntry: m_ModEntries)
 	{
 		wxString name;
 		if (modEntry->GetName() != modEntry->GetID())
@@ -662,4 +629,13 @@ void KModManager::ExportModList(const wxString& outputFilePath) const
 
 	KxFileStream stream(outputFilePath, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways);
 	stream.WriteStringUTF8(xml.GetXML(KxXML_PRINT_HTML5));
+}
+
+void KModManager::NotifyModInstalled(KModEntry& modEntry)
+{
+	KModEvent(KEVT_MOD_INSTALLED, modEntry).Send();
+}
+void KModManager::NotifyModUninstalled(const wxString& modID)
+{
+	KModEvent(KEVT_MOD_UNINSTALLED, modID).Send();
 }

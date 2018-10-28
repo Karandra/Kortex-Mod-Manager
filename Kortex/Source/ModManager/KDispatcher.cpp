@@ -80,7 +80,7 @@ namespace
 		}
 	}
 
-	void BuildTreeBranch(const KDispatcher::ModsVector& mods, KFileTreeNode::Vector& children, const KFileTreeNode* rootNode, KFileTreeNode::RefVector& directories)
+	void BuildTreeBranch(const KDispatcher::ModRefVector& mods, KFileTreeNode::Vector& children, const KFileTreeNode* rootNode, KFileTreeNode::RefVector& directories)
 	{
 		std::unordered_map<size_t, size_t> hash;
 		hash.reserve(mods.size());
@@ -145,26 +145,26 @@ wxString KDispatcherCollision::GetLocalizedCollisionName(KMMDispatcherCollisionT
 	{
 		case KMM_DCT_NONE:
 		{
-			return T(KxID_NONE);
+			return KTr(KxID_NONE);
 		}
 		case KMM_DCT_UNKNOWN:
 		{
-			return T("ModExplorer.Collision.Unknown");
+			return KTr("ModExplorer.Collision.Unknown");
 		}
 		case KMM_DCT_OVERWRITTEN:
 		{
-			return T("ModExplorer.Collision.Overwritten");
+			return KTr("ModExplorer.Collision.Overwritten");
 		}
 		case KMM_DCT_OVERWRITES:
 		{
-			return T("ModExplorer.Collision.Owerwrites");
+			return KTr("ModExplorer.Collision.Owerwrites");
 		}
 	};
 	return wxEmptyString;
 }
 
 //////////////////////////////////////////////////////////////////////////
-KModEntry* KDispatcher::IterateOverModsEx(const ModsVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly) const
+KModEntry* KDispatcher::IterateOverModsEx(const ModRefVector& mods, const IterationFunctor& functor, IterationOrder order, bool activeOnly) const
 {
 	switch (order)
 	{
@@ -218,7 +218,7 @@ void KDispatcher::UpdateVirtualTree()
 	// Recursive (parallel)
 	#if 1
 	m_VirtualTree.ClearChildren();
-	const KModEntry::RefVector mods = KModManager::Get().GetAllEntries(true);
+	const KModEntry::RefVector mods = KModManager::GetInstance()->GetAllEntries(true);
 
 	// Build top level
 	KFileTreeNode::RefVector directories;
@@ -276,7 +276,7 @@ const KFileTreeNode& KDispatcher::GetVirtualTree() const
 KModEntry* KDispatcher::IterateOverMods(IterationFunctor functor, IterationOrder order, bool includeWriteTarget, bool activeOnly) const
 {
 	RebuildTreeIfNeeded();
-	return IterateOverModsEx(KModManager::Get().GetAllEntries(includeWriteTarget), functor, order, activeOnly);
+	return IterateOverModsEx(KModManager::GetInstance()->GetAllEntries(includeWriteTarget), functor, order, activeOnly);
 }
 
 const KFileTreeNode* KDispatcher::ResolveLocation(const wxString& relativePath) const
@@ -301,7 +301,7 @@ wxString KDispatcher::ResolveLocationPath(const wxString& relativePath, const KM
 
 	// Fallback to write target
 	KxUtility::SetIfNotNull(owningMod, nullptr);
-	return KModManager::Get().GetModEntry_WriteTarget()->GetModFilesDir() + wxS('\\') + relativePath;
+	return KModManager::GetInstance()->GetModEntry_WriteTarget()->GetModFilesDir() + wxS('\\') + relativePath;
 }
 
 const KFileTreeNode* KDispatcher::BackTrackFullPath(const wxString& fullPath) const

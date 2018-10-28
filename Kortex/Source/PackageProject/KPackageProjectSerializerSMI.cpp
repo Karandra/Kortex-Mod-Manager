@@ -61,11 +61,11 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 		const wxString& id = m_Project->GetTargetProfileID();
 		if (id == "Morrowind")
 		{
-			return V(KVAR(KVAR_VIRTUAL_GAME_DIR) "\\Data Files");
+			return KVarExp(KVAR(KVAR_VIRTUAL_GAME_DIR) "\\Data Files");
 		}
 		else
 		{
-			return V(KVAR(KVAR_VIRTUAL_GAME_DIR) "\\Data");
+			return KVarExp(KVAR(KVAR_VIRTUAL_GAME_DIR) "\\Data");
 		}
 	}
 

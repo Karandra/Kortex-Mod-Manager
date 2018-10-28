@@ -69,7 +69,7 @@ void KModEntry::SetWebSite(FixedWebSitesArray& array, KNetworkProviderID index, 
 		array[index] = modID;
 	}
 }
-bool KModEntry::HasTag(KxStringVector& array, const wxString& value)
+bool KModEntry::HasTag(const KxStringVector& array, const wxString& value)
 {
 	return std::find(array.begin(), array.end(), value) != array.end();
 }
@@ -445,9 +445,9 @@ intptr_t KModEntry::GetPriority() const
 	if (IsEnabled())
 	{
 		int priority = 0;
-		for (const KModEntry* entry: KModManager::Get().GetEntries())
+		for (const auto& entry: KModManager::GetInstance()->GetEntries())
 		{
-			if (entry == this)
+			if (entry.get() == this)
 			{
 				break;
 			}
@@ -464,7 +464,7 @@ intptr_t KModEntry::GetPriority() const
 intptr_t KModEntry::GetOrderIndex() const
 {
 	// x2 reserve space for priority groups
-	return 2 * KModManager::Get().GetModOrderIndex(this);
+	return 2 * KModManager::GetInstance()->GetModOrderIndex(this);
 }
 
 wxString KModEntry::GetRootDir() const

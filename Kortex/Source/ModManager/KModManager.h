@@ -19,12 +19,6 @@ class KVirtualFileSystemBase;
 class KIPCClient;
 class KxProgressDialog;
 
-enum KModManagerModsMoveType
-{
-	KMM_MOVEMOD_BEFORE,
-	KMM_MOVEMOD_AFTER,
-};
-
 //////////////////////////////////////////////////////////////////////////
 class KModManager: public KManager, public KxSingletonPtr<KModManager>
 {
@@ -32,18 +26,11 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 	friend class KApp;
 
 	public:
-		static KModManager& Get()
+		enum class MoveMode
 		{
-			return *GetInstance();
-		}
-		static KModTagsManager& GetTagManager()
-		{
-			return Get().m_TagManager;
-		}
-		static KDispatcher& GetDispatcher()
-		{
-			return Get().m_Dispatcher;
-		}
+			Before,
+			After,
+		};
 
 	private:
 		using MandatotyModEntriesVector = std::vector<KMandatoryModEntry>;
@@ -117,7 +104,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		{
 			return m_ModEntries;
 		}
-		KModEntry::Vector GetAllEntries(bool includeWriteTarget = false);
+		KModEntry::RefVector GetAllEntries(bool includeWriteTarget = false);
 
 		MandatotyModEntriesVector& GetModEntry_Mandatory()
 		{
@@ -155,7 +142,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		bool ChangeModID(KModEntry* entry, const wxString& newID);
 
 		intptr_t GetModOrderIndex(const KModEntry* modEntry) const;
-		bool MoveModsIntoThis(const KModEntry::Vector& entriesToMove, const KModEntry* anchor, KModManagerModsMoveType moveMode = KMM_MOVEMOD_AFTER);
+		bool MoveModsIntoThis(const KModEntry::RefVector& entriesToMove, const KModEntry& anchor, MoveMode moveMode = MoveMode::After);
 
 		wxString GetVirtualGameRoot() const;
 		KxProgressDialog* GetMountStatusDialog() const
@@ -171,4 +158,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		void UnMountVFS();
 
 		void ExportModList(const wxString& outputFilePath) const;
+
+		void NotifyModInstalled(KModEntry& modEntry);
+		void NotifyModUninstalled(const wxString& modID);
 };

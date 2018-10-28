@@ -50,11 +50,13 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 
 	private:
 		void DoResortMods(const KProfile& profile);
+		void DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* window = NULL);
+		KModEntry* DoLoadMod(const wxString& signature);
+		
 		void SetMounted(bool value)
 		{
 			m_IsMounted = value;
 		}
-		void DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* window = NULL);
 
 		bool InitMainVirtualFolder();
 		bool InitMirroredLocations();
@@ -67,10 +69,7 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 
 	private:
 		void OnInit() override;
-
 		void OnModFilesChanged(KModEvent& event);
-		void OnModInstalled(KModEvent& event);
-		void OnModUninstalled(KModEvent& event);
 
 	public:
 		KModManager(KWorkspace* workspace);
@@ -160,5 +159,5 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 		void ExportModList(const wxString& outputFilePath) const;
 
 		void NotifyModInstalled(KModEntry& modEntry);
-		void NotifyModUninstalled(const wxString& modID);
+		void NotifyModUninstalled(KModEntry& modEntry);
 };

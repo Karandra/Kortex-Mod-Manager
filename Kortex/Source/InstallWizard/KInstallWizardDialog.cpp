@@ -645,8 +645,6 @@ void KInstallWizardDialog::OnClose(wxCloseEvent& event)
 	}
 	else
 	{
-		KModManager::GetInstance()->NotifyModInstalled(m_ModEntry);
-
 		wxNotifyEvent doneEvent(KEVT_IW_DONE);
 		doneEvent.SetEventObject(this);
 		HandleWindowEvent(doneEvent);
@@ -1181,9 +1179,12 @@ bool KInstallWizardDialog::OnEndInstall()
 			const wxBitmap& bitmap = imageEntry->GetBitmap();
 			bitmap.SaveFile(m_ModEntry.GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
 		}
-
+		
+		KModManager::GetInstance()->NotifyModInstalled(m_ModEntry);
 		if (ShouldCancel())
 		{
+			// We were canceled, but mod is partially installed,
+			// so user can call uninstall on it later
 			Destroy();
 		}
 		else

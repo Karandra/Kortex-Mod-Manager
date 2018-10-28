@@ -82,14 +82,29 @@ void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* wind
 			self->LinkHandler(&folder, KxEVT_FILEOP_REMOVE_FOLDER);
 			folder.RemoveFolderTree(true);
 		});
-		operation->OnEnd([this, modID = modEntry->GetID().Clone()](KOperationWithProgressBase* self)
+		operation->OnEnd([this, modEntry](KOperationWithProgressBase* self)
 		{
 			Save();
-			NotifyModUninstalled(modID);
+			NotifyModUninstalled(*modEntry);
 		});
 		operation->SetDialogCaption(KTr("ModManager.RemoveMod.RemovingMessage"));
 		operation->Run();
 	}
+}
+KModEntry* KModManager::DoLoadMod(const wxString& signature)
+{
+	if (!signature.IsEmpty())
+	{
+		KModEntry& entry = *m_ModEntries.emplace_back(new KModEntry());
+		entry.CreateFromSignature(signature);
+		if (entry.IsOK())
+		{
+			m_TagManager.LoadTagsFromEntry(entry);
+			return &entry;
+		}
+		m_ModEntries.pop_back();
+	}
+	return NULL;
 }
 
 bool KModManager::InitMainVirtualFolder()
@@ -232,28 +247,12 @@ void KModManager::OnModFilesChanged(KModEvent& event)
 		mod->UpdateFileTree();
 	}
 }
-void KModManager::OnModInstalled(KModEvent& event)
-{
-	Save();
-	Load();
-	ResortMods();
-	KWorkspace::ScheduleReloadOf<KModWorkspace>();
-}
-void KModManager::OnModUninstalled(KModEvent& event)
-{
-	Save();
-	Load();
-	ResortMods();
-	KWorkspace::ScheduleReloadOf<KModWorkspace>();
-}
 
 KModManager::KModManager(KWorkspace* workspace)
 	:m_Options(this, "General"),
 	m_ModEntry_BaseGame(std::numeric_limits<int>::min()), m_ModEntry_WriteTarget(std::numeric_limits<int>::max())
 {
 	KEvent::Bind(KEVT_MOD_FILES_CHANGED, &KModManager::OnModFilesChanged, this);
-	KEvent::Bind(KEVT_MOD_INSTALLED, &KModManager::OnModInstalled, this);
-	KEvent::Bind(KEVT_MOD_UNINSTALLED, &KModManager::OnModUninstalled, this);
 }
 void KModManager::Clear()
 {
@@ -321,19 +320,7 @@ void KModManager::Load()
 		for (const wxString& path: KxFile(instnace->GetModsDir()).Find(KxFile::NullFilter, KxFS_FOLDER, false))
 		{
 			wxString signature = KxFile(path).GetFullName();
-			if (!signature.IsEmpty())
-			{
-				KModEntry& entry = *m_ModEntries.emplace_back(new KModEntry());
-				entry.CreateFromSignature(signature);
-				if (entry.IsOK())
-				{
-					m_TagManager.LoadTagsFromEntry(entry);
-				}
-				else
-				{
-					m_ModEntries.pop_back();
-				}
-			}
+			DoLoadMod(signature);
 		}
 	}
 
@@ -633,9 +620,36 @@ void KModManager::ExportModList(const wxString& outputFilePath) const
 
 void KModManager::NotifyModInstalled(KModEntry& modEntry)
 {
-	KModEvent(KEVT_MOD_INSTALLED, modEntry).Send();
+	KModEntry* newMod = FindModBySignature(modEntry.GetSignature());
+	if (newMod == NULL)
+	{
+		newMod = DoLoadMod(modEntry.GetSignature());
+	}
+
+	if (newMod)
+	{
+		newMod->UpdateFileTree();
+		ResortMods();
+
+		KDispatcher::GetInstance()->InvalidateVirtualTree();
+		KModWorkspace::GetInstance()->ReloadWorkspace();
+		KEvent::MakeQueue<KModEvent>(KEVT_MOD_INSTALLED, *newMod);
+
+		Save();
+	}
 }
-void KModManager::NotifyModUninstalled(const wxString& modID)
+void KModManager::NotifyModUninstalled(KModEntry& modEntry)
 {
-	KModEvent(KEVT_MOD_UNINSTALLED, modID).Send();
+	intptr_t index = GetModOrderIndex(&modEntry);
+	if (index != -1)
+	{
+		const wxString modID = modEntry.GetID();
+		m_ModEntries.erase(m_ModEntries.begin() + index);
+
+		KDispatcher::GetInstance()->InvalidateVirtualTree();
+		KModWorkspace::GetInstance()->ReloadWorkspace();
+		KEvent::MakeQueue<KModEvent>(KEVT_MOD_UNINSTALLED, modID);
+
+		Save();
+	}
 }

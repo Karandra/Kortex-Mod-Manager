@@ -68,7 +68,7 @@ KPackageProjectConfig& KPackageCreatorPageInfo::GetProjectConfig() const
 void KPackageCreatorPageInfo::CreateBasicInfoControls()
 {
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(m_Pane, T("PackageCreator.PageInfo.BasicInfo"));
+	KxLabel* label = CreateCaptionLabel(m_Pane, KTr("PackageCreator.PageInfo.BasicInfo"));
 	m_PaneSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	wxFlexGridSizer* basicInfoSizer = new wxFlexGridSizer(2, KLC_VERTICAL_SPACING, 0);
@@ -77,30 +77,30 @@ void KPackageCreatorPageInfo::CreateBasicInfoControls()
 
 	// Main info
 	wxBoxSizer* nameIDSizer = new wxBoxSizer(wxHORIZONTAL);
-	AddControlsRow2(m_Pane, basicInfoSizer, T("PackageCreator.PageInfo.BasicInfo.Name"), nameIDSizer, 2);
+	AddControlsRow2(m_Pane, basicInfoSizer, KTr("PackageCreator.PageInfo.BasicInfo.Name"), nameIDSizer, 2);
 
 	m_NameInput = CreateInputField(m_Pane);
 	nameIDSizer->Add(m_NameInput, 1, wxEXPAND|wxRIGHT, 6 * KLC_HORIZONTAL_SPACING);
 
-	m_IDInput = AddControlsRow(nameIDSizer, T("PackageCreator.PageInfo.BasicInfo.ID"), CreateInputField(m_Pane));
+	m_IDInput = AddControlsRow(nameIDSizer, KTr("PackageCreator.PageInfo.BasicInfo.ID"), CreateInputField(m_Pane));
 	m_IDInput->SetMaxSize(wxSize(150, -1));
 
-	m_VersionInput = AddControlsRow(basicInfoSizer, T("PackageCreator.PageInfo.BasicInfo.Version"), CreateInputField(m_Pane));
-	m_AuthorInput = AddControlsRow(basicInfoSizer, T("PackageCreator.PageInfo.BasicInfo.Author"), CreateInputField(m_Pane));
+	m_VersionInput = AddControlsRow(basicInfoSizer, KTr("PackageCreator.PageInfo.BasicInfo.Version"), CreateInputField(m_Pane));
+	m_AuthorInput = AddControlsRow(basicInfoSizer, KTr("PackageCreator.PageInfo.BasicInfo.Author"), CreateInputField(m_Pane));
 
 	// Tags
 	{
-		wxBoxSizer* sizer = AddControlsRow2(m_Pane, basicInfoSizer, T("PackageCreator.PageInfo.BasicInfo.Tags"), new wxBoxSizer(wxVERTICAL));
+		wxBoxSizer* sizer = AddControlsRow2(m_Pane, basicInfoSizer, KTr("PackageCreator.PageInfo.BasicInfo.Tags"), new wxBoxSizer(wxVERTICAL));
 		m_TagsModel = new KPCInfoTagsListModel();
 		m_TagsModel->Create(m_Controller, m_Pane, sizer);
 	}
 
-	m_DescriptionButton = AddControlsRow(basicInfoSizer, T("PackageCreator.PageInfo.BasicInfo.Description"), new KxButton(m_Pane, KxID_NONE, T(KxID_EDIT)), 0);
+	m_DescriptionButton = AddControlsRow(basicInfoSizer, KTr("PackageCreator.PageInfo.BasicInfo.Description"), new KxButton(m_Pane, KxID_NONE, KTr(KxID_EDIT)), 0);
 
 	// Additional info
 	wxBoxSizer* collapsePaneContainerSizer = new wxBoxSizer(wxVERTICAL);
 	m_PaneSizer->Add(collapsePaneContainerSizer, 0, wxEXPAND|wxLEFT, ms_LeftMargin);
-	KxCollapsiblePane* pCollapsePane = new KxCollapsiblePane(m_Pane, KxID_NONE, T("PackageCreator.PageInfo.BasicInfo.AdditionalData"));
+	KxCollapsiblePane* pCollapsePane = new KxCollapsiblePane(m_Pane, KxID_NONE, KTr("PackageCreator.PageInfo.BasicInfo.AdditionalData"));
 	collapsePaneContainerSizer->Add(pCollapsePane, 0, wxEXPAND);
 
 	wxFlexGridSizer* collapsePaneSizer = new wxFlexGridSizer(2, KLC_VERTICAL_SPACING, 0);
@@ -108,10 +108,10 @@ void KPackageCreatorPageInfo::CreateBasicInfoControls()
 	collapsePaneSizer->SetSizeHints(pCollapsePane->GetPane());
 	pCollapsePane->GetPane()->SetSizer(collapsePaneSizer);
 
-	m_TranslatedNameInput = AddControlsRow(collapsePaneSizer, T("PackageCreator.PageInfo.BasicInfo.TranslatedName"), CreateInputField(pCollapsePane->GetPane()));
-	m_TranslatorNameInput = AddControlsRow(collapsePaneSizer, T("PackageCreator.PageInfo.BasicInfo.Translatior"), CreateInputField(pCollapsePane->GetPane()));
-	m_UserDataButton = AddControlsRow(collapsePaneSizer, T("PackageCreator.PageInfo.BasicInfo.UserData"), new KxButton(pCollapsePane->GetPane(), KxID_NONE, T(KxID_EDIT)), 0);
-	m_DocumentsButton = AddControlsRow(collapsePaneSizer, T("PackageCreator.PageInfo.BasicInfo.Documents"), new KxButton(pCollapsePane->GetPane(), KxID_NONE, T(KxID_EDIT)), 0);
+	m_TranslatedNameInput = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.BasicInfo.TranslatedName"), CreateInputField(pCollapsePane->GetPane()));
+	m_TranslatorNameInput = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.BasicInfo.Translatior"), CreateInputField(pCollapsePane->GetPane()));
+	m_UserDataButton = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.BasicInfo.UserData"), new KxButton(pCollapsePane->GetPane(), KxID_NONE, KTr(KxID_EDIT)), 0);
+	m_DocumentsButton = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.BasicInfo.Documents"), new KxButton(pCollapsePane->GetPane(), KxID_NONE, KTr(KxID_EDIT)), 0);
 
 	// Bind events
 	m_IDInput->Bind(wxEVT_TEXT, [this](wxCommandEvent& event)
@@ -158,14 +158,14 @@ void KPackageCreatorPageInfo::CreateBasicInfoControls()
 	});
 	m_UserDataButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		KPCInfoAdditionalInfoModelDialog dialog(GetMainWindow(), T("PackageCreator.PageInfo.BasicInfo.UserData"), m_Controller, true);
+		KPCInfoAdditionalInfoModelDialog dialog(GetMainWindow(), KTr("PackageCreator.PageInfo.BasicInfo.UserData"), m_Controller, true);
 		dialog.SetDataVector(GetProjectInfo().GetCustomFields(), &GetProjectInfo());
 		dialog.ShowModal();
 		event.Skip();
 	});
 	m_DocumentsButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		KPCInfoDocumentsModelDialog dialog(GetMainWindow(), T("PackageCreator.PageInfo.BasicInfo.Documents"), m_Controller);
+		KPCInfoDocumentsModelDialog dialog(GetMainWindow(), KTr("PackageCreator.PageInfo.BasicInfo.Documents"), m_Controller);
 		dialog.SetDataVector(GetProjectInfo().GetDocuments(), &GetProjectInfo());
 		dialog.ShowModal();
 		event.Skip();
@@ -174,7 +174,7 @@ void KPackageCreatorPageInfo::CreateBasicInfoControls()
 void KPackageCreatorPageInfo::CreateSitesControls()
 {
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(m_Pane, T("PackageCreator.PageInfo.Sites"));
+	KxLabel* label = CreateCaptionLabel(m_Pane, KTr("PackageCreator.PageInfo.Sites"));
 	m_PaneSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	wxFlexGridSizer* sitesSizer = new wxFlexGridSizer(2, KLC_VERTICAL_SPACING, 0);
@@ -187,7 +187,7 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 	m_WebSitesLoversLabID = AddProviderControl<KNetworkProviderLoversLab>(sitesSizer);
 
 	// Other sites
-	m_WebSitesButton = AddControlsRow(sitesSizer, T("PackageCreator.PageInfo.Sites.AdditionalSites"), new KxButton(m_Pane, KxID_NONE, T(KxID_EDIT)), 0);
+	m_WebSitesButton = AddControlsRow(sitesSizer, KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), new KxButton(m_Pane, KxID_NONE, KTr(KxID_EDIT)), 0);
 
 	// Bind events
 	m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<KNETWORK_PROVIDER_ID_TESALL>, this);
@@ -196,7 +196,7 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 
 	m_WebSitesButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		KPCInfoSitesModelDialog dialog(GetMainWindow(), T("PackageCreator.PageInfo.Sites.AdditionalSites"), m_Controller, true);
+		KPCInfoSitesModelDialog dialog(GetMainWindow(), KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), m_Controller, true);
 		dialog.SetDataVector(GetProjectInfo().GetWebSites(), &GetProjectInfo());
 		dialog.ShowModal();
 		event.Skip();
@@ -205,7 +205,7 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 void KPackageCreatorPageInfo::CreateConfigControls()
 {
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(m_Pane, T("PackageCreator.PageInfo.Config"));
+	KxLabel* label = CreateCaptionLabel(m_Pane, KTr("PackageCreator.PageInfo.Config"));
 	m_PaneSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	wxFlexGridSizer* configSizer = new wxFlexGridSizer(2, KLC_VERTICAL_SPACING, 0);
@@ -214,18 +214,18 @@ void KPackageCreatorPageInfo::CreateConfigControls()
 
 	/* Required parameters */
 	// Package path
-	wxBoxSizer* pathSizer = AddControlsRow2(m_Pane, configSizer, T("PackageCreator.PageInfo.Config.PackageOutputFile"), new wxBoxSizer(wxHORIZONTAL));
+	wxBoxSizer* pathSizer = AddControlsRow2(m_Pane, configSizer, KTr("PackageCreator.PageInfo.Config.PackageOutputFile"), new wxBoxSizer(wxHORIZONTAL));
 	m_InstallBackageFileInput = CreateInputField(m_Pane);
-	KxButton* installBackageFileButton = new KxButton(m_Pane, KxID_NONE, T(KxID_SELECT_FILE));
+	KxButton* installBackageFileButton = new KxButton(m_Pane, KxID_NONE, KTr(KxID_SELECT_FILE));
 
 	pathSizer->Add(m_InstallBackageFileInput, 1, wxEXPAND);
 	pathSizer->Add(installBackageFileButton, 0, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 
 	// Compression level
-	m_CompressionLevel = AddControlsRow(configSizer, T("PackageCreator.PageInfo.Config.CompressionLevel"), new KxComboBox(m_Pane, KxID_NONE));
+	m_CompressionLevel = AddControlsRow(configSizer, KTr("PackageCreator.PageInfo.Config.CompressionLevel"), new KxComboBox(m_Pane, KxID_NONE));
 	auto AddCompressionLevel = [this](const wxString& id, int level)
 	{
-		m_CompressionLevel->Append(wxString::Format("%d - %s", level, T(id)), reinterpret_cast<void*>(level));
+		m_CompressionLevel->Append(wxString::Format("%d - %s", level, KTr(id)), reinterpret_cast<void*>(level));
 	};
 	AddCompressionLevel("PackageCreator.PageInfo.Config.CompressionLevel.None", 0);
 	AddCompressionLevel("PackageCreator.PageInfo.Config.CompressionLevel.Fastest", 1);
@@ -237,7 +237,7 @@ void KPackageCreatorPageInfo::CreateConfigControls()
 	/* Advanced */
 	wxBoxSizer* collapsePaneContainerSizer = new wxBoxSizer(wxVERTICAL);
 	m_PaneSizer->Add(collapsePaneContainerSizer, 0, wxEXPAND|wxLEFT, ms_LeftMargin);
-	KxCollapsiblePane* collapsePane = new KxCollapsiblePane(m_Pane, KxID_NONE, T("PackageCreator.PageInfo.Config.CompressionAdvanced"));
+	KxCollapsiblePane* collapsePane = new KxCollapsiblePane(m_Pane, KxID_NONE, KTr("PackageCreator.PageInfo.Config.CompressionAdvanced"));
 	collapsePaneContainerSizer->Add(collapsePane, 0, wxEXPAND);
 
 	wxFlexGridSizer* collapsePaneSizer = new wxFlexGridSizer(2, KLC_VERTICAL_SPACING, 0);
@@ -246,22 +246,22 @@ void KPackageCreatorPageInfo::CreateConfigControls()
 	collapsePane->GetPane()->SetSizer(collapsePaneSizer);
 
 	// Compression Method
-	m_CompressionMethod = AddControlsRow(collapsePaneSizer, T("PackageCreator.PageInfo.Config.CompressionMethod"), new KxComboBox(collapsePane->GetPane(), KxID_NONE));
+	m_CompressionMethod = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.Config.CompressionMethod"), new KxComboBox(collapsePane->GetPane(), KxID_NONE));
 	m_CompressionMethod->AddItem("LZMA");
 	m_CompressionMethod->AddItem("LZMA2");
 	m_CompressionMethod->AddItem("PPMd");
 	m_CompressionMethod->AddItem("BZip2");
 
 	// Dictionary size
-	m_CompressionDictionarySize = AddControlsRow(collapsePaneSizer, T("PackageCreator.PageInfo.Config.DictionarySize"), new KxSlider(collapsePane->GetPane(), KxID_NONE, KPackageProjectConfig::ms_DefaultDictionarySize, KPackageProjectConfig::ms_MinDictionarySize, KPackageProjectConfig::ms_MaxDictionarySize, KxSlider::DefaultStyle|wxSL_TICKS));
+	m_CompressionDictionarySize = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.Config.DictionarySize"), new KxSlider(collapsePane->GetPane(), KxID_NONE, KPackageProjectConfig::ms_DefaultDictionarySize, KPackageProjectConfig::ms_MinDictionarySize, KPackageProjectConfig::ms_MaxDictionarySize, KxSlider::DefaultStyle|wxSL_TICKS));
 	m_CompressionDictionarySize->SetMaxSize(wxSize(wxDefaultCoord, 23));
-	m_CompressionDictionarySizeMemory = AddControlsRow(collapsePaneSizer, T("PackageCreator.PageInfo.Config.DictionarySize.Memory"), CreateNormalLabel(collapsePane->GetPane(), wxEmptyString));
+	m_CompressionDictionarySizeMemory = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.Config.DictionarySize.Memory"), CreateNormalLabel(collapsePane->GetPane(), wxEmptyString));
 
 	// Checkboxes
-	m_CompressionUseMultithreading = new wxCheckBox(collapsePane->GetPane(), KxID_ANY, T("PackageCreator.PageInfo.Config.UseMultithreadedCompression"));
+	m_CompressionUseMultithreading = new wxCheckBox(collapsePane->GetPane(), KxID_ANY, KTr("PackageCreator.PageInfo.Config.UseMultithreadedCompression"));
 	collapsePaneSizer->Add(m_CompressionUseMultithreading, 1, wxEXPAND);
 
-	m_CompressionSolidArchive = new wxCheckBox(collapsePane->GetPane(), KxID_ANY, T("PackageCreator.PageInfo.Config.SolidArchive"));
+	m_CompressionSolidArchive = new wxCheckBox(collapsePane->GetPane(), KxID_ANY, KTr("PackageCreator.PageInfo.Config.SolidArchive"));
 	collapsePaneSizer->Add(m_CompressionSolidArchive, 1, wxEXPAND);
 
 	// Bind events
@@ -286,10 +286,10 @@ void KPackageCreatorPageInfo::CreateConfigControls()
 		dialog.SetDefaultExtension("kmp");
 		dialog.SetFolder(folder);
 		dialog.SetFileName(name);
-		dialog.AddFilter("*.kmp", T("FileFilter.ModPackage"));
-		dialog.AddFilter("*.7z", T("FileFilter.7ZipArchive"));
-		dialog.AddFilter("*.fomod", T("FileFilter.ModPackageFOMod"));
-		dialog.AddFilter("*", T("FileFilter.AllFiles"));
+		dialog.AddFilter("*.kmp", KTr("FileFilter.ModPackage"));
+		dialog.AddFilter("*.7z", KTr("FileFilter.7ZipArchive"));
+		dialog.AddFilter("*.fomod", KTr("FileFilter.ModPackageFOMod"));
+		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 		if (dialog.ShowModal() == KxID_OK)
 		{
@@ -453,5 +453,5 @@ wxString KPackageCreatorPageInfo::GetID() const
 }
 wxString KPackageCreatorPageInfo::GetPageName() const
 {
-	return T("PackageCreator.PageInfo.Name");
+	return KTr("PackageCreator.PageInfo.Name");
 }

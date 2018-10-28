@@ -136,7 +136,7 @@ void KProgramManager::OnAddMainMenuItems(KxMenu& menu)
 	{
 		if (entry.ShouldShowInMainMenu())
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(wxString::Format("%s %s", T("Generic.Run"), entry.GetName())));
+			KxMenuItem* item = menu.Add(new KxMenuItem(wxString::Format("%s %s", KTr("Generic.Run"), entry.GetName())));
 			item->Enable(entry.CanRunNow());
 			item->Bind(KxEVT_MENU_SELECT, [this, &entry](KxMenuEvent& event)
 			{
@@ -176,7 +176,7 @@ bool KProgramManager::DoCheckEntry(const KProgramEntry& entry) const
 	}
 	else
 	{
-		KLogEvent(T("ProgramManager.FileNotFound") + ":\r\n" + entry.GetExecutable(), KLOG_ERROR);
+		KLogEvent(KTr("ProgramManager.FileNotFound") + ":\r\n" + entry.GetExecutable(), KLOG_ERROR);
 		return false;
 	}
 }
@@ -196,7 +196,7 @@ wxString KProgramManager::GetID() const
 }
 wxString KProgramManager::GetName() const
 {
-	return T("ProgramManager.Name");
+	return KTr("ProgramManager.Name");
 }
 wxString KProgramManager::GetVersion() const
 {

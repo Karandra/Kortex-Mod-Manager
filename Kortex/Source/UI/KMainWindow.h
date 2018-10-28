@@ -30,6 +30,15 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		static const void* GetUniqueID();
 
 	private:
+		template<class T> static KxAuiToolBarItem* AddToolBarButton(KxAuiToolBar* toolBar, KImageEnum imageID = KIMG_NONE)
+		{
+			KxAuiToolBarItem* button = toolBar->AddTool(wxEmptyString, KGetBitmap(imageID), wxITEM_NORMAL);
+			button->Bind(KxEVT_AUI_TOOLBAR_CLICK, &T::OnToolBarButton, T::GetInstance());
+			T::GetInstance()->OnSetToolBarButton(button);
+			return button;
+		}
+
+	private:
 		wxBoxSizer* m_MainSizer = NULL;
 		wxBoxSizer* m_ToolBarSizer = NULL;
 
@@ -42,7 +51,6 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		int m_ToolBar_InsertionIndex = 0;
 
 		KxAuiToolBar* m_QuickToolBar = NULL;
-		KxAuiToolBarItem* m_QuickToolBar_Login = NULL;
 		KxAuiToolBarItem* m_QuickToolBar_QuickSettingsMenu = NULL;
 		KxAuiToolBarItem* m_QuickToolBar_Help = NULL;
 

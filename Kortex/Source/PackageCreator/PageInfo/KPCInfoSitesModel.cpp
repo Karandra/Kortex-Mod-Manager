@@ -23,8 +23,8 @@ void KPCInfoSitesModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCInfoSitesModel::OnActivateItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCInfoSitesModel::OnContextMenu, this);
 
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 200);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Address"), ColumnID::Value, m_UseInlineEditor ? KxDATAVIEW_CELL_EDITABLE : KxDATAVIEW_CELL_INERT, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 200);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Address"), ColumnID::Value, m_UseInlineEditor ? KxDATAVIEW_CELL_EDITABLE : KxDATAVIEW_CELL_INERT, 300);
 }
 
 void KPCInfoSitesModel::GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
@@ -135,16 +135,16 @@ void KPCInfoSitesModel::OnContextMenu(KxDataViewEvent& event)
 
 	KxMenu menu;
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddSite, T(KxID_ADD)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddSite, KTr(KxID_ADD)));
 		item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 

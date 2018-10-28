@@ -38,7 +38,7 @@ wxString KScreenshotsGalleryManager::GetID() const
 }
 wxString KScreenshotsGalleryManager::GetName() const
 {
-	return T("ScreenshotsGallery.Name");
+	return KTr("ScreenshotsGallery.Name");
 }
 wxString KScreenshotsGalleryManager::GetVersion() const
 {

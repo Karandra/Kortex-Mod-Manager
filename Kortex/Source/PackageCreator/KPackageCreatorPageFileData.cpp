@@ -57,7 +57,7 @@ void KPackageCreatorPageFileData::CreateMainListControls()
 	KThemeManager::Get().ProcessWindow(m_MainListPane);
 
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(m_MainListPane, T("PackageCreator.PageFileData.MainList"));
+	KxLabel* label = CreateCaptionLabel(m_MainListPane, KTr("PackageCreator.PageFileData.MainList"));
 	mainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	// Sizer
@@ -76,7 +76,7 @@ void KPackageCreatorPageFileData::CreateFolderContentControls()
 	KThemeManager::Get().ProcessWindow(m_FolderContentPane);
 
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(m_FolderContentPane, T("PackageCreator.PageFileData.FolderContent"));
+	KxLabel* label = CreateCaptionLabel(m_FolderContentPane, KTr("PackageCreator.PageFileData.FolderContent"));
 	mainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	wxBoxSizer* filesSizer = new wxBoxSizer(wxVERTICAL);
@@ -112,5 +112,5 @@ wxString KPackageCreatorPageFileData::GetID() const
 }
 wxString KPackageCreatorPageFileData::GetPageName() const
 {
-	return T("PackageCreator.PageFileData.Name");
+	return KTr("PackageCreator.PageFileData.Name");
 }

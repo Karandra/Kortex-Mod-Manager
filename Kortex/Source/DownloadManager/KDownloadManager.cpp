@@ -122,7 +122,7 @@ void KDownloadManager::OnRemoveEntry(const KDownloadEntry& entry) const
 void KDownloadManager::OnDownloadComplete(KDownloadEntry& entry)
 {
 	OnChangeEntry(entry);
-	KNotificationCenter::GetInstance()->Notify(this, TF("DownloadManager.Notification.DownloadCompleted").arg(entry.GetFileInfo().GetName()), KxICON_INFORMATION);
+	KNotificationCenter::GetInstance()->Notify(KTr("DownloadManager.Notification.DownloadCompleted"), KTrf("DownloadManager.Notification.DownloadCompletedEx", entry.GetFileInfo().GetName()), KxICON_INFORMATION);
 }
 void KDownloadManager::OnDownloadPaused(KDownloadEntry& entry)
 {
@@ -139,7 +139,7 @@ void KDownloadManager::OnDownloadResumed(KDownloadEntry& entry)
 void KDownloadManager::OnDownloadFailed(KDownloadEntry& entry)
 {
 	OnChangeEntry(entry);
-	KNotificationCenter::GetInstance()->Notify(this, TF("DownloadManager.Notification.DownloadFailed").arg(entry.GetFileInfo().GetName()), KxICON_WARNING);
+	KNotificationCenter::GetInstance()->Notify(KTr("DownloadManager.Notification.DownloadFailed"), KTrf("DownloadManager.Notification.DownloadFailedEx", entry.GetFileInfo().GetName()), KxICON_WARNING);
 }
 
 bool KDownloadManager::CheckIsAssociatedWithNXM() const
@@ -399,7 +399,7 @@ wxString KDownloadManager::GetID() const
 }
 wxString KDownloadManager::GetName() const
 {
-	return T("DownloadManager.Name");
+	return KTr("DownloadManager.Name");
 }
 wxString KDownloadManager::GetVersion() const
 {

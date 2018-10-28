@@ -74,7 +74,7 @@ KPackageProjectComponents& KPackageCreatorPageComponents::GetProjectComponents()
 void KPackageCreatorPageComponents::CreateComponentsView()
 {
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(this, T("PackageCreator.PageComponents.Name"));
+	KxLabel* label = CreateCaptionLabel(this, KTr("PackageCreator.PageComponents.Name"));
 	m_MainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -92,7 +92,7 @@ void KPackageCreatorPageComponents::CreateMiscControls()
 	wxBoxSizer* leftSizer = new wxBoxSizer(wxVERTICAL);
 	stepsSizer->Add(leftSizer, 1, wxEXPAND);
 
-	KxLabel* label = CreateCaptionLabel(this, T("PackageCreator.PageComponents.Advanced"));
+	KxLabel* label = CreateCaptionLabel(this, KTr("PackageCreator.PageComponents.Advanced"));
 	leftSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	// Entry image
@@ -121,16 +121,16 @@ void KPackageCreatorPageComponents::CreateMiscControls()
 	leftSizer->Add(leftTableSizer, 1, wxEXPAND|wxLEFT, ms_LeftMargin);
 
 	// Required files
-	wxBoxSizer* sizer = AddControlsRow2(this, leftTableSizer, T("PackageCreator.PageComponents.RequiredFiles"), new wxBoxSizer(wxVERTICAL));
+	wxBoxSizer* sizer = AddControlsRow2(this, leftTableSizer, KTr("PackageCreator.PageComponents.RequiredFiles"), new wxBoxSizer(wxVERTICAL));
 
 	m_RequiredFilesModel = new KPCCFileDataSelectorModelCB();
 	m_RequiredFilesModel->Create(m_Controller, this, sizer);
 	m_RequiredFilesModel->SetDataVector();
 
-	KxButton* conditionalSteps = AddControlsRow(leftTableSizer, T("PackageCreator.PageComponents.ConditionalInstall"), new KxButton(this, KxID_NONE, T(KxID_EDIT)), 0);
+	KxButton* conditionalSteps = AddControlsRow(leftTableSizer, KTr("PackageCreator.PageComponents.ConditionalInstall"), new KxButton(this, KxID_NONE, KTr(KxID_EDIT)), 0);
 	conditionalSteps->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		KPCCConditionalStepsModelDialog dialog(GetMainWindow(), T("PackageCreator.PageComponents.ConditionalInstall"), m_Controller, true);
+		KPCCConditionalStepsModelDialog dialog(GetMainWindow(), KTr("PackageCreator.PageComponents.ConditionalInstall"), m_Controller, true);
 		dialog.SetDataVector(GetProjectComponents().GetConditionalSteps());
 		dialog.ShowModal();
 	});
@@ -158,5 +158,5 @@ wxString KPackageCreatorPageComponents::GetID() const
 }
 wxString KPackageCreatorPageComponents::GetPageName() const
 {
-	return T("PackageCreator.PageComponents.Name");
+	return KTr("PackageCreator.PageComponents.Name");
 }

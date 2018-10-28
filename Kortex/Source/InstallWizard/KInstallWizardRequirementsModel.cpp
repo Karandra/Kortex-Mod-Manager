@@ -26,13 +26,13 @@ void KInstallWizardRequirementsModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KInstallWizardRequirementsModel::OnActivateItem, this);
 
 	/* Columns */
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 250);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 250);
 	{
-		wxString sVersionHeader = T("PackageCreator.PageRequirements.CurrentVersion") + '/' + T("PackageCreator.PageRequirements.RequiredVersion");
+		wxString sVersionHeader = KTr("PackageCreator.PageRequirements.CurrentVersion") + '/' + KTr("PackageCreator.PageRequirements.RequiredVersion");
 		GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(sVersionHeader, ColumnID::Version, KxDATAVIEW_CELL_INERT, 225);
 	}
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("PackageCreator.PageRequirements.RequiredState"), ColumnID::ObjectState, KxDATAVIEW_CELL_INERT, 300);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Description"), ColumnID::Description, KxDATAVIEW_CELL_INERT);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("PackageCreator.PageRequirements.RequiredState"), ColumnID::ObjectState, KxDATAVIEW_CELL_INERT, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Description"), ColumnID::Description, KxDATAVIEW_CELL_INERT);
 }
 
 void KInstallWizardRequirementsModel::GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
@@ -86,7 +86,7 @@ void KInstallWizardRequirementsModel::GetValueByRow(wxAny& data, size_t row, con
 				}
 				else
 				{
-					wxString sReqState = T("PackageCreator.PageRequirements.RequiredState." + KPackageProjectRequirements::ObjectFunctionToString(objectFunc));
+					wxString sReqState = KTr("PackageCreator.PageRequirements.RequiredState." + KPackageProjectRequirements::ObjectFunctionToString(objectFunc));
 					if (!sObject.IsEmpty())
 					{
 						data = KxDataViewBitmapTextValue(wxString::Format("%s: \"%s\"", sReqState, sObject), icon);

@@ -23,16 +23,16 @@ wxString KPluginManagerConfigStdContentEntry::GetID() const
 }
 wxString KPluginManagerConfigStdContentEntry::GetName() const
 {
-	return V(m_Name);
+	return KVarExp(m_Name);
 }
 wxString KPluginManagerConfigStdContentEntry::GetLogo() const
 {
-	return V(m_Logo);
+	return KVarExp(m_Logo);
 }
 
 wxString KPluginManagerConfigStdContentEntry::GetLogoFullPath() const
 {
-	return V(wxString::Format("%s\\PluginManager\\Logos\\%s\\%s", KApp::Get().GetDataFolder(), "$(GameID)", GetLogo()));
+	return KVarExp(wxString::Format("%s\\PluginManager\\Logos\\%s\\%s", KApp::Get().GetDataFolder(), "$(GameID)", GetLogo()));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ wxString KPluginManagerConfigSortingToolEntry::GetID() const
 }
 wxString KPluginManagerConfigSortingToolEntry::GetName() const
 {
-	return V(m_Name);
+	return KVarExp(m_Name);
 }
 
 wxString KPluginManagerConfigSortingToolEntry::GetExecutable() const
@@ -73,7 +73,7 @@ void KPluginManagerConfigSortingToolEntry::SetExecutable(const wxString& path) c
 
 wxString KPluginManagerConfigSortingToolEntry::GetArguments() const
 {
-	return V(m_Command);
+	return KVarExp(m_Command);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -99,19 +99,19 @@ KPluginManagerConfigLootAPI::~KPluginManagerConfigLootAPI()
 
 wxString KPluginManagerConfigLootAPI::GetBranch() const
 {
-	return V(m_Branch);
+	return KVarExp(m_Branch);
 }
 wxString KPluginManagerConfigLootAPI::GetRepository() const
 {
-	return V(m_Repository);
+	return KVarExp(m_Repository);
 }
 wxString KPluginManagerConfigLootAPI::GetFolderName() const
 {
-	return V(m_FolderName);
+	return KVarExp(m_FolderName);
 }
 wxString KPluginManagerConfigLootAPI::GetLocalGamePath() const
 {
-	return V(m_LocalGamePath);
+	return KVarExp(m_LocalGamePath);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ bool KPluginManagerConfig::HasMainStdContentID() const
 }
 wxString KPluginManagerConfig::GetMainStdContentID() const
 {
-	return V(m_StandardContent_MainID);
+	return KVarExp(m_StandardContent_MainID);
 }
 
 const KPluginManagerConfig::StandardContentEntry* KPluginManagerConfig::GetStandardContent(const wxString& id) const

@@ -56,12 +56,12 @@ void KProgramManagerModel::OnInitControl()
 	m_BitmapSize.FromSystemIcon();
 	GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight() + 4);
 
-	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ProgramManager.List.RequiresVFS"), ColumnID::RequiresVFS, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
-	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ProgramManager.List.ShowInMainMenu"), ColumnID::ShowInMainMenu, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 300);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("ProgramManager.List.Arguments"), ColumnID::Arguments, KxDATAVIEW_CELL_EDITABLE, 300);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("ProgramManager.List.Executable"), ColumnID::Executable, KxDATAVIEW_CELL_EDITABLE, 100);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("ProgramManager.List.WorkingDirectory"), ColumnID::WorkingDirectory, KxDATAVIEW_CELL_EDITABLE);
+	GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("ProgramManager.List.RequiresVFS"), ColumnID::RequiresVFS, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
+	GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("ProgramManager.List.ShowInMainMenu"), ColumnID::ShowInMainMenu, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("ProgramManager.List.Arguments"), ColumnID::Arguments, KxDATAVIEW_CELL_EDITABLE, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("ProgramManager.List.Executable"), ColumnID::Executable, KxDATAVIEW_CELL_EDITABLE, 100);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("ProgramManager.List.WorkingDirectory"), ColumnID::WorkingDirectory, KxDATAVIEW_CELL_EDITABLE);
 }
 
 void KProgramManagerModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
@@ -251,53 +251,53 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 
 		KxMenu menu;
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RunProgram, T("ProgramManager.Menu.RunProgram")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RunProgram, KTr("ProgramManager.Menu.RunProgram")));
 			item->Enable(entry && entry->CanRunNow());
 			item->SetBitmap(KGetBitmap(KIMG_APPLICATION_RUN));
 		}
 		menu.AddSeparator();
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddProgram, T("ProgramManager.Menu.AddProgram")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddProgram, KTr("ProgramManager.Menu.AddProgram")));
 			item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
 		}
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RemoveProgram, T("ProgramManager.Menu.RemoveProgram")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RemoveProgram, KTr("ProgramManager.Menu.RemoveProgram")));
 			item->SetBitmap(KGetBitmap(KIMG_MINUS_SMALL));
 			item->Enable(entry);
 		}
 		menu.AddSeparator();
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ClearPrograms, T("ProgramManager.Menu.ClearPrograms")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ClearPrograms, KTr("ProgramManager.Menu.ClearPrograms")));
 			item->Enable(!IsEmpty());
 		}
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::LoadDefaultPrograms, T("ProgramManager.Menu.LoadDefaultPrograms")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::LoadDefaultPrograms, KTr("ProgramManager.Menu.LoadDefaultPrograms")));
 			item->SetBitmap(KGetBitmap(KIMG_APPLICATION_RUN));
 		}
 		menu.AddSeparator();
 		if (entry && column->IsEditable())
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::Edit, TF("ProgramManager.Menu.EditProgram").arg(column->GetTitle())));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::Edit, KTrf("ProgramManager.Menu.EditProgram", column->GetTitle())));
 			item->SetBitmap(KGetBitmap(KIMG_PENCIL_SMALL));
 		}
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseIcon, T("ProgramManager.Menu.ChooseIcon")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseIcon, KTr("ProgramManager.Menu.ChooseIcon")));
 			item->SetBitmap(KGetBitmap(KIMG_IMAGE));
 			item->Enable(entry);
 		}
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseExecutable, T("ProgramManager.Menu.ChooseExecutable")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseExecutable, KTr("ProgramManager.Menu.ChooseExecutable")));
 			item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_IMPORT));
 			item->Enable(entry);
 		}
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseWorkingDirectory, T("ProgramManager.Menu.ChooseWorkingDirectory")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseWorkingDirectory, KTr("ProgramManager.Menu.ChooseWorkingDirectory")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER));
 			item->Enable(entry);
 		}
 		menu.AddSeparator();
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ShowExpandedValues, T("ProgramManager.Menu.ShowExpandedValues"), wxEmptyString, wxITEM_CHECK));
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ShowExpandedValues, KTr("ProgramManager.Menu.ShowExpandedValues"), wxEmptyString, wxITEM_CHECK));
 			item->SetBitmap(KGetBitmap(KIMG_EDIT_CODE));
 			item->Check(m_ShowExpandedValues);
 		}
@@ -330,7 +330,7 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 			}
 			case MenuID::ClearPrograms:
 			{
-				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, T("ProgramManager.Menu.ClearPrograms.Message"), T("ProgramManager.Menu.ClearPrograms"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTr("ProgramManager.Menu.ClearPrograms.Message"), KTr("ProgramManager.Menu.ClearPrograms"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 				if (dialog.ShowModal() == KxID_YES)
 				{
 					GetDataVector()->clear();
@@ -446,8 +446,8 @@ wxString KProgramManagerModel::AskSelectExecutable(const KProgramEntry* entry) c
 {
 	KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
 	dialog.SetFolder(entry->GetExecutable());
-	dialog.AddFilter("*.exe", T("FileFilter.Programs"));
-	dialog.AddFilter("*", T("FileFilter.AllFiles"));
+	dialog.AddFilter("*.exe", KTr("FileFilter.Programs"));
+	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	if (entry)
 	{
 		dialog.SetFolder(entry->GetExecutable().BeforeLast('\\'));
@@ -463,8 +463,8 @@ wxString KProgramManagerModel::AskSelectIcon(const KProgramEntry& entry) const
 {
 	KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
 	dialog.SetFolder(entry.HasIconPath() ? entry.GetIconPath() : wxEmptyString);
-	dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), T("FileFilter.Images"));
-	dialog.AddFilter("*", T("FileFilter.AllFiles"));
+	dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 	if (dialog.ShowModal())
 	{

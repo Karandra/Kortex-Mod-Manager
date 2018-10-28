@@ -121,7 +121,7 @@ wxString KModManagerImportNMM::GetProfileDirectory() const
 
 void KModManagerImportNMM::CopySavesAndConfig(KOperationWithProgressDialogBase* context)
 {
-	context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KSaveManager::GetInstance()->GetName()));
+	context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), KSaveManager::GetInstance()->GetName()));
 
 	// Copy saves from real saves folder to virtual
 	KxEvtFile savesSource(KVAR_EXP(KVAR_ACTUAL_CONFIG_DIR));
@@ -146,10 +146,10 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 		wxString modBaseFolder = modInfoNode.GetAttribute("modFilePath") + "\\VirtualInstall";
 
 		// Notify
-		context->SetDialogCaption(wxString::Format("%s \"%s\", %zu/%zu", T("Generic.Import"), modName, modsProcessed, modsTotal));
+		context->SetDialogCaption(wxString::Format("%s \"%s\", %zu/%zu", KTr("Generic.Import"), modName, modsProcessed, modsTotal));
 
 		// Check mod existence
-		KModEntry* existingModEntry = KModManager::Get().FindModByID(modName);
+		KModEntry* existingModEntry = KModManager::GetInstance()->FindModByID(modName);
 		if (existingModEntry && ShouldSkipExistingMods())
 		{
 			existingModEntry->SetEnabled(true);
@@ -157,36 +157,36 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 		}
 
 		// Write data
-		KModEntry* modEntry = KModManager::Get().GetEntries().emplace_back(new KModEntry());
+		KModEntry& modEntry = *KModManager::GetInstance()->GetEntries().emplace_back(new KModEntry());
 
 		KxFileStream infoStream(m_InstanceDirectory + "\\cache\\" + modFileName.BeforeLast('.') + "\\Data\\fomod\\info.xml", KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 		KxXMLDocument info(infoStream);
 		KxXMLNode infoNode = info.QueryElement("fomod");
 
-		modEntry->SetName(modName);
-		modEntry->SetEnabled(true);
-		modEntry->SetVersion(infoNode.GetFirstChildElement("Version").GetValue());
-		modEntry->SetAuthor(infoNode.GetFirstChildElement("Author").GetValue());
-		modEntry->SetDescription(ProcessDescription(infoNode.GetFirstChildElement("Description").GetValue()));
-		modEntry->SetWebSite(KNETWORK_PROVIDER_ID_NEXUS, infoNode.GetFirstChildElement("Id").GetValueInt(modInfoNode.GetAttributeInt("modId")));
+		modEntry.SetName(modName);
+		modEntry.SetEnabled(true);
+		modEntry.SetVersion(infoNode.GetFirstChildElement("Version").GetValue());
+		modEntry.SetAuthor(infoNode.GetFirstChildElement("Author").GetValue());
+		modEntry.SetDescription(ProcessDescription(infoNode.GetFirstChildElement("Description").GetValue()));
+		modEntry.SetWebSite(KNETWORK_PROVIDER_ID_NEXUS, infoNode.GetFirstChildElement("Id").GetValueInt(modInfoNode.GetAttributeInt("modId")));
 
 		// Install date
-		modEntry->SetTime(KME_TIME_INSTALL, KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
+		modEntry.SetTime(KME_TIME_INSTALL, KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
 
 		// If such mod already exist, try create unique ID
 		if (existingModEntry)
 		{
-			modEntry->SetID(wxString::Format("[NMM %lld] %s", modID, modName));
+			modEntry.SetID(wxString::Format("[NMM %lld] %s", modID, modName));
 		}
 		else
 		{
-			modEntry->SetID(modName);
+			modEntry.SetID(modName);
 		}
-		addedMods.push_back(modEntry->GetID());
+		addedMods.push_back(modEntry.GetID());
 
 		// Save entry
-		modEntry->CreateAllFolders();
-		modEntry->Save();
+		modEntry.CreateAllFolders();
+		modEntry.Save();
 
 		// Copy mod contents
 		// Do some trick:
@@ -195,7 +195,7 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 		wxString modFolder = modBaseFolder + wxS('\\') + modInfoNode.GetFirstChildElement("fileLink").GetAttribute("realPath").BeforeFirst('\\');
 		
 		KxEvtFile source(modFolder);
-		wxString destination = modEntry->GetModFilesDir() + wxS('\\') + GetDataFolderName();
+		wxString destination = modEntry.GetModFilesDir() + wxS('\\') + GetDataFolderName();
 		context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
 		source.CopyFolder(KxFile::NullFilter, destination, true, true);
 	}
@@ -212,7 +212,7 @@ void KModManagerImportNMM::CopyMods(KOperationWithProgressDialogBase* context)
 			return;
 		}
 
-		if (KModEntry* existingMod = KModManager::Get().FindModByID(name))
+		if (KModEntry* existingMod = KModManager::GetInstance()->FindModByID(name))
 		{
 			modList.emplace_back(KProfileMod(*existingMod, existingMod->IsEnabled()));
 		}
@@ -225,7 +225,7 @@ void KModManagerImportNMM::ReadPlugins(KOperationWithProgressDialogBase* context
 {
 	if (KPluginManager* pluginManager = KPluginManager::GetInstance())
 	{
-		context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), pluginManager->GetName()));
+		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), pluginManager->GetName()));
 
 		// Load entries
 		pluginManager->Load();
@@ -353,7 +353,7 @@ wxString KModManagerImportNMM::GetAdditionalInfo() const
 	// Target profile
 	if (m_TargetProfileTemplate)
 	{
-		additionalInfo << "\r\n" << T("ModManager.Import.ManagedGame") << ": " << m_TargetProfileTemplate->GetName();
+		additionalInfo << "\r\n" << KTr("ModManager.Import.ManagedGame") << ": " << m_TargetProfileTemplate->GetName();
 	}
 	return additionalInfo;
 }

@@ -58,7 +58,7 @@ void KPackageCreatorPageRequirements::SelectComboBoxItem(KxComboBox* control, in
 void KPackageCreatorPageRequirements::CreateGroupsControls()
 {
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(this, T("PackageCreator.PageRequirements.Groups"));
+	KxLabel* label = CreateCaptionLabel(this, KTr("PackageCreator.PageRequirements.Groups"));
 	m_MainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	// Sizer
@@ -70,7 +70,7 @@ void KPackageCreatorPageRequirements::CreateGroupsControls()
 	m_GroupsModel->Create(m_Controller, this, sizer);
 
 	// Default groups button
-	m_DefaultGroupsButton = new KxButton(this, KxID_NONE, T("PackageCreator.PageRequirements.DefaultGroups"));
+	m_DefaultGroupsButton = new KxButton(this, KxID_NONE, KTr("PackageCreator.PageRequirements.DefaultGroups"));
 	m_DefaultGroupsButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
 		KPCCRequirementsSelectorModelDialog dialog(KMainWindow::GetInstance(), m_DefaultGroupsButton->GetLabel(), m_Controller);
@@ -86,7 +86,7 @@ void KPackageCreatorPageRequirements::CreateGroupsControls()
 void KPackageCreatorPageRequirements::CreateEntriesControls()
 {
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(this, T("PackageCreator.PageRequirements.Name"));
+	KxLabel* label = CreateCaptionLabel(this, KTr("PackageCreator.PageRequirements.Name"));
 	m_MainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	// Sizer
@@ -101,7 +101,7 @@ void KPackageCreatorPageRequirements::CreateEntriesControls()
 void KPackageCreatorPageRequirements::CreateStdReqsControls()
 {
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(this, T("PackageCreator.PageRequirements.StdReqs"));
+	KxLabel* label = CreateCaptionLabel(this, KTr("PackageCreator.PageRequirements.StdReqs"));
 	m_MainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	// Sizer
@@ -120,7 +120,7 @@ void KPackageCreatorPageRequirements::CreateStdReqsControls()
 	sizer->Add(m_StdReqs_List, 1, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 
 	// Add button
-	m_StdReqs_Add = new KxButton(this, KxID_NONE, T(KxID_ADD));
+	m_StdReqs_Add = new KxButton(this, KxID_NONE, KTr(KxID_ADD));
 	m_StdReqs_Add->Enable(false);
 	m_StdReqs_Add->Bind(wxEVT_BUTTON, &KPackageCreatorPageRequirements::OnAddStdReq, this);
 	sizer->Add(m_StdReqs_Add, 0, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
@@ -130,7 +130,7 @@ void KPackageCreatorPageRequirements::CreateStdReqsControls()
 }
 void KPackageCreatorPageRequirements::LoadStdReqs()
 {
-	m_StdReqs_Categories->AddItem(V("<$T(Generic.All)>"));
+	m_StdReqs_Categories->AddItem(KVarExp("<$T(Generic.All)>"));
 
 	std::unordered_set<wxString> categoriesSet;
 	for (const auto& entry: KPackageManager::GetInstance()->GetStdRequirements())
@@ -230,5 +230,5 @@ wxString KPackageCreatorPageRequirements::GetID() const
 }
 wxString KPackageCreatorPageRequirements::GetPageName() const
 {
-	return T("PackageCreator.PageRequirements.Name");
+	return KTr("PackageCreator.PageRequirements.Name");
 }

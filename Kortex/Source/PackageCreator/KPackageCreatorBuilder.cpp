@@ -290,17 +290,17 @@ void KPackageCreatorBuilderOperation::OnEndHandler()
 		{
 			case KPCB_STATUS_ERROR_PACKAGE_PATH:
 			{
-				message = T("PackageCreator.Build.CheckError.PackagePath");
+				message = KTr("PackageCreator.Build.CheckError.PackagePath");
 				break;
 			}
 			default:
 			{
-				message = T("PackageCreator.Build.CheckError.MissingFiles");
+				message = KTr("PackageCreator.Build.CheckError.MissingFiles");
 				break;
 			}
 		};
 
-		KxTaskDialog dialog(KApp::Get().GetTopWindow(), KxID_NONE, T("PackageCreator.Build.CheckError"), message, KxBTN_OK, KxICON_WARNING);
+		KxTaskDialog dialog(KApp::Get().GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.CheckError"), message, KxBTN_OK, KxICON_WARNING);
 		dialog.SetExMessage(KxString::Join(m_MissingFiles, "\r\n"));
 		dialog.ShowModal();
 	}
@@ -319,13 +319,13 @@ void KPackageCreatorBuilderOperation::OnEndHandler()
 			{
 				wxString path = m_Project->GetConfig().GetInstallPackageFile();
 				wxString size = KxFile(path).GetFormattedFileSize(2);
-				wxString info = wxString::Format("%s: \"%s\"\r\n%s: %s", T(KxID_FILE), path, T("Generic.Size"), size);
-				KxTaskDialog(KApp::Get().GetTopWindow(), KxID_NONE, T("PackageCreator.Build.Complete"), info, KxBTN_OK, KxICON_INFORMATION).ShowModal();
+				wxString info = wxString::Format("%s: \"%s\"\r\n%s: %s", KTr(KxID_FILE), path, KTr("Generic.Size"), size);
+				KxTaskDialog(KApp::Get().GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.Complete"), info, KxBTN_OK, KxICON_INFORMATION).ShowModal();
 			}
 		}
 		else
 		{
-			KxTaskDialog(KApp::Get().GetTopWindow(), KxID_NONE, T("PackageCreator.Build.BuildError"), wxEmptyString, KxBTN_OK, KxICON_ERROR).ShowModal();
+			KxTaskDialog(KApp::Get().GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.BuildError"), wxEmptyString, KxBTN_OK, KxICON_ERROR).ShowModal();
 		}
 	}
 }

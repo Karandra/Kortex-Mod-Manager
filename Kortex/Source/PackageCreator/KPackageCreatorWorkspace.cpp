@@ -93,9 +93,9 @@ void KPackageCreatorWorkspace::CreateMenuBar(wxSizer* sizer)
 	m_MenuBar->SetMargins(0, 0, 0, 2);
 	KThemeManager::Get().ProcessWindow(static_cast<wxWindow*>(m_MenuBar));
 
-	m_MenuBar_Project = m_MenuBar->AddTool(T("PackageCreator.MenuBar.Project"), wxNullBitmap);
-	m_MenuBar_Import = m_MenuBar->AddTool(T("PackageCreator.MenuBar.Import"), wxNullBitmap);
-	m_MenuBar_Build = m_MenuBar->AddTool(T("PackageCreator.MenuBar.Build"), wxNullBitmap);
+	m_MenuBar_Project = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Project"), wxNullBitmap);
+	m_MenuBar_Import = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Import"), wxNullBitmap);
+	m_MenuBar_Build = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Build"), wxNullBitmap);
 
 	m_MenuBar->Realize();
 	sizer->Add(m_MenuBar, 0, wxEXPAND);
@@ -111,27 +111,27 @@ void KPackageCreatorWorkspace::CreateProjectMenu()
 	m_MenuBar_Project->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 	KxMenuItem* item = NULL;
 
-	item = menu->Add(new KxMenuItem(KxID_NEW, T("PackageCreator.MenuProject.New")));
+	item = menu->Add(new KxMenuItem(KxID_NEW, KTr("PackageCreator.MenuProject.New")));
 	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_NEW));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnNewProject, this);
 
-	item = menu->Add(new KxMenuItem(KxID_OPEN, T("PackageCreator.MenuProject.Open")));
+	item = menu->Add(new KxMenuItem(KxID_OPEN, KTr("PackageCreator.MenuProject.Open")));
 	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnOpenProject, this);
 	menu->AddSeparator();
 
-	item = menu->Add(new KxMenuItem(KxID_SAVE, T("PackageCreator.MenuProject.Save")));
+	item = menu->Add(new KxMenuItem(KxID_SAVE, KTr("PackageCreator.MenuProject.Save")));
 	item->SetBitmap(KGetBitmap(KIMG_DISK));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnSaveProject, this);
 
-	item = menu->Add(new KxMenuItem(KxID_SAVEAS, T("PackageCreator.MenuProject.SaveAs")));
+	item = menu->Add(new KxMenuItem(KxID_SAVEAS, KTr("PackageCreator.MenuProject.SaveAs")));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnSaveProject, this);
 
-	item = menu->Add(new KxMenuItem(KxID_HIGHEST + KPP_PACCKAGE_FOMOD_XML, T("PackageCreator.MenuProject.SaveAsFOMod")));
+	item = menu->Add(new KxMenuItem(KxID_HIGHEST + KPP_PACCKAGE_FOMOD_XML, KTr("PackageCreator.MenuProject.SaveAsFOMod")));
 	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_EXPORT));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnExportProject, this);
 
-	item = menu->Add(new KxMenuItem(KxID_HIGHEST + KPP_PACCKAGE_NATIVE, T("PackageCreator.MenuProject.SaveAsKMP")));
+	item = menu->Add(new KxMenuItem(KxID_HIGHEST + KPP_PACCKAGE_NATIVE, KTr("PackageCreator.MenuProject.SaveAsKMP")));
 	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_EXPORT));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnExportProject, this);
 }
@@ -142,11 +142,11 @@ void KPackageCreatorWorkspace::CreateImportMenu()
 	m_MenuBar_Import->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 	KxMenuItem* item = NULL;
 
-	item = menu->Add(new KxMenuItem(KxID_HIGHEST + 0, T("PackageCreator.MenuImport.FOModXML")));
+	item = menu->Add(new KxMenuItem(KxID_HIGHEST + 0, KTr("PackageCreator.MenuImport.FOModXML")));
 	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_IMPORT));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnImportProject, this);
 
-	item = menu->Add(new KxMenuItem(KxID_HIGHEST + 1, T("PackageCreator.MenuImport.Package")));
+	item = menu->Add(new KxMenuItem(KxID_HIGHEST + 1, KTr("PackageCreator.MenuImport.Package")));
 	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_IMPORT));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnImportProject, this);
 }
@@ -157,11 +157,11 @@ void KPackageCreatorWorkspace::CreateBuildMenu()
 	m_MenuBar_Build->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 	KxMenuItem* item = NULL;
 
-	item = menu->Add(new KxMenuItem(T("PackageCreator.MenuBuild.Build")));
+	item = menu->Add(new KxMenuItem(KTr("PackageCreator.MenuBuild.Build")));
 	item->SetBitmap(KGetBitmap(KIMG_COMPILE));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnBuildProject, this);
 
-	item = menu->Add(new KxMenuItem(T("PackageCreator.MenuBuild.Preview")));
+	item = menu->Add(new KxMenuItem(KTr("PackageCreator.MenuBuild.Preview")));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnBuildProjectPreview, this);
 }
 
@@ -233,7 +233,7 @@ wxString KPackageCreatorWorkspace::GetID() const
 }
 wxString KPackageCreatorWorkspace::GetName() const
 {
-	return T("PackageManager.CreatorName");
+	return KTr("PackageManager.CreatorName");
 }
 
 KPackageCreatorPageBase* KPackageCreatorWorkspace::GetCurrentPage() const
@@ -293,8 +293,8 @@ void KPackageCreatorWorkspace::OnOpenProject(KxMenuEvent& event)
 	if (m_Controller->AskForSave() == KxID_OK)
 	{
 		KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN);
-		dialog.AddFilter("*.kmpproj", T("FileFilter.ModProject"));
-		dialog.AddFilter("*", T("FileFilter.AllFiles"));
+		dialog.AddFilter("*.kmpproj", KTr("FileFilter.ModProject"));
+		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 		if (dialog.ShowModal() == KxID_OK)
 		{
@@ -310,8 +310,8 @@ void KPackageCreatorWorkspace::OnSaveProject(KxMenuEvent& event)
 		KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_SAVE);
 		dialog.SetDefaultExtension("kmpproj");
 		dialog.SetFileName(m_Controller->GetProjectName());
-		dialog.AddFilter("*.kmpproj", T("FileFilter.ModProject"));
-		dialog.AddFilter("*", T("FileFilter.AllFiles"));
+		dialog.AddFilter("*.kmpproj", KTr("FileFilter.ModProject"));
+		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 		if (dialog.ShowModal() == KxID_OK)
 		{
@@ -349,8 +349,8 @@ void KPackageCreatorWorkspace::OnImportProject(KxMenuEvent& event)
 			case 1:
 			{
 				KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN);
-				dialog.AddFilter("*.kmp;*.smi;*.7z;*.zip;*.fomod", T("FileFilter.AllSupportedFormats"));
-				dialog.AddFilter("*", T("FileFilter.AllFiles"));
+				dialog.AddFilter("*.kmp;*.smi;*.7z;*.zip;*.fomod", KTr("FileFilter.AllSupportedFormats"));
+				dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 				if (dialog.ShowModal() == KxID_OK)
 				{
 					ImportProjectFromPackage(dialog.GetResult());
@@ -370,8 +370,8 @@ void KPackageCreatorWorkspace::OnExportProject(KxMenuEvent& event)
 			KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_SAVE);
 			dialog.SetDefaultExtension("xml");
 			dialog.SetFileName(m_Controller->GetProjectName());
-			dialog.AddFilter("*.xml", T("FileFilter.XML"));
-			dialog.AddFilter("*", T("FileFilter.AllFiles"));
+			dialog.AddFilter("*.xml", KTr("FileFilter.XML"));
+			dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 			if (dialog.ShowModal() == KxID_OK)
 			{

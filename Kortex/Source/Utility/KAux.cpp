@@ -166,7 +166,7 @@ bool KAux::IsSingleFileExtensionMatches(const wxString& filePath, const wxString
 }
 bool KAux::AskOpenURL(const wxString& url, wxWindow* parent)
 {
-	KxTaskDialog dialog(parent, KxID_NONE, T("Generic.OpenWebSiteDialog.Caption"), url, KxBTN_YES|KxBTN_NO);
+	KxTaskDialog dialog(parent, KxID_NONE, KTr("Generic.OpenWebSiteDialog.Caption"), url, KxBTN_YES|KxBTN_NO);
 	dialog.SetOptionEnabled(KxTD_SIZE_TO_CONTENT);
 	if (dialog.ShowModal() == KxID_YES)
 	{
@@ -177,7 +177,7 @@ bool KAux::AskOpenURL(const wxString& url, wxWindow* parent)
 }
 bool KAux::AskOpenURL(const KLabeledValueArray& urlList, wxWindow* parent)
 {
-	KxTaskDialog dialog(parent, KxID_NONE, T("Generic.OpenWebSiteListDialog.Caption"), wxEmptyString, KxBTN_CANCEL);
+	KxTaskDialog dialog(parent, KxID_NONE, KTr("Generic.OpenWebSiteListDialog.Caption"), wxEmptyString, KxBTN_CANCEL);
 	dialog.SetOptionEnabled(KxTD_SIZE_TO_CONTENT);
 	dialog.SetOptionEnabled(KxTD_CMDLINKS_ENABLED);
 	dialog.Bind(KxEVT_STDDIALOG_BUTTON, [parent, urlList](wxNotifyEvent& event)
@@ -246,7 +246,7 @@ void KAux::LoadStringArray(KxStringVector& array, const KxXMLNode& arrayNode)
 
 wxString KAux::MakeBracketedLabel(wxStandardID id, const wxUniChar& cLeft, const wxUniChar& cRight)
 {
-	return MakeBracketedLabel(T(id), cLeft, cRight);
+	return MakeBracketedLabel(KTr(id), cLeft, cRight);
 }
 wxString KAux::MakeBracketedLabel(const wxString& text, const wxUniChar& cLeft, const wxUniChar& cRight)
 {

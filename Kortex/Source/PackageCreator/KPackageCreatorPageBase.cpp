@@ -88,7 +88,7 @@ KxAuiToolBar* KPackageCreatorPageBase::CreateListToolBar(wxWindow* window, bool 
 }
 void KPackageCreatorPageBase::ShowTooltipWarning(wxWindow* window, const wxString& message, const wxRect& rect)
 {
-	KxRichToolTip tooltip(T(KxID_ERROR), message);
+	KxRichToolTip tooltip(KTr(KxID_ERROR), message);
 	tooltip.SetIcon(KxICON_WARNING);
 
 	if (!rect.IsEmpty() || wxRect(wxPoint(0, 0), wxGetDisplaySize()).Contains(rect))
@@ -99,5 +99,5 @@ void KPackageCreatorPageBase::ShowTooltipWarning(wxWindow* window, const wxStrin
 }
 void KPackageCreatorPageBase::WarnIDCollision(wxWindow* window, const wxRect& rect)
 {
-	ShowTooltipWarning(window, T("PackageCreator.IDCollision"), rect);
+	ShowTooltipWarning(window, KTr("PackageCreator.IDCollision"), rect);
 }

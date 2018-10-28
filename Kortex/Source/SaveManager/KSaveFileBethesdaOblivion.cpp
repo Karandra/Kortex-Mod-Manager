@@ -20,11 +20,11 @@ bool KSaveFileBethesdaOblivion::DoInitializeSaveData()
 			// Skip 'saveHeaderSize' field
 			stream.Skip<uint32_t>();
 
-			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex"));
-			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), T("SaveManager.Info.Name"));
-			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Level"));
-			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), T("SaveManager.Info.Location"));
-			m_BasicInfo.emplace_back(wxString::FromCDouble(stream.ReadObject<float32_t>(), 2), T("SaveManager.Info.TimeInGame"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), KTr("SaveManager.Info.Name"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Level"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), KTr("SaveManager.Info.Location"));
+			m_BasicInfo.emplace_back(wxString::FromCDouble(stream.ReadObject<float32_t>(), 2), KTr("SaveManager.Info.TimeInGame"));
 
 			// Skip 'gameTicks', 'gameTime' and screenshot struct size
 			stream.Skip<uint32_t, SYSTEMTIME, uint32_t>();

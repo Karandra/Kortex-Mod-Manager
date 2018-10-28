@@ -17,8 +17,8 @@ enum ColumnID
 void KPCCFileDataSelectorModel::OnInitControl()
 {
 	GetView()->AppendColumn<KxDataViewToggleRenderer>(wxEmptyString, ColumnID::Checked, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE, KxDV_COL_NONE);
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("PackageCreator.PageFileData.MainList.InPackagePath"), ColumnID::ID, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("PackageCreator.PageFileData.MainList.Source"), ColumnID::Source, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("PackageCreator.PageFileData.MainList.InPackagePath"), ColumnID::ID, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageFileData.MainList.Source"), ColumnID::Source, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
 }
 
 void KPCCFileDataSelectorModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const

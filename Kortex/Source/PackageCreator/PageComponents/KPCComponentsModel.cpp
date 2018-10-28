@@ -176,9 +176,9 @@ void KPCComponentsModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_EDIT_DETACH, &KPCComponentsModel::OnDetachEditor, this);
 
 	/* Columns */
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 300);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 300);
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE, 500);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE, 500);
 		info.GetColumn()->UseDynamicEditor(true);
 	}
 }
@@ -358,7 +358,7 @@ void KPCComponentsModel::GetStepValue(wxAny& value, const KxDataViewColumn* colu
 		}
 		case ColumnID::Value:
 		{
-			value = T("PackageCreator.PageComponents.Conditions") + ": " + KPackageCreatorPageComponents::FormatArrayToText(step->GetConditions(), true);
+			value = KTr("PackageCreator.PageComponents.Conditions") + ": " + KPackageCreatorPageComponents::FormatArrayToText(step->GetConditions(), true);
 			break;
 		}
 	};
@@ -387,7 +387,7 @@ void KPCComponentsModel::GetGroupValue(wxAny& value, const KxDataViewColumn* col
 			}
 			else
 			{
-				value = T("PackageCreator.PageComponents.SelectionMode") + ": " + m_SelectionModeEditor.GetItems()[group->GetSelectionMode()];
+				value = KTr("PackageCreator.PageComponents.SelectionMode") + ": " + m_SelectionModeEditor.GetItems()[group->GetSelectionMode()];
 			}
 			break;
 		}
@@ -421,7 +421,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = T("PackageCreator.PageComponents.TypeDescriptor");
+					value = KTr("PackageCreator.PageComponents.TypeDescriptor");
 					break;
 				}
 				case ColumnID::Value:
@@ -445,7 +445,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = T("PackageCreator.PageComponents.FileData");
+					value = KTr("PackageCreator.PageComponents.FileData");
 					break;
 				}
 				case ColumnID::Value:
@@ -462,7 +462,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = T("PackageCreator.PageComponents.Requirements");
+					value = KTr("PackageCreator.PageComponents.Requirements");
 					break;
 				}
 				case ColumnID::Value:
@@ -479,7 +479,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = T("PackageCreator.PageComponents.Image");
+					value = KTr("PackageCreator.PageComponents.Image");
 					break;
 				}
 				case ColumnID::Value:
@@ -516,7 +516,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = T("PackageCreator.PageComponents.Description");
+					value = KTr("PackageCreator.PageComponents.Description");
 					break;
 				}
 				case ColumnID::Value:
@@ -544,7 +544,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = T("PackageCreator.PageComponents.Conditions");
+					value = KTr("PackageCreator.PageComponents.Conditions");
 					break;
 				}
 				case ColumnID::Value:
@@ -569,7 +569,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = T("PackageCreator.PageComponents.AssignedFlags");
+					value = KTr("PackageCreator.PageComponents.AssignedFlags");
 					break;
 				}
 				case ColumnID::Value:
@@ -793,10 +793,10 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 		// All items
 		{
 			KxMenu* allItemsMenu = CreateAllItemsMenu();
-			CreateAllItemsMenuEntry(allItemsMenu, node, T("Generic.Name"), &KPCComponentsModel::AllSteps_Name);
-			CreateAllItemsMenuEntry(allItemsMenu, node, T("PackageCreator.PageComponents.Conditions"), &KPCComponentsModel::AllSteps_Conditions);
+			CreateAllItemsMenuEntry(allItemsMenu, node, KTr("Generic.Name"), &KPCComponentsModel::AllSteps_Name);
+			CreateAllItemsMenuEntry(allItemsMenu, node, KTr("PackageCreator.PageComponents.Conditions"), &KPCComponentsModel::AllSteps_Conditions);
 
-			KxMenuItem* item = contextMenu.Add(allItemsMenu, T("PackageCreator.PageComponents.AllSteps"));
+			KxMenuItem* item = contextMenu.Add(allItemsMenu, KTr("PackageCreator.PageComponents.AllSteps"));
 			item->SetBitmap(KGetBitmap(KIMG_DIRECTION));
 		}
 		if (node)
@@ -805,10 +805,10 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 			if (parent && parent->GetStep())
 			{
 				KxMenu* allItemsMenu = CreateAllItemsMenu();
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("Generic.Name"), &KPCComponentsModel::AllGroups_Name);
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.SelectionMode"), &KPCComponentsModel::AllGroups_SelectionMode);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("Generic.Name"), &KPCComponentsModel::AllGroups_Name);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.SelectionMode"), &KPCComponentsModel::AllGroups_SelectionMode);
 
-				KxMenuItem* item = contextMenu.Add(allItemsMenu, TF("PackageCreator.PageComponents.AllGroupsOf").arg(parent->GetStep()->GetName()));
+				KxMenuItem* item = contextMenu.Add(allItemsMenu, KTrf("PackageCreator.PageComponents.AllGroupsOf", parent->GetStep()->GetName()));
 				item->SetBitmap(KGetBitmap(KIMG_FOLDER));
 			}
 		}
@@ -818,16 +818,16 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 			if (parent && parent->GetGroup())
 			{
 				KxMenu* allItemsMenu = CreateAllItemsMenu();
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("Generic.Name"), &KPCComponentsModel::AllEntries_Name);
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.TypeDescriptor"), &KPCComponentsModel::AllEntries_DefaultTypeDescriptor);
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.FileData"), &KPCComponentsModel::AllEntries_FileData);
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.Requirements"), &KPCComponentsModel::AllEntries_Requirements);
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.Image"), &KPCComponentsModel::AllEntries_Image);
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.Description"), &KPCComponentsModel::AllEntries_Description);
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.Conditions"), &KPCComponentsModel::AllEntries_Conditions);
-				CreateAllItemsMenuEntry(allItemsMenu, parent, T("PackageCreator.PageComponents.AssignedFlags"), &KPCComponentsModel::AllEntries_AssignedFlags);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("Generic.Name"), &KPCComponentsModel::AllEntries_Name);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.TypeDescriptor"), &KPCComponentsModel::AllEntries_DefaultTypeDescriptor);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.FileData"), &KPCComponentsModel::AllEntries_FileData);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.Requirements"), &KPCComponentsModel::AllEntries_Requirements);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.Image"), &KPCComponentsModel::AllEntries_Image);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.Description"), &KPCComponentsModel::AllEntries_Description);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.Conditions"), &KPCComponentsModel::AllEntries_Conditions);
+				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.AssignedFlags"), &KPCComponentsModel::AllEntries_AssignedFlags);
 
-				KxMenuItem* item = contextMenu.Add(allItemsMenu, TF("PackageCreator.PageComponents.AllEntriesOf").arg(parent->GetGroup()->GetName()));
+				KxMenuItem* item = contextMenu.Add(allItemsMenu, KTrf("PackageCreator.PageComponents.AllEntriesOf", parent->GetGroup()->GetName()));
 				item->SetBitmap(KGetBitmap(KIMG_BLOCK));
 				item->SetClientData(node);
 			}
@@ -836,22 +836,22 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 
 		// Add item
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddStep, T("PackageCreator.PageComponents.AddStep")));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddStep, KTr("PackageCreator.PageComponents.AddStep")));
 			item->SetBitmap(KGetBitmap(KIMG_DIRECTION_PLUS));
 			item->Enable(true);
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddGroup, T("PackageCreator.PageComponents.AddGroup")));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddGroup, KTr("PackageCreator.PageComponents.AddGroup")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_PLUS));
 			item->Enable(node);
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddEntry, T("PackageCreator.PageComponents.AddEntry")));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddEntry, KTr("PackageCreator.PageComponents.AddEntry")));
 			item->SetBitmap(KGetBitmap(KIMG_BLOCK_PLUS));
 			item->Enable(node && (node->GetGroup() || node->GetEntry() || node->IsEntryItem()));
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddEntriesFromFiles, T("PackageCreator.PageComponents.AddEntriesFromFiles")));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddEntriesFromFiles, KTr("PackageCreator.PageComponents.AddEntriesFromFiles")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
 			item->Enable(node && (node->GetGroup() || node->GetEntry() || node->IsEntryItem()));
 		}
@@ -867,14 +867,14 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 			if (const KPPCStep* step = node->GetStep())
 			{
 				menuItemRemove->SetBitmap(KGetBitmap(KIMG_DIRECTION_MINUS));
-				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", T("PackageCreator.PageComponents.RemoveStep"), step->GetName()));
+				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveStep"), step->GetName()));
 				menuItemRemove->SetClientData(node);
 				menuItemRemove->Enable(true);
 			}
 			else if (const KPPCGroup* group = node->GetGroup())
 			{
 				menuItemRemove->SetBitmap(KGetBitmap(KIMG_FOLDER_MINUS));
-				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", T("PackageCreator.PageComponents.RemoveGroup"), group->GetName()));
+				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveGroup"), group->GetName()));
 				menuItemRemove->SetClientData(node);
 				menuItemRemove->Enable(true);
 			}
@@ -883,7 +883,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 				const KPPCEntry* entry = node->GetEntry() ? node->GetEntry() : node->GetParent()->GetEntry();
 
 				menuItemRemove->SetBitmap(KGetBitmap(KIMG_BLOCK_MINUS));
-				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", T("PackageCreator.PageComponents.RemoveEntry"), entry->GetName()));
+				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveEntry"), entry->GetName()));
 				menuItemRemove->SetClientData(node->GetEntry() ? node : node->GetParent());
 				menuItemRemove->Enable(true);
 			}
@@ -1146,7 +1146,7 @@ void KPCComponentsModel::AddEntriesFromFiles(KPCComponentsModelNode* node, KxDat
 }
 void KPCComponentsModel::RemoveStep(KPCComponentsModelNode* node, const KPPCStep* step)
 {
-	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, TF("PackageCreator.RemoveStepDialog").arg(step->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveStepDialog", step->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (dialog.ShowModal() == KxID_YES)
 	{
 		KPPCStepArray& steps = GetComponents().GetSteps();
@@ -1159,7 +1159,7 @@ void KPCComponentsModel::RemoveStep(KPCComponentsModelNode* node, const KPPCStep
 }
 void KPCComponentsModel::RemoveGroup(KPCComponentsModelNode* node, const KPPCGroup* group)
 {
-	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, TF("PackageCreator.RemoveGroupDialog").arg(group->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveGroupDialog", group->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (dialog.ShowModal() == KxID_YES)
 	{
 		KPPCGroupArray& groups = node->GetParent()->GetStep()->GetGroups();

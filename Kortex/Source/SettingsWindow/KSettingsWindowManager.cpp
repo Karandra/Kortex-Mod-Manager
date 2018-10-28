@@ -108,7 +108,7 @@ wxString KSettingsWindowManager::GetID() const
 }
 wxString KSettingsWindowManager::GetName() const
 {
-	return T("Settings.Caption");
+	return KTr("Settings.Caption");
 }
 
 KSettingsWindowManager::KSettingsWindowManager(KWorkspace* workspace)

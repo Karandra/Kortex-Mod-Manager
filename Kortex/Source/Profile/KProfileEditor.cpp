@@ -25,11 +25,11 @@ void KProfileEditor::OnInitControl()
 
 	// Columns
 	{
-		auto info = GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, 250);
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, 250);
 		info.GetRenderer()->SetDefaultToggleType(KxDataViewToggleRenderer::ToggleType::RadioBox);
 	}
-	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ModManager.Profile.LocalSaves"), ColumnID::LocalSaves, KxDATAVIEW_CELL_ACTIVATABLE);
-	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ModManager.Profile.LocalConfig"), ColumnID::LocalConfig, KxDATAVIEW_CELL_ACTIVATABLE);
+	GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("ModManager.Profile.LocalSaves"), ColumnID::LocalSaves, KxDATAVIEW_CELL_ACTIVATABLE);
+	GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("ModManager.Profile.LocalConfig"), ColumnID::LocalConfig, KxDATAVIEW_CELL_ACTIVATABLE);
 }
 
 void KProfileEditor::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
@@ -78,7 +78,7 @@ bool KProfileEditor::SetValueByRow(const wxAny& value, size_t row, const KxDataV
 					{
 						if (KGameInstance::GetActive()->HasProfile(name))
 						{
-							KxTaskDialog(GetViewTLW(), KxID_NONE, T(KxID_RENAME), T("ModManager.Profile.AlreadyExist"), KxBTN_OK, KxICON_WARNING).ShowModal();
+							KxTaskDialog(GetViewTLW(), KxID_NONE, KTr(KxID_RENAME), KTr("ModManager.Profile.AlreadyExist"), KxBTN_OK, KxICON_WARNING).ShowModal();
 							return false;
 						}
 
@@ -95,7 +95,7 @@ bool KProfileEditor::SetValueByRow(const wxAny& value, size_t row, const KxDataV
 						}
 						else
 						{
-							KxTaskDialog(GetViewTLW(), KxID_NONE, T(KxID_RENAME), T("ModManager.Profile.RenameFailed"), KxBTN_OK, KxICON_ERROR).ShowModal();
+							KxTaskDialog(GetViewTLW(), KxID_NONE, KTr(KxID_RENAME), KTr("ModManager.Profile.RenameFailed"), KxBTN_OK, KxICON_ERROR).ShowModal();
 						}
 					}
 				}
@@ -220,7 +220,7 @@ void KModListManagerEditorDialog::OnRemoveList(wxCommandEvent& event)
 				return;
 			}
 
-			KxTaskDialog dialog(GetView(), KxID_NONE, T(KxID_REMOVE), T("ModManager.Profile.RemoveDialog"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+			KxTaskDialog dialog(GetView(), KxID_NONE, KTr(KxID_REMOVE), KTr("ModManager.Profile.RemoveDialog"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 			if (dialog.ShowModal() == KxID_YES)
 			{
 				const wxString profileID = entry->GetID();
@@ -244,7 +244,7 @@ void KModListManagerEditorDialog::OnRemoveList(wxCommandEvent& event)
 
 KModListManagerEditorDialog::KModListManagerEditorDialog(wxWindow* parent)
 {
-	if (KxStdDialog::Create(parent, KxID_NONE, T("ModManager.Profile.Configure"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
+	if (KxStdDialog::Create(parent, KxID_NONE, KTr("ModManager.Profile.Configure"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
 		SetMainIcon(KxICON_NONE);
 		SetWindowResizeSide(wxBOTH);

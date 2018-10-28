@@ -92,10 +92,10 @@ KWorkspace* KPluginManagerBethesda::CreateWorkspace(KMainWindow* mainWindow)
 void KPluginManagerBethesda::LoadNativeOrderBG()
 {
 	Clear();
-	KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
+	KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
 
 	// Load from 'LoadOrder.txt'
-	for (const wxString& name: KxTextFile::ReadToArray(V(m_OrderListFile)))
+	for (const wxString& name: KxTextFile::ReadToArray(KVarExp(m_OrderListFile)))
 	{
 		// Find whether plugin with this name exist
 		auto it = std::find_if(files.begin(), files.end(), [&name](const KFileTreeNode* node)
@@ -144,7 +144,7 @@ void KPluginManagerBethesda::LoadNativeActiveBG()
 {
 	// Load names from 'Plugins.txt' it they are not already added.
 	// Activate all new added and existing items with same name.
-	for (const wxString& name: KxTextFile::ReadToArray(V(m_ActiveListFile)))
+	for (const wxString& name: KxTextFile::ReadToArray(KVarExp(m_ActiveListFile)))
 	{
 		if (KPluginEntry* entry = FindPluginByName(name))
 		{
@@ -163,10 +163,10 @@ void KPluginManagerBethesda::SaveNativeOrderBG() const
 
 	// Lists
 	KxStringVector loadOrder;
-	loadOrder.emplace_back(V(m_OrderFileHeader));
+	loadOrder.emplace_back(KVarExp(m_OrderFileHeader));
 
 	KxStringVector activeOrder;
-	activeOrder.emplace_back(V(m_ActiveFileHeader));
+	activeOrder.emplace_back(KVarExp(m_ActiveFileHeader));
 
 	// Write order
 	for (const KProfilePlugin& listItem: KGameInstance::GetActive()->GetActiveProfile()->GetPlugins())
@@ -188,11 +188,11 @@ void KPluginManagerBethesda::SaveNativeOrderBG() const
 	}
 
 	// Save files
-	const wxString orderListFile = V(m_OrderListFile);
+	const wxString orderListFile = KVarExp(m_OrderListFile);
 	KxFile(orderListFile.BeforeLast('\\')).CreateFolder();
 	KxTextFile::WriteToFile(orderListFile, loadOrder, wxTextFileType_Dos);
 
-	const wxString activeListFile = V(m_ActiveListFile);
+	const wxString activeListFile = KVarExp(m_ActiveListFile);
 	KxFile(activeListFile.BeforeLast('\\')).CreateFolder();
 	KxTextFile::WriteToFile(activeListFile, activeOrder, wxTextFileType_Dos);
 }
@@ -242,17 +242,17 @@ wxString KPluginManagerBethesda::GetPluginTypeName(bool isMaster, bool isLight) 
 {
 	if (isMaster && isLight)
 	{
-		return V("$T(PluginManager.PluginType.Master) ($T(PluginManager.PluginType.Light))");
+		return KVarExp("$T(PluginManager.PluginType.Master) ($T(PluginManager.PluginType.Light))");
 	}
 	if (isMaster)
 	{
-		return T("PluginManager.PluginType.Master");
+		return KTr("PluginManager.PluginType.Master");
 	}
 	if (isLight)
 	{
-		return T("PluginManager.PluginType.Light");
+		return KTr("PluginManager.PluginType.Light");
 	}
-	return T("PluginManager.PluginType.Normal");
+	return KTr("PluginManager.PluginType.Normal");
 }
 
 void KPluginManagerBethesda::Save() const
@@ -265,7 +265,7 @@ void KPluginManagerBethesda::Load()
 
 	if (KProfile* profile = KGameInstance::GetActiveProfile())
 	{
-		KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
+		KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
 
 		for (const KProfilePlugin& listEntry: profile->GetPlugins())
 		{
@@ -338,7 +338,7 @@ KPluginEntry::RefVector KPluginManagerBethesda::GetDependentPlugins(const KPlugi
 }
 const KModEntry* KPluginManagerBethesda::FindParentMod(const KPluginEntry& pluginEntry) const
 {
-	const KFileTreeNode* node = KModManager::GetDispatcher().ResolveLocation(GetPluginRootRelativePath(pluginEntry.GetName()));
+	const KFileTreeNode* node = KDispatcher::GetInstance()->ResolveLocation(GetPluginRootRelativePath(pluginEntry.GetName()));
 	if (node)
 	{
 		return &node->GetMod();

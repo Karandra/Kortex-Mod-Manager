@@ -39,17 +39,17 @@ void KVirtualGameFolderModel::OnInitControl()
 	/* Columns */
 	KxDataViewColumnFlags flags = KxDV_COL_DEFAULT_FLAGS|KxDV_COL_SORTABLE;
 	{
-		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 300, flags);
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 300, flags);
 		info.GetRenderer()->SetOptionEnabled(KxDataViewRendererOptions::KxDVR_ALLOW_BITMAP_SCALEDOWN);
 	}
 	{
-		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewComboBoxEditor>(T("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_EDITABLE, 300, flags);
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_EDITABLE, 300, flags);
 		m_PartOfEditor = info.GetEditor();
 		info.GetColumn()->SortAscending();
 	}
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 100, flags);
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125, flags);
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.SourceLocation"), ColumnID::SourceLocation, KxDATAVIEW_CELL_INERT, 100, flags);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 100, flags);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125, flags);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.SourceLocation"), ColumnID::SourceLocation, KxDATAVIEW_CELL_INERT, 100, flags);
 }
 
 bool KVirtualGameFolderModel::IsContainer(const KxDataViewItem& item) const
@@ -299,7 +299,7 @@ void KVirtualGameFolderModel::RefreshItems()
 	{
 		m_TreeItems = &m_FoundItems;
 
-		KFileTreeNode::CRefVector files = KModManager::GetDispatcher().FindFiles(wxEmptyString, m_SearchMask, KxFS_FILE, true);
+		KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->FindFiles(wxEmptyString, m_SearchMask, KxFS_FILE, true);
 		m_FoundItems.reserve(files.size());
 
 		for (const KFileTreeNode* node: files)
@@ -310,8 +310,8 @@ void KVirtualGameFolderModel::RefreshItems()
 	}
 	else
 	{
-		m_TreeItems = &KModManager::GetDispatcher().GetVirtualTree().GetChildren();
-		for (const KFileTreeNode& node: KModManager::GetDispatcher().GetVirtualTree().GetChildren())
+		m_TreeItems = &KDispatcher::GetInstance()->GetVirtualTree().GetChildren();
+		for (const KFileTreeNode& node: *m_TreeItems)
 		{
 			if (node.GetMod().IsEnabled())
 			{

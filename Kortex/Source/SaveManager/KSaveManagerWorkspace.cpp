@@ -82,7 +82,7 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSaveFile* sav
 		const KxStringVector& list = saveEntry->GetPluginsList();
 
 		KxMenu* pluginsListMenu = new KxMenu();
-		KxMenuItem* pluginsListMenuItem = menu.Add(pluginsListMenu, wxString::Format("%s (%zu)", T("SaveManager.Tab.PluginsList"), list.size()));
+		KxMenuItem* pluginsListMenuItem = menu.Add(pluginsListMenu, wxString::Format("%s (%zu)", KTr("SaveManager.Tab.PluginsList"), list.size()));
 		pluginsListMenuItem->Enable(!list.empty());
 
 		if (!pluginManager->HasEntries())
@@ -100,7 +100,7 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSaveFile* sav
 	// Basic info
 	{
 		KxMenu* basicInfoMenu = new KxMenu();
-		KxMenuItem* basicInfoMenuItem = menu.Add(basicInfoMenu, T("SaveManager.Tab.BasicInfo"));
+		KxMenuItem* basicInfoMenuItem = menu.Add(basicInfoMenu, KTr("SaveManager.Tab.BasicInfo"));
 		basicInfoMenuItem->Enable(saveEntry && !saveEntry->GetBasicInfo().empty());
 
 		if (saveEntry)
@@ -125,14 +125,14 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSaveFile* sav
 
 	// Sync
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_APPLY, T("SaveManager.SyncPluginsList")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_APPLY, KTr("SaveManager.SyncPluginsList")));
 		item->SetBitmap(KGetBitmap(KIMG_PLUG_DISCONNECT));
 		item->Enable(!isMultiSelect && saveEntry && saveEntry->HasPluginsList() && pluginManager);
 	}
 
 	// Save
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_SAVE, T("SaveManager.SavePluginsList")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_SAVE, KTr("SaveManager.SavePluginsList")));
 		item->SetBitmap(KGetBitmap(KIMG_DISK));
 		item->Enable(!isMultiSelect && saveEntry && saveEntry->HasPluginsList());
 	}
@@ -143,10 +143,10 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSaveFile* sav
 		const KSaveManagerConfig* profileConfig = KSaveManagerConfig::GetInstance();
 
 		KxMenu* filtersMenu = new KxMenu();
-		menu.Add(filtersMenu, T("FileFilter"));
+		menu.Add(filtersMenu, KTr("FileFilter"));
 
 		// All files
-		KxMenuItem* allFilesItem = filtersMenu->Add(new KxMenuItem(T("FileFilter.AllFiles"), wxEmptyString, wxITEM_CHECK));
+		KxMenuItem* allFilesItem = filtersMenu->Add(new KxMenuItem(KTr("FileFilter.AllFiles"), wxEmptyString, wxITEM_CHECK));
 		allFilesItem->Check(FiltersMenu_IsAllFiltersActive());
 		allFilesItem->Bind(KxEVT_MENU_SELECT, &KSaveManagerWorkspace::FiltersMenu_AllFiles, this);
 
@@ -165,12 +165,12 @@ void KSaveManagerWorkspace::CreateContextMenu(KxMenu& menu, const KSaveFile* sav
 
 	// Reload data
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REFRESH, T(KxID_REFRESH)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REFRESH, KTr(KxID_REFRESH)));
 		item->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
 	}
 	// Remove
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(selectedItemCount != 0);
 	}
 }
@@ -226,8 +226,8 @@ void KSaveManagerWorkspace::OnSavePluginsList(const KSaveFile* saveEntry)
 	KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_SAVE);
 	dialog.SetDefaultExtension("txt");
 	dialog.SetFileName(saveEntry->GetFileInfo().GetName().BeforeLast('.'));
-	dialog.AddFilter("*.txt", T("FileFilter.Text"));
-	dialog.AddFilter("*", T("FileFilter.AllFiles"));
+	dialog.AddFilter("*.txt", KTr("FileFilter.Text"));
+	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 	if (dialog.ShowModal() == KxID_OK)
 	{
@@ -271,11 +271,11 @@ wxString KSaveManagerWorkspace::GetID() const
 }
 wxString KSaveManagerWorkspace::GetName() const
 {
-	return T("SaveManager.Name");
+	return KTr("SaveManager.Name");
 }
 wxString KSaveManagerWorkspace::GetNameShort() const
 {
-	return T("SaveManager.NameShort");
+	return KTr("SaveManager.NameShort");
 }
 
 void KSaveManagerWorkspace::LoadData()
@@ -302,7 +302,7 @@ void KSaveManagerWorkspace::ProcessSelection(const KSaveFile* saveEntry)
 		}
 		else
 		{
-			mainWindow->SetStatus(T("SaveManager.InvalidFile"), statusIndex, KIMG_CROSS_CIRCLE_FRAME);
+			mainWindow->SetStatus(KTr("SaveManager.InvalidFile"), statusIndex, KIMG_CROSS_CIRCLE_FRAME);
 		}
 	}
 }

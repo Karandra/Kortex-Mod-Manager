@@ -161,11 +161,11 @@ wxString KPluginManagerWorkspace::GetID() const
 }
 wxString KPluginManagerWorkspace::GetName() const
 {
-	return T("PluginManager.Name");
+	return KTr("PluginManager.Name");
 }
 wxString KPluginManagerWorkspace::GetNameShort() const
 {
-	return T("PluginManager.NameShort");
+	return KTr("PluginManager.NameShort");
 }
 
 void KPluginManagerWorkspace::UpdatePluginTypeCounter(KxMenuItem* item)
@@ -202,13 +202,13 @@ void KPluginManagerWorkspace::UpdatePluginTypeCounter(KxMenuItem* item)
 
 		if (clientData->GetType() == PluginType::Total)
 		{
-			item->SetItemLabel(KxString::Format("%1: %2", T("PluginManager.PluginCounter.Total"), count));
+			item->SetItemLabel(KxString::Format("%1: %2", KTr("PluginManager.PluginCounter.Total"), count));
 		}
 		else if (clientData->GetType() == PluginType::Active)
 		{
 			if (pluginsConfig->HasPluginLimit())
 			{
-				item->SetItemLabel(KxString::Format("%1: %2/%3", T("PluginManager.PluginCounter.Active"), count, pluginsConfig->GetPluginLimit()));
+				item->SetItemLabel(KxString::Format("%1: %2/%3", KTr("PluginManager.PluginCounter.Active"), count, pluginsConfig->GetPluginLimit()));
 				item->SetBitmap(KGetBitmap(count >= pluginsConfig->GetPluginLimit() ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
 			}
 		}
@@ -217,7 +217,7 @@ void KPluginManagerWorkspace::UpdatePluginTypeCounter(KxMenuItem* item)
 			wxString label;
 			if (clientData->GetType() == PluginType::Active)
 			{
-				label = T("Generic.All");
+				label = KTr("Generic.All");
 			}
 			else if (KPluginManagerBethesda* bethesda = dynamic_cast<KPluginManagerBethesda*>(KPluginManager::GetInstance()))
 			{
@@ -287,11 +287,11 @@ void KPluginManagerWorkspace::OnCreateSortingToolsMenu(KxMenu& menu, const KPlug
 		sortingMenu = new KxMenu();
 		menu.AddSeparator();
 
-		KxMenuItem* item = menu.Add(sortingMenu, T("PluginManager.Sorting"));
-		item->Enable(KModManager::Get().IsVFSMounted());
+		KxMenuItem* item = menu.Add(sortingMenu, KTr("PluginManager.Sorting"));
+		item->Enable(KModManager::GetInstance()->IsVFSMounted());
 	}
 
-	if (sortingMenu && KModManager::Get().IsVFSMounted())
+	if (sortingMenu && KModManager::GetInstance()->IsVFSMounted())
 	{
 		// LootAPI
 		{
@@ -324,12 +324,12 @@ void KPluginManagerWorkspace::OnCreateImportExportMenu(KxMenu& menu, const KPlug
 	menu.AddSeparator();
 
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(T("PluginManager.Tools.ImportList")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KTr("PluginManager.Tools.ImportList")));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
 			KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_OPEN);
-			dialog.AddFilter("*.txt", T("FileFilter.Text"));
-			dialog.AddFilter("*", T("FileFilter.AllFiles"));
+			dialog.AddFilter("*.txt", KTr("FileFilter.Text"));
+			dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 			if (dialog.ShowModal() == KxID_OK)
 			{
 				KPluginManager::GetInstance()->SyncWithPluginsList(KxTextFile::ReadToArray(dialog.GetResult()));
@@ -337,14 +337,14 @@ void KPluginManagerWorkspace::OnCreateImportExportMenu(KxMenu& menu, const KPlug
 		});
 	}
 	{
-		KxMenuItem* itemAll = menu.Add(new KxMenuItem(T("PluginManager.Tools.ExportList")));
-		KxMenuItem* itemActive = menu.Add(new KxMenuItem(T("PluginManager.Tools.ExportListActive")));
+		KxMenuItem* itemAll = menu.Add(new KxMenuItem(KTr("PluginManager.Tools.ExportList")));
+		KxMenuItem* itemActive = menu.Add(new KxMenuItem(KTr("PluginManager.Tools.ExportListActive")));
 
 		auto Event = [this, itemActive](KxMenuEvent& event)
 		{
 			KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
-			dialog.AddFilter("*.txt", T("FileFilter.Text"));
-			dialog.AddFilter("*", T("FileFilter.AllFiles"));
+			dialog.AddFilter("*.txt", KTr("FileFilter.Text"));
+			dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 			dialog.SetDefaultExtension("txt");
 
 			if (dialog.ShowModal() == KxID_OK)

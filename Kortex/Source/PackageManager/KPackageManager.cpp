@@ -42,11 +42,11 @@ void KPackageManager::ExtractAcrhiveThreaded(wxWindow* window, const wxString& f
 		// Show warning message if something went wrong
 		if (self->GetClientData() == NULL)
 		{
-			KxTaskDialog dialog(window, KxID_NONE, TF("InstallWizard.LoadFailed.Caption").arg(outPath), T("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
+			KxTaskDialog dialog(window, KxID_NONE, KTrf("InstallWizard.LoadFailed.Caption", outPath), KTr("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
 			dialog.ShowModal();
 		}
 	});
-	thread->SetDialogCaption(T("ModManager.ExtractingPackageFiles"));
+	thread->SetDialogCaption(KTr("ModManager.ExtractingPackageFiles"));
 	thread->Run();
 }
 
@@ -56,7 +56,7 @@ bool KPackageManager::IsPathAbsolute(const wxString& path)
 }
 wxString KPackageManager::GetRequirementFilePath(const KPPRRequirementEntry* entry)
 {
-	wxString path = V(entry->GetObject());
+	wxString path = KVarExp(entry->GetObject());
 	if (IsPathAbsolute(path))
 	{
 		// Is object is absolute file path, return it as is.
@@ -64,7 +64,7 @@ wxString KPackageManager::GetRequirementFilePath(const KPPRRequirementEntry* ent
 	}
 	else
 	{
-		return KModManager::GetDispatcher().ResolveLocationPath(path);
+		return KDispatcher::GetInstance()->ResolveLocationPath(path);
 	}
 }
 
@@ -82,7 +82,7 @@ KPPReqState KPackageManager::CheckRequirementState(const KPPRRequirementEntry* e
 		{
 			if (!entry->GetID().IsEmpty())
 			{
-				bool isActive = KModManager::Get().IsModActive(entry->GetID());
+				bool isActive = KModManager::GetInstance()->IsModActive(entry->GetID());
 				return (KPPReqState)(objectFunc == KPPR_OBJFUNC_MOD_ACTIVE ? isActive : !isActive);
 			}
 			return KPPReqState::False;
@@ -169,7 +169,7 @@ KxVersion KPackageManager::GetRequirementVersionFromBinaryFile(const KPPRRequire
 }
 KxVersion KPackageManager::GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry)
 {
-	const KModEntry* modEntry = KModManager::Get().FindModByID(entry->GetID());
+	const KModEntry* modEntry = KModManager::GetInstance()->FindModByID(entry->GetID());
 	if (modEntry)
 	{
 		return modEntry->GetVersion();
@@ -191,9 +191,9 @@ void KPackageManager::LoadStdRequirements()
 	for (KxXMLNode entryNode = xml.GetFirstChildElement("Requirements").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 	{
 		auto& entry = m_StdEntries.GetEntries().emplace_back(new KPPRRequirementEntry(KPPR_TYPE_SYSTEM));
-		entry->SetID(V(entryNode.GetAttribute("ID")));
-		entry->SetCategory(V(entryNode.GetAttribute("Category")));
-		entry->SetName(V(entryNode.GetFirstChildElement("Name").GetValue()));
+		entry->SetID(KVarExp(entryNode.GetAttribute("ID")));
+		entry->SetCategory(KVarExp(entryNode.GetAttribute("Category")));
+		entry->SetName(KVarExp(entryNode.GetFirstChildElement("Name").GetValue()));
 
 		// Object
 		KxXMLNode objectNode = entryNode.GetFirstChildElement("Object");
@@ -232,7 +232,7 @@ wxString KPackageManager::GetID() const
 }
 wxString KPackageManager::GetName() const
 {
-	return T("PackageManager.Name");
+	return KTr("PackageManager.Name");
 }
 wxString KPackageManager::GetVersion() const
 {

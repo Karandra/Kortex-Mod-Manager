@@ -28,8 +28,8 @@ void KPCCConditionalStepsModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCCConditionalStepsModel::OnActivateItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCCConditionalStepsModel::OnContextMenu, this);
 
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("PackageCreator.PageComponents.Conditions"), ColumnID::Conditions, KxDATAVIEW_CELL_INERT, 300);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("PackageCreator.PageComponents.FileData"), ColumnID::StepData, KxDATAVIEW_CELL_INERT, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageComponents.Conditions"), ColumnID::Conditions, KxDATAVIEW_CELL_INERT, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageComponents.FileData"), ColumnID::StepData, KxDATAVIEW_CELL_INERT, 300);
 }
 
 void KPCCConditionalStepsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
@@ -100,16 +100,16 @@ void KPCCConditionalStepsModel::OnContextMenu(KxDataViewEvent& event)
 
 	KxMenu menu;
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddStep, T(KxID_ADD)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddStep, KTr(KxID_ADD)));
 		item->SetBitmap(KGetBitmap(KIMG_DIRECTION_PLUS));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 

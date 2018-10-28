@@ -20,8 +20,8 @@ void KPCFileDataFolderContentModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCFileDataFolderContentModel::OnActivateItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCFileDataFolderContentModel::OnContextMenu, this);
 
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("PackageCreator.PageFileData.MainList.Source"), ColumnID::Source, KxDATAVIEW_CELL_INERT, 300);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("PackageCreator.PageFileData.MainList.Destination"), ColumnID::Destination, KxDATAVIEW_CELL_EDITABLE, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageFileData.MainList.Source"), ColumnID::Source, KxDATAVIEW_CELL_INERT, 300);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("PackageCreator.PageFileData.MainList.Destination"), ColumnID::Destination, KxDATAVIEW_CELL_EDITABLE, 300);
 }
 
 void KPCFileDataFolderContentModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
@@ -112,7 +112,7 @@ void KPCFileDataFolderContentModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 				dialog.SetFolder(entry->GetSource().BeforeLast('\\'));
-				dialog.AddFilter("*", T("FileFilter.AllFiles"));
+				dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 				if (dialog.ShowModal() == KxID_OK)
 				{
 					entry->SetSource(dialog.GetResult());
@@ -133,16 +133,16 @@ void KPCFileDataFolderContentModel::OnContextMenu(KxDataViewEvent& event)
 
 	KxMenu menu;
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFiles, T("PackageCreator.AddMultipleFiles")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFiles, KTr("PackageCreator.AddMultipleFiles")));
 		item->SetBitmap(KGetBitmap(KIMG_DOCUMENTS_PLUS));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 
@@ -169,7 +169,7 @@ void KPCFileDataFolderContentModel::OnContextMenu(KxDataViewEvent& event)
 void KPCFileDataFolderContentModel::OnAddMultipleFiles()
 {
 	KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
-	dialog.AddFilter("*", T("FileFilter.AllFiles"));
+	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	dialog.SetOptionEnabled(KxFBD_ALLOW_MULTISELECT);
 	if (dialog.ShowModal() == KxID_OK)
 	{

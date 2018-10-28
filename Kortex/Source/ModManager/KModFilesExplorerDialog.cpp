@@ -9,7 +9,7 @@
 
 void KModFilesExplorerDialog::CreateUI(wxWindow* parent)
 {
-	wxString caption = wxString::Format("%s \"%s\"", T("ModExplorer.Caption"), m_ModEntry.GetName());
+	wxString caption = wxString::Format("%s \"%s\"", KTr("ModExplorer.Caption"), m_ModEntry.GetName());
 	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
 		SetMainIcon(KxICON_NONE);

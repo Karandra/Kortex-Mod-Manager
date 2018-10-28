@@ -56,15 +56,14 @@ KNetworkProviderID KModManagerModel::ColumnToSpecialSite(int column) const
 {
 	return (KNetworkProviderID)(column - ColumnID::Sites - 1);
 }
-wxString KModManagerModel::FormatTagList(const KModEntry* entry) const
+wxString KModManagerModel::FormatTagList(const KModEntry& entry) const
 {
-	const KModTagsManager& tagManager = KModManager::GetTagManager();
 	KxStringVector tags;
-	tags.reserve(entry->GetTags().size());
+	tags.reserve(entry.GetTags().size());
 
-	for (const wxString& tagID: entry->GetTags())
+	for (const wxString& tagID: entry.GetTags())
 	{
-		tags.push_back(tagManager.GetTagName(tagID));
+		tags.push_back(KModTagsManager::GetInstance()->GetTagName(tagID));
 	}
 	return KxString::Join(tags, "; ");
 }
@@ -87,27 +86,27 @@ void KModManagerModel::OnInitControl()
 	KxDataViewColumnFlags defaultFlagsNoSortNoOrder = KxDV_COL_RESIZEABLE;
 
 	{
-		auto info = GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(T("ModManager.ModList.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE|KxDATAVIEW_CELL_EDITABLE, 400, defaultFlags);;
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE|KxDATAVIEW_CELL_EDITABLE, 400, defaultFlags);;
 		m_NameColumn = info.GetColumn();
 	}
 	{
-		auto info = GetView()->AppendColumn<KxDataViewBitmapRenderer>(T("Generic.Image"), ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, m_BitmapSize.GetWidth() + 4, KxDV_COL_REORDERABLE);
+		auto info = GetView()->AppendColumn<KxDataViewBitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, m_BitmapSize.GetWidth() + 4, KxDV_COL_REORDERABLE);
 		m_BitmapColumn = info.GetColumn();
 	}
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
 		m_PriorityColumn = info.GetColumn();
 		m_PriorityColumn->SortAscending();
 	}
 
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("ModManager.ModList.Version"), ColumnID::Version, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("ModManager.ModList.Author"), ColumnID::Author, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.Tags"), ColumnID::Tags, KxDATAVIEW_CELL_INERT, 100, defaultFlags);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Version"), ColumnID::Version, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Author"), ColumnID::Author, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.Tags"), ColumnID::Tags, KxDATAVIEW_CELL_INERT, 100, defaultFlags);
 	
 	{
 		int spacing = 1;
 		int width = (spacing +  16) * (KNETWORK_PROVIDER_ID_MAX + 1);
-		auto info = GetView()->AppendColumn<SitesRenderer>(T("ModManager.ModList.Sites"), ColumnID::Sites, KxDATAVIEW_CELL_INERT, width, defaultFlagsNoSort);
+		auto info = GetView()->AppendColumn<SitesRenderer>(KTr("ModManager.ModList.Sites"), ColumnID::Sites, KxDATAVIEW_CELL_INERT, width, defaultFlagsNoSort);
 
 		info.GetRenderer()->SetImageList(KApp::Get().GetImageList());
 		info.GetRenderer()->SetSpacing(1);
@@ -128,11 +127,11 @@ void KModManagerModel::OnInitControl()
 		AddSiteColumn((KNetworkProviderID)i);
 	}
 
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.ModList.DateInstall"), ColumnID::DateInstall, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.ModList.DateUninstall"), ColumnID::DateUninstall, KxDATAVIEW_CELL_INERT,  125, defaultFlags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.ModList.ModFolder"), ColumnID::ModFolder, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.ModList.PackagePath"), ColumnID::PackagePath, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("ModManager.ModList.Signature"), ColumnID::Signature, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.DateInstall"), ColumnID::DateInstall, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.DateUninstall"), ColumnID::DateUninstall, KxDATAVIEW_CELL_INERT,  125, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.ModFolder"), ColumnID::ModFolder, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.PackagePath"), ColumnID::PackagePath, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.Signature"), ColumnID::Signature, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
 
 	// UI
 	m_PriorityGroupRowHeight = GetView()->GetUniformRowHeight() * 1.2;
@@ -342,7 +341,7 @@ void KModManagerModel::GetValue(wxAny& value, const KxDataViewItem& item, const 
 		}
 		case ColumnID::Tags:
 		{
-			value = FormatTagList(entry);
+			value = FormatTagList(*entry);
 			break;
 		}
 		case ColumnID::Sites:
@@ -658,7 +657,7 @@ bool KModManagerModel::Compare(const KxDataViewItem& item1, const KxDataViewItem
 				}
 				case ColumnID::Tags:
 				{
-					return KxComparator::IsLess(FormatTagList(entry1), FormatTagList(entry2));
+					return KxComparator::IsLess(FormatTagList(*entry1), FormatTagList(*entry2));
 				}
 				case ColumnID::DateInstall:
 				{
@@ -946,7 +945,7 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 		KModEntry* thisEntry = node->GetEntry();
 		if (thisEntry && HasDragDropDataObject())
 		{
-			const KModEntry::Vector& entriesToMove = GetDragDropDataObject()->GetEntries();
+			const KModEntry::RefVector& entriesToMove = GetDragDropDataObject()->GetEntries();
 			KPriorityGroupEntry* priorityGroup = thisEntry->ToPriorityGroup();
 			if (priorityGroup)
 			{
@@ -954,8 +953,8 @@ bool KModManagerModel::OnDropItems(KxDataViewEventDND& event)
 			}
 
 			// Move and refresh
-			KModManagerModsMoveType moveType = entriesToMove.size() > 1 ? KMM_MOVEMOD_AFTER : KMM_MOVEMOD_BEFORE;
-			if (KModManager::Get().MoveModsIntoThis(entriesToMove, thisEntry, moveType))
+			KModManager::MoveMode moveType = entriesToMove.size() > 1 ? KModManager::MoveMode::After : KModManager::MoveMode::Before;
+			if (KModManager::GetInstance()->MoveModsIntoThis(entriesToMove, *thisEntry, moveType))
 			{
 				// If items dragged over priority group, assign them to it
 				if (priorityGroup)
@@ -1027,7 +1026,7 @@ void KModManagerModel::SetDisplayMode(KModManagerModelType mode)
 
 const KModTagArray& KModManagerModel::GetTags() const
 {
-	return KModManager::GetTagManager().GetTagList();
+	return KModTagsManager::GetInstance()->GetTagList();
 }
 void KModManagerModel::SetDataVector()
 {
@@ -1055,9 +1054,9 @@ void KModManagerModel::RefreshItems()
 		size_t noneCount = 0;
 
 		/* Calculate item count for every tag */
-		for (KModEntry* modEntry: *m_Entries)
+		for (auto& modEntry: *m_Entries)
 		{
-			if (FilterMod(modEntry) && !modEntry->GetTags().empty())
+			if (FilterMod(*modEntry) && !modEntry->GetTags().empty())
 			{
 				for (const wxString& tagName: modEntry->GetTags())
 				{
@@ -1100,9 +1099,9 @@ void KModManagerModel::RefreshItems()
 		ItemsAdded(groupItems);
 
 		/* Add actual elements */
-		for (KModEntry* modEntry: *m_Entries)
+		for (auto& modEntry: *m_Entries)
 		{
-			if (FilterMod(modEntry))
+			if (FilterMod(*modEntry))
 			{
 				if (!modEntry->GetTags().empty())
 				{
@@ -1122,7 +1121,7 @@ void KModManagerModel::RefreshItems()
 						{
 							groupNode->GetChildren().reserve(count);
 
-							KMMModelNode& entryNode = groupNode->GetChildren().emplace_back(modEntry);
+							KMMModelNode& entryNode = groupNode->GetChildren().emplace_back(&*modEntry);
 							entryNode.SetParentNode(*groupNode);
 							ItemAdded(MakeItem(groupNode), MakeItem(entryNode));
 						}
@@ -1132,7 +1131,7 @@ void KModManagerModel::RefreshItems()
 				{
 					noneNode->GetChildren().reserve(noneCount);
 
-					KMMModelNode& entryNode = noneNode->GetChildren().emplace_back(modEntry);
+					KMMModelNode& entryNode = noneNode->GetChildren().emplace_back(&*modEntry);
 					ItemAdded(MakeItem(noneNode), MakeItem(entryNode));
 				}
 			}
@@ -1140,14 +1139,14 @@ void KModManagerModel::RefreshItems()
 	}
 	else
 	{
-		auto& mandatoryLocations = KModManager::Get().GetModEntry_Mandatory();
+		auto& mandatoryLocations = KModManager::GetInstance()->GetModEntry_Mandatory();
 
 		// +2 for base game and overwrite folder
 		m_PriortyGroups.reserve(m_Entries->size() + 1);
 		m_DataVector.reserve(m_Entries->size() + mandatoryLocations.size() + 2 + m_PriortyGroups.capacity());
 
 		// Add base game
-		KMMModelNode& baseGameNode = m_DataVector.emplace_back(KModManager::Get().GetModEntry_BaseGame());
+		KMMModelNode& baseGameNode = m_DataVector.emplace_back(KModManager::GetInstance()->GetModEntry_BaseGame());
 		ItemAdded(MakeItem(baseGameNode));
 
 		// Add mandatory locations
@@ -1161,9 +1160,9 @@ void KModManagerModel::RefreshItems()
 		KModEntry* lastEntry = baseGameNode.GetEntry();
 		KMMModelNode* priorityGroupNode = NULL;
 
-		for (KModEntry* currentEntry: *m_Entries)
+		for (auto& currentEntry: *m_Entries)
 		{
-			if (FilterMod(currentEntry))
+			if (FilterMod(*currentEntry))
 			{
 				// Add priority group
 				if (CanShowPriorityGroups())
@@ -1178,9 +1177,9 @@ void KModManagerModel::RefreshItems()
 							begin = true;
 						}
 
-						KModEntry* anchorEntry = begin ? currentEntry : lastEntry;
+						KModEntry* anchorEntry = begin ? &*currentEntry : lastEntry;
 						KPriorityGroupEntry& entry = m_PriortyGroups.emplace_back(KPriorityGroupEntry(anchorEntry, begin));
-						if (const KModTag* tag = KModManager::GetTagManager().FindModTag(anchorEntry->GetPriorityGroupTag()))
+						if (const KModTag* tag = KModTagsManager::GetInstance()->FindModTag(anchorEntry->GetPriorityGroupTag()))
 						{
 							// Save localized tag name
 							entry.SetPriorityGroupTag(tag->GetLabel());
@@ -1204,10 +1203,10 @@ void KModManagerModel::RefreshItems()
 							priorityGroupNode = NULL;
 						}
 					}
-					lastEntry = currentEntry;
+					lastEntry = &*currentEntry;
 				}
 
-				KMMModelNode& node = (priorityGroupNode ? priorityGroupNode->GetChildren() : m_DataVector).emplace_back(currentEntry);
+				KMMModelNode& node = (priorityGroupNode ? priorityGroupNode->GetChildren() : m_DataVector).emplace_back(&*currentEntry);
 				node.SetParentNode(*priorityGroupNode);
 				ItemAdded(MakeItem(priorityGroupNode), MakeItem(node));
 			}
@@ -1219,7 +1218,7 @@ void KModManagerModel::RefreshItems()
 			if (!m_PriortyGroups.empty() && m_PriortyGroups.back().IsBegin())
 			{
 				const wxString& groupName = m_PriortyGroups.back().GetPriorityGroupTag();
-				KPriorityGroupEntry& entry = m_PriortyGroups.emplace_back(KPriorityGroupEntry(m_Entries->back(), false));
+				KPriorityGroupEntry& entry = m_PriortyGroups.emplace_back(KPriorityGroupEntry(&*m_Entries->back(), false));
 				entry.SetPriorityGroupTag(groupName);
 
 				KMMModelNode& node = m_DataVector.emplace_back(&entry);
@@ -1228,7 +1227,7 @@ void KModManagerModel::RefreshItems()
 		}
 
 		// WriteTargetRoot
-		KMMModelNode& writeTargetRootNode = m_DataVector.emplace_back(KModManager::Get().GetModEntry_WriteTarget());
+		KMMModelNode& writeTargetRootNode = m_DataVector.emplace_back(KModManager::GetInstance()->GetModEntry_WriteTarget());
 		ItemAdded(MakeItem(writeTargetRootNode));
 	}
 	GetView()->SetFocus();
@@ -1300,9 +1299,9 @@ void KModManagerModel::SetSearchColumns(const KxDataViewColumn::Vector& columns)
 	m_SearchColumns = columns;
 	Save(true);
 }
-bool KModManagerModel::FilterMod(const KModEntry* modEntry) const
+bool KModManagerModel::FilterMod(const KModEntry& modEntry) const
 {
-	if (!modEntry->IsInstalled() && !ShouldShowNotInstalledMods())
+	if (!modEntry.IsInstalled() && !ShouldShowNotInstalledMods())
 	{
 		return false;
 	}
@@ -1318,17 +1317,17 @@ bool KModManagerModel::FilterMod(const KModEntry* modEntry) const
 		{
 			case ColumnID::Name:
 			{
-				found = KAux::CheckSearchMask(m_SearchMask, modEntry->GetName()) || KAux::CheckSearchMask(m_SearchMask, modEntry->GetID());
+				found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetName()) || KAux::CheckSearchMask(m_SearchMask, modEntry.GetID());
 				break;
 			}
 			case ColumnID::Author:
 			{
-				found = KAux::CheckSearchMask(m_SearchMask, modEntry->GetAuthor());
+				found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetAuthor());
 				break;
 			}
 			case ColumnID::Version:
 			{
-				found = KAux::CheckSearchMask(m_SearchMask, modEntry->GetVersion());
+				found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetVersion());
 				break;
 			}
 			case ColumnID::Tags:
@@ -1338,12 +1337,12 @@ bool KModManagerModel::FilterMod(const KModEntry* modEntry) const
 			}
 			case ColumnID::PackagePath:
 			{
-				found = KAux::CheckSearchMask(m_SearchMask, modEntry->GetInstallPackageFile());
+				found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetInstallPackageFile());
 				break;
 			}
 			case ColumnID::Signature:
 			{
-				found = KAux::CheckSearchMask(m_SearchMask, modEntry->GetSignature());
+				found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetSignature());
 				break;
 			}
 		};

@@ -130,14 +130,14 @@ void KPluginViewBaseModel::OnContextMenu(KxDataViewEvent& event)
 
 	// Base items
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(T("PluginManager.EnableAll")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KTr("PluginManager.EnableAll")));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
 			SetAllEnabled(true);
 		});
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(T("PluginManager.DisableAll")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KTr("PluginManager.DisableAll")));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
 			SetAllEnabled(false);
@@ -158,7 +158,7 @@ void KPluginViewBaseModel::OnContextMenu(KxDataViewEvent& event)
 				}
 
 				// Description
-				KxMenuItem* descriptionItem = menu.Add(new KxMenuItem(T("Generic.Description")));
+				KxMenuItem* descriptionItem = menu.Add(new KxMenuItem(KTr("Generic.Description")));
 				descriptionItem->Enable(!bethesdaReader->GetDescription().IsEmpty());
 				descriptionItem->Bind(KxEVT_MENU_SELECT, [this, bethesdaReader](KxMenuEvent& event)
 				{
@@ -174,7 +174,7 @@ void KPluginViewBaseModel::OnContextMenu(KxDataViewEvent& event)
 				// Dependencies
 				const KxStringVector& dependenciesList = bethesdaReader->GetRequiredPlugins();
 				KxMenu* dependenciesMenu = new KxMenu();
-				KxMenuItem* dependenciesMenuItem = menu.Add(dependenciesMenu, wxString::Format("%s (%zu)", T("PluginManager.PluginDependencies"), dependenciesList.size()));
+				KxMenuItem* dependenciesMenuItem = menu.Add(dependenciesMenu, wxString::Format("%s (%zu)", KTr("PluginManager.PluginDependencies"), dependenciesList.size()));
 				dependenciesMenuItem->Enable(!dependenciesList.empty());
 
 				for (const wxString& name: dependenciesList)
@@ -186,7 +186,7 @@ void KPluginViewBaseModel::OnContextMenu(KxDataViewEvent& event)
 				// Dependent plugins
 				KPluginEntry::RefVector dependentList = manager->GetDependentPlugins(*entry);
 				KxMenu* dependentMenu = new KxMenu();
-				KxMenuItem* dependentMenuItem = menu.Add(dependentMenu, wxString::Format("%s (%zu)", T("PluginManager.DependentPlugins"), dependentList.size()));
+				KxMenuItem* dependentMenuItem = menu.Add(dependentMenu, wxString::Format("%s (%zu)", KTr("PluginManager.DependentPlugins"), dependentList.size()));
 				dependentMenuItem->Enable(!dependentList.empty());
 
 				for (const KPluginEntry* depEntry: dependentList)

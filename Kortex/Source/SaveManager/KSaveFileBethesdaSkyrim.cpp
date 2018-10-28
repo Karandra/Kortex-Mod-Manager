@@ -19,16 +19,16 @@ bool KSaveFileBethesdaSkyrim::DoInitializeSaveData()
 			m_SaveVersion = stream.ReadObject<uint32_t>();
 
 			// Read basic info
-			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex"));
-			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Name"));
-			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.Level"));
-			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Location"));
-			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()), T("SaveManager.Info.TimeInGame"));
-			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()), T("SaveManager.Info.Race"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Name"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.Level"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Location"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.TimeInGame"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Race"));
 
 			// Player sex
 			uint16_t playerSex = stream.ReadObject<uint16_t>();
-			m_BasicInfo.emplace_back(playerSex == 0 ? T("SaveManager.Info.SexMale") : T("SaveManager.Info.SexFemale"), T("SaveManager.Info.Sex"));
+			m_BasicInfo.emplace_back(playerSex == 0 ? KTr("SaveManager.Info.SexMale") : KTr("SaveManager.Info.SexFemale"), KTr("SaveManager.Info.Sex"));
 
 			// Skip 'playerCurExp', 'playerLvlUpExp' and 'filetime' fields.
 			stream.Skip<float32_t, float32_t, FILETIME>();

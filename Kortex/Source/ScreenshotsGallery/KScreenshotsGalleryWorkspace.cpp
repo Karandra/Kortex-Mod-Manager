@@ -46,7 +46,7 @@ void KScreenshotsGalleryWorkspace::LoadData()
 	{
 		for (const wxString& folderPath: galleryConfig->GetLocations())
 		{
-			KxStringVector files = KxFile(V(folderPath)).Find(m_Manager->GetSupportedExtensions(), KxFS_FILE, false);
+			KxStringVector files = KxFile(KVarExp(folderPath)).Find(m_Manager->GetSupportedExtensions(), KxFS_FILE, false);
 			for (const wxString& path: files)
 			{
 				m_LoadedImages.emplace_back(path);
@@ -148,7 +148,7 @@ wxString KScreenshotsGalleryWorkspace::GetID() const
 }
 wxString KScreenshotsGalleryWorkspace::GetName() const
 {
-	return T("ScreenshotsGallery.Name");
+	return KTr("ScreenshotsGallery.Name");
 }
 
 void KScreenshotsGalleryWorkspace::DisplayInfo(const wxString& filePath)

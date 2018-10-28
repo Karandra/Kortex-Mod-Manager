@@ -16,7 +16,7 @@
 
 wxString KPackageCreatorController::GetNewProjectName()
 {
-	return T("PackageCreator.NewProjectName");
+	return KTr("PackageCreator.NewProjectName");
 }
 
 KPackageCreatorController::KPackageCreatorController(KPackageCreatorWorkspace* workspace)
@@ -29,11 +29,11 @@ KPackageCreatorController::~KPackageCreatorController()
 
 wxString KPackageCreatorController::GetSaveConfirmationCaption() const
 {
-	return T("PackageCreator.SaveChanges.Caption");
+	return KTr("PackageCreator.SaveChanges.Caption");
 }
 wxString KPackageCreatorController::GetSaveConfirmationMessage() const
 {
-	return T("PackageCreator.SaveChanges.Message");
+	return KTr("PackageCreator.SaveChanges.Message");
 }
 
 bool KPackageCreatorController::IsOK() const
@@ -190,7 +190,7 @@ void KPackageCreatorController::ExportProject(KPackageProjectSerializer& seriali
 void KPackageCreatorController::BuildProject(bool buildPreview)
 {
 	auto thread = new KPackageCreatorBuilderOperation(m_Project.get(), buildPreview);
-	thread->SetDialogCaption(TF("PackageCreator.Build.Caption").arg(GetProjectName()));
+	thread->SetDialogCaption(KTrf("PackageCreator.Build.Caption", GetProjectName()));
 	thread->Run();
 }
 

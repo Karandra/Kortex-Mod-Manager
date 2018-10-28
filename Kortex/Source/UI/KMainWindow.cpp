@@ -3,6 +3,7 @@
 #include "SettingsWindow/KSettingsWindow.h"
 #include "ModManager/KModManager.h"
 #include "Network/KNetwork.h"
+#include "NotificationCenter/KNotificationCenter.h"
 #include "DownloadManager/KDownloadManager.h"
 #include "ProgramManager/KProgramManager.h"
 #include "KInstanceSelectionDialog.h"
@@ -109,11 +110,9 @@ void KMainWindow::CreateToolBar()
 	/* Quick ToolBar */
 	m_QuickToolBar = NewToolBar(0, true);
 	{
-		m_QuickToolBar_Login = m_QuickToolBar->AddTool(wxEmptyString, KGetBitmap(KIMG_APPLICATION_LOGO_SMALL), wxITEM_NORMAL);
-		m_QuickToolBar_Login->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KNetwork::OnLoginButton, KNetwork::GetInstance());
-		KNetwork::GetInstance()->SetLoginButton(m_QuickToolBar_Login);
-
+		AddToolBarButton<KNetwork>(m_QuickToolBar, KIMG_APPLICATION_LOGO_SMALL);
 		m_QuickToolBar->AddSeparator();
+		AddToolBarButton<KNotificationCenter>(m_QuickToolBar, KIMG_BELL);
 
 		m_QuickToolBar_QuickSettingsMenu = m_QuickToolBar->AddTool(wxEmptyString, KGetBitmap(KIMG_GEAR), wxITEM_NORMAL);
 		m_QuickToolBar_QuickSettingsMenu->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KMainWindow::OnQSMButton, this);
@@ -243,7 +242,7 @@ void KMainWindow::CreateMainWorkspaces()
 void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 {
 	{
-		KxMenuItem* item = mainMenu.Add(new KxMenuItem(T("MainMenu.Settings")));
+		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.Settings")));
 		item->SetBitmap(KGetBitmap(KIMG_APPLICATION_TASK));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
@@ -252,7 +251,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 	}
 	mainMenu.AddSeparator();
 	{
-		KxMenuItem* item = mainMenu.Add(new KxMenuItem(T("MainMenu.ChangeInstance")));
+		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.ChangeInstance")));
 		item->Bind(KxEVT_MENU_SELECT, &KMainWindow::OnChangeInstance, this);
 		item->Enable(!KModManager::GetInstance()->IsVFSMounted());
 	}
@@ -271,7 +270,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 		KLocationsManagerConfig::GetInstance()->OnAddMainMenuItems(mainMenu);
 	}
 	{
-		KxMenuItem* item = mainMenu.Add(new KxMenuItem(T("MainMenu.About")));
+		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.About")));
 		item->SetBitmap(KGetBitmap(KIMG_INFORMATION_FRAME));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
@@ -287,8 +286,8 @@ void KMainWindow::OnQSMButton(KxAuiToolBarEvent& event)
 	if (current && current->HasQuickSettingsMenu())
 	{
 		DWORD alignment = TPM_RIGHTALIGN|TPM_TOPALIGN;
-		wxPoint tPos = m_QuickToolBar_QuickSettingsMenu->GetRect().GetRightBottom() + wxPoint(1, 2);
-		current->GetQuickSettingsMenu()->Show(m_QuickToolBar, tPos, alignment);
+		wxPoint pos = m_QuickToolBar_QuickSettingsMenu->GetRect().GetRightBottom() + wxPoint(1, 2);
+		current->GetQuickSettingsMenu()->Show(m_QuickToolBar, pos, alignment);
 	}
 }
 void KMainWindow::OnWindowClose(wxCloseEvent& event)
@@ -297,9 +296,9 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 
 	if (event.CanVeto())
 	{
-		if (KModManager::Get().IsVFSMounted())
+		if (KModManager::GetInstance()->IsVFSMounted())
 		{
-			KxTaskDialog dialog(this, KxID_NONE, T("VFS.AskUnmountOnExit"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_QUESTION);
+			KxTaskDialog dialog(this, KxID_NONE, KTr("VFS.AskUnmountOnExit"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_QUESTION);
 			if (dialog.ShowModal() != KxID_YES)
 			{
 				event.Veto();
@@ -376,12 +375,12 @@ void KMainWindow::OnVFSToggled(KVFSEvent& event)
 {
 	if (event.IsActivated())
 	{
-		m_StatusBar->SetStatusText(T("VFS.Status.Active"));
+		m_StatusBar->SetStatusText(KTr("VFS.Status.Active"));
 		m_StatusBar->SetStatusImage(KIMG_TICK_CIRCLE_FRAME, 0);
 	}
 	else
 	{
-		m_StatusBar->SetStatusText(T("VFS.Status.Inactive"));
+		m_StatusBar->SetStatusText(KTr("VFS.Status.Inactive"));
 		m_StatusBar->SetStatusImage(KIMG_INFORMATION_FRAME_EMPTY, 0);
 	}
 	KThemeManager::Get().ProcessWindow(m_StatusBar, event.IsActivated());

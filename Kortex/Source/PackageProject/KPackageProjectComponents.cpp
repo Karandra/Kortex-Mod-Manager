@@ -112,7 +112,7 @@ wxString KPackageProjectComponents::TypeDescriptorToString(KPPCTypeDescriptor ty
 }
 wxString KPackageProjectComponents::TypeDescriptorToTranslation(KPPCTypeDescriptor type)
 {
-	return T(wxString::Format("PackageCreator.PageComponents.TypeDescriptor.%s", KPackageProjectComponents::TypeDescriptorToString(type)));
+	return KTr(wxString::Format("PackageCreator.PageComponents.TypeDescriptor.%s", KPackageProjectComponents::TypeDescriptorToString(type)));
 }
 
 KPPCSelectionMode KPackageProjectComponents::StringToSelectionMode(const wxString& name)
@@ -168,7 +168,7 @@ wxString KPackageProjectComponents::SelectionModeToString(KPPCSelectionMode type
 }
 wxString KPackageProjectComponents::SelectionModeToTranslation(KPPCSelectionMode type)
 {
-	return T(wxString::Format("PackageCreator.PageComponents.SelectionMode.%s", SelectionModeToString(type)));
+	return KTr(wxString::Format("PackageCreator.PageComponents.SelectionMode.%s", SelectionModeToString(type)));
 }
 
 KxStringVector KPackageProjectComponents::GetFlagsAttributes(FlagAttribute index) const

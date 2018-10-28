@@ -20,10 +20,10 @@ void KGameConfigWorkspace::CreateControllerView()
 	/* Columns */
 	const int flags = wxCOL_SORTABLE|wxCOL_RESIZABLE|wxCOL_REORDERABLE;
 	const wxAlignment alignment = wxALIGN_LEFT;
-	m_ControllerView->AddColumn(T("ConfigManager.View.Path"), 275, alignment, flags);
-	m_ControllerView->AddColumn(T("ConfigManager.View.Name"), 250, alignment, flags);
-	m_ControllerView->AddColumn(T("ConfigManager.View.Type"), 75, alignment, flags);
-	m_ControllerView->AddColumn(T("ConfigManager.View.Value"), 325, alignment, flags);
+	m_ControllerView->AddColumn(KTr("ConfigManager.View.Path"), 275, alignment, flags);
+	m_ControllerView->AddColumn(KTr("ConfigManager.View.Name"), 250, alignment, flags);
+	m_ControllerView->AddColumn(KTr("ConfigManager.View.Type"), 75, alignment, flags);
+	m_ControllerView->AddColumn(KTr("ConfigManager.View.Value"), 325, alignment, flags);
 	m_ControllerView->SetSortColumn(0, true);
 }
 bool KGameConfigWorkspace::OnCreateWorkspace()
@@ -38,12 +38,12 @@ bool KGameConfigWorkspace::OnCreateWorkspace()
 	m_ListViewSizer->Add(m_ControllerView, 1, wxEXPAND, KLC_VERTICAL_SPACING);
 
 	/* Controls */
-	m_SaveButton = new KxButton(this, KxID_NONE, T(KxID_SAVE));
+	m_SaveButton = new KxButton(this, KxID_NONE, KTr(KxID_SAVE));
 	m_SaveButton->SetBitmap(KGetBitmap(KIMG_DISK));
 	m_SaveButton->Disable();
 	m_SaveButton->Bind(wxEVT_BUTTON, &KGameConfigWorkspace::OnSaveButton, this);
 
-	m_DiscardButton = new KxButton(this, KxID_NONE, T(KxID_UNDO));
+	m_DiscardButton = new KxButton(this, KxID_NONE, KTr(KxID_UNDO));
 	m_DiscardButton->SetBitmap(KGetBitmap(KIMG_CROSS_WHITE));
 	m_DiscardButton->Disable();
 	m_DiscardButton->Bind(wxEVT_BUTTON, &KGameConfigWorkspace::OnDiscardButton, this);
@@ -99,7 +99,7 @@ wxString KGameConfigWorkspace::GetID() const
 }
 wxString KGameConfigWorkspace::GetName() const
 {
-	return T("ConfigManager.Name");
+	return KTr("ConfigManager.Name");
 }
 
 void KGameConfigWorkspace::OnSaveButton(wxCommandEvent& event)

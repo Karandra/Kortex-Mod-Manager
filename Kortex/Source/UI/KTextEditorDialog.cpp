@@ -13,7 +13,7 @@
 
 bool KTextEditorDialog::Create(wxWindow* parent)
 {
-	if (KxStdDialog::Create(parent, KxID_NONE, T("TextEditor.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL))
+	if (KxStdDialog::Create(parent, KxID_NONE, KTr("TextEditor.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL))
 	{
 		SetMainIcon(KxICON_NONE);
 		SetWindowResizeSide(wxBOTH);
@@ -31,57 +31,57 @@ bool KTextEditorDialog::Create(wxWindow* parent)
 		viewSizer->Add(m_ToolBar, 0, wxEXPAND);
 
 		// Edit mode
-		m_ToolBar_SwitchMode = KMainWindow::CreateToolBarButton(m_ToolBar, T("TextEditor.ToolBar.Mode"), KIMG_EDIT);
+		m_ToolBar_SwitchMode = KMainWindow::CreateToolBarButton(m_ToolBar, KTr("TextEditor.ToolBar.Mode"), KIMG_EDIT);
 		m_ToolBar_SwitchMode->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KTextEditorDialog::OnSwitchMode, this);
 		m_ToolBar->AddSeparator();
 
 		// Save/Load
-		m_ToolBar_Save = KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_SAVE), KIMG_DISK);
+		m_ToolBar_Save = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_SAVE), KIMG_DISK);
 		m_ToolBar_Save->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KTextEditorDialog::OnSaveLoadFile, this);
 
-		m_ToolBar_Open = KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_OPEN), KIMG_FOLDER_OPEN);
+		m_ToolBar_Open = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_OPEN), KIMG_FOLDER_OPEN);
 		m_ToolBar_Open->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KTextEditorDialog::OnSaveLoadFile, this);
 		m_ToolBar->AddSeparator();
 
 		// Undo/Redo
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_UNDO), KIMG_ARROW_CURVE_180_LEFT)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_UNDO), KIMG_ARROW_CURVE_180_LEFT)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			m_Editor->Undo();
 		});
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_REDO), KIMG_ARROW_CIRCLE_135_LEFT)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_REDO), KIMG_ARROW_CIRCLE_135_LEFT)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			m_Editor->Redo();
 		});
 		m_ToolBar->AddSeparator();
 
 		// Styles
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_BOLD), KIMG_EDIT_BOLD)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_BOLD), KIMG_EDIT_BOLD)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			ToggleTag("b");
 		});
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_ITALIC), KIMG_EDIT_ITALIC)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_ITALIC), KIMG_EDIT_ITALIC)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			ToggleTag("i");
 		});
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_UNDERLINE), KIMG_EDIT_UNDERLINE)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_UNDERLINE), KIMG_EDIT_UNDERLINE)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			ToggleTag("u");
 		});
 		m_ToolBar->AddSeparator();
 
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_JUSTIFY_LEFT), KIMG_EDIT_ALIGNMENT_LEFT)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_LEFT), KIMG_EDIT_ALIGNMENT_LEFT)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			ToggleTag("div", "align", "left");
 		});
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_JUSTIFY_CENTER), KIMG_EDIT_ALIGNMENT_CENTER)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_CENTER), KIMG_EDIT_ALIGNMENT_CENTER)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			ToggleTag("div", "align", "center");
 		});
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_JUSTIFY_RIGHT), KIMG_EDIT_ALIGNMENT_RIGHT)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_RIGHT), KIMG_EDIT_ALIGNMENT_RIGHT)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			ToggleTag("div", "align", "right");
 		});
-		KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_JUSTIFY_FILL), KIMG_EDIT_ALIGNMENT_JUSTIFY)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+		KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_FILL), KIMG_EDIT_ALIGNMENT_JUSTIFY)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			ToggleTag("div", "align", "justify");
 		});
@@ -89,12 +89,12 @@ bool KTextEditorDialog::Create(wxWindow* parent)
 		// Heading
 		m_HeadingList = new KxBitmapComboBox(m_ToolBar, KxID_ANY);
 		m_HeadingList->SetImageList(const_cast<KxImageList*>(KGetImageList()));
-		m_ToolBar->AddControl(m_HeadingList, T("TextEditor.ToolBar.Heading"));
+		m_ToolBar->AddControl(m_HeadingList, KTr("TextEditor.ToolBar.Heading"));
 
 		const int maxHeading = 6;
 		for (int i = 1; i <= maxHeading; i++)
 		{
-			m_HeadingList->AddItem(wxString::Format("%s %d", T("TextEditor.ToolBar.Heading"), i), KIMG_EDIT_HEADING + i);
+			m_HeadingList->AddItem(wxString::Format("%s %d", KTr("TextEditor.ToolBar.Heading"), i), KIMG_EDIT_HEADING + i);
 		}
 		m_HeadingList->SetSelection(0);
 		m_HeadingList->Bind(wxEVT_COMBOBOX, [this](wxCommandEvent& event)
@@ -182,8 +182,8 @@ void KTextEditorDialog::OnSaveLoadFile(KxAuiToolBarEvent& event)
 	bool save = event.GetEventObject() == m_ToolBar_Save;
 
 	KxFileBrowseDialog dialog(this, KxID_NONE, save ? KxFBD_SAVE : KxFBD_OPEN);
-	dialog.AddFilter("*.txt", T("FileFilter.Text"));
-	dialog.AddFilter("*", T("FileFilter.AllFiles"));
+	dialog.AddFilter("*.txt", KTr("FileFilter.Text"));
+	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	dialog.SetDefaultExtension("txt");
 
 	if (dialog.ShowModal() == KxID_OK)

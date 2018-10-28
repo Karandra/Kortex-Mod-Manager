@@ -32,7 +32,7 @@ enum ComponentsTabIndex
 
 void KInstallWizardDialog::ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath)
 {
-	KxTaskDialog dialog(window, KxID_NONE, TF("InstallWizard.LoadFailed.Caption").arg(packagePath), T("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
+	KxTaskDialog dialog(window, KxID_NONE, KTrf("InstallWizard.LoadFailed.Caption", packagePath), KTr("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
 	dialog.ShowModal();
 }
 
@@ -43,11 +43,11 @@ bool KInstallWizardDialog::CreateUI(wxWindow* parent)
 	{
 		GetContentWindow()->SetBackgroundColour(GetBackgroundColour());
 
-		m_BackwardButton = AddButton(KxID_BACKWARD, "< " + T("InstallWizard.BackwardButton")).As<KxButton>();
+		m_BackwardButton = AddButton(KxID_BACKWARD, "< " + KTr("InstallWizard.BackwardButton")).As<KxButton>();
 		m_BackwardButton->Bind(wxEVT_BUTTON, &KInstallWizardDialog::OnGoBackward, this);
 		m_BackwardButton->Bind(wxEVT_BUTTON, &KInstallWizardDialog::OnGoStepBackward, this);
 
-		m_ForwardButton = AddButton(KxID_FORWARD, T("InstallWizard.ForwardButton") + " >").As<KxButton>();
+		m_ForwardButton = AddButton(KxID_FORWARD, KTr("InstallWizard.ForwardButton") + " >").As<KxButton>();
 		m_ForwardButton->Bind(wxEVT_BUTTON, &KInstallWizardDialog::OnGoForward, this);
 		m_ForwardButton->Bind(wxEVT_BUTTON, &KInstallWizardDialog::OnGoStepForward, this);
 
@@ -95,7 +95,7 @@ wxWindow* KInstallWizardDialog::CreateUI_Info()
 	/* Info */
 	m_Info_PackageInfoList = new KInstallWizardInfoModel(*this, GetConfig());
 	m_Info_PackageInfoList->Create(m_Info_Tabs);
-	m_Info_Tabs->AddPage(m_Info_PackageInfoList->GetView(), T("InstallWizard.Page.Info"), true);
+	m_Info_Tabs->AddPage(m_Info_PackageInfoList->GetView(), KTr("InstallWizard.Page.Info"), true);
 
 	/* Description */
 	m_Info_Description = new KxHTMLWindow(m_Info_Tabs, KxID_NONE);
@@ -103,7 +103,7 @@ wxWindow* KInstallWizardDialog::CreateUI_Info()
 	{
 		KAux::AskOpenURL(event.GetLinkInfo().GetHref(), this);
 	});
-	m_Info_Tabs->AddPage(m_Info_Description, T("Generic.Description"));
+	m_Info_Tabs->AddPage(m_Info_Description, KTr("Generic.Description"));
 
 	/* Documents */
 	// Pane and sizer
@@ -123,7 +123,7 @@ wxWindow* KInstallWizardDialog::CreateUI_Info()
 	m_Info_DocumentAdvanced = wxWebView::New(m_Info_DocumentsSplitter, KxID_NONE);
 
 	m_Info_DocumentsSplitter->SplitVertically(m_Info_DocumentsList, m_Info_DocumentSimple, m_Info_DocumentsSplitter->GetMinimumPaneSize());
-	m_Info_Tabs->AddPage(m_Info_DocumentsSplitter, T("InstallWizard.Page.Documnets"));
+	m_Info_Tabs->AddPage(m_Info_DocumentsSplitter, KTr("InstallWizard.Page.Documnets"));
 
 	/* Screenshots */
 	m_Info_Screenshots = new KxThumbView(m_Info_Tabs, KxID_NONE, KxThumbView::DefaultStyle|wxBORDER_NONE);
@@ -149,7 +149,7 @@ wxWindow* KInstallWizardDialog::CreateUI_Info()
 	});
 	KThemeManager::Get().ProcessWindow(m_Info_Screenshots);
 
-	m_Info_Tabs->AddPage(m_Info_Screenshots, T("InstallWizard.Page.Screenshots"));
+	m_Info_Tabs->AddPage(m_Info_Screenshots, KTr("InstallWizard.Page.Screenshots"));
 
 	// Return page
 	return m_Info_Tabs;
@@ -214,14 +214,14 @@ wxWindow* KInstallWizardDialog::CreateUI_Components()
 	{
 		KAux::AskOpenURL(event.GetLinkInfo().GetHref(), this);
 	});
-	m_Components_Tabs->InsertPage(ComponentsTabIndex::Description, m_Components_Description, T("Generic.Description"), true);
+	m_Components_Tabs->InsertPage(ComponentsTabIndex::Description, m_Components_Description, KTr("Generic.Description"), true);
 
 	// Requirements
 	m_Components_Requirements = new KInstallWizardRequirementsModel();
 	m_Components_Requirements->SetDataViewFlags(KxDataViewCtrl::DefaultStyle|(KxDataViewCtrlStyles)wxBORDER_NONE);
 	m_Components_Requirements->Create(m_Components_Tabs);
 	m_Components_Requirements->SetDataVector();
-	m_Components_Tabs->InsertPage(ComponentsTabIndex::Requirements, m_Components_Requirements->GetView(), T("InstallWizard.Page.Requirements"));
+	m_Components_Tabs->InsertPage(ComponentsTabIndex::Requirements, m_Components_Requirements->GetView(), KTr("InstallWizard.Page.Requirements"));
 
 	/* Split */
 	m_Components_SplitterHRight->SplitHorizontally(m_Components_ImageView, m_Components_Tabs, -m_Components_SplitterHRight->GetMinimumPaneSize());
@@ -271,27 +271,27 @@ void KInstallWizardDialog::SetLabelByCurrentPage()
 	{
 		case KIWD_PAGE_INFO:
 		{
-			SetLabel(T("InstallWizard.Page.Info"));
+			SetLabel(KTr("InstallWizard.Page.Info"));
 			break;
 		}
 		case KIWD_PAGE_REQUIREMENTS:
 		{
-			SetLabel(T("InstallWizard.Page.Requirements"));
+			SetLabel(KTr("InstallWizard.Page.Requirements"));
 			break;
 		}
 		case KIWD_PAGE_COMPONENTS:
 		{
-			SetLabel(T("InstallWizard.Page.Components"));
+			SetLabel(KTr("InstallWizard.Page.Components"));
 			break;
 		}
 		case KIWD_PAGE_INSTALLING:
 		{
-			SetLabel(T("InstallWizard.Page.Installing"));
+			SetLabel(KTr("InstallWizard.Page.Installing"));
 			break;
 		}
 		case KIWD_PAGE_DONE:
 		{
-			SetLabel(T("InstallWizard.Page.Done"));
+			SetLabel(KTr("InstallWizard.Page.Done"));
 			break;
 		}
 	};
@@ -326,7 +326,7 @@ bool KInstallWizardDialog::LoadPackage()
 		/* Info and misc */
 		
 		// Window caption
-		SetCaption(TF("InstallWizard.WindowCaption").arg(m_Package->GetName()) + ' ' + info.GetVersion());
+		SetCaption(KTrf("InstallWizard.WindowCaption", m_Package->GetName()) + ' ' + info.GetVersion());
 
 		// Try to find existing mod for this package
 		FindExistingMod();
@@ -397,7 +397,7 @@ bool KInstallWizardDialog::ProcessLoadPackage()
 
 void KInstallWizardDialog::FindExistingMod()
 {
-	m_ExistingMod = KModManager::Get().FindModByID(GetConfig().ComputeModID());
+	m_ExistingMod = KModManager::GetInstance()->FindModByID(GetConfig().ComputeModID());
 }
 void KInstallWizardDialog::AcceptExistingMod(const KModEntry& existringMod)
 {
@@ -490,15 +490,15 @@ void KInstallWizardDialog::LoadInfoList()
 		}
 	};
 
-	AddString(T("PackageCreator.PageInfo.BasicInfo.ID"), wxEmptyString, KIWI_TYPE_ID , true);
-	AddString(T("PackageCreator.PageInfo.BasicInfo.Name"), wxEmptyString, KIWI_TYPE_NAME, true);
-	AddString(T("PackageCreator.PageInfo.BasicInfo.TranslatedName"), info.GetTranslatedName());
-	AddString(T("PackageCreator.PageInfo.BasicInfo.Translatior"), info.GetTranslator());
-	AddString(T("PackageCreator.PageInfo.BasicInfo.Version"), info.GetVersion(), KIWI_TYPE_NONE, true);
-	AddString(T("PackageCreator.PageInfo.BasicInfo.Author"), info.GetAuthor(), KIWI_TYPE_NONE, true);
+	AddString(KTr("PackageCreator.PageInfo.BasicInfo.ID"), wxEmptyString, KIWI_TYPE_ID , true);
+	AddString(KTr("PackageCreator.PageInfo.BasicInfo.Name"), wxEmptyString, KIWI_TYPE_NAME, true);
+	AddString(KTr("PackageCreator.PageInfo.BasicInfo.TranslatedName"), info.GetTranslatedName());
+	AddString(KTr("PackageCreator.PageInfo.BasicInfo.Translatior"), info.GetTranslator());
+	AddString(KTr("PackageCreator.PageInfo.BasicInfo.Version"), info.GetVersion(), KIWI_TYPE_NONE, true);
+	AddString(KTr("PackageCreator.PageInfo.BasicInfo.Author"), info.GetAuthor(), KIWI_TYPE_NONE, true);
 	AddSites();
 	AddUserData();
-	AddString(T("PackageCreator.PageInfo.BasicInfo.Tags"), wxEmptyString, KIWITypes::KIWI_TYPE_TAGS, true, KIMG_TAGS);
+	AddString(KTr("PackageCreator.PageInfo.BasicInfo.Tags"), wxEmptyString, KIWITypes::KIWI_TYPE_TAGS, true, KIMG_TAGS);
 
 	m_Info_PackageInfoList->RefreshItems();
 }
@@ -607,7 +607,7 @@ void KInstallWizardDialog::OnSelectDocument(int index, bool useAdvancedEditor)
 	else
 	{
 		SwitchSimple();
-		m_Info_DocumentSimple->SetTextValue(KAux::MakeHTMLWindowPlaceholder(T("InstallWizard.SelectDocumentHint"), m_Info_DocumentSimple));
+		m_Info_DocumentSimple->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectDocumentHint"), m_Info_DocumentSimple));
 		m_Info_DocumentSimple->Disable();
 	}
 }
@@ -621,7 +621,7 @@ bool KInstallWizardDialog::AskCancel(bool canCancel)
 			return true;
 		}
 
-		KxTaskDialog dialog(this, KxID_NONE, T("InstallWizard.CancelMessage"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		KxTaskDialog dialog(this, KxID_NONE, KTr("InstallWizard.CancelMessage"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		return dialog.ShowModal() == KxID_YES;
 	}
 	return true;
@@ -645,7 +645,7 @@ void KInstallWizardDialog::OnClose(wxCloseEvent& event)
 	}
 	else
 	{
-		KModEvent(KEVT_MOD_INSTALLED, m_ModEntry).Send();
+		KModManager::GetInstance()->NotifyModInstalled(m_ModEntry);
 
 		wxNotifyEvent doneEvent(KEVT_IW_DONE);
 		doneEvent.SetEventObject(this);
@@ -783,7 +783,7 @@ void KInstallWizardDialog::OnSelectComponent(KxDataViewEvent& event)
 			}
 			else
 			{
-				m_Components_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(T("InstallWizard.NoDescriptionHint"), m_Components_Description));
+				m_Components_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Components_Description));
 			}
 			m_Components_Tabs->SetPageImage(ComponentsTabIndex::Description, !bDescriptionEmpty ? KIMG_INFORMATION_FRAME : KIMG_INFORMATION_FRAME_EMPTY);
 
@@ -942,7 +942,7 @@ void KInstallWizardDialog::ClearComponentsViewInfo()
 	m_Components_Tabs->SetPageImage(ComponentsTabIndex::Description, KIMG_INFORMATION_FRAME_EMPTY);
 	m_Components_Tabs->SetPageImage(ComponentsTabIndex::Requirements, KIMG_INFORMATION_FRAME_EMPTY);
 
-	m_Components_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(T("InstallWizard.SelectComponentHint"), m_Components_Description));
+	m_Components_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectComponentHint"), m_Components_Description));
 	m_Components_Description->Disable();
 
 	m_Components_ImageView->SetBitmap(wxNullBitmap);
@@ -988,7 +988,7 @@ bool KInstallWizardDialog::BeginComponents()
 	}
 	else
 	{
-		KxTaskDialog(this, KxID_NONE, T("InstallWizard.InvalidStepsConfig.Caption"), T("InstallWizard.InvalidStepsConfig.Message"), KxBTN_OK, KxICON_ERROR).ShowModal();
+		KxTaskDialog(this, KxID_NONE, KTr("InstallWizard.InvalidStepsConfig.Caption"), KTr("InstallWizard.InvalidStepsConfig.Message"), KxBTN_OK, KxICON_ERROR).ShowModal();
 		return false;
 	}
 }
@@ -1135,7 +1135,7 @@ void KInstallWizardDialog::ShowInstallableFilesPreview()
 		}
 	}
 
-	KxTaskDialog dialog(this, KxID_NONE, T("InstallWizard.CollectedFiles.Caption"), KxString::Join(files, "\r\n"), KxBTN_OK, KxICON_INFORMATION);
+	KxTaskDialog dialog(this, KxID_NONE, KTr("InstallWizard.CollectedFiles.Caption"), KxString::Join(files, "\r\n"), KxBTN_OK, KxICON_INFORMATION);
 	dialog.ShowModal();
 }
 
@@ -1161,7 +1161,7 @@ bool KInstallWizardDialog::OnBeginInstall()
 	}
 	else
 	{
-		KxTaskDialog dialog(this, KxID_NONE, T("InstallWizard.NoFiles.Caption"), T("InstallWizard.NoFiles.Message"), KxBTN_OK, KxICON_ERROR);
+		KxTaskDialog dialog(this, KxID_NONE, KTr("InstallWizard.NoFiles.Caption"), KTr("InstallWizard.NoFiles.Message"), KxBTN_OK, KxICON_ERROR);
 		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
 		dialog.ShowModal();
 		return false;
@@ -1238,7 +1238,7 @@ void KInstallWizardDialog::OnMajorProgress(KxFileOperationEvent& event)
 
 	int64_t current = event.GetMajorProcessed();
 	int64_t max = event.GetMajorTotal();
-	m_Installing_MajorStatus->SetLabel(TF("InstallWizard.InstalledXOfY").arg(current).arg(max) + ". " + event.GetSource());
+	m_Installing_MajorStatus->SetLabel(KTrf("InstallWizard.InstalledXOfY", current, max) + ". " + event.GetSource());
 }
 
 void KInstallWizardDialog::SetModEntryData()
@@ -1485,8 +1485,8 @@ void KInstallWizardDialog::SwitchPage(KInstallWizardPages page)
 				m_BackwardButton->Disable();
 				m_ForwardButton->Enable();
 
-				m_ForwardButton->SetLabel(T(KxID_CLOSE));
-				m_Done_Label->SetLabel(TF("InstallWizard.InstallationComplete").arg(m_Package->GetName()));
+				m_ForwardButton->SetLabel(KTr(KxID_CLOSE));
+				m_Done_Label->SetLabel(KTrf("InstallWizard.InstallationComplete", m_Package->GetName()));
 
 				m_CurrentPage = page;
 				SetLabelByCurrentPage();
@@ -1513,7 +1513,7 @@ bool KInstallWizardDialog::OnLeavingPage(KInstallWizardPages page)
 				// Reinstall confirmation
 				if (!IsOptionEnabled(KIWD_OPTION_PREVIEW) && m_ExistingMod && m_ExistingMod->IsInstalled())
 				{
-					KxTaskDialog dialog(this, KxID_NONE, T("InstallWizard.Reinstall.Caption"), T("InstallWizard.Reinstall.Message"), KxBTN_YES|KxBTN_NO);
+					KxTaskDialog dialog(this, KxID_NONE, KTr("InstallWizard.Reinstall.Caption"), KTr("InstallWizard.Reinstall.Message"), KxBTN_YES|KxBTN_NO);
 					dialog.SetMainIcon(KxICON_WARNING);
 					return dialog.ShowModal() == KxID_YES;
 				}

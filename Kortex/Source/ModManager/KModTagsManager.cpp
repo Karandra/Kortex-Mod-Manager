@@ -40,13 +40,13 @@ void KModTagsManager::LoadTagsFromFile(const wxString& filePath)
 		wxString id = node.GetAttribute("ID");
 		wxString label = node.GetAttribute("Label", id);
 		bool isSuccess = false;
-		wxString labelT = KTranslation::GetTranslation().GetString("ModManager.Tag." + label, &isSuccess);
+		wxString labelT = KTranslation::GetAppTranslation().GetString("ModManager.Tag." + label, &isSuccess);
 		if (isSuccess)
 		{
 			label = labelT;
 		}
 
-		KModTag& tag = m_Tags.emplace_back(KModTag(id, V(label), isSuccess));
+		KModTag& tag = m_Tags.emplace_back(KModTag(id, KVarExp(label), isSuccess));
 		tag.SetNexusID(node.GetAttributeInt("NexusID"));
 	}
 }
@@ -122,9 +122,9 @@ const wxString& KModTagsManager::GetTagName(const wxString& tagID) const
 	}
 	return wxNullString;
 }
-void KModTagsManager::LoadTagsFromEntry(const KModEntry* entry)
+void KModTagsManager::LoadTagsFromEntry(const KModEntry& entry)
 {
-	for (const wxString& tagName: entry->GetTags())
+	for (const wxString& tagName: entry.GetTags())
 	{
 		AddModTag(tagName);
 	}

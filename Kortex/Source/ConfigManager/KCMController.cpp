@@ -19,23 +19,23 @@ void KCMController::CreateContextMenu()
 {
 	m_ContextMenu = new KxMenu();
 
-	m_ContextMenu_EditValue = m_ContextMenu->Add(new KxMenuItem(T("ConfigManager.EditValue.ModifyValue")));
+	m_ContextMenu_EditValue = m_ContextMenu->Add(new KxMenuItem(KTr("ConfigManager.EditValue.ModifyValue")));
 	m_ContextMenu_EditValue->SetBitmap(KGetBitmap(KIMG_GEAR_PENCIL));
 
-	m_ContextMenu_CreateValue = m_ContextMenu->Add(new KxMenuItem(T("ConfigManager.EditValue.CreateValue")));
+	m_ContextMenu_CreateValue = m_ContextMenu->Add(new KxMenuItem(KTr("ConfigManager.EditValue.CreateValue")));
 	m_ContextMenu_CreateValue->SetBitmap(KGetBitmap(KIMG_GEAR_PLUS));
 
 	m_ContextMenu->AddSeparator();
 
-	m_ContextMenu_RemoveValue = m_ContextMenu->Add(new KxMenuItem(T("ConfigManager.EditValue.RemoveValue")));
+	m_ContextMenu_RemoveValue = m_ContextMenu->Add(new KxMenuItem(KTr("ConfigManager.EditValue.RemoveValue")));
 	m_ContextMenu_RemoveValue->SetBitmap(KGetBitmap(KIMG_GEAR_MINUS));
 
-	m_ContextMenu_RemovePath = m_ContextMenu->Add(new KxMenuItem(T("ConfigManager.EditValue.RemovePath")));
+	m_ContextMenu_RemovePath = m_ContextMenu->Add(new KxMenuItem(KTr("ConfigManager.EditValue.RemovePath")));
 	m_ContextMenu_RemovePath->SetBitmap(KGetBitmap(KIMG_CATEGORY_ITEM_MINUS));
 
 	m_ContextMenu->AddSeparator();
 	{
-		KxMenuItem* item = m_ContextMenu->Add(new KxMenuItem(T(KxID_REFRESH)));
+		KxMenuItem* item = m_ContextMenu->Add(new KxMenuItem(KTr(KxID_REFRESH)));
 		item->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
@@ -196,7 +196,7 @@ void KCMController::SetDialogValidator(KxDialog* dialog, KCMConfigEntryStd* conf
 				tValidator.SetMax(max);
 
 				pStdDialog->GetDialogMainCtrl()->SetValidator(tValidator);
-				pStdDialog->SetLabel(wxString::Format("%s: [%s; %s]", T("ConfigManager.EditValue.ValuesRange"), configEntry->GetFormatter()(nMin), configEntry->GetFormatter()(max)));
+				pStdDialog->SetLabel(wxString::Format("%s: [%s; %s]", KTr("ConfigManager.EditValue.ValuesRange"), configEntry->GetFormatter()(nMin), configEntry->GetFormatter()(max)));
 			}
 			else if (KConfigManager::IsUnsignedIntType(type))
 			{
@@ -224,7 +224,7 @@ void KCMController::SetDialogValidator(KxDialog* dialog, KCMConfigEntryStd* conf
 				tValidator.SetMax(max);
 
 				pStdDialog->GetDialogMainCtrl()->SetValidator(tValidator);
-				pStdDialog->SetLabel(wxString::Format("%s: [%s; %s]", T("ConfigManager.EditValue.ValuesRange"), configEntry->GetFormatter()(nMin), configEntry->GetFormatter()(max)));
+				pStdDialog->SetLabel(wxString::Format("%s: [%s; %s]", KTr("ConfigManager.EditValue.ValuesRange"), configEntry->GetFormatter()(nMin), configEntry->GetFormatter()(max)));
 			}
 			else if (KConfigManager::IsFloatType(type))
 			{
@@ -254,14 +254,14 @@ void KCMController::SetDialogValidator(KxDialog* dialog, KCMConfigEntryStd* conf
 				tValidator.SetPrecision(nPrecision);
 
 				pStdDialog->GetDialogMainCtrl()->SetValidator(tValidator);
-				pStdDialog->SetLabel(wxString::Format("%s: [%g; %g]", T("ConfigManager.EditValue.ValuesRange"), nMin, max));
+				pStdDialog->SetLabel(wxString::Format("%s: [%g; %g]", KTr("ConfigManager.EditValue.ValuesRange"), nMin, max));
 			}
 		}
 	}
 }
 void KCMController::ConfigureForVirtualKey(KxStdDialog* dialog, KCMConfigEntryVK* pVKEntry)
 {
-	dialog->SetLabel(T("ConfigManager.EditValue.EnterVirtualKey"));
+	dialog->SetLabel(KTr("ConfigManager.EditValue.EnterVirtualKey"));
 	dialog->SetClientData((void*)pVKEntry->GetDataKeyCode());
 	wxComboBox* pComboBox = dynamic_cast<wxComboBox*>(dialog->GetDialogMainCtrl());
 	wxTextEntry* pTextEntry = NULL;
@@ -975,7 +975,7 @@ void KCMCAddEntryDialog::CreateFilesList()
 void KCMCAddEntryDialog::CreatePathInput()
 {
 	m_PathInput = new KxTextBox(GetContentWindow(), KxID_NONE);
-	m_PathInput->SetHint(T("ConfigManager.EditValue.CreateValue.PathHint"));
+	m_PathInput->SetHint(KTr("ConfigManager.EditValue.CreateValue.PathHint"));
 	if (KCMConfigEntryPath* pPath = m_ConfigEntry->ToPathEntry())
 	{
 		m_PathInput->SetValue(pPath->GetPath());
@@ -998,7 +998,7 @@ void KCMCAddEntryDialog::CreateNameInput()
 
 	// Name
 	m_NameInput = new KxTextBox(GetContentWindow(), KxID_NONE);
-	m_NameInput->SetHint(T("ConfigManager.EditValue.CreateValue.ValueNameHint"));
+	m_NameInput->SetHint(KTr("ConfigManager.EditValue.CreateValue.ValueNameHint"));
 	if (KCMConfigEntryStd* stdEntry = m_ConfigEntry->ToStdEntry())
 	{
 		m_NameInput->SetValue(stdEntry->GetName());
@@ -1034,7 +1034,7 @@ void KCMCAddEntryDialog::OnOK(wxNotifyEvent& event)
 		else
 		{
 			delete newEntry;
-			KLogEvent(T("ConfigManager.EditValue.CreateValue.NameCollision"), KLOG_WARNING, this).Send();
+			KLogEvent(KTr("ConfigManager.EditValue.CreateValue.NameCollision"), KLOG_WARNING, this).Send();
 			event.Veto();
 		}
 	}
@@ -1047,7 +1047,7 @@ void KCMCAddEntryDialog::OnOK(wxNotifyEvent& event)
 KCMCAddEntryDialog::KCMCAddEntryDialog(KCMController* controller, KCMConfigEntryBase* configEntry)
 	:m_Controller(controller), m_ConfigEntry(configEntry)
 {
-	Create(m_Controller->GetParentWindow(), KxID_NONE, T("ConfigManager.EditValue.CreateValue.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY);
+	Create(m_Controller->GetParentWindow(), KxID_NONE, KTr("ConfigManager.EditValue.CreateValue.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY);
 }
 KCMCAddEntryDialog::~KCMCAddEntryDialog()
 {

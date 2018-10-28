@@ -10,14 +10,14 @@ void KPluginViewModelBethesda::OnInitControl()
 {
 	KxDataViewColumnFlags defaultFlags = KxDV_COL_DEFAULT_FLAGS|KxDV_COL_SORTABLE;
 
-	GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, KxDVC_DEFAULT_WIDTH, defaultFlags);
+	GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, KxDVC_DEFAULT_WIDTH, defaultFlags);
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Index"), ColumnID::Index, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Index"), ColumnID::Index, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 		info.GetColumn()->SortAscending();
 	}
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Author"), ColumnID::Author, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Author"), ColumnID::Author, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 }
 
 void KPluginViewModelBethesda::GetValue(wxAny& value, const KPluginEntry& pluginEntry, const KxDataViewColumn* column) const

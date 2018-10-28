@@ -125,7 +125,7 @@ void KImageViewerDialog::OnAcceptNavigation(KImageViewerEvent& event)
 			m_Splitter->Unsplit(m_Description);
 			m_Splitter->Initialize(m_ImageView);
 
-			m_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(T("InstallWizard.NoDescriptionHint"), m_Description));
+			m_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
 			m_Description->Enable(false);
 		}
 
@@ -156,7 +156,7 @@ void KImageViewerDialog::OnSaveImage(wxCommandEvent& event)
 	const KSGMImageTypeArray& formats = KScreenshotsGalleryManager::GetSupportedFormats();
 	for (const wxString& ext: exts)
 	{
-		dialog.AddFilter(ext, wxString::Format("%s %s", T("FileFilter.Image"), ext.AfterFirst('.').MakeUpper()));
+		dialog.AddFilter(ext, wxString::Format("%s %s", KTr("FileFilter.Image"), ext.AfterFirst('.').MakeUpper()));
 	}
 	dialog.SetDefaultExtension(exts[0]);
 	dialog.SetFileName(m_FilePath.AfterLast('\\').BeforeLast('.'));
@@ -182,7 +182,7 @@ void KImageViewerDialog::OnChangeColor(wxColourPickerEvent& event)
 
 bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 {
-	if (KxStdDialog::Create(parent, KxID_NONE, KAux::StrOr(caption, T("ImageViewer.Caption")), wxDefaultPosition, wxDefaultSize, KxBTN_CLOSE))
+	if (KxStdDialog::Create(parent, KxID_NONE, KAux::StrOr(caption, KTr("ImageViewer.Caption")), wxDefaultPosition, wxDefaultSize, KxBTN_CLOSE))
 	{
 		AddButton(KxID_SAVE, wxEmptyString, true).GetControl()->Bind(wxEVT_BUTTON, &KImageViewerDialog::OnSaveImage, this);
 
@@ -244,7 +244,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 		m_ToolBar->AddControl(m_ColorBGCtrl);
 
 		// Backward
-		m_Backward = KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_BACKWARD), KIMG_CONTROL_LEFT);
+		m_Backward = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_BACKWARD), KIMG_CONTROL_LEFT);
 
 		// Scale
 		m_ScaleSlider = new KxSlider(m_ToolBar, KxID_NONE, 100, 10, 500);
@@ -252,7 +252,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 		m_ToolBar->AddControl(m_ScaleSlider);
 
 		// Forward
-		m_Forward = KMainWindow::CreateToolBarButton(m_ToolBar, T(KxID_FORWARD), KIMG_CONTROL_RIGHT);
+		m_Forward = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_FORWARD), KIMG_CONTROL_RIGHT);
 		
 		// FG color
 		m_ColorFGCtrl = new wxColourPickerCtrl(m_ToolBar, KxID_NONE, m_ImageView->GetForegroundColour());

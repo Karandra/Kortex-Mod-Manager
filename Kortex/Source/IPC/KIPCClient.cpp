@@ -53,7 +53,7 @@ wxConnectionBase* KIPCClient::OnMakeConnection()
 void KIPCClient::OnDisconnect()
 {
 	wxLogError("Client: Connection reset by server. Terminating");
-	KLogEvent(T("VFSService.InstallFailed"), KLOG_CRITICAL).Send();
+	KLogEvent(KTr("VFSService.InstallFailed"), KLOG_CRITICAL).Send();
 }
 
 void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
@@ -61,7 +61,7 @@ void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
 	KEvent::CallAfter([config]()
 	{
 		// Set mounted status
-		KModManager::Get().SetMounted(config.IsEnabled());
+		KModManager::GetInstance()->SetMounted(config.IsEnabled());
 		int status = config.GetStatus();
 
 		// Send event before reloading 'KPluginManager'
@@ -71,11 +71,11 @@ void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
 
 		if (!KVFSService::IsSuccessCode(status))
 		{
-			wxString message = wxString::Format("%s\r\n\r\n%s: %s", KVFSService::GetStatusCodeMessage(status), T("VFS.MountPoint"), event.GetString());
+			wxString message = wxString::Format("%s\r\n\r\n%s: %s", KVFSService::GetStatusCodeMessage(status), KTr("VFS.MountPoint"), event.GetString());
 			KLogEvent(message, KLOG_ERROR).Send();
 		}
 
-		KModManager::Get().DestroyMountStatusDialog();
+		KModManager::GetInstance()->DestroyMountStatusDialog();
 	});
 }
 
@@ -190,7 +190,7 @@ bool KIPCClient::ConvergenceVFS_SetDispatcherIndex()
 	{
 		if (m_Connection->SendToServer(KIPCRequestNS::BeginConvergenceIndex()))
 		{
-			KModManager::GetDispatcher().GetVirtualTree().WalkTree([this](const KFileTreeNode& node)
+			KDispatcher::GetInstance()->GetVirtualTree().WalkTree([this](const KFileTreeNode& node)
 			{
 				if (node.GetMod().IsEnabled())
 				{

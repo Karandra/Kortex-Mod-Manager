@@ -13,10 +13,10 @@ void KNewModDialog::OnOK(wxNotifyEvent& event)
 		wxString name = GetValue();
 		if (!name.IsEmpty())
 		{
-			const KModEntry* existingMod = KModManager::Get().FindModByID(name);
+			const KModEntry* existingMod = KModManager::GetInstance()->FindModByID(name);
 			if (existingMod)
 			{
-				KLogEvent(T("ModManager.NewMod.NameCollision"), KLOG_WARNING, this);
+				KLogEvent(KTr("ModManager.NewMod.NameCollision"), KLOG_WARNING, this);
 			}
 			else
 			{
@@ -27,7 +27,7 @@ void KNewModDialog::OnOK(wxNotifyEvent& event)
 		}
 		else
 		{
-			KLogEvent(T("ModManager.NewMod.NameInvalid"), KLOG_WARNING, this);
+			KLogEvent(KTr("ModManager.NewMod.NameInvalid"), KLOG_WARNING, this);
 		}
 		event.Veto();
 	}
@@ -39,9 +39,9 @@ void KNewModDialog::OnOK(wxNotifyEvent& event)
 
 KNewModDialog::KNewModDialog(wxWindow* parent)
 {
-	if (Create(parent, KxID_NONE, T("ModManager.NewMod.DialogCaption"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL))
+	if (Create(parent, KxID_NONE, KTr("ModManager.NewMod.DialogCaption"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL))
 	{
-		SetLabel(T("ModManager.NewMod.DialogMessage"));
+		SetLabel(KTr("ModManager.NewMod.DialogMessage"));
 		GetDialogMainCtrl()->SetFocus();
 
 		Bind(KxEVT_STDDIALOG_BUTTON, &KNewModDialog::OnOK, this);
@@ -75,7 +75,7 @@ void KNewModDialogEx::OnSelectFolder(wxNotifyEvent& event)
 	{
 		if (m_FolderPath.IsEmpty())
 		{
-			KLogEvent(T("ModManager.NewMod.SelectedFolderNone"), KLOG_WARNING, this);
+			KLogEvent(KTr("ModManager.NewMod.SelectedFolderNone"), KLOG_WARNING, this);
 			event.Veto();
 		}
 		else
@@ -98,11 +98,11 @@ wxString KNewModDialogEx::GetMethodString(bool bLink) const
 {
 	if (bLink)
 	{
-		return T("ModManager.NewMod.FromFolderMessageLink");
+		return KTr("ModManager.NewMod.FromFolderMessageLink");
 	}
 	else
 	{
-		return T("ModManager.NewMod.FromFolderMessageCopy");
+		return KTr("ModManager.NewMod.FromFolderMessageCopy");
 	}
 }
 void KNewModDialogEx::UpdateLabelText()
@@ -113,19 +113,19 @@ void KNewModDialogEx::UpdateLabelText()
 	}
 	else
 	{
-		SetLabel(wxString::Format("%s\r\n%s: %s", GetMethodString(), T("ModManager.NewMod.SelectedFolder"), m_FolderPath));
+		SetLabel(wxString::Format("%s\r\n%s: %s", GetMethodString(), KTr("ModManager.NewMod.SelectedFolder"), m_FolderPath));
 	}
 }
 
 KNewModDialogEx::KNewModDialogEx(wxWindow* parent)
 	:KNewModDialog(parent)
 {
-	SetCaption(T("ModManager.NewMod.DialogCaption"));
+	SetCaption(KTr("ModManager.NewMod.DialogCaption"));
 	SetLabel(GetMethodString(false));
 	AddButton(KxID_SELECT_FOLDER, wxEmptyString, true);
 
 	// Method checkbox
-	m_LinkedModCheckBox = new wxCheckBox(GetContentWindow(), KxID_NONE, T("ModManager.NewMod.CreateAsLinkedMod"));
+	m_LinkedModCheckBox = new wxCheckBox(GetContentWindow(), KxID_NONE, KTr("ModManager.NewMod.CreateAsLinkedMod"));
 	GetContentWindowSizer()->Add(m_LinkedModCheckBox, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 
 	Bind(KxEVT_STDDIALOG_BUTTON, &KNewModDialogEx::OnSelectFolder, this);

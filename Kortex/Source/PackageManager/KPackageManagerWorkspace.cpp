@@ -62,7 +62,7 @@ void KPackageManagerWorkspace::CreateViewPane()
 
 	{
 		KxAuiToolBarItem* item = KMainWindow::CreateToolBarButton(m_ToolBar, wxEmptyString, KIMG_HOME);
-		item->SetShortHelp(T(KxID_HOME));
+		item->SetShortHelp(KTr(KxID_HOME));
 		item->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			m_MainView->NavigateHome();
@@ -70,7 +70,7 @@ void KPackageManagerWorkspace::CreateViewPane()
 	}
 	{
 		KxAuiToolBarItem* item = KMainWindow::CreateToolBarButton(m_ToolBar, wxEmptyString, KIMG_FOLDER_ARROW);
-		item->SetShortHelp(T(KxID_UP));
+		item->SetShortHelp(KTr(KxID_UP));
 		item->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
 			m_MainView->NavigateUp();
@@ -165,5 +165,5 @@ wxString KPackageManagerWorkspace::GetID() const
 }
 wxString KPackageManagerWorkspace::GetName() const
 {
-	return T("PackageManager.PackagesListName");
+	return KTr("PackageManager.PackagesListName");
 }

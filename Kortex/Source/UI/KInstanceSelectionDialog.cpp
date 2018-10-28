@@ -33,9 +33,9 @@ bool KInstanceSelectionDialog::Create(wxWindow* parent,
 
 		// Bottom panel
 		m_OK = GetButton(KxID_OK).As<KxButton>();
-		m_CreateShortcut = AddButton(KxID_NONE, T("InstanceSelection.CreateShortcut"), true).As<KxButton>();
-		m_Remove = AddButton(KxID_REMOVE, T("InstanceSelection.RemoveInstance"), true).As<KxButton>();
-		m_Create = AddButton(KxID_ADD, T("InstanceSelection.CreateInstance"), true).As<KxButton>();
+		m_CreateShortcut = AddButton(KxID_NONE, KTr("InstanceSelection.CreateShortcut"), true).As<KxButton>();
+		m_Remove = AddButton(KxID_REMOVE, KTr("InstanceSelection.RemoveInstance"), true).As<KxButton>();
+		m_Create = AddButton(KxID_ADD, KTr("InstanceSelection.CreateInstance"), true).As<KxButton>();
 
 		// Splitter
 		wxSizer* mainSizer = GetContentWindowSizer();
@@ -79,7 +79,7 @@ bool KInstanceSelectionDialog::Create(wxWindow* parent,
 
 KInstanceSelectionDialog::KInstanceSelectionDialog(wxWindow* parent)
 {
-	Create(parent, KxID_NONE, T("InstanceSelection.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY|KxCBD_BITMAP);
+	Create(parent, KxID_NONE, KTr("InstanceSelection.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY|KxCBD_BITMAP);
 	Configure();
 }
 KInstanceSelectionDialog::~KInstanceSelectionDialog()
@@ -203,7 +203,7 @@ void KInstanceSelectionDialog::LoadInstancesList(const KGameInstance* instanceTe
 }
 bool KInstanceSelectionDialog::AskForGameFolder(const KGameInstance* instanceTemplate, const wxString& currentGamePath)
 {
-	KxTaskDialog messageDialog(this, KxID_NONE, TF("InstanceSelection.GameNotFound.Caption").arg(instanceTemplate->GetName()), TF("InstanceSelection.GameNotFound.Message").arg(instanceTemplate->GetName()), KxBTN_CANCEL, KxICON_WARNING);
+	KxTaskDialog messageDialog(this, KxID_NONE, KTrf("InstanceSelection.GameNotFound.Caption", instanceTemplate->GetName()), KTrf("InstanceSelection.GameNotFound.Message", instanceTemplate->GetName()), KxBTN_CANCEL, KxICON_WARNING);
 	messageDialog.AddButton(KxID_SELECT_FOLDER);
 	if (messageDialog.ShowModal() == KxID_SELECT_FOLDER)
 	{
@@ -231,8 +231,8 @@ void KInstanceSelectionDialog::OnCreateShortcut(wxCommandEvent& event)
 		dialog.SetFileName(wxString::Format("%s - %s", instance->GetShortName(), instance->GetInstanceID()));
 		dialog.SetOptionEnabled(KxFBD_NO_DEREFERENCE_LINKS);
 
-		dialog.AddFilter("*.lnk", T("FileFilter.Shortcuts"));
-		dialog.AddFilter("*", T("FileFilter.AllFiles"));
+		dialog.AddFilter("*.lnk", KTr("FileFilter.Shortcuts"));
+		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 		if (dialog.ShowModal() == KxID_OK)
 		{
@@ -269,8 +269,8 @@ void KInstanceSelectionDialog::OnButton(wxNotifyEvent& event)
 				wxWindowID ret = KxTaskDialog(
 					this,
 					KxID_NONE,
-					TF("InstanceSelection.ConfirmRemoving.Caption").arg(instance->GetInstanceID()),
-					TF("InstanceSelection.ConfirmRemoving.Message").arg(instance->GetInstanceDir()).arg(instance->GetInstanceID()),
+					KTrf("InstanceSelection.ConfirmRemoving.Caption", instance->GetInstanceID()),
+					KTrf("InstanceSelection.ConfirmRemoving.Message", instance->GetInstanceDir(), instance->GetInstanceID()),
 					KxBTN_YES|KxBTN_NO, KxICON_WARNING
 				).ShowModal();
 				if (ret == KxID_YES)
@@ -282,7 +282,7 @@ void KInstanceSelectionDialog::OnButton(wxNotifyEvent& event)
 					}
 					else
 					{
-						KLogEvent(T("InstanceCreatorDialog.DeletionError"), KLOG_ERROR).Send();
+						KLogEvent(KTr("InstanceCreatorDialog.DeletionError"), KLOG_ERROR).Send();
 					}
 				}
 			}

@@ -4,5 +4,5 @@
 
 wxString KMandatoryModEntry::GetModFilesDir() const
 {
-	return V(KFixedModEntry::GetModFilesDir());
+	return KVarExp(KFixedModEntry::GetModFilesDir());
 }

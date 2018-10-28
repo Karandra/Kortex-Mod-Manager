@@ -76,7 +76,7 @@ wxString KIVariablesTable::Expand(const wxString& variables) const
 					wxString value;
 					if (isTranslationVar)
 					{
-						value = T(varName);
+						value = KTr(varName);
 					}
 					else if (isShellVar)
 					{

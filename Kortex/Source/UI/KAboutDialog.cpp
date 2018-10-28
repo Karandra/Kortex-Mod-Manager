@@ -29,10 +29,10 @@ wxWindow* KAboutDialog::CreateTab_Info()
 	wxString libraries;
 	auto AddLibrary = [&libraries](const char* name, const char* url, const char* extraName = NULL, const char* extraURL = NULL)
 	{
-		libraries << wxString::Format("<a href=\"%s\">%s</a>", url, name);
+		libraries << KxString::Format("<a href=\"%1\">%2</a>", url, name);
 		if (extraName && extraURL)
 		{
-			libraries << wxString::Format(" (<a href=\"%s\">%s</a>)", extraURL, extraName);
+			libraries << KxString::Format(" (<a href=\"%1\">%2</a>)", extraURL, extraName);
 		}
 		libraries << "<br>";
 	};
@@ -51,14 +51,14 @@ wxWindow* KAboutDialog::CreateTab_Info()
 	wxString iconPacks;
 	auto AddIconPack = [&iconPacks](const char* packName, const char* authorName, const char* url)
 	{
-		iconPacks << TF("About.Info.IconPack").arg(packName).arg(wxString::Format("<a href=\"%s\">%s</a>", url, authorName));
+		iconPacks << KTrf("About.Info.IconPack", packName, KxString::Format("<a href=\"%1\">%2</a>", url, authorName));
 		iconPacks << "<br>";
 	};
 	AddIconPack("Fugue Icons", "Yusuke Kamiyamane", "http://p.yusukekamiyamane.com");
 	AddIconPack("Tango 7-zip", "Laoism", "https://laoism.deviantart.com/art/Tango-7-zip-2-1-113983312");
 
-	info->SetPage(wxString::Format("<div align=\"justify\">%s:<br>%s<br>%s</div>",
-									T("About.Info.Libraries"), libraries,
+	info->SetPage(KxString::Format("<div align=\"justify\">%1:<br>%2<br>%3</div>",
+									KTr("About.Info.Libraries"), libraries,
 									iconPacks));
 	return info;
 }
@@ -157,12 +157,12 @@ wxWindow* KAboutDialog::CreateTab_Permissions()
 		return link;
 	};
 
-	wxString firstPart = TF("About.Permissions").arg(MakeLink(sSiteNameTA, sSiteTA)).arg(sSiteNameTA).arg(MakeLink(T("About.Permissions.ContactMethod"), sDeveloperProfileTA));
-	wxString secondPart1 = MakePageLink(T("About.Permissions.DownloadPage"), sDownloadPageTA, sSiteNameTA);
-	wxString secondPart2 = MakePageLink(T("About.Permissions.DownloadPage"), sDownloadPageNexus, sSiteNameNexus);
-	wxString secondPart3 = MakePageLink(T("About.Permissions.SupportPage"), sSupportPageTA, sSiteNameTA);
+	wxString firstPart = KTrf("About.Permissions", MakeLink(sSiteNameTA, sSiteTA), sSiteNameTA, MakeLink(KTr("About.Permissions.ContactMethod"), sDeveloperProfileTA));
+	wxString secondPart1 = MakePageLink(KTr("About.Permissions.DownloadPage"), sDownloadPageTA, sSiteNameTA);
+	wxString secondPart2 = MakePageLink(KTr("About.Permissions.DownloadPage"), sDownloadPageNexus, sSiteNameNexus);
+	wxString secondPart3 = MakePageLink(KTr("About.Permissions.SupportPage"), sSupportPageTA, sSiteNameTA);
 
-	info->SetPage(wxString::Format("<div align=\"justify\">%s<br><br>%s<br>%s<br>%s</div>", firstPart, secondPart1, secondPart2, secondPart3));
+	info->SetPage(KxString::Format("<div align=\"justify\">%1<br><br>%2<br>%3<br>%4</div>", firstPart, secondPart1, secondPart2, secondPart3));
 	return info;
 }
 
@@ -173,7 +173,7 @@ void KAboutDialog::OnLinkClick(wxHtmlLinkEvent& event)
 
 KAboutDialog::KAboutDialog(wxWindow* parent)
 {
-	if (KxStdDialog::Create(parent, KxID_NONE, V("$T(MainMenu.About) $(AppName)"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
+	if (KxStdDialog::Create(parent, KxID_NONE, KVarExp("$T(MainMenu.About) $(AppName)"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
 		SetDefaultBackgroundColor();
 		GetContentWindow()->SetBackgroundColour(GetBackgroundColour());
@@ -184,12 +184,12 @@ KAboutDialog::KAboutDialog(wxWindow* parent)
 		m_View = new KxAuiNotebook(m_ContentPanel, KxID_NONE);
 		KThemeManager::Get().ProcessWindow(m_View);
 
-		m_View->AddPage(CreateTab_Info(), T("About.Tabs.Info"), true);
-		m_View->AddPage(CreateTab_Modules(), T("About.Tabs.Modules"));
-		m_View->AddPage(CreateTab_Permissions(), T("About.Tabs.Permissions"));
+		m_View->AddPage(CreateTab_Info(), KTr("About.Tabs.Info"), true);
+		m_View->AddPage(CreateTab_Modules(), KTr("About.Tabs.Modules"));
+		m_View->AddPage(CreateTab_Permissions(), KTr("About.Tabs.Permissions"));
 
 		PostCreate(wxDefaultPosition);
-		SetLabel(wxString::Format("%s: %s\r\n%s: %s", T("About.Version"), KApp::Get().GetAppVersion(), T("About.Developer"), KApp::Get().GetVendorDisplayName()));
+		SetLabel(wxString::Format("%s: %s\r\n%s: %s", KTr("About.Version"), KApp::Get().GetAppVersion(), KTr("About.Developer"), KApp::Get().GetVendorDisplayName()));
 		AdjustWindow(wxDefaultPosition, wxSize(650, 425));
 	}
 }

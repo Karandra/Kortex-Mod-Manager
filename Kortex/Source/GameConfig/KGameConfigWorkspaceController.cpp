@@ -9,7 +9,7 @@
 
 KxTreeListItem KGameConfigWorkspaceController::CreateUnknownItemsRoot()
 {
-	return GetTreeRoot().Add(T("ConfigManager.Categories.None"));
+	return GetTreeRoot().Add(KTr("ConfigManager.Categories.None"));
 }
 void KGameConfigWorkspaceController::OnSelectControllerView(wxTreeListEvent& event)
 {

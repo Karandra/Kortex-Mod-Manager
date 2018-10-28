@@ -52,7 +52,7 @@ class KModManagerModel:	public KxDataViewModelExBase<KxDataViewModel>, public Kx
 			return m_ShowPriorityGroups && !m_ShowPriorityGroupsSuppress;
 		}
 		KNetworkProviderID ColumnToSpecialSite(int column) const;
-		wxString FormatTagList(const KModEntry* entry) const;
+		wxString FormatTagList(const KModEntry& entry) const;
 
 		virtual void OnInitControl() override;
 		
@@ -144,7 +144,7 @@ class KModManagerModel:	public KxDataViewModelExBase<KxDataViewModel>, public Kx
 			return true;
 		}
 		void SetSearchColumns(const KxDataViewColumn::Vector& columns);
-		bool FilterMod(const KModEntry* modEntry) const;
+		bool FilterMod(const KModEntry& modEntry) const;
 
 		KxDataViewItem MakeItem(const KMMModelNode* node) const;
 		KxDataViewItem MakeItem(const KMMModelNode& node) const
@@ -173,7 +173,7 @@ class KModManagerModel:	public KxDataViewModelExBase<KxDataViewModel>, public Kx
 class KModManagerModelDataObject: public KDataViewModelDragDropData
 {
 	private:
-		KModEntry::Vector m_Entries;
+		KModEntry::RefVector m_Entries;
 
 	public:
 		KModManagerModelDataObject(size_t count = 0)
@@ -182,7 +182,7 @@ class KModManagerModelDataObject: public KDataViewModelDragDropData
 		}
 
 	public:
-		const KModEntry::Vector& GetEntries() const
+		const KModEntry::RefVector& GetEntries() const
 		{
 			return m_Entries;
 		}

@@ -25,8 +25,8 @@ void KInstallWizardInfoModel::OnInitControl()
 
 	/* Columns */
 	GetView()->AppendColumn<KxDataViewBitmapRenderer>(wxEmptyString, ColumnID::Icon, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, KxDV_COL_NONE);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 250);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 250);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
 }
 
 void KInstallWizardInfoModel::GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
@@ -87,9 +87,9 @@ void KInstallWizardInfoModel::GetValueByRow(wxAny& data, size_t row, const KxDat
 					KxStringVector names;
 					for (const wxString& id: GetTags())
 					{
-						if (const KModTag* pTag = KModManager::GetTagManager().FindModTag(id))
+						if (const KModTag* tag = KModTagsManager::GetInstance()->FindModTag(id))
 						{
-							names.push_back(pTag->GetLabel());
+							names.push_back(tag->GetLabel());
 						}
 					}
 					data = KPackageCreatorPageComponents::FormatArrayToText(names);
@@ -97,7 +97,7 @@ void KInstallWizardInfoModel::GetValueByRow(wxAny& data, size_t row, const KxDat
 				}
 				case KIWI_TYPE_ID:
 				{
-					data = wxString::Format("%s (%s)", m_Config.ComputeModID(), m_Config.GetSignature());
+					data = KxString::Format("%1 (%2)", m_Config.ComputeModID(), m_Config.GetSignature());
 					break;
 				}
 				case KIWI_TYPE_NAME:
@@ -162,7 +162,7 @@ bool KInstallWizardInfoModel::CheckModID(const wxString& id)
 {
 	if (id.IsEmpty())
 	{
-		KxTaskDialog msg(GetViewTLW(), KxID_NONE, T("InstallWizard.ChangeID.Invalid"), wxEmptyString, KxBTN_OK, KxICON_WARNING);
+		KxTaskDialog msg(GetViewTLW(), KxID_NONE, KTr("InstallWizard.ChangeID.Invalid"), wxEmptyString, KxBTN_OK, KxICON_WARNING);
 		msg.ShowModal();
 		return false;
 	}

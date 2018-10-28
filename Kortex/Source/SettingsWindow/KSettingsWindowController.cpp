@@ -7,7 +7,7 @@
 
 KxTreeListItem KSettingsWindowController::CreateUnknownItemsRoot()
 {
-	return GetTreeRoot().Add(T("ConfigManager.Categories.None"));
+	return GetTreeRoot().Add(KTr("ConfigManager.Categories.None"));
 }
 
 KSettingsWindowController::KSettingsWindowController(KSettingsWorkspace* workspace, KxTreeList* view)

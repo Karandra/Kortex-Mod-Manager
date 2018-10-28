@@ -20,7 +20,7 @@ bool KSaveFileBethesdaMorrowind::DoInitializeSaveData()
 			
 			// Seek to save file name (fixed length)
 			stream.SeekFromStart(64);
-			m_BasicInfo.emplace_back(stream.ReadStringACP(256), T("SaveManager.Info.SaveName"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(256), KTr("SaveManager.Info.SaveName"));
 
 			// Seek unknown bytes
 			stream.Skip<uint32_t>();
@@ -40,13 +40,13 @@ bool KSaveFileBethesdaMorrowind::DoInitializeSaveData()
 			stream.Skip(28);
 
 			// 64 bytes of location name
-			m_BasicInfo.emplace_back(stream.ReadStringACP(64), T("SaveManager.Info.Location"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(64), KTr("SaveManager.Info.Location"));
 
 			// Unknown float
 			stream.Skip<float>();
 
 			// 32 bytes of character name
-			m_BasicInfo.emplace_back(stream.ReadStringACP(32), T("SaveManager.Info.Name"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(32), KTr("SaveManager.Info.Name"));
 
 			// Skip entire SCRD record and SCRS record name
 			stream.Skip(28 + 4);

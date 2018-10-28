@@ -55,7 +55,7 @@ wxString KSaveManager::GetID() const
 }
 wxString KSaveManager::GetName() const
 {
-	return T("SaveManager.Name");
+	return KTr("SaveManager.Name");
 }
 wxString KSaveManager::GetVersion() const
 {

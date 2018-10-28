@@ -11,16 +11,16 @@
 KLocationsManagerConfig::KLocationsManagerConfig(KGameInstance& profile, const KxXMLNode& node)
 {
 	// Set predefined locations
-	m_Locations.emplace_back(KLabeledValue("$(AppSettings)", T("OpenLocation.AppSettings")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_ACTUAL_GAME_DIR), T("OpenLocation.GameRoot")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_VIRTUAL_GAME_DIR), T("OpenLocation.VirtualGameRoot")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_ACTUAL_CONFIG_DIR), T("OpenLocation.ConfigRootTarget")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_CONFIG_DIR), T("OpenLocation.VirtualConfigRoot")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_OVERWRITES_DIR), T("OpenLocation.WriteTargetRoot")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_INSTANCE_DIR), T("OpenLocation.CurrentProfileRoot")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_INSTANCES_DIR), T("OpenLocation.ProfilesRoot")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_MODS_DIR), T("OpenLocation.ModsRoot")));
-	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_SAVES_DIR), T("OpenLocation.Saves")));
+	m_Locations.emplace_back(KLabeledValue("$(AppSettings)", KTr("OpenLocation.AppSettings")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_ACTUAL_GAME_DIR), KTr("OpenLocation.GameRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_VIRTUAL_GAME_DIR), KTr("OpenLocation.VirtualGameRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_ACTUAL_CONFIG_DIR), KTr("OpenLocation.ConfigRootTarget")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_CONFIG_DIR), KTr("OpenLocation.VirtualConfigRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_OVERWRITES_DIR), KTr("OpenLocation.WriteTargetRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_INSTANCE_DIR), KTr("OpenLocation.CurrentProfileRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_INSTANCES_DIR), KTr("OpenLocation.ProfilesRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_MODS_DIR), KTr("OpenLocation.ModsRoot")));
+	m_Locations.emplace_back(KLabeledValue(KVAR(KVAR_SAVES_DIR), KTr("OpenLocation.Saves")));
 
 	if (node.HasChildren())
 	{
@@ -30,7 +30,7 @@ KLocationsManagerConfig::KLocationsManagerConfig(KGameInstance& profile, const K
 		// Load profile locations
 		for (KxXMLNode entryNode = node.GetFirstChildElement("Entry"); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 		{
-			KLabeledValue& value = m_Locations.emplace_back(KLabeledValue(V(entryNode.GetValue()), V(entryNode.GetAttribute("Label"))));
+			KLabeledValue& value = m_Locations.emplace_back(KLabeledValue(KVarExp(entryNode.GetValue()), KVarExp(entryNode.GetAttribute("Label"))));
 			if (value.GetValue().IsEmpty())
 			{
 				m_Locations.pop_back();
@@ -47,15 +47,15 @@ KLabeledValueArray KLocationsManagerConfig::GetLocations() const
 	KLabeledValueArray locations = m_Locations;
 	for (KLabeledValue& value: locations)
 	{
-		value.SetLabel(V(value.GetLabelRaw()));
-		value.SetValue(V(value.GetValue()));
+		value.SetLabel(KVarExp(value.GetLabelRaw()));
+		value.SetValue(KVarExp(value.GetValue()));
 	}
 	return locations;
 }
 bool KLocationsManagerConfig::OpenLocation(const KLabeledValue& entry) const
 {
 	// Create the folder, shouldn't be harmful.
-	KxFile tFolder(V(entry.GetValue()));
+	KxFile tFolder(KVarExp(entry.GetValue()));
 	tFolder.CreateFolder();
 
 	return KxShell::Execute(KApp::Get().GetTopWindow(), tFolder.GetFullPath(), "open");
@@ -72,14 +72,14 @@ void KLocationsManagerConfig::OnAddMainMenuItems(KxMenu& mainMenu)
 		}
 		else
 		{
-			KxMenuItem* item = locationsMenu->Add(new KxMenuItem(V(entry.GetLabel())));
+			KxMenuItem* item = locationsMenu->Add(new KxMenuItem(KVarExp(entry.GetLabel())));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER));
 			item->Bind(KxEVT_MENU_SELECT, [this, &entry](KxMenuEvent& event)
 			{
-				OpenLocation(KLabeledValue(V(entry.GetValue())));
+				OpenLocation(KLabeledValue(KVarExp(entry.GetValue())));
 			});
 		}
 	}
-	mainMenu.Add(locationsMenu, T("MainMenu.OpenLocation"))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+	mainMenu.Add(locationsMenu, KTr("MainMenu.OpenLocation"))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
 	mainMenu.AddSeparator();
 }

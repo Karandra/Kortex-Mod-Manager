@@ -36,7 +36,7 @@ KPackageProjectInterface& KPackageCreatorPageInterface::GetProjectInterface() co
 void KPackageCreatorPageInterface::CreateImageListControls()
 {
 	// Main caption
-	KxLabel* label = CreateCaptionLabel(this, T("PackageCreator.PageInterface.ImageList"));
+	KxLabel* label = CreateCaptionLabel(this, KTr("PackageCreator.PageInterface.ImageList"));
 	m_MainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	// Sizer
@@ -70,5 +70,5 @@ wxString KPackageCreatorPageInterface::GetID() const
 }
 wxString KPackageCreatorPageInterface::GetPageName() const
 {
-	return T("PackageCreator.PageInterface.Name");
+	return KTr("PackageCreator.PageInterface.Name");
 }

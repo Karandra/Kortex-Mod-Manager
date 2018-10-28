@@ -28,14 +28,14 @@ void KPCCFlagsSelectorModel::OnInitControl()
 
 	// Label
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
 		m_LabelEditor = info.GetEditor();
 		m_LabelEditor->SetEditable(true);
 	}
 
 	// Value
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(T("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
 		m_ValueEditor = info.GetEditor();
 		m_ValueEditor->SetEditable(true);
 	}
@@ -47,7 +47,7 @@ void KPCCFlagsSelectorModel::OnInitControl()
 		tChoices.push_back(KPackageProjectRequirements::OperatorToSymbolicName(KPP_OPERATOR_AND));
 		tChoices.push_back(KPackageProjectRequirements::OperatorToSymbolicName(KPP_OPERATOR_OR));
 
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(T("PackageCreator.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("PackageCreator.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
 		m_OperatorEditor = info.GetEditor();
 		m_OperatorEditor->SetItems
 		({
@@ -119,7 +119,7 @@ bool KPCCFlagsSelectorModel::SetValueByRow(const wxAny& value, size_t row, const
 				wxString newName = value.As<wxString>();
 				if (IsAssignMode() && newName.StartsWith(KPPRRequirementsGroup::GetFlagNamePrefix()))
 				{
-					KPackageCreatorPageBase::ShowTooltipWarning(GetView(), T("PackageCreator.InvalidFlagName"), GetItemRect(GetItem(row), column));
+					KPackageCreatorPageBase::ShowTooltipWarning(GetView(), KTr("PackageCreator.InvalidFlagName"), GetItemRect(GetItem(row), column));
 					return false;
 				}
 
@@ -168,16 +168,16 @@ void KPCCFlagsSelectorModel::OnContextMenu(KxDataViewEvent& event)
 
 	KxMenu menu;
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFlag, T(KxID_ADD)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFlag, KTr(KxID_ADD)));
 		item->SetBitmap(KGetBitmap(KIMG_FLAG_PLUS));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 
@@ -215,9 +215,9 @@ void KPCCFlagsSelectorModel::OnRemoveFlag(const KxDataViewItem& item)
 	if (KPPCFlagEntry* entry = GetDataEntry(GetRow(item)))
 	{
 		wxString deletedName = entry->GetDeletedName();
-		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, TF("PackageCreator.RemoveFlagDialog.Caption").arg(entry->GetName()), TF("PackageCreator.RemoveFlagDialog.Message").arg(deletedName), KxBTN_CANCEL, KxICON_WARNING);
-		dialog.AddButton(KxID_REMOVE, T("PackageCreator.RemoveFlagDialog.Remove"));
-		dialog.AddButton(KxID_RENAME, T("PackageCreator.RemoveFlagDialog.Rename"));
+		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveFlagDialog.Caption", entry->GetName()), KTrf("PackageCreator.RemoveFlagDialog.Message", deletedName), KxBTN_CANCEL, KxICON_WARNING);
+		dialog.AddButton(KxID_REMOVE, KTr("PackageCreator.RemoveFlagDialog.Remove"));
+		dialog.AddButton(KxID_RENAME, KTr("PackageCreator.RemoveFlagDialog.Rename"));
 
 		switch (dialog.ShowModal())
 		{
@@ -347,7 +347,7 @@ KPCCFlagsTDSelectorModelDialog::KPCCFlagsTDSelectorModelDialog(wxWindow* parent,
 	wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 	m_Sizer->Add(sizer, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 
-	m_ComboBoxNewTD = KPackageCreatorPageBase::AddControlsRow(sizer, T("PackageCreator.PageComponents.TypeDescriptorConditional"), new KxComboBox(m_ViewPane, KxID_NONE), 1);
+	m_ComboBoxNewTD = KPackageCreatorPageBase::AddControlsRow(sizer, KTr("PackageCreator.PageComponents.TypeDescriptorConditional"), new KxComboBox(m_ViewPane, KxID_NONE), 1);
 	m_ComboBoxNewTD->Bind(wxEVT_COMBOBOX, &KPCCFlagsTDSelectorModelDialog::OnSelectNewTD, this);
 
 	auto AddItem = [this](const wxString& id, KPPCTypeDescriptor nTD)
@@ -359,11 +359,11 @@ KPCCFlagsTDSelectorModelDialog::KPCCFlagsTDSelectorModelDialog(wxWindow* parent,
 		}
 	};
 	AddItem(KAux::MakeNoneLabel(), KPPC_DESCRIPTOR_INVALID);
-	AddItem(T("PackageCreator.PageComponents.TypeDescriptor.Optional"), KPPC_DESCRIPTOR_OPTIONAL);
-	AddItem(T("PackageCreator.PageComponents.TypeDescriptor.Required"), KPPC_DESCRIPTOR_REQUIRED);
-	AddItem(T("PackageCreator.PageComponents.TypeDescriptor.Recommended"), KPPC_DESCRIPTOR_RECOMMENDED);
-	AddItem(T("PackageCreator.PageComponents.TypeDescriptor.CouldBeUsable"), KPPC_DESCRIPTOR_COULD_BE_USABLE);
-	AddItem(T("PackageCreator.PageComponents.TypeDescriptor.NotUsable"), KPPC_DESCRIPTOR_NOT_USABLE);
+	AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Optional"), KPPC_DESCRIPTOR_OPTIONAL);
+	AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Required"), KPPC_DESCRIPTOR_REQUIRED);
+	AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Recommended"), KPPC_DESCRIPTOR_RECOMMENDED);
+	AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.CouldBeUsable"), KPPC_DESCRIPTOR_COULD_BE_USABLE);
+	AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.NotUsable"), KPPC_DESCRIPTOR_NOT_USABLE);
 
 	AdjustWindow(wxDefaultPosition, wxSize(700, 400));
 	KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);

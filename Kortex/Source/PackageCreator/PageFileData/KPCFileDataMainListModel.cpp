@@ -33,13 +33,13 @@ void KPCFileDataMainListModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KPCFileDataMainListModel::OnSelectItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCFileDataMainListModel::OnContextMenu, this);
 
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("PackageCreator.PageFileData.MainList.InPackagePath"), ColumnID::ID, KxDATAVIEW_CELL_EDITABLE, 175);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("PackageCreator.PageFileData.MainList.Source"), ColumnID::Source, KxDATAVIEW_CELL_INERT, 150);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("PackageCreator.PageFileData.MainList.Destination"), ColumnID::Destination, KxDATAVIEW_CELL_EDITABLE, 150);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(KTr("PackageCreator.PageFileData.MainList.InPackagePath"), ColumnID::ID, KxDATAVIEW_CELL_EDITABLE, 175);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageFileData.MainList.Source"), ColumnID::Source, KxDATAVIEW_CELL_INERT, 150);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("PackageCreator.PageFileData.MainList.Destination"), ColumnID::Destination, KxDATAVIEW_CELL_EDITABLE, 150);
 	
 	// Priority
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewSpinEditor>(T("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_EDITABLE, 50);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewSpinEditor>(KTr("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_EDITABLE, 50);
 		m_PriorityRenderer = info.GetEditor();
 		m_PriorityRenderer->SetIntergerType();
 		m_PriorityRenderer->SetRangeInt(KPackageProjectFileData::ms_MinUserPriority, KPackageProjectFileData::ms_MaxUserPriority);
@@ -125,7 +125,7 @@ bool KPCFileDataMainListModel::SetValueByRow(const wxAny& value, size_t row, con
 				{
 					if (!KPackageProjectFileData::IsFileIDValid(newID))
 					{
-						KPackageCreatorPageBase::ShowTooltipWarning(GetView(), T("Generic.IDInvalid"), GetItemRect(GetItem(row), column));
+						KPackageCreatorPageBase::ShowTooltipWarning(GetView(), KTr("Generic.IDInvalid"), GetItemRect(GetItem(row), column));
 					}
 					else if (m_FileData->HasEntryWithID(newID, entry))
 					{
@@ -233,7 +233,7 @@ void KPCFileDataMainListModel::OnActivateItem(KxDataViewEvent& event)
 					else
 					{
 						dialog.SetFolder(entry->GetSource().BeforeLast('\\'));
-						dialog.AddFilter("*", T("FileFilter.AllFiles"));
+						dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 					}
 
 					if (dialog.ShowModal() == KxID_OK)
@@ -286,29 +286,29 @@ void KPCFileDataMainListModel::OnContextMenu(KxDataViewEvent& event)
 	}
 
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFile, T("PackageCreator.AddFile")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFile, KTr("PackageCreator.AddFile")));
 		item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_PLUS));
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFolder, T("PackageCreator.AddFolder")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFolder, KTr("PackageCreator.AddFolder")));
 		item->SetBitmap(KGetBitmap(KIMG_FOLDER_PLUS));
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFolders, T("PackageCreator.AddMultipleFolders")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFolders, KTr("PackageCreator.AddMultipleFolders")));
 		item->SetBitmap(KGetBitmap(KIMG_FOLDERS_PLUS));
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ReplaceFolderContent, T("PackageCreator.PageFileData.ReplaceFolderContent")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ReplaceFolderContent, KTr("PackageCreator.PageFileData.ReplaceFolderContent")));
 		item->Enable(entry && entry->ToFolderEntry());
 		item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 	
@@ -387,7 +387,7 @@ void KPCFileDataMainListModel::OnAllItemsMenuSelect(KxDataViewColumn* column)
 void KPCFileDataMainListModel::OnAddFile()
 {
 	KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
-	dialog.AddFilter("*", T("FileFilter.AllFiles"));
+	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		wxString source = dialog.GetResult();
@@ -440,7 +440,7 @@ void KPCFileDataMainListModel::OnAddFolder()
 			NotifyAddedItem(item);
 			SelectItem(item);
 		});
-		operation->SetDialogCaption(T("Generic.FileSearchInProgress"));
+		operation->SetDialogCaption(KTr("Generic.FileSearchInProgress"));
 		operation->Run();
 	}
 }
@@ -476,7 +476,7 @@ void KPCFileDataMainListModel::OnAddMultipleFolders()
 			RefreshItems();
 			ChangeNotify();
 		});
-		operation->SetDialogCaption(T("Generic.FileSearchInProgress"));
+		operation->SetDialogCaption(KTr("Generic.FileSearchInProgress"));
 		operation->Run();
 	}
 }
@@ -499,7 +499,7 @@ void KPCFileDataMainListModel::OnReplaceFolderContent(const KxDataViewItem& item
 			NotifyChangedItem(item);
 			SelectItem(item);
 		});
-		operation->SetDialogCaption(T("Generic.FileSearchInProgress"));
+		operation->SetDialogCaption(KTr("Generic.FileSearchInProgress"));
 		operation->Run();
 	}
 }

@@ -130,16 +130,16 @@ void KPCRGroupsModel::OnContextMenu(KxDataViewEvent& event)
 
 	KxMenu menu;
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddGroup, T(KxID_ADD)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddGroup, KTr(KxID_ADD)));
 		item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 
@@ -211,7 +211,7 @@ void KPCRGroupsModel::OnAddGroup(bool useDialog)
 	wxString name;
 	if (useDialog)
 	{
-		KxTextBoxDialog dialog(m_Controller->GetWorkspace(), KxID_NONE, T("PackageCreator.NewGroupDialog"));
+		KxTextBoxDialog dialog(m_Controller->GetWorkspace(), KxID_NONE, KTr("PackageCreator.NewGroupDialog"));
 		dialog.Bind(KxEVT_STDDIALOG_BUTTON, [this, &dialog](wxNotifyEvent& event)
 		{
 			if (event.GetId() == KxID_OK)
@@ -244,7 +244,7 @@ void KPCRGroupsModel::OnRemoveGroup(const KxDataViewItem& item)
 {
 	if (KPPRRequirementsGroup* group = GetDataEntry(item))
 	{
-		KxTaskDialog dialog(m_Controller->GetWorkspace(), KxID_NONE, TF("PackageCreator.RemoveGroupDialog").arg(group->GetID()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		KxTaskDialog dialog(m_Controller->GetWorkspace(), KxID_NONE, KTrf("PackageCreator.RemoveGroupDialog", group->GetID()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (dialog.ShowModal() == KxID_YES)
 		{
 			if (IsEmpty())
@@ -274,7 +274,7 @@ void KPCRGroupsModel::Create(KPackageCreatorController* controller, wxWindow* wi
 {
 	KPackageCreatorVectorModel::Create(controller, window, sizer);
 
-	m_AddButton = new KxButton(window, KxID_NONE, T(KxID_ADD));
+	m_AddButton = new KxButton(window, KxID_NONE, KTr(KxID_ADD));
 	m_AddButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
 		OnAddGroup(true);
@@ -282,7 +282,7 @@ void KPCRGroupsModel::Create(KPackageCreatorController* controller, wxWindow* wi
 	sizer->Add(m_AddButton, 0, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 
 	// Remove button
-	m_RemoveButton = new KxButton(window, KxID_NONE, T(KxID_REMOVE));
+	m_RemoveButton = new KxButton(window, KxID_NONE, KTr(KxID_REMOVE));
 	m_RemoveButton->Enable(false);
 	m_RemoveButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{

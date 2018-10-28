@@ -133,7 +133,7 @@ bool KLootAPI::IsSupported() const
 }
 bool KLootAPI::CanSortNow() const
 {
-	return KModManager::Get().IsVFSMounted();
+	return KModManager::GetInstance()->IsVFSMounted();
 }
 
 wxString KLootAPI::GetDataPath() const
@@ -194,7 +194,7 @@ bool KLootAPI::SortPlugins(KxStringVector& sortedList, KOperationWithProgressDia
 					bool isMasterListUpdated = dataBase->UpdateMasterlist(masterListPath, repositoryURL, repositoryBranch);
 					if (isMasterListUpdated && !dataBase->IsLatestMasterlist(masterListPath, repositoryBranch))
 					{
-						ThrowError(T("PluginManager.LootAPI.CanNotUpdateMasterlist"));
+						ThrowError(KTr("PluginManager.LootAPI.CanNotUpdateMasterlist"));
 					}
 
 					// Load list

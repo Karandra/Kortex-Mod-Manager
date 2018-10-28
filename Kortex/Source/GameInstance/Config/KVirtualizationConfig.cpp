@@ -19,18 +19,18 @@ KxStringVector KVirtualizationMirroredEntry::GetSources() const
 	KxStringVector sources = m_Sources;
 	std::transform(sources.begin(), sources.end(), sources.begin(), [](const wxString& s)
 	{
-		return V(s);
+		return KVarExp(s);
 	});
 	return sources;
 }
 
 wxString KVirtualizationMirroredEntry::GetSource() const
 {
-	return !m_Sources.empty() ? V(m_Sources.front()) : wxNullString;
+	return !m_Sources.empty() ? KVarExp(m_Sources.front()) : wxNullString;
 }
 wxString KVirtualizationMirroredEntry::GetTarget() const
 {
-	return V(m_Target);
+	return KVarExp(m_Target);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -38,16 +38,16 @@ KVirtualizationMandatoryEntry::KVirtualizationMandatoryEntry(const KxXMLNode& pa
 {
 	// Folder path will not be expanded here
 	m_Source = parentNode.GetValue();
-	m_Name = V(parentNode.GetAttribute("Name"));
+	m_Name = KVarExp(parentNode.GetAttribute("Name"));
 }
 
 wxString KVirtualizationMandatoryEntry::GetSource() const
 {
-	return V(m_Source);
+	return KVarExp(m_Source);
 }
 wxString KVirtualizationMandatoryEntry::GetName() const
 {
-	return V(m_Name);
+	return KVarExp(m_Name);
 }
 
 //////////////////////////////////////////////////////////////////////////

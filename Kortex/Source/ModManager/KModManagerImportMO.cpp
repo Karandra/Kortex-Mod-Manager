@@ -182,7 +182,7 @@ wxString KModManagerImportMO::GetProfileDirectory() const
 
 void KModManagerImportMO::ReadExecutables(KOperationWithProgressDialogBase* context)
 {
-	context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KProgramManager::GetInstance()->GetName()));
+	context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), KProgramManager::GetInstance()->GetName()));
 
 	KProgramEntry::Vector& programList = KProgramManager::GetInstance()->GetProgramList();
 	KProgramEntry* pCurrentEntry = NULL;
@@ -221,7 +221,7 @@ void KModManagerImportMO::CopySaves(KOperationWithProgressDialogBase* context)
 {
 	if (const KSaveManager* saveManager = KSaveManager::GetInstance())
 	{
-		context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KSaveManager::GetInstance()->GetName()));
+		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), KSaveManager::GetInstance()->GetName()));
 
 		KxEvtFile source(GetProfileDirectory() + "\\Saves");
 		context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
@@ -260,10 +260,10 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 				name.Remove(0, 1);
 
 				// Notify
-				context->SetDialogCaption(wxString::Format("%s \"%s\", %zu/%zu", T("Generic.Import"), name, counter, modsList.size()));
+				context->SetDialogCaption(wxString::Format("%s \"%s\", %zu/%zu", KTr("Generic.Import"), name, counter, modsList.size()));
 
 				// Check mod existence
-				KModEntry* existingMod = KModManager::Get().FindModByID(name);
+				KModEntry* existingMod = KModManager::GetInstance()->FindModByID(name);
 				if (existingMod && ShouldSkipExistingMods())
 				{
 					existingMod->SetEnabled(isModEnabled);
@@ -276,39 +276,39 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 				KxINI tModINI(metaStream);
 
 				// Write data
-				KModEntry* entry = KModManager::Get().GetEntries().emplace_back(new KModEntry());
-				entry->SetName(name);
-				entry->SetEnabled(isModEnabled);
-				entry->SetVersion(tModINI.GetValue("General", "version"));
-				entry->SetInstallPackageFile(ProcessFilePath(tModINI.GetValue("General", "installationFile")));
-				entry->SetDescription(ProcessDescription(tModINI.GetValue("General", "nexusDescription")));
+				KModEntry& entry = *KModManager::GetInstance()->GetEntries().emplace_back(new KModEntry());
+				entry.SetName(name);
+				entry.SetEnabled(isModEnabled);
+				entry.SetVersion(tModINI.GetValue("General", "version"));
+				entry.SetInstallPackageFile(ProcessFilePath(tModINI.GetValue("General", "installationFile")));
+				entry.SetDescription(ProcessDescription(tModINI.GetValue("General", "nexusDescription")));
 
 				// NexusID
 				int64_t nexusID = tModINI.GetValueInt("General", "modid", KNETWORK_SITE_INVALID_MODID);
 				if (nexusID > 0)
 				{
-					entry->SetWebSite(KNETWORK_PROVIDER_ID_NEXUS, nexusID);
+					entry.SetWebSite(KNETWORK_PROVIDER_ID_NEXUS, nexusID);
 				}
 
 				// Install date
-				entry->SetTime(isModEnabled ? KME_TIME_INSTALL : KME_TIME_UNINSTALL, KxFile(modFolder).GetFileTime(KxFILETIME_CREATION));
+				entry.SetTime(isModEnabled ? KME_TIME_INSTALL : KME_TIME_UNINSTALL, KxFile(modFolder).GetFileTime(KxFILETIME_CREATION));
 
 				// If such mod already exist, try create unique ID
 				if (existingMod)
 				{
-					entry->SetID(wxString::Format("[MO] %s", name));
+					entry.SetID(wxString::Format("[MO] %s", name));
 				}
 				else
 				{
-					entry->SetID(name);
+					entry.SetID(name);
 				}
 				
 				// Save
-				entry->CreateAllFolders();
-				entry->Save();
+				entry.CreateAllFolders();
+				entry.Save();
 
 				// Copy mod contents
-				wxString destination = entry->GetModFilesDir() + wxS('\\') + GetDataFolderName();
+				wxString destination = entry.GetModFilesDir() + wxS('\\') + GetDataFolderName();
 
 				KxEvtFile source(modFolder);
 				context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
@@ -333,7 +333,7 @@ void KModManagerImportMO::CopyMods(KOperationWithProgressDialogBase* context)
 			return;
 		}
 
-		if (KModEntry* existingMod = KModManager::Get().FindModByID(name))
+		if (KModEntry* existingMod = KModManager::GetInstance()->FindModByID(name))
 		{
 			currentModList.emplace_back(KProfileMod(*existingMod, existingMod->IsEnabled()));
 		}
@@ -344,7 +344,7 @@ void KModManagerImportMO::ReadPlugins(KOperationWithProgressDialogBase* context)
 {
 	if (KPluginManager* manager = KPluginManager::GetInstance())
 	{
-		context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), manager->GetName()));
+		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), manager->GetName()));
 
 		// Load entries
 		manager->Load();
@@ -379,7 +379,7 @@ void KModManagerImportMO::CopyGameConfig(KOperationWithProgressDialogBase* conte
 {
 	if (const KConfigManagerConfig* options = KConfigManagerConfig::GetInstance())
 	{
-		context->SetDialogCaption(wxString::Format("%s \"%s\"", T("Generic.Import"), KGameConfigWorkspace::GetInstance()->GetName()));
+		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), KGameConfigWorkspace::GetInstance()->GetName()));
 
 		for (size_t i = 0; i < options->GetEntriesCount(); i++)
 		{
@@ -525,12 +525,12 @@ wxString KModManagerImportMO::GetAdditionalInfo() const
 			version = "<unknown>";
 		}
 	}
-	info << T("Generic.Version") << ": " << version;
+	info << KTr("Generic.Version") << ": " << version;
 
 	// Target profile
 	if (m_TargetProfileTemplate)
 	{
-		info << "\r\n" << T("ModManager.Import.ManagedGame") << ": " << m_TargetProfileTemplate->GetName();
+		info << "\r\n" << KTr("ModManager.Import.ManagedGame") << ": " << m_TargetProfileTemplate->GetName();
 	}
 
 	return info;

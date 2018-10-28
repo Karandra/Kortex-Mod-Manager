@@ -14,8 +14,8 @@ enum ColumnID
 
 void KModStatisticsModel::OnInitControl()
 {
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 250);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 250);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
 }
 
 void KModStatisticsModel::GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
@@ -49,27 +49,27 @@ wxString KModStatisticsModel::GetStatName(KModStatisticsType index) const
 	{
 		case KMM_STAT_MOD_COUNT_TOTAL:
 		{
-			return T("ModManager.Statistics.ModCountTotal");
+			return KTr("ModManager.Statistics.ModCountTotal");
 		}
 		case KMM_STAT_MOD_COUNT_ACTIVE:
 		{
-			return T("ModManager.Statistics.ModCountActive");
+			return KTr("ModManager.Statistics.ModCountActive");
 		}
 		case KMM_STAT_MOD_COUNT_INACTIVE:
 		{
-			return T("ModManager.Statistics.ModCountInactive");
+			return KTr("ModManager.Statistics.ModCountInactive");
 		}
 		case KMM_STAT_MOD_COUNT_FILES:
 		{
-			return T("ModManager.Statistics.FilesCount");
+			return KTr("ModManager.Statistics.FilesCount");
 		}
 		case KMM_STAT_MOD_COUNT_FOLDERS:
 		{
-			return T("ModManager.Statistics.FoldersCount");
+			return KTr("ModManager.Statistics.FoldersCount");
 		}
 		case KMM_STAT_MODS_SIZE:
 		{
-			return T("ModManager.Statistics.ModsSize");
+			return KTr("ModManager.Statistics.ModsSize");
 		}
 	};
 	return wxEmptyString;
@@ -113,7 +113,7 @@ wxString KModStatisticsModel::CalcStatValue(KModStatisticsType index) const
 int64_t KModStatisticsModel::CountMods(CountMode mode) const
 {
 	int64_t count = 0;
-	for (const KModEntry* modEentry: KModManager::Get().GetAllEntries(true))
+	for (const KModEntry* modEentry: KModManager::GetInstance()->GetAllEntries(true))
 	{
 		switch (mode)
 		{
@@ -145,7 +145,7 @@ int64_t KModStatisticsModel::CountMods(CountMode mode) const
 int64_t KModStatisticsModel::CalcModStoreSize() const
 {
 	int64_t totalSize = 0;
-	for (const KModEntry* modEntry: KModManager::Get().GetAllEntries(true))
+	for (const KModEntry* modEntry: KModManager::GetInstance()->GetAllEntries(true))
 	{
 		modEntry->GetFileTree().WalkTree([&totalSize](const KFileTreeNode& rootNode)
 		{
@@ -164,7 +164,7 @@ int64_t KModStatisticsModel::CalcModStoreSize() const
 int64_t KModStatisticsModel::CountFilesAndFolders(KxFileSearchType type, CountMode mode) const
 {
 	int64_t count = 0;
-	for (const KModEntry* modEntry: KModManager::Get().GetAllEntries(true))
+	for (const KModEntry* modEntry: KModManager::GetInstance()->GetAllEntries(true))
 	{
 		modEntry->GetFileTree().WalkTree([&count, type, mode](const KFileTreeNode& rootNode)
 		{
@@ -219,9 +219,9 @@ void KModStatisticsModel::RefreshItems()
 //////////////////////////////////////////////////////////////////////////
 KModStatisticsDialog::KModStatisticsDialog(wxWindow* parent)
 {
-	if (KxStdDialog::Create(parent, KxID_NONE, T("ModManager.Statistics"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
+	if (KxStdDialog::Create(parent, KxID_NONE, KTr("ModManager.Statistics"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
-		KxProgressDialog dialog(parent, KxID_NONE, T("ModManager.Statistics.Status"), wxDefaultPosition, wxDefaultSize, KxBTN_NONE);
+		KxProgressDialog dialog(parent, KxID_NONE, KTr("ModManager.Statistics.Status"), wxDefaultPosition, wxDefaultSize, KxBTN_NONE);
 		dialog.Pulse();
 		dialog.Show();
 		KApp::Get().Yield();

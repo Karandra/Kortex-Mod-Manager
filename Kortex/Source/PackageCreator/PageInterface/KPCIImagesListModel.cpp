@@ -46,22 +46,22 @@ void KPCIImagesListModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_CACHE_HINT, &KPCIImagesListModel::OnCacheHint, this);
 
 	GetView()->AppendColumn<KxDataViewBitmapRenderer>(wxEmptyString, ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, ms_BitmapWidth, KxDV_COL_NONE);
-	GetView()->AppendColumn<KxDataViewToggleRenderer>(T("PackageCreator.PageInterface.ImageList.Show"), ColumnID::Visible, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
+	GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("PackageCreator.PageInterface.ImageList.Show"), ColumnID::Visible, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
 
 	// Main
 	{
-		auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(T("PackageCreator.PageInterface.ImageList.Main"), ColumnID::Main, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
+		auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("PackageCreator.PageInterface.ImageList.Main"), ColumnID::Main, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
 		info.GetRenderer()->SetDefaultToggleType(KxDataViewToggleRenderer::ToggleType::RadioBox);
 	}
 
 	// Header
 	{
-		auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(T("PackageCreator.PageInterface.ImageList.Header"), ColumnID::Header, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
+		auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("PackageCreator.PageInterface.ImageList.Header"), ColumnID::Header, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
 		info.GetRenderer()->SetDefaultToggleType(KxDataViewToggleRenderer::ToggleType::RadioBox);
 	}
 
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("PackageCreator.PageInterface.ImageList.Value"), ColumnID::Path, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH);
-	GetView()->AppendColumn<KxDataViewHTMLRenderer>(T("Generic.Description"), ColumnID::Description, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageInterface.ImageList.Value"), ColumnID::Path, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH);
+	GetView()->AppendColumn<KxDataViewHTMLRenderer>(KTr("Generic.Description"), ColumnID::Description, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH);
 }
 
 void KPCIImagesListModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
@@ -205,8 +205,8 @@ void KPCIImagesListModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 					dialog.SetFolder(entry->GetPath().BeforeLast('\\'));
-					dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), T("FileFilter.Images"));
-					dialog.AddFilter("*", T("FileFilter.AllFiles"));
+					dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+					dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 					if (dialog.ShowModal() == KxID_OK)
 					{
 						wxString newPath = dialog.GetResult();
@@ -249,20 +249,20 @@ void KPCIImagesListModel::OnContextMenu(KxDataViewEvent& event)
 	}
 
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ImportFiles, T("PackageCreator.ImportFiles")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ImportFiles, KTr("PackageCreator.ImportFiles")));
 		item->SetBitmap(KGetBitmap(KIMG_FOLDER_SEARCH_RESULT));
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFiles, T("PackageCreator.AddMultipleFiles")));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFiles, KTr("PackageCreator.AddMultipleFiles")));
 		item->SetBitmap(KGetBitmap(KIMG_DOCUMENTS_PLUS));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 
@@ -357,7 +357,7 @@ void KPCIImagesListModel::OnImportFiles()
 			ChangeNotify();
 			GetView()->Thaw();
 		});
-		operation->SetDialogCaption(T("Generic.FileSearchInProgress"));
+		operation->SetDialogCaption(KTr("Generic.FileSearchInProgress"));
 		operation->Run();
 	}
 }
@@ -365,8 +365,8 @@ void KPCIImagesListModel::OnAddMultipleItems()
 {
 	KxFileBrowseDialog dialog(GetView(), KxID_NONE, KxFBD_OPEN);
 	dialog.SetOptionEnabled(KxFBD_ALLOW_MULTISELECT);
-	dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), T("FileFilter.Images"));
-	dialog.AddFilter("*", T("FileFilter.AllFiles"));
+	dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		wxWindowUpdateLocker lock(GetView());

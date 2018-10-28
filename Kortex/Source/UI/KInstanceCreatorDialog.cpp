@@ -30,7 +30,7 @@ bool KInstanceCreatorDialog::Create(wxWindow* parent,
 		wxBoxSizer* nameSizer = new wxBoxSizer(wxHORIZONTAL);
 		mainSizer->Add(nameSizer, 0, wxEXPAND);
 
-		KxLabel* nameLabel = new KxLabel(canvas, KxID_NONE, T("InstanceCreatorDialog.NameLabel"));
+		KxLabel* nameLabel = new KxLabel(canvas, KxID_NONE, KTr("InstanceCreatorDialog.NameLabel"));
 		nameSizer->Add(nameLabel, 1);
 
 		m_NameInput = new KxTextBox(canvas, KxID_NONE);
@@ -40,7 +40,7 @@ bool KInstanceCreatorDialog::Create(wxWindow* parent,
 		wxBoxSizer* copySizer = new wxBoxSizer(wxHORIZONTAL);
 		mainSizer->Add(copySizer, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
-		KxLabel* copyFromLabel = new KxLabel(canvas, KxID_NONE, T("InstanceCreatorDialog.CopyFrom"));
+		KxLabel* copyFromLabel = new KxLabel(canvas, KxID_NONE, KTr("InstanceCreatorDialog.CopyFrom"));
 		copySizer->Add(copyFromLabel, 1, wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
 		wxBoxSizer* copyOptionsSizer = new wxBoxSizer(wxVERTICAL);
@@ -48,7 +48,7 @@ bool KInstanceCreatorDialog::Create(wxWindow* parent,
 
 		mainSizer->Detach(m_InstancesList);
 		copyOptionsSizer->Add(m_InstancesList, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
-		m_InstancesList->AddItem(V("<$T(ID_NONE)>"));
+		m_InstancesList->AddItem(KVarExp("<$T(ID_NONE)>"));
 
 		for (const auto& instance: m_InstanceTemplate->GetActiveInstances())
 		{
@@ -58,15 +58,15 @@ bool KInstanceCreatorDialog::Create(wxWindow* parent,
 		m_InstancesList->SetSelection(0);
 
 		// Copy instance config
-		m_CopyInstanceConfigCHK = new KxCheckBox(canvas, KxID_NONE, T("InstanceCreatorDialog.CopyInstanceConfig"));
+		m_CopyInstanceConfigCHK = new KxCheckBox(canvas, KxID_NONE, KTr("InstanceCreatorDialog.CopyInstanceConfig"));
 		copyOptionsSizer->Add(m_CopyInstanceConfigCHK, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
 		// Copy mod tags
-		m_CopyModTagsCHK = new KxCheckBox(canvas, KxID_NONE, T("InstanceCreatorDialog.CopyModTags"));
+		m_CopyModTagsCHK = new KxCheckBox(canvas, KxID_NONE, KTr("InstanceCreatorDialog.CopyModTags"));
 		copyOptionsSizer->Add(m_CopyModTagsCHK, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
 		// Copy programs
-		m_CopyProgramsCHK = new KxCheckBox(canvas, KxID_NONE, T("InstanceCreatorDialog.CopyPrograms"));
+		m_CopyProgramsCHK = new KxCheckBox(canvas, KxID_NONE, KTr("InstanceCreatorDialog.CopyPrograms"));
 		copyOptionsSizer->Add(m_CopyProgramsCHK, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
 		m_NameInput->SetFocus();
@@ -80,7 +80,7 @@ bool KInstanceCreatorDialog::Create(wxWindow* parent,
 KInstanceCreatorDialog::KInstanceCreatorDialog(wxWindow* parent, KGameInstance* instanceTemplate)
 	:m_InstanceTemplate(instanceTemplate)
 {
-	Create(parent, KxID_NONE, TF("InstanceCreatorDialog.Caption").arg(instanceTemplate->GetName()), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY);
+	Create(parent, KxID_NONE, KTrf("InstanceCreatorDialog.Caption", instanceTemplate->GetName()), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY);
 
 	Bind(KxEVT_STDDIALOG_BUTTON, &KInstanceCreatorDialog::OnButtonClick, this);
 	m_InstancesList->Bind(wxEVT_COMBOBOX, &KInstanceCreatorDialog::OnSelectInstance, this);
@@ -118,12 +118,12 @@ bool KInstanceCreatorDialog::OnOK(wxNotifyEvent& event)
 	m_Name = m_NameInput->GetValue();
 	if (!KGameInstance::IsValidInstanceID(m_Name))
 	{
-		KLogEvent(T("InstanceCreatorDialog.InstanceNameInvalid"), KLOG_WARNING, this).Send();
+		KLogEvent(KTr("InstanceCreatorDialog.InstanceNameInvalid"), KLOG_WARNING, this).Send();
 		return false;
 	}
 	else if (m_InstanceTemplate->HasInstance(m_Name))
 	{
-		KLogEvent(T("InstanceCreatorDialog.InstanceNameCollision"), KLOG_WARNING, this).Send();
+		KLogEvent(KTr("InstanceCreatorDialog.InstanceNameCollision"), KLOG_WARNING, this).Send();
 		return false;
 	}
 	else
@@ -154,7 +154,7 @@ bool KInstanceCreatorDialog::OnOK(wxNotifyEvent& event)
 			}
 		}
 
-		KLogEvent(T("InstanceCreatorDialog.CreationError"), KLOG_ERROR, this).Send();
+		KLogEvent(KTr("InstanceCreatorDialog.CreationError"), KLOG_ERROR, this).Send();
 		return false;
 	}
 }

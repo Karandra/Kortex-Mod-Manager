@@ -9,7 +9,7 @@
 KxMenu* KPackageCreatorListModel::CreateAllItemsMenu(KxMenu& menu)
 {
 	KxMenu* subMenu = new KxMenu();
-	KxMenuItem* item = menu.Add(subMenu, T("Generic.All"));
+	KxMenuItem* item = menu.Add(subMenu, KTr("Generic.All"));
 	item->Enable(!IsEmpty());
 
 	subMenu->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)

@@ -266,7 +266,7 @@ KCMSampleValueArray KConfigManager::FF_GetVideoModesList(KCMConfigEntryStd* conf
 
 				if (label.IsEmpty())
 				{
-					label = T("ConfigManager.Samples.VideoMode.RatioUnknown");
+					label = KTr("ConfigManager.Samples.VideoMode.RatioUnknown");
 				}
 				outList.push_back(KCMSampleValue(pDVEntry, value, label));
 			}
@@ -288,7 +288,7 @@ KCMSampleValueArray KConfigManager::FF_FindFiles(KCMConfigEntryStd* configEntry,
 	KxXMLNode tSampleValuesNode = node.GetFirstChildElement("SampleValues");
 
 	KCMSampleValueArray tFoundFiles;
-	wxString folder = V(tSampleValuesNode.GetAttribute("Folder"));
+	wxString folder = KVarExp(tSampleValuesNode.GetAttribute("Folder"));
 	wxString filter = KAux::StrOr(tSampleValuesNode.GetAttribute("Filter"), KxFile::NullFilter);
 	bool bRecursiveSearch = tSampleValuesNode.GetAttributeBool("Recursive");
 	KxStringVector files = KxFile(folder).Find(filter, KxFS_FILE, bRecursiveSearch);
@@ -333,7 +333,7 @@ void KConfigManager::LoadCategories(KxXMLDocument& xml)
 			}
 			else
 			{
-				label = T(wxString::Format("GameConfig.Categories.%s", id));
+				label = KTr(wxString::Format("GameConfig.Categories.%s", id));
 			}
 
 			if (label.IsEmpty())
@@ -389,7 +389,7 @@ void KConfigManager::LoadVirtualKeys()
 			wxString name = KAux::StrOr(node.GetAttribute("Name"), vkid, std::to_wstring(keyCode));
 
 			bool hasTranslation = false;
-			wxString label = KTranslation::GetTranslation().GetString(wxString::Format("ConfigManager.VirtualKey.%s", vkid), &hasTranslation);
+			wxString label = KTranslation::GetAppTranslation().GetString(wxString::Format("ConfigManager.VirtualKey.%s", vkid), &hasTranslation);
 			if (hasTranslation)
 			{
 				name = label;
@@ -401,7 +401,7 @@ void KConfigManager::LoadVirtualKeys()
 
 	if (!m_VirtualKeys.count(WXK_NONE))
 	{
-		m_VirtualKeys.emplace(std::make_pair(WXK_NONE, std::make_pair("VK_NONE", T("ConfigManager.VirtualKey.VK_NONE"))));
+		m_VirtualKeys.emplace(std::make_pair(WXK_NONE, std::make_pair("VK_NONE", KTr("ConfigManager.VirtualKey.VK_NONE"))));
 	}
 }
 
@@ -435,7 +435,7 @@ wxString KConfigManager::GetID() const
 }
 wxString KConfigManager::GetName() const
 {
-	return T("ConfigManager.Name");
+	return KTr("ConfigManager.Name");
 }
 wxString KConfigManager::GetVersion() const
 {
@@ -546,7 +546,7 @@ KCMIDataProvider* KConfigManager::OnQueryDataProvider(const KCMFileEntry* fileEn
 					KCMDataProviderINI* dataProvider = NULL;
 					if (profileEntry->IsFilePathRelative())
 					{
-						wxString path = KModManager::GetDispatcher().ResolveLocationPath(profileEntry->GetFilePath());
+						wxString path = KDispatcher::GetInstance()->ResolveLocationPath(profileEntry->GetFilePath());
 						if (!path.IsEmpty())
 						{
 							dataProvider = new KCMDataProviderINI(path);

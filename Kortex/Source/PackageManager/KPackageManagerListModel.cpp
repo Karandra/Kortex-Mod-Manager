@@ -52,12 +52,12 @@ void KPackageManagerListModel::OnInitControl()
 
 	KxDataViewColumnFlags flags = KxDV_COL_DEFAULT_FLAGS|KxDV_COL_SORTABLE;
 	{
-		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 450, flags);
+		auto info = GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 450, flags);
 		info.GetColumn()->SortAscending();
 	}
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125, flags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, 125, flags);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 150, flags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125, flags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, 125, flags);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 150, flags);
 }
 
 void KPackageManagerListModel::GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
@@ -290,19 +290,19 @@ void KPackageManagerListModel::OnContextMenu(KxDataViewEvent& event)
 
 void KPackageManagerListModel::CreateContextMenu()
 {
-	m_ContextMenu_Open = m_ContextMenu.Add(new KxMenuItem(MenuID::Open, T(KxID_OPEN)));
+	m_ContextMenu_Open = m_ContextMenu.Add(new KxMenuItem(MenuID::Open, KTr(KxID_OPEN)));
 	m_ContextMenu_Open->SetDefault();
 
-	m_ContextMenu.Add(new KxMenuItem(MenuID::OpenLocation, T("MainMenu.OpenLocation")))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
-	m_ContextMenu_ImportProject = m_ContextMenu.Add(new KxMenuItem(MenuID::ImportProject, T("ModManager.Menu.Package.ImportProject")));
-	m_ContextMenu_ExtractFiles = m_ContextMenu.Add(new KxMenuItem(MenuID::ExtractFiles, T("ModManager.Menu.Package.Extract")));
+	m_ContextMenu.Add(new KxMenuItem(MenuID::OpenLocation, KTr("MainMenu.OpenLocation")))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+	m_ContextMenu_ImportProject = m_ContextMenu.Add(new KxMenuItem(MenuID::ImportProject, KTr("ModManager.Menu.Package.ImportProject")));
+	m_ContextMenu_ExtractFiles = m_ContextMenu.Add(new KxMenuItem(MenuID::ExtractFiles, KTr("ModManager.Menu.Package.Extract")));
 
 	m_ContextMenu.AddSeparator();
-	m_ContextMenu.Add(new KxMenuItem(MenuID::Remove, T(KxID_REMOVE)));
-	m_ContextMenu.Add(new KxMenuItem(MenuID::Rename, T(KxID_RENAME)));
+	m_ContextMenu.Add(new KxMenuItem(MenuID::Remove, KTr(KxID_REMOVE)));
+	m_ContextMenu.Add(new KxMenuItem(MenuID::Rename, KTr(KxID_RENAME)));
 
 	m_ContextMenu.AddSeparator();
-	m_ContextMenu.Add(new KxMenuItem(MenuID::Properties, T(KxID_PROPERTIES)));
+	m_ContextMenu.Add(new KxMenuItem(MenuID::Properties, KTr(KxID_PROPERTIES)));
 }
 void KPackageManagerListModel::RunInstallWizard(const KxFileItem& entry)
 {
@@ -343,7 +343,7 @@ wxBitmap KPackageManagerListModel::GetIcon(const KxFileItem& entry) const
 }
 wxString KPackageManagerListModel::GetType(const KxFileItem& entry) const
 {
-	return entry.IsFile() ? KxShell::GetTypeName(entry.GetName().AfterLast('.')) : T(KxID_FOLDER);
+	return entry.IsFile() ? KxShell::GetTypeName(entry.GetName().AfterLast('.')) : KTr(KxID_FOLDER);
 }
 
 KPackageManagerListModel::KPackageManagerListModel()

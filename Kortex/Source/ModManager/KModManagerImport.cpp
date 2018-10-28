@@ -27,7 +27,7 @@ std::unique_ptr<KModManagerImport> KModManagerImport::Create(Type type)
 }
 void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 {
-	KxTaskDialog warningDialog(window, KxID_NONE, T("ModManager.Import.Caption"), T("ModManager.Import.OverwriteWarning"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
+	KxTaskDialog warningDialog(window, KxID_NONE, KTr("ModManager.Import.Caption"), KTr("ModManager.Import.OverwriteWarning"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
 	if (warningDialog.ShowModal() != KxID_OK)
 	{
 		return;
@@ -42,11 +42,11 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 			importer->SetDirectory(fileDialog.GetResult());
 			if (importer->CanImport())
 			{
-				KxTaskDialog profileSelectDialog(window, KxID_NONE, T("ModManager.Import.Caption"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_INFO);
+				KxTaskDialog profileSelectDialog(window, KxID_NONE, KTr("ModManager.Import.Caption"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_INFO);
 
-				profileSelectDialog.SetMessage(TF("ModManager.Import.InfoFound").arg(importer->GetModManagerName()));
+				profileSelectDialog.SetMessage(KTrf("ModManager.Import.InfoFound", importer->GetModManagerName()));
 				profileSelectDialog.SetExMessage(importer->GetAdditionalInfo());
-				profileSelectDialog.SetCheckBoxLabel(T("ModManager.Import.SkipExisingMods"));
+				profileSelectDialog.SetCheckBoxLabel(KTr("ModManager.Import.SkipExisingMods"));
 
 				profileSelectDialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
 				profileSelectDialog.SetOptionEnabled(KxTD_CHB_ENABLED);
@@ -95,7 +95,7 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 							KDownloadWorkspace::GetInstance()->ScheduleReload();
 						});
 					});
-					operation->SetDialogCaption(T("ModManager.Import.Caption"));
+					operation->SetDialogCaption(KTr("ModManager.Import.Caption"));
 					operation->SetOptionEnabled(KOWPD_OPTION_RUN_ONEND_BEFORE_DIALOG_DESTRUCTION);
 
 					importer.release();
@@ -109,7 +109,7 @@ void KModManagerImport::ShowImportDialog(Type type, wxWindow* window)
 			wxLogError("Invalid foreign mod-manager importer interface is requested: %d", (int)type);
 		}
 
-		KxTaskDialog errorDialog(window, KxID_NONE, T(KxID_ERROR), T("ModManager.Import.CanNotImport"), KxBTN_OK, KxICON_ERROR);
+		KxTaskDialog errorDialog(window, KxID_NONE, KTr(KxID_ERROR), KTr("ModManager.Import.CanNotImport"), KxBTN_OK, KxICON_ERROR);
 		if (errorDialog.ShowModal() != KxID_OK)
 		{
 			return;
@@ -123,12 +123,12 @@ wxString KModManagerImport::GetProfileMatchingMessage(KxIconType* pIcon) const
 	if (!targetID.IsOK())
 	{
 		KxUtility::SetIfNotNull(pIcon, KxICON_WARNING);
-		return T("ModManager.Import.TargetProfileNotFound");
+		return KTr("ModManager.Import.TargetProfileNotFound");
 	}
 	if (targetID != KGameInstance::GetActive()->GetGameID())
 	{
 		KxUtility::SetIfNotNull(pIcon, KxICON_ERROR);
-		return T("ModManager.Import.TargetProfileMismatch");
+		return KTr("ModManager.Import.TargetProfileMismatch");
 	}
 
 	KxUtility::SetIfNotNull(pIcon, KxICON_NONE);

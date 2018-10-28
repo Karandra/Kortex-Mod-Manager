@@ -1,7 +1,7 @@
 #pragma once
 
 #define KVAR(s)			wxS("$(") s wxS(")")
-#define KVAR_EXP(s)		V(KVAR(s))
+#define KVAR_EXP(s)		KVarExp(KVAR(s))
 
 /* App-wide */
 // These variables are set by Kortex itself

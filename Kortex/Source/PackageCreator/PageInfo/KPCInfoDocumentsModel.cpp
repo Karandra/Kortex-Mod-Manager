@@ -22,8 +22,8 @@ void KPCInfoDocumentsModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCInfoDocumentsModel::OnActivateItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCInfoDocumentsModel::OnContextMenu, this);
 
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 200);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T(KxID_FILE), ColumnID::Value, KxDATAVIEW_CELL_INERT, 200);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 200);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr(KxID_FILE), ColumnID::Value, KxDATAVIEW_CELL_INERT, 200);
 }
 
 void KPCInfoDocumentsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
@@ -106,16 +106,16 @@ void KPCInfoDocumentsModel::OnContextMenu(KxDataViewEvent& event)
 
 	KxMenu menu;
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddEntry, T(KxID_ADD)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddEntry, KTr(KxID_ADD)));
 		item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 
@@ -171,8 +171,8 @@ void KPCInfoDocumentsModel::OnClearList()
 KxStringVector KPCInfoDocumentsModel::OpenFileDialog(bool isMultiple) const
 {
 	KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
-	dialog.AddFilter("*.txt;*.ini;*.xml;*.htm;*.html;*.mht;*.mhtml;*.pdf", T("FileFilter.AllSupportedFormats"));
-	dialog.AddFilter("*", T("FileFilter.AllFiles"));
+	dialog.AddFilter("*.txt;*.ini;*.xml;*.htm;*.html;*.mht;*.mhtml;*.pdf", KTr("FileFilter.AllSupportedFormats"));
+	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	dialog.SetOptionEnabled(KxFBD_ALLOW_MULTISELECT, isMultiple);
 
 	dialog.ShowModal();

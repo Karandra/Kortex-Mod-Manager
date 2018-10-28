@@ -557,7 +557,7 @@ KProfile* KGameInstance::CreateProfile(const wxString& profileID, const KProfile
 		});
 
 		// Configure and run
-		operation->SetDialogCaption(T("Generic.FileCopyInProgress"));
+		operation->SetDialogCaption(KTr("Generic.FileCopyInProgress"));
 		operation->Run();
 		return &newProfile;
 	}

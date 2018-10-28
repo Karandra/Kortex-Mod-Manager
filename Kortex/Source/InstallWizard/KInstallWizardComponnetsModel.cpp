@@ -21,7 +21,7 @@ void KInstallWizardComponnetsModel::OnInitControl()
 
 	/* Columns */
 	GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, ColumnID::Expander, KxDATAVIEW_CELL_INERT, 0, KxDV_COL_HIDDEN);
-	GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, 250);
+	GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, 250);
 }
 
 bool KInstallWizardComponnetsModel::IsContainer(const KxDataViewItem& item) const
@@ -273,7 +273,7 @@ wxBitmap KInstallWizardComponnetsModel::GetImageByTypeDescriptor(KPPCTypeDescrip
 }
 wxString KInstallWizardComponnetsModel::GetMessageTypeDescriptor(KPPCTypeDescriptor type) const
 {
-	return T("PackageCreator.TypeDescriptor." + KPackageProjectComponents::TypeDescriptorToString(type));
+	return KTr("PackageCreator.TypeDescriptor." + KPackageProjectComponents::TypeDescriptorToString(type));
 }
 KxDataViewBitmapTextToggleValue::ToggleType KInstallWizardComponnetsModel::GetToggleType(KPPCSelectionMode mode) const
 {
@@ -289,7 +289,7 @@ KxDataViewBitmapTextToggleValue::ToggleType KInstallWizardComponnetsModel::GetTo
 }
 const wxString& KInstallWizardComponnetsModel::GetSelectionModeString(const KPPCGroup& group) const
 {
-	static const wxString ms_Select = T("Generic.Select");
+	static const wxString ms_Select = KTr("Generic.Select");
 	auto MakeString = [](KPPCSelectionMode mode) -> wxString
 	{
 		return ms_Select + ' ' + KxString::MakeLower(KPackageProjectComponents::SelectionModeToTranslation(mode));
@@ -371,7 +371,7 @@ void KInstallWizardComponnetsModel::OnActivateItem(KxDataViewEvent& event)
 		}
 		else if (const KPPCEntry* entry = node->GetEntry())
 		{
-			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, T(KxID_INFO), GetMessageTypeDescriptor(entry->GetTDCurrentValue()), KxBTN_OK, KxICON_INFORMATION);
+			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTr(KxID_INFO), GetMessageTypeDescriptor(entry->GetTDCurrentValue()), KxBTN_OK, KxICON_INFORMATION);
 			dialog.ShowModal();
 		}
 	}

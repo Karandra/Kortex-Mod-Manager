@@ -17,7 +17,7 @@ namespace
 	{
 		if (!path.IsEmpty())
 		{
-			wxString pathExp = V(path);
+			wxString pathExp = KVarExp(path);
 			if (IsRelative(pathExp))
 			{
 				KxUtility::SetIfNotNull(isRelative, true);
@@ -91,9 +91,9 @@ wxString KProgramEntry::GetName() const
 {
 	if (m_Name.IsEmpty())
 	{
-		return V(m_Executable).AfterLast(wxS('\\'));
+		return KVarExp(m_Executable).AfterLast(wxS('\\'));
 	}
-	return V(m_Name);
+	return KVarExp(m_Name);
 }
 wxString KProgramEntry::GetIconPath() const
 {
@@ -114,7 +114,7 @@ wxString KProgramEntry::GetExecutableReal() const
 }
 wxString KProgramEntry::GetArguments() const
 {
-	return V(m_Arguments);
+	return KVarExp(m_Arguments);
 }
 wxString KProgramEntry::GetWorkingDirectory() const
 {

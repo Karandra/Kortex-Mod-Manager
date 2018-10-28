@@ -21,7 +21,7 @@ bool KSaveFileBethesdaFalloutNV::DoInitializeSaveData()
 			stream.Skip<uint8_t>();
 
 			// Read game language (seems to have fixed length)
-			m_BasicInfo.emplace_back(stream.ReadStringACP(64), T("SaveManager.Info.Language"));
+			m_BasicInfo.emplace_back(stream.ReadStringACP(64), KTr("SaveManager.Info.Language"));
 
 			// Seek to screenshort dimensions data
 			stream.SeekFromStart(85);
@@ -33,14 +33,14 @@ bool KSaveFileBethesdaFalloutNV::DoInitializeSaveData()
 			stream.Skip<uint8_t>();
 
 			// Read save index
-			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex"));
 
 			auto ReadWZString = [this, &stream](const wxString& fieldName)
 			{
 				stream.Skip<uint8_t>();
 				uint16_t length = stream.ReadObject<uint16_t>();
 				stream.Skip<uint8_t>();
-				m_BasicInfo.emplace_back(stream.ReadStringACP(length), T(fieldName));
+				m_BasicInfo.emplace_back(stream.ReadStringACP(length), KTr(fieldName));
 			};
 
 			// Read name
@@ -49,7 +49,7 @@ bool KSaveFileBethesdaFalloutNV::DoInitializeSaveData()
 			
 			// Read level
 			stream.Skip<uint8_t>();
-			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), T("SaveManager.Info.Level"));
+			m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.Level"));
 
 			// Read location
 			ReadWZString("SaveManager.Info.Location");

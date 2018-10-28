@@ -13,7 +13,7 @@ KSaveManagerConfig::KSaveManagerConfig(KGameInstance& instance, const KxXMLNode&
 	// Load file filters
 	for (KxXMLNode entryNode = node.GetFirstChildElement("FileFilters").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 	{
-		m_FileFilters.emplace_back(KLabeledValue(entryNode.GetValue(), V(entryNode.GetAttribute("Label"))));
+		m_FileFilters.emplace_back(KLabeledValue(entryNode.GetValue(), KVarExp(entryNode.GetAttribute("Label"))));
 	}
 
 	// Multi-file save config
@@ -30,9 +30,9 @@ KSaveManagerConfig::~KSaveManagerConfig()
 
 wxString KSaveManagerConfig::GetSaveInterface() const
 {
-	return V(m_SaveInterface);
+	return KVarExp(m_SaveInterface);
 }
 wxString KSaveManagerConfig::GetLocation() const
 {
-	return V(m_Location);
+	return KVarExp(m_Location);
 }

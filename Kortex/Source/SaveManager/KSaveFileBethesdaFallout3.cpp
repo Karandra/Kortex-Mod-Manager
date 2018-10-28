@@ -27,14 +27,14 @@ bool KSaveFileBethesdaFallout3::DoInitializeSaveData()
 
 			// Read save index
 			stream.Skip<uint8_t>();
-			m_BasicInfo.emplace_back(std::to_wstring(stream.ReadObject<uint32_t>()), T("SaveManager.Info.SaveIndex"));
+			m_BasicInfo.emplace_back(std::to_wstring(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex"));
 
 			auto ReadWZString = [this, &stream](const wxString& fieldName)
 			{
 				stream.Skip<uint8_t>();
 				uint16_t length = stream.ReadObject<uint16_t>();
 				stream.Skip<uint8_t>();
-				m_BasicInfo.emplace_back(stream.ReadStringACP(length), T(fieldName));
+				m_BasicInfo.emplace_back(stream.ReadStringACP(length), KTr(fieldName));
 			};
 
 			// Read name
@@ -43,7 +43,7 @@ bool KSaveFileBethesdaFallout3::DoInitializeSaveData()
 			
 			// Read level
 			stream.Skip<uint8_t>();
-			m_BasicInfo.emplace_back(std::to_wstring(stream.ReadObject<uint32_t>()), T("SaveManager.Info.Level"));
+			m_BasicInfo.emplace_back(std::to_wstring(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.Level"));
 
 			// Read location
 			ReadWZString("SaveManager.Info.Location");

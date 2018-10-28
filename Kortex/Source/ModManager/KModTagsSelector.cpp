@@ -20,18 +20,18 @@ void KModTagsSelector::OnInitControl()
 	// Override tag
 	if (IsFullFeatured())
 	{
-		auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(T("ModManager.Tags.PriorityGroup"), ColumnID::PriorityGroup, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE, KxDV_COL_REORDERABLE);
+		auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("ModManager.Tags.PriorityGroup"), ColumnID::PriorityGroup, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE, KxDV_COL_REORDERABLE);
 		info.GetRenderer()->SetDefaultToggleType(KxDataViewToggleRenderer::ToggleType::RadioBox);
 	}
 
 	// Name
 	if (IsFullFeatured())
 	{
-		GetView()->PrependColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE|KxDATAVIEW_CELL_ACTIVATABLE);
+		GetView()->PrependColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE|KxDATAVIEW_CELL_ACTIVATABLE);
 	}
 	else
 	{
-		GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE|KxDATAVIEW_CELL_ACTIVATABLE);
+		GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE|KxDATAVIEW_CELL_ACTIVATABLE);
 	}
 }
 
@@ -139,7 +139,7 @@ void KModTagsSelector::OnActivate(KxDataViewEvent& event)
 
 const KModTag* KModTagsSelector::FindStdTag(const wxString& tagValue) const
 {
-	return KModManager::GetTagManager().FindModTag(tagValue);
+	return KModTagsManager::GetInstance()->FindModTag(tagValue);
 }
 KxStringVector::const_iterator KModTagsSelector::FindTag(const KModTag* entry) const
 {
@@ -185,11 +185,11 @@ void KModTagsSelector::SetDataVector(KxStringVector* data, KModEntry* modEntry)
 }
 size_t KModTagsSelector::GetItemCount() const
 {
-	return m_Data ? KModManager::GetTagManager().GetTagsCount() : 0;
+	return m_Data ? KModTagsManager::GetInstance()->GetTagsCount() : 0;
 }
 KModTag* KModTagsSelector::GetDataEntry(size_t index) const
 {
-	KModTagArray& tTags = KModManager::GetTagManager().GetTagList();
+	KModTagArray& tTags = KModTagsManager::GetInstance()->GetTagList();
 	if (m_Data && index < tTags.size())
 	{
 		return &tTags[index];
@@ -242,7 +242,7 @@ wxString KModTagsSelectorCB::DoGetStingValue() const
 	}
 	else
 	{
-		return V("<$T(ID_NONE)>");
+		return KVarExp("<$T(ID_NONE)>");
 	}
 }
 void KModTagsSelectorCB::SetStringValue(const wxString& value)
@@ -297,7 +297,7 @@ void KModTagsSelectorDialog::OnSelectItem(KxDataViewEvent& event)
 
 void KModTagsSelectorDialog::OnAddTag(wxCommandEvent& event)
 {
-	const KModTag* pNewTag = KModManager::GetTagManager().AddModTag(KAux::MakeBracketedLabel(T(KxID_NEW)));
+	const KModTag* pNewTag =KModTagsManager::GetInstance()->AddModTag(KAux::MakeBracketedLabel(KTr(KxID_NEW)));
 	RefreshItems();
 
 	KxDataViewItem newItem = GetItem(GetItemCount() - 1);
@@ -311,7 +311,7 @@ void KModTagsSelectorDialog::OnRemoveTag(wxCommandEvent& event)
 	if (entry)
 	{
 		// Find all mods with this tag and remove it from them
-		for (KModEntry* modEntry: KModManager::Get().GetEntries())
+		for (auto& modEntry: KModManager::GetInstance()->GetEntries())
 		{
 			if (KModEntry::ToggleTag(modEntry->GetTags(), entry->GetValue(), false))
 			{
@@ -324,7 +324,7 @@ void KModTagsSelectorDialog::OnRemoveTag(wxCommandEvent& event)
 		}
 
 		// Remove tag from system
-		KModManager::GetTagManager().RemoveModTag(entry->GetValue());
+		KModTagsManager::GetInstance()->RemoveModTag(entry->GetValue());
 
 		// Reload control
 		KxDataViewItem tPrevItem = GetPrevItem(item);

@@ -18,8 +18,8 @@ void KModSitesEditor::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KModSitesEditor::OnActivate, this);
 
 	// Columns
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 150);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 150);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
 }
 
 bool KModSitesEditor::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
@@ -267,7 +267,7 @@ void KModSitesEditorDialog::OnRemoveTag(wxCommandEvent& event)
 KModSitesEditorDialog::KModSitesEditorDialog(wxWindow* parent, KLabeledValueArray& sites, KModEntry::FixedWebSitesArray& fixedSites)
 	:KModSitesEditor(sites, fixedSites)
 {
-	if (KxStdDialog::Create(parent, KxID_NONE, T("ModManager.SitesEditor"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
+	if (KxStdDialog::Create(parent, KxID_NONE, KTr("ModManager.SitesEditor"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
 		SetMainIcon(KxICON_NONE);
 		SetWindowResizeSide(wxBOTH);

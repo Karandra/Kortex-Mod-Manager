@@ -22,13 +22,13 @@ void KNetworkProvider::Init()
 
 void KNetworkProvider::OnAuthSuccess(wxWindow* window)
 {
-	KxTaskDialog dialog(window ? window : KMainWindow::GetInstance(), KxID_NONE, TF("Network.AuthSuccess").arg(GetName()));
+	KxTaskDialog dialog(window ? window : KMainWindow::GetInstance(), KxID_NONE, KTrf("Network.AuthSuccess", GetName()));
 	dialog.SetMainIcon(KxICON_INFO);
 	dialog.ShowModal();
 }
 void KNetworkProvider::OnAuthFail(wxWindow* window)
 {
-	KxTaskDialog dialog(window ? window : KMainWindow::GetInstance(), KxID_NONE, TF("Network.AuthFail").arg(GetName()));
+	KxTaskDialog dialog(window ? window : KMainWindow::GetInstance(), KxID_NONE, KTrf("Network.AuthFail", GetName()));
 	dialog.SetMainIcon(KxICON_ERROR);
 	dialog.ShowModal();
 }
@@ -98,7 +98,7 @@ bool KNetworkProvider::SaveAuthInfo(const wxString& userName, const KxSecretValu
 }
 bool KNetworkProvider::RequestAuthInfo(wxString& userName, KxSecretValue& password, wxWindow* window, bool* cancelled) const
 {
-	KxCredentialsDialog dialog(window, KxID_NONE, TF("Network.AuthCaption").arg(GetName()), T("Network.AuthMessage"));
+	KxCredentialsDialog dialog(window, KxID_NONE, KTrf("Network.AuthCaption", GetName()), KTr("Network.AuthMessage"));
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		KxUtility::SetIfNotNull(cancelled, false);

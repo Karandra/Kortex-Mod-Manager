@@ -30,11 +30,11 @@ void KModFilesExplorerModel::OnInitControl()
 	GetView()->SetIndent(20);
 
 	/* Columns */
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 300);
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("ModExplorer.Collisions"), ColumnID::Collisions, KxDATAVIEW_CELL_INERT, 200);
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125);
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, 175);
-	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(T("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 125);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 300);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("ModExplorer.Collisions"), ColumnID::Collisions, KxDATAVIEW_CELL_INERT, 200);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 125);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, 175);
+	GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 125);
 }
 
 bool KModFilesExplorerModel::IsContainer(const KxDataViewItem& item) const
@@ -141,7 +141,7 @@ void KModFilesExplorerModel::GetValue(wxAny& value, const KxDataViewItem& item, 
 			}
 			case ColumnID::Type:
 			{
-				value = node->IsDirectory() ? T(KxID_FOLDER) : KxShell::GetTypeName(node->GetName());
+				value = node->IsDirectory() ? KTr(KxID_FOLDER) : KxShell::GetTypeName(node->GetName());
 				break;
 			}
 			case ColumnID::Size:
@@ -236,7 +236,7 @@ const KDispatcherCollision::Vector& KModFilesExplorerModel::GetOrUpdateCollision
 	else
 	{
 		wxString path = node.GetFullPath().Remove(0, m_ModEntry.GetModFilesDir().Length());
-		auto it = m_Collisions.insert_or_assign(&node, KModManager::GetDispatcher().FindCollisions(m_ModEntry, path));
+		auto it = m_Collisions.insert_or_assign(&node, KDispatcher::GetInstance()->FindCollisions(m_ModEntry, path));
 
 		return it.first->second;
 	}

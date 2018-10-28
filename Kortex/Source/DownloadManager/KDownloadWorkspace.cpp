@@ -65,9 +65,9 @@ wxString KDownloadWorkspace::GetID() const
 }
 wxString KDownloadWorkspace::GetName() const
 {
-	return T("DownloadManager.Name");
+	return KTr("DownloadManager.Name");
 }
 wxString KDownloadWorkspace::GetNameShort() const
 {
-	return T("DownloadManager.NameShort");
+	return KTr("DownloadManager.NameShort");
 }

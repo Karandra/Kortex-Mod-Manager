@@ -41,20 +41,20 @@ void KPCREntriesListModel::OnInitControl()
 	/* Columns */
 	// Type
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(T("PackageCreator.PageRequirements.Type"), ColumnID::Type, KxDATAVIEW_CELL_EDITABLE, 115);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("PackageCreator.PageRequirements.Type"), ColumnID::Type, KxDATAVIEW_CELL_EDITABLE, 115);
 		m_TypeEditor = info.GetEditor();
 		m_TypeEditor->SetItems
 		({
-			T("PackageCreator.PageRequirements.Type.User"),
-			T("PackageCreator.PageRequirements.Type.System"),
-			T("PackageCreator.PageRequirements.Type.Auto")
+			KTr("PackageCreator.PageRequirements.Type.User"),
+			KTr("PackageCreator.PageRequirements.Type.System"),
+			KTr("PackageCreator.PageRequirements.Type.Auto")
 		 });
 		
 	}
 
 	// Operator
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(T("PackageCreator.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("PackageCreator.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
 		m_OperatorEditor = info.GetEditor();
 		m_OperatorEditor->SetItems
 		({
@@ -63,33 +63,33 @@ void KPCREntriesListModel::OnInitControl()
 		 });
 	}
 
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.ID"), ColumnID::ID, KxDATAVIEW_CELL_EDITABLE, 175);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 235);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("PackageCreator.PageRequirements.RequiredVersion") + " (RV)", ColumnID::RequiredVersion, KxDATAVIEW_CELL_EDITABLE, 150);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(T("PackageCreator.PageRequirements.CurrentVersion") + " (CV)", ColumnID::CurrentVersion, KxDATAVIEW_CELL_INERT, 200);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.ID"), ColumnID::ID, KxDATAVIEW_CELL_EDITABLE, 175);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 235);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("PackageCreator.PageRequirements.RequiredVersion") + " (RV)", ColumnID::RequiredVersion, KxDATAVIEW_CELL_EDITABLE, 150);
+	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageRequirements.CurrentVersion") + " (CV)", ColumnID::CurrentVersion, KxDATAVIEW_CELL_INERT, 200);
 
 	// Object function
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(T("PackageCreator.PageRequirements.RequiredState"), ColumnID::RequiredState, KxDATAVIEW_CELL_EDITABLE, 150);
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("PackageCreator.PageRequirements.RequiredState"), ColumnID::RequiredState, KxDATAVIEW_CELL_EDITABLE, 150);
 		m_ObjectFunctionEditor = info.GetEditor();
 
 		KxStringVector tChoices;
 		tChoices.push_back(KAux::MakeNoneLabel());
-		tChoices.push_back(T("PackageCreator.PageRequirements.RequiredState.ModActive"));
-		tChoices.push_back(T("PackageCreator.PageRequirements.RequiredState.ModInactive"));
-		tChoices.push_back(T("PackageCreator.PageRequirements.RequiredState.FileExist"));
-		tChoices.push_back(T("PackageCreator.PageRequirements.RequiredState.FileNotExist"));
+		tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.ModActive"));
+		tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.ModInactive"));
+		tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileExist"));
+		tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileNotExist"));
 
 		if (KPluginManager::HasInstance())
 		{
-			tChoices.push_back(T("PackageCreator.PageRequirements.RequiredState.PluginActive"));
-			tChoices.push_back(T("PackageCreator.PageRequirements.RequiredState.PluginInactive"));
+			tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.PluginActive"));
+			tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.PluginInactive"));
 		}
 		m_ObjectFunctionEditor->SetItems(tChoices);
 	}
 
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("PackageCreator.PageRequirements.Object"), ColumnID::Object, KxDATAVIEW_CELL_EDITABLE, 400);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(T("Generic.Description"), ColumnID::Description, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("PackageCreator.PageRequirements.Object"), ColumnID::Object, KxDATAVIEW_CELL_EDITABLE, 400);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Description"), ColumnID::Description, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE);
 }
 
 void KPCREntriesListModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
@@ -435,16 +435,16 @@ void KPCREntriesListModel::OnContextMenuItem(KxDataViewEvent& event)
 	}
 
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddEntry, T(KxID_ADD)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddEntry, KTr(KxID_ADD)));
 		item->SetBitmap(KGetBitmap(KIMG_CHEQUE_PLUS));
 	}
 	menu.AddSeparator();
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, T(KxID_REMOVE)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
 		item->Enable(entry != NULL);
 	}
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, T(KxID_CLEAR)));
+		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 		item->Enable(!IsEmpty());
 	}
 

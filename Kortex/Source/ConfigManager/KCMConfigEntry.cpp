@@ -103,7 +103,7 @@ void KCMConfigEntryStd::LoadMain(KxXMLNode& node)
 	else
 	{
 		bool isTranslated = false;
-		m_Label = KAux::StrOr(KTranslation::GetTranslation().GetString(wxString::Format("GameConfig.Values.%s", m_Name), &isTranslated), m_Name);
+		m_Label = KAux::StrOr(KTranslation::GetAppTranslation().GetString(wxString::Format("GameConfig.Values.%s", m_Name), &isTranslated), m_Name);
 		if (isTranslated)
 		{
 			m_Label = KApp::Get().ExpandVariables(m_Label);

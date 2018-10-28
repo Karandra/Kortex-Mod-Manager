@@ -27,8 +27,8 @@ void KPackageCreatorFOModIEDialog::OnBrowseFile(wxCommandEvent& event)
 		}
 
 		dialog.SetDefaultExtension("xml");
-		dialog.AddFilter("*.xml", T("FileFilter.XML"));
-		dialog.AddFilter("*", T("FileFilter.AllFiles"));
+		dialog.AddFilter("*.xml", KTr("FileFilter.XML"));
+		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	}
 
 	wxWindowID id = dialog.ShowModal();
@@ -70,7 +70,7 @@ void KPackageCreatorFOModIEDialog::OnOK(wxNotifyEvent& event)
 KPackageCreatorFOModIEDialog::KPackageCreatorFOModIEDialog(wxWindow* parent, bool isExport)
 	:m_IsExport(isExport)
 {
-	if (KxStdDialog::Create(parent, KxID_NONE, isExport ? T("PackageCreator.ExportFOMod") : T("PackageCreator.ImportFOMod"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL))
+	if (KxStdDialog::Create(parent, KxID_NONE, isExport ? KTr("PackageCreator.ExportFOMod") : KTr("PackageCreator.ImportFOMod"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL))
 	{
 		SetMainIcon(KxICON_NONE);
 		SetWindowResizeSide(wxHORIZONTAL);
@@ -85,7 +85,7 @@ KPackageCreatorFOModIEDialog::KPackageCreatorFOModIEDialog(wxWindow* parent, boo
 		m_InfoInput = KPackageCreatorPageBase::AddControlsRow(mainSizer, "Info.xml", new KxTextBox(m_ViewPane, KxID_NONE));
 		m_InfoInput->Bind(wxEVT_TEXT, &KPackageCreatorFOModIEDialog::OnText, this);
 
-		KxButton* infoButton = new KxButton(m_ViewPane, InfoXML, T(KxID_SELECT_FILE));
+		KxButton* infoButton = new KxButton(m_ViewPane, InfoXML, KTr(KxID_SELECT_FILE));
 		infoButton->Bind(wxEVT_BUTTON, &KPackageCreatorFOModIEDialog::OnBrowseFile, this);
 		infoButton->SetClientObject(new wxStringClientData("Info"));
 		mainSizer->Add(infoButton, 0, wxEXPAND);
@@ -94,16 +94,16 @@ KPackageCreatorFOModIEDialog::KPackageCreatorFOModIEDialog(wxWindow* parent, boo
 		m_ModuleConfigInput = KPackageCreatorPageBase::AddControlsRow(mainSizer, "ModuleConfig.xml", new KxTextBox(m_ViewPane, KxID_NONE));
 		m_ModuleConfigInput->Bind(wxEVT_TEXT, &KPackageCreatorFOModIEDialog::OnText, this);
 
-		KxButton* moduleConfigButton = new KxButton(m_ViewPane, ModuleConfigXML, T(KxID_SELECT_FILE));
+		KxButton* moduleConfigButton = new KxButton(m_ViewPane, ModuleConfigXML, KTr(KxID_SELECT_FILE));
 		moduleConfigButton->Bind(wxEVT_BUTTON, &KPackageCreatorFOModIEDialog::OnBrowseFile, this);
 		moduleConfigButton->SetClientObject(new wxStringClientData("ModuleConfig"));
 		mainSizer->Add(moduleConfigButton, 0, wxEXPAND);
 		
 		// Project folder path
-		m_ProjectFolderInput = KPackageCreatorPageBase::AddControlsRow(mainSizer, T("PackageCreator.ProjectFolder"), new KxTextBox(m_ViewPane, KxID_NONE));
+		m_ProjectFolderInput = KPackageCreatorPageBase::AddControlsRow(mainSizer, KTr("PackageCreator.ProjectFolder"), new KxTextBox(m_ViewPane, KxID_NONE));
 		m_ProjectFolderInput->Bind(wxEVT_TEXT, &KPackageCreatorFOModIEDialog::OnText, this);
 
-		KxButton* projectFolderButton = new KxButton(m_ViewPane, ProjectFolder, T(KxID_SELECT_FOLDER));
+		KxButton* projectFolderButton = new KxButton(m_ViewPane, ProjectFolder, KTr(KxID_SELECT_FOLDER));
 		projectFolderButton->Bind(wxEVT_BUTTON, &KPackageCreatorFOModIEDialog::OnBrowseFile, this);
 		mainSizer->Add(projectFolderButton, 0, wxEXPAND);
 

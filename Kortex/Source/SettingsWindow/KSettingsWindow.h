@@ -72,7 +72,7 @@ class KSettingsWorkspace: public KWorkspace
 		}
 		virtual wxString GetName() const override
 		{
-			return T("Settings.Caption");
+			return KTr("Settings.Caption");
 		}
 		virtual KImageEnum GetImageID() const override
 		{

@@ -18,11 +18,11 @@ KApp& KWorkspaceController::GetApp()
 
 wxString KWorkspaceController::GetSaveConfirmationCaption() const
 {
-	return wxString::Format("%s - %s", GetWorkspace()->GetName(), KxString::ToLower(T("Controller.SaveChanges.Caption")));
+	return wxString::Format("%s - %s", GetWorkspace()->GetName(), KxString::ToLower(KTr("Controller.SaveChanges.Caption")));
 }
 wxString KWorkspaceController::GetSaveConfirmationMessage() const
 {
-	return T("Controller.SaveChanges.Message");
+	return KTr("Controller.SaveChanges.Message");
 }
 
 KWorkspaceController::KWorkspaceController(KWorkspace* workspace)
@@ -53,8 +53,8 @@ wxWindowID KWorkspaceController::AskForSave(bool canCancel)
 	{
 		KxTaskDialog dialog(GetMainWindow(), KxID_NONE, GetSaveConfirmationCaption(), GetSaveConfirmationMessage(), canCancel ? KxBTN_CANCEL : KxBTN_NONE);
 		dialog.SetMainIcon(KxICON_WARNING);
-		dialog.AddButton(KxID_YES, T("Controller.SaveChanges.Save"));
-		dialog.AddButton(KxID_NO, T("Controller.SaveChanges.Discard"));
+		dialog.AddButton(KxID_YES, KTr("Controller.SaveChanges.Save"));
+		dialog.AddButton(KxID_NO, KTr("Controller.SaveChanges.Discard"));
 
 		wxWindowID ret = dialog.ShowModal();
 		if (ret == KxID_YES)

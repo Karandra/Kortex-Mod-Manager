@@ -43,7 +43,7 @@ wxString KVFSService::GetStatusCodeMessage(int code)
 	#if KIPC_SERVER
 	return wxString::Format("%d", (int)std::abs(code));
 	#else
-	return T(wxString::Format("VFS.Error%d", (int)std::abs(code)));
+	return KTr(wxString::Format("VFS.Error%d", (int)std::abs(code)));
 	#endif
 }
 

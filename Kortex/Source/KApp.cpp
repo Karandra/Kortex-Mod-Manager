@@ -224,7 +224,7 @@ bool KApp::OnInit()
 			return false;
 		}
 
-		KLogEvent(T("Init.AnotherInstanceRunning"), KLOG_ERROR);
+		KLogEvent(KTr("Init.AnotherInstanceRunning"), KLOG_ERROR);
 		return false;
 	}
 	m_InitProgressDialog = NULL;
@@ -391,7 +391,7 @@ void KApp::ShowWorkspace()
 		else
 		{
 			wxLogInfo("No workspaces available. Terminating");
-			KLogEvent(T("Init.Error3"), KLOG_CRITICAL, m_MainWindow).Send();
+			KLogEvent(KTr("Init.Error3"), KLOG_CRITICAL, m_MainWindow).Send();
 		}
 	}
 	else
@@ -413,7 +413,7 @@ void KApp::InitSettings()
 		wxLogInfo("Pre start config needed");
 		if (!ShowFirstTimeConfigDialog(m_InitProgressDialog))
 		{
-			KLogEvent(T("Init.Error1"), KLOG_CRITICAL).Send();
+			KLogEvent(KTr("Init.Error1"), KLOG_CRITICAL).Send();
 			return;
 		}
 	}
@@ -424,7 +424,7 @@ void KApp::InitSettings()
 
 	// Init all profiles and load current one if specified (or ask user to choose it)
 	wxLogInfo("Settings initialized. Begin loading profile.");
-	m_InitProgressDialog->SetLabel(T("Init.Status2"));
+	m_InitProgressDialog->SetLabel(KTr("Init.Status2"));
 
 	ConfigureInternetExplorer(true);
 }
@@ -436,10 +436,10 @@ bool KApp::IsPreStartConfigNeeded()
 bool KApp::ShowFirstTimeConfigDialog(wxWindow* parent)
 {
 	wxString defaultPath = GetUserSettingsFolder();
-	wxString message = wxString::Format("%s\r\n\r\n%s: %s", T("Init.ProfilesPath2"), T("Generic.DefaultValue"), defaultPath);
-	KxTaskDialog dialog(parent, KxID_NONE, T("Init.ProfilesPath1"), message, KxBTN_NONE);
-	dialog.AddButton(KxID_YES, T("Generic.UseDefaultValue"));
-	dialog.AddButton(KxID_NO, T("Generic.SelectFolder"));
+	wxString message = wxString::Format("%s\r\n\r\n%s: %s", KTr("Init.ProfilesPath2"), KTr("Generic.DefaultValue"), defaultPath);
+	KxTaskDialog dialog(parent, KxID_NONE, KTr("Init.ProfilesPath1"), message, KxBTN_NONE);
+	dialog.AddButton(KxID_YES, KTr("Generic.UseDefaultValue"));
+	dialog.AddButton(KxID_NO, KTr("Generic.SelectFolder"));
 
 	if (dialog.ShowModal() == KxID_YES)
 	{
@@ -488,7 +488,7 @@ void KApp::InitInstancesData(wxWindow* parent)
 
 			if (!LoadInstance())
 			{
-				KLogEvent(T("Init.Error1"), KLOG_CRITICAL).Send();
+				KLogEvent(KTr("Init.Error1"), KLOG_CRITICAL).Send();
 			}
 		}
 		else if (ret == KxID_CANCEL)
@@ -565,13 +565,13 @@ void KApp::InitVFS()
 	else
 	{
 		wxLogInfo("Server: Not started.");
-		KLogEvent(T("VFSService.InstallFailed"), KLOG_CRITICAL).Send();
+		KLogEvent(KTr("VFSService.InstallFailed"), KLOG_CRITICAL).Send();
 	}
 }
 void KApp::UnInitVFS()
 {
 	wxLogInfo("Unmounting VFS");
-	KModManager::Get().UnMountVFS();
+	KModManager::GetInstance()->UnMountVFS();
 
 	wxLogInfo("Uninitializing VFS services");
 	delete m_VFSServiceClient;
@@ -649,10 +649,10 @@ bool KApp::ShowChageInstanceDialog()
 	wxWindowID ret = dialog.ShowModal();
 	if (ret == KxID_OK && (GetCurrentGameID() != dialog.GetNewGameID() || GetCurrentInstanceID() != dialog.GetNewInstanceID()))
 	{
-		KxTaskDialog confirmDialog(m_MainWindow, KxID_NONE, T("InstanceSelection.ChangeInstanceDialog.Caption"), T("InstanceSelection.ChangeInstanceDialog.Message"), KxBTN_NONE, KxICON_WARNING);
-		confirmDialog.AddButton(KxID_YES, T("InstanceSelection.ChangeInstanceDialog.Yes"));
-		confirmDialog.AddButton(KxID_NO, T("InstanceSelection.ChangeInstanceDialog.No"));
-		confirmDialog.AddButton(KxID_CANCEL, T("InstanceSelection.ChangeInstanceDialog.Cancel"));
+		KxTaskDialog confirmDialog(m_MainWindow, KxID_NONE, KTr("InstanceSelection.ChangeInstanceDialog.Caption"), KTr("InstanceSelection.ChangeInstanceDialog.Message"), KxBTN_NONE, KxICON_WARNING);
+		confirmDialog.AddButton(KxID_YES, KTr("InstanceSelection.ChangeInstanceDialog.Yes"));
+		confirmDialog.AddButton(KxID_NO, KTr("InstanceSelection.ChangeInstanceDialog.No"));
+		confirmDialog.AddButton(KxID_CANCEL, KTr("InstanceSelection.ChangeInstanceDialog.Cancel"));
 		confirmDialog.SetDefaultButton(KxID_CANCEL);
 
 		ret = confirmDialog.ShowModal();
@@ -819,11 +819,11 @@ void KApp::OnErrorOccurred(KLogEvent& event)
 	{
 		if (event.IsCritical())
 		{
-			caption = T("Generic.CriticalError");
+			caption = KTr("Generic.CriticalError");
 		}
 		else
 		{
-			caption = T(KxID_ERROR);
+			caption = KTr(KxID_ERROR);
 		}
 		message = event.GetMessage();
 	}

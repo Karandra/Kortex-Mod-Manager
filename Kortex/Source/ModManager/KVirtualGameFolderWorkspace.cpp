@@ -70,9 +70,9 @@ wxString KVirtualGameFolderWorkspace::GetID() const
 }
 wxString KVirtualGameFolderWorkspace::GetName() const
 {
-	return T("VirtualGameFolderWS.Name");
+	return KTr("VirtualGameFolderWS.Name");
 }
 wxString KVirtualGameFolderWorkspace::GetNameShort() const
 {
-	return T("VirtualGameFolderWS.NameShort");
+	return KTr("VirtualGameFolderWS.NameShort");
 }

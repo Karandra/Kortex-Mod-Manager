@@ -55,9 +55,9 @@ wxString KProgramWorkspace::GetID() const
 }
 wxString KProgramWorkspace::GetName() const
 {
-	return T("ProgramManager.Name");
+	return KTr("ProgramManager.Name");
 }
 wxString KProgramWorkspace::GetNameShort() const
 {
-	return T("ProgramManager.NameShort");
+	return KTr("ProgramManager.NameShort");
 }

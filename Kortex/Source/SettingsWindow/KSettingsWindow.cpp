@@ -16,14 +16,14 @@ wxWindow* KSettingsWindow::GetDialogMainCtrl() const
 }
 void KSettingsWindow::OnPrepareUninstall(wxCommandEvent& event)
 {
-	KxTaskDialog askDialog(this, KxID_NONE, TF("Settings.PrepareUninstall.Caption").arg(KApp::Get().GetAppDisplayName()), T("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+	KxTaskDialog askDialog(this, KxID_NONE, KTrf("Settings.PrepareUninstall.Caption", KApp::Get().GetAppDisplayName()), KTr("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (askDialog.ShowModal() == KxID_YES)
 	{
 		if (KApp::Get().Uninstall())
 		{
-			KxTaskDialog dialog(this, KxID_NONE, T("Settings.PrepareUninstall.Success"), wxEmptyString, KxBTN_NONE, KxICON_INFORMATION);
-			dialog.AddButton(KxID_OK, T("Settings.PrepareUninstall.RebootNow"));
-			dialog.AddButton(KxID_CANCEL, T("Settings.PrepareUninstall.RebootLater"));
+			KxTaskDialog dialog(this, KxID_NONE, KTr("Settings.PrepareUninstall.Success"), wxEmptyString, KxBTN_NONE, KxICON_INFORMATION);
+			dialog.AddButton(KxID_OK, KTr("Settings.PrepareUninstall.RebootNow"));
+			dialog.AddButton(KxID_CANCEL, KTr("Settings.PrepareUninstall.RebootLater"));
 			if (dialog.ShowModal() == KxID_OK)
 			{
 				wxShutdown(wxSHUTDOWN_REBOOT);
@@ -32,7 +32,7 @@ void KSettingsWindow::OnPrepareUninstall(wxCommandEvent& event)
 		}
 		else
 		{
-			KxTaskDialog(this, KxID_NONE, T("Settings.PrepareUninstall.Error"), wxEmptyString, KxBTN_OK, KxICON_ERROR).ShowModal();
+			KxTaskDialog(this, KxID_NONE, KTr("Settings.PrepareUninstall.Error"), wxEmptyString, KxBTN_OK, KxICON_ERROR).ShowModal();
 		}
 	}
 }
@@ -40,9 +40,9 @@ void KSettingsWindow::OnPrepareUninstall(wxCommandEvent& event)
 KSettingsWindow::KSettingsWindow(KMainWindow* mainWindow)
 	:m_MainWindow(mainWindow)
 {
-	if (Create(mainWindow, KxID_NONE, T("Settings.Caption"), wxDefaultPosition, mainWindow->GetMinSize(), KxBTN_OK|KxBTN_CANCEL))
+	if (Create(mainWindow, KxID_NONE, KTr("Settings.Caption"), wxDefaultPosition, mainWindow->GetMinSize(), KxBTN_OK|KxBTN_CANCEL))
 	{
-		AddButton(KxID_REMOVE, T("Settings.PrepareUninstall.Button"), true).GetControl()
+		AddButton(KxID_REMOVE, KTr("Settings.PrepareUninstall.Button"), true).GetControl()
 			->Bind(wxEVT_BUTTON, &KSettingsWindow::OnPrepareUninstall, this);
 
 		KThemeManager::Get().ProcessWindow(m_ContentPanel);
@@ -65,8 +65,8 @@ void KSettingsWorkspace::CreateControllerView()
 	/* Columns */
 	const int flags = wxCOL_SORTABLE|wxCOL_RESIZABLE;
 	const wxAlignment alignment = wxALIGN_LEFT;
-	m_ControllerView->AddColumn(T("ConfigManager.View.Name"), 300, alignment, flags);
-	m_ControllerView->AddColumn(T("ConfigManager.View.Value"), 300, alignment, flags);
+	m_ControllerView->AddColumn(KTr("ConfigManager.View.Name"), 300, alignment, flags);
+	m_ControllerView->AddColumn(KTr("ConfigManager.View.Value"), 300, alignment, flags);
 	m_ControllerView->SetSortColumn(0, true);
 
 	m_MainSizer->Add(m_ControllerView, 1, wxEXPAND);
@@ -132,7 +132,7 @@ void KSettingsWorkspace::OnSaveButton(wxCommandEvent& event)
 	if (m_Controller->HasUnsavedChanges())
 	{
 		m_Controller->SaveChanges();
-		KxTaskDialog(m_SettingsWindow, KxID_NONE, T("Settings.SaveMessage"), wxEmptyString, KxBTN_OK, KxICON_INFORMATION).ShowModal();
+		KxTaskDialog(m_SettingsWindow, KxID_NONE, KTr("Settings.SaveMessage"), wxEmptyString, KxBTN_OK, KxICON_INFORMATION).ShowModal();
 	}
 	m_SettingsWindow->Close();
 }

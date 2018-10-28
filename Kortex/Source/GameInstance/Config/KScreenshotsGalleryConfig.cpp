@@ -8,7 +8,7 @@ KScreenshotsGalleryConfig::KScreenshotsGalleryConfig(KGameInstance& profile, con
 {
 	for (KxXMLNode entryNode = node.GetFirstChildElement("Locations").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 	{
-		m_Locations.emplace_back(V(entryNode.GetValue()));
+		m_Locations.emplace_back(KVarExp(entryNode.GetValue()));
 	}
 	m_Manager = new KScreenshotsGalleryManager();
 }

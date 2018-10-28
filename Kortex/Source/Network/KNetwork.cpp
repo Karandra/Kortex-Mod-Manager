@@ -51,7 +51,7 @@ bool KNetwork::SetCurrentProviderToFirstAvailableIfNone()
 	return true;
 }
 
-void KNetwork::SetLoginButton(KxAuiToolBarItem* button)
+void KNetwork::OnSetToolBarButton(KxAuiToolBarItem* button)
 {
 	m_LoginButton = button;
 
@@ -90,12 +90,12 @@ void KNetwork::UpdateButton()
 		wxBitmap bitmap;
 		GetProviderInfo(*provider, label, bitmap);
 
-		m_LoginButton->SetLabel(T("Network.SignedIn") + ": " + label);
+		m_LoginButton->SetLabel(KTr("Network.SignedIn") + ": " + label);
 		m_LoginButton->SetBitmap(KGetBitmap(provider->GetIcon()));
 	}
 	else
 	{
-		m_LoginButton->SetLabel(T("Network.NotSignedIn"));
+		m_LoginButton->SetLabel(KTr("Network.NotSignedIn"));
 		m_LoginButton->SetBitmap(KGetBitmap(KNetworkProvider::GetGenericIcon()));
 	}
 
@@ -117,11 +117,11 @@ void KNetwork::CreateMenu()
 		bool authOK = GetProviderInfo(*provider, label, bitmap);
 		if (authOK)
 		{
-			label = T("Network.SignOut") + ": " + label;
+			label = KTr("Network.SignOut") + ": " + label;
 		}
 		else
 		{
-			label = T("Network.SignIn") + ": " + label;
+			label = KTr("Network.SignIn") + ": " + label;
 		}
 
 		KxMenuItem* item = m_Menu->Add(new KxMenuItem(label));
@@ -140,7 +140,7 @@ void KNetwork::CreateMenu()
 		bool authOK = GetProviderInfo(*provider, label, bitmap, false);
 		if (!authOK)
 		{
-			label = T("Network.NotSignedIn") + ": " + label;
+			label = KTr("Network.NotSignedIn") + ": " + label;
 		}
 
 		KxMenuItem* item = m_Menu->Add(new KxMenuItem(label, wxEmptyString, wxITEM_RADIO));
@@ -167,7 +167,7 @@ void KNetwork::OnSignInOut(KxMenuEvent& event)
 	KNetworkProvider* provider = static_cast<KNetworkProvider*>(event.GetItem()->GetClientData());
 	if (provider->IsAuthenticated())
 	{
-		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, TF("Network.SignOutMessage").arg(provider->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("Network.SignOutMessage", provider->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (dialog.ShowModal() == KxID_YES)
 		{
 			provider->SignOut();
@@ -194,7 +194,7 @@ void KNetwork::OnSelectProvider(KxMenuEvent& event)
 	UpdateButton();
 	m_Options.SetAttribute("CurrentProvider", m_CurrentProvider);
 }
-void KNetwork::OnLoginButton(KxAuiToolBarEvent& event)
+void KNetwork::OnToolBarButton(KxAuiToolBarEvent& event)
 {
 	wxPoint pos = m_LoginButton->GetDropdownMenuPosition();
 	m_Menu->Show(m_LoginButton->GetToolBar(), pos);

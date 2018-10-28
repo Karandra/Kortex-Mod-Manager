@@ -45,7 +45,7 @@ class KNetwork: public KManager, public KxSingletonPtr<KNetwork>
 		bool SetCurrentProviderToFirstAvailableIfNone();
 
 	private:
-		void SetLoginButton(KxAuiToolBarItem* button);
+		void OnSetToolBarButton(KxAuiToolBarItem* button);
 		bool GetProviderInfo(const KNetworkProvider& provider, wxString& label, wxBitmap& bitmap, bool name = true) const;
 		void UpdateButton();
 		void CreateMenu();
@@ -53,7 +53,7 @@ class KNetwork: public KManager, public KxSingletonPtr<KNetwork>
 
 		void OnSignInOut(KxMenuEvent& event);
 		void OnSelectProvider(KxMenuEvent& event);
-		void OnLoginButton(KxAuiToolBarEvent& event);
+		void OnToolBarButton(KxAuiToolBarEvent& event);
 
 	public:
 		KNetwork();

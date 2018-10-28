@@ -136,6 +136,8 @@
 		<String ID="Generic.FolderLocation">Расположение папки</String>
 		<String ID="Generic.SourceLocation">Исходное расположение</String>
 		<String ID="Generic.Version">Версия</String>
+		<String ID="Generic.Revision">Ревизия</String>
+		<String ID="Generic.Developer">Разработчик</String>
 		<String ID="Generic.EnterData">Введите данные</String>
 		<String ID="Generic.DefaultValue">Значение по умолчанию</String>
 		<String ID="Generic.UseDefaultValue">Использовать значение по умолчанию</String>
@@ -210,9 +212,6 @@
 		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</String>
 		
 		<!-- About dialog -->
-		<String ID="About.Version">Версия</String>
-		<String ID="About.Developer">Разработчик</String>
-		
 		<String ID="About.Tabs.Info">Информация</String>
 		<String ID="About.Tabs.Modules">Модули</String>
 		<String ID="About.Tabs.Permissions">Разрешения</String>

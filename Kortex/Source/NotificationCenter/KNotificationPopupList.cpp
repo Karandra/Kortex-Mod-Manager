@@ -14,7 +14,7 @@ void KNotificationPopupList::OnInitControl()
 {
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KNotificationPopupList::OnSelectItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KNotificationPopupList::OnActivateItem, this);
-	GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight() + 2);
+	GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight() * 1.5);
 
 	{
 		auto item = GetView()->AppendColumn<KxDataViewBitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, KxDATAVIEW_CELL_INERT);

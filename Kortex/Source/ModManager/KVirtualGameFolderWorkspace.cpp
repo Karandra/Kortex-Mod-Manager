@@ -58,7 +58,7 @@ void KVirtualGameFolderWorkspace::OnModSerach(wxCommandEvent& event)
 }
 void KVirtualGameFolderWorkspace::OnViewInvalidated(KEvent& event)
 {
-	if (IsWorkspaceCreated() && IsWorkspaceVisible())
+	if (IsWorkspaceCreated())
 	{
 		ScheduleReload();
 	}

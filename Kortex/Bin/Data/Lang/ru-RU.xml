@@ -129,6 +129,9 @@
 		<String ID="Generic.Date">Дата</String>
 		<String ID="Generic.Game">Игра</String>
 		<String ID="Generic.Image">Изображение</String>
+		<String ID="Generic.Color">Цвет</String>
+		<String ID="Generic.Assign">Назначить</String>
+		<String ID="Generic.Reset">Сбросить</String>
 		<String ID="Generic.Screenshot">Скриншот</String>
 		<String ID="Generic.ModificationDate">Дата изменения</String>
 		<String ID="Generic.Location">Расположение</String>
@@ -846,6 +849,8 @@
 		<String ID="ModManager.DisplayMode.Log">Режим журнала</String>
 		<String ID="ModManager.DisplayMode.ShowPriorityGroups">Показывать группы приоритетов</String>
 		<String ID="ModManager.DisplayMode.ShowNotInstalledMods">Показывать не установленные моды</String>
+		<String ID="ModManager.DisplayMode.BoldPriorityGroupLabels">Полужирный текст меток групп приоритета</String>
+		<String ID="ModManager.DisplayMode.PriorityGroupLabelsAlignment">Выравнивание меток групп приоритета</String>
 		
 		<String ID="ModManager.VFS.Activate">Включить VFS</String>
 		<String ID="ModManager.VFS.Deactivate">Выключить VFS</String>

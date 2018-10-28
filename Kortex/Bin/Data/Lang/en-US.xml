@@ -129,6 +129,9 @@
 		<String ID="Generic.Date">Date</String>
 		<String ID="Generic.Game">Game</String>
 		<String ID="Generic.Image">Image</String>
+		<String ID="Generic.Color">Color</String>
+		<String ID="Generic.Assign">Assign</String>
+		<String ID="Generic.Reset">Reset</String>
 		<String ID="Generic.Screenshot">Screenshot</String>
 		<String ID="Generic.ModificationDate">Date modified</String>
 		<String ID="Generic.Location">Location</String>
@@ -846,6 +849,8 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="ModManager.DisplayMode.Log">Log</String>
 		<String ID="ModManager.DisplayMode.ShowPriorityGroups">Show priority groups</String>
 		<String ID="ModManager.DisplayMode.ShowNotInstalledMods">Show not installed mods</String>
+		<String ID="ModManager.DisplayMode.BoldPriorityGroupLabels">Bold priority group labels</String>
+		<String ID="ModManager.DisplayMode.PriorityGroupLabelsAlignment">Priority group labels alignment</String>
 
 		<String ID="ModManager.VFS.Activate">Enable virtual file system</String>
 		<String ID="ModManager.VFS.Deactivate">Disable virtual file system</String>

@@ -15,6 +15,15 @@ class KFixedModEntry: public KModEntry
 		}
 
 	public:
+		virtual void CreateFromSignature(const wxString& signature) override
+		{
+		}
+		virtual bool Save() override
+		{
+			return false;
+		}
+
+	public:
 		virtual const KFixedModEntry* ToFixedEntry() const override
 		{
 			return this;

@@ -18,11 +18,24 @@ enum KModManagerModelType
 class KModManagerModelDataObject;
 class KModManagerModel:	public KxDataViewModelExBase<KxDataViewModel>, public KxDataViewModelExDragDropEnabled<KModManagerModelDataObject>
 {
+	public:
+		enum class PriorityGroupLabelAlignment
+		{
+			Center,
+			Left,
+			Right,
+		};
+
 	private:
-		KModManagerModelType m_DisplayMode = KMM_TYPE_CONNECTOR;
 		bool m_ShowPriorityGroups = false;
 		bool m_ShowPriorityGroupsSuppress = false;
+		
+		KModManagerModelType m_DisplayMode = KMM_TYPE_CONNECTOR;
 		bool m_ShowNotInstalledMods = false;
+		bool m_BoldPriorityGroupLabels = false;
+
+		PriorityGroupLabelAlignment m_PriorityGroupLabelAlignmentType = PriorityGroupLabelAlignment::Center;
+		int m_PriorityGroupLabelAlignment = wxALIGN_INVALID;
 
 		KBitmapSize m_BitmapSize;
 		int m_PriorityGroupRowHeight = 0;
@@ -125,12 +138,24 @@ class KModManagerModel:	public KxDataViewModelExBase<KxDataViewModel>, public Kx
 			m_ShowNotInstalledMods = value;
 		}
 
+		bool IsBoldPriorityGroupLabels() const
+		{
+			return m_BoldPriorityGroupLabels;
+		}
+		void SetBoldPriorityGroupLabels(bool value)
+		{
+			m_BoldPriorityGroupLabels = value;
+		}
+
+		PriorityGroupLabelAlignment GetPriorityGroupLabelAlignment() const;
+		void SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment value);
+
 		void RefreshItem(KModEntry* entry)
 		{
 			ItemChanged(MakeItem(entry));
 		}
 
-		const KModTagArray& GetTags() const;
+		const KModTag::Vector& GetTags() const;
 		void SetDataVector();
 		void SetDataVector(KModEntry::Vector& array);
 		virtual void RefreshItems() override;
@@ -170,7 +195,7 @@ class KModManagerModel:	public KxDataViewModelExBase<KxDataViewModel>, public Kx
 		size_t CountItemsInGroup(const KModTag* group) const;
 };
 
-class KModManagerModelDataObject: public KDataViewModelDragDropData
+class KModManagerModelDataObject: public KxDataViewModelExDragDropData
 {
 	private:
 		KModEntry::RefVector m_Entries;

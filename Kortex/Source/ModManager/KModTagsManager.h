@@ -8,7 +8,13 @@ class KGameInstance;
 
 class KModTag: public KLabeledValue
 {
+	public:
+		using Vector = std::vector<KModTag>;
+		using RefVector = std::vector<KModTag*>;
+		using CRefVector = std::vector<const KModTag*>;
+
 	private:
+		KxColor m_Color;
 		int m_NexusID = -1;
 		bool m_IsSystemTag = false;
 
@@ -17,6 +23,19 @@ class KModTag: public KLabeledValue
 		virtual ~KModTag();
 
 	public:
+		bool HasColor() const
+		{
+			return m_Color.IsOk();
+		}
+		KxColor GetColor() const
+		{
+			return m_Color;
+		}
+		void SetColor(const KxColor& color)
+		{
+			m_Color = color;
+		}
+
 		bool HasNexusID() const
 		{
 			return m_NexusID >= 0;
@@ -35,29 +54,30 @@ class KModTag: public KLabeledValue
 			return m_IsSystemTag;
 		}
 };
-typedef std::vector<KModTag> KModTagArray;
 
 //////////////////////////////////////////////////////////////////////////
 class KModTagsManager: public KxSingletonPtr<KModTagsManager>
 {
 	friend class KModManager;
 
-	public:
-		static wxString GetDefaultTagsFile();
+	private:
+		KModTag::Vector m_Tags;
 
 	private:
-		KModTagArray m_Tags;
-
-	private:
+		wxString GetUserTagsFile() const;
 		void LoadTagsFromFile(const wxString& filePath);
+		void LoadDefaultTags();
+		
 		void OnInit();
+		void LoadUserTags();
+		void SaveUserTags() const;
 
 	public:
 		KModTagsManager();
 		virtual ~KModTagsManager();
 
 	public:
-		KModTagArray& GetTagList()
+		KModTag::Vector& GetTags()
 		{
 			return m_Tags;
 		}
@@ -65,30 +85,19 @@ class KModTagsManager: public KxSingletonPtr<KModTagsManager>
 		{
 			return m_Tags.size();
 		}
-		bool IsTagListEmpty() const
+		bool HasTags() const
 		{
 			return m_Tags.empty();
 		}
 		
-		const KModTag* FindModTag(const wxString& tagValue, KModTagArray::const_iterator* pIt = NULL) const;
-		const KModTag* AddModTag(const KModTag& tag);
-		const KModTag* AddModTag(const wxString& name)
-		{
-			// Add tag with value only.
-			return AddModTag(KModTag(name));
-		}
+		const KModTag* FindModTag(const wxString& tagValue, KModTag::Vector::const_iterator* iterator = NULL) const;
+		KModTag* FindModTag(const wxString& tagValue, KModTag::Vector::const_iterator* iterator = NULL);
+		
+		KModTag* AddModTag(const KModTag& tag);
+		KModTag* AddModTag(const wxString& name);
+
 		bool RemoveModTag(const wxString& tagValue);
 		const wxString& GetTagName(const wxString& tagID) const;
-		void LoadTagsFromEntry(const KModEntry& entry);
 
-		wxString GetUserTagsFile() const;
-		void LoadDefaultTags()
-		{
-			LoadTagsFromFile(GetDefaultTagsFile());
-		}
-		void LoadUserTags()
-		{
-			LoadTagsFromFile(GetUserTagsFile());
-		}
-		void SaveUserTags() const;
+		void LoadTagsFromEntry(const KModEntry& entry);
 };

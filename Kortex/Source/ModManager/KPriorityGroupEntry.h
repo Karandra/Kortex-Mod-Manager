@@ -2,11 +2,13 @@
 #include "stdafx.h"
 #include "KFixedModEntry.h"
 enum KImageEnum;
+class KModTag;
 
 class KPriorityGroupEntry: public KFixedModEntry
 {
 	public:
 		KModEntry* m_BaseMod = NULL;
+		KModTag* m_Tag = NULL;
 		bool m_IsBegin = false;
 
 	public:
@@ -42,9 +44,22 @@ class KPriorityGroupEntry: public KFixedModEntry
 		virtual intptr_t GetPriority() const override;
 		virtual intptr_t GetOrderIndex() const override;
 
+		virtual bool HasColor() const override;
+		virtual KxColor GetColor() const override;
+		virtual void SetColor(const KxColor& color) override;
+
 		KModEntry* GetBaseMod() const
 		{
 			return m_BaseMod;
+		}
+		
+		KModTag* GetTag() const
+		{
+			return m_Tag;
+		}
+		void SetTag(KModTag* tag)
+		{
+			m_Tag = tag;
 		}
 
 		bool IsBegin() const

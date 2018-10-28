@@ -64,6 +64,7 @@ class KModEntry: public KWithBitmap
 		wxDateTime m_Time[KME_TIME_MAX] = {wxDefaultDateTime, wxDefaultDateTime};
 		wxString m_InstallPackageFile;
 		bool m_IsEnabled = false;
+		KxColor m_Color;
 
 		bool m_IsDescriptionChanged = false;
 		mutable wxString m_Description;
@@ -80,11 +81,11 @@ class KModEntry: public KWithBitmap
 		virtual ~KModEntry();
 
 	public:
+		virtual void CreateFromSignature(const wxString& signature);
 		void CreateFromID(const wxString& id);
-		void CreateFromSignature(const wxString& signature);
 		void CreateFromProject(const KPackageProject& config);
 		void CreateAllFolders();
-		bool Save();
+		virtual bool Save();
 
 	public:
 		bool IsOK() const;
@@ -229,6 +230,19 @@ class KModEntry: public KWithBitmap
 		virtual bool IsEnabled() const;
 		virtual void SetEnabled(bool value);
 		virtual bool IsInstalled() const;
+
+		virtual bool HasColor() const
+		{
+			return m_Color.IsOk();
+		}
+		virtual KxColor GetColor() const
+		{
+			return m_Color;
+		}
+		virtual void SetColor(const KxColor& color)
+		{
+			m_Color = color;
+		}
 
 		virtual bool IsLinkedMod() const
 		{

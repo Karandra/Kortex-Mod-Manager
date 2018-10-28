@@ -17,6 +17,7 @@
 enum ColumnID
 {
 	Name,
+	Color,
 	Bitmap,
 	Priority,
 	Version,
@@ -92,6 +93,12 @@ void KModManagerModel::OnInitControl()
 	{
 		auto info = GetView()->AppendColumn<KxDataViewBitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, m_BitmapSize.GetWidth() + 4, KxDV_COL_REORDERABLE);
 		m_BitmapColumn = info.GetColumn();
+	}
+	{
+		KBitmapSize size;
+		size.FromSystemIcon();
+
+		GetView()->AppendColumn<KxDataViewNullRenderer>(KTr("Generic.Color"), ColumnID::Color, KxDATAVIEW_CELL_INERT, size.GetWidth(), defaultFlagsNoSort);
 	}
 	{
 		auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
@@ -437,22 +444,26 @@ void KModManagerModel::GetValue(wxAny& value, const KxDataViewItem& item, const 
 	{
 		case ColumnID::Name:
 		{
-			bool isBegin = entry->IsBegin();
-			if (!m_PriorityColumn->IsSortedAscending())
+			const KModTag* tag = entry->GetTag();
+			if (tag)
 			{
-				isBegin = !isBegin;
-			}
+				bool isBegin = entry->IsBegin();
+				if (!m_PriorityColumn->IsSortedAscending())
+				{
+					isBegin = !isBegin;
+				}
 
-			wxString label;
-			if (isBegin)
-			{
-				label = KxFormat(wxS("<%1>")).arg(entry->GetPriorityGroupTag());
+				wxString label;
+				if (isBegin)
+				{
+					label = tag->GetLabel();
+				}
+				else
+				{
+					label = KxString::Format(wxS("^ %1 ^"), tag->GetLabel());
+				}
+				value = KxDataViewBitmapTextToggleValue(true, label, KGetBitmap(entry->GetIcon()), KxDataViewBitmapTextToggleValue::InvalidType);
 			}
-			else
-			{
-				label = KxFormat(wxS("</%1>")).arg(entry->GetPriorityGroupTag());
-			}
-			value = KxDataViewBitmapTextToggleValue(true, label, KGetBitmap(entry->GetIcon()), KxDataViewBitmapTextToggleValue::InvalidType);
 			break;
 		}
 	};
@@ -582,6 +593,10 @@ bool KModManagerModel::GetItemAttributes(const KxDataViewItem& item, const KxDat
 		{
 			attributes.SetItalic();
 		}
+		if (columnID == ColumnID::Color && !priorityGroup)
+		{
+			attributes.SetBackgroundColor(entry->GetColor());
+		}
 		if (!fixed && (columnID == ColumnID::Name || IsSpecialSiteColumn(columnID)))
 		{
 			attributes.SetUnderlined(cellState & KxDATAVIEW_CELL_HIGHLIGHTED && column->IsHotTracked());
@@ -589,7 +604,9 @@ bool KModManagerModel::GetItemAttributes(const KxDataViewItem& item, const KxDat
 		if (priorityGroup)
 		{
 			attributes.SetForegroundColor(m_PriortyGroupColor);
-			attributes.SetCategoryLine();
+			attributes.SetBackgroundColor(priorityGroup->GetColor());
+			attributes.SetBold(m_BoldPriorityGroupLabels);
+			attributes.SetAlignment(m_PriorityGroupLabelAlignment);
 		}
 		return !attributes.IsDefault();
 	}
@@ -752,10 +769,12 @@ void KModManagerModel::OnActivateItem(KxDataViewEvent& event)
 		{
 			case ColumnID::Name:
 			{
+				#if 0
 				if (!entry->ToFixedEntry() && entry->IsInstallPackageFileExist())
 				{
 					KModWorkspace::GetInstance()->OpenPackage(entry->GetInstallPackageFile());
 				}
+				#endif
 				break;
 			}
 			case ColumnID::Bitmap:
@@ -791,12 +810,7 @@ void KModManagerModel::OnContextMenu(KxDataViewEvent& event)
 
 	if (node && column)
 	{
-		// I need simple entry
 		entry = node->GetEntry();
-		if (entry && entry->ToPriorityGroup())
-		{
-			entry = NULL;
-		}
 
 		if (const KModTag* group = node->GetGroup())
 		{
@@ -1024,9 +1038,36 @@ void KModManagerModel::SetDisplayMode(KModManagerModelType mode)
 	};
 }
 
-const KModTagArray& KModManagerModel::GetTags() const
+KModManagerModel::PriorityGroupLabelAlignment KModManagerModel::GetPriorityGroupLabelAlignment() const
 {
-	return KModTagsManager::GetInstance()->GetTagList();
+	return m_PriorityGroupLabelAlignmentType;
+}
+void KModManagerModel::SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment value)
+{
+	m_PriorityGroupLabelAlignmentType = value;
+	switch (value)
+	{
+		case PriorityGroupLabelAlignment::Left:
+		{
+			m_PriorityGroupLabelAlignment = wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL;
+			break;
+		}
+		case PriorityGroupLabelAlignment::Right:
+		{
+			m_PriorityGroupLabelAlignment = wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL;
+			break;
+		}
+		default:
+		{
+			m_PriorityGroupLabelAlignment = wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL;
+			break;
+		}
+	};
+}
+
+const KModTag::Vector& KModManagerModel::GetTags() const
+{
+	return KModTagsManager::GetInstance()->GetTags();
 }
 void KModManagerModel::SetDataVector()
 {
@@ -1179,10 +1220,10 @@ void KModManagerModel::RefreshItems()
 
 						KModEntry* anchorEntry = begin ? &*currentEntry : lastEntry;
 						KPriorityGroupEntry& entry = m_PriortyGroups.emplace_back(KPriorityGroupEntry(anchorEntry, begin));
-						if (const KModTag* tag = KModTagsManager::GetInstance()->FindModTag(anchorEntry->GetPriorityGroupTag()))
+						KModTag* tag = KModTagsManager::GetInstance()->FindModTag(anchorEntry->GetPriorityGroupTag());
+						if (tag)
 						{
-							// Save localized tag name
-							entry.SetPriorityGroupTag(tag->GetLabel());
+							entry.SetTag(tag);
 						}
 
 						KMMModelNode& node = m_DataVector.emplace_back(&entry);
@@ -1217,9 +1258,9 @@ void KModManagerModel::RefreshItems()
 		{
 			if (!m_PriortyGroups.empty() && m_PriortyGroups.back().IsBegin())
 			{
-				const wxString& groupName = m_PriortyGroups.back().GetPriorityGroupTag();
+				KModTag* lastTag = m_PriortyGroups.back().GetTag();
 				KPriorityGroupEntry& entry = m_PriortyGroups.emplace_back(KPriorityGroupEntry(&*m_Entries->back(), false));
-				entry.SetPriorityGroupTag(groupName);
+				entry.SetTag(lastTag);
 
 				KMMModelNode& node = m_DataVector.emplace_back(&entry);
 				ItemAdded(MakeItem(node));

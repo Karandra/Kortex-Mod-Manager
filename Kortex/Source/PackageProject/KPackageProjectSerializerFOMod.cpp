@@ -110,7 +110,7 @@ KPPOperator KPackageProjectSerializerFOMod::DecideOperator(const wxSize& v1, con
 KxStringVector KPackageProjectSerializerFOMod::ConvertTagsArray(const KxStringVector& FOModTags) const
 {
 	KxStringVector outList;
-	const KModTagArray& allTags = KModTagsManager::GetInstance()->GetTagList();
+	const KModTag::Vector& allTags = KModTagsManager::GetInstance()->GetTags();
 	for (const wxString& tagName: FOModTags)
 	{
 		if (CheckTag(tagName))

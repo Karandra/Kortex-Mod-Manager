@@ -189,10 +189,10 @@ size_t KModTagsSelector::GetItemCount() const
 }
 KModTag* KModTagsSelector::GetDataEntry(size_t index) const
 {
-	KModTagArray& tTags = KModTagsManager::GetInstance()->GetTagList();
-	if (m_Data && index < tTags.size())
+	KModTag::Vector& tags = KModTagsManager::GetInstance()->GetTags();
+	if (m_Data && index < tags.size())
 	{
-		return &tTags[index];
+		return &tags[index];
 	}
 	return NULL;
 }

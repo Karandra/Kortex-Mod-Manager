@@ -36,13 +36,19 @@
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxDualProgressDialog.h>
 #include <KxFramework/KxFileOperationEvent.h>
+#include <wx/colordlg.h>
 
 enum DisplayModeMenuID
 {
 	Connector,
 	Manager,
 	ShowPriorityGroups,
+	BoldPriorityGroupLabels,
 	ShowNotInstalledMods,
+
+	PriorityGroupLabelAlignment_Left,
+	PriorityGroupLabelAlignment_Right,
+	PriorityGroupLabelAlignment_Center,
 };
 enum ToolsMenuID
 {
@@ -78,10 +84,38 @@ enum ContextMenuID
 	KMC_ID_PACKAGE_CREATE_PROJECT,
 	KMC_ID_PACKAGE_PROPERTIES,
 
+	KMC_COLOR_ASSIGN,
+	KMC_COLOR_RESET,
+
 	KMC_ID_TAG_ENABLE_ALL,
 	KMC_ID_TAG_DISABLE_ALL,
 };
 
+namespace
+{
+	template<class Functor> bool DoForAllSelectedItems(KModManagerModel* model, const Functor& func)
+	{
+		KxDataViewItem::Vector items;
+		if (model->GetView()->GetSelections(items) != 0)
+		{
+			for (const KxDataViewItem& item: items)
+			{
+				KModEntry* entry = model->GetModEntry(item);
+				if (entry)
+				{
+					if (!func(*entry))
+					{
+						break;
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
 KModWorkspace::KModWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_OptionsUI(this, "MainUI"), m_ModListViewOptions(this, "ModListView")
 {
@@ -96,6 +130,8 @@ KModWorkspace::~KModWorkspace()
 		m_ModListViewOptions.SetAttribute("DisplayMode", m_ViewModel->GetDisplayMode());
 		m_ModListViewOptions.SetAttribute("ShowPriorityGroups", m_ViewModel->ShouldShowPriorityGroups());
 		m_ModListViewOptions.SetAttribute("ShowNotInstalledMods", m_ViewModel->ShouldShowNotInstalledMods());
+		m_ModListViewOptions.SetAttribute("BoldPriorityGroupLabels", m_ViewModel->IsBoldPriorityGroupLabels());
+		m_ModListViewOptions.SetAttribute("PriorityGroupLabelAlignment", (int)m_ViewModel->GetPriorityGroupLabelAlignment());
 		m_ModListViewOptions.SetAttribute("ImageResizeMode", (int)m_ImageResizeMode);
 
 		KProgramOptionSerializer::SaveSplitterLayout(m_SplitterLeftRight, m_OptionsUI);
@@ -204,6 +240,27 @@ void KModWorkspace::CreateDisplayModeMenu()
 		KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::ShowNotInstalledMods, KTr("ModManager.DisplayMode.ShowNotInstalledMods"), wxEmptyString, wxITEM_CHECK));
 		item->Check(m_ViewModel->ShouldShowNotInstalledMods());
 	}
+	{
+		KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::BoldPriorityGroupLabels, KTr("ModManager.DisplayMode.BoldPriorityGroupLabels"), wxEmptyString, wxITEM_CHECK));
+		item->Check(m_ViewModel->IsBoldPriorityGroupLabels());
+	}
+	m_ToolBar_DisplayModeMenu->AddSeparator();
+
+	{
+		KxMenu* alignmnetMenu = new KxMenu();
+		m_ToolBar_DisplayModeMenu->Add(alignmnetMenu, KTr("ModManager.DisplayMode.PriorityGroupLabelsAlignment"));
+
+		using PriorityGroupLabelAlignment = KModManagerModel::PriorityGroupLabelAlignment;
+		auto AddOption = [this, alignmnetMenu](DisplayModeMenuID id, PriorityGroupLabelAlignment type, KxStandardID trId)
+		{
+			KxMenuItem* item = alignmnetMenu->Add(new KxMenuItem(id, KTr(trId), wxEmptyString, wxITEM_RADIO));
+			item->Check(m_ViewModel->GetPriorityGroupLabelAlignment() == type);
+			return item;
+		};
+		AddOption(DisplayModeMenuID::PriorityGroupLabelAlignment_Left, PriorityGroupLabelAlignment::Left, KxID_JUSTIFY_LEFT);
+		AddOption(DisplayModeMenuID::PriorityGroupLabelAlignment_Center, PriorityGroupLabelAlignment::Center, KxID_JUSTIFY_CENTER);
+		AddOption(DisplayModeMenuID::PriorityGroupLabelAlignment_Right, PriorityGroupLabelAlignment::Right, KxID_JUSTIFY_RIGHT);
+	}
 }
 void KModWorkspace::CreateAddModMenu()
 {
@@ -259,6 +316,8 @@ void KModWorkspace::CreateModsView()
 	m_ViewModel = new KModManagerModel();
 	m_ViewModel->ShowPriorityGroups(m_ModListViewOptions.GetAttributeBool("ShowPriorityGroups"));
 	m_ViewModel->ShowNotInstalledMods(m_ModListViewOptions.GetAttributeBool("ShowNotInstalledMods"));
+	m_ViewModel->SetBoldPriorityGroupLabels(m_ModListViewOptions.GetAttributeBool("BoldPriorityGroupLabels"));
+	m_ViewModel->SetPriorityGroupLabelAlignment((KModManagerModel::PriorityGroupLabelAlignment)m_ModListViewOptions.GetAttributeInt("PriorityGroupLabelAlignment"));
 	
 	m_ViewModel->Create(m_ModsPane);
 	m_ViewModel->SetDataVector(KModManager::GetInstance()->GetEntries());
@@ -491,6 +550,32 @@ void KModWorkspace::OnDisplayModeMenu(KxAuiToolBarEvent& event)
 				ProcessSelection();
 				break;
 			}
+			case DisplayModeMenuID::BoldPriorityGroupLabels:
+			{
+				m_ViewModel->SetBoldPriorityGroupLabels(!m_ViewModel->IsBoldPriorityGroupLabels());
+				m_ViewModel->UpdateUI();
+				break;
+			}
+
+			using PriorityGroupLabelAlignment = KModManagerModel::PriorityGroupLabelAlignment;
+			case DisplayModeMenuID::PriorityGroupLabelAlignment_Left:
+			{
+				m_ViewModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Left);
+				m_ViewModel->UpdateUI();
+				break;
+			}
+			case DisplayModeMenuID::PriorityGroupLabelAlignment_Right:
+			{
+				m_ViewModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Right);
+				m_ViewModel->UpdateUI();
+				break;
+			}
+			case DisplayModeMenuID::PriorityGroupLabelAlignment_Center:
+			{
+				m_ViewModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Center);
+				m_ViewModel->UpdateUI();
+				break;
+			}
 		};
 	}
 }
@@ -692,30 +777,32 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 {
 	if (modEntry)
 	{
-		bool isFixedMod = modEntry->ToFixedEntry();
-		bool isLinkedMod = modEntry->IsLinkedMod();
-		bool isInstalled = modEntry->IsInstalled();
-		bool isPackageExist = modEntry->IsInstallPackageFileExist() && !isFixedMod;
-		bool isVFSActive = KModManager::GetInstance()->IsVFSMounted();
+		const bool isMultipleSelection = m_ViewModel->GetView()->GetSelectedItemsCount() > 1;
+		const bool isFixedMod = modEntry->ToFixedEntry();
+		const bool isPriorityGroup = modEntry->ToPriorityGroup();
+		const bool isLinkedMod = modEntry->IsLinkedMod();
+		const bool isInstalled = modEntry->IsInstalled();
+		const bool isPackageExist = modEntry->IsInstallPackageFileExist() && !isFixedMod;
+		const bool isVFSActive = KModManager::GetInstance()->IsVFSMounted();
 
 		if (isInstalled)
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_UNINSTALL, KTr("ModManager.Menu.UninstallMod")));
 			item->SetBitmap(KGetBitmap(KIMG_BOX_MINUS));
-			item->Enable(!isVFSActive && !isFixedMod);
+			item->Enable(!isMultipleSelection && !isVFSActive && !isFixedMod);
 		}
 		else
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_INSTALL, KTr("ModManager.Menu.InstallMod")));
 			item->SetBitmap(KGetBitmap(KIMG_BOX));
-			item->Enable(isPackageExist && !isFixedMod);
+			item->Enable(!isMultipleSelection && isPackageExist && !isFixedMod);
 		}
 		{
 			// Linked mods can't be uninstalled on erase
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_UNINSTALL_AND_ERASE));
 			item->SetItemLabel(isInstalled && !isLinkedMod ? KTr("ModManager.Menu.UninstallAndErase") : KTr("ModManager.Menu.Erase"));
 			item->SetBitmap(KGetBitmap(KIMG_ERASER));
-			item->Enable(!isFixedMod && !isVFSActive);
+			item->Enable(!isMultipleSelection && !isFixedMod && !isVFSActive);
 		}
 		contextMenu.AddSeparator();
 
@@ -726,11 +813,12 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 
 			{
 				KxMenuItem* item = imageMenu->Add(new KxMenuItem(KMC_ID_MOD_IMAGE_SHOW, KTr("ModManager.Menu.Image.Show")));
+				item->Enable(!isMultipleSelection && !isFixedMod);
 			}
 			{
 				KxMenuItem* item = imageMenu->Add(new KxMenuItem(KMC_ID_MOD_IMAGE_ASSIGN, KTr("ModManager.Menu.Image.Assign")));
 				item->SetBitmap(KGetBitmap(KIMG_IMAGE));
-				item->Enable(!isFixedMod);
+				item->Enable(!isMultipleSelection && !isFixedMod);
 			}
 			imageMenu->AddSeparator();
 
@@ -750,7 +838,7 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_DESCRIPTION, KTr("ModManager.Menu.EditDescription")));
 			item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_PENICL));
-			item->Enable(!isFixedMod);
+			item->Enable(!isMultipleSelection && !isFixedMod);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_TAGS, KTr("ModManager.Menu.EditTags")));
@@ -760,24 +848,28 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_SITES, KTr("ModManager.Menu.EditSites")));
 			item->SetBitmap(KGetBitmap(KNetworkProvider::GetGenericIcon()));
-			item->Enable(!isFixedMod);
+			item->Enable(!isMultipleSelection && !isFixedMod);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHANGE_ID, KTr("ModManager.Menu.ChangeID")));
 			item->SetBitmap(KGetBitmap(KIMG_KEY));
-			item->Enable(!isVFSActive && !isFixedMod);
+			item->Enable(!isMultipleSelection && !isVFSActive && !isFixedMod);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EXPLORE_FILES, KTr("ModManager.Menu.ExploreFiles")));
+			item->Enable(!isMultipleSelection && !isPriorityGroup);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_SHOW_COLLISIONS, KTr("ModManager.Menu.ShowCollisions")));
+			item->Enable(!isMultipleSelection && !isPriorityGroup);
 		}
 
 		/* Package menu */
 		{
 			KxMenu* packageMenu = new KxMenu();
-			contextMenu.Add(packageMenu, KTr("ModManager.Menu.Package"));
+			KxMenuItem* packageMenuItem = contextMenu.Add(packageMenu, KTr("ModManager.Menu.Package"));
+			packageMenuItem->Enable(!isMultipleSelection && !isFixedMod && !isPriorityGroup);
+
 			{
 				KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_OPEN, KTr("ModManager.Menu.Package.Open")));
 				item->SetDefault();
@@ -820,16 +912,34 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 		}
 		contextMenu.AddSeparator();
 
+		// Color menu
+		{
+			KxMenu* colorMenu = new KxMenu();
+			contextMenu.Add(colorMenu, KTr("Generic.Color"));
+
+			{
+				KxMenuItem* item = colorMenu->Add(new KxMenuItem(KMC_COLOR_ASSIGN, KTr("Generic.Assign")));
+				item->SetDefault();
+			}
+			{
+				KxMenuItem* item = colorMenu->Add(new KxMenuItem(KMC_COLOR_RESET, KTr("Generic.Reset")));
+				item->Enable(modEntry->HasColor() || m_ViewModel->GetView()->GetSelectedItemsCount() != 0);
+			}
+		}
+		contextMenu.AddSeparator();
+
+		// Other items
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_OPEN_LOCATION, KTr("ModManager.Menu.OpenModFilesLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+			item->Enable(!isMultipleSelection && !isPriorityGroup);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHANGE_LOCATION, KTr("ModManager.Menu.ChangeModFilesLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
-			item->Enable(!isFixedMod);
+			item->Enable(!isMultipleSelection && !isFixedMod);
 		}
-		if (isLinkedMod && !isFixedMod)
+		if (!isMultipleSelection && isLinkedMod && !isFixedMod)
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_REVERT_LOCATION, KTr("ModManager.Menu.RevertModFilesLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
@@ -838,6 +948,7 @@ void KModWorkspace::CreateViewContextMenu(KxMenu& contextMenu, KModEntry* modEnt
 
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_PROPERTIES, KTr("ModManager.Menu.Properties")));
+			item->Enable(!isMultipleSelection && !isPriorityGroup);
 		}
 	}
 
@@ -908,7 +1019,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 	wxWindowID menuID = contextMenu.Show(NULL, mousePos);
 	switch (menuID)
 	{
-		/* Mod */
+		// Mod
 		case KMC_ID_MOD_OPEN_LOCATION:
 		{
 			wxString location = modEntry->IsInstalled() ? modEntry->GetModFilesDir() : modEntry->GetRootDir();
@@ -926,14 +1037,8 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 					modEntry->SetLinkedModLocation(dialog.GetResult());
 					modEntry->Save();
 
-					{
-						KModEvent event(KEVT_MOD_FILES_CHANGED, *modEntry);
-						ProcessEvent(event);
-					}
-					{
-						KModEvent event(KEVT_MOD_CHANGED, *modEntry);
-						ProcessEvent(event);
-					}
+					KModEvent(KEVT_MOD_FILES_CHANGED, *modEntry).Send();
+					KModEvent(KEVT_MOD_CHANGED, *modEntry).Send();
 				}
 			}
 			break;
@@ -948,14 +1053,8 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 				modEntry->SetLinkedModLocation(wxEmptyString);
 				modEntry->Save();
 
-				{
-					KModEvent event(KEVT_MOD_FILES_CHANGED, *modEntry);
-					ProcessEvent(event);
-				}
-				{
-					KModEvent event(KEVT_MOD_CHANGED, *modEntry);
-					ProcessEvent(event);
-				}
+				KModEvent(KEVT_MOD_FILES_CHANGED, *modEntry).Send();
+				KModEvent(KEVT_MOD_CHANGED, *modEntry).Send();
 			}
 			break;
 		}
@@ -990,8 +1089,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 				modEntry->ResetNoBitmap();
 				modEntry->Save();
 
-				KModEvent event(KEVT_MOD_CHANGED, *modEntry);
-				ProcessEvent(event);
+				KModEvent(KEVT_MOD_CHANGED, *modEntry).Send();
 			}
 			break;
 		}
@@ -1020,24 +1118,17 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			if (dialog.IsModified())
 			{
 				dialog.ApplyChanges();
-
-				KxDataViewItem::Vector items;
-				if (m_ViewModel->GetView()->GetSelections(items) != 0)
+				bool hasSelection = DoForAllSelectedItems(m_ViewModel, [&tempEntry](KModEntry& entry)
 				{
-					for (const KxDataViewItem& item: items)
-					{
-						KModEntry* entry = m_ViewModel->GetModEntry(item);
-						if (entry)
-						{
-							entry->GetTags() = tempEntry.GetTags();
-							entry->SetPriorityGroupTag(tempEntry.GetPriorityGroupTag());
-							entry->Save();
+					entry.GetTags() = tempEntry.GetTags();
+					entry.SetPriorityGroupTag(tempEntry.GetPriorityGroupTag());
+					entry.Save();
 
-							KModEvent event(KEVT_MOD_CHANGED, *modEntry);
-							ProcessEvent(event);
-						}
-
-					}
+					KModEvent(KEVT_MOD_CHANGED, entry).Send();
+					return true;
+				});
+				if (hasSelection)
+				{
 					ReloadView();
 				}
 			}
@@ -1050,9 +1141,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			if (dialog.IsModified())
 			{
 				modEntry->Save();
-
-				KModEvent event(KEVT_MOD_CHANGED, *modEntry);
-				ProcessEvent(event);
+				KModEvent(KEVT_MOD_CHANGED, *modEntry).Send();
 			}
 			break;
 		}
@@ -1081,7 +1170,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			break;
 		}
 
-		/* Package */
+		// Package
 		case KMC_ID_PACKAGE_OPEN:
 		{
 			OpenPackage(modEntry->GetInstallPackageFile());
@@ -1106,8 +1195,7 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 				modEntry->SetInstallPackageFile(dialog.GetResult());
 				modEntry->Save();
 
-				KModEvent event(KEVT_MOD_CHANGED, *modEntry);
-				ProcessEvent(event);
+				KModEvent(KEVT_MOD_CHANGED, *modEntry).Send();
 			}
 			break;
 		}
@@ -1142,6 +1230,44 @@ void KModWorkspace::ShowViewContextMenu(KModEntry* modEntry)
 			KPackageCreatorWorkspace::GetInstance()->SwitchHere();
 			break;
 		}
+
+		// Color menu
+		case KMC_COLOR_ASSIGN:
+		{
+			wxColourData colorData;
+			colorData.SetColour(modEntry->GetColor());
+			colorData.SetChooseFull(true);
+			colorData.SetChooseAlpha(true);
+
+			wxColourDialog dialog(this, &colorData);
+			if (dialog.ShowModal() == wxID_OK)
+			{
+				DoForAllSelectedItems(m_ViewModel, [&dialog](KModEntry& entry)
+				{
+					entry.SetColor(dialog.GetColourData().GetColour());
+					entry.Save();
+
+					KModEvent(KEVT_MOD_CHANGED, entry).Send();
+					return true;
+				});
+				m_ViewModel->UpdateUI();
+			}
+			break;
+		}
+		case KMC_COLOR_RESET:
+		{
+			DoForAllSelectedItems(m_ViewModel, [](KModEntry& entry)
+			{
+				entry.SetColor(KxColor());
+				entry.Save();
+
+				KModEvent(KEVT_MOD_CHANGED, entry).Send();
+				return true;
+			});
+			m_ViewModel->UpdateUI();
+			break;
+		}
+
 		case KMC_ID_PACKAGE_PROPERTIES:
 		{
 			KxShell::Execute(GetMainWindow(), modEntry->GetInstallPackageFile(), "properties");

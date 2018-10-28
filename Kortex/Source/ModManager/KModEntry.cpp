@@ -101,13 +101,6 @@ KModEntry::~KModEntry()
 {
 }
 
-void KModEntry::CreateFromID(const wxString& id)
-{
-	m_ID = id;
-	m_Signature = GetSignatureFromID(id);
-
-	CreateFromSignature(m_Signature);
-}
 void KModEntry::CreateFromSignature(const wxString& signature)
 {
 	m_Signature = signature;
@@ -118,11 +111,11 @@ void KModEntry::CreateFromSignature(const wxString& signature)
 		KxXMLDocument xml(xmlStream);
 		if (xml.IsOK())
 		{
-			KxXMLNode tRoot = xml.GetFirstChildElement("Mod");
-			if (m_Signature == tRoot.GetAttribute("Signature"))
+			KxXMLNode rootNode = xml.GetFirstChildElement("Mod");
+			if (m_Signature == rootNode.GetAttribute("Signature"))
 			{
-				m_ID = tRoot.GetFirstChildElement("ID").GetValue();
-				m_Name = tRoot.GetFirstChildElement("Name").GetValue();
+				m_ID = rootNode.GetFirstChildElement("ID").GetValue();
+				m_Name = rootNode.GetFirstChildElement("Name").GetValue();
 
 				// Check ID validity
 				if (m_ID.IsEmpty())
@@ -142,16 +135,29 @@ void KModEntry::CreateFromSignature(const wxString& signature)
 					m_Name = m_ID;
 				}
 
-				m_Version = tRoot.GetFirstChildElement("Version").GetValue();
-				m_Author = tRoot.GetFirstChildElement("Author").GetValue();
+				m_Version = rootNode.GetFirstChildElement("Version").GetValue();
+				m_Author = rootNode.GetFirstChildElement("Author").GetValue();
+
+				// Color
+				KxXMLNode colorNode = rootNode.GetFirstChildElement("Color");
+				if (colorNode.IsOK())
+				{
+					int r = colorNode.GetAttributeInt("R", -1);
+					int g = colorNode.GetAttributeInt("G", -1);
+					int b = colorNode.GetAttributeInt("B", -1);
+					if (r >= 0 && g >= 0 && b >= 0)
+					{
+						m_Color.Set(r, g, b, 200);
+					}
+				}
 
 				// Tags
-				KxXMLNode tagsNode = tRoot.GetFirstChildElement("Tags");
+				KxXMLNode tagsNode = rootNode.GetFirstChildElement("Tags");
 				KAux::LoadStringArray(m_Tags, tagsNode);
 				m_PriorityGroupTag = tagsNode.GetAttribute("PriorityGroup");
 
 				// Sites
-				KxXMLNode tWebSitesNode = tRoot.GetFirstChildElement("Sites");
+				KxXMLNode tWebSitesNode = rootNode.GetFirstChildElement("Sites");
 				m_FixedWebSites[KNETWORK_PROVIDER_ID_TESALL] = tWebSitesNode.GetAttributeInt("TESALLID", -1);
 				m_FixedWebSites[KNETWORK_PROVIDER_ID_NEXUS] = tWebSitesNode.GetAttributeInt("NexusID", -1);
 				m_FixedWebSites[KNETWORK_PROVIDER_ID_LOVERSLAB] = tWebSitesNode.GetAttributeInt("LoversLabID", -1);
@@ -162,7 +168,7 @@ void KModEntry::CreateFromSignature(const wxString& signature)
 				}
 
 				// Time
-				KxXMLNode tTimeNode = tRoot.GetFirstChildElement("Time");
+				KxXMLNode tTimeNode = rootNode.GetFirstChildElement("Time");
 				if (tTimeNode.IsOK())
 				{
 					auto ParseTime = [this, &tTimeNode](const auto& name, KMETimeIndex index)
@@ -178,10 +184,10 @@ void KModEntry::CreateFromSignature(const wxString& signature)
 				}
 
 				// Package file
-				m_InstallPackageFile = tRoot.GetFirstChildElement("InstallPackage").GetValue();
+				m_InstallPackageFile = rootNode.GetFirstChildElement("InstallPackage").GetValue();
 
 				// Linked mod config
-				KxXMLNode tLinkedModNode = tRoot.GetFirstChildElement("LinkedMod");
+				KxXMLNode tLinkedModNode = rootNode.GetFirstChildElement("LinkedMod");
 				if (tLinkedModNode.IsOK())
 				{
 					m_LinkedModFilesPath = tLinkedModNode.GetAttribute("FolderPath");
@@ -189,6 +195,13 @@ void KModEntry::CreateFromSignature(const wxString& signature)
 			}
 		}
 	}
+}
+void KModEntry::CreateFromID(const wxString& id)
+{
+	m_ID = id;
+	m_Signature = GetSignatureFromID(id);
+
+	CreateFromSignature(m_Signature);
 }
 void KModEntry::CreateFromProject(const KPackageProject& config)
 {
@@ -282,6 +295,15 @@ bool KModEntry::Save()
 		rootNode.NewElement("Name").SetValue(GetName()); // Field 'm_Name' can be empty and GetName() returns 'm_ID' in this case
 		rootNode.NewElement("Version").SetValue(m_Version);
 		rootNode.NewElement("Author").SetValue(m_Author);
+
+		// Color
+		if (m_Color.IsOk())
+		{
+			KxXMLNode colorNode = rootNode.NewElement("Color");
+			colorNode.SetAttribute("R", m_Color.GetR());
+			colorNode.SetAttribute("G", m_Color.GetG());
+			colorNode.SetAttribute("B", m_Color.GetB());
+		}
 
 		KxXMLNode tagsNode = rootNode.NewElement("Tags");
 		if (!m_PriorityGroupTag.IsEmpty())

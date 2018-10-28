@@ -29,11 +29,12 @@ void KNotificationPopup::CreateUI()
 	sizerRight->Add(caption, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING * 2);
 
 	KxHTMLWindow* message = new KxHTMLWindow(this, KxID_NONE, m_Notification->GetMessage());
+	message->ShowScrollbars(wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT);
 	sizerRight->Add(message, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 }
 
 KNotificationPopup::KNotificationPopup(KNotification* notification)
-	:wxPopupWindow(KMainWindow::GetInstance() ? KMainWindow::GetInstance() : KApp::Get().GetTopWindow(), wxBORDER_THEME), m_Notification(notification)
+	:wxPopupWindow(KMainWindow::HasInstance() ? KMainWindow::GetInstance() : KApp::Get().GetTopWindow(), wxBORDER_THEME), m_Notification(notification)
 {
 	CreateUI();
 

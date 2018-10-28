@@ -6,6 +6,23 @@
 #include "KBitmapSize.h"
 #include <KxFramework/KxCoroutine.h>
 
+KNotification::~KNotification()
+{
+	if (HasPopupWindow())
+	{
+		DestroyPopupWindow();
+	}
+}
+
+void KNotification::SetPopupWindow(KNotificationPopup* window)
+{
+	m_PopupWindow = window;
+}
+void KNotification::DestroyPopupWindow()
+{
+	wxApp::GetInstance()->ScheduleForDestruction(m_PopupWindow);
+}
+
 void KNotification::ShowPopupWindow()
 {
 	KxCoroutine::Run([this](KxCoroutineBase& coroutine)
@@ -18,18 +35,29 @@ void KNotification::ShowPopupWindow()
 			}
 			else
 			{
-				wxApp::GetInstance()->ScheduleForDestruction(m_PopupWindow);
+				DestroyPopupWindow();
 				m_PopupWindow = NULL;
 				return coroutine.YieldStop();
 			}
 		}
 		else
 		{
+			HWND previousForegroundWindow = ::GetForegroundWindow();
+
 			m_PopupWindow = new KNotificationPopup(this);
 			m_PopupWindow->Show();
+
+			if (previousForegroundWindow)
+			{
+				::SetForegroundWindow(previousForegroundWindow);
+			}
 			return coroutine.YieldWaitSeconds(3);
 		}
 	});
+}
+bool KNotification::HasPopupWindow() const
+{
+	return m_PopupWindow && !wxTheApp->IsScheduledForDestruction(m_PopupWindow) && !m_PopupWindow->IsBeingDeleted();
 }
 
 //////////////////////////////////////////////////////////////////////////

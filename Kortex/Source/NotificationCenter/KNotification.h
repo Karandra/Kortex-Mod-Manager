@@ -9,21 +9,15 @@ class KNotification
 	friend class KNotificationPopup;
 
 	public:
-		using Containter = std::vector<std::unique_ptr<KNotification>>;
-		using RefContainter = std::vector<KNotification*>;
+		using Vector = std::vector<std::unique_ptr<KNotification>>;
+		using RefVector = std::vector<KNotification*>;
 
 	private:
 		KNotificationPopup* m_PopupWindow = NULL;
 
 	private:
-		bool HasPopupWindow() const
-		{
-			return m_PopupWindow != NULL;
-		}
-		void SetPopupWindow(KNotificationPopup* window)
-		{
-			m_PopupWindow = window;
-		}
+		void SetPopupWindow(KNotificationPopup* window);
+		void DestroyPopupWindow();
 		KNotificationPopup* GetPopupWindow() const
 		{
 			return m_PopupWindow;
@@ -31,10 +25,11 @@ class KNotification
 
 	public:
 		KNotification() = default;
-		virtual ~KNotification() = default;
+		virtual ~KNotification();
 
 	public:
 		void ShowPopupWindow();
+		bool HasPopupWindow() const;
 
 		virtual wxString GetCaption() const = 0;
 		virtual wxString GetMessage() const = 0;

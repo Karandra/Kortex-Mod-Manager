@@ -9,7 +9,6 @@ KProgramWorkspace::KProgramWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow), m_ProgramListViewOptions(this, "ProgramListView")
 {
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
-	CreateItemInManagersMenu();
 }
 KProgramWorkspace::~KProgramWorkspace()
 {

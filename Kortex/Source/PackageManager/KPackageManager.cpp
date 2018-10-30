@@ -236,7 +236,7 @@ wxString KPackageManager::GetName() const
 }
 wxString KPackageManager::GetVersion() const
 {
-	return "1.2.2";
+	return "1.3";
 }
 
 const KPPRRequirementEntry* KPackageManager::FindScriptExtenderRequirement() const

@@ -59,7 +59,7 @@ wxString KSaveManager::GetName() const
 }
 wxString KSaveManager::GetVersion() const
 {
-	return "1.0.2";
+	return "1.1";
 }
 
 KWorkspace* KSaveManager::GetWorkspace() const

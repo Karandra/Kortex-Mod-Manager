@@ -200,7 +200,7 @@ wxString KProgramManager::GetName() const
 }
 wxString KProgramManager::GetVersion() const
 {
-	return "1.1";
+	return "2.0";
 }
 
 void KProgramManager::Save() const

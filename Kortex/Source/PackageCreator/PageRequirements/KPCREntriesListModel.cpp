@@ -222,6 +222,9 @@ bool KPCREntriesListModel::SetValueByRow(const wxAny& data, size_t row, const Kx
 		{
 			case ColumnID::Type:
 			{
+				entry->ResetCurrentVersion();
+				entry->ResetObjectFunctionResult();
+
 				entry->TrySetTypeDescriptor(data.As<KPPRTypeDescriptor>());
 				ChangeNotify();
 				break;
@@ -239,6 +242,9 @@ bool KPCREntriesListModel::SetValueByRow(const wxAny& data, size_t row, const Kx
 				{
 					if (newID.IsEmpty() || !m_Group->HasEntryWithID(newID))
 					{
+						entry->ResetCurrentVersion();
+						entry->ResetObjectFunctionResult();
+
 						entry->SetID(newID);
 						entry->ConformToTypeDescriptor();
 						ChangeNotify();
@@ -253,6 +259,9 @@ bool KPCREntriesListModel::SetValueByRow(const wxAny& data, size_t row, const Kx
 			}
 			case ColumnID::Name:
 			{
+				entry->ResetCurrentVersion();
+				entry->ResetObjectFunctionResult();
+
 				entry->SetName(data.As<wxString>());
 				entry->ConformToTypeDescriptor();
 				ChangeNotify();
@@ -260,6 +269,8 @@ bool KPCREntriesListModel::SetValueByRow(const wxAny& data, size_t row, const Kx
 			}
 			case ColumnID::RequiredVersion:
 			{
+				entry->ResetObjectFunctionResult();
+
 				entry->SetRequiredVersion(data.As<wxString>());
 				ChangeNotify();
 				break;
@@ -267,15 +278,17 @@ bool KPCREntriesListModel::SetValueByRow(const wxAny& data, size_t row, const Kx
 			case ColumnID::RequiredState:
 			{
 				entry->ResetObjectFunctionResult();
+
 				entry->SetObjectFunction(data.As<KPPRObjectFunction>());
 				ChangeNotify();
 				break;
 			}
 			case ColumnID::Object:
 			{
-				entry->SetObject(data.As<wxString>());
 				entry->ResetCurrentVersion();
 				entry->ResetObjectFunctionResult();
+
+				entry->SetObject(data.As<wxString>());
 				ChangeNotify();
 				break;
 			}

@@ -23,8 +23,15 @@ Version 1.4 - x
 [Package Manager] Fixed search in packages list.
 [Package Manager] Changing mod ID to existing mod's ID in install wizard is now allowed.
 [Package Manager] Fixed requirements check (removed two-phased checking).
-[Package Manager] Component entries in package creator view can now be dragged to different branch.
-[Package Manager] Version 1.2.2.
+[Package Manager] Component entries in package creator view can now be moved between different branches.
+[Package Manager] Version 1.3
+[Program Manager] Program manager redone. Workspace moved to mods window as separate tab.
+[Program Manager] Version 2.0.
+[Download Manager] Support for association with NXM links.
+[Download Manager] Support for mod downloads from NexusMods.
+[Download Manager] Support for querying info for unknown downloads.
+[Download Manager] Support for file change log displaying.
+[Download Manager] Version 1.0.
 [Plugin Manager] For Morrowind, Oblivion, Fallout 3 and Fallout: New Vegas forced sorting by plugin modification date is disabled.
 [Plugin Manager] Added plugins counter for all types.
 [Plugin Manager] Version 1.3

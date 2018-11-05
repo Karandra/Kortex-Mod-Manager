@@ -21,7 +21,7 @@ void KInstallWizardComponnetsModel::OnInitControl()
 
 	/* Columns */
 	GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, ColumnID::Expander, KxDATAVIEW_CELL_INERT, 0, KxDV_COL_HIDDEN);
-	GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, 250);
+	GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE);
 }
 
 bool KInstallWizardComponnetsModel::IsContainer(const KxDataViewItem& item) const

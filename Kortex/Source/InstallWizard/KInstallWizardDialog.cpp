@@ -1051,9 +1051,9 @@ void KInstallWizardDialog::CollectAllInstallableEntries()
 		// Manual steps present, get files from checked entries
 		if (HasManualComponents())
 		{
-			for (const KIWStepStackItem& tStepItem: m_InstallSteps)
+			for (const KIWStepStackItem& step: m_InstallSteps)
 			{
-				for (const KPPCEntry* entry: tStepItem.GetChecked())
+				for (const KPPCEntry* entry: step.GetChecked())
 				{
 					AddFilesFromList(entry->GetFileData());
 				}
@@ -1175,7 +1175,6 @@ bool KInstallWizardDialog::OnEndInstall()
 		imageEntry = imageEntry ? imageEntry : interfaceConfig.GetHeaderImageEntry();
 		if (imageEntry && imageEntry->HasBitmap())
 		{
-			// Save original image
 			const wxBitmap& bitmap = imageEntry->GetBitmap();
 			bitmap.SaveFile(m_ModEntry.GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
 		}
@@ -1183,8 +1182,8 @@ bool KInstallWizardDialog::OnEndInstall()
 		KModManager::GetInstance()->NotifyModInstalled(m_ModEntry);
 		if (ShouldCancel())
 		{
-			// We were canceled, but mod is partially installed,
-			// so user can call uninstall on it later
+			// We were canceled, but mod is partially installed.
+			// Just exit immediately, user can uninstall this.
 			Destroy();
 		}
 		else
@@ -1209,13 +1208,13 @@ void KInstallWizardDialog::OnMinorProgress(KxFileOperationEvent& event)
 		m_Installing_MajorStatus->SetLabel(event.GetSource());
 	}
 
-	int64_t nMinorMin = event.GetMinorProcessed();
-	int64_t nMinorMax = event.GetMinorTotal();
+	int64_t minorMin = event.GetMinorProcessed();
+	int64_t minorMax = event.GetMinorTotal();
 	if (event.IsMinorKnown())
 	{
-		m_Installing_MinorProgress->SetValue(nMinorMin, nMinorMax);
+		m_Installing_MinorProgress->SetValue(minorMin, minorMax);
 	}
-	else if (nMinorMin != -2 && nMinorMax != -2)
+	else if (minorMin != -2 && minorMax != -2)
 	{
 		m_Installing_MinorProgress->Pulse();
 	}
@@ -1239,7 +1238,7 @@ void KInstallWizardDialog::OnMajorProgress(KxFileOperationEvent& event)
 
 	int64_t current = event.GetMajorProcessed();
 	int64_t max = event.GetMajorTotal();
-	m_Installing_MajorStatus->SetLabel(KTrf("InstallWizard.InstalledXOfY", current, max) + ". " + event.GetSource());
+	m_Installing_MajorStatus->SetLabel(KTrf("InstallWizard.InstalledXOfY", current, max) + wxS(". ") + event.GetSource());
 }
 
 void KInstallWizardDialog::SetModEntryData()
@@ -1267,32 +1266,32 @@ wxString KInstallWizardDialog::GetFinalPath(uint32_t index, const wxString& inst
 {
 	// Remove "in archive" source path from final file path
 	wxString path = GetArchive().GetItemName(index).Remove(0, fileEntry->GetSource().Length());
-	if (!path.IsEmpty() && path[0] == '\\')
+	if (!path.IsEmpty() && path[0] == wxS('\\'))
 	{
 		path.Remove(0, 1);
 	}
 
 	// Perpend destination path if needed
-	const wxString& sDestination = fileEntry->GetDestination();
+	const wxString& destination = fileEntry->GetDestination();
 	if (!fileEntry->GetDestination().IsEmpty())
 	{
-		if (!sDestination.IsEmpty() && sDestination[0] != '\\')
+		if (!destination.IsEmpty() && destination[0] != wxS('\\'))
 		{
-			path.Prepend('\\');
+			path.Prepend(wxS('\\'));
 		}
 		path.Prepend(fileEntry->GetDestination());
 	}
 
-	return installLocation + '\\' + path;
+	return installLocation + wxS('\\') + path;
 }
 KxStringVector KInstallWizardDialog::GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const KPPFFolderEntry* folder) const
 {
-	KxStringVector tFilePaths;
-	for (const uint32_t index : filePaths)
+	KxStringVector finalPaths;
+	for (uint32_t index : filePaths)
 	{
-		tFilePaths.push_back(GetFinalPath(index, installLocation, folder));
+		finalPaths.emplace_back(GetFinalPath(index, installLocation, folder));
 	}
-	return tFilePaths;
+	return finalPaths;
 }
 void KInstallWizardDialog::RunInstall()
 {
@@ -1304,11 +1303,11 @@ void KInstallWizardDialog::RunInstall()
 		installLocation.RemoveLast(1);
 	}
 
-	auto NotifyMajor = [this](size_t current, size_t max, const wxString& sStatus)
+	auto NotifyMajor = [this](size_t current, size_t max, const wxString& status)
 	{
 		KxFileOperationEvent* event = new KxFileOperationEvent(KxEVT_ARCHIVE);
 		event->SetEventObject(this);
-		event->SetSource(sStatus.Clone());
+		event->SetSource(status.Clone());
 		event->SetMajorProcessed(current);
 		event->SetMajorTotal(max);
 		QueueEvent(event);

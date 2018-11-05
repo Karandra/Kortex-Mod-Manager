@@ -73,7 +73,7 @@ KApp::KApp()
 	m_Variables.SetVariable("SystemArchitectureName", KAux::ArchitectureToString(KxSystem::Is64Bit()));
 
 	// Revision variable
-	m_Variables.SetVariable("AppRevisionFull", "cb53d2777634bc18d9993c45523714b7cd95a32b");
+	m_Variables.SetVariable("AppRevisionFull", "ee1f8acb5a9528de3ff0c118595b1d757ccc2bae");
 	m_Variables.SetDynamicVariable("AppRevision", [this]()
 	{
 		return m_Variables.GetVariable(wxS("AppRevisionFull")).GetValue().Left(7);

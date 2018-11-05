@@ -138,7 +138,7 @@ namespace
 			if (KxComparator::Matches(std::wstring_view(path), ToTStringView(filter)))
 			{
 				// Extract directory from path
-				size_t pos = path.rfind(L'\\');
+				size_t pos = path.rfind(wxS('\\'));
 				if (pos != path.npos)
 				{
 					SevenZip::TStringView name(path.data() + pos + 1);
@@ -151,7 +151,6 @@ namespace
 				{
 					item.SetName(ToWxString(path));
 				}
-
 				item.SetNormalAttributes();
 				item.SetExtraData(i);
 

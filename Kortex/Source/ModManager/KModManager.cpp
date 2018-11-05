@@ -82,10 +82,17 @@ void KModManager::DoUninstallMod(KModEntry* modEntry, bool erase, wxWindow* wind
 			self->LinkHandler(&folder, KxEVT_FILEOP_REMOVE_FOLDER);
 			folder.RemoveFolderTree(true);
 		});
-		operation->OnEnd([this, modEntry](KOperationWithProgressBase* self)
+		operation->OnEnd([this, modEntry, erase](KOperationWithProgressBase* self)
 		{
 			Save();
-			NotifyModUninstalled(*modEntry);
+			if (erase)
+			{
+				NotifyModErased(*modEntry);
+			}
+			else
+			{
+				NotifyModUninstalled(*modEntry);
+			}
 		});
 		operation->SetDialogCaption(KTr("ModManager.RemoveMod.RemovingMessage"));
 		operation->Run();
@@ -640,6 +647,14 @@ void KModManager::NotifyModInstalled(KModEntry& modEntry)
 }
 void KModManager::NotifyModUninstalled(KModEntry& modEntry)
 {
+	modEntry.UpdateFileTree();
+	KDispatcher::GetInstance()->InvalidateVirtualTree();
+
+	Save();
+	KEvent::MakeSend<KModEvent>(KEVT_MOD_UNINSTALLED, modEntry);
+}
+void KModManager::NotifyModErased(KModEntry& modEntry)
+{
 	intptr_t index = GetModOrderIndex(&modEntry);
 	if (index != -1)
 	{
@@ -648,8 +663,8 @@ void KModManager::NotifyModUninstalled(KModEntry& modEntry)
 
 		KDispatcher::GetInstance()->InvalidateVirtualTree();
 		KModWorkspace::GetInstance()->ReloadWorkspace();
-		KEvent::MakeQueue<KModEvent>(KEVT_MOD_UNINSTALLED, modID);
-
+		
 		Save();
+		KEvent::MakeSend<KModEvent>(KEVT_MOD_UNINSTALLED, modID);
 	}
 }

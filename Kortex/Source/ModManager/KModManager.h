@@ -160,4 +160,5 @@ class KModManager: public KManager, public KxSingletonPtr<KModManager>
 
 		void NotifyModInstalled(KModEntry& modEntry);
 		void NotifyModUninstalled(KModEntry& modEntry);
+		void NotifyModErased(KModEntry& modEntry);
 };

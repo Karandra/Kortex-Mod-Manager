@@ -48,7 +48,7 @@ class KModPackage
 		void LoadConfigSMI(KPackageProject& project, size_t index);
 		void LoadConfigFOMod(KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex);
 		
-		const wxString& DetectEffectiveArchiveRoot(size_t index);
+		wxString DetectEffectiveArchiveRoot(const KxFileItem& item) const;
 		void SetModIDIfNone();
 
 		void LoadBasicResources();

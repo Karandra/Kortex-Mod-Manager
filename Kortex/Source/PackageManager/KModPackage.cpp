@@ -48,6 +48,7 @@ void KModPackage::LoadConfig(KPackageProject& project)
 			if (m_Archive.FindFile("KortexPackage.xml", item))
 			{
 				m_PackageType = KPP_PACCKAGE_NATIVE;
+				m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item);
 				LoadConfigNative(project, item.GetExtraData<size_t>());
 				return;
 			}
@@ -63,6 +64,7 @@ void KModPackage::LoadConfig(KPackageProject& project)
 			if (item.IsOK())
 			{
 				m_PackageType = KPP_PACCKAGE_LEGACY;
+				m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item);
 				LoadConfigSMI(project, item.GetExtraData<size_t>());
 				return;
 			}
@@ -72,8 +74,9 @@ void KModPackage::LoadConfig(KPackageProject& project)
 		auto TryScriptedFOMod = [this]()
 		{
 			KxFileItem item;
-			if (m_Archive.FindFile("Script.cs", item))
+			if (m_Archive.FindFile("*Script.cs", item))
 			{
+				m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item);
 				return item.GetExtraData<size_t>();
 			}
 			return ms_InvalidIndex;
@@ -82,12 +85,13 @@ void KModPackage::LoadConfig(KPackageProject& project)
 		{
 			KxFileItem infoItem;
 			KxFileItem moduleConfigItem;
-
-			m_Archive.FindFile("Info.xml", infoItem);
-			m_Archive.FindFile("ModuleConfig.xml", moduleConfigItem);
+			m_Archive.FindFile("*Info.xml", infoItem);
+			m_Archive.FindFile("*ModuleConfig.xml", moduleConfigItem);
 
 			if (infoItem.IsOK() || moduleConfigItem.IsOK())
 			{
+				m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(moduleConfigItem.IsOK() ? moduleConfigItem : infoItem);
+
 				// No module config
 				if (!moduleConfigItem.IsOK() && TryScriptedFOMod() != ms_InvalidIndex)
 				{
@@ -126,29 +130,13 @@ void KModPackage::LoadConfigSMI(KPackageProject& project, size_t index)
 void KModPackage::LoadConfigFOMod(KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex)
 {
 	KArchive::BufferMap buffers = m_Archive.ExtractToMemory({(uint32_t)infoIndex, (uint32_t)moduleConfigIndex});
-
 	KPackageProjectSerializerFOMod serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
-	serializer.SetEffectiveArchiveRoot(DetectEffectiveArchiveRoot(infoIndex != ms_InvalidIndex ? infoIndex : moduleConfigIndex));
 	serializer.Structurize(&project);
 }
 
-const wxString& KModPackage::DetectEffectiveArchiveRoot(size_t index)
+wxString KModPackage::DetectEffectiveArchiveRoot(const KxFileItem& item) const
 {
-	// This currently only works for FOMod's
-	if (index != ms_InvalidIndex)
-	{
-		wxString path = m_Archive.GetItemName(index);
-		size_t startIndex = KxString::Find(path, "FOMod", 0, false);
-
-		// If 'FOMod' folder found not at string beginning,
-		// then effective root folder is right before it.
-		if (startIndex != wxNOT_FOUND && startIndex != 0)
-		{
-			// Subtract 1 as we do not need the path separator
-			m_EffectiveArchiveRoot = path.Mid(0, startIndex - 1);
-		}
-	}
-	return m_EffectiveArchiveRoot;
+	return item.GetSource();
 }
 void KModPackage::SetModIDIfNone()
 {

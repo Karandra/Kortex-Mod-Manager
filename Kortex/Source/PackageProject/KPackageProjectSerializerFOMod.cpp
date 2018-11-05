@@ -66,16 +66,16 @@ wxString KPackageProjectSerializerFOMod::GetDataFolderName(bool withSeparator) c
 	wxString folder;
 	if (m_IsMorrowind)
 	{
-		folder = "DataFiles";
+		folder = wxS("DataFiles");
 	}
 	else if (m_HasDataFolderAsRoot)
 	{
-		folder = "Data";
+		folder = wxS("Data");
 	}
 
 	if (!folder.IsEmpty() && withSeparator)
 	{
-		folder.Append('\\');
+		folder.Append(wxS('\\'));
 	}
 	return folder;
 }
@@ -417,7 +417,7 @@ KPackageProjectSerializerFOMod::FilePriorityArray KPackageProjectSerializerFOMod
 			fileEntry->SetPriority(fileDataNode.GetAttributeInt("priority", KPackageProjectFileData::ms_DefaultPriority));
 
 			wxString destination = fileDataNode.GetAttribute("destination");
-			fileEntry->SetDestination(GetDataFolderName(true) + (!destination.IsEmpty() ? destination : source));
+			fileEntry->SetDestination(GetDataFolderName(true) + (!destination.IsEmpty() ? destination : wxEmptyString));
 
 			priorityList.push_back(std::make_pair(fileEntry, fileDataNode.GetAttributeInt("priority", std::numeric_limits<int64_t>::max())));
 

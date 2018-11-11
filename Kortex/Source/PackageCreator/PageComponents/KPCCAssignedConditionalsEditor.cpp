@@ -90,6 +90,13 @@ bool KPCCAssignedConditionalsEditor::SetValueByRow(const wxAny& value, size_t ro
 			case ColumnID::Name:
 			{
 				wxString newName = value.As<wxString>();
+				if (newName.StartsWith(KPPRRequirementsGroup::GetFlagNamePrefix()))
+				{
+					wxRect rect = GetView()->GetAdjustedItemRect(GetItem(row), column);
+					KPackageCreatorPageBase::ShowTooltipWarning(GetView(), KTr("PackageCreator.InvalidFlagName"), rect);
+					return false;
+				}
+
 				TrackChangeID(entry->GetName(), newName);
 				entry->SetName(newName);
 				ChangeNotify();

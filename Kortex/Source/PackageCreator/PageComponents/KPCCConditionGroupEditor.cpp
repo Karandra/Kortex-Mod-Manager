@@ -218,12 +218,6 @@ bool KPCCConditionGroupEditor::SetValue(const wxAny& value, const KxDataViewItem
 			case ColumnID::Name:
 			{
 				wxString newName = value.As<wxString>();
-				if (newName.StartsWith(KPPRRequirementsGroup::GetFlagNamePrefix()))
-				{
-					KPackageCreatorPageBase::ShowTooltipWarning(GetView(), KTr("PackageCreator.InvalidFlagName"), GetView()->GetAdjustedItemRect(item, column));
-					return false;
-				}
-
 				TrackChangeID(flag->GetName(), newName);
 				flag->SetName(newName);
 				ChangeNotify();

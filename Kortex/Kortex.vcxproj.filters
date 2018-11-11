@@ -441,9 +441,6 @@
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCCRequirementsSelectorModel.cpp">
       <Filter>Code\Source Files\PackageCreator\PageComponents</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCFlagsSelectorModel.cpp">
-      <Filter>Code\Source Files\PackageCreator\PageComponents</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoDocumentsModel.cpp">
       <Filter>Code\Source Files\PackageCreator\PageInfo</Filter>
     </ClCompile>
@@ -810,6 +807,12 @@
     <ClCompile Include="Source\NotificationCenter\KNotificationPopupList.cpp">
       <Filter>Code\Source Files\NotificationCenter</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCAssignedConditionalsEditor.cpp">
+      <Filter>Code\Source Files\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCConditionGroupEditor.cpp">
+      <Filter>Code\Source Files\PackageCreator\PageComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1035,9 +1038,6 @@
       <Filter>Code\Header Files\PackageCreator\PageComponents</Filter>
     </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCCRequirementsSelectorModel.h">
-      <Filter>Code\Header Files\PackageCreator\PageComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCFlagsSelectorModel.h">
       <Filter>Code\Header Files\PackageCreator\PageComponents</Filter>
     </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoDocumentsModel.h">
@@ -1474,6 +1474,15 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\KUPtrVectorUtil.h">
       <Filter>Code\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\KVectorForwarder.h">
+      <Filter>Code\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCAssignedConditionalsEditor.h">
+      <Filter>Code\Header Files\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCConditionGroupEditor.h">
+      <Filter>Code\Header Files\PackageCreator\PageComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -145,6 +145,7 @@
 		<String ID="Generic.DefaultValue">Default value</String>
 		<String ID="Generic.UseDefaultValue">Use default value</String>
 		<String ID="Generic.SystemMenu">System menu</String>
+		<String ID="Generic.Operator">Operator</String>
 		<String ID="Generic.CriticalError">The application has encountered a critical error and will be closed.</String>
 		<String ID="Generic.OpenWebSiteDialog.Caption">Do you want to open this webpage?</String>
 		<String ID="Generic.OpenWebSiteListDialog.Caption">Choose a webpage you want to open</String>
@@ -1158,7 +1159,6 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="PackageCreator.SaveChanges.Message">Do you want to save now?</String>
 		<String ID="PackageCreator.IDCollision">An element with this ID already exists in the project.</String>
 		<String ID="PackageCreator.InvalidFlagName">Invalid flag name</String>
-		<String ID="PackageCreator.Operator">Operator</String>
 		
 		<String ID="PackageCreator.AddFile">Add file</String>
 		<String ID="PackageCreator.AddMultipleFiles">Add files</String>
@@ -1174,13 +1174,6 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="PackageCreator.NewGroupDialog">Add new group</String>
 		<String ID="PackageCreator.RemoveStepDialog">Are you sure you want to delete the step "%1"? All groups in this step will be deleted as well.</String>
 		<String ID="PackageCreator.RemoveGroupDialog">Are you sure you want to delete the group "%1"? All elements in this group will be deleted as well.</String>
-
-		<String ID="PackageCreator.RemoveFlagDialog.Caption">Deleting flag "%1"</String>
-		<String ID="PackageCreator.RemoveFlagDialog.Message"><![CDATA[Delete this flag from the whole project? This will delete all references to this flag in the entire project.
-
-You can also rename the flag to "%1" and manually change the references to it.]]></String>
-		<String ID="PackageCreator.RemoveFlagDialog.Remove">Remove from project</String>
-		<String ID="PackageCreator.RemoveFlagDialog.Rename">Rename</String>
 
 		<!-- Page: Info -->
 		<String ID="PackageCreator.PageInfo.Name">Information</String>
@@ -1313,6 +1306,20 @@ You can also rename the flag to "%1" and manually change the references to it.]]
 		<String ID="PackageCreator.TypeDescriptor.Recommended">This component is optional, but is recommended for the current configuration.</String>
 		<String ID="PackageCreator.TypeDescriptor.NotUsable">This component can not be used in the current configuration. For example, some of the required mods are missing.</String>
 		<String ID="PackageCreator.TypeDescriptor.CouldBeUsable">This component can be used in the current configuration, but its correct operation is not guaranteed. For example, the versions of the required mods do not match.</String>
+
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Caption">Remove flags</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Message"><![CDATA[Remove flags from the whole project? Deleting will remove all references to flags in the project.
+
+You can also rename references to a deleted flags by adding the prefix "%1" to them.]]></String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Remove">Remove only</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveTrack">Remove in entire project</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveRename">Rename flags</String>
+
+		<String ID="PackageCreator.Conditions.AddNewCondition">Add new condition</String>
+		<String ID="PackageCreator.Conditions.AddToCondition">Add to condition</String>
+		<String ID="PackageCreator.Conditions.RemoveCondition">Remove condition</String>
+		<String ID="PackageCreator.Conditions.RemoveFromCondition">Remove from condition</String>
+		<String ID="PackageCreator.Conditions.RemoveAll">Remove all conditions</String>
 
 		<!-- Install Wizard -->
 		<String ID="InstallWizard.WindowCaption">Installing "%1"</String>

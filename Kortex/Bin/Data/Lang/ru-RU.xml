@@ -144,6 +144,7 @@
 		<String ID="Generic.EnterData">Введите данные</String>
 		<String ID="Generic.DefaultValue">Значение по умолчанию</String>
 		<String ID="Generic.UseDefaultValue">Использовать значение по умолчанию</String>
+		<String ID="Generic.Operator">Оператор</String>
 		<String ID="Generic.SystemMenu">Системное меню</String>
 		<String ID="Generic.CriticalError">Произошла критическая ошибка. Программа будет завершена.</String>
 		<String ID="Generic.OpenWebSiteDialog.Caption">Открыть данную веб-страницу?</String>
@@ -1158,7 +1159,6 @@
 		<String ID="PackageCreator.SaveChanges.Message">Сохранить сейчас?</String>
 		<String ID="PackageCreator.IDCollision">Элемент с таким идентификатором уже есть в проекте.</String>
 		<String ID="PackageCreator.InvalidFlagName">Некорректное название флага</String>
-		<String ID="PackageCreator.Operator">Оператор</String>
 
 		<String ID="PackageCreator.AddFile">Добавить файл</String>
 		<String ID="PackageCreator.AddMultipleFiles">Добавить файлы</String>
@@ -1174,13 +1174,6 @@
 		<String ID="PackageCreator.NewGroupDialog">Добавление новой группы</String>
 		<String ID="PackageCreator.RemoveStepDialog">Вы уверены, что хотите удалить этап "%1"? Все группы, входящие в этот этап, также будут удалены.</String>
 		<String ID="PackageCreator.RemoveGroupDialog">Вы уверены, что хотите удалить группу "%1"? Все элементы, входящие в эту группу, также будут удалены.</String>
-		
-		<String ID="PackageCreator.RemoveFlagDialog.Caption">Удаление флага "%1"></String>
-		<String ID="PackageCreator.RemoveFlagDialog.Message"><![CDATA[Удалить данный флаг из всего проекта? Удаление приведёт к удалению всех ссылок на этот флаг во всём проекте.
-
-Также можно переименовать флаг в "%2" и вручную изменить ссылки на него.]]></String>
-		<String ID="PackageCreator.RemoveFlagDialog.Remove">Удалить во всём проекте</String>
-		<String ID="PackageCreator.RemoveFlagDialog.Rename">Выполнить переименование</String>
 
 		<!-- Page: Info -->
 		<String ID="PackageCreator.PageInfo.Name">Информация</String>
@@ -1313,6 +1306,21 @@
 		<String ID="PackageCreator.TypeDescriptor.Recommended">Этот компонент не является обязательным, но рекомендуется для текущей конфигурации.</String>
 		<String ID="PackageCreator.TypeDescriptor.NotUsable">Этот компонент не может быть использован в текущей конфигурации. Например, отсутствуют некоторые требуемые моды.</String>
 		<String ID="PackageCreator.TypeDescriptor.CouldBeUsable">Этот компонент может быть использован в текущей конфигурации, но его правильная работа не гарантируется. Например, не совпадают версии требуемых модов.</String>
+
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Caption">Удаление флагов</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Message"><![CDATA[Удалить флаги из всего проекта? Удаление приведёт к удалению всех ссылок на флаги в проекте.
+
+Также можно с переименовать сслыки на удалённый флаг добавив к ним префикс "%1".]]>
+		</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Remove">Просто удалить</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveTrack">Удалить во всём проекте</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveRename">Выполнить переименование</String>
+
+		<String ID="PackageCreator.Conditions.AddNewCondition">Добавить новое условие</String>
+		<String ID="PackageCreator.Conditions.AddToCondition">Добавить в условие</String>
+		<String ID="PackageCreator.Conditions.RemoveCondition">Удалить условие</String>
+		<String ID="PackageCreator.Conditions.RemoveFromCondition">Удалить из условия</String>
+		<String ID="PackageCreator.Conditions.RemoveAll">Удалить все условия</String>
 
 		<!-- Install Wizard -->
 		<String ID="InstallWizard.WindowCaption">Установка "%1"></String>

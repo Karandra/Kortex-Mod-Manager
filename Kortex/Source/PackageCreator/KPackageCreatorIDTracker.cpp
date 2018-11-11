@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPackageCreatorIDTracker.h"
 
-void KPackageCreatorIDTracker::TrackID_ReplaceInStringsList(const wxString& trackedID, const wxString& newID, KxStringVector& list) const
+void KPackageCreatorIDTracker::TrackID_ReplaceInStringVector(const wxString& trackedID, const wxString& newID, KxStringVector& list) const
 {
 	for (auto it = list.begin(); it != list.end(); ++it)
 	{
@@ -12,7 +12,7 @@ void KPackageCreatorIDTracker::TrackID_ReplaceInStringsList(const wxString& trac
 		}
 	}
 }
-void KPackageCreatorIDTracker::TrackID_RemoveFromStringsList(const wxString& trackedID, KxStringVector& list) const
+void KPackageCreatorIDTracker::TrackID_RemoveFromStringVector(const wxString& trackedID, KxStringVector& list) const
 {
 	auto it = std::find(list.begin(), list.end(), trackedID);
 	if (it != list.end())
@@ -21,7 +21,7 @@ void KPackageCreatorIDTracker::TrackID_RemoveFromStringsList(const wxString& tra
 	}
 }
 
-void KPackageCreatorIDTracker::TrackID_ReplaceInStringsList(const wxString& trackedID, const wxString& newID, KPPCFlagEntryArray& list) const
+void KPackageCreatorIDTracker::TrackID_ReplaceInFlagVector(const wxString& trackedID, const wxString& newID, KPPCFlagEntry::Vector& list) const
 {
 	for (auto it = list.begin(); it != list.end(); ++it)
 	{
@@ -32,7 +32,7 @@ void KPackageCreatorIDTracker::TrackID_ReplaceInStringsList(const wxString& trac
 		}
 	}
 }
-void KPackageCreatorIDTracker::TrackID_RemoveFromStringsList(const wxString& trackedID, KPPCFlagEntryArray& list) const
+void KPackageCreatorIDTracker::TrackID_RemoveFromFlagVector(const wxString& trackedID, KPPCFlagEntry::Vector& list) const
 {
 	auto it = std::find_if(list.begin(), list.end(), [&trackedID](const KPPCFlagEntry& flagEntry)
 	{

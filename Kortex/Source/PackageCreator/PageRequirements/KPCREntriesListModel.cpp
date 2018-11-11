@@ -17,7 +17,6 @@
 enum ColumnID
 {
 	Type,
-	Operator,
 	ID,
 	Name,
 	RequiredVersion,
@@ -50,17 +49,6 @@ void KPCREntriesListModel::OnInitControl()
 			KTr("PackageCreator.PageRequirements.Type.Auto")
 		 });
 		
-	}
-
-	// Operator
-	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("PackageCreator.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
-		m_OperatorEditor = info.GetEditor();
-		m_OperatorEditor->SetItems
-		({
-			KPackageProjectRequirements::OperatorToSymbolicName(KPP_OPERATOR_AND),
-			KPackageProjectRequirements::OperatorToSymbolicName(KPP_OPERATOR_OR)
-		 });
 	}
 
 	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.ID"), ColumnID::ID, KxDATAVIEW_CELL_EDITABLE, 175);
@@ -102,11 +90,6 @@ void KPCREntriesListModel::GetEditorValueByRow(wxAny& value, size_t row, const K
 			case ColumnID::Type:
 			{
 				value = entry->GetTypeDescriptor();
-				return;
-			}
-			case ColumnID::Operator:
-			{
-				value = entry->GetOperator() == KPP_OPERATOR_AND ? 0 : 1;
 				return;
 			}
 			case ColumnID::ID:
@@ -154,11 +137,6 @@ void KPCREntriesListModel::GetValueByRow(wxAny& value, size_t row, const KxDataV
 				value = m_TypeEditor->GetItems()[entry->GetTypeDescriptor()];
 				break;
 			}
-			case ColumnID::Operator:
-			{
-				value = m_OperatorEditor->GetItems()[entry->GetOperator() == KPP_OPERATOR_AND ? 0 : 1];
-				break;
-			}
 			case ColumnID::ID:
 			{
 				value = entry->IsEmptyID() ? KAux::MakeNoneLabel() : entry->GetID();
@@ -176,18 +154,11 @@ void KPCREntriesListModel::GetValueByRow(wxAny& value, size_t row, const KxDataV
 			}
 			case ColumnID::CurrentVersion:
 			{
-				wxString operatorName = KPackageProjectRequirements::OperatorToSymbolicName(entry->GetRVFunction());
-				wxString cv = entry->GetCurrentVersion().ToString();
-				wxString rv = entry->GetRequiredVersion().ToString();
+				wxString operatorName = KPackageProject::OperatorToSymbolicName(entry->GetRVFunction());
+				wxString cv = entry->GetCurrentVersion();
+				wxString rv = entry->GetRequiredVersion();
 
-				KxFormat format("CV(%1) %2 RV(%3) %4 %5");
-				format.arg(cv);
-				format.arg(operatorName);
-				format.arg(rv);
-				format.arg(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
-				format.arg(entry->CheckVersion() ? "true" : "false");
-
-				value = format.ToString();
+				value = KxString::Format("CV(%1) %2 RV(%3) %4 %5", cv, operatorName, rv, KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT), entry->CheckVersion());
 				break;
 			}
 			case ColumnID::RequiredState:
@@ -195,7 +166,7 @@ void KPCREntriesListModel::GetValueByRow(wxAny& value, size_t row, const KxDataV
 				KxFormat format("%1 %2 %3");
 				format.arg(m_ObjectFunctionEditor->GetItems()[entry->GetObjectFunction()]);
 				format.arg(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
-				format.arg(entry->GetObjectFunctionResult() == KPPReqState::True ? "true" : "false");
+				format.arg(entry->GetObjectFunctionResult() == KPPReqState::True);
 
 				value = format.ToString();
 				break;
@@ -226,12 +197,6 @@ bool KPCREntriesListModel::SetValueByRow(const wxAny& data, size_t row, const Kx
 				entry->ResetObjectFunctionResult();
 
 				entry->TrySetTypeDescriptor(data.As<KPPRTypeDescriptor>());
-				ChangeNotify();
-				break;
-			}
-			case ColumnID::Operator:
-			{
-				entry->SetOperator(data.As<int>() == 0 ? KPP_OPERATOR_AND : KPP_OPERATOR_OR);
 				ChangeNotify();
 				break;
 			}
@@ -355,7 +320,6 @@ void KPCREntriesListModel::OnActivateItem(KxDataViewEvent& event)
 		switch (column->GetID())
 		{
 			case ColumnID::Type:
-			case ColumnID::Operator:
 			case ColumnID::RequiredVersion:
 			{
 				GetView()->EditItem(item, column);
@@ -368,7 +332,7 @@ void KPCREntriesListModel::OnActivateItem(KxDataViewEvent& event)
 					KxMenu menu;
 					for (int i = KPP_OPERATOR_MIN; i < KPP_OPERATOR_COUNT_COMPARISON; i++)
 					{
-						KxMenuItem* item = menu.Add(new KxMenuItem(i, KPackageProjectRequirements::OperatorToSymbolicName((KPPOperator)i), wxEmptyString, wxITEM_CHECK));
+						KxMenuItem* item = menu.Add(new KxMenuItem(i, KPackageProject::OperatorToSymbolicName((KPPOperator)i), wxEmptyString, wxITEM_CHECK));
 						item->Check(i == entry->GetRVFunction());
 					}
 

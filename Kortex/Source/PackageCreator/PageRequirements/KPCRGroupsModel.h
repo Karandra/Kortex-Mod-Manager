@@ -7,7 +7,7 @@ class KPCREntriesListModel;
 class KxDataViewComboBox;
 class KxButton;
 
-class KPCRGroupsModel: public KPackageCreatorVectorModel<KPPRRequirementsGroupArray>, public KPackageCreatorIDTracker
+class KPCRGroupsModel: public KPackageCreatorVectorModel<KPPRRequirementsGroup::Vector>, public KPackageCreatorIDTracker
 {
 	private:
 		KPackageProjectRequirements* m_Requirements = NULL;
@@ -21,6 +21,7 @@ class KPCRGroupsModel: public KPackageCreatorVectorModel<KPPRRequirementsGroupAr
 		virtual wxWindow* OnGetDataViewWindow() override;
 		virtual void OnInitControl() override;
 
+		virtual void GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
 		virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
 		virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
 

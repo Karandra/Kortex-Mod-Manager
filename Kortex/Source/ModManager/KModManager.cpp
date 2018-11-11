@@ -30,6 +30,7 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
+#include <execution>
 
 void KModManager::DoResortMods(const KProfile& profile)
 {
@@ -331,11 +332,12 @@ void KModManager::Load()
 		}
 	}
 
-	// Load lists
-	for (KModEntry* entry: GetAllEntries(true))
+	// Build mod file trees
+	KModEntry::RefVector allEntries = GetAllEntries(true);
+	std::for_each(std::execution::par_unseq, allEntries.begin(), allEntries.end(), [](KModEntry* entry)
 	{
 		entry->UpdateFileTree();
-	}
+	});
 
 	if (KDispatcher::HasInstance())
 	{

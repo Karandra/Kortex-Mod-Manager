@@ -17,45 +17,64 @@
 
 wxString KPackageCreatorPageComponents::FormatArrayToText(const KxStringVector& array)
 {
-	return array.empty() ? KAux::MakeNoneLabel() : KxString::Join(array, ", ");
+	return array.empty() ? wxEmptyString : KxString::Join(array, wxS(", "));
 }
-wxString KPackageCreatorPageComponents::FormatArrayToText(const KPPCFlagEntryArray& array, bool isRequired)
+wxString KPackageCreatorPageComponents::ConditionToString(const KPPCCondition& condition, bool isRequired)
 {
-	if (!array.empty())
-	{
-		wxString out;
-		for (size_t i = 0; i < array.size(); i++)
-		{
-			const KPPCFlagEntry& flag = array[i];
-			out.Append(wxString::Format("%s %s \"%s\"", flag.GetName(), (isRequired ? "==" : "="), flag.GetValue()));
+	wxString out;
 
-			if (i + 1 != array.size())
+	const KPPCFlagEntry::Vector& flags = condition.GetFlags();
+	for (size_t i = 0; i < flags.size(); i++)
+	{
+		const KPPCFlagEntry& flag = flags[i];
+		out.Append(KxString::Format(wxS("%1 %2 \"%3\""), flag.GetName(), (isRequired ? wxS("==") : wxS("=")), flag.GetValue()));
+
+		if (i + 1 != flags.size())
+		{
+			if (isRequired)
 			{
-				if (isRequired)
-				{
-					out.Append(' ' + KPackageProjectRequirements::OperatorToSymbolicName(flag.GetOperator()) + ' ');
-				}
-				else
-				{
-					out.Append(", ");
-				}
+				out += wxS(" ");
+				out += KPackageProject::OperatorToSymbolicName(condition.GetOperator());
+				out += wxS(" ");
+			}
+			else
+			{
+				out += wxS(", ");
 			}
 		}
-		return out;
 	}
-	return KAux::MakeNoneLabel();
+	return out;
+}
+wxString KPackageCreatorPageComponents::ConditionGroupToString(const KPPCConditionGroup& conditionGroup)
+{
+	wxString out;
+	if (conditionGroup.HasConditions())
+	{
+		const KPPCCondition::Vector& conditions = conditionGroup.GetConditions();
+		for (size_t i = 0; i < conditions.size(); i++)
+		{
+			out.Append(wxS('(') + ConditionToString(conditions[i], true) + wxS(')'));
+			if (i + 1 != conditions.size())
+			{
+				out += wxS(" ");
+				out += KPackageProject::OperatorToSymbolicName(conditionGroup.GetOperator());
+				out += wxS(" ");
+			}
+		}
+	}
+	return out;
 }
 
 KPackageCreatorPageComponents::KPackageCreatorPageComponents(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller)
 	:KPackageCreatorPageBase(mainWorkspace, controller),
-	m_MainOptions(this, "MainUI"), m_ComponnetsOptions(this, "ComponentsView")
+	m_MainOptions(this, "MainUI"), m_ComponentsOptions(this, "ComponentsView")
 {
 }
 KPackageCreatorPageComponents::~KPackageCreatorPageComponents()
 {
 	if (IsWorkspaceCreated())
 	{
-		KProgramOptionSerializer::SaveDataViewLayout(m_ComponentsModel->GetView(), m_ComponnetsOptions);
+		KProgramOptionSerializer::SaveDataViewLayout(m_ComponentsModel->GetView(), m_ComponentsOptions);
 	}
 }
 bool KPackageCreatorPageComponents::OnCreateWorkspace()
@@ -63,7 +82,7 @@ bool KPackageCreatorPageComponents::OnCreateWorkspace()
 	CreateComponentsView();
 	CreateMiscControls();
 
-	KProgramOptionSerializer::LoadDataViewLayout(m_ComponentsModel->GetView(), m_ComponnetsOptions);
+	KProgramOptionSerializer::LoadDataViewLayout(m_ComponentsModel->GetView(), m_ComponentsOptions);
 	return true;
 }
 KPackageProjectComponents& KPackageCreatorPageComponents::GetProjectComponents() const

@@ -165,11 +165,11 @@ class KInstallWizardDialog:
 		void OnSelectComponent(KxDataViewEvent& event);
 
 		void StoreRequirementsFlags();
-		void StoreStepFlags(const KPPCEntryRefArray& checkedEntries);
+		void StoreStepFlags(const KPPCEntry::RefVector& checkedEntries);
 		void RestoreStepFlagsUpToThis(const KPPCStep& step);
 
 		bool IsConditionSatisfied(const KPPCFlagEntry& flagEntry) const;
-		bool IsConditionsSatisfied(const KPPCFlagEntryArray& flags) const;
+		bool IsConditionsSatisfied(const KPPCConditionGroup& conditionGroup) const;
 		bool IsStepSatisfiesConditions(const KPPCStep& step) const;
 		bool CheckIsManualComponentsAvailable() const;
 		KPPCStep* GetFirstStepSatisfiesConditions() const;

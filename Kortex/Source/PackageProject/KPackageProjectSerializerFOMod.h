@@ -36,7 +36,6 @@ class KPackageProjectSerializerFOMod: public KPackageProjectSerializer
 		wxString MakeProjectPath(const wxString& path) const;
 		KPPCSelectionMode ConvertSelectionMode(const wxString& mode) const;
 		wxString ConvertSelectionMode(KPPCSelectionMode mode) const;
-		KPPOperator DecideOperator(const wxSize& v1, const wxSize& v2 = wxSize(0, 0)) const;
 		KxStringVector ConvertTagsArray(const KxStringVector& FOModTags) const;
 		template<class T> void UniqueStringArray(T& array)
 		{
@@ -51,13 +50,6 @@ class KPackageProjectSerializerFOMod: public KPackageProjectSerializer
 		void ReadInstallSteps();
 		void ReadConditionalSteps(const KxXMLNode& stepsArrayNode);
 		FilePriorityArray ReadFileData(const KxXMLNode& filesArrayNode, KPPCEntry* entry = NULL);
-		KPPOperator ReadCompositeDependencies(const KxXMLNode& dependenciesNode,
-											  KPPCFlagEntryArray* conditions = NULL,
-											  KPPCEntry* componentsEntry = NULL,
-											  KPPRRequirementsGroup** reqGroupOut = NULL,
-											  bool alwaysCreateReqGroup = false,
-											  const wxString& createdReqGroupID = wxEmptyString
-		);
 		void UniqueFileData();
 		void UniqueImages();
 
@@ -68,7 +60,7 @@ class KPackageProjectSerializerFOMod: public KPackageProjectSerializer
 		void WriteInstallSteps();
 		void WriteConditionalSteps(KxXMLNode& stepsArrayNode);
 		void WriteFileData(KxXMLNode& node, const KxStringVector& files, bool alwaysInstall = false);
-		wxSize WriteRequirements(KxXMLNode& node, const KxStringVector& requiremetSets);
+		void WriteRequirements(KxXMLNode& node, const KxStringVector& requiremetSets);
 
 	private:
 		void InitDataFolderInfo();

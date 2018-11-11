@@ -11,45 +11,70 @@
 #include "PackageManager/KPackageManager.h"
 #include "ModManager/KModManager.h"
 #include "GameInstance/KGameInstance.h"
+#include "Network/KNetwork.h"
 #include "KAux.h"
 
-static void WriteKPPCFlagEntryArray(const KPPCFlagEntryArray& array, KxXMLNode& arrayNode, bool isRequired)
+namespace
 {
-	arrayNode.ClearChildren();
-	for (const KPPCFlagEntry& value: array)
+	void WriteCondition(const KPPCCondition& condition, KxXMLNode& conditionNode, bool writeOperator)
 	{
-		KxXMLNode entryNode = arrayNode.NewElement("Flag");
-		entryNode.SetValue(value.GetValue());
-		entryNode.SetAttribute("Name", value.GetName());
-		if (isRequired)
+		if (writeOperator)
 		{
-			entryNode.SetAttribute("Operator", KPackageProjectRequirements::OperatorToString(value.GetOperator()));
+			conditionNode.SetAttribute("Operator", KPackageProject::OperatorToString(condition.GetOperator()));
 		}
-	}
-}
-static void ReadKPPCFlagEntryArray(KPPCFlagEntryArray& array, const KxXMLNode& arrayNode, bool isRequired)
-{
-	for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
-	{
-		KPPOperator operatorType = KPackageProjectComponents::ms_DefaultFlagsOperator;
-		if (isRequired)
-		{
-			operatorType = KPackageProjectRequirements::StringToOperator(node.GetAttribute("Operator"), false, operatorType);
-		}
-		array.emplace_back(KPPCFlagEntry(node.GetValue(), node.GetAttribute("Name"), operatorType));
-	}
-}
-template<class T> static void WriteLabeledValueArray(const KLabeledValueArray& array, KxXMLNode& arrayNode, const T& Func, bool isCDATA = false)
-{
-	arrayNode.ClearChildren();
-	for (const KLabeledValue& value: array)
-	{
-		KxXMLNode elementNode = arrayNode.NewElement("Entry");
 
-		elementNode.SetValue(Func(value), isCDATA);
-		if (value.HasLabel())
+		for (const KPPCFlagEntry& flag: condition.GetFlags())
 		{
-			elementNode.SetAttribute("Name", value.GetLabel());
+			KxXMLNode flagNode = conditionNode.NewElement("Flag");
+			flagNode.SetValue(flag.GetValue());
+			flagNode.SetAttribute("Name", flag.GetName());
+		}
+	}
+	void WriteConditionGroup(const KPPCConditionGroup& conditionGroup, KxXMLNode& groupNode)
+	{
+		groupNode.SetAttribute("Operator", KPackageProject::OperatorToString(conditionGroup.GetOperator()));
+		for (const KPPCCondition& condition: conditionGroup.GetConditions())
+		{
+			if (condition.HasFlags())
+			{
+				WriteCondition(condition, groupNode.NewElement("Condition"), true);
+			}
+		}
+	}
+	
+	void ReadCondition(KPPCCondition& condition, const KxXMLNode& conditionNode)
+	{
+		condition.SetOperator(KPackageProject::StringToOperator(conditionNode.GetAttribute("Operator"), false, KPP_OPERATOR_AND));
+		for (KxXMLNode node = conditionNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+		{
+			condition.GetFlags().emplace_back(node.GetValue(), node.GetAttribute("Name"));
+		}
+	}
+	void ReadConditionGroup(KPPCConditionGroup& conditionGroup, const KxXMLNode& groupNode)
+	{
+		conditionGroup.SetOperator(KPackageProject::StringToOperator(groupNode.GetAttribute("Operator"), false, KPP_OPERATOR_AND));
+		for (KxXMLNode conditionNode = groupNode.GetFirstChildElement(); conditionNode.IsOK(); conditionNode = conditionNode.GetNextSiblingElement())
+		{
+			KPPCCondition& condition = conditionGroup.GetConditions().emplace_back();
+			ReadCondition(condition, conditionNode);
+			if (!condition.HasFlags())
+			{
+				conditionGroup.GetConditions().pop_back();
+			}
+		}
+	}
+
+	template<class T> void WriteLabeledValueArray(const KLabeledValueArray& array, KxXMLNode& arrayNode, const T& Func, bool isCDATA = false)
+	{
+		for (const KLabeledValue& value: array)
+		{
+			KxXMLNode elementNode = arrayNode.NewElement("Entry");
+
+			elementNode.SetValue(Func(value), isCDATA);
+			if (value.HasLabel())
+			{
+				elementNode.SetAttribute("Name", value.GetLabel());
+			}
 		}
 	}
 }
@@ -100,11 +125,35 @@ void KPackageProjectSerializerKMP::ReadInfo()
 		KAux::LoadLabeledValueArray(info.GetCustomFields(), infoNode.GetFirstChildElement("Custom"));
 
 		// Web-sites
-		KxXMLNode sitesNode = infoNode.GetFirstChildElement("Sites");
-		info.SetWebSite(KNETWORK_PROVIDER_ID_NEXUS, sitesNode.GetAttributeInt("NexusID", -1));
-		info.SetWebSite(KNETWORK_PROVIDER_ID_TESALL, sitesNode.GetAttributeInt("TESALLID", -1));
-		info.SetWebSite(KNETWORK_PROVIDER_ID_LOVERSLAB, sitesNode.GetAttributeInt("LoversLabID", -1));
-		KAux::LoadLabeledValueArray(info.GetWebSites(), sitesNode, "Name");
+		if (m_ProjectLoad->GetFormatVersion() < KxVersion("1.3"))
+		{
+			KxXMLNode sitesNode = infoNode.GetFirstChildElement("Sites");
+			info.SetWebSite(KNETWORK_PROVIDER_ID_NEXUS, sitesNode.GetAttributeInt("NexusID", -1));
+			info.SetWebSite(KNETWORK_PROVIDER_ID_TESALL, sitesNode.GetAttributeInt("TESALLID", -1));
+			info.SetWebSite(KNETWORK_PROVIDER_ID_LOVERSLAB, sitesNode.GetAttributeInt("LoversLabID", -1));
+			KAux::LoadLabeledValueArray(info.GetWebSites(), sitesNode, "Name");
+		}
+		else
+		{
+			KxXMLNode providerNode = infoNode.GetFirstChildElement("Provider");
+			auto LoadProviderInfo = [&providerNode, &info](KNetworkProviderID index)
+			{
+				if (info.HasWebSite(index))
+				{
+					wxString name = KNetwork::GetInstance()->GetProvider(index)->GetName();
+					KNetworkModID id = providerNode.GetFirstChildElement(name).GetAttributeInt("ModID", KNETWORK_PROVIDER_ID_INVALID);
+					if (id != KNETWORK_PROVIDER_ID_INVALID)
+					{
+						info.SetWebSite(index, id);
+					}
+				}
+			};
+			LoadProviderInfo(KNETWORK_PROVIDER_ID_NEXUS);
+			LoadProviderInfo(KNETWORK_PROVIDER_ID_TESALL);
+			LoadProviderInfo(KNETWORK_PROVIDER_ID_LOVERSLAB);
+
+			KAux::LoadLabeledValueArray(info.GetWebSites(), infoNode.GetFirstChildElement("WebSites"), "Name");
+		}
 
 		// Documents
 		KAux::LoadLabeledValueArray(info.GetDocuments(), infoNode.GetFirstChildElement("Documents"), "Name");
@@ -158,7 +207,7 @@ void KPackageProjectSerializerKMP::ReadInterface()
 		}
 	}
 }
-void KPackageProjectSerializerKMP::ReadFileData()
+void KPackageProjectSerializerKMP::ReadFiles()
 {
 	KxXMLNode fileDataNode = m_XML.QueryElement("Package/Files");
 	if (fileDataNode.IsOK())
@@ -210,6 +259,7 @@ void KPackageProjectSerializerKMP::ReadRequirements()
 		{
 			KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
 			requirementGroup->SetID(groupNode.GetAttribute("ID"));
+			requirementGroup->SetOperator(KPackageProject::StringToOperator(groupNode.GetAttribute("Operator"), false, requirements.ms_DefaultGroupOperator));
 
 			for (KxXMLNode entryNode = groupNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 			{
@@ -217,7 +267,6 @@ void KPackageProjectSerializerKMP::ReadRequirements()
 
 				KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(new KPPRRequirementEntry(type)).get();
 				entry->SetID(entryNode.GetAttribute("ID"));
-				entry->SetOperator(requirements.StringToOperator(entryNode.GetAttribute("Operator"), requirements.ms_DefaultEntryOperator));
 				entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 
 				// Object
@@ -228,7 +277,7 @@ void KPackageProjectSerializerKMP::ReadRequirements()
 				// Version
 				KxXMLNode versionNode = entryNode.GetFirstChildElement("Version");
 				entry->SetRequiredVersion(versionNode.GetValue());
-				entry->SetRVFunction(requirements.StringToOperator(versionNode.GetAttribute("Function"), requirements.ms_DefaultVersionOperator));
+				entry->SetRVFunction(KPackageProject::StringToOperator(versionNode.GetAttribute("Function"), false, requirements.ms_DefaultVersionOperator));
 
 				// Description
 				entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
@@ -254,7 +303,7 @@ void KPackageProjectSerializerKMP::ReadComponents()
 		{
 			auto& step = components.GetSteps().emplace_back(new KPPCStep());
 			step->SetName(stepNode.GetAttribute("Name"));
-			ReadKPPCFlagEntryArray(step->GetConditions(), stepNode.GetFirstChildElement("Conditions"), true);
+			ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("Conditions"));
 
 			for (KxXMLNode groupNode = stepNode.GetFirstChildElement("Groups").GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 			{
@@ -273,17 +322,42 @@ void KPackageProjectSerializerKMP::ReadComponents()
 					KxXMLNode typeDescriptorNode = entryNode.GetFirstChildElement("TypeDescriptor");
 					entry->SetTDDefaultValue(components.StringToTypeDescriptor(typeDescriptorNode.GetAttribute("DefaultValue")));
 					entry->SetTDConditionalValue(components.StringToTypeDescriptor(typeDescriptorNode.GetAttribute("ConditionalValue"), KPPC_DESCRIPTOR_INVALID));
-					ReadKPPCFlagEntryArray(entry->GetTDConditions(), typeDescriptorNode.GetFirstChildElement("Conditions"), true);
+					
+					if (m_ProjectLoad->GetFormatVersion() < KxVersion("1.3"))
+					{
+						KxXMLNode conditionsNode = typeDescriptorNode.GetFirstChildElement("Conditions");
+						if (conditionsNode.IsOK())
+						{
+							KPPCConditionGroup& conditionGroup = entry->GetTDConditionGroup();
+							KPPCCondition& condition = conditionGroup.GetOrCreateFirstCondition();
+							ReadCondition(condition, conditionsNode);
+
+							conditionGroup.SetOperator(KPP_OPERATOR_AND);
+							condition.SetOperator(KPP_OPERATOR_AND);
+						}
+					}
+					else
+					{
+						ReadConditionGroup(entry->GetTDConditionGroup(), typeDescriptorNode.GetFirstChildElement("Conditions"));
+					}
 
 					// If condition list is empty and type descriptor values are equal, clear 'ConditionalValue'
-					if (entry->GetTDConditions().empty() && entry->GetTDDefaultValue() == entry->GetTDConditionalValue())
+					if (!entry->GetTDConditionGroup().HasConditions() && entry->GetTDDefaultValue() == entry->GetTDConditionalValue())
 					{
 						entry->SetTDConditionalValue(KPPC_DESCRIPTOR_INVALID);
 					}
 
 					KAux::LoadStringArray(entry->GetFileData(), entryNode.GetFirstChildElement("Files"));
 					KAux::LoadStringArray(entry->GetRequirements(), entryNode.GetFirstChildElement("Requirements"));
-					ReadKPPCFlagEntryArray(entry->GetAssignedFlags(), entryNode.GetFirstChildElement("AssignedFlags"), false);
+					
+					// Conditional flags
+					KxXMLNode conditionalFlagsNode = entryNode.GetFirstChildElement("ConditionalFlags");
+					if (!conditionalFlagsNode.IsOK())
+					{
+						// Old option name
+						conditionalFlagsNode = entryNode.GetFirstChildElement("AssignedFlags");
+					}
+					ReadCondition(entry->GetConditionalFlags(), conditionalFlagsNode);
 				}
 			}
 		}
@@ -293,7 +367,7 @@ void KPackageProjectSerializerKMP::ReadComponents()
 			for (KxXMLNode stepNode = componentsNode.GetFirstChildElement(sRootNodeName).GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 			{
 				auto& step = components.GetConditionalSteps().emplace_back(new KPPCConditionalStep());
-				ReadKPPCFlagEntryArray(step->GetConditions(), stepNode.GetFirstChildElement("Conditions"), true);
+				ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("Conditions"));
 				KAux::LoadStringArray(step->GetEntries(), stepNode.GetFirstChildElement(sNodeName));
 			}
 		};
@@ -356,18 +430,22 @@ void KPackageProjectSerializerKMP::WriteInfo(KxXMLNode& baseNode)
 	}
 
 	// Web-sites
-	KxXMLNode sitesNode = infoNode.NewElement("Sites");
-	auto WriteFixedSite = [&sitesNode, info](const char* name, KNetworkProviderID index)
+	KxXMLNode providerNode = infoNode.NewElement("Provider");
+	auto WriteProviderInfo = [&providerNode, &info](KNetworkProviderID index)
 	{
 		if (info.HasWebSite(index))
 		{
-			sitesNode.SetAttribute(name, info.GetWebSiteModID(index));
+			providerNode.NewElement(KNetwork::GetInstance()->GetProvider(index)->GetName()).SetAttribute("ModID", info.GetWebSiteModID(index));
 		}
 	};
-	WriteFixedSite("NexusID", KNETWORK_PROVIDER_ID_NEXUS);
-	WriteFixedSite("TESALLID", KNETWORK_PROVIDER_ID_TESALL);
-	WriteFixedSite("LoversLabID", KNETWORK_PROVIDER_ID_LOVERSLAB);
-	KAux::SaveLabeledValueArray(info.GetWebSites(), sitesNode, "Name");
+	WriteProviderInfo(KNETWORK_PROVIDER_ID_NEXUS);
+	WriteProviderInfo(KNETWORK_PROVIDER_ID_TESALL);
+	WriteProviderInfo(KNETWORK_PROVIDER_ID_LOVERSLAB);
+
+	if (!info.GetWebSites().empty())
+	{
+		KAux::SaveLabeledValueArray(info.GetWebSites(), infoNode.NewElement("WebSites"), "Name");
+	}
 
 	// Documents
 	if (!info.GetDocuments().empty())
@@ -443,7 +521,7 @@ void KPackageProjectSerializerKMP::WriteInterface(KxXMLNode& baseNode)
 		}
 	}
 }
-void KPackageProjectSerializerKMP::WriteFileData(KxXMLNode& baseNode)
+void KPackageProjectSerializerKMP::WriteFiles(KxXMLNode& baseNode)
 {
 	KxXMLNode fileDataNode = baseNode.NewElement("Files");
 	const KPackageProjectFileData& fileData = m_ProjectSave->GetFileData();
@@ -503,20 +581,21 @@ void KPackageProjectSerializerKMP::WriteRequirements(KxXMLNode& baseNode)
 		{
 			KxXMLNode requirementsGroupNode = groupsArrayNode.NewElement("Group");
 			requirementsGroupNode.SetAttribute("ID", group->GetID());
+			requirementsGroupNode.SetAttribute("Operator", KPackageProject::OperatorToString(group->GetOperator()));
 
 			if (!group->GetEntries().empty())
 			{
 				for (const auto& entry: group->GetEntries())
 				{
 					KxXMLNode entryNode = requirementsGroupNode.NewElement("Entry");
-					if (!entry->GetID().IsEmpty())
+					if (!entry->IsEmptyID())
 					{
-						entryNode.SetAttribute("ID", entry->GetID());
+						entryNode.SetAttribute("ID", entry->RawGetID());
 					}
 					entryNode.SetAttribute("Type", requirements.TypeDescriptorToString(entry->GetTypeDescriptor()));
-					entryNode.SetAttribute("Operator", requirements.OperatorToString(entry->GetOperator()));
 
-					entryNode.NewElement("Name").SetValue(entry->GetName());
+					// Name
+					entryNode.NewElement("Name").SetValue(entry->RawGetName());
 
 					// Object
 					KxXMLNode objectNode = entryNode.NewElement("Object");
@@ -526,7 +605,7 @@ void KPackageProjectSerializerKMP::WriteRequirements(KxXMLNode& baseNode)
 					// Version
 					KxXMLNode versionNode = entryNode.NewElement("Version");
 					versionNode.SetValue(entry->GetRequiredVersion());
-					versionNode.SetAttribute("Function", requirements.OperatorToString(entry->GetRVFunction()));
+					versionNode.SetAttribute("Function", KPackageProject::OperatorToString(entry->GetRVFunction()));
 
 					// Description
 					if (!entry->GetDescription().IsEmpty())
@@ -563,11 +642,10 @@ void KPackageProjectSerializerKMP::WriteComponents(KxXMLNode& baseNode)
 			}
 
 			/* Step conditions */
-			if (!step->GetConditions().empty())
+			if (step->GetConditionGroup().HasConditions())
 			{
-				WriteKPPCFlagEntryArray(step->GetConditions(), stepNode.NewElement("Conditions"), true);
+				WriteConditionGroup(step->GetConditionGroup(), stepNode.NewElement("ConditionGroup"));
 			}
-			
 
 			/* Groups */
 			if (!step->GetGroups().empty())
@@ -614,9 +692,9 @@ void KPackageProjectSerializerKMP::WriteComponents(KxXMLNode& baseNode)
 								typeDescriptorNode.SetAttribute("ConditionalValue", components.TypeDescriptorToString(entry->GetTDConditionalValue()));
 							}
 
-							if (!entry->GetTDConditions().empty())
+							if (entry->GetTDConditionGroup().HasConditions())
 							{
-								WriteKPPCFlagEntryArray(entry->GetTDConditions(), typeDescriptorNode.NewElement("Conditions"), true);
+								WriteConditionGroup(entry->GetTDConditionGroup(), typeDescriptorNode.NewElement("Conditions"));
 							}
 
 							if (!entry->GetFileData().empty())
@@ -629,9 +707,9 @@ void KPackageProjectSerializerKMP::WriteComponents(KxXMLNode& baseNode)
 								KAux::SaveStringArray(entry->GetRequirements(), entryNode.NewElement("Requirements"));
 							}
 
-							if (!entry->GetAssignedFlags().empty())
+							if (entry->GetConditionalFlags().HasFlags())
 							{
-								WriteKPPCFlagEntryArray(entry->GetAssignedFlags(), entryNode.NewElement("AssignedFlags"), false);
+								WriteCondition(entry->GetConditionalFlags(), entryNode.NewElement("ConditionalFlags"), false);
 							}
 						}
 					}
@@ -640,7 +718,7 @@ void KPackageProjectSerializerKMP::WriteComponents(KxXMLNode& baseNode)
 		}
 	}
 
-	auto WriteConditionalSteps = [&componentsNode](const KPPCConditionalStepArray& steps, const wxString& sRootNodeName, const wxString& sNodeName)
+	auto WriteConditionalSteps = [&componentsNode](const KPPCConditionalStep::Vector& steps, const wxString& sRootNodeName, const wxString& sNodeName)
 	{
 		if (!steps.empty())
 		{
@@ -649,9 +727,9 @@ void KPackageProjectSerializerKMP::WriteComponents(KxXMLNode& baseNode)
 			{
 				/* Header */
 				KxXMLNode setNode = stepsArrayNode.NewElement("Step");
-				if (!step->GetConditions().empty())
+				if (step->GetConditionGroup().HasConditions())
 				{
-					WriteKPPCFlagEntryArray(step->GetConditions(), setNode.NewElement("Conditions"), true);
+					WriteConditionGroup(step->GetConditionGroup(), setNode.NewElement("Conditions"));
 				}
 
 				/* Entries */
@@ -673,7 +751,7 @@ void KPackageProjectSerializerKMP::Serialize(const KPackageProject* project)
 	KxXMLNode baseNode = WriteBase();
 	WriteConfig(baseNode);
 	WriteInfo(baseNode);
-	WriteFileData(baseNode);
+	WriteFiles(baseNode);
 	WriteInterface(baseNode);
 	WriteRequirements(baseNode);
 	WriteComponents(baseNode);
@@ -688,7 +766,7 @@ void KPackageProjectSerializerKMP::Structurize(KPackageProject* project)
 	ReadBase();
 	ReadConfig();
 	ReadInfo();
-	ReadFileData();
+	ReadFiles();
 	ReadInterface();
 	ReadRequirements();
 	ReadComponents();

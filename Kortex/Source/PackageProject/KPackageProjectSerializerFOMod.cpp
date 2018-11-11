@@ -15,49 +15,258 @@
 #include "KUnsortedUnique.h"
 #include <KxFramework/KxString.h>
 
-static wxSize WriteKPPCFlagEntryArray(const KPPCFlagEntryArray& array, KxXMLNode& arrayNode, bool isRequired)
+namespace
 {
-	int andCount = 0;
-	int orCount = 0;
-
-	arrayNode.ClearChildren();
-	for (const KPPCFlagEntry& value: array)
+	wxString ToFOModOperator(KPPOperator value)
 	{
-		value.GetOperator() == KPP_OPERATOR_AND ? andCount++ : orCount++;
+		return value == KPP_OPERATOR_OR ? wxS("Or") : wxS("And");
+	}
+	KPPOperator FromFOModOperator(const wxString& value)
+	{
+		return value == wxS("Or") ? KPP_OPERATOR_OR : KPP_OPERATOR_AND;
+	}
 
-		if (isRequired)
+	void WriteCondition(const KPPCCondition& condition, KxXMLNode& conditionNode)
+	{
+		for (const KPPCFlagEntry& flag: condition.GetFlags())
 		{
-			KxXMLNode entryNode = arrayNode.NewElement("flagDependency");
-			entryNode.SetAttribute("flag", value.GetName());
-			entryNode.SetAttribute("value", value.GetValue());
+			KxXMLNode entryNode = conditionNode.NewElement("flagDependency");
+			entryNode.SetAttribute("flag", flag.GetName());
+			entryNode.SetAttribute("value", flag.GetValue());
+		}
+	}
+	void WriteConditionGroup(const KPPCConditionGroup& conditionGroup, KxXMLNode& groupNode)
+	{
+		groupNode.SetAttribute("operator", ToFOModOperator(conditionGroup.GetOperator()));
+
+		const KPPCCondition::Vector& conditions = conditionGroup.GetConditions();
+		if (conditions.size() == 1)
+		{
+			if (conditions.front().HasFlags())
+			{
+				WriteCondition(conditions.front(), groupNode);
+			}
 		}
 		else
 		{
-			KxXMLNode entryNode = arrayNode.NewElement("flag");
-			entryNode.SetValue(value.GetValue());
-			entryNode.SetAttribute("name", value.GetName());
+			for (const KPPCCondition& condition: conditions)
+			{
+				if (condition.HasFlags())
+				{
+					WriteCondition(condition, groupNode.NewElement("dependencies"));
+				}
+			}
 		}
 	}
-	return wxSize(andCount, orCount);
-}
-static void ReadKPPCFlagEntryArray(KPPCFlagEntryArray& array, const KxXMLNode& arrayNode, KPPOperator operatorType = KPP_OPERATOR_INVALID)
-{
-	operatorType != KPP_OPERATOR_INVALID ? operatorType : KPackageProjectComponents::ms_DefaultFlagsOperator;
 
-	for (KxXMLNode node = arrayNode.GetFirstChildElement("flag"); node.IsOK(); node = node.GetNextSiblingElement("flag"))
+	void ReadAssignedFlags(KPPCCondition& condition, const KxXMLNode& conditionNode)
 	{
-		array.emplace_back(KPPCFlagEntry(node.GetValue(), node.GetAttribute("name"), operatorType));
-	}
-}
-template<class T> static void SortEntries(T& array, const wxString& order)
-{
-	if (order != "Explicit")
-	{
-		bool isLess = order == "Ascending";
-		std::sort(array.begin(), array.end(), [isLess](const auto& v1, const auto& v2)
+		for (KxXMLNode node = conditionNode.GetFirstChildElement("flag"); node.IsOK(); node = node.GetNextSiblingElement("flag"))
 		{
-			return isLess ? v1->GetName() < v2->GetName() : v1->GetName() > v2->GetName();
-		});
+			condition.GetFlags().emplace_back(node.GetValue(), node.GetAttribute("name"));
+		}
+	}
+	void WriteAssignedFlags(const KPPCCondition& condition, KxXMLNode& conditionNode)
+	{
+		conditionNode.SetAttribute("operator", ToFOModOperator(condition.GetOperator()));
+		for (const KPPCFlagEntry& flag : condition.GetFlags())
+		{
+			KxXMLNode entryNode = conditionNode.NewElement("flag");
+			entryNode.SetValue(flag.GetValue());
+			entryNode.SetAttribute("name", flag.GetName());
+		}
+	}
+
+	void ReadCompositeDependenciesAux(KPackageProject& project,
+									  const KxXMLNode& dependenciesNode,
+									  KPPCConditionGroup* conditionGroup,
+									  KPPCEntry* componentEntry,
+									  bool alwaysCreateReqGroup,
+									  const wxString& createdReqGroupID,
+									  KPPRRequirementsGroup*& requirementsGroup
+	)
+	{
+		KPPOperator operatorType = FromFOModOperator(dependenciesNode.GetAttribute("operator"));
+
+		auto CreateOrGetRequirementsGroup = [&project, &createdReqGroupID, &requirementsGroup, operatorType]()
+		{
+			if (!requirementsGroup)
+			{
+				requirementsGroup = project.GetRequirements().GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
+				requirementsGroup->SetID(createdReqGroupID);
+				requirementsGroup->SetOperator(operatorType);
+			}
+			return requirementsGroup;
+		};
+		if (alwaysCreateReqGroup)
+		{
+			CreateOrGetRequirementsGroup();
+		}
+
+		for (KxXMLNode depNode = dependenciesNode.GetFirstChildElement(); depNode.IsOK(); depNode = depNode.GetNextSiblingElement())
+		{
+			std::unique_ptr<KPPRRequirementEntry> reqEntry;
+
+			wxString name = depNode.GetName();
+			if (name == "fileDependency")
+			{
+				reqEntry = std::make_unique<KPPRRequirementEntry>();
+				reqEntry->SetObject(depNode.GetAttribute("file"));
+
+				// FOMod support only these three required states
+				wxString state = depNode.GetAttribute("state");
+				if (state == "Active")
+				{
+					reqEntry->SetObjectFunction(KPPR_OBJFUNC_PLUGIN_ACTIVE);
+				}
+				else if (state == "Inactive")
+				{
+					reqEntry->SetObjectFunction(KPPR_OBJFUNC_PLUGIN_INACTIVE);
+				}
+				else if (state == "Missing")
+				{
+					reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_NOT_EXIST);
+				}
+				else
+				{
+					reqEntry->SetObjectFunction(KPPR_OBJFUNC_NONE);
+				}
+			}
+			else if (name == "gameDependency")
+			{
+				reqEntry = std::make_unique<KPPRRequirementEntry>();
+
+				// Copy std requirement for current game and set required version from FOMod
+				const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindStdReqirement(KApp::Get().GetCurrentGameID());
+
+				// This check probably redundant, but just in case
+				if (stdEntry)
+				{
+					*reqEntry = *stdEntry;
+				}
+				else
+				{
+					reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
+				}
+				reqEntry->SetRequiredVersion(depNode.GetAttribute("version"));
+			}
+			else if (name == "foseDependency")
+			{
+				// Although it's named 'fose' I will interpret this as generic Script Extender requirement.
+				// What else can I do? Check game ID and continue only if it's Fallout 3?
+				reqEntry = std::make_unique<KPPRRequirementEntry>();
+
+				// There may be no Script Extender
+				const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->GetScriptExtenderRequirement();
+				if (stdEntry)
+				{
+					*reqEntry = *stdEntry;
+				}
+				else
+				{
+					// No SE, fill with something meaningful
+					reqEntry->SetName(KGameInstance::GetActive()->GetShortName() + " Script Extender");
+					reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
+				}
+			}
+			else if (name == "flagDependency")
+			{
+				// This is an equivalent of native 'Flag' attribute.
+				if (conditionGroup)
+				{
+					wxString name = depNode.GetAttribute("flag");
+					wxString value = depNode.GetAttribute("value");
+					conditionGroup->GetOrCreateFirstCondition().GetFlags().emplace_back(value, name);
+				}
+			}
+			else if (name == "fommDependency")
+			{
+				// This could be interpreted as mod manager version.
+				// Native format doesn't currently support that. It has a 'FormatVersion' attribute,
+				// but versions used in FOMod will surely be different from versions
+				// of Kortex's install engine. So ignore this for now.
+			}
+			else
+			{
+				// There also can be 'dependencies' element which can include another level of this structure.
+				// This seems wrong and I will not process this.
+			}
+
+			// If requirement entry has been created, force creation of a requirements group and add entry there
+			if (reqEntry)
+			{
+				// Create requirements group if needed and it haven't created earlier
+				CreateOrGetRequirementsGroup();
+
+				// If no name assigned to this entry (which is always the case right now),
+				// extract name from the requirement object file path.
+				if (reqEntry->IsEmptyName())
+				{
+					reqEntry->SetName(reqEntry->GetObject().AfterLast('\\').BeforeLast('.'));
+				}
+
+				// If still empty, use address as the name
+				if (reqEntry->IsEmptyName())
+				{
+					reqEntry->SetName(KxString::Format("FOModReq::0x%1", reqEntry.get()));
+				}
+
+				// Try change type to system. Most likely will fail.
+				reqEntry->TrySetTypeDescriptor(KPPR_TYPE_SYSTEM);
+
+				// Add the entry to its group
+				requirementsGroup->GetEntries().emplace_back(std::move(reqEntry));
+			}
+		}
+
+		// Set this requirements group as requirement to conditions group
+		if (conditionGroup && requirementsGroup)
+		{
+			conditionGroup->GetOrCreateFirstCondition().GetFlags().emplace_back("true", requirementsGroup->GetFlagName());
+		}
+
+		// Link this requirements group to provided component
+		if (componentEntry && requirementsGroup)
+		{
+			componentEntry->GetRequirements().emplace_back(requirementsGroup->GetID());
+		}
+	}
+	KPPRRequirementsGroup* ReadCompositeDependencies(KPackageProject& project,
+													 const KxXMLNode& dependenciesNode,
+													 KPPCConditionGroup* conditionGroup,
+													 KPPCEntry* componentsEntry,
+													 bool alwaysCreateReqGroup = false,
+													 const wxString& createdReqGroupID = wxEmptyString
+	)
+	{
+		// If we have child dependencies read them all to condition group.
+		// Else read them from this node.
+		KPPRRequirementsGroup* requirementsGroup = NULL;
+		KxXMLNode childDependenciesNode = dependenciesNode.GetFirstChildElement("dependencies");
+		if (childDependenciesNode.IsOK())
+		{
+			for (KxXMLNode node = childDependenciesNode; node.IsOK(); node = node.GetNextSiblingElement("dependencies"))
+			{
+				ReadCompositeDependenciesAux(project, node, conditionGroup, componentsEntry, alwaysCreateReqGroup, createdReqGroupID, requirementsGroup);
+			}
+		}
+		else
+		{
+			ReadCompositeDependenciesAux(project, dependenciesNode, conditionGroup, componentsEntry, alwaysCreateReqGroup, createdReqGroupID, requirementsGroup);
+		}
+		return requirementsGroup;
+	}
+
+	template<class T> void SortEntries(T& array, const wxString& order)
+	{
+		if (order != wxS("Explicit"))
+		{
+			const bool isLess = order == wxS("Ascending");
+			std::sort(array.begin(), array.end(), [isLess](const auto& v1, const auto& v2)
+			{
+				return isLess ? v1->GetName() < v2->GetName() : v1->GetName() > v2->GetName();
+			});
+		}
 	}
 }
 
@@ -93,19 +302,14 @@ wxString KPackageProjectSerializerFOMod::MakeProjectPath(const wxString& path) c
 	return wxEmptyString;
 }
 KPPCSelectionMode KPackageProjectSerializerFOMod::ConvertSelectionMode(const wxString& mode) const
-{	
-	// Remove 'Select' from string and use internal conversion function
+{
+	// Remove 'Select' (first 6 chars) from string and use internal conversion function.
 	return KPackageProjectComponents::StringToSelectionMode(wxString(mode).Remove(0, 6));
 }
 wxString KPackageProjectSerializerFOMod::ConvertSelectionMode(KPPCSelectionMode mode) const
 {
 	// Append internal conversion function result to 'Select'
-	return "Select" + KPackageProjectComponents::SelectionModeToString(mode);
-}
-KPPOperator KPackageProjectSerializerFOMod::DecideOperator(const wxSize& v1, const wxSize& v2) const
-{
-	wxSize totalOpCount = v1 + v2;
-	return totalOpCount.GetX() > totalOpCount.GetY() ? KPP_OPERATOR_AND : KPP_OPERATOR_OR;
+	return wxS("Select") + KPackageProjectComponents::SelectionModeToString(mode);
 }
 KxStringVector KPackageProjectSerializerFOMod::ConvertTagsArray(const KxStringVector& FOModTags) const
 {
@@ -249,13 +453,12 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 		}
 
 		// Main requirements
-		KPPRRequirementsGroup* mainReqsGroup = NULL;
 		KxXMLNode moduleReqsNode = configRootNode.GetFirstChildElement("moduleDependencies").GetFirstChildElement("dependencies");
 		if (!moduleReqsNode.IsOK())
 		{
 			moduleReqsNode = configRootNode.GetFirstChildElement("moduleDependencies");
 		}
-		ReadCompositeDependencies(moduleReqsNode, NULL, NULL, &mainReqsGroup, true, "Main");
+		KPPRRequirementsGroup* mainReqsGroup = ReadCompositeDependencies(*m_ProjectLoad, moduleReqsNode, NULL, NULL, true, "Main");
 		if (mainReqsGroup)
 		{
 			// If main requirements group is empty - add current game with no required version
@@ -285,7 +488,7 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 				{
 					stepConditionsNode = stepNode.GetFirstChildElement("visible");
 				}
-				ReadCompositeDependencies(stepConditionsNode, &step->GetConditions(), NULL, NULL, false, step->GetName());
+				ReadCompositeDependencies(*m_ProjectLoad, stepConditionsNode, &step->GetConditionGroup(), NULL, false, step->GetName());
 			}
 
 			KxXMLNode optionalFileGroupsNode = stepNode.GetFirstChildElement("optionalFileGroups");
@@ -323,8 +526,8 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 						if (typeDescriptorNodeName == "type")
 						{
 							// Simple variant
-							wxString sTypeDescriptor = typeDescriptorNode.GetAttribute("name");
-							entry->SetTDDefaultValue(KPackageProjectComponents::StringToTypeDescriptor(sTypeDescriptor));
+							wxString typeDescriptor = typeDescriptorNode.GetAttribute("name");
+							entry->SetTDDefaultValue(KPackageProjectComponents::StringToTypeDescriptor(typeDescriptor));
 						}
 						else if (typeDescriptorNodeName == "dependencyType")
 						{
@@ -336,12 +539,12 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 							entry->SetTDDefaultValue(KPackageProjectComponents::StringToTypeDescriptor(typeDescriptorNode.GetFirstChildElement("defaultType").GetAttribute("name")));
 							entry->SetTDConditionalValue(KPackageProjectComponents::StringToTypeDescriptor(node.GetFirstChildElement("type").GetAttribute("name")));
 
-							wxString reqGroupID = wxString::Format("%s::%s::%s", step->GetName(), group->GetName(), entry->GetName());
-							ReadCompositeDependencies(node.GetFirstChildElement("dependencies"), &entry->GetTDConditions(), entry, NULL, false, reqGroupID);
+							wxString reqGroupID = KxString::Format("%1::%2::%3", step->GetName(), group->GetName(), entry->GetName());
+							ReadCompositeDependencies(*m_ProjectLoad, node.GetFirstChildElement("dependencies"), &entry->GetTDConditionGroup(), entry, false, reqGroupID);
 						}
 
 						// Assigned flags
-						ReadKPPCFlagEntryArray(entry->GetAssignedFlags(), pluginNode.GetFirstChildElement("conditionFlags"));
+						ReadAssignedFlags(entry->GetConditionalFlags(), pluginNode.GetFirstChildElement("conditionFlags"));
 
 						// Files
 						ReadFileData(pluginNode.GetFirstChildElement("files"), entry);
@@ -385,12 +588,11 @@ void KPackageProjectSerializerFOMod::ReadConditionalSteps(const KxXMLNode& steps
 		}
 
 		// Conditions
-		KPPRRequirementsGroup* reqSet = NULL;
-		KPPOperator operatorType = ReadCompositeDependencies(stepNode.GetFirstChildElement("dependencies"), &step->GetConditions(), NULL, &reqSet);
+		KPPRRequirementsGroup* reqSet = ReadCompositeDependencies(*m_ProjectLoad, stepNode.GetFirstChildElement("dependencies"), &step->GetConditionGroup(), NULL);
 		if (reqSet)
 		{
-			reqSet->SetID(wxString::Format("ConditionalStep#%zu", index));
-			step->GetConditions().emplace_back(KPPCFlagEntry("true", reqSet->GetFlagName(), operatorType));
+			reqSet->SetID(KxString::Format("ConditionalStep#%1", index));
+			step->GetConditionGroup().GetOrCreateFirstCondition().GetFlags().emplace_back(KPPCFlagEntry("true", reqSet->GetFlagName()));
 		}
 	}
 }
@@ -453,159 +655,6 @@ KPackageProjectSerializerFOMod::FilePriorityArray KPackageProjectSerializerFOMod
 		}
 	}
 	return priorityList;
-}
-KPPOperator KPackageProjectSerializerFOMod::ReadCompositeDependencies(const KxXMLNode& dependenciesNode,
-																	  KPPCFlagEntryArray* conditions,
-																	  KPPCEntry* componentsEntry,
-																	  KPPRRequirementsGroup** reqGroupOut,
-																	  bool alwaysCreateReqGroup,
-																	  const wxString& createdReqGroupID
-)
-{
-	KPackageProjectRequirements& requirements = m_ProjectLoad->GetRequirements();
-
-	// These 'compositeDependency' structs can have an operator (default AND).
-	// I can apply it to flag and requirement entry as FOMod doesn't support operators for individual entries.
-	KPPOperator operatorType = dependenciesNode.GetAttribute("operator") == "Or" ? KPP_OPERATOR_OR : KPP_OPERATOR_AND;
-
-	KPPRRequirementsGroup* reqGroup = NULL;
-	if (alwaysCreateReqGroup)
-	{
-		reqGroup = requirements.GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
-		reqGroup->SetID(createdReqGroupID);
-	}
-
-	for (KxXMLNode depNode = dependenciesNode.GetFirstChildElement(); depNode.IsOK(); depNode = depNode.GetNextSiblingElement())
-	{
-		KPPRRequirementEntry* reqEntry = NULL;
-
-		wxString name = depNode.GetName();
-		if (name == "fileDependency")
-		{
-			reqEntry = new KPPRRequirementEntry();
-			reqEntry->SetObject(depNode.GetAttribute("file"));
-
-			// FOMod support only these three required states
-			wxString state = depNode.GetAttribute("state");
-			if (state == "Active")
-			{
-				reqEntry->SetObjectFunction(KPPR_OBJFUNC_PLUGIN_ACTIVE);
-			}
-			else if (state == "Inactive")
-			{
-				reqEntry->SetObjectFunction(KPPR_OBJFUNC_PLUGIN_INACTIVE);
-			}
-			else if (state == "Missing")
-			{
-				reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_NOT_EXIST);
-			}
-			else
-			{
-				reqEntry->SetObjectFunction(KPPR_OBJFUNC_NONE);
-			}
-		}
-		else if (name == "gameDependency")
-		{
-			reqEntry = new KPPRRequirementEntry();
-
-			// Copy std requirement for current game and set required version from FOMod
-			const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindStdReqirement(KApp::Get().GetCurrentGameID());
-			
-			// This check probably redundant, but just in case
-			if (stdEntry)
-			{
-				*reqEntry = *stdEntry;
-			}
-			else
-			{
-				reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
-			}
-			reqEntry->SetRequiredVersion(depNode.GetAttribute("version"));
-		}
-		else if (name == "foseDependency")
-		{
-			reqEntry = new KPPRRequirementEntry();
-
-			// Although it's named 'fose' I will interpret this as generic Script Extender requirement
-			const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindScriptExtenderRequirement();
-
-			// There may be no Script Extender
-			if (stdEntry)
-			{
-				*reqEntry = *stdEntry;
-			}
-			else
-			{
-				// Fill with something meaningful
-				reqEntry->SetName(KGameInstance::GetActive()->GetShortName() + " Script Extender");
-				reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
-			}
-		}
-		else if (name == "flagDependency")
-		{
-			// This is an equivalent of KMP's 'Conditions' attribute.
-			if (conditions)
-			{
-				wxString name = depNode.GetAttribute("flag");
-				wxString value = depNode.GetAttribute("value");
-				conditions->emplace_back(KPPCFlagEntry(value, name, operatorType));
-			}
-		}
-		else if (name == "fommDependency")
-		{
-			// This could be interpreted as mod manager version.
-			// KMP doesn't currently support that. It has a 'FormatVersion' attribute,
-			// but versions used in FOMod will surely be different from versions
-			// of Kortex's install engine. So ignore this for now.
-		}
-		else
-		{
-			// There also can be 'dependencies' element which can include another level of this structure.
-			// This seems wrong and I will not process this.
-		}
-
-		// Configure and add the requirement to its set
-		if (reqEntry)
-		{
-			reqEntry->SetOperator(operatorType);
-
-			// If no name assigned to this entry (which is always the case right now),
-			// extract name from file path.
-			if (reqEntry->GetName().IsEmpty())
-			{
-				reqEntry->SetName(reqEntry->GetObject().AfterLast('\\').BeforeLast('.'));
-			}
-
-			// Try set type to system
-			reqEntry->TrySetTypeDescriptor(KPPR_TYPE_SYSTEM);
-
-			// Create requirements group if needed and it haven't created earlier
-			if (!reqGroup)
-			{
-				reqGroup = requirements.GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
-				reqGroup->SetID(createdReqGroupID);
-			}
-			reqGroup->GetEntries().emplace_back(reqEntry);
-		}
-	}
-
-	// Set this group as flag requirement to conditions list
-	if (conditions && reqGroup)
-	{
-		conditions->emplace_back(KPPCFlagEntry("true", reqGroup->GetFlagName(), operatorType));
-	}
-
-	// Link this requirements group to provided component
-	if (componentsEntry && reqGroup)
-	{
-		componentsEntry->GetRequirements().emplace_back(reqGroup->GetID());
-	}
-
-	if (reqGroupOut)
-	{
-		*reqGroupOut = reqGroup;
-	}
-	return operatorType;
 }
 void KPackageProjectSerializerFOMod::UniqueFileData()
 {
@@ -708,7 +757,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 
 	// Write name
 	KxXMLNode moduleNameNode = configRootNode.NewElement("moduleName");
-	moduleNameNode.SetValue(m_ProjectSave->ComputeModID());
+	moduleNameNode.SetValue(m_ProjectSave->GetModID());
 
 	// Write title customization
 	const KPPITitleConfig& titleConfig = interfaceConfig.GetTitleConfig();
@@ -779,13 +828,11 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 			stepNode.SetAttribute("name", step->GetName());
 
 			// Write step conditions
-			if (!step->GetConditions().empty())
+			const KPPCConditionGroup& conditions = step->GetConditionGroup();
+			if (conditions.HasConditions())
 			{
-				KxXMLNode tStepConditionsNode = stepNode.NewElement("visible").NewElement("dependencies");
-				wxSize tFlagsCount = WriteKPPCFlagEntryArray(step->GetConditions(), tStepConditionsNode, true);
-
-				KPPOperator operatorType = DecideOperator(tFlagsCount);
-				tStepConditionsNode.SetAttribute("operator", operatorType == KPP_OPERATOR_AND ? "And" : "Or");
+				KxXMLNode stepConditionsNode = stepNode.NewElement("visible").NewElement("dependencies");
+				WriteConditionGroup(conditions, stepConditionsNode);
 			}
 
 			KxXMLNode optionalFileGroups = stepNode.NewElement("optionalFileGroups");
@@ -823,15 +870,15 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 						WriteFileData(entryNode.NewElement("files"), entry->GetFileData());
 
 						// Assigned flags
-						if (!entry->GetAssignedFlags().empty())
+						if (entry->GetConditionalFlags().HasFlags())
 						{
-							WriteKPPCFlagEntryArray(entry->GetAssignedFlags(), entryNode.NewElement("conditionFlags"), false);
+							WriteAssignedFlags(entry->GetConditionalFlags(), entryNode.NewElement("conditionFlags"));
 						}
 
 						// Type descriptor
 						// In FOMod this thing implements flags and requirements checking
 						KxXMLNode typeDescriptorNode = entryNode.NewElement("typeDescriptor");
-						if (entry->GetTDConditions().empty() && entry->GetRequirements().empty())
+						if (!entry->GetTDConditionGroup().HasConditions() && entry->GetRequirements().empty())
 						{
 							// Simple variant - no requirements and no conditions.
 							wxString typeDescriptor = components.TypeDescriptorToString(entry->GetTDDefaultValue());
@@ -845,12 +892,8 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 
 							KxXMLNode patternNode = dependencyTypeNode.NewElement("patterns").NewElement("pattern");
 							KxXMLNode dependenciesNode = patternNode.NewElement("dependencies");
-							wxSize opCountFlags = WriteKPPCFlagEntryArray(entry->GetTDConditions(), dependenciesNode, true);
-							wxSize opCountReqs = WriteRequirements(dependenciesNode, entry->GetRequirements());
-
-							// Since FOMod doesn't support operators for individual entries I need to count the most used one.
-							KPPOperator operatorType = DecideOperator(opCountFlags, opCountReqs);
-							dependenciesNode.SetAttribute("operator", operatorType == KPP_OPERATOR_AND ? "And" : "Or");
+							WriteConditionGroup(entry->GetTDConditionGroup(), dependenciesNode);
+							WriteRequirements(dependenciesNode, entry->GetRequirements());
 
 							// New type descriptor
 							KPPCTypeDescriptor conditionalTD = entry->GetTDConditionalValue() != KPPC_DESCRIPTOR_INVALID ? entry->GetTDConditionalValue() : entry->GetTDDefaultValue();
@@ -871,7 +914,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 	// Make simple installation if no components present
 	if (components.GetSteps().empty() && components.GetConditionalSteps().empty())
 	{
-		wxString name = m_ProjectSave->ComputeModName();
+		wxString name = m_ProjectSave->GetModName();
 
 		KxXMLNode stepsArrayNode = configRootNode.NewElement("installSteps");
 		stepsArrayNode.SetAttribute("order", "Explicit");
@@ -898,9 +941,9 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 			entryNode.NewElement("description").SetValue(m_ProjectSave->GetInfo().GetDescription(), true);
 		}
 
-		if (const KPPIImageEntry* pImage = m_ProjectSave->GetInterface().GetMainImageEntry())
+		if (const KPPIImageEntry* imageEntry = m_ProjectSave->GetInterface().GetMainImageEntry())
 		{
-			entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(pImage->GetPath(), KPP_CONTENT_IMAGES));
+			entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(imageEntry->GetPath(), KPP_CONTENT_IMAGES));
 		}
 
 		KxXMLNode typeDescriptorNode = entryNode.NewElement("typeDescriptor");
@@ -922,11 +965,7 @@ void KPackageProjectSerializerFOMod::WriteConditionalSteps(KxXMLNode& stepsArray
 		KxXMLNode stepNode = stepsArrayNode.NewElement("pattern");
 
 		// Dependencies
-		KxXMLNode tDependencies = stepNode.NewElement("dependencies");
-		wxSize tOpCountFlags = WriteKPPCFlagEntryArray(step->GetConditions(), tDependencies, true);
-
-		KPPOperator operatorType = DecideOperator(tOpCountFlags);
-		tDependencies.SetAttribute("operator", operatorType == KPP_OPERATOR_AND ? "And" : "Or");
+		WriteConditionGroup(step->GetConditionGroup(), stepNode.NewElement("dependencies"));
 
 		// Files
 		WriteFileData(stepNode.NewElement("files"), step->GetEntries());
@@ -987,22 +1026,19 @@ void KPackageProjectSerializerFOMod::WriteFileData(KxXMLNode& node, const KxStri
 		}
 	}
 }
-wxSize KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const KxStringVector& requiremetSets)
+void KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const KxStringVector& requiremetSets)
 {
-	int andCount = 0;
-	int orCount = 0;
-
 	const KPackageProjectRequirements& requirements = m_ProjectSave->GetRequirements();
+	const KPPRRequirementEntry* scriptExtenderReqEntry = KPackageManager::GetInstance()->GetScriptExtenderRequirement();
+
 	for (const wxString& id: requiremetSets)
 	{
 		KPPRRequirementsGroup* group = requirements.FindGroupWithID(id);
 		if (group)
 		{
-			const KPPRRequirementEntry* scriptExtenderReqEntry = KPackageManager::GetInstance()->FindScriptExtenderRequirement();
+			node.SetAttribute("operator", group->GetOperator() == KPP_OPERATOR_AND ? "And" : "Or");
 			for (const auto& entry: group->GetEntries())
 			{
-				entry->GetOperator() == KPP_OPERATOR_AND ? andCount++ : orCount++;
-
 				if (entry->GetID() == KApp::Get().GetCurrentGameID())
 				{
 					node.NewElement("gameDependency").SetAttribute("version", entry->GetRequiredVersion());
@@ -1024,8 +1060,6 @@ wxSize KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const 
 			}
 		}
 	}
-
-	return wxSize(andCount, orCount);
 }
 
 void KPackageProjectSerializerFOMod::InitDataFolderInfo()

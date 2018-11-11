@@ -3,7 +3,7 @@
 #include "PackageCreator/KPackageCreatorVectorModel.h"
 #include "PackageProject/KPackageProjectRequirements.h"
 
-class KPCREntriesListModel: public KPackageCreatorVectorModel<KPPRRequirementEntryArray>
+class KPCREntriesListModel: public KPackageCreatorVectorModel<KPPRRequirementEntry::Vector>
 {
 	private:
 		KPackageProjectRequirements* m_Requirements = NULL;

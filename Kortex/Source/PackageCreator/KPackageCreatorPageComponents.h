@@ -16,11 +16,12 @@ class KPackageCreatorPageComponents: public KPackageCreatorPageBase
 
 	public:
 		static wxString FormatArrayToText(const KxStringVector& array);
-		static wxString FormatArrayToText(const KPPCFlagEntryArray& array, bool isRequired);
+		static wxString ConditionToString(const KPPCCondition& condition, bool isRequired);
+		static wxString ConditionGroupToString(const KPPCConditionGroup& conditionGroup);
 
 	private:
 		KProgramOptionUI m_MainOptions;
-		KProgramOptionUI m_ComponnetsOptions;
+		KProgramOptionUI m_ComponentsOptions;
 		KPCComponentsModel* m_ComponentsModel = NULL;
 
 		// Misc controls

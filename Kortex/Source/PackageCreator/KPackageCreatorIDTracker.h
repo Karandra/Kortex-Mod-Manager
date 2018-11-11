@@ -10,29 +10,29 @@ class KPackageCreatorIDTracker
 		{
 			if (remove)
 			{
-				TrackID_RemoveFromStringsList(trackedID, list);
+				TrackID_RemoveFromStringVector(trackedID, list);
 			}
 			else
 			{
-				TrackID_ReplaceInStringsList(trackedID, newID, list);
+				TrackID_ReplaceInStringVector(trackedID, newID, list);
 			}
 		}
-		void TrackID_ReplaceInStringsList(const wxString& trackedID, const wxString& newID, KxStringVector& list) const;
-		void TrackID_RemoveFromStringsList(const wxString& trackedID, KxStringVector& list) const;
+		void TrackID_ReplaceInStringVector(const wxString& trackedID, const wxString& newID, KxStringVector& list) const;
+		void TrackID_RemoveFromStringVector(const wxString& trackedID, KxStringVector& list) const;
 
-		void TrackID_ReplaceInStringsList(const wxString& trackedID, const wxString& newID, KPPCFlagEntryArray& list) const;
-		void TrackID_RemoveFromStringsList(const wxString& trackedID, KPPCFlagEntryArray& list) const;
-		void TrackID_ReplaceOrRemove(const wxString& trackedID, const wxString& newID, KPPCFlagEntryArray& list, bool remove) const
+		void TrackID_ReplaceOrRemove(const wxString& trackedID, const wxString& newID, KPPCFlagEntry::Vector& list, bool remove) const
 		{
 			if (remove)
 			{
-				TrackID_RemoveFromStringsList(trackedID, list);
+				TrackID_RemoveFromFlagVector(trackedID, list);
 			}
 			else
 			{
-				TrackID_ReplaceInStringsList(trackedID, newID, list);
+				TrackID_ReplaceInFlagVector(trackedID, newID, list);
 			}
 		}
+		void TrackID_ReplaceInFlagVector(const wxString& trackedID, const wxString& newID, KPPCFlagEntry::Vector& list) const;
+		void TrackID_RemoveFromFlagVector(const wxString& trackedID, KPPCFlagEntry::Vector& list) const;
 
 	protected:
 		virtual bool TrackChangeID(const wxString& trackedID, const wxString& newID) = 0;

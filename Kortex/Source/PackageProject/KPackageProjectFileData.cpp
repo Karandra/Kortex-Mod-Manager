@@ -17,11 +17,11 @@ void KPPFFileEntry::MakeUniqueID()
 {
 	if (m_ID.IsEmpty())
 	{
-		m_ID = wxString::Format("0x%p", m_ID, this);
+		m_ID = KxString::Format("0x%1", this);
 	}
 	else
 	{
-		m_ID = wxString::Format("%s!0x%p", m_ID, this);
+		m_ID = KxString::Format("%s!0x%1", this);
 	}
 }
 
@@ -35,7 +35,7 @@ int32_t KPPFFileEntry::GetPriority() const
 }
 void KPPFFileEntry::SetPriority(int32_t value)
 {
-	m_Priority = KPackageProjectFileData::IsPriorityValid(value) ? value : KPackageProjectFileData::ms_DefaultPriority;
+	m_Priority = KPackageProjectFileData::CorrectPriority(value);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,14 @@ KPPFFolderEntry::~KPPFFolderEntry()
 }
 
 //////////////////////////////////////////////////////////////////////////
+bool KPackageProjectFileData::IsPriorityValid(int32_t value)
+{
+	return value >= KPackageProjectFileData::ms_MinUserPriority && value <= KPackageProjectFileData::ms_MaxUserPriority;
+}
+int32_t KPackageProjectFileData::CorrectPriority(int32_t value)
+{
+	return std::clamp(value, ms_MinUserPriority, ms_MaxUserPriority);
+}
 bool KPackageProjectFileData::IsFileIDValid(const wxString& id)
 {
 	if (!id.IsEmpty() && !KAux::HasForbiddenFileNameChars(id))

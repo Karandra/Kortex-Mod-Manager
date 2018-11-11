@@ -140,7 +140,7 @@ wxString KModPackage::DetectEffectiveArchiveRoot(const KxFileItem& item) const
 }
 void KModPackage::SetModIDIfNone()
 {
-	if (m_Config.ComputeModID().IsEmpty())
+	if (m_Config.GetModID().IsEmpty())
 	{
 		m_Config.SetModID(m_PackageFilePath.AfterLast('\\').BeforeLast('.'));
 	}
@@ -265,7 +265,7 @@ bool KModPackage::IsOK() const
 	return !m_PackageFilePath.IsEmpty() &&
 		m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown &&
 		m_PackageType != KPP_PACCKAGE_UNKNOWN &&
-		!m_Config.ComputeModID().IsEmpty();
+		!m_Config.GetModID().IsEmpty();
 }
 bool KModPackage::IsTypeSupported() const
 {

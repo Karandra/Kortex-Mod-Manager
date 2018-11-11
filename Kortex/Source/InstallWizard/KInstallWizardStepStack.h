@@ -6,14 +6,14 @@ class KIWStepStackItem
 {
 	private:
 		KPPCStep* Step = NULL;
-		KPPCEntryRefArray CheckedEntries;
+		KPPCEntry::RefVector CheckedEntries;
 
 	public:
 		KIWStepStackItem(KPPCStep* step)
 			:Step(step)
 		{
 		}
-		KIWStepStackItem(KPPCStep* step, const KPPCEntryRefArray& checked)
+		KIWStepStackItem(KPPCStep* step, const KPPCEntry::RefVector& checked)
 			:Step(step), CheckedEntries(checked)
 		{
 		}
@@ -23,11 +23,11 @@ class KIWStepStackItem
 		{
 			return Step;
 		}
-		const KPPCEntryRefArray& GetChecked() const
+		const KPPCEntry::RefVector& GetChecked() const
 		{
 			return CheckedEntries;
 		}
-		KPPCEntryRefArray& GetChecked()
+		KPPCEntry::RefVector& GetChecked()
 		{
 			return CheckedEntries;
 		}
@@ -47,7 +47,7 @@ class KIWStepStack: private KIWStackType
 
 	public:
 		void PushStep(KPPCStep* step);
-		void PushStep(KPPCStep* step, const KPPCEntryRefArray& checked);
+		void PushStep(KPPCStep* step, const KPPCEntry::RefVector& checked);
 		
 		void PopItem()
 		{

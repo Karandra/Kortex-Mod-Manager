@@ -207,8 +207,8 @@ void KModEntry::CreateFromProject(const KPackageProject& config)
 {
 	const KPackageProjectInfo& info = config.GetInfo();
 
-	SetID(config.ComputeModID());
-	m_Name = config.ComputeModName();
+	SetID(config.GetModID());
+	m_Name = config.GetModName();
 	m_Author = info.GetAuthor();
 	m_Version = info.GetVersion();
 	m_Description = info.GetDescription();

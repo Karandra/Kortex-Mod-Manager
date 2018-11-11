@@ -24,16 +24,13 @@ enum KPPCTypeDescriptor
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KPPCFlagEntry: public KLabeledValue
+class KPPCFlagEntry: public KLabeledValue, public wxObject
 {
 	public:
-		static wxString GetDeletedFlagPrefix()
-		{
-			return "DELETED_";
-		}
+		using Vector = std::vector<KPPCFlagEntry>;
 
-	private:
-		KPPOperator m_Operator;
+	public:
+		static wxString GetDeletedFlagPrefix();
 
 	private:
 		bool HasLabel() const = delete;
@@ -42,19 +39,10 @@ class KPPCFlagEntry: public KLabeledValue
 		void SetLabel(const wxString& label) = delete;
 
 	public:
-		KPPCFlagEntry(const wxString& value, const wxString& name = wxEmptyString, KPPOperator operatorType = KPP_OPERATOR_AND);
+		KPPCFlagEntry(const wxString& value, const wxString& name = wxEmptyString);
 		virtual ~KPPCFlagEntry();
 
 	public:
-		KPPOperator GetOperator() const
-		{
-			return m_Operator;
-		}
-		void SetOperator(KPPOperator operatorType)
-		{
-			m_Operator = operatorType;
-		}
-
 		const wxString& GetValue() const
 		{
 			return KLabeledValue::GetValue();
@@ -77,11 +65,90 @@ class KPPCFlagEntry: public KLabeledValue
 			KLabeledValue::SetLabel(value);
 		}
 };
-typedef std::vector<KPPCFlagEntry> KPPCFlagEntryArray;
+
+//////////////////////////////////////////////////////////////////////////
+class KPPCCondition: public wxObject
+{
+	public:
+		using Vector = std::vector<KPPCCondition>;
+
+	private:
+		KPPCFlagEntry::Vector m_Flags;
+		KPPOperator m_Operator;
+
+	public:
+		bool HasFlags() const
+		{
+			return !m_Flags.empty();
+		}
+		KPPCFlagEntry::Vector& GetFlags()
+		{
+			return m_Flags;
+		}
+		const KPPCFlagEntry::Vector& GetFlags() const
+		{
+			return m_Flags;
+		}
+
+		KPPOperator GetOperator() const
+		{
+			return m_Operator;
+		}
+		void SetOperator(KPPOperator value)
+		{
+			m_Operator = value;
+		}
+};
+
+//////////////////////////////////////////////////////////////////////////
+class KPPCConditionGroup
+{
+	private:
+		KPPCCondition::Vector m_Conditions;
+		KPPOperator m_Operator;
+
+	public:
+		bool HasConditions() const
+		{
+			return !m_Conditions.empty();
+		}
+		KPPCCondition::Vector& GetConditions()
+		{
+			return m_Conditions;
+		}
+		const KPPCCondition::Vector& GetConditions() const
+		{
+			return m_Conditions;
+		}
+		KPPCCondition& GetOrCreateFirstCondition()
+		{
+			if (m_Conditions.empty())
+			{
+				return m_Conditions.emplace_back();
+			}
+			else
+			{
+				return m_Conditions.front();
+			}
+		}
+
+		KPPOperator GetOperator() const
+		{
+			return m_Operator;
+		}
+		void SetOperator(KPPOperator value)
+		{
+			m_Operator = value;
+		}
+};
 
 //////////////////////////////////////////////////////////////////////////
 class KPPCEntry: public KWithName
 {
+	public:
+		using Vector = std::vector<std::unique_ptr<KPPCEntry>>;
+		using RefVector = std::vector<KPPCEntry*>;
+
 	private:
 		wxString m_Image;
 		wxString m_Description;
@@ -90,8 +157,8 @@ class KPPCEntry: public KWithName
 		KPPCTypeDescriptor m_TypeDescriptorDefault;
 		KPPCTypeDescriptor m_TypeDescriptorConditional = KPPC_DESCRIPTOR_INVALID;
 		KPPCTypeDescriptor m_TypeDescriptorCurrent = KPPC_DESCRIPTOR_INVALID;
-		KPPCFlagEntryArray m_TypeDescriptorConditions;
-		KPPCFlagEntryArray m_AssignedFlags;
+		KPPCConditionGroup m_TypeDescriptorConditions;
+		KPPCCondition m_ConditionalFlags;
 
 	public:
 		KPPCEntry();
@@ -161,33 +228,34 @@ class KPPCEntry: public KWithName
 			m_TypeDescriptorCurrent = type;
 		}
 
-		KPPCFlagEntryArray& GetTDConditions()
+		KPPCConditionGroup& GetTDConditionGroup()
 		{
 			return m_TypeDescriptorConditions;
 		}
-		const KPPCFlagEntryArray& GetTDConditions() const
+		const KPPCConditionGroup& GetTDConditionGroup() const
 		{
 			return m_TypeDescriptorConditions;
 		}
 
-		KPPCFlagEntryArray& GetAssignedFlags()
+		KPPCCondition& GetConditionalFlags()
 		{
-			return m_AssignedFlags;
+			return m_ConditionalFlags;
 		}
-		const KPPCFlagEntryArray& GetAssignedFlags() const
+		const KPPCCondition& GetConditionalFlags() const
 		{
-			return m_AssignedFlags;
+			return m_ConditionalFlags;
 		}
 };
-typedef std::vector<std::unique_ptr<KPPCEntry>> KPPCEntryArray;
-typedef std::vector<KPPCEntry*> KPPCEntryRefArray;
 
 //////////////////////////////////////////////////////////////////////////
 class KPPCGroup: public KWithName
 {
+	public:
+		using Vector = std::vector<std::unique_ptr<KPPCGroup>>;
+
 	private:
 		KPPCSelectionMode m_SelectionMode;
-		KPPCEntryArray m_Entries;
+		KPPCEntry::Vector m_Entries;
 
 	public:
 		KPPCGroup();
@@ -203,54 +271,58 @@ class KPPCGroup: public KWithName
 			m_SelectionMode = type;
 		}
 
-		KPPCEntryArray& GetEntries()
+		KPPCEntry::Vector& GetEntries()
 		{
 			return m_Entries;
 		}
-		const KPPCEntryArray& GetEntries() const
+		const KPPCEntry::Vector& GetEntries() const
 		{
 			return m_Entries;
 		}
 };
-typedef std::vector<std::unique_ptr<KPPCGroup>> KPPCGroupArray;
 
 //////////////////////////////////////////////////////////////////////////
 class KPPCStep: public KWithName
 {
+	public:
+		using Vector = std::vector<std::unique_ptr<KPPCStep>>;
+
 	private:
-		KPPCFlagEntryArray m_Conditions;
-		KPPCGroupArray m_Entries;
+		KPPCConditionGroup m_Conditions;
+		KPPCGroup::Vector m_Entries;
 
 	public:
 		KPPCStep();
 		~KPPCStep();
 
 	public:
-		KPPCFlagEntryArray& GetConditions()
+		KPPCConditionGroup& GetConditionGroup()
 		{
 			return m_Conditions;
 		}
-		const KPPCFlagEntryArray& GetConditions() const
+		const KPPCConditionGroup& GetConditionGroup() const
 		{
 			return m_Conditions;
 		}
 
-		KPPCGroupArray& GetGroups()
+		KPPCGroup::Vector& GetGroups()
 		{
 			return m_Entries;
 		}
-		const KPPCGroupArray& GetGroups() const
+		const KPPCGroup::Vector& GetGroups() const
 		{
 			return m_Entries;
 		}		
 };
-typedef std::vector<std::unique_ptr<KPPCStep>> KPPCStepArray;
 
 //////////////////////////////////////////////////////////////////////////
 class KPPCConditionalStep
 {
+	public:
+		using Vector = std::vector<std::unique_ptr<KPPCConditionalStep>>;
+
 	private:
-		KPPCFlagEntryArray m_Conditions;
+		KPPCConditionGroup m_Conditions;
 		KxStringVector m_Entries;
 
 	public:
@@ -258,11 +330,11 @@ class KPPCConditionalStep
 		~KPPCConditionalStep();
 
 	public:
-		KPPCFlagEntryArray& GetConditions()
+		KPPCConditionGroup& GetConditionGroup()
 		{
 			return m_Conditions;
 		}
-		const KPPCFlagEntryArray& GetConditions() const
+		const KPPCConditionGroup& GetConditionGroup() const
 		{
 			return m_Conditions;
 		}
@@ -276,7 +348,6 @@ class KPPCConditionalStep
 			return m_Entries;
 		}
 };
-typedef std::vector<std::unique_ptr<KPPCConditionalStep>> KPPCConditionalStepArray;
 
 //////////////////////////////////////////////////////////////////////////
 class KPackageProjectComponents: public KPackageProjectPart
@@ -296,7 +367,7 @@ class KPackageProjectComponents: public KPackageProjectPart
 		static wxString SelectionModeToTranslation(KPPCSelectionMode type);
 
 	private:
-		enum FlagAttribute
+		enum class FlagAttribute
 		{
 			Name,
 			Value,
@@ -304,8 +375,8 @@ class KPackageProjectComponents: public KPackageProjectPart
 
 	private:
 		KxStringVector m_RequiredFileData;
-		KPPCStepArray m_Steps;
-		KPPCConditionalStepArray m_ConditionalSteps;
+		KPPCStep::Vector m_Steps;
+		KPPCConditionalStep::Vector m_ConditionalSteps;
 
 	private:
 		KxStringVector GetFlagsAttributes(FlagAttribute index) const;
@@ -324,20 +395,20 @@ class KPackageProjectComponents: public KPackageProjectPart
 			return m_RequiredFileData;
 		}
 
-		KPPCStepArray& GetSteps()
+		KPPCStep::Vector& GetSteps()
 		{
 			return m_Steps;
 		}
-		const KPPCStepArray& GetSteps() const
+		const KPPCStep::Vector& GetSteps() const
 		{
 			return m_Steps;
 		}
 
-		KPPCConditionalStepArray& GetConditionalSteps()
+		KPPCConditionalStep::Vector& GetConditionalSteps()
 		{
 			return m_ConditionalSteps;
 		}
-		const KPPCConditionalStepArray& GetConditionalSteps() const
+		const KPPCConditionalStep::Vector& GetConditionalSteps() const
 		{
 			return m_ConditionalSteps;
 		}

@@ -11,7 +11,7 @@ class KInstallWizardComponnetsModel: public KDataViewTreeModel
 		const KPackageProjectComponents* m_ComponentsInfo = NULL;
 		const KPPCStep* m_Step = NULL;
 		KIWCNodesVector m_DataVector;
-		KPPCEntryRefArray m_CheckedEntries;
+		KPPCEntry::RefVector m_CheckedEntries;
 
 		const KPPCEntry* m_HotItem = NULL;
 
@@ -48,9 +48,9 @@ class KInstallWizardComponnetsModel: public KDataViewTreeModel
 	public:
 		size_t GetItemsCount() const;
 		void SetDataVector();
-		void SetDataVector(const KPackageProjectComponents* compInfo, const KPPCStep* step, const KPPCEntryRefArray& checkedEntries);
+		void SetDataVector(const KPackageProjectComponents* compInfo, const KPPCStep* step, const KPPCEntry::RefVector& checkedEntries);
 		virtual void RefreshItems() override;
-		virtual bool OnLeaveStep(KPPCEntryRefArray& checkedEntries);
+		virtual bool OnLeaveStep(KPPCEntry::RefVector& checkedEntries);
 
 		const KPPCEntry* GetSelectedEntry() const;
 		const KPPCEntry* GetHotTrackedEntry() const
@@ -64,5 +64,5 @@ class KInstallWizardComponnetsModel: public KDataViewTreeModel
 			return MakeItem(&node);
 		}
 		KIWCModelNode* GetNode(const KxDataViewItem& item) const;
-		KPPCEntryRefArray GetCheckedEntries() const;
+		KPPCEntry::RefVector GetCheckedEntries() const;
 };

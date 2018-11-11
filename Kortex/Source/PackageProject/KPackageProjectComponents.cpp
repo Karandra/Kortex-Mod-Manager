@@ -4,8 +4,13 @@
 #include "KApp.h"
 #include "KAux.h"
 
-KPPCFlagEntry::KPPCFlagEntry(const wxString& value, const wxString& name, KPPOperator operatorType)
-	:KLabeledValue(value, name), m_Operator(operatorType)
+wxString KPPCFlagEntry::GetDeletedFlagPrefix()
+{
+	return wxS("DELETED_");
+}
+
+KPPCFlagEntry::KPPCFlagEntry(const wxString& value, const wxString& name)
+	:KLabeledValue(value, name)
 {
 }
 KPPCFlagEntry::~KPPCFlagEntry()
@@ -47,18 +52,19 @@ KPPCConditionalStep::~KPPCConditionalStep()
 }
 
 //////////////////////////////////////////////////////////////////////////
-#define KPPC_DESCRIPTOR_OPTIONAL_STRING					"Optional"
-#define KPPC_DESCRIPTOR_REQUIRED_STRING					"Required"
-#define KPPC_DESCRIPTOR_RECOMMENDED_STRING				"Recommended"
-#define KPPC_DESCRIPTOR_COULD_BE_USABLE_STRING			"CouldBeUsable"
-#define KPPC_DESCRIPTOR_NOT_USABLE_STRING				"NotUsable"
+#define KPPC_DESCRIPTOR_OPTIONAL_STRING					wxS("Optional")
+#define KPPC_DESCRIPTOR_REQUIRED_STRING					wxS("Required")
+#define KPPC_DESCRIPTOR_RECOMMENDED_STRING				wxS("Recommended")
+#define KPPC_DESCRIPTOR_COULD_BE_USABLE_STRING			wxS("CouldBeUsable")
+#define KPPC_DESCRIPTOR_NOT_USABLE_STRING				wxS("NotUsable")
 
-#define KPPC_SELECT_ANY_STRING							"Any"
-#define KPPC_SELECT_EXACTLY_ONE_STRING					"ExactlyOne"
-#define KPPC_SELECT_AT_LEAST_ONE_STRING					"AtLeastOne"
-#define KPPC_SELECT_AT_MOST_ONE_STRING					"AtMostOne"
-#define KPPC_SELECT_ALL_STRING							"All"
+#define KPPC_SELECT_ANY_STRING							wxS("Any")
+#define KPPC_SELECT_EXACTLY_ONE_STRING					wxS("ExactlyOne")
+#define KPPC_SELECT_AT_LEAST_ONE_STRING					wxS("AtLeastOne")
+#define KPPC_SELECT_AT_MOST_ONE_STRING					wxS("AtMostOne")
+#define KPPC_SELECT_ALL_STRING							wxS("All")
 
+//////////////////////////////////////////////////////////////////////////
 KPPCTypeDescriptor KPackageProjectComponents::StringToTypeDescriptor(const wxString& name, KPPCTypeDescriptor default)
 {
 	if (name == KPPC_DESCRIPTOR_OPTIONAL_STRING)
@@ -112,7 +118,7 @@ wxString KPackageProjectComponents::TypeDescriptorToString(KPPCTypeDescriptor ty
 }
 wxString KPackageProjectComponents::TypeDescriptorToTranslation(KPPCTypeDescriptor type)
 {
-	return KTr(wxString::Format("PackageCreator.PageComponents.TypeDescriptor.%s", KPackageProjectComponents::TypeDescriptorToString(type)));
+	return KTr(KxString::Format("PackageCreator.PageComponents.TypeDescriptor.%1", KPackageProjectComponents::TypeDescriptorToString(type)));
 }
 
 KPPCSelectionMode KPackageProjectComponents::StringToSelectionMode(const wxString& name)
@@ -168,7 +174,7 @@ wxString KPackageProjectComponents::SelectionModeToString(KPPCSelectionMode type
 }
 wxString KPackageProjectComponents::SelectionModeToTranslation(KPPCSelectionMode type)
 {
-	return KTr(wxString::Format("PackageCreator.PageComponents.SelectionMode.%s", SelectionModeToString(type)));
+	return KTr(KxString::Format("PackageCreator.PageComponents.SelectionMode.%1", SelectionModeToString(type)));
 }
 
 KxStringVector KPackageProjectComponents::GetFlagsAttributes(FlagAttribute index) const
@@ -176,16 +182,16 @@ KxStringVector KPackageProjectComponents::GetFlagsAttributes(FlagAttribute index
 	KxStringVector outList;
 
 	// Add flags for requirements sets
-	if (index == Name)
+	if (index == FlagAttribute::Name)
 	{
-		for (const auto& pSet: GetProject().GetRequirements().GetGroups())
+		for (const auto& group: GetProject().GetRequirements().GetGroups())
 		{
-			outList.push_back(pSet->GetFlagName());
+			outList.push_back(group->GetFlagName());
 		}
 	}
 	
-	// Some std values
-	if (index == Value)
+	// Some standard values
+	if (index == FlagAttribute::Value)
 	{
 		outList.push_back("true");
 		outList.push_back("false");
@@ -198,9 +204,9 @@ KxStringVector KPackageProjectComponents::GetFlagsAttributes(FlagAttribute index
 		{
 			for (const auto& entry: group->GetEntries())
 			{
-				for (const KPPCFlagEntry& flagEntry: entry->GetAssignedFlags())
+				for (const KPPCFlagEntry& flagEntry: entry->GetConditionalFlags().GetFlags())
 				{
-					outList.push_back(index == Name ? flagEntry.GetName() : flagEntry.GetValue());
+					outList.push_back(index == FlagAttribute::Name ? flagEntry.GetName() : flagEntry.GetValue());
 				}
 			}
 		}
@@ -221,9 +227,9 @@ KPackageProjectComponents::~KPackageProjectComponents()
 
 KxStringVector KPackageProjectComponents::GetFlagsNames() const
 {
-	return GetFlagsAttributes(Name);
+	return GetFlagsAttributes(FlagAttribute::Name);
 }
 KxStringVector KPackageProjectComponents::GetFlagsValues() const
 {
-	return GetFlagsAttributes(Value);
+	return GetFlagsAttributes(FlagAttribute::Value);
 }

@@ -18,7 +18,7 @@ class KPackageProjectSerializerKMP: public KPackageProjectSerializer
 		void ReadConfig();
 		void ReadInfo();
 		void ReadInterface();
-		void ReadFileData();
+		void ReadFiles();
 		void ReadRequirements();
 		void ReadComponents();
 
@@ -26,7 +26,7 @@ class KPackageProjectSerializerKMP: public KPackageProjectSerializer
 		void WriteConfig(KxXMLNode& baseNode);
 		void WriteInfo(KxXMLNode& baseNode);
 		void WriteInterface(KxXMLNode& baseNode);
-		void WriteFileData(KxXMLNode& baseNode);
+		void WriteFiles(KxXMLNode& baseNode);
 		void WriteRequirements(KxXMLNode& baseNode);
 		void WriteComponents(KxXMLNode& baseNode);
 

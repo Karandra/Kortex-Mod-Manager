@@ -51,7 +51,7 @@ class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
 			return m_Options;
 		}
 
-		const KPPRRequirementEntryArray& GetStdRequirements() const
+		const KPPRRequirementEntry::Vector& GetStdRequirements() const
 		{
 			return m_StdEntries.GetEntries();
 		}
@@ -59,10 +59,10 @@ class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
 		{
 			return m_StdEntries.FindEntry(id);
 		}
-		const KPPRRequirementEntry* FindScriptExtenderRequirement() const;
+		const KPPRRequirementEntry* GetScriptExtenderRequirement() const;
 		bool HasScriptExtender() const
 		{
-			return FindScriptExtenderRequirement() != NULL;
+			return GetScriptExtenderRequirement() != NULL;
 		}
 		bool IsStdReqirement(const wxString& id) const
 		{

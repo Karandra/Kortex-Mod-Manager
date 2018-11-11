@@ -26,8 +26,11 @@ enum KPPRTypeDescriptor
 //////////////////////////////////////////////////////////////////////////
 class KPPRRequirementEntry: public KWithIDName
 {
+	public:
+		using Vector = std::vector<std::unique_ptr<KPPRRequirementEntry>>;
+		using RefVector = std::vector<KPPRRequirementEntry*>;
+
 	private:
-		KPPOperator m_Operator;
 		wxString m_Object;
 		KxVersion m_RequiredVersion;
 
@@ -55,15 +58,6 @@ class KPPRRequirementEntry: public KWithIDName
 		~KPPRRequirementEntry();
 
 	public:
-		KPPOperator GetOperator() const
-		{
-			return m_Operator;
-		}
-		void SetOperator(KPPOperator operatorType)
-		{
-			m_Operator = operatorType;
-		}
-
 		const wxString& GetObject() const
 		{
 			return m_Object;
@@ -166,19 +160,22 @@ class KPPRRequirementEntry: public KWithIDName
 		}
 		bool CalcOverallStatus();
 };
-typedef std::vector<std::unique_ptr<KPPRRequirementEntry>> KPPRRequirementEntryArray;
-typedef std::vector<KPPRRequirementEntry*> KPPRRequirementEntryPtrArray;
 
 //////////////////////////////////////////////////////////////////////////
 class KPPRRequirementsGroup
 {
+	public:
+		using Vector = std::vector<std::unique_ptr<KPPRRequirementsGroup>>;
+		using RefVector = std::vector<KPPRRequirementsGroup*>;
+
 	public:
 		static wxString GetFlagNamePrefix();
 		static wxString GetFlagName(const wxString& id);
 
 	private:
 		wxString m_ID;
-		KPPRRequirementEntryArray m_Entries;
+		KPPOperator m_Operator;
+		KPPRRequirementEntry::Vector m_Entries;
 
 		bool m_GroupStatus = false;
 		bool m_GroupStatusCalculated = false;
@@ -201,11 +198,20 @@ class KPPRRequirementsGroup
 			return GetFlagName(GetID());
 		}
 
-		KPPRRequirementEntryArray& GetEntries()
+		KPPOperator GetOperator() const
+		{
+			return m_Operator;
+		}
+		void SetOperator(KPPOperator value)
+		{
+			m_Operator = value;
+		}
+
+		KPPRRequirementEntry::Vector& GetEntries()
 		{
 			return m_Entries;
 		}
-		const KPPRRequirementEntryArray& GetEntries() const
+		const KPPRRequirementEntry::Vector& GetEntries() const
 		{
 			return m_Entries;
 		}
@@ -222,23 +228,17 @@ class KPPRRequirementsGroup
 			return m_GroupStatus;
 		}
 };
-typedef std::vector<std::unique_ptr<KPPRRequirementsGroup>> KPPRRequirementsGroupArray;
-typedef std::vector<KPPRRequirementsGroup*> KPPRRequirementsGroupPtrArray;
 
 //////////////////////////////////////////////////////////////////////////
 class KPackageProjectRequirements: public KPackageProjectPart
 {
 	public:
-		static const KPPOperator ms_DefaultEntryOperator = KPP_OPERATOR_AND;
+		static const KPPOperator ms_DefaultGroupOperator = KPP_OPERATOR_AND;
 		static const KPPOperator ms_DefaultVersionOperator = KPP_OPERATOR_GTEQ;
 		static const KPPRObjectFunction ms_DefaultObjectFunction = KPPR_OBJFUNC_NONE;
 		static const KPPRTypeDescriptor ms_DefaultTypeDescriptor = KPPR_TYPE_AUTO;
 
 	public:
-		static wxString OperatorToSymbolicName(KPPOperator operatorType);
-		static wxString OperatorToString(KPPOperator operatorType);
-		static KPPOperator StringToOperator(const wxString& name, bool allowNone, KPPOperator default = ms_DefaultVersionOperator);
-
 		static KPPRObjectFunction StringToObjectFunction(const wxString& name);
 		static wxString ObjectFunctionToString(KPPRObjectFunction state);
 
@@ -246,10 +246,9 @@ class KPackageProjectRequirements: public KPackageProjectPart
 		static wxString TypeDescriptorToString(KPPRTypeDescriptor type);
 
 		static bool CompareVersions(KPPOperator operatorType, const KxVersion& current, const KxVersion& required);
-		
 
 	private:
-		KPPRRequirementsGroupArray m_Groups;
+		KPPRRequirementsGroup::Vector m_Groups;
 		KxStringVector m_DefaultGroup;
 
 	public:
@@ -257,11 +256,11 @@ class KPackageProjectRequirements: public KPackageProjectPart
 		virtual ~KPackageProjectRequirements();
 
 	public:
-		KPPRRequirementsGroupArray& GetGroups()
+		KPPRRequirementsGroup::Vector& GetGroups()
 		{
 			return m_Groups;
 		}
-		const KPPRRequirementsGroupArray& GetGroups() const
+		const KPPRRequirementsGroup::Vector& GetGroups() const
 		{
 			return m_Groups;
 		}

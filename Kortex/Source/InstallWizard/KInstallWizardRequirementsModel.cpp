@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "KInstallWizardRequirementsModel.h"
+#include "PackageProject/KPackageProject.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageManager/KPackageManager.h"
 #include "UI/KMainWindow.h"
@@ -65,10 +66,10 @@ void KInstallWizardRequirementsModel::GetValueByRow(wxAny& data, size_t row, con
 				}
 				else
 				{
-					wxString sCV = entry->GetCurrentVersion().ToString();
-					wxString sRV = entry->GetRequiredVersion().ToString();
-					wxString sOperator = KPackageProjectRequirements::OperatorToSymbolicName(entry->GetRVFunction());
-					data = KxDataViewBitmapTextValue(wxString::Format("%s %s %s", sCV, sOperator, sRV), icon);
+					wxString cv = entry->GetCurrentVersion().ToString();
+					wxString rv = entry->GetRequiredVersion().ToString();
+					wxString operatorSymbol = KPackageProject::OperatorToSymbolicName(entry->GetRVFunction());
+					data = KxDataViewBitmapTextValue(KxString::Format("%1 %2 %3", cv, operatorSymbol, rv), icon);
 				}
 				break;
 			}

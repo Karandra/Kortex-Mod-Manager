@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPCCConditionalStepsModel.h"
 #include "KPCCFileDataSelectorModel.h"
-#include "KPCCFlagsSelectorModel.h"
+#include "KPCCConditionGroupEditor.h"
 #include "PackageProject/KPackageProject.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageCreator/KPackageCreatorPageComponents.h"
@@ -41,7 +41,7 @@ void KPCCConditionalStepsModel::GetValueByRow(wxAny& value, size_t row, const Kx
 		{
 			case ColumnID::Conditions:
 			{
-				value = KPackageCreatorPageComponents::FormatArrayToText(entry->GetConditions(), true);
+				value = KPackageCreatorPageComponents::ConditionGroupToString(entry->GetConditionGroup());
 				break;
 			}
 			case ColumnID::StepData:
@@ -69,8 +69,7 @@ void KPCCConditionalStepsModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (step)
 				{
-					KPCCFlagsSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller, false);
-					dialog.SetDataVector(step->GetConditions());
+					KPCCConditionGroupEditorDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller, step->GetConditionGroup());
 					dialog.ShowModal();
 					NotifyChangedItem(event.GetItem());
 				}

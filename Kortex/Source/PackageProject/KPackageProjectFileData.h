@@ -140,15 +140,14 @@ class KPPFFolderEntry: public KPPFFileEntry
 class KPackageProjectFileData: public KPackageProjectPart
 {
 	public:
+		static const int ms_RequiredFilesPriority = std::numeric_limits<int>::min();
 		static const int ms_DefaultPriority = -1;
 		static const int ms_MinUserPriority = -1;
-		static const int ms_MaxUserPriority = UINT16_MAX;
+		static const int ms_MaxUserPriority = std::numeric_limits<int16_t>::max();
 
 	public:
-		static bool IsPriorityValid(int32_t value)
-		{
-			return value >= KPackageProjectFileData::ms_MinUserPriority && value <= KPackageProjectFileData::ms_MaxUserPriority;
-		}
+		static bool IsPriorityValid(int32_t value);
+		static int32_t CorrectPriority(int32_t value);
 		static bool IsFileIDValid(const wxString& id);
 
 	private:

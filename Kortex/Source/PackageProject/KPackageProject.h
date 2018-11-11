@@ -8,19 +8,38 @@
 #include "KPackageProjectComponents.h"
 #include "KPackageProjectDefs.h"
 #include "KApp.h"
-enum KModManagerLocation;
+#include <KxFramework/KxVersion.h>
+
+//////////////////////////////////////////////////////////////////////////
+class KPackageProjectConditionChecker
+{
+	private:
+		bool m_Result = false;
+		bool m_IsFirstElement = true;
+
+	public:
+		void operator()(bool value, KPPOperator operatorType);
+		
+	public:
+		bool GetResult() const
+		{
+			return m_Result;
+		}
+};
 
 //////////////////////////////////////////////////////////////////////////
 class KPackageProject
 {
 	public:
-		// Initialize 'cookie' to zero before first call to this function
-		static void CheckCondition(bool& currentStatus, int& cookie, bool isThis, KPPOperator operatorType);
-		static void CheckCondition(bool& currentStatus, int& cookie, const KPPRRequirementEntry& entry);
-		static void CheckCondition(bool& currentStatus, int& cookie, bool isThis, const KPPCFlagEntry& entry);
+		static wxString OperatorToSymbolicName(KPPOperator operatorType);
+		static wxString OperatorToString(KPPOperator operatorType);
+		static KPPOperator StringToOperator(const wxString& name, bool allowNone, KPPOperator default);
+
+		static KxStringVector CreateOperatorSymNamesList(const std::initializer_list<KPPOperator>& operators);
+		static KxStringVector CreateOperatorNamesList(const std::initializer_list<KPPOperator>& operators);
 
 	private:
-		wxString m_FormatVersion;
+		KxVersion m_FormatVersion;
 		wxString m_TargetProfileID;
 		wxString m_ModID;
 
@@ -37,11 +56,11 @@ class KPackageProject
 		virtual ~KPackageProject();
 
 	public:
-		const wxString& GetFormatVersion() const
+		const KxVersion& GetFormatVersion() const
 		{
 			return m_FormatVersion;
 		}
-		void SetFormatVersion(const wxString& id)
+		void SetFormatVersion(const KxVersion& id)
 		{
 			m_FormatVersion = id;
 		}
@@ -55,16 +74,9 @@ class KPackageProject
 			m_TargetProfileID = id;
 		}
 		
-		const wxString& GetModID() const
-		{
-			return m_ModID;
-		}
-		void SetModID(const wxString& id)
-		{
-			m_ModID = id;
-		}
-		wxString ComputeModID() const;
-		wxString ComputeModName() const;
+		void SetModID(const wxString& id);
+		wxString GetModID() const;
+		wxString GetModName() const;
 		wxString GetSignature() const;
 
 		KPackageProjectConfig& GetConfig()

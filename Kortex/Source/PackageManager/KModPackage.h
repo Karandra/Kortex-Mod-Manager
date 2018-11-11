@@ -99,7 +99,7 @@ class KModPackage
 
 		wxString GetName() const
 		{
-			return m_Config.ComputeModName();
+			return m_Config.GetModName();
 		}
 		const KPPIImageEntry* GetLogoImage() const
 		{

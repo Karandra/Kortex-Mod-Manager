@@ -14,7 +14,8 @@
 
 enum ColumnID
 {
-	Name
+	Name,
+	Operator
 };
 enum MenuID
 {
@@ -24,7 +25,6 @@ enum MenuID
 KxDataViewCtrl* KPCRGroupsModel::OnCreateDataView(wxWindow* window)
 {
 	m_ComboView = new KxDataViewComboBox();
-	m_ComboView->SetDataViewFlags(KxDataViewComboBox::DefaultDataViewStyle|KxDV_NO_HEADER);
 	m_ComboView->SetOptionEnabled(KxDVCB_OPTION_ALT_POPUP_WINDOW);
 	m_ComboView->SetOptionEnabled(KxDVCB_OPTION_HORIZONTAL_SIZER);
 	m_ComboView->SetOptionEnabled(KxDVCB_OPTION_DISMISS_ON_SELECT, false);
@@ -47,9 +47,33 @@ void KPCRGroupsModel::OnInitControl()
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCRGroupsModel::OnContextMenu, this);
 
 	/* Columns */
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(wxEmptyString, ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
+	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
+	{
+		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
+		info.GetEditor()->SetItems(KPackageProject::CreateOperatorSymNamesList({KPP_OPERATOR_AND, KPP_OPERATOR_OR}));
+	}
 }
 
+void KPCRGroupsModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+{
+	KPPRRequirementsGroup* group = GetDataEntry(row);
+	if (group)
+	{
+		switch (column->GetID())
+		{
+			case ColumnID::Name:
+			{
+				value = group->GetID();
+				break;
+			}
+			case ColumnID::Operator:
+			{
+				value = group->GetOperator() == KPP_OPERATOR_AND ? 0 : 1;
+				break;
+			}
+		};
+	}
+}
 void KPCRGroupsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 {
 	KPPRRequirementsGroup* group = GetDataEntry(row);
@@ -60,6 +84,11 @@ void KPCRGroupsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewCo
 			case ColumnID::Name:
 			{
 				value = group->GetID();
+				break;
+			}
+			case ColumnID::Operator:
+			{
+				value = KPackageProject::OperatorToSymbolicName(group->GetOperator());
 				break;
 			}
 		};
@@ -89,6 +118,11 @@ bool KPCRGroupsModel::SetValueByRow(const wxAny& value, size_t row, const KxData
 						return false;
 					}
 				}
+				return true;
+			}
+			case ColumnID::Operator:
+			{
+				group->SetOperator(value.As<int>() == 0 ? KPP_OPERATOR_AND : KPP_OPERATOR_OR);
 				return true;
 			}
 		};
@@ -186,8 +220,11 @@ bool KPCRGroupsModel::DoTrackID(const wxString& trackedID, const wxString& newID
 				TrackID_ReplaceOrRemove(trackedID, newID, entry->GetRequirements(), remove);
 
 				// Flags
-				TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, entry->GetAssignedFlags(), remove);
-				TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, entry->GetTDConditions(), remove);
+				TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, entry->GetConditionalFlags().GetFlags(), remove);
+				for (KPPCCondition& condition: entry->GetTDConditionGroup().GetConditions())
+				{
+					TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);
+				}
 			}
 		}
 	}
@@ -195,7 +232,10 @@ bool KPCRGroupsModel::DoTrackID(const wxString& trackedID, const wxString& newID
 	// Conditional steps flags
 	for (auto& step: GetProject().GetComponents().GetConditionalSteps())
 	{
-		TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, step->GetConditions(), remove);
+		for (KPPCCondition& condition : step->GetConditionGroup().GetConditions())
+		{
+			TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);
+		}
 	}
 
 	return true;

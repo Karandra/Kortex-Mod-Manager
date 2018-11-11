@@ -8,13 +8,12 @@
 #include <KxFramework/KxStdDialog.h>
 class KxComboBox;
 
-class KPCCFlagsSelectorModel: public KPackageCreatorVectorModel<KPPCFlagEntryArray>, public KPackageCreatorIDTracker
+class KPCCAssignedConditionalsEditor: public KPackageCreatorVectorModel<KPPCFlagEntry::Vector>, public KPackageCreatorIDTracker
 {
 	protected:
+		KPPCCondition* m_Condition = NULL;
 		KxDataViewComboBoxEditor* m_LabelEditor = NULL;
 		KxDataViewComboBoxEditor* m_ValueEditor = NULL;
-		KxDataViewComboBoxEditor* m_OperatorEditor = NULL;
-		bool m_IsAssign = true;
 
 	private:
 		virtual void OnInitControl() override;
@@ -52,8 +51,7 @@ class KPCCFlagsSelectorModel: public KPackageCreatorVectorModel<KPPCFlagEntryArr
 		}
 
 	public:
-		KPCCFlagsSelectorModel(KPackageCreatorController* controller, bool isAssign)
-			:m_IsAssign(isAssign)
+		KPCCAssignedConditionalsEditor(KPackageCreatorController* controller)
 		{
 			m_Controller = controller;
 		}
@@ -63,7 +61,7 @@ class KPCCFlagsSelectorModel: public KPackageCreatorVectorModel<KPPCFlagEntryArr
 		{
 			if (index < GetItemCount())
 			{
-				return &GetDataVector()->at(index);
+				return &(*GetDataVector())[index];
 			}
 			return NULL;
 		}
@@ -71,22 +69,17 @@ class KPCCFlagsSelectorModel: public KPackageCreatorVectorModel<KPPCFlagEntryArr
 		{
 			if (index < GetItemCount())
 			{
-				return &GetDataVector()->at(index);
+				return &(*GetDataVector())[index];
 			}
 			return NULL;
 		}
 
-		bool IsAssignMode() const
-		{
-			return m_IsAssign;
-		}
-
 		void SetDataVector();
-		void SetDataVector(VectorType& data);
+		void SetDataVector(KPPCCondition& data);
 };
 
 //////////////////////////////////////////////////////////////////////////
-class KPCCFlagsSelectorModelDialog: public KxStdDialog, public KPCCFlagsSelectorModel
+class KPCCAssignedConditionalsEditorDialog: public KxStdDialog, public KPCCAssignedConditionalsEditor
 {
 	protected:
 		wxWindow* m_ViewPane = NULL;
@@ -102,28 +95,6 @@ class KPCCFlagsSelectorModelDialog: public KxStdDialog, public KPCCFlagsSelector
 		}
 
 	public:
-		KPCCFlagsSelectorModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, bool isAssign);
-		virtual ~KPCCFlagsSelectorModelDialog();
-};
-
-//////////////////////////////////////////////////////////////////////////
-class KPCCFlagsTDSelectorModelDialog: public KPCCFlagsSelectorModelDialog
-{
-	private:
-		KxComboBox* m_ComboBoxNewTD = NULL;
-		KPPCEntry* m_Entry = NULL;
-
-		KProgramOptionUI m_WindowOptions;
-		KProgramOptionUI m_ViewOptions;
-
-	private:
-		void OnSelectNewTD(wxCommandEvent& event);
-		wxWindow* GetDialogFocusCtrl() const override
-		{
-			return GetView();
-		}
-
-	public:
-		KPCCFlagsTDSelectorModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, KPPCEntry* entry);
-		virtual ~KPCCFlagsTDSelectorModelDialog();
+		KPCCAssignedConditionalsEditorDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller);
+		virtual ~KPCCAssignedConditionalsEditorDialog();
 };

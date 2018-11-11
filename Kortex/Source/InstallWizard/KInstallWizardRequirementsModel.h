@@ -4,11 +4,11 @@
 #include "KDataViewListModel.h"
 #include "PackageProject/KPackageProjectRequirements.h"
 
-class KInstallWizardRequirementsModel: public KDataViewVectorListModel<KPPRRequirementEntryPtrArray, KDataViewListModel>
+class KInstallWizardRequirementsModel: public KDataViewVectorListModel<KPPRRequirementEntry::RefVector, KDataViewListModel>
 {
 	private:
 		const KPackageProjectRequirements* m_RequirementsInfo = NULL;
-		KPPRRequirementEntryPtrArray m_DataVector;
+		KPPRRequirementEntry::RefVector m_DataVector;
 
 	private:
 		virtual void OnInitControl() override;

@@ -6,10 +6,8 @@
 #include "KAux.h"
 
 KPPRRequirementEntry::KPPRRequirementEntry(KPPRTypeDescriptor typeDescriptor)
-	:m_Operator(KPackageProjectRequirements::ms_DefaultEntryOperator),
-	m_ObjectFunction(KPackageProjectRequirements::ms_DefaultObjectFunction),
+	:m_ObjectFunction(KPackageProjectRequirements::ms_DefaultObjectFunction),
 	m_RequiredVersionFunction(KPackageProjectRequirements::ms_DefaultVersionOperator),
-
 	m_TypeDescriptor(typeDescriptor)
 {
 }
@@ -140,6 +138,7 @@ wxString KPPRRequirementsGroup::GetFlagName(const wxString& id)
 }
 
 KPPRRequirementsGroup::KPPRRequirementsGroup()
+	:m_Operator(KPackageProjectRequirements::ms_DefaultGroupOperator)
 {
 }
 KPPRRequirementsGroup::~KPPRRequirementsGroup()
@@ -148,7 +147,7 @@ KPPRRequirementsGroup::~KPPRRequirementsGroup()
 
 KPPRRequirementEntry* KPPRRequirementsGroup::FindEntry(const wxString& id) const
 {
-	auto it = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const KPPRRequirementEntryArray::value_type& entry)
+	auto it = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const KPPRRequirementEntry::Vector::value_type& entry)
 	{
 		return entry->GetID() == id;
 	});
@@ -162,197 +161,66 @@ KPPRRequirementEntry* KPPRRequirementsGroup::FindEntry(const wxString& id) const
 
 bool KPPRRequirementsGroup::CalcGroupStatus()
 {
-	// Sequential variant
 	if (!m_GroupStatusCalculated)
 	{
-		bool overallValue = true;
-		int cookie = 0;
-
+		KPackageProjectConditionChecker checker;
 		for (auto& entry: m_Entries)
 		{
-			entry->CalcOverallStatus();
-			KPackageProject::CheckCondition(overallValue, cookie, *entry);
+			checker(entry->CalcOverallStatus(), m_Operator);
 		}
 
-		m_GroupStatus = overallValue;
+		m_GroupStatus = checker.GetResult();
 		m_GroupStatusCalculated = true;
 	}
 	return m_GroupStatus;
 }
 
 //////////////////////////////////////////////////////////////////////////
-#define KPPR_OPERATOR_NONE_STRING			""
-#define KPPR_OPERATOR_EQ_STRING				"EQ"
-#define KPPR_OPERATOR_NOT_EQ_STRING			"NOTEQ"
-#define KPPR_OPERATOR_LT_STRING				"LT"
-#define KPPR_OPERATOR_LTEQ_STRING			"LTEQ"
-#define KPPR_OPERATOR_GT_STRING				"GT"
-#define KPPR_OPERATOR_GTEQ_STRING			"GTEQ"
-#define KPPR_OPERATOR_AND_STRING			"AND"
-#define KPPR_OPERATOR_OR_STRING				"OR"
-
-#define KPPR_OBJFUNC_NONE_STRING			""
-#define KPPR_OBJFUNC_MOD_ACTIVE_STRING		"ModActive"
-#define KPPR_OBJFUNC_MOD_INACTIVE_STRING	"ModIncative"
-#define KPPR_OBJFUNC_PLUGIN_ACTIVE_STRING	"PluginActive"
-#define KPPR_OBJFUNC_PLUGIN_INACTIVE_STRING	"PluginIncative"
-#define KPPR_OBJFUNC_FILE_EXIST_STRING		"FileExist"
-#define KPPR_OBJFUNC_FILE_NOT_EXIST_STRING	"FileNotExist"
-
-#define KPPR_TYPE_USER_STRING				"User"
-#define KPPR_TYPE_SYSTEM_STRING				"System"
-#define KPPR_TYPE_AUTO_STRING				"Auto"
-
-wxString KPackageProjectRequirements::OperatorToSymbolicName(KPPOperator operatorType)
+namespace ObjFuncConst
 {
-	switch (operatorType)
-	{
-		case KPP_OPERATOR_EQ:
-		{
-			return "==";
-		}
-		case KPP_OPERATOR_NOT_EQ:
-		{
-			return "!=";
-		}
-		case KPP_OPERATOR_LT:
-		{
-			return "<";
-		}
-		case KPP_OPERATOR_LTEQ:
-		{
-			return "<=";
-		}
-		case KPP_OPERATOR_GT:
-		{
-			return ">";
-		}
-		case KPP_OPERATOR_GTEQ:
-		{
-			return ">=";
-		}
-		case KPP_OPERATOR_AND:
-		{
-			return "&&";
-		}
-		case KPP_OPERATOR_OR:
-		{
-			return "||";
-		}
-	};
-	return wxEmptyString;
+	constexpr const auto NONE_STRING = wxS("");
+	constexpr const auto MOD_ACTIVE_STRING = wxS("ModActive");
+	constexpr const auto MOD_INACTIVE_STRING = wxS("ModIncative");
+	constexpr const auto PLUGIN_ACTIVE_STRING = wxS("PluginActive");
+	constexpr const auto PLUGIN_INACTIVE_STRING = wxS("PluginIncative");
+	constexpr const auto FILE_EXIST_STRING = wxS("FileExist");
+	constexpr const auto FILE_NOT_EXIST_STRING = wxS("FileNotExist");
 }
-wxString KPackageProjectRequirements::OperatorToString(KPPOperator operatorType)
+namespace TypeConst
 {
-	switch (operatorType)
-	{
-		case KPP_OPERATOR_EQ:
-		{
-			return KPPR_OPERATOR_EQ_STRING;
-		}
-		case KPP_OPERATOR_NOT_EQ:
-		{
-			return KPPR_OPERATOR_NOT_EQ_STRING;
-		}
-		case KPP_OPERATOR_LT:
-		{
-			return KPPR_OPERATOR_LT_STRING;
-		}
-		case KPP_OPERATOR_LTEQ:
-		{
-			return KPPR_OPERATOR_LTEQ_STRING;
-		}
-		case KPP_OPERATOR_GT:
-		{
-			return KPPR_OPERATOR_GT_STRING;
-		}
-		case KPP_OPERATOR_GTEQ:
-		{
-			return KPPR_OPERATOR_GTEQ_STRING;
-		}
-		case KPP_OPERATOR_AND:
-		{
-			return KPPR_OPERATOR_AND_STRING;
-		}
-		case KPP_OPERATOR_OR:
-		{
-			return KPPR_OPERATOR_OR_STRING;
-		}
-		case KPP_OPERATOR_NONE:
-		{
-			return KPPR_OPERATOR_NONE_STRING;
-		}
-	};
-	return wxEmptyString;
-}
-KPPOperator KPackageProjectRequirements::StringToOperator(const wxString& name, bool allowNone, KPPOperator default)
-{
-	if (name == KPPR_OPERATOR_EQ_STRING)
-	{
-		return KPP_OPERATOR_EQ;
-	}
-	if (name == KPPR_OPERATOR_NOT_EQ_STRING)
-	{
-		return KPP_OPERATOR_NOT_EQ;
-	}
-	if (name == KPPR_OPERATOR_LT_STRING)
-	{
-		return KPP_OPERATOR_LT;
-	}
-	if (name == KPPR_OPERATOR_LTEQ_STRING)
-	{
-		return KPP_OPERATOR_LTEQ;
-	}
-	if (name == KPPR_OPERATOR_GT_STRING)
-	{
-		return KPP_OPERATOR_GT;
-	}
-	if (name == KPPR_OPERATOR_GTEQ_STRING)
-	{
-		return KPP_OPERATOR_GTEQ;
-	}
-	if (name == KPPR_OPERATOR_AND_STRING)
-	{
-		return KPP_OPERATOR_AND;
-	}
-	if (name == KPPR_OPERATOR_OR_STRING)
-	{
-		return KPP_OPERATOR_OR;
-	}
-	if (allowNone && name == KPPR_OPERATOR_NONE_STRING)
-	{
-		return KPP_OPERATOR_NONE;
-	}
-	return default;
+	constexpr const auto USER_STRING = wxS("User");
+	constexpr const auto SYSTEM_STRING = wxS("System");
+	constexpr const auto AUTO_STRING = wxS("Auto");
 }
 
+//////////////////////////////////////////////////////////////////////////
 KPPRObjectFunction KPackageProjectRequirements::StringToObjectFunction(const wxString& name)
 {
-	if (name == KPPR_OBJFUNC_NONE_STRING)
+	if (name == ObjFuncConst::NONE_STRING)
 	{
 		return KPPR_OBJFUNC_NONE;
 	}
-	if (name == KPPR_OBJFUNC_MOD_ACTIVE_STRING)
+	if (name == ObjFuncConst::MOD_ACTIVE_STRING)
 	{
 		return KPPR_OBJFUNC_MOD_ACTIVE;
 	}
-	if (name == KPPR_OBJFUNC_MOD_INACTIVE_STRING)
+	if (name == ObjFuncConst::MOD_INACTIVE_STRING)
 	{
 		return KPPR_OBJFUNC_MOD_INACTIVE;
 	}
-	if (name == KPPR_OBJFUNC_PLUGIN_ACTIVE_STRING)
+	if (name == ObjFuncConst::PLUGIN_ACTIVE_STRING)
 	{
 		return KPPR_OBJFUNC_PLUGIN_ACTIVE;
 	}
-	if (name == KPPR_OBJFUNC_PLUGIN_INACTIVE_STRING)
+	if (name == ObjFuncConst::PLUGIN_INACTIVE_STRING)
 	{
 		return KPPR_OBJFUNC_PLUGIN_INACTIVE;
 	}
-	if (name == KPPR_OBJFUNC_FILE_EXIST_STRING)
+	if (name == ObjFuncConst::FILE_EXIST_STRING)
 	{
 		return KPPR_OBJFUNC_FILE_EXIST;
 	}
-	if (name == KPPR_OBJFUNC_FILE_NOT_EXIST_STRING)
+	if (name == ObjFuncConst::FILE_NOT_EXIST_STRING)
 	{
 		return KPPR_OBJFUNC_FILE_NOT_EXIST;
 	}
@@ -364,31 +232,31 @@ wxString KPackageProjectRequirements::ObjectFunctionToString(KPPRObjectFunction 
 	{
 		case KPPR_OBJFUNC_NONE:
 		{
-			return KPPR_OBJFUNC_NONE_STRING;
+			return ObjFuncConst::NONE_STRING;
 		}
 		case KPPR_OBJFUNC_MOD_ACTIVE:
 		{
-			return KPPR_OBJFUNC_MOD_ACTIVE_STRING;
+			return ObjFuncConst::MOD_ACTIVE_STRING;
 		}
 		case KPPR_OBJFUNC_MOD_INACTIVE:
 		{
-			return KPPR_OBJFUNC_MOD_INACTIVE_STRING;
+			return ObjFuncConst::MOD_INACTIVE_STRING;
 		}
 		case KPPR_OBJFUNC_PLUGIN_ACTIVE:
 		{
-			return KPPR_OBJFUNC_PLUGIN_ACTIVE_STRING;
+			return ObjFuncConst::PLUGIN_ACTIVE_STRING;
 		}
 		case KPPR_OBJFUNC_PLUGIN_INACTIVE:
 		{
-			return KPPR_OBJFUNC_PLUGIN_INACTIVE_STRING;
+			return ObjFuncConst::PLUGIN_INACTIVE_STRING;
 		}
 		case KPPR_OBJFUNC_FILE_EXIST:
 		{
-			return KPPR_OBJFUNC_FILE_EXIST_STRING;
+			return ObjFuncConst::FILE_EXIST_STRING;
 		}
 		case KPPR_OBJFUNC_FILE_NOT_EXIST:
 		{
-			return KPPR_OBJFUNC_FILE_NOT_EXIST_STRING;
+			return ObjFuncConst::FILE_NOT_EXIST_STRING;
 		}
 	};
 	return wxEmptyString;
@@ -396,15 +264,15 @@ wxString KPackageProjectRequirements::ObjectFunctionToString(KPPRObjectFunction 
 
 KPPRTypeDescriptor KPackageProjectRequirements::StringToTypeDescriptor(const wxString& name)
 {
-	if (name == KPPR_TYPE_USER_STRING)
+	if (name == TypeConst::USER_STRING)
 	{
 		return KPPR_TYPE_USER;
 	}
-	if (name == KPPR_TYPE_SYSTEM_STRING)
+	if (name == TypeConst::SYSTEM_STRING)
 	{
 		return KPPR_TYPE_SYSTEM;
 	}
-	if (name == KPPR_TYPE_AUTO_STRING)
+	if (name == TypeConst::AUTO_STRING)
 	{
 		return KPPR_TYPE_AUTO;
 	}
@@ -416,15 +284,15 @@ wxString KPackageProjectRequirements::TypeDescriptorToString(KPPRTypeDescriptor 
 	{
 		case KPPR_TYPE_USER:
 		{
-			return KPPR_TYPE_USER_STRING;
+			return TypeConst::USER_STRING;
 		}
 		case KPPR_TYPE_SYSTEM:
 		{
-			return KPPR_TYPE_SYSTEM_STRING;
+			return TypeConst::SYSTEM_STRING;
 		}
 		case KPPR_TYPE_AUTO:
 		{
-			return KPPR_TYPE_AUTO_STRING;
+			return TypeConst::AUTO_STRING;
 		}
 	};
 	return wxEmptyString;
@@ -495,39 +363,31 @@ KPPRRequirementsGroup* KPackageProjectRequirements::FindGroupWithID(const wxStri
 
 bool KPackageProjectRequirements::IsDefaultGroupContains(const wxString& groupID) const
 {
-	auto it = std::find_if(m_DefaultGroup.cbegin(), m_DefaultGroup.cend(), [&groupID](const wxString& id)
+	auto it = std::find_if(m_DefaultGroup.begin(), m_DefaultGroup.end(), [&groupID](const wxString& id)
 	{
 		return id == groupID;
 	});
-	return it != m_DefaultGroup.cend();
+	return it != m_DefaultGroup.end();
 }
 KxStringVector KPackageProjectRequirements::GetFlagNames() const
 {
-	KxStringVector tFlagNames;
-	for (const auto& pSet: m_Groups)
+	KxStringVector flagNames;
+	for (const auto& group: m_Groups)
 	{
-		tFlagNames.push_back(pSet->GetFlagName());
+		flagNames.push_back(group->GetFlagName());
 	}
-	return tFlagNames;
+	return flagNames;
 }
 bool KPackageProjectRequirements::CalcOverallStatus(const KxStringVector& groups) const
 {
-	int value = -1;
+	KPackageProjectConditionChecker checker;
 	for (const wxString& id: groups)
 	{
 		KPPRRequirementsGroup* group = FindGroupWithID(id);
 		if (group)
 		{
-			bool bResult = group->CalcGroupStatus();
-			if (value == -1)
-			{
-				value = bResult;
-			}
-			else
-			{
-				value = bResult ? (bool)value && bResult : 0;
-			}
+			checker(group->CalcGroupStatus(), KPP_OPERATOR_AND);
 		}
 	}
-	return value == 1;
+	return checker.GetResult();
 }

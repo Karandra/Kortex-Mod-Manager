@@ -17,16 +17,14 @@
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxShell.h>
 
-static void ReadKPPCFlagEntryArray(KPPCFlagEntryArray& array, const KxXMLNode& arrayNode, bool isRequired)
+namespace
 {
-	for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+	void ReadConditionGroup(KPPCConditionGroup& conditionGroup, const KxXMLNode& flagsNode, bool isRequired)
 	{
-		KPPOperator operatorType = KPackageProjectComponents::ms_DefaultFlagsOperator;
-		if (isRequired)
+		for (KxXMLNode node = flagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			operatorType = KPackageProjectRequirements::StringToOperator(node.GetAttribute("Operator"), false, operatorType);
+			conditionGroup.GetOrCreateFirstCondition().GetFlags().emplace_back(node.GetValue(), node.GetAttribute("Name"));
 		}
-		array.emplace_back(KPPCFlagEntry(node.GetValue(), node.GetAttribute("Name"), operatorType));
 	}
 }
 
@@ -760,15 +758,13 @@ void KPackageProjectSerializerSMI::ReadRequirements5x()
 			{
 				KPPRRequirementsGroup* group = requirements.GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
 				group->SetID(setsNode.GetAttribute("ID"));
+				group->SetOperator(setsNode.GetAttribute("Operator") == "Or" ? KPP_OPERATOR_OR : KPP_OPERATOR_AND);
 
 				// In 5.x default set have ID 'Default'. What a coincidence.
 				if (showCommonRequirements && (group->GetID() == "---" || group->GetID() == "Default"|| group->GetID() == "Main"))
 				{
 					requirements.GetDefaultGroup().push_back(group->GetID());
 				}
-
-				// 5.x uses one operator for all entries
-				KPPOperator operatorType = setsNode.GetAttribute("Operator") == "Or" ? KPP_OPERATOR_OR : KPP_OPERATOR_AND;
 
 				for (KxXMLNode entryNode = setsNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 				{
@@ -779,7 +775,6 @@ void KPackageProjectSerializerSMI::ReadRequirements5x()
 						entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 						entry->SetRequiredVersion(entryNode.GetFirstChildElement("RequiredVersion").GetValue());
 						entry->SetDescription(entryNode.GetFirstChildElement("Comment").GetValue());
-						entry->SetOperator(operatorType);
 
 						// File path
 						wxString path = entryNode.GetFirstChildElement("Path").GetValue();
@@ -872,14 +867,12 @@ void KPackageProjectSerializerSMI::ReadComponents5x()
 	{
 		KPackageProjectComponents& components = m_Project->GetComponents();
 
-		auto ReadFlagsArray = [](KPPCFlagEntryArray& array, const KxXMLNode& arrayNode)
+		auto ReadFlagsArray = [](KPPCCondition& conditions, const KxXMLNode& flagsNode)
 		{
-			KPPOperator operatorType = arrayNode.GetAttribute("Operator") == "Or" ? KPP_OPERATOR_OR : KPP_OPERATOR_AND;
-			for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+			for (KxXMLNode node = flagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
-				array.emplace_back(KPPCFlagEntry(node.GetAttribute("Value"), node.GetValue(), operatorType));
+				conditions.GetFlags().emplace_back(node.GetAttribute("Value"), node.GetValue());
 			}
-			return operatorType;
 		};
 
 		KxXMLNode componentsNode = m_XML.QueryElement("SetupInfo/Installer/Components");
@@ -933,8 +926,8 @@ void KPackageProjectSerializerSMI::ReadComponents5x()
 					// In KMP required flags (now TDConditions) changes type descriptor if check is successful.
 					KPPCTypeDescriptor typeDescriptor = components.StringToTypeDescriptor(entryNode.GetFirstChildElement("TypeDescriptor").GetValue());
 
-					ReadFlagsArray(entry->GetTDConditions(), entryNode.GetFirstChildElement("RequiredFlags"));
-					if (!entry->GetTDConditions().empty())
+					ReadFlagsArray(entry->GetTDConditionGroup().GetOrCreateFirstCondition(), entryNode.GetFirstChildElement("RequiredFlags"));
+					if (entry->GetTDConditionGroup().HasConditions())
 					{
 						entry->SetTDDefaultValue(KPPC_DESCRIPTOR_NOT_USABLE);
 						entry->SetTDConditionalValue(typeDescriptor);
@@ -945,7 +938,7 @@ void KPackageProjectSerializerSMI::ReadComponents5x()
 					}
 
 					/* Assigned flags */
-					ReadFlagsArray(entry->GetAssignedFlags(), entryNode.GetFirstChildElement("SetFlags"));
+					ReadFlagsArray(entry->GetConditionalFlags(), entryNode.GetFirstChildElement("SetFlags"));
 				}
 
 				return group;
@@ -956,7 +949,7 @@ void KPackageProjectSerializerSMI::ReadComponents5x()
 			{
 				KPPCStep* step = components.GetSteps().emplace_back(new KPPCStep()).get();
 				step->SetName(stepNode.GetAttribute("Name"));
-				ReadFlagsArray(step->GetConditions(), stepNode.GetFirstChildElement("RequiredFlags"));
+				ReadFlagsArray(step->GetConditionGroup().GetOrCreateFirstCondition(), stepNode.GetFirstChildElement("RequiredFlags"));
 
 				// KMP stores groups inside steps.
 				// Version 5.x stores groups separately and links them by IDs.
@@ -982,7 +975,7 @@ void KPackageProjectSerializerSMI::ReadComponents5x()
 				for (KxXMLNode stepNode = componentsNode.GetFirstChildElement(sRootNodeName).GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 				{
 					auto& step = components.GetConditionalSteps().emplace_back(new KPPCConditionalStep());
-					ReadFlagsArray(step->GetConditions(), stepNode.GetFirstChildElement("RequiredFlags"));
+					ReadFlagsArray(step->GetConditionGroup().GetOrCreateFirstCondition(), stepNode.GetFirstChildElement("RequiredFlags"));
 					KAux::LoadStringArray(step->GetEntries(), stepNode.GetFirstChildElement(sNodeName));
 				}
 			};

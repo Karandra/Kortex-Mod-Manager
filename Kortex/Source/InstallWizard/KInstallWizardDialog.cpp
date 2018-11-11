@@ -397,7 +397,7 @@ bool KInstallWizardDialog::ProcessLoadPackage()
 
 void KInstallWizardDialog::FindExistingMod()
 {
-	m_ExistingMod = KModManager::GetInstance()->FindModByID(GetConfig().ComputeModID());
+	m_ExistingMod = KModManager::GetInstance()->FindModByID(GetConfig().GetModID());
 }
 void KInstallWizardDialog::AcceptExistingMod(const KModEntry& existringMod)
 {
@@ -729,7 +729,7 @@ void KInstallWizardDialog::OnGoStepForward(wxCommandEvent& event)
 {
 	if (GetCurrentStep())
 	{
-		KPPCEntryRefArray checkedEntries;
+		KPPCEntry::RefVector checkedEntries;
 		if (m_Components_ItemList->OnLeaveStep(checkedEntries))
 		{
 			// Store flags from checked entries and save list of checked entries to current step.
@@ -827,11 +827,11 @@ void KInstallWizardDialog::StoreRequirementsFlags()
 		m_FlagsStorage.insert_or_assign(group->GetFlagName(), group->CalcGroupStatus() ? "true" : "false");
 	}
 }
-void KInstallWizardDialog::StoreStepFlags(const KPPCEntryRefArray& checkedEntries)
+void KInstallWizardDialog::StoreStepFlags(const KPPCEntry::RefVector& checkedEntries)
 {
 	for (KPPCEntry* entry: checkedEntries)
 	{
-		for (const KPPCFlagEntry& flagEntry: entry->GetAssignedFlags())
+		for (const KPPCFlagEntry& flagEntry: entry->GetConditionalFlags().GetFlags())
 		{
 			m_FlagsStorage.insert_or_assign(flagEntry.GetName(), flagEntry.GetValue());
 		}
@@ -857,39 +857,50 @@ void KInstallWizardDialog::RestoreStepFlagsUpToThis(const KPPCStep& step)
 
 bool KInstallWizardDialog::IsConditionSatisfied(const KPPCFlagEntry& flagEntry) const
 {
-	if (m_FlagsStorage.count(flagEntry.GetName()))
+	auto it = m_FlagsStorage.find(flagEntry.GetName());
+	if (it != m_FlagsStorage.end())
 	{
-		return m_FlagsStorage.at(flagEntry.GetName()) == flagEntry.GetValue();
+		return it->second == flagEntry.GetValue();
 	}
-	else
-	{
-		return flagEntry.GetValue().IsEmpty();
-	}
-	return false;
+	return !flagEntry.HasValue();
 }
-bool KInstallWizardDialog::IsConditionsSatisfied(const KPPCFlagEntryArray& flags) const
+bool KInstallWizardDialog::IsConditionsSatisfied(const KPPCConditionGroup& conditionGroup) const
 {
-	bool overallValue = true;
-	int cookie = 0;
-
-	for (const KPPCFlagEntry& entry: flags)
+	KPackageProjectConditionChecker groupChecker;
+	for (const KPPCCondition& condition: conditionGroup.GetConditions())
 	{
-		KPackageProject::CheckCondition(overallValue, cookie, IsConditionSatisfied(entry), entry);
+		// Evaluate each condition
+		KPackageProjectConditionChecker conditionChecker;
+		for (const KPPCFlagEntry& flag: condition.GetFlags())
+		{
+			conditionChecker(IsConditionSatisfied(flag), condition.GetOperator());
+			if (condition.GetOperator() == KPP_OPERATOR_AND && !conditionChecker.GetResult())
+			{
+				break;
+			}
+		}
+
+		// Then combine it
+		groupChecker(conditionChecker.GetResult(), conditionGroup.GetOperator());
+		if (conditionGroup.GetOperator() == KPP_OPERATOR_AND && !groupChecker.GetResult())
+		{
+			break;
+		}
 	}
-	return overallValue;
+	return groupChecker.GetResult();
 }
 bool KInstallWizardDialog::IsStepSatisfiesConditions(const KPPCStep& step) const
 {
-	return IsConditionsSatisfied(step.GetConditions());
+	return IsConditionsSatisfied(step.GetConditionGroup());
 }
 bool KInstallWizardDialog::CheckIsManualComponentsAvailable() const
 {
-	const KPackageProjectComponents& tComps = GetConfig().GetComponents();
-	if (!tComps.GetSteps().empty())
+	const KPackageProjectComponents& components = GetConfig().GetComponents();
+	if (!components.GetSteps().empty())
 	{
 		// Iterate over all steps from the beginning
 		// and if at least one step satisfies conditions return true.
-		for (const auto& step: tComps.GetSteps())
+		for (const auto& step: components.GetSteps())
 		{
 			if (IsStepSatisfiesConditions(*step))
 			{
@@ -901,7 +912,7 @@ bool KInstallWizardDialog::CheckIsManualComponentsAvailable() const
 }
 KPPCStep* KInstallWizardDialog::GetFirstStepSatisfiesConditions() const
 {
-	const KPPCStepArray& steps = GetConfig().GetComponents().GetSteps();
+	const KPPCStep::Vector& steps = GetConfig().GetComponents().GetSteps();
 	for (size_t i = 0; i < steps.size(); i++)
 	{
 		KPPCStep* pCurrentStep = steps[i].get();
@@ -914,21 +925,21 @@ KPPCStep* KInstallWizardDialog::GetFirstStepSatisfiesConditions() const
 }
 KPPCStep* KInstallWizardDialog::GetFirstStepSatisfiesConditions(const KPPCStep* afterThis) const
 {
-	const KPPCStepArray& steps = GetConfig().GetComponents().GetSteps();
-	auto itAfterThis = std::find_if(steps.cbegin(), steps.cend(), [afterThis](const auto& step)
+	const KPPCStep::Vector& steps = GetConfig().GetComponents().GetSteps();
+	const auto itAfterThis = std::find_if(steps.begin(), steps.end(), [afterThis](const auto& step)
 	{
 		return step.get() == afterThis;
 	});
 
 	auto itNextAfterThis = itAfterThis + 1;
-	if (itAfterThis != steps.cend() && itNextAfterThis != steps.cend())
+	if (itAfterThis != steps.end() && itNextAfterThis != steps.end())
 	{
-		for (auto it = itNextAfterThis; it != steps.cend(); ++it)
+		for (auto it = itNextAfterThis; it != steps.end(); ++it)
 		{
-			KPPCStep* pCurrentStep = it->get();
-			if (IsStepSatisfiesConditions(*pCurrentStep))
+			KPPCStep& currentStep = **it;
+			if (IsStepSatisfiesConditions(currentStep))
 			{
-				return pCurrentStep;
+				return &currentStep;
 			}
 		}
 	}
@@ -1008,7 +1019,7 @@ void KInstallWizardDialog::LoadManualStep(KPPCStep& step)
 		for (auto& entry: group->GetEntries())
 		{
 			entry->SetTDCurrentValue(KPPC_DESCRIPTOR_INVALID);
-			if (IsConditionsSatisfied(entry->GetTDConditions()))
+			if (IsConditionsSatisfied(entry->GetTDConditionGroup()))
 			{
 				entry->SetTDCurrentValue(entry->GetTDConditionalValue());
 			}
@@ -1020,34 +1031,43 @@ void KInstallWizardDialog::LoadManualStep(KPPCStep& step)
 }
 void KInstallWizardDialog::CollectAllInstallableEntries()
 {
+	auto AddFilesFromList = [this](const KxStringVector& list, bool pushBack = true)
+	{
+		for (const wxString& id: list)
+		{
+			KPPFFileEntry* entry = GetConfig().GetFileData().FindEntryWithID(id);
+			if (entry)
+			{
+				if (pushBack)
+				{
+					m_InstallableFiles.push_back(entry);
+				}
+				else
+				{
+					m_InstallableFiles.insert(m_InstallableFiles.begin(), entry);
+				}
+			}
+		}
+	};
+	auto UniqueFiles = [this]()
+	{
+		m_InstallableFiles.erase(std::unique(m_InstallableFiles.begin(), m_InstallableFiles.end()), m_InstallableFiles.end());
+	};
+
 	m_InstallableFiles.clear();
 
 	// No manual install steps and no conditional install.
-	// Return list of all files of package.
+	// Saves list of all files in the package.
 	if (!HasManualComponents() && !HasConditionalInstall())
 	{
 		for (const auto& entry: GetConfig().GetFileData().GetData())
 		{
 			m_InstallableFiles.push_back(entry.get());
 		}
+		SortInstallableFiles();
 	}
 	else
 	{
-		auto AddFilesFromList = [this](const KxStringVector& list)
-		{
-			for (const wxString& id: list)
-			{
-				KPPFFileEntry* entry = GetConfig().GetFileData().FindEntryWithID(id);
-				if (entry)
-				{
-					m_InstallableFiles.push_back(entry);
-				}
-			}
-		};
-
-		// Store required files
-		AddFilesFromList(GetConfig().GetComponents().GetRequiredFileData());
-
 		// Manual steps present, get files from checked entries
 		if (HasManualComponents())
 		{
@@ -1065,53 +1085,58 @@ void KInstallWizardDialog::CollectAllInstallableEntries()
 		{
 			for (const auto& step: GetConfig().GetComponents().GetConditionalSteps())
 			{
-				if (IsConditionsSatisfied(step->GetConditions()))
+				if (IsConditionsSatisfied(step->GetConditionGroup()))
 				{
 					AddFilesFromList(step->GetEntries());
 				}
 			}
 		}
+
+		// Sort all files excluding required
+		SortInstallableFiles();
+
+		// Add required files to the beginning
+		AddFilesFromList(GetConfig().GetComponents().GetRequiredFileData(), false);
 	}
 
-	// Unique and sort files
-	m_InstallableFiles.erase(std::unique(m_InstallableFiles.begin(), m_InstallableFiles.end()), m_InstallableFiles.end());
-	SortInstallableFiles();
+	// Remove duplicates
+	UniqueFiles();
 }
 void KInstallWizardDialog::SortInstallableFiles()
 {
 	// Sort all files by its priorities.
 	// Leave all files with default priority (-1) at end.
-	// So split all files into two arrays: first width assigned priorities and second with default.
+	// So split all files into two arrays: first with assigned priorities and second with default.
 	// Sort arrays with non-default priorities.
 	// Merge the two arrays. First sorted, then unsorted.
 
-	KPPFFileEntryRefArray tDefaultPriority;
-	KPPFFileEntryRefArray tNonDefaultPriority;
+	KPPFFileEntryRefArray defaultPriority;
+	KPPFFileEntryRefArray nonDefaultPriority;
 	for (KPPFFileEntry* entry: m_InstallableFiles)
 	{
 		if (entry->IsDefaultPriority())
 		{
-			tDefaultPriority.push_back(entry);
+			defaultPriority.push_back(entry);
 		}
 		else
 		{
-			tNonDefaultPriority.push_back(entry);
+			nonDefaultPriority.push_back(entry);
 		}
 	}
 
 	// Sort non-default
-	std::sort(tNonDefaultPriority.begin(), tNonDefaultPriority.end(), [](const KPPFFileEntry* entry1, const KPPFFileEntry* entry2)
+	std::sort(nonDefaultPriority.begin(), nonDefaultPriority.end(), [](const KPPFFileEntry* entry1, const KPPFFileEntry* entry2)
 	{
 		return entry1->GetPriority() < entry2->GetPriority();
 	});
 
 	// Merge back
 	m_InstallableFiles.clear();
-	for (KPPFFileEntry* entry: tNonDefaultPriority)
+	for (KPPFFileEntry* entry: nonDefaultPriority)
 	{
 		m_InstallableFiles.push_back(entry);
 	}
-	for (KPPFFileEntry* entry: tDefaultPriority)
+	for (KPPFFileEntry* entry: defaultPriority)
 	{
 		m_InstallableFiles.push_back(entry);
 	}

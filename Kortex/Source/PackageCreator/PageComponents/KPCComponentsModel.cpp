@@ -6,7 +6,8 @@
 #include "PackageCreator/PageInterface/KPCIImagesListModel.h"
 #include "KPCCFileDataSelectorModel.h"
 #include "KPCCRequirementsSelectorModel.h"
-#include "KPCCFlagsSelectorModel.h"
+#include "KPCCAssignedConditionalsEditor.h"
+#include "KPCCConditionGroupEditor.h"
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"
@@ -358,7 +359,12 @@ void KPCComponentsModel::GetStepValue(wxAny& value, const KxDataViewColumn* colu
 		}
 		case ColumnID::Value:
 		{
-			value = KTr("PackageCreator.PageComponents.Conditions") + ": " + KPackageCreatorPageComponents::FormatArrayToText(step->GetConditions(), true);
+			wxString conditions = KPackageCreatorPageComponents::ConditionGroupToString(step->GetConditionGroup());
+			if (conditions.IsEmpty())
+			{
+				conditions = KAux::MakeNoneLabel();
+			}
+			value = KTr(wxS("PackageCreator.PageComponents.Conditions")) + wxS(": ") + conditions;
 			break;
 		}
 	};
@@ -387,7 +393,7 @@ void KPCComponentsModel::GetGroupValue(wxAny& value, const KxDataViewColumn* col
 			}
 			else
 			{
-				value = KTr("PackageCreator.PageComponents.SelectionMode") + ": " + m_SelectionModeEditor.GetItems()[group->GetSelectionMode()];
+				value = KTr(wxS("PackageCreator.PageComponents.SelectionMode")) + wxS(": ") + m_SelectionModeEditor.GetItems()[group->GetSelectionMode()];
 			}
 			break;
 		}
@@ -421,7 +427,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = KTr("PackageCreator.PageComponents.TypeDescriptor");
+					value = KTr(wxS("PackageCreator.PageComponents.TypeDescriptor"));
 					break;
 				}
 				case ColumnID::Value:
@@ -445,7 +451,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = KTr("PackageCreator.PageComponents.FileData");
+					value = KTr(wxS("PackageCreator.PageComponents.FileData"));
 					break;
 				}
 				case ColumnID::Value:
@@ -462,7 +468,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = KTr("PackageCreator.PageComponents.Requirements");
+					value = KTr(wxS("PackageCreator.PageComponents.Requirements"));
 					break;
 				}
 				case ColumnID::Value:
@@ -479,7 +485,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = KTr("PackageCreator.PageComponents.Image");
+					value = KTr(wxS("PackageCreator.PageComponents.Image"));
 					break;
 				}
 				case ColumnID::Value:
@@ -516,7 +522,7 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = KTr("PackageCreator.PageComponents.Description");
+					value = KTr(wxS("PackageCreator.PageComponents.Description"));
 					break;
 				}
 				case ColumnID::Value:
@@ -544,19 +550,29 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = KTr("PackageCreator.PageComponents.Conditions");
+					value = KTr(wxS("PackageCreator.PageComponents.Conditions"));
 					break;
 				}
 				case ColumnID::Value:
 				{
-					wxString sConditions = KPackageCreatorPageComponents::FormatArrayToText(entry->GetTDConditions(), true);
+					wxString conditions = KPackageCreatorPageComponents::ConditionGroupToString(entry->GetTDConditionGroup());
+					if (conditions.IsEmpty())
+					{
+						conditions = KAux::MakeNoneLabel();
+					}
+
 					if (entry->GetTDConditionalValue() != KPPC_DESCRIPTOR_INVALID)
 					{
-						value = sConditions + ' ' + KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT) + ' ' + KPackageProjectComponents::TypeDescriptorToTranslation(entry->GetTDConditionalValue());
+						if (entry->GetTDConditionGroup().GetConditions().size() > 1)
+						{
+							conditions.Prepend(wxS("("));
+							conditions.Append(wxS(")"));
+						}
+						value = conditions + wxS(' ') + KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT) + wxS(' ') + KPackageProjectComponents::TypeDescriptorToTranslation(entry->GetTDConditionalValue());
 					}
 					else
 					{
-						value = sConditions;
+						value = conditions;
 					}
 					break;
 				}
@@ -569,12 +585,17 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			{
 				case ColumnID::Name:
 				{
-					value = KTr("PackageCreator.PageComponents.AssignedFlags");
+					value = KTr(wxS("PackageCreator.PageComponents.AssignedFlags"));
 					break;
 				}
 				case ColumnID::Value:
 				{
-					value = KPackageCreatorPageComponents::FormatArrayToText(entry->GetAssignedFlags(), false);
+					wxString flags = KPackageCreatorPageComponents::ConditionToString(entry->GetConditionalFlags(), false);
+					if (flags.IsEmpty())
+					{
+						flags = KAux::MakeNoneLabel();
+					}
+					value = flags;
 					break;
 				}
 			};
@@ -696,14 +717,20 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 	{
 		if (KPPCStep* step = node->GetStep())
 		{
-			KPCCFlagsSelectorModelDialog dialog(GetView(), column->GetTitle(), m_Controller, false);
-			dialog.SetDataVector(step->GetConditions());
+			KPCCConditionGroupEditorDialog dialog(GetView(), column->GetTitle(), m_Controller, step->GetConditionGroup());
 			dialog.ShowModal();
 			NotifyChangedItem(item);
 			return;
 		}
 		else if (node->IsEntryItem())
 		{
+			auto GetItemLabel = [this, &item]()
+			{
+				wxAny value;
+				GetValue(value, item, GetView()->GetColumnByID(ColumnID::Name));
+				return value.As<wxString>();
+			};
+
 			KPPCEntry* entry = node->GetParent()->GetEntry();
 			switch (node->GetEntryItemID())
 			{
@@ -711,8 +738,8 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KPCCFlagsSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller, true);
-						dialog.SetDataVector(entry->GetAssignedFlags());
+						KPCCAssignedConditionalsEditorDialog dialog(KMainWindow::GetInstance(), GetItemLabel(), m_Controller);
+						dialog.SetDataVector(entry->GetConditionalFlags());
 						dialog.ShowModal();
 						NotifyChangedItem(item);
 					}
@@ -722,8 +749,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KPCCFlagsTDSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller, entry);
-						dialog.SetDataVector(entry->GetTDConditions());
+						KPCCConditionGroupEditorDialogTD dialog(KMainWindow::GetInstance(), GetItemLabel(), m_Controller, entry->GetTDConditionGroup(), *entry);
 						dialog.ShowModal();
 						NotifyChangedItem(item);
 					}
@@ -733,7 +759,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KPCCFileDataSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller);
+						KPCCFileDataSelectorModelDialog dialog(KMainWindow::GetInstance(), GetItemLabel(), m_Controller);
 						dialog.SetDataVector(entry->GetFileData(), &m_Controller->GetProject()->GetFileData());
 						if (dialog.ShowModal() == KxID_OK)
 						{
@@ -747,7 +773,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KPCCRequirementsSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller);
+						KPCCRequirementsSelectorModelDialog dialog(KMainWindow::GetInstance(), GetItemLabel(), m_Controller);
 						dialog.SetDataVector(entry->GetRequirements(), &m_Controller->GetProject()->GetRequirements());
 						if (dialog.ShowModal() == KxID_OK)
 						{
@@ -1149,7 +1175,7 @@ void KPCComponentsModel::RemoveStep(KPCComponentsModelNode* node, const KPPCStep
 	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveStepDialog", step->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (dialog.ShowModal() == KxID_YES)
 	{
-		KPPCStepArray& steps = GetComponents().GetSteps();
+		KPPCStep::Vector& steps = GetComponents().GetSteps();
 
 		steps.erase(FindElement(steps, step));
 		m_Steps.erase(FindElement(m_Steps, node));
@@ -1162,7 +1188,7 @@ void KPCComponentsModel::RemoveGroup(KPCComponentsModelNode* node, const KPPCGro
 	KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveGroupDialog", group->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (dialog.ShowModal() == KxID_YES)
 	{
-		KPPCGroupArray& groups = node->GetParent()->GetStep()->GetGroups();
+		KPPCGroup::Vector& groups = node->GetParent()->GetStep()->GetGroups();
 		KPCComponentsModelNode::Vector& nodes = node->GetParent()->GetChildren();
 
 		groups.erase(FindElement(groups, group));
@@ -1173,7 +1199,7 @@ void KPCComponentsModel::RemoveGroup(KPCComponentsModelNode* node, const KPPCGro
 }
 void KPCComponentsModel::RemoveEntry(KPCComponentsModelNode* node, const KPPCEntry* entry)
 {
-	KPPCEntryArray& entries = node->GetParent()->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetParent()->GetGroup()->GetEntries();
 	KPCComponentsModelNode::Vector& nodes = node->GetParent()->GetChildren();
 
 	entries.erase(FindElement(entries, entry));
@@ -1213,14 +1239,12 @@ void KPCComponentsModel::AllSteps_Name(KPCComponentsModelNode* node, const wxStr
 void KPCComponentsModel::AllSteps_Conditions(KPCComponentsModelNode* node, const wxString& name)
 {
 	KPPCEntry tempEntry;
-	KPCCFlagsSelectorModelDialog dialog(GetViewTLW(), name, m_Controller, false);
-	dialog.SetDataVector(tempEntry.GetTDConditions());
-
+	KPCCConditionGroupEditorDialog dialog(GetViewTLW(), name, m_Controller, tempEntry.GetTDConditionGroup());
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		for (auto& entry: GetComponents().GetSteps())
 		{
-			entry->GetConditions() = tempEntry.GetTDConditions();
+			entry->GetConditionGroup() = tempEntry.GetTDConditionGroup();
 		}
 		GetView()->Refresh();
 	}
@@ -1228,7 +1252,7 @@ void KPCComponentsModel::AllSteps_Conditions(KPCComponentsModelNode* node, const
 
 void KPCComponentsModel::AllGroups_Name(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCGroupArray& groups = node->GetStep()->GetGroups();
+	KPPCGroup::Vector& groups = node->GetStep()->GetGroups();
 
 	KxTextBoxDialog dialog(GetViewTLW(), KxID_NONE, name);
 	if (dialog.ShowModal() == KxID_OK)
@@ -1242,7 +1266,7 @@ void KPCComponentsModel::AllGroups_Name(KPCComponentsModelNode* node, const wxSt
 }
 void KPCComponentsModel::AllGroups_SelectionMode(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCGroupArray& groups = node->GetStep()->GetGroups();
+	KPPCGroup::Vector& groups = node->GetStep()->GetGroups();
 
 	KxComboBoxDialog dialog(GetView(), KxID_NONE, name);
 	dialog.SetItems(m_SelectionModeEditor.GetItems());
@@ -1258,7 +1282,7 @@ void KPCComponentsModel::AllGroups_SelectionMode(KPCComponentsModelNode* node, c
 
 void KPCComponentsModel::AllEntries_Name(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCEntryArray& entries = node->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 
 	KxTextBoxDialog dialog(GetView(), KxID_NONE, name);
 	if (dialog.ShowModal() == KxID_OK)
@@ -1272,7 +1296,7 @@ void KPCComponentsModel::AllEntries_Name(KPCComponentsModelNode* node, const wxS
 }
 void KPCComponentsModel::AllEntries_DefaultTypeDescriptor(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCEntryArray& entries = node->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 
 	KxComboBoxDialog dialog(GetView(), KxID_NONE, name);
 	dialog.SetItems(m_TypeDescriptorEditor.GetItems());
@@ -1287,7 +1311,7 @@ void KPCComponentsModel::AllEntries_DefaultTypeDescriptor(KPCComponentsModelNode
 }
 void KPCComponentsModel::AllEntries_FileData(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCEntryArray& entries = node->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 
 	KPCCFileDataSelectorModelDialog dialog(GetView(), name, m_Controller);
 	dialog.SetDataVector({}, &m_Controller->GetProject()->GetFileData());
@@ -1302,7 +1326,7 @@ void KPCComponentsModel::AllEntries_FileData(KPCComponentsModelNode* node, const
 }
 void KPCComponentsModel::AllEntries_Requirements(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCEntryArray& entries = node->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 
 	KPCCRequirementsSelectorModelDialog dialog(GetView(), name, m_Controller);
 	dialog.SetDataVector({}, &m_Controller->GetProject()->GetRequirements());
@@ -1317,7 +1341,7 @@ void KPCComponentsModel::AllEntries_Requirements(KPCComponentsModelNode* node, c
 }
 void KPCComponentsModel::AllEntries_Image(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCEntryArray& entries = node->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 	const KPPIImageEntryArray& images = GetInterface().GetImages();
 	KxComboBoxDialog dialog(GetView(), KxID_NONE, name, wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, KxComboBoxDialog::DefaultStyle);
 
@@ -1339,16 +1363,15 @@ void KPCComponentsModel::AllEntries_Image(KPCComponentsModelNode* node, const wx
 }
 void KPCComponentsModel::AllEntries_Conditions(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCEntryArray& entries = node->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 	KPPCEntry tempEntry;
 
-	KPCCFlagsTDSelectorModelDialog dialog(GetView(), name, m_Controller, &tempEntry);
-	dialog.SetDataVector(tempEntry.GetTDConditions());
+	KPCCConditionGroupEditorDialogTD dialog(GetView(), name, m_Controller, tempEntry.GetTDConditionGroup(), tempEntry);
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		for (auto& entry: entries)
 		{
-			entry->GetTDConditions() = tempEntry.GetTDConditions();
+			entry->GetTDConditionGroup() = tempEntry.GetTDConditionGroup();
 			entry->SetTDConditionalValue(tempEntry.GetTDConditionalValue());
 		}
 		GetView()->Refresh();
@@ -1356,23 +1379,23 @@ void KPCComponentsModel::AllEntries_Conditions(KPCComponentsModelNode* node, con
 }
 void KPCComponentsModel::AllEntries_AssignedFlags(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCEntryArray& entries = node->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 	KPPCEntry tempEntry;
 
-	KPCCFlagsSelectorModelDialog dialog(GetView(), name, m_Controller, true);
-	dialog.SetDataVector(tempEntry.GetAssignedFlags());
+	KPCCAssignedConditionalsEditorDialog dialog(GetView(), name, m_Controller);
+	dialog.SetDataVector(tempEntry.GetConditionalFlags());
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		for (auto& entry: entries)
 		{
-			entry->GetAssignedFlags() = tempEntry.GetAssignedFlags();
+			entry->GetConditionalFlags() = tempEntry.GetConditionalFlags();
 		}
 		GetView()->Refresh();
 	}
 }
 void KPCComponentsModel::AllEntries_Description(KPCComponentsModelNode* node, const wxString& name)
 {
-	KPPCEntryArray& entries = node->GetGroup()->GetEntries();
+	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 
 	KTextEditorDialog dialog(GetView());
 	if (dialog.ShowModal() == KxID_OK)

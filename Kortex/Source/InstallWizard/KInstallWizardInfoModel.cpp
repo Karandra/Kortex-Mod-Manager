@@ -38,12 +38,12 @@ void KInstallWizardInfoModel::GetEditorValueByRow(wxAny& data, size_t row, const
 		{
 			case KIWI_TYPE_ID:
 			{
-				data = m_Config.ComputeModID();
+				data = m_Config.GetModID();
 				break;
 			}
 			case KIWI_TYPE_NAME:
 			{
-				data = m_Config.ComputeModName();
+				data = m_Config.GetModName();
 				break;
 			}
 		};
@@ -97,12 +97,12 @@ void KInstallWizardInfoModel::GetValueByRow(wxAny& data, size_t row, const KxDat
 				}
 				case KIWI_TYPE_ID:
 				{
-					data = KxString::Format("%1 (%2)", m_Config.ComputeModID(), m_Config.GetSignature());
+					data = KxString::Format("%1 (%2)", m_Config.GetModID(), m_Config.GetSignature());
 					break;
 				}
 				case KIWI_TYPE_NAME:
 				{
-					data = m_Config.ComputeModName();
+					data = m_Config.GetModName();
 					break;
 				}
 				default:
@@ -124,7 +124,7 @@ bool KInstallWizardInfoModel::SetValueByRow(const wxAny& data, size_t row, const
 			case KIWI_TYPE_ID:
 			{
 				wxString id = data.As<wxString>();
-				if (id != m_Config.ComputeModID() && CheckModID(id))
+				if (id != m_Config.GetModID() && CheckModID(id))
 				{
 					m_Config.SetModID(id);
 					m_InstallWizard.FindExistingMod();

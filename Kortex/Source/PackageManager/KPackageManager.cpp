@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "KPackageManager.h"
+#include "PackageProject/KPackageProject.h"
 #include "Archive/KArchive.h"
 #include "GameInstance/KInstanceManagement.h"
 #include "ModManager/KModManager.h"
@@ -203,7 +204,7 @@ void KPackageManager::LoadStdRequirements()
 		// Version
 		KxXMLNode versionNode = entryNode.GetFirstChildElement("Version");
 		entry->SetRequiredVersion(versionNode.GetValue());
-		entry->SetRVFunction(KPackageProjectRequirements::StringToOperator(versionNode.GetAttribute("Function"), false));
+		entry->SetRVFunction(KPackageProject::StringToOperator(versionNode.GetAttribute("Function"), false, KPackageProjectRequirements::ms_DefaultVersionOperator));
 		entry->SetBinaryVersionKind(versionNode.GetAttribute("BinaryVersionKind"));
 
 		// Description
@@ -239,7 +240,7 @@ wxString KPackageManager::GetVersion() const
 	return "1.3";
 }
 
-const KPPRRequirementEntry* KPackageManager::FindScriptExtenderRequirement() const
+const KPPRRequirementEntry* KPackageManager::GetScriptExtenderRequirement() const
 {
 	return FindStdReqirement(KVAR_EXP(KVAR_SCRIPT_EXTENDER_ID));
 }

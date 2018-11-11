@@ -12,7 +12,7 @@ void KIWStepStack::PushStep(KPPCStep* step)
 {
 	push(KIWStepStackItem(step));
 }
-void KIWStepStack::PushStep(KPPCStep* step, const KPPCEntryRefArray& checked)
+void KIWStepStack::PushStep(KPPCStep* step, const KPPCEntry::RefVector& checked)
 {
 	push(KIWStepStackItem(step, checked));
 }

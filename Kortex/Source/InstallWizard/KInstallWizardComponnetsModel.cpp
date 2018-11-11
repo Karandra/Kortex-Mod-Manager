@@ -417,7 +417,7 @@ void KInstallWizardComponnetsModel::SetDataVector()
 	ItemsCleared();
 	GetView()->Disable();
 }
-void KInstallWizardComponnetsModel::SetDataVector(const KPackageProjectComponents* compInfo, const KPPCStep* step, const KPPCEntryRefArray& checkedEntries)
+void KInstallWizardComponnetsModel::SetDataVector(const KPackageProjectComponents* compInfo, const KPPCStep* step, const KPPCEntry::RefVector& checkedEntries)
 {
 	SetDataVector();
 
@@ -502,7 +502,7 @@ void KInstallWizardComponnetsModel::RefreshItems()
 	SelectItem(selection);
 	GetView()->SetFocus();
 }
-bool KInstallWizardComponnetsModel::OnLeaveStep(KPPCEntryRefArray& checkedEntries)
+bool KInstallWizardComponnetsModel::OnLeaveStep(KPPCEntry::RefVector& checkedEntries)
 {
 	checkedEntries = GetCheckedEntries();
 	return true;
@@ -526,9 +526,9 @@ KIWCModelNode* KInstallWizardComponnetsModel::GetNode(const KxDataViewItem& item
 {
 	return item.GetValuePtr<KIWCModelNode>();
 }
-KPPCEntryRefArray KInstallWizardComponnetsModel::GetCheckedEntries() const
+KPPCEntry::RefVector KInstallWizardComponnetsModel::GetCheckedEntries() const
 {
-	KPPCEntryRefArray entries;
+	KPPCEntry::RefVector entries;
 	for (const KIWCModelNode& node: m_DataVector)
 	{
 		if (node.IsEntry() && node.IsChecked())

@@ -6,7 +6,7 @@
 #include "KProgramOptions.h"
 #include <KxFramework/KxStdDialog.h>
 
-class KPCCConditionalStepsModel: public KPackageCreatorVectorModel<KPPCConditionalStepArray>
+class KPCCConditionalStepsModel: public KPackageCreatorVectorModel<KPPCConditionalStep::Vector>
 {
 	private:
 		virtual void OnInitControl() override;

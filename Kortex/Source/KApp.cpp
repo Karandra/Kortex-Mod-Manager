@@ -36,7 +36,9 @@
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxRegistry.h>
 #include <KxFramework/KxSplashWindow.h>
+#include <KxFramework/KxAnimation.h>
 #include <KxFramework/KxTaskScheduler.h>
+#include <KxFramework/KxCallAtScopeExit.h>
 
 namespace
 {
@@ -158,19 +160,26 @@ bool KApp::OnInit()
 	// Show loading window
 	LoadImages();
 	KThemeManager::Set(new KThemeDefault());
-	KxSplashWindow splashWindow(NULL, m_ImageSet.GetBitmap("application-logo"));
-	
+	KxSplashWindow* splashWindow = new KxSplashWindow();
+
 	// Don't show loading screen if it's a download link request
 	if (downloadLink.IsEmpty() || !anotherInstanceRunning)
 	{
-		splashWindow.Show();
+		splashWindow->Create(NULL, m_ImageSet.GetBitmap("application-logo"));
+		splashWindow->Show();
 	}
-	m_InitProgressDialog = &splashWindow;
+	m_InitProgressDialog = splashWindow;
+
+	KxCallAtScopeExit atExit([this]()
+	{
+		m_InitProgressDialog->Destroy();
+		m_InitProgressDialog = NULL;
+	});
 
 	// Log system info
 	wxLogInfo("%s %s: Log opened", GetAppDisplayName(), GetAppVersion());
-	KxSystem::VersionInfo tVI = KxSystem::GetVersionInfo();
-	wxLogInfo("System: %s %s %s. Kernel version: %d.%d", KxSystem::GetName(), KxSystem::Is64Bit() ? "x64" : "x86", tVI.ServicePack, tVI.MajorVersion, tVI.MinorVersion);
+	KxSystem::VersionInfo versionInfo = KxSystem::GetVersionInfo();
+	wxLogInfo("System: %s %s %s. Kernel version: %d.%d", KxSystem::GetName(), KxSystem::Is64Bit() ? "x64" : "x86", versionInfo.ServicePack, versionInfo.MajorVersion, versionInfo.MinorVersion);
 
 	wxFileSystem::AddHandler(new KINetFSHandler());
 
@@ -234,7 +243,6 @@ bool KApp::OnInit()
 		KLogEvent(KTr("Init.AnotherInstanceRunning"), KLOG_ERROR);
 		return false;
 	}
-	m_InitProgressDialog = NULL;
 }
 int KApp::OnExit()
 {
@@ -431,7 +439,6 @@ void KApp::InitSettings()
 
 	// Init all profiles and load current one if specified (or ask user to choose it)
 	wxLogInfo("Settings initialized. Begin loading profile.");
-	m_InitProgressDialog->SetLabel(KTr("Init.Status2"));
 
 	ConfigureInternetExplorer(true);
 }

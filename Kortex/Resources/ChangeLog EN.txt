@@ -24,6 +24,7 @@ Version 1.4 - x
 [Package Manager] Changing mod ID to existing mod's ID in install wizard is now allowed.
 [Package Manager] Fixed requirements check (removed two-phased checking).
 [Package Manager] Component entries in package creator view can now be moved between different branches.
+[Package Manager] Changed conditions system. Fixed undefined condition evaluation order.
 [Package Manager] Version 1.3
 [Program Manager] Program manager redone. Workspace moved to mods window as separate tab.
 [Program Manager] Version 2.0.

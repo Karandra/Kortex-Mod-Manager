@@ -286,14 +286,8 @@ class KInstallWizardDialog:
 			return m_InstallSteps.GetTopItem();
 		}
 		bool HasMainRequirements() const;
-		bool HasManualComponents() const
-		{
-			return m_HasManualComponents;
-		}
-		bool HasConditionalInstall() const
-		{
-			return !GetConfig().GetComponents().GetConditionalSteps().empty();
-		}
+		bool HasManualComponents() const;
+		bool HasConditionalInstall() const;
 };
 
 //////////////////////////////////////////////////////////////////////////

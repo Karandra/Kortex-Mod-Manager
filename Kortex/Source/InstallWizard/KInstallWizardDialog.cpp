@@ -866,28 +866,32 @@ bool KInstallWizardDialog::IsConditionSatisfied(const KPPCFlagEntry& flagEntry) 
 }
 bool KInstallWizardDialog::IsConditionsSatisfied(const KPPCConditionGroup& conditionGroup) const
 {
-	KPackageProjectConditionChecker groupChecker;
-	for (const KPPCCondition& condition: conditionGroup.GetConditions())
+	if (conditionGroup.HasConditions())
 	{
-		// Evaluate each condition
-		KPackageProjectConditionChecker conditionChecker;
-		for (const KPPCFlagEntry& flag: condition.GetFlags())
+		KPackageProjectConditionChecker groupChecker;
+		for (const KPPCCondition& condition: conditionGroup.GetConditions())
 		{
-			conditionChecker(IsConditionSatisfied(flag), condition.GetOperator());
-			if (condition.GetOperator() == KPP_OPERATOR_AND && !conditionChecker.GetResult())
+			// Evaluate each condition
+			KPackageProjectConditionChecker conditionChecker;
+			for (const KPPCFlagEntry& flag: condition.GetFlags())
+			{
+				conditionChecker(IsConditionSatisfied(flag), condition.GetOperator());
+				if (condition.GetOperator() == KPP_OPERATOR_AND && !conditionChecker.GetResult())
+				{
+					break;
+				}
+			}
+
+			// Then combine it
+			groupChecker(conditionChecker.GetResult(), conditionGroup.GetOperator());
+			if (conditionGroup.GetOperator() == KPP_OPERATOR_AND && !groupChecker.GetResult())
 			{
 				break;
 			}
 		}
-
-		// Then combine it
-		groupChecker(conditionChecker.GetResult(), conditionGroup.GetOperator());
-		if (conditionGroup.GetOperator() == KPP_OPERATOR_AND && !groupChecker.GetResult())
-		{
-			break;
-		}
+		return groupChecker.GetResult();
 	}
-	return groupChecker.GetResult();
+	return true;
 }
 bool KInstallWizardDialog::IsStepSatisfiesConditions(const KPPCStep& step) const
 {
@@ -1551,4 +1555,12 @@ bool KInstallWizardDialog::OnLeavingPage(KInstallWizardPages page)
 bool KInstallWizardDialog::HasMainRequirements() const
 {
 	return !GetConfig().GetRequirements().IsDefaultGroupEmpty();
+}
+bool KInstallWizardDialog::HasManualComponents() const
+{
+	return m_HasManualComponents;
+}
+bool KInstallWizardDialog::HasConditionalInstall() const
+{
+	return !GetConfig().GetComponents().GetConditionalSteps().empty();
 }

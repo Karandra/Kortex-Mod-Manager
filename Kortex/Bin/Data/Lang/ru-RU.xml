@@ -1280,7 +1280,7 @@
 		<String ID="PackageCreator.PageComponents.Image">Изображение</String>
 		<String ID="PackageCreator.PageComponents.Description">Описание</String>
 		<String ID="PackageCreator.PageComponents.Conditions">Условия</String>
-		<String ID="PackageCreator.PageComponents.AssignedFlags">Назначенные флаги</String>
+		<String ID="PackageCreator.PageComponents.ConditionFlags">Флаги условий</String>
 		
 		<String ID="PackageCreator.PageComponents.SelectionMode">Режим выбора</String>
 		<String ID="PackageCreator.PageComponents.SelectionMode.Any">Любой</String>

@@ -1280,7 +1280,7 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="PackageCreator.PageComponents.Image">Image</String>
 		<String ID="PackageCreator.PageComponents.Description">Description</String>
 		<String ID="PackageCreator.PageComponents.Conditions">Conditions</String>
-		<String ID="PackageCreator.PageComponents.AssignedFlags">Assigned flags</String>
+		<String ID="PackageCreator.PageComponents.ConditionFlags">Condition flags</String>
 
 		<String ID="PackageCreator.PageComponents.SelectionMode">Selection mode</String>
 		<String ID="PackageCreator.PageComponents.SelectionMode.Any">Any</String>

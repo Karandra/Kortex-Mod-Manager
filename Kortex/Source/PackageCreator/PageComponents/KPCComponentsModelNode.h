@@ -17,7 +17,7 @@ class KPCComponentsModelNode
 			Image,
 			Description,
 			Conditions,
-			AssignedFlags,
+			ConditionFlags,
 		};
 
 	private:
@@ -91,7 +91,7 @@ class KPCComponentsModelNode
 			AddEntryItem(EntryID::Image);
 			AddEntryItem(EntryID::Description);
 			AddEntryItem(EntryID::Conditions);
-			AddEntryItem(EntryID::AssignedFlags);
+			AddEntryItem(EntryID::ConditionFlags);
 		}
 
 		bool HasChildren() const

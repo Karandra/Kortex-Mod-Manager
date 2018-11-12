@@ -579,13 +579,13 @@ void KPCComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn*
 			};
 			break;
 		}
-		case EntryID::AssignedFlags:
+		case EntryID::ConditionFlags:
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Name:
 				{
-					value = KTr(wxS("PackageCreator.PageComponents.AssignedFlags"));
+					value = KTr(wxS("PackageCreator.PageComponents.ConditionFlags"));
 					break;
 				}
 				case ColumnID::Value:
@@ -734,7 +734,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 			KPPCEntry* entry = node->GetParent()->GetEntry();
 			switch (node->GetEntryItemID())
 			{
-				case EntryID::AssignedFlags:
+				case EntryID::ConditionFlags:
 				{
 					if (entry)
 					{

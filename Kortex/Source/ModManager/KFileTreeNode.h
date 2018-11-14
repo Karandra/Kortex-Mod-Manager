@@ -199,6 +199,10 @@ class KFileTreeNode
 			return m_Item.GetFullPath();
 		}
 		wxString GetRelativePath() const;
+		wxString GetFileExtension() const
+		{
+			return m_Item.GetFileExtension();
+		}
 
 		bool IsDirectory() const
 		{

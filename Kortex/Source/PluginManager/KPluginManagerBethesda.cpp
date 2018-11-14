@@ -92,7 +92,7 @@ KWorkspace* KPluginManagerBethesda::CreateWorkspace(KMainWindow* mainWindow)
 void KPluginManagerBethesda::LoadNativeOrderBG()
 {
 	Clear();
-	KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false);
+	KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->Find(m_PluginsLocation, KDispatcher::SimpleSearcher(wxEmptyString, true, KxFS_FILE), false);
 
 	// Load from 'LoadOrder.txt'
 	for (const wxString& name: KxTextFile::ReadToArray(KVarExp(m_OrderListFile)))
@@ -265,7 +265,7 @@ void KPluginManagerBethesda::Load()
 
 	if (KProfile* profile = KGameInstance::GetActiveProfile())
 	{
-		KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->FindFiles(m_PluginsLocation, KxFile::NullFilter, KxFS_FILE, false, true);
+		KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->Find(m_PluginsLocation, KDispatcher::SimpleSearcher(wxEmptyString, true, KxFS_FILE), false);
 
 		for (const KProfilePlugin& listEntry: profile->GetPlugins())
 		{

@@ -299,7 +299,7 @@ void KVirtualGameFolderModel::RefreshItems()
 	{
 		m_TreeItems = &m_FoundItems;
 
-		KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->FindFiles(wxEmptyString, m_SearchMask, KxFS_FILE, true);
+		KFileTreeNode::CRefVector files = KDispatcher::GetInstance()->Find(wxEmptyString, KDispatcher::SimpleSearcher(m_SearchMask, true, KxFS_FILE), true);
 		m_FoundItems.reserve(files.size());
 
 		for (const KFileTreeNode* node: files)

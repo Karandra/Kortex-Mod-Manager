@@ -152,7 +152,7 @@ void KModCollisionViewerModel::OnContextMenu(KxDataViewEvent& event)
 
 void KModCollisionViewerModel::RunCollisionsSearch(KOperationWithProgressBase* context)
 {
-	for (const KFileTreeNode* fileNode: KDispatcher::GetInstance()->FindFiles(*m_ModEntry, KxFile::NullFilter, KxFS_FILE, true))
+	for (const KFileTreeNode* fileNode: KDispatcher::GetInstance()->Find(*m_ModEntry, KDispatcher::SimpleSearcher(wxEmptyString, true, KxFS_FILE), true))
 	{
 		if (!context->CanContinue())
 		{

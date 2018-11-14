@@ -57,6 +57,25 @@ class KDispatcher: public KxSingletonPtr<KDispatcher>
 			Reversed
 		};
 		using IterationFunctor = std::function<bool(const KModEntry&)>;
+		using FilterFunctor = std::function<bool(const KFileTreeNode&)>;
+
+	public:
+		class SimpleSearcher
+		{
+			private:
+				const wxString m_Filter;
+				const bool m_ActiveOnly = true;
+				const KxFileSearchType m_ElementType = KxFS_ALL;
+
+			public:
+				SimpleSearcher(const wxString& filter = wxEmptyString, bool activeOnly = true, KxFileSearchType type = KxFS_FILE)
+					:m_Filter(filter), m_ActiveOnly(activeOnly), m_ElementType(type)
+				{
+				}
+
+			public:
+				bool operator()(const KFileTreeNode& node) const;
+		};
 
 	private:
 		KFileTreeNode m_VirtualTree;
@@ -91,13 +110,13 @@ class KDispatcher: public KxSingletonPtr<KDispatcher>
 		const KFileTreeNode* BackTrackFullPath(const wxString& fullPath) const;
 		
 		// Searches files in virtual tree in specified directory.
-		KFileTreeNode::CRefVector FindFiles(const wxString& relativePath, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, bool activeOnly = false) const;
+		KFileTreeNode::CRefVector Find(const wxString& relativePath, const FilterFunctor& filter, bool recurse = false) const;
 
 		// Searches files in specified node. This can be 'KModEntry' tree or virtual tree.
-		KFileTreeNode::CRefVector FindFiles(const KFileTreeNode& rootNode, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false, bool activeOnly = false) const;
+		KFileTreeNode::CRefVector Find(const KFileTreeNode& rootNode, const FilterFunctor& filter, bool recurse = false) const;
 		
 		// Searches files in specified mod. It's basically short-circuit to previous function with mod's file tree.
-		KFileTreeNode::CRefVector FindFiles(const KModEntry& modEntry, const wxString& filter = KxFile::NullFilter, KxFileSearchType type = KxFS_ALL, bool recurse = false) const;
+		KFileTreeNode::CRefVector Find(const KModEntry& modEntry, const FilterFunctor& filter, bool recurse = false) const;
 		
 		// Searches for collisions of file specified by 'relativePath' for a mod.
 		KDispatcherCollision::Vector FindCollisions(const KModEntry& scannedMod, const wxString& relativePath) const;

@@ -13,6 +13,7 @@ class KPluginManagerConfigSortingToolEntry;
 class KModEntry;
 class KPluginViewModel;
 class KxXMLNode;
+class wxProcessEvent;
 
 #define KPLUGIN_IMANAGER_BETHESDA wxS("Bethesda")
 #define KPLUGIN_IMANAGER_BETHESDA2 wxS("Bethesda2")

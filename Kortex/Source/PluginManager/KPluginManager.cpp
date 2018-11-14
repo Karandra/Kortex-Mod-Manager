@@ -245,9 +245,11 @@ void KPluginManager::RunSortingTool(const KPluginManagerConfigSortingToolEntry& 
 		runEntry.SetExecutable(entry.GetExecutable());
 		runEntry.SetArguments(entry.GetArguments());
 
-		KxProgressDialog* dialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
 		KxProcess& process = KProgramManager::GetInstance()->CreateProcess(runEntry);
+		process.SetOptionEnabled(KxPROCESS_WAIT_END, true);
+		process.SetOptionEnabled(KxPROCESS_DETACHED, false);
 
+		KxProgressDialog* dialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
 		dialog->Bind(KxEVT_STDDIALOG_BUTTON, [&process](wxNotifyEvent& event)
 		{
 			if (event.GetId() == KxID_CANCEL)
@@ -256,11 +258,16 @@ void KPluginManager::RunSortingTool(const KPluginManagerConfigSortingToolEntry& 
 			}
 			event.Veto();
 		});
-		process.Bind(wxEVT_END_PROCESS, [this](wxProcessEvent& event)
+		process.Bind(KxEVT_PROCESS_END, [this, &process, dialog](wxProcessEvent& event)
 		{
 			LoadNativeOrder();
+			dialog->Destroy();
 			KMainWindow::GetInstance()->Show();
-			event.Skip();
+
+			KEvent::CallAfter([&process]()
+			{
+				KProgramManager::GetInstance()->DestroyProcess(process);
+			});
 		});
 
 		KMainWindow::GetInstance()->Hide();

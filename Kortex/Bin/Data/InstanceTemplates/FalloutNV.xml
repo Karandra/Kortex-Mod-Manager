@@ -11,7 +11,7 @@
 			<Name>Installed Path</Name>
 			<Type>REG_SZ</Type>
 		</Entry>
-		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\FalloutNV</Entry>
+		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\FalloutNV</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
 		<Entry ID="ScriptExtenderID">NVSE</Entry>
 		<Entry ID="xEditID">fnv</Entry>
@@ -47,7 +47,7 @@
 				<Sources>
 					<Entry>$(ProfileDir)\Plugins</Entry>
 				</Sources>
-				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\FalloutNV</Target>
+				<Target>$SHF(APPLICATIONDATA_LOCAL)\FalloutNV</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>

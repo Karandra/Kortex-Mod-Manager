@@ -11,7 +11,7 @@
 			<Name>Installed Path</Name>
 			<Type>REG_SZ</Type>
 		</Entry>
-		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\Skyrim VR</Entry>
+		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Skyrim VR</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
 		<Entry ID="ScriptExtenderID">SKSEVR</Entry>
 		<Entry ID="xEditID">tes5vr</Entry>
@@ -56,7 +56,7 @@
 				<Sources>
 					<Entry>$(ProfileDir)\Plugins</Entry>
 				</Sources>
-				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\Skyrim VR</Target>
+				<Target>$SHF(APPLICATIONDATA_LOCAL)\Skyrim VR</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>

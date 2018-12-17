@@ -11,7 +11,7 @@
 			<Name>Installed Path</Name>
 			<Type>REG_SZ</Type>
 		</Entry>
-		<Entry ID="ActualConfigDir">$SH(SHF_DOCUMENTS)\My Games\Fallout4VR</Entry>
+		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Fallout4VR</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
 		<!--<Entry ID="ScriptExtenderID">F4SEVR</Entry>-->
 		<Entry ID="xEditID">fo4vr</Entry>
@@ -35,7 +35,7 @@
 				<Sources>
 					<Entry>$(ProfileDir)\Plugins</Entry>
 				</Sources>
-				<Target>$SH(SHF_APPLICATIONDATA_LOCAL)\Fallout4VR</Target>
+				<Target>$SHF(APPLICATIONDATA_LOCAL)\Fallout4VR</Target>
 			</Entry>
 		</MirroredLocations>
 	</Virtualization>

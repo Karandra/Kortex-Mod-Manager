@@ -17,17 +17,24 @@ namespace Kortex::Application
 {
 	class BasicOption: public IAppOption
 	{
+		public:
+			enum class Disposition
+			{
+				Global,
+				Instance,
+			};
+
 		protected:
 			KxXMLNode m_Node;
 
 		protected:
-			void Create(KxXMLDocument& xml, const wxString& branch = wxEmptyString);
-			void Create(KxXMLDocument& xml, const IApplication& app, const wxString& branch = wxEmptyString);
-			void Create(KxXMLDocument& xml, const IModule& module, const wxString& branch = wxEmptyString);
-			void Create(KxXMLDocument& xml, const IManager& manager, const wxString& branch = wxEmptyString);
-			void Create(KxXMLDocument& xml, const KWorkspace& workspace, const wxString& branch = wxEmptyString);
-			void Create(KxXMLDocument& xml, const KMainWindow& mainWindow, const wxString& branch = wxEmptyString);
-			void Create(KxXMLDocument& xml, const KInstallWizardDialog& installWizard, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const IApplication& app, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const IModule& module, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const IManager& manager, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const KWorkspace& workspace, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const KMainWindow& mainWindow, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const KInstallWizardDialog& installWizard, const wxString& branch = wxEmptyString);
 	};
 }
 
@@ -41,7 +48,7 @@ namespace Kortex::Application
 		public:
 			template<class... Args> GlobalOption(Args&&... arg)
 			{
-				Create(GetXML(), std::forward<Args>(arg)...);
+				Create(Disposition::Global, GetXML(), std::forward<Args>(arg)...);
 				AssignActiveInstance();
 			}
 	};
@@ -57,7 +64,7 @@ namespace Kortex::Application
 			{
 				if (IConfigurableGameInstance* configurableInstance = GetConfigurableInstance(instance))
 				{
-					Create(GetXML(configurableInstance), std::forward<Args>(arg)...);
+					Create(Disposition::Instance, GetXML(configurableInstance), std::forward<Args>(arg)...);
 					AssignInstance(configurableInstance);
 				}
 			}

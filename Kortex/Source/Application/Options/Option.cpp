@@ -10,6 +10,7 @@ namespace
 {
 	using namespace Kortex;
 	using namespace Kortex::Application;
+	using Disposition = BasicOption::Disposition;
 
 	template<class... Args> wxString Concat(Args&&... arg)
 	{
@@ -20,55 +21,56 @@ namespace
 		return xml.QueryOrCreateElement(XPath);
 	}
 
-	template<class... Args> void InitFromEx(KxXMLDocument& xml, KxXMLNode& node, Args&&... arg)
+	template<class... Args> void InitFromEx(Disposition disposition, KxXMLDocument& xml, KxXMLNode& node, Args&&... arg)
 	{
-		node = QueryConfigNode(xml, Concat(wxS("Instance/"), std::forward<Args>(arg)...));
+		const wxChar* root = disposition == Disposition::Global ? wxS("Global/") : wxS("Instance/");
+		node = QueryConfigNode(xml, Concat(root, std::forward<Args>(arg)...));
 	}
-	template<class... Args> void InitFrom(KxXMLDocument& xml, KxXMLNode& node, const  IModule& module, Args&&... arg)
+	template<class... Args> void InitFrom(Disposition disposition, KxXMLDocument& xml, KxXMLNode& node, const  IModule& module, Args&&... arg)
 	{
-		InitFromEx(xml, node, module.GetModuleInfo().GetID(), std::forward<Args>(arg)...);
+		InitFromEx(disposition, xml, node, module.GetModuleInfo().GetID(), std::forward<Args>(arg)...);
 	}
-	template<class... Args> void InitFrom(KxXMLDocument& xml, KxXMLNode& node, const IManager& manager, Args&&... arg)
+	template<class... Args> void InitFrom(Disposition disposition, KxXMLDocument& xml, KxXMLNode& node, const IManager& manager, Args&&... arg)
 	{
-		InitFrom(xml, node, manager.GetModule(), wxS('/'), manager.GetManagerInfo().GetID(), std::forward<Args>(arg)...);
+		InitFrom(disposition, xml, node, manager.GetModule(), wxS('/'), manager.GetManagerInfo().GetID(), std::forward<Args>(arg)...);
 	}
 }
 
 namespace Kortex::Application
 {
-	void BasicOption::Create(KxXMLDocument& xml, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const wxString& branch)
 	{
-		InitFromEx(xml, m_Node, branch);
+		InitFromEx(disposition, xml, m_Node, branch);
 		AssignNode(m_Node);
 	}
-	void BasicOption::Create(KxXMLDocument& xml, const IApplication& app, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const IApplication& app, const wxString& branch)
 	{
-		InitFromEx(xml, m_Node, wxS("Application"), branch);
+		InitFromEx(disposition, xml, m_Node, wxS("Application"), branch);
 		AssignNode(m_Node);
 	}
-	void BasicOption::Create(KxXMLDocument& xml, const IModule& module, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const IModule& module, const wxString& branch)
 	{
-		InitFrom(xml, m_Node, module, branch);
+		InitFrom(disposition, xml, m_Node, module, branch);
 		AssignNode(m_Node);
 	}
-	void BasicOption::Create(KxXMLDocument& xml, const IManager& manager, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const IManager& manager, const wxString& branch)
 	{
-		InitFrom(xml, m_Node, manager, branch);
+		InitFrom(disposition, xml, m_Node, manager, branch);
 		AssignNode(m_Node);
 	}
-	void BasicOption::Create(KxXMLDocument& xml, const KWorkspace& workspace, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const KWorkspace& workspace, const wxString& branch)
 	{
 		// TODO: Workspace
 		AssignNode(m_Node);
 	}
-	void BasicOption::Create(KxXMLDocument& xml, const KMainWindow& mainWindow, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const KMainWindow& mainWindow, const wxString& branch)
 	{
-		InitFrom(xml, m_Node, *KPackageManager::GetInstance(), wxS("InstallWizard"), branch);
+		InitFrom(disposition, xml, m_Node, *KPackageManager::GetInstance(), wxS("InstallWizard"), branch);
 		AssignNode(m_Node);
 	}
-	void BasicOption::Create(KxXMLDocument& xml, const KInstallWizardDialog& installWizard, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const KInstallWizardDialog& installWizard, const wxString& branch)
 	{
-		InitFrom(xml, m_Node, *KPackageManager::GetInstance(), wxS("InstallWizard"), branch);
+		InitFrom(disposition, xml, m_Node, *KPackageManager::GetInstance(), wxS("InstallWizard"), branch);
 		AssignNode(m_Node);
 	}
 }

@@ -19,6 +19,7 @@
 		<String ID="ID_CONVERT">Конвертировать</String>
 		<String ID="ID_MOVE">Переместить</String>
 		<String ID="ID_COPY">Копировать</String>
+		<String ID="ID_COPY_LINK">Копировать ссылку</String>
 		<String ID="ID_CUT">Вырезать</String>
 		<String ID="ID_DELETE">Удалить</String>
 		<String ID="ID_DOWN">Вниз</String>
@@ -216,21 +217,15 @@
 		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</String>
 		
 		<!-- About dialog -->
-		<String ID="About.Tabs.Info">Информация</String>
-		<String ID="About.Tabs.Modules">Модули</String>
-		<String ID="About.Tabs.Permissions">Разрешения</String>
 		
-		<String ID="About.Info.Libraries">Используемые библиотеки</String>
-		<String ID="About.Info.IconPack">Используются иконки из набора %1 от %2.</String>
-		
-		<String ID="About.Permissions"><![CDATA[
-Запрещено распространение этой программы без указания ссылки на официальный сайт.
-Официальным сайтом является %1.
-Если вы желаете разместить программу на другом сайте, прежде свяжитесь со мной - разработчиком программы.
-Вы можете сделать это на сайте %2 через %3 или написать в тему обсуждения программы на форуме.]]></String>
-		<String ID="About.Permissions.ContactMethod">личное сообщение</String>
-		<String ID="About.Permissions.DownloadPage">Страница загрузки</String>
-		<String ID="About.Permissions.SupportPage">Обсуждение и поддержка</String>
+		<String ID="About.Modules.Caption">Модули</String>
+		<String ID="About.Libraries">Используемые библиотеки</String>
+		<String ID="About.IconPack">Используются иконки из набора %1 от %2.</String>
+
+		<String ID="About.Info.Caption">Информация</String>
+		<String ID="About.Info.SourceCodeLocation">Source code can be found on</String>
+
+		<String ID="About.License.Caption">Лицензия</String>
 
 		<!-- Instance selection -->
 		<String ID="InstanceSelection.Caption">Выбор инстанса</String>
@@ -890,7 +885,7 @@
 		<String ID="ModManager.Menu.Image">Изображение</String>
 		<String ID="ModManager.Menu.Image.Show">Открыть изображение</String>
 		<String ID="ModManager.Menu.Image.Assign">Изменить изображение</String>
-		<String ID="ModManager.Menu.Image.ScaleAspect">Масштабировать сохраняя соотношение сторон</String>
+		<String ID="ModManager.Menu.Image.ScaleAspect">Сохранять соотношение сторон</String>
 		<String ID="ModManager.Menu.Image.Stretch">Растянуть</String>
 		<String ID="ModManager.Menu.Image.Fill">Заполнить</String>
 		<String ID="ModManager.Menu.EditDescription">Изменить описание</String>
@@ -929,7 +924,8 @@
 		<String ID="ModManager.Statistics.ModCountInactive">Неактивные моды</String>
 		<String ID="ModManager.Statistics.FilesCount">Всего файлов</String>
 		<String ID="ModManager.Statistics.FoldersCount">Всего папок</String>
-		<String ID="ModManager.Statistics.ModsSize">Занимаемое модами пространство</String>
+		<String ID="ModManager.Statistics.FilesAndFoldersCount">Всего файлов и папок</String>
+		<String ID="ModManager.Statistics.UsedSpace">Занимаемое модами пространство</String>
 		
 		<String ID="ModManager.Import.Caption">Импорт из другого мод-менеджера</String>
 		<String ID="ModManager.Import.ManagedGame">Управляемая игра</String>

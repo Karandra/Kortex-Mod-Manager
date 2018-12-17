@@ -19,6 +19,7 @@
 		<String ID="ID_CONVERT">Convert</String>
 		<String ID="ID_MOVE">Move</String>
 		<String ID="ID_COPY">Copy</String>
+		<String ID="ID_COPY_LINK">Copy link</String>
 		<String ID="ID_CUT">Cut</String>
 		<String ID="ID_DELETE">Delete</String>
 		<String ID="ID_DOWN">Down</String>
@@ -216,21 +217,14 @@ Using the default folder is not recommended because profile data can occupy a lo
 		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Use HTTPS protocol in FOMod XML-scheme</String>
 
 		<!-- About dialog -->
-		<String ID="About.Tabs.Info">Info</String>
-		<String ID="About.Tabs.Modules">Modules</String>
-		<String ID="About.Tabs.Permissions">Permissions</String>
-
+		<String ID="About.Tabs.Modules.Caption">Modules</String>
 		<String ID="About.Info.Libraries">Libraries used</String>
 		<String ID="About.Info.IconPack">Icon set %1 by %2 is used.</String>
+		
+		<String ID="About.Info.Caption">Information</String>
+		<String ID="About.Info.SourceCodeLocation">Source code can be found on</String>
 
-		<String ID="About.Permissions"><![CDATA[
-Distribution of this software without providing a link to the official website is not allowed.
-The official website is %1.
-In case you would like to upload this software to a different website, you must contact me (the developer) first.
-You can do this at %2 website via %3 or a post at the forums.]]></String>
-		<String ID="About.Permissions.ContactMethod">private message</String>
-		<String ID="About.Permissions.DownloadPage">Download page</String>
-		<String ID="About.Permissions.SupportPage">Discussion and support</String>
+		<String ID="About.License.Caption">License</String>
 
 		<!-- Instance selection -->
 		<String ID="InstanceSelection.Caption">Select instance</String>
@@ -929,7 +923,8 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="ModManager.Statistics.ModCountInactive">Inactive mods</String>
 		<String ID="ModManager.Statistics.FilesCount">Total files</String>
 		<String ID="ModManager.Statistics.FoldersCount">Total folders</String>
-		<String ID="ModManager.Statistics.ModsSize">Space used by mods</String>
+		<String ID="ModManager.Statistics.FilesAndFoldersCount">Files and folders count</String>
+		<String ID="ModManager.Statistics.UsedSpace">Space used by mods</String>
 
 		<String ID="ModManager.Import.Caption">Import from another mod manager</String>
 		<String ID="ModManager.Import.ManagedGame">Managed game</String>

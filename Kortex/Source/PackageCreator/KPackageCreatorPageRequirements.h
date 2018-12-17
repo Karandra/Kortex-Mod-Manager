@@ -3,7 +3,6 @@
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
-#include "KProgramOptions.h"
 class KPackageCreatorWorkspace;
 class KPackageProjectRequirements;
 class KPCRGroupsModel;
@@ -16,21 +15,21 @@ class KPackageCreatorPageRequirements: public KPackageCreatorPageBase
 	friend class KPackageCreatorWorkspace;
 
 	private:
-		KProgramOptionUI m_MainOptions;
+		//KProgramOptionAI m_MainOptions;
 
 		// Sets list
-		KPCRGroupsModel* m_GroupsModel = NULL;
-		KxButton* m_DefaultGroupsButton = NULL;
-		KProgramOptionUI m_GroupsModelOptions;
+		KPCRGroupsModel* m_GroupsModel = nullptr;
+		KxButton* m_DefaultGroupsButton = nullptr;
+		//KProgramOptionAI m_GroupsModelOptions;
 
 		// Requirements list
-		KPCREntriesListModel* m_EntriesModel = NULL;
-		KProgramOptionUI m_EntriesModelOptions;
+		KPCREntriesListModel* m_EntriesModel = nullptr;
+		//KProgramOptionAI m_EntriesModelOptions;
 
 		// Std requirements list
-		KxComboBox* m_StdReqs_Categories = NULL;
-		KxComboBox* m_StdReqs_List = NULL;
-		KxButton* m_StdReqs_Add = NULL;
+		KxComboBox* m_StdReqs_Categories = nullptr;
+		KxComboBox* m_StdReqs_List = nullptr;
+		KxButton* m_StdReqs_Add = nullptr;
 
 	public:
 		KPackageCreatorPageRequirements(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller);

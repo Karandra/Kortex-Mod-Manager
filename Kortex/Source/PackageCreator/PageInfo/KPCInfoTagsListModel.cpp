@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "KPCInfoTagsListModel.h"
 #include "PackageCreator/KPackageCreatorController.h"
-#include "ModManager/KModManager.h"
+#include <Kortex/ModManager.hpp>
 #include <KxFramework/KxDataViewComboBox.h>
 #include <KxFramework/KxString.h>
 
 bool KPCInfoTagsListModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 {
-	bool bRet = KModTagsSelectorCB::SetValueByRow(data, row, column);
+	bool bRet = SelectorDisplayModelCB::SetValueByRow(data, row, column);
 	if (bRet)
 	{
 		m_Controller->ChangeNotify();
@@ -18,5 +18,5 @@ bool KPCInfoTagsListModel::SetValueByRow(const wxAny& data, size_t row, const Kx
 void KPCInfoTagsListModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* pSzier)
 {
 	m_Controller = controller;
-	KModTagsSelectorCB::Create(window, pSzier);
+	SelectorDisplayModelCB::Create(window, pSzier);
 }

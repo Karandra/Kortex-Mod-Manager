@@ -5,7 +5,7 @@
 #include "PackageProject/KPackageProjectSerializerKMP.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
 #include "InstallWizard/KInstallWizardDialog.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxString.h>
@@ -20,7 +20,7 @@ wxString KPackageCreatorBuilder::GetTempPackagePath() const
 }
 wxString KPackageCreatorBuilder::GetTempFolder() const
 {
-	return wxString::Format("%s\\%s\\0x%p\\", wxFileName::GetTempDir(), KApp::Get().GetAppName(), this);
+	return wxString::Format("%s\\%s\\0x%p\\", wxFileName::GetTempDir(), Kortex::IApplication::GetInstance()->GetName(), this);
 }
 wxString KPackageCreatorBuilder::GetImagePath(const wxString& fileName) const
 {
@@ -300,7 +300,7 @@ void KPackageCreatorBuilderOperation::OnEndHandler()
 			}
 		};
 
-		KxTaskDialog dialog(KApp::Get().GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.CheckError"), message, KxBTN_OK, KxICON_WARNING);
+		KxTaskDialog dialog(Kortex::IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.CheckError"), message, KxBTN_OK, KxICON_WARNING);
 		dialog.SetExMessage(KxString::Join(m_MissingFiles, "\r\n"));
 		dialog.ShowModal();
 	}
@@ -313,25 +313,25 @@ void KPackageCreatorBuilderOperation::OnEndHandler()
 				KInstallWizardDialog* dialog = new KInstallWizardDialog();
 				dialog->SetOptionEnabled(KIWD_OPTION_PREVIEW);
 				dialog->SetOptionEnabled(KIWD_OPTION_CLEANUP);
-				dialog->Create(KApp::Get().GetTopWindow(), m_PackagePath);
+				dialog->Create(Kortex::IApplication::GetInstance()->GetTopWindow(), m_PackagePath);
 			}
 			else
 			{
 				wxString path = m_Project->GetConfig().GetInstallPackageFile();
 				wxString size = KxFile(path).GetFormattedFileSize(2);
 				wxString info = wxString::Format("%s: \"%s\"\r\n%s: %s", KTr(KxID_FILE), path, KTr("Generic.Size"), size);
-				KxTaskDialog(KApp::Get().GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.Complete"), info, KxBTN_OK, KxICON_INFORMATION).ShowModal();
+				KxTaskDialog(Kortex::IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.Complete"), info, KxBTN_OK, KxICON_INFORMATION).ShowModal();
 			}
 		}
 		else
 		{
-			KxTaskDialog(KApp::Get().GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.BuildError"), wxEmptyString, KxBTN_OK, KxICON_ERROR).ShowModal();
+			KxTaskDialog(Kortex::IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.BuildError"), wxEmptyString, KxBTN_OK, KxICON_ERROR).ShowModal();
 		}
 	}
 }
 
 KPackageCreatorBuilderOperation::KPackageCreatorBuilderOperation(const KPackageProject* project, bool previewBuild)
-	:KOperationWithProgressDialog(true, NULL), m_Project(project), m_BuildPreview(previewBuild)
+	:KOperationWithProgressDialog(true, nullptr), m_Project(project), m_BuildPreview(previewBuild)
 {
 	if (previewBuild)
 	{

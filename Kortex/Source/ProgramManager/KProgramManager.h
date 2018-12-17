@@ -1,83 +1,116 @@
 #pragma once
 #include "stdafx.h"
-#include "KManager.h"
+#include "Application/IManager.h"
+#include "Application/IModule.h"
 #include "KProgramEntry.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxSingleton.h>
+#include <KxFramework/KxProcess.h>
 class KxMenu;
 class KxMenuItem;
-class KxProcess;
 
-class KProgramManager: public KManager, public KxSingletonPtr<KProgramManager>
+class KMainWindow;
+class KProgramManagerModel;
+class KProgramManagerConfig;
+
+namespace Kortex
 {
-	friend class KMainWindow;
-	friend class KProgramManagerModel;
-	friend class KProgramManagerConfig;
+	namespace ProgramManager::Internal
+	{
+		extern const SimpleManagerInfo TypeInfo;
+	}
 
-	private:
-		KProgramEntry::Vector m_DefaultPrograms;
-		KProgramEntry::Vector m_UserPrograms;
-		KProgramOptionUI m_Options;
+	class KProgramManager:
+		public ManagerWithTypeInfo<IManager, SimpleManagerInfo, ProgramManager::Internal::TypeInfo>,
+		public KxSingletonPtr<KProgramManager>
+	{
+		friend class KMainWindow;
+		friend class KProgramManagerModel;
+		friend class KProgramManagerConfig;
 
-	private:
-		virtual void OnInit() override;
-		void OnLoadConfig(const KxXMLNode& configNode);
-		void LoadUserPrograms();
-		void SaveUserPrograms() const;
+		private:
+			KProgramEntry::Vector m_DefaultPrograms;
+			KProgramEntry::Vector m_UserPrograms;
 
-		void LoadEntryImages(KProgramEntry& entry) const;
-		bool CheckEntryImages(const KProgramEntry& entry) const;
-		wxBitmap LoadEntryImage(const KProgramEntry& entry, bool smallBitmap) const;
-		void OnAddMainMenuItems(KxMenu& menu);
+		protected:
+			virtual void OnInit() override;
+			virtual void OnExit() override;
+			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 
-		KxProcess& DoCreateProcess(const KProgramEntry& entry) const;
-		int DoRunProcess(KxProcess& process) const;
-		bool DoCheckEntry(const KProgramEntry& entry) const;
+		private:
+			void LoadUserPrograms();
+			void SaveUserPrograms() const;
 
-	public:
-		KProgramManager();
-		virtual ~KProgramManager();
+			void LoadEntryImages(KProgramEntry& entry) const;
+			bool CheckEntryImages(const KProgramEntry& entry) const;
+			wxBitmap LoadEntryImage(const KProgramEntry& entry, bool smallBitmap) const;
+			void OnAddMainMenuItems(KxMenu& menu);
 
-	public:
-		virtual wxString GetID() const override;
-		virtual wxString GetName() const override;
-		virtual wxString GetVersion() const override;
-		virtual KImageEnum GetImageID() const override
-		{
-			return KIMG_APPLICATION_RUN;
-		}
+			KxProcess& DoCreateProcess(const KProgramEntry& entry) const;
+			int DoRunProcess(KxProcess& process) const;
+			bool DoCheckEntry(const KProgramEntry& entry) const;
 
-		bool HasPrograms() const
-		{
-			return !m_UserPrograms.empty();
-		}
-		const KProgramEntry::Vector& GetProgramList() const
-		{
-			return m_UserPrograms;
-		}
-		KProgramEntry::Vector& GetProgramList()
-		{
-			return m_UserPrograms;
-		}
+		public:
+			KProgramManager();
+			virtual ~KProgramManager();
 
-	public:
-		KProgramOption& GetOptions()
-		{
-			return m_Options;
-		}
+		public:
+			bool HasPrograms() const
+			{
+				return !m_UserPrograms.empty();
+			}
+			const KProgramEntry::Vector& GetProgramList() const
+			{
+				return m_UserPrograms;
+			}
+			KProgramEntry::Vector& GetProgramList()
+			{
+				return m_UserPrograms;
+			}
 
-		virtual void Save() const override;
-		virtual void Load() override;
-		void LoadDefaultPrograms();
+		public:
+			virtual void Save() const override;
+			virtual void Load() override;
+			void LoadDefaultPrograms();
 
-		// Created process can be run with either 'KxPROCESS_WAIT_SYNC' or 'KxPROCESS_WAIT_ASYNC' flag.
-		// Or use 'RunProcess' to run it with default parameters.
-		// If you didn't run it, call 'DestroyProcess'.
-		KxProcess& CreateProcess(const KProgramEntry& entry) const;
-		void DestroyProcess(KxProcess& process);
-		int RunProcess(KxProcess& process) const;
+			// Created process can be run with either 'KxPROCESS_WAIT_SYNC' or 'KxPROCESS_WAIT_ASYNC' flag.
+			// Or use 'RunProcess' to run it with default parameters.
+			// If you didn't run it, call 'DestroyProcess'.
+			KxProcess& CreateProcess(const KProgramEntry& entry) const;
+			void DestroyProcess(KxProcess& process);
+			int RunProcess(KxProcess& process) const;
 
-		// Check entry paths and perform 'CreateProcess -> RunProcess' sequence on it.
-		int RunEntry(const KProgramEntry& entry) const;
-};
+			// Check entry paths and perform 'CreateProcess -> RunProcess' sequence on it.
+			int RunEntry(const KProgramEntry& entry) const;
+	};
+}
+
+namespace Kortex
+{
+	namespace Internal
+	{
+		extern const SimpleModuleInfo ProgramModuleTypeInfo;
+	};
+
+	class KProgramModule:
+		public ModuleWithTypeInfo<IModule, SimpleModuleInfo, Internal::ProgramModuleTypeInfo>,
+		public KxSingletonPtr<KProgramModule>
+	{
+		private:
+			KProgramManager m_ProgramManager;
+
+		protected:
+			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& node) override;
+			virtual void OnInit() override;
+			virtual void OnExit() override;
+
+		public:
+			KProgramModule();
+
+		public:
+			virtual ManagerRefVector GetManagers() override
+			{
+				return ToManagersList(m_ProgramManager);
+			}
+	};
+}

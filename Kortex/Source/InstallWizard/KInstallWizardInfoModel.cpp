@@ -1,15 +1,18 @@
 #include "stdafx.h"
+#include <Kortex/Application.hpp>
 #include "KInstallWizardInfoModel.h"
 #include "KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorPageComponents.h"
-#include "ModManager/KModManager.h"
-#include "ModManager/KModTagsSelector.h"
+#include <Kortex/ModManager.hpp>
+#include <Kortex/ModTagManager.hpp>
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
-#include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
+
+using namespace Kortex;
+using namespace Kortex::ModManager;
 
 enum ColumnID
 {
@@ -84,15 +87,7 @@ void KInstallWizardInfoModel::GetValueByRow(wxAny& data, size_t row, const KxDat
 			{
 				case KIWI_TYPE_TAGS:
 				{
-					KxStringVector names;
-					for (const wxString& id: GetTags())
-					{
-						if (const KModTag* tag = KModTagsManager::GetInstance()->FindModTag(id))
-						{
-							names.push_back(tag->GetLabel());
-						}
-					}
-					data = KPackageCreatorPageComponents::FormatArrayToText(names);
+					data = KPackageCreatorPageComponents::FormatArrayToText(GetTagStore().GetNames());
 					break;
 				}
 				case KIWI_TYPE_ID:
@@ -168,9 +163,9 @@ bool KInstallWizardInfoModel::CheckModID(const wxString& id)
 	}
 	return true;
 }
-KxStringVector& KInstallWizardInfoModel::GetTags() const
+Kortex::ModTagStore& KInstallWizardInfoModel::GetTagStore() const
 {
-	return m_Config.GetInfo().GetTags();
+	return m_Config.GetInfo().GetTagStore();
 }
 void KInstallWizardInfoModel::OnActivateItem(KxDataViewEvent& event)
 {
@@ -198,8 +193,8 @@ void KInstallWizardInfoModel::OnActivateItem(KxDataViewEvent& event)
 			}
 			case KIWI_TYPE_TAGS:
 			{
-				KModTagsSelectorDialog dialog(GetViewTLW(), entry->Value.GetLabel());
-				dialog.SetDataVector(&GetTags(), m_InstallWizard.GetModEntry());
+				ModTagManager::SelectorDialog dialog(GetViewTLW(), entry->Value.GetLabel());
+				dialog.SetDataVector(&GetTagStore(), m_InstallWizard.GetModEntry());
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{

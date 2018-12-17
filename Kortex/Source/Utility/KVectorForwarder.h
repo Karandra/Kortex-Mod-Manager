@@ -20,7 +20,7 @@ template<class VectorT> class KVectorForwarder
 		using const_reverse_iterator = typename VectorT::const_reverse_iterator;
 
 	private:
-		VectorT* m_Vector = NULL;
+		VectorT* m_Vector = nullptr;
 
 	public:
 		KVectorForwarder(VectorT& value)

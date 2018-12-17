@@ -6,12 +6,12 @@
 class KPCREntriesListModel: public KPackageCreatorVectorModel<KPPRRequirementEntry::Vector>
 {
 	private:
-		KPackageProjectRequirements* m_Requirements = NULL;
-		KPPRRequirementsGroup* m_Group = NULL;
+		KPackageProjectRequirements* m_Requirements = nullptr;
+		KPPRRequirementsGroup* m_Group = nullptr;
 
-		KxDataViewComboBoxEditor* m_TypeEditor = NULL;
-		KxDataViewComboBoxEditor* m_OperatorEditor = NULL;
-		KxDataViewComboBoxEditor* m_ObjectFunctionEditor = NULL;
+		KxDataViewComboBoxEditor* m_TypeEditor = nullptr;
+		KxDataViewComboBoxEditor* m_OperatorEditor = nullptr;
+		KxDataViewComboBoxEditor* m_ObjectFunctionEditor = nullptr;
 
 	private:
 		virtual void OnInitControl() override;
@@ -54,6 +54,6 @@ class KPCREntriesListModel: public KPackageCreatorVectorModel<KPPRRequirementEnt
 			{
 				return GetDataVector()->at(index).get();
 			}
-			return NULL;
+			return nullptr;
 		}
 };

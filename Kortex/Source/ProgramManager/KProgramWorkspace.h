@@ -1,18 +1,15 @@
 #pragma once
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
-#include "KProgramOptions.h"
-#include "KEventsFwd.h"
+#include <Kortex/Events.hpp>
 #include <KxFramework/KxSingleton.h>
 class KProgramManagerModel;
 
 class KProgramWorkspace: public KWorkspace, public KxSingletonPtr<KProgramWorkspace>
 {
 	private:
-		KProgramOptionUI m_ProgramListViewOptions;
-
-		wxBoxSizer* m_MainSizer = NULL;
-		KProgramManagerModel* m_ViewModel = NULL;
+		wxBoxSizer* m_MainSizer = nullptr;
+		KProgramManagerModel* m_ViewModel = nullptr;
 
 	public:
 		KProgramWorkspace(KMainWindow* mainWindow);
@@ -24,7 +21,7 @@ class KProgramWorkspace: public KWorkspace, public KxSingletonPtr<KProgramWorksp
 		virtual bool OnCloseWorkspace() override;
 		virtual void OnReloadWorkspace() override;
 
-		void OnVFSToggled(KVFSEvent& event);
+		void OnVFSToggled(Kortex::VirtualFileSystemEvent& event);
 
 	public:
 		virtual wxString GetID() const override;

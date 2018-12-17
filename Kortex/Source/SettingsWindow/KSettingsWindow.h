@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxStdDialog.h>
 class KxTreeList;
 class KxButton;
@@ -12,8 +11,8 @@ class KSettingsWorkspace;
 class KSettingsWindow: public KxStdDialog
 {
 	private:
-		KMainWindow* m_MainWindow = NULL;
-		KSettingsWorkspace* m_Workspace = NULL;
+		KMainWindow* m_MainWindow = nullptr;
+		KSettingsWorkspace* m_Workspace = nullptr;
 
 	private:
 		virtual int GetViewSizerProportion() const override
@@ -41,14 +40,12 @@ class KSettingsWindowController;
 class KSettingsWorkspace: public KWorkspace
 {
 	private:
-		KProgramOptionUI m_AppConfigViewOptions;
-
-		wxBoxSizer* m_MainSizer = NULL;
-		KSettingsWindow* m_SettingsWindow = NULL;
-		KSettingsWindowController* m_Controller = NULL;
-		KxTreeList* m_ControllerView = NULL;
-		KxButton* m_SaveButton = NULL;
-		KxButton* m_DiscardButton = NULL;
+		wxBoxSizer* m_MainSizer = nullptr;
+		KSettingsWindow* m_SettingsWindow = nullptr;
+		KSettingsWindowController* m_Controller = nullptr;
+		KxTreeList* m_ControllerView = nullptr;
+		KxButton* m_SaveButton = nullptr;
+		KxButton* m_DiscardButton = nullptr;
 
 	private:
 		void CreateControllerView();

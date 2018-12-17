@@ -10,7 +10,7 @@ class KPackageProjectSerializerSMI: public KPackageProjectSerializer
 {
 	private:
 		KxVersion m_ProjectVersion;
-		KPackageProject* m_Project = NULL;
+		KPackageProject* m_Project = nullptr;
 		wxString m_Data;
 		KxXMLDocument m_XML;
 

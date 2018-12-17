@@ -3,7 +3,7 @@
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -121,7 +121,7 @@ void KPCInfoAdditionalInfoModel::OnContextMenu(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
@@ -168,7 +168,7 @@ void KPCInfoAdditionalInfoModel::OnClearList()
 
 void KPCInfoAdditionalInfoModel::SetDataVector()
 {
-	m_InfoData = NULL;
+	m_InfoData = nullptr;
 	KPackageCreatorVectorModel::SetDataVector();
 }
 void KPCInfoAdditionalInfoModel::SetDataVector(VectorType& data, KPackageProjectInfo* info)
@@ -179,7 +179,7 @@ void KPCInfoAdditionalInfoModel::SetDataVector(VectorType& data, KPackageProject
 
 //////////////////////////////////////////////////////////////////////////
 KPCInfoAdditionalInfoModelDialog::KPCInfoAdditionalInfoModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, bool bUseInlineEditor)
-	:m_WindowOptions("KPCInfoAdditionalInfoModelDialog", "Window"), m_ViewOptions("KPCInfoAdditionalInfoModelDialog", "View")
+	//:m_WindowOptions("KPCInfoAdditionalInfoModelDialog", "Window"), m_ViewOptions("KPCInfoAdditionalInfoModelDialog", "View")
 {
 	UseInlineEditor(bUseInlineEditor);
 
@@ -197,14 +197,14 @@ KPCInfoAdditionalInfoModelDialog::KPCInfoAdditionalInfoModelDialog(wxWindow* par
 		KPCInfoAdditionalInfoModel::Create(controller, m_ViewPane, sizer);
 
 		AdjustWindow(wxDefaultPosition, wxSize(700, 400));
-		KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-		KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+		//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 	}
 }
 KPCInfoAdditionalInfoModelDialog::~KPCInfoAdditionalInfoModelDialog()
 {
 	IncRef();
 
-	KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
-	KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
+	//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 }

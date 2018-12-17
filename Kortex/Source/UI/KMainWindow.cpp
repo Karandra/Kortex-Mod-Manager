@@ -1,38 +1,36 @@
 #include "stdafx.h"
 #include "KMainWindow.h"
 #include "SettingsWindow/KSettingsWindow.h"
-#include "ModManager/KModManager.h"
-#include "Network/KNetwork.h"
-#include "NotificationCenter/KNotificationCenter.h"
-#include "DownloadManager/KDownloadManager.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/Notification.hpp>
+#include <Kortex/Events.hpp>
+#include <Kortex/ModManager.hpp>
+#include <Kortex/NetworkManager.hpp>
+#include <Kortex/DownloadManager.hpp>
+#include <Kortex/GameInstance.hpp>
 #include "ProgramManager/KProgramManager.h"
 #include "KInstanceSelectionDialog.h"
 #include "KAboutDialog.h"
-#include "KThemeManager.h"
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
-#include "KEvents.h"
-#include "GameInstance/KInstanceManagement.h"
 #include "GameInstance/Config/KLocationsManagerConfig.h"
-#include "KPluggableManager.h"
-#include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxShell.h>
 
-#include "GameConfig/KGameConfigWorkspace.h"
-#include "ModManager/KModWorkspace.h"
 #include "PackageManager/KPackageManagerWorkspace.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "ProgramManager/KProgramWorkspace.h"
+
+using namespace Kortex;
 
 KxAuiToolBarItem* KMainWindow::CreateToolBarButton(KxAuiToolBar* toolBar, const wxString& label, KImageEnum imageID, wxItemKind kind, int index)
 {
 	wxBitmap bitmap = wxNullBitmap;
 	if (imageID != KIMG_NONE)
 	{
-		bitmap = KApp::Get().GetImageList()->GetBitmap(imageID);
+		bitmap = KGetBitmap(imageID);
 	}
 
 	KxAuiToolBarItem* button = toolBar->AddTool(label, bitmap, kind);
@@ -82,7 +80,7 @@ void KMainWindow::CreateToolBar()
 		KxAuiToolBar* toolBar = new KxAuiToolBar(this, KxID_NONE, flags);
 		toolBar->SetToolBorderPadding(KLC_HORIZONTAL_SPACING_SMALL);
 		toolBar->SetMargins(KLC_HORIZONTAL_SPACING, KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING, KLC_VERTICAL_SPACING + 1);
-		KThemeManager::Get().ProcessWindow(toolBar);
+		IThemeManager::GetActive().ProcessWindow(toolBar);
 
 		m_ToolBarSizer->Add(toolBar, proportion, wxEXPAND);
 		return toolBar;
@@ -110,9 +108,9 @@ void KMainWindow::CreateToolBar()
 	/* Quick ToolBar */
 	m_QuickToolBar = NewToolBar(0, true);
 	{
-		AddToolBarButton<KNetwork>(m_QuickToolBar, KIMG_APPLICATION_LOGO_SMALL);
+		AddToolBarButton<Kortex::INetworkManager>(m_QuickToolBar, KIMG_APPLICATION_LOGO_SMALL);
 		m_QuickToolBar->AddSeparator();
-		AddToolBarButton<KNotificationCenter>(m_QuickToolBar, KIMG_BELL);
+		AddToolBarButton<Kortex::INotificationCenter>(m_QuickToolBar, KIMG_BELL);
 
 		m_QuickToolBar_QuickSettingsMenu = m_QuickToolBar->AddTool(wxEmptyString, KGetBitmap(KIMG_GEAR), wxITEM_NORMAL);
 		m_QuickToolBar_QuickSettingsMenu->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KMainWindow::OnQSMButton, this);
@@ -141,7 +139,7 @@ WXLRESULT KMainWindow::MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lPara
 	{
 		const COPYDATASTRUCT* data = reinterpret_cast<const COPYDATASTRUCT*>(lParam);
 		const wxString link(reinterpret_cast<const wchar_t*>(data->lpData), data->cbData);
-		KDownloadManager::GetInstance()->QueueFromOutside(link);
+		Kortex::IDownloadManager::GetInstance()->QueueFromOutside(link);
 	}
 	return KxFrame::MSWWindowProc(msg, wParam, lParam);
 }
@@ -169,10 +167,10 @@ bool KMainWindow::Create(wxWindow* parent,
 		CreateBaseLayout();
 		CreateMainWorkspaces();
 
-		KEvent::Bind(KEVT_VFS_TOGGLED, &KMainWindow::OnVFSToggled, this);
-		KEvent::Bind(KEVT_VFS_TOGGLED, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
+		IEvent::Bind(Events::VirtualFileSystemToggled, &KMainWindow::OnVFSToggled, this);
+		IEvent::Bind(Events::VirtualFileSystemToggled, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
 
-		KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		GetInstanceOption().LoadWindowLayout(this);
 		return true;
 	}
 	return false;
@@ -180,32 +178,34 @@ bool KMainWindow::Create(wxWindow* parent,
 
 void KMainWindow::CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace)
 {
-	KWorkspace* firstSubWorkspace = NULL;
-
-	for (KManager* manager: KPluggableManager::GetActiveInstances())
+	KWorkspace* firstSubWorkspace = nullptr;
+	for (IModule* module: IModule::GetInstances())
 	{
-		if (KPluggableManager* pluggableManager = manager->ToPluggableManager())
+		for (IManager* manager: module->GetManagers())
 		{
-			KWorkspace* workspace = pluggableManager->CreateWorkspace(this);
-			if (workspace)
+			if (IPluggableManager* pluggableManager = manager->ToPluggableManager())
 			{
-				if (parentWorkspace && workspace->IsSubWorkspace())
+				KWorkspace* workspace = pluggableManager->CreateWorkspace(this);
+				if (workspace)
 				{
-					if (!firstSubWorkspace)
+					if (parentWorkspace && workspace->IsSubWorkspace())
 					{
-						firstSubWorkspace = workspace;
-					}
-					
-					if (parentWorkspace->MakeSubWorkspace(workspace))
-					{
-						parentWorkspace->AddSubWorkspace(workspace);
-						continue;
-					}
-				}
+						if (!firstSubWorkspace)
+						{
+							firstSubWorkspace = workspace;
+						}
 
-				AddWorkspace(workspace);
-				KxMenuItem* item = workspace->CreateItemInManagersMenu();
-				item->SetClientData(manager);
+						if (parentWorkspace->MakeSubWorkspace(workspace))
+						{
+							parentWorkspace->AddSubWorkspace(workspace);
+							continue;
+						}
+					}
+
+					AddWorkspace(workspace);
+					KxMenuItem* item = workspace->CreateItemInManagersMenu();
+					item->SetClientData(manager);
+				}
 			}
 		}
 	}
@@ -220,17 +220,17 @@ void KMainWindow::CreateMainWorkspaces()
 	m_ManagersMenu = new KxMenu();
 
 	// Add workspaces
-	AddWorkspace(new KGameConfigWorkspace(this))->CreateNow();
-	AddWorkspace(new KModWorkspace(this))->CreateNow();
+	//AddWorkspace(new KGameConfigWorkspace(this))->CreateNow();
+	AddWorkspace(new Kortex::ModManager::Workspace(this))->CreateNow();
 	AddWorkspace(new KPackageCreatorWorkspace(this));
 	AddWorkspace(new KPackageManagerWorkspace(this));
-	CreatePluggableManagersWorkspaces(KModWorkspace::GetInstance());
+	CreatePluggableManagersWorkspaces(Kortex::ModManager::Workspace::GetInstance());
 
 	// Create toolbar button and assign menu to it
 	m_ToolBar->AddSeparator();
 
-	KxAuiToolBarItem* toolBarButton = CreateToolBarButton(m_ToolBar, KVAR_EXP(KVAR_GAME_NAME));
-	wxImage gameIcon = KGameInstance::GetActive()->GetIcon().ConvertToImage();
+	KxAuiToolBarItem* toolBarButton = CreateToolBarButton(m_ToolBar, GetVariable(Variables::KVAR_GAME_NAME));
+	wxImage gameIcon = IGameInstance::GetActive()->GetIcon().ConvertToImage();
 	toolBarButton->SetBitmap(gameIcon.Rescale(m_ToolBar->GetToolBitmapSize().GetWidth(), m_ToolBar->GetToolBitmapSize().GetHeight(), wxIMAGE_QUALITY_HIGH));
 
 	toolBarButton->AssignDropdownMenu(m_ManagersMenu);
@@ -253,13 +253,13 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 	{
 		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.ChangeInstance")));
 		item->Bind(KxEVT_MENU_SELECT, &KMainWindow::OnChangeInstance, this);
-		item->Enable(!KModManager::GetInstance()->IsVFSMounted());
+		item->Enable(!Kortex::IModManager::GetInstance()->IsVFSMounted());
 	}
 	mainMenu.AddSeparator();
 
 	// Add programs
 	size_t count = mainMenu.GetMenuItemCount();
-	KProgramManager::GetInstance()->OnAddMainMenuItems(mainMenu);
+	Kortex::KProgramManager::GetInstance()->OnAddMainMenuItems(mainMenu);
 	if (count != mainMenu.GetMenuItemCount())
 	{
 		mainMenu.AddSeparator();
@@ -267,7 +267,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 
 	// Add locations
 	{
-		KLocationsManagerConfig::GetInstance()->OnAddMainMenuItems(mainMenu);
+		KLocationsManagerConfig();//::GetInstance()->OnAddMainMenuItems(mainMenu);
 	}
 	{
 		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.About")));
@@ -277,7 +277,6 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 			KAboutDialog(this).ShowModal();
 		});
 	}
-	
 }
 
 void KMainWindow::OnQSMButton(KxAuiToolBarEvent& event)
@@ -296,7 +295,7 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 
 	if (event.CanVeto())
 	{
-		if (KModManager::GetInstance()->IsVFSMounted())
+		if (Kortex::IModManager::GetInstance()->IsVFSMounted())
 		{
 			KxTaskDialog dialog(this, KxID_NONE, KTr("VFS.AskUnmountOnExit"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_QUESTION);
 			if (dialog.ShowModal() != KxID_YES)
@@ -353,8 +352,7 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 	if (skip)
 	{
 		event.Skip();
-		KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
-		KDownloadManager::GetInstance()->OnShutdown();
+		GetInstanceOption().SaveWindowLayout(this);
 	}
 }
 void KMainWindow::OnChangeInstance(KxMenuEvent& event)
@@ -365,13 +363,15 @@ void KMainWindow::OnChangeInstance(KxMenuEvent& event)
 		return;
 	}
 
-	if (KApp::Get().ShowChageInstanceDialog())
+	#if 0
+	if (IApplication::GetInstance()->ShowChageInstanceDialog())
 	{
 		Close(true);
 	}
+	#endif
 }
 
-void KMainWindow::OnVFSToggled(KVFSEvent& event)
+void KMainWindow::OnVFSToggled(VirtualFileSystemEvent& event)
 {
 	if (event.IsActivated())
 	{
@@ -383,13 +383,13 @@ void KMainWindow::OnVFSToggled(KVFSEvent& event)
 		m_StatusBar->SetStatusText(KTr("VFS.Status.Inactive"));
 		m_StatusBar->SetStatusImage(KIMG_INFORMATION_FRAME_EMPTY, 0);
 	}
-	KThemeManager::Get().ProcessWindow(m_StatusBar, event.IsActivated());
+	IThemeManager::GetActive().ProcessWindow(m_StatusBar, event.IsActivated());
 }
-void KMainWindow::OnPluggableManagersMenuVFSToggled(KVFSEvent& event)
+void KMainWindow::OnPluggableManagersMenuVFSToggled(VirtualFileSystemEvent& event)
 {
 	for (wxMenuItem* item: m_ManagersMenu->GetMenuItems())
 	{
-		KPluggableManager* manager = static_cast<KPluggableManager*>(static_cast<KxMenuItem*>(item)->GetClientData());
+		IPluggableManager* manager = static_cast<IPluggableManager*>(static_cast<KxMenuItem*>(item)->GetClientData());
 		if (manager)
 		{
 			//item->Enable(event.IsActivated());
@@ -398,14 +398,13 @@ void KMainWindow::OnPluggableManagersMenuVFSToggled(KVFSEvent& event)
 }
 
 KMainWindow::KMainWindow()
-	:m_WindowOptions("KMainWindow", wxEmptyString)
 {
-	if (Create(NULL, KxID_NONE, KApp::Get().GetAppDisplayName(), wxDefaultPosition, wxSize(850, 600), DefaultStyle))
+	if (Create(nullptr, KxID_NONE, IApplication::GetInstance()->GetName(), wxDefaultPosition, wxSize(850, 600), DefaultStyle))
 	{
 		Bind(wxEVT_CLOSE_WINDOW, &KMainWindow::OnWindowClose, this);
 
 		// Update status bar
-		KVFSEvent event(false);
+		VirtualFileSystemEvent event(false);
 		OnVFSToggled(event);
 	}
 }
@@ -415,7 +414,7 @@ KMainWindow::~KMainWindow()
 
 bool KMainWindow::SwitchWorkspaceHelper(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace)
 {
-	wxLogInfo("%s: switching from %s to %s", __FUNCTION__, prevWorkspace ? prevWorkspace->GetID() : "NULL", nextWorkspace ? nextWorkspace->GetID() : "NULL");
+	wxLogInfo("%s: switching from %s to %s", __FUNCTION__, prevWorkspace ? prevWorkspace->GetID() : "nullptr", nextWorkspace ? nextWorkspace->GetID() : "nullptr");
 
 	if (prevWorkspace && !prevWorkspace->OnCloseWorkspaceInternal())
 	{
@@ -461,7 +460,7 @@ void KMainWindow::ProcessSwitchWorkspace(KWorkspace* nextWorkspace, KWorkspace* 
 }
 KWorkspace* KMainWindow::DoAddWorkspace(KWorkspace* workspace)
 {
-	KThemeManager::Get().ProcessWindow(workspace);
+	IThemeManager::GetActive().ProcessWindow(workspace);
 	m_WorkspaceInstances.insert(std::make_pair(workspace->GetID(), workspace));
 	m_WorkspaceContainer->AddPage(workspace, workspace->GetName(), false, workspace->GetImageID());
 
@@ -475,7 +474,7 @@ KWorkspace* KMainWindow::GetWorkspace(const wxString& id) const
 	{
 		return m_WorkspaceInstances.at(id);
 	}
-	return NULL;
+	return nullptr;
 }
 KWorkspace* KMainWindow::GetCurrentWorkspace() const
 {
@@ -486,7 +485,7 @@ KWorkspace* KMainWindow::GetCurrentWorkspace() const
 	{
 		return static_cast<KWorkspace*>(window);
 	}
-	return NULL;
+	return nullptr;
 }
 KWorkspace* KMainWindow::GetFirstWorkspace() const
 {
@@ -496,11 +495,11 @@ KWorkspace* KMainWindow::GetFirstWorkspace() const
 	{
 		return (*m_WorkspaceInstances.begin()).second;
 	}
-	return NULL;
+	return nullptr;
 }
 bool KMainWindow::SwitchWorkspace(KWorkspace* nextWorkspace)
 {
-	wxLogInfo("Attempt to switch workspace to %s", nextWorkspace ? nextWorkspace->GetID() : "NULL");
+	wxLogInfo("Attempt to switch workspace to %s", nextWorkspace ? nextWorkspace->GetID() : "nullptr");
 
 	if (nextWorkspace && !nextWorkspace->IsSubWorkspace())
 	{

@@ -2,13 +2,12 @@
 #include "stdafx.h"
 #include "PackageCreator/KPackageCreatorVectorModel.h"
 #include "PackageProject/KPackageProjectInfo.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxStdDialog.h>
 
-class KPCInfoDocumentsModel: public KPackageCreatorVectorModel<KLabeledValueArray>
+class KPCInfoDocumentsModel: public KPackageCreatorVectorModel<KLabeledValue::Vector>
 {
 	private:
-		KPackageProjectInfo* m_InfoData = NULL;
+		KPackageProjectInfo* m_InfoData = nullptr;
 
 	private:
 		virtual void OnInitControl() override;
@@ -36,7 +35,7 @@ class KPCInfoDocumentsModel: public KPackageCreatorVectorModel<KLabeledValueArra
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		KLabeledValue* GetDataEntry(size_t index)
 		{
@@ -44,7 +43,7 @@ class KPCInfoDocumentsModel: public KPackageCreatorVectorModel<KLabeledValueArra
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		void SetDataVector();
@@ -55,9 +54,9 @@ class KPCInfoDocumentsModel: public KPackageCreatorVectorModel<KLabeledValueArra
 class KPCInfoDocumentsModelDialog: public KxStdDialog, public KPCInfoDocumentsModel
 {
 	private:
-		wxWindow* m_ViewPane = NULL;
-		KProgramOptionUI m_WindowOptions;
-		KProgramOptionUI m_ViewOptions;
+		wxWindow* m_ViewPane = nullptr;
+		//KProgramOptionAI m_WindowOptions;
+		//KProgramOptionAI m_ViewOptions;
 
 	private:
 		wxWindow* GetDialogMainCtrl() const override

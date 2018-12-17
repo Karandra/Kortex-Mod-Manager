@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPackageCreatorFOModIEDialog.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxFileBrowseDialog.h>
 
@@ -32,7 +32,7 @@ void KPackageCreatorFOModIEDialog::OnBrowseFile(wxCommandEvent& event)
 	}
 
 	wxWindowID id = dialog.ShowModal();
-	KxTextBox* input = NULL;
+	KxTextBox* input = nullptr;
 	switch (event.GetId())
 	{
 		case InfoXML:

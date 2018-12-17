@@ -1,19 +1,23 @@
 #pragma once
 #include "stdafx.h"
-#include "ModManager/KModTagsSelector.h"
+#include <Kortex/ModTagManager.hpp>
 #include "KLabeledValue.h"
 class KPackageCreatorController;
-class KModTag;
 class KxDataViewComboBox;
 
-class KPCInfoTagsListModel: public KModTagsSelectorCB
+namespace Kortex
+{
+	class IModTag;
+}
+
+class KPCInfoTagsListModel: public Kortex::ModTagManager::SelectorDisplayModelCB
 {
 	private:
-		KPackageCreatorController* m_Controller = NULL;
+		KPackageCreatorController* m_Controller = nullptr;
 
 	protected:
 		virtual bool SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column) override;
 
 	public:
-		void Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* pSzier = NULL);
+		void Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* pSzier = nullptr);
 };

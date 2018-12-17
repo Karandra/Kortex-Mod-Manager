@@ -10,7 +10,7 @@ using KPCCRequirementsSelectorDataArray = std::vector<KPCCRequirementsSelectorDa
 class KPCCRequirementsSelectorModel: public KPackageCreatorVectorModel<KPCCRequirementsSelectorDataArray>
 {
 	private:
-		KPackageProjectRequirements* m_ReqData = NULL;
+		KPackageProjectRequirements* m_ReqData = nullptr;
 		KPCCRequirementsSelectorDataArray m_DataVector;
 
 	private:
@@ -31,7 +31,7 @@ class KPCCRequirementsSelectorModel: public KPackageCreatorVectorModel<KPCCRequi
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		KPCCRequirementsSelectorDataElement* GetDataEntry(size_t index)
 		{
@@ -39,7 +39,7 @@ class KPCCRequirementsSelectorModel: public KPackageCreatorVectorModel<KPCCRequi
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		void SetDataVector();
@@ -51,7 +51,7 @@ class KPCCRequirementsSelectorModel: public KPackageCreatorVectorModel<KPCCRequi
 class KPCCRequirementsSelectorModelDialog: public KxStdDialog, public KPCCRequirementsSelectorModel
 {
 	private:
-		wxWindow* m_ViewPane = NULL;
+		wxWindow* m_ViewPane = nullptr;
 
 	private:
 		wxWindow* GetDialogMainCtrl() const override

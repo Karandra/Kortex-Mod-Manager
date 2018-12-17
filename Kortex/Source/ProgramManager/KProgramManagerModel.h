@@ -53,7 +53,7 @@ class KProgramManagerModel:
 
 		KProgramEntry::Vector& GetProgramsList() const
 		{
-			return KProgramManager::GetInstance()->GetProgramList();
+			return Kortex::KProgramManager::GetInstance()->GetProgramList();
 		}
 		KProgramEntry* GetDataEntry(size_t i)
 		{
@@ -61,10 +61,10 @@ class KProgramManagerModel:
 			{
 				return &GetDataVector()->at(i);
 			}
-			return NULL;
+			return nullptr;
 		}
 		
-		wxString AskSelectExecutable(const KProgramEntry* entry = NULL) const;
+		wxString AskSelectExecutable(const KProgramEntry* entry = nullptr) const;
 		wxString AskSelectIcon(const KProgramEntry& entry) const;
 		bool AddProgram();
 		void RemoveProgram(KProgramEntry* entry);
@@ -87,7 +87,7 @@ class KProgramManagerModel:
 			{
 				return &GetDataVector()->at(i);
 			}
-			return NULL;
+			return nullptr;
 		}
 		const KProgramEntry* GetDataEntry(const KxDataViewItem& item) const
 		{

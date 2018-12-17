@@ -2,23 +2,26 @@
 #include "stdafx.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxAuiToolBar.h>
-#include "KApp.h"
+#include "Application/Options/Option.h"
 #include "KImageProvider.h"
-class KManager;
 class KMainWindow;
 class KWorkspaceController;
 class KPackageCreatorWorkspace;
-class KModWorkspace;
+
+namespace Kortex::ModManager
+{
+	class Workspace;
+}
 
 class KxMenu;
 class KxMenuItem;
 class KxAuiToolBarItem;
 
-class KWorkspace: public KxPanel
+class KWorkspace: public KxPanel, public Kortex::Application::WithOptions<KWorkspace>
 {
 	friend class KMainWindow;
 	friend class KPackageCreatorWorkspace;
-	friend class KModWorkspace;
+	friend class Kortex::ModManager::Workspace;
 
 	public:
 		enum class TabIndex
@@ -40,12 +43,12 @@ class KWorkspace: public KxPanel
 		}
 
 	private:
-		KMainWindow* m_MainWindow = NULL;
-		KWorkspaceController* m_WorkspaceController = NULL;
-		wxBoxSizer* m_Sizer = NULL;
-		KxAuiToolBarItem* m_ToolBarButton = NULL;
-		KxMenuItem* m_ManagersMenuItem = NULL;
-		KxMenu* m_QSM = NULL;
+		KMainWindow* m_MainWindow = nullptr;
+		KWorkspaceController* m_WorkspaceController = nullptr;
+		wxBoxSizer* m_Sizer = nullptr;
+		KxAuiToolBarItem* m_ToolBarButton = nullptr;
+		KxMenuItem* m_ManagersMenuItem = nullptr;
+		KxMenu* m_QSM = nullptr;
 		
 		bool m_CreatingWorkspace = false;
 		bool m_IsCreated = false;
@@ -91,6 +94,7 @@ class KWorkspace: public KxPanel
 		{
 			return m_MainWindow;
 		}
+		
 		virtual KxAuiToolBarItem* GetToolBarButton() const
 		{
 			return m_ToolBarButton;
@@ -120,7 +124,7 @@ class KWorkspace: public KxPanel
 		}
 		virtual wxBookCtrlBase* GetSubWorkspaceContainer()
 		{
-			return NULL;
+			return nullptr;
 		}
 		virtual bool AddSubWorkspace(KWorkspace* workspace)
 		{
@@ -142,11 +146,11 @@ class KWorkspace: public KxPanel
 
 		bool HasQuickSettingsMenu() const
 		{
-			return GetQuickSettingsMenu() != NULL;
+			return GetQuickSettingsMenu() != nullptr;
 		}
 		virtual KxMenu* GetQuickSettingsMenu() const
 		{
-			return NULL;
+			return nullptr;
 		}
 		virtual void ShowQuickSettingsMenu()
 		{

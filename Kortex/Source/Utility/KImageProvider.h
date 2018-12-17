@@ -2,23 +2,6 @@
 #include "stdafx.h"
 #include <KxFramework/KxImageList.h>
 #include <KxFramework/KxImageSet.h>
-enum KImageEnum;
-
-namespace KImageProvider
-{
-	const KxImageList* KGetImageList();
-	const KxImageSet* KGetImageSet();
-
-	wxBitmap KGetBitmap(KImageEnum index);
-	wxImage KGetImage(KImageEnum index);
-	wxIcon KGetIcon(KImageEnum index);
-
-	wxBitmap KGetBitmap(const wxString& id);
-	wxImage KGetImage(const wxString& id);
-	wxIcon KGetIcon(const wxString& id);
-
-	void KLoadImages(KxImageList& imageList, KxImageSet& imageSet);
-}
 
 enum KImageEnum: int
 {
@@ -181,5 +164,21 @@ enum KImageEnum: int
 
 	KIMG_COUNT
 };
+
+namespace KImageProvider
+{
+	const KxImageList* KGetImageList();
+	const KxImageSet* KGetImageSet();
+
+	wxBitmap KGetBitmap(KImageEnum index);
+	wxImage KGetImage(KImageEnum index);
+	wxIcon KGetIcon(KImageEnum index);
+
+	wxBitmap KGetBitmap(const wxString& id);
+	wxImage KGetImage(const wxString& id);
+	wxIcon KGetIcon(const wxString& id);
+
+	void KLoadImages(KxImageList& imageList, KxImageSet& imageSet);
+}
 
 using namespace KImageProvider;

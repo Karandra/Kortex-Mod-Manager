@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "KTextEditorDialog.h"
-#include "KThemeManager.h"
 #include "KMainWindow.h"
 #include "KAux.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxBitmapComboBox.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxUtility.h>
+
+using namespace Kortex;
 
 bool KTextEditorDialog::Create(wxWindow* parent)
 {
@@ -23,7 +24,7 @@ bool KTextEditorDialog::Create(wxWindow* parent)
 		wxBoxSizer* viewSizer = new wxBoxSizer(wxVERTICAL);
 		m_View = new KxPanel(m_ContentPanel, KxID_NONE);
 		m_View->SetSizer(viewSizer);
-		KThemeManager::Get().ProcessWindow(m_View);
+		IThemeManager::GetActive().ProcessWindow(m_View);
 
 		/* ToolBar */
 		m_ToolBar = new KxAuiToolBar(m_View, KxID_NONE, KxAuiToolBar::DefaultStyle|wxAUI_TB_PLAIN_BACKGROUND);
@@ -108,7 +109,7 @@ bool KTextEditorDialog::Create(wxWindow* parent)
 		// Tabs
 		m_Tabs = new wxSimplebook(m_View, KxID_NONE);
 		viewSizer->Add(m_Tabs, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
-		KThemeManager::Get().ProcessWindow(m_Tabs);
+		IThemeManager::GetActive().ProcessWindow(m_Tabs);
 
 		PostCreate(wxDefaultPosition);
 

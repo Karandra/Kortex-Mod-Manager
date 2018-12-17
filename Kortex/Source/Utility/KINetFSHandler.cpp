@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KINetFSHandler.h"
-#include "Network/KNetwork.h"
-#include "KApp.h"
+#include <Kortex/NetworkManager.hpp>
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxCURL.h>
@@ -9,7 +9,7 @@
 
 wxString KINetFSHandler::GetCacheFolder() const
 {
-	return KNetwork::GetInstance()->GetCacheFolder();
+	return Kortex::INetworkManager::GetInstance()->GetCacheFolder();
 }
 wxString KINetFSHandler::ExtractFileName(const wxString& location) const
 {
@@ -25,18 +25,18 @@ bool KINetFSHandler::HasCachedCopy(const wxString& location) const
 }
 wxFSFile* KINetFSHandler::DoOpenFile(const wxString& location) const
 {
-	KLogMessage("[KINetFSHandler] Attempt to download resource: \"%s\"", location);
+	wxLogMessage("[KINetFSHandler] Attempt to download resource: \"%s\"", location);
 	if (HasCachedCopy(location))
 	{
 		wxString fullPath = ConstructFullPath(location);
-		KLogMessage("[KINetFSHandler] Using cached copy: \"%s\"", fullPath);
+		wxLogMessage("[KINetFSHandler] Using cached copy: \"%s\"", fullPath);
 
 		KxFileStream* stream = new KxFileStream(fullPath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Everything);
 		return new wxFSFile(stream, fullPath, wxEmptyString, GetAnchor(location), wxFileName(fullPath).GetModificationTime());
 	}
 	else if (KxINet::IsInternetAvailable())
 	{
-		KLogMessage("[KINetFSHandler] No cached copy, downloading");
+		wxLogMessage("[KINetFSHandler] No cached copy, downloading");
 
 		wxString fullPath = ConstructFullPath(location);
 		KxFileStream* stream = new KxFileStream(fullPath, KxFileStream::Access::RW, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Everything);
@@ -48,13 +48,13 @@ wxFSFile* KINetFSHandler::DoOpenFile(const wxString& location) const
 		{
 			stream->Rewind();
 
-			KLogMessage("[KINetFSHandler] Resource downloaded to: \"%s\"", fullPath);
+			wxLogMessage("[KINetFSHandler] Resource downloaded to: \"%s\"", fullPath);
 			return new wxFSFile(stream, fullPath, wxEmptyString, GetAnchor(location), wxFileName(fullPath).GetModificationTime());
 		}
 	}
 
 	wxLogError("[KINetFSHandler] Can not download resource: \"%s\"", location);
-	return NULL;
+	return nullptr;
 }
 
 KINetFSHandler::KINetFSHandler()
@@ -72,13 +72,13 @@ bool KINetFSHandler::CanOpen(const wxString& location)
 wxString KINetFSHandler::FindFirst(const wxString& wildcard, int flags)
 {
 	// This don't seems to be called at all
-	KLogMessage("[%s] Wildcards: %s, flags: %d", __FUNCTION__, wildcard, flags);
+	wxLogMessage("[%s] Wildcards: %s, flags: %d", __FUNCTION__, wildcard, flags);
 	return wxInternetFSHandler::FindFirst(wildcard, flags);
 }
 wxString KINetFSHandler::FindNext()
 {
 	// And this too
-	KLogMessage("[%s]", __FUNCTION__);
+	wxLogMessage("[%s]", __FUNCTION__);
 	return wxInternetFSHandler::FindNext();
 }
 wxFSFile* KINetFSHandler::OpenFile(wxFileSystem& fs, const wxString& location)

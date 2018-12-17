@@ -1,0 +1,72 @@
+#include "stdafx.h"
+#include "ModTagStore.h"
+#include <Kortex/ModTagManager.hpp>
+
+namespace
+{
+	using namespace Kortex;
+	using namespace Kortex::ModTagManager;
+
+	template<class MapT, class Functor> void VisitHelper(MapT&& map, Functor&& functor)
+	{
+		const IModTagManager* manager = IModTagManager::GetInstance();
+
+		for (const wxString& tagID: map)
+		{
+			DefaultTag tag(tagID, manager->GetTagNameByID(tagID));
+			if (!functor(tag))
+			{
+				break;
+			}
+		}
+	}
+}
+
+namespace Kortex
+{
+	bool ModTagStore::HasTag(const IModTag& tag) const
+	{
+		return HasTag(tag.GetID());
+	}
+	void ModTagStore::AddTag(const IModTag& tag)
+	{
+		AddTag(tag.GetID());
+	}
+	void ModTagStore::RemoveTag(const IModTag& tag)
+	{
+		RemoveTag(tag.GetID());
+	}
+	void ModTagStore::ToggleTag(const IModTag& tag, bool addTag)
+	{
+		addTag ? AddTag(tag) : RemoveTag(tag);
+	}
+
+	void ModTagStore::Visit(const Visitor& visitor)
+	{
+		VisitHelper(m_TagIDs, visitor);
+	}
+	void ModTagStore::Visit(const CVisitor& visitor) const
+	{
+		VisitHelper(m_TagIDs, visitor);
+	}
+
+	KxStringVector ModTagStore::GetIDs() const
+	{
+		KxStringVector values;
+		for (const wxString& tagID: m_TagIDs)
+		{
+			values.push_back(tagID);
+		}
+		return values;
+	}
+	KxStringVector ModTagStore::GetNames() const
+	{
+		KxStringVector values;
+		VisitHelper(m_TagIDs, [&values](const IModTag& tag)
+		{
+			values.push_back(tag.GetName());
+			return true;
+		});
+		return values;
+	}
+}

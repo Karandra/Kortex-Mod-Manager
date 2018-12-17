@@ -1,13 +1,11 @@
 #include "stdafx.h"
 #include "KProgramManager.h"
-#include "GameInstance/KInstanceManagement.h"
-#include "KEvents.h"
+#include <Kortex/GameInstance.hpp>
+#include <Kortex/Events.hpp>
 #include "UI/KMainWindow.h"
-#include "ModManager/KModManager.h"
-#include "ModManager/KDispatcher.h"
-#include "GameInstance/Config/KProgramManagerConfig.h"
+#include <Kortex/ModManager.hpp>
 #include "KBitmapSize.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileStream.h>
@@ -20,6 +18,8 @@
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxTaskDialog.h>
+
+using namespace Kortex;
 
 namespace
 {
@@ -53,190 +53,212 @@ namespace
 	}
 }
 
-void KProgramManager::OnInit()
+namespace Kortex
 {
-	LoadUserPrograms();
-}
-void KProgramManager::OnLoadConfig(const KxXMLNode& configNode)
-{
-	LoadProgramsFromXML(m_DefaultPrograms, configNode);
-}
-void KProgramManager::LoadUserPrograms()
-{
-	KxFileStream stream(KGameInstance::GetActive()->GetProgramsFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-	KxXMLDocument xml(stream);
-	LoadProgramsFromXML(m_UserPrograms, xml);
-}
-void KProgramManager::SaveUserPrograms() const
-{
-	KxXMLDocument xml;
-	KxXMLNode rootNode = xml.NewElement("Programs");
-
-	for (const KProgramEntry& entry: m_UserPrograms)
+	namespace ProgramManager::Internal
 	{
-		entry.Save(rootNode);
+		const SimpleManagerInfo TypeInfo("KProgramManager", "ProgramManager.Name");
 	}
 
-	KxFileStream stream(KGameInstance::GetActive()->GetProgramsFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
-	xml.Save(stream);
-}
-
-void KProgramManager::LoadEntryImages(KProgramEntry& entry) const
-{
-	entry.GetSmallBitmap().SetBitmap(LoadEntryImage(entry, true));
-	entry.GetLargeBitmap().SetBitmap(LoadEntryImage(entry, false));
-}
-bool KProgramManager::CheckEntryImages(const KProgramEntry& entry) const
-{
-	return entry.GetSmallBitmap().HasBitmap() && entry.GetLargeBitmap().HasBitmap();
-}
-wxBitmap KProgramManager::LoadEntryImage(const KProgramEntry& entry, bool smallBitmap) const
-{
-	wxBitmap bitmap;
-	wxString path = entry.GetIconPath();
-
-	if (KAux::IsSingleFileExtensionMatches(path, wxS("exe")))
+	void KProgramManager::OnInit()
 	{
-		bitmap = KxShell::GetFileIcon(path, smallBitmap);
+		LoadUserPrograms();
 	}
-	else
+	void KProgramManager::OnExit()
 	{
-		bitmap.LoadFile(path, wxBITMAP_TYPE_ANY);
+		SaveUserPrograms();
+	}
+	void KProgramManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
+	{
+		LoadProgramsFromXML(m_DefaultPrograms, managerNode);
 	}
 
-	if (bitmap.IsOk())
+	void KProgramManager::LoadUserPrograms()
 	{
-		KBitmapSize bitmapSize;
-		if (smallBitmap)
+		KxFileStream stream(IGameInstance::GetActive()->GetProgramsFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+		KxXMLDocument xml(stream);
+		LoadProgramsFromXML(m_UserPrograms, xml);
+	}
+	void KProgramManager::SaveUserPrograms() const
+	{
+		KxXMLDocument xml;
+		KxXMLNode rootNode = xml.NewElement("Programs");
+
+		for (const KProgramEntry& entry: m_UserPrograms)
 		{
-			bitmapSize.FromSystemSmallIcon();
+			entry.Save(rootNode);
+		}
+
+		KxFileStream stream(IGameInstance::GetActive()->GetProgramsFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+		xml.Save(stream);
+	}
+
+	void KProgramManager::LoadEntryImages(KProgramEntry& entry) const
+	{
+		entry.GetSmallBitmap().SetBitmap(LoadEntryImage(entry, true));
+		entry.GetLargeBitmap().SetBitmap(LoadEntryImage(entry, false));
+	}
+	bool KProgramManager::CheckEntryImages(const KProgramEntry& entry) const
+	{
+		return entry.GetSmallBitmap().HasBitmap() && entry.GetLargeBitmap().HasBitmap();
+	}
+	wxBitmap KProgramManager::LoadEntryImage(const KProgramEntry& entry, bool smallBitmap) const
+	{
+		wxBitmap bitmap;
+		wxString path = entry.GetIconPath();
+
+		if (KAux::IsSingleFileExtensionMatches(path, wxS("exe")))
+		{
+			bitmap = KxShell::GetFileIcon(path, smallBitmap);
 		}
 		else
 		{
-			bitmapSize.FromSystemIcon();
+			bitmap.LoadFile(path, wxBITMAP_TYPE_ANY);
 		}
 
-		if (bitmap.GetWidth() != bitmapSize.GetWidth() || bitmap.GetHeight() != bitmapSize.GetHeight())
+		if (bitmap.IsOk())
 		{
-			bitmap = bitmapSize.ScaleBitmapAspect(bitmap);
-		}
-	}
-	else
-	{
-		KxFileItem item;
-		item.SetName(wxS(".exe"));
-		item.SetNormalAttributes();
-		bitmap = KxShell::GetFileIcon(item, smallBitmap);
-	}
-	return bitmap;
-}
-void KProgramManager::OnAddMainMenuItems(KxMenu& menu)
-{
-	for (KProgramEntry& entry: m_UserPrograms)
-	{
-		if (entry.ShouldShowInMainMenu())
-		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(wxString::Format("%s %s", KTr("Generic.Run"), entry.GetName())));
-			item->Enable(entry.CanRunNow());
-			item->Bind(KxEVT_MENU_SELECT, [this, &entry](KxMenuEvent& event)
+			KBitmapSize bitmapSize;
+			if (smallBitmap)
 			{
-				RunEntry(entry);
-			});
-
-			if (!CheckEntryImages(entry))
-			{
-				LoadEntryImages(entry);
+				bitmapSize.FromSystemSmallIcon();
 			}
-			item->SetBitmap(entry.GetSmallBitmap().GetBitmap());
+			else
+			{
+				bitmapSize.FromSystemIcon();
+			}
+
+			if (bitmap.GetWidth() != bitmapSize.GetWidth() || bitmap.GetHeight() != bitmapSize.GetHeight())
+			{
+				bitmap = bitmapSize.ScaleBitmapAspect(bitmap);
+			}
+		}
+		else
+		{
+			KxFileItem item;
+			item.SetName(wxS(".exe"));
+			item.SetNormalAttributes();
+			bitmap = KxShell::GetFileIcon(item, smallBitmap);
+		}
+		return bitmap;
+	}
+	void KProgramManager::OnAddMainMenuItems(KxMenu& menu)
+	{
+		for (KProgramEntry& entry: m_UserPrograms)
+		{
+			if (entry.ShouldShowInMainMenu())
+			{
+				KxMenuItem* item = menu.Add(new KxMenuItem(wxString::Format("%s %s", KTr("Generic.Run"), entry.GetName())));
+				item->Enable(entry.CanRunNow());
+				item->Bind(KxEVT_MENU_SELECT, [this, &entry](KxMenuEvent& event)
+				{
+					RunEntry(entry);
+				});
+
+				if (!CheckEntryImages(entry))
+				{
+					LoadEntryImages(entry);
+				}
+				item->SetBitmap(entry.GetSmallBitmap().GetBitmap());
+			}
 		}
 	}
-}
 
-KxProcess& KProgramManager::DoCreateProcess(const KProgramEntry& entry) const
-{
-	KxProcess* process = new KxProcess();
-	InitProcessPaths(*process, entry);
-	InitProcessOptions(*process);
-	process->SetClientData(const_cast<KProgramEntry*>(&entry));
-
-	return *process;
-}
-int KProgramManager::DoRunProcess(KxProcess& process) const
-{
-	KProgramEntry* entry = static_cast<KProgramEntry*>(process.GetClientData());
-	entry->OnRun();
-
-	return process.Run(KxPROCESS_RUN_SYNC);
-}
-bool KProgramManager::DoCheckEntry(const KProgramEntry& entry) const
-{
-	if (KxFile(entry.GetExecutable()).IsFileExist())
+	KxProcess& KProgramManager::DoCreateProcess(const KProgramEntry& entry) const
 	{
-		return true;
+		KxProcess* process = new KxProcess();
+		InitProcessPaths(*process, entry);
+		InitProcessOptions(*process);
+		process->SetClientData(const_cast<KProgramEntry*>(&entry));
+
+		return *process;
 	}
-	else
+	int KProgramManager::DoRunProcess(KxProcess& process) const
 	{
-		KLogEvent(KTr("ProgramManager.FileNotFound") + ":\r\n" + entry.GetExecutable(), KLOG_ERROR);
-		return false;
+		KProgramEntry* entry = static_cast<KProgramEntry*>(process.GetClientData());
+		entry->OnRun();
+
+		return process.Run(KxPROCESS_RUN_SYNC);
 	}
-}
-
-KProgramManager::KProgramManager()
-	:m_Options(this, "Options")
-{
-}
-KProgramManager::~KProgramManager()
-{
-	SaveUserPrograms();
-}
-
-wxString KProgramManager::GetID() const
-{
-	return "KProgramManager";
-}
-wxString KProgramManager::GetName() const
-{
-	return KTr("ProgramManager.Name");
-}
-wxString KProgramManager::GetVersion() const
-{
-	return "2.0";
-}
-
-void KProgramManager::Save() const
-{
-	SaveUserPrograms();
-}
-void KProgramManager::Load()
-{
-	LoadUserPrograms();
-}
-void KProgramManager::LoadDefaultPrograms()
-{
-	for (const KProgramEntry& entry: m_DefaultPrograms)
+	bool KProgramManager::DoCheckEntry(const KProgramEntry& entry) const
 	{
-		m_UserPrograms.emplace_back(entry);
+		if (KxFile(entry.GetExecutable()).IsFileExist())
+		{
+			return true;
+		}
+		else
+		{
+			LogEvent(KTr("ProgramManager.FileNotFound") + ":\r\n" + entry.GetExecutable(), LogLevel::Error);
+			return false;
+		}
 	}
-}
 
-KxProcess& KProgramManager::CreateProcess(const KProgramEntry& entry) const
-{
-	return DoCreateProcess(entry);
-}
-void KProgramManager::DestroyProcess(KxProcess& process)
-{
-	delete &process;
-}
-int KProgramManager::RunProcess(KxProcess& process) const
-{
-	return DoRunProcess(process);
-}
-int KProgramManager::RunEntry(const KProgramEntry& entry) const
-{
-	if (DoCheckEntry(entry))
+	KProgramManager::KProgramManager()
+		:ManagerWithTypeInfo(Kortex::KProgramModule::GetInstance())//, m_Options(this, "Options")
 	{
-		KxProcess& process = DoCreateProcess(entry);
+	}
+	KProgramManager::~KProgramManager()
+	{
+	}
+
+	void KProgramManager::Save() const
+	{
+		SaveUserPrograms();
+	}
+	void KProgramManager::Load()
+	{
+		LoadUserPrograms();
+	}
+	void KProgramManager::LoadDefaultPrograms()
+	{
+		for (const KProgramEntry& entry: m_DefaultPrograms)
+		{
+			m_UserPrograms.emplace_back(entry);
+		}
+	}
+
+	KxProcess& KProgramManager::CreateProcess(const KProgramEntry& entry) const
+	{
+		return DoCreateProcess(entry);
+	}
+	void KProgramManager::DestroyProcess(KxProcess& process)
+	{
+		delete &process;
+	}
+	int KProgramManager::RunProcess(KxProcess& process) const
+	{
 		return DoRunProcess(process);
 	}
-	return -1;
+	int KProgramManager::RunEntry(const KProgramEntry& entry) const
+	{
+		if (DoCheckEntry(entry))
+		{
+			KxProcess& process = DoCreateProcess(entry);
+			return DoRunProcess(process);
+		}
+		return -1;
+	}
+}
+
+namespace Kortex
+{
+	namespace Internal
+	{
+		const SimpleModuleInfo ProgramModuleTypeInfo("Programs", "ProgramsModule.Name", "2.0", KIMG_APPLICATION_RUN);
+	}
+
+	void KProgramModule::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)
+	{
+	}
+	void KProgramModule::OnInit()
+	{
+	}
+	void KProgramModule::OnExit()
+	{
+	}
+
+	KProgramModule::KProgramModule()
+		:ModuleWithTypeInfo(Disposition::Global)
+	{
+	}
 }

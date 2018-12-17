@@ -2,7 +2,7 @@
 #include "KPCFileDataFolderContentModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 
 enum ColumnID
@@ -139,7 +139,7 @@ void KPCFileDataFolderContentModel::OnContextMenu(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));

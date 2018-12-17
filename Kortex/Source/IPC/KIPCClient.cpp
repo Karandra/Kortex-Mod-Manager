@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "KIPCClient.h"
 #include "KIPCConnection.h"
-#include "KApp.h"
-#include "ModManager/KModManager.h"
-#include "PluginManager/KPluginManager.h"
-#include "PluginManager/KPluginManagerWorkspace.h"
-#include "Events/KVFSEvent.h"
-#include "Events/KLogEvent.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/ModManager.hpp>
+#include <Kortex/Events.hpp>
 #include "VFS/KVFSService.h"
 #include <KxFramework/KxSystem.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxProgressDialog.h>
+
+using namespace Kortex;
+using namespace Kortex::ModManager;
 
 wxString KIPCClient::GetServerFileName()
 {
@@ -53,29 +53,29 @@ wxConnectionBase* KIPCClient::OnMakeConnection()
 void KIPCClient::OnDisconnect()
 {
 	wxLogError("Client: Connection reset by server. Terminating");
-	KLogEvent(KTr("VFSService.InstallFailed"), KLOG_CRITICAL).Send();
+	Kortex::LogEvent(KTr("VFSService.InstallFailed"), Kortex::LogLevel::Critical).Send();
 }
 
 void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
 {
-	KEvent::CallAfter([config]()
+	IEvent::CallAfter([config]()
 	{
 		// Set mounted status
-		KModManager::GetInstance()->SetMounted(config.IsEnabled());
+		Kortex::IModManager::GetInstance()->SetMounted(config.IsEnabled());
 		int status = config.GetStatus();
 
-		// Send event before reloading 'KPluginManager'
-		KVFSEvent event(KEVT_VFS_TOGGLED, config.IsEnabled());
+		// Send event before reloading 'IPluginManager'
+		VirtualFileSystemEvent event(Events::VirtualFileSystemToggled, config.IsEnabled());
 		event.SetInt(status);
 		event.Send();
 
 		if (!KVFSService::IsSuccessCode(status))
 		{
 			wxString message = wxString::Format("%s\r\n\r\n%s: %s", KVFSService::GetStatusCodeMessage(status), KTr("VFS.MountPoint"), event.GetString());
-			KLogEvent(message, KLOG_ERROR).Send();
+			Kortex::LogEvent(message, Kortex::LogLevel::Error).Send();
 		}
 
-		KModManager::GetInstance()->DestroyMountStatusDialog();
+		//IModManager::GetInstance()->DestroyMountStatusDialog();
 	});
 }
 
@@ -190,9 +190,9 @@ bool KIPCClient::ConvergenceVFS_SetDispatcherIndex()
 	{
 		if (m_Connection->SendToServer(KIPCRequestNS::BeginConvergenceIndex()))
 		{
-			KDispatcher::GetInstance()->GetVirtualTree().WalkTree([this](const KFileTreeNode& node)
+			IModDispatcher::GetInstance()->GetVirtualTree().WalkTree([this](const FileTreeNode& node)
 			{
-				if (node.GetMod().IsEnabled())
+				if (node.GetMod().IsActive())
 				{
 					return m_Connection->SendToServer(KIPCRequestNS::AddConvergenceIndex(node.GetRelativePath(), node.GetFullPath()));
 				}

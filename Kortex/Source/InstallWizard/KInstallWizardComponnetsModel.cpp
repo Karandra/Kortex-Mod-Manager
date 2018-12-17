@@ -1,9 +1,9 @@
 #include "stdafx.h"
+#include <Kortex/Application.hpp>
 #include "KInstallWizardComponnetsModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageManager/KPackageManager.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
 
@@ -387,7 +387,7 @@ void KInstallWizardComponnetsModel::OnHotTrackItem(KxDataViewEvent& event)
 			return;
 		}
 	}
-	m_HotItem = NULL;
+	m_HotItem = nullptr;
 }
 
 KInstallWizardComponnetsModel::KInstallWizardComponnetsModel()
@@ -411,8 +411,8 @@ void KInstallWizardComponnetsModel::SetDataVector()
 {
 	m_DataVector.clear();
 	m_CheckedEntries.clear();
-	m_ComponentsInfo = NULL;
-	m_Step = NULL;
+	m_ComponentsInfo = nullptr;
+	m_Step = nullptr;
 
 	ItemsCleared();
 	GetView()->Disable();
@@ -515,7 +515,7 @@ const KPPCEntry* KInstallWizardComponnetsModel::GetSelectedEntry() const
 	{
 		return node->GetEntry();
 	}
-	return NULL;
+	return nullptr;
 }
 
 KxDataViewItem KInstallWizardComponnetsModel::MakeItem(const KIWCModelNode* node) const

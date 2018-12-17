@@ -18,7 +18,7 @@ class KPCIImagesListModel: public KPackageCreatorVectorModel<KPPIImageEntryArray
 		static void LoadBitmap(KPPIImageEntry* entry);
 
 	private:
-		KPackageProjectInterface* m_Interface = NULL;
+		KPackageProjectInterface* m_Interface = nullptr;
 
 	private:
 		virtual void OnInitControl() override;
@@ -64,7 +64,7 @@ class KPCIImagesListModel: public KPackageCreatorVectorModel<KPPIImageEntryArray
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		KPPIImageEntry* GetDataEntry(size_t index)
 		{
@@ -72,7 +72,7 @@ class KPCIImagesListModel: public KPackageCreatorVectorModel<KPPIImageEntryArray
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		const KPPIImageEntry* GetDataEntry(const KxDataViewItem& item) const

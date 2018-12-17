@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/ModManager.hpp>
 #include "KPackageCreatorWorkspace.h"
 #include "KPackageCreatorController.h"
 #include "KPackageCreatorPageBase.h"
@@ -12,12 +14,13 @@
 #include "PackageProject/KPackageProjectSerializerKMP.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
 #include "PackageManager/KModPackage.h"
-#include "KThemeManager.h"
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxFileStream.h>
 #pragma warning (disable: 4302)
+
+using namespace Kortex;
 
 KPackageCreatorWorkspace::KPackageCreatorWorkspace(KMainWindow* mainWindow)
 	:KWorkspace(mainWindow)
@@ -30,14 +33,14 @@ KPackageCreatorWorkspace::~KPackageCreatorWorkspace()
 }
 bool KPackageCreatorWorkspace::OnCreateWorkspace()
 {
-	KThemeManager::Get().ProcessWindow(static_cast<wxWindow*>(this));
+	IThemeManager::GetActive().ProcessWindow(static_cast<wxWindow*>(this));
 
 	wxBoxSizer* mainPaneSizer = new wxBoxSizer(wxHORIZONTAL);
 	m_MainPane = new KxPanel(this, KxID_NONE);
 	m_MainPane->SetSizer(mainPaneSizer);
 
 	m_MainSizer->Add(m_MainPane, 1, wxEXPAND);
-	KThemeManager::Get().ProcessWindow(m_MainPane);
+	IThemeManager::GetActive().ProcessWindow(m_MainPane);
 
 	CreatePagesListView();
 	CreatePagesView();
@@ -87,11 +90,11 @@ void KPackageCreatorWorkspace::CreateMenuBar(wxSizer* sizer)
 {
 	m_MenuBar = new KxAuiToolBar(m_PagesBookPane, KxID_NONE, KxAuiToolBar::DefaultStyle|wxAUI_TB_PLAIN_BACKGROUND|wxAUI_TB_TEXT);
 	m_MenuBar->SetBackgroundColour(GetBackgroundColour());
-	m_MenuBar->SetBorderColor(KThemeManager::Get().GetColor(KTMC_BORDER));
+	m_MenuBar->SetBorderColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::Border));
 	m_MenuBar->SetToolPacking(0);
 	m_MenuBar->SetToolSeparation(0);
 	m_MenuBar->SetMargins(0, 0, 0, 2);
-	KThemeManager::Get().ProcessWindow(static_cast<wxWindow*>(m_MenuBar));
+	IThemeManager::GetActive().ProcessWindow(static_cast<wxWindow*>(m_MenuBar));
 
 	m_MenuBar_Project = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Project"), wxNullBitmap);
 	m_MenuBar_Import = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Import"), wxNullBitmap);
@@ -109,7 +112,7 @@ void KPackageCreatorWorkspace::CreateProjectMenu()
 	KxMenu* menu = new KxMenu();
 	m_MenuBar_Project->AssignDropdownMenu(menu);
 	m_MenuBar_Project->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
-	KxMenuItem* item = NULL;
+	KxMenuItem* item = nullptr;
 
 	item = menu->Add(new KxMenuItem(KxID_NEW, KTr("PackageCreator.MenuProject.New")));
 	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_NEW));
@@ -140,7 +143,7 @@ void KPackageCreatorWorkspace::CreateImportMenu()
 	KxMenu* menu = new KxMenu();
 	m_MenuBar_Import->AssignDropdownMenu(menu);
 	m_MenuBar_Import->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
-	KxMenuItem* item = NULL;
+	KxMenuItem* item = nullptr;
 
 	item = menu->Add(new KxMenuItem(KxID_HIGHEST + 0, KTr("PackageCreator.MenuImport.FOModXML")));
 	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_IMPORT));
@@ -155,7 +158,7 @@ void KPackageCreatorWorkspace::CreateBuildMenu()
 	KxMenu* menu = new KxMenu();
 	m_MenuBar_Build->AssignDropdownMenu(menu);
 	m_MenuBar_Build->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
-	KxMenuItem* item = NULL;
+	KxMenuItem* item = nullptr;
 
 	item = menu->Add(new KxMenuItem(KTr("PackageCreator.MenuBuild.Build")));
 	item->SetBitmap(KGetBitmap(KIMG_COMPILE));
@@ -175,7 +178,7 @@ void KPackageCreatorWorkspace::CreatePagesListView()
 	m_PagesList->SetMaxSize(wxSize(180, wxDefaultCoord));
 
 	m_PagesList->AddColumn(wxEmptyString);
-	KThemeManager::Get().ProcessWindow(m_PagesList);
+	IThemeManager::GetActive().ProcessWindow(m_PagesList);
 
 	m_PagesList->Bind(KxEVT_TREELIST_SELECTION_CHANGED, &KPackageCreatorWorkspace::OnSwitchPage, this);
 }
@@ -192,7 +195,7 @@ void KPackageCreatorWorkspace::CreatePagesView()
 	// Pages book
 	m_PagesBook = new wxSimplebook(m_PagesBookPane, KxID_NONE);
 	pagesBookPaneSizer->Add(m_PagesBook, 1, wxEXPAND);
-	KThemeManager::Get().ProcessWindow(m_PagesBook);
+	IThemeManager::GetActive().ProcessWindow(m_PagesBook);
 }
 
 void KPackageCreatorWorkspace::AddPageBase(KPackageCreatorPageBase* page, bool select)
@@ -265,7 +268,7 @@ KPackageProject& KPackageCreatorWorkspace::ImportProjectFromPackage(const wxStri
 	m_Controller->ImportProjectFromPackage(path);
 	return *m_Controller->GetProject();
 }
-KPackageProject& KPackageCreatorWorkspace::CreateProjectFromModEntry(const KModEntry& modEntry)
+KPackageProject& KPackageCreatorWorkspace::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
 {
 	m_Controller->CreateProjectFromModEntry(modEntry);
 	return *m_Controller->GetProject();

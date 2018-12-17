@@ -7,7 +7,7 @@
 #include "PackageCreator/KPackageCreatorPageComponents.h"
 #include "PackageCreator/KPackageCreatorController.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxDataViewComboBox.h>
@@ -105,7 +105,7 @@ void KPCCConditionalStepsModel::OnContextMenu(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
@@ -161,8 +161,8 @@ void KPCCConditionalStepsModel::SetDataVector(VectorType& data)
 
 //////////////////////////////////////////////////////////////////////////
 KPCCConditionalStepsModelDialog::KPCCConditionalStepsModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, bool isAutomatic)
-	:KPCCConditionalStepsModel(controller),
-	m_WindowOptions("KPCCConditionalStepsModelDialog", "Window"), m_ViewOptions("KPCCConditionalStepsModelDialog", "View")
+	:KPCCConditionalStepsModel(controller)
+	//m_WindowOptions("KPCCConditionalStepsModelDialog", "Window"), m_ViewOptions("KPCCConditionalStepsModelDialog", "View")
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -178,14 +178,14 @@ KPCCConditionalStepsModelDialog::KPCCConditionalStepsModelDialog(wxWindow* paren
 		KPCCConditionalStepsModel::Create(controller, m_ViewPane, sizer);
 
 		AdjustWindow(wxDefaultPosition, wxSize(900, 500));
-		KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-		KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+		//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 	}
 }
 KPCCConditionalStepsModelDialog::~KPCCConditionalStepsModelDialog()
 {
 	IncRef();
 
-	KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
-	KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
+	//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 }

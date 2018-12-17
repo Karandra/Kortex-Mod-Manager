@@ -43,8 +43,8 @@ class KVFSService: public KxSingletonPtr<KVFSService>
 		const wxString m_Description;
 		const wxString m_LibraryPath;
 		const wxString m_DriverPath;
-		KxVFSService* m_ServiceImpl = NULL;
-		HMODULE m_LibraryHandle = NULL;
+		KxVFSService* m_ServiceImpl = nullptr;
+		HMODULE m_LibraryHandle = nullptr;
 
 	private:
 		void UnInit();

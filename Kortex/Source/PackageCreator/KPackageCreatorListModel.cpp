@@ -3,7 +3,7 @@
 #include "KPackageCreatorController.h"
 #include "KPackageCreatorPageBase.h"
 #include "PackageProject/KPackageProject.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxString.h>
 
 KxMenu* KPackageCreatorListModel::CreateAllItemsMenu(KxMenu& menu)

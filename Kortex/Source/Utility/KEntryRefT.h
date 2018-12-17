@@ -7,10 +7,10 @@ template<class T> class KEntryRef: public wxClientData
 		using EntryType = T;
 
 	protected:
-		EntryType* m_Entry = NULL;
+		EntryType* m_Entry = nullptr;
 
 	public:
-		KEntryRef(T* entry = NULL)
+		KEntryRef(T* entry = nullptr)
 			:m_Entry(entry)
 		{
 		}
@@ -21,7 +21,7 @@ template<class T> class KEntryRef: public wxClientData
 	public:
 		bool IsOK() const
 		{
-			return m_Entry != NULL;
+			return m_Entry != nullptr;
 		}
 
 		EntryType* GetEntry()

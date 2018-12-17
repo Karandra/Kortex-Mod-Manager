@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "KLabeledValue.h"
-enum KPGCFileID;
 class KxXMLNode;
 
 enum KAuxCharCode
@@ -34,7 +33,7 @@ class KAux
 		static wxString GetResolutionRatio(const wxSize& resolution, const wxString& unknown = wxEmptyString);
 
 		// Converts string to a bool value ("false" in any case is false and "0" or "0.0" is false, otherwise true).
-		static bool StringToBool(const wxString& value, bool* isUnknown = NULL);
+		static bool StringToBool(const wxString& value, bool* isUnknown = nullptr);
 
 		// Format date in Russian format (DD.MM.YYYY). Returns empty string if 't' is invalid.
 		static wxString FormatDate(const wxDateTime& t);
@@ -53,16 +52,16 @@ class KAux
 		static bool IsSingleFileExtensionMatches(const wxString& filePath, const wxString& ext);
 
 		// Shows a dialog that asks user to confirm opening the URL in default web-browser. Returns true if user has agreed.
-		static bool AskOpenURL(const wxString& url, wxWindow* parent = NULL);
-		static bool AskOpenURL(const KLabeledValueArray& urlList, wxWindow* parent = NULL);
+		static bool AskOpenURL(const wxString& url, wxWindow* parent = nullptr);
+		static bool AskOpenURL(const KLabeledValue::Vector& urlList, wxWindow* parent = nullptr);
 
-		// Saves KLabeledValueArray into specified node, clearing the node first.
+		// Saves KLabeledValue::Vector into specified node, clearing the node first.
 		// If KLabeledValue element has no label, attribute for the label will not be created.
-		static void SaveLabeledValueArray(const KLabeledValueArray& array, KxXMLNode& arrayNode, const wxString& labelName = "Label");
+		static void SaveLabeledValueArray(const KLabeledValue::Vector& array, KxXMLNode& arrayNode, const wxString& labelName = "Label");
 
-		// Loads KLabeledValueArray from specified node.
+		// Loads KLabeledValue::Vector from specified node.
 		// Does NOT clears 'array'.
-		static void LoadLabeledValueArray(KLabeledValueArray& array, const KxXMLNode& arrayNode, const wxString& labelName = "Label");
+		static void LoadLabeledValueArray(KLabeledValue::Vector& array, const KxXMLNode& arrayNode, const wxString& labelName = "Label");
 
 		// Saves KxStringVector into specified node, clearing the node first.
 		static void SaveStringArray(const KxStringVector& array, KxXMLNode& arrayNode, const wxString& elementNodeName = "Entry");
@@ -86,7 +85,7 @@ class KAux
 
 		// Creates placeholder for KxHTMLWindow to be showed when actual content is unavailable.
 		// Window is required if you want correct text color.
-		static wxString MakeHTMLWindowPlaceholder(const wxString& text, const wxWindow* window = NULL);
+		static wxString MakeHTMLWindowPlaceholder(const wxString& text, const wxWindow* window = nullptr);
 
 		// Extracts domain name from provided URL (without www. part if any).
 		static wxString ExtractDomainName(const wxString& url);
@@ -136,4 +135,25 @@ class KAux
 
 		static bool SetSearchMask(wxString& storage, const wxString& newMask);
 		static bool CheckSearchMask(const wxString& mask, const wxString& string);
+
+		template<class T> static T ExpandVariablesInVector(const T& items)
+		{
+			T newItems;
+			newItems.reserve(items.size());
+			for (const auto& item: items)
+			{
+				newItems.emplace_back(KVarExp(item));
+			}
+			return newItems;
+		}
+		template<> static KLabeledValue::Vector ExpandVariablesInVector(const KLabeledValue::Vector& items)
+		{
+			KLabeledValue::Vector newItems;
+			newItems.reserve(items.size());
+			for (const auto& item: items)
+			{
+				newItems.emplace_back(KVarExp(item.GetValue()), KVarExp(item.GetLabelRaw()));
+			}
+			return newItems;
+		}
 };

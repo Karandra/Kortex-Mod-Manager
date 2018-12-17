@@ -2,21 +2,23 @@
 #include "stdafx.h"
 #include "KLabeledValue.h"
 #include <KxFramework/KxSingleton.h>
-class KGameInstance;
 class KxMenu;
 
-class KLocationsManagerConfig: public KxSingletonPtr<KLocationsManagerConfig>
+namespace Kortex
 {
-	private:
-		KLabeledValueArray m_Locations;
+	class IGameInstance;
+	class KLocationsManagerConfig
+	{
+		private:
+			KLabeledValue::Vector m_Locations;
 
-	public:
-		KLocationsManagerConfig(KGameInstance& profile, const KxXMLNode& node);
-		~KLocationsManagerConfig();
+		public:
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& node);
 
-	public:
-		KLabeledValueArray GetLocations() const;
-		bool OpenLocation(const KLabeledValue& entry) const;
+		public:
+			KLabeledValue::Vector GetLocations() const;
+			bool OpenLocation(const KLabeledValue& entry) const;
 
-		void OnAddMainMenuItems(KxMenu& mainMenu);
-};
+			void OnAddMainMenuItems(KxMenu& mainMenu);
+	};
+}

@@ -1,6 +1,4 @@
 //{{NO_DEPENDENCIES}}
-// Включаемый файл, созданный в Microsoft Visual C++.
-// Используется Kortex.rc
 //
 #define IDI_ICON_APP                    101
 #define IDI_PNG1                        102

@@ -4,7 +4,6 @@
 #include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
 #include "PackageProject/KPackageProjectComponents.h"
-#include "KProgramOptions.h"
 class KPackageCreatorWorkspace;
 class KPackageProjectComponents;
 class KPCCFileDataSelectorModelCB;
@@ -20,13 +19,13 @@ class KPackageCreatorPageComponents: public KPackageCreatorPageBase
 		static wxString ConditionGroupToString(const KPPCConditionGroup& conditionGroup);
 
 	private:
-		KProgramOptionUI m_MainOptions;
-		KProgramOptionUI m_ComponentsOptions;
-		KPCComponentsModel* m_ComponentsModel = NULL;
+		//KProgramOptionAI m_MainOptions;
+		//KProgramOptionAI m_ComponentsOptions;
+		KPCComponentsModel* m_ComponentsModel = nullptr;
 
 		// Misc controls
-		KPCCFileDataSelectorModelCB* m_RequiredFilesModel = NULL;
-		KxImageView* m_EntryImage = NULL;
+		KPCCFileDataSelectorModelCB* m_RequiredFilesModel = nullptr;
+		KxImageView* m_EntryImage = nullptr;
 
 	public:
 		KPackageCreatorPageComponents(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller);

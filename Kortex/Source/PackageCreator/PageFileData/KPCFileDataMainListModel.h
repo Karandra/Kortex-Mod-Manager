@@ -11,10 +11,10 @@ class KxDataViewSpinRenderer;
 class KPCFileDataMainListModel: public KPackageCreatorVectorModel<KPPFFileEntryArray>, public KPackageCreatorIDTracker
 {
 	private:
-		KPackageProjectFileData* m_FileData = NULL;
-		KPCFileDataFolderContentModel* m_ContentModel = NULL;
+		KPackageProjectFileData* m_FileData = nullptr;
+		KPCFileDataFolderContentModel* m_ContentModel = nullptr;
 
-		KxDataViewSpinEditor* m_PriorityRenderer = NULL;
+		KxDataViewSpinEditor* m_PriorityRenderer = nullptr;
 
 	private:
 		virtual void OnInitControl() override;
@@ -64,7 +64,7 @@ class KPCFileDataMainListModel: public KPackageCreatorVectorModel<KPPFFileEntryA
 			{
 				return GetDataVector()->at(index).get();
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		void SetProject(KPackageProject& projectData);

@@ -3,7 +3,6 @@
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
-#include "KProgramOptions.h"
 class KPackageCreatorWorkspace;
 class KPackageProjectInterface;
 class KPCIImagesListModel;
@@ -14,9 +13,9 @@ class KPackageCreatorPageInterface:	public KPackageCreatorPageBase
 	friend class KPackageCreatorWorkspace;
 
 	private:
-		KPCIImagesListModel* m_ImageListModel = NULL;
-		KProgramOptionUI m_MainOptions;
-		KProgramOptionUI m_ListOptions;
+		KPCIImagesListModel* m_ImageListModel = nullptr;
+		//KProgramOptionAI m_MainOptions;
+		//KProgramOptionAI m_ListOptions;
 
 	public:
 		KPackageCreatorPageInterface(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller);

@@ -3,7 +3,7 @@
 #include "PackageCreator/KPackageCreatorController.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxComboBox.h>
@@ -141,7 +141,7 @@ void KPCCAssignedConditionalsEditor::OnContextMenu(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
@@ -250,7 +250,7 @@ bool KPCCAssignedConditionalsEditor::DoTrackID(wxString trackedID, const wxStrin
 
 void KPCCAssignedConditionalsEditor::SetDataVector()
 {
-	m_Condition = NULL;
+	m_Condition = nullptr;
 	KPackageCreatorVectorModel::SetDataVector();
 }
 void KPCCAssignedConditionalsEditor::SetDataVector(KPPCCondition& data)
@@ -265,8 +265,8 @@ void KPCCAssignedConditionalsEditor::SetDataVector(KPPCCondition& data)
 
 //////////////////////////////////////////////////////////////////////////
 KPCCAssignedConditionalsEditorDialog::KPCCAssignedConditionalsEditorDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller)
-	:KPCCAssignedConditionalsEditor(controller),
-	m_WindowOptions("KPCCAssignedConditionalsEditorDialog", "Window"), m_ViewOptions("KPCCConditionGroupEditorDialog", "View")
+	:KPCCAssignedConditionalsEditor(controller)
+	//m_WindowOptions("KPCCAssignedConditionalsEditorDialog", "Window"), m_ViewOptions("KPCCConditionGroupEditorDialog", "View")
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -282,14 +282,14 @@ KPCCAssignedConditionalsEditorDialog::KPCCAssignedConditionalsEditorDialog(wxWin
 		KPCCAssignedConditionalsEditor::Create(controller, m_ViewPane, m_Sizer);
 
 		AdjustWindow(wxDefaultPosition, wxSize(700, 400));
-		KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-		KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+		//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 	}
 }
 KPCCAssignedConditionalsEditorDialog::~KPCCAssignedConditionalsEditorDialog()
 {
 	IncRef();
 
-	KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
-	KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
+	//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 }

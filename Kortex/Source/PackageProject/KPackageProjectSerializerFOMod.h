@@ -18,8 +18,8 @@ class KPackageProjectSerializerFOMod: public KPackageProjectSerializer
 		wxString m_ModuleConfigXML;
 		wxString m_ProjectFolder;
 
-		KPackageProject* m_ProjectLoad = NULL;
-		const KPackageProject* m_ProjectSave = NULL;
+		KPackageProject* m_ProjectLoad = nullptr;
+		const KPackageProject* m_ProjectSave = nullptr;
 		KxXMLDocument m_XML;
 		bool m_ExportToNativeFormat = false;
 
@@ -36,7 +36,6 @@ class KPackageProjectSerializerFOMod: public KPackageProjectSerializer
 		wxString MakeProjectPath(const wxString& path) const;
 		KPPCSelectionMode ConvertSelectionMode(const wxString& mode) const;
 		wxString ConvertSelectionMode(KPPCSelectionMode mode) const;
-		KxStringVector ConvertTagsArray(const KxStringVector& FOModTags) const;
 		template<class T> void UniqueStringArray(T& array)
 		{
 			auto it = std::unique(array.begin(), array.end());
@@ -49,7 +48,7 @@ class KPackageProjectSerializerFOMod: public KPackageProjectSerializer
 
 		void ReadInstallSteps();
 		void ReadConditionalSteps(const KxXMLNode& stepsArrayNode);
-		FilePriorityArray ReadFileData(const KxXMLNode& filesArrayNode, KPPCEntry* entry = NULL);
+		FilePriorityArray ReadFileData(const KxXMLNode& filesArrayNode, KPPCEntry* entry = nullptr);
 		void UniqueFileData();
 		void UniqueImages();
 

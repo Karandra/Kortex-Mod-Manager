@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPackageProjectFileData.h"
 #include "KPackageProject.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 
@@ -89,5 +89,5 @@ KPPFFileEntry* KPackageProjectFileData::FindEntryWithID(const wxString& id, size
 		}
 		return it->get();
 	}
-	return NULL;
+	return nullptr;
 }

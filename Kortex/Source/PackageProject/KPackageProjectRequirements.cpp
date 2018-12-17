@@ -2,7 +2,7 @@
 #include "KPackageProjectRequirements.h"
 #include "KPackageProject.h"
 #include "PackageManager/KPackageManager.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 
 KPPRRequirementEntry::KPPRRequirementEntry(KPPRTypeDescriptor typeDescriptor)
@@ -19,7 +19,7 @@ const KxVersion& KPPRRequirementEntry::GetCurrentVersion() const
 {
 	if (!m_CurrentVersionChecked)
 	{
-		m_CurrentVersion = KPackageManager::GetInstance()->GetRequirementVersion(this);
+		m_CurrentVersion = Kortex::KPackageManager::GetInstance()->GetRequirementVersion(this);
 		m_CurrentVersionChecked = true;
 	}
 	return m_CurrentVersion;
@@ -38,7 +38,7 @@ KPPReqState KPPRRequirementEntry::GetObjectFunctionResult() const
 {
 	if (!m_ObjectFunctionResultChecked)
 	{
-		m_ObjectFunctionResult = KPackageManager::GetInstance()->CheckRequirementState(this);
+		m_ObjectFunctionResult = Kortex::KPackageManager::GetInstance()->CheckRequirementState(this);
 		m_ObjectFunctionResultChecked = true;
 	}
 	return m_ObjectFunctionResult;
@@ -51,7 +51,7 @@ void KPPRRequirementEntry::ResetObjectFunctionResult()
 
 bool KPPRRequirementEntry::IsStd() const
 {
-	return KPackageManager::GetInstance()->IsStdReqirement(GetID());
+	return Kortex::KPackageManager::GetInstance()->IsStdReqirement(GetID());
 }
 bool KPPRRequirementEntry::IsSystem() const
 {
@@ -102,7 +102,7 @@ bool KPPRRequirementEntry::ConformToTypeDescriptor()
 {
 	if (m_TypeDescriptor == KPPR_TYPE_SYSTEM || m_TypeDescriptor == KPPR_TYPE_AUTO)
 	{
-		const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindStdReqirement(GetID());
+		const KPPRRequirementEntry* stdEntry = Kortex::KPackageManager::GetInstance()->FindStdReqirement(GetID());
 		if (stdEntry)
 		{
 			SetName(stdEntry->GetName());
@@ -156,7 +156,7 @@ KPPRRequirementEntry* KPPRRequirementsGroup::FindEntry(const wxString& id) const
 	{
 		return it->get();
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool KPPRRequirementsGroup::CalcGroupStatus()
@@ -358,7 +358,7 @@ KPPRRequirementsGroup* KPackageProjectRequirements::FindGroupWithID(const wxStri
 	{
 		return it->get();
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool KPackageProjectRequirements::IsDefaultGroupContains(const wxString& groupID) const

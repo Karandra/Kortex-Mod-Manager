@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KAux.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
@@ -175,7 +175,7 @@ bool KAux::AskOpenURL(const wxString& url, wxWindow* parent)
 	}
 	return false;
 }
-bool KAux::AskOpenURL(const KLabeledValueArray& urlList, wxWindow* parent)
+bool KAux::AskOpenURL(const KLabeledValue::Vector& urlList, wxWindow* parent)
 {
 	KxTaskDialog dialog(parent, KxID_NONE, KTr("Generic.OpenWebSiteListDialog.Caption"), wxEmptyString, KxBTN_CANCEL);
 	dialog.SetOptionEnabled(KxTD_SIZE_TO_CONTENT);
@@ -204,7 +204,7 @@ bool KAux::AskOpenURL(const KLabeledValueArray& urlList, wxWindow* parent)
 	return dialog.ShowModal() != KxID_CANCEL;
 }
 
-void KAux::SaveLabeledValueArray(const KLabeledValueArray& array, KxXMLNode& arrayNode, const wxString& labelName)
+void KAux::SaveLabeledValueArray(const KLabeledValue::Vector& array, KxXMLNode& arrayNode, const wxString& labelName)
 {
 	arrayNode.ClearChildren();
 
@@ -219,7 +219,7 @@ void KAux::SaveLabeledValueArray(const KLabeledValueArray& array, KxXMLNode& arr
 		}
 	}
 }
-void KAux::LoadLabeledValueArray(KLabeledValueArray& array, const KxXMLNode& arrayNode, const wxString& labelName)
+void KAux::LoadLabeledValueArray(KLabeledValue::Vector& array, const KxXMLNode& arrayNode, const wxString& labelName)
 {
 	for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 	{

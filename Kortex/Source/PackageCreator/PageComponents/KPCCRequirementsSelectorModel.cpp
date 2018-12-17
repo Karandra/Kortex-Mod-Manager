@@ -2,7 +2,7 @@
 #include "KPCCRequirementsSelectorModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 
 enum ColumnID
@@ -51,7 +51,7 @@ bool KPCCRequirementsSelectorModel::SetValueByRow(const wxAny& value, size_t row
 
 void KPCCRequirementsSelectorModel::SetDataVector()
 {
-	m_ReqData = NULL;
+	m_ReqData = nullptr;
 	m_DataVector.clear();
 	KPackageCreatorVectorModel::SetDataVector();
 }

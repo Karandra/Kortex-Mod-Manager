@@ -11,10 +11,11 @@
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxComboBoxDialog.h>
+#include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
 
 namespace
@@ -27,10 +28,10 @@ namespace
 		});
 	};
 	
-	template<class EntryT> void SwapNodesInSameBranch(KPCComponentsModelNode* thisNode, KPCComponentsModelNode* draggedNode, std::vector<std::unique_ptr<EntryT>>* entries = NULL)
+	template<class EntryT> void SwapNodesInSameBranch(KPCComponentsModelNode* thisNode, KPCComponentsModelNode* draggedNode, std::vector<std::unique_ptr<EntryT>>* entries = nullptr)
 	{
-		EntryT* thisEntry = NULL;
-		EntryT* draggedEntry = NULL;
+		EntryT* thisEntry = nullptr;
+		EntryT* draggedEntry = nullptr;
 
 		if constexpr(std::is_same<EntryT, KPPCStep>::value)
 		{
@@ -61,11 +62,11 @@ namespace
 	}
 	template<class EntryT> void MoveNodeToDifferentBranch(KPCComponentsModelNode* thisNode, KPCComponentsModelNode* draggedNode, KPCComponentsModel* model)
 	{
-		std::vector<std::unique_ptr<EntryT>>* thisItems = NULL;
-		std::vector<std::unique_ptr<EntryT>>* draggedItems = NULL;
+		std::vector<std::unique_ptr<EntryT>>* thisItems = nullptr;
+		std::vector<std::unique_ptr<EntryT>>* draggedItems = nullptr;
 		
-		EntryT* thisEntry = NULL;
-		EntryT* draggedEntry = NULL;
+		EntryT* thisEntry = nullptr;
+		EntryT* draggedEntry = nullptr;
 
 		if constexpr(std::is_same<EntryT, KPPCGroup>::value)
 		{
@@ -673,7 +674,7 @@ bool KPCComponentsModel::SetEntryItemValue(const wxAny& value, const KxDataViewC
 				else
 				{
 					entry->SetImage(wxEmptyString);
-					m_EntryImageView->SetClientData(NULL);
+					m_EntryImageView->SetClientData(nullptr);
 					m_EntryImageView->SetBitmap(wxNullBitmap);
 				}
 
@@ -704,7 +705,7 @@ void KPCComponentsModel::OnSelectItem(KxDataViewEvent& event)
 			return;
 		}
 	}
-	m_EntryImageView->SetClientData(NULL);
+	m_EntryImageView->SetClientData(nullptr);
 	m_EntryImageView->SetBitmap(wxNullBitmap);
 }
 void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
@@ -883,7 +884,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 		}
 		
 		// Remove item
-		KxMenuItem* menuItemRemove = NULL;
+		KxMenuItem* menuItemRemove = nullptr;
 		if (node)
 		{
 			contextMenu.AddSeparator();
@@ -1010,7 +1011,7 @@ void KPCComponentsModel::OnAttachEditor(KxDataViewEvent& event)
 }
 void KPCComponentsModel::OnDetachEditor(KxDataViewEvent& event)
 {
-	event.GetColumn()->SetEditor(NULL);
+	event.GetColumn()->SetEditor(nullptr);
 }
 void KPCComponentsModel::UpdateImageEditorList()
 {

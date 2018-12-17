@@ -2,7 +2,7 @@
 #include "KWorkspaceController.h"
 #include "KWorkspace.h"
 #include "KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
 
@@ -10,11 +10,6 @@ wxDEFINE_EVENT(KEVT_CONTROLLER_CHANGED, wxNotifyEvent);
 wxDEFINE_EVENT(KEVT_CONTROLLER_SAVED, wxNotifyEvent);
 wxDEFINE_EVENT(KEVT_CONTROLLER_DISCARDED, wxNotifyEvent);
 wxDEFINE_EVENT(KEVT_CONTROLLER_SELECTED, wxNotifyEvent);
-
-KApp& KWorkspaceController::GetApp()
-{
-	return KApp::Get();
-}
 
 wxString KWorkspaceController::GetSaveConfirmationCaption() const
 {
@@ -35,7 +30,7 @@ KWorkspaceController::~KWorkspaceController()
 
 bool KWorkspaceController::IsOK() const
 {
-	return m_Workspace != NULL;
+	return m_Workspace != nullptr;
 }
 
 KWorkspace* KWorkspaceController::GetWorkspace() const

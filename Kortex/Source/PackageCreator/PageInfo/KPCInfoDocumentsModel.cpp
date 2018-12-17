@@ -2,7 +2,7 @@
 #include "KPCInfoDocumentsModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -112,7 +112,7 @@ void KPCInfoDocumentsModel::OnContextMenu(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
@@ -181,7 +181,7 @@ KxStringVector KPCInfoDocumentsModel::OpenFileDialog(bool isMultiple) const
 
 void KPCInfoDocumentsModel::SetDataVector()
 {
-	m_InfoData = NULL;
+	m_InfoData = nullptr;
 	KPackageCreatorVectorModel::SetDataVector();
 }
 void KPCInfoDocumentsModel::SetDataVector(VectorType& data, KPackageProjectInfo* info)
@@ -192,7 +192,7 @@ void KPCInfoDocumentsModel::SetDataVector(VectorType& data, KPackageProjectInfo*
 
 //////////////////////////////////////////////////////////////////////////
 KPCInfoDocumentsModelDialog::KPCInfoDocumentsModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller)
-	:m_WindowOptions("KPCInfoDocumentsModelDialog", "Window"), m_ViewOptions("KPCInfoDocumentsModelDialog", "View")
+	//:m_WindowOptions("KPCInfoDocumentsModelDialog", "Window"), m_ViewOptions("KPCInfoDocumentsModelDialog", "View")
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -208,14 +208,14 @@ KPCInfoDocumentsModelDialog::KPCInfoDocumentsModelDialog(wxWindow* parent, const
 		KPCInfoDocumentsModel::Create(controller, m_ViewPane, sizer);
 
 		AdjustWindow(wxDefaultPosition, wxSize(700, 400));
-		KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-		KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+		//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 	}
 }
 KPCInfoDocumentsModelDialog::~KPCInfoDocumentsModelDialog()
 {
 	IncRef();
 
-	KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
-	KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
+	//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 }

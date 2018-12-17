@@ -5,8 +5,7 @@
 #include "KModPackage.h"
 #include "UI/KImageViewerDialog.h"
 #include "UI/KMainWindow.h"
-#include "KThemeManager.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxAuiNotebook.h>
@@ -15,8 +14,10 @@
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxTextFile.h>
 
+using namespace Kortex;
+
 KPackageManagerWorkspace::KPackageManagerWorkspace(KMainWindow* mainWindow)
-	:KWorkspace(mainWindow), m_PackageListViewOptions(this, "PackageListView"), m_MainOptions(this, "MainUI")
+	:KWorkspace(mainWindow)//, m_PackageListViewOptions(this, "PackageListView"), m_MainOptions(this, "MainUI")
 {
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	CreateItemInManagersMenu();
@@ -25,9 +26,9 @@ KPackageManagerWorkspace::~KPackageManagerWorkspace()
 {
 	if (IsWorkspaceCreated())
 	{
-		KProgramOptionSerializer::SaveDataViewLayout(m_MainView->GetView(), m_PackageListViewOptions);
-		KProgramOptionSerializer::SaveSplitterLayout(m_Splitter, m_MainOptions);
-		KProgramOptionSerializer::SaveSplitterLayout(m_InfoPane, m_MainOptions);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_MainView->GetView(), m_PackageListViewOptions);
+		//KProgramOptionSerializer::SaveSplitterLayout(m_Splitter, m_MainOptions);
+		//KProgramOptionSerializer::SaveSplitterLayout(m_InfoPane, m_MainOptions);
 	}
 }
 bool KPackageManagerWorkspace::OnCreateWorkspace()
@@ -36,15 +37,15 @@ bool KPackageManagerWorkspace::OnCreateWorkspace()
 	m_Splitter->SetName("PackageViewPaneSize");
 	m_Splitter->SetMinimumPaneSize(250);
 	m_MainSizer->Add(m_Splitter, 1, wxEXPAND);
-	KThemeManager::Get().ProcessWindow(m_Splitter);
+	IThemeManager::GetActive().ProcessWindow(m_Splitter);
 
 	CreateViewPane();
 	CreateInfoPane();
 	m_Splitter->SplitVertically(m_ViewPane, m_InfoPane, -m_Splitter->GetMinimumPaneSize());
 
-	KProgramOptionSerializer::LoadSplitterLayout(m_Splitter, m_MainOptions);
-	KProgramOptionSerializer::LoadSplitterLayout(m_InfoPane, m_MainOptions);
-	KProgramOptionSerializer::LoadDataViewLayout(m_MainView->GetView(), m_PackageListViewOptions);
+	//KProgramOptionSerializer::LoadSplitterLayout(m_Splitter, m_MainOptions);
+	//KProgramOptionSerializer::LoadSplitterLayout(m_InfoPane, m_MainOptions);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_MainView->GetView(), m_PackageListViewOptions);
 	return true;
 }
 
@@ -99,7 +100,7 @@ void KPackageManagerWorkspace::CreateInfoPane()
 	m_InfoPane->SetName("ImageViewHeight");
 	m_InfoPane->SetMinimumPaneSize(150);
 	m_InfoPane->SetSizer(sizer);
-	KThemeManager::Get().ProcessWindow(m_InfoPane);
+	IThemeManager::GetActive().ProcessWindow(m_InfoPane);
 
 	// Image
 	m_InfoImage = new KxImageView(m_InfoPane, KxID_NONE, wxBORDER_THEME);
@@ -143,7 +144,7 @@ bool KPackageManagerWorkspace::OnCloseWorkspace()
 }
 void KPackageManagerWorkspace::OnReloadWorkspace()
 {
-	m_MainView->Navigate(KPackageManager::GetInstance()->GetPackagesFolder());
+	m_MainView->Navigate(Kortex::KPackageManager::GetInstance()->GetPackagesFolder());
 }
 
 void KPackageManagerWorkspace::OnSerach(wxCommandEvent& event)

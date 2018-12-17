@@ -1,12 +1,13 @@
 #include "stdafx.h"
+#include <Kortex/ScreenshotsGallery.hpp>
 #include "KImageViewerDialog.h"
-#include "KThemeManager.h"
 #include "KMainWindow.h"
 #include "KAux.h"
-#include "KApp.h"
-#include "ScreenshotsGallery/KScreenshotsGalleryManager.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxString.h>
+
+using namespace Kortex;
 
 wxDEFINE_EVENT(KEVT_IMAGEVIEWER_NEXT_IMAGE, KImageViewerEvent);
 wxDEFINE_EVENT(KEVT_IMAGEVIEWER_PREV_IMAGE, KImageViewerEvent);
@@ -21,12 +22,12 @@ const wxBitmap& KImageViewerEvent::GetBitmap() const
 }
 void KImageViewerEvent::SetBitmap(const wxBitmap& bitmap)
 {
-	m_Data = bitmap.IsOk() ? &bitmap : NULL;
+	m_Data = bitmap.IsOk() ? &bitmap : nullptr;
 }
 
 bool KImageViewerEvent::IsAnimationFile() const
 {
-	return HasFilePath() && KScreenshotsGalleryManager::IsAnimationFile(GetFilePath());
+	return HasFilePath() && Kortex::IScreenshotsGallery::IsAnimationFile(GetFilePath());
 }
 bool KImageViewerEvent::HasFilePath() const
 {
@@ -52,7 +53,7 @@ wxMemoryInputStream KImageViewerEvent::GetInputSteram()
 		const KArchive::Buffer* pBuffer = std::get<InputStream>(m_Data);
 		return wxMemoryInputStream(pBuffer->data(), pBuffer->size());
 	}
-	return wxMemoryInputStream(NULL, 0);
+	return wxMemoryInputStream(nullptr, 0);
 }
 void KImageViewerEvent::SetInputStream(const KArchive::Buffer& buffer)
 {
@@ -75,7 +76,7 @@ bool KImageViewerDialog::OnDynamicBind(wxDynamicEventTableEntry& entry)
 
 void KImageViewerDialog::OnLoadFromDisk(const wxString& filePath)
 {
-	if (KScreenshotsGalleryManager::IsAnimationFile(filePath))
+	if (Kortex::IScreenshotsGallery::IsAnimationFile(filePath))
 	{
 		m_ImageView->LoadFile(filePath);
 	}
@@ -152,8 +153,8 @@ void KImageViewerDialog::OnScaleChanged(wxCommandEvent& event)
 void KImageViewerDialog::OnSaveImage(wxCommandEvent& event)
 {
 	KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
-	const KxStringVector& exts = KScreenshotsGalleryManager::GetSupportedExtensions();
-	const KSGMImageTypeArray& formats = KScreenshotsGalleryManager::GetSupportedFormats();
+	const KxStringVector& exts = Kortex::IScreenshotsGallery::GetSupportedExtensions();
+	const Kortex::ScreenshotsGallery::SupportedTypesVector& formats = Kortex::IScreenshotsGallery::GetSupportedFormats();
 	for (const wxString& ext: exts)
 	{
 		dialog.AddFilter(ext, wxString::Format("%s %s", KTr("FileFilter.Image"), ext.AfterFirst('.').MakeUpper()));
@@ -192,7 +193,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 
 		// Splitter
 		m_Splitter = new KxSplitterWindow(m_ContentPanel, KxID_NONE);
-		KThemeManager::Get().ProcessWindow(m_Splitter);
+		IThemeManager::GetActive().ProcessWindow(m_Splitter);
 		PostCreate(wxDefaultPosition);
 
 		// View
@@ -203,10 +204,11 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 		{
 			Close();
 		});
-		KThemeManager::Get().ProcessWindow(m_ImageView);
+		IThemeManager::GetActive().ProcessWindow(m_ImageView);
 
 		// Options
-		int64_t colorBG = m_OptionsImageView.GetAttributeInt("ColorBG", -1);
+		auto options = IApplication::GetInstance()->GetGlobalOption("ImageViewer");
+		int64_t colorBG = options.GetAttributeInt("ColorBG", -1);
 		if (colorBG != -1)
 		{
 			m_ImageView->SetBackgroundColour(KxColor::FromCOLORREF(colorBG));
@@ -216,7 +218,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 			m_ImageView->SetBackgroundColour("LIGHT GREY");
 		}
 
-		int64_t colorFG = m_OptionsImageView.GetAttributeInt("ColorFG", -1);
+		int64_t colorFG = options.GetAttributeInt("ColorFG", -1);
 		if (colorFG != -1)
 		{
 			m_ImageView->SetForegroundColour(KxColor::FromCOLORREF(colorFG));
@@ -278,7 +280,6 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 	return false;
 }
 KImageViewerDialog::KImageViewerDialog(wxWindow* parent, const wxString& caption)
-	:m_OptionsImageView("KImageViewerDialog", "ImageView")
 {
 	if (Create(parent, caption))
 	{
@@ -289,6 +290,7 @@ KImageViewerDialog::KImageViewerDialog(wxWindow* parent, const wxString& caption
 }
 KImageViewerDialog::~KImageViewerDialog()
 {
-	m_OptionsImageView.SetAttribute("ColorBG", (int64_t)m_ImageView->GetBackgroundColour().GetPixel());
-	m_OptionsImageView.SetAttribute("ColorFG", (int64_t)m_ImageView->GetForegroundColour().GetPixel());
+	auto options = IApplication::GetInstance()->GetGlobalOption("ImageViewer");
+	options.SetAttribute("ColorBG", (int64_t)m_ImageView->GetBackgroundColour().GetPixel());
+	options.SetAttribute("ColorFG", (int64_t)m_ImageView->GetForegroundColour().GetPixel());
 }

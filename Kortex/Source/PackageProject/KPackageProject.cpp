@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "KPackageProject.h"
 #include "PackageManager/KPackageManager.h"
-#include "ModManager/KModManager.h"
-#include "GameInstance/KInstanceManagement.h"
-#include "KApp.h"
+#include <Kortex/ModManager.hpp>
+#include <Kortex/GameInstance.hpp>
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 
 namespace OperatorConst
@@ -193,8 +193,15 @@ KxStringVector KPackageProject::CreateOperatorNamesList(const std::initializer_l
 }
 
 KPackageProject::KPackageProject()
-	:m_Config(*this), m_Info(*this), m_FileData(*this), m_Interface(*this), m_Requirements(*this), m_Components(*this),
-	m_FormatVersion(KPackageManager::GetInstance()->GetVersion()), m_TargetProfileID(KGameInstance::GetActive()->GetGameID())
+	:m_Config(*this),
+	m_Info(*this),
+	m_FileData(*this),
+	m_Interface(*this),
+	m_Requirements(*this),
+	m_Components(*this),
+
+	m_FormatVersion(Kortex::KPackageModule::GetInstance()->GetModuleInfo().GetVersion()),
+	m_TargetProfileID(Kortex::IGameInstance::GetActive()->GetGameID())
 {
 }
 KPackageProject::~KPackageProject()
@@ -252,5 +259,5 @@ wxString KPackageProject::GetModName() const
 }
 wxString KPackageProject::GetSignature() const
 {
-	return KModEntry::GetSignatureFromID(GetModID());
+	return Kortex::ModManager::BasicGameMod::GetSignatureFromID(GetModID());
 }

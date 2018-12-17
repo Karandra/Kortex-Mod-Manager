@@ -3,7 +3,6 @@
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
-#include "KProgramOptions.h"
 class KPackageCreatorWorkspace;
 class KPackageProjectFileData;
 class KPCFileDataMainListModel;
@@ -14,18 +13,18 @@ class KPackageCreatorPageFileData: public KPackageCreatorPageBase
 	friend class KPackageCreatorWorkspace;
 
 	private:
-		KxSplitterWindow* m_Pane = NULL;
-		KProgramOptionUI m_MainOptions;
+		KxSplitterWindow* m_Pane = nullptr;
+		//KProgramOptionAI m_MainOptions;
 
 		// Folders
-		KxPanel* m_MainListPane = NULL;
+		KxPanel* m_MainListPane = nullptr;
 		KPCFileDataMainListModel* m_MainListModel;
-		KProgramOptionUI m_MainListOptions;
+		//KProgramOptionAI m_MainListOptions;
 
 		// Files
-		KxPanel* m_FolderContentPane = NULL;
+		KxPanel* m_FolderContentPane = nullptr;
 		KPCFileDataFolderContentModel* m_ContentListModel;
-		KProgramOptionUI m_ContentListModelOptions;
+		//KProgramOptionAI m_ContentListModelOptions;
 
 	public:
 		KPackageCreatorPageFileData(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller);

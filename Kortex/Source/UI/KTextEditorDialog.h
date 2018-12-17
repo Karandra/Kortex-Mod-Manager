@@ -11,21 +11,21 @@ class KxBitmapComboBox;
 class KTextEditorDialog: public KxStdDialog
 {
 	private:
-		KxPanel* m_View = NULL;
-		wxSimplebook* m_Tabs = NULL;
+		KxPanel* m_View = nullptr;
+		wxSimplebook* m_Tabs = nullptr;
 		wxString m_Text;
 		bool m_TextModified = false;
 
 		bool m_EditMode = true;
 		bool m_Editable = true;
-		KxAuiToolBar* m_ToolBar = NULL;
-		KxAuiToolBarItem* m_ToolBar_SwitchMode = NULL;
-		KxAuiToolBarItem* m_ToolBar_Save = NULL;
-		KxAuiToolBarItem* m_ToolBar_Open = NULL;
-		KxBitmapComboBox* m_HeadingList = NULL;
-		KxStyledTextBox* m_Editor = NULL;
+		KxAuiToolBar* m_ToolBar = nullptr;
+		KxAuiToolBarItem* m_ToolBar_SwitchMode = nullptr;
+		KxAuiToolBarItem* m_ToolBar_Save = nullptr;
+		KxAuiToolBarItem* m_ToolBar_Open = nullptr;
+		KxBitmapComboBox* m_HeadingList = nullptr;
+		KxStyledTextBox* m_Editor = nullptr;
 
-		KxHTMLWindow* m_Preview = NULL;
+		KxHTMLWindow* m_Preview = nullptr;
 
 	private:
 		bool Create(wxWindow* parent);
@@ -43,7 +43,7 @@ class KTextEditorDialog: public KxStdDialog
 		{
 			return wxHORIZONTAL;
 		}
-		virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = NULL) const override
+		virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
 		{
 			return true;
 		}

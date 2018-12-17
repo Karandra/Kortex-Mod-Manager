@@ -302,7 +302,7 @@ bool KBethesdaArchive::ReadFileNamesRecords()
 
 	for (size_t i = 0; i < m_Header.FilesCount; i++)
 	{
-		char c = NULL;
+		char c = '\0';
 		do
 		{
 			if (!m_Stream.ReadObject(c))
@@ -444,7 +444,7 @@ void* KBethesdaArchive::FindFirstFile(const wxString& filter, KxFileItem& fileIt
 	{
 		return new SearchData(filter, nextIndex);
 	}
-	return NULL;
+	return nullptr;
 }
 bool KBethesdaArchive::FindNextFile(void* handle, KxFileItem& item) const
 {

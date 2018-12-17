@@ -2,12 +2,12 @@
 #include "stdafx.h"
 #include "KPackageProjectPart.h"
 #include "KLabeledValue.h"
-#include "ModManager/KModEntry.h"
+#include "GameMods/ModTagStore.h"
+#include "GameMods/ModProvider/Store.h"
+#include "GameMods/TagManager/DefaultTag.h"
 
 class KPackageProjectInfo: public KPackageProjectPart
 {
-	using FixedWebSitesArray = KModEntry::FixedWebSitesArray;
-
 	private:
 		wxString m_Name;
 		wxString m_TranslatedName;
@@ -15,11 +15,11 @@ class KPackageProjectInfo: public KPackageProjectPart
 		wxString m_Author;
 		wxString m_Translator;
 		wxString m_Description;
-		KLabeledValueArray m_CustomFields;
-		KLabeledValueArray m_Documents;
-		KLabeledValueArray m_WebSites;
-		FixedWebSitesArray m_FixedWebSites = {-1, -1, -1};
-		KxStringVector m_Tags;
+		KLabeledValue::Vector m_CustomFields;
+		KLabeledValue::Vector m_Documents;
+		KLabeledValue::Vector m_WebSites;
+		Kortex::ModProvider::Store m_ProviderStore;
+		Kortex::ModTagStore m_TagStore;
 
 	public:
 		KPackageProjectInfo(KPackageProject& project);
@@ -80,52 +80,39 @@ class KPackageProjectInfo: public KPackageProjectPart
 			m_Description = value;
 		}
 		
-		const KLabeledValueArray& GetCustomFields() const
+		const KLabeledValue::Vector& GetCustomFields() const
 		{
 			return m_CustomFields;
 		}
-		KLabeledValueArray& GetCustomFields()
+		KLabeledValue::Vector& GetCustomFields()
 		{
 			return m_CustomFields;
 		}
 		
-		const KLabeledValueArray& GetDocuments() const
+		const KLabeledValue::Vector& GetDocuments() const
 		{
 			return m_Documents;
 		}
-		KLabeledValueArray& GetDocuments()
+		KLabeledValue::Vector& GetDocuments()
 		{
 			return m_Documents;
 		}
 
-		const KLabeledValueArray& GetWebSites() const
+		const Kortex::ModProvider::Store& GetProviderStore() const
 		{
-			return m_WebSites;
+			return m_ProviderStore;
 		}
-		KLabeledValueArray& GetWebSites()
+		Kortex::ModProvider::Store& GetProviderStore()
 		{
-			return m_WebSites;
+			return m_ProviderStore;
 		}
-		const FixedWebSitesArray& GetFixedWebSites() const
-		{
-			return m_FixedWebSites;
-		}
-		FixedWebSitesArray& GetFixedWebSites()
-		{
-			return m_FixedWebSites;
-		}
-		int64_t GetWebSiteModID(KNetworkProviderID index) const;
-		bool HasWebSite(KNetworkProviderID index) const;
-		KLabeledValue GetWebSite(KNetworkProviderID index) const;
-		void SetWebSite(KNetworkProviderID index, int64_t modID);
 
-		const KxStringVector& GetTags() const
+		const Kortex::ModTagStore& GetTagStore() const
 		{
-			return m_Tags;
+			return m_TagStore;
 		}
-		KxStringVector& GetTags()
+		virtual Kortex::ModTagStore& GetTagStore()
 		{
-			return m_Tags;
+			return m_TagStore;
 		}
-		void ToggleTag(const wxString& value, bool set);
 };

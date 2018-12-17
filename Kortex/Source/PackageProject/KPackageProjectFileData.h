@@ -18,11 +18,11 @@ class KPPFFileEntry
 	public:
 		virtual KPPFFolderEntry* ToFolderEntry()
 		{
-			return NULL;
+			return nullptr;
 		}
 		virtual const KPPFFolderEntry* ToFolderEntry() const
 		{
-			return NULL;
+			return nullptr;
 		}
 		virtual KPPFFileEntry* ToFileEntry()
 		{
@@ -178,11 +178,11 @@ class KPackageProjectFileData: public KPackageProjectPart
 			return entry;
 		}
 
-		KPPFFileEntry* FindEntryWithID(const wxString& id, size_t* index = NULL) const;
-		bool HasEntryWithID(const wxString& id, const KPPFFileEntry* ignoreThis = NULL) const
+		KPPFFileEntry* FindEntryWithID(const wxString& id, size_t* index = nullptr) const;
+		bool HasEntryWithID(const wxString& id, const KPPFFileEntry* ignoreThis = nullptr) const
 		{
 			KPPFFileEntry* entry = FindEntryWithID(id);
-			return entry != NULL && entry != ignoreThis;
+			return entry != nullptr && entry != ignoreThis;
 		}
 		bool CanUseThisIDForNewEntry(const wxString& id) const
 		{

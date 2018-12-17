@@ -1,41 +1,44 @@
 #include "stdafx.h"
 #include "KProgramManagerModel.h"
-#include "ModManager/KModManager.h"
-#include "ScreenshotsGallery/KScreenshotsGalleryManager.h"
-#include "KVariablesDatabase.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/ModManager.hpp>
+#include <Kortex/ScreenshotsGallery.hpp>
 #include "KAux.h"
 #include "UI/KMainWindow.h"
 #include "KOperationWithProgress.h"
 #include <KxFramework/KxMenu.h>
+#include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
-enum ColumnID
+namespace
 {
-	RequiresVFS,
-	ShowInMainMenu,
-	Name,
-	Arguments,
-	Executable,
-	WorkingDirectory,
-};
-enum MenuID
-{
-	RunProgram,
+	enum ColumnID
+	{
+		RequiresVFS,
+		ShowInMainMenu,
+		Name,
+		Arguments,
+		Executable,
+		WorkingDirectory,
+	};
+	enum MenuID
+	{
+		RunProgram,
 
-	AddProgram,
-	RemoveProgram,
+		AddProgram,
+		RemoveProgram,
 
-	ClearPrograms,
-	LoadDefaultPrograms,
+		ClearPrograms,
+		LoadDefaultPrograms,
 
-	Edit,
-	ChooseIcon,
-	ChooseExecutable,
-	ChooseWorkingDirectory,
+		Edit,
+		ChooseIcon,
+		ChooseExecutable,
+		ChooseWorkingDirectory,
 
-	ShowExpandedValues,
-};
+		ShowExpandedValues,
+	};
+}
 
 void KProgramManagerModel::OnInitControl()
 {
@@ -161,7 +164,7 @@ bool KProgramManagerModel::SetValueByRow(const wxAny& value, size_t row, const K
 			case ColumnID::Executable:
 			{
 				entry->SetExecutable(value.As<wxString>());
-				KProgramManager::GetInstance()->LoadEntryImages(*entry);
+				Kortex::KProgramManager::GetInstance()->LoadEntryImages(*entry);
 				return true;
 			}
 			case ColumnID::WorkingDirectory:
@@ -214,7 +217,7 @@ void KProgramManagerModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (entry->CanRunNow())
 				{
-					KProgramManager::GetInstance()->RunEntry(*entry);
+					Kortex::KProgramManager::GetInstance()->RunEntry(*entry);
 				}
 				else
 				{
@@ -239,12 +242,12 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 		{
 			if (save)
 			{
-				KProgramManager::GetInstance()->GetOptions().SetAttribute("ShowExpandedValues", value);
+				Kortex::KProgramManager::GetInstance()->GetInstanceOption().SetAttribute("ShowExpandedValues", value);
 				return value;
 			}
 			else
 			{
-				return KProgramManager::GetInstance()->GetOptions().GetAttributeBool("ShowExpandedValues", value);
+				return Kortex::KProgramManager::GetInstance()->GetInstanceOption().GetAttributeBool("ShowExpandedValues", value);
 			}
 		};
 		KProgramEntry* entry = GetDataEntry(GetRow(event.GetItem()));
@@ -306,7 +309,7 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 		{
 			case MenuID::RunProgram:
 			{
-				KProgramManager::GetInstance()->RunEntry(*entry);
+				Kortex::KProgramManager::GetInstance()->RunEntry(*entry);
 				break;
 			}
 
@@ -350,7 +353,7 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 				if (!path.IsEmpty() && path != entry->GetExecutable())
 				{
 					entry->SetIconPath(path);
-					KProgramManager::GetInstance()->LoadEntryImages(*entry);
+					Kortex::KProgramManager::GetInstance()->LoadEntryImages(*entry);
 					ItemChanged(event.GetItem());
 				}
 				break;
@@ -361,7 +364,7 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 				if (!path.IsEmpty() && path != entry->GetExecutable())
 				{
 					entry->SetExecutable(path);
-					KProgramManager::GetInstance()->LoadEntryImages(*entry);
+					Kortex::KProgramManager::GetInstance()->LoadEntryImages(*entry);
 					ItemChanged(event.GetItem());
 				}
 				break;
@@ -383,7 +386,7 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 			}
 			case MenuID::LoadDefaultPrograms:
 			{
-				KProgramManager::GetInstance()->LoadDefaultPrograms();
+				Kortex::KProgramManager::GetInstance()->LoadDefaultPrograms();
 				RefreshItems();
 				SelectItem(0);
 				break;
@@ -463,7 +466,7 @@ wxString KProgramManagerModel::AskSelectIcon(const KProgramEntry& entry) const
 {
 	KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
 	dialog.SetFolder(entry.HasIconPath() ? entry.GetIconPath() : wxEmptyString);
-	dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+	dialog.AddFilter(KxString::Join(Kortex::IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
 	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 	if (dialog.ShowModal())
@@ -480,7 +483,7 @@ bool KProgramManagerModel::AddProgram()
 		KProgramEntry& entry = GetDataVector()->emplace_back();
 		entry.SetName(path.AfterLast('\\').BeforeLast('.'));
 		entry.SetExecutable(path);
-		KProgramManager::GetInstance()->LoadEntryImages(entry);
+		Kortex::KProgramManager::GetInstance()->LoadEntryImages(entry);
 		return true;
 	}
 	return false;
@@ -501,12 +504,12 @@ bool KProgramManagerModel::SaveLoadExpandedValues(bool save, bool value) const
 {
 	if (save)
 	{
-		KProgramManager::GetInstance()->GetOptions().SetAttribute("ShowExpandedValues", value);
+		Kortex::KProgramManager::GetInstance()->GetInstanceOption().SetAttribute("ShowExpandedValues", value);
 		return value;
 	}
 	else
 	{
-		return KProgramManager::GetInstance()->GetOptions().GetAttributeBool("ShowExpandedValues", value);
+		return Kortex::KProgramManager::GetInstance()->GetInstanceOption().GetAttributeBool("ShowExpandedValues", value);
 	}
 }
 
@@ -520,9 +523,9 @@ void KProgramManagerModel::RefreshItems()
 {
 	for (KProgramEntry& entry: GetProgramsList())
 	{
-		if (!KProgramManager::GetInstance()->CheckEntryImages(entry))
+		if (!Kortex::KProgramManager::GetInstance()->CheckEntryImages(entry))
 		{
-			KProgramManager::GetInstance()->LoadEntryImages(entry);
+			Kortex::KProgramManager::GetInstance()->LoadEntryImages(entry);
 		}
 	}
 	KxDataViewVectorListModelEx::RefreshItems();

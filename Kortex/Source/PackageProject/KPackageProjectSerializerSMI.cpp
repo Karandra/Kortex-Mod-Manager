@@ -9,10 +9,9 @@
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
 #include "PackageManager/KPackageManager.h"
-#include "ModManager/KModManager.h"
-#include "GameInstance/KGameInstance.h"
-#include "KVariablesDatabase.h"
-#include "KApp.h"
+#include "GameInstance/IGameInstance.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/ModTagManager.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxShell.h>
@@ -38,7 +37,8 @@ wxString KPackageProjectSerializerSMI::ConvertMultiLine(const wxString& source) 
 }
 wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVariable) const
 {
-	#define SHVAR(s)		"$SH(" ## #s ## ")"
+	using namespace Kortex;
+	using namespace Kortex::Variables;
 
 	wxString oldVariableFixed = sOldVariable;
 
@@ -51,7 +51,7 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 
 	if (oldVariableFixed == "InstallPath" || oldVariableFixed == "Root")
 	{
-		return KVAR(KVAR_VIRTUAL_GAME_DIR);
+		return WrapAsInline(KVAR_VIRTUAL_GAME_DIR);
 	}
 
 	if (oldVariableFixed == "Data" || oldVariableFixed == "DataFilesPath")
@@ -59,54 +59,59 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 		const wxString& id = m_Project->GetTargetProfileID();
 		if (id == "Morrowind")
 		{
-			return KVarExp(KVAR(KVAR_VIRTUAL_GAME_DIR) "\\Data Files");
+			return WrapAsInline(KVAR_VIRTUAL_GAME_DIR) + "\\Data Files";
 		}
 		else
 		{
-			return KVarExp(KVAR(KVAR_VIRTUAL_GAME_DIR) "\\Data");
+			return WrapAsInline(KVAR_VIRTUAL_GAME_DIR) + "\\Data";
 		}
 	}
 
 	if (oldVariableFixed == "SettingsPath")
 	{
-		return KVAR(KVAR_CONFIG_DIR);
+		return WrapAsInline(KVAR_CONFIG_DIR);
 	}
+
+	auto AsShellVar = [](const wxString& name)
+	{
+		return WrapAsInline(name, NS::ShellFolder);
+	};
 
 	if (oldVariableFixed == "SavesPath")
 	{
-		return SHVAR(SHF_SAVED_GAMES);
+		return AsShellVar("SAVED_GAMES");
 	}
 	if (oldVariableFixed == "UserName")
 	{
-		return SHVAR("UserName");
+		return WrapAsInline("USERNAME", NS::Environment);
 	}
 	if (oldVariableFixed == "UserProfile")
 	{
-		return SHVAR(SHF_USER_PROFILE);
+		return AsShellVar("USER_PROFILE");
 	}
 	if (oldVariableFixed == "WindowsFolder")
 	{
-		return SHVAR(SHF_WINDOWS);
+		return AsShellVar("WINDOWS");
 	}
 	if (oldVariableFixed == "SystemDrive")
 	{
-		return SHVAR(SHF_SYSTEMDRIVE);
+		return AsShellVar("SYSTEMDRIVE");
 	}
 	if (oldVariableFixed == "Documents")
 	{
-		return SHVAR(SHF_DOCUMENTS);
+		return AsShellVar("DOCUMENTS");
 	}
 	if (oldVariableFixed == "ProgramFiles")
 	{
-		return SHVAR(SHF_PROGRAMFILES);
+		return AsShellVar("PROGRAMFILES");
 	}
 	if (oldVariableFixed == "ProgramFilesX86")
 	{
-		return SHVAR(SHF_PROGRAMFILES_X86);
+		return AsShellVar("PROGRAMFILES_X86");
 	}
 	if (oldVariableFixed == "ProgramFilesX64")
 	{
-		return SHVAR(SHF_PROGRAMFILES_X64);
+		return AsShellVar("PROGRAMFILES_X64");
 	}
 
 	#undef SHVAR
@@ -114,17 +119,17 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 }
 void KPackageProjectSerializerSMI::AddSite(const wxString& url)
 {
-	KPackageProjectInfo& info = m_Project->GetInfo();
+	Kortex::ModProvider::Store& store = m_Project->GetInfo().GetProviderStore();
 
 	wxString siteName;
-	auto siteInfo = TryParseWebSite(url, &siteName);
-	if (siteInfo.first != -1 && siteInfo.second != KNETWORK_PROVIDER_ID_INVALID && !info.HasWebSite(siteInfo.second))
+	Kortex::ModProvider::Item item = TryParseWebSite(url, &siteName);
+	if (item.IsOK())
 	{
-		info.SetWebSite(siteInfo.second, siteInfo.first);
+		store.TryAddItem(std::move(item));
 	}
 	else
 	{
-		info.GetWebSites().emplace_back(url, KAux::ExtractDomainName(url));
+		store.TryAddWith(siteName, url);
 	}
 }
 void KPackageProjectSerializerSMI::FixRequirementID(KPPRRequirementEntry* entry) const
@@ -244,7 +249,7 @@ void KPackageProjectSerializerSMI::ReadInterface3x4x5x(const wxString& sLogoNode
 		}
 
 		// If main image not in the images list for some reason, add it there
-		if (interfaceConfig.GetMainImageEntry() == NULL)
+		if (interfaceConfig.GetMainImageEntry() == nullptr)
 		{
 			interfaceConfig.GetImages().emplace_back(interfaceConfig.GetMainImage());
 		}
@@ -357,7 +362,7 @@ void KPackageProjectSerializerSMI::ReadInfo3x()
 		wxString discussion = basicInfoNode.GetFirstChildElement("Discussion").GetValue();
 		if (!discussion.IsEmpty())
 		{
-			info.GetWebSites().emplace_back(discussion, "Discussion");
+			info.GetProviderStore().AssignWith("Discussion", discussion);
 		}
 	}
 
@@ -484,14 +489,16 @@ void KPackageProjectSerializerSMI::ReadInfo4x()
 		wxString discussion = basicInfoNode.GetFirstChildElement("Discussion").GetValue();
 		if (!discussion.IsEmpty())
 		{
+			#if 0
 			info.GetWebSites().emplace_back(discussion, "Discussion");
+			#endif
 		}
 
 		// An ID of '---' means no category
 		wxString category = basicInfoNode.GetFirstChildElement("Category").GetValue();
 		if (!category.IsEmpty() && category != "---" && CheckTag(category))
 		{
-			info.GetTags().emplace_back(category);
+			info.GetTagStore().AddTag(Kortex::ModTagManager::DefaultTag(category));
 		}
 	}
 
@@ -681,14 +688,16 @@ void KPackageProjectSerializerSMI::ReadInfo5x()
 		wxString discussion = basicInfoNode.GetFirstChildElement("Discussion").GetValue();
 		if (!discussion.IsEmpty())
 		{
+			#if 0
 			info.GetWebSites().emplace_back(discussion, "Discussion");
+			#endif
 		}
 
 		// An ID of '---' means no category
 		wxString category = basicInfoNode.GetFirstChildElement("Category").GetValue();
 		if (!category.IsEmpty() && category != "---" && CheckTag(category))
 		{
-			info.GetTags().emplace_back(category);
+			info.GetTagStore().AddTag(Kortex::ModTagManager::DefaultTag(category));
 		}
 	}
 
@@ -720,7 +729,7 @@ void KPackageProjectSerializerSMI::ReadFiles5x()
 		// Folder
 		for (KxXMLNode entryNode = fileDataNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 		{
-			KPPFFileEntry* fileEntry = NULL;
+			KPPFFileEntry* fileEntry = nullptr;
 			if (entryNode.GetName() == "Folder")
 			{
 				fileEntry = fileData.AddFolder(new KPPFFolderEntry());

@@ -1,13 +1,13 @@
 #include "stdafx.h"
+#include <Kortex/PluginManager.hpp>
 #include "KPCREntriesListModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageProject/KPackageProject.h"
 #include "PackageManager/KPackageManager.h"
-#include "PluginManager/KPluginManager.h"
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxAuiToolBar.h>
@@ -61,19 +61,19 @@ void KPCREntriesListModel::OnInitControl()
 		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("PackageCreator.PageRequirements.RequiredState"), ColumnID::RequiredState, KxDATAVIEW_CELL_EDITABLE, 150);
 		m_ObjectFunctionEditor = info.GetEditor();
 
-		KxStringVector tChoices;
-		tChoices.push_back(KAux::MakeNoneLabel());
-		tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.ModActive"));
-		tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.ModInactive"));
-		tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileExist"));
-		tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileNotExist"));
+		KxStringVector choices;
+		choices.push_back(KAux::MakeNoneLabel());
+		choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.ModActive"));
+		choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.ModInactive"));
+		choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileExist"));
+		choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileNotExist"));
 
-		if (KPluginManager::HasInstance())
+		if (Kortex::IPluginManager::HasInstance())
 		{
-			tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.PluginActive"));
-			tChoices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.PluginInactive"));
+			choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.PluginActive"));
+			choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.PluginInactive"));
 		}
-		m_ObjectFunctionEditor->SetItems(tChoices);
+		m_ObjectFunctionEditor->SetItems(choices);
 	}
 
 	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("PackageCreator.PageRequirements.Object"), ColumnID::Object, KxDATAVIEW_CELL_EDITABLE, 400);
@@ -418,7 +418,7 @@ void KPCREntriesListModel::OnContextMenuItem(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));

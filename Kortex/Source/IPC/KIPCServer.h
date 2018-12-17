@@ -17,7 +17,7 @@ class KIPCServer: public wxServer, public KxSingleton<KIPCServer>
 
 	private:
 		const bool m_IsCreated = false;
-		KIPCConnection* m_Connection = NULL;
+		KIPCConnection* m_Connection = nullptr;
 
 		bool m_ManualDisablingInProgress = false;
 		std::unique_ptr<KVFSService> m_Service;
@@ -62,7 +62,7 @@ class KIPCServer: public wxServer, public KxSingleton<KIPCServer>
 		}
 		bool IsConnected() const
 		{
-			return m_Connection != NULL;
+			return m_Connection != nullptr;
 		}
 		KIPCConnection* GetConnection() const
 		{

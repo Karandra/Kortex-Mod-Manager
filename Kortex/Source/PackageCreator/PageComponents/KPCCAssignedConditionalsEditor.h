@@ -4,16 +4,15 @@
 #include "PackageProject/KPackageProjectComponents.h"
 #include "PackageProject/KPackageProjectRequirements.h"
 #include "PackageCreator/KPackageCreatorIDTracker.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxStdDialog.h>
 class KxComboBox;
 
 class KPCCAssignedConditionalsEditor: public KPackageCreatorVectorModel<KPPCFlagEntry::Vector>, public KPackageCreatorIDTracker
 {
 	protected:
-		KPPCCondition* m_Condition = NULL;
-		KxDataViewComboBoxEditor* m_LabelEditor = NULL;
-		KxDataViewComboBoxEditor* m_ValueEditor = NULL;
+		KPPCCondition* m_Condition = nullptr;
+		KxDataViewComboBoxEditor* m_LabelEditor = nullptr;
+		KxDataViewComboBoxEditor* m_ValueEditor = nullptr;
 
 	private:
 		virtual void OnInitControl() override;
@@ -63,7 +62,7 @@ class KPCCAssignedConditionalsEditor: public KPackageCreatorVectorModel<KPPCFlag
 			{
 				return &(*GetDataVector())[index];
 			}
-			return NULL;
+			return nullptr;
 		}
 		const KPPCFlagEntry* GetDataEntry(size_t index) const
 		{
@@ -71,7 +70,7 @@ class KPCCAssignedConditionalsEditor: public KPackageCreatorVectorModel<KPPCFlag
 			{
 				return &(*GetDataVector())[index];
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		void SetDataVector();
@@ -82,11 +81,11 @@ class KPCCAssignedConditionalsEditor: public KPackageCreatorVectorModel<KPPCFlag
 class KPCCAssignedConditionalsEditorDialog: public KxStdDialog, public KPCCAssignedConditionalsEditor
 {
 	protected:
-		wxWindow* m_ViewPane = NULL;
-		wxBoxSizer* m_Sizer = NULL;
+		wxWindow* m_ViewPane = nullptr;
+		wxBoxSizer* m_Sizer = nullptr;
 
-		KProgramOptionUI m_WindowOptions;
-		KProgramOptionUI m_ViewOptions;
+		//KProgramOptionAI m_WindowOptions;
+		//KProgramOptionAI m_ViewOptions;
 
 	private:
 		wxWindow* GetDialogMainCtrl() const override

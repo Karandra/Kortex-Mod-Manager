@@ -26,7 +26,7 @@ class KNewModDialog: public KxTextBoxDialog
 class KNewModDialogEx: public KNewModDialog
 {
 	private:
-		wxCheckBox* m_LinkedModCheckBox = NULL;
+		wxCheckBox* m_LinkedModCheckBox = nullptr;
 
 		bool m_IsLinkedMod = false;
 		wxString m_FolderPath;

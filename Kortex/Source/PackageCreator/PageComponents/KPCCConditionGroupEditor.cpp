@@ -4,7 +4,7 @@
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageProject/KPackageProjectComponents.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include "KBitmapSize.h"
 #include <KxFramework/KxString.h>
@@ -569,13 +569,13 @@ void KPCCConditionGroupEditorDialog::OnSelectGlobalOperator(wxCommandEvent& even
 }
 void KPCCConditionGroupEditorDialog::LoadWindowSizes()
 {
-	KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-	KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+	//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+	//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 }
 
 KPCCConditionGroupEditorDialog::KPCCConditionGroupEditorDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, KPPCConditionGroup& conditionGroup)
-	:KPCCConditionGroupEditor(controller, conditionGroup),
-	m_WindowOptions("KPCCConditionGroupEditorDialog", "Window"), m_ViewOptions("KPCCConditionGroupEditorDialog", "View")
+	:KPCCConditionGroupEditor(controller, conditionGroup)
+	//m_WindowOptions("KPCCConditionGroupEditorDialog", "Window"), m_ViewOptions("KPCCConditionGroupEditorDialog", "View")
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -617,8 +617,8 @@ KPCCConditionGroupEditorDialog::~KPCCConditionGroupEditorDialog()
 {
 	IncRef();
 
-	KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
-	KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
+	//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 }
 
 int KPCCConditionGroupEditorDialog::ShowModal()

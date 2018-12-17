@@ -1,14 +1,13 @@
 #include "stdafx.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/PluginManager.hpp>
 #include "KAboutDialog.h"
-#include "KThemeManager.h"
 #include "KMainWindow.h"
 #include "KWorkspace.h"
-#include "KManager.h"
 #include "Archive/KArchive.h"
-#include "SettingsWindow/KSettingsWindowManager.h"
-#include "PluginManager/LOOT API/KLootAPI.h"
 #include "KAux.h"
-#include "KApp.h"
+#include "KBitmapSize.h"
+#include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxHTMLWindow.h>
 #include <KxFramework/KxTreeList.h>
 #include <KxFramework/KxShell.h>
@@ -18,16 +17,95 @@
 #include <KxFramework/KxJSON.h>
 #include "VFS/KVFSService.h"
 
+namespace
+{
+	wxString GetAppLicense()
+	{
+		return Kortex::IApplication::GetInstance()->GetDataFolder();
+	}
+	wxString CreateInfoText(int yearBegin, int yearEnd, const wxString& sourceLink)
+	{
+		const wxChar* formatString = wxS("$T(Generic.Version): $(AppVersion)\n"
+										 "$T(Generic.Revision): $(AppRevision)\n\n\n\n\n\n\n\n\n\n\n"
+
+										 "This program is distributed in the hope that it will be useful, "
+										 "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+										 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
+										 "GNU General Public License for more details.\n\n"
+
+										 "Copyright %1-%2 $(AppDeveloper).\n\n"
+										 "$T(About.Info.SourceCodeLocation) <a href=\"%3\">GitHub</a>."
+		);
+		return KxString::Format(KVarExp(formatString), yearBegin, yearEnd, sourceLink);
+	}
+}
+
+using namespace Kortex;
+
+//////////////////////////////////////////////////////////////////////////
+wxString KAboutInfo::GetLocation() const
+{
+	switch (m_Type)
+	{
+		case Type::App:
+		{
+			return Kortex::IApplication::GetInstance()->GetDataFolder() + wxS("\\About");
+		}
+		case Type::Software:
+		{
+			return Kortex::IApplication::GetInstance()->GetDataFolder() + wxS("\\About\\Software");
+		}
+		case Type::Resource:
+		{
+			return Kortex::IApplication::GetInstance()->GetDataFolder() + wxS("\\About\\Resource");
+		}
+	};
+	return wxEmptyString;
+}
+wxString KAboutInfo::GetLicense() const
+{
+	if (m_License.IsEmpty())
+	{
+		m_License = KxTextFile::ReadToString(GetLocation() + wxS("\\License.txt"));
+
+		// Convert any '<text>' which is not a link to '&lt;text&gt;'
+		{
+			wxRegEx regex("<(?!http:)(.*?)>", wxRE_ADVANCED|wxRE_ICASE);
+			regex.ReplaceAll(&m_License, wxS("\\&lt;\\1\\&gt;"));
+		}
+
+		// Create clickable links
+		{
+			wxRegEx regex("<http:(.*?)>", wxRE_ADVANCED|wxRE_ICASE);
+			regex.ReplaceAll(&m_License, wxS("<a href=\"http:\\1\">http:\\1</a>"));
+		}
+	}
+	return m_License;
+}
+
+//////////////////////////////////////////////////////////////////////////
+KxHTMLWindow* KAboutDialog::CreateHTMLWindow(wxWindow* parent)
+{
+	KxHTMLWindow* window = new KxHTMLWindow(parent, KxID_NONE);
+	wxFont font = GetFont();
+	window->SetStandardFonts(font.GetPointSize(), font.GetFaceName(), font.GetFaceName());
+	window->SetBorders(KLC_HORIZONTAL_SPACING);
+	window->Bind(wxEVT_HTML_LINK_CLICKED, &KAboutDialog::OnLinkClick, this);
+	return window;
+}
+wxSize KAboutDialog::GetLogoSize() const
+{
+	return FromDIP(KBitmapSize().FromSystemIcon().GetSize() * 4);
+}
+
 wxWindow* KAboutDialog::CreateTab_Info()
 {
-	KxHTMLWindow* info = new KxHTMLWindow(m_View, KxID_NONE);
-	wxFont font = m_View->GetFont();
-	info->SetStandardFonts(font.GetPointSize(), font.GetFaceName(), font.GetFaceName());
-	info->SetBorders(KLC_HORIZONTAL_SPACING);
-	info->Bind(wxEVT_HTML_LINK_CLICKED, &KAboutDialog::OnLinkClick, this);
+	KxHTMLWindow* info = CreateHTMLWindow(m_View);
+	info->SetTextValue(CreateInfoText(2018, 2019, "https://github.com/KerberX/Kortex-Mod-Manager"));
+	return info;
 
 	wxString libraries;
-	auto AddLibrary = [&libraries](const char* name, const char* url, const char* extraName = NULL, const char* extraURL = NULL)
+	auto AddLibrary = [&libraries](const char* name, const char* url, const char* extraName = nullptr, const char* extraURL = nullptr)
 	{
 		libraries << KxString::Format("<a href=\"%1\">%2</a>", url, name);
 		if (extraName && extraURL)
@@ -67,19 +145,16 @@ wxWindow* KAboutDialog::CreateTab_Modules()
 	KxTreeList* list = new KxTreeList(m_View, KxID_NONE, KxTreeList::DefaultStyle|wxTL_NO_HEADER);
 	list->GetDataView()->ToggleWindowStyle(wxBORDER_NONE);
 	list->GetDataView()->SetAllowColumnsAutoSize(false);
-	list->SetImageList(KApp::Get().GetImageList());
+	list->SetImageList(&Kortex::IApplication::GetInstance()->GetImageList());
 	list->AddColumn(wxEmptyString, 300);
 	list->AddColumn(wxEmptyString, 75);
 
-	for (KManager* manager: KManager::GetActiveInstances())
+	Kortex::IModule::ForEachModule([list](Kortex::IModule& module)
 	{
-		// ConfigManager used by SettingsWindow should not be shown in this window
-		if (manager != KApp::Get().GetSettingsManager())
-		{
-			KxTreeListItem item = list->GetRoot().Add(KxStringVector{manager->GetName(), manager->GetVersion()});
-			item.SetImage(manager->GetImageID());
-		}
-	}
+		const Kortex::IModuleInfo& info = module.GetModuleInfo();
+		KxTreeListItem item = list->GetRoot().Add(KxStringVector {info.GetName(), info.GetVersion()});
+		item.SetImage(info.GetImageID());
+	});
 
 	// 7-Zip
 	{
@@ -100,15 +175,15 @@ wxWindow* KAboutDialog::CreateTab_Modules()
 	}
 
 	// LOOT API
-	if (KLootAPI* lootAPI = KLootAPI::GetInstance())
+	if (Kortex::PluginManager::LootAPI* lootAPI = Kortex::PluginManager::LootAPI::GetInstance())
 	{
-		KxTreeListItem item = list->GetRoot().Add(KxStringVector{"LOOT API", lootAPI->GetVersion()});
+		KxTreeListItem item = list->GetRoot().Add(KxStringVector{lootAPI->GetLibraryName(), lootAPI->GetLibraryVersion()});
 		item.SetImage(KIMG_LOOT);
 	}
 
 	// WebSocket++
 	{
-		KxTreeListItem item = list->GetRoot().Add(KxStringVector{"WebSocket++", KxWebSocketClient::GetVersion()});
+		KxTreeListItem item = list->GetRoot().Add(KxStringVector{KxWebSocketClient::GetLibraryName(), KxWebSocketClient::GetLibraryName()});
 		item.SetImage(KIMG_WEBSOCKET);
 	}
 
@@ -123,46 +198,13 @@ wxWindow* KAboutDialog::CreateTab_Modules()
 		KxTreeListItem item = list->GetRoot().Add(KxStringVector{KxJSON::GetLibraryName(), KxJSON::GetVersion()});
 		item.SetImage(KIMG_JSON);
 	}
-
 	return list;
 }
-wxWindow* KAboutDialog::CreateTab_Permissions()
+wxWindow* KAboutDialog::CreateTab_License()
 {
-	KxHTMLWindow* info = new KxHTMLWindow(m_View, KxID_NONE);
-	info->Bind(wxEVT_HTML_LINK_CLICKED, &KAboutDialog::OnLinkClick, this);
-	wxFont font = m_View->GetFont();
-	info->SetStandardFonts(font.GetPointSize(), font.GetFaceName(), font.GetFaceName());
-	info->SetBorders(KLC_HORIZONTAL_SPACING);
+	KxHTMLWindow* info = CreateHTMLWindow(m_View);
+	info->SetTextValue(m_AppInfo.GetLicense());
 
-	static const char* sSiteNameTA = "TESALL.RU";
-	static const char* sSiteNameNexus = "NexusMods";
-	static const char* sSiteTA = "http://tesall.ru";
-	static const char* sSiteNexus = "https://www.nexusmods.com";
-	static const char* sDeveloperProfileTA = "http://tesall.ru/user/5527-kerber";
-	static const char* sDownloadPageTA = "http://tesall.ru/files/file/8153-kortex";
-	static const char* sDownloadPageNexus = "https://www.nexusmods.com/skyrim/mods/90868";
-	static const char* sSupportPageTA = "http://tesall.ru/topic/7489-kortex";
-
-	auto MakeLink = [](const auto& name, const auto& url)
-	{
-		return wxString::Format("<a href=\"%s\">%s</a>", url, name);
-	};
-	auto MakePageLink = [](const auto& name, const auto& url, const char* siteName = NULL)
-	{
-		wxString link = wxString::Format("<a href=\"%s\">%s</a>", url, name);
-		if (siteName)
-		{
-			link << " (" << siteName << ")";
-		}
-		return link;
-	};
-
-	wxString firstPart = KTrf("About.Permissions", MakeLink(sSiteNameTA, sSiteTA), sSiteNameTA, MakeLink(KTr("About.Permissions.ContactMethod"), sDeveloperProfileTA));
-	wxString secondPart1 = MakePageLink(KTr("About.Permissions.DownloadPage"), sDownloadPageTA, sSiteNameTA);
-	wxString secondPart2 = MakePageLink(KTr("About.Permissions.DownloadPage"), sDownloadPageNexus, sSiteNameNexus);
-	wxString secondPart3 = MakePageLink(KTr("About.Permissions.SupportPage"), sSupportPageTA, sSiteNameTA);
-
-	info->SetPage(KxString::Format("<div align=\"justify\">%1<br><br>%2<br>%3<br>%4</div>", firstPart, secondPart1, secondPart2, secondPart3));
 	return info;
 }
 
@@ -172,6 +214,7 @@ void KAboutDialog::OnLinkClick(wxHtmlLinkEvent& event)
 }
 
 KAboutDialog::KAboutDialog(wxWindow* parent)
+	:m_AppInfo(KAboutInfo::Type::App)
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, KVarExp("$T(MainMenu.About) $(AppName)"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 	{
@@ -181,20 +224,20 @@ KAboutDialog::KAboutDialog(wxWindow* parent)
 		SetMainIcon(KxICON_NONE);
 		SetWindowResizeSide((wxOrientation)0);
 
-		m_View = new KxAuiNotebook(m_ContentPanel, KxID_NONE);
-		KThemeManager::Get().ProcessWindow(m_View);
+		m_Logo = new KxImageView(m_ContentPanel, KxID_NONE, wxBORDER_NONE);
+		m_Logo->SetBitmap(KGetBitmap("application-logo"));
+		m_Logo->SetScaleMode(KxImageView_ScaleMode::KxIV_SCALE_ASPECT_FIT);
 
-		m_View->AddPage(CreateTab_Info(), KTr("About.Tabs.Info"), true);
-		m_View->AddPage(CreateTab_Modules(), KTr("About.Tabs.Modules"));
-		m_View->AddPage(CreateTab_Permissions(), KTr("About.Tabs.Permissions"));
+		m_View = new KxAuiNotebook(m_ContentPanel, KxID_NONE);
+		IThemeManager::GetActive().ProcessWindow(m_View);
+
+		m_View->AddPage(CreateTab_Info(), KTr("About.Info.Caption"), true);
+		m_View->AddPage(CreateTab_Modules(), KTr("About.Modules.Caption"));
+		m_View->AddPage(CreateTab_License(), KTr("About.License.Caption"));
 
 		PostCreate(wxDefaultPosition);
-		SetLabel(KxString::Format("%1: %2\r\n%3: %4\r\n%5: %6",
-								  KTr("Generic.Version"), KApp::Get().GetAppVersion(),
-								  KTr("Generic.Revision"), KApp::Get().GetVariables().GetVariable("AppRevision"),
-								  KTr("Generic.Developer"), KApp::Get().GetVendorDisplayName())
-		);
-		AdjustWindow(wxDefaultPosition, wxSize(650, 425));
+		GetContentWindowSizer()->Prepend(m_Logo, 0, wxEXPAND)->SetMinSize(GetLogoSize());
+		AdjustWindow(wxDefaultPosition, wxSize(700, 450));
 	}
 }
 KAboutDialog::~KAboutDialog()

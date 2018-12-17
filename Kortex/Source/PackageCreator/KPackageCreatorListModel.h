@@ -13,13 +13,13 @@ class KPackageCreatorListModelDataObject;
 class KPackageCreatorListModel:	public KDataViewListModel, public KxDataViewModelExDragDropEnabled<KPackageCreatorListModelDataObject>
 {
 	protected:
-		KPackageCreatorController* m_Controller = NULL;
+		KPackageCreatorController* m_Controller = nullptr;
 
 	protected:
 		/* ID tracker */
 		virtual KPackageCreatorIDTracker* GetTracker()
 		{
-			return NULL;
+			return nullptr;
 		}
 
 		/* All items menu */

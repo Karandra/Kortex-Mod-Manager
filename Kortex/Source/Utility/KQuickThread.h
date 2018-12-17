@@ -10,7 +10,7 @@ class KQuickThread: public wxThread
 
 	private:
 		EntryType m_Entry;
-		wxEvtHandler* m_EventHandler = NULL;
+		wxEvtHandler* m_EventHandler = nullptr;
 		bool m_EndEventSent = false;
 
 	private:
@@ -19,7 +19,7 @@ class KQuickThread: public wxThread
 		wxThreadError Delete(ExitCode*, wxThreadWait) = delete;
 
 	public:
-		KQuickThread(const EntryType& entryPoint, wxEvtHandler* eventHandler = NULL);
+		KQuickThread(const EntryType& entryPoint, wxEvtHandler* eventHandler = nullptr);
 		virtual ~KQuickThread();
 
 	public:
@@ -29,7 +29,7 @@ class KQuickThread: public wxThread
 
 		bool CanSendEvents() const
 		{
-			return m_EventHandler != NULL;
+			return m_EventHandler != nullptr;
 		}
 		void QueueEvent(wxEvent* event);
 		void QueueEvent(const wxEvent& event);

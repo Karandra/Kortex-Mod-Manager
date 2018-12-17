@@ -219,7 +219,7 @@ class KPPRRequirementsGroup
 		KPPRRequirementEntry* FindEntry(const wxString& id) const;
 		bool HasEntryWithID(const wxString& id) const
 		{
-			return FindEntry(id) != NULL;
+			return FindEntry(id) != nullptr;
 		}
 
 		bool CalcGroupStatus();
@@ -282,7 +282,7 @@ class KPackageProjectRequirements: public KPackageProjectPart
 		KPPRRequirementsGroup* FindGroupWithID(const wxString& id) const;
 		bool HasSetWithID(const wxString& id) const
 		{
-			return FindGroupWithID(id) != NULL;
+			return FindGroupWithID(id) != nullptr;
 		}
 
 		KxStringVector GetFlagNames() const;

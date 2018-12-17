@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KImageProvider.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxFileFinder.h>
@@ -9,11 +9,11 @@ namespace KImageProvider
 {
 	const KxImageList* KGetImageList()
 	{
-		return KApp::Get().GetImageList();
+		return &Kortex::IApplication::GetInstance()->GetImageList();
 	}
 	const KxImageSet* KGetImageSet()
 	{
-		return KApp::Get().GetImageSet();
+		return &Kortex::IApplication::GetInstance()->GetImageSet();
 	}
 
 	wxBitmap KGetBitmap(KImageEnum index)
@@ -56,7 +56,7 @@ namespace KImageProvider
 		};
 		auto Add = [&AddItem](KImageEnum id, const char* name, int type = 0)
 		{
-			wxBitmap img(KxString::Format(wxS("%1\\UI\\%2.%3"), KApp::Get().GetDataFolder(), name, type == 0 ? wxS("png") : wxS("ico")), type == 0 ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_ICO);
+			wxBitmap img(KxString::Format(wxS("%1\\UI\\%2.%3"), Kortex::IApplication::GetInstance()->GetDataFolder(), name, type == 0 ? wxS("png") : wxS("ico")), type == 0 ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_ICO);
 			if (img.IsOk())
 			{
 				AddItem(id, name, img);

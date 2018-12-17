@@ -32,7 +32,7 @@ class KSetEnabledWrapper
 
 	public:
 		KSetEnabledWrapper()
-			:m_Objects((wxWindow*)NULL)
+			:m_Objects((wxWindow*)nullptr)
 		{
 		}
 		template<class T> KSetEnabledWrapper(T* object)

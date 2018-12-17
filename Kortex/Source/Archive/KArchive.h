@@ -76,7 +76,7 @@ class KArchive:
 		static bool UnInit();
 
 	private:
-		SevenZip::SevenZipArchive* m_Impl = NULL;
+		SevenZip::SevenZipArchive* m_Impl = nullptr;
 		wxString m_FilePath;
 		
 		int64_t m_CompressedSize = -1;

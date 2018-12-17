@@ -8,12 +8,17 @@
 #include "KPackageProjectFileData.h"
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
-#include "GameInstance/KInstanceManagement.h"
+#include <Kortex/GameInstance.hpp>
 #include "PackageManager/KPackageManager.h"
-#include "ModManager/KModManager.h"
+#include <Kortex/ModManager.hpp>
+#include <Kortex/NetworkManager.hpp>
+#include <Kortex/ModTagManager.hpp>
 #include "KAux.h"
 #include "KUnsortedUnique.h"
 #include <KxFramework/KxString.h>
+
+using namespace Kortex;
+using namespace Kortex::Network;
 
 namespace
 {
@@ -137,7 +142,7 @@ namespace
 				reqEntry = std::make_unique<KPPRRequirementEntry>();
 
 				// Copy std requirement for current game and set required version from FOMod
-				const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->FindStdReqirement(KApp::Get().GetCurrentGameID());
+				const KPPRRequirementEntry* stdEntry = Kortex::KPackageManager::GetInstance()->FindStdReqirement(Kortex::IGameInstance::GetActive()->GetGameID());
 
 				// This check probably redundant, but just in case
 				if (stdEntry)
@@ -157,7 +162,7 @@ namespace
 				reqEntry = std::make_unique<KPPRRequirementEntry>();
 
 				// There may be no Script Extender
-				const KPPRRequirementEntry* stdEntry = KPackageManager::GetInstance()->GetScriptExtenderRequirement();
+				const KPPRRequirementEntry* stdEntry = Kortex::KPackageManager::GetInstance()->GetScriptExtenderRequirement();
 				if (stdEntry)
 				{
 					*reqEntry = *stdEntry;
@@ -165,7 +170,7 @@ namespace
 				else
 				{
 					// No SE, fill with something meaningful
-					reqEntry->SetName(KGameInstance::GetActive()->GetShortName() + " Script Extender");
+					reqEntry->SetName(Kortex::IGameInstance::GetActive()->GetShortName() + " Script Extender");
 					reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
 				}
 			}
@@ -241,7 +246,7 @@ namespace
 	{
 		// If we have child dependencies read them all to condition group.
 		// Else read them from this node.
-		KPPRRequirementsGroup* requirementsGroup = NULL;
+		KPPRRequirementsGroup* requirementsGroup = nullptr;
 		KxXMLNode childDependenciesNode = dependenciesNode.GetFirstChildElement("dependencies");
 		if (childDependenciesNode.IsOK())
 		{
@@ -268,6 +273,15 @@ namespace
 			});
 		}
 	}
+	template<class T> bool WriteSite(const ModProvider::Store& providerStore, KxXMLNode& node)
+	{
+		if (const ModProvider::Item* item = providerStore.GetItem<T>())
+		{
+			node.SetValue(item->GetURL());
+			return true;
+		}
+		return false;
+	};
 }
 
 wxString KPackageProjectSerializerFOMod::GetDataFolderName(bool withSeparator) const
@@ -311,19 +325,6 @@ wxString KPackageProjectSerializerFOMod::ConvertSelectionMode(KPPCSelectionMode 
 	// Append internal conversion function result to 'Select'
 	return wxS("Select") + KPackageProjectComponents::SelectionModeToString(mode);
 }
-KxStringVector KPackageProjectSerializerFOMod::ConvertTagsArray(const KxStringVector& FOModTags) const
-{
-	KxStringVector outList;
-	const KModTag::Vector& allTags = KModTagsManager::GetInstance()->GetTags();
-	for (const wxString& tagName: FOModTags)
-	{
-		if (CheckTag(tagName))
-		{
-			outList.push_back(tagName);
-		}
-	}
-	return outList;
-}
 
 /* Structurize */
 void KPackageProjectSerializerFOMod::ReadInfo()
@@ -340,44 +341,50 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 		info.SetDescription(ConvertBBCode(KxString::Trim(infoNode.GetFirstChildElement("Description").GetValue(), true, true)));
 
 		// Web-site
+		Kortex::ModProvider::Store& providerStore = info.GetProviderStore();
+
 		int64_t intID = -1;
 		wxString id = infoNode.GetFirstChildElement("Id").GetValue();
 		if (!id.IsEmpty() && id.ToLongLong(&intID))
 		{
-			info.SetWebSite(KNETWORK_PROVIDER_ID_NEXUS, intID);
+			providerStore.TryAddWith<Kortex::Network::NexusProvider>(intID);
 		}
 
 		wxString siteURL = infoNode.GetFirstChildElement("Website").GetValue();
 		if (!siteURL.IsEmpty())
 		{
-			auto AddGenericSite = [&info, &siteURL](const wxString& siteName)
+			auto AddAsGenericSite = [&providerStore, &siteURL](const wxString& siteName)
 			{
-				info.GetWebSites().emplace_back(KLabeledValue(siteURL, siteName.AfterLast('.')));
+				providerStore.TryAddWith(siteName.AfterLast('.'), siteURL);
 			};
 
 			wxString siteName;
-			auto webSite = TryParseWebSite(siteURL, &siteName);
-			if (webSite.first != -1 && webSite.second != KNETWORK_PROVIDER_ID_INVALID)
+			Kortex::ModProvider::Item webSite = TryParseWebSite(siteURL, &siteName);
+			if (webSite.IsOK())
 			{
-				// Site for Nexus already retrieved
-				if (webSite.second == KNETWORK_PROVIDER_ID_NEXUS && intID != -1)
+				// Site for Nexus already retrieved, so add as generic
+				Kortex::INetworkProvider* provider = nullptr;
+				if (webSite.TryGetProvider(provider) && provider == Kortex::Network::NexusProvider::GetInstance())
 				{
-					AddGenericSite(siteName);
+					AddAsGenericSite(siteName);
 				}
 				else
 				{
-					info.SetWebSite(webSite.second, webSite.first);
+					providerStore.AssignItem(std::move(webSite));
 				}
 			}
 			else
 			{
-				AddGenericSite(siteName);
+				AddAsGenericSite(siteName);
 			}
 		}
 
-		// Load and convert tags
-		KAux::LoadStringArray(info.GetTags(), infoNode.GetFirstChildElement("Groups"));
-		info.GetTags() = ConvertTagsArray(info.GetTags());
+		// Load tags
+		Kortex::ModTagStore& tagStore = info.GetTagStore();
+		for (KxXMLNode node = infoNode.GetFirstChildElement("Groups"); node.IsOK(); node = node.GetNextSiblingElement())
+		{
+			tagStore.AddTag(Kortex::ModTagManager::DefaultTag(node.GetValue()));
+		}
 	}
 }
 
@@ -458,14 +465,14 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 		{
 			moduleReqsNode = configRootNode.GetFirstChildElement("moduleDependencies");
 		}
-		KPPRRequirementsGroup* mainReqsGroup = ReadCompositeDependencies(*m_ProjectLoad, moduleReqsNode, NULL, NULL, true, "Main");
+		KPPRRequirementsGroup* mainReqsGroup = ReadCompositeDependencies(*m_ProjectLoad, moduleReqsNode, nullptr, nullptr, true, "Main");
 		if (mainReqsGroup)
 		{
 			// If main requirements group is empty - add current game with no required version
 			if (mainReqsGroup->GetEntries().empty())
 			{
 				KPPRRequirementEntry* entry = mainReqsGroup->GetEntries().emplace_back(new KPPRRequirementEntry()).get();
-				entry->SetID(KApp::Get().GetCurrentGameID());
+				entry->SetID(Kortex::IGameInstance::GetActive()->GetGameID());
 				entry->ConformToTypeDescriptor();
 			}
 			requirements.GetDefaultGroup().push_back(mainReqsGroup->GetID());
@@ -488,7 +495,7 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 				{
 					stepConditionsNode = stepNode.GetFirstChildElement("visible");
 				}
-				ReadCompositeDependencies(*m_ProjectLoad, stepConditionsNode, &step->GetConditionGroup(), NULL, false, step->GetName());
+				ReadCompositeDependencies(*m_ProjectLoad, stepConditionsNode, &step->GetConditionGroup(), nullptr, false, step->GetName());
 			}
 
 			KxXMLNode optionalFileGroupsNode = stepNode.GetFirstChildElement("optionalFileGroups");
@@ -588,7 +595,7 @@ void KPackageProjectSerializerFOMod::ReadConditionalSteps(const KxXMLNode& steps
 		}
 
 		// Conditions
-		KPPRRequirementsGroup* reqSet = ReadCompositeDependencies(*m_ProjectLoad, stepNode.GetFirstChildElement("dependencies"), &step->GetConditionGroup(), NULL);
+		KPPRRequirementsGroup* reqSet = ReadCompositeDependencies(*m_ProjectLoad, stepNode.GetFirstChildElement("dependencies"), &step->GetConditionGroup(), nullptr);
 		if (reqSet)
 		{
 			reqSet->SetID(KxString::Format("ConditionalStep#%1", index));
@@ -603,7 +610,7 @@ KPackageProjectSerializerFOMod::FilePriorityArray KPackageProjectSerializerFOMod
 	{
 		for (KxXMLNode fileDataNode = filesArrayNode.GetFirstChildElement(); fileDataNode.IsOK(); fileDataNode = fileDataNode.GetNextSiblingElement())
 		{
-			KPPFFileEntry* fileEntry = NULL;
+			KPPFFileEntry* fileEntry = nullptr;
 			if (fileDataNode.GetName() == "folder")
 			{
 				fileEntry = new KPPFFolderEntry();
@@ -697,39 +704,38 @@ void KPackageProjectSerializerFOMod::WriteInfo()
 		infoNode.NewElement("Description").SetValue(info.GetDescription(), true);
 	}
 
+	// Sites
 	WriteSites(infoNode, infoNode.NewElement("Website"));
-	KAux::SaveStringArray(info.GetTags(), infoNode.NewElement("Groups"), "element");
+
+	// Tags
+	KxXMLNode tagsNode = infoNode.NewElement("Groups");
+	info.GetTagStore().Visit([&tagsNode](const Kortex::IModTag& tag)
+	{
+		tagsNode.NewElement("element").SetValue(tag.GetID());
+		return true;
+	});
 }
 void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& sitesNode)
 {
 	// FOMod supports only one web-site and field for site ID, so I need to decide which one to write.
-	// The order will be: Nexus -> Id, TESALL -> LoversLab -> other (if any)
+	// The order will be: Nexus (as ID) -> LoversLab -> TESALL -> other (if any)
 
-	const KPackageProjectInfo& info = m_ProjectSave->GetInfo();
-	auto WriteSite = [&info, &sitesNode](KNetworkProviderID index) -> bool
-	{
-		if (info.HasWebSite(index))
-		{
-			sitesNode.SetValue(info.GetWebSite(index).GetValue());
-			return true;
-		}
-		return false;
-	};
+	const ModProvider::Store& providerStore = m_ProjectSave->GetInfo().GetProviderStore();
 
 	// Write Nexus to 'Id'
-	if (info.HasWebSite(KNETWORK_PROVIDER_ID_NEXUS))
+	if (const ModProvider::Item* nexusItem = providerStore.GetItem(NexusProvider::GetInstance()->GetName()))
 	{
-		infoNode.NewElement("Id").SetValue(info.GetWebSiteModID(KNETWORK_PROVIDER_ID_NEXUS));
+		infoNode.NewElement("Id").SetValue(nexusItem->GetModID());
 	}
 
-	if (!(WriteSite(KNETWORK_PROVIDER_ID_TESALL) || WriteSite(KNETWORK_PROVIDER_ID_LOVERSLAB)))
+	if (!(WriteSite<LoversLabProvider>(providerStore, sitesNode) || WriteSite<TESALLProvider>(providerStore, sitesNode)))
 	{
-		// Write first one from list
-		const KLabeledValueArray& tSites = info.GetWebSites();
-		if (!tSites.empty())
+		// Write first one from store
+		providerStore.Visit([&sitesNode](const ModProvider::Item& item)
 		{
-			sitesNode.SetValue(tSites[0].GetValue());
-		}
+			sitesNode.SetValue(item.GetURL());
+			return false;
+		});
 	}
 
 	// Ignore all others sites
@@ -744,7 +750,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 	KxXMLNode configRootNode = m_XML.NewElement("config");
 
 	// Write XML-Schema
-	if (KPackageManager::GetInstance()->GetOptions().GetAttributeBool("FOModUseHTTPSForXMLScheme", true))
+	if (Kortex::KPackageManager::GetInstance()->GetGlobalOption("FOMod").GetAttributeBool("UseHTTPSForXMLScheme", true))
 	{
 		configRootNode.SetAttribute("xmlns:xsi", "https://www.w3.org/2001/XMLSchema-instance");
 		configRootNode.SetAttribute("xsi:noNamespaceSchemaLocation", "https://qconsulting.ca/fo3/ModConfig5.0.xsd");
@@ -774,10 +780,10 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 	}
 	if (titleConfig.HasColor())
 	{
-		wxString sColorValue = titleConfig.GetColor().GetAsString(KxC2S_HTML_SYNTAX).AfterFirst('#');
-		if (!sColorValue.IsEmpty())
+		wxString colorValue = titleConfig.GetColor().GetAsString(KxColor::ToString::HTMLSyntax).AfterFirst('#');
+		if (!colorValue.IsEmpty())
 		{
-			moduleNameNode.SetAttribute("colour", sColorValue);
+			moduleNameNode.SetAttribute("colour", colorValue);
 		}
 	}
 
@@ -1029,7 +1035,7 @@ void KPackageProjectSerializerFOMod::WriteFileData(KxXMLNode& node, const KxStri
 void KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const KxStringVector& requiremetSets)
 {
 	const KPackageProjectRequirements& requirements = m_ProjectSave->GetRequirements();
-	const KPPRRequirementEntry* scriptExtenderReqEntry = KPackageManager::GetInstance()->GetScriptExtenderRequirement();
+	const KPPRRequirementEntry* scriptExtenderReqEntry = Kortex::KPackageManager::GetInstance()->GetScriptExtenderRequirement();
 
 	for (const wxString& id: requiremetSets)
 	{
@@ -1039,7 +1045,7 @@ void KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const Kx
 			node.SetAttribute("operator", group->GetOperator() == KPP_OPERATOR_AND ? "And" : "Or");
 			for (const auto& entry: group->GetEntries())
 			{
-				if (entry->GetID() == KApp::Get().GetCurrentGameID())
+				if (entry->GetID() == Kortex::IGameInstance::GetActive()->GetGameID())
 				{
 					node.NewElement("gameDependency").SetAttribute("version", entry->GetRequiredVersion());
 				}
@@ -1064,9 +1070,21 @@ void KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const Kx
 
 void KPackageProjectSerializerFOMod::InitDataFolderInfo()
 {
-	wxString id = KApp::Get().GetCurrentGameID();
-	m_HasDataFolderAsRoot = id == "Skyrim" || id == "SkyrimSE" || id == "Oblivion" || id == "Fallout3" || id == "FalloutNV" || id == "Fallout4";
-	m_IsMorrowind = id == "Morrowind";
+	using namespace Kortex;
+
+	const GameID id = Kortex::IGameInstance::GetActive()->GetGameID();
+
+	m_IsMorrowind = id == GameIDs::Morrowind;
+	m_HasDataFolderAsRoot =
+		id == GameIDs::Skyrim ||
+		id == GameIDs::SkyrimSE ||
+		id == GameIDs::SkyrimVR ||
+		id == GameIDs::Oblivion ||
+
+		id == GameIDs::Fallout3 ||
+		id == GameIDs::FalloutNV ||
+		id == GameIDs::Fallout4 ||
+		id == GameIDs::Fallout4VR;
 }
 void KPackageProjectSerializerFOMod::Init()
 {

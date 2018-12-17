@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/GameInstance.hpp>
 #include "KInstallWizardRequirementsModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
@@ -6,7 +8,6 @@
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"
-#include "KApp.h"
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxAuiToolBar.h>
@@ -46,7 +47,7 @@ void KInstallWizardRequirementsModel::GetValueByRow(wxAny& data, size_t row, con
 			case ColumnID::Name:
 			{
 				wxString label;
-				if (entry->GetName() != entry->GetID() && entry->GetID() != KApp::Get().GetCurrentGameID())
+				if (entry->GetName() != entry->GetID() && entry->GetID() != Kortex::IGameInstance::GetActive()->GetGameID())
 				{
 					label = wxString::Format("%s (%s)", entry->GetName(), entry->GetID());
 				}
@@ -157,7 +158,7 @@ void KInstallWizardRequirementsModel::OnActivateItem(KxDataViewEvent& event)
 void KInstallWizardRequirementsModel::SetDataVector()
 {
 	m_DataVector.clear();
-	m_RequirementsInfo = NULL;
+	m_RequirementsInfo = nullptr;
 	KDataViewVectorListModel::SetDataVector();
 }
 void KInstallWizardRequirementsModel::SetDataVector(const KPackageProjectRequirements* reqsInfo, const KxStringVector& reqIDs)

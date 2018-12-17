@@ -9,8 +9,8 @@ class KxAuiToolBarEvent;
 class KPCFileDataFolderContentModel: public KPackageCreatorVectorModel<KPPFFolderItemsArray>
 {
 	private:
-		KPPFFolderEntry* m_Folder = NULL;
-		KPackageProjectFileData* m_FileData = NULL;
+		KPPFFolderEntry* m_Folder = nullptr;
+		KPackageProjectFileData* m_FileData = nullptr;
 
 	private:
 		virtual void OnInitControl() override;
@@ -36,8 +36,8 @@ class KPCFileDataFolderContentModel: public KPackageCreatorVectorModel<KPPFFolde
 		void SetProject(KPackageProject& projectData);
 		void SetDataVector()
 		{
-			m_Folder = NULL;
-			KPackageCreatorVectorModel::SetDataVector(NULL);
+			m_Folder = nullptr;
+			KPackageCreatorVectorModel::SetDataVector(nullptr);
 		}
 		void SetDataVector(KPPFFolderEntry* folder)
 		{
@@ -51,7 +51,7 @@ class KPCFileDataFolderContentModel: public KPackageCreatorVectorModel<KPPFFolde
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		KPPFFolderEntryItem* GetDataEntry(size_t index)
 		{
@@ -59,6 +59,6 @@ class KPCFileDataFolderContentModel: public KPackageCreatorVectorModel<KPPFFolde
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 };

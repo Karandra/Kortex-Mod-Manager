@@ -15,9 +15,9 @@ class KPackageCreatorPageBase: public KWorkspace
 		static const int ms_LeftMargin = KLC_HORIZONTAL_SPACING * 4;
 
 	protected:
-		wxBoxSizer* m_MainSizer = NULL;
-		KPackageCreatorWorkspace* m_MainWorkspace = NULL;
-		KPackageCreatorController* m_Controller = NULL;
+		wxBoxSizer* m_MainSizer = nullptr;
+		KPackageCreatorWorkspace* m_MainWorkspace = nullptr;
+		KPackageCreatorController* m_Controller = nullptr;
 
 	public:
 		KPackageCreatorPageBase(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller);
@@ -58,7 +58,7 @@ class KPackageCreatorPageBase: public KWorkspace
 
 		static KxLabel* CreateCaptionLabel(wxWindow* window, const wxString& label);
 		static KxLabel* CreateNormalLabel(wxWindow* window, const wxString& label, bool addColon = true, bool addLine = false);
-		template<class T> static T* AddControlsRow(wxSizer* sizer, const wxString& labelText, T* control, int controlProportion = 1, KxLabel** labelOut = NULL)
+		template<class T> static T* AddControlsRow(wxSizer* sizer, const wxString& labelText, T* control, int controlProportion = 1, KxLabel** labelOut = nullptr)
 		{
 			KxLabel* label = CreateNormalLabel(control->GetParent(), labelText);
 			if (labelOut)

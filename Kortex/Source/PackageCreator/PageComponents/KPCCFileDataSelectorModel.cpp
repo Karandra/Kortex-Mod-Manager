@@ -2,7 +2,7 @@
 #include "KPCCFileDataSelectorModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxDataViewComboBox.h>
@@ -60,7 +60,7 @@ bool KPCCFileDataSelectorModel::SetValueByRow(const wxAny& value, size_t row, co
 
 void KPCCFileDataSelectorModel::SetDataVector()
 {
-	m_FileData = NULL;
+	m_FileData = nullptr;
 	m_DataVector.clear();
 	KPackageCreatorVectorModel::SetDataVector();
 }
@@ -155,7 +155,7 @@ void KPCCFileDataSelectorModelCB::SetDataVector(KxStringVector& data, KPackagePr
 
 //////////////////////////////////////////////////////////////////////////
 KPCCFileDataSelectorModelDialog::KPCCFileDataSelectorModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller)
-	:m_WindowOptions("KPCCFileDataSelectorModelDialog", "Window"), m_ViewOptions("KPCCFileDataSelectorModelDialog", "View")
+	//:m_WindowOptions("KPCCFileDataSelectorModelDialog", "Window"), m_ViewOptions("KPCCFileDataSelectorModelDialog", "View")
 {
 	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL))
 	{
@@ -171,14 +171,14 @@ KPCCFileDataSelectorModelDialog::KPCCFileDataSelectorModelDialog(wxWindow* paren
 		KPCCFileDataSelectorModel::Create(controller, m_ViewPane, sizer);
 
 		AdjustWindow(wxDefaultPosition, wxSize(700, 500));
-		KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-		KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+		//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 	}
 }
 KPCCFileDataSelectorModelDialog::~KPCCFileDataSelectorModelDialog()
 {
 	IncRef();
 
-	KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
-	KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
+	//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 }

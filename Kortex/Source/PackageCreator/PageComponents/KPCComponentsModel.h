@@ -20,13 +20,13 @@ class KPCComponentsModel:
 
 	private:
 		KPCComponentsModelNode::Vector m_Steps;
-		KPackageCreatorController* m_Controller = NULL;
+		KPackageCreatorController* m_Controller = nullptr;
 
 		KxDataViewComboBoxEditor m_TypeDescriptorEditor;
 		KxDataViewComboBoxEditor m_SelectionModeEditor;
 		KxDataViewComboBoxEditor m_ImagesEditor;
 		KxDataViewTextEditor m_TextEditor;
-		KxImageView* m_EntryImageView = NULL;
+		KxImageView* m_EntryImageView = nullptr;
 
 	protected:
 		virtual void OnInitControl() override;

@@ -200,7 +200,7 @@ class KBethesdaArchive:
 		using FileItem = KBethesdaArchiveNS::NamedRecordWithData<FileRecord, FileData>;
 
 	public:
-		static uint64_t HashFilePath(const wxString& sourcePath, bool isFolderPath, wxString* correctedPath = NULL);
+		static uint64_t HashFilePath(const wxString& sourcePath, bool isFolderPath, wxString* correctedPath = nullptr);
 
 	private:
 		KxFileStream m_Stream;
@@ -228,7 +228,7 @@ class KBethesdaArchive:
 			{
 				return &m_DirectoryRecods[index];
 			}
-			return NULL;
+			return nullptr;
 		}
 		const FileItem* GetFileRecord(size_t index) const
 		{
@@ -236,7 +236,7 @@ class KBethesdaArchive:
 			{
 				return &m_FileRecords[index];
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		bool OpenArchive(const wxString& filePath);

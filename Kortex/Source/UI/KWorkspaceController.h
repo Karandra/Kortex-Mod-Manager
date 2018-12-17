@@ -3,7 +3,6 @@
 #include "KImageProvider.h"
 class KMainWindow;
 class KWorkspace;
-class KApp;
 
 wxDECLARE_EVENT(KEVT_CONTROLLER_CHANGED, wxNotifyEvent);
 wxDECLARE_EVENT(KEVT_CONTROLLER_SAVED, wxNotifyEvent);
@@ -13,10 +12,9 @@ wxDECLARE_EVENT(KEVT_CONTROLLER_SELECTED, wxNotifyEvent);
 class KWorkspaceController: public wxEvtHandler
 {
 	private:
-		KWorkspace* m_Workspace = NULL;
+		KWorkspace* m_Workspace = nullptr;
 
 	protected:
-		KApp& GetApp();
 		virtual void ResetView() {};
 
 		virtual wxString GetSaveConfirmationCaption() const;

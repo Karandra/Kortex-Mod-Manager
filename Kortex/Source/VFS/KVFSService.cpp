@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KVFSService.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxSystem.h>
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxFile.h>
@@ -49,7 +49,7 @@ wxString KVFSService::GetStatusCodeMessage(int code)
 
 wxString KVFSService::InitLibraryPath()
 {
-	wxString path = KApp::Get().GetDataFolder() + "\\VFS\\";
+	wxString path = Kortex::IApplication::GetInstance()->GetDataFolder() + "\\VFS\\";
 	#if defined _WIN64
 	path += "KxVirtualFileSystem x64.dll";
 	#else
@@ -59,7 +59,7 @@ wxString KVFSService::InitLibraryPath()
 }
 wxString KVFSService::InitDriverPath()
 {
-	wxString path = KApp::Get().GetDataFolder() + "\\VFS\\Drivers\\";
+	wxString path = Kortex::IApplication::GetInstance()->GetDataFolder() + "\\VFS\\Drivers\\";
 	if (KxSystem::IsWindows10OrGreater())
 	{
 		path += "Win10";
@@ -94,13 +94,13 @@ wxString KVFSService::InitDriverPath()
 void KVFSService::UnInit()
 {
 	delete m_ServiceImpl;
-	m_ServiceImpl = NULL;
+	m_ServiceImpl = nullptr;
 }
 
 KVFSService::KVFSService()
 	:m_Name("KortexVFS"),
-	m_DisplayName(wxString::Format("%s VFS Service", KApp::Get().GetAppDisplayName())),
-	m_Description(wxString::Format("The VFS service provides support for a virtual file system for %s", KApp::Get().GetAppDisplayName())),
+	m_DisplayName(KxString::Format("%1 VFS Service", Kortex::IApplication::GetInstance()->GetName())),
+	m_Description(KxString::Format("The VFS service provides support for a virtual file system for %1", Kortex::IApplication::GetInstance()->GetName())),
 	m_LibraryPath(InitLibraryPath()),
 	m_DriverPath(InitDriverPath())
 {
@@ -120,7 +120,7 @@ KVFSService::~KVFSService()
 }
 bool KVFSService::Init()
 {
-	if (m_ServiceImpl == NULL)
+	if (m_ServiceImpl == nullptr)
 	{
 		m_ServiceImpl = new KxVFSService(m_Name);
 		return m_ServiceImpl->IsOK();
@@ -130,7 +130,7 @@ bool KVFSService::Init()
 
 bool KVFSService::IsOK() const
 {
-	return m_LibraryHandle != NULL && !m_DriverPath.IsEmpty();
+	return m_LibraryHandle != nullptr && !m_DriverPath.IsEmpty();
 }
 
 KxVFSService* KVFSService::GetServiceImpl() const
@@ -139,7 +139,7 @@ KxVFSService* KVFSService::GetServiceImpl() const
 }
 bool KVFSService::IsReady() const
 {
-	return IsOK() && (m_ServiceImpl != NULL && m_ServiceImpl->IsStarted());
+	return IsOK() && (m_ServiceImpl != nullptr && m_ServiceImpl->IsStarted());
 }
 bool KVFSService::IsStarted() const
 {

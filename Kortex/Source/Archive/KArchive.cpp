@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KArchive.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxComparator.h>
@@ -42,7 +42,7 @@ namespace
 		using TCharType = SevenZip::TCharType;
 
 		private:
-			wxEvtHandler* m_EvtHandler = NULL;
+			wxEvtHandler* m_EvtHandler = nullptr;
 			int64_t m_LastMajor = 0;
 			int64_t m_TotalSize = 0;
 			wxString m_CurrentFile;
@@ -272,7 +272,6 @@ namespace FormatNS
 		return SZEnum::Unknown;
 	}
 }
-
 namespace MethodNS
 {
 	using KAEnum = KArchiveNS::Method;
@@ -328,7 +327,7 @@ namespace MethodNS
 
 wxString KArchive::GetLibraryPath()
 {
-	wxString path = KApp::Get().GetDataFolder();
+	wxString path = Kortex::IApplication::GetInstance()->GetDataFolder();
 	#if defined _WIN64
 	path += "\\7z x64.dll";
 	#else
@@ -376,7 +375,7 @@ void KArchive::CloseArchive()
 	m_FilePath.clear();
 	m_CompressedSize = -1;
 	m_OriginalSize = -1;
-	m_Impl = NULL;
+	m_Impl = nullptr;
 }
 
 KArchive::KArchive()
@@ -394,7 +393,7 @@ KArchive::~KArchive()
 // KxIArchive
 bool KArchive::IsOK() const
 {
-	return m_Impl != NULL;
+	return m_Impl != nullptr;
 }
 bool KArchive::Open(const wxString& filePath)
 {
@@ -445,7 +444,7 @@ void* KArchive::FindFirstFile(const wxString& filter, KxFileItem& fileItem) cons
 	{
 		return new SearchData(filter, nextIndex);
 	}
-	return NULL;
+	return nullptr;
 }
 bool KArchive::FindNextFile(void* handle, KxFileItem& item) const
 {

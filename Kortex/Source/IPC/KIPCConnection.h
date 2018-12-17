@@ -18,8 +18,8 @@ class KIPCConnection: public wxConnection
 		}
 
 	private:
-		KIPCServer* m_Server = NULL;
-		KIPCClient* m_Client = NULL;
+		KIPCServer* m_Server = nullptr;
+		KIPCClient* m_Client = nullptr;
 
 	private:
 		using SendFunctionType = bool(KIPCConnection::*)(const wxString&, const void*, size_t, wxIPCFormat);
@@ -44,8 +44,8 @@ class KIPCConnection: public wxConnection
 		virtual bool OnStopAdvise(const wxString& topic, const wxString& item) override;
 
 	public:
-		KIPCConnection(KIPCServer* server = NULL);
-		KIPCConnection(KIPCClient* client = NULL);
+		KIPCConnection(KIPCServer* server = nullptr);
+		KIPCConnection(KIPCClient* client = nullptr);
 		virtual ~KIPCConnection();
 
 	public:

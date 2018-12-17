@@ -32,7 +32,7 @@ class KPCComponentsModelNode
 
 	private:
 		std::variant<KPPCStep*, KPPCGroup*, KPPCEntry*, EntryID> m_Value;
-		KPCComponentsModelNode* m_Parent = NULL;
+		KPCComponentsModelNode* m_Parent = nullptr;
 		Vector m_Children;
 
 	public:
@@ -57,17 +57,17 @@ class KPCComponentsModelNode
 		KPPCStep* GetStep() const
 		{
 			auto value = std::get_if<KPPCStep*>(&m_Value);
-			return value ? *value : NULL;
+			return value ? *value : nullptr;
 		}
 		KPPCGroup* GetGroup() const
 		{
 			auto value = std::get_if<KPPCGroup*>(&m_Value);
-			return value ? *value : NULL;
+			return value ? *value : nullptr;
 		}
 		KPPCEntry* GetEntry() const
 		{
 			auto value = std::get_if<KPPCEntry*>(&m_Value);
-			return value ? *value : NULL;
+			return value ? *value : nullptr;
 		}
 
 		bool IsEntryItem() const
@@ -109,7 +109,7 @@ class KPCComponentsModelNode
 
 		bool HasParent() const
 		{
-			return m_Parent != NULL;
+			return m_Parent != nullptr;
 		}
 		KPCComponentsModelNode* GetParent() const
 		{

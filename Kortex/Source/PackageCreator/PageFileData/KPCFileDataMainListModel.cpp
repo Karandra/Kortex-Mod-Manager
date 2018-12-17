@@ -4,7 +4,7 @@
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageCreator/KPackageCreatorController.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KOperationWithProgress.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileOperationEvent.h>
@@ -305,7 +305,7 @@ void KPCFileDataMainListModel::OnContextMenu(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));

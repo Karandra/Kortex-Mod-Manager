@@ -3,11 +3,11 @@
 #include "KPackageManager.h"
 #include "KModPackage.h"
 #include "UI/KMainWindow.h"
-#include "GameInstance/KGameInstance.h"
+#include "GameInstance/IGameInstance.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "KOperationWithProgress.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxHTMLWindow.h>
@@ -260,7 +260,7 @@ void KPackageManagerListModel::OnContextMenu(KxDataViewEvent& event)
 						outPath += '\\' + entry->GetName();
 					}
 
-					KPackageManager::ExtractAcrhiveThreaded(GetViewTLW(), entry->GetFullPath(), outPath);
+					Kortex::KPackageManager::ExtractAcrhiveThreaded(GetViewTLW(), entry->GetFullPath(), outPath);
 				}
 				break;
 			}
@@ -398,7 +398,7 @@ void KPackageManagerListModel::Navigate(const wxString& sNavigatePath)
 	RefreshItems();
 
 	// Not the best place but whatever
-	m_AutoShowPackageInfo = KPackageManager::GetInstance()->GetOptions().GetAttributeBool("AutoShowPackageInfo", true);
+	m_AutoShowPackageInfo = Kortex::KPackageManager::GetInstance()->GetGlobalOption().GetAttributeBool("AutoShowPackageInfo", true);
 }
 void KPackageManagerListModel::NavigateUp()
 {

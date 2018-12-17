@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxPanel.h>
@@ -17,24 +16,24 @@ class KPackageManagerListModel;
 class KPackageManagerWorkspace: public KWorkspace, public KxSingletonPtr<KPackageManagerWorkspace>
 {
 	private:
-		KProgramOptionUI m_PackageListViewOptions;
-		KProgramOptionUI m_MainOptions;
+		//KProgramOptionAI m_PackageListViewOptions;
+		//KProgramOptionAI m_MainOptions;
 
 		/* Layout */
-		wxBoxSizer* m_MainSizer = NULL;
-		wxBoxSizer* m_ViewSizer = NULL;
-		KxSplitterWindow* m_Splitter = NULL;
+		wxBoxSizer* m_MainSizer = nullptr;
+		wxBoxSizer* m_ViewSizer = nullptr;
+		KxSplitterWindow* m_Splitter = nullptr;
 
 		/* View */
-		wxWindow* m_ViewPane = NULL;
-		KxAuiToolBar* m_ToolBar = NULL;
-		KxSearchBox* m_SearchBox = NULL;
-		KPackageManagerListModel* m_MainView = NULL;
+		wxWindow* m_ViewPane = nullptr;
+		KxAuiToolBar* m_ToolBar = nullptr;
+		KxSearchBox* m_SearchBox = nullptr;
+		KPackageManagerListModel* m_MainView = nullptr;
 
 		/* Info pane */
-		KxSplitterWindow* m_InfoPane = NULL;
-		KxImageView* m_InfoImage = NULL;
-		KxHTMLWindow* m_InfoDescription = NULL;
+		KxSplitterWindow* m_InfoPane = nullptr;
+		KxImageView* m_InfoImage = nullptr;
+		KxHTMLWindow* m_InfoDescription = nullptr;
 
 	public:
 		KPackageManagerWorkspace(KMainWindow* mainWindow);

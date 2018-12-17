@@ -7,24 +7,23 @@
 #include "PageRequirements/KPCREntriesListModel.h"
 #include "PageComponents/KPCCRequirementsSelectorModel.h"
 #include "PackageManager/KPackageManager.h"
-#include "KThemeManager.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxComboBox.h>
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 
 KPackageCreatorPageRequirements::KPackageCreatorPageRequirements(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller)
-	:KPackageCreatorPageBase(mainWorkspace, controller),
-	m_MainOptions(this, "MainUI"), m_GroupsModelOptions(this, "GroupsListView"), m_EntriesModelOptions(this, "EntriesListView")
+	:KPackageCreatorPageBase(mainWorkspace, controller)
+	//m_MainOptions(this, "MainUI"), m_GroupsModelOptions(this, "GroupsListView"), m_EntriesModelOptions(this, "EntriesListView")
 {
 }
 KPackageCreatorPageRequirements::~KPackageCreatorPageRequirements()
 {
 	if (IsWorkspaceCreated())
 	{
-		KProgramOptionSerializer::SaveDataViewLayout(m_GroupsModel->GetView(), m_GroupsModelOptions);
-		KProgramOptionSerializer::SaveDataViewLayout(m_EntriesModel->GetView(), m_EntriesModelOptions);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_GroupsModel->GetView(), m_GroupsModelOptions);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_EntriesModel->GetView(), m_EntriesModelOptions);
 
 		m_GroupsModel->SetDataVector();
 		m_EntriesModel->SetDataVector();
@@ -37,8 +36,8 @@ bool KPackageCreatorPageRequirements::OnCreateWorkspace()
 	CreateEntriesControls();
 	CreateStdReqsControls();
 
-	KProgramOptionSerializer::LoadDataViewLayout(m_GroupsModel->GetView(), m_GroupsModelOptions);
-	KProgramOptionSerializer::LoadDataViewLayout(m_EntriesModel->GetView(), m_EntriesModelOptions);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_GroupsModel->GetView(), m_GroupsModelOptions);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_EntriesModel->GetView(), m_EntriesModelOptions);
 	return true;
 }
 KPackageProjectRequirements& KPackageCreatorPageRequirements::GetProjectRequirements() const
@@ -133,7 +132,7 @@ void KPackageCreatorPageRequirements::LoadStdReqs()
 	m_StdReqs_Categories->AddItem(KVarExp("<$T(Generic.All)>"));
 
 	std::unordered_set<wxString> categoriesSet;
-	for (const auto& entry: KPackageManager::GetInstance()->GetStdRequirements())
+	for (const auto& entry: Kortex::KPackageManager::GetInstance()->GetStdRequirements())
 	{
 		if (categoriesSet.emplace(entry->GetCategory()).second)
 		{
@@ -157,7 +156,7 @@ void KPackageCreatorPageRequirements::OnSelectStdReqCategory(wxCommandEvent& eve
 
 		m_StdReqs_List->Clear();
 
-		for (const auto& entry: KPackageManager::GetInstance()->GetStdRequirements())
+		for (const auto& entry: Kortex::KPackageManager::GetInstance()->GetStdRequirements())
 		{
 			if (requestedCategory.IsEmpty() || requestedCategory == entry->GetCategory())
 			{

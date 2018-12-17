@@ -8,7 +8,7 @@
 #include "PageComponents/KPCCConditionalStepsModel.h"
 #include "PageComponents/KPCComponentsModel.h"
 #include "UI/KImageViewerDialog.h"
-#include "KThemeManager.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxLabel.h>
@@ -66,15 +66,15 @@ wxString KPackageCreatorPageComponents::ConditionGroupToString(const KPPCConditi
 }
 
 KPackageCreatorPageComponents::KPackageCreatorPageComponents(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller)
-	:KPackageCreatorPageBase(mainWorkspace, controller),
-	m_MainOptions(this, "MainUI"), m_ComponentsOptions(this, "ComponentsView")
+	:KPackageCreatorPageBase(mainWorkspace, controller)
+	//m_MainOptions(this, "MainUI"), m_ComponentsOptions(this, "ComponentsView")
 {
 }
 KPackageCreatorPageComponents::~KPackageCreatorPageComponents()
 {
 	if (IsWorkspaceCreated())
 	{
-		KProgramOptionSerializer::SaveDataViewLayout(m_ComponentsModel->GetView(), m_ComponentsOptions);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_ComponentsModel->GetView(), m_ComponentsOptions);
 	}
 }
 bool KPackageCreatorPageComponents::OnCreateWorkspace()
@@ -82,7 +82,7 @@ bool KPackageCreatorPageComponents::OnCreateWorkspace()
 	CreateComponentsView();
 	CreateMiscControls();
 
-	KProgramOptionSerializer::LoadDataViewLayout(m_ComponentsModel->GetView(), m_ComponentsOptions);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_ComponentsModel->GetView(), m_ComponentsOptions);
 	return true;
 }
 KPackageProjectComponents& KPackageCreatorPageComponents::GetProjectComponents() const

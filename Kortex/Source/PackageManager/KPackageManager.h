@@ -1,73 +1,103 @@
 #pragma once
 #include "stdafx.h"
-#include "KManager.h"
+#include "Application/IModule.h"
+#include "Application/IManager.h"
 #include "PackageProject/KPackageProjectDefs.h"
 #include "PackageProject/KPackageProjectRequirements.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxVersion.h>
 #include <KxFramework/KxSingleton.h>
 class KxXMLNode;
 
-class KPackageManager: public KManager, public KxSingletonPtr<KPackageManager>
+namespace Kortex
 {
-	public:
-		static const KxStringVector& GetSuppoptedExtensions();
-		static const wxString& GetSuppoptedExtensionsFilter();
-		static void ExtractAcrhiveThreaded(wxWindow* window, const wxString& filePath, const wxString& outPath);
+	namespace PackageManager::Internal
+	{
+		extern const SimpleManagerInfo TypeInfo;
+	}
 
-	public:
-		static bool IsPathAbsolute(const wxString& path);
-		static wxString GetRequirementFilePath(const KPPRRequirementEntry* entry);
-		static KPPReqState CheckRequirementState(const KPPRRequirementEntry* entry);
-		static KxVersion GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry);
-		static KxVersion GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry);
-		static KxVersion GetRequirementVersion(const KPPRRequirementEntry* entry);
+	class KPackageManager:
+		public ManagerWithTypeInfo<IManager, SimpleManagerInfo, PackageManager::Internal::TypeInfo>,
+		public KxSingletonPtr<KPackageManager>
+	{
+		friend class KPackageModule;
 
-	private:
-		KProgramOptionUI m_Options;
-		KPPRRequirementsGroup m_StdEntries;
+		public:
+			static const KxStringVector& GetSuppoptedExtensions();
+			static const wxString& GetSuppoptedExtensionsFilter();
+			static void ExtractAcrhiveThreaded(wxWindow* window, const wxString& filePath, const wxString& outPath);
 
-	private:
-		void LoadStdRequirements();
-		virtual void OnInit() override;
+		public:
+			static bool IsPathAbsolute(const wxString& path);
+			static wxString GetRequirementFilePath(const KPPRRequirementEntry* entry);
+			static KPPReqState CheckRequirementState(const KPPRRequirementEntry* entry);
+			static KxVersion GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry);
+			static KxVersion GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry);
+			static KxVersion GetRequirementVersion(const KPPRRequirementEntry* entry);
 
-	public:
-		KPackageManager();
-		virtual ~KPackageManager();
+		private:
+			KPPRRequirementsGroup m_StdEntries;
 
-	public:
-		virtual wxString GetID() const override;
-		virtual wxString GetName() const override;
-		virtual wxString GetVersion() const override;
-		virtual KImageEnum GetImageID() const override
-		{
-			return KIMG_BOX;
-		}
+		private:
+			void LoadStdRequirements();
 
-	public:
-		KProgramOption& GetOptions()
-		{
-			return m_Options;
-		}
+			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
+			virtual void OnInit() override;
+			virtual void OnExit() override;
 
-		const KPPRRequirementEntry::Vector& GetStdRequirements() const
-		{
-			return m_StdEntries.GetEntries();
-		}
-		const KPPRRequirementEntry* FindStdReqirement(const wxString& id) const
-		{
-			return m_StdEntries.FindEntry(id);
-		}
-		const KPPRRequirementEntry* GetScriptExtenderRequirement() const;
-		bool HasScriptExtender() const
-		{
-			return GetScriptExtenderRequirement() != NULL;
-		}
-		bool IsStdReqirement(const wxString& id) const
-		{
-			return FindStdReqirement(id) != NULL;
-		}
+		public:
+			KPackageManager();
+			virtual ~KPackageManager();
 
-		wxString GetPackagesFolder() const;
-};
+		public:
+			const KPPRRequirementEntry::Vector& GetStdRequirements() const
+			{
+				return m_StdEntries.GetEntries();
+			}
+			const KPPRRequirementEntry* FindStdReqirement(const wxString& id) const
+			{
+				return m_StdEntries.FindEntry(id);
+			}
+			const KPPRRequirementEntry* GetScriptExtenderRequirement() const;
+			bool HasScriptExtender() const
+			{
+				return GetScriptExtenderRequirement() != nullptr;
+			}
+			bool IsStdReqirement(const wxString& id) const
+			{
+				return FindStdReqirement(id) != nullptr;
+			}
+
+			wxString GetPackagesFolder() const;
+	};
+}
+
+namespace Kortex
+{
+	namespace Internal
+	{
+		extern const SimpleModuleInfo PackagesModuleTypeInfo;
+	};
+
+	class KPackageModule:
+		public ModuleWithTypeInfo<IModule, SimpleModuleInfo, Internal::PackagesModuleTypeInfo>,
+		public KxSingletonPtr<KPackageModule>
+	{
+		private:
+			KPackageManager m_PackageManager;
+
+		protected:
+			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& node) override;
+			virtual void OnInit() override;
+			virtual void OnExit() override;
+
+		public:
+			KPackageModule();
+
+		public:
+			virtual ManagerRefVector GetManagers() override
+			{
+				return ToManagersList(m_PackageManager);
+			}
+	};
+}

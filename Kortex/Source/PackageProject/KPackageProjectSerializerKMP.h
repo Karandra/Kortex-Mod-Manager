@@ -8,8 +8,8 @@ class KPackageProjectSerializerKMP: public KPackageProjectSerializer
 {
 	private:
 		const bool m_AsProject = false;
-		KPackageProject* m_ProjectLoad = NULL;
-		const KPackageProject* m_ProjectSave = NULL;
+		KPackageProject* m_ProjectLoad = nullptr;
+		const KPackageProject* m_ProjectSave = nullptr;
 		wxString m_Data;
 		KxXMLDocument m_XML;
 

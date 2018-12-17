@@ -1,8 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "KApp.h"
+#include "Application/Options/Option.h"
 #include "KImageProvider.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxFrame.h>
 #include <KxFramework/KxPanel.h>
@@ -15,11 +14,17 @@
 #include <KxFramework/KxStatusBarEx.h>
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxColor.h>
-class KGameInstance;
 class KWorkspace;
-class KVFSEvent;
 
-class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
+namespace Kortex
+{
+	class VirtualFileSystemEvent;
+}
+
+class KMainWindow:
+	public KxFrame,
+	public KxSingletonPtr<KMainWindow>,
+	public Kortex::Application::WithOptions<KMainWindow>
 {
 	public:
 		typedef std::unordered_map<wxString, KWorkspace*> WorkspaceInstancesMapType;
@@ -33,36 +38,34 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		template<class T> static KxAuiToolBarItem* AddToolBarButton(KxAuiToolBar* toolBar, KImageEnum imageID = KIMG_NONE)
 		{
 			KxAuiToolBarItem* button = toolBar->AddTool(wxEmptyString, KGetBitmap(imageID), wxITEM_NORMAL);
-			button->Bind(KxEVT_AUI_TOOLBAR_CLICK, &T::OnToolBarButton, T::GetInstance());
+			button->Bind(KxEVT_AUI_TOOLBAR_CLICK, &T::CallOnToolBarButton, T::GetInstance());
 			T::GetInstance()->OnSetToolBarButton(button);
 			return button;
 		}
 
 	private:
-		wxBoxSizer* m_MainSizer = NULL;
-		wxBoxSizer* m_ToolBarSizer = NULL;
+		wxBoxSizer* m_MainSizer = nullptr;
+		wxBoxSizer* m_ToolBarSizer = nullptr;
 
 		/* StatusBar */
-		KxStatusBarEx* m_StatusBar = NULL;
+		KxStatusBarEx* m_StatusBar = nullptr;
 		
 		/* ToolBar */
-		KxAuiToolBar* m_ToolBar = NULL;
-		KxAuiToolBarItem* m_ToolBar_MainMenu = NULL;
+		KxAuiToolBar* m_ToolBar = nullptr;
+		KxAuiToolBarItem* m_ToolBar_MainMenu = nullptr;
 		int m_ToolBar_InsertionIndex = 0;
 
-		KxAuiToolBar* m_QuickToolBar = NULL;
-		KxAuiToolBarItem* m_QuickToolBar_QuickSettingsMenu = NULL;
-		KxAuiToolBarItem* m_QuickToolBar_Help = NULL;
+		KxAuiToolBar* m_QuickToolBar = nullptr;
+		KxAuiToolBarItem* m_QuickToolBar_QuickSettingsMenu = nullptr;
+		KxAuiToolBarItem* m_QuickToolBar_Help = nullptr;
 
 		/* Workspaces */
 		WorkspaceInstancesMapType m_WorkspaceInstances;
-		wxSimplebook* m_WorkspaceContainer = NULL;
+		wxSimplebook* m_WorkspaceContainer = nullptr;
 		bool m_HasCurrentWorkspace = false;
 
 		/* Loadable managers menu */
-		KxMenu* m_ManagersMenu = NULL;
-
-		KProgramOptionUI m_WindowOptions;
+		KxMenu* m_ManagersMenu = nullptr;
 
 	private:
 		void CreateToolBar();
@@ -79,7 +82,7 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 					long style = DefaultStyle
 		);
 
-		void CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace = NULL);
+		void CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace = nullptr);
 		void CreateMainWorkspaces();
 		void CreateMainMenu(KxMenu& mainMenu);
 
@@ -88,15 +91,15 @@ class KMainWindow: public KxFrame, public KxSingletonPtr<KMainWindow>
 		void OnWindowClose(wxCloseEvent& event);
 		void OnChangeInstance(KxMenuEvent& event);
 
-		void OnVFSToggled(KVFSEvent& event);
-		void OnPluggableManagersMenuVFSToggled(KVFSEvent& event);
+		void OnVFSToggled(Kortex::VirtualFileSystemEvent& event);
+		void OnPluggableManagersMenuVFSToggled(Kortex::VirtualFileSystemEvent& event);
 	
 	public:
 		KMainWindow();
 		virtual ~KMainWindow();
 
 	private:
-		bool SwitchWorkspaceHelper(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace = NULL);
+		bool SwitchWorkspaceHelper(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace = nullptr);
 		void ProcessSwitchWorkspace(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace);
 		KWorkspace* DoAddWorkspace(KWorkspace* workspace);
 

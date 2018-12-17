@@ -1,9 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "GameInstance/KGameID.h"
+#include "GameInstance/GameID.h"
 #include <KxFramework/KxComboBoxDialog.h>
-class KGameInstance;
-class KGameInstance;
 class KxPanel;
 class KxButton;
 class KxTextBox;
@@ -11,74 +9,84 @@ class KxListBox;
 class KxBitmapComboBox;
 class KxSplitterWindow;
 
-class KInstanceSelectionDialog: public KxComboBoxDialog
+namespace Kortex
 {
-	private:
-		KxSplitterWindow* m_Splitter = NULL;
+	class IGameInstance;
 
-		KxPanel* m_LeftPane = NULL;
-		wxBoxSizer* m_LeftSizer = NULL;
-		KxBitmapComboBox* m_TemplatesList = NULL;
-		KxListBox* m_InstancesList = NULL;
+	class KInstanceSelectionDialog: public KxComboBoxDialog
+	{
+		private:
+			KxSplitterWindow* m_Splitter = nullptr;
 
-		KxPanel* m_RightPane = NULL;
-		wxBoxSizer* m_RightSizer = NULL;
-		KxTextBox* m_TextBox = NULL;
+			KxPanel* m_LeftPane = nullptr;
+			wxBoxSizer* m_LeftSizer = nullptr;
+			KxBitmapComboBox* m_TemplatesList = nullptr;
+			KxListBox* m_InstancesList = nullptr;
 
-		KxButton* m_OK = NULL;
-		KxButton* m_Create = NULL;
-		KxButton* m_Remove = NULL;
-		KxButton* m_CreateShortcut = NULL;
+			KxPanel* m_RightPane = nullptr;
+			wxBoxSizer* m_RightSizer = nullptr;
+			KxTextBox* m_TextBox = nullptr;
 
-	private:
-		KGameID m_NewGameID;
-		wxString m_NewInstance;
-		wxString m_NewGameRoot;
+			KxButton* m_OK = nullptr;
+			KxButton* m_Create = nullptr;
+			KxButton* m_Remove = nullptr;
+			KxButton* m_CreateShortcut = nullptr;
 
-	private:
-		bool Create(wxWindow* parent,
-					wxWindowID id,
-					const wxString& caption,
-					const wxPoint & pos = wxDefaultPosition,
-					const wxSize & size = wxDefaultSize,
-					int buttons = DefaultButtons,
-					long style = DefaultStyle
-		);
+		private:
+			GameID m_NewGameID;
+			wxString m_NewInstanceID;
+			wxString m_NewGameRoot;
+			IGameInstance* m_NewInstance = nullptr;
+
+		private:
+			bool Create(wxWindow* parent,
+						wxWindowID id,
+						const wxString& caption,
+						const wxPoint & pos = wxDefaultPosition,
+						const wxSize & size = wxDefaultSize,
+						int buttons = DefaultButtons,
+						long style = DefaultStyle
+			);
 	
-	public:
-		KInstanceSelectionDialog(wxWindow* parent);
-		virtual ~KInstanceSelectionDialog();
+		public:
+			KInstanceSelectionDialog(wxWindow* parent);
+			virtual ~KInstanceSelectionDialog();
 
-	public:
-		KGameID GetNewGameID() const
-		{
-			return m_NewGameID;
-		}
-		wxString GetNewInstanceID() const
-		{
-			return m_NewInstance;
-		}
-		
-		bool IsNewGameRootSet() const
-		{
-			return !m_NewGameRoot.IsEmpty();
-		}
-		wxString GetNewGameRoot() const
-		{
-			return m_NewGameRoot;
-		}
+		public:
+			GameID GetNewGameID() const
+			{
+				return m_NewGameID;
+			}
+			wxString GetNewInstanceID() const
+			{
+				return m_NewInstanceID;
+			}
+			IGameInstance* GetNewInstance() const
+			{
+				return m_NewInstance;
+			}
 
-	private:
-		KGameInstance* GetSelectedTemplate() const;
-		KGameInstance* GetSelectedInstance() const;
+			bool IsNewGameRootSet() const
+			{
+				return !m_NewGameRoot.IsEmpty();
+			}
+			wxString GetNewGameRoot() const
+			{
+				return m_NewGameRoot;
+			}
 
-		void Configure();
-		void LoadTemplatesList();
-		void LoadInstancesList(const KGameInstance* instanceTemplate, const wxString& selectID);
-		bool AskForGameFolder(const KGameInstance* instanceTemplate, const wxString& currentGamePath);
+		private:
+			IGameInstance* GetSelectedTemplate() const;
+			IGameInstance* GetSelectedInstance() const;
 
-		void OnCreateShortcut(wxCommandEvent& event);
-		void OnButton(wxNotifyEvent& event);
-		void OnUpdateProfiles(wxNotifyEvent& event);
-		void OnDisplayInstanceInfo(const KGameInstance* instance);
-};
+			void Configure();
+			void LoadTemplatesList();
+			void LoadInstancesList(const IGameInstance* instanceTemplate, const wxString& selectID);
+			bool AskForGameFolder(const IGameInstance* instanceTemplate, const wxString& currentGamePath);
+
+			void OnCreateShortcut(wxCommandEvent& event);
+			void OnButton(wxNotifyEvent& event);
+			void OnUpdateProfiles(wxNotifyEvent& event);
+			void OnDisplayInstanceInfo(const IGameInstance* instance);
+	};
+}

@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "KNewModDialog.h"
-#include "ModManager/KModManager.h"
-#include "Events/KLogEvent.h"
-#include "KApp.h"
+#include <Kortex/ModManager.hpp>
+#include "Events/LogEvent.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxFile.h>
+
+using namespace Kortex;
+using namespace Kortex::ModManager;
 
 void KNewModDialog::OnOK(wxNotifyEvent& event)
 {
@@ -13,10 +16,10 @@ void KNewModDialog::OnOK(wxNotifyEvent& event)
 		wxString name = GetValue();
 		if (!name.IsEmpty())
 		{
-			const KModEntry* existingMod = KModManager::GetInstance()->FindModByID(name);
+			const IGameMod* existingMod = IModManager::GetInstance()->FindModByID(name);
 			if (existingMod)
 			{
-				KLogEvent(KTr("ModManager.NewMod.NameCollision"), KLOG_WARNING, this);
+				Kortex::LogEvent(KTr("ModManager.NewMod.NameCollision"), LogLevel::Warning, this);
 			}
 			else
 			{
@@ -27,7 +30,7 @@ void KNewModDialog::OnOK(wxNotifyEvent& event)
 		}
 		else
 		{
-			KLogEvent(KTr("ModManager.NewMod.NameInvalid"), KLOG_WARNING, this);
+			Kortex::LogEvent(KTr("ModManager.NewMod.NameInvalid"), LogLevel::Warning, this);
 		}
 		event.Veto();
 	}
@@ -75,7 +78,7 @@ void KNewModDialogEx::OnSelectFolder(wxNotifyEvent& event)
 	{
 		if (m_FolderPath.IsEmpty())
 		{
-			KLogEvent(KTr("ModManager.NewMod.SelectedFolderNone"), KLOG_WARNING, this);
+			Kortex::LogEvent(KTr("ModManager.NewMod.SelectedFolderNone"), LogLevel::Warning, this);
 			event.Veto();
 		}
 		else

@@ -2,17 +2,18 @@
 #include "KPackageCreatorController.h"
 #include "KPackageCreatorWorkspace.h"
 #include "KPackageCreatorBuilder.h"
-#include "ModManager/KModManager.h"
-#include "ModManager/KModEntry.h"
+#include <Kortex/ModManager.hpp>
 #include "PackageProject/KPackageProjectDefs.h"
 #include "PackageProject/KPackageProjectSerializerKMP.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
 #include "PackageManager/KModPackage.h"
 #include "Archive/KArchive.h"
 #include "KOperationWithProgress.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxTextFile.h>
+
+using namespace Kortex::ModManager;
 
 wxString KPackageCreatorController::GetNewProjectName()
 {
@@ -148,7 +149,7 @@ void KPackageCreatorController::ImportProjectFromPackage(const wxString& package
 
 	Reload();
 }
-void KPackageCreatorController::CreateProjectFromModEntry(const KModEntry& modEntry)
+void KPackageCreatorController::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
 {
 	m_ProjectFile.Clear();
 	m_Project = std::make_unique<KPackageProject>();
@@ -156,16 +157,15 @@ void KPackageCreatorController::CreateProjectFromModEntry(const KModEntry& modEn
 	/* Info and config */
 	m_Project->SetModID(modEntry.GetID());
 
-	m_Project->GetConfig().SetInstallPackageFile(modEntry.GetInstallPackageFile());
+	m_Project->GetConfig().SetInstallPackageFile(modEntry.GetPackageFile());
 
 	KPackageProjectInfo& info = m_Project->GetInfo();
 	info.SetName(modEntry.GetName());
 	info.SetVersion(modEntry.GetVersion());
 	info.SetAuthor(modEntry.GetAuthor());
 	info.SetDescription(modEntry.GetDescription());
-	info.GetFixedWebSites() = modEntry.GetFixedWebSites();
-	info.GetWebSites() = modEntry.GetWebSites();
-	info.GetTags() = modEntry.GetTags();
+	info.GetProviderStore() = modEntry.GetProviderStore();
+	info.GetTagStore() = modEntry.GetTagStore();
 
 	/* Interface */
 	KPPIImageEntry& imageEntry = m_Project->GetInterface().GetImages().emplace_back(KPPIImageEntry());

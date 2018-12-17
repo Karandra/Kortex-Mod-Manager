@@ -8,12 +8,12 @@
 class KInstallWizardComponnetsModel: public KDataViewTreeModel
 {
 	private:
-		const KPackageProjectComponents* m_ComponentsInfo = NULL;
-		const KPPCStep* m_Step = NULL;
+		const KPackageProjectComponents* m_ComponentsInfo = nullptr;
+		const KPPCStep* m_Step = nullptr;
 		KIWCNodesVector m_DataVector;
 		KPPCEntry::RefVector m_CheckedEntries;
 
-		const KPPCEntry* m_HotItem = NULL;
+		const KPPCEntry* m_HotItem = nullptr;
 
 	private:
 		virtual void OnInitControl() override;

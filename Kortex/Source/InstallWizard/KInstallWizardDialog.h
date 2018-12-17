@@ -1,12 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "PackageManager/KModPackage.h"
-#include "ModManager/KModEntry.h"
+#include "GameMods/ModManager/BasicGameMod.h"
 #include "KInstallWizardStepStack.h"
 #include "KOperationWithProgress.h"
 #include "KTempFolderKeeper.h"
 #include "KImageProvider.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxLabel.h>
@@ -61,66 +60,66 @@ class KInstallWizardDialog:
 
 	private:
 		/* UI */
-		KxButton* m_CancelButton = NULL;
-		KxButton* m_BackwardButton = NULL;
-		KxButton* m_ForwardButton = NULL;
-		wxSimplebook* m_TabView = NULL;
+		KxButton* m_CancelButton = nullptr;
+		KxButton* m_BackwardButton = nullptr;
+		KxButton* m_ForwardButton = nullptr;
+		wxSimplebook* m_TabView = nullptr;
 		KInstallWizardPages m_CurrentPage = KIWD_PAGE_NONE;
 
 		// Info
-		KxAuiNotebook* m_Info_Tabs = NULL;
-		KInstallWizardInfoModel* m_Info_PackageInfoList = NULL;
-		KxHTMLWindow* m_Info_Description = NULL;
+		KxAuiNotebook* m_Info_Tabs = nullptr;
+		KInstallWizardInfoModel* m_Info_PackageInfoList = nullptr;
+		KxHTMLWindow* m_Info_Description = nullptr;
 
-		KxSplitterWindow* m_Info_DocumentsSplitter = NULL;
-		KxListBox* m_Info_DocumentsList = NULL;
-		KxHTMLWindow* m_Info_DocumentSimple = NULL;
-		wxWebView* m_Info_DocumentAdvanced = NULL;
+		KxSplitterWindow* m_Info_DocumentsSplitter = nullptr;
+		KxListBox* m_Info_DocumentsList = nullptr;
+		KxHTMLWindow* m_Info_DocumentSimple = nullptr;
+		wxWebView* m_Info_DocumentAdvanced = nullptr;
 
-		KxThumbView* m_Info_Screenshots = NULL;
+		KxThumbView* m_Info_Screenshots = nullptr;
 
 		// Main requirements
-		KInstallWizardRequirementsModel* m_Requirements_Main = NULL;
+		KInstallWizardRequirementsModel* m_Requirements_Main = nullptr;
 
 		// Components
-		KxSplitterWindow* m_Components_SplitterV = NULL;
-		KxSplitterWindow* m_Components_SplitterHRight = NULL;
+		KxSplitterWindow* m_Components_SplitterV = nullptr;
+		KxSplitterWindow* m_Components_SplitterHRight = nullptr;
 
-		KInstallWizardComponnetsModel* m_Components_ItemList = NULL;
-		KxAuiNotebook* m_Components_Tabs = NULL;
-		KxImageView* m_Components_ImageView = NULL;
-		KxHTMLWindow* m_Components_Description = NULL;
-		KInstallWizardRequirementsModel* m_Components_Requirements = NULL;
+		KInstallWizardComponnetsModel* m_Components_ItemList = nullptr;
+		KxAuiNotebook* m_Components_Tabs = nullptr;
+		KxImageView* m_Components_ImageView = nullptr;
+		KxHTMLWindow* m_Components_Description = nullptr;
+		KInstallWizardRequirementsModel* m_Components_Requirements = nullptr;
 
 		// Installing
-		KxPanel* m_Installing_Pane = NULL;
-		KxProgressBar* m_Installing_MinorProgress = NULL;
-		KxProgressBar* m_Installing_MajorProgress = NULL;
-		KxLabel* m_Installing_MinorStatus = NULL;
-		KxLabel* m_Installing_MajorStatus = NULL;
+		KxPanel* m_Installing_Pane = nullptr;
+		KxProgressBar* m_Installing_MinorProgress = nullptr;
+		KxProgressBar* m_Installing_MajorProgress = nullptr;
+		KxLabel* m_Installing_MinorStatus = nullptr;
+		KxLabel* m_Installing_MajorStatus = nullptr;
 		bool m_ShouldCancel = false;
 		bool m_IsComplete = false;
 		bool m_InfoPageLeft = false;
-		KIWDInstallOperation* m_InstallThread = NULL;
+		KIWDInstallOperation* m_InstallThread = nullptr;
 
 		// Done
-		KxPanel* m_Done_Pane = NULL;
-		KxLabel* m_Done_Label = NULL;
+		KxPanel* m_Done_Pane = nullptr;
+		KxLabel* m_Done_Label = nullptr;
 
 		/* UI options */
-		KProgramOptionUI m_Option_Window;
-		KProgramOptionUI m_Option_MainUI;
-		KProgramOptionUI m_Option_InfoView;
-		KProgramOptionUI m_Option_RequirementsView;
-		KProgramOptionUI m_Option_ComponentsView;
-		KProgramOptionUI m_Option_ComponentRequirementsView;
+		//KProgramOptionAI m_Option_Window;
+		//KProgramOptionAI m_Option_MainUI;
+		//KProgramOptionAI m_Option_InfoView;
+		//KProgramOptionAI m_Option_RequirementsView;
+		//KProgramOptionAI m_Option_ComponentsView;
+		//KProgramOptionAI m_Option_ComponentRequirementsView;
 
 		/* Package */
 		KIWImagesMap m_ImagesMap;
 		int m_CurrentImageIndex = -1;
 		std::unique_ptr<KModPackage> m_Package;
-		KModEntry m_ModEntry;
-		const KModEntry* m_ExistingMod = NULL;
+		Kortex::ModManager::BasicGameMod m_ModEntry;
+		const Kortex::IGameMod* m_ExistingMod = nullptr;
 
 		// Components
 		bool m_HasManualComponents = false;
@@ -145,7 +144,7 @@ class KInstallWizardDialog:
 		bool LoadPackage();
 		bool ProcessLoadPackage();
 		void FindExistingMod();
-		void AcceptExistingMod(const KModEntry& modEntry);
+		void AcceptExistingMod(const Kortex::IGameMod& mod);
 		void LoadHeaderImage();
 		void LoadInfoList();
 		void LoadMainRequirements();
@@ -188,7 +187,7 @@ class KInstallWizardDialog:
 		void OnMinorProgress(KxFileOperationEvent& event);
 		void OnMajorProgress(KxFileOperationEvent& event);
 
-		void SetModEntryData();
+		void SetModData();
 		KxUInt32Vector GetFilesOfFolder(const KPPFFolderEntry* folder) const;
 		wxString GetFinalPath(uint32_t index, const wxString& installLocation, const KPPFFileEntry* fileEntry) const;
 		KxStringVector GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const KPPFFolderEntry* folder) const;
@@ -207,7 +206,7 @@ class KInstallWizardDialog:
 		{
 			return wxVERTICAL;
 		}
-		virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = NULL) const override
+		virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
 		{
 			return false;
 		}
@@ -247,16 +246,16 @@ class KInstallWizardDialog:
 		{
 			return m_Package->GetArchive();
 		}
-		const KModEntry* GetExistingMod() const
+		const Kortex::IGameMod* GetExistingMod() const
 		{
 			return m_ExistingMod;
 		}
 
-		const KModEntry* GetModEntry() const
+		const Kortex::ModManager::BasicGameMod* GetModEntry() const
 		{
 			return &m_ModEntry;
 		}
-		KModEntry* GetModEntry()
+		Kortex::ModManager::BasicGameMod* GetModEntry()
 		{
 			return &m_ModEntry;
 		}
@@ -294,7 +293,7 @@ class KInstallWizardDialog:
 class KIWDInstallOperation: public KOperationWithProgressBase
 {
 	private:
-		KInstallWizardDialog* m_InstallWizard = NULL;
+		KInstallWizardDialog* m_InstallWizard = nullptr;
 
 	public:
 		KIWDInstallOperation(KInstallWizardDialog* installWizard)

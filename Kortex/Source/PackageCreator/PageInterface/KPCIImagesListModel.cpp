@@ -1,12 +1,12 @@
 #include "stdafx.h"
+#include <Kortex/ScreenshotsGallery.hpp>
 #include "KPCIImagesListModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"
-#include "ScreenshotsGallery/KScreenshotsGalleryManager.h"
 #include "KOperationWithProgress.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxFileOperationEvent.h>
@@ -205,7 +205,7 @@ void KPCIImagesListModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
 					dialog.SetFolder(entry->GetPath().BeforeLast('\\'));
-					dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+					dialog.AddFilter(KxString::Join(Kortex::IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
 					dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 					if (dialog.ShowModal() == KxID_OK)
 					{
@@ -259,7 +259,7 @@ void KPCIImagesListModel::OnContextMenu(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
@@ -335,7 +335,7 @@ void KPCIImagesListModel::OnImportFiles()
 		{
 			KxEvtFile source(source);
 			self->LinkHandler(&source, KxEVT_FILEOP_SEARCH);
-			KxStringVector files = source.Find(KScreenshotsGalleryManager::GetSupportedExtensions(), KxFS_FILE, true);
+			KxStringVector files = source.Find(Kortex::IScreenshotsGallery::GetSupportedExtensions(), KxFS_FILE, true);
 
 			size_t count = files.size();
 			size_t processed = 0;
@@ -365,7 +365,7 @@ void KPCIImagesListModel::OnAddMultipleItems()
 {
 	KxFileBrowseDialog dialog(GetView(), KxID_NONE, KxFBD_OPEN);
 	dialog.SetOptionEnabled(KxFBD_ALLOW_MULTISELECT);
-	dialog.AddFilter(KxString::Join(KScreenshotsGalleryManager::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+	dialog.AddFilter(KxString::Join(Kortex::IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
 	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	if (dialog.ShowModal() == KxID_OK)
 	{

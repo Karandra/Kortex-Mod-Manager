@@ -2,10 +2,11 @@
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
 #include "KMainWindow.h"
-#include "KThemeManager.h"
-#include "GameInstance/KInstanceManagement.h"
-#include "KEvents.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/Events.hpp>
+#include <Kortex/GameInstance.hpp>
+
+using namespace Kortex;
 
 bool KWorkspace::OnOpenWorkspaceInternal()
 {
@@ -59,7 +60,7 @@ bool KWorkspace::MakeSubWorkspace(KWorkspace* workspace)
 {
 	if (workspace->IsSubWorkspace())
 	{
-		KThemeManager::Get().ProcessWindow(workspace);
+		IThemeManager::GetActive().ProcessWindow(workspace);
 		return workspace->Reparent(GetSubWorkspaceContainer());
 	}
 	return false;
@@ -67,7 +68,7 @@ bool KWorkspace::MakeSubWorkspace(KWorkspace* workspace)
 
 wxString KWorkspace::OnGetWindowTitle() const
 {
-	return wxString::Format("%s – %s – %s", KApp::Get().GetAppDisplayName(), KGameInstance::GetActive()->GetShortName(), GetName());
+	return KxString::Format("%1 – %2 – %3", Kortex::IApplication::GetInstance()->GetName(), Kortex::IGameInstance::GetActive()->GetShortName(), GetName());
 }
 bool KWorkspace::OnOpenWorkspace()
 {

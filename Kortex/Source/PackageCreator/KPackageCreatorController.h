@@ -6,8 +6,12 @@ class KPackageCreatorWorkspace;
 class KPackageManager;
 class KPackageProjectSerializer;
 class KModPackage;
-class KModEntry;
 enum KPPPackageType;
+
+namespace Kortex
+{
+	class IGameMod;
+}
 
 class KPackageCreatorController: public KWorkspaceController
 {
@@ -15,8 +19,8 @@ class KPackageCreatorController: public KWorkspaceController
 		static wxString GetNewProjectName();
 
 	private:
-		KPackageCreatorWorkspace* m_Workspace = NULL;
-		std::unique_ptr<KPackageProject> m_Project = NULL;
+		KPackageCreatorWorkspace* m_Workspace = nullptr;
+		std::unique_ptr<KPackageProject> m_Project = nullptr;
 		wxString m_ProjectFile;
 		bool m_HasChanges = false;
 
@@ -32,7 +36,7 @@ class KPackageCreatorController: public KWorkspaceController
 		bool IsOK() const override;
 		KPackageManager* GetManager() const
 		{
-			return NULL;
+			return nullptr;
 		}
 		KPackageProject* GetProject() const
 		{
@@ -62,7 +66,7 @@ class KPackageCreatorController: public KWorkspaceController
 		void SaveProject();
 		void SaveProject(const wxString& filePath);
 		void ImportProjectFromPackage(const wxString& packagePath);
-		void CreateProjectFromModEntry(const KModEntry& modEntry);
+		void CreateProjectFromModEntry(const Kortex::IGameMod& modEntry);
 		void ImportProject(KPackageProjectSerializer& serializer);
 		void ExportProject(KPackageProjectSerializer& serializer);
 		void BuildProject(bool buildPreview = false);

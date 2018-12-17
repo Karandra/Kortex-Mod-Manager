@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "KSettingsWindow.h"
 #include "UI/KMainWindow.h"
-#include "KThemeManager.h"
-#include "KSettingsWindowController.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "VFS/KVFSService.h"
-#include "ModManager/KModManager.h"
+#include <Kortex/ModManager.hpp>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxTreeList.h>
+
+using namespace Kortex;
 
 wxWindow* KSettingsWindow::GetDialogMainCtrl() const
 {
@@ -16,10 +16,10 @@ wxWindow* KSettingsWindow::GetDialogMainCtrl() const
 }
 void KSettingsWindow::OnPrepareUninstall(wxCommandEvent& event)
 {
-	KxTaskDialog askDialog(this, KxID_NONE, KTrf("Settings.PrepareUninstall.Caption", KApp::Get().GetAppDisplayName()), KTr("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+	KxTaskDialog askDialog(this, KxID_NONE, KTrf("Settings.PrepareUninstall.Caption", Kortex::IApplication::GetInstance()->GetName()), KTr("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 	if (askDialog.ShowModal() == KxID_YES)
 	{
-		if (KApp::Get().Uninstall())
+		if (Kortex::IApplication::GetInstance()->Uninstall())
 		{
 			KxTaskDialog dialog(this, KxID_NONE, KTr("Settings.PrepareUninstall.Success"), wxEmptyString, KxBTN_NONE, KxICON_INFORMATION);
 			dialog.AddButton(KxID_OK, KTr("Settings.PrepareUninstall.RebootNow"));
@@ -45,7 +45,7 @@ KSettingsWindow::KSettingsWindow(KMainWindow* mainWindow)
 		AddButton(KxID_REMOVE, KTr("Settings.PrepareUninstall.Button"), true).GetControl()
 			->Bind(wxEVT_BUTTON, &KSettingsWindow::OnPrepareUninstall, this);
 
-		KThemeManager::Get().ProcessWindow(m_ContentPanel);
+		IThemeManager::GetActive().ProcessWindow(m_ContentPanel);
 		m_Workspace = new KSettingsWorkspace(this, mainWindow);
 
 		PostCreate();
@@ -73,8 +73,7 @@ void KSettingsWorkspace::CreateControllerView()
 }
 
 KSettingsWorkspace::KSettingsWorkspace(KSettingsWindow* settingsWindow, KMainWindow* mainWindow)
-	:KWorkspace(mainWindow, settingsWindow->GetContentWindow()), m_SettingsWindow(settingsWindow),
-	m_AppConfigViewOptions(this, "AppConfigView")
+	:KWorkspace(mainWindow, settingsWindow->GetContentWindow()), m_SettingsWindow(settingsWindow)
 {
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(m_MainSizer);
@@ -102,18 +101,6 @@ bool KSettingsWorkspace::OnCreateWorkspace()
 	m_DiscardButton = m_SettingsWindow->GetButton(KxID_CANCEL);
 	m_DiscardButton->Bind(wxEVT_BUTTON, &KSettingsWorkspace::OnDiscardButton, this);
 
-	/* Controller */
-	m_Controller = new KSettingsWindowController(this, m_ControllerView);
-	m_Controller->Bind(KEVT_CONTROLLER_SAVED, &KSettingsWorkspace::OnControllerSaveDiscard, this);
-	m_Controller->Bind(KEVT_CONTROLLER_DISCARDED, &KSettingsWorkspace::OnControllerSaveDiscard, this);
-	m_Controller->Bind(KEVT_CONTROLLER_CHANGED, [this](wxNotifyEvent& event)
-	{
-		m_SaveButton->Enable();
-		m_DiscardButton->Enable();
-	});
-	m_Controller->LoadView();
-	SetWorkspaceController(m_Controller);
-
 	//KProgramOptionSerializer::LoadDataViewLayout(m_ControllerView->GetDataView(), m_AppConfigViewOptions);
 	return true;
 }
@@ -129,16 +116,18 @@ bool KSettingsWorkspace::OnCloseWorkspace()
 
 void KSettingsWorkspace::OnSaveButton(wxCommandEvent& event)
 {
+	#if 0
 	if (m_Controller->HasUnsavedChanges())
 	{
 		m_Controller->SaveChanges();
 		KxTaskDialog(m_SettingsWindow, KxID_NONE, KTr("Settings.SaveMessage"), wxEmptyString, KxBTN_OK, KxICON_INFORMATION).ShowModal();
 	}
+	#endif
 	m_SettingsWindow->Close();
 }
 void KSettingsWorkspace::OnDiscardButton(wxCommandEvent& event)
 {
-	m_Controller->DiscardChanges();
+	//m_Controller->DiscardChanges();
 	m_SettingsWindow->Close();
 }
 void KSettingsWorkspace::OnControllerSaveDiscard(wxNotifyEvent& event)

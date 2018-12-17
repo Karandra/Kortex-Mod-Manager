@@ -19,8 +19,8 @@ class KPackageCreatorBuilder: public KTempFolderKeeper
 	friend class KPackageCreatorBuilderOperation;
 
 	private:
-		const KPackageProject* m_Project = NULL;
-		KOperationWithProgressBase* m_Thread = NULL;	
+		const KPackageProject* m_Project = nullptr;
+		KOperationWithProgressBase* m_Thread = nullptr;	
 		wxString m_PackagePath;
 		const bool m_BuildPreview = false;
 
@@ -81,7 +81,7 @@ class KPackageCreatorBuilder: public KTempFolderKeeper
 class KPackageCreatorBuilderOperation: public KOperationWithProgressDialog<KxArchiveEvent>
 {
 	private:
-		const KPackageProject* m_Project = NULL;
+		const KPackageProject* m_Project = nullptr;
 		bool m_BuildPreview = false;
 		wxString m_PackagePath;
 

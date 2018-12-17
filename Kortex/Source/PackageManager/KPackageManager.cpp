@@ -1,13 +1,11 @@
 #include "stdafx.h"
 #include "KPackageManager.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/PluginManager.hpp>
+#include <Kortex/GameInstance.hpp>
+#include <Kortex/ModManager.hpp>
 #include "PackageProject/KPackageProject.h"
 #include "Archive/KArchive.h"
-#include "GameInstance/KInstanceManagement.h"
-#include "ModManager/KModManager.h"
-#include "PluginManager/KPluginManager.h"
-#include "GameInstance/Config/KPackageManagerConfig.h"
-#include "KVariablesDatabase.h"
-#include "KApp.h"
 #include "KAux.h"
 #include "KOperationWithProgress.h"
 #include <KxFramework/KxXML.h>
@@ -16,236 +14,260 @@
 #include <KxFramework/KxArchiveEvent.h>
 #include <KxFramework/KxTaskDialog.h>
 
-const KxStringVector& KPackageManager::GetSuppoptedExtensions()
+namespace Kortex
 {
-	static const KxStringVector ms_SupportedExtensions = {"kmp", "smi", "fomod", "7z", "zip"};
-	return ms_SupportedExtensions;
-}
-const wxString& KPackageManager::GetSuppoptedExtensionsFilter()
-{
-	static const wxString ms_SupportedExtensionsFilter = KAux::MakeExtensionsFilter(GetSuppoptedExtensions());
-	return ms_SupportedExtensionsFilter;
-}
-void KPackageManager::ExtractAcrhiveThreaded(wxWindow* window, const wxString& filePath, const wxString& outPath)
-{
-	auto thread = new KOperationWithProgressDialog<KxArchiveEvent>(true, wxGetTopLevelParent(window));
-	thread->OnRun([filePath, outPath](KOperationWithProgressBase* self)
+	namespace PackageManager::Internal
 	{
-		KArchive archive(filePath);
-		self->LinkHandler(&archive, KxEVT_ARCHIVE);
-		bool ok = archive.ExtractAll(outPath);
-
-		// Set extraction successfulness status
-		self->SetClientData(ok ? (void*)1 : NULL);
-	});
-	thread->OnEnd([window, outPath](KOperationWithProgressBase* self)
-	{
-		// Show warning message if something went wrong
-		if (self->GetClientData() == NULL)
-		{
-			KxTaskDialog dialog(window, KxID_NONE, KTrf("InstallWizard.LoadFailed.Caption", outPath), KTr("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
-			dialog.ShowModal();
-		}
-	});
-	thread->SetDialogCaption(KTr("ModManager.ExtractingPackageFiles"));
-	thread->Run();
-}
-
-bool KPackageManager::IsPathAbsolute(const wxString& path)
-{
-	return path.IsEmpty() || (path.Length() >= 2 && path[1] == ':');
-}
-wxString KPackageManager::GetRequirementFilePath(const KPPRRequirementEntry* entry)
-{
-	wxString path = KVarExp(entry->GetObject());
-	if (IsPathAbsolute(path))
-	{
-		// Is object is absolute file path, return it as is.
-		return path;
+		const SimpleManagerInfo TypeInfo("KPackageManager", "PackageManager.Name");
 	}
-	else
-	{
-		return KDispatcher::GetInstance()->ResolveLocationPath(path);
-	}
-}
 
-KPPReqState KPackageManager::CheckRequirementState(const KPPRRequirementEntry* entry)
-{
-	KPPRObjectFunction objectFunc = entry->GetObjectFunction();
-	switch (objectFunc)
+	const KxStringVector& KPackageManager::GetSuppoptedExtensions()
 	{
-		case KPPR_OBJFUNC_NONE:
+		static const KxStringVector ms_SupportedExtensions = {"kmp", "smi", "fomod", "7z", "zip"};
+		return ms_SupportedExtensions;
+	}
+	const wxString& KPackageManager::GetSuppoptedExtensionsFilter()
+	{
+		static const wxString ms_SupportedExtensionsFilter = KAux::MakeExtensionsFilter(GetSuppoptedExtensions());
+		return ms_SupportedExtensionsFilter;
+	}
+	void KPackageManager::ExtractAcrhiveThreaded(wxWindow* window, const wxString& filePath, const wxString& outPath)
+	{
+		auto thread = new KOperationWithProgressDialog<KxArchiveEvent>(true, wxGetTopLevelParent(window));
+		thread->OnRun([filePath, outPath](KOperationWithProgressBase* self)
 		{
-			return KPPReqState::True;
-		}
-		case KPPR_OBJFUNC_MOD_ACTIVE:
-		case KPPR_OBJFUNC_MOD_INACTIVE:
+			KArchive archive(filePath);
+			self->LinkHandler(&archive, KxEVT_ARCHIVE);
+			bool ok = archive.ExtractAll(outPath);
+
+			// Set extraction successfulness status
+			self->SetClientData(ok ? (void*)1 : nullptr);
+		});
+		thread->OnEnd([window, outPath](KOperationWithProgressBase* self)
 		{
-			if (!entry->GetID().IsEmpty())
+			// Show warning message if something went wrong
+			if (self->GetClientData() == nullptr)
 			{
-				bool isActive = KModManager::GetInstance()->IsModActive(entry->GetID());
-				return (KPPReqState)(objectFunc == KPPR_OBJFUNC_MOD_ACTIVE ? isActive : !isActive);
+				KxTaskDialog dialog(window, KxID_NONE, KTrf("InstallWizard.LoadFailed.Caption", outPath), KTr("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
+				dialog.ShowModal();
 			}
-			return KPPReqState::False;
-		}
-		case KPPR_OBJFUNC_PLUGIN_ACTIVE:
-		case KPPR_OBJFUNC_PLUGIN_INACTIVE:
+		});
+		thread->SetDialogCaption(KTr("ModManager.ExtractingPackageFiles"));
+		thread->Run();
+	}
+
+	bool KPackageManager::IsPathAbsolute(const wxString& path)
+	{
+		return path.IsEmpty() || (path.Length() >= 2 && path[1] == ':');
+	}
+	wxString KPackageManager::GetRequirementFilePath(const KPPRRequirementEntry* entry)
+	{
+		wxString path = KVarExp(entry->GetObject());
+		if (IsPathAbsolute(path))
 		{
-			if (!entry->GetObject().IsEmpty())
+			// Is object is absolute file path, return it as is.
+			return path;
+		}
+		else
+		{
+			return IModDispatcher::GetInstance()->ResolveLocationPath(path);
+		}
+	}
+
+	KPPReqState KPackageManager::CheckRequirementState(const KPPRRequirementEntry* entry)
+	{
+		KPPRObjectFunction objectFunc = entry->GetObjectFunction();
+		switch (objectFunc)
+		{
+			case KPPR_OBJFUNC_NONE:
 			{
-				KPluginManager* manager = KPluginManager::GetInstance();
-				if (manager)
+				return KPPReqState::True;
+			}
+			case KPPR_OBJFUNC_MOD_ACTIVE:
+			case KPPR_OBJFUNC_MOD_INACTIVE:
+			{
+				if (!entry->GetID().IsEmpty())
 				{
-					if (!manager->HasEntries())
+					bool isActive = IModManager::GetInstance()->IsModActive(entry->GetID());
+					return (KPPReqState)(objectFunc == KPPR_OBJFUNC_MOD_ACTIVE ? isActive : !isActive);
+				}
+				return KPPReqState::False;
+			}
+			case KPPR_OBJFUNC_PLUGIN_ACTIVE:
+			case KPPR_OBJFUNC_PLUGIN_INACTIVE:
+			{
+				if (!entry->GetObject().IsEmpty())
+				{
+					Kortex::IPluginManager* manager = Kortex::IPluginManager::GetInstance();
+					if (manager)
 					{
-						manager->Load();
+						if (!manager->HasPlugins())
+						{
+							manager->Load();
+						}
+
+						bool isActive = manager->IsPluginActive(entry->GetObject());
+						return (KPPReqState)(objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? isActive : !isActive);
 					}
-
-					bool isActive = manager->IsPluginActive(entry->GetObject());
-					return (KPPReqState)(objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? isActive : !isActive);
+					return KPPReqState::Unknown;
 				}
-				return KPPReqState::Unknown;
+				return KPPReqState::False;
 			}
-			return KPPReqState::False;
-		}
-		case KPPR_OBJFUNC_FILE_EXIST:
-		case KPPR_OBJFUNC_FILE_NOT_EXIST:
-		{
-			if (!entry->GetObject().IsEmpty())
+			case KPPR_OBJFUNC_FILE_EXIST:
+			case KPPR_OBJFUNC_FILE_NOT_EXIST:
 			{
-				bool isExist = KxFile(GetRequirementFilePath(entry)).IsExist();
-				return (KPPReqState)(objectFunc == KPPR_OBJFUNC_FILE_EXIST ? isExist : !isExist);
-			}
-			return KPPReqState::False;
-		}
-	};
-	return KPPReqState::Unknown;
-}
-KxVersion KPackageManager::GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry)
-{
-	KxVersion version;
-
-	KxFile file(GetRequirementFilePath(entry));
-	if (file.IsFileExist())
-	{
-		KxLibraryVersionInfo versionInfo = file.GetVersionInfo();
-		if (versionInfo.IsOK())
-		{
-			auto TryWith = [&versionInfo](const wxString& name) -> KxVersion
-			{
-				KxVersion version(versionInfo.GetString(name));
-				if (version.IsOK())
+				if (!entry->GetObject().IsEmpty())
 				{
-					return version;
+					bool isExist = KxFile(GetRequirementFilePath(entry)).IsExist();
+					return (KPPReqState)(objectFunc == KPPR_OBJFUNC_FILE_EXIST ? isExist : !isExist);
 				}
-				return KxNullVersion;
-			};
-			
-			version = TryWith(entry->GetBinaryVersionKind());
-			if (!version.IsOK())
+				return KPPReqState::False;
+			}
+		};
+		return KPPReqState::Unknown;
+	}
+	KxVersion KPackageManager::GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry)
+	{
+		KxVersion version;
+
+		KxFile file(GetRequirementFilePath(entry));
+		if (file.IsFileExist())
+		{
+			KxLibraryVersionInfo versionInfo = file.GetVersionInfo();
+			if (versionInfo.IsOK())
 			{
-				version = TryWith("ProductVersion");
+				auto TryWith = [&versionInfo](const wxString& name) -> KxVersion
+				{
+					KxVersion version(versionInfo.GetString(name));
+					if (version.IsOK())
+					{
+						return version;
+					}
+					return KxNullVersion;
+				};
+
+				version = TryWith(entry->GetBinaryVersionKind());
 				if (!version.IsOK())
 				{
-					version = TryWith("FileVersion");
+					version = TryWith("ProductVersion");
 					if (!version.IsOK())
 					{
-						version = TryWith("ProductVersionString");
+						version = TryWith("FileVersion");
 						if (!version.IsOK())
 						{
-							version = TryWith("FileVersionString");
+							version = TryWith("ProductVersionString");
+							if (!version.IsOK())
+							{
+								version = TryWith("FileVersionString");
+							}
 						}
 					}
 				}
 			}
-		}
 
-		// No versions available, use file modification time
-		if (!version.IsOK())
+			// No versions available, use file modification time
+			if (!version.IsOK())
+			{
+				version = file.GetFileTime(KxFILETIME_MODIFICATION);
+			}
+		}
+		return version;
+	}
+	KxVersion KPackageManager::GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry)
+	{
+		const IGameMod* modEntry = IModManager::GetInstance()->FindModByID(entry->GetID());
+		if (modEntry)
 		{
-			version = file.GetFileTime(KxFILETIME_MODIFICATION);
+			return modEntry->GetVersion();
+		}
+		return KxNullVersion;
+	}
+	KxVersion KPackageManager::GetRequirementVersion(const KPPRRequirementEntry* entry)
+	{
+		KxVersion modVersion = GetRequirementVersionFromModManager(entry);
+		return modVersion.IsOK() ? modVersion : GetRequirementVersionFromBinaryFile(entry);
+	}
+
+	void KPackageManager::LoadStdRequirements()
+	{
+		wxString stdReqsFilePath = KxFormat("%1\\PackageManager\\Requirements\\%2.xml").arg(IApplication::GetInstance()->GetDataFolder()).arg(IGameInstance::GetActive()->GetGameID());
+		KxFileStream file(stdReqsFilePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+		KxXMLDocument xml(file);
+
+		for (KxXMLNode entryNode = xml.GetFirstChildElement("Requirements").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
+		{
+			auto& entry = m_StdEntries.GetEntries().emplace_back(new KPPRRequirementEntry(KPPR_TYPE_SYSTEM));
+			entry->SetID(KVarExp(entryNode.GetAttribute("ID")));
+			entry->SetCategory(KVarExp(entryNode.GetAttribute("Category")));
+			entry->SetName(KVarExp(entryNode.GetFirstChildElement("Name").GetValue()));
+
+			// Object
+			KxXMLNode objectNode = entryNode.GetFirstChildElement("Object");
+			entry->SetObject(objectNode.GetValue());
+			entry->SetObjectFunction(KPackageProjectRequirements::StringToObjectFunction(objectNode.GetAttribute("Function")));
+
+			// Version
+			KxXMLNode versionNode = entryNode.GetFirstChildElement("Version");
+			entry->SetRequiredVersion(versionNode.GetValue());
+			entry->SetRVFunction(KPackageProject::StringToOperator(versionNode.GetAttribute("Function"), false, KPackageProjectRequirements::ms_DefaultVersionOperator));
+			entry->SetBinaryVersionKind(versionNode.GetAttribute("BinaryVersionKind"));
+
+			// Description
+			entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
+
+			// Dependencies
+			KAux::LoadStringArray(entry->GetDependencies(), entryNode.GetFirstChildElement("Dependencies"));
 		}
 	}
-	return version;
-}
-KxVersion KPackageManager::GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry)
-{
-	const KModEntry* modEntry = KModManager::GetInstance()->FindModByID(entry->GetID());
-	if (modEntry)
+
+	void KPackageManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
-		return modEntry->GetVersion();
 	}
-	return KxNullVersion;
-}
-KxVersion KPackageManager::GetRequirementVersion(const KPPRRequirementEntry* entry)
-{
-	KxVersion modVersion = GetRequirementVersionFromModManager(entry);
-	return modVersion.IsOK() ? modVersion : GetRequirementVersionFromBinaryFile(entry);
-}
-
-void KPackageManager::LoadStdRequirements()
-{
-	wxString stdReqsFilePath = KxFormat("%1\\PackageManager\\Requirements\\%2.xml").arg(KApp::Get().GetDataFolder()).arg(KGameInstance::GetActive()->GetGameID());
-	KxFileStream file(stdReqsFilePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-	KxXMLDocument xml(file);
-
-	for (KxXMLNode entryNode = xml.GetFirstChildElement("Requirements").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
+	void KPackageManager::OnInit()
 	{
-		auto& entry = m_StdEntries.GetEntries().emplace_back(new KPPRRequirementEntry(KPPR_TYPE_SYSTEM));
-		entry->SetID(KVarExp(entryNode.GetAttribute("ID")));
-		entry->SetCategory(KVarExp(entryNode.GetAttribute("Category")));
-		entry->SetName(KVarExp(entryNode.GetFirstChildElement("Name").GetValue()));
+		LoadStdRequirements();
+	}
+	void KPackageManager::OnExit()
+	{
+	}
 
-		// Object
-		KxXMLNode objectNode = entryNode.GetFirstChildElement("Object");
-		entry->SetObject(objectNode.GetValue());
-		entry->SetObjectFunction(KPackageProjectRequirements::StringToObjectFunction(objectNode.GetAttribute("Function")));
+	KPackageManager::KPackageManager()
+		:ManagerWithTypeInfo(Kortex::KPackageModule::GetInstance())//, m_Options(this, "General")
+	{
+	}
+	KPackageManager::~KPackageManager()
+	{
+	}
 
-		// Version
-		KxXMLNode versionNode = entryNode.GetFirstChildElement("Version");
-		entry->SetRequiredVersion(versionNode.GetValue());
-		entry->SetRVFunction(KPackageProject::StringToOperator(versionNode.GetAttribute("Function"), false, KPackageProjectRequirements::ms_DefaultVersionOperator));
-		entry->SetBinaryVersionKind(versionNode.GetAttribute("BinaryVersionKind"));
-
-		// Description
-		entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
-
-		// Dependencies
-		KAux::LoadStringArray(entry->GetDependencies(), entryNode.GetFirstChildElement("Dependencies"));
+	const KPPRRequirementEntry* KPackageManager::GetScriptExtenderRequirement() const
+	{
+		return FindStdReqirement(GetVariable(Variables::KVAR_SCRIPT_EXTENDER_ID));
+	}
+	wxString KPackageManager::GetPackagesFolder() const
+	{
+		return GetInstanceOption().GetAttribute("PackagesLocation");
 	}
 }
-void KPackageManager::OnInit()
-{
-	LoadStdRequirements();
-}
 
-KPackageManager::KPackageManager()
-	:m_Options(this, "General")
+namespace Kortex
 {
-}
-KPackageManager::~KPackageManager()
-{
-}
+	namespace Internal
+	{
+		const SimpleModuleInfo PackagesModuleTypeInfo("ModPackages", "PackagesModule.Name", "1.3.1", KIMG_BOX);
+	}
 
-wxString KPackageManager::GetID() const
-{
-	return "KPackageManager";
-}
-wxString KPackageManager::GetName() const
-{
-	return KTr("PackageManager.Name");
-}
-wxString KPackageManager::GetVersion() const
-{
-	return "1.3";
-}
+	void KPackageModule::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)
+	{
+	}
+	void KPackageModule::OnInit()
+	{
+	}
+	void KPackageModule::OnExit()
+	{
+	}
 
-const KPPRRequirementEntry* KPackageManager::GetScriptExtenderRequirement() const
-{
-	return FindStdReqirement(KVAR_EXP(KVAR_SCRIPT_EXTENDER_ID));
-}
-
-wxString KPackageManager::GetPackagesFolder() const
-{
-	return m_Options.GetAttribute("PackagesLocation");
+	KPackageModule::KPackageModule()
+		:ModuleWithTypeInfo(Disposition::Global)
+	{
+	}
 }

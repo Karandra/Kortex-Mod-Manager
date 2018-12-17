@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPackageProjectInterface.h"
 #include "KPackageProject.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 
 KPPIImageEntry::KPPIImageEntry(const wxString& path, const wxString& description, bool isVisible)
@@ -27,7 +27,7 @@ const KPPIImageEntry* KPackageProjectInterface::FindEntryWithValue(const wxStrin
 	{
 		return v.GetPath().IsSameAs(path, false);
 	});
-	return it != m_Images.end() ? &(*it) : NULL;
+	return it != m_Images.end() ? &(*it) : nullptr;
 }
 KPPIImageEntry* KPackageProjectInterface::FindEntryWithValue(const wxString& path)
 {
@@ -35,5 +35,5 @@ KPPIImageEntry* KPackageProjectInterface::FindEntryWithValue(const wxString& pat
 	{
 		return v.GetPath().IsSameAs(path, false);
 	});
-	return it != m_Images.end() ? &(*it) : NULL;
+	return it != m_Images.end() ? &(*it) : nullptr;
 }

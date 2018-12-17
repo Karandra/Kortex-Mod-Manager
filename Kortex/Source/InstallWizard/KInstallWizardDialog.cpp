@@ -1,4 +1,8 @@
 #include "stdafx.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/ModManager.hpp>
+#include <Kortex/NetworkManager.hpp>
+#include <Kortex/Events.hpp>
 #include "KInstallWizardDefs.h"
 #include "KInstallWizardDialog.h"
 #include "KInstallWizardInfoModel.h"
@@ -8,19 +12,15 @@
 #include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
 #include "UI/KTextEditorDialog.h"
-#include "ModManager/KModEntry.h"
-#include "ModManager/KModManager.h"
-#include "Network/KNetwork.h"
-#include "KThemeManager.h"
-#include "KEvents.h"
 #include "KAux.h"
-#include "KApp.h"
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxArchiveFileFinder.h>
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxString.h>
+
+using namespace Kortex;
 
 wxDEFINE_EVENT(KEVT_IW_DONE, wxNotifyEvent);
 
@@ -75,17 +75,17 @@ bool KInstallWizardDialog::CreateUI(wxWindow* parent)
 }
 void KInstallWizardDialog::LoadUIOptions()
 {
-	KProgramOptionSerializer::LoadWindowSize(this, m_Option_Window);
+	//KProgramOptionSerializer::LoadWindowSize(this, m_Option_Window);
 	Center();
 
-	KProgramOptionSerializer::LoadSplitterLayout(m_Info_DocumentsSplitter, m_Option_MainUI);
-	KProgramOptionSerializer::LoadSplitterLayout(m_Components_SplitterV, m_Option_MainUI);
-	KProgramOptionSerializer::LoadSplitterLayout(m_Components_SplitterHRight, m_Option_MainUI);
-
-	KProgramOptionSerializer::LoadDataViewLayout(m_Info_PackageInfoList->GetView(), m_Option_InfoView);
-	KProgramOptionSerializer::LoadDataViewLayout(m_Requirements_Main->GetView(), m_Option_RequirementsView);
-	KProgramOptionSerializer::LoadDataViewLayout(m_Components_ItemList->GetView(), m_Option_ComponentsView);
-	KProgramOptionSerializer::LoadDataViewLayout(m_Components_Requirements->GetView(), m_Option_ComponentRequirementsView);
+	//KProgramOptionSerializer::LoadSplitterLayout(m_Info_DocumentsSplitter, m_Option_MainUI);
+	//KProgramOptionSerializer::LoadSplitterLayout(m_Components_SplitterV, m_Option_MainUI);
+	//KProgramOptionSerializer::LoadSplitterLayout(m_Components_SplitterHRight, m_Option_MainUI);
+	//
+	//KProgramOptionSerializer::LoadDataViewLayout(m_Info_PackageInfoList->GetView(), m_Option_InfoView);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_Requirements_Main->GetView(), m_Option_RequirementsView);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_Components_ItemList->GetView(), m_Option_ComponentsView);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_Components_Requirements->GetView(), m_Option_ComponentRequirementsView);
 }
 
 wxWindow* KInstallWizardDialog::CreateUI_Info()
@@ -110,7 +110,7 @@ wxWindow* KInstallWizardDialog::CreateUI_Info()
 	m_Info_DocumentsSplitter = new KxSplitterWindow(m_Info_Tabs, KxID_NONE);
 	m_Info_DocumentsSplitter->SetName("DocumentsListSize");
 	m_Info_DocumentsSplitter->SetMinimumPaneSize(200);
-	m_Info_DocumentsSplitter->SetSashColor(KThemeManager::Get().GetColor(KTMC_WINDOW_BG));
+	m_Info_DocumentsSplitter->SetSashColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::WindowBG));
 
 	// List
 	m_Info_DocumentsList = new KxListBox(m_Info_DocumentsSplitter, KxID_NONE);
@@ -147,7 +147,7 @@ wxWindow* KInstallWizardDialog::CreateUI_Info()
 			m_CurrentImageIndex = -1;
 		}
 	});
-	KThemeManager::Get().ProcessWindow(m_Info_Screenshots);
+	IThemeManager::GetActive().ProcessWindow(m_Info_Screenshots);
 
 	m_Info_Tabs->AddPage(m_Info_Screenshots, KTr("InstallWizard.Page.Screenshots"));
 
@@ -167,12 +167,12 @@ wxWindow* KInstallWizardDialog::CreateUI_Components()
 	m_Components_SplitterV = new KxSplitterWindow(m_TabView, KxID_NONE);
 	m_Components_SplitterV->SetMinimumPaneSize(150);
 	m_Components_SplitterV->SetName("ComponentsPaneSize");
-	KThemeManager::Get().ProcessWindow(m_Components_SplitterV);
+	IThemeManager::GetActive().ProcessWindow(m_Components_SplitterV);
 
 	m_Components_SplitterHRight = new KxSplitterWindow(m_Components_SplitterV, KxID_NONE);
 	m_Components_SplitterHRight->SetName("ComponentImageHeight");
 	m_Components_SplitterHRight->SetMinimumPaneSize(150);
-	KThemeManager::Get().ProcessWindow(m_Components_SplitterHRight);
+	IThemeManager::GetActive().ProcessWindow(m_Components_SplitterHRight);
 
 	/* Controls */
 	// Item list
@@ -390,42 +390,38 @@ bool KInstallWizardDialog::ProcessLoadPackage()
 	Show();
 	Raise();
 
-	KModEvent(KEVT_MOD_INSTALLING, m_ModEntry).Send();
+	Kortex::ModManager::ModEvent(Kortex::Events::ModInstalling, m_ModEntry).Send();
 
 	return ret;
 }
 
 void KInstallWizardDialog::FindExistingMod()
 {
-	m_ExistingMod = KModManager::GetInstance()->FindModByID(GetConfig().GetModID());
+	m_ExistingMod = Kortex::IModManager::GetInstance()->FindModByID(GetConfig().GetModID());
 }
-void KInstallWizardDialog::AcceptExistingMod(const KModEntry& existringMod)
+void KInstallWizardDialog::AcceptExistingMod(const Kortex::IGameMod& mod)
 {
 	// Info
 	KPackageProjectInfo& packageInfo = GetConfig().GetInfo();
 
 	// Tags
-	packageInfo.GetTags() = existringMod.GetTags();
-	m_ModEntry.SetPriorityGroupTag(existringMod.GetPriorityGroupTag());
+	packageInfo.GetTagStore() = mod.GetTagStore();
+	m_ModEntry.SetPriorityGroupTag(mod.GetPriorityGroupTag());
 
 	// Other info
 	if (packageInfo.GetName().IsEmpty())
 	{
-		packageInfo.SetName(existringMod.GetName());
+		packageInfo.SetName(mod.GetName());
 	}
-	if (packageInfo.GetWebSites().empty())
+	if (packageInfo.GetProviderStore().IsEmpty())
 	{
-		packageInfo.GetWebSites() = existringMod.GetWebSites();
-	}
-	if (packageInfo.GetFixedWebSites().empty())
-	{
-		packageInfo.GetFixedWebSites() = existringMod.GetFixedWebSites();
+		packageInfo.GetProviderStore() = mod.GetProviderStore();
 	}
 
 	// Linked mod configuration
-	if (existringMod.IsLinkedMod())
+	if (mod.IsLinkedMod())
 	{
-		m_ModEntry.SetLinkedModLocation(existringMod.GetModFilesDir());
+		m_ModEntry.LinkLocation(mod.GetModFilesDir());
 	}
 }
 void KInstallWizardDialog::LoadHeaderImage()
@@ -463,24 +459,13 @@ void KInstallWizardDialog::LoadInfoList()
 	};
 	auto AddSites = [this, &info, &AddString]()
 	{
-		for (int i = 0; i < KNETWORK_PROVIDER_ID_MAX; i++)
+		info.GetProviderStore().Visit([this](const Kortex::ModProvider::Item& item)
 		{
-			KNetworkProviderID index = (KNetworkProviderID)i;
-			if (info.HasWebSite(index))
-			{
-				KLabeledValue entry = info.GetWebSite(index);
-				KNetworkProvider* site = KNetwork::GetInstance()->GetProvider(index);
-				m_Info_PackageInfoList->AddItem(entry, site->GetIcon(), KIWI_TYPE_SITE);
-			}
-		}
-
-		for (const KLabeledValue& entry: info.GetWebSites())
-		{
-			if (entry.HasValue())
-			{
-				m_Info_PackageInfoList->AddItem(entry, KNetworkProvider::GetGenericIcon(), KIWI_TYPE_SITE);
-			}
-		}
+			Kortex::INetworkProvider* provider = nullptr;
+			KImageEnum icon = item.TryGetProvider(provider) ? provider->GetIcon() : Kortex::INetworkProvider::GetGenericIcon();
+			m_Info_PackageInfoList->AddItem(KLabeledValue(item.GetURL(), item.GetName()), icon, KIWI_TYPE_SITE);
+			return true;
+		});
 	};
 	auto AddUserData = [this, &info, &AddString]()
 	{
@@ -567,7 +552,7 @@ void KInstallWizardDialog::OnSelectDocument(int index, bool useAdvancedEditor)
 		m_Info_DocumentsSplitter->SplitVertically(m_Info_DocumentsList, m_Info_DocumentAdvanced, m_Info_DocumentsSplitter->GetSashPosition());
 	};
 
-	const KLabeledValueArray& documents = m_Package->GetConfig().GetInfo().GetDocuments();
+	const KLabeledValue::Vector& documents = m_Package->GetConfig().GetInfo().GetDocuments();
 	if (index != -1 && (size_t)index < documents.size())
 	{
 		try
@@ -925,7 +910,7 @@ KPPCStep* KInstallWizardDialog::GetFirstStepSatisfiesConditions() const
 			return pCurrentStep;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 KPPCStep* KInstallWizardDialog::GetFirstStepSatisfiesConditions(const KPPCStep* afterThis) const
 {
@@ -947,7 +932,7 @@ KPPCStep* KInstallWizardDialog::GetFirstStepSatisfiesConditions(const KPPCStep* 
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void KInstallWizardDialog::ClearComponentsViewInfo()
@@ -1179,7 +1164,7 @@ bool KInstallWizardDialog::OnBeginInstall()
 		});
 		m_InstallThread->OnEnd([this](KOperationWithProgressBase* self)
 		{
-			m_InstallThread = NULL;
+			m_InstallThread = nullptr;
 			OnEndInstall();
 		});
 
@@ -1208,7 +1193,7 @@ bool KInstallWizardDialog::OnEndInstall()
 			bitmap.SaveFile(m_ModEntry.GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
 		}
 		
-		KModManager::GetInstance()->NotifyModInstalled(m_ModEntry);
+		Kortex::IModManager::GetInstance()->NotifyModInstalled(m_ModEntry);
 		if (ShouldCancel())
 		{
 			// We were canceled, but mod is partially installed.
@@ -1270,11 +1255,11 @@ void KInstallWizardDialog::OnMajorProgress(KxFileOperationEvent& event)
 	m_Installing_MajorStatus->SetLabel(KTrf("InstallWizard.InstalledXOfY", current, max) + wxS(". ") + event.GetSource());
 }
 
-void KInstallWizardDialog::SetModEntryData()
+void KInstallWizardDialog::SetModData()
 {
 	m_ModEntry.CreateFromProject(GetConfig());
-	m_ModEntry.SetTime(KME_TIME_INSTALL, wxDateTime::Now());
-	m_ModEntry.SetInstallPackageFile(m_Package->GetPackageFilePath());
+	m_ModEntry.SetInstallTime(wxDateTime::Now());
+	m_ModEntry.SetPackageFile(m_Package->GetPackageFilePath());
 	m_ModEntry.CreateAllFolders();
 }
 KxUInt32Vector KInstallWizardDialog::GetFilesOfFolder(const KPPFFolderEntry* folder) const
@@ -1324,7 +1309,7 @@ KxStringVector KInstallWizardDialog::GetFinalPaths(const KxUInt32Vector& filePat
 }
 void KInstallWizardDialog::RunInstall()
 {
-	SetModEntryData();
+	SetModData();
 
 	wxString installLocation = m_ModEntry.GetModFilesDir();
 	if (installLocation.Last() == '\\')
@@ -1376,12 +1361,12 @@ void KInstallWizardDialog::RunInstall()
 }
 
 KInstallWizardDialog::KInstallWizardDialog()
-	:m_Option_Window(this, "Window"),
-	m_Option_MainUI(this, "MainUI"),
-	m_Option_InfoView(this, "InfoView"),
-	m_Option_RequirementsView(this, "RequirementsView"),
-	m_Option_ComponentsView(this, "ComponentsView"),
-	m_Option_ComponentRequirementsView(this, "ComponentRequirementsView")
+//:m_Option_Window(this, "Window"),
+//m_Option_MainUI(this, "MainUI"),
+//m_Option_InfoView(this, "InfoView"),
+//m_Option_RequirementsView(this, "RequirementsView"),
+//m_Option_ComponentsView(this, "ComponentsView"),
+//m_Option_ComponentRequirementsView(this, "ComponentRequirementsView")
 {
 }
 KInstallWizardDialog::KInstallWizardDialog(wxWindow* parent, const wxString& packagePath)
@@ -1419,16 +1404,16 @@ KInstallWizardDialog::~KInstallWizardDialog()
 
 	if (m_Package->IsOK())
 	{
-		KProgramOptionSerializer::SaveWindowSize(this, m_Option_Window);
+		//KProgramOptionSerializer::SaveWindowSize(this, m_Option_Window);
 
-		KProgramOptionSerializer::SaveSplitterLayout(m_Info_DocumentsSplitter, m_Option_MainUI);
-		KProgramOptionSerializer::SaveSplitterLayout(m_Components_SplitterV, m_Option_MainUI);
-		KProgramOptionSerializer::SaveSplitterLayout(m_Components_SplitterHRight, m_Option_MainUI);
+		//KProgramOptionSerializer::SaveSplitterLayout(m_Info_DocumentsSplitter, m_Option_MainUI);
+		//KProgramOptionSerializer::SaveSplitterLayout(m_Components_SplitterV, m_Option_MainUI);
+		//KProgramOptionSerializer::SaveSplitterLayout(m_Components_SplitterHRight, m_Option_MainUI);
 
-		KProgramOptionSerializer::SaveDataViewLayout(m_Info_PackageInfoList->GetView(), m_Option_InfoView);
-		KProgramOptionSerializer::SaveDataViewLayout(m_Requirements_Main->GetView(), m_Option_RequirementsView);
-		KProgramOptionSerializer::SaveDataViewLayout(m_Components_ItemList->GetView(), m_Option_ComponentsView);
-		KProgramOptionSerializer::SaveDataViewLayout(m_Components_Requirements->GetView(), m_Option_ComponentRequirementsView);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_Info_PackageInfoList->GetView(), m_Option_InfoView);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_Requirements_Main->GetView(), m_Option_RequirementsView);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_Components_ItemList->GetView(), m_Option_ComponentsView);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_Components_Requirements->GetView(), m_Option_ComponentRequirementsView);
 	}
 }
 

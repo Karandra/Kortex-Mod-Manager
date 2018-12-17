@@ -4,7 +4,6 @@
 #include "PackageCreator/KPackageCreatorVectorModel.h"
 #include "PackageProject/KPackageProjectComponents.h"
 #include "PackageProject/KPackageProjectFileData.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxStdDialog.h>
 
 using KPCCFileDataSelectorDataElement = std::pair<KPPFFileEntry*, bool>;
@@ -12,7 +11,7 @@ using KPCCFileDataSelectorDataArray = std::vector<KPCCFileDataSelectorDataElemen
 class KPCCFileDataSelectorModel: public KPackageCreatorVectorModel<KPCCFileDataSelectorDataArray>
 {
 	private:
-		KPackageProjectFileData* m_FileData = NULL;
+		KPackageProjectFileData* m_FileData = nullptr;
 		KPCCFileDataSelectorDataArray m_DataVector;
 
 	private:
@@ -33,7 +32,7 @@ class KPCCFileDataSelectorModel: public KPackageCreatorVectorModel<KPCCFileDataS
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		const KPCCFileDataSelectorDataElement* GetDataEntry(size_t index) const
 		{
@@ -41,7 +40,7 @@ class KPCCFileDataSelectorModel: public KPackageCreatorVectorModel<KPCCFileDataS
 			{
 				return &GetDataVector()->at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		void SetDataVector();
@@ -54,8 +53,8 @@ class KxDataViewComboBox;
 class KPCCFileDataSelectorModelCB: public KPCCFileDataSelectorModel
 {
 	private:
-		KxDataViewComboBox* m_ComboView = NULL;
-		KxStringVector* m_RequiredFiles = NULL;
+		KxDataViewComboBox* m_ComboView = nullptr;
+		KxStringVector* m_RequiredFiles = nullptr;
 
 	private:
 		virtual KxDataViewCtrl* OnCreateDataView(wxWindow* window) override;
@@ -72,10 +71,10 @@ class KPCCFileDataSelectorModelCB: public KPCCFileDataSelectorModel
 class KPCCFileDataSelectorModelDialog: public KxStdDialog, public KPCCFileDataSelectorModel
 {
 	private:
-		wxWindow* m_ViewPane = NULL;
+		wxWindow* m_ViewPane = nullptr;
 
-		KProgramOptionUI m_WindowOptions;
-		KProgramOptionUI m_ViewOptions;
+		//KProgramOptionAI m_WindowOptions;
+		//KProgramOptionAI m_ViewOptions;
 
 	private:
 		wxWindow* GetDialogMainCtrl() const override

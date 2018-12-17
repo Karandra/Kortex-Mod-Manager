@@ -4,7 +4,6 @@
 #include "PackageProject/KPackageProjectComponents.h"
 #include "PackageProject/KPackageProjectRequirements.h"
 #include "PackageCreator/KPackageCreatorIDTracker.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxStdDialog.h>
 class KxComboBox;
 
@@ -14,12 +13,12 @@ class KPCCConditionGroupEditor:
 	public KPackageCreatorIDTracker
 {
 	protected:
-		KPackageCreatorController* m_Controller = NULL;
+		KPackageCreatorController* m_Controller = nullptr;
 		KPackageProject& m_Project;
 		KPPCConditionGroup& m_ConditionGroup;
 
-		KxDataViewComboBoxEditor* m_LabelEditor = NULL;
-		KxDataViewComboBoxEditor* m_ValueEditor = NULL;
+		KxDataViewComboBoxEditor* m_LabelEditor = nullptr;
+		KxDataViewComboBoxEditor* m_ValueEditor = nullptr;
 		KxColor m_ConditionColor;
 
 	private:
@@ -89,12 +88,12 @@ class KPCCConditionGroupEditor:
 class KPCCConditionGroupEditorDialog: public KxStdDialog, public KPCCConditionGroupEditor
 {
 	protected:
-		wxWindow* m_ViewPane = NULL;
-		wxBoxSizer* m_Sizer = NULL;
-		KxComboBox* m_GlobalOperatorCB = NULL;
+		wxWindow* m_ViewPane = nullptr;
+		wxBoxSizer* m_Sizer = nullptr;
+		KxComboBox* m_GlobalOperatorCB = nullptr;
 
-		KProgramOptionUI m_WindowOptions;
-		KProgramOptionUI m_ViewOptions;
+		//KProgramOptionAI m_WindowOptions;
+		//KProgramOptionAI m_ViewOptions;
 
 	private:
 		wxWindow* GetDialogMainCtrl() const override
@@ -118,7 +117,7 @@ class KPCCConditionGroupEditorDialog: public KxStdDialog, public KPCCConditionGr
 class KPCCConditionGroupEditorDialogTD: public KPCCConditionGroupEditorDialog
 {
 	private:
-		KxComboBox* m_NewTypeDescriptorCB = NULL;
+		KxComboBox* m_NewTypeDescriptorCB = nullptr;
 		KPPCEntry& m_Entry;
 
 	private:

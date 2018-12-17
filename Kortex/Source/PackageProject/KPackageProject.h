@@ -7,7 +7,6 @@
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
 #include "KPackageProjectDefs.h"
-#include "KApp.h"
 #include <KxFramework/KxVersion.h>
 
 //////////////////////////////////////////////////////////////////////////

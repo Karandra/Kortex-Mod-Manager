@@ -1,26 +1,19 @@
 #pragma once
+#pragma comment(lib, "delayimp")
 
 /* KxFramework */
-#pragma comment(lib, "KxFramework.lib")
-
 #include <KxFramework/KxFramework.h>
-#include <KxFramework/KxApp.h>
-#include <KxFramework/KxTranslation.h>
-#include <KxFramework/KxSystemSettings.h>
-#include <KxFramework/KxSystem.h>
-#include <KxFramework/KxXML.h>
+#include <KxFramework/KxWinUndef.h>
 
-#include <KxFramework/KxFrame.h>
-#include <KxFramework/KxDialog.h>
-#include <KxFramework/KxTaskDialog.h>
+#if _WIN64
+#pragma comment(lib, "Bin/KxFramework x64.lib")
+#else
+#pragma comment(lib, "Bin/KxFramework.lib")
+#endif
 
 /* Kortex */
 #define KIPC_SERVER 0
-#define KLogMessage	wxLogMessage
-
-#pragma comment(lib, "delayimp")
-
-#include "KTranslation.h"
+#include <Kortex/Core.hpp>
 
 enum KLayoutConstants
 {
@@ -28,5 +21,5 @@ enum KLayoutConstants
 	KLC_HORIZONTAL_SPACING = 3,
 
 	KLC_VERTICAL_SPACING_SMALL = 2,
-	KLC_HORIZONTAL_SPACING_SMALL = 2,
+	KLC_HORIZONTAL_SPACING_SMALL = 2
 };

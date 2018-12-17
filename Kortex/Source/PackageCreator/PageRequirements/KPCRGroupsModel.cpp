@@ -5,7 +5,7 @@
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageCreator/KPackageCreatorController.h"
 #include "UI/KMainWindow.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxDataViewComboBox.h>
@@ -143,7 +143,7 @@ void KPCRGroupsModel::OnSelectItem(KxDataViewEvent& event)
 	}
 	else
 	{
-		m_EntriesModel->SetRequirementsGroup(NULL);
+		m_EntriesModel->SetRequirementsGroup(nullptr);
 		m_EntriesModel->SetDataVector();
 	}
 	RefreshComboControl();
@@ -170,7 +170,7 @@ void KPCRGroupsModel::OnContextMenu(KxDataViewEvent& event)
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != NULL);
+		item->Enable(entry != nullptr);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));

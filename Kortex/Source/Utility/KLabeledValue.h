@@ -3,6 +3,9 @@
 
 class KLabeledValue: public wxClientDataContainer
 {
+	public:
+		using Vector = std::vector<KLabeledValue>;
+
 	private:
 		wxString m_Value;
 		wxString m_Label;
@@ -12,9 +15,7 @@ class KLabeledValue: public wxClientDataContainer
 			:m_Value(value), m_Label(label)
 		{
 		}
-		virtual ~KLabeledValue()
-		{
-		}
+		virtual ~KLabeledValue() = default;
 
 	public:
 		bool HasValue() const
@@ -47,4 +48,3 @@ class KLabeledValue: public wxClientDataContainer
 			m_Label = label;
 		}
 };
-typedef std::vector<KLabeledValue> KLabeledValueArray;

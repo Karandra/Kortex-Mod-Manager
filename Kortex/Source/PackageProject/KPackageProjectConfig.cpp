@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPackageProjectConfig.h"
 #include "KPackageProject.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 
 const wxString KPackageProjectConfig::ms_DefaultCompressionMethod = "LZMA2";

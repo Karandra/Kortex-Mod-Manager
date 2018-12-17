@@ -22,15 +22,15 @@ class KPackageManagerListModel: public KDataViewListModel
 		std::unique_ptr<KModPackage> m_Package;
 
 		KxMenu m_ContextMenu;
-		KxMenuItem* m_ContextMenu_Open = NULL;
-		KxMenuItem* m_ContextMenu_ImportProject = NULL;
-		KxMenuItem* m_ContextMenu_ExtractFiles = NULL;
+		KxMenuItem* m_ContextMenu_Open = nullptr;
+		KxMenuItem* m_ContextMenu_ImportProject = nullptr;
+		KxMenuItem* m_ContextMenu_ExtractFiles = nullptr;
 
 		wxString m_PrevPath;
 		wxString m_CurrentPath;
 		bool m_IsRoot = true;
-		KxImageView* m_ImageView = NULL;
-		KxHTMLWindow* m_Description = NULL;
+		KxImageView* m_ImageView = nullptr;
+		KxHTMLWindow* m_Description = nullptr;
 
 	private:
 		virtual void OnInitControl() override;
@@ -60,7 +60,7 @@ class KPackageManagerListModel: public KDataViewListModel
 		virtual size_t GetItemCount() const override;
 		wxString GetHomePath() const
 		{
-			return KPackageManager::GetInstance()->GetPackagesFolder();
+			return Kortex::KPackageManager::GetInstance()->GetPackagesFolder();
 		}
 		
 		bool IsInRoot() const
@@ -94,7 +94,7 @@ class KPackageManagerListModel: public KDataViewListModel
 			{
 				return &m_Data.at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		KxFileItem* GetDataEntry(size_t index)
 		{
@@ -102,7 +102,7 @@ class KPackageManagerListModel: public KDataViewListModel
 			{
 				return &m_Data.at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		const KxFileItem* GetDataEntry(const KxDataViewItem& item) const
 		{
@@ -115,7 +115,7 @@ class KPackageManagerListModel: public KDataViewListModel
 
 		bool IsPackageOK() const
 		{
-			return m_Package != NULL && m_Package->IsOK();
+			return m_Package != nullptr && m_Package->IsOK();
 		}
 		bool CanAutoShowPackageInfo() const
 		{
@@ -127,7 +127,7 @@ class KPackageManagerListModel: public KDataViewListModel
 class KPackageManagerListModelThread: public KOperationWithProgressDialog<KxArchiveEvent>
 {
 	private:
-		KPackageManagerListModel* m_Model = NULL;
+		KPackageManagerListModel* m_Model = nullptr;
 
 	private:
 		KModPackage& GetPackage() const

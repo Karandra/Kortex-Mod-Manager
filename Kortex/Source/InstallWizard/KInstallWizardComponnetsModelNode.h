@@ -15,10 +15,10 @@ class KIWCModelNode
 		Type m_Type = None;
 		union
 		{
-			const KPPCGroup* m_Group = NULL;
+			const KPPCGroup* m_Group = nullptr;
 			const KPPCEntry* m_Entry;
 		};
-		const KIWCModelNode* m_ParentNode = NULL;
+		const KIWCModelNode* m_ParentNode = nullptr;
 
 		size_t m_Begin = 0;
 		size_t m_Size = 0;
@@ -53,16 +53,16 @@ class KIWCModelNode
 
 		const KPPCGroup* GetGroup() const
 		{
-			return IsGroup() ? m_Group : NULL;
+			return IsGroup() ? m_Group : nullptr;
 		}
 		const KPPCEntry* GetEntry() const
 		{
-			return IsEntry() ? m_Entry : NULL;
+			return IsEntry() ? m_Entry : nullptr;
 		}
 
 		bool HasParentNode() const
 		{
-			return m_ParentNode != NULL;
+			return m_ParentNode != nullptr;
 		}
 		const KIWCModelNode* GetParentNode() const
 		{

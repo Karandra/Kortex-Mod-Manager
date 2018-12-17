@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "KProgramWorkspace.h"
 #include "KProgramManagerModel.h"
-#include "KEvents.h"
-#include "KApp.h"
+#include <Kortex/Events.hpp>
+#include <Kortex/Application.hpp>
 #include "KAux.h"
 
+using namespace Kortex;
+
 KProgramWorkspace::KProgramWorkspace(KMainWindow* mainWindow)
-	:KWorkspace(mainWindow), m_ProgramListViewOptions(this, "ProgramListView")
+	:KWorkspace(mainWindow)//, m_ProgramListViewOptions(this, "ProgramListView")
 {
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 }
@@ -14,16 +16,16 @@ KProgramWorkspace::~KProgramWorkspace()
 {
 	if (IsWorkspaceCreated())
 	{
-		KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_ProgramListViewOptions);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_ProgramListViewOptions);
 	}
 }
 bool KProgramWorkspace::OnCreateWorkspace()
 {
 	m_ViewModel = new KProgramManagerModel();
 	m_ViewModel->Create(this, m_MainSizer);
-	KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_ProgramListViewOptions);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_ProgramListViewOptions);
 
-	KEvent::Bind(KEVT_VFS_TOGGLED, &KProgramWorkspace::OnVFSToggled, this);
+	IEvent::Bind(Events::VirtualFileSystemToggled, &KProgramWorkspace::OnVFSToggled, this);
 	return true;
 }
 
@@ -43,7 +45,7 @@ void KProgramWorkspace::OnReloadWorkspace()
 	m_ViewModel->RefreshItems();
 }
 
-void KProgramWorkspace::OnVFSToggled(KVFSEvent& event)
+void KProgramWorkspace::OnVFSToggled(VirtualFileSystemEvent& event)
 {
 	ScheduleReload();
 }

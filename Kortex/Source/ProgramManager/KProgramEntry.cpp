@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "KProgramEntry.h"
 #include "KProgramManager.h"
-#include "GameInstance/KInstanceManagement.h"
-#include "ModManager/KModManager.h"
-#include "ModManager/KDispatcher.h"
+#include <Kortex/GameInstance.hpp>
+#include <Kortex/ModManager.hpp>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxXML.h>
+
+using namespace Kortex;
+using namespace Kortex::ModManager;
 
 namespace
 {
@@ -13,7 +15,7 @@ namespace
 	{
 		return !(path.length() >= 2 && path[1] == wxS(':'));
 	}
-	wxString ResolvePath(const wxString& path, bool toVirtualDir, bool* isRelative = NULL)
+	wxString ResolvePath(const wxString& path, bool toVirtualDir, bool* isRelative = nullptr)
 	{
 		if (!path.IsEmpty())
 		{
@@ -23,16 +25,16 @@ namespace
 				KxUtility::SetIfNotNull(isRelative, true);
 				if (toVirtualDir)
 				{
-					if (KGameInstance* instnace = KGameInstance::GetActive())
+					if (IGameInstance* instnace = IGameInstance::GetActive())
 					{
 						return instnace->GetVirtualGameDir() + wxS('\\') + pathExp;
 					}
 				}
 				else
 				{
-					if (KDispatcher* dispatcher = KDispatcher::GetInstance())
+					if (IModDispatcher* dispatcher = IModDispatcher::GetInstance())
 					{
-						const KFileTreeNode* node = dispatcher->ResolveLocation(pathExp);
+						const FileTreeNode* node = dispatcher->ResolveLocation(pathExp);
 						if (node)
 						{
 							return node->GetFullPath();
@@ -75,7 +77,7 @@ bool KProgramEntry::IsRequiresVFS() const
 }
 bool KProgramEntry::CanRunNow() const
 {
-	if (KModManager* manager = KModManager::GetInstance())
+	if (IModManager* manager = IModManager::GetInstance())
 	{
 		if (!IsRequiresVFS() || manager->IsVFSMounted())
 		{

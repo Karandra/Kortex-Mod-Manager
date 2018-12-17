@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KIPCServer.h"
 #include "KIPCConnection.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include "VFS/KVFSService.h"
 #include "VFS/KVFSMirror.h"
 #include "VFS/KVFSMultiMirror.h"
@@ -25,11 +25,11 @@ wxConnectionBase* KIPCServer::OnAcceptConnection(const wxString& topic)
 		m_Connection = new KIPCConnection(this);
 		return m_Connection;
 	}
-	return NULL;
+	return nullptr;
 }
 void KIPCServer::OnDisconnect()
 {
-	KApp::Get().ExitApp();
+	Kortex::IApplication::GetInstance()->ExitApp();
 }
 
 void KIPCServer::OnAcceptRequest(const KIPCRequestNS::InitVFSService& config)

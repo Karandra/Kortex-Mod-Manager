@@ -15,16 +15,16 @@ namespace KIPCRequestNS
 	template<size_t t_Length> class BasicStaticString
 	{
 		private:
-			wchar_t m_Buffer[t_Length] = {0};
+			wxChar m_Buffer[t_Length] = {0};
 			size_t m_Length = 0;
 
 		public:
-			BasicStaticString(const wchar_t* s = NULL)
+			BasicStaticString(const wxChar* s = nullptr)
 			{
 				if (s)
 				{
-					m_Length = wcslen(s);
-					wcsncpy_s(m_Buffer, s, m_Length);
+					m_Length = wxStrlen(s);
+					wxStrncpy(m_Buffer, s, m_Length);
 				}
 			}
 			BasicStaticString(const wxString& s)
@@ -37,20 +37,20 @@ namespace KIPCRequestNS
 			{
 				return t_Length;
 			}
-			const wchar_t* GetBuffer() const noexcept
+			const wxChar* GetBuffer() const noexcept
 			{
 				return m_Buffer;
 			}
-			wchar_t* GetBuffer() noexcept
+			wxChar* GetBuffer() noexcept
 			{
 				return m_Buffer;
 			}
 
-			const wchar_t* data() const noexcept
+			const wxChar* data() const noexcept
 			{
 				return m_Buffer;
 			}
-			wchar_t* data() noexcept
+			wxChar* data() noexcept
 			{
 				return m_Buffer;
 			}
@@ -62,7 +62,7 @@ namespace KIPCRequestNS
 			{
 				return m_Length;
 			}
-			bool empry() const
+			bool empty() const
 			{
 				return m_Length == 0;
 			}
@@ -274,7 +274,7 @@ namespace KIPCRequestNS
 				KxStringVector sources;
 				for (const StaticString& s: m_Sources)
 				{
-					if (!s.empry())
+					if (!s.empty())
 					{
 						sources.push_back(s);
 					}

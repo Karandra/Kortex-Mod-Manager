@@ -10,11 +10,11 @@ class KxButton;
 class KPCRGroupsModel: public KPackageCreatorVectorModel<KPPRRequirementsGroup::Vector>, public KPackageCreatorIDTracker
 {
 	private:
-		KPackageProjectRequirements* m_Requirements = NULL;
-		KxDataViewComboBox* m_ComboView = NULL;
-		KPCREntriesListModel* m_EntriesModel = NULL;
-		KxButton* m_AddButton = NULL;
-		KxButton* m_RemoveButton = NULL;
+		KPackageProjectRequirements* m_Requirements = nullptr;
+		KxDataViewComboBox* m_ComboView = nullptr;
+		KPCREntriesListModel* m_EntriesModel = nullptr;
+		KxButton* m_AddButton = nullptr;
+		KxButton* m_RemoveButton = nullptr;
 
 	private:
 		virtual KxDataViewCtrl* OnCreateDataView(wxWindow* window) override;
@@ -66,7 +66,7 @@ class KPCRGroupsModel: public KPackageCreatorVectorModel<KPPRRequirementsGroup::
 			{
 				return (*GetDataVector())[index].get();
 			}
-			return NULL;
+			return nullptr;
 		}
 		KPPRRequirementsGroup* GetDataEntry(const KxDataViewItem& item) const
 		{

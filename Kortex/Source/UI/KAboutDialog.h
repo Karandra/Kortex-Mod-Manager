@@ -3,13 +3,45 @@
 #include "KImageProvider.h"
 #include <KxFramework/KxStdDialog.h>
 #include <KxFramework/KxAuiNotebook.h>
+#include <KxFramework/KxImageView.h>
 #include <KxFramework/KxPanel.h>
+class KxHTMLWindow;
 class wxHtmlLinkEvent;
 
+//////////////////////////////////////////////////////////////////////////
+class KAboutInfo
+{
+	public:
+		enum class Type
+		{
+			App,
+			Software,
+			Resource,
+		};
+
+	private:
+		Type m_Type;
+		mutable wxString m_License;
+
+	public:
+		KAboutInfo(Type type)
+			:m_Type(type)
+		{
+		}
+
+	public:
+		wxString GetLocation() const;
+		wxString GetLicense() const;
+};
+
+//////////////////////////////////////////////////////////////////////////
 class KAboutDialog: public KxStdDialog
 {
 	private:
-		KxAuiNotebook* m_View = NULL;
+		KxImageView* m_Logo = nullptr;
+		KxAuiNotebook* m_View = nullptr;
+
+		KAboutInfo m_AppInfo;
 
 	private:
 		virtual int GetViewSizerProportion() const override
@@ -18,13 +50,13 @@ class KAboutDialog: public KxStdDialog
 		}
 		virtual wxOrientation GetViewSizerOrientation() const override
 		{
-			return wxVERTICAL;
+			return wxHORIZONTAL;
 		}
 		virtual wxOrientation GetViewLabelSizerOrientation() const override
 		{
 			return wxVERTICAL;
 		}
-		virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = NULL) const override
+		virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
 		{
 			return true;
 		}
@@ -32,14 +64,14 @@ class KAboutDialog: public KxStdDialog
 		{
 			return m_View;
 		}
-		virtual void ResetState()
-		{
-		}
 
 	private:
+		KxHTMLWindow* CreateHTMLWindow(wxWindow* parent);
+		wxSize GetLogoSize() const;
+
 		wxWindow* CreateTab_Info();
 		wxWindow* CreateTab_Modules();
-		wxWindow* CreateTab_Permissions();
+		wxWindow* CreateTab_License();
 
 		void OnLinkClick(wxHtmlLinkEvent& event);
 

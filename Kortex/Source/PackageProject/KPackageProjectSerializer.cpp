@@ -1,14 +1,16 @@
 #include "stdafx.h"
 #include "KPackageProjectSerializer.h"
-#include "ModManager/KModManager.h"
-#include "Network/KNetwork.h"
+#include <Kortex/ModManager.hpp>
+#include <Kortex/NetworkManager.hpp>
 #include "KAux.h"
 #include <KxFramework/KxTextFile.h>
 
-KModEntry::FixedWebSitePair KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
+Kortex::ModProvider::Item KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
 {
+	using namespace Kortex::Network;
+
 	long long id = -1;
-	KNetworkProviderID index = KNETWORK_PROVIDER_ID_INVALID;
+	Kortex::INetworkProvider* provider = nullptr;
 
 	// https://regex101.com
 	wxString regEx = wxString::FromUTF8Unchecked(u8R"((?:http:\/\/)?(?:https:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)(?:.*\/)(?:[^\d]+)(\d+))");
@@ -20,27 +22,32 @@ KModEntry::FixedWebSitePair KPackageProjectSerializer::TryParseWebSite(const wxS
 		wxString siteName = KAux::ExtractDomainName(url);
 		if (siteName == "tesall.ru")
 		{
-			index = KNETWORK_PROVIDER_ID_TESALL;
+			provider = Kortex::Network::TESALLProvider::GetInstance();
 		}
 		else if (siteName == "nexusmods.com" || siteName.AfterFirst('.') == "nexusmods.com" || siteName.Contains("nexus"))
 		{
-			index = KNETWORK_PROVIDER_ID_NEXUS;
+			provider = Kortex::Network::NexusProvider::GetInstance();
 		}
 		else if (siteName == "loverslab.com")
 		{
-			index = KNETWORK_PROVIDER_ID_LOVERSLAB;
+			provider = Kortex::Network::LoversLabProvider::GetInstance();
 		}
 		KxUtility::SetIfNotNull(domainNameOut, siteName);
 
 		// ID
 		reURL.GetMatch(url, 2).ToLongLong(&id);
 	}
-	return std::make_pair(id, index);
+
+	if (provider)
+	{
+		Kortex::ModProvider::Item(provider->GetName(), id);
+	}
+	return Kortex::ModProvider::Item();
 }
 wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
 {
 	wxString copy = bbSource;
-	return KNetwork::GetInstance()->GetProvider(KNETWORK_PROVIDER_ID_NEXUS)->ConvertDescriptionToHTML(copy);
+	return Kortex::Network::NexusProvider::GetInstance()->ConvertDescriptionToHTML(copy);
 }
 wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, KPPContentType type) const
 {
@@ -65,7 +72,7 @@ wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, 
 }
 bool KPackageProjectSerializer::CheckTag(const wxString& tagName) const
 {
-	return KModTagsManager::GetInstance()->FindModTag(tagName) != NULL;
+	return Kortex::IModTagManager::GetInstance()->FindTagByName(tagName) != nullptr;
 }
 
 KPackageProjectSerializer::KPackageProjectSerializer()

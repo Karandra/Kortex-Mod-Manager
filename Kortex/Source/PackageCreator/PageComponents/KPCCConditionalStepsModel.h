@@ -3,7 +3,6 @@
 #include "PackageCreator/KPackageCreatorVectorModel.h"
 #include "PackageProject/KPackageProjectComponents.h"
 #include "PackageProject/KPackageProjectFileData.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxStdDialog.h>
 
 class KPCCConditionalStepsModel: public KPackageCreatorVectorModel<KPPCConditionalStep::Vector>
@@ -39,7 +38,7 @@ class KPCCConditionalStepsModel: public KPackageCreatorVectorModel<KPPCCondition
 			{
 				return GetDataVector()->at(index).get();
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		void SetDataVector();
@@ -50,9 +49,9 @@ class KPCCConditionalStepsModel: public KPackageCreatorVectorModel<KPPCCondition
 class KPCCConditionalStepsModelDialog: public KxStdDialog, public KPCCConditionalStepsModel
 {
 	private:
-		wxWindow* m_ViewPane = NULL;
-		KProgramOptionUI m_WindowOptions;
-		KProgramOptionUI m_ViewOptions;
+		wxWindow* m_ViewPane = nullptr;
+		//KProgramOptionAI m_WindowOptions;
+		//KProgramOptionAI m_ViewOptions;
 
 	private:
 		wxWindow* GetDialogMainCtrl() const override

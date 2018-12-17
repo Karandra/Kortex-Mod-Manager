@@ -9,15 +9,10 @@
 #include "PageInfo/KPCInfoAdditionalInfoModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "PackageProject/KPackageProjectInfo.h"
-#include "ModManager/KModManager.h"
-#include "ModManager/KModWorkspace.h"
-#include "ModManager/KModEntry.h"
-#include "Network/KNetwork.h"
-#include "Network/KNetworkProviderNexus.h"
-#include "Network/KNetworkProviderTESALL.h"
-#include "Network/KNetworkProviderLoversLab.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/ModManager.hpp>
+#include <Kortex/NetworkManager.hpp>
 #include "UI/KTextEditorDialog.h"
-#include "KThemeManager.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxLabel.h>
@@ -31,6 +26,8 @@
 #pragma warning(disable: 4302)
 #pragma warning(disable: 4311)
 #pragma warning(disable: 4312)
+
+using namespace Kortex;
 
 KPackageCreatorPageInfo::KPackageCreatorPageInfo(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller)
 	:KPackageCreatorPageBase(mainWorkspace, controller)
@@ -46,7 +43,7 @@ bool KPackageCreatorPageInfo::OnCreateWorkspace()
 	m_Pane->SetSizer(m_PaneSizer);
 
 	m_MainSizer->Add(m_Pane, 1, wxEXPAND);
-	KThemeManager::Get().ProcessWindow(m_Pane);
+	IThemeManager::GetActive().ProcessWindow(m_Pane);
 
 	CreateBasicInfoControls();
 	CreateSitesControls();
@@ -182,23 +179,26 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 	m_PaneSizer->Add(sitesSizer, 0, wxEXPAND|wxLEFT, ms_LeftMargin);
 
 	// Fixed sites
-	m_WebSitesNexusID = AddProviderControl<KNetworkProviderNexus>(sitesSizer);
-	m_WebSitesTESALLID = AddProviderControl<KNetworkProviderTESALL>(sitesSizer);
-	m_WebSitesLoversLabID = AddProviderControl<KNetworkProviderLoversLab>(sitesSizer);
+	using namespace Kortex::Network;
+	m_WebSitesNexusID = AddProviderControl<NexusProvider>(sitesSizer);
+	m_WebSitesTESALLID = AddProviderControl<TESALLProvider>(sitesSizer);
+	m_WebSitesLoversLabID = AddProviderControl<LoversLabProvider>(sitesSizer);
 
 	// Other sites
 	m_WebSitesButton = AddControlsRow(sitesSizer, KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), new KxButton(m_Pane, KxID_NONE, KTr(KxID_EDIT)), 0);
 
 	// Bind events
-	m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<KNETWORK_PROVIDER_ID_TESALL>, this);
-	m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<KNETWORK_PROVIDER_ID_NEXUS>, this);
-	m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<KNETWORK_PROVIDER_ID_LOVERSLAB>, this);
+	m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusProvider>, this);
+	m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLProvider>, this);
+	m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabProvider>, this);
 
 	m_WebSitesButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
+		#if 0
 		KPCInfoSitesModelDialog dialog(GetMainWindow(), KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), m_Controller, true);
-		dialog.SetDataVector(GetProjectInfo().GetWebSites(), &GetProjectInfo());
+		dialog.SetDataVector(GetProjectInfo().GetProviderStore(), &GetProjectInfo());
 		dialog.ShowModal();
+		#endif
 		event.Skip();
 	});
 }
@@ -356,11 +356,13 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& tProjectInfo)
 	m_VersionInput->SetValue(tProjectInfo.GetVersion());
 	m_AuthorInput->SetValue(tProjectInfo.GetAuthor());
 	m_TranslatorNameInput->SetValue(tProjectInfo.GetTranslator());
-	m_TagsModel->SetDataVector(&tProjectInfo.GetTags());
+	m_TagsModel->SetDataVector(&tProjectInfo.GetTagStore());
 
 	/* Web sites */
-	auto LoadFixedSite = [tProjectInfo](KNetworkProviderID index, KxTextBox* input)
+	using namespace Kortex::Network;
+	auto LoadFixedSite = [tProjectInfo](ProviderID index, KxTextBox* input)
 	{
+		#if 0
 		if (tProjectInfo.HasWebSite(index))
 		{
 			input->SetValue(std::to_wstring(tProjectInfo.GetWebSiteModID(index)));
@@ -369,10 +371,11 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& tProjectInfo)
 		{
 			input->Clear();
 		}
+		#endif
 	};
-	LoadFixedSite(KNETWORK_PROVIDER_ID_TESALL, m_WebSitesTESALLID);
-	LoadFixedSite(KNETWORK_PROVIDER_ID_NEXUS, m_WebSitesNexusID);
-	LoadFixedSite(KNETWORK_PROVIDER_ID_LOVERSLAB, m_WebSitesLoversLabID);
+	LoadFixedSite(ProviderIDs::TESALL, m_WebSitesTESALLID);
+	LoadFixedSite(ProviderIDs::Nexus, m_WebSitesNexusID);
+	LoadFixedSite(ProviderIDs::LoversLab, m_WebSitesLoversLabID);
 
 	/* Config */
 	// Package path

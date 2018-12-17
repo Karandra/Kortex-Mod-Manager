@@ -7,7 +7,7 @@
 class KInstallWizardRequirementsModel: public KDataViewVectorListModel<KPPRRequirementEntry::RefVector, KDataViewListModel>
 {
 	private:
-		const KPackageProjectRequirements* m_RequirementsInfo = NULL;
+		const KPackageProjectRequirements* m_RequirementsInfo = nullptr;
 		KPPRRequirementEntry::RefVector m_DataVector;
 
 	private:
@@ -34,7 +34,7 @@ class KInstallWizardRequirementsModel: public KDataViewVectorListModel<KPPRRequi
 			{
 				return m_DataVector.at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		KPPRRequirementEntry* GetDataEntry(const KxDataViewItem& item) const
 		{

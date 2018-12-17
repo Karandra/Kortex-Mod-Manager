@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KOperationWithProgress.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxString.h>
 
 void KOperationWithProgressBase::OnThreadEnd(wxNotifyEvent& event)
@@ -10,7 +10,7 @@ void KOperationWithProgressBase::OnThreadEnd(wxNotifyEvent& event)
 	{
 		m_Ended = true;
 
-		m_Thread = NULL;
+		m_Thread = nullptr;
 		RunOnEnd();
 		delete this;
 	}
@@ -94,7 +94,7 @@ bool KOperationWithProgressBase::Stop()
 	if (m_Thread)
 	{
 		KQuickThread* thread = m_Thread;
-		m_Thread = NULL;
+		m_Thread = nullptr;
 		return thread->Destroy();
 	}
 	return false;
@@ -133,7 +133,7 @@ void KOperationWithProgressDialogBase::DestroyDialog()
 	if (m_ProgressDialog)
 	{
 		m_ProgressDialog->Destroy();
-		m_ProgressDialog = NULL;
+		m_ProgressDialog = nullptr;
 	}
 
 	if (m_Parent)

@@ -13,7 +13,7 @@ class KOperationWithProgressBase: public wxClientDataContainer
 
 	private:
 		wxEvtHandler m_EventHandler;
-		KQuickThread* m_Thread = NULL;
+		KQuickThread* m_Thread = nullptr;
 		bool m_AllowCancel = false;
 		bool m_Ended = false;
 		wxCriticalSection m_EndCS;
@@ -80,9 +80,9 @@ class KOperationWithProgressDialogBase:
 	public KxWithOptions<KOperationWithProgressDialogOptions, KOWPD_OPTION_NONE>
 {
 	private:
-		wxWindow* m_Parent = NULL;
-		wxWindow* m_ExactParent = NULL;
-		KxDualProgressDialog* m_ProgressDialog = NULL;
+		wxWindow* m_Parent = nullptr;
+		wxWindow* m_ExactParent = nullptr;
+		KxDualProgressDialog* m_ProgressDialog = nullptr;
 		wxString m_Caption;
 
 	private:
@@ -99,8 +99,8 @@ class KOperationWithProgressDialogBase:
 		virtual wxString OnSetLabel(const wxString& label);
 
 	public:
-		KOperationWithProgressDialogBase(bool allowCancel, wxWindow* window = NULL);
-		KOperationWithProgressDialogBase(const HandlerType& entryPoint, bool allowCancel, wxWindow* window = NULL);
+		KOperationWithProgressDialogBase(bool allowCancel, wxWindow* window = nullptr);
+		KOperationWithProgressDialogBase(const HandlerType& entryPoint, bool allowCancel, wxWindow* window = nullptr);
 		virtual ~KOperationWithProgressDialogBase();
 
 	public:
@@ -138,11 +138,11 @@ class KOperationWithProgressDialog: public KOperationWithProgressDialogBase
 		using EventTypeTag = wxEventTypeTag<EventClass>;
 
 	public:
-		KOperationWithProgressDialog(bool allowCancel, wxWindow* window = NULL)
+		KOperationWithProgressDialog(bool allowCancel, wxWindow* window = nullptr)
 			:KOperationWithProgressDialogBase(allowCancel, window)
 		{
 		}
-		KOperationWithProgressDialog(const HandlerType& entryPoint, bool allowCancel, wxWindow* window = NULL)
+		KOperationWithProgressDialog(const HandlerType& entryPoint, bool allowCancel, wxWindow* window = nullptr)
 			:KOperationWithProgressDialogBase(entryPoint, allowCancel, window)
 		{
 		}

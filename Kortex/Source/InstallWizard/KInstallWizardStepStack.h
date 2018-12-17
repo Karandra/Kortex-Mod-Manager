@@ -5,7 +5,7 @@
 class KIWStepStackItem
 {
 	private:
-		KPPCStep* Step = NULL;
+		KPPCStep* Step = nullptr;
 		KPPCEntry::RefVector CheckedEntries;
 
 	public:
@@ -55,15 +55,15 @@ class KIWStepStack: private KIWStackType
 		}
 		KIWStepStackItem* GetTopItem()
 		{
-			return !empty() ? &top() : NULL;
+			return !empty() ? &top() : nullptr;
 		}
 		const KIWStepStackItem* GetTopItem() const
 		{
-			return !empty() ? &top() : NULL;
+			return !empty() ? &top() : nullptr;
 		}
 		KPPCStep* GetTopStep() const
 		{
-			return !empty() ? top().GetStep() : NULL;
+			return !empty() ? top().GetStep() : nullptr;
 		}
 		void Clear();
 

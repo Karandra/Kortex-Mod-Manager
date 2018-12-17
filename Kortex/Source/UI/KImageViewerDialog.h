@@ -8,7 +8,6 @@
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxHTMLWindow.h>
 #include "Archive/KArchive.h"
-#include "KProgramOptions.h"
 #include <KxFramework/KxSplitterWindow.h>
 
 class KImageViewerEvent: public wxNotifyEvent
@@ -105,19 +104,17 @@ wxDECLARE_EVENT(KEVT_IMAGEVIEWER_PREV_IMAGE, KImageViewerEvent);
 class KImageViewerDialog: public KxStdDialog
 {
 	private:
-		KxSplitterWindow* m_Splitter = NULL;
-		KxImageView* m_ImageView = NULL;
-		KxHTMLWindow* m_Description = NULL;
-		KxAuiToolBar* m_ToolBar = NULL;
-		KxAuiToolBarItem* m_Backward = NULL;
-		KxAuiToolBarItem* m_Forward = NULL;
-		KxSlider* m_ScaleSlider = NULL;
+		KxSplitterWindow* m_Splitter = nullptr;
+		KxImageView* m_ImageView = nullptr;
+		KxHTMLWindow* m_Description = nullptr;
+		KxAuiToolBar* m_ToolBar = nullptr;
+		KxAuiToolBarItem* m_Backward = nullptr;
+		KxAuiToolBarItem* m_Forward = nullptr;
+		KxSlider* m_ScaleSlider = nullptr;
 		wxString m_FilePath;
 
-		wxColourPickerCtrl* m_ColorBGCtrl = NULL;
-		wxColourPickerCtrl* m_ColorFGCtrl = NULL;
-
-		KProgramOptionUI m_OptionsImageView;
+		wxColourPickerCtrl* m_ColorBGCtrl = nullptr;
+		wxColourPickerCtrl* m_ColorFGCtrl = nullptr;
 
 	private:
 		virtual int GetViewSizerProportion() const override
@@ -132,7 +129,7 @@ class KImageViewerDialog: public KxStdDialog
 		{
 			return wxHORIZONTAL;
 		}
-		virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = NULL) const override
+		virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
 		{
 			return true;
 		}

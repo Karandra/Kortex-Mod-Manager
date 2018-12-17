@@ -9,7 +9,6 @@
 #include <KxFramework/KxTextBox.h>
 #include <KxFramework/KxTreeList.h>
 #include <KxFramework/KxButton.h>
-class KModEntry;
 class KPackageCreatorManager;
 class KPackageCreatorController;
 class KPackageCreatorPageBase;
@@ -20,32 +19,37 @@ class KPackageCreatorPageRequirements;
 class KPackageCreatorPageComponents;
 class KPackageProject;
 
+namespace Kortex
+{
+	class IGameMod;
+}
+
 class KPackageCreatorWorkspace: public KWorkspace, public KxSingletonPtr<KPackageCreatorWorkspace>
 {
 	friend class KPackageCreatorPageBase;
 	friend class KPackageCreatorController;
 
 	private:
-		KPackageCreatorManager* m_Manager = NULL;
-		KPackageCreatorController* m_Controller = NULL;
+		KPackageCreatorManager* m_Manager = nullptr;
+		KPackageCreatorController* m_Controller = nullptr;
 
-		KxAuiToolBar* m_MenuBar = NULL;
-		KxAuiToolBarItem* m_MenuBar_Project = NULL;
-		KxAuiToolBarItem* m_MenuBar_Import = NULL;
-		KxAuiToolBarItem* m_MenuBar_Build = NULL;
+		KxAuiToolBar* m_MenuBar = nullptr;
+		KxAuiToolBarItem* m_MenuBar_Project = nullptr;
+		KxAuiToolBarItem* m_MenuBar_Import = nullptr;
+		KxAuiToolBarItem* m_MenuBar_Build = nullptr;
 
-		wxBoxSizer* m_MainSizer = NULL;
-		KxPanel* m_MainPane = NULL;
-		KxPanel* m_PagesBookPane = NULL;
-		wxSimplebook* m_PagesBook = NULL;
-		KxTreeList* m_PagesList = NULL;
+		wxBoxSizer* m_MainSizer = nullptr;
+		KxPanel* m_MainPane = nullptr;
+		KxPanel* m_PagesBookPane = nullptr;
+		wxSimplebook* m_PagesBook = nullptr;
+		KxTreeList* m_PagesList = nullptr;
 
 		// Pages
-		KPackageCreatorPageInfo* m_PageInfo = NULL;
-		KPackageCreatorPageFileData* m_PageFileData = NULL;
-		KPackageCreatorPageInterface* m_PageInterface = NULL;
-		KPackageCreatorPageRequirements* m_PageRequirements = NULL;
-		KPackageCreatorPageComponents* m_PageComponents = NULL;
+		KPackageCreatorPageInfo* m_PageInfo = nullptr;
+		KPackageCreatorPageFileData* m_PageFileData = nullptr;
+		KPackageCreatorPageInterface* m_PageInterface = nullptr;
+		KPackageCreatorPageRequirements* m_PageRequirements = nullptr;
+		KPackageCreatorPageComponents* m_PageComponents = nullptr;
 
 	public:
 		KPackageCreatorWorkspace(KMainWindow* mainWindow);
@@ -101,7 +105,7 @@ class KPackageCreatorWorkspace: public KWorkspace, public KxSingletonPtr<KPackag
 		KPackageCreatorPageBase* GetCurrentPage() const;
 		bool SwitchToPage(size_t index);
 		KPackageProject& ImportProjectFromPackage(const wxString& path);
-		KPackageProject& CreateProjectFromModEntry(const KModEntry& modEntry);
+		KPackageProject& CreateProjectFromModEntry(const Kortex::IGameMod& modEntry);
 
 	private:
 		void RefreshWindowTitleForProject();

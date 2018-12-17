@@ -12,8 +12,8 @@ class KUPtrVectorUtil
 		template<class T> using ElementsVector = std::vector<std::unique_ptr<T>>;
 		template<class T> using ElementsRefVector = std::vector<T*>;
 
-		template<class T> static bool MoveElements(ElementsVector<T>& elementsVector,
-										   const ElementsRefVector<T>& entriesToMove,
+		template<class T> static bool MoveElements(ElementsVector<T>& allItems,
+										   const ElementsRefVector<T>& toMove,
 										   const T& anchor,
 										   MoveMode moveMode
 		)
@@ -24,41 +24,41 @@ class KUPtrVectorUtil
 			};
 
 			// Check if anchor is not one of moved elements
-			if (std::find(entriesToMove.begin(), entriesToMove.end(), &anchor) != entriesToMove.end())
+			if (std::find(toMove.begin(), toMove.end(), &anchor) != toMove.end())
 			{
 				return false;
 			}
 
 			// Remove all moved elements from existing place
-			elementsVector.erase(std::remove_if(elementsVector.begin(), elementsVector.end(), [&entriesToMove](auto& entry)
+			allItems.erase(std::remove_if(allItems.begin(), allItems.end(), [&toMove](auto& entry)
 			{
 				// Release unique_ptr's and remove them
 				// Pointer to it is present in 'entriesToMove' vector
-				if (std::find(entriesToMove.begin(), entriesToMove.end(), entry.get()) != entriesToMove.end())
+				if (std::find(toMove.begin(), toMove.end(), entry.get()) != toMove.end())
 				{
 					entry.release();
 					return true;
 				}
 				return false;
-			}), elementsVector.end());
+			}), allItems.end());
 
 			// Find anchor position
-			auto anchorIt = std::find_if(elementsVector.begin(), elementsVector.end(), FindAnchor);
-			if (anchorIt != elementsVector.end())
+			auto anchorIt = std::find_if(allItems.begin(), allItems.end(), FindAnchor);
+			if (anchorIt != allItems.end())
 			{
 				switch (moveMode)
 				{
 					case MoveMode::Before:
 					{
-						elementsVector.insert(anchorIt, entriesToMove.begin(), entriesToMove.end());
+						allItems.insert(anchorIt, toMove.begin(), toMove.end());
 						break;
 					}
 					default:
 					{
 						size_t index = 1;
-						for (auto it = entriesToMove.begin(); it != entriesToMove.end(); ++it)
+						for (auto it = toMove.begin(); it != toMove.end(); ++it)
 						{
-							elementsVector.emplace(anchorIt + index, *it);
+							allItems.emplace(anchorIt + index, *it);
 							index++;
 						}
 						break;
@@ -70,12 +70,12 @@ class KUPtrVectorUtil
 		}
 
 	public:
-		template<class T> static bool MoveBefore(ElementsVector<T>& elementsVector, const ElementsRefVector<T>& entriesToMove, const T& anchor)
+		template<class T> static bool MoveBefore(ElementsVector<T>& allItems, const ElementsRefVector<T>& toMove, const T& anchor)
 		{
-			return MoveElements<T>(elementsVector, entriesToMove, anchor, MoveMode::Before);
+			return MoveElements<T>(allItems, toMove, anchor, MoveMode::Before);
 		}
-		template<class T> static bool MoveAfter(ElementsVector<T>& elementsVector, const ElementsRefVector<T>& entriesToMove, const T& anchor)
+		template<class T> static bool MoveAfter(ElementsVector<T>& allItems, const ElementsRefVector<T>& toMove, const T& anchor)
 		{
-			return MoveElements<T>(elementsVector, entriesToMove, anchor, MoveMode::After);
+			return MoveElements<T>(allItems, toMove, anchor, MoveMode::After);
 		}
 };

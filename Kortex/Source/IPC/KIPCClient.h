@@ -14,7 +14,7 @@ class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 		static bool RunServerAndConnect(KIPCClient** clientInstance);
 
 	private:
-		KIPCConnection* m_Connection = NULL;
+		KIPCConnection* m_Connection = nullptr;
 
 	private:
 		bool CreateConnection();
@@ -30,7 +30,7 @@ class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 	public:
 		bool IsConnected() const
 		{
-			return m_Connection != NULL;
+			return m_Connection != nullptr;
 		}
 
 		bool InitConnection();

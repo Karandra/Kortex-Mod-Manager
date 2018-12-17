@@ -1,7 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "KPackageProjectDefs.h"
-#include "ModManager/KModEntry.h"
+#include <Kortex/ModManager.hpp>
+#include <Kortex/ModProvider.hpp>
 class KPackageProject;
 
 class KPackageProjectSerializer
@@ -18,7 +19,7 @@ class KPackageProjectSerializer
 			return root;
 		}
 
-		static KModEntry::FixedWebSitePair TryParseWebSite(const wxString& url, wxString* domainNameOut = NULL);
+		static Kortex::ModProvider::Item TryParseWebSite(const wxString& url, wxString* domainNameOut = nullptr);
 		static wxString ConvertBBCode(const wxString& bbSource);
 
 	private:

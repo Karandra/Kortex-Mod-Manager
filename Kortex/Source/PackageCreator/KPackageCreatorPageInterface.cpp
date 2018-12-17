@@ -4,20 +4,20 @@
 #include "PageInterface/KPCIImagesListModel.h"
 #include "KPackageCreatorWorkspace.h"
 #include "KPackageCreatorController.h"
-#include "KThemeManager.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxComboBox.h>
 
 KPackageCreatorPageInterface::KPackageCreatorPageInterface(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller)
-	:KPackageCreatorPageBase(mainWorkspace, controller),
-	m_MainOptions(this, "MainUI"), m_ListOptions(this, "ListView")
+	:KPackageCreatorPageBase(mainWorkspace, controller)
+	//m_MainOptions(this, "MainUI"), m_ListOptions(this, "ListView")
 {
 }
 KPackageCreatorPageInterface::~KPackageCreatorPageInterface()
 {
 	if (IsWorkspaceCreated())
 	{
-		KProgramOptionSerializer::SaveDataViewLayout(m_ImageListModel->GetView(), m_ListOptions);
+		//KProgramOptionSerializer::SaveDataViewLayout(m_ImageListModel->GetView(), m_ListOptions);
 		m_ImageListModel->SetDataVector();
 	}
 }
@@ -25,7 +25,7 @@ bool KPackageCreatorPageInterface::OnCreateWorkspace()
 {
 	CreateImageListControls();
 
-	KProgramOptionSerializer::LoadDataViewLayout(m_ImageListModel->GetView(), m_ListOptions);
+	//KProgramOptionSerializer::LoadDataViewLayout(m_ImageListModel->GetView(), m_ListOptions);
 	return true;
 }
 KPackageProjectInterface& KPackageCreatorPageInterface::GetProjectInterface() const

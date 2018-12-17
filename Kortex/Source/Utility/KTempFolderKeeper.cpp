@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KTempFolderKeeper.h"
-#include "KApp.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxMath.h>
 
@@ -16,7 +16,7 @@ void KTempFolderKeeper::InitGlobalTemp()
 {
 	if (ms_GlobalTemp.IsEmpty())
 	{
-		ms_GlobalTemp = wxFileName::GetTempDir() + '\\' + KApp::Get().GetAppName() + '\\';
+		ms_GlobalTemp = wxFileName::GetTempDir() + '\\' + Kortex::IApplication::GetInstance()->GetName() + '\\';
 		KxFile(ms_GlobalTemp).CreateFolder();
 	}
 }

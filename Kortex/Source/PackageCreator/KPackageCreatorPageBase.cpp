@@ -4,10 +4,9 @@
 #include "KPackageCreatorWorkspace.h"
 #include "KPackageCreatorController.h"
 #include "PackageManager/KPackageManager.h"
-#include "GameInstance/KGameInstance.h"
-#include "Events/KLogEvent.h"
-#include "KThemeManager.h"
-#include "KApp.h"
+#include "GameInstance/IGameInstance.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/Events.hpp>
 #include <KxFramework/KxStdDialogSimple.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxTextBox.h>
@@ -83,7 +82,7 @@ KxAuiToolBar* KPackageCreatorPageBase::CreateListToolBar(wxWindow* window, bool 
 	toolBar->SetMargins(0, 0, 0, 0);
 	toolBar->SetToolSeparation(0);
 
-	KThemeManager::Get().ProcessWindow(static_cast<wxWindow*>(toolBar));
+	Kortex::IThemeManager::GetActive().ProcessWindow(static_cast<wxWindow*>(toolBar));
 	return toolBar;
 }
 void KPackageCreatorPageBase::ShowTooltipWarning(wxWindow* window, const wxString& message, const wxRect& rect)

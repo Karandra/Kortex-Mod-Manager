@@ -5,6 +5,11 @@
 #include "PackageProject/KPackageProject.h"
 class KInstallWizardDialog;
 
+namespace Kortex
+{
+	class ModTagStore;
+}
+
 enum KIWITypes
 {
 	KIWI_TYPE_NONE = 0,
@@ -43,7 +48,7 @@ class KInstallWizardInfoModel: public KDataViewListModel
 		virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
 
 		bool CheckModID(const wxString& id);
-		KxStringVector& GetTags() const;
+		Kortex::ModTagStore& GetTagStore() const;
 		void OnActivateItem(KxDataViewEvent& event);
 
 	public:
@@ -66,7 +71,7 @@ class KInstallWizardInfoModel: public KDataViewListModel
 			{
 				return &m_DataVector.at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		Item* GetDataEntry(size_t index)
 		{
@@ -74,7 +79,7 @@ class KInstallWizardInfoModel: public KDataViewListModel
 			{
 				return &m_DataVector.at(index);
 			}
-			return NULL;
+			return nullptr;
 		}
 		const Item* GetDataEntry(const KxDataViewItem& item) const
 		{

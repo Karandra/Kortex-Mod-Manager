@@ -14,11 +14,11 @@ class KPackageCreatorFOModIEDialog: public KxStdDialog
 		};
 
 	private:
-		wxWindow* m_ViewPane = NULL;
-		wxWindow* m_OKButton = NULL;
-		KxTextBox* m_InfoInput = NULL;
-		KxTextBox* m_ModuleConfigInput = NULL;
-		KxTextBox* m_ProjectFolderInput = NULL;
+		wxWindow* m_ViewPane = nullptr;
+		wxWindow* m_OKButton = nullptr;
+		KxTextBox* m_InfoInput = nullptr;
+		KxTextBox* m_ModuleConfigInput = nullptr;
+		KxTextBox* m_ProjectFolderInput = nullptr;
 		bool m_IsExport = false;
 
 		wxString m_InfoFile;

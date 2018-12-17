@@ -2,48 +2,52 @@
 #include "stdafx.h"
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxComboBoxDialog.h>
-class KGameInstance;
 class KxTextBox;
 class KxCheckBox;
 class KxComboBox;
 
-class KInstanceCreatorDialog: public KxComboBoxDialog
+namespace Kortex
 {
-	private:
-		KGameInstance* m_InstanceTemplate = NULL;
-		KxTextBox* m_NameInput = NULL;
-		KxComboBox* m_InstancesList = NULL;
-		
-		KxCheckBox* m_CopyInstanceConfigCHK = NULL;
-		KxCheckBox* m_CopyModTagsCHK = NULL;
-		KxCheckBox* m_CopyProgramsCHK = NULL;
-		
-		wxString m_Name;
+	class IGameInstance;
 
-	private:
-		bool Create(wxWindow* parent,
-					wxWindowID id,
-					const wxString& caption,
-					const wxPoint & pos = wxDefaultPosition,
-					const wxSize & size = wxDefaultSize,
-					int buttons = DefaultButtons,
-					long style = DefaultStyle
-		);
+	class KInstanceCreatorDialog: public KxComboBoxDialog
+	{
+		private:
+			IGameInstance* m_InstanceTemplate = nullptr;
+			KxTextBox* m_NameInput = nullptr;
+			KxComboBox* m_InstancesList = nullptr;
+		
+			KxCheckBox* m_CopyInstanceConfigCHK = nullptr;
+			KxCheckBox* m_CopyModTagsCHK = nullptr;
+			KxCheckBox* m_CopyProgramsCHK = nullptr;
+		
+			wxString m_Name;
+
+		private:
+			bool Create(wxWindow* parent,
+						wxWindowID id,
+						const wxString& caption,
+						const wxPoint & pos = wxDefaultPosition,
+						const wxSize & size = wxDefaultSize,
+						int buttons = DefaultButtons,
+						long style = DefaultStyle
+			);
 	
-	public:
-		KInstanceCreatorDialog(wxWindow* parent, KGameInstance* instanceTemplate);
-		virtual ~KInstanceCreatorDialog();
+		public:
+			KInstanceCreatorDialog(wxWindow* parent, IGameInstance* instanceTemplate);
+			virtual ~KInstanceCreatorDialog();
 
-	public:
-		const wxString& GetConfigID() const
-		{
-			return m_Name;
-		}
+		public:
+			const wxString& GetConfigID() const
+			{
+				return m_Name;
+			}
 
-	private:
-		const KGameInstance* GetSelectedInstance() const;
+		private:
+			const IGameInstance* GetSelectedInstance() const;
 
-		void OnSelectInstance(wxCommandEvent& event);
-		void OnButtonClick(wxNotifyEvent& event);
-		bool OnOK(wxNotifyEvent& event);
-};
+			void OnSelectInstance(wxCommandEvent& event);
+			void OnButtonClick(wxNotifyEvent& event);
+			bool OnOK(wxNotifyEvent& event);
+	};
+}

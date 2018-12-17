@@ -8,10 +8,10 @@
 #include "KPackageProjectFileData.h"
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
+#include <Kortex/NetworkManager.hpp>
+#include <Kortex/ModTagManager.hpp>
 #include "PackageManager/KPackageManager.h"
-#include "ModManager/KModManager.h"
-#include "GameInstance/KGameInstance.h"
-#include "Network/KNetwork.h"
+#include "GameInstance/IGameInstance.h"
 #include "KAux.h"
 
 namespace
@@ -64,7 +64,7 @@ namespace
 		}
 	}
 
-	template<class T> void WriteLabeledValueArray(const KLabeledValueArray& array, KxXMLNode& arrayNode, const T& Func, bool isCDATA = false)
+	template<class T> void WriteLabeledValueArray(const KLabeledValue::Vector& array, KxXMLNode& arrayNode, const T& Func, bool isCDATA = false)
 	{
 		for (const KLabeledValue& value: array)
 		{
@@ -125,41 +125,19 @@ void KPackageProjectSerializerKMP::ReadInfo()
 		KAux::LoadLabeledValueArray(info.GetCustomFields(), infoNode.GetFirstChildElement("Custom"));
 
 		// Web-sites
-		if (m_ProjectLoad->GetFormatVersion() < KxVersion("1.3"))
-		{
-			KxXMLNode sitesNode = infoNode.GetFirstChildElement("Sites");
-			info.SetWebSite(KNETWORK_PROVIDER_ID_NEXUS, sitesNode.GetAttributeInt("NexusID", -1));
-			info.SetWebSite(KNETWORK_PROVIDER_ID_TESALL, sitesNode.GetAttributeInt("TESALLID", -1));
-			info.SetWebSite(KNETWORK_PROVIDER_ID_LOVERSLAB, sitesNode.GetAttributeInt("LoversLabID", -1));
-			KAux::LoadLabeledValueArray(info.GetWebSites(), sitesNode, "Name");
-		}
-		else
-		{
-			KxXMLNode providerNode = infoNode.GetFirstChildElement("Provider");
-			auto LoadProviderInfo = [&providerNode, &info](KNetworkProviderID index)
-			{
-				if (info.HasWebSite(index))
-				{
-					wxString name = KNetwork::GetInstance()->GetProvider(index)->GetName();
-					KNetworkModID id = providerNode.GetFirstChildElement(name).GetAttributeInt("ModID", KNETWORK_PROVIDER_ID_INVALID);
-					if (id != KNETWORK_PROVIDER_ID_INVALID)
-					{
-						info.SetWebSite(index, id);
-					}
-				}
-			};
-			LoadProviderInfo(KNETWORK_PROVIDER_ID_NEXUS);
-			LoadProviderInfo(KNETWORK_PROVIDER_ID_TESALL);
-			LoadProviderInfo(KNETWORK_PROVIDER_ID_LOVERSLAB);
-
-			KAux::LoadLabeledValueArray(info.GetWebSites(), infoNode.GetFirstChildElement("WebSites"), "Name");
-		}
+		using namespace Kortex::Network;
+		Kortex::ModProvider::Store& store = info.GetProviderStore();
+		store.LoadAssign(infoNode.GetFirstChildElement("Provider"));
 
 		// Documents
 		KAux::LoadLabeledValueArray(info.GetDocuments(), infoNode.GetFirstChildElement("Documents"), "Name");
 
 		// Tags
-		KAux::LoadStringArray(info.GetTags(), infoNode.GetFirstChildElement("Tags"));
+		Kortex::ModTagStore& tagStore = info.GetTagStore();
+		for (KxXMLNode node = infoNode.GetFirstChildElement("Tags"); node.IsOK(); node = node.GetNextSiblingElement())
+		{
+			tagStore.AddTag(Kortex::ModTagManager::DefaultTag(node.GetValue()));
+		}
 	}
 }
 void KPackageProjectSerializerKMP::ReadInterface()
@@ -217,8 +195,8 @@ void KPackageProjectSerializerKMP::ReadFiles()
 		// Folder
 		for (KxXMLNode folderNode = fileDataNode.GetFirstChildElement(); folderNode.IsOK(); folderNode = folderNode.GetNextSiblingElement())
 		{
-			KPPFFileEntry* fileEntry = NULL;
-			KPPFFolderEntry* folderEntry = NULL;
+			KPPFFileEntry* fileEntry = nullptr;
+			KPPFFolderEntry* folderEntry = nullptr;
 			if (folderNode.GetName() == "Folder")
 			{
 				folderEntry = new KPPFFolderEntry();
@@ -378,11 +356,11 @@ void KPackageProjectSerializerKMP::ReadComponents()
 KxXMLNode KPackageProjectSerializerKMP::WriteBase()
 {
 	KxXMLNode baseNode = m_XML.NewElement("Package");
-	baseNode.SetAttribute("FormatVersion", KPackageManager::GetInstance()->GetVersion());
+	baseNode.SetAttribute("FormatVersion", Kortex::KPackageModule::GetInstance()->GetModuleInfo().GetVersion());
 	baseNode.SetAttribute("ID", m_ProjectSave->GetModID());
 
 	KxXMLNode targetProfileNode = baseNode.NewElement("TargetProfile");
-	targetProfileNode.SetAttribute("ID", KApp::Get().GetCurrentGameID());
+	targetProfileNode.SetAttribute("ID", Kortex::IGameInstance::GetActive()->GetGameID());
 
 	return baseNode;
 }
@@ -431,21 +409,7 @@ void KPackageProjectSerializerKMP::WriteInfo(KxXMLNode& baseNode)
 
 	// Web-sites
 	KxXMLNode providerNode = infoNode.NewElement("Provider");
-	auto WriteProviderInfo = [&providerNode, &info](KNetworkProviderID index)
-	{
-		if (info.HasWebSite(index))
-		{
-			providerNode.NewElement(KNetwork::GetInstance()->GetProvider(index)->GetName()).SetAttribute("ModID", info.GetWebSiteModID(index));
-		}
-	};
-	WriteProviderInfo(KNETWORK_PROVIDER_ID_NEXUS);
-	WriteProviderInfo(KNETWORK_PROVIDER_ID_TESALL);
-	WriteProviderInfo(KNETWORK_PROVIDER_ID_LOVERSLAB);
-
-	if (!info.GetWebSites().empty())
-	{
-		KAux::SaveLabeledValueArray(info.GetWebSites(), infoNode.NewElement("WebSites"), "Name");
-	}
+	info.GetProviderStore().Save(providerNode);
 
 	// Documents
 	if (!info.GetDocuments().empty())
@@ -457,9 +421,15 @@ void KPackageProjectSerializerKMP::WriteInfo(KxXMLNode& baseNode)
 	}
 
 	// Tags
-	if (!info.GetTags().empty())
+	const Kortex::ModTagStore& tagStore = info.GetTagStore();
+	if (!tagStore.IsEmpty())
 	{
-		KAux::SaveStringArray(info.GetTags(), infoNode.NewElement("Tags"));
+		KxXMLNode tagsNode = infoNode.NewElement("Tags");
+		tagStore.Visit([&tagsNode](const Kortex::IModTag& tag)
+		{
+			tagsNode.NewElement("Entry").SetValue(tag.GetID());
+			return true;
+		});
 	}
 }
 void KPackageProjectSerializerKMP::WriteInterface(KxXMLNode& baseNode)

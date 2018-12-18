@@ -1709,6 +1709,12 @@
     <ClInclude Include="Source\Application\Options\Option.h">
       <Filter>Code\Headers\Application\Option</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\Options\OptionDatabase.h">
+      <Filter>Code\Headers\Application\Option</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\ApplicationOptionDatabase.hpp">
+      <Filter>Code\Include\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc">

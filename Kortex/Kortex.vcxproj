@@ -229,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Kortex\Application.hpp" />
+    <ClInclude Include="Include\Kortex\ApplicationOptionDatabase.hpp" />
     <ClInclude Include="Include\Kortex\Common\GameMods.hpp" />
     <ClInclude Include="Include\Kortex\Common\Network.hpp" />
     <ClInclude Include="Include\Kortex\Core.hpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Source\Application\IThemeManager.h" />
     <ClInclude Include="Source\Application\IVariableTable.h" />
     <ClInclude Include="Source\Application\Options\Option.h" />
+    <ClInclude Include="Source\Application\Options\OptionDatabase.h" />
     <ClInclude Include="Source\Application\Options\OptionSerializer.h" />
     <ClInclude Include="Source\Application\RTTI.h" />
     <ClInclude Include="Source\Application\Translation.h" />

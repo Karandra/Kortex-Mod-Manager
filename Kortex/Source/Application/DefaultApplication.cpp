@@ -8,6 +8,7 @@
 #include "PackageManager/KPackageManager.h"
 #include "ProgramManager/KProgramManager.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptionDatabase.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>
@@ -59,6 +60,8 @@ namespace
 
 namespace Kortex::Application
 {
+	using namespace OptionDatabase;
+
 	DefaultApplication::DefaultApplication()
 		:m_ImageList(GetSmallIconWidth(), GetSmallIconHeight(), false, KIMG_COUNT)
 	{
@@ -317,13 +320,13 @@ namespace Kortex::Application
 	void DefaultApplication::LoadTranslation()
 	{
 		m_AvailableTranslations = KxTranslation::FindTranslationsInDirectory(m_DataFolder + "\\Translation");
-		auto option = GetGlobalOption("Language");
+		auto option = GetGlobalOption(OptionsDef::ToString(Options::Language));
 
-		switch (TryLoadTranslation(m_Translation, m_AvailableTranslations, option.GetAttribute("Locale")))
+		switch (TryLoadTranslation(m_Translation, m_AvailableTranslations, option.GetAttribute(LanguageDef::ToString(Language::Locale))))
 		{
 			case LoadTranslationStatus::Success:
 			{
-				option.SetAttribute("Locale", m_Translation.GetLocale());
+				option.SetAttribute(LanguageDef::ToString(Language::Locale), m_Translation.GetLocale());
 				break;
 			}
 			case LoadTranslationStatus::LoadingError:
@@ -344,7 +347,8 @@ namespace Kortex::Application
 	}
 	void DefaultApplication::ShowWorkspace()
 	{
-		wxString startPage = GetInstanceOption("Workspace").GetValue(ModManager::Workspace::GetInstance()->GetID());
+		auto option = GetInstanceOption(OptionsDef::ToString(Options::Workspace));
+		wxString startPage = option.GetValue(ModManager::Workspace::GetInstance()->GetID());
 		wxLogInfo("Start page is: %s", startPage);
 
 		KWorkspace* workspace = KMainWindow::GetInstance()->GetWorkspace(startPage);
@@ -366,6 +370,7 @@ namespace Kortex::Application
 
 			if (isSuccess)
 			{
+				startPage = workspace->GetID();
 				wxLogInfo("Successfully showed %s workspace", startPage);
 			}
 			else
@@ -378,6 +383,8 @@ namespace Kortex::Application
 		{
 			wxLogInfo("Successfully showed %s workspace", startPage);
 		}
+
+		option.SetValue(startPage);
 	}
 	bool DefaultApplication::ShowChageInstanceDialog()
 	{
@@ -400,8 +407,8 @@ namespace Kortex::Application
 					dialog.GetNewInstance()->GetInstanceOption(wxString("Variables/") + Variables::KVAR_ACTUAL_GAME_DIR).SetValue(dialog.GetNewGameRoot());
 				}
 
-				GetGlobalOption("GameID").SetValue(dialog.GetNewGameID());
-				GetGlobalOption("InstanceID").SetValue(dialog.GetNewInstanceID());
+				GetGlobalOption(OptionsDef::ToString(Options::Game)).SetAttribute(GameDef::ToString(Game::ID), dialog.GetNewGameID());
+				GetGlobalOption(OptionsDef::ToString(Options::Instance)).SetAttribute(InstanceDef::ToString(Instance::ID), dialog.GetNewInstanceID());
 
 				// Restart if user agreed
 				if (ret == KxID_YES)
@@ -420,7 +427,7 @@ namespace Kortex::Application
 		wxLogInfo("Initializing app settings");
 
 		// Init some application-wide variables
-		auto options = GetGlobalOption("Instance");
+		auto options = GetGlobalOption(OptionsDef::ToString(Options::Instance));
 		m_InstancesFolder = options.GetAttribute("Location", m_InstancesFolder);
 
 		// Show first time config dialog if needed and save new 'ProfilesFolder'
@@ -488,14 +495,14 @@ namespace Kortex::Application
 				m_StartupGameID = dialog.GetNewGameID();
 				if (!m_IsCmdStartupGameID)
 				{
-					GetGlobalOption("Game").SetAttribute("ID", m_StartupGameID);
+					GetGlobalOption(OptionsDef::ToString(Options::Game)).SetAttribute(GameDef::ToString(Game::ID), m_StartupGameID);
 				}
 
 				// Instance ID
 				m_StartupInstanceID = dialog.GetNewInstanceID();
 				if (!m_IsCmdStartupInstanceID)
 				{
-					GetGlobalOption("Instance").SetAttribute("ID", m_StartupInstanceID);
+					GetGlobalOption(OptionsDef::ToString(Options::Instance)).SetAttribute(InstanceDef::ToString(Instance::ID), m_StartupInstanceID);
 				}
 
 				// Set new game root
@@ -552,7 +559,7 @@ namespace Kortex::Application
 		}
 		else
 		{
-			m_StartupGameID = GetGlobalOption("Game").GetAttribute("ID");
+			m_StartupGameID = GetGlobalOption(OptionsDef::ToString(Options::Game)).GetAttribute(GameDef::ToString(Game::ID));
 		}
 
 		if (parser.Found("InstanceID", &m_StartupInstanceID))
@@ -561,7 +568,7 @@ namespace Kortex::Application
 		}
 		else
 		{
-			m_StartupInstanceID = GetGlobalOption("Instance").GetAttribute("ID");
+			m_StartupInstanceID = GetGlobalOption(OptionsDef::ToString(Options::Instance)).GetAttribute(InstanceDef::ToString(Instance::ID));
 		}
 		wxLogInfo("InstanceTemplate: %s, Instance: %s", m_StartupGameID, m_StartupInstanceID);
 	}

@@ -94,6 +94,6 @@ class KPackageCreatorPageBase: public KWorkspace
 		}
 		static KxAuiToolBar* CreateListToolBar(wxWindow* window, bool isVertical = false, bool showText = false);
 		
-		static void ShowTooltipWarning(wxWindow* window, const wxString& message, const wxRect& rect = wxNullRect);
-		static void WarnIDCollision(wxWindow* window, const wxRect& rect = wxNullRect);
+		static void ShowTooltipWarning(wxWindow* window, const wxString& message, const wxRect& rect = KxNullWxRect);
+		static void WarnIDCollision(wxWindow* window, const wxRect& rect = KxNullWxRect);
 };

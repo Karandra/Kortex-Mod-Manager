@@ -147,7 +147,7 @@ namespace Kortex::PluginManager
 		{
 			return modEntry->GetName();
 		}
-		return wxNullString;
+		return KxNullWxString;
 	}
 	wxString BethesdaDisplayModel::GetPluginAuthor(const IGamePlugin& plugin) const
 	{

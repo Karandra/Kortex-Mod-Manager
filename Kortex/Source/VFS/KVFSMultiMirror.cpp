@@ -3,7 +3,7 @@
 #include "KVFSService.h"
 
 KVFSMultiMirror::KVFSMultiMirror(KVFSService* service, const wxString& mountPoint, const wxString& source)
-	:KxVFSMultiMirror(service->GetServiceImpl(), mountPoint, source)
+	:KxVFSMultiMirror(service->GetServiceImpl(), mountPoint.wc_str(), source.wc_str())
 {
 }
 KVFSMultiMirror::~KVFSMultiMirror()

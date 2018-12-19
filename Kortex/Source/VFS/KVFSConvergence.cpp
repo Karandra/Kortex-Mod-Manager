@@ -3,7 +3,7 @@
 #include "KVFSService.h"
 
 KVFSConvergence::KVFSConvergence(KVFSService* service, const wxString& mountPoint, const wxString& writeTarget)
-	:KxVFSConvergence(service->GetServiceImpl(), mountPoint, writeTarget)
+	:KxVFSConvergence(service->GetServiceImpl(), mountPoint.wc_str(), writeTarget.wc_str())
 {
 }
 KVFSConvergence::~KVFSConvergence()

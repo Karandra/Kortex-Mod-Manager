@@ -290,7 +290,7 @@ namespace Kortex::PluginManager
 		if (IGameProfile* profile = IGameInstance::GetActiveProfile())
 		{
 			profile->SyncWithCurrentState();
-			profile->Save();
+			profile->SaveConfig();
 		}
 		Kortex::IPluginManager::GetInstance()->Save();
 	}

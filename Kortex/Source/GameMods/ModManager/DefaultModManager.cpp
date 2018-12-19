@@ -215,7 +215,7 @@ namespace Kortex::ModManager
 		if (profile)
 		{
 			profile->SyncWithCurrentState();
-			profile->Save();
+			profile->SaveConfig();
 		}
 	}
 
@@ -540,7 +540,7 @@ namespace Kortex::ModManager
 	}
 	wxString MirroredLocation::GetSource() const
 	{
-		return !m_Sources.empty() ? KVarExp(m_Sources.front()) : wxNullString;
+		return !m_Sources.empty() ? KVarExp(m_Sources.front()) : KxNullWxString;
 	}
 	wxString MirroredLocation::GetTarget() const
 	{

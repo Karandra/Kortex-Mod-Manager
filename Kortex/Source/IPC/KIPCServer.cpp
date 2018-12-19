@@ -77,7 +77,7 @@ void KIPCServer::OnAcceptRequest(const KIPCRequestNS::CreateConvergenceVFS& conf
 }
 void KIPCServer::OnAcceptRequest(const KIPCRequestNS::AddConvergenceVirtualFolder& config)
 {
-	m_Convergence->AddVirtualFolder(config.GetPath());
+	m_Convergence->AddVirtualFolder(config.GetPath().wc_str());
 }
 void KIPCServer::OnAcceptRequest(const KIPCRequestNS::ClearConvergenceVirtualFolders& config)
 {
@@ -124,7 +124,7 @@ void KIPCServer::OnAcceptRequest(const KIPCRequestNS::CreateMultiMirrorVFS& conf
 	// Add additional sources
 	for (size_t i = 1; i < sources.size(); i++)
 	{
-		vfs->AddVirtualFolder(sources[i]);
+		vfs->AddVirtualFolder(sources[i].wc_str());
 	}
 
 	m_MirrorVFSList.emplace_back(vfs);

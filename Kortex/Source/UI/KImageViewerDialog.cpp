@@ -35,7 +35,7 @@ bool KImageViewerEvent::HasFilePath() const
 }
 const wxString& KImageViewerEvent::GetFilePath() const
 {
-	return HasFilePath() ? std::get<FilePath>(m_Data) : wxNullString;
+	return HasFilePath() ? std::get<FilePath>(m_Data) : KxNullWxString;
 }
 void KImageViewerEvent::SetFilePath(const wxString& filePath)
 {

@@ -50,7 +50,7 @@ namespace Kortex::ModStatistics
 	}
 	const wxString& DisplayModel::GetStatValue(size_t index) const
 	{
-		return index < m_DataVector.size() ? m_DataVector[index] : wxNullString;
+		return index < m_DataVector.size() ? m_DataVector[index] : KxNullWxString;
 	}
 
 	DisplayModel::DisplayModel():m_Stats(IModStatistics::GetInstance())

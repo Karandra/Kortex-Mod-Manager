@@ -106,7 +106,7 @@ KVFSService::KVFSService()
 {
 	if (!m_LibraryPath.IsEmpty())
 	{
-		m_LibraryHandle = ::LoadLibraryW(m_LibraryPath);
+		m_LibraryHandle = ::LoadLibraryW(m_LibraryPath.wc_str());
 	}
 }
 KVFSService::~KVFSService()
@@ -122,7 +122,7 @@ bool KVFSService::Init()
 {
 	if (m_ServiceImpl == nullptr)
 	{
-		m_ServiceImpl = new KxVFSService(m_Name);
+		m_ServiceImpl = new KxVFSService(m_Name.wc_str());
 		return m_ServiceImpl->IsOK();
 	}
 	return false;
@@ -160,7 +160,7 @@ bool KVFSService::Stop()
 }
 bool KVFSService::Install()
 {
-	return m_ServiceImpl->Install(m_DriverPath, m_DisplayName, m_Description);
+	return m_ServiceImpl->Install(m_DriverPath.wc_str(), m_DisplayName.wc_str(), m_Description.wc_str());
 }
 bool KVFSService::Uninstall()
 {

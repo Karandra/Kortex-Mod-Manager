@@ -105,10 +105,10 @@ wxWindow* KAboutDialog::CreateTab_Info()
 	return info;
 
 	wxString libraries;
-	auto AddLibrary = [&libraries](const char* name, const char* url, const char* extraName = nullptr, const char* extraURL = nullptr)
+	auto AddLibrary = [&libraries](const wxString& name, const wxString& url, const wxString& extraName = {}, const wxString& extraURL = {})
 	{
 		libraries << KxString::Format("<a href=\"%1\">%2</a>", url, name);
-		if (extraName && extraURL)
+		if (!extraName.IsEmpty() && !extraURL.IsEmpty())
 		{
 			libraries << KxString::Format(" (<a href=\"%1\">%2</a>)", extraURL, extraName);
 		}
@@ -144,7 +144,7 @@ wxWindow* KAboutDialog::CreateTab_Modules()
 {
 	KxTreeList* list = new KxTreeList(m_View, KxID_NONE, KxTreeList::DefaultStyle|wxTL_NO_HEADER);
 	list->GetDataView()->ToggleWindowStyle(wxBORDER_NONE);
-	list->GetDataView()->SetAllowColumnsAutoSize(false);
+	//list->GetDataView()->SetAllowColumnsAutoSize(false);
 	list->SetImageList(&Kortex::IApplication::GetInstance()->GetImageList());
 	list->AddColumn(wxEmptyString, 300);
 	list->AddColumn(wxEmptyString, 75);

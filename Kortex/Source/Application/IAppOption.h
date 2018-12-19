@@ -6,149 +6,98 @@
 
 namespace Kortex
 {
+	class IGameProfile;
 	class IGameInstance;
 	class IConfigurableGameInstance;
 }
 
 namespace Kortex
 {
-	class IAppOption:
+	class IAppOption: 
 		public KxXDocumentNode<IAppOption>,
 		public Application::OptionSerializer::UILayout
 	{
+		friend class KxXDocumentNode<IAppOption>;
+
+		public:
+			enum class Disposition
+			{
+				None,
+				Global,
+				Instance,
+				Profile,
+			};
+
 		private:
 			KxXMLNode* m_ConfigNode = nullptr;
 			IConfigurableGameInstance* m_Instance = nullptr;
+			IGameProfile* m_Profile = nullptr;
+			Disposition m_Disposition = Disposition::None;
 			
 		protected:
+			wxString DoGetValue(const wxString& defaultValue = wxEmptyString) const override;
 			bool DoSetValue(const wxString& value, bool isCDATA = false) override;
+
+			wxString DoGetAttribute(const wxString& name, const wxString& defaultValue = wxEmptyString) const override;
 			bool DoSetAttribute(const wxString& name, const wxString& value) override;
-			void ChangeNotify();
 
 			void AssignNode(KxXMLNode& node)
 			{
 				m_ConfigNode = &node;
 			}
+			void AssignDisposition(Disposition disposition)
+			{
+				m_Disposition = disposition;
+			}
+			
 			bool AssignInstance(const IConfigurableGameInstance* instance);
 			bool AssignActiveInstance();
+			
+			void AssignProfile(IGameProfile* profile);
+			void AssignActiveProfile();
 
 		protected:
 			IAppOption() = default;
-			IAppOption(KxXMLNode& node, const IConfigurableGameInstance* instance = nullptr)
-			{
-				AssignNode(node);
-				AssignInstance(instance);
-			}
 
 		public:
 			/* General */
 			bool IsOK() const override
 			{
-				return m_ConfigNode && m_ConfigNode->IsOK();
+				return m_ConfigNode && m_ConfigNode->IsOK() && m_Disposition != Disposition::None;
 			}
-			bool IsInstanceOption() const
+			
+			Disposition GetDisposition() const
 			{
-				return m_Instance != nullptr;
+				return m_Disposition;
 			}
 			bool IsGlobalOption() const
 			{
-				return !IsInstanceOption();
+				return m_Disposition == Disposition::Global;
 			}
-			void Save();
+			bool IsInstanceOption() const
+			{
+				return m_Disposition == Disposition::Instance;
+			}
+			bool IsProfileOption() const
+			{
+				return m_Disposition == Disposition::Profile;
+			}
 
-			KxXMLNode GetNode() const
+			KxXMLNode GetConfigNode() const
 			{
 				return m_ConfigNode ? *m_ConfigNode : KxXMLNode();
 			}
-			Node QueryElement(const wxString& XPath) const override
+			wxString GetXPath() const override
 			{
-				return Node();
+				return m_ConfigNode ? m_ConfigNode->GetXPath() : wxEmptyString;
 			}
-			Node QueryOrCreateElement(const wxString& XPath) override
-			{
-				return Node();
-			}
-
-			/* Node */
-			size_t GetIndexWithinParent() const override
-			{
-				return 0;
-			}
-
 			wxString GetName() const override
 			{
-				return m_ConfigNode->GetName();
-			}
-			bool SetName(const wxString& name) override
-			{
-				const bool res = m_ConfigNode->SetName(name);
-				ChangeNotify();
-				return res;
-			}
-
-			size_t GetChildrenCount() const override
-			{
-				return 0;
-			}
-			NodeVector GetChildren() const override
-			{
-				return {};
+				return m_ConfigNode ? m_ConfigNode->GetName() : wxEmptyString;
 			}
 		
-			/* Value */
-			wxString GetValue(const wxString& default = wxEmptyString) const override
-			{
-				return m_ConfigNode->GetValue(default);
-			}
+			void NotifyChange();
 
-			/* Attributes */
-			size_t GetAttributeCount() const override
-			{
-				return 0;
-			}
-			KxStringVector GetAttributes() const override
-			{
-				return m_ConfigNode->GetAttributes();
-			}
-			bool HasAttribute(const wxString& name) const override
-			{
-				return m_ConfigNode->HasAttribute(name);
-			}
-			wxString GetAttribute(const wxString& name, const wxString& default = wxEmptyString) const override
-			{
-				return m_ConfigNode->GetAttribute(name, default);
-			}
-	
-			/* Navigation */
-			Node GetElementByAttribute(const wxString& name, const wxString& value) const override
-			{
-				return Node();
-			}
-			Node GetElementByTag(const wxString& tagName) const override
-			{
-				return Node();
-			}
-			Node GetParent() const override
-			{
-				return Node();
-			}
-			Node GetPreviousSibling() const override
-			{
-				return Node();
-			}
-			Node GetNextSibling() const override
-			{
-				return Node();
-			}
-			Node GetFirstChild() const override
-			{
-				return Node();
-			}
-			Node GetLastChild() const override
-			{
-				return Node();
-			}
-		
 		public:
 			void SaveDataViewLayout(KxDataViewCtrl* dataView)
 			{
@@ -176,5 +125,21 @@ namespace Kortex
 			{
 				WindowSize(*this, SerializationMode::Load, window);
 			}
+	};
+}
+
+namespace Kortex::Application
+{
+	class IWithConfig
+	{
+		protected:
+			virtual ~IWithConfig() = default;
+
+		public:
+			virtual const KxXMLDocument& GetConfig() const = 0;
+			virtual KxXMLDocument& GetConfig() = 0;
+
+			virtual void OnConfigChanged(IAppOption& option) = 0;
+			virtual void SaveConfig() = 0;
 	};
 }

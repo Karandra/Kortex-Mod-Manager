@@ -1,13 +1,15 @@
 #pragma once
 #include "stdafx.h"
+#include "Application/IAppOption.h"
 #include <KxFramework/KxSingleton.h>
-class IVariableTable;
+class KxXMLDocument;
 
 namespace Kortex
 {
 	class IGameMod;
 	class IGamePlugin;
 	class IGameInstance;
+	class IAppOption;
 
 	namespace GameInstance
 	{
@@ -89,11 +91,17 @@ namespace Kortex::GameInstance
 
 namespace Kortex
 {
-	class IGameProfile
+	class IGameProfile:
+		public Application::IWithConfig,
+		public Application::WithProfileOptions<IGameProfile>
 	{
 		friend class IGameInstance;
+		friend class IAppOption;
 
 		public:
+			using ProfileMod = GameInstance::ProfileMod;
+			using ProfilePlugin = GameInstance::ProfilePlugin;
+
 			using Vector = std::vector<std::unique_ptr<IGameProfile>>;
 			using RefVector = std::vector<IGameProfile*>;
 			using CRefVector = std::vector<const IGameProfile*>;
@@ -115,7 +123,7 @@ namespace Kortex
 				return GetActive() == this;
 			}
 
-			wxString GetOrderFile() const;
+			wxString GetConfigFile() const;
 			wxString GetProfileDir() const;
 			wxString GetProfileRelativePath(const wxString& name) const;
 			wxString GetSavesDir() const;
@@ -123,8 +131,7 @@ namespace Kortex
 			wxString GetOverwritesDir() const;
 
 			virtual std::unique_ptr<IGameProfile> Clone() const = 0;
-			virtual void Load() = 0;
-			virtual void Save() = 0;
+			virtual void LoadConfig() = 0;
 			virtual void SyncWithCurrentState() = 0;
 
 			virtual wxString GetID() const = 0;
@@ -136,10 +143,10 @@ namespace Kortex
 			virtual bool IsLocalConfigEnabled() const = 0;
 			virtual void SetLocalConfigEnabled(bool value) = 0;
 
-			virtual const GameInstance::ProfileMod::Vector& GetMods() const = 0;
-			virtual GameInstance::ProfileMod::Vector& GetMods() = 0;
+			virtual const ProfileMod::Vector& GetMods() const = 0;
+			virtual ProfileMod::Vector& GetMods() = 0;
 
-			virtual const GameInstance::ProfilePlugin::Vector& GetPlugins() const = 0;
-			virtual GameInstance::ProfilePlugin::Vector& GetPlugins() = 0;
+			virtual const ProfilePlugin::Vector& GetPlugins() const = 0;
+			virtual ProfilePlugin::Vector& GetPlugins() = 0;
 	};
 }

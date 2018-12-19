@@ -16,6 +16,16 @@
 #include <KxFramework/KxSystem.h>
 #include <wx/apptrait.h>
 
+namespace
+{
+	using namespace Kortex;
+
+	void LogConfigChnage(const IAppOption& option)
+	{
+		wxLogInfo("Path: \"%s\", Value: \"%s\"", option.GetXPath(), option.GetValue());
+	}
+}
+
 namespace Kortex
 {
 	class SystemApplicationTraits: public wxGUIAppTraits
@@ -37,7 +47,7 @@ namespace Kortex
 				wxString fullPath = filePath + wxS('\\') + fileName;
 
 				FILE* handle = nullptr;
-				::_wfopen_s(&handle, fullPath, L"w+b");
+				::_wfopen_s(&handle, fullPath.wc_str(), L"w+b");
 				return handle;
 			}
 
@@ -99,23 +109,33 @@ namespace Kortex
 		KArchive::UnInit();
 	}
 
-	void SystemApplication::LoadGlobalSettings()
+	void SystemApplication::LoadGlobalConfig()
 	{
-		wxLogInfo("SystemApplication::LoadGlobalSettings");
+		wxLogInfo("SystemApplication::LoadGlobalConfig");
 
-		KxFileStream stream(m_Application->GetUserSettingsFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+		KxFileStream stream(m_Application->GetUserSettingsFile(), KxFileStream::Access::RW, KxFileStream::Disposition::OpenAlways, KxFileStream::Share::Read);
 		const bool success = m_GlobalConfig.Load(stream);
+		if (!success)
+		{
+			// Query some option to initialize file structure
+			m_Application->GetGlobalOption();
 
-		wxLogInfo("SystemApplication::LoadGlobalSettings -> %s", success ? "true" : "false");
+			// Save
+			stream.Rewind();
+			stream.SetAllocationSize(0);
+			m_GlobalConfig.Save(stream);
+		}
+
+		wxLogInfo("SystemApplication::LoadGlobalConfig -> %s", success ? "true" : "false");
 	}
-	void SystemApplication::SaveGlobalSettings()
+	void SystemApplication::SaveGlobalConfig()
 	{
-		wxLogInfo("SystemApplication::SaveGlobalSettings");
+		wxLogInfo("SystemApplication::SaveGlobalConfig");
 
 		KxFileStream stream(m_Application->GetUserSettingsFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 		const bool success = m_GlobalConfig.Save(stream);
 
-		wxLogInfo("SystemApplication::SaveGlobalSettings -> %s", success ? "true" : "false");
+		wxLogInfo("SystemApplication::SaveGlobalConfig -> %s", success ? "true" : "false");
 	}
 	void SystemApplication::SaveActiveInstanceSettings()
 	{
@@ -184,7 +204,7 @@ namespace Kortex
 		wxLogInfo("Instances folder: %s", m_Application->GetInstancesFolder());
 
 		// Run initialization
-		LoadGlobalSettings();
+		LoadGlobalConfig();
 		InitComponents();
 		m_IsApplicationInitialized = m_Application->OnInit();
 
@@ -211,7 +231,7 @@ namespace Kortex
 		
 		UninitComponents();
 		SaveActiveInstanceSettings();
-		SaveGlobalSettings();
+		SaveGlobalConfig();
 
 		// Exit now
 		UninitLogging();
@@ -228,13 +248,31 @@ namespace Kortex
 
 		m_Application->OnError(event);
 	}
-	void SystemApplication::OnGlobalConfigChanged(IAppOption& option)
+	
+	bool SystemApplication::OnGlobalConfigChanged(IAppOption& option)
 	{
-		wxLogInfo("SystemApplication::OnGlobalConfigChanged -> %s", option.GetName());
-		if (m_Application->OnGlobalConfigChanged(option))
-		{
-			SaveGlobalSettings();
-		}
+		wxLogInfo("SystemApplication::OnGlobalConfigChanged");
+		LogConfigChnage(option);
+
+		return m_Application->OnGlobalConfigChanged(option);
+	}
+	bool SystemApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
+	{
+		wxLogInfo("SystemApplication::OnInstanceConfigChanged");
+		wxLogInfo("InstanceID: %s", instance.GetInstanceID());
+		LogConfigChnage(option);
+
+		instance.QueryInterface<IConfigurableGameInstance>()->OnConfigChanged(option);
+		return m_Application->OnInstanceConfigChanged(option, instance);
+	}
+	bool SystemApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
+	{
+		wxLogInfo("SystemApplication::OnProfileConfigChanged");
+		wxLogInfo("ProfileID: %s", profile.GetID());
+		LogConfigChnage(option);
+
+		profile.OnConfigChanged(option);
+		return m_Application->OnProfileConfigChanged(option, profile);
 	}
 
 	bool SystemApplication::OnException()

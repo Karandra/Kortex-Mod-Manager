@@ -477,7 +477,7 @@ namespace Kortex::ModManager
 			if (!IGameInstance::IsActiveProfileID(newProfileID))
 			{
 				profile->SyncWithCurrentState();
-				profile->Save();
+				profile->SaveConfig();
 
 				IGameProfile* newProfile = instance->GetProfile(newProfileID);
 				if (newProfile)
@@ -497,7 +497,7 @@ namespace Kortex::ModManager
 		// Save current
 		IGameProfile* profile = IGameInstance::GetActiveProfile();
 		profile->SyncWithCurrentState();
-		profile->Save();
+		profile->SaveConfig();
 
 		Kortex::KModListManagerEditorDialog dialog(this);
 		dialog.ShowModal();

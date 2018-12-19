@@ -7,6 +7,8 @@
 namespace Kortex
 {
 	class LogEvent;
+	class IGameInstance;
+	class IGameProfile;
 	class IApplication;
 	class IAppOption;
 	class IThemeManager;
@@ -37,8 +39,8 @@ namespace Kortex
 			void InitComponents();
 			void UninitComponents();
 
-			void LoadGlobalSettings();
-			void SaveGlobalSettings();
+			void LoadGlobalConfig();
+			void SaveGlobalConfig();
 			void SaveActiveInstanceSettings();
 
 		public:
@@ -49,7 +51,10 @@ namespace Kortex
 			bool OnInit() override;
 			int OnExit() override;
 			void OnError(LogEvent& event);
-			void OnGlobalConfigChanged(IAppOption& option);
+
+			bool OnGlobalConfigChanged(IAppOption& option);
+			bool OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance);
+			bool OnProfileConfigChanged(IAppOption& option, IGameProfile& profile);
 
 			bool OnException();
 			bool OnExceptionInMainLoop() override;

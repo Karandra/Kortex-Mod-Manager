@@ -46,9 +46,12 @@ namespace Kortex::Application
 			bool OnInit() override;
 			int OnExit() override;
 
-			bool OnException() override;
 			void OnError(LogEvent& event) override;
+			bool OnException() override;
+
 			bool OnGlobalConfigChanged(IAppOption& option) override;
+			bool OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance) override;
+			bool OnProfileConfigChanged(IAppOption& option, IGameProfile& profile) override;
 
 		public:
 			wxString GetRootFolder() const override

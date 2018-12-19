@@ -245,7 +245,7 @@ namespace Kortex
 	}
 	wxString KPackageManager::GetPackagesFolder() const
 	{
-		return GetInstanceOption().GetAttribute("PackagesLocation");
+		return GetActiveInstanceOption().GetAttribute("PackagesLocation");
 	}
 }
 

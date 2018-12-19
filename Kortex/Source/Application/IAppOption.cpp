@@ -6,30 +6,28 @@
 
 namespace Kortex
 {
+	wxString IAppOption::DoGetValue(const wxString& defaultValue) const
+	{
+		return m_ConfigNode->GetValue(defaultValue);
+	}
 	bool IAppOption::DoSetValue(const wxString& value, bool isCDATA)
 	{
 		const bool res = m_ConfigNode->SetValue(value, isCDATA);
-		ChangeNotify();
+		NotifyChange();
 		return res;
+	}
+
+	wxString IAppOption::DoGetAttribute(const wxString& name, const wxString& defaultValue) const
+	{
+		return m_ConfigNode->GetAttribute(name, defaultValue);
 	}
 	bool IAppOption::DoSetAttribute(const wxString& name, const wxString& value)
 	{
 		const bool res = m_ConfigNode->SetAttribute(name, value);
-		ChangeNotify();
+		NotifyChange();
 		return res;
 	}
-	void IAppOption::ChangeNotify()
-	{
-		if (IsGlobalOption())
-		{
-			SystemApplication::GetInstance()->OnGlobalConfigChanged(*this);
-		}
-		else if (IsInstanceOption())
-		{
-			m_Instance->OnConfigChanged(*this);
-		}
-	}
-
+	
 	bool IAppOption::AssignInstance(const IConfigurableGameInstance* instance)
 	{
 		m_Instance = const_cast<IConfigurableGameInstance*>(instance);
@@ -48,16 +46,45 @@ namespace Kortex
 			return false;
 		}
 	}
-
-	void IAppOption::Save()
+	
+	void IAppOption::AssignProfile(IGameProfile* profile)
 	{
-		if (IsGlobalOption())
+		m_Profile = profile;
+	}
+	void IAppOption::AssignActiveProfile()
+	{
+		m_Profile = IGameProfile::GetActive();
+	}
+
+	void IAppOption::NotifyChange()
+	{
+		SystemApplication* sysApp = SystemApplication::GetInstance();
+		switch (m_Disposition)
 		{
-			SystemApplication::GetInstance()->SaveGlobalSettings();
-		}
-		else if (IsInstanceOption())
-		{
-			m_Instance->SaveConfig();
-		}
+			case Disposition::Global:
+			{
+				if (sysApp->OnGlobalConfigChanged(*this))
+				{
+					sysApp->SaveGlobalConfig();
+				}
+				break;
+			}
+			case Disposition::Instance:
+			{
+				if (sysApp->OnInstanceConfigChanged(*this, *m_Instance->QueryInterface<IGameInstance>()))
+				{
+					m_Instance->SaveConfig();
+				}
+				break;
+			}
+			case Disposition::Profile:
+			{
+				if (sysApp->OnProfileConfigChanged(*this, *m_Profile))
+				{
+					m_Profile->SaveConfig();
+				}
+				break;
+			}
+		};
 	}
 }

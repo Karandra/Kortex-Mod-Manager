@@ -242,12 +242,12 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 		{
 			if (save)
 			{
-				Kortex::KProgramManager::GetInstance()->GetInstanceOption().SetAttribute("ShowExpandedValues", value);
+				Kortex::KProgramManager::GetInstance()->GetActiveInstanceOption().SetAttribute("ShowExpandedValues", value);
 				return value;
 			}
 			else
 			{
-				return Kortex::KProgramManager::GetInstance()->GetInstanceOption().GetAttributeBool("ShowExpandedValues", value);
+				return Kortex::KProgramManager::GetInstance()->GetActiveInstanceOption().GetAttributeBool("ShowExpandedValues", value);
 			}
 		};
 		KProgramEntry* entry = GetDataEntry(GetRow(event.GetItem()));
@@ -504,12 +504,12 @@ bool KProgramManagerModel::SaveLoadExpandedValues(bool save, bool value) const
 {
 	if (save)
 	{
-		Kortex::KProgramManager::GetInstance()->GetInstanceOption().SetAttribute("ShowExpandedValues", value);
+		Kortex::KProgramManager::GetInstance()->GetActiveInstanceOption().SetAttribute("ShowExpandedValues", value);
 		return value;
 	}
 	else
 	{
-		return Kortex::KProgramManager::GetInstance()->GetInstanceOption().GetAttributeBool("ShowExpandedValues", value);
+		return Kortex::KProgramManager::GetInstance()->GetActiveInstanceOption().GetAttributeBool("ShowExpandedValues", value);
 	}
 }
 

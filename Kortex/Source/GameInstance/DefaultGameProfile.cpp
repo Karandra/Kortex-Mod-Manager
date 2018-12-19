@@ -8,9 +8,50 @@
 
 namespace Kortex::GameInstance
 {
-	void DefaultGameProfile::Load()
+	void DefaultGameProfile::OnConfigChanged(IAppOption& option)
 	{
-		KxFileStream stream(GetOrderFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+		wxLogInfo("DefaultGameProfile::OnConfigChanged -> %s", option.GetXPath());
+	}
+	void DefaultGameProfile::SaveConfig()
+	{
+		KxXMLNode rootNode = m_Config.QueryOrCreateElement("Profile");
+
+		KxXMLNode configNode = rootNode.QueryOrCreateElement("Config");
+		configNode.QueryOrCreateElement("LocalSaves").SetAttribute("Enabled", m_LocalSavesEnabled);
+		configNode.QueryOrCreateElement("LocalConfig").SetAttribute("Enabled", m_LocalConfigEnabled);
+
+		if (Kortex::IModManager::HasInstance())
+		{
+			KxXMLNode modsNode = rootNode.QueryOrCreateElement("Mods");
+			modsNode.ClearChildren();
+
+			for (const ProfileMod& mod: m_Mods)
+			{
+				KxXMLNode node = modsNode.NewElement("Entry");
+				node.SetAttribute("Signature", mod.GetSignature());
+				node.SetAttribute("Enabled", mod.IsActive());
+			}
+		}
+
+		if (Kortex::IPluginManager::HasInstance())
+		{
+			KxXMLNode pluginsNode = rootNode.QueryOrCreateElement("Plugins");
+			pluginsNode.ClearChildren();
+
+			for (const ProfilePlugin& plugin: m_Plugins)
+			{
+				KxXMLNode node = pluginsNode.NewElement("Entry");
+				node.SetAttribute("Name", plugin.GetPluginName());
+				node.SetAttribute("Enabled", plugin.IsActive());
+			}
+		}
+
+		KxFileStream stream(GetConfigFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+		m_Config.Save(stream);
+	}
+	void DefaultGameProfile::LoadConfig()
+	{
+		KxFileStream stream(GetConfigFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 		KxXMLDocument xml(stream);
 		if (xml.IsOK())
 		{
@@ -43,39 +84,14 @@ namespace Kortex::GameInstance
 			}
 		}
 	}
-	void DefaultGameProfile::Save()
+	
+	std::unique_ptr<IGameProfile> DefaultGameProfile::Clone() const
 	{
-		KxXMLDocument xml;
-		KxXMLNode rootNode = xml.NewElement("Profile");
+		auto profile = std::make_unique<DefaultGameProfile>();
+		profile->m_ID = m_ID;
+		profile->LoadConfig();
 
-		KxXMLNode configNode = rootNode.NewElement("Config");
-		configNode.NewElement("LocalSaves").SetAttribute("Enabled", m_LocalSavesEnabled);
-		configNode.NewElement("LocalConfig").SetAttribute("Enabled", m_LocalConfigEnabled);
-
-		if (Kortex::IModManager::HasInstance())
-		{
-			KxXMLNode modsNode = rootNode.NewElement("Mods");
-			for (const ProfileMod& mod: m_Mods)
-			{
-				KxXMLNode node = modsNode.NewElement("Entry");
-				node.SetAttribute("Signature", mod.GetSignature());
-				node.SetAttribute("Enabled", mod.IsActive());
-			}
-		}
-
-		if (Kortex::IPluginManager::HasInstance())
-		{
-			KxXMLNode pluginsNode = rootNode.NewElement("Plugins");
-			for (const ProfilePlugin& plugin: m_Plugins)
-			{
-				KxXMLNode node = pluginsNode.NewElement("Entry");
-				node.SetAttribute("Name", plugin.GetPluginName());
-				node.SetAttribute("Enabled", plugin.IsActive());
-			}
-		}
-
-		KxFileStream stream(GetOrderFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
-		xml.Save(stream);
+		return profile;
 	}
 	void DefaultGameProfile::SyncWithCurrentState()
 	{
@@ -100,7 +116,7 @@ namespace Kortex::GameInstance
 	void DefaultGameProfile::SetLocalSavesEnabled(bool value)
 	{
 		m_LocalSavesEnabled = value;
-		Save();
+		SaveConfig();
 		if (IsActive())
 		{
 			IGameInstance::GetActive()->GetVariables().SetVariable(Variables::KVAR_SAVES_DIR, GetSavesDir());
@@ -114,7 +130,7 @@ namespace Kortex::GameInstance
 	void DefaultGameProfile::SetLocalConfigEnabled(bool value)
 	{
 		m_LocalConfigEnabled = value;
-		Save();
+		SaveConfig();
 		if (IsActive())
 		{
 			IGameInstance::GetActive()->GetVariables().SetVariable(Variables::KVAR_CONFIG_DIR, GetConfigDir());

@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameID.h"
+#include "Application/IAppOption.h"
 #include "Application/Options/Option.h"
 #include <KxFramework/KxINI.h>
 #include <KxFramework/KxFileStream.h>
@@ -24,7 +25,9 @@ namespace Kortex
 	}
 
 	class IGameProfile;
-	class IGameInstance: public RTTI::IInterface<IGameInstance>
+	class IGameInstance:
+		public RTTI::IInterface<IGameInstance>,
+		public Application::WithInstanceOptions<IGameInstance>
 	{
 		public:
 			using Vector = std::vector<std::unique_ptr<IGameInstance>>;
@@ -162,31 +165,16 @@ namespace Kortex
 			virtual bool RenameProfile(IGameProfile& profile, const wxString& newID) = 0;
 			virtual bool ChangeProfileTo(const IGameProfile& profile) = 0;
 			virtual void LoadSavedProfileOrDefault() = 0;
-
-			// Config
-		public:
-			Application::GlobalOption GetGlobalOption(const wxString& branch = wxEmptyString) const
-			{
-				return Application::GlobalOption(branch);
-			}
-			Application::InstanceOption GetInstanceOption(const wxString& branch = wxEmptyString) const
-			{
-				return Application::InstanceOption(*this, branch);
-			}
 	};
 }
 
 namespace Kortex
 {
-	class IConfigurableGameInstance: public RTTI::IInterface<IConfigurableGameInstance>
+	class IConfigurableGameInstance:
+		public RTTI::IInterface<IConfigurableGameInstance>,
+		public Application::IWithConfig
 	{
 		public:
-			virtual const KxXMLDocument& GetConfig() const = 0;
-			virtual KxXMLDocument& GetConfig() = 0;
-
-			virtual void OnConfigChanged(IAppOption& option) = 0;
-			virtual bool HasConfigChanges() = 0;
-			virtual bool SaveConfig() = 0;
 			virtual void OnExit() = 0;
 	};
 }

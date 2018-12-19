@@ -97,7 +97,7 @@ namespace Kortex::PluginManager
 			};
 			pluginsList.emplace_back(name, isActive);
 		}
-		profile->Save();
+		profile->SaveConfig();
 		Invalidate();
 	}
 	KxStringVector BasePluginManager::GetPluginsList(bool activeOnly) const

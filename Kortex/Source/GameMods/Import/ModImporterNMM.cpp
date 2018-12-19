@@ -218,7 +218,7 @@ namespace Kortex::ModManager
 		}
 
 		// Save lists, without sync
-		profile->Save();
+		profile->SaveConfig();
 	}
 	void ModImporterNMM::ReadPlugins(KOperationWithProgressDialogBase* context)
 	{
@@ -246,7 +246,7 @@ namespace Kortex::ModManager
 
 				profilePluginsList.emplace_back(GameInstance::ProfilePlugin(value.BeforeFirst('='), enabled));
 			}
-			profile->Save();
+			profile->SaveConfig();
 		}
 	}
 	void ModImporterNMM::CopyDownloads(KOperationWithProgressDialogBase* context)

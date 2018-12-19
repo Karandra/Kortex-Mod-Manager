@@ -2,13 +2,15 @@
 #include "stdafx.h"
 #include "IGameProfile.h"
 #include <KxFramework/KxSingleton.h>
-class IVariableTable;
+#include <KxFramework/KxXML.h>
 
 namespace Kortex::GameInstance
 {
 	class DefaultGameProfile: public IGameProfile
 	{
 		private:
+			KxXMLDocument m_Config;
+
 			wxString m_ID;
 			bool m_LocalSavesEnabled = false;
 			bool m_LocalConfigEnabled = false;
@@ -24,13 +26,20 @@ namespace Kortex::GameInstance
 			}
 
 		public:
-			std::unique_ptr<IGameProfile> Clone() const override
+			const KxXMLDocument& GetConfig() const override
 			{
-				return std::make_unique<DefaultGameProfile>(*this);
+				return m_Config;
 			}
-			void Load();
-			void Save();
-			void SyncWithCurrentState();
+			KxXMLDocument& GetConfig() override
+			{
+				return m_Config;
+			}
+			void OnConfigChanged(IAppOption& option) override;
+			void LoadConfig() override;
+			void SaveConfig() override;
+
+			std::unique_ptr<IGameProfile> Clone() const override;
+			void SyncWithCurrentState() override;
 
 			wxString GetID() const override
 			{

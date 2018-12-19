@@ -79,7 +79,7 @@ namespace Kortex::GameInstance
 	void ActiveGameInstance::SetCurrentProfileID(const wxString& id)
 	{
 		m_CurrentProfileID = id;
-		IApplication::GetInstance()->GetInstanceOption("Profile").SetAttribute("ID", id);
+		GetInstanceOption("Profile").SetAttribute("ID", id);
 	}
 
 	void ActiveGameInstance::DoChangeProfileTo(const IGameProfile& profile)
@@ -115,7 +115,7 @@ namespace Kortex::GameInstance
 	void ActiveGameInstance::LoadSavedProfileOrDefault()
 	{
 		// Load saved profile or create a default one in none is exist yet
-		const IGameProfile* profile = GetProfile(IApplication::GetInstance()->GetInstanceOption("Profile").GetAttribute("ID"));
+		const IGameProfile* profile = GetProfile(GetInstanceOption("Profile").GetAttribute("ID"));
 		if (profile)
 		{
 			ChangeProfileTo(*profile);

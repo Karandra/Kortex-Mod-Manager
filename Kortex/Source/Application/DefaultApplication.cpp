@@ -207,11 +207,6 @@ namespace Kortex::Application
 		return 0;
 	}
 	
-	bool DefaultApplication::OnException()
-	{
-		LogEvent(RethrowCatchAndGetExceptionInfo(), LogLevel::Error);
-		return false;
-	}
 	void DefaultApplication::OnError(LogEvent& event)
 	{
 		KxIconType iconType = KxICON_NONE;
@@ -290,9 +285,22 @@ namespace Kortex::Application
 			IEvent::CallAfter(ShowErrorMessageFunc);
 		}
 	}
+	bool DefaultApplication::OnException()
+	{
+		LogEvent(RethrowCatchAndGetExceptionInfo(), LogLevel::Error);
+		return false;
+	}
+	
 	bool DefaultApplication::OnGlobalConfigChanged(IAppOption& option)
 	{
-		// Return true to flush changes to file.
+		return true;
+	}
+	bool DefaultApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
+	{
+		return true;
+	}
+	bool DefaultApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
+	{
 		return true;
 	}
 
@@ -347,7 +355,7 @@ namespace Kortex::Application
 	}
 	void DefaultApplication::ShowWorkspace()
 	{
-		auto option = GetInstanceOption(OptionsDef::ToString(Options::Workspace));
+		auto option = GetActiveInstanceOption(OptionsDef::ToString(Options::Workspace));
 		wxString startPage = option.GetValue(ModManager::Workspace::GetInstance()->GetID());
 		wxLogInfo("Start page is: %s", startPage);
 

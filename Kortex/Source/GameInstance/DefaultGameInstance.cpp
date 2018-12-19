@@ -384,7 +384,7 @@ namespace Kortex::GameInstance
 			IGameProfile& newProfile = *m_Profiles.emplace_back(NewProfile());
 			newProfile.SetID(id);
 			KxFile(newProfile.GetProfileDir()).CreateFolder();
-			newProfile.Save();
+			newProfile.SaveConfig();
 
 			// Do copy
 			KOperationWithProgressDialogBase* operation = new KOperationWithProgressDialog<KxFileOperationEvent>(false);
@@ -440,7 +440,7 @@ namespace Kortex::GameInstance
 			newProfile.SetID(newName);
 
 			KxFile(newProfile.GetProfileDir()).CreateFolder();
-			newProfile.Save();
+			newProfile.SaveConfig();
 
 			ProfileEvent event(Events::ProfileAdded, newProfile);
 			event.Send();
@@ -599,7 +599,7 @@ namespace Kortex::GameInstance
 				profile.SetID(item.GetName());
 				if (ShouldInitProfiles())
 				{
-					profile.Load();
+					profile.LoadConfig();
 				}
 			}
 			item = finder.FindNext();
@@ -684,12 +684,11 @@ namespace Kortex::GameInstance
 
 	void ConfigurableGameInstance::OnConfigChanged(IAppOption& option)
 	{
-		m_HasChanges = true;
-		SaveConfig();
+		wxLogInfo("ConfigurableGameInstance::OnConfigChanged -> %s", option.GetXPath());
 	}
-	bool ConfigurableGameInstance::SaveConfig()
+	void ConfigurableGameInstance::SaveConfig()
 	{
-		KxXMLNode variablesNode = m_Config.QueryElement("Instance/Variables");
+		KxXMLNode variablesNode = GetInstanceOption("Variables").GetConfigNode();
 		variablesNode.ClearChildren();
 
 		GetVariables().Accept([this, &variablesNode](const wxString& name, const VariableValue& value)
@@ -713,9 +712,8 @@ namespace Kortex::GameInstance
 			return true;
 		});
 
-		m_HasChanges = false;
 		KxFileStream configStream(GetConfigFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
-		return m_Config.Save(configStream);
+		m_Config.Save(configStream);
 	}
 	void ConfigurableGameInstance::OnExit()
 	{

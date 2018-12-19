@@ -73,46 +73,32 @@ namespace Kortex::Application::OptionSerializer
 	}
 	void UILayout::WindowSize(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window)
 	{
-		bool maximized = false;
-		bool topLevel = false;
-		if (window->IsTopLevel())
-		{
-			topLevel = true;
-			maximized = window->IsMaximized();
-		}
+		const bool isMaximized = window->IsMaximized();
 
 		if (mode == SerializationMode::Save)
 		{
-			if (topLevel)
+			option.SetAttribute("Maximized", isMaximized);
+			if (!isMaximized)
 			{
-				option.SetAttribute("Maximized", window->IsMaximized());
-			}
-			else
-			{
-				wxSize tSize = window->GetSize();
-				option.SetAttribute("Width", tSize.GetWidth());
-				option.SetAttribute("Height", tSize.GetHeight());
+				wxSize size = window->GetSize();
+				option.SetAttribute("Width", size.GetWidth());
+				option.SetAttribute("Height", size.GetHeight());
 			}
 		}
 		else
 		{
-			if (topLevel)
+			wxSize size(option.GetAttributeInt("Width", wxDefaultCoord), option.GetAttributeInt("Height", wxDefaultCoord));
+			size.DecToIfSpecified(window->GetMaxSize());
+			size.IncTo(window->GetMinSize());
+			window->SetSize(size);
+
+			if (option.GetAttributeBool("Maximized"))
 			{
-				if (option.GetAttributeBool("Maximized"))
-				{
-					window->Maximize();
-				}
-				else
-				{
-					window->Center();
-				}
+				window->Maximize();
 			}
 			else
 			{
-				wxSize size(option.GetAttributeInt("Width", wxDefaultCoord), option.GetAttributeInt("Height", wxDefaultCoord));
-				size.DecToIfSpecified(window->GetMaxSize());
-				size.IncTo(window->GetMinSize());
-				window->SetSize(size);
+				window->Center();
 			}
 		}
 	}

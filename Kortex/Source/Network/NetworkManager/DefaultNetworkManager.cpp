@@ -24,7 +24,7 @@ namespace Kortex::NetworkManager
 
 		// Load default provider
 		m_DefaultProvider = 0;
-		if (INetworkProvider* provider = FindProvider(GetInstanceOption().GetAttribute("DefaultProvider")))
+		if (INetworkProvider* provider = FindProvider(GetActiveInstanceOption().GetAttribute("DefaultProvider")))
 		{
 			m_DefaultProvider = provider->GetID();
 		}
@@ -32,7 +32,7 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::OnExit()
 	{
-		GetInstanceOption().SetAttribute("CurrentProvider", m_DefaultProvider);
+		GetActiveInstanceOption().SetAttribute("DefaultProvider", GetDefaultProvider()->GetName());
 	}
 	void DefaultNetworkManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
@@ -206,7 +206,7 @@ namespace Kortex::NetworkManager
 		m_DefaultProvider = provider->GetID();
 
 		UpdateButton();
-		GetInstanceOption().SetAttribute("CurrentProvider", m_DefaultProvider);
+		GetActiveInstanceOption().SetAttribute("DefaultProvider", provider->GetName());
 	}
 	void DefaultNetworkManager::OnToolBarButton(KxAuiToolBarEvent& event)
 	{

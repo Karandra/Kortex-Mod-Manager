@@ -192,7 +192,6 @@ namespace Kortex::GameInstance
 	{
 		private:
 			KxXMLDocument m_Config;
-			bool m_HasChanges = false;
 
 		protected:
 			void LoadVariables(const KxXMLDocument& instanceConfig);
@@ -215,12 +214,8 @@ namespace Kortex::GameInstance
 				return m_Config;
 			}
 			
-			bool HasConfigChanges() override
-			{
-				return m_HasChanges;
-			}
 			void OnConfigChanged(IAppOption& option) override;
-			bool SaveConfig() override;
+			void SaveConfig() override;
 			void OnExit() override;
 	};
 }

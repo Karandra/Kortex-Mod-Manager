@@ -345,7 +345,7 @@ namespace Kortex::ModManager
 				currentModList.emplace_back(GameInstance::ProfileMod(*existingMod, existingMod->IsActive()));
 			}
 		}
-		profile->Save();
+		profile->SaveConfig();
 	}
 	void ModImporterMO::ReadPlugins(KOperationWithProgressDialogBase* context)
 	{
@@ -379,7 +379,7 @@ namespace Kortex::ModManager
 				}
 				currentPluginsList.emplace_back(GameInstance::ProfilePlugin(name, KAux::IsStringsContain(activePlugins, name, false)));
 			}
-			profile->Save();
+			profile->SaveConfig();
 		}
 	}
 	void ModImporterMO::CopyGameConfig(KOperationWithProgressDialogBase* context)

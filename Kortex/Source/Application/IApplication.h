@@ -14,6 +14,8 @@ namespace Kortex
 	class LogEvent;
 	class SystemApplication;
 	class IVariableTable;
+	class IGameInstance;
+	class IGameProfile;
 
 	enum class LoadTranslationStatus
 	{
@@ -38,9 +40,12 @@ namespace Kortex
 			virtual int OnExit() = 0;
 
 			virtual void OnError(LogEvent& event) = 0;
-			virtual bool OnGlobalConfigChanged(IAppOption& option) = 0;
-
+			virtual bool OnException() = 0;
 			wxString RethrowCatchAndGetExceptionInfo() const;
+
+			virtual bool OnGlobalConfigChanged(IAppOption& option) = 0;
+			virtual bool OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance) = 0;
+			virtual bool OnProfileConfigChanged(IAppOption& option, IGameProfile& profile) = 0;
 
 			void InitGlobalManagers();
 			void UnInitGlobalManagers();
@@ -67,7 +72,6 @@ namespace Kortex
 			virtual wxString ExpandVariablesLocally(const wxString& variables) const = 0;
 			virtual wxString ExpandVariables(const wxString& variables) const = 0;
 		
-			virtual bool OnException() = 0;
 			virtual bool ScheduleRestart() = 0;
 			virtual bool Uninstall() = 0;
 

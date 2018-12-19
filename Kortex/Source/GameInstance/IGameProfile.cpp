@@ -58,7 +58,7 @@ namespace Kortex
 		return Util::CreateLocalFolder(id, name);
 	}
 
-	wxString IGameProfile::GetOrderFile() const
+	wxString IGameProfile::GetConfigFile() const
 	{
 		return Util::GetLocalRelativePath(GetID(), wxS("Profile.xml"));
 	}

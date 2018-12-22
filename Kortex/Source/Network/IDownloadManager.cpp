@@ -37,7 +37,6 @@ namespace Kortex
 	}
 	IDownloadManager::~IDownloadManager()
 	{
-		PauseAllActive();
 	}
 
 	void IDownloadManager::PauseAllActive()

@@ -19,9 +19,6 @@ namespace Kortex::Application
 	class BasicOption: public IAppOption
 	{
 		protected:
-			KxXMLNode m_Node;
-
-		protected:
 			void Create(Disposition disposition, KxXMLDocument& xml, const wxString& branch = wxEmptyString);
 			void Create(Disposition disposition, KxXMLDocument& xml, const IApplication& app, const wxString& branch = wxEmptyString);
 			void Create(Disposition disposition, KxXMLDocument& xml, const IGameInstance& instance, const wxString& branch = wxEmptyString);
@@ -108,49 +105,70 @@ namespace Kortex::Application
 	template<class T> class WithOptions
 	{
 		protected:
+			const T& CSelf() const
+			{
+				return *static_cast<const T*>(this);
+			}
 			T& NCSelf() const
 			{
-				return *const_cast<T*>(static_cast<const T*>(this));
+				return const_cast<T&>(CSelf());
 			}
 
 		public:
-			GlobalOption GetGlobalOption(const wxString& branch = wxEmptyString) const
+			template<class... Args> GlobalOption GetGlobalOption(Args&&... arg) const
 			{
-				return GlobalOption(NCSelf(), branch);
+				return GlobalOption(NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
-			ActiveInstanceOption GetActiveInstanceOption(const wxString& branch = wxEmptyString) const
+			template<class... Args> ActiveInstanceOption GetAInstanceOption(Args&&... arg) const
 			{
-				return ActiveInstanceOption(NCSelf(), branch);
+				return ActiveInstanceOption(NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
-			ActiveProfileOption GetActiveProfileOption(const wxString& branch = wxEmptyString) const
+			template<class... Args> ActiveProfileOption GetAProfileOption(Args&&... arg) const
 			{
-				return ActiveProfileOption(NCSelf(), branch);
+				return ActiveProfileOption(NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
-
-			
-			#if 0
-			ProfileOption GetProfileOption(const wxString& branch = wxEmptyString) const
-			{
-				return ProfileOption(GetNCSelf(), &GetNCSelf(), branch);
-			}
-			#endif
 	};
 
 	template<class T> class WithInstanceOptions: public WithOptions<T>
 	{
 		public:
-			InstanceOption GetInstanceOption(const wxString& branch = wxEmptyString) const
+			template<class... Args> InstanceOption GetInstanceOption(Args&&... arg) const
 			{
-				return InstanceOption(&NCSelf(), NCSelf(), branch);
+				return InstanceOption(&NCSelf(), NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
 	};
 
 	template<class T> class WithProfileOptions: public WithOptions<T>
 	{
 		public:
-			ProfileOption GetProfileOption(const wxString& branch = wxEmptyString) const
+			template<class... Args> ProfileOption GetProfileOption(Args&&... arg) const
 			{
-				return ProfileOption(&NCSelf(), NCSelf(), branch);
+				return ProfileOption(&NCSelf(), NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
 	};
+}
+
+namespace Kortex::Application
+{
+	template<class T, class... Args> GlobalOption GetGlobalOptionOf(Args&&... arg)
+	{
+		return T::GetInstance()->GetGlobalOption(std::forward<Args>(arg)...);
+	}
+	template<class T, class... Args> ActiveInstanceOption GetAInstanceOptionOf(Args&&... arg)
+	{
+		return T::GetInstance()->GetAInstanceOption(std::forward<Args>(arg)...);
+	}
+	template<class T, class... Args> ActiveProfileOption GetAProfileOptionOf(Args&&... arg)
+	{
+		return T::GetInstance()->GetAProfileOption(std::forward<Args>(arg)...);
+	}
+
+	template<class T, class... Args> InstanceOption GetInstanceOptionOf(Args&&... arg)
+	{
+		return T::GetInstance()->GetInstanceOption(std::forward<Args>(arg)...);
+	}
+	template<class T, class... Args> ProfileOption GetProfileOptionOf(Args&&... arg)
+	{
+		return T::GetInstance()->GetProfileOption(std::forward<Args>(arg)...);
+	}
 }

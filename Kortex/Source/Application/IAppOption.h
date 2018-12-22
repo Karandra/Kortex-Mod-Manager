@@ -28,8 +28,22 @@ namespace Kortex
 				Profile,
 			};
 
+		public:
+			static wxString MakeXPath()
+			{
+				return wxString();
+			}
+			template<class Args> static wxString MakeXPath(Args&& arg)
+			{
+				return arg;
+			}
+			template<class... Args> static wxString MakeXPath(Args&&... arg)
+			{
+				return ((arg + wxString(wxS('/'))) + ...);
+			}
+
 		private:
-			KxXMLNode* m_ConfigNode = nullptr;
+			KxXMLNode m_ConfigNode;
 			IConfigurableGameInstance* m_Instance = nullptr;
 			IGameProfile* m_Profile = nullptr;
 			Disposition m_Disposition = Disposition::None;
@@ -41,9 +55,9 @@ namespace Kortex
 			wxString DoGetAttribute(const wxString& name, const wxString& defaultValue = wxEmptyString) const override;
 			bool DoSetAttribute(const wxString& name, const wxString& value) override;
 
-			void AssignNode(KxXMLNode& node)
+			void AssignNode(const KxXMLNode& node)
 			{
-				m_ConfigNode = &node;
+				m_ConfigNode = node;
 			}
 			void AssignDisposition(Disposition disposition)
 			{
@@ -63,7 +77,7 @@ namespace Kortex
 			/* General */
 			bool IsOK() const override
 			{
-				return m_ConfigNode && m_ConfigNode->IsOK() && m_Disposition != Disposition::None;
+				return m_ConfigNode.IsOK() && m_Disposition != Disposition::None;
 			}
 			
 			Disposition GetDisposition() const
@@ -85,17 +99,17 @@ namespace Kortex
 
 			KxXMLNode GetConfigNode() const
 			{
-				return m_ConfigNode ? *m_ConfigNode : KxXMLNode();
+				return m_ConfigNode;
 			}
 			wxString GetXPath() const override
 			{
-				return m_ConfigNode ? m_ConfigNode->GetXPath() : wxEmptyString;
+				return m_ConfigNode.GetXPath();
 			}
 			wxString GetName() const override
 			{
-				return m_ConfigNode ? m_ConfigNode->GetName() : wxEmptyString;
+				return m_ConfigNode.GetName();
 			}
-		
+
 			void NotifyChange();
 
 		public:

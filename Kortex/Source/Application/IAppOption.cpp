@@ -8,22 +8,22 @@ namespace Kortex
 {
 	wxString IAppOption::DoGetValue(const wxString& defaultValue) const
 	{
-		return m_ConfigNode->GetValue(defaultValue);
+		return m_ConfigNode.GetValue(defaultValue);
 	}
 	bool IAppOption::DoSetValue(const wxString& value, bool isCDATA)
 	{
-		const bool res = m_ConfigNode->SetValue(value, isCDATA);
+		const bool res = m_ConfigNode.SetValue(value, isCDATA);
 		NotifyChange();
 		return res;
 	}
 
 	wxString IAppOption::DoGetAttribute(const wxString& name, const wxString& defaultValue) const
 	{
-		return m_ConfigNode->GetAttribute(name, defaultValue);
+		return m_ConfigNode.GetAttribute(name, defaultValue);
 	}
 	bool IAppOption::DoSetAttribute(const wxString& name, const wxString& value)
 	{
-		const bool res = m_ConfigNode->SetAttribute(name, value);
+		const bool res = m_ConfigNode.SetAttribute(name, value);
 		NotifyChange();
 		return res;
 	}

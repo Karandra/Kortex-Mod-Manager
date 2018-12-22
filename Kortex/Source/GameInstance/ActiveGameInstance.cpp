@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "ActiveGameInstance.h"
 #include "IGameProfile.h"
-#include "Kortex/Application.hpp"
+#include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/Common/GameData.hpp>
 
@@ -78,8 +79,10 @@ namespace Kortex::GameInstance
 	}
 	void ActiveGameInstance::SetCurrentProfileID(const wxString& id)
 	{
+		using namespace Application;
+
 		m_CurrentProfileID = id;
-		GetInstanceOption("Profile").SetAttribute("ID", id);
+		GetInstanceOption(Options::Option::Profile).SetAttribute(Options::Profile::ID, id);
 	}
 
 	void ActiveGameInstance::DoChangeProfileTo(const IGameProfile& profile)

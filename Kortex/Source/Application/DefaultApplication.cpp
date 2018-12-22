@@ -8,7 +8,7 @@
 #include "PackageManager/KPackageManager.h"
 #include "ProgramManager/KProgramManager.h"
 #include <Kortex/Application.hpp>
-#include <Kortex/ApplicationOptionDatabase.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>
@@ -41,26 +41,11 @@ namespace
 	{
 		return KBitmapSize().FromSystemSmallIcon().GetHeight();
 	}
-
-	void CreateGlobalManagers()
-	{
-		new Kortex::GameModsModule();
-		new Kortex::KPackageModule();
-		new Kortex::KProgramModule();
-		new Kortex::NetworkModule();
-	}
-	void DestroyGlobalManagers()
-	{
-		delete Kortex::GameModsModule::GetInstance();
-		delete Kortex::KPackageModule::GetInstance();
-		delete Kortex::KProgramModule::GetInstance();
-		delete Kortex::NetworkModule::GetInstance();
-	}
 }
 
 namespace Kortex::Application
 {
-	using namespace OptionDatabase;
+	using namespace Options;
 
 	DefaultApplication::DefaultApplication()
 		:m_ImageList(GetSmallIconWidth(), GetSmallIconHeight(), false, KIMG_COUNT)
@@ -155,10 +140,13 @@ namespace Kortex::Application
 			// Init systems
 			wxLogInfo("Begin initializing core systems");
 
-			// Init IModManager first
 			InitSettings();
 			InitVFS();
-			CreateGlobalManagers();
+			
+			m_GameModsModule = std::make_unique<GameModsModule>();
+			m_PackagesModule = std::make_unique<KPackageModule>();
+			m_ProgramModule = std::make_unique<KProgramModule>();
+			m_NetworkModule = std::make_unique<NetworkModule>();
 			wxLogInfo("Core systems initialized");
 
 			wxLogInfo("Initializing instances");
@@ -201,9 +189,12 @@ namespace Kortex::Application
 
 		// Destroy other managers
 		UnInitGlobalManagers();
-		DestroyGlobalManagers();
 
-		IGameInstance::DestroyActive();
+		m_GameModsModule.reset();
+		m_PackagesModule.reset();
+		m_ProgramModule.reset();
+		m_NetworkModule.reset();
+
 		return 0;
 	}
 	
@@ -328,13 +319,13 @@ namespace Kortex::Application
 	void DefaultApplication::LoadTranslation()
 	{
 		m_AvailableTranslations = KxTranslation::FindTranslationsInDirectory(m_DataFolder + "\\Translation");
-		auto option = GetGlobalOption(OptionsDef::ToString(Options::Language));
+		auto option = GetGlobalOption(Option::Language);
 
-		switch (TryLoadTranslation(m_Translation, m_AvailableTranslations, option.GetAttribute(LanguageDef::ToString(Language::Locale))))
+		switch (TryLoadTranslation(m_Translation, m_AvailableTranslations, option.GetAttribute(Language::Locale)))
 		{
 			case LoadTranslationStatus::Success:
 			{
-				option.SetAttribute(LanguageDef::ToString(Language::Locale), m_Translation.GetLocale());
+				option.SetAttribute(Language::Locale, m_Translation.GetLocale());
 				break;
 			}
 			case LoadTranslationStatus::LoadingError:
@@ -355,7 +346,7 @@ namespace Kortex::Application
 	}
 	void DefaultApplication::ShowWorkspace()
 	{
-		auto option = GetActiveInstanceOption(OptionsDef::ToString(Options::Workspace));
+		auto option = GetAInstanceOption(Option::Workspace);
 		wxString startPage = option.GetValue(ModManager::Workspace::GetInstance()->GetID());
 		wxLogInfo("Start page is: %s", startPage);
 
@@ -410,13 +401,16 @@ namespace Kortex::Application
 			if (ret != KxID_CANCEL)
 			{
 				// Set new game root
-				if (dialog.IsNewGameRootSet())
+				IGameInstance* instance = dialog.GetNewInstance();
+				IConfigurableGameInstance* configurableInstance = nullptr;
+				if (dialog.IsNewGameRootSet() && instance->QueryInterface(configurableInstance))
 				{
-					dialog.GetNewInstance()->GetInstanceOption(wxString("Variables/") + Variables::KVAR_ACTUAL_GAME_DIR).SetValue(dialog.GetNewGameRoot());
+					instance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetNewGameRoot());
+					configurableInstance->SaveConfig();
 				}
 
-				GetGlobalOption(OptionsDef::ToString(Options::Game)).SetAttribute(GameDef::ToString(Game::ID), dialog.GetNewGameID());
-				GetGlobalOption(OptionsDef::ToString(Options::Instance)).SetAttribute(InstanceDef::ToString(Instance::ID), dialog.GetNewInstanceID());
+				GetGlobalOption(Option::Game).SetAttribute(Game::ID, dialog.GetNewGameID());
+				GetGlobalOption(Option::Instance).SetAttribute(Instance::ID, dialog.GetNewInstanceID());
 
 				// Restart if user agreed
 				if (ret == KxID_YES)
@@ -435,7 +429,7 @@ namespace Kortex::Application
 		wxLogInfo("Initializing app settings");
 
 		// Init some application-wide variables
-		auto options = GetGlobalOption(OptionsDef::ToString(Options::Instance));
+		auto options = GetGlobalOption(Option::Instance);
 		m_InstancesFolder = options.GetAttribute("Location", m_InstancesFolder);
 
 		// Show first time config dialog if needed and save new 'ProfilesFolder'
@@ -503,14 +497,14 @@ namespace Kortex::Application
 				m_StartupGameID = dialog.GetNewGameID();
 				if (!m_IsCmdStartupGameID)
 				{
-					GetGlobalOption(OptionsDef::ToString(Options::Game)).SetAttribute(GameDef::ToString(Game::ID), m_StartupGameID);
+					GetGlobalOption(Option::Game).SetAttribute(Game::ID, m_StartupGameID);
 				}
 
 				// Instance ID
 				m_StartupInstanceID = dialog.GetNewInstanceID();
 				if (!m_IsCmdStartupInstanceID)
 				{
-					GetGlobalOption(OptionsDef::ToString(Options::Instance)).SetAttribute(InstanceDef::ToString(Instance::ID), m_StartupInstanceID);
+					GetGlobalOption(Option::Instance).SetAttribute(Instance::ID, m_StartupInstanceID);
 				}
 
 				// Set new game root
@@ -567,7 +561,7 @@ namespace Kortex::Application
 		}
 		else
 		{
-			m_StartupGameID = GetGlobalOption(OptionsDef::ToString(Options::Game)).GetAttribute(GameDef::ToString(Game::ID));
+			m_StartupGameID = GetGlobalOption(Option::Game).GetAttribute(Game::ID);
 		}
 
 		if (parser.Found("InstanceID", &m_StartupInstanceID))
@@ -576,7 +570,7 @@ namespace Kortex::Application
 		}
 		else
 		{
-			m_StartupInstanceID = GetGlobalOption(OptionsDef::ToString(Options::Instance)).GetAttribute(InstanceDef::ToString(Instance::ID));
+			m_StartupInstanceID = GetGlobalOption(Option::Instance).GetAttribute(Instance::ID);
 		}
 		wxLogInfo("InstanceTemplate: %s, Instance: %s", m_StartupGameID, m_StartupInstanceID);
 	}

@@ -170,7 +170,7 @@ bool KMainWindow::Create(wxWindow* parent,
 		IEvent::Bind(Events::VirtualFileSystemToggled, &KMainWindow::OnVFSToggled, this);
 		IEvent::Bind(Events::VirtualFileSystemToggled, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
 
-		GetActiveInstanceOption().LoadWindowLayout(this);
+		GetAInstanceOption().LoadWindowLayout(this);
 		return true;
 	}
 	return false;
@@ -352,7 +352,7 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 	if (skip)
 	{
 		event.Skip();
-		GetActiveInstanceOption().SaveWindowLayout(this);
+		GetAInstanceOption().SaveWindowLayout(this);
 	}
 }
 void KMainWindow::OnChangeInstance(KxMenuEvent& event)

@@ -8,9 +8,11 @@
 #include "KPackageProjectFileData.h"
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
-#include <Kortex/GameInstance.hpp>
 #include "PackageManager/KPackageManager.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
+#include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include "KAux.h"
@@ -19,6 +21,7 @@
 
 using namespace Kortex;
 using namespace Kortex::Network;
+using namespace Kortex::Application;
 
 namespace
 {
@@ -750,7 +753,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 	KxXMLNode configRootNode = m_XML.NewElement("config");
 
 	// Write XML-Schema
-	if (Kortex::KPackageManager::GetInstance()->GetGlobalOption("FOMod").GetAttributeBool("UseHTTPSForXMLScheme", true))
+	if (GetGlobalOptionOf<KPackageManager>(Options::PackageManager::FOMod).GetAttributeBool(Options::FOMod::UseHTTPSForXMLScheme, true))
 	{
 		configRootNode.SetAttribute("xmlns:xsi", "https://www.w3.org/2001/XMLSchema-instance");
 		configRootNode.SetAttribute("xsi:noNamespaceSchemaLocation", "https://qconsulting.ca/fo3/ModConfig5.0.xsd");

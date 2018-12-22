@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "KPackageManager.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
@@ -245,7 +246,9 @@ namespace Kortex
 	}
 	wxString KPackageManager::GetPackagesFolder() const
 	{
-		return GetActiveInstanceOption().GetAttribute("PackagesLocation");
+		using namespace Application;
+
+		return GetAInstanceOption(Options::PackageManager::Package).GetAttribute(Options::Package::Location);
 	}
 }
 

@@ -9,6 +9,14 @@
 class KIPCClient;
 class KVFSService;
 
+namespace Kortex
+{
+	class GameModsModule;
+	class KPackageModule;
+	class KProgramModule;
+	class NetworkModule;
+}
+
 namespace Kortex::Application
 {
 	class DefaultApplication: public IApplication
@@ -36,6 +44,11 @@ namespace Kortex::Application
 			wxString m_StartupInstanceID;
 			bool m_IsCmdStartupGameID = false;
 			bool m_IsCmdStartupInstanceID = false;
+
+			std::unique_ptr<GameModsModule> m_GameModsModule;
+			std::unique_ptr<KPackageModule> m_PackagesModule;
+			std::unique_ptr<KProgramModule> m_ProgramModule;
+			std::unique_ptr<NetworkModule> m_NetworkModule;
 
 		public:
 			DefaultApplication();

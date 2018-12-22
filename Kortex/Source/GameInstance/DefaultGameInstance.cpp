@@ -3,6 +3,7 @@
 #include "ActiveGameInstance.h"
 #include "DefaultGameProfile.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/Events.hpp>
 #include "IGameProfile.h"
@@ -688,7 +689,9 @@ namespace Kortex::GameInstance
 	}
 	void ConfigurableGameInstance::SaveConfig()
 	{
-		KxXMLNode variablesNode = GetInstanceOption("Variables").GetConfigNode();
+		using namespace Application;
+
+		KxXMLNode variablesNode = GetInstanceOption(Options::Option::Variables).GetConfigNode();
 		variablesNode.ClearChildren();
 
 		GetVariables().Accept([this, &variablesNode](const wxString& name, const VariableValue& value)

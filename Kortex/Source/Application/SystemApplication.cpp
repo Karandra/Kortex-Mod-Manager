@@ -22,7 +22,7 @@ namespace
 
 	void LogConfigChnage(const IAppOption& option)
 	{
-		wxLogInfo("Path: \"%s\", Value: \"%s\"", option.GetXPath(), option.GetValue());
+		wxLogInfo(wxS("Path: \"%s\", Value: \"%s\""), option.GetXPath(), option.GetValue());
 	}
 }
 
@@ -136,6 +136,9 @@ namespace Kortex
 		const bool success = m_GlobalConfig.Save(stream);
 
 		wxLogInfo("SystemApplication::SaveGlobalConfig -> %s", success ? "true" : "false");
+
+		wxLogInfo("SystemApplication::SaveGlobalConfig -> Destroying active instance");
+		IGameInstance::DestroyActive();
 	}
 	void SystemApplication::SaveActiveInstanceSettings()
 	{
@@ -233,8 +236,10 @@ namespace Kortex
 		SaveActiveInstanceSettings();
 		SaveGlobalConfig();
 
-		// Exit now
+		// Close log now, it will be closed after call to 'KxApp::OnExit' anyway.
 		UninitLogging();
+
+		// Exit now
 		if (m_IsApplicationInitialized)
 		{
 			KxApp::OnExit();

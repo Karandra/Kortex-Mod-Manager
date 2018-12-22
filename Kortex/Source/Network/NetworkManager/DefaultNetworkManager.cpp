@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultNetworkManager.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Events.hpp>
@@ -9,6 +10,8 @@
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxMenu.h>
+
+using namespace Kortex::Application::Options;
 
 namespace Kortex::NetworkManager
 {
@@ -24,7 +27,7 @@ namespace Kortex::NetworkManager
 
 		// Load default provider
 		m_DefaultProvider = 0;
-		if (INetworkProvider* provider = FindProvider(GetActiveInstanceOption().GetAttribute("DefaultProvider")))
+		if (INetworkProvider* provider = FindProvider(GetAInstanceOption(Option::Provider).GetAttribute(Provider::Default)))
 		{
 			m_DefaultProvider = provider->GetID();
 		}
@@ -32,7 +35,8 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::OnExit()
 	{
-		GetActiveInstanceOption().SetAttribute("DefaultProvider", GetDefaultProvider()->GetName());
+		const INetworkProvider* provider = GetDefaultProvider();
+		GetAInstanceOption(Option::Provider).SetAttribute(Provider::Default, provider ? provider->GetName() : wxEmptyString);
 	}
 	void DefaultNetworkManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
@@ -206,7 +210,7 @@ namespace Kortex::NetworkManager
 		m_DefaultProvider = provider->GetID();
 
 		UpdateButton();
-		GetActiveInstanceOption().SetAttribute("DefaultProvider", provider->GetName());
+		GetAInstanceOption().SetAttribute("DefaultProvider", provider->GetName());
 	}
 	void DefaultNetworkManager::OnToolBarButton(KxAuiToolBarEvent& event)
 	{

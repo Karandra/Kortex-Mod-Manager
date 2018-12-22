@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "KProgramManagerModel.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
 #include "KAux.h"
@@ -238,18 +239,6 @@ void KProgramManagerModel::OnContextMenu(KxDataViewEvent& event)
 	KxDataViewColumn* column = event.GetColumn();
 	if (column)
 	{
-		auto SaveLoadExpandedValues = [](bool save, bool value = false) -> bool
-		{
-			if (save)
-			{
-				Kortex::KProgramManager::GetInstance()->GetActiveInstanceOption().SetAttribute("ShowExpandedValues", value);
-				return value;
-			}
-			else
-			{
-				return Kortex::KProgramManager::GetInstance()->GetActiveInstanceOption().GetAttributeBool("ShowExpandedValues", value);
-			}
-		};
 		KProgramEntry* entry = GetDataEntry(GetRow(event.GetItem()));
 
 		KxMenu menu;
@@ -502,14 +491,17 @@ void KProgramManagerModel::RemoveProgram(KProgramEntry* entry)
 
 bool KProgramManagerModel::SaveLoadExpandedValues(bool save, bool value) const
 {
+	using namespace Kortex;
+	using namespace Kortex::Application;
+
 	if (save)
 	{
-		Kortex::KProgramManager::GetInstance()->GetActiveInstanceOption().SetAttribute("ShowExpandedValues", value);
+		GetAInstanceOptionOf<KProgramManager>(Options::ProgramManager::ShowExpandedValues).SetAttribute(Options::Attribute::Enabled, value);
 		return value;
 	}
 	else
 	{
-		return Kortex::KProgramManager::GetInstance()->GetActiveInstanceOption().GetAttributeBool("ShowExpandedValues", value);
+		return GetAInstanceOptionOf<KProgramManager>(Options::ProgramManager::ShowExpandedValues).GetAttributeBool(Options::Attribute::Enabled, value);
 	}
 }
 

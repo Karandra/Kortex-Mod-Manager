@@ -2,12 +2,9 @@
 #include "stdafx.h"
 #include "KWithBitmap.h"
 class KxXMLNode;
-class KProgramManager;
 
 class KProgramEntry
 {
-	friend class KProgramManager;
-
 	public:
 		using Vector = std::vector<KProgramEntry>;
 		using RefVector = std::vector<KProgramEntry*>;

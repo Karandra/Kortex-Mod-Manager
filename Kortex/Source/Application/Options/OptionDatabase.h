@@ -1,71 +1,87 @@
 #pragma once
 #include "stdafx.h"
-#include <KxFramework/KxIndexedEnum.h>
 
-namespace Kortex::Application::OptionDatabase
+#define KortexDefOption(name)	constexpr const wxChar name[] = wxS(#name)
+
+namespace Kortex::Application::Options
 {
-	template<class TDerived, class TEnum, class TString>
-	using IndexDefinition = KxIndexedEnum::Definition<TDerived, TEnum, TString, true>;
+	/* Generic attribute names */
+	namespace Attribute
+	{
+		KortexDefOption(Enabled);
+	}
+
+	// General option "namespaces"
+	namespace Option
+	{
+		KortexDefOption(Game);
+		KortexDefOption(Instance);
+		KortexDefOption(Profile);
+		KortexDefOption(Variables);
+		KortexDefOption(Language);
+		KortexDefOption(Workspace);
+		KortexDefOption(Provider);
+		KortexDefOption(ImageViewer);
+	}
+	
+	/* Application itself */
+	namespace Application
+	{
+		KortexDefOption(RestartDelay);
+	}
+	namespace Language
+	{
+		KortexDefOption(Locale);
+	}
+	namespace Game
+	{
+		KortexDefOption(ID);
+	}
+	namespace Instance
+	{
+		KortexDefOption(ID);
+		KortexDefOption(Location);
+	}
+	namespace Profile
+	{
+		KortexDefOption(ID);
+	}
+
+	// Some misc options related to application
+	namespace ImageViewer
+	{
+		KortexDefOption(ColorBG);
+		KortexDefOption(ColorFG);
+	}
+
+	/* Network */
+	namespace Provider
+	{
+		KortexDefOption(Default);
+	}
+
+	/* Package manager */
+	namespace PackageManager
+	{
+		KortexDefOption(Package);
+		KortexDefOption(AutoShowInfo);
+		KortexDefOption(FOMod);
+	}
+	namespace Package
+	{
+		KortexDefOption(Location);
+		KortexDefOption(AutoShowInfo);
+	}
+	namespace FOMod
+	{
+		KortexDefOption(UseHTTPSForXMLScheme);
+	}
+
+	/* Program manager */
+	namespace ProgramManager
+	{
+		KortexDefOption(ShowExpandedValues);
+	}
 }
 
-namespace Kortex::Application::OptionDatabase
-{
-	enum class Options
-	{
-		Game,
-		Instance,
-		Language,
-		Workspace,
-	};
-	class OptionsDef: public IndexDefinition<OptionsDef, Options, wxString>
-	{
-		inline static const TItem m_Index[] =
-		{
-			{Options::Game, wxS("Game")},
-			{Options::Instance, wxS("Instance")},
-			{Options::Language, wxS("Language")},
-			{Options::Workspace, wxS("Workspace")},
-		};
-	};
-}
-
-namespace Kortex::Application::OptionDatabase
-{
-	enum class Language
-	{
-		Locale,
-	};
-	class LanguageDef: public IndexDefinition<LanguageDef, Language, wxString>
-	{
-		inline static const TItem m_Index[] =
-		{
-			{Language::Locale, wxS("Locale")},
-		};
-	};
-
-	enum class Instance
-	{
-		ID,
-		Location,
-	};
-	class InstanceDef: public IndexDefinition<InstanceDef, Instance, wxString>
-	{
-		inline static const TItem m_Index[] =
-		{
-			{Instance::ID, wxS("ID")},
-			{Instance::Location, wxS("Location")},
-		};
-	};
-
-	enum class Game
-	{
-		ID,
-	};
-	class GameDef: public IndexDefinition<GameDef, Game, wxString>
-	{
-		inline static const TItem m_Index[] =
-		{
-			{Game::ID, wxS("ID")},
-		};
-	};
-}
+#undef DefineOption

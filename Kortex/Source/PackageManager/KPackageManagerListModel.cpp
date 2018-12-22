@@ -1,13 +1,14 @@
 #include "stdafx.h"
+#include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
+#include <Kortex/GameInstance.hpp>
 #include "KPackageManagerListModel.h"
 #include "KPackageManager.h"
 #include "KModPackage.h"
 #include "UI/KMainWindow.h"
-#include "GameInstance/IGameInstance.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "KOperationWithProgress.h"
-#include <Kortex/Application.hpp>
 #include "KAux.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxHTMLWindow.h>
@@ -16,25 +17,31 @@
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
-enum ColumnID
-{
-	Name,
-	ModificationDate,
-	Type,
-	Size,
-};
-enum MenuID
-{
-	Open,
-	OpenLocation,
-	ImportProject,
-	ExtractFiles,
+using namespace Kortex;
+using namespace Kortex::Application;
 
-	Remove,
-	Rename,
+namespace
+{
+	enum ColumnID
+	{
+		Name,
+		ModificationDate,
+		Type,
+		Size,
+	};
+	enum MenuID
+	{
+		Open,
+		OpenLocation,
+		ImportProject,
+		ExtractFiles,
 
-	Properties,
-};
+		Remove,
+		Rename,
+
+		Properties,
+	};
+}
 
 void KPackageManagerListModel::OnInitControl()
 {
@@ -398,7 +405,7 @@ void KPackageManagerListModel::Navigate(const wxString& sNavigatePath)
 	RefreshItems();
 
 	// Not the best place but whatever
-	m_AutoShowPackageInfo = Kortex::KPackageManager::GetInstance()->GetGlobalOption().GetAttributeBool("AutoShowPackageInfo", true);
+	m_AutoShowPackageInfo = GetGlobalOptionOf<KPackageManager>(Options::PackageManager::Package).GetAttributeBool(Options::Package::AutoShowInfo, true);
 }
 void KPackageManagerListModel::NavigateUp()
 {

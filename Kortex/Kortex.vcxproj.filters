@@ -1712,7 +1712,7 @@
     <ClInclude Include="Source\Application\Options\OptionDatabase.h">
       <Filter>Code\Headers\Application\Option</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Kortex\ApplicationOptionDatabase.hpp">
+    <ClInclude Include="Include\Kortex\ApplicationOptions.hpp">
       <Filter>Code\Include\Components</Filter>
     </ClInclude>
   </ItemGroup>

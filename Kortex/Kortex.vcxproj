@@ -229,7 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Kortex\Application.hpp" />
-    <ClInclude Include="Include\Kortex\ApplicationOptionDatabase.hpp" />
+    <ClInclude Include="Include\Kortex\ApplicationOptions.hpp" />
     <ClInclude Include="Include\Kortex\Common\GameMods.hpp" />
     <ClInclude Include="Include\Kortex\Common\Network.hpp" />
     <ClInclude Include="Include\Kortex\Core.hpp" />

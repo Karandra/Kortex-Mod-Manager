@@ -43,6 +43,9 @@ namespace Kortex
 				return *GetMods().emplace_back(NewMod());
 			}
 
+			virtual void Load() = 0;
+			virtual void Save() const = 0;
+
 			virtual const IGameMod::Vector& GetMods() const = 0;
 			virtual IGameMod::Vector& GetMods() = 0;
 			virtual IGameMod::RefVector GetAllMods(bool includeWriteTarget = false) = 0;

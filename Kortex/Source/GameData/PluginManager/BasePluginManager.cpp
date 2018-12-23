@@ -2,7 +2,7 @@
 #include "BasePluginManager.h"
 #include "Workspace.h"
 #include <Kortex/GameInstance.hpp>
-#include "ProgramManager/KProgramManager.h"
+#include <Kortex/ProgramManager.hpp>
 #include "UI/KWorkspace.h"
 #include <Kortex/Events.hpp>
 #include "KUPtrVectorUtil.h"
@@ -151,25 +151,25 @@ namespace Kortex::PluginManager
 	{
 		if (CheckSortingTool(entry))
 		{
-			KProgramEntry runEntry;
+			ProgramManager::DefaultProgramEntry runEntry;
 			runEntry.SetName(entry.GetName());
 			runEntry.SetExecutable(entry.GetExecutable());
 			runEntry.SetArguments(entry.GetArguments());
 
-			KxProcess& process = KProgramManager::GetInstance()->CreateProcess(runEntry);
-			process.SetOptionEnabled(KxPROCESS_WAIT_END, true);
-			process.SetOptionEnabled(KxPROCESS_DETACHED, false);
+			KxProcess* process = IProgramManager::GetInstance()->CreateProcess(runEntry).release();
+			process->SetOptionEnabled(KxPROCESS_WAIT_END, true);
+			process->SetOptionEnabled(KxPROCESS_DETACHED, false);
 
 			KxProgressDialog* dialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
-			dialog->Bind(KxEVT_STDDIALOG_BUTTON, [&process](wxNotifyEvent& event)
+			dialog->Bind(KxEVT_STDDIALOG_BUTTON, [process](wxNotifyEvent& event)
 			{
 				if (event.GetId() == KxID_CANCEL)
 				{
-					process.Terminate(-1, true);
+					process->Terminate(-1, true);
 				}
 				event.Veto();
 			});
-			process.Bind(KxEVT_PROCESS_END, [this, &process, dialog](wxProcessEvent& event)
+			process->Bind(KxEVT_PROCESS_END, [this, process, dialog](wxProcessEvent& event)
 			{
 				LoadNativeOrder();
 				dialog->Destroy();
@@ -177,7 +177,7 @@ namespace Kortex::PluginManager
 
 				IEvent::CallAfter([&process]()
 				{
-					KProgramManager::GetInstance()->DestroyProcess(process);
+					delete process;
 				});
 			});
 
@@ -186,7 +186,7 @@ namespace Kortex::PluginManager
 			dialog->Pulse();
 			dialog->Show();
 
-			process.Run(KxPROCESS_RUN_ASYNC);
+			process->Run(KxPROCESS_RUN_ASYNC);
 		}
 	}
 }

@@ -6,10 +6,10 @@
 #include "UI/KInstanceSelectionDialog.h"
 #include "VFS/KVFSService.h"
 #include "PackageManager/KPackageManager.h"
-#include "ProgramManager/KProgramManager.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/Notification.hpp>
+#include <Kortex/ProgramManager.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>

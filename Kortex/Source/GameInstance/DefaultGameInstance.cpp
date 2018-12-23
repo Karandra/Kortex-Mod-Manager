@@ -5,9 +5,9 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
+#include <Kortex/ProgramManager.hpp>
 #include <Kortex/Events.hpp>
 #include "IGameProfile.h"
-#include "ProgramManager/KProgramManager.h"
 #include "KOperationWithProgress.h"
 #include "KBitmapSize.h"
 #include "KAux.h"
@@ -198,20 +198,13 @@ namespace Kortex::GameInstance
 		wxBitmap bitmap(GetIconLocation(), wxBITMAP_TYPE_ANY);
 		if (!bitmap.IsOk())
 		{
-			if (KProgramManager* programsConfig = KProgramManager::GetInstance())
+			// Can't load instance icon. Try to load icon for first program in hope that the first one is the managed game.
+			if (IProgramManager* programsConfig = IProgramManager::GetInstance())
 			{
-				const KProgramEntry::Vector& items = programsConfig->GetProgramList();
+				const IProgramEntry::Vector& items = programsConfig->GetProgramList();
 				if (!items.empty())
 				{
-					const KProgramEntry& programEntry = items.front();
-					if (!programEntry.GetIconPath().IsEmpty())
-					{
-						bitmap = KxShell::GetFileIcon(Kortex::IModDispatcher::GetInstance()->ResolveLocationPath(programEntry.GetIconPath()));
-					}
-					else
-					{
-						bitmap = KxShell::GetFileIcon(Kortex::IModDispatcher::GetInstance()->ResolveLocationPath(programEntry.GetExecutable()));
-					}
+					bitmap = KxShell::GetFileIcon(IModDispatcher::GetInstance()->ResolveLocationPath(items.front()->GetIconPath()));
 				}
 			}
 		}

@@ -40,31 +40,33 @@
 		</MirroredLocations>
 	</Virtualization>
 
-	<ProgramManager>
-		<Programs>
-			<Entry>
-				<Name>$(GameShortName)</Name>
-				<Executable>TESV.exe</Executable>
-			</Entry>
-			<Entry>
-				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
-				<Executable>SKSE_Loader.exe</Executable>
-			</Entry>
-			<Entry>
-				<Name>$(GameShortName) Launcher</Name>
-				<Executable>SkyrimLauncher.exe</Executable>
-			</Entry>
-			<Entry>
-				<Name>Creation Kit</Name>
-				<Executable>CreationKit.exe</Executable>
-				<Arguments></Arguments>
-			</Entry>
-			<Entry>
-				<Name>ENB Injector</Name>
-				<Executable>ENBInjector.exe</Executable>
-			</Entry>
-		</Programs>
-	</ProgramManager>
+	<Programs>
+		<ProgramManager>
+			<DefaultPrograms>
+				<Entry ShowInMainMenu="1">
+					<Name>$(GameShortName)</Name>
+					<Executable>TESV.exe</Executable>
+				</Entry>
+				<Entry ShowInMainMenu="1">
+					<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+					<Executable>SKSE_Loader.exe</Executable>
+				</Entry>
+				<Entry ShowInMainMenu="1">
+					<Name>$(GameShortName) Launcher</Name>
+					<Executable>SkyrimLauncher.exe</Executable>
+				</Entry>
+				<Entry>
+					<Name>Creation Kit</Name>
+					<Executable>CreationKit.exe</Executable>
+					<Arguments></Arguments>
+				</Entry>
+				<Entry>
+					<Name>ENB Injector</Name>
+					<Executable>ENBInjector.exe</Executable>
+				</Entry>
+			</DefaultPrograms>
+		</ProgramManager>
+	</Programs>
 
 	<GameConfig EnableENB="1">
 		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Skyrim.ini</Entry>

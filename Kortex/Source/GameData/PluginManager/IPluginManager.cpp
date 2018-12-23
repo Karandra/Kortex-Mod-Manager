@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "ProgramManager/KProgramManager.h"
 #include "UI/KWorkspace.h"
 #include <Kortex/Events.hpp>
 #include "KUPtrVectorUtil.h"

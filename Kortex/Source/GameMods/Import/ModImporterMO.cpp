@@ -7,9 +7,8 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/DownloadManager.hpp>
+#include <Kortex/ProgramManager.hpp>
 #include "PackageProject/KPackageProjectSerializer.h"
-#include "ProgramManager/KProgramManager.h"
-#include "ProgramManager/KProgramWorkspace.h"
 #include "KOperationWithProgress.h"
 #include "KAux.h"
 #include <KxFramework/KxFileFinder.h>
@@ -182,10 +181,7 @@ namespace Kortex::ModManager
 
 	void ModImporterMO::ReadExecutables(KOperationWithProgressDialogBase* context)
 	{
-		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), KProgramManager::GetInstance()->GetManagerInfo().GetName()));
-
-		KProgramEntry::Vector& programList = KProgramManager::GetInstance()->GetProgramList();
-		KProgramEntry* pCurrentEntry = nullptr;
+		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), IProgramManager::GetInstance()->GetManagerInfo().GetName()));
 
 		const wxString sectionName("customExecutables");
 		long count = -1;
@@ -203,7 +199,7 @@ namespace Kortex::ModManager
 					return m_Options.GetValue(sectionName, wxString::Format("%d\\%s", i, name));
 				};
 
-				KProgramEntry& entry = programList.emplace_back();
+				IProgramEntry& entry = IProgramManager::GetInstance()->EmplaceProgram();
 				entry.SetName(GetValue("title"));
 				entry.SetExecutable(ProcessFilePath(GetValue("binary")));
 				entry.SetArguments(ProcessFilePath(GetValue("arguments")));
@@ -214,7 +210,6 @@ namespace Kortex::ModManager
 					entry.SetName(entry.GetExecutable().AfterLast('\\').BeforeLast('.'));
 				}
 			}
-			KProgramManager::GetInstance()->Save();
 		}
 	}
 	void ModImporterMO::CopySaves(KOperationWithProgressDialogBase* context)

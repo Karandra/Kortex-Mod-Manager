@@ -81,6 +81,8 @@ namespace Kortex::Application::Options
 	namespace ProgramManager
 	{
 		KortexDefOption(ShowExpandedValues);
+		KortexDefOption(DisplayModel);
+		KortexDefOption(UserPrograms);
 	}
 }
 

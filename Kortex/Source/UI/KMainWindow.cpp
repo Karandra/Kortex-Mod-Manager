@@ -6,9 +6,9 @@
 #include <Kortex/Events.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
+#include <Kortex/ProgramManager.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "ProgramManager/KProgramManager.h"
 #include "KInstanceSelectionDialog.h"
 #include "KAboutDialog.h"
 #include "KWorkspace.h"
@@ -21,7 +21,6 @@
 
 #include "PackageManager/KPackageManagerWorkspace.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
-#include "ProgramManager/KProgramWorkspace.h"
 
 using namespace Kortex;
 
@@ -259,7 +258,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 
 	// Add programs
 	size_t count = mainMenu.GetMenuItemCount();
-	Kortex::KProgramManager::GetInstance()->OnAddMainMenuItems(mainMenu);
+	Kortex::IProgramManager::GetInstance()->OnAddMainMenuItems(mainMenu);
 	if (count != mainMenu.GetMenuItemCount())
 	{
 		mainMenu.AddSeparator();

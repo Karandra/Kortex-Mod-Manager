@@ -6,7 +6,6 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>
 #include "UI/KImageViewerDialog.h"
-#include "ProgramManager/KProgramManager.h"
 #include "KAux.h"
 #include "KOperationWithProgress.h"
 #include <KxFramework/KxSearchBox.h>

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "KInstanceCreatorDialog.h"
-#include "ProgramManager/KProgramManager.h"
 #include "Events/LogEvent.h"
 #include "GameInstance/IGameInstance.h"
 #include <Kortex/Application.hpp>

@@ -6,7 +6,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>
-#include "ProgramManager/KProgramWorkspace.h"
+#include <Kortex/ProgramManager.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 
@@ -90,7 +90,7 @@ namespace Kortex
 						{
 							KWorkspace::ScheduleReloadOf<ModManager::Workspace>();
 							KWorkspace::ScheduleReloadOf<DownloadManager::Workspace>();
-							KWorkspace::ScheduleReloadOf<KProgramWorkspace>();
+							KWorkspace::ScheduleReloadOf<ProgramManager::Workspace>();
 							//KWorkspace::ScheduleReloadOf<KGameConfigWorkspace>();
 						});
 						operation->SetDialogCaption(KTr("ModManager.Import.Caption"));

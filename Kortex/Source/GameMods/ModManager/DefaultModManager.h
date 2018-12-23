@@ -111,9 +111,6 @@ namespace Kortex::ModManager
 
 		public:
 			KWorkspace* GetWorkspace() const override;
-			void SetWorkspace(KWorkspace* workspace)
-			{
-			}
 			void Load() override;
 			void Save() const override;
 

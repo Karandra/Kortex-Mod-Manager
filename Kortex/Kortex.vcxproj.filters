@@ -111,9 +111,6 @@
     <Filter Include="Code\Source\Network\Provider">
       <UniqueIdentifier>{16db6ccd-8b23-4a71-99f9-35422b1d4f61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\ProgramManager">
-      <UniqueIdentifier>{ea90ff45-611e-4a67-9994-23816ff6b21a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\GameInstance">
       <UniqueIdentifier>{baf9614d-07aa-47eb-8665-ead79d31a066}</UniqueIdentifier>
     </Filter>
@@ -238,9 +235,6 @@
     <Filter Include="Code\Headers\Network\Provider">
       <UniqueIdentifier>{87dd762e-83ab-43a0-8ea5-458d4c6dada6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\ProgramManager">
-      <UniqueIdentifier>{12602aa1-3fe1-499e-8830-e016580559ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\GameInstance">
       <UniqueIdentifier>{1e072cee-0e2c-4fc2-9f84-f016c2f83098}</UniqueIdentifier>
     </Filter>
@@ -306,6 +300,18 @@
     </Filter>
     <Filter Include="Code\Source\Application\Option">
       <UniqueIdentifier>{f8dee2e9-4626-42bf-95eb-0f0d1f9534f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Programs">
+      <UniqueIdentifier>{12602aa1-3fe1-499e-8830-e016580559ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Programs">
+      <UniqueIdentifier>{ea90ff45-611e-4a67-9994-23816ff6b21a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Programs\ProgramManager">
+      <UniqueIdentifier>{c3ddbced-ebb9-4c58-8363-a05a68abc265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Programs\ProgramManager">
+      <UniqueIdentifier>{b25a0b02-b256-4184-aa30-ed283a17b3e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -516,12 +522,6 @@
     <ClCompile Include="Source\Utility\KINetFSHandler.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ProgramManager\KProgramManager.cpp">
-      <Filter>Code\Source\ProgramManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ProgramManager\KProgramManagerModel.cpp">
-      <Filter>Code\Source\ProgramManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\VFS\KVFSService.cpp">
       <Filter>Code\Source\VFS</Filter>
     </ClCompile>
@@ -548,12 +548,6 @@
     </ClCompile>
     <ClCompile Include="Source\GameInstance\Config\KLocationsManagerConfig.cpp">
       <Filter>Code\Source\GameInstance\Config</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ProgramManager\KProgramWorkspace.cpp">
-      <Filter>Code\Source\ProgramManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ProgramManager\KProgramEntry.cpp">
-      <Filter>Code\Source\ProgramManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCCAssignedConditionalsEditor.cpp">
       <Filter>Code\Source\PackageCreator\PageComponents</Filter>
@@ -915,6 +909,27 @@
     <ClCompile Include="Source\Application\Options\Option.cpp">
       <Filter>Code\Source\Application\Option</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Programs\IProgramEntry.cpp">
+      <Filter>Code\Source\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\IProgramManager.cpp">
+      <Filter>Code\Source\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\ProgramsModule.cpp">
+      <Filter>Code\Source\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\ProgramManager\Workspace.cpp">
+      <Filter>Code\Source\Programs\ProgramManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\ProgramManager\DisplayModel.cpp">
+      <Filter>Code\Source\Programs\ProgramManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramManager.cpp">
+      <Filter>Code\Source\Programs\ProgramManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramEntry.cpp">
+      <Filter>Code\Source\Programs\ProgramManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1166,12 +1181,6 @@
     <ClInclude Include="Source\Utility\KINetFSHandler.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ProgramManager\KProgramManager.h">
-      <Filter>Code\Headers\ProgramManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ProgramManager\KProgramManagerModel.h">
-      <Filter>Code\Headers\ProgramManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\VFS\KVFSService.h">
       <Filter>Code\Headers\VFS</Filter>
     </ClInclude>
@@ -1198,12 +1207,6 @@
     </ClInclude>
     <ClInclude Include="Source\GameInstance\Config\KLocationsManagerConfig.h">
       <Filter>Code\Headers\GameInstance\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ProgramManager\KProgramWorkspace.h">
-      <Filter>Code\Headers\ProgramManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ProgramManager\KProgramEntry.h">
-      <Filter>Code\Headers\ProgramManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KUPtrVectorUtil.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -1714,6 +1717,33 @@
     </ClInclude>
     <ClInclude Include="Include\Kortex\ApplicationOptions.hpp">
       <Filter>Code\Include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\IProgramEntry.h">
+      <Filter>Code\Headers\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\IProgramManager.h">
+      <Filter>Code\Headers\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramsModule.h">
+      <Filter>Code\Headers\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\ProgramManager.hpp">
+      <Filter>Code\Include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\Common\Programs.hpp">
+      <Filter>Code\Include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\Workspace.h">
+      <Filter>Code\Headers\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\DisplayModel.h">
+      <Filter>Code\Headers\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramManager.h">
+      <Filter>Code\Headers\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramEntry.h">
+      <Filter>Code\Headers\Programs\ProgramManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

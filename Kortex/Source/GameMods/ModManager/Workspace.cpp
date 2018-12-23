@@ -7,6 +7,7 @@
 #include <Kortex/ModProvider.hpp>
 #include <Kortex/SaveManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
+#include <Kortex/ProgramManager.hpp>
 #include <Kortex/VirtualGameFolder.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
@@ -23,7 +24,6 @@
 #include "UI/KTextEditorDialog.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
-#include "ProgramManager/KProgramWorkspace.h"
 #include "KOperationWithProgress.h"
 #include "KAux.h"
 #include <KxFramework/KxFile.h>
@@ -167,7 +167,7 @@ namespace Kortex::ModManager
 		IEvent::Bind(Events::VirtualFileSystemToggled, &Workspace::OnVFSToggled, this);
 
 		CreateAsSubWorkspace<VirtualGameFolder::Workspace>();
-		CreateAsSubWorkspace<KProgramWorkspace>();
+		CreateAsSubWorkspace<ProgramManager::Workspace>();
 		return true;
 	}
 

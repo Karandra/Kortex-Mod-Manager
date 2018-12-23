@@ -59,13 +59,6 @@ namespace Kortex
 				return GetWorkspace() != nullptr;
 			}
 
-			virtual void Load()
-			{
-			}
-			virtual void Save() const
-			{
-			}
-
 			virtual const Kortex::IPluggableManager* ToPluggableManager() const
 			{
 				return nullptr;

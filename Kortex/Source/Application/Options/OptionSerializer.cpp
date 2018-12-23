@@ -10,45 +10,52 @@ namespace Kortex::Application::OptionSerializer
 {
 	void UILayout::DataViewLayout(IAppOption& option, SerializationMode mode, KxDataViewCtrl* dataView)
 	{
-		wxArrayInt indexes;
-		if (mode == SerializationMode::Load)
-		{
-			indexes.resize(dataView->GetColumnCount());
-		}
-
 		const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
-		for (size_t i = 0; i < dataView->GetColumnCount(); i++)
+		KxXMLNode columnsNode = option.GetConfigNode().QueryOrCreateElement(wxS("Columns"));
+
+		if (mode == SerializationMode::Save)
 		{
-			KxDataViewColumn* column = dataView->GetColumn(i);
-			const int columnID = column->GetID();
+			columnsNode.ClearNode();
 
-			const wxString widthName = wxString::Format("Column[%d].Width", columnID);
-			const wxString visibleName = wxString::Format("Column[%d].Visible", columnID);
-			const wxString displayIndexName = wxString::Format("Column[%d].DisplayIndex", columnID);
+			for (size_t i = 0; i < dataView->GetColumnCount(); i++)
+			{
+				KxXMLNode node = columnsNode.NewElement(wxS("Entry"));
+				const KxDataViewColumn* column = dataView->GetColumn(i);
 
-			if (mode == SerializationMode::Save)
-			{
-				if (column->IsResizeable())
-				{
-					option.SetAttribute(widthName, column->GetWidth());
-				}
-				option.SetAttribute(visibleName, column->IsShown());
-				option.SetAttribute(displayIndexName, (int64_t)dataView->GetColumnPosition(column));
-			}
-			else
-			{
-				if (column->IsResizeable())
-				{
-					int width = option.GetAttributeInt(widthName, KxDVC_DEFAULT_WIDTH);
-					column->SetWidth(std::clamp(width, column->GetMinWidth(), screenWidth));
-				}
-				column->SetHidden(!option.GetAttributeBool(visibleName, true));
-				indexes[i] = option.GetAttributeInt(displayIndexName, columnID);
+				node.SetAttribute(wxS("DisplayAt"), (int64_t)dataView->GetColumnPosition(column));
+				node.SetAttribute(wxS("Visible"), column->IsExposed());
+				node.SetAttribute(wxS("Width"), column->GetWidth());
 			}
 		}
-
-		if (mode == SerializationMode::Load)
+		else
 		{
+			wxArrayInt indexes;
+			indexes.resize(dataView->GetColumnCount());
+
+			KxXMLNode node = columnsNode.GetFirstChildElement();
+			for (size_t i = 0; i < dataView->GetColumnCount(); i++)
+			{
+				indexes[i] = i;
+
+				if (node.IsOK())
+				{
+					KxDataViewColumn* column = dataView->GetColumn(i);
+
+					if (column->IsResizeable())
+					{
+						int width = node.GetAttributeInt(wxS("Width"), -1);
+						if (width > 0)
+						{
+							column->SetWidth(std::clamp(width, column->GetMinWidth(), screenWidth));
+						}
+					}
+					column->SetHidden(!node.GetAttributeBool(wxS("Visible"), true));
+					indexes[i] = node.GetAttributeInt(wxS("DisplayAt"), i);
+
+					node = node.GetNextSiblingElement();
+				}
+			}
+
 			if (wxHeaderCtrl* header = dataView->GetHeaderCtrl())
 			{
 				header->SetColumnsOrder(indexes);
@@ -73,26 +80,35 @@ namespace Kortex::Application::OptionSerializer
 	}
 	void UILayout::WindowSize(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window)
 	{
-		const bool isMaximized = window->IsMaximized();
+		KxXMLNode geometryNode = option.GetConfigNode().QueryOrCreateElement(wxS("Geometry"));
 
 		if (mode == SerializationMode::Save)
 		{
-			option.SetAttribute("Maximized", isMaximized);
+			geometryNode.ClearNode();
+
+			const bool isMaximized = window->IsMaximized();
+			geometryNode.NewElement(wxS("Maximized")).SetValue(isMaximized);
 			if (!isMaximized)
 			{
 				wxSize size = window->GetSize();
-				option.SetAttribute("Width", size.GetWidth());
-				option.SetAttribute("Height", size.GetHeight());
+
+				KxXMLNode sizeNode = geometryNode.NewElement(wxS("Size"));
+				sizeNode.SetAttribute(wxS("Width"), size.GetWidth());
+				sizeNode.SetAttribute(wxS("Height"), size.GetHeight());
 			}
 		}
 		else
 		{
-			wxSize size(option.GetAttributeInt("Width", wxDefaultCoord), option.GetAttributeInt("Height", wxDefaultCoord));
+			KxXMLNode sizeNode = geometryNode.GetFirstChildElement(wxS("Size"));
+
+			wxSize size;
+			size.SetWidth(sizeNode.GetAttributeInt(wxS("Width"), wxDefaultCoord));
+			size.SetHeight(sizeNode.GetAttributeInt(wxS("Height"), wxDefaultCoord));
 			size.DecToIfSpecified(window->GetMaxSize());
 			size.IncTo(window->GetMinSize());
 			window->SetSize(size);
 
-			if (option.GetAttributeBool("Maximized"))
+			if (geometryNode.GetFirstChildElement(wxS("Maximized")).GetValueBool())
 			{
 				window->Maximize();
 			}

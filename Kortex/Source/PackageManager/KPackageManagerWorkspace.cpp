@@ -15,9 +15,32 @@
 #include <KxFramework/KxTextFile.h>
 
 using namespace Kortex;
+using namespace Kortex::Application;
+
+namespace Kortex::Application::OName
+{
+	KortexDefOption(VSplitter);
+	KortexDefOption(HSplitter);
+}
+
+namespace
+{
+	auto GetDisplayModelOption()
+	{
+		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+	}
+	auto GetVSplitterOption()
+	{
+		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::UI, OName::VSplitter);
+	}
+	auto GetHSplitterOption()
+	{
+		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::UI, OName::HSplitter);
+	}
+}
 
 KPackageManagerWorkspace::KPackageManagerWorkspace(KMainWindow* mainWindow)
-	:KWorkspace(mainWindow)//, m_PackageListViewOptions(this, "PackageListView"), m_MainOptions(this, "MainUI")
+	:KWorkspace(mainWindow)
 {
 	m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	CreateItemInManagersMenu();
@@ -26,9 +49,9 @@ KPackageManagerWorkspace::~KPackageManagerWorkspace()
 {
 	if (IsWorkspaceCreated())
 	{
-		//KProgramOptionSerializer::SaveDataViewLayout(m_MainView->GetView(), m_PackageListViewOptions);
-		//KProgramOptionSerializer::SaveSplitterLayout(m_Splitter, m_MainOptions);
-		//KProgramOptionSerializer::SaveSplitterLayout(m_InfoPane, m_MainOptions);
+		GetDisplayModelOption().SaveDataViewLayout(m_MainView->GetView());
+		GetVSplitterOption().SaveSplitterLayout(m_Splitter);
+		GetHSplitterOption().SaveSplitterLayout(m_InfoPane);
 	}
 }
 bool KPackageManagerWorkspace::OnCreateWorkspace()
@@ -43,9 +66,9 @@ bool KPackageManagerWorkspace::OnCreateWorkspace()
 	CreateInfoPane();
 	m_Splitter->SplitVertically(m_ViewPane, m_InfoPane, -m_Splitter->GetMinimumPaneSize());
 
-	//KProgramOptionSerializer::LoadSplitterLayout(m_Splitter, m_MainOptions);
-	//KProgramOptionSerializer::LoadSplitterLayout(m_InfoPane, m_MainOptions);
-	//KProgramOptionSerializer::LoadDataViewLayout(m_MainView->GetView(), m_PackageListViewOptions);
+	GetVSplitterOption().LoadSplitterLayout(m_Splitter);
+	GetHSplitterOption().LoadSplitterLayout(m_InfoPane);
+	GetDisplayModelOption().LoadDataViewLayout(m_MainView->GetView());
 	return true;
 }
 

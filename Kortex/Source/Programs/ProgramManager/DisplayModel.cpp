@@ -41,6 +41,11 @@ namespace
 	};
 }
 
+namespace Kortex::Application::OName
+{
+	KortexDefOption(ShowExpandedValues);
+}
+
 namespace Kortex::ProgramManager
 {
 	void DisplayModel::OnInitControl()
@@ -491,12 +496,12 @@ namespace Kortex::ProgramManager
 
 		if (save)
 		{
-			GetAInstanceOptionOf<IProgramManager>(Options::ProgramManager::ShowExpandedValues).SetAttribute(Options::Attribute::Enabled, value);
+			GetAInstanceOptionOf<IProgramManager>(OName::ShowExpandedValues).SetAttribute(OName::Enabled, value);
 			return value;
 		}
 		else
 		{
-			return GetAInstanceOptionOf<IProgramManager>(Options::ProgramManager::ShowExpandedValues).GetAttributeBool(Options::Attribute::Enabled, value);
+			return GetAInstanceOptionOf<IProgramManager>(OName::ShowExpandedValues).GetAttributeBool(OName::Enabled, value);
 		}
 	}
 

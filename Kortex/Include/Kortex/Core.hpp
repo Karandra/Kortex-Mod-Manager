@@ -2,6 +2,7 @@
 #include "Application/RTTI.h"
 #include "Application/Translation.h"
 #include "Application/IAppOption.h"
+#include "Application/Options/Macros.h"
 
 #include "Application/IModule.h"
 #include "Application/IManager.h"

@@ -98,6 +98,7 @@
     <ClCompile Include="Source\GameMods\IModManager.cpp" />
     <ClCompile Include="Source\GameMods\FileTreeNode.cpp" />
     <ClCompile Include="Source\GameMods\IModTagManager.cpp" />
+    <ClCompile Include="Source\GameMods\ModManager\VirtualFileSystem.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\Dialog.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\DisplayModel.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\Item.cpp" />
@@ -211,6 +212,7 @@
     <ClCompile Include="Source\SettingsWindow\KSettingsWindow.cpp" />
     <ClCompile Include="Source\UI\KNewModDialog.cpp" />
     <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
+    <ClCompile Include="Source\VFS\IVirtualFileSystem.cpp" />
     <ClCompile Include="Source\VFS\KVFSConvergence.cpp" />
     <ClCompile Include="Source\VFS\KVFSMultiMirror.cpp" />
     <ClCompile Include="Source\VFS\KVFSService.cpp" />
@@ -233,13 +235,14 @@
   <ItemGroup>
     <ClInclude Include="Include\Kortex\Application.hpp" />
     <ClInclude Include="Include\Kortex\ApplicationOptions.hpp" />
+    <ClInclude Include="Include\Kortex\Common\GameData.hpp" />
     <ClInclude Include="Include\Kortex\Common\GameMods.hpp" />
     <ClInclude Include="Include\Kortex\Common\Network.hpp" />
+    <ClInclude Include="Include\Kortex\Common\Packages.hpp" />
     <ClInclude Include="Include\Kortex\Common\Programs.hpp" />
     <ClInclude Include="Include\Kortex\Core.hpp" />
     <ClInclude Include="Include\Kortex\DownloadManager.hpp" />
     <ClInclude Include="Include\Kortex\Events.hpp" />
-    <ClInclude Include="Include\Kortex\GameData.hpp" />
     <ClInclude Include="Include\Kortex\GameInstance.hpp" />
     <ClInclude Include="Include\Kortex\ModImporter.hpp" />
     <ClInclude Include="Include\Kortex\ModManager.hpp" />
@@ -267,6 +270,7 @@
     <ClInclude Include="Source\Application\IPluggableManager.h" />
     <ClInclude Include="Source\Application\IThemeManager.h" />
     <ClInclude Include="Source\Application\IVariableTable.h" />
+    <ClInclude Include="Source\Application\Options\Macros.h" />
     <ClInclude Include="Source\Application\Options\Option.h" />
     <ClInclude Include="Source\Application\Options\OptionDatabase.h" />
     <ClInclude Include="Source\Application\Options\OptionSerializer.h" />
@@ -352,6 +356,7 @@
     <ClInclude Include="Source\GameMods\IModStatistics.h" />
     <ClInclude Include="Source\GameMods\IModTag.h" />
     <ClInclude Include="Source\GameMods\IModTagManager.h" />
+    <ClInclude Include="Source\GameMods\ModManager\VirtualFileSystem.h" />
     <ClInclude Include="Source\GameMods\ModProvider\Dialog.h" />
     <ClInclude Include="Source\GameMods\ModProvider\DisplayModel.h" />
     <ClInclude Include="Source\GameMods\ModProvider\Item.h" />
@@ -488,6 +493,7 @@
     <ClInclude Include="Source\UI\KNewModDialog.h" />
     <ClInclude Include="Source\UI\KWorkspaceController.h" />
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
+    <ClInclude Include="Source\VFS\IVirtualFileSystem.h" />
     <ClInclude Include="Source\VFS\KVFSConvergence.h" />
     <ClInclude Include="Source\VFS\KVFSMultiMirror.h" />
     <ClInclude Include="Source\VFS\KVFSService.h" />

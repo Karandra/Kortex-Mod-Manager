@@ -13,11 +13,30 @@
 #include <KxFramework/KxTextFile.h>
 #include <wx/clipbrd.h>
 
+namespace Kortex::Application::OName
+{
+	KortexDefOption(FileFilters);
+}
+
+namespace
+{
+	using namespace Kortex;
+	using namespace Kortex::Application;
+
+	auto GetDisplayModelOptions()
+	{
+		return GetAInstanceOptionOf<ISaveManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+	}
+	auto GetFiltersOptions()
+	{
+		return GetAInstanceOptionOf<ISaveManager>(OName::Workspace, OName::FileFilters);
+	}
+}
+
 namespace Kortex::SaveManager
 {
 	Workspace::Workspace(KMainWindow* mainWindow)
 		:KWorkspace(mainWindow), m_Manager(ISaveManager::GetInstance())
-		//m_SavesListViewOptions(this, "SavesListView"), m_FileFiltersOptions(this, "FileFilters")
 	{
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	}
@@ -25,11 +44,11 @@ namespace Kortex::SaveManager
 	{
 		if (IsWorkspaceCreated())
 		{
-			//KProgramOptionSerializer::SaveDataViewLayout(m_DisplayModel->GetView(), m_SavesListViewOptions);
+			GetDisplayModelOptions().SaveDataViewLayout(m_DisplayModel->GetView());
 
-			for (const auto& v: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
+			for (const auto& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
 			{
-				//m_FileFiltersOptions.SetAttribute(v.GetValue(), FiltersMenu_IsFilterActive(v.GetValue()));
+				GetFiltersOptions().SetAttribute(filter.GetValue(), FiltersMenu_IsFilterActive(filter.GetValue()));
 			}
 		}
 	}
@@ -44,16 +63,15 @@ namespace Kortex::SaveManager
 		m_ActiveFilters.clear();
 
 		KxStringVector filters;
-		for (const auto& v: m_Manager->GetConfig().GetFileFilters())
+		auto filterOptions = GetFiltersOptions();
+		for (const auto& filter: m_Manager->GetConfig().GetFileFilters())
 		{
-			const wxString& value = v.GetValue();
-			#if 0
-			if (m_FileFiltersOptions.GetAttributeBool(value, true))
+			const wxString& value = filter.GetValue();
+			if (filterOptions.GetAttributeBool(value, true))
 			{
 				m_ActiveFilters.insert(value);
 				filters.push_back(value);
 			}
-			#endif
 		}
 
 		ReloadWorkspace();
@@ -74,7 +92,11 @@ namespace Kortex::SaveManager
 		const size_t selectedItemCount = m_DisplayModel->GetView()->GetSelectedItemsCount();
 		const bool isMultiSelect = selectedItemCount > 1;
 
-		const IBethesdaGameSave* bethesdaSave = save->QueryInterface<IBethesdaGameSave>();
+		const IBethesdaGameSave* bethesdaSave = nullptr;
+		if (save)
+		{
+			save->QueryInterface(bethesdaSave);
+		}
 		const bool hasPlugins = bethesdaSave && bethesdaSave->HasPlugins();
 
 		// Plugins list
@@ -83,7 +105,7 @@ namespace Kortex::SaveManager
 			const KxStringVector pluginsList = bethesdaSave->GetPlugins();
 
 			KxMenu* pluginsMenu = new KxMenu();
-			KxMenuItem* pluginsMenuItem = menu.Add(pluginsMenu, wxString::Format("%s (%zu)", KTr("SaveManager.Tab.PluginsList"), pluginsList.size()));
+			KxMenuItem* pluginsMenuItem = menu.Add(pluginsMenu, KxString::Format("%1 (%2)", KTr("SaveManager.Tab.PluginsList"), pluginsList.size()));
 			pluginsMenuItem->Enable(!pluginsList.empty());
 
 			if (!pluginManager->HasPlugins())

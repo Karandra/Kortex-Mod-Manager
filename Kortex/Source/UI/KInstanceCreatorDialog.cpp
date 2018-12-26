@@ -66,10 +66,6 @@ namespace Kortex
 			m_CopyModTagsCHK = new KxCheckBox(canvas, KxID_NONE, KTr("InstanceCreatorDialog.CopyModTags"));
 			copyOptionsSizer->Add(m_CopyModTagsCHK, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
-			// Copy programs
-			m_CopyProgramsCHK = new KxCheckBox(canvas, KxID_NONE, KTr("InstanceCreatorDialog.CopyPrograms"));
-			copyOptionsSizer->Add(m_CopyProgramsCHK, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
-
 			m_NameInput->SetFocus();
 			AddUserWindow(m_NameInput);
 			AdjustWindow(pos);
@@ -105,7 +101,6 @@ namespace Kortex
 
 		m_CopyInstanceConfigCHK->Enable(isEnabled);
 		m_CopyModTagsCHK->Enable(isEnabled);
-		m_CopyProgramsCHK->Enable(isEnabled);
 	}
 	void KInstanceCreatorDialog::OnButtonClick(wxNotifyEvent& event)
 	{
@@ -142,10 +137,6 @@ namespace Kortex
 					if (m_CopyModTagsCHK->IsChecked())
 					{
 						options |= GameInstance::CopyOptionsInstance::ModTags;
-					}
-					if (m_CopyProgramsCHK->IsChecked())
-					{
-						options |= GameInstance::CopyOptionsInstance::Programs;
 					}
 				}
 

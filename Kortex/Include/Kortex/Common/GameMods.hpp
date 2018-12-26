@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+#include <Kortex/Core.hpp>
 #include "GameMods/GameModsModule.h"
 
 #include "GameMods/IGameMod.h"

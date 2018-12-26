@@ -24,6 +24,7 @@
 #include <KxFramework/KxDualProgressDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxComparator.h>
+#include <KxFramework/KxIndexedEnum.h>
 
 namespace
 {
@@ -242,10 +243,6 @@ namespace Kortex::GameInstance
 	{
 		return GetInstanceRelativePath(wxS("ModTags.xml"));
 	}
-	wxString DefaultGameInstance::GetProgramsFile() const
-	{
-		return GetInstanceRelativePath(wxS("Programs.xml"));
-	}
 	wxString DefaultGameInstance::GetModsDir() const
 	{
 		return GetInstanceRelativePath(wxS("Mods"));
@@ -314,10 +311,6 @@ namespace Kortex::GameInstance
 				if (copyOptions & CopyOptionsInstance::ModTags)
 				{
 					KxFile(baseInstance->GetModTagsFile()).CopyFile(GetModTagsFile(), false);
-				}
-				if (copyOptions & CopyOptionsInstance::Programs)
-				{
-					KxFile(baseInstance->GetProgramsFile()).CopyFile(GetProgramsFile(), false);
 				}
 			}
 			return true;
@@ -526,6 +519,32 @@ namespace Kortex::GameInstance
 	}
 }
 
+namespace
+{
+	class NameToRegKeyDef: public KxIndexedEnum::Definition<NameToRegKeyDef, KxRegistryHKey, wxString>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{KxREG_HKEY_CLASSES_ROOT, wxS("HKEY_CLASSES_ROOT")},
+			{KxREG_HKEY_CURRENT_USER, wxS("HKEY_CURRENT_USER")},
+			{KxREG_HKEY_LOCAL_MACHINE, wxS("HKEY_LOCAL_MACHINE")},
+			{KxREG_HKEY_USERS, wxS("HKEY_USERS")},
+			{KxREG_HKEY_CURRENT_CONFIG, wxS("HKEY_CURRENT_CONFIG")},
+		};
+	};
+	class NameToRegTypeDef: public KxIndexedEnum::Definition<NameToRegTypeDef, KxRegistryValueType, wxString>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{KxREG_VALUE_SZ, wxS("REG_VALUE_SZ")},
+			{KxREG_VALUE_EXPAND_SZ, wxS("REG_VALUE_EXPAND_SZ")},
+			{KxREG_VALUE_MULTI_SZ, wxS("REG_VALUE_MULTI_SZ")},
+			{KxREG_VALUE_DWORD, wxS("REG_VALUE_DWORD")},
+			{KxREG_VALUE_QWORD, wxS("REG_VALUE_QWORD")},
+		};
+	};
+}
+
 namespace Kortex::GameInstance
 {
 	void ConfigurableGameInstance::LoadVariables(const KxXMLDocument& instanceConfig)
@@ -562,14 +581,25 @@ namespace Kortex::GameInstance
 				}
 
 				// Process depending on type
-				VariableValue::Type type = VariableValue::Type::None;
+				using Type = VariableValue::Type;
+
+				Type type = Type::None;
 				if (typeString == wxS("FSPath"))
 				{
-					type = VariableValue::Type::FSPath;
+					type = Type::FSPath;
 					value = KxFile(value).GetPath();
 				}
 
-				variables.SetVariable(id, VariableValue(value, saveAsOverride, type));
+				// Override mode
+				using Override = VariableValue::Override;
+
+				Override overrideMode = Override::DoNotChange;
+				if (saveAsOverride)
+				{
+					overrideMode = Override::True;
+				}
+				
+				variables.SetVariable(id, VariableValue(value, overrideMode, type));
 			}
 		};
 		
@@ -601,27 +631,9 @@ namespace Kortex::GameInstance
 	}
 	wxString ConfigurableGameInstance::LoadRegistryVariable(const KxXMLNode& node) const
 	{
-		static const std::unordered_map<wxString, KxRegistryHKey> ms_NameToRegKey =
-		{
-			std::make_pair(wxS("HKEY_CLASSES_ROOT"), KxREG_HKEY_CLASSES_ROOT),
-			std::make_pair(wxS("HKEY_CURRENT_USER"), KxREG_HKEY_CURRENT_USER),
-			std::make_pair(wxS("HKEY_LOCAL_MACHINE"), KxREG_HKEY_LOCAL_MACHINE),
-			std::make_pair(wxS("HKEY_USERS"), KxREG_HKEY_USERS),
-			std::make_pair(wxS("HKEY_CURRENT_CONFIG"), KxREG_HKEY_CURRENT_CONFIG)
-		};
-
-		static const std::unordered_map<wxString, KxRegistryValueType> ms_NameToRegType =
-		{
-			std::make_pair(wxS("REG_VALUE_SZ"), KxREG_VALUE_SZ),
-			std::make_pair(wxS("REG_VALUE_EXPAND_SZ"), KxREG_VALUE_EXPAND_SZ),
-			std::make_pair(wxS("REG_VALUE_MULTI_SZ"), KxREG_VALUE_MULTI_SZ),
-			std::make_pair(wxS("REG_VALUE_DWORD"), KxREG_VALUE_DWORD),
-			std::make_pair(wxS("REG_VALUE_QWORD"), KxREG_VALUE_QWORD)
-		};
-
 		// 32 or 64 bit registry branch
 		KxRegistryNode regBranch = KxREG_NODE_SYS;
-		switch (node.GetFirstChildElement("Branch").GetValueInt())
+		switch (node.GetFirstChildElement("Branch").GetValueInt(0))
 		{
 			case 32:
 			{
@@ -636,15 +648,14 @@ namespace Kortex::GameInstance
 		};
 
 		// Main key
-		const KxRegistryHKey* mainKey = FindObjectInMap<const KxRegistryHKey>(ms_NameToRegKey, node.GetFirstChildElement("Root").GetValue());
+		auto mainKey = NameToRegKeyDef::TryFromString(node.GetFirstChildElement("Root").GetValue());
 		if (mainKey)
 		{
 			wxString path = ExpandVariables(node.GetFirstChildElement("Path").GetValue());
 			wxString name = ExpandVariables(node.GetFirstChildElement("Name").GetValue());
-			const KxRegistryValueType* type = FindObjectInMap<const KxRegistryValueType>(ms_NameToRegType, node.GetFirstChildElement("Type").GetValue());
+			auto type = NameToRegTypeDef::TryFromString(node.GetFirstChildElement("Type").GetValue());
 
-			wxAny data = KxRegistry::GetValue(*mainKey, path, name, type ? *type : KxREG_VALUE_ANY, regBranch, true);
-			return data.As<wxString>();
+			return KxRegistry::GetValue(*mainKey, path, name, type ? *type : KxREG_VALUE_ANY, regBranch, true).As<wxString>();
 		}
 		return wxEmptyString;
 	}
@@ -684,7 +695,7 @@ namespace Kortex::GameInstance
 	{
 		using namespace Application;
 
-		KxXMLNode variablesNode = GetInstanceOption(Options::Option::Variables).GetConfigNode();
+		KxXMLNode variablesNode = GetInstanceOption(OName::Variables).GetConfigNode();
 		variablesNode.ClearChildren();
 
 		GetVariables().Accept([this, &variablesNode](const wxString& name, const VariableValue& value)

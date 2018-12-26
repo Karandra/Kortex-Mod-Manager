@@ -19,7 +19,6 @@ namespace Kortex
 		
 			KxCheckBox* m_CopyInstanceConfigCHK = nullptr;
 			KxCheckBox* m_CopyModTagsCHK = nullptr;
-			KxCheckBox* m_CopyProgramsCHK = nullptr;
 		
 			wxString m_Name;
 

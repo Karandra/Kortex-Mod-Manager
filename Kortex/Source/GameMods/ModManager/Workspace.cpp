@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModImporter.hpp>
 #include <Kortex/ModStatistics.hpp>
@@ -37,9 +38,23 @@
 #include <KxFramework/KxFileOperationEvent.h>
 #include <wx/colordlg.h>
 
+namespace Kortex::Application::OName
+{
+	KortexDefOption(VSplitter);
+
+	KortexDefOption(ShowPriorityGroups);
+	KortexDefOption(ShowNotInstalledMods);
+	KortexDefOption(BoldPriorityGroupLabels);
+	KortexDefOption(PriorityGroupLabelAlignment);
+	KortexDefOption(DisplayMode);
+	KortexDefOption(ImageResizeMode);
+}
+
 namespace
 {
+	using namespace Kortex;
 	using namespace Kortex::ModManager;
+	using namespace Kortex::Application;
 
 	enum DisplayModeMenuID
 	{
@@ -101,7 +116,7 @@ namespace
 		{
 			for (const KxDataViewItem& item: items)
 			{
-				Kortex::IGameMod* entry = model->GetModEntry(item);
+				IGameMod* entry = model->GetModEntry(item);
 				if (entry)
 				{
 					if (!func(*entry))
@@ -113,6 +128,15 @@ namespace
 			return true;
 		}
 		return false;
+	}
+
+	auto GetDisplayModelOptions()
+	{
+		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+	}
+	auto GetVSplitterOptions()
+	{
+		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::UI, OName::VSplitter);
 	}
 }
 
@@ -128,15 +152,18 @@ namespace Kortex::ModManager
 	{
 		if (IsWorkspaceCreated())
 		{
-			//KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_ModListViewOptions);
-			//m_ModListViewOptions.SetAttribute("DisplayMode", (int)m_ViewModel->GetDisplayMode());
-			//m_ModListViewOptions.SetAttribute("ShowPriorityGroups", m_ViewModel->ShouldShowPriorityGroups());
-			//m_ModListViewOptions.SetAttribute("ShowNotInstalledMods", m_ViewModel->ShouldShowNotInstalledMods());
-			//m_ModListViewOptions.SetAttribute("BoldPriorityGroupLabels", m_ViewModel->IsBoldPriorityGroupLabels());
-			//m_ModListViewOptions.SetAttribute("PriorityGroupLabelAlignment", (int)m_ViewModel->GetPriorityGroupLabelAlignment());
-			//m_ModListViewOptions.SetAttribute("ImageResizeMode", (int)m_ImageResizeMode);
+			auto options = GetDisplayModelOptions();
+			options.SaveDataViewLayout(m_ViewModel->GetView());
 
-			//KProgramOptionSerializer::SaveSplitterLayout(m_SplitterLeftRight, m_OptionsUI);
+			options.SetAttribute(OName::DisplayMode, (int)m_ViewModel->GetDisplayMode());
+			options.SetAttribute(OName::ShowPriorityGroups, m_ViewModel->ShouldShowPriorityGroups());
+			options.SetAttribute(OName::ShowNotInstalledMods, m_ViewModel->ShouldShowNotInstalledMods());
+			options.SetAttribute(OName::BoldPriorityGroupLabels, m_ViewModel->IsBoldPriorityGroupLabels());
+			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_ViewModel->GetPriorityGroupLabelAlignment());
+			options.SetAttribute(OName::ImageResizeMode, (int)m_ImageResizeMode);
+
+			GetVSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
+			
 		}
 	}
 	bool Workspace::OnCreateWorkspace()
@@ -315,15 +342,17 @@ namespace Kortex::ModManager
 
 	void Workspace::CreateModsView()
 	{
+		const auto options = GetDisplayModelOptions();
+
 		m_ViewModel = new DisplayModel();
-		//m_ViewModel->ShowPriorityGroups(m_ModListViewOptions.GetAttributeBool("ShowPriorityGroups"));
-		//m_ViewModel->ShowNotInstalledMods(m_ModListViewOptions.GetAttributeBool("ShowNotInstalledMods"));
-		//m_ViewModel->SetBoldPriorityGroupLabels(m_ModListViewOptions.GetAttributeBool("BoldPriorityGroupLabels"));
-		//m_ViewModel->SetPriorityGroupLabelAlignment((DisplayModel::PriorityGroupLabelAlignment)m_ModListViewOptions.GetAttributeInt("PriorityGroupLabelAlignment"));
+		m_ViewModel->ShowPriorityGroups(options.GetAttributeBool(OName::ShowPriorityGroups));
+		m_ViewModel->ShowNotInstalledMods(options.GetAttributeBool(OName::ShowNotInstalledMods));
+		m_ViewModel->SetBoldPriorityGroupLabels(options.GetAttributeBool(OName::BoldPriorityGroupLabels));
+		m_ViewModel->SetPriorityGroupLabelAlignment((DisplayModel::PriorityGroupLabelAlignment)options.GetAttributeInt(OName::PriorityGroupLabelAlignment));
 	
 		m_ViewModel->Create(m_ModsPane);
 		m_ViewModel->SetDataVector(IModManager::GetInstance()->GetMods());
-		//m_ViewModel->SetDisplayMode((DisplayModelType)m_ModListViewOptions.GetAttributeInt("DisplayMode"));
+		m_ViewModel->SetDisplayMode((DisplayModelType)options.GetAttributeInt(OName::DisplayMode));
 	}
 	void Workspace::CreateControls()
 	{
@@ -355,10 +384,12 @@ namespace Kortex::ModManager
 				m_SplitterLeftRight->Unsplit(m_PaneRight_Tabs);
 			}
 
-			//KProgramOptionSerializer::LoadSplitterLayout(m_SplitterLeftRight, m_OptionsUI);
-			//KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_ModListViewOptions);
+			GetVSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
 
-			//m_ImageResizeMode = (ImageResizeMode)m_ModListViewOptions.GetAttributeInt("ImageResizeMode", (int)m_ImageResizeMode);
+			auto displayModelOptions = GetDisplayModelOptions();
+			displayModelOptions.LoadDataViewLayout(m_ViewModel->GetView());
+
+			m_ImageResizeMode = (ImageResizeMode)displayModelOptions.GetAttributeInt(OName::ImageResizeMode, (int)m_ImageResizeMode);
 			m_ViewModel->UpdateRowHeight();
 		}
 		return true;
@@ -424,14 +455,14 @@ namespace Kortex::ModManager
 
 	void Workspace::OnMountButton(wxCommandEvent& event)
 	{
-		IModManager* manager = IModManager::GetInstance();
-		if (manager->IsVFSMounted())
+		IVirtualFileSystem& vfs = IModManager::GetInstance()->GetVFS();
+		if (vfs.IsEnabled())
 		{
-			manager->UnMountVFS();
+			vfs.Disable();
 		}
 		else
 		{
-			manager->MountVFS();
+			vfs.Enable();
 		}
 	}
 	bool Workspace::ShowChangeModIDDialog(IGameMod* entry)
@@ -785,7 +816,7 @@ namespace Kortex::ModManager
 			const bool isLinkedMod = modEntry->IsLinkedMod();
 			const bool isInstalled = modEntry->IsInstalled();
 			const bool isPackageExist = modEntry->IsPackageFileExist() && !isFixedMod;
-			const bool isVFSActive = IModManager::GetInstance()->IsVFSMounted();
+			const bool isVFSActive = IModManager::GetInstance()->GetVFS().IsEnabled();
 
 			if (isInstalled)
 			{
@@ -1297,7 +1328,7 @@ namespace Kortex::ModManager
 			menu.Add(new KxMenuItem(KMC_ID_TAG_DISABLE_ALL, KTr("ModManager.Menu.Tag.DeactivateAll")))->SetBitmap(KGetBitmap(KIMG_TICK_CIRCLE_FRAME_EMPTY));
 
 			// State
-			bool isVFSActive = IModManager::GetInstance()->IsVFSMounted();
+			bool isVFSActive = IModManager::GetInstance()->GetVFS().IsEnabled();
 			for (auto& item: menu.GetMenuItems())
 			{
 				item->Enable(!isVFSActive);
@@ -1352,6 +1383,6 @@ namespace Kortex::ModManager
 	}
 	bool Workspace::IsChangingModsAllowed() const
 	{
-		return !IModManager::GetInstance()->IsVFSMounted();
+		return !IModManager::GetInstance()->GetVFS().IsEnabled();
 	}
 }

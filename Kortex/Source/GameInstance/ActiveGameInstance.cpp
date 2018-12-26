@@ -82,7 +82,7 @@ namespace Kortex::GameInstance
 		using namespace Application;
 
 		m_CurrentProfileID = id;
-		GetInstanceOption(Options::Option::Profile).SetAttribute(Options::Profile::ID, id);
+		GetInstanceOption(OName::Profile).SetAttribute(OName::ID, id);
 	}
 
 	void ActiveGameInstance::DoChangeProfileTo(const IGameProfile& profile)

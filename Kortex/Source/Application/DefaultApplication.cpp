@@ -45,7 +45,10 @@ namespace
 
 namespace Kortex::Application
 {
-	using namespace Options;
+	namespace OName
+	{
+		KortexDefOption(RestartDelay);
+	}
 
 	DefaultApplication::DefaultApplication()
 		:m_ImageList(GetSmallIconWidth(), GetSmallIconHeight(), false, KIMG_COUNT)
@@ -297,7 +300,7 @@ namespace Kortex::Application
 
 	bool DefaultApplication::ScheduleRestart()
 	{
-		int delaySec = GetGlobalOption("RestartDelay").GetValueInt(5);
+		int delaySec = GetGlobalOption(OName::RestartDelay).GetValueInt(5);
 		const wxString taskName = "Kortex::ScheduleRestart";
 
 		KxTaskScheduler taskSheduler;
@@ -312,20 +315,20 @@ namespace Kortex::Application
 	bool DefaultApplication::Uninstall()
 	{
 		DisableIE10Support();
-		IModManager::GetInstance()->UnMountVFS();
+		IModManager::GetInstance()->GetVFS().Disable();
 		return m_VFSServiceClient->UninstallVFSService();
 	}
 
 	void DefaultApplication::LoadTranslation()
 	{
 		m_AvailableTranslations = KxTranslation::FindTranslationsInDirectory(m_DataFolder + "\\Translation");
-		auto option = GetGlobalOption(Option::Language);
+		auto option = GetGlobalOption(OName::Language);
 
-		switch (TryLoadTranslation(m_Translation, m_AvailableTranslations, option.GetAttribute(Language::Locale)))
+		switch (TryLoadTranslation(m_Translation, m_AvailableTranslations, option.GetAttribute(OName::Locale)))
 		{
 			case LoadTranslationStatus::Success:
 			{
-				option.SetAttribute(Language::Locale, m_Translation.GetLocale());
+				option.SetAttribute(OName::Locale, m_Translation.GetLocale());
 				break;
 			}
 			case LoadTranslationStatus::LoadingError:
@@ -346,7 +349,7 @@ namespace Kortex::Application
 	}
 	void DefaultApplication::ShowWorkspace()
 	{
-		auto option = GetAInstanceOption(Option::Workspace);
+		auto option = GetAInstanceOption(OName::Workspace);
 		wxString startPage = option.GetValue(ModManager::Workspace::GetInstance()->GetID());
 		wxLogInfo("Start page is: %s", startPage);
 
@@ -409,8 +412,8 @@ namespace Kortex::Application
 					configurableInstance->SaveConfig();
 				}
 
-				GetGlobalOption(Option::Game).SetAttribute(Game::ID, dialog.GetNewGameID());
-				GetGlobalOption(Option::Instance).SetAttribute(Instance::ID, dialog.GetNewInstanceID());
+				GetGlobalOption(OName::Game).SetAttribute(OName::ID, dialog.GetNewGameID());
+				GetGlobalOption(OName::Instance).SetAttribute(OName::ID, dialog.GetNewInstanceID());
 
 				// Restart if user agreed
 				if (ret == KxID_YES)
@@ -429,7 +432,7 @@ namespace Kortex::Application
 		wxLogInfo("Initializing app settings");
 
 		// Init some application-wide variables
-		auto options = GetGlobalOption(Option::Instance);
+		auto options = GetGlobalOption(OName::Instance);
 		m_InstancesFolder = options.GetAttribute("Location", m_InstancesFolder);
 
 		// Show first time config dialog if needed and save new 'ProfilesFolder'
@@ -497,14 +500,14 @@ namespace Kortex::Application
 				m_StartupGameID = dialog.GetNewGameID();
 				if (!m_IsCmdStartupGameID)
 				{
-					GetGlobalOption(Option::Game).SetAttribute(Game::ID, m_StartupGameID);
+					GetGlobalOption(OName::Game).SetAttribute(OName::ID, m_StartupGameID);
 				}
 
 				// Instance ID
 				m_StartupInstanceID = dialog.GetNewInstanceID();
 				if (!m_IsCmdStartupInstanceID)
 				{
-					GetGlobalOption(Option::Instance).SetAttribute(Instance::ID, m_StartupInstanceID);
+					GetGlobalOption(OName::Instance).SetAttribute(OName::ID, m_StartupInstanceID);
 				}
 
 				// Set new game root
@@ -561,7 +564,7 @@ namespace Kortex::Application
 		}
 		else
 		{
-			m_StartupGameID = GetGlobalOption(Option::Game).GetAttribute(Game::ID);
+			m_StartupGameID = GetGlobalOption(OName::Game).GetAttribute(OName::ID);
 		}
 
 		if (parser.Found("InstanceID", &m_StartupInstanceID))
@@ -570,7 +573,7 @@ namespace Kortex::Application
 		}
 		else
 		{
-			m_StartupInstanceID = GetGlobalOption(Option::Instance).GetAttribute(Instance::ID);
+			m_StartupInstanceID = GetGlobalOption(OName::Instance).GetAttribute(OName::ID);
 		}
 		wxLogInfo("InstanceTemplate: %s, Instance: %s", m_StartupGameID, m_StartupInstanceID);
 	}
@@ -603,7 +606,7 @@ namespace Kortex::Application
 	void DefaultApplication::UnInitVFS()
 	{
 		wxLogInfo("Unmounting VFS");
-		Kortex::IModManager::GetInstance()->UnMountVFS();
+		Kortex::IModManager::GetInstance()->GetVFS().Disable();
 
 		wxLogInfo("Uninitializing VFS services");
 		delete m_VFSServiceClient;

@@ -15,6 +15,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/ModTagManager.hpp>
+#include <Kortex/Common/Packages.hpp>
 #include "KAux.h"
 #include "KUnsortedUnique.h"
 #include <KxFramework/KxString.h>
@@ -753,7 +754,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 	KxXMLNode configRootNode = m_XML.NewElement("config");
 
 	// Write XML-Schema
-	if (GetGlobalOptionOf<KPackageManager>(Options::PackageManager::FOMod).GetAttributeBool(Options::FOMod::UseHTTPSForXMLScheme, true))
+	if (GetGlobalOptionOf<KPackageManager>(OName::FOMod).GetAttributeBool(OName::UseHTTPSForXMLScheme, true))
 	{
 		configRootNode.SetAttribute("xmlns:xsi", "https://www.w3.org/2001/XMLSchema-instance");
 		configRootNode.SetAttribute("xsi:noNamespaceSchemaLocation", "https://qconsulting.ca/fo3/ModConfig5.0.xsd");

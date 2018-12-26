@@ -6,18 +6,20 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include "KAux.h"
 
+namespace
+{
+	using namespace Kortex;
+	using namespace Kortex::Application;
+	using namespace Kortex::ProgramManager;
+
+	auto GetDisplayModelOption()
+	{
+		return GetAInstanceOptionOf<IProgramManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+	}
+}
+
 namespace Kortex::ProgramManager
 {
-	namespace
-	{
-		using namespace Application;
-
-		auto GetDisplayModelOption()
-		{
-			return GetAInstanceOptionOf<IProgramManager>(Options::ProgramManager::DisplayModel);
-		}
-	}
-
 	Workspace::Workspace(KMainWindow* mainWindow)
 		:KWorkspace(mainWindow)
 	{

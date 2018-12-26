@@ -11,13 +11,12 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxMenu.h>
 
-using namespace Kortex::Application::Options;
-
 namespace Kortex::NetworkManager
 {
 	void DefaultNetworkManager::OnInit()
 	{
 		using namespace Network;
+		using namespace Application;
 
 		// Init providers
 		m_Providers.reserve(ProviderIDs::MAX_SYSTEM);
@@ -27,7 +26,7 @@ namespace Kortex::NetworkManager
 
 		// Load default provider
 		m_DefaultProvider = 0;
-		if (INetworkProvider* provider = FindProvider(GetAInstanceOption(Option::Provider).GetAttribute(Provider::Default)))
+		if (INetworkProvider* provider = FindProvider(GetAInstanceOption(OName::Provider).GetAttribute(OName::Default)))
 		{
 			m_DefaultProvider = provider->GetID();
 		}
@@ -35,8 +34,10 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::OnExit()
 	{
+		using namespace Application;
+
 		const INetworkProvider* provider = GetDefaultProvider();
-		GetAInstanceOption(Option::Provider).SetAttribute(Provider::Default, provider ? provider->GetName() : wxEmptyString);
+		GetAInstanceOption(OName::Provider).SetAttribute(OName::Default, provider ? provider->GetName() : wxEmptyString);
 	}
 	void DefaultNetworkManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
@@ -261,7 +262,7 @@ namespace Kortex::NetworkManager
 	void Config::OnLoadInstance(IGameInstance& profile, const KxXMLNode& node)
 	{
 		m_NexusID = node.GetFirstChildElement("NexusID").GetValue();
-		m_SteamID = node.GetFirstChildElement("NexusID").GetValueInt(m_SteamID);
+		m_SteamID = node.GetFirstChildElement("SteamID").GetValueInt(m_SteamID);
 	}
 	wxString Config::GetNexusID() const
 	{

@@ -2,6 +2,7 @@
 #include "DefaultProgramManager.h"
 #include "DefaultProgramEntry.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/Common/Programs.hpp>
 
 namespace Kortex::ProgramManager
 {
@@ -25,12 +26,12 @@ namespace Kortex::ProgramManager
 
 	void DefaultProgramManager::LoadUserPrograms()
 	{
-		KxXMLNode node = GetAInstanceOption(Application::Options::ProgramManager::UserPrograms).GetConfigNode();
+		KxXMLNode node = GetAInstanceOption(Application::OName::UserPrograms).GetConfigNode();
 		LoadProgramsFromXML(m_UserPrograms, node);
 	}
 	void DefaultProgramManager::SaveUserPrograms() const
 	{
-		auto option = GetAInstanceOption(Application::Options::ProgramManager::UserPrograms);
+		auto option = GetAInstanceOption(Application::OName::UserPrograms);
 		KxXMLNode rootNode = option.GetConfigNode();
 		rootNode.ClearNode();
 

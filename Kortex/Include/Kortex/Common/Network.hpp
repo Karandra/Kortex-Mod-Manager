@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+#include <Kortex/Core.hpp>
 #include "Network/NetworkModule.h"
 
 #include "Network/INetworkManager.h"

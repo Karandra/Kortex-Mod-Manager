@@ -2,12 +2,29 @@
 #include "Workspace.h"
 #include "DisplayModel.h"
 #include <Kortex/Events.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <KxFramework/KxSearchBox.h>
+
+namespace Kortex::Application::OName
+{
+	KortexDefOption(VirtualGameFolder);
+}
+
+namespace
+{
+	using namespace Kortex;
+	using namespace Kortex::Application;
+
+	auto GetDisplayModelOption()
+	{
+		return GetAInstanceOptionOf<IModManager>(OName::VirtualGameFolder, OName::UI, OName::DisplayModel);
+	}
+}
 
 namespace Kortex::VirtualGameFolder
 {
 	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)//, m_OptionsUI(this, "MainUI"), m_ViewOptions(this, "View")
+		:KWorkspace(mainWindow)
 	{
 		IEvent::Bind(Kortex::Events::ProfileSelected, &Workspace::OnViewInvalidated, this);
 		IEvent::Bind(Kortex::Events::ModsReordered, &Workspace::OnViewInvalidated, this);
@@ -20,7 +37,7 @@ namespace Kortex::VirtualGameFolder
 	{
 		if (IsWorkspaceCreated())
 		{
-			//KProgramOptionSerializer::SaveDataViewLayout(m_Model->GetView(), m_ViewOptions);
+			GetDisplayModelOption().SaveDataViewLayout(m_Model->GetView());
 		}
 	}
 	bool Workspace::OnCreateWorkspace()
@@ -34,7 +51,7 @@ namespace Kortex::VirtualGameFolder
 		m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &Workspace::OnModSerach, this);
 		m_MainSizer->Add(m_SearchBox, 0, wxTOP|wxEXPAND, KLC_VERTICAL_SPACING);
 
-		//KProgramOptionSerializer::LoadDataViewLayout(m_Model->GetView(), m_ViewOptions);
+		GetDisplayModelOption().LoadDataViewLayout(m_Model->GetView());
 		return true;
 	}
 

@@ -126,7 +126,6 @@ namespace Kortex::GameInstance
 
 			wxString GetConfigFile() const override;
 			wxString GetModTagsFile() const override;
-			wxString GetProgramsFile() const override;
 			wxString GetModsDir() const override;
 			wxString GetProfilesDir() const override;
 			wxString GetGameDir() const override;

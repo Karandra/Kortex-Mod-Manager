@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
@@ -18,59 +19,69 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 
-namespace MenuCounter
+namespace
 {
+	using namespace Kortex;
+	using namespace Kortex::Application;
 	using namespace Kortex::PluginManager;
 
-	enum PluginType: uint32_t
+	auto GetDisplayModelOptions()
 	{
-		Normal = 0,
-		Master = 1 << 0,
-		Light = 1 << 1,
-
-		Total = ~PluginType() - 1,
-		Active = ~PluginType()
-	};
-	bool CheckType(const Kortex::IBethesdaGamePlugin& plugin, uint32_t type)
-	{
-		if (type == PluginType::Active)
-		{
-			return true;
-		}
-
-		bool ok = true;
-		if (type & PluginType::Normal)
-		{
-			ok = ok && plugin.IsNormal();
-		}
-		if (type & PluginType::Master)
-		{
-			ok = ok && plugin.IsMaster();
-		}
-		if (type & PluginType::Light)
-		{
-			ok = ok && plugin.IsLight();
-		}
-		return ok;
+		return Application::GetAInstanceOptionOf<IPluginManager>(OName::Workspace, OName::UI, OName::DisplayModel);
 	}
 
-	class CounterData: public wxClientData
+	namespace MenuCounter
 	{
-		private:
+		enum PluginType: uint32_t
+		{
+			Normal = 0,
+			Master = 1 << 0,
+			Light = 1 << 1,
+
+			Total = ~PluginType() - 1,
+			Active = ~PluginType()
+		};
+		bool CheckType(const IBethesdaGamePlugin& plugin, uint32_t type)
+		{
+			if (type == PluginType::Active)
+			{
+				return true;
+			}
+
+			bool ok = true;
+			if (type & PluginType::Normal)
+			{
+				ok = ok && plugin.IsNormal();
+			}
+			if (type & PluginType::Master)
+			{
+				ok = ok && plugin.IsMaster();
+			}
+			if (type & PluginType::Light)
+			{
+				ok = ok && plugin.IsLight();
+			}
+			return ok;
+		}
+
+		class CounterData: public wxClientData
+		{
+			private:
 			uint32_t m_Type = PluginType::Normal;
 
-		public:
+			public:
 			CounterData(uint32_t type)
 				:m_Type(type)
 			{
 			}
 
-		public:
+			public:
 			uint32_t GetType() const
 			{
 				return m_Type;
 			}
-	};
+		};
+	}
 }
 
 namespace Kortex::PluginManager
@@ -97,7 +108,7 @@ namespace Kortex::PluginManager
 		if (IsWorkspaceCreated())
 		{
 			IGameInstance::GetActive()->GetActiveProfile()->SyncWithCurrentState();
-			//KProgramOptionSerializer::SaveDataViewLayout(m_ModelView->GetView(), m_PluginListViewOptions);
+			GetDisplayModelOptions().SaveDataViewLayout(m_ModelView->GetView());
 		}
 	}
 	bool Workspace::OnCreateWorkspace()
@@ -110,7 +121,7 @@ namespace Kortex::PluginManager
 		m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &Workspace::OnModSerach, this);
 		m_MainSizer->Add(m_SearchBox, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 
-		//KProgramOptionSerializer::LoadDataViewLayout(m_ModelView->GetView(), m_PluginListViewOptions);
+		GetDisplayModelOptions().LoadDataViewLayout(m_ModelView->GetView());
 		return true;
 	}
 
@@ -286,10 +297,10 @@ namespace Kortex::PluginManager
 			menu.AddSeparator();
 
 			KxMenuItem* item = menu.Add(sortingMenu, KTr("PluginManager.Sorting"));
-			item->Enable(IModManager::GetInstance()->IsVFSMounted());
+			item->Enable(IModManager::GetInstance()->GetVFS().IsEnabled());
 		}
 
-		if (sortingMenu && IModManager::GetInstance()->IsVFSMounted())
+		if (sortingMenu && IModManager::GetInstance()->GetVFS().IsEnabled())
 		{
 			// LootAPI
 			{

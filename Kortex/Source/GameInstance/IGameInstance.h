@@ -15,7 +15,6 @@ namespace Kortex
 		{
 			Config = 1 << 0,
 			ModTags = 1 << 1,
-			Programs = 1 << 2,
 		};
 		enum CopyOptionsProfile: uint32_t
 		{
@@ -104,7 +103,6 @@ namespace Kortex
 
 			virtual wxString GetConfigFile() const = 0;
 			virtual wxString GetModTagsFile() const = 0;
-			virtual wxString GetProgramsFile() const = 0;
 			virtual wxString GetModsDir() const = 0;
 			virtual wxString GetProfilesDir() const = 0;
 			virtual wxString GetGameDir() const = 0;

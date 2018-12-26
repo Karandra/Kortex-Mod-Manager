@@ -10,7 +10,15 @@
 #include <KxFramework/KxString.h>
 
 using namespace Kortex;
-using namespace Kortex::Application::Options;
+using namespace Kortex::Application;
+
+namespace Kortex::Application::OName
+{
+	KortexDefOption(ImageViewer);
+
+	KortexDefOption(ColorBG);
+	KortexDefOption(ColorFG);
+}
 
 wxDEFINE_EVENT(KEVT_IMAGEVIEWER_NEXT_IMAGE, KImageViewerEvent);
 wxDEFINE_EVENT(KEVT_IMAGEVIEWER_PREV_IMAGE, KImageViewerEvent);
@@ -210,8 +218,8 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 		IThemeManager::GetActive().ProcessWindow(m_ImageView);
 
 		// Options
-		auto options = IApplication::GetInstance()->GetGlobalOption(Option::ImageViewer);
-		int64_t colorBG = options.GetAttributeInt(ImageViewer::ColorFG, -1);
+		auto options = IApplication::GetInstance()->GetGlobalOption(OName::ImageViewer);
+		int64_t colorBG = options.GetAttributeInt(OName::ColorFG, -1);
 		if (colorBG != -1)
 		{
 			m_ImageView->SetBackgroundColour(KxColor::FromCOLORREF(colorBG));
@@ -221,7 +229,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 			m_ImageView->SetBackgroundColour("LIGHT GREY");
 		}
 
-		int64_t colorFG = options.GetAttributeInt(ImageViewer::ColorFG, -1);
+		int64_t colorFG = options.GetAttributeInt(OName::ColorFG, -1);
 		if (colorFG != -1)
 		{
 			m_ImageView->SetForegroundColour(KxColor::FromCOLORREF(colorFG));
@@ -293,7 +301,7 @@ KImageViewerDialog::KImageViewerDialog(wxWindow* parent, const wxString& caption
 }
 KImageViewerDialog::~KImageViewerDialog()
 {
-	auto options = IApplication::GetInstance()->GetGlobalOption(Option::ImageViewer);
-	options.SetAttribute(ImageViewer::ColorBG, (int64_t)m_ImageView->GetBackgroundColour().GetPixel());
-	options.SetAttribute(ImageViewer::ColorFG, (int64_t)m_ImageView->GetForegroundColour().GetPixel());
+	auto options = IApplication::GetInstance()->GetGlobalOption(OName::ImageViewer);
+	options.SetAttribute(OName::ColorBG, (int64_t)m_ImageView->GetBackgroundColour().GetPixel());
+	options.SetAttribute(OName::ColorFG, (int64_t)m_ImageView->GetForegroundColour().GetPixel());
 }

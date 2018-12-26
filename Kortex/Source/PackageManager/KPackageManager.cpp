@@ -5,6 +5,7 @@
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
+#include <Kortex/Common/Packages.hpp>
 #include "PackageProject/KPackageProject.h"
 #include "Archive/KArchive.h"
 #include "KAux.h"
@@ -248,7 +249,7 @@ namespace Kortex
 	{
 		using namespace Application;
 
-		return GetAInstanceOption(Options::PackageManager::Package).GetAttribute(Options::Package::Location);
+		return GetAInstanceOption(OName::Package).GetAttribute(OName::Location);
 	}
 }
 

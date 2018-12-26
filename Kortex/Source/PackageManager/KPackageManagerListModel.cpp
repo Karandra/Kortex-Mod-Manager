@@ -2,6 +2,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/GameInstance.hpp>
+#include <Kortex/Common/Packages.hpp>
 #include "KPackageManagerListModel.h"
 #include "KPackageManager.h"
 #include "KModPackage.h"
@@ -405,7 +406,7 @@ void KPackageManagerListModel::Navigate(const wxString& sNavigatePath)
 	RefreshItems();
 
 	// Not the best place but whatever
-	m_AutoShowPackageInfo = GetGlobalOptionOf<KPackageManager>(Options::PackageManager::Package).GetAttributeBool(Options::Package::AutoShowInfo, true);
+	m_AutoShowPackageInfo = GetGlobalOptionOf<KPackageManager>(OName::Package).GetAttributeBool(OName::AutoShowInfo, true);
 }
 void KPackageManagerListModel::NavigateUp()
 {

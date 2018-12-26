@@ -930,6 +930,12 @@
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramEntry.cpp">
       <Filter>Code\Source\Programs\ProgramManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\VFS\IVirtualFileSystem.cpp">
+      <Filter>Code\Source\VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameMods\ModManager\VirtualFileSystem.cpp">
+      <Filter>Code\Source\GameMods\ModManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1445,9 +1451,6 @@
     <ClInclude Include="Include\Kortex\Common\Network.hpp">
       <Filter>Code\Include\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Kortex\GameData.hpp">
-      <Filter>Code\Include\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.h">
       <Filter>Code\Headers\GameData\ScreenshotsGallery</Filter>
     </ClInclude>
@@ -1744,6 +1747,21 @@
     </ClInclude>
     <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramEntry.h">
       <Filter>Code\Headers\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VFS\IVirtualFileSystem.h">
+      <Filter>Code\Headers\VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\VirtualFileSystem.h">
+      <Filter>Code\Headers\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\Common\Packages.hpp">
+      <Filter>Code\Include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\Common\GameData.hpp">
+      <Filter>Code\Include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Options\Macros.h">
+      <Filter>Code\Headers\Application\Option</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,27 +18,11 @@
 	</Variables>
 
 	<Network>
-		<NexusID>Skyrim</NexusID>
-		<SteamID>72850</SteamID>
+		<NetworkManager>
+			<NexusID>Skyrim</NexusID>
+			<SteamID>72850</SteamID>
+		</NetworkManager>
 	</Network>
-
-	<Virtualization>
-		<MirroredLocations>
-			<Entry>
-				<Sources>
-					<Entry>$(SavesDir)</Entry>
-					<Entry>$(ConfigDir)</Entry>
-				</Sources>
-				<Target>$(ActualConfigDir)</Target>
-			</Entry>
-			<Entry>
-				<Sources>
-					<Entry>$(ProfileDir)\Plugins</Entry>
-				</Sources>
-				<Target>$SHF(APPLICATIONDATA_LOCAL)\Skyrim</Target>
-			</Entry>
-		</MirroredLocations>
-	</Virtualization>
 
 	<Programs>
 		<ProgramManager>
@@ -75,6 +59,26 @@
 		<Entry ID="1001" Format="INI" TypeDetectionMethod="HungarianNotation">SkyrimEditorPrefs.ini</Entry>
 	</GameConfig>
 
+	<GameMods>
+		<ModManager>
+			<MirroredLocations>
+				<Entry>
+					<Sources>
+						<Entry>$(SavesDir)</Entry>
+						<Entry>$(ConfigDir)</Entry>
+					</Sources>
+					<Target>$(ActualConfigDir)</Target>
+				</Entry>
+				<Entry>
+					<Sources>
+						<Entry>$(ProfileDir)\Plugins</Entry>
+					</Sources>
+					<Target>$SHF(APPLICATIONDATA_LOCAL)\Skyrim</Target>
+				</Entry>
+			</MirroredLocations>
+		</ModManager>
+	</GameMods>
+	
 	<GameData>
 		<PluginManager Implementation="Bethesda" PluginImplementation="BethesdaSkyrim">
 			<Limit Value="255"/>
@@ -86,11 +90,9 @@
 			<SortByFileModificationDate>0</SortByFileModificationDate>
 
 			<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
-			<OrderListHeader>
-				<![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
+			<OrderListHeader><![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
 # Please do not modify this file.
-# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]>
-			</OrderListHeader>
+# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></OrderListHeader>
 
 			<SortingTools>
 				<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">

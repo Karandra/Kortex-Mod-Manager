@@ -63,7 +63,11 @@ namespace Kortex
 
 	bool IApplication::Is64Bit() const
 	{
-		return _WIN64;
+		#if defined _WIN64
+		return true;
+		#else
+		return false;
+		#endif
 	}
 	bool IApplication::IsSystem64Bit() const
 	{

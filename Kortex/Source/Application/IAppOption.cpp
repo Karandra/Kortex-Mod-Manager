@@ -58,6 +58,9 @@ namespace Kortex
 
 	void IAppOption::NotifyChange()
 	{
+		// Disable for now
+		return;
+
 		SystemApplication* sysApp = SystemApplication::GetInstance();
 		switch (m_Disposition)
 		{

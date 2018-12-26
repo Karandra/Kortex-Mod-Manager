@@ -49,7 +49,7 @@ namespace Kortex::ModProvider
 	
 	wxString Item::GetName() const
 	{
-		if (auto provider = std::get_if<INetworkProvider*>(&m_ID))
+		if (auto provider = std::get_if<INetworkProvider*>(&m_ID); provider && *provider)
 		{
 			return (*provider)->GetName();
 		}

@@ -254,30 +254,31 @@ namespace Kortex
 		m_Application->OnError(event);
 	}
 	
-	bool SystemApplication::OnGlobalConfigChanged(IAppOption& option)
+	void SystemApplication::OnGlobalConfigChanged(IAppOption& option)
 	{
 		wxLogInfo("SystemApplication::OnGlobalConfigChanged");
 		LogConfigChnage(option);
 
-		return m_Application->OnGlobalConfigChanged(option);
+		m_Application->OnGlobalConfigChanged(option);
 	}
-	bool SystemApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
+	void SystemApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
 	{
 		wxLogInfo("SystemApplication::OnInstanceConfigChanged");
 		wxLogInfo("InstanceID: %s", instance.GetInstanceID());
 		LogConfigChnage(option);
 
+		// If this function called, it's certainly 'IConfigurableGameInstance'
 		instance.QueryInterface<IConfigurableGameInstance>()->OnConfigChanged(option);
-		return m_Application->OnInstanceConfigChanged(option, instance);
+		m_Application->OnInstanceConfigChanged(option, instance);
 	}
-	bool SystemApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
+	void SystemApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
 	{
 		wxLogInfo("SystemApplication::OnProfileConfigChanged");
 		wxLogInfo("ProfileID: %s", profile.GetID());
 		LogConfigChnage(option);
 
 		profile.OnConfigChanged(option);
-		return m_Application->OnProfileConfigChanged(option, profile);
+		m_Application->OnProfileConfigChanged(option, profile);
 	}
 
 	bool SystemApplication::OnException()

@@ -39,14 +39,9 @@ namespace Kortex
 		IGameInstance& instance = AssignActive(std::make_unique<GameInstance::ActiveGameInstance>(instanceTemplate, instanceID));
 		if (instance.InitInstance())
 		{
-			IConfigurableGameInstance* configurableInstance = nullptr;
-			if (instance.QueryInterface(configurableInstance))
-			{
-				configurableInstance->SaveConfig();
-			}
 			return &instance;
 		}
-		
+
 		DestroyActive();
 		return nullptr;
 	}

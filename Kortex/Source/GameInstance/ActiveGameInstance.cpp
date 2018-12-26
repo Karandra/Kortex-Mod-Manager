@@ -112,8 +112,6 @@ namespace Kortex::GameInstance
 
 		// Finally send event
 		ProfileEvent(Events::ProfileSelected, const_cast<IGameProfile&>(profile)).Send();
-
-		SaveConfig();
 	}
 	void ActiveGameInstance::LoadSavedProfileOrDefault()
 	{

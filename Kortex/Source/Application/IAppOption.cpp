@@ -66,26 +66,17 @@ namespace Kortex
 		{
 			case Disposition::Global:
 			{
-				if (sysApp->OnGlobalConfigChanged(*this))
-				{
-					sysApp->SaveGlobalConfig();
-				}
+				sysApp->OnGlobalConfigChanged(*this);
 				break;
 			}
 			case Disposition::Instance:
 			{
-				if (sysApp->OnInstanceConfigChanged(*this, *m_Instance->QueryInterface<IGameInstance>()))
-				{
-					m_Instance->SaveConfig();
-				}
+				sysApp->OnInstanceConfigChanged(*this, *m_Instance->QueryInterface<IGameInstance>());
 				break;
 			}
 			case Disposition::Profile:
 			{
-				if (sysApp->OnProfileConfigChanged(*this, *m_Profile))
-				{
-					m_Profile->SaveConfig();
-				}
+				sysApp->OnProfileConfigChanged(*this, *m_Profile);
 				break;
 			}
 		};

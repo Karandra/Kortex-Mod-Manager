@@ -285,17 +285,14 @@ namespace Kortex::Application
 		return false;
 	}
 	
-	bool DefaultApplication::OnGlobalConfigChanged(IAppOption& option)
+	void DefaultApplication::OnGlobalConfigChanged(IAppOption& option)
 	{
-		return true;
 	}
-	bool DefaultApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
+	void DefaultApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
 	{
-		return true;
 	}
-	bool DefaultApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
+	void DefaultApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
 	{
-		return true;
 	}
 
 	bool DefaultApplication::ScheduleRestart()
@@ -328,6 +325,7 @@ namespace Kortex::Application
 		{
 			case LoadTranslationStatus::Success:
 			{
+				KxTranslation::SetCurrent(m_Translation);
 				option.SetAttribute(OName::Locale, m_Translation.GetLocale());
 				break;
 			}

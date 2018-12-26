@@ -52,9 +52,9 @@ namespace Kortex
 			int OnExit() override;
 			void OnError(LogEvent& event);
 
-			bool OnGlobalConfigChanged(IAppOption& option);
-			bool OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance);
-			bool OnProfileConfigChanged(IAppOption& option, IGameProfile& profile);
+			void OnGlobalConfigChanged(IAppOption& option);
+			void OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance);
+			void OnProfileConfigChanged(IAppOption& option, IGameProfile& profile);
 
 			bool OnException();
 			bool OnExceptionInMainLoop() override;

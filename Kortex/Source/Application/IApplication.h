@@ -43,9 +43,9 @@ namespace Kortex
 			virtual bool OnException() = 0;
 			wxString RethrowCatchAndGetExceptionInfo() const;
 
-			virtual bool OnGlobalConfigChanged(IAppOption& option) = 0;
-			virtual bool OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance) = 0;
-			virtual bool OnProfileConfigChanged(IAppOption& option, IGameProfile& profile) = 0;
+			virtual void OnGlobalConfigChanged(IAppOption& option) = 0;
+			virtual void OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance) = 0;
+			virtual void OnProfileConfigChanged(IAppOption& option, IGameProfile& profile) = 0;
 
 			void InitGlobalManagers();
 			void UnInitGlobalManagers();

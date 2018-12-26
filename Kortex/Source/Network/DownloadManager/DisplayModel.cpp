@@ -636,7 +636,7 @@ namespace Kortex::DownloadManager
 	}
 
 	DisplayModel::DisplayModel()
-		:m_DownloadManager()
+		:m_DownloadManager(IDownloadManager::GetInstance())
 	{
 		SetDataViewFlags(KxDV_VERT_RULES);
 		SetDataVector(&IDownloadManager::GetInstance()->GetDownloads());

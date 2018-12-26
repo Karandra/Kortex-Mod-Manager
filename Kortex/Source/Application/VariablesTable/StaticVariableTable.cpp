@@ -52,7 +52,7 @@ namespace Kortex
 		}
 		else
 		{
-			m_StaticVariables.insert_or_assign(id, VariableValue(value.GetValue(), VariableValue::Override::False, VariableValue::Type::None));
+			m_StaticVariables.insert_or_assign(id, value);
 		}
 	}
 }

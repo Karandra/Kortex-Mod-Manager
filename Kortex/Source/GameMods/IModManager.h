@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Application/IManager.h"
 #include "GameMods/IGameMod.h"
+#include "VFS/IVirtualFileSystem.h"
 #include "Network/NetworkConstants.h"
 #include <KxFramework/KxSingleton.h>
 
@@ -73,23 +74,11 @@ namespace Kortex
 			virtual void ExportModList(const wxString& outputFilePath) const = 0;
 
 		public:
+			virtual IVirtualFileSystem& GetVFS() = 0;
+
+		public:
 			virtual void NotifyModInstalled(IGameMod& mod) = 0;
 			virtual void NotifyModUninstalled(IGameMod& mod) = 0;
 			virtual void NotifyModErased(IGameMod& mod) = 0;
-
-		public:
-			bool IsVFSMounted()
-			{
-				return false;
-			}
-			void MountVFS()
-			{
-			}
-			void UnMountVFS()
-			{
-			}
-			void SetMounted(bool)
-			{
-			}
 	};
 }

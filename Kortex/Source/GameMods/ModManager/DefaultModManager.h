@@ -3,6 +3,7 @@
 #include "GameMods/IModManager.h"
 #include "GameMods/IGameMod.h"
 #include "FixedGameMod.h"
+#include "VirtualFileSystem.h"
 #include "MandatoryModEntry.h"
 #include <Kortex/Events.hpp>
 class IGameProfile;
@@ -86,8 +87,11 @@ namespace Kortex::ModManager
 {
 	class DefaultModManager: public IModManager
 	{
+		friend class VirtualFileSystem;
+
 		private:
-			ModManager::Config m_Config;
+			Config m_Config;
+			VirtualFileSystem m_VFS;
 
 			IGameMod::Vector m_Mods;
 			FixedGameMod m_BaseGame;
@@ -104,6 +108,7 @@ namespace Kortex::ModManager
 			virtual void OnInit() override;
 			virtual void OnExit() override;
 
+			void OnMountPointsError(const KxStringVector& locations);
 			void OnModFilesChanged(ModEvent& event);
 
 		public:
@@ -163,6 +168,11 @@ namespace Kortex::ModManager
 			bool MoveModsAfter(const IGameMod::RefVector& toMove, const IGameMod& anchor) override;
 		
 			void ExportModList(const wxString& outputFilePath) const override;
+			
+			IVirtualFileSystem& GetVFS() override
+			{
+				return m_VFS;
+			}
 
 		public:
 			void NotifyModInstalled(IGameMod& mod) override;

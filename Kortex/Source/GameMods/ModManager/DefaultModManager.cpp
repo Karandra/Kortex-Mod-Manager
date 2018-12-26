@@ -19,7 +19,6 @@
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "UI/KWorkspaceController.h"
-#include "IPC/KIPCClient.h"
 #include "KOperationWithProgress.h"
 #include "KUPtrVectorUtil.h"
 #include <KxFramework/KxXML.h>
@@ -150,8 +149,28 @@ namespace Kortex::ModManager
 	}
 	void DefaultModManager::OnExit()
 	{
+		m_VFS.Disable();
 	}
 
+	void DefaultModManager::OnMountPointsError(const KxStringVector& locations)
+	{
+		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
+		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
+		dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
+
+		wxString message;
+		for (const wxString& path: locations)
+		{
+			message += KxString::Format(wxS("<a href=\"%1\">%2</a>\r\n"), path, path);
+		}
+		dialog.SetExMessage(message);
+
+		dialog.Bind(wxEVT_TEXT_URL, [&dialog](wxTextUrlEvent& event)
+		{
+			KxShell::Execute(&dialog, event.GetString(), wxS("open"));
+		});
+		dialog.ShowModal();
+	}
 	void DefaultModManager::OnModFilesChanged(ModEvent& event)
 	{
 		if (event.HasMod())
@@ -165,7 +184,8 @@ namespace Kortex::ModManager
 	}
 
 	DefaultModManager::DefaultModManager()
-		:m_BaseGame(std::numeric_limits<int>::min()), m_Overwrites(std::numeric_limits<int>::max())
+		:m_VFS(*this),
+		m_BaseGame(std::numeric_limits<int>::min()), m_Overwrites(std::numeric_limits<int>::max())
 	{
 	}
 

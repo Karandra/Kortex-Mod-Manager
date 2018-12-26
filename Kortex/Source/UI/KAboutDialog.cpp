@@ -183,7 +183,7 @@ wxWindow* KAboutDialog::CreateTab_Modules()
 
 	// WebSocket++
 	{
-		KxTreeListItem item = list->GetRoot().Add(KxStringVector{KxWebSocketClient::GetLibraryName(), KxWebSocketClient::GetLibraryName()});
+		KxTreeListItem item = list->GetRoot().Add(KxStringVector{KxWebSocketClient::GetLibraryName(), KxWebSocketClient::GetLibraryVersion()});
 		item.SetImage(KIMG_WEBSOCKET);
 	}
 

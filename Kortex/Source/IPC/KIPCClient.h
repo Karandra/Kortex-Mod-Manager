@@ -47,6 +47,6 @@ class KIPCClient: public wxClient, public KxSingletonPtr<KIPCClient>
 		bool ConvergenceVFS_BuildDispatcherIndex();
 		bool ConvergenceVFS_SetDispatcherIndex();
 		
-		bool ToggleVFS();
+		bool EnableVFS();
 		bool DisableVFS();
 };

@@ -252,7 +252,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 	{
 		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.ChangeInstance")));
 		item->Bind(KxEVT_MENU_SELECT, &KMainWindow::OnChangeInstance, this);
-		item->Enable(!Kortex::IModManager::GetInstance()->IsVFSMounted());
+		item->Enable(!Kortex::IModManager::GetInstance()->GetVFS().IsEnabled());
 	}
 	mainMenu.AddSeparator();
 
@@ -294,7 +294,7 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 
 	if (event.CanVeto())
 	{
-		if (Kortex::IModManager::GetInstance()->IsVFSMounted())
+		if (Kortex::IModManager::GetInstance()->GetVFS().IsEnabled())
 		{
 			KxTaskDialog dialog(this, KxID_NONE, KTr("VFS.AskUnmountOnExit"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_QUESTION);
 			if (dialog.ShowModal() != KxID_YES)

@@ -157,7 +157,7 @@ namespace Kortex::PluginManager
 
 	bool LootAPI::CanSortNow() const
 	{
-		return IModManager::GetInstance()->IsVFSMounted();
+		return IModManager::GetInstance()->GetVFS().IsEnabled();
 	}
 	bool LootAPI::SortPlugins(KxStringVector& sortedList, KOperationWithProgressDialogBase* context)
 	{

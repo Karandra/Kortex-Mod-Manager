@@ -83,6 +83,6 @@ class KIPCServer: public wxServer, public KxSingleton<KIPCServer>
 		}
 
 		bool IsVFSEnabled() const;
-		int ToggleVFS();
+		int EnableVFS();
 		bool DisableVFS();
 };

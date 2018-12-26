@@ -58,13 +58,21 @@ void KIPCClient::OnDisconnect()
 
 void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
 {
+	IVirtualFileSystem& vfs = Kortex::IModManager::GetInstance()->GetVFS();
+	if (config.IsEnabled())
+	{
+		vfs.OnEnabled();
+	}
+	else
+	{
+		vfs.OnDisabled();
+	}
+
 	IEvent::CallAfter([config]()
 	{
-		// Set mounted status
-		Kortex::IModManager::GetInstance()->SetMounted(config.IsEnabled());
 		int status = config.GetStatus();
 
-		// Send event before reloading 'IPluginManager'
+		// Send event
 		VirtualFileSystemEvent event(Events::VirtualFileSystemToggled, config.IsEnabled());
 		event.SetInt(status);
 		event.Send();
@@ -74,8 +82,6 @@ void KIPCClient::OnAcceptRequest(const KIPCRequestNS::VFSStateChanged& config)
 			wxString message = wxString::Format("%s\r\n\r\n%s: %s", KVFSService::GetStatusCodeMessage(status), KTr("VFS.MountPoint"), event.GetString());
 			Kortex::LogEvent(message, Kortex::LogLevel::Error).Send();
 		}
-
-		//IModManager::GetInstance()->DestroyMountStatusDialog();
 	});
 }
 
@@ -204,7 +210,7 @@ bool KIPCClient::ConvergenceVFS_SetDispatcherIndex()
 	return false;
 }
 
-bool KIPCClient::ToggleVFS()
+bool KIPCClient::EnableVFS()
 {
 	if (m_Connection)
 	{

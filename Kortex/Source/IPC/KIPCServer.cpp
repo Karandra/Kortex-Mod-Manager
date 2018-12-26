@@ -136,7 +136,7 @@ void KIPCServer::OnAcceptRequest(const KIPCRequestNS::ClearMirrorVFSList& config
 
 void KIPCServer::OnAcceptRequest(const KIPCRequestNS::ToggleVFS& config)
 {
-	config.ShouldEnable() ? ToggleVFS() : DisableVFS();
+	config.ShouldEnable() ? EnableVFS() : DisableVFS();
 }
 
 void KIPCServer::OnVFSUnmounted(KxBroadcastEvent& event)
@@ -182,7 +182,7 @@ bool KIPCServer::IsVFSEnabled() const
 	}
 	return false;
 }
-int KIPCServer::ToggleVFS()
+int KIPCServer::EnableVFS()
 {
 	if (!IsVFSEnabled())
 	{

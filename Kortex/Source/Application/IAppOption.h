@@ -126,7 +126,7 @@ namespace Kortex
 			{
 				SplitterLayout(*this, SerializationMode::Save, splitter);
 			}
-			void LoadDataViewLayout(KxSplitterWindow* splitter)
+			void LoadSplitterLayout(KxSplitterWindow* splitter)
 			{
 				SplitterLayout(*this, SerializationMode::Load, splitter);
 			}
@@ -157,3 +157,4 @@ namespace Kortex::Application
 			virtual void SaveConfig() = 0;
 	};
 }
+

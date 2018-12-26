@@ -219,7 +219,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 
 		// Options
 		auto options = IApplication::GetInstance()->GetGlobalOption(OName::ImageViewer);
-		int64_t colorBG = options.GetAttributeInt(OName::ColorFG, -1);
+		int64_t colorBG = options.GetAttributeInt(OName::ColorBG, -1);
 		if (colorBG != -1)
 		{
 			m_ImageView->SetBackgroundColour(KxColor::FromCOLORREF(colorBG));

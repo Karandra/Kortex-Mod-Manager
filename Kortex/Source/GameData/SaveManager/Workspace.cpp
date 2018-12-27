@@ -11,6 +11,7 @@
 #include <KxFramework/KxAuiNotebook.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxTextFile.h>
+#include <KxFramework/KxCrypto.h>
 #include <wx/clipbrd.h>
 
 namespace Kortex::Application::OName
@@ -23,13 +24,23 @@ namespace
 	using namespace Kortex;
 	using namespace Kortex::Application;
 
+	wxString FilterNameToSignature(const KLabeledValue& filter)
+	{
+		wxStringInputStream stream(filter.GetValue());
+		return wxS("Filter-") + KxCrypto::CRC32(stream);
+	}
+
 	auto GetDisplayModelOptions()
 	{
-		return GetAInstanceOptionOf<ISaveManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+		return GetAInstanceOptionOf<ISaveManager>(OName::Workspace, OName::DisplayModel);
 	}
 	auto GetFiltersOptions()
 	{
 		return GetAInstanceOptionOf<ISaveManager>(OName::Workspace, OName::FileFilters);
+	}
+	auto GetFilterOption(const KLabeledValue& filter)
+	{
+		return GetAInstanceOptionOf<ISaveManager>(OName::Workspace, OName::FileFilters, FilterNameToSignature(filter));
 	}
 }
 
@@ -46,9 +57,13 @@ namespace Kortex::SaveManager
 		{
 			GetDisplayModelOptions().SaveDataViewLayout(m_DisplayModel->GetView());
 
+			KxXMLNode filterNode = GetFiltersOptions().GetNode();
+			filterNode.ClearNode();
+
 			for (const auto& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
 			{
-				GetFiltersOptions().SetAttribute(filter.GetValue(), FiltersMenu_IsFilterActive(filter.GetValue()));
+				KxXMLNode node = filterNode.NewElement(FilterNameToSignature(filter));
+				node.SetAttribute(OName::Enabled, FiltersMenu_IsFilterActive(filter.GetValue()));
 			}
 		}
 	}
@@ -58,7 +73,7 @@ namespace Kortex::SaveManager
 		m_MainSizer->Add(m_DisplayModel->GetView(), 1, wxEXPAND);
 
 		// Load options
-		//KProgramOptionSerializer::LoadDataViewLayout(m_DisplayModel->GetView(), m_SavesListViewOptions);
+		GetDisplayModelOptions().LoadDataViewLayout(m_DisplayModel->GetView());
 		m_DisplayModel->UpdateRowHeight();
 		m_ActiveFilters.clear();
 
@@ -66,15 +81,14 @@ namespace Kortex::SaveManager
 		auto filterOptions = GetFiltersOptions();
 		for (const auto& filter: m_Manager->GetConfig().GetFileFilters())
 		{
-			const wxString& value = filter.GetValue();
-			if (filterOptions.GetAttributeBool(value, true))
+			if (GetFilterOption(filter).GetAttributeBool(OName::Enabled, true))
 			{
-				m_ActiveFilters.insert(value);
-				filters.push_back(value);
+				m_ActiveFilters.insert(filter.GetValue());
+				filters.push_back(filter.GetValue());
 			}
 		}
 
-		ReloadWorkspace();
+		LoadData();
 		return true;
 	}
 

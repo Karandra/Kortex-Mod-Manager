@@ -27,9 +27,6 @@ namespace Kortex::SaveManager
 			ISaveManager* m_Manager = nullptr;
 			std::unordered_set<wxString> m_ActiveFilters;
 
-			//KProgramOptionAI m_SavesListViewOptions;
-			//KProgramOptionAI m_FileFiltersOptions;
-
 			wxBoxSizer* m_MainSizer = nullptr;
 			wxBoxSizer* m_ViewSizer = nullptr;
 			KxSplitterWindow* m_Splitter = nullptr;

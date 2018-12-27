@@ -4,12 +4,12 @@
 #include "Network/INetworkProvider.h"
 #include "GameInstance/GameID.h"
 
-namespace Kortex::ModProvider
+namespace Kortex
 {
-	class Store;
-	class Item
+	class ModProviderStore;
+	class ModProviderItem
 	{
-		friend class Store;
+		friend class ModProviderStore;
 
 		private:
 			using TID = std::variant<wxString, INetworkProvider*>;
@@ -20,31 +20,30 @@ namespace Kortex::ModProvider
 			TData m_Data = Network::InvalidModID;
 
 		public:
-			Item() = default;
+			ModProviderItem() = default;
 
-			Item(const wxString& name, const wxString& url)
+			ModProviderItem(const wxString& name, const wxString& url)
 				:m_ID(name), m_Data(url)
 			{
 			}
-			Item(const wxString& name, Network::ModID id)
+			ModProviderItem(const wxString& name, Network::ModID id)
 				:m_ID(name), m_Data(id)
 			{
 			}
 
-			Item(INetworkProvider* provider, const wxString& url)
+			ModProviderItem(INetworkProvider* provider, const wxString& url)
 				:m_ID(provider), m_Data(url)
 			{
 			}
-			Item(INetworkProvider* provider, Network::ModID id)
+			ModProviderItem(INetworkProvider* provider, Network::ModID id)
 				:m_ID(provider), m_Data(id)
 			{
 			}
 
 		public:
-			bool IsOK() const
-			{
-				return (HasProvider() || HasName()) && (HasModID() || HasURL());
-			}
+			bool IsOK() const;
+			bool IsEmptyValue() const;
+			
 			void Load(const KxXMLNode& node);
 			void Save(KxXMLNode& node) const;
 

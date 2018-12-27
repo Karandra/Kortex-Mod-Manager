@@ -1,62 +1,65 @@
 #include "stdafx.h"
 #include "Store.h"
 
-namespace Kortex::ModProvider
+namespace Kortex
 {
-	wxString Store::GetModURL(const wxString& name, const GameID& gameID) const
+	wxString ModProviderStore::GetModURL(const wxString& name, const GameID& gameID) const
 	{
-		if (const Item* item = GetItem(name))
+		if (const ModProviderItem* item = GetItem(name))
 		{
 			return item->GetURL(gameID);
 		}
 		return wxEmptyString;
 	}
-	wxString Store::GetModURL(INetworkProvider* provider, const GameID& gameID) const
+	wxString ModProviderStore::GetModURL(INetworkProvider* provider, const GameID& gameID) const
 	{
-		if (const Item* item = GetItem(provider))
+		if (const ModProviderItem* item = GetItem(provider))
 		{
 			return item->GetURL(gameID);
 		}
 		return wxEmptyString;
 	}
 	
-	KxStringVector Store::GetModURLs(const GameID& gameID) const
+	KxStringVector ModProviderStore::GetModURLs(const GameID& gameID) const
 	{
 		KxStringVector items;
 		items.reserve(m_Items.size());
 
-		for (const Item& item: m_Items)
+		for (const ModProviderItem& item: m_Items)
 		{
 			items.push_back(item.GetURL(gameID));
 		}
 		return items;
 	}
-	KLabeledValue::Vector Store::GetModNamedURLs(const GameID& gameID) const
+	KLabeledValue::Vector ModProviderStore::GetModNamedURLs(const GameID& gameID) const
 	{
 		KLabeledValue::Vector items;
 		items.reserve(m_Items.size());
 
-		for (const Item& item: m_Items)
+		for (const ModProviderItem& item: m_Items)
 		{
 			items.emplace_back(item.GetURL(gameID), item.GetName());
 		}
 		return items;
 	}
 
-	void Store::LoadTryAdd(const KxXMLNode& arrayNode)
+	void ModProviderStore::LoadTryAdd(const KxXMLNode& arrayNode)
 	{
 		LoadHelper<LoadMode::TryAdd>(*this, arrayNode);
 	}
-	void Store::LoadAssign(const KxXMLNode& arrayNode)
+	void ModProviderStore::LoadAssign(const KxXMLNode& arrayNode)
 	{
 		LoadHelper<LoadMode::Assign>(*this, arrayNode);
 	}
-	void Store::Save(KxXMLNode& arrayNode) const
+	void ModProviderStore::Save(KxXMLNode& arrayNode) const
 	{
-		for (const Item& item: m_Items)
+		for (const ModProviderItem& item: m_Items)
 		{
-			KxXMLNode node = arrayNode.NewElement(wxS("Entry"));
-			item.Save(node);
+			if (item.IsOK() && !item.IsEmptyValue())
+			{
+				KxXMLNode node = arrayNode.NewElement(wxS("Entry"));
+				item.Save(node);
+			}
 		}
 	}
 }

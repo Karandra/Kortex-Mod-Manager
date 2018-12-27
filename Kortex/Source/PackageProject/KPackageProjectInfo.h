@@ -18,7 +18,7 @@ class KPackageProjectInfo: public KPackageProjectPart
 		KLabeledValue::Vector m_CustomFields;
 		KLabeledValue::Vector m_Documents;
 		KLabeledValue::Vector m_WebSites;
-		Kortex::ModProvider::Store m_ProviderStore;
+		Kortex::ModProviderStore m_ProviderStore;
 		Kortex::ModTagStore m_TagStore;
 
 	public:
@@ -98,11 +98,11 @@ class KPackageProjectInfo: public KPackageProjectPart
 			return m_Documents;
 		}
 
-		const Kortex::ModProvider::Store& GetProviderStore() const
+		const Kortex::ModProviderStore& GetProviderStore() const
 		{
 			return m_ProviderStore;
 		}
-		Kortex::ModProvider::Store& GetProviderStore()
+		Kortex::ModProviderStore& GetProviderStore()
 		{
 			return m_ProviderStore;
 		}

@@ -7,9 +7,9 @@
 #include "Utility/Collection.h"
 #include "Utility/KLabeledValue.h"
 
-namespace Kortex::ModProvider
+namespace Kortex
 {
-	class Store
+	class ModProviderStore
 	{
 		private:
 			template<class TContainer, class TValue> static auto FindItem(TContainer&& items, TValue&& value)
@@ -26,7 +26,7 @@ namespace Kortex::ModProvider
 					{
 						return item.GetProvider() == value;
 					}
-					else if constexpr(std::is_same_v<ValueType, Item::TID>)
+					else if constexpr(std::is_same_v<ValueType, ModProviderItem::TID>)
 					{
 						return item.m_ID == value;
 					}
@@ -47,11 +47,11 @@ namespace Kortex::ModProvider
 				TryAdd,
 				Assign
 			};
-			template<LoadMode t_LoadMode> void LoadHelper(Store& store, const KxXMLNode& arrayNode)
+			template<LoadMode t_LoadMode> void LoadHelper(ModProviderStore& store, const KxXMLNode& arrayNode)
 			{
 				for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 				{
-					Item item;
+					ModProviderItem item;
 					item.Load(node);
 					if (item.IsOK())
 					{
@@ -80,7 +80,7 @@ namespace Kortex::ModProvider
 			}
 			template<class T> void DoAssignItem(T&& item)
 			{
-				if (Item* ptr = FindItemPtr(m_Items, item.m_ID))
+				if (ModProviderItem* ptr = FindItemPtr(m_Items, item.m_ID))
 				{
 					*ptr = item;
 				}
@@ -91,33 +91,33 @@ namespace Kortex::ModProvider
 			}
 
 		private:
-			std::vector<Item> m_Items;
+			std::vector<ModProviderItem> m_Items;
 
 		public:
 			// Retrieve item
-			const Item* GetItem(const wxString& name) const
+			const ModProviderItem* GetItem(const wxString& name) const
 			{
 				return FindItemPtr(m_Items, name);
 			}
-			Item* GetItem(const wxString& name)
+			ModProviderItem* GetItem(const wxString& name)
 			{
 				return FindItemPtr(m_Items, name);
 			}
 			
-			const Item* GetItem(const INetworkProvider* provider) const
+			const ModProviderItem* GetItem(const INetworkProvider* provider) const
 			{
 				return FindItemPtr(m_Items, provider);
 			}
-			Item* GetItem(const INetworkProvider* provider)
+			ModProviderItem* GetItem(const INetworkProvider* provider)
 			{
 				return FindItemPtr(m_Items, provider);
 			}
 
-			template<class T> const Item* GetItem() const
+			template<class T> const ModProviderItem* GetItem() const
 			{
 				return GetItem(T::GetInstance());
 			}
-			template<class T> Item* GetItem()
+			template<class T> ModProviderItem* GetItem()
 			{
 				return GetItem(T::GetInstance());
 			}
@@ -136,16 +136,16 @@ namespace Kortex::ModProvider
 			}
 			
 			// Adds item if there are none with this name
-			void TryAddItem(const Item& item)
+			void TryAddItem(const ModProviderItem& item)
 			{
 				DoTryAddItem(item);
 			}
-			void TryAddItem(Item&& item)
+			void TryAddItem(ModProviderItem&& item)
 			{
 				DoTryAddItem(std::move(item));
 			}
 
-			Item* TryAddWith(const wxString& name, const wxString& url)
+			ModProviderItem* TryAddWith(const wxString& name, const wxString& url)
 			{
 				if (!HasItem(name))
 				{
@@ -153,7 +153,7 @@ namespace Kortex::ModProvider
 				}
 				return nullptr;
 			}
-			Item* TryAddWith(const wxString& name, Network::ModID id)
+			ModProviderItem* TryAddWith(const wxString& name, Network::ModID id)
 			{
 				if (!HasItem(name))
 				{
@@ -162,7 +162,7 @@ namespace Kortex::ModProvider
 				return nullptr;
 			}
 			
-			Item* TryAddWith(INetworkProvider* provider, const wxString& url)
+			ModProviderItem* TryAddWith(INetworkProvider* provider, const wxString& url)
 			{
 				if (!HasItem(provider))
 				{
@@ -170,7 +170,7 @@ namespace Kortex::ModProvider
 				}
 				return nullptr;
 			}
-			Item* TryAddWith(INetworkProvider* provider, Network::ModID id)
+			ModProviderItem* TryAddWith(INetworkProvider* provider, Network::ModID id)
 			{
 				if (!HasItem(provider))
 				{
@@ -179,26 +179,26 @@ namespace Kortex::ModProvider
 				return nullptr;
 			}
 
-			template<class T> Item* TryAddWith(const wxString& url)
+			template<class T> ModProviderItem* TryAddWith(const wxString& url)
 			{
 				return TryAddWith(T::GetInstance(), url);
 			}
-			template<class T> Item* TryAddWith(Network::ModID id)
+			template<class T> ModProviderItem* TryAddWith(Network::ModID id)
 			{
 				return TryAddWith(T::GetInstance(), id);
 			}
 			
 			// Assigns new value to existing item or creates new item
-			void AssignItem(const Item& item)
+			void AssignItem(const ModProviderItem& item)
 			{
 				DoAssignItem(item);
 			}
-			void AssignItem(Item&& item)
+			void AssignItem(ModProviderItem&& item)
 			{
 				DoAssignItem(std::move(item));
 			}
 
-			Item& AssignWith(const wxString& name, const wxString& url)
+			ModProviderItem& AssignWith(const wxString& name, const wxString& url)
 			{
 				auto it = FindItem(m_Items, name);
 				if (it == m_Items.end())
@@ -212,7 +212,7 @@ namespace Kortex::ModProvider
 					return *it;
 				}
 			}
-			Item& AssignWith(const wxString& name, Network::ModID id)
+			ModProviderItem& AssignWith(const wxString& name, Network::ModID id)
 			{
 				auto it = FindItem(m_Items, name);
 				if (it == m_Items.end())
@@ -227,7 +227,7 @@ namespace Kortex::ModProvider
 				}
 			}
 			
-			Item& AssignWith(INetworkProvider* provider, const wxString& url)
+			ModProviderItem& AssignWith(INetworkProvider* provider, const wxString& url)
 			{
 				auto it = FindItem(m_Items, provider);
 				if (it == m_Items.end())
@@ -241,7 +241,7 @@ namespace Kortex::ModProvider
 					return *it;
 				}
 			}
-			Item& AssignWith(INetworkProvider* provider, Network::ModID id)
+			ModProviderItem& AssignWith(INetworkProvider* provider, Network::ModID id)
 			{
 				auto it = FindItem(m_Items, provider);
 				if (it == m_Items.end())
@@ -256,11 +256,11 @@ namespace Kortex::ModProvider
 				}
 			}
 
-			template<class T> Item& AssignWith(const wxString& url)
+			template<class T> ModProviderItem& AssignWith(const wxString& url)
 			{
 				return AssignWith(T::GetInstance(), url);
 			}
-			template<class T> Item& AssignWith(Network::ModID id)
+			template<class T> ModProviderItem& AssignWith(Network::ModID id)
 			{
 				return AssignWith(T::GetInstance(), id);
 			}
@@ -295,18 +295,31 @@ namespace Kortex::ModProvider
 				return m_Items.empty();
 			}
 	
-			template<class Functor> void Visit(Functor&& visitor) const
+			template<class TFunctor> void Visit(TFunctor&& func) const
 			{
-				Utility::Collection::Enumerate(m_Items, visitor);
+				Utility::Collection::Enumerate(m_Items, func);
 			}
-			template<class Functor> void Visit(Functor&& visitor)
+			template<class TFunctor> void Visit(TFunctor&& func)
 			{
-				Utility::Collection::Enumerate(m_Items, visitor);
+				Utility::Collection::Enumerate(m_Items, func);
+			}
+			template<class TFunctor> void RemoveIf(TFunctor&& func)
+			{
+				if (!m_Items.empty())
+				{
+					for (size_t i = m_Items.size() - 1; i != 0; i--)
+					{
+						if (func(m_Items[i]))
+						{
+							m_Items.erase(m_Items.begin() + i);
+						}
+					}
+				}
 			}
 
 			wxString GetModURL(const wxString& name, const GameID& gameID = GameIDs::NullGameID) const;
 			wxString GetModURL(INetworkProvider* provider, const GameID& gameID = GameIDs::NullGameID) const;
-			template<class T>  wxString GetModURL(const GameID& gameID = GameIDs::NullGameID) const
+			template<class T> wxString GetModURL(const GameID& gameID = GameIDs::NullGameID) const
 			{
 				return GetModURL(T::GetInstance(), gameID);
 			}

@@ -459,7 +459,7 @@ void KInstallWizardDialog::LoadInfoList()
 	};
 	auto AddSites = [this, &info, &AddString]()
 	{
-		info.GetProviderStore().Visit([this](const Kortex::ModProvider::Item& item)
+		info.GetProviderStore().Visit([this](const Kortex::ModProviderItem& item)
 		{
 			Kortex::INetworkProvider* provider = nullptr;
 			KImageEnum icon = item.TryGetProvider(provider) ? provider->GetIcon() : Kortex::INetworkProvider::GetGenericIcon();

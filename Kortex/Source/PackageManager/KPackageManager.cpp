@@ -20,7 +20,7 @@ namespace Kortex
 {
 	namespace PackageManager::Internal
 	{
-		const SimpleManagerInfo TypeInfo("KPackageManager", "PackageManager.Name");
+		const SimpleManagerInfo TypeInfo("PackageManager", "PackageManager.Name");
 	}
 
 	const KxStringVector& KPackageManager::GetSuppoptedExtensions()

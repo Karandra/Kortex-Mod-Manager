@@ -2,9 +2,27 @@
 #include "Item.h"
 #include <Kortex/NetworkManager.hpp>
 
-namespace Kortex::ModProvider
+namespace Kortex
 {
-	void Item::Load(const KxXMLNode& node)
+	bool ModProviderItem::IsOK() const
+	{
+		// Items with known provider valid if both provider and mod ID is valid.
+		// Unknown items valid if at least name is present.
+		if (HasProvider())
+		{
+			return HasModID();
+		}
+		else
+		{
+			return HasName();
+		}
+	}
+	bool ModProviderItem::IsEmptyValue() const
+	{
+		return !HasModID() || !HasURL();
+	}
+
+	void ModProviderItem::Load(const KxXMLNode& node)
 	{
 		SetName(node.GetAttribute("Name"));
 
@@ -18,7 +36,7 @@ namespace Kortex::ModProvider
 			m_Data = node.GetAttributeInt("URL");
 		}
 	}
-	void Item::Save(KxXMLNode& node) const
+	void ModProviderItem::Save(KxXMLNode& node) const
 	{
 		node.SetAttribute("Name", GetName());
 
@@ -34,7 +52,7 @@ namespace Kortex::ModProvider
 		}
 	}
 
-	INetworkProvider* Item::GetProvider() const
+	INetworkProvider* ModProviderItem::GetProvider() const
 	{
 		if (auto provider = std::get_if<INetworkProvider*>(&m_ID))
 		{
@@ -47,7 +65,7 @@ namespace Kortex::ModProvider
 		return nullptr;
 	}
 	
-	wxString Item::GetName() const
+	wxString ModProviderItem::GetName() const
 	{
 		if (auto provider = std::get_if<INetworkProvider*>(&m_ID); provider && *provider)
 		{
@@ -59,7 +77,7 @@ namespace Kortex::ModProvider
 		}
 		return wxEmptyString;
 	}
-	void Item::SetName(const wxString& name)
+	void ModProviderItem::SetName(const wxString& name)
 	{
 		if (INetworkProvider* provider = INetworkManager::GetInstance()->FindProvider(name))
 		{
@@ -71,7 +89,7 @@ namespace Kortex::ModProvider
 		}
 	}
 
-	wxString Item::GetURL(const GameID& gameID) const
+	wxString ModProviderItem::GetURL(const GameID& gameID) const
 	{
 		Network::ModID modID = Network::InvalidModID;
 		INetworkProvider* provider = nullptr;
@@ -86,7 +104,7 @@ namespace Kortex::ModProvider
 		}
 		return wxEmptyString;
 	}
-	Network::ModID Item::GetModID() const
+	Network::ModID ModProviderItem::GetModID() const
 	{
 		if (const Network::ModID* id = std::get_if<Network::ModID>(&m_Data))
 		{

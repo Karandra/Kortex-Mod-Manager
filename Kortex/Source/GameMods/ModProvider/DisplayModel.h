@@ -15,7 +15,7 @@ namespace Kortex::ModProvider
 			};
 
 		protected:
-			Store& m_ProviderStore;
+			ModProviderStore& m_ProviderStore;
 			bool m_IsModified = false;
 
 		protected:
@@ -33,21 +33,21 @@ namespace Kortex::ModProvider
 			void OnActivate(KxDataViewEvent& event);
 
 		public:
-			DisplayModel(Store& providerStore)
+			DisplayModel(ModProviderStore& providerStore)
 				:m_ProviderStore(providerStore)
 			{
 			}
 
 		public:
-			const Item* GetNode(const KxDataViewItem& item) const
+			const ModProviderItem* GetNode(const KxDataViewItem& item) const
 			{
-				return item.GetValuePtr<Item>();
+				return item.GetValuePtr<ModProviderItem>();
 			}
-			Item* GetNode(const KxDataViewItem& item)
+			ModProviderItem* GetNode(const KxDataViewItem& item)
 			{
-				return item.GetValuePtr<Item>();
+				return item.GetValuePtr<ModProviderItem>();
 			}
-			KxDataViewItem MakeItem(const Item& node)
+			KxDataViewItem MakeItem(const ModProviderItem& node)
 			{
 				return KxDataViewItem(&node);
 			}
@@ -56,5 +56,6 @@ namespace Kortex::ModProvider
 			{
 				return m_IsModified;
 			}
+			void ApplyChanges();
 	};
 }

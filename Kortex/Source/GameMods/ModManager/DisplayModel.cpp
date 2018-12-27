@@ -354,7 +354,7 @@ namespace Kortex::ModManager
 				SitesValue::ArrayT list;
 				SitesValue::ClearArray(list);
 				
-				mod->GetProviderStore().Visit([&list](const ModProvider::Item& item)
+				mod->GetProviderStore().Visit([&list](const ModProviderItem& item)
 				{
 					INetworkProvider* provider = nullptr;
 					if (item.TryGetProvider(provider))
@@ -378,7 +378,7 @@ namespace Kortex::ModManager
 				INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(index);
 				if (provider)
 				{
-					const ModProvider::Item* providerItem = mod->GetProviderStore().GetItem(provider->GetName());
+					const ModProviderItem* providerItem = mod->GetProviderStore().GetItem(provider->GetName());
 					Network::ModID id = Network::InvalidModID;
 					if (providerItem && providerItem->TryGetModID(id))
 					{
@@ -633,7 +633,7 @@ namespace Kortex::ModManager
 				}
 				else if (!entry->QueryInterface<IFixedGameMod>())
 				{
-					if (m_BitmapColumn->IsExposed())
+					if (m_BitmapColumn->IsVisible())
 					{
 						height = m_BitmapSize.GetHeight() + 2;
 						return true;
@@ -658,8 +658,8 @@ namespace Kortex::ModManager
 				if (IsSpecialSiteColumn(columnID))
 				{
 					INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(ColumnToSpecialSite(columnID));
-					ModProvider::Item* item1 = entry1->GetProviderStore().GetItem(provider);
-					ModProvider::Item* item2 = entry2->GetProviderStore().GetItem(provider);
+					ModProviderItem* item1 = entry1->GetProviderStore().GetItem(provider);
+					ModProviderItem* item2 = entry2->GetProviderStore().GetItem(provider);
 
 					return item1 && item2 && (item1->GetModID() < item2->GetModID());
 				}
@@ -764,8 +764,8 @@ namespace Kortex::ModManager
 			Network::ProviderID providerID = ColumnToSpecialSite(columnID);
 			if (IsSpecialSiteColumn(columnID))
 			{
-				const ModProvider::Store& store = entry->GetProviderStore();
-				if (const ModProvider::Item* providerItem = store.GetItem(INetworkManager::GetInstance()->GetProvider(providerID)))
+				const ModProviderStore& store = entry->GetProviderStore();
+				if (const ModProviderItem* providerItem = store.GetItem(INetworkManager::GetInstance()->GetProvider(providerID)))
 				{
 					KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
 				}
@@ -797,7 +797,7 @@ namespace Kortex::ModManager
 				}
 				case ColumnID::Sites:
 				{
-					const ModProvider::Store& store = entry->GetProviderStore();
+					const ModProviderStore& store = entry->GetProviderStore();
 					if (!store.IsEmpty())
 					{
 						KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());
@@ -861,7 +861,7 @@ namespace Kortex::ModManager
 	}
 	void DisplayModel::OnCacheHint(KxDataViewEvent& event)
 	{
-		if (m_BitmapColumn->IsExposed())
+		if (m_BitmapColumn->IsVisible())
 		{
 			for (size_t row = event.GetCacheHintFrom(); row <= event.GetCacheHintTo(); row++)
 			{

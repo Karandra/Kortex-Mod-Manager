@@ -64,7 +64,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		void CalculateMemoryRequiredForCompression(int nPower);
 		template<class T> void OnOpenSite(wxTextUrlEvent& event)
 		{
-			Kortex::ModProvider::Store& store = GetProjectInfo().GetProviderStore();
+			Kortex::ModProviderStore& store = GetProjectInfo().GetProviderStore();
 
 			wxString url = store.GetModURL(T::GetInstance()->GetName());
 			if (!url.IsEmpty())
@@ -78,7 +78,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 			long long id = -1;
 			static_cast<KxTextBox*>(event.GetEventObject())->GetValue().ToLongLong(&id);
 
-			Kortex::ModProvider::Store& store = GetProjectInfo().GetProviderStore();
+			Kortex::ModProviderStore& store = GetProjectInfo().GetProviderStore();
 			store.AssignWith<T>(id);
 			event.Skip();
 		}

@@ -17,7 +17,7 @@ namespace Kortex::ModProvider
 		if (item.IsTreeRootItem())
 		{
 			children.reserve(m_ProviderStore.GetSize());
-			m_ProviderStore.Visit([&children](Item& item)
+			m_ProviderStore.Visit([&children](ModProviderItem& item)
 			{
 				children.push_back(&item);
 				return true;
@@ -35,7 +35,7 @@ namespace Kortex::ModProvider
 
 	bool DisplayModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		const Item* node = GetNode(item);
+		const ModProviderItem* node = GetNode(item);
 		if (node)
 		{
 			if (node->HasProvider())
@@ -58,7 +58,7 @@ namespace Kortex::ModProvider
 	}
 	void DisplayModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		const Item* node = GetNode(item);
+		const ModProviderItem* node = GetNode(item);
 		if (node)
 		{
 			switch (column->GetID())
@@ -75,7 +75,7 @@ namespace Kortex::ModProvider
 	}
 	void DisplayModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		const Item* node = GetNode(item);
+		const ModProviderItem* node = GetNode(item);
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
@@ -93,7 +93,7 @@ namespace Kortex::ModProvider
 	}
 	bool DisplayModel::SetValue(const wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column)
 	{
-		Item* node = GetNode(item);
+		ModProviderItem* node = GetNode(item);
 
 		switch (column->GetID())
 		{
@@ -114,7 +114,7 @@ namespace Kortex::ModProvider
 				if (node->HasProvider())
 				{
 					Network::ModID modID = Network::InvalidModID;
-					if (data.GetAs(&modID))
+					if (data.GetAs(&modID) && modID >= 0)
 					{
 						node->SetModID(modID);
 						m_IsModified = true;
@@ -137,14 +137,23 @@ namespace Kortex::ModProvider
 
 	void DisplayModel::OnActivate(KxDataViewEvent& event)
 	{
-		const Item* node = GetNode(event.GetItem());
+		const ModProviderItem* node = GetNode(event.GetItem());
 		if (node)
 		{
-			KxDataViewColumn* column = node->HasProvider() ? event.GetColumn() : GetView()->GetColumnByID(ColumnID::Value);
+			// Allow edit both name and value for unknown providers (with URL),
+			// and restrict editing to modID only for known providers.
+			KxDataViewColumn* column = node->HasProvider() ? GetView()->GetColumnByID(ColumnID::Value) : event.GetColumn();
 			if (column)
 			{
 				GetView()->EditItem(event.GetItem(), column);
 			}
 		}
+	}
+	void DisplayModel::ApplyChanges()
+	{
+		m_ProviderStore.RemoveIf([](ModProviderItem& item)
+		{
+			return !item.IsOK();
+		});
 	}
 }

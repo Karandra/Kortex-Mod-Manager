@@ -17,11 +17,11 @@ namespace
 {
 	using namespace Kortex;
 
-	template<class T> void LoadOldSite(ModProvider::Store& store, KxXMLNode& node, const wxString& name)
+	template<class T> void LoadOldSite(ModProviderStore& store, KxXMLNode& node, const wxString& name)
 	{
 		store.AssignWith<T>(node.GetAttributeInt(name, Network::InvalidModID));
 	}
-	void LoadOldSites(ModProvider::Store& store, KxXMLNode& node)
+	void LoadOldSites(ModProviderStore& store, KxXMLNode& node)
 	{
 		LoadOldSite<Network::NexusProvider>(store, node, "NexusID");
 		LoadOldSite<Network::LoversLabProvider>(store, node, "LoversLabID");

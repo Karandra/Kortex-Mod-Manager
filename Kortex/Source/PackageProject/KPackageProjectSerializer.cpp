@@ -5,7 +5,7 @@
 #include "KAux.h"
 #include <KxFramework/KxTextFile.h>
 
-Kortex::ModProvider::Item KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
+Kortex::ModProviderItem KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
 {
 	using namespace Kortex::Network;
 
@@ -40,9 +40,9 @@ Kortex::ModProvider::Item KPackageProjectSerializer::TryParseWebSite(const wxStr
 
 	if (provider)
 	{
-		Kortex::ModProvider::Item(provider->GetName(), id);
+		Kortex::ModProviderItem(provider->GetName(), id);
 	}
-	return Kortex::ModProvider::Item();
+	return Kortex::ModProviderItem();
 }
 wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
 {

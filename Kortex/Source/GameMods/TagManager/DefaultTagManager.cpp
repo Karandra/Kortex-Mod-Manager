@@ -2,6 +2,7 @@
 #include "DefaultTagManager.h"
 #include "DefaultTag.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "PackageManager/KPackageManager.h"
@@ -9,17 +10,32 @@
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxXML.h>
 
+namespace Kortex::Application::OName
+{
+	KortexDefOption(DefaultTags);
+	KortexDefOption(UserTags);
+}
+
+namespace
+{
+	using namespace Kortex;
+	using namespace Kortex::ModTagManager;
+
+	std::unique_ptr<DefaultTag> NewDefaultTag()
+	{
+		return std::make_unique<DefaultTag>();
+	}
+}
+
 namespace Kortex::ModTagManager
 {
-	void DefaultTagManager::LoadTagsFromFile(const wxString& filePath, bool markAsSystem)
+	void DefaultTagManager::LoadTagsFrom(IModTag::Vector& items, const KxXMLNode& tagsNode, bool markAsSystem)
 	{
-		KxFileStream stream(filePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-		KxXMLDocument xml(stream);
-
 		const bool hasSE = KPackageManager::GetInstance()->HasScriptExtender();
-		for (KxXMLNode node = xml.GetFirstChildElement("Tags").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+
+		for (KxXMLNode node = tagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			if (!hasSE && node.GetAttributeBool("RequiresScriptExtender"))
+			if (!hasSE && node.GetAttributeBool(wxS("RequiresScriptExtender")))
 			{
 				continue;
 			}
@@ -29,14 +45,17 @@ namespace Kortex::ModTagManager
 			{
 				wxString label = node.GetAttribute("Name", id);
 
-				auto labelTranslated = Translation::TryGetString(IApplication::GetInstance()->GetTranslation(), wxS("ModManager.Tag.") + label);
+				auto labelTranslated = Translation::TryGetString(wxS("ModManager.Tag.") + label);
 				if (labelTranslated)
 				{
 					label = labelTranslated.value();
 				}
 
-				auto tag = std::make_unique<DefaultTag>(id, label, markAsSystem);
-				tag->SetNexusID(node.GetAttributeInt("NexusID", INexusModTag::InvalidNexusID));
+				auto tag = NewDefaultTag();
+				tag->SetID(id);
+				tag->SetName(label);
+				tag->SetNexusID(node.GetAttributeInt(wxS("NexusID"), INexusModTag::InvalidNexusID));
+				tag->MarkAsSystem(markAsSystem);
 
 				// Color
 				KxXMLNode colorNode = node.GetFirstChildElement("Color");
@@ -47,68 +66,62 @@ namespace Kortex::ModTagManager
 						return value >= 0 && value <= 255;
 					};
 
-					int r = colorNode.GetAttributeInt("R", -1);
-					int g = colorNode.GetAttributeInt("G", -1);
-					int b = colorNode.GetAttributeInt("B", -1);
+					int r = colorNode.GetAttributeInt(wxS("R"), -1);
+					int g = colorNode.GetAttributeInt(wxS("G"), -1);
+					int b = colorNode.GetAttributeInt(wxS("B"), -1);
 					if (CheckColorValue(r) && CheckColorValue(g) && CheckColorValue(b))
 					{
 						tag->SetColor(KxColor(r, g, b, 200));
 					}
 				}
 
-				EmplaceTag(std::move(tag));
+				items.emplace_back(std::move(tag));
 			}
 		}
 	}
-	void DefaultTagManager::SaveTagsToFile(const wxString& filePath) const
+	void DefaultTagManager::SaveTagsTo(const IModTag::Vector& items, KxXMLNode& tagsNode) const
 	{
-		KxXMLDocument xml;
-		KxXMLNode rootNode = xml.NewElement("Tags");
-
-		for (const auto& tag: m_Tags)
+		tagsNode.ClearNode();
+		for (const auto& tag: items)
 		{
-			KxXMLNode node = rootNode.NewElement("Entry");
-			node.SetAttribute("ID", tag->GetID());
-			node.SetAttribute("Name", (tag->IsSystemTag() || tag->GetID() == tag->GetName() ? tag->GetID() : tag->GetName()));
+			KxXMLNode node = tagsNode.NewElement(wxS("Entry"));
+			node.SetAttribute(wxS("ID"), tag->GetID());
+			node.SetAttribute(wxS("Name"), (tag->IsSystemTag() || tag->GetID() == tag->GetName() ? tag->GetID() : tag->GetName()));
 
 			// Color
-			if (tag->HasColor())
+			KxColor color = tag->GetColor();
+			if (color.IsOk())
 			{
-				KxXMLNode colorNode = node.NewElement("Color");
-
-				KxColor color = tag->GetColor();
-				colorNode.SetAttribute("R", color.GetR());
-				colorNode.SetAttribute("G", color.GetG());
-				colorNode.SetAttribute("B", color.GetB());
+				KxXMLNode colorNode = node.NewElement(wxS("Color"));
+				colorNode.SetAttribute(wxS("R"), color.GetR());
+				colorNode.SetAttribute(wxS("G"), color.GetG());
+				colorNode.SetAttribute(wxS("B"), color.GetB());
 			}
 		}
-
-		KxFileStream stream(filePath, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
-		xml.Save(stream);
 	}
 
-	void DefaultTagManager::LoadDefaultTags()
-	{
-		LoadTagsFromFile(IApplication::GetInstance()->GetDataFolder() + wxS("\\ModManager\\DefaultTags.xml"), true);
-	}
 	void DefaultTagManager::LoadUserTags()
 	{
-		LoadTagsFromFile(IGameInstance::GetActive()->GetModTagsFile(), false);
+		LoadTagsFrom(m_UserTags, GetAInstanceOption(Application::OName::UserTags).GetNode(), false);
 	}
 	void DefaultTagManager::SaveUserTags() const
 	{
-		SaveTagsToFile(IGameInstance::GetActive()->GetModTagsFile());
+		SaveTagsTo(m_UserTags, GetAInstanceOption(Application::OName::UserTags).GetNode());
 	}
 
 	void DefaultTagManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
+		LoadTagsFrom(m_DefaultTags, managerNode.GetFirstChildElement(Application::OName::DefaultTags), true);
 	}
 	void DefaultTagManager::OnInit()
 	{
 		LoadUserTags();
-		if (HasTags())
+		if (m_UserTags.empty())
 		{
-			LoadDefaultTags();
+			for (const auto& tag: m_DefaultTags)
+			{
+				m_UserTags.emplace_back(tag->Clone());
+			}
 		}
 	}
 	void DefaultTagManager::OnExit()
@@ -126,6 +139,6 @@ namespace Kortex::ModTagManager
 	}
 	std::unique_ptr<IModTag> DefaultTagManager::NewTag()
 	{
-		return std::make_unique<DefaultTag>();
+		return NewDefaultTag();
 	}
 }

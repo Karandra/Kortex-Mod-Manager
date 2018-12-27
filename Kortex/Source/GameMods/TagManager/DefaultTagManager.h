@@ -1,19 +1,20 @@
 #pragma once
 #include "stdafx.h"
 #include "GameMods/IModTagManager.h"
+class KxXMLNode;
 
 namespace Kortex::ModTagManager
 {
 	class DefaultTagManager: public IModTagManager
 	{
 		private:
-			IModTag::Vector m_Tags;
+			IModTag::Vector m_DefaultTags;
+			IModTag::Vector m_UserTags;
 
 		protected:
-			void LoadTagsFromFile(const wxString& filePath, bool markAsSystem);
-			void SaveTagsToFile(const wxString& filePath) const;
+			void LoadTagsFrom(IModTag::Vector& items, const KxXMLNode& tagsNode, bool markAsSystem);
+			void SaveTagsTo(const IModTag::Vector& items, KxXMLNode& tagsNode) const;
 
-			void LoadDefaultTags();
 			void LoadUserTags();
 			void SaveUserTags() const;
 
@@ -25,11 +26,11 @@ namespace Kortex::ModTagManager
 		public:
 			const IModTag::Vector& GetTags() const override
 			{
-				return m_Tags;
+				return m_UserTags;
 			}
 			IModTag::Vector& GetTags() override
 			{
-				return m_Tags;
+				return m_UserTags;
 			}
 	
 			void LoadTagsFromMod(const IGameMod& mod) override;

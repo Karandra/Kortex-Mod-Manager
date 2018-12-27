@@ -35,7 +35,7 @@
 					<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
 					<Executable>SKSE_Loader.exe</Executable>
 				</Entry>
-				<Entry ShowInMainMenu="1">
+				<Entry>
 					<Name>$(GameShortName) Launcher</Name>
 					<Executable>SkyrimLauncher.exe</Executable>
 				</Entry>
@@ -119,7 +119,7 @@
 			</StandardContent>
 		</PluginManager>
 
-		<SaveManager SaveInterface="BethesdaSkyrim">
+		<SaveManager SaveImplementation="BethesdaSkyrim">
 			<Location>$(SavesDir)\Saves</Location>
 			<FileFilters>
 				<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>

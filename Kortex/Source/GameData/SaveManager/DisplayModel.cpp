@@ -233,7 +233,7 @@ namespace Kortex::SaveManager
 	}
 	void DisplayModel::OnCacheHint(KxDataViewEvent& event)
 	{
-		if (m_BitmapColumn->IsExposed())
+		if (m_BitmapColumn->IsVisible())
 		{
 			for (size_t row = event.GetCacheHintFrom(); row <= event.GetCacheHintTo(); row++)
 			{
@@ -272,10 +272,10 @@ namespace Kortex::SaveManager
 				item = finder.FindNext();
 				if (item.IsOK())
 				{
-					auto& entry = m_DataVector.emplace_back(ISaveManager::GetInstance()->NewSave());
-					if (!entry->Create(item.GetFullPath()))
+					auto& entry = ISaveManager::GetInstance()->NewSave();
+					if (entry && entry->Create(item.GetFullPath()))
 					{
-						m_DataVector.pop_back();
+						m_DataVector.emplace_back(std::move(entry));
 					}
 				}
 			}
@@ -289,7 +289,7 @@ namespace Kortex::SaveManager
 		KxDataViewColumn* column = GetView()->GetColumnByID(ColumnID::Bitmap);
 		if (column)
 		{
-			if (column->IsExposed())
+			if (column->IsVisible())
 			{
 				GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight());
 			}

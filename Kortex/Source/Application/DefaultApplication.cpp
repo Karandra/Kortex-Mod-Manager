@@ -146,10 +146,11 @@ namespace Kortex::Application
 			InitSettings();
 			InitVFS();
 			
-			m_GameModsModule = std::make_unique<GameModsModule>();
+			// Order is important
+			m_NetworkModule = std::make_unique<NetworkModule>();
 			m_PackagesModule = std::make_unique<KPackageModule>();
 			m_ProgramModule = std::make_unique<KProgramModule>();
-			m_NetworkModule = std::make_unique<NetworkModule>();
+			m_GameModsModule = std::make_unique<GameModsModule>();
 			wxLogInfo("Core systems initialized");
 
 			wxLogInfo("Initializing instances");
@@ -295,6 +296,43 @@ namespace Kortex::Application
 	{
 	}
 
+	bool DefaultApplication::OpenInstanceSelectionDialog()
+	{
+		KInstanceSelectionDialog dialog(KMainWindow::GetInstance());
+		wxWindowID ret = dialog.ShowModal();
+		if (ret == KxID_OK && (m_IsCmdStartupGameID != dialog.GetNewGameID() || m_StartupInstanceID != dialog.GetNewInstanceID()))
+		{
+			KxTaskDialog confirmDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("InstanceSelection.ChangeInstanceDialog.Caption"), KTr("InstanceSelection.ChangeInstanceDialog.Message"), KxBTN_NONE, KxICON_WARNING);
+			confirmDialog.AddButton(KxID_YES, KTr("InstanceSelection.ChangeInstanceDialog.Yes"));
+			confirmDialog.AddButton(KxID_NO, KTr("InstanceSelection.ChangeInstanceDialog.No"));
+			confirmDialog.AddButton(KxID_CANCEL, KTr("InstanceSelection.ChangeInstanceDialog.Cancel"));
+			confirmDialog.SetDefaultButton(KxID_CANCEL);
+
+			ret = confirmDialog.ShowModal();
+			if (ret != KxID_CANCEL)
+			{
+				// Set new game root
+				IGameInstance* instance = dialog.GetNewInstance();
+				IConfigurableGameInstance* configurableInstance = nullptr;
+				if (dialog.IsNewGameRootSet() && instance->QueryInterface(configurableInstance))
+				{
+					instance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetNewGameRoot());
+					configurableInstance->SaveConfig();
+				}
+
+				GetGlobalOption(OName::Game).SetAttribute(OName::ID, dialog.GetNewGameID());
+				GetGlobalOption(OName::Instance).SetAttribute(OName::ID, dialog.GetNewInstanceID());
+
+				// Restart if user agreed
+				if (ret == KxID_YES)
+				{
+					ScheduleRestart();
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 	bool DefaultApplication::ScheduleRestart()
 	{
 		int delaySec = GetGlobalOption(OName::RestartDelay).GetValueInt(5);
@@ -385,43 +423,6 @@ namespace Kortex::Application
 		}
 
 		option.SetValue(startPage);
-	}
-	bool DefaultApplication::ShowChageInstanceDialog()
-	{
-		KInstanceSelectionDialog dialog(KMainWindow::GetInstance());
-		wxWindowID ret = dialog.ShowModal();
-		if (ret == KxID_OK && (m_IsCmdStartupGameID != dialog.GetNewGameID() || m_StartupInstanceID != dialog.GetNewInstanceID()))
-		{
-			KxTaskDialog confirmDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("InstanceSelection.ChangeInstanceDialog.Caption"), KTr("InstanceSelection.ChangeInstanceDialog.Message"), KxBTN_NONE, KxICON_WARNING);
-			confirmDialog.AddButton(KxID_YES, KTr("InstanceSelection.ChangeInstanceDialog.Yes"));
-			confirmDialog.AddButton(KxID_NO, KTr("InstanceSelection.ChangeInstanceDialog.No"));
-			confirmDialog.AddButton(KxID_CANCEL, KTr("InstanceSelection.ChangeInstanceDialog.Cancel"));
-			confirmDialog.SetDefaultButton(KxID_CANCEL);
-
-			ret = confirmDialog.ShowModal();
-			if (ret != KxID_CANCEL)
-			{
-				// Set new game root
-				IGameInstance* instance = dialog.GetNewInstance();
-				IConfigurableGameInstance* configurableInstance = nullptr;
-				if (dialog.IsNewGameRootSet() && instance->QueryInterface(configurableInstance))
-				{
-					instance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetNewGameRoot());
-					configurableInstance->SaveConfig();
-				}
-
-				GetGlobalOption(OName::Game).SetAttribute(OName::ID, dialog.GetNewGameID());
-				GetGlobalOption(OName::Instance).SetAttribute(OName::ID, dialog.GetNewInstanceID());
-
-				// Restart if user agreed
-				if (ret == KxID_YES)
-				{
-					ScheduleRestart();
-				}
-				return true;
-			}
-		}
-		return false;
 	}
 
 	void DefaultApplication::InitSettings()

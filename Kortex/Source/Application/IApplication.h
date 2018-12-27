@@ -72,6 +72,7 @@ namespace Kortex
 			virtual wxString ExpandVariablesLocally(const wxString& variables) const = 0;
 			virtual wxString ExpandVariables(const wxString& variables) const = 0;
 		
+			virtual bool OpenInstanceSelectionDialog() = 0;
 			virtual bool ScheduleRestart() = 0;
 			virtual bool Uninstall() = 0;
 

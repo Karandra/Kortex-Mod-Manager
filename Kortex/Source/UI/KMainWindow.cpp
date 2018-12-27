@@ -362,12 +362,10 @@ void KMainWindow::OnChangeInstance(KxMenuEvent& event)
 		return;
 	}
 
-	#if 0
-	if (IApplication::GetInstance()->ShowChageInstanceDialog())
+	if (IApplication::GetInstance()->OpenInstanceSelectionDialog())
 	{
 		Close(true);
 	}
-	#endif
 }
 
 void KMainWindow::OnVFSToggled(VirtualFileSystemEvent& event)

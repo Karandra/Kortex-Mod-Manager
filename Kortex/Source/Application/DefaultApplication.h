@@ -130,13 +130,13 @@ namespace Kortex::Application
 				return m_AvailableTranslations;
 			}
 
+			bool OpenInstanceSelectionDialog() override;
 			bool ScheduleRestart() override;
 			bool Uninstall() override;
 
 			void LoadTranslation();
 			void LoadImages();
 			void ShowWorkspace();
-			bool ShowChageInstanceDialog();
 
 			void InitSettings();
 			bool IsPreStartConfigNeeded();

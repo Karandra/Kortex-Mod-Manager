@@ -11,7 +11,7 @@ namespace Kortex::Application::OptionSerializer
 	void UILayout::DataViewLayout(IAppOption& option, SerializationMode mode, KxDataViewCtrl* dataView)
 	{
 		const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
-		KxXMLNode columnsNode = option.GetConfigNode().QueryOrCreateElement(wxS("Columns"));
+		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(wxS("Columns"));
 
 		if (mode == SerializationMode::Save)
 		{
@@ -23,7 +23,7 @@ namespace Kortex::Application::OptionSerializer
 				const KxDataViewColumn* column = dataView->GetColumn(i);
 
 				node.SetAttribute(wxS("DisplayAt"), (int64_t)dataView->GetColumnPosition(column));
-				node.SetAttribute(wxS("Visible"), column->IsExposed());
+				node.SetAttribute(wxS("Visible"), column->IsVisible());
 				node.SetAttribute(wxS("Width"), column->GetWidth());
 			}
 		}
@@ -49,7 +49,7 @@ namespace Kortex::Application::OptionSerializer
 							column->SetWidth(std::clamp(width, column->GetMinWidth(), screenWidth));
 						}
 					}
-					column->SetHidden(!node.GetAttributeBool(wxS("Visible"), true));
+					column->SetVisible(node.GetAttributeBool(wxS("Visible"), true));
 					indexes[i] = node.GetAttributeInt(wxS("DisplayAt"), i);
 
 					node = node.GetNextSiblingElement();
@@ -80,7 +80,7 @@ namespace Kortex::Application::OptionSerializer
 	}
 	void UILayout::WindowSize(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window)
 	{
-		KxXMLNode geometryNode = option.GetConfigNode().QueryOrCreateElement(wxS("Geometry"));
+		KxXMLNode geometryNode = option.GetNode().QueryOrCreateElement(wxS("Geometry"));
 
 		if (mode == SerializationMode::Save)
 		{

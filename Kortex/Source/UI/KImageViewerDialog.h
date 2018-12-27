@@ -21,7 +21,7 @@ class KImageViewerEvent: public wxNotifyEvent
 		};
 
 	private:
-		std::variant<wxString, const wxBitmap*, const KArchive::Buffer*> m_Data;
+		std::variant<wxString, wxBitmap, const KArchive::Buffer*> m_Data;
 		bool m_HasPrev = false;
 		bool m_HasNext = false;
 
@@ -85,12 +85,12 @@ class KImageViewerEvent: public wxNotifyEvent
 		}
 
 		bool HasBitmap() const;
-		const wxBitmap& GetBitmap() const;
+		wxBitmap GetBitmap() const;
 		void SetBitmap(const wxBitmap& bitmap);
 
 		bool IsAnimationFile() const;
 		bool HasFilePath() const;
-		const wxString& GetFilePath() const;
+		wxString GetFilePath() const;
 		void SetFilePath(const wxString& filePath);
 
 		bool IsInputStream() const;

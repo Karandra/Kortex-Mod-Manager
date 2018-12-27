@@ -27,13 +27,13 @@ bool KImageViewerEvent::HasBitmap() const
 {
 	return GetType() == BitmapPtr;
 }
-const wxBitmap& KImageViewerEvent::GetBitmap() const
+wxBitmap KImageViewerEvent::GetBitmap() const
 {
-	return HasBitmap() ? *std::get<BitmapPtr>(m_Data) : wxNullBitmap;
+	return HasBitmap() ? std::get<BitmapPtr>(m_Data) : wxNullBitmap;
 }
 void KImageViewerEvent::SetBitmap(const wxBitmap& bitmap)
 {
-	m_Data = bitmap.IsOk() ? &bitmap : nullptr;
+	m_Data = bitmap.IsOk() ? bitmap : wxNullBitmap;
 }
 
 bool KImageViewerEvent::IsAnimationFile() const
@@ -44,7 +44,7 @@ bool KImageViewerEvent::HasFilePath() const
 {
 	return GetType() == FilePath;
 }
-const wxString& KImageViewerEvent::GetFilePath() const
+wxString KImageViewerEvent::GetFilePath() const
 {
 	return HasFilePath() ? std::get<FilePath>(m_Data) : KxNullWxString;
 }
@@ -61,8 +61,11 @@ wxMemoryInputStream KImageViewerEvent::GetInputSteram()
 {
 	if (IsInputStream())
 	{
-		const KArchive::Buffer* pBuffer = std::get<InputStream>(m_Data);
-		return wxMemoryInputStream(pBuffer->data(), pBuffer->size());
+		const KArchive::Buffer* buffer = std::get<InputStream>(m_Data);
+		if (buffer)
+		{
+			return wxMemoryInputStream(buffer->data(), buffer->size());
+		}
 	}
 	return wxMemoryInputStream(nullptr, 0);
 }

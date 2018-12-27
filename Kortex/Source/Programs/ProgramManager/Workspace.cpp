@@ -14,7 +14,7 @@ namespace
 
 	auto GetDisplayModelOption()
 	{
-		return GetAInstanceOptionOf<IProgramManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+		return GetAInstanceOptionOf<IProgramManager>(OName::Workspace, OName::DisplayModel);
 	}
 }
 

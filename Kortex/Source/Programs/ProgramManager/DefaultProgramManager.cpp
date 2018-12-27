@@ -26,13 +26,13 @@ namespace Kortex::ProgramManager
 
 	void DefaultProgramManager::LoadUserPrograms()
 	{
-		KxXMLNode node = GetAInstanceOption(Application::OName::UserPrograms).GetConfigNode();
+		KxXMLNode node = GetAInstanceOption(Application::OName::UserPrograms).GetNode();
 		LoadProgramsFromXML(m_UserPrograms, node);
 	}
 	void DefaultProgramManager::SaveUserPrograms() const
 	{
 		auto option = GetAInstanceOption(Application::OName::UserPrograms);
-		KxXMLNode rootNode = option.GetConfigNode();
+		KxXMLNode rootNode = option.GetNode();
 		rootNode.ClearNode();
 
 		for (const auto& entry: m_UserPrograms)

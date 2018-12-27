@@ -27,15 +27,15 @@ namespace
 {
 	auto GetDisplayModelOption()
 	{
-		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::DisplayModel);
 	}
 	auto GetVSplitterOption()
 	{
-		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::UI, OName::VSplitter);
+		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::VSplitter);
 	}
 	auto GetHSplitterOption()
 	{
-		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::UI, OName::HSplitter);
+		return GetAInstanceOptionOf<KPackageManager>(OName::Workspace, OName::HSplitter);
 	}
 }
 

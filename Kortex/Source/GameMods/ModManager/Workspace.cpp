@@ -132,11 +132,11 @@ namespace
 
 	auto GetDisplayModelOptions()
 	{
-		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::DisplayModel);
 	}
 	auto GetVSplitterOptions()
 	{
-		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::UI, OName::VSplitter);
+		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::VSplitter);
 	}
 }
 

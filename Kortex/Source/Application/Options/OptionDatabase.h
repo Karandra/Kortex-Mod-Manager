@@ -4,7 +4,6 @@
 
 namespace Kortex::Application::OName
 {
-	KortexDefOption(UI);
 	KortexDefOption(Game);
 	KortexDefOption(Instance);
 	KortexDefOption(Profile);
@@ -17,6 +16,7 @@ namespace Kortex::Application::OName
 	KortexDefOption(FOMod);
 
 	KortexDefOption(ID);
+	KortexDefOption(Name);
 	KortexDefOption(Active);
 	KortexDefOption(Enabled);
 	KortexDefOption(Locale);

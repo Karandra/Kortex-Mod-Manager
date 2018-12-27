@@ -27,7 +27,7 @@ namespace
 
 	auto GetDisplayModelOptions()
 	{
-		return Application::GetAInstanceOptionOf<IPluginManager>(OName::Workspace, OName::UI, OName::DisplayModel);
+		return Application::GetAInstanceOptionOf<IPluginManager>(OName::Workspace, OName::DisplayModel);
 	}
 
 	namespace MenuCounter

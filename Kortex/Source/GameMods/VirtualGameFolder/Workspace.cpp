@@ -17,7 +17,7 @@ namespace
 
 	auto GetDisplayModelOption()
 	{
-		return GetAInstanceOptionOf<IModManager>(OName::VirtualGameFolder, OName::UI, OName::DisplayModel);
+		return GetAInstanceOptionOf<IModManager>(OName::VirtualGameFolder, OName::DisplayModel);
 	}
 }
 

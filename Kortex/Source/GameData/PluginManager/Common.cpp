@@ -28,7 +28,7 @@ namespace Kortex::PluginManager
 
 	wxString StdContentEntry::GetLogoFullPath() const
 	{
-		return KVarExp(wxString::Format("%s\\PluginManager\\Logos\\%s\\%s", IApplication::GetInstance()->GetDataFolder(), "$(GameID)", GetLogo()));
+		return KVarExp(KxString::Format("%1\\PluginManager\\Logos\\%2\\%3", IApplication::GetInstance()->GetDataFolder(), "$(GameID)", GetLogo()));
 	}
 }
 

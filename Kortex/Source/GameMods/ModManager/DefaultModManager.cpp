@@ -143,7 +143,7 @@ namespace Kortex::ModManager
 		m_Overwrites.SetID(Variables::KVAR_OVERWRITES_DIR);
 		m_Overwrites.SetName(KTr("ModManager.WriteTargetName"));
 		m_Overwrites.SetActive(true);
-		// Location will be linked later
+		// Location will be linked on profile change
 
 		Load();
 	}
@@ -200,17 +200,14 @@ namespace Kortex::ModManager
 		// Load entries
 		if (IGameInstance* instnace = IGameInstance::GetActive())
 		{
-			KxFileFinder finder(instnace->GetModsDir());
-			
-			KxFileItem item = finder.FindNext();
-			while (item.IsOK())
+			KxFileFinder finder(instnace->GetModsDir(), wxS('*'));
+			for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
 			{
-				if (item.IsDirectory())
+				if (item.IsNormalItem() && item.IsDirectory())
 				{
 					const wxString signature = item.GetName();
 					DoCreateMod(signature);
 				}
-				item = finder.FindNext();
 			}
 		}
 
@@ -467,7 +464,7 @@ namespace Kortex::ModManager
 
 			// Add sites
 			KxXMLNode sitesNode = rowNode.NewElement("td");
-			modEntry->GetProviderStore().Visit([&sitesNode](const ModProvider::Item& item)
+			modEntry->GetProviderStore().Visit([&sitesNode](const ModProviderItem& item)
 			{
 				KxXMLNode linkNode = sitesNode.NewElement("a");
 				linkNode.SetValue(item.GetName());

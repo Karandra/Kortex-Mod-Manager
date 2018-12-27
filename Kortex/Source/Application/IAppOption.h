@@ -97,7 +97,7 @@ namespace Kortex
 				return m_Disposition == Disposition::Profile;
 			}
 
-			KxXMLNode GetConfigNode() const
+			KxXMLNode GetNode() const
 			{
 				return m_ConfigNode;
 			}

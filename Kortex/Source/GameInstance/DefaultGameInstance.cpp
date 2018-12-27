@@ -695,7 +695,7 @@ namespace Kortex::GameInstance
 	{
 		using namespace Application;
 
-		KxXMLNode variablesNode = GetInstanceOption(OName::Variables).GetConfigNode();
+		KxXMLNode variablesNode = GetInstanceOption(OName::Variables).GetNode();
 		variablesNode.ClearChildren();
 
 		GetVariables().Accept([this, &variablesNode](const wxString& name, const VariableValue& value)

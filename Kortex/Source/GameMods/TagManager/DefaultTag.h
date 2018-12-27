@@ -4,14 +4,24 @@
 
 namespace Kortex::ModTagManager
 {
+	class DefaultTagManager;
+
 	class DefaultTag: public RTTI::IImplementation<IModTag, INexusModTag>
 	{
+		friend class DefaultTagManager;
+
 		private:
 			wxString m_ID;
 			wxString m_Name;
 			KxColor m_Color;
 			int m_NexusID = -1;
 			bool m_IsSystemTag = false;
+
+		protected:
+			void MarkAsSystem(bool value)
+			{
+				m_IsSystemTag = value;
+			}
 
 		public:
 			DefaultTag() = default;
@@ -21,6 +31,10 @@ namespace Kortex::ModTagManager
 			}
 
 		public:
+			std::unique_ptr<IModTag> Clone() const override
+			{
+				return std::make_unique<DefaultTag>(*this);
+			}
 			bool IsSystemTag() const
 			{
 				return m_IsSystemTag;

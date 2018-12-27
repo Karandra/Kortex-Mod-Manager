@@ -10,7 +10,7 @@ namespace Kortex::SaveManager
 	{
 		private:
 			KLabeledValue::Vector m_FileFilters;
-			wxString m_SaveInterface;
+			wxString m_SaveImplementation;
 			wxString m_Location;
 
 			wxString m_PrimarySaveExt;
@@ -20,7 +20,7 @@ namespace Kortex::SaveManager
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& node);
 
 		public:
-			wxString GetSaveInterface() const;
+			wxString GetSaveImplementation() const;
 			wxString GetLocation() const;
 		
 			bool HasFileFilter() const

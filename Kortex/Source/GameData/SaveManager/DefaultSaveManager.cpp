@@ -15,9 +15,9 @@
 
 namespace
 {
-	template<class T> bool TryCreateSaveObject(std::unique_ptr<Kortex::IGameSave>& ptr, const wxString& requestedInterface, const wxChar* name)
+	template<class T> bool TryCreateSaveObject(std::unique_ptr<Kortex::IGameSave>& ptr, const wxString& requestedImpl, const wxChar* thisImpl)
 	{
-		if (requestedInterface == name)
+		if (requestedImpl == thisImpl)
 		{
 			ptr = std::make_unique<T>();
 			return true;
@@ -56,18 +56,18 @@ namespace Kortex::SaveManager
 	}
 	std::unique_ptr<IGameSave> DefaultSaveManager::NewSave() const
 	{
-		const wxString requestedInterface = m_Config.GetSaveInterface();
+		const wxString requestedImplementation = m_Config.GetSaveImplementation();
 		std::unique_ptr<IGameSave> object;
 
-		TryCreateSaveObject<BethesdaSave::Morrowind>(object, requestedInterface, wxS("BethesdaMorrowind")) ||
-		TryCreateSaveObject<BethesdaSave::Oblivion>(object, requestedInterface, wxS("BethesdaOblivion")) ||
-		TryCreateSaveObject<BethesdaSave::Skyrim>(object, requestedInterface, wxS("BethesdaSkyrim")) ||
-		TryCreateSaveObject<BethesdaSave::SkyrimSE>(object, requestedInterface, wxS("BethesdaSkyrimSE")) ||
+		TryCreateSaveObject<BethesdaSave::Morrowind>(object, requestedImplementation, wxS("BethesdaMorrowind")) ||
+		TryCreateSaveObject<BethesdaSave::Oblivion>(object, requestedImplementation, wxS("BethesdaOblivion")) ||
+		TryCreateSaveObject<BethesdaSave::Skyrim>(object, requestedImplementation, wxS("BethesdaSkyrim")) ||
+		TryCreateSaveObject<BethesdaSave::SkyrimSE>(object, requestedImplementation, wxS("BethesdaSkyrimSE")) ||
 
-		TryCreateSaveObject<BethesdaSave::Fallout3>(object, requestedInterface, wxS("BethesdaFallout3")) ||
-		TryCreateSaveObject<BethesdaSave::FalloutNV>(object, requestedInterface, wxS("BethesdaFalloutNV")) ||
-		TryCreateSaveObject<BethesdaSave::Fallout4>(object, requestedInterface, wxS("BethesdaFallout4")) ||
-		TryCreateSaveObject<EmptySaveFile>(object, requestedInterface, wxS("Sacred2"));
+		TryCreateSaveObject<BethesdaSave::Fallout3>(object, requestedImplementation, wxS("BethesdaFallout3")) ||
+		TryCreateSaveObject<BethesdaSave::FalloutNV>(object, requestedImplementation, wxS("BethesdaFalloutNV")) ||
+		TryCreateSaveObject<BethesdaSave::Fallout4>(object, requestedImplementation, wxS("BethesdaFallout4")) ||
+		TryCreateSaveObject<EmptySaveFile>(object, requestedImplementation, wxS("Sacred2"));
 
 		return object;
 	}
@@ -77,7 +77,7 @@ namespace Kortex::SaveManager
 {
 	void Config::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)
 	{
-		m_SaveInterface = node.GetAttribute("SaveInterface");
+		m_SaveImplementation = node.GetAttribute("SaveImplementation");
 		m_Location = node.GetFirstChildElement("Location").GetValue();
 
 		// Load file filters
@@ -91,9 +91,9 @@ namespace Kortex::SaveManager
 		m_SecondarySaveExt = node.GetFirstChildElement("SecondaryExtension").GetValue();
 	}
 
-	wxString Config::GetSaveInterface() const
+	wxString Config::GetSaveImplementation() const
 	{
-		return KVarExp(m_SaveInterface);
+		return KVarExp(m_SaveImplementation);
 	}
 	wxString Config::GetLocation() const
 	{

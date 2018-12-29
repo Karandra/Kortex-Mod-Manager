@@ -147,6 +147,8 @@
 		<String ID="Generic.UseDefaultValue">Use default value</String>
 		<String ID="Generic.SystemMenu">System menu</String>
 		<String ID="Generic.Operator">Operator</String>
+		<String ID="Generic.Expanded">Expanded</String>
+		<String ID="Generic.Collapsed">Collapsed</String>
 		<String ID="Generic.CriticalError">The application has encountered a critical error and will be closed.</String>
 		<String ID="Generic.OpenWebSiteDialog.Caption">Do you want to open this webpage?</String>
 		<String ID="Generic.OpenWebSiteListDialog.Caption">Choose a webpage you want to open</String>

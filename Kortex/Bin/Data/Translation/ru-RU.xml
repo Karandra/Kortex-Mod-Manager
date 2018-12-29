@@ -146,6 +146,8 @@
 		<String ID="Generic.DefaultValue">Значение по умолчанию</String>
 		<String ID="Generic.UseDefaultValue">Использовать значение по умолчанию</String>
 		<String ID="Generic.Operator">Оператор</String>
+		<String ID="Generic.Expanded">Раскрыт</String>
+		<String ID="Generic.Collapsed">Свёрнут</String>
 		<String ID="Generic.SystemMenu">Системное меню</String>
 		<String ID="Generic.CriticalError">Произошла критическая ошибка. Программа будет завершена.</String>
 		<String ID="Generic.OpenWebSiteDialog.Caption">Открыть данную веб-страницу?</String>

@@ -63,14 +63,24 @@ namespace Kortex::ModProvider
 		{
 			switch (column->GetID())
 			{
+				case ColumnID::Name:
+				{
+					value = node->GetName();
+					break;
+				}
 				case ColumnID::Value:
 				{
-					Network::ModID id = Network::InvalidModID;
-					value = node->TryGetModID(id) ? std::to_wstring(id) : node->GetURL();
-					return;
+					if (node->HasProvider())
+					{
+						value = node->GetModID();
+					}
+					else
+					{
+						value = node->GetURL();
+					}
+					break;
 				}
 			};
-			GetValue(value, item, column);
 		}
 	}
 	void DisplayModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const

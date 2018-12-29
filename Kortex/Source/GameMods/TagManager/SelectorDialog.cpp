@@ -1,8 +1,25 @@
 #include "stdafx.h"
 #include "SelectorDialog.h"
 #include <Kortex/ModTagManager.hpp>
+#include <Kortex/ApplicationOptions.hpp>
 #include <KxFramework/KxDataViewComboBox.h>
 #include <KxFramework/KxButton.h>
+
+namespace Kortex::Application::OName
+{
+	KortexDefOption(SelectorDialog);
+}
+
+namespace
+{
+	using namespace Kortex;
+	using namespace Kortex::Application;
+
+	auto GetOptions()
+	{
+		return GetAInstanceOptionOf<IModTagManager>(OName::SelectorDialog);
+	}
+}
 
 namespace Kortex::ModTagManager
 {
@@ -21,12 +38,12 @@ namespace Kortex::ModTagManager
 		}
 		return SelectorDisplayModel::IsEditorEnabledByRow(row, column);
 	}
+	
 	void SelectorDialog::OnSelectItem(KxDataViewEvent& event)
 	{
 		const IModTag* entry = GetDataEntry(event.GetItem());
-		m_RemoveButton->Enable(entry);
+		m_RemoveButton->Enable(entry != nullptr);
 	}
-
 	void SelectorDialog::OnAddTag(wxCommandEvent& event)
 	{
 		IModTagManager::GetInstance()->EmplaceTagWith(wxEmptyString, KAux::MakeBracketedLabel(KTr(KxID_NEW)));
@@ -91,13 +108,16 @@ namespace Kortex::ModTagManager
 
 			// List
 			SelectorDisplayModel::Create(m_ViewPane, sizer);
+			GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &SelectorDialog::OnSelectItem, this);
+			GetOptions().LoadDataViewLayout(GetView());
 
-			AdjustWindow(wxDefaultPosition, wxSize(400, 550));
+			AdjustWindow(wxDefaultPosition, wxSize(740, 620));
 			GetView()->SetFocus();
 		}
 	}
 	SelectorDialog::~SelectorDialog()
 	{
+		GetOptions().SaveDataViewLayout(GetView());
 		IncRef();
 	}
 }

@@ -16,8 +16,10 @@ namespace Kortex::ModTagManager
 		protected:
 			enum ColumnID
 			{
-				Name,
 				PriorityGroup,
+				Name,
+				NexusID,
+				Color,
 			};
 
 		private:
@@ -31,14 +33,16 @@ namespace Kortex::ModTagManager
 			bool m_AllowSave = false;
 
 		protected:
-			virtual void OnInitControl() override;
+			void OnInitControl() override;
 
-			virtual void GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
-			virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
-			virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
-			virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
+			void GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
+			void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
+			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
+			bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
+			bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const override;
 
 			void OnActivate(KxDataViewEvent& event);
+			void OnKeyDown(wxKeyEvent& event);
 
 		protected:
 			const IModTag* FindStdTag(const wxString& tagID) const;
@@ -51,8 +55,8 @@ namespace Kortex::ModTagManager
 			SelectorDisplayModel(bool isFullFeatured = false);
 
 		public:
-			virtual void SetDataVector(ModTagStore* tagStore = nullptr, IGameMod* mod = nullptr);
-			virtual size_t GetItemCount() const override;
+			void SetDataVector(ModTagStore* tagStore = nullptr, IGameMod* mod = nullptr);
+			size_t GetItemCount() const override;
 		
 			IModTag* GetDataEntry(size_t index) const;
 

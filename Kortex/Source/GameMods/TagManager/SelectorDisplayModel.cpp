@@ -1,28 +1,36 @@
 #include "stdafx.h"
 #include "SelectorDisplayModel.h"
 #include <Kortex/ModTagManager.hpp>
+#include <Kortex/NetworkManager.hpp>
 
 namespace Kortex::ModTagManager
 {
 	void SelectorDisplayModel::OnInitControl()
 	{
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &SelectorDisplayModel::OnActivate, this);
+		GetView()->Bind(wxEVT_CHAR_HOOK, &SelectorDisplayModel::OnKeyDown, this);
 
-		// Override tag
+		// Priority group
 		if (IsFullFeatured())
 		{
-			auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("ModManager.Tags.PriorityGroup"), ColumnID::PriorityGroup, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE, KxDV_COL_REORDERABLE);
+			auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("ModManager.Tags.PriorityGroup"), ColumnID::PriorityGroup, KxDATAVIEW_CELL_ACTIVATABLE);
 			info.GetRenderer()->SetDefaultToggleType(KxDataViewToggleRenderer::ToggleType::RadioBox);
 		}
 
 		// Name
+		GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE|KxDATAVIEW_CELL_ACTIVATABLE);
+
+		// NexusID
 		if (IsFullFeatured())
 		{
-			GetView()->PrependColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE|KxDATAVIEW_CELL_ACTIVATABLE);
+			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>("NexusID", ColumnID::NexusID, KxDATAVIEW_CELL_EDITABLE);
+			info.GetColumn()->SetBitmap(KGetBitmap(Network::NexusProvider::GetInstance()->GetIcon()));
 		}
-		else
+
+		// Color
+		if (IsFullFeatured())
 		{
-			GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE|KxDATAVIEW_CELL_ACTIVATABLE);
+			GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewColorEditor>(KTr("Generic.Color"), ColumnID::Color, KxDATAVIEW_CELL_EDITABLE);
 		}
 	}
 
@@ -38,6 +46,20 @@ namespace Kortex::ModTagManager
 					value = entry->GetName();
 					break;
 				}
+				case ColumnID::NexusID:
+				{
+					const INexusModTag* nexusTag = nullptr;
+					if (entry->QueryInterface(nexusTag))
+					{
+						value = nexusTag->GetNexusID();
+					}
+					break;
+				}
+				case ColumnID::Color:
+				{
+					value = entry->GetColor();
+					break;
+				}
 			};
 		}
 	}
@@ -50,12 +72,31 @@ namespace Kortex::ModTagManager
 			{
 				case ColumnID::Name:
 				{
-					value = KxDataViewBitmapTextToggleValue(m_Data->HasTag(*entry), entry->GetName(), KGetBitmap(!entry->IsSystemTag() ? KIMG_PLUS_SMALL : KIMG_NONE), KxDataViewBitmapTextToggleValue::CheckBox);
+					value = KxDataViewBitmapTextToggleValue(m_Data->HasTag(*entry), entry->GetName(), wxNullBitmap, KxDataViewBitmapTextToggleValue::CheckBox);
 					break;
 				}
 				case ColumnID::PriorityGroup:
 				{
 					value = entry == m_PriorityGroupTag;
+					break;
+				}
+				case ColumnID::NexusID:
+				{
+					const INexusModTag* nexusTag = nullptr;
+					if (entry->QueryInterface(nexusTag))
+					{
+						value = nexusTag->GetNexusID();
+					}
+					else
+					{
+						value = KAux::MakeNoneLabel();
+					}
+					break;
+				}
+				case ColumnID::Color:
+				{
+					KxColor color = entry->GetColor();
+					value = color.IsOk() ? color.GetAsString(KxColor::ToString::HTMLSyntax) : KAux::MakeNoneLabel();
 					break;
 				}
 			};
@@ -112,6 +153,23 @@ namespace Kortex::ModTagManager
 					}
 					return false;
 				}
+				case ColumnID::NexusID:
+				{
+					INexusModTag* nexusTag = nullptr;
+					int id = -1;
+					if (value.GetAs(&id) && id > 0 && entry->QueryInterface(nexusTag))
+					{
+						nexusTag->SetNexusID(id);
+						return true;
+					}
+					break;
+				}
+				case ColumnID::Color:
+				{
+					entry->SetColor(value.As<KxColor>());
+					return true;
+					break;
+				}
 			};
 		}
 		return false;
@@ -120,16 +178,57 @@ namespace Kortex::ModTagManager
 	{
 		return true;
 	}
+	bool SelectorDisplayModel::GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const
+	{
+		const IModTag* entry = GetDataEntry(row);
+		if (entry)
+		{
+			switch (column->GetID())
+			{
+				case ColumnID::Color:
+				{
+					KxColor color = entry->GetColor();
+					if (color.IsOk())
+					{
+						color.SetA(200);
+						attribute.SetBackgroundColor(color);
+						attribute.SetForegroundColor(color.Negate());
+						return true;
+					}
+					break;
+				}
+			};
+		}
+		return false;
+	}
 
 	void SelectorDisplayModel::OnActivate(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
 		KxDataViewColumn* column = event.GetColumn();
-		if (item.IsOK() && column && column->GetID() != ColumnID::Name)
+		if (item.IsOK() && column)
 		{
-			GetView()->EditItem(item, GetView()->GetColumnByID(ColumnID::Name));
+			GetView()->EditItem(item, column);
 		}
 	}
+	void SelectorDisplayModel::OnKeyDown(wxKeyEvent& event)
+	{
+		if (event.GetKeyCode() == WXK_DELETE)
+		{
+			KxDataViewItem item = GetView()->GetSelection();
+			KxDataViewColumn* column = GetView()->GetCurrentColumn();
+			if (item.IsOK() && column->GetID() == ColumnID::Color)
+			{
+				if (IModTag* entry = GetDataEntry(GetRow(item)))
+				{
+					entry->ResetColor();
+					ItemChanged(item);
+				}
+			}
+		}
+		event.Skip();
+	}
+
 	const IModTag* SelectorDisplayModel::FindStdTag(const wxString& tagID) const
 	{
 		return IModTagManager::GetInstance()->FindTagByID(tagID);

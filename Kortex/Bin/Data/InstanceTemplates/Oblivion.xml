@@ -101,6 +101,59 @@
 				</Entry>
 			</MirroredLocations>
 		</ModManager>
+		<TagManager>
+			<DefaultTags>
+				<Entry ID="Animation" NexusID="51"/>
+				<Entry ID="Armor" NexusID="51"/>
+				<Entry ID="Clothing" NexusID="60"/>
+				<Entry ID="Jewelry" NexusID="102"/>
+				<Entry ID="Weapons" NexusID="55"/>
+				<Entry ID="Gameplay" NexusID="24"/>
+				<Entry ID="Immersion" NexusID="78"/>
+				<Entry ID="Environment" NexusID="74"/>
+				<Entry ID="GuildsFactions" NexusID="25"/>
+				<Entry ID="Combat" NexusID="77"/>
+				<Entry ID="Crafting" NexusID="100"/>
+				<Entry ID="Magic" NexusID="75"/>
+				<Entry ID="MagicSpells" NexusID="75"/>
+				<Entry ID="MagicGameplay" NexusID="93"/>
+				<Entry ID="Alchemy" NexusID="94"/>
+				<Entry ID="BooksScrolls" NexusID="98"/>
+				<Entry ID="Quests" NexusID="35"/>
+				<Entry ID="Buildings" NexusID="95"/>
+				<Entry ID="Settlements" NexusID="53"/>
+				<Entry ID="Mercantiles" NexusID="69"/>
+				<Entry ID="NewLands" NexusID="30"/>
+				<Entry ID="Dungeons" NexusID="88"/>
+				<Entry ID="AbandonedStructures" NexusID="70"/>
+				<Entry ID="PlayerHomes" NexusID="67"/>
+				<Entry ID="Landscape" NexusID="58"/>
+				<Entry ID="Overhauls" NexusID="79"/>
+				<Entry ID="Conversions" NexusID="-1"/>
+				<Entry ID="Audio" NexusID="61"/>
+				<Entry ID="Interface" NexusID="42"/>
+				<Entry ID="NPC" NexusID="33"/>
+				<Entry ID="Body" NexusID="26"/>
+				<Entry ID="Face" NexusID="26"/>
+				<Entry ID="Hair" NexusID="26"/>
+				<Entry ID="Races" NexusID="34"/>
+				<Entry ID="Followers" NexusID="66"/>
+				<Entry ID="Creatures" NexusID="83"/>
+				<Entry ID="Mounts" NexusID="101"/>
+				<Entry ID="ModelsTextures" NexusID="29"/>
+				<Entry ID="Graphics" NexusID="62"/>
+				<Entry ID="ENBPresets" NexusID="97"/>
+				<Entry ID="Collectables" NexusID="92"/>
+				<Entry ID="ItemsObjects" NexusID="85"/>
+				<Entry ID="Cheats" NexusID="40"/>
+				<Entry ID="Fixes" NexusID="95"/>
+				<Entry ID="ScriptExtenderPlugins" NexusID="-1" RequiresScriptExtender="1"/>
+				<Entry ID="Utilities" NexusID="39"/>
+				<Entry ID="Resources" NexusID="82"/>
+				<Entry ID="GameSaves" NexusID="43"/>
+				<Entry ID="Misc" NexusID="28"/>
+			</DefaultTags>
+		</TagManager>
 	</GameMods>
 
 	<GameData>

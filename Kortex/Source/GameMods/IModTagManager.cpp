@@ -49,7 +49,7 @@ namespace Kortex
 {
 	namespace ModTagManager::Internal
 	{
-		const SimpleManagerInfo TypeInfo("ModTagManager", "ModTagManager.Name");
+		const SimpleManagerInfo TypeInfo("TagManager", "ModTagManager.Name");
 	}
 
 	IModTagManager::IModTagManager()
@@ -61,27 +61,39 @@ namespace Kortex
 	{
 		return EmplaceTag(NewTag());
 	}
+	IModTag& IModTagManager::EmplaceTag(IModTag::Vector& items)
+	{
+		return EmplaceTag(items, NewTag());
+	}
+	
 	IModTag& IModTagManager::EmplaceTag(std::unique_ptr<IModTag> tag)
 	{
-		IModTag::Vector& tags = GetTags();
-		IModTag* existingTag = FindModTag<IModTag, FindBy::Object>(tags, *tag);
-
+		return EmplaceTag(GetTags(), std::move(tag));
+	}
+	IModTag& IModTagManager::EmplaceTag(IModTag::Vector& items, std::unique_ptr<IModTag> tag)
+	{
+		IModTag* existingTag = FindModTag<IModTag, FindBy::Object>(items, *tag);
 		if (existingTag)
 		{
 			return *existingTag;
 		}
-		return *tags.emplace_back(std::move(tag));
+		return *items.emplace_back(std::move(tag));
 	}
+
 	IModTag& IModTagManager::EmplaceTagWith(const wxString& id, const wxString& name)
 	{
-		IModTag* existingTag = FindTagByID(id);
+		return EmplaceTagWith(GetTags(), id, name);
+	}
+	IModTag& IModTagManager::EmplaceTagWith(IModTag::Vector& items, const wxString& id, const wxString& name)
+	{
+		IModTag* existingTag = FindTagByID(items, id);
 		if (existingTag)
 		{
 			return *existingTag;
 		}
 		else
 		{
-			IModTag& tag = EmplaceTag();
+			IModTag& tag = EmplaceTag(items);
 			tag.SetID(id);
 			tag.SetName(name.IsEmpty() ? id : name);
 
@@ -93,26 +105,36 @@ namespace Kortex
 	{
 		GetTags().clear();
 	}
+	void IModTagManager::RemoveAllTags(IModTag::Vector& items)
+	{
+		items.clear();
+	}
+
 	bool IModTagManager::RemoveTag(IModTag& tag)
 	{
-		IModTag::Vector& tags = GetTags();
+		return RemoveTag(GetTags(), tag);
+	}
+	bool IModTagManager::RemoveTag(IModTag::Vector& items, IModTag& tag)
+	{
 		IModTag::Vector::const_iterator it;
-
-		if (FindModTag<IModTag, FindBy::Object>(tags, tag, &it))
+		if (FindModTag<IModTag, FindBy::Object>(items, tag, &it))
 		{
-			tags.erase(it);
+			items.erase(it);
 			return true;
 		}
 		return false;
 	}
+
 	bool IModTagManager::RemoveTagByID(const wxString& id)
 	{
-		IModTag::Vector& tags = GetTags();
+		RemoveTagByID(GetTags(), id);
+	}
+	bool IModTagManager::RemoveTagByID(IModTag::Vector& items, const wxString& id)
+	{
 		IModTag::Vector::const_iterator it;
-
-		if (FindModTag<IModTag, FindBy::ID>(tags, id, &it))
+		if (FindModTag<IModTag, FindBy::ID>(items, id, &it))
 		{
-			tags.erase(it);
+			items.erase(it);
 			return true;
 		}
 		return false;
@@ -122,13 +144,27 @@ namespace Kortex
 	{
 		return FindModTag<IModTag, FindBy::ID>(GetTags(), id);
 	}
+	IModTag* IModTagManager::FindTagByID(const IModTag::Vector& items, const wxString& id) const
+	{
+		return FindModTag<IModTag, FindBy::ID>(items, id);
+	}
+
 	IModTag* IModTagManager::FindTagByName(const wxString& name) const
 	{
 		return FindModTag<IModTag, FindBy::Name>(GetTags(), name);
 	}
+	IModTag* IModTagManager::FindTagByName(const IModTag::Vector& items, const wxString& name) const
+	{
+		return FindModTag<IModTag, FindBy::Name>(items, name);
+	}
+
 	wxString IModTagManager::GetTagNameByID(const wxString& id) const
 	{
-		if (const IModTag* tag = FindTagByID(id))
+		return GetTagNameByID(GetTags(), id);
+	}
+	wxString IModTagManager::GetTagNameByID(const IModTag::Vector& items, const wxString& id) const
+	{
+		if (const IModTag* tag = FindTagByID(items, id))
 		{
 			return tag->GetName();
 		}

@@ -32,19 +32,39 @@ namespace Kortex
 				return !GetTags().empty();
 			}
 
-			virtual void LoadTagsFromMod(const IGameMod& mod) = 0;
+			virtual void LoadTagsFromMod(IModTag::Vector& items, const IGameMod& mod) = 0;
+			void LoadTagsFromMod(const IGameMod& mod)
+			{
+				LoadTagsFromMod(GetTags(), mod);
+			}
 
 			virtual std::unique_ptr<IModTag> NewTag() = 0;
+
 			IModTag& EmplaceTag();
+			IModTag& EmplaceTag(IModTag::Vector& items);
+
 			IModTag& EmplaceTag(std::unique_ptr<IModTag> tag);
+			IModTag& EmplaceTag(IModTag::Vector& items, std::unique_ptr<IModTag> tag);
+
 			IModTag& EmplaceTagWith(const wxString& id, const wxString& name = wxEmptyString);
+			IModTag& EmplaceTagWith(IModTag::Vector& items, const wxString& id, const wxString& name = wxEmptyString);
 
 			void RemoveAllTags();
+			void RemoveAllTags(IModTag::Vector& items);
+
 			bool RemoveTag(IModTag& tag);
+			bool RemoveTag(IModTag::Vector& items, IModTag& tag);
+
 			bool RemoveTagByID(const wxString& id);
+			bool RemoveTagByID(IModTag::Vector& items, const wxString& id);
 
 			IModTag* FindTagByID(const wxString& id) const;
+			IModTag* FindTagByID(const IModTag::Vector& items, const wxString& id) const;
+
 			IModTag* FindTagByName(const wxString& name) const;
+			IModTag* FindTagByName(const IModTag::Vector& items, const wxString& name) const;
+
 			wxString GetTagNameByID(const wxString& id) const;
+			wxString GetTagNameByID(const IModTag::Vector& items, const wxString& id) const;
 	};
 }

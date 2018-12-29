@@ -239,10 +239,6 @@ namespace Kortex::GameInstance
 	{
 		return GetInstanceRelativePath(wxS("Instance.xml"));
 	}
-	wxString DefaultGameInstance::GetModTagsFile() const
-	{
-		return GetInstanceRelativePath(wxS("ModTags.xml"));
-	}
 	wxString DefaultGameInstance::GetModsDir() const
 	{
 		return GetInstanceRelativePath(wxS("Mods"));
@@ -307,10 +303,6 @@ namespace Kortex::GameInstance
 				if (copyOptions & CopyOptionsInstance::Config)
 				{
 					KxFile(baseInstance->GetConfigFile()).CopyFile(GetConfigFile(), false);
-				}
-				if (copyOptions & CopyOptionsInstance::ModTags)
-				{
-					KxFile(baseInstance->GetModTagsFile()).CopyFile(GetModTagsFile(), false);
 				}
 			}
 			return true;

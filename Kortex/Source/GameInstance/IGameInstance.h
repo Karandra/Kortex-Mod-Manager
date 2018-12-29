@@ -14,7 +14,6 @@ namespace Kortex
 		enum CopyOptionsInstance: uint32_t
 		{
 			Config = 1 << 0,
-			ModTags = 1 << 1,
 		};
 		enum CopyOptionsProfile: uint32_t
 		{
@@ -102,7 +101,6 @@ namespace Kortex
 			virtual wxString GetInstanceRelativePath(const wxString& name) const = 0;
 
 			virtual wxString GetConfigFile() const = 0;
-			virtual wxString GetModTagsFile() const = 0;
 			virtual wxString GetModsDir() const = 0;
 			virtual wxString GetProfilesDir() const = 0;
 			virtual wxString GetGameDir() const = 0;

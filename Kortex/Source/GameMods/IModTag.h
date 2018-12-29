@@ -12,8 +12,8 @@ namespace Kortex
 			using CRefVector = std::vector<const IModTag*>;
 
 		public:
-			virtual std::unique_ptr<IModTag> Clone() const = 0;
 			virtual bool IsSystemTag() const = 0;
+			virtual std::unique_ptr<IModTag> Clone() const = 0;
 
 			virtual wxString GetID() const = 0;
 			virtual void SetID(const wxString& value) = 0;
@@ -23,6 +23,10 @@ namespace Kortex
 
 			virtual KxColor GetColor() const  = 0;
 			virtual void SetColor(const KxColor& color) = 0;
+			void ResetColor()
+			{
+				SetColor(KxColor());
+			}
 			bool HasColor() const
 			{
 				return GetColor().IsOk();

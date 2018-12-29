@@ -14,7 +14,6 @@ namespace Kortex::PluginManager
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Index"), ColumnID::Index, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 			info.GetColumn()->SortAscending();
 		}
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Type"), ColumnID::Type, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Author"), ColumnID::Author, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 	}

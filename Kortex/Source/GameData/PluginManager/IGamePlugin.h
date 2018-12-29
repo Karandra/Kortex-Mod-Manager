@@ -19,8 +19,12 @@ namespace Kortex
 			using Vector = std::vector<std::unique_ptr<IGamePlugin>>;
 			using RefVector = std::vector<IGamePlugin*>;
 
+		private:
+			mutable bool m_IsDataRead = false;
+
 		protected:
 			virtual void OnRead(PluginManager::IPluginReader& reader) = 0;
+			void ReadDataIfNeeded() const;
 
 		public:
 			virtual ~IGamePlugin() = default;
@@ -36,7 +40,6 @@ namespace Kortex
 			bool CanToggleActive() const;
 
 			virtual const IGameMod* GetOwningMod() const = 0;
-
 			virtual const PluginManager::StdContentEntry* GetStdContentEntry() const = 0;
 			bool IsStdContent() const
 			{

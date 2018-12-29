@@ -8,9 +8,9 @@ namespace Kortex::PluginManager
 {
 	StdContentEntry::StdContentEntry(const KxXMLNode& node)
 	{
-		m_ID = node.GetAttribute("ID");
-		m_Name = node.GetAttribute("Name");
-		m_Logo = node.GetAttribute("Logo");
+		m_ID = node.GetAttribute(wxS("ID"));
+		m_Name = node.GetAttribute(wxS("Name"));
+		m_Logo = node.GetAttribute(wxS("Logo"));
 	}
 
 	wxString StdContentEntry::GetID() const

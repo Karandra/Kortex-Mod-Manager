@@ -2,9 +2,21 @@
 #include <Kortex/ModManager.hpp>
 #include "IGamePlugin.h"
 #include "IPluginManager.h"
+#include "IPluginReader.h"
 
 namespace Kortex
 {
+	void IGamePlugin::ReadDataIfNeeded() const
+	{
+		if (!m_IsDataRead)
+		{
+			auto reader = IPluginManager::GetInstance()->CreatePluginReader();
+			reader->OnRead(*const_cast<IGamePlugin*>(this));
+			const_cast<IGamePlugin*>(this)->OnRead(*reader);
+
+			m_IsDataRead = true;
+		}
+	}
 	bool IGamePlugin::CanToggleActive() const
 	{
 		if (const IGameMod* mod = GetOwningMod())

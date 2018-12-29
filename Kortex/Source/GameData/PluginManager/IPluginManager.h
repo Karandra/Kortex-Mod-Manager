@@ -73,7 +73,6 @@ namespace Kortex
 
 			virtual bool HasDependentPlugins(const IGamePlugin& pluginEntry) const = 0;
 			virtual IGamePlugin::RefVector GetDependentPlugins(const IGamePlugin& pluginEntry) const = 0;
-			void ReadPluginsData();
 
 		public:
 			IPluginManager();

@@ -17,6 +17,7 @@ namespace Kortex::PluginManager
 			void Create(const wxString& fullPath)
 			{
 				m_FileItem.SetFullPath(fullPath);
+				m_FileItem.UpdateInfo();
 			}
 
 		public:

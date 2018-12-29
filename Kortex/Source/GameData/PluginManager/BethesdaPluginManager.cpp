@@ -365,16 +365,12 @@ namespace Kortex::PluginManager
 			{
 				SortByDate();
 			}
-
-			ReadPluginsData();
 			profile->SyncWithCurrentState();
 		}
 	}
 	void BethesdaPluginManager::LoadNativeOrder()
 	{
 		LoadNativeOrderBG();
-		ReadPluginsData();
-
 		Save();
 	}
 }

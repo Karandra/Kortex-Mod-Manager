@@ -38,36 +38,43 @@ namespace Kortex::PluginManager
 		public:
 			bool IsOK() const override
 			{
-				return m_Data.m_HeaderFlags != HeaderFlags::None && BaseGamePlugin::IsOK();
+				return BaseGamePlugin::IsOK();
 			}
 			
 			bool IsLocalized() const override
 			{
+				ReadDataIfNeeded();
 				return m_Data.m_HeaderFlags & HeaderFlags::Localized;
 			}
 			bool IsMaster() const override
 			{
+				ReadDataIfNeeded();
 				return m_Data.m_HeaderFlags & HeaderFlags::Master;
 			}
 			bool IsLight() const override
 			{
+				ReadDataIfNeeded();
 				return m_Data.m_HeaderFlags & HeaderFlags::Light;
 			}
 			uint32_t GetFormVersion() const override
 			{
+				ReadDataIfNeeded();
 				return m_Data.m_FormVersion;
 			}
 	
 			KxStringVector GetRequiredPlugins() const override
 			{
+				ReadDataIfNeeded();
 				return m_Data.m_RequiredPlugins;
 			}
 			wxString GetAuthor() const override
 			{
+				ReadDataIfNeeded();
 				return m_Data.m_Author;
 			}
 			wxString GetDescription() const override
 			{
+				ReadDataIfNeeded();
 				return m_Data.m_Description;
 			}
 	};

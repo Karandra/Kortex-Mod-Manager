@@ -30,15 +30,6 @@ namespace Kortex
 		}
 		return -1;
 	}
-	void IPluginManager::ReadPluginsData()
-	{
-		auto reader = CreatePluginReader();
-		for (auto& plugin: GetPlugins())
-		{
-			reader->OnRead(*plugin);
-			plugin->OnRead(*reader);
-		}
-	}
 	void IPluginManager::OnVirtualTreeInvalidated(IEvent& event)
 	{
 		Invalidate();

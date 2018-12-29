@@ -4,14 +4,13 @@
 namespace Kortex
 {
 	class IGamePlugin;
-	class IPluginManager;
 }
 
 namespace Kortex::PluginManager
 {
 	class IPluginReader: public RTTI::IInterface<IPluginReader>
 	{
-		friend class IPluginManager;
+		friend class IGamePlugin;
 
 		protected:
 			virtual void OnRead(const IGamePlugin& plugin) = 0;

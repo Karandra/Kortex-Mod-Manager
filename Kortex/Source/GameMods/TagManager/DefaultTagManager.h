@@ -12,7 +12,7 @@ namespace Kortex::ModTagManager
 			IModTag::Vector m_UserTags;
 
 		protected:
-			void LoadTagsFrom(IModTag::Vector& items, const KxXMLNode& tagsNode, bool markAsSystem);
+			void LoadTagsFrom(IModTag::Vector& items, const KxXMLNode& tagsNode);
 			void SaveTagsTo(const IModTag::Vector& items, KxXMLNode& tagsNode) const;
 
 			void LoadUserTags();
@@ -33,7 +33,7 @@ namespace Kortex::ModTagManager
 				return m_UserTags;
 			}
 	
-			void LoadTagsFromMod(const IGameMod& mod) override;
+			void LoadTagsFromMod(IModTag::Vector& items, const IGameMod& mod) override;
 			std::unique_ptr<IModTag> NewTag() override;
 	};
 }

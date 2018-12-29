@@ -35,7 +35,7 @@ namespace Kortex::ModTagManager
 			{
 				return std::make_unique<DefaultTag>(*this);
 			}
-			bool IsSystemTag() const
+			bool IsSystemTag() const override
 			{
 				return m_IsSystemTag;
 			}

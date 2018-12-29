@@ -13,9 +13,9 @@ namespace Kortex
 
 	void GameModsModule::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)
 	{
+		m_TagManager = std::make_unique<ModTagManager::DefaultTagManager>();
 		m_ModManager = std::make_unique<ModManager::DefaultModManager>();
 		m_ModDispatcher = std::make_unique<ModManager::DefaultModDispatcher>();
-		m_TagManager = std::make_unique<ModTagManager::DefaultTagManager>();
 		m_ModStatistics = std::make_unique<ModStatistics::DefaultStatistics>();
 	}
 	void GameModsModule::OnInit()

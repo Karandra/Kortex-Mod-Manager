@@ -103,7 +103,7 @@ namespace Kortex::ModTagManager
 			m_AddButton = AddButton(KxID_ADD, wxEmptyString, true).As<KxButton>();
 			m_AddButton->Bind(wxEVT_BUTTON, &SelectorDialog::OnAddTag, this);
 
-			m_LoadDefaultTagsButton = AddButton(KxID_DEFAULT, KTr("TagManager.LoadDefaultTags")).As<KxButton>();
+			m_LoadDefaultTagsButton = AddButton(KxID_DEFAULT, KTr("TagManager.LoadDefaultTags"), true).As<KxButton>();
 			m_LoadDefaultTagsButton->Bind(wxEVT_BUTTON, &SelectorDialog::OnLoadDefaultTags, this);
 
 			wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);

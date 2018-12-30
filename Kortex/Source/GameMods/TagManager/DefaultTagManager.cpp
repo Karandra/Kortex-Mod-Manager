@@ -35,51 +35,53 @@ namespace Kortex::ModTagManager
 
 		for (KxXMLNode node = tagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			
 			if (!hasSE && node.GetAttributeBool(wxS("RequiresScriptExtender")))
 			{
 				continue;
 			}
+
 			wxString id = node.GetAttribute(wxS("ID"));
-
-			// If tag exist, it's probably from mod, remove it,
-			// we are going to add more complete tag definition right now.
-			if (IModTag* existingTag = FindTagByID(items, id))
+			if (!id.IsEmpty())
 			{
-				RemoveTag(items, *existingTag);
-			}
-
-			wxString label = node.GetFirstChildElement(wxS("Name")).GetValue(id);
-			auto labelTranslated = Translation::TryGetString(wxS("ModManager.Tag.") + label);
-			if (labelTranslated)
-			{
-				label = labelTranslated.value();
-			}
-
-			auto tag = NewDefaultTag();
-			tag->SetID(id);
-			tag->SetName(label);
-			tag->SetNexusID(node.GetAttributeInt(wxS("NexusID"), INexusModTag::InvalidNexusID));
-			tag->MarkAsSystem(labelTranslated.has_value());
-
-			// Color
-			KxXMLNode colorNode = node.GetFirstChildElement("Color");
-			if (colorNode.IsOK())
-			{
-				auto CheckColorValue = [](int value)
+				// If tag exist, it's probably from mod, remove it,
+				// we are going to add more complete tag definition right now.
+				if (IModTag* existingTag = FindTagByID(items, id))
 				{
-					return value >= 0 && value <= 255;
-				};
-
-				int r = colorNode.GetAttributeInt(wxS("R"), -1);
-				int g = colorNode.GetAttributeInt(wxS("G"), -1);
-				int b = colorNode.GetAttributeInt(wxS("B"), -1);
-				if (CheckColorValue(r) && CheckColorValue(g) && CheckColorValue(b))
-				{
-					tag->SetColor(KxColor(r, g, b, 200));
+					RemoveTag(items, *existingTag);
 				}
+
+				// Name
+				auto name = DefaultTag::TryGetTranslatedName(id);
+				if (!name)
+				{
+					name = node.GetFirstChildElement(wxS("Name")).GetValue(id);
+				}
+
+				auto tag = NewDefaultTag();
+				tag->SetID(id);
+				tag->SetName(name ? *name : wxString());
+				tag->SetNexusID(node.GetFirstChildElement(wxS("NexusID")).GetValueInt(INexusModTag::InvalidNexusID));
+				tag->SetExpanded(node.GetFirstChildElement(wxS("Expanded")).GetValueBool());
+
+				// Color
+				KxXMLNode colorNode = node.GetFirstChildElement("Color");
+				if (colorNode.IsOK())
+				{
+					auto CheckColorValue = [](int value)
+					{
+						return value >= 0 && value <= 255;
+					};
+
+					int r = colorNode.GetAttributeInt(wxS("R"), -1);
+					int g = colorNode.GetAttributeInt(wxS("G"), -1);
+					int b = colorNode.GetAttributeInt(wxS("B"), -1);
+					if (CheckColorValue(r) && CheckColorValue(g) && CheckColorValue(b))
+					{
+						tag->SetColor(KxColor(r, g, b, 200));
+					}
+				}
+				EmplaceTag(items, std::move(tag));
 			}
-			EmplaceTag(items, std::move(tag));
 		}
 	}
 	void DefaultTagManager::SaveTagsTo(const IModTag::Vector& items, KxXMLNode& tagsNode) const
@@ -88,17 +90,26 @@ namespace Kortex::ModTagManager
 		for (const auto& tag: items)
 		{
 			KxXMLNode node = tagsNode.NewElement(wxS("Entry"));
-			node.SetAttribute(wxS("ID"), tag->GetID());
 
-			if (!tag->IsSystemTag())
+			// ID
+			const wxString id = tag->GetID();
+			node.SetAttribute(wxS("ID"), id);
+
+			// Expanded
+			node.NewElement(wxS("Expanded")).SetValue(tag->IsExpanded());
+
+			// Name
+			const wxString name = tag->GetName();
+			if (!tag->IsDefaultTag() && !name.IsEmpty() && name != id)
 			{
-				node.NewElement(wxS("Name")).SetValue(tag->GetName());
+				node.NewElement(wxS("Name")).SetValue(name);
 			}
 
+			// Nexus ID
 			INexusModTag* nexusTag = nullptr;
 			if (tag->QueryInterface(nexusTag) && nexusTag->HasNexusID())
 			{
-				node.SetAttribute(wxS("NexusID"), nexusTag->GetNexusID());
+				node.NewElement(wxS("NexusID")).SetValue(nexusTag->GetNexusID());
 			}
 
 			// Color
@@ -129,13 +140,6 @@ namespace Kortex::ModTagManager
 	void DefaultTagManager::OnInit()
 	{
 		LoadUserTags();
-		if (m_UserTags.empty())
-		{
-			for (const auto& tag: m_DefaultTags)
-			{
-				m_UserTags.emplace_back(tag->Clone());
-			}
-		}
 	}
 	void DefaultTagManager::OnExit()
 	{

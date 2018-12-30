@@ -73,10 +73,13 @@ namespace Kortex::ModManager
 		/* View */
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnSelectItem, this);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_EXPANDED, &DisplayModel::OnExpandCollapseItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_COLLAPSED, &DisplayModel::OnExpandCollapseItem, this);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
 		GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &DisplayModel::OnHeaderContextMenu, this);
 		GetView()->Bind(KxEVT_DATAVIEW_COLUMN_SORTED, &DisplayModel::OnColumnSorted, this);
 		GetView()->Bind(KxEVT_DATAVIEW_CACHE_HINT, &DisplayModel::OnCacheHint, this);
+		GetView()->SetIndent(KBitmapSize().FromSystemSmallIcon().GetWidth() / 2);
 		EnableDragAndDrop();
 
 		/* Columns */
@@ -610,8 +613,17 @@ namespace Kortex::ModManager
 			}
 			if (priorityGroup)
 			{
-				attributes.SetForegroundColor(m_PriortyGroupColor);
-				attributes.SetBackgroundColor(mod->GetColor());
+				KxColor color = mod->GetColor();
+				if (color.IsOk())
+				{
+					attributes.SetForegroundColor(color.GetContrastColor(GetView()));
+				}
+				else
+				{
+					attributes.SetForegroundColor(m_PriortyGroupColor);
+				}
+
+				attributes.SetBackgroundColor(color);
 				attributes.SetBold(m_BoldPriorityGroupLabels);
 				attributes.SetAlignment(m_PriorityGroupLabelAlignment);
 			}
@@ -810,6 +822,20 @@ namespace Kortex::ModManager
 					break;
 				}
 			};
+		}
+	}
+	void DisplayModel::OnExpandCollapseItem(KxDataViewEvent& event)
+	{
+		if (const DisplayModelNode* node = GetNode(event.GetItem()))
+		{
+			IPriorityGroup* priorityGroup = nullptr;
+			if (node->IsEntry() && node->GetEntry()->QueryInterface(priorityGroup))
+			{
+				if (IModTag* tag = priorityGroup->GetTag())
+				{
+					tag->SetExpanded(event.GetEventType() == KxEVT_DATAVIEW_ITEM_EXPANDED);
+				}
+			}
 		}
 	}
 	void DisplayModel::OnContextMenu(KxDataViewEvent& event)
@@ -1034,13 +1060,11 @@ namespace Kortex::ModManager
 			case DisplayModelType::Connector:
 			{
 				m_DisplayMode = mode;
-				GetView()->SetIndent(0);
 				break;
 			}
 			case DisplayModelType::Manager:
 			{
 				m_DisplayMode = mode;
-				GetView()->SetIndent(KGetImageList()->GetSize().GetWidth());
 				break;
 			}
 		};
@@ -1228,24 +1252,23 @@ namespace Kortex::ModManager
 							}
 
 							IGameMod* anchorEntry = begin ? &*currentEntry : lastEntry;
-							PriorityGroup& entry = m_PriortyGroups.emplace_back(PriorityGroup(*anchorEntry, begin));
-							IModTag* tag = tagManager->FindTagByID(anchorEntry->GetPriorityGroupTag());
-							if (tag)
-							{
-								entry.SetTag(tag);
-							}
-
-							DisplayModelNode& node = m_DataVector.emplace_back(entry);
-							KxDataViewItem item = MakeItem(node);
-							ItemAdded(item);
-							GetView()->Expand(item);
-
 							if (begin)
 							{
-								priorityGroupNode = &node;
+								PriorityGroup& entry = m_PriortyGroups.emplace_back(*anchorEntry, begin);
+								IModTag* tag = tagManager->FindTagByID(anchorEntry->GetPriorityGroupTag());
+								if (tag)
+								{
+									entry.SetTag(tag);
+								}
 
-								// Preallocate this size, a bit excessive, but whatever.
-								// I need to rewrite all this anyway.
+								DisplayModelNode& node = m_DataVector.emplace_back(entry);
+								KxDataViewItem item = MakeItem(node);
+								ItemAdded(item);
+
+								priorityGroupNode = &node;
+								GetView()->SetItemExpanded(item, tag && tag->IsExpanded());
+
+								// Preallocate this size, a bit excessive, but whatever. I need to rewrite all this anyway.
 								node.GetChildren().reserve(m_DataVector.capacity());
 							}
 							else
@@ -1263,18 +1286,20 @@ namespace Kortex::ModManager
 			}
 
 			// If priority group was opened, but wasn't closed, close it manually
+			#if 0
 			if (CanShowPriorityGroups())
 			{
 				if (!m_PriortyGroups.empty() && m_PriortyGroups.back().IsBegin())
 				{
 					IModTag* lastTag = m_PriortyGroups.back().GetTag();
-					PriorityGroup& entry = m_PriortyGroups.emplace_back(PriorityGroup(*m_Entries->back(), false));
+					PriorityGroup& entry = m_PriortyGroups.emplace_back(*m_Entries->back(), false);
 					entry.SetTag(lastTag);
 
 					DisplayModelNode& node = m_DataVector.emplace_back(entry);
 					ItemAdded(MakeItem(node));
 				}
 			}
+			#endif
 
 			// WriteTargetRoot
 			DisplayModelNode& writeTargetRootNode = m_DataVector.emplace_back(IModManager::GetInstance()->GetOverwrites());

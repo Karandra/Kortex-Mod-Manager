@@ -102,6 +102,7 @@ namespace Kortex::ModManager
 
 			void OnSelectItem(KxDataViewEvent& event);
 			void OnActivateItem(KxDataViewEvent& event);
+			void OnExpandCollapseItem(KxDataViewEvent& event);
 			void OnContextMenu(KxDataViewEvent& event);
 			void OnHeaderContextMenu(KxDataViewEvent& event);
 			void OnColumnSorted(KxDataViewEvent& event);

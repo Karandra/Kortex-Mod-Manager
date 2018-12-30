@@ -115,7 +115,7 @@ namespace Kortex::Application
 
 		// Check download
 		wxString downloadLink;
-		if (!Kortex::IDownloadManagerNXM::CheckCmdLineArgs(GetCmdLineParser(), downloadLink))
+		if (!IDownloadManagerNXM::CheckCmdLineArgs(GetCmdLineParser(), downloadLink))
 		{
 			downloadLink.clear();
 		}

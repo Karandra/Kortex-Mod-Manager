@@ -163,8 +163,7 @@ namespace Kortex
 
 		// Create default application
 		m_Application = std::make_unique<Application::DefaultApplication>();
-		m_Application->OnCreate();
-		
+
 		// Initialize main variables
 		IVariableTable& variables = m_Application->GetVariables();
 		variables.SetVariable("AppID", SystemApplicationInfo::ID);
@@ -189,6 +188,9 @@ namespace Kortex
 
 	bool SystemApplication::OnInit()
 	{
+		// Call creation function
+		m_Application->OnCreate();
+
 		// Initialize logging
 		InitLogging();
 		wxLogInfo("SystemApplication::OnInit");

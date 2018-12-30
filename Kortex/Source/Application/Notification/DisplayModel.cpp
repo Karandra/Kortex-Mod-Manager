@@ -93,7 +93,7 @@ namespace Kortex::Notification
 	wxString DisplayModel::FormatToHTML(const INotification& notification) const
 	{
 		return KxString::Format(wxS("<font color=\"%1\" size=\"%2\">%3</font>\r\n%4"),
-								KxUtility::GetThemeColor_Caption(GetView()).GetAsString(KxColor::ToString::HTMLSyntax),
+								KxUtility::GetThemeColor_Caption(GetView()).ToString(KxColor::C2S::HTML),
 								3,
 								notification.GetCaption(),
 								notification.GetMessage()

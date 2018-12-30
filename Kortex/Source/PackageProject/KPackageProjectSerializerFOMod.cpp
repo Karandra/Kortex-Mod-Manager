@@ -784,7 +784,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 	}
 	if (titleConfig.HasColor())
 	{
-		wxString colorValue = titleConfig.GetColor().GetAsString(KxColor::ToString::HTMLSyntax).AfterFirst('#');
+		wxString colorValue = titleConfig.GetColor().ToString(KxColor::C2S::HTML).AfterFirst('#');
 		if (!colorValue.IsEmpty())
 		{
 			moduleNameNode.SetAttribute("colour", colorValue);

@@ -97,6 +97,7 @@
     <ClCompile Include="Source\GameMods\IModImporter.cpp" />
     <ClCompile Include="Source\GameMods\IModManager.cpp" />
     <ClCompile Include="Source\GameMods\FileTreeNode.cpp" />
+    <ClCompile Include="Source\GameMods\IModTag.cpp" />
     <ClCompile Include="Source\GameMods\IModTagManager.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\VirtualFileSystem.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\Dialog.cpp" />

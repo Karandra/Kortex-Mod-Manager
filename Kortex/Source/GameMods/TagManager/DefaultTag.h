@@ -4,29 +4,22 @@
 
 namespace Kortex::ModTagManager
 {
-	class DefaultTagManager;
-
 	class DefaultTag: public RTTI::IImplementation<IModTag, INexusModTag>
 	{
-		friend class DefaultTagManager;
+		public:
+			static std::optional<wxString> TryGetTranslatedName(const wxString& id);
 
 		private:
 			wxString m_ID;
 			wxString m_Name;
 			KxColor m_Color;
 			int m_NexusID = -1;
-			bool m_IsSystemTag = false;
-
-		protected:
-			void MarkAsSystem(bool value)
-			{
-				m_IsSystemTag = value;
-			}
+			bool m_IsExpanded = false;
 
 		public:
 			DefaultTag() = default;
-			DefaultTag(const wxString& id, const wxString& name = wxEmptyString, bool isSystemTag = false)
-				:m_ID(id), m_Name(m_Name), m_IsSystemTag(isSystemTag)
+			DefaultTag(const wxString& id, const wxString& name = wxEmptyString)
+				:m_ID(id), m_Name(m_Name)
 			{
 			}
 
@@ -35,11 +28,16 @@ namespace Kortex::ModTagManager
 			{
 				return std::make_unique<DefaultTag>(*this);
 			}
-			bool IsSystemTag() const override
-			{
-				return m_IsSystemTag;
-			}
 			
+			bool IsExpanded() const
+			{
+				return m_IsExpanded;
+			}
+			void SetExpanded(bool isExpanded) override
+			{
+				m_IsExpanded = isExpanded;
+			}
+
 			wxString GetID() const override
 			{
 				return m_ID;
@@ -49,14 +47,8 @@ namespace Kortex::ModTagManager
 				m_ID = id;
 			}
 
-			wxString GetName() const override
-			{
-				return m_Name.IsEmpty() ? m_ID : m_Name;
-			}
-			void SetName(const wxString& name) override
-			{
-				m_Name = name;
-			}
+			wxString GetName() const override;
+			void SetName(const wxString& name) override;
 
 			KxColor GetColor() const override
 			{

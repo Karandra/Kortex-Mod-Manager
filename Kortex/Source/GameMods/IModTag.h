@@ -12,8 +12,24 @@ namespace Kortex
 			using CRefVector = std::vector<const IModTag*>;
 
 		public:
-			virtual bool IsSystemTag() const = 0;
 			virtual std::unique_ptr<IModTag> Clone() const = 0;
+			
+			bool IsDefaultTag() const;
+
+			virtual bool IsExpanded() const = 0;
+			virtual void SetExpanded(bool isExpanded) = 0;
+			void ToggleExpanded()
+			{
+				SetExpanded(!IsExpanded());
+			}
+			void Expand()
+			{
+				SetExpanded(true);
+			}
+			void Collapse()
+			{
+				SetExpanded(false);
+			}
 
 			virtual wxString GetID() const = 0;
 			virtual void SetID(const wxString& value) = 0;

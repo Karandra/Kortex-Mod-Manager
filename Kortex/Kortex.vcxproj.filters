@@ -936,6 +936,9 @@
     <ClCompile Include="Source\GameMods\ModManager\VirtualFileSystem.cpp">
       <Filter>Code\Source\GameMods\ModManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameMods\IModTag.cpp">
+      <Filter>Code\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">

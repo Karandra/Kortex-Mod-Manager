@@ -3,10 +3,11 @@
 #include "DefaultDownloadEntry.h"
 #include "DisplayModel.h"
 #include "Workspace.h"
+#include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Notification.hpp>
-#include "UI/KMainWindow.h"
 #include <Kortex/GameInstance.hpp>
+#include "UI/KMainWindow.h"
 #include "KAux.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxDataView.h>
@@ -34,6 +35,11 @@ namespace
 		item = KxDataViewItem();
 		return nullptr;
 	}
+}
+
+namespace Kortex::Application::OName
+{
+	KortexDefOption(Downloads);
 }
 
 namespace Kortex::DownloadManager
@@ -164,17 +170,23 @@ namespace Kortex::DownloadManager
 
 	wxString DefaultDownloadManager::GetDownloadsLocation() const
 	{
-		wxString location;// = m_Options.GetAttribute("DownloadsLocation");
+		using namespace Application;
+		
+		auto option = GetAInstanceOption(OName::Downloads);
+		wxString location = option.GetAttribute(OName::Location);
 		if (location.IsEmpty())
 		{
 			location = IGameInstance::GetActive()->GetInstanceRelativePath("Downloads");
+			option.SetAttribute(OName::Location, location);
 			KxFile(location).CreateFolder();
 		}
 		return location;
 	}
 	void DefaultDownloadManager::SetDownloadsLocation(const wxString& location)
 	{
-		//m_Options.SetAttribute("DownloadsLocation", location);
+		using namespace Application;
+
+		GetAInstanceOption(OName::Downloads).SetAttribute(OName::Location, location);
 		KxFile(location).CreateFolder();
 	}
 

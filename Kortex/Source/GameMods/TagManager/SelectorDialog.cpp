@@ -4,6 +4,7 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include <KxFramework/KxDataViewComboBox.h>
 #include <KxFramework/KxButton.h>
+#include <KxFramework/KxTaskDialog.h>
 
 namespace Kortex::Application::OName
 {
@@ -23,26 +24,12 @@ namespace
 
 namespace Kortex::ModTagManager
 {
-	bool SelectorDialog::IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const
-	{
-		const IModTag* entry = GetDataEntry(row);
-		if (entry)
-		{
-			switch (column->GetID())
-			{
-				case ColumnID::Name:
-				{
-					return !entry->IsSystemTag();
-				}
-			};
-		}
-		return SelectorDisplayModel::IsEditorEnabledByRow(row, column);
-	}
-	
 	void SelectorDialog::OnSelectItem(KxDataViewEvent& event)
 	{
-		const IModTag* entry = GetDataEntry(event.GetItem());
-		m_RemoveButton->Enable(entry != nullptr);
+		const IModTag* tag = GetDataEntry(GetRow(event.GetItem()));
+		m_RemoveButton->Enable(tag != nullptr);
+
+		event.Skip();
 	}
 	void SelectorDialog::OnAddTag(wxCommandEvent& event)
 	{
@@ -55,34 +42,49 @@ namespace Kortex::ModTagManager
 	}
 	void SelectorDialog::OnRemoveTag(wxCommandEvent& event)
 	{
-		KxDataViewItem item = GetView()->GetSelection();
-		IModTag* entry = GetDataEntry(item);
-		if (entry)
+		KxTaskDialog dialog(this, KxID_NONE, KTr("TagManager.RemoveTag.Message"), {}, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		if (dialog.ShowModal() == KxID_YES)
 		{
-			// Find all mods with this tag and remove it from them
-			for (auto& modEntry: IModManager::GetInstance()->GetMods())
+			KxDataViewItem item = GetView()->GetSelection();
+			IModTag* tag = GetDataEntry(GetRow(item));
+			if (tag)
 			{
-				ModTagStore& tagStore = modEntry->GetTagStore();
-				if (tagStore.HasTag(*entry))
+				// Find all mods with this tag and remove it from them
+				for (auto& mod: IModManager::GetInstance()->GetMods())
 				{
-					tagStore.RemoveTag(*entry);
-
-					m_IsModified = true;
-					if (m_AllowSave)
+					ModTagStore& tagStore = mod->GetTagStore();
+					if (tagStore.HasTag(*tag))
 					{
-						modEntry->Save();
+						if (mod->GetPriorityGroupTag() == tag->GetID())
+						{
+							mod->SetPriorityGroupTag(wxString());
+						}
+
+						tagStore.RemoveTag(*tag);
+						mod->Save();
+						m_IsModified = true;
 					}
 				}
+
+				// Remove tag from system
+				IModTagManager::GetInstance()->RemoveTag(*tag);
+
+				// Reload control
+				KxDataViewItem prevItem = GetPrevItem(item);
+				RefreshItems();
+				SelectItem(prevItem);
+				GetView()->SetFocus();
 			}
-
-			// Remove tag from system
-			IModTagManager::GetInstance()->RemoveTag(*entry);
-
-			// Reload control
-			KxDataViewItem prevItem = GetPrevItem(item);
+		}
+	}
+	void SelectorDialog::OnLoadDefaultTags(wxCommandEvent& event)
+	{
+		KxTaskDialog dialog(this, KxID_NONE, KTr("TagManager.LoadDefaultTags.Message"), {}, KxBTN_YES|KxBTN_NO, KxICON_QUESTION);
+		if (dialog.ShowModal() == KxID_YES)
+		{
+			IModTagManager::GetInstance()->LoadDefaultTags();
+			m_IsModified = true;
 			RefreshItems();
-			SelectItem(prevItem);
-			GetView()->SetFocus();
 		}
 	}
 
@@ -101,6 +103,9 @@ namespace Kortex::ModTagManager
 			m_AddButton = AddButton(KxID_ADD, wxEmptyString, true).As<KxButton>();
 			m_AddButton->Bind(wxEVT_BUTTON, &SelectorDialog::OnAddTag, this);
 
+			m_LoadDefaultTagsButton = AddButton(KxID_DEFAULT, KTr("TagManager.LoadDefaultTags")).As<KxButton>();
+			m_LoadDefaultTagsButton->Bind(wxEVT_BUTTON, &SelectorDialog::OnLoadDefaultTags, this);
+
 			wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 			m_ViewPane = new KxPanel(GetContentWindow(), KxID_NONE);
 			m_ViewPane->SetSizer(sizer);
@@ -111,7 +116,7 @@ namespace Kortex::ModTagManager
 			GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &SelectorDialog::OnSelectItem, this);
 			GetOptions().LoadDataViewLayout(GetView());
 
-			AdjustWindow(wxDefaultPosition, wxSize(740, 620));
+			AdjustWindow(wxDefaultPosition, wxSize(980, 720));
 			GetView()->SetFocus();
 		}
 	}

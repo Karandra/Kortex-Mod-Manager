@@ -198,7 +198,7 @@ void KInstallWizardInfoModel::OnActivateItem(KxDataViewEvent& event)
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{
-					dialog.ApplyChanges();
+					dialog.ApplyChangesToMod();
 					ItemChanged(event.GetItem());
 				}
 				break;

@@ -49,12 +49,24 @@ namespace Kortex
 {
 	namespace ModTagManager::Internal
 	{
-		const SimpleManagerInfo TypeInfo("TagManager", "ModTagManager.Name");
+		const SimpleManagerInfo TypeInfo("TagManager", "TagManager.Name");
 	}
 
 	IModTagManager::IModTagManager()
 		:ManagerWithTypeInfo(GameModsModule::GetInstance())
 	{
+	}
+
+	void IModTagManager::LoadDefaultTags(IModTag::Vector& items)
+	{
+		for (const auto& tag: GetDefaultTags())
+		{
+			items.emplace_back(tag->Clone());
+		}
+	}
+	void IModTagManager::LoadDefaultTags()
+	{
+		LoadDefaultTags(GetTags());
 	}
 
 	IModTag& IModTagManager::EmplaceTag()

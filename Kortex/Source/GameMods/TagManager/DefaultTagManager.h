@@ -24,6 +24,10 @@ namespace Kortex::ModTagManager
 			void OnExit() override;
 
 		public:
+			const IModTag::Vector& GetDefaultTags() const override
+			{
+				return m_DefaultTags;
+			}
 			const IModTag::Vector& GetTags() const override
 			{
 				return m_UserTags;

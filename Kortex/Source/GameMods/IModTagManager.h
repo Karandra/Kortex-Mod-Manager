@@ -21,6 +21,7 @@ namespace Kortex
 			IModTagManager();
 
 		public:
+			virtual const IModTag::Vector& GetDefaultTags() const = 0;
 			virtual const IModTag::Vector& GetTags() const = 0;
 			virtual IModTag::Vector& GetTags() = 0;
 			size_t GetTagsCount() const
@@ -37,6 +38,9 @@ namespace Kortex
 			{
 				LoadTagsFromMod(GetTags(), mod);
 			}
+			
+			void LoadDefaultTags(IModTag::Vector& items);
+			void LoadDefaultTags();
 
 			virtual std::unique_ptr<IModTag> NewTag() = 0;
 

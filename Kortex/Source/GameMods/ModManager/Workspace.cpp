@@ -109,7 +109,7 @@ namespace
 		KMC_ID_TAG_DISABLE_ALL,
 	};
 
-	template<class Functor> bool DoForAllSelectedItems(DisplayModel* model, const Functor& func)
+	template<class Functor> bool DoForAllSelectedItems(DisplayModel* model, Functor&& func)
 	{
 		KxDataViewItem::Vector items;
 		if (model->GetView()->GetSelections(items) != 0)
@@ -1161,7 +1161,7 @@ namespace Kortex::ModManager
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{
-					dialog.ApplyChanges();
+					dialog.ApplyChangesToMod();
 					bool hasSelection = DoForAllSelectedItems(m_ViewModel, [&tempEntry](IGameMod& entry)
 					{
 						entry.GetTagStore() = tempEntry.GetTagStore();

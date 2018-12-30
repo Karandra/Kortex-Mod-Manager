@@ -17,6 +17,7 @@ namespace Kortex::ModTagManager
 			enum ColumnID
 			{
 				PriorityGroup,
+				ExpandedState,
 				Name,
 				NexusID,
 				Color,
@@ -30,7 +31,6 @@ namespace Kortex::ModTagManager
 			IGameMod* m_GameMod = nullptr;
 			const IModTag* m_PriorityGroupTag = nullptr;
 			bool m_IsModified = false;
-			bool m_AllowSave = false;
 
 		protected:
 			void OnInitControl() override;
@@ -44,20 +44,12 @@ namespace Kortex::ModTagManager
 			void OnActivate(KxDataViewEvent& event);
 			void OnKeyDown(wxKeyEvent& event);
 
-		protected:
-			const IModTag* FindStdTag(const wxString& tagID) const;
-			bool HasPriorityGroupTag() const
-			{
-				return m_PriorityGroupTag != nullptr;
-			}
-
 		public:
 			SelectorDisplayModel(bool isFullFeatured = false);
 
 		public:
 			void SetDataVector(ModTagStore* tagStore = nullptr, IGameMod* mod = nullptr);
 			size_t GetItemCount() const override;
-		
 			IModTag* GetDataEntry(size_t index) const;
 
 			bool IsFullFeatured() const
@@ -68,14 +60,11 @@ namespace Kortex::ModTagManager
 			{
 				return m_IsModified;
 			}
-			void ApplyChanges();
-			void SetAllowSave(bool allow = true)
+			
+			bool HasPriorityGroupTag() const
 			{
-				m_AllowSave = allow;
+				return m_PriorityGroupTag != nullptr;
 			}
-			wxWindow* GetWindow()
-			{
-				return OnGetDataViewWindow();
-			}
+			void ApplyChangesToMod();
 	};
 }

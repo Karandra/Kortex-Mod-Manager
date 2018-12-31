@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/Options/Option.h"
-#include "KImageProvider.h"
+#include "Utility/KImageProvider.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxFrame.h>
 #include <KxFramework/KxPanel.h>

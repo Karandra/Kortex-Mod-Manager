@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "Archive/KArchive.h"
-#include "KOperationWithProgress.h"
-#include "KTempFolderKeeper.h"
+#include "Utility/KOperationWithProgress.h"
+#include "Utility/KTempFolderKeeper.h"
 class KPackageProject;
 class KPPFFileEntry;
 class KPackageCreatorBuilderOperation;

@@ -4,7 +4,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include "UI/KMainWindow.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 namespace Kortex::ModManager
 {

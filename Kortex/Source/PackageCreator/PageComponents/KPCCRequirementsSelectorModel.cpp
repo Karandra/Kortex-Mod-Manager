@@ -3,7 +3,7 @@
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 enum ColumnID
 {

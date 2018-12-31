@@ -2,7 +2,7 @@
 #include "KPackageProjectInterface.h"
 #include "KPackageProject.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 KPPIImageEntry::KPPIImageEntry(const wxString& path, const wxString& description, bool isVisible)
 	:m_Path(path), m_Description(description), m_IsVisiable(isVisible)

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <Kortex/ModTagManager.hpp>
-#include "KLabeledValue.h"
+#include "Utility/KLabeledValue.h"
 class KPackageCreatorController;
 class KxDataViewComboBox;
 

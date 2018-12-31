@@ -3,9 +3,9 @@
 #include "Workspace.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ProgramManager.hpp>
-#include "UI/KWorkspace.h"
 #include <Kortex/Events.hpp>
-#include "KUPtrVectorUtil.h"
+#include "UI/KWorkspace.h"
+#include "Utility/KUPtrVectorUtil.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxTaskDialog.h>

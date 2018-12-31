@@ -4,7 +4,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 namespace OperatorConst
 {

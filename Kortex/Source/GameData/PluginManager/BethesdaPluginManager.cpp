@@ -5,7 +5,7 @@
 #include <Kortex/Application.hpp>
 #include "UI/KWorkspace.h"
 #include "UI/KWorkspaceController.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxTextFile.h>

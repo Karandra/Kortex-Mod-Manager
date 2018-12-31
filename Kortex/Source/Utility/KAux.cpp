@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>

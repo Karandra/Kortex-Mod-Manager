@@ -3,7 +3,7 @@
 #include "KPackageProject.h"
 #include "PackageManager/KPackageManager.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 KPPRRequirementEntry::KPPRRequirementEntry(KPPRTypeDescriptor typeDescriptor)
 	:m_ObjectFunction(KPackageProjectRequirements::ms_DefaultObjectFunction),

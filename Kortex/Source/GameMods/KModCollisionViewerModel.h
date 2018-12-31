@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include <Kortex/ModManager.hpp>
-#include "KDataViewListModel.h"
-#include "KImageProvider.h"
+#include "Utility/KDataViewListModel.h"
+#include "Utility/KImageProvider.h"
 #include <KxFramework/KxStdDialog.h>
 #include <KxFramework/KxFileFinder.h>
 class KOperationWithProgressBase;

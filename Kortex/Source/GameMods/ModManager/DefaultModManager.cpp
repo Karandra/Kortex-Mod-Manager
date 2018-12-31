@@ -19,8 +19,8 @@
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "UI/KWorkspaceController.h"
-#include "KOperationWithProgress.h"
-#include "KUPtrVectorUtil.h"
+#include "Utility/KOperationWithProgress.h"
+#include "Utility/KUPtrVectorUtil.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
@@ -336,14 +336,15 @@ namespace Kortex::ModManager
 		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModByNetworkID(Kortex::Network::ProviderID providerID, Kortex::Network::ModID id, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByNetworkID(NetworkProviderID providerID, ModID id, intptr_t* index) const
 	{
-		if (INetworkManager::GetInstance()->HasProvider(providerID))
+		if (INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(providerID))
 		{
 			intptr_t i = 0;
 			for (auto& entry: m_Mods)
 			{
-				//if (entry->GetFixedWebSites()[providerID] == id)
+				ModProviderItem* item = entry->GetProviderStore().GetItem(provider);
+				if (item && item->GetModID() == id)
 				{
 					KxUtility::SetIfNotNull(index, i);
 					return &*entry;

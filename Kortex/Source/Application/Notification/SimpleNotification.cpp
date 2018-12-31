@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SimpleNotification.h"
-#include "KBitmapSize.h"
+#include "Utility/KBitmapSize.h"
 
 namespace Kortex
 {

@@ -3,9 +3,9 @@
 #include "PackageManager/KModPackage.h"
 #include "GameMods/ModManager/BasicGameMod.h"
 #include "KInstallWizardStepStack.h"
-#include "KOperationWithProgress.h"
-#include "KTempFolderKeeper.h"
-#include "KImageProvider.h"
+#include "Utility/KOperationWithProgress.h"
+#include "Utility/KTempFolderKeeper.h"
+#include "Utility/KImageProvider.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxLabel.h>

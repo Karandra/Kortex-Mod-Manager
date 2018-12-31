@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "KPackageCreatorBuilder.h"
-#include "KOperationWithProgress.h"
 #include "PackageProject/KPackageProject.h"
 #include "PackageProject/KPackageProjectSerializerKMP.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
+#include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxTextFile.h>

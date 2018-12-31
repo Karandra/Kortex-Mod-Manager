@@ -7,7 +7,7 @@
 #include <Kortex/ModTagManager.hpp>
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 

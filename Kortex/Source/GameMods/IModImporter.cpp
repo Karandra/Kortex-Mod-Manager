@@ -2,7 +2,7 @@
 #include "IModImporter.h"
 #include "GameMods/Import/ModImporterMO.h"
 #include "GameMods/Import/ModImporterNMM.h"
-#include "KOperationWithProgress.h"
+#include "Utility/KOperationWithProgress.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>

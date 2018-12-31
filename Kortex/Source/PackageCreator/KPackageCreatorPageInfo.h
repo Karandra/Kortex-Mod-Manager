@@ -3,7 +3,7 @@
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
-#include "Network/NetworkConstants.h"
+#include "Network/Common.h"
 class KPackageCreatorWorkspace;
 class KPackageProjectInfo;
 class KPackageProjectConfig;

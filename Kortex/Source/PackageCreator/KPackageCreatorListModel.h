@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "KImageProvider.h"
-#include "KDataViewListModel.h"
+#include "Utility/KImageProvider.h"
+#include "Utility/KDataViewListModel.h"
 class KPackageCreatorController;
 class KPackageProject;
 class KPackageCreatorIDTracker;
@@ -10,7 +10,7 @@ class KxMenu;
 class KxMenuItem;
 
 class KPackageCreatorListModelDataObject;
-class KPackageCreatorListModel:	public KDataViewListModel, public KxDataViewModelExDragDropEnabled<KPackageCreatorListModelDataObject>
+class KPackageCreatorListModel:	public KxDataViewListModelEx, public KxDataViewModelExDragDropEnabled<KPackageCreatorListModelDataObject>
 {
 	protected:
 		KPackageCreatorController* m_Controller = nullptr;
@@ -97,7 +97,7 @@ class KPackageCreatorListModel:	public KDataViewListModel, public KxDataViewMode
 		}
 };
 
-class KPackageCreatorListModelDataObject: public KDataViewModelDragDropData
+class KPackageCreatorListModelDataObject: public KxDataViewModelExDragDropData
 {
 	private:
 		KxDataViewItem m_Item;

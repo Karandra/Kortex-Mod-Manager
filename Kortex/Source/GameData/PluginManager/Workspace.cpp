@@ -7,8 +7,8 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>
 #include "UI/KImageViewerDialog.h"
-#include "KAux.h"
-#include "KOperationWithProgress.h"
+#include "Utility/KAux.h"
+#include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxSearchBox.h>
 #include <KxFramework/KxNotebook.h>
 #include <KxFramework/KxAuiNotebook.h>

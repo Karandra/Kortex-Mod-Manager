@@ -2,7 +2,7 @@
 #include "KPackageProjectComponents.h"
 #include "KPackageProject.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 wxString KPPCFlagEntry::GetDeletedFlagPrefix()
 {

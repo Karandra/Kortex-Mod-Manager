@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KDataViewListModel.h"
+#include "Utility/KDataViewListModel.h"
 #include "Network/IDownloadManager.h"
 #include "Network/IDownloadEntry.h"
 class KxMenuEvent;

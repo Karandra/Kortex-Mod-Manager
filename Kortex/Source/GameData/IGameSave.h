@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KLabeledValue.h"
+#include "Utility/KLabeledValue.h"
 #include <KxFramework/KxFileItem.h>
 
 namespace Kortex

@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "KImageProvider.h"
-#include "KDataViewListModel.h"
+#include "Utility/KImageProvider.h"
+#include "Utility/KDataViewListModel.h"
 #include "KModPackage.h"
-#include "KOperationWithProgress.h"
+#include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxArchiveEvent.h>
 #include <KxFramework/KxFileFinder.h>
@@ -12,7 +12,7 @@ class KxPanel;
 class KxHTMLWindow;
 class KPackageManagerListModelThread;
 
-class KPackageManagerListModel: public KDataViewListModel
+class KPackageManagerListModel: public KxDataViewListModelEx
 {
 	friend class KPackageManagerListModelThread;
 

@@ -5,7 +5,7 @@
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"
-#include "KOperationWithProgress.h"
+#include "Utility/KOperationWithProgress.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxString.h>

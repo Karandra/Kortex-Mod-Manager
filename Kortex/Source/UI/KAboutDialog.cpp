@@ -5,8 +5,8 @@
 #include "KMainWindow.h"
 #include "KWorkspace.h"
 #include "Archive/KArchive.h"
-#include "KAux.h"
-#include "KBitmapSize.h"
+#include "Utility/KAux.h"
+#include "Utility/KBitmapSize.h"
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxHTMLWindow.h>
 #include <KxFramework/KxTreeList.h>

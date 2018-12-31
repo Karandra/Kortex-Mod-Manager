@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DynamicVariableTable.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 namespace Kortex
 {

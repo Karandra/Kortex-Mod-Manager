@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KPackageProjectPart.h"
-#include "KWithIDName.h"
+#include "Utility/KWithIDName.h"
 #include <KxFramework/KxVersion.h>
 
 enum KPPRObjectFunction

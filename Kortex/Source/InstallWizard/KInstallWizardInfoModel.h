@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "KImageProvider.h"
-#include "KDataViewListModel.h"
+#include "Utility/KImageProvider.h"
+#include "Utility/KDataViewListModel.h"
 #include "PackageProject/KPackageProject.h"
 class KInstallWizardDialog;
 

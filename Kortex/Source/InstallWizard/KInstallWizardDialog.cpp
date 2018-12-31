@@ -12,7 +12,7 @@
 #include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
 #include "UI/KTextEditorDialog.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileStream.h>

@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KDataViewListModel.h"
+#include "Utility/KDataViewListModel.h"
 #include "GameMods/IModStatistics.h"
 
 namespace Kortex::ModStatistics

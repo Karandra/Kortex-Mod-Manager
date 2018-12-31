@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "DisplayModelNode.h"
-#include "KDataViewListModel.h"
-#include "KImageProvider.h"
-#include "KBitmapSize.h"
+#include "Utility/KDataViewListModel.h"
+#include "Utility/KImageProvider.h"
+#include "Utility/KBitmapSize.h"
 class KxDataViewBitmapTextToggleRenderer;
 
 namespace Kortex
@@ -72,7 +72,7 @@ namespace Kortex::ModManager
 			{
 				return m_ShowPriorityGroups && !m_ShowPriorityGroupsSuppress;
 			}
-			Kortex::Network::ProviderID ColumnToSpecialSite(int column) const;
+			NetworkProviderID ColumnToSpecialSite(int column) const;
 			wxString FormatTagList(const IGameMod& entry) const;
 
 			virtual void OnInitControl() override;

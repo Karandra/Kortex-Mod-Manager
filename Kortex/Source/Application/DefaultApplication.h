@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "IApplication.h"
 #include "Application/VariablesTable/DynamicVariableTable.h"
-#include "KImageProvider.h"
+#include "Utility/KImageProvider.h"
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxImageList.h>
 #include <KxFramework/KxImageSet.h>

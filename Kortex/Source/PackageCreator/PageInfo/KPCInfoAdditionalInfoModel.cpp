@@ -4,7 +4,7 @@
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 

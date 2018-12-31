@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "KPackageProjectPart.h"
-#include "KLabeledValue.h"
-#include "KWithIDName.h"
+#include "Utility/KLabeledValue.h"
+#include "Utility/KWithIDName.h"
 
 enum KPPCSelectionMode
 {

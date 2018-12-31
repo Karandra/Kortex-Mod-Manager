@@ -3,9 +3,9 @@
 #include "Utility/KLabeledValue.h"
 #include "Utility/KWithBitmap.h"
 #include <KxFramework/KxVersion.h>
-#include "KImageProvider.h"
-#include "KWithBitmap.h"
-#include "KAux.h"
+#include "Utility/KImageProvider.h"
+#include "Utility/KWithBitmap.h"
+#include "Utility/KAux.h"
 class KPackageProject;
 
 namespace Kortex

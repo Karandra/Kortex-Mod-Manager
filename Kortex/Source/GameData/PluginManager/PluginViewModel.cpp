@@ -5,7 +5,7 @@
 #include <Kortex/Application.hpp>
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxMenu.h>
 

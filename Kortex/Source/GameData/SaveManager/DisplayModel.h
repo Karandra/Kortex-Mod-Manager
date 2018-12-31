@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "KDataViewListModel.h"
+#include "Utility/KDataViewListModel.h"
 #include "GameData/IGameSave.h"
-#include "KBitmapSize.h"
+#include "Utility/KBitmapSize.h"
 
 namespace Kortex
 {

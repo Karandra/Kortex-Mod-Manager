@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KImageProvider.h"
+#include "Utility/KImageProvider.h"
 class KMainWindow;
 class KWorkspace;
 

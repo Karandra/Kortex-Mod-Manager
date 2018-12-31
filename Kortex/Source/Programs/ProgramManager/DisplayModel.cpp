@@ -4,9 +4,9 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
-#include "KAux.h"
 #include "UI/KMainWindow.h"
-#include "KOperationWithProgress.h"
+#include "Utility/KAux.h"
+#include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>

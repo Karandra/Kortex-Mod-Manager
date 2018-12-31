@@ -3,7 +3,7 @@
 #include "KPackageManager.h"
 #include "PackageProject/KPackageProject.h"
 #include "Archive/KArchive.h"
-#include "KLabeledValue.h"
+#include "Utility/KLabeledValue.h"
 #include <KxFramework/KxFileStream.h>
 
 class KModPackage

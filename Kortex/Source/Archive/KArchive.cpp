@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KArchive.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxComparator.h>
 #include <7zpp/7zpp.h>

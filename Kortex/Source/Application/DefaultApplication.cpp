@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "DefaultApplication.h"
-#include "KAux.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "UI/KInstanceSelectionDialog.h"
@@ -15,7 +14,8 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Events.hpp>
 #include "IPC/KIPCClient.h"
-#include "KBitmapSize.h"
+#include "Utility/KBitmapSize.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>

@@ -2,7 +2,7 @@
 #include "INetworkProvider.h"
 #include <Kortex/NetworkManager.hpp>
 #include "UI/KMainWindow.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxTaskDialog.h>

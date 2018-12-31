@@ -4,7 +4,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Events.hpp>
 #include "UI/KInstanceCreatorDialog.h"
-#include "KBitmapSize.h"
+#include "Utility/KBitmapSize.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxBitmapComboBox.h>

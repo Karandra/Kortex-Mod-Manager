@@ -13,7 +13,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include "UI/KTextEditorDialog.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxListBox.h>
@@ -179,7 +179,7 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 	m_PaneSizer->Add(sitesSizer, 0, wxEXPAND|wxLEFT, ms_LeftMargin);
 
 	// Fixed sites
-	using namespace Kortex::Network;
+	using namespace Kortex::NetworkManager;
 	m_WebSitesNexusID = AddProviderControl<NexusProvider>(sitesSizer);
 	m_WebSitesTESALLID = AddProviderControl<TESALLProvider>(sitesSizer);
 	m_WebSitesLoversLabID = AddProviderControl<LoversLabProvider>(sitesSizer);
@@ -359,8 +359,8 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& tProjectInfo)
 	m_TagsModel->SetDataVector(&tProjectInfo.GetTagStore());
 
 	/* Web sites */
-	using namespace Kortex::Network;
-	auto LoadFixedSite = [tProjectInfo](ProviderID index, KxTextBox* input)
+	using namespace Kortex::NetworkManager;
+	auto LoadFixedSite = [tProjectInfo](NetworkProviderID index, KxTextBox* input)
 	{
 		#if 0
 		if (tProjectInfo.HasWebSite(index))
@@ -373,9 +373,9 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& tProjectInfo)
 		}
 		#endif
 	};
-	LoadFixedSite(ProviderIDs::TESALL, m_WebSitesTESALLID);
-	LoadFixedSite(ProviderIDs::Nexus, m_WebSitesNexusID);
-	LoadFixedSite(ProviderIDs::LoversLab, m_WebSitesLoversLabID);
+	LoadFixedSite(NetworkProviderIDs::TESALL, m_WebSitesTESALLID);
+	LoadFixedSite(NetworkProviderIDs::Nexus, m_WebSitesNexusID);
+	LoadFixedSite(NetworkProviderIDs::LoversLab, m_WebSitesLoversLabID);
 
 	/* Config */
 	// Package path

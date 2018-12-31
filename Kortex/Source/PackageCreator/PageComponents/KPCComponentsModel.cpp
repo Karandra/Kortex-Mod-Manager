@@ -12,7 +12,7 @@
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxComboBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>

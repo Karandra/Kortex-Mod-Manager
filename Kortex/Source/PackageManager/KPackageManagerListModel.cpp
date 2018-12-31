@@ -9,8 +9,8 @@
 #include "UI/KMainWindow.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
-#include "KOperationWithProgress.h"
-#include "KAux.h"
+#include "Utility/KOperationWithProgress.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxHTMLWindow.h>
 #include <KxFramework/KxFile.h>

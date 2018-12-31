@@ -2,7 +2,7 @@
 #include <Kortex/SaveManager.hpp>
 #include <Kortex/Application.hpp>
 #include "UI/KImageViewerDialog.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxComparator.h>

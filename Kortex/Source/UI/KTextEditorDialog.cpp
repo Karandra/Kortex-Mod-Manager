@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KTextEditorDialog.h"
 #include "KMainWindow.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxBitmapComboBox.h>

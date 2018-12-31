@@ -25,8 +25,8 @@
 #include "UI/KTextEditorDialog.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
-#include "KOperationWithProgress.h"
-#include "KAux.h"
+#include "Utility/KOperationWithProgress.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLabel.h>

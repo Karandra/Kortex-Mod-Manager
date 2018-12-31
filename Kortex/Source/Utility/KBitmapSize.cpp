@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "KBitmapSize.h"
-#include "KAux.h"
+#include "Utility/KBitmapSize.h"
+#include "Utility/KAux.h"
 
 namespace
 {

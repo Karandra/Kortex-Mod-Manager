@@ -2,7 +2,7 @@
 #include "KPackageCreatorFOModIEDialog.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFileBrowseDialog.h>
 
 void KPackageCreatorFOModIEDialog::OnText(wxCommandEvent& event)

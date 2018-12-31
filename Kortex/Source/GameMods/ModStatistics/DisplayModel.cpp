@@ -2,7 +2,7 @@
 #include "DisplayModel.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProgressDialog.h>
 

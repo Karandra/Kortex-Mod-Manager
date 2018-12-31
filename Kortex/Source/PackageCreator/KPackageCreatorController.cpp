@@ -8,7 +8,7 @@
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
 #include "PackageManager/KModPackage.h"
 #include "Archive/KArchive.h"
-#include "KOperationWithProgress.h"
+#include "Utility/KOperationWithProgress.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxTextFile.h>

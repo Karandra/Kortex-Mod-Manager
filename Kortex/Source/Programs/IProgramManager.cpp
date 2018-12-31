@@ -2,8 +2,8 @@
 #include "IProgramManager.h"
 #include <Kortex/Common/Programs.hpp>
 #include <Kortex/Events.hpp>
-#include "KBitmapSize.h"
-#include "KAux.h"
+#include "Utility/KBitmapSize.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileItem.h>
 #include <KxFramework/KxMenu.h>

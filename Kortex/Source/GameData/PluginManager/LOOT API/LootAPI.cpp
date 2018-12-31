@@ -3,8 +3,8 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "KOperationWithProgress.h"
-#include "Events/LogEvent.h"
+#include <Kortex/Events.hpp>
+#include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxSystem.h>
 #include "loot/api.h"

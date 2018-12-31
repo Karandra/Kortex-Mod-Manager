@@ -6,7 +6,7 @@
 #include "UI/KImageViewerDialog.h"
 #include "UI/KMainWindow.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxAuiNotebook.h>
 #include <KxFramework/KxSearchBox.h>

@@ -4,7 +4,7 @@
 #include "FileTreeNode.h"
 #include <Kortex/Application.hpp>
 #include "UI/KMainWindow.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>

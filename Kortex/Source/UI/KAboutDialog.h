@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KImageProvider.h"
+#include "Utility/KImageProvider.h"
 #include <KxFramework/KxStdDialog.h>
 #include <KxFramework/KxAuiNotebook.h>
 #include <KxFramework/KxImageView.h>

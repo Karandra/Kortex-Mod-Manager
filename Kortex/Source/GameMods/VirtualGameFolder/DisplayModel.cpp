@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
 #include <Kortex/ModManager.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLibrary.h>

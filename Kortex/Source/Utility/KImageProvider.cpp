@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "KImageProvider.h"
+#include "Utility/KImageProvider.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxFileFinder.h>
 

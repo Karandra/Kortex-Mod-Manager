@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "GameData/ISaveManager.h"
 #include <Kortex/Events.hpp>
-#include "KLabeledValue.h"
+#include "Utility/KLabeledValue.h"
 
 namespace Kortex::SaveManager
 {

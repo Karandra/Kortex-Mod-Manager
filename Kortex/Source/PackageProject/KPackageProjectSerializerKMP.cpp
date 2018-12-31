@@ -12,7 +12,7 @@
 #include <Kortex/ModTagManager.hpp>
 #include "PackageManager/KPackageManager.h"
 #include "GameInstance/IGameInstance.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 namespace
 {
@@ -125,7 +125,7 @@ void KPackageProjectSerializerKMP::ReadInfo()
 		KAux::LoadLabeledValueArray(info.GetCustomFields(), infoNode.GetFirstChildElement("Custom"));
 
 		// Web-sites
-		using namespace Kortex::Network;
+		using namespace Kortex::NetworkManager;
 		Kortex::ModProviderStore& store = info.GetProviderStore();
 		store.LoadAssign(infoNode.GetFirstChildElement("Provider"));
 

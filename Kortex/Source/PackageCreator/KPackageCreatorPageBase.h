@@ -3,7 +3,7 @@
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
 #include "KPackageCreatorWorkspace.h"
-#include "KLabeledValue.h"
+#include "Utility/KLabeledValue.h"
 class KPackageCreatorController;
 class KPackageProject;
 class KxLabel;

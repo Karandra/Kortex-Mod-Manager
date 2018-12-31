@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "KPackageProjectPart.h"
-#include "KLabeledValue.h"
+#include "Utility/KLabeledValue.h"
 #include "GameMods/ModTagStore.h"
 #include "GameMods/ModProvider/Store.h"
 #include "GameMods/TagManager/DefaultTag.h"

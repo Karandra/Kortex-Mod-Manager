@@ -3,7 +3,7 @@
 #include "GameMods/IModManager.h"
 #include "GameMods/FileTreeNode.h"
 #include <Kortex/Events.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileFinder.h>
 #include <chrono>

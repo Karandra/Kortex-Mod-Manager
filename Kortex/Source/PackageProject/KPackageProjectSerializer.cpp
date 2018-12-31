@@ -2,12 +2,12 @@
 #include "KPackageProjectSerializer.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxTextFile.h>
 
 Kortex::ModProviderItem KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
 {
-	using namespace Kortex::Network;
+	using namespace Kortex::NetworkManager;
 
 	long long id = -1;
 	Kortex::INetworkProvider* provider = nullptr;
@@ -22,15 +22,15 @@ Kortex::ModProviderItem KPackageProjectSerializer::TryParseWebSite(const wxStrin
 		wxString siteName = KAux::ExtractDomainName(url);
 		if (siteName == "tesall.ru")
 		{
-			provider = Kortex::Network::TESALLProvider::GetInstance();
+			provider = Kortex::NetworkManager::TESALLProvider::GetInstance();
 		}
 		else if (siteName == "nexusmods.com" || siteName.AfterFirst('.') == "nexusmods.com" || siteName.Contains("nexus"))
 		{
-			provider = Kortex::Network::NexusProvider::GetInstance();
+			provider = Kortex::NetworkManager::NexusProvider::GetInstance();
 		}
 		else if (siteName == "loverslab.com")
 		{
-			provider = Kortex::Network::LoversLabProvider::GetInstance();
+			provider = Kortex::NetworkManager::LoversLabProvider::GetInstance();
 		}
 		KxUtility::SetIfNotNull(domainNameOut, siteName);
 
@@ -47,7 +47,7 @@ Kortex::ModProviderItem KPackageProjectSerializer::TryParseWebSite(const wxStrin
 wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
 {
 	wxString copy = bbSource;
-	return Kortex::Network::NexusProvider::GetInstance()->ConvertDescriptionToHTML(copy);
+	return Kortex::NetworkManager::NexusProvider::GetInstance()->ConvertDescriptionToHTML(copy);
 }
 wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, KPPContentType type) const
 {

@@ -8,9 +8,9 @@
 #include <Kortex/ProgramManager.hpp>
 #include <Kortex/Events.hpp>
 #include "IGameProfile.h"
-#include "KOperationWithProgress.h"
-#include "KBitmapSize.h"
-#include "KAux.h"
+#include "Utility/KOperationWithProgress.h"
+#include "Utility/KBitmapSize.h"
+#include "Utility/KAux.h"
 #include "Util.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>

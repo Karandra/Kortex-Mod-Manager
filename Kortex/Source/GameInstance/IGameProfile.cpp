@@ -4,7 +4,7 @@
 #include <Kortex/Application.hpp>
 #include "IGameInstance.h"
 #include "IGameProfile.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFileStream.h>
 
 namespace

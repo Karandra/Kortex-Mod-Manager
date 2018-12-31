@@ -5,7 +5,7 @@
 #include <Kortex/ModProvider.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "PackageProject/KPackageProject.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxCrypto.h>
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxFile.h>
@@ -19,13 +19,13 @@ namespace
 
 	template<class T> void LoadOldSite(ModProviderStore& store, KxXMLNode& node, const wxString& name)
 	{
-		store.AssignWith<T>(node.GetAttributeInt(name, Network::InvalidModID));
+		store.AssignWith<T>(node.GetAttributeInt(name, ModID::GetInvalidValue()));
 	}
 	void LoadOldSites(ModProviderStore& store, KxXMLNode& node)
 	{
-		LoadOldSite<Network::NexusProvider>(store, node, "NexusID");
-		LoadOldSite<Network::LoversLabProvider>(store, node, "LoversLabID");
-		LoadOldSite<Network::TESALLProvider>(store, node, "TESALLID");
+		LoadOldSite<NetworkManager::NexusProvider>(store, node, "NexusID");
+		LoadOldSite<NetworkManager::LoversLabProvider>(store, node, "LoversLabID");
+		LoadOldSite<NetworkManager::TESALLProvider>(store, node, "TESALLID");
 	}
 }
 

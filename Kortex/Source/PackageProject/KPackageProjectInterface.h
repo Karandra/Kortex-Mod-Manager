@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "KPackageProjectPart.h"
-#include "KLabeledValue.h"
-#include "KWithBitmap.h"
+#include "Utility/KLabeledValue.h"
+#include "Utility/KWithBitmap.h"
 #include <KxFramework/KxColor.h>
 
 class KPPIImageEntry: public KWithBitmap

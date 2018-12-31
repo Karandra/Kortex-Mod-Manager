@@ -16,12 +16,12 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include <Kortex/Common/Packages.hpp>
-#include "KAux.h"
-#include "KUnsortedUnique.h"
+#include "Utility/KAux.h"
+#include "Utility/KUnsortedUnique.h"
 #include <KxFramework/KxString.h>
 
 using namespace Kortex;
-using namespace Kortex::Network;
+using namespace Kortex::NetworkManager;
 using namespace Kortex::Application;
 
 namespace
@@ -351,7 +351,7 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 		wxString id = infoNode.GetFirstChildElement("Id").GetValue();
 		if (!id.IsEmpty() && id.ToLongLong(&intID))
 		{
-			providerStore.TryAddWith<Kortex::Network::NexusProvider>(intID);
+			providerStore.TryAddWith<Kortex::NetworkManager::NexusProvider>(intID);
 		}
 
 		wxString siteURL = infoNode.GetFirstChildElement("Website").GetValue();
@@ -368,7 +368,7 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 			{
 				// Site for Nexus already retrieved, so add as generic
 				Kortex::INetworkProvider* provider = nullptr;
-				if (webSite.TryGetProvider(provider) && provider == Kortex::Network::NexusProvider::GetInstance())
+				if (webSite.TryGetProvider(provider) && provider == Kortex::NetworkManager::NexusProvider::GetInstance())
 				{
 					AddAsGenericSite(siteName);
 				}
@@ -729,7 +729,7 @@ void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& 
 	// Write Nexus to 'Id'
 	if (const ModProviderItem* nexusItem = providerStore.GetItem(NexusProvider::GetInstance()->GetName()))
 	{
-		infoNode.NewElement("Id").SetValue(nexusItem->GetModID());
+		infoNode.NewElement("Id").SetValue(nexusItem->GetModID().GetValue());
 	}
 
 	if (!(WriteSite<LoversLabProvider>(providerStore, sitesNode) || WriteSite<TESALLProvider>(providerStore, sitesNode)))

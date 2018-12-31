@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "KWithBitmap.h"
-class KxXMLNode;
+#include "Utility/KWithBitmap.h"
+#include <KxFramework/KxXML.h>
 
 namespace Kortex
 {

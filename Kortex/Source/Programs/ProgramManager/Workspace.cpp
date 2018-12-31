@@ -4,7 +4,7 @@
 #include <Kortex/Events.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 
 namespace
 {

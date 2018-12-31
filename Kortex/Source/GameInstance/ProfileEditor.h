@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "KImageProvider.h"
-#include "KDataViewListModel.h"
 #include "IGameProfile.h"
-#include "KLabeledValue.h"
+#include "Utility/KImageProvider.h"
+#include "Utility/KDataViewListModel.h"
+#include "Utility/KLabeledValue.h"
 #include <KxFramework/KxStdDialog.h>
 class KxButton;
 class KxCheckBox;

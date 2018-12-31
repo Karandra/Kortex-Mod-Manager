@@ -2,8 +2,8 @@
 #include "KLocationsManagerConfig.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "KImageProvider.h"
-#include "KAux.h"
+#include "Utility/KImageProvider.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxMenu.h>

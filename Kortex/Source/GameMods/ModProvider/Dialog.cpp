@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Dialog.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <Kortex/NetworkManager.hpp>
 #include <KxFramework/KxButton.h>
 
@@ -17,7 +17,7 @@ namespace Kortex::ModProvider
 
 			item->Bind(KxEVT_MENU_SELECT, [this, &provider](KxMenuEvent& event)
 			{
-				OnAddItem(m_ProviderStore.AssignWith(&*provider, Network::InvalidModID));
+				OnAddItem(m_ProviderStore.AssignWith(&*provider, ModID()));
 			});
 		}
 

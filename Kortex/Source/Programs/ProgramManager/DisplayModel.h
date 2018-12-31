@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "KDataViewListModel.h"
+#include "Utility/KDataViewListModel.h"
 #include "Programs/IProgramEntry.h"
 #include "Programs/IProgramManager.h"
-#include "KBitmapSize.h"
+#include "Utility/KBitmapSize.h"
 
 namespace Kortex::ProgramManager
 {

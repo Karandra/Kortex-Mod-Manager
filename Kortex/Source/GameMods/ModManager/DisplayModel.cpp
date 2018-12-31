@@ -10,7 +10,7 @@
 #include "PriorityGroup.h"
 #include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
 
@@ -40,7 +40,7 @@ namespace
 		MAX
 	};
 
-	using SitesRenderer = KxDataViewImageListRenderer<Kortex::Network::ProviderIDs::MAX_SYSTEM + 1>;
+	using SitesRenderer = KxDataViewImageListRenderer<Kortex::NetworkProviderIDs::MAX_SYSTEM + 1>;
 	using SitesValue = typename SitesRenderer::ValueT;
 }
 
@@ -59,9 +59,9 @@ namespace Kortex::ModManager
 		};
 		return false;
 	}
-	Network::ProviderID DisplayModel::ColumnToSpecialSite(int column) const
+	NetworkProviderID DisplayModel::ColumnToSpecialSite(int column) const
 	{
-		return (Kortex::Network::ProviderID)(column - ColumnID::Sites - 1);
+		return (NetworkProviderID)(column - ColumnID::Sites - 1);
 	}
 	wxString DisplayModel::FormatTagList(const IGameMod& entry) const
 	{
@@ -114,7 +114,7 @@ namespace Kortex::ModManager
 	
 		{
 			int spacing = 1;
-			int width = (spacing +  16) * (Kortex::Network::ProviderIDs::MAX_SYSTEM + 1);
+			int width = (spacing +  16) * (NetworkProviderIDs::MAX_SYSTEM + 1);
 			auto info = GetView()->AppendColumn<SitesRenderer>(KTr("ModManager.ModList.Sites"), ColumnID::Sites, KxDATAVIEW_CELL_INERT, width, defaultFlagsNoSort);
 
 			info.GetRenderer()->SetImageList(&IApplication::GetInstance()->GetImageList());
@@ -122,18 +122,21 @@ namespace Kortex::ModManager
 			info.GetRenderer()->SetAlignment(wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL);
 		}
 
-		auto AddSiteColumn = [this, defaultFlags](Kortex::Network::ProviderID index)
+		auto AddProviderColumn = [this, defaultFlags](NetworkProviderID index)
 		{
 			int id = ColumnID::Sites + index + 1;
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, id, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
 		
-			INetworkProvider* site = INetworkManager::GetInstance()->GetProvider(index);
-			info.GetColumn()->SetTitle(site->GetName());
-			info.GetColumn()->SetBitmap(KGetBitmap(site->GetIcon()));
+			INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(index);
+			if (provider)
+			{
+				info.GetColumn()->SetTitle(provider->GetName());
+				info.GetColumn()->SetBitmap(KGetBitmap(provider->GetIcon()));
+			}
 		};
-		for (int i = 0; i < Kortex::Network::ProviderIDs::MAX_SYSTEM; i++)
+		for (int i = 0; i < NetworkProviderIDs::MAX_SYSTEM; i++)
 		{
-			AddSiteColumn((Kortex::Network::ProviderID)i);
+			AddProviderColumn((NetworkProviderID)i);
 		}
 
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.DateInstall"), ColumnID::DateInstall, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
@@ -366,7 +369,7 @@ namespace Kortex::ModManager
 					}
 					else
 					{
-						list[Network::ProviderIDs::MAX_SYSTEM] = INetworkProvider::GetGenericIcon();
+						list[NetworkProviderIDs::MAX_SYSTEM] = INetworkProvider::GetGenericIcon();
 					}
 					return true;
 				});
@@ -377,12 +380,13 @@ namespace Kortex::ModManager
 			case ColumnID::Sites_NexusID:
 			case ColumnID::Sites_LoversLabID:
 			{
-				Network::ProviderID index = (Network::ProviderID)(column->GetID() - ColumnID::Sites - 1);
+				NetworkProviderID index = (NetworkProviderID)(column->GetID() - ColumnID::Sites - 1);
 				INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(index);
 				if (provider)
 				{
 					const ModProviderItem* providerItem = mod->GetProviderStore().GetItem(provider->GetName());
-					Network::ModID id = Network::InvalidModID;
+					
+					ModID id;
 					if (providerItem && providerItem->TryGetModID(id))
 					{
 						value = id;
@@ -673,7 +677,7 @@ namespace Kortex::ModManager
 					ModProviderItem* item1 = entry1->GetProviderStore().GetItem(provider);
 					ModProviderItem* item2 = entry2->GetProviderStore().GetItem(provider);
 
-					return item1 && item2 && (item1->GetModID() < item2->GetModID());
+					return item1 && item2 && (item1->GetModID().GetValue() < item2->GetModID().GetValue());
 				}
 
 				switch (columnID)
@@ -773,7 +777,7 @@ namespace Kortex::ModManager
 			int columnID = column->GetID();
 
 			// If this is a site open click
-			Network::ProviderID providerID = ColumnToSpecialSite(columnID);
+			NetworkProviderID providerID = ColumnToSpecialSite(columnID);
 			if (IsSpecialSiteColumn(columnID))
 			{
 				const ModProviderStore& store = entry->GetProviderStore();

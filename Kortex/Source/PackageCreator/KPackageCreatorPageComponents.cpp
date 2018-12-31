@@ -9,7 +9,7 @@
 #include "PageComponents/KPCComponentsModel.h"
 #include "UI/KImageViewerDialog.h"
 #include <Kortex/Application.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxComboBox.h>

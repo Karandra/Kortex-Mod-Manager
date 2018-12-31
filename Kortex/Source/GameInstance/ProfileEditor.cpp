@@ -4,7 +4,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxCheckBox.h>

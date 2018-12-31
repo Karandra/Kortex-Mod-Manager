@@ -12,7 +12,7 @@
 #include "GameInstance/IGameInstance.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxShell.h>
 

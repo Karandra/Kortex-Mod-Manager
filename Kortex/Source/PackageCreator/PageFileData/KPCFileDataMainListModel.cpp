@@ -5,7 +5,7 @@
 #include "PackageCreator/KPackageCreatorController.h"
 #include "UI/KMainWindow.h"
 #include <Kortex/Application.hpp>
-#include "KOperationWithProgress.h"
+#include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileOperationEvent.h>
 #include <KxFramework/KxFileBrowseDialog.h>

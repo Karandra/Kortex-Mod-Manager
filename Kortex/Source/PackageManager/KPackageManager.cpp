@@ -8,8 +8,8 @@
 #include <Kortex/Common/Packages.hpp>
 #include "PackageProject/KPackageProject.h"
 #include "Archive/KArchive.h"
-#include "KAux.h"
-#include "KOperationWithProgress.h"
+#include "Utility/KAux.h"
+#include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxFileStream.h>

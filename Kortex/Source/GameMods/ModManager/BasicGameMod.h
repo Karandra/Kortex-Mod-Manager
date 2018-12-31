@@ -4,12 +4,12 @@
 #include "GameMods/FileTreeNode.h"
 #include "GameMods/ModTagStore.h"
 #include "GameMods/ModProvider/Store.h"
-#include "Network/NetworkConstants.h"
-#include "KLabeledValue.h"
-#include "KWithBitmap.h"
+#include "Network/Common.h"
+#include "Utility/KLabeledValue.h"
+#include "Utility/KWithBitmap.h"
+#include "Utility/KAux.h"
+#include "Utility/KImageProvider.h"
 #include <KxFramework/KxVersion.h>
-#include "KAux.h"
-#include "KImageProvider.h"
 
 namespace Kortex
 {

@@ -3,7 +3,7 @@
 #include <Kortex/GameInstance.hpp>
 #include "UI/KWorkspace.h"
 #include <Kortex/Events.hpp>
-#include "KUPtrVectorUtil.h"
+#include "Utility/KUPtrVectorUtil.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxProgressDialog.h>

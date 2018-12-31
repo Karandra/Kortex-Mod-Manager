@@ -3,7 +3,7 @@
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include "Application/Options/Option.h"
-#include "KImageProvider.h"
+#include "Utility/KImageProvider.h"
 class KMainWindow;
 class KWorkspaceController;
 class KPackageCreatorWorkspace;
@@ -199,9 +199,4 @@ class KWorkspace: public KxPanel, public Kortex::Application::WithOptions<KWorks
 		bool SwitchHere();
 		bool CreateNow();
 		void ScheduleReload();
-
-		virtual bool HasHelpEntry() const
-		{
-			return false;
-		}
 };

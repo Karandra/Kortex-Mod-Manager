@@ -14,7 +14,7 @@
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
 #include "GameInstance/Config/KLocationsManagerConfig.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxShell.h>
@@ -446,7 +446,7 @@ void KMainWindow::ProcessSwitchWorkspace(KWorkspace* nextWorkspace, KWorkspace* 
 	if (nextWorkspace)
 	{
 		m_QuickToolBar_QuickSettingsMenu->SetEnabled(nextWorkspace->HasQuickSettingsMenu());
-		m_QuickToolBar_Help->SetEnabled(nextWorkspace->HasHelpEntry());
+		m_QuickToolBar_Help->SetEnabled(false);
 
 		wxWindowUpdateLocker lock(m_StatusBar);
 		for (int i = 0; i < m_StatusBar->GetFieldsCount() - 1; i++)

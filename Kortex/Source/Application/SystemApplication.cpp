@@ -7,7 +7,7 @@
 #include <Kortex/Events.hpp>
 #include "Archive/KArchive.h"
 #include "UI/KMainWindow.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxRegistry.h>
 #include <KxFramework/KxLibrary.h>

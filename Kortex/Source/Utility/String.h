@@ -18,7 +18,7 @@ namespace Kortex::Utility::String
 		return ((wxString(arg) + sep) + ...);
 	}
 
-	template<class TFunctor> void SplitBySeparator(const wxString& string, const wxString& sep, const TFunctor& func)
+	template<class TFunctor> void SplitBySeparator(const wxString& string, const wxString& sep, TFunctor&& func)
 	{
 		// This ugly construction is faster than 'KxString::Split', so using it.
 		size_t pos = 0;
@@ -46,7 +46,7 @@ namespace Kortex::Utility::String
 			}
 		}
 	}
-	template<class TFunctor> void SplitByLength(const wxString& string, size_t length, const TFunctor& func)
+	template<class TFunctor> void SplitByLength(const wxString& string, size_t length, TFunctor&& func)
 	{
 		const stringLength = string.length();
 		for (size_t i = 0; i < stringLength; i += length)

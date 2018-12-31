@@ -51,9 +51,14 @@ namespace Kortex
 			void Notify(const wxString& caption, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
 			void Notify(const IManager* manager, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
 			void Notify(const IManager* manager, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+			
 			template<class T, class... Args> void Notify(Args&&... arg)
 			{
-				DoNotify(new T(std::forward(arg)...));
+				DoNotify(new T(std::forward<Args>(arg)...));
+			}
+			template<class TManager, class... Args> void NotifyFromManager(Args&&... arg)
+			{
+				Notify(TManager::GetInstance(), std::forward<Args>(arg)...);
 			}
 
 			virtual bool HasActivePopups() const = 0;

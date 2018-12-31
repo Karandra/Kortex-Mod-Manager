@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "Utility/String.h"
 #include "Options/OptionSerializer.h"
 #include <KxFramework/KxXDocumentNode.h>
 #include <KxFramework/KxXML.h>
@@ -39,7 +40,7 @@ namespace Kortex
 			}
 			template<class... Args> static wxString MakeXPath(Args&&... arg)
 			{
-				return ((arg + wxString(wxS('/'))) + ...);
+				return Utility::String::ConcatWithSeparator(wxS('/'), std::forward<Args>(arg)...);
 			}
 
 		private:

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <Kortex/ModManager.hpp>
+#include "Utility/String.h"
 #include <KxFramework/KxComparator.h>
 
 namespace
@@ -8,38 +9,6 @@ namespace
 	{
 		return relativePath.IsEmpty() || relativePath == wxS('\\') || relativePath == wxS('/') || relativePath == wxS('.') || relativePath == wxS("..");
 	}
-	template<class Functor> void IterateOverPath(const wxString& relativePath, const Functor& functor)
-	{
-		// This ugly construction is faster than
-		// for (const wxString& folderName: KxString::Split(relativePath, wxS("\\")))
-		// So using it.
-		const constexpr wxChar separator = wxS('\\');
-		size_t pos = 0;
-		size_t separatorPos = relativePath.find(separator);
-		if (separatorPos == wxString::npos)
-		{
-			separatorPos = relativePath.length();
-		}
-
-		while (pos < relativePath.length() && separatorPos <= relativePath.length())
-		{
-			const std::wstring_view folderName(relativePath.wc_str() + pos, separatorPos - pos);
-			if (functor(folderName))
-			{
-				return;
-			}
-
-			pos += folderName.length() + 1;
-			separatorPos = relativePath.find(separator, pos);
-
-			// No separator found, but this is not the last element
-			if (separatorPos == wxString::npos && pos < relativePath.length())
-			{
-				separatorPos = relativePath.length();
-			}
-		}
-	}
-
 	struct FileNameHasher
 	{
 		// From Boost
@@ -49,7 +18,7 @@ namespace
 			seed ^= hasher(v) + 0x9e3779b9u + (seed << 6) + (seed >> 2);
 		}
 		
-		size_t operator()(const std::wstring_view& value) const
+		size_t operator()(std::wstring_view value) const
 		{
 			size_t hashValue = 0;
 			for (wchar_t c: value)
@@ -72,9 +41,9 @@ namespace Kortex
 
 		if (rootNode.HasChildren())
 		{
-			auto ScanChildren = [](const FileTreeNode& rootNode, const std::wstring_view& folderName) -> const FileTreeNode*
+			auto ScanChildren = [](const FileTreeNode& rootNode, std::wstring_view folderName) -> const FileTreeNode*
 			{
-				const size_t hash = HashFileName(folderName);
+				const size_t hash = FileNameHasher()(folderName);
 				for (const FileTreeNode& node: rootNode.GetChildren())
 				{
 					if (hash == node.GetNameHash())
@@ -86,7 +55,7 @@ namespace Kortex
 			};
 
 			const FileTreeNode* finalNode = nullptr;
-			IterateOverPath(relativePath, [&ScanChildren, &finalNode, &rootNode](const std::wstring_view& folderName)
+			Utility::String::SplitBySeparator(relativePath, wxS('\\'), [&ScanChildren, &finalNode, &rootNode](std::wstring_view folderName)
 			{
 				finalNode = ScanChildren(finalNode ? *finalNode : rootNode, folderName);
 				return finalNode == nullptr;

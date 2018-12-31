@@ -214,7 +214,6 @@ namespace Kortex::ModTagManager
 					KxColor color = entry->GetColor();
 					if (color.IsOk())
 					{
-						color.SetA(128);
 						attribute.SetBackgroundColor(color);
 						attribute.SetForegroundColor(color.GetContrastColor(GetView()));
 						return true;

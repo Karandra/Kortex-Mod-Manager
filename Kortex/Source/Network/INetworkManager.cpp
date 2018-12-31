@@ -23,9 +23,9 @@ namespace Kortex
 		}
 		return false;
 	}
-	Network::ProviderID INetworkManager::GetDefaultProviderID() const
+	NetworkProviderID INetworkManager::GetDefaultProviderID() const
 	{
 		const INetworkProvider* provider = GetDefaultProvider();
-		return provider ? provider->GetID() : Network::ProviderIDs::Invalid;
+		return provider ? provider->GetID() : NetworkProviderIDs::Invalid;
 	}
 }

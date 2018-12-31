@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/IModule.h"
-#include "NetworkConstants.h"
+#include "Common.h"
 #include "INetworkProvider.h"
 #include <KxFramework/KxSingleton.h>
 class KMainWindow;

@@ -42,7 +42,7 @@ namespace Kortex::NetworkManager
 	{
 		private:
 			INetworkProvider::Vector m_Providers;
-			Network::ProviderID m_DefaultProvider = Network::ProviderIDs::Invalid;
+			NetworkProviderID m_DefaultProvider = NetworkProviderIDs::Invalid;
 			NetworkManager::Config m_Config;
 
 			KxAuiToolBarItem* m_LoginButton = nullptr;
@@ -85,7 +85,7 @@ namespace Kortex::NetworkManager
 			INetworkProvider* GetDefaultProvider() const override;
 
 			INetworkProvider* FindProvider(const wxString& name) const override;
-			INetworkProvider* GetProvider(Network::ProviderID providerID) const override;
+			INetworkProvider* GetProvider(NetworkProviderID providerID) const override;
 			
 			void OnAuthStateChanged() override;
 	};

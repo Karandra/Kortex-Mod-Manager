@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Network/NetworkConstants.h"
+#include "Network/Common.h"
 #include "GameInstance/GameID.h"
 #include <KxFramework/KxISerializer.h>
 class KxFileItem;
@@ -10,11 +10,8 @@ namespace Kortex
 	class IGameMod;
 	class INetworkProvider;
 
-	namespace Network
-	{
-		class DownloadInfo;
-		class FileInfo;
-	}
+	class IModFileInfo;
+	class IModDownloadInfo;
 }
 
 namespace Kortex
@@ -44,7 +41,7 @@ namespace Kortex
 			virtual const INetworkProvider* GetProvider() const = 0;
 			virtual void SetProvider(const INetworkProvider* provider) = 0;
 			bool HasProvider() const;
-			bool IsProviderOfType(Network::ProviderID providerID) const;
+			bool IsProviderOfType(NetworkProviderID providerID) const;
 			template<class T> bool IsProviderOfType() const
 			{
 				if (const INetworkProvider* provider = GetProvider())
@@ -64,11 +61,11 @@ namespace Kortex
 			virtual bool IsCompleted() const = 0;
 			virtual bool CanRestart() const = 0;
 
-			virtual const Network::FileInfo& GetFileInfo() const = 0;
-			virtual Network::FileInfo& GetFileInfo() = 0;
+			virtual const IModFileInfo& GetFileInfo() const = 0;
+			virtual IModFileInfo& GetFileInfo() = 0;
 
-			virtual const Network::DownloadInfo& GetDownloadInfo() const = 0;
-			virtual Network::DownloadInfo& GetDownloadInfo() = 0;
+			virtual const IModDownloadInfo& GetDownloadInfo() const = 0;
+			virtual IModDownloadInfo& GetDownloadInfo() = 0;
 
 			virtual bool IsRunning() const = 0;
 			virtual bool IsPaused() const = 0;

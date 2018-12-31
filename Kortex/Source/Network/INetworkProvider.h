@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "NetworkConstants.h"
+#include "Common.h"
 #include "NetworkProviderReply.h"
 #include "GameInstance/GameID.h"
-#include "KImageProvider.h"
+#include "Utility/KImageProvider.h"
 #include <KxFramework/KxSecretStore.h>
 #include <KxFramework/KxVersion.h>
 
@@ -21,7 +21,7 @@ namespace Kortex
 			static KImageEnum GetGenericIcon();
 
 		private:
-			template<class T> static std::unique_ptr<T> Create(Network::ProviderID id)
+			template<class T> static std::unique_ptr<T> Create(NetworkProviderID id)
 			{
 				auto provider = std::make_unique<T>();
 				provider->SetID(id);
@@ -32,11 +32,11 @@ namespace Kortex
 		private:
 			KxSecretDefaultStoreService m_LoginStore;
 			wxBitmap m_UserPicture;
-			Network::ProviderID m_ID = Network::ProviderIDs::Invalid;
+			NetworkProviderID m_ID = NetworkProviderIDs::Invalid;
 			bool m_RequiresAuthentication = true;
 
 		private:
-			void SetID(Network::ProviderID id)
+			void SetID(NetworkProviderID id)
 			{
 				m_ID = id;
 			}
@@ -60,7 +60,7 @@ namespace Kortex
 			virtual ~INetworkProvider();
 
 		public:
-			Network::ProviderID GetID() const
+			NetworkProviderID GetID() const
 			{
 				return m_ID;
 			}
@@ -91,7 +91,7 @@ namespace Kortex
 				return description;
 			}
 			virtual wxString GetModURLBasePart(const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual wxString GetModURL(Network::ModID modID, const wxString& modSignature = wxEmptyString, const GameID& id = GameIDs::NullGameID) = 0;
+			virtual wxString GetModURL(ModID modID, const wxString& modSignature = wxEmptyString, const GameID& id = GameIDs::NullGameID) = 0;
 
 			bool HasAuthInfo() const;
 			bool LoadAuthInfo(wxString& userName, KxSecretValue& password) const;
@@ -114,10 +114,15 @@ namespace Kortex
 			bool ValidateAuth(wxWindow* window = nullptr);
 			bool SignOut(wxWindow* window = nullptr);
 
-			virtual Network::ModInfo GetModInfo(Network::ModID modID, const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual Network::FileInfo GetFileItem(Network::ModID modID, Network::FileID fileID, const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual Network::FileInfo::Vector GetFilesList(Network::ModID modID, const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual Network::DownloadInfo::Vector GetFileDownloadLinks(Network::ModID modID, Network::FileID fileID, const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual Network::EndorsementInfo EndorseMod(Network::ModID modID, Network::EndorsementState::Value state = Network::EndorsementState::Endorse, const GameID& id = GameIDs::NullGameID) = 0;
+			virtual std::unique_ptr<IModInfo> NewModInfo() const = 0;
+			virtual std::unique_ptr<IModFileInfo> NewModFileInfo() const = 0;
+			virtual std::unique_ptr<IModDownloadInfo> NewModDownloadInfo() const = 0;
+			virtual std::unique_ptr<IModEndorsementInfo> NewModEndorsementInfo() const = 0;
+
+			virtual std::unique_ptr<IModInfo> GetModInfo(ModID modID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const = 0;
+			virtual std::unique_ptr<IModFileInfo> GetFileInfo(ModID modID, ModFileID fileID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const = 0;
+			virtual IModFileInfo::Vector GetFilesList(ModID modID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const = 0;
+			virtual IModDownloadInfo::Vector GetFileDownloadLinks(ModID modID, ModFileID fileID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const = 0;
+			virtual std::unique_ptr<IModEndorsementInfo> EndorseMod(ModID modID, ModEndorsement state, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) = 0;
 	};
 }

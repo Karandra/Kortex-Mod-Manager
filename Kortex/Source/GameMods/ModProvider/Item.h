@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Network/NetworkConstants.h"
+#include "Network/Common.h"
 #include "Network/INetworkProvider.h"
 #include "GameInstance/GameID.h"
 
@@ -13,11 +13,11 @@ namespace Kortex
 
 		private:
 			using TID = std::variant<wxString, INetworkProvider*>;
-			using TData = std::variant<wxString, Network::ModID>;
+			using TData = std::variant<wxString, ModID>;
 
 		private:
 			TID m_ID = nullptr;
-			TData m_Data = Network::InvalidModID;
+			TData m_Data = ModID();
 
 		public:
 			ModProviderItem() = default;
@@ -26,7 +26,7 @@ namespace Kortex
 				:m_ID(name), m_Data(url)
 			{
 			}
-			ModProviderItem(const wxString& name, Network::ModID id)
+			ModProviderItem(const wxString& name, ModID id)
 				:m_ID(name), m_Data(id)
 			{
 			}
@@ -35,7 +35,7 @@ namespace Kortex
 				:m_ID(provider), m_Data(url)
 			{
 			}
-			ModProviderItem(INetworkProvider* provider, Network::ModID id)
+			ModProviderItem(INetworkProvider* provider, ModID id)
 				:m_ID(provider), m_Data(id)
 			{
 			}
@@ -93,19 +93,19 @@ namespace Kortex
 				return !GetURL(gameID).IsEmpty();
 			}
 
-			Network::ModID GetModID() const;
-			void SetModID(Network::ModID id)
+			ModID GetModID() const;
+			void SetModID(ModID id)
 			{
 				m_Data = id;
 			}
-			bool TryGetModID(Network::ModID& id) const
+			bool TryGetModID(ModID& id) const
 			{
 				id = GetModID();
-				return id != Network::InvalidModID;
+				return id.HasValue();
 			}
 			bool HasModID() const
 			{
-				return GetModID() != Network::InvalidModID;
+				return GetModID().HasValue();
 			}
 	};
 }

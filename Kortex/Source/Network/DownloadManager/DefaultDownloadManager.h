@@ -38,15 +38,8 @@ namespace Kortex::DownloadManager
 			void LoadDownloads() override;
 			void SaveDownloads() override;
 
-			bool ShouldShowHiddenDownloads() const override
-			{
-				//return m_Options.GetAttributeBool("ShowHiddenDownloads");
-				return false;
-			}
-			void ShowHiddenDownloads(bool show = true) override
-			{
-				//m_Options.SetAttribute("ShowHiddenDownloads", show);
-			}
+			bool ShouldShowHiddenDownloads() const override;
+			void ShowHiddenDownloads(bool show = true) override;
 
 			wxString GetDownloadsLocation() const override;
 			void SetDownloadsLocation(const wxString& location) override;
@@ -62,8 +55,8 @@ namespace Kortex::DownloadManager
 
 			IDownloadEntry& NewDownload() override;
 			bool RemoveDownload(IDownloadEntry& download) override;
-			bool QueueDownload(const Network::DownloadInfo& downloadInfo,
-							   const Network::FileInfo& fileInfo,
+			bool QueueDownload(const IModDownloadInfo& downloadInfo,
+							   const IModFileInfo& fileInfo,
 							   const INetworkProvider* provider,
 							   const GameID& id = GameIDs::NullGameID
 			) override;
@@ -77,7 +70,6 @@ namespace Kortex::DownloadManager
 			bool IsAssociatedWithNXM() const override;
 			void AssociateWithNXM() override;
 
-			GameID TranslateGameID(const wxString& nexusID) const override;
 			bool QueueNXM(const wxString& link) override;
 	};
 }

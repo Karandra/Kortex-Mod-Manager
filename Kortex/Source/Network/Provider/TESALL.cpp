@@ -5,7 +5,7 @@
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxHTML.h>
 
-namespace Kortex::Network
+namespace Kortex::NetworkManager
 {
 	bool TESALLProvider::DoAuthenticate(wxWindow* window)
 	{
@@ -55,29 +55,8 @@ namespace Kortex::Network
 	{
 		return "http://tesall.ru/files/file";
 	}
-	wxString TESALLProvider::GetModURL(int64_t modID, const wxString& modSignature, const GameID& id)
+	wxString TESALLProvider::GetModURL(ModID modID, const wxString& modSignature, const GameID& id)
 	{
-		return ConstructIPBModURL(modID, modSignature);
-	}
-
-	ModInfo TESALLProvider::GetModInfo(int64_t modID, const GameID& id) const
-	{
-		return ModInfo();
-	}
-	FileInfo TESALLProvider::GetFileItem(int64_t modID, int64_t fileID, const GameID& id) const
-	{
-		return FileInfo();
-	}
-	FileInfo::Vector TESALLProvider::GetFilesList(int64_t modID, const GameID& id) const
-	{
-		return FileInfo::Vector();
-	}
-	DownloadInfo::Vector TESALLProvider::GetFileDownloadLinks(int64_t modID, int64_t fileID, const GameID& id) const
-	{
-		return DownloadInfo::Vector();
-	}
-	EndorsementInfo TESALLProvider::EndorseMod(int64_t modID, EndorsementState::Value state, const GameID& id)
-	{
-		return EndorsementInfo();
+		return ConstructIPBModURL(modID.GetValue(), modSignature);
 	}
 }

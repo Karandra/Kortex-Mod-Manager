@@ -8,7 +8,7 @@
 #include <Kortex/Notification.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "UI/KMainWindow.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxDataView.h>
 #include <KxFramework/KxRegistry.h>
@@ -40,6 +40,7 @@ namespace
 namespace Kortex::Application::OName
 {
 	KortexDefOption(Downloads);
+	KortexDefOption(ShowHiddenDownloads);
 }
 
 namespace Kortex::DownloadManager
@@ -168,6 +169,17 @@ namespace Kortex::DownloadManager
 		}
 	}
 
+	bool DefaultDownloadManager::ShouldShowHiddenDownloads() const
+	{
+		using namespace Application;
+		return GetAInstanceOption(OName::ShowHiddenDownloads).GetValueBool();
+	}
+	void DefaultDownloadManager::ShowHiddenDownloads(bool show)
+	{
+		using namespace Application;
+		GetAInstanceOption(OName::ShowHiddenDownloads).SetValue(show);
+	}
+
 	wxString DefaultDownloadManager::GetDownloadsLocation() const
 	{
 		using namespace Application;
@@ -211,8 +223,8 @@ namespace Kortex::DownloadManager
 		}
 		return false;
 	}
-	bool DefaultDownloadManager::QueueDownload(const Network::DownloadInfo& downloadInfo,
-											   const Network::FileInfo& fileInfo,
+	bool DefaultDownloadManager::QueueDownload(const IModDownloadInfo& downloadInfo,
+											   const IModFileInfo& fileInfo,
 											   const INetworkProvider* provider,
 											   const GameID& id
 	)
@@ -283,69 +295,33 @@ namespace Kortex::DownloadManager
 		m_IsAssociatedWithNXM = CheckIsAssociatedWithNXM();
 	}
 
-	GameID DefaultDownloadManager::TranslateGameID(const wxString& nexusID) const
-	{
-		const wxString idLower = KxString::ToLower(nexusID);
-		if (!idLower.IsEmpty())
-		{
-			// TES
-			if (idLower == "morrowind")
-			{
-				return GameIDs::Morrowind;
-			}
-			if (idLower == "oblivion")
-			{
-				return GameIDs::Oblivion;
-			}
-			if (idLower == "skyrim")
-			{
-				return GameIDs::Skyrim;
-			}
-			if (idLower == "skyrimse")
-			{
-				return GameIDs::SkyrimSE;
-			}
-
-			// Fallout
-			if (idLower == "fallout3")
-			{
-				return GameIDs::Fallout3;
-			}
-			if (idLower == "falloutnv")
-			{
-				return GameIDs::FalloutNV;
-			}
-			if (idLower == "fallout4")
-			{
-				return GameIDs::Fallout4;
-			}
-		}
-		return GameIDs::NullGameID;
-	}
 	bool DefaultDownloadManager::QueueNXM(const wxString& link)
 	{
-		wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+))", wxRE_ADVANCED|wxRE_ICASE);
+		wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+))", wxRE_ADVANCED|wxRE_ICASE);
 		if (reg.Matches(link))
 		{
-			GameID game = TranslateGameID(reg.GetMatch(link, 1));
-			int64_t modID = -1;
-			int64_t fileID = -1;
-			reg.GetMatch(link, 2).ToLongLong(&modID);
-			reg.GetMatch(link, 3).ToLongLong(&fileID);
+			NetworkManager::NexusProvider* nexus = NetworkManager::NexusProvider::GetInstance();
 
-			if (game.IsOK() && modID != -1 && fileID != -1)
+			GameID game = nexus->TranslateNxmGameID(reg.GetMatch(link, 1));
+			ModID modID(reg.GetMatch(link, 2));
+			ModFileID fileID(reg.GetMatch(link, 3));
+
+			Nexus::Internal::ReplyStructs::ModDownloadInfoNXM nxmExtraInfo;
+			nxmExtraInfo.Key = reg.GetMatch(link, 4);
+			nxmExtraInfo.Expires = reg.GetMatch(link, 5);
+
+			if (game.IsOK() && modID && fileID)
 			{
-				Network::NexusProvider* nexus = Network::NexusProvider::GetInstance();
-				auto fileInfo = nexus->GetFileItem(modID, fileID, game);
-				if (fileInfo.IsOK())
+				auto fileInfo = nexus->GetFileInfo(modID, fileID, wxAny(), game);
+				if (fileInfo)
 				{
 					bool success = true;
-					auto links = nexus->GetFileDownloadLinks(modID, fileID, game);
-					for (const auto& v: links)
+					auto linkItems = nexus->GetFileDownloadLinks(modID, fileID, nxmExtraInfo, game);
+					for (const auto& link: linkItems)
 					{
-						success = success && QueueDownload(v, fileInfo, nexus, game);
+						success = success && QueueDownload(*link, *fileInfo, nexus, game);
 					}
-					return success && !links.empty();
+					return success && !linkItems.empty();
 				}
 			}
 		}

@@ -5,7 +5,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include "InstallWizard/KInstallWizardDialog.h"
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxFile.h>
@@ -255,9 +255,9 @@ namespace Kortex::DownloadManager
 			}
 			case ColumnID::Provider:
 			{
-				using namespace Network;
-				ProviderID id1 = entry1->GetProvider() ? entry1->GetProvider()->GetID() : ProviderIDs::Invalid;
-				ProviderID id2 = entry2->GetProvider() ? entry2->GetProvider()->GetID() : ProviderIDs::Invalid;
+				using namespace NetworkManager;
+				NetworkProviderID id1 = entry1->GetProvider() ? entry1->GetProvider()->GetID() : NetworkProviderIDs::Invalid;
+				NetworkProviderID id2 = entry2->GetProvider() ? entry2->GetProvider()->GetID() : NetworkProviderIDs::Invalid;
 
 				return id1 < id2;
 			}
@@ -346,7 +346,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ShowChangeLog, KTr("DownloadManager.Menu.ShowChangeLog")));
-			item->Enable(entry && entry->GetFileInfo().HasChangeLog());
+			item->Enable(entry && !entry->GetFileInfo().GetChangeLog().IsEmpty());
 		}
 		contextMenu.AddSeparator();
 
@@ -404,7 +404,7 @@ namespace Kortex::DownloadManager
 				item->Check(assocOK);
 				item->SetBitmap(KGetBitmap(KIMG_SITE_NEXUS));
 			}
-			if (entry && entry->IsProviderOfType<Network::NexusProvider>())
+			if (entry && entry->IsProviderOfType<NetworkManager::NexusProvider>())
 			{
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::CopyNXM, KTr("DownloadManager.Menu.CopyNXM")));
 			}
@@ -565,7 +565,7 @@ namespace Kortex::DownloadManager
 			}
 			case MenuID::CopyNXM:
 			{
-				const Network::NexusProvider* nexus = Network::NexusProvider::GetInstance();
+				const NetworkManager::NexusProvider* nexus = NetworkManager::NexusProvider::GetInstance();
 				if (wxTheClipboard->Open())
 				{
 					wxTheClipboard->SetData(new wxTextDataObject(nexus->ConstructNXM(entry->GetFileInfo(), entry->GetTargetGameID())));

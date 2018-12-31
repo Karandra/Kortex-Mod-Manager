@@ -61,8 +61,8 @@ namespace Kortex
 
 			virtual IDownloadEntry& NewDownload() = 0;
 			virtual bool RemoveDownload(IDownloadEntry& download) = 0;
-			virtual bool QueueDownload(const Network::DownloadInfo& downloadInfo,
-									   const Network::FileInfo& fileInfo,
+			virtual bool QueueDownload(const IModDownloadInfo& downloadInfo,
+									   const IModFileInfo& fileInfo,
 									   const INetworkProvider* provider,
 									   const GameID& id = GameIDs::NullGameID
 			) = 0;
@@ -78,7 +78,6 @@ namespace Kortex
 			virtual bool IsAssociatedWithNXM() const = 0;
 			virtual void AssociateWithNXM() = 0;
 
-			virtual GameID TranslateGameID(const wxString& nexusID) const = 0;
 			virtual bool QueueNXM(const wxString& link) = 0;
 	};
 }

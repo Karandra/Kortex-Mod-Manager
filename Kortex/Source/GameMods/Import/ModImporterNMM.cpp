@@ -7,8 +7,8 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include "PackageProject/KPackageProjectSerializer.h"
-#include "KOperationWithProgress.h"
-#include "KAux.h"
+#include "Utility/KOperationWithProgress.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxTextFile.h>
 
@@ -168,7 +168,7 @@ namespace Kortex::ModManager
 			modEntry.SetVersion(infoNode.GetFirstChildElement("Version").GetValue());
 			modEntry.SetAuthor(infoNode.GetFirstChildElement("Author").GetValue());
 			modEntry.SetDescription(ProcessDescription(infoNode.GetFirstChildElement("Description").GetValue()));
-			//modEntry.SetWebSite(Network::ProviderIDs::Nexus, infoNode.GetFirstChildElement("Id").GetValueInt(modInfoNode.GetAttributeInt("modId")));
+			modEntry.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(infoNode.GetFirstChildElement("Id").GetValueInt(modInfoNode.GetAttributeInt("modId", ModID::GetInvalidValue())));
 
 			// Install date
 			modEntry.SetInstallTime(KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
@@ -268,7 +268,7 @@ namespace Kortex::ModManager
 
 				IDownloadEntry& entry = manager->NewDownload();
 				entry.SetTargetGame(m_TargetGame);
-				entry.SetProvider(Network::NexusProvider::GetInstance());
+				entry.SetProvider(NetworkManager::NexusProvider::GetInstance());
 				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
 				entry.GetDownloadInfo().SetURL(infoNode.GetFirstChildElement("Website").GetValue());

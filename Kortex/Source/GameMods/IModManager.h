@@ -3,7 +3,7 @@
 #include "Application/IManager.h"
 #include "GameMods/IGameMod.h"
 #include "VFS/IVirtualFileSystem.h"
-#include "Network/NetworkConstants.h"
+#include "Network/Common.h"
 #include <KxFramework/KxSingleton.h>
 
 namespace Kortex
@@ -61,7 +61,7 @@ namespace Kortex
 			virtual IGameMod* FindModByID(const wxString& modID, intptr_t* index = nullptr) const = 0;
 			virtual IGameMod* FindModByName(const wxString& modName, intptr_t* index = nullptr) const = 0;
 			virtual IGameMod* FindModBySignature(const wxString& signature, intptr_t* index = nullptr) const = 0;
-			virtual IGameMod* FindModByNetworkID(Network::ProviderID providerID, Network::ModID id, intptr_t* index = nullptr) const = 0;
+			virtual IGameMod* FindModByNetworkID(NetworkProviderID providerID, ModID id, intptr_t* index = nullptr) const = 0;
 			
 			virtual bool IsModActive(const wxString& modID) const = 0;
 			virtual bool ChangeModID(IGameMod& mod, const wxString& newID) = 0;

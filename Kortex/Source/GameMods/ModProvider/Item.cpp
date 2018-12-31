@@ -26,10 +26,10 @@ namespace Kortex
 	{
 		SetName(node.GetAttribute("Name"));
 
-		Network::ModID id = node.GetAttributeInt("ModID", Network::InvalidModID);
-		if (id != Network::InvalidModID)
+		ModID id = node.GetAttributeInt("ModID", ModID::GetInvalidValue());
+		if (id.HasValue())
 		{
-			m_Data = id;
+			m_Data = std::move(id);
 		}
 		else
 		{
@@ -40,11 +40,11 @@ namespace Kortex
 	{
 		node.SetAttribute("Name", GetName());
 
-		Network::ModID id = Network::InvalidModID;
+		ModID id;
 		wxString url;
 		if (TryGetModID(id))
 		{
-			node.SetAttribute("ModID", id);
+			node.SetAttribute("ModID", id.GetValue());
 		}
 		else if (TryGetURL(url))
 		{
@@ -91,8 +91,8 @@ namespace Kortex
 
 	wxString ModProviderItem::GetURL(const GameID& gameID) const
 	{
-		Network::ModID modID = Network::InvalidModID;
 		INetworkProvider* provider = nullptr;
+		ModID modID;
 
 		if (const wxString* url = std::get_if<wxString>(&m_Data))
 		{
@@ -104,12 +104,12 @@ namespace Kortex
 		}
 		return wxEmptyString;
 	}
-	Network::ModID ModProviderItem::GetModID() const
+	ModID ModProviderItem::GetModID() const
 	{
-		if (const Network::ModID* id = std::get_if<Network::ModID>(&m_Data))
+		if (const ModID* id = std::get_if<ModID>(&m_Data))
 		{
 			return *id;
 		}
-		return Network::InvalidModID;
+		return ModID();
 	}
 }

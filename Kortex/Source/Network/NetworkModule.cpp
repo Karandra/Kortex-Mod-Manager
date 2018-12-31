@@ -2,7 +2,7 @@
 #include "NetworkModule.h"
 #include "NetworkManager/DefaultNetworkManager.h"
 #include "DownloadManager/DefaultDownloadManager.h"
-#include "KINetFSHandler.h"
+#include "Utility/KINetFSHandler.h"
 
 namespace Kortex
 {

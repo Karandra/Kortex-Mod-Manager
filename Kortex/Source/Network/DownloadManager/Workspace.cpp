@@ -4,15 +4,26 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/DownloadManager.hpp>
-#include "KAux.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
+namespace
+{
+	auto GetDisplayModelOptions()
+	{
+		using namespace Kortex;
+		using namespace Kortex::Application;
+
+		return GetAInstanceOptionOf<IDownloadManager>(OName::Workspace, OName::DisplayModel);
+	}
+}
+
 namespace Kortex::DownloadManager
 {
 	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)//, m_ViewOptions(this, "DownloadsListView")
+		:KWorkspace(mainWindow)
 	{
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	}
@@ -20,7 +31,7 @@ namespace Kortex::DownloadManager
 	{
 		if (IsWorkspaceCreated())
 		{
-			//KProgramOptionSerializer::SaveDataViewLayout(m_ViewModel->GetView(), m_ViewOptions);
+			GetDisplayModelOptions().SaveDataViewLayout(m_ViewModel->GetView());
 		}
 	}
 	bool Workspace::OnCreateWorkspace()
@@ -30,7 +41,7 @@ namespace Kortex::DownloadManager
 
 		m_ViewModel = new DisplayModel();
 		m_ViewModel->Create(this, m_MainSizer);
-		//KProgramOptionSerializer::LoadDataViewLayout(m_ViewModel->GetView(), m_ViewOptions);
+		GetDisplayModelOptions().LoadDataViewLayout(m_ViewModel->GetView());
 
 		CallAfter([manager]()
 		{

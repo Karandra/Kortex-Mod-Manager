@@ -1550,9 +1550,6 @@
     <ClInclude Include="Source\Network\NetworkModule.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\NetworkConstants.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameData\GameDataModule.h">
       <Filter>Code\Headers\GameData</Filter>
     </ClInclude>
@@ -1765,6 +1762,18 @@
     </ClInclude>
     <ClInclude Include="Source\Application\Options\Macros.h">
       <Filter>Code\Headers\Application\Option</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\Common.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\UniqueID.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\String.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkProviderReplyStructs.h">
+      <Filter>Code\Headers\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

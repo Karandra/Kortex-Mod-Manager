@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/IManager.h"
-#include "NetworkConstants.h"
+#include "Common.h"
 #include "INetworkProvider.h"
 #include <KxFramework/KxSingleton.h>
 class KMainWindow;
@@ -53,11 +53,11 @@ namespace Kortex
 
 			virtual INetworkProvider* GetDefaultProvider() const = 0;
 			bool IsDefaultProviderAvailable() const;
-			Network::ProviderID GetDefaultProviderID() const;
+			NetworkProviderID GetDefaultProviderID() const;
 		
 			virtual INetworkProvider* FindProvider(const wxString& name) const = 0;
-			virtual INetworkProvider* GetProvider(Network::ProviderID providerID) const = 0;
-			bool HasProvider(Network::ProviderID providerID) const
+			virtual INetworkProvider* GetProvider(NetworkProviderID providerID) const = 0;
+			bool HasProvider(NetworkProviderID providerID) const
 			{
 				return GetProvider(providerID) != nullptr;
 			}

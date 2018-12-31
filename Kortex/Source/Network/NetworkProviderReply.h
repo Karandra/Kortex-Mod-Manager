@@ -1,389 +1,190 @@
 #pragma once
 #include "stdafx.h"
-#include "NetworkConstants.h"
+#include "Common.h"
+#include "Application/RTTI.h"
 #include <KxFramework/KxVersion.h>
 
-namespace Kortex::Network
+namespace Kortex::NetworkManager
 {
-	class BaseReply
+	class BaseModReply: public RTTI::IInterface<BaseModReply>
 	{
 		private:
 			bool m_ShouldTryLater = false;
 
 		public:
-			virtual ~BaseReply() = default;
+			virtual ~BaseModReply() = default;
 
 		public:
 			virtual bool IsOK() const = 0;
-			virtual void Reset() = 0;
 
-			bool ShouldTryLater() const
+			bool ShouldTryLater()
 			{
 				return m_ShouldTryLater;
 			}
-			void SetShouldTryLater()
+			void SetShouldTryLater(bool value = true)
 			{
-				m_ShouldTryLater = true;
+				m_ShouldTryLater = value;
 			}
 	};
+}
 
-	class EndorsementState
+namespace Kortex
+{
+	class ModEndorsement
 	{
 		public:
-			enum Value
+			static ModEndorsement Endorsed()
 			{
-				Invalid = -1,
+				return ModEndorsement(State::Endorse);
+			}
+			static ModEndorsement Abstained()
+			{
+				return ModEndorsement(State::Abstain);
+			}
+			static ModEndorsement Undecided()
+			{
+				return ModEndorsement(State::Undecided);
+			}
+
+		private:
+			enum class State
+			{
 				Undecided,
 				Endorse,
 				Abstain,
 			};
 
 		private:
-			Value m_State = Value::Invalid;
+			State m_State = State::Undecided;
 
-		public:
-			virtual ~EndorsementState() = default;
-
-		public:
-			bool IsValid() const
+		private:
+			ModEndorsement(State value)
+				:m_State(value)
 			{
-				return m_State != Value::Invalid;
 			}
 
+		public:
+			ModEndorsement(ModEndorsement&&) = default;
+			ModEndorsement(const ModEndorsement&) = default;
+
+		public:
 			bool IsEndorsed() const
 			{
-				return m_State == Value::Endorse;
+				return m_State == State::Endorse;
 			}
 			bool IsAbstained() const
 			{
-				return m_State == Value::Abstain;
+				return m_State == State::Abstain;
 			}
+			bool IsUndecided() const
+			{
+				return m_State == State::Undecided;
+			}
+
 			bool ShouldRemindEndorse() const
 			{
 				return !IsEndorsed() && !IsAbstained();
 			}
 	
-			EndorsementState& SetEndorsed()
-			{
-				m_State = Value::Endorse;
-				return *this;
-			}
-			EndorsementState& SetAbstained()
-			{
-				m_State = Value::Abstain;
-				return *this;
-			}
-			EndorsementState& SetUndecided()
-			{
-				m_State = Value::Undecided;
-				return *this;
-			}
+		public:
+			ModEndorsement& operator=(ModEndorsement&&) = default;
+			ModEndorsement& operator=(const ModEndorsement&) = default;
 	};
 
-	class FileInfo: public BaseReply
+	class IModFileInfo: public RTTI::IMultiInterface<IModFileInfo, NetworkManager::BaseModReply>
 	{
-		friend class NexusProvider;
+		public:
+			enum class CategoryID
+			{
+				Unknown = 0,
+				Main,
+				Optional
+			};
 
 		public:
-			using Vector = std::vector<FileInfo>;
-
-		private:
-			int64_t m_ModID = -1;
-			int64_t m_ID = -1;
-			int64_t m_Size = -1;
-			wxString m_Name;
-			wxString m_DisplayName;
-			wxString m_ChangeLog;
-			wxString m_Category;
-			KxVersion m_Version;
-			wxDateTime m_UploadDate;
-			bool m_IsPrimary = false;
+			using Vector = std::vector<std::unique_ptr<IModFileInfo>>;
 
 		public:
-			virtual bool IsOK() const override
-			{
-				return !m_Name.IsEmpty() && m_Size >= 0 && m_ID >= 0 && m_ModID >= 0;
-			}
-			virtual void Reset() override
-			{
-				*this = FileInfo();
-			}
+			virtual std::unique_ptr<IModFileInfo> Clone() const = 0;
 
 		public:
-			int64_t GetModID() const
-			{
-				return m_ModID;
-			}
-			void SetModID(int64_t id)
-			{
-				m_ModID = id;
-			}
+			virtual ModID GetModID() const = 0;
+			virtual void SetModID(ModID value) = 0;
 
-			int64_t GetID() const
-			{
-				return m_ID;
-			}
-			void SetID(int64_t id)
-			{
-				m_ID = id;
-			}
-			
-			int64_t GetSize() const
-			{
-				return m_Size;
-			}
-			void SetSize(int64_t size)
-			{
-				m_Size = size;
-			}
+			virtual ModFileID GetID() const = 0;
+			virtual void SetID(ModFileID value) = 0;
 
-			bool IsPrimary() const
-			{
-				return m_IsPrimary;
-			}
-			void SetPrimary(bool set = true)
-			{
-				m_IsPrimary = set;
-			}
+			virtual int64_t GetSize() const = 0;
+			virtual void SetSize(int64_t value) = 0;
 
-			const wxString& GetName() const
-			{
-				return m_Name;
-			}
-			void SetName(const wxString& name)
-			{
-				m_Name = name;
-			}
-			
-			wxString GetDisplayName() const
-			{
-				return m_DisplayName.IsEmpty() ? m_Name : m_DisplayName;
-			}
-			void SetDisplayName(const wxString& name)
-			{
-				m_DisplayName = name;
-			}
-			
-			wxDateTime GetUploadDate() const
-			{
-				return m_UploadDate;
-			}
-			void SetUploadDate(const wxDateTime& date)
-			{
-				m_UploadDate = date;
-			}
-			
-			const KxVersion& GetVersion() const
-			{
-				return m_Version;
-			}
-			void SetVersion(const KxVersion& version)
-			{
-				m_Version = version;
-			}
-			
-			bool HasChangeLog() const
-			{
-				return !m_ChangeLog.IsEmpty();
-			}
-			const wxString& GetChangeLog() const
-			{
-				return m_ChangeLog;
-			}
-			void SetChangeLog(const wxString& changeLog)
-			{
-				m_ChangeLog = changeLog;
-			}
+			virtual bool IsPrimary() const = 0;
 
-			const wxString& GetCategory() const
-			{
-				return m_Category;
-			}
-			void SetCategory(const wxString& value)
-			{
-				m_Category = value;
-			}
+			virtual wxString GetName() const = 0;
+			virtual void SetName(const wxString& value) = 0;
+
+			virtual wxString GetDisplayName() const = 0;
+			virtual void SetDisplayName(const wxString& value) = 0;
+
+			virtual KxVersion GetVersion() const = 0;
+			virtual void SetVersion(const KxVersion& value) = 0;
+
+			virtual wxString GetChangeLog() const = 0;
+			virtual void SetChangeLog(const wxString& value) = 0;
+
+			virtual wxDateTime GetUploadDate() const = 0;
+			virtual CategoryID GetCategory() const = 0;
 	};
 
-	class ModInfo: public BaseReply, public EndorsementState
+	class IModInfo: public RTTI::IMultiInterface<IModInfo, NetworkManager::BaseModReply>
 	{
-		friend class NexusProvider;
-
-		private:
-			int64_t m_ID = -1;
-			wxString m_Name;
-			wxString m_Summary;
-			wxString m_Description;
-			wxString m_Author;
-			wxString m_Uploader;
-			wxString m_UploaderProfileURL;
-			wxString m_MainImageURL;
-			KxVersion m_Version;
-			wxDateTime m_UploadDate;
-			wxDateTime m_LastUpdateDate;
-			FileInfo m_PrimaryFile;
-			bool m_ContainsAdultContent = false;
+		public:
+			virtual std::unique_ptr<IModInfo> Clone() const = 0;
 
 		public:
-			virtual bool IsOK() const override
-			{
-				return m_ID >= 0 && !m_Name.IsEmpty();
-			}
-			virtual void Reset() override
-			{
-				*this = ModInfo();
-			}
-	
-		public:
-			int64_t GetID() const
-			{
-				return m_ID;
-			}
-			const wxString& GetName() const
-			{
-				return m_Name;
-			}
-			wxString GetSummary() const
-			{
-				if (m_Summary.IsEmpty())
-				{
-					return m_Description.Left(128) + "...";
-				}
-				return m_Summary;
-			}
-			const wxString& GetDescription() const
-			{
-				return m_Description;
-			}
-			const wxString& GetAuthor() const
-			{
-				return m_Author.IsEmpty() ? m_Uploader : m_Author;
-			}
-			const wxString& GetUploader() const
-			{
-				return m_Uploader;
-			}
-			const wxString& GetUploaderProfileURL() const
-			{
-				return m_UploaderProfileURL;
-			}
-			const wxString& GetMainImageURL() const
-			{
-				return m_MainImageURL;
-			}
-			const KxVersion& GetVersion() const
-			{
-				return m_Version;
-			}
-			wxDateTime GetUploadDate() const
-			{
-				return m_UploadDate;
-			}
-			wxDateTime GetLastUpdateDate() const
-			{
-				return m_LastUpdateDate;
-			}
-			bool ContainsAdultContent() const
-			{
-				return m_ContainsAdultContent;
-			}
+			virtual ModID GetID() const = 0;
 
-			bool HasPrimaryFile() const
-			{
-				return m_PrimaryFile.IsOK();
-			}
-			FileInfo& GetPrimaryFile()
-			{
-				return m_PrimaryFile;
-			}
-			const FileInfo& GetPrimaryFile() const
-			{
-				return m_PrimaryFile;
-			}
+			virtual wxString GetName() const = 0;
+			virtual wxString GetSummary() const = 0;
+			virtual wxString GetDescription() const = 0;
+
+			virtual wxString GetAuthor() const = 0;
+			virtual wxString GetUploader() const = 0;
+			virtual wxString GetUploaderProfile() const = 0;
+			virtual wxString GetMainImage() const = 0;
+
+			virtual KxVersion GetVersion() const = 0;
+			virtual wxDateTime GetUploadDate() const = 0;
+			virtual wxDateTime GetLastUpdateDate() const = 0;
+			
+			virtual IModFileInfo* GetPrimaryFile() = 0;
+			virtual ModEndorsement GetEndorsementState() const = 0;
+
+			virtual bool ContainsAdultContent() const = 0;
 	};
 
-	class DownloadInfo: public BaseReply
+	class IModDownloadInfo: public RTTI::IMultiInterface<IModDownloadInfo, NetworkManager::BaseModReply>
 	{
-		friend class NexusProvider;
+		public:
+			virtual std::unique_ptr<IModDownloadInfo> Clone() const = 0;
 
 		public:
-			using Vector = std::vector<DownloadInfo>;
-
-		private:
-			wxString m_Name;
-			wxString m_ShortName;
-			wxString m_URL;
+			using Vector = std::vector<std::unique_ptr<IModDownloadInfo>>;
 
 		public:
-			DownloadInfo(const wxString& url = wxEmptyString, const wxString& name = wxEmptyString, const wxString& shortName = wxEmptyString)
-				:m_URL(url), m_Name(name), m_ShortName(shortName)
-			{
-			}
+			virtual wxString GetName() const = 0;
+			virtual wxString GetShortName() const = 0;
 
-		public:
-			virtual bool IsOK() const override
-			{
-				return !m_URL.IsEmpty();
-			}
-			virtual void Reset() override
-			{
-				*this = DownloadInfo();
-			}
-	
-		public:
-			const wxString& GetName() const
-			{
-				return m_Name.IsEmpty() ? m_URL : m_Name;
-			}
-			void SetName(const wxString& name)
-			{
-				m_Name = name;
-			}
-			
-			const wxString& GetShortName() const
-			{
-				return m_ShortName.IsEmpty() ? GetName() : m_ShortName;
-			}
-			void SetShortName(const wxString& name)
-			{
-				m_ShortName = name;
-			}
-			
-			const wxString& GetURL() const
-			{
-				return m_URL;
-			}
-			void SetURL(const wxString& url)
-			{
-				m_URL = url;
-			}
+			virtual wxString GetURL() const = 0;
+			virtual void SetURL(const wxString& value) = 0;
 	};
 
-	class EndorsementInfo: public BaseReply, public EndorsementState
+	class IModEndorsementInfo: public RTTI::IMultiInterface<IModEndorsementInfo, NetworkManager::BaseModReply>
 	{
-		friend class NexusProvider;
-
-		private:
-			wxString m_Message;
+		public:
+			virtual std::unique_ptr<IModEndorsementInfo> Clone() const = 0;
 
 		public:
-			virtual bool IsOK() const override
-			{
-				return EndorsementState::IsValid();
-			}
-			virtual void Reset() override
-			{
-				*this = EndorsementInfo();
-			}
-	
-		public:
-			bool HasMessage() const
-			{
-				return !m_Message.IsEmpty();
-			}
-			const wxString& GetMessage() const
-			{
-				return m_Message;
-			}
+			virtual ModEndorsement GetEndorsement() const = 0;
+			virtual wxString GetMessage() const = 0;
 	};
 }

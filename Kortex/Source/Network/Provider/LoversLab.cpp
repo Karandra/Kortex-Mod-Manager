@@ -4,7 +4,7 @@
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxCURL.h>
 
-namespace Kortex::Network
+namespace Kortex::NetworkManager
 {
 	LoversLabProvider::LoversLabProvider()
 		:INetworkProvider(wxS("LoversLab"))
@@ -59,29 +59,8 @@ namespace Kortex::Network
 	{
 		return "https://www.loverslab.com/files/file";
 	}
-	wxString LoversLabProvider::GetModURL(int64_t modID, const wxString& modSignature, const GameID& id)
+	wxString LoversLabProvider::GetModURL(ModID modID, const wxString& modSignature, const GameID& id)
 	{
-		return ConstructIPBModURL(modID, modSignature);
-	}
-
-	ModInfo LoversLabProvider::GetModInfo(int64_t modID, const GameID& id) const
-	{
-		return ModInfo();
-	}
-	FileInfo LoversLabProvider::GetFileItem(int64_t modID, int64_t fileID, const GameID& id) const
-	{
-		return FileInfo();
-	}
-	FileInfo::Vector LoversLabProvider::GetFilesList(int64_t modID, const GameID& id) const
-	{
-		return FileInfo::Vector();
-	}
-	DownloadInfo::Vector LoversLabProvider::GetFileDownloadLinks(int64_t modID, int64_t fileID, const GameID& id) const
-	{
-		return DownloadInfo::Vector();
-	}
-	EndorsementInfo LoversLabProvider::EndorseMod(int64_t modID, EndorsementState::Value state, const GameID& id)
-	{
-		return EndorsementInfo();
+		return ConstructIPBModURL(modID.GetValue(), modSignature);
 	}
 }

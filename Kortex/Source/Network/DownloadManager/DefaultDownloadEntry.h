@@ -18,8 +18,8 @@ namespace Kortex::DownloadManager
 	class DefaultDownloadEntry: public IDownloadEntry
 	{
 		private:
-			Network::DownloadInfo m_DownloadInfo;
-			Network::FileInfo m_FileInfo;
+			std::unique_ptr<IModDownloadInfo> m_DownloadInfo;
+			std::unique_ptr<IModFileInfo> m_FileInfo;
 
 			wxEvtHandler m_EvtHandler;
 			KQuickThread* m_Thread = nullptr;
@@ -52,16 +52,16 @@ namespace Kortex::DownloadManager
 
 		public:
 			DefaultDownloadEntry();
-			DefaultDownloadEntry(const Network::DownloadInfo& downloadInfo,
-						   const Network::FileInfo& fileInfo,
-						   const INetworkProvider* provider,
-						   const GameID& id);
+			DefaultDownloadEntry(const IModDownloadInfo& downloadInfo,
+								 const IModFileInfo& fileInfo,
+								 const INetworkProvider* provider,
+								 const GameID& id);
 			virtual ~DefaultDownloadEntry();
 
 		public:
 			bool IsOK() const override
 			{
-				return m_DownloadInfo.IsOK() && m_FileInfo.IsOK() && m_TargetGame && m_Provider;
+				return m_Provider && m_DownloadInfo->IsOK() && m_FileInfo->IsOK() && m_TargetGame && m_Provider;
 			}
 			wxString GetFullPath() const override;
 			wxString GetMetaFilePath() const override;
@@ -111,29 +111,29 @@ namespace Kortex::DownloadManager
 			}
 			bool IsCompleted() const override
 			{
-				return !IsFailed() && m_FileInfo.GetSize() == m_DownloadedSize;
+				return !IsFailed() && m_FileInfo->GetSize() == m_DownloadedSize;
 			}
 			bool CanRestart() const override
 			{
-				return !IsRunning() && m_Provider && m_FileInfo.IsOK();
+				return !IsRunning() && m_Provider && m_FileInfo->IsOK();
 			}
 
-			const Network::FileInfo& GetFileInfo() const override
+			const IModFileInfo& GetFileInfo() const override
 			{
-				return m_FileInfo;
+				return *m_FileInfo;
 			}
-			Network::FileInfo& GetFileInfo() override
+			IModFileInfo& GetFileInfo() override
 			{
-				return m_FileInfo;
+				return *m_FileInfo;
 			}
 
-			const Network::DownloadInfo& GetDownloadInfo() const override
+			const IModDownloadInfo& GetDownloadInfo() const override
 			{
-				return m_DownloadInfo;
+				return *m_DownloadInfo;
 			}
-			Network::DownloadInfo& GetDownloadInfo() override
+			IModDownloadInfo& GetDownloadInfo() override
 			{
-				return m_DownloadInfo;
+				return *m_DownloadInfo;
 			}
 
 			bool IsRunning() const override

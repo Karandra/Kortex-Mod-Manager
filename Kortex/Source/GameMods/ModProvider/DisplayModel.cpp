@@ -123,8 +123,8 @@ namespace Kortex::ModProvider
 				wxString newValue = data.As<wxString>();
 				if (node->HasProvider())
 				{
-					Network::ModID modID = Network::InvalidModID;
-					if (data.GetAs(&modID) && modID >= 0)
+					ModID modID;
+					if (modID.FromString(newValue))
 					{
 						node->SetModID(modID);
 						m_IsModified = true;

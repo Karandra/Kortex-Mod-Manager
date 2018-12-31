@@ -21,13 +21,13 @@ namespace Kortex
 	{
 		return GetProvider() != nullptr;
 	}
-	bool IDownloadEntry::IsProviderOfType(Network::ProviderID providerID) const
+	bool IDownloadEntry::IsProviderOfType(NetworkProviderID providerID) const
 	{
 		if (const INetworkProvider* provider = GetProvider())
 		{
 			return provider->GetID() == providerID;
 		}
-		return providerID == Network::ProviderIDs::Invalid;
+		return providerID == NetworkProviderIDs::Invalid;
 	}
 
 	bool IDownloadEntry::Save() const

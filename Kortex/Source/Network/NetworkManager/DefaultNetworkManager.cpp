@@ -15,14 +15,14 @@ namespace Kortex::NetworkManager
 {
 	void DefaultNetworkManager::OnInit()
 	{
-		using namespace Network;
+		using namespace NetworkManager;
 		using namespace Application;
 
 		// Init providers
-		m_Providers.reserve(ProviderIDs::MAX_SYSTEM);
+		m_Providers.reserve(NetworkProviderIDs::MAX_SYSTEM);
 		AddProvider<NexusProvider>();
-		AddProvider<TESALLProvider>();
-		AddProvider<LoversLabProvider>();
+		//AddProvider<TESALLProvider>();
+		//AddProvider<LoversLabProvider>();
 
 		// Load default provider
 		m_DefaultProvider = 0;
@@ -65,7 +65,7 @@ namespace Kortex::NetworkManager
 				}
 			}
 
-			m_DefaultProvider = Kortex::Network::ProviderIDs::Invalid;
+			m_DefaultProvider = NetworkProviderIDs::Invalid;
 			return false;
 		}
 		return true;
@@ -247,7 +247,7 @@ namespace Kortex::NetworkManager
 		}
 		return nullptr;
 	}
-	INetworkProvider* DefaultNetworkManager::GetProvider(Network::ProviderID providerID) const
+	INetworkProvider* DefaultNetworkManager::GetProvider(NetworkProviderID providerID) const
 	{
 		if (providerID >= 0 && (size_t)providerID < m_Providers.size())
 		{

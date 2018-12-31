@@ -9,8 +9,8 @@
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/ProgramManager.hpp>
 #include "PackageProject/KPackageProjectSerializer.h"
-#include "KOperationWithProgress.h"
-#include "KAux.h"
+#include "Utility/KOperationWithProgress.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxINI.h>
@@ -268,21 +268,21 @@ namespace Kortex::ModManager
 					// Load 'meta.ini'
 					wxString modFolder = GetModFolder(name);
 					KxFileStream metaStream(modFolder + "\\Meta.ini");
-					KxINI tModINI(metaStream);
+					KxINI modINI(metaStream);
 
 					// Write data
 					IGameMod& entry = IModManager::GetInstance()->EmplaceMod();
 					entry.SetName(name);
 					entry.SetActive(isModEnabled);
-					entry.SetVersion(tModINI.GetValue("General", "version"));
-					entry.SetPackageFile(ProcessFilePath(tModINI.GetValue("General", "installationFile")));
-					entry.SetDescription(ProcessDescription(tModINI.GetValue("General", "nexusDescription")));
+					entry.SetVersion(modINI.GetValue("General", "version"));
+					entry.SetPackageFile(ProcessFilePath(modINI.GetValue("General", "installationFile")));
+					entry.SetDescription(ProcessDescription(modINI.GetValue("General", "nexusDescription")));
 
 					// NexusID
-					int64_t nexusID = tModINI.GetValueInt("General", "modid", Network::InvalidModID);
-					if (nexusID > 0)
+					ModID nexusID = modINI.GetValueInt("General", "modid", ModID::GetInvalidValue());
+					if (nexusID)
 					{
-						//entry.SetWebSite(Network::ProviderIDs::Nexus, nexusID);
+						entry.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(nexusID);
 					}
 
 					// Install date

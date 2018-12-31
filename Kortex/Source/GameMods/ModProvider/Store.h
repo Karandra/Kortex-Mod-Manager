@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Item.h"
-#include "Network/NetworkConstants.h"
+#include "Network/Common.h"
 #include "Network/INetworkProvider.h"
 #include "GameInstance/GameID.h"
 #include "Utility/Collection.h"
@@ -153,7 +153,7 @@ namespace Kortex
 				}
 				return nullptr;
 			}
-			ModProviderItem* TryAddWith(const wxString& name, Network::ModID id)
+			ModProviderItem* TryAddWith(const wxString& name, ModID id)
 			{
 				if (!HasItem(name))
 				{
@@ -170,7 +170,7 @@ namespace Kortex
 				}
 				return nullptr;
 			}
-			ModProviderItem* TryAddWith(INetworkProvider* provider, Network::ModID id)
+			ModProviderItem* TryAddWith(INetworkProvider* provider, ModID id)
 			{
 				if (!HasItem(provider))
 				{
@@ -183,7 +183,7 @@ namespace Kortex
 			{
 				return TryAddWith(T::GetInstance(), url);
 			}
-			template<class T> ModProviderItem* TryAddWith(Network::ModID id)
+			template<class T> ModProviderItem* TryAddWith(ModID id)
 			{
 				return TryAddWith(T::GetInstance(), id);
 			}
@@ -212,7 +212,7 @@ namespace Kortex
 					return *it;
 				}
 			}
-			ModProviderItem& AssignWith(const wxString& name, Network::ModID id)
+			ModProviderItem& AssignWith(const wxString& name, ModID id)
 			{
 				auto it = FindItem(m_Items, name);
 				if (it == m_Items.end())
@@ -241,7 +241,7 @@ namespace Kortex
 					return *it;
 				}
 			}
-			ModProviderItem& AssignWith(INetworkProvider* provider, Network::ModID id)
+			ModProviderItem& AssignWith(INetworkProvider* provider, ModID id)
 			{
 				auto it = FindItem(m_Items, provider);
 				if (it == m_Items.end())
@@ -260,7 +260,7 @@ namespace Kortex
 			{
 				return AssignWith(T::GetInstance(), url);
 			}
-			template<class T> ModProviderItem& AssignWith(Network::ModID id)
+			template<class T> ModProviderItem& AssignWith(ModID id)
 			{
 				return AssignWith(T::GetInstance(), id);
 			}

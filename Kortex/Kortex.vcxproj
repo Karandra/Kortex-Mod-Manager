@@ -401,9 +401,10 @@
     <ClInclude Include="Source\Network\IDownloadManager.h" />
     <ClInclude Include="Source\Network\INetworkManager.h" />
     <ClInclude Include="Source\Network\NetworkModule.h" />
-    <ClInclude Include="Source\Network\NetworkConstants.h" />
+    <ClInclude Include="Source\Network\Common.h" />
     <ClInclude Include="Source\Network\INetworkProvider.h" />
     <ClInclude Include="Source\Network\NetworkManager\DefaultNetworkManager.h" />
+    <ClInclude Include="Source\Network\NetworkProviderReplyStructs.h" />
     <ClInclude Include="Source\Network\NetworkProviderReply.h" />
     <ClInclude Include="Source\Network\Provider\LoversLab.h" />
     <ClInclude Include="Source\Network\Provider\LoversLabModInfo.h" />
@@ -494,6 +495,8 @@
     <ClInclude Include="Source\UI\KNewModDialog.h" />
     <ClInclude Include="Source\UI\KWorkspaceController.h" />
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
+    <ClInclude Include="Source\Utility\String.h" />
+    <ClInclude Include="Source\Utility\UniqueID.h" />
     <ClInclude Include="Source\VFS\IVirtualFileSystem.h" />
     <ClInclude Include="Source\VFS\KVFSConvergence.h" />
     <ClInclude Include="Source\VFS\KVFSMultiMirror.h" />
@@ -648,7 +651,7 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\Utility;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
@@ -673,7 +676,7 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\Utility;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
@@ -700,7 +703,7 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\Utility;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
@@ -739,7 +742,7 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\Utility;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>

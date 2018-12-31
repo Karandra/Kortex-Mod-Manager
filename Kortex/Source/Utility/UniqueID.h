@@ -65,12 +65,13 @@ namespace Kortex::Utility::UniqueID
 
 			IntegerID& operator=(TValue value)
 			{
-				m_Value = std::move(value);
+				CheckAndAssign(value);
 				return *this;
 			}
 			IntegerID& operator=(const wxString& value)
 			{
 				FromString(value);
+				return *this;
 			}
 			IntegerID& operator=(IntegerID&& other)
 			{

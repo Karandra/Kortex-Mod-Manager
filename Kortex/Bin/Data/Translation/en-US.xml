@@ -969,6 +969,8 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="Network.NotSignedIn">Not signed in</String>
 		<String ID="Network.SignOutMessage">Are you sure you want to sign out of "%1" account?</String>
 
+		<String ID="Network.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</String>
+
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Download manager</String>
 		<String ID="DownloadManager.NameShort">Downloads</String>

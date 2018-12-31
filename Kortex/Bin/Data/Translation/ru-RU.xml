@@ -970,6 +970,8 @@
 		<String ID="Network.NotSignedIn">Вход не выполнен</String>
 		<String ID="Network.SignOutMessage">Вы действительно хотите выйти из аккаунта %1?</String>
 
+		<String ID="Network.RequestQuotaReched">Query limit reached to %1 for a period of time</String>
+
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>
 		<String ID="DownloadManager.NameShort">Загрузки</String>

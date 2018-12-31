@@ -72,7 +72,7 @@ namespace Kortex::ModProvider
 				{
 					if (node->HasProvider())
 					{
-						value = node->GetModID();
+						value = node->GetModID().GetValue();
 					}
 					else
 					{

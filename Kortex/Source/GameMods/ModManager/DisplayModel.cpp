@@ -389,7 +389,7 @@ namespace Kortex::ModManager
 					ModID id;
 					if (providerItem && providerItem->TryGetModID(id))
 					{
-						value = id;
+						value = id.GetValue();
 					}
 				}
 				break;

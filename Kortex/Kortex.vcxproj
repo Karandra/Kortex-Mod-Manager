@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Application\About\Dialog.cpp" />
+    <ClCompile Include="Source\Application\About\DisplayModel.cpp" />
+    <ClCompile Include="Source\Application\About\DisplayModelNode.cpp" />
     <ClCompile Include="Source\Application\DefaultApplication.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
     <ClCompile Include="Source\Application\IAppOption.cpp" />
@@ -208,7 +211,6 @@
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerKMP.cpp" />
     <ClCompile Include="Source\UI\KTextEditorDialog.cpp" />
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
-    <ClCompile Include="Source\UI\KAboutDialog.cpp" />
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp" />
     <ClCompile Include="Source\SettingsWindow\KSettingsWindow.cpp" />
     <ClCompile Include="Source\UI\KNewModDialog.cpp" />
@@ -261,6 +263,9 @@
     <ClInclude Include="Include\Kortex\Utility.hpp" />
     <ClInclude Include="Include\Kortex\VirtualGameFolder.hpp" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Source\Application\About\Dialog.h" />
+    <ClInclude Include="Source\Application\About\DisplayModel.h" />
+    <ClInclude Include="Source\Application\About\DisplayModelNode.h" />
     <ClInclude Include="Source\Application\DefaultApplication.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IAppOption.h" />
@@ -488,7 +493,6 @@
     <ClInclude Include="Source\PackageProject\KPackageProjectSerializerKMP.h" />
     <ClInclude Include="Source\UI\KTextEditorDialog.h" />
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
-    <ClInclude Include="Source\UI\KAboutDialog.h" />
     <ClInclude Include="Source\UI\KImageViewerDialog.h" />
     <ClInclude Include="Source\Utility\KLabeledValue.h" />
     <ClInclude Include="Source\SettingsWindow\KSettingsWindow.h" />
@@ -666,6 +670,9 @@
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -691,6 +698,9 @@
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -730,6 +740,9 @@
     <PostBuildEvent>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -763,6 +776,9 @@
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

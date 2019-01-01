@@ -10,7 +10,7 @@
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "KInstanceSelectionDialog.h"
-#include "KAboutDialog.h"
+#include "Application/About/Dialog.h"
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
 #include "GameInstance/Config/KLocationsManagerConfig.h"
@@ -273,7 +273,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 		item->SetBitmap(KGetBitmap(KIMG_INFORMATION_FRAME));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
-			KAboutDialog(this).ShowModal();
+			Kortex::Application::AboutDialog(this).ShowModal();
 		});
 	}
 }

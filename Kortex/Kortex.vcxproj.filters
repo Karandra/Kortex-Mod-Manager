@@ -313,6 +313,12 @@
     <Filter Include="Code\Headers\Programs\ProgramManager">
       <UniqueIdentifier>{b25a0b02-b256-4184-aa30-ed283a17b3e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\Application\About">
+      <UniqueIdentifier>{ee9ec590-f7b4-48d1-a0ea-7b6da8cbc8bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Application\About">
+      <UniqueIdentifier>{846945b4-fcb7-4075-9a10-7aff9aa2bf86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -343,9 +349,6 @@
       <Filter>Code\Source\SettingsWindow</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\KAboutDialog.cpp">
       <Filter>Code\Source\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\KTextEditorDialog.cpp">
@@ -937,7 +940,16 @@
       <Filter>Code\Source\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\IModTag.cpp">
-      <Filter>Code\Source</Filter>
+      <Filter>Code\Source\GameMods</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\About\Dialog.cpp">
+      <Filter>Code\Source\Application\About</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\About\DisplayModel.cpp">
+      <Filter>Code\Source\Application\About</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\About\DisplayModelNode.cpp">
+      <Filter>Code\Source\Application\About</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -975,9 +987,6 @@
       <Filter>Code\Headers\SettingsWindow</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KImageViewerDialog.h">
-      <Filter>Code\Headers\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KAboutDialog.h">
       <Filter>Code\Headers\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KLabeledValue.h">
@@ -1774,6 +1783,15 @@
     </ClInclude>
     <ClInclude Include="Source\Network\NetworkProviderReplyStructs.h">
       <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\About\Dialog.h">
+      <Filter>Code\Headers\Application\About</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\About\DisplayModel.h">
+      <Filter>Code\Headers\Application\About</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\About\DisplayModelNode.h">
+      <Filter>Code\Headers\Application\About</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

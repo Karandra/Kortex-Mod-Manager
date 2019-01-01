@@ -112,7 +112,7 @@
 		<String ID="Generic.Select">Select</String>
 		<String ID="Generic.Import">Import</String>
 		<String ID="Generic.Export">Export</String>
-		<String ID="Generic.Info">Info</String>
+		<String ID="Generic.Info">Information</String>
 		<String ID="Generic.Description">Description</String>
 		<String ID="Generic.Size">Size</String>
 		<String ID="Generic.Author">Author</String>
@@ -149,6 +149,7 @@
 		<String ID="Generic.Operator">Operator</String>
 		<String ID="Generic.Expanded">Expanded</String>
 		<String ID="Generic.Collapsed">Collapsed</String>
+		<String ID="Generic.License">License</String>
 		<String ID="Generic.CriticalError">The application has encountered a critical error and will be closed.</String>
 		<String ID="Generic.OpenWebSiteDialog.Caption">Do you want to open this webpage?</String>
 		<String ID="Generic.OpenWebSiteListDialog.Caption">Choose a webpage you want to open</String>
@@ -219,14 +220,8 @@ Using the default folder is not recommended because profile data can occupy a lo
 		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Use HTTPS protocol in FOMod XML-scheme</String>
 
 		<!-- About dialog -->
-		<String ID="About.Tabs.Modules.Caption">Modules</String>
-		<String ID="About.Info.Libraries">Libraries used</String>
-		<String ID="About.Info.IconPack">Icon set %1 by %2 is used.</String>
-		
-		<String ID="About.Info.Caption">Information</String>
-		<String ID="About.Info.SourceCodeLocation">Source code can be found on</String>
-
-		<String ID="About.License.Caption">License</String>
+		<String ID="About.SourceCodeLocation">Source code can be found on</String>
+		<String ID="About.UsedSoftware">Used software</String>
 
 		<!-- Instance selection -->
 		<String ID="InstanceSelection.Caption">Select instance</String>
@@ -728,6 +723,9 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="GameConfig.Values.EnableMultipleWeathers">Enable multiple weathers</String>
 		<String ID="GameConfig.Values.EnableLocationWeather">Enable location weather</String>
 
+		<!-- Program module -->
+		<String ID="ProgramsModule.Name">Program manager</String>
+
 		<!-- Program Manager -->
 		<String ID="ProgramManager.Name">Program manager</String>
 		<String ID="ProgramManager.NameShort">Programs</String>
@@ -767,6 +765,9 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="ProgramManager.Menu.ChooseWorkingDirectory">Выбрать рабочую папку</String>
 		
 		<String ID="ProgramManager.Menu.ShowExpandedValues">Показывать раскрытые значения</String>
+
+		<!-- Game Mods Module -->
+		<String ID="GameModsModule.Name">Game mods module</String>
 
 		<!-- Mod Manager -->
 		<String ID="ModManager.Name">Mod manager</String>
@@ -955,6 +956,9 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="VirtualGameFolderWS.Name">Virtual game folder</String>
 		<String ID="VirtualGameFolderWS.NameShort">Game data</String>
 
+		<!-- Network module-->
+		<String ID="NetworkModule.Name">Network</String>
+
 		<!-- Network -->
 		<String ID="Network.Provider">Provider</String>
 		
@@ -1050,6 +1054,9 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="VFS.Error1000">Virtual file system is not running.</String>
 		<String ID="VFS.Error10000">Unknown error.</String>
 
+		<!-- GameData module -->
+		<String ID="GameDataModule.Name">Game data module</String>
+
 		<!-- PluginManager -->
 		<String ID="PluginManager.Name">Plugin manager</String>
 		<String ID="PluginManager.NameShort">Plugins</String>
@@ -1117,6 +1124,9 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="SaveManager.Info.SexFemale">Female</String>
 		<String ID="SaveManager.Info.Race">Race</String>
 		<String ID="SaveManager.Info.Karma">Karma</String>
+
+		<!-- Packages module -->
+		<String ID="PackagesModule.Name">Packages module</String>
 
 		<!-- Package Manager -->
 		<String ID="PackageManager.Name">Package manager</String>

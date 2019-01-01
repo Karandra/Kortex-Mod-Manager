@@ -149,6 +149,7 @@
 		<String ID="Generic.Expanded">Раскрыт</String>
 		<String ID="Generic.Collapsed">Свёрнут</String>
 		<String ID="Generic.SystemMenu">Системное меню</String>
+		<String ID="Generic.License">Лицензия</String>
 		<String ID="Generic.CriticalError">Произошла критическая ошибка. Программа будет завершена.</String>
 		<String ID="Generic.OpenWebSiteDialog.Caption">Открыть данную веб-страницу?</String>
 		<String ID="Generic.OpenWebSiteListDialog.Caption">Выберите веб-страницу, которую хотите открыть</String>
@@ -219,15 +220,8 @@
 		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</String>
 		
 		<!-- About dialog -->
-		
-		<String ID="About.Modules.Caption">Модули</String>
-		<String ID="About.Libraries">Используемые библиотеки</String>
-		<String ID="About.IconPack">Используются иконки из набора %1 от %2.</String>
-
-		<String ID="About.Info.Caption">Информация</String>
-		<String ID="About.Info.SourceCodeLocation">Source code can be found on</String>
-
-		<String ID="About.License.Caption">Лицензия</String>
+		<String ID="About.SourceCodeLocation">Исходный код может быть найден на</String>
+		<String ID="About.UsedSoftware">Используемое компоненты</String>
 
 		<!-- Instance selection -->
 		<String ID="InstanceSelection.Caption">Выбор инстанса</String>
@@ -728,7 +722,10 @@
 		<!-- ENB: Weather -->
 		<String ID="GameConfig.Values.EnableMultipleWeathers">Использовать разные погодные конфигурации</String>
 		<String ID="GameConfig.Values.EnableLocationWeather">Использовать погодные конфигурации в зависимости от локации</String>
-	
+
+		<!-- Program module -->
+		<String ID="ProgramsModule.Name">Менеджер программ</String>
+		
 		<!-- Program Manager -->
 		<String ID="ProgramManager.Name">Менеджер программ</String>
 		<String ID="ProgramManager.NameShort">Программы</String>
@@ -768,9 +765,12 @@
 		<String ID="ProgramManager.Menu.ChooseWorkingDirectory">Choose working directory</String>
 
 		<String ID="ProgramManager.Menu.ShowExpandedValues">Show expanded values</String>
-		
+
+		<!-- Game Mods Module -->
+		<String ID="GameModsModule.Name">Модуль управления модами</String>
+
 		<!-- Mod Manager -->
-		<String ID="ModManager.Name">Управление модами</String>
+		<String ID="ModManager.Name">Менеджер модов</String>
 		<String ID="ModManager.NameShort">Моды</String>
 		
 		<String ID="ModManager.ExtractingPackageFiles">Распаковка файлов установщика</String>
@@ -956,6 +956,9 @@
 		<String ID="VirtualGameFolderWS.Name">Виртуальная папка игры</String>
 		<String ID="VirtualGameFolderWS.NameShort">Данные игры</String>
 
+		<!-- Network module-->
+		<String ID="NetworkModule.Name">Модуль взаимодействия с сетью</String>
+		
 		<!-- Network -->
 		<String ID="Network.Provider">Провайдер</String>
 		
@@ -1051,8 +1054,11 @@
 		<String ID="VFS.Error1000">Виртуальная файловая система не была запущена.</String>
 		<String ID="VFS.Error10000">Неизвестная ошибка.</String>
 
+		<!-- GameData module -->
+		<String ID="GameDataModule.Name">Модуль игровых данных</String>
+
 		<!-- PluginManager -->
-		<String ID="PluginManager.Name">Управление плагинами</String>
+		<String ID="PluginManager.Name">Менеджер плагинов</String>
 		<String ID="PluginManager.NameShort">Плагины</String>
 		
 		<String ID="PluginManager.PluginCounter.Total">Всего</String>
@@ -1118,6 +1124,9 @@
 		<String ID="SaveManager.Info.SexFemale">Женский</String>
 		<String ID="SaveManager.Info.Race">Раса</String>
 		<String ID="SaveManager.Info.Karma">Карма</String>
+
+		<!-- Packages module -->
+		<String ID="PackagesModule.Name">Модуль установочных пакетов</String>
 
 		<!-- Package Manager -->
 		<String ID="PackageManager.Name">Менеджер пакетов</String>

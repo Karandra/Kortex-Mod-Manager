@@ -178,19 +178,21 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 	sitesSizer->AddGrowableCol(1, 1);
 	m_PaneSizer->Add(sitesSizer, 0, wxEXPAND|wxLEFT, ms_LeftMargin);
 
-	// Fixed sites
+	// Providers
 	using namespace Kortex::NetworkManager;
-	m_WebSitesNexusID = AddProviderControl<NexusProvider>(sitesSizer);
-	m_WebSitesTESALLID = AddProviderControl<TESALLProvider>(sitesSizer);
-	m_WebSitesLoversLabID = AddProviderControl<LoversLabProvider>(sitesSizer);
-
-	// Other sites
+	if (m_WebSitesNexusID = AddProviderControl<NexusProvider>(sitesSizer))
+	{
+		m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLProvider>, this);
+	}
+	if (m_WebSitesTESALLID = AddProviderControl<TESALLProvider>(sitesSizer))
+	{
+		m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusProvider>, this);
+	}
+	if (m_WebSitesLoversLabID = AddProviderControl<LoversLabProvider>(sitesSizer))
+	{
+		m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabProvider>, this);
+	}
 	m_WebSitesButton = AddControlsRow(sitesSizer, KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), new KxButton(m_Pane, KxID_NONE, KTr(KxID_EDIT)), 0);
-
-	// Bind events
-	m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusProvider>, this);
-	m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLProvider>, this);
-	m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabProvider>, this);
 
 	m_WebSitesButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{

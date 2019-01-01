@@ -85,21 +85,23 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		template<class T> KxTextBox* AddProviderControl(wxSizer* sizer)
 		{
 			Kortex::INetworkProvider* provider = T::GetInstance();
-
-			KxLabel* label = nullptr;
-			wxString name = provider->GetName().BeforeLast('.');
-			if (name.IsEmpty())
+			if (provider)
 			{
-				name = provider->GetName();
+				KxLabel* label = nullptr;
+				wxString name = provider->GetName().BeforeLast('.');
+				if (name.IsEmpty())
+				{
+					name = provider->GetName();
+				}
+
+				KxTextBox* control = AddControlsRow(sizer, name + "ID", CreateInputField(m_Pane), 1, &label);
+				label->ToggleWindowStyle(KxLABEL_HYPERLINK);
+				label->SetBitmap(KGetBitmap(provider->GetIcon()));
+				label->Bind(wxEVT_TEXT_URL, &KPackageCreatorPageInfo::OnOpenSite<T>, this);
+				control->SetValidator(wxIntegerValidator<int64_t>());
+				return control;
 			}
-
-			KxTextBox* control = AddControlsRow(sizer, name + "ID", CreateInputField(m_Pane), 1, &label);
-			label->ToggleWindowStyle(KxLABEL_HYPERLINK);
-			label->SetBitmap(KGetBitmap(provider->GetIcon()));
-			label->Bind(wxEVT_TEXT_URL, &KPackageCreatorPageInfo::OnOpenSite<T>, this);
-			control->SetValidator(wxIntegerValidator<int64_t>());
-
-			return control;
+			return nullptr;
 		};
 
 	private:

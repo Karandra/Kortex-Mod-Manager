@@ -180,7 +180,7 @@ void KPackageCreatorWorkspace::CreatePagesListView()
 	m_PagesList->AddColumn(wxEmptyString);
 	IThemeManager::GetActive().ProcessWindow(m_PagesList);
 
-	m_PagesList->Bind(KxEVT_TREELIST_SELECTION_CHANGED, &KPackageCreatorWorkspace::OnSwitchPage, this);
+	m_PagesList->Bind(wxEVT_TREELIST_SELECTION_CHANGED, &KPackageCreatorWorkspace::OnSwitchPage, this);
 }
 void KPackageCreatorWorkspace::CreatePagesView()
 {

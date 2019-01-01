@@ -25,7 +25,7 @@ namespace
 	enum TabID
 	{
 		Info,
-		UsedSoftware,
+		Components,
 		License
 	};
 
@@ -64,7 +64,7 @@ namespace Kortex::Application
 		info->SetTextValue(CreateInfoText(2018, 2019, *m_AppInfo));
 		return info;
 	}
-	wxWindow* AboutDialog::CreateTab_UsedSoftware()
+	wxWindow* AboutDialog::CreateTab_Components()
 	{
 		m_DisplayModel = new About::DisplayModel(*this);
 		m_DisplayModel->Create(m_TabView);
@@ -133,7 +133,7 @@ namespace Kortex::Application
 			IThemeManager::GetActive().ProcessWindow(m_TabView);
 
 			m_TabView->InsertPage(TabID::Info, CreateTab_Info(), KTr("Generic.Info"), true);
-			m_TabView->InsertPage(TabID::UsedSoftware, CreateTab_UsedSoftware(), KTr("About.UsedSoftware"));
+			m_TabView->InsertPage(TabID::Components, CreateTab_Components(), KTr("About.Components"));
 			m_TabView->InsertPage(TabID::License, CreateTab_License(), KTr("Generic.License"));
 
 			PostCreate(wxDefaultPosition);

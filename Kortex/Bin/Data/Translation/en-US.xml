@@ -221,7 +221,7 @@ Using the default folder is not recommended because profile data can occupy a lo
 
 		<!-- About dialog -->
 		<String ID="About.SourceCodeLocation">Source code can be found on</String>
-		<String ID="About.UsedSoftware">Used software</String>
+		<String ID="About.Components">Components</String>
 
 		<!-- Instance selection -->
 		<String ID="InstanceSelection.Caption">Select instance</String>

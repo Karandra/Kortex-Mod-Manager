@@ -221,7 +221,7 @@
 		
 		<!-- About dialog -->
 		<String ID="About.SourceCodeLocation">Исходный код может быть найден на</String>
-		<String ID="About.UsedSoftware">Используемое компоненты</String>
+		<String ID="About.Components">Компоненты</String>
 
 		<!-- Instance selection -->
 		<String ID="InstanceSelection.Caption">Выбор инстанса</String>

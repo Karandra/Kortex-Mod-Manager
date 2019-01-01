@@ -55,7 +55,7 @@ namespace Kortex::Application
 			wxString GetCaption() const;
 
 			wxWindow* CreateTab_Info();
-			wxWindow* CreateTab_UsedSoftware();
+			wxWindow* CreateTab_Components();
 			wxWindow* CreateTab_License();
 
 			KxHTMLWindow* CreateHTMLWindow();

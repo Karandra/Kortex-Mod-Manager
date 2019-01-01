@@ -83,7 +83,7 @@
 		<String ID="ID_UP">Up</String>
 		<String ID="ID_YES">Yes</String>
 		<String ID="ID_ZOOM_100">Actual size</String>
-		<String ID="ID_ZOOM_FIT">Zoomto fit</String>
+		<String ID="ID_ZOOM_FIT">Zoom to fit</String>
 		<String ID="ID_ZOOM_IN">Zoom in</String>
 		<String ID="ID_ZOOM_OUT">Zoom out</String>
 		<String ID="ID_ERROR">Error</String>
@@ -1154,8 +1154,8 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="PackageCreator.MenuProject.SaveAsFOMod">Save as FOMod</String>
 		<String ID="PackageCreator.MenuProject.SaveAsKMP">Save as KMP</String>
 
-		<String ID="PackageCreator.MenuImport.FOModXML">Improt from FOMod (XML)</String>
-		<String ID="PackageCreator.MenuImport.Package">Improt from installation package</String>
+		<String ID="PackageCreator.MenuImport.FOModXML">Import from FOMod (XML)</String>
+		<String ID="PackageCreator.MenuImport.Package">Import from installation package</String>
 
 		<String ID="PackageCreator.MenuBuild.Build">Build</String>
 		<String ID="PackageCreator.MenuBuild.UpdateInfo">Update info</String>

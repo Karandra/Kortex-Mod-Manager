@@ -21,9 +21,9 @@ wxString KVFSService::GetLibraryVersion()
 {
 	return KxVFSService::GetLibraryVersion();
 }
-wxString KVFSService::GetDokanVersion()
+wxString KVFSService::GetDokanyVersion()
 {
-	return KxVFSService::GetDokanVersion();
+	return KxVFSService::GetDokanyVersion();
 }
 
 int KVFSService::GetSuccessCode()

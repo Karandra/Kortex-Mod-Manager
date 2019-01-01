@@ -27,7 +27,7 @@ class KVFSService: public KxSingletonPtr<KVFSService>
 {
 	public:
 		static wxString GetLibraryVersion();
-		static wxString GetDokanVersion();
+		static wxString GetDokanyVersion();
 
 		static int GetSuccessCode();
 		static bool IsSuccessCode(int code);

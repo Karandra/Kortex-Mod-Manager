@@ -90,6 +90,7 @@ namespace Kortex
 			wxString GetName() const;
 			wxString GetDeveloper() const;
 			KxVersion GetVersion() const;
+			KxVersion GetWxWidgetsVersion() const;
 			KxXMLDocument& GetGlobalConfig() const;
 
 			wxCmdLineParser& GetCmdLineParser() const;

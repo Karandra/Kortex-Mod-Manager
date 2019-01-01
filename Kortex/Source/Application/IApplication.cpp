@@ -108,6 +108,11 @@ namespace Kortex
 	{
 		return GetSystemApp()->GetAppVersion();
 	}
+	KxVersion IApplication::GetWxWidgetsVersion() const
+	{
+		return wxGetLibraryVersionInfo();
+	}
+
 	KxXMLDocument& IApplication::GetGlobalConfig() const
 	{
 		return GetSystemApp()->GetGlobalConfig();

@@ -212,8 +212,12 @@ namespace Kortex::NetworkManager
 	bool NexusProvider::DoValidateAuth(wxWindow* window)
 	{
 		auto info = GetValidationInfo();
-		RequestUserAvatar(*info);
-		return info->IsOK() && info->GetAPIKey() == GetAPIKey();
+		if (info)
+		{
+			RequestUserAvatar(*info);
+			return info->GetAPIKey() == GetAPIKey();
+		}
+		return false;
 	}
 	bool NexusProvider::DoSignOut(wxWindow* window)
 	{

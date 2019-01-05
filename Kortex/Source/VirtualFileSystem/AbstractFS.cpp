@@ -39,6 +39,6 @@ namespace Kortex::VirtualFileSystem
 
 	void AbstractFS::SetMountPoint(const wxString& path)
 	{
-		m_Contrller.Send(RequestID::FSSetMountPoint, path);
+		m_Contrller.Send(RequestID::FSSetMountPoint, m_Handle, path);
 	}
 }

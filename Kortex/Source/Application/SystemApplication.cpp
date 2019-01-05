@@ -410,7 +410,7 @@ namespace Kortex
 		KxProcess process(KxLibrary(nullptr).GetFileName());
 		if (process.Find())
 		{
-			for (HWND hWnd : process.EnumWindows())
+			for (HWND hWnd: process.EnumWindows())
 			{
 				if (KxTLWInternal::GetWindowUserData(hWnd) == KMainWindow::GetUniqueID())
 				{

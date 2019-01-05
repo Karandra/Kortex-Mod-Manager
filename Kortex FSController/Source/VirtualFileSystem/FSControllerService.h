@@ -81,6 +81,10 @@ namespace Kortex::VirtualFileSystem
 			
 			IPC::FSHandle GetFileSystemHandle(const KxVFS::AbstractFS& vfs) const;
 			KxVFS::AbstractFS& GetFileSystemByHandle(IPC::FSHandle handle) const;
+			template<class T> T& GetFileSystemByHandle(IPC::FSHandle handle) const
+			{
+				return static_cast<T&>(GetFileSystemByHandle(handle));
+			}
 
 		public:
 			wxString GetLibraryName() const override

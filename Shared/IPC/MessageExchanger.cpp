@@ -29,6 +29,11 @@ namespace Kortex::IPC
 		// Return to caller
 		return sharedBuffer;
 	}
+	KxSharedMemoryBuffer MessageExchanger::DoSendStringMessage(const Message& message, const wxString& value)
+	{
+		return DoSendMessage(message, value.wc_str(), value.length() * sizeof(wxChar) + sizeof(wxChar));
+	}
+
 	void MessageExchanger::Create(HWND windowHandle)
 	{
 		m_ProcessingWindow = windowHandle;

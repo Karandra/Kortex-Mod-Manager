@@ -12,6 +12,22 @@ namespace Kortex::IPC
 
 		protected:
 			KxSharedMemoryBuffer DoSendMessage(const Message& message, const void* userData = nullptr, size_t dataSize = 0);
+			KxSharedMemoryBuffer DoSendStringMessage(const Message& message, const wxString& value);
+			template<class T> KxSharedMemoryBuffer DoSendValueMessage(const Message& message, const T& value)
+			{
+				if constexpr(std::is_same_v<T, wxString>)
+				{
+					return DoSendStringMessage(message, value);
+				}
+				else
+				{
+					static_assert(std::is_trivially_copyable_v<T>, "T must be trivially copyable");
+
+					return DoSendMessage(message, &value, sizeof(T));
+				}
+			}
+			
+		protected:
 			void Create(HWND windowHandle);
 
 		public:
@@ -22,18 +38,27 @@ namespace Kortex::IPC
 		public:
 			bool IsOK() const;
 
-			KxSharedMemoryBuffer Send(const Message& message, const void* userData = nullptr, size_t dataSize = 0);
 			KxSharedMemoryBuffer SendExit();
-
+			KxSharedMemoryBuffer Send(const Message& message, const void* userData = nullptr, size_t dataSize = 0);
+			template<class... Args> KxSharedMemoryBuffer Send(const Message& message, Args&&... arg)
+			{
+				constexpr size_t count = sizeof...(Args);
+				if constexpr(count == 0)
+				{
+					return DoSendMessage(message);
+				}
+				else if constexpr(count == 1)
+				{
+					return DoSendValueMessage(message, arg...);
+				}
+				else
+				{
+					return DoSendStringMessage(message, IPC::Serializer::Serialize(std::forward<Args>(arg)...));
+				}
+			}
 			template<class T> KxSharedMemoryBuffer Send(const Message& message, const T& value)
 			{
-				static_assert(std::is_trivially_copyable_v<T>, "T must be trivially copyable");
-
-				return DoSendMessage(message, &value, sizeof(T));
-			}
-			template<> KxSharedMemoryBuffer Send(const Message& message, const wxString& value)
-			{
-				return DoSendMessage(message, value.wc_str(), value.length() * sizeof(wxChar) + sizeof(wxChar));
+				return DoSendValueMessage(message, value);
 			}
 	};
 }

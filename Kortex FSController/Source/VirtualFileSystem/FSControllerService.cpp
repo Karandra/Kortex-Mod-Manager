@@ -74,118 +74,159 @@ namespace Kortex::VirtualFileSystem
 				break;
 			}
 
+			case RequestID::IsInstalled:
+			{
+				message.SerializePayload(IsInstalled());
+				break;
+			}
+			case RequestID::Install:
+			{
+				message.SerializePayload(Install());
+				break;
+			}
+			case RequestID::Uninstall:
+			{
+				message.SerializePayload(Uninstall());
+				break;
+			}
+
+			case RequestID::Start:
+			{
+				message.SerializePayload(Start());
+				break;
+			}
+			case RequestID::Stop:
+			{
+				message.SerializePayload(Stop());
+				break;
+			}
+
 			case RequestID::CreateFS:
 			{
-				IPC::FSHandle handle = OnCreateFS(message.GetPayload<FileSystemID>());
-				message.SetPayload(handle);
+				auto[id] = message.DeserializePayload<FileSystemID>();
+
+				IPC::FSHandle handle = OnCreateFS(id);
+				message.SerializePayload(handle);
 				break;
 			}
 			case RequestID::DestroyFS:
 			{
-				IPC::FSHandle handle = OnCreateFS(message.GetPayload<FileSystemID>());
+				auto[id] = message.DeserializePayload<FileSystemID>();
+
+				IPC::FSHandle handle = OnCreateFS(id);
 				DestroyFS(GetFileSystemByHandle(handle));
 				break;
 			}
 
 			case RequestID::FSEnable:
 			{
-				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(message.GetPayload<IPC::FSHandle>());
-				message.SetPayload(vfs.Mount().GetCode());
+				auto[handle] = message.DeserializePayload<IPC::FSHandle>();
+
+				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(handle);
+				message.SerializePayload(vfs.Mount().GetCode());
 				break;
 			}
 			case RequestID::FSDisable:
 			{
-				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(message.GetPayload<IPC::FSHandle>());
-				message.SetPayload(vfs.UnMount());
+				auto[handle] = message.DeserializePayload<IPC::FSHandle>();
+
+				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(handle);
+				message.SerializePayload(vfs.UnMount());
 				break;
 			}
 
 			case RequestID::FSSetMountPoint:
 			{
-				IPC::Serializer serializer = message.DeserializePayload();
+				auto[handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
 
-				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(serializer.GetInt<IPC::FSHandle>(0));
-				vfs.SetMountPoint(ToKxDynamicStringRef(serializer.GetString(1)));
+				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(handle);
+				vfs.SetMountPoint(ToKxDynamicStringRef(path));
 				break;
 			}
 			case RequestID::FSSetWriteTarget:
+			{
+				auto[handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
+
+				auto& vfs = GetFileSystemByHandle<KxVFS::ConvergenceFS>(handle);
+				vfs.SetWriteTarget(ToKxDynamicStringRef(path));
+				break;
+			}
 			case RequestID::FSSetSource:
 			{
-				// Implementation detail: source and write target is the same things in Convergence and Mirror.
+				auto[handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
 
-				IPC::Serializer serializer = message.DeserializePayload();
-
-				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(serializer.GetInt<IPC::FSHandle>(0));
-				static_cast<KxVFS::MirrorFS&>(vfs).SetSource(ToKxDynamicStringRef(serializer.GetString(1)));
+				auto& vfs = GetFileSystemByHandle<KxVFS::MirrorFS>(handle);
+				vfs.SetSource(ToKxDynamicStringRef(path));
 				break;
 			}
 			case RequestID::FSBuildDispatcherIndex:
 			{
-				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(message.GetPayload<IPC::FSHandle>());
-				size_t count = static_cast<KxVFS::ConvergenceFS&>(vfs).BuildDispatcherIndex();
-				message.SetPayload(count);
+				auto[handle] = message.DeserializePayload<IPC::FSHandle>();
+
+				auto& vfs = GetFileSystemByHandle<KxVFS::ConvergenceFS>(handle);
+				message.SerializePayload(vfs.BuildDispatcherIndex());
 				break;
 			}
 			case RequestID::FSAddVirtualFolder:
 			{
-				IPC::Serializer serializer = message.DeserializePayload();
+				auto[handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
 
-				KxVFS::AbstractFS& vfs = GetFileSystemByHandle(serializer.GetInt<IPC::FSHandle>(0));
-				KxVFS::ConvergenceFS& convergence = static_cast<KxVFS::ConvergenceFS&>(vfs);
-				convergence.AddVirtualFolder(ToKxDynamicStringRef(serializer.GetString(1)));
+				auto& vfs = GetFileSystemByHandle<KxVFS::ConvergenceFS>(handle);
+				vfs.AddVirtualFolder(ToKxDynamicStringRef(path));
 				break;
 			}
 
-			case RequestID::IsInstalled:
+			case RequestID::FSEnableINIOptimization:
 			{
-				message.SetPayload(IsInstalled());
+				auto[handle, value] = message.DeserializePayload<IPC::FSHandle, bool>();
+
+				auto& vfs = GetFileSystemByHandle<KxVFS::ConvergenceFS>(handle);
+				vfs.EnableINIOptimization(value);
 				break;
 			}
-			case RequestID::Install:
+			case RequestID::FSEnableSecurityFunctions:
 			{
-				message.SetPayload(Install());
-				break;
-			}
-			case RequestID::Uninstall:
-			{
-				message.SetPayload(Uninstall());
+				auto[handle, value] = message.DeserializePayload<IPC::FSHandle, bool>();
+
+				auto& vfs = GetFileSystemByHandle<KxVFS::MirrorFS>(handle);
+				vfs.EnableSecurityFunctions(value);
 				break;
 			}
 
 			case RequestID::GetLibraryName:
 			{
-				message.SetPayload(GetLibraryName());
+				message.SerializePayload(GetLibraryName());
 				break;
 			}
 			case RequestID::GetLibraryURL:
 			{
-				message.SetPayload(GetLibraryURL());
+				message.SerializePayload(GetLibraryURL());
 				break;
 			}
 			case RequestID::GetLibraryVersion:
 			{
-				message.SetPayload(GetLibraryVersion().ToString());
+				message.SerializePayload(GetLibraryVersion().ToString());
 				break;
 			}
 
 			case RequestID::HasNativeLibrary:
 			{
-				message.SetPayload(HasNativeLibrary());
+				message.SerializePayload(HasNativeLibrary());
 				break;
 			}
 			case RequestID::GetNativeLibraryName:
 			{
-				message.SetPayload(GetNativeLibraryName());
+				message.SerializePayload(GetNativeLibraryName());
 				break;
 			}
 			case RequestID::GetNativeLibraryURL:
 			{
-				message.SetPayload(GetNativeLibraryURL());
+				message.SerializePayload(GetNativeLibraryURL());
 				break;
 			}
 			case RequestID::GetNativeLibraryVersion:
 			{
-				message.SetPayload(GetNativeLibraryVersion().ToString());
+				message.SerializePayload(GetNativeLibraryVersion().ToString());
 				break;
 			}
 		};

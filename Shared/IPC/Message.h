@@ -94,14 +94,28 @@ namespace Kortex::IPC
 			{
 				GetSharedBuffer(payload.length() * sizeof(wxChar) + sizeof(wxChar)).WriteData(payload);
 			}
-	
-			IPC::Serializer DeserializePayload() const
+
+			template<class... Args> std::tuple<Args...> DeserializePayload() const
 			{
-				return IPC::Serializer(GetPayload<wxString>());
+				if constexpr((sizeof...(Args)) <= 1)
+				{
+					return GetPayload<Args...>();
+				}
+				else
+				{
+					return IPC::Serializer::Deserialize<Args...>(GetPayload<wxString>());
+				}
 			}
-			template<class... Args> void SerializePayload(Args&&... arg)
+			template<class... Args> void SerializePayload(Args&&... arg) const
 			{
-				SetPayload(IPC::Serializer::Serialize(std::forward<Args>(arg)...).ToString());
+				if constexpr((sizeof...(Args)) <= 1)
+				{
+					SetPayload(arg...);
+				}
+				else
+				{
+					SetPayload(IPC::Serializer::Serialize(std::forward<Args>(arg)...).ToString());
+				}
 			}
 	};
 }

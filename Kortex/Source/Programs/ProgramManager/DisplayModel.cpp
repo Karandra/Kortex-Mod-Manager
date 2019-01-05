@@ -444,7 +444,7 @@ namespace Kortex::ProgramManager
 	wxString DisplayModel::AskSelectExecutable(const IProgramEntry* entry) const
 	{
 		KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
-		dialog.SetFolder(entry->GetExecutable());
+		dialog.SetFolder(entry ? entry->GetExecutable() : wxString());
 		dialog.AddFilter("*.exe", KTr("FileFilter.Programs"));
 		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 		if (entry)

@@ -17,19 +17,19 @@ namespace Kortex::VirtualFileSystem
 
 	void Convergence::AddVirtualFolder(const wxString& path)
 	{
-		m_Contrller.Send(RequestID::FSAddVirtualFolder, m_Handle, path);
+		m_Controller.Send(RequestID::FSAddVirtualFolder, m_Handle, path);
 	}
 	size_t Convergence::BuildDispatcherIndex()
 	{
-		return m_Contrller.Send(RequestID::FSBuildDispatcherIndex, m_Handle).GetAs<size_t>();
+		return m_Controller.Send(RequestID::FSBuildDispatcherIndex, m_Handle).GetAs<size_t>();
 	}
 
 	bool Convergence::EnableINIOptimization(bool value)
 	{
-		return m_Contrller.Send(RequestID::FSEnableINIOptimization, m_Handle).GetAs<bool>();
+		return m_Controller.Send(RequestID::FSEnableINIOptimization, m_Handle).GetAs<bool>();
 	}
 	bool Convergence::EnableSecurityFunctions(bool value)
 	{
-		return m_Contrller.Send(RequestID::FSEnableSecurityFunctions, m_Handle).GetAs<bool>();
+		return m_Controller.Send(RequestID::FSEnableSecurityFunctions, m_Handle).GetAs<bool>();
 	}
 }

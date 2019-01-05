@@ -9,7 +9,7 @@ namespace Kortex::VirtualFileSystem
 	class AbstractFS: public IVirtualFileSystem
 	{
 		protected:
-			IPC::FSController& m_Contrller;
+			IPC::FSController& m_Controller;
 			IPC::FSHandle m_Handle = 0;
 
 		protected:

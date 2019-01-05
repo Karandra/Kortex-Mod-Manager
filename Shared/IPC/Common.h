@@ -10,9 +10,14 @@ namespace Kortex::IPC
 		None = 0,
 
 		Exit,
+		UnhandledException,
+
 		Install,
 		Uninstall,
 		IsInstalled,
+
+		Start,
+		Stop,
 
 		CreateFS,
 		DestroyFS,
@@ -29,6 +34,9 @@ namespace Kortex::IPC
 		FSSetWriteTarget,
 		FSBuildDispatcherIndex,
 		FSAddVirtualFolder,
+
+		FSEnableINIOptimization,
+		FSEnableSecurityFunctions,
 
 		GetLibraryName,
 		GetLibraryURL,

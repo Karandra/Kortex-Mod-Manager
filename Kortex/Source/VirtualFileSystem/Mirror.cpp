@@ -1,0 +1,24 @@
+#include "stdafx.h"
+#include "Mirror.h"
+#include "IPC/Common.h"
+
+using namespace Kortex::IPC;
+
+namespace Kortex::VirtualFileSystem
+{
+	Mirror::Mirror(FileSystemID id, const wxString& mountPoint, const wxString& source)
+		:AbstractFS(id)
+	{
+		m_Contrller.Send(RequestID::FSSetMountPoint, m_Handle, mountPoint);
+		m_Contrller.Send(RequestID::FSSetSource, m_Handle, source);
+	}
+	Mirror::Mirror(const wxString& mountPoint, const wxString& source)
+		:Mirror(FileSystemID::Mirror, mountPoint, source)
+	{
+	}
+
+	void Mirror::SetSource(const wxString& path)
+	{
+		m_Contrller.Send(RequestID::FSSetSource, m_Handle, path);
+	}
+}

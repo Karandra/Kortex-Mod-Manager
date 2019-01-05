@@ -101,7 +101,16 @@ namespace Kortex::FSController
 		{
 			message = "unknown error.";
 		}
-		wxMessageBox(KxString::Format(wxS("Unexpected exception has occurred: %1.\r\n\r\nThe program will terminate."), message));
+		message = KxString::Format(wxS("Unexpected exception has occurred: %1.\r\n\r\nThe program will terminate."), message);
+
+		if (m_MainApp && m_MainApp->IsOK())
+		{
+			m_MainApp->Send(IPC::RequestID::UnhandledException, message);
+		}
+		else
+		{
+			wxMessageBox(message);
+		}
 
 		// Exit the main loop and terminate the program.
 		return false;

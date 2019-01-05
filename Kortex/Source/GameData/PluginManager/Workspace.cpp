@@ -216,7 +216,7 @@ namespace Kortex::PluginManager
 				if (pluginsConfig.HasPluginLimit())
 				{
 					item->SetItemLabel(KxString::Format("%1: %2/%3", KTr("PluginManager.PluginCounter.Active"), count, pluginsConfig.GetPluginLimit()));
-					item->SetBitmap(KGetBitmap(count >= pluginsConfig.GetPluginLimit() ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
+					item->SetBitmap(KGetBitmap(count >= static_cast<size_t>(pluginsConfig.GetPluginLimit()) ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
 				}
 			}
 			else

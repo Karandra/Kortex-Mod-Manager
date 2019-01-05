@@ -3,6 +3,8 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Events.hpp>
+#include "VirtualFileSystem/Mirror.h"
+#include "VirtualFileSystem/MultiMirror.h"
 #include "VirtualFileSystem/Convergence.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxProgressDialog.h>
@@ -52,30 +54,26 @@ namespace Kortex::ModManager
 		}
 
 		const IGameInstance* instance = IGameInstance::GetActive();
-		#if 1
 		auto vfs = std::make_unique<VirtualFileSystem::Convergence>(instance->GetVirtualGameDir(), m_Manager.GetOverwrites().GetModFilesDir());
 		if (vfs)
 		{
-			//vfs->EnableINIOptimization(true);
-			//vfs->EnableSecurityFunctions(true);
+			vfs->EnableINIOptimization(true);
+			vfs->EnableSecurityFunctions(true);
 			for (const wxString& path: folders)
 			{
 				vfs->AddVirtualFolder(path);
 			}
 
-			//vfs->SetDispatcherIndex();
 			size_t indexSize = vfs->BuildDispatcherIndex();
 			wxLogInfo("VirtualFileSystem::Convergence::BuildDispatcherIndex: index size -> %zu", indexSize);
 
 			m_Convergence = std::move(vfs);
 		}
-		#endif
 	}
 	void VFSActivator::InitMirroredLocations()
 	{
 		m_Mirrors.clear();
 
-		#if 0
 		for (const MirroredLocation& location: m_Manager.GetOptions().GetMirroredLocations())
 		{
 			if (location.ShouldUseMultiMirror())
@@ -87,7 +85,6 @@ namespace Kortex::ModManager
 				m_Mirrors.emplace_back(std::make_unique<VirtualFileSystem::Mirror>(location.GetTarget(), location.GetSource()));
 			}
 		}
-		#endif
 	}
 
 	void VFSActivator::ShowStatusDialog()

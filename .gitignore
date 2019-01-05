@@ -3,6 +3,7 @@
 *.vcxproj.user
 
 # Output binaries
+Junk/*
 Kortex/Junk/*
 Kortex/Release/*
 Kortex/Debug/*

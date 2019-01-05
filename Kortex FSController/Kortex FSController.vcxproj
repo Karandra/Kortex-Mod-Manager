@@ -19,12 +19,42 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Shared\IPC\FSController.cpp" />
-    <ClCompile Include="..\Shared\IPC\MainApplication.cpp" />
-    <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp" />
-    <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp" />
-    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp" />
-    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp" />
+    <ClCompile Include="..\Shared\IPC\FSController.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\MainApplication.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\MainApplicationLink.cpp" />
     <ClCompile Include="Source\RecievingWindow.cpp" />
@@ -39,9 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shared\IPC\Common.h" />
-    <ClInclude Include="..\Shared\IPC\Message.h" />
     <ClInclude Include="..\Shared\IPC\FSController.h" />
     <ClInclude Include="..\Shared\IPC\MainApplication.h" />
+    <ClInclude Include="..\Shared\IPC\Message.h" />
     <ClInclude Include="..\Shared\IPC\MessageExchanger.h" />
     <ClInclude Include="..\Shared\IPC\ProcessingWindow.h" />
     <ClInclude Include="..\Shared\IPC\Serialization.h" />
@@ -111,22 +141,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
     <TargetName>FileSystemController</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
     <TargetName>FileSystemController x64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
     <TargetName>FileSystemController x64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
     <TargetName>FileSystemController</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,7 +172,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -164,7 +194,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxVirtualFileSystem\Bin;$(SolutionDir)..\wxWidgets\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -179,7 +209,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxVirtualFileSystem\Bin;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -199,7 +229,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

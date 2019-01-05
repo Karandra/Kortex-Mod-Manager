@@ -19,12 +19,42 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Shared\IPC\MainApplication.cpp" />
-    <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp" />
-    <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp" />
-    <ClCompile Include="..\Shared\IPC\FSController.cpp" />
-    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp" />
-    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp" />
+    <ClCompile Include="..\Shared\IPC\FSController.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\MainApplication.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="Source\Application\About\Dialog.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModel.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp" />
@@ -230,16 +260,20 @@
     <ClCompile Include="Source\Utility\KAux.cpp" />
     <ClCompile Include="Source\Utility\KImageProvider.cpp" />
     <ClCompile Include="Source\Utility\KQuickThread.cpp" />
+    <ClCompile Include="Source\VirtualFileSystem\Convergence.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\DefaultVFSService.cpp" />
+    <ClCompile Include="Source\VirtualFileSystem\AbstractFS.cpp" />
+    <ClCompile Include="Source\VirtualFileSystem\Mirror.cpp" />
+    <ClCompile Include="Source\VirtualFileSystem\MultiMirror.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\RecievingWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shared\IPC\Common.h" />
+    <ClInclude Include="..\Shared\IPC\FSController.h" />
     <ClInclude Include="..\Shared\IPC\MainApplication.h" />
     <ClInclude Include="..\Shared\IPC\Message.h" />
     <ClInclude Include="..\Shared\IPC\MessageExchanger.h" />
     <ClInclude Include="..\Shared\IPC\ProcessingWindow.h" />
-    <ClInclude Include="..\Shared\IPC\FSController.h" />
     <ClInclude Include="..\Shared\IPC\Serialization.h" />
     <ClInclude Include="..\Shared\VirtualFileSystem\IVFSService.h" />
     <ClInclude Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.h" />
@@ -515,7 +549,9 @@
     <ClInclude Include="Source\Utility\KThemeManager.h" />
     <ClInclude Include="Source\VirtualFileSystem\Convergence.h" />
     <ClInclude Include="Source\VirtualFileSystem\DefaultVFSService.h" />
-    <ClInclude Include="Source\VirtualFileSystem\FSHandleWrapper.h" />
+    <ClInclude Include="Source\VirtualFileSystem\AbstractFS.h" />
+    <ClInclude Include="Source\VirtualFileSystem\Mirror.h" />
+    <ClInclude Include="Source\VirtualFileSystem\MultiMirror.h" />
     <ClInclude Include="Source\VirtualFileSystem\RecievingWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -565,8 +601,12 @@
     <Xml Include="Bin\Data\PackageManager\Requirements\Sacred2.xml" />
     <Xml Include="Bin\Data\PackageManager\Requirements\Skyrim.xml" />
     <Xml Include="Bin\Data\PackageManager\Requirements\SkyrimSE.xml" />
-    <Xml Include="Bin\Data\Translation\en-US.xml" />
-    <Xml Include="Bin\Data\Translation\ru-RU.xml" />
+    <Xml Include="Bin\Data\Translation\en-US.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Bin\Data\Translation\ru-RU.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="Bin\Data\PackageCreator\Templates\Default.kmpproj" />
@@ -633,23 +673,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
     <TargetName>$(ProjectName) x64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -662,7 +702,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -692,7 +732,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -725,7 +765,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
-      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -766,7 +806,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>

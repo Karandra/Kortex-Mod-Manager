@@ -5,8 +5,9 @@
 #include <Kortex/Events.hpp>
 #include "Application/SystemApplication.h"
 #include "UI/KMainWindow.h"
-#include <KxFramework/KxSystem.h>
+#include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxLibrary.h>
+#include <KxFramework/KxSystem.h>
 #include <KxFramework/KxFile.h>
 
 namespace
@@ -45,6 +46,17 @@ namespace Kortex::VirtualFileSystem
 				}
 				break;
 			}
+			case RequestID::UnhandledException:
+			{
+				auto [exceptionMessage] = message.DeserializePayload<wxString>();
+
+				KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("VFS.Service.UnhandledException"), exceptionMessage, KxBTN_OK, KxICON_ERROR);
+				dialog.ShowModal();
+
+				Stop();
+				Start();
+				break;
+			}
 
 			case RequestID::FSEnabled:
 			{
@@ -74,7 +86,7 @@ namespace Kortex::VirtualFileSystem
 				Stop();
 				evnet.Skip();
 			});
-
+			
 			m_Controller.SetProcessingWindow(*m_RecievingWindow);
 			m_Controller.Run();
 		}
@@ -116,13 +128,18 @@ namespace Kortex::VirtualFileSystem
 	bool DefaultVFSService::Start()
 	{
 		RunController();
-		return IsOK();
+		if (IsOK())
+		{
+			return m_Controller.Send(RequestID::Start).GetAs<bool>();
+		}
+		return false;
 	}
 	bool DefaultVFSService::Stop()
 	{
 		if (m_RecievingWindow)
 		{
-			return m_RecievingWindow->Destroy();
+			m_RecievingWindow->Destroy();
+			return m_Controller.Send(RequestID::Stop).GetAs<bool>();
 		}
 		return false;
 	}

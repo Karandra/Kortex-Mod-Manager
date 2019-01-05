@@ -166,8 +166,8 @@ bool KMainWindow::Create(wxWindow* parent,
 		CreateBaseLayout();
 		CreateMainWorkspaces();
 
-		IEvent::Bind(Events::VirtualFileSystemToggled, &KMainWindow::OnVFSToggled, this);
-		IEvent::Bind(Events::VirtualFileSystemToggled, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
+		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnVFSToggled, this);
+		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
 
 		GetAInstanceOption().LoadWindowLayout(this);
 		return true;
@@ -368,7 +368,7 @@ void KMainWindow::OnChangeInstance(KxMenuEvent& event)
 	}
 }
 
-void KMainWindow::OnVFSToggled(VirtualFileSystemEvent& event)
+void KMainWindow::OnVFSToggled(VFSEvent& event)
 {
 	if (event.IsActivated())
 	{
@@ -382,7 +382,7 @@ void KMainWindow::OnVFSToggled(VirtualFileSystemEvent& event)
 	}
 	IThemeManager::GetActive().ProcessWindow(m_StatusBar, event.IsActivated());
 }
-void KMainWindow::OnPluggableManagersMenuVFSToggled(VirtualFileSystemEvent& event)
+void KMainWindow::OnPluggableManagersMenuVFSToggled(VFSEvent& event)
 {
 	for (wxMenuItem* item: m_ManagersMenu->GetMenuItems())
 	{
@@ -401,7 +401,7 @@ KMainWindow::KMainWindow()
 		Bind(wxEVT_CLOSE_WINDOW, &KMainWindow::OnWindowClose, this);
 
 		// Update status bar
-		VirtualFileSystemEvent event(false);
+		VFSEvent event(Events::MainVFSToggled, false);
 		OnVFSToggled(event);
 	}
 }

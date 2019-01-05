@@ -60,9 +60,6 @@
     <Filter Include="Code\Source\Utility">
       <UniqueIdentifier>{3d4221b7-0197-4472-840f-106f30da65c6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\VFS">
-      <UniqueIdentifier>{8c67519b-0440-43b1-b57e-cea7caeddc63}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\SettingsWindow">
       <UniqueIdentifier>{e9b8debe-3e5f-4a98-b530-52a2df3ad7a7}</UniqueIdentifier>
     </Filter>
@@ -95,9 +92,6 @@
     </Filter>
     <Filter Include="Code\Source\InstallWizard">
       <UniqueIdentifier>{eb1f8d1e-9c5c-4fd8-b7b4-b6c475b9d12f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\IPC">
-      <UniqueIdentifier>{9d7d2b18-7173-4c6b-ad36-652cbff0a235}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Source\Network">
       <UniqueIdentifier>{1cf732ae-1aa0-424c-94d5-446352cdfb8c}</UniqueIdentifier>
@@ -184,9 +178,6 @@
     <Filter Include="Code\Headers\Utility">
       <UniqueIdentifier>{9abd253e-e468-46a2-9094-58a7460a16c6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\VFS">
-      <UniqueIdentifier>{f99cdd01-168e-493d-a114-fad82410e929}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\SettingsWindow">
       <UniqueIdentifier>{e905e6c3-93c4-4dfe-a7e4-e8e63dfc9180}</UniqueIdentifier>
     </Filter>
@@ -219,9 +210,6 @@
     </Filter>
     <Filter Include="Code\Headers\InstallWizard">
       <UniqueIdentifier>{56b3d8e2-4a4a-44d5-92f7-7a4701e4108a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\IPC">
-      <UniqueIdentifier>{ec27e3c4-ffc1-4b66-bac2-21e6c0b2a9fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers\Network">
       <UniqueIdentifier>{73439ed9-5d64-4c3e-b8c6-d01d9f165780}</UniqueIdentifier>
@@ -318,6 +306,33 @@
     </Filter>
     <Filter Include="Code\Source\Application\About">
       <UniqueIdentifier>{846945b4-fcb7-4075-9a10-7aff9aa2bf86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{2115c87c-576c-47c9-bedd-e0d7df5d3886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Source">
+      <UniqueIdentifier>{36a44a92-fdae-4855-944c-c659f535e636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Headers">
+      <UniqueIdentifier>{61b47c97-a0ef-4c1f-9556-3809e2adf6ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Headers\IPC">
+      <UniqueIdentifier>{84e8e5ed-cc7f-4831-a1cb-c203362b0c87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Source\IPC">
+      <UniqueIdentifier>{6ba9e007-972f-4f26-92d9-2cdbc2e087e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Source\VirtualFileSystem">
+      <UniqueIdentifier>{8c67519b-0440-43b1-b57e-cea7caeddc63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Headers\VirtualFileSystem">
+      <UniqueIdentifier>{f99cdd01-168e-493d-a114-fad82410e929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\VirtualFileSystem">
+      <UniqueIdentifier>{939c8d3a-ef4f-4d1a-9de6-9478181a804b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\VirtualFileSystem">
+      <UniqueIdentifier>{7f6171b5-f739-4be0-b2ad-bda3e7a42979}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -489,21 +504,6 @@
     <ClCompile Include="Source\InstallWizard\KInstallWizardInfoModel.cpp">
       <Filter>Code\Source\InstallWizard</Filter>
     </ClCompile>
-    <ClCompile Include="Source\IPC\KIPC.cpp">
-      <Filter>Code\Source\IPC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\IPC\KIPCConnection.cpp">
-      <Filter>Code\Source\IPC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\IPC\KIPCClient.cpp">
-      <Filter>Code\Source\IPC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\IPC\KIPCRequest.cpp">
-      <Filter>Code\Source\IPC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\IPC\KIPCServer.cpp">
-      <Filter>Code\Source\IPC</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageManager\KPackageManagerListModel.cpp">
       <Filter>Code\Source\PackageManager</Filter>
     </ClCompile>
@@ -525,20 +525,8 @@
     <ClCompile Include="Source\Utility\KINetFSHandler.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\VFS\KVFSService.cpp">
-      <Filter>Code\Source\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VFS\KVFSConvergence.cpp">
-      <Filter>Code\Source\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VFS\KVFSMirror.cpp">
-      <Filter>Code\Source\VFS</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\KBitmapSize.cpp">
       <Filter>Code\Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VFS\KVFSMultiMirror.cpp">
-      <Filter>Code\Source\VFS</Filter>
     </ClCompile>
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
@@ -789,9 +777,6 @@
     <ClCompile Include="Source\Events\LogEvent.cpp">
       <Filter>Code\Source\Events</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Events\VirtualFileSystemEvent.cpp">
-      <Filter>Code\Source\Events</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameMods\VirtualGameFolder\DisplayModel.cpp">
       <Filter>Code\Source\GameMods\VirtualGameFolder</Filter>
     </ClCompile>
@@ -933,12 +918,6 @@
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramEntry.cpp">
       <Filter>Code\Source\Programs\ProgramManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\VFS\IVirtualFileSystem.cpp">
-      <Filter>Code\Source\VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameMods\ModManager\VirtualFileSystem.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameMods\IModTag.cpp">
       <Filter>Code\Source\GameMods</Filter>
     </ClCompile>
@@ -950,6 +929,36 @@
     </ClCompile>
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp">
       <Filter>Code\Source\Application\About</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameMods\ModManager\VFSActivator.cpp">
+      <Filter>Code\Source\GameMods\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\VFSEvent.cpp">
+      <Filter>Code\Source\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp">
+      <Filter>Shared\Source\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp">
+      <Filter>Shared\Source\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\FSController.cpp">
+      <Filter>Shared\Source\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\MainApplication.cpp">
+      <Filter>Shared\Source\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp">
+      <Filter>Shared\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp">
+      <Filter>Shared\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VirtualFileSystem\DefaultVFSService.cpp">
+      <Filter>Code\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VirtualFileSystem\RecievingWindow.cpp">
+      <Filter>Code\Source\VirtualFileSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1157,21 +1166,6 @@
     <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h">
       <Filter>Code\Headers\InstallWizard</Filter>
     </ClInclude>
-    <ClInclude Include="Source\IPC\KIPC.h">
-      <Filter>Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IPC\KIPCConnection.h">
-      <Filter>Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IPC\KIPCClient.h">
-      <Filter>Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IPC\KIPCRequest.h">
-      <Filter>Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IPC\KIPCServer.h">
-      <Filter>Code\Headers\IPC</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utility\KUnsortedUnique.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
@@ -1199,20 +1193,8 @@
     <ClInclude Include="Source\Utility\KINetFSHandler.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\VFS\KVFSService.h">
-      <Filter>Code\Headers\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VFS\KVFSConvergence.h">
-      <Filter>Code\Headers\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VFS\KVFSMirror.h">
-      <Filter>Code\Headers\VFS</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utility\KBitmapSize.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VFS\KVFSMultiMirror.h">
-      <Filter>Code\Headers\VFS</Filter>
     </ClInclude>
     <ClInclude Include="Source\Archive\KBethesdaArchive.h">
       <Filter>Code\Headers\Archive</Filter>
@@ -1514,9 +1496,6 @@
     <ClInclude Include="Source\Events\IEvent.h">
       <Filter>Code\Headers\Events</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Events\VirtualFileSystemEvent.h">
-      <Filter>Code\Headers\Events</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameMods\VirtualGameFolder\DisplayModel.h">
       <Filter>Code\Headers\GameMods\VirtualGameFolder</Filter>
     </ClInclude>
@@ -1757,12 +1736,6 @@
     <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramEntry.h">
       <Filter>Code\Headers\Programs\ProgramManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\VFS\IVirtualFileSystem.h">
-      <Filter>Code\Headers\VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\VirtualFileSystem.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Kortex\Common\Packages.hpp">
       <Filter>Code\Include\Common</Filter>
     </ClInclude>
@@ -1792,6 +1765,51 @@
     </ClInclude>
     <ClInclude Include="Source\Application\About\DisplayModelNode.h">
       <Filter>Code\Headers\Application\About</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\VFSActivator.h">
+      <Filter>Code\Headers\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\VFSEvent.h">
+      <Filter>Code\Headers\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\ProcessingWindow.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\Common.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\MessageExchanger.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\FSController.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\MainApplication.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\VirtualFileSystem\IVFSService.h">
+      <Filter>Shared\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.h">
+      <Filter>Shared\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\DefaultVFSService.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\RecievingWindow.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\Message.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\FSHandleWrapper.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\Serialization.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Convergence.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1944,5 +1962,10 @@
     <Text Include="Resources\ChangeLog RU.txt">
       <Filter>Resources</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\KxVirtualFileSystem\KxVirtualFileSystem\Utility\KxDynamicString\KxBasicDynamicString.natvis">
+      <Filter>Resources</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>

@@ -29,7 +29,6 @@
 #include <type_traits>
 
 /* Kortex */
-#define KIPC_SERVER 0
 #include <Kortex/Core.hpp>
 
 enum KLayoutConstants

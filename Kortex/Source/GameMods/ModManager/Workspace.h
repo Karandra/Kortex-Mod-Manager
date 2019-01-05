@@ -128,7 +128,7 @@ namespace Kortex::ModManager
 		
 			void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 			void OnToolsMenu(KxAuiToolBarEvent& event);
-			void OnVFSToggled(VirtualFileSystemEvent& event);
+			void OnVFSToggled(VFSEvent& event);
 		
 			void OnAddMod_Empty(KxMenuEvent& event);
 			void OnAddMod_FromFolder(KxMenuEvent& event);

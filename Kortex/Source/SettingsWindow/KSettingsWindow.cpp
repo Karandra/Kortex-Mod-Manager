@@ -2,7 +2,6 @@
 #include "KSettingsWindow.h"
 #include "UI/KMainWindow.h"
 #include <Kortex/Application.hpp>
-#include "VFS/KVFSService.h"
 #include <Kortex/ModManager.hpp>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxButton.h>

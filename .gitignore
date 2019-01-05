@@ -7,9 +7,10 @@ Kortex/Junk/*
 Kortex/Release/*
 Kortex/Debug/*
 
-Kortex Server/Junk/*
-Kortex Server/Release/*
-Kortex Server/Debug/*
+Kortex FSController/Junk/*
+Kortex FSController/Release/*
+Kortex FSController/Debug/*
+
 Kortex/Release/*
 Kortex/Debug/*
 Kortex/Bin/Kortex Server x64.exe

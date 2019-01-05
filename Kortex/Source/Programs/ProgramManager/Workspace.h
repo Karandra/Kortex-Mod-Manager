@@ -24,7 +24,7 @@ namespace Kortex::ProgramManager
 			bool OnCloseWorkspace() override;
 			void OnReloadWorkspace() override;
 
-			void OnVFSToggled(Kortex::VirtualFileSystemEvent& event);
+			void OnVFSToggled(Kortex::VFSEvent& event);
 
 		public:
 			wxString GetID() const override;

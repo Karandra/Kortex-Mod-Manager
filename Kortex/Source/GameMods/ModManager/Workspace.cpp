@@ -191,7 +191,7 @@ namespace Kortex::ModManager
 		ReloadView();
 		UpdateModListContent();
 
-		IEvent::Bind(Events::VirtualFileSystemToggled, &Workspace::OnVFSToggled, this);
+		IEvent::Bind(Events::MainVFSToggled, &Workspace::OnVFSToggled, this);
 
 		CreateAsSubWorkspace<VirtualGameFolder::Workspace>();
 		CreateAsSubWorkspace<ProgramManager::Workspace>();
@@ -639,7 +639,7 @@ namespace Kortex::ModManager
 		};
 	}
 
-	void Workspace::OnVFSToggled(VirtualFileSystemEvent& event)
+	void Workspace::OnVFSToggled(VFSEvent& event)
 	{
 		m_ToolBar_Profiles->Enable(!event.IsActivated());
 		m_ToolBar_EditProfiles->SetEnabled(!event.IsActivated());

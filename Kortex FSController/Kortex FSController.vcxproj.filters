@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Code">
+      <UniqueIdentifier>{19675054-ea55-4a6b-b1ca-3771af10d1e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Code\Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Code\Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Code\Source\VirtualFileSystem">
+      <UniqueIdentifier>{f38c57e6-7f40-46fa-a20d-0e6f2ff3e74c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\VirtualFileSystem">
+      <UniqueIdentifier>{45f5a63a-ad72-4f19-aebb-38acff649418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{c8f1e079-3e60-464b-9912-d3545b442e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Headers">
+      <UniqueIdentifier>{503bc38c-e0da-48c6-9214-36fb46f19dd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Source">
+      <UniqueIdentifier>{b787f2bc-b02a-4e45-9712-108308948450}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Source\IPC">
+      <UniqueIdentifier>{f5d1ebd5-c5a2-4d2c-a04c-1d59ebc66aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Source\VirtualFileSystem">
+      <UniqueIdentifier>{d1cf2336-1f4e-422b-8f82-173570f44667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Headers\VirtualFileSystem">
+      <UniqueIdentifier>{c6bec5d4-de3e-4179-b052-ec6e61d03a52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Headers\IPC">
+      <UniqueIdentifier>{978447dd-c791-4317-9b25-d054959f6484}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\stdafx.cpp">
+      <Filter>Code\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application.cpp">
+      <Filter>Code\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RecievingWindow.cpp">
+      <Filter>Code\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VirtualFileSystem\Mirror.cpp">
+      <Filter>Code\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VirtualFileSystem\MultiMirror.cpp">
+      <Filter>Code\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VirtualFileSystem\Convergence.cpp">
+      <Filter>Code\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\FSController.cpp">
+      <Filter>Shared\Source\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\MainApplication.cpp">
+      <Filter>Shared\Source\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp">
+      <Filter>Shared\Source\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp">
+      <Filter>Shared\Source\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp">
+      <Filter>Shared\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp">
+      <Filter>Shared\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VirtualFileSystem\FSControllerService.cpp">
+      <Filter>Code\Source\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainApplicationLink.cpp">
+      <Filter>Code\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\stdafx.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RecievingWindow.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Common.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Convergence.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\KxVFSWrapper.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Mirror.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\MultiMirror.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\Common.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\FSController.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\MainApplication.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\MessageExchanger.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\ProcessingWindow.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\VirtualFileSystem\IVFSService.h">
+      <Filter>Shared\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.h">
+      <Filter>Shared\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\FSControllerService.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainApplicationLink.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\Message.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\IPC\Serialization.h">
+      <Filter>Shared\Headers\IPC</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

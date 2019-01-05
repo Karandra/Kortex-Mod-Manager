@@ -18,7 +18,7 @@ class KWorkspace;
 
 namespace Kortex
 {
-	class VirtualFileSystemEvent;
+	class VFSEvent;
 }
 
 class KMainWindow:
@@ -91,8 +91,8 @@ class KMainWindow:
 		void OnWindowClose(wxCloseEvent& event);
 		void OnChangeInstance(KxMenuEvent& event);
 
-		void OnVFSToggled(Kortex::VirtualFileSystemEvent& event);
-		void OnPluggableManagersMenuVFSToggled(Kortex::VirtualFileSystemEvent& event);
+		void OnVFSToggled(Kortex::VFSEvent& event);
+		void OnPluggableManagersMenuVFSToggled(Kortex::VFSEvent& event);
 	
 	public:
 		KMainWindow();

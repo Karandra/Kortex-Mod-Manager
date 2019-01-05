@@ -19,6 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Shared\IPC\MainApplication.cpp" />
+    <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp" />
+    <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp" />
+    <ClCompile Include="..\Shared\IPC\FSController.cpp" />
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp" />
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp" />
     <ClCompile Include="Source\Application\About\Dialog.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModel.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp" />
@@ -102,7 +108,7 @@
     <ClCompile Include="Source\GameMods\FileTreeNode.cpp" />
     <ClCompile Include="Source\GameMods\IModTag.cpp" />
     <ClCompile Include="Source\GameMods\IModTagManager.cpp" />
-    <ClCompile Include="Source\GameMods\ModManager\VirtualFileSystem.cpp" />
+    <ClCompile Include="Source\GameMods\ModManager\VFSActivator.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\Dialog.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\DisplayModel.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\Item.cpp" />
@@ -130,11 +136,6 @@
     <ClCompile Include="Source\GameMods\VirtualGameFolder\DisplayModel.cpp" />
     <ClCompile Include="Source\GameMods\VirtualGameFolder\Workspace.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardInfoModel.cpp" />
-    <ClCompile Include="Source\IPC\KIPC.cpp" />
-    <ClCompile Include="Source\IPC\KIPCClient.cpp" />
-    <ClCompile Include="Source\IPC\KIPCConnection.cpp" />
-    <ClCompile Include="Source\IPC\KIPCRequest.cpp" />
-    <ClCompile Include="Source\IPC\KIPCServer.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadEntry.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadManager.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DisplayModel.cpp" />
@@ -154,7 +155,7 @@
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.cpp" />
     <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.cpp" />
     <ClCompile Include="Source\Archive\KArchive.cpp" />
-    <ClCompile Include="Source\Events\VirtualFileSystemEvent.cpp" />
+    <ClCompile Include="Source\Events\VFSEvent.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardComponnetsModel.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardDialog.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardRequirementsModel.cpp" />
@@ -215,11 +216,6 @@
     <ClCompile Include="Source\SettingsWindow\KSettingsWindow.cpp" />
     <ClCompile Include="Source\UI\KNewModDialog.cpp" />
     <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
-    <ClCompile Include="Source\VFS\IVirtualFileSystem.cpp" />
-    <ClCompile Include="Source\VFS\KVFSConvergence.cpp" />
-    <ClCompile Include="Source\VFS\KVFSMultiMirror.cpp" />
-    <ClCompile Include="Source\VFS\KVFSService.cpp" />
-    <ClCompile Include="Source\VFS\KVFSMirror.cpp" />
     <ClCompile Include="Source\Events\LogEvent.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -234,8 +230,19 @@
     <ClCompile Include="Source\Utility\KAux.cpp" />
     <ClCompile Include="Source\Utility\KImageProvider.cpp" />
     <ClCompile Include="Source\Utility\KQuickThread.cpp" />
+    <ClCompile Include="Source\VirtualFileSystem\DefaultVFSService.cpp" />
+    <ClCompile Include="Source\VirtualFileSystem\RecievingWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Shared\IPC\Common.h" />
+    <ClInclude Include="..\Shared\IPC\MainApplication.h" />
+    <ClInclude Include="..\Shared\IPC\Message.h" />
+    <ClInclude Include="..\Shared\IPC\MessageExchanger.h" />
+    <ClInclude Include="..\Shared\IPC\ProcessingWindow.h" />
+    <ClInclude Include="..\Shared\IPC\FSController.h" />
+    <ClInclude Include="..\Shared\IPC\Serialization.h" />
+    <ClInclude Include="..\Shared\VirtualFileSystem\IVFSService.h" />
+    <ClInclude Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.h" />
     <ClInclude Include="Include\Kortex\Application.hpp" />
     <ClInclude Include="Include\Kortex\ApplicationOptions.hpp" />
     <ClInclude Include="Include\Kortex\Common\GameData.hpp" />
@@ -362,7 +369,7 @@
     <ClInclude Include="Source\GameMods\IModStatistics.h" />
     <ClInclude Include="Source\GameMods\IModTag.h" />
     <ClInclude Include="Source\GameMods\IModTagManager.h" />
-    <ClInclude Include="Source\GameMods\ModManager\VirtualFileSystem.h" />
+    <ClInclude Include="Source\GameMods\ModManager\VFSActivator.h" />
     <ClInclude Include="Source\GameMods\ModProvider\Dialog.h" />
     <ClInclude Include="Source\GameMods\ModProvider\DisplayModel.h" />
     <ClInclude Include="Source\GameMods\ModProvider\Item.h" />
@@ -393,11 +400,6 @@
     <ClInclude Include="Source\GameMods\VirtualGameFolder\DisplayModel.h" />
     <ClInclude Include="Source\GameMods\VirtualGameFolder\Workspace.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h" />
-    <ClInclude Include="Source\IPC\KIPC.h" />
-    <ClInclude Include="Source\IPC\KIPCClient.h" />
-    <ClInclude Include="Source\IPC\KIPCConnection.h" />
-    <ClInclude Include="Source\IPC\KIPCRequest.h" />
-    <ClInclude Include="Source\IPC\KIPCServer.h" />
     <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadEntry.h" />
     <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadManager.h" />
     <ClInclude Include="Source\Network\DownloadManager\DisplayModel.h" />
@@ -437,7 +439,7 @@
     <ClInclude Include="Source\Utility\KVectorForwarder.h" />
     <ClInclude Include="Source\Utility\KWithBitmap.h" />
     <ClInclude Include="Source\Archive\KArchive.h" />
-    <ClInclude Include="Source\Events\VirtualFileSystemEvent.h" />
+    <ClInclude Include="Source\Events\VFSEvent.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardComponnetsModel.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardDefs.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardDialog.h" />
@@ -501,11 +503,6 @@
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
     <ClInclude Include="Source\Utility\String.h" />
     <ClInclude Include="Source\Utility\UniqueID.h" />
-    <ClInclude Include="Source\VFS\IVirtualFileSystem.h" />
-    <ClInclude Include="Source\VFS\KVFSConvergence.h" />
-    <ClInclude Include="Source\VFS\KVFSMultiMirror.h" />
-    <ClInclude Include="Source\VFS\KVFSService.h" />
-    <ClInclude Include="Source\VFS\KVFSMirror.h" />
     <ClInclude Include="Source\Events\LogEvent.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\UI\KMainWindow.h" />
@@ -516,6 +513,10 @@
     <ClInclude Include="Source\Utility\KImageProvider.h" />
     <ClInclude Include="Source\Utility\KQuickThread.h" />
     <ClInclude Include="Source\Utility\KThemeManager.h" />
+    <ClInclude Include="Source\VirtualFileSystem\Convergence.h" />
+    <ClInclude Include="Source\VirtualFileSystem\DefaultVFSService.h" />
+    <ClInclude Include="Source\VirtualFileSystem\FSHandleWrapper.h" />
+    <ClInclude Include="Source\VirtualFileSystem\RecievingWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc" />
@@ -574,6 +575,9 @@
     <Text Include="Resources\ChangeLog EN.txt" />
     <Text Include="Resources\ChangeLog RU.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\KxVirtualFileSystem\KxVirtualFileSystem\Utility\KxDynamicString\KxBasicDynamicString.natvis" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}</ProjectGuid>
@@ -629,21 +633,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
+    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <IntDir>$(ProjectDir)Junk\</IntDir>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
+    <IntDir>$(ProjectDir)Junk\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
+    <IntDir>$(ProjectDir)Junk\</IntDir>
     <TargetName>$(ProjectName) x64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -655,16 +661,18 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Lib\Win32;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
+      <DelayLoadDLLs>loot_api.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>delayimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
@@ -683,16 +691,18 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;C:\Users\Kerber\Documents\visual studio 2017\Projects\KxFramework;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\7zip-cpp\Lib\x64;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\KxVirtualFileSystem\KxVirtualFileSystem\Bin;C:\Users\Kerber\Documents\Visual Studio 2017\Projects\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
+      <DelayLoadDLLs>loot_api.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>delayimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
@@ -713,9 +723,9 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
-      <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
+      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -723,9 +733,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Bin;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
-      <DelayLoadDLLs>KxVirtualFileSystem.dll;loot_api.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>loot_api.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
@@ -755,8 +765,8 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Source;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LOOT API;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)$(Platform)\%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -764,9 +774,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\KxVirtualFileSystem\KxVirtualFileSystem\Bin;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
-      <DelayLoadDLLs>KxVirtualFileSystem x64.dll;loot_api.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>loot_api.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>

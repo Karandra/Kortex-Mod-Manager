@@ -5,12 +5,9 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kortex", "Kortex\Kortex.vcxproj", "{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kortex Server", "Kortex Server\Kortex Server.vcxproj", "{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kortex FSController", "Kortex FSController\Kortex FSController.vcxproj", "{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -22,24 +19,27 @@ Global
 		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Debug|x64.Build.0 = Debug|x64
 		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Debug|x86.ActiveCfg = Debug|Win32
 		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Debug|x86.Build.0 = Debug|Win32
-		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x64.ActiveCfg = Release|x64
-		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x64.Build.0 = Release|x64
-		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x86.ActiveCfg = Release|x64
-		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x86.Build.0 = Release|x64
+		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x64.ActiveCfg = Release|Win32
+		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x64.Build.0 = Release|Win32
+		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x86.ActiveCfg = Release|Win32
+		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x86.Build.0 = Release|Win32
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Debug|x64.ActiveCfg = Debug|x64
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Debug|x64.Build.0 = Debug|x64
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Debug|x86.ActiveCfg = Debug|Win32
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Debug|x86.Build.0 = Debug|Win32
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x64.ActiveCfg = Release|x64
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x64.Build.0 = Release|x64
-		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x86.ActiveCfg = Release|Win32
-		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x86.Build.0 = Release|Win32
+		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x86.ActiveCfg = Release|x64
+		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {044918F0-75C1-49BE-994B-C6999F2EE4D3}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

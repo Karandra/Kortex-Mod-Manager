@@ -38,7 +38,7 @@ namespace Kortex::ProgramManager
 		m_ViewModel->Create(this, m_MainSizer);
 		GetDisplayModelOption().LoadDataViewLayout(m_ViewModel->GetView());
 
-		IEvent::Bind(Events::VirtualFileSystemToggled, &Workspace::OnVFSToggled, this);
+		IEvent::Bind(Events::MainVFSToggled, &Workspace::OnVFSToggled, this);
 		return true;
 	}
 
@@ -58,7 +58,7 @@ namespace Kortex::ProgramManager
 		m_ViewModel->RefreshItems();
 	}
 
-	void Workspace::OnVFSToggled(VirtualFileSystemEvent& event)
+	void Workspace::OnVFSToggled(VFSEvent& event)
 	{
 		ScheduleReload();
 	}

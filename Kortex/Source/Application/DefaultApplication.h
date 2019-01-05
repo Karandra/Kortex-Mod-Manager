@@ -6,11 +6,11 @@
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxImageList.h>
 #include <KxFramework/KxImageSet.h>
-class KIPCClient;
-class KVFSService;
 
 namespace Kortex
 {
+	class IVFSService;
+
 	class GameModsModule;
 	class KPackageModule;
 	class KProgramModule;
@@ -37,8 +37,6 @@ namespace Kortex::Application
 			KxImageList m_ImageList;
 			KxImageSet m_ImageSet;
 		
-			KIPCClient* m_VFSServiceClient = nullptr;
-			KVFSService* m_VFSService = nullptr;
 
 			GameID m_StartupGameID;
 			wxString m_StartupInstanceID;
@@ -49,6 +47,7 @@ namespace Kortex::Application
 			std::unique_ptr<KPackageModule> m_PackagesModule;
 			std::unique_ptr<KProgramModule> m_ProgramModule;
 			std::unique_ptr<NetworkModule> m_NetworkModule;
+			std::unique_ptr<IVFSService> m_VFSService;
 
 		public:
 			DefaultApplication();

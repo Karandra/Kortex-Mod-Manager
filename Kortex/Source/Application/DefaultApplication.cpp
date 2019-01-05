@@ -3,7 +3,7 @@
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "UI/KInstanceSelectionDialog.h"
-#include "VFS/KVFSService.h"
+#include "VirtualFileSystem/DefaultVFSService.h"
 #include "PackageManager/KPackageManager.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
@@ -13,7 +13,6 @@
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Events.hpp>
-#include "IPC/KIPCClient.h"
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -142,7 +141,7 @@ namespace Kortex::Application
 
 			// Init systems
 			wxLogInfo("Begin initializing core systems");
-
+			
 			InitSettings();
 			InitVFS();
 			
@@ -351,7 +350,7 @@ namespace Kortex::Application
 	{
 		DisableIE10Support();
 		IModManager::GetInstance()->GetVFS().Disable();
-		return m_VFSServiceClient->UninstallVFSService();
+		return m_VFSService->Uninstall();
 	}
 
 	void DefaultApplication::LoadTranslation()
@@ -580,21 +579,15 @@ namespace Kortex::Application
 	void DefaultApplication::InitVFS()
 	{
 		wxLogInfo("Begin initializing VFS");
-		if (KIPCClient::RunServerAndConnect(&m_VFSServiceClient))
-		{
-			wxLogInfo("Server: Started. Initializing driver service.");
-			if (!m_VFSServiceClient->InitVFSService())
-			{
-				wxLogInfo("Server: Driver service init failed.");
-			}
-			else
-			{
-				wxLogInfo("Server: Driver service init success.");
-			}
+		m_VFSService = std::make_unique<VirtualFileSystem::DefaultVFSService>();
 
-			wxLogInfo("Client: Initializing driver service.");
-			m_VFSService = new KVFSService();
-			wxLogInfo("Client: Driver service init %s.", m_VFSService->IsOK() ? "success" : "failed");
+		if (m_VFSService && m_VFSService->IsOK())
+		{
+			if (!m_VFSService->IsInstalled())
+			{
+				m_VFSService->Install();
+			}
+			m_VFSService->Start();
 		}
 		else
 		{
@@ -605,10 +598,7 @@ namespace Kortex::Application
 	void DefaultApplication::UnInitVFS()
 	{
 		wxLogInfo("Unmounting VFS");
-		Kortex::IModManager::GetInstance()->GetVFS().Disable();
-
-		wxLogInfo("Uninitializing VFS services");
-		delete m_VFSServiceClient;
-		delete m_VFSService;
+		IModManager::GetInstance()->GetVFS().Disable();
+		m_VFSService->Stop();
 	}
 }

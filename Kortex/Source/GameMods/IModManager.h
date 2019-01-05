@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Application/IManager.h"
 #include "GameMods/IGameMod.h"
-#include "VFS/IVirtualFileSystem.h"
+#include "VirtualFileSystem/IVirtualFileSystem.h"
 #include "Network/Common.h"
 #include <KxFramework/KxSingleton.h>
 

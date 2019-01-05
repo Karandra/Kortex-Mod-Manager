@@ -1,21 +1,10 @@
 #include "stdafx.h"
-#include <Kortex/Application.hpp>
-#include <Kortex/PluginManager.hpp>
 #include "Dialog.h"
 #include "DisplayModel.h"
-#include "UI/KMainWindow.h"
-#include "Archive/KArchive.h"
+#include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include "Utility/KBitmapSize.h"
-#include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxHTMLWindow.h>
-#include <KxFramework/KxTreeList.h>
-#include <KxFramework/KxShell.h>
-#include <KxFramework/KxCrypto.h>
-#include <KxFramework/KxWebSockets.h>
-#include <KxFramework/KxCURL.h>
-#include <KxFramework/KxJSON.h>
-#include "VFS/KVFSService.h"
 
 namespace
 {

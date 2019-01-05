@@ -2,7 +2,7 @@
 #include "DisplayModel.h"
 #include "Dialog.h"
 #include "Archive/KArchive.h"
-#include "VFS/KVFSService.h"
+#include "VirtualFileSystem/IVFSService.h"
 #include "Utility/KAux.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/PluginManager.hpp>
@@ -178,8 +178,15 @@ namespace Kortex::Application::About
 		// Add third party software
 		AddSoftwareNode("wxWidgets", IApplication::GetInstance()->GetWxWidgetsVersion(), "https://www.wxwidgets.org", KIMG_BLOCK);
 
-		AddSoftwareNode("Dokany", KVFSService::GetDokanyVersion(), "https://github.com/dokan-dev/dokany", KIMG_DISK);
-		AddSoftwareNode("KxVirtualFileSystem", KVFSService::GetLibraryVersion(), "https://github.com/KerberX/KxVirtualFileSystem", KIMG_DISK);
+		IVFSService* vfsService = IVFSService::GetInstance();
+		if (vfsService)
+		{
+			AddSoftwareNode(vfsService->GetLibraryName(), vfsService->GetLibraryVersion(), vfsService->GetLibraryURL(), KIMG_JAR_EMPTY);
+			if (vfsService->HasNativeLibrary())
+			{
+				AddSoftwareNode(vfsService->GetNativeLibraryName(), vfsService->GetNativeLibraryVersion(), vfsService->GetNativeLibraryURL(), KIMG_JAR);
+			}
+		}
 
 		AddSoftwareNode(KxINI::GetLibraryName(), KxINI::GetLibraryVersion(), "https://github.com/brofield/simpleini", KIMG_DOCUMENT_PENICL);
 		AddSoftwareNode(KxXMLDocument::GetLibraryName(), KxXMLDocument::GetLibraryVersion(), "https://github.com/leethomason/tinyxml2", KIMG_EDIT_CODE);

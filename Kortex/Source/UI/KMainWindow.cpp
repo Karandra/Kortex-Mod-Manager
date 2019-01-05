@@ -143,38 +143,6 @@ WXLRESULT KMainWindow::MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lPara
 	return KxFrame::MSWWindowProc(msg, wParam, lParam);
 }
 
-bool KMainWindow::Create(wxWindow* parent,
-						 wxWindowID id,
-						 const wxString& caption,
-						 const wxPoint& pos,
-						 const wxSize& size,
-						 long style
-)
-{
-	if (KxFrame::Create(parent, id, caption, pos, size, style))
-	{
-		SetWindowUserData(GetUniqueID());
-		SetDefaultBackgroundColor();
-		SetIcons(wxICON(IDS_ICON_APP));
-		SetMinSize(size);
-		
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-		SetSizer(m_MainSizer);
-
-		CreateToolBar();
-		CreateStatusBar();
-		CreateBaseLayout();
-		CreateMainWorkspaces();
-
-		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnVFSToggled, this);
-		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
-
-		GetAInstanceOption().LoadWindowLayout(this);
-		return true;
-	}
-	return false;
-}
-
 void KMainWindow::CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace)
 {
 	KWorkspace* firstSubWorkspace = nullptr;
@@ -394,19 +362,36 @@ void KMainWindow::OnPluggableManagersMenuVFSToggled(VFSEvent& event)
 	}
 }
 
-KMainWindow::KMainWindow()
+bool KMainWindow::Create(wxWindow* parent)
 {
-	if (Create(nullptr, KxID_NONE, IApplication::GetInstance()->GetName(), wxDefaultPosition, wxSize(850, 600), DefaultStyle))
+	const wxSize size(850, 600);
+	if (KxFrame::Create(parent, KxID_NONE, IApplication::GetInstance()->GetName(), wxDefaultPosition, size, KMainWindow::DefaultStyle))
 	{
+		SetWindowUserData(GetUniqueID());
+		SetDefaultBackgroundColor();
+		SetIcons(wxICON(IDS_ICON_APP));
+		SetMinSize(size);
+		
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(m_MainSizer);
+
+		CreateToolBar();
+		CreateStatusBar();
+		CreateBaseLayout();
+		CreateMainWorkspaces();
+
 		Bind(wxEVT_CLOSE_WINDOW, &KMainWindow::OnWindowClose, this);
+		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnVFSToggled, this);
+		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
+
+		GetAInstanceOption().LoadWindowLayout(this);
 
 		// Update status bar
 		VFSEvent event(Events::MainVFSToggled, false);
 		OnVFSToggled(event);
+		return true;
 	}
-}
-KMainWindow::~KMainWindow()
-{
+	return false;
 }
 
 bool KMainWindow::SwitchWorkspaceHelper(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace)

@@ -74,14 +74,6 @@ class KMainWindow:
 		virtual WXLRESULT MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam) override;
 
 	private:
-		bool Create(wxWindow* parent,
-					wxWindowID id,
-					const wxString& caption,
-					const wxPoint& pos = wxDefaultPosition,
-					const wxSize& size = wxDefaultSize,
-					long style = DefaultStyle
-		);
-
 		void CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace = nullptr);
 		void CreateMainWorkspaces();
 		void CreateMainMenu(KxMenu& mainMenu);
@@ -95,8 +87,8 @@ class KMainWindow:
 		void OnPluggableManagersMenuVFSToggled(Kortex::VFSEvent& event);
 	
 	public:
-		KMainWindow();
-		virtual ~KMainWindow();
+		bool Create(wxWindow* parent = nullptr);
+		KMainWindow() = default;
 
 	private:
 		bool SwitchWorkspaceHelper(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace = nullptr);

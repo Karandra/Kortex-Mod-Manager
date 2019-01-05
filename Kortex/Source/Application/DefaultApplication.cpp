@@ -135,6 +135,7 @@ namespace Kortex::Application
 			splashWindow->Show();
 		}
 		
+		KMainWindow* mainWindow = nullptr;
 		if (!anotherInstanceRunning)
 		{
 			wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", GetSmallIconHeight() + m_InitProgressDialog->FromDIP(3));
@@ -142,6 +143,10 @@ namespace Kortex::Application
 			// Init systems
 			wxLogInfo("Begin initializing core systems");
 			
+			// Initialize main window
+			mainWindow = new KMainWindow();
+			SetTopWindow(mainWindow);
+
 			InitSettings();
 			InitVFS();
 			
@@ -161,8 +166,7 @@ namespace Kortex::Application
 
 			// All required managers initialized, can create main window now
 			wxLogInfo("Creating main window");
-			KMainWindow* mainWindow = new KMainWindow();
-			SetTopWindow(mainWindow);
+			mainWindow->Create();
 
 			// Show main window and selected workspace
 			wxLogInfo("Main window created. Showing workspace.");
@@ -592,7 +596,7 @@ namespace Kortex::Application
 		else
 		{
 			wxLogInfo("Server: Not started.");
-			LogEvent(KTr("VFSService.InstallFailed"), LogLevel::Critical).Send();
+			LogEvent(KTr("VFS.Service.InstallFailed"), LogLevel::Critical).Send();
 		}
 	}
 	void DefaultApplication::UnInitVFS()

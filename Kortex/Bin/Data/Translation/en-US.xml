@@ -1020,16 +1020,19 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="DownloadManager.Menu.CopyNXM">Copy NXM-link</String>
 
 		<!-- VFS -->
-		<String ID="VFSService.InitFailed">Failed to load the virtual file system library. Unable to continue.</String>
-		<String ID="VFSService.InstallCaption">Install virtual file system service</String>
-		<String ID="VFSService.InstallMessage">Virtual file system (VFS) service has not been installed. After this window has been closed, VFS service and driver will be installed.</String>
-		<String ID="VFSService.InstallFailed">Failed to install the virtual file system service.</String>
+		<String ID="VFS.Service.InitFailed">Failed to load the virtual file system library. Unable to continue.</String>
+		<String ID="VFS.Service.InstallCaption">Install virtual file system service</String>
+		<String ID="VFS.Service.InstallMessage">Virtual file system (VFS) service has not been installed. After this window has been closed, VFS service and driver will be installed.</String>
+		<String ID="VFS.Service.InstallFailed">Failed to install the virtual file system service.</String>
+		<String ID="VFS.Service.UnhandledException">Unhandled exception occured in virtual file system (VFS) service. The service will be restarted.</String>
+		
 		<String ID="VFS.MountingCaptionEnable">Mounting the virtual file system</String>
 		<String ID="VFS.MountingCaptionDisable">Unmounting the virtual file system</String>
 		<String ID="VFS.MountingMessage">This might take some time.</String>
 		<String ID="VFS.MountFailed">Failed to mount the virtual file system.</String>
 		<String ID="VFS.UnMountFailed">Failed to unmount virtual file system.</String>
 		<String ID="VFS.PrepareMountPointFailed">Failed to prepare the mount point.</String>
+		
 		<String ID="VFS.MountPoint">Mount point</String>
 		<String ID="VFS.MountPointNotEmpty.Caption">File system can't be mounted in a folder that is not empty</String>
 		<String ID="VFS.MountPointNotEmpty.Message">Either delete this folder or delete all files from there and try again.</String>
@@ -1041,7 +1044,7 @@ This folder and all its contents will be deleted: %1]]></String>
 		<String ID="VFS.WriteMode.Caption">VFS writing mode</String>
 		<String ID="VFS.WriteMode.Disabled">Writing disabled</String>
 		<String ID="VFS.WriteMode.TargetFile">Overwrite</String>
-		<String ID="VFS.WriteMode.SpecialWriteTarget">Write to a copy</String>
+		<String ID="VFS.WriteMode.FileCopy">Write to a copy</String>
 
 		<String ID="VFS.Error0">Virtual file system successfully mounted.</String>
 		<String ID="VFS.Error1">Unable to mount.</String>

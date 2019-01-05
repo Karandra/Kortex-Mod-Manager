@@ -1020,16 +1020,19 @@
 		<String ID="DownloadManager.Menu.CopyNXM">Скопировать NXM-ссылку</String>
 
 		<!-- VFS -->
-		<String ID="VFSService.InitFailed">Не удалось загрузить библиотеку виртуальной файловой системы. Продолжение невозможно.</String>
-		<String ID="VFSService.InstallCaption">Установка службы виртуальной файловой системы</String>
-		<String ID="VFSService.InstallMessage">Служба виртуальной файловой системы (VFS) не установлена. После закрытия этого окна будет произведена установка службы и драйвера ФС.</String>
-		<String ID="VFSService.InstallFailed">Не удалось установить службу виртуальной файловой системы.</String>
+		<String ID="VFS.Service.InitFailed">Не удалось загрузить библиотеку виртуальной файловой системы. Продолжение невозможно.</String>
+		<String ID="VFS.Service.InstallCaption">Установка службы виртуальной файловой системы</String>
+		<String ID="VFS.Service.InstallMessage">Служба виртуальной файловой системы (VFS) не установлена. После закрытия этого окна будет произведена установка службы и драйвера ФС.</String>
+		<String ID="VFS.Service.InstallFailed">Не удалось установить службу виртуальной файловой системы.</String>
+		<String ID="VFS.Service.UnhandledException">Необработанное исключение возникло в службе виртуальной файловой системы (VFS). Служба будет перезапущена.</String>
+		
 		<String ID="VFS.MountingCaptionEnable">Монтирование виртуальной файловой системы</String>
 		<String ID="VFS.MountingCaptionDisable">Размонтирование виртуальной файловой системы</String>
 		<String ID="VFS.MountingMessage">Это может занять некоторое время.</String>
 		<String ID="VFS.MountFailed">Не удалось смонтировать виртуальную файловую систему.</String>
 		<String ID="VFS.UnMountFailed">Не удалось размонтировать виртуальную файловую систему.</String>
 		<String ID="VFS.PrepareMountPointFailed">Ошибка подготовки точки монтирования.</String>
+		
 		<String ID="VFS.MountPoint">Точка монтирования</String>
 		<String ID="VFS.MountPointNotEmpty.Caption">Невозможно смонтировать файловую систему в непустую папку</String>
 		<String ID="VFS.MountPointNotEmpty.Message">Удалите эту папку целиком или удалите из неё все файлы и повторите попытку.</String>
@@ -1041,7 +1044,7 @@
 		<String ID="VFS.WriteMode.Caption">Режим записи VFS</String>
 		<String ID="VFS.WriteMode.Disabled">Запись запрещена</String>
 		<String ID="VFS.WriteMode.TargetFile">В исходный файл</String>
-		<String ID="VFS.WriteMode.SpecialWriteTarget">В копию исходного файла</String>
+		<String ID="VFS.WriteMode.FileCopy">В копию исходного файла</String>
 		
 		<String ID="VFS.Error0">Виртуальная файловую систему успешно смонтирована.</String>
 		<String ID="VFS.Error1">Ошибка монтирования.</String>

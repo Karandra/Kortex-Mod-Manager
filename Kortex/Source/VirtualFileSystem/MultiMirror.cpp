@@ -15,7 +15,7 @@ namespace Kortex::VirtualFileSystem
 	{
 	}
 	MultiMirror::MultiMirror(const wxString& mountPoint, const KxStringVector& sources)
-		:Convergence(IPC::FileSystemID::MultiMirror, mountPoint, sources.front())
+		:MultiMirror(mountPoint, sources.front())
 	{
 		for (size_t i = 1; i < sources.size(); i++)
 		{

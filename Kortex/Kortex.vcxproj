@@ -123,6 +123,7 @@
     <ClCompile Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.cpp" />
     <ClCompile Include="Source\GameData\ScreenshotsGallery\Workspace.cpp" />
     <ClCompile Include="Source\GameInstance\Config\KLocationsManagerConfig.cpp" />
+    <ClCompile Include="Source\GameInstance\CreationDialog.cpp" />
     <ClCompile Include="Source\GameInstance\IGameInstance.cpp" />
     <ClCompile Include="Source\GameInstance\IGameProfile.cpp" />
     <ClCompile Include="Source\GameInstance\ActiveGameInstance.cpp" />
@@ -255,7 +256,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\UI\KMainWindow.cpp" />
-    <ClCompile Include="Source\UI\KInstanceCreatorDialog.cpp" />
     <ClCompile Include="Source\UI\KWorkspace.cpp" />
     <ClCompile Include="Source\Utility\KAux.cpp" />
     <ClCompile Include="Source\Utility\KImageProvider.cpp" />
@@ -386,6 +386,7 @@
     <ClInclude Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.h" />
     <ClInclude Include="Source\GameData\ScreenshotsGallery\Workspace.h" />
     <ClInclude Include="Source\GameInstance\Config\KLocationsManagerConfig.h" />
+    <ClInclude Include="Source\GameInstance\CreationDialog.h" />
     <ClInclude Include="Source\GameInstance\IGameInstance.h" />
     <ClInclude Include="Source\GameInstance\IGameProfile.h" />
     <ClInclude Include="Source\GameInstance\ActiveGameInstance.h" />
@@ -541,7 +542,6 @@
     <ClInclude Include="Source\Events\LogEvent.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\UI\KMainWindow.h" />
-    <ClInclude Include="Source\UI\KInstanceCreatorDialog.h" />
     <ClInclude Include="Source\UI\KWorkspace.h" />
     <ClInclude Include="Source\Utility\KAux.h" />
     <ClInclude Include="Source\Utility\KImageProvider.h" />

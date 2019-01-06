@@ -9,36 +9,32 @@ class KxComboBox;
 namespace Kortex
 {
 	class IGameInstance;
+}
 
-	class KInstanceCreatorDialog: public KxComboBoxDialog
+namespace Kortex::GameInstance
+{
+	class CreationDialog: public KxComboBoxDialog
 	{
 		private:
-			IGameInstance* m_InstanceTemplate = nullptr;
 			KxTextBox* m_NameInput = nullptr;
 			KxComboBox* m_InstancesList = nullptr;
-		
 			KxCheckBox* m_CopyInstanceConfigCHK = nullptr;
 		
-			wxString m_Name;
-
-		private:
-			bool Create(wxWindow* parent,
-						wxWindowID id,
-						const wxString& caption,
-						const wxPoint & pos = wxDefaultPosition,
-						const wxSize & size = wxDefaultSize,
-						int buttons = DefaultButtons,
-						long style = DefaultStyle
-			);
-	
-		public:
-			KInstanceCreatorDialog(wxWindow* parent, IGameInstance* instanceTemplate);
-			virtual ~KInstanceCreatorDialog();
+			IGameInstance* m_InstanceTemplate = nullptr;
+			wxString m_InstanceID;
 
 		public:
-			const wxString& GetConfigID() const
+			bool Create(wxWindow* parent, const GameID& gameID);
+			CreationDialog() = default;
+			CreationDialog(wxWindow* parent, const GameID& gameID)
 			{
-				return m_Name;
+				Create(parent, gameID);
+			}
+
+		public:
+			wxString GetInstanceID() const
+			{
+				return m_InstanceID;
 			}
 
 		private:

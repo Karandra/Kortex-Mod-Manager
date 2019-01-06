@@ -531,9 +531,6 @@
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UI\KInstanceCreatorDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameInstance\Config\KLocationsManagerConfig.cpp">
       <Filter>Code\Source\GameInstance\Config</Filter>
     </ClCompile>
@@ -972,6 +969,9 @@
     <ClCompile Include="Source\GameInstance\SelectionDialog.cpp">
       <Filter>Code\Source\GameInstance</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameInstance\CreationDialog.cpp">
+      <Filter>Code\Source\GameInstance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1210,9 +1210,6 @@
     </ClInclude>
     <ClInclude Include="Source\Archive\KBethesdaArchive.h">
       <Filter>Code\Headers\Archive</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KInstanceCreatorDialog.h">
-      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameInstance\Config\KLocationsManagerConfig.h">
       <Filter>Code\Headers\GameInstance\Config</Filter>
@@ -1827,6 +1824,9 @@
       <Filter>Shared Code\Headers\VirtualFileSystem</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameInstance\SelectionDialog.h">
+      <Filter>Code\Headers\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\CreationDialog.h">
       <Filter>Code\Headers\GameInstance</Filter>
     </ClInclude>
   </ItemGroup>

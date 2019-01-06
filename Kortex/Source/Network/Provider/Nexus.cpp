@@ -49,9 +49,7 @@ namespace
 	}
 	wxString& ConvertUnicodeEscapes(wxString& source)
 	{
-		// \u0026
-
-		// Find and replace all '\uABCD' 6-char hex patterns to corresponding UTF-8 codes
+		// Find and replace all '\uABCD' 6-char hex patterns to corresponding Unicode codes.
 		// This is almost the same as 'ModImporterMO::DecodeUTF8'. Need to generalize and merge these functions.
 		constexpr size_t prefixLength = 2;
 		constexpr size_t sequenceLength = 6;

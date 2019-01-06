@@ -47,6 +47,31 @@ namespace
 
 		return name;
 	}
+	wxString& ConvertUnicodeEscapes(wxString& source)
+	{
+		// \u0026
+
+		// Find and replace all '\uABCD' 6-char hex patterns to corresponding UTF-8 codes
+		// This is almost the same as 'ModImporterMO::DecodeUTF8'. Need to generalize and merge these functions.
+		constexpr size_t prefixLength = 2;
+		constexpr size_t sequenceLength = 6;
+		constexpr size_t valueLength = sequenceLength - prefixLength;
+
+		for (size_t i = 0; i < source.Length(); i++)
+		{
+			size_t pos = source.find(wxS("\\u"), i);
+			if (pos != wxString::npos)
+			{
+				unsigned long long value = 0;
+				if (source.Mid(pos + prefixLength, valueLength).ToULongLong(&value, 16) && value != 0)
+				{
+					wxUniChar c(value);
+					source.replace(pos, sequenceLength, c);
+				}
+			}
+		}
+		return source;
+	}
 
 	wxDateTime ReadDateTime(const TJsonValue& json)
 	{
@@ -580,7 +605,7 @@ namespace Kortex::NetworkManager
 
 				data.Name = value["name"].get<wxString>();
 				data.ShortName = value["short_name"].get<wxString>();
-				data.URL = value["URI"].get<wxString>();
+				data.URL = ConvertUnicodeEscapes(value["URI"].get<wxString>());
 
 				if (info->IsOK())
 				{

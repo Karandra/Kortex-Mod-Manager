@@ -149,7 +149,7 @@ namespace Kortex::DownloadManager
 	void DefaultDownloadEntry::DoRun(int64_t resumePos)
 	{
 		KxFileStream::Disposition disposition = resumePos > 0 ? KxFileStream::Disposition::OpenExisting : KxFileStream::Disposition::CreateAlways;
-		m_Stream = std::make_unique<KxFileStream>(GetFullPath(), KxFileStream::Access::Write, disposition, KxFileStream::Share::Read);
+		m_Stream = std::make_unique<KxFileStream>(GetFullPath(), KxFileStream::Access::RW, disposition, KxFileStream::Share::Read);
 		if (m_Stream->IsOk())
 		{
 			// Download session
@@ -173,7 +173,7 @@ namespace Kortex::DownloadManager
 		}
 
 		m_IsFailed = true;
-		if (m_Session->IsStopped())
+		if (m_Session && m_Session->IsStopped())
 		{
 			IDownloadManager::GetInstance()->OnDownloadStopped(*this);
 		}

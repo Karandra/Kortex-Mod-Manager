@@ -9,7 +9,6 @@
 #include <Kortex/ProgramManager.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "KInstanceSelectionDialog.h"
 #include "Application/About/Dialog.h"
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"

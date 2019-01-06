@@ -110,7 +110,7 @@ namespace Kortex::ModManager
 
 		GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Version"), ColumnID::Version, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
 		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Author"), ColumnID::Author, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.Tags"), ColumnID::Tags, KxDATAVIEW_CELL_INERT, 100, defaultFlags);
+		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.Tags"), ColumnID::Tags, KxDATAVIEW_CELL_INERT, 100, defaultFlags);
 	
 		{
 			int spacing = 1;
@@ -122,21 +122,13 @@ namespace Kortex::ModManager
 			info.GetRenderer()->SetAlignment(wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL);
 		}
 
-		auto AddProviderColumn = [this, defaultFlags](NetworkProviderID index)
+		for (const auto& provider: INetworkManager::GetInstance()->GetProviders())
 		{
-			int id = ColumnID::Sites + index + 1;
+			int id = ColumnID::Sites + provider->GetID() + 1;
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, id, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
-		
-			INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(index);
-			if (provider)
-			{
-				info.GetColumn()->SetTitle(provider->GetName());
-				info.GetColumn()->SetBitmap(KGetBitmap(provider->GetIcon()));
-			}
-		};
-		for (int i = 0; i < NetworkProviderIDs::MAX_SYSTEM; i++)
-		{
-			AddProviderColumn((NetworkProviderID)i);
+
+			info.GetColumn()->SetTitle(provider->GetName());
+			info.GetColumn()->SetBitmap(KGetBitmap(provider->GetIcon()));
 		}
 
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.DateInstall"), ColumnID::DateInstall, KxDATAVIEW_CELL_INERT, 125, defaultFlags);

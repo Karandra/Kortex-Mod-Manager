@@ -160,8 +160,7 @@ namespace Kortex::NetworkManager
 	}
 	bool NexusProvider::ShouldTryLater(const KxCURLReplyBase& reply) const
 	{
-		// Should I make an enum with these codes?
-		return reply.GetResponseCode() == 429;
+		return reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests;
 	}
 	wxString NexusProvider::GetAPIURL() const
 	{

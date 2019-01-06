@@ -114,6 +114,8 @@ namespace Kortex::DownloadManager
 	{
 		m_IsReady = true;
 		m_IsAssociatedWithNXM = CheckIsAssociatedWithNXM();
+
+		KxFile(GetDownloadsLocation()).CreateFolder();
 	}
 	void DefaultDownloadManager::OnExit()
 	{
@@ -190,7 +192,6 @@ namespace Kortex::DownloadManager
 		{
 			location = IGameInstance::GetActive()->GetInstanceRelativePath("Downloads");
 			option.SetAttribute(OName::Location, location);
-			KxFile(location).CreateFolder();
 		}
 		return location;
 	}

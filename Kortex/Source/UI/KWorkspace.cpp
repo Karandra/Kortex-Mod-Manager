@@ -159,7 +159,7 @@ bool KWorkspace::SwitchHere()
 		wxBookCtrlBase* tabs = dynamic_cast<wxBookCtrlBase*>(GetParent());
 		if (tabs)
 		{
-			tabs->SetSelection(GetTabIndex());
+			tabs->SetSelection(tabs->FindPage(this));
 		}
 	}
 	else

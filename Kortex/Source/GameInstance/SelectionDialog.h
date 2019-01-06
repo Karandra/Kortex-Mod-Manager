@@ -31,10 +31,10 @@ namespace Kortex::GameInstance
 			wxBoxSizer* m_RightSizer = nullptr;
 			KxTextBox* m_TextBox = nullptr;
 
-			KxButton* m_OK = nullptr;
-			KxButton* m_Create = nullptr;
-			KxButton* m_Remove = nullptr;
-			KxButton* m_CreateShortcut = nullptr;
+			KxButton* m_OKButton = nullptr;
+			KxButton* m_CreateButton = nullptr;
+			KxButton* m_RemoveButton = nullptr;
+			KxButton* m_CreateShortcutButton = nullptr;
 
 		private:
 			wxString m_SelectedGameRoot;
@@ -74,6 +74,10 @@ namespace Kortex::GameInstance
 
 			void OnFilterSelected(const GameID& gameID = GameIDs::NullGameID);
 			void OnInstanceSelected(IGameInstance* instance = nullptr);
+
+			void OnCreateInstance(const GameID& gameID);
+			void OnRemoveInstance(IGameInstance* instance);
+			void OnSelectInstance(IGameInstance* instance);
 
 			void OnCreateShortcut(wxCommandEvent& event);
 			void OnButton(wxNotifyEvent& event);

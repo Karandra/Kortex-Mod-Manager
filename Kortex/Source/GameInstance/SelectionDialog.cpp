@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "SelectionDialog.h"
+#include "CreationDialog.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Events.hpp>
-#include "UI/KInstanceCreatorDialog.h"
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -29,12 +29,12 @@ namespace Kortex::GameInstance
 			SetWindowResizeSide(wxBOTH);
 
 			// Bottom panel
-			m_OK = GetButton(KxID_OK).As<KxButton>();
-			m_CreateShortcut = AddButton(KxID_NONE, KTr("InstanceSelection.CreateShortcut"), true).As<KxButton>();
-			m_Remove = AddButton(KxID_REMOVE, KTr("InstanceSelection.RemoveInstance"), true).As<KxButton>();
-			m_Create = AddButton(KxID_ADD, KTr("InstanceSelection.CreateInstance"), true).As<KxButton>();
+			m_OKButton = GetButton(KxID_OK).As<KxButton>();
+			m_CreateShortcutButton = AddButton(KxID_NONE, KTr("InstanceSelection.CreateShortcut"), true).As<KxButton>();
+			m_RemoveButton = AddButton(KxID_REMOVE, KTr("InstanceSelection.RemoveInstance"), true).As<KxButton>();
+			m_CreateButton = AddButton(KxID_ADD, KTr("InstanceSelection.CreateInstance"), true).As<KxButton>();
 
-			m_CreateShortcut->Bind(wxEVT_BUTTON, &SelectionDialog::OnCreateShortcut, this);
+			m_CreateShortcutButton->Bind(wxEVT_BUTTON, &SelectionDialog::OnCreateShortcut, this);
 
 			// Splitter
 			wxSizer* mainSizer = GetContentWindowSizer();
@@ -151,9 +151,9 @@ namespace Kortex::GameInstance
 	}
 	void SelectionDialog::LoadInstancesList(const GameID& gameID, IGameInstance* selectInstance)
 	{
-		m_OK->Disable();
-		m_Remove->Disable();
-		m_CreateShortcut->Disable();
+		m_OKButton->Disable();
+		m_RemoveButton->Disable();
+		m_CreateShortcutButton->Disable();
 		m_InstancesList->ClearItems();
 
 		int select = 0;
@@ -223,26 +223,92 @@ namespace Kortex::GameInstance
 
 	void SelectionDialog::OnFilterSelected(const GameID& gameID)
 	{
+		m_CreateButton->Enable(gameID.IsOK());
 		LoadInstancesList(gameID, GetCurrentInstance());
 	}
 	void SelectionDialog::OnInstanceSelected(IGameInstance* instance)
 	{
 		if (instance)
 		{
-			m_OK->Enable(instance->IsOK());
-			m_Remove->Enable(!instance->IsActiveInstance() && instance->IsDeployed());
-			m_CreateShortcut->Enable(instance->IsOK());
+			m_OKButton->Enable(instance->IsOK());
+			m_RemoveButton->Enable(!instance->IsActiveInstance() && instance->IsDeployed());
+			m_CreateShortcutButton->Enable(instance->IsOK());
 
 			OnDisplayInstanceInfo(instance);
 		}
 		else
 		{
-			m_OK->Enable(false);
-			m_Remove->Enable(false);
-			m_CreateShortcut->Enable(false);
+			m_OKButton->Enable(false);
+			m_RemoveButton->Enable(false);
+			m_CreateShortcutButton->Enable(false);
 
 			OnDisplayInstanceInfo(nullptr);
 		}
+	}
+
+	void SelectionDialog::OnCreateInstance(const GameID& gameID)
+	{
+		CreationDialog dialog(this, gameID);
+		if (dialog.ShowModal() == KxID_OK)
+		{
+			LoadInstancesList(gameID, IGameInstance::GetShallowInstance(dialog.GetName()));
+		}
+	}
+	void SelectionDialog::OnRemoveInstance(IGameInstance* instance)
+	{
+		KxTaskDialog dialog(this,
+							KxID_NONE,
+							KTrf("InstanceSelection.ConfirmRemoving.Caption", instance->GetInstanceID()),
+							KTrf("InstanceSelection.ConfirmRemoving.Message", instance->GetInstanceDir(), instance->GetInstanceID()),
+							KxBTN_YES|KxBTN_NO, KxICON_WARNING
+		);
+		if (dialog.ShowModal() == KxID_YES)
+		{
+			const GameID gameID = instance->GetGameID();
+			if (instance->WithdrawDeploy())
+			{
+				LoadInstancesList(gameID);
+			}
+			else
+			{
+				LogEvent(KTr("InstanceCreatorDialog.DeletionError"), LogLevel::Error).Send();
+			}
+		}
+	}
+	void SelectionDialog::OnSelectInstance(IGameInstance* instance)
+	{
+		m_SelectedInstance = nullptr;
+
+		// Game directory is need for instance to work correctly.
+		// Check it and try to get correct path if we have none.
+		wxString gamePath = instance->GetGameDir();
+
+		// Try defaults
+		if (gamePath.IsEmpty())
+		{
+			gamePath = instance->GetTemplate().GetGameID();
+		}
+
+		// Ask user
+		if (!KxFile(gamePath).IsFolderExist())
+		{
+			if (AskForGameFolder(instance, gamePath))
+			{
+				instance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, m_SelectedGameRoot);
+
+				IConfigurableGameInstance* configurableInstance = nullptr;
+				if (instance->QueryInterface(configurableInstance))
+				{
+					configurableInstance->SaveConfig();
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+
+		m_SelectedInstance = instance;
 	}
 
 	void SelectionDialog::OnCreateShortcut(wxCommandEvent& event)
@@ -261,7 +327,7 @@ namespace Kortex::GameInstance
 			if (dialog.ShowModal() == KxID_OK)
 			{
 				KxShellLink link;
-				link.SetTarget(KxLibrary(nullptr).GetFileName());
+				link.SetTarget(IApplication::GetInstance()->GetExecutablePath());
 				link.SetArguments(KxString::Format("InstanceID \"%2\"", instance->GetInstanceID()));
 				link.SetWorkingFolder(KxFile::GetCWD());
 				link.SetIconLocation(instance->GetIconLocation());
@@ -281,65 +347,16 @@ namespace Kortex::GameInstance
 
 			if (selectedGame && id == KxID_ADD)
 			{
-				KInstanceCreatorDialog dialog(this, IGameInstance::GetTemplate(selectedGame));
-				if (dialog.ShowModal() == KxID_OK)
-				{
-					LoadInstancesList(selectedGame, IGameInstance::GetShallowInstance(dialog.GetName()));
-				}
+				OnCreateInstance(selectedGame);
 			}
 			if (instance && id == KxID_REMOVE)
 			{
-				wxWindowID ret = KxTaskDialog(this,
-											  KxID_NONE,
-											  KTrf("InstanceSelection.ConfirmRemoving.Caption", instance->GetInstanceID()),
-											  KTrf("InstanceSelection.ConfirmRemoving.Message", instance->GetInstanceDir(), instance->GetInstanceID()),
-											  KxBTN_YES|KxBTN_NO, KxICON_WARNING
-				).ShowModal();
-				if (ret == KxID_YES)
-				{
-					if (instance->WithdrawDeploy())
-					{
-						instance = nullptr;
-						LoadInstancesList(selectedGame);
-					}
-					else
-					{
-						LogEvent(KTr("InstanceCreatorDialog.DeletionError"), LogLevel::Error).Send();
-					}
-				}
+				OnRemoveInstance(instance);
 			}
 		}
 		else if (id == KxID_OK)
 		{
-			m_SelectedInstance = nullptr;
-			wxString gamePath = instance->GetGameDir();
-
-			// Try defaults
-			if (gamePath.IsEmpty())
-			{
-				gamePath = instance->GetTemplate().GetGameID();
-			}
-
-			// Ask user
-			if (!KxFile(gamePath).IsFolderExist())
-			{
-				if (AskForGameFolder(instance, gamePath))
-				{
-					instance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, m_SelectedGameRoot);
-
-					IConfigurableGameInstance* configurableInstance = nullptr;
-					if (instance->QueryInterface(configurableInstance))
-					{
-						configurableInstance->SaveConfig();
-					}
-				}
-				else
-				{
-					return;
-				}
-			}
-
-			m_SelectedInstance = instance;
+			OnSelectInstance(instance);
 			event.Skip();
 		}
 	}

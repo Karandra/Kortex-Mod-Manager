@@ -8,6 +8,7 @@
 #include "Archive/KArchive.h"
 #include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
+#include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxRegistry.h>
 #include <KxFramework/KxLibrary.h>
@@ -160,6 +161,11 @@ namespace Kortex
 		SetAppDisplayName(SystemApplicationInfo::Name);
 		SetAppVersion(SystemApplicationInfo::Version);
 		SetVendorName(SystemApplicationInfo::Developer);
+
+		// Initialize .exe path and root folder
+		m_ExecutablePath = KxLibrary(nullptr).GetFileName();
+		m_RootFolder = m_ExecutablePath.BeforeLast(wxS('\\'), &m_ExecutableName);
+		KxFile::SetCWD(m_RootFolder);
 
 		// Create default application
 		m_Application = std::make_unique<Application::DefaultApplication>();
@@ -390,18 +396,16 @@ namespace Kortex
 	}
 	void SystemApplication::ConfigureForInternetExplorer10(bool init) const
 	{
-		wxString appName = KxLibrary(nullptr).GetFileName().AfterLast('\\');
-
 		#define IERegPath	wxS("SOFTWARE\\Microsoft\\Internet Explorer\\MAIN\\FeatureControl\\")
 		if (init)
 		{
-			KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BEHAVIORS"), appName, 1, KxREG_VALUE_DWORD);
-			KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BROWSER_EMULATION"), appName, 10000, KxREG_VALUE_DWORD);
+			KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BEHAVIORS"), m_ExecutableName, 1, KxREG_VALUE_DWORD);
+			KxRegistry::SetValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BROWSER_EMULATION"), m_ExecutableName, 10000, KxREG_VALUE_DWORD);
 		}
 		else
 		{
-			KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BEHAVIORS"), appName);
-			KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BROWSER_EMULATION"), appName);
+			KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BEHAVIORS"), m_ExecutableName);
+			KxRegistry::RemoveValue(KxREG_HKEY_CURRENT_USER, IERegPath wxS("FEATURE_BROWSER_EMULATION"), m_ExecutableName);
 		}
 		#undef IERegPath
 	}

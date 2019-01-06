@@ -61,6 +61,19 @@ namespace Kortex
 		});
 	}
 
+	wxString IApplication::GetRootFolder() const
+	{
+		return GetSystemApp()->GetRootFolder();
+	}
+	wxString IApplication::GetExecutablePath() const
+	{
+		return GetSystemApp()->GetExecutablePath();
+	}
+	wxString IApplication::GetExecutableName() const
+	{
+		return GetSystemApp()->GetExecutableName();
+	}
+
 	bool IApplication::Is64Bit() const
 	{
 		#if defined _WIN64

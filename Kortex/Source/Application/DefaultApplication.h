@@ -26,7 +26,6 @@ namespace Kortex::Application
 			KxStringToStringUMap m_AvailableTranslations;
 			DynamicVariableTable m_Variables;
 
-			wxString m_RootFolder;
 			wxString m_DataFolder;
 			wxString m_LogsFolder;
 			wxString m_UserSettingsFolder;
@@ -64,10 +63,6 @@ namespace Kortex::Application
 			void OnProfileConfigChanged(IAppOption& option, IGameProfile& profile) override;
 
 		public:
-			wxString GetRootFolder() const override
-			{
-				return m_RootFolder;
-			}
 			wxString GetDataFolder() const override
 			{
 				return m_DataFolder;

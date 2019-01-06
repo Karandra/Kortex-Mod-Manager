@@ -22,6 +22,10 @@ namespace Kortex
 		friend class IAppOption;
 
 		private:
+			wxString m_RootFolder;
+			wxString m_ExecutableName;
+			wxString m_ExecutablePath;
+
 			std::unique_ptr<IApplication> m_Application;
 			std::unique_ptr<IThemeManager> m_ThemeManager;
 			std::unique_ptr<INotificationCenter> m_NotificationCenter;
@@ -69,6 +73,19 @@ namespace Kortex
 			void ConfigureForInternetExplorer10(bool init) const;
 			bool QueueDownloadToMainProcess(const wxString& link) const;
 			
+			wxString GetRootFolder() const
+			{
+				return m_RootFolder;
+			}
+			wxString GetExecutablePath() const
+			{
+				return m_ExecutablePath;
+			}
+			wxString GetExecutableName() const
+			{
+				return m_ExecutableName;
+			}
+
 			KxXMLDocument& GetGlobalConfig()
 			{
 				return m_GlobalConfig;

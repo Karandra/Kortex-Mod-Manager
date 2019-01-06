@@ -51,7 +51,10 @@ namespace Kortex
 			void UnInitGlobalManagers();
 
 		public:
-			virtual wxString GetRootFolder() const = 0;
+			wxString GetRootFolder() const;
+			wxString GetExecutablePath() const;
+			wxString GetExecutableName() const;
+
 			virtual wxString GetDataFolder() const = 0;
 			virtual wxString GetLogsFolder() const = 0;
 			virtual wxString GetUserSettingsFolder() const = 0;

@@ -16,17 +16,10 @@
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
-#include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
-#include <KxFramework/KxTextBoxDialog.h>
-#include <KxFramework/KxProcess.h>
-#include <KxFramework/KxSystem.h>
 #include <KxFramework/KxShell.h>
-#include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
-#include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxSplashWindow.h>
-#include <KxFramework/KxAnimation.h>
 #include <KxFramework/KxTaskScheduler.h>
 #include <KxFramework/KxCallAtScopeExit.h>
 
@@ -76,10 +69,9 @@ namespace Kortex::Application
 		});
 
 		// Setup paths
-		m_RootFolder = KxLibrary(nullptr).GetFileName().BeforeLast('\\');
-		KxFile::SetCWD(m_RootFolder);
+		const wxString rootFolder = GetRootFolder();
 
-		m_DataFolder = m_RootFolder + "\\Data";
+		m_DataFolder = rootFolder + "\\Data";
 		m_UserSettingsFolder = KxShell::GetFolder(KxSHF_APPLICATIONDATA_LOCAL) + '\\' + GetID();
 		m_UserSettingsFile = m_UserSettingsFolder + "\\Settings.xml";
 		m_LogsFolder = m_UserSettingsFolder + "\\Logs";

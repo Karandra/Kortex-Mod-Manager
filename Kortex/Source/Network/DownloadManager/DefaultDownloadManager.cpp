@@ -265,7 +265,7 @@ namespace Kortex::DownloadManager
 	bool DefaultDownloadManager::CheckIsAssociatedWithNXM() const
 	{
 		wxString path = KxRegistry::GetValue(KxREG_HKEY_CLASSES_ROOT, "NXM\\shell\\open\\command", "", KxREG_VALUE_SZ, KxREG_NODE_SYS, true).As<wxString>();
-		return KxLibrary(nullptr).GetFileName() == path.AfterFirst('"').BeforeFirst('"');
+		return IApplication::GetInstance()->GetExecutablePath() == path.AfterFirst('"').BeforeFirst('"');
 	}
 	bool DefaultDownloadManager::IsAssociatedWithNXM() const
 	{

@@ -19,7 +19,7 @@ namespace Kortex::GameInstance
 	{
 		friend class IGameInstance;
 
-		private:
+		protected:
 			GameID m_GameID;
 			wxString m_InstanceID;
 			wxString m_DefinitionFile;
@@ -156,6 +156,7 @@ namespace Kortex::GameInstance
 	{
 		private:
 			KxXMLDocument m_Config;
+			const bool m_WasCreatedUsingOnlyInstanceID = false;
 
 		protected:
 			void LoadVariables(const KxXMLDocument& instanceConfig);

@@ -472,25 +472,29 @@ namespace Kortex::GameInstance
 	}
 	bool ConfigurableGameInstance::InitInstance()
 	{
-		// This instance were created using only instance ID, so load config file
-		// as it's accessible using just instance ID, load game ID from there and
-		// recreate itself with correct data. Actually that just assigns template
-		// file path and 'is system' attribute.
-
-		using namespace Application;
-
-		LoadConfigFile();
-		if (m_Config.IsOK())
+		if (m_WasCreatedUsingOnlyInstanceID)
 		{
-			const IGameInstance* templateInstance = GetTemplate(GetInstanceOption().GetAttribute(OName::GameID));
-			if (templateInstance)
+			// This instance were created using only instance ID, so load config file
+			// as it's accessible using just instance ID, load game ID from there and
+			// recreate itself with correct data. Actually that just assigns template
+			// file path and 'is system' attribute.
+
+			using namespace Application;
+
+			LoadConfigFile();
+			if (m_Config.IsOK())
 			{
-				// Found a template for our game ID, query it for template definition.
-				Create(templateInstance->GetDefinitionFile(), GetInstanceID(), templateInstance->IsSystemTemplate());
-				return DefaultGameInstance::InitInstance();
+				const IGameInstance* templateInstance = GetTemplate(GetInstanceOption().GetAttribute(OName::GameID));
+				if (templateInstance)
+				{
+					// Found a template for our game ID, query it for template definition.
+					Create(templateInstance->GetDefinitionFile(), GetInstanceID(), templateInstance->IsSystemTemplate());
+					return DefaultGameInstance::InitInstance();
+				}
 			}
+			return false;
 		}
-		return false;
+		return DefaultGameInstance::InitInstance();
 	}
 	bool ConfigurableGameInstance::OnLoadInstance(const KxXMLDocument& templateConfig)
 	{
@@ -509,12 +513,14 @@ namespace Kortex::GameInstance
 	}
 
 	ConfigurableGameInstance::ConfigurableGameInstance(const wxString& instanceID)
+		:m_WasCreatedUsingOnlyInstanceID(true)
 	{
 		Create(wxString(), instanceID, false);
 	}
 	ConfigurableGameInstance::ConfigurableGameInstance(const IGameInstance& instanceTemplate, const wxString& instanceID)
 	{
 		Create(instanceTemplate.GetDefinitionFile(), instanceID, instanceTemplate.IsSystemTemplate());
+		m_GameID = instanceTemplate.GetGameID();
 	}
 
 	void ConfigurableGameInstance::OnConfigChanged(IAppOption& option)

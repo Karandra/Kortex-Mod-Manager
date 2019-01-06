@@ -52,7 +52,7 @@ namespace Kortex
 
 			static Vector& GetShallowInstances();
 			static IGameInstance* GetShallowInstance(const wxString& instanceID);
-			static IGameInstance* NewShallowInstance(const wxString& instanceID);
+			static IGameInstance* NewShallowInstance(const wxString& instanceID, const GameID& gameID);
 
 			static wxString GetTemplatesFolder();
 			static wxString GetUserTemplatesFolder();

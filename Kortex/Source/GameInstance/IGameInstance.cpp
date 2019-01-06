@@ -126,14 +126,20 @@ namespace Kortex
 	{
 		return Util::FindObjectInVector<IGameInstance, Util::FindBy::InstanceID>(ms_Instances, instanceID);
 	}
-	IGameInstance* IGameInstance::NewShallowInstance(const wxString& instanceID)
+	IGameInstance* IGameInstance::NewShallowInstance(const wxString& instanceID, const GameID& gameID)
 	{
 		if (GetShallowInstance(instanceID) == nullptr)
 		{
-			IGameInstance& instance = *ms_Instances.emplace_back(std::make_unique<GameInstance::ConfigurableGameInstance>(instanceID));
-			Util::SortByInstanceID(ms_Instances);
+			const IGameInstance* instanceTemplate = GetTemplate(gameID);
+			if (instanceTemplate)
+			{
+				auto instance = std::make_unique<GameInstance::ConfigurableGameInstance>(*instanceTemplate, instanceID);
+				IGameInstance& ref = *ms_Instances.emplace_back(std::move(instance));
+				Util::SortByInstanceID(ms_Instances);
 
-			return &instance;
+				ref.InitInstance();
+				return &ref;
+			}
 		}
 		return nullptr;
 	}
@@ -225,6 +231,13 @@ namespace Kortex
 		{
 			KxFile(GetModsDir()).CreateFolder();
 			KxFile(GetProfilesDir()).CreateFolder();
+
+			// Should never fail since 'NewShallowInstance' function creates object that implement this interface
+			IConfigurableGameInstance* instance = nullptr;
+			if (QueryInterface(instance))
+			{
+				instance->SaveConfig();
+			}
 
 			if (baseInstance)
 			{

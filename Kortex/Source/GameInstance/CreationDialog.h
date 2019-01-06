@@ -19,9 +19,12 @@ namespace Kortex::GameInstance
 			KxTextBox* m_NameInput = nullptr;
 			KxComboBox* m_InstancesList = nullptr;
 			KxCheckBox* m_CopyInstanceConfigCHK = nullptr;
-		
+			
 			IGameInstance* m_InstanceTemplate = nullptr;
 			wxString m_InstanceID;
+
+		private:
+			wxWindow* GetDialogFocusCtrl() const override;
 
 		public:
 			bool Create(wxWindow* parent, const GameID& gameID);

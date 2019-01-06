@@ -10,6 +10,11 @@
 
 namespace Kortex::GameInstance
 {
+	wxWindow* CreationDialog::GetDialogFocusCtrl() const
+	{
+		return m_NameInput;
+	}
+
 	bool CreationDialog::Create(wxWindow* parent, const GameID& gameID)
 	{
 		m_InstanceTemplate = IGameInstance::GetTemplate(gameID);
@@ -62,7 +67,6 @@ namespace Kortex::GameInstance
 			m_CopyInstanceConfigCHK = new KxCheckBox(contentPanel, KxID_NONE, KTr("InstanceCreatorDialog.CopyInstanceConfig"));
 			copyOptionsSizer->Add(m_CopyInstanceConfigCHK, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
-			m_NameInput->SetFocus();
 			AddUserWindow(m_NameInput);
 			AdjustWindow(wxDefaultPosition);
 
@@ -107,7 +111,7 @@ namespace Kortex::GameInstance
 		}
 		else
 		{
-			if (IGameInstance* newInstance = m_InstanceTemplate->NewShallowInstance(m_InstanceID))
+			if (IGameInstance* newInstance = m_InstanceTemplate->NewShallowInstance(m_InstanceID, m_InstanceTemplate->GetGameID()))
 			{
 				uint32_t options = 0;
 				const IGameInstance* baseInstance = GetSelectedInstance();

@@ -54,8 +54,8 @@ namespace Kortex
 			static IGameInstance* GetShallowInstance(const wxString& instanceID);
 			static IGameInstance* NewShallowInstance(const wxString& instanceID, const GameID& gameID);
 
-			static wxString GetTemplatesFolder();
-			static wxString GetUserTemplatesFolder();
+			static wxString GetGameDefinitionsFolder();
+			static wxString GetUserGameDefinitionsFolder();
 			static void LoadTemplates();
 			static void LoadInstances();
 

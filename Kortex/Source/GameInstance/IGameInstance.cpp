@@ -144,13 +144,13 @@ namespace Kortex
 		return nullptr;
 	}
 
-	wxString IGameInstance::GetTemplatesFolder()
+	wxString IGameInstance::GetGameDefinitionsFolder()
 	{
-		return IApplication::GetInstance()->GetDataFolder() + wxS("\\InstanceTemplates");
+		return IApplication::GetInstance()->GetDataFolder() + wxS("\\GameDefinitions");
 	}
-	wxString IGameInstance::GetUserTemplatesFolder()
+	wxString IGameInstance::GetUserGameDefinitionsFolder()
 	{
-		return IApplication::GetInstance()->GetUserSettingsFolder() + wxS("\\InstanceTemplates");
+		return IApplication::GetInstance()->GetUserSettingsFolder() + wxS("\\GameDefinitions");
 	}
 	
 	void IGameInstance::LoadTemplates()
@@ -158,8 +158,8 @@ namespace Kortex
 		ms_InstanceTemplates.clear();
 
 		GameInstance::TemplateLoader loader;
-		loader.FindInstanceTemplates(GetTemplatesFolder(), true);
-		loader.FindInstanceTemplates(GetUserTemplatesFolder(), false);
+		loader.FindInstanceTemplates(GetGameDefinitionsFolder(), true);
+		loader.FindInstanceTemplates(GetUserGameDefinitionsFolder(), false);
 
 		Util::SortByOrder(ms_InstanceTemplates);
 	}
@@ -213,7 +213,7 @@ namespace Kortex
 	}
 	wxString IGameInstance::GetDefaultIconLocation() const
 	{
-		return KxString::Format(wxS("%1\\Icons\\%2.ico"), IGameInstance::GetTemplatesFolder(), GetGameID());
+		return KxString::Format(wxS("%1\\Icons\\%2.ico"), IGameInstance::GetGameDefinitionsFolder(), GetGameID());
 	}
 
 	const IGameInstance& IGameInstance::GetTemplate() const

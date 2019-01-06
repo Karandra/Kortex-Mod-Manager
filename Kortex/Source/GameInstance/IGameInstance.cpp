@@ -7,6 +7,7 @@
 #include "Utility/KBitmapSize.h"
 #include "Util.h"
 #include <KxFramework/KxShell.h>
+#include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxComparator.h>
 
@@ -17,6 +18,29 @@ namespace
 	std::unique_ptr<IGameInstance> ms_ActiveInstance;
 	IGameInstance::Vector ms_InstanceTemplates;
 	IGameInstance::Vector ms_Instances;
+
+	wxBitmap LoadIconFromFile(const wxString& path)
+	{
+		wxBitmap bitmap(path, wxBITMAP_TYPE_ANY);
+		if (bitmap.IsOk())
+		{
+			KBitmapSize size;
+			size.FromSystemIcon();
+			if (bitmap.GetWidth() != size.GetWidth() || bitmap.GetHeight() != size.GetHeight())
+			{
+				bitmap = size.ScaleBitmapAspect(bitmap);
+			}
+		}
+		else
+		{
+			KxFileItem item;
+			item.SetName(".exe");
+			item.SetNormalAttributes();
+
+			bitmap = KxShell::GetFileIcon(item, false);
+		}
+		return bitmap;
+	}
 }
 
 namespace Kortex::GameInstance
@@ -25,20 +49,20 @@ namespace Kortex::GameInstance
 	{
 		public:
 			void FindInstanceTemplates(const wxString& path, bool isSystem)
-		{
-			KxFileFinder finder(path, wxS("*.xml"));
-			for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
 			{
-				if (item.IsFile() && item.IsNormalItem())
+				KxFileFinder finder(path, wxS("*.xml"));
+				for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
 				{
-					IGameInstance& instance = *ms_InstanceTemplates.emplace_back(std::make_unique<GameInstance::DefaultGameInstance>(item.GetFullPath(), wxEmptyString, isSystem));
-					if (!instance.InitInstance())
+					if (item.IsFile() && item.IsNormalItem())
 					{
-						ms_InstanceTemplates.pop_back();
+						IGameInstance& instance = *ms_InstanceTemplates.emplace_back(std::make_unique<GameInstance::DefaultGameInstance>(item.GetFullPath(), wxEmptyString, isSystem));
+						if (!instance.InitInstance())
+						{
+							ms_InstanceTemplates.pop_back();
+						}
 					}
 				}
 			}
-		}
 	};
 }
 
@@ -62,11 +86,11 @@ namespace Kortex
 	
 	wxBitmap IGameInstance::GetGenericIcon()
 	{
-		return wxBitmap(GetGenericIconLocation(), wxBITMAP_TYPE_ANY);
+		return LoadIconFromFile(GetGenericIconLocation());
 	}
 	wxString IGameInstance::GetGenericIconLocation()
 	{
-		return GetTemplatesFolder() + wxS("\\Icons\\Generic.ico");
+		return IApplication::GetInstance()->GetDataFolder() + wxS("\\UI\\application-logo-icon.ico");
 	}
 
 	IGameInstance* IGameInstance::CreateActive(const IGameInstance& instanceTemplate, const wxString& instanceID)
@@ -179,25 +203,7 @@ namespace Kortex
 
 	wxBitmap IGameInstance::LoadIcon(const wxString& path) const
 	{
-		wxBitmap bitmap(path, wxBITMAP_TYPE_ANY);
-		if (bitmap.IsOk())
-		{
-			KBitmapSize size;
-			size.FromSystemIcon();
-			if (bitmap.GetWidth() != size.GetWidth() || bitmap.GetHeight() != size.GetHeight())
-			{
-				bitmap = size.ScaleBitmapAspect(bitmap);
-			}
-		}
-		else
-		{
-			KxFileItem item;
-			item.SetName(".exe");
-			item.SetNormalAttributes();
-
-			bitmap = KxShell::GetFileIcon(item, false);
-		}
-		return bitmap;
+		return LoadIconFromFile(path);
 	}
 	wxString IGameInstance::GetDefaultIconLocation() const
 	{

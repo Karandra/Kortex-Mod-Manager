@@ -17,28 +17,26 @@ namespace Kortex::GameInstance
 {
 	class DefaultGameInstance: public RTTI::IImplementation<IGameInstance>
 	{
+		friend class IGameInstance;
+
 		private:
 			GameID m_GameID;
 			wxString m_InstanceID;
-			wxString m_TemplateFile;
+			wxString m_DefinitionFile;
 
-			wxString m_Name;
-			wxString m_NameShort;
+			wxString m_GameName;
+			wxString m_GameShortName;
 			int m_SortOrder = -1;
 			bool m_IsSystemTemplate = true;
 
 			StaticVariableTable m_Variables;
-			Vector m_Instances;
 			ProfilesVector m_Profiles;
-
-		private:
-			void LoadInstancesList();
 
 		protected:
 			wxString CreateProfileID(const wxString& id) const override;
 			wxString CreateDefaultProfileID() const override;
 
-			bool OnLoadInstance(const KxXMLDocument& instanceConfig) override
+			virtual bool OnLoadInstance(const KxXMLDocument& templateConfig)
 			{
 				return true;
 			}
@@ -50,16 +48,16 @@ namespace Kortex::GameInstance
 
 		protected:
 			DefaultGameInstance() = default;
-			void Create(const wxString& templateFile, const wxString& instanceID, bool isSystemTemplate)
+			void Create(const wxString& definitionFile, const wxString& instanceID, bool isSystemTemplate)
 			{
-				m_TemplateFile = templateFile;
+				m_DefinitionFile = definitionFile;
 				m_InstanceID = instanceID;
 				m_IsSystemTemplate = isSystemTemplate;
 			}
 
 		public:
 			DefaultGameInstance(const wxString& templateFile, const wxString& instanceID, bool isSystemTemplate)
-				:m_TemplateFile(templateFile), m_InstanceID(instanceID), m_IsSystemTemplate(isSystemTemplate)
+				:m_DefinitionFile(templateFile), m_InstanceID(instanceID), m_IsSystemTemplate(isSystemTemplate)
 			{
 			}
 
@@ -72,9 +70,9 @@ namespace Kortex::GameInstance
 			{
 				return m_InstanceID.IsEmpty();
 			}
-			wxString GetTemplateFile() const override
+			wxString GetDefinitionFile() const override
 			{
-				return m_TemplateFile;
+				return m_DefinitionFile;
 			}
 		
 			// Variables
@@ -98,13 +96,13 @@ namespace Kortex::GameInstance
 			{
 				return m_InstanceID;
 			}
-			wxString GetName() const override
+			wxString GetGameName() const override
 			{
-				return m_Name.IsEmpty() ? m_NameShort : m_Name;
+				return m_GameName.IsEmpty() ? m_GameShortName : m_GameName;
 			}
-			wxString GetShortName() const override
+			wxString GetGameShortName() const override
 			{
-				return m_NameShort.IsEmpty() ? m_Name : m_NameShort;
+				return m_GameShortName.IsEmpty() ? m_GameName : m_GameShortName;
 			}
 		
 			int GetSortOrder() const override
@@ -115,8 +113,7 @@ namespace Kortex::GameInstance
 			{
 				return m_IsSystemTemplate;
 			}
-			bool IsActiveInstance() const override;
-
+			
 			wxString GetIconLocation() const override;
 			wxBitmap GetIcon() const override;
 
@@ -129,37 +126,6 @@ namespace Kortex::GameInstance
 			wxString GetProfilesDir() const override;
 			wxString GetGameDir() const override;
 			wxString GetVirtualGameDir() const override;
-
-			// Instances
-			const Vector& GetActiveInstances() const override
-			{
-				return m_Instances;
-			}
-			Vector& GetActiveInstances() override
-			{
-				return m_Instances;
-			}
-		
-			const IGameInstance* GetInstance(const wxString& id) const override;
-			IGameInstance* GetInstance(const wxString& id) override;
-
-			const IGameInstance& GetTemplate() const override
-			{
-				// Shouldn't fail
-				return *IGameInstance::GetTemplate(m_GameID);
-			}
-			IGameInstance& GetTemplate() override
-			{
-				// Shouldn't fail
-				return *IGameInstance::GetTemplate(m_GameID);
-			}
-
-			IGameInstance* AddInstance(const wxString& instanceID) override;
-			IGameInstance* AddInstanceToTemplate(const wxString& instanceID) override;
-
-			bool Deploy(const IGameInstance* baseInstance = nullptr, uint32_t copyOptions = 0) override;
-			bool IsDeployed() const override;
-			bool WithdrawDeploy() override;
 
 			// Profiles
 			const ProfilesVector& GetProfiles() const override
@@ -197,9 +163,12 @@ namespace Kortex::GameInstance
 			void LoadProfiles(const KxXMLDocument& instanceConfig);
 			wxString LoadRegistryVariable(const KxXMLNode& node) const;
 
-			bool OnLoadInstance(const KxXMLDocument& instanceConfig) override;
+			void LoadConfigFile();
+			bool InitInstance() override;
+			bool OnLoadInstance(const KxXMLDocument& templateConfig) override;
 
 		public:
+			ConfigurableGameInstance(const wxString& instanceID);
 			ConfigurableGameInstance(const IGameInstance& instanceTemplate, const wxString& instanceID);
 
 		public:

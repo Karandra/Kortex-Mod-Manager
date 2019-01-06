@@ -303,7 +303,9 @@ namespace Kortex::Application
 	{
 		KInstanceSelectionDialog dialog(KMainWindow::GetInstance());
 		wxWindowID ret = dialog.ShowModal();
-		if (ret == KxID_OK && (m_IsCmdStartupGameID != dialog.GetNewGameID() || m_StartupInstanceID != dialog.GetNewInstanceID()))
+		IGameInstance* selectedInstance = dialog.GetSelectedInstance();
+
+		if (ret == KxID_OK && (selectedInstance && m_StartupInstanceID != selectedInstance->GetInstanceID()))
 		{
 			KxTaskDialog confirmDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("InstanceSelection.ChangeInstanceDialog.Caption"), KTr("InstanceSelection.ChangeInstanceDialog.Message"), KxBTN_NONE, KxICON_WARNING);
 			confirmDialog.AddButton(KxID_YES, KTr("InstanceSelection.ChangeInstanceDialog.Yes"));
@@ -315,16 +317,13 @@ namespace Kortex::Application
 			if (ret != KxID_CANCEL)
 			{
 				// Set new game root
-				IGameInstance* instance = dialog.GetNewInstance();
 				IConfigurableGameInstance* configurableInstance = nullptr;
-				if (dialog.IsNewGameRootSet() && instance->QueryInterface(configurableInstance))
+				if (dialog.IsGameRootSelected() && selectedInstance->QueryInterface(configurableInstance))
 				{
-					instance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetNewGameRoot());
+					selectedInstance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetSelectedGameRoot());
 					configurableInstance->SaveConfig();
 				}
-
-				GetGlobalOption(OName::Game).SetAttribute(OName::ID, dialog.GetNewGameID());
-				GetGlobalOption(OName::Instance).SetAttribute(OName::ID, dialog.GetNewInstanceID());
+				GetGlobalOption(OName::Instance).SetAttribute(OName::ID, selectedInstance->GetInstanceID());
 
 				// Restart if user agreed
 				if (ret == KxID_YES)
@@ -486,8 +485,9 @@ namespace Kortex::Application
 	}
 	void DefaultApplication::InitInstancesData(wxWindow* parent)
 	{
-		LoadStartupGameIDAndInstanceID();
+		LoadStartupInstanceID();
 		IGameInstance::LoadTemplates();
+		IGameInstance::LoadInstances();
 
 		if (!LoadInstance())
 		{
@@ -498,15 +498,8 @@ namespace Kortex::Application
 			wxWindowID ret = dialog.ShowModal();
 			if (ret == KxID_OK)
 			{
-				// Game ID
-				m_StartupGameID = dialog.GetNewGameID();
-				if (!m_IsCmdStartupGameID)
-				{
-					GetGlobalOption(OName::Game).SetAttribute(OName::ID, m_StartupGameID);
-				}
-
 				// Instance ID
-				m_StartupInstanceID = dialog.GetNewInstanceID();
+				m_StartupInstanceID = dialog.GetSelectedInstance()->GetInstanceID();
 				if (!m_IsCmdStartupInstanceID)
 				{
 					GetGlobalOption(OName::Instance).SetAttribute(OName::ID, m_StartupInstanceID);
@@ -514,12 +507,12 @@ namespace Kortex::Application
 
 				// Set new game root
 				IGameInstance* activeInstnace = IGameInstance::GetActive();
-				if (activeInstnace && dialog.IsNewGameRootSet())
+				if (activeInstnace && dialog.IsGameRootSelected())
 				{
-					activeInstnace->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetNewGameRoot());
+					activeInstnace->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetSelectedGameRoot());
 				}
 
-				wxLogInfo("New GameID: %s, New InstanceID: %s", m_StartupGameID, m_StartupInstanceID);
+				wxLogInfo("New GameID: %s, New InstanceID: %s", m_StartupInstanceID);
 				wxLogInfo("Trying again");
 
 				if (!LoadInstance())
@@ -538,36 +531,24 @@ namespace Kortex::Application
 	}
 	bool DefaultApplication::LoadInstance()
 	{
-		wxLogInfo(KxString::Format("Trying load instance. GameID: %1, InstanceID: %2", m_StartupGameID, m_StartupInstanceID));
+		wxLogInfo("Trying load instance. InstanceID: %s", m_StartupInstanceID);
 
-		if (m_StartupGameID.IsOK() && !m_StartupInstanceID.IsEmpty())
+		if (!m_StartupInstanceID.IsEmpty())
 		{
-			// Check that we have template for this game and required instance exist
-			const IGameInstance* instanceTemplate = IGameInstance::GetTemplate(m_StartupGameID);
-			if (instanceTemplate)
+			const IGameInstance* instance = IGameInstance::GetShallowInstance(m_StartupInstanceID);
+			if (instance)
 			{
-				m_Variables.SetVariable(Variables::KVAR_GAME_ID, m_StartupGameID.ToString());
+				m_Variables.SetVariable(Variables::KVAR_GAME_ID, instance->GetGameID().ToString());
 				m_Variables.SetVariable(Variables::KVAR_INSTANCE_ID, m_StartupInstanceID);
 
-				return IGameInstance::CreateActive(*instanceTemplate, m_StartupInstanceID);
+				return IGameInstance::CreateActive(instance->GetTemplate(), m_StartupInstanceID);
 			}
 		}
 		return false;
 	}
-	void DefaultApplication::LoadStartupGameIDAndInstanceID()
+	void DefaultApplication::LoadStartupInstanceID()
 	{
 		wxCmdLineParser& parser = GetCmdLineParser();
-
-		wxString gameID;
-		if (parser.Found("GameID", &gameID))
-		{
-			m_IsCmdStartupGameID = true;
-			m_StartupGameID = gameID;
-		}
-		else
-		{
-			m_StartupGameID = GetGlobalOption(OName::Game).GetAttribute(OName::ID);
-		}
 
 		if (parser.Found("InstanceID", &m_StartupInstanceID))
 		{
@@ -577,7 +558,7 @@ namespace Kortex::Application
 		{
 			m_StartupInstanceID = GetGlobalOption(OName::Instance).GetAttribute(OName::ID);
 		}
-		wxLogInfo("InstanceTemplate: %s, Instance: %s", m_StartupGameID, m_StartupInstanceID);
+		wxLogInfo("Instance: %s", m_StartupInstanceID);
 	}
 
 	void DefaultApplication::InitVFS()

@@ -174,7 +174,7 @@ namespace
 				else
 				{
 					// No SE, fill with something meaningful
-					reqEntry->SetName(Kortex::IGameInstance::GetActive()->GetShortName() + " Script Extender");
+					reqEntry->SetName(Kortex::IGameInstance::GetActive()->GetGameShortName() + " Script Extender");
 					reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
 				}
 			}

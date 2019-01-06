@@ -51,7 +51,7 @@ namespace Kortex
 			copyOptionsSizer->Add(m_InstancesList, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 			m_InstancesList->AddItem(KVarExp("<$T(ID_NONE)>"));
 
-			for (const auto& instance: m_InstanceTemplate->GetActiveInstances())
+			for (const auto& instance: IGameInstance::GetShallowInstances())
 			{
 				int index = m_InstancesList->AddItem(instance->GetInstanceID());
 				m_InstancesList->SetClientData(index, (void*)instance.get());
@@ -73,7 +73,7 @@ namespace Kortex
 	KInstanceCreatorDialog::KInstanceCreatorDialog(wxWindow* parent, IGameInstance* instanceTemplate)
 		:m_InstanceTemplate(instanceTemplate)
 	{
-		Create(parent, KxID_NONE, KTrf("InstanceCreatorDialog.Caption", instanceTemplate->GetName()), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY);
+		Create(parent, KxID_NONE, KTrf("InstanceCreatorDialog.Caption", instanceTemplate->GetGameName()), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, DefaultStyle|KxCBD_READONLY);
 
 		Bind(KxEVT_STDDIALOG_BUTTON, &KInstanceCreatorDialog::OnButtonClick, this);
 		m_InstancesList->Bind(wxEVT_COMBOBOX, &KInstanceCreatorDialog::OnSelectInstance, this);
@@ -111,14 +111,14 @@ namespace Kortex
 			LogEvent(KTr("InstanceCreatorDialog.InstanceNameInvalid"), LogLevel::Warning, this).Send();
 			return false;
 		}
-		else if (m_InstanceTemplate->HasInstance(m_Name))
+		else if (IGameInstance::GetShallowInstance(m_Name) != nullptr)
 		{
 			LogEvent(KTr("InstanceCreatorDialog.InstanceNameCollision"), LogLevel::Warning, this).Send();
 			return false;
 		}
 		else
 		{
-			if (IGameInstance* newInstance = m_InstanceTemplate->AddInstance(m_Name))
+			if (IGameInstance* newInstance = m_InstanceTemplate->NewShallowInstance(m_Name))
 			{
 				uint32_t options = 0;
 				const IGameInstance* baseInstance = GetSelectedInstance();

@@ -57,8 +57,6 @@ namespace Kortex
 			virtual wxString GetUserSettingsFolder() const = 0;
 			virtual wxString GetUserSettingsFile() const = 0;
 			virtual wxString GetInstancesFolder() const = 0;
-
-			virtual GameID GetStartupGameID() const = 0;
 			virtual wxString GetStartupInstanceID() const = 0;
 
 			virtual bool IsTranslationLoaded() const = 0;

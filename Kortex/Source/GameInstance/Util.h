@@ -69,10 +69,5 @@ namespace
 				return KxComparator::IsLess(v1->GetInstanceID(), v2->GetInstanceID(), true);
 			});
 		}
-
-		wxString GetVariablesSectionName()
-		{
-			return wxS("GameInstance::Variables");
-		}
 	}
 }

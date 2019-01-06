@@ -118,6 +118,7 @@
 		<String ID="Generic.Author">Автор</String>
 		<String ID="Generic.ID">Идентификатор</String>
 		<String ID="Generic.IDInvalid">Некорретный идентификатор</String>
+		<String ID="Generic.Invalid">Некорретный</String>
 		<String ID="Generic.Name">Название</String>
 		<String ID="Generic.Index">Индекс</String>
 		<String ID="Generic.PartOf">Часть</String>
@@ -228,6 +229,7 @@
 		<String ID="InstanceSelection.CreateInstance">Создать инстанс</String>
 		<String ID="InstanceSelection.RemoveInstance">Удалить инстанс</String>
 		<String ID="InstanceSelection.CreateShortcut">Создать ярлык</String>
+		<String ID="InstanceSelection.InvalidInstance">Некорректный инстанс</String>
 		
 		<String ID="InstanceSelection.GameNotFound.Caption">Расположение %1 не найдено</String>
 		<String ID="InstanceSelection.GameNotFound.Message">Установочная папка %1 не найдена или не существует. Укажите папку вручную, чтобы продолжить.</String>

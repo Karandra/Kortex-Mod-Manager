@@ -118,6 +118,7 @@
 		<String ID="Generic.Author">Author</String>
 		<String ID="Generic.ID">Identifier</String>
 		<String ID="Generic.IDInvalid">Invalid identifier</String>
+		<String ID="Generic.Invalid">Invalid</String>
 		<String ID="Generic.Name">Name</String>
 		<String ID="Generic.Index">Index</String>
 		<String ID="Generic.PartOf">Part of</String>
@@ -228,6 +229,7 @@ Using the default folder is not recommended because profile data can occupy a lo
 		<String ID="InstanceSelection.CreateInstance">Create instance</String>
 		<String ID="InstanceSelection.RemoveInstance">Delete instance</String>
 		<String ID="InstanceSelection.CreateShortcut">Create shortcut</String>
+		<String ID="InstanceSelection.InvalidInstance">Invalid instance</String>
 
 		<String ID="InstanceSelection.GameNotFound.Caption">Failed to locate %1</String>
 		<String ID="InstanceSelection.GameNotFound.Message">%1 installation folder not found or doesn't exist. Select the folder manually to continue.</String>

@@ -4,8 +4,6 @@
 #include "DefaultGameProfile.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
-#include <Kortex/ModManager.hpp>
-#include <Kortex/ProgramManager.hpp>
 #include <Kortex/Events.hpp>
 #include "IGameProfile.h"
 #include "Utility/KOperationWithProgress.h"
@@ -14,10 +12,8 @@
 #include "Util.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
-#include <KxFramework/KxINI.h>
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxString.h>
-#include <KxFramework/KxShell.h>
 #include <KxFramework/KxRegistry.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxFileOperationEvent.h>
@@ -26,104 +22,23 @@
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxIndexedEnum.h>
 
-namespace
+namespace Kortex::Application::OName
 {
-	enum class FindBy
-	{
-		GameID,
-		InstanceID,
-		ProfileID
-	};
-	template<class ObjectT, FindBy findBy, class VectorT> ObjectT* FindObjectInVector(VectorT& storageVector, const wxString& value, typename VectorT::const_iterator* itOut = nullptr)
-	{
-		auto it = std::find_if(storageVector.begin(), storageVector.end(), [&value](const auto& object)
-		{
-			if constexpr(findBy == FindBy::GameID)
-			{
-				return KxComparator::IsEqual(object->GetGameID(), value, true);
-			}
-			else if constexpr(findBy == FindBy::InstanceID)
-			{
-				return KxComparator::IsEqual(object->GetInstanceID(), value, true);
-			}
-			else if constexpr(findBy == FindBy::ProfileID)
-			{
-				return KxComparator::IsEqual(object->GetID(), value, true);
-			}
-			else
-			{
-				static_assert(false, "unsupported find request");
-			}
-		});
-
-		if (it != storageVector.end())
-		{
-			if (itOut)
-			{
-				*itOut = it;
-			}
-			return it->get();
-		}
-		return nullptr;
-	}
-	template<class ObjectT, class MapT> ObjectT* FindObjectInMap(MapT& map, const wxString& id)
-	{
-		auto it = map.find(id);
-		if (it != map.end())
-		{
-			return &it->second;
-		}
-		return nullptr;
-	}
-	
-	template<class VectorT> void SortByOrder(VectorT& items)
-	{
-		std::sort(items.begin(), items.end(), [](const auto& v1, const auto& v2)
-		{
-			return v1->GetSortOrder() < v2->GetSortOrder();
-		});
-	}
-	template<class VectorT> void SortByInstanceID(VectorT& items)
-	{
-		std::sort(items.begin(), items.end(), [](const auto& v1, const auto& v2)
-		{
-			return KxComparator::IsLess(v1->GetInstanceID(), v2->GetInstanceID(), true);
-		});
-	}
+	KortexDefOption(GameID);
 }
 
 namespace Kortex::GameInstance
 {
-	void DefaultGameInstance::LoadInstancesList()
-	{
-		m_Instances.clear();
-
-		KxFileFinder finder(GetInstanceDir(), wxS("*"));
-		KxFileItem item = finder.FindNext();
-		while (item.IsOK())
-		{
-			if (item.IsDirectory() && item.IsNormalItem())
-			{
-				auto instance = std::make_unique<ConfigurableGameInstance>(*this, item.GetName());
-				if (instance->InitInstance())
-				{
-					m_Instances.emplace_back(std::move(instance));
-				}
-			}
-			item = finder.FindNext();
-		};
-		SortByOrder(m_Instances);
-	}
 	bool DefaultGameInstance::InitInstance()
 	{
-		m_Variables.SetVariable("InstanceTemplateLocation", m_TemplateFile);
+		m_Variables.SetVariable("InstanceTemplateLocation", m_DefinitionFile);
 
 		// Load template XML
-		KxFileStream instanceConfigStream(m_TemplateFile);
-		KxXMLDocument instanceConfig(instanceConfigStream);
+		KxFileStream templateConfigStream(m_DefinitionFile);
+		KxXMLDocument templateConfig(templateConfigStream);
 
 		// Load ID and SortOrder
-		KxXMLNode node = instanceConfig.QueryElement("Instance");
+		KxXMLNode node = templateConfig.QueryElement("Instance");
 		m_GameID = node.GetAttribute("GameID");
 		if (m_GameID.IsOK())
 		{
@@ -131,27 +46,27 @@ namespace Kortex::GameInstance
 
 			// Load name
 			node = node.QueryElement("Name");
-			m_Name = node.GetValue();
-			m_NameShort = node.GetAttribute("Short");
+			m_GameName = node.GetValue();
+			m_GameShortName = node.GetAttribute("Short");
 
 			// Set base variables
 			m_Variables.SetVariable(wxS("GameID"), VariableValue(m_GameID));
-			m_Variables.SetVariable(wxS("GameName"), KAux::StrOr(m_Name, m_NameShort, m_GameID));
-			m_Variables.SetVariable(wxS("GameShortName"), KAux::StrOr(m_NameShort, m_Name, m_GameID));
-			m_Variables.SetVariable(wxS("GameSortOrder"), VariableValue(KxFormat(wxS("%1")).arg(m_SortOrder)));
+			m_Variables.SetVariable(wxS("GameName"), KAux::StrOr(m_GameName, m_GameShortName, m_GameID));
+			m_Variables.SetVariable(wxS("GameShortName"), KAux::StrOr(m_GameShortName, m_GameName, m_GameID));
+			m_Variables.SetVariable(wxS("GameSortOrder"), VariableValue(KxString::Format(wxS("%1"), m_SortOrder)));
 
-			if (IsTemplate())
+			if (!IsTemplate())
 			{
-				LoadInstancesList();
-				return IsOK();
+				if (OnLoadInstance(templateConfig))
+				{
+					return IsOK();
+				}
+				else
+				{
+					// Reset ID if instance is not loaded correctly
+					m_GameID = GameIDs::NullGameID;
+				}
 			}
-			if (OnLoadInstance(instanceConfig))
-			{
-				return IsOK();
-			}
-
-			// Reset ID if instance is not loaded correctly
-			m_GameID = GameIDs::NullGameID;
 		}
 		return IsOK();
 	}
@@ -179,52 +94,19 @@ namespace Kortex::GameInstance
 	}
 
 	// Properties
-	bool DefaultGameInstance::IsActiveInstance() const
-	{
-		IGameInstance* Instance = IGameInstance::GetActive();
-		return Instance && Instance->GetGameID() == m_GameID && Instance->GetInstanceID() == m_InstanceID;
-	}
-
 	wxString DefaultGameInstance::GetIconLocation() const
 	{
-		wxString path = KxString::Format(wxS("%1\\Icons\\%2.ico"), IGameInstance::GetTemplatesFolder(), GetGameID());
-		if (!KxFile(path).IsFileExist())
-		{
-			path = KxString::Format(wxS("%1\\Icons\\Generic.ico"), IGameInstance::GetTemplatesFolder());
-		}
-		return path;
+		return GetDefaultIconLocation();
 	}
 	wxBitmap DefaultGameInstance::GetIcon() const
 	{
-		wxBitmap bitmap(GetIconLocation(), wxBITMAP_TYPE_ANY);
-		if (!bitmap.IsOk())
-		{
-			// Can't load instance icon. Try to load icon for first program in hope that the first one is the managed game.
-			if (IProgramManager* programsConfig = IProgramManager::GetInstance())
-			{
-				const IProgramEntry::Vector& items = programsConfig->GetProgramList();
-				if (!items.empty())
-				{
-					bitmap = KxShell::GetFileIcon(IModDispatcher::GetInstance()->ResolveLocationPath(items.front()->GetIconPath()));
-				}
-			}
-		}
-
-		if (bitmap.IsOk())
-		{
-			KBitmapSize size;
-			size.FromSystemIcon();
-			if (bitmap.GetWidth() != size.GetWidth() || bitmap.GetHeight() != size.GetHeight())
-			{
-				bitmap = size.ScaleBitmapAspect(bitmap);
-			}
-		}
-		return bitmap;
+		wxBitmap bitmap = LoadIcon(GetIconLocation());
+		return bitmap.IsOk() ? bitmap : GetGenericIcon();
 	}
 
 	wxString DefaultGameInstance::GetInstanceTemplateDir() const
 	{
-		return IApplication::GetInstance()->GetInstancesFolder() + wxS('\\') + GetGameID();
+		return IApplication::GetInstance()->GetInstancesFolder();
 	}
 	wxString DefaultGameInstance::GetInstanceDir() const
 	{
@@ -256,91 +138,14 @@ namespace Kortex::GameInstance
 		return GetInstanceRelativePath(wxS("VirtualGameDir"));
 	}
 
-	// Instances
-	const IGameInstance* DefaultGameInstance::GetInstance(const wxString& id) const
-	{
-		return FindObjectInVector<const IGameInstance, FindBy::InstanceID>(m_Instances, id);
-	}
-	IGameInstance* DefaultGameInstance::GetInstance(const wxString& id)
-	{
-		return FindObjectInVector<IGameInstance, FindBy::InstanceID>(m_Instances, id);
-	}
-
-	IGameInstance* DefaultGameInstance::AddInstance(const wxString& instanceID)
-	{
-		if (IsTemplate() && !HasInstance(instanceID))
-		{
-			auto instance = std::make_unique<ConfigurableGameInstance>(*this, instanceID);
-			if (instance->InitInstance())
-			{
-				IGameInstance* ptr = instance.get();
-				m_Instances.emplace_back(std::move(instance));
-				SortByInstanceID(m_Instances);
-				return ptr;
-			}
-		}
-		return nullptr;
-	}
-	IGameInstance* DefaultGameInstance::AddInstanceToTemplate(const wxString& instanceID)
-	{
-		if (!IsTemplate())
-		{
-			IGameInstance* instanceTemplate = FindObjectInVector<IGameInstance, FindBy::GameID>(GetTemplates(), m_GameID);
-			return instanceTemplate->AddInstance(instanceID);
-		}
-		return nullptr;
-	}
-
-	bool DefaultGameInstance::Deploy(const IGameInstance* baseInstance, uint32_t copyOptions)
-	{
-		if (!IsTemplate() && !IsDeployed())
-		{
-			KxFile(GetModsDir()).CreateFolder();
-			KxFile(GetProfilesDir()).CreateFolder();
-
-			if (baseInstance)
-			{
-				if (copyOptions & CopyOptionsInstance::Config)
-				{
-					KxFile(baseInstance->GetConfigFile()).CopyFile(GetConfigFile(), false);
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-	bool DefaultGameInstance::IsDeployed() const
-	{
-		return !IsTemplate() && KxFile(GetInstanceDir()).IsFolderExist();
-	}
-	bool DefaultGameInstance::WithdrawDeploy()
-	{
-		if (!IsTemplate() && IsDeployed())
-		{
-			// Move to recycle bin
-			KxFile path(GetInstanceDir());
-			path.RemoveFolderTree(true, true);
-			path.RemoveFolder(true);
-
-			Vector::const_iterator it;
-			Vector& items = GetTemplate().GetActiveInstances();
-			if (FindObjectInVector<IGameInstance, FindBy::InstanceID>(items, m_InstanceID, &it))
-			{
-				items.erase(it);
-			}
-			return true;
-		}
-		return false;
-	}
-
 	// Profiles
 	const IGameProfile* DefaultGameInstance::GetProfile(const wxString& profileID) const
 	{
-		return FindObjectInVector<const IGameProfile, FindBy::ProfileID>(m_Profiles, IGameProfile::ProcessID(profileID));
+		return Util::FindObjectInVector<const IGameProfile, Util::FindBy::ProfileID>(m_Profiles, IGameProfile::ProcessID(profileID));
 	}
 	IGameProfile* DefaultGameInstance::GetProfile(const wxString& profileID)
 	{
-		return FindObjectInVector<IGameProfile, FindBy::ProfileID>(m_Profiles, IGameProfile::ProcessID(profileID));
+		return Util::FindObjectInVector<IGameProfile, Util::FindBy::ProfileID>(m_Profiles, IGameProfile::ProcessID(profileID));
 	}
 
 	std::unique_ptr<IGameProfile> DefaultGameInstance::NewProfile()
@@ -444,7 +249,7 @@ namespace Kortex::GameInstance
 
 			// Remove it from profiles list
 			ProfilesVector::const_iterator it;
-			if (FindObjectInVector<const IGameProfile, FindBy::ProfileID>(m_Profiles, profile.GetID(), &it))
+			if (Util::FindObjectInVector<const IGameProfile, Util::FindBy::ProfileID>(m_Profiles, profile.GetID(), &it))
 			{
 				wxString id = profile.GetID();
 				m_Profiles.erase(it);
@@ -660,23 +465,56 @@ namespace Kortex::GameInstance
 		variables.SetVariable("GameArchitectureName", KAux::ArchitectureToString(is64Bit));
 	}
 
-	bool ConfigurableGameInstance::OnLoadInstance(const KxXMLDocument& instanceConfig)
+	void ConfigurableGameInstance::LoadConfigFile()
 	{
-		// Load config file
 		KxFileStream configStream(GetConfigFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 		m_Config.Load(configStream);
+	}
+	bool ConfigurableGameInstance::InitInstance()
+	{
+		// This instance were created using only instance ID, so load config file
+		// as it's accessible using just instance ID, load game ID from there and
+		// recreate itself with correct data. Actually that just assigns template
+		// file path and 'is system' attribute.
+
+		using namespace Application;
+
+		LoadConfigFile();
+		if (m_Config.IsOK())
+		{
+			const IGameInstance* templateInstance = GetTemplate(GetInstanceOption().GetAttribute(OName::GameID));
+			if (templateInstance)
+			{
+				// Found a template for our game ID, query it for template definition.
+				Create(templateInstance->GetDefinitionFile(), GetInstanceID(), templateInstance->IsSystemTemplate());
+				return DefaultGameInstance::InitInstance();
+			}
+		}
+		return false;
+	}
+	bool ConfigurableGameInstance::OnLoadInstance(const KxXMLDocument& templateConfig)
+	{
+		// Load config file if not loaded already
+		if (!m_Config.IsOK())
+		{
+			LoadConfigFile();
+		}
 
 		// Load data
-		LoadVariables(instanceConfig);
-		DetectGameArchitecture(instanceConfig);
-		LoadProfiles(instanceConfig);
+		LoadVariables(templateConfig);
+		DetectGameArchitecture(templateConfig);
+		LoadProfiles(templateConfig);
 
 		return true;
 	}
 
+	ConfigurableGameInstance::ConfigurableGameInstance(const wxString& instanceID)
+	{
+		Create(wxString(), instanceID, false);
+	}
 	ConfigurableGameInstance::ConfigurableGameInstance(const IGameInstance& instanceTemplate, const wxString& instanceID)
 	{
-		Create(instanceTemplate.GetTemplateFile(), instanceID, instanceTemplate.IsSystemTemplate());
+		Create(instanceTemplate.GetDefinitionFile(), instanceID, instanceTemplate.IsSystemTemplate());
 	}
 
 	void ConfigurableGameInstance::OnConfigChanged(IAppOption& option)
@@ -686,6 +524,9 @@ namespace Kortex::GameInstance
 	void ConfigurableGameInstance::SaveConfig()
 	{
 		using namespace Application;
+
+		// Save game ID
+		GetInstanceOption().SetAttribute(OName::GameID, GetGameID());
 
 		KxXMLNode variablesNode = GetInstanceOption(OName::Variables).GetNode();
 		variablesNode.ClearChildren();

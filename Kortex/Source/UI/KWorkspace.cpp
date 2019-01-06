@@ -68,7 +68,7 @@ bool KWorkspace::MakeSubWorkspace(KWorkspace* workspace)
 
 wxString KWorkspace::OnGetWindowTitle() const
 {
-	return KxString::Format("%1 – %2 – %3", Kortex::IApplication::GetInstance()->GetName(), Kortex::IGameInstance::GetActive()->GetShortName(), GetName());
+	return KxString::Format("%1 – %2 – %3", IApplication::GetInstance()->GetName(), IGameInstance::GetActive()->GetGameShortName(), GetName());
 }
 bool KWorkspace::OnOpenWorkspace()
 {

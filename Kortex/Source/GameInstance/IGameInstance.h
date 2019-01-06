@@ -11,6 +11,8 @@ namespace Kortex
 {
 	namespace GameInstance
 	{
+		class TemplateLoader;
+
 		enum CopyOptionsInstance: uint32_t
 		{
 			Config = 1 << 0,
@@ -27,6 +29,8 @@ namespace Kortex
 		public RTTI::IInterface<IGameInstance>,
 		public Application::WithInstanceOptions<IGameInstance>
 	{
+		friend class GameInstance::TemplateLoader;
+
 		public:
 			using Vector = std::vector<std::unique_ptr<IGameInstance>>;
 			using RefVector = std::vector<IGameInstance*>;
@@ -37,35 +41,41 @@ namespace Kortex
 			static bool IsValidInstanceID(const wxString& id);
 			static bool IsValidProfileID(const wxString& id);
 
+			static wxBitmap GetGenericIcon();
+			static wxString GetGenericIconLocation();
+
 		public:
 			static IGameInstance* CreateActive(const IGameInstance& instanceTemplate, const wxString& instanceID);
+			static IGameInstance* GetActive();
+			static IGameInstance& AssignActive(std::unique_ptr<IGameInstance> instance);
+			static void DestroyActive();
+
+			static Vector& GetShallowInstances();
+			static IGameInstance* GetShallowInstance(const wxString& instanceID);
+			static IGameInstance* NewShallowInstance(const wxString& instanceID);
 
 			static wxString GetTemplatesFolder();
 			static wxString GetUserTemplatesFolder();
 			static void LoadTemplates();
+			static void LoadInstances();
 
 			static size_t GetTemplatesCount();
 			static Vector& GetTemplates();
 			static IGameInstance* GetTemplate(const GameID& id);
 			static bool HasTemplate(const GameID& id);
 
-		private:
-			static void FindInstanceTemplates(const wxString& path, bool isSystem);
-
 		public:
-			static IGameInstance* GetActive();
-			static IGameInstance& AssignActive(std::unique_ptr<IGameInstance> instance);
-			static void DestroyActive();
-
 			static wxString GetActiveProfileID();
 			static IGameProfile* GetActiveProfile();
 			static bool IsActiveProfileID(const wxString& id);
 
 		protected:
+			wxBitmap LoadIcon(const wxString& path) const;
+			wxString GetDefaultIconLocation() const;
+
 			virtual wxString CreateProfileID(const wxString& id) const = 0;
 			virtual wxString CreateDefaultProfileID() const = 0;
 
-			virtual bool OnLoadInstance(const KxXMLDocument& instanceConfig) = 0;
 			virtual bool ShouldInitProfiles() const = 0;
 			virtual bool InitInstance() = 0;
 
@@ -75,7 +85,7 @@ namespace Kortex
 		public:
 			virtual bool IsOK() const = 0;
 			virtual bool IsTemplate() const = 0;
-			virtual wxString GetTemplateFile() const = 0;
+			virtual wxString GetDefinitionFile() const = 0;
 		
 			// Variables
 			virtual IVariableTable& GetVariables() = 0;
@@ -86,15 +96,14 @@ namespace Kortex
 			// Properties
 			virtual GameID GetGameID() const = 0;
 			virtual wxString GetInstanceID() const = 0;
-			virtual wxString GetName() const = 0;
-			virtual wxString GetShortName() const = 0;
+			virtual wxString GetGameName() const = 0;
+			virtual wxString GetGameShortName() const = 0;
 		
 			virtual int GetSortOrder() const = 0;
 			virtual bool IsSystemTemplate() const = 0;
-			virtual bool IsActiveInstance() const = 0;
-
 			virtual wxString GetIconLocation() const = 0;
 			virtual wxBitmap GetIcon() const = 0;
+			bool IsActiveInstance() const;
 
 			virtual wxString GetInstanceTemplateDir() const = 0;
 			virtual wxString GetInstanceDir() const = 0;
@@ -107,33 +116,12 @@ namespace Kortex
 			virtual wxString GetVirtualGameDir() const = 0;
 
 			// Instances
-			bool HasInstances() const
-			{
-				return !GetActiveInstances().empty();
-			}
-			size_t GetInstancesCount() const
-			{
-				return GetActiveInstances().size();
-			}
-			virtual const Vector& GetActiveInstances() const = 0;
-			virtual Vector& GetActiveInstances() = 0;
-		
-			bool HasInstance(const wxString& id) const
-			{
-				return GetInstance(id) != nullptr;
-			}
-			virtual const IGameInstance* GetInstance(const wxString& id) const = 0;
-			virtual IGameInstance* GetInstance(const wxString& id) = 0;
+			const IGameInstance& GetTemplate() const;
+			IGameInstance& GetTemplate();
 
-			virtual const IGameInstance& GetTemplate() const = 0;
-			virtual IGameInstance& GetTemplate() = 0;
-
-			virtual IGameInstance* AddInstance(const wxString& instanceID) = 0;
-			virtual IGameInstance* AddInstanceToTemplate(const wxString& instanceID) = 0;
-
-			virtual bool Deploy(const IGameInstance* baseInstance = nullptr, uint32_t copyOptions = 0) = 0;
-			virtual bool IsDeployed() const = 0;
-			virtual bool WithdrawDeploy() = 0;
+			bool Deploy(const IGameInstance* baseInstance = nullptr, uint32_t copyOptions = 0);
+			bool WithdrawDeploy();
+			bool IsDeployed() const;
 
 			// Profiles
 			bool HasProfiles() const

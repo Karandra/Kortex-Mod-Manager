@@ -140,7 +140,7 @@ namespace Kortex::DownloadManager
 					const IGameInstance* instance = entry->GetTargetGame();
 					if (instance)
 					{
-						value = instance->GetShortName();
+						value = instance->GetGameShortName();
 					}
 					break;
 				}
@@ -248,8 +248,8 @@ namespace Kortex::DownloadManager
 			}
 			case ColumnID::Game:
 			{
-				const wxString name1 = entry1->GetTargetGame() ? entry1->GetTargetGame()->GetShortName() : wxEmptyString;
-				const wxString name2 = entry2->GetTargetGame() ? entry2->GetTargetGame()->GetShortName() : wxEmptyString;
+				const wxString name1 = entry1->GetTargetGame() ? entry1->GetTargetGame()->GetGameShortName() : wxEmptyString;
+				const wxString name2 = entry2->GetTargetGame() ? entry2->GetTargetGame()->GetGameShortName() : wxEmptyString;
 
 				return KxComparator::IsLess(name1, name2);
 			}

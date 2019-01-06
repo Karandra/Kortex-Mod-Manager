@@ -5,6 +5,7 @@
 #include <Kortex/Events.hpp>
 #include "UI/KInstanceCreatorDialog.h"
 #include "Utility/KBitmapSize.h"
+#include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxBitmapComboBox.h>
@@ -54,7 +55,7 @@ namespace Kortex
 			mainSizer->Detach(GetDialogMainCtrl());
 			GetDialogMainCtrl()->Reparent(m_LeftPane);
 			m_LeftSizer->Add(GetDialogMainCtrl(), 0, wxEXPAND);
-			m_TemplatesList = static_cast<KxBitmapComboBox*>(GetDialogMainCtrl());
+			m_GameFilter = static_cast<KxBitmapComboBox*>(GetDialogMainCtrl());
 
 			m_InstancesList = new KxListBox(m_LeftPane, KxID_NONE);
 			m_LeftSizer->Add(m_InstancesList, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
@@ -89,16 +90,12 @@ namespace Kortex
 	{
 	}
 
-	IGameInstance* KInstanceSelectionDialog::GetSelectedTemplate() const
+	GameID KInstanceSelectionDialog::GetCurrentFilter() const
 	{
-		void* data = m_TemplatesList->GetClientData(m_TemplatesList->GetSelection());
-		if (data)
-		{
-			return static_cast<IGameInstance*>(data);
-		}
-		return nullptr;
+		void* data = m_GameFilter->GetClientData(m_GameFilter->GetSelection());
+		return data ? static_cast<IGameInstance*>(data)->GetGameID() : GameIDs::NullGameID;
 	}
-	IGameInstance* KInstanceSelectionDialog::GetSelectedInstance() const
+	IGameInstance* KInstanceSelectionDialog::GetCurrentInstance() const
 	{
 		void* data = (void*)m_InstancesList->GetItemData(m_InstancesList->GetSelection());
 		if (data)
@@ -113,109 +110,105 @@ namespace Kortex
 		Bind(KxEVT_STDDIALOG_BUTTON, &KInstanceSelectionDialog::OnButton, this);
 		Bind(Kortex::Events::ProfileRefreshList, &KInstanceSelectionDialog::OnUpdateProfiles, this);
 
-		m_TemplatesList->Bind(wxEVT_COMBOBOX, [this](wxCommandEvent& event)
+		m_GameFilter->Bind(wxEVT_COMBOBOX, [this](wxCommandEvent& event)
 		{
-			const IGameInstance* instanceTemplate = GetSelectedTemplate();
-			if (instanceTemplate)
-			{
-				IGameInstance* activeInstance = IGameInstance::GetActive();
-
-				LoadInstancesList(instanceTemplate, activeInstance ? activeInstance->GetInstanceID() : wxEmptyString);
-			}
+			OnFilterSelected(GetCurrentFilter());
 		});
 		m_InstancesList->Bind(wxEVT_LIST_ITEM_SELECTED, [this](wxCommandEvent& event)
 		{
-			IGameInstance* instance = GetSelectedInstance();
-
-			m_OK->Enable(true);
-			m_Remove->Enable(!instance->IsActiveInstance());
-			m_CreateShortcut->Enable(true);
-
-			OnDisplayInstanceInfo(instance);
+			OnInstanceSelected(GetCurrentInstance());
 			event.Skip();
 		});
 		m_InstancesList->Bind(wxEVT_LIST_ITEM_DESELECTED, [this](wxCommandEvent& event)
 		{
-			m_OK->Enable(false);
-			m_Remove->Enable(false);
-			m_CreateShortcut->Enable(false);
-
-			OnDisplayInstanceInfo(nullptr);
+			OnInstanceSelected(GetCurrentInstance());
 			event.Skip();
 		});
 
-		m_OK->Disable();
-		m_Remove->Disable();
-		m_CreateShortcut->Disable();
-		LoadTemplatesList();
+		const IGameInstance* active = IGameInstance::GetActive();
+		LoadGameFilter(active ? active->GetGameID() : GameIDs::NullGameID);
+
+		wxString instanceID = active ? active->GetInstanceID() : IApplication::GetInstance()->GetStartupInstanceID();
+		OnInstanceSelected(IGameInstance::GetShallowInstance(instanceID));
+
 		AdjustWindow(wxDefaultPosition, wxSize(650, 400));
 	}
-	void KInstanceSelectionDialog::LoadTemplatesList()
+	void KInstanceSelectionDialog::LoadGameFilter(const GameID& gameID)
 	{
-		GameID currentGame;
-		if (const IGameInstance* activeInstance = IGameInstance::GetActive())
-		{
-			currentGame = activeInstance->GetGameID();
-		}
-		else
-		{
-			currentGame = IApplication::GetInstance()->GetStartupGameID();
-		}
+		KBitmapSize bitmapSize = KBitmapSize().FromSystemIcon();
+		m_GameFilterImageList = new KxImageList(bitmapSize.GetWidth(), bitmapSize.GetHeight(), false, IGameInstance::GetTemplatesCount());
+		m_GameFilter->AssignImageList(m_GameFilterImageList);
 
-		KBitmapSize size;
-		size.FromSystemIcon();
-
-		KxImageList* imageList = new KxImageList(size.GetWidth(), size.GetHeight(), false, IGameInstance::GetTemplatesCount());
-		m_TemplatesList->AssignImageList(imageList);
+		int imageID = m_GameFilterImageList->Add(IGameInstance::GetGenericIcon());
+		m_GameFilter->AddItem(KAux::MakeBracketedLabel(KTr("Generic.All")), imageID);
 
 		int select = 0;
-		for (const auto& instanceTemplate: IGameInstance::GetTemplates())
+		for (const auto& currentTemplate: IGameInstance::GetTemplates())
 		{
-			int imageID = imageList->Add(instanceTemplate->GetIcon());
-			int index = m_TemplatesList->AddItem(instanceTemplate->GetName(), imageID);
-			m_TemplatesList->SetClientData(index, (void*)instanceTemplate.get());
+			imageID = m_GameFilterImageList->Add(currentTemplate->GetIcon());
+			int index = m_GameFilter->AddItem(currentTemplate->GetGameName(), imageID);
+			m_GameFilter->SetClientData(index, static_cast<void*>(currentTemplate.get()));
 
-			if (instanceTemplate->GetGameID() == currentGame)
+			if (gameID.IsOK() && gameID == currentTemplate->GetGameID())
 			{
 				select = index;
 			}
 		}
-		m_TemplatesList->SetSelection(select);
+		m_GameFilter->SetSelection(select);
 
 		wxCommandEvent event(wxEVT_COMBOBOX);
 		event.SetInt(select);
-		m_TemplatesList->HandleWindowEvent(event);
+		m_GameFilter->ProcessWindowEvent(event);
 	}
-	void KInstanceSelectionDialog::LoadInstancesList(const IGameInstance* instanceTemplate, const wxString& selectID)
+	void KInstanceSelectionDialog::LoadInstancesList(const GameID& gameID, IGameInstance* selectInstance)
 	{
 		m_OK->Disable();
 		m_Remove->Disable();
 		m_CreateShortcut->Disable();
 		m_InstancesList->ClearItems();
 
-		if (instanceTemplate)
+		int select = 0;
+		for (const auto& instnace: IGameInstance::GetShallowInstances())
 		{
-			size_t select = 0;
-			for (const auto& instanceTemplate: instanceTemplate->GetActiveInstances())
+			if (gameID && gameID != instnace->GetGameID())
 			{
-				int index = m_InstancesList->AddItem(instanceTemplate->GetInstanceID());
-				m_InstancesList->SetItemPtrData(index, (intptr_t)instanceTemplate.get());
-				if (instanceTemplate->GetInstanceID() == selectID)
+				continue;
+			}
+
+			wxString name;
+			if (instnace->IsOK())
+			{
+				if (gameID)
 				{
-					select = index;
+					name = instnace->GetInstanceID();
+				}
+				else
+				{
+					name = KxString::Format("[%1] %2", instnace->GetGameShortName(), instnace->GetInstanceID());
 				}
 			}
-			m_InstancesList->Select(select);
-			m_InstancesList->SetFocus();
+			else
+			{
+				name = KxString::Format("%1 (%2)", instnace->GetInstanceID(), KTr("InstanceSelection.InvalidInstance"));
+			}
 
-			wxCommandEvent event(wxEVT_LIST_ITEM_SELECTED);
-			event.SetInt(select);
-			m_TemplatesList->HandleWindowEvent(event);
+			int index = m_InstancesList->AddItem(name);
+			m_InstancesList->SetItemPtrData(index, reinterpret_cast<wxUIntPtr>(instnace.get()));
+			if (selectInstance && selectInstance == instnace.get())
+			{
+				select = index;
+			}
 		}
+		m_InstancesList->Select(select);
+		m_InstancesList->SetFocus();
+
+		wxCommandEvent event(wxEVT_LIST_ITEM_SELECTED);
+		event.SetInt(select);
+		m_GameFilter->HandleWindowEvent(event);
 	}
-	bool KInstanceSelectionDialog::AskForGameFolder(const IGameInstance* instanceTemplate, const wxString& currentGamePath)
+	bool KInstanceSelectionDialog::AskForGameFolder(const IGameInstance* instance, const wxString& currentGamePath)
 	{
-		KxTaskDialog messageDialog(this, KxID_NONE, KTrf("InstanceSelection.GameNotFound.Caption", instanceTemplate->GetName()), KTrf("InstanceSelection.GameNotFound.Message", instanceTemplate->GetName()), KxBTN_CANCEL, KxICON_WARNING);
+		KxTaskDialog messageDialog(this, KxID_NONE, KTrf("InstanceSelection.GameNotFound.Caption", instance->GetGameName()), KTrf("InstanceSelection.GameNotFound.Message", instance->GetGameName()), KxBTN_CANCEL, KxICON_WARNING);
 		messageDialog.AddButton(KxID_SELECT_FOLDER);
 		if (messageDialog.ShowModal() == KxID_SELECT_FOLDER)
 		{
@@ -223,24 +216,47 @@ namespace Kortex
 			browseDialog.SetFolder(currentGamePath);
 			if (browseDialog.ShowModal())
 			{
-				m_NewGameRoot = browseDialog.GetResult();
+				m_SelectedGameRoot = browseDialog.GetResult();
 				return true;
 			}
 		}
 
-		m_NewGameRoot.Clear();
+		m_SelectedGameRoot.Clear();
 		return false;
+	}
+
+	void KInstanceSelectionDialog::OnFilterSelected(const GameID& gameID)
+	{
+		LoadInstancesList(gameID, GetCurrentInstance());
+	}
+	void KInstanceSelectionDialog::OnInstanceSelected(IGameInstance* instance)
+	{
+		if (instance)
+		{
+			m_OK->Enable(instance->IsOK());
+			m_Remove->Enable(!instance->IsActiveInstance() && instance->IsDeployed());
+			m_CreateShortcut->Enable(instance->IsOK());
+
+			OnDisplayInstanceInfo(instance);
+		}
+		else
+		{
+			m_OK->Enable(false);
+			m_Remove->Enable(false);
+			m_CreateShortcut->Enable(false);
+
+			OnDisplayInstanceInfo(nullptr);
+		}
 	}
 
 	void KInstanceSelectionDialog::OnCreateShortcut(wxCommandEvent& event)
 	{
-		const IGameInstance* instanceTemplate = GetSelectedTemplate();
-		IGameInstance* instance = GetSelectedInstance();
-		if (instanceTemplate && instance)
+		IGameInstance* instance = GetCurrentInstance();
+		if (instance)
 		{
 			KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 			dialog.SetDefaultExtension("lnk");
-			dialog.SetFileName(wxString::Format("%s - %s", instance->GetShortName(), instance->GetInstanceID()));
+			dialog.SetFileName(wxString::Format("%s - %s", instance->GetGameShortName(), instance->GetInstanceID()));
 			dialog.SetOptionEnabled(KxFBD_NO_DEREFERENCE_LINKS);
 
 			dialog.AddFilter("*.lnk", KTr("FileFilter.Shortcuts"));
@@ -250,9 +266,9 @@ namespace Kortex
 			{
 				KxShellLink link;
 				link.SetTarget(KxLibrary(nullptr).GetFileName());
-				link.SetArguments(KxFormat("-GameID \"%1\" -InstanceID \"%2\"").arg(instanceTemplate->GetGameID()).arg(instance->GetInstanceID()));
+				link.SetArguments(KxString::Format("InstanceID \"%2\"", instance->GetInstanceID()));
 				link.SetWorkingFolder(KxFile::GetCWD());
-				link.SetIconLocation(KxFile(instanceTemplate->GetIconLocation()).GetFullPath());
+				link.SetIconLocation(instance->GetIconLocation());
 				link.Save(dialog.GetResult());
 			}
 		}
@@ -260,62 +276,60 @@ namespace Kortex
 	void KInstanceSelectionDialog::OnButton(wxNotifyEvent& event)
 	{
 		wxWindowID id = event.GetId();
-		IGameInstance* instanceTemplate = GetSelectedTemplate();
-		IGameInstance* instance = GetSelectedInstance();
+		GameID selectedGame = GetCurrentFilter();
+		IGameInstance* instance = GetCurrentInstance();
 
 		if (id == KxID_ADD || id == KxID_REMOVE)
 		{
 			event.Veto();
-			if (instanceTemplate)
+
+			if (selectedGame && id == KxID_ADD)
 			{
-				if (id == KxID_ADD)
+				KInstanceCreatorDialog dialog(this, IGameInstance::GetTemplate(selectedGame));
+				if (dialog.ShowModal() == KxID_OK)
 				{
-					KInstanceCreatorDialog dialog(this, instanceTemplate);
-					if (dialog.ShowModal() == KxID_OK)
-					{
-						LoadInstancesList(instanceTemplate, dialog.GetName());
-					}
+					LoadInstancesList(selectedGame, IGameInstance::GetShallowInstance(dialog.GetName()));
 				}
-				else if (id == KxID_REMOVE && instance)
+			}
+			if (instance && id == KxID_REMOVE)
+			{
+				wxWindowID ret = KxTaskDialog(this,
+											  KxID_NONE,
+											  KTrf("InstanceSelection.ConfirmRemoving.Caption", instance->GetInstanceID()),
+											  KTrf("InstanceSelection.ConfirmRemoving.Message", instance->GetInstanceDir(), instance->GetInstanceID()),
+											  KxBTN_YES|KxBTN_NO, KxICON_WARNING
+				).ShowModal();
+				if (ret == KxID_YES)
 				{
-					wxWindowID ret = KxTaskDialog(
-						this,
-						KxID_NONE,
-						KTrf("InstanceSelection.ConfirmRemoving.Caption", instance->GetInstanceID()),
-						KTrf("InstanceSelection.ConfirmRemoving.Message", instance->GetInstanceDir(), instance->GetInstanceID()),
-						KxBTN_YES|KxBTN_NO, KxICON_WARNING
-					).ShowModal();
-					if (ret == KxID_YES)
+					if (instance->WithdrawDeploy())
 					{
-						if (instance->WithdrawDeploy())
-						{
-							instance = nullptr;
-							LoadInstancesList(instanceTemplate, wxEmptyString);
-						}
-						else
-						{
-							LogEvent(KTr("InstanceCreatorDialog.DeletionError"), LogLevel::Error).Send();
-						}
+						instance = nullptr;
+						LoadInstancesList(selectedGame);
+					}
+					else
+					{
+						LogEvent(KTr("InstanceCreatorDialog.DeletionError"), LogLevel::Error).Send();
 					}
 				}
 			}
 		}
-		else if (id == KxID_OK && instanceTemplate)
+		else if (id == KxID_OK)
 		{
+			m_SelectedInstance = nullptr;
 			wxString gamePath = instance->GetGameDir();
 
 			// Try defaults
 			if (gamePath.IsEmpty())
 			{
-				gamePath = instanceTemplate->GetGameDir();
+				gamePath = instance->GetTemplate().GetGameID();
 			}
 
 			// Ask user
 			if (!KxFile(gamePath).IsFolderExist())
 			{
-				if (AskForGameFolder(instanceTemplate, gamePath))
+				if (AskForGameFolder(instance, gamePath))
 				{
-					instance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, m_NewGameRoot);
+					instance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, m_SelectedGameRoot);
 
 					IConfigurableGameInstance* configurableInstance = nullptr;
 					if (instance->QueryInterface(configurableInstance))
@@ -329,16 +343,13 @@ namespace Kortex
 				}
 			}
 
-			m_NewInstance = instance;
-			m_NewGameID = instance->GetGameID();
-			m_NewInstanceID = instance->GetInstanceID();
-
+			m_SelectedInstance = instance;
 			event.Skip();
 		}
 	}
 	void KInstanceSelectionDialog::OnUpdateProfiles(wxNotifyEvent& event)
 	{
-		LoadInstancesList(GetSelectedTemplate(), event.GetString());
+		LoadInstancesList(GetCurrentFilter(), IGameInstance::GetShallowInstance(event.GetString()));
 	}
 	void KInstanceSelectionDialog::OnDisplayInstanceInfo(const IGameInstance* instance)
 	{

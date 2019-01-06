@@ -352,7 +352,7 @@ namespace Kortex::ModManager
 		// Target profile
 		if (m_TargetGame)
 		{
-			additionalInfo << "\r\n" << KTr("ModManager.Import.ManagedGame") << ": " << m_TargetGame->GetName();
+			additionalInfo << "\r\n" << KTr("ModManager.Import.ManagedGame") << ": " << m_TargetGame->GetGameName();
 		}
 		return additionalInfo;
 	}

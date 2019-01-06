@@ -38,9 +38,7 @@ namespace Kortex::Application
 			KxImageSet m_ImageSet;
 		
 
-			GameID m_StartupGameID;
 			wxString m_StartupInstanceID;
-			bool m_IsCmdStartupGameID = false;
 			bool m_IsCmdStartupInstanceID = false;
 
 			std::unique_ptr<GameModsModule> m_GameModsModule;
@@ -90,11 +88,6 @@ namespace Kortex::Application
 			{
 				return m_InstancesFolder;
 			}
-
-			GameID GetStartupGameID() const override
-			{
-				return m_StartupGameID;
-			}
 			wxString GetStartupInstanceID() const override
 			{
 				return m_StartupInstanceID;
@@ -142,7 +135,7 @@ namespace Kortex::Application
 			bool ShowFirstTimeConfigDialog(wxWindow* parent);
 			void InitInstancesData(wxWindow* parent);
 			bool LoadInstance();
-			void LoadStartupGameIDAndInstanceID();
+			void LoadStartupInstanceID();
 
 			void InitVFS();
 			void UnInitVFS();

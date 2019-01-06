@@ -2,7 +2,7 @@
 #include "DefaultApplication.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
-#include "UI/KInstanceSelectionDialog.h"
+#include "GameInstance/SelectionDialog.h"
 #include "VirtualFileSystem/DefaultVFSService.h"
 #include "PackageManager/KPackageManager.h"
 #include <Kortex/Application.hpp>
@@ -301,7 +301,7 @@ namespace Kortex::Application
 
 	bool DefaultApplication::OpenInstanceSelectionDialog()
 	{
-		KInstanceSelectionDialog dialog(KMainWindow::GetInstance());
+		GameInstance::SelectionDialog dialog(KMainWindow::GetInstance());
 		wxWindowID ret = dialog.ShowModal();
 		IGameInstance* selectedInstance = dialog.GetSelectedInstance();
 
@@ -494,7 +494,7 @@ namespace Kortex::Application
 			wxLogInfo("Unable to load saved instance. Asking user to choose one.");
 
 			parent->Hide();
-			KInstanceSelectionDialog dialog(parent);
+			GameInstance::SelectionDialog dialog(parent);
 			wxWindowID ret = dialog.ShowModal();
 			if (ret == KxID_OK)
 			{

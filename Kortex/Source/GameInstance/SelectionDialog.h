@@ -12,8 +12,11 @@ class KxSplitterWindow;
 namespace Kortex
 {
 	class IGameInstance;
+}
 
-	class KInstanceSelectionDialog: public KxComboBoxDialog
+namespace Kortex::GameInstance
+{
+	class SelectionDialog: public KxComboBoxDialog
 	{
 		private:
 			KxSplitterWindow* m_Splitter = nullptr;
@@ -37,19 +40,13 @@ namespace Kortex
 			wxString m_SelectedGameRoot;
 			IGameInstance* m_SelectedInstance = nullptr;
 
-		private:
-			bool Create(wxWindow* parent,
-						wxWindowID id,
-						const wxString& caption,
-						const wxPoint & pos = wxDefaultPosition,
-						const wxSize & size = wxDefaultSize,
-						int buttons = DefaultButtons,
-						long style = DefaultStyle
-			);
-	
 		public:
-			KInstanceSelectionDialog(wxWindow* parent);
-			virtual ~KInstanceSelectionDialog();
+			bool Create(wxWindow* parent = nullptr);
+			SelectionDialog() = default;
+			SelectionDialog(wxWindow* parent)
+			{
+				Create(parent);
+			}
 
 		public:
 			IGameInstance* GetSelectedInstance() const

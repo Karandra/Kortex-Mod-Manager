@@ -129,6 +129,7 @@
     <ClCompile Include="Source\GameInstance\GameID.cpp" />
     <ClCompile Include="Source\GameInstance\DefaultGameInstance.cpp" />
     <ClCompile Include="Source\GameInstance\DefaultGameProfile.cpp" />
+    <ClCompile Include="Source\GameInstance\SelectionDialog.cpp" />
     <ClCompile Include="Source\GameInstance\ProfileEditor.cpp" />
     <ClCompile Include="Source\GameMods\GameModsModule.cpp" />
     <ClCompile Include="Source\GameMods\IModDispatcher.cpp" />
@@ -255,7 +256,6 @@
     </ClCompile>
     <ClCompile Include="Source\UI\KMainWindow.cpp" />
     <ClCompile Include="Source\UI\KInstanceCreatorDialog.cpp" />
-    <ClCompile Include="Source\UI\KInstanceSelectionDialog.cpp" />
     <ClCompile Include="Source\UI\KWorkspace.cpp" />
     <ClCompile Include="Source\Utility\KAux.cpp" />
     <ClCompile Include="Source\Utility\KImageProvider.cpp" />
@@ -392,6 +392,7 @@
     <ClInclude Include="Source\GameInstance\GameID.h" />
     <ClInclude Include="Source\GameInstance\DefaultGameInstance.h" />
     <ClInclude Include="Source\GameInstance\DefaultGameProfile.h" />
+    <ClInclude Include="Source\GameInstance\SelectionDialog.h" />
     <ClInclude Include="Source\GameInstance\ProfileEditor.h" />
     <ClInclude Include="Source\GameInstance\Util.h" />
     <ClInclude Include="Source\GameMods\GameModsModule.h" />
@@ -541,7 +542,6 @@
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\UI\KMainWindow.h" />
     <ClInclude Include="Source\UI\KInstanceCreatorDialog.h" />
-    <ClInclude Include="Source\UI\KInstanceSelectionDialog.h" />
     <ClInclude Include="Source\UI\KWorkspace.h" />
     <ClInclude Include="Source\Utility\KAux.h" />
     <ClInclude Include="Source\Utility\KImageProvider.h" />

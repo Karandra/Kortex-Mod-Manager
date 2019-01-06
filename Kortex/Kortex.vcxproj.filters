@@ -531,9 +531,6 @@
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UI\KInstanceSelectionDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\UI\KInstanceCreatorDialog.cpp">
       <Filter>Code\Source\UI</Filter>
     </ClCompile>
@@ -972,6 +969,9 @@
     <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp">
       <Filter>Shared Code\Source\VirtualFileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameInstance\SelectionDialog.cpp">
+      <Filter>Code\Source\GameInstance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1210,9 +1210,6 @@
     </ClInclude>
     <ClInclude Include="Source\Archive\KBethesdaArchive.h">
       <Filter>Code\Headers\Archive</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KInstanceSelectionDialog.h">
-      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KInstanceCreatorDialog.h">
       <Filter>Code\Headers\UI</Filter>
@@ -1828,6 +1825,9 @@
     </ClInclude>
     <ClInclude Include="..\Shared\VirtualFileSystem\IVFSService.h">
       <Filter>Shared Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\SelectionDialog.h">
+      <Filter>Code\Headers\GameInstance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

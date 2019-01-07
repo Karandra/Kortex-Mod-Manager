@@ -1,10 +1,12 @@
-Version 1.4 - x
+Version 2.0 - x
 [General] Added network functionality, sign-in system for NexusMods.
 [General] Removed refresh button from toolbar.
 [General] Drag and drop will cause scroll on attempt to drop to first or last visible row.
 [General] Fixed loading instance when Kortex is unable to locate game directory automatically.
 [General] Profile system reworked, adopted Mod Organizer naming convention (Instance -> Profile instead of Porfile -> Mod list).
 [General] Added local saves and local game configuration options for profiles.
+[General] Instances no longer required to be inside folder named after managed game.
+[General] New UI for About dialog.
 [General] Notifications center.
 [Mod Manager] Added grouping by priority with collapsible groups.
 [Mod Manager] Added colors to mods and priority groups.

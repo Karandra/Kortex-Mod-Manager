@@ -60,6 +60,7 @@ namespace Kortex::DownloadManager
 {
 	void DisplayModel::OnInitControl()
 	{
+		GetView()->SetUniformRowHeight(GetView()->GetDefaultRowHeight(KxDVC_ROW_HEIGHT_EXPLORER));
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnSelectItem, this);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
@@ -84,7 +85,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			auto info = GetView()->AppendColumn<KxDataViewProgressRenderer>(KTr("Generic.Status"), ColumnID::Status, KxDATAVIEW_CELL_INERT);
-			info.GetRenderer()->SetSizeOption(KxDVR_PROGRESS_HEIGHT_FIT);
+			info.GetRenderer()->SetSizeOption(KxDVR_PROGRESS_HEIGHT_AUTO);
 		}
 		RefreshItems();
 	}
@@ -123,16 +124,7 @@ namespace Kortex::DownloadManager
 				}
 				case ColumnID::Size:
 				{
-					int64_t downloadedSize = entry->GetDownloadedSize();
-					int64_t totalSize = entry->GetFileInfo().GetSize();
-					if (entry->IsCompleted())
-					{
-						value = KxFile::FormatFileSize(totalSize, 2);
-					}
-					else
-					{
-						value = KxFile::FormatFileSize(downloadedSize, 2) + '/' + KxFile::FormatFileSize(totalSize, 2);
-					}
+					value = KxFile::FormatFileSize(entry->GetFileInfo().GetSize(), 2);
 					break;
 				}
 				case ColumnID::Game:
@@ -161,12 +153,12 @@ namespace Kortex::DownloadManager
 				case ColumnID::Status:
 				{
 					// Percent
-					int64_t downloadedSize = entry->GetDownloadedSize();
-					int64_t totalSize = entry->GetFileInfo().GetSize();
+					const int64_t downloadedSize = entry->GetDownloadedSize();
+					const int64_t totalSize = entry->GetFileInfo().GetSize();
 					int percent = 0;
 					if (totalSize > 0)
 					{
-						percent = ((double)downloadedSize / (double)totalSize) * 100;
+						percent = ((float)downloadedSize / (float)totalSize) * 100;
 					}
 
 					// Bar color
@@ -184,13 +176,20 @@ namespace Kortex::DownloadManager
 					wxString label;
 					if (entry->IsRunning())
 					{
-						static wxString sec = KTr("Generic.Sec");
+						static wxString sec = KTr(wxS("Generic.Sec"));
 						label = KxString::Format(wxS("%1%, %2/%3"), percent, KxFile::FormatFileSize(entry->GetSpeed(), 0), sec);
 					}
 					else
 					{
 						label = KxString::Format(wxS("%1%"), percent);
 					}
+
+					if (!entry->IsCompleted())
+					{
+						label += wxS(", ");
+						label += KxFile::FormatFileSize(downloadedSize, 2) + wxS('/') + KxFile::FormatFileSize(totalSize, 2);
+					}
+
 					value = KxDataViewProgressValue(percent, label, state);
 					break;
 				}
@@ -222,6 +221,22 @@ namespace Kortex::DownloadManager
 				case ColumnID::Name:
 				{
 					break;
+				}
+			};
+		}
+		return false;
+	}
+	bool DisplayModel::GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const
+	{
+		const IDownloadEntry* entry = GetDataEntry(row);
+		if (entry)
+		{
+			switch (column->GetID())
+			{
+				case ColumnID::Size:
+				{
+					attribute.SetAlignment(wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT);
+					return true;
 				}
 			};
 		}

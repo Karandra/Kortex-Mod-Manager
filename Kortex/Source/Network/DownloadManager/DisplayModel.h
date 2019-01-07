@@ -19,6 +19,7 @@ namespace Kortex::DownloadManager
 			virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
 			virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
 			virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
+			virtual bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const override;
 			virtual bool HasDefaultCompare() const override
 			{
 				return true;

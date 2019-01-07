@@ -6,13 +6,20 @@
 
 namespace
 {
-	template<class CounterType, class StreamType> void ReadPluginList(StreamType& stream, KxStringVector& plugins)
+	template<class TCounter, class TStream> void ReadPluginList(TStream& stream, KxStringVector& plugins)
 	{
-		size_t pluginCount = stream.ReadObject<CounterType>();
+		size_t pluginCount = stream.ReadObject<TCounter>();
 		for (size_t i = 0; i < pluginCount; i++)
 		{
-			uint16_t length = stream.ReadObject<uint16_t>();
-			plugins.emplace_back(stream.ReadStringUTF8(length));
+			const uint16_t length = stream.ReadObject<uint16_t>();
+			if (length != 0)
+			{
+				plugins.emplace_back(stream.ReadStringUTF8(length));
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 }
@@ -26,8 +33,8 @@ namespace Kortex::SaveManager::BethesdaSave
 		{
 			if (stream.ReadStringASCII(13) == wxS("TESV_SAVEGAME"))
 			{
-				// Skip 'headerSize'
-				stream.Skip<uint32_t>();
+				// Read 'headerSize'
+				const uint32_t headerSize = stream.ReadObject<uint32_t>();
 
 				// Read version
 				m_SaveVersion = stream.ReadObject<uint32_t>();
@@ -55,7 +62,8 @@ namespace Kortex::SaveManager::BethesdaSave
 				stream.Skip<uint16_t>();
 				m_Bitmap = ReadBitmapRGBA(stream.ReadVector<uint8_t>(width * height * 4), width, height);
 
-				if (m_SaveVersion >= 12)
+				// It seems that only save files with header size == 84 have esl block, otherwise and following code breaks.
+				if (m_SaveVersion >= 12 && headerSize == 84)
 				{
 					uint32_t uncompressedSize = stream.ReadObject<uint32_t>();
 					uint32_t compressedSize = stream.ReadObject<uint32_t>();
@@ -65,7 +73,6 @@ namespace Kortex::SaveManager::BethesdaSave
 					KxUInt8Vector compressedData = stream.ReadVector<uint8_t>(compressedSize);
 					KxUInt8Vector uncompressedData(uncompressedSize, 0);
 					KxLZ4::Decompress(compressedData.data(), compressedData.size(), uncompressedData.data(), uncompressedData.size());
-
 					KxIOStreamWrapper<KxMemoryInputStream> memoryStream(uncompressedData.data(), uncompressedData.size());
 
 					// Skip unknown 5 bytes

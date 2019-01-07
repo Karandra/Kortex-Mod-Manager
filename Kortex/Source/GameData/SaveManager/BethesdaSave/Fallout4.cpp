@@ -4,12 +4,20 @@
 
 namespace
 {
-	template<class CounterType> void ReadPluginList(KxFileStream& stream, KxStringVector& plugins)
+	template<class TCounter> void ReadPluginList(KxFileStream& stream, KxStringVector& plugins)
 	{
-		size_t count = stream.ReadObject<CounterType>();
+		size_t count = stream.ReadObject<TCounter>();
 		for (size_t i = 0; i < count; i++)
 		{
-			plugins.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()));
+			const uint16_t length = stream.ReadObject<uint16_t>();
+			if (length != 0)
+			{
+				plugins.emplace_back(stream.ReadStringUTF8(length));
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 }

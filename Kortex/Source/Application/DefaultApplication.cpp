@@ -528,7 +528,7 @@ namespace Kortex::Application
 		if (!m_StartupInstanceID.IsEmpty())
 		{
 			const IGameInstance* instance = IGameInstance::GetShallowInstance(m_StartupInstanceID);
-			if (instance && instance->IsOK())
+			if (instance && instance->IsOK() && KxFile(instance->GetGameDir()).IsFolderExist())
 			{
 				m_Variables.SetVariable(Variables::KVAR_GAME_ID, instance->GetGameID().ToString());
 				m_Variables.SetVariable(Variables::KVAR_INSTANCE_ID, m_StartupInstanceID);

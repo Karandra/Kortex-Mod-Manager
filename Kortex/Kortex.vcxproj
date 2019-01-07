@@ -559,16 +559,16 @@
     <ResourceCompile Include="Kortex.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Bin\Data\InstanceTemplates\Icons\Fallout3.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\Fallout4.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\FalloutNV.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\Generic.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\Morrowind.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\Oblivion.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\Sacred2.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\Skyrim.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\SkyrimSE.ico" />
-    <Image Include="Bin\Data\InstanceTemplates\Icons\SkyrimVR.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\Fallout3.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\Fallout4.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\Fallout4VR.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\FalloutNV.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\Morrowind.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\Oblivion.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\Sacred2.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\Skyrim.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\SkyrimSE.ico" />
+    <Image Include="Bin\Data\GameDefinitions\Icons\SkyrimVR.ico" />
     <Image Include="Resources\App.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -583,16 +583,16 @@
     <Xml Include="Bin\Data\ConfigManager\Profiles\SkyrimSE.xml" />
     <Xml Include="Bin\Data\ConfigManager\Settings.xml" />
     <Xml Include="Bin\Data\ConfigManager\VirtualKeys.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\Fallout3.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\Fallout4.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\Fallout4VR.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\FalloutNV.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\Morrowind.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\Oblivion.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\Sacred2.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\Skyrim.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\SkyrimSE.xml" />
-    <Xml Include="Bin\Data\InstanceTemplates\SkyrimVR.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\Fallout3.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\Fallout4.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\Fallout4VR.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\FalloutNV.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\Morrowind.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\Oblivion.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\Sacred2.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\Skyrim.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\SkyrimSE.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\SkyrimVR.xml" />
     <Xml Include="Bin\Data\ModManager\DefaultTags.xml" />
     <Xml Include="Bin\Data\PackageManager\Requirements\Fallout3.xml" />
     <Xml Include="Bin\Data\PackageManager\Requirements\Fallout4.xml" />

@@ -79,7 +79,7 @@ namespace Kortex::ModManager
 		GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &DisplayModel::OnHeaderContextMenu, this);
 		GetView()->Bind(KxEVT_DATAVIEW_COLUMN_SORTED, &DisplayModel::OnColumnSorted, this);
 		GetView()->Bind(KxEVT_DATAVIEW_CACHE_HINT, &DisplayModel::OnCacheHint, this);
-		GetView()->SetIndent(KBitmapSize().FromSystemSmallIcon().GetWidth() / 2);
+		GetView()->SetIndent(0);
 		EnableDragAndDrop();
 
 		/* Columns */

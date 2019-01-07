@@ -331,10 +331,10 @@
     <Filter Include="Code\Include\Git">
       <UniqueIdentifier>{7c678c2c-c543-48d7-a8db-f24f5b579fb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Misc\Game Gefinitions">
+    <Filter Include="Misc\Game Definitions">
       <UniqueIdentifier>{0989cc56-192d-4358-962b-2f3822e190b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Misc\Game Gefinitions\Icons">
+    <Filter Include="Misc\Game Definitions\Icons">
       <UniqueIdentifier>{62a74ac0-dd4d-4d27-8025-329b14e7bec3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -1846,34 +1846,34 @@
       <Filter>Resources</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\Fallout3.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\Fallout4.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\Fallout4VR.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\FalloutNV.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\Morrowind.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\Oblivion.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\Sacred2.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\Skyrim.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\SkyrimSE.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
     <Image Include="Bin\Data\GameDefinitions\Icons\SkyrimVR.ico">
-      <Filter>Misc\Game Gefinitions\Icons</Filter>
+      <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -1944,34 +1944,34 @@
       <Filter>Misc\Translation</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Fallout3.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Fallout4.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Fallout4VR.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\FalloutNV.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Morrowind.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Oblivion.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Sacred2.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Skyrim.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\SkyrimSE.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
     <Xml Include="Bin\Data\GameDefinitions\SkyrimVR.xml">
-      <Filter>Misc\Game Gefinitions</Filter>
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

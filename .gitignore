@@ -19,5 +19,9 @@ Kortex/Bin/Kortex x64.exe
 Kortex/Bin/Kortex Server.exe
 Kortex/Bin/Kortex.exe
 
+#Misc files
+Kortex/Include/Kortex/Git/LatestCommit.txt
+
 # Resourses
 Resources/*
+

@@ -5,6 +5,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Theme.hpp>
 #include <Kortex/Events.hpp>
+#include <Kortex/Git/Constants.h>
 #include "Archive/KArchive.h"
 #include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
@@ -76,9 +77,13 @@ namespace Kortex
 		const constexpr wxChar Name[] = wxS("Kortex Mod Manager");
 		const constexpr wxChar Version[] = wxS("2.0");
 		const constexpr wxChar Developer[] = wxS("Kerber");
-
 		const constexpr wxChar GUID[] = wxS("B5E8047C-9239-45C4-86F6-6C83A842063E");
-		const constexpr wxChar CommitHash[] = wxS("ee1f8acb5a9528de3ff0c118595b1d757ccc2bae");
+
+		template<class T> wxString RemoveWhitespace(T&& value)
+		{
+			wxString data(value, std::size(value) - 1);
+			return KxString::Trim(data, true, true);
+		}
 	}
 
 	void SystemApplication::InitLogging()
@@ -177,7 +182,7 @@ namespace Kortex
 		variables.SetVariable("AppVersion", SystemApplicationInfo::Version);
 		variables.SetVariable("AppDeveloper", SystemApplicationInfo::Developer);
 		variables.SetVariable("AppGUID", SystemApplicationInfo::GUID);
-		variables.SetVariable("AppCommitHash", SystemApplicationInfo::CommitHash);
+		variables.SetVariable("AppCommitHash", SystemApplicationInfo::RemoveWhitespace(SystemApplicationInfo::GitCommitHash));
 		variables.SetVariable("AppModProjectProgID", "KMM.ModProject.1");
 		variables.SetVariable("AppModPackageProgID", "KMM.ModPackage.1");
 		variables.SetVariable("AppData", m_Application->GetDataFolder());

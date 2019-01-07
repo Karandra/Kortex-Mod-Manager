@@ -334,6 +334,9 @@
     <Filter Include="Shared Code\Source\VirtualFileSystem">
       <UniqueIdentifier>{8c67519b-0440-43b1-b57e-cea7caeddc63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Include\Git">
+      <UniqueIdentifier>{7c678c2c-c543-48d7-a8db-f24f5b579fb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1181,9 +1184,6 @@
     <ClInclude Include="Source\Utility\KUnsortedUnique.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PackageManager\KPackageManagerListModel.h">
       <Filter>Code\Headers\PackageManager</Filter>
     </ClInclude>
@@ -1829,6 +1829,12 @@
     <ClInclude Include="Source\GameInstance\CreationDialog.h">
       <Filter>Code\Headers\GameInstance</Filter>
     </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\Git\Constants.h">
+      <Filter>Code\Include\Git</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc">
@@ -1979,6 +1985,9 @@
     </Text>
     <Text Include="Resources\ChangeLog RU.txt">
       <Filter>Resources</Filter>
+    </Text>
+    <Text Include="Include\Kortex\Git\LatestCommit.txt">
+      <Filter>Code\Include\Git</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

@@ -288,6 +288,7 @@
     <ClInclude Include="Include\Kortex\DownloadManager.hpp" />
     <ClInclude Include="Include\Kortex\Events.hpp" />
     <ClInclude Include="Include\Kortex\GameInstance.hpp" />
+    <ClInclude Include="Include\Kortex\Git\Constants.h" />
     <ClInclude Include="Include\Kortex\ModImporter.hpp" />
     <ClInclude Include="Include\Kortex\ModManager.hpp" />
     <ClInclude Include="Include\Kortex\ModProvider.hpp" />
@@ -612,6 +613,7 @@
     <None Include="Bin\Data\PackageCreator\Templates\Default.kmpproj" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Include\Kortex\Git\LatestCommit.txt" />
     <Text Include="Resources\ChangeLog EN.txt" />
     <Text Include="Resources\ChangeLog RU.txt" />
   </ItemGroup>
@@ -721,6 +723,11 @@
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
     </Manifest>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
+"C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
+echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -751,6 +758,11 @@
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
     </Manifest>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
+"C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
+echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -793,6 +805,11 @@
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
     </Manifest>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
+"C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
+echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -829,6 +846,11 @@
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
     </Manifest>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
+"C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
+echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

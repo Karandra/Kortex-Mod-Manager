@@ -11,9 +11,10 @@ namespace Kortex::PluginManager
 
 		GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE, KxDVC_DEFAULT_WIDTH, defaultFlags);
 		{
-			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Index"), ColumnID::Index, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
+			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 			info.GetColumn()->SortAscending();
 		}
+		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Index"), BSColumnID::Index, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.PartOf"), ColumnID::PartOf, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Author"), ColumnID::Author, KxDATAVIEW_CELL_INERT, KxDVC_DEFAULT_WIDTH, defaultFlags);
 	}
@@ -27,14 +28,22 @@ namespace Kortex::PluginManager
 				value = KxDataViewBitmapTextToggleValue(plugin.IsActive(), plugin.GetName(), wxNullBitmap, KxDataViewBitmapTextToggleValue::CheckBox);
 				break;
 			}
-			case ColumnID::Index:
+			case BSColumnID::Index:
 			{
-				value = Kortex::IPluginManager::GetInstance()->FormatPriority(plugin);
+				if (plugin.IsActive())
+				{
+					value = KxFormat(wxS("0x%1")).UpperCase().arg(plugin.GetPriority(), 2, 16, wxS('0')).ToString();
+				}
+				break;
+			}
+			case ColumnID::Priority:
+			{
+				value = plugin.GetOrderIndex();
 				break;
 			}
 			case ColumnID::Type:
 			{
-				value = Kortex::IPluginManager::GetInstance()->GetPluginTypeName(plugin);
+				value = IPluginManager::GetInstance()->GetPluginTypeName(plugin);
 				break;
 			}
 			case ColumnID::PartOf:
@@ -56,6 +65,9 @@ namespace Kortex::PluginManager
 			case ColumnID::Name:
 			{
 				plugin.SetActive(value.As<bool>());
+				
+				// If this item state has changed, this makes control query indexes of displayed items again
+				GetView()->Refresh();
 				return true;
 			}
 		};
@@ -79,7 +91,8 @@ namespace Kortex::PluginManager
 	{
 		switch (column->GetID())
 		{
-			case ColumnID::Index:
+			case ColumnID::Priority:
+			case BSColumnID::Index:
 			{
 				attributes.SetFontFace(wxS("Consolas"));
 				return true;
@@ -105,32 +118,33 @@ namespace Kortex::PluginManager
 		};
 		return !attributes.IsDefault();
 	}
-	bool BethesdaDisplayModel::Compare(const IGamePlugin& plugin1, const IGamePlugin& plugin2, const KxDataViewColumn* column) const
+	bool BethesdaDisplayModel::Compare(const IGamePlugin& pluginLeft, const IGamePlugin& pluginRight, const KxDataViewColumn* column) const
 	{
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
 			{
-				return KxComparator::IsLess(plugin1.GetName(), plugin1.GetName());
+				return KxComparator::IsLess(pluginLeft.GetName(), pluginRight.GetName());
 			}
 			default:
-			case ColumnID::Index:
+			case ColumnID::Priority:
+			case BSColumnID::Index:
 			{
-				return plugin1.GetOrderIndex() < plugin2.GetOrderIndex();
+				return pluginLeft.GetOrderIndex() < pluginRight.GetOrderIndex();
 			}
 			case ColumnID::Type:
 			{
-				const Kortex::IPluginManager* manager = Kortex::IPluginManager::GetInstance();
-				return KxComparator::IsLess(manager->GetPluginTypeName(plugin1), manager->GetPluginTypeName(plugin2));
+				const IPluginManager* manager = IPluginManager::GetInstance();
+				return KxComparator::IsLess(manager->GetPluginTypeName(pluginLeft), manager->GetPluginTypeName(pluginRight));
 				break;
 			}
 			case ColumnID::PartOf:
 			{
-				return KxComparator::IsLess(GetPartOfName(plugin1), GetPartOfName(plugin2));
+				return KxComparator::IsLess(GetPartOfName(pluginLeft), GetPartOfName(pluginRight));
 			}
 			case ColumnID::Author:
 			{
-				return KxComparator::IsLess(GetPluginAuthor(plugin1), GetPluginAuthor(plugin2));
+				return KxComparator::IsLess(GetPluginAuthor(pluginLeft), GetPluginAuthor(pluginRight));
 			}
 		};
 		return false;

@@ -19,7 +19,6 @@ namespace Kortex::PluginManager
 	void BethesdaPluginManager::OnInit()
 	{
 		BasePluginManager::OnInit();
-		m_DisplayModel = std::make_unique<BethesdaDisplayModel>();
 	}
 	void BethesdaPluginManager::OnExit()
 	{
@@ -63,14 +62,6 @@ namespace Kortex::PluginManager
 	{
 		const wxString ext = name.AfterLast(wxS('.'));
 		return KxComparator::IsEqual(ext, wxS("esp")) || KxComparator::IsEqual(ext, wxS("esm"));
-	}
-	wxString BethesdaPluginManager::OnFormatPriority(const IGamePlugin& plugin, intptr_t value) const
-	{
-		if (plugin.IsActive())
-		{
-			return KxFormat(wxS("0x%1 (%2)")).arg(value, 2, 16, wxS('0')).arg(value);
-		}
-		return wxEmptyString;
 	}
 
 	IGamePlugin::RefVector BethesdaPluginManager::CollectDependentPlugins(const IGamePlugin& plugin, bool firstOnly) const
@@ -119,7 +110,7 @@ namespace Kortex::PluginManager
 	}
 	wxString BethesdaPluginManager::OnWriteToActiveOrder(const IGamePlugin& plugin) const
 	{
-		return plugin.GetName();
+		return plugin.IsActive() ? plugin.GetName() : wxEmptyString;
 	}
 	KWorkspace* BethesdaPluginManager::CreateWorkspace(KMainWindow* mainWindow)
 	{
@@ -206,10 +197,13 @@ namespace Kortex::PluginManager
 		{
 			if (const IGamePlugin* plugin = listItem.GetPlugin())
 			{
-				loadOrder.emplace_back(OnWriteToLoadOrder(*plugin));
-				if (listItem.IsActive())
+				if (loadOrder.emplace_back(OnWriteToLoadOrder(*plugin)).IsEmpty())
 				{
-					activeOrder.emplace_back(OnWriteToActiveOrder(*plugin));
+					loadOrder.pop_back();
+				}
+				if (activeOrder.emplace_back(OnWriteToActiveOrder(*plugin)).IsEmpty())
+				{
+					activeOrder.pop_back();
 				}
 
 				if (modFileDate)
@@ -238,13 +232,13 @@ namespace Kortex::PluginManager
 	{
 	}
 
-	std::unique_ptr<Kortex::IGamePlugin> BethesdaPluginManager::CreatePlugin(const wxString& fullPath, bool isActive) const
+	std::unique_ptr<IGamePlugin> BethesdaPluginManager::CreatePlugin(const wxString& fullPath, bool isActive)
 	{
 		auto plugin = std::make_unique<BethesdaPlugin>(fullPath);
 		plugin->SetActive(isActive);
 		return plugin;
 	}
-	std::unique_ptr<PluginManager::IPluginReader> BethesdaPluginManager::CreatePluginReader() const
+	std::unique_ptr<IPluginReader> BethesdaPluginManager::CreatePluginReader()
 	{
 		using namespace PluginManager;
 		using namespace PluginManager::Internal;
@@ -269,9 +263,9 @@ namespace Kortex::PluginManager
 	{
 		return Workspace::GetInstance();
 	}
-	IDisplayModel* BethesdaPluginManager::GetDisplayModel() const
+	std::unique_ptr<IDisplayModel> BethesdaPluginManager::CreateDisplayModel()
 	{
-		return m_DisplayModel.get();
+		return std::make_unique<BethesdaDisplayModel>();
 	}
 
 	wxString BethesdaPluginManager::GetPluginTypeName(const IGamePlugin& plugin) const

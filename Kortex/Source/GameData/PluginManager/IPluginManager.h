@@ -69,7 +69,6 @@ namespace Kortex
 		protected:
 			virtual intptr_t OnGetPluginPriority(const IGamePlugin& plugin) const = 0;
 			virtual intptr_t OnGetPluginDisplayPriority(const IGamePlugin& plugin) const = 0;
-			virtual wxString OnFormatPriority(const IGamePlugin& plugin, intptr_t value) const = 0;
 
 			virtual bool HasDependentPlugins(const IGamePlugin& pluginEntry) const = 0;
 			virtual IGamePlugin::RefVector GetDependentPlugins(const IGamePlugin& pluginEntry) const = 0;
@@ -80,8 +79,8 @@ namespace Kortex
 		public:
 			virtual const PluginManager::Config& GetConfig() const = 0;
 
-			virtual std::unique_ptr<PluginManager::IPluginReader> CreatePluginReader() const = 0;
-			virtual PluginManager::IDisplayModel* GetDisplayModel() const = 0;
+			virtual std::unique_ptr<PluginManager::IPluginReader> CreatePluginReader() = 0;
+			virtual std::unique_ptr<PluginManager::IDisplayModel> CreateDisplayModel() = 0;
 			virtual wxString GetPluginsLocation() const = 0;
 			virtual wxString GetPluginTypeName(const IGamePlugin& plugin) const = 0;
 			virtual const IGameMod* FindOwningMod(const IGamePlugin& pluginEntry) const = 0;
@@ -101,15 +100,6 @@ namespace Kortex
 			virtual void Load() = 0;
 			virtual void LoadNativeOrder() = 0;
 			virtual void Invalidate() = 0;
-
-			wxString FormatPriority(const IGamePlugin& plugin, intptr_t value) const
-			{
-				return OnFormatPriority(plugin, value);
-			}
-			wxString FormatPriority(const IGamePlugin& plugin) const
-			{
-				return OnFormatPriority(plugin, OnGetPluginDisplayPriority(plugin));
-			}
 
 			virtual bool MovePlugins(const IGamePlugin::RefVector& entriesToMove, const IGamePlugin& anchor, MoveMode moveMode = MoveMode::After) = 0;
 			virtual void SyncWithPluginsList(const KxStringVector& pluginNamesList, SyncListMode mode = SyncListMode::ActivateAll) = 0;

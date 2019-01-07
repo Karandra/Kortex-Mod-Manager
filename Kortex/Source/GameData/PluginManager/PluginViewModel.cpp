@@ -9,22 +9,12 @@
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxMenu.h>
 
-namespace
-{
-	enum ColumnID
-	{
-		Name,
-		Index,
-		Type,
-		PartOf,
-		Author,
-	};
-}
-
 namespace Kortex::PluginManager
 {
 	void PluginViewModel::OnInitControl()
 	{
+		m_DisplayModel = IPluginManager::GetInstance()->CreateDisplayModel();
+
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &PluginViewModel::OnSelectItem, this);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &PluginViewModel::OnActivateItem, this);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &PluginViewModel::OnContextMenu, this);
@@ -49,8 +39,8 @@ namespace Kortex::PluginManager
 		{
 			for (size_t i = 0; i < GetItemCount(); i++)
 			{
-				const IGamePlugin* entry = GetDataEntry(i);
-				if (entry && KAux::CheckSearchMask(m_SearchMask, entry->GetName()))
+				const IGamePlugin* plugin = GetDataEntry(i);
+				if (plugin && KAux::CheckSearchMask(m_SearchMask, plugin->GetName()))
 				{
 					children.push_back(GetItem(i));
 				}
@@ -59,11 +49,15 @@ namespace Kortex::PluginManager
 	}
 	void PluginViewModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		GetDisplayModel()->GetValue(value, *GetDataEntry(row), column);
+		if (const IGamePlugin* plugin = GetDataEntry(row))
+		{
+			GetDisplayModel()->GetValue(value, *plugin, column);
+		}
 	}
 	bool PluginViewModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		if (GetDisplayModel()->SetValue(value, *GetDataEntry(row), column))
+		IGamePlugin* plugin = GetDataEntry(row);
+		if (plugin && GetDisplayModel()->SetValue(value, *plugin, column))
 		{
 			ChangeNotify();
 			return true;
@@ -72,24 +66,37 @@ namespace Kortex::PluginManager
 	}
 	bool PluginViewModel::IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const
 	{
-		return GetDisplayModel()->IsEditorEnabled(*GetDataEntry(row), column);
+		if (const IGamePlugin* plugin = GetDataEntry(row))
+		{
+			return GetDisplayModel()->IsEditorEnabled(*plugin, column);
+		}
+		return false;
 	}
 	bool PluginViewModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 	{
-		const IGamePlugin* entry = GetDataEntry(row);
-		if (entry && column->GetID() == ColumnID::Name)
+		if (const IGamePlugin* plugin = GetDataEntry(row))
 		{
-			return entry->CanToggleActive();
+			return GetDisplayModel()->IsEnabled(*plugin, column);
 		}
-		return true;
+		return false;
 	}
 	bool PluginViewModel::GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const
 	{
-		return GetDisplayModel()->GetAttributes(*GetDataEntry(row), column, attributes, cellState);
+		if (const IGamePlugin* plugin = GetDataEntry(row))
+		{
+			return GetDisplayModel()->GetAttributes(*plugin, column, attributes, cellState);
+		}
+		return false;
 	}
 	bool PluginViewModel::CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const
 	{
-		return GetDisplayModel()->Compare(*GetDataEntry(row1), *GetDataEntry(row2), column);
+		const IGamePlugin* plugin1 = GetDataEntry(row1);
+		const IGamePlugin* plugin2 = GetDataEntry(row2);
+		if (plugin1 && plugin2)
+		{
+			return GetDisplayModel()->Compare(*plugin1, *plugin2, column);
+		}
+		return false;
 	}
 
 	void PluginViewModel::OnSelectItem(KxDataViewEvent& event)
@@ -98,7 +105,7 @@ namespace Kortex::PluginManager
 		KxDataViewColumn* column = event.GetColumn();
 		const IGamePlugin* entry = GetDataEntry(GetRow(item));
 
-		if (column && column->GetID() == ColumnID::PartOf)
+		if (column && column->GetID() == IDisplayModel::ColumnID::PartOf)
 		{
 			ModManager::Workspace* workspace = ModManager::Workspace::GetInstance();
 			wxWindowUpdateLocker lock(workspace);
@@ -121,7 +128,7 @@ namespace Kortex::PluginManager
 		const IGamePlugin* entry = GetDataEntry(GetRow(item));
 
 		KxMenu menu;
-		Kortex::IPluginManager* manager = Kortex::IPluginManager::GetInstance();
+		IPluginManager* manager = IPluginManager::GetInstance();
 		Workspace* workspace = Workspace::GetInstance();
 
 		// Base items
@@ -189,7 +196,7 @@ namespace Kortex::PluginManager
 			// Plugin select event
 			auto OnSelectPlugin = [this](KxMenuEvent& event)
 			{
-				const IGamePlugin* entry = Kortex::IPluginManager::GetInstance()->FindPluginByName(event.GetItem()->GetItemLabelText());
+				const IGamePlugin* entry = IPluginManager::GetInstance()->FindPluginByName(event.GetItem()->GetItemLabelText());
 				SelectItem(GetItemByEntry(entry), true);
 				GetView()->SetFocus();
 			};
@@ -252,7 +259,7 @@ namespace Kortex::PluginManager
 			const IGamePlugin::RefVector& entriesToMove = GetDragDropDataObject()->GetEntries();
 
 			// Move and refresh
-			if (Kortex::IPluginManager::GetInstance()->MovePlugins(entriesToMove, *entry))
+			if (IPluginManager::GetInstance()->MovePlugins(entriesToMove, *entry))
 			{
 				ChangeNotify();
 				RefreshItems();
@@ -274,13 +281,13 @@ namespace Kortex::PluginManager
 	{
 		if (KxDataViewColumn* column = GetView()->GetSortingColumn())
 		{
-			return column->GetID() == ColumnID::Index && column->IsSortedAscending();
+			return column->GetID() == IDisplayModel::ColumnID::Priority && column->IsSortedAscending();
 		}
 		return true;
 	}
 
 	PluginViewModel::PluginViewModel()
-		:m_Entries(Kortex::IPluginManager::GetInstance()->GetPlugins())
+		:m_Entries(IPluginManager::GetInstance()->GetPlugins())
 	{
 		SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES);
 	}
@@ -292,7 +299,7 @@ namespace Kortex::PluginManager
 			profile->SyncWithCurrentState();
 			profile->SaveConfig();
 		}
-		Kortex::IPluginManager::GetInstance()->Save();
+		IPluginManager::GetInstance()->Save();
 	}
 	void PluginViewModel::SetDataVector()
 	{
@@ -304,12 +311,12 @@ namespace Kortex::PluginManager
 	}
 	IDisplayModel* PluginViewModel::GetDisplayModel() const
 	{
-		return Kortex::IPluginManager::GetInstance()->GetDisplayModel();
+		return m_DisplayModel.get();
 	}
 
 	void PluginViewModel::SetAllEnabled(bool value)
 	{
-		Kortex::IPluginManager::GetInstance()->SetAllPluginsActive(value);
+		IPluginManager::GetInstance()->SetAllPluginsActive(value);
 		GetView()->Refresh();
 		ChangeNotify();
 	}

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include <Kortex/PluginManager.hpp>
+#include <Kortex/ModManager.hpp>
+#include "Bethesda2DisplayModel.h"
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxComparator.h>
 
@@ -23,27 +25,46 @@ namespace Kortex::PluginManager
 		const wxString ext = name.AfterLast(wxS('.'));
 		return KxComparator::IsEqual(ext, wxS("esp")) || KxComparator::IsEqual(ext, wxS("esm")) || KxComparator::IsEqual(ext, wxS("esl"));
 	}
-	void BethesdaPluginManager2::LoadNativeActiveBG()
+	
+	void BethesdaPluginManager2::LoadNativeOrderBG()
 	{
-		// Load names from 'Plugins.txt' it they are not already added.
-		// Activate all new added and existing items with same name.
-		KxStringVector activeOrder = KxTextFile::ReadToArray(KVarExp(m_ActiveListFile));
-		for (wxString& name: activeOrder)
-		{
-			if (!name.IsEmpty() && !name.StartsWith('#'))
-			{
-				// Remove asterix
-				if (name.StartsWith('*'))
-				{
-					name = name.AfterFirst('*');
-				}
+		ClearPlugins();
+		FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, true, KxFS_FILE), false);
 
-				if (IGamePlugin* entry = FindPluginByName(name))
+		// Load names from 'Plugins.txt'. Activate those with '*' in front fo the file name.
+		for (wxString& name: KxTextFile::ReadToArray(KVarExp(m_ActiveListFile)))
+		{
+			// Find whether plugin with this name exist
+			auto it = std::find_if(files.begin(), files.end(), [&name](const FileTreeNode* node)
+			{
+				return KxComparator::IsEqual(node->GetName(), name);
+			});
+
+			if (!name.StartsWith('#') && it != files.end())
+			{
+				if (CheckExtension(name))
 				{
-					entry->SetActive(true);
+					// Remove asterix and check state
+					bool isActive = false;
+					if (name.StartsWith(wxS('*')))
+					{
+						isActive = true;
+						name = name.AfterFirst(wxS('*'));
+					}
+					GetPlugins().emplace_back(CreatePlugin((*it)->GetFullPath(), isActive));
 				}
 			}
 		}
+	}
+	void BethesdaPluginManager2::LoadNativeActiveBG()
+	{
+		// Empty for this implementation.
+	}
+	void BethesdaPluginManager2::SaveNativeOrderBG() const
+	{
+		// Base class version is fine. it will save both 'plugins.txt' and 'loadorder.txt',
+		// but it will cal our 'OnWriteToActiveOrder' so these files will be written with correct content.
+		BethesdaPluginManager::SaveNativeOrderBG();
 	}
 
 	wxString BethesdaPluginManager2::OnWriteToLoadOrder(const IGamePlugin& plugin) const
@@ -52,11 +73,7 @@ namespace Kortex::PluginManager
 	}
 	wxString BethesdaPluginManager2::OnWriteToActiveOrder(const IGamePlugin& plugin) const
 	{
-		if (!plugin.IsStdContent())
-		{
-			return '*' + plugin.GetName();
-		}
-		return plugin.GetName();
+		return plugin.IsActive() ? wxS('*') + plugin.GetName() : plugin.GetName();
 	}
 
 	intptr_t BethesdaPluginManager2::CountLightActiveBefore(const IGamePlugin& plugin) const
@@ -86,19 +103,6 @@ namespace Kortex::PluginManager
 		}
 		return OnGetPluginPriority(plugin);
 	}
-	wxString BethesdaPluginManager2::OnFormatPriority(const IGamePlugin& plugin, intptr_t value) const
-	{
-		if (plugin.IsActive())
-		{
-			const IBethesdaGamePlugin* bethesdaPlugin = nullptr;
-			if (plugin.QueryInterface(bethesdaPlugin) && bethesdaPlugin->IsLight())
-			{
-				return wxString::Format("0x%02X:%03X", (int)value, (int)CountLightActiveBefore(plugin));
-			}
-			return IPluginManager::FormatPriority(plugin, value);
-		}
-		return wxEmptyString;
-	}
 
 	BethesdaPluginManager2::BethesdaPluginManager2()
 	{
@@ -107,10 +111,14 @@ namespace Kortex::PluginManager
 	{
 	}
 
-	std::unique_ptr<IGamePlugin> BethesdaPluginManager2::CreatePlugin(const wxString& fullPath, bool isActive) const
+	std::unique_ptr<IGamePlugin> BethesdaPluginManager2::CreatePlugin(const wxString& fullPath, bool isActive)
 	{
 		auto plugin = std::make_unique<BethesdaPlugin2>(fullPath);
 		plugin->SetActive(isActive);
 		return plugin;
+	}
+	std::unique_ptr<IDisplayModel> BethesdaPluginManager2::CreateDisplayModel()
+	{
+		return std::make_unique<Bethesda2DisplayModel>(*this);
 	}
 }

@@ -975,6 +975,9 @@
     <ClCompile Include="Source\GameInstance\CreationDialog.cpp">
       <Filter>Code\Source\GameInstance</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameData\PluginManager\Bethesda2DisplayModel.cpp">
+      <Filter>Code\Source\GameData\PluginManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1834,6 +1837,9 @@
     </ClInclude>
     <ClInclude Include="Include\Kortex\Git\Constants.h">
       <Filter>Code\Include\Git</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\Bethesda2DisplayModel.h">
+      <Filter>Code\Headers\GameData\PluginManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

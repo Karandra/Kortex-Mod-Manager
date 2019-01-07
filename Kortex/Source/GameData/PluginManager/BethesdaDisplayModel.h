@@ -6,6 +6,14 @@ namespace Kortex::PluginManager
 {
 	class BethesdaDisplayModel: public IDisplayModel
 	{
+		public:
+			enum BSColumnID
+			{
+				MIN = IDisplayModel::ColumnID::MIN_USER,
+
+				Index
+			};
+
 		protected:
 			virtual void OnInitControl() override;
 
@@ -17,7 +25,7 @@ namespace Kortex::PluginManager
 			virtual bool IsEditorEnabled(const IGamePlugin& plugin, const KxDataViewColumn* column) const override;
 
 			virtual bool GetAttributes(const IGamePlugin& plugin, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
-			virtual bool Compare(const IGamePlugin& plugin1, const IGamePlugin& plugin2, const KxDataViewColumn* column) const override;
+			virtual bool Compare(const IGamePlugin& pluginLeft, const IGamePlugin& pluginRight, const KxDataViewColumn* column) const override;
 
 		public:
 			wxString GetPartOfName(const IGamePlugin& plugin) const;

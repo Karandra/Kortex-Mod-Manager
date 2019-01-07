@@ -18,7 +18,7 @@ namespace Kortex::PluginManager
 			enum ColumnID
 			{
 				Name,
-				Index,
+				Priority,
 				Type,
 				PartOf,
 				Author,
@@ -46,7 +46,7 @@ namespace Kortex::PluginManager
 			virtual bool IsEditorEnabled(const IGamePlugin& plugin, const KxDataViewColumn* column) const = 0;
 
 			virtual bool GetAttributes(const IGamePlugin& plugin, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const = 0;
-			virtual bool Compare(const IGamePlugin& plugin1, const IGamePlugin& plugin2, const KxDataViewColumn* column) const = 0;
+			virtual bool Compare(const IGamePlugin& pluginLeft, const IGamePlugin& pluginRight, const KxDataViewColumn* column) const = 0;
 
 		public:
 			KxDataViewCtrl* GetView() const

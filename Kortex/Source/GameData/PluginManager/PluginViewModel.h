@@ -15,6 +15,7 @@ namespace Kortex::PluginManager
 	{
 		private:
 			IGamePlugin::Vector& m_Entries;
+			std::unique_ptr<IDisplayModel> m_DisplayModel;
 			wxString m_SearchMask;
 
 		private:

@@ -92,6 +92,7 @@
     <ClCompile Include="Source\GameData\IScreenshotsGallery.cpp" />
     <ClCompile Include="Source\GameData\PluginManager\BaseGamePlugin.cpp" />
     <ClCompile Include="Source\GameData\PluginManager\BasePluginManager.cpp" />
+    <ClCompile Include="Source\GameData\PluginManager\Bethesda2DisplayModel.cpp" />
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPlugin.cpp" />
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPlugin2.cpp" />
     <ClCompile Include="Source\GameData\PluginManager\Common.cpp" />
@@ -351,6 +352,7 @@
     <ClInclude Include="Source\GameData\IScreenshotsGallery.h" />
     <ClInclude Include="Source\GameData\PluginManager\BaseGamePlugin.h" />
     <ClInclude Include="Source\GameData\PluginManager\BasePluginManager.h" />
+    <ClInclude Include="Source\GameData\PluginManager\Bethesda2DisplayModel.h" />
     <ClInclude Include="Source\GameData\PluginManager\Common.h" />
     <ClInclude Include="Source\GameData\PluginManager\IBethesdaPluginReader.h" />
     <ClInclude Include="Source\GameData\PluginManager\IGamePlugin.h" />

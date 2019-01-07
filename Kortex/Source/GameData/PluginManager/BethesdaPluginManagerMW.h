@@ -17,13 +17,13 @@ namespace Kortex::PluginManager
 			void WriteActiveMW(KxINI& ini) const;
 
 		protected:
-			virtual void OnInit() override;
-			virtual void OnExit() override;
-			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
+			void OnInit() override;
+			void OnExit() override;
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 
-			virtual void LoadNativeActiveBG() override;
-			virtual void LoadNativeOrderBG() override;
-			virtual void SaveNativeOrderBG() const override;
+			void LoadNativeActiveBG() override;
+			void LoadNativeOrderBG() override;
+			void SaveNativeOrderBG() const override;
 			wxString GetMorrowindINI() const;	
 
 		public:
@@ -31,13 +31,13 @@ namespace Kortex::PluginManager
 			virtual ~BethesdaPluginManagerMW();
 
 		public:
-			virtual wxString GetPluginRootRelativePath(const wxString& fileName) const override
+			wxString GetPluginRootRelativePath(const wxString& fileName) const override
 			{
 				return m_PluginsLocation + wxS('\\') + fileName;
 			}
 
-			virtual void Save() const override;
-			virtual void Load() override;
-			virtual void LoadNativeOrder() override;
+			void Save() const override;
+			void Load() override;
+			void LoadNativeOrder() override;
 	};
 }

@@ -49,8 +49,6 @@ namespace Kortex::PluginManager
 			bool m_ShouldChangeFileModificationDate;
 			bool m_ShouldSortByFileModificationDate;
 
-			std::unique_ptr<BethesdaDisplayModel> m_DisplayModel;
-
 		protected:
 			void OnInit() override;
 			void OnExit() override;
@@ -58,8 +56,7 @@ namespace Kortex::PluginManager
 
 			void SortByDate();
 			virtual bool CheckExtension(const wxString& name) const;
-			wxString OnFormatPriority(const IGamePlugin& plugin, intptr_t value) const override;
-			
+
 			IGamePlugin::RefVector CollectDependentPlugins(const IGamePlugin& plugin, bool firstOnly) const;
 			bool HasDependentPlugins(const IGamePlugin& plugin) const override;
 			IGamePlugin::RefVector GetDependentPlugins(const IGamePlugin& plugin) const override;
@@ -71,7 +68,7 @@ namespace Kortex::PluginManager
 
 			virtual wxString OnWriteToLoadOrder(const IGamePlugin& plugin) const;
 			virtual wxString OnWriteToActiveOrder(const IGamePlugin& plugin) const;
-			virtual KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
 
 		public:
 			BethesdaPluginManager();
@@ -83,26 +80,26 @@ namespace Kortex::PluginManager
 				return m_LootAPIConfig;
 			}
 			KWorkspace* GetWorkspace() const override;
-			IDisplayModel* GetDisplayModel() const override;
 
-			virtual std::unique_ptr<IGamePlugin> CreatePlugin(const wxString& fullPath, bool isActive) const;
-			std::unique_ptr<PluginManager::IPluginReader> CreatePluginReader() const override;
+			std::unique_ptr<PluginManager::IDisplayModel> CreateDisplayModel() override;
+			std::unique_ptr<IPluginReader> CreatePluginReader() override;
+			virtual std::unique_ptr<IGamePlugin> CreatePlugin(const wxString& fullPath, bool isActive);
 
-			virtual wxString GetPluginsLocation() const override
+			wxString GetPluginsLocation() const override
 			{
 				return m_PluginsLocation;
 			}
-			virtual wxString GetPluginTypeName(const IGamePlugin& plugin) const override;
-			virtual wxString GetPluginTypeName(bool isMaster, bool isLight) const;
+			wxString GetPluginTypeName(const IGamePlugin& plugin) const override;
+			wxString GetPluginTypeName(bool isMaster, bool isLight) const;
 			virtual wxString GetPluginRootRelativePath(const wxString& fileName) const
 			{
 				return m_PluginsLocation + wxS('\\') + fileName;
 			}
-			virtual const IGameMod* FindOwningMod(const IGamePlugin& plugin) const override;
+			const IGameMod* FindOwningMod(const IGamePlugin& plugin) const override;
 
-			virtual void Save() const override;
-			virtual void Load() override;
-			virtual void LoadNativeOrder() override;
+			void Save() const override;
+			void Load() override;
+			void LoadNativeOrder() override;
 
 			bool ShouldChangeFileModificationDate() const
 			{

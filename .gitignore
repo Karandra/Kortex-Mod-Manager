@@ -14,9 +14,9 @@ Kortex FSController/Debug/*
 
 Kortex/Release/*
 Kortex/Debug/*
-Kortex/Bin/Kortex Server x64.exe
+Kortex/Bin/FileSystemController x64.exe
+Kortex/Bin/FileSystemController.exe
 Kortex/Bin/Kortex x64.exe
-Kortex/Bin/Kortex Server.exe
 Kortex/Bin/Kortex.exe
 
 #Misc files

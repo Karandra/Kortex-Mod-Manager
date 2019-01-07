@@ -9,20 +9,47 @@
 
 namespace
 {
-	HWND GetMainAppWIndow(const wxCmdLineParser& parser)
+	template<class T> bool GetCmdArgIntValue(const wxCmdLineParser& parser, const wxString& name, T& value)
 	{
-		wxString value;
+		wxString stringValue;
 		unsigned long long intValue = 0;
-		if (parser.Found("HWND", &value) && value.ToULongLong(&intValue))
+		if (parser.Found(name, &stringValue) && stringValue.ToULongLong(&intValue))
 		{
-			return reinterpret_cast<HWND>(intValue);
+			if constexpr(std::is_pointer_v<T>)
+			{
+				value = reinterpret_cast<T>(intValue);
+			}
+			else
+			{
+				value = static_cast<T>(intValue);
+			}
+			return true;
 		}
-		return nullptr;
+		return false;
+	}
+
+	HWND GetMainAppWindow(const wxCmdLineParser& parser)
+	{
+		HWND hWnd = nullptr;
+		GetCmdArgIntValue(parser, "HWND", hWnd);
+		return hWnd;
+	}
+	DWORD GetMainAppProcessID(const wxCmdLineParser& parser)
+	{
+		DWORD pid = 0;
+		GetCmdArgIntValue(parser, "PID", pid);
+		return pid;
 	}
 }
 
 namespace Kortex::FSController
 {
+	void Application::OnMainAppTerminates(wxProcessEvent& event)
+	{
+		m_RecievingWindow->Destroy();
+		ExitApp();
+	}
+
 	Application::Application()
 	{
 		wxLog::EnableLogging(false);
@@ -37,6 +64,7 @@ namespace Kortex::FSController
 		wxCmdLineParser& parser = GetCmdLineParser();
 		parser.SetSwitchChars("-");
 		parser.AddOption("HWND");
+		parser.AddOption("PID");
 	}
 	Application::~Application()
 	{
@@ -45,19 +73,27 @@ namespace Kortex::FSController
 	bool Application::OnInit()
 	{
 		ParseCommandLine();
+		HWND windowHandle = GetMainAppWindow(GetCmdLineParser());
+		DWORD pid = GetMainAppProcessID(GetCmdLineParser());
 
-		HWND windowHandle = GetMainAppWIndow(GetCmdLineParser());
-		m_MainApp = std::make_unique<MainApplicationLink>(windowHandle);
-		if (m_MainApp->IsOK())
+		if (windowHandle != nullptr && pid != 0)
 		{
-			m_Service = std::make_unique<VirtualFileSystem::FSControllerService>();
-			m_RecievingWindow = new RecievingWindow(*m_Service);
-			SetTopWindow(m_RecievingWindow);
+			if (m_MainApp = std::make_unique<MainApplicationLink>(windowHandle); m_MainApp->IsOK())
+			{
+				m_MainProcess = std::make_unique<KxProcess>(pid);
+				m_MainProcess->Bind(KxEVT_PROCESS_END, &Application::OnMainAppTerminates, this);
+				m_MainProcess->SetOptionEnabled(KxPROCESS_WAIT_END);
+				m_MainProcess->Attach(KxPROCESS_RUN_ASYNC);
 
-			m_MainApp->SetService(*m_Service);
-			m_MainApp->SetRecievingWindow(m_RecievingWindow);
-			m_Service->SetRecievingWindow(m_RecievingWindow);
-			return true;
+				m_Service = std::make_unique<VirtualFileSystem::FSControllerService>();
+				m_RecievingWindow = new RecievingWindow(*m_Service);
+				SetTopWindow(m_RecievingWindow);
+
+				m_MainApp->SetService(*m_Service);
+				m_MainApp->SetRecievingWindow(m_RecievingWindow);
+				m_Service->SetRecievingWindow(m_RecievingWindow);
+				return true;
+			}
 		}
 		return false;
 	}

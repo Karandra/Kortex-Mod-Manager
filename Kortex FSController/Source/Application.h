@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxApp.h>
+#include <KxFramework/KxProcess.h>
 
 namespace Kortex::VirtualFileSystem
 {
@@ -19,8 +20,12 @@ namespace Kortex::FSController
 			wxString m_DataFolder;
 
 			RecievingWindow* m_RecievingWindow = NULL;
+			std::unique_ptr<KxProcess> m_MainProcess;
 			std::unique_ptr<MainApplicationLink> m_MainApp;
 			std::unique_ptr<VirtualFileSystem::FSControllerService> m_Service;
+
+		private:
+			void OnMainAppTerminates(wxProcessEvent& event);
 
 		public:
 			Application();

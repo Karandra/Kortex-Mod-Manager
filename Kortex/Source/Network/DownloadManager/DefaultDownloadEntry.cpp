@@ -128,7 +128,7 @@ namespace Kortex::DownloadManager
 
 		// Queue update
 		int64_t time = GetClockTime();
-		if (time - m_TimeStamp >= 100)
+		if (time - m_TimeStamp >= 200)
 		{
 			m_TimeStamp = time;
 

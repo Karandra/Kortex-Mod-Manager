@@ -308,10 +308,7 @@ namespace Kortex::ModManager
 			}
 			case ColumnID::Priority:
 			{
-				if (mod->IsActive())
-				{
-					value = mod->GetPriority();
-				}
+				value = mod->GetPriority();
 				break;
 			}
 			case ColumnID::Version:

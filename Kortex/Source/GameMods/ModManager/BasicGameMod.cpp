@@ -354,21 +354,14 @@ namespace Kortex::ModManager
 
 	intptr_t BasicGameMod::GetPriority() const
 	{
-		if (IsActive())
+		intptr_t priority = 0;
+		for (const auto& mod: IModManager::GetInstance()->GetMods())
 		{
-			intptr_t priority = 0;
-			for (const auto& mod: IModManager::GetInstance()->GetMods())
+			if (mod.get() == this)
 			{
-				if (mod.get() == this)
-				{
-					break;
-				}
-				if (mod->IsActive())
-				{
-					priority++;
-				}
+				return priority;
 			}
-			return priority;
+			priority++;
 		}
 		return -1;
 	}

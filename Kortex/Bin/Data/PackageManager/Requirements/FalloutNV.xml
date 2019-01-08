@@ -6,8 +6,8 @@
 		<Object Function="FileExist">FalloutNV.exe</Object>
 		<Version Function="GTEQ">1.4.0.525</Version>
 	</Entry>
-	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(ScriptExtenderName)</Name>
+	<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameShortName) Script Extender</Name>
 		<Object Function="FileExist">NVSE_Loader.exe</Object>
 		<Version Function="GTEQ">0.5.1.4</Version>
 	</Entry>

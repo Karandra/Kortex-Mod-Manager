@@ -6,8 +6,8 @@
 		<Object Function="FileExist">Fallout3.exe</Object>
 		<Version Function="GTEQ">1.7.0.3</Version>
 	</Entry>
-	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(ScriptExtenderName)</Name>
+	<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameShortName) Script Extender</Name>
 		<Object Function="FileExist">FOSE_Loader.exe</Object>
 		<Version Function="GTEQ">0.1.2.2</Version>
 	</Entry>

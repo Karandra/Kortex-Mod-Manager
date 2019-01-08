@@ -6,8 +6,8 @@
 		<Object Function="FileExist">Oblivion.exe</Object>
 		<Version Function="GTEQ">1.2.0.416</Version>
 	</Entry>
-	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(ScriptExtenderName)</Name>
+	<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameShortName) Script Extender</Name>
 		<Object Function="FileExist">OBSE_Loader.exe</Object>
 		<Version Function="GTEQ">0.0.21.4</Version>
 	</Entry>

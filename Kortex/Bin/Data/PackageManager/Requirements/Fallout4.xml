@@ -6,8 +6,8 @@
 		<Object Function="FileExist">Fallout4.exe</Object>
 		<Version Function="GTEQ">1.10.106.0</Version>
 	</Entry>
-	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(ScriptExtenderName)</Name>
+	<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameShortName) Script Extender</Name>
 		<Object Function="FileExist">F4SE_Loader.exe</Object>
 		<Version Function="GTEQ">0.0.6.11</Version>
 	</Entry>

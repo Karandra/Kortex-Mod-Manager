@@ -10,8 +10,8 @@
 		<Name>$(GameShortName): Update</Name>
 		<Object Function="PluginActive">Update.esm</Object>
 	</Entry>
-	<Entry ID="$(ScriptExtenderNameShort)" Category="$T(PackageManager.ReqCategory.General)">
-		<Name>$(ScriptExtenderName)</Name>
+	<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+		<Name>$(GameShortName) Script Extender</Name>
 		<Object Function="FileExist">SKSE64_Loader.exe</Object>
 		<Version Function="GTEQ">0.2.0.6</Version>
 	</Entry>

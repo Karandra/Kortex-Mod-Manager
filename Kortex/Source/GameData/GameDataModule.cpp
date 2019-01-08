@@ -2,6 +2,7 @@
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/SaveManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
+#include "Utility/Log.h"
 
 namespace Kortex
 {
@@ -45,7 +46,7 @@ namespace Kortex
 			}
 			else
 			{
-				wxLogMessage("GameDataModule::CreatePluginManager: Unknown interface requested \"%s\"", name);
+				Utility::Log::LogMessage("GameDataModule::CreatePluginManager: Unknown interface requested \"%1\"", name);
 			}
 		}
 		return nullptr;

@@ -4,13 +4,14 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/PluginManager.hpp>
+#include "Utility/Log.h"
 #include <KxFramework/KxFileStream.h>
 
 namespace Kortex::GameInstance
 {
 	void DefaultGameProfile::OnConfigChanged(IAppOption& option)
 	{
-		wxLogInfo("DefaultGameProfile::OnConfigChanged -> %s", option.GetXPath());
+		Utility::Log::LogInfo("DefaultGameProfile::OnConfigChanged -> %1", option.GetXPath());
 	}
 	void DefaultGameProfile::SaveConfig()
 	{

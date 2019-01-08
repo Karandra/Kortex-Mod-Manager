@@ -14,6 +14,7 @@
 #include "KWorkspaceController.h"
 #include "GameInstance/Config/KLocationsManagerConfig.h"
 #include "Utility/KAux.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxShell.h>
@@ -395,23 +396,23 @@ bool KMainWindow::Create(wxWindow* parent)
 
 bool KMainWindow::SwitchWorkspaceHelper(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace)
 {
-	wxLogInfo("%s: switching from %s to %s", __FUNCTION__, prevWorkspace ? prevWorkspace->GetID() : "nullptr", nextWorkspace ? nextWorkspace->GetID() : "nullptr");
+	Utility::Log::LogInfo("%1: switching from %2 to %3", __FUNCTION__, prevWorkspace ? prevWorkspace->GetID() : "nullptr", nextWorkspace ? nextWorkspace->GetID() : "nullptr");
 
 	if (prevWorkspace && !prevWorkspace->OnCloseWorkspaceInternal())
 	{
-		wxLogInfo("%s: %s refused to close", __FUNCTION__, prevWorkspace->GetID());
+		Utility::Log::LogInfo("%1: %2 refused to close", __FUNCTION__, prevWorkspace->GetID());
 		return false;
 	}
 
 	if (nextWorkspace && !nextWorkspace->IsWorkspaceCreated() && !nextWorkspace->OnCreateWorkspaceInternal())
 	{
-		wxLogInfo("%s: can not create %s workspace", __FUNCTION__, nextWorkspace->GetID());
+		Utility::Log::LogInfo("%1: can not create %2 workspace", __FUNCTION__, nextWorkspace->GetID());
 		return false;
 	}
 
 	if (nextWorkspace && nextWorkspace->OnOpenWorkspaceInternal())
 	{
-		wxLogInfo("%s: %s opened. Process switching", __FUNCTION__, nextWorkspace->GetID());
+		Utility::Log::LogInfo("%1: %2 opened. Process switching", __FUNCTION__, nextWorkspace->GetID());
 
 		m_HasCurrentWorkspace = true;
 		ProcessSwitchWorkspace(nextWorkspace, prevWorkspace);
@@ -420,12 +421,12 @@ bool KMainWindow::SwitchWorkspaceHelper(KWorkspace* nextWorkspace, KWorkspace* p
 		return true;
 	}
 
-	wxLogInfo("%s: %s refused to open", __FUNCTION__, nextWorkspace->GetID());
+	Utility::Log::LogInfo("%1: %2 refused to open", __FUNCTION__, nextWorkspace->GetID());
 	return false;
 }
 void KMainWindow::ProcessSwitchWorkspace(KWorkspace* nextWorkspace, KWorkspace* prevWorkspace)
 {
-	wxLogInfo("%s: processing switch", __FUNCTION__);
+	Utility::Log::LogInfo("%1: processing switch", __FUNCTION__);
 
 	if (nextWorkspace)
 	{
@@ -450,7 +451,7 @@ KWorkspace* KMainWindow::DoAddWorkspace(KWorkspace* workspace)
 
 KWorkspace* KMainWindow::GetWorkspace(const wxString& id) const
 {
-	wxLogInfo("Attempt to convert workspace ID (%s) to workspace instance", id);
+	Utility::Log::LogInfo("Attempt to convert workspace ID (%1) to workspace instance", id);
 	if (m_WorkspaceInstances.count(id))
 	{
 		return m_WorkspaceInstances.at(id);
@@ -459,7 +460,7 @@ KWorkspace* KMainWindow::GetWorkspace(const wxString& id) const
 }
 KWorkspace* KMainWindow::GetCurrentWorkspace() const
 {
-	wxLogInfo("Attempt to get current workspace");
+	Utility::Log::LogInfo("Attempt to get current workspace");
 
 	wxWindow* window = m_WorkspaceContainer->GetCurrentPage();
 	if (window && m_HasCurrentWorkspace)
@@ -470,7 +471,7 @@ KWorkspace* KMainWindow::GetCurrentWorkspace() const
 }
 KWorkspace* KMainWindow::GetFirstWorkspace() const
 {
-	wxLogInfo("Trying to get first workspace");
+	Utility::Log::LogInfo("Trying to get first workspace");
 
 	if (!m_WorkspaceInstances.empty())
 	{
@@ -480,7 +481,7 @@ KWorkspace* KMainWindow::GetFirstWorkspace() const
 }
 bool KMainWindow::SwitchWorkspace(KWorkspace* nextWorkspace)
 {
-	wxLogInfo("Attempt to switch workspace to %s", nextWorkspace ? nextWorkspace->GetID() : "nullptr");
+	Utility::Log::LogInfo("Attempt to switch workspace to %1", nextWorkspace ? nextWorkspace->GetID() : "nullptr");
 
 	if (nextWorkspace && !nextWorkspace->IsSubWorkspace())
 	{

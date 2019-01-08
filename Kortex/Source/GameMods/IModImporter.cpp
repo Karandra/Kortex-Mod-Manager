@@ -3,6 +3,7 @@
 #include "GameMods/Import/ModImporterMO.h"
 #include "GameMods/Import/ModImporterNMM.h"
 #include "Utility/KOperationWithProgress.h"
+#include "Utility/Log.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>
@@ -104,7 +105,7 @@ namespace Kortex
 			}
 			else
 			{
-				wxLogError("Invalid foreign mod-manager importer interface is requested: %d", (int)type);
+				Utility::Log::LogError("Invalid foreign mod-manager importer interface is requested: %1", type);
 			}
 
 			KxTaskDialog errorDialog(window, KxID_NONE, KTr(KxID_ERROR), KTr("ModManager.Import.CanNotImport"), KxBTN_OK, KxICON_ERROR);

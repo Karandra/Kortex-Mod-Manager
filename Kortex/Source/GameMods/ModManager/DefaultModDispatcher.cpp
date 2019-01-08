@@ -4,6 +4,7 @@
 #include "GameMods/FileTreeNode.h"
 #include <Kortex/Events.hpp>
 #include "Utility/KAux.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileFinder.h>
 #include <chrono>
@@ -231,7 +232,7 @@ namespace Kortex::ModManager
 				directories = std::move(roundDirectories);
 			}
 		}
-		wxLogInfo("KDispatcher::UpdateVirtualTree: %lld", GetClockTime() - t1);
+		Utility::Log::LogInfo("KDispatcher::UpdateVirtualTree: %1", GetClockTime() - t1);
 	}
 	void DefaultModDispatcher::InvalidateVirtualTree()
 	{

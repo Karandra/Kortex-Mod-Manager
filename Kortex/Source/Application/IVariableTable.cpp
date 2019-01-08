@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "IVariableTable.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxSystem.h>
 
@@ -90,7 +91,7 @@ namespace Kortex
 							}
 							else
 							{
-								wxLogMessage("Can't expand shell folder variable \"%s\" (invalid variable name)", varName);
+								Utility::Log::LogWarning("Can't expand shell folder variable \"%1\" (invalid variable name)", varName);
 							}
 						}
 						else if (isEnvVar)

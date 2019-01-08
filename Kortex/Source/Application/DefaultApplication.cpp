@@ -15,6 +15,7 @@
 #include <Kortex/Events.hpp>
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxShell.h>
@@ -134,7 +135,7 @@ namespace Kortex::Application
 			wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", GetSmallIconHeight() + m_InitProgressDialog->FromDIP(3));
 
 			// Init systems
-			wxLogInfo("Begin initializing core systems");
+			Utility::Log::LogInfo("Begin initializing core systems");
 			
 			// Initialize main window
 			mainWindow = new KMainWindow();
@@ -148,21 +149,21 @@ namespace Kortex::Application
 			m_PackagesModule = std::make_unique<KPackageModule>();
 			m_ProgramModule = std::make_unique<KProgramModule>();
 			m_GameModsModule = std::make_unique<GameModsModule>();
-			wxLogInfo("Core systems initialized");
+			Utility::Log::LogInfo("Core systems initialized");
 
-			wxLogInfo("Initializing instances");
+			Utility::Log::LogInfo("Initializing instances");
 			InitInstancesData(m_InitProgressDialog);
 			InitGlobalManagers();
 
-			wxLogInfo("Loading saved profile");
+			Utility::Log::LogInfo("Loading saved profile");
 			IGameInstance::GetActive()->LoadSavedProfileOrDefault();
 
 			// All required managers initialized, can create main window now
-			wxLogInfo("Creating main window");
+			Utility::Log::LogInfo("Creating main window");
 			mainWindow->Create();
 
 			// Show main window and selected workspace
-			wxLogInfo("Main window created. Showing workspace.");
+			Utility::Log::LogInfo("Main window created. Showing workspace.");
 			ShowWorkspace();
 			mainWindow->Show();
 			return true;
@@ -182,7 +183,7 @@ namespace Kortex::Application
 	}
 	int DefaultApplication::OnExit()
 	{
-		wxLogInfo("DefaultApplication::OnExit");
+		Utility::Log::LogInfo("DefaultApplication::OnExit");
 
 		// VFS should be uninitialized first
 		UnInitVFS();
@@ -249,7 +250,7 @@ namespace Kortex::Application
 			message = event.GetMessage();
 		}
 
-		wxLogMessage("%s: %s", caption, message);
+		Utility::Log::LogMessage("%1: %2", caption, message);
 		auto ShowErrorMessageFunc = [this, caption, message, iconType, window, logLevel, isCritical]()
 		{
 			KxTaskDialog dialog(window ? window : GetTopWindow(), KxID_NONE, caption, message, KxBTN_OK, iconType);
@@ -382,12 +383,12 @@ namespace Kortex::Application
 	{
 		auto option = GetAInstanceOption(OName::Workspace);
 		wxString startPage = option.GetValue(ModManager::Workspace::GetInstance()->GetID());
-		wxLogInfo("Start page is: %s", startPage);
+		Utility::Log::LogInfo("Start page is: %1", startPage);
 
 		KWorkspace* workspace = KMainWindow::GetInstance()->GetWorkspace(startPage);
 		if (!workspace || !workspace->CanBeStartPage() || !workspace->SwitchHere())
 		{
-			wxLogInfo("Can't show workspace %s. Trying first available", startPage);
+			Utility::Log::LogInfo("Can't show workspace %1. Trying first available", startPage);
 
 			bool isSuccess = false;
 			for (const auto& v: KMainWindow::GetInstance()->GetWorkspacesList())
@@ -395,7 +396,7 @@ namespace Kortex::Application
 				workspace = v.second;
 				if (workspace->CanBeStartPage())
 				{
-					wxLogInfo("Trying to load %s workspace", workspace->GetID());
+					Utility::Log::LogInfo("Trying to load %1 workspace", workspace->GetID());
 					isSuccess = workspace->SwitchHere();
 					break;
 				}
@@ -404,17 +405,17 @@ namespace Kortex::Application
 			if (isSuccess)
 			{
 				startPage = workspace->GetID();
-				wxLogInfo("Successfully showed %s workspace", startPage);
+				Utility::Log::LogInfo("Successfully showed %1 workspace", startPage);
 			}
 			else
 			{
-				wxLogInfo("No workspaces available. Terminating");
+				Utility::Log::LogInfo("No workspaces available. Terminating");
 				LogEvent(KTr("Init.Error3"), LogLevel::Critical, KMainWindow::GetInstance()).Send();
 			}
 		}
 		else
 		{
-			wxLogInfo("Successfully showed %s workspace", startPage);
+			Utility::Log::LogInfo("Successfully showed %1 workspace", startPage);
 		}
 
 		option.SetValue(startPage);
@@ -423,7 +424,7 @@ namespace Kortex::Application
 	void DefaultApplication::InitSettings()
 	{
 		EnableIE10Support();
-		wxLogInfo("Initializing app settings");
+		Utility::Log::LogInfo("Initializing app settings");
 
 		// Init some application-wide variables
 		auto options = GetGlobalOption(OName::Instances, OName::Location);
@@ -432,7 +433,7 @@ namespace Kortex::Application
 		// Show first time config dialog if needed and save new 'ProfilesFolder'
 		if (IsPreStartConfigNeeded())
 		{
-			wxLogInfo("Pre start config needed");
+			Utility::Log::LogInfo("Pre start config needed");
 			if (!ShowFirstTimeConfigDialog(m_InitProgressDialog))
 			{
 				LogEvent(KTr("Init.Error1"), LogLevel::Critical).Send();
@@ -442,10 +443,10 @@ namespace Kortex::Application
 
 		m_Variables.SetVariable(Variables::KVAR_INSTANCES_DIR, m_InstancesFolder);
 		options.SetValue(m_InstancesFolder);
-		wxLogInfo("Instances folder changed: %s", m_InstancesFolder);
+		Utility::Log::LogInfo("Instances folder changed: %1", m_InstancesFolder);
 
 		// Init all profiles and load current one if specified (or ask user to choose it)
-		wxLogInfo("Settings initialized. Begin loading profile.");
+		Utility::Log::LogInfo("Settings initialized. Begin loading profile.");
 	}
 	bool DefaultApplication::IsPreStartConfigNeeded()
 	{
@@ -487,7 +488,7 @@ namespace Kortex::Application
 
 		if (!LoadInstance())
 		{
-			wxLogInfo("Unable to load saved instance. Asking user to choose one.");
+			Utility::Log::LogInfo("Unable to load saved instance. Asking user to choose one.");
 
 			parent->Hide();
 			GameInstance::SelectionDialog dialog(parent);
@@ -508,8 +509,8 @@ namespace Kortex::Application
 					activeInstnace->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetSelectedGameRoot());
 				}
 
-				wxLogInfo("New InstanceID: %s", m_StartupInstanceID);
-				wxLogInfo("Trying again");
+				Utility::Log::LogInfo("New InstanceID: %1", m_StartupInstanceID);
+				Utility::Log::LogInfo("Trying again");
 
 				if (!LoadInstance())
 				{
@@ -519,7 +520,7 @@ namespace Kortex::Application
 			}
 			else if (ret == KxID_CANCEL)
 			{
-				wxLogInfo("Instance loading canceled. Exiting.");
+				Utility::Log::LogInfo("Instance loading canceled. Exiting.");
 				ExitApp();
 			}
 		}
@@ -527,7 +528,7 @@ namespace Kortex::Application
 	}
 	bool DefaultApplication::LoadInstance()
 	{
-		wxLogInfo("Trying load instance. InstanceID: %s", m_StartupInstanceID);
+		Utility::Log::LogInfo("Trying load instance. InstanceID: %1", m_StartupInstanceID);
 
 		if (!m_StartupInstanceID.IsEmpty())
 		{
@@ -553,12 +554,12 @@ namespace Kortex::Application
 		{
 			m_StartupInstanceID = GetGlobalOption(OName::Instances, OName::Active).GetValue();
 		}
-		wxLogInfo("Instance: %s", m_StartupInstanceID);
+		Utility::Log::LogInfo("Instance: %1", m_StartupInstanceID);
 	}
 
 	void DefaultApplication::InitVFS()
 	{
-		wxLogInfo("Begin initializing VFS");
+		Utility::Log::LogInfo("Begin initializing VFS");
 		m_VFSService = std::make_unique<VirtualFileSystem::DefaultVFSService>();
 
 		if (m_VFSService && m_VFSService->IsOK())
@@ -571,13 +572,13 @@ namespace Kortex::Application
 		}
 		else
 		{
-			wxLogInfo("Server: Not started.");
+			Utility::Log::LogInfo("Server: Not started.");
 			LogEvent(KTr("VFS.Service.InstallFailed"), LogLevel::Critical).Send();
 		}
 	}
 	void DefaultApplication::UnInitVFS()
 	{
-		wxLogInfo("Unmounting VFS");
+		Utility::Log::LogInfo("Unmounting VFS");
 		IModManager::GetInstance()->GetVFS().Disable();
 		m_VFSService->Stop();
 	}

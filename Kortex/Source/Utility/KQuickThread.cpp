@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "KQuickThread.h"
 #include <Kortex/Application.hpp>
+#include "Utility/Log.h"
 
+using namespace Kortex;
 wxDEFINE_EVENT(KEVT_QUICK_THREAD_END, wxNotifyEvent);
 
 wxThread::ExitCode KQuickThread::Entry()
 {
 	wxLog::SetThreadActiveTarget(&Kortex::IApplication::GetInstance()->GetLogger());
-	wxLogMessage("Thread 0x%p (ID: %lld) started", this, (int64_t)GetId());
+	Utility::Log::LogMessage("Thread 0x%1 (ID: %2) started", this, (size_t)GetId());
 
 	m_Entry(*this);
 	if (!m_EndEventSent)
@@ -15,7 +17,7 @@ wxThread::ExitCode KQuickThread::Entry()
 		OnExit();
 	}
 
-	wxLogMessage("Thread 0x%p (ID: %lld) exited", this, (int64_t)GetId());
+	Utility::Log::LogMessage("Thread 0x%1 (ID: %2) exited", this, (size_t)GetId());
 	return 0;
 }
 void KQuickThread::OnExit()

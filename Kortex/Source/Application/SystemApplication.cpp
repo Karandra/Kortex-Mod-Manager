@@ -9,6 +9,7 @@
 #include "Archive/KArchive.h"
 #include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxRegistry.h>
@@ -24,7 +25,7 @@ namespace
 
 	void LogConfigChnage(const IAppOption& option)
 	{
-		wxLogInfo(wxS("Path: \"%s\", Value: \"%s\""), option.GetXPath(), option.GetValue());
+		Utility::Log::LogInfo(wxS("Path: \"%1\", Value: \"%2\""), option.GetXPath(), option.GetValue());
 	}
 }
 
@@ -91,18 +92,18 @@ namespace Kortex
 		Bind(Events::Log, &SystemApplication::OnError, this);
 		wxLog::SetVerbose(true);
 
-		wxLogInfo(KxString::Format("%1 v%2: Log opened", SystemApplicationInfo::Name, SystemApplicationInfo::Version));
+		Utility::Log::LogInfo("%1 v%2: Log opened", SystemApplicationInfo::Name, SystemApplicationInfo::Version);
 	}
 	void SystemApplication::UninitLogging()
 	{
-		wxLogInfo("Log closed");
+		Utility::Log::LogInfo("Log closed");
 		wxLog::FlushActive();
 		CleanupLogs();
 	}
 	
 	void SystemApplication::InitComponents()
 	{
-		wxLogInfo("SystemApplication::InitComponents");
+		Utility::Log::LogInfo("SystemApplication::InitComponents");
 
 		KArchive::Init();
 		m_ThemeManager = std::make_unique<Theme::Default>();
@@ -110,14 +111,14 @@ namespace Kortex
 	}
 	void SystemApplication::UninitComponents()
 	{
-		wxLogInfo("SystemApplication::UninitComponents");
+		Utility::Log::LogInfo("SystemApplication::UninitComponents");
 
 		KArchive::UnInit();
 	}
 
 	void SystemApplication::LoadGlobalConfig()
 	{
-		wxLogInfo("SystemApplication::LoadGlobalConfig");
+		Utility::Log::LogInfo("SystemApplication::LoadGlobalConfig");
 
 		KxFileStream stream(m_Application->GetUserSettingsFile(), KxFileStream::Access::RW, KxFileStream::Disposition::OpenAlways, KxFileStream::Share::Read);
 		const bool success = m_GlobalConfig.Load(stream);
@@ -132,29 +133,29 @@ namespace Kortex
 			m_GlobalConfig.Save(stream);
 		}
 
-		wxLogInfo("SystemApplication::LoadGlobalConfig -> %s", success ? "true" : "false");
+		Utility::Log::LogInfo("SystemApplication::LoadGlobalConfig -> %1", success ? "true" : "false");
 	}
 	void SystemApplication::SaveGlobalConfig()
 	{
-		wxLogInfo("SystemApplication::SaveGlobalConfig");
+		Utility::Log::LogInfo("SystemApplication::SaveGlobalConfig");
 
 		KxFileStream stream(m_Application->GetUserSettingsFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 		const bool success = m_GlobalConfig.Save(stream);
 
-		wxLogInfo("SystemApplication::SaveGlobalConfig -> %s", success ? "true" : "false");
+		Utility::Log::LogInfo("SystemApplication::SaveGlobalConfig -> %1", success ? "true" : "false");
 
-		wxLogInfo("SystemApplication::SaveGlobalConfig -> Destroying active instance");
+		Utility::Log::LogInfo("SystemApplication::SaveGlobalConfig -> Destroying active instance");
 		IGameInstance::DestroyActive();
 	}
 	void SystemApplication::SaveActiveInstanceSettings()
 	{
-		wxLogInfo("SystemApplication::SaveActiveInstanceSettings");
+		Utility::Log::LogInfo("SystemApplication::SaveActiveInstanceSettings");
 		
 		IGameInstance* instance = IGameInstance::GetActive();
 		IConfigurableGameInstance* configurableInstance = nullptr;
 		if (instance && instance->QueryInterface(configurableInstance))
 		{
-			wxLogInfo("Calling IConfigurableGameInstance::OnExit");
+			Utility::Log::LogInfo("Calling IConfigurableGameInstance::OnExit");
 			configurableInstance->OnExit();
 		}
 	}
@@ -204,27 +205,27 @@ namespace Kortex
 
 		// Initialize logging
 		InitLogging();
-		wxLogInfo("SystemApplication::OnInit");
+		Utility::Log::LogInfo("SystemApplication::OnInit");
 
 		// Log system info
 		KxSystem::VersionInfo versionInfo = KxSystem::GetVersionInfo();
-		wxLogInfo("System: %s %s %s. Kernel version: %d.%d", KxSystem::GetName(), m_Application->IsSystem64Bit() ? "x64" : "x86", versionInfo.ServicePack, versionInfo.MajorVersion, versionInfo.MinorVersion);
-		wxLogInfo("Another instance detected: %s", IsAnotherRunning() ? "true" : "false");
+		Utility::Log::LogInfo("System: %1 %2 %3. Kernel version: %4.%5", KxSystem::GetName(), m_Application->IsSystem64Bit() ? "x64" : "x86", versionInfo.ServicePack, versionInfo.MajorVersion, versionInfo.MinorVersion);
+		Utility::Log::LogInfo("Another instance detected: %1", IsAnotherRunning() ? "true" : "false");
 
 		// Log paths
-		wxLogInfo("Root folder: %s", m_Application->GetRootFolder());
-		wxLogInfo("Data folder: %s", m_Application->GetDataFolder());
-		wxLogInfo("Logs folder: %s", m_Application->GetLogsFolder());
-		wxLogInfo("User settings folder: %s", m_Application->GetUserSettingsFolder());
-		wxLogInfo("User settings file: %s", m_Application->GetUserSettingsFile());
-		wxLogInfo("Instances folder: %s", m_Application->GetInstancesFolder());
+		Utility::Log::LogInfo("Root folder: %1", m_Application->GetRootFolder());
+		Utility::Log::LogInfo("Data folder: %1", m_Application->GetDataFolder());
+		Utility::Log::LogInfo("Logs folder: %1", m_Application->GetLogsFolder());
+		Utility::Log::LogInfo("User settings folder: %1", m_Application->GetUserSettingsFolder());
+		Utility::Log::LogInfo("User settings file: %1", m_Application->GetUserSettingsFile());
+		Utility::Log::LogInfo("Instances folder: %1", m_Application->GetInstancesFolder());
 
 		// Run initialization
 		LoadGlobalConfig();
 		InitComponents();
 		m_IsApplicationInitialized = m_Application->OnInit();
 
-		wxLogInfo("Initializing app: %s", m_IsApplicationInitialized ? "true" : "false");
+		Utility::Log::LogInfo("Initializing app: %1", m_IsApplicationInitialized ? "true" : "false");
 		if (!m_IsApplicationInitialized)
 		{
 			UninitLogging();
@@ -233,7 +234,7 @@ namespace Kortex
 	}
 	int SystemApplication::OnExit()
 	{
-		wxLogInfo("SystemApplication::OnExit");
+		Utility::Log::LogInfo("SystemApplication::OnExit");
 
 		if (m_IsApplicationInitialized)
 		{
@@ -241,9 +242,9 @@ namespace Kortex
 		}
 		else
 		{
-			wxLogInfo("Exiting before initialization is completed");
+			Utility::Log::LogInfo("Exiting before initialization is completed");
 		}
-		wxLogInfo("Exit code: %d", m_ExitCode);
+		Utility::Log::LogInfo("Exit code: %1", m_ExitCode);
 		
 		UninitComponents();
 		SaveActiveInstanceSettings();
@@ -261,23 +262,23 @@ namespace Kortex
 	}
 	void SystemApplication::OnError(LogEvent& event)
 	{
-		wxLogInfo("SystemApplication::OnError");
-		wxLogInfo("An error occurred:\r\n\r\n%s", event.GetMessage());
+		Utility::Log::LogInfo("SystemApplication::OnError");
+		Utility::Log::LogInfo("An error occurred:\r\n\r\n%1", event.GetMessage());
 
 		m_Application->OnError(event);
 	}
 	
 	void SystemApplication::OnGlobalConfigChanged(IAppOption& option)
 	{
-		wxLogInfo("SystemApplication::OnGlobalConfigChanged");
+		Utility::Log::LogInfo("SystemApplication::OnGlobalConfigChanged");
 		LogConfigChnage(option);
 
 		m_Application->OnGlobalConfigChanged(option);
 	}
 	void SystemApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
 	{
-		wxLogInfo("SystemApplication::OnInstanceConfigChanged");
-		wxLogInfo("InstanceID: %s", instance.GetInstanceID());
+		Utility::Log::LogInfo("SystemApplication::OnInstanceConfigChanged");
+		Utility::Log::LogInfo("InstanceID: %1", instance.GetInstanceID());
 		LogConfigChnage(option);
 
 		// If this function called, it's certainly 'IConfigurableGameInstance'
@@ -286,8 +287,8 @@ namespace Kortex
 	}
 	void SystemApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
 	{
-		wxLogInfo("SystemApplication::OnProfileConfigChanged");
-		wxLogInfo("ProfileID: %s", profile.GetID());
+		Utility::Log::LogInfo("SystemApplication::OnProfileConfigChanged");
+		Utility::Log::LogInfo("ProfileID: %1", profile.GetID());
 		LogConfigChnage(option);
 
 		profile.OnConfigChanged(option);
@@ -296,10 +297,10 @@ namespace Kortex
 
 	bool SystemApplication::OnException()
 	{
-		wxLogError("SystemApplication::OnException");
+		Utility::Log::LogInfo("SystemApplication::OnException");
 		if (wxIsDebuggerRunning())
 		{
-			wxLogError("Debugger is running, rethrowing exception");
+			Utility::Log::LogInfo("Debugger is running, rethrowing exception");
 
 			throw;
 			return false;
@@ -307,32 +308,32 @@ namespace Kortex
 
 		if (!m_Application->OnException())
 		{
-			wxLogError("Exception info: %s", RethrowCatchAndGetExceptionInfo());
+			Utility::Log::LogInfo("Exception info: %1", RethrowCatchAndGetExceptionInfo());
 			return false;
 		}
 		return true;
 	}
 	bool SystemApplication::OnExceptionInMainLoop()
 	{
-		wxLogError("SystemApplication::OnExceptionInMainLoop");
+		Utility::Log::LogInfo("SystemApplication::OnExceptionInMainLoop");
 
 		// Exit the main loop and terminate the program if 'OnException' return false.
 		return OnException();
 	}
 	void SystemApplication::OnUnhandledException()
 	{
-		wxLogError("SystemApplication::OnUnhandledException");
+		Utility::Log::LogInfo("SystemApplication::OnUnhandledException");
 
 		if (!OnException())
 		{
 			constexpr int exitCode = std::numeric_limits<int>::min();
-			wxLogError("Terminating with code: %d", exitCode);
+			Utility::Log::LogInfo("Terminating with code: %1", exitCode);
 			ExitApp(exitCode);
 		}
 	}
 	wxString SystemApplication::RethrowCatchAndGetExceptionInfo() const
 	{
-		wxLogError("Trying to extract message form current exception");
+		Utility::Log::LogError("Trying to extract message form current exception");
 
 		wxString message = "Unknown";
 		wxString type = "Unknown";
@@ -368,7 +369,10 @@ namespace Kortex
 		catch (...)
 		{
 		}
-		return KxString::Format("Unexpected exception has occurred: %1.\r\n\r\nThe program will terminate.\r\n\r\nException type: %2", message, type);
+
+		wxString value = KxString::Format("Unexpected exception has occurred: %1.\r\n\r\nThe program will terminate.\r\n\r\nException type: %2", message, type);
+		Utility::Log::LogFatalError(value);
+		return value;
 	}
 	
 	wxAppTraits* SystemApplication::CreateTraits()

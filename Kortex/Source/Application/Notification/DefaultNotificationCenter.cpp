@@ -4,6 +4,7 @@
 #include <Kortex/Notification.hpp>
 #include <Kortex/Events.hpp>
 #include "Utility/KImageProvider.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxCoroutine.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <wx/popupwin.h>
@@ -56,9 +57,9 @@ namespace Kortex::Notification
 
 	void DefaultNotificationCenter::DoNotify(INotification* notification)
 	{
-		wxLogInfo("DefaultNotificationCenter::DoNotify");
-		wxLogInfo("Caption: %s", notification->GetCaption());
-		wxLogInfo("Message: %s", notification->GetMessage());
+		Utility::Log::LogInfo("DefaultNotificationCenter::DoNotify");
+		Utility::Log::LogInfo("Caption: %1", notification->GetCaption());
+		Utility::Log::LogInfo("Message: %1", notification->GetMessage());
 
 		IEvent::CallAfter([this, notification]()
 		{

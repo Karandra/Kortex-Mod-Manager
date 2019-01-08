@@ -4,6 +4,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>
 #include "Archive/KArchive.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxSystem.h>
 
 namespace Kortex
@@ -20,20 +21,20 @@ namespace Kortex
 
 	void IApplication::InitGlobalManagers()
 	{
-		wxLogInfo("Initializing modules");
+		Utility::Log::LogInfo("Initializing modules");
 
 		IModule::ForEachModuleAndManager([](IModule& module, IManager* manager = nullptr)
 		{
 			if (manager)
 			{
-				wxLogInfo("Initializing manager: %s::%s", module.GetModuleInfo().GetID(), manager->GetManagerInfo().GetID());
+				Utility::Log::LogInfo("Initializing manager: %1::%2", module.GetModuleInfo().GetID(), manager->GetManagerInfo().GetID());
 				manager->OnInit();
 			}
 			else
 			{
 				if (module.GetModuleDisposition() == IModule::Disposition::Global)
 				{
-					wxLogInfo("Initializing module: %s", module.GetModuleInfo().GetID());
+					Utility::Log::LogInfo("Initializing module: %1", module.GetModuleInfo().GetID());
 					module.OnInit();
 				}
 			}
@@ -41,20 +42,20 @@ namespace Kortex
 	}
 	void IApplication::UnInitGlobalManagers()
 	{
-		wxLogInfo("Uninitializing modules.");
+		Utility::Log::LogInfo("Uninitializing modules.");
 
 		IModule::ForEachModuleAndManager([](IModule& module, IManager* manager = nullptr)
 		{
 			if (manager)
 			{
-				wxLogInfo("Uninitializing manager: %s::%s", module.GetModuleInfo().GetID(), manager->GetManagerInfo().GetID());
+				Utility::Log::LogInfo("Uninitializing manager: %1::%1", module.GetModuleInfo().GetID(), manager->GetManagerInfo().GetID());
 				manager->OnExit();
 			}
 			else
 			{
 				if (module.GetModuleDisposition() == IModule::Disposition::Global)
 				{
-					wxLogInfo("Uninitializing module: %s", module.GetModuleInfo().GetID());
+					Utility::Log::LogInfo("Uninitializing module: %1", module.GetModuleInfo().GetID());
 					module.OnExit();
 				}
 			}
@@ -171,7 +172,7 @@ namespace Kortex
 			auto it = availableTranslations.find(locale);
 			if (it != availableTranslations.end())
 			{
-				wxLogInfo("Trying to load translation from file \"%s\" for \"%s\" locale", it->second, locale);
+				Utility::Log::LogInfo("Trying to load translation from file \"%1\" for \"%2\" locale", it->second, locale);
 				if (translation.LoadFromFile(it->second))
 				{
 					translation.SetLocale(locale);

@@ -3,6 +3,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "SystemApplication.h"
+#include "Utility/Log.h"
 
 namespace Kortex
 {
@@ -42,7 +43,7 @@ namespace Kortex
 		}
 		else
 		{
-			wxLogError("Failed to assign 'IConfigurableGameInstance' interface to 'IAppOption' object");
+			Utility::Log::LogError("Failed to assign 'IConfigurableGameInstance' interface to 'IAppOption' object");
 			return false;
 		}
 	}

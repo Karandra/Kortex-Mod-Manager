@@ -6,6 +6,7 @@
 #include "VirtualFileSystem/Mirror.h"
 #include "VirtualFileSystem/MultiMirror.h"
 #include "VirtualFileSystem/Convergence.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxProgressDialog.h>
 
@@ -65,7 +66,7 @@ namespace Kortex::ModManager
 			}
 
 			size_t indexSize = vfs->BuildDispatcherIndex();
-			wxLogInfo("VirtualFileSystem::Convergence::BuildDispatcherIndex: index size -> %zu", indexSize);
+			Utility::Log::LogInfo("VirtualFileSystem::Convergence::BuildDispatcherIndex: index size -> %1", indexSize);
 
 			m_Convergence = std::move(vfs);
 		}

@@ -13,6 +13,7 @@
 #include "UI/KImageViewerDialog.h"
 #include "UI/KTextEditorDialog.h"
 #include "Utility/KAux.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileStream.h>
@@ -586,7 +587,7 @@ void KInstallWizardDialog::OnSelectDocument(int index, bool useAdvancedEditor)
 		catch (const std::out_of_range& exc)
 		{
 			// Getting the document can throw
-			wxLogInfo("Can't load document at index %d: %s", index, exc.what());
+			Utility::Log::LogInfo("Can't load document at index %1: %2", index, exc.what());
 		}
 	}
 	else

@@ -9,6 +9,7 @@
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
+#include "Utility/Log.h"
 #include "Util.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
@@ -525,7 +526,7 @@ namespace Kortex::GameInstance
 
 	void ConfigurableGameInstance::OnConfigChanged(IAppOption& option)
 	{
-		wxLogInfo("ConfigurableGameInstance::OnConfigChanged -> %s", option.GetXPath());
+		Utility::Log::LogInfo("ConfigurableGameInstance::OnConfigChanged -> %1", option.GetXPath());
 	}
 	void ConfigurableGameInstance::SaveConfig()
 	{

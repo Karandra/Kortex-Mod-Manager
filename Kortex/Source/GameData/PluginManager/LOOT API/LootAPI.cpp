@@ -5,6 +5,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>
 #include "Utility/KOperationWithProgress.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxSystem.h>
 #include "loot/api.h"
@@ -98,17 +99,17 @@ namespace Kortex::PluginManager
 		{
 			case (int)LogLevel::trace:
 			{
-				wxLogTrace("", "[LOOT API] %s", value);
+				Utility::Log::LogTrace("[LOOT API] %1", value);
 				break;
 			}
 			case (int)LogLevel::debug:
 			{
-				wxLogDebug("[LOOT API] %s", value);
+				Utility::Log::LogDebug("[LOOT API] %1", value);
 				break;
 			}
 			case (int)LogLevel::info:
 			{
-				wxLogInfo("[LOOT API] %s", value);
+				Utility::Log::LogInfo("[LOOT API] %1", value);
 
 				KxFileOperationEvent event(Events::LootAPI);
 				event.SetEventObject(context->GetEventHandler());
@@ -118,17 +119,17 @@ namespace Kortex::PluginManager
 			}
 			case (int)LogLevel::warning:
 			{
-				wxLogWarning("[LOOT API] %s", value);
+				Utility::Log::LogWarning("[LOOT API] %1", value);
 				break;
 			}
 			case (int)LogLevel::error:
 			{
-				wxLogError("[LOOT API] %s", value);
+				Utility::Log::LogError("[LOOT API] %1", value);
 				break;
 			}
 			case (int)LogLevel::fatal:
 			{
-				wxLogMessage("Fatal Error: [LOOT API] %s", value);
+				Utility::Log::LogMessage("Fatal Error: [LOOT API] %1", value);
 				break;
 			}
 		};

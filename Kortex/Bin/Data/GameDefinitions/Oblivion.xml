@@ -281,12 +281,12 @@
 				</Entry>
 			</SortingTools>
 
-			<LOOTAPI>
-				<Branch>v0.13</Branch>
+			<LibLoot>
+				<Branch>v0.14</Branch>
 				<Repository>https://github.com/loot/oblivion.git</Repository>
 				<FolderName>Oblivion</FolderName>
 				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
-			</LOOTAPI>
+			</LibLoot>
 
 			<StandardContent MainID="Oblivion.esm">
 				<Entry ID="Oblivion.esm" Name="$(GameShortName)" Logo="Oblivion.png"/>

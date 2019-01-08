@@ -240,7 +240,7 @@ namespace Kortex::PluginManager
 		operation->OnRun([operation](KOperationWithProgressBase* self)
 		{
 			KxStringVector sortedList;
-			if (LootAPI::GetInstance()->SortPlugins(sortedList, operation))
+			if (LibLoot::GetInstance()->SortPlugins(sortedList, operation))
 			{
 				IPluginManager::GetInstance()->SyncWithPluginsList(sortedList, SyncListMode::DoNotChange);
 				IPluginManager::GetInstance()->Save();
@@ -291,7 +291,7 @@ namespace Kortex::PluginManager
 	{
 		KxMenu* sortingMenu = nullptr;
 		const Config& pluginsConfig = IPluginManager::GetInstance()->GetConfig();
-		if (pluginsConfig.HasSortingTools() || LootAPI::HasInstance())
+		if (pluginsConfig.HasSortingTools() || LibLoot::HasInstance())
 		{
 			sortingMenu = new KxMenu();
 			menu.AddSeparator();
@@ -302,21 +302,26 @@ namespace Kortex::PluginManager
 
 		if (sortingMenu && IModManager::GetInstance()->GetVFS().IsEnabled())
 		{
-			// LootAPI
+			// LibLoot
+			bool hasLoot = false;
+			if (LibLoot::GetInstance() != nullptr)
 			{
+				hasLoot = true;
+
 				KxMenuItem* item = sortingMenu->Add(new KxMenuItem("LOOT API"));
 				item->Bind(KxEVT_MENU_SELECT, &Workspace::OnRunLootAPI, this);
 			}
 
 			// Sorting tools
 			{
-				for (const SortingToolEntry& entry: pluginsConfig.GetSortingTools())
+				const auto& sortingTools = pluginsConfig.GetSortingTools();
+				if (hasLoot && !sortingTools.empty())
 				{
-					if (LootAPI::HasInstance())
-					{
-						sortingMenu->AddSeparator();
-					}
+					sortingMenu->AddSeparator();
+				}
 
+				for (const SortingToolEntry& entry: sortingTools)
+				{
 					KxMenuItem* item = sortingMenu->Add(new KxMenuItem(entry.GetName()));
 					item->SetBitmap(KxShell::GetFileIcon(entry.GetExecutable(), true));
 					item->Bind(KxEVT_MENU_SELECT, [this, entry](KxMenuEvent& event)

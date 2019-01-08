@@ -196,7 +196,7 @@ namespace Kortex::Application::About
 		AddSoftwareNode(KxWebSocketClient::GetLibraryName(), KxWebSocketClient::GetLibraryVersion(), "https://github.com/zaphoyd/websocketpp", KIMG_WEBSOCKET);
 		AddSoftwareNode(KxJSON::GetLibraryName(), KxJSON::GetVersion(), "https://github.com/nlohmann/json", KIMG_JSON);
 
-		if (PluginManager::LootAPI* lootAPI = PluginManager::LootAPI::GetInstance())
+		if (PluginManager::LibLoot* lootAPI = PluginManager::LibLoot::GetInstance())
 		{
 			AddSoftwareNode(lootAPI->GetLibraryName(), lootAPI->GetLibraryVersion(), "https://github.com/loot/loot-api", KIMG_LOOT);
 		}

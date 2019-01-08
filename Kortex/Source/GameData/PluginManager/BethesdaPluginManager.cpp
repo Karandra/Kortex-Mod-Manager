@@ -29,11 +29,11 @@ namespace Kortex::PluginManager
 		BasePluginManager::OnLoadInstance(instance, managerNode);
 
 		// Load LOOT API config
-		KxXMLNode lootAPINode = managerNode.GetFirstChildElement("LootAPI");
-		m_LootAPIConfig.OnLoadInstance(instance, managerNode);
-		if (m_LootAPIConfig.IsOK())
+		KxXMLNode lootAPINode = managerNode.GetFirstChildElement("LibLoot");
+		m_LibLootConfig.OnLoadInstance(instance, lootAPINode);
+		if (m_LibLootConfig.IsOK())
 		{
-			m_LootAPI = std::make_unique<LootAPI>();
+			m_LootAPI = std::make_unique<LibLoot>();
 		}
 
 		m_ActiveListFile = managerNode.GetFirstChildElement("ActiveList").GetValue();
@@ -374,9 +374,9 @@ namespace Kortex::PluginManager
 	void LootAPIConfig::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)
 	{
 		#if _WIN64
-		m_Librray.Load(IApplication::GetInstance()->GetDataFolder() + "\\PluginManager\\LOOT API x64\\loot_api.dll");
+		m_Librray.Load(IApplication::GetInstance()->GetDataFolder() + "\\PluginManager\\LibLoot x64\\loot.dll");
 		#else
-		m_Librray.Load(IApplication::GetInstance()->GetDataFolder() + "\\PluginManager\\LOOT API x86\\loot_api.dll");
+		m_Librray.Load(IApplication::GetInstance()->GetDataFolder() + "\\PluginManager\\LibLoot x86\\loot.dll");
 		#endif
 
 		m_Branch = node.GetFirstChildElement("Branch").GetValue();

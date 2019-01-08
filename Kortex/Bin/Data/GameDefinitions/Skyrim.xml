@@ -257,12 +257,12 @@
 				</Entry>
 			</SortingTools>
 
-			<LootAPI>
-				<Branch>v0.13</Branch>
+			<LibLoot>
+				<Branch>v0.14</Branch>
 				<Repository>https://github.com/loot/skyrim.git</Repository>
 				<FolderName>Skyrim</FolderName>
 				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
-			</LootAPI>
+			</LibLoot>
 
 			<StandardContent MainID="Skyrim.esm">
 				<Entry ID="Skyrim.esm" Name="$(GameShortName)" Logo="Skyrim.png"/>

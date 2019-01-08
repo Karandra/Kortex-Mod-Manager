@@ -106,12 +106,12 @@
 			</Entry>
 		</SortingTools>
 
-		<LOOTAPI>
-			<Branch>v0.13</Branch>
+		<LibLoot>
+			<Branch>v0.14</Branch>
 			<Repository>https://github.com/loot/falloutnv.git</Repository>
 			<FolderName>FalloutNV</FolderName>
 			<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
-		</LOOTAPI>
+		</LibLoot>
 
 		<StandardContent MainID="FalloutNV.esm">
 			<Entry ID="FalloutNV.esm" Name="$(GameShortName)" Logo="FalloutNV.png"/>
@@ -135,6 +135,7 @@
 			<Entry ID="TribalPack.esm" Name="$(GameShortName): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
 			<Entry ID="TribalPack_lang.esp" Name="$(GameShortName): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
 		</StandardContent>
+
 	</PluginManager>
 
 	<ScreenshotsGallery>

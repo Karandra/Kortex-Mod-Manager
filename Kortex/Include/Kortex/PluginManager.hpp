@@ -3,7 +3,7 @@
 #include "Common/GameData.hpp"
 
 #include "GameData/PluginManager/Common.h"
-#include "GameData/PluginManager/LOOT API/LootAPI.h"
+#include "GameData/PluginManager/LibLoot/LibLoot.h"
 
 #include "GameData/PluginManager/IGamePlugin.h"
 #include "GameData/PluginManager/BethesdaPlugin.h"

@@ -94,12 +94,12 @@
 			</Entry>
 		</SortingTools>
 
-		<LOOTAPI>
-			<Branch>v0.13</Branch>
+		<LibLoot>
+			<Branch>v0.14</Branch>
 			<Repository>https://github.com/loot/fallout3.git</Repository>
 			<FolderName>Fallout3</FolderName>
 			<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
-		</LOOTAPI>
+		</LibLoot>
 
 		<StandardContent MainID="Fallout3.esm">
 			<Entry ID="Fallout3.esm" Name="$(GameShortName)" Logo="Fallout3.png"/>
@@ -111,7 +111,8 @@
 			<Entry ID="PointLookout.esm" Name="$(GameShortName): Point Lookout" Logo="PointLookout.png"/>
 			<Entry ID="Zeta.esm" Name="$(GameShortName): Mothership Zeta" Logo="Zeta.png"/>
 		</StandardContent>
-	</PluginManager>
+	
+</PluginManager>
 
 	<ScreenshotsGallery>
 		<Locations>

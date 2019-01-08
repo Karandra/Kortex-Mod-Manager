@@ -257,12 +257,12 @@
 				</Entry>
 			</SortingTools>
 
-			<LOOTAPI>
-				<Branch>v0.13</Branch>
+			<LibLoot>
+				<Branch>v0.14</Branch>
 				<Repository>https://github.com/loot/skyrimse.git</Repository>
 				<FolderName>Skyrim Special Edition</FolderName>
 				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
-			</LOOTAPI>
+			</LibLoot>
 
 			<StandardContent MainID="Skyrim.esm">
 				<Entry ID="Skyrim.esm" Name="$(GameShortName)" Logo="Skyrim.png"/>

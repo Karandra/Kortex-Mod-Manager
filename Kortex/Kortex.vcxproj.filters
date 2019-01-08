@@ -111,9 +111,6 @@
     <Filter Include="Code\Source\GameData\PluginManager">
       <UniqueIdentifier>{0ad972bf-4485-4d8a-b74d-b63ba58f3519}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\GameData\PluginManager\LOOT API">
-      <UniqueIdentifier>{1eeda770-0c32-43fb-a8f4-6ac671cbf3e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\GameData\SaveManager">
       <UniqueIdentifier>{aee8af18-99c8-4b9b-9cbc-b59054bed2ae}</UniqueIdentifier>
     </Filter>
@@ -229,9 +226,6 @@
     <Filter Include="Code\Headers\GameData\PluginManager">
       <UniqueIdentifier>{889054e8-6ce3-4142-bdcf-f3ceffebe391}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\GameData\PluginManager\LOOT API">
-      <UniqueIdentifier>{662a5b88-3f29-4336-bc6a-74a3408927e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\GameData\SaveManager">
       <UniqueIdentifier>{cdb84733-3aa4-4b4c-bfd2-25d34f8a55ce}</UniqueIdentifier>
     </Filter>
@@ -336,6 +330,12 @@
     </Filter>
     <Filter Include="Misc\Game Definitions\Icons">
       <UniqueIdentifier>{62a74ac0-dd4d-4d27-8025-329b14e7bec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\GameData\PluginManager\LibLoot">
+      <UniqueIdentifier>{1eeda770-0c32-43fb-a8f4-6ac671cbf3e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\GameData\PluginManager\LibLoot">
+      <UniqueIdentifier>{662a5b88-3f29-4336-bc6a-74a3408927e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -593,9 +593,6 @@
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaDisplayModel.cpp">
       <Filter>Code\Source\GameData\PluginManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameData\PluginManager\LOOT API\LootAPI.cpp">
-      <Filter>Code\Source\GameData\PluginManager\LOOT API</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\ScreenshotsGallery\Workspace.cpp">
       <Filter>Code\Source\GameData\ScreenshotsGallery</Filter>
@@ -981,6 +978,9 @@
     <ClCompile Include="Source\Utility\Log.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameData\PluginManager\LibLoot\LibLoot.cpp">
+      <Filter>Code\Source\GameData\PluginManager\LibLoot</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1288,9 +1288,6 @@
     </ClInclude>
     <ClInclude Include="Source\GameData\PluginManager\IDisplayModel.h">
       <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\LOOT API\LootAPI.h">
-      <Filter>Code\Headers\GameData\PluginManager\LOOT API</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameData\ScreenshotsGallery\Workspace.h">
       <Filter>Code\Headers\GameData\ScreenshotsGallery</Filter>
@@ -1846,6 +1843,9 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\Log.h">
       <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\LibLoot\LibLoot.h">
+      <Filter>Code\Headers\GameData\PluginManager\LibLoot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

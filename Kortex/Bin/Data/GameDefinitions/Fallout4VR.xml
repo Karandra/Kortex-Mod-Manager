@@ -94,12 +94,12 @@
 			</Entry>
 		</SortingTools>
 
-		<LOOTAPI>
-			<Branch>v0.13</Branch>
+		<LibLoot>
+			<Branch>v0.14</Branch>
 			<Repository>https://github.com/loot/fallout4.git</Repository>
 			<FolderName>Fallout4VR</FolderName>
 			<LocalGamePath>$(ModListRoot)\LocalPlugins</LocalGamePath>
-		</LOOTAPI>
+		</LibLoot>
 
 		<StandardContent MainID="Fallout4.esm">
 			<Entry ID="Fallout4.esm" Name="$(GameShortName)" Logo="Fallout4.png"/>
@@ -112,7 +112,8 @@
 			<Entry ID="DLCNukaWorld.esm" Name="$(GameShortName): Nuka World" Logo="NukaWorld.png"/>
 			<Entry ID="DLCUltraHighResolution.esm" Name="$(GameShortName): High Resolution Texture Pack" Logo="Fallout4.png"/>
 		</StandardContent>
-	</PluginManager>
+	
+</PluginManager>
 
 	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
 		<Locations>

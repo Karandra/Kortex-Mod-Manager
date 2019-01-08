@@ -31,14 +31,14 @@ namespace Kortex::PluginManager
 
 namespace Kortex::PluginManager
 {
-	class LootAPI;
+	class LibLoot;
 	class BethesdaDisplayModel;
 
 	class BethesdaPluginManager: public RTTI::IMultiInterface<BethesdaPluginManager, BasePluginManager>
 	{
 		protected:
-			LootAPIConfig m_LootAPIConfig;
-			std::unique_ptr<LootAPI> m_LootAPI;
+			LootAPIConfig m_LibLootConfig;
+			std::unique_ptr<LibLoot> m_LootAPI;
 
 			wxString m_PluginsLocation;
 			wxString m_ActiveListFile;
@@ -75,9 +75,9 @@ namespace Kortex::PluginManager
 			virtual ~BethesdaPluginManager();
 
 		public:
-			const LootAPIConfig& GetLootAPIConfig() const
+			const LootAPIConfig& GetLibLootConfig() const
 			{
-				return m_LootAPIConfig;
+				return m_LibLootConfig;
 			}
 			KWorkspace* GetWorkspace() const override;
 

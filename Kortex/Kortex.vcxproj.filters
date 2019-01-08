@@ -978,6 +978,9 @@
     <ClCompile Include="Source\GameData\PluginManager\Bethesda2DisplayModel.cpp">
       <Filter>Code\Source\GameData\PluginManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utility\Log.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1840,6 +1843,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameData\PluginManager\Bethesda2DisplayModel.h">
       <Filter>Code\Headers\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Log.h">
+      <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

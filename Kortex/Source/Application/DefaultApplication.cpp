@@ -40,6 +40,7 @@ namespace Kortex::Application
 	namespace OName
 	{
 		KortexDefOption(RestartDelay);
+		KortexDefOption(Instances);
 	}
 
 	DefaultApplication::DefaultApplication()
@@ -315,7 +316,7 @@ namespace Kortex::Application
 					selectedInstance->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetSelectedGameRoot());
 					configurableInstance->SaveConfig();
 				}
-				GetGlobalOption(OName::Instance).SetAttribute(OName::ID, selectedInstance->GetInstanceID());
+				GetGlobalOption(OName::Instances, OName::Active).SetValue(selectedInstance->GetInstanceID());
 
 				// Restart if user agreed
 				if (ret == KxID_YES)
@@ -425,8 +426,8 @@ namespace Kortex::Application
 		wxLogInfo("Initializing app settings");
 
 		// Init some application-wide variables
-		auto options = GetGlobalOption(OName::Instance);
-		m_InstancesFolder = options.GetAttribute("Location", m_InstancesFolder);
+		auto options = GetGlobalOption(OName::Instances, OName::Location);
+		m_InstancesFolder = options.GetValue(m_InstancesFolder);
 
 		// Show first time config dialog if needed and save new 'ProfilesFolder'
 		if (IsPreStartConfigNeeded())
@@ -440,7 +441,7 @@ namespace Kortex::Application
 		}
 
 		m_Variables.SetVariable(Variables::KVAR_INSTANCES_DIR, m_InstancesFolder);
-		options.SetAttribute("Location", m_InstancesFolder);
+		options.SetValue(m_InstancesFolder);
 		wxLogInfo("Instances folder changed: %s", m_InstancesFolder);
 
 		// Init all profiles and load current one if specified (or ask user to choose it)
@@ -452,7 +453,8 @@ namespace Kortex::Application
 	}
 	bool DefaultApplication::ShowFirstTimeConfigDialog(wxWindow* parent)
 	{
-		wxString defaultPath = GetUserSettingsFolder() + "\\Instances";
+		const wxString defaultPath = GetUserSettingsFolder() + wxS("\\Instances");
+
 		wxString message = wxString::Format("%s\r\n\r\n%s: %s", KTr("Init.ProfilesPath2"), KTr("Generic.DefaultValue"), defaultPath);
 		KxTaskDialog messageDialog(parent, KxID_NONE, KTr("Init.ProfilesPath1"), message, KxBTN_NONE);
 		messageDialog.AddButton(KxID_YES, KTr("Generic.UseDefaultValue"));
@@ -460,16 +462,18 @@ namespace Kortex::Application
 
 		if (messageDialog.ShowModal() == KxID_YES)
 		{
-			m_Variables.SetVariable(Variables::KVAR_INSTANCES_DIR, defaultPath);
+			m_InstancesFolder = defaultPath;
+			m_Variables.SetVariable(Variables::KVAR_INSTANCES_DIR, m_InstancesFolder);
 			return true;
 		}
 		else
 		{
-			KxFileBrowseDialog folderDialog(&messageDialog, KxID_NONE, KxFBD_OPEN_FOLDER);
+			KxFileBrowseDialog folderDialog(m_InitProgressDialog, KxID_NONE, KxFBD_OPEN_FOLDER);
 			folderDialog.SetFolder(defaultPath);
 			if (folderDialog.ShowModal() == KxID_OK)
 			{
-				m_Variables.SetVariable(Variables::KVAR_INSTANCES_DIR, folderDialog.GetResult());
+				m_InstancesFolder = folderDialog.GetResult();
+				m_Variables.SetVariable(Variables::KVAR_INSTANCES_DIR, m_InstancesFolder);
 				return true;
 			}
 			return false;
@@ -494,7 +498,7 @@ namespace Kortex::Application
 				m_StartupInstanceID = dialog.GetSelectedInstance()->GetInstanceID();
 				if (!m_IsCmdStartupInstanceID)
 				{
-					GetGlobalOption(OName::Instance).SetAttribute(OName::ID, m_StartupInstanceID);
+					GetGlobalOption(OName::Instances, OName::Active).SetValue(m_StartupInstanceID);
 				}
 
 				// Set new game root
@@ -547,7 +551,7 @@ namespace Kortex::Application
 		}
 		else
 		{
-			m_StartupInstanceID = GetGlobalOption(OName::Instance).GetAttribute(OName::ID);
+			m_StartupInstanceID = GetGlobalOption(OName::Instances, OName::Active).GetValue();
 		}
 		wxLogInfo("Instance: %s", m_StartupInstanceID);
 	}

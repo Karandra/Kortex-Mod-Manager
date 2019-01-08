@@ -224,10 +224,10 @@ namespace Kortex
 
 	void KPackageManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
+		LoadStdRequirements();
 	}
 	void KPackageManager::OnInit()
 	{
-		LoadStdRequirements();
 	}
 	void KPackageManager::OnExit()
 	{

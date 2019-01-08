@@ -200,7 +200,7 @@ namespace Kortex::GameInstance
 
 		wxCommandEvent event(wxEVT_LIST_ITEM_SELECTED);
 		event.SetInt(select);
-		m_GameFilter->HandleWindowEvent(event);
+		m_InstancesList->HandleWindowEvent(event);
 	}
 	bool SelectionDialog::AskForGameFolder(const IGameInstance* instance, const wxString& currentGamePath)
 	{

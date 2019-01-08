@@ -504,7 +504,7 @@ namespace Kortex::Application
 					activeInstnace->GetVariables().SetVariable(Variables::KVAR_ACTUAL_GAME_DIR, dialog.GetSelectedGameRoot());
 				}
 
-				wxLogInfo("New GameID: %s, New InstanceID: %s", m_StartupInstanceID);
+				wxLogInfo("New InstanceID: %s", m_StartupInstanceID);
 				wxLogInfo("Trying again");
 
 				if (!LoadInstance())
@@ -541,7 +541,6 @@ namespace Kortex::Application
 	void DefaultApplication::LoadStartupInstanceID()
 	{
 		wxCmdLineParser& parser = GetCmdLineParser();
-
 		if (parser.Found("InstanceID", &m_StartupInstanceID))
 		{
 			m_IsCmdStartupInstanceID = true;

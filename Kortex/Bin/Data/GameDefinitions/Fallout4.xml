@@ -18,52 +18,215 @@
 	</Variables>
 
 	<Network>
-		<NexusID>Fallout4</NexusID>
-		<SteamID>377160</SteamID>
+		<NetworkManager>
+			<NexusID>Fallout4</NexusID>
+			<SteamID>377160</SteamID>
+		</NetworkManager>
 	</Network>
+	
+	<Programs>
+		<ProgramManager>
+			<DefaultPrograms>
+				<Entry>
+					<Name>$(GameShortName)</Name>
+					<Executable>Fallout4.exe</Executable>
+				</Entry>
+				<Entry>
+					<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+					<Executable>F4SE_Loader.exe</Executable>
+				</Entry>
+				<Entry>
+					<Name>$(GameShortName) Launcher</Name>
+					<Executable>Fallout4Launcher.exe</Executable>
+				</Entry>
+				<Entry>
+					<Name>Creation Kit</Name>
+					<Executable>CreationKit.exe</Executable>
+				</Entry>
+				<Entry>
+					<Name>ENB Injector</Name>
+					<Executable>ENBInjector.exe</Executable>
+				</Entry>
+			</DefaultPrograms>
+		</ProgramManager>
+	</Programs>
 
-	<Virtualization>
-		<MirroredLocations>
-			<Entry>
-				<Sources>
-					<Entry>$(SavesDir)</Entry>
-					<Entry>$(ConfigDir)</Entry>
-				</Sources>
-				<Target>$(ActualConfigDir)</Target>
-			</Entry>
-			<Entry>
-				<Sources>
-					<Entry>$(ProfileDir)\Plugins</Entry>
-				</Sources>
-				<Target>$SHF(APPLICATIONDATA_LOCAL)\Fallout4</Target>
-			</Entry>
-		</MirroredLocations>
-	</Virtualization>
-
-	<ProgramManager>
-		<Programs>
-			<Entry>
-				<Name>$(GameShortName)</Name>
-				<Executable>Fallout4.exe</Executable>
-			</Entry>
-			<Entry>
-				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
-				<Executable>F4SE_Loader.exe</Executable>
-			</Entry>
-			<Entry>
-				<Name>$(GameShortName) Launcher</Name>
-				<Executable>Fallout4Launcher.exe</Executable>
-			</Entry>
-			<Entry>
-				<Name>Creation Kit</Name>
-				<Executable>CreationKit.exe</Executable>
-			</Entry>
-			<Entry>
-				<Name>ENB Injector</Name>
-				<Executable>ENBInjector.exe</Executable>
-			</Entry>
-		</Programs>
-	</ProgramManager>
+	<GameMods>
+		<ModManager>
+			<MirroredLocations>
+				<Entry>
+					<Sources>
+						<Entry>$(SavesDir)</Entry>
+						<Entry>$(ConfigDir)</Entry>
+					</Sources>
+					<Target>$(ActualConfigDir)</Target>
+				</Entry>
+				<Entry>
+					<Sources>
+						<Entry>$(ProfileDir)\Plugins</Entry>
+					</Sources>
+					<Target>$SHF(APPLICATIONDATA_LOCAL)\Fallout4</Target>
+				</Entry>
+			</MirroredLocations>
+		</ModManager>
+		<TagManager>
+			<DefaultTags>
+				<Entry ID="Animation">
+					<NexusID>51</NexusID>
+				</Entry>
+				<Entry ID="Armor">
+					<NexusID>54</NexusID>
+				</Entry>
+				<Entry ID="Clothing">
+					<NexusID>60</NexusID>
+				</Entry>
+				<Entry ID="Jewelry">
+					<NexusID>102</NexusID>
+				</Entry>
+				<Entry ID="Weapons">
+					<NexusID>55</NexusID>
+				</Entry>
+				<Entry ID="Gameplay">
+					<NexusID>24</NexusID>
+				</Entry>
+				<Entry ID="Immersion">
+					<NexusID>78</NexusID>
+				</Entry>
+				<Entry ID="Environment">
+					<NexusID>74</NexusID>
+				</Entry>
+				<Entry ID="SkillsAndLeveling">
+					<NexusID>73</NexusID>
+				</Entry>
+				<Entry ID="GuildsAndFactions">
+					<NexusID>25</NexusID>
+				</Entry>
+				<Entry ID="Stealth">
+					<NexusID>76</NexusID>
+				</Entry>
+				<Entry ID="Combat">
+					<NexusID>77</NexusID>
+				</Entry>
+				<Entry ID="Crafting">
+					<NexusID>100</NexusID>
+				</Entry>
+				<Entry ID="Magic">
+					<NexusID>75</NexusID>
+				</Entry>
+				<Entry ID="MagicGameplay">
+					<NexusID>93</NexusID>
+				</Entry>
+				<Entry ID="BooksAndScrolls">
+					<NexusID>98</NexusID>
+				</Entry>
+				<Entry ID="Alchemy">
+					<NexusID>94</NexusID>
+				</Entry>
+				<Entry ID="Quests">
+					<NexusID>35</NexusID>
+				</Entry>
+				<Entry ID="Buildings">
+					<NexusID>95</NexusID>
+				</Entry>
+				<Entry ID="Settlements">
+					<NexusID>53</NexusID>
+				</Entry>
+				<Entry ID="Mercantiles">
+					<NexusID>69</NexusID>
+				</Entry>
+				<Entry ID="New Lands">
+					<NexusID>30</NexusID>
+				</Entry>
+				<Entry ID="Dungeons">
+					<NexusID>88</NexusID>
+				</Entry>
+				<Entry ID="AbandonedStructures">
+					<NexusID>70</NexusID>
+				</Entry>
+				<Entry ID="Player Homes">
+					<NexusID>67</NexusID>
+				</Entry>
+				<Entry ID="Landscape">
+					<NexusID>58</NexusID>
+				</Entry>
+				<Entry ID="Overhauls">
+					<NexusID>79</NexusID>
+				</Entry>
+				<Entry ID="Conversions">
+					<NexusID>-1</NexusID>
+				</Entry>
+				<Entry ID="Audio">
+					<NexusID>61</NexusID>
+				</Entry>
+				<Entry ID="User Interface">
+					<NexusID>42</NexusID>
+				</Entry>
+				<Entry ID="NPC">
+					<NexusID>33</NexusID>
+				</Entry>
+				<Entry ID="Body">
+					<NexusID>26</NexusID>
+				</Entry>
+				<Entry ID="Face">
+					<NexusID>26</NexusID>
+				</Entry>
+				<Entry ID="Hair">
+					<NexusID>26</NexusID>
+				</Entry>
+				<Entry ID="Races">
+					<NexusID>34</NexusID>
+				</Entry>
+				<Entry ID="Followers">
+					<NexusID>66</NexusID>
+				</Entry>
+				<Entry ID="Creatures">
+					<NexusID>83</NexusID>
+				</Entry>
+				<Entry ID="Mounts">
+					<NexusID>101</NexusID>
+				</Entry>
+				<Entry ID="ModelsAndTextures">
+					<NexusID>29</NexusID>
+				</Entry>
+				<Entry ID="Graphics">
+					<NexusID>62</NexusID>
+				</Entry>
+				<Entry ID="ENBPresets">
+					<NexusID>97</NexusID>
+				</Entry>
+				<Entry ID="Collectables">
+					<NexusID>92</NexusID>
+				</Entry>
+				<Entry ID="ItemsAndObjects">
+					<NexusID>85</NexusID>
+				</Entry>
+				<Entry ID="Cheats">
+					<NexusID>40</NexusID>
+				</Entry>
+				<Entry ID="Fixes">
+					<NexusID>95</NexusID>
+				</Entry>
+				<Entry ID="ScriptExtenderPlugins" RequiresScriptExtender="1">
+					<NexusID>-1</NexusID>
+				</Entry>
+				<Entry ID="Utilities">
+					<NexusID>39</NexusID>
+				</Entry>
+				<Entry ID="Configuration">
+					<NexusID>116</NexusID>
+				</Entry>
+				<Entry ID="Resources">
+					<NexusID>82</NexusID>
+				</Entry>
+				<Entry ID="SaveGames">
+					<NexusID>43</NexusID>
+				</Entry>
+				<Entry ID="Misc">
+					<NexusID>28</NexusID>
+				</Entry>
+			</DefaultTags>
+		</TagManager>
+	</GameMods>
 
 	<GameConfig EnableENB="1">
 		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout4.ini</Entry>
@@ -73,66 +236,69 @@
 		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">CreationKitPrefs.ini</Entry>
 	</GameConfig>
 
-	<PluginManager Enabled="1" InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
-		<Limit Value="254"/>
+	<GameData>
+		<PluginManager Implementation="Bethesda2" PluginImplementation="BethesdaSkyrim">
+			<Limit Value="254"/>
+			
+			<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
+			<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
 
-		<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
-		<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
+			<ChangeFileModificationDate>0</ChangeFileModificationDate>
+			<SortByFileModificationDate>0</SortByFileModificationDate>
 
-		<ChangeFileModificationDate>0</ChangeFileModificationDate>
-		<SortByFileModificationDate>0</SortByFileModificationDate>
-
-		<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
-		<OrderListHeader><![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
+			<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
+			<OrderListHeader>
+				<![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
 # Please do not modify this file.
 # Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]>
-		</OrderListHeader>
+			</OrderListHeader>
 
-		<SortingTools>
-			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
-				<Command><![CDATA[--game=Fallout4]]></Command>
-			</Entry>
-		</SortingTools>
+			<SortingTools>
+				<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+					<Command><![CDATA[--game=Fallout4]]></Command>
+				</Entry>
+			</SortingTools>
 
-		<LOOTAPI>
-			<Branch>v0.13</Branch>
-			<Repository>https://github.com/loot/fallout4.git</Repository>
-			<FolderName>Fallout4</FolderName>
-			<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
-		</LOOTAPI>
+			<LOOTAPI>
+				<Branch>v0.13</Branch>
+				<Repository>https://github.com/loot/fallout4.git</Repository>
+				<FolderName>Fallout4</FolderName>
+				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
+			</LOOTAPI>
 
-		<StandardContent MainID="Fallout4.esm">
-			<Entry ID="Fallout4.esm" Name="$(GameShortName)" Logo="Fallout4.png"/>
-			<Entry ID="DLCWorkshop01.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop01.png"/>
-			<Entry ID="DLCWorkshop02.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop02.png"/>
-			<Entry ID="DLCWorkshop03.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop03.png"/>
-			<Entry ID="DLCRobot.esm" Name="$(GameShortName): Automatron" Logo="Automatron.png"/>
-			<Entry ID="DLCCoast.esm" Name="$(GameShortName): Far Harbor" Logo="FarHarbor.png"/>
-			<Entry ID="DLCNukaWorld.esm" Name="$(GameShortName): Nuka World" Logo="NukaWorld.png"/>
-			<Entry ID="DLCUltraHighResolution.esm" Name="$(GameShortName): High Resolution Texture Pack" Logo="Fallout4.png"/>
-		</StandardContent>
-	</PluginManager>
+			<StandardContent MainID="Fallout4.esm">
+				<Entry ID="Fallout4.esm" Name="$(GameShortName)" Logo="Fallout4.png"/>
+				<Entry ID="DLCWorkshop01.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop01.png"/>
+				<Entry ID="DLCWorkshop02.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop02.png"/>
+				<Entry ID="DLCWorkshop03.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop03.png"/>
+				<Entry ID="DLCRobot.esm" Name="$(GameShortName): Automatron" Logo="Automatron.png"/>
+				<Entry ID="DLCCoast.esm" Name="$(GameShortName): Far Harbor" Logo="FarHarbor.png"/>
+				<Entry ID="DLCNukaWorld.esm" Name="$(GameShortName): Nuka World" Logo="NukaWorld.png"/>
+				<Entry ID="DLCUltraHighResolution.esm" Name="$(GameShortName): High Resolution Texture Pack" Logo="Fallout4.png"/>
+			</StandardContent>
+		</PluginManager>
 
-	<ScreenshotsGallery Enabled="1">
-		<Locations>
-			<Entry>$(ActualGameDir)</Entry>
-			<Entry>$(ActualGameDir)\Screenshots</Entry>
-			<Entry>$(ConfigDir)</Entry>
-			<Entry>$(ConfigDir)\Screenshots</Entry>
-			<Entry>$(OverwritesDir)</Entry>
-			<Entry>$(OverwritesDir)\Screenshots</Entry>
-		</Locations>
-	</ScreenshotsGallery>
+		<SaveManager SaveImplementation="BethesdaFallout4">
+			<Location>$(SavesDir)\Saves</Location>
+			<FileFilters>
+				<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
+				<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
+				<Entry Label="$T(SaveManager.Filter.CoSaves) (*.f4se)">*.f4se</Entry>
+			</FileFilters>
 
-	<SaveManager Enabled="1" SaveFileFormat="BethesdaFallout4">
-		<Location>$(SavesDir)\Saves</Location>
-		<FileFilters>
-			<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
-			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
-			<Entry Label="$T(SaveManager.Filter.CoSaves) (*.f4se)">*.f4se</Entry>
-		</FileFilters>
+			<PrimaryExtension>fos</PrimaryExtension>
+			<SecondaryExtension>f4se</SecondaryExtension>
+		</SaveManager>
 
-		<PrimaryExtension>fos</PrimaryExtension>
-		<SecondaryExtension>f4se</SecondaryExtension>
-	</SaveManager>
+		<ScreenshotsGallery>
+			<Locations>
+				<Entry>$(ActualGameDir)</Entry>
+				<Entry>$(ActualGameDir)\Screenshots</Entry>
+				<Entry>$(ConfigDir)</Entry>
+				<Entry>$(ConfigDir)\Screenshots</Entry>
+				<Entry>$(OverwritesDir)</Entry>
+				<Entry>$(OverwritesDir)\Screenshots</Entry>
+			</Locations>
+		</ScreenshotsGallery>
+	</GameData>
 </Instance>

@@ -183,7 +183,7 @@
 				<Entry ID="ModelsAndTextures">
 					<NexusID>29</NexusID>
 				</Entry>
-				<Entry ID="VisualsAndGraphics">
+				<Entry ID="Graphics">
 					<NexusID>62</NexusID>
 				</Entry>
 				<Entry ID="ENBPresets">

@@ -1,13 +1,14 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxFileItem.h>
+#include "Utility/KWithBitmap.h"
 
 namespace Kortex
 {
 	class IGameMod;
 	class IModDispatcher;
 
-	class FileTreeNode
+	class FileTreeNode: public KWithBitmap
 	{
 		friend class IModDispatcher;
 		friend class IGameMod;
@@ -83,6 +84,7 @@ namespace Kortex
 			const FileTreeNode* m_Parent = nullptr;
 			const IGameMod* m_Mod = nullptr;
 			size_t m_NameHash = 0;
+			KWithBitmap m_Bitmap;
 
 		private:
 			void MakeNull()

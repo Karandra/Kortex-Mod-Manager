@@ -140,20 +140,20 @@ namespace Kortex::VirtualGameFolder
 			{
 				case ColumnID::Name:
 				{
-					wxBitmap bitmap;
-					if (node->IsDirectory())
+					if (!node->HasBitmap())
 					{
-						bitmap = KGetBitmap(KIMG_FOLDER);
-					}
-					else
-					{
-						bitmap = KxShell::GetFileIcon(node->GetFullPath(), true);
+						wxBitmap bitmap = KxShell::GetFileIcon(node->GetFullPath(), true);
+						
+						// Couldn't get bitmap from system, use our own
 						if (!bitmap.IsOk())
 						{
-							bitmap = KGetBitmap(KIMG_DOCUMENT);
+							bitmap = KGetBitmap(node->IsDirectory() ? KIMG_FOLDER : KIMG_DOCUMENT);
 						}
+
+						// That's caching
+						const_cast<FileTreeNode*>(node)->SetBitmap(bitmap);
 					}
-					value = KxDataViewBitmapTextValue(node->GetName(), bitmap);
+					value = KxDataViewBitmapTextValue(node->GetName(), node->GetBitmap());
 					break;
 				}
 				case ColumnID::PartOf:

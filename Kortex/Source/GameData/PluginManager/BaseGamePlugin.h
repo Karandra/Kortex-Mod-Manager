@@ -3,6 +3,11 @@
 #include "IGamePlugin.h"
 #include <KxFramework/KxFileItem.h>
 
+namespace Kortex::ModManager
+{
+	class ModEvent;
+}
+
 namespace Kortex::PluginManager
 {
 	class BaseGamePlugin: public IGamePlugin
@@ -13,6 +18,10 @@ namespace Kortex::PluginManager
 			mutable const StdContentEntry* m_StdContent = nullptr;
 			bool m_IsActive = false;
 
+		private:
+			void Init();
+			void OnModsReoaded(ModManager::ModEvent& event);
+
 		protected:
 			void Create(const wxString& fullPath)
 			{
@@ -21,11 +30,16 @@ namespace Kortex::PluginManager
 			}
 
 		public:
-			BaseGamePlugin() = default;
+			BaseGamePlugin()
+			{
+				Init();
+			}
 			BaseGamePlugin(const wxString& fullPath)
 				:m_FileItem(fullPath)
 			{
+				Init();
 			}
+			~BaseGamePlugin();
 
 		public:
 			bool IsOK() const override

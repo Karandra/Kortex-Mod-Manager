@@ -180,9 +180,9 @@ namespace ObjFuncConst
 {
 	constexpr const auto NONE_STRING = wxS("");
 	constexpr const auto MOD_ACTIVE_STRING = wxS("ModActive");
-	constexpr const auto MOD_INACTIVE_STRING = wxS("ModIncative");
+	constexpr const auto MOD_INACTIVE_STRING = wxS("ModInactive");
 	constexpr const auto PLUGIN_ACTIVE_STRING = wxS("PluginActive");
-	constexpr const auto PLUGIN_INACTIVE_STRING = wxS("PluginIncative");
+	constexpr const auto PLUGIN_INACTIVE_STRING = wxS("PluginInactive");
 	constexpr const auto FILE_EXIST_STRING = wxS("FileExist");
 	constexpr const auto FILE_NOT_EXIST_STRING = wxS("FileNotExist");
 }

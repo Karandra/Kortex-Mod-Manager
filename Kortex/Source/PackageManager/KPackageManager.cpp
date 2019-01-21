@@ -190,7 +190,7 @@ namespace Kortex
 		return modVersion.IsOK() ? modVersion : GetRequirementVersionFromBinaryFile(entry);
 	}
 
-	void KPackageManager::LoadStdRequirements(const KxXMLNode& rootNode)
+	void KPackageManager::LoadRequirements(const KxXMLNode& rootNode)
 	{
 		for (KxXMLNode entryNode = rootNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 		{
@@ -220,7 +220,7 @@ namespace Kortex
 
 	void KPackageManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
-		LoadStdRequirements(managerNode.GetFirstChildElement("Requirements"));
+		LoadRequirements(managerNode.GetFirstChildElement("Requirements"));
 	}
 	void KPackageManager::OnInit()
 	{

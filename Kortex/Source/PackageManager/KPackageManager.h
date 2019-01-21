@@ -39,7 +39,7 @@ namespace Kortex
 			KPPRRequirementsGroup m_StdEntries;
 
 		private:
-			void LoadStdRequirements();
+			void LoadStdRequirements(const KxXMLNode& rootNode);
 
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 			virtual void OnInit() override;

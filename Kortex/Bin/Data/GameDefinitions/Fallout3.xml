@@ -18,27 +18,188 @@
 	</Variables>
 
 	<Network>
-		<NexusID>Fallout3</NexusID>
-		<SteamID>22370</SteamID>
+		<NetworkManager>
+			<NexusID>Fallout3</NexusID>
+			<SteamID>22370</SteamID>
+		</NetworkManager>
 	</Network>
 
-	<Virtualization>
-		<MirroredLocations>
-			<Entry>
-				<Sources>
-					<Entry>$(SavesDir)</Entry>
-					<Entry>$(ConfigDir)</Entry>
-				</Sources>
-				<Target>$(ActualConfigDir)</Target>
-			</Entry>
-			<Entry>
-				<Sources>
-					<Entry>$(ProfileDir)\Plugins</Entry>
-				</Sources>
-				<Target>$SHF(APPLICATIONDATA_LOCAL)\Fallout3</Target>
-			</Entry>
-		</MirroredLocations>
-	</Virtualization>
+	<GameMods>
+		<ModManager>
+			<MirroredLocations>
+				<Entry>
+					<Sources>
+						<Entry>$(SavesDir)</Entry>
+						<Entry>$(ConfigDir)</Entry>
+					</Sources>
+					<Target>$(ActualConfigDir)</Target>
+				</Entry>
+				<Entry>
+					<Sources>
+						<Entry>$(ProfileDir)\Plugins</Entry>
+					</Sources>
+					<Target>$SHF(APPLICATIONDATA_LOCAL)\Fallout3</Target>
+				</Entry>
+			</MirroredLocations>
+		</ModManager>
+		<TagManager>
+			<DefaultTags>
+				<Entry ID="Animation">
+					<NexusID>51</NexusID>
+				</Entry>
+				<Entry ID="Armor">
+					<NexusID>54</NexusID>
+				</Entry>
+				<Entry ID="Clothing">
+					<NexusID>60</NexusID>
+				</Entry>
+				<Entry ID="Jewelry">
+					<NexusID>102</NexusID>
+				</Entry>
+				<Entry ID="Weapons">
+					<NexusID>55</NexusID>
+				</Entry>
+				<Entry ID="Gameplay">
+					<NexusID>24</NexusID>
+				</Entry>
+				<Entry ID="Immersion">
+					<NexusID>78</NexusID>
+				</Entry>
+				<Entry ID="Environment">
+					<NexusID>74</NexusID>
+				</Entry>
+				<Entry ID="SkillsAndLeveling">
+					<NexusID>73</NexusID>
+				</Entry>
+				<Entry ID="GuildsAndFactions">
+					<NexusID>25</NexusID>
+				</Entry>
+				<Entry ID="Stealth">
+					<NexusID>76</NexusID>
+				</Entry>
+				<Entry ID="Combat">
+					<NexusID>77</NexusID>
+				</Entry>
+				<Entry ID="Crafting">
+					<NexusID>100</NexusID>
+				</Entry>
+				<Entry ID="Magic">
+					<NexusID>75</NexusID>
+				</Entry>
+				<Entry ID="MagicGameplay">
+					<NexusID>93</NexusID>
+				</Entry>
+				<Entry ID="BooksAndScrolls">
+					<NexusID>98</NexusID>
+				</Entry>
+				<Entry ID="Alchemy">
+					<NexusID>94</NexusID>
+				</Entry>
+				<Entry ID="Quests">
+					<NexusID>35</NexusID>
+				</Entry>
+				<Entry ID="Buildings">
+					<NexusID>95</NexusID>
+				</Entry>
+				<Entry ID="Settlements">
+					<NexusID>53</NexusID>
+				</Entry>
+				<Entry ID="Mercantiles">
+					<NexusID>69</NexusID>
+				</Entry>
+				<Entry ID="New Lands">
+					<NexusID>30</NexusID>
+				</Entry>
+				<Entry ID="Dungeons">
+					<NexusID>88</NexusID>
+				</Entry>
+				<Entry ID="AbandonedStructures">
+					<NexusID>70</NexusID>
+				</Entry>
+				<Entry ID="Player Homes">
+					<NexusID>67</NexusID>
+				</Entry>
+				<Entry ID="Landscape">
+					<NexusID>58</NexusID>
+				</Entry>
+				<Entry ID="Overhauls">
+					<NexusID>79</NexusID>
+				</Entry>
+				<Entry ID="Conversions">
+					<NexusID>-1</NexusID>
+				</Entry>
+				<Entry ID="Audio">
+					<NexusID>61</NexusID>
+				</Entry>
+				<Entry ID="User Interface">
+					<NexusID>42</NexusID>
+				</Entry>
+				<Entry ID="NPC">
+					<NexusID>33</NexusID>
+				</Entry>
+				<Entry ID="Body">
+					<NexusID>26</NexusID>
+				</Entry>
+				<Entry ID="Face">
+					<NexusID>26</NexusID>
+				</Entry>
+				<Entry ID="Hair">
+					<NexusID>26</NexusID>
+				</Entry>
+				<Entry ID="Races">
+					<NexusID>34</NexusID>
+				</Entry>
+				<Entry ID="Followers">
+					<NexusID>66</NexusID>
+				</Entry>
+				<Entry ID="Creatures">
+					<NexusID>83</NexusID>
+				</Entry>
+				<Entry ID="Mounts">
+					<NexusID>101</NexusID>
+				</Entry>
+				<Entry ID="ModelsAndTextures">
+					<NexusID>29</NexusID>
+				</Entry>
+				<Entry ID="Graphics">
+					<NexusID>62</NexusID>
+				</Entry>
+				<Entry ID="ENBPresets">
+					<NexusID>97</NexusID>
+				</Entry>
+				<Entry ID="Collectables">
+					<NexusID>92</NexusID>
+				</Entry>
+				<Entry ID="ItemsAndObjects">
+					<NexusID>85</NexusID>
+				</Entry>
+				<Entry ID="Cheats">
+					<NexusID>40</NexusID>
+				</Entry>
+				<Entry ID="Fixes">
+					<NexusID>95</NexusID>
+				</Entry>
+				<Entry ID="ScriptExtenderPlugins" RequiresScriptExtender="1">
+					<NexusID>-1</NexusID>
+				</Entry>
+				<Entry ID="Utilities">
+					<NexusID>39</NexusID>
+				</Entry>
+				<Entry ID="Configuration">
+					<NexusID>116</NexusID>
+				</Entry>
+				<Entry ID="Resources">
+					<NexusID>82</NexusID>
+				</Entry>
+				<Entry ID="SaveGames">
+					<NexusID>43</NexusID>
+				</Entry>
+				<Entry ID="Misc">
+					<NexusID>28</NexusID>
+				</Entry>
+			</DefaultTags>
+		</TagManager>
+	</GameMods>
 
 	<ProgramManager>
 		<Programs>
@@ -72,68 +233,124 @@
 		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\GECKPrefs.ini</Entry>
 	</GameConfig>
 
-	<PluginManager InterfaceName="Bethesda" PluginFileFormat="BethesdaSkyrim">
-		<Limit Value="255"/>
+	<GameData>
+		<PluginManager InterfaceName="Bethesda" PluginFileFormat="BethesdaSkyrim">
+			<Limit Value="255"/>
 
-		<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
-		<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
+			<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
+			<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
 
-		<ChangeFileModificationDate>1</ChangeFileModificationDate>
-		<SortByFileModificationDate>0</SortByFileModificationDate>
+			<ChangeFileModificationDate>1</ChangeFileModificationDate>
+			<SortByFileModificationDate>0</SortByFileModificationDate>
 
-		<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
-		<OrderListHeader>
-			<![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
+			<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
+			<OrderListHeader>
+				<![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
 # Please do not modify this file.
 # Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]>
-		</OrderListHeader>
+			</OrderListHeader>
 
-		<SortingTools>
-			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
-				<Command><![CDATA[--game=Fallout3]]></Command>
-			</Entry>
-		</SortingTools>
+			<SortingTools>
+				<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+					<Command><![CDATA[--game=Fallout3]]></Command>
+				</Entry>
+			</SortingTools>
 
-		<LibLoot>
-			<Branch>v0.14</Branch>
-			<Repository>https://github.com/loot/fallout3.git</Repository>
-			<FolderName>Fallout3</FolderName>
-			<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
-		</LibLoot>
+			<LibLoot>
+				<Branch>v0.14</Branch>
+				<Repository>https://github.com/loot/fallout3.git</Repository>
+				<FolderName>Fallout3</FolderName>
+				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
+			</LibLoot>
 
-		<StandardContent MainID="Fallout3.esm">
-			<Entry ID="Fallout3.esm" Name="$(GameShortName)" Logo="Fallout3.png"/>
-			<Entry ID="Anchorage.esm" Name="$(GameShortName): Operation Anchorage" Logo="Anchorage.png"/>
-			<Entry ID="ThePitt.esm" Name="$(GameShortName): The Pitt" Logo="ThePitt.png"/>
-			<Entry ID="BrokenSteel.esm" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
-			<Entry ID="BrokenSteel1.esp" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
-			<Entry ID="BrokenSteel2.esp" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
-			<Entry ID="PointLookout.esm" Name="$(GameShortName): Point Lookout" Logo="PointLookout.png"/>
-			<Entry ID="Zeta.esm" Name="$(GameShortName): Mothership Zeta" Logo="Zeta.png"/>
-		</StandardContent>
-	
-</PluginManager>
+			<StandardContent MainID="Fallout3.esm">
+				<Entry ID="Fallout3.esm" Name="$(GameShortName)" Logo="Fallout3.png"/>
+				<Entry ID="Anchorage.esm" Name="$(GameShortName): Operation Anchorage" Logo="Anchorage.png"/>
+				<Entry ID="ThePitt.esm" Name="$(GameShortName): The Pitt" Logo="ThePitt.png"/>
+				<Entry ID="BrokenSteel.esm" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+				<Entry ID="BrokenSteel1.esp" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+				<Entry ID="BrokenSteel2.esp" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+				<Entry ID="PointLookout.esm" Name="$(GameShortName): Point Lookout" Logo="PointLookout.png"/>
+				<Entry ID="Zeta.esm" Name="$(GameShortName): Mothership Zeta" Logo="Zeta.png"/>
+			</StandardContent>
 
-	<ScreenshotsGallery>
-		<Locations>
-			<Entry>$(ActualGameDir)</Entry>
-			<Entry>$(ActualGameDir)\Screenshots</Entry>
-			<Entry>$(ConfigDir)</Entry>
-			<Entry>$(ConfigDir)\Screenshots</Entry>
-			<Entry>$(OverwritesDir)</Entry>
-			<Entry>$(OverwritesDir)\Screenshots</Entry>
-		</Locations>
-	</ScreenshotsGallery>
+		</PluginManager>
 
-	<SaveManager SaveFileFormat="BethesdaFallout3">
-		<Location>$(SavesDir)\Saves</Location>
-		<FileFilters>
-			<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
-			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
-			<Entry Label="$T(SaveManager.Filter.CoSaves) (*.fose)">*.fose</Entry>
-		</FileFilters>
+		<ScreenshotsGallery>
+			<Locations>
+				<Entry>$(ActualGameDir)</Entry>
+				<Entry>$(ActualGameDir)\Screenshots</Entry>
+				<Entry>$(ConfigDir)</Entry>
+				<Entry>$(ConfigDir)\Screenshots</Entry>
+				<Entry>$(OverwritesDir)</Entry>
+				<Entry>$(OverwritesDir)\Screenshots</Entry>
+			</Locations>
+		</ScreenshotsGallery>
 
-		<PrimaryExtension>fos</PrimaryExtension>
-		<SecondaryExtension>fose</SecondaryExtension>
-	</SaveManager>
+		<SaveManager SaveFileFormat="BethesdaFallout3">
+			<Location>$(SavesDir)\Saves</Location>
+			<FileFilters>
+				<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
+				<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
+				<Entry Label="$T(SaveManager.Filter.CoSaves) (*.fose)">*.fose</Entry>
+			</FileFilters>
+
+			<PrimaryExtension>fos</PrimaryExtension>
+			<SecondaryExtension>fose</SecondaryExtension>
+		</SaveManager>
+	</GameData>
+
+	<Packages>
+		<PackageManager>
+			<Requirements>
+				<!-- General -->
+				<Entry ID="Fallout3" Category="$T(PackageManager.ReqCategory.General)">
+					<Name>$(GameName)</Name>
+					<Object Function="FileExist">Fallout3.exe</Object>
+					<Version Function="GTEQ">1.7.0.3</Version>
+				</Entry>
+				<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+					<Name>$(GameShortName) Script Extender</Name>
+					<Object Function="FileExist">FOSE_Loader.exe</Object>
+					<Version Function="GTEQ">0.1.2.2</Version>
+				</Entry>
+
+				<!-- DLC -->
+				<Entry ID="DLC-Anchorage" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: Operation Anchorage</Name>
+					<Object Function="PluginActive">Anchorage.esm</Object>
+				</Entry>
+				<Entry ID="DLC-ThePitt" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: The Pitt</Name>
+					<Object Function="PluginActive">ThePitt.esm</Object>
+				</Entry>
+				<Entry ID="DLC-BrokenSteel" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: Broken Steel</Name>
+					<Object Function="PluginActive">BrokenSteel.esm</Object>
+				</Entry>
+				<Entry ID="DLC-PointLookout" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: Point Lookout</Name>
+					<Object Function="PluginActive">PointLookout.esm</Object>
+				</Entry>
+				<Entry ID="DLC-Zeta" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: Mothership Zeta</Name>
+					<Object Function="PluginActive">Zeta.esm</Object>
+				</Entry>
+
+				<!-- Body replacers -->
+				<Entry ID="Type3" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+					<Name>Dimonized Type3 Female Body</Name>
+					<RequiredState>ModActive</RequiredState>
+				</Entry>
+				<Entry ID="T6M" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+					<Name>Type 6 Modification Body</Name>
+					<RequiredState>ModActive</RequiredState>
+				</Entry>
+				<Entry ID="BreezeBody" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+					<Name>Breezes FO3 Males</Name>
+					<RequiredState>ModActive</RequiredState>
+				</Entry>
+			</Requirements>
+		</PackageManager>
+	</Packages>
 </Instance>

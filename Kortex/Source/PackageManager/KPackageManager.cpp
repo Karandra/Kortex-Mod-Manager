@@ -190,13 +190,9 @@ namespace Kortex
 		return modVersion.IsOK() ? modVersion : GetRequirementVersionFromBinaryFile(entry);
 	}
 
-	void KPackageManager::LoadStdRequirements()
+	void KPackageManager::LoadStdRequirements(const KxXMLNode& rootNode)
 	{
-		wxString stdReqsFilePath = KxFormat("%1\\PackageManager\\Requirements\\%2.xml").arg(IApplication::GetInstance()->GetDataFolder()).arg(IGameInstance::GetActive()->GetGameID());
-		KxFileStream file(stdReqsFilePath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-		KxXMLDocument xml(file);
-
-		for (KxXMLNode entryNode = xml.GetFirstChildElement("Requirements").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
+		for (KxXMLNode entryNode = rootNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 		{
 			auto& entry = m_StdEntries.GetEntries().emplace_back(new KPPRRequirementEntry(KPPR_TYPE_SYSTEM));
 			entry->SetID(KVarExp(entryNode.GetAttribute("ID")));
@@ -224,7 +220,7 @@ namespace Kortex
 
 	void KPackageManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
-		LoadStdRequirements();
+		LoadStdRequirements(managerNode.GetFirstChildElement("Requirements"));
 	}
 	void KPackageManager::OnInit()
 	{

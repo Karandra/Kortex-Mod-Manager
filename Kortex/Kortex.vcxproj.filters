@@ -7,23 +7,11 @@
     <Filter Include="Misc">
       <UniqueIdentifier>{e71fb8a4-c382-4b81-8669-76d39e1ed34b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Misc\PackageManager">
-      <UniqueIdentifier>{0cf9efe5-6cc5-49b2-ae5f-1c86f5aa91d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc\ModManager">
-      <UniqueIdentifier>{be24eb37-bb5b-47a8-9e81-889e8767b8fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Misc\ConfigManager">
       <UniqueIdentifier>{cafe45f4-7e48-45e5-8f88-8cdc8457cb09}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc\ConfigManager\Profiles">
       <UniqueIdentifier>{1c0fb599-cfe9-4c82-a540-469bdfe10c7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc\PackageManager\Requirements">
-      <UniqueIdentifier>{3683d6cd-5853-496f-a848-3ac9328753f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc\PackageManager\Project templates">
-      <UniqueIdentifier>{f7b61e8f-7f53-44a7-883d-dfeb40c92278}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc\Translation">
       <UniqueIdentifier>{643fe7f0-efc0-4c29-850b-62cd63e54149}</UniqueIdentifier>
@@ -1904,33 +1892,6 @@
     <Xml Include="Bin\Data\ConfigManager\Profiles\Fallout4.xml">
       <Filter>Misc\ConfigManager\Profiles</Filter>
     </Xml>
-    <Xml Include="Bin\Data\PackageManager\Requirements\Skyrim.xml">
-      <Filter>Misc\PackageManager\Requirements</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\PackageManager\Requirements\SkyrimSE.xml">
-      <Filter>Misc\PackageManager\Requirements</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\PackageManager\Requirements\Oblivion.xml">
-      <Filter>Misc\PackageManager\Requirements</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\PackageManager\Requirements\Morrowind.xml">
-      <Filter>Misc\PackageManager\Requirements</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\PackageManager\Requirements\Fallout4.xml">
-      <Filter>Misc\PackageManager\Requirements</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\PackageManager\Requirements\FalloutNV.xml">
-      <Filter>Misc\PackageManager\Requirements</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\PackageManager\Requirements\Fallout3.xml">
-      <Filter>Misc\PackageManager\Requirements</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\PackageManager\Requirements\Sacred2.xml">
-      <Filter>Misc\PackageManager\Requirements</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ModManager\DefaultTags.xml">
-      <Filter>Misc\ModManager</Filter>
-    </Xml>
     <Xml Include="Bin\Data\ConfigManager\Profiles\FalloutNV.xml">
       <Filter>Misc\ConfigManager\Profiles</Filter>
     </Xml>
@@ -1985,11 +1946,6 @@
     <Xml Include="Bin\Data\GameDefinitions\SkyrimVR.xml">
       <Filter>Misc\Game Definitions</Filter>
     </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Bin\Data\PackageCreator\Templates\Default.kmpproj">
-      <Filter>Misc\PackageManager\Project templates</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\ChangeLog EN.txt">

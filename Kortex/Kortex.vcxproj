@@ -597,24 +597,12 @@
     <Xml Include="Bin\Data\GameDefinitions\Skyrim.xml" />
     <Xml Include="Bin\Data\GameDefinitions\SkyrimSE.xml" />
     <Xml Include="Bin\Data\GameDefinitions\SkyrimVR.xml" />
-    <Xml Include="Bin\Data\ModManager\DefaultTags.xml" />
-    <Xml Include="Bin\Data\PackageManager\Requirements\Fallout3.xml" />
-    <Xml Include="Bin\Data\PackageManager\Requirements\Fallout4.xml" />
-    <Xml Include="Bin\Data\PackageManager\Requirements\FalloutNV.xml" />
-    <Xml Include="Bin\Data\PackageManager\Requirements\Morrowind.xml" />
-    <Xml Include="Bin\Data\PackageManager\Requirements\Oblivion.xml" />
-    <Xml Include="Bin\Data\PackageManager\Requirements\Sacred2.xml" />
-    <Xml Include="Bin\Data\PackageManager\Requirements\Skyrim.xml" />
-    <Xml Include="Bin\Data\PackageManager\Requirements\SkyrimSE.xml" />
     <Xml Include="Bin\Data\Translation\en-US.xml">
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Bin\Data\Translation\ru-RU.xml">
       <SubType>Designer</SubType>
     </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Bin\Data\PackageCreator\Templates\Default.kmpproj" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Include\Kortex\Git\LatestCommit.txt" />

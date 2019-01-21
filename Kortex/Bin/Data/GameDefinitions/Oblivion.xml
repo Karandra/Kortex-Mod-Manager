@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance GameID="Oblivion" SortOrder="12">
-	<Name Short="Oblivion">The Elder Scrolls IV: Oblivion</Name>
+<Definition GameID="Oblivion" SortOrder="12">
+	<Name ShortName="Oblivion">The Elder Scrolls IV: Oblivion</Name>
 	
 	<Variables>
 		<!--Required-->
@@ -570,4 +570,4 @@
 			</Requirements>
 		</PackageManager>
 	</Packages>
-</Instance>
+</Definition>

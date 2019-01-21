@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance GameID="Sacred2" SortOrder="31">
-	<Name Short="Sacred 2">Sacred 2: Fallen Angel</Name>
+<Definition GameID="Sacred2" SortOrder="31">
+	<Name ShortName="Sacred 2">Sacred 2: Fallen Angel</Name>
 	
 	<Variables>
 		<!--Required-->
@@ -254,4 +254,4 @@
 			</Requirements>
 		</PackageManager>
 	</Packages>
-</Instance>
+</Definition>

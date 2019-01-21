@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance GameID="Fallout4VR" SortOrder="23">
-	<Name Short="Fallout 4 - VR">Fallout 4 - VR Edition</Name>
+<Definition GameID="Fallout4VR" SortOrder="23">
+	<Name ShortName="Fallout 4 - VR">Fallout 4 - VR Edition</Name>
 
 	<Variables>
 		<!--Required-->
@@ -240,4 +240,4 @@
 			</Requirements>
 		</PackageManager>
 	</Packages>
-</Instance>
+</Definition>

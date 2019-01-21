@@ -10,7 +10,7 @@ namespace Kortex::GameInstance
 {
 	void InstanceModuleLoader::LoadGlobalModule(IModule& module, const KxXMLDocument& instanceConfig)
 	{
-		LoadModule(module, instanceConfig.GetFirstChildElement("Instance").GetFirstChildElement(module.GetModuleInfo().GetID()));
+		LoadModule(module, instanceConfig.GetFirstChildElement("Definition").GetFirstChildElement(module.GetModuleInfo().GetID()));
 	}
 	void InstanceModuleLoader::LoadModule(IModule& module, const KxXMLNode& instanceNode)
 	{

@@ -39,7 +39,7 @@ namespace Kortex::GameInstance
 		KxXMLDocument templateConfig(templateConfigStream);
 
 		// Load ID and SortOrder
-		KxXMLNode node = templateConfig.QueryElement("Instance");
+		KxXMLNode node = templateConfig.QueryElement("Definition");
 		m_GameID = node.GetAttribute("GameID");
 		if (m_GameID.IsOK())
 		{
@@ -48,7 +48,7 @@ namespace Kortex::GameInstance
 			// Load name
 			node = node.QueryElement("Name");
 			m_GameName = node.GetValue();
-			m_GameShortName = node.GetAttribute("Short");
+			m_GameShortName = node.GetAttribute("ShortName");
 
 			// Set base variables
 			m_Variables.SetVariable(wxS("GameID"), VariableValue(m_GameID));
@@ -402,7 +402,7 @@ namespace Kortex::GameInstance
 		};
 		
 		// Load template variables
-		LoadVariables(instanceConfig.QueryElement("Instance/Variables"), false);
+		LoadVariables(instanceConfig.QueryElement("Definition/Variables"), false);
 
 		// Override any variables from file
 		LoadVariables(m_Config.QueryElement("Instance/Variables"), true);

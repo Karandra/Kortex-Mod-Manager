@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance GameID="Skyrim" SortOrder="13">
-	<Name Short="Skyrim">The Elder Scrolls V: Skyrim</Name>
+<Definition GameID="Skyrim" SortOrder="13">
+	<Name ShortName="Skyrim">The Elder Scrolls V: Skyrim</Name>
 
 	<Variables>
 		<!--Required-->
@@ -651,4 +651,4 @@
 			</Requirements>
 		</PackageManager>
 	</Packages>
-</Instance>
+</Definition>

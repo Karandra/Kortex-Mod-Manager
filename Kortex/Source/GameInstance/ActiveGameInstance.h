@@ -24,7 +24,7 @@ namespace Kortex::GameInstance
 			void LoadModule(IModule& module, const KxXMLNode& node);
 			template<class T, bool isAlwaysEnabled = false> std::unique_ptr<T> InitModule(const KxXMLDocument& instanceConfig)
 			{
-				const KxXMLNode node = instanceConfig.GetFirstChildElement("Instance").GetFirstChildElement(T::GetModuleTypeInfo().GetID());
+				const KxXMLNode node = instanceConfig.GetFirstChildElement("Definition").GetFirstChildElement(T::GetModuleTypeInfo().GetID());
 				if (isAlwaysEnabled || node.GetAttributeBool("Enabled", true))
 				{
 					auto module = std::make_unique<T>();

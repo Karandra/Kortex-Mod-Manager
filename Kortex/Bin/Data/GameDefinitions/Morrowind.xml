@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance GameID="Morrowind" SortOrder="11">
-	<Name Short="Morrowind">The Elder Scrolls III: Morrowind</Name>
+<Definition GameID="Morrowind" SortOrder="11">
+	<Name ShortName="Morrowind">The Elder Scrolls III: Morrowind</Name>
 	
 	<Variables>
 		<!--Required-->
@@ -320,4 +320,4 @@
 			</Requirements>
 		</PackageManager>
 	</Packages>
-</Instance>
+</Definition>

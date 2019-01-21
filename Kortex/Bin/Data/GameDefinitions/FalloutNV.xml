@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance GameID="FalloutNV" SortOrder="22">
-	<Name Short="Fallout NV">Fallout: New Vegas</Name>
+<Definition GameID="FalloutNV" SortOrder="22">
+	<Name ShortName="Fallout NV">Fallout: New Vegas</Name>
 
 	<Variables>
 		<!--Required-->
@@ -283,4 +283,4 @@
 			</Requirements>
 		</PackageManager>
 	</Packages>
-</Instance>
+</Definition>

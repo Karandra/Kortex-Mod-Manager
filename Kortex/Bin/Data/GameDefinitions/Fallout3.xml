@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance GameID="Fallout3" SortOrder="21">
+<Definition GameID="Fallout3" SortOrder="21">
 	<Name>Fallout 3</Name>
 
 	<Variables>
@@ -353,4 +353,4 @@
 			</Requirements>
 		</PackageManager>
 	</Packages>
-</Instance>
+</Definition>

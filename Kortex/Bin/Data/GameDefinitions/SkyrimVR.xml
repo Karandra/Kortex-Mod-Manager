@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Instance GameID="SkyrimVR" SortOrder="13">
-	<Name Short="Skyrim VR">The Elder Scrolls V: Skyrim - VR Edition</Name>
+<Definition GameID="SkyrimVR" SortOrder="13">
+	<Name ShortName="Skyrim VR">The Elder Scrolls V: Skyrim - VR Edition</Name>
 	
 	<Variables>
 		<!--Required-->
@@ -532,4 +532,4 @@
 			</Requirements>
 		</PackageManager>
 	</Packages>
-</Instance>
+</Definition>

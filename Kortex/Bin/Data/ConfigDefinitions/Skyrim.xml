@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definition>
+	<DataTypes>
+		<Entry Type="bool">
+			<Input As="int|bool"/>
+			<Output As="int"/>
+		</Entry>
+		<Entry Type="int">
+			<Input As="int"/>
+			<Output As="int"/>
+		</Entry>
+		<Entry Type="float">
+			<Input As="float"/>
+			<Output As="float" Precision="4"/>
+		</Entry>
+	</DataTypes>
+	<TypeDetection>
+		<HungarianNotation>
+			<Entry Prefix="i">int32</Entry>
+			<Entry Prefix="u">uint32</Entry>
+			<Entry Prefix="f">float32</Entry>
+			<Entry Prefix="d">float64</Entry>
+			<Entry Prefix="b">bool</Entry>
+			<Entry Prefix="s">string</Entry>
+			<Entry Prefix="S">string</Entry>
+			<Entry Prefix="r">string</Entry>
+		</HungarianNotation>
+	</TypeDetection>
+	
+	<Groups Format="INI" TypeDetectionMethod="HungarianNotation">
+		<Group ID="Game">
+			<!-- Graphics -->
+			<Entry Category="Game/Graphics" Path="Display" Name="iPresentInterval" Type="bool"></Entry>
+			<Entry Category="Game/Graphics" Path="Imagespace" Name="bDoRadialBlur" Type="bool"></Entry>
+			<Entry Category="Game/Graphics" Path="General" Name="bDisableAllGore" Type="bool"></Entry>
+		</Group>
+		<Group ID="GamePrefs">
+			<!-- Graphics -->
+			<Entry Category="Game/Graphics" Path="Display" Name="bFull Screen" Type="bool"></Entry>
+			<Entry Category="Game/Graphics" Path="Display" Name="bFXAAEnabled" Type="bool"></Entry>
+		</Group>
+
+		<Group ID="Editor">
+			<Entry Category="Editor" Path="General" Name="sLanguage" Type="string">
+				<SampleValues Sort="1">
+					<Entry Label="$T(GameConfig.Samples.Language.RUSSIAN)">RUSSIAN</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.ENGLISH)">ENGLISH</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.GERMAN)">GERMAN</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.FRENCH)">FRENCH</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.CZECH)">CZECH</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.ITALIAN)">ITALIAN</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.POLISH)">POLISH</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.SPANISH)">SPANISH</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.CHINESE)">CHINESE</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.DANISH)">DANISH</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.FINNISH)">FINNISH</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.GREEK)">GREEK</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.JAPANESE)">JAPANESE</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.NORWEGIAN)">NORWEGIAN</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.PORTUGUESE)">PORTUGUESE</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.SWEDISH)">SWEDISH</Entry>
+					<Entry Label="$T(GameConfig.Samples.Language.TURKISH)">TURKISH</Entry>
+				</SampleValues>
+			</Entry>
+			<Entry Category="Editor/Messages" Path="MESSAGES" Name="bSkipInitializationFlows" Type="bool"></Entry>
+			<Entry Category="Editor/Messages" Path="MESSAGES" Name="bSkipProgramFlows" Type="bool"></Entry>
+			<Entry Category="Editor/Messages" Path="MESSAGES" Name="bAllowYesToAll" Type="bool"></Entry>
+			<Entry Category="Editor/Messages" Path="MESSAGES" Name="bBlockMessageBoxes" Type="bool"></Entry>
+			<Entry Category="Editor/Messages" Path="MESSAGES" Name="iFileLogging" Type="int32"></Entry>
+
+			<Entry Category="Editor" Path="SpellCheck" Name="bSpellCheckEnabled" Type="bool"></Entry>
+		</Group>
+		<Group ID="EditorPrefs">
+			
+		</Group>
+	</Groups>
+</Definition>

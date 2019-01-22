@@ -1910,6 +1910,9 @@
     <Xml Include="Bin\Data\GameDefinitions\SkyrimVR.xml">
       <Filter>Misc\Game Definitions</Filter>
     </Xml>
+    <Xml Include="Bin\Data\ConfigDefinitions\Skyrim.xml">
+      <Filter>Misc\ConfigDefinitions</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\ChangeLog EN.txt">

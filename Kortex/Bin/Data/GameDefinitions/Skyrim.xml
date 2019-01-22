@@ -52,11 +52,17 @@
 		</ProgramManager>
 	</Programs>
 
-	<GameConfig EnableENB="1">
-		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Skyrim.ini</Entry>
-		<Entry ID="1" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\SkyrimPrefs.ini</Entry>
-		<Entry ID="1000" Format="INI" TypeDetectionMethod="HungarianNotation">SkyrimEditor.ini</Entry>
-		<Entry ID="1001" Format="INI" TypeDetectionMethod="HungarianNotation">SkyrimEditorPrefs.ini</Entry>
+	<GameConfig>
+		<Definitions>
+			<Definition ID="Skyrim">
+				<Groups>
+					<Group ID="Game" FilePath="$(ConfigDir)\Skyrim.ini"/>
+					<Group ID="GamePrefs" FilePath="$(ConfigDir)\SkyrimPrefs.ini"/>
+					<Group ID="Editor" FilePath="SkyrimEditor.ini"/>
+					<Group ID="EditorPrefs" FilePath="SkyrimEditorPrefs.ini"/>
+				</Groups>
+			</Definition>
+		</Definitions>
 	</GameConfig>
 
 	<GameMods>

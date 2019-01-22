@@ -7,12 +7,6 @@
     <Filter Include="Misc">
       <UniqueIdentifier>{e71fb8a4-c382-4b81-8669-76d39e1ed34b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Misc\ConfigManager">
-      <UniqueIdentifier>{cafe45f4-7e48-45e5-8f88-8cdc8457cb09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc\ConfigManager\Profiles">
-      <UniqueIdentifier>{1c0fb599-cfe9-4c82-a540-469bdfe10c7f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Misc\Translation">
       <UniqueIdentifier>{643fe7f0-efc0-4c29-850b-62cd63e54149}</UniqueIdentifier>
     </Filter>
@@ -324,6 +318,9 @@
     </Filter>
     <Filter Include="Code\Headers\GameData\PluginManager\LibLoot">
       <UniqueIdentifier>{662a5b88-3f29-4336-bc6a-74a3408927e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc\ConfigDefinitions">
+      <UniqueIdentifier>{cafe45f4-7e48-45e5-8f88-8cdc8457cb09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1877,39 +1874,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Bin\Data\ConfigManager\ENB.xml">
-      <Filter>Misc\ConfigManager</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\VirtualKeys.xml">
-      <Filter>Misc\ConfigManager</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Profiles\Skyrim.xml">
-      <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Settings.xml">
-      <Filter>Misc\ConfigManager</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Profiles\Fallout4.xml">
-      <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Profiles\FalloutNV.xml">
-      <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Profiles\Morrowind.xml">
-      <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Profiles\Oblivion.xml">
-      <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Profiles\Sacred2.xml">
-      <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Profiles\SkyrimSE.xml">
-      <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\ConfigManager\Profiles\Fallout3.xml">
-      <Filter>Misc\ConfigManager\Profiles</Filter>
-    </Xml>
     <Xml Include="Bin\Data\Translation\en-US.xml">
       <Filter>Misc\Translation</Filter>
     </Xml>

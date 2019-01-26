@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameConfigModule.h"
+#include <Kortex/GameConfig.hpp>
 
 namespace Kortex
 {
@@ -16,6 +17,7 @@ namespace Kortex
 	}
 	void GameConfigModule::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)
 	{
+		m_GameConfigManager = CreateManagerIfEnabled<GameConfig::DefaultGameConfigManager>(node);
 	}
 
 	GameConfigModule::GameConfigModule()
@@ -25,6 +27,6 @@ namespace Kortex
 
 	IModule::ManagerRefVector GameConfigModule::GetManagers()
 	{
-		return {};
+		return ToManagersList(m_GameConfigManager);
 	}
 }

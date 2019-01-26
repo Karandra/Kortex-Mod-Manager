@@ -322,6 +322,18 @@
     <Filter Include="Misc\ConfigDefinitions">
       <UniqueIdentifier>{cafe45f4-7e48-45e5-8f88-8cdc8457cb09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\GameConfig">
+      <UniqueIdentifier>{67adfd80-5134-413c-9269-79e037903bd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\GameConfig">
+      <UniqueIdentifier>{39d97edc-8536-4db1-ba52-08c3a498f1a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\GameConfig\ConfigManger">
+      <UniqueIdentifier>{48eb0151-affe-41bf-825a-37acd492bf6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\GameConfig\ConfigManger">
+      <UniqueIdentifier>{a9415759-d16c-4b15-9583-65f5841112fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -965,6 +977,18 @@
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\LibLoot\LibLoot.cpp">
       <Filter>Code\Source\GameData\PluginManager\LibLoot</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\GameConfigModule.cpp">
+      <Filter>Code\Source\GameConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\IConfigManager.cpp">
+      <Filter>Code\Source\GameConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\IGameConfigManager.cpp">
+      <Filter>Code\Source\GameConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1831,6 +1855,24 @@
     </ClInclude>
     <ClInclude Include="Source\GameData\PluginManager\LibLoot\LibLoot.h">
       <Filter>Code\Headers\GameData\PluginManager\LibLoot</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\GameConfigModule.h">
+      <Filter>Code\Headers\GameConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\IConfigManager.h">
+      <Filter>Code\Headers\GameConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\IGameConfigManager.h">
+      <Filter>Code\Headers\GameConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\Common\GameConfig.hpp">
+      <Filter>Code\Include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\GameConfig.hpp">
+      <Filter>Code\Include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

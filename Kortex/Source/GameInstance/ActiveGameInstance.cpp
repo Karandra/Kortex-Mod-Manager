@@ -5,6 +5,7 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/Common/GameData.hpp>
+#include <Kortex/Common/GameConfig.hpp>
 
 namespace Kortex::GameInstance
 {
@@ -37,6 +38,7 @@ namespace Kortex::GameInstance
 
 		// Load instance modules
 		m_GameDataModule = InitModule<Kortex::GameDataModule>(instanceConfig);
+		m_GameConfigModule = InitModule<Kortex::GameConfigModule>(instanceConfig);
 	}
 	void ActiveGameInstance::InitVariables(const IGameProfile& profile)
 	{

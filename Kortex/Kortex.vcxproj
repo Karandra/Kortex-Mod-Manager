@@ -86,6 +86,10 @@
     <ClCompile Include="Source\Events\ProfileEvent.cpp" />
     <ClCompile Include="Source\Events\PluginEvent.cpp" />
     <ClCompile Include="Source\Events\SaveEvent.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.cpp" />
+    <ClCompile Include="Source\GameConfig\GameConfigModule.cpp" />
+    <ClCompile Include="Source\GameConfig\IConfigManager.cpp" />
+    <ClCompile Include="Source\GameConfig\IGameConfigManager.cpp" />
     <ClCompile Include="Source\GameData\GameDataModule.cpp" />
     <ClCompile Include="Source\GameData\IGameSave.cpp" />
     <ClCompile Include="Source\GameData\ISaveManager.cpp" />
@@ -281,6 +285,7 @@
     <ClInclude Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.h" />
     <ClInclude Include="Include\Kortex\Application.hpp" />
     <ClInclude Include="Include\Kortex\ApplicationOptions.hpp" />
+    <ClInclude Include="Include\Kortex\Common\GameConfig.hpp" />
     <ClInclude Include="Include\Kortex\Common\GameData.hpp" />
     <ClInclude Include="Include\Kortex\Common\GameMods.hpp" />
     <ClInclude Include="Include\Kortex\Common\Network.hpp" />
@@ -289,6 +294,7 @@
     <ClInclude Include="Include\Kortex\Core.hpp" />
     <ClInclude Include="Include\Kortex\DownloadManager.hpp" />
     <ClInclude Include="Include\Kortex\Events.hpp" />
+    <ClInclude Include="Include\Kortex\GameConfig.hpp" />
     <ClInclude Include="Include\Kortex\GameInstance.hpp" />
     <ClInclude Include="Include\Kortex\Git\Constants.h" />
     <ClInclude Include="Include\Kortex\ModImporter.hpp" />
@@ -347,6 +353,10 @@
     <ClInclude Include="Source\Events\ProfileEvent.h" />
     <ClInclude Include="Source\Events\PluginEvent.h" />
     <ClInclude Include="Source\Events\SaveEvent.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.h" />
+    <ClInclude Include="Source\GameConfig\GameConfigModule.h" />
+    <ClInclude Include="Source\GameConfig\IConfigManager.h" />
+    <ClInclude Include="Source\GameConfig\IGameConfigManager.h" />
     <ClInclude Include="Source\GameData\GameDataModule.h" />
     <ClInclude Include="Source\GameData\IGameSave.h" />
     <ClInclude Include="Source\GameData\ISaveManager.h" />

@@ -5,6 +5,8 @@
 
 namespace Kortex
 {
+	class IGameConfigManager;
+
 	namespace Internal
 	{
 		extern const SimpleModuleInfo GameConfigModuleTypeInfo;
@@ -17,7 +19,7 @@ namespace Kortex
 		friend class KMainWindow;
 
 		private:
-			//std::unique_ptr<INetworkManager> m_NetworkManager;
+			std::unique_ptr<IGameConfigManager> m_GameConfigManager;
 
 		private:
 			virtual void OnInit() override;

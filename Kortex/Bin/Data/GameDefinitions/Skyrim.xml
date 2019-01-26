@@ -52,18 +52,20 @@
 		</ProgramManager>
 	</Programs>
 
-	<GameConfig>
-		<Definitions>
-			<Definition ID="Skyrim">
-				<Groups>
-					<Group ID="Game" FilePath="$(ConfigDir)\Skyrim.ini"/>
-					<Group ID="GamePrefs" FilePath="$(ConfigDir)\SkyrimPrefs.ini"/>
-					<Group ID="Editor" FilePath="SkyrimEditor.ini"/>
-					<Group ID="EditorPrefs" FilePath="SkyrimEditorPrefs.ini"/>
-				</Groups>
-			</Definition>
-		</Definitions>
-	</GameConfig>
+	<GameConfigModule>
+		<GameConfigManager>
+			<Definitions>
+				<Definition ID="Skyrim">
+					<Groups>
+						<Group ID="Game" FilePath="$(ConfigDir)\Skyrim.ini"/>
+						<Group ID="GamePrefs" FilePath="$(ConfigDir)\SkyrimPrefs.ini"/>
+						<Group ID="Editor" FilePath="SkyrimEditor.ini"/>
+						<Group ID="EditorPrefs" FilePath="SkyrimEditorPrefs.ini"/>
+					</Groups>
+				</Definition>
+			</Definitions>
+		</GameConfigManager>
+	</GameConfigModule>
 
 	<GameMods>
 		<ModManager>

@@ -6,10 +6,11 @@ namespace Kortex
 {
 	class IModule;
 	class IManager;
-
 	class IGameProfile;
 	class IGameInstance;
+
 	class GameDataModule;
+	class GameConfigModule;
 }
 
 namespace Kortex::GameInstance
@@ -48,6 +49,7 @@ namespace Kortex::GameInstance
 			wxString m_CurrentProfileID;
 		
 			std::unique_ptr<Kortex::GameDataModule> m_GameDataModule;
+			std::unique_ptr<Kortex::GameConfigModule> m_GameConfigModule;
 
 		protected:
 			void InitModulesConfig(const KxXMLDocument& instanceConfig);

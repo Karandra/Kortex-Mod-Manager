@@ -10,20 +10,20 @@
 			<Output As="int"/>
 		</Entry>
 		<Entry Type="float">
-			<Input As="float"/>
+			<Input As="int|float"/>
 			<Output As="float" Precision="4"/>
 		</Entry>
 	</DataTypes>
 	<TypeDetection>
 		<HungarianNotation>
-			<Entry Prefix="i">int32</Entry>
-			<Entry Prefix="u">uint32</Entry>
-			<Entry Prefix="f">float32</Entry>
-			<Entry Prefix="d">float64</Entry>
-			<Entry Prefix="b">bool</Entry>
-			<Entry Prefix="s">string</Entry>
-			<Entry Prefix="S">string</Entry>
-			<Entry Prefix="r">string</Entry>
+			<Entry Prefix="i" Type="int"/>
+			<Entry Prefix="u" Type="uint"/>
+			<Entry Prefix="f" Type="float32"/>
+			<Entry Prefix="d" Type="float64"/>
+			<Entry Prefix="b" Type="bool"/>
+			<Entry Prefix="s" Type="string"/>
+			<Entry Prefix="S" Type="string"/>
+			<Entry Prefix="r" Type="string"/>
 		</HungarianNotation>
 	</TypeDetection>
 	

@@ -20,7 +20,7 @@ namespace Kortex
 	};
 
 	class INetworkManager:
-		public ManagerWithTypeInfo<IManager, SimpleManagerInfo, NetworkManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, NetworkManager::Internal::TypeInfo>,
 		public KxSingletonPtr<INetworkManager>
 	{
 		friend class KMainWindow;

@@ -20,7 +20,7 @@ namespace Kortex
 	}
 
 	class IModManager:
-		public ManagerWithTypeInfo<IManager, SimpleManagerInfo, ModManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, ModManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IModManager>
 	{
 		friend class IGameMod;

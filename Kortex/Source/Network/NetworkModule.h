@@ -22,7 +22,7 @@ namespace Kortex
 	class IDownloadManager;
 
 	class NetworkModule:
-		public ModuleWithTypeInfo<IModule, SimpleModuleInfo, Internal::NetworkModuleTypeInfo>,
+		public ModuleWithTypeInfo<IModule, Internal::NetworkModuleTypeInfo>,
 		public KxSingletonPtr<NetworkModule>
 	{
 		friend class KMainWindow;

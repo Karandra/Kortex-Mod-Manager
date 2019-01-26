@@ -18,7 +18,7 @@ namespace Kortex
 	}
 
 	class IProgramManager:
-		public ManagerWithTypeInfo<IManager, SimpleManagerInfo, ProgramManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, ProgramManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IProgramManager>
 	{
 		friend class KMainWindow;

@@ -16,7 +16,7 @@ namespace Kortex
 
 	class IGameSave;
 	class ISaveManager:
-		public ManagerWithTypeInfo<IPluggableManager, SimpleManagerInfo, SaveManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IPluggableManager, SaveManager::Internal::TypeInfo>,
 		public KxSingletonPtr<ISaveManager>
 	{
 		public:

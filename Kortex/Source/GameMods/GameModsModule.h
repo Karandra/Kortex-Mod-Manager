@@ -15,7 +15,7 @@ namespace Kortex
 	class IModStatistics;
 
 	class GameModsModule:
-		public ModuleWithTypeInfo<IModule, SimpleModuleInfo, Internal::GameModsTypeInfo>,
+		public ModuleWithTypeInfo<IModule, Internal::GameModsTypeInfo>,
 		public KxSingletonPtr<GameModsModule>
 	{
 		private:

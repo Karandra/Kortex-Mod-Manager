@@ -14,7 +14,7 @@ namespace Kortex
 	class IGameMod;
 
 	class IModTagManager:
-		public ManagerWithTypeInfo<IManager, SimpleManagerInfo, ModTagManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, ModTagManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IModTagManager>
 	{
 		public:

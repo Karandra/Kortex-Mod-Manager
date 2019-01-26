@@ -52,7 +52,7 @@ namespace Kortex::PluginManager
 namespace Kortex
 {
 	class IPluginManager:
-		public ManagerWithTypeInfo<IPluggableManager, SimpleManagerInfo, PluginManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IPluggableManager, PluginManager::Internal::TypeInfo>,
 		public RTTI::IInterface<IPluginManager>,
 		public KxSingletonPtr<IPluginManager>
 	{

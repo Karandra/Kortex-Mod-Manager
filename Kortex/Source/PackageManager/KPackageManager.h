@@ -17,7 +17,7 @@ namespace Kortex
 	}
 
 	class KPackageManager:
-		public ManagerWithTypeInfo<IManager, SimpleManagerInfo, PackageManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, PackageManager::Internal::TypeInfo>,
 		public KxSingletonPtr<KPackageManager>
 	{
 		friend class KPackageModule;
@@ -80,7 +80,7 @@ namespace Kortex
 	};
 
 	class KPackageModule:
-		public ModuleWithTypeInfo<IModule, SimpleModuleInfo, Internal::PackagesModuleTypeInfo>,
+		public ModuleWithTypeInfo<IModule, Internal::PackagesModuleTypeInfo>,
 		public KxSingletonPtr<KPackageModule>
 	{
 		private:

@@ -12,7 +12,7 @@ namespace Kortex
 	}
 
 	class IDownloadManager:
-		public ManagerWithTypeInfo<IPluggableManager, SimpleManagerInfo, DownloadManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IPluggableManager, DownloadManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IDownloadManager>,
 		public RTTI::IInterface<IDownloadManager>
 	{

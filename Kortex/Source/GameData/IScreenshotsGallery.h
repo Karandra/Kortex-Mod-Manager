@@ -16,7 +16,7 @@ namespace Kortex
 	}
 
 	class IScreenshotsGallery:
-		public ManagerWithTypeInfo<IPluggableManager, SimpleManagerInfo, ScreenshotsGallery::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IPluggableManager, ScreenshotsGallery::Internal::TypeInfo>,
 		public KxSingletonPtr<IScreenshotsGallery>
 	{
 		public:

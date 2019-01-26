@@ -12,7 +12,7 @@ namespace Kortex
 	class IProgramManager;
 
 	class KProgramModule:
-		public ModuleWithTypeInfo<IModule, SimpleModuleInfo, Internal::ProgramModuleTypeInfo>,
+		public ModuleWithTypeInfo<IModule, Internal::ProgramModuleTypeInfo>,
 		public KxSingletonPtr<KProgramModule>
 	{
 		private:

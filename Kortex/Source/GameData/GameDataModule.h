@@ -14,7 +14,7 @@ namespace Kortex
 	class IScreenshotsGallery;
 
 	class GameDataModule:
-		public ModuleWithTypeInfo<IModule, SimpleModuleInfo, Internal::GameDataTypeInfo>,
+		public ModuleWithTypeInfo<IModule, Internal::GameDataTypeInfo>,
 		public KxSingletonPtr<GameDataModule>
 	{
 		private:

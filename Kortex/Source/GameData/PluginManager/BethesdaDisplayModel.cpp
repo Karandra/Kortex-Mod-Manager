@@ -32,7 +32,7 @@ namespace Kortex::PluginManager
 			{
 				if (plugin.IsActive())
 				{
-					value = KxFormat(wxS("0x%1")).UpperCase().arg(plugin.GetPriority(), 2, 16, wxS('0')).ToString();
+					value = KxFormat(wxS("0x%1")).UpperCase()(plugin.GetPriority(), 2, 16, wxS('0')).ToString();
 				}
 				break;
 			}

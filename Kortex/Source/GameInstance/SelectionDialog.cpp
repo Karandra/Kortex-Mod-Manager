@@ -374,7 +374,7 @@ namespace Kortex::GameInstance
 		{
 			variables.Accept([this](const wxString& name, const VariableValue& value)
 			{
-				*m_TextBox << KxFormat(wxS("$(%1)%2 = \"%3\"")).arg(name).arg(value.IsOverride() ? wxS("*") : wxS("")).arg(value) << wxS("\r\n");
+				*m_TextBox << KxString::Format(wxS("$(%1)%2 = \"%3\"\r\n"), name, value.IsOverride() ? wxS("*") : wxS(""), value);
 				return true;
 			});
 		};
@@ -403,14 +403,14 @@ namespace Kortex::GameInstance
 			for (const auto&[id, item]: KxShell::GetShellFolderList())
 			{
 				// Skip 'SHF_' part for 'item.second'
-				*m_TextBox << KxFormat(wxS("$SHF(%1) = \"%2\"")).arg(item.second + 4).arg(KxShell::GetFolder(id)) << wxS("\r\n");
+				*m_TextBox << KxString::Format(wxS("$SHF(%1) = \"%2\"\r\n"), item.second + 4, KxShell::GetFolder(id));
 			}
 			PrintSeparator();
 
 			// $ENV(*) variables
 			for (const auto&[name, value]: KxSystem::GetEnvironmentVariables())
 			{
-				*m_TextBox << KxFormat(wxS("$ENV(%1) = \"%2\"")).arg(name).arg(value) << wxS("\r\n");
+				*m_TextBox << KxString::Format(wxS("$ENV(%1) = \"%2\"\r\n"), name, value);
 			}
 		}
 	}

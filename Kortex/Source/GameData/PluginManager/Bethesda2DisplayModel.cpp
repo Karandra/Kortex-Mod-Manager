@@ -17,8 +17,8 @@ namespace Kortex::PluginManager
 					{
 						KxFormat formatter(wxS("0x%1:%2"));
 						formatter.UpperCase();
-						formatter.arg(plugin.GetPriority(), 2, 16, wxS('0'));
-						formatter.arg(m_Manager.CountLightActiveBefore(plugin), 3, 16, wxS('0'));
+						formatter(plugin.GetPriority(), 2, 16, wxS('0'));
+						formatter(m_Manager.CountLightActiveBefore(plugin), 3, 16, wxS('0'));
 
 						value = formatter.ToString();
 					}

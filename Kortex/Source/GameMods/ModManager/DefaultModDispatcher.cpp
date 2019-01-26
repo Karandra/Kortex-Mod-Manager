@@ -192,7 +192,7 @@ namespace Kortex::ModManager
 		constexpr const bool useRecursive = true;
 		const int64_t t1 = GetClockTime();
 
-		if constexpr (useRecursive)
+		if constexpr(useRecursive)
 		{
 			// Recursive (parallel)
 			// Build top level

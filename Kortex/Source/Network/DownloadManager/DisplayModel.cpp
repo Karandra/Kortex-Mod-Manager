@@ -502,7 +502,7 @@ namespace Kortex::DownloadManager
 			case MenuID::ShowChangeLog:
 			{
 				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, entry->GetFileInfo().GetDisplayName(), wxEmptyString, KxBTN_OK, KxICON_NONE);
-				dialog.SetMessage(KxFormat("%1 %2").arg(KTr("Generic.Version")).arg(entry->GetFileInfo().GetVersion()));
+				dialog.SetMessage(KxString::Format("%1 %2", KTr("Generic.Version"), entry->GetFileInfo().GetVersion()));
 				dialog.SetExMessage(entry->GetFileInfo().GetChangeLog());
 				dialog.SetMainIcon(KxShell::GetFileIcon(entry->GetFullPath()));
 				dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);

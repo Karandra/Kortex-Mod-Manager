@@ -44,7 +44,7 @@ wxString KModCollisionViewerModel::FormatSingleCollision(const KDispatcherCollis
 	const Kortex::IGameMod& mod = collision.GetMod();
 	const KMMDispatcherCollisionType type = collision.GetType();
 
-	return KxFormat(KDispatcherCollision::GetLocalizedCollisionName(type)).arg(mod.GetName());
+	return KxString::Format(KDispatcherCollision::GetLocalizedCollisionName(type), mod.GetName());
 }
 wxString KModCollisionViewerModel::FormatCollisionsCount(const CollisionVector& collisions)
 {
@@ -52,7 +52,7 @@ wxString KModCollisionViewerModel::FormatCollisionsCount(const CollisionVector& 
 	{
 		return FormatSingleCollision(collisions.front());
 	}
-	return KxFormat("%1").arg(collisions.size());
+	return KxString::Format(wxS("%1"), collisions.size());
 }
 wxString KModCollisionViewerModel::FormatCollisionsView(const CollisionVector& collisions)
 {
@@ -193,7 +193,7 @@ void KModCollisionViewerModelDialog::RunThread()
 	{
 		if (GetItemCount() != 0)
 		{
-			SetLabel(KxFormat("%1: %2").arg(KTr("ModExplorer.Collisions.Count")).arg(GetItemCount()));
+			SetLabel(KxString::Format("%1: %2", KTr("ModExplorer.Collisions.Count"), GetItemCount()));
 			//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
 			//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 

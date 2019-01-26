@@ -58,7 +58,7 @@ namespace Kortex
 			Utility::String::SplitBySeparator(relativePath, wxS('\\'), [&ScanChildren, &finalNode, &rootNode](std::wstring_view folderName)
 			{
 				finalNode = ScanChildren(finalNode ? *finalNode : rootNode, folderName);
-				return finalNode == nullptr;
+				return finalNode != nullptr;
 			});
 
 			if (finalNode == nullptr || (type == NavigateTo::Folder && !finalNode->IsDirectory()) || type == NavigateTo::File && !finalNode->IsFile())

@@ -164,9 +164,9 @@ void KPCREntriesListModel::GetValueByRow(wxAny& value, size_t row, const KxDataV
 			case ColumnID::RequiredState:
 			{
 				KxFormat format("%1 %2 %3");
-				format.arg(m_ObjectFunctionEditor->GetItems()[entry->GetObjectFunction()]);
-				format.arg(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
-				format.arg(entry->GetObjectFunctionResult() == KPPReqState::True);
+				format(m_ObjectFunctionEditor->GetItems()[entry->GetObjectFunction()]);
+				format(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
+				format(entry->GetObjectFunctionResult() == KPPReqState::True);
 
 				value = format.ToString();
 				break;

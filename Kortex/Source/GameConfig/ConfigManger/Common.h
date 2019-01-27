@@ -29,7 +29,7 @@ namespace Kortex::GameConfig
 		UInt = UInt32,
 		Float = Float32,
 	};
-	class DataTypeIDDef: public KxIndexedEnum::Definition<DataTypeIDDef, DataTypeID, wxString, true>
+	class DataTypeDef: public KxIndexedEnum::Definition<DataTypeDef, DataTypeID, wxString, false>
 	{
 		// Serialization is done with lower-cased versions of these identifiers
 		inline static const TItem ms_Index[] =
@@ -56,7 +56,7 @@ namespace Kortex::GameConfig
 			{DataTypeID::String, wxS("string")},
 		};
 	};
-	using DataTypeIDValue = KxIndexedEnum::Value<DataTypeIDDef, DataTypeID::None>;
+	using DataTypeValue = KxIndexedEnum::Value<DataTypeDef, DataTypeID::None>;
 }
 
 namespace Kortex::GameConfig
@@ -68,7 +68,7 @@ namespace Kortex::GameConfig
 		HungarianNotation,
 		DataAnalysis
 	};
-	class TypeDetectorIDDef: public KxIndexedEnum::Definition<TypeDetectorIDDef, TypeDetectorID, wxString, true>
+	class TypeDetectorDef: public KxIndexedEnum::Definition<TypeDetectorDef, TypeDetectorID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{
@@ -76,7 +76,7 @@ namespace Kortex::GameConfig
 			{TypeDetectorID::DataAnalysis, wxS("DataAnalysis")},
 		};
 	};
-	using TypeDetectorIDValue = KxIndexedEnum::Value<TypeDetectorIDDef, TypeDetectorID::None>;
+	using TypeDetectorValue = KxIndexedEnum::Value<TypeDetectorDef, TypeDetectorID::None>;
 }
 
 namespace Kortex::GameConfig
@@ -96,8 +96,8 @@ namespace Kortex::GameConfig
 			{SourceFormat::None, wxS("None")},
 
 			{SourceFormat::INI, wxS("INI")},
-			//{SourceFormat::XML, wxS("XML")},
-			//{SourceFormat::Registry, wxS("Registry")},
+			{SourceFormat::XML, wxS("XML")},
+			{SourceFormat::Registry, wxS("Registry")},
 		};
 	};
 	using SourceFormatValue = KxIndexedEnum::Value<SourceFormatDef, SourceFormat::None>;
@@ -119,4 +119,44 @@ namespace Kortex::GameConfig
 		};
 	};
 	using SourceTypeValue = KxIndexedEnum::Value<SourceTypeDef, SourceType::None>;
+}
+
+namespace Kortex::GameConfig
+{
+	enum class SortOrderID: uint32_t
+	{
+		Explicit = 0,
+		Ascending,
+		Descending
+	};
+	class SortOrderDef: public KxIndexedEnum::Definition<SortOrderDef, SortOrderID, wxString, true>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{SortOrderID::Explicit, wxS("Explicit")},
+			{SortOrderID::Ascending, wxS("Ascending")},
+			{SortOrderID::Descending, wxS("Descending")},
+		};
+	};
+	using SortOrderValue = KxIndexedEnum::Value<SortOrderDef, SortOrderID::Explicit>;
+}
+
+namespace Kortex::GameConfig
+{
+	enum class SortOptionsID: uint32_t
+	{
+		Lexicographical = 0,
+		IgnoreCase = 1 << 0,
+		DigitsAsNumbers = 1 << 1,
+	};
+	class SortOptionsDef: public KxIndexedEnum::Definition<SortOptionsDef, SortOptionsID, wxString, false>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{SortOptionsID::Lexicographical, wxS("Lexicographical")},
+			{SortOptionsID::IgnoreCase, wxS("IgnoreCase")},
+			{SortOptionsID::DigitsAsNumbers, wxS("DigitsAsNumbers")},
+		};
+	};
+	using SortOptionsValue = KxIndexedEnum::Value<SortOptionsDef, SortOptionsID::Lexicographical>;
 }

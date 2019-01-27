@@ -11,7 +11,7 @@ namespace Kortex::GameConfig
 	{
 		private:
 			SourceFormatValue m_SourceFormat;
-			TypeDetectorIDValue m_TypeDetector;
+			TypeDetectorValue m_TypeDetector;
 
 		public:
 			ItemOptions() = default;
@@ -25,7 +25,7 @@ namespace Kortex::GameConfig
 			{
 				return m_SourceFormat;
 			}
-			TypeDetectorIDValue GetTypeDetection() const
+			TypeDetectorValue GetTypeDetection() const
 			{
 				return m_TypeDetector;
 			}

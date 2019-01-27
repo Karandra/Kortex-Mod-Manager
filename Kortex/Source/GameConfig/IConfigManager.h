@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/IManager.h"
+class KxTranslation;
 
 namespace Kortex
 {

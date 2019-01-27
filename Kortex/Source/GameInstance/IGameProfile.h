@@ -10,6 +10,7 @@ namespace Kortex
 	class IGamePlugin;
 	class IGameInstance;
 	class IAppOption;
+	class IVariableTable;
 
 	namespace GameInstance
 	{

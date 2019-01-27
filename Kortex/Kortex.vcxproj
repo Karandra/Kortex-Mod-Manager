@@ -58,6 +58,7 @@
     <ClCompile Include="Source\Application\About\Dialog.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModel.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp" />
+    <ClCompile Include="Source\Application\RefTranslator.cpp" />
     <ClCompile Include="Source\Application\DefaultApplication.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
     <ClCompile Include="Source\Application\IAppOption.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="Source\Application\SystemApplication.cpp" />
     <ClCompile Include="Source\Application\Theme\Default.cpp" />
     <ClCompile Include="Source\Application\Theme\VisualStudio.cpp" />
+    <ClCompile Include="Source\Application\ITranslator.cpp" />
     <ClCompile Include="Source\Application\VariablesTable\VariableValue.cpp" />
     <ClCompile Include="Source\Application\VariablesTable\DynamicVariableTable.cpp" />
     <ClCompile Include="Source\Application\VariablesTable\StaticVariableTable.cpp" />
@@ -93,6 +95,8 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\ISource.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemGroup.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemOptions.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\ItemSamples.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\ItemValue.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ITypeDetector.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Item.cpp" />
     <ClCompile Include="Source\GameConfig\GameConfigModule.cpp" />
@@ -324,6 +328,7 @@
     <ClInclude Include="Source\Application\About\Dialog.h" />
     <ClInclude Include="Source\Application\About\DisplayModel.h" />
     <ClInclude Include="Source\Application\About\DisplayModelNode.h" />
+    <ClInclude Include="Source\Application\RefTranslator.h" />
     <ClInclude Include="Source\Application\DefaultApplication.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IAppOption.h" />
@@ -350,6 +355,7 @@
     <ClInclude Include="Source\Application\SystemApplication.h" />
     <ClInclude Include="Source\Application\Theme\Default.h" />
     <ClInclude Include="Source\Application\Theme\VisualStudio.h" />
+    <ClInclude Include="Source\Application\ITranslator.h" />
     <ClInclude Include="Source\Application\VariablesTable\VariableValueInternals.h" />
     <ClInclude Include="Source\Application\VariablesTable\VariableValue.h" />
     <ClInclude Include="Source\Application\VariablesTable\DynamicVariableTable.h" />
@@ -369,6 +375,8 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\ISource.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemOptions.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemSamples.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemValue.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ITypeDetector.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Item.h" />
     <ClInclude Include="Source\GameConfig\GameConfigModule.h" />
@@ -614,12 +622,12 @@
     <Xml Include="Bin\Data\GameDefinitions\Skyrim.xml" />
     <Xml Include="Bin\Data\GameDefinitions\SkyrimSE.xml" />
     <Xml Include="Bin\Data\GameDefinitions\SkyrimVR.xml" />
-    <Xml Include="Bin\Data\Translation\en-US.xml">
-      <SubType>Designer</SubType>
-    </Xml>
-    <Xml Include="Bin\Data\Translation\ru-RU.xml">
-      <SubType>Designer</SubType>
-    </Xml>
+    <Xml Include="Bin\Data\Translation\en-US.Application.xml" />
+    <Xml Include="Bin\Data\Translation\en-US.ConfigManager.xml" />
+    <Xml Include="Bin\Data\Translation\en-US.GameConfig.xml" />
+    <Xml Include="Bin\Data\Translation\ru-RU.Application.xml" />
+    <Xml Include="Bin\Data\Translation\ru-RU.ConfigManager.xml" />
+    <Xml Include="Bin\Data\Translation\ru-RU.GameConfig.xml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Include\Kortex\Git\LatestCommit.txt" />

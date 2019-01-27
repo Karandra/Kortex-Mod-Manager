@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "DefaultTag.h"
 #include "DefaultTagManager.h"
+#include <Kortex/Application.hpp>
 
 namespace Kortex::ModTagManager
 {
 	std::optional<wxString> DefaultTag::TryGetTranslatedName(const wxString& id)
 	{
-		return Translation::TryGetString(wxS("TagManager.Tag.") + id);
+		return ITranslator::GetAppTranslator().TryGetString(wxS("TagManager.Tag.") + id);
 	}
 
 	wxString DefaultTag::GetName() const

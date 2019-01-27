@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Common.h"
 #include "DataType.h"
+#include "ItemValue.h"
 
 namespace Kortex
 {
@@ -20,7 +21,7 @@ namespace Kortex::GameConfig
 			wxString m_Category;
 			wxString m_Path;
 			wxString m_Name;
-			TypeID m_Type;
+			ItemValue m_Value;
 
 		public:
 			Item(ItemGroup& group, const KxXMLNode& itemNode);
@@ -48,9 +49,18 @@ namespace Kortex::GameConfig
 			{
 				return m_Name;
 			}
-			TypeID GetType() const
+			
+			DataType GetDataType() const
 			{
-				return m_Type;
+				return m_Value.GetType();
+			}
+			const ItemValue& GetValue() const
+			{
+				return m_Value;
+			}
+			ItemValue& GetValue()
+			{
+				return m_Value;
 			}
 	};
 }

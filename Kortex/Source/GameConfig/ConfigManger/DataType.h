@@ -6,22 +6,31 @@ class KxXMLNode;
 
 namespace Kortex::GameConfig
 {
-	class TypeID: public DataTypeIDValue
+	class TypeID: public DataTypeValue
 	{
-		private:
-			template<DataTypeID... IDs> bool IsOneOfTypes() const
+		public:
+			struct Hash
 			{
-				return ((GetValue() == IDs) || ...);
+				size_t operator()(TypeID id) const noexcept
+				{
+					return std::hash<TypeID::TInt>()(id.GetInt());
+				}
+			};
+
+		private:
+			template<DataTypeID... id> bool IsOneOfTypes() const
+			{
+				return (HasFlag(id) || ...);
 			}
 
 		public:
 			TypeID() = default;
 			TypeID(TEnum value)
-				:DataTypeIDValue(value)
+				:DataTypeValue(value)
 			{
 			}
 			TypeID(TInt value)
-				:DataTypeIDValue(value)
+				:DataTypeValue(value)
 			{
 			}
 			TypeID(const wxString& value)
@@ -38,6 +47,8 @@ namespace Kortex::GameConfig
 			{
 				return GetValue() == DataTypeID::Any;
 			}
+			bool IsSignedInteger() const;
+			bool IsUnsignedInteger() const;
 			bool IsInteger() const;
 			bool IsFloat() const;
 			bool IsBool() const;
@@ -50,7 +61,7 @@ namespace Kortex::GameConfig
 	class DataType
 	{
 		public:
-			DataType CreateGeneric(DataTypeID id, int precision = -1);
+			static DataType CreateGeneric(DataTypeID id, int precision = -1);
 
 		public:
 			TypeID m_TypeID;
@@ -63,10 +74,7 @@ namespace Kortex::GameConfig
 			DataType(const KxXMLNode& node);
 
 		public:
-			bool IsOK() const
-			{
-				return m_TypeID != DataTypeID::None;
-			}
+			bool IsOK() const;
 
 			TypeID GetID() const
 			{

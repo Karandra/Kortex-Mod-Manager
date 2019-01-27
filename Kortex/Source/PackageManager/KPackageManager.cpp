@@ -239,7 +239,7 @@ namespace Kortex
 
 	const KPPRRequirementEntry* KPackageManager::GetScriptExtenderRequirement() const
 	{
-		return FindStdReqirement(GetVariable(Variables::KVAR_SCRIPT_EXTENDER_ID));
+		return FindStdReqirement(ITranslator::GetVariable(Variables::KVAR_SCRIPT_EXTENDER_ID));
 	}
 	wxString KPackageManager::GetPackagesFolder() const
 	{

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Item.h"
 #include "ItemGroup.h"
+#include "Definition.h"
 
 namespace Kortex::GameConfig
 {
@@ -10,12 +11,14 @@ namespace Kortex::GameConfig
 		m_Category = itemNode.GetAttribute(wxS("Category"));
 		m_Path = itemNode.GetAttribute(wxS("Path"));
 		m_Name = itemNode.GetAttribute(wxS("Name"));
-		m_Type.FromString(itemNode.GetAttribute(wxS("Type")));
+
+		TypeID type(itemNode.GetAttribute(wxS("Type")));
+		m_Value.SetType(group.GetDefinition().GetDataType(type));
 	}
 
 	bool Item::IsOK() const
 	{
-		return !m_Category.IsEmpty() && !m_Path.IsEmpty() && !m_Name.IsEmpty() && !m_Type.IsNone() && !m_Type.IsAny();
+		return !m_Category.IsEmpty() && !m_Path.IsEmpty() && !m_Name.IsEmpty() && m_Value.IsOk();
 	}
 	
 	IConfigManager& Item::GetManager() const

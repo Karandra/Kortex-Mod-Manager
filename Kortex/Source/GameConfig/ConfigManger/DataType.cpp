@@ -4,10 +4,17 @@
 
 namespace Kortex::GameConfig
 {
+	bool TypeID::IsSignedInteger() const
+	{
+		return IsOneOfTypes<DataTypeID::Int8, DataTypeID::Int16, DataTypeID::Int32>();
+	}
+	bool TypeID::IsUnsignedInteger() const
+	{
+		return IsOneOfTypes<DataTypeID::UInt8, DataTypeID::UInt16, DataTypeID::UInt32, DataTypeID::UInt64>();
+	}
 	bool TypeID::IsInteger() const
 	{
-		return IsOneOfTypes<DataTypeID::Int8, DataTypeID::Int16, DataTypeID::Int32,
-			DataTypeID::UInt8, DataTypeID::UInt16, DataTypeID::UInt32, DataTypeID::UInt64>();
+		return IsSignedInteger() || IsUnsignedInteger();
 	}
 	bool TypeID::IsFloat() const
 	{
@@ -57,5 +64,10 @@ namespace Kortex::GameConfig
 				m_Precision = std::clamp<int>(outputNode.GetAttributeInt(wxS("Precision"), -1), -1, 8);
 			}
 		}
+	}
+
+	bool DataType::IsOK() const
+	{
+		return !m_TypeID.IsNone() && !m_TypeID.IsAny() && !m_InputType.IsNone() && !m_OutputType.IsNone() && !m_OutputType.IsAny();
 	}
 }

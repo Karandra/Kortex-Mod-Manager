@@ -196,7 +196,7 @@ void KMainWindow::CreateMainWorkspaces()
 	// Create toolbar button and assign menu to it
 	m_ToolBar->AddSeparator();
 
-	KxAuiToolBarItem* toolBarButton = CreateToolBarButton(m_ToolBar, GetVariable(Variables::KVAR_GAME_NAME));
+	KxAuiToolBarItem* toolBarButton = CreateToolBarButton(m_ToolBar, ITranslator::GetVariable(Variables::KVAR_GAME_NAME));
 	wxImage gameIcon = IGameInstance::GetActive()->GetIcon().ConvertToImage();
 	toolBarButton->SetBitmap(gameIcon.Rescale(m_ToolBar->GetToolBitmapSize().GetWidth(), m_ToolBar->GetToolBitmapSize().GetHeight(), wxIMAGE_QUALITY_HIGH));
 

@@ -124,9 +124,9 @@ namespace Kortex::ModManager
 		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), ISaveManager::GetInstance()->GetManagerInfo().GetName()));
 
 		// Copy saves from real saves folder to virtual
-		KxEvtFile savesSource(GetVariable(Variables::KVAR_ACTUAL_CONFIG_DIR));
+		KxEvtFile savesSource(ITranslator::GetVariable(Variables::KVAR_ACTUAL_CONFIG_DIR));
 		context->LinkHandler(&savesSource, KxEVT_FILEOP_COPY_FOLDER);
-		savesSource.CopyFolder(KxFile::NullFilter, GetVariable(Variables::KVAR_CONFIG_DIR), true, true);
+		savesSource.CopyFolder(KxFile::NullFilter, ITranslator::GetVariable(Variables::KVAR_CONFIG_DIR), true, true);
 	}
 	void ModImporterNMM::CopyMods(KOperationWithProgressDialogBase* context)
 	{

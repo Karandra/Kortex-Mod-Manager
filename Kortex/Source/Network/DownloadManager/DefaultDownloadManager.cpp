@@ -3,6 +3,7 @@
 #include "DefaultDownloadEntry.h"
 #include "DisplayModel.h"
 #include "Workspace.h"
+#include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Notification.hpp>

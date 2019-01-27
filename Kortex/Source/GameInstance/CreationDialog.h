@@ -9,6 +9,7 @@ class KxComboBox;
 namespace Kortex
 {
 	class IGameInstance;
+	class GameID;
 }
 
 namespace Kortex::GameInstance

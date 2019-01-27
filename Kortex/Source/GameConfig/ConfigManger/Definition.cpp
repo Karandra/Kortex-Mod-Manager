@@ -29,16 +29,17 @@ namespace Kortex::GameConfig
 			// Load data types
 			for (KxXMLNode node = rootNode.GetFirstChildElement("DataTypes").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
-				if (!m_DataTypes.emplace_back(node).IsOK())
+				DataType type(node);
+				if (type.IsOK())
 				{
-					m_DataTypes.pop_back();
+					m_DataTypes.insert_or_assign(type.GetID(), std::move(type));
 				}
 			}
 
 			// Load type detectors config
 			for (KxXMLNode node = rootNode.GetFirstChildElement("TypeDetection").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
-				switch (TypeDetectorIDDef::FromString(node.GetName(), TypeDetectorID::None))
+				switch (TypeDetectorDef::FromString(node.GetName(), TypeDetectorID::None))
 				{
 					case TypeDetectorID::HungarianNotation:
 					{
@@ -62,5 +63,14 @@ namespace Kortex::GameConfig
 			return true;
 		}
 		return false;
+	}
+	DataType Definition::GetDataType(TypeID id) const
+	{
+		auto it = m_DataTypes.find(id);
+		if (it != m_DataTypes.end())
+		{
+			return it->second;
+		}
+		return DataType::CreateGeneric(id);
 	}
 }

@@ -19,7 +19,7 @@ namespace Kortex::GameConfig
 
 			wxString m_ID;
 			wxString m_FilePath;
-			std::vector<DataType> m_DataTypes;
+			std::unordered_map<TypeID, DataType, TypeID::Hash> m_DataTypes;
 			std::vector<std::unique_ptr<ITypeDetector>> m_TypeDetectors;
 
 			std::unordered_map<wxString, std::unique_ptr<ItemGroup>> m_Groups;
@@ -60,6 +60,8 @@ namespace Kortex::GameConfig
 			{
 				return m_Options;
 			}
+			DataType GetDataType(TypeID id) const;
+
 			bool Load();
 
 			ItemGroup* GetGroupByID(const wxString& id)

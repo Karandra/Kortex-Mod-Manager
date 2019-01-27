@@ -5,7 +5,12 @@
 #include "Application/Options/Option.h"
 #include <KxFramework/KxINI.h>
 #include <KxFramework/KxFileStream.h>
-class IVariableTable;
+
+namespace Kortex
+{
+	class IGameProfile;
+	class IVariableTable;
+}
 
 namespace Kortex
 {
@@ -24,7 +29,6 @@ namespace Kortex
 		};
 	}
 
-	class IGameProfile;
 	class IGameInstance:
 		public RTTI::IInterface<IGameInstance>,
 		public Application::WithInstanceOptions<IGameInstance>

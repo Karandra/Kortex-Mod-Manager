@@ -130,9 +130,9 @@ namespace Kortex::ModManager
 
 		// Base game
 		m_BaseGame.SetID(Variables::KVAR_GAME_ID);
-		m_BaseGame.SetName(GetVariable(Variables::KVAR_GAME_NAME));
+		m_BaseGame.SetName(ITranslator::GetVariable(Variables::KVAR_GAME_NAME));
 		m_BaseGame.SetActive(true);
-		m_BaseGame.LinkLocation(GetVariable(Variables::KVAR_ACTUAL_GAME_DIR));
+		m_BaseGame.LinkLocation(ITranslator::GetVariable(Variables::KVAR_ACTUAL_GAME_DIR));
 
 		// Write target
 		m_Overwrites.SetID(Variables::KVAR_OVERWRITES_DIR);

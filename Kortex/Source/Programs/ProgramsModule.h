@@ -1,6 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/IModule.h"
+#include <KxFramework/KxSingleton.h>
+
+namespace Kortex
+{
+	class IProgramManager;
+}
 
 namespace Kortex
 {
@@ -9,11 +15,7 @@ namespace Kortex
 		extern const SimpleModuleInfo ProgramModuleTypeInfo;
 	};
 
-	class IProgramManager;
-
-	class KProgramModule:
-		public ModuleWithTypeInfo<IModule, Internal::ProgramModuleTypeInfo>,
-		public KxSingletonPtr<KProgramModule>
+	class KProgramModule: public ModuleWithTypeInfo<IModule, Internal::ProgramModuleTypeInfo>, public KxSingletonPtr<KProgramModule>
 	{
 		private:
 			std::unique_ptr<IProgramManager> m_ProgramManager;

@@ -16,6 +16,7 @@ namespace Kortex
 	class IVariableTable;
 	class IGameInstance;
 	class IGameProfile;
+	class ITranslator;
 
 	enum class LoadTranslationStatus
 	{
@@ -64,6 +65,7 @@ namespace Kortex
 
 			virtual bool IsTranslationLoaded() const = 0;
 			virtual const KxTranslation& GetTranslation() const = 0;
+			virtual const ITranslator& GetTranslator() const = 0;
 			virtual KxTranslation::AvailableMap GetAvailableTranslations() const = 0;
 
 			virtual const KxImageList& GetImageList() const = 0;

@@ -1014,6 +1014,18 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\Item.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\ItemSamples.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\ItemValue.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\ITranslator.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\RefTranslator.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1925,6 +1937,18 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\Item.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemSamples.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemValue.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\ITranslator.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\RefTranslator.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc">
@@ -1967,12 +1991,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Bin\Data\Translation\en-US.xml">
-      <Filter>Misc\Translation</Filter>
-    </Xml>
-    <Xml Include="Bin\Data\Translation\ru-RU.xml">
-      <Filter>Misc\Translation</Filter>
-    </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Fallout3.xml">
       <Filter>Misc\Game Definitions</Filter>
     </Xml>
@@ -2005,6 +2023,24 @@
     </Xml>
     <Xml Include="Bin\Data\ConfigDefinitions\Skyrim.xml">
       <Filter>Misc\ConfigDefinitions</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\Translation\en-US.Application.xml">
+      <Filter>Misc\Translation</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\Translation\en-US.ConfigManager.xml">
+      <Filter>Misc\Translation</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\Translation\en-US.GameConfig.xml">
+      <Filter>Misc\Translation</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\Translation\ru-RU.Application.xml">
+      <Filter>Misc\Translation</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\Translation\ru-RU.ConfigManager.xml">
+      <Filter>Misc\Translation</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\Translation\ru-RU.GameConfig.xml">
+      <Filter>Misc\Translation</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

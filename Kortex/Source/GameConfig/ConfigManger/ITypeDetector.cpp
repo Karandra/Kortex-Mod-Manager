@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ITypeDetector.h"
-#include <KxFramework/KxUtility.h>
 
 namespace Kortex::GameConfig
 {

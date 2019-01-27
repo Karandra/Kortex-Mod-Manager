@@ -45,7 +45,8 @@ namespace Kortex::Application
 	}
 
 	DefaultApplication::DefaultApplication()
-		:m_ImageList(GetSmallIconWidth(), GetSmallIconHeight(), false, KIMG_COUNT)
+		:m_ImageList(GetSmallIconWidth(), GetSmallIconHeight(), false, KIMG_COUNT),
+		m_Translator(m_Translation)
 	{
 	}
 

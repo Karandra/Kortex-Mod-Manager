@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "IApplication.h"
+#include "RefTranslator.h"
 #include "Application/VariablesTable/DynamicVariableTable.h"
 #include "Utility/KImageProvider.h"
 #include <KxFramework/KxApp.h>
@@ -23,6 +24,7 @@ namespace Kortex::Application
 	{
 		private:
 			KxTranslation m_Translation;
+			RefTranslator m_Translator;
 			KxStringToStringUMap m_AvailableTranslations;
 			DynamicVariableTable m_Variables;
 
@@ -111,6 +113,10 @@ namespace Kortex::Application
 			const KxTranslation& GetTranslation() const override
 			{
 				return m_Translation;
+			}
+			const ITranslator& GetTranslator() const override
+			{
+				return m_Translator;
 			}
 			KxTranslation::AvailableMap GetAvailableTranslations() const override
 			{

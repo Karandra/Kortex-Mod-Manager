@@ -66,6 +66,3 @@ namespace Kortex::Variables
 	const constexpr wxChar KVAR_GLOBAL_CONFIG_DIR[] = wxS("GlobalConfigDir");
 
 }
-
-//#define KVAR(s)			wxS("$(") s wxS(")")
-//#define KVAR_EXP(s)		KVarExp(KVAR(s))

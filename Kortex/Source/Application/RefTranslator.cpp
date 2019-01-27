@@ -4,7 +4,7 @@
 
 namespace Kortex
 {
-	ITranslator::OpString Kortex::RefTranslator::DoGetString(const wxString& id) const
+	ITranslator::OpString RefTranslator::DoGetString(const wxString& id) const
 	{
 		bool isSuccess = false;
 		wxString value = m_TranslationRef.GetString(id, &isSuccess);

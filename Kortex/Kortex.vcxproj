@@ -58,6 +58,7 @@
     <ClCompile Include="Source\Application\About\Dialog.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModel.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp" />
+    <ClCompile Include="Source\Application\RefStackTranslator.cpp" />
     <ClCompile Include="Source\Application\RefTranslator.cpp" />
     <ClCompile Include="Source\Application\DefaultApplication.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
@@ -328,6 +329,7 @@
     <ClInclude Include="Source\Application\About\Dialog.h" />
     <ClInclude Include="Source\Application\About\DisplayModel.h" />
     <ClInclude Include="Source\Application\About\DisplayModelNode.h" />
+    <ClInclude Include="Source\Application\RefStackTranslator.h" />
     <ClInclude Include="Source\Application\RefTranslator.h" />
     <ClInclude Include="Source\Application\DefaultApplication.h" />
     <ClInclude Include="Source\Application\IApplication.h" />

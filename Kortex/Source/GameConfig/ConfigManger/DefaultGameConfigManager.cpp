@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultGameConfigManager.h"
 #include "Definition.h"
+#include <Kortex/Application.hpp>
 
 namespace Kortex::GameConfig
 {
@@ -19,12 +20,20 @@ namespace Kortex::GameConfig
 
 	void DefaultGameConfigManager::OnInit()
 	{
+		IConfigManager::OnInit();
 	}
 	void DefaultGameConfigManager::OnExit()
 	{
+		IConfigManager::OnExit();
 	}
 	void DefaultGameConfigManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
+		IConfigManager::OnLoadInstance(instance, managerNode);
+		if (LoadTranslation(m_Translation, "GameConfig"))
+		{
+			m_Translator.Push(m_Translation);
+		}
+
 		const KxXMLNode definitionsNode = managerNode.GetFirstChildElement("Definitions");
 		for (KxXMLNode defNode = definitionsNode.GetFirstChildElement(); defNode.IsOK(); defNode = defNode.GetNextSiblingElement())
 		{
@@ -40,9 +49,5 @@ namespace Kortex::GameConfig
 				m_Definitions.insert_or_assign(id, std::move(definition));
 			}
 		}
-	}
-
-	DefaultGameConfigManager::~DefaultGameConfigManager()
-	{
 	}
 }

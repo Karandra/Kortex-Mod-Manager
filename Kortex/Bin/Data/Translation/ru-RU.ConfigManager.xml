@@ -4,9 +4,6 @@
 		<Translator>Kerber</Translator>
 	</Info>
 	<StringTable>
-		<String ID="ConfigManager.Name">Конфигурация игры</String>
-		<String ID="ConfigManager.NameShort">Конфигурация игры</String>
-		
 		<String ID="ConfigManager.EditValue.EnterVirtualKey">Выберите значение из списка ниже или нажмите нужную клавишу на клавиутуре</String>
 		<String ID="ConfigManager.EditValue.ValuesRange">Допустимые значения</String>
 		<String ID="ConfigManager.EditValue.Success">Все параметры успешно сохранены</String>
@@ -31,25 +28,6 @@
 		<String ID="ConfigManager.View.Type">Тип</String>
 		<String ID="ConfigManager.View.NoValue">Нет</String>
 		<String ID="ConfigManager.View.EmptyStringValue">Пустая строка</String>
-
-		<String ID="ConfigManager.Types.Unknown">unknown</String>
-		<String ID="ConfigManager.Types.int">int</String>
-		<String ID="ConfigManager.Types.uint">uint</String>
-		<String ID="ConfigManager.Types.int8">int8</String>
-		<String ID="ConfigManager.Types.uint8">uint8</String>
-		<String ID="ConfigManager.Types.int16">int16</String>
-		<String ID="ConfigManager.Types.uint16">uint16</String>
-		<String ID="ConfigManager.Types.int32">int32</String>
-		<String ID="ConfigManager.Types.uint32">uint32</String>
-		<String ID="ConfigManager.Types.int64">int64</String>
-		<String ID="ConfigManager.Types.uint64">uint64</String>
-		<String ID="ConfigManager.Types.float">float</String>
-		<String ID="ConfigManager.Types.float32">float32</String>
-		<String ID="ConfigManager.Types.float64">float64</String>
-		<String ID="ConfigManager.Types.string">string</String>
-		<String ID="ConfigManager.Types.wstring">wstring</String>
-		<String ID="ConfigManager.Types.bool">bool</String>
-		<String ID="ConfigManager.Types.struct">struct</String>
 
 		<String ID="ConfigManager.VirtualKey.VK_NONE">Не назначено</String>
 		<String ID="ConfigManager.VirtualKey.VK_LBUTTON">Левая кнопка мыши</String>

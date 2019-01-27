@@ -29,7 +29,8 @@ namespace Kortex::GameConfig
 		for (KxXMLNode defNode = definitionsNode.GetFirstChildElement(); defNode.IsOK(); defNode = defNode.GetNextSiblingElement())
 		{
 			wxString id = defNode.GetAttribute("ID");
-			auto definition = std::make_unique<Definition>(id, GetDefinitionFileByID(id));
+
+			auto definition = std::make_unique<Definition>(*this, id, GetDefinitionFileByID(id));
 			if (definition->Load())
 			{
 				definition->ForEachGroup([this, &defNode](ItemGroup& group)

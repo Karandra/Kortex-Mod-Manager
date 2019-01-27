@@ -4,7 +4,6 @@
 #include <KxFramework/KxIndexedEnum.h>
 class KxXMLNode;
 
-
 namespace Kortex::GameConfig
 {
 	class TypeID: public DataTypeIDValue

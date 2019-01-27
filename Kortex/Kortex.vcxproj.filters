@@ -1005,13 +1005,13 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\ISource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameConfig\ConfigManger\IValue.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\INISource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemGroup.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Item.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1916,13 +1916,13 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\ISource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\IValue.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\INISource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Item.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
   </ItemGroup>

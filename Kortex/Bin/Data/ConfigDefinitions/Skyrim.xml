@@ -36,18 +36,18 @@
 	<Groups>
 		<Group ID="Game">
 			<!-- Graphics -->
-			<Entry Category="Game/Graphics" Path="Display" Name="iPresentInterval" Type="bool"></Entry>
-			<Entry Category="Game/Graphics" Path="Imagespace" Name="bDoRadialBlur" Type="bool"></Entry>
-			<Entry Category="Game/Graphics" Path="General" Name="bDisableAllGore" Type="bool"></Entry>
+			<Item Category="Game/Graphics" Path="Display" Name="iPresentInterval" Type="bool"></Item>
+			<Item Category="Game/Graphics" Path="Imagespace" Name="bDoRadialBlur" Type="bool"></Item>
+			<Item Category="Game/Graphics" Path="General" Name="bDisableAllGore" Type="bool"></Item>
 		</Group>
 		<Group ID="GamePrefs">
 			<!-- Graphics -->
-			<Entry Category="Game/Graphics" Path="Display" Name="bFull Screen" Type="bool"></Entry>
-			<Entry Category="Game/Graphics" Path="Display" Name="bFXAAEnabled" Type="bool"></Entry>
+			<Item Category="Game/Graphics" Path="Display" Name="bFull Screen" Type="bool"></Item>
+			<Item Category="Game/Graphics" Path="Display" Name="bFXAAEnabled" Type="bool"></Item>
 		</Group>
 
 		<Group ID="Editor">
-			<Entry Category="Editor" Path="General" Name="sLanguage" Type="string">
+			<Item Category="Editor" Path="General" Name="sLanguage" Type="string">
 				<SampleValues Sort="1">
 					<Entry Label="$T(GameConfig.Samples.Language.RUSSIAN)">RUSSIAN</Entry>
 					<Entry Label="$T(GameConfig.Samples.Language.ENGLISH)">ENGLISH</Entry>
@@ -67,14 +67,14 @@
 					<Entry Label="$T(GameConfig.Samples.Language.SWEDISH)">SWEDISH</Entry>
 					<Entry Label="$T(GameConfig.Samples.Language.TURKISH)">TURKISH</Entry>
 				</SampleValues>
-			</Entry>
-			<Entry Category="Editor/Messages" Path="MESSAGES" Name="bSkipInitializationFlows" Type="bool"></Entry>
-			<Entry Category="Editor/Messages" Path="MESSAGES" Name="bSkipProgramFlows" Type="bool"></Entry>
-			<Entry Category="Editor/Messages" Path="MESSAGES" Name="bAllowYesToAll" Type="bool"></Entry>
-			<Entry Category="Editor/Messages" Path="MESSAGES" Name="bBlockMessageBoxes" Type="bool"></Entry>
-			<Entry Category="Editor/Messages" Path="MESSAGES" Name="iFileLogging" Type="int32"></Entry>
+			</Item>
+			<Item Category="Editor/Messages" Path="MESSAGES" Name="bSkipInitializationFlows" Type="bool"></Item>
+			<Item Category="Editor/Messages" Path="MESSAGES" Name="bSkipProgramFlows" Type="bool"></Item>
+			<Item Category="Editor/Messages" Path="MESSAGES" Name="bAllowYesToAll" Type="bool"></Item>
+			<Item Category="Editor/Messages" Path="MESSAGES" Name="bBlockMessageBoxes" Type="bool"></Item>
+			<Item Category="Editor/Messages" Path="MESSAGES" Name="iFileLogging" Type="int32"></Item>
 
-			<Entry Category="Editor" Path="SpellCheck" Name="bSpellCheckEnabled" Type="bool"></Entry>
+			<Item Category="Editor" Path="SpellCheck" Name="bSpellCheckEnabled" Type="bool"></Item>
 		</Group>
 		<Group ID="EditorPrefs">
 			

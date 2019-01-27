@@ -11,7 +11,7 @@ namespace Kortex::GameConfig
 		for (KxXMLNode node = groupsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
 			wxString id = node.GetAttribute(wxS("ID"));
-			m_Groups.insert_or_assign(id, std::make_unique<ItemGroup>(id, node, m_Options));
+			m_Groups.insert_or_assign(id, std::make_unique<ItemGroup>(*this, id, node, m_Options));
 		}
 	}
 

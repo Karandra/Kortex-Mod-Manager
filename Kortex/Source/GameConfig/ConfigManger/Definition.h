@@ -5,11 +5,18 @@
 #include "ItemOptions.h"
 #include "ItemGroup.h"
 
+namespace Kortex
+{
+	class IConfigManager;
+}
+
 namespace Kortex::GameConfig
 {
 	class Definition
 	{
 		private:
+			IConfigManager& m_Manager;
+
 			wxString m_ID;
 			wxString m_FilePath;
 			std::vector<DataType> m_DataTypes;
@@ -21,7 +28,7 @@ namespace Kortex::GameConfig
 
 		private:
 			void LoadGroups(const KxXMLNode& groupsNode);
-			template<class TItems, class TFunctor> static void ForEachItem(TItems&& items, TFunctor&& func)
+			template<class TItems, class TFunctor> static void CallForEachItem(TItems&& items, TFunctor&& func)
 			{
 				for (auto& [id, item]: items)
 				{
@@ -30,13 +37,17 @@ namespace Kortex::GameConfig
 			}
 
 		public:
-			Definition(const wxString& id, const wxString& filePath)
-				:m_ID(id), m_FilePath(filePath)
+			Definition(IConfigManager& manager, const wxString& id, const wxString& filePath)
+				:m_Manager(manager), m_ID(id), m_FilePath(filePath)
 			{
 			}
 			virtual ~Definition();
 
 		public:
+			IConfigManager& GetManager() const
+			{
+				return m_Manager;
+			}
 			wxString GetID() const
 			{
 				return m_ID;
@@ -58,11 +69,11 @@ namespace Kortex::GameConfig
 			}
 			template<class TFunctor> void ForEachGroup(TFunctor&& func) const
 			{
-				ForEachItem(m_Groups, func);
+				CallForEachItem(m_Groups, func);
 			}
 			template<class TFunctor> void ForEachGroup(TFunctor&& func)
 			{
-				ForEachItem(m_Groups, func);
+				CallForEachItem(m_Groups, func);
 			}
 	};
 }

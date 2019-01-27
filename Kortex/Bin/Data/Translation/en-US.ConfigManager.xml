@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Lang>
+	<Info>
+		<Translator>Monday, Kerber</Translator>
+	</Info>
+	<StringTable>
+		<String ID="ConfigManager.Name">Game configuration</String>
+		<String ID="ConfigManager.NameShort">Game configuration</String>
+
+		<String ID="ConfigManager.EditValue.EnterVirtualKey">Select a value from the list below or press the corresponding button on your keyboard</String>
+		<String ID="ConfigManager.EditValue.ValuesRange">Value range</String>
+		<String ID="ConfigManager.EditValue.Success">All parameters have been successfully saved</String>
+		<String ID="ConfigManager.EditValue.Error">Failed to save parameters</String>
+		<String ID="ConfigManager.EditValue.Discarded">Parameter changes have been discarded</String>
+		<String ID="ConfigManager.EditValue.Loading">Loading "%1"</String>
+		<String ID="ConfigManager.EditValue.Saving">Saving...</String>
+		<String ID="ConfigManager.EditValue.ModifyValue">Modify value</String>
+		<String ID="ConfigManager.EditValue.CreateValue.Caption">Add parameter</String>
+		<String ID="ConfigManager.EditValue.CreateValue.PathHint">Enter section name</String>
+		<String ID="ConfigManager.EditValue.CreateValue.ValueNameHint">Enter parameter name</String>
+		<String ID="ConfigManager.EditValue.CreateValue.ValueDataHint">Enter value</String>
+		<String ID="ConfigManager.EditValue.CreateValue.NameCollision">There is already a parameter with the same name as you specified. Specify a different path and/or name</String>
+		<String ID="ConfigManager.EditValue.CreateValue.EmptyFields">Empty fields are not allowed</String>
+		<String ID="ConfigManager.EditValue.CreateValue">Add parameter</String>
+		<String ID="ConfigManager.EditValue.RemoveValue">Delete parameter</String>
+		<String ID="ConfigManager.EditValue.RemovePath">Delete section</String>
+
+		<String ID="ConfigManager.View.Path">Path</String>
+		<String ID="ConfigManager.View.Value">Value</String>
+		<String ID="ConfigManager.View.Name">Parameter</String>
+		<String ID="ConfigManager.View.Type">Type</String>
+		<String ID="ConfigManager.View.NoValue">None</String>
+		<String ID="ConfigManager.View.EmptyStringValue">Empty string</String>
+
+		<String ID="ConfigManager.Types.Unknown">unknown</String>
+		<String ID="ConfigManager.Types.int">int</String>
+		<String ID="ConfigManager.Types.uint">uint</String>
+		<String ID="ConfigManager.Types.int8">int8</String>
+		<String ID="ConfigManager.Types.uint8">uint8</String>
+		<String ID="ConfigManager.Types.int16">int16</String>
+		<String ID="ConfigManager.Types.uint16">uint16</String>
+		<String ID="ConfigManager.Types.int32">int32</String>
+		<String ID="ConfigManager.Types.uint32">uint32</String>
+		<String ID="ConfigManager.Types.int64">int64</String>
+		<String ID="ConfigManager.Types.uint64">uint64</String>
+		<String ID="ConfigManager.Types.float">float</String>
+		<String ID="ConfigManager.Types.float32">float32</String>
+		<String ID="ConfigManager.Types.float64">float64</String>
+		<String ID="ConfigManager.Types.string">string</String>
+		<String ID="ConfigManager.Types.wstring">wstring</String>
+		<String ID="ConfigManager.Types.bool">bool</String>
+		<String ID="ConfigManager.Types.struct">struct</String>
+
+		<String ID="ConfigManager.VirtualKey.VK_NONE">Not assigned</String>
+		<String ID="ConfigManager.VirtualKey.VK_LBUTTON">Left mouse button</String>
+		<String ID="ConfigManager.VirtualKey.VK_RBUTTON">Right mouse button</String>
+		<String ID="ConfigManager.VirtualKey.VK_MBUTTON">Middle mouse button</String>
+		<String ID="ConfigManager.VirtualKey.VK_XBUTTON1">Mouse button X1</String>
+		<String ID="ConfigManager.VirtualKey.VK_XBUTTON2">Mouse button X2</String>
+		<String ID="ConfigManager.VirtualKey.VK_SPACE">Space</String>
+		<String ID="ConfigManager.VirtualKey.VK_LWIN">Left Windows key</String>
+		<String ID="ConfigManager.VirtualKey.VK_RWIN">Right Windows key</String>
+		<String ID="ConfigManager.VirtualKey.VK_LSHIFT">Left Shift</String>
+		<String ID="ConfigManager.VirtualKey.VK_RSHIFT">Right Shift</String>
+		<String ID="ConfigManager.VirtualKey.VK_LCONTROL">Left Ctrl</String>
+		<String ID="ConfigManager.VirtualKey.VK_RCONTROL">Right Ctrl</String>
+		<String ID="ConfigManager.VirtualKey.VK_LMENU">Left Alt</String>
+		<String ID="ConfigManager.VirtualKey.VK_RMENU">Right Alt</String>
+		<String ID="ConfigManager.VirtualKey.VK_LEFT">Page Left</String>
+		<String ID="ConfigManager.VirtualKey.VK_UP">Page Up</String>
+		<String ID="ConfigManager.VirtualKey.VK_RIGHT">Page Right</String>
+		<String ID="ConfigManager.VirtualKey.VK_DOWN">Page Down</String>
+
+		<String ID="ConfigManager.Categories.None">Unknown parameters</String>
+
+		<String ID="ConfigManager.Samples.None">None</String>
+		<String ID="ConfigManager.Samples.VeryLow">Very low</String>
+		<String ID="ConfigManager.Samples.Low">Low</String>
+		<String ID="ConfigManager.Samples.Mid">Medium</String>
+		<String ID="ConfigManager.Samples.High">High</String>
+		<String ID="ConfigManager.Samples.VeryHigh">Very high</String>
+		<String ID="ConfigManager.Samples.Ultra">Ultra</String>
+		<String ID="ConfigManager.Samples.Extreme">Extreme</String>
+		<String ID="ConfigManager.Samples.VideoMode.RatioUnknown">Unknown aspect ratio</String>
+	</StringTable>
+</Lang>

@@ -164,18 +164,19 @@ namespace Kortex
 	}
 	LoadTranslationStatus IApplication::TryLoadTranslation(KxTranslation& translation,
 														   const KxTranslation::AvailableMap& availableTranslations,
+														   const wxString& component,
 														   const wxString& desiredLocale
 	) const
 	{
-		auto LoadLang = [&translation, &availableTranslations](const wxString& locale) -> bool
+		auto LoadLang = [&translation, &component, &availableTranslations](const wxString& name, bool isFullName = false) -> bool
 		{
-			auto it = availableTranslations.find(locale);
+			auto it = availableTranslations.find(isFullName ? name : name + '.' + component);
 			if (it != availableTranslations.end())
 			{
-				Utility::Log::LogInfo("Trying to load translation from file \"%1\" for \"%2\" locale", it->second, locale);
+				Utility::Log::LogInfo("Trying to load translation from file \"%1\" for \"%2\" component", it->second, name);
 				if (translation.LoadFromFile(it->second))
 				{
-					translation.SetLocale(locale);
+					translation.SetLocale(name.BeforeFirst('.'));
 					return true;
 				}
 			}
@@ -201,7 +202,7 @@ namespace Kortex
 
 			// Try first available
 			const auto& first = *availableTranslations.begin();
-			if (LoadLang(first.first))
+			if (LoadLang(first.first, true))
 			{
 				return LoadTranslationStatus::Success;
 			}

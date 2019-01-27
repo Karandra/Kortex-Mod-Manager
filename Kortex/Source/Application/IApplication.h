@@ -105,6 +105,7 @@ namespace Kortex
 			wxLog& GetLogger();
 			LoadTranslationStatus TryLoadTranslation(KxTranslation& translation,
 													 const KxTranslation::AvailableMap& availableTranslations,
+													 const wxString& component,
 													 const wxString& desiredLocale = wxEmptyString
 			) const;
 	};

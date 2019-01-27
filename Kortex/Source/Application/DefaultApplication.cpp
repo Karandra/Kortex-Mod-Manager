@@ -355,7 +355,7 @@ namespace Kortex::Application
 		m_AvailableTranslations = KxTranslation::FindTranslationsInDirectory(m_DataFolder + "\\Translation");
 		auto option = GetGlobalOption(OName::Language);
 
-		switch (TryLoadTranslation(m_Translation, m_AvailableTranslations, option.GetAttribute(OName::Locale)))
+		switch (TryLoadTranslation(m_Translation, m_AvailableTranslations, "Application", option.GetAttribute(OName::Locale)))
 		{
 			case LoadTranslationStatus::Success:
 			{

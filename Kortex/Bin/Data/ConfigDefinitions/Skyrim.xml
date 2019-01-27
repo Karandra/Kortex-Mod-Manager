@@ -2,18 +2,19 @@
 <Definition>
 	<DataTypes>
 		<Entry Type="bool">
-			<Input As="int|bool"/>
-			<Output As="int"/>
+			<Input As="any"/>
+			<Output As="bool"/>
 		</Entry>
 		<Entry Type="int">
-			<Input As="int"/>
+			<Input As="any"/>
 			<Output As="int"/>
 		</Entry>
 		<Entry Type="float">
-			<Input As="int|float"/>
+			<Input As="any"/>
 			<Output As="float" Precision="4"/>
 		</Entry>
 	</DataTypes>
+	
 	<TypeDetection>
 		<HungarianNotation>
 			<Entry Prefix="i" Type="int"/>
@@ -26,8 +27,13 @@
 			<Entry Prefix="r" Type="string"/>
 		</HungarianNotation>
 	</TypeDetection>
+
+	<Options>
+		<Format Value="INI"/>
+		<TypeDetection Value="HungarianNotation"/>
+	</Options>
 	
-	<Groups Format="INI" TypeDetectionMethod="HungarianNotation">
+	<Groups>
 		<Group ID="Game">
 			<!-- Graphics -->
 			<Entry Category="Game/Graphics" Path="Display" Name="iPresentInterval" Type="bool"></Entry>

@@ -990,6 +990,30 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Definition.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\DataType.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\ITypeDetector.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\ItemOptions.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\ISource.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\IValue.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\INISource.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\ItemGroup.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1872,6 +1896,33 @@
       <Filter>Code\Include\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Definition.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\DataType.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ITypeDetector.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Common.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemOptions.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ISource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\IValue.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\INISource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
   </ItemGroup>

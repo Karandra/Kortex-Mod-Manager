@@ -6,7 +6,7 @@ namespace Kortex::GameConfig
 {
 	bool TypeID::IsSignedInteger() const
 	{
-		return IsOneOfTypes<DataTypeID::Int8, DataTypeID::Int16, DataTypeID::Int32>();
+		return IsOneOfTypes<DataTypeID::Int8, DataTypeID::Int16, DataTypeID::Int32, DataTypeID::Int64>();
 	}
 	bool TypeID::IsUnsignedInteger() const
 	{

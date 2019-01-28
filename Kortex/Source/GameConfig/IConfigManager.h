@@ -3,6 +3,7 @@
 #include "Application/IManager.h"
 #include "Application/RefStackTranslator.h"
 #include <KxFramework/KxTranslation.h>
+class KxXMLNode;
 
 namespace Kortex
 {
@@ -29,5 +30,7 @@ namespace Kortex
 
 		public:
 			virtual const ITranslator& GetTranslator() const = 0;
+
+			wxString LoadItemLabel(const KxXMLNode& itemNode, const wxString& name) const;
 	};
 }

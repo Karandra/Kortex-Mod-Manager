@@ -15,10 +15,13 @@ namespace Kortex::GameConfig
 	ItemSamples::ItemSamples(Item& item, const KxXMLNode& node)
 		:m_Item(item)
 	{
-		m_SortOrder.FromString(node.GetAttribute(wxS("SortOrder")));
-		m_SortOptions.FromOrExpression(node.GetAttribute(wxS("SortOptions")));
+		if (node.IsOK())
+		{
+			m_SortOrder.FromString(node.GetAttribute(wxS("SortOrder")));
+			m_SortOptions.FromOrExpression(node.GetAttribute(wxS("SortOptions")));
 
-		m_Values.reserve(node.GetChildrenCount());
-		LoadSamples(node);
+			m_Values.reserve(node.GetChildrenCount());
+			LoadSamples(node);
+		}
 	}
 }

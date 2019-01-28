@@ -48,7 +48,7 @@ namespace Kortex::GameConfig
 
 	DataType::DataType(const KxXMLNode& node)
 	{
-		if (m_TypeID.FromString(node.GetAttribute(wxS("Type"))) && !m_TypeID.IsAny())
+		if (node.IsOK() && m_TypeID.FromString(node.GetAttribute(wxS("Type"))) && !m_TypeID.IsAny())
 		{
 			// Input
 			const KxXMLNode inputNode = node.GetFirstChildElement(wxS("Input"));

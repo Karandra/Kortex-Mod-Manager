@@ -17,8 +17,11 @@ namespace Kortex::GameConfig
 {
 	void ItemOptions::Load(const KxXMLNode& node)
 	{
-		m_SourceFormat.FromString(node.GetFirstChildElement(wxS("Format")).GetAttribute(wxS("Value")));
-		m_TypeDetector.FromString(node.GetFirstChildElement(wxS("TypeDetection")).GetAttribute(wxS("Value")));
+		if (node.IsOK())
+		{
+			m_SourceFormat.FromString(node.GetFirstChildElement(wxS("Format")).GetAttribute(wxS("Value")));
+			m_TypeDetector.FromString(node.GetFirstChildElement(wxS("TypeDetection")).GetAttribute(wxS("Value")));
+		}
 	}
 	void ItemOptions::CopyIfNotSpecified(const ItemOptions& other)
 	{

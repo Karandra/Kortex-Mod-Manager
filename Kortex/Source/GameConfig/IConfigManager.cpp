@@ -41,4 +41,26 @@ namespace Kortex
 		:ManagerWithTypeInfo(GameConfigModule::GetInstance())
 	{
 	}
+
+	wxString IConfigManager::LoadItemLabel(const KxXMLNode& itemNode, const wxString& name) const
+	{
+		const ITranslator& translator = GetTranslator();
+
+		wxString label = itemNode.GetAttribute(wxS("Label"));
+		if (!label.IsEmpty())
+		{
+			auto value = translator.TryGetString(label);
+			if (value)
+			{
+				return *value;
+			}
+		}
+
+		auto value = translator.TryGetString(wxS("ValueName.") + name);
+		if (value)
+		{
+			return *value;
+		}
+		return name;
+	}
 }

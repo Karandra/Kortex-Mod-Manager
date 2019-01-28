@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "DataType.h"
 #include "ItemValue.h"
+#include "ItemOptions.h"
 
 namespace Kortex
 {
@@ -22,6 +23,7 @@ namespace Kortex::GameConfig
 			wxString m_Path;
 			wxString m_Name;
 			ItemValue m_Value;
+			ItemOptions m_Options;
 
 		public:
 			Item(ItemGroup& group, const KxXMLNode& itemNode);
@@ -61,6 +63,11 @@ namespace Kortex::GameConfig
 			ItemValue& GetValue()
 			{
 				return m_Value;
+			}
+	
+			const ItemOptions& GetOptions() const
+			{
+				return m_Options;
 			}
 	};
 }

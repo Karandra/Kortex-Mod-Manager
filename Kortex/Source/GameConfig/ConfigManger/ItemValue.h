@@ -5,31 +5,43 @@
 
 namespace Kortex::GameConfig
 {
+	class ItemOptions;
+
 	class ItemValue
 	{
 		private:
 			wxAny m_Value;
-			wxString m_Label;
 			DataType m_Type;
 
 		private:
-			void FromString(const wxString& stringValue);
+			void FromString(const wxString& stringValue, const ItemOptions& options);
 			void AsBool(TypeID inputType, const wxString& stringValue);
 			void AsSignedInteger(TypeID inputType, const wxString& stringValue);
 			void AsUnsignedInteger(TypeID inputType, const wxString& stringValue);
 			void AsFloat(TypeID inputType, const wxString& stringValue);
 			void AsString(TypeID inputType, const wxString& stringValue);
 
+			wxString ToString(const ItemOptions& options) const;
+			wxString FromBool(TypeID outputType, const ItemOptions& options) const;
+			wxString FromSignedInteger(TypeID outputType, const ItemOptions& options) const;
+			wxString FromUnsignedInteger(TypeID outputType, const ItemOptions& options) const;
+			wxString FromFloat(TypeID outputType, const ItemOptions& options) const;
+			wxString FromString(TypeID outputType, const ItemOptions& options) const;
+
 		public:
 			ItemValue() = default;
-			template<class T> ItemValue(const DataType& type, T&& value)
+			ItemValue(const DataType& type)
+				:m_Type(type)
+			{
+			}
+			template<class T> ItemValue(const DataType& type, const ItemOptions& options, T&& value)
 				:m_Type(type), m_Value(value)
 			{
 			}
-			template<> ItemValue(const DataType& type, const wxString& value)
+			template<> ItemValue(const DataType& type, const ItemOptions& options, const wxString& value)
 				:m_Type(type)
 			{
-				FromString(value);
+				FromString(value, options);
 			}
 
 		public:
@@ -37,6 +49,7 @@ namespace Kortex::GameConfig
 			{
 				return m_Type.IsOK();
 			}
+			
 			DataType GetType() const
 			{
 				return m_Type;
@@ -45,47 +58,48 @@ namespace Kortex::GameConfig
 			{
 				m_Type = type;
 			}
-
-			wxString GetLabel() const
-			{
-				if (m_Label.IsEmpty())
-				{
-					wxString label;
-					m_Value.GetAs<wxString>(&label);
-					return label;
-				}
-				return m_Label;
-			}
-			void SetLabel(const wxString& label)
-			{
-				m_Label = label;
-			}
 			
-			bool HasValue() const
+			bool IsNull() const
 			{
-				return !m_Value.IsNull();
+				return m_Value.IsNull();
 			}
-			const wxAny& GetValue() const
-			{
-				return m_Value;
-			}
-			void SetValue(const wxAny& value)
-			{
-				m_Value = value;
-			}
-			void RemoveValue()
+			void MakeNull()
 			{
 				m_Value.MakeNull();
 			}
-			template<class T> bool SetValue(T&& value)
+
+			template<class T> bool As(T& value) const
+			{
+				return m_Value.GetAs(&value);
+			}
+			template<> bool As(wxAny& value) const
+			{
+				value = m_Value;
+				return true;
+			}
+
+			template<class T> T As() const
+			{
+				static_assert(std::is_default_constructible_v<T>);
+
+				T value;
+				return m_Value.GetAs(&value);
+			}
+			template<> wxAny As() const
+			{
+				return m_Value;
+			}
+
+			template<class T> bool Assign(T&& value)
 			{
 				m_Value = value;
-				return HasValue();
+				return !IsNull();
 			}
-			template<> bool SetValue(const wxString& value)
+			template<> bool Assign(wxAny&& value)
 			{
-				FromString(value);
-				return HasValue();
+				m_Value = std::move(value);
+				value.MakeNull();
+				return !IsNull();
 			}
 	};
 }

@@ -1,63 +1,132 @@
 #include "stdafx.h"
 #include "ItemValue.h"
+#include "ItemOptions.h"
+#include <KxFramework/KxString.h>
 
 namespace
 {
-	bool GetAsBool(bool& value, const wxString& stringValue)
-	{
-		if (stringValue == wxS("true") || stringValue == wxS("TRUE") || stringValue == wxS("1"))
-		{
-			value = true;
-			return true;
-		}
-		else if (stringValue == wxS("false") || stringValue == wxS("FALSE") || stringValue == wxS("0"))
-		{
-			value = false;
-			return true;
-		}
-		return false;
-	}
-	template<class T> bool GetAsSignedInteger(T& value, const wxString& stringValue)
-	{
-		static_assert(std::is_signed_v<T>);
+	using Kortex::GameConfig::ItemOptions;
 
-		long long iValue = 0;
-		if (stringValue.ToLongLong(&iValue))
-		{
-			value = iValue;
-			return true;
-		}
-		return false;
-	}
-	template<class T> bool GetAsUnsignedInteger(T& value, const wxString& stringValue)
+	template<class T> wxString GetAs(const wxAny& anyValue, const ItemOptions& options)
 	{
-		static_assert(std::is_unsigned_v<T>);
-
-		unsigned long long iValue = 0;
-		if (stringValue.ToULongLong(&iValue))
+		T value;
+		if (anyValue.GetAs(&value))
 		{
-			value = iValue;
-			return true;
+			return value;
 		}
-		return false;
+		return {};
 	}
-	template<class T> bool GetAsFloat(T& value, const wxString& stringValue)
+	template<class T> wxString FormatAs(const T& value, const ItemOptions& options)
 	{
-		static_assert(std::is_floating_point_v<T>);
-
-		double dValue = 0;
-		if (stringValue.ToCDouble(&dValue))
+		KxFormat formatter(options.GetOutputFormat());
+		if constexpr(std::is_floating_point_v<T>)
 		{
-			value = dValue;
-			return true;
+			return formatter(value, options.GetPrecision());
 		}
-		return false;
+		else
+		{
+			return formatter(value);
+		}
+	}
+	template<class T> wxString GetAndFormat(const wxAny& anyValue, const ItemOptions& options)
+	{
+		T value;
+		if (anyValue.GetAs(&value))
+		{
+			return FormatAs(value, options);
+		}
+		return {};
+	}
+
+	namespace ToAny
+	{
+		bool GetAsBool(bool& value, const wxString& stringValue)
+		{
+			if (stringValue == wxS("true") || stringValue == wxS("TRUE") || stringValue == wxS("1"))
+			{
+				value = true;
+				return true;
+			}
+			else if (stringValue == wxS("false") || stringValue == wxS("FALSE") || stringValue == wxS("0"))
+			{
+				value = false;
+				return true;
+			}
+			return false;
+		}
+		template<class T> bool GetAsSignedInteger(T& value, const wxString& stringValue)
+		{
+			static_assert(std::is_signed_v<T>);
+
+			long long iValue = 0;
+			if (stringValue.ToLongLong(&iValue))
+			{
+				value = iValue;
+				return true;
+			}
+			return false;
+		}
+		template<class T> bool GetAsUnsignedInteger(T& value, const wxString& stringValue)
+		{
+			static_assert(std::is_unsigned_v<T>);
+
+			unsigned long long iValue = 0;
+			if (stringValue.ToULongLong(&iValue))
+			{
+				value = iValue;
+				return true;
+			}
+			return false;
+		}
+		template<class T> bool GetAsFloat(T& value, const wxString& stringValue)
+		{
+			static_assert(std::is_floating_point_v<T>);
+
+			double dValue = 0;
+			if (stringValue.ToCDouble(&dValue))
+			{
+				value = dValue;
+				return true;
+			}
+			return false;
+		}
+	}
+
+	namespace FromAny
+	{
+		wxString AsBool(const wxAny& value, const ItemOptions& options)
+		{
+			bool boolValue = false;
+			value.GetAs(&boolValue);
+
+			return boolValue ? wxS("true") : wxS("false");
+		}
+		wxString AsSignedInteger(const wxAny& value, const ItemOptions& options)
+		{
+			return GetAndFormat<int64_t>(value, options);
+		}
+		wxString AsUnsignedInteger(const wxAny& value, const ItemOptions& options)
+		{
+			return GetAndFormat<uint64_t>(value, options);
+		}
+		wxString AsFloat32(const wxAny& value, const ItemOptions& options)
+		{
+			return GetAndFormat<float>(value, options);
+		}
+		wxString AsFloat64(const wxAny& value, const ItemOptions& options)
+		{
+			return GetAndFormat<double>(value, options);
+		}
+		wxString AsString(const wxAny& value, const ItemOptions& options)
+		{
+			return GetAndFormat<wxString>(value, options);
+		}
 	}
 }
 
 namespace Kortex::GameConfig
 {
-	void ItemValue::FromString(const wxString& stringValue)
+	void ItemValue::FromString(const wxString& stringValue, const ItemOptions& options)
 	{
 		const TypeID type = m_Type.GetID();
 		const TypeID inputType = m_Type.GetInputType();
@@ -88,7 +157,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsBool())
 		{
 			bool value = false;
-			if (GetAsBool(value, stringValue))
+			if (ToAny::GetAsBool(value, stringValue))
 			{
 				m_Value = value;
 				return;
@@ -97,7 +166,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsSignedInteger())
 		{
 			int value = 0;
-			if (GetAsSignedInteger(value, stringValue))
+			if (ToAny::GetAsSignedInteger(value, stringValue))
 			{
 				m_Value = value != 0;
 				return;
@@ -106,7 +175,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsUnsignedInteger())
 		{
 			unsigned int value = 0;
-			if (GetAsUnsignedInteger(value, stringValue))
+			if (ToAny::GetAsUnsignedInteger(value, stringValue))
 			{
 				m_Value = value != 0u;
 				return;
@@ -115,7 +184,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsFloat())
 		{
 			double value = 0.0;
-			if (GetAsFloat(value, stringValue))
+			if (ToAny::GetAsFloat(value, stringValue))
 			{
 				m_Value = value != 0.0;
 				return;
@@ -132,7 +201,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsSignedInteger())
 		{
 			int64_t value = 0;
-			if (GetAsSignedInteger(value, stringValue))
+			if (ToAny::GetAsSignedInteger(value, stringValue))
 			{
 				m_Value = value;
 				return;
@@ -141,7 +210,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsUnsignedInteger())
 		{
 			uint64_t value = 0;
-			if (GetAsUnsignedInteger(value, stringValue))
+			if (ToAny::GetAsUnsignedInteger(value, stringValue))
 			{
 				m_Value = value;
 				return;
@@ -150,7 +219,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsFloat())
 		{
 			double value = 0.0;
-			if (GetAsFloat(value, stringValue))
+			if (ToAny::GetAsFloat(value, stringValue))
 			{
 				m_Value = value;
 				return;
@@ -159,7 +228,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsBool())
 		{
 			bool value = false;
-			if (GetAsBool(value, stringValue))
+			if (ToAny::GetAsBool(value, stringValue))
 			{
 				m_Value = (int)value;
 				return;
@@ -181,7 +250,7 @@ namespace Kortex::GameConfig
 		if (inputType.IsFloat())
 		{
 			double value = 0.0;
-			if (GetAsFloat(value, stringValue))
+			if (ToAny::GetAsFloat(value, stringValue))
 			{
 				m_Value = value;
 				return;
@@ -190,33 +259,33 @@ namespace Kortex::GameConfig
 		if (inputType.IsSignedInteger())
 		{
 			int64_t value = 0;
-			if (GetAsSignedInteger(value, stringValue))
+			if (ToAny::GetAsSignedInteger(value, stringValue))
 			{
-				m_Value = value;
+				m_Value = static_cast<double>(value);
 				return;
 			}
 		}
 		if (inputType.IsUnsignedInteger())
 		{
 			uint64_t value = 0;
-			if (GetAsUnsignedInteger(value, stringValue))
+			if (ToAny::GetAsUnsignedInteger(value, stringValue))
 			{
-				m_Value = value;
+				m_Value = static_cast<double>(value);
 				return;
 			}
 		}
 		if (inputType.IsBool())
 		{
 			bool value = false;
-			if (GetAsBool(value, stringValue))
+			if (ToAny::GetAsBool(value, stringValue))
 			{
-				m_Value = (double)value;
+				m_Value = static_cast<double>(value);
 				return;
 			}
 		}
 		if (inputType.IsString())
 		{
-			m_Value = (double)!stringValue.IsEmpty();
+			m_Value = static_cast<double>(!stringValue.IsEmpty());
 			return;
 		}
 	}
@@ -224,5 +293,122 @@ namespace Kortex::GameConfig
 	{
 		// There's no point in checking anything, just copy raw value
 		m_Value = stringValue;
+	}
+
+	wxString ItemValue::ToString(const ItemOptions& options) const
+	{
+		const TypeID type = m_Type.GetID();
+		const TypeID outputType = m_Type.GetInputType();
+
+		if (type.IsBool())
+		{
+			return FromBool(outputType, options);
+		}
+		else if (type.IsSignedInteger())
+		{
+			return FromSignedInteger(outputType, options);
+		}
+		else if (type.IsUnsignedInteger())
+		{
+			return FromUnsignedInteger(outputType, options);
+		}
+		else if (type.IsFloat())
+		{
+			return FromFloat(outputType, options);
+		}
+		else if (type.IsString())
+		{
+			FromString(outputType, options);
+		}
+	}
+	wxString ItemValue::FromBool(TypeID outputType, const ItemOptions& options) const
+	{
+		if (outputType.IsBool() || outputType.IsString())
+		{
+			return FromAny::AsBool(m_Value, options);
+		}
+		if (outputType.IsInteger())
+		{
+			return FromAny::AsSignedInteger(m_Value, options);
+		}
+		if (outputType.IsFloat())
+		{
+			return FromAny::AsFloat32(m_Value, options);
+		}
+		return {};
+	}
+	wxString ItemValue::FromSignedInteger(TypeID outputType, const ItemOptions& options) const
+	{
+		if (outputType.IsInteger() || outputType.IsBool())
+		{
+			return FromAny::AsSignedInteger(m_Value, options);
+		}
+		if (outputType.IsType(DataTypeID::Float32))
+		{
+			return FromAny::AsFloat32(m_Value, options);
+		}
+		if (outputType.IsType(DataTypeID::Float64))
+		{
+			return FromAny::AsFloat64(m_Value, options);
+		}
+		if (outputType.IsString())
+		{
+			return FromAny::AsString(m_Value, options);
+		}
+		return {};
+	}
+	wxString ItemValue::FromUnsignedInteger(TypeID outputType, const ItemOptions& options) const
+	{
+		if (outputType.IsInteger() || outputType.IsBool())
+		{
+			return FromAny::AsUnsignedInteger(m_Value, options);
+		}
+		if (outputType.IsType(DataTypeID::Float32))
+		{
+			return FromAny::AsFloat32(m_Value, options);
+		}
+		if (outputType.IsType(DataTypeID::Float64))
+		{
+			return FromAny::AsFloat64(m_Value, options);
+		}
+		if (outputType.IsString())
+		{
+			return FromAny::AsString(m_Value, options);
+		}
+		return {};
+	}
+	wxString ItemValue::FromFloat(TypeID outputType, const ItemOptions& options) const
+	{
+		if (outputType.IsType(DataTypeID::Float32) || outputType.IsString())
+		{
+			return FromAny::AsFloat32(m_Value, options);
+		}
+		if (outputType.IsType(DataTypeID::Float64) || outputType.IsString())
+		{
+			return FromAny::AsFloat64(m_Value, options);
+		}
+		if (outputType.IsInteger() || outputType.IsBool())
+		{
+			return FromAny::AsFloat32(m_Value, options);
+		}
+		return {};
+	}
+	wxString ItemValue::FromString(TypeID outputType, const ItemOptions& options) const
+	{
+		if (outputType.IsString())
+		{
+			return GetAndFormat<wxString>(m_Value, options);
+		}
+		if (outputType.IsFloat())
+		{
+			wxString value = GetAs<wxString>(m_Value, options);
+			return FormatAs<double>(!value.IsEmpty(), options);
+		}
+		if (outputType.IsInteger() || outputType.IsBool())
+		{
+			wxString value = GetAs<wxString>(m_Value, options);
+			return FormatAs<int>(!value.IsEmpty(), options);
+		}
+		return {};
 	}
 }

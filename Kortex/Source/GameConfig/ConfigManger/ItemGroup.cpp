@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ItemGroup.h"
 #include "Item.h"
+#include "Items/SimpleItem.h"
 #include "Definition.h"
 #include "INISource.h"
 #include <KxFramework/KxXML.h>
@@ -11,7 +12,8 @@ namespace Kortex::GameConfig
 	{
 		for (KxXMLNode node = groupNode.GetFirstChildElement(wxS("Item")); node.IsOK(); node = node.GetNextSiblingElement(wxS("Item")))
 		{
-			m_Items.emplace_back(std::make_unique<Item>(*this, node));
+			Item& item = NewItem<SimpleItem>(*this, node);
+			item.Create(groupNode);
 		}
 	}
 

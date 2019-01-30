@@ -334,6 +334,12 @@
     <Filter Include="Code\Source\GameConfig\ConfigManger">
       <UniqueIdentifier>{a9415759-d16c-4b15-9583-65f5841112fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\GameConfig\ConfigManger\Items">
+      <UniqueIdentifier>{3ca8163e-eaa9-4bf5-bf2c-548749e35194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\GameConfig\ConfigManger\Items">
+      <UniqueIdentifier>{e3fd558d-96e0-47aa-a71b-5b3ba6623c97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1028,6 +1034,9 @@
     </ClCompile>
     <ClCompile Include="Source\Application\RefStackTranslator.cpp">
       <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Items\SimpleItem.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1954,6 +1963,9 @@
     </ClInclude>
     <ClInclude Include="Source\Application\RefStackTranslator.h">
       <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\SimpleItem.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

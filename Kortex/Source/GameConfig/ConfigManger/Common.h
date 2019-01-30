@@ -23,6 +23,7 @@ namespace Kortex::GameConfig
 
 		Bool = 1 << 10,
 		String = 1 << 11,
+		Struct = 1 << 12,
 
 		// Aliases
 		Int = Int32,
@@ -54,6 +55,7 @@ namespace Kortex::GameConfig
 
 			{DataTypeID::Bool, wxS("bool")},
 			{DataTypeID::String, wxS("string")},
+			{DataTypeID::Struct, wxS("struct")},
 		};
 	};
 	using DataTypeValue = KxIndexedEnum::Value<DataTypeDef, DataTypeID::None>;
@@ -159,4 +161,42 @@ namespace Kortex::GameConfig
 		};
 	};
 	using SortOptionsValue = KxIndexedEnum::Value<SortOptionsDef, SortOptionsID::Lexicographical>;
+}
+
+namespace Kortex::GameConfig
+{
+	enum class ItemKindID: uint32_t
+	{
+		Simple = 0,
+	};
+	class ItemKindDef: public KxIndexedEnum::Definition<ItemKindDef, ItemKindID, wxString, true>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{ItemKindID::Simple, wxS("Simple")},
+		};
+	};
+	using ItemKindValue = KxIndexedEnum::Value<ItemKindDef, ItemKindID::Simple>;
+}
+
+namespace Kortex::GameConfig
+{
+	enum class SamplesSourceID: uint32_t
+	{
+		None = 0,
+		Range,
+		Function,
+		ImmediateItems,
+	};
+	class SamplesSourceDef: public KxIndexedEnum::Definition<SamplesSourceDef, SamplesSourceID, wxString, true>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{SamplesSourceID::None, wxS("None")},
+			{SamplesSourceID::Range, wxS("Range")},
+			{SamplesSourceID::Function, wxS("Function")},
+			{SamplesSourceID::ImmediateItems, wxS("ImmediateItems")},
+		};
+	};
+	using SamplesSourceValue = KxIndexedEnum::Value<SamplesSourceDef, SamplesSourceID::None>;
 }

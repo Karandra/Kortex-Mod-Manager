@@ -16,6 +16,10 @@ namespace Kortex::GameConfig
 	{
 		return IsSignedInteger() || IsUnsignedInteger();
 	}
+	bool TypeID::IsAnyInt64() const
+	{
+		return IsOneOfTypes<DataTypeID::Int64, DataTypeID::UInt64>();
+	}
 	bool TypeID::IsFloat() const
 	{
 		return IsOneOfTypes<DataTypeID::Float32, DataTypeID::Float64>();
@@ -27,6 +31,10 @@ namespace Kortex::GameConfig
 	bool TypeID::IsString() const
 	{
 		return IsOneOfTypes<DataTypeID::String>();
+	}
+	bool TypeID::IsStruct() const
+	{
+		return IsOneOfTypes<DataTypeID::Struct>();
 	}
 }
 
@@ -60,14 +68,14 @@ namespace Kortex::GameConfig
 			m_OutputType.FromOrExpression(outputNode.GetAttribute(wxS("As")), m_TypeID);
 			if (m_OutputType.IsFloat())
 			{
-				// I think 8 digits of precision should be enough
-				m_Precision = std::clamp<int>(outputNode.GetAttributeInt(wxS("Precision"), -1), -1, 8);
+				// ItemOptions class will correct this value if needed
+				m_Precision = outputNode.GetAttributeInt(wxS("Precision"), -1);
 			}
 		}
 	}
 
 	bool DataType::IsOK() const
 	{
-		return !m_TypeID.IsNone() && !m_TypeID.IsAny() && !m_InputType.IsNone() && !m_OutputType.IsNone() && !m_OutputType.IsAny();
+		return !m_TypeID.IsNone() && !m_TypeID.IsAny() && !m_InputType.IsNone() && m_OutputType.IsDefinitiveType();
 	}
 }

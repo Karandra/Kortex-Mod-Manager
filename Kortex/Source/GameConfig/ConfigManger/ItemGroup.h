@@ -35,6 +35,10 @@ namespace Kortex::GameConfig
 					func(*item);
 				}
 			}
+			template<class T, class... Args> T& DoNewItem(Args&&... arg)
+			{
+				return *m_Items.emplace_back(std::make_unique<T>(std::forward<Args>(arg)));
+			}
 
 		public:
 			ItemGroup(Definition& definition, const wxString& id, const KxXMLNode& groupNode, const ItemOptions& parentOptions);
@@ -77,5 +81,9 @@ namespace Kortex::GameConfig
 			}
 
 			bool OnLoadInstance(const KxXMLNode& groupNode);
+			template<class T, class... Args> T& NewItem(Args&&... arg)
+			{
+				return static_cast<T&>(*m_Items.emplace_back(std::make_unique<T>(std::forward<Args>(arg)...)));
+			}
 	};
 }

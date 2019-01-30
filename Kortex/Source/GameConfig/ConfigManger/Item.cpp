@@ -14,19 +14,17 @@ namespace Kortex::GameConfig
 			m_Category = itemNode.GetAttribute(wxS("Category"));
 			m_Path = itemNode.GetAttribute(wxS("Path"));
 			m_Name = itemNode.GetAttribute(wxS("Name"));
+			m_TypeID.FromString(itemNode.GetAttribute(wxS("Type")));
+			m_Kind.FromString(itemNode.GetAttribute(wxS("Kind")));
 
-			TypeID type(itemNode.GetAttribute(wxS("Type")));
-			m_Value.SetType(group.GetDefinition().GetDataType(type));
-			m_Value.SetLabel(GetManager().LoadItemLabel(itemNode, m_Name));
-
-			m_Options.Load(itemNode.GetFirstChildElement(wxS("Options")));
+			m_Options.Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());
 			m_Options.CopyIfNotSpecified(group.GetOptions());
 		}
 	}
 
 	bool Item::IsOK() const
 	{
-		return !m_Category.IsEmpty() && !m_Path.IsEmpty() && !m_Name.IsEmpty() && m_Value.IsOk();
+		return !m_Category.IsEmpty() && !m_Path.IsEmpty() && !m_Name.IsEmpty() && m_TypeID.IsDefinitiveType();
 	}
 	
 	IConfigManager& Item::GetManager() const
@@ -36,5 +34,10 @@ namespace Kortex::GameConfig
 	Definition& Item::GetDefinition() const
 	{
 		return m_Group.GetDefinition();
+	}
+
+	DataType Item::GetDataType() const
+	{
+		return m_Group.GetDefinition().GetDataType(m_TypeID);
 	}
 }

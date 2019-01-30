@@ -29,7 +29,7 @@
 	</TypeDetection>
 
 	<Options>
-		<Format Value="INI"/>
+		<SourceFormat Value="INI"/>
 		<TypeDetection Value="HungarianNotation"/>
 	</Options>
 	
@@ -42,12 +42,12 @@
 			
 			<!-- Interface -->
 			<Item Category="Game/Interface" Path="Interface" Name="fMaxSubtitleDistance" Type="float32">
-				<Samples Min="0" Max="2500" Step="250"/>
+				<Samples Source="Range" Min="0" Max="2500" Step="250"/>
 			</Item>
 
 			<!-- Vegetation -->
 			<Item Category="Game/Vegetation/Grass" Path="Grass" Name="iMinGrassSize" Type="int32">
-				<Samples Min="0" Max="150" Step="10"/>
+				<Samples Source="Range" Min="0" Max="150" Step="10"/>
 			</Item>
 		</Group>
 		
@@ -57,10 +57,17 @@
 			<Item Category="Game/Graphics" Path="Display" Name="bFXAAEnabled" Type="bool"></Item>
 
 			<Item Category="Game/Graphics" Path="Display" Name="sD3DDevice" Type="string" Editable="0">
-				<Samples FillFunction="GetVideoAdapterList"/>
+				<Options>
+					<Output>
+						<Format><![CDATA["%1"]]></Format>
+					</Output>
+				</Options>
+				<Samples Source="Function">
+					<Function Name="GetVideoAdapterList"/>
+				</Samples>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="iMultiSample" Type="int32">
-				<Samples>
+				<Samples Source="ImmediateItems" SortOrder="Explicit" SortOptions="None">
 					<Entry Label="$T(ConfigManager.Samples.None)">0</Entry>
 					<Entry Label="$T(ConfigManager.Samples.Low)">1</Entry>
 					<Entry Label="$T(ConfigManager.Samples.Mid)">2</Entry>
@@ -68,11 +75,20 @@
 					<Entry Label="$T(ConfigManager.Samples.Ultra)">8</Entry>
 				</Samples>
 			</Item>
+			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="struct">
+				<SubItems Separator="×">
+					<Item Name="iSize W" Type="int32"/>
+					<Item Name="iSize H" Type="int32"/>
+				</SubItems>
+				<Samples Source="Function">
+					<Function Name="GetVideoModesList"/>
+				</Samples>
+			</Item>
 		</Group>
 
 		<Group ID="Editor">
 			<Item Category="Editor" Path="General" Name="sLanguage" Type="string">
-				<Samples SortOrder="Explicit" SortOptions="IgnoreCase">
+				<Samples Source="ImmediateItems" SortOrder="Ascending" SortOptions="IgnoreCase">
 					<Entry Label="$T(GameConfig.Samples.Language.RUSSIAN)">RUSSIAN</Entry>
 					<Entry Label="$T(GameConfig.Samples.Language.ENGLISH)">ENGLISH</Entry>
 					<Entry Label="$T(GameConfig.Samples.Language.GERMAN)">GERMAN</Entry>

@@ -47,12 +47,23 @@ namespace Kortex::GameConfig
 			{
 				return GetValue() == DataTypeID::Any;
 			}
+			bool IsDefinitiveType() const
+			{
+				return !IsNone() && !IsAny();
+			}
+			
 			bool IsSignedInteger() const;
 			bool IsUnsignedInteger() const;
+			bool IsAnyInt64() const;
 			bool IsInteger() const;
 			bool IsFloat() const;
 			bool IsBool() const;
 			bool IsString() const;
+			bool IsStruct() const;
+			bool IsType(DataTypeID id) const
+			{
+				return HasFlag(id);
+			}
 	};
 }
 

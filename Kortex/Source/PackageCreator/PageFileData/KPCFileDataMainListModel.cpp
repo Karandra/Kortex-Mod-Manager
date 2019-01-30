@@ -505,7 +505,7 @@ void KPCFileDataMainListModel::OnReplaceFolderContent(const KxDataViewItem& item
 }
 void KPCFileDataMainListModel::OnRemoveElement(const KxDataViewItem& item)
 {
-	if (KPPFFileEntry* entry = GetDataEntry(item))
+	if (KPPFFileEntry* entry = GetDataEntry(GetRow(item)))
 	{
 		TrackRemoveID(entry->GetID());
 		RemoveItemAndNotify(*GetDataVector(), item);

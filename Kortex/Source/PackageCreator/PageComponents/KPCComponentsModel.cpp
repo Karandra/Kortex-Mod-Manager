@@ -115,6 +115,45 @@ namespace
 		}
 	}
 
+	KPCComponentsModelNode* GetSelectedAndExpanded(KPCComponentsModel* model, const KPCComponentsModelNode::Vector& nodes, KxDataViewCtrl* view, std::vector<KPCComponentsModelNode*>& expandedItems, KPCComponentsModelNode* except)
+	{
+		auto AddIfExpanded = [model, &expandedItems, view, except](KPCComponentsModelNode& node)
+		{
+			if (&node != except)
+			{
+				KxDataViewItem item = model->GetItem(&node);
+				if (view->IsExpanded(item))
+				{
+					expandedItems.push_back(&node);
+				}
+			}
+		};
+
+		for (const auto& step: nodes)
+		{
+			AddIfExpanded(*step);
+			for (const auto& group: step->GetChildren())
+			{
+				AddIfExpanded(*group);
+				for (const auto& entry: group->GetChildren())
+				{
+					AddIfExpanded(*entry);
+				}
+			}
+		}
+
+		auto selectedNode = model->GetNode(view->GetSelection());
+		return selectedNode != except ? selectedNode : nullptr;
+	}
+	void ExapndAndSelect(KPCComponentsModel* model, KxDataViewCtrl* view, const std::vector<KPCComponentsModelNode*>& expandedItems, const KPCComponentsModelNode* selectedItem)
+	{
+		for (const KPCComponentsModelNode* node: expandedItems)
+		{
+			view->Expand(model->GetItem(node));
+		}
+		view->Select(selectedItem ? model->GetItem(selectedItem) : KxDataViewItem());
+	}
+
 	KPCComponentsModelNode* GetParentStep(KPCComponentsModelNode* node)
 	{
 		KPCComponentsModelNode* parent = node;
@@ -882,7 +921,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
 			item->Enable(node && (node->GetGroup() || node->GetEntry() || node->IsEntryItem()));
 		}
-		
+
 		// Remove item
 		KxMenuItem* menuItemRemove = nullptr;
 		if (node)
@@ -1180,8 +1219,13 @@ void KPCComponentsModel::RemoveStep(KPCComponentsModelNode* node, const KPPCStep
 
 		steps.erase(FindElement(steps, step));
 		m_Steps.erase(FindElement(m_Steps, node));
-		ItemDeleted(GetItem(node));
+
+		std::vector<KPCComponentsModelNode*> expandedItems;
+		KPCComponentsModelNode* selectedItem = GetSelectedAndExpanded(this, m_Steps, GetView(), expandedItems, node);
+
+		ItemsCleared();
 		ChangeNotify();
+		ExapndAndSelect(this, GetView(), expandedItems, selectedItem);
 	}
 }
 void KPCComponentsModel::RemoveGroup(KPCComponentsModelNode* node, const KPPCGroup* group)
@@ -1194,8 +1238,13 @@ void KPCComponentsModel::RemoveGroup(KPCComponentsModelNode* node, const KPPCGro
 
 		groups.erase(FindElement(groups, group));
 		nodes.erase(FindElement(nodes, node));
-		ItemDeleted(GetItem(node->GetParent()), GetItem(node));
+
+		std::vector<KPCComponentsModelNode*> expandedItems;
+		KPCComponentsModelNode* selectedItem = GetSelectedAndExpanded(this, m_Steps, GetView(), expandedItems, node);
+
+		ItemsCleared();
 		ChangeNotify();
+		ExapndAndSelect(this, GetView(), expandedItems, selectedItem);
 	}
 }
 void KPCComponentsModel::RemoveEntry(KPCComponentsModelNode* node, const KPPCEntry* entry)
@@ -1205,8 +1254,13 @@ void KPCComponentsModel::RemoveEntry(KPCComponentsModelNode* node, const KPPCEnt
 
 	entries.erase(FindElement(entries, entry));
 	nodes.erase(FindElement(nodes, node));
-	ItemDeleted(GetItem(node->GetParent()), GetItem(node));
+
+	std::vector<KPCComponentsModelNode*> expandedItems;
+	KPCComponentsModelNode* selectedItem = GetSelectedAndExpanded(this, m_Steps, GetView(), expandedItems, node);
+
+	ItemsCleared();
 	ChangeNotify();
+	ExapndAndSelect(this, GetView(), expandedItems, selectedItem);
 }
 
 KxMenu* KPCComponentsModel::CreateAllItemsMenu()

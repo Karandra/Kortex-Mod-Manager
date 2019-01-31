@@ -48,9 +48,6 @@ namespace Kortex
 			virtual void OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance) = 0;
 			virtual void OnProfileConfigChanged(IAppOption& option, IGameProfile& profile) = 0;
 
-			void InitGlobalManagers();
-			void UnInitGlobalManagers();
-
 		public:
 			wxString GetRootFolder() const;
 			wxString GetExecutablePath() const;

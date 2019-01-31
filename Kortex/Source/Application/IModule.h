@@ -18,6 +18,7 @@ namespace Kortex
 
 	class IModule: public Application::WithOptions<IModule>
 	{
+		friend class IManager;
 		friend class IApplication;
 		friend class GameInstance::InstanceModuleLoader;
 
@@ -28,9 +29,9 @@ namespace Kortex
 			
 			enum class Disposition
 			{
-				ActiveInstance,
+				Local,
 				Global,
-				Local
+				ActiveInstance,
 			};
 
 		private:
@@ -52,6 +53,9 @@ namespace Kortex
 
 		public:
 			static const RefList& GetInstances();
+
+			static void InitModulesWithDisposition(Disposition disposition);
+			static void UninitModulesWithDisposition(Disposition disposition);
 		
 			template<class Functor> static void ForEachModule(Functor&& functor)
 			{

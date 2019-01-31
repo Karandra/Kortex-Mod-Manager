@@ -19,49 +19,6 @@ namespace Kortex
 		return GetSystemApp()->RethrowCatchAndGetExceptionInfo();
 	}
 
-	void IApplication::InitGlobalManagers()
-	{
-		Utility::Log::LogInfo("Initializing modules");
-
-		IModule::ForEachModuleAndManager([](IModule& module, IManager* manager = nullptr)
-		{
-			if (manager)
-			{
-				Utility::Log::LogInfo("Initializing manager: %1::%2", module.GetModuleInfo().GetID(), manager->GetManagerInfo().GetID());
-				manager->OnInit();
-			}
-			else
-			{
-				if (module.GetModuleDisposition() == IModule::Disposition::Global)
-				{
-					Utility::Log::LogInfo("Initializing module: %1", module.GetModuleInfo().GetID());
-					module.OnInit();
-				}
-			}
-		});
-	}
-	void IApplication::UnInitGlobalManagers()
-	{
-		Utility::Log::LogInfo("Uninitializing modules.");
-
-		IModule::ForEachModuleAndManager([](IModule& module, IManager* manager = nullptr)
-		{
-			if (manager)
-			{
-				Utility::Log::LogInfo("Uninitializing manager: %1::%1", module.GetModuleInfo().GetID(), manager->GetManagerInfo().GetID());
-				manager->OnExit();
-			}
-			else
-			{
-				if (module.GetModuleDisposition() == IModule::Disposition::Global)
-				{
-					Utility::Log::LogInfo("Uninitializing module: %1", module.GetModuleInfo().GetID());
-					module.OnExit();
-				}
-			}
-		});
-	}
-
 	wxString IApplication::GetRootFolder() const
 	{
 		return GetSystemApp()->GetRootFolder();

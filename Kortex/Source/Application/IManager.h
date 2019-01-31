@@ -18,6 +18,7 @@ namespace Kortex
 
 	class IManager: public Application::WithOptions<IManager>
 	{
+		friend class IModule;
 		friend class IApplication;
 		friend class GameInstance::InstanceModuleLoader;
 

@@ -153,8 +153,9 @@ namespace Kortex::Application
 			Utility::Log::LogInfo("Core systems initialized");
 
 			Utility::Log::LogInfo("Initializing instances");
-			InitInstancesData(m_InitProgressDialog);
-			InitGlobalManagers();
+			InitInstancesData(m_InitProgressDialog);			IModule::InitModulesWithDisposition(IModule::Disposition::Global);
+			IModule::InitModulesWithDisposition(IModule::Disposition::ActiveInstance);
+			IModule::InitModulesWithDisposition(IModule::Disposition::Local);
 
 			Utility::Log::LogInfo("Loading saved profile");
 			IGameInstance::GetActive()->LoadSavedProfileOrDefault();
@@ -190,7 +191,9 @@ namespace Kortex::Application
 		UnInitVFS();
 
 		// Destroy other managers
-		UnInitGlobalManagers();
+		IModule::UninitModulesWithDisposition(IModule::Disposition::Local);
+		IModule::UninitModulesWithDisposition(IModule::Disposition::ActiveInstance);
+		IModule::UninitModulesWithDisposition(IModule::Disposition::Global);
 
 		m_GameModsModule.reset();
 		m_PackagesModule.reset();

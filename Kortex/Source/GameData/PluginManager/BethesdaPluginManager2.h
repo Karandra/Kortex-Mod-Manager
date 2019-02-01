@@ -7,7 +7,7 @@ namespace Kortex::PluginManager
 {
 	class Bethesda2DisplayModel;
 
-	class BethesdaPluginManager2: public RTTI::IMultiInterface<BethesdaPluginManager2, BethesdaPluginManager>
+	class BethesdaPluginManager2: public RTTI::IExtendInterface<BethesdaPluginManager2, BethesdaPluginManager>
 	{
 		friend class Bethesda2DisplayModel;
 

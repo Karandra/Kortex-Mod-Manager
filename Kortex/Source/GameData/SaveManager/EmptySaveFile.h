@@ -4,7 +4,7 @@
 
 namespace Kortex::SaveManager
 {
-	class EmptySaveFile: public RTTI::IMultiInterface<EmptySaveFile, BaseGameSave>
+	class EmptySaveFile: public RTTI::IExtendInterface<EmptySaveFile, BaseGameSave>
 	{
 		protected:
 			virtual bool OnRead(const KxFileItem& fileItem) override

@@ -91,7 +91,7 @@ namespace Kortex
 			ModEndorsement& operator=(const ModEndorsement&) = default;
 	};
 
-	class IModFileInfo: public RTTI::IMultiInterface<IModFileInfo, NetworkManager::BaseModReply>
+	class IModFileInfo: public RTTI::IExtendInterface<IModFileInfo, NetworkManager::BaseModReply>
 	{
 		public:
 			enum class CategoryID
@@ -135,7 +135,7 @@ namespace Kortex
 			virtual CategoryID GetCategory() const = 0;
 	};
 
-	class IModInfo: public RTTI::IMultiInterface<IModInfo, NetworkManager::BaseModReply>
+	class IModInfo: public RTTI::IExtendInterface<IModInfo, NetworkManager::BaseModReply>
 	{
 		public:
 			virtual std::unique_ptr<IModInfo> Clone() const = 0;
@@ -162,7 +162,7 @@ namespace Kortex
 			virtual bool ContainsAdultContent() const = 0;
 	};
 
-	class IModDownloadInfo: public RTTI::IMultiInterface<IModDownloadInfo, NetworkManager::BaseModReply>
+	class IModDownloadInfo: public RTTI::IExtendInterface<IModDownloadInfo, NetworkManager::BaseModReply>
 	{
 		public:
 			virtual std::unique_ptr<IModDownloadInfo> Clone() const = 0;
@@ -178,7 +178,7 @@ namespace Kortex
 			virtual void SetURL(const wxString& value) = 0;
 	};
 
-	class IModEndorsementInfo: public RTTI::IMultiInterface<IModEndorsementInfo, NetworkManager::BaseModReply>
+	class IModEndorsementInfo: public RTTI::IExtendInterface<IModEndorsementInfo, NetworkManager::BaseModReply>
 	{
 		public:
 			virtual std::unique_ptr<IModEndorsementInfo> Clone() const = 0;

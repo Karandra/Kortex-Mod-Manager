@@ -5,7 +5,7 @@ class KxINI;
 
 namespace Kortex::PluginManager
 {
-	class BethesdaPluginManagerMW: public RTTI::IMultiInterface<BethesdaPluginManagerMW, BethesdaPluginManager>
+	class BethesdaPluginManagerMW: public RTTI::IExtendInterface<BethesdaPluginManagerMW, BethesdaPluginManager>
 	{
 		private:
 			const wxString m_PluginsListFile;

@@ -45,7 +45,7 @@ namespace Kortex::Nexus::Internal::ReplyStructs
 
 namespace Kortex
 {
-	class INexusModDownloadInfo: public RTTI::IMultiInterface<INexusModDownloadInfo, IModDownloadInfo>
+	class INexusModDownloadInfo: public RTTI::IExtendInterface<INexusModDownloadInfo, IModDownloadInfo>
 	{
 		public:
 			virtual wxString GetKey() const = 0;

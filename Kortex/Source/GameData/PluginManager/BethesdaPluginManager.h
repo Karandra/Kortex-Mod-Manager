@@ -34,7 +34,7 @@ namespace Kortex::PluginManager
 	class LibLoot;
 	class BethesdaDisplayModel;
 
-	class BethesdaPluginManager: public RTTI::IMultiInterface<BethesdaPluginManager, BasePluginManager>
+	class BethesdaPluginManager: public RTTI::IExtendInterface<BethesdaPluginManager, BasePluginManager>
 	{
 		protected:
 			LootAPIConfig m_LibLootConfig;

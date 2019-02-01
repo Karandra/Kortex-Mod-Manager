@@ -4,7 +4,7 @@
 
 namespace Kortex::SaveManager
 {
-	class IBethesdaGameSave: public RTTI::IMultiInterface<IBethesdaGameSave, BaseGameSave>
+	class IBethesdaGameSave: public RTTI::IExtendInterface<IBethesdaGameSave, BaseGameSave>
 	{
 		public:
 			using float32_t = float;

@@ -1038,6 +1038,9 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\SimpleItem.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Workspace.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1966,6 +1969,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\Items\SimpleItem.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Workspace.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

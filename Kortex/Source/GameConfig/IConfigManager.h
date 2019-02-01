@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Application/IManager.h"
+#include "Application/IPluggableManager.h"
 #include "Application/RefStackTranslator.h"
 #include <KxFramework/KxTranslation.h>
 class KxXMLNode;
@@ -12,7 +12,7 @@ namespace Kortex
 		extern const SimpleManagerInfo TypeInfo;
 	};
 
-	class IConfigManager: public ManagerWithTypeInfo<IManager, ConfigManager::Internal::TypeInfo>
+	class IConfigManager: public ManagerWithTypeInfo<IPluggableManager, ConfigManager::Internal::TypeInfo>
 	{
 		private:
 			KxTranslation m_Translation;

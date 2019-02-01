@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultGameConfigManager.h"
 #include "Definition.h"
+#include "Workspace.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>
 
@@ -55,6 +56,10 @@ namespace Kortex::GameConfig
 				m_Definitions.insert_or_assign(id, std::move(definition));
 			}
 		}
+	}
+	KWorkspace* DefaultGameConfigManager::CreateWorkspace(KMainWindow* mainWindow)
+	{
+		return new Workspace(mainWindow);
 	}
 
 	void DefaultGameConfigManager::Load()

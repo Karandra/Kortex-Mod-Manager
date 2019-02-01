@@ -29,7 +29,8 @@ namespace Kortex::GameConfig
 			void OnInit() override;
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
-			
+			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+
 			RefStackTranslator& GetTranslatorStack() override
 			{
 				return m_Translator;

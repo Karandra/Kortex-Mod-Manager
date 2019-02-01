@@ -20,14 +20,14 @@ namespace Kortex::GameConfig
 			{
 				case ItemKindID::Simple:
 				{
-					item = DoNewItem<SimpleItem>(*this, node);
+					item = NewItem<SimpleItem>(*this, node);
 					break;
 				}
 			};
 
 			if (item && item->Create(groupNode))
 			{
-				m_Items.emplace_back(std::move(item));
+				AddItem(std::move(item));
 			}
 		}
 	}
@@ -75,9 +75,15 @@ namespace Kortex::GameConfig
 
 	void ItemGroup::ReadItems()
 	{
-		if (m_Source->Open())
+		if (m_Source && m_Source->Open())
 		{
-			for (auto& item: m_Items)
+			if (!m_UnknownLoaded)
+			{
+				m_Source->LoadUnknownItems(*this);
+				m_UnknownLoaded = true;
+			}
+
+			for (auto& [hash, item]: m_Items)
 			{
 				item->Read(*m_Source);
 			}

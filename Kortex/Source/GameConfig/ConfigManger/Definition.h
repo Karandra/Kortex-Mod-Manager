@@ -28,7 +28,14 @@ namespace Kortex::GameConfig
 
 		private:
 			void LoadGroups(const KxXMLNode& groupsNode);
-			template<class TItems, class TFunctor> static void CallForEachItem(TItems&& items, TFunctor&& func)
+			template<class TItems, class TFunctor> static void VectorForEach(TItems&& items, TFunctor&& func)
+			{
+				for (auto& item: items)
+				{
+					func(*item);
+				}
+			}
+			template<class TItems, class TFunctor> static void MapForEach(TItems&& items, TFunctor&& func)
 			{
 				for (auto& [id, item]: items)
 				{
@@ -71,11 +78,15 @@ namespace Kortex::GameConfig
 			}
 			template<class TFunctor> void ForEachGroup(TFunctor&& func) const
 			{
-				CallForEachItem(m_Groups, func);
+				MapForEach(m_Groups, func);
 			}
 			template<class TFunctor> void ForEachGroup(TFunctor&& func)
 			{
-				CallForEachItem(m_Groups, func);
+				MapForEach(m_Groups, func);
+			}
+			template<class TFunctor> void ForEachTypeDetector(TFunctor&& func) const
+			{
+				VectorForEach(m_TypeDetectors, func);
 			}
 	};
 }

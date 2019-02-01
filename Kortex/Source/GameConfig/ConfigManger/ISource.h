@@ -6,6 +6,7 @@ namespace Kortex::GameConfig
 {
 	class Item;
 	class ItemValue;
+	class ItemGroup;
 
 	class ISource
 	{
@@ -23,5 +24,6 @@ namespace Kortex::GameConfig
 
 			virtual bool WriteValue(const Item& item, const ItemValue& value) = 0;
 			virtual bool ReadValue(Item& item, ItemValue& value) const = 0;
+			virtual void LoadUnknownItems(ItemGroup& group) = 0;
 	};
 }

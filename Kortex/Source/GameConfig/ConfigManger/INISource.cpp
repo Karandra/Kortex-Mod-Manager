@@ -2,6 +2,9 @@
 #include "INISource.h"
 #include "Item.h"
 #include "ItemValue.h"
+#include "ItemGroup.h"
+#include "Definition.h"
+#include "Items/SimpleItem.h"
 #include <KxFramework/KxFileStream.h>
 
 namespace Kortex::GameConfig
@@ -32,5 +35,33 @@ namespace Kortex::GameConfig
 	bool INISource::ReadValue(Item& item, ItemValue& value) const
 	{
 		return value.Deserialize(m_INI.GetValue(item.GetPath(), item.GetName()), item);
+	}
+	void INISource::LoadUnknownItems(ItemGroup& group)
+	{
+		for (const wxString& sectionName: m_INI.GetSectionNames())
+		{
+			for (const wxString& keyName: m_INI.GetKeyNames(sectionName))
+			{
+				auto item = group.NewItem<SimpleItem>(group);
+				item->SetCategory(group.GetID());
+				item->SetPath(sectionName);
+				item->SetName(keyName);
+
+				if (!group.HasItem(*item))
+				{
+					TypeID type;
+					group.GetDefinition().ForEachTypeDetector([this, &type, &keyName, &sectionName](const ITypeDetector& detector)
+					{
+						if (type.IsNone())
+						{
+							type = detector.GetType(keyName, detector.RequiresValueData() ? m_INI.GetValue(keyName, sectionName) : wxString());
+						}
+					});
+
+					item->SetTypeID(type);
+					group.AddItem(std::move(item));
+				}
+			}
+		}
 	}
 }

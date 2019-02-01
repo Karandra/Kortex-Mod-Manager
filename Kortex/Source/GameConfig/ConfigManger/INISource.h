@@ -37,5 +37,6 @@ namespace Kortex::GameConfig
 
 			bool WriteValue(const Item& item, const ItemValue& value) override;
 			bool ReadValue(Item& item, ItemValue& value) const override;
+			void LoadUnknownItems(ItemGroup& group) override;
 	};
 }

@@ -24,22 +24,19 @@ namespace Kortex::GameConfig
 			ItemOptions m_Options;
 			SourceTypeValue m_SourceType = SourceType::None;
 			std::unique_ptr<ISource> m_Source;
-			std::vector<std::unique_ptr<Item>> m_Items;
+			std::unordered_map<size_t, std::unique_ptr<Item>> m_Items;
+			bool m_UnknownLoaded = false;
 
 		private:
 			void LoadItems(const KxXMLNode& groupNode);
 			template<class TItems, class TFunctor> static void CallForEachItem(TItems&& items, TFunctor&& func)
 			{
-				for (auto& item: items)
+				for (auto& [hash, item]: items)
 				{
 					func(*item);
 				}
 			}
-			template<class T, class... Args> auto DoNewItem(Args&&... arg)
-			{
-				return std::make_unique<T>(std::forward<Args>(arg)...);
-			}
-
+			
 		public:
 			ItemGroup(Definition& definition, const wxString& id, const KxXMLNode& groupNode, const ItemOptions& parentOptions);
 
@@ -82,9 +79,23 @@ namespace Kortex::GameConfig
 			}
 
 			bool OnLoadInstance(const KxXMLNode& groupNode);
-			template<class T, class... Args> T& NewItem(Args&&... arg)
+			
+			bool HasItem(const Item& item) const
 			{
-				return static_cast<T&>(*m_Items.emplace_back(DoNewItem<T>(std::forward<Args>(arg)...)));
+				return m_Items.find(item.GetHash()) != m_Items.end();
+			}
+			template<class T, class... Args> auto NewItem(Args&&... arg)
+			{
+				return std::make_unique<T>(std::forward<Args>(arg)...);
+			}
+			template<class T> T& AddItem(std::unique_ptr<T> item)
+			{
+				auto[it, inserted] = m_Items.insert_or_assign(item->GetHash(), std::move(item));
+				return *static_cast<T*>(it->second.get());
+			}
+			template<class T, class... Args> T& EmplaceItem(Args&&... arg)
+			{
+				return AddItem(NewItem<T>(std::forward<Args>(arg)...));
 			}
 	};
 }

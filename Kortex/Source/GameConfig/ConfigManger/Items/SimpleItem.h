@@ -8,6 +8,7 @@ namespace Kortex::GameConfig
 	{
 		private:
 			ItemValue m_Value;
+			HashStore m_HashStore;
 
 		protected:
 			bool Create(const KxXMLNode& itemNode) override;
@@ -20,6 +21,11 @@ namespace Kortex::GameConfig
 			SimpleItem(ItemGroup& group, const KxXMLNode& itemNode = {});
 
 		public:
+			size_t GetHash() const override
+			{
+				return m_HashStore.Get(*this);
+			}
+
 			const ItemValue& GetValue() const
 			{
 				return m_Value;

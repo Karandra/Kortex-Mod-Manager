@@ -12,6 +12,7 @@ namespace Kortex::GameConfig
 			virtual ~ITypeDetector() = default;
 
 		public:
+			virtual bool RequiresValueData() const = 0;
 			virtual TypeID GetType(const wxString& valueName, const wxString& valueData) const = 0;
 	};
 }
@@ -27,6 +28,10 @@ namespace Kortex::GameConfig
 			HungarianNotationTypeDetector(const KxXMLNode& rootNode);
 
 		public:
+			bool RequiresValueData() const override
+			{
+				return false;
+			}
 			TypeID GetType(const wxString& valueName, const wxString& valueData) const override;
 	};
 }
@@ -36,6 +41,10 @@ namespace Kortex::GameConfig
 	class DataAnalysisTypeDetector: public ITypeDetector
 	{
 		public:
+			bool RequiresValueData() const override
+			{
+				return true;
+			}
 			TypeID GetType(const wxString& valueName, const wxString& valueData) const override;
 	};
 }

@@ -6,6 +6,32 @@
 
 namespace Kortex::GameConfig
 {
+	size_t HashStore::Get(const Item& item, const wxString& value) const
+	{
+		if (!m_Hash)
+		{
+			m_Hash = item.CalcHash(value);
+		}
+		return *m_Hash;
+	}
+}
+
+namespace Kortex::GameConfig
+{
+	size_t Item::CalcHash(const wxString& value) const
+	{
+		wxString hashData = m_Path;
+		hashData += wxS('/');
+		hashData += m_Name;
+
+		if (!value.IsEmpty())
+		{
+			hashData += wxS('/');
+			hashData += value;
+		}
+		return std::hash<wxString>()(hashData);
+	}
+
 	Item::Item(ItemGroup& group, const KxXMLNode& itemNode)
 		:m_Group(group)
 	{
@@ -27,7 +53,6 @@ namespace Kortex::GameConfig
 	{
 		return !m_Category.IsEmpty() && !m_Path.IsEmpty() && m_TypeID.IsDefinitiveType();
 	}
-	
 	IConfigManager& Item::GetManager() const
 	{
 		return m_Group.GetManager();

@@ -14,12 +14,27 @@ namespace Kortex
 
 namespace Kortex::GameConfig
 {
+	class Item;
+
+	class HashStore
+	{
+		private:
+			mutable std::optional<size_t> m_Hash;
+
+		public:
+			size_t Get(const Item& item, const wxString& value = {}) const;
+	};
+}
+
+namespace Kortex::GameConfig
+{
 	class ItemGroup;
 	class Definition;
 
 	class Item: public RTTI::IInterface<Item>
 	{
 		friend class ItemGroup;
+		friend class HashStore;
 
 		private:
 			ItemGroup& m_Group;
@@ -37,12 +52,15 @@ namespace Kortex::GameConfig
 			virtual void Read(const ISource& source) = 0;
 			virtual void Write(ISource& source) const = 0;
 
+			size_t CalcHash(const wxString& value = {}) const;
+
 		public:
 			Item(ItemGroup& group, const KxXMLNode& itemNode = {});
 			virtual ~Item() = default;
 
 		public:
 			virtual bool IsOK() const;
+			virtual size_t GetHash() const = 0;
 			void ReadItem();
 
 			IConfigManager& GetManager() const;

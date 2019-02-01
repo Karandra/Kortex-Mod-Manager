@@ -42,7 +42,7 @@ namespace Kortex
 	{
 	}
 
-	wxString IConfigManager::LoadItemLabel(const KxXMLNode& itemNode, const wxString& name) const
+	wxString IConfigManager::LoadItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const
 	{
 		const ITranslator& translator = GetTranslator();
 
@@ -56,7 +56,7 @@ namespace Kortex
 			}
 		}
 
-		auto value = translator.TryGetString(wxS("ValueName.") + name);
+		auto value = translator.TryGetString(perfix + wxS('.') + name);
 		if (value)
 		{
 			return *value;

@@ -4,6 +4,9 @@
 
 namespace Kortex::GameConfig
 {
+	class Item;
+	class ItemValue;
+
 	class ISource
 	{
 		public:
@@ -18,7 +21,7 @@ namespace Kortex::GameConfig
 			virtual bool Save() = 0;
 			virtual void Close() = 0;
 
-			virtual bool WriteValue() = 0;
-			virtual bool ReadValue() const = 0;
+			virtual bool WriteValue(const Item& item, const ItemValue& value) = 0;
+			virtual bool ReadValue(Item& item, ItemValue& value) const = 0;
 	};
 }

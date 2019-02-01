@@ -5,14 +5,20 @@ namespace Kortex::GameConfig
 {
 	bool SimpleItem::Create(const KxXMLNode& itemNode)
 	{
-		m_Value.SetType(GetDataType());
-		return true;
+		return IsOK();
 	}
-	void SimpleItem::Load(const ISource& source)
+
+	void SimpleItem::Clear()
 	{
+		m_Value.MakeNull();
 	}
-	void SimpleItem::Save(ISource& source) const
+	void SimpleItem::Read(const ISource& source)
 	{
+		source.ReadValue(*this, m_Value);
+	}
+	void SimpleItem::Write(ISource& source) const
+	{
+		source.WriteValue(*this, m_Value);
 	}
 
 	SimpleItem::SimpleItem(ItemGroup& group, const KxXMLNode& itemNode)

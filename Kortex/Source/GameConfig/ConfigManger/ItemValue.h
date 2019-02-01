@@ -5,60 +5,60 @@
 
 namespace Kortex::GameConfig
 {
+	class Item;
 	class ItemOptions;
 
 	class ItemValue
 	{
+		public:
+			using Vector = std::vector<ItemValue>;
+
 		private:
 			wxAny m_Value;
-			DataType m_Type;
+			TypeID m_Type;
 
 		private:
-			void FromString(const wxString& stringValue, const ItemOptions& options);
-			void AsBool(TypeID inputType, const wxString& stringValue);
-			void AsSignedInteger(TypeID inputType, const wxString& stringValue);
-			void AsUnsignedInteger(TypeID inputType, const wxString& stringValue);
-			void AsFloat(TypeID inputType, const wxString& stringValue);
-			void AsString(TypeID inputType, const wxString& stringValue);
+			void DoDeserialize(const wxString& stringValue, const Item& item);
+			void DeserializeAsBool(TypeID inputType, const wxString& stringValue);
+			void DeserializeAsSignedInteger(TypeID inputType, const wxString& stringValue);
+			void DeserializeAsUnsignedInteger(TypeID inputType, const wxString& stringValue);
+			void DeserializeAsFloat(TypeID inputType, const wxString& stringValue);
+			void DeserializeAsString(TypeID inputType, const wxString& stringValue);
 
-			wxString ToString(const ItemOptions& options) const;
-			wxString FromBool(TypeID outputType, const ItemOptions& options) const;
-			wxString FromSignedInteger(TypeID outputType, const ItemOptions& options) const;
-			wxString FromUnsignedInteger(TypeID outputType, const ItemOptions& options) const;
-			wxString FromFloat(TypeID outputType, const ItemOptions& options) const;
-			wxString FromString(TypeID outputType, const ItemOptions& options) const;
+			wxString DoSerialize(const Item& item) const;
+			wxString SerializeFromBool(TypeID outputType, const Item& item) const;
+			wxString SerializeFromSignedInteger(TypeID outputType, const Item& item) const;
+			wxString SerializeFromUnsignedInteger(TypeID outputType, const Item& item) const;
+			wxString SerializeFromFloat(TypeID outputType, const Item& item) const;
+			wxString SerializeFromString(TypeID outputType, const Item& item) const;
 
 		public:
-			ItemValue() = default;
-			ItemValue(const DataType& type)
+			ItemValue(TypeID type = {})
 				:m_Type(type)
 			{
 			}
-			template<class T> ItemValue(const DataType& type, const ItemOptions& options, T&& value)
-				:m_Type(type), m_Value(value)
+			template<class T> ItemValue(T&& value)
 			{
+				Assign(std::forward<T>(value));
 			}
-			template<> ItemValue(const DataType& type, const ItemOptions& options, const wxString& value)
-				:m_Type(type)
+			template<> ItemValue(wxAny&& value)
 			{
-				FromString(value, options);
+				Assign(std::move(value));
 			}
 
 		public:
-			bool IsOk() const
-			{
-				return m_Type.IsOK();
-			}
-			
-			DataType GetType() const
+			TypeID GetType() const
 			{
 				return m_Type;
 			}
-			void SetType(DataType type)
+			void SetType(TypeID type)
 			{
 				m_Type = type;
 			}
-			
+
+			wxString Serialize(const Item& item) const;
+			bool Deserialize(const wxString& value, const Item& item);
+
 			bool IsNull() const
 			{
 				return m_Value.IsNull();
@@ -83,7 +83,11 @@ namespace Kortex::GameConfig
 				static_assert(std::is_default_constructible_v<T>);
 
 				T value;
-				return m_Value.GetAs(&value);
+				if (m_Value.GetAs(&value))
+				{
+					return value;
+				}
+				return {};
 			}
 			template<> wxAny As() const
 			{
@@ -93,11 +97,14 @@ namespace Kortex::GameConfig
 			template<class T> bool Assign(T&& value)
 			{
 				m_Value = value;
+				m_Type = TypeID::GetByCType<std::decay_t<T>>();
 				return !IsNull();
 			}
 			template<> bool Assign(wxAny&& value)
 			{
 				m_Value = std::move(value);
+				m_Type = DataTypeID::Any;
+
 				value.MakeNull();
 				return !IsNull();
 			}

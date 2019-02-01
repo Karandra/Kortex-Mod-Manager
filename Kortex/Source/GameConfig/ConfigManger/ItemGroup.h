@@ -35,9 +35,9 @@ namespace Kortex::GameConfig
 					func(*item);
 				}
 			}
-			template<class T, class... Args> T& DoNewItem(Args&&... arg)
+			template<class T, class... Args> auto DoNewItem(Args&&... arg)
 			{
-				return *m_Items.emplace_back(std::make_unique<T>(std::forward<Args>(arg)));
+				return std::make_unique<T>(std::forward<Args>(arg)...);
 			}
 
 		public:
@@ -70,6 +70,7 @@ namespace Kortex::GameConfig
 			{
 				return *m_Source;
 			}
+			void ReadItems();
 
 			template<class TFunctor> void ForEachItem(TFunctor&& func) const
 			{
@@ -83,7 +84,7 @@ namespace Kortex::GameConfig
 			bool OnLoadInstance(const KxXMLNode& groupNode);
 			template<class T, class... Args> T& NewItem(Args&&... arg)
 			{
-				return static_cast<T&>(*m_Items.emplace_back(std::make_unique<T>(std::forward<Args>(arg)...)));
+				return static_cast<T&>(*m_Items.emplace_back(DoNewItem<T>(std::forward<Args>(arg)...)));
 			}
 	};
 }

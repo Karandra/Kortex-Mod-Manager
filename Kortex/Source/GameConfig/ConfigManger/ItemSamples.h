@@ -7,17 +7,114 @@ class KxXMLNode;
 namespace Kortex::GameConfig
 {
 	class Item;
+}
 
+namespace Kortex::GameConfig
+{
+	enum class SamplingFunctionID: uint32_t
+	{
+		None = 0,
+		GetVideoModes,
+		GetVideoAdapters,
+		GetVirtualKeys,
+		FindFiles,
+	};
+	class SamplingFunctionDef: public KxIndexedEnum::Definition<SamplingFunctionDef, SamplingFunctionID, wxString, true>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{SamplingFunctionID::None, wxS("None")},
+			{SamplingFunctionID::GetVideoModes, wxS("GetVideoModes")},
+			{SamplingFunctionID::GetVideoAdapters, wxS("GetVideoAdapters")},
+			{SamplingFunctionID::GetVirtualKeys, wxS("GetVirtualKeys")},
+			{SamplingFunctionID::FindFiles, wxS("FindFiles")},
+		};
+	};
+	using SamplingFunctionValue = KxIndexedEnum::Value<SamplingFunctionDef, SamplingFunctionID::None>;
+}
+
+namespace Kortex::GameConfig
+{
+	class SampleValue
+	{
+		private:
+			ItemValue m_Value;
+			wxString m_Label;
+
+		public:
+			SampleValue(const wxString& label = {})
+				:m_Label(label)
+			{
+			}
+			template<class T> SampleValue(const wxString& label, T&& value)
+				:m_Label(label), m_Value(std::forward<T>(value))
+			{
+			}
+
+		public:
+			const ItemValue& GetValue() const
+			{
+				return m_Value;
+			}
+			ItemValue& GetValue()
+			{
+				return m_Value;
+			}
+
+			wxString GetLabel() const
+			{
+				return m_Label.IsEmpty() ? m_Value.As<wxString>() : m_Label;
+			}
+			void SetLabel(const wxString& label)
+			{
+				m_Label = label;
+			}
+	};
+}
+
+namespace Kortex::GameConfig
+{
 	class ItemSamples
 	{
 		private:
-			Item& m_Item;
-			SortOrderValue m_SortOrder;
-			SortOptionsValue m_SortOptions;
-			std::vector<ItemValue> m_Values;
+			struct VirtualKeyInfo
+			{
+				using Map = std::unordered_map<uint64_t, VirtualKeyInfo>;
+
+				wxString ID;
+				wxString Name;
+				uint64_t Code = 0;
+			};
 
 		private:
-			void LoadSamples(const KxXMLNode& rootNode);
+			Item& m_Item;
+			SamplesSourceValue m_SourceType;
+			SortOrderValue m_SortOrder;
+			SortOptionsValue m_SortOptions;
+			SamplingFunctionValue m_SampligFunction;
+			std::vector<SampleValue> m_Values;
+
+		private:
+			void LoadImmediateItems(const KxXMLNode& rootNode);
+			void SortImmediateItems();
+			void GenerateItems(const ItemValue::Vector& arguments);
+			const VirtualKeyInfo::Map& LoadVirtualKeys();
+			template<class T> void LoadRange(T min, T max, T step)
+			{
+				for (double i = min; i <= max; i += step)
+				{
+					SampleValue& sample = m_Values.emplace_back();
+					sample.GetValue().Assign(i);
+				}
+			}
+
+			template<class TItems, class TFunctor> void DoForEachItem(TItems&& items, TFunctor&& func)
+			{
+				for (auto& item: items)
+				{
+					func(item);
+				}
+			}
 
 		public:
 			ItemSamples(Item& item, const KxXMLNode& node);
@@ -27,6 +124,11 @@ namespace Kortex::GameConfig
 			{
 				return m_Item;
 			}
+			
+			SamplesSourceValue GetSourceType() const
+			{
+				return m_SourceType;
+			}
 			SortOrderValue GetSortOrder() const
 			{
 				return m_SortOrder;
@@ -34,6 +136,19 @@ namespace Kortex::GameConfig
 			SortOptionsValue GetSortOptions() const
 			{
 				return m_SortOptions;
+			}
+			SamplingFunctionValue GetSamplingFunction() const
+			{
+				return m_SampligFunction;
+			}
+
+			template<class TFunctor> void ForEachSample(TFunctor&& func) const
+			{
+				DoForEachItem(m_Values, func);
+			}
+			template<class TFunctor> void ForEachSample(TFunctor&& func)
+			{
+				DoForEachItem(m_Values, func);
 			}
 	};
 }

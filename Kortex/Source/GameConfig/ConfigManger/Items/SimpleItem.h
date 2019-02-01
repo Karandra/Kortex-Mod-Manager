@@ -11,18 +11,20 @@ namespace Kortex::GameConfig
 
 		protected:
 			bool Create(const KxXMLNode& itemNode) override;
-			void Load(const ISource& source) override;
-			void Save(ISource& source) const override;
+
+			void Clear() override;
+			void Read(const ISource& source) override;
+			void Write(ISource& source) const override;
 
 		public:
-			SimpleItem(ItemGroup& group, const KxXMLNode& itemNode);
+			SimpleItem(ItemGroup& group, const KxXMLNode& itemNode = {});
 
 		public:
 			const ItemValue& GetValue() const
 			{
 				return m_Value;
 			}
-			const ItemValue& GetValue()
+			ItemValue& GetValue()
 			{
 				return m_Value;
 			}

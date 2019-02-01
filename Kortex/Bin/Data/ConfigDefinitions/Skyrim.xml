@@ -63,16 +63,21 @@
 					</Output>
 				</Options>
 				<Samples Source="Function">
-					<Function Name="GetVideoAdapterList"/>
+					<Function Name="GetVideoAdapterList">
+						<Arg Type="int"></Arg>
+					</Function>
 				</Samples>
+			</Item>
+			<Item Category="Game/Graphics" Path="Display" Name="fGamma" Type="float32">
+				<Samples Source="Range" Min="0" Max="2" Step="0.25"/>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="iMultiSample" Type="int32">
 				<Samples Source="ImmediateItems" SortOrder="Explicit" SortOptions="None">
-					<Entry Label="$T(ConfigManager.Samples.None)">0</Entry>
-					<Entry Label="$T(ConfigManager.Samples.Low)">1</Entry>
-					<Entry Label="$T(ConfigManager.Samples.Mid)">2</Entry>
-					<Entry Label="$T(ConfigManager.Samples.High)">4</Entry>
-					<Entry Label="$T(ConfigManager.Samples.Ultra)">8</Entry>
+					<Value Label="$T(ConfigManager.Samples.None)">0</Value>
+					<Value Label="$T(ConfigManager.Samples.Low)">1</Value>
+					<Value Label="$T(ConfigManager.Samples.Mid)">2</Value>
+					<Value Label="$T(ConfigManager.Samples.High)">4</Value>
+					<Value Label="$T(ConfigManager.Samples.Ultra)">8</Value>
 				</Samples>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="struct">
@@ -89,23 +94,23 @@
 		<Group ID="Editor">
 			<Item Category="Editor" Path="General" Name="sLanguage" Type="string">
 				<Samples Source="ImmediateItems" SortOrder="Ascending" SortOptions="IgnoreCase">
-					<Entry Label="$T(GameConfig.Samples.Language.RUSSIAN)">RUSSIAN</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.ENGLISH)">ENGLISH</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.GERMAN)">GERMAN</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.FRENCH)">FRENCH</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.CZECH)">CZECH</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.ITALIAN)">ITALIAN</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.POLISH)">POLISH</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.SPANISH)">SPANISH</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.CHINESE)">CHINESE</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.DANISH)">DANISH</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.FINNISH)">FINNISH</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.GREEK)">GREEK</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.JAPANESE)">JAPANESE</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.NORWEGIAN)">NORWEGIAN</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.PORTUGUESE)">PORTUGUESE</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.SWEDISH)">SWEDISH</Entry>
-					<Entry Label="$T(GameConfig.Samples.Language.TURKISH)">TURKISH</Entry>
+					<Value Label="Language.RUSSIAN">RUSSIAN</Value>
+					<Value Label="Language.ENGLISH">ENGLISH</Value>
+					<Value Label="Language.GERMAN">GERMAN</Value>
+					<Value Label="Language.FRENCH">FRENCH</Value>
+					<Value Label="Language.CZECH">CZECH</Value>
+					<Value Label="Language.ITALIAN">ITALIAN</Value>
+					<Value Label="Language.POLISH">POLISH</Value>
+					<Value Label="Language.SPANISH">SPANISH</Value>
+					<Value Label="Language.CHINESE">CHINESE</Value>
+					<Value Label="Language.DANISH">DANISH</Value>
+					<Value Label="Language.FINNISH">FINNISH</Value>
+					<Value Label="Language.GREEK">GREEK</Value>
+					<Value Label="Language.JAPANESE">JAPANESE</Value>
+					<Value Label="Language.NORWEGIAN">NORWEGIAN</Value>
+					<Value Label="Language.PORTUGUESE">PORTUGUESE</Value>
+					<Value Label="Language.SWEDISH">SWEDISH</Value>
+					<Value Label="Language.TURKISH">TURKISH</Value>
 				</Samples>
 			</Item>
 			<Item Category="Editor/Messages" Path="MESSAGES" Name="bSkipInitializationFlows" Type="bool"></Item>

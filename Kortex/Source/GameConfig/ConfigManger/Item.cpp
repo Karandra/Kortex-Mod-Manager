@@ -14,6 +14,7 @@ namespace Kortex::GameConfig
 			m_Category = itemNode.GetAttribute(wxS("Category"));
 			m_Path = itemNode.GetAttribute(wxS("Path"));
 			m_Name = itemNode.GetAttribute(wxS("Name"));
+			m_Label = GetManager().LoadItemLabel(itemNode, m_Name, wxS("ValueName"));
 			m_TypeID.FromString(itemNode.GetAttribute(wxS("Type")));
 			m_Kind.FromString(itemNode.GetAttribute(wxS("Kind")));
 
@@ -24,7 +25,7 @@ namespace Kortex::GameConfig
 
 	bool Item::IsOK() const
 	{
-		return !m_Category.IsEmpty() && !m_Path.IsEmpty() && !m_Name.IsEmpty() && m_TypeID.IsDefinitiveType();
+		return !m_Category.IsEmpty() && !m_Path.IsEmpty() && m_TypeID.IsDefinitiveType();
 	}
 	
 	IConfigManager& Item::GetManager() const
@@ -36,6 +37,11 @@ namespace Kortex::GameConfig
 		return m_Group.GetDefinition();
 	}
 
+	void Item::ReadItem()
+	{
+		Clear();
+		Read(m_Group.GetSource());
+	}
 	DataType Item::GetDataType() const
 	{
 		return m_Group.GetDefinition().GetDataType(m_TypeID);

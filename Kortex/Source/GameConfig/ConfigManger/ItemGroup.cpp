@@ -12,8 +12,23 @@ namespace Kortex::GameConfig
 	{
 		for (KxXMLNode node = groupNode.GetFirstChildElement(wxS("Item")); node.IsOK(); node = node.GetNextSiblingElement(wxS("Item")))
 		{
-			Item& item = NewItem<SimpleItem>(*this, node);
-			item.Create(groupNode);
+			ItemKindValue kind;
+			kind.FromString(node.GetAttribute(wxS("Kind")));
+
+			std::unique_ptr<Item> item = nullptr;
+			switch (kind.GetValue())
+			{
+				case ItemKindID::Simple:
+				{
+					item = DoNewItem<SimpleItem>(*this, node);
+					break;
+				}
+			};
+
+			if (item && item->Create(groupNode))
+			{
+				m_Items.emplace_back(std::move(item));
+			}
 		}
 	}
 
@@ -56,5 +71,17 @@ namespace Kortex::GameConfig
 	IConfigManager& ItemGroup::GetManager() const
 	{
 		return m_Definition.GetManager();
+	}
+
+	void ItemGroup::ReadItems()
+	{
+		if (m_Source->Open())
+		{
+			for (auto& item: m_Items)
+			{
+				item->Read(*m_Source);
+			}
+			m_Source->Close();
+		}
 	}
 }

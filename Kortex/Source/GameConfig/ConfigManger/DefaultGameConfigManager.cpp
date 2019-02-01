@@ -2,6 +2,7 @@
 #include "DefaultGameConfigManager.h"
 #include "Definition.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/Events.hpp>
 
 namespace Kortex::GameConfig
 {
@@ -17,10 +18,15 @@ namespace Kortex::GameConfig
 			}
 		}
 	}
+	void DefaultGameConfigManager::OnChangeProfile(GameInstance::ProfileEvent& event)
+	{
+		Load();
+	}
 
 	void DefaultGameConfigManager::OnInit()
 	{
 		IConfigManager::OnInit();
+		IEvent::Bind(Events::ProfileSelected, &DefaultGameConfigManager::OnChangeProfile, this);
 	}
 	void DefaultGameConfigManager::OnExit()
 	{
@@ -49,5 +55,19 @@ namespace Kortex::GameConfig
 				m_Definitions.insert_or_assign(id, std::move(definition));
 			}
 		}
+	}
+
+	void DefaultGameConfigManager::Load()
+	{
+		for (const auto& [id, definition]: m_Definitions)
+		{
+			definition->ForEachGroup([](ItemGroup& group)
+			{
+				group.ReadItems();
+			});
+		}
+	}
+	void DefaultGameConfigManager::Save()
+	{
 	}
 }

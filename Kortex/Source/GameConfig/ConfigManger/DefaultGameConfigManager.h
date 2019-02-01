@@ -4,6 +4,11 @@
 #include "Definition.h"
 #include <KxFramework/KxTranslation.h>
 
+namespace Kortex::GameInstance
+{
+	class ProfileEvent;
+}
+
 namespace Kortex::GameConfig
 {
 	class ItemGroup;
@@ -18,6 +23,7 @@ namespace Kortex::GameConfig
 
 		private:
 			void LoadGroup(const KxXMLNode& definitionNode, ItemGroup& group);
+			void OnChangeProfile(GameInstance::ProfileEvent& event);
 
 		protected:
 			void OnInit() override;
@@ -34,5 +40,8 @@ namespace Kortex::GameConfig
 			{
 				return m_Translator;
 			}
+	
+			void Load() override;
+			void Save() override;
 	};
 }

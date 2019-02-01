@@ -35,13 +35,7 @@ namespace Kortex::GameConfig
 			bool Save() override;
 			void Close() override;
 
-			bool WriteValue() override
-			{
-				return false;
-			}
-			bool ReadValue() const override
-			{
-				return false;
-			}
+			bool WriteValue(const Item& item, const ItemValue& value) override;
+			bool ReadValue(Item& item, ItemValue& value) const override;
 	};
 }

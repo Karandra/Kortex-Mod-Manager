@@ -31,6 +31,9 @@ namespace Kortex
 		public:
 			virtual const ITranslator& GetTranslator() const = 0;
 
-			wxString LoadItemLabel(const KxXMLNode& itemNode, const wxString& name) const;
+			virtual void Load() = 0;
+			virtual void Save() = 0;
+
+			wxString LoadItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const;
 	};
 }

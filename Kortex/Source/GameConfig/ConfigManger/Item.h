@@ -4,6 +4,7 @@
 #include "DataType.h"
 #include "ItemValue.h"
 #include "ItemOptions.h"
+#include "ISource.h"
 #include "Application/RTTI.h"
 
 namespace Kortex
@@ -15,7 +16,6 @@ namespace Kortex::GameConfig
 {
 	class ItemGroup;
 	class Definition;
-	class ISource;
 
 	class Item: public RTTI::IInterface<Item>
 	{
@@ -33,15 +33,17 @@ namespace Kortex::GameConfig
 
 		protected:
 			virtual bool Create(const KxXMLNode& itemNode) = 0;
-			virtual void Load(const ISource& source) = 0;
-			virtual void Save(ISource& source) const = 0;
+			virtual void Clear() = 0;
+			virtual void Read(const ISource& source) = 0;
+			virtual void Write(ISource& source) const = 0;
 
 		public:
-			Item(ItemGroup& group, const KxXMLNode& itemNode = KxXMLNode());
+			Item(ItemGroup& group, const KxXMLNode& itemNode = {});
 			virtual ~Item() = default;
 
 		public:
 			virtual bool IsOK() const;
+			void ReadItem();
 
 			IConfigManager& GetManager() const;
 			Definition& GetDefinition() const;

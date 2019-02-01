@@ -34,5 +34,11 @@ namespace Kortex::GameConfig
 			{
 				return m_Value;
 			}
+	
+		public:
+			wxAny GetValue(const Column& column) const override
+			{
+				return m_Value.As<wxAny>();
+			}
 	};
 }

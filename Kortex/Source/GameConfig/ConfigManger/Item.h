@@ -6,6 +6,8 @@
 #include "ItemOptions.h"
 #include "ISource.h"
 #include "Application/RTTI.h"
+#include <KxFramework/DataView2/Node.h>
+#include <KxFramework/DataView2/TypeAliases.h>
 
 namespace Kortex
 {
@@ -31,7 +33,7 @@ namespace Kortex::GameConfig
 	class ItemGroup;
 	class Definition;
 
-	class Item: public RTTI::IInterface<Item>
+	class Item: public RTTI::IExtendInterface<Item, KxDataView2::Node>, public KxDataView2::TypeAliases
 	{
 		friend class ItemGroup;
 		friend class HashStore;

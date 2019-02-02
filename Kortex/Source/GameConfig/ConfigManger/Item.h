@@ -4,6 +4,7 @@
 #include "DataType.h"
 #include "ItemValue.h"
 #include "ItemOptions.h"
+#include "ItemSamples.h"
 #include "ISource.h"
 #include "GameConfig/IConfigManager.h"
 #include <KxFramework/DataView2/Node.h>
@@ -44,6 +45,7 @@ namespace Kortex::GameConfig
 			wxString m_Path;
 			wxString m_Name;
 			wxString m_Label;
+			ItemSamples m_Samples;
 			TypeID m_TypeID;
 			ItemKindValue m_Kind;
 			ItemOptions m_Options;
@@ -107,6 +109,15 @@ namespace Kortex::GameConfig
 			void SetLabel(const wxString& label)
 			{
 				m_Label = label;
+			}
+
+			const ItemSamples& GetSamples() const
+			{
+				return m_Samples;
+			}
+			ItemSamples& GetSamples()
+			{
+				return m_Samples;
 			}
 
 			const ItemOptions& GetOptions() const

@@ -99,13 +99,14 @@ namespace Kortex::GameConfig
 			void SortImmediateItems();
 			void GenerateItems(const ItemValue::Vector& arguments);
 			const VirtualKeyInfo::Map& LoadVirtualKeys();
-			template<class T> void LoadRange(T min, T max, T step)
+			template<class T> SortOrderValue LoadRange(T min, T max, T step)
 			{
 				for (double i = min; i <= max; i += step)
 				{
 					SampleValue& sample = m_Values.emplace_back();
 					sample.GetValue().Assign(i);
 				}
+				return step >= 0 ? SortOrderID::Ascending : SortOrderID::Descending;
 			}
 
 			template<class TItems, class TFunctor> void DoForEachItem(TItems&& items, TFunctor&& func)
@@ -117,14 +118,15 @@ namespace Kortex::GameConfig
 			}
 
 		public:
-			ItemSamples(Item& item, const KxXMLNode& node);
+			ItemSamples(Item& item, const KxXMLNode& samplesNode = {});
 
 		public:
 			Item& GetItem() const
 			{
 				return m_Item;
 			}
-			
+			void Load(const KxXMLNode& samplesNode);
+
 			SamplesSourceValue GetSourceType() const
 			{
 				return m_SourceType;

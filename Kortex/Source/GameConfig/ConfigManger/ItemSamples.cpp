@@ -61,7 +61,6 @@ namespace
 		const int ret = ::CompareStringEx(localeName, options, v1.wc_str(), v1.length(), v2.wc_str(), v2.length(), versionInfo, nullptr, 0);
 		return static_cast<CompareResult>(ret);
 	}
-
 }
 
 namespace Kortex::GameConfig
@@ -188,46 +187,71 @@ namespace Kortex::GameConfig
 		return virtualKeys;
 	}
 
-	ItemSamples::ItemSamples(Item& item, const KxXMLNode& node)
+	ItemSamples::ItemSamples(Item& item, const KxXMLNode& samplesNode)
 		:m_Item(item)
 	{
-		if (node.IsOK())
+		Load(samplesNode);
+	}
+	void ItemSamples::Load(const KxXMLNode& samplesNode)
+	{
+		if (samplesNode.IsOK())
 		{
-			m_SourceType.FromString(node.GetAttribute(wxS("SourceType")));
+			m_SourceType.FromString(samplesNode.GetAttribute(wxS("Source")));
 			switch (m_SourceType.GetValue())
 			{
 				case SamplesSourceID::ImmediateItems:
 				{
-					m_SortOrder.FromString(node.GetAttribute(wxS("SortOrder")));
-					m_SortOptions.FromOrExpression(node.GetAttribute(wxS("SortOptions")));
+					m_SortOrder.FromString(samplesNode.GetAttribute(wxS("SortOrder")));
+					m_SortOptions.FromOrExpression(samplesNode.GetAttribute(wxS("SortOptions")));
 
-					m_Values.reserve(node.GetChildrenCount());
-					LoadImmediateItems(node);
-					SortImmediateItems();
+					m_Values.reserve(samplesNode.GetChildrenCount());
+					LoadImmediateItems(samplesNode);
+					if (!m_SortOrder.IsDefault())
+					{
+						SortImmediateItems();
+					}
 					break;
 				}
 				case SamplesSourceID::Range:
 				{
 					const TypeID type = m_Item.GetTypeID();
+					bool isRangeLoaded = false;
+
 					if (type.IsFloat())
 					{
-						double min = node.GetAttributeFloat(wxS("Min"), 0);
-						double max = node.GetAttributeFloat(wxS("Max"), 0);
-						double step = node.GetAttributeFloat(wxS("Step"), 1.0);
-						LoadRange(min, max, step);
+						double min = samplesNode.GetAttributeFloat(wxS("Min"), 0);
+						double max = samplesNode.GetAttributeFloat(wxS("Max"), 0);
+						double step = samplesNode.GetAttributeFloat(wxS("Step"), 1.0);
+						m_SortOrder = LoadRange(min, max, step);
+						isRangeLoaded = true;
 					}
-					else if (type.IsInteger())
+					else if (type.IsSignedInteger())
 					{
-						int64_t min = node.GetAttributeInt(wxS("Min"), 0);
-						int64_t max = node.GetAttributeInt(wxS("Max"), 0);
-						int64_t step = node.GetAttributeInt(wxS("Step"), 1);
-						LoadRange(min, max, step);
+						int64_t min = samplesNode.GetAttributeInt(wxS("Min"), 0);
+						int64_t max = samplesNode.GetAttributeInt(wxS("Max"), 0);
+						int64_t step = samplesNode.GetAttributeInt(wxS("Step"), 1);
+						m_SortOrder = LoadRange(min, max, step);
+						isRangeLoaded = true;
+					}
+					else if (type.IsUnsignedInteger())
+					{
+						uint64_t min = samplesNode.GetAttributeInt(wxS("Min"), 0);
+						uint64_t max = samplesNode.GetAttributeInt(wxS("Max"), 0);
+						uint64_t step = samplesNode.GetAttributeInt(wxS("Step"), 1);
+						m_SortOrder = LoadRange(min, max, step);
+						isRangeLoaded = true;
+					}
+
+					if (isRangeLoaded)
+					{
+						LoadImmediateItems(samplesNode);
+						SortImmediateItems();
 					}
 					break;
 				}
 				case SamplesSourceID::Function:
 				{
-					const KxXMLNode functionNode = node.GetFirstChildElement(wxS("Function"));
+					const KxXMLNode functionNode = samplesNode.GetFirstChildElement(wxS("Function"));
 					if (m_SampligFunction.FromString(functionNode.GetAttribute(wxS("Name"))))
 					{
 						ItemValue::Vector arguments;

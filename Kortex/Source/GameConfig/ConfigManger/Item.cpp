@@ -34,7 +34,7 @@ namespace Kortex::GameConfig
 	}
 
 	Item::Item(ItemGroup& group, const KxXMLNode& itemNode)
-		:m_Group(group)
+		:m_Group(group), m_Samples(*this)
 	{
 		if (itemNode.IsOK())
 		{
@@ -47,6 +47,8 @@ namespace Kortex::GameConfig
 
 			m_Options.Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());
 			m_Options.CopyIfNotSpecified(group.GetOptions());
+
+			m_Samples.Load(itemNode.GetFirstChildElement(wxS("Samples")));
 		}
 	}
 

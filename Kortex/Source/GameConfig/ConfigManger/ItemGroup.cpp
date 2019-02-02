@@ -96,7 +96,7 @@ namespace Kortex::GameConfig
 		{
 			case ColumnID::Path:
 			{
-				return m_ID;
+				return m_Source->GetPathDescription();
 			}
 		}
 		return {};

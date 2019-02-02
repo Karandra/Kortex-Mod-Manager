@@ -15,6 +15,7 @@ namespace Kortex::GameConfig
 	{
 		if (IsWorkspaceCreated())
 		{
+			ClearView();
 		}
 	}
 	bool Workspace::OnCreateWorkspace()

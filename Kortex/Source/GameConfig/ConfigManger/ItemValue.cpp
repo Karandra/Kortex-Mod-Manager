@@ -132,9 +132,8 @@ namespace Kortex::GameConfig
 {
 	void ItemValue::DoDeserialize(const wxString& stringValue, const Item& item)
 	{
-		const DataType dataType = item.GetDataType();
-		const TypeID type = dataType.GetID();
-		const TypeID inputType = dataType.GetInputType();
+		const TypeID type = item.GetTypeID();
+		const TypeID inputType = item.GetDataType().GetInputType();
 
 		if (type.IsBool())
 		{
@@ -318,9 +317,8 @@ namespace Kortex::GameConfig
 
 	wxString ItemValue::DoSerialize(const Item& item) const
 	{
-		const DataType dataType = item.GetDataType();
-		const TypeID type = dataType.GetID();
-		const TypeID outputType = dataType.GetInputType();
+		const TypeID type = item.GetTypeID();
+		const TypeID outputType = item.GetDataType().GetInputType();
 
 		if (type.IsBool())
 		{

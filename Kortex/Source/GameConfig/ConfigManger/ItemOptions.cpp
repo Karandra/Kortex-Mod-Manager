@@ -53,7 +53,7 @@ namespace Kortex::GameConfig
 			m_Precision = std::clamp(m_Precision, -1, 8);
 		}
 	}
-	void ItemOptions::CopyIfNotSpecified(const ItemOptions& other)
+	void ItemOptions::CopyIfNotSpecified(const ItemOptions& other, const DataType& dataType)
 	{
 		CopyIfDefault(m_InputFormat, other.m_InputFormat);
 		CopyIfDefault(m_OutputFormat, other.m_OutputFormat);
@@ -62,5 +62,6 @@ namespace Kortex::GameConfig
 		CopyIfDefault(m_TypeDetector, other.m_TypeDetector);
 
 		CopyIfDefault(m_Precision, other.m_Precision);
+		CopyIfDefault(m_Precision, dataType.GetPrecision());
 	}
 }

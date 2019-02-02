@@ -46,7 +46,7 @@ namespace Kortex::GameConfig
 			m_Kind.FromString(itemNode.GetAttribute(wxS("Kind")));
 
 			m_Options.Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());
-			m_Options.CopyIfNotSpecified(group.GetOptions());
+			m_Options.CopyIfNotSpecified(group.GetOptions(), GetDataType());
 
 			m_Samples.Load(itemNode.GetFirstChildElement(wxS("Samples")));
 		}

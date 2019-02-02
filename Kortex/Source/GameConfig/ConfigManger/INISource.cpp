@@ -43,7 +43,6 @@ namespace Kortex::GameConfig
 			for (const wxString& keyName: m_INI.GetKeyNames(sectionName))
 			{
 				auto item = group.NewItem<SimpleItem>(group, true);
-				item->SetCategory(group.GetID());
 				item->SetPath(sectionName);
 				item->SetName(keyName);
 

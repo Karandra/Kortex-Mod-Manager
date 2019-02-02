@@ -95,7 +95,7 @@ namespace Kortex::GameConfig
 			std::vector<SampleValue> m_Values;
 
 		private:
-			void LoadImmediateItems(const KxXMLNode& rootNode);
+			size_t LoadImmediateItems(const KxXMLNode& rootNode);
 			void SortImmediateItems();
 			void GenerateItems(const ItemValue::Vector& arguments);
 			const VirtualKeyInfo::Map& LoadVirtualKeys();

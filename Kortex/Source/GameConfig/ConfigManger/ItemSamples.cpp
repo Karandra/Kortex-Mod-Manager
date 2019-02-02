@@ -65,13 +65,17 @@ namespace
 
 namespace Kortex::GameConfig
 {
-	void ItemSamples::LoadImmediateItems(const KxXMLNode& rootNode)
+	size_t ItemSamples::LoadImmediateItems(const KxXMLNode& rootNode)
 	{
+		size_t counter = 0;
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			SampleValue& sample = m_Values.emplace_back(m_Item.GetManager().LoadItemLabel(node, {}, wxS("Samples")));
+			SampleValue& sample = m_Values.emplace_back(m_Item.GetManager().TranslateItemLabel(node, {}, wxS("Samples")));
 			sample.GetValue().Deserialize(node.GetValue(), m_Item);
+
+			counter++;
 		}
+		return counter;
 	}
 	void ItemSamples::SortImmediateItems()
 	{
@@ -242,9 +246,8 @@ namespace Kortex::GameConfig
 						isRangeLoaded = true;
 					}
 
-					if (isRangeLoaded)
+					if (isRangeLoaded && LoadImmediateItems(samplesNode) != 0)
 					{
-						LoadImmediateItems(samplesNode);
 						SortImmediateItems();
 					}
 					break;

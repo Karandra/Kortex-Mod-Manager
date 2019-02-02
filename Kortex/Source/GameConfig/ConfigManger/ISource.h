@@ -16,6 +16,7 @@ namespace Kortex::GameConfig
 		public:
 			virtual SourceTypeValue GetType() const = 0;
 			virtual SourceFormatValue GetFormat() const = 0;
+			virtual wxString GetPathDescription() const = 0;
 
 			virtual bool IsOpened() const = 0;
 			virtual bool Open() = 0;

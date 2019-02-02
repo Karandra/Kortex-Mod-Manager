@@ -437,7 +437,7 @@ namespace Kortex::GameConfig
 
 	wxString ItemValue::Serialize(const Item& item) const
 	{
-		return DoSerialize(item);
+		return IsNull() ? wxString() : DoSerialize(item);
 	}
 	bool ItemValue::Deserialize(const wxString& value, const Item& item)
 	{

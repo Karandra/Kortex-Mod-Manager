@@ -90,4 +90,15 @@ namespace Kortex::GameConfig
 			m_Source->Close();
 		}
 	}
+	wxAny ItemGroup::GetValue(const Column& column) const
+	{
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Path:
+			{
+				return m_ID;
+			}
+		}
+		return {};
+	}
 }

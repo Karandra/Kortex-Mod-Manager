@@ -7,6 +7,10 @@ class KxXMLNode;
 
 namespace Kortex
 {
+	namespace GameConfig
+	{
+		class Definition;
+	}
 	namespace ConfigManager::Internal
 	{
 		extern const SimpleManagerInfo TypeInfo;
@@ -14,6 +18,9 @@ namespace Kortex
 
 	class IConfigManager: public ManagerWithTypeInfo<IPluggableManager, ConfigManager::Internal::TypeInfo>
 	{
+		public:
+			using DefinitionFunc = std::function<void(const GameConfig::Definition& definition)>;
+
 		private:
 			KxTranslation m_Translation;
 
@@ -30,6 +37,7 @@ namespace Kortex
 
 		public:
 			virtual const ITranslator& GetTranslator() const = 0;
+			virtual void ForEachDefinition(const DefinitionFunc& func) = 0;
 
 			virtual void Load() = 0;
 			virtual void Save() = 0;

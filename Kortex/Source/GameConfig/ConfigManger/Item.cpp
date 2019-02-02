@@ -3,6 +3,7 @@
 #include "ItemGroup.h"
 #include "Definition.h"
 #include "GameConfig/IConfigManager.h"
+#include <KxStringUtility.h>
 
 namespace Kortex::GameConfig
 {
@@ -53,6 +54,11 @@ namespace Kortex::GameConfig
 	{
 		return !m_Category.IsEmpty() && !m_Path.IsEmpty() && m_TypeID.IsDefinitiveType();
 	}
+	wxString Item::GetFullPath() const
+	{
+		return Kx::Utility::String::ConcatWithSeparator(wxS('/'), m_Group.GetSource().GetPathDescription(), m_Path, m_Name);
+	}
+	
 	IConfigManager& Item::GetManager() const
 	{
 		return m_Group.GetManager();

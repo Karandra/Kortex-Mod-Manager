@@ -9,13 +9,23 @@ namespace KxDataView2
 	class View;
 }
 
+namespace Kortex
+{
+	class IGameConfigManager;
+}
+
 namespace Kortex::GameConfig
 {
-	class DisplayModel;
+	class DefaultGameConfigManager;
 
 	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
 	{
+		friend class DefaultGameConfigManager;
+
 		private:
+			IGameConfigManager& m_Manager;
+			const ITranslator& m_Translator;
+
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxDataView2::View* m_View = nullptr;
 
@@ -28,6 +38,9 @@ namespace Kortex::GameConfig
 			virtual bool OnOpenWorkspace() override;
 			virtual bool OnCloseWorkspace() override;
 			virtual void OnReloadWorkspace() override;
+
+			void ClearView();
+			void LoadView();
 
 		public:
 			virtual wxString GetID() const override;

@@ -4,6 +4,8 @@
 #include "ISource.h"
 #include "Item.h"
 #include "ItemOptions.h"
+#include <KxFramework/DataView2/Node.h>
+#include <KxFramework/DataView2/TypeAliases.h>
 class KxXMLNode;
 
 namespace Kortex
@@ -15,7 +17,7 @@ namespace Kortex::GameConfig
 {
 	class Definition;
 
-	class ItemGroup
+	class ItemGroup: public RTTI::IExtendInterface<ItemGroup, KxDataView2::Node>, public KxDataView2::TypeAliases
 	{
 		private:
 			Definition& m_Definition;
@@ -97,5 +99,8 @@ namespace Kortex::GameConfig
 			{
 				return AddItem(NewItem<T>(std::forward<Args>(arg)...));
 			}
+	
+		public:
+			wxAny GetValue(const Column& column) const override;
 	};
 }

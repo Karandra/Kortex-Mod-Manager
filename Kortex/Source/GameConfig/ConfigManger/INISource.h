@@ -10,10 +10,11 @@ namespace Kortex::GameConfig
 		private:
 			KxINI m_INI;
 			wxString m_FilePath;
+			wxString m_FileName;
 
 		public:
 			INISource(const wxString& filePath)
-				:m_FilePath(filePath)
+				:m_FilePath(filePath), m_FileName(filePath.AfterLast(wxS('\\')))
 			{
 			}
 
@@ -25,6 +26,10 @@ namespace Kortex::GameConfig
 			SourceFormatValue GetFormat() const override
 			{
 				return SourceFormat::INI;
+			}
+			wxString GetPathDescription() const override
+			{
+				return m_FileName;
 			}
 
 			bool IsOpened() const override

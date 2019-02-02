@@ -22,6 +22,11 @@ namespace Kortex::GameConfig
 	void DefaultGameConfigManager::OnChangeProfile(GameInstance::ProfileEvent& event)
 	{
 		Load();
+
+		if (Workspace* workspace = Workspace::GetInstance())
+		{
+			workspace->ReloadWorkspace();
+		}
 	}
 
 	void DefaultGameConfigManager::OnInit()
@@ -31,6 +36,10 @@ namespace Kortex::GameConfig
 	}
 	void DefaultGameConfigManager::OnExit()
 	{
+		if (Workspace* workspace = Workspace::GetInstance())
+		{
+			workspace->ClearView();
+		}
 		IConfigManager::OnExit();
 	}
 	void DefaultGameConfigManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)

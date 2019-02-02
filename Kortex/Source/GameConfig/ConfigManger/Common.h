@@ -200,3 +200,14 @@ namespace Kortex::GameConfig
 	};
 	using SamplesSourceValue = KxIndexedEnum::Value<SamplesSourceDef, SamplesSourceID::None>;
 }
+
+namespace Kortex::GameConfig
+{
+	enum class ColumnID
+	{
+		Path,
+		Name,
+		Type,
+		Value,
+	};
+}

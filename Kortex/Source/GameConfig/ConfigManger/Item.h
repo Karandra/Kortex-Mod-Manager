@@ -5,7 +5,7 @@
 #include "ItemValue.h"
 #include "ItemOptions.h"
 #include "ISource.h"
-#include "Application/RTTI.h"
+#include "GameConfig/IConfigManager.h"
 #include <KxFramework/DataView2/Node.h>
 #include <KxFramework/DataView2/TypeAliases.h>
 
@@ -63,6 +63,7 @@ namespace Kortex::GameConfig
 		public:
 			virtual bool IsOK() const;
 			virtual size_t GetHash() const = 0;
+			virtual wxString GetFullPath() const;
 			void ReadItem();
 
 			IConfigManager& GetManager() const;

@@ -41,7 +41,14 @@ namespace Kortex::GameConfig
 			{
 				return m_Translator;
 			}
-	
+			void ForEachDefinition(const DefinitionFunc& func) override
+			{
+				for (const auto& [id, definition]: m_Definitions)
+				{
+					func(*definition);
+				}
+			}
+
 			void Load() override;
 			void Save() override;
 	};

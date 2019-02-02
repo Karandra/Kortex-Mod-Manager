@@ -23,10 +23,9 @@
 		<String ID="ConfigManager.EditValue.RemovePath">Delete section</String>
 
 		<String ID="ConfigManager.View.Path">Path</String>
-		<String ID="ConfigManager.View.Value">Value</String>
 		<String ID="ConfigManager.View.Name">Parameter</String>
 		<String ID="ConfigManager.View.Type">Type</String>
-		<String ID="ConfigManager.View.NoValue">None</String>
+		<String ID="ConfigManager.View.Value">Value</String>
 		<String ID="ConfigManager.View.EmptyStringValue">Empty string</String>
 
 		<String ID="ConfigManager.VirtualKey.VK_NONE">Not assigned</String>

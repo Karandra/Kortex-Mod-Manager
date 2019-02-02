@@ -23,10 +23,9 @@
 		<String ID="ConfigManager.EditValue.RemovePath">Удалить секцию</String>
 
 		<String ID="ConfigManager.View.Path">Путь</String>
-		<String ID="ConfigManager.View.Value">Значение</String>
 		<String ID="ConfigManager.View.Name">Параметр</String>
 		<String ID="ConfigManager.View.Type">Тип</String>
-		<String ID="ConfigManager.View.NoValue">Нет</String>
+		<String ID="ConfigManager.View.Value">Значение</String>
 		<String ID="ConfigManager.View.EmptyStringValue">Пустая строка</String>
 
 		<String ID="ConfigManager.VirtualKey.VK_NONE">Не назначено</String>

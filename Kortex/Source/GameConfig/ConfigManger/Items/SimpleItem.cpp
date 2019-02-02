@@ -31,7 +31,7 @@ namespace Kortex::GameConfig
 	{
 	}
 
-	wxAny SimpleItem::GetValue(const Column& column) const
+	wxAny SimpleItem::GetValue(const KxDataView2::Column& column) const
 	{
 		switch (column.GetID<ColumnID>())
 		{
@@ -71,15 +71,15 @@ namespace Kortex::GameConfig
 		}
 		return {};
 	}
-	KxDataView2::Renderer& SimpleItem::GetRenderer(const Column& column) const
+	KxDataView2::Renderer& SimpleItem::GetRenderer(const KxDataView2::Column& column) const
 	{
 		return m_Renderer;
 	}
-	KxDataView2::Editor* SimpleItem::GetEditor(const Column& column) const
+	KxDataView2::Editor* SimpleItem::GetEditor(const KxDataView2::Column& column) const
 	{
 		return nullptr;
 	}
-	bool SimpleItem::GetAttributes(CellAttributes& attributes, const CellState& cellState, const Column& column) const
+	bool SimpleItem::GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const
 	{
 		if (m_IsUnknown)
 		{

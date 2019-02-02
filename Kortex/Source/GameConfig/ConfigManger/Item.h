@@ -34,7 +34,7 @@ namespace Kortex::GameConfig
 	class ItemGroup;
 	class Definition;
 
-	class Item: public RTTI::IExtendInterface<Item, KxDataView2::Node>, public KxDataView2::TypeAliases
+	class Item: public RTTI::IExtendInterface<Item, KxDataView2::Node>
 	{
 		friend class ItemGroup;
 		friend class HashStore;

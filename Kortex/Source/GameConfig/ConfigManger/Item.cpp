@@ -41,7 +41,7 @@ namespace Kortex::GameConfig
 			m_Category = itemNode.GetAttribute(wxS("Category"));
 			m_Path = itemNode.GetAttribute(wxS("Path"));
 			m_Name = itemNode.GetAttribute(wxS("Name"));
-			m_Label = GetManager().LoadItemLabel(itemNode, m_Name, wxS("ValueName"));
+			m_Label = GetManager().TranslateItemLabel(itemNode, m_Name, wxS("ValueName"));
 			m_TypeID.FromString(itemNode.GetAttribute(wxS("Type")));
 			m_Kind.FromString(itemNode.GetAttribute(wxS("Kind")));
 

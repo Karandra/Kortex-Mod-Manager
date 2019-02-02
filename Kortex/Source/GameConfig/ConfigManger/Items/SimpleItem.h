@@ -46,9 +46,9 @@ namespace Kortex::GameConfig
 			}
 	
 		public:
-			wxAny GetValue(const Column& column) const override;
-			Renderer& GetRenderer(const Column& column) const override;
-			Editor* GetEditor(const Column& column) const override;
-			bool GetAttributes(CellAttributes& attributes, const CellState& cellState, const Column& column) const override;
+			wxAny GetValue(const KxDataView2::Column& column) const override;
+			KxDataView2::Renderer& GetRenderer(const KxDataView2::Column& column) const override;
+			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
+			bool GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const override;
 	};
 }

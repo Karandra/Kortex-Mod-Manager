@@ -81,11 +81,6 @@ namespace Kortex::GameConfig
 	}
 	bool SimpleItem::GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const
 	{
-		if (m_IsUnknown)
-		{
-			attributes.SetEnabled(false);
-			return true;
-		}
 		return false;
 	}
 }

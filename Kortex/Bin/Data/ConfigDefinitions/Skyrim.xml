@@ -333,7 +333,7 @@
 					<Value>15000000</Value>
 				</Samples>
 			</Item>
-			<Item Category="Game/Vegetation/Trees" Path="Trees" Name="uiMaxSkinnedTreesToRender" Type="int32">
+			<Item Category="Game/Vegetation/Trees" Path="Trees" Name="uiMaxSkinnedTreesToRender" Type="uint32">
 				<Samples Source="Range" Min="0" Max="100" Step="20"/>
 			</Item>
 

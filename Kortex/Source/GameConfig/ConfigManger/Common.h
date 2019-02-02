@@ -24,11 +24,6 @@ namespace Kortex::GameConfig
 		Bool = 1 << 10,
 		String = 1 << 11,
 		Struct = 1 << 12,
-
-		// Aliases
-		Int = Int32,
-		UInt = UInt32,
-		Float = Float32,
 	};
 	class DataTypeDef: public KxIndexedEnum::Definition<DataTypeDef, DataTypeID, wxString, false>
 	{
@@ -38,24 +33,26 @@ namespace Kortex::GameConfig
 			{DataTypeID::None, wxS("none")},
 			{DataTypeID::Any, wxS("any")},
 
-			{DataTypeID::Int, wxS("int")},
 			{DataTypeID::Int8, wxS("int8")},
 			{DataTypeID::Int16, wxS("int16")},
 			{DataTypeID::Int32, wxS("int32")},
 			{DataTypeID::Int64, wxS("int64")},
-			{DataTypeID::UInt, wxS("uint")},
 			{DataTypeID::UInt8, wxS("uint8")},
 			{DataTypeID::UInt16, wxS("uint16")},
 			{DataTypeID::UInt32, wxS("uint32")},
 			{DataTypeID::UInt64, wxS("uint64")},
-
-			{DataTypeID::Float, wxS("float")},
 			{DataTypeID::Float32, wxS("float32")},
 			{DataTypeID::Float64, wxS("float64")},
 
 			{DataTypeID::Bool, wxS("bool")},
 			{DataTypeID::String, wxS("string")},
 			{DataTypeID::Struct, wxS("struct")},
+
+			// Aliases, they are last items because deserialization
+			// should not prefer them over definitive types.
+			{DataTypeID::Int32, wxS("int")},
+			{DataTypeID::UInt32, wxS("uint")},
+			{DataTypeID::Float32, wxS("float")},
 		};
 	};
 	using DataTypeValue = KxIndexedEnum::Value<DataTypeDef, DataTypeID::None>;

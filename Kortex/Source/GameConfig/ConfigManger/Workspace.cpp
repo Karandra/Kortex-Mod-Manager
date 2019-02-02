@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Workspace.h"
+#include "Utility/KAux.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameConfig.hpp>
+#include <Kortex/Utility.hpp>
 #include <KxFramework/DataView2/DataView2.h>
 
 namespace Kortex::GameConfig
@@ -43,23 +45,54 @@ namespace Kortex::GameConfig
 				items[i]->Detach();
 			}
 		}
+		m_Categories.clear();
 	}
 	void Workspace::LoadView()
 	{
 		ClearView();
-
-		KxDataView2::Node& rootNode = m_View->GetRootNode();
-		m_Manager.ForEachDefinition([&rootNode](const Definition& definition)
+		m_Manager.ForEachItem([this](Item& item)
 		{
-			definition.ForEachGroup([&rootNode](ItemGroup& group)
+			KxDataView2::Node* parent = &m_View->GetRootNode();
+			auto it = m_Categories.find(item.GetCategory());
+			if (it != m_Categories.end())
 			{
-				rootNode.AttachChild(&group, rootNode.GetChildrenCount());
-
-				group.ForEachItem([&group](Item& item)
+				parent = &it->second;
+			}
+			else
+			{
+				// Build category tree for this item
+				wxString categoryPath;
+				Utility::String::SplitBySeparator(item.GetCategory(), wxS('/'), [this, &parent, &categoryPath](const auto& category)
 				{
-					group.AttachChild(&item, group.GetChildrenCount());
+					// Add next part
+					if (categoryPath.IsEmpty())
+					{
+						categoryPath = Utility::String::FromWxStringView(category);
+					}
+					else
+					{
+						categoryPath = Utility::String::ConcatWithSeparator(wxS('/'), categoryPath, Utility::String::FromWxStringView(category));
+					}
+
+					// See if that branch already exist
+					auto it = m_Categories.find(categoryPath);
+					if (it != m_Categories.end())
+					{
+						parent = &it->second;
+					}
+					else
+					{
+						// No branch, create one
+						auto[it, inserted] = m_Categories.insert_or_assign(categoryPath, categoryPath);
+
+						// Attach to view nodes
+						parent->AttachChild(&it->second, 0);
+						parent = &it->second;
+					}
+					return true;
 				});
-			});
+			}
+			parent->AttachChild(&item, parent->GetChildrenCount());
 		});
 		m_View->ItemsChanged();
 	}

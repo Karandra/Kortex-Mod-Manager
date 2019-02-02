@@ -97,6 +97,7 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemGroup.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemOptions.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemSamples.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\Items\CategoryItem.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\SimpleItem.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemValue.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ITypeDetector.cpp" />
@@ -380,6 +381,7 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemOptions.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemSamples.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\CategoryItem.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Items\SimpleItem.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemValue.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ITypeDetector.h" />

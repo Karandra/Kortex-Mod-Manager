@@ -3,6 +3,7 @@
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxSingleton.h>
+#include "Items/CategoryItem.h"
 
 namespace KxDataView2
 {
@@ -28,6 +29,7 @@ namespace Kortex::GameConfig
 
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxDataView2::View* m_View = nullptr;
+			std::unordered_map<wxString, CategoryItem> m_Categories;
 
 		public:
 			Workspace(KMainWindow* mainWindow);

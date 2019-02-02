@@ -42,25 +42,26 @@ namespace Kortex
 	{
 	}
 
-	wxString IConfigManager::LoadItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const
+	wxString IConfigManager::TranslateItemLabel(const wxString& name, const wxString& perfix) const
 	{
-		const ITranslator& translator = GetTranslator();
-
-		wxString label = itemNode.GetAttribute(wxS("Label"));
-		if (!label.IsEmpty())
-		{
-			auto value = translator.TryGetString(label);
-			if (value)
-			{
-				return *value;
-			}
-		}
-
-		auto value = translator.TryGetString(perfix + wxS('.') + name);
+		auto value = GetTranslator().TryGetString(perfix + wxS('.') + name);
 		if (value)
 		{
 			return *value;
 		}
 		return name;
+	}
+	wxString IConfigManager::TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const
+	{
+		wxString label = itemNode.GetAttribute(wxS("Label"));
+		if (!label.IsEmpty())
+		{
+			auto value = GetTranslator().TryGetString(label);
+			if (value)
+			{
+				return *value;
+			}
+		}
+		return TranslateItemLabel(name, perfix);
 	}
 }

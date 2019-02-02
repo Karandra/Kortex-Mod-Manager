@@ -10,6 +10,8 @@ namespace Kortex
 	namespace GameConfig
 	{
 		class Definition;
+		class ItemGroup;
+		class Item;
 	}
 	namespace ConfigManager::Internal
 	{
@@ -38,10 +40,25 @@ namespace Kortex
 		public:
 			virtual const ITranslator& GetTranslator() const = 0;
 			virtual void ForEachDefinition(const DefinitionFunc& func) = 0;
+			template<class TFunctor> void ForEachGroup(TFunctor&& func)
+			{
+				ForEachDefinition([&func](auto&& definition)
+				{
+					definition.ForEachGroup(func);
+				});
+			}
+			template<class TFunctor> void ForEachItem(TFunctor&& func)
+			{
+				ForEachGroup([&func](auto&& group)
+				{
+					group.ForEachItem(func);
+				});
+			}
 
 			virtual void Load() = 0;
 			virtual void Save() = 0;
 
-			wxString LoadItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const;
+			wxString TranslateItemLabel(const wxString& name, const wxString& perfix) const;
+			wxString TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const;
 	};
 }

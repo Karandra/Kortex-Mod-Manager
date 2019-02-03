@@ -72,7 +72,8 @@ namespace Kortex::GameConfig
 			{
 				return m_Value.GetAs(&value);
 			}
-			template<> bool As(wxAny& value) const
+			template<> bool As(wxAny& value) const = delete;
+			bool AsAny(wxAny& value) const
 			{
 				value = m_Value;
 				return true;
@@ -89,7 +90,8 @@ namespace Kortex::GameConfig
 				}
 				return {};
 			}
-			template<> wxAny As() const
+			template<> wxAny As() const = delete;
+			const wxAny& AsAny() const
 			{
 				return m_Value;
 			}

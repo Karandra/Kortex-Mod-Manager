@@ -22,10 +22,12 @@ namespace Kortex::GameConfig
 	}
 	bool Workspace::OnCreateWorkspace()
 	{
-		using namespace KxDataView2;
+		using KxDataView2::CtrlStyle;
+		using KxDataView2::ColumnStyle;
+		using KxDataView2::TextRenderer;
 
-		m_View = new View(this, KxID_NONE);
-		m_View->AssignModel(new Model(false));
+		m_View = new KxDataView2::View(this, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
+		m_View->AssignModel(new KxDataView2::Model(false));
 		m_MainSizer->Add(m_View, 1, wxEXPAND);
 
 		ColumnStyle columnStyle = ColumnStyle::Move|ColumnStyle::Size|ColumnStyle::Sort;
@@ -95,7 +97,9 @@ namespace Kortex::GameConfig
 					return true;
 				});
 			}
+
 			parent->AttachChild(&item, parent->GetChildrenCount());
+			item.OnAttachToView();
 		});
 		m_View->ItemsChanged();
 	}

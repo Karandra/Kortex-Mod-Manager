@@ -3,6 +3,7 @@
 #include "GameConfig/IGameConfigManager.h"
 #include "GameConfig/ConfigManger/Common.h"
 #include "Utility/KAux.h"
+#include <KxFramework/KxComparator.h>
 
 namespace Kortex::GameConfig
 {
@@ -30,6 +31,15 @@ namespace Kortex::GameConfig
 	CategoryItem::CategoryItem(const wxString& categoryPath, const wxString& categoryName)
 		:m_CategoryPath(categoryPath), m_CategoryName(categoryName)
 	{
+	}
+
+	wxString CategoryItem::GetStringRepresentation(ColumnID id) const
+	{
+		if (id == ColumnID::Path)
+		{
+			return m_CategoryName;
+		}
+		return wxString();
 	}
 
 	wxAny CategoryItem::GetValue(const KxDataView2::Column& column) const

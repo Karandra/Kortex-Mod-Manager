@@ -3,7 +3,8 @@
 #include "ItemGroup.h"
 #include "Definition.h"
 #include "GameConfig/IConfigManager.h"
-#include <KxStringUtility.h>
+#include <KxFramework/KxStringUtility.h>
+#include <KxFramework/KxComparator.h>
 
 namespace Kortex::GameConfig
 {
@@ -60,7 +61,26 @@ namespace Kortex::GameConfig
 	{
 		return Kx::Utility::String::ConcatWithSeparator(wxS('/'), m_Group.GetSource().GetPathDescription(), m_Path, m_Name);
 	}
-	
+	wxString Item::GetStringRepresentation(ColumnID id) const
+	{
+		switch (id)
+		{
+			case ColumnID::Path:
+			{
+				return m_Path;
+			}
+			case ColumnID::Name:
+			{
+				return m_Name;
+			}
+			case ColumnID::Type:
+			{
+				return m_TypeID.ToString();
+			}
+		};
+		return {};
+	}
+
 	IConfigManager& Item::GetManager() const
 	{
 		return m_Group.GetManager();
@@ -78,5 +98,16 @@ namespace Kortex::GameConfig
 	DataType Item::GetDataType() const
 	{
 		return m_Group.GetDefinition().GetDataType(m_TypeID);
+	}
+
+	bool Item::Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const
+	{
+		const IViewItem* viewItem = nullptr;
+		if (node.QueryInterface(viewItem))
+		{
+			const ColumnID id = column.GetID<ColumnID>();
+			return KxComparator::IsLess(GetStringRepresentation(id), viewItem->GetStringRepresentation(id), true);
+		}
+		return false;
 	}
 }

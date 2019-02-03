@@ -1,10 +1,11 @@
 #pragma once
 #include "stdafx.h"
+#include "GameConfig/ConfigManger/IViewItem.h"
 #include <KxFramework/DataView2/DataView2.h>
 
 namespace Kortex::GameConfig
 {
-	class CategoryItem: public RTTI::IExtendInterface<CategoryItem, KxDataView2::Node>
+	class CategoryItem: public RTTI::IExtendInterface<CategoryItem, IViewItem, KxDataView2::Node>
 	{
 		private:
 			wxString m_CategoryPath;
@@ -26,6 +27,8 @@ namespace Kortex::GameConfig
 			{
 				return m_CategoryName;
 			}
+
+			wxString GetStringRepresentation(ColumnID id) const override;
 
 		public:
 			wxAny GetValue(const KxDataView2::Column& column) const override;

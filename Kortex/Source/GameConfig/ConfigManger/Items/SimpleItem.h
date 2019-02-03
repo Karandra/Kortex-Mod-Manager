@@ -5,7 +5,7 @@
 
 namespace Kortex::GameConfig
 {
-	class SimpleItem: public RTTI::IImplementation<Item>
+	class SimpleItem: public RTTI::IExtendInterface<SimpleItem, Item>
 	{
 		private:
 			ItemValue m_Value;
@@ -31,10 +31,11 @@ namespace Kortex::GameConfig
 			{
 				return m_HashStore.Get(*this);
 			}
-			bool IsUnknown() const
+			bool IsUnknown() const override
 			{
 				return m_IsUnknown;
 			}
+			wxString GetStringRepresentation(ColumnID id) const override;
 
 			const ItemValue& GetValue() const
 			{
@@ -44,7 +45,7 @@ namespace Kortex::GameConfig
 			{
 				return m_Value;
 			}
-	
+			
 		public:
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			KxDataView2::Renderer& GetRenderer(const KxDataView2::Column& column) const override;

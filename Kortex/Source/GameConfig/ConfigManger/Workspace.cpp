@@ -22,14 +22,17 @@ namespace Kortex::GameConfig
 	}
 	bool Workspace::OnCreateWorkspace()
 	{
-		m_View = new KxDataView2::View(this, KxID_NONE);
-		m_View->AssignModel(new KxDataView2::Model(false));
+		using namespace KxDataView2;
+
+		m_View = new View(this, KxID_NONE);
+		m_View->AssignModel(new Model(false));
 		m_MainSizer->Add(m_View, 1, wxEXPAND);
 
-		m_View->AppendColumn<KxDataView2::TextRenderer>(m_Translator.GetString("ConfigManager.View.Path"), ColumnID::Path);
-		m_View->AppendColumn<KxDataView2::TextRenderer>(m_Translator.GetString("ConfigManager.View.Name"), ColumnID::Name);
-		m_View->AppendColumn<KxDataView2::TextRenderer>(m_Translator.GetString("ConfigManager.View.Type"), ColumnID::Type);
-		m_View->AppendColumn(m_Translator.GetString("ConfigManager.View.Value"), ColumnID::Value);
+		ColumnStyle columnStyle = ColumnStyle::Move|ColumnStyle::Size|ColumnStyle::Sort;
+		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Path"), ColumnID::Path, {}, columnStyle);
+		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Name"), ColumnID::Name, {}, columnStyle);
+		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Type"), ColumnID::Type, {}, columnStyle);
+		m_View->AppendColumn(m_Translator.GetString("ConfigManager.View.Value"), ColumnID::Value, {}, columnStyle);
 
 		OnReloadWorkspace();
 		return true;

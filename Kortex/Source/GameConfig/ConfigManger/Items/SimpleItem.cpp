@@ -23,12 +23,21 @@ namespace Kortex::GameConfig
 	}
 
 	SimpleItem::SimpleItem(ItemGroup& group, const KxXMLNode& itemNode)
-		:IImplementation<Item>(group, itemNode)
+		:IExtendInterface(group, itemNode)
 	{
 	}
 	SimpleItem::SimpleItem(ItemGroup& group, bool isUnknown)
-		:IImplementation<Item>(group), m_IsUnknown(isUnknown)
+		:IExtendInterface(group), m_IsUnknown(isUnknown)
 	{
+	}
+
+	wxString SimpleItem::GetStringRepresentation(ColumnID id) const
+	{
+		if (id == ColumnID::Value)
+		{
+			return m_Value.As<wxString>();
+		}
+		return Item::GetStringRepresentation(id);
 	}
 
 	wxAny SimpleItem::GetValue(const KxDataView2::Column& column) const

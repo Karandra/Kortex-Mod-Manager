@@ -5,6 +5,7 @@
 #include "ItemValue.h"
 #include "ItemOptions.h"
 #include "ItemSamples.h"
+#include "IViewItem.h"
 #include "ISource.h"
 #include "GameConfig/IConfigManager.h"
 #include <KxFramework/DataView2/Node.h>
@@ -34,7 +35,7 @@ namespace Kortex::GameConfig
 	class ItemGroup;
 	class Definition;
 
-	class Item: public RTTI::IExtendInterface<Item, KxDataView2::Node>
+	class Item: public RTTI::IExtendInterface<Item, IViewItem, KxDataView2::Node>
 	{
 		friend class ItemGroup;
 		friend class HashStore;
@@ -64,8 +65,10 @@ namespace Kortex::GameConfig
 
 		public:
 			virtual bool IsOK() const;
+			virtual bool IsUnknown() const = 0;
 			virtual size_t GetHash() const = 0;
 			virtual wxString GetFullPath() const;
+			wxString GetStringRepresentation(ColumnID id) const override;
 			void ReadItem();
 
 			IConfigManager& GetManager() const;
@@ -147,5 +150,8 @@ namespace Kortex::GameConfig
 				m_TypeID = id;
 			}
 			DataType GetDataType() const;
+
+		public:
+			bool Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
 	};
 }

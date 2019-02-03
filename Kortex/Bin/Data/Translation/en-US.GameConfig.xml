@@ -162,7 +162,7 @@
 		<String ID="ValueName.bAlwaysRunByDefault">Always run by default</String>
 		<String ID="ValueName.bMouseAcceleration">Mouse acceleration</String>
 		<String ID="ValueName.bInvertYValues">Invert Y axis</String>
-		<String ID="ValueName.bEnableFileSelection">Enable plugin selection in $(LauncherName)</String>
+		<String ID="ValueName.bEnableFileSelection">Enable plugin selection in $(GameShortName) Launcher</String>
 		<String ID="ValueName.bAllowScreenshot">Allow screenshot</String>
 		<String ID="ValueName.bAlwaysActive">Always active</String>
 		<String ID="ValueName.bPreemptivelyUnloadCells">Preemptively unload cells</String>

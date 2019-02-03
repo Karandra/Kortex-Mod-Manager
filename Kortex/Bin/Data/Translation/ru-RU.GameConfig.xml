@@ -162,7 +162,7 @@
 		<String ID="ValueName.bAlwaysRunByDefault">Бег включен по умолчанию</String>
 		<String ID="ValueName.bMouseAcceleration">Ускорение мыши</String>
 		<String ID="ValueName.bInvertYValues">Инверсия мыши по оси Y</String>
-		<String ID="ValueName.bEnableFileSelection">Активировать подключение плагинов в $(LauncherName)</String>
+		<String ID="ValueName.bEnableFileSelection">Активировать подключение плагинов в $(GameShortName) Launcher</String>
 		<String ID="ValueName.bAllowScreenshot">Разрешить скриншоты</String>
 		<String ID="ValueName.bAlwaysActive">Игра всегда активна</String>
 		<String ID="ValueName.bPreemptivelyUnloadCells">Выгружать ненужные ячейки</String>

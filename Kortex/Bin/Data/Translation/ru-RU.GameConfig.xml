@@ -5,7 +5,6 @@
 	</Info>
 	<StringTable>
 		<String ID="Category.Game">Игра</String>
-		<String ID="Category.Editor">Редактор</String>
 		<String ID="Category.Graphics">Графика</String>
 		<String ID="Category.Shadows">Тени</String>
 		<String ID="Category.Water">Вода</String>
@@ -21,6 +20,9 @@
 		<String ID="Category.MemoryManagement">Управление памятью</String>
 		<String ID="Category.BackgroudLoading">Фоновая загрузка</String>
 		<String ID="Category.Debug">Отладка</String>
+
+		<String ID="Category.Editor">Редактор</String>
+		<String ID="Category.Messages">Сообщения</String>
 		
 		<String ID="Category.ENB">ENB</String>
 		<String ID="Category.ENB.General">Общие параметры</String>
@@ -47,6 +49,24 @@
 		<String ID="SampleValue.Difficulty3">Эксперт</String>
 		<String ID="SampleValue.Difficulty4">Мастер</String>
 		<String ID="SampleValue.Difficulty5">Легендарный</String>
+
+		<String ID="SampleValue.Language.RUSSIAN">Русский</String>
+		<String ID="SampleValue.Language.ENGLISH">Английский</String>
+		<String ID="SampleValue.Language.GERMAN">Немецкий</String>
+		<String ID="SampleValue.Language.FRENCH">Французский</String>
+		<String ID="SampleValue.Language.CZECH">Чешский</String>
+		<String ID="SampleValue.Language.ITALIAN">Итальянский</String>
+		<String ID="SampleValue.Language.POLISH">Польский</String>
+		<String ID="SampleValue.Language.SPANISH">Испанский</String>
+		<String ID="SampleValue.Language.CHINESE">Китайский</String>
+		<String ID="SampleValue.Language.DANISH">Датский</String>
+		<String ID="SampleValue.Language.FINNISH">Финский</String>
+		<String ID="SampleValue.Language.GREEK">Греческий</String>
+		<String ID="SampleValue.Language.JAPANESE">Японский</String>
+		<String ID="SampleValue.Language.NORWEGIAN">Норвежский</String>
+		<String ID="SampleValue.Language.PORTUGUESE">Португальский</String>
+		<String ID="SampleValue.Language.SWEDISH">Шведский</String>
+		<String ID="SampleValue.Language.TURKISH">Турецкий</String>
 		
 		<!-- Graphics -->
 		<String ID="ValueName.sD3DDevice">Название видеоадаптера</String>

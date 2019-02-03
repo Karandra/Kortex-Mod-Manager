@@ -5,7 +5,6 @@
 	</Info>
 	<StringTable>
 		<String ID="Category.Game">Game</String>
-		<String ID="Category.Editor">Editor</String>
 		<String ID="Category.Graphics">Graphics</String>
 		<String ID="Category.Shadows">Shadows</String>
 		<String ID="Category.Water">Water</String>
@@ -21,6 +20,9 @@
 		<String ID="Category.MemoryManagement">Memory management</String>
 		<String ID="Category.BackgroudLoading">Background loading</String>
 		<String ID="Category.Debug">Debug</String>
+		
+		<String ID="Category.Editor">Editor</String>
+		<String ID="Category.Messages">Messages</String>
 		
 		<String ID="Category.ENB">ENB</String>
 		<String ID="Category.ENB.General">General</String>
@@ -47,6 +49,24 @@
 		<String ID="SampleValue.Difficulty3">Expert</String>
 		<String ID="SampleValue.Difficulty4">Master</String>
 		<String ID="SampleValue.Difficulty5">Legendary</String>
+
+		<String ID="SampleValue.Language.RUSSIAN">Russian</String>
+		<String ID="SampleValue.Language.ENGLISH">English</String>
+		<String ID="SampleValue.Language.GERMAN">German</String>
+		<String ID="SampleValue.Language.FRENCH">French</String>
+		<String ID="SampleValue.Language.CZECH">Czech</String>
+		<String ID="SampleValue.Language.ITALIAN">Italian</String>
+		<String ID="SampleValue.Language.POLISH">Polish</String>
+		<String ID="SampleValue.Language.SPANISH">Spanish</String>
+		<String ID="SampleValue.Language.CHINESE">Chinese</String>
+		<String ID="SampleValue.Language.DANISH">Danish</String>
+		<String ID="SampleValue.Language.FINNISH">Finnish</String>
+		<String ID="SampleValue.Language.GREEK">Greek</String>
+		<String ID="SampleValue.Language.JAPANESE">Japanese</String>
+		<String ID="SampleValue.Language.NORWEGIAN">Norwegian</String>
+		<String ID="SampleValue.Language.PORTUGUESE">Portuguese</String>
+		<String ID="SampleValue.Language.SWEDISH">Swedish</String>
+		<String ID="SampleValue.Language.TURKISH">Turkish</String>
 
 		<!-- Graphics -->
 		<String ID="ValueName.sD3DDevice">Graphics Adapter</String>

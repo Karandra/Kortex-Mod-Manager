@@ -50,14 +50,14 @@
 
 		<String ID="ConfigManager.Categories.None">Unknown parameters</String>
 
-		<String ID="ConfigManager.Samples.None">None</String>
-		<String ID="ConfigManager.Samples.VeryLow">Very low</String>
-		<String ID="ConfigManager.Samples.Low">Low</String>
-		<String ID="ConfigManager.Samples.Mid">Medium</String>
-		<String ID="ConfigManager.Samples.High">High</String>
-		<String ID="ConfigManager.Samples.VeryHigh">Very high</String>
-		<String ID="ConfigManager.Samples.Ultra">Ultra</String>
-		<String ID="ConfigManager.Samples.Extreme">Extreme</String>
-		<String ID="ConfigManager.Samples.VideoMode.RatioUnknown">Unknown aspect ratio</String>
+		<String ID="SampleValue.None">None</String>
+		<String ID="SampleValue.VeryLow">Very low</String>
+		<String ID="SampleValue.Low">Low</String>
+		<String ID="SampleValue.Mid">Medium</String>
+		<String ID="SampleValue.High">High</String>
+		<String ID="SampleValue.VeryHigh">Very high</String>
+		<String ID="SampleValue.Ultra">Ultra</String>
+		<String ID="SampleValue.Extreme">Extreme</String>
+		<String ID="SampleValue.VideoMode.RatioUnknown">Unknown aspect ratio</String>
 	</StringTable>
 </Lang>

@@ -50,14 +50,14 @@
 
 		<String ID="ConfigManager.Categories.None">Неизвестные параметры</String>
 
-		<String ID="ConfigManager.Samples.None">Нет</String>
-		<String ID="ConfigManager.Samples.VeryLow">Очень низкий</String>
-		<String ID="ConfigManager.Samples.Low">Низкий</String>
-		<String ID="ConfigManager.Samples.Mid">Средний</String>
-		<String ID="ConfigManager.Samples.High">Высокий</String>
-		<String ID="ConfigManager.Samples.VeryHigh">Очень высокий</String>
-		<String ID="ConfigManager.Samples.Ultra">Ультра</String>
-		<String ID="ConfigManager.Samples.Extreme">Экстремальный</String>
-		<String ID="ConfigManager.Samples.VideoMode.RatioUnknown">Неизвестное соотношение сторон</String>
+		<String ID="SampleValue.None">Нет</String>
+		<String ID="SampleValue.VeryLow">Очень низкий</String>
+		<String ID="SampleValue.Low">Низкий</String>
+		<String ID="SampleValue.Mid">Средний</String>
+		<String ID="SampleValue.High">Высокий</String>
+		<String ID="SampleValue.VeryHigh">Очень высокий</String>
+		<String ID="SampleValue.Ultra">Ультра</String>
+		<String ID="SampleValue.Extreme">Экстремальный</String>
+		<String ID="SampleValue.VideoMode.RatioUnknown">Неизвестное соотношение сторон</String>
 	</StringTable>
 </Lang>

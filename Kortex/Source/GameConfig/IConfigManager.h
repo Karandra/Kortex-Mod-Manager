@@ -39,6 +39,7 @@ namespace Kortex
 
 		public:
 			virtual const ITranslator& GetTranslator() const = 0;
+
 			virtual void ForEachDefinition(const DefinitionFunc& func) = 0;
 			template<class TFunctor> void ForEachGroup(TFunctor&& func)
 			{

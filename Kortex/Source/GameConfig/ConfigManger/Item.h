@@ -114,6 +114,10 @@ namespace Kortex::GameConfig
 				m_Label = label;
 			}
 
+			bool HasSamples() const
+			{
+				return !m_Samples.IsEmpty();
+			}
 			const ItemSamples& GetSamples() const
 			{
 				return m_Samples;
@@ -150,6 +154,8 @@ namespace Kortex::GameConfig
 				m_TypeID = id;
 			}
 			DataType GetDataType() const;
+
+			virtual bool IsEditable() const;
 
 		public:
 			bool Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;

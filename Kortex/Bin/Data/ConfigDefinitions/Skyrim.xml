@@ -156,8 +156,9 @@
 			<Item Category="Game/Graphics" Path="BlurShader" Name="bUseBlurShader" Type="bool"/>
 			<Item Category="Game/Graphics" Path="Imagespace" Name="bDoDepthOfField" Type="bool"/>
 			<Item Category="Game/Graphics" Path="Display" Name="bFloatPointRenderTarget" Type="bool"/>
-			<Item Category="Game/Graphics" Path="Display" Name="sD3DDevice" Type="string" Editable="0">
+			<Item Category="Game/Graphics" Path="Display" Name="sD3DDevice" Type="string">
 				<Options>
+					<Editable Value="false"/>
 					<Output>
 						<Format><![CDATA["%1"]]></Format>
 					</Output>
@@ -199,7 +200,10 @@
 					<Value Label="TexturesExtra">-2</Value>
 				</Samples>
 			</Item>
-			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="int32" SubType="DoubleValue" Editable="0">
+			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="int32" SubType="DoubleValue">
+				<Options>
+					<Editable Value="false"/>
+				</Options>
 				<ValueName1>iSize W</ValueName1>
 				<ValueName2>iSize H</ValueName2>
 				<Separator>×</Separator>
@@ -218,10 +222,16 @@
 					<Value Label="Ultra">8192</Value>
 				</Samples>
 			</Item>
-			<Item Category="Game/Shadows" Path="Display" Name="iBlurDeferredShadowMask" Type="int32" Editable="0">
+			<Item Category="Game/Shadows" Path="Display" Name="iBlurDeferredShadowMask" Type="int32">
+				<Options>
+					<Editable Value="false"/>
+				</Options>
 				<Samples Source="Range" Min="0" Max="7" Step="1"/>
 			</Item>
-			<Item Category="Game/Shadows" Path="Display" Name="iShadowMaskQuarter" Type="int32" Editable="0">
+			<Item Category="Game/Shadows" Path="Display" Name="iShadowMaskQuarter" Type="int32">
+				<Options>
+					<Editable Value="false"/>
+				</Options>
 				<Samples Source="Range" Min="0" Max="7" Step="1"/>
 			</Item>
 			<Item Category="Game/Shadows" Path="Display" Name="fShadowDistance" Type="float32">
@@ -392,7 +402,10 @@
 					<Value>15000000</Value>
 				</Samples>
 			</Item>
-			<Item Category="Game/LevelOfDetail" Path="Particles" Name="iMaxDesired" Type="int32" Editable="1">
+			<Item Category="Game/LevelOfDetail" Path="Particles" Name="iMaxDesired" Type="int32">
+				<Options>
+					<Editable Value="true"/>
+				</Options>
 				<Samples Source="Range" Min="0" Max="2000" Step="250"/>
 			</Item>
 

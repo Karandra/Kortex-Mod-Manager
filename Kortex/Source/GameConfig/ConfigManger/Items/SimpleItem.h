@@ -12,8 +12,7 @@ namespace Kortex::GameConfig
 			HashStore m_HashStore;
 			const bool m_IsUnknown = false;
 
-			mutable KxDataView2::TextRenderer m_Renderer;
-			mutable KxDataView2::TextEditor m_Editor;
+			mutable std::unique_ptr<KxDataView2::Editor> m_Editor;
 			mutable std::optional<wxString> m_CachedViewData;
 
 		protected:
@@ -22,6 +21,15 @@ namespace Kortex::GameConfig
 			void Clear() override;
 			void Read(const ISource& source) override;
 			void Write(ISource& source) const override;
+
+		private:
+			std::unique_ptr<wxValidator> CreateValidator() const;
+			std::unique_ptr<KxDataView2::Editor> CreateEditor() const;
+
+			bool IsReadOnlyComboBox() const
+			{
+				return HasSamples() && !IsEditable();
+			}
 
 		public:
 			SimpleItem(ItemGroup& group, const KxXMLNode& itemNode = {});
@@ -50,6 +58,8 @@ namespace Kortex::GameConfig
 		public:
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
+			bool SetValue(const wxAny& value, KxDataView2::Column& column) override;
+			
 			KxDataView2::Renderer& GetRenderer(const KxDataView2::Column& column) const override;
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
 			bool GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const override;

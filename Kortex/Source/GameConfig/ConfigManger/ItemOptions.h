@@ -14,6 +14,7 @@ namespace Kortex::GameConfig
 			wxString m_OutputFormat;
 			SourceFormatValue m_SourceFormat;
 			TypeDetectorValue m_TypeDetector;
+			EditableBehaviorValue m_EditableBehavior;
 			int m_Precision = -1;
 
 		public:
@@ -33,6 +34,19 @@ namespace Kortex::GameConfig
 				return m_TypeDetector;
 			}
 			
+			EditableBehaviorValue GetEditableBehavior() const
+			{
+				return m_EditableBehavior;
+			}
+			bool IsEditable() const
+			{
+				return m_EditableBehavior == EditableBehaviorID::True;
+			}
+			bool IsAutoEditable() const
+			{
+				return m_EditableBehavior == EditableBehaviorID::Auto;
+			}
+
 			bool HasInputFormat() const
 			{
 				return !m_InputFormat.IsEmpty();

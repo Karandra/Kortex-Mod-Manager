@@ -104,7 +104,11 @@ namespace Kortex::GameConfig
 			SortOrderValue m_SortOrder;
 			SortOptionsValue m_SortOptions;
 			SamplingFunctionValue m_SampligFunction;
+
 			std::vector<SampleValue> m_Values;
+			wxAny m_MinValue;
+			wxAny m_MaxValue;
+			wxAny m_Step;
 
 		private:
 			size_t LoadImmediateItems(const KxXMLNode& rootNode);
@@ -118,6 +122,10 @@ namespace Kortex::GameConfig
 					m_Values.reserve(std::abs(max - min));
 				}
 
+				m_MinValue = min;
+				m_MaxValue = max;
+				m_Step = step;
+
 				for (T i = min; i <= max; i += step)
 				{
 					SampleValue& sample = m_Values.emplace_back();
@@ -126,9 +134,9 @@ namespace Kortex::GameConfig
 				return step >= 0 ? SortOrderID::Ascending : SortOrderID::Descending;
 			}
 
-			template<class TItems, class TFunctor> void DoForEachItem(TItems&& items, TFunctor&& func)
+			template<class TItems, class TFunctor> static void DoForEachItem(TItems&& items, TFunctor&& func)
 			{
-				for (auto& item: items)
+				for (auto&& item: items)
 				{
 					func(item);
 				}
@@ -138,11 +146,16 @@ namespace Kortex::GameConfig
 			ItemSamples(Item& item, const KxXMLNode& samplesNode = {});
 
 		public:
+			void Load(const KxXMLNode& samplesNode);
+			
+			bool IsEmpty() const
+			{
+				return m_Values.empty();
+			}
 			Item& GetItem() const
 			{
 				return m_Item;
 			}
-			void Load(const KxXMLNode& samplesNode);
 
 			SamplesSourceValue GetSourceType() const
 			{
@@ -161,6 +174,22 @@ namespace Kortex::GameConfig
 				return m_SampligFunction;
 			}
 
+			bool HasStep() const;
+			bool HasBoundValues() const;
+			template<class T> void GetBoundValues(T& min, T& max) const
+			{
+				static_assert(std::is_integral_v<T> || std::is_floating_point_v<T>);
+
+				if (m_MinValue.IsNull() || !m_MinValue.GetAs(&min))
+				{
+					min = std::numeric_limits<T>::lowest();
+				}
+				if (m_MaxValue.IsNull() || !m_MaxValue.GetAs(&max))
+				{
+					max = std::numeric_limits<T>::max();
+				}
+			}
+
 			template<class TFunctor> void ForEachSample(TFunctor&& func) const
 			{
 				DoForEachItem(m_Values, func);
@@ -169,8 +198,16 @@ namespace Kortex::GameConfig
 			{
 				DoForEachItem(m_Values, func);
 			}
-	
-			const SampleValue* FindSampleByValue(const ItemValue& value) const;
-			const SampleValue* FindSampleByLabel(const wxString& label) const;
+			
+			const SampleValue* GetSampleByIndex(size_t index) const
+			{
+				if (index < m_Values.size())
+				{
+					return &m_Values[index];
+				}
+				return nullptr;
+			}
+			const SampleValue* FindSampleByValue(const ItemValue& value, size_t* index = nullptr) const;
+			const SampleValue* FindSampleByLabel(const wxString& label, size_t* index = nullptr) const;
 	};
 }

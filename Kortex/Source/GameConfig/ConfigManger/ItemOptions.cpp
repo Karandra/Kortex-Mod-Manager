@@ -38,6 +38,7 @@ namespace Kortex::GameConfig
 
 			m_SourceFormat.FromString(node.GetFirstChildElement(wxS("SourceFormat")).GetAttribute(wxS("Value")));
 			m_TypeDetector.FromString(node.GetFirstChildElement(wxS("TypeDetection")).GetAttribute(wxS("Value")));
+			m_EditableBehavior.FromString(node.GetFirstChildElement(wxS("Editable")).GetAttribute(wxS("Value")));
 
 			// Load precision
 			if (dataType.IsOK() && dataType.GetOutputType().IsFloat())
@@ -49,8 +50,16 @@ namespace Kortex::GameConfig
 				m_Precision = node.GetFirstChildElement(wxS("Output")).GetAttributeInt(wxS("Precision"), -1);
 			}
 
-			// I think 8 digits of precision should be enough
-			m_Precision = std::clamp(m_Precision, -1, 8);
+			int maxDigits = 0;
+			if (dataType.GetID() == DataTypeID::Float32)
+			{
+				maxDigits = std::numeric_limits<float>::digits10;
+			}
+			else if (dataType.GetID() == DataTypeID::Float64)
+			{
+				maxDigits = std::numeric_limits<double>::digits10;
+			}
+			m_Precision = std::clamp(m_Precision, -1, maxDigits);
 		}
 	}
 	void ItemOptions::CopyIfNotSpecified(const ItemOptions& other, const DataType& dataType)
@@ -60,6 +69,7 @@ namespace Kortex::GameConfig
 
 		CopyIfDefault(m_SourceFormat, other.m_SourceFormat);
 		CopyIfDefault(m_TypeDetector, other.m_TypeDetector);
+		CopyIfDefault(m_EditableBehavior, other.m_EditableBehavior);
 
 		CopyIfDefault(m_Precision, other.m_Precision);
 		CopyIfDefault(m_Precision, dataType.GetPrecision());

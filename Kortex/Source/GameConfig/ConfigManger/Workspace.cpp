@@ -34,7 +34,7 @@ namespace Kortex::GameConfig
 		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Path"), ColumnID::Path, {}, columnStyle);
 		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Name"), ColumnID::Name, {}, columnStyle);
 		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Type"), ColumnID::Type, {}, columnStyle);
-		m_View->AppendColumn(m_Translator.GetString("ConfigManager.View.Value"), ColumnID::Value, {}, columnStyle);
+		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Value"), ColumnID::Value, {}, columnStyle);
 
 		OnReloadWorkspace();
 		return true;

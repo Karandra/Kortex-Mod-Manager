@@ -200,6 +200,26 @@ namespace Kortex::GameConfig
 
 namespace Kortex::GameConfig
 {
+	enum class EditableBehaviorID: uint32_t
+	{
+		Auto = 0,
+		True,
+		False,
+	};
+	class EditableBehaviorDef: public KxIndexedEnum::Definition<EditableBehaviorDef, EditableBehaviorID, wxString, true>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{EditableBehaviorID::Auto, wxS("Auto")},
+			{EditableBehaviorID::True, wxS("true")},
+			{EditableBehaviorID::False, wxS("false")},
+		};
+	};
+	using EditableBehaviorValue = KxIndexedEnum::Value<EditableBehaviorDef, EditableBehaviorID::Auto>;
+}
+
+namespace Kortex::GameConfig
+{
 	enum class ColumnID
 	{
 		Path,

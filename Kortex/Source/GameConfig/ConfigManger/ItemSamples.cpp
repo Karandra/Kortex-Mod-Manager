@@ -222,7 +222,7 @@ namespace Kortex::GameConfig
 					if (type.IsFloat())
 					{
 						double min = samplesNode.GetAttributeFloat(wxS("Min"), 0);
-						double max = samplesNode.GetAttributeFloat(wxS("Max"), 0);
+						double max = samplesNode.GetAttributeFloat(wxS("Max"), 1.0);
 						double step = samplesNode.GetAttributeFloat(wxS("Step"), 1.0);
 						m_SortOrder = LoadRange(min, max, step);
 						isRangeLoaded = true;
@@ -230,7 +230,7 @@ namespace Kortex::GameConfig
 					else if (type.IsSignedInteger())
 					{
 						int64_t min = samplesNode.GetAttributeInt(wxS("Min"), 0);
-						int64_t max = samplesNode.GetAttributeInt(wxS("Max"), 0);
+						int64_t max = samplesNode.GetAttributeInt(wxS("Max"), 1);
 						int64_t step = samplesNode.GetAttributeInt(wxS("Step"), 1);
 						m_SortOrder = LoadRange(min, max, step);
 						isRangeLoaded = true;
@@ -238,7 +238,7 @@ namespace Kortex::GameConfig
 					else if (type.IsUnsignedInteger())
 					{
 						uint64_t min = samplesNode.GetAttributeInt(wxS("Min"), 0);
-						uint64_t max = samplesNode.GetAttributeInt(wxS("Max"), 0);
+						uint64_t max = samplesNode.GetAttributeInt(wxS("Max"), 1);
 						uint64_t step = samplesNode.GetAttributeInt(wxS("Step"), 1);
 						m_SortOrder = LoadRange(min, max, step);
 						isRangeLoaded = true;
@@ -246,6 +246,7 @@ namespace Kortex::GameConfig
 
 					if (isRangeLoaded && LoadImmediateItems(samplesNode) != 0)
 					{
+						m_SortOptions.AddFlag(SortOptionsID::DigitsAsNumbers);
 						SortImmediateItems();
 					}
 					break;
@@ -277,28 +278,43 @@ namespace Kortex::GameConfig
 		}
 	}
 
-	const SampleValue* ItemSamples::FindSampleByValue(const ItemValue& value) const
+	bool ItemSamples::HasStep() const
+	{
+		return !m_Step.IsNull();
+	}
+	bool ItemSamples::HasBoundValues() const
+	{
+		return !m_MinValue.IsNull() && !m_MaxValue.IsNull();
+	}
+	
+	const SampleValue* ItemSamples::FindSampleByValue(const ItemValue& value, size_t* index) const
 	{
 		if (!value.IsNull())
 		{
+			size_t counter = 0;
 			for (const SampleValue& sampleValue: m_Values)
 			{
 				if (sampleValue.GetValue().As<wxString>() == value.As<wxString>())
 				{
+					KxUtility::SetIfNotNull(index, counter);
 					return &sampleValue;
 				}
+				counter++;
 			}
 		}
 		return nullptr;
 	}
-	const SampleValue* ItemSamples::FindSampleByLabel(const wxString& label) const
+	const SampleValue* ItemSamples::FindSampleByLabel(const wxString& label, size_t* index) const
 	{
+		size_t counter = 0;
 		for (const SampleValue& sampleValue: m_Values)
 		{
 			if (sampleValue.GetLabel() == label)
 			{
+				KxUtility::SetIfNotNull(index, counter);
 				return &sampleValue;
 			}
+			counter++;
 		}
 		return nullptr;
 	}

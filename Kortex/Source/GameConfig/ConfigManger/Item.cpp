@@ -99,6 +99,14 @@ namespace Kortex::GameConfig
 	{
 		return m_Group.GetDefinition().GetDataType(m_TypeID);
 	}
+	bool Item::IsEditable() const
+	{
+		if (m_Options.IsAutoEditable())
+		{
+			return IsUnknown() || m_TypeID.IsFloat() || (m_TypeID.IsString() || m_TypeID.IsInteger() && m_Samples.IsEmpty());
+		}
+		return m_Options.IsEditable();
+	}
 
 	bool Item::Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{

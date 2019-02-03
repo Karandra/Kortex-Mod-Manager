@@ -2,13 +2,9 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
-#include <KxFramework/KxSingleton.h>
 #include "Items/CategoryItem.h"
-
-namespace KxDataView2
-{
-	class View;
-}
+#include <KxFramework/KxSingleton.h>
+#include <KxFramework/DataView2/DataView2Fwd.h>
 
 namespace Kortex
 {

@@ -14,6 +14,7 @@ namespace Kortex::GameConfig
 
 			mutable KxDataView2::TextRenderer m_Renderer;
 			mutable KxDataView2::TextEditor m_Editor;
+			mutable std::optional<wxString> m_CachedViewData;
 
 		protected:
 			bool Create(const KxXMLNode& itemNode) override;
@@ -48,6 +49,7 @@ namespace Kortex::GameConfig
 			
 		public:
 			wxAny GetValue(const KxDataView2::Column& column) const override;
+			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
 			KxDataView2::Renderer& GetRenderer(const KxDataView2::Column& column) const override;
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
 			bool GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const override;

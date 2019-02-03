@@ -12,15 +12,6 @@
 
 namespace
 {
-	using Kortex::GameConfig::SortOptionsID;
-	using Kortex::GameConfig::SortOptionsValue;
-
-	enum class CompareResult
-	{
-		LessThan = 1,
-		Equal = 2,
-		GreaterThan = 3
-	};
 	class CompareStringsData
 	{
 		private:
@@ -30,6 +21,8 @@ namespace
 		public:
 			CompareStringsData(const wchar_t* localeName)
 			{
+				m_VersionInfo.dwNLSVersionInfoSize = sizeof(m_VersionInfo);
+
 				if (KxSystem::IsWindows8OrGreater())
 				{
 					m_OK = ::GetNLSVersionEx(SYSNLS_FUNCTION::COMPARE_STRING, localeName, &m_VersionInfo);
@@ -42,6 +35,10 @@ namespace
 				return m_OK ? &m_VersionInfo : nullptr;
 			}
 	};
+}
+
+namespace Kortex::GameConfig
+{
 	CompareResult CompareStrings(const wxString& v1, const wxString& v2, SortOptionsValue sortOptions)
 	{
 		constexpr const auto localeName = LOCALE_NAME_INVARIANT;
@@ -68,9 +65,11 @@ namespace Kortex::GameConfig
 	size_t ItemSamples::LoadImmediateItems(const KxXMLNode& rootNode)
 	{
 		size_t counter = 0;
+		m_Values.reserve(rootNode.GetChildrenCount());
+
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			SampleValue& sample = m_Values.emplace_back(m_Item.GetManager().TranslateItemLabel(node, {}, wxS("Samples")));
+			SampleValue& sample = m_Values.emplace_back(m_Item.GetManager().TranslateItemLabel(node, {}, wxS("SampleValue")));
 			sample.GetValue().Deserialize(node.GetValue(), m_Item);
 
 			counter++;
@@ -208,7 +207,6 @@ namespace Kortex::GameConfig
 					m_SortOrder.FromString(samplesNode.GetAttribute(wxS("SortOrder")));
 					m_SortOptions.FromOrExpression(samplesNode.GetAttribute(wxS("SortOptions")));
 
-					m_Values.reserve(samplesNode.GetChildrenCount());
 					LoadImmediateItems(samplesNode);
 					if (!m_SortOrder.IsDefault())
 					{
@@ -277,5 +275,31 @@ namespace Kortex::GameConfig
 				}
 			}
 		}
+	}
+
+	const SampleValue* ItemSamples::FindSampleByValue(const ItemValue& value) const
+	{
+		if (!value.IsNull())
+		{
+			for (const SampleValue& sampleValue: m_Values)
+			{
+				if (sampleValue.GetValue().As<wxString>() == value.As<wxString>())
+				{
+					return &sampleValue;
+				}
+			}
+		}
+		return nullptr;
+	}
+	const SampleValue* ItemSamples::FindSampleByLabel(const wxString& label) const
+	{
+		for (const SampleValue& sampleValue: m_Values)
+		{
+			if (sampleValue.GetLabel() == label)
+			{
+				return &sampleValue;
+			}
+		}
+		return nullptr;
 	}
 }

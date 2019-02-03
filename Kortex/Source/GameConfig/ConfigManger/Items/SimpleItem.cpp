@@ -58,24 +58,48 @@ namespace Kortex::GameConfig
 			}
 			case ColumnID::Value:
 			{
-				const ItemValue& value = GetValue();
-				wxString serializedValue = value.Serialize(*this);
-
-				if (serializedValue.IsEmpty())
+				if (!m_CachedViewData)
 				{
-					if (value.GetType().IsString())
+					auto FormatValue = [this](const ItemValue& value)
 					{
-						return KAux::MakeBracketedLabel(GetManager().GetTranslator().GetString(wxS("ConfigManager.View.EmptyStringValue")));
+						wxString serializedValue = value.Serialize(*this);
+
+						if (serializedValue.IsEmpty())
+						{
+							if (value.GetType().IsString())
+							{
+								return KAux::MakeBracketedLabel(GetManager().GetTranslator().GetString(wxS("ConfigManager.View.EmptyStringValue")));
+							}
+							else
+							{
+								return KAux::MakeNoneLabel();
+							}
+						}
+						return serializedValue;
+					};
+
+					const SampleValue* sampleValue = GetSamples().FindSampleByValue(m_Value);
+					if (sampleValue && sampleValue->HasLabel())
+					{
+						m_CachedViewData = KxString::Format(wxS("%1 - %2"), FormatValue(m_Value), sampleValue->GetLabel());
 					}
 					else
 					{
-						return KAux::MakeNoneLabel();
+						m_CachedViewData = FormatValue(m_Value);
 					}
 				}
-				else
-				{
-					return serializedValue;
-				}
+				return *m_CachedViewData;
+			}
+		}
+		return {};
+	}
+	wxAny SimpleItem::GetEditorValue(const KxDataView2::Column& column) const
+	{
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Value:
+			{
+				return m_Value.AsAny();
 			}
 		}
 		return {};

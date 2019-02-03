@@ -7,6 +7,14 @@ class KxXMLNode;
 namespace Kortex::GameConfig
 {
 	class Item;
+
+	enum class CompareResult
+	{
+		LessThan = 1,
+		Equal = 2,
+		GreaterThan = 3
+	};
+	CompareResult CompareStrings(const wxString& v1, const wxString& v2, SortOptionsValue sortOptions);
 }
 
 namespace Kortex::GameConfig
@@ -61,6 +69,10 @@ namespace Kortex::GameConfig
 				return m_Value;
 			}
 
+			bool HasLabel() const
+			{
+				return !m_Label.IsEmpty();
+			}
 			wxString GetLabel() const
 			{
 				return m_Label.IsEmpty() ? m_Value.As<wxString>() : m_Label;
@@ -101,7 +113,12 @@ namespace Kortex::GameConfig
 			const VirtualKeyInfo::Map& LoadVirtualKeys();
 			template<class T> SortOrderValue LoadRange(T min, T max, T step)
 			{
-				for (double i = min; i <= max; i += step)
+				if constexpr(std::is_signed_v<T>)
+				{
+					m_Values.reserve(std::abs(max - min));
+				}
+
+				for (T i = min; i <= max; i += step)
 				{
 					SampleValue& sample = m_Values.emplace_back();
 					sample.GetValue().Assign(i);
@@ -152,5 +169,8 @@ namespace Kortex::GameConfig
 			{
 				DoForEachItem(m_Values, func);
 			}
+	
+			const SampleValue* FindSampleByValue(const ItemValue& value) const;
+			const SampleValue* FindSampleByLabel(const wxString& label) const;
 	};
 }

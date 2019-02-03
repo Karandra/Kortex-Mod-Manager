@@ -386,6 +386,7 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemValue.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ITypeDetector.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Item.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\IViewItem.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Workspace.h" />
     <ClInclude Include="Source\GameConfig\GameConfigModule.h" />
     <ClInclude Include="Source\GameConfig\IConfigManager.h" />

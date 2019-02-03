@@ -5,7 +5,7 @@
 
 namespace Kortex::DownloadManager
 {
-	class DefaultDownloadManager: public RTTI::IImplementation<Kortex::IDownloadManager, IDownloadManagerNXM>
+	class DefaultDownloadManager: public RTTI::IExtendInterface<DefaultDownloadManager, Kortex::IDownloadManager, IDownloadManagerNXM>
 	{
 		private:
 			IDownloadEntry::Vector m_Downloads;

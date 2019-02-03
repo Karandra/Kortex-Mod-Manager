@@ -22,7 +22,7 @@ namespace Kortex::ModManager
 	class FixedGameMod;
 	class PriorityGroup;
 
-	class BasicGameMod: public RTTI::IImplementation<IGameMod, IGameModWithImage>
+	class BasicGameMod: public RTTI::IExtendInterface<BasicGameMod, IGameMod, IGameModWithImage>
 	{
 		private:
 			wxString m_Signature;

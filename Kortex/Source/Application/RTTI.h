@@ -4,5 +4,5 @@
 
 namespace Kortex::RTTI
 {
-	using namespace Kx::RTTI;
+	using namespace KxRTTI;
 }

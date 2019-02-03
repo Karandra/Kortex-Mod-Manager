@@ -22,7 +22,7 @@ namespace Kortex::ModManager
 			virtual bool IsEnd() const = 0;
 	};
 
-	class PriorityGroup: public RTTI::IImplementation<FixedGameMod, IPriorityGroup>
+	class PriorityGroup: public RTTI::IExtendInterface<PriorityGroup, FixedGameMod, IPriorityGroup>
 	{
 		public:
 			IGameMod& m_BaseMod;

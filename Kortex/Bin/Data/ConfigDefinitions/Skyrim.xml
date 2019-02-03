@@ -171,32 +171,32 @@
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="iMultiSample" Type="int32">
 				<Samples Source="ImmediateItems">
-					<Value Label="$T(ConfigManager.Samples.None)">0</Value>
-					<Value Label="$T(ConfigManager.Samples.Low)">1</Value>
-					<Value Label="$T(ConfigManager.Samples.Mid)">2</Value>
-					<Value Label="$T(ConfigManager.Samples.High)">4</Value>
-					<Value Label="$T(ConfigManager.Samples.Ultra)">8</Value>
+					<Value Label="None">0</Value>
+					<Value Label="Low">1</Value>
+					<Value Label="Mid">2</Value>
+					<Value Label="High">4</Value>
+					<Value Label="Ultra">8</Value>
 				</Samples>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="iMaxAnisotropy" Type="int32">
 				<Samples Source="ImmediateItems">
-					<Value Label="$T(ConfigManager.Samples.None)">0</Value>
-					<Value Label="$T(ConfigManager.Samples.Low)">2</Value>
-					<Value Label="$T(ConfigManager.Samples.Mid)">4</Value>
-					<Value Label="$T(ConfigManager.Samples.High)">8</Value>
-					<Value Label="$T(ConfigManager.Samples.Ultra)">12</Value>
-					<Value Label="$T(ConfigManager.Samples.Extreme)">16</Value>
+					<Value Label="None">0</Value>
+					<Value Label="Low">2</Value>
+					<Value Label="Mid">4</Value>
+					<Value Label="High">8</Value>
+					<Value Label="Ultra">12</Value>
+					<Value Label="Extreme">16</Value>
 				</Samples>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="iTexMipMapSkip" Type="int32">
 				<Samples Source="ImmediateItems">
-					<Value Label="$T(ConfigManager.Samples.VeryLow)">4</Value>
-					<Value Label="$T(ConfigManager.Samples.Low)">3</Value>
-					<Value Label="$T(ConfigManager.Samples.Mid)">2</Value>
-					<Value Label="$T(ConfigManager.Samples.High)">1</Value>
-					<Value Label="$T(ConfigManager.Samples.Ultra)">0</Value>
-					<Value Label="$T(GameConfig.Samples.TexturesExtra)">-1</Value>
-					<Value Label="$T(GameConfig.Samples.TexturesExtra)">-2</Value>
+					<Value Label="VeryLow">4</Value>
+					<Value Label="Low">3</Value>
+					<Value Label="Mid">2</Value>
+					<Value Label="High">1</Value>
+					<Value Label="Ultra">0</Value>
+					<Value Label="TexturesExtra">-1</Value>
+					<Value Label="TexturesExtra">-2</Value>
 				</Samples>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="int32" SubType="DoubleValue" Editable="0">
@@ -211,11 +211,11 @@
 			<Item Category="Game/Shadows" Path="Display" Name="bDrawLandShadows" Type="bool"/>
 			<Item Category="Game/Shadows" Path="Display" Name="iShadowMapResolution" Type="int32">
 				<Samples Source="ImmediateItems">
-					<Value Label="$T(ConfigManager.Samples.VeryLow)">512</Value>
-					<Value Label="$T(ConfigManager.Samples.Low)">1024</Value>
-					<Value Label="$T(ConfigManager.Samples.Mid)">2048</Value>
-					<Value Label="$T(ConfigManager.Samples.High)">4096</Value>
-					<Value Label="$T(ConfigManager.Samples.Ultra)">8192</Value>
+					<Value Label="VeryLow">512</Value>
+					<Value Label="Low">1024</Value>
+					<Value Label="Mid">2048</Value>
+					<Value Label="High">4096</Value>
+					<Value Label="Ultra">8192</Value>
 				</Samples>
 			</Item>
 			<Item Category="Game/Shadows" Path="Display" Name="iBlurDeferredShadowMask" Type="int32" Editable="0">
@@ -249,11 +249,11 @@
 			</Item>
 			<Item Category="Game/Water" Path="Display" Name="iWaterMultiSamples" Type="int32">
 				<Samples Source="ImmediateItems">
-					<Value Label="$T(ConfigManager.Samples.None)">0</Value>
-					<Value Label="$T(ConfigManager.Samples.Low)">1</Value>
-					<Value Label="$T(ConfigManager.Samples.Mid)">2</Value>
-					<Value Label="$T(ConfigManager.Samples.High)">4</Value>
-					<Value Label="$T(ConfigManager.Samples.Ultra)">8</Value>
+					<Value Label="None">0</Value>
+					<Value Label="Low">1</Value>
+					<Value Label="Mid">2</Value>
+					<Value Label="High">4</Value>
+					<Value Label="Ultra">8</Value>
 				</Samples>
 			</Item>
 			<Item Category="Game/Water" Path="Water" Name="bUseWaterReflections" Type="bool"/>

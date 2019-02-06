@@ -7,7 +7,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/PluginManager.hpp>
 #include <KxFramework/KxHTMLWindow.h>
-#include <KxFramework/KxWebSockets.h>
+#include <KxFramework/WebSocket/IClient.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxCrypto.h>
 #include <KxFramework/KxJSON.h>
@@ -193,7 +193,7 @@ namespace Kortex::Application::About
 		AddSoftwareNode("OpenSSL", KxCrypto::GetOpenSSLVersion(), "https://www.openssl.org", KIMG_LOCK_SSL);
 		AddSoftwareNode("7-Zip", KArchive::GetLibraryVersion(), "https://www.7-zip.org", KIMG_7ZIP);
 		AddSoftwareNode("cURL", KxCURL::GetVersion(), "https://curl.haxx.se", KIMG_CURL);
-		AddSoftwareNode(KxWebSocketClient::GetLibraryName(), KxWebSocketClient::GetLibraryVersion(), "https://github.com/zaphoyd/websocketpp", KIMG_WEBSOCKET);
+		AddSoftwareNode(KxWebSocket::IClient::GetLibraryName(), KxWebSocket::IClient::GetLibraryVersion(), "https://github.com/zaphoyd/websocketpp", KIMG_WEBSOCKET);
 		AddSoftwareNode(KxJSON::GetLibraryName(), KxJSON::GetVersion(), "https://github.com/nlohmann/json", KIMG_JSON);
 
 		if (PluginManager::LibLoot* lootAPI = PluginManager::LibLoot::GetInstance())

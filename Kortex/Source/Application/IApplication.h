@@ -88,6 +88,7 @@ namespace Kortex
 
 			wxString GetID() const;
 			wxString GetName() const;
+			wxString GetShortName() const;
 			wxString GetDeveloper() const;
 			KxVersion GetVersion() const;
 			KxVersion GetWxWidgetsVersion() const;

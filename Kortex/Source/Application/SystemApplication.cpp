@@ -76,6 +76,7 @@ namespace Kortex
 	{
 		const constexpr wxChar ID[] = wxS("KortexModManager");
 		const constexpr wxChar Name[] = wxS("Kortex Mod Manager");
+		const constexpr wxChar ShortName[] = wxS("Kortex");
 		const constexpr wxChar Version[] = wxS("2.0");
 		const constexpr wxChar Developer[] = wxS("Kerber");
 		const constexpr wxChar GUID[] = wxS("B5E8047C-9239-45C4-86F6-6C83A842063E");
@@ -180,6 +181,7 @@ namespace Kortex
 		IVariableTable& variables = m_Application->GetVariables();
 		variables.SetVariable("AppID", SystemApplicationInfo::ID);
 		variables.SetVariable("AppName", SystemApplicationInfo::Name);
+		variables.SetVariable("AppShortName", SystemApplicationInfo::ShortName);
 		variables.SetVariable("AppVersion", SystemApplicationInfo::Version);
 		variables.SetVariable("AppDeveloper", SystemApplicationInfo::Developer);
 		variables.SetVariable("AppGUID", SystemApplicationInfo::GUID);
@@ -437,6 +439,11 @@ namespace Kortex
 			}
 		}
 		return false;
+	}
+
+	wxString SystemApplication::GetShortName() const
+	{
+		return SystemApplicationInfo::ShortName;
 	}
 
 	wxLog* SystemApplication::GetLogger() const

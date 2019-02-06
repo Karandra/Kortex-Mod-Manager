@@ -73,6 +73,7 @@ namespace Kortex
 			void ConfigureForInternetExplorer10(bool init) const;
 			bool QueueDownloadToMainProcess(const wxString& link) const;
 			
+			wxString GetShortName() const;
 			wxString GetRootFolder() const
 			{
 				return m_RootFolder;

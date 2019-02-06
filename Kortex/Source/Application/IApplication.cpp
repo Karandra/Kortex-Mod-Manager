@@ -71,6 +71,10 @@ namespace Kortex
 	{
 		return GetSystemApp()->GetAppDisplayName();
 	}
+	wxString IApplication::GetShortName() const
+	{
+		return GetSystemApp()->GetShortName();
+	}
 	wxString IApplication::GetDeveloper() const
 	{
 		return GetSystemApp()->GetVendorName();

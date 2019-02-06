@@ -4,10 +4,10 @@
 #include "Network/INetworkProvider.h"
 #include "NexusModInfo.h"
 #include <KxFramework/KxSingleton.h>
+#include <KxFramework/WebSocket/IClient.h>
 class KxCURLSession;
 class KxCURLReplyBase;
 
-//////////////////////////////////////////////////////////////////////////
 namespace Kortex::NetworkManager
 {
 	class NexusProvider: public INetworkProvider, public KxSingletonPtr<NexusProvider>
@@ -17,6 +17,11 @@ namespace Kortex::NetworkManager
 			{
 				return NetworkProviderIDs::Nexus;
 			}
+
+		private:
+			std::unique_ptr<KxWebSocket::IClient> m_WebSocketClient;
+			const wxString m_UserAgent;
+			wxString m_UserToken;
 
 		private:
 			void OnAuthSuccess(wxWindow* window = nullptr);

@@ -192,9 +192,9 @@ namespace Kortex::Application::About
 		AddSoftwareNode(KxXMLDocument::GetLibraryName(), KxXMLDocument::GetLibraryVersion(), "https://github.com/leethomason/tinyxml2", KIMG_EDIT_CODE);
 		AddSoftwareNode("OpenSSL", KxCrypto::GetOpenSSLVersion(), "https://www.openssl.org", KIMG_LOCK_SSL);
 		AddSoftwareNode("7-Zip", KArchive::GetLibraryVersion(), "https://www.7-zip.org", KIMG_7ZIP);
-		AddSoftwareNode("cURL", KxCURL::GetVersion(), "https://curl.haxx.se", KIMG_CURL);
+		AddSoftwareNode(KxCURL::GetLibraryName(), KxCURL::GetLibraryVersion(), "https://curl.haxx.se", KIMG_CURL);
 		AddSoftwareNode(KxWebSocket::GetLibraryName(), KxWebSocket::GetLibraryVersion(), "https://github.com/zaphoyd/websocketpp", KIMG_WEBSOCKET);
-		AddSoftwareNode(KxJSON::GetLibraryName(), KxJSON::GetVersion(), "https://github.com/nlohmann/json", KIMG_JSON);
+		AddSoftwareNode(KxJSON::GetLibraryName(), KxJSON::GetLibraryVersion(), "https://github.com/nlohmann/json", KIMG_JSON);
 
 		if (PluginManager::LibLoot* lootAPI = PluginManager::LibLoot::GetInstance())
 		{

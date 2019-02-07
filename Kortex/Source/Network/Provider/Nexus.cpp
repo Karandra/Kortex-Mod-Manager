@@ -29,7 +29,12 @@ namespace
 		};
 	};
 
-	wxString GetUserAgent()
+	enum class NetworkSoftware
+	{
+		CURL,
+		WebSocket,
+	};
+	wxString GetUserAgent(NetworkSoftware networkSoftware)
 	{
 		const IApplication* app = IApplication::GetInstance();
 		KxFormat formatter("%1/%2 (Windows_NT %3; %4) %5/%6");
@@ -46,8 +51,26 @@ namespace
 		formatter(KVarExp("$(SystemArchitectureName)"));
 
 		// Network software
-		formatter("libcurl");
-		formatter(KxCURL::GetVersion());
+		switch (networkSoftware)
+		{
+			case NetworkSoftware::CURL:
+			{
+				formatter(KxCURL::GetLibraryName());
+				formatter(KxCURL::GetLibraryVersion());
+				break;
+			}
+			case NetworkSoftware::WebSocket:
+			{
+				formatter(KxWebSocket::GetLibraryName());
+				formatter(KxWebSocket::GetLibraryVersion());
+				break;
+			}
+			default:
+			{
+				formatter("Unknown");
+				formatter("x.x");
+			}
+		};
 
 		return formatter;
 	}
@@ -224,6 +247,7 @@ namespace Kortex::NetworkManager
 	bool NexusProvider::DoAuthenticate(wxWindow* window)
 	{
 		m_WebSocketClient = KxWebSocket::NewSecureClient("wss://sso.nexusmods.com");
+		m_WebSocketClient->SetUserAgent(GetUserAgent(NetworkSoftware::WebSocket));
 
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_OPEN, [this, window](KxWebSocketEvent& event)
 		{
@@ -310,7 +334,6 @@ namespace Kortex::NetworkManager
 				OnAuthFail(window);
 			}
 			m_WebSocketClient.reset();
-			INetworkManager::GetInstance()->OnAuthStateChanged();
 		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_FAIL, [this, window](KxWebSocketEvent& event)
 		{
@@ -341,7 +364,7 @@ namespace Kortex::NetworkManager
 	}
 
 	NexusProvider::NexusProvider()
-		:INetworkProvider(wxS("Nexus")), m_UserAgent(GetUserAgent())
+		:INetworkProvider(wxS("Nexus")), m_UserAgent(GetUserAgent(NetworkSoftware::CURL))
 	{
 	}
 

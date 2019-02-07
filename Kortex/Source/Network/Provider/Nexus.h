@@ -4,9 +4,15 @@
 #include "Network/INetworkProvider.h"
 #include "NexusModInfo.h"
 #include <KxFramework/KxSingleton.h>
-#include <KxFramework/WebSocket/IClient.h>
+#include <KxFramework/KxUUID.h>
+
 class KxCURLSession;
 class KxCURLReplyBase;
+
+namespace KxWebSocket
+{
+	class IClient;
+}
 
 namespace Kortex::NetworkManager
 {
@@ -21,6 +27,7 @@ namespace Kortex::NetworkManager
 		private:
 			std::unique_ptr<KxWebSocket::IClient> m_WebSocketClient;
 			const wxString m_UserAgent;
+			KxUUID m_UserID;
 			wxString m_UserToken;
 
 		private:

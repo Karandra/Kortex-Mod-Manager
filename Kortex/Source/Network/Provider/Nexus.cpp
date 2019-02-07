@@ -12,6 +12,7 @@
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxIndexedEnum.h>
+#include <KxFramework/KxWebSocket.h>
 
 namespace
 {
@@ -151,16 +152,19 @@ namespace Kortex::NetworkManager
 		IEvent::CallAfter([this, window]()
 		{
 			INetworkProvider::OnAuthSuccess(window);
+			INetworkManager::GetInstance()->OnAuthStateChanged();
 		});
 	}
 	void NexusProvider::OnAuthFail(wxWindow* window)
 	{
 		m_WebSocketClient.reset();
 		m_UserToken.clear();
+		m_UserID = UUID {0};
 
 		IEvent::CallAfter([this, window]()
 		{
 			INetworkProvider::OnAuthFail(window);
+			INetworkManager::GetInstance()->OnAuthStateChanged();
 		});
 	}
 
@@ -219,18 +223,21 @@ namespace Kortex::NetworkManager
 
 	bool NexusProvider::DoAuthenticate(wxWindow* window)
 	{
-		m_WebSocketClient = KxWebSocket::IClient::NewSecureClient("wss://sso.nexusmods.com");
-		//m_WebSocketClient = KxWebSocket::IClient::NewSecureClient("wss://echo.websocket.org");
-		//m_WebSocketClient = KxWebSocket::IClient::NewSecureClient("wss://demos.kaazing.com/echo");
+		m_WebSocketClient = KxWebSocket::NewSecureClient("wss://sso.nexusmods.com");
 
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_OPEN, [this, window](KxWebSocketEvent& event)
 		{
-			const wxString guid = KVarExp("$(AppGUID)").MakeLower();
+			if (m_UserID.IsNull())
+			{
+				m_UserID.Create();
+			}
+			
+			const wxString guid = m_UserID.ToString().MakeLower();
 			const wxString appID = wxS("kortex");
 			KxJSONObject json =
 			{
 				{"id", guid},
-				//{"appid", appID},
+				{"appid", appID},
 				{"token", nullptr},
 				{"protocol", 2}
 			};
@@ -238,6 +245,7 @@ namespace Kortex::NetworkManager
 			{
 				json["token"] = m_UserToken;
 			}
+			INotificationCenter::GetInstance()->Notify("GUID", guid, KxICON_INFO);
 
 			m_WebSocketClient->Send(KxJSON::Save(json));
 			wxString openURL = KxString::Format("https://www.nexusmods.com/sso?id=%1&application=%2", guid, appID);
@@ -245,9 +253,6 @@ namespace Kortex::NetworkManager
 		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_MESSAGE, [this, window](KxWebSocketEvent& event)
 		{
-			//wxMessageBox(wxString::FromUTF8((const char*)event.GetBinaryData(), event.GetBinarySize()));
-			//return;
-
 			try
 			{
 				const KxJSONObject json = KxJSON::Load(event.GetTextMessage());
@@ -259,6 +264,8 @@ namespace Kortex::NetworkManager
 					if (auto it = data.find("connection_token"); it != data.end())
 					{
 						m_UserToken = it->get<wxString>();
+						INotificationCenter::GetInstance()->Notify("UserToken", m_UserToken, KxICON_INFO);
+
 						if (m_UserToken.IsEmpty())
 						{
 							OnAuthFail(window);
@@ -270,6 +277,7 @@ namespace Kortex::NetworkManager
 					if (auto it = data.find("api_key"); it != data.end())
 					{
 						const wxString apiKey = it->get<wxString>();
+						INotificationCenter::GetInstance()->Notify("API Key", apiKey, KxICON_INFO);
 
 						auto info = GetValidationInfo(apiKey);
 						if (info->IsOK() && info->GetAPIKey() == apiKey)
@@ -295,27 +303,23 @@ namespace Kortex::NetworkManager
 		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_CLOSE, [this, window](KxWebSocketEvent& event)
 		{
-			INotificationCenter::GetInstance()->Notify("WSS", "OnClose", KxICON_WARNING);
+			INotificationCenter::GetInstance()->Notify("WSS", "OnClose", KxICON_INFO);
 
-			#if 0
 			if (!HasAuthInfo())
 			{
 				OnAuthFail(window);
 			}
-			#endif
-
-			//m_WebSocketClient.reset();
+			m_WebSocketClient.reset();
 			INetworkManager::GetInstance()->OnAuthStateChanged();
 		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_FAIL, [this, window](KxWebSocketEvent& event)
 		{
-			INotificationCenter::GetInstance()->Notify("WSS", "OnFail", KxICON_WARNING);
+			INotificationCenter::GetInstance()->Notify("WSS", "OnFail", KxICON_ERROR);
 
 			OnAuthFail(window);
 		});
 
-		m_WebSocketClient->Connect();
-		return true;
+		return m_WebSocketClient->Connect();
 	}
 	bool NexusProvider::DoValidateAuth(wxWindow* window)
 	{

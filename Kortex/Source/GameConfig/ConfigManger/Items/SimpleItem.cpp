@@ -141,122 +141,111 @@ namespace Kortex::GameConfig
 
 	wxAny SimpleItem::GetValue(const KxDataView2::Column& column) const
 	{
-		switch (column.GetID<ColumnID>())
+		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
-			case ColumnID::Path:
+			if (!m_CachedViewData)
 			{
-				return GetFullPath();
-			}
-			case ColumnID::Name:
-			{
-				return GetLabel();
-			}
-			case ColumnID::Type:
-			{
-				return GetTypeID().ToString();
-			}
-			case ColumnID::Value:
-			{
-				if (!m_CachedViewData)
+				auto FormatValue = [this](const ItemValue& value)
 				{
-					auto FormatValue = [this](const ItemValue& value)
-					{
-						wxString serializedValue = value.Serialize(*this);
+					wxString serializedValue = value.Serialize(*this);
 
-						if (serializedValue.IsEmpty())
+					if (serializedValue.IsEmpty())
+					{
+						if (value.GetType().IsString())
 						{
-							if (value.GetType().IsString())
-							{
-								return KAux::MakeBracketedLabel(GetManager().GetTranslator().GetString(wxS("ConfigManager.View.EmptyStringValue")));
-							}
-							else
-							{
-								return KAux::MakeNoneLabel();
-							}
+							return KAux::MakeBracketedLabel(GetManager().GetTranslator().GetString(wxS("ConfigManager.View.EmptyStringValue")));
 						}
-						return serializedValue;
-					};
+						else
+						{
+							return KAux::MakeNoneLabel();
+						}
+					}
+					return serializedValue;
+				};
 
-					const SampleValue* sampleValue = GetSamples().FindSampleByValue(m_Value);
-					if (sampleValue && sampleValue->HasLabel())
-					{
-						m_CachedViewData = KxString::Format(wxS("%1 - %2"), FormatValue(m_Value), sampleValue->GetLabel());
-					}
-					else
-					{
-						m_CachedViewData = FormatValue(m_Value);
-					}
-				}
-
-				if (GetTypeID().IsBool())
+				const SampleValue* sampleValue = GetSamples().FindSampleByValue(m_Value);
+				if (sampleValue && sampleValue->HasLabel())
 				{
-					using namespace KxDataView2;
-					if (!m_Value.IsNull())
-					{
-						return BitmapTextToggleValue(m_Value.As<bool>(), *m_CachedViewData, wxNullBitmap, ToggleType::CheckBox);
-					}
-					else
-					{
-						return BitmapTextToggleValue(*m_CachedViewData, wxNullBitmap, ToggleState::Indeterminate, ToggleType::CheckBox);
-					}
-				}
-				return *m_CachedViewData;
-			}
-		}
-		return {};
-	}
-	wxAny SimpleItem::GetEditorValue(const KxDataView2::Column& column) const
-	{
-		switch (column.GetID<ColumnID>())
-		{
-			case ColumnID::Value:
-			{
-				if (IsComboBoxEditor() && !IsEditable())
-				{
-					size_t index = 0;
-					GetSamples().FindSampleByValue(m_Value, &index);
-					return index;
+					m_CachedViewData = KxString::Format(wxS("%1 - %2"), FormatValue(m_Value), sampleValue->GetLabel());
 				}
 				else
 				{
-					return m_Value.Serialize(*this);
+					m_CachedViewData = FormatValue(m_Value);
 				}
+			}
+
+			if (GetTypeID().IsBool())
+			{
+				using namespace KxDataView2;
+				if (!m_Value.IsNull())
+				{
+					return BitmapTextToggleValue(m_Value.As<bool>(), *m_CachedViewData, wxNullBitmap, ToggleType::CheckBox);
+				}
+				else
+				{
+					return BitmapTextToggleValue(*m_CachedViewData, wxNullBitmap, ToggleState::Indeterminate, ToggleType::CheckBox);
+				}
+			}
+			return *m_CachedViewData;
+		}
+		return Item::GetValue(column);
+	}
+	wxAny SimpleItem::GetEditorValue(const KxDataView2::Column& column) const
+	{
+		if (column.GetID<ColumnID>() == ColumnID::Value)
+		{
+			if (IsComboBoxEditor() && !IsEditable())
+			{
+				size_t index = 0;
+				GetSamples().FindSampleByValue(m_Value, &index);
+				return index;
+			}
+			else
+			{
+				return m_Value.Serialize(*this);
 			}
 		}
 		return {};
 	}
 	bool SimpleItem::SetValue(const wxAny& value, KxDataView2::Column& column)
 	{
-		switch (column.GetID<ColumnID>())
+		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
-			case ColumnID::Value:
+			if (GetTypeID().IsBool())
 			{
-				if (GetTypeID().IsBool())
+				m_Value = !m_Value.As<bool>();
+				ChangeNotify();
+				return true;
+			}
+			else if (IsComboBoxEditor() && value.CheckType<int>())
+			{
+				const SampleValue* sampleValue = GetSamples().GetSampleByIndex(value.As<int>());
+				if (sampleValue)
 				{
-					m_Value = !m_Value.As<bool>();
-					ChangeNotify();
-					return true;
-				}
-				else if (IsComboBoxEditor() && value.CheckType<int>())
-				{
-					const SampleValue* sampleValue = GetSamples().GetSampleByIndex(value.As<int>());
-					if (sampleValue)
+					wxString serialized = sampleValue->GetValue().Serialize(*this);
+					if (serialized != m_Value.Serialize(*this))
 					{
-						m_Value.Deserialize(sampleValue->GetValue().Serialize(*this), *this);
+						m_Value.Deserialize(serialized, *this);
 						ChangeNotify();
 						return true;
 					}
-				}
-				else
-				{
-					wxString data;
-					value.GetAs(&data);
-					m_Value.Deserialize(data, *this);
-					ChangeNotify();
-					return true;
+					return false;
 				}
 			}
-		};
+
+			// Any other variant
+			const wxString oldData = m_Value.Serialize(*this);
+
+			wxString data;
+			value.GetAs(&data);
+			m_Value.Deserialize(data, *this);
+
+			if (m_Value.Serialize(*this) != oldData)
+			{
+				ChangeNotify();
+				return true;
+			}
+		}
 		return false;
 	}
 

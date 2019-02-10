@@ -39,7 +39,12 @@ namespace Kortex::GameConfig
 	{
 		source.WriteValue(*this, m_Value);
 	}
-	
+	void SimpleItem::ChangeNotify()
+	{
+		m_CachedViewData.reset();
+		Item::ChangeNotify();
+	}
+
 	std::unique_ptr<wxValidator> SimpleItem::CreateValidator() const
 	{
 		const ItemOptions& options = GetOptions();
@@ -206,7 +211,7 @@ namespace Kortex::GameConfig
 		{
 			case ColumnID::Value:
 			{
-				if (IsReadOnlyComboBox())
+				if (IsComboBoxEditor() && !IsEditable())
 				{
 					size_t index = 0;
 					GetSamples().FindSampleByValue(m_Value, &index);
@@ -229,16 +234,16 @@ namespace Kortex::GameConfig
 				if (GetTypeID().IsBool())
 				{
 					m_Value = !m_Value.As<bool>();
-					m_CachedViewData.reset();
+					ChangeNotify();
 					return true;
 				}
-				else if (IsReadOnlyComboBox())
+				else if (IsComboBoxEditor() && value.CheckType<int>())
 				{
-					const SampleValue* sampleValue = GetSamples().GetSampleByIndex(value.As<size_t>());
+					const SampleValue* sampleValue = GetSamples().GetSampleByIndex(value.As<int>());
 					if (sampleValue)
 					{
 						m_Value.Deserialize(sampleValue->GetValue().Serialize(*this), *this);
-						m_CachedViewData.reset();
+						ChangeNotify();
 						return true;
 					}
 				}
@@ -247,12 +252,11 @@ namespace Kortex::GameConfig
 					wxString data;
 					value.GetAs(&data);
 					m_Value.Deserialize(data, *this);
-					m_CachedViewData.reset();
+					ChangeNotify();
 					return true;
 				}
-				return false;
 			}
-		}
+		};
 		return false;
 	}
 

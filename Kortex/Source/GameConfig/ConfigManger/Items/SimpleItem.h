@@ -20,13 +20,14 @@ namespace Kortex::GameConfig
 			void Clear() override;
 			void Read(const ISource& source) override;
 			void Write(ISource& source) const override;
+			void ChangeNotify() override;
 
 		private:
 			std::unique_ptr<wxValidator> CreateValidator() const;
 			std::unique_ptr<KxDataView2::Editor> CreateEditor() const;
-			bool IsReadOnlyComboBox() const
+			bool IsComboBoxEditor() const
 			{
-				return HasSamples() && !IsEditable();
+				return HasSamples();
 			}
 
 		public:

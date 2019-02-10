@@ -3,6 +3,7 @@
 #include "ItemGroup.h"
 #include "Definition.h"
 #include "GameConfig/IConfigManager.h"
+#include <KxFramework/DataView2/DataView2.h>
 #include <KxFramework/KxStringUtility.h>
 #include <KxFramework/KxComparator.h>
 
@@ -129,6 +130,37 @@ namespace Kortex::GameConfig
 		return m_Options.IsEditable();
 	}
 
+	wxAny Item::GetValue(const KxDataView2::Column& column) const
+	{
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Path:
+			{
+				if (!m_DisplayPath)
+				{
+					m_DisplayPath = GetFullPath();
+				}
+
+				if (m_HasChanges)
+				{
+					return KxDataView2::BitmapTextValue(*m_DisplayPath, KGetBitmap(KIMG_PENCIL_SMALL));
+				}
+				else
+				{
+					return *m_DisplayPath;
+				}
+			}
+			case ColumnID::Name:
+			{
+				return m_Label;
+			}
+			case ColumnID::Type:
+			{
+				return m_TypeID.ToString();
+			}
+		};
+		return {};
+	}
 	bool Item::Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{
 		const IViewItem* viewItem = nullptr;

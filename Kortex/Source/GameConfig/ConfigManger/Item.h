@@ -50,7 +50,9 @@ namespace Kortex::GameConfig
 			TypeID m_TypeID;
 			ItemKindValue m_Kind;
 			ItemOptions m_Options;
+
 			bool m_HasChanges = false;
+			mutable std::optional<wxString> m_DisplayPath;
 
 		protected:
 			virtual bool Create(const KxXMLNode& itemNode) = 0;
@@ -168,6 +170,8 @@ namespace Kortex::GameConfig
 		public:
 			virtual void OnActivate(KxDataView2::Column& column) {}
 			virtual void OnSelect(KxDataView2::Column& column) {}
+
+			wxAny GetValue(const KxDataView2::Column& column) const override;
 			bool Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
 	};
 }

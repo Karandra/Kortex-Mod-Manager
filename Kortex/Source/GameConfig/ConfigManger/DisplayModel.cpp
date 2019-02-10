@@ -38,7 +38,10 @@ namespace Kortex::GameConfig
 	}
 	void DisplayModel::ClearView()
 	{
-		m_View->GetRootNode().DetachAllChildren();
+		if (m_View)
+		{
+			m_View->GetRootNode().DetachAllChildren();
+		}
 		m_Categories.clear();
 	}
 	void DisplayModel::LoadView()

@@ -67,9 +67,21 @@ namespace Kortex::GameConfig
 		return new Workspace(mainWindow);
 	}
 
+	void DefaultGameConfigManager::OnItemChanged(GameConfig::Item& item)
+	{
+		m_ChangedItems.remove(&item);
+		m_ChangedItems.push_back(&item);
+	}
+	void DefaultGameConfigManager::OnItemChangeDiscarded(GameConfig::Item& item)
+	{
+		m_ChangedItems.remove(&item);
+	}
+
 	void DefaultGameConfigManager::Load()
 	{
-		for (const auto& [id, definition]: m_Definitions)
+		m_ChangedItems.clear();
+
+		for (const auto&[id, definition]: m_Definitions)
 		{
 			definition->ForEachGroup([](ItemGroup& group)
 			{
@@ -77,7 +89,24 @@ namespace Kortex::GameConfig
 			});
 		}
 	}
-	void DefaultGameConfigManager::Save()
+	void DefaultGameConfigManager::SaveChanges()
 	{
+		for (GameConfig::Item* item: m_ChangedItems)
+		{
+			item->SaveChanges();
+		}
+		m_ChangedItems.clear();
+	}
+	void DefaultGameConfigManager::DiscardChanges()
+	{
+		for (GameConfig::Item* item: m_ChangedItems)
+		{
+			item->DiscardChanges();
+		}
+		m_ChangedItems.clear();
+	}
+	bool DefaultGameConfigManager::HasUnsavedChanges() const
+	{
+		return !m_ChangedItems.empty();
 	}
 }

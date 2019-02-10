@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "IConfigManager.h"
+#include "ConfigManger/Item.h"
+#include "ConfigManger/ItemGroup.h"
+#include "ConfigManger/Definition.h"
 #include <Kortex/Common/GameConfig.hpp>
 #include <Kortex/Application.hpp>
 

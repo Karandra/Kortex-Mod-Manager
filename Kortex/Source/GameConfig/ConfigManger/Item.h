@@ -50,6 +50,7 @@ namespace Kortex::GameConfig
 			TypeID m_TypeID;
 			ItemKindValue m_Kind;
 			ItemOptions m_Options;
+			bool m_HasChanges = false;
 
 		protected:
 			virtual bool Create(const KxXMLNode& itemNode) = 0;
@@ -58,6 +59,7 @@ namespace Kortex::GameConfig
 			virtual void Write(ISource& source) const = 0;
 
 			size_t CalcHash(const wxString& value = {}) const;
+			virtual void ChangeNotify();
 
 		public:
 			Item(ItemGroup& group, const KxXMLNode& itemNode = {});
@@ -69,7 +71,13 @@ namespace Kortex::GameConfig
 			virtual size_t GetHash() const = 0;
 			virtual wxString GetFullPath() const;
 			wxString GetStringRepresentation(ColumnID id) const override;
-			void ReadItem();
+			
+			bool HasChanges() const
+			{
+				return m_HasChanges;
+			}
+			void SaveChanges();
+			void DiscardChanges();
 
 			IConfigManager& GetManager() const;
 			Definition& GetDefinition() const;

@@ -20,6 +20,8 @@ namespace Kortex
 
 	class IConfigManager: public ManagerWithTypeInfo<IPluggableManager, ConfigManager::Internal::TypeInfo>
 	{
+		friend class GameConfig::Item;
+
 		public:
 			using DefinitionFunc = std::function<void(const GameConfig::Definition& definition)>;
 
@@ -33,6 +35,9 @@ namespace Kortex
 
 			virtual RefStackTranslator& GetTranslatorStack() = 0;
 			bool LoadTranslation(KxTranslation& translation, const wxString& component);
+			
+			virtual void OnItemChanged(GameConfig::Item& item) = 0;
+			virtual void OnItemChangeDiscarded(GameConfig::Item& item) = 0;
 
 		public:
 			IConfigManager();
@@ -57,7 +62,9 @@ namespace Kortex
 			}
 
 			virtual void Load() = 0;
-			virtual void Save() = 0;
+			virtual void SaveChanges() = 0;
+			virtual void DiscardChanges() = 0;
+			virtual bool HasUnsavedChanges() const = 0;
 
 			wxString TranslateItemLabel(const wxString& name, const wxString& perfix) const;
 			wxString TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const;

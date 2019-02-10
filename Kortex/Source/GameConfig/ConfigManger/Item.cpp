@@ -33,6 +33,11 @@ namespace Kortex::GameConfig
 		}
 		return std::hash<wxString>()(hashData);
 	}
+	void Item::ChangeNotify()
+	{
+		m_HasChanges = true;
+		GetManager().OnItemChanged(*this);
+	}
 
 	Item::Item(ItemGroup& group, const KxXMLNode& itemNode)
 		:m_Group(group), m_Samples(*this)
@@ -94,11 +99,23 @@ namespace Kortex::GameConfig
 		return m_Group.GetDefinition();
 	}
 
-	void Item::ReadItem()
+	void Item::SaveChanges()
 	{
-		Clear();
-		Read(m_Group.GetSource());
+		if (m_HasChanges)
+		{
+			Write(m_Group.GetSource());
+			m_HasChanges = false;
+		}
 	}
+	void Item::DiscardChanges()
+	{
+		if (m_HasChanges)
+		{
+			Clear();
+			Read(m_Group.GetSource());
+		}
+	}
+	
 	DataType Item::GetDataType() const
 	{
 		return m_Group.GetDefinition().GetDataType(m_TypeID);

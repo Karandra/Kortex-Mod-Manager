@@ -20,6 +20,7 @@ namespace Kortex::GameConfig
 
 			KxTranslation m_Translation;
 			RefStackTranslator m_Translator;
+			std::list<GameConfig::Item*> m_ChangedItems;
 
 		private:
 			void LoadGroup(const KxXMLNode& definitionNode, ItemGroup& group);
@@ -35,6 +36,8 @@ namespace Kortex::GameConfig
 			{
 				return m_Translator;
 			}
+			void OnItemChanged(GameConfig::Item& item) override;
+			void OnItemChangeDiscarded(GameConfig::Item& item) override;
 
 		public:
 			const ITranslator& GetTranslator() const override
@@ -50,6 +53,8 @@ namespace Kortex::GameConfig
 			}
 
 			void Load() override;
-			void Save() override;
+			void SaveChanges() override;
+			void DiscardChanges() override;
+			bool HasUnsavedChanges() const override;
 	};
 }

@@ -159,6 +159,9 @@
 			<Item Category="Game/Graphics" Path="Display" Name="sD3DDevice" Type="string">
 				<Options>
 					<Editable Value="false"/>
+					<Input>
+						<Format><![CDATA["%1"]]></Format>
+					</Input>
 					<Output>
 						<Format><![CDATA["%1"]]></Format>
 					</Output>

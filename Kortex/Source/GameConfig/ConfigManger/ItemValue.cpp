@@ -41,6 +41,28 @@ namespace
 		}
 		return {};
 	}
+	wxString ProcessInputFormatting(const wxString& stringValue, const ItemOptions& options)
+	{
+		if (options.HasInputFormat())
+		{
+			const wxString format = options.GetInputFormat();
+			wxString value = stringValue;
+			
+			// Remove formatting before %1
+			if (size_t pos = format.find(wxS("%1")); pos != wxString::npos)
+			{
+				value.StartsWith(format.Left(pos), &value);
+			}
+
+			// Remove formatting after %1
+			if (size_t pos = format.rfind(wxS("%1")); pos != wxString::npos)
+			{
+				value.EndsWith(format.Left(pos), &value);
+			}
+			return value;
+		}
+		return stringValue;
+	}
 
 	namespace ToAny
 	{
@@ -439,7 +461,7 @@ namespace Kortex::GameConfig
 	}
 	bool ItemValue::Deserialize(const wxString& value, const Item& item)
 	{
-		DoDeserialize(value, item);
+		DoDeserialize(ProcessInputFormatting(value, item.GetOptions()), item);
 		return !IsNull();
 	}
 }

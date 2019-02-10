@@ -60,12 +60,20 @@ namespace Kortex::GameConfig
 		{
 			// Input
 			const KxXMLNode inputNode = node.GetFirstChildElement(wxS("Input"));
-			m_InputType.FromOrExpression(inputNode.GetAttribute(wxS("As")), DataTypeID::Any);
+			m_InputType.FromOrExpression(inputNode.GetAttribute(wxS("As")), DataTypeID::None);
+			if (m_InputType.IsNone())
+			{
+				m_InputType = DataTypeID::Any;
+			}
 			
 			// Output
 			const KxXMLNode outputNode = node.GetFirstChildElement(wxS("Output"));
 
-			m_OutputType.FromOrExpression(outputNode.GetAttribute(wxS("As")), m_TypeID);
+			m_OutputType.FromOrExpression(outputNode.GetAttribute(wxS("As")), DataTypeID::None);
+			if (m_OutputType.IsNone())
+			{
+				m_OutputType = m_TypeID;
+			}
 			if (m_OutputType.IsFloat())
 			{
 				// ItemOptions class will correct this value if needed

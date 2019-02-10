@@ -3,7 +3,7 @@
 	<DataTypes>
 		<Entry Type="bool">
 			<Input As="any"/>
-			<Output As="bool"/>
+			<Output As="int"/>
 		</Entry>
 		<Entry Type="int">
 			<Input As="any"/>

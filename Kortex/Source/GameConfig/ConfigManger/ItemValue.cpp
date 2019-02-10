@@ -338,7 +338,7 @@ namespace Kortex::GameConfig
 		}
 		else if (type.IsString())
 		{
-			SerializeFromString(outputType, item);
+			return SerializeFromString(outputType, item);
 		}
 		return {};
 	}

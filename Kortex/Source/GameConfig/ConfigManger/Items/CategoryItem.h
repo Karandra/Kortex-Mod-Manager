@@ -17,6 +17,7 @@ namespace Kortex::GameConfig
 		public:
 			CategoryItem(const wxString& categoryPath);
 			CategoryItem(const wxString& categoryPath, const wxString& categoryName);
+			~CategoryItem();
 
 		public:
 			wxString GetCategoryPath() const

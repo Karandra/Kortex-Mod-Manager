@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "SimpleItem.h"
+#include "GameConfig/ConfigManger/DisplayModel.h"
 #include "Utility/KAux.h"
+#include <KxFramework/DataView2/DataView2.h>
 
 namespace
 {
@@ -37,7 +39,7 @@ namespace Kortex::GameConfig
 	{
 		source.WriteValue(*this, m_Value);
 	}
-
+	
 	std::unique_ptr<wxValidator> SimpleItem::CreateValidator() const
 	{
 		const ItemOptions& options = GetOptions();
@@ -70,43 +72,48 @@ namespace Kortex::GameConfig
 	}
 	std::unique_ptr<KxDataView2::Editor> SimpleItem::CreateEditor() const
 	{
-		std::unique_ptr<KxDataView2::Editor> editor;
-		const bool isEditable = IsEditable();
-
-		if (HasSamples())
+		const TypeID type = GetTypeID();
+		if (type.IsInteger() || type.IsFloat() || type.IsString())
 		{
-			auto comboBox = std::make_unique<KxDataView2::ComboBoxEditor>();
-			comboBox->SetMaxVisibleItems(32);
-			comboBox->AutoPopup(!isEditable);
+			std::unique_ptr<KxDataView2::Editor> editor;
+			const bool isEditable = IsEditable();
 
-			// Add samples
-			comboBox->ClearItems();
-			const ItemSamples& samples = GetSamples();
-			if (!samples.IsEmpty())
+			if (HasSamples())
 			{
-				samples.ForEachSample([this, &comboBox](const SampleValue& sample)
-				{
-					const ItemValue& value = sample.GetValue();
-					if (sample.HasLabel())
-					{
-						comboBox->AddItem(KxString::Format(wxS("%1 - %2"), value.Serialize(*this), sample.GetLabel()));
-					}
-					else
-					{
-						comboBox->AddItem(value.Serialize(*this));
-					}
-				});
-			}
-			editor = std::move(comboBox);
-		}
-		else
-		{
-			editor = std::make_unique<KxDataView2::TextEditor>();
-		}
+				auto comboBox = std::make_unique<KxDataView2::ComboBoxEditor>();
+				comboBox->SetMaxVisibleItems(32);
+				comboBox->AutoPopup(!isEditable);
 
-		editor->SetEditable(isEditable);
-		editor->SetValidator(CreateValidator());
-		return editor;
+				// Add samples
+				comboBox->ClearItems();
+				const ItemSamples& samples = GetSamples();
+				if (!samples.IsEmpty())
+				{
+					samples.ForEachSample([this, &comboBox](const SampleValue& sample)
+					{
+						const ItemValue& value = sample.GetValue();
+						if (sample.HasLabel())
+						{
+							comboBox->AddItem(KxString::Format(wxS("%1 - %2"), value.Serialize(*this), sample.GetLabel()));
+						}
+						else
+						{
+							comboBox->AddItem(value.Serialize(*this));
+						}
+					});
+				}
+				editor = std::move(comboBox);
+			}
+			else
+			{
+				editor = std::make_unique<KxDataView2::TextEditor>();
+			}
+
+			editor->SetEditable(isEditable);
+			editor->SetValidator(CreateValidator());
+			return editor;
+		}
+		return nullptr;
 	}
 
 	SimpleItem::SimpleItem(ItemGroup& group, const KxXMLNode& itemNode)
@@ -175,6 +182,11 @@ namespace Kortex::GameConfig
 						m_CachedViewData = FormatValue(m_Value);
 					}
 				}
+
+				if (GetTypeID().IsBool())
+				{
+					return KxDataView2::BitmapTextToggleValue(m_Value.As<bool>(), *m_CachedViewData, wxNullBitmap, KxDataView2::ToggleType::CheckBox);
+				}
 				return *m_CachedViewData;
 			}
 		}
@@ -206,7 +218,13 @@ namespace Kortex::GameConfig
 		{
 			case ColumnID::Value:
 			{
-				if (IsReadOnlyComboBox())
+				if (GetTypeID().IsBool())
+				{
+					m_Value = !m_Value.As<bool>();
+					m_CachedViewData.reset();
+					return true;
+				}
+				else if (IsReadOnlyComboBox())
 				{
 					const SampleValue* sampleValue = GetSamples().GetSampleByIndex(value.As<size_t>());
 					if (sampleValue)
@@ -230,10 +248,6 @@ namespace Kortex::GameConfig
 		return false;
 	}
 
-	KxDataView2::Renderer& SimpleItem::GetRenderer(const KxDataView2::Column& column) const
-	{
-		return column.GetRenderer();
-	}
 	KxDataView2::Editor* SimpleItem::GetEditor(const KxDataView2::Column& column) const
 	{
 		if (column.GetID<ColumnID>() == ColumnID::Value)
@@ -246,8 +260,20 @@ namespace Kortex::GameConfig
 		}
 		return nullptr;
 	}
-	bool SimpleItem::GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const
+	void SimpleItem::OnActivate(KxDataView2::Column& column)
 	{
-		return false;
+		if (column.GetID<ColumnID>() == ColumnID::Value)
+		{
+			if (GetTypeID().IsBool())
+			{
+				m_Value = !m_Value.As<bool>();
+				m_CachedViewData.reset();
+				Refresh(column);
+			}
+			else
+			{
+				Edit(column);
+			}
+		}
 	}
 }

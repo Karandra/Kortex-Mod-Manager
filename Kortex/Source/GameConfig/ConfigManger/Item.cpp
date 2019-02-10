@@ -52,6 +52,10 @@ namespace Kortex::GameConfig
 			m_Samples.Load(itemNode.GetFirstChildElement(wxS("Samples")));
 		}
 	}
+	Item::~Item()
+	{
+		DetachAllChildren();
+	}
 
 	bool Item::IsOK() const
 	{

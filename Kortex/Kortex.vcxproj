@@ -92,6 +92,7 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\DataType.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Definition.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\DisplayModel.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\INISource.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ISource.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemGroup.cpp" />
@@ -376,6 +377,7 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\DataType.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Definition.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\DisplayModel.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\INISource.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ISource.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h" />

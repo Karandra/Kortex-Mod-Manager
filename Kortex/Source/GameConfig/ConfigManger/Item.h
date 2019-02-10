@@ -9,7 +9,7 @@
 #include "ISource.h"
 #include "GameConfig/IConfigManager.h"
 #include <KxFramework/DataView2/Node.h>
-#include <KxFramework/DataView2/TypeAliases.h>
+#include <KxFramework/DataView2/DataView2Fwd.h>
 
 namespace Kortex
 {
@@ -61,7 +61,7 @@ namespace Kortex::GameConfig
 
 		public:
 			Item(ItemGroup& group, const KxXMLNode& itemNode = {});
-			virtual ~Item() = default;
+			virtual ~Item();
 
 		public:
 			virtual bool IsOK() const;
@@ -158,6 +158,8 @@ namespace Kortex::GameConfig
 			virtual bool IsEditable() const;
 
 		public:
+			virtual void OnActivate(KxDataView2::Column& column) {}
+			virtual void OnSelect(KxDataView2::Column& column) {}
 			bool Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
 	};
 }

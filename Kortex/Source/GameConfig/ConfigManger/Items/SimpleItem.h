@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "GameConfig/ConfigManger/Item.h"
-#include <KxFramework/DataView2/DataView2.h>
 
 namespace Kortex::GameConfig
 {
@@ -25,7 +24,6 @@ namespace Kortex::GameConfig
 		private:
 			std::unique_ptr<wxValidator> CreateValidator() const;
 			std::unique_ptr<KxDataView2::Editor> CreateEditor() const;
-
 			bool IsReadOnlyComboBox() const
 			{
 				return HasSamples() && !IsEditable();
@@ -59,9 +57,8 @@ namespace Kortex::GameConfig
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
 			bool SetValue(const wxAny& value, KxDataView2::Column& column) override;
-			
-			KxDataView2::Renderer& GetRenderer(const KxDataView2::Column& column) const override;
+
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
-			bool GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const override;
+			void OnActivate(KxDataView2::Column& column) override;
 	};
 }

@@ -32,6 +32,10 @@ namespace Kortex::GameConfig
 		:m_CategoryPath(categoryPath), m_CategoryName(categoryName)
 	{
 	}
+	CategoryItem::~CategoryItem()
+	{
+		DetachAllChildren();
+	}
 
 	wxString CategoryItem::GetStringRepresentation(ColumnID id) const
 	{

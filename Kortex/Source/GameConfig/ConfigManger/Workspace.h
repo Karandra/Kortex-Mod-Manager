@@ -2,30 +2,16 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
-#include "Items/CategoryItem.h"
+#include "DisplayModel.h"
 #include <KxFramework/KxSingleton.h>
-#include <KxFramework/DataView2/DataView2Fwd.h>
-
-namespace Kortex
-{
-	class IGameConfigManager;
-}
 
 namespace Kortex::GameConfig
 {
-	class DefaultGameConfigManager;
-
 	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
 	{
-		friend class DefaultGameConfigManager;
-
 		private:
-			IGameConfigManager& m_Manager;
-			const ITranslator& m_Translator;
-
 			wxBoxSizer* m_MainSizer = nullptr;
-			KxDataView2::View* m_View = nullptr;
-			std::unordered_map<wxString, CategoryItem> m_Categories;
+			DisplayModel m_DisplayModel;
 
 		public:
 			Workspace(KMainWindow* mainWindow);
@@ -36,9 +22,6 @@ namespace Kortex::GameConfig
 			virtual bool OnOpenWorkspace() override;
 			virtual bool OnCloseWorkspace() override;
 			virtual void OnReloadWorkspace() override;
-
-			void ClearView();
-			void LoadView();
 
 		public:
 			virtual wxString GetID() const override;

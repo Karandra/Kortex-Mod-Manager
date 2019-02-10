@@ -36,10 +36,6 @@ namespace Kortex::GameConfig
 	}
 	void DefaultGameConfigManager::OnExit()
 	{
-		if (Workspace* workspace = Workspace::GetInstance())
-		{
-			workspace->ClearView();
-		}
 		IConfigManager::OnExit();
 	}
 	void DefaultGameConfigManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)

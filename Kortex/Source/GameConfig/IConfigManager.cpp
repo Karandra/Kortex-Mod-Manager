@@ -47,37 +47,49 @@ namespace Kortex
 
 	wxString IConfigManager::TranslateItemLabel(const wxString& name, const wxString& perfix) const
 	{
-		auto value = GetTranslator().TryGetString(perfix + wxS('.') + name);
-		if (value)
+		if (!name.IsEmpty())
 		{
-			return *value;
+			auto value = GetTranslator().TryGetString(perfix + wxS('.') + name);
+			if (value)
+			{
+				return *value;
+			}
+			return name;
 		}
 		return {};
 	}
 	wxString IConfigManager::TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const
 	{
-		wxString label = itemNode.GetAttribute(wxS("Label"));
-		if (!label.IsEmpty())
+		auto [text, isTranslated] = TranslateItemElement(itemNode, true, wxS("Label"));
+		if (!isTranslated)
+		{
+			text = TranslateItemLabel(text, perfix);
+			if (!text.IsEmpty())
+			{
+				return text;
+			}
+			return TranslateItemLabel(name, perfix);
+		}
+		return text;
+	}
+	std::pair<wxString, bool> IConfigManager::TranslateItemElement(const KxXMLNode& itemNode, bool isAttribute, const wxString& attributeName) const
+	{
+		wxString text = isAttribute ? itemNode.GetAttribute(attributeName) : itemNode.GetValue();
+		if (!text.IsEmpty())
 		{
 			// Strip translation variable
-			if (label.StartsWith(wxS("$T(")) && label.EndsWith(wxS(")")))
+			if (text.StartsWith(wxS("$T(")) && text.EndsWith(wxS(")")))
 			{
-				label.Remove(0, 3);
-				label.RemoveLast(1);
+				text.Remove(0, 3);
+				text.RemoveLast(1);
 			}
 
-			auto value = GetTranslator().TryGetString(label);
+			auto value = GetTranslator().TryGetString(text);
 			if (value)
 			{
-				return *value;
-			}
-
-			label = TranslateItemLabel(label, perfix);
-			if (!label.IsEmpty())
-			{
-				return label;
+				return {*value, true};
 			}
 		}
-		return TranslateItemLabel(name, perfix);
+		return {text, false};
 	}
 }

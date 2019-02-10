@@ -158,7 +158,7 @@
 			<Item Category="Game/Graphics" Path="Display" Name="bFloatPointRenderTarget" Type="bool"/>
 			<Item Category="Game/Graphics" Path="Display" Name="sD3DDevice" Type="string">
 				<Options>
-					<Editable Value="false"/>
+					<EditableBehavior Value="EditableIfNoSamples"/>
 					<Input>
 						<Format><![CDATA["%1"]]></Format>
 					</Input>
@@ -205,7 +205,7 @@
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="int32" SubType="DoubleValue">
 				<Options>
-					<Editable Value="false"/>
+					<EditableBehavior Value="ReadOnly"/>
 				</Options>
 				<ValueName1>iSize W</ValueName1>
 				<ValueName2>iSize H</ValueName2>
@@ -227,13 +227,13 @@
 			</Item>
 			<Item Category="Game/Shadows" Path="Display" Name="iBlurDeferredShadowMask" Type="int32">
 				<Options>
-					<Editable Value="false"/>
+					<EditableBehavior Value="ReadOnly"/>
 				</Options>
 				<Samples Source="Range" Min="0" Max="7" Step="1"/>
 			</Item>
 			<Item Category="Game/Shadows" Path="Display" Name="iShadowMaskQuarter" Type="int32">
 				<Options>
-					<Editable Value="false"/>
+					<EditableBehavior Value="ReadOnly"/>
 				</Options>
 				<Samples Source="Range" Min="0" Max="7" Step="1"/>
 			</Item>
@@ -407,7 +407,7 @@
 			</Item>
 			<Item Category="Game/LevelOfDetail" Path="Particles" Name="iMaxDesired" Type="int32">
 				<Options>
-					<Editable Value="true"/>
+					<EditableBehavior Value="Editable"/>
 				</Options>
 				<Samples Source="Range" Min="0" Max="2000" Step="250"/>
 			</Item>

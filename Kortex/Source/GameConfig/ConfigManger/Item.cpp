@@ -123,11 +123,26 @@ namespace Kortex::GameConfig
 	}
 	bool Item::IsEditable() const
 	{
-		if (m_Options.IsAutoEditable())
+		switch (m_Options.GetEditableBehavior().GetValue())
 		{
-			return IsUnknown() || m_TypeID.IsFloat() || (m_TypeID.IsString() || m_TypeID.IsInteger() && m_Samples.IsEmpty());
-		}
-		return m_Options.IsEditable();
+			case EditableBehaviorID::Editable:
+			{
+				return true;
+			}
+			case EditableBehaviorID::ReadOnly:
+			{
+				return false;
+			}
+			case EditableBehaviorID::Auto:
+			{
+				return IsUnknown() || m_TypeID.IsFloat() || (m_TypeID.IsString() || m_TypeID.IsInteger() && m_Samples.IsEmpty());
+			}
+			case EditableBehaviorID::EditableIfNoSamples:
+			{
+				return m_Samples.IsEmpty();
+			}
+		};
+		return false;
 	}
 
 	wxAny Item::GetValue(const KxDataView2::Column& column) const

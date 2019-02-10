@@ -38,14 +38,6 @@ namespace Kortex::GameConfig
 			{
 				return m_EditableBehavior;
 			}
-			bool IsEditable() const
-			{
-				return m_EditableBehavior == EditableBehaviorID::True;
-			}
-			bool IsAutoEditable() const
-			{
-				return m_EditableBehavior == EditableBehaviorID::Auto;
-			}
 
 			bool HasInputFormat() const
 			{

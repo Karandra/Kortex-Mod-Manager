@@ -38,7 +38,7 @@ namespace Kortex::GameConfig
 
 			m_SourceFormat.FromString(node.GetFirstChildElement(wxS("SourceFormat")).GetAttribute(wxS("Value")));
 			m_TypeDetector.FromString(node.GetFirstChildElement(wxS("TypeDetection")).GetAttribute(wxS("Value")));
-			m_EditableBehavior.FromString(node.GetFirstChildElement(wxS("Editable")).GetAttribute(wxS("Value")));
+			m_EditableBehavior.FromString(node.GetFirstChildElement(wxS("EditableBehavior")).GetAttribute(wxS("Value")));
 
 			// Load precision
 			if (dataType.IsOK() && dataType.GetOutputType().IsFloat())

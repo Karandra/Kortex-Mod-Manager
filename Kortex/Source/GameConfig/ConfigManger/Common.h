@@ -203,16 +203,18 @@ namespace Kortex::GameConfig
 	enum class EditableBehaviorID: uint32_t
 	{
 		Auto = 0,
-		True,
-		False,
+		ReadOnly,
+		Editable,
+		EditableIfNoSamples
 	};
 	class EditableBehaviorDef: public KxIndexedEnum::Definition<EditableBehaviorDef, EditableBehaviorID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{
 			{EditableBehaviorID::Auto, wxS("Auto")},
-			{EditableBehaviorID::True, wxS("true")},
-			{EditableBehaviorID::False, wxS("false")},
+			{EditableBehaviorID::Editable, wxS("Editable")},
+			{EditableBehaviorID::ReadOnly, wxS("ReadOnly")},
+			{EditableBehaviorID::EditableIfNoSamples, wxS("EditableIfNoSamples")},
 		};
 	};
 	using EditableBehaviorValue = KxIndexedEnum::Value<EditableBehaviorDef, EditableBehaviorID::Auto>;
@@ -226,5 +228,10 @@ namespace Kortex::GameConfig
 		Name,
 		Type,
 		Value,
+	};
+	enum class SerializeFor
+	{
+		Storage = 0,
+		Display
 	};
 }

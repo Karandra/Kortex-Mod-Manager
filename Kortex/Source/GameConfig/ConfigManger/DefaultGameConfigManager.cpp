@@ -71,10 +71,27 @@ namespace Kortex::GameConfig
 	{
 		m_ChangedItems.remove(&item);
 		m_ChangedItems.push_back(&item);
+
+		if (Workspace* workspace = Workspace::GetInstance())
+		{
+			workspace->OnChangesMade();
+		}
 	}
 	void DefaultGameConfigManager::OnItemChangeDiscarded(GameConfig::Item& item)
 	{
 		m_ChangedItems.remove(&item);
+
+		if (Workspace* workspace = Workspace::GetInstance())
+		{
+			if (HasUnsavedChanges())
+			{
+				workspace->OnChangesMade();
+			}
+			else
+			{
+				workspace->OnChangesDiscarded();
+			}
+		}
 	}
 
 	void DefaultGameConfigManager::Load()
@@ -96,6 +113,11 @@ namespace Kortex::GameConfig
 			item->SaveChanges();
 		}
 		m_ChangedItems.clear();
+
+		if (Workspace* workspace = Workspace::GetInstance())
+		{
+			workspace->OnChangesSaved();
+		}
 	}
 	void DefaultGameConfigManager::DiscardChanges()
 	{
@@ -104,6 +126,11 @@ namespace Kortex::GameConfig
 			item->DiscardChanges();
 		}
 		m_ChangedItems.clear();
+
+		if (Workspace* workspace = Workspace::GetInstance())
+		{
+			workspace->OnChangesDiscarded();
+		}
 	}
 	bool DefaultGameConfigManager::HasUnsavedChanges() const
 	{

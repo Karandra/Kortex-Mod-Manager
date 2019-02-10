@@ -4,6 +4,7 @@
 #include "UI/KMainWindow.h"
 #include "DisplayModel.h"
 #include <KxFramework/KxSingleton.h>
+#include <KxFramework/KxButton.h>
 
 namespace Kortex::GameConfig
 {
@@ -13,31 +14,42 @@ namespace Kortex::GameConfig
 			wxBoxSizer* m_MainSizer = nullptr;
 			DisplayModel m_DisplayModel;
 
+			KxButton* m_SaveButton = nullptr;
+			KxButton* m_DiscardButton = nullptr;
+
 		public:
 			Workspace(KMainWindow* mainWindow);
-			virtual ~Workspace();
-			virtual bool OnCreateWorkspace() override;
+			~Workspace();
 
 		private:
-			virtual bool OnOpenWorkspace() override;
-			virtual bool OnCloseWorkspace() override;
-			virtual void OnReloadWorkspace() override;
+			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
+
+			void OnSaveButton(wxCommandEvent& event);
+			void OnDiscardButton(wxCommandEvent& event);
 
 		public:
-			virtual wxString GetID() const override;
-			virtual wxString GetName() const override;
-			virtual wxString GetNameShort() const;
-			virtual KImageEnum GetImageID() const override
+			wxString GetID() const override;
+			wxString GetName() const override;
+			wxString GetNameShort() const;
+			KImageEnum GetImageID() const override
 			{
 				return KIMG_GEAR_PENCIL;
 			}
-			virtual wxSizer* GetWorkspaceSizer() const override
+			wxSizer* GetWorkspaceSizer() const override
 			{
 				return m_MainSizer;
 			}
-			virtual bool CanReload() const override
+			bool CanReload() const override
 			{
 				return true;
 			}
+	
+		public:
+			void OnChangesMade();
+			void OnChangesSaved();
+			void OnChangesDiscarded();
 	};
 }

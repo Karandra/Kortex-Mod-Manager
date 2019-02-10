@@ -38,9 +38,5 @@ namespace Kortex::GameConfig
 			void CreateView(wxWindow* parent, wxSizer* sizer);
 			void ClearView();
 			void LoadView();
-			KxDataView2::View* GetView() const
-			{
-				return m_View;
-			}
 	};
 }

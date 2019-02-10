@@ -107,7 +107,9 @@ namespace Kortex::GameConfig
 			{
 				for (const auto& adapter: KxSystemSettings::EnumVideoAdapters())
 				{
-					m_Values.emplace_back(adapter.DeviceName, adapter.DeviceString);
+					// DeviceString field is wchar_t[] array so wrap it into wxString,
+					// otherwise wxAny will store pointer to the array and not copy its content as wxString.
+					m_Values.emplace_back(wxEmptyString, wxString(adapter.DeviceString));
 				}
 				break;
 			}

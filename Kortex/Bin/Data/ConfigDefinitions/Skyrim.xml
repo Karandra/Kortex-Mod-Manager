@@ -167,7 +167,7 @@
 					</Output>
 				</Options>
 				<Samples Source="Function">
-					<Function Name="GetVideoAdapterList"/>
+					<Function Name="GetVideoAdapters"/>
 				</Samples>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="fGamma" Type="float32">
@@ -210,7 +210,7 @@
 				<ValueName1>iSize W</ValueName1>
 				<ValueName2>iSize H</ValueName2>
 				<Separator>×</Separator>
-				<Samples Source="Function" FillFunction="GetVideoModesList"/>
+				<Samples Source="Function" FillFunction="GetVideoModes"/>
 			</Item>
 
 			<!-- Shadows -->

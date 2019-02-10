@@ -108,11 +108,28 @@ namespace Kortex::GameConfig
 	}
 	void DefaultGameConfigManager::SaveChanges()
 	{
+		std::vector<ISource*> openedSources;
 		for (GameConfig::Item* item: m_ChangedItems)
 		{
+			// Open source for this item if it's not already opened
+			ISource& source = item->GetGroup().GetSource();
+			if (!source.IsOpened())
+			{
+				source.Open();
+				openedSources.push_back(&source);
+			}
+
+			// Save this item
 			item->SaveChanges();
 		}
 		m_ChangedItems.clear();
+
+		// Save and close opened sources
+		for (ISource* source: openedSources)
+		{
+			source->Save();
+			source->Close();
+		}
 
 		if (Workspace* workspace = Workspace::GetInstance())
 		{

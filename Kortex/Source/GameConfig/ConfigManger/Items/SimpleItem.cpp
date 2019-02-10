@@ -185,7 +185,15 @@ namespace Kortex::GameConfig
 
 				if (GetTypeID().IsBool())
 				{
-					return KxDataView2::BitmapTextToggleValue(m_Value.As<bool>(), *m_CachedViewData, wxNullBitmap, KxDataView2::ToggleType::CheckBox);
+					using namespace KxDataView2;
+					if (!m_Value.IsNull())
+					{
+						return BitmapTextToggleValue(m_Value.As<bool>(), *m_CachedViewData, wxNullBitmap, ToggleType::CheckBox);
+					}
+					else
+					{
+						return BitmapTextToggleValue(*m_CachedViewData, wxNullBitmap, ToggleState::Indeterminate, ToggleType::CheckBox);
+					}
 				}
 				return *m_CachedViewData;
 			}

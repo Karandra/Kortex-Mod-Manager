@@ -340,7 +340,7 @@ namespace Kortex::GameConfig
 	wxString ItemValue::DoSerialize(const Item& item) const
 	{
 		const TypeID type = item.GetTypeID();
-		const TypeID outputType = item.GetDataType().GetInputType();
+		const TypeID outputType = item.GetDataType().GetOutputType();
 
 		if (type.IsBool())
 		{

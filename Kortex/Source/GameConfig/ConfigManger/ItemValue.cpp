@@ -337,14 +337,14 @@ namespace Kortex::GameConfig
 		m_Value = stringValue;
 	}
 
-	wxString ItemValue::DoSerialize(const Item& item) const
+	wxString ItemValue::DoSerialize(const Item& item, SerializeFor mode) const
 	{
 		const TypeID type = item.GetTypeID();
 		const TypeID outputType = item.GetDataType().GetOutputType();
 
 		if (type.IsBool())
 		{
-			return SerializeFromBool(outputType, item);
+			return SerializeFromBool(outputType, item, mode);
 		}
 		else if (type.IsSignedInteger())
 		{
@@ -364,19 +364,26 @@ namespace Kortex::GameConfig
 		}
 		return {};
 	}
-	wxString ItemValue::SerializeFromBool(TypeID outputType, const Item& item) const
+	wxString ItemValue::SerializeFromBool(TypeID outputType, const Item& item, SerializeFor mode) const
 	{
-		if (outputType.IsBool() || outputType.IsString())
+		if (mode == SerializeFor::Storage)
+		{
+			if (outputType.IsBool() || outputType.IsString())
+			{
+				return FromAny::AsBool(m_Value, item);
+			}
+			if (outputType.IsInteger())
+			{
+				return FromAny::AsSignedInteger(m_Value, item);
+			}
+			if (outputType.IsFloat())
+			{
+				return FromAny::AsFloat32(m_Value, item);
+			}
+		}
+		else if (mode == SerializeFor::Display)
 		{
 			return FromAny::AsBool(m_Value, item);
-		}
-		if (outputType.IsInteger())
-		{
-			return FromAny::AsSignedInteger(m_Value, item);
-		}
-		if (outputType.IsFloat())
-		{
-			return FromAny::AsFloat32(m_Value, item);
 		}
 		return {};
 	}
@@ -455,9 +462,9 @@ namespace Kortex::GameConfig
 		return {};
 	}
 
-	wxString ItemValue::Serialize(const Item& item) const
+	wxString ItemValue::Serialize(const Item& item, SerializeFor mode) const
 	{
-		return IsNull() ? wxString() : DoSerialize(item);
+		return IsNull() ? wxString() : DoSerialize(item, mode);
 	}
 	bool ItemValue::Deserialize(const wxString& value, const Item& item)
 	{

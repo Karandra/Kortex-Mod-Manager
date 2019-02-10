@@ -25,8 +25,8 @@ namespace Kortex::GameConfig
 			void DeserializeAsFloat(TypeID inputType, const wxString& stringValue);
 			void DeserializeAsString(TypeID inputType, const wxString& stringValue);
 
-			wxString DoSerialize(const Item& item) const;
-			wxString SerializeFromBool(TypeID outputType, const Item& item) const;
+			wxString DoSerialize(const Item& item, SerializeFor mode) const;
+			wxString SerializeFromBool(TypeID outputType, const Item& item, SerializeFor mode) const;
 			wxString SerializeFromSignedInteger(TypeID outputType, const Item& item) const;
 			wxString SerializeFromUnsignedInteger(TypeID outputType, const Item& item) const;
 			wxString SerializeFromFloat(TypeID outputType, const Item& item) const;
@@ -56,7 +56,7 @@ namespace Kortex::GameConfig
 				m_Type = type;
 			}
 
-			wxString Serialize(const Item& item) const;
+			wxString Serialize(const Item& item, SerializeFor mode = SerializeFor::Storage) const;
 			bool Deserialize(const wxString& value, const Item& item);
 
 			bool IsNull() const

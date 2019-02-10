@@ -147,7 +147,7 @@ namespace Kortex::GameConfig
 			{
 				auto FormatValue = [this](const ItemValue& value)
 				{
-					wxString serializedValue = value.Serialize(*this);
+					wxString serializedValue = value.Serialize(*this, SerializeFor::Display);
 
 					if (serializedValue.IsEmpty())
 					{

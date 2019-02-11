@@ -113,7 +113,7 @@
 		<String ID="ValueName.WaterReflectionsResolution">Water reflections resolution</String>
 
 		<!-- Audio -->
-		<String ID="ValueName.bEnableAudio">Enable Audio</String>
+		<String ID="ValueName.bEnableAudio">Enable audio</String>
 		<String ID="ValueName.fAudioMasterVolume">Master volume</String>
 		<String ID="ValueName.fVal0">Effects</String>
 		<String ID="ValueName.fVal1">Footsteps</String>
@@ -125,20 +125,20 @@
 		<String ID="ValueName.fVal7">Voice</String>
 
 		<!-- Gameplay -->
-		<String ID="ValueName.bGamepadEnable">Enable Gamepad</String>
+		<String ID="ValueName.bGamepadEnable">Enable gamepad</String>
 		<String ID="ValueName.bGamePadRumble">Vibration</String>
-		<String ID="ValueName.bSaveOnPause">Save on Character Menu</String>
-		<String ID="ValueName.bSaveOnWait">Save on Wait</String>
-		<String ID="ValueName.bSaveOnTravel">Save on Travel</String>
-		<String ID="ValueName.bSaveOnRest">Save on Rest</String>
+		<String ID="ValueName.bSaveOnPause">Save in pause menu</String>
+		<String ID="ValueName.bSaveOnWait">Save on wait</String>
+		<String ID="ValueName.bSaveOnTravel">Save on fast travel</String>
+		<String ID="ValueName.bSaveOnRest">Save on rest</String>
 		<String ID="ValueName.iDifficulty">Difficulty</String>
-		<String ID="ValueName.fAutosaveEveryXMins">Autosave (min)</String>
+		<String ID="ValueName.fAutosaveEveryXMins">Autosave interval (min)</String>
 
 		<!-- Interface -->
 		<String ID="ValueName.sLanguage">Language</String>
-		<String ID="ValueName.bDialogueSubtitles">Dialogue Subtitles</String>
-		<String ID="ValueName.bGeneralSubtitles">General Subtitles</String>
-		<String ID="ValueName.bShowCompass">Show Compass</String>
+		<String ID="ValueName.bDialogueSubtitles">Dialogue subtitles</String>
+		<String ID="ValueName.bGeneralSubtitles">General subtitles</String>
+		<String ID="ValueName.bShowCompass">Show compass</String>
 		<String ID="ValueName.bShowQuestMarkers">Show quest markers</String>
 		<String ID="ValueName.bShowFloatingQuestMarkers">Show floating quest markers</String>
 		<String ID="ValueName.bCrosshairEnabled">Enable crosshair</String>
@@ -208,7 +208,7 @@
 		<!-- ENB: General -->
 		<String ID="ValueName.MaxAnisotropy">Anisotropic filtering</String>
 		<String ID="ValueName.ForceAnisotropicFiltering">Force anisotropic filtering</String>
-		<String ID="ValueName.UseDefferedRendering">Deferred Rendering</String>
+		<String ID="ValueName.UseDefferedRendering">Deferred rendering</String>
 		<String ID="ValueName.ForceBorderless">Borderless window</String>
 		<String ID="ValueName.ForceBorderlessFullscreen">Borderless fullscreen window</String>
 		<String ID="ValueName.EnableVSync">Vertical synchronization</String>

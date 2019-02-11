@@ -1,15 +1,17 @@
 #include "stdafx.h"
 #include "Workspace.h"
+#include "WorkspaceController.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameConfig.hpp>
 #include <Kortex/Utility.hpp>
+#include <KxFramework/KxTaskDialog.h>
 
 namespace Kortex::GameConfig
 {
 	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)
+		:KWorkspace(mainWindow), m_MainSizer(new wxBoxSizer(wxVERTICAL))
 	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetWorkspaceController(new WorkspaceController(this));
 	}
 	Workspace::~Workspace()
 	{
@@ -45,7 +47,11 @@ namespace Kortex::GameConfig
 	}
 	bool Workspace::OnCloseWorkspace()
 	{
-		KMainWindow::GetInstance()->ClearStatus(1);
+		if (GetWorkspaceController()->AskForSave() == KxID_OK)
+		{
+			KMainWindow::GetInstance()->ClearStatus(1);
+			return true;
+		}
 		return true;
 	}
 	void Workspace::OnReloadWorkspace()
@@ -60,7 +66,6 @@ namespace Kortex::GameConfig
 	void Workspace::OnDiscardButton(wxCommandEvent& event)
 	{
 		IGameConfigManager::GetInstance()->DiscardChanges();
-		m_DisplayModel.GetView()->Refresh();
 	}
 
 	wxString Workspace::GetID() const
@@ -85,10 +90,11 @@ namespace Kortex::GameConfig
 	{
 		m_SaveButton->Disable();
 		m_DiscardButton->Disable();
+		m_DisplayModel.RefreshView();
 	}
 	void Workspace::OnChangesDiscarded()
 	{
-		m_SaveButton->Disable();
-		m_DiscardButton->Disable();
+		// Same logic
+		OnChangesSaved();
 	}
 }

@@ -19,28 +19,58 @@ namespace Kortex::GameConfig
 		node.DetachAllChildren();
 	}
 
+	void DisplayModel::OnActivate(KxDataView2::Event& event)
+	{
+		using namespace KxDataView2;
+
+		if (event.GetColumn())
+		{
+			Item* item = nullptr;
+			if (Node* node = event.GetNode(); node && node->QueryInterface(item))
+			{
+				if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_ACTIVATED)
+				{
+					item->OnActivate(*event.GetColumn());
+				}
+				else if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_SELECTED)
+				{
+					item->OnSelect(*event.GetColumn());
+				}
+			}
+		}
+	}
+
+	DisplayModel::DisplayModel()
+		:m_Manager(*IGameConfigManager::GetInstance()), m_Translator(m_Manager.GetTranslator())
+	{
+	}
+	DisplayModel::~DisplayModel()
+	{
+		ClearView();
+	}
+	
 	void DisplayModel::CreateView(wxWindow* parent, wxSizer* sizer)
 	{
 		using namespace KxDataView2;
 
-		m_View = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
-		m_View->SetModel(this);
-		sizer->Add(m_View, 1, wxEXPAND);
+		KxDataView2::View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
+		view->SetModel(this);
+		sizer->Add(view, 1, wxEXPAND);
 
 		ColumnStyle columnStyle = ColumnStyle::Move|ColumnStyle::Size|ColumnStyle::Sort;
-		m_View->AppendColumn<BitmapTextRenderer>(m_Translator.GetString("ConfigManager.View.Path"), ColumnID::Path, {}, columnStyle);
-		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Name"), ColumnID::Name, {}, columnStyle);
-		m_View->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Type"), ColumnID::Type, {}, columnStyle);
-		m_View->AppendColumn<BitmapTextToggleRenderer>(m_Translator.GetString("ConfigManager.View.Value"), ColumnID::Value, {}, columnStyle);
+		view->AppendColumn<BitmapTextRenderer>(m_Translator.GetString("ConfigManager.View.Path"), ColumnID::Path, {}, columnStyle);
+		view->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Name"), ColumnID::Name, {}, columnStyle);
+		view->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Type"), ColumnID::Type, {}, columnStyle);
+		view->AppendColumn<BitmapTextToggleRenderer>(m_Translator.GetString("ConfigManager.View.Value"), ColumnID::Value, {}, columnStyle);
 
-		m_View->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivate, this);
-		m_View->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnActivate, this);
+		view->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivate, this);
+		view->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnActivate, this);
 	}
 	void DisplayModel::ClearView()
 	{
-		if (m_View)
+		if (KxDataView2::View* view = GetView())
 		{
-			m_View->GetRootNode().DetachAllChildren();
+			view->GetRootNode().DetachAllChildren();
 		}
 		m_Categories.clear();
 	}
@@ -49,7 +79,7 @@ namespace Kortex::GameConfig
 		ClearView();
 		m_Manager.ForEachItem([this](Item& item)
 		{
-			KxDataView2::Node* parent = &m_View->GetRootNode();
+			KxDataView2::Node* parent = &GetView()->GetRootNode();
 			auto it = m_Categories.find(item.GetCategory());
 			if (it != m_Categories.end())
 			{
@@ -93,36 +123,13 @@ namespace Kortex::GameConfig
 			parent->AttachChild(&item, parent->GetChildrenCount());
 			item.OnAttachToView();
 		});
-		m_View->ItemsChanged();
+		GetView()->ItemsChanged();
 	}
-
-	void DisplayModel::OnActivate(KxDataView2::Event& event)
+	void DisplayModel::RefreshView()
 	{
-		using namespace KxDataView2;
-
-		if (event.GetColumn())
+		if (KxDataView2::View* view = GetView())
 		{
-			Item* item = nullptr;
-			if (Node* node = event.GetNode(); node && node->QueryInterface(item))
-			{
-				if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_ACTIVATED)
-				{
-					item->OnActivate(*event.GetColumn());
-				}
-				else if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_SELECTED)
-				{
-					item->OnSelect(*event.GetColumn());
-				}
-			}
+			view->Refresh();
 		}
-	}
-
-	DisplayModel::DisplayModel()
-		:m_Manager(*IGameConfigManager::GetInstance()), m_Translator(m_Manager.GetTranslator())
-	{
-	}
-	DisplayModel::~DisplayModel()
-	{
-		ClearView();
 	}
 }

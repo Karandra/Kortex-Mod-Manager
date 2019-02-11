@@ -104,6 +104,7 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\ITypeDetector.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Item.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Workspace.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\WorkspaceController.cpp" />
     <ClCompile Include="Source\GameConfig\GameConfigModule.cpp" />
     <ClCompile Include="Source\GameConfig\IConfigManager.cpp" />
     <ClCompile Include="Source\GameConfig\IGameConfigManager.cpp" />
@@ -390,6 +391,7 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\Item.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\IViewItem.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Workspace.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\WorkspaceController.h" />
     <ClInclude Include="Source\GameConfig\GameConfigModule.h" />
     <ClInclude Include="Source\GameConfig\IConfigManager.h" />
     <ClInclude Include="Source\GameConfig\IGameConfigManager.h" />

@@ -20,7 +20,6 @@ namespace Kortex::GameConfig
 			IGameConfigManager& m_Manager;
 			const ITranslator& m_Translator;
 
-			KxDataView2::View* m_View = nullptr;
 			std::unordered_map<wxString, CategoryItem> m_Categories;
 
 		protected:
@@ -38,5 +37,6 @@ namespace Kortex::GameConfig
 			void CreateView(wxWindow* parent, wxSizer* sizer);
 			void ClearView();
 			void LoadView();
+			void RefreshView();
 	};
 }

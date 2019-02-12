@@ -110,7 +110,7 @@
 		<String ID="ValueName.bUseWaterDepth">Эффекты глубины</String>
 		<String ID="ValueName.bUseWaterDisplacements">Эффекты водоизмещения</String>
 		<String ID="ValueName.iWaterMultiSamples">Сглаживание</String>
-		<String ID="ValueName.WaterReflectionsResolution">Разрешение отражений</String>
+		<String ID="ValueName.WaterReflectionResolution">Разрешение отражений</String>
 
 		<!-- Audio -->
 		<String ID="ValueName.bEnableAudio">Включить звук</String>

@@ -110,7 +110,7 @@
 		<String ID="ValueName.bUseWaterDepth">Water depth</String>
 		<String ID="ValueName.bUseWaterDisplacements">Water displacements</String>
 		<String ID="ValueName.iWaterMultiSamples">Water antialiasing</String>
-		<String ID="ValueName.WaterReflectionsResolution">Water reflections resolution</String>
+		<String ID="ValueName.WaterReflectionResolution">Water reflections resolution</String>
 
 		<!-- Audio -->
 		<String ID="ValueName.bEnableAudio">Enable audio</String>

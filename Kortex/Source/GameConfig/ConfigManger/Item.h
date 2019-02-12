@@ -63,7 +63,7 @@ namespace Kortex::GameConfig
 			virtual void ChangeNotify();
 
 		public:
-			Item(ItemGroup& group, const KxXMLNode& itemNode = {});
+			Item(ItemGroup& group, const KxXMLNode& itemNode = {}, bool allowLoadSamples = true);
 			virtual ~Item();
 
 		public:
@@ -71,7 +71,6 @@ namespace Kortex::GameConfig
 			virtual bool IsUnknown() const = 0;
 			virtual size_t GetHash() const = 0;
 			virtual wxString GetFullPath() const;
-			
 			
 			bool HasChanges() const
 			{

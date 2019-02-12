@@ -33,7 +33,7 @@ namespace Kortex::GameConfig
 			}
 
 		public:
-			SimpleItem(ItemGroup& group, const KxXMLNode& itemNode = {});
+			SimpleItem(ItemGroup& group, const KxXMLNode& itemNode = {}, bool allowLoadSamples = true);
 			SimpleItem(ItemGroup& group, bool isUnknown);
 
 		public:

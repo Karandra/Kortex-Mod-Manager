@@ -5,7 +5,7 @@
 namespace Kortex::GameConfig
 {
 	StructSubItem::StructSubItem(StructItem& structItem, const KxXMLNode& itemNode)
-		:IExtendInterface(structItem.GetGroup(), itemNode), m_Struct(structItem)
+		:IExtendInterface(structItem.GetGroup(), itemNode, false), m_Struct(structItem)
 	{
 		GetOptions().Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());
 

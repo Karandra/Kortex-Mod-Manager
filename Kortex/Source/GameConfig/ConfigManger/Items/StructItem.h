@@ -25,6 +25,7 @@ namespace Kortex::GameConfig
 			void ChangeNotify() override;
 
 		private:
+			wxString FormatToOutput(SerializeFor mode) const;
 			std::unique_ptr<KxDataView2::Editor> CreateEditor() const;
 			bool IsComboBoxEditor() const
 			{

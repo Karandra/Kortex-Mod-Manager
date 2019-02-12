@@ -47,6 +47,7 @@ namespace Kortex::GameConfig
 			}
 			case StructSerializationModeID::AsString:
 			{
+				// TODO: not required right now
 				break;
 			}
 		};
@@ -65,6 +66,8 @@ namespace Kortex::GameConfig
 			}
 			case StructSerializationModeID::AsString:
 			{
+				ItemValue value(FormatToOutput(SerializeFor::Storage));
+				source.WriteValue(*this, value);
 				break;
 			}
 		};
@@ -79,6 +82,15 @@ namespace Kortex::GameConfig
 		Item::ChangeNotify();
 	}
 
+	wxString StructItem::FormatToOutput(SerializeFor mode) const
+	{
+		KxFormat formatter(GetOptions().GetOutputFormat());
+		for (const StructSubItem& subItem: m_SubItems)
+		{
+			formatter(subItem.GetValue().Serialize(subItem, mode));
+		}
+		return formatter;
+	}
 	std::unique_ptr<KxDataView2::Editor> StructItem::CreateEditor() const
 	{
 		return nullptr;
@@ -102,13 +114,14 @@ namespace Kortex::GameConfig
 				wxString value;
 				for (const StructSubItem& subItem: m_SubItems)
 				{
+					wxString type = subItem.GetTypeID().ToString();
 					if (value.IsEmpty())
 					{
-						value = subItem.GetTypeID().ToString();
+						value = type;
 					}
 					else
 					{
-						value = Kx::Utility::String::ConcatWithSeparator(wxS(", "), value, subItem.GetTypeID().ToString());
+						value = Kx::Utility::String::ConcatWithSeparator(wxS(", "), value, type);
 					}
 				}
 				m_CachedViewType = KxString::Format(wxS("struct<%1>"), value);
@@ -119,15 +132,9 @@ namespace Kortex::GameConfig
 		{
 			if (!m_CachedViewValue)
 			{
-				const ItemOptions& options = GetOptions();
-				if (options.HasOutputFormat())
+				if (GetOptions().HasOutputFormat())
 				{
-					KxFormat formatter(options.GetOutputFormat());
-					for (const StructSubItem& subItem: m_SubItems)
-					{
-						formatter(subItem.GetValue().Serialize(subItem));
-					}
-					m_CachedViewValue = formatter;
+					m_CachedViewValue = FormatToOutput(SerializeFor::Display);
 				}
 				else
 				{

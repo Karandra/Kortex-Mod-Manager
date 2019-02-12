@@ -125,8 +125,8 @@ namespace Kortex::GameConfig
 		return nullptr;
 	}
 
-	SimpleItem::SimpleItem(ItemGroup& group, const KxXMLNode& itemNode)
-		:IExtendInterface(group, itemNode)
+	SimpleItem::SimpleItem(ItemGroup& group, const KxXMLNode& itemNode, bool allowLoadSamples)
+		:IExtendInterface(group, itemNode, allowLoadSamples)
 	{
 	}
 	SimpleItem::SimpleItem(ItemGroup& group, bool isUnknown)

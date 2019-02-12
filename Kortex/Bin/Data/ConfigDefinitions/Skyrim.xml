@@ -203,14 +203,21 @@
 					<Value Label="TexturesExtra">-2</Value>
 				</Samples>
 			</Item>
-			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="int32" SubType="DoubleValue">
+			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="struct">
 				<Options>
 					<EditableBehavior Value="ReadOnly"/>
+					<SerializationMode Value="ElementWise"/>
+					<Output>
+						<Format><![CDATA[%1×%2]]></Format>
+					</Output>
 				</Options>
-				<ValueName1>iSize W</ValueName1>
-				<ValueName2>iSize H</ValueName2>
-				<Separator>×</Separator>
-				<Samples Source="Function" FillFunction="GetVideoModes"/>
+				<SubItems>
+					<Item Name="iSize W" Type="int32"/>
+					<Item Name="iSize H" Type="int32"/>
+				</SubItems>
+				<Samples Source="Function">
+					<Function Name="GetVideoModes"/>
+				</Samples>
 			</Item>
 
 			<!-- Shadows -->
@@ -248,10 +255,18 @@
 			</Item>
 
 			<!-- Water -->
-			<Item Category="Game/Water" Path="Water" Name="WaterReflectionsResolution" Type="int32" SubType="DoubleValue">
-				<ValueName1>iWaterReflectWidth</ValueName1>
-				<ValueName2>iWaterReflectHeight</ValueName2>
-				<Separator>×</Separator>
+			<Item Category="Game/Water" Path="Water" Name="WaterReflectionResolution" Type="struct">
+				<Options>
+					<EditableBehavior Value="ReadOnly"/>
+					<SerializationMode Value="ElementWise"/>
+					<Output>
+						<Format><![CDATA[%1×%2]]></Format>
+					</Output>
+				</Options>
+				<SubItems>
+					<Item Name="iWaterReflectWidth" Type="int32"/>
+					<Item Name="iWaterReflectHeight" Type="int32"/>
+				</SubItems>
 				<Samples Source="ImmediateItems">
 					<Value>512×512</Value>
 					<Value>1024×1024</Value>

@@ -85,7 +85,7 @@
 		<String ID="ValueName.iMaxAnisotropy">Anisotropic filtering</String>
 		<String ID="ValueName.iTexMipMapSkip">Texture quality</String>
 		<String ID="ValueName.fGamma">Gamma</String>
-		<String ID="ValueName.ScreenResolution">Resolution</String>
+		<String ID="ValueName.ScreenResolution">Screen resolution</String>
 
 		<!-- Shadows -->
 		<String ID="ValueName.bTreesReceiveShadows">Shadows on trees</String>

@@ -60,9 +60,6 @@ namespace Kortex::GameConfig
 			{
 				return m_SerializationMode;
 			}
-
-			void OnAttachToView() override;
-			wxString GetStringRepresentation(ColumnID id) const override;
 			
 			template<class TFunctor> void ForEachSubItem(TFunctor&& func) const
 			{
@@ -74,11 +71,14 @@ namespace Kortex::GameConfig
 			}
 
 		public:
+			wxString GetViewString(ColumnID id) const override;
+			void OnActivate(KxDataView2::Column& column) override;
+			void OnAttachToView() override;
+
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
 			bool SetValue(const wxAny& value, KxDataView2::Column& column) override;
 
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
-			void OnActivate(KxDataView2::Column& column) override;
 	};
 }

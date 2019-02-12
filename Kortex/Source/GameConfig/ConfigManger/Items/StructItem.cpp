@@ -93,14 +93,7 @@ namespace Kortex::GameConfig
 	{
 	}
 
-	void StructItem::OnAttachToView()
-	{
-		for (StructSubItem& subItem: m_SubItems)
-		{
-			AttachChild(&subItem, GetChildrenCount());
-		}
-	}
-	wxString StructItem::GetStringRepresentation(ColumnID id) const
+	wxString StructItem::GetViewString(ColumnID id) const
 	{
 		if (id == ColumnID::Type)
 		{
@@ -126,23 +119,54 @@ namespace Kortex::GameConfig
 		{
 			if (!m_CachedViewValue)
 			{
-				wxString value;
-				for (const StructSubItem& subItem: m_SubItems)
+				const ItemOptions& options = GetOptions();
+				if (options.HasOutputFormat())
 				{
-					if (value.IsEmpty())
+					KxFormat formatter(options.GetOutputFormat());
+					for (const StructSubItem& subItem: m_SubItems)
 					{
-						value = subItem.GetValue().Serialize(subItem);
+						formatter(subItem.GetValue().Serialize(subItem));
 					}
-					else
-					{
-						value = Kx::Utility::String::ConcatWithSeparator(wxS(", "), value, subItem.GetValue().Serialize(subItem));
-					}
+					m_CachedViewValue = formatter;
 				}
-				m_CachedViewValue = KxString::Format(wxS("{%1}"), value);
+				else
+				{
+					wxString finalValue;
+					for (const StructSubItem& subItem: m_SubItems)
+					{
+						wxString value = subItem.GetValue().Serialize(subItem);
+						if (finalValue.IsEmpty())
+						{
+							finalValue = value;
+						}
+						else
+						{
+							finalValue = Kx::Utility::String::ConcatWithSeparator(wxS(", "), finalValue, value);
+						}
+					}
+					m_CachedViewValue = KxString::Format(wxS("{%1}"), finalValue);
+				}
+
+				
 			}
 			return *m_CachedViewValue;
 		}
-		return Item::GetStringRepresentation(id);
+		return Item::GetViewString(id);
+	}
+	void StructItem::OnActivate(KxDataView2::Column& column)
+	{
+		if (column.GetID<ColumnID>() == ColumnID::Value)
+		{
+			Edit(column);
+		}
+		Item::OnActivate(column);
+	}
+	void StructItem::OnAttachToView()
+	{
+		for (StructSubItem& subItem: m_SubItems)
+		{
+			AttachChild(&subItem, GetChildrenCount());
+		}
 	}
 
 	wxAny StructItem::GetValue(const KxDataView2::Column& column) const
@@ -175,12 +199,5 @@ namespace Kortex::GameConfig
 			return m_Editor.get();
 		}
 		return nullptr;
-	}
-	void StructItem::OnActivate(KxDataView2::Column& column)
-	{
-		if (column.GetID<ColumnID>() == ColumnID::Value)
-		{
-			Edit(column);
-		}
 	}
 }

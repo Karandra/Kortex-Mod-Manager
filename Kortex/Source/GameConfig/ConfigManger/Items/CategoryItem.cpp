@@ -37,13 +37,20 @@ namespace Kortex::GameConfig
 		DetachAllChildren();
 	}
 
-	wxString CategoryItem::GetStringRepresentation(ColumnID id) const
+	wxString CategoryItem::GetViewString(ColumnID id) const
 	{
 		if (id == ColumnID::Path)
 		{
 			return m_CategoryName;
 		}
 		return wxString();
+	}
+	void CategoryItem::OnActivate(KxDataView2::Column& column)
+	{
+		if (column.GetID<ColumnID>() == ColumnID::Path)
+		{
+			ToggleExpanded();
+		}
 	}
 
 	wxAny CategoryItem::GetValue(const KxDataView2::Column& column) const

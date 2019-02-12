@@ -25,16 +25,16 @@ namespace Kortex::GameConfig
 
 		if (event.GetColumn())
 		{
-			Item* item = nullptr;
-			if (Node* node = event.GetNode(); node && node->QueryInterface(item))
+			IViewItem* viewItem = nullptr;
+			if (Node* node = event.GetNode(); node && node->QueryInterface(viewItem))
 			{
 				if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_ACTIVATED)
 				{
-					item->OnActivate(*event.GetColumn());
+					viewItem->OnActivate(*event.GetColumn());
 				}
 				else if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_SELECTED)
 				{
-					item->OnSelect(*event.GetColumn());
+					viewItem->OnSelect(*event.GetColumn());
 				}
 			}
 		}

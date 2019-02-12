@@ -29,9 +29,11 @@ namespace Kortex::GameConfig
 				return m_CategoryName;
 			}
 
-			wxString GetStringRepresentation(ColumnID id) const override;
 
 		public:
+			wxString GetViewString(ColumnID id) const override;
+			void OnActivate(KxDataView2::Column& column) override;
+
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			KxDataView2::Renderer& GetRenderer(const KxDataView2::Column& column) const override;
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;

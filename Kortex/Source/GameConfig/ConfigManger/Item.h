@@ -71,7 +71,7 @@ namespace Kortex::GameConfig
 			virtual bool IsUnknown() const = 0;
 			virtual size_t GetHash() const = 0;
 			virtual wxString GetFullPath() const;
-			wxString GetStringRepresentation(ColumnID id) const override;
+			
 			
 			bool HasChanges() const
 			{
@@ -158,8 +158,8 @@ namespace Kortex::GameConfig
 			virtual bool IsEditable() const;
 
 		public:
-			virtual void OnActivate(KxDataView2::Column& column) {}
-			virtual void OnSelect(KxDataView2::Column& column) {}
+			void OnActivate(KxDataView2::Column& column) override;
+			wxString GetViewString(ColumnID id) const override;
 
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			bool Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;

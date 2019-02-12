@@ -17,13 +17,13 @@ namespace Kortex::GameConfig
 	{
 		return GetTypeID().IsDefinitiveType() && !GetName().IsEmpty();
 	}
-	wxString StructSubItem::GetStringRepresentation(ColumnID id) const
+	wxString StructSubItem::GetViewString(ColumnID id) const
 	{
 		if (id == ColumnID::Path)
 		{
 			return m_Struct.GetName() + wxS("::") + GetName();
 		}
-		return SimpleItem::GetStringRepresentation(id);
+		return SimpleItem::GetViewString(id);
 	}
 	wxString StructSubItem::GetPath() const
 	{

@@ -134,7 +134,7 @@ namespace Kortex::GameConfig
 	{
 	}
 
-	wxString SimpleItem::GetStringRepresentation(ColumnID id) const
+	wxString SimpleItem::GetViewString(ColumnID id) const
 	{
 		if (id == ColumnID::Value)
 		{
@@ -170,14 +170,32 @@ namespace Kortex::GameConfig
 			}
 			return *m_CachedViewData;
 		}
-		return Item::GetStringRepresentation(id);
+		return Item::GetViewString(id);
+	}
+	void SimpleItem::OnActivate(KxDataView2::Column& column)
+	{
+		if (column.GetID<ColumnID>() == ColumnID::Value)
+		{
+			if (GetTypeID().IsBool())
+			{
+				m_Value = !m_Value.As<bool>();
+				m_CachedViewData.reset();
+				Refresh(column);
+			}
+			else
+			{
+				Edit(column);
+			}
+			return;
+		}
+		Item::OnActivate(column);
 	}
 
 	wxAny SimpleItem::GetValue(const KxDataView2::Column& column) const
 	{
 		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
-			wxString value = GetStringRepresentation(ColumnID::Value);
+			wxString value = GetViewString(ColumnID::Value);
 			if (GetTypeID().IsBool())
 			{
 				using namespace KxDataView2;
@@ -264,21 +282,5 @@ namespace Kortex::GameConfig
 			return m_Editor.get();
 		}
 		return nullptr;
-	}
-	void SimpleItem::OnActivate(KxDataView2::Column& column)
-	{
-		if (column.GetID<ColumnID>() == ColumnID::Value)
-		{
-			if (GetTypeID().IsBool())
-			{
-				m_Value = !m_Value.As<bool>();
-				m_CachedViewData.reset();
-				Refresh(column);
-			}
-			else
-			{
-				Edit(column);
-			}
-		}
 	}
 }

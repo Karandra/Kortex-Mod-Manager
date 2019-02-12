@@ -70,7 +70,7 @@ namespace Kortex::GameConfig
 	{
 		return Kx::Utility::String::ConcatWithSeparator(wxS('/'), m_Group.GetSource().GetPathDescription(), m_Path, m_Name);
 	}
-	wxString Item::GetStringRepresentation(ColumnID id) const
+	wxString Item::GetViewString(ColumnID id) const
 	{
 		switch (id)
 		{
@@ -155,14 +155,14 @@ namespace Kortex::GameConfig
 		{
 			if (m_HasChanges)
 			{
-				return KxDataView2::BitmapTextValue(GetStringRepresentation(id), KGetBitmap(KIMG_PENCIL_SMALL));
+				return KxDataView2::BitmapTextValue(GetViewString(id), KGetBitmap(KIMG_PENCIL_SMALL));
 			}
 			else
 			{
-				return GetStringRepresentation(id);
+				return GetViewString(id);
 			}
 		}
-		return GetStringRepresentation(id);
+		return GetViewString(id);
 	}
 	bool Item::Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{
@@ -170,8 +170,16 @@ namespace Kortex::GameConfig
 		if (node.QueryInterface(viewItem))
 		{
 			const ColumnID id = column.GetID<ColumnID>();
-			return KxComparator::IsLess(GetStringRepresentation(id), viewItem->GetStringRepresentation(id), true);
+			return KxComparator::IsLess(GetViewString(id), viewItem->GetViewString(id), true);
 		}
 		return false;
+	}
+
+	void Item::OnActivate(KxDataView2::Column& column)
+	{
+		if (column.GetID<ColumnID>() == ColumnID::Path)
+		{
+			ToggleExpanded();
+		}
 	}
 }

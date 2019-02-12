@@ -45,7 +45,6 @@ namespace Kortex::GameConfig
 			{
 				return m_IsUnknown;
 			}
-			wxString GetStringRepresentation(ColumnID id) const override;
 
 			const ItemValue& GetValue() const
 			{
@@ -57,11 +56,13 @@ namespace Kortex::GameConfig
 			}
 			
 		public:
+			wxString GetViewString(ColumnID id) const override;
+			void OnActivate(KxDataView2::Column& column) override;
+
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
 			bool SetValue(const wxAny& value, KxDataView2::Column& column) override;
 
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
-			void OnActivate(KxDataView2::Column& column) override;
 	};
 }

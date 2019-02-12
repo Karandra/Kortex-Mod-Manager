@@ -18,8 +18,7 @@ namespace Kortex::GameConfig
 
 		public:
 			bool IsOK() const override;
-			wxString GetStringRepresentation(ColumnID id) const override;
-
+			wxString GetViewString(ColumnID id) const override;
 			wxString GetPath() const override;
 
 			const StructItem& GetStruct() const

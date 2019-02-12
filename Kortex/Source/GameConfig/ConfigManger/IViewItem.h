@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Common.h"
 #include "Application/RTTI.h"
+#include "KxFramework/DataView2/DataView2Fwd.h"
 
 namespace Kortex::GameConfig
 {
@@ -9,6 +10,9 @@ namespace Kortex::GameConfig
 	{
 		public:
 			virtual void OnAttachToView() { }
-			virtual wxString GetStringRepresentation(ColumnID id) const = 0;
+			virtual void OnSelect(KxDataView2::Column& column) { }
+			virtual void OnActivate(KxDataView2::Column& column) { }
+
+			virtual wxString GetViewString(ColumnID id) const = 0;
 	};
 }

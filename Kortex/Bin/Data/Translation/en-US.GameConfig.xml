@@ -69,7 +69,7 @@
 		<String ID="SampleValue.Language.TURKISH">Turkish</String>
 
 		<!-- Graphics -->
-		<String ID="ValueName.sD3DDevice">Graphics Adapter</String>
+		<String ID="ValueName.sD3DDevice">Graphics adapter</String>
 		<String ID="ValueName.bFull Screen">Fullscreen mode</String>
 		<String ID="ValueName.bFXAAEnabled">Enable FXAA</String>
 		<String ID="ValueName.iPresentInterval">Vertical synchronization</String>

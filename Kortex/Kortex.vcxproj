@@ -100,6 +100,8 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemSamples.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\CategoryItem.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\SimpleItem.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\Items\StructItem.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\Items\StructSubItem.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemValue.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ITypeDetector.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Item.cpp" />
@@ -386,6 +388,8 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemSamples.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Items\CategoryItem.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Items\SimpleItem.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructItem.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructSubItem.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemValue.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ITypeDetector.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Item.h" />

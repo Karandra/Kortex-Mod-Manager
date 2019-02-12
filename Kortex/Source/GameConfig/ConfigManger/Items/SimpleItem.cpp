@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "SimpleItem.h"
-#include "GameConfig/ConfigManger/DisplayModel.h"
 #include "Utility/KAux.h"
 #include <KxFramework/DataView2/DataView2.h>
 
@@ -39,9 +38,14 @@ namespace Kortex::GameConfig
 	{
 		source.WriteValue(*this, m_Value);
 	}
-	void SimpleItem::ChangeNotify()
+	
+	void SimpleItem::ResetCache()
 	{
 		m_CachedViewData.reset();
+	}
+	void SimpleItem::ChangeNotify()
+	{
+		ResetCache();
 		Item::ChangeNotify();
 	}
 
@@ -134,15 +138,6 @@ namespace Kortex::GameConfig
 	{
 		if (id == ColumnID::Value)
 		{
-			return m_Value.As<wxString>();
-		}
-		return Item::GetStringRepresentation(id);
-	}
-
-	wxAny SimpleItem::GetValue(const KxDataView2::Column& column) const
-	{
-		if (column.GetID<ColumnID>() == ColumnID::Value)
-		{
 			if (!m_CachedViewData)
 			{
 				auto FormatValue = [this](const ItemValue& value)
@@ -173,20 +168,29 @@ namespace Kortex::GameConfig
 					m_CachedViewData = FormatValue(m_Value);
 				}
 			}
+			return *m_CachedViewData;
+		}
+		return Item::GetStringRepresentation(id);
+	}
 
+	wxAny SimpleItem::GetValue(const KxDataView2::Column& column) const
+	{
+		if (column.GetID<ColumnID>() == ColumnID::Value)
+		{
+			wxString value = GetStringRepresentation(ColumnID::Value);
 			if (GetTypeID().IsBool())
 			{
 				using namespace KxDataView2;
 				if (!m_Value.IsNull())
 				{
-					return BitmapTextToggleValue(m_Value.As<bool>(), *m_CachedViewData, wxNullBitmap, ToggleType::CheckBox);
+					return BitmapTextToggleValue(m_Value.As<bool>(), value, wxNullBitmap, ToggleType::CheckBox);
 				}
 				else
 				{
-					return BitmapTextToggleValue(*m_CachedViewData, wxNullBitmap, ToggleState::Indeterminate, ToggleType::CheckBox);
+					return BitmapTextToggleValue(value, wxNullBitmap, ToggleState::Indeterminate, ToggleType::CheckBox);
 				}
 			}
-			return *m_CachedViewData;
+			return value;
 		}
 		return Item::GetValue(column);
 	}

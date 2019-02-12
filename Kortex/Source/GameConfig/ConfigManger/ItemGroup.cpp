@@ -2,6 +2,7 @@
 #include "ItemGroup.h"
 #include "Item.h"
 #include "Items/SimpleItem.h"
+#include "Items/StructItem.h"
 #include "Definition.h"
 #include "INISource.h"
 #include <KxFramework/KxXML.h>
@@ -12,20 +13,22 @@ namespace Kortex::GameConfig
 	{
 		for (KxXMLNode node = groupNode.GetFirstChildElement(wxS("Item")); node.IsOK(); node = node.GetNextSiblingElement(wxS("Item")))
 		{
-			ItemKindValue kind;
-			kind.FromString(node.GetAttribute(wxS("Kind")));
+			std::unique_ptr<Item> item;
 
-			std::unique_ptr<Item> item = nullptr;
-			switch (kind.GetValue())
+			TypeID type;
+			if (type.FromString(node.GetAttribute(wxS("Type"))))
 			{
-				case ItemKindID::Simple:
+				if (type.IsStruct())
+				{
+					item = NewItem<StructItem>(*this, node);
+				}
+				else if (type.IsScalarType())
 				{
 					item = NewItem<SimpleItem>(*this, node);
-					break;
 				}
-			};
+			}
 
-			if (item && item->Create(groupNode))
+			if (item && item->Create(node))
 			{
 				AddItem(std::move(item));
 			}
@@ -86,6 +89,16 @@ namespace Kortex::GameConfig
 			for (auto& [hash, item]: m_Items)
 			{
 				item->Read(*m_Source);
+
+				// Read struct sub-items if this is a struct
+				StructItem* structItem = nullptr;
+				if (item->QueryInterface(structItem))
+				{
+					structItem->ForEachSubItem([this](Item& subItem)
+					{
+						subItem.Read(*m_Source);
+					});
+				}
 			}
 			m_Source->Close();
 		}

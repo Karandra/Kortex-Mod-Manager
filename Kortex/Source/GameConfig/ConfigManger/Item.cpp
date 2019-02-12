@@ -50,7 +50,6 @@ namespace Kortex::GameConfig
 			m_Name = itemNode.GetAttribute(wxS("Name"));
 			m_Label = GetManager().TranslateItemLabel(itemNode, m_Name, wxS("ValueName"));
 			m_TypeID.FromString(itemNode.GetAttribute(wxS("Type")));
-			m_Kind.FromString(itemNode.GetAttribute(wxS("Kind")));
 
 			m_Options.Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());
 			m_Options.CopyIfNotSpecified(group.GetOptions(), GetDataType());
@@ -77,11 +76,15 @@ namespace Kortex::GameConfig
 		{
 			case ColumnID::Path:
 			{
-				return m_Path;
+				if (!m_DisplayPath)
+				{
+					m_DisplayPath = GetFullPath();
+				}
+				return *m_DisplayPath;
 			}
 			case ColumnID::Name:
 			{
-				return m_Name;
+				return m_Label;
 			}
 			case ColumnID::Type:
 			{
@@ -147,34 +150,19 @@ namespace Kortex::GameConfig
 
 	wxAny Item::GetValue(const KxDataView2::Column& column) const
 	{
-		switch (column.GetID<ColumnID>())
+		const ColumnID id = column.GetID<ColumnID>();
+		if (id == ColumnID::Path)
 		{
-			case ColumnID::Path:
+			if (m_HasChanges)
 			{
-				if (!m_DisplayPath)
-				{
-					m_DisplayPath = GetFullPath();
-				}
-
-				if (m_HasChanges)
-				{
-					return KxDataView2::BitmapTextValue(*m_DisplayPath, KGetBitmap(KIMG_PENCIL_SMALL));
-				}
-				else
-				{
-					return *m_DisplayPath;
-				}
+				return KxDataView2::BitmapTextValue(GetStringRepresentation(id), KGetBitmap(KIMG_PENCIL_SMALL));
 			}
-			case ColumnID::Name:
+			else
 			{
-				return m_Label;
+				return GetStringRepresentation(id);
 			}
-			case ColumnID::Type:
-			{
-				return m_TypeID.ToString();
-			}
-		};
-		return {};
+		}
+		return GetStringRepresentation(id);
 	}
 	bool Item::Compare(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{

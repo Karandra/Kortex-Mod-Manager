@@ -107,7 +107,11 @@ namespace Kortex::GameConfig
 			{
 				return !IsNone() && !IsAny();
 			}
-			
+			bool IsScalarType() const
+			{
+				return IsDefinitiveType() && !IsStruct();
+			}
+
 			bool IsSignedInteger() const;
 			bool IsUnsignedInteger() const;
 			bool IsAnyInt64() const;

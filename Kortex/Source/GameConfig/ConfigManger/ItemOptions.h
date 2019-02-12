@@ -7,6 +7,35 @@ class KxXMLNode;
 
 namespace Kortex::GameConfig
 {
+	enum class ItemOptionsCopy: uint32_t
+	{
+		None = 0,
+		InputFormat = 1 << 0,
+		OutputFormat = 1 << 1,
+		SourceFormat = 1 << 2,
+		TypeDetector = 1 << 3,
+		EditableBehavior = 1 << 4,
+		Precision = 1 << 5,
+
+		Everything = std::numeric_limits<uint32_t>::max()
+	};
+
+	constexpr inline ItemOptionsCopy operator~(ItemOptionsCopy v)
+	{
+		return static_cast<ItemOptionsCopy>(~(uint32_t)v);
+	}
+	constexpr inline ItemOptionsCopy operator|(ItemOptionsCopy v1, ItemOptionsCopy v2)
+	{
+		return static_cast<ItemOptionsCopy>((uint32_t)v1 | (uint32_t)v2);
+	}
+	constexpr inline uint32_t operator&(ItemOptionsCopy v1, ItemOptionsCopy v2)
+	{
+		return (uint32_t)v1 & (uint32_t)v2;
+	}
+}
+
+namespace Kortex::GameConfig
+{
 	class ItemOptions
 	{
 		private:
@@ -67,6 +96,6 @@ namespace Kortex::GameConfig
 			}
 
 			void Load(const KxXMLNode& node, const DataType& dataType = {});
-			void CopyIfNotSpecified(const ItemOptions& other, const DataType& dataType = {});
+			void CopyIfNotSpecified(const ItemOptions& other, const DataType& dataType = {}, ItemOptionsCopy copyWhat = ItemOptionsCopy::Everything);
 	};
 }

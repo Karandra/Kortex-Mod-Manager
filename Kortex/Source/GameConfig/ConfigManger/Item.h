@@ -48,7 +48,6 @@ namespace Kortex::GameConfig
 			wxString m_Label;
 			ItemSamples m_Samples;
 			TypeID m_TypeID;
-			ItemKindValue m_Kind;
 			ItemOptions m_Options;
 
 			bool m_HasChanges = false;
@@ -97,7 +96,7 @@ namespace Kortex::GameConfig
 				m_Category = category;
 			}
 			
-			wxString GetPath() const
+			virtual wxString GetPath() const
 			{
 				return m_Path;
 			}
@@ -141,18 +140,9 @@ namespace Kortex::GameConfig
 			{
 				return m_Options;
 			}
-			void SetOptions(const ItemOptions& options)
+			ItemOptions& GetOptions()
 			{
-				m_Options = options;
-			}
-
-			ItemKindValue GetKind() const
-			{
-				return m_Kind;
-			}
-			void SetKind(ItemKindValue value)
-			{
-				m_Kind = value;
+				return m_Options;
 			}
 
 			TypeID GetTypeID() const

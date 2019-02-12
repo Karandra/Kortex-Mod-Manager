@@ -1050,6 +1050,12 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\WorkspaceController.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Items\StructItem.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Items\StructSubItem.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1993,6 +1999,12 @@
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\WorkspaceController.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructItem.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructSubItem.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

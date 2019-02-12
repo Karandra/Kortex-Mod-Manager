@@ -29,7 +29,8 @@ namespace Kortex::GameConfig
 
 		private:
 			void LoadItems(const KxXMLNode& groupNode);
-			template<class TItems, class TFunctor> static void CallForEachItem(TItems&& items, TFunctor&& func)
+
+			template<class TItems, class TFunctor> static void DoForEachItem(TItems&& items, TFunctor&& func)
 			{
 				for (auto& [hash, item]: items)
 				{
@@ -71,11 +72,11 @@ namespace Kortex::GameConfig
 
 			template<class TFunctor> void ForEachItem(TFunctor&& func) const
 			{
-				CallForEachItem(m_Items, func);
+				DoForEachItem(m_Items, func);
 			}
 			template<class TFunctor> void ForEachItem(TFunctor&& func)
 			{
-				CallForEachItem(m_Items, func);
+				DoForEachItem(m_Items, func);
 			}
 
 			bool OnLoadInstance(const KxXMLNode& groupNode);

@@ -162,22 +162,6 @@ namespace Kortex::GameConfig
 
 namespace Kortex::GameConfig
 {
-	enum class ItemKindID: uint32_t
-	{
-		Simple = 0,
-	};
-	class ItemKindDef: public KxIndexedEnum::Definition<ItemKindDef, ItemKindID, wxString, true>
-	{
-		inline static const TItem ms_Index[] =
-		{
-			{ItemKindID::Simple, wxS("Simple")},
-		};
-	};
-	using ItemKindValue = KxIndexedEnum::Value<ItemKindDef, ItemKindID::Simple>;
-}
-
-namespace Kortex::GameConfig
-{
 	enum class SamplesSourceID: uint32_t
 	{
 		None = 0,
@@ -218,6 +202,24 @@ namespace Kortex::GameConfig
 		};
 	};
 	using EditableBehaviorValue = KxIndexedEnum::Value<EditableBehaviorDef, EditableBehaviorID::Auto>;
+}
+
+namespace Kortex::GameConfig
+{
+	enum class StructSerializationModeID: uint32_t
+	{
+		ElementWise = 0,
+		AsString
+	};
+	class StructSerializationModeDef: public KxIndexedEnum::Definition<StructSerializationModeDef, StructSerializationModeID, wxString, true>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{StructSerializationModeID::ElementWise, wxS("ElementWise")},
+			{StructSerializationModeID::AsString, wxS("AsString")},
+		};
+	};
+	using StructSerializationModeValue = KxIndexedEnum::Value<StructSerializationModeDef, StructSerializationModeID::ElementWise>;
 }
 
 namespace Kortex::GameConfig

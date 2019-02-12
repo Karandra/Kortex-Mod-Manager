@@ -4,23 +4,25 @@
 
 namespace
 {
-	template<class T> void CopyIfDefault(T& thisValue, const T& otherValue)
+	using IOC = Kortex::GameConfig::ItemOptionsCopy;
+
+	template<class T> void CopyIfDefault(T& thisValue, const T& otherValue, IOC copyWhat, IOC thisType)
 	{
-		if (thisValue.IsDefault())
+		if (copyWhat & thisType && thisValue.IsDefault())
 		{
 			thisValue = otherValue;
 		}
 	}
-	template<> void CopyIfDefault(wxString& thisValue, const wxString& otherValue)
+	template<> void CopyIfDefault(wxString& thisValue, const wxString& otherValue, IOC copyWhat, IOC thisType)
 	{
-		if (thisValue.IsEmpty())
+		if (copyWhat & thisType && thisValue.IsEmpty())
 		{
 			thisValue = otherValue;
 		}
 	}
-	template<> void CopyIfDefault(int& thisValue, const int& otherValue)
+	template<> void CopyIfDefault(int& thisValue, const int& otherValue, IOC copyWhat, IOC thisType)
 	{
-		if (thisValue < 0)
+		if (copyWhat & thisType && thisValue < 0)
 		{
 			thisValue = otherValue;
 		}
@@ -62,16 +64,16 @@ namespace Kortex::GameConfig
 			m_Precision = std::clamp(m_Precision, -1, maxDigits);
 		}
 	}
-	void ItemOptions::CopyIfNotSpecified(const ItemOptions& other, const DataType& dataType)
+	void ItemOptions::CopyIfNotSpecified(const ItemOptions& other, const DataType& dataType, ItemOptionsCopy copyWhat)
 	{
-		CopyIfDefault(m_InputFormat, other.m_InputFormat);
-		CopyIfDefault(m_OutputFormat, other.m_OutputFormat);
+		CopyIfDefault(m_InputFormat, other.m_InputFormat, copyWhat, ItemOptionsCopy::InputFormat);
+		CopyIfDefault(m_OutputFormat, other.m_OutputFormat, copyWhat, ItemOptionsCopy::OutputFormat);
 
-		CopyIfDefault(m_SourceFormat, other.m_SourceFormat);
-		CopyIfDefault(m_TypeDetector, other.m_TypeDetector);
-		CopyIfDefault(m_EditableBehavior, other.m_EditableBehavior);
+		CopyIfDefault(m_SourceFormat, other.m_SourceFormat, copyWhat, ItemOptionsCopy::SourceFormat);
+		CopyIfDefault(m_TypeDetector, other.m_TypeDetector, copyWhat, ItemOptionsCopy::TypeDetector);
+		CopyIfDefault(m_EditableBehavior, other.m_EditableBehavior, copyWhat, ItemOptionsCopy::EditableBehavior);
 
-		CopyIfDefault(m_Precision, other.m_Precision);
-		CopyIfDefault(m_Precision, dataType.GetPrecision());
+		CopyIfDefault(m_Precision, other.m_Precision, copyWhat, ItemOptionsCopy::Precision);
+		CopyIfDefault(m_Precision, dataType.GetPrecision(), copyWhat, ItemOptionsCopy::Precision);
 	}
 }

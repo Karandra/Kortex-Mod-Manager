@@ -199,8 +199,8 @@
 					<Value Label="Mid">2</Value>
 					<Value Label="High">1</Value>
 					<Value Label="Ultra">0</Value>
-					<Value Label="TexturesExtra">-1</Value>
-					<Value Label="TexturesExtra">-2</Value>
+					<Value Label="IncreasedDetail">-1</Value>
+					<Value Label="IncreasedDetail">-2</Value>
 				</Samples>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="struct">

@@ -41,7 +41,7 @@
 		<String ID="Category.ENB.ColorCorrection">Коррекция цвета</String>
 		<String ID="Category.ENB.Weather">Погода</String>
 
-		<String ID="SampleValue.TexturesExtra">Повышенная резкость</String>
+		<String ID="SampleValue.IncreasedDetail">Повышенная резкость</String>
 		
 		<String ID="SampleValue.Difficulty0">Новичок</String>
 		<String ID="SampleValue.Difficulty1">Ученик</String>

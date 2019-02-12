@@ -41,7 +41,7 @@
 		<String ID="Category.ENB.ColorCorrection">Color correction</String>
 		<String ID="Category.ENB.Weather">Weather</String>
 
-		<String ID="SampleValue.TexturesExtra">Increased detail</String>
+		<String ID="SampleValue.IncreasedDetail">Increased detail</String>
 		
 		<String ID="SampleValue.Difficulty0">Novice</String>
 		<String ID="SampleValue.Difficulty1">Apprentice</String>

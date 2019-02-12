@@ -85,8 +85,11 @@
 		<String ID="ValueName.iMaxAnisotropy">Анизотропная фильтрация</String>
 		<String ID="ValueName.iTexMipMapSkip">Качество текстур</String>
 		<String ID="ValueName.fGamma">Гамма-коррекция</String>
+		
 		<String ID="ValueName.ScreenResolution">Разрешение экрана</String>
-
+		<String ID="ValueName.iSize W">Ширина экрана</String>
+		<String ID="ValueName.iSize H">Высота экрана</String>
+		
 		<!-- Shadows -->
 		<String ID="ValueName.bTreesReceiveShadows">Тени на деревьях</String>
 		<String ID="ValueName.bDrawLandShadows">Тени от ландшафта</String>
@@ -110,7 +113,10 @@
 		<String ID="ValueName.bUseWaterDepth">Эффекты глубины</String>
 		<String ID="ValueName.bUseWaterDisplacements">Эффекты водоизмещения</String>
 		<String ID="ValueName.iWaterMultiSamples">Сглаживание</String>
+		
 		<String ID="ValueName.WaterReflectionResolution">Разрешение отражений</String>
+		<String ID="ValueName.iWaterReflectWidth">Ширина</String>
+		<String ID="ValueName.iWaterReflectHeight">Высота</String>
 
 		<!-- Audio -->
 		<String ID="ValueName.bEnableAudio">Включить звук</String>

@@ -85,7 +85,10 @@
 		<String ID="ValueName.iMaxAnisotropy">Anisotropic filtering</String>
 		<String ID="ValueName.iTexMipMapSkip">Texture quality</String>
 		<String ID="ValueName.fGamma">Gamma</String>
+		
 		<String ID="ValueName.ScreenResolution">Screen resolution</String>
+		<String ID="ValueName.iSize W">Screen width</String>
+		<String ID="ValueName.iSize H">Screen height</String>
 
 		<!-- Shadows -->
 		<String ID="ValueName.bTreesReceiveShadows">Shadows on trees</String>
@@ -110,7 +113,10 @@
 		<String ID="ValueName.bUseWaterDepth">Water depth</String>
 		<String ID="ValueName.bUseWaterDisplacements">Water displacements</String>
 		<String ID="ValueName.iWaterMultiSamples">Water antialiasing</String>
+		
 		<String ID="ValueName.WaterReflectionResolution">Water reflections resolution</String>
+		<String ID="ValueName.iWaterReflectWidth">Width</String>
+		<String ID="ValueName.iWaterReflectHeight">Height</String>
 
 		<!-- Audio -->
 		<String ID="ValueName.bEnableAudio">Enable audio</String>

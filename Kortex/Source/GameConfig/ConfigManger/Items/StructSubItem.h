@@ -29,5 +29,8 @@ namespace Kortex::GameConfig
 			{
 				return m_Struct;
 			}
+
+		public:
+			bool SetValue(const wxAny& value, KxDataView2::Column& column) override;
 	};
 }

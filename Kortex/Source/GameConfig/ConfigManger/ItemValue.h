@@ -37,13 +37,27 @@ namespace Kortex::GameConfig
 				:m_Type(type)
 			{
 			}
+			
 			template<class T> ItemValue(T&& value)
 			{
 				Assign(std::forward<T>(value));
 			}
+			template<> ItemValue(const wxAny& value)
+			{
+				Assign(value);
+			}
 			template<> ItemValue(wxAny&& value)
 			{
 				Assign(std::move(value));
+			}
+
+			ItemValue(ItemValue&& other)
+			{
+				*this = std::move(other);
+			}
+			ItemValue(const ItemValue& other)
+			{
+				*this = other;
 			}
 
 		public:
@@ -102,6 +116,12 @@ namespace Kortex::GameConfig
 				m_Type = TypeID::GetByCType<std::decay_t<T>>();
 				return !IsNull();
 			}
+			template<> bool Assign(const wxAny& value)
+			{
+				m_Value = value;
+				m_Type = DataTypeID::Any;
+				return !IsNull();
+			}
 			template<> bool Assign(wxAny&& value)
 			{
 				m_Value = std::move(value);
@@ -109,6 +129,24 @@ namespace Kortex::GameConfig
 
 				value.MakeNull();
 				return !IsNull();
+			}
+			
+		public:
+			ItemValue& operator=(ItemValue&& other)
+			{
+				Assign(std::move(other.m_Value));
+
+				m_Type = other.m_Type;
+				other.m_Type = DataTypeID::None;
+
+				return *this;
+			}
+			ItemValue& operator=(const ItemValue& other)
+			{
+				Assign(other.m_Value);
+				m_Type = other.m_Type;
+
+				return *this;
 			}
 	};
 }

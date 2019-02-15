@@ -187,7 +187,8 @@ namespace Kortex::GameConfig
 	enum class EditableBehaviorID: uint32_t
 	{
 		Auto = 0,
-		ReadOnly,
+		Inert,
+		Selectable,
 		Editable,
 		EditableIfNoSamples
 	};
@@ -196,30 +197,13 @@ namespace Kortex::GameConfig
 		inline static const TItem ms_Index[] =
 		{
 			{EditableBehaviorID::Auto, wxS("Auto")},
+			{EditableBehaviorID::Inert, wxS("Inert")},
+			{EditableBehaviorID::Selectable, wxS("Selectable")},
 			{EditableBehaviorID::Editable, wxS("Editable")},
-			{EditableBehaviorID::ReadOnly, wxS("ReadOnly")},
 			{EditableBehaviorID::EditableIfNoSamples, wxS("EditableIfNoSamples")},
 		};
 	};
 	using EditableBehaviorValue = KxIndexedEnum::Value<EditableBehaviorDef, EditableBehaviorID::Auto>;
-}
-
-namespace Kortex::GameConfig
-{
-	enum class StructSerializationModeID: uint32_t
-	{
-		ElementWise = 0,
-		AsString
-	};
-	class StructSerializationModeDef: public KxIndexedEnum::Definition<StructSerializationModeDef, StructSerializationModeID, wxString, true>
-	{
-		inline static const TItem ms_Index[] =
-		{
-			{StructSerializationModeID::ElementWise, wxS("ElementWise")},
-			{StructSerializationModeID::AsString, wxS("AsString")},
-		};
-	};
-	using StructSerializationModeValue = KxIndexedEnum::Value<StructSerializationModeDef, StructSerializationModeID::ElementWise>;
 }
 
 namespace Kortex::GameConfig

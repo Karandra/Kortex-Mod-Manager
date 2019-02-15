@@ -7,6 +7,11 @@ namespace Kortex::GameConfig
 {
 	bool StructItem::Create(const KxXMLNode& itemNode)
 	{
+		// Load struct options
+		const KxXMLNode structOptions = itemNode.GetFirstChildElement(wxS("Options"));
+		m_SerializationMode.FromString(structOptions.GetFirstChildElement(wxS("SerializationMode")).GetAttribute(wxS("Value")));
+		m_StructKindValue.FromString(structOptions.GetFirstChildElement(wxS("StructKind")).GetAttribute(wxS("Value")));
+
 		const KxXMLNode subItemsNode = itemNode.GetFirstChildElement(wxS("SubItems"));
 		m_SubItems.reserve(subItemsNode.GetChildrenCount());
 
@@ -91,8 +96,69 @@ namespace Kortex::GameConfig
 		}
 		return formatter;
 	}
-	std::unique_ptr<KxDataView2::Editor> StructItem::CreateEditor() const
+	std::unique_ptr<KxDataView2::ComboBoxEditor> StructItem::CreateEditor() const
 	{
+		if (!m_StructKindValue.IsDefault())
+		{
+			auto editor = std::make_unique<KxDataView2::ComboBoxEditor>();
+			editor->SetMaxVisibleItems(32);
+
+			const bool isEditable = IsEditable();
+			editor->SetEditable(isEditable);
+			editor->AutoPopup(!isEditable);
+
+			// Add samples
+			auto AddSample = [&editor](const SampleValue& sample, const wxString& value)
+			{
+				if (sample.HasLabel())
+				{
+					editor->AddItem(KxString::Format(wxS("%1 - %2"), value, sample.GetLabel()));
+				}
+				else
+				{
+					editor->AddItem(value);
+				}
+			};
+
+			editor->ClearItems();
+			switch (m_StructKindValue.GetValue())
+			{
+				case StructKindID::SideBySide:
+				{
+					size_t min = std::numeric_limits<size_t>::max();
+					for (const StructSubItem& subItem: m_SubItems)
+					{
+						min = std::min(min, subItem.GetSamples().GetCount());
+					}
+
+					if (min != 0 && min != std::numeric_limits<size_t>::max())
+					{
+						for (size_t i = 0; i < min; ++i)
+						{
+							KxFormat formatter(GetOptions().GetOutputFormat());
+							for (const StructSubItem& subItem: m_SubItems)
+							{
+								formatter(subItem.GetSamples().GetSampleByIndex(i)->GetValue().Serialize(subItem, SerializeFor::Display));
+							}
+							editor->AddItem(formatter);
+						}	
+					}
+					break;
+				}
+				case StructKindID::Geometry2D:
+				{
+					GetSamples().ForEachSample([this, &editor, &AddSample](const SampleValue& sample)
+					{
+						const ItemValue& sampleValue = sample.GetValue();
+
+						auto[x, y] = sampleValue.As<std::tuple<int64_t, int64_t>>();
+						AddSample(sample, KxString::Format(GetOptions().GetOutputFormat(), x, y));
+					});
+					break;
+				}
+			};
+			return editor;
+		}
 		return nullptr;
 	}
 
@@ -184,13 +250,42 @@ namespace Kortex::GameConfig
 	{
 		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
+			return 0;
 		}
 		return {};
 	}
 	bool StructItem::SetValue(const wxAny& value, KxDataView2::Column& column)
 	{
-		if (column.GetID<ColumnID>() == ColumnID::Value)
+		if (column.GetID<ColumnID>() == ColumnID::Value && value.CheckType<int>())
 		{
+			const size_t selectedIndex = value.As<int>();
+
+			switch (m_StructKindValue.GetValue())
+			{
+				case StructKindID::SideBySide:
+				{
+					const wxString oldValue = FormatToOutput(SerializeFor::Storage);
+					for (StructSubItem& subItem: m_SubItems)
+					{
+						const SampleValue* sampleValue = subItem.GetSamples().GetSampleByIndex(selectedIndex);
+						if (sampleValue)
+						{
+							subItem.GetValue().Deserialize(sampleValue->GetValue().Serialize(subItem), subItem);
+						}
+					}
+
+					if (FormatToOutput(SerializeFor::Storage) != oldValue)
+					{
+						ChangeNotify();
+						return true;
+					}
+					return false;
+				}
+				case StructKindID::Geometry2D:
+				{
+					return false;
+				}
+			};
 		}
 		return false;
 	}

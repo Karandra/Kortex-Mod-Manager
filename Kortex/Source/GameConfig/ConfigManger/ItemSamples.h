@@ -45,17 +45,26 @@ namespace Kortex::GameConfig
 {
 	class SampleValue
 	{
+		public:
+			using Vector = std::vector<SampleValue>;
+
 		private:
 			ItemValue m_Value;
 			wxString m_Label;
 
 		public:
-			SampleValue(const wxString& label = {})
-				:m_Label(label)
+			SampleValue() = default;
+			SampleValue(SampleValue&& other)
 			{
+				*this = std::move(other);
 			}
-			template<class T> SampleValue(const wxString& label, T&& value)
-				:m_Label(label), m_Value(std::forward<T>(value))
+			SampleValue(const SampleValue& other)
+			{
+				*this = other;
+			}
+
+			template<class T> SampleValue(const T& value)
+				:m_Value(value)
 			{
 			}
 
@@ -81,22 +90,32 @@ namespace Kortex::GameConfig
 			{
 				m_Label = label;
 			}
+	
+		public:
+			SampleValue& operator=(SampleValue&& other)
+			{
+				m_Value = std::move(other.m_Value);
+				m_Label = std::move(other.m_Label);
+
+				return *this;
+			}
+			SampleValue& operator=(const SampleValue& other)
+			{
+				m_Value = other.m_Value;
+				m_Label = other.m_Label;
+
+				return *this;
+			}
 	};
 }
 
 namespace Kortex::GameConfig
 {
+	class ISamplingFunction;
+
 	class ItemSamples
 	{
-		private:
-			struct VirtualKeyInfo
-			{
-				using Map = std::unordered_map<uint64_t, VirtualKeyInfo>;
-
-				wxString ID;
-				wxString Name;
-				uint64_t Code = 0;
-			};
+		friend class ISamplingFunction;
 
 		private:
 			Item& m_Item;
@@ -105,7 +124,7 @@ namespace Kortex::GameConfig
 			SortOptionsValue m_SortOptions;
 			SamplingFunctionValue m_SampligFunction;
 
-			std::vector<SampleValue> m_Values;
+			SampleValue::Vector m_Values;
 			wxAny m_MinValue;
 			wxAny m_MaxValue;
 			wxAny m_Step;
@@ -114,7 +133,6 @@ namespace Kortex::GameConfig
 			size_t LoadImmediateItems(const KxXMLNode& rootNode);
 			void SortImmediateItems();
 			void GenerateItems(const ItemValue::Vector& arguments);
-			const VirtualKeyInfo::Map& LoadVirtualKeys();
 			template<class T> SortOrderValue LoadRange(T min, T max, T step)
 			{
 				if constexpr(std::is_signed_v<T>)
@@ -134,6 +152,10 @@ namespace Kortex::GameConfig
 				return step >= 0 ? SortOrderID::Ascending : SortOrderID::Descending;
 			}
 
+			SampleValue::Vector& GetSampleValues()
+			{
+				return m_Values;
+			}
 			template<class TItems, class TFunctor> static void DoForEachItem(TItems&& items, TFunctor&& func)
 			{
 				for (auto&& item: items)
@@ -151,6 +173,10 @@ namespace Kortex::GameConfig
 			bool IsEmpty() const
 			{
 				return m_Values.empty();
+			}
+			size_t GetCount() const
+			{
+				return m_Values.size();
 			}
 			Item& GetItem() const
 			{

@@ -3,16 +3,62 @@
 #include "GameConfig/ConfigManger/Item.h"
 #include "StructSubItem.h"
 
+namespace KxDataView2
+{
+	class KX_API ComboBoxEditor;
+}
+
+namespace Kortex::GameConfig
+{
+	enum class StructKindID
+	{
+		None = 0,
+		SideBySide,
+		Geometry2D,
+	};
+	class StructKindDef: public KxIndexedEnum::Definition<StructKindDef, StructKindID, wxString, true>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{StructKindID::None, wxS("None")},
+			{StructKindID::SideBySide, wxS("SideBySide")},
+			{StructKindID::Geometry2D, wxS("Geometry2D")},
+		};
+	};
+	using StructKindValue = KxIndexedEnum::Value<StructKindDef, StructKindID::None>;
+}
+
+namespace Kortex::GameConfig
+{
+	enum class StructSerializationModeID: uint32_t
+	{
+		ElementWise = 0,
+		AsString
+	};
+	class StructSerializationModeDef: public KxIndexedEnum::Definition<StructSerializationModeDef, StructSerializationModeID, wxString, true>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{StructSerializationModeID::ElementWise, wxS("ElementWise")},
+			{StructSerializationModeID::AsString, wxS("AsString")},
+		};
+	};
+	using StructSerializationModeValue = KxIndexedEnum::Value<StructSerializationModeDef, StructSerializationModeID::ElementWise>;
+}
+
 namespace Kortex::GameConfig
 {
 	class StructItem: public RTTI::IExtendInterface<StructItem, Item>
 	{
+		friend class StructSubItem;
+
 		private:
 			HashStore m_HashStore;
 			std::vector<StructSubItem> m_SubItems;
 			StructSerializationModeValue m_SerializationMode;
+			StructKindValue m_StructKindValue;
 
-			mutable std::unique_ptr<KxDataView2::Editor> m_Editor;
+			mutable std::unique_ptr<KxDataView2::ComboBoxEditor> m_Editor;
 			mutable std::optional<wxString> m_CachedViewType;
 			mutable std::optional<wxString> m_CachedViewValue;
 
@@ -26,7 +72,7 @@ namespace Kortex::GameConfig
 
 		private:
 			wxString FormatToOutput(SerializeFor mode) const;
-			std::unique_ptr<KxDataView2::Editor> CreateEditor() const;
+			std::unique_ptr<KxDataView2::ComboBoxEditor> CreateEditor() const;
 			bool IsComboBoxEditor() const
 			{
 				return HasSamples();
@@ -57,11 +103,16 @@ namespace Kortex::GameConfig
 			{
 				return false;
 			}
+			
 			StructSerializationModeValue GetSerializationMode() const
 			{
 				return m_SerializationMode;
 			}
-			
+			StructKindValue GetStructKind() const
+			{
+				return m_StructKindValue;
+			}
+
 			template<class TFunctor> void ForEachSubItem(TFunctor&& func) const
 			{
 				DoForEachItem(m_SubItems, func);

@@ -125,8 +125,8 @@ namespace Kortex::GameConfig
 		return nullptr;
 	}
 
-	SimpleItem::SimpleItem(ItemGroup& group, const KxXMLNode& itemNode, bool allowLoadSamples)
-		:IExtendInterface(group, itemNode, allowLoadSamples)
+	SimpleItem::SimpleItem(ItemGroup& group, const KxXMLNode& itemNode)
+		:IExtendInterface(group, itemNode)
 	{
 	}
 	SimpleItem::SimpleItem(ItemGroup& group, bool isUnknown)
@@ -273,7 +273,7 @@ namespace Kortex::GameConfig
 
 	KxDataView2::Editor* SimpleItem::GetEditor(const KxDataView2::Column& column) const
 	{
-		if (column.GetID<ColumnID>() == ColumnID::Value)
+		if (column.GetID<ColumnID>() == ColumnID::Value && GetOptions().GetEditableBehavior() != EditableBehaviorID::Inert)
 		{
 			if (!m_Editor)
 			{

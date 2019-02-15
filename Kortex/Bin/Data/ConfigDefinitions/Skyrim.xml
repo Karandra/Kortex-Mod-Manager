@@ -205,19 +205,41 @@
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="ScreenResolution" Type="struct">
 				<Options>
-					<EditableBehavior Value="ReadOnly"/>
+					<EditableBehavior Value="Selectable"/>
 					<SerializationMode Value="ElementWise"/>
+					<StructKind Value="Geometry2D"/>
 					<Output>
 						<Format><![CDATA[%1×%2]]></Format>
 					</Output>
 				</Options>
-				<SubItems>
-					<Item Name="iSize W" Type="int32"/>
-					<Item Name="iSize H" Type="int32"/>
-				</SubItems>
 				<Samples Source="Function">
-					<Function Name="GetVideoModes"/>
+					<Function Name="GetVideoModes">
+						<Arg Type="string">Component::Width|Component::Height</Arg>
+					</Function>
 				</Samples>
+				
+				<SubItems>
+					<Item Name="iSize W" Type="int32">
+						<Options>
+							<EditableBehavior Value="Editable"/>
+						</Options>
+						<Samples Source="Function">
+							<Function Name="GetVideoModes">
+								<Arg Type="string">Component::Width</Arg>
+							</Function>
+						</Samples>
+					</Item>
+					<Item Name="iSize H" Type="int32">
+						<Options>
+							<EditableBehavior Value="Editable"/>
+						</Options>
+						<Samples Source="Function">
+							<Function Name="GetVideoModes">
+								<Arg Type="string">Component::Height</Arg>
+							</Function>
+						</Samples>
+					</Item>
+				</SubItems>
 			</Item>
 
 			<!-- Shadows -->
@@ -257,23 +279,40 @@
 			<!-- Water -->
 			<Item Category="Game/Water" Path="Water" Name="WaterReflectionResolution" Type="struct">
 				<Options>
-					<EditableBehavior Value="ReadOnly"/>
+					<EditableBehavior Value="Selectable"/>
 					<SerializationMode Value="ElementWise"/>
+					<StructKind Value="SideBySide"/>
 					<Output>
 						<Format><![CDATA[%1×%2]]></Format>
 					</Output>
 				</Options>
+
 				<SubItems>
-					<Item Name="iWaterReflectWidth" Type="int32"/>
-					<Item Name="iWaterReflectHeight" Type="int32"/>
+					<Item Name="iWaterReflectWidth" Type="int32">
+						<Options>
+							<EditableBehavior Value="Inert"/>
+						</Options>
+						<Samples Source="ImmediateItems">
+							<Value>512</Value>
+							<Value>1024</Value>
+							<Value>2048</Value>
+							<Value>4096</Value>
+							<Value>8192</Value>
+						</Samples>
+					</Item>
+					<Item Name="iWaterReflectHeight" Type="int32">
+						<Options>
+							<EditableBehavior Value="Inert"/>
+						</Options>
+						<Samples Source="ImmediateItems">
+							<Value>512</Value>
+							<Value>1024</Value>
+							<Value>2048</Value>
+							<Value>4096</Value>
+							<Value>8192</Value>
+						</Samples>
+					</Item>
 				</SubItems>
-				<Samples Source="ImmediateItems">
-					<Value>512×512</Value>
-					<Value>1024×1024</Value>
-					<Value>2048×2048</Value>
-					<Value>4096×4096</Value>
-					<Value>8192×8192</Value>
-				</Samples>
 			</Item>
 			<Item Category="Game/Water" Path="Display" Name="iWaterMultiSamples" Type="int32">
 				<Samples Source="ImmediateItems">

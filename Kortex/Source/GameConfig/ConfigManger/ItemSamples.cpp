@@ -2,13 +2,13 @@
 #include "ItemSamples.h"
 #include "Item.h"
 #include "Items/SimpleItem.h"
+#include "SamplingFunctions/GetVideoAdapters.h"
+#include "SamplingFunctions/GetVideoModes.h"
+#include "SamplingFunctions/GetVirtualKeys.h"
+#include "SamplingFunctions/FindFiles.h"
 #include "GameConfig/IConfigManager.h"
 #include <Kortex/Application.hpp>
-#include <KxFramework/KxXML.h>
 #include <KxFramework/KxSystem.h>
-#include <KxFramework/KxSystemSettings.h>
-#include <KxFramework/KxFileStream.h>
-#include <KxFramework/KxFileFinder.h>
 
 namespace
 {
@@ -69,7 +69,8 @@ namespace Kortex::GameConfig
 
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			SampleValue& sample = m_Values.emplace_back(m_Item.GetManager().TranslateItemLabel(node, {}, wxS("SampleValue")));
+			SampleValue& sample = m_Values.emplace_back();
+			sample.SetLabel(m_Item.GetManager().TranslateItemLabel(node, {}, wxS("SampleValue")));
 			sample.GetValue().Deserialize(node.GetValue(), m_Item);
 
 			counter++;
@@ -105,91 +106,25 @@ namespace Kortex::GameConfig
 		{
 			case SamplingFunctionID::GetVideoAdapters:
 			{
-				for (const auto& adapter: KxSystemSettings::EnumVideoAdapters())
-				{
-					// DeviceString field is wchar_t[] array so wrap it into wxString,
-					// otherwise wxAny will store pointer to the array and not copy its content as wxString.
-					m_Values.emplace_back(wxEmptyString, wxString(adapter.DeviceString));
-				}
+				SamplingFunction::GetVideoAdapters(m_Values).Invoke(arguments);
 				break;
 			}
 			case SamplingFunctionID::GetVideoModes:
 			{
-				std::unordered_set<wxString> hashMap;
-				for (const auto& videoMode: KxSystemSettings::EnumVideoModes(wxEmptyString))
-				{
-					wxString hashValue = KxString::Format(wxS("%1×%2"), videoMode.Width, videoMode.Height);
-					if (hashMap.emplace(hashValue).second)
-					{
-						m_Values.emplace_back(hashValue);
-					}
-				}
+				SamplingFunction::GetVideoModes(m_Values).Invoke(arguments);
 				break;
 			}
 			case SamplingFunctionID::GetVirtualKeys:
 			{
-				for (const auto&[keyCode, info]: LoadVirtualKeys())
-				{
-					m_Values.emplace_back(info.Name, keyCode);
-				}
+				SamplingFunction::GetVirtualKeys(m_Values, m_Item.GetManager()).Invoke(arguments);
 				break;
 			}
 			case SamplingFunctionID::FindFiles:
 			{
-				if (arguments.size() > 1)
-				{
-					KxFileFinder finder(arguments[0].As<wxString>());
-					for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
-					{
-						if (item.IsFile() && item.IsNormalItem())
-						{
-							m_Values.emplace_back(item.GetName());
-						}
-					}
-				}
+				SamplingFunction::FindFiles(m_Values).Invoke(arguments);
 				break;
 			}
 		};
-	}
-	const ItemSamples::VirtualKeyInfo::Map& ItemSamples::LoadVirtualKeys()
-	{
-		static VirtualKeyInfo::Map virtualKeys;
-
-		if (virtualKeys.empty())
-		{
-			KxFileStream xmlStream(IApplication::GetInstance()->GetDataFolder() + wxS("VirtualKeys.xml"), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
-			KxXMLDocument xml(xmlStream);
-
-			const ITranslator& translator = m_Item.GetManager().GetTranslator();
-			KxXMLNode node = xml.QueryElement("VirtualKeys");
-			for (node = node.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
-			{
-				unsigned long keyCode = WXK_NONE;
-				wxString value = node.GetValue();
-				if (value.Mid(2).ToCULong(&keyCode, 16) || value.ToCULong(&keyCode, 16))
-				{
-					wxString vkid = node.GetAttribute("VKID");
-					wxString name = node.GetAttribute("Name");
-					if (name.IsEmpty())
-					{
-						name = KxString::Format("%1", keyCode);
-					}
-					auto label = translator.TryGetString(wxS("ConfigManager.VirtualKey.") + vkid);
-					if (label)
-					{
-						name = *label;
-					}
-
-					virtualKeys.insert_or_assign(keyCode, VirtualKeyInfo {vkid, name, keyCode});
-				}
-			}
-
-			if (!virtualKeys.count(WXK_NONE))
-			{
-				virtualKeys.insert_or_assign(WXK_NONE, VirtualKeyInfo {"VK_NONE", translator.GetString("ConfigManager.VirtualKey.VK_NONE"), WXK_NONE});
-			}
-		}
-		return virtualKeys;
 	}
 
 	ItemSamples::ItemSamples(Item& item, const KxXMLNode& samplesNode)
@@ -269,7 +204,7 @@ namespace Kortex::GameConfig
 								item.SetTypeID(type);
 								item.GetValue().Deserialize(argNode.GetValue(), item);
 
-								arguments.emplace_back(type);
+								arguments.emplace_back(std::move(item.GetValue()));
 							}
 						}
 						GenerateItems(arguments);

@@ -40,7 +40,7 @@ namespace Kortex::GameConfig
 		GetManager().OnItemChanged(*this);
 	}
 
-	Item::Item(ItemGroup& group, const KxXMLNode& itemNode, bool allowLoadSamples)
+	Item::Item(ItemGroup& group, const KxXMLNode& itemNode)
 		:m_Group(group), m_Samples(*this)
 	{
 		if (itemNode.IsOK())
@@ -54,10 +54,7 @@ namespace Kortex::GameConfig
 			m_Options.Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());
 			m_Options.CopyIfNotSpecified(group.GetOptions(), GetDataType());
 
-			if (allowLoadSamples)
-			{
-				m_Samples.Load(itemNode.GetFirstChildElement(wxS("Samples")));
-			}
+			m_Samples.Load(itemNode.GetFirstChildElement(wxS("Samples")));
 		}
 	}
 	Item::~Item()
@@ -135,7 +132,8 @@ namespace Kortex::GameConfig
 			{
 				return true;
 			}
-			case EditableBehaviorID::ReadOnly:
+			case EditableBehaviorID::Selectable:
+			case EditableBehaviorID::Inert:
 			{
 				return false;
 			}

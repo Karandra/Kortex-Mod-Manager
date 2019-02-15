@@ -340,6 +340,12 @@
     <Filter Include="Code\Source\GameConfig\ConfigManger\Items">
       <UniqueIdentifier>{e3fd558d-96e0-47aa-a71b-5b3ba6623c97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\GameConfig\ConfigManger\SamplingFunctions">
+      <UniqueIdentifier>{a171eb37-ac0c-4c1e-aadc-fac09fa4f4ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\GameConfig\ConfigManger\SamplingFunctions">
+      <UniqueIdentifier>{a221830e-d859-44a1-96f1-8a0c011282d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1055,6 +1061,21 @@
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\StructSubItem.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\ISamplingFunction.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoModes.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\FindFiles.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoAdapters.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2005,6 +2026,24 @@
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructSubItem.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ISamplingFunction.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\Generic.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoModes.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\FindFiles.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoAdapters.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

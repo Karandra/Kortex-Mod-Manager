@@ -5,7 +5,7 @@
 namespace Kortex::GameConfig
 {
 	StructSubItem::StructSubItem(StructItem& structItem, const KxXMLNode& itemNode)
-		:IExtendInterface(structItem.GetGroup(), itemNode, false), m_Struct(structItem)
+		:IExtendInterface(structItem.GetGroup(), itemNode), m_Struct(structItem)
 	{
 		GetOptions().Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());
 
@@ -28,5 +28,15 @@ namespace Kortex::GameConfig
 	wxString StructSubItem::GetPath() const
 	{
 		return m_Struct.GetPath();
+	}
+
+	bool StructSubItem::SetValue(const wxAny& value, KxDataView2::Column& column)
+	{
+		if (SimpleItem::SetValue(value, column))
+		{
+			m_Struct.ChangeNotify();
+			return true;
+		}
+		return false;
 	}
 }

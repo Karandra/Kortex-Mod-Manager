@@ -63,7 +63,7 @@ namespace Kortex::GameConfig
 			virtual void ChangeNotify();
 
 		public:
-			Item(ItemGroup& group, const KxXMLNode& itemNode = {}, bool allowLoadSamples = true);
+			Item(ItemGroup& group, const KxXMLNode& itemNode = {});
 			virtual ~Item();
 
 		public:

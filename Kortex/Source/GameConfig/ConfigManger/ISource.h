@@ -7,9 +7,15 @@ namespace Kortex::GameConfig
 	class Item;
 	class ItemValue;
 	class ItemGroup;
+}
 
+namespace Kortex::GameConfig
+{
 	class ISource
 	{
+		protected:
+			wxString DispatchFSLocation(const wxString& path) const;
+		
 		public:
 			virtual ~ISource() = default;
 

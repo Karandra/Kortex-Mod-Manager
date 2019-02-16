@@ -4,6 +4,7 @@
 		<Translator>Kerber</Translator>
 	</Info>
 	<StringTable>
+		<!-- Categories -->
 		<String ID="Category.Game">Игра</String>
 		<String ID="Category.Graphics">Графика</String>
 		<String ID="Category.Shadows">Тени</String>
@@ -25,22 +26,23 @@
 		<String ID="Category.Messages">Сообщения</String>
 		
 		<String ID="Category.ENB">ENB</String>
-		<String ID="Category.ENB.General">Общие параметры</String>
-		<String ID="Category.ENB.Effects">Эффекты</String>
-		<String ID="Category.ENB.Bloom">Свечение (Bloom)</String>
-		<String ID="Category.ENB.AmbientOcclusion">Ambient Occlusion</String>
-		<String ID="Category.ENB.ProxyLibrary">Прокси-библиотека</String>
-		<String ID="Category.ENB.FPSLimit">Ограничение FPS</String>
-		<String ID="Category.ENB.Controls">Настройка управления</String>
-		<String ID="Category.ENB.Antialiasing">Сглаживание</String>
-		<String ID="Category.ENB.Fixes">Исправления</String>
-		<String ID="Category.ENB.Performance">Производительность</String>
-		<String ID="Category.ENB.Memory">Память</String>
-		<String ID="Category.ENB.AdaptiveQuality">Адаптивное качество</String>
-		<String ID="Category.ENB.Multihead">Настройки для нескольких GPU</String>
-		<String ID="Category.ENB.ColorCorrection">Коррекция цвета</String>
-		<String ID="Category.ENB.Weather">Погода</String>
-
+		<String ID="Category.General">Общие параметры</String>
+		<String ID="Category.Effects">Эффекты</String>
+		<String ID="Category.Bloom">Свечение (Bloom)</String>
+		<String ID="Category.AmbientOcclusion">Ambient Occlusion</String>
+		<String ID="Category.ProxyLibrary">Прокси-библиотека</String>
+		<String ID="Category.FPSLimit">Ограничение FPS</String>
+		<String ID="Category.Controls">Настройка управления</String>
+		<String ID="Category.Antialiasing">Сглаживание</String>
+		<String ID="Category.Fixes">Исправления</String>
+		<String ID="Category.Performance">Производительность</String>
+		<String ID="Category.Memory">Память</String>
+		<String ID="Category.AdaptiveQuality">Адаптивное качество</String>
+		<String ID="Category.Multihead">Настройки для нескольких GPU</String>
+		<String ID="Category.ColorCorrection">Коррекция цвета</String>
+		<String ID="Category.Weather">Погода</String>
+		
+		<!-- Sample values -->
 		<String ID="SampleValue.IncreasedDetail">Повышенная резкость</String>
 		
 		<String ID="SampleValue.Difficulty0">Новичок</String>
@@ -317,7 +319,7 @@
 		<String ID="ValueName.FixSkyReflection">Исправлять отражения неба</String>
 		<String ID="ValueName.FixCursorVisibility">Исправлять отображение курсора мыши</String>
 		<String ID="ValueName.FixLag">Исправлять зависания</String>
-		<String ID="ValueName.IgnoreCreationKit">Игнорировать $(EditorName)</String>
+		<String ID="ValueName.IgnoreCreationKit">Игнорировать $(GameEditorName)</String>
 
 		<!-- ENB: Antialiasing -->
 		<String ID="ValueName.EnableEdgeAA">Сглаживание рёбер</String>

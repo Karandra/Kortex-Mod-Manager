@@ -4,6 +4,7 @@
 		<Translator>Monday, Kerber</Translator>
 	</Info>
 	<StringTable>
+		<!-- Categories -->
 		<String ID="Category.Game">Game</String>
 		<String ID="Category.Graphics">Graphics</String>
 		<String ID="Category.Shadows">Shadows</String>
@@ -25,22 +26,23 @@
 		<String ID="Category.Messages">Messages</String>
 		
 		<String ID="Category.ENB">ENB</String>
-		<String ID="Category.ENB.General">General</String>
-		<String ID="Category.ENB.Effects">Effects</String>
-		<String ID="Category.ENB.Bloom">Bloom</String>
-		<String ID="Category.ENB.AmbientOcclusion">Ambient Occlusion</String>
-		<String ID="Category.ENB.ProxyLibrary">Proxy library</String>
-		<String ID="Category.ENB.FPSLimit">FPS limit</String>
-		<String ID="Category.ENB.Controls">Controls</String>
-		<String ID="Category.ENB.Antialiasing">Antialiasing</String>
-		<String ID="Category.ENB.Fixes">Fixes</String>
-		<String ID="Category.ENB.Performance">Performance</String>
-		<String ID="Category.ENB.Memory">Memory</String>
-		<String ID="Category.ENB.AdaptiveQuality">Adaptive quality</String>
-		<String ID="Category.ENB.Multihead">Multihead</String>
-		<String ID="Category.ENB.ColorCorrection">Color correction</String>
-		<String ID="Category.ENB.Weather">Weather</String>
+		<String ID="Category.General">General</String>
+		<String ID="Category.Effects">Effects</String>
+		<String ID="Category.Bloom">Bloom</String>
+		<String ID="Category.AmbientOcclusion">Ambient Occlusion</String>
+		<String ID="Category.ProxyLibrary">Proxy library</String>
+		<String ID="Category.FPSLimit">FPS limit</String>
+		<String ID="Category.Controls">Controls</String>
+		<String ID="Category.Antialiasing">Antialiasing</String>
+		<String ID="Category.Fixes">Fixes</String>
+		<String ID="Category.Performance">Performance</String>
+		<String ID="Category.Memory">Memory</String>
+		<String ID="Category.AdaptiveQuality">Adaptive quality</String>
+		<String ID="Category.Multihead">Multihead</String>
+		<String ID="Category.ColorCorrection">Color correction</String>
+		<String ID="Category.Weather">Weather</String>
 
+		<!-- Sample values -->
 		<String ID="SampleValue.IncreasedDetail">Increased detail</String>
 		
 		<String ID="SampleValue.Difficulty0">Novice</String>
@@ -317,7 +319,7 @@
 		<String ID="ValueName.FixSkyReflection">Fix sky reflection</String>
 		<String ID="ValueName.FixCursorVisibility">Fix cursor visibility</String>
 		<String ID="ValueName.FixLag">Fix lag</String>
-		<String ID="ValueName.IgnoreCreationKit">Ignore $(EditorName)</String>
+		<String ID="ValueName.IgnoreCreationKit">Ignore $(GameEditorName)</String>
 
 		<!-- ENB: Antialiasing -->
 		<String ID="ValueName.EnableEdgeAA">Enable edge AA</String>

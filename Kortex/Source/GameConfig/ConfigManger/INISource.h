@@ -11,6 +11,7 @@ namespace Kortex::GameConfig
 			KxINI m_INI;
 			wxString m_FilePath;
 			wxString m_FileName;
+			bool m_IsOpened = false;
 
 		public:
 			INISource(const wxString& filePath)
@@ -34,7 +35,7 @@ namespace Kortex::GameConfig
 
 			bool IsOpened() const override
 			{
-				return m_INI.IsOK();
+				return m_IsOpened;
 			}
 			bool Open() override;
 			bool Save() override;

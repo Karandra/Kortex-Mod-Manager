@@ -11,20 +11,32 @@ namespace Kortex::GameConfig
 {
 	bool INISource::Open()
 	{
-		KxFileStream stream(DispatchFSLocation(KVarExp(m_FilePath)), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-		return m_INI.Load(stream);
+		if (!m_IsOpened)
+		{
+			KxFileStream stream(DispatchFSLocation(KVarExp(m_FilePath)), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+			if (stream.IsOk() && m_INI.Load(stream))
+			{
+				m_IsOpened = true;
+				return true;
+			}
+		}
+		return false;
 	}
 	bool INISource::Save()
 	{
-		KxFileStream stream(DispatchFSLocation(KVarExp(m_FilePath)), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
-		if (stream.IsOk())
+		if (m_IsOpened)
 		{
-			return m_INI.Save(stream);
+			KxFileStream stream(DispatchFSLocation(KVarExp(m_FilePath)), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+			if (stream.IsOk())
+			{
+				return m_INI.Save(stream);
+			}
 		}
 		return false;
 	}
 	void INISource::Close()
 	{
+		m_IsOpened = false;
 	}
 
 	bool INISource::WriteValue(const Item& item, const ItemValue& value)

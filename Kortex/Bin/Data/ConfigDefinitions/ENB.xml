@@ -14,6 +14,10 @@
 			<Output As="float" Precision="2"/>
 		</Item>
 	</DataTypes>
+	
+	<TypeDetection>
+		<DataAnalysis/>
+	</TypeDetection>
 
 	<Options>
 		<SourceFormat Value="INI"/>

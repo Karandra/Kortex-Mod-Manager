@@ -29,7 +29,6 @@ namespace Kortex::GameConfig
 				return m_CategoryName;
 			}
 
-
 		public:
 			wxString GetViewString(ColumnID id) const override;
 			void OnActivate(KxDataView2::Column& column) override;

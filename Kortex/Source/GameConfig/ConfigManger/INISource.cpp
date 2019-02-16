@@ -44,6 +44,7 @@ namespace Kortex::GameConfig
 				auto item = group.NewItem<SimpleItem>(group, true);
 				item->SetPath(sectionName);
 				item->SetName(keyName);
+				item->SetCategory(wxS('/') + m_FileName);
 
 				if (!group.HasItem(*item))
 				{

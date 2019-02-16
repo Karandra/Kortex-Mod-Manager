@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
 #include "Item.h"
 #include "Items/CategoryItem.h"
@@ -32,7 +31,7 @@ namespace Kortex::GameConfig
 		public:
 			DisplayModel();
 			~DisplayModel();
-
+		
 		public:
 			void CreateView(wxWindow* parent, wxSizer* sizer);
 			void ClearView();

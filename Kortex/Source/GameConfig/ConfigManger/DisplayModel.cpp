@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
-#include "Utility/KAux.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameConfig.hpp>
 #include <Kortex/Utility.hpp>

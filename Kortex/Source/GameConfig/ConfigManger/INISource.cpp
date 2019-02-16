@@ -41,6 +41,12 @@ namespace Kortex::GameConfig
 		{
 			for (const wxString& keyName: m_INI.GetKeyNames(sectionName))
 			{
+				// Skip C++ style comments
+				if (keyName.StartsWith(wxS("//")))
+				{
+					continue;
+				}
+
 				auto item = group.NewItem<SimpleItem>(group, true);
 				item->SetPath(sectionName);
 				item->SetName(keyName);

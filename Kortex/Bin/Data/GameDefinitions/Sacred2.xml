@@ -13,8 +13,7 @@
 		</Entry>
 		<Entry ID="ActualConfigDir">$SHF(SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
 
-		<Entry ID="GameExecutable">$(GameRoot)\System\Sacred2.exe</Entry>
-		<Entry ID="VirtualGameExecutable">$(VirtualGameRoot)\System\Sacred2.exe</Entry>
+		<!--<Entry ID="GameEditorName"></Entry>-->
 	</Variables>
 
 	<Network>

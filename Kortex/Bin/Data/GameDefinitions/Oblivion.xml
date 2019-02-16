@@ -13,6 +13,8 @@
 		</Entry>
 		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Oblivion</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		
+		<Entry ID="GameEditorName">Construction Set</Entry>
 		<Entry ID="ScriptExtenderID">OBSE</Entry>
 		<Entry ID="xEditID">tes4</Entry>
 	</Variables>

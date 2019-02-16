@@ -13,6 +13,8 @@
 		</Entry>
 		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Skyrim</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		
+		<Entry ID="GameEditorName">Creation Kit</Entry>
 		<Entry ID="ScriptExtenderID">SKSE</Entry>
 		<Entry ID="xEditID">tes5</Entry>
 	</Variables>
@@ -55,7 +57,7 @@
 	<GameConfigModule>
 		<ConfigManager>
 			<Definitions>
-				<Definition ID="Skyrim">
+				<Definition ID="Games/Skyrim">
 					<Groups>
 						<Group ID="Game">
 							<Source Type="FSPath">$(ConfigDir)\Skyrim.ini</Source>
@@ -68,6 +70,16 @@
 						</Group>
 						<Group ID="EditorPrefs">
 							<Source Type="FSPath">SkyrimEditorPrefs.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+				<Definition ID="ENB">
+					<Groups>
+						<Group ID="ENBLocal">
+							<Source Type="FSPath">ENBLocal.ini</Source>
+						</Group>
+						<Group ID="ENBSeries">
+							<Source Type="FSPath">ENBSeries.ini</Source>
 						</Group>
 					</Groups>
 				</Definition>

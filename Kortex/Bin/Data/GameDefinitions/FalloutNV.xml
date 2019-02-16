@@ -13,6 +13,8 @@
 		</Entry>
 		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\FalloutNV</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		
+		<Entry ID="GameEditorName">GECK</Entry>
 		<Entry ID="ScriptExtenderID">NVSE</Entry>
 		<Entry ID="xEditID">fnv</Entry>
 

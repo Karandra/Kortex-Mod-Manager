@@ -13,9 +13,10 @@
 		</Entry>
 		<Entry ID="ActualConfigDir">$(ActualGameDir)</Entry>
 		<Entry ID="ActualSavesDir">$(ActualGameDir)\Saves</Entry>
-		<Entry ID="GameExecutable">Morrowind.exe</Entry>
+
+		<Entry ID="GameEditorName">Construction Set</Entry>
 		<!--<Entry ID="ScriptExtenderID">MWSE</Entry>-->
-		<!--<Entry ID="xEditID">tes3</Entry>-->
+		<Entry ID="xEditID">tes3</Entry>
 	</Variables>
 
 	<Network>

@@ -13,6 +13,8 @@
 		</Entry>
 		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Fallout4</Entry>
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		
+		<Entry ID="GameEditorName">Creation Kit</Entry>
 		<Entry ID="ScriptExtenderID">F4SE</Entry>
 		<Entry ID="xEditID">fo4</Entry>
 	</Variables>

@@ -346,6 +346,9 @@
     <Filter Include="Code\Source\GameConfig\ConfigManger\SamplingFunctions">
       <UniqueIdentifier>{a221830e-d859-44a1-96f1-8a0c011282d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Misc\ConfigDefinitions\Games">
+      <UniqueIdentifier>{d6f7b275-a549-4902-9852-bc41949ffb8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -2117,9 +2120,6 @@
     <Xml Include="Bin\Data\GameDefinitions\SkyrimVR.xml">
       <Filter>Misc\Game Definitions</Filter>
     </Xml>
-    <Xml Include="Bin\Data\ConfigDefinitions\Skyrim.xml">
-      <Filter>Misc\ConfigDefinitions</Filter>
-    </Xml>
     <Xml Include="Bin\Data\Translation\en-US.Application.xml">
       <Filter>Misc\Translation</Filter>
     </Xml>
@@ -2137,6 +2137,12 @@
     </Xml>
     <Xml Include="Bin\Data\Translation\ru-RU.GameConfig.xml">
       <Filter>Misc\Translation</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\ConfigDefinitions\Games\Skyrim.xml">
+      <Filter>Misc\ConfigDefinitions\Games</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\ConfigDefinitions\ENB.xml">
+      <Filter>Misc\ConfigDefinitions</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

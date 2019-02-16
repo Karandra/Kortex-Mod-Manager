@@ -639,7 +639,12 @@
     <Image Include="Resources\App.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Bin\Data\ConfigDefinitions\Skyrim.xml" />
+    <Xml Include="Bin\Data\ConfigDefinitions\ENB.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Bin\Data\ConfigDefinitions\Games\Skyrim.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Bin\Data\GameDefinitions\Fallout3.xml" />
     <Xml Include="Bin\Data\GameDefinitions\Fallout4.xml" />
     <Xml Include="Bin\Data\GameDefinitions\Fallout4VR.xml" />
@@ -647,7 +652,9 @@
     <Xml Include="Bin\Data\GameDefinitions\Morrowind.xml" />
     <Xml Include="Bin\Data\GameDefinitions\Oblivion.xml" />
     <Xml Include="Bin\Data\GameDefinitions\Sacred2.xml" />
-    <Xml Include="Bin\Data\GameDefinitions\Skyrim.xml" />
+    <Xml Include="Bin\Data\GameDefinitions\Skyrim.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Bin\Data\GameDefinitions\SkyrimSE.xml" />
     <Xml Include="Bin\Data\GameDefinitions\SkyrimVR.xml" />
     <Xml Include="Bin\Data\Translation\en-US.Application.xml" />

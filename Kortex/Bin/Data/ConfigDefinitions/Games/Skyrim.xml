@@ -121,14 +121,8 @@
 			</Item>
 
 			<Item Category="Game/Misc/Archives" Path="Archive" Name="bInvalidateOlderFiles" Type="bool"/>
-			<Item Category="Game/Misc/Archives" Path="Archive" Name="sResourceArchiveList" Type="string" SubType="Array">
-				<Separator>, </Separator>
-				<Samples FillFunction="FindFiles" Folder="$(VirtualGameRoot)\Data" Filter="*.bsa"/>
-			</Item>
-			<Item Category="Game/Misc/Archives" Path="Archive" Name="sResourceArchiveList2" Type="string" SubType="Array">
-				<Separator>, </Separator>
-				<Samples FillFunction="FindFiles" Folder="$(VirtualGameRoot)\Data" Filter="*.bsa"/>
-			</Item>
+			<Item Category="Game/Misc/Archives" Path="Archive" Name="sResourceArchiveList" Type="string"/>
+			<Item Category="Game/Misc/Archives" Path="Archive" Name="sResourceArchiveList2" Type="string"/>
 
 			<Item Category="Game/Misc/MemoryManagement" Path="General" Name="bPreemptivelyUnloadCells" Type="bool"/>
 			<Item Category="Game/Misc/MemoryManagement" Path="General" Name="bPreCullActors" Type="bool"/>

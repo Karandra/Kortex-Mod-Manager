@@ -21,7 +21,7 @@ namespace
 
 namespace Kortex::GameConfig::SamplingFunction
 {
-	void GetVideoModes::DoCall(Component component)
+	void GetVideoModes::DoCall(Component component, const wxString& format)
 	{
 		std::unordered_set<uint32_t> addedValues;
 		auto AddValueIfUnique = [this, &addedValues](uint32_t testValue, const auto& value) -> SampleValue*
@@ -50,12 +50,11 @@ namespace Kortex::GameConfig::SamplingFunction
 				}
 				case Component::Both:
 				{
-					std::tuple<int64_t, int64_t> value(videoMode.Width, videoMode.Height);
-					SampleValue* sample = AddValueIfUnique(videoMode.Width ^ videoMode.Height, value);
+					uint32_t hashValue = videoMode.Width ^ videoMode.Height;
+					SampleValue* sample = AddValueIfUnique(hashValue, KxString::Format(format, videoMode.Width, videoMode.Height));
 					if (sample)
 					{
-						auto[x, y] = value;
-						sample->SetLabel(KAux::GetResolutionRatio(wxSize(x, y)));
+						sample->SetLabel(KAux::GetResolutionRatio(wxSize(videoMode.Width, videoMode.Height)));
 					}
 					break;
 				}
@@ -69,7 +68,7 @@ namespace Kortex::GameConfig::SamplingFunction
 			Component component = ComponentDef::FromOrExpression(arguments[0].As<wxString>(), Component::None);
 			if (component != Component::None)
 			{
-				DoCall(component);
+				DoCall(component, arguments.size() >= 2 ? arguments[1].As<wxString>() : wxEmptyString);
 			}
 		}
 	}

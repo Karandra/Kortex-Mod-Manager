@@ -13,16 +13,16 @@ namespace Kortex::GameConfig
 	enum class StructKindID
 	{
 		None = 0,
+		Default,
 		SideBySide,
-		Geometry2D,
 	};
 	class StructKindDef: public KxIndexedEnum::Definition<StructKindDef, StructKindID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{
 			{StructKindID::None, wxS("None")},
+			{StructKindID::Default, wxS("Default")},
 			{StructKindID::SideBySide, wxS("SideBySide")},
-			{StructKindID::Geometry2D, wxS("Geometry2D")},
 		};
 	};
 	using StructKindValue = KxIndexedEnum::Value<StructKindDef, StructKindID::None>;
@@ -71,7 +71,10 @@ namespace Kortex::GameConfig
 			void ChangeNotify() override;
 
 		private:
+			void ParseFromString(const wxString& sourceString);
 			wxString FormatToOutput(SerializeFor mode) const;
+			size_t GetMinOfAllSamples() const;
+		
 			std::unique_ptr<KxDataView2::ComboBoxEditor> CreateEditor() const;
 			bool IsComboBoxEditor() const
 			{

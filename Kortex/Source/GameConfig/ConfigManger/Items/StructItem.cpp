@@ -2,6 +2,7 @@
 #include "StructItem.h"
 #include <KxFramework/DataView2/DataView2.h>
 #include <KxFramework/KxStringUtility.h>
+#include <regex>
 
 namespace Kortex::GameConfig
 {
@@ -52,7 +53,11 @@ namespace Kortex::GameConfig
 			}
 			case StructSerializationModeID::AsString:
 			{
-				// TODO: not required right now
+				StructSubItem item(*this);
+				item.SetTypeID(DataTypeID::String);
+				item.Read(source);
+				
+				ParseFromString(item.GetValue().As<wxString>());
 				break;
 			}
 		};
@@ -71,7 +76,9 @@ namespace Kortex::GameConfig
 			}
 			case StructSerializationModeID::AsString:
 			{
-				ItemValue value(FormatToOutput(SerializeFor::Storage));
+				ItemValue value;
+				value.Assign(FormatToOutput(SerializeFor::Storage));
+				
 				source.WriteValue(*this, value);
 				break;
 			}
@@ -87,6 +94,21 @@ namespace Kortex::GameConfig
 		Item::ChangeNotify();
 	}
 
+	void StructItem::ParseFromString(const wxString& sourceString)
+	{
+		wxString format = GetOptions().GetInputFormat();
+		format.Replace(wxS("(%)"), wxS("(.+)"));
+
+		wxRegEx regEx(format, wxRE_ADVANCED|wxRE_ICASE);
+		if (regEx.Matches(sourceString) && regEx.GetMatchCount() == m_SubItems.size() + 1)
+		{
+			for (size_t i = 0; i < m_SubItems.size(); i++)
+			{
+				StructSubItem& subItem = m_SubItems[i];
+				subItem.GetValue().Deserialize(regEx.GetMatch(sourceString, i + 1), subItem);
+			}
+		}
+	}
 	wxString StructItem::FormatToOutput(SerializeFor mode) const
 	{
 		KxFormat formatter(GetOptions().GetOutputFormat());
@@ -96,6 +118,17 @@ namespace Kortex::GameConfig
 		}
 		return formatter;
 	}
+	size_t StructItem::GetMinOfAllSamples() const
+	{
+		size_t min = std::numeric_limits<size_t>::max();
+		for (const StructSubItem& subItem: m_SubItems)
+		{
+			min = std::min(min, subItem.GetSamples().GetCount());
+		}
+		
+		return  min != std::numeric_limits<size_t>::max() ? min : 0;
+	}
+
 	std::unique_ptr<KxDataView2::ComboBoxEditor> StructItem::CreateEditor() const
 	{
 		if (!m_StructKindValue.IsDefault())
@@ -123,15 +156,18 @@ namespace Kortex::GameConfig
 			editor->ClearItems();
 			switch (m_StructKindValue.GetValue())
 			{
+				case StructKindID::Default:
+				{
+					GetSamples().ForEachSample([this, &AddSample](const SampleValue& sample)
+					{
+						const ItemValue& sampleValue = sample.GetValue();
+						AddSample(sample, sampleValue.As<wxString>());
+					});
+					break;
+				}
 				case StructKindID::SideBySide:
 				{
-					size_t min = std::numeric_limits<size_t>::max();
-					for (const StructSubItem& subItem: m_SubItems)
-					{
-						min = std::min(min, subItem.GetSamples().GetCount());
-					}
-
-					if (min != 0 && min != std::numeric_limits<size_t>::max())
+					if (const size_t min = GetMinOfAllSamples(); min != 0)
 					{
 						for (size_t i = 0; i < min; ++i)
 						{
@@ -143,17 +179,6 @@ namespace Kortex::GameConfig
 							editor->AddItem(formatter);
 						}	
 					}
-					break;
-				}
-				case StructKindID::Geometry2D:
-				{
-					GetSamples().ForEachSample([this, &editor, &AddSample](const SampleValue& sample)
-					{
-						const ItemValue& sampleValue = sample.GetValue();
-
-						auto[x, y] = sampleValue.As<std::tuple<int64_t, int64_t>>();
-						AddSample(sample, KxString::Format(GetOptions().GetOutputFormat(), x, y));
-					});
 					break;
 				}
 			};
@@ -190,7 +215,7 @@ namespace Kortex::GameConfig
 						value = Kx::Utility::String::ConcatWithSeparator(wxS(", "), value, type);
 					}
 				}
-				m_CachedViewType = KxString::Format(wxS("struct<%1>"), value);
+				m_CachedViewType = KxString::Format(wxS("struct<%1>"), value, 1, 4);
 			}
 			return *m_CachedViewType;
 		}
@@ -219,8 +244,6 @@ namespace Kortex::GameConfig
 					}
 					m_CachedViewValue = KxString::Format(wxS("{%1}"), finalValue);
 				}
-
-				
 			}
 			return *m_CachedViewValue;
 		}
@@ -250,7 +273,44 @@ namespace Kortex::GameConfig
 	{
 		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
-			return 0;
+			switch (m_StructKindValue.GetValue())
+			{
+				case StructKindID::Default:
+				{
+					size_t index = std::numeric_limits<size_t>::max();
+					size_t counter = 0;
+					const wxString currentValue = FormatToOutput(SerializeFor::Storage);
+
+					GetSamples().ForEachSample([this, &index, &counter, &currentValue](const SampleValue& sample)
+					{
+						if (sample.GetValue().As<wxString>() == currentValue && index != 0)
+						{
+							index = counter;
+						}
+						counter++;
+					});
+					return index < counter ? index : 0;
+				}
+				case StructKindID::SideBySide:
+				{
+					if (const size_t min = GetMinOfAllSamples(); min != 0)
+					{
+						const wxString currentValue = FormatToOutput(SerializeFor::Storage);
+						for (size_t i = 0; i < min; ++i)
+						{
+							KxFormat formatter(GetOptions().GetOutputFormat());
+							for (const StructSubItem& subItem: m_SubItems)
+							{
+								formatter(subItem.GetSamples().GetSampleByIndex(i)->GetValue().Serialize(subItem, SerializeFor::Storage));
+							}
+							if (formatter == currentValue)
+							{
+								return i;
+							}
+						}
+					}
+				}
+			};
 		}
 		return {};
 	}
@@ -262,6 +322,21 @@ namespace Kortex::GameConfig
 
 			switch (m_StructKindValue.GetValue())
 			{
+				case StructKindID::Default:
+				{
+					const SampleValue* sampleValue = GetSamples().GetSampleByIndex(selectedIndex);
+					if (sampleValue)
+					{
+						const wxString oldValue = FormatToOutput(SerializeFor::Storage);
+						ParseFromString(sampleValue->GetValue().As<wxString>());
+						if (oldValue != FormatToOutput(SerializeFor::Storage))
+						{
+							ChangeNotify();
+							return true;
+						}
+					}
+					return false;
+				}
 				case StructKindID::SideBySide:
 				{
 					const wxString oldValue = FormatToOutput(SerializeFor::Storage);
@@ -279,10 +354,6 @@ namespace Kortex::GameConfig
 						ChangeNotify();
 						return true;
 					}
-					return false;
-				}
-				case StructKindID::Geometry2D:
-				{
 					return false;
 				}
 			};

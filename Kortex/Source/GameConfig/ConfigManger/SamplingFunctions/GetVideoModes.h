@@ -19,7 +19,7 @@ namespace Kortex::GameConfig::SamplingFunction
 			SampleValue::Vector& m_Values;
 
 		protected:
-			void DoCall(Component component);
+			void DoCall(Component component, const wxString& format = {});
 			void OnCall(const ItemValue::Vector& arguments) override;
 			
 		public:

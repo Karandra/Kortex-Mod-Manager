@@ -207,14 +207,20 @@
 				<Options>
 					<EditableBehavior Value="Selectable"/>
 					<SerializationMode Value="ElementWise"/>
-					<StructKind Value="Geometry2D"/>
+					<StructKind Value="Default"/>
+					
+					<Input>
+						<Format><![CDATA[(%)×(%)]]></Format>
+					</Input>
 					<Output>
 						<Format><![CDATA[%1×%2]]></Format>
 					</Output>
 				</Options>
+				
 				<Samples Source="Function">
 					<Function Name="GetVideoModes">
 						<Arg Type="string">Component::Width|Component::Height</Arg>
+						<Arg Type="string"><![CDATA[%1×%2]]></Arg>
 					</Function>
 				</Samples>
 				

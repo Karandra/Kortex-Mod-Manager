@@ -1,6 +1,7 @@
 # VisualStudio files
 .vs/*
 *.vcxproj.user
+*.DotSettings
 
 # Output binaries
 Junk/*

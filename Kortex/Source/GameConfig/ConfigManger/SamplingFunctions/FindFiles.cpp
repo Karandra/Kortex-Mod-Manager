@@ -4,7 +4,7 @@
 
 namespace Kortex::GameConfig::SamplingFunction
 {
-	void FindFiles::DoCall(const wxString& sourcePath)
+	void FindFiles::DoCall(const wxString& sourcePath) const
 	{
 		KxFileFinder finder(KVarExp(sourcePath));
 		for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())

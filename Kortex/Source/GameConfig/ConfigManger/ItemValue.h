@@ -37,21 +37,21 @@ namespace Kortex::GameConfig
 				:m_Type(type)
 			{
 			}
-			
-			template<class T> ItemValue(T&& value)
-			{
-				Assign(std::forward<T>(value));
-			}
-			template<> ItemValue(const wxAny& value)
+
+			template<class T> explicit ItemValue(const T& value)
 			{
 				Assign(value);
 			}
-			template<> ItemValue(wxAny&& value)
+			explicit ItemValue(const wxAny& value)
+			{
+				Assign(value);
+			}
+			explicit ItemValue(wxAny&& value)
 			{
 				Assign(std::move(value));
 			}
 
-			ItemValue(ItemValue&& other)
+			ItemValue(ItemValue&& other) noexcept
 			{
 				*this = std::move(other);
 			}
@@ -132,7 +132,7 @@ namespace Kortex::GameConfig
 			}
 			
 		public:
-			ItemValue& operator=(ItemValue&& other)
+			ItemValue& operator=(ItemValue&& other) noexcept
 			{
 				Assign(std::move(other.m_Value));
 

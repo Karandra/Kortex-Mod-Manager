@@ -80,7 +80,7 @@
 		<String ID="ValueName.bUseBlurShader">Use blur shader</String>
 		<String ID="ValueName.bDoDepthOfField">Depth of field</String>
 		<String ID="ValueName.bDoRadialBlur">Radial blur</String>
-		<String ID="ValueName.bDisableAllGore">Disablee all gore</String>
+		<String ID="ValueName.bDisableAllGore">Disable all gore</String>
 		<String ID="ValueName.bBloodSplatterEnabled">Blood splatter</String>
 		<String ID="ValueName.bFloatPointRenderTarget">bFloatPointRenderTarget</String>
 		<String ID="ValueName.iMultiSample">Antialiasing</String>

@@ -48,22 +48,22 @@ namespace Kortex::GameConfig
 				}
 
 				auto item = group.NewItem<SimpleItem>(group, true);
-				item->SetPath(sectionName);
 				item->SetName(keyName);
-				item->SetCategory(wxS('/') + m_FileName);
+				item->SetPath(sectionName);
 
 				if (!group.HasItem(*item))
 				{
-					TypeID type;
-					group.GetDefinition().ForEachTypeDetector([this, &type, &keyName, &sectionName](const ITypeDetector& detector)
+					// Run type detectors
+					TypeID type = InvokeTypeDetectors(group, [this, &type, &keyName, &sectionName](const ITypeDetector& detector)
 					{
-						if (type.IsNone())
-						{
-							type = detector.GetType(keyName, detector.RequiresValueData() ? m_INI.GetValue(keyName, sectionName) : wxString());
-						}
+						return std::tuple{keyName, detector.RequiresValueData() ? m_INI.GetValue(sectionName, keyName) : wxString()};
 					});
-
 					item->SetTypeID(type);
+
+					// Category is never a part of item's hash calculation, so set it here
+					item->SetCategory(wxS('/') + m_FileName + wxS('/') + sectionName);
+
+					// Move the item to group
 					group.AddItem(std::move(item));
 				}
 			}

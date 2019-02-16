@@ -1,12 +1,14 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
+#include "DataType.h"
 
 namespace Kortex::GameConfig
 {
 	class Item;
 	class ItemValue;
 	class ItemGroup;
+	class ITypeDetector;
 }
 
 namespace Kortex::GameConfig
@@ -15,6 +17,19 @@ namespace Kortex::GameConfig
 	{
 		protected:
 			wxString DispatchFSLocation(const wxString& path) const;
+			template<class TFunctor> TypeID InvokeTypeDetectors(const ItemGroup& group, TFunctor&& func)
+			{
+				TypeID type;
+				group.GetDefinition().ForEachTypeDetector([this, &func, &type](const ITypeDetector& detector)
+				{
+					if (!type.IsDefinitiveType())
+					{
+						auto&&[valueName, valueData] = std::invoke(func, detector);
+						type = detector.GetType(valueName, valueData);
+					}
+				});
+				return type;
+			}
 		
 		public:
 			virtual ~ISource() = default;

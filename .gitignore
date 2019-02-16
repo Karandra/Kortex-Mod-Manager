@@ -2,6 +2,7 @@
 .vs/*
 *.vcxproj.user
 *.DotSettings
+*.DotSettings.user
 
 # Output binaries
 Junk/*
@@ -25,4 +26,3 @@ Kortex/Include/Kortex/Git/LatestCommit.txt
 
 # Resourses
 Resources/*
-

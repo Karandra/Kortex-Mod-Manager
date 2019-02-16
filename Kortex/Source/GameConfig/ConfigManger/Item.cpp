@@ -117,6 +117,7 @@ namespace Kortex::GameConfig
 		{
 			Clear();
 			Read(m_Group.GetSource());
+			m_HasChanges = false;
 		}
 	}
 	

@@ -28,6 +28,7 @@ namespace Kortex::GameConfig
 
 	void SimpleItem::Clear()
 	{
+		ResetCache();
 		m_Value.MakeNull();
 	}
 	void SimpleItem::Read(const ISource& source)

@@ -259,7 +259,7 @@
 			</Item>
 			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="FilterQuality" Type="int32">
 				<Samples Source="ImmediateItems">
-					<Item Label="$T(ConfigManager.Samples.VeryLow)">-1</Item>
+					<Item Label="VeryLow">-1</Item>
 					<Item Label="Low">0</Item>
 					<Item Label="Mid">1</Item>
 					<Item Label="High">2</Item>
@@ -267,7 +267,7 @@
 			</Item>
 			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="FilterType" Type="int32">
 				<Samples Source="ImmediateItems">
-					<Item Label="$T(ConfigManager.Samples.VeryLow)">4</Item>
+					<Item Label="VeryLow">4</Item>
 					<Item Label="Low">3</Item>
 					<Item Label="Mid">2</Item>
 					<Item Label="High">1</Item>

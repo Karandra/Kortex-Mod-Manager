@@ -117,6 +117,11 @@ namespace Kortex::GameConfig
 			case SamplingFunctionID::GetVirtualKeys:
 			{
 				SamplingFunction::GetVirtualKeys(m_Values, m_Item.GetManager()).Invoke(arguments);
+
+				m_SortOrder = SortOrderID::Ascending;
+				m_SortOptions.AddFlag(SortOptionsID::DigitsAsNumbers);
+				m_SortOptions.AddFlag(SortOptionsID::IgnoreCase);
+				SortImmediateItems();
 				break;
 			}
 			case SamplingFunctionID::FindFiles:

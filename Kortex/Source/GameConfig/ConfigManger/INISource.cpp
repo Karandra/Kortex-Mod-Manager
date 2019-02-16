@@ -41,11 +41,23 @@ namespace Kortex::GameConfig
 
 	bool INISource::WriteValue(const Item& item, const ItemValue& value)
 	{
-		return m_INI.SetValue(item.GetPath(), item.GetName(), value.Serialize(item));
+		if (value.IsNull())
+		{
+			return m_INI.RemoveValue(item.GetPath(), item.GetName());
+		}
+		else
+		{
+			return m_INI.SetValue(item.GetPath(), item.GetName(), value.Serialize(item));
+		}
 	}
 	bool INISource::ReadValue(Item& item, ItemValue& value) const
 	{
-		return value.Deserialize(m_INI.GetValue(item.GetPath(), item.GetName()), item);
+		wxString valueData = m_INI.GetValue(item.GetPath(), item.GetName());
+		if (!valueData.IsEmpty())
+		{
+			return value.Deserialize(valueData, item);
+		}
+		return false;
 	}
 	void INISource::LoadUnknownItems(ItemGroup& group)
 	{

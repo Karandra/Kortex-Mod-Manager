@@ -33,7 +33,10 @@ namespace Kortex::GameConfig
 	}
 	void SimpleItem::Read(const ISource& source)
 	{
-		source.ReadValue(*this, m_Value);
+		if (!source.ReadValue(*this, m_Value))
+		{
+			m_Value.MakeNull();
+		}
 	}
 	void SimpleItem::Write(ISource& source) const
 	{

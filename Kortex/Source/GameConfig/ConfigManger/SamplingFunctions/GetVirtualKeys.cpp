@@ -12,7 +12,7 @@ namespace Kortex::GameConfig::SamplingFunction
 		static VirtualKeyInfo::Map virtualKeys;
 		m_KeyMap = &virtualKeys;
 
-		KxFileStream xmlStream(IApplication::GetInstance()->GetDataFolder() + wxS("VirtualKeys.xml"), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
+		KxFileStream xmlStream(IApplication::GetInstance()->GetDataFolder() + wxS("\\VirtualKeys.xml"), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 		KxXMLDocument xml(xmlStream);
 
 		const ITranslator& translator = m_Manager.GetTranslator();

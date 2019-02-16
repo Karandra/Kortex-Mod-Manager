@@ -91,7 +91,7 @@ namespace Kortex::GameConfig
 			if (HasSamples())
 			{
 				auto comboBox = std::make_unique<KxDataView2::ComboBoxEditor>();
-				comboBox->SetMaxVisibleItems(32);
+				comboBox->SetMaxVisibleItems(16);
 				comboBox->AutoPopup(!isEditable);
 
 				// Add samples

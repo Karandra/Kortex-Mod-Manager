@@ -153,7 +153,8 @@ namespace Kortex::Application
 			Utility::Log::LogInfo("Core systems initialized");
 
 			Utility::Log::LogInfo("Initializing instances");
-			InitInstancesData(m_InitProgressDialog);			IModule::InitModulesWithDisposition(IModule::Disposition::Global);
+			InitInstancesData(m_InitProgressDialog);
+			IModule::InitModulesWithDisposition(IModule::Disposition::Global);
 			IModule::InitModulesWithDisposition(IModule::Disposition::ActiveInstance);
 			IModule::InitModulesWithDisposition(IModule::Disposition::Local);
 

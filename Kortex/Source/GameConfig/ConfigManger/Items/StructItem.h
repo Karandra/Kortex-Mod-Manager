@@ -53,7 +53,6 @@ namespace Kortex::GameConfig
 		friend class StructSubItem;
 
 		private:
-			HashStore m_HashStore;
 			std::vector<StructSubItem> m_SubItems;
 			StructSerializationModeValue m_SerializationMode;
 			StructKindValue m_StructKindValue;
@@ -97,10 +96,6 @@ namespace Kortex::GameConfig
 			bool IsOK() const override
 			{
 				return !m_SubItems.empty() && Item::IsOK();
-			}
-			size_t GetHash() const override
-			{
-				return m_HashStore.Get(*this);
 			}
 			bool IsUnknown() const override
 			{

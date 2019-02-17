@@ -23,6 +23,7 @@ namespace Kortex::GameConfig
 {
 	bool SimpleItem::Create(const KxXMLNode& itemNode)
 	{
+		RegisterAsKnown();
 		return IsOK();
 	}
 

@@ -13,7 +13,21 @@ namespace Kortex::GameConfig
 	{
 		if (!m_Hash)
 		{
-			m_Hash = item.CalcHash(value);
+			wxString hashData = item.GetPath();
+			hashData += wxS('/');
+			hashData += item.GetName();
+
+			if (!value.IsEmpty())
+			{
+				hashData += wxS('/');
+				hashData += value;
+			}
+
+			size_t hashValue = std::hash<wxString>()(hashData);
+			if (hashValue != 0)
+			{
+				m_Hash = hashValue;
+			}
 		}
 		return *m_Hash;
 	}
@@ -21,23 +35,24 @@ namespace Kortex::GameConfig
 
 namespace Kortex::GameConfig
 {
-	size_t Item::CalcHash(const wxString& value) const
-	{
-		wxString hashData = m_Path;
-		hashData += wxS('/');
-		hashData += m_Name;
-
-		if (!value.IsEmpty())
-		{
-			hashData += wxS('/');
-			hashData += value;
-		}
-		return std::hash<wxString>()(hashData);
-	}
 	void Item::ChangeNotify()
 	{
 		m_HasChanges = true;
 		GetManager().OnItemChanged(*this);
+	}
+	void Item::RegisterAsKnown()
+	{
+		if (!IsUnknown())
+		{
+			m_Group.AddKnownItem(GetHash(), *this);
+		}
+	}
+	void Item::UnregisterAsKnown()
+	{
+		if (m_HashStore.HasHash())
+		{
+			m_Group.RemoveKnownItem(GetHash());
+		}
 	}
 
 	Item::Item(ItemGroup& group, const KxXMLNode& itemNode)
@@ -45,20 +60,24 @@ namespace Kortex::GameConfig
 	{
 		if (itemNode.IsOK())
 		{
+			// Main data
 			m_Category = itemNode.GetAttribute(wxS("Category"));
 			m_Path = itemNode.GetAttribute(wxS("Path"));
 			m_Name = itemNode.GetAttribute(wxS("Name"));
 			m_Label = GetManager().TranslateItemLabel(itemNode, m_Name, wxS("ValueName"));
 			m_TypeID.FromString(itemNode.GetAttribute(wxS("Type")));
 
+			// Options
 			m_Options.Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());
 			m_Options.CopyIfNotSpecified(group.GetOptions(), GetDataType());
 
+			// Samples
 			m_Samples.Load(itemNode.GetFirstChildElement(wxS("Samples")));
 		}
 	}
 	Item::~Item()
 	{
+		UnregisterAsKnown();
 		DetachAllChildren();
 	}
 

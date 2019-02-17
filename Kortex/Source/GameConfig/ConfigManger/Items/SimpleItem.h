@@ -37,10 +37,6 @@ namespace Kortex::GameConfig
 			SimpleItem(ItemGroup& group, bool isUnknown);
 
 		public:
-			size_t GetHash() const override
-			{
-				return m_HashStore.Get(*this);
-			}
 			bool IsUnknown() const override
 			{
 				return m_IsUnknown;

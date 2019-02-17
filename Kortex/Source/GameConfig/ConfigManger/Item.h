@@ -26,6 +26,10 @@ namespace Kortex::GameConfig
 			mutable std::optional<size_t> m_Hash;
 
 		public:
+			bool HasHash() const
+			{
+				return m_Hash.has_value();
+			}
 			size_t Get(const Item& item, const wxString& value = {}) const;
 	};
 }
@@ -38,7 +42,6 @@ namespace Kortex::GameConfig
 	class Item: public RTTI::IExtendInterface<Item, IViewItem, KxDataView2::Node>
 	{
 		friend class ItemGroup;
-		friend class HashStore;
 
 		private:
 			ItemGroup& m_Group;
@@ -49,6 +52,7 @@ namespace Kortex::GameConfig
 			ItemSamples m_Samples;
 			TypeID m_TypeID;
 			ItemOptions m_Options;
+			HashStore m_HashStore;
 
 			bool m_HasChanges = false;
 			mutable std::optional<wxString> m_DisplayPath;
@@ -58,9 +62,10 @@ namespace Kortex::GameConfig
 			virtual void Clear() = 0;
 			virtual void Read(const ISource& source) = 0;
 			virtual void Write(ISource& source) const = 0;
-
-			size_t CalcHash(const wxString& value = {}) const;
 			virtual void ChangeNotify();
+
+			void RegisterAsKnown();
+			void UnregisterAsKnown();
 
 		public:
 			Item(ItemGroup& group, const KxXMLNode& itemNode = {});
@@ -69,8 +74,11 @@ namespace Kortex::GameConfig
 		public:
 			virtual bool IsOK() const;
 			virtual bool IsUnknown() const = 0;
-			virtual size_t GetHash() const = 0;
 			virtual wxString GetFullPath() const;
+			size_t GetHash() const
+			{
+				return m_HashStore.Get(*this);
+			}
 			
 			bool HasChanges() const
 			{

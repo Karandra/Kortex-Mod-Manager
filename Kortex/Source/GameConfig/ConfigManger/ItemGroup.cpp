@@ -34,6 +34,20 @@ namespace Kortex::GameConfig
 			}
 		}
 	}
+	void ItemGroup::AddKnownItem(size_t hash, Item& item)
+	{
+		if (!m_Destructing && hash != 0)
+		{
+			m_ItemsHash.emplace(hash, &item);
+		}
+	}
+	void ItemGroup::RemoveKnownItem(size_t hash)
+	{
+		if (!m_Destructing && hash != 0)
+		{
+			m_ItemsHash.erase(hash);
+		}
+	}
 
 	ItemGroup::ItemGroup(Definition& definition, const wxString& id, const KxXMLNode& groupNode, const ItemOptions& parentOptions)
 		:m_Definition(definition), m_ID(id), m_Options(groupNode)
@@ -41,7 +55,15 @@ namespace Kortex::GameConfig
 		m_Options.CopyIfNotSpecified(parentOptions);
 		LoadItems(groupNode);
 	}
+	ItemGroup::~ItemGroup()
+	{
+		m_Destructing = true;
+	}
 
+	IConfigManager& ItemGroup::GetManager() const
+	{
+		return m_Definition.GetManager();
+	}
 	bool ItemGroup::OnLoadInstance(const KxXMLNode& groupNode)
 	{
 		const KxXMLNode sourceNode = groupNode.GetFirstChildElement(wxS("Source"));
@@ -71,11 +93,6 @@ namespace Kortex::GameConfig
 		}
 		return false;
 	}
-	IConfigManager& ItemGroup::GetManager() const
-	{
-		return m_Definition.GetManager();
-	}
-
 	void ItemGroup::ReadItems()
 	{
 		if (m_Source && m_Source->Open())
@@ -86,7 +103,7 @@ namespace Kortex::GameConfig
 				m_UnknownLoaded = true;
 			}
 
-			for (auto& [hash, item]: m_Items)
+			for (auto& item: m_Items)
 			{
 				item->Read(*m_Source);
 

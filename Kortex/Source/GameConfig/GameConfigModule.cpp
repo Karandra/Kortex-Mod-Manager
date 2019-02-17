@@ -17,7 +17,19 @@ namespace Kortex
 	}
 	void GameConfigModule::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)
 	{
-		m_GameConfigManager = CreateManagerIfEnabled<GameConfig::DefaultGameConfigManager>(node);
+		m_GameConfigManager = CreateGameConfigManager(GetManagerNode<IGameConfigManager>(node));
+	}
+
+	std::unique_ptr<Kortex::IGameConfigManager> GameConfigModule::CreateGameConfigManager(const KxXMLNode& node) const
+	{
+		if (IsEnabledInTemplate(node))
+		{
+			if (node.GetFirstChildElement("Definitions").GetChildrenCount() > 0)
+			{
+				return std::make_unique<GameConfig::DefaultGameConfigManager>();
+			}
+		}
+		return nullptr;
 	}
 
 	GameConfigModule::GameConfigModule()

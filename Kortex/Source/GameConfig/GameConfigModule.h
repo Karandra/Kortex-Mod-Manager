@@ -26,6 +26,9 @@ namespace Kortex
 			virtual void OnExit() override;
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& node) override;
 
+		private:
+			std::unique_ptr<IGameConfigManager> CreateGameConfigManager(const KxXMLNode& node) const;
+
 		public:
 			GameConfigModule();
 

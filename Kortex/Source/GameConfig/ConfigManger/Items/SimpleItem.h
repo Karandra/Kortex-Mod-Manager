@@ -15,7 +15,6 @@ namespace Kortex::GameConfig
 			mutable std::optional<wxString> m_CachedViewData;
 
 		protected:
-			bool Create(const KxXMLNode& itemNode) override;
 
 			void Clear() override;
 			void Read(const ISource& source) override;
@@ -37,6 +36,7 @@ namespace Kortex::GameConfig
 			SimpleItem(ItemGroup& group, bool isUnknown);
 
 		public:
+			bool Create(const KxXMLNode& itemNode = {}) override;
 			bool IsUnknown() const override
 			{
 				return m_IsUnknown;

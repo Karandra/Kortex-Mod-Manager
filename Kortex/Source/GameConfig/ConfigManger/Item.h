@@ -58,7 +58,6 @@ namespace Kortex::GameConfig
 			mutable std::optional<wxString> m_DisplayPath;
 
 		protected:
-			virtual bool Create(const KxXMLNode& itemNode) = 0;
 			virtual void Clear() = 0;
 			virtual void Read(const ISource& source) = 0;
 			virtual void Write(ISource& source) const = 0;
@@ -72,6 +71,7 @@ namespace Kortex::GameConfig
 			virtual ~Item();
 
 		public:
+			virtual bool Create(const KxXMLNode& itemNode = {}) = 0;
 			virtual bool IsOK() const;
 			virtual bool IsUnknown() const = 0;
 			virtual wxString GetFullPath() const;

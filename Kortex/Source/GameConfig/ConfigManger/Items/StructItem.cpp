@@ -6,32 +6,6 @@
 
 namespace Kortex::GameConfig
 {
-	bool StructItem::Create(const KxXMLNode& itemNode)
-	{
-		// Load struct options
-		const KxXMLNode structOptions = itemNode.GetFirstChildElement(wxS("Options"));
-		m_SerializationMode.FromString(structOptions.GetFirstChildElement(wxS("SerializationMode")).GetAttribute(wxS("Value")));
-		m_StructKindValue.FromString(structOptions.GetFirstChildElement(wxS("StructKind")).GetAttribute(wxS("Value")));
-
-		const KxXMLNode subItemsNode = itemNode.GetFirstChildElement(wxS("SubItems"));
-		m_SubItems.reserve(subItemsNode.GetChildrenCount());
-
-		// Load sub-items
-		for (KxXMLNode node = subItemsNode.GetFirstChildElement(wxS("Item")); node.IsOK(); node = node.GetNextSiblingElement(wxS("Item")))
-		{
-			TypeID type;
-			if (type.FromString(node.GetAttribute(wxS("Type"))) && type.IsScalarType())
-			{
-				StructSubItem& subItem = m_SubItems.emplace_back(*this, node);
-				if (!subItem.Create(node))
-				{
-					m_SubItems.pop_back();
-				}
-			}
-		}
-		return IsOK();
-	}
-
 	void StructItem::Clear()
 	{
 		for (StructSubItem& subItem: m_SubItems)
@@ -196,6 +170,34 @@ namespace Kortex::GameConfig
 	{
 	}
 
+	bool StructItem::Create(const KxXMLNode& itemNode)
+	{
+		if (itemNode.IsOK())
+		{
+			// Load struct options
+			const KxXMLNode structOptions = itemNode.GetFirstChildElement(wxS("Options"));
+			m_SerializationMode.FromString(structOptions.GetFirstChildElement(wxS("SerializationMode")).GetAttribute(wxS("Value")));
+			m_StructKindValue.FromString(structOptions.GetFirstChildElement(wxS("StructKind")).GetAttribute(wxS("Value")));
+
+			const KxXMLNode subItemsNode = itemNode.GetFirstChildElement(wxS("SubItems"));
+			m_SubItems.reserve(subItemsNode.GetChildrenCount());
+
+			// Load sub-items
+			for (KxXMLNode node = subItemsNode.GetFirstChildElement(wxS("Item")); node.IsOK(); node = node.GetNextSiblingElement(wxS("Item")))
+			{
+				TypeID type;
+				if (type.FromString(node.GetAttribute(wxS("Type"))) && type.IsScalarType())
+				{
+					StructSubItem& subItem = m_SubItems.emplace_back(*this, node);
+					if (!subItem.Create(node))
+					{
+						m_SubItems.pop_back();
+					}
+				}
+			}
+		}
+		return IsOK();
+	}
 	wxString StructItem::GetViewString(ColumnID id) const
 	{
 		if (id == ColumnID::Type)

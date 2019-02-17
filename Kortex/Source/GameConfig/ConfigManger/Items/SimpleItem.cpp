@@ -21,12 +21,6 @@ namespace
 
 namespace Kortex::GameConfig
 {
-	bool SimpleItem::Create(const KxXMLNode& itemNode)
-	{
-		RegisterAsKnown();
-		return IsOK();
-	}
-
 	void SimpleItem::Clear()
 	{
 		ResetCache();
@@ -139,6 +133,11 @@ namespace Kortex::GameConfig
 	{
 	}
 
+	bool SimpleItem::Create(const KxXMLNode& itemNode)
+	{
+		RegisterAsKnown();
+		return IsOK();
+	}
 	wxString SimpleItem::GetViewString(ColumnID id) const
 	{
 		if (id == ColumnID::Value)

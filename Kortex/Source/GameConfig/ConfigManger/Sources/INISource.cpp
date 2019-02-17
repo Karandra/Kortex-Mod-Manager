@@ -88,7 +88,10 @@ namespace Kortex::GameConfig
 					item->SetCategory(wxS('/') + m_FileName + wxS('/') + sectionName);
 
 					// Move the item to group
-					group.AddItem(std::move(item));
+					if (item->Create())
+					{
+						group.AddItem(std::move(item));
+					}
 				}
 			}
 		}

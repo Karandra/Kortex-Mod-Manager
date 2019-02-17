@@ -31,7 +31,7 @@ namespace Kortex::Application::About
 	}
 	wxString INode::ReadLicense(Type type) const
 	{
-		wxString license = KxTextFile::ReadToString(String::Concat(GetLocation(type), wxS("License.txt")));
+		wxString license = KxTextFile::ReadToString(String::ConcatWithSeparator(wxS('\\'), GetLocation(type), wxS("License.txt")));
 		if (!license.IsEmpty())
 		{
 			// Convert any '<text>' which is not a link to '&lt;text&gt;'

@@ -71,7 +71,7 @@
 	<GameMods>
 		<ModManager>
 			<MandatoryLocations>
-				<Entry Name="$T(ConfigManager.NameShort)">$(ConfigDir)</Entry>
+				<Entry Name="$T(GameConfigModule.Name)">$(ConfigDir)</Entry>
 				<Entry Name="$T(SaveManager.NameShort)">$(SavesDir)</Entry>
 			</MandatoryLocations>
 		</ModManager>

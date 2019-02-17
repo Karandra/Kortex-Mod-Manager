@@ -116,6 +116,12 @@ namespace Kortex
 
 		KArchive::UnInit();
 	}
+	void SystemApplication::SetPostCreateVariables()
+	{
+		IVariableTable& variables = m_Application->GetVariables();
+
+		variables.SetVariable(Variables::KVAR_APP_SETTINGS_DIR, m_Application->GetUserSettingsFolder());
+	}
 
 	void SystemApplication::LoadGlobalConfig()
 	{
@@ -204,6 +210,7 @@ namespace Kortex
 	{
 		// Call creation function
 		m_Application->OnCreate();
+		SetPostCreateVariables();
 
 		// Initialize logging
 		InitLogging();

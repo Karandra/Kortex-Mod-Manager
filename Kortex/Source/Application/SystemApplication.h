@@ -42,6 +42,7 @@ namespace Kortex
 
 			void InitComponents();
 			void UninitComponents();
+			void SetPostCreateVariables();
 
 			void LoadGlobalConfig();
 			void SaveGlobalConfig();

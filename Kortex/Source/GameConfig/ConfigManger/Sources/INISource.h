@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "ISource.h"
+#include "GameConfig/ConfigManger/ISource.h"
 #include <KxFramework/KxINI.h>
 
 namespace Kortex::GameConfig

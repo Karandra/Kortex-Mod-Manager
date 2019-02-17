@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "INISource.h"
-#include "Item.h"
-#include "ItemValue.h"
-#include "ItemGroup.h"
-#include "Definition.h"
-#include "Items/SimpleItem.h"
+#include "GameConfig/ConfigManger/Item.h"
+#include "GameConfig/ConfigManger/ItemValue.h"
+#include "GameConfig/ConfigManger/ItemGroup.h"
+#include "GameConfig/ConfigManger/Definition.h"
+#include "GameConfig/ConfigManger/Items/SimpleItem.h"
 #include <KxFramework/KxFileStream.h>
 
 namespace Kortex::GameConfig

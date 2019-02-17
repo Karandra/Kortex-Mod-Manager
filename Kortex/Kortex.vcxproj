@@ -93,7 +93,6 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Definition.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\DisplayModel.cpp" />
-    <ClCompile Include="Source\GameConfig\ConfigManger\INISource.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ISamplingFunction.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ISource.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemGroup.cpp" />
@@ -110,6 +109,7 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoAdapters.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoModes.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INISource.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Workspace.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\WorkspaceController.cpp" />
     <ClCompile Include="Source\GameConfig\GameConfigModule.cpp" />
@@ -386,7 +386,6 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Definition.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\DisplayModel.h" />
-    <ClInclude Include="Source\GameConfig\ConfigManger\INISource.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ISamplingFunction.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ISource.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h" />
@@ -405,6 +404,8 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoAdapters.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoModes.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\NullSource.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Workspace.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\WorkspaceController.h" />
     <ClInclude Include="Source\GameConfig\GameConfigModule.h" />

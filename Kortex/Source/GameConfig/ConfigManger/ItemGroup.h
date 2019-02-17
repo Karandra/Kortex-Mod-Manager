@@ -78,7 +78,7 @@ namespace Kortex::GameConfig
 			}
 			
 			void ReadItems();
-			bool OnLoadInstance(const KxXMLNode& groupNode);
+			void OnLoadInstance(const KxXMLNode& groupNode);
 
 			template<class TFunctor> void ForEachItem(TFunctor&& func) const
 			{

@@ -349,6 +349,12 @@
     <Filter Include="Misc\ConfigDefinitions\Games">
       <UniqueIdentifier>{d6f7b275-a549-4902-9852-bc41949ffb8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\GameConfig\ConfigManger\Sources">
+      <UniqueIdentifier>{c35ca882-6f5e-44af-b0ac-ef80104862a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\GameConfig\ConfigManger\Sources">
+      <UniqueIdentifier>{d441cc9e-18f3-461e-8b28-2762735d2b8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1020,9 +1026,6 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\ISource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameConfig\ConfigManger\INISource.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemGroup.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
@@ -1079,6 +1082,9 @@
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INISource.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1982,9 +1988,6 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\ISource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\INISource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
@@ -2047,6 +2050,12 @@
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\NullSource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

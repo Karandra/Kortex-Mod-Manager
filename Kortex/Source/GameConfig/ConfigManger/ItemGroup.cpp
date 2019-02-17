@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "ItemGroup.h"
+#include "Definition.h"
 #include "Item.h"
 #include "Items/SimpleItem.h"
 #include "Items/StructItem.h"
-#include "Definition.h"
-#include "INISource.h"
+#include "Sources/INISource.h"
+#include "Sources/NullSource.h"
 #include <KxFramework/KxXML.h>
 
 namespace Kortex::GameConfig
@@ -64,7 +65,7 @@ namespace Kortex::GameConfig
 	{
 		return m_Definition.GetManager();
 	}
-	bool ItemGroup::OnLoadInstance(const KxXMLNode& groupNode)
+	void ItemGroup::OnLoadInstance(const KxXMLNode& groupNode)
 	{
 		const KxXMLNode sourceNode = groupNode.GetFirstChildElement(wxS("Source"));
 
@@ -77,7 +78,7 @@ namespace Kortex::GameConfig
 				case SourceFormat::INI:
 				{
 					m_Source = std::make_unique<INISource>(sourceNode.GetValue());
-					return true;
+					break;
 				}
 				case SourceFormat::XML:
 				{
@@ -91,7 +92,11 @@ namespace Kortex::GameConfig
 				}
 			};
 		}
-		return false;
+		
+		if (!m_Source)
+		{
+			m_Source = std::make_unique<NullSource>();
+		}
 	}
 	void ItemGroup::ReadItems()
 	{

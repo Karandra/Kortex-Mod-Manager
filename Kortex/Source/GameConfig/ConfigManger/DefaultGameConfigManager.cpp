@@ -25,7 +25,7 @@ namespace Kortex::GameConfig
 
 		if (Workspace* workspace = Workspace::GetInstance())
 		{
-			workspace->ReloadWorkspace();
+			workspace->ScheduleReload();
 		}
 	}
 

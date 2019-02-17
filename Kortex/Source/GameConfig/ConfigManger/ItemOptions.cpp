@@ -76,4 +76,8 @@ namespace Kortex::GameConfig
 		CopyIfDefault(m_Precision, other.m_Precision, copyWhat, ItemOptionsCopy::Precision);
 		CopyIfDefault(m_Precision, dataType.GetPrecision(), copyWhat, ItemOptionsCopy::Precision);
 	}
+	void ItemOptions::CopyPrecisionIfNotSpecified(const DataType& dataType)
+	{
+		CopyIfNotSpecified(*this, dataType, ItemOptionsCopy::Precision);
+	}
 }

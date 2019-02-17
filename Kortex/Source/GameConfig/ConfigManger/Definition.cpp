@@ -56,6 +56,8 @@ namespace Kortex::GameConfig
 
 			// Load options
 			m_Options.Load(rootNode.GetFirstChildElement(wxS("Options")));
+			m_Options.CopyPrecisionIfNotSpecified(GetDataType(DataTypeID::Float32));
+			m_Options.CopyPrecisionIfNotSpecified(GetDataType(DataTypeID::Float64));
 
 			// Load groups
 			LoadGroups(rootNode.GetFirstChildElement(wxS("Groups")));

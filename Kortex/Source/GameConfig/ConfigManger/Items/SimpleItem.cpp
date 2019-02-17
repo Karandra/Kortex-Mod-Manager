@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SimpleItem.h"
+#include "GameConfig/ConfigManger/ItemGroup.h"
 #include "Utility/KAux.h"
 #include <KxFramework/DataView2/DataView2.h>
 
@@ -131,6 +132,7 @@ namespace Kortex::GameConfig
 	SimpleItem::SimpleItem(ItemGroup& group, bool isUnknown)
 		:IExtendInterface(group), m_IsUnknown(isUnknown)
 	{
+		GetOptions().CopyIfNotSpecified(group.GetOptions(), GetDataType());
 	}
 
 	bool SimpleItem::Create(const KxXMLNode& itemNode)

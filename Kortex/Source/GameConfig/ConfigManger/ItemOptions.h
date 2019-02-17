@@ -97,5 +97,6 @@ namespace Kortex::GameConfig
 
 			void Load(const KxXMLNode& node, const DataType& dataType = {});
 			void CopyIfNotSpecified(const ItemOptions& other, const DataType& dataType = {}, ItemOptionsCopy copyWhat = ItemOptionsCopy::Everything);
+			void CopyPrecisionIfNotSpecified(const DataType& dataType);
 	};
 }

@@ -328,7 +328,7 @@ namespace Kortex::GameInstance
 			{
 				KxShellLink link;
 				link.SetTarget(IApplication::GetInstance()->GetExecutablePath());
-				link.SetArguments(KxString::Format("InstanceID \"%2\"", instance->GetInstanceID()));
+				link.SetArguments(KxString::Format("-InstanceID \"%1\"", instance->GetInstanceID()));
 				link.SetWorkingFolder(KxFile::GetCWD());
 				link.SetIconLocation(instance->GetIconLocation());
 				link.Save(dialog.GetResult());

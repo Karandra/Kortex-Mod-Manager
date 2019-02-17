@@ -643,6 +643,7 @@
     <Xml Include="Bin\Data\ConfigDefinitions\ENB.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="Bin\Data\ConfigDefinitions\Games\Morrowind.xml" />
     <Xml Include="Bin\Data\ConfigDefinitions\Games\Skyrim.xml">
       <SubType>Designer</SubType>
     </Xml>

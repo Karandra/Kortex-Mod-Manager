@@ -54,9 +54,19 @@
 		</ProgramManager>
 	</Programs>
 
-	<GameConfig EnableENB="0">
-		<Entry ID="0" Format="INI" TypeDetectionMethod="DataAnalysis">$(ConfigDir)\Morrowind.ini</Entry>
-	</GameConfig>
+	<GameConfigModule>
+		<ConfigManager>
+			<Definitions>
+				<Definition ID="Games/Morrowind">
+					<Groups>
+						<Group ID="Game">
+							<Source Type="FSPath">$(ConfigDir)\Morrowind.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+			</Definitions>
+		</ConfigManager>
+	</GameConfigModule>
 
 	<GameMods>
 		<ModManager>

@@ -80,10 +80,32 @@
 		</Programs>
 	</ProgramManager>
 
-	<GameConfig EnableENB="1">
-		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Oblivion.ini</Entry>
-		<Entry ID="1000" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\ConstructionSet.ini</Entry>
-	</GameConfig>
+	<GameConfigModule>
+		<ConfigManager>
+			<Definitions>
+				<Definition ID="Games/Skyrim">
+					<Groups>
+						<Group ID="GamePrefs">
+							<Source Type="FSPath">$(ConfigDir)\Oblivion.ini</Source>
+						</Group>
+						<Group ID="EditorPrefs">
+							<Source Type="FSPath">ConstructionSet.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+				<Definition ID="ENB">
+					<Groups>
+						<Group ID="ENBLocal">
+							<Source Type="FSPath">ENBLocal.ini</Source>
+						</Group>
+						<Group ID="ENBSeries">
+							<Source Type="FSPath">ENBSeries.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+			</Definitions>
+		</ConfigManager>
+	</GameConfigModule>
 
 	<GameMods>
 		<ModManager>

@@ -231,12 +231,41 @@
 		</ProgramManager>
 	</Programs>
 
-	<GameConfig EnableENB="1">
-		<Entry ID="0" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Skyrim.ini</Entry>
-		<Entry ID="1" Format="INI" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\SkyrimPrefs.ini</Entry>
-		<Entry ID="1000" Format="INI" TypeDetectionMethod="HungarianNotation">CreationKit.ini</Entry>
-		<Entry ID="1001" Format="INI" TypeDetectionMethod="HungarianNotation">CreationKitPrefs.ini</Entry>
-	</GameConfig>
+	<GameConfigModule>
+		<ConfigManager>
+			<Definitions>
+				<Definition ID="Games/Skyrim">
+					<Groups>
+						<Group ID="Game">
+							<Source Type="FSPath">$(ConfigDir)\Skyrim.ini</Source>
+						</Group>
+						<Group ID="GamePrefs">
+							<Source Type="FSPath">$(ConfigDir)\SkyrimPrefs.ini</Source>
+						</Group>
+						<Group ID="GameCustom">
+							<Source Type="FSPath">$(ConfigDir)\SkyrimCustom.ini</Source>
+						</Group>
+						<Group ID="Editor">
+							<Source Type="FSPath">CreationKit.ini</Source>
+						</Group>
+						<Group ID="EditorPrefs">
+							<Source Type="FSPath">CreationKitPrefs.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+				<Definition ID="ENB">
+					<Groups>
+						<Group ID="ENBLocal">
+							<Source Type="FSPath">ENBLocal.ini</Source>
+						</Group>
+						<Group ID="ENBSeries">
+							<Source Type="FSPath">ENBSeries.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+			</Definitions>
+		</ConfigManager>
+	</GameConfigModule>
 
 	<GameData>
 		<PluginManager InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">

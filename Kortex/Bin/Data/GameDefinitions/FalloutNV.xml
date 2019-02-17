@@ -83,12 +83,38 @@
 		</ProgramManager>
 	</Programs>
 
-	<GameConfig EnableENB="1">
-		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout.ini</Entry>
-		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\FalloutPrefs.ini</Entry>
-		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\GECKCustom.ini</Entry>
-		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\GECKPrefs.ini</Entry>
-	</GameConfig>
+	<GameConfigModule>
+		<ConfigManager>
+			<Definitions>
+				<Definition ID="Games/Skyrim">
+					<Groups>
+						<Group ID="Game">
+							<Source Type="FSPath">$(ConfigDir)\Fallout.ini</Source>
+						</Group>
+						<Group ID="GamePrefs">
+							<Source Type="FSPath">$(ConfigDir)\FalloutPrefs.ini</Source>
+						</Group>
+						<Group ID="Editor">
+							<Source Type="FSPath">GECKPrefs.ini</Source>
+						</Group>
+						<Group ID="EditorPrefs">
+							<Source Type="FSPath">GECKCustom.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+				<Definition ID="ENB">
+					<Groups>
+						<Group ID="ENBLocal">
+							<Source Type="FSPath">ENBLocal.ini</Source>
+						</Group>
+						<Group ID="ENBSeries">
+							<Source Type="FSPath">ENBSeries.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+			</Definitions>
+		</ConfigManager>
+	</GameConfigModule>
 
 	<GameData>
 		<PluginManager InterfaceName="Bethesda" PluginFileFormat="BethesdaSkyrim">

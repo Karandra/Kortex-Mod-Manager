@@ -67,13 +67,41 @@
 		</Programs>
 	</ProgramManager>
 
-	<GameConfig EnableENB="1">
-		<Entry Format="INI" ID="0" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout4.ini</Entry>
-		<Entry Format="INI" ID="1" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout4Prefs.ini</Entry>
-		<Entry Format="INI" ID="2" TypeDetectionMethod="HungarianNotation">$(ConfigDir)\Fallout4Custom.ini</Entry>
-		<Entry Format="INI" ID="1000" TypeDetectionMethod="HungarianNotation">CreationKit.ini</Entry>
-		<Entry Format="INI" ID="1001" TypeDetectionMethod="HungarianNotation">CreationKitPrefs.ini</Entry>
-	</GameConfig>
+	<GameConfigModule>
+		<ConfigManager>
+			<Definitions>
+				<Definition ID="Games/Skyrim">
+					<Groups>
+						<Group ID="Game">
+							<Source Type="FSPath">$(ConfigDir)\Fallout4.ini</Source>
+						</Group>
+						<Group ID="GamePrefs">
+							<Source Type="FSPath">$(ConfigDir)\Fallout4Prefs.ini</Source>
+						</Group>
+						<Group ID="GameCustom">
+							<Source Type="FSPath">$(ConfigDir)\Fallout4Custom.ini</Source>
+						</Group>
+						<Group ID="Editor">
+							<Source Type="FSPath">CreationKit.ini</Source>
+						</Group>
+						<Group ID="EditorPrefs">
+							<Source Type="FSPath">CreationKitPrefs.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+				<Definition ID="ENB">
+					<Groups>
+						<Group ID="ENBLocal">
+							<Source Type="FSPath">ENBLocal.ini</Source>
+						</Group>
+						<Group ID="ENBSeries">
+							<Source Type="FSPath">ENBSeries.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+			</Definitions>
+		</ConfigManager>
+	</GameConfigModule>
 
 	<PluginManager Enabled="1" InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
 		<Limit Value="254"/>

@@ -13,10 +13,9 @@ namespace Kortex::GameConfig
 
 namespace Kortex::GameConfig
 {
-	class ISource
+	class ISource: public RTTI::IInterface<ISource>
 	{
 		protected:
-			wxString DispatchFSLocation(const wxString& path) const;
 			template<class TFunctor> TypeID InvokeTypeDetectors(const ItemGroup& group, TFunctor&& func)
 			{
 				TypeID type;
@@ -35,7 +34,6 @@ namespace Kortex::GameConfig
 			virtual ~ISource() = default;
 
 		public:
-			virtual SourceTypeValue GetType() const = 0;
 			virtual SourceFormatValue GetFormat() const = 0;
 			virtual wxString GetPathDescription() const = 0;
 

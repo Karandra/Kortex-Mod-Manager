@@ -1086,6 +1086,9 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INISource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\IFileSource.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2056,6 +2059,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\Sources\NullSource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\IFileSource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

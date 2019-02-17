@@ -13,7 +13,7 @@ namespace Kortex::GameConfig
 	{
 		if (!m_IsOpened)
 		{
-			KxFileStream stream(DispatchFSLocation(KVarExp(m_FilePath)), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+			KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 			if (stream.IsOk() && m_INI.Load(stream))
 			{
 				m_IsOpened = true;
@@ -26,7 +26,7 @@ namespace Kortex::GameConfig
 	{
 		if (m_IsOpened)
 		{
-			KxFileStream stream(DispatchFSLocation(KVarExp(m_FilePath)), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+			KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 			if (stream.IsOk())
 			{
 				return m_INI.Save(stream);

@@ -4,7 +4,7 @@
 
 namespace Kortex::GameConfig
 {
-	class NullSource: public ISource
+	class NullSource: public RTTI::IExtendInterface<NullSource, ISource>
 	{
 		private:
 			bool m_IsOpened = false;
@@ -13,10 +13,6 @@ namespace Kortex::GameConfig
 			NullSource() = default;
 
 		public:
-			SourceTypeValue GetType() const override
-			{
-				return SourceType::None;
-			}
 			SourceFormatValue GetFormat() const override
 			{
 				return SourceFormat::None;

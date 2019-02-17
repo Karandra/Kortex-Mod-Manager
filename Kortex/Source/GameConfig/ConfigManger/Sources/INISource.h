@@ -1,11 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "GameConfig/ConfigManger/ISource.h"
+#include "GameConfig/ConfigManger/IFileSource.h"
 #include <KxFramework/KxINI.h>
 
 namespace Kortex::GameConfig
 {
-	class INISource: public ISource
+	class INISource: public RTTI::IExtendInterface<INISource, ISource, IFileSource>
 	{
 		private:
 			KxINI m_INI;
@@ -20,16 +21,24 @@ namespace Kortex::GameConfig
 			}
 
 		public:
-			SourceTypeValue GetType() const override
+			// IFSSource
+			wxString GetFileName() const override
 			{
-				return SourceType::FSPath;
+				return m_FileName;
 			}
+			wxString GetFilePath() const override
+			{
+				return m_FilePath;
+			}
+
+			// ISource
 			SourceFormatValue GetFormat() const override
 			{
 				return SourceFormat::INI;
 			}
 			wxString GetPathDescription() const override
 			{
+				// No file name resolution is required, we can return it unchanged.
 				return m_FileName;
 			}
 

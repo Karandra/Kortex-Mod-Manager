@@ -103,7 +103,7 @@ namespace Kortex::GameConfig
 		{
 			definition->ForEachGroup([](ItemGroup& group)
 			{
-				group.ReadItems();
+				group.LoadItemsData();
 			});
 		}
 	}

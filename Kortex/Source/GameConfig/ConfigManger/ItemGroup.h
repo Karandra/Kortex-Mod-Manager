@@ -29,11 +29,12 @@ namespace Kortex::GameConfig
 
 			std::vector<std::unique_ptr<Item>> m_Items;
 			std::unordered_map<size_t, Item*> m_ItemsHash;
-			bool m_UnknownLoaded = false;
 			bool m_Destructing = false;
 
 		private:
 			void LoadItems(const KxXMLNode& groupNode);
+			void RemoveAllUnknownItems();
+
 			void AddKnownItem(size_t hash, Item& item);
 			void RemoveKnownItem(size_t hash);
 
@@ -77,7 +78,7 @@ namespace Kortex::GameConfig
 				return *m_Source;
 			}
 			
-			void ReadItems();
+			void LoadItemsData();
 			void OnLoadInstance(const KxXMLNode& groupNode);
 
 			template<class TFunctor> void ForEachItem(TFunctor&& func) const

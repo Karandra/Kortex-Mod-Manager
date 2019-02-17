@@ -35,6 +35,15 @@ namespace Kortex::GameConfig
 			}
 		}
 	}
+	void ItemGroup::RemoveAllUnknownItems()
+	{
+		auto it = std::remove_if(m_Items.begin(), m_Items.end(), [](const auto& item)
+		{
+			return item->IsUnknown();
+		});
+		m_Items.erase(it, m_Items.end());
+	}
+	
 	void ItemGroup::AddKnownItem(size_t hash, Item& item)
 	{
 		if (!m_Destructing && hash != 0)
@@ -98,15 +107,12 @@ namespace Kortex::GameConfig
 			m_Source = std::make_unique<NullSource>();
 		}
 	}
-	void ItemGroup::ReadItems()
+	void ItemGroup::LoadItemsData()
 	{
 		if (m_Source && m_Source->Open())
 		{
-			if (!m_UnknownLoaded)
-			{
-				m_Source->LoadUnknownItems(*this);
-				m_UnknownLoaded = true;
-			}
+			RemoveAllUnknownItems();
+			m_Source->LoadUnknownItems(*this);
 
 			for (auto& item: m_Items)
 			{

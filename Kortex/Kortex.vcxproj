@@ -153,7 +153,6 @@
     <ClCompile Include="Source\GameData\SaveManager\Workspace.cpp" />
     <ClCompile Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.cpp" />
     <ClCompile Include="Source\GameData\ScreenshotsGallery\Workspace.cpp" />
-    <ClCompile Include="Source\GameInstance\Config\KLocationsManagerConfig.cpp" />
     <ClCompile Include="Source\GameInstance\CreationDialog.cpp" />
     <ClCompile Include="Source\GameInstance\IGameInstance.cpp" />
     <ClCompile Include="Source\GameInstance\IGameProfile.cpp" />
@@ -455,7 +454,6 @@
     <ClInclude Include="Source\GameData\SaveManager\Workspace.h" />
     <ClInclude Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.h" />
     <ClInclude Include="Source\GameData\ScreenshotsGallery\Workspace.h" />
-    <ClInclude Include="Source\GameInstance\Config\KLocationsManagerConfig.h" />
     <ClInclude Include="Source\GameInstance\CreationDialog.h" />
     <ClInclude Include="Source\GameInstance\IGameInstance.h" />
     <ClInclude Include="Source\GameInstance\IGameProfile.h" />

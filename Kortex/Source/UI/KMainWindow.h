@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Application/Options/Option.h"
 #include "Utility/KImageProvider.h"
+#include "Utility/KLabeledValue.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxFrame.h>
 #include <KxFramework/KxPanel.h>
@@ -47,10 +48,10 @@ class KMainWindow:
 		wxBoxSizer* m_MainSizer = nullptr;
 		wxBoxSizer* m_ToolBarSizer = nullptr;
 
-		/* StatusBar */
+		// StatusBar
 		KxStatusBarEx* m_StatusBar = nullptr;
 		
-		/* ToolBar */
+		// ToolBar
 		KxAuiToolBar* m_ToolBar = nullptr;
 		KxAuiToolBarItem* m_ToolBar_MainMenu = nullptr;
 		int m_ToolBar_InsertionIndex = 0;
@@ -59,13 +60,16 @@ class KMainWindow:
 		KxAuiToolBarItem* m_QuickToolBar_QuickSettingsMenu = nullptr;
 		KxAuiToolBarItem* m_QuickToolBar_Help = nullptr;
 
-		/* Workspaces */
+		// Workspaces
 		WorkspaceInstancesMapType m_WorkspaceInstances;
 		wxSimplebook* m_WorkspaceContainer = nullptr;
 		bool m_HasCurrentWorkspace = false;
 
-		/* Loadable managers menu */
+		// Pluggable managers menu
 		KxMenu* m_ManagersMenu = nullptr;
+
+		// Locations menu data
+		KLabeledValue::Vector m_Locations;
 
 	private:
 		void CreateToolBar();
@@ -77,6 +81,7 @@ class KMainWindow:
 		void CreatePluggableManagersWorkspaces(KWorkspace* parentWorkspace = nullptr);
 		void CreateMainWorkspaces();
 		void CreateMainMenu(KxMenu& mainMenu);
+		void AddLocationsMenu(KxMenu& mainMenu);
 
 	private:
 		void OnQSMButton(KxAuiToolBarEvent& event);

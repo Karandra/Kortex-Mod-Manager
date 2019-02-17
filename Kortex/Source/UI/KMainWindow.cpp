@@ -12,7 +12,6 @@
 #include "Application/About/Dialog.h"
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
-#include "GameInstance/Config/KLocationsManagerConfig.h"
 #include "Utility/KAux.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -233,9 +232,9 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 	}
 
 	// Add locations
-	{
-		KLocationsManagerConfig();//::GetInstance()->OnAddMainMenuItems(mainMenu);
-	}
+	AddLocationsMenu(mainMenu);
+
+	// Add about
 	{
 		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.About")));
 		item->SetBitmap(KGetBitmap(KIMG_INFORMATION_FRAME));
@@ -244,6 +243,68 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 			Kortex::Application::AboutDialog(this).ShowModal();
 		});
 	}
+}
+void KMainWindow::AddLocationsMenu(KxMenu& mainMenu)
+{
+	// Set predefined locations
+	if (m_Locations.empty())
+	{
+		using Variables::WrapAsInline;
+
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_APP_SETTINGS_DIR), KTr("OpenLocation.AppSettings"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_ACTUAL_GAME_DIR), KTr("OpenLocation.GameRoot"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_VIRTUAL_GAME_DIR), KTr("OpenLocation.VirtualGameRoot"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_ACTUAL_CONFIG_DIR), KTr("OpenLocation.ConfigRootTarget"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_CONFIG_DIR), KTr("OpenLocation.VirtualConfigRoot"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_OVERWRITES_DIR), KTr("OpenLocation.WriteTargetRoot"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_INSTANCE_DIR), KTr("OpenLocation.CurrentProfileRoot"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_INSTANCES_DIR), KTr("OpenLocation.ProfilesRoot"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_MODS_DIR), KTr("OpenLocation.ModsRoot"));
+		m_Locations.emplace_back(WrapAsInline(Variables::KVAR_SAVES_DIR), KTr("OpenLocation.Saves"));
+
+		// TODO: make main window a manager to allow it load instance config
+		#if 0
+		if (node.HasChildren())
+		{
+			// This will allow to insert a separator in locations menu
+			m_Locations.emplace_back(KLabeledValue(wxEmptyString, wxEmptyString));
+
+			// Load profile locations
+			for (KxXMLNode entryNode = node.GetFirstChildElement("Entry"); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
+			{
+				KLabeledValue& value = m_Locations.emplace_back(KLabeledValue(KVarExp(entryNode.GetValue()), KVarExp(entryNode.GetAttribute("Label"))));
+				if (value.GetValue().IsEmpty())
+				{
+					m_Locations.pop_back();
+				}
+			}
+		}
+		#endif
+	}
+
+	KxMenu* locationsMenu = new KxMenu();
+	for (const KLabeledValue& entry: m_Locations)
+	{
+		if (!entry.HasLabel() && !entry.HasLabel())
+		{
+			locationsMenu->AddSeparator();
+		}
+		else
+		{
+			KxMenuItem* item = locationsMenu->Add(new KxMenuItem(KVarExp(entry.GetLabel())));
+			item->SetBitmap(KGetBitmap(KIMG_FOLDER));
+			item->Bind(KxEVT_MENU_SELECT, [this, &entry](KxMenuEvent& event)
+			{
+				// Create the folder, shouldn't be harmful.
+				KxFile folder(KVarExp(entry.GetValue()));
+				folder.CreateFolder();
+
+				return KxShell::Execute(this, folder.GetFullPath(), wxS("open"));
+			});
+		}
+	}
+	mainMenu.Add(locationsMenu, KTr("MainMenu.OpenLocation"))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+	mainMenu.AddSeparator();
 }
 
 void KMainWindow::OnQSMButton(KxAuiToolBarEvent& event)

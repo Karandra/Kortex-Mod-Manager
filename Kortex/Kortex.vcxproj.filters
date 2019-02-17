@@ -84,9 +84,6 @@
     <Filter Include="Code\Source\GameInstance">
       <UniqueIdentifier>{baf9614d-07aa-47eb-8665-ead79d31a066}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\GameInstance\Config">
-      <UniqueIdentifier>{3e6b9084-f94f-476d-9b43-fb88c706680f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\GameData">
       <UniqueIdentifier>{34b15e23-e6b7-434d-a450-7ef713e39793}</UniqueIdentifier>
     </Filter>
@@ -198,9 +195,6 @@
     </Filter>
     <Filter Include="Code\Headers\GameInstance">
       <UniqueIdentifier>{1e072cee-0e2c-4fc2-9f84-f016c2f83098}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameInstance\Config">
-      <UniqueIdentifier>{04a98a9d-f008-41e3-886d-d303bfcbb8df}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers\GameData">
       <UniqueIdentifier>{c2418d72-d34b-4a75-9979-cb2e26cd962f}</UniqueIdentifier>
@@ -551,9 +545,6 @@
     </ClCompile>
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameInstance\Config\KLocationsManagerConfig.cpp">
-      <Filter>Code\Source\GameInstance\Config</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCCAssignedConditionalsEditor.cpp">
       <Filter>Code\Source\PackageCreator\PageComponents</Filter>
@@ -1324,9 +1315,6 @@
     </ClInclude>
     <ClInclude Include="Source\Archive\KBethesdaArchive.h">
       <Filter>Code\Headers\Archive</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\Config\KLocationsManagerConfig.h">
-      <Filter>Code\Headers\GameInstance\Config</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KUPtrVectorUtil.h">
       <Filter>Code\Headers\Utility</Filter>

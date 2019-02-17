@@ -64,6 +64,21 @@ namespace Kortex::GameConfig
 		}
 		return false;
 	}
+	void Definition::RemoveInvalidGroups()
+	{
+		for (auto it = m_Groups.begin(); it != m_Groups.end();)
+		{
+			if (!it->second->IsOK())
+			{
+				m_Groups.erase(it++);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+
 	DataType Definition::GetDataType(TypeID id) const
 	{
 		auto it = m_DataTypes.find(id);

@@ -58,6 +58,7 @@ namespace Kortex::GameConfig
 				{
 					LoadGroup(defNode, group);
 				});
+				definition->RemoveInvalidGroups();
 				m_Definitions.insert_or_assign(id, std::move(definition));
 			}
 		}

@@ -70,6 +70,7 @@ namespace Kortex::GameConfig
 			DataType GetDataType(TypeID id) const;
 
 			bool Load();
+			void RemoveInvalidGroups();
 
 			ItemGroup* GetGroupByID(const wxString& id)
 			{

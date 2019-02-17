@@ -37,12 +37,14 @@ Version 2.0 - x
 [Download Manager] Version 1.0.
 [Plugin Manager] For Morrowind, Oblivion, Fallout 3 and Fallout: New Vegas forced sorting by plugin modification date is disabled.
 [Plugin Manager] Added plugins counter for all types.
-[Plugin Manager] Version 1.3
+[Plugin Manager] Version 1.3.
 [Save Manager] Improved saves list performace.
 [Save Manager] Hiding screenshot column changes rows height.
 [Save Manager] Added reading of ESL block for Fallout 4 and SkyrimSE. Fixed reading ESP list for SkyrimSE.
 [Save Manager] Fixed save screenshot for Morrowind.
 [Save Manager] Version 1.1.
+[Config Manager] Configurator rewritten from scratch.
+[Config Manager] Version 2.0.
 
 Version 1.3 - 12.07.2018
 [General] The ability to specify a folder for program settings via command-line arguments is added. Syntax: -GlobalConfigPath "Path to folder"
@@ -115,13 +117,13 @@ Version 1.1 - 21.04.2018
 [Package Manager] Added the ability to change the properties of all components at once in the group through the appropriate editing menu by calling it by right-clicking on the column header.
 [Package Manager] You can now add multiple files at the same time when you add documents to the installer project.
 [Package Manager] Module Version 1.1.
-[Manage Mods] Fixed the impossibility of changing the name of an unset mod in the "Manage Mods" window.
-[Manage Modes] Added a request to unmount VFS when trying to close the program instead of minimizing the window.
-[Manage Modes] Added export of a list of mods in HTML format.
-[Manage mods] Mods in the download list can be moved by dragging the selected range with the mouse. Both continuous and unbound bands are supported.
-[Modulation Control] Module Version 1.0.1.
-[Manage plugins] Added transition to the mode when double clicking on the column "Part" in the list of plug-ins.
-[Plugin Management] Drag and drop is available in the list of plug-ins.
-[Plugin Management] Module Version 1.0.1.
+[Mod Manager] Fixed the impossibility of changing the name of an unset mod in the "Manage Mods" window.
+[Mod Manager] Added a request to unmount VFS when trying to close the program instead of minimizing the window.
+[Mod Manager] Added export of a list of mods in HTML format.
+[Mod Manager] Mods in the download list can be moved by dragging the selected range with the mouse. Both continuous and unbound bands are supported.
+[Mod Manager] Module Version 1.0.1.
+[Plugin Manager] Added transition to the mode when double clicking on the column "Part" in the list of plug-ins.
+[Plugin Manager] Drag and drop is available in the list of plug-ins.
+[Plugin Manager] Module Version 1.0.1.
 
 Version 1.0 - 09.04.2018

@@ -225,13 +225,13 @@ namespace Kortex::GameConfig
 		{
 			if (!m_CachedViewValue)
 			{
+				wxString finalValue;
 				if (GetOptions().HasOutputFormat())
 				{
-					m_CachedViewValue = FormatToOutput(SerializeFor::Display);
+					finalValue = FormatToOutput(SerializeFor::Display);
 				}
 				else
 				{
-					wxString finalValue;
 					for (const StructSubItem& subItem: m_SubItems)
 					{
 						wxString value = subItem.GetValue().Serialize(subItem);
@@ -244,7 +244,17 @@ namespace Kortex::GameConfig
 							finalValue = Kx::Utility::String::ConcatWithSeparator(wxS(", "), finalValue, value);
 						}
 					}
-					m_CachedViewValue = KxString::Format(wxS("{%1}"), finalValue);
+					finalValue = KxString::Format(wxS("{%1}"), finalValue);
+				}
+
+				const SampleValue* sample = GetSamples().FindSampleByValue(ItemValue(finalValue));
+				if (sample && sample->HasLabel())
+				{
+					m_CachedViewValue = KxString::Format(wxS("%1 - %2"), finalValue, sample->GetLabel());
+				}
+				else
+				{
+					m_CachedViewValue = finalValue;
 				}
 			}
 			return *m_CachedViewValue;

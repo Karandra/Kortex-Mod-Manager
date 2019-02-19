@@ -111,7 +111,7 @@ namespace Kortex::GameConfig
 			}
 			case SamplingFunctionID::GetVideoModes:
 			{
-				SamplingFunction::GetVideoModes(m_Values).Invoke(arguments);
+				SamplingFunction::GetVideoModes(m_Values, m_Item.GetManager()).Invoke(arguments);
 				break;
 			}
 			case SamplingFunctionID::GetVirtualKeys:

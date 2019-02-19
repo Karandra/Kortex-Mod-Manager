@@ -2,6 +2,11 @@
 #include "stdafx.h"
 #include "GameConfig/ConfigManger/ISamplingFunction.h"
 
+namespace Kortex
+{
+	class IConfigManager;
+}
+
 namespace Kortex::GameConfig::SamplingFunction
 {
 	class GetVideoModes: public ISamplingFunction
@@ -17,14 +22,15 @@ namespace Kortex::GameConfig::SamplingFunction
 
 		private:
 			SampleValue::Vector& m_Values;
+			IConfigManager& m_Manager;
 
 		protected:
 			void DoCall(Component component, const wxString& format = {});
 			void OnCall(const ItemValue::Vector& arguments) override;
 			
 		public:
-			GetVideoModes(SampleValue::Vector& values)
-				:m_Values(values)
+			GetVideoModes(SampleValue::Vector& values, IConfigManager& manager)
+				:m_Values(values), m_Manager(manager)
 			{
 			}
 	};

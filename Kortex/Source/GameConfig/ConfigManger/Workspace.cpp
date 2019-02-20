@@ -9,8 +9,9 @@
 namespace Kortex::GameConfig
 {
 	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow), m_MainSizer(new wxBoxSizer(wxVERTICAL))
+		:KWorkspace(mainWindow), m_DisplayModel(*IGameConfigManager::GetInstance())
 	{
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 		SetWorkspaceController(new WorkspaceController(this));
 	}
 	Workspace::~Workspace()

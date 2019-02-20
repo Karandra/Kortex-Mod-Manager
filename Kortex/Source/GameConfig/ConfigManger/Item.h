@@ -86,6 +86,7 @@ namespace Kortex::GameConfig
 			}
 			void SaveChanges();
 			void DiscardChanges();
+			void DeleteValue();
 
 			IConfigManager& GetManager() const;
 			Definition& GetDefinition() const;

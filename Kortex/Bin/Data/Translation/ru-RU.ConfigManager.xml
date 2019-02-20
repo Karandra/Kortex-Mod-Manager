@@ -4,23 +4,10 @@
 		<Translator>Kerber</Translator>
 	</Info>
 	<StringTable>
-		<String ID="ConfigManager.EditValue.EnterVirtualKey">Выберите значение из списка ниже или нажмите нужную клавишу на клавиутуре</String>
-		<String ID="ConfigManager.EditValue.ValuesRange">Допустимые значения</String>
-		<String ID="ConfigManager.EditValue.Success">Все параметры успешно сохранены</String>
-		<String ID="ConfigManager.EditValue.Error">Ошибка при сохранении параметров</String>
-		<String ID="ConfigManager.EditValue.Discarded">Изменения параметров отменены</String>
-		<String ID="ConfigManager.EditValue.Loading">Загрузка "%1"</String>
-		<String ID="ConfigManager.EditValue.Saving">Сохранение...</String>
-		<String ID="ConfigManager.EditValue.ModifyValue">Изменить значение</String>
-		<String ID="ConfigManager.EditValue.CreateValue.Caption">Добавление параметра</String>
-		<String ID="ConfigManager.EditValue.CreateValue.PathHint">Введите название секции</String>
-		<String ID="ConfigManager.EditValue.CreateValue.ValueNameHint">Введите название параметра</String>
-		<String ID="ConfigManager.EditValue.CreateValue.ValueDataHint">Введите значение</String>
-		<String ID="ConfigManager.EditValue.CreateValue.NameCollision">Новый параметр совпадает с одним из известных параметров. Выберите другие путь и/или название</String>
-		<String ID="ConfigManager.EditValue.CreateValue.EmptyFields">Пустые поля не допускаются</String>
-		<String ID="ConfigManager.EditValue.CreateValue">Добавить параметр</String>
-		<String ID="ConfigManager.EditValue.RemoveValue">Удалить параметр</String>
-		<String ID="ConfigManager.EditValue.RemovePath">Удалить секцию</String>
+		<String ID="ConfigManager.Menu.EditValue">Изменить значение</String>
+		<String ID="ConfigManager.Menu.DiscardChange">Отменить изменение</String>
+		<String ID="ConfigManager.Menu.CreateValue">Добавить параметр</String>
+		<String ID="ConfigManager.Menu.RemoveValue">Удалить параметр</String>
 
 		<String ID="ConfigManager.View.Path">Путь</String>
 		<String ID="ConfigManager.View.Name">Параметр</String>

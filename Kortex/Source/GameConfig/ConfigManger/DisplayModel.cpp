@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
+#include "Workspace.h"
+#include "UI/KWorkspaceController.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameConfig.hpp>
 #include <Kortex/Utility.hpp>
@@ -16,6 +18,19 @@ namespace Kortex::GameConfig
 	{
 		// Root node doesn't own anything
 		node.DetachAllChildren();
+	}
+
+	bool DisplayModel::OnAskRefreshView()
+	{
+		Workspace* workspace = Workspace::GetInstance();
+		if (workspace)
+		{
+			if (KWorkspaceController* controller = workspace->GetWorkspaceController())
+			{
+				return controller->AskForSave();
+			}
+		}
+		return true;
 	}
 
 	void DisplayModel::OnActivate(KxDataView2::Event& event)
@@ -38,9 +53,67 @@ namespace Kortex::GameConfig
 			}
 		}
 	}
+	void DisplayModel::OnContextMenu(KxDataView2::Event& event)
+	{
+		Item* item = event.GetNode() ? event.GetNode()->QueryInterface<Item>() : nullptr;
+		KxDataView2::Column* column = event.GetColumn();
 
-	DisplayModel::DisplayModel()
-		:m_Manager(*IGameConfigManager::GetInstance()), m_Translator(m_Manager.GetTranslator())
+		KxMenu menu;
+		{
+			KxMenuItem* menuItem = menu.Add(new KxMenuItem(KxID_EDIT, m_Translator.GetString("ConfigManager.Menu.EditValue")));
+			menuItem->SetBitmap(KGetBitmap(KIMG_PENCIL_SMALL));
+			menuItem->SetDefault();
+			menuItem->Enable(item);
+		}
+		{
+			KxMenuItem* menuItem = menu.Add(new KxMenuItem(KxID_UNDO, m_Translator.GetString("ConfigManager.Menu.DiscardChange")));
+			menuItem->SetBitmap(KGetBitmap(KIMG_CROSS_WHITE));
+			menuItem->Enable(item && item->HasChanges());
+		}
+		{
+			KxMenuItem* menuItem = menu.Add(new KxMenuItem(KxID_REFRESH, m_Translator.GetString(KxID_REFRESH)));
+			menuItem->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
+		}
+
+		menu.AddSeparator();
+		{
+			KxMenuItem* menuItem = menu.Add(new KxMenuItem(KxID_DELETE, m_Translator.GetString("ConfigManager.Menu.RemoveValue")));
+			menuItem->SetBitmap(KGetBitmap(KIMG_MINUS_SMALL));
+			menuItem->Enable(item);
+		}
+
+		switch (menu.Show(GetView()))
+		{
+			case KxID_EDIT:
+			{
+				item->OnActivate(*GetView()->GetColumnByID(ColumnID::Value));
+				break;
+			}
+			case KxID_UNDO:
+			{
+				item->DiscardChanges();
+				break;
+			}
+			case KxID_REFRESH:
+			{
+				if (OnAskRefreshView())
+				{
+					m_Manager.Load();
+					LoadView();
+				}
+				break;
+			}
+
+			case KxID_DELETE:
+			{
+				item->DeleteValue();
+				break;
+			}
+		};
+	}
+
+	DisplayModel::DisplayModel(IConfigManager& manager)
+		:m_Manager(manager), m_Translator(manager.GetTranslator())
 	{
 	}
 	DisplayModel::~DisplayModel()
@@ -64,6 +137,13 @@ namespace Kortex::GameConfig
 
 		view->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivate, this);
 		view->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnActivate, this);
+		view->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
+		view->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, [view](Event& event)
+		{
+			KxMenu menu;
+			view->CreateColumnSelectionMenu(menu);
+			view->OnColumnSelectionMenu(menu);
+		});
 	}
 	void DisplayModel::ClearView()
 	{

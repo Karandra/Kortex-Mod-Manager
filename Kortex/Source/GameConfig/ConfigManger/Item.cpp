@@ -139,7 +139,12 @@ namespace Kortex::GameConfig
 			m_HasChanges = false;
 		}
 	}
-	
+	void Item::DeleteValue()
+	{
+		Clear();
+		m_HasChanges = true;
+	}
+
 	DataType Item::GetDataType() const
 	{
 		return m_Group.GetDefinition().GetDataType(m_TypeID);

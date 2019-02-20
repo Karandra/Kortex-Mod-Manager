@@ -8,7 +8,7 @@
 namespace Kortex
 {
 	class ITranslator;
-	class IGameConfigManager;
+	class IConfigManager;
 }
 
 namespace Kortex::GameConfig
@@ -16,7 +16,7 @@ namespace Kortex::GameConfig
 	class DisplayModel: public RTTI::IExtendInterface<DisplayModel, KxDataView2::Model>
 	{
 		private:
-			IGameConfigManager& m_Manager;
+			IConfigManager& m_Manager;
 			const ITranslator& m_Translator;
 
 			std::unordered_map<wxString, CategoryItem> m_Categories;
@@ -25,11 +25,14 @@ namespace Kortex::GameConfig
 			void OnDeleteNode(KxDataView2::Node* node) override;
 			void OnDetachRootNode(KxDataView2::RootNode& node) override;
 
+			virtual bool OnAskRefreshView();
+
 		private:
 			void OnActivate(KxDataView2::Event& event);
+			void OnContextMenu(KxDataView2::Event& event);
 
 		public:
-			DisplayModel();
+			DisplayModel(IConfigManager& manager);
 			~DisplayModel();
 		
 		public:

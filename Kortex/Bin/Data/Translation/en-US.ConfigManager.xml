@@ -4,23 +4,10 @@
 		<Translator>Monday, Kerber</Translator>
 	</Info>
 	<StringTable>
-		<String ID="ConfigManager.EditValue.EnterVirtualKey">Select a value from the list below or press the corresponding button on your keyboard</String>
-		<String ID="ConfigManager.EditValue.ValuesRange">Value range</String>
-		<String ID="ConfigManager.EditValue.Success">All parameters have been successfully saved</String>
-		<String ID="ConfigManager.EditValue.Error">Failed to save parameters</String>
-		<String ID="ConfigManager.EditValue.Discarded">Parameter changes have been discarded</String>
-		<String ID="ConfigManager.EditValue.Loading">Loading "%1"</String>
-		<String ID="ConfigManager.EditValue.Saving">Saving...</String>
-		<String ID="ConfigManager.EditValue.ModifyValue">Modify value</String>
-		<String ID="ConfigManager.EditValue.CreateValue.Caption">Add parameter</String>
-		<String ID="ConfigManager.EditValue.CreateValue.PathHint">Enter section name</String>
-		<String ID="ConfigManager.EditValue.CreateValue.ValueNameHint">Enter parameter name</String>
-		<String ID="ConfigManager.EditValue.CreateValue.ValueDataHint">Enter value</String>
-		<String ID="ConfigManager.EditValue.CreateValue.NameCollision">There is already a parameter with the same name as you specified. Specify a different path and/or name</String>
-		<String ID="ConfigManager.EditValue.CreateValue.EmptyFields">Empty fields are not allowed</String>
-		<String ID="ConfigManager.EditValue.CreateValue">Add parameter</String>
-		<String ID="ConfigManager.EditValue.RemoveValue">Delete parameter</String>
-		<String ID="ConfigManager.EditValue.RemovePath">Delete section</String>
+		<String ID="ConfigManager.Menu.EditValue">Edit value</String>
+		<String ID="ConfigManager.Menu.DiscardChange">Discard change</String>
+		<String ID="ConfigManager.Menu.CreateValue">Add parameter</String>
+		<String ID="ConfigManager.Menu.RemoveValue">Delete parameter</String>
 
 		<String ID="ConfigManager.View.Path">Path</String>
 		<String ID="ConfigManager.View.Name">Parameter</String>

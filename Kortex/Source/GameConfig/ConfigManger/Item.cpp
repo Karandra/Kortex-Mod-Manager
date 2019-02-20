@@ -142,7 +142,7 @@ namespace Kortex::GameConfig
 	void Item::DeleteValue()
 	{
 		Clear();
-		m_HasChanges = true;
+		ChangeNotify();
 	}
 
 	DataType Item::GetDataType() const

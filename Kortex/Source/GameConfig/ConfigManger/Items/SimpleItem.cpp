@@ -185,7 +185,7 @@ namespace Kortex::GameConfig
 			if (GetTypeID().IsBool())
 			{
 				m_Value.Assign(!m_Value.As<bool>());
-				m_CachedViewData.reset();
+				ChangeNotify();
 				Refresh(column);
 			}
 			else

@@ -36,7 +36,7 @@ namespace Kortex::GameConfig
 			~DisplayModel();
 		
 		public:
-			void CreateView(wxWindow* parent, wxSizer* sizer);
+			void CreateView(wxWindow* parent, wxSizer* sizer = nullptr);
 			void ClearView();
 			void LoadView();
 			void RefreshView();

@@ -36,9 +36,6 @@
     <Filter Include="Code\Source\Utility">
       <UniqueIdentifier>{3d4221b7-0197-4472-840f-106f30da65c6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\SettingsWindow">
-      <UniqueIdentifier>{e9b8debe-3e5f-4a98-b530-52a2df3ad7a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\PackageCreator">
       <UniqueIdentifier>{b0551a4e-5415-4a53-bb31-dfc298c1730a}</UniqueIdentifier>
     </Filter>
@@ -147,9 +144,6 @@
     </Filter>
     <Filter Include="Code\Headers\Utility">
       <UniqueIdentifier>{9abd253e-e468-46a2-9094-58a7460a16c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\SettingsWindow">
-      <UniqueIdentifier>{e905e6c3-93c4-4dfe-a7e4-e8e63dfc9180}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers\PackageCreator">
       <UniqueIdentifier>{422b5703-ecad-46d0-907b-45d21d9d2d6b}</UniqueIdentifier>
@@ -349,6 +343,12 @@
     <Filter Include="Code\Headers\GameConfig\ConfigManger\Sources">
       <UniqueIdentifier>{d441cc9e-18f3-461e-8b28-2762735d2b8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\Application\Window">
+      <UniqueIdentifier>{e9b8debe-3e5f-4a98-b530-52a2df3ad7a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Application\Settings">
+      <UniqueIdentifier>{e905e6c3-93c4-4dfe-a7e4-e8e63dfc9180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -374,9 +374,6 @@
     </ClCompile>
     <ClCompile Include="Source\UI\KNewModDialog.cpp">
       <Filter>Code\Source\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SettingsWindow\KSettingsWindow.cpp">
-      <Filter>Code\Source\SettingsWindow</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp">
       <Filter>Code\Source\UI</Filter>
@@ -1080,6 +1077,12 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\IFileSource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Application\Settings\Window.cpp">
+      <Filter>Code\Source\Application\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Settings\ConfigManager.cpp">
+      <Filter>Code\Source\Application\Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1111,9 +1114,6 @@
     </ClInclude>
     <ClInclude Include="Source\UI\KNewModDialog.h">
       <Filter>Code\Headers\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SettingsWindow\KSettingsWindow.h">
-      <Filter>Code\Headers\SettingsWindow</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KImageViewerDialog.h">
       <Filter>Code\Headers\UI</Filter>
@@ -2050,6 +2050,12 @@
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\IFileSource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Settings\Window.h">
+      <Filter>Code\Headers\Application\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Settings\ConfigManager.h">
+      <Filter>Code\Headers\Application\Settings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

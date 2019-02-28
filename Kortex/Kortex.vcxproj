@@ -71,6 +71,8 @@
     <ClCompile Include="Source\Application\IVariableTable.cpp" />
     <ClCompile Include="Source\Application\Options\Option.cpp" />
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp" />
+    <ClCompile Include="Source\Application\Settings\ConfigManager.cpp" />
+    <ClCompile Include="Source\Application\Settings\Window.cpp" />
     <ClCompile Include="Source\Application\Translation.cpp" />
     <ClCompile Include="Source\Application\Notification\BaseNotification.cpp" />
     <ClCompile Include="Source\Application\Notification\DefaultNotificationCenter.cpp" />
@@ -275,7 +277,6 @@
     <ClCompile Include="Source\UI\KTextEditorDialog.cpp" />
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp" />
-    <ClCompile Include="Source\SettingsWindow\KSettingsWindow.cpp" />
     <ClCompile Include="Source\UI\KNewModDialog.cpp" />
     <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
     <ClCompile Include="Source\Events\LogEvent.cpp" />
@@ -358,6 +359,8 @@
     <ClInclude Include="Source\Application\Options\OptionDatabase.h" />
     <ClInclude Include="Source\Application\Options\OptionSerializer.h" />
     <ClInclude Include="Source\Application\RTTI.h" />
+    <ClInclude Include="Source\Application\Settings\ConfigManager.h" />
+    <ClInclude Include="Source\Application\Settings\Window.h" />
     <ClInclude Include="Source\Application\Translation.h" />
     <ClInclude Include="Source\Application\Module\ManagerInfo.h" />
     <ClInclude Include="Source\Application\Module\ModuleInfo.h" />
@@ -601,7 +604,6 @@
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
     <ClInclude Include="Source\UI\KImageViewerDialog.h" />
     <ClInclude Include="Source\Utility\KLabeledValue.h" />
-    <ClInclude Include="Source\SettingsWindow\KSettingsWindow.h" />
     <ClInclude Include="Source\UI\KNewModDialog.h" />
     <ClInclude Include="Source\UI\KWorkspaceController.h" />
     <ClInclude Include="Source\Utility\KEntryRefT.h" />

@@ -127,7 +127,10 @@ namespace Kortex::GameConfig
 
 		KxDataView2::View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
 		view->SetModel(this);
-		sizer->Add(view, 1, wxEXPAND);
+		if (sizer)
+		{
+			sizer->Add(view, 1, wxEXPAND);
+		}
 
 		ColumnStyle columnStyle = ColumnStyle::Move|ColumnStyle::Size|ColumnStyle::Sort;
 		view->AppendColumn<BitmapTextRenderer>(m_Translator.GetString("ConfigManager.View.Path"), ColumnID::Path, {}, columnStyle);

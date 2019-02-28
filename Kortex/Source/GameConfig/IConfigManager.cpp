@@ -13,13 +13,12 @@ namespace Kortex
 		const SimpleManagerInfo TypeInfo("ConfigManager", "ConfigManager.Name");
 	}
 
+	wxString IConfigManager::GetDefinitionFileByID(const wxString& id)
+	{
+		return IApplication::GetInstance()->GetDataFolder() + wxS("\\ConfigDefinitions\\") + id + wxS(".xml");
+	}
+
 	void IConfigManager::OnInit()
-	{
-	}
-	void IConfigManager::OnExit()
-	{
-	}
-	void IConfigManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
 		RefStackTranslator& translator = GetTranslatorStack();
 		translator.Push(IApplication::GetInstance()->GetTranslation());
@@ -28,6 +27,12 @@ namespace Kortex
 		{
 			translator.Push(m_Translation);
 		}
+	}
+	void IConfigManager::OnExit()
+	{
+	}
+	void IConfigManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
+	{
 	}
 
 	bool IConfigManager::LoadTranslation(KxTranslation& translation, const wxString& component)

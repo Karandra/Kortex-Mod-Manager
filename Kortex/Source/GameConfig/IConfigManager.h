@@ -25,6 +25,9 @@ namespace Kortex
 		public:
 			using DefinitionFunc = std::function<void(const GameConfig::Definition& definition)>;
 
+		public:
+			static wxString GetDefinitionFileByID(const wxString& id);
+
 		private:
 			KxTranslation m_Translation;
 

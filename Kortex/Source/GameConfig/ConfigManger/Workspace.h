@@ -46,7 +46,7 @@ namespace Kortex::GameConfig
 			{
 				return true;
 			}
-	
+
 		public:
 			void OnChangesMade();
 			void OnChangesSaved();

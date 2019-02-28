@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "KMainWindow.h"
-#include "SettingsWindow/KSettingsWindow.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/Events.hpp>
@@ -10,6 +9,7 @@
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "Application/About/Dialog.h"
+#include "Application/Settings/Window.h"
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
 #include "Utility/KAux.h"
@@ -212,7 +212,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 		item->SetBitmap(KGetBitmap(KIMG_APPLICATION_TASK));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
-			KSettingsWindow(this).ShowModal();
+			Application::Settings::Window(this).ShowModal();
 		});
 	}
 	mainMenu.AddSeparator();

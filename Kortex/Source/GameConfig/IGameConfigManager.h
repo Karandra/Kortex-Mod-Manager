@@ -8,9 +8,6 @@ namespace Kortex
 	class IGameConfigManager: public IConfigManager, public KxSingletonPtr<IGameConfigManager>
 	{
 		public:
-			static wxString GetDefinitionFileByID(const wxString& id);
-
-		public:
 			IGameConfigManager();
 	};
 }

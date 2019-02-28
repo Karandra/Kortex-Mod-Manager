@@ -77,7 +77,11 @@ namespace Kortex::GameConfig
 			{
 				return *m_Source;
 			}
-			
+			void AssignSource(std::unique_ptr<ISource> source)
+			{
+				m_Source = std::move(source);
+			}
+
 			void LoadItemsData();
 			void OnLoadInstance(const KxXMLNode& groupNode);
 

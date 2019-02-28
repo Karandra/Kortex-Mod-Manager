@@ -2156,6 +2156,9 @@
     <Xml Include="Bin\Data\ConfigDefinitions\Games\Morrowind.xml">
       <Filter>Misc\ConfigDefinitions\Games</Filter>
     </Xml>
+    <Xml Include="Bin\Data\ConfigDefinitions\AppSettings.xml">
+      <Filter>Misc\ConfigDefinitions</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\ChangeLog EN.txt">

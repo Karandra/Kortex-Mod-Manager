@@ -642,6 +642,7 @@
     <Image Include="Resources\App.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="Bin\Data\ConfigDefinitions\AppSettings.xml" />
     <Xml Include="Bin\Data\ConfigDefinitions\ENB.xml">
       <SubType>Designer</SubType>
     </Xml>

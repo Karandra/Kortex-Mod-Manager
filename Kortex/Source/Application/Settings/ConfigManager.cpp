@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ConfigManager.h"
+#include "GameConfig/ConfigManger/Sources/NullSource.h"
 #include <Kortex/Application.hpp>
 
 namespace Kortex::Application::Settings
@@ -7,6 +8,12 @@ namespace Kortex::Application::Settings
 	void ConfigManager::OnInit()
 	{
 		IConfigManager::OnInit();
+		
+		m_Definition.Load();
+		m_Definition.ForEachGroup([](GameConfig::ItemGroup& group)
+		{
+			group.AssignSource(std::make_unique<GameConfig::NullSource>());
+		});
 	}
 	void ConfigManager::OnExit()
 	{

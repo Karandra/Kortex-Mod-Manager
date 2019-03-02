@@ -31,6 +31,7 @@ namespace Kortex::Application::Settings
 				return m_DisplayModel.GetView();
 			}
 
+			void OnCloseWindow(wxCloseEvent& event);
 			void OnPrepareUninstall(wxCommandEvent& event);
 
 		public:

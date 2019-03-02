@@ -20,8 +20,8 @@ namespace Kortex::Application::Settings
 			KxTranslation m_Translation;
 			RefStackTranslator m_Translator;
 			
+			std::list<GameConfig::Item*> m_ChangedItems;
 			GameConfig::DisplayModel* m_DisplayModel = nullptr;
-			bool m_HasChanges = false;
 
 		protected:
 			void OnInit() override;
@@ -47,10 +47,12 @@ namespace Kortex::Application::Settings
 			}
 			void OnItemChanged(GameConfig::Item& item) override
 			{
-				m_HasChanges = true;
+				m_ChangedItems.remove(&item);
+				m_ChangedItems.push_back(&item);
 			}
 			void OnItemChangeDiscarded(GameConfig::Item& item) override
 			{
+				m_ChangedItems.remove(&item);
 			}
 
 		public:

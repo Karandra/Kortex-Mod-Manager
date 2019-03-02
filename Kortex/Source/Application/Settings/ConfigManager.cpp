@@ -42,6 +42,7 @@ namespace Kortex::Application::Settings
 
 	void ConfigManager::Load()
 	{
+		m_ChangedItems.clear();
 		m_Definition.ForEachGroup([](GameConfig::ItemGroup& group)
 		{
 			group.LoadItemsData();
@@ -52,10 +53,10 @@ namespace Kortex::Application::Settings
 		using namespace GameConfig;
 
 		std::vector<ISource*> openedSources;
-		ForEachItem([&openedSources](Item& item)
+		for (GameConfig::Item* item: m_ChangedItems)
 		{
 			// Open source for this item if it's not already opened
-			ISource& source = item.GetGroup().GetSource();
+			ISource& source = item->GetGroup().GetSource();
 			if (!source.IsOpened())
 			{
 				source.Open();
@@ -63,8 +64,9 @@ namespace Kortex::Application::Settings
 			}
 
 			// Save this item
-			item.SaveChanges();
-		});
+			item->SaveChanges();
+		}
+		m_ChangedItems.clear();
 
 		// Save and close opened sources
 		for (ISource* source: openedSources)
@@ -75,9 +77,14 @@ namespace Kortex::Application::Settings
 	}
 	void ConfigManager::DiscardChanges()
 	{
+		for (GameConfig::Item* item: m_ChangedItems)
+		{
+			item->DiscardChanges();
+		}
+		m_ChangedItems.clear();
 	}
 	bool ConfigManager::HasUnsavedChanges() const
 	{
-		return m_HasChanges;
+		return !m_ChangedItems.empty();
 	}
 }

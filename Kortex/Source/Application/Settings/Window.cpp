@@ -7,6 +7,17 @@
 
 namespace Kortex::Application::Settings
 {
+	void Window::OnCloseWindow(wxCloseEvent& event)
+	{
+		if (m_Manager.HasUnsavedChanges())
+		{
+			KxTaskDialog dialog(this, KxID_NONE, KTrf("Settings.SaveMessage"), {}, KxBTN_OK, KxICON_WARNING);
+			dialog.ShowModal();
+
+			m_Manager.SaveChanges();
+		}
+		event.Skip();
+	}
 	void Window::OnPrepareUninstall(wxCommandEvent& event)
 	{
 		KxTaskDialog askDialog(this, KxID_NONE, KTrf("Settings.PrepareUninstall.Caption", Kortex::IApplication::GetInstance()->GetName()), KTr("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
@@ -38,6 +49,8 @@ namespace Kortex::Application::Settings
 
 		if (Create(parent ? parent : KMainWindow::GetInstance(), KxID_NONE, KTr("Settings.Caption"), wxDefaultPosition, wxSize(800, 600), KxBTN_OK|KxBTN_CANCEL))
 		{
+			Bind(wxEVT_CLOSE_WINDOW, &Window::OnCloseWindow, this);
+
 			wxWindow* removeButton = AddButton(KxID_REMOVE, KTr("Settings.PrepareUninstall.Button"), true).GetControl();
 			removeButton->Bind(wxEVT_BUTTON, &Window::OnPrepareUninstall, this);
 

@@ -30,7 +30,7 @@
 					<Function Name="GetAvailableTranslations"/>
 				</Samples>
 			</Item>
-			<Item Category="Global/General" Path="Global/Instances/Location" Name="" Type="string">
+			<Item Category="Global/General" Path="Global/Application/Instances/Location" Name="" Type="string">
 				<Action Name="BrowseFolder"/>
 			</Item>
 		</Group>

@@ -70,8 +70,14 @@ namespace Kortex::GameConfig
 			m_Category = itemNode.GetAttribute(wxS("Category"));
 			m_Path = itemNode.GetAttribute(wxS("Path"));
 			m_Name = itemNode.GetAttribute(wxS("Name"));
-			m_Label = GetManager().TranslateItemLabel(itemNode, m_Name, wxS("ValueName"));
 			m_TypeID.FromString(itemNode.GetAttribute(wxS("Type")));
+
+			// Label
+			m_Label = GetManager().TranslateItemLabel(itemNode, m_Name, wxS("ValueName"));
+			if (m_Label.IsEmpty())
+			{
+				m_Label = GetManager().TranslateItemLabel(m_Path.AfterLast(wxS('/')), wxS("ValueName"));
+			}
 
 			// Options
 			m_Options.Load(itemNode.GetFirstChildElement(wxS("Options")), GetDataType());

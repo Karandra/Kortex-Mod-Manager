@@ -9,6 +9,7 @@ namespace Kortex
 {
 	namespace GameConfig
 	{
+		class DisplayModel;
 		class Definition;
 		class ItemGroup;
 		class Item;
@@ -21,6 +22,7 @@ namespace Kortex
 	class IConfigManager: public ManagerWithTypeInfo<IPluggableManager, ConfigManager::Internal::TypeInfo>
 	{
 		friend class GameConfig::Item;
+		friend class GameConfig::DisplayModel;
 
 		public:
 			using DefinitionFunc = std::function<void(const GameConfig::Definition& definition)>;
@@ -35,6 +37,13 @@ namespace Kortex
 			void OnInit() override;
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
+			
+			virtual void OnCreateDisplayModel(GameConfig::DisplayModel& displayModel)
+			{
+			}
+			virtual void OnDestroyDisplayModel(GameConfig::DisplayModel& displayModel)
+			{
+			}
 
 			virtual RefStackTranslator& GetTranslatorStack() = 0;
 			bool LoadTranslation(KxTranslation& translation, const wxString& component);
@@ -47,6 +56,7 @@ namespace Kortex
 
 		public:
 			virtual const ITranslator& GetTranslator() const = 0;
+			virtual GameConfig::DisplayModel* GetDisplayModel() const = 0;
 
 			virtual void ForEachDefinition(const DefinitionFunc& func) = 0;
 			template<class TFunctor> void ForEachGroup(TFunctor&& func)

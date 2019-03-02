@@ -21,6 +21,7 @@ namespace Kortex::GameConfig
 			KxTranslation m_Translation;
 			RefStackTranslator m_Translator;
 			std::list<GameConfig::Item*> m_ChangedItems;
+			DisplayModel* m_DisplayModel = nullptr;
 
 		private:
 			void LoadGroup(const KxXMLNode& definitionNode, ItemGroup& group);
@@ -31,6 +32,15 @@ namespace Kortex::GameConfig
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+
+			void OnCreateDisplayModel(DisplayModel& displayModel) override
+			{
+				m_DisplayModel = &displayModel;
+			}
+			void OnDestroyDisplayModel(DisplayModel& displayModel) override
+			{
+				m_DisplayModel = nullptr;
+			}
 
 			RefStackTranslator& GetTranslatorStack() override
 			{
@@ -43,6 +53,10 @@ namespace Kortex::GameConfig
 			const ITranslator& GetTranslator() const override
 			{
 				return m_Translator;
+			}
+			DisplayModel* GetDisplayModel() const override
+			{
+				return m_DisplayModel;
 			}
 			void ForEachDefinition(const DefinitionFunc& func) override
 			{

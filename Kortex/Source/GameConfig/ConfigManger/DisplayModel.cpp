@@ -115,9 +115,11 @@ namespace Kortex::GameConfig
 	DisplayModel::DisplayModel(IConfigManager& manager)
 		:m_Manager(manager), m_Translator(manager.GetTranslator())
 	{
+		m_Manager.OnCreateDisplayModel(*this);
 	}
 	DisplayModel::~DisplayModel()
 	{
+		m_Manager.OnDestroyDisplayModel(*this);
 		ClearView();
 	}
 	

@@ -34,6 +34,8 @@ namespace Kortex::Application::Settings
 		:m_DisplayModel(m_Manager)
 	{
 		m_Manager.OnInit();
+		m_Manager.Load();
+
 		if (Create(parent ? parent : KMainWindow::GetInstance(), KxID_NONE, KTr("Settings.Caption"), wxDefaultPosition, wxSize(800, 600), KxBTN_OK|KxBTN_CANCEL))
 		{
 			wxWindow* removeButton = AddButton(KxID_REMOVE, KTr("Settings.PrepareUninstall.Button"), true).GetControl();
@@ -41,11 +43,16 @@ namespace Kortex::Application::Settings
 
 			SetMainIcon(KxICON_NONE);
 			PostCreate();
-
 			IThemeManager::GetActive().ProcessWindow(GetContentWindow());
 
-			m_Manager.Load();
+			// Create display
 			m_DisplayModel.CreateView(GetContentWindow(), GetContentWindowMainSizer());
+			
+			KxDataView2::View* view = m_DisplayModel.GetView();
+			view->GetColumnByID(GameConfig::ColumnID::Type)->SetVisible(false);
+			view->GetColumnByID(GameConfig::ColumnID::Path)->SetVisible(false);
+			view->SetExpanderColumn(view->GetColumnByID(GameConfig::ColumnID::Name));
+
 			m_DisplayModel.LoadView();
 		}
 	}

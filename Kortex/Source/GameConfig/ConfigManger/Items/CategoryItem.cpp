@@ -43,6 +43,14 @@ namespace Kortex::GameConfig
 		{
 			return m_CategoryName;
 		}
+		if (id == ColumnID::Name)
+		{
+			KxDataView2::Column* column = GetView()->GetColumnByID(ColumnID::Path);
+			if (column && !column->IsVisible())
+			{
+				return m_CategoryName;
+			}
+		}
 		return wxString();
 	}
 	void CategoryItem::OnActivate(KxDataView2::Column& column)
@@ -55,14 +63,7 @@ namespace Kortex::GameConfig
 
 	wxAny CategoryItem::GetValue(const KxDataView2::Column& column) const
 	{
-		switch (column.GetID<ColumnID>())
-		{
-			case ColumnID::Path:
-			{
-				return m_CategoryName;
-			}
-		}
-		return {};
+		return GetViewString(column.GetID<ColumnID>());
 	}
 	KxDataView2::Renderer& CategoryItem::GetRenderer(const KxDataView2::Column& column) const
 	{

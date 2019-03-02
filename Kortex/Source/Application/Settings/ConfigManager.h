@@ -19,6 +19,8 @@ namespace Kortex::Application::Settings
 			GameConfig::Definition m_Definition;
 			KxTranslation m_Translation;
 			RefStackTranslator m_Translator;
+			
+			GameConfig::DisplayModel* m_DisplayModel = nullptr;
 			bool m_HasChanges = false;
 
 		protected:
@@ -28,6 +30,15 @@ namespace Kortex::Application::Settings
 			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override
 			{
 				return nullptr;
+			}
+
+			void OnCreateDisplayModel(GameConfig::DisplayModel& displayModel) override
+			{
+				m_DisplayModel = &displayModel;
+			}
+			void OnDestroyDisplayModel(GameConfig::DisplayModel& displayModel) override
+			{
+				m_DisplayModel = nullptr;
 			}
 
 			RefStackTranslator& GetTranslatorStack() override
@@ -49,6 +60,10 @@ namespace Kortex::Application::Settings
 			const ITranslator& GetTranslator() const override
 			{
 				return m_Translator;
+			}
+			GameConfig::DisplayModel* GetDisplayModel() const override
+			{
+				return m_DisplayModel;
 			}
 			void ForEachDefinition(const DefinitionFunc& func) override
 			{

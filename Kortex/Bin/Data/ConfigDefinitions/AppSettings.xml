@@ -3,7 +3,7 @@
 	<DataTypes>
 		<Item Type="bool">
 			<Input As="any"/>
-			<Output As="bool"/>
+			<Output As="int"/>
 		</Item>
 		<Item Type="int">
 			<Input As="any"/>
@@ -23,6 +23,9 @@
 		<Group ID="Global">
 			<!-- General -->
 			<Item Category="Global/General" Path="Global/Application/Language" Name="Locale" Type="string">
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
 				<Samples Source="Function">
 					<Function Name="GetAvailableTranslations"/>
 				</Samples>
@@ -30,19 +33,14 @@
 			<Item Category="Global/General" Path="Global/Instances/Location" Name="" Type="string">
 				<Action Name="BrowseFolder"/>
 			</Item>
-			
-			<!-- UI -->
-			<Item Category="Global/UI/ImageViewer" Path="Global/ImageViewer" Name="ColorBG" Type="uint32">
-				<Action Name="PickColor"/>
-			</Item>
-			<Item Category="Global/UI/ImageViewer" Path="Global/ImageViewer" Name="ColorFG" Type="uint32">
-				<Action Name="PickColor"/>
-			</Item>
 		</Group>
 		
 		<Group ID="Instance">
 			<!-- General -->
 			<Item Category="Instance/General" Path="Instance/Application/Workspace" Name="" Type="string">
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
 				<Samples Source="Function">
 					<Function Name="GetStartupWorkspaces"/>
 				</Samples>

@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "ConfigManager.h"
-#include "GameConfig/ConfigManger/Sources/NullSource.h"
+#include "GameConfig/ConfigManger/Sources/XMLRefSource.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/GameInstance.hpp>
+#include "Application/SystemApplication.h"
 
 namespace Kortex::Application::Settings
 {
@@ -10,10 +12,19 @@ namespace Kortex::Application::Settings
 		IConfigManager::OnInit();
 		
 		m_Definition.Load();
-		m_Definition.ForEachGroup([](GameConfig::ItemGroup& group)
+
+		if (GameConfig::ItemGroup* group = m_Definition.GetGroupByID("Global"))
 		{
-			group.AssignSource(std::make_unique<GameConfig::NullSource>());
-		});
+			group->AssignSource(std::make_unique<GameConfig::XMLRefSource>(SystemApplication::GetInstance()->GetGlobalConfig()));
+		}
+		if (GameConfig::ItemGroup* group = m_Definition.GetGroupByID("Instance"))
+		{
+			IConfigurableGameInstance* configurableInstance = nullptr;
+			if (IGameInstance* activeInstance = IGameInstance::GetActive(); activeInstance && activeInstance->QueryInterface(configurableInstance))
+			{
+				group->AssignSource(std::make_unique<GameConfig::XMLRefSource>(configurableInstance->GetConfig()));
+			}
+		}
 	}
 	void ConfigManager::OnExit()
 	{

@@ -43,6 +43,8 @@ namespace Kortex::Application::Settings
 			PostCreate();
 
 			IThemeManager::GetActive().ProcessWindow(GetContentWindow());
+
+			m_Manager.Load();
 			m_DisplayModel.CreateView(GetContentWindow(), GetContentWindowMainSizer());
 			m_DisplayModel.LoadView();
 		}

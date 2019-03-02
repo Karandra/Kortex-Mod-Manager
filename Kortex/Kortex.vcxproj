@@ -119,6 +119,9 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoModes.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INISource.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLFileSource.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.cpp" />
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLSource.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Workspace.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\WorkspaceController.cpp" />
     <ClCompile Include="Source\GameConfig\GameConfigModule.cpp" />
@@ -422,6 +425,9 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Sources\NullSource.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLFileSource.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.h" />
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLSource.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Workspace.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\WorkspaceController.h" />
     <ClInclude Include="Source\GameConfig\GameConfigModule.h" />

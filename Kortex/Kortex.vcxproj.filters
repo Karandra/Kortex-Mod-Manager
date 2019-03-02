@@ -1107,6 +1107,15 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\Actions\PickColor.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\Actions</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLFileSource.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLSource.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2098,6 +2107,15 @@
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\Actions\PickColor.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLFileSource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLSource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

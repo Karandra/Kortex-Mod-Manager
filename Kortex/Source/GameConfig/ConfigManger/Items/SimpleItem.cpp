@@ -182,7 +182,17 @@ namespace Kortex::GameConfig
 	{
 		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
-			if (!IAction::InvokeAction(GetAction(), m_Value))
+			if (HasAction())
+			{
+				wxString oldVaue = m_Value.Serialize(*this);
+				IAction::InvokeAction(GetAction(), m_Value);
+				if (oldVaue != m_Value.Serialize(*this))
+				{
+					ChangeNotify();
+					Refresh(column);
+				}
+			}
+			else
 			{
 				if (GetTypeID().IsBool())
 				{
@@ -194,11 +204,6 @@ namespace Kortex::GameConfig
 				{
 					Edit(column);
 				}
-			}
-			else
-			{
-				ChangeNotify();
-				Refresh(column);
 			}
 			return;
 		}

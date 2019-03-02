@@ -5,6 +5,8 @@
 #include "SamplingFunctions/GetVideoAdapters.h"
 #include "SamplingFunctions/GetVideoModes.h"
 #include "SamplingFunctions/GetVirtualKeys.h"
+#include "SamplingFunctions/GetAvailableTranslations.h"
+#include "SamplingFunctions/GetStartupWorkspaces.h"
 #include "SamplingFunctions/FindFiles.h"
 #include "GameConfig/IConfigManager.h"
 #include <Kortex/Application.hpp>
@@ -104,6 +106,21 @@ namespace Kortex::GameConfig
 	{
 		switch (m_SampligFunction.GetValue())
 		{
+			case SamplingFunctionID::FindFiles:
+			{
+				SamplingFunction::FindFiles(m_Values).Invoke(arguments);
+				break;
+			}
+			case SamplingFunctionID::GetAvailableTranslations:
+			{
+				SamplingFunction::GetAvailableTranslations(m_Values).Invoke(arguments);
+				break;
+			}
+			case SamplingFunctionID::GetStartupWorkspaces:
+			{
+				SamplingFunction::GetStartupWorkspaces(m_Values).Invoke(arguments);
+				break;
+			}
 			case SamplingFunctionID::GetVideoAdapters:
 			{
 				SamplingFunction::GetVideoAdapters(m_Values).Invoke(arguments);
@@ -122,11 +139,6 @@ namespace Kortex::GameConfig
 				m_SortOptions.AddFlag(SortOptionsID::DigitsAsNumbers);
 				m_SortOptions.AddFlag(SortOptionsID::IgnoreCase);
 				SortImmediateItems();
-				break;
-			}
-			case SamplingFunctionID::FindFiles:
-			{
-				SamplingFunction::FindFiles(m_Values).Invoke(arguments);
 				break;
 			}
 		};

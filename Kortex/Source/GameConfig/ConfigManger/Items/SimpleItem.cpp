@@ -182,15 +182,23 @@ namespace Kortex::GameConfig
 	{
 		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
-			if (GetTypeID().IsBool())
+			if (!IAction::InvokeAction(GetAction(), m_Value))
 			{
-				m_Value.Assign(!m_Value.As<bool>());
-				ChangeNotify();
-				Refresh(column);
+				if (GetTypeID().IsBool())
+				{
+					m_Value.Assign(!m_Value.As<bool>());
+					ChangeNotify();
+					Refresh(column);
+				}
+				else
+				{
+					Edit(column);
+				}
 			}
 			else
 			{
-				Edit(column);
+				ChangeNotify();
+				Refresh(column);
 			}
 			return;
 		}

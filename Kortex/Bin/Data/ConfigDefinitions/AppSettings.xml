@@ -28,15 +28,15 @@
 				</Samples>
 			</Item>
 			<Item Category="Global/General" Path="Global/Instances/Location" Name="" Type="string">
-				<Action Value="BrowseFolder"/>
+				<Action Name="BrowseFolder"/>
 			</Item>
 			
 			<!-- UI -->
 			<Item Category="Global/UI/ImageViewer" Path="Global/ImageViewer" Name="ColorBG" Type="uint32">
-				<Action Value="PickColor"/>
+				<Action Name="PickColor"/>
 			</Item>
 			<Item Category="Global/UI/ImageViewer" Path="Global/ImageViewer" Name="ColorFG" Type="uint32">
-				<Action Value="PickColor"/>
+				<Action Name="PickColor"/>
 			</Item>
 		</Group>
 		
@@ -50,12 +50,12 @@
 			
 			<!-- Downloads -->
 			<Item Category="Instance/Downloads" Path="Instance/Network/DownloadManager/Downloads" Name="Location" Type="string">
-				<Action Value="BrowseFolder"/>
+				<Action Name="BrowseFolder"/>
 			</Item>
 			
 			<!-- Variables -->
 			<Item Category="Instance/Variables" Path="Instance/Variables/Entry" Name="ID=ActualGameDir" Type="string">
-				<Action Value="BrowseFolder"/>
+				<Action Name="BrowseFolder"/>
 			</Item>
 		</Group>
 	</Groups>

@@ -19,7 +19,7 @@ namespace Kortex::GameConfig
 			}
 			wxString GetPathDescription() const override
 			{
-				return wxS("Null");
+				return wxEmptyString;
 			}
 
 			bool IsOpened() const override

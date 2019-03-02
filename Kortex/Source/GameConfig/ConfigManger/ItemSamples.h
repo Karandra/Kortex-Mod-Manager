@@ -22,20 +22,24 @@ namespace Kortex::GameConfig
 	enum class SamplingFunctionID: uint32_t
 	{
 		None = 0,
-		GetVideoModes,
-		GetVideoAdapters,
-		GetVirtualKeys,
 		FindFiles,
+		GetAvailableTranslations,
+		GetStartupWorkspaces,
+		GetVideoAdapters,
+		GetVideoModes,
+		GetVirtualKeys,
 	};
 	class SamplingFunctionDef: public KxIndexedEnum::Definition<SamplingFunctionDef, SamplingFunctionID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{
 			{SamplingFunctionID::None, wxS("None")},
-			{SamplingFunctionID::GetVideoModes, wxS("GetVideoModes")},
-			{SamplingFunctionID::GetVideoAdapters, wxS("GetVideoAdapters")},
-			{SamplingFunctionID::GetVirtualKeys, wxS("GetVirtualKeys")},
 			{SamplingFunctionID::FindFiles, wxS("FindFiles")},
+			{SamplingFunctionID::GetAvailableTranslations, wxS("GetAvailableTranslations")},
+			{SamplingFunctionID::GetStartupWorkspaces, wxS("GetStartupWorkspaces")},
+			{SamplingFunctionID::GetVideoAdapters, wxS("GetVideoAdapters")},
+			{SamplingFunctionID::GetVideoModes, wxS("GetVideoModes")},
+			{SamplingFunctionID::GetVirtualKeys, wxS("GetVirtualKeys")},
 		};
 	};
 	using SamplingFunctionValue = KxIndexedEnum::Value<SamplingFunctionDef, SamplingFunctionID::None>;

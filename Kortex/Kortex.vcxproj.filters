@@ -349,6 +349,12 @@
     <Filter Include="Code\Headers\Application\Settings">
       <UniqueIdentifier>{e905e6c3-93c4-4dfe-a7e4-e8e63dfc9180}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\GameConfig\ConfigManger\Actions">
+      <UniqueIdentifier>{790e4434-58df-4b1b-94c5-136bedb156ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\GameConfig\ConfigManger\Actions">
+      <UniqueIdentifier>{8eefe203-9c27-4975-a461-886f0746b901}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1082,6 +1088,24 @@
     </ClCompile>
     <ClCompile Include="Source\Application\Settings\ConfigManager.cpp">
       <Filter>Code\Source\Application\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetAvailableTranslations.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetStartupWorkspaces.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\IAction.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Actions\PickColor.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2056,6 +2080,24 @@
     </ClInclude>
     <ClInclude Include="Source\Application\Settings\ConfigManager.h">
       <Filter>Code\Headers\Application\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetAvailableTranslations.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetStartupWorkspaces.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\IAction.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\PickColor.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

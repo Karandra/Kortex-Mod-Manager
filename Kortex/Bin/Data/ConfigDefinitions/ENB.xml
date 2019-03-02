@@ -63,7 +63,9 @@
 			<!-- ProxyLibrary -->
 			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="EnableProxyLibrary" Type="bool"/>
 			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="InitProxyFunctions" Type="bool"/>
-			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="ProxyLibrary" Type="string"/>
+			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="ProxyLibrary" Type="string">
+				<Action Name="BrowseFile"/>
+			</Item>
 
 			<!-- Controls -->
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyReadConfig" Type="int32">

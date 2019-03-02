@@ -7,6 +7,7 @@
 #include "ItemSamples.h"
 #include "IViewItem.h"
 #include "ISource.h"
+#include "IAction.h"
 #include "GameConfig/IConfigManager.h"
 #include <KxFramework/DataView2/Node.h>
 #include <KxFramework/DataView2/DataView2Fwd.h>
@@ -50,9 +51,10 @@ namespace Kortex::GameConfig
 			wxString m_Name;
 			wxString m_Label;
 			ItemSamples m_Samples;
-			TypeID m_TypeID;
 			ItemOptions m_Options;
 			HashStore m_HashStore;
+			TypeID m_TypeID;
+			ActionValue m_Action;
 
 			bool m_HasChanges = false;
 			mutable std::optional<wxString> m_DisplayPath;
@@ -162,6 +164,15 @@ namespace Kortex::GameConfig
 				m_TypeID = id;
 			}
 			DataType GetDataType() const;
+
+			bool HasAction() const
+			{
+				return !m_Action.IsDefault();
+			}
+			ActionValue GetAction() const
+			{
+				return m_Action;
+			}
 
 			virtual bool IsEditable() const;
 

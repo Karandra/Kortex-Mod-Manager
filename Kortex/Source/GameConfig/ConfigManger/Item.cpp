@@ -14,8 +14,14 @@ namespace Kortex::GameConfig
 		if (!m_Hash)
 		{
 			wxString hashData = item.GetPath();
-			hashData += wxS('/');
-			hashData += item.GetName();
+
+			// Add name
+			wxString name = item.GetName();
+			if (!name.IsEmpty())
+			{
+				hashData += wxS('/');
+				hashData += name;
+			}
 
 			if (!value.IsEmpty())
 			{
@@ -73,6 +79,9 @@ namespace Kortex::GameConfig
 
 			// Samples
 			m_Samples.Load(itemNode.GetFirstChildElement(wxS("Samples")));
+
+			// Action
+			m_Action.FromString(itemNode.GetFirstChildElement(wxS("Action")).GetAttribute(wxS("Name")));
 		}
 	}
 	Item::~Item()
@@ -87,7 +96,24 @@ namespace Kortex::GameConfig
 	}
 	wxString Item::GetFullPath() const
 	{
-		return Kx::Utility::String::ConcatWithSeparator(wxS('/'), m_Group.GetSource().GetPathDescription(), m_Path, m_Name);
+		wxString fullPath;
+		auto AddPart = [&fullPath](const wxString& part)
+		{
+			if (!fullPath.IsEmpty() && !part.IsEmpty())
+			{
+				fullPath += wxS('/');
+			}
+			if (!part.IsEmpty())
+			{
+				fullPath += part;
+			}
+		};
+
+		AddPart(m_Group.GetSource().GetPathDescription());
+		AddPart(m_Path);
+		AddPart(m_Name);
+
+		return fullPath;
 	}
 	wxString Item::GetViewString(ColumnID id) const
 	{

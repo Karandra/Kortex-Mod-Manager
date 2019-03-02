@@ -20,12 +20,15 @@ namespace Kortex::GameConfig
 			const ITranslator& m_Translator;
 
 			std::unordered_map<wxString, CategoryItem> m_Categories;
+			bool m_ExpandBranches = false;
+			bool m_DisableColumnsMenu = false;
 
 		protected:
 			void OnDeleteNode(KxDataView2::Node* node) override;
 			void OnDetachRootNode(KxDataView2::RootNode& node) override;
 
 			virtual bool OnAskRefreshView();
+			void ExpandAllCategories();
 
 		private:
 			void OnActivate(KxDataView2::Event& event);
@@ -40,5 +43,14 @@ namespace Kortex::GameConfig
 			void ClearView();
 			void LoadView();
 			void RefreshView();
+
+			void ExpandBranches(bool value = true)
+			{
+				m_ExpandBranches = value;
+			}
+			void DisableColumnsMenu(bool value = true)
+			{
+				m_DisableColumnsMenu = value;
+			}
 	};
 }

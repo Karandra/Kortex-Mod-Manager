@@ -66,6 +66,8 @@ namespace Kortex::Application::Settings
 			view->GetColumnByID(GameConfig::ColumnID::Path)->SetVisible(false);
 			view->SetExpanderColumn(view->GetColumnByID(GameConfig::ColumnID::Name));
 
+			m_DisplayModel.ExpandBranches();
+			m_DisplayModel.DisableColumnsMenu();
 			m_DisplayModel.LoadView();
 		}
 	}

@@ -32,6 +32,24 @@ namespace Kortex::GameConfig
 		}
 		return true;
 	}
+	void DisplayModel::ExpandAllCategories()
+	{
+		std::function<void(KxDataView2::Node&)> Expand = [this, &Expand](KxDataView2::Node& parentNode)
+		{
+			for (KxDataView2::Node* node: parentNode.GetChildren())
+			{
+				if (node->QueryInterface<CategoryItem>())
+				{
+					node->Expand();
+				}
+				if (node->HasChildren())
+				{
+					Expand(*node);
+				}
+			}
+		};
+		Expand(GetView()->GetRootNode());
+	}
 
 	void DisplayModel::OnActivate(KxDataView2::Event& event)
 	{
@@ -143,11 +161,18 @@ namespace Kortex::GameConfig
 		view->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivate, this);
 		view->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnActivate, this);
 		view->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
-		view->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, [view](Event& event)
+		view->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, [this, view](Event& event)
 		{
-			KxMenu menu;
-			view->CreateColumnSelectionMenu(menu);
-			view->OnColumnSelectionMenu(menu);
+			if (!m_DisableColumnsMenu)
+			{
+				KxMenu menu;
+				view->CreateColumnSelectionMenu(menu);
+				view->OnColumnSelectionMenu(menu);
+			}
+			else
+			{
+				event.Skip();
+			}
 		});
 	}
 	void DisplayModel::ClearView()
@@ -197,8 +222,9 @@ namespace Kortex::GameConfig
 						auto[it, inserted] = m_Categories.insert_or_assign(categoryPath, categoryPath);
 
 						// Attach to view nodes
-						parent->AttachChild(&it->second, 0);
-						parent = &it->second;
+						CategoryItem& categoryItem = it->second;
+						parent->AttachChild(&categoryItem, 0);
+						parent = &categoryItem;
 					}
 					return true;
 				});
@@ -208,6 +234,11 @@ namespace Kortex::GameConfig
 			item.OnAttachToView();
 		});
 		GetView()->ItemsChanged();
+
+		if (m_ExpandBranches)
+		{
+			ExpandAllCategories();
+		}
 	}
 	void DisplayModel::RefreshView()
 	{

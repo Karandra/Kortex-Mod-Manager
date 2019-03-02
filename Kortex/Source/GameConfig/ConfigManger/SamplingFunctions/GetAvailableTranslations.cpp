@@ -6,9 +6,14 @@ namespace Kortex::GameConfig::SamplingFunction
 {
 	void GetAvailableTranslations::OnCall(const ItemValue::Vector& arguments)
 	{
-		for (const auto&[locale, path]: IApplication::GetInstance()->GetAvailableTranslations())
+		for (const auto&[fullName, path]: IApplication::GetInstance()->GetAvailableTranslations())
 		{
-			m_Values.emplace_back(locale).SetLabel(KxTranslation::GetLanguageFullName(locale));
+			wxString component;
+			wxString locale = fullName.BeforeFirst(wxS('.'), &component);
+			if (component == wxS("Application"))
+			{
+				m_Values.emplace_back(locale).SetLabel(KxTranslation::GetLanguageFullName(locale));
+			}
 		}
 	}
 }

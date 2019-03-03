@@ -410,7 +410,7 @@ namespace Kortex::ModManager
 
 	wxString Workspace::GetID() const
 	{
-		return "Workspace";
+		return "ModManager::Workspace";
 	}
 	wxString Workspace::GetName() const
 	{

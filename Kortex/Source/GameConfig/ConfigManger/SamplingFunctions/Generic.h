@@ -4,26 +4,26 @@
 
 namespace Kortex::GameConfig
 {
-	template<class TFunctor, size_t requireArgsCount = std::numeric_limits<size_t>::max()>
-	class Generic: public RTTI::IExtendInterface<Generic, ISamplingFunction>
+	template<class TFunctor, size_t requiredArgsCount = std::numeric_limits<size_t>::max()>
+	class Generic: public ISamplingFunction
 	{
 		private:
-			TFunctor m_Functor;
 			ItemValue::Vector& m_Values;
+			TFunctor m_Functor;
 
-		public:
-			Generic(T&& func, ItemValue::Vector& values)
-				:m_Functor(std::move(func)), m_Values(values)
+		protected:
+			void OnCall(const ItemValue::Vector& arguments) override
+		{
+			if (requiredArgsCount == std::numeric_limits<size_t>::max() || arguments.size() >= requiredArgsCount)
 			{
+				std::invoke(m_Functor, m_Values, arguments);
 			}
+		}
 
 		public:
-			void operator()(const ItemValue::Vector& arguments) override
+			Generic(ItemValue::Vector& values, TFunctor&& func)
+				:m_Values(values), m_Functor(std::move(func))
 			{
-				if (requireArgsCount == std::numeric_limits<size_t>::max() || arguments.size() >= requireArgsCount)
-				{
-					std::invoke(m_Functor, m_Values, arguments);
-				}
 			}
 	};
 }

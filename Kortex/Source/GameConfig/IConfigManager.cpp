@@ -63,9 +63,9 @@ namespace Kortex
 		}
 		return {};
 	}
-	wxString IConfigManager::TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const
+	wxString IConfigManager::TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix, bool isAttribute) const
 	{
-		auto [text, isTranslated] = TranslateItemElement(itemNode, true, wxS("Label"));
+		auto [text, isTranslated] = TranslateItemElement(itemNode, isAttribute, wxS("Label"));
 		if (!isTranslated)
 		{
 			text = TranslateItemLabel(text, perfix);

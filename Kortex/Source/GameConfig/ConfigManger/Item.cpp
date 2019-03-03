@@ -73,7 +73,7 @@ namespace Kortex::GameConfig
 			m_TypeID.FromString(itemNode.GetAttribute(wxS("Type")));
 
 			// Label
-			m_Label = GetManager().TranslateItemLabel(itemNode, m_Name, wxS("ValueName"));
+			m_Label = GetManager().TranslateItemLabel(itemNode.GetFirstChildElement(wxS("Label")), m_Name, wxS("ValueName"), false);
 			if (m_Label.IsEmpty())
 			{
 				m_Label = GetManager().TranslateItemLabel(m_Path.AfterLast(wxS('/')), wxS("ValueName"));

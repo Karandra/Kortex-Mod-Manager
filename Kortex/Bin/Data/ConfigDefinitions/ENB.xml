@@ -179,15 +179,19 @@
 			<Item Category="ENB/Memory" Path="MEMORY" Name="EnableUnsafeMemoryHacks" Type="bool"/>
 
 			<!-- Adaptive Quality -->
-			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="Enable" Label="EnableAdaptiveQuality" Type="bool"/>
-			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="Quality" Label="AdaptiveQuality" Type="int32">
+			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="Enable" Type="bool">
+				<Label>EnableAdaptiveQuality</Label>
+			</Item>
+			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="Quality" Type="int32">
+				<Label>AdaptiveQuality</Label>
 				<Samples Source="ImmediateItems">
 					<Item Label="Low">2</Item>
 					<Item Label="Mid">1</Item>
 					<Item Label="High">0</Item>
 				</Samples>
 			</Item>
-			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="DesiredFPS" Label="AdaptiveQualityDesiredFPS" Type="float32">
+			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="DesiredFPS" Type="float32">
+				<Label>AdaptiveQualityDesiredFPS</Label>
 				<Samples Source="Range" Min="0" Max="60" Step="10"/>
 			</Item>
 
@@ -230,7 +234,8 @@
 
 			<!-- Bloom -->
 			<Item Category="ENB/Bloom" Path="EFFECT" Name="EnableBloom" Type="bool"/>
-			<Item Category="ENB/Bloom" Path="BLOOM" Name="Quality" Label="BloomQuality" Type="int32">
+			<Item Category="ENB/Bloom" Path="BLOOM" Name="Quality" Type="int32">
+				<Label>BloomQuality</Label>
 				<Samples Source="ImmediateItems">
 					<Item Label="Low">2</Item>
 					<Item Label="Mid">1</Item>

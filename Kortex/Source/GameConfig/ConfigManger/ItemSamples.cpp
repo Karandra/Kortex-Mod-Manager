@@ -72,7 +72,7 @@ namespace Kortex::GameConfig
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
 			SampleValue& sample = m_Values.emplace_back();
-			sample.SetLabel(m_Item.GetManager().TranslateItemLabel(node, {}, wxS("SampleValue")));
+			sample.SetLabel(m_Item.GetManager().TranslateItemLabel(node, {}, wxS("SampleValue"), true));
 			sample.GetValue().Deserialize(node.GetValue(), m_Item);
 
 			counter++;

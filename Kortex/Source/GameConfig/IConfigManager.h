@@ -80,7 +80,7 @@ namespace Kortex
 			virtual bool HasUnsavedChanges() const = 0;
 
 			wxString TranslateItemLabel(const wxString& name, const wxString& perfix) const;
-			wxString TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix) const;
+			wxString TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix, bool isAttribute = false) const;
 			std::pair<wxString, bool> TranslateItemElement(const KxXMLNode& itemNode, bool isAttribute = false, const wxString& attributeName = {}) const;
 	};
 }

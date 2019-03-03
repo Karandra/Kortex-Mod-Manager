@@ -12,8 +12,6 @@ namespace Kortex::Application::OName
 	KortexDefOption(Workspace);
 	KortexDefOption(Provider);
 	KortexDefOption(DisplayModel);
-	KortexDefOption(Package);
-	KortexDefOption(FOMod);
 
 	KortexDefOption(ID);
 	KortexDefOption(Name);

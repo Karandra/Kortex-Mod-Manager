@@ -245,7 +245,7 @@ namespace Kortex
 	{
 		using namespace Application;
 
-		return GetAInstanceOption(OName::Package).GetAttribute(OName::Location);
+		return GetAInstanceOption(OName::Packages).GetAttribute(OName::Location);
 	}
 }
 

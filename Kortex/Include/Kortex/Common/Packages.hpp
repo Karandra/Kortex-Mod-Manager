@@ -3,6 +3,8 @@
 
 namespace Kortex::Application::OName
 {
+	KortexDefOption(Packages);
+	KortexDefOption(FOMod);
 	KortexDefOption(AutoShowInfo);
 	KortexDefOption(UseHTTPSForXMLScheme);
 }

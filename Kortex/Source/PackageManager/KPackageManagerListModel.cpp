@@ -406,7 +406,7 @@ void KPackageManagerListModel::Navigate(const wxString& sNavigatePath)
 	RefreshItems();
 
 	// Not the best place but whatever
-	m_AutoShowPackageInfo = GetGlobalOptionOf<KPackageManager>(OName::Package).GetAttributeBool(OName::AutoShowInfo, true);
+	m_AutoShowPackageInfo = GetGlobalOptionOf<KPackageManager>(OName::Packages).GetAttributeBool(OName::AutoShowInfo, true);
 }
 void KPackageManagerListModel::NavigateUp()
 {

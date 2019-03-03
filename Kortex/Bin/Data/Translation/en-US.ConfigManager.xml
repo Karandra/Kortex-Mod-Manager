@@ -35,7 +35,15 @@
 		<String ID="ConfigManager.VirtualKey.VK_RIGHT">Page Right</String>
 		<String ID="ConfigManager.VirtualKey.VK_DOWN">Page Down</String>
 
-		<String ID="ConfigManager.Categories.None">Unknown parameters</String>
+		<!-- Categories -->
+		<String ID="Category.None">Unknown parameters</String>
+		<String ID="Category.General">General</String>
+		<String ID="Category.Global">Global parameters</String>
+		<String ID="Category.Instance">Instance parameters</String>
+		<String ID="Category.Variables">Variables</String>
+		<String ID="Category.DownloadManager">Download manager</String>
+		<String ID="Category.PackageManager">Package manager</String>
+		<String ID="Category.VFS">Virtual file system (VFS)</String>
 
 		<String ID="SampleValue.None">None</String>
 		<String ID="SampleValue.VeryLow">Very low</String>

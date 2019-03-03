@@ -35,7 +35,15 @@
 		<String ID="ConfigManager.VirtualKey.VK_RIGHT">Стрелка вправо</String>
 		<String ID="ConfigManager.VirtualKey.VK_DOWN">Стрелка вниз</String>
 
-		<String ID="ConfigManager.Categories.None">Неизвестные параметры</String>
+		<!-- Categories -->
+		<String ID="Category.None">Неизвестные параметры</String>
+		<String ID="Category.General">Общие параметры</String>
+		<String ID="Category.Global">Глобальные параметры</String>
+		<String ID="Category.Instance">Параметры инстанса</String>
+		<String ID="Category.Variables">Переменные</String>
+		<String ID="Category.DownloadManager">Менеджер загрузок</String>
+		<String ID="Category.PackageManager">Менеджер установщиков</String>
+		<String ID="Category.VFS">Виртуальная файловая система (VFS)</String>
 
 		<String ID="SampleValue.None">Нет</String>
 		<String ID="SampleValue.VeryLow">Очень низкий</String>

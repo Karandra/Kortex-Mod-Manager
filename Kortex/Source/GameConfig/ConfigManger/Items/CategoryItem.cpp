@@ -21,7 +21,7 @@ namespace Kortex::GameConfig
 			}
 			return label;
 		}
-		return manager->GetTranslator().GetString(wxS("ConfigManager.Categories.None"));
+		return manager->GetTranslator().GetString(wxS("Category.None"));
 	}
 
 	CategoryItem::CategoryItem(const wxString& categoryPath)

@@ -200,25 +200,20 @@
 		<String ID="Settings.PrepareUninstall.RebootNow">Перезагрузить сейчас</String>
 		<String ID="Settings.PrepareUninstall.RebootLater">Перезагрузить позже</String>
 		
-		<String ID="Settings.Categories.General">Основные параметры</String>
-		<String ID="Settings.Categories.VFS">Виртуальная файловая система (VFS)</String>
-		<String ID="Settings.Categories.VariablesOverride">Переопределение переменных</String>
-		<String ID="Settings.Categories.ProgramManager">Конфигурация запуска программ</String>
-		<String ID="Settings.Categories.PackageManager">Установщики</String>
+		<String ID="Settings.Category.General">Основные параметры</String>
+		<String ID="Settings.Category.Variables">Переменные</String>
+		<String ID="Settings.Category.PackageManager">Менеджер установщиков</String>
+		<String ID="Settings.Category.VFS">Виртуальная файловая система (VFS)</String>
 
-		<String ID="Settings.Value.Language">Язык интерфейса</String>
-		<String ID="Settings.Value.Workspace">Начальная страница</String>
-		<String ID="Settings.Value.ProfilesLocation">Папка хранения профилей</String>
-
-		<String ID="Settings.Value.MainEnabled">Активные основные программы</String>
-		<String ID="Settings.Value.PreMainSequence">Последовательность запуска предварительных программ</String>
-		<String ID="Settings.Value.PreMainTimeout">Интервал между запуском предварительных программ (мс)</String>
-		<String ID="Settings.Value.PreMainTimeoutAfter">Время ожидания после запуска предварительных программ (мс)</String>
+		<String ID="Settings.ValueName.Language">Язык интерфейса</String>
+		<String ID="Settings.ValueName.StartupWorkspace">Начальная страница</String>
+		<String ID="Settings.ValueName.InstancesLocation">Папка инстансов</String>
+		<String ID="Settings.ValueName.PackagesLocation">Папка установочных пакетов</String>
+		<String ID="Settings.ValueName.AutoShowPackageInfo">Автоматически показывать информацию об установочном пакете</String>
+		<String ID="Settings.ValueName.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</String>
+		<String ID="Settings.ValueName.DownloadsFolder">Папка загрузок</String>
 		
-		<String ID="Settings.Value.PackagesLocation">Папка установочных пакетов</String>
-		<String ID="Settings.Value.GameRoot">Установочная папка $(GameShortName)</String>
-		<String ID="Settings.Value.AutoShowPackageInfo">Автоматически показывать информацию об установочном пакете</String>
-		<String ID="Settings.Value.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</String>
+		<String ID="Settings.ValueName.Var.ActualGameDir">Установочная папка $(GameShortName)</String>
 		
 		<!-- About dialog -->
 		<String ID="About.SourceCodeLocation">Исходный код может быть найден на</String>

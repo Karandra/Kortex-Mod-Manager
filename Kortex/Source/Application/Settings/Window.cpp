@@ -11,7 +11,7 @@ namespace Kortex::Application::Settings
 	{
 		if (m_Manager.HasUnsavedChanges())
 		{
-			KxTaskDialog dialog(this, KxID_NONE, KTrf("Settings.SaveMessage"), {}, KxBTN_OK, KxICON_WARNING);
+			KxTaskDialog dialog(this, KxID_NONE, KTrf("Settings.SaveMessage"), {}, KxBTN_OK, KxICON_INFORMATION);
 			dialog.ShowModal();
 
 			m_Manager.SaveChanges();

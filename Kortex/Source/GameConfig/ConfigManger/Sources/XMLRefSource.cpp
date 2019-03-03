@@ -74,7 +74,7 @@ namespace Kortex::GameConfig
 					wxString attributeValue;
 					attributeName = attributeName.BeforeFirst(wxS('='), &attributeValue);
 
-					wxString arrayItemName = item.GetPath().AfterLast(wxS('\\'));
+					wxString arrayItemName = item.GetPath().AfterLast(wxS('/'));
 					KxXMLNode arrayNode = node.GetParent();
 					for (KxXMLNode itemNode = arrayNode.GetFirstChildElement(arrayItemName); itemNode.IsOK(); itemNode = itemNode.GetNextSiblingElement(arrayItemName))
 					{

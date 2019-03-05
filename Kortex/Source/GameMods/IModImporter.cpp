@@ -6,6 +6,7 @@
 #include "Utility/Log.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
+#include <Kortex/VirtualGameFolder.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/ProgramManager.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -60,7 +61,7 @@ namespace Kortex
 					profileSelectDialog.SetFooterIcon(footerIcon);
 
 					// Profiles
-					KxStringVector profilesList = importer->GetProfilesList();
+					KxStringVector profilesList = importer->GetAvailableProfiles();
 					if (!profilesList.empty())
 					{
 						for (size_t i = 0; i < profilesList.size(); i++)
@@ -78,7 +79,7 @@ namespace Kortex
 						wxWindowID selectedProfileIndex = profileSelectDialog.GetSelectedRadioButton();
 						if (!profilesList.empty() && selectedProfileIndex != KxID_NONE)
 						{
-							importer->SetProfileToImport(profilesList[selectedProfileIndex]);
+							importer->m_SelectedProfile = profilesList[selectedProfileIndex];
 						}
 
 						auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, window);
@@ -90,9 +91,9 @@ namespace Kortex
 						operation->OnEnd([](KOperationWithProgressBase* self)
 						{
 							KWorkspace::ScheduleReloadOf<ModManager::Workspace>();
+							KWorkspace::ScheduleReloadOf<VirtualGameFolder::Workspace>();
 							KWorkspace::ScheduleReloadOf<DownloadManager::Workspace>();
 							KWorkspace::ScheduleReloadOf<ProgramManager::Workspace>();
-							//KWorkspace::ScheduleReloadOf<KGameConfigWorkspace>();
 						});
 						operation->SetDialogCaption(KTr("ModManager.Import.Caption"));
 						operation->SetOptionEnabled(KOWPD_OPTION_RUN_ONEND_BEFORE_DIALOG_DESTRUCTION);
@@ -118,7 +119,7 @@ namespace Kortex
 
 	wxString IModImporter::GetProfileMatchingMessage(KxIconType* pIcon) const
 	{
-		GameID targetID = GetTargetProfileID();
+		GameID targetID = GetTargetGameID();
 		if (!targetID.IsOK())
 		{
 			KxUtility::SetIfNotNull(pIcon, KxICON_WARNING);

@@ -34,7 +34,7 @@ namespace Kortex::ModManager
 			virtual void Import(KOperationWithProgressDialogBase* context) override;
 		
 			virtual bool CanImport() const override;
-			virtual GameID GetTargetProfileID() const override
+			virtual GameID GetTargetGameID() const override
 			{
 				return m_TargetGameID;
 			}
@@ -43,10 +43,10 @@ namespace Kortex::ModManager
 				return "Nexus Mod Manager";
 			}
 			virtual wxString GetAdditionalInfo() const;
-			virtual wxString GetCurrentModList() const override
+			virtual wxString GetCurrentProfile() const override
 			{
 				return wxEmptyString;
 			}
-			virtual KxStringVector GetProfilesList() const override;
+			virtual KxStringVector GetAvailableProfiles() const override;
 	};
 }

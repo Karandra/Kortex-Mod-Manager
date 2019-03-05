@@ -19,15 +19,15 @@ namespace Kortex
 			static void PerformImport(Type type, wxWindow* window);
 
 		private:
-			wxString m_ProfileToImport;
+			wxString m_SelectedProfile;
 			bool m_ShouldSkipExistingMods = false;
 
 		protected:
 			wxString GetProfileMatchingMessage(KxIconType* icon = nullptr) const;
 		
-			const wxString& GetProfileToImport() const
+			const wxString& GetSelectedProfile() const
 			{
-				return m_ProfileToImport;
+				return m_SelectedProfile;
 			}
 			bool ShouldSkipExistingMods() const
 			{
@@ -42,12 +42,6 @@ namespace Kortex
 			virtual ~IModImporter();
 
 		public:
-			void SetProfileToImport(const wxString& name)
-			{
-				m_ProfileToImport = name;
-			}
-
-		public:
 			// Sets mod manager data directory. For MO this is the instance folder.
 			virtual void SetDirectory(const wxString& path) = 0;
 
@@ -59,7 +53,7 @@ namespace Kortex
 
 			// Retrieve target profile. Value of 'GameIDs::NullGameID' is fine, it just means
 			// that data can be imported into any game.
-			virtual GameID GetTargetProfileID() const = 0;
+			virtual GameID GetTargetGameID() const = 0;
 
 			// Return mod manager name.
 			virtual wxString GetModManagerName() const = 0;
@@ -70,15 +64,14 @@ namespace Kortex
 				return wxEmptyString;
 			}
 
-			// Get current used mod list or, if the mod manager doesn't support this
-			// return empty string.
-			virtual wxString GetCurrentModList() const
+			// Get currently used profile or, if the mod manager doesn't support this, return empty string.
+			virtual wxString GetCurrentProfile() const
 			{
 				return wxEmptyString;
 			}
 
 			// If target mod-manager supports profiles implement this function.
-			virtual KxStringVector GetProfilesList() const
+			virtual KxStringVector GetAvailableProfiles() const
 			{
 				return KxStringVector();
 			}

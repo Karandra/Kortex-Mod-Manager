@@ -8,6 +8,7 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/ProgramManager.hpp>
+#include <Kortex/GameConfig.hpp>
 #include "PackageProject/KPackageProjectSerializer.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
@@ -82,7 +83,7 @@ namespace Kortex::ModManager
 		return path;
 	}
 
-	GameID ModImporterMO::GetGameID(const wxString& name)
+	GameID ModImporterMO::TranslateGameID(const wxString& name)
 	{
 		if (!name.IsEmpty())
 		{
@@ -131,12 +132,12 @@ namespace Kortex::ModManager
 	void ModImporterMO::LoadOptions()
 	{
 		// Game name
-		m_TargetProfile = GetGameID(m_Options.GetValue("General", "gameName"));
-		m_TargetInstance = IGameInstance::GetTemplate(m_TargetProfile);
-		m_ModManagerName = m_TargetProfile.IsOK() ? "Mod Organizer 2.x" : "Mod Organizer 1.x";
+		m_TargetGameID = TranslateGameID(m_Options.GetValue("General", "gameName"));
+		m_TargetInstance = IGameInstance::GetTemplate(m_TargetGameID);
+		m_ModManagerName = m_TargetGameID.IsOK() ? "Mod Organizer 2.x" : "Mod Organizer 1.x";
 
 		// Current mod list
-		m_CurrentModList = m_Options.GetValue("General", "selected_profile");
+		m_CurrentProfile = m_Options.GetValue("General", "selected_profile");
 
 		// Directories
 		wxString baseDirectory = m_Options.GetValue("Settings", "base_directory");
@@ -165,7 +166,7 @@ namespace Kortex::ModManager
 	}
 	wxString ModImporterMO::GetDataFolderName() const
 	{
-		if (m_TargetProfile == GameIDs::Morrowind)
+		if (m_TargetGameID == GameIDs::Morrowind)
 		{
 			return "Data Files";
 		}
@@ -176,18 +177,18 @@ namespace Kortex::ModManager
 	}
 	wxString ModImporterMO::GetProfileDirectory() const
 	{
-		return m_ProfilesDirectory + '\\' + GetProfileToImport();
+		return m_ProfilesDirectory + '\\' + GetSelectedProfile();
 	}
 
 	void ModImporterMO::ReadExecutables(KOperationWithProgressDialogBase* context)
 	{
-		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), IProgramManager::GetInstance()->GetManagerInfo().GetName()));
+		context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), IProgramManager::GetInstance()->GetManagerInfo().GetName()));
 
 		const wxString sectionName("customExecutables");
-		long count = -1;
-		if (m_Options.GetValue(sectionName, "size").ToCLong(&count) && count > 0)
+		long long count = -1;
+		if (m_Options.GetValue(sectionName, "size").ToLongLong(&count) && count > 0)
 		{
-			for (int i = 1; i <= count; i++)
+			for (size_t i = 1; i <= (size_t)count; i++)
 			{
 				if (!context->CanContinue())
 				{
@@ -196,7 +197,7 @@ namespace Kortex::ModManager
 
 				auto GetValue = [this, &sectionName, i](const auto& name)
 				{
-					return m_Options.GetValue(sectionName, wxString::Format("%d\\%s", i, name));
+					return m_Options.GetValue(sectionName, KxString::Format("%1\\%2", i, name));
 				};
 
 				IProgramEntry& entry = IProgramManager::GetInstance()->EmplaceProgram();
@@ -216,7 +217,7 @@ namespace Kortex::ModManager
 	{
 		if (const ISaveManager* saveManager = ISaveManager::GetInstance())
 		{
-			context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), saveManager->GetManagerInfo().GetName()));
+			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), saveManager->GetManagerInfo().GetName()));
 
 			KxEvtFile source(GetProfileDirectory() + "\\Saves");
 			context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
@@ -225,6 +226,14 @@ namespace Kortex::ModManager
 	}
 	void ModImporterMO::CopyMods(KOperationWithProgressDialogBase* context)
 	{
+		IGameProfile* profile = IGameInstance::GetActiveProfile();
+		GameInstance::ProfileMod::Vector& currentModList = profile->GetMods();
+		currentModList.clear();
+
+		auto AddMod = [&currentModList](IGameMod& mod, bool isActive)
+		{
+			currentModList.emplace_back(mod, isActive);
+		};
 		auto GetModFolder = [this](const wxString& name)
 		{
 			return m_ModsDirectory + '\\' + name;
@@ -236,32 +245,30 @@ namespace Kortex::ModManager
 		// MO stores mod list in reverse order.
 		for (auto it = modsList.rbegin(); it != modsList.rend(); ++it)
 		{
-			wxString& name = *it;
-
-			counter++;
 			if (!context->CanContinue())
 			{
 				return;
 			}
 
+			counter++;
+			wxString& name = *it;
 			if (!name.IsEmpty())
 			{
 				wxUniChar c = name[0];
 				if (c == '+' || c == '-')
 				{
-					bool isModEnabled = c == '+';
-
-					// Remove state char
+					// Check if mod enabled and remove state char
+					const bool isModActive = c == '+';
 					name.Remove(0, 1);
 
 					// Notify
-					context->SetDialogCaption(wxString::Format("%s \"%s\", %zu/%zu", KTr("Generic.Import"), name, counter, modsList.size()));
+					context->SetDialogCaption(KxString::Format("%1 \"%2\", %3/%4", KTr("Generic.Import"), name, counter, modsList.size()));
 
 					// Check mod existence
 					IGameMod* existingMod = IModManager::GetInstance()->FindModByID(name);
 					if (existingMod && ShouldSkipExistingMods())
 					{
-						existingMod->SetActive(isModEnabled);
+						AddMod(*existingMod, isModActive);
 						continue;
 					}
 
@@ -271,46 +278,47 @@ namespace Kortex::ModManager
 					KxINI modINI(metaStream);
 
 					// Write data
-					IGameMod& entry = IModManager::GetInstance()->EmplaceMod();
-					entry.SetName(name);
-					entry.SetActive(isModEnabled);
-					entry.SetVersion(modINI.GetValue("General", "version"));
-					entry.SetPackageFile(ProcessFilePath(modINI.GetValue("General", "installationFile")));
-					entry.SetDescription(ProcessDescription(modINI.GetValue("General", "nexusDescription")));
+					IGameMod& mod = IModManager::GetInstance()->EmplaceMod();
+					mod.SetName(name);
+					mod.SetActive(isModActive);
+					mod.SetVersion(modINI.GetValue("General", "version"));
+					mod.SetPackageFile(ProcessFilePath(modINI.GetValue("General", "installationFile")));
+					mod.SetDescription(ProcessDescription(modINI.GetValue("General", "nexusDescription")));
 
 					// NexusID
 					ModID nexusID = modINI.GetValueInt("General", "modid", ModID::GetInvalidValue());
 					if (nexusID)
 					{
-						entry.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(nexusID);
+						mod.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(nexusID);
 					}
 
 					// Install date
 					wxDateTime date = KxFile(modFolder).GetFileTime(KxFILETIME_CREATION);
-					if (isModEnabled)
+					if (isModActive)
 					{
-						entry.SetInstallTime(date);
+						mod.SetInstallTime(date);
 					}
 					else
 					{
-						entry.SetUninstallTime(date);
+						mod.SetUninstallTime(date);
 					}
 
 					// If such mod already exist, try create unique ID
 					if (existingMod)
 					{
-						entry.SetID(wxString::Format("[MO] %s", name));
+						mod.SetID(KxString::Format("[MO] %1", name));
 					}
 					else
 					{
-						entry.SetID(name);
+						mod.SetID(name);
 					}
 
 					// Save
-					entry.Save();
+					AddMod(mod, isModActive);
+					mod.Save();
 
 					// Copy mod contents
-					wxString destination = entry.GetModFilesDir() + wxS('\\') + GetDataFolderName();
+					wxString destination = mod.GetModFilesDir() + wxS('\\') + GetDataFolderName();
 
 					KxEvtFile source(modFolder);
 					context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
@@ -318,41 +326,22 @@ namespace Kortex::ModManager
 
 					// Remove 'meta.ini' file
 					KxFile(destination + "\\Meta.ini").RemoveFile();
+
+					// Update mod content
+					mod.UpdateFileTree();
 				}
 			}
 		}
-
-		// Sort mods. If mod entries was created here, they already sorted,
-		// if they was skipped, sort is needed.
-		IGameProfile* profile = IGameInstance::GetActiveProfile();
-
-		GameInstance::ProfileMod::Vector& currentModList = profile->GetMods();
-		currentModList.clear();
-		for (const wxString& name: modsList)
-		{
-			if (!context->CanContinue())
-			{
-				return;
-			}
-
-			if (IGameMod* existingMod = IModManager::GetInstance()->FindModByID(name))
-			{
-				currentModList.emplace_back(GameInstance::ProfileMod(*existingMod, existingMod->IsActive()));
-			}
-		}
 		profile->SaveConfig();
+		IModDispatcher::GetInstance()->UpdateVirtualTree();
 	}
 	void ModImporterMO::ReadPlugins(KOperationWithProgressDialogBase* context)
 	{
 		if (IPluginManager* manager = IPluginManager::GetInstance())
 		{
-			context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), manager->GetManagerInfo().GetName()));
-
-			// Load entries
-			manager->Load();
+			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), manager->GetManagerInfo().GetName()));
 
 			KxStringVector activePlugins = KxTextFile::ReadToArray(GetProfileDirectory() + "\\Plugins.txt");
-
 			IGameProfile* profile = IGameInstance::GetActiveProfile();
 
 			GameInstance::ProfilePlugin::Vector& currentPluginsList = profile->GetPlugins();
@@ -366,43 +355,42 @@ namespace Kortex::ModManager
 
 				if (!name.IsEmpty())
 				{
-					wxUniChar c = name[0];
-					if (c == '*')
+					if (name[0] == '*')
 					{
 						name.Remove(0, 1);
 					}
 				}
-				currentPluginsList.emplace_back(GameInstance::ProfilePlugin(name, KAux::IsStringsContain(activePlugins, name, false)));
+				currentPluginsList.emplace_back(name, KAux::IsStringsContain(activePlugins, name, false));
 			}
 			profile->SaveConfig();
+
+			manager->Load();
+			KWorkspace::ScheduleReloadOf<PluginManager::Workspace>();
 		}
 	}
 	void ModImporterMO::CopyGameConfig(KOperationWithProgressDialogBase* context)
 	{
-		#if 0
-		if (const KConfigManagerConfig* options = KConfigManagerConfig::GetInstance())
+		if (IGameConfigManager* manager = IGameConfigManager::GetInstance())
 		{
-			context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), KGameConfigWorkspace::GetInstance()->GetName()));
+			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), manager->GetManagerInfo().GetName()));
 
-			for (size_t i = 0; i < options->GetEntriesCount(); i++)
+			manager->ForEachGroup([this](GameConfig::ItemGroup& group)
 			{
-				if (!context->CanContinue())
+				GameConfig::IFileSource* fileSource = nullptr;
+				GameConfig::ISource& source = group.GetSource();
+				if (source.QueryInterface(fileSource))
 				{
-					return;
-				}
-
-				const KConfigManagerConfigEntry* entry = options->GetEntryAt(i);
-				if (entry->IsGameConfigID())
-				{
-					KxFile file(GetProfileDirectory() + '\\' + entry->GetFileName());
+					KxFile file(GetProfileDirectory() + '\\' + fileSource->GetFileName());
 					if (file.IsFileExist())
 					{
-						file.CopyFile(entry->GetFilePath(), true);
+						source.Close();
+						file.CopyFile(fileSource->GetFilePath(), true);
 					}
 				}
-			}
+				return true;
+			});
+			manager->Load();
 		}
-		#endif
 	}
 	void ModImporterMO::CopyDownloads(KOperationWithProgressDialogBase* context)
 	{
@@ -410,8 +398,7 @@ namespace Kortex::ModManager
 		manager->PauseAllActive();
 
 		KxFileFinder finder(m_DownloadsDirectory, "*.meta");
-		KxFileItem item = finder.FindNext();
-		while (item.IsOK())
+		for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
 		{
 			KxEvtFile archiveFile(item.GetFullPath().BeforeLast('.'));
 			if (item.IsNormalItem() && item.IsFile())
@@ -507,7 +494,7 @@ namespace Kortex::ModManager
 		if (m_CanImport)
 		{
 			// Allow import from unknown managed game, as MO1 doesn't store its name.
-			if (m_TargetProfile.IsOK())
+			if (m_TargetGameID.IsOK())
 			{
 				return m_TargetInstance != nullptr;
 			}
@@ -539,20 +526,18 @@ namespace Kortex::ModManager
 
 		return info;
 	}
-	KxStringVector ModImporterMO::GetProfilesList() const
+	KxStringVector ModImporterMO::GetAvailableProfiles() const
 	{
-		KxStringVector list;
+		KxStringVector profiles;
 
-		KxFileFinder finder(m_InstanceDirectory + "\\profiles");
-		KxFileItem item = finder.FindNext();
-		while (item.IsOK())
+		KxFileFinder finder(m_InstanceDirectory + "\\profiles", "*");
+		for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
 		{
 			if (item.IsNormalItem() && item.IsDirectory() && !KxFileFinder::IsDirectoryEmpty(item.GetFullPath()))
 			{
-				list.push_back(item.GetName());
+				profiles.push_back(item.GetName());
 			}
-			item = finder.FindNext();
 		}
-		return list;
+		return profiles;
 	}
 }

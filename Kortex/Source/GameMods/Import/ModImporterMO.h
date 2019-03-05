@@ -14,10 +14,10 @@ namespace Kortex::ModManager
 			wxString m_DownloadsDirectory;
 			KxINI m_Options;
 
-			GameID m_TargetProfile;
-			const IGameInstance* m_TargetInstance = nullptr;
-			wxString m_CurrentModList;
+			wxString m_CurrentProfile;
 			wxString m_ModManagerName;
+			GameID m_TargetGameID;
+			const IGameInstance* m_TargetInstance = nullptr;
 			bool m_CanImport = false;
 
 		private:
@@ -25,7 +25,7 @@ namespace Kortex::ModManager
 			wxString& ProcessFilePath(wxString& path) const;
 			wxString& ProcessDescription(wxString& path) const;
 
-			GameID GetGameID(const wxString& name);
+			GameID TranslateGameID(const wxString& name);
 			void LoadOptions();
 			wxString GetDataFolderName() const;
 			wxString GetProfileDirectory() const;
@@ -42,19 +42,19 @@ namespace Kortex::ModManager
 			virtual void Import(KOperationWithProgressDialogBase* context) override;
 		
 			virtual bool CanImport() const override;
-			virtual GameID GetTargetProfileID() const override
+			virtual GameID GetTargetGameID() const override
 			{
-				return m_TargetProfile;
+				return m_TargetGameID;
 			}
 			virtual wxString GetModManagerName() const override
 			{
 				return m_ModManagerName;
 			}
 			virtual wxString GetAdditionalInfo() const;
-			virtual wxString GetCurrentModList() const override
+			virtual wxString GetCurrentProfile() const override
 			{
-				return m_CurrentModList;
+				return m_CurrentProfile;
 			}
-			virtual KxStringVector GetProfilesList() const override;
+			virtual KxStringVector GetAvailableProfiles() const override;
 	};
 }

@@ -110,7 +110,7 @@ namespace Kortex::ModManager
 	{
 		auto it = std::find_if(m_ProfilesList.begin(), m_ProfilesList.end(), [this](const auto& v)
 		{
-			return v.second == GetProfileToImport();
+			return v.second == GetSelectedProfile();
 		});
 		if (it != m_ProfilesList.end())
 		{
@@ -356,7 +356,7 @@ namespace Kortex::ModManager
 		}
 		return additionalInfo;
 	}
-	KxStringVector ModImporterNMM::GetProfilesList() const
+	KxStringVector ModImporterNMM::GetAvailableProfiles() const
 	{
 		KxStringVector profilesList;
 		profilesList.reserve(m_ProfilesList.size());

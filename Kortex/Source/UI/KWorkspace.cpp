@@ -178,23 +178,20 @@ bool KWorkspace::CreateNow()
 }
 void KWorkspace::ScheduleReload()
 {
-	CallAfter([this]()
+	if (IsWorkspaceCreated())
 	{
-		if (IsWorkspaceCreated())
+		CallAfter([this]()
 		{
 			if (IsWorkspaceVisible())
 			{
+				// Reload immediately
 				ReloadWorkspace();
 			}
 			else
 			{
-				// ReloadWorkspace will be called when workspace is opened next time
+				// ReloadWorkspace will be called when workspace is opened
 				m_IsReloadSheduled = true;
 			}
-		}
-		else
-		{
-			CreateNow();
-		}
-	});
+		});
+	}
 }

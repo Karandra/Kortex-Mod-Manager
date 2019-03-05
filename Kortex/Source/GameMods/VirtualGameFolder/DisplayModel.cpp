@@ -316,7 +316,7 @@ namespace Kortex::VirtualGameFolder
 			m_TreeItems = &IModDispatcher::GetInstance()->GetVirtualTree().GetChildren();
 			for (const FileTreeNode& node: *m_TreeItems)
 			{
-				if (node.GetMod().IsActive())
+				if (node.IsDirectory() || node.GetMod().IsActive())
 				{
 					ItemAdded(MakeItem(node));
 				}

@@ -202,7 +202,7 @@ Using the default folder is not recommended because profile data can occupy a lo
 
 		<String ID="Settings.ValueName.Language">UI language</String>
 		<String ID="Settings.ValueName.StartupWorkspace">Start page</String>
-		<String ID="Settings.ValueName.InstancesLocation">Instaces folder</String>
+		<String ID="Settings.ValueName.InstancesLocation">Instances folder</String>
 		<String ID="Settings.ValueName.PackagesLocation">Installation package folder</String>		
 		<String ID="Settings.ValueName.AutoShowPackageInfo">Automatically show information about the installation package</String>
 		<String ID="Settings.ValueName.FOModUseHTTPSForXMLScheme">Use HTTPS protocol in FOMod XML-scheme</String>
@@ -504,7 +504,7 @@ This folder and all its contents will be deleted: %1]]></String>
 
 		<String ID="ModManager.Import.Caption">Import from another mod manager</String>
 		<String ID="ModManager.Import.ManagedGame">Managed game</String>
-		<String ID="ModManager.Import.OverwriteWarning">Importing data from another mod manager can result in loss of data in this profile.</String>
+		<String ID="ModManager.Import.OverwriteWarning">Importing data from another mod manager can result in loss of data in this instance.</String>
 		<String ID="ModManager.Import.TargetProfileMismatch">The current selected game does not match the game controlled by this mod-manager. Import at your own risk.</String>
 		<String ID="ModManager.Import.TargetProfileNotFound">Data on the game managed by this mod manager is not found. Import at your own risk.</String>
 		<String ID="ModManager.Import.SkipExisingMods">Skip existing mods</String>

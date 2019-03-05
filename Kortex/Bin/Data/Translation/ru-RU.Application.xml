@@ -509,7 +509,7 @@
 		
 		<String ID="ModManager.Import.Caption">Импорт из другого мод-менеджера</String>
 		<String ID="ModManager.Import.ManagedGame">Управляемая игра</String>
-		<String ID="ModManager.Import.OverwriteWarning">Импорт данных из другого мод-менеджера может повлечь потерю данных в этом профиле.</String>
+		<String ID="ModManager.Import.OverwriteWarning">Импорт данных из другого мод-менеджера может повлечь потерю данных в этом инстансе.</String>
 		<String ID="ModManager.Import.TargetProfileMismatch">Текущая выбранная игра не совпадает с игрой, управляемой данным мод-менеджером. Выполняйте импорт на свой страх и риск.</String>
 		<String ID="ModManager.Import.TargetProfileNotFound">Не обнаружены данные об игре, управляемой данным мод-менеджером. Выполняйте импорт на свой страх и риск.</String>
 		<String ID="ModManager.Import.SkipExisingMods">Пропускать существующие моды</String>

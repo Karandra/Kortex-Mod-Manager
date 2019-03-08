@@ -236,7 +236,7 @@
 
 	<GameData>
 		<PluginManager Implementation="BethesdaMorrowind" PluginImplementation="BethesdaMorrowind">
-			<Limit Value="255"/>
+			<Limit Value="254"/>
 
 			<ChangeFileModificationDate>1</ChangeFileModificationDate>
 			<SortByFileModificationDate>0</SortByFileModificationDate>

@@ -286,7 +286,7 @@
 
 	<GameData>
 		<PluginManager Implementation="Bethesda" PluginImplementation="BethesdaOblivion">
-			<Limit Value="255"/>
+			<Limit Value="254"/>
 
 			<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
 			<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>

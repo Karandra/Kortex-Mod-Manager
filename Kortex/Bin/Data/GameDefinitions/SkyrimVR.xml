@@ -269,7 +269,7 @@
 
 	<GameData>
 		<PluginManager InterfaceName="Bethesda2" PluginFileFormat="BethesdaSkyrim">
-			<Limit Value="254"/>
+			<Limit Value="253"/>
 
 			<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
 			<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>

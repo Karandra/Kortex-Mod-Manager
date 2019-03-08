@@ -222,6 +222,8 @@ namespace Kortex::ModManager
 			KxEvtFile source(GetProfileDirectory() + "\\Saves");
 			context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
 			source.CopyFolder(KxFile::NullFilter, saveManager->GetConfig().GetLocation(), true, true);
+
+			saveManager->ScheduleReloadWorkspace();
 		}
 	}
 	void ModImporterMO::CopyMods(KOperationWithProgressDialogBase* context)
@@ -337,16 +339,18 @@ namespace Kortex::ModManager
 	}
 	void ModImporterMO::ReadPlugins(KOperationWithProgressDialogBase* context)
 	{
-		if (IPluginManager* manager = IPluginManager::GetInstance())
+		if (IPluginManager* pluginManager = IPluginManager::GetInstance())
 		{
-			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), manager->GetManagerInfo().GetName()));
+			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), pluginManager->GetManagerInfo().GetName()));
 
 			KxStringVector activePlugins = KxTextFile::ReadToArray(GetProfileDirectory() + "\\Plugins.txt");
-			IGameProfile* profile = IGameInstance::GetActiveProfile();
+			KxStringVector allPlugins = KxTextFile::ReadToArray(GetProfileDirectory() + "\\LoadOrder.txt");
 
+			IGameProfile* profile = IGameInstance::GetActiveProfile();
 			GameInstance::ProfilePlugin::Vector& currentPluginsList = profile->GetPlugins();
 			currentPluginsList.clear();
-			for (wxString& name: KxTextFile::ReadToArray(GetProfileDirectory() + "\\LoadOrder.txt"))
+
+			for (wxString& name: allPlugins)
 			{
 				if (!context->CanContinue())
 				{
@@ -364,32 +368,33 @@ namespace Kortex::ModManager
 			}
 			profile->SaveConfig();
 
-			manager->Load();
-			KWorkspace::ScheduleReloadOf<PluginManager::Workspace>();
+			pluginManager->Load();
+			pluginManager->ScheduleReloadWorkspace();
 		}
 	}
 	void ModImporterMO::CopyGameConfig(KOperationWithProgressDialogBase* context)
 	{
-		if (IGameConfigManager* manager = IGameConfigManager::GetInstance())
+		if (IGameConfigManager* configManager = IGameConfigManager::GetInstance())
 		{
-			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), manager->GetManagerInfo().GetName()));
+			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), configManager->GetManagerInfo().GetName()));
 
-			manager->ForEachGroup([this](GameConfig::ItemGroup& group)
+			configManager->ForEachGroup([this](GameConfig::ItemGroup& group)
 			{
 				GameConfig::IFileSource* fileSource = nullptr;
 				GameConfig::ISource& source = group.GetSource();
 				if (source.QueryInterface(fileSource))
 				{
-					KxFile file(GetProfileDirectory() + '\\' + fileSource->GetFileName());
+					KxFile file(GetProfileDirectory() + '\\' + fileSource->GetExpandedFileName());
 					if (file.IsFileExist())
 					{
 						source.Close();
-						file.CopyFile(fileSource->GetFilePath(), true);
+						file.CopyFile(fileSource->GetResolvedFilePath(), true);
 					}
 				}
 				return true;
 			});
-			manager->Load();
+			configManager->Load();
+			configManager->ScheduleReloadWorkspace();
 		}
 	}
 	void ModImporterMO::CopyDownloads(KOperationWithProgressDialogBase* context)
@@ -439,7 +444,6 @@ namespace Kortex::ModManager
 					manager->GetDownloads().pop_back();
 				}
 			}
-			item = finder.FindNext();
 		}
 	}
 

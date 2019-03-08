@@ -59,6 +59,7 @@ namespace Kortex
 			{
 				return GetWorkspace() != nullptr;
 			}
+			void ScheduleReloadWorkspace() const;
 
 			virtual const Kortex::IPluggableManager* ToPluggableManager() const
 			{

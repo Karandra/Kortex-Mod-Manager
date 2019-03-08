@@ -21,8 +21,8 @@ namespace Kortex::NetworkManager
 		// Init providers
 		m_Providers.reserve(NetworkProviderIDs::MAX_SYSTEM);
 		AddProvider<NexusProvider>();
-		//AddProvider<TESALLProvider>();
-		//AddProvider<LoversLabProvider>();
+		AddProvider<LoversLabProvider>();
+		AddProvider<TESALLProvider>();
 
 		// Load default provider
 		m_DefaultProvider = 0;

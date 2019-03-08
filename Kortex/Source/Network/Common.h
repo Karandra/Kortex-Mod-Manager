@@ -8,8 +8,8 @@ namespace Kortex::NetworkManager
 		enum ProviderIDs
 		{
 			Nexus,
-			TESALL,
 			LoversLab,
+			TESALL,
 
 			MAX_SYSTEM,
 			Invalid = -1

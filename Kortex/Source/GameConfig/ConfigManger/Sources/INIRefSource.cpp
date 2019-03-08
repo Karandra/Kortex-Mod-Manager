@@ -1,45 +1,32 @@
 #include "stdafx.h"
-#include "INISource.h"
+#include "INIRefSource.h"
 #include "GameConfig/ConfigManger/Item.h"
 #include "GameConfig/ConfigManger/ItemValue.h"
 #include "GameConfig/ConfigManger/ItemGroup.h"
 #include "GameConfig/ConfigManger/Definition.h"
 #include "GameConfig/ConfigManger/Items/SimpleItem.h"
-#include <KxFramework/KxFileStream.h>
 
 namespace Kortex::GameConfig
 {
-	bool INISource::Open()
+	bool INIRefSource::Open()
 	{
 		if (!m_IsOpened)
 		{
-			KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-			if (stream.IsOk() && m_INI.Load(stream))
-			{
-				m_IsOpened = true;
-				return true;
-			}
+			m_IsOpened = true;
+			return true;
 		}
 		return false;
 	}
-	bool INISource::Save()
+	bool INIRefSource::Save()
 	{
-		if (m_IsOpened)
-		{
-			KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
-			if (stream.IsOk())
-			{
-				return m_INI.Save(stream);
-			}
-		}
-		return false;
+		return m_IsOpened;
 	}
-	void INISource::Close()
+	void INIRefSource::Close()
 	{
 		m_IsOpened = false;
 	}
 
-	bool INISource::WriteValue(const Item& item, const ItemValue& value)
+	bool INIRefSource::WriteValue(const Item& item, const ItemValue& value)
 	{
 		if (value.IsNull())
 		{
@@ -50,7 +37,7 @@ namespace Kortex::GameConfig
 			return m_INI.SetValue(item.GetPath(), item.GetName(), value.Serialize(item));
 		}
 	}
-	bool INISource::ReadValue(Item& item, ItemValue& value) const
+	bool INIRefSource::ReadValue(Item& item, ItemValue& value) const
 	{
 		wxString valueData = m_INI.GetValue(item.GetPath(), item.GetName());
 		if (!valueData.IsEmpty())
@@ -59,7 +46,7 @@ namespace Kortex::GameConfig
 		}
 		return false;
 	}
-	void INISource::LoadUnknownItems(ItemGroup& group)
+	void INIRefSource::LoadUnknownItems(ItemGroup& group)
 	{
 		for (const wxString& sectionName: m_INI.GetSectionNames())
 		{
@@ -85,7 +72,15 @@ namespace Kortex::GameConfig
 					item->SetTypeID(type);
 
 					// Category is never a part of item's hash calculation, so set it here
-					item->SetCategory(wxS('/') + m_FileName + wxS('/') + sectionName);
+					wxString pathDescription = GetPathDescription();
+					if (!pathDescription.IsEmpty())
+					{
+						item->SetCategory(wxS('/') + pathDescription + wxS('/') + sectionName);
+					}
+					else
+					{
+						item->SetCategory(wxS('/') + sectionName);
+					}
 
 					// Move the item to group
 					if (item->Create())

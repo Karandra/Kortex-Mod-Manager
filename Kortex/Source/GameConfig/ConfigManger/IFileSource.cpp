@@ -9,9 +9,9 @@ namespace Kortex::GameConfig
 		return IModDispatcher::GetInstance()->ResolveLocationPath(path);
 	}
 
-	wxString IFileSource::GetResolvedFileName() const
+	wxString IFileSource::GetExpandedFileName() const
 	{
-		return ResolveFSLocation(KVarExp(GetFileName()));
+		return KVarExp(GetFileName());
 	}
 	wxString IFileSource::GetResolvedFilePath() const
 	{

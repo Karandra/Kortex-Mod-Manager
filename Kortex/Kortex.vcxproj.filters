@@ -1077,9 +1077,6 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INISource.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\IFileSource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
@@ -1110,10 +1107,13 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLFileSource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLSource.cpp">
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.cpp">
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INIRefSource.cpp">
+      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INIFileSource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2075,9 +2075,6 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\Sources\NullSource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
     </ClInclude>
@@ -2115,6 +2112,15 @@
       <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INIRefSource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INIFileSource.h">
+      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
     </ClInclude>
   </ItemGroup>

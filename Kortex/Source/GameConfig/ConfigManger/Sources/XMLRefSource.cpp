@@ -5,7 +5,6 @@
 #include "GameConfig/ConfigManger/ItemGroup.h"
 #include "GameConfig/ConfigManger/Definition.h"
 #include "GameConfig/ConfigManger/Items/SimpleItem.h"
-#include <KxFramework/KxFileStream.h>
 
 namespace Kortex::GameConfig
 {

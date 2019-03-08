@@ -1,36 +1,36 @@
 #include "stdafx.h"
-#include "XMLFileSource.h"
+#include "INIFileSource.h"
 #include <KxFramework/KxFileStream.h>
 
 namespace Kortex::GameConfig
 {
-	bool XMLFileSource::Open()
+	bool INIFileSource::Open()
 	{
-		if (!XMLSource::IsOpened())
+		if (!INISource::IsOpened())
 		{
 			KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-			if (stream.IsOk() && GetXML().Load(stream))
+			if (stream.IsOk() && GetINI().Load(stream))
 			{
-				XMLSource::Open();
+				INISource::Open();
 				return true;
 			}
 		}
 		return false;
 	}
-	bool XMLFileSource::Save()
+	bool INIFileSource::Save()
 	{
-		if (XMLSource::IsOpened())
+		if (INISource::IsOpened())
 		{
 			KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 			if (stream.IsOk())
 			{
-				return GetXML().Save(stream);
+				return GetINI().Save(stream);
 			}
 		}
 		return false;
 	}
-	void XMLFileSource::Close()
+	void INIFileSource::Close()
 	{
-		XMLSource::Close();
+		INISource::Close();
 	}
 }

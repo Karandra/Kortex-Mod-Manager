@@ -1,29 +1,29 @@
 #pragma once
 #include "stdafx.h"
 #include "GameConfig/ConfigManger/ISource.h"
-#include <KxFramework/KxXML.h>
+#include <KxFramework/KxINI.h>
 
 namespace Kortex::GameConfig
 {
-	class XMLRefSource: public RTTI::IExtendInterface<XMLRefSource, ISource>
+	class INIRefSource: public RTTI::IExtendInterface<INIRefSource, ISource>
 	{
 		private:
-			KxXMLDocument& m_XML;
+			KxINI& m_INI;
 			bool m_IsOpened = false;
 
 		protected:
-			const KxXMLDocument& GetXML() const
+			const KxINI& GetINI() const
 			{
-				return m_XML;
+				return m_INI;
 			}
-			KxXMLDocument& GetXML()
+			KxINI& GetINI()
 			{
-				return m_XML;
+				return m_INI;
 			}
 
 		public:
-			XMLRefSource(KxXMLDocument& xml)
-				:m_XML(xml)
+			INIRefSource(KxINI& ini)
+				:m_INI(ini)
 			{
 			}
 
@@ -31,7 +31,7 @@ namespace Kortex::GameConfig
 			// ISource
 			SourceFormatValue GetFormat() const override
 			{
-				return SourceFormat::XML;
+				return SourceFormat::INI;
 			}
 			wxString GetPathDescription() const override
 			{

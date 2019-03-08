@@ -14,7 +14,7 @@ namespace Kortex::GameConfig
 			virtual wxString GetFileName() const = 0;
 			virtual wxString GetFilePath() const = 0;
 
-			wxString GetResolvedFileName() const;
+			wxString GetExpandedFileName() const;
 			wxString GetResolvedFilePath() const;
 	};
 }

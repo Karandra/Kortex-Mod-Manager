@@ -4,7 +4,8 @@
 #include "Item.h"
 #include "Items/SimpleItem.h"
 #include "Items/StructItem.h"
-#include "Sources/INISource.h"
+#include "Sources/INIFileSource.h"
+#include "Sources/XMLFileSource.h"
 #include "Sources/NullSource.h"
 #include <KxFramework/KxXML.h>
 
@@ -86,12 +87,12 @@ namespace Kortex::GameConfig
 			{
 				case SourceFormat::INI:
 				{
-					m_Source = std::make_unique<INISource>(sourceNode.GetValue());
+					m_Source = std::make_unique<INIFileSource>(sourceNode.GetValue());
 					break;
 				}
 				case SourceFormat::XML:
 				{
-					//m_Source = std::make_unique<XMLSource>(sourceNode.GetValue());
+					m_Source = std::make_unique<XMLFileSource>(sourceNode.GetValue());
 					break;
 				}
 				case SourceFormat::Registry:

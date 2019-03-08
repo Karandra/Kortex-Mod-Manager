@@ -369,16 +369,16 @@ namespace Kortex::ModManager
 			case ColumnID::Sites_NexusID:
 			case ColumnID::Sites_LoversLabID:
 			{
-				NetworkProviderID index = (NetworkProviderID)(column->GetID() - ColumnID::Sites - 1);
-				INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(index);
+				const NetworkProviderID index = (NetworkProviderID)(column->GetID() - ColumnID::Sites - 1);
+				const INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(index);
 				if (provider)
 				{
-					const ModProviderItem* providerItem = mod->GetProviderStore().GetItem(provider->GetName());
+					const ModProviderItem* providerItem = mod->GetProviderStore().GetItem(*provider);
 					
-					ModID id;
-					if (providerItem && providerItem->TryGetModID(id))
+					NetworkModInfo modInfo;
+					if (providerItem && providerItem->TryGetModInfo(modInfo))
 					{
-						value = id.GetValue();
+						value = modInfo.ToString();
 					}
 				}
 				break;
@@ -663,10 +663,14 @@ namespace Kortex::ModManager
 				if (IsSpecialSiteColumn(columnID))
 				{
 					INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(ColumnToSpecialSite(columnID));
-					ModProviderItem* item1 = entry1->GetProviderStore().GetItem(provider);
-					ModProviderItem* item2 = entry2->GetProviderStore().GetItem(provider);
+					if (provider)
+					{
+						ModProviderItem* item1 = entry1->GetProviderStore().GetItem(*provider);
+						ModProviderItem* item2 = entry2->GetProviderStore().GetItem(*provider);
 
-					return item1 && item2 && (item1->GetModID().GetValue() < item2->GetModID().GetValue());
+						return item1 && item2 && (item1->GetModInfo().GetModID().GetValue() < item2->GetModInfo().GetModID().GetValue());
+					}
+					return false;
 				}
 
 				switch (columnID)
@@ -770,13 +774,17 @@ namespace Kortex::ModManager
 			if (IsSpecialSiteColumn(columnID))
 			{
 				const ModProviderStore& store = entry->GetProviderStore();
-				if (const ModProviderItem* providerItem = store.GetItem(INetworkManager::GetInstance()->GetProvider(providerID)))
+				const INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(providerID);
+				if (provider)
 				{
-					KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
-				}
-				else if (!store.IsEmpty())
-				{
-					KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());
+					if (const ModProviderItem* providerItem = store.GetItem(*provider))
+					{
+						KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
+					}
+					else if (!store.IsEmpty())
+					{
+						KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());
+					}
 				}
 				return;
 			}

@@ -72,7 +72,7 @@ namespace Kortex::ModProvider
 				{
 					if (node->HasProvider())
 					{
-						value = node->GetModID().GetValue();
+						value = node->GetModInfo().ToString();
 					}
 					else
 					{
@@ -123,10 +123,10 @@ namespace Kortex::ModProvider
 				wxString newValue = data.As<wxString>();
 				if (node->HasProvider())
 				{
-					ModID modID;
-					if (modID.FromString(newValue))
+					NetworkModInfo modInfo;
+					if (modInfo.FromString(newValue))
 					{
-						node->SetModID(modID);
+						node->SetModInfo(modInfo);
 						m_IsModified = true;
 						return true;
 					}

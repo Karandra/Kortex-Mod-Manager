@@ -17,15 +17,42 @@ namespace
 {
 	using namespace Kortex;
 
-	template<class T> void LoadOldSite(ModProviderStore& store, KxXMLNode& node, const wxString& name)
+	template<class T> void LoadOldSite(ModProviderStore& store, KxXMLNode& node, const wxString& attributeName, const wxString& providerName)
 	{
-		store.AssignWith<T>(node.GetAttributeInt(name, ModID::GetInvalidValue()));
+		ModID modID = node.GetAttributeInt(attributeName, ModID::GetInvalidValue());
+		if (modID.HasValue())
+		{
+			auto AddName = [&providerName](ModProviderItem& item)
+			{
+				if (!item.HasName())
+				{
+					item.SetName(providerName);
+				}
+			};
+
+			if (T* provider = T::GetInstance())
+			{
+				ModProviderItem& item = store.AssignWith(*provider, modID);
+				AddName(item);
+			}
+			else
+			{
+				ModProviderItem& item = store.AssignWith(providerName, modID);
+				AddName(item);
+			}
+		}
 	}
-	void LoadOldSites(ModProviderStore& store, KxXMLNode& node)
+	void LoadOldSites(ModProviderStore& store, KxXMLNode& sitesNode)
 	{
-		LoadOldSite<NetworkManager::NexusProvider>(store, node, "NexusID");
-		LoadOldSite<NetworkManager::LoversLabProvider>(store, node, "LoversLabID");
-		LoadOldSite<NetworkManager::TESALLProvider>(store, node, "TESALLID");
+		LoadOldSite<NetworkManager::NexusProvider>(store, sitesNode, "NexusID", "Nexus");
+		LoadOldSite<NetworkManager::LoversLabProvider>(store, sitesNode, "LoversLabID", "LoversLab");
+		LoadOldSite<NetworkManager::TESALLProvider>(store, sitesNode, "TESALLID", "TESALL");
+
+		// Load any "free" sites
+		for (KxXMLNode node = sitesNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+		{
+			store.TryAddItem(ModProviderItem(node.GetAttribute("Label"), node.GetValue()));
+		}
 	}
 }
 

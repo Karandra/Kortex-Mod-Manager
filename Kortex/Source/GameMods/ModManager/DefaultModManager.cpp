@@ -331,15 +331,15 @@ namespace Kortex::ModManager
 		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModByNetworkID(NetworkProviderID providerID, ModID id, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByNetworkID(NetworkProviderID providerID, NetworkModInfo modInfo, intptr_t* index) const
 	{
 		if (INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(providerID))
 		{
 			intptr_t i = 0;
 			for (auto& entry: m_Mods)
 			{
-				ModProviderItem* item = entry->GetProviderStore().GetItem(provider);
-				if (item && item->GetModID() == id)
+				ModProviderItem* item = entry->GetProviderStore().GetItem(*provider);
+				if (item && item->GetModInfo() == modInfo)
 				{
 					KxUtility::SetIfNotNull(index, i);
 					return &*entry;

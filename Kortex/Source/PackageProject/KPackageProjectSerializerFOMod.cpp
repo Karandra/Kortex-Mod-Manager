@@ -347,11 +347,10 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 		// Web-site
 		Kortex::ModProviderStore& providerStore = info.GetProviderStore();
 
-		int64_t intID = -1;
-		wxString id = infoNode.GetFirstChildElement("Id").GetValue();
-		if (!id.IsEmpty() && id.ToLongLong(&intID))
+		ModID nexusID = infoNode.GetFirstChildElement("Id").GetValueInt(ModID::GetInvalidValue());
+		if (nexusID.HasValue())
 		{
-			providerStore.TryAddWith<Kortex::NetworkManager::NexusProvider>(intID);
+			providerStore.TryAddWith<Kortex::NetworkManager::NexusProvider>(nexusID);
 		}
 
 		wxString siteURL = infoNode.GetFirstChildElement("Website").GetValue();
@@ -729,7 +728,7 @@ void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& 
 	// Write Nexus to 'Id'
 	if (const ModProviderItem* nexusItem = providerStore.GetItem(NexusProvider::GetInstance()->GetName()))
 	{
-		infoNode.NewElement("Id").SetValue(nexusItem->GetModID().GetValue());
+		infoNode.NewElement("Id").SetValue(nexusItem->GetModInfo().GetModID().GetValue());
 	}
 
 	if (!(WriteSite<LoversLabProvider>(providerStore, sitesNode) || WriteSite<TESALLProvider>(providerStore, sitesNode)))

@@ -40,7 +40,7 @@ Kortex::ModProviderItem KPackageProjectSerializer::TryParseWebSite(const wxStrin
 
 	if (provider)
 	{
-		Kortex::ModProviderItem(provider->GetName(), id);
+		return Kortex::ModProviderItem(provider->GetName(), Kortex::ModID(id));
 	}
 	return Kortex::ModProviderItem();
 }

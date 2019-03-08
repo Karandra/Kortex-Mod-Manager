@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Network/Common.h"
 #include "Network/INetworkProvider.h"
+#include "Network/NetworkModInfo.h"
 #include "GameInstance/GameID.h"
 
 namespace Kortex
@@ -13,11 +14,11 @@ namespace Kortex
 
 		private:
 			using TID = std::variant<wxString, INetworkProvider*>;
-			using TData = std::variant<wxString, ModID>;
+			using TData = std::variant<wxString, NetworkModInfo>;
 
 		private:
 			TID m_ID = nullptr;
-			TData m_Data = ModID();
+			TData m_Data = NetworkModInfo();
 
 		public:
 			ModProviderItem() = default;
@@ -26,7 +27,7 @@ namespace Kortex
 				:m_ID(name), m_Data(url)
 			{
 			}
-			ModProviderItem(const wxString& name, ModID id)
+			ModProviderItem(const wxString& name, NetworkModInfo id)
 				:m_ID(name), m_Data(id)
 			{
 			}
@@ -35,7 +36,7 @@ namespace Kortex
 				:m_ID(provider), m_Data(url)
 			{
 			}
-			ModProviderItem(INetworkProvider* provider, ModID id)
+			ModProviderItem(INetworkProvider* provider, NetworkModInfo id)
 				:m_ID(provider), m_Data(id)
 			{
 			}
@@ -48,9 +49,9 @@ namespace Kortex
 			void Save(KxXMLNode& node) const;
 
 			INetworkProvider* GetProvider() const;
-			void SetProvider(INetworkProvider* provider)
+			void SetProvider(INetworkProvider& provider)
 			{
-				m_ID = provider;
+				m_ID = &provider;
 			}
 			template<class T> void SetProvider()
 			{
@@ -93,19 +94,19 @@ namespace Kortex
 				return !GetURL(gameID).IsEmpty();
 			}
 
-			ModID GetModID() const;
-			void SetModID(ModID id)
+			NetworkModInfo GetModInfo() const;
+			void SetModInfo(NetworkModInfo modInfo)
 			{
-				m_Data = id;
+				m_Data = modInfo;
 			}
-			bool TryGetModID(ModID& id) const
+			bool TryGetModInfo(NetworkModInfo& modInfo) const
 			{
-				id = GetModID();
-				return id.HasValue();
+				modInfo = GetModInfo();
+				return !modInfo.IsEmpty();
 			}
-			bool HasModID() const
+			bool HasModInfo() const
 			{
-				return GetModID().HasValue();
+				return !GetModInfo().IsEmpty();
 			}
 	};
 }

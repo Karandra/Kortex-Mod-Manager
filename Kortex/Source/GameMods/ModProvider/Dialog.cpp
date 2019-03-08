@@ -13,11 +13,11 @@ namespace Kortex::ModProvider
 		{
 			KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(provider->GetName()));
 			item->SetBitmap(KGetBitmap(provider->GetIcon()));
-			item->Enable(!m_ProviderStore.HasItem(&*provider));
+			item->Enable(!m_ProviderStore.HasItem(*provider));
 
 			item->Bind(KxEVT_MENU_SELECT, [this, &provider](KxMenuEvent& event)
 			{
-				OnAddItem(m_ProviderStore.AssignWith(&*provider, ModID()));
+				OnAddItem(m_ProviderStore.AssignWith(*provider, ModID()));
 			});
 		}
 

@@ -1116,6 +1116,9 @@
     <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INIFileSource.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Network\NetworkModInfo.cpp">
+      <Filter>Code\Source\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2124,6 +2127,9 @@
       <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\NetworkProviderRequest.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkModInfo.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
   </ItemGroup>

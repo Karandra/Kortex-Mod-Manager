@@ -79,7 +79,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 			static_cast<KxTextBox*>(event.GetEventObject())->GetValue().ToLongLong(&id);
 
 			Kortex::ModProviderStore& store = GetProjectInfo().GetProviderStore();
-			store.AssignWith<T>(id);
+			store.AssignWith<T>(ModID(id));
 			event.Skip();
 		}
 		template<class T> KxTextBox* AddProviderControl(wxSizer* sizer)

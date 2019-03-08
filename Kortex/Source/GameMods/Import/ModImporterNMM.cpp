@@ -176,7 +176,7 @@ namespace Kortex::ModManager
 
 		for (KxXMLNode modInfoNode = modListNode.GetFirstChildElement("modInfo"); modInfoNode.IsOK(); modInfoNode = modInfoNode.GetNextSiblingElement("modInfo"))
 		{
-			int64_t modID = modInfoNode.GetAttributeInt("modId", -1);
+			ModID modID = modInfoNode.GetAttributeInt("modId", ModID::GetInvalidValue());
 			wxString modName = modInfoNode.GetAttribute("modName");
 			wxString modFileName = modInfoNode.GetAttribute("modFileName");
 			wxString modBaseFolder = modInfoNode.GetAttribute("modFilePath") + "\\VirtualInstall";
@@ -204,7 +204,13 @@ namespace Kortex::ModManager
 			mod.SetVersion(infoNode.GetFirstChildElement("Version").GetValue());
 			mod.SetAuthor(infoNode.GetFirstChildElement("Author").GetValue());
 			mod.SetDescription(ProcessDescription(infoNode.GetFirstChildElement("Description").GetValue()));
-			mod.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(infoNode.GetFirstChildElement("Id").GetValueInt(modInfoNode.GetAttributeInt("modId", ModID::GetInvalidValue())));
+
+			// Get nexus mod ID from FOMod file if we don't have it already
+			if (!modID.HasValue())
+			{
+				modID = infoNode.GetFirstChildElement("Id").GetValueInt(modID.GetValue());
+			}
+			mod.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(modID);
 
 			// Install date
 			mod.SetInstallTime(KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
@@ -212,7 +218,7 @@ namespace Kortex::ModManager
 			// If such mod already exist, try create unique ID
 			if (existingModEntry)
 			{
-				mod.SetID(wxString::Format("[NMM %lld] %s", modID, modName));
+				mod.SetID(KxString::Format("[NMM %1] %2", modID.GetValue(), modName));
 			}
 			else
 			{

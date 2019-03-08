@@ -216,6 +216,7 @@
     <ClCompile Include="Source\Network\IDownloadEntry.cpp" />
     <ClCompile Include="Source\Network\IDownloadManager.cpp" />
     <ClCompile Include="Source\Network\INetworkManager.cpp" />
+    <ClCompile Include="Source\Network\NetworkModInfo.cpp" />
     <ClCompile Include="Source\Network\NetworkModule.cpp" />
     <ClCompile Include="Source\Network\INetworkProvider.cpp" />
     <ClCompile Include="Source\Network\NetworkManager\DefaultNetworkManager.cpp" />
@@ -534,6 +535,7 @@
     <ClInclude Include="Source\Network\IDownloadEntry.h" />
     <ClInclude Include="Source\Network\IDownloadManager.h" />
     <ClInclude Include="Source\Network\INetworkManager.h" />
+    <ClInclude Include="Source\Network\NetworkModInfo.h" />
     <ClInclude Include="Source\Network\NetworkModule.h" />
     <ClInclude Include="Source\Network\Common.h" />
     <ClInclude Include="Source\Network\INetworkProvider.h" />

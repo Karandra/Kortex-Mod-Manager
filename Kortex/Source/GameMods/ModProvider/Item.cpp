@@ -10,7 +10,7 @@ namespace Kortex
 		// Unknown items valid if at least name is present.
 		if (HasProvider())
 		{
-			return HasModID();
+			return HasModInfo();
 		}
 		else
 		{
@@ -19,34 +19,35 @@ namespace Kortex
 	}
 	bool ModProviderItem::IsEmptyValue() const
 	{
-		return !HasModID() || !HasURL();
+		return !HasModInfo() || !HasURL();
 	}
 
 	void ModProviderItem::Load(const KxXMLNode& node)
 	{
 		SetName(node.GetAttribute("Name"));
 
-		ModID id = node.GetAttributeInt("ModID", ModID::GetInvalidValue());
-		if (id.HasValue())
+		NetworkModInfo modInfo(node.GetAttributeInt("ModID", ModID().GetValue()), node.GetAttributeInt("FileID", ModFileID().GetValue()));
+		if (!modInfo.IsEmpty())
 		{
-			m_Data = std::move(id);
+			m_Data = std::move(modInfo);
 		}
 		else
 		{
-			m_Data = node.GetAttributeInt("URL");
+			m_Data = node.GetAttribute("URL");
 		}
 	}
 	void ModProviderItem::Save(KxXMLNode& node) const
 	{
 		node.SetAttribute("Name", GetName());
-
-		ModID id;
-		wxString url;
-		if (TryGetModID(id))
+		if (NetworkModInfo modInfo; TryGetModInfo(modInfo))
 		{
-			node.SetAttribute("ModID", id.GetValue());
+			node.SetAttribute("ModID", modInfo.GetModID().GetValue());
+			if (modInfo.HasFileID())
+			{
+				node.SetAttribute("FileID", modInfo.GetFileID().GetValue());
+			}
 		}
-		else if (TryGetURL(url))
+		else if (wxString url; TryGetURL(url))
 		{
 			node.SetAttribute("URL", url);
 		}
@@ -92,23 +93,21 @@ namespace Kortex
 	wxString ModProviderItem::GetURL(const GameID& gameID) const
 	{
 		INetworkProvider* provider = nullptr;
-		ModID modID;
-
 		if (const wxString* url = std::get_if<wxString>(&m_Data))
 		{
 			return *url;
 		}
-		else if (TryGetModID(modID) && TryGetProvider(provider))
+		else if (NetworkModInfo modInfo; TryGetModInfo(modInfo) && TryGetProvider(provider))
 		{
-			return provider->GetModURL(modID, wxEmptyString, gameID);
+			return provider->GetModURL(modInfo);
 		}
 		return wxEmptyString;
 	}
-	ModID ModProviderItem::GetModID() const
+	NetworkModInfo ModProviderItem::GetModInfo() const
 	{
-		if (const ModID* id = std::get_if<ModID>(&m_Data))
+		if (const NetworkModInfo* modInfo = std::get_if<NetworkModInfo>(&m_Data))
 		{
-			return *id;
+			return *modInfo;
 		}
 		return ModID();
 	}

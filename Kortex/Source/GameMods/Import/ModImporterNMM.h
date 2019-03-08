@@ -11,10 +11,10 @@ namespace Kortex::ModManager
 			wxString m_InstanceDirectory;
 			KxXMLDocument m_ProfileManagerXML;
 
-			bool m_CanImport = false;
+			std::vector<std::pair<wxString, wxString>> m_ProfilesList;
 			GameID m_TargetGameID;
 			const IGameInstance* m_TargetGame = nullptr;
-			std::vector<std::pair<wxString, wxString>> m_ProfilesList;
+			bool m_CanImport = false;
 
 		private:
 			wxString ProcessDescription(const wxString& path) const;

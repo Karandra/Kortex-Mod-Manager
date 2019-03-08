@@ -6,6 +6,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/DownloadManager.hpp>
+#include <Kortex/GameConfig.hpp>
 #include "PackageProject/KPackageProjectSerializer.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
@@ -121,15 +122,51 @@ namespace Kortex::ModManager
 
 	void ModImporterNMM::CopySavesAndConfig(KOperationWithProgressDialogBase* context)
 	{
-		context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), ISaveManager::GetInstance()->GetManagerInfo().GetName()));
+		context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), ISaveManager::GetInstance()->GetManagerInfo().GetName()));
 
-		// Copy saves from real saves folder to virtual
-		KxEvtFile savesSource(ITranslator::GetVariable(Variables::KVAR_ACTUAL_CONFIG_DIR));
-		context->LinkHandler(&savesSource, KxEVT_FILEOP_COPY_FOLDER);
-		savesSource.CopyFolder(KxFile::NullFilter, ITranslator::GetVariable(Variables::KVAR_CONFIG_DIR), true, true);
+		// Saves
+		if (const ISaveManager* saveManager = ISaveManager::GetInstance())
+		{
+			KxEvtFile savesSource(ITranslator::GetVariable(Variables::KVAR_ACTUAL_SAVES_DIR));
+			context->LinkHandler(&savesSource, KxEVT_FILEOP_COPY_FOLDER);
+			savesSource.CopyFolder(KxFile::NullFilter, saveManager->GetConfig().GetLocation(), true, true);
+
+			saveManager->ScheduleReloadWorkspace();
+		}
+
+		// Config
+		if (IGameConfigManager* configManager = IGameConfigManager::GetInstance())
+		{
+			configManager->ForEachGroup([this](GameConfig::ItemGroup& group)
+			{
+				GameConfig::IFileSource* fileSource = nullptr;
+				GameConfig::ISource& source = group.GetSource();
+				if (source.QueryInterface(fileSource))
+				{
+					KxFile file(ITranslator::GetVariable(Variables::KVAR_ACTUAL_CONFIG_DIR) + '\\' + fileSource->GetExpandedFileName());
+					if (file.IsFileExist())
+					{
+						source.Close();
+						file.CopyFile(fileSource->GetResolvedFilePath(), true);
+					}
+				}
+				return true;
+			});
+			configManager->Load();
+			configManager->ScheduleReloadWorkspace();
+		}
 	}
 	void ModImporterNMM::CopyMods(KOperationWithProgressDialogBase* context)
 	{
+		IGameProfile* profile = IGameInstance::GetActive()->GetActiveProfile();
+		GameInstance::ProfileMod::Vector& currentModList = profile->GetMods();
+		currentModList.clear();
+
+		auto AddMod = [&currentModList](IGameMod& mod, bool isActive)
+		{
+			currentModList.emplace_back(mod, isActive);
+		};
+
 		KxFileStream installConfigStream(m_InstanceDirectory + "\\VirtualInstall\\VirtualModConfig.xml", KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 		KxXMLDocument installConfig(installConfigStream);
 
@@ -137,7 +174,6 @@ namespace Kortex::ModManager
 		size_t modsProcessed = 0;
 		size_t modsTotal = modListNode.GetChildrenCount();
 
-		KxStringVector addedMods;
 		for (KxXMLNode modInfoNode = modListNode.GetFirstChildElement("modInfo"); modInfoNode.IsOK(); modInfoNode = modInfoNode.GetNextSiblingElement("modInfo"))
 		{
 			int64_t modID = modInfoNode.GetAttributeInt("modId", -1);
@@ -146,95 +182,75 @@ namespace Kortex::ModManager
 			wxString modBaseFolder = modInfoNode.GetAttribute("modFilePath") + "\\VirtualInstall";
 
 			// Notify
-			context->SetDialogCaption(wxString::Format("%s \"%s\", %zu/%zu", KTr("Generic.Import"), modName, modsProcessed, modsTotal));
+			context->SetDialogCaption(KxString::Format("%1 \"%2\", %3/%4", KTr("Generic.Import"), modName, modsProcessed, modsTotal));
 
 			// Check mod existence
 			IGameMod* existingModEntry = IModManager::GetInstance()->FindModByID(modName);
 			if (existingModEntry && ShouldSkipExistingMods())
 			{
-				existingModEntry->SetActive(true);
+				AddMod(*existingModEntry, true);
 				continue;
 			}
 
 			// Write data
-			IGameMod& modEntry = IModManager::GetInstance()->EmplaceMod();
+			IGameMod& mod = IModManager::GetInstance()->EmplaceMod();
 
 			KxFileStream infoStream(m_InstanceDirectory + "\\cache\\" + modFileName.BeforeLast('.') + "\\Data\\fomod\\info.xml", KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 			KxXMLDocument info(infoStream);
 			KxXMLNode infoNode = info.QueryElement("fomod");
 
-			modEntry.SetName(modName);
-			modEntry.SetActive(true);
-			modEntry.SetVersion(infoNode.GetFirstChildElement("Version").GetValue());
-			modEntry.SetAuthor(infoNode.GetFirstChildElement("Author").GetValue());
-			modEntry.SetDescription(ProcessDescription(infoNode.GetFirstChildElement("Description").GetValue()));
-			modEntry.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(infoNode.GetFirstChildElement("Id").GetValueInt(modInfoNode.GetAttributeInt("modId", ModID::GetInvalidValue())));
+			mod.SetName(modName);
+			mod.SetActive(true);
+			mod.SetVersion(infoNode.GetFirstChildElement("Version").GetValue());
+			mod.SetAuthor(infoNode.GetFirstChildElement("Author").GetValue());
+			mod.SetDescription(ProcessDescription(infoNode.GetFirstChildElement("Description").GetValue()));
+			mod.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(infoNode.GetFirstChildElement("Id").GetValueInt(modInfoNode.GetAttributeInt("modId", ModID::GetInvalidValue())));
 
 			// Install date
-			modEntry.SetInstallTime(KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
+			mod.SetInstallTime(KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
 
 			// If such mod already exist, try create unique ID
 			if (existingModEntry)
 			{
-				modEntry.SetID(wxString::Format("[NMM %lld] %s", modID, modName));
+				mod.SetID(wxString::Format("[NMM %lld] %s", modID, modName));
 			}
 			else
 			{
-				modEntry.SetID(modName);
+				mod.SetID(modName);
 			}
-			addedMods.push_back(modEntry.GetID());
 
 			// Save entry
-			modEntry.Save();
+			AddMod(mod, true);
+			mod.Save();
 
-			// Copy mod contents
-			// Do some trick:
-			// NMM can store mod files in folder named after mod's name or its ID and there is no way to
-			// know that. So I will check first file in the list, get folder from its path and construct final mod path.
+			// Copy mod contents.
+			// NMM can stores mod files in folder named after mod's name or its ID and there is no way to know that.
+			// So I will check first file in the list, get folder from its path and construct final mod path.
 			wxString modFolder = modBaseFolder + wxS('\\') + modInfoNode.GetFirstChildElement("fileLink").GetAttribute("realPath").BeforeFirst('\\');
 
 			KxEvtFile source(modFolder);
-			wxString destination = modEntry.GetModFilesDir() + wxS('\\') + GetDataFolderName();
+			wxString destination = mod.GetModFilesDir() + wxS('\\') + GetDataFolderName();
 			context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
 			source.CopyFolder(KxFile::NullFilter, destination, true, true);
+
+			// Update mod content
+			mod.UpdateFileTree();
 		}
 
-		// Add mods to mods list
-		IGameProfile* profile = IGameInstance::GetActive()->GetActiveProfile();
-
-		GameInstance::ProfileMod::Vector& modList = profile->GetMods();
-		modList.clear();
-		for (const wxString& name: addedMods)
-		{
-			if (!context->CanContinue())
-			{
-				return;
-			}
-
-			if (IGameMod* existingMod = IModManager::GetInstance()->FindModByID(name))
-			{
-				modList.emplace_back(GameInstance::ProfileMod(*existingMod, existingMod->IsActive()));
-			}
-		}
-
-		// Save lists, without sync
 		profile->SaveConfig();
+		IModDispatcher::GetInstance()->UpdateVirtualTree();
 	}
 	void ModImporterNMM::ReadPlugins(KOperationWithProgressDialogBase* context)
 	{
 		if (IPluginManager* pluginManager = IPluginManager::GetInstance())
 		{
-			context->SetDialogCaption(wxString::Format("%s \"%s\"", KTr("Generic.Import"), pluginManager->GetManagerInfo().GetName()));
-
-			// Load entries
-			pluginManager->Load();
-			KxStringVector pluginsList = KxTextFile::ReadToArray(GetProfileDirectory() + '\\' + "LoadOrder.txt");
+			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), pluginManager->GetManagerInfo().GetName()));
 
 			IGameProfile* profile = IGameInstance::GetActive()->GetActiveProfile();
-
 			GameInstance::ProfilePlugin::Vector& profilePluginsList = profile->GetPlugins();
 			profilePluginsList.clear();
-			for (const wxString& value: pluginsList)
+
+			for (const wxString& value: KxTextFile::ReadToArray(GetProfileDirectory() + '\\' + "LoadOrder.txt"))
 			{
 				if (!context->CanContinue())
 				{
@@ -242,11 +258,14 @@ namespace Kortex::ModManager
 				}
 
 				wxString enabledValue = value.AfterFirst('=');
-				bool enabled = !enabledValue.IsEmpty() && enabledValue[0] == '1';
+				const bool isEnabled = !enabledValue.IsEmpty() && enabledValue[0] == '1';
 
-				profilePluginsList.emplace_back(GameInstance::ProfilePlugin(value.BeforeFirst('='), enabled));
+				profilePluginsList.emplace_back(value.BeforeFirst('='), isEnabled);
 			}
 			profile->SaveConfig();
+
+			pluginManager->Load();
+			pluginManager->ScheduleReloadWorkspace();
 		}
 	}
 	void ModImporterNMM::CopyDownloads(KOperationWithProgressDialogBase* context)
@@ -255,8 +274,7 @@ namespace Kortex::ModManager
 		manager->PauseAllActive();
 
 		KxFileFinder fileFinder(m_InstanceDirectory);
-		KxFileItem fileItem = fileFinder.FindNext();
-		while (fileItem.IsOK())
+		for (KxFileItem fileItem = fileFinder.FindNext(); fileItem.IsOK(); fileItem = fileFinder.FindNext())
 		{
 			if (fileItem.IsNormalItem() && fileItem.IsFile())
 			{
@@ -299,7 +317,6 @@ namespace Kortex::ModManager
 					manager->GetDownloads().pop_back();
 				}
 			}
-			fileItem = fileFinder.FindNext();
 		}
 	}
 

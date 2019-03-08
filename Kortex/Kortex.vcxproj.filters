@@ -2172,6 +2172,9 @@
     <Image Include="Bin\Data\GameDefinitions\Icons\SkyrimVR.ico">
       <Filter>Misc\Game Definitions\Icons</Filter>
     </Image>
+    <Image Include="Bin\Data\GameDefinitions\Icons\Enderal.ico">
+      <Filter>Misc\Game Definitions\Icons</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Bin\Data\GameDefinitions\Fallout3.xml">
@@ -2233,6 +2236,9 @@
     </Xml>
     <Xml Include="Bin\Data\ConfigDefinitions\AppSettings.xml">
       <Filter>Misc\ConfigDefinitions</Filter>
+    </Xml>
+    <Xml Include="Bin\Data\GameDefinitions\Enderal.xml">
+      <Filter>Misc\Game Definitions</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

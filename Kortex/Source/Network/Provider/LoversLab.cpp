@@ -59,8 +59,29 @@ namespace Kortex::NetworkManager
 	{
 		return "https://www.loverslab.com/files/file";
 	}
-	wxString LoversLabProvider::GetModURL(ModID modID, const wxString& modSignature, const GameID& id)
+	wxString LoversLabProvider::GetModURL(const ProviderRequest& request)
 	{
-		return ConstructIPBModURL(modID.GetValue(), modSignature);
+		return ConstructIPBModURL(request.GetModID().GetValue(), request.GetExtraInfo<wxString>());
+	}
+
+	std::unique_ptr<IModInfo> LoversLabProvider::GetModInfo(const ProviderRequest& request) const
+	{
+		return nullptr;
+	}
+	std::unique_ptr<IModFileInfo> LoversLabProvider::GetFileInfo(const ProviderRequest& request) const
+	{
+		return nullptr;
+	}
+	IModFileInfo::Vector LoversLabProvider::GetFilesList(const ProviderRequest& request) const
+	{
+		return {};
+	}
+	IModDownloadInfo::Vector LoversLabProvider::GetFileDownloadLinks(const ProviderRequest& request) const
+	{
+		return {};
+	}
+	std::unique_ptr<IModEndorsementInfo> LoversLabProvider::EndorseMod(const ProviderRequest& request, ModEndorsement state)
+	{
+		return nullptr;
 	}
 }

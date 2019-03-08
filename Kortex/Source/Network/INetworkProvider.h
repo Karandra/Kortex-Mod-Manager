@@ -92,7 +92,7 @@ namespace Kortex
 				return description;
 			}
 			virtual wxString GetModURLBasePart(const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual wxString GetModURL(ModID modID, const wxString& modSignature = wxEmptyString, const GameID& id = GameIDs::NullGameID) = 0;
+			virtual wxString GetModURL(const ProviderRequest& request) = 0;
 
 			bool HasAuthInfo() const;
 			bool LoadAuthInfo(wxString& userName, KxSecretValue& password) const;

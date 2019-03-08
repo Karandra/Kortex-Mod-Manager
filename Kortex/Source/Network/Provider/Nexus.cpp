@@ -541,9 +541,9 @@ namespace Kortex::NetworkManager
 	{
 		return wxString::Format("https://www.nexusmods.com/%s/mods", GetGameID(id)).MakeLower();
 	}
-	wxString NexusProvider::GetModURL(ModID modID, const wxString& modSignature, const GameID& id)
+	wxString NexusProvider::GetModURL(const ProviderRequest& request)
 	{
-		return KxString::Format("%1/%2", GetModURLBasePart(id), modID.GetValue());
+		return KxString::Format("%1/%2", GetModURLBasePart(request.GetGameID()), request.GetModID().GetValue());
 	}
 
 	std::unique_ptr<IModInfo> NexusProvider::GetModInfo(const ProviderRequest& request) const

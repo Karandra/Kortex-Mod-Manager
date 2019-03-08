@@ -60,10 +60,10 @@ namespace Kortex::NetworkManager
 			}
 			wxString& ConvertDescriptionToHTML(wxString& description) const override;
 			wxString GetModURLBasePart(const GameID& id = GameIDs::NullGameID) const override;
-			wxString GetModURL(ModID modID, const wxString& modSignature = wxEmptyString, const GameID& id = GameIDs::NullGameID) override;
+			wxString GetModURL(const ProviderRequest& request) override;
 
 		public:
-			std::unique_ptr<IModInfo> NewModInfo() const
+			std::unique_ptr<IModInfo> NewModInfo() const override
 			{
 				return std::make_unique<Nexus::ModInfo>();
 			}

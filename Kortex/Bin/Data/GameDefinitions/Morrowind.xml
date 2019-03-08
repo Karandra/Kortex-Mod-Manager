@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Definition GameID="Morrowind" SortOrder="11">
+<Definition GameID="Morrowind" SortOrder="11100">
 	<Name ShortName="Morrowind">The Elder Scrolls III: Morrowind</Name>
 	
 	<Variables>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Definition GameID="SkyrimSE" SortOrder="13">
+<Definition GameID="SkyrimSE" SortOrder="13200">
 	<Name ShortName="Skyrim SE">The Elder Scrolls V: Skyrim - Special Edition</Name>
 	
 	<Variables>

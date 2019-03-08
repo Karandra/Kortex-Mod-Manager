@@ -695,6 +695,7 @@
     <Xml Include="Bin\Data\Translation\ru-RU.GameConfig.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Bin\Data\GameDefinitions\SortOrdersNote.txt" />
     <Text Include="Include\Kortex\Git\LatestCommit.txt" />
     <Text Include="Resources\ChangeLog EN.txt" />
     <Text Include="Resources\ChangeLog RU.txt" />

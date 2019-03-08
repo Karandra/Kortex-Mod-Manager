@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Definition GameID="FalloutNV" SortOrder="22">
+<Definition GameID="FalloutNV" SortOrder="22100">
 	<Name ShortName="Fallout NV">Fallout: New Vegas</Name>
 
 	<Variables>

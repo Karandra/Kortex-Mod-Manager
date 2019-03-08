@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Definition GameID="Fallout4VR" SortOrder="23">
+<Definition GameID="Fallout4VR" SortOrder="23101">
 	<Name ShortName="Fallout 4 - VR">Fallout 4 - VR Edition</Name>
 
 	<Variables>

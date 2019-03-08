@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Definition GameID="Sacred2" SortOrder="31">
+<Definition GameID="Sacred2" SortOrder="110200">
 	<Name ShortName="Sacred 2">Sacred 2: Fallen Angel</Name>
 	
 	<Variables>

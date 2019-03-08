@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Definition GameID="SkyrimVR" SortOrder="13">
+<Definition GameID="SkyrimVR" SortOrder="13201">
 	<Name ShortName="Skyrim VR">The Elder Scrolls V: Skyrim - VR Edition</Name>
 	
 	<Variables>

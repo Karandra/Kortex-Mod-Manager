@@ -2251,6 +2251,9 @@
     <Text Include="Include\Kortex\Git\LatestCommit.txt">
       <Filter>Code\Include\Git</Filter>
     </Text>
+    <Text Include="Bin\Data\GameDefinitions\SortOrdersNote.txt">
+      <Filter>Misc\Game Definitions</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\..\KxVirtualFileSystem\KxVirtualFileSystem\Utility\KxDynamicString\KxBasicDynamicString.natvis">

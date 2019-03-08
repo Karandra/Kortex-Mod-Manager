@@ -314,16 +314,18 @@ namespace Kortex::DownloadManager
 
 			if (game.IsOK() && modID && fileID)
 			{
-				auto fileInfo = nexus->GetFileInfo(modID, fileID, wxAny(), game);
+				auto fileInfo = nexus->GetFileInfo(ProviderRequest(modID, fileID, game));
 				if (fileInfo)
 				{
-					bool success = true;
-					auto linkItems = nexus->GetFileDownloadLinks(modID, fileID, nxmExtraInfo, game);
-					for (const auto& link: linkItems)
+					ProviderRequest request(modID, fileID, game);
+					request.SetExtraInfo(nxmExtraInfo);
+					auto linkItems = nexus->GetFileDownloadLinks(request);
+
+					if (!linkItems.empty())
 					{
-						success = success && QueueDownload(*link, *fileInfo, nexus, game);
+						return QueueDownload(*linkItems.front(), *fileInfo, nexus, game);
 					}
-					return success && !linkItems.empty();
+					return false;
 				}
 			}
 		}

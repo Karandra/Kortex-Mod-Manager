@@ -45,7 +45,8 @@ namespace Kortex::DownloadManager
 	}
 	bool DefaultDownloadEntry::RequestNewLink()
 	{
-		auto info = m_Provider->GetFileDownloadLinks(m_FileInfo->GetModID(), m_FileInfo->GetID(), GetTargetGameID());
+		ProviderRequest request(m_FileInfo->GetModID(), m_FileInfo->GetID(), GetTargetGameID());
+		auto info = m_Provider->GetFileDownloadLinks(request);
 		if (!info.empty())
 		{
 			m_DownloadInfo = std::move(info.front());
@@ -63,7 +64,8 @@ namespace Kortex::DownloadManager
 			ModID modID(reg.GetMatch(m_FileInfo->GetName(), 2));
 			if (modID)
 			{
-				for (auto& fileInfo: m_Provider->GetFilesList(modID, GetTargetGameID()))
+				ProviderRequest request(modID, {}, GetTargetGameID());
+				for (auto& fileInfo: m_Provider->GetFilesList(request))
 				{
 					if (fileInfo->GetName() == m_FileInfo->GetName())
 					{
@@ -373,7 +375,8 @@ namespace Kortex::DownloadManager
 	{
 		if (m_Provider)
 		{
-			m_FileInfo = m_Provider->GetFileInfo(m_FileInfo->GetModID(), m_FileInfo->GetID(), GetTargetGameID());
+			ProviderRequest request(m_FileInfo->GetModID(), m_FileInfo->GetID(), GetTargetGameID());
+			m_FileInfo = m_Provider->GetFileInfo(request);
 			return m_FileInfo && m_FileInfo->IsOK();
 		}
 		return false;

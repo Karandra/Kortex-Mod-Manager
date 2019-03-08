@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
+#include "NetworkProviderRequest.h"
 #include "NetworkProviderReply.h"
 #include "GameInstance/GameID.h"
 #include "Utility/KImageProvider.h"
@@ -119,10 +120,10 @@ namespace Kortex
 			virtual std::unique_ptr<IModDownloadInfo> NewModDownloadInfo() const = 0;
 			virtual std::unique_ptr<IModEndorsementInfo> NewModEndorsementInfo() const = 0;
 
-			virtual std::unique_ptr<IModInfo> GetModInfo(ModID modID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual std::unique_ptr<IModFileInfo> GetFileInfo(ModID modID, ModFileID fileID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual IModFileInfo::Vector GetFilesList(ModID modID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual IModDownloadInfo::Vector GetFileDownloadLinks(ModID modID, ModFileID fileID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual std::unique_ptr<IModEndorsementInfo> EndorseMod(ModID modID, ModEndorsement state, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) = 0;
+			virtual std::unique_ptr<IModInfo> GetModInfo(const ProviderRequest& request) const = 0;
+			virtual std::unique_ptr<IModFileInfo> GetFileInfo(const ProviderRequest& request) const = 0;
+			virtual IModFileInfo::Vector GetFilesList(const ProviderRequest& request) const = 0;
+			virtual IModDownloadInfo::Vector GetFileDownloadLinks(const ProviderRequest& request) const = 0;
+			virtual std::unique_ptr<IModEndorsementInfo> EndorseMod(const ProviderRequest& request, ModEndorsement state) = 0;
 	};
 }

@@ -540,6 +540,7 @@
     <ClInclude Include="Source\Network\NetworkManager\DefaultNetworkManager.h" />
     <ClInclude Include="Source\Network\NetworkProviderReplyStructs.h" />
     <ClInclude Include="Source\Network\NetworkProviderReply.h" />
+    <ClInclude Include="Source\Network\NetworkProviderRequest.h" />
     <ClInclude Include="Source\Network\Provider\LoversLab.h" />
     <ClInclude Include="Source\Network\Provider\LoversLabModInfo.h" />
     <ClInclude Include="Source\Network\Provider\Nexus.h" />

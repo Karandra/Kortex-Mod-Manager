@@ -54,6 +54,10 @@ namespace Kortex::NetworkManager
 			KImageEnum GetIcon() const override;
 			wxString GetName() const override;
 			wxString GetGameID(const GameID& id = GameIDs::NullGameID) const override;
+			wxString GetGameID(const ProviderRequest& request) const
+			{
+				return GetGameID(request.GetGameID());
+			}
 			wxString& ConvertDescriptionToHTML(wxString& description) const override;
 			wxString GetModURLBasePart(const GameID& id = GameIDs::NullGameID) const override;
 			wxString GetModURL(ModID modID, const wxString& modSignature = wxEmptyString, const GameID& id = GameIDs::NullGameID) override;
@@ -76,11 +80,11 @@ namespace Kortex::NetworkManager
 				return std::make_unique<Nexus::ModEndorsementInfo>();
 			}
 
-			std::unique_ptr<IModInfo> GetModInfo(ModID modID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const override;
-			std::unique_ptr<IModFileInfo> GetFileInfo(ModID modID, ModFileID fileID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const override;
-			IModFileInfo::Vector GetFilesList(ModID modID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const override;
-			IModDownloadInfo::Vector GetFileDownloadLinks(ModID modID, ModFileID fileID, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) const override;
-			std::unique_ptr<IModEndorsementInfo> EndorseMod(ModID modID, ModEndorsement state, const wxAny& extraInfo = wxAny(), const GameID& id = GameIDs::NullGameID) override;
+			std::unique_ptr<IModInfo> GetModInfo(const ProviderRequest& request) const override;
+			std::unique_ptr<IModFileInfo> GetFileInfo(const ProviderRequest& request) const override;
+			IModFileInfo::Vector GetFilesList(const ProviderRequest& request) const override;
+			IModDownloadInfo::Vector GetFileDownloadLinks(const ProviderRequest& request) const override;
+			std::unique_ptr<IModEndorsementInfo> EndorseMod(const ProviderRequest& request, ModEndorsement state) override;
 
 			std::unique_ptr<Nexus::ValidationInfo> GetValidationInfo(const wxString& apiKey = wxEmptyString) const;
 			std::unique_ptr<Nexus::GameInfo> GetGameInfo(const GameID& id = GameIDs::NullGameID) const;

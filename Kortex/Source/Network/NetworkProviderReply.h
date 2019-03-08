@@ -8,23 +8,11 @@ namespace Kortex::NetworkManager
 {
 	class BaseModReply: public RTTI::IInterface<BaseModReply>
 	{
-		private:
-			bool m_ShouldTryLater = false;
-
 		public:
 			virtual ~BaseModReply() = default;
 
 		public:
 			virtual bool IsOK() const = 0;
-
-			bool ShouldTryLater()
-			{
-				return m_ShouldTryLater;
-			}
-			void SetShouldTryLater(bool value = true)
-			{
-				m_ShouldTryLater = value;
-			}
 	};
 }
 

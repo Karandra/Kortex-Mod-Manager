@@ -2123,6 +2123,9 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Network\NetworkProviderRequest.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc">

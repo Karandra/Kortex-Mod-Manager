@@ -84,7 +84,6 @@ namespace Kortex
 			const FileTreeNode* m_Parent = nullptr;
 			const IGameMod* m_Mod = nullptr;
 			size_t m_NameHash = 0;
-			KWithBitmap m_Bitmap;
 
 		private:
 			void MakeNull()

@@ -32,7 +32,7 @@ namespace Kortex::GameInstance
 {
 	bool DefaultGameInstance::InitInstance()
 	{
-		m_Variables.SetVariable("InstanceTemplateLocation", m_DefinitionFile);
+		m_Variables.SetVariable("GameDefinitionFile", m_DefinitionFile);
 
 		// Load template XML
 		KxFileStream templateConfigStream(m_DefinitionFile);

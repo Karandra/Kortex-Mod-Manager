@@ -16,7 +16,7 @@
 		
 		<Entry ID="GameEditorName">Creation Kit</Entry>
 		<Entry ID="ScriptExtenderID">SKSE</Entry>
-		<Entry ID="xEditID">tes5</Entry>
+		<Entry ID="xEditID">enderal</Entry>
 	</Variables>
 
 	<Network>

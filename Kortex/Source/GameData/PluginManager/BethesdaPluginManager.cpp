@@ -120,7 +120,7 @@ namespace Kortex::PluginManager
 	void BethesdaPluginManager::LoadNativeOrderBG()
 	{
 		ClearPlugins();
-		FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, true, KxFS_FILE), false);
+		FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, KxFS_FILE), false);
 
 		// Load from 'LoadOrder.txt'
 		for (const wxString& name: KxTextFile::ReadToArray(KVarExp(m_OrderListFile)))
@@ -313,7 +313,7 @@ namespace Kortex::PluginManager
 
 		if (IGameProfile* profile = IGameInstance::GetActiveProfile())
 		{
-			FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, true, KxFS_FILE), false);
+			FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, KxFS_FILE), false);
 
 			for (const GameInstance::ProfilePlugin& listEntry: profile->GetPlugins())
 			{

@@ -22,7 +22,7 @@ namespace
 	int64_t CountMods(CountMode mode)
 	{
 		int64_t count = 0;
-		for (const IGameMod* mod: IModManager::GetInstance()->GetAllMods(true))
+		for (const IGameMod* mod: IModManager::GetInstance()->GetAllMods(false, true))
 		{
 			switch (mode)
 			{
@@ -54,7 +54,7 @@ namespace
 	int64_t CountFilesAndFolders(FSElementType type, CountMode mode)
 	{
 		int64_t count = 0;
-		for (const IGameMod* modEntry: IModManager::GetInstance()->GetAllMods(true))
+		for (const IGameMod* modEntry: IModManager::GetInstance()->GetAllMods(false, true))
 		{
 			modEntry->GetFileTree().WalkTree([&count, type, mode](const FileTreeNode& rootNode)
 			{
@@ -96,7 +96,7 @@ namespace
 	int64_t CalcUsedSize(CountMode mode)
 	{
 		int64_t totalSize = 0;
-		for (const IGameMod* modEntry: IModManager::GetInstance()->GetAllMods(true))
+		for (const IGameMod* modEntry: IModManager::GetInstance()->GetAllMods(false, true))
 		{
 			if ((mode == CountMode::Active && !modEntry->IsActive()) || (mode == CountMode::Inactive && modEntry->IsActive()))
 			{

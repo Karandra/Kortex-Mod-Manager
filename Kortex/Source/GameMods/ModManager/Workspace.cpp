@@ -1005,7 +1005,7 @@ namespace Kortex::ModManager
 	void Workspace::ChangeImageResizeMode(ImageResizeMode mode)
 	{
 		m_ImageResizeMode = mode;
-		for (auto& mod: IModManager::GetInstance()->GetAllMods())
+		for (auto& mod: IModManager::GetInstance()->GetAllMods(false, false))
 		{
 			IGameModWithImage* withImage = nullptr;
 			if (mod->QueryInterface(withImage))
@@ -1345,7 +1345,7 @@ namespace Kortex::ModManager
 						return modEntry.GetTagStore().HasTag(*modTag);
 					};
 
-					for (auto& modEntry: IModManager::GetInstance()->GetAllMods())
+					for (auto& modEntry: IModManager::GetInstance()->GetAllMods(false, false))
 					{
 						if (modEntry->IsInstalled() && CheckTag(*modEntry))
 						{

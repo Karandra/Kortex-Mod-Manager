@@ -50,7 +50,7 @@ namespace Kortex
 
 			virtual const IGameMod::Vector& GetMods() const = 0;
 			virtual IGameMod::Vector& GetMods() = 0;
-			virtual IGameMod::RefVector GetAllMods(bool includeWriteTarget = false) = 0;
+			virtual IGameMod::RefVector GetAllMods(bool activeOnly = false, bool includeWriteTarget = false) = 0;
 			virtual IGameMod::RefVector GetMandatoryMods() = 0;
 
 			virtual IGameMod& GetBaseGame() = 0;

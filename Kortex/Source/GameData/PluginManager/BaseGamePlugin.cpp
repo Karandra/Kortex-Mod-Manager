@@ -7,9 +7,9 @@ namespace Kortex::PluginManager
 {
 	void BaseGamePlugin::Init()
 	{
-		IEvent::Bind(Events::ModVirtualTreeInvalidated, &BaseGamePlugin::OnModsReoaded, this);
+		IEvent::Bind(Events::ModVirtualTreeInvalidated, &BaseGamePlugin::OnVirtualTreeInvalidated, this);
 	}
-	void BaseGamePlugin::OnModsReoaded(ModManager::ModEvent& event)
+	void BaseGamePlugin::OnVirtualTreeInvalidated(ModManager::ModEvent& event)
 	{
 		m_OwningMod = nullptr;
 	}
@@ -33,6 +33,6 @@ namespace Kortex::PluginManager
 
 	BaseGamePlugin::~BaseGamePlugin()
 	{
-		IEvent::Unbind(Events::ModVirtualTreeInvalidated, &BaseGamePlugin::OnModsReoaded, this);
+		IEvent::Unbind(Events::ModVirtualTreeInvalidated, &BaseGamePlugin::OnVirtualTreeInvalidated, this);
 	}
 }

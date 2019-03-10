@@ -34,14 +34,12 @@ namespace Kortex
 		return nullptr;
 	}
 
-	Kortex::IGameMod* IModDispatcher::IterateModsForward(IterationFunctor functor, bool includeWriteTarget) const
+	IGameMod* IModDispatcher::IterateModsForward(IterationFunctor functor, bool includeWriteTarget) const
 	{
-		RebuildTreeIfNeeded();
-		return DoIterateMods(IModManager::GetInstance()->GetAllMods(includeWriteTarget), functor, IterationOrder::Direct);
+		return DoIterateMods(IModManager::GetInstance()->GetAllMods(false, includeWriteTarget), functor, IterationOrder::Direct);
 	}
-	Kortex::IGameMod* IModDispatcher::IterateModsBackward(IterationFunctor functor, bool includeWriteTarget) const
+	IGameMod* IModDispatcher::IterateModsBackward(IterationFunctor functor, bool includeWriteTarget) const
 	{
-		RebuildTreeIfNeeded();
-		return DoIterateMods(IModManager::GetInstance()->GetAllMods(includeWriteTarget), functor, IterationOrder::Reversed);
+		return DoIterateMods(IModManager::GetInstance()->GetAllMods(false, includeWriteTarget), functor, IterationOrder::Reversed);
 	}
 }

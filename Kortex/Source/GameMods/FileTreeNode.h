@@ -1,14 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxFileItem.h>
-#include "Utility/KWithBitmap.h"
 
 namespace Kortex
 {
 	class IGameMod;
 	class IModDispatcher;
 
-	class FileTreeNode: public KWithBitmap
+	class FileTreeNode final
 	{
 		friend class IModDispatcher;
 		friend class IGameMod;
@@ -78,11 +77,11 @@ namespace Kortex
 			}
 
 		private:
+			KxFileItem m_Item;
 			Vector m_Children;
 			Vector m_Alternatives;
-			KxFileItem m_Item;
-			const FileTreeNode* m_Parent = nullptr;
 			const IGameMod* m_Mod = nullptr;
+			const FileTreeNode* m_Parent = nullptr;
 			size_t m_NameHash = 0;
 
 		private:
@@ -97,10 +96,13 @@ namespace Kortex
 
 		public:
 			FileTreeNode() = default;
-			FileTreeNode(const IGameMod& mod, const KxFileItem& item, const FileTreeNode* parent = nullptr)
-				:m_Mod(&mod), m_Item(item), m_Parent(parent)
+			FileTreeNode(const IGameMod& mod, const KxFileItem& item, const FileTreeNode* parent = nullptr);
+			FileTreeNode(const FileTreeNode&) = delete;
+			FileTreeNode(FileTreeNode&& other)
 			{
+				*this = std::move(other);
 			}
+			~FileTreeNode();
 
 		public:
 			bool IsOK() const
@@ -115,14 +117,13 @@ namespace Kortex
 			{
 				return *m_Mod;
 			}
-
-			const FileTreeNode* WalkTree(const TreeWalker& functor) const;
-			const FileTreeNode* WalkToRoot(const TreeWalker& functor) const;
-
 			void CopyBasicAttributes(const FileTreeNode& other)
 			{
 				m_NameHash = other.m_NameHash;
 			}
+
+			const FileTreeNode* WalkTree(const TreeWalker& functor) const;
+			const FileTreeNode* WalkToRoot(const TreeWalker& functor) const;
 
 			bool HasChildren() const
 			{
@@ -198,11 +199,11 @@ namespace Kortex
 				m_NameHash = HashFileName(GetName());
 			}
 		
-			const wxString& GetName() const
+			wxString GetName() const
 			{
 				return m_Item.GetName();
 			}
-			const wxString& GetSource() const
+			wxString GetSource() const
 			{
 				return m_Item.GetSource();
 			}
@@ -228,5 +229,9 @@ namespace Kortex
 			{
 				return m_Item.GetFileSize();
 			}
+			
+		public:
+			FileTreeNode& operator=(const FileTreeNode&) = delete;
+			FileTreeNode& operator=(FileTreeNode&& other);
 	};
 }

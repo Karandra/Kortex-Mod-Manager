@@ -29,7 +29,7 @@ namespace Kortex::PluginManager
 	void BethesdaPluginManager2::LoadNativeOrderBG()
 	{
 		ClearPlugins();
-		FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, true, KxFS_FILE), false);
+		FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, KxFS_FILE), false);
 
 		// Load names from 'Plugins.txt'. Activate those with '*' in front fo the file name.
 		for (wxString& name: KxTextFile::ReadToArray(KVarExp(m_ActiveListFile)))

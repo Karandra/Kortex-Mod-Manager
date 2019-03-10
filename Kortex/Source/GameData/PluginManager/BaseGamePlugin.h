@@ -20,7 +20,7 @@ namespace Kortex::PluginManager
 
 		private:
 			void Init();
-			void OnModsReoaded(ModManager::ModEvent& event);
+			void OnVirtualTreeInvalidated(ModManager::ModEvent& event);
 
 		protected:
 			void Create(const wxString& fullPath)

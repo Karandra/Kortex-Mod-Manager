@@ -475,7 +475,7 @@ namespace Kortex::ModManager
 	bool DisplayModel::SetValue(const wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column)
 	{
 		const DisplayModelNode* node = GetNode(item);
-		if (IGameMod* entry = node->GetEntry())
+		if (IGameMod* mod = node->GetEntry())
 		{
 			switch (column->GetID())
 			{
@@ -484,23 +484,23 @@ namespace Kortex::ModManager
 					bool isChanged = false;
 					if (value.CheckType<wxString>())
 					{
-						entry->SetName(value.As<wxString>());
+						mod->SetName(value.As<wxString>());
 						isChanged = true;
 
-						ModEvent(Events::ModChanged, *entry).Send();
+						IEvent::MakeSend<ModEvent>(Events::ModChanged, *mod);
 					}
 					else
 					{
 						bool checked = value.As<bool>();
-						entry->SetActive(checked);
+						mod->SetActive(checked);
 						isChanged = true;
 
-						ModEvent(Events::ModToggled, *entry).Send();
+						IEvent::MakeSend<ModEvent>(Events::ModToggled, *mod);
 					}
 
 					if (isChanged)
 					{
-						entry->Save();
+						mod->Save();
 						IModManager::GetInstance()->Save();
 						return true;
 					}
@@ -509,12 +509,12 @@ namespace Kortex::ModManager
 				case ColumnID::Version:
 				{
 					wxString newVersion = value.As<wxString>();
-					if (newVersion != entry->GetVersion())
+					if (newVersion != mod->GetVersion())
 					{
-						entry->SetVersion(newVersion);
-						entry->Save();
+						mod->SetVersion(newVersion);
+						mod->Save();
 
-						ModEvent(Events::ModChanged, *entry).Send();
+						IEvent::MakeSend<ModEvent>(Events::ModChanged, *mod);
 						return true;
 					}
 					return false;
@@ -522,12 +522,12 @@ namespace Kortex::ModManager
 				case ColumnID::Author:
 				{
 					wxString author = value.As<wxString>();
-					if (author != entry->GetAuthor())
+					if (author != mod->GetAuthor())
 					{
-						entry->SetAuthor(author);
-						entry->Save();
+						mod->SetAuthor(author);
+						mod->Save();
 
-						ModEvent(Events::ModChanged, *entry).Send();
+						IEvent::MakeSend<ModEvent>(Events::ModChanged, *mod);
 						return true;
 					}
 					break;

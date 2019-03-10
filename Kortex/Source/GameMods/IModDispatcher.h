@@ -21,7 +21,6 @@ namespace Kortex
 
 		protected:
 			IGameMod* DoIterateMods(const IGameMod::RefVector& mods, const IterationFunctor& functor, IterationOrder order) const;
-			virtual void RebuildTreeIfNeeded() const = 0;
 
 		public:
 			// Full rebuild of file tree. Invalidates all references to old tree nodes.
@@ -55,12 +54,10 @@ namespace Kortex
 			// Return 'false' from functor to stop iteration.
 			IGameMod* IterateModsForward(const IGameMod::RefVector& mods, IterationFunctor functor) const
 			{
-				RebuildTreeIfNeeded();
 				return DoIterateMods(mods, functor, IterationOrder::Direct);
 			}
 			IGameMod* IterateModsBackward(const IGameMod::RefVector& mods, IterationFunctor functor) const
 			{
-				RebuildTreeIfNeeded();
 				return DoIterateMods(mods, functor, IterationOrder::Reversed);
 			}
 			IGameMod* IterateModsForward(IterationFunctor functor, bool includeWriteTarget = false) const;

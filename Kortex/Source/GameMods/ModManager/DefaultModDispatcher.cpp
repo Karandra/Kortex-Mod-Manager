@@ -162,34 +162,27 @@ namespace Kortex::ModManager
 {
 	bool DispatcherSearcher::operator()(const FileTreeNode& node) const
 	{
-		return node.GetItem().IsElementType(m_ElementType) &&
-			(!m_ActiveOnly || (m_ActiveOnly && node.GetMod().IsActive())) &&
-			KxComparator::Matches(node.GetName(), m_Filter, true);
+		return node.GetItem().IsElementType(m_ElementType) && KxComparator::Matches(node.GetName(), m_Filter, true);
 	}
 }
 
 namespace Kortex::ModManager
 {
-	void DefaultModDispatcher::RebuildTreeIfNeeded() const
-	{
-		if (m_VirtualTreeInvalidated)
-		{
-			m_VirtualTreeInvalidated = false;
-			const_cast<DefaultModDispatcher*>(this)->UpdateVirtualTree();
-		}
-	}
-
 	void DefaultModDispatcher::OnVirtualTreeInvalidated(IEvent& event)
 	{
 		InvalidateVirtualTree();
 	}
-
+	void DefaultModDispatcher::InvalidateVirtualTree()
+	{
+		UpdateVirtualTree();
+		IEvent::MakeSend<ModEvent>(Events::ModVirtualTreeInvalidated);
+	}
 	void DefaultModDispatcher::UpdateVirtualTree()
 	{
-		const IGameMod::RefVector mods = IModManager::GetInstance()->GetAllMods(true);
+		const IGameMod::RefVector mods = IModManager::GetInstance()->GetAllMods(true, false);
 		m_VirtualTree.ClearChildren();
 
-		constexpr const bool useRecursive = true;
+		constexpr const bool useRecursive = false;
 		const int64_t t1 = GetClockTime();
 
 		if constexpr(useRecursive)
@@ -234,21 +227,14 @@ namespace Kortex::ModManager
 		}
 		Utility::Log::LogInfo("KDispatcher::UpdateVirtualTree: %1", GetClockTime() - t1);
 	}
-	void DefaultModDispatcher::InvalidateVirtualTree()
-	{
-		m_VirtualTreeInvalidated = true;
-		IEvent::MakeSend<ModEvent>(Events::ModVirtualTreeInvalidated);
-	}
 
 	const FileTreeNode& DefaultModDispatcher::GetVirtualTree() const
 	{
-		RebuildTreeIfNeeded();
 		return m_VirtualTree;
 	}
 
 	const FileTreeNode* DefaultModDispatcher::ResolveLocation(const wxString& relativePath) const
 	{
-		RebuildTreeIfNeeded();
 		return FileTreeNode::NavigateToAny(m_VirtualTree, relativePath);
 	}
 	wxString DefaultModDispatcher::ResolveLocationPath(const wxString& relativePath, const IGameMod** owningMod) const
@@ -272,7 +258,6 @@ namespace Kortex::ModManager
 	}
 	const FileTreeNode* DefaultModDispatcher::BackTrackFullPath(const wxString& fullPath) const
 	{
-		RebuildTreeIfNeeded();
 		return m_VirtualTree.WalkTree([&fullPath](const FileTreeNode& node)
 		{
 			return KxComparator::IsEqual(node.GetFullPath(), fullPath, true);
@@ -281,8 +266,6 @@ namespace Kortex::ModManager
 
 	FileTreeNode::CRefVector DefaultModDispatcher::Find(const wxString& relativePath, const FilterFunctor& filter, bool recurse) const
 	{
-		RebuildTreeIfNeeded();
-
 		FileTreeNode::CRefVector nodes;
 		const FileTreeNode* folderNode = FileTreeNode::NavigateToFolder(m_VirtualTree, relativePath);
 		if (folderNode)
@@ -293,8 +276,6 @@ namespace Kortex::ModManager
 	}
 	FileTreeNode::CRefVector DefaultModDispatcher::Find(const FileTreeNode& rootNode, const FilterFunctor& filter, bool recurse) const
 	{
-		RebuildTreeIfNeeded();
-
 		FileTreeNode::CRefVector nodes;
 		FindFilesInTree(nodes, rootNode, filter, recurse);
 
@@ -302,8 +283,6 @@ namespace Kortex::ModManager
 	}
 	FileTreeNode::CRefVector DefaultModDispatcher::Find(const IGameMod& mod, const FilterFunctor& filter, bool recurse) const
 	{
-		RebuildTreeIfNeeded();
-
 		FileTreeNode::CRefVector nodes;
 		FindFilesInTree(nodes, mod.GetFileTree(), filter, recurse);
 
@@ -347,6 +326,7 @@ namespace Kortex::ModManager
 		IEvent::Bind(Events::ModFilesChanged, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
 		IEvent::Bind(Events::ModInstalled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
 		IEvent::Bind(Events::ModUninstalled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
+		IEvent::Bind(Events::ModToggled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
 		IEvent::Bind(Events::ModsReordered, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
 	}
 }

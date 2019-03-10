@@ -158,7 +158,7 @@ void KModCollisionViewerModel::OnContextMenu(KxDataViewEvent& event)
 
 void KModCollisionViewerModel::RunCollisionsSearch(KOperationWithProgressBase* context)
 {
-	for (const Kortex::FileTreeNode* fileNode: Kortex::IModDispatcher::GetInstance()->Find(*m_ModEntry, DispatcherSearcher(wxEmptyString, true, KxFS_FILE), true))
+	for (const Kortex::FileTreeNode* fileNode: Kortex::IModDispatcher::GetInstance()->Find(*m_ModEntry, DispatcherSearcher(wxEmptyString, KxFS_FILE), true))
 	{
 		if (!context->CanContinue())
 		{

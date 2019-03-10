@@ -207,7 +207,7 @@ namespace Kortex::ModManager
 		}
 
 		// Build mod file trees
-		IGameMod::RefVector allEntries = GetAllMods(true);
+		IGameMod::RefVector allEntries = GetAllMods(false, true);
 
 		// Using 'std::execution::seq/unseq' generates too much strain on IO.
 		// And doesn't really improves loading speed. Using 'seq' for now.
@@ -245,7 +245,7 @@ namespace Kortex::ModManager
 		}
 		return refs;
 	}
-	IGameMod::RefVector DefaultModManager::GetAllMods(bool includeWriteTarget)
+	IGameMod::RefVector DefaultModManager::GetAllMods(bool activeOnly, bool includeWriteTarget)
 	{
 		IGameMod::RefVector allMods;
 		allMods.reserve(m_Mods.size() + m_MandatoryMods.size() + 2);
@@ -262,7 +262,10 @@ namespace Kortex::ModManager
 		// Add mods
 		for (auto& mod: m_Mods)
 		{
-			allMods.push_back(mod.get());
+			if (!activeOnly || (activeOnly && mod->IsActive()))
+			{
+				allMods.push_back(mod.get());
+			}
 		}
 
 		// Add write target
@@ -505,8 +508,8 @@ namespace Kortex::ModManager
 			ResortMods();
 
 			IModDispatcher::GetInstance()->InvalidateVirtualTree();
-			Workspace::GetInstance()->ReloadWorkspace();
-			IEvent::MakeQueue<ModEvent>(Events::ModInstalled, *newMod);
+			IEvent::MakeSend<ModEvent>(Events::ModInstalled, *newMod);
+			ScheduleReloadWorkspace();
 
 			Save();
 		}

@@ -39,9 +39,7 @@ namespace Kortex
 		:ManagerWithTypeInfo(GameDataModule::GetInstance())
 	{
 		IEvent::Bind(Events::ProfileSelected, &IPluginManager::OnVirtualTreeInvalidated, this);
-		IEvent::Bind(Events::ModsReordered, &IPluginManager::OnVirtualTreeInvalidated, this);
-		IEvent::Bind(Events::ModToggled, &IPluginManager::OnVirtualTreeInvalidated, this);
-		IEvent::Bind(Events::ModFilesChanged, &IPluginManager::OnVirtualTreeInvalidated, this);
+		IEvent::Bind(Events::ModVirtualTreeInvalidated, &IPluginManager::OnVirtualTreeInvalidated, this);
 	}
 
 	bool IPluginManager::IsPluginActive(const wxString& pluginName) const

@@ -49,12 +49,11 @@ namespace Kortex::ModManager
 	{
 		private:
 			const wxString m_Filter;
-			const bool m_ActiveOnly = true;
 			const KxFileSearchType m_ElementType = KxFS_ALL;
 
 		public:
-			DispatcherSearcher(const wxString& filter = wxEmptyString, bool activeOnly = true, KxFileSearchType type = KxFS_FILE)
-				:m_Filter(filter), m_ActiveOnly(activeOnly), m_ElementType(type)
+			DispatcherSearcher(const wxString& filter = wxEmptyString, KxFileSearchType type = KxFS_FILE)
+				:m_Filter(filter), m_ElementType(type)
 			{
 			}
 
@@ -69,17 +68,13 @@ namespace Kortex::ModManager
 	{
 		private:
 			FileTreeNode m_VirtualTree;
-			mutable bool m_VirtualTreeInvalidated = true;
 
 		private:
 			void OnVirtualTreeInvalidated(IEvent& event);
 
-		protected:
-			void RebuildTreeIfNeeded() const override;
-
 		public:
-			void UpdateVirtualTree() override;
 			void InvalidateVirtualTree() override;
+			void UpdateVirtualTree() override;
 
 			const FileTreeNode& GetVirtualTree() const override;
 

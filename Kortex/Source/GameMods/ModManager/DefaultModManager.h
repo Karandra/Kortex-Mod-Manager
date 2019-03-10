@@ -133,7 +133,7 @@ namespace Kortex::ModManager
 			{
 				return m_Mods;
 			}
-			IGameMod::RefVector GetAllMods(bool includeWriteTarget = false) override;
+			IGameMod::RefVector GetAllMods(bool activeOnly = false, bool includeWriteTarget = false) override;
 			IGameMod::RefVector GetMandatoryMods() override;
 
 			IGameMod& GetBaseGame() override

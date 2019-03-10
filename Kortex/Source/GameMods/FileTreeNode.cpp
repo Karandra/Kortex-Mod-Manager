@@ -69,10 +69,20 @@ namespace Kortex
 		}
 		return nullptr;
 	}
-
 	size_t FileTreeNode::HashFileName(const std::wstring_view& name)
 	{
 		return FileNameHasher()(name);
+	}
+
+	FileTreeNode::FileTreeNode(const IGameMod& mod, const KxFileItem& item, const FileTreeNode* parent)
+		:m_Mod(&mod), m_Item(item), m_Parent(parent)
+	{
+	}
+	FileTreeNode::~FileTreeNode()
+	{
+		m_Mod = nullptr;
+		m_Parent = nullptr;
+		m_NameHash = 0;
 	}
 
 	const FileTreeNode* FileTreeNode::WalkTree(const TreeWalker& functor) const
@@ -128,7 +138,6 @@ namespace Kortex
 		}
 		return false;
 	}
-
 	wxString FileTreeNode::GetRelativePath() const
 	{
 		wxString path = m_Item.GetFullPath();
@@ -138,5 +147,23 @@ namespace Kortex
 			path.Remove(0, 1);
 		}
 		return path;
+	}
+
+	FileTreeNode& FileTreeNode::operator=(FileTreeNode&& other)
+	{
+		m_Item = std::move(other.m_Item);
+		m_Children = std::move(other.m_Children);
+		m_Alternatives = std::move(other.m_Alternatives);
+
+		m_Mod = other.m_Mod;
+		other.m_Mod = nullptr;
+
+		m_Parent = other.m_Parent;
+		other.m_Parent = nullptr;
+
+		m_NameHash = other.m_NameHash;
+		other.m_NameHash = 0;
+
+		return *this;
 	}
 }

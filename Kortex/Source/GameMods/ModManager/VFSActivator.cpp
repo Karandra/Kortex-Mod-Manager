@@ -46,30 +46,24 @@ namespace Kortex::ModManager
 		m_Convergence.reset();
 
 		KxStringVector folders;
-		for (const IGameMod* entry: m_Manager.GetAllMods())
+		for (const IGameMod* entry: m_Manager.GetAllMods(true, true))
 		{
-			if (entry->IsActive())
-			{
-				folders.push_back(entry->GetModFilesDir());
-			}
+			folders.push_back(entry->GetModFilesDir());
 		}
 
 		const IGameInstance* instance = IGameInstance::GetActive();
 		auto vfs = std::make_unique<VirtualFileSystem::Convergence>(instance->GetVirtualGameDir(), m_Manager.GetOverwrites().GetModFilesDir());
-		if (vfs)
+		vfs->EnableINIOptimization(true);
+		vfs->EnableSecurityFunctions(true);
+		for (const wxString& path: folders)
 		{
-			vfs->EnableINIOptimization(true);
-			vfs->EnableSecurityFunctions(true);
-			for (const wxString& path: folders)
-			{
-				vfs->AddVirtualFolder(path);
-			}
-
-			size_t indexSize = vfs->BuildDispatcherIndex();
-			Utility::Log::LogInfo("VirtualFileSystem::Convergence::BuildDispatcherIndex: index size -> %1", indexSize);
-
-			m_Convergence = std::move(vfs);
+			vfs->AddVirtualFolder(path);
 		}
+
+		size_t indexSize = vfs->BuildDispatcherIndex();
+		Utility::Log::LogInfo("VirtualFileSystem::Convergence::BuildDispatcherIndex: index size -> %1", indexSize);
+
+		m_Convergence = std::move(vfs);
 	}
 	void VFSActivator::InitMirroredLocations()
 	{

@@ -140,6 +140,8 @@ namespace Kortex::VirtualGameFolder
 			{
 				case ColumnID::Name:
 				{
+					value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->IsDirectory() ? KIMG_FOLDER : KIMG_DOCUMENT));
+					#if 0
 					if (!node->HasBitmap())
 					{
 						wxBitmap bitmap = KxShell::GetFileIcon(node->GetFullPath(), true);
@@ -154,6 +156,7 @@ namespace Kortex::VirtualGameFolder
 						const_cast<FileTreeNode*>(node)->SetBitmap(bitmap);
 					}
 					value = KxDataViewBitmapTextValue(node->GetName(), node->GetBitmap());
+					#endif
 					break;
 				}
 				case ColumnID::PartOf:
@@ -302,7 +305,7 @@ namespace Kortex::VirtualGameFolder
 		{
 			m_TreeItems = &m_FoundItems;
 
-			FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(wxEmptyString, ModManager::DispatcherSearcher(m_SearchMask, true, KxFS_FILE), true);
+			FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(wxEmptyString, ModManager::DispatcherSearcher(m_SearchMask, KxFS_FILE), true);
 			m_FoundItems.reserve(files.size());
 
 			for (const FileTreeNode* node: files)
@@ -316,10 +319,7 @@ namespace Kortex::VirtualGameFolder
 			m_TreeItems = &IModDispatcher::GetInstance()->GetVirtualTree().GetChildren();
 			for (const FileTreeNode& node: *m_TreeItems)
 			{
-				if (node.IsDirectory() || node.GetMod().IsActive())
-				{
-					ItemAdded(MakeItem(node));
-				}
+				ItemAdded(MakeItem(node));
 			}
 		}
 

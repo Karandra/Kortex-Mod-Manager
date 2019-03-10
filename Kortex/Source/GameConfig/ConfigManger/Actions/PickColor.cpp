@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "PickColor.h"
+#include "GameConfig/ConfigManger/Item.h"
 #include <Kortex/Application.hpp>
 #include <wx/generic/colrdlgg.h>
 

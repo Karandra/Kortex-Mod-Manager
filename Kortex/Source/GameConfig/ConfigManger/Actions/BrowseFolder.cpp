@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BrowseFolder.h"
+#include "GameConfig/ConfigManger/Item.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 

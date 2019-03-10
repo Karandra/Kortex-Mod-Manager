@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
-#include "Item.h"
 #include "ItemValue.h"
 #include "ItemSamples.h"
 
@@ -30,6 +29,8 @@ namespace Kortex::GameConfig
 
 namespace Kortex::GameConfig
 {
+	class Item;
+
 	class IAction: public RTTI::IInterface<IAction>
 	{
 		public:

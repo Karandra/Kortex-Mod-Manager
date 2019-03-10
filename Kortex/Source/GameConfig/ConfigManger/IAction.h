@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
+#include "Item.h"
 #include "ItemValue.h"
 #include "ItemSamples.h"
 
@@ -32,7 +33,7 @@ namespace Kortex::GameConfig
 	class IAction: public RTTI::IInterface<IAction>
 	{
 		public:
-			static bool InvokeAction(ActionID id, ItemValue& value);
+			static bool InvokeAction(ActionID id, Item& item, ItemValue& value);
 
 		public:
 			IAction() = default;
@@ -41,7 +42,7 @@ namespace Kortex::GameConfig
 			virtual ~IAction() = default;
 
 		public:
-			virtual void Invoke(ItemValue& value) = 0;
+			virtual void Invoke(Item& item, ItemValue& value) = 0;
 	
 		public:
 			IAction& operator=(const IAction&) = delete;

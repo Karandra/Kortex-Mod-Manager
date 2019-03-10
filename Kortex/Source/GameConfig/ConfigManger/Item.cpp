@@ -3,6 +3,8 @@
 #include "ItemGroup.h"
 #include "Definition.h"
 #include "GameConfig/IConfigManager.h"
+#include "GameConfig/ConfigManger/DisplayModel.h"
+#include "Application/IApplication.h"
 #include <KxFramework/DataView2/DataView2.h>
 #include <KxFramework/KxStringUtility.h>
 #include <KxFramework/KxComparator.h>
@@ -152,6 +154,29 @@ namespace Kortex::GameConfig
 	Definition& Item::GetDefinition() const
 	{
 		return m_Group.GetDefinition();
+	}
+	wxWindow* Item::GetInvokingWindow() const
+	{
+		if (KxDataView2::View* view = GetView())
+		{
+			return view;
+		}
+		else if (DisplayModel* displayModel = GetManager().GetDisplayModel())
+		{
+			return displayModel->GetView();
+		}
+		return nullptr;
+	}
+	wxWindow* Item::GetInvokingTopLevelWindow() const
+	{
+		if (wxWindow* window = GetInvokingWindow())
+		{
+			if (wxWindow* topLevel = wxGetTopLevelParent(window))
+			{
+				return topLevel;
+			}
+		}
+		return IApplication::GetInstance()->GetTopWindow();
 	}
 
 	void Item::SaveChanges()

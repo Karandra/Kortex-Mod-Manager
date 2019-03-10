@@ -96,7 +96,9 @@ namespace Kortex::GameConfig
 			{
 				return m_Group;
 			}
-			
+			wxWindow* GetInvokingWindow() const;
+			wxWindow* GetInvokingTopLevelWindow() const;
+
 			wxString GetCategory() const
 			{
 				return m_Category;

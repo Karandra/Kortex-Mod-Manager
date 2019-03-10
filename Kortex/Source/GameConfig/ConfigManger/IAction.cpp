@@ -6,23 +6,23 @@
 
 namespace Kortex::GameConfig
 {
-	bool IAction::InvokeAction(ActionID id, ItemValue& value)
+	bool IAction::InvokeAction(ActionID id, Item& item, ItemValue& value)
 	{
 		switch (id)
 		{
 			case ActionID::BrowseFile:
 			{
-				Actions::BrowseFile().Invoke(value);
+				Actions::BrowseFile().Invoke(item, value);
 				break;
 			}
 			case ActionID::BrowseFolder:
 			{
-				Actions::BrowseFolder().Invoke(value);
+				Actions::BrowseFolder().Invoke(item, value);
 				break;
 			}
 			case ActionID::PickColor:
 			{
-				Actions::PickColor().Invoke(value);
+				Actions::PickColor().Invoke(item, value);
 				break;
 			}
 			default:

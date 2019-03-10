@@ -5,9 +5,9 @@
 
 namespace Kortex::GameConfig::Actions
 {
-	void BrowseFile::Invoke(ItemValue& value)
+	void BrowseFile::Invoke(Item& item, ItemValue& value)
 	{
-		KxFileBrowseDialog dialog(IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KxFBD_OPEN);
+		KxFileBrowseDialog dialog(item.GetInvokingTopLevelWindow(), KxID_NONE, KxFBD_OPEN);
 
 		wxString folder = value.As<wxString>().BeforeLast(wxS('\\'));
 		if (folder.IsEmpty())

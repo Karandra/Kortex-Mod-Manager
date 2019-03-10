@@ -5,9 +5,9 @@
 
 namespace Kortex::GameConfig::Actions
 {
-	void BrowseFolder::Invoke(ItemValue& value)
+	void BrowseFolder::Invoke(Item& item, ItemValue& value)
 	{
-		KxFileBrowseDialog dialog(IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
+		KxFileBrowseDialog dialog(item.GetInvokingTopLevelWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
 		dialog.SetFolder(value.As<wxString>());
 
 		if (dialog.ShowModal() == KxID_OK)

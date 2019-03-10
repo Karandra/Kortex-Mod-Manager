@@ -185,7 +185,7 @@ namespace Kortex::GameConfig
 			if (HasAction())
 			{
 				wxString oldVaue = m_Value.Serialize(*this);
-				IAction::InvokeAction(GetAction(), m_Value);
+				IAction::InvokeAction(GetAction(), *this, m_Value);
 				if (oldVaue != m_Value.Serialize(*this))
 				{
 					ChangeNotify();

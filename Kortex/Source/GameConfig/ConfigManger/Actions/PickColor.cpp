@@ -5,14 +5,14 @@
 
 namespace Kortex::GameConfig::Actions
 {
-	void PickColor::Invoke(ItemValue& value)
+	void PickColor::Invoke(Item& item, ItemValue& value)
 	{
 		wxColourData colorData;
 		colorData.SetChooseFull(true);
 		colorData.SetChooseAlpha(true);
 		colorData.SetColour(value.As<KxColor>());
 
-		wxGenericColourDialog dialog(IApplication::GetInstance()->GetTopWindow(), &colorData);
+		wxGenericColourDialog dialog(item.GetInvokingTopLevelWindow(), &colorData);
 		if (dialog.ShowModal() == wxID_OK)
 		{
 			value.Assign(KxColor(dialog.GetColourData().GetColour()));

@@ -140,13 +140,17 @@ namespace Kortex
 	}
 	wxString FileTreeNode::GetRelativePath() const
 	{
-		wxString path = m_Item.GetFullPath();
-		if (path.Replace(m_Mod->GetModFilesDir(), wxEmptyString, false) == 1 && !path.IsEmpty() && path[0] == wxS('\\'))
+		if (m_Mod)
 		{
-			// Remove leading slash
-			path.Remove(0, 1);
+			wxString path = m_Item.GetFullPath();
+			if (path.Replace(m_Mod->GetModFilesDir(), wxEmptyString, false) == 1 && !path.IsEmpty() && path[0] == wxS('\\'))
+			{
+				// Remove leading slash
+				path.Remove(0, 1);
+			}
+			return path;
 		}
-		return path;
+		return {};
 	}
 
 	FileTreeNode& FileTreeNode::operator=(FileTreeNode&& other)

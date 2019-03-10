@@ -190,7 +190,7 @@ namespace Kortex::ModManager
 			// Recursive (parallel)
 			// Build top level
 			FileTreeNode::RefVector directories;
-			BuildTreeBranch(mods, m_VirtualTree.GetChildren(), nullptr, directories);
+			BuildTreeBranch(mods, m_VirtualTree.GetChildren(), &m_VirtualTree, directories);
 
 			// Build subdirectories
 			std::function<void(FileTreeNode::RefVector&&)> Execute;
@@ -210,7 +210,7 @@ namespace Kortex::ModManager
 			// Iterational (sequential)
 			// Build top level
 			FileTreeNode::RefVector directories;
-			BuildTreeBranch(mods, m_VirtualTree.GetChildren(), nullptr, directories);
+			BuildTreeBranch(mods, m_VirtualTree.GetChildren(), &m_VirtualTree, directories);
 
 			// Build subdirectories
 			while (!directories.empty())

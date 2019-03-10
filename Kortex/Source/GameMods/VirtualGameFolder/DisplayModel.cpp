@@ -140,23 +140,23 @@ namespace Kortex::VirtualGameFolder
 			{
 				case ColumnID::Name:
 				{
-					value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->IsDirectory() ? KIMG_FOLDER : KIMG_DOCUMENT));
-					#if 0
-					if (!node->HasBitmap())
+					const auto it = m_IconCache.find(node);
+					if (it != m_IconCache.end())
+					{
+						value = KxDataViewBitmapTextValue(node->GetName(), it->second);
+					}
+					else
 					{
 						wxBitmap bitmap = KxShell::GetFileIcon(node->GetFullPath(), true);
-						
-						// Couldn't get bitmap from system, use our own
 						if (!bitmap.IsOk())
 						{
+							// Couldn't get bitmap from system, use our own
 							bitmap = KGetBitmap(node->IsDirectory() ? KIMG_FOLDER : KIMG_DOCUMENT);
 						}
+						m_IconCache.insert_or_assign(node, bitmap);
 
-						// That's caching
-						const_cast<FileTreeNode*>(node)->SetBitmap(bitmap);
+						value = KxDataViewBitmapTextValue(node->GetName(), bitmap);
 					}
-					value = KxDataViewBitmapTextValue(node->GetName(), node->GetBitmap());
-					#endif
 					break;
 				}
 				case ColumnID::PartOf:
@@ -298,6 +298,7 @@ namespace Kortex::VirtualGameFolder
 
 	void DisplayModel::RefreshItems()
 	{
+		m_IconCache.clear();
 		m_FoundItems.clear();
 		ItemsCleared();
 

@@ -17,6 +17,7 @@ namespace Kortex::VirtualGameFolder
 		private:
 			const FileTreeNode::Vector* m_TreeItems = nullptr;
 			FileTreeNode::Vector m_FoundItems;
+			mutable std::unordered_map<const FileTreeNode*, wxBitmap> m_IconCache;
 
 			wxString m_SearchMask;
 			KxDataViewComboBoxEditor* m_PartOfEditor = nullptr;

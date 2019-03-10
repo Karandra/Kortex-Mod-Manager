@@ -7,6 +7,7 @@ Discord server: https://discord.gg/ZyzWjYj
 - The Elder Scrolls III: Morrowind
 - The Elder Scrolls IV: Oblivion
 - The Elder Scrolls V: Skyrim
+- [Enderal: Forgotten Stories](https://enderal.com) (TES5: Skyrim total conversion)
 - The Elder Scrolls V: Skyrim - Special Edition
 - The Elder Scrolls V: Skyrim - VR Edition
 - Fallout 3

@@ -18,10 +18,6 @@ namespace Kortex::PluginManager
 			mutable const StdContentEntry* m_StdContent = nullptr;
 			bool m_IsActive = false;
 
-		private:
-			void Init();
-			void OnVirtualTreeInvalidated(ModManager::ModEvent& event);
-
 		protected:
 			void Create(const wxString& fullPath)
 			{
@@ -30,16 +26,11 @@ namespace Kortex::PluginManager
 			}
 
 		public:
-			BaseGamePlugin()
-			{
-				Init();
-			}
+			BaseGamePlugin() = default;
 			BaseGamePlugin(const wxString& fullPath)
 				:m_FileItem(fullPath)
 			{
-				Init();
 			}
-			~BaseGamePlugin();
 
 		public:
 			bool IsOK() const override
@@ -66,6 +57,10 @@ namespace Kortex::PluginManager
 			}
 
 			const IGameMod* GetOwningMod() const override;
+			void OnResetOwningMod() override
+			{
+				m_OwningMod = nullptr;
+			}
 			const StdContentEntry* GetStdContentEntry() const override;
 	};
 }

@@ -6,7 +6,7 @@
 
 namespace Kortex::VirtualFileSystem
 {
-	class AbstractFS: public IVirtualFileSystem
+	class BaseFileSystem: public IVirtualFileSystem
 	{
 		protected:
 			IPC::FSController& m_Controller;
@@ -17,7 +17,7 @@ namespace Kortex::VirtualFileSystem
 			void OnDisabled() override;
 
 		public:
-			AbstractFS(IPC::FileSystemID id);
+			BaseFileSystem(IPC::FileSystemID id);
 
 		public:
 			IPC::FSHandle GetHandle() const override;
@@ -27,6 +27,11 @@ namespace Kortex::VirtualFileSystem
 			void Disable() override;
 
 		public:
+			wxString GetMountPoint() const;
 			void SetMountPoint(const wxString& path);
+
+			bool EnableAsyncIO(bool value);
+			bool EnableExtendedSecurity(bool value);
+			bool EnableImpersonateCallerUser(bool value);
 	};
 }

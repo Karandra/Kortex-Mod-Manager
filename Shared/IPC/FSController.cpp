@@ -6,7 +6,7 @@ namespace Kortex::IPC
 {
 	void FSController::OnProcessReady(wxProcessEvent& event)
 	{
-		// Length is x2 just to not match window that has our name concatenated with something else
+		// Length is x2 just to not match a window that has our name concatenated with something else
 		const wxString searchedName = ProcessingWindow::GetWindowName();
 		const size_t nameLength = searchedName.length() * 2;
 

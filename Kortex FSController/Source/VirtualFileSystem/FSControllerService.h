@@ -4,8 +4,8 @@
 #include "IPC/Message.h"
 #include "VirtualFileSystem/IVirtualFileSystem.h"
 #include "VirtualFileSystem/IVFSService.h"
-#include <KxVirtualFileSystem/Service.h>
-#include <KxVirtualFileSystem/AbstractFS.h>
+#include <KxVirtualFileSystem/FileSystemService.h>
+#include <KxVirtualFileSystem/IFileSystem.h>
 
 namespace Kortex::FSController
 {
@@ -14,25 +14,24 @@ namespace Kortex::FSController
 
 namespace Kortex::VirtualFileSystem
 {
-	class FSControllerService: public IVFSService, public KxVFS::Service
+	class FSControllerService: public IVFSService, public KxVFS::FileSystemService
 	{
 		friend class FSController::RecievingWindow;
 
 		private:
 			FSController::RecievingWindow* m_RecievingWindow = nullptr;
-			std::vector<std::unique_ptr<KxVFS::AbstractFS>> m_FileSystems;
+			std::vector<std::unique_ptr<KxVFS::IFileSystem>> m_FileSystems;
 
 		private:
 			void OnMessage(const IPC::Message& message);
-			IPC::FSHandle OnCreateFS(IPC::FileSystemID fileSystemID);
-
-			void DestroyFS(KxVFS::AbstractFS& vfs);
+			IPC::FSHandle CreateFS(IPC::FileSystemID fileSystemID);
+			void DestroyFS(KxVFS::IFileSystem& fileSystem);
 
 		protected:
-			void RegisterFS(IVirtualFileSystem& vfs) override
+			void RegisterFS(IVirtualFileSystem& fileSystem) override
 			{
 			}
-			void UnregisterFS(IVirtualFileSystem& vfs) override
+			void UnregisterFS(IVirtualFileSystem& fileSystem) override
 			{
 			}
 
@@ -43,33 +42,33 @@ namespace Kortex::VirtualFileSystem
 		public:
 			bool IsOK() const override
 			{
-				return KxVFS::Service::IsOK();
+				return KxVFS::FileSystemService::IsOK();
 			}
 			void* GetNativeService() override
 			{
-				return static_cast<KxVFS::Service*>(this);
+				return static_cast<KxVFS::FileSystemService*>(this);
 			}
 
 			wxString GetServiceName() const override
 			{
-				return ToWxString(KxVFS::Service::GetServiceName());
+				return ToWxString(KxVFS::FileSystemService::GetServiceName());
 			}
 			bool IsInstalled() const override
 			{
-				return KxVFS::Service::IsInstalled();
+				return KxVFS::FileSystemService::IsInstalled();
 			}
 			bool IsStarted() const override
 			{
-				return KxVFS::Service::IsStarted();
+				return KxVFS::FileSystemService::IsStarted();
 			}
 	
 			bool Start()  override
 			{
-				return KxVFS::Service::Start();
+				return KxVFS::FileSystemService::Start();
 			}
 			bool Stop() override
 			{
-				return KxVFS::Service::Stop();
+				return KxVFS::FileSystemService::Stop();
 			}
 			bool Install() override;
 			bool Uninstall() override;
@@ -79,8 +78,8 @@ namespace Kortex::VirtualFileSystem
 				m_RecievingWindow = recievingWindow;
 			}
 			
-			IPC::FSHandle GetFileSystemHandle(const KxVFS::AbstractFS& vfs) const;
-			KxVFS::AbstractFS& GetFileSystemByHandle(IPC::FSHandle handle) const;
+			IPC::FSHandle GetFileSystemHandle(const KxVFS::IFileSystem& fileSystem) const;
+			KxVFS::IFileSystem& GetFileSystemByHandle(IPC::FSHandle handle) const;
 			template<class T> T& GetFileSystemByHandle(IPC::FSHandle handle) const
 			{
 				return static_cast<T&>(GetFileSystemByHandle(handle));
@@ -97,7 +96,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			KxVersion GetLibraryVersion() const override
 			{
-				return ToWxString(KxVFS::Service::GetLibraryVersion());
+				return ToWxString(KxVFS::FileSystemService::GetLibraryVersion());
 			}
 
 			bool HasNativeLibrary() const override
@@ -114,7 +113,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			KxVersion GetNativeLibraryVersion() const override
 			{
-				return ToWxString(KxVFS::Service::GetDokanyVersion());
+				return ToWxString(KxVFS::FileSystemService::GetDokanyVersion());
 			}
 	};
 }

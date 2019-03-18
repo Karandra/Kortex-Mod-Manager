@@ -7,7 +7,7 @@ using namespace Kortex::IPC;
 namespace Kortex::VirtualFileSystem
 {
 	Mirror::Mirror(FileSystemID id, const wxString& mountPoint, const wxString& source)
-		:AbstractFS(id)
+		:BaseFileSystem(id)
 	{
 		m_Controller.Send(RequestID::FSSetMountPoint, m_Handle, mountPoint);
 		m_Controller.Send(RequestID::FSSetSource, m_Handle, source);

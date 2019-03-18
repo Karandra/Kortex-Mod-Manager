@@ -304,7 +304,7 @@
     <ClCompile Include="Source\Utility\Log.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\Convergence.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\DefaultVFSService.cpp" />
-    <ClCompile Include="Source\VirtualFileSystem\AbstractFS.cpp" />
+    <ClCompile Include="Source\VirtualFileSystem\BaseFileSystem.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\Mirror.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\MultiMirror.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\RecievingWindow.cpp" />
@@ -641,9 +641,9 @@
     <ClInclude Include="Source\Utility\KImageProvider.h" />
     <ClInclude Include="Source\Utility\KQuickThread.h" />
     <ClInclude Include="Source\Utility\KThemeManager.h" />
+    <ClInclude Include="Source\VirtualFileSystem\BaseFileSystem.h" />
     <ClInclude Include="Source\VirtualFileSystem\Convergence.h" />
     <ClInclude Include="Source\VirtualFileSystem\DefaultVFSService.h" />
-    <ClInclude Include="Source\VirtualFileSystem\AbstractFS.h" />
     <ClInclude Include="Source\VirtualFileSystem\Mirror.h" />
     <ClInclude Include="Source\VirtualFileSystem\MultiMirror.h" />
     <ClInclude Include="Source\VirtualFileSystem\RecievingWindow.h" />

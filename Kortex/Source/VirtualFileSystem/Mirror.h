@@ -1,10 +1,10 @@
 #pragma once
 #include "stdafx.h"
-#include "AbstractFS.h"
+#include "BaseFileSystem.h"
 
 namespace Kortex::VirtualFileSystem
 {
-	class Mirror: public AbstractFS
+	class Mirror: public BaseFileSystem
 	{
 		protected:
 			Mirror(IPC::FileSystemID id, const wxString& mountPoint, const wxString& source);

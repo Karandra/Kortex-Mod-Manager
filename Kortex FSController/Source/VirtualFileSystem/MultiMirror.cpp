@@ -6,11 +6,11 @@
 namespace Kortex::VirtualFileSystem
 {
 	MultiMirror::MultiMirror(const wxString& mountPoint, const wxString& source)
-		:KxVFSWrapper(ToKxDynamicStringRef(mountPoint), ToKxDynamicStringRef(source))
+		:Convergence(mountPoint, source)
 	{
 	}
 	MultiMirror::MultiMirror(const wxString& mountPoint, const KxStringVector& sources)
-		:MultiMirror(mountPoint, sources.front())
+		:Convergence(mountPoint, sources.front())
 	{
 		for (size_t i = 1; i < sources.size(); i++)
 		{

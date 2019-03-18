@@ -2,13 +2,17 @@
 #include "stdafx.h"
 #include "VirtualFileSystem/IVFSService.h"
 #include "VirtualFileSystem/IVirtualFileSystem.h"
-#include <KxVirtualFileSystem/AbstractFS.h>
+#include <KxVirtualFileSystem/IFileSystem.h>
 #include "MainApplicationLink.h"
 
 namespace Kortex::VirtualFileSystem
 {
 	template<class T> class KxVFSWrapper: public IVirtualFileSystem, public T
 	{
+		public:
+			using TBase = T;
+			using TWrapper = KxVFSWrapper;
+
 		private:
 			FSController::MainApplicationLink* m_Link = nullptr;
 
@@ -24,7 +28,7 @@ namespace Kortex::VirtualFileSystem
 
 		public:
 			template<class... Args> KxVFSWrapper(Args&&... arg)
-				:T(*IVFSService::GetInstance()->GetNativeService<KxVFS::Service>(), std::forward<Args>(arg)...)
+				:TBase(*IVFSService::GetInstance()->GetNativeService<KxVFS::FileSystemService>(), std::forward<Args>(arg)...)
 			{
 				m_Link = FSController::MainApplicationLink::GetInstance();
 			}
@@ -32,32 +36,41 @@ namespace Kortex::VirtualFileSystem
 		public:
 			IPC::FSHandle GetHandle() const override
 			{
-				return reinterpret_cast<IPC::FSHandle>(static_cast<const T*>(this));
+				return reinterpret_cast<IPC::FSHandle>(static_cast<const TBase*>(this));
+			}
+
+			wxString GetMountPointLocation() const
+			{
+				return ToWxString(TBase::GetMountPoint());
+			}
+			void SetMountPointLocation(const wxString& mountPoint)
+			{
+				TBase::SetMountPoint(ToKxDynamicStringRef(mountPoint));
 			}
 
 			bool IsEnabled() const override
 			{
-				return T::IsMounted();
+				return TBase::IsMounted();
 			}
 			void Enable() override
 			{
-				T::Mount();
+				TBase::Mount();
 			}
 			void Disable() override
 			{
-				T::UnMount();
+				TBase::UnMount();
 			}
 
 		protected:
 			NTSTATUS OnMount(KxVFS::EvtMounted& eventInfo) override
 			{
-				const NTSTATUS status = T::OnMount(eventInfo);
+				const NTSTATUS status = TBase::OnMount(eventInfo);
 				OnEnabled();
 				return status;
 			}
 			NTSTATUS OnUnMount(KxVFS::EvtUnMounted& eventInfo) override
 			{
-				const NTSTATUS status = T::OnUnMount(eventInfo);
+				const NTSTATUS status = TBase::OnUnMount(eventInfo);
 				OnDisabled();
 				return status;
 			}

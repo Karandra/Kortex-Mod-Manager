@@ -5,7 +5,7 @@
 
 namespace KxVFS
 {
-	class AbstractFS;
+	class IFileSystem;
 }
 namespace Kortex
 {
@@ -40,7 +40,7 @@ namespace Kortex::FSController
 				m_RecievingWindow = recievingWindow;
 			}
 
-			void NotifyMounted(const KxVFS::AbstractFS& vfs);
-			void NotifyUnmounted(const KxVFS::AbstractFS& vfs);
+			void NotifyMounted(const KxVFS::IFileSystem& fileSystem);
+			void NotifyUnmounted(const KxVFS::IFileSystem& fileSystem);
 	};
 }

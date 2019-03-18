@@ -29,14 +29,18 @@ namespace Kortex::IPC
 		FSEnable,
 		FSDisable,
 
-		FSSetSource,
+
+		FSGetMountPoint,
 		FSSetMountPoint,
+
+		FSSetSource,
 		FSSetWriteTarget,
-		FSBuildDispatcherIndex,
+		FSBuildFileTree,
 		FSAddVirtualFolder,
 
-		FSEnableINIOptimization,
-		FSEnableSecurityFunctions,
+		FSEnableAsyncIO,
+		FSEnableExtendedSecurity,
+		FSEnableImpersonateCallerUser,
 
 		GetLibraryName,
 		GetLibraryURL,

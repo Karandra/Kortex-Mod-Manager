@@ -15,12 +15,12 @@ namespace Kortex::FSController
 	{
 	}
 
-	void MainApplicationLink::NotifyMounted(const KxVFS::AbstractFS& vfs)
+	void MainApplicationLink::NotifyMounted(const KxVFS::IFileSystem& fileSystem)
 	{
-		Send(RequestID::FSEnabled, m_Service->GetFileSystemHandle(vfs));
+		Send(RequestID::FSEnabled, m_Service->GetFileSystemHandle(fileSystem));
 	}
-	void MainApplicationLink::NotifyUnmounted(const KxVFS::AbstractFS& vfs)
+	void MainApplicationLink::NotifyUnmounted(const KxVFS::IFileSystem& fileSystem)
 	{
-		Send(RequestID::FSDisabled, m_Service->GetFileSystemHandle(vfs));
+		Send(RequestID::FSDisabled, m_Service->GetFileSystemHandle(fileSystem));
 	}
 }

@@ -954,9 +954,6 @@
     <ClCompile Include="Source\VirtualFileSystem\Mirror.cpp">
       <Filter>Code\Source\VirtualFileSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Source\VirtualFileSystem\AbstractFS.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
-    </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\MultiMirror.cpp">
       <Filter>Code\Source\VirtualFileSystem</Filter>
     </ClCompile>
@@ -1118,6 +1115,9 @@
     </ClCompile>
     <ClCompile Include="Source\Network\NetworkModInfo.cpp">
       <Filter>Code\Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VirtualFileSystem\BaseFileSystem.cpp">
+      <Filter>Code\Source\VirtualFileSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1925,9 +1925,6 @@
     <ClInclude Include="Source\VirtualFileSystem\Mirror.h">
       <Filter>Code\Headers\VirtualFileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\AbstractFS.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
     <ClInclude Include="Source\VirtualFileSystem\MultiMirror.h">
       <Filter>Code\Headers\VirtualFileSystem</Filter>
     </ClInclude>
@@ -2131,6 +2128,9 @@
     </ClInclude>
     <ClInclude Include="Source\Network\NetworkModInfo.h">
       <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\BaseFileSystem.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,10 @@ namespace Kortex
 {
 	class VFSEvent;
 }
+namespace Kortex::VirtualFileSystem
+{
+	class BaseFileSystem;
+}
 
 namespace Kortex::ModManager
 {
@@ -29,6 +33,7 @@ namespace Kortex::ModManager
 			KxStringVector CheckMountPoints() const;
 			void InitMainVirtualFolder();
 			void InitMirroredLocations();
+			void SetFileSystemOptions(VirtualFileSystem::BaseFileSystem& fileSystem);
 
 			void ShowStatusDialog();
 			void HideStatusDialog();

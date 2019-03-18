@@ -19,17 +19,8 @@ namespace Kortex::VirtualFileSystem
 	{
 		m_Controller.Send(RequestID::FSAddVirtualFolder, m_Handle, path);
 	}
-	size_t Convergence::BuildDispatcherIndex()
+	size_t Convergence::BuildFileTree()
 	{
-		return m_Controller.Send(RequestID::FSBuildDispatcherIndex, m_Handle).GetAs<size_t>();
-	}
-
-	bool Convergence::EnableINIOptimization(bool value)
-	{
-		return m_Controller.Send(RequestID::FSEnableINIOptimization, m_Handle).GetAs<bool>();
-	}
-	bool Convergence::EnableSecurityFunctions(bool value)
-	{
-		return m_Controller.Send(RequestID::FSEnableSecurityFunctions, m_Handle).GetAs<bool>();
+		return m_Controller.Send(RequestID::FSBuildFileTree, m_Handle).GetAs<size_t>();
 	}
 }

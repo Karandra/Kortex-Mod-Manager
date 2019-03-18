@@ -14,9 +14,6 @@ namespace Kortex::VirtualFileSystem
 
 		public:
 			void AddVirtualFolder(const wxString& path);
-			size_t BuildDispatcherIndex();
-
-			bool EnableINIOptimization(bool value);
-			bool EnableSecurityFunctions(bool value);
+			size_t BuildFileTree();
 	};
 }

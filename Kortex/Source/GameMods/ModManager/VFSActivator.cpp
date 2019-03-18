@@ -52,18 +52,16 @@ namespace Kortex::ModManager
 		}
 
 		const IGameInstance* instance = IGameInstance::GetActive();
-		auto vfs = std::make_unique<VirtualFileSystem::Convergence>(instance->GetVirtualGameDir(), m_Manager.GetOverwrites().GetModFilesDir());
-		vfs->EnableINIOptimization(true);
-		vfs->EnableSecurityFunctions(true);
+		auto fileSystem = std::make_unique<VirtualFileSystem::Convergence>(instance->GetVirtualGameDir(), m_Manager.GetOverwrites().GetModFilesDir());
+		SetFileSystemOptions(*fileSystem);
+
 		for (const wxString& path: folders)
 		{
-			vfs->AddVirtualFolder(path);
+			fileSystem->AddVirtualFolder(path);
 		}
+		Utility::Log::LogInfo("VirtualFileSystem::Convergence::BuildFileTree: file tree size -> %1", fileSystem->BuildFileTree());
 
-		size_t indexSize = vfs->BuildDispatcherIndex();
-		Utility::Log::LogInfo("VirtualFileSystem::Convergence::BuildDispatcherIndex: index size -> %1", indexSize);
-
-		m_Convergence = std::move(vfs);
+		m_Convergence = std::move(fileSystem);
 	}
 	void VFSActivator::InitMirroredLocations()
 	{
@@ -71,15 +69,27 @@ namespace Kortex::ModManager
 
 		for (const MirroredLocation& location: m_Manager.GetOptions().GetMirroredLocations())
 		{
+			
+
 			if (location.ShouldUseMultiMirror())
 			{
-				m_Mirrors.emplace_back(std::make_unique<VirtualFileSystem::MultiMirror>(location.GetTarget(), location.GetSources()));
+				auto fileSystem = std::make_unique<VirtualFileSystem::MultiMirror>(location.GetTarget(), location.GetSources());
+				SetFileSystemOptions(*fileSystem);
+				m_Mirrors.emplace_back(std::move(fileSystem));
 			}
 			else
 			{
-				m_Mirrors.emplace_back(std::make_unique<VirtualFileSystem::Mirror>(location.GetTarget(), location.GetSource()));
+				auto fileSystem = std::make_unique<VirtualFileSystem::Mirror>(location.GetTarget(), location.GetSource());
+				SetFileSystemOptions(*fileSystem);
+				m_Mirrors.emplace_back(std::move(fileSystem));
 			}
 		}
+	}
+	void VFSActivator::SetFileSystemOptions(VirtualFileSystem::BaseFileSystem& fileSystem)
+	{
+		fileSystem.EnableAsyncIO(true);
+		fileSystem.EnableExtendedSecurity(true);
+		fileSystem.EnableImpersonateCallerUser(true);
 	}
 
 	void VFSActivator::ShowStatusDialog()

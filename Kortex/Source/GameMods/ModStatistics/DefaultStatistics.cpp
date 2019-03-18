@@ -203,6 +203,16 @@ namespace Kortex::ModStatistics
 	}
 	wxString DefaultStatistics::GetStatValue(const StatInfo& stat) const
 	{
-		return std::to_wstring(GetStatValueInt(stat));
+		switch ((StatIndex)stat.GetIndex())
+		{
+			case StatIndex::UsedSpace:
+			{
+				return KxFile::FormatFileSize(GetStatValueInt(stat), 2);
+			}
+			default:
+			{
+				return KxString::Format(wxS("%1"), GetStatValueInt(stat));
+			}
+		};
 	}
 }

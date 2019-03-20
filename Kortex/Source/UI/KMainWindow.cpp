@@ -285,7 +285,7 @@ void KMainWindow::AddLocationsMenu(KxMenu& mainMenu)
 	KxMenu* locationsMenu = new KxMenu();
 	for (const KLabeledValue& entry: m_Locations)
 	{
-		if (!entry.HasLabel() && !entry.HasLabel())
+		if (!entry.HasLabel() && !entry.HasValue())
 		{
 			locationsMenu->AddSeparator();
 		}

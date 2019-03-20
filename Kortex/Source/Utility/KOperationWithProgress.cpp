@@ -230,7 +230,7 @@ void KOperationWithProgressDialogBase::OnFileOperation(KxFileOperationEvent& eve
 		{
 			dialog->GetPB1()->SetValue(nMinor, nMajor);
 		}
-		else if (nMajor != -2 && nMajor != -2)
+		else if (nMinor != -2 && nMajor != -2)
 		{
 			dialog->GetPB1()->Pulse();
 		}

@@ -112,7 +112,7 @@ namespace Kortex::SaveManager
 
 						newInfoPrimary.UpdateInfo();
 						newInfoSecondary.UpdateInfo();
-						if (!newInfoPrimary.IsOK() && !newInfoPrimary.IsOK())
+						if (!newInfoPrimary.IsOK() && !newInfoSecondary.IsOK())
 						{
 							bool b1 = KxFile(infoPrimary.GetFullPath()).Rename(newInfoPrimary.GetFullPath(), false);
 							bool b2 = KxFile(infoSecondary.GetFullPath()).Rename(newInfoSecondary.GetFullPath(), false);

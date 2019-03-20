@@ -61,7 +61,10 @@ void KInstallWizardRequirementsModel::GetValueByRow(wxAny& data, size_t row, con
 			case ColumnID::Version:
 			{
 				wxBitmap icon = GetIconByState(entry->CheckVersion() ? wxCHK_CHECKED : wxCHK_UNCHECKED);
-				if ((!entry->GetCurrentVersion().IsOK() && !entry->GetRequiredVersion().IsOK()) || !entry->GetRequiredVersion().IsOK())
+				const bool currentOK = entry->GetCurrentVersion().IsOK();
+				const bool requiredOK = entry->GetRequiredVersion().IsOK();
+
+				if ((!currentOK && !requiredOK) || (currentOK && !requiredOK))
 				{
 					data = icon;
 				}

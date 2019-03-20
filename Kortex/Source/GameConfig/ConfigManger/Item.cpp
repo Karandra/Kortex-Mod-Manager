@@ -221,7 +221,7 @@ namespace Kortex::GameConfig
 			}
 			case EditableBehaviorID::Auto:
 			{
-				return IsUnknown() || m_TypeID.IsFloat() || (m_TypeID.IsString() || m_TypeID.IsInteger() && m_Samples.IsEmpty());
+				return IsUnknown() || m_TypeID.IsFloat() || ((m_TypeID.IsString() || m_TypeID.IsInteger()) && m_Samples.IsEmpty());
 			}
 			case EditableBehaviorID::EditableIfNoSamples:
 			{

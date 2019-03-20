@@ -636,7 +636,7 @@ KPackageProjectSerializerFOMod::FilePriorityArray KPackageProjectSerializerFOMod
 			// Decide whether to add this item to required files or not
 			bool shouldAlwaysInstall = fileDataNode.GetAttributeBool("alwaysInstall", false);
 			bool shouldInstallIfUsable = fileDataNode.GetAttributeBool("installIfUsable", false);
-			if (shouldAlwaysInstall || shouldInstallIfUsable && entry->GetTDDefaultValue() != KPPC_DESCRIPTOR_NOT_USABLE)
+			if (shouldAlwaysInstall || (shouldInstallIfUsable && entry->GetTDDefaultValue() != KPPC_DESCRIPTOR_NOT_USABLE))
 			{
 				m_ProjectLoad->GetComponents().GetRequiredFileData().emplace_back(fileEntry->GetID());
 			}

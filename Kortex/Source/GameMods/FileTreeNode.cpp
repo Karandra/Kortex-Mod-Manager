@@ -61,7 +61,7 @@ namespace Kortex
 				return finalNode != nullptr;
 			});
 
-			if (finalNode == nullptr || (type == NavigateTo::Folder && !finalNode->IsDirectory()) || type == NavigateTo::File && !finalNode->IsFile())
+			if (finalNode == nullptr || (type == NavigateTo::Folder && !finalNode->IsDirectory()) || (type == NavigateTo::File && !finalNode->IsFile()))
 			{
 				return nullptr;
 			}

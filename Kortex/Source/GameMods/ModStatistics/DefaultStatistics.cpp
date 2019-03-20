@@ -163,7 +163,7 @@ namespace Kortex::ModStatistics
 	}
 	bool DefaultStatistics::HasStat(const StatInfo& stat) const
 	{
-		return stat.GetIndex() >= (int)StatIndex::MIN && stat.GetIndex() < (int)StatIndex::MAX;
+		return stat.GetIndex() >= (size_t)StatIndex::MIN && stat.GetIndex() < (size_t)StatIndex::MAX;
 	}
 	
 	wxString DefaultStatistics::GetStatName(const StatInfo& stat) const

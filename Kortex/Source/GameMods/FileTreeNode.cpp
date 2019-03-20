@@ -15,7 +15,7 @@ namespace
 		template<class T> static void hash_combine(size_t& seed, const T& v)
 		{
 			std::hash<T> hasher;
-			seed ^= hasher(v) + 0x9e3779b9u + (seed << 6) + (seed >> 2);
+			seed ^= hasher(v) + size_t(0x9e3779b9u) + (seed << 6) + (seed >> 2);
 		}
 		
 		size_t operator()(std::wstring_view value) const

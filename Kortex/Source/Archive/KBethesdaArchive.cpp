@@ -129,7 +129,7 @@ uint64_t KBethesdaArchive::HashFilePath(const wxString& sourcePath, bool isFolde
 		if (hasExtension)
 		{
 			const int extensionLength = sizeof(uint32_t);
-			char extensionString[extensionLength + 1] = {'\0'};
+			alignas(uint32_t) char extensionString[extensionLength + 1] = {'\0'};
 			for (size_t i = 0; i < extensionLength; i++)
 			{
 				size_t charIndex = extensionIndex + i;

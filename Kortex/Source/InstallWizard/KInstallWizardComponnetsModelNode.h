@@ -12,7 +12,6 @@ class KIWCModelNode
 	};
 
 	private:
-		Type m_Type = None;
 		union
 		{
 			const KPPCGroup* m_Group = nullptr;
@@ -22,6 +21,7 @@ class KIWCModelNode
 
 		size_t m_Begin = 0;
 		size_t m_Size = 0;
+		Type m_Type = None;
 		wxCheckBoxState m_CheckState = wxCHK_UNDETERMINED;
 
 	public:

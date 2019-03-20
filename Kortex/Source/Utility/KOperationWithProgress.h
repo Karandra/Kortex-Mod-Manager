@@ -35,7 +35,7 @@ class KOperationWithProgressBase: public wxClientDataContainer
 
 	public:
 		KOperationWithProgressBase(bool allowCancel);
-		KOperationWithProgressBase(const HandlerType& entryPoint, bool allowCancel);
+		KOperationWithProgressBase(HandlerType entryPoint, bool allowCancel);
 		virtual ~KOperationWithProgressBase();
 
 	public:
@@ -44,17 +44,17 @@ class KOperationWithProgressBase: public wxClientDataContainer
 			return &m_EventHandler;
 		}
 
-		void OnRun(const HandlerType& f)
+		void OnRun(HandlerType func)
 		{
-			m_ThreadEntry = f;
+			m_ThreadEntry = std::move(func);
 		}
-		void OnEnd(const HandlerType& f)
+		void OnEnd(HandlerType func)
 		{
-			m_OnEndHandler = f;
+			m_OnEndHandler = func;
 		}
-		void OnCancel(const HandlerType& f)
+		void OnCancel(HandlerType func)
 		{
-			m_OnCancelHandler = f;
+			m_OnCancelHandler = func;
 		}
 
 		virtual void LinkHandler(wxEvtHandler* eventHandler, wxEventType type);

@@ -58,8 +58,8 @@ KOperationWithProgressBase::KOperationWithProgressBase(bool allowCancel)
 	:m_AllowCancel(allowCancel)
 {
 }
-KOperationWithProgressBase::KOperationWithProgressBase(const HandlerType& entryPoint, bool allowCancel)
-	:m_ThreadEntry(entryPoint), m_AllowCancel(allowCancel)
+KOperationWithProgressBase::KOperationWithProgressBase(HandlerType entryPoint, bool allowCancel)
+	:m_ThreadEntry(std::move(entryPoint)), m_AllowCancel(allowCancel)
 {
 }
 KOperationWithProgressBase::~KOperationWithProgressBase()

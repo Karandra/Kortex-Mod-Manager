@@ -86,7 +86,7 @@ namespace Kortex
 						operation->OnRun([operation, importer = importer.get()](KOperationWithProgressBase* self)
 						{
 							std::unique_ptr<IModImporter> temp(importer);
-							importer->Import(operation);
+							temp->Import(operation);
 						});
 						operation->OnEnd([](KOperationWithProgressBase* self)
 						{

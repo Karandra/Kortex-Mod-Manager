@@ -245,7 +245,7 @@ KPackageCreatorPageBase* KPackageCreatorWorkspace::GetCurrentPage() const
 }
 bool KPackageCreatorWorkspace::SwitchToPage(size_t index)
 {
-	if (index >= 0 && index < m_PagesBook->GetPageCount())
+	if (index < m_PagesBook->GetPageCount())
 	{
 		bool allow = true;
 		KPackageCreatorPageBase* current = GetCurrentPage();

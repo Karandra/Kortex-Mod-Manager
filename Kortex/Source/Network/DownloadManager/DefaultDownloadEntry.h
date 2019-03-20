@@ -61,7 +61,7 @@ namespace Kortex::DownloadManager
 		public:
 			bool IsOK() const override
 			{
-				return m_Provider && m_DownloadInfo->IsOK() && m_FileInfo->IsOK() && m_TargetGame && m_Provider;
+				return m_Provider && m_TargetGame && m_DownloadInfo->IsOK() && m_FileInfo->IsOK();
 			}
 			wxString GetFullPath() const override;
 			wxString GetMetaFilePath() const override;

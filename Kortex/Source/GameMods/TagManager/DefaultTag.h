@@ -19,7 +19,7 @@ namespace Kortex::ModTagManager
 		public:
 			DefaultTag() = default;
 			DefaultTag(const wxString& id, const wxString& name = wxEmptyString)
-				:m_ID(id), m_Name(m_Name)
+				:m_ID(id), m_Name(name)
 			{
 			}
 

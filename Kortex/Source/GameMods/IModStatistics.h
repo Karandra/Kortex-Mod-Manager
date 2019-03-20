@@ -4,7 +4,7 @@
 
 namespace Kortex::ModStatistics
 {
-	enum class StatIndex: size_t
+	enum class StatIndex
 	{
 		TotalMods,
 		ActiveMods,

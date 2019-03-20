@@ -1323,15 +1323,15 @@ namespace Kortex::ModManager
 			KxDataViewColumn* column = GetView()->GetColumnByID(id);
 			if (column)
 			{
-				wxString sTitle = column->GetTitle();
-				if (sTitle.IsEmpty())
+				wxString title = column->GetTitle();
+				if (title.IsEmpty())
 				{
-					sTitle << '<' << GetView()->GetColumnIndex(column) + 1 << '>';
+					title << '<' << (GetView()->GetColumnIndex(column) + 1) << '>';
 				}
 
 				//enable = enable || m_SearchFilterOptions.GetAttributeBool(std::to_string(id));
 
-				KxMenuItem* menuItem = menu.Add(new KxMenuItem(sTitle, wxEmptyString, wxITEM_CHECK));
+				KxMenuItem* menuItem = menu.Add(new KxMenuItem(title, wxEmptyString, wxITEM_CHECK));
 				menuItem->Check(enable);
 				menuItem->SetClientData(column);
 				if (enable)

@@ -382,7 +382,6 @@ void KBethesdaArchive::CloseArchive()
 	m_DirectoryRecods.clear();
 	m_FileRecords.clear();
 	m_OriginalSize = -1;
-	m_OriginalSize = -1;
 	m_Status = Status::Unknown;
 	m_IsHeaderOK = false;
 }

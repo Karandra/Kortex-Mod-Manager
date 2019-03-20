@@ -46,8 +46,8 @@ namespace Kortex::PluginManager
 			wxString m_ActiveFileHeader;
 			wxString m_OrderFileHeader;
 
-			bool m_ShouldChangeFileModificationDate;
-			bool m_ShouldSortByFileModificationDate;
+			bool m_ShouldChangeFileModificationDate = false;
+			bool m_ShouldSortByFileModificationDate = false;
 
 		protected:
 			void OnInit() override;

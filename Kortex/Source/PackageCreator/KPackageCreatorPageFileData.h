@@ -18,12 +18,12 @@ class KPackageCreatorPageFileData: public KPackageCreatorPageBase
 
 		// Folders
 		KxPanel* m_MainListPane = nullptr;
-		KPCFileDataMainListModel* m_MainListModel;
+		KPCFileDataMainListModel* m_MainListModel = nullptr;
 		//KProgramOptionAI m_MainListOptions;
 
 		// Files
 		KxPanel* m_FolderContentPane = nullptr;
-		KPCFileDataFolderContentModel* m_ContentListModel;
+		KPCFileDataFolderContentModel* m_ContentListModel = nullptr;
 		//KProgramOptionAI m_ContentListModelOptions;
 
 	public:

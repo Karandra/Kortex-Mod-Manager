@@ -262,7 +262,7 @@ namespace Kortex::ModManager
 		// Add mods
 		for (auto& mod: m_Mods)
 		{
-			if (!activeOnly || (activeOnly && mod->IsActive()))
+			if (!activeOnly || mod->IsActive())
 			{
 				allMods.push_back(mod.get());
 			}

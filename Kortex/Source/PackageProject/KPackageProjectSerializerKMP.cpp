@@ -457,7 +457,7 @@ void KPackageProjectSerializerKMP::WriteInterface(KxXMLNode& baseNode)
 	{
 		if (entry)
 		{
-			if (!isListEntry || (isListEntry && entry->HasPath()))
+			if (!isListEntry || entry->HasPath())
 			{
 				KxXMLNode node = rootNode.NewElement(name);
 				node.SetAttribute("Path", m_AsProject ? entry->GetPath() : PathNameToPackage(entry->GetPath(), KPP_CONTENT_IMAGES));

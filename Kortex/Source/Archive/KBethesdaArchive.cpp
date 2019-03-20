@@ -350,12 +350,6 @@ bool KBethesdaArchive::ReadFileDataRecords()
 			// This size is original size
 			m_OriginalSize += fileRecord.Size;
 		}
-
-		if (!isSuccess)
-		{
-			m_Status = Status::FileData;
-			return false;
-		}
 	}
 	return true;
 }

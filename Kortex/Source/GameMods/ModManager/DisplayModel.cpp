@@ -481,30 +481,20 @@ namespace Kortex::ModManager
 			{
 				case ColumnID::Name:
 				{
-					bool isChanged = false;
 					if (value.CheckType<wxString>())
 					{
 						mod->SetName(value.As<wxString>());
-						isChanged = true;
-
 						IEvent::MakeSend<ModEvent>(Events::ModChanged, *mod);
 					}
 					else
 					{
-						bool checked = value.As<bool>();
-						mod->SetActive(checked);
-						isChanged = true;
-
+						mod->SetActive(value.As<bool>());
 						IEvent::MakeSend<ModEvent>(Events::ModToggled, *mod);
 					}
 
-					if (isChanged)
-					{
-						mod->Save();
-						IModManager::GetInstance()->Save();
-						return true;
-					}
-					return false;
+					mod->Save();
+					IModManager::GetInstance()->Save();
+					return true;
 				}
 				case ColumnID::Version:
 				{

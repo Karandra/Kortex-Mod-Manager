@@ -59,7 +59,7 @@ namespace Kortex::ModTagManager
 
 				auto tag = NewDefaultTag();
 				tag->SetID(id);
-				tag->SetName(name ? *name : wxString());
+				tag->SetName(*name);
 				tag->SetNexusID(node.GetFirstChildElement(wxS("NexusID")).GetValueInt(INexusModTag::InvalidNexusID));
 				tag->SetExpanded(node.GetFirstChildElement(wxS("Expanded")).GetValueBool());
 

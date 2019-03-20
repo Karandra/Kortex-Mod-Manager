@@ -30,7 +30,8 @@ namespace Kortex
 
 		size_t rgbaIndex = 0;
 		size_t alphaIndex = 0;
-		for (size_t rgbIndex = 0; rgbIndex < (size_t)(width * height * 3);)
+		const size_t length = (size_t)width * (size_t)height * 3;
+		for (size_t rgbIndex = 0; rgbIndex < length;)
 		{
 			data[rgbIndex] = rgbaData[rgbaIndex];
 			data[rgbIndex+1] = rgbaData[rgbaIndex+1];

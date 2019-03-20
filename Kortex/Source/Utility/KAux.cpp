@@ -32,7 +32,8 @@ wxString KAux::ArchitectureToString(bool is64Bit)
 wxImage& KAux::ChangeLightness(wxImage& image, int alphaValue)
 {
 	unsigned char* data = image.GetData();
-	for (size_t i = 0; i < (size_t)(image.GetWidth() * image.GetHeight() * 3); i += 3)
+	const size_t length = (size_t)image.GetWidth() * (size_t)image.GetHeight() * 3;
+	for (size_t i = 0; i < length; i += 3)
 	{
 		unsigned char* r = &data[i];
 		unsigned char* g = &data[i+1];

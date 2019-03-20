@@ -66,7 +66,7 @@ namespace KImageProvider
 		// Null icon
 		wxImage nullIcon(wxSize(16, 16), true);
 		nullIcon.InitAlpha();
-		for (size_t i = 0; i < (size_t)(nullIcon.GetWidth() * nullIcon.GetHeight()); i++)
+		for (size_t i = 0; i < ((size_t)nullIcon.GetWidth() * (size_t)nullIcon.GetHeight()); i++)
 		{
 			*(nullIcon.GetAlpha() + i) = 0;
 		}

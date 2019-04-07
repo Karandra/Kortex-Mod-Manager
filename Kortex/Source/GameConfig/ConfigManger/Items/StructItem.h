@@ -16,7 +16,7 @@ namespace Kortex::GameConfig
 		Default,
 		SideBySide,
 	};
-	class StructKindDef: public KxIndexedEnum::Definition<StructKindDef, StructKindID, wxString, true>
+	struct StructKindDef: public KxIndexedEnum::Definition<StructKindDef, StructKindID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{
@@ -35,7 +35,7 @@ namespace Kortex::GameConfig
 		ElementWise = 0,
 		AsString
 	};
-	class StructSerializationModeDef: public KxIndexedEnum::Definition<StructSerializationModeDef, StructSerializationModeID, wxString, true>
+	struct StructSerializationModeDef: public KxIndexedEnum::Definition<StructSerializationModeDef, StructSerializationModeID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{

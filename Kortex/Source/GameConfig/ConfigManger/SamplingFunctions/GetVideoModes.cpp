@@ -9,7 +9,7 @@ namespace
 {
 	using Component = Kortex::GameConfig::SamplingFunction::GetVideoModes::Component;
 
-	class ComponentDef: public KxIndexedEnum::Definition<ComponentDef, Component, wxString, true>
+	struct ComponentDef: public KxIndexedEnum::Definition<ComponentDef, Component, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{

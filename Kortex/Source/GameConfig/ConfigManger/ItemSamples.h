@@ -29,7 +29,7 @@ namespace Kortex::GameConfig
 		GetVideoModes,
 		GetVirtualKeys,
 	};
-	class SamplingFunctionDef: public KxIndexedEnum::Definition<SamplingFunctionDef, SamplingFunctionID, wxString, true>
+	struct SamplingFunctionDef: public KxIndexedEnum::Definition<SamplingFunctionDef, SamplingFunctionID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{

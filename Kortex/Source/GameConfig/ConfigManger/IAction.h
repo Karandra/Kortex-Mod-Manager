@@ -14,7 +14,7 @@ namespace Kortex::GameConfig
 		BrowseFolder,
 		PickColor,
 	};
-	class ActionDef: public KxIndexedEnum::Definition<ActionDef, ActionID, wxString, true>
+	struct ActionDef: public KxIndexedEnum::Definition<ActionDef, ActionID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{

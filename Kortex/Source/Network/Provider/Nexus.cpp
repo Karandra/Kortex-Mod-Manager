@@ -20,7 +20,7 @@ namespace
 	using namespace Kortex::NetworkManager;
 	using TJsonValue = typename nlohmann::json::value_type;
 
-	class CategoryDef: public KxIndexedEnum::Definition<CategoryDef, IModFileInfo::CategoryID, wxString>
+	struct CategoryDef: public KxIndexedEnum::Definition<CategoryDef, IModFileInfo::CategoryID, wxString>
 	{
 		inline static const TItem ms_Index[] = 
 		{

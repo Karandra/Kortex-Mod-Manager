@@ -319,7 +319,7 @@ namespace Kortex::GameInstance
 
 namespace
 {
-	class NameToRegKeyDef: public KxIndexedEnum::Definition<NameToRegKeyDef, KxRegistryHKey, wxString>
+	struct NameToRegKeyDef: public KxIndexedEnum::Definition<NameToRegKeyDef, KxRegistryHKey, wxString>
 	{
 		inline static const TItem ms_Index[] =
 		{
@@ -330,7 +330,7 @@ namespace
 			{KxREG_HKEY_CURRENT_CONFIG, wxS("HKEY_CURRENT_CONFIG")},
 		};
 	};
-	class NameToRegTypeDef: public KxIndexedEnum::Definition<NameToRegTypeDef, KxRegistryValueType, wxString>
+	struct NameToRegTypeDef: public KxIndexedEnum::Definition<NameToRegTypeDef, KxRegistryValueType, wxString>
 	{
 		inline static const TItem ms_Index[] =
 		{

@@ -273,7 +273,7 @@ namespace Kortex::GameConfig
 	{
 		for (StructSubItem& subItem: m_SubItems)
 		{
-			AttachChild(&subItem, GetChildrenCount());
+			AttachChild(subItem, GetChildrenCount());
 		}
 	}
 

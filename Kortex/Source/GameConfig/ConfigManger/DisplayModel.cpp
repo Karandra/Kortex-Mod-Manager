@@ -9,17 +9,6 @@
 
 namespace Kortex::GameConfig
 {
-	void DisplayModel::OnDeleteNode(KxDataView2::Node* node)
-	{
-		// We own CategoryItem nodes and config manager owns everything else,
-		// so don't delete anything here.
-	}
-	void DisplayModel::OnDetachRootNode(KxDataView2::RootNode& node)
-	{
-		// Root node doesn't own anything
-		node.DetachAllChildren();
-	}
-
 	bool DisplayModel::OnAskRefreshView()
 	{
 		Workspace* workspace = Workspace::GetInstance();
@@ -223,14 +212,14 @@ namespace Kortex::GameConfig
 
 						// Attach to view nodes
 						CategoryItem& categoryItem = it->second;
-						parent->AttachChild(&categoryItem, 0);
+						parent->AttachChild(categoryItem, 0);
 						parent = &categoryItem;
 					}
 					return true;
 				});
 			}
 
-			parent->AttachChild(&item, parent->GetChildrenCount());
+			parent->AttachChild(item, parent->GetChildrenCount());
 			item.OnAttachToView();
 		});
 		GetView()->ItemsChanged();

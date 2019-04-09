@@ -24,9 +24,6 @@ namespace Kortex::GameConfig
 			bool m_DisableColumnsMenu = false;
 
 		protected:
-			void OnDeleteNode(KxDataView2::Node* node) override;
-			void OnDetachRootNode(KxDataView2::RootNode& node) override;
-
 			virtual bool OnAskRefreshView();
 			void ExpandAllCategories();
 

@@ -119,7 +119,7 @@ namespace Kortex
 			{
 				return GetItem(provider) != nullptr;
 			}
-			template<class T> bool GetItem()
+			template<class T> bool HasItem()
 			{
 				return HasItem(*T::GetInstance());
 			}

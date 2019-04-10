@@ -1344,7 +1344,7 @@ void KInstallWizardDialog::RunInstall()
 			else
 			{
 				KxFileItem item;
-				if (GetArchive().FindFileInFolder(fileEntry->GetSource(), wxEmptyString, item))
+				if (GetArchive().FindFile(fileEntry->GetSource(), item))
 				{
 					wxString path = installLocation + wxS('\\') + fileEntry->GetDestination();
 					GetArchive().ExtractToFiles({item.GetExtraData<uint32_t>()}, {path});

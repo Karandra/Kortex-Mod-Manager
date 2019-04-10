@@ -244,6 +244,7 @@
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramEntry.cpp" />
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramManager.cpp" />
     <ClCompile Include="Source\Programs\ProgramManager\DisplayModel.cpp" />
+    <ClCompile Include="Source\Programs\ProgramManager\ProgramEditorDialog.cpp" />
     <ClCompile Include="Source\Programs\ProgramManager\Workspace.cpp" />
     <ClCompile Include="Source\Programs\ProgramsModule.cpp" />
     <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
@@ -560,6 +561,7 @@
     <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramEntry.h" />
     <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramManager.h" />
     <ClInclude Include="Source\Programs\ProgramManager\DisplayModel.h" />
+    <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h" />
     <ClInclude Include="Source\Programs\ProgramManager\Workspace.h" />
     <ClInclude Include="Source\Programs\ProgramsModule.h" />
     <ClInclude Include="Source\Utility\Collection.h" />

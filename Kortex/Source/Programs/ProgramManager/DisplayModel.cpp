@@ -4,6 +4,7 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
+#include "ProgramEditorDialog.h"
 #include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
 #include "Utility/KOperationWithProgress.h"
@@ -26,18 +27,15 @@ namespace
 	{
 		RunProgram,
 
+		Edit,
+		ChooseIcon,
+		ShowExpandedValues,
+
 		AddProgram,
 		RemoveProgram,
 
 		ClearPrograms,
 		LoadDefaultPrograms,
-
-		Edit,
-		ChooseIcon,
-		ChooseExecutable,
-		ChooseWorkingDirectory,
-
-		ShowExpandedValues,
 	};
 }
 
@@ -193,11 +191,23 @@ namespace Kortex::ProgramManager
 		const IProgramEntry* entry = GetDataEntry(row);
 		if (entry)
 		{
-			if (column->GetID() == ColumnID::Name && !entry->CanRunNow())
+			switch (column->GetID())
 			{
-				attributes.SetEnabled(false);
-				return true;
-			}
+				case ColumnID::Name:
+				{
+					if (!entry->CanRunNow())
+					{
+						attributes.SetEnabled(false);
+						return true;
+					}
+					return false;
+				}
+				case ColumnID::Arguments:
+				{
+					attributes.SetFontFace(wxS("Consolas"));
+					return true;
+				}
+			};
 		}
 		return false;
 	}
@@ -235,7 +245,11 @@ namespace Kortex::ProgramManager
 				}
 				default:
 				{
-					GetView()->EditItem(item, column);
+					ProgramEditorDialog dialog(GetViewTLW(), *entry);
+					if (dialog.ShowModal() == KxID_OK)
+					{
+						IProgramManager::GetInstance()->LoadProgramIcons(dialog.Accept());
+					}
 					break;
 				}
 			};
@@ -254,25 +268,7 @@ namespace Kortex::ProgramManager
 				item->Enable(entry && entry->CanRunNow());
 				item->SetBitmap(KGetBitmap(KIMG_APPLICATION_RUN));
 			}
-			menu.AddSeparator();
-			{
-				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddProgram, KTr("ProgramManager.Menu.AddProgram")));
-				item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
-			}
-			{
-				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RemoveProgram, KTr("ProgramManager.Menu.RemoveProgram")));
-				item->SetBitmap(KGetBitmap(KIMG_MINUS_SMALL));
-				item->Enable(entry);
-			}
-			menu.AddSeparator();
-			{
-				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ClearPrograms, KTr("ProgramManager.Menu.ClearPrograms")));
-				item->Enable(!IsEmpty());
-			}
-			{
-				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::LoadDefaultPrograms, KTr("ProgramManager.Menu.LoadDefaultPrograms")));
-				item->SetBitmap(KGetBitmap(KIMG_APPLICATION_RUN));
-			}
+
 			menu.AddSeparator();
 			if (entry && column->IsEditable())
 			{
@@ -285,20 +281,30 @@ namespace Kortex::ProgramManager
 				item->Enable(entry);
 			}
 			{
-				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseExecutable, KTr("ProgramManager.Menu.ChooseExecutable")));
-				item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_IMPORT));
-				item->Enable(entry);
-			}
-			{
-				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseWorkingDirectory, KTr("ProgramManager.Menu.ChooseWorkingDirectory")));
-				item->SetBitmap(KGetBitmap(KIMG_FOLDER));
-				item->Enable(entry);
-			}
-			menu.AddSeparator();
-			{
 				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ShowExpandedValues, KTr("ProgramManager.Menu.ShowExpandedValues"), wxEmptyString, wxITEM_CHECK));
 				item->SetBitmap(KGetBitmap(KIMG_EDIT_CODE));
 				item->Check(m_ShowExpandedValues);
+			}
+
+			menu.AddSeparator();
+			{
+				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddProgram, KTr("ProgramManager.Menu.AddProgram")));
+				item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
+			}
+			{
+				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RemoveProgram, KTr("ProgramManager.Menu.RemoveProgram")));
+				item->SetBitmap(KGetBitmap(KIMG_MINUS_SMALL));
+				item->Enable(entry);
+			}
+
+			menu.AddSeparator();
+			{
+				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ClearPrograms, KTr("ProgramManager.Menu.ClearPrograms")));
+				item->Enable(!IsEmpty());
+			}
+			{
+				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::LoadDefaultPrograms, KTr("ProgramManager.Menu.LoadDefaultPrograms")));
+				item->SetBitmap(KGetBitmap(KIMG_APPLICATION_RUN));
 			}
 
 			switch (menu.Show(GetView()))
@@ -306,6 +312,34 @@ namespace Kortex::ProgramManager
 				case MenuID::RunProgram:
 				{
 					IProgramManager::GetInstance()->RunEntry(*entry);
+					break;
+				}
+
+				case MenuID::Edit:
+				{
+					ProgramEditorDialog dialog(GetViewTLW(), *entry);
+					if (dialog.ShowModal() == KxID_OK)
+					{
+						IProgramManager::GetInstance()->LoadProgramIcons(dialog.Accept());
+					}
+					break;
+				}
+				case MenuID::ChooseIcon:
+				{
+					wxString path = AskSelectIcon(*entry);
+					if (!path.IsEmpty() && path != entry->GetExecutable())
+					{
+						entry->SetIconPath(path);
+						IProgramManager::GetInstance()->LoadProgramIcons(*entry);
+						ItemChanged(event.GetItem());
+					}
+					break;
+				}
+				case MenuID::ShowExpandedValues:
+				{
+					m_ShowExpandedValues = !m_ShowExpandedValues;
+					SaveLoadExpandedValues(true, m_ShowExpandedValues);
+					GetView()->Refresh();
 					break;
 				}
 
@@ -338,61 +372,11 @@ namespace Kortex::ProgramManager
 					break;
 				}
 
-				case MenuID::Edit:
-				{
-					GetView()->EditItem(event.GetItem(), column);
-					break;
-				}
-				case MenuID::ChooseIcon:
-				{
-					wxString path = AskSelectIcon(*entry);
-					if (!path.IsEmpty() && path != entry->GetExecutable())
-					{
-						entry->SetIconPath(path);
-						IProgramManager::GetInstance()->LoadProgramIcons(*entry);
-						ItemChanged(event.GetItem());
-					}
-					break;
-				}
-				case MenuID::ChooseExecutable:
-				{
-					wxString path = AskSelectExecutable(entry);
-					if (!path.IsEmpty() && path != entry->GetExecutable())
-					{
-						entry->SetExecutable(path);
-						IProgramManager::GetInstance()->LoadProgramIcons(*entry);
-						ItemChanged(event.GetItem());
-					}
-					break;
-				}
-				case MenuID::ChooseWorkingDirectory:
-				{
-					KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN_FOLDER);
-					dialog.SetFolder(entry->GetWorkingDirectory());
-					if (dialog.ShowModal())
-					{
-						entry->SetWorkingDirectory(dialog.GetResult());
-					}
-					else
-					{
-						entry->SetWorkingDirectory(wxEmptyString);
-					}
-					ItemChanged(event.GetItem());
-					break;
-				}
 				case MenuID::LoadDefaultPrograms:
 				{
 					IProgramManager::GetInstance()->LoadDefaultPrograms();
 					RefreshItems();
 					SelectItem(0);
-					break;
-				}
-
-				case MenuID::ShowExpandedValues:
-				{
-					m_ShowExpandedValues = !m_ShowExpandedValues;
-					SaveLoadExpandedValues(true, m_ShowExpandedValues);
-					GetView()->Refresh();
 					break;
 				}
 			};
@@ -441,22 +425,19 @@ namespace Kortex::ProgramManager
 		return true;
 	}
 
-	wxString DisplayModel::AskSelectExecutable(const IProgramEntry* entry) const
+	bool DisplayModel::AddProgram()
 	{
-		KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
-		dialog.SetFolder(entry ? entry->GetExecutable() : wxString());
-		dialog.AddFilter("*.exe", KTr("FileFilter.Programs"));
-		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
-		if (entry)
+		ProgramEditorDialog dialog(GetViewTLW());
+		if (dialog.ShowModal() == KxID_OK)
 		{
-			dialog.SetFolder(entry->GetExecutable().BeforeLast('\\'));
+			IProgramManager::GetInstance()->LoadProgramIcons(dialog.Accept());
+			return true;
 		}
-
-		if (dialog.ShowModal())
-		{
-			return dialog.GetResult();
-		}
-		return wxEmptyString;
+		return false;
+	}
+	void DisplayModel::RemoveProgram(IProgramEntry* entry)
+	{
+		IProgramManager::GetInstance()->RemoveProgram(*entry);
 	}
 	wxString DisplayModel::AskSelectIcon(const IProgramEntry& entry) const
 	{
@@ -470,23 +451,6 @@ namespace Kortex::ProgramManager
 			return dialog.GetResult();
 		}
 		return wxEmptyString;
-	}
-	bool DisplayModel::AddProgram()
-	{
-		wxString path = AskSelectExecutable();
-		if (!path.IsEmpty())
-		{
-			IProgramEntry& entry = IProgramManager::GetInstance()->EmplaceProgram();
-			entry.SetName(path.AfterLast('\\').BeforeLast('.'));
-			entry.SetExecutable(path);
-			IProgramManager::GetInstance()->LoadProgramIcons(entry);
-			return true;
-		}
-		return false;
-	}
-	void DisplayModel::RemoveProgram(IProgramEntry* entry)
-	{
-		IProgramManager::GetInstance()->RemoveProgram(*entry);
 	}
 
 	bool DisplayModel::SaveLoadExpandedValues(bool save, bool value) const

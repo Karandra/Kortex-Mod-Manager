@@ -464,7 +464,7 @@ namespace Kortex::Application
 		wxString message = wxString::Format("%s\r\n\r\n%s: %s", KTr("Init.ProfilesPath2"), KTr("Generic.DefaultValue"), defaultPath);
 		KxTaskDialog messageDialog(parent, KxID_NONE, KTr("Init.ProfilesPath1"), message, KxBTN_NONE);
 		messageDialog.AddButton(KxID_YES, KTr("Generic.UseDefaultValue"));
-		messageDialog.AddButton(KxID_NO, KTr("Generic.SelectFolder"));
+		messageDialog.AddButton(KxID_NO, KTr("Generic.BrowseFolder"));
 
 		if (messageDialog.ShowModal() == KxID_YES)
 		{

@@ -57,10 +57,9 @@ namespace Kortex::ProgramManager
 			virtual bool OnDropItems(KxDataViewEventDND& event) override;
 			bool CanDragDropNow() const;
 
-			wxString AskSelectExecutable(const IProgramEntry* entry = nullptr) const;
-			wxString AskSelectIcon(const IProgramEntry& entry) const;
 			bool AddProgram();
 			void RemoveProgram(IProgramEntry* entry);
+			wxString AskSelectIcon(const IProgramEntry& entry) const;
 
 			bool SaveLoadExpandedValues(bool save, bool value = false) const;;
 

@@ -1119,6 +1119,9 @@
     <ClCompile Include="Source\GameMods\ModManager\NewModDialog.cpp">
       <Filter>Code\Source\GameMods\ModManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Programs\ProgramManager\ProgramEditorDialog.cpp">
+      <Filter>Code\Source\Programs\ProgramManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2131,6 +2134,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameMods\ModManager\NewModDialog.h">
       <Filter>Code\Headers\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h">
+      <Filter>Code\Headers\Programs\ProgramManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

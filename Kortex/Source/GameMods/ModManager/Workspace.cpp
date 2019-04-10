@@ -18,9 +18,9 @@
 #include "DisplayModel.h"
 #include "DefaultModManager.h"
 #include "BasicGameMod.h"
+#include "NewModDialog.h"
 #include "GameMods/KModFilesExplorerDialog.h"
 #include "GameMods/KModCollisionViewerModel.h"
-#include "UI/KNewModDialog.h"
 #include "UI/KImageViewerDialog.h"
 #include "UI/KTextEditorDialog.h"
 #include "InstallWizard/KInstallWizardDialog.h"
@@ -659,7 +659,7 @@ namespace Kortex::ModManager
 	}
 	void Workspace::OnAddMod_Empty(KxMenuEvent& event)
 	{
-		KNewModDialog dialog(this);
+		NewModDialog dialog(this);
 		if (dialog.ShowModal() == KxID_OK)
 		{
 			BasicGameMod entry;
@@ -673,7 +673,7 @@ namespace Kortex::ModManager
 	}
 	void Workspace::OnAddMod_FromFolder(KxMenuEvent& event)
 	{
-		KNewModDialogEx dialog(this);
+		NewModFromFolderDialog dialog(this);
 		if (dialog.ShowModal() == KxID_OK)
 		{
 			BasicGameMod modEntry;
@@ -681,13 +681,13 @@ namespace Kortex::ModManager
 			modEntry.CreateAllFolders();
 			modEntry.SetInstallTime(wxDateTime::Now());
 
-			if (dialog.IsCreateAsLinkedMod())
+			if (dialog.ShouldCreateAsLinkedMod())
 			{
 				modEntry.LinkLocation(dialog.GetFolderPath());
 			}
 			modEntry.Save();
 
-			if (!dialog.IsCreateAsLinkedMod())
+			if (!dialog.ShouldCreateAsLinkedMod())
 			{
 				// Copy files
 				wxString sourcePath = dialog.GetFolderPath();

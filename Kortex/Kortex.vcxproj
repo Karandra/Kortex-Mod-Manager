@@ -181,6 +181,7 @@
     <ClCompile Include="Source\GameMods\FileTreeNode.cpp" />
     <ClCompile Include="Source\GameMods\IModTag.cpp" />
     <ClCompile Include="Source\GameMods\IModTagManager.cpp" />
+    <ClCompile Include="Source\GameMods\ModManager\NewModDialog.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\VFSActivator.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\Dialog.cpp" />
     <ClCompile Include="Source\GameMods\ModProvider\DisplayModel.cpp" />
@@ -287,7 +288,6 @@
     <ClCompile Include="Source\UI\KTextEditorDialog.cpp" />
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp" />
-    <ClCompile Include="Source\UI\KNewModDialog.cpp" />
     <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
     <ClCompile Include="Source\Events\LogEvent.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
@@ -497,6 +497,7 @@
     <ClInclude Include="Source\GameMods\IModStatistics.h" />
     <ClInclude Include="Source\GameMods\IModTag.h" />
     <ClInclude Include="Source\GameMods\IModTagManager.h" />
+    <ClInclude Include="Source\GameMods\ModManager\NewModDialog.h" />
     <ClInclude Include="Source\GameMods\ModManager\VFSActivator.h" />
     <ClInclude Include="Source\GameMods\ModProvider\Dialog.h" />
     <ClInclude Include="Source\GameMods\ModProvider\DisplayModel.h" />
@@ -627,7 +628,6 @@
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
     <ClInclude Include="Source\UI\KImageViewerDialog.h" />
     <ClInclude Include="Source\Utility\KLabeledValue.h" />
-    <ClInclude Include="Source\UI\KNewModDialog.h" />
     <ClInclude Include="Source\UI\KWorkspaceController.h" />
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
     <ClInclude Include="Source\Utility\Log.h" />

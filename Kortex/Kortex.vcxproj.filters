@@ -378,9 +378,6 @@
     <ClCompile Include="Source\UI\KWorkspaceController.cpp">
       <Filter>Code\Source\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UI\KNewModDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp">
       <Filter>Code\Source\UI</Filter>
     </ClCompile>
@@ -1119,6 +1116,9 @@
     <ClCompile Include="Source\VirtualFileSystem\BaseFileSystem.cpp">
       <Filter>Code\Source\VirtualFileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameMods\ModManager\NewModDialog.cpp">
+      <Filter>Code\Source\GameMods\ModManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1146,9 +1146,6 @@
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KWorkspaceController.h">
-      <Filter>Code\Headers\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KNewModDialog.h">
       <Filter>Code\Headers\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KImageViewerDialog.h">
@@ -2131,6 +2128,9 @@
     </ClInclude>
     <ClInclude Include="Source\VirtualFileSystem\BaseFileSystem.h">
       <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\NewModDialog.h">
+      <Filter>Code\Headers\GameMods\ModManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

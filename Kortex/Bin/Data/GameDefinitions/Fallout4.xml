@@ -376,11 +376,11 @@
 					<Name>DLC: Wasteland Workshop 1</Name>
 					<Object Function="PluginActive">DLCWorkshop01.esm</Object>
 				</Entry>
-				<Entry ID="DLC: DLC-WastelandWorkshop2" Category="$T(PackageManager.ReqCategory.DLC)">
+				<Entry ID="DLC-WastelandWorkshop2" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>Wasteland Workshop 2</Name>
 					<Object Function="PluginActive">DLCWorkshop02.esm</Object>
 				</Entry>
-				<Entry ID="DLC: DLC-WastelandWorkshop3" Category="$T(PackageManager.ReqCategory.DLC)">
+				<Entry ID="DLC-WastelandWorkshop3" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>Wasteland Workshop 3</Name>
 					<Object Function="PluginActive">DLCWorkshop03.esm</Object>
 				</Entry>

@@ -4,6 +4,7 @@
 #include "PackageProject/KPackageProjectSerializerSMI.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
 #include <KxFramework/KxString.h>
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxShell.h>
 
@@ -57,14 +58,15 @@ void KModPackage::LoadConfig(KPackageProject& project)
 		// SMI/AMI legacy format
 		{
 			KxFileItem item;
-			if (!m_Archive.FindFileInFolder("SetupInfo", "Setup.xml", item))
+			wxString rootFolder = "SetupInfo";
+			if (!m_Archive.FindFileInFolder(rootFolder, "Setup.xml", item))
 			{
-				m_Archive.FindFileInFolder("SetupInfo", "Project.smp", item);
+				m_Archive.FindFileInFolder(rootFolder, "Project.smp", item);
 			}
 			if (item.IsOK())
 			{
 				m_PackageType = KPP_PACCKAGE_LEGACY;
-				m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item);
+				m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item, rootFolder);
 				LoadConfigSMI(project, item.GetExtraData<size_t>());
 				return;
 			}
@@ -90,7 +92,7 @@ void KModPackage::LoadConfig(KPackageProject& project)
 
 			if (infoItem.IsOK() || moduleConfigItem.IsOK())
 			{
-				m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(moduleConfigItem.IsOK() ? moduleConfigItem : infoItem);
+				m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(moduleConfigItem.IsOK() ? moduleConfigItem : infoItem, "FOMod");
 
 				// No module config
 				if (!moduleConfigItem.IsOK() && TryScriptedFOMod() != ms_InvalidIndex)
@@ -131,12 +133,28 @@ void KModPackage::LoadConfigFOMod(KPackageProject& project, size_t infoIndex, si
 {
 	KArchive::BufferMap buffers = m_Archive.ExtractToMemory({(uint32_t)infoIndex, (uint32_t)moduleConfigIndex});
 	KPackageProjectSerializerFOMod serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
+	serializer.SetEffectiveArchiveRoot(m_EffectiveArchiveRoot);
 	serializer.Structurize(&project);
 }
 
-wxString KModPackage::DetectEffectiveArchiveRoot(const KxFileItem& item) const
+wxString KModPackage::DetectEffectiveArchiveRoot(const KxFileItem& item, const wxString& subPath) const
 {
-	return item.GetSource();
+	wxString path = item.GetSource();
+	if (!path.IsEmpty())
+	{
+		if (!subPath.IsEmpty())
+		{
+			// If path is going to be something like "123456\\FOMod" then 'subPath' should contain "FOMod" part.
+			// Here we're going to remove it to get effective root.
+			wxString afterRoot;
+			if (wxString actualRoot = path.BeforeLast(wxS('\\'), &afterRoot); KxComparator::IsEqual(afterRoot, subPath, true))
+			{
+				return actualRoot;
+			}
+		}
+		return path;
+	}
+	return {};
 }
 void KModPackage::SetModIDIfNone()
 {

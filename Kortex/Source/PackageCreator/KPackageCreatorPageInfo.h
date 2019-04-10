@@ -75,11 +75,13 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		}
 		template<class T> void OnEditSite(wxCommandEvent& event)
 		{
-			long long id = -1;
-			static_cast<KxTextBox*>(event.GetEventObject())->GetValue().ToLongLong(&id);
-
+			KxTextBox* textBox = static_cast<KxTextBox*>(event.GetEventObject());
 			Kortex::ModProviderStore& store = GetProjectInfo().GetProviderStore();
-			store.AssignWith<T>(ModID(id));
+
+			NetworkModInfo modInfo;
+			modInfo.FromString(textBox->GetValue());
+			store.AssignWith<T>(modInfo);
+
 			event.Skip();
 		}
 		template<class T> KxTextBox* AddProviderControl(wxSizer* sizer)
@@ -87,18 +89,21 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 			Kortex::INetworkProvider* provider = T::GetInstance();
 			if (provider)
 			{
-				KxLabel* label = nullptr;
+				
 				wxString name = provider->GetName().BeforeLast('.');
 				if (name.IsEmpty())
 				{
 					name = provider->GetName();
 				}
 
+				KxLabel* label = nullptr;
 				KxTextBox* control = AddControlsRow(sizer, name + "ID", CreateInputField(m_Pane), 1, &label);
+				control->SetValidator(NetworkModInfo::GetValidator());
+
 				label->ToggleWindowStyle(KxLABEL_HYPERLINK);
 				label->SetBitmap(KGetBitmap(provider->GetIcon()));
 				label->Bind(wxEVT_TEXT_URL, &KPackageCreatorPageInfo::OnOpenSite<T>, this);
-				control->SetValidator(wxIntegerValidator<int64_t>());
+
 				return control;
 			}
 			return nullptr;

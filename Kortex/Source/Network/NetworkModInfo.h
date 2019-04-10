@@ -5,6 +5,9 @@ namespace Kortex
 {
 	class NetworkModInfo
 	{
+		public:
+			static wxTextValidator GetValidator();
+
 		private:
 			ModID m_ModID;
 			ModFileID m_FileID;

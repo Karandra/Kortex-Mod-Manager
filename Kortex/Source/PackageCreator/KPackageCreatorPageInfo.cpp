@@ -11,6 +11,7 @@
 #include "PackageProject/KPackageProjectInfo.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
+#include <Kortex/ModProvider.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include "UI/KTextEditorDialog.h"
 #include "Utility/KAux.h"
@@ -182,25 +183,43 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 	using namespace Kortex::NetworkManager;
 	if (m_WebSitesNexusID = AddProviderControl<NexusProvider>(sitesSizer))
 	{
-		m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLProvider>, this);
-	}
-	if (m_WebSitesTESALLID = AddProviderControl<TESALLProvider>(sitesSizer))
-	{
-		m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusProvider>, this);
+		m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusProvider>, this);
 	}
 	if (m_WebSitesLoversLabID = AddProviderControl<LoversLabProvider>(sitesSizer))
 	{
 		m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabProvider>, this);
 	}
+	if (m_WebSitesTESALLID = AddProviderControl<TESALLProvider>(sitesSizer))
+	{
+		m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLProvider>, this);
+	}
 	m_WebSitesButton = AddControlsRow(sitesSizer, KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), new KxButton(m_Pane, KxID_NONE, KTr(KxID_EDIT)), 0);
 
 	m_WebSitesButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		#if 0
-		KPCInfoSitesModelDialog dialog(GetMainWindow(), KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), m_Controller, true);
-		dialog.SetDataVector(GetProjectInfo().GetProviderStore(), &GetProjectInfo());
+		Kortex::ModProviderStore& store = GetProjectInfo().GetProviderStore();
+		Kortex::ModProvider::Dialog dialog(GetMainWindow(), store);
 		dialog.ShowModal();
-		#endif
+
+		// Update "free" inputs
+		auto UpdateWebInput = [&store](KxTextBox* textBox, INetworkProvider* provider)
+		{
+			if (provider)
+			{
+				if (ModProviderItem* item = store.GetItem(*provider))
+				{
+					textBox->SetValue(item->GetModInfo().ToString());
+				}
+				else
+				{
+					textBox->Clear();
+				}
+			}
+		};
+		UpdateWebInput(m_WebSitesNexusID, NexusProvider::GetInstance());
+		UpdateWebInput(m_WebSitesLoversLabID, LoversLabProvider::GetInstance());
+		UpdateWebInput(m_WebSitesTESALLID, TESALLProvider::GetInstance());
+
 		event.Skip();
 	});
 }

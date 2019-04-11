@@ -8,9 +8,9 @@
 class KxButton;
 class KxCheckBox;
 
-namespace Kortex
+namespace Kortex::ProfileEditor
 {
-	class KProfileEditor: public KxDataViewVectorListModelEx<IGameProfile::Vector, KxDataViewListModelEx>
+	class DisplayModel: public KxDataViewVectorListModelEx<IGameProfile::Vector, KxDataViewListModelEx>
 	{
 		private:
 			bool m_IsModified = false;
@@ -35,7 +35,7 @@ namespace Kortex
 			}
 
 		public:
-			KProfileEditor();
+			DisplayModel();
 
 		public:
 			bool IsModified() const
@@ -66,9 +66,9 @@ namespace Kortex
 	};
 }
 
-namespace Kortex
+namespace Kortex::ProfileEditor
 {
-	class KModListManagerEditorDialog: public KxStdDialog, public KProfileEditor
+	class Dialog: public KxStdDialog, public DisplayModel
 	{
 		private:
 			wxWindow* m_ViewPane = nullptr;
@@ -82,13 +82,13 @@ namespace Kortex
 				return m_ViewPane;
 			}
 		
-			void OnSelectItem(KxDataViewEvent& event);
-			void OnAddList(wxCommandEvent& event);
-			void OnCopyList(wxCommandEvent& event);
-			void OnRemoveList(wxCommandEvent& event);
+			void OnSelectProfile(KxDataViewEvent& event);
+			void OnAddProfile(wxCommandEvent& event);
+			void OnCopyProfile(wxCommandEvent& event);
+			void OnRemoveProfile(wxCommandEvent& event);
 
 		public:
-			KModListManagerEditorDialog(wxWindow* parent);
-			virtual ~KModListManagerEditorDialog();
+			Dialog(wxWindow* parent);
+			virtual ~Dialog();
 	};
 }

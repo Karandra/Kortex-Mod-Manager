@@ -23,11 +23,11 @@ namespace
 
 using namespace Kortex::GameInstance;
 
-namespace Kortex
+namespace Kortex::ProfileEditor
 {
-	void KProfileEditor::OnInitControl()
+	void DisplayModel::OnInitControl()
 	{
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KProfileEditor::OnActivate, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivate, this);
 
 		// Columns
 		{
@@ -38,11 +38,11 @@ namespace Kortex
 		GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("ModManager.Profile.LocalConfig"), ColumnID::LocalConfig, KxDATAVIEW_CELL_ACTIVATABLE);
 	}
 
-	void KProfileEditor::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+	void DisplayModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
 		GetValueByRow(value, row, column);
 	}
-	void KProfileEditor::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+	void DisplayModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
 		const IGameProfile* entry = GetDataEntry(row);
 		if (entry)
@@ -68,7 +68,7 @@ namespace Kortex
 			};
 		}
 	}
-	bool KProfileEditor::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+	bool DisplayModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
 		IGameProfile* entry = GetDataEntry(row);
 		if (entry)
@@ -129,12 +129,12 @@ namespace Kortex
 		}
 		return false;
 	}
-	bool KProfileEditor::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
+	bool DisplayModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 	{
 		return true;
 	}
 
-	void KProfileEditor::OnActivate(KxDataViewEvent& event)
+	void DisplayModel::OnActivate(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
 		if (item.IsOK())
@@ -143,21 +143,21 @@ namespace Kortex
 		}
 	}
 
-	KProfileEditor::KProfileEditor()
+	DisplayModel::DisplayModel()
 		:m_NewCurrentProfile(IGameInstance::GetActive()->GetActiveProfileID())
 	{
 	}
 }
 
-namespace Kortex
+namespace Kortex::ProfileEditor
 {
-	void KModListManagerEditorDialog::OnSelectItem(KxDataViewEvent& event)
+	void Dialog::OnSelectProfile(KxDataViewEvent& event)
 	{
-		const IGameProfile* entry = GetDataEntry(GetRow(event.GetItem()));
-		if (entry)
+		const IGameProfile* profile = GetDataEntry(GetRow(event.GetItem()));
+		if (profile)
 		{
 			m_CopyButton->Enable();
-			m_RemoveButton->Enable(GetItemCount() > 1);
+			m_RemoveButton->Enable(!profile->IsActive());
 		}
 		else
 		{
@@ -165,7 +165,7 @@ namespace Kortex
 			m_RemoveButton->Disable();
 		}
 	}
-	void KModListManagerEditorDialog::OnAddList(wxCommandEvent& event)
+	void Dialog::OnAddProfile(wxCommandEvent& event)
 	{
 		ProfileEvent listEvent(Events::ProfileAdding);
 		listEvent.Send();
@@ -174,10 +174,10 @@ namespace Kortex
 			return;
 		}
 
-		IGameProfile* newModList = IGameInstance::GetActive()->CreateProfile(listEvent.GetProfileID());
-		if (newModList)
+		IGameProfile* newProfile = IGameInstance::GetActive()->CreateProfile(listEvent.GetProfileID());
+		if (newProfile)
 		{
-			ProfileEvent(Events::ProfileAdded, *newModList).Send();
+			ProfileEvent(Events::ProfileAdded, *newProfile).Send();
 
 			MarkModified();
 			RefreshItems();
@@ -188,22 +188,22 @@ namespace Kortex
 			GetView()->EditItem(newItem, GetView()->GetColumn(ColumnID::Name));
 		}
 	}
-	void KModListManagerEditorDialog::OnCopyList(wxCommandEvent& event)
+	void Dialog::OnCopyProfile(wxCommandEvent& event)
 	{
 		KxDataViewItem item = GetView()->GetSelection();
-		if (IGameProfile* entry = GetDataEntry(GetRow(item)))
+		if (IGameProfile* profile = GetDataEntry(GetRow(item)))
 		{
-			ProfileEvent listEvent(Events::ProfileAdding, *entry);
+			ProfileEvent listEvent(Events::ProfileAdding, *profile);
 			listEvent.Send();
 			if (!listEvent.IsAllowed())
 			{
 				return;
 			}
 
-			IGameProfile* newModList = IGameInstance::GetActive()->ShallowCopyProfile(*entry, listEvent.GetProfileID());
-			if (newModList)
+			IGameProfile* newProfile = IGameInstance::GetActive()->ShallowCopyProfile(*profile, listEvent.GetProfileID());
+			if (newProfile)
 			{
-				ProfileEvent(Events::ProfileAdded, *newModList).Send();
+				ProfileEvent(Events::ProfileAdded, *newProfile).Send();
 
 				MarkModified();
 				RefreshItems();
@@ -214,14 +214,14 @@ namespace Kortex
 			}
 		}
 	}
-	void KModListManagerEditorDialog::OnRemoveList(wxCommandEvent& event)
+	void Dialog::OnRemoveProfile(wxCommandEvent& event)
 	{
 		if (IGameInstance::GetActive()->HasProfiles())
 		{
 			KxDataViewItem item = GetView()->GetSelection();
-			if (IGameProfile* entry = GetDataEntry(GetRow(item)))
+			if (IGameProfile* profile = GetDataEntry(GetRow(item)))
 			{
-				ProfileEvent listEvent(Events::ProfileRemoving, *entry);
+				ProfileEvent listEvent(Events::ProfileRemoving, *profile);
 				listEvent.Send();
 				if (!listEvent.IsAllowed())
 				{
@@ -231,8 +231,8 @@ namespace Kortex
 				KxTaskDialog dialog(GetView(), KxID_NONE, KTr(KxID_REMOVE), KTr("ModManager.Profile.RemoveDialog"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 				if (dialog.ShowModal() == KxID_YES)
 				{
-					const wxString profileID = entry->GetID();
-					if (IGameInstance::GetActive()->RemoveProfile(*entry))
+					const wxString profileID = profile->GetID();
+					if (IGameInstance::GetActive()->RemoveProfile(*profile))
 					{
 						SetNewProfile(IGameInstance::GetActive()->GetActiveProfileID());
 						ProfileEvent(Events::ProfileRemoved, profileID).Send();
@@ -250,7 +250,7 @@ namespace Kortex
 		}
 	}
 
-	KModListManagerEditorDialog::KModListManagerEditorDialog(wxWindow* parent)
+	Dialog::Dialog(wxWindow* parent)
 	{
 		if (KxStdDialog::Create(parent, KxID_NONE, KTr("ModManager.Profile.Configure"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 		{
@@ -258,14 +258,14 @@ namespace Kortex
 			SetWindowResizeSide(wxBOTH);
 
 			m_RemoveButton = AddButton(KxID_REMOVE, wxEmptyString, true).As<KxButton>();
-			m_RemoveButton->Bind(wxEVT_BUTTON, &KModListManagerEditorDialog::OnRemoveList, this);
+			m_RemoveButton->Bind(wxEVT_BUTTON, &Dialog::OnRemoveProfile, this);
 			m_RemoveButton->Disable();
 
 			m_AddButton = AddButton(KxID_ADD, wxEmptyString, true).As<KxButton>();
-			m_AddButton->Bind(wxEVT_BUTTON, &KModListManagerEditorDialog::OnAddList, this);
+			m_AddButton->Bind(wxEVT_BUTTON, &Dialog::OnAddProfile, this);
 
 			m_CopyButton = AddButton(KxID_COPY, wxEmptyString, true).As<KxButton>();
-			m_CopyButton->Bind(wxEVT_BUTTON, &KModListManagerEditorDialog::OnCopyList, this);
+			m_CopyButton->Bind(wxEVT_BUTTON, &Dialog::OnCopyProfile, this);
 			m_CopyButton->Disable();
 
 			wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -274,8 +274,8 @@ namespace Kortex
 			PostCreate();
 
 			// List
-			KProfileEditor::Create(m_ViewPane, sizer);
-			GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KModListManagerEditorDialog::OnSelectItem, this);
+			DisplayModel::Create(m_ViewPane, sizer);
+			GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &Dialog::OnSelectProfile, this);
 			SetDataVector(&IGameInstance::GetActive()->GetProfiles());
 			RefreshItems();
 
@@ -283,7 +283,7 @@ namespace Kortex
 			GetView()->SetFocus();
 		}
 	}
-	KModListManagerEditorDialog::~KModListManagerEditorDialog()
+	Dialog::~Dialog()
 	{
 		IncRef();
 	}

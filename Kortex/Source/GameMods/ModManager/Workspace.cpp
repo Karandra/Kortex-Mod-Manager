@@ -530,7 +530,7 @@ namespace Kortex::ModManager
 		profile->SyncWithCurrentState();
 		profile->SaveConfig();
 
-		Kortex::KModListManagerEditorDialog dialog(this);
+		Kortex::ProfileEditor::Dialog dialog(this);
 		dialog.ShowModal();
 		if (dialog.IsModified())
 		{

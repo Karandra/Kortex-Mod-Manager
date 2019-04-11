@@ -58,6 +58,7 @@
     <ClCompile Include="Source\Application\About\Dialog.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModel.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp" />
+    <ClCompile Include="Source\Application\Module\Info.cpp" />
     <ClCompile Include="Source\Application\RefStackTranslator.cpp" />
     <ClCompile Include="Source\Application\RefTranslator.cpp" />
     <ClCompile Include="Source\Application\DefaultApplication.cpp" />

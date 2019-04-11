@@ -33,9 +33,6 @@ namespace Kortex
 			{
 				return m_ID;
 			}
-			virtual wxString GetName() const override
-			{
-				return m_Name;
-			}
+			virtual wxString GetName() const override;
 	};
 }

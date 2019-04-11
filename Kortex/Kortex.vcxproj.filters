@@ -1122,6 +1122,9 @@
     <ClCompile Include="Source\Programs\ProgramManager\ProgramEditorDialog.cpp">
       <Filter>Code\Source\Programs\ProgramManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Application\Module\Info.cpp">
+      <Filter>Code\Source\Application\Module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">

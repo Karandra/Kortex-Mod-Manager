@@ -39,10 +39,7 @@ namespace Kortex
 			{
 				return m_ID;
 			}
-			virtual wxString GetName() const override
-			{
-				return KTr(m_Name);
-			}
+			virtual wxString GetName() const override;
 			virtual KxVersion GetVersion() const override
 			{
 				return m_Version;

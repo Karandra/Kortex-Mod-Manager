@@ -195,7 +195,7 @@ namespace Kortex::DownloadManager
 	}
 	DefaultDownloadEntry::DefaultDownloadEntry(const IModDownloadInfo& downloadInfo,
 											   const IModFileInfo& fileInfo,
-											   const INetworkModSource* modSource,
+											   const IModSource* modSource,
 											   const GameID& id
 	)
 		:m_DownloadInfo(downloadInfo.Clone()),

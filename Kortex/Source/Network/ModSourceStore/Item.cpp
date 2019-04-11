@@ -53,9 +53,9 @@ namespace Kortex
 		}
 	}
 
-	INetworkModSource* ModSourceItem::GetModSource() const
+	IModSource* ModSourceItem::GetModSource() const
 	{
-		if (auto modSource = std::get_if<INetworkModSource*>(&m_ID))
+		if (auto modSource = std::get_if<IModSource*>(&m_ID))
 		{
 			return *modSource;
 		}
@@ -68,7 +68,7 @@ namespace Kortex
 	
 	wxString ModSourceItem::GetName() const
 	{
-		if (auto modSource = std::get_if<INetworkModSource*>(&m_ID); modSource && *modSource)
+		if (auto modSource = std::get_if<IModSource*>(&m_ID); modSource && *modSource)
 		{
 			return (*modSource)->GetName();
 		}
@@ -80,7 +80,7 @@ namespace Kortex
 	}
 	void ModSourceItem::SetName(const wxString& name)
 	{
-		if (INetworkModSource* modSource = INetworkManager::GetInstance()->FindModSource(name))
+		if (IModSource* modSource = INetworkManager::GetInstance()->FindModSource(name))
 		{
 			m_ID = modSource;
 		}
@@ -92,7 +92,7 @@ namespace Kortex
 
 	wxString ModSourceItem::GetURL(const GameID& gameID) const
 	{
-		INetworkModSource* modSource = nullptr;
+		IModSource* modSource = nullptr;
 		if (const wxString* url = std::get_if<wxString>(&m_Data))
 		{
 			return *url;

@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "Application/IModule.h"
 #include "Common.h"
-#include "INetworkModSource.h"
 #include <KxFramework/KxSingleton.h>
 class KMainWindow;
 class KxAuiToolBarEvent;
@@ -17,7 +16,6 @@ namespace Kortex
 		extern const SimpleModuleInfo NetworkModuleTypeInfo;
 	};
 
-	class INetworkModSource;
 	class INetworkManager;
 	class IDownloadManager;
 

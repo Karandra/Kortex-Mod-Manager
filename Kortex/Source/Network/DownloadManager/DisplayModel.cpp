@@ -138,7 +138,7 @@ namespace Kortex::DownloadManager
 				}
 				case ColumnID::ModSource:
 				{
-					const INetworkModSource* modSource = entry->GetModSource();
+					const IModSource* modSource = entry->GetModSource();
 					if (modSource)
 					{
 						value = modSource->GetName();

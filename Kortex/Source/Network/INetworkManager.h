@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Application/IManager.h"
 #include "Common.h"
-#include "INetworkModSource.h"
+#include "IModSource.h"
 #include <KxFramework/KxSingleton.h>
 class KMainWindow;
 class KxAuiToolBarItem;
@@ -37,8 +37,8 @@ namespace Kortex
 
 			template<class T> T& AddModSource()
 			{
-				INetworkModSource::Vector& items = GetModSources();
-				return static_cast<T&>(*items.emplace_back(INetworkModSource::Create<T>(items.size())));
+				IModSource::Vector& items = GetModSources();
+				return static_cast<T&>(*items.emplace_back(IModSource::Create<T>(items.size())));
 			}
 
 		public:
@@ -48,15 +48,15 @@ namespace Kortex
 			virtual const NetworkManager::Config& GetConfig() const = 0;
 			virtual wxString GetCacheFolder() const = 0;
 		
-			virtual const INetworkModSource::Vector& GetModSources() const = 0;
-			virtual INetworkModSource::Vector& GetModSources() = 0;
+			virtual const IModSource::Vector& GetModSources() const = 0;
+			virtual IModSource::Vector& GetModSources() = 0;
 
-			virtual INetworkModSource* GetDefaultModSource() const = 0;
+			virtual IModSource* GetDefaultModSource() const = 0;
 			bool IsDefaultProviderAvailable() const;
 			ModSourceID GetDefaultProviderID() const;
 			
-			virtual INetworkModSource* FindModSource(const wxString& name) const = 0;
-			virtual INetworkModSource* GetModSource(ModSourceID sourceID) const = 0;
+			virtual IModSource* FindModSource(const wxString& name) const = 0;
+			virtual IModSource* GetModSource(ModSourceID sourceID) const = 0;
 			bool HasModSource(ModSourceID sourceID) const
 			{
 				return GetModSource(sourceID) != nullptr;

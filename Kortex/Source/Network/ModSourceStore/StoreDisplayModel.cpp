@@ -1,18 +1,18 @@
 #include "stdafx.h"
-#include "DisplayModel.h"
+#include "StoreDisplayModel.h"
 
-namespace Kortex::ModProvider
+namespace Kortex::ModSource
 {
-	void DisplayModel::OnInitControl()
+	void StoreDisplayModel::OnInitControl()
 	{
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivate, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &StoreDisplayModel::OnActivate, this);
 
 		// Columns
 		GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 150);
 		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
 	}
 
-	void DisplayModel::GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const
+	void StoreDisplayModel::GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const
 	{
 		if (item.IsTreeRootItem())
 		{
@@ -24,16 +24,16 @@ namespace Kortex::ModProvider
 			});
 		}
 	}
-	bool DisplayModel::IsContainer(const KxDataViewItem& item) const
+	bool StoreDisplayModel::IsContainer(const KxDataViewItem& item) const
 	{
 		return item.IsTreeRootItem();
 	}
-	KxDataViewItem DisplayModel::GetParent(const KxDataViewItem& item) const
+	KxDataViewItem StoreDisplayModel::GetParent(const KxDataViewItem& item) const
 	{
 		return KxDataViewItem();
 	}
 
-	bool DisplayModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
+	bool StoreDisplayModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
 		const ModSourceItem* node = GetNode(item);
 		if (node)
@@ -56,7 +56,7 @@ namespace Kortex::ModProvider
 		}
 		return false;
 	}
-	void DisplayModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
+	void StoreDisplayModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
 		const ModSourceItem* node = GetNode(item);
 		if (node)
@@ -83,15 +83,15 @@ namespace Kortex::ModProvider
 			};
 		}
 	}
-	void DisplayModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
+	void StoreDisplayModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
 		const ModSourceItem* node = GetNode(item);
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
 			{
-				INetworkModSource* modSource = nullptr;
-				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetModSource(modSource) ? modSource->GetIcon() : INetworkModSource::GetGenericIcon()));
+				IModSource* modSource = nullptr;
+				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetModSource(modSource) ? modSource->GetIcon() : IModSource::GetGenericIcon()));
 				break;
 			}
 			case ColumnID::Value:
@@ -101,7 +101,7 @@ namespace Kortex::ModProvider
 			}
 		};
 	}
-	bool DisplayModel::SetValue(const wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column)
+	bool StoreDisplayModel::SetValue(const wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column)
 	{
 		ModSourceItem* node = GetNode(item);
 
@@ -145,7 +145,7 @@ namespace Kortex::ModProvider
 		return false;
 	}
 
-	void DisplayModel::OnActivate(KxDataViewEvent& event)
+	void StoreDisplayModel::OnActivate(KxDataViewEvent& event)
 	{
 		const ModSourceItem* node = GetNode(event.GetItem());
 		if (node)
@@ -159,7 +159,7 @@ namespace Kortex::ModProvider
 			}
 		}
 	}
-	void DisplayModel::ApplyChanges()
+	void StoreDisplayModel::ApplyChanges()
 	{
 		m_ModSourceStore.RemoveIf([](ModSourceItem& item)
 		{

@@ -5,7 +5,6 @@
 #include <Kortex/ModImporter.hpp>
 #include <Kortex/ModStatistics.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include <Kortex/ModProvider.hpp>
 #include <Kortex/SaveManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
 #include <Kortex/ProgramManager.hpp>
@@ -880,7 +879,7 @@ namespace Kortex::ModManager
 			}
 			{
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_SITES, KTr("ModManager.Menu.EditSites")));
-				item->SetBitmap(KGetBitmap(INetworkModSource::GetGenericIcon()));
+				item->SetBitmap(KGetBitmap(IModSource::GetGenericIcon()));
 				item->Enable(!isMultipleSelection && !isFixedMod);
 			}
 			{
@@ -1180,7 +1179,7 @@ namespace Kortex::ModManager
 			}
 			case KMC_ID_MOD_EDIT_SITES:
 			{
-				ModProvider::Dialog dialog(GetMainWindow(), modEntry->GetModSourceStore());
+				ModSource::StoreDialog dialog(GetMainWindow(), modEntry->GetModSourceStore());
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{

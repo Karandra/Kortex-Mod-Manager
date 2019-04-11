@@ -11,7 +11,6 @@
 #include "PackageProject/KPackageProjectInfo.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
-#include <Kortex/ModProvider.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include "UI/KTextEditorDialog.h"
 #include "Utility/KAux.h"
@@ -198,11 +197,11 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 	m_WebSitesButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
 		Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
-		Kortex::ModProvider::Dialog dialog(GetMainWindow(), store);
+		Kortex::ModSource::StoreDialog dialog(GetMainWindow(), store);
 		dialog.ShowModal();
 
 		// Update "free" inputs
-		auto UpdateWebInput = [&store](KxTextBox* textBox, INetworkModSource* modSource)
+		auto UpdateWebInput = [&store](KxTextBox* textBox, IModSource* modSource)
 		{
 			if (modSource)
 			{

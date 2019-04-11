@@ -2,7 +2,6 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include <Kortex/ModProvider.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "PackageProject/KPackageProject.h"
 #include "Utility/KAux.h"

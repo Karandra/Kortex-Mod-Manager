@@ -27,7 +27,7 @@ namespace Kortex::DownloadManager
 			std::unique_ptr<KxCURLSession> m_Session;
 
 			const IGameInstance* m_TargetGame = nullptr;
-			const INetworkModSource* m_ModSource = nullptr;
+			const IModSource* m_ModSource = nullptr;
 			wxDateTime m_Date;
 			int64_t m_DownloadedSize = 0;
 			int64_t m_Speed = 0;
@@ -54,7 +54,7 @@ namespace Kortex::DownloadManager
 			DefaultDownloadEntry();
 			DefaultDownloadEntry(const IModDownloadInfo& downloadInfo,
 								 const IModFileInfo& fileInfo,
-								 const INetworkModSource* modSource,
+								 const IModSource* modSource,
 								 const GameID& id);
 			virtual ~DefaultDownloadEntry();
 
@@ -78,11 +78,11 @@ namespace Kortex::DownloadManager
 			const IGameMod* GetMod() const override;
 			bool IsInstalled() const override;
 
-			const INetworkModSource* GetModSource() const override
+			const IModSource* GetModSource() const override
 			{
 				return m_ModSource;
 			}
-			void SetModSource(const INetworkModSource* modSource) override
+			void SetModSource(const IModSource* modSource) override
 			{
 				m_ModSource = modSource;
 			}

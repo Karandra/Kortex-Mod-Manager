@@ -4,7 +4,6 @@
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include <Kortex/ModProvider.hpp>
 #include "DisplayModel.h"
 #include "Workspace.h"
 #include "PriorityGroup.h"
@@ -351,14 +350,14 @@ namespace Kortex::ModManager
 				
 				mod->GetModSourceStore().Visit([&list](const ModSourceItem& item)
 				{
-					INetworkModSource* modSource = nullptr;
+					IModSource* modSource = nullptr;
 					if (item.TryGetModSource(modSource))
 					{
 						list[modSource->GetID()] = modSource->GetIcon();
 					}
 					else
 					{
-						list[ModSourceIDs::MAX_SYSTEM] = INetworkModSource::GetGenericIcon();
+						list[ModSourceIDs::MAX_SYSTEM] = IModSource::GetGenericIcon();
 					}
 					return true;
 				});
@@ -370,7 +369,7 @@ namespace Kortex::ModManager
 			case ColumnID::Sites_LoversLabID:
 			{
 				const ModSourceID index = (ModSourceID)(column->GetID() - ColumnID::Sites - 1);
-				const INetworkModSource* modSource = INetworkManager::GetInstance()->GetModSource(index);
+				const IModSource* modSource = INetworkManager::GetInstance()->GetModSource(index);
 				if (modSource)
 				{
 					const ModSourceItem* providerItem = mod->GetModSourceStore().GetItem(*modSource);
@@ -652,7 +651,7 @@ namespace Kortex::ModManager
 			{
 				if (IsSpecialSiteColumn(columnID))
 				{
-					INetworkModSource* modSource = INetworkManager::GetInstance()->GetModSource(ColumnToSpecialSite(columnID));
+					IModSource* modSource = INetworkManager::GetInstance()->GetModSource(ColumnToSpecialSite(columnID));
 					if (modSource)
 					{
 						ModSourceItem* item1 = entry1->GetModSourceStore().GetItem(*modSource);
@@ -764,7 +763,7 @@ namespace Kortex::ModManager
 			if (IsSpecialSiteColumn(columnID))
 			{
 				const ModSourceStore& store = entry->GetModSourceStore();
-				const INetworkModSource* modSource = INetworkManager::GetInstance()->GetModSource(sourceID);
+				const IModSource* modSource = INetworkManager::GetInstance()->GetModSource(sourceID);
 				if (modSource)
 				{
 					if (const ModSourceItem* providerItem = store.GetItem(*modSource))

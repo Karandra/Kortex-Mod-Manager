@@ -462,8 +462,8 @@ void KInstallWizardDialog::LoadInfoList()
 	{
 		info.GetModSourceStore().Visit([this](const Kortex::ModSourceItem& item)
 		{
-			Kortex::INetworkModSource* modSource = nullptr;
-			KImageEnum icon = item.TryGetModSource(modSource) ? modSource->GetIcon() : Kortex::INetworkModSource::GetGenericIcon();
+			Kortex::IModSource* modSource = nullptr;
+			KImageEnum icon = item.TryGetModSource(modSource) ? modSource->GetIcon() : Kortex::IModSource::GetGenericIcon();
 			m_Info_PackageInfoList->AddItem(KLabeledValue(item.GetURL(), item.GetName()), icon, KIWI_TYPE_SITE);
 			return true;
 		});

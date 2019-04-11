@@ -5,18 +5,19 @@
 #include "NetworkProviderReply.h"
 #include "GameInstance/GameID.h"
 #include "Utility/KImageProvider.h"
+#include <KxFramework/KxQueryInterface.h>
 #include <KxFramework/KxSecretStore.h>
 #include <KxFramework/KxVersion.h>
 
 namespace Kortex
 {
-	class INetworkModSource
+	class IModSource: public KxRTTI::IInterface<IModSource>
 	{
 		friend class INetworkManager;
 
 		public:
-			using Vector = std::vector<std::unique_ptr<INetworkModSource>>;
-			using RefVector = std::vector<INetworkModSource*>;
+			using Vector = std::vector<std::unique_ptr<IModSource>>;
+			using RefVector = std::vector<IModSource*>;
 
 		public:
 			static KImageEnum GetGenericIcon();
@@ -57,8 +58,8 @@ namespace Kortex
 			virtual bool DoSignOut(wxWindow* window = nullptr) = 0;
 
 		public:
-			INetworkModSource(const wxString& name);
-			virtual ~INetworkModSource();
+			IModSource(const wxString& name);
+			virtual ~IModSource();
 
 		public:
 			ModSourceID GetID() const

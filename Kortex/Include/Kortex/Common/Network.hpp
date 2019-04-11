@@ -6,6 +6,7 @@
 #include "Network/IDownloadManager.h"
 #include "Network/IDownloadEntry.h"
 
-#include "Network/Provider/Nexus.h"
-#include "Network/Provider/LoversLab.h"
-#include "Network/Provider/TESALL.h"
+#include "Network/ModSourceStore.h"
+#include "Network/ModSource/Nexus.h"
+#include "Network/ModSource/LoversLab.h"
+#include "Network/ModSource/TESALL.h"

@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "KPackageProjectDefs.h"
 #include <Kortex/ModManager.hpp>
-#include <Kortex/ModProvider.hpp>
+#include "Network/ModSourceStore.h"
 class KPackageProject;
 
 class KPackageProjectSerializer

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/INetworkModSource.h"
+#include "Network/IModSource.h"
 #include "NexusModInfo.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxUUID.h>
@@ -16,7 +16,7 @@ namespace KxWebSocket
 
 namespace Kortex::NetworkManager
 {
-	class NexusProvider: public INetworkModSource, public KxSingletonPtr<NexusProvider>
+	class NexusProvider: public IModSource, public KxSingletonPtr<NexusProvider>
 	{
 		public:
 			static constexpr ModSourceID GetTypeID()

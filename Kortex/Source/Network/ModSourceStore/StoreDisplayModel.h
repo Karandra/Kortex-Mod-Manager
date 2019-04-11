@@ -3,9 +3,9 @@
 #include "Utility/KDataViewListModel.h"
 #include "Store.h"
 
-namespace Kortex::ModProvider
+namespace Kortex::ModSource
 {
-	class DisplayModel: public KxDataViewListModelExBase<KxDataViewModel>
+	class StoreDisplayModel: public KxDataViewListModelExBase<KxDataViewModel>
 	{
 		protected:
 			enum ColumnID
@@ -33,7 +33,7 @@ namespace Kortex::ModProvider
 			void OnActivate(KxDataViewEvent& event);
 
 		public:
-			DisplayModel(ModSourceStore& store)
+			StoreDisplayModel(ModSourceStore& store)
 				:m_ModSourceStore(store)
 			{
 			}

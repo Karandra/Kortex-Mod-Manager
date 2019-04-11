@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "INetworkModSource.h"
+#include "IModSource.h"
 #include <Kortex/NetworkManager.hpp>
 #include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
@@ -10,34 +10,34 @@
 
 namespace Kortex
 {
-	KImageEnum INetworkModSource::GetGenericIcon()
+	KImageEnum IModSource::GetGenericIcon()
 	{
 		return KIMG_SITE_UNKNOWN;
 	}
 
-	void INetworkModSource::Init()
+	void IModSource::Init()
 	{
 		KxFile(GetCacheFolder()).CreateFolder();
 		m_UserPicture.LoadFile(GetUserPictureFile(), wxBITMAP_TYPE_ANY);
 	}
 
-	void INetworkModSource::OnAuthSuccess(wxWindow* window)
+	void IModSource::OnAuthSuccess(wxWindow* window)
 	{
 		KxTaskDialog dialog(window ? window : KMainWindow::GetInstance(), KxID_NONE, KTrf("Network.AuthSuccess", GetName()));
 		dialog.SetMainIcon(KxICON_INFO);
 		dialog.ShowModal();
 	}
-	void INetworkModSource::OnAuthFail(wxWindow* window)
+	void IModSource::OnAuthFail(wxWindow* window)
 	{
 		KxTaskDialog dialog(window ? window : KMainWindow::GetInstance(), KxID_NONE, KTrf("Network.AuthFail", GetName()));
 		dialog.SetMainIcon(KxICON_ERROR);
 		dialog.ShowModal();
 	}
-	wxString INetworkModSource::ConstructIPBModURL(int64_t modID, const wxString& modSignature) const
+	wxString IModSource::ConstructIPBModURL(int64_t modID, const wxString& modSignature) const
 	{
 		return wxString::Format("%s/%lld-%s", GetModURLBasePart(), modID, modSignature.IsEmpty() ? "x" : modSignature);
 	}
-	wxBitmap INetworkModSource::DownloadSmallBitmap(const wxString& url) const
+	wxBitmap IModSource::DownloadSmallBitmap(const wxString& url) const
 	{
 		KxCURLSession connection(url);
 		KxCURLBinaryReply reply = connection.Download();
@@ -47,57 +47,57 @@ namespace Kortex
 		return wxBitmap(KAux::ScaleImageAspect(wxImage(stream), -1, size.GetHeight()), 32);
 	}
 
-	bool INetworkModSource::DoIsAuthenticated() const
+	bool IModSource::DoIsAuthenticated() const
 	{
 		return !m_RequiresAuthentication;
 	}
-	bool INetworkModSource::DoSignOut(wxWindow* window)
+	bool IModSource::DoSignOut(wxWindow* window)
 	{
 		return m_LoginStore.Delete();
 	}
 
-	INetworkModSource::INetworkModSource(const wxString& name)
+	IModSource::IModSource(const wxString& name)
 		:m_LoginStore(wxS("Kortex/") + name)
 	{
 	}
-	INetworkModSource::~INetworkModSource()
+	IModSource::~IModSource()
 	{
 	}
 
-	bool INetworkModSource::IsDefault() const
+	bool IModSource::IsDefault() const
 	{
 		return this == INetworkManager::GetInstance()->GetDefaultModSource();
 	}
 
-	wxString INetworkModSource::GetCacheFolder() const
+	wxString IModSource::GetCacheFolder() const
 	{
 		return INetworkManager::GetInstance()->GetCacheFolder() + '\\' + KAux::MakeSafeFileName(GetName());
 	}
-	wxString INetworkModSource::GetUserPictureFile() const
+	wxString IModSource::GetUserPictureFile() const
 	{
 		return GetCacheFolder() + "\\UserPicture.png";
 	}
 
-	wxString INetworkModSource::GetGameID(const GameID& id) const
+	wxString IModSource::GetGameID(const GameID& id) const
 	{
 		return id.IsOK() ? id : INetworkManager::GetInstance()->GetConfig().GetNexusID();
 	}
 
-	bool INetworkModSource::HasAuthInfo() const
+	bool IModSource::HasAuthInfo() const
 	{
 		wxString userName;
 		KxSecretValue password;
 		return LoadAuthInfo(userName, password) && !userName.IsEmpty() && password.IsOk();
 	}
-	bool INetworkModSource::LoadAuthInfo(wxString& userName, KxSecretValue& password) const
+	bool IModSource::LoadAuthInfo(wxString& userName, KxSecretValue& password) const
 	{
 		return m_LoginStore.Load(userName, password);
 	}
-	bool INetworkModSource::SaveAuthInfo(const wxString& userName, const KxSecretValue& password)
+	bool IModSource::SaveAuthInfo(const wxString& userName, const KxSecretValue& password)
 	{
 		return m_LoginStore.Save(userName, password);
 	}
-	bool INetworkModSource::RequestAuthInfo(wxString& userName, KxSecretValue& password, wxWindow* window, bool* cancelled) const
+	bool IModSource::RequestAuthInfo(wxString& userName, KxSecretValue& password, wxWindow* window, bool* cancelled) const
 	{
 		KxCredentialsDialog dialog(window, KxID_NONE, KTrf("Network.AuthCaption", GetName()), KTr("Network.AuthMessage"));
 		if (dialog.ShowModal() == KxID_OK)
@@ -110,7 +110,7 @@ namespace Kortex
 		KxUtility::SetIfNotNull(cancelled, true);
 		return false;
 	}
-	bool INetworkModSource::RequestAuthInfoAndSave(wxWindow* window, bool* cancelled)
+	bool IModSource::RequestAuthInfoAndSave(wxWindow* window, bool* cancelled)
 	{
 		wxString userName;
 		KxSecretValue password;
@@ -121,23 +121,23 @@ namespace Kortex
 		return false;
 	}
 
-	bool INetworkModSource::IsAuthenticated() const
+	bool IModSource::IsAuthenticated() const
 	{
 		return DoIsAuthenticated();
 	}
-	bool INetworkModSource::Authenticate(wxWindow* window)
+	bool IModSource::Authenticate(wxWindow* window)
 	{
 		bool authOK = DoAuthenticate(window);
 		m_RequiresAuthentication = !authOK;
 		return authOK;
 	}
-	bool INetworkModSource::ValidateAuth(wxWindow* window)
+	bool IModSource::ValidateAuth(wxWindow* window)
 	{
 		bool authOK = DoValidateAuth(window);
 		m_RequiresAuthentication = !authOK;
 		return authOK;
 	}
-	bool INetworkModSource::SignOut(wxWindow* window)
+	bool IModSource::SignOut(wxWindow* window)
 	{
 		m_RequiresAuthentication = true;
 		return DoSignOut(window);

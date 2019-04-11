@@ -1,13 +1,13 @@
 #pragma once
 #include "stdafx.h"
-#include "DisplayModel.h"
+#include "StoreDisplayModel.h"
 #include <KxFramework/KxStdDialog.h>
 #include <KxFramework/KxMenu.h>
 class KxButton;
 
-namespace Kortex::ModProvider
+namespace Kortex::ModSource
 {
-	class Dialog: public KxStdDialog, public DisplayModel
+	class StoreDialog: public KxStdDialog, public StoreDisplayModel
 	{
 		private:
 			wxWindow* m_ViewPane = nullptr;
@@ -29,7 +29,7 @@ namespace Kortex::ModProvider
 			void OnCloseDialog(wxCloseEvent& event);
 
 		public:
-			Dialog(wxWindow* parent, ModSourceStore& store);
-			virtual ~Dialog();
+			StoreDialog(wxWindow* parent, ModSourceStore& store);
+			virtual ~StoreDialog();
 	};
 }

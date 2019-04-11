@@ -23,7 +23,7 @@ namespace Kortex
 	}
 	bool IDownloadEntry::IsModSourceOfType(ModSourceID sourceID) const
 	{
-		if (const INetworkModSource* modSource = GetModSource())
+		if (const IModSource* modSource = GetModSource())
 		{
 			return modSource->GetID() == sourceID;
 		}

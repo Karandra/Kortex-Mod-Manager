@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/INetworkModSource.h"
+#include "Network/IModSource.h"
 #include "Network/NetworkProviderReply.h"
 #include "Network/NetworkProviderReplyStructs.h"
 

@@ -86,7 +86,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		}
 		template<class T> KxTextBox* AddModSourceControl(wxSizer* sizer)
 		{
-			Kortex::INetworkModSource* modSource = T::GetInstance();
+			Kortex::IModSource* modSource = T::GetInstance();
 			if (modSource)
 			{
 				

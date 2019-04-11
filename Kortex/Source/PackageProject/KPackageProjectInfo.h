@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "KPackageProjectPart.h"
 #include "Utility/KLabeledValue.h"
+#include "Network/ModSourceStore.h"
 #include "GameMods/ModTagStore.h"
-#include "GameMods/ModProvider/Store.h"
 #include "GameMods/TagManager/DefaultTag.h"
 
 class KPackageProjectInfo: public KPackageProjectPart

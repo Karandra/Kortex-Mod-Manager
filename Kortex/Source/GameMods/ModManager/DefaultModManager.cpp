@@ -330,7 +330,7 @@ namespace Kortex::ModManager
 	}
 	IGameMod* DefaultModManager::FindModByNetworkID(ModSourceID sourceID, NetworkModInfo modInfo, intptr_t* index) const
 	{
-		if (INetworkModSource* modSource = INetworkManager::GetInstance()->GetModSource(sourceID))
+		if (IModSource* modSource = INetworkManager::GetInstance()->GetModSource(sourceID))
 		{
 			intptr_t i = 0;
 			for (auto& entry: m_Mods)

@@ -10,7 +10,7 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 	using namespace Kortex::NetworkManager;
 
 	long long id = -1;
-	Kortex::INetworkModSource* modSource = nullptr;
+	Kortex::IModSource* modSource = nullptr;
 
 	// https://regex101.com
 	wxString regEx = wxString::FromUTF8Unchecked(u8R"((?:http:\/\/)?(?:https:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)(?:.*\/)(?:[^\d]+)(\d+))");

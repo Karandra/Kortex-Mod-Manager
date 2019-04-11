@@ -182,7 +182,7 @@ namespace Kortex::NetworkManager
 
 		IEvent::CallAfter([this, window]()
 		{
-			INetworkModSource::OnAuthSuccess(window);
+			IModSource::OnAuthSuccess(window);
 			INetworkManager::GetInstance()->OnAuthStateChanged();
 		});
 	}
@@ -194,7 +194,7 @@ namespace Kortex::NetworkManager
 
 		IEvent::CallAfter([this, window]()
 		{
-			INetworkModSource::OnAuthFail(window);
+			IModSource::OnAuthFail(window);
 			INetworkManager::GetInstance()->OnAuthStateChanged();
 		});
 	}
@@ -369,15 +369,15 @@ namespace Kortex::NetworkManager
 	}
 	bool NexusProvider::DoSignOut(wxWindow* window)
 	{
-		return INetworkModSource::DoSignOut(window);
+		return IModSource::DoSignOut(window);
 	}
 	bool NexusProvider::DoIsAuthenticated() const
 	{
-		return INetworkModSource::DoIsAuthenticated();
+		return IModSource::DoIsAuthenticated();
 	}
 
 	NexusProvider::NexusProvider()
-		:INetworkModSource(wxS("Nexus")), m_UserAgent(GetUserAgent(NetworkSoftware::CURL))
+		:IModSource(wxS("Nexus")), m_UserAgent(GetUserAgent(NetworkSoftware::CURL))
 	{
 	}
 
@@ -426,7 +426,7 @@ namespace Kortex::NetworkManager
 				return "Fallout4";
 			}
 		}
-		return INetworkModSource::GetGameID(id);
+		return IModSource::GetGameID(id);
 	}
 	wxString& NexusProvider::ConvertDescriptionToHTML(wxString& description) const
 	{

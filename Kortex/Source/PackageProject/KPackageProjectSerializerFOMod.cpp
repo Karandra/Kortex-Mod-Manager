@@ -366,7 +366,7 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 			if (webSite.IsOK())
 			{
 				// Site for Nexus already retrieved, so add as generic
-				Kortex::INetworkModSource* modSource = nullptr;
+				Kortex::IModSource* modSource = nullptr;
 				if (webSite.TryGetModSource(modSource) && modSource == Kortex::NetworkManager::NexusProvider::GetInstance())
 				{
 					AddAsGenericSite(siteName);

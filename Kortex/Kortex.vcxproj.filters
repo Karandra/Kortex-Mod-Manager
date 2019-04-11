@@ -75,9 +75,6 @@
     <Filter Include="Code\Source\Network\NetworkManager">
       <UniqueIdentifier>{ba4aef9b-dff3-45d6-883a-b1f6f45e534a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\Network\Provider">
-      <UniqueIdentifier>{16db6ccd-8b23-4a71-99f9-35422b1d4f61}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\GameInstance">
       <UniqueIdentifier>{baf9614d-07aa-47eb-8665-ead79d31a066}</UniqueIdentifier>
     </Filter>
@@ -113,9 +110,6 @@
     </Filter>
     <Filter Include="Code\Source\GameMods\TagManager">
       <UniqueIdentifier>{e4193127-2ce3-4d9f-b523-ef484ace238a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameMods\ModProvider">
-      <UniqueIdentifier>{12b87631-6ac1-4dca-90de-866902eb5e7e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Source\Application">
       <UniqueIdentifier>{0f73dc8b-efce-481a-abf3-24442642de86}</UniqueIdentifier>
@@ -184,9 +178,6 @@
     <Filter Include="Code\Headers\Network\NetworkManager">
       <UniqueIdentifier>{61f8b170-0cd5-453a-9f61-8f3048510036}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\Network\Provider">
-      <UniqueIdentifier>{87dd762e-83ab-43a0-8ea5-458d4c6dada6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\GameInstance">
       <UniqueIdentifier>{1e072cee-0e2c-4fc2-9f84-f016c2f83098}</UniqueIdentifier>
     </Filter>
@@ -222,9 +213,6 @@
     </Filter>
     <Filter Include="Code\Headers\GameMods\TagManager">
       <UniqueIdentifier>{c4902872-1559-4470-b800-a0afa9709cec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameMods\ModProvider">
-      <UniqueIdentifier>{74572704-c409-416a-9f6f-e080fac38a00}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers\Application">
       <UniqueIdentifier>{cdc8b6c9-a0f5-4aab-b19b-1d5acc28ef34}</UniqueIdentifier>
@@ -354,6 +342,18 @@
     </Filter>
     <Filter Include="Code\Source\GameConfig\ConfigManger\Actions">
       <UniqueIdentifier>{8eefe203-9c27-4975-a461-886f0746b901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Network\ModSource">
+      <UniqueIdentifier>{fece819f-3c96-4b34-bea2-7c4f8866dba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Network\ModSource">
+      <UniqueIdentifier>{63e0bdce-a29b-447e-b830-1079bfc9e801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Network\ModSourceStore">
+      <UniqueIdentifier>{ddb971f4-4b34-4a56-9ee2-9b11f69b5e26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Network\ModSourceStore">
+      <UniqueIdentifier>{d7143fe2-6431-46fd-b4c2-d14686be856d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -702,15 +702,6 @@
     <ClCompile Include="Source\Network\DownloadManager\Workspace.cpp">
       <Filter>Code\Source\Network\DownloadManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\Provider\LoversLab.cpp">
-      <Filter>Code\Source\Network\Provider</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Network\Provider\Nexus.cpp">
-      <Filter>Code\Source\Network\Provider</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Network\Provider\TESALL.cpp">
-      <Filter>Code\Source\Network\Provider</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameInstance\IGameInstance.cpp">
       <Filter>Code\Source\GameInstance</Filter>
     </ClCompile>
@@ -818,18 +809,6 @@
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModTagStore.cpp">
       <Filter>Code\Source\GameMods</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameMods\ModProvider\DisplayModel.cpp">
-      <Filter>Code\Source\GameMods\ModProvider</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameMods\ModProvider\Dialog.cpp">
-      <Filter>Code\Source\GameMods\ModProvider</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameMods\ModProvider\Store.cpp">
-      <Filter>Code\Source\GameMods\ModProvider</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameMods\ModProvider\Item.cpp">
-      <Filter>Code\Source\GameMods\ModProvider</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\TagManager\DefaultTag.cpp">
       <Filter>Code\Source\GameMods\TagManager</Filter>
@@ -1122,7 +1101,28 @@
     <ClCompile Include="Source\Application\Module\Info.cpp">
       <Filter>Code\Source\Application\Module</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\INetworkModSource.cpp">
+    <ClCompile Include="Source\Network\ModSourceStore\Item.cpp">
+      <Filter>Code\Source\Network\ModSourceStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModSourceStore\Store.cpp">
+      <Filter>Code\Source\Network\ModSourceStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModSource\Nexus.cpp">
+      <Filter>Code\Source\Network\ModSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModSource\TESALL.cpp">
+      <Filter>Code\Source\Network\ModSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModSource\LoversLab.cpp">
+      <Filter>Code\Source\Network\ModSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModSourceStore\StoreDisplayModel.cpp">
+      <Filter>Code\Source\Network\ModSourceStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModSourceStore\StoreDialog.cpp">
+      <Filter>Code\Source\Network\ModSourceStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\IModSource.cpp">
       <Filter>Code\Source\Network</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1541,24 +1541,6 @@
     <ClInclude Include="Source\Network\DownloadManager\Workspace.h">
       <Filter>Code\Headers\Network\DownloadManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\Provider\LoversLab.h">
-      <Filter>Code\Headers\Network\Provider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\Provider\LoversLabModInfo.h">
-      <Filter>Code\Headers\Network\Provider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\Provider\Nexus.h">
-      <Filter>Code\Headers\Network\Provider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\Provider\NexusModInfo.h">
-      <Filter>Code\Headers\Network\Provider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\Provider\TESALL.h">
-      <Filter>Code\Headers\Network\Provider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\Provider\TESALLModInfo.h">
-      <Filter>Code\Headers\Network\Provider</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameInstance\IGameInstance.h">
       <Filter>Code\Headers\GameInstance</Filter>
     </ClInclude>
@@ -1691,18 +1673,6 @@
     <ClInclude Include="Source\GameMods\ModTagStore.h">
       <Filter>Code\Headers\GameMods</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameMods\ModProvider\DisplayModel.h">
-      <Filter>Code\Headers\GameMods\ModProvider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModProvider\Dialog.h">
-      <Filter>Code\Headers\GameMods\ModProvider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModProvider\Store.h">
-      <Filter>Code\Headers\GameMods\ModProvider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModProvider\Item.h">
-      <Filter>Code\Headers\GameMods\ModProvider</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameMods\TagManager\DefaultTag.h">
       <Filter>Code\Headers\GameMods\TagManager</Filter>
     </ClInclude>
@@ -1773,9 +1743,6 @@
       <Filter>Code\Include\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ModManager.hpp">
-      <Filter>Code\Include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Kortex\ModProvider.hpp">
       <Filter>Code\Include\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ModStatistics.hpp">
@@ -2138,7 +2105,40 @@
     <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h">
       <Filter>Code\Headers\Programs\ProgramManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\INetworkModSource.h">
+    <ClInclude Include="Source\Network\ModSourceStore\Item.h">
+      <Filter>Code\Headers\Network\ModSourceStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore\Store.h">
+      <Filter>Code\Headers\Network\ModSourceStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSource\Nexus.h">
+      <Filter>Code\Headers\Network\ModSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSource\NexusModInfo.h">
+      <Filter>Code\Headers\Network\ModSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSource\TESALL.h">
+      <Filter>Code\Headers\Network\ModSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSource\TESALLModInfo.h">
+      <Filter>Code\Headers\Network\ModSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSource\LoversLab.h">
+      <Filter>Code\Headers\Network\ModSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSource\LoversLabModInfo.h">
+      <Filter>Code\Headers\Network\ModSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore\StoreDisplayModel.h">
+      <Filter>Code\Headers\Network\ModSourceStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore\StoreDialog.h">
+      <Filter>Code\Headers\Network\ModSourceStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\IModSource.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
   </ItemGroup>

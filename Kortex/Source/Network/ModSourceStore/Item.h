@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/INetworkModSource.h"
+#include "Network/IModSource.h"
 #include "Network/NetworkModInfo.h"
 #include "GameInstance/GameID.h"
 
@@ -13,7 +13,7 @@ namespace Kortex
 		friend class ModSourceStore;
 
 		private:
-			using TID = std::variant<wxString, INetworkModSource*>;
+			using TID = std::variant<wxString, IModSource*>;
 			using TData = std::variant<wxString, NetworkModInfo>;
 
 		private:
@@ -32,11 +32,11 @@ namespace Kortex
 			{
 			}
 
-			ModSourceItem(INetworkModSource* modSource, const wxString& url)
+			ModSourceItem(IModSource* modSource, const wxString& url)
 				:m_ID(modSource), m_Data(url)
 			{
 			}
-			ModSourceItem(INetworkModSource* modSource, NetworkModInfo id)
+			ModSourceItem(IModSource* modSource, NetworkModInfo id)
 				:m_ID(modSource), m_Data(id)
 			{
 			}
@@ -48,8 +48,8 @@ namespace Kortex
 			void Load(const KxXMLNode& node);
 			void Save(KxXMLNode& node) const;
 
-			INetworkModSource* GetModSource() const;
-			void SetModSource(INetworkModSource& modSource)
+			IModSource* GetModSource() const;
+			void SetModSource(IModSource& modSource)
 			{
 				m_ID = &modSource;
 			}
@@ -57,7 +57,7 @@ namespace Kortex
 			{
 				m_ID = T::GetInstance();
 			}
-			bool TryGetModSource(INetworkModSource*& modSource) const
+			bool TryGetModSource(IModSource*& modSource) const
 			{
 				modSource = GetModSource();
 				return modSource != nullptr;

@@ -99,7 +99,7 @@ namespace Kortex::GameInstance
 		// Perform all required updates here
 		if (Kortex::IModManager* modManager = Kortex::IModManager::GetInstance())
 		{
-			Kortex::IGameMod& overwrites = modManager->GetOverwrites();
+			Kortex::IGameMod& overwrites = modManager->GetWriteTarget();
 			overwrites.LinkLocation(profile.GetOverwritesDir());
 			overwrites.UpdateFileTree();
 

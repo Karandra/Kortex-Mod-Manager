@@ -135,10 +135,10 @@ namespace Kortex::ModManager
 		m_BaseGame.LinkLocation(ITranslator::GetVariable(Variables::KVAR_ACTUAL_GAME_DIR));
 
 		// Write target
-		m_Overwrites.SetID(Variables::KVAR_OVERWRITES_DIR);
-		m_Overwrites.SetName(KTr("ModManager.WriteTargetName"));
-		m_Overwrites.SetActive(true);
-		// Location will be linked on profile change
+		m_WriteTarget.SetID(Variables::KVAR_OVERWRITES_DIR);
+		m_WriteTarget.SetName(KTr("ModManager.WriteTargetName"));
+		m_WriteTarget.SetActive(true);
+		// m_WriteTarget.LinkLocation(...) Location will be linked on profile change
 
 		Load();
 	}
@@ -147,7 +147,7 @@ namespace Kortex::ModManager
 		m_VFS.Disable();
 	}
 
-	void DefaultModManager::OnMountPointsError(const KxStringVector& locations)
+	void DefaultModManager::OnMountPointError(const KxStringVector& locations)
 	{
 		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
 		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
@@ -180,7 +180,7 @@ namespace Kortex::ModManager
 
 	DefaultModManager::DefaultModManager()
 		:m_VFS(*this),
-		m_BaseGame(std::numeric_limits<int>::min()), m_Overwrites(std::numeric_limits<int>::max())
+		m_BaseGame(std::numeric_limits<int>::min()), m_WriteTarget(std::numeric_limits<int>::max())
 	{
 	}
 
@@ -271,7 +271,7 @@ namespace Kortex::ModManager
 		// Add write target
 		if (includeWriteTarget)
 		{
-			allMods.push_back(&m_Overwrites);
+			allMods.push_back(&m_WriteTarget);
 		}
 
 		return allMods;

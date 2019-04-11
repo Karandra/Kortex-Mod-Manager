@@ -52,7 +52,7 @@ namespace Kortex::ModManager
 		}
 
 		const IGameInstance* instance = IGameInstance::GetActive();
-		auto fileSystem = std::make_unique<VirtualFileSystem::Convergence>(instance->GetVirtualGameDir(), m_Manager.GetOverwrites().GetModFilesDir());
+		auto fileSystem = std::make_unique<VirtualFileSystem::Convergence>(instance->GetVirtualGameDir(), m_Manager.GetWriteTarget().GetModFilesDir());
 		SetFileSystemOptions(*fileSystem);
 
 		for (const wxString& path: folders)
@@ -215,7 +215,7 @@ namespace Kortex::ModManager
 			}
 			else
 			{
-				m_Manager.OnMountPointsError(nonEmptyMountPoints);
+				m_Manager.OnMountPointError(nonEmptyMountPoints);
 			}
 
 			HideStatusDialog();

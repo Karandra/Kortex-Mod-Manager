@@ -95,7 +95,7 @@ namespace Kortex::ModManager
 
 			IGameMod::Vector m_Mods;
 			FixedGameMod m_BaseGame;
-			FixedGameMod m_Overwrites;
+			FixedGameMod m_WriteTarget;
 			std::vector<KMandatoryModEntry> m_MandatoryMods;
 
 		protected:
@@ -108,7 +108,7 @@ namespace Kortex::ModManager
 			virtual void OnInit() override;
 			virtual void OnExit() override;
 
-			void OnMountPointsError(const KxStringVector& locations);
+			void OnMountPointError(const KxStringVector& locations);
 			void OnModFilesChanged(ModEvent& event);
 
 		public:
@@ -140,9 +140,9 @@ namespace Kortex::ModManager
 			{
 				return m_BaseGame;
 			}
-			IGameMod& GetOverwrites() override
+			IGameMod& GetWriteTarget() override
 			{
-				return m_Overwrites;
+				return m_WriteTarget;
 			}
 
 			void ResortMods(const IGameProfile& profile) override;

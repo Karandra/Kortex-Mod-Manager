@@ -254,7 +254,7 @@ namespace Kortex::ModManager
 
 		// Fallback to write target
 		KxUtility::SetIfNotNull(owningMod, nullptr);
-		return IModManager::GetInstance()->GetOverwrites().GetModFilesDir() + wxS('\\') + relativePath;
+		return IModManager::GetInstance()->GetWriteTarget().GetModFilesDir() + wxS('\\') + relativePath;
 	}
 	const FileTreeNode* DefaultModDispatcher::BackTrackFullPath(const wxString& fullPath) const
 	{

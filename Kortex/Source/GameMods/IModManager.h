@@ -54,7 +54,7 @@ namespace Kortex
 			virtual IGameMod::RefVector GetMandatoryMods() = 0;
 
 			virtual IGameMod& GetBaseGame() = 0;
-			virtual IGameMod& GetOverwrites() = 0;
+			virtual IGameMod& GetWriteTarget() = 0;
 
 			virtual void ResortMods(const IGameProfile& profile) = 0;
 			virtual void ResortMods() = 0;

@@ -1293,7 +1293,7 @@ namespace Kortex::ModManager
 			#endif
 
 			// WriteTargetRoot
-			DisplayModelNode& writeTargetRootNode = m_DataVector.emplace_back(IModManager::GetInstance()->GetOverwrites());
+			DisplayModelNode& writeTargetRootNode = m_DataVector.emplace_back(IModManager::GetInstance()->GetWriteTarget());
 			ItemAdded(MakeItem(writeTargetRootNode));
 		}
 		GetView()->SetFocus();

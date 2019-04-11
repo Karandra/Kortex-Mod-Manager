@@ -158,18 +158,18 @@ namespace
 
 	void ReportRequestQuoteReached(const NexusProvider& nexus)
 	{
-		INotificationCenter::GetInstance()->NotifyFromManager<INetworkManager>(KTrf("Network.RequestQuotaReched", nexus.GetName()), KxICON_WARNING);
+		INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("Network.RequestQuotaReched", nexus.GetName()), KxICON_WARNING);
 	}
 	void ReportRequestError(const NexusProvider& nexus, const wxString& message)
 	{
 		try
 		{
 			KxJSONObject json = KxJSON::Load(message);
-			INotificationCenter::GetInstance()->NotifyFromManager<INetworkManager>(json["message"].get<wxString>(), KxICON_ERROR);
+			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(json["message"].get<wxString>(), KxICON_ERROR);
 		}
 		catch (...)
 		{
-			INotificationCenter::GetInstance()->NotifyFromManager<INetworkManager>(message, KxICON_ERROR);
+			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message, KxICON_ERROR);
 		}
 	}
 }

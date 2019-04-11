@@ -56,7 +56,7 @@ namespace Kortex
 			{
 				DoNotify(new T(std::forward<Args>(arg)...));
 			}
-			template<class TManager, class... Args> void NotifyFromManager(Args&&... arg)
+			template<class TManager, class... Args> void NotifyUsing(Args&&... arg)
 			{
 				Notify(TManager::GetInstance(), std::forward<Args>(arg)...);
 			}

@@ -495,7 +495,7 @@ namespace Kortex::DownloadManager
 					{
 						message = KTrf("DownloadManager.Notification.RestoreDownloadFailed", entry->GetFileInfo().GetName());
 					}
-					INotificationCenter::GetInstance()->Notify(IDownloadManager::GetInstance(), message, KxICON_WARNING);
+					INotificationCenter::GetInstance()->NotifyUsing<IDownloadManager>(message, KxICON_WARNING);
 				}
 				break;
 			}

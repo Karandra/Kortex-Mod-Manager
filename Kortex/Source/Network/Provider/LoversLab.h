@@ -11,9 +11,9 @@ namespace Kortex::NetworkManager
 	class LoversLabProvider: public INetworkModSource, public KxSingletonPtr<LoversLabProvider>
 	{
 		public:
-			static constexpr NetworkProviderID GetTypeID()
+			static constexpr ModSourceID GetTypeID()
 			{
-				return NetworkProviderIDs::LoversLab;
+				return ModSourceIDs::LoversLab;
 			}
 
 		private:

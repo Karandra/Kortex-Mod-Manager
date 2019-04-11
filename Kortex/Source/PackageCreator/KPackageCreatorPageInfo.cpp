@@ -181,15 +181,15 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 
 	// Providers
 	using namespace Kortex::NetworkManager;
-	if (m_WebSitesNexusID = AddProviderControl<NexusProvider>(sitesSizer))
+	if (m_WebSitesNexusID = AddModSourceControl<NexusProvider>(sitesSizer))
 	{
 		m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusProvider>, this);
 	}
-	if (m_WebSitesLoversLabID = AddProviderControl<LoversLabProvider>(sitesSizer))
+	if (m_WebSitesLoversLabID = AddModSourceControl<LoversLabProvider>(sitesSizer))
 	{
 		m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabProvider>, this);
 	}
-	if (m_WebSitesTESALLID = AddProviderControl<TESALLProvider>(sitesSizer))
+	if (m_WebSitesTESALLID = AddModSourceControl<TESALLProvider>(sitesSizer))
 	{
 		m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLProvider>, this);
 	}
@@ -197,16 +197,16 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 
 	m_WebSitesButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		Kortex::ModSourceStore& store = GetProjectInfo().GetProviderStore();
+		Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
 		Kortex::ModProvider::Dialog dialog(GetMainWindow(), store);
 		dialog.ShowModal();
 
 		// Update "free" inputs
-		auto UpdateWebInput = [&store](KxTextBox* textBox, INetworkModSource* provider)
+		auto UpdateWebInput = [&store](KxTextBox* textBox, INetworkModSource* modSource)
 		{
-			if (provider)
+			if (modSource)
 			{
-				if (ModSourceItem* item = store.GetItem(*provider))
+				if (ModSourceItem* item = store.GetItem(*modSource))
 				{
 					textBox->SetValue(item->GetModInfo().ToString());
 				}
@@ -381,7 +381,7 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& tProjectInfo)
 
 	/* Web sites */
 	using namespace Kortex::NetworkManager;
-	auto LoadFixedSite = [tProjectInfo](NetworkProviderID index, KxTextBox* input)
+	auto LoadFixedSite = [tProjectInfo](ModSourceID index, KxTextBox* input)
 	{
 		#if 0
 		if (tProjectInfo.HasWebSite(index))
@@ -394,9 +394,9 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& tProjectInfo)
 		}
 		#endif
 	};
-	LoadFixedSite(NetworkProviderIDs::TESALL, m_WebSitesTESALLID);
-	LoadFixedSite(NetworkProviderIDs::Nexus, m_WebSitesNexusID);
-	LoadFixedSite(NetworkProviderIDs::LoversLab, m_WebSitesLoversLabID);
+	LoadFixedSite(ModSourceIDs::TESALL, m_WebSitesTESALLID);
+	LoadFixedSite(ModSourceIDs::Nexus, m_WebSitesNexusID);
+	LoadFixedSite(ModSourceIDs::LoversLab, m_WebSitesLoversLabID);
 
 	/* Config */
 	// Package path

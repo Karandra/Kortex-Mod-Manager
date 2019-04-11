@@ -124,10 +124,10 @@ void KPackageProjectSerializerKMP::ReadInfo()
 		// Custom info
 		KAux::LoadLabeledValueArray(info.GetCustomFields(), infoNode.GetFirstChildElement("Custom"));
 
-		// Web-sites
+		// Source
 		using namespace Kortex::NetworkManager;
-		Kortex::ModSourceStore& store = info.GetProviderStore();
-		store.LoadAssign(infoNode.GetFirstChildElement("Provider"));
+		Kortex::ModSourceStore& store = info.GetModSourceStore();
+		store.LoadAssign(infoNode.GetFirstChildElement("Source"));
 
 		// Documents
 		KAux::LoadLabeledValueArray(info.GetDocuments(), infoNode.GetFirstChildElement("Documents"), "Name");
@@ -407,9 +407,9 @@ void KPackageProjectSerializerKMP::WriteInfo(KxXMLNode& baseNode)
 		KAux::SaveLabeledValueArray(info.GetCustomFields(), infoNode.NewElement("Custom"));
 	}
 
-	// Web-sites
-	KxXMLNode providerNode = infoNode.NewElement("Provider");
-	info.GetProviderStore().Save(providerNode);
+	// Source
+	KxXMLNode providerNode = infoNode.NewElement("Source");
+	info.GetModSourceStore().Save(providerNode);
 
 	// Documents
 	if (!info.GetDocuments().empty())

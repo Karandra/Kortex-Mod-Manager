@@ -25,7 +25,7 @@ namespace Kortex
 					}
 					else if constexpr(std::is_same_v<DValue, INetworkModSource*> || std::is_same_v<DValue, const INetworkModSource*>)
 					{
-						return item.GetProvider() == value;
+						return item.GetModSource() == value;
 					}
 					else if constexpr(std::is_same_v<DValue, ModSourceItem::TID>)
 					{
@@ -99,8 +99,8 @@ namespace Kortex
 			const ModSourceItem* GetItem(const wxString& name) const;
 			ModSourceItem* GetItem(const wxString& name);
 			
-			const ModSourceItem* GetItem(const INetworkModSource& provider) const;
-			ModSourceItem* GetItem(const INetworkModSource& provider);
+			const ModSourceItem* GetItem(const INetworkModSource& modSource) const;
+			ModSourceItem* GetItem(const INetworkModSource& modSource);
 
 			template<class T> const ModSourceItem* GetItem() const
 			{
@@ -115,9 +115,9 @@ namespace Kortex
 			{
 				return GetItem(name) != nullptr;
 			}
-			bool HasItem(const INetworkModSource& provider) const
+			bool HasItem(const INetworkModSource& modSource) const
 			{
-				return GetItem(provider) != nullptr;
+				return GetItem(modSource) != nullptr;
 			}
 			template<class T> bool HasItem()
 			{
@@ -151,19 +151,19 @@ namespace Kortex
 				return nullptr;
 			}
 			
-			ModSourceItem* TryAddWith(INetworkModSource& provider, const wxString& url)
+			ModSourceItem* TryAddWith(INetworkModSource& modSource, const wxString& url)
 			{
-				if (!HasItem(provider))
+				if (!HasItem(modSource))
 				{
-					return &m_Items.emplace_back(&provider, url);
+					return &m_Items.emplace_back(&modSource, url);
 				}
 				return nullptr;
 			}
-			ModSourceItem* TryAddWith(INetworkModSource& provider, NetworkModInfo id)
+			ModSourceItem* TryAddWith(INetworkModSource& modSource, NetworkModInfo id)
 			{
-				if (!HasItem(provider))
+				if (!HasItem(modSource))
 				{
-					return &m_Items.emplace_back(&provider, id);
+					return &m_Items.emplace_back(&modSource, id);
 				}
 				return nullptr;
 			}
@@ -190,8 +190,8 @@ namespace Kortex
 			ModSourceItem& AssignWith(const wxString& name, const wxString& url);
 			ModSourceItem& AssignWith(const wxString& name, NetworkModInfo modInfo);
 			
-			ModSourceItem& AssignWith(INetworkModSource& provider, const wxString& url);
-			ModSourceItem& AssignWith(INetworkModSource& provider, NetworkModInfo modInfo);
+			ModSourceItem& AssignWith(INetworkModSource& modSource, const wxString& url);
+			ModSourceItem& AssignWith(INetworkModSource& modSource, NetworkModInfo modInfo);
 
 			template<class T> ModSourceItem& AssignWith(const wxString& url)
 			{
@@ -203,7 +203,7 @@ namespace Kortex
 			}
 
 			bool RemoveItem(const wxString& name);
-			bool RemoveItem(const INetworkModSource& provider);
+			bool RemoveItem(const INetworkModSource& modSource);
 
 			void Clear()
 			{
@@ -241,7 +241,7 @@ namespace Kortex
 			}
 
 			wxString GetModURL(const wxString& name, const GameID& gameID = GameIDs::NullGameID) const;
-			wxString GetModURL(const INetworkModSource& provider, const GameID& gameID = GameIDs::NullGameID) const;
+			wxString GetModURL(const INetworkModSource& modSource, const GameID& gameID = GameIDs::NullGameID) const;
 			template<class T> wxString GetModURL(const GameID& gameID = GameIDs::NullGameID) const
 			{
 				return GetModURL(*T::GetInstance(), gameID);

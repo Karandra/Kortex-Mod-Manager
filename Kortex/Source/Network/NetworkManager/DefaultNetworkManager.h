@@ -41,8 +41,8 @@ namespace Kortex::NetworkManager
 	class DefaultNetworkManager: public INetworkManager
 	{
 		private:
-			INetworkModSource::Vector m_Providers;
-			NetworkProviderID m_DefaultProvider = NetworkProviderIDs::Invalid;
+			INetworkModSource::Vector m_ModSources;
+			ModSourceID m_DefaultModSource = ModSourceIDs::Invalid;
 			NetworkManager::Config m_Config;
 
 			KxAuiToolBarItem* m_LoginButton = nullptr;
@@ -58,7 +58,7 @@ namespace Kortex::NetworkManager
 
 		private:
 			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
-			bool GetProviderInfo(const INetworkModSource& provider, wxString& label, wxBitmap& bitmap, bool name = true) const;
+			bool GetProviderInfo(const INetworkModSource& modSource, wxString& label, wxBitmap& bitmap, bool name = true) const;
 			void UpdateButton();
 			void CreateMenu();
 			void QueueUIUpdate();
@@ -73,19 +73,19 @@ namespace Kortex::NetworkManager
 				return m_Config;
 			}
 			wxString GetCacheFolder() const override;
-		
-			const INetworkModSource::Vector& GetProviders() const override
+			
+			const INetworkModSource::Vector& GetModSources() const override
 			{
-				return m_Providers;
+				return m_ModSources;
 			}
-			INetworkModSource::Vector& GetProviders() override
+			INetworkModSource::Vector& GetModSources() override
 			{
-				return m_Providers;
+				return m_ModSources;
 			}
-			INetworkModSource* GetDefaultProvider() const override;
+			INetworkModSource* GetDefaultModSource() const override;
 
-			INetworkModSource* FindProvider(const wxString& name) const override;
-			INetworkModSource* GetProvider(NetworkProviderID providerID) const override;
+			INetworkModSource* FindModSource(const wxString& name) const override;
+			INetworkModSource* GetModSource(ModSourceID sourceID) const override;
 			
 			void OnAuthStateChanged() override;
 	};

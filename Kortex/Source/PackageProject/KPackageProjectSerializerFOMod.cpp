@@ -277,9 +277,9 @@ namespace
 			});
 		}
 	}
-	template<class T> bool WriteSite(const ModSourceStore& providerStore, KxXMLNode& node)
+	template<class T> bool WriteSite(const ModSourceStore& modSourceStore, KxXMLNode& node)
 	{
-		if (const ModSourceItem* item = providerStore.GetItem<T>())
+		if (const ModSourceItem* item = modSourceStore.GetItem<T>())
 		{
 			node.SetValue(item->GetURL());
 			return true;
@@ -345,20 +345,20 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 		info.SetDescription(ConvertBBCode(KxString::Trim(infoNode.GetFirstChildElement("Description").GetValue(), true, true)));
 
 		// Web-site
-		Kortex::ModSourceStore& providerStore = info.GetProviderStore();
+		Kortex::ModSourceStore& modSourceStore = info.GetModSourceStore();
 
 		ModID nexusID = infoNode.GetFirstChildElement("Id").GetValueInt(ModID::GetInvalidValue());
 		if (nexusID.HasValue())
 		{
-			providerStore.TryAddWith<Kortex::NetworkManager::NexusProvider>(nexusID);
+			modSourceStore.TryAddWith<Kortex::NetworkManager::NexusProvider>(nexusID);
 		}
 
 		wxString siteURL = infoNode.GetFirstChildElement("Website").GetValue();
 		if (!siteURL.IsEmpty())
 		{
-			auto AddAsGenericSite = [&providerStore, &siteURL](const wxString& siteName)
+			auto AddAsGenericSite = [&modSourceStore, &siteURL](const wxString& siteName)
 			{
-				providerStore.TryAddWith(siteName.AfterLast('.'), siteURL);
+				modSourceStore.TryAddWith(siteName.AfterLast('.'), siteURL);
 			};
 
 			wxString siteName;
@@ -366,14 +366,14 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 			if (webSite.IsOK())
 			{
 				// Site for Nexus already retrieved, so add as generic
-				Kortex::INetworkModSource* provider = nullptr;
-				if (webSite.TryGetProvider(provider) && provider == Kortex::NetworkManager::NexusProvider::GetInstance())
+				Kortex::INetworkModSource* modSource = nullptr;
+				if (webSite.TryGetModSource(modSource) && modSource == Kortex::NetworkManager::NexusProvider::GetInstance())
 				{
 					AddAsGenericSite(siteName);
 				}
 				else
 				{
-					providerStore.AssignItem(std::move(webSite));
+					modSourceStore.AssignItem(std::move(webSite));
 				}
 			}
 			else
@@ -723,18 +723,18 @@ void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& 
 	// FOMod supports only one web-site and field for site ID, so I need to decide which one to write.
 	// The order will be: Nexus (as ID) -> LoversLab -> TESALL -> other (if any)
 
-	const ModSourceStore& providerStore = m_ProjectSave->GetInfo().GetProviderStore();
+	const ModSourceStore& modSourceStore = m_ProjectSave->GetInfo().GetModSourceStore();
 
 	// Write Nexus to 'Id'
-	if (const ModSourceItem* nexusItem = providerStore.GetItem(NexusProvider::GetInstance()->GetName()))
+	if (const ModSourceItem* nexusItem = modSourceStore.GetItem(NexusProvider::GetInstance()->GetName()))
 	{
 		infoNode.NewElement("Id").SetValue(nexusItem->GetModInfo().GetModID().GetValue());
 	}
 
-	if (!(WriteSite<LoversLabProvider>(providerStore, sitesNode) || WriteSite<TESALLProvider>(providerStore, sitesNode)))
+	if (!(WriteSite<LoversLabProvider>(modSourceStore, sitesNode) || WriteSite<TESALLProvider>(modSourceStore, sitesNode)))
 	{
 		// Write first one from store
-		providerStore.Visit([&sitesNode](const ModSourceItem& item)
+		modSourceStore.Visit([&sitesNode](const ModSourceItem& item)
 		{
 			sitesNode.SetValue(item.GetURL());
 			return false;

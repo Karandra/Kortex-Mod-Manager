@@ -22,7 +22,7 @@ namespace
 		Version,
 		Size,
 		Game,
-		Provider,
+		ModSource,
 		Date,
 		Status,
 	};
@@ -78,7 +78,7 @@ namespace Kortex::DownloadManager
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Version"), ColumnID::Version, KxDATAVIEW_CELL_INERT, 100, flags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 200, flags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Game"), ColumnID::Game, KxDATAVIEW_CELL_INERT, 100, flags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Network.Provider"), ColumnID::Provider, KxDATAVIEW_CELL_INERT, 100, flags);
+		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Network.ModSource"), ColumnID::ModSource, KxDATAVIEW_CELL_INERT, 100, flags);
 		{
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Date"), ColumnID::Date, KxDATAVIEW_CELL_INERT, 125, flags);
 			info.GetColumn()->SortDescending();
@@ -136,12 +136,12 @@ namespace Kortex::DownloadManager
 					}
 					break;
 				}
-				case ColumnID::Provider:
+				case ColumnID::ModSource:
 				{
-					const INetworkModSource* provider = entry->GetProvider();
-					if (provider)
+					const INetworkModSource* modSource = entry->GetModSource();
+					if (modSource)
 					{
-						value = provider->GetName();
+						value = modSource->GetName();
 					}
 					break;
 				}
@@ -268,11 +268,11 @@ namespace Kortex::DownloadManager
 
 				return KxComparator::IsLess(name1, name2);
 			}
-			case ColumnID::Provider:
+			case ColumnID::ModSource:
 			{
 				using namespace NetworkManager;
-				NetworkProviderID id1 = entry1->GetProvider() ? entry1->GetProvider()->GetID() : NetworkProviderIDs::Invalid;
-				NetworkProviderID id2 = entry2->GetProvider() ? entry2->GetProvider()->GetID() : NetworkProviderIDs::Invalid;
+				ModSourceID id1 = entry1->GetModSource() ? entry1->GetModSource()->GetID() : ModSourceIDs::Invalid;
+				ModSourceID id2 = entry2->GetModSource() ? entry2->GetModSource()->GetID() : ModSourceIDs::Invalid;
 
 				return id1 < id2;
 			}
@@ -340,24 +340,24 @@ namespace Kortex::DownloadManager
 			KxMenu* providerMenu = new KxMenu();
 			if (entry && !entry->IsRunning())
 			{
-				for (auto& provider: INetworkManager::GetInstance()->GetProviders())
+				for (auto& modSource: INetworkManager::GetInstance()->GetModSources())
 				{
-					KxMenuItem* item = providerMenu->Add(new KxMenuItem(provider->GetName(), wxEmptyString, wxITEM_CHECK));
-					item->Check(provider.get() == entry->GetProvider());
-					item->Bind(KxEVT_MENU_SELECT, [entry, &provider](KxMenuEvent& event)
+					KxMenuItem* item = providerMenu->Add(new KxMenuItem(modSource->GetName(), wxEmptyString, wxITEM_CHECK));
+					item->Check(modSource.get() == entry->GetModSource());
+					item->Bind(KxEVT_MENU_SELECT, [entry, &modSource](KxMenuEvent& event)
 					{
-						entry->SetProvider(provider.get());
+						entry->SetModSource(modSource.get());
 						entry->Save();
 					});
 				}
 			}
 
-			KxMenuItem* item = contextMenu.Add(providerMenu, KTr("DownloadManager.Menu.SetProvider"));
+			KxMenuItem* item = contextMenu.Add(providerMenu, KTr("DownloadManager.Menu.SetModSource"));
 			item->Enable(providerMenu->GetMenuItemCount() != 0);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::QueryInfo, KTr("DownloadManager.Menu.QueryInfo")));
-			item->Enable(entry && !entry->IsRunning() && entry->HasProvider());
+			item->Enable(entry && !entry->IsRunning() && entry->HasModSource());
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ShowChangeLog, KTr("DownloadManager.Menu.ShowChangeLog")));
@@ -419,7 +419,7 @@ namespace Kortex::DownloadManager
 				item->Check(assocOK);
 				item->SetBitmap(KGetBitmap(KIMG_SITE_NEXUS));
 			}
-			if (entry && entry->IsProviderOfType<NetworkManager::NexusProvider>())
+			if (entry && entry->IsModSourceOfType<NetworkManager::NexusProvider>())
 			{
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::CopyNXM, KTr("DownloadManager.Menu.CopyNXM")));
 			}

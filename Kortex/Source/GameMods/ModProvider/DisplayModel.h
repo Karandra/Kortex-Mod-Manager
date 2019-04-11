@@ -15,7 +15,7 @@ namespace Kortex::ModProvider
 			};
 
 		protected:
-			ModSourceStore& m_ProviderStore;
+			ModSourceStore& m_ModSourceStore;
 			bool m_IsModified = false;
 
 		protected:
@@ -33,8 +33,8 @@ namespace Kortex::ModProvider
 			void OnActivate(KxDataViewEvent& event);
 
 		public:
-			DisplayModel(ModSourceStore& providerStore)
-				:m_ProviderStore(providerStore)
+			DisplayModel(ModSourceStore& store)
+				:m_ModSourceStore(store)
 			{
 			}
 

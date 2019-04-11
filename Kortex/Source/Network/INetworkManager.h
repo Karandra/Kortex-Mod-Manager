@@ -35,9 +35,9 @@ namespace Kortex
 			virtual void OnSetToolBarButton(KxAuiToolBarItem* button) = 0;
 			virtual void OnToolBarButton(KxAuiToolBarEvent& event) = 0;
 
-			template<class T> T& AddProvider()
+			template<class T> T& AddModSource()
 			{
-				INetworkModSource::Vector& items = GetProviders();
+				INetworkModSource::Vector& items = GetModSources();
 				return static_cast<T&>(*items.emplace_back(INetworkModSource::Create<T>(items.size())));
 			}
 
@@ -48,18 +48,18 @@ namespace Kortex
 			virtual const NetworkManager::Config& GetConfig() const = 0;
 			virtual wxString GetCacheFolder() const = 0;
 		
-			virtual const INetworkModSource::Vector& GetProviders() const = 0;
-			virtual INetworkModSource::Vector& GetProviders() = 0;
+			virtual const INetworkModSource::Vector& GetModSources() const = 0;
+			virtual INetworkModSource::Vector& GetModSources() = 0;
 
-			virtual INetworkModSource* GetDefaultProvider() const = 0;
+			virtual INetworkModSource* GetDefaultModSource() const = 0;
 			bool IsDefaultProviderAvailable() const;
-			NetworkProviderID GetDefaultProviderID() const;
-		
-			virtual INetworkModSource* FindProvider(const wxString& name) const = 0;
-			virtual INetworkModSource* GetProvider(NetworkProviderID providerID) const = 0;
-			bool HasProvider(NetworkProviderID providerID) const
+			ModSourceID GetDefaultProviderID() const;
+			
+			virtual INetworkModSource* FindModSource(const wxString& name) const = 0;
+			virtual INetworkModSource* GetModSource(ModSourceID sourceID) const = 0;
+			bool HasModSource(ModSourceID sourceID) const
 			{
-				return GetProvider(providerID) != nullptr;
+				return GetModSource(sourceID) != nullptr;
 			}
 	
 			virtual void OnAuthStateChanged() = 0;

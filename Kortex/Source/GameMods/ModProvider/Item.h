@@ -32,12 +32,12 @@ namespace Kortex
 			{
 			}
 
-			ModSourceItem(INetworkModSource* provider, const wxString& url)
-				:m_ID(provider), m_Data(url)
+			ModSourceItem(INetworkModSource* modSource, const wxString& url)
+				:m_ID(modSource), m_Data(url)
 			{
 			}
-			ModSourceItem(INetworkModSource* provider, NetworkModInfo id)
-				:m_ID(provider), m_Data(id)
+			ModSourceItem(INetworkModSource* modSource, NetworkModInfo id)
+				:m_ID(modSource), m_Data(id)
 			{
 			}
 
@@ -48,23 +48,23 @@ namespace Kortex
 			void Load(const KxXMLNode& node);
 			void Save(KxXMLNode& node) const;
 
-			INetworkModSource* GetProvider() const;
-			void SetProvider(INetworkModSource& provider)
+			INetworkModSource* GetModSource() const;
+			void SetModSource(INetworkModSource& modSource)
 			{
-				m_ID = &provider;
+				m_ID = &modSource;
 			}
-			template<class T> void SetProvider()
+			template<class T> void SetModSource()
 			{
 				m_ID = T::GetInstance();
 			}
-			bool TryGetProvider(INetworkModSource*& provider) const
+			bool TryGetModSource(INetworkModSource*& modSource) const
 			{
-				provider = GetProvider();
-				return provider != nullptr;
+				modSource = GetModSource();
+				return modSource != nullptr;
 			}
-			bool HasProvider() const
+			bool HasModSource() const
 			{
-				return GetProvider() != nullptr;
+				return GetModSource() != nullptr;
 			}
 
 			wxString GetName() const;

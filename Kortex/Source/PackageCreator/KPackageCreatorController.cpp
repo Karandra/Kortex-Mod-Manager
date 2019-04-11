@@ -164,7 +164,7 @@ void KPackageCreatorController::CreateProjectFromModEntry(const Kortex::IGameMod
 	info.SetVersion(modEntry.GetVersion());
 	info.SetAuthor(modEntry.GetAuthor());
 	info.SetDescription(modEntry.GetDescription());
-	info.GetProviderStore() = modEntry.GetProviderStore();
+	info.GetModSourceStore() = modEntry.GetModSourceStore();
 	info.GetTagStore() = modEntry.GetTagStore();
 
 	/* Interface */

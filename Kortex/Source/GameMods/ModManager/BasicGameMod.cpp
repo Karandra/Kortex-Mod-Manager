@@ -17,27 +17,27 @@ namespace
 {
 	using namespace Kortex;
 
-	template<class T> void LoadOldSite(ModSourceStore& store, KxXMLNode& node, const wxString& attributeName, const wxString& providerName)
+	template<class T> void LoadOldSite(ModSourceStore& store, KxXMLNode& node, const wxString& attributeName, const wxString& sourceName)
 	{
 		ModID modID = node.GetAttributeInt(attributeName, ModID::GetInvalidValue());
 		if (modID.HasValue())
 		{
-			auto AddName = [&providerName](ModSourceItem& item)
+			auto AddName = [&sourceName](ModSourceItem& item)
 			{
 				if (!item.HasName())
 				{
-					item.SetName(providerName);
+					item.SetName(sourceName);
 				}
 			};
 
-			if (T* provider = T::GetInstance())
+			if (T* modSource = T::GetInstance())
 			{
-				ModSourceItem& item = store.AssignWith(*provider, modID);
+				ModSourceItem& item = store.AssignWith(*modSource, modID);
 				AddName(item);
 			}
 			else
 			{
-				ModSourceItem& item = store.AssignWith(providerName, modID);
+				ModSourceItem& item = store.AssignWith(sourceName, modID);
 				AddName(item);
 			}
 		}
@@ -132,11 +132,11 @@ namespace Kortex::ModManager
 					KxXMLNode oldSitesNode = rootNode.GetFirstChildElement("Sites");
 					if (oldSitesNode.IsOK())
 					{
-						LoadOldSites(m_ProviderStore, oldSitesNode);
+						LoadOldSites(m_ModSourceStore, oldSitesNode);
 					}
 					else
 					{
-						m_ProviderStore.LoadAssign(rootNode.GetFirstChildElement("Provider"));
+						m_ModSourceStore.LoadAssign(rootNode.GetFirstChildElement("Source"));
 					}
 
 					// Time
@@ -190,7 +190,7 @@ namespace Kortex::ModManager
 		m_IsDescriptionChanged = true;
 
 		m_TagStore = info.GetTagStore();
-		m_ProviderStore = info.GetProviderStore();
+		m_ModSourceStore = info.GetModSourceStore();
 		return true;
 	}
 	
@@ -266,11 +266,11 @@ namespace Kortex::ModManager
 				return true;
 			});
 
-			// Sites
-			if (!m_ProviderStore.IsEmpty())
+			// Source
+			if (!m_ModSourceStore.IsEmpty())
 			{
-				KxXMLNode providersNode = rootNode.NewElement("Provider");
-				m_ProviderStore.Save(providersNode);
+				KxXMLNode providersNode = rootNode.NewElement("Source");
+				m_ModSourceStore.Save(providersNode);
 			}
 
 			// Time

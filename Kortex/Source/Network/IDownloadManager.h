@@ -63,7 +63,7 @@ namespace Kortex
 			virtual bool RemoveDownload(IDownloadEntry& download) = 0;
 			virtual bool QueueDownload(const IModDownloadInfo& downloadInfo,
 									   const IModFileInfo& fileInfo,
-									   const INetworkModSource* provider,
+									   const INetworkModSource* modSource,
 									   const GameID& id = GameIDs::NullGameID
 			) = 0;
 			virtual bool QueueFromOutside(const wxString& link) = 0;

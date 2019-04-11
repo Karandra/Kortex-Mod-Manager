@@ -22,22 +22,22 @@ namespace Kortex
 			static KImageEnum GetGenericIcon();
 
 		private:
-			template<class T> static std::unique_ptr<T> Create(NetworkProviderID id)
+			template<class T> static std::unique_ptr<T> Create(ModSourceID id)
 			{
-				auto provider = std::make_unique<T>();
-				provider->SetID(id);
-				provider->Init();
-				return provider;
+				auto modSource = std::make_unique<T>();
+				modSource->SetID(id);
+				modSource->Init();
+				return modSource;
 			}
 
 		private:
 			KxSecretDefaultStoreService m_LoginStore;
 			wxBitmap m_UserPicture;
-			NetworkProviderID m_ID = NetworkProviderIDs::Invalid;
+			ModSourceID m_ID = ModSourceIDs::Invalid;
 			bool m_RequiresAuthentication = true;
 
 		private:
-			void SetID(NetworkProviderID id)
+			void SetID(ModSourceID id)
 			{
 				m_ID = id;
 			}
@@ -61,7 +61,7 @@ namespace Kortex
 			virtual ~INetworkModSource();
 
 		public:
-			NetworkProviderID GetID() const
+			ModSourceID GetID() const
 			{
 				return m_ID;
 			}

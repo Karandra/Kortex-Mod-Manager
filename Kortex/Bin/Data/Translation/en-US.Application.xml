@@ -535,7 +535,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkModule.Name">Network</String>
 
 		<!-- Network -->
-		<String ID="Network.Provider">Provider</String>
+		<String ID="Network.ModSource">Mod source</String>
 
 		<String ID="Network.AuthCaption">Authentication on %1</String>
 		<String ID="Network.AuthMessage">Enter your username and password to log in to your account.</String>
@@ -577,7 +577,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.Resume">Resume</String>
 		<String ID="DownloadManager.Menu.Restart">Restart</String>
 
-		<String ID="DownloadManager.Menu.SetProvider">Change provider</String>
+		<String ID="DownloadManager.Menu.SetModSource">Change mod source</String>
 		<String ID="DownloadManager.Menu.QueryInfo">Query info</String>
 		<String ID="DownloadManager.Menu.ShowChangeLog">Show change log</String>
 

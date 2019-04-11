@@ -17,17 +17,17 @@ namespace Kortex
 		SetTargetGame(IGameInstance::GetTemplate(id));
 	}
 	
-	bool IDownloadEntry::HasProvider() const
+	bool IDownloadEntry::HasModSource() const
 	{
-		return GetProvider() != nullptr;
+		return GetModSource() != nullptr;
 	}
-	bool IDownloadEntry::IsProviderOfType(NetworkProviderID providerID) const
+	bool IDownloadEntry::IsModSourceOfType(ModSourceID sourceID) const
 	{
-		if (const INetworkModSource* provider = GetProvider())
+		if (const INetworkModSource* modSource = GetModSource())
 		{
-			return provider->GetID() == providerID;
+			return modSource->GetID() == sourceID;
 		}
-		return providerID == NetworkProviderIDs::Invalid;
+		return sourceID == ModSourceIDs::Invalid;
 	}
 
 	bool IDownloadEntry::Save() const

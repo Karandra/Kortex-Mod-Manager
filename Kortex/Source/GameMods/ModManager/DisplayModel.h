@@ -72,7 +72,7 @@ namespace Kortex::ModManager
 			{
 				return m_ShowPriorityGroups && !m_ShowPriorityGroupsSuppress;
 			}
-			NetworkProviderID ColumnToSpecialSite(int column) const;
+			ModSourceID ColumnToSpecialSite(int column) const;
 			wxString FormatTagList(const IGameMod& entry) const;
 
 			virtual void OnInitControl() override;

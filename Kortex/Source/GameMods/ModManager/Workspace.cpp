@@ -1180,7 +1180,7 @@ namespace Kortex::ModManager
 			}
 			case KMC_ID_MOD_EDIT_SITES:
 			{
-				ModProvider::Dialog dialog(GetMainWindow(), modEntry->GetProviderStore());
+				ModProvider::Dialog dialog(GetMainWindow(), modEntry->GetModSourceStore());
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{

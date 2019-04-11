@@ -34,7 +34,7 @@ namespace Kortex::ModManager
 			bool m_IsDescriptionChanged = false;
 			mutable wxString m_Description;
 
-			ModSourceStore m_ProviderStore;
+			ModSourceStore m_ModSourceStore;
 			ModTagStore m_TagStore;
 			wxString m_PriorityGroupTag;
 
@@ -131,13 +131,13 @@ namespace Kortex::ModManager
 				m_TimeUninstall = date;
 			}
 		
-			const ModSourceStore& GetProviderStore() const override
+			const ModSourceStore& GetModSourceStore() const override
 			{
-				return m_ProviderStore;
+				return m_ModSourceStore;
 			}
-			ModSourceStore& GetProviderStore() override
+			ModSourceStore& GetModSourceStore() override
 			{
-				return m_ProviderStore;
+				return m_ModSourceStore;
 			}
 
 			const ModTagStore& GetTagStore() const override

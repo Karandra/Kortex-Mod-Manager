@@ -66,7 +66,7 @@ namespace Kortex
 
 	bool INetworkModSource::IsDefault() const
 	{
-		return this == INetworkManager::GetInstance()->GetDefaultProvider();
+		return this == INetworkManager::GetInstance()->GetDefaultModSource();
 	}
 
 	wxString INetworkModSource::GetCacheFolder() const

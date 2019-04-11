@@ -27,7 +27,7 @@ namespace Kortex::DownloadManager
 			std::unique_ptr<KxCURLSession> m_Session;
 
 			const IGameInstance* m_TargetGame = nullptr;
-			const INetworkModSource* m_Provider = nullptr;
+			const INetworkModSource* m_ModSource = nullptr;
 			wxDateTime m_Date;
 			int64_t m_DownloadedSize = 0;
 			int64_t m_Speed = 0;
@@ -54,18 +54,18 @@ namespace Kortex::DownloadManager
 			DefaultDownloadEntry();
 			DefaultDownloadEntry(const IModDownloadInfo& downloadInfo,
 								 const IModFileInfo& fileInfo,
-								 const INetworkModSource* provider,
+								 const INetworkModSource* modSource,
 								 const GameID& id);
 			virtual ~DefaultDownloadEntry();
 
 		public:
 			bool IsOK() const override
 			{
-				return m_Provider && m_TargetGame && m_DownloadInfo->IsOK() && m_FileInfo->IsOK();
+				return m_ModSource && m_TargetGame && m_DownloadInfo->IsOK() && m_FileInfo->IsOK();
 			}
 			wxString GetFullPath() const override;
 			wxString GetMetaFilePath() const override;
-		
+			
 			const IGameInstance* GetTargetGame() const override
 			{
 				return m_TargetGame;
@@ -78,15 +78,15 @@ namespace Kortex::DownloadManager
 			const IGameMod* GetMod() const override;
 			bool IsInstalled() const override;
 
-			const INetworkModSource* GetProvider() const override
+			const INetworkModSource* GetModSource() const override
 			{
-				return m_Provider;
+				return m_ModSource;
 			}
-			void SetProvider(const INetworkModSource* provider) override
+			void SetModSource(const INetworkModSource* modSource) override
 			{
-				m_Provider = provider;
+				m_ModSource = modSource;
 			}
-		
+			
 			wxDateTime GetDate() const override
 			{
 				return m_Date;
@@ -95,7 +95,7 @@ namespace Kortex::DownloadManager
 			{
 				m_Date = date;
 			}
-		
+			
 			int64_t GetDownloadedSize() const override
 			{
 				return m_DownloadedSize;
@@ -115,7 +115,7 @@ namespace Kortex::DownloadManager
 			}
 			bool CanRestart() const override
 			{
-				return !IsRunning() && m_Provider && m_FileInfo->IsOK();
+				return !IsRunning() && m_ModSource && m_FileInfo->IsOK();
 			}
 
 			const IModFileInfo& GetFileInfo() const override
@@ -173,7 +173,7 @@ namespace Kortex::DownloadManager
 			void Run(int64_t resumeFrom = 0) override;
 			bool Restart() override;
 
-			// Restores download info depending of this download provider and its filename
+			// Restores download info depending of this download modSource and its filename
 			// which is set in 'DefaultDownloadEntry::DeSerializeDefault' if something goes wrong.
 			// Restoration is performed by analyzing file name to get file id and mod id
 			// and querying rest of the information form internet.

@@ -8,16 +8,16 @@ namespace Kortex::ModProvider
 {
 	void Dialog::CreateAddMenu()
 	{
-		// Add known provider
-		for (const auto& provider: INetworkManager::GetInstance()->GetProviders())
+		// Add known modSource
+		for (const auto& modSource: INetworkManager::GetInstance()->GetModSources())
 		{
-			KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(provider->GetName()));
-			item->SetBitmap(KGetBitmap(provider->GetIcon()));
-			item->Enable(!m_ProviderStore.HasItem(*provider));
+			KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(modSource->GetName()));
+			item->SetBitmap(KGetBitmap(modSource->GetIcon()));
+			item->Enable(!m_ModSourceStore.HasItem(*modSource));
 
-			item->Bind(KxEVT_MENU_SELECT, [this, &provider](KxMenuEvent& event)
+			item->Bind(KxEVT_MENU_SELECT, [this, &modSource](KxMenuEvent& event)
 			{
-				OnAddItem(m_ProviderStore.AssignWith(*provider, ModID()));
+				OnAddItem(m_ModSourceStore.AssignWith(*modSource, ModID()));
 			});
 		}
 
@@ -27,7 +27,7 @@ namespace Kortex::ModProvider
 		item->SetBitmap(KGetBitmap(INetworkModSource::GetGenericIcon()));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
-			OnAddItem(m_ProviderStore.AssignWith(wxEmptyString, wxEmptyString));
+			OnAddItem(m_ModSourceStore.AssignWith(wxEmptyString, wxEmptyString));
 		});
 	}
 	void Dialog::OnAddItem(ModSourceItem& node)
@@ -36,7 +36,7 @@ namespace Kortex::ModProvider
 
 		RefreshItems();
 		SelectItem(MakeItem(node));
-		GetView()->EditItem(MakeItem(node), GetView()->GetColumn(node.HasProvider() ? ColumnID::Value : ColumnID::Name));
+		GetView()->EditItem(MakeItem(node), GetView()->GetColumn(node.HasModSource() ? ColumnID::Value : ColumnID::Name));
 	}
 
 	void Dialog::OnSelectItem(KxDataViewEvent& event)
@@ -53,7 +53,7 @@ namespace Kortex::ModProvider
 		ModSourceItem* node = GetNode(GetView()->GetSelection());
 		if (node)
 		{
-			m_ProviderStore.RemoveItem(node->GetName());
+			m_ModSourceStore.RemoveItem(node->GetName());
 			m_IsModified = true;
 			
 			RefreshItems();
@@ -61,8 +61,8 @@ namespace Kortex::ModProvider
 		}
 	}
 
-	Dialog::Dialog(wxWindow* parent, ModSourceStore& providerStore)
-		:DisplayModel(providerStore)
+	Dialog::Dialog(wxWindow* parent, ModSourceStore& store)
+		:DisplayModel(store)
 	{
 		if (KxStdDialog::Create(parent, KxID_NONE, KTr("ModManager.SitesEditor"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 		{

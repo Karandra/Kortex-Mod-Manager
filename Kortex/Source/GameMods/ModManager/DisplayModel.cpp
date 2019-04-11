@@ -40,7 +40,7 @@ namespace
 		MAX
 	};
 
-	using SitesRenderer = KxDataViewImageListRenderer<Kortex::NetworkProviderIDs::MAX_SYSTEM + 1>;
+	using SitesRenderer = KxDataViewImageListRenderer<Kortex::ModSourceIDs::MAX_SYSTEM + 1>;
 	using SitesValue = typename SitesRenderer::ValueT;
 }
 
@@ -59,9 +59,9 @@ namespace Kortex::ModManager
 		};
 		return false;
 	}
-	NetworkProviderID DisplayModel::ColumnToSpecialSite(int column) const
+	ModSourceID DisplayModel::ColumnToSpecialSite(int column) const
 	{
-		return (NetworkProviderID)(column - ColumnID::Sites - 1);
+		return (ModSourceID)(column - ColumnID::Sites - 1);
 	}
 	wxString DisplayModel::FormatTagList(const IGameMod& entry) const
 	{
@@ -114,7 +114,7 @@ namespace Kortex::ModManager
 	
 		{
 			int spacing = 1;
-			int width = (spacing +  16) * (NetworkProviderIDs::MAX_SYSTEM + 1);
+			int width = (spacing +  16) * (ModSourceIDs::MAX_SYSTEM + 1);
 			auto info = GetView()->AppendColumn<SitesRenderer>(KTr("ModManager.ModList.Sites"), ColumnID::Sites, KxDATAVIEW_CELL_INERT, width, defaultFlagsNoSort);
 
 			info.GetRenderer()->SetImageList(&IApplication::GetInstance()->GetImageList());
@@ -122,13 +122,13 @@ namespace Kortex::ModManager
 			info.GetRenderer()->SetAlignment(wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL);
 		}
 
-		for (const auto& provider: INetworkManager::GetInstance()->GetProviders())
+		for (const auto& modSource: INetworkManager::GetInstance()->GetModSources())
 		{
-			int id = ColumnID::Sites + provider->GetID() + 1;
+			int id = ColumnID::Sites + modSource->GetID() + 1;
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, id, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
 
-			info.GetColumn()->SetTitle(provider->GetName());
-			info.GetColumn()->SetBitmap(KGetBitmap(provider->GetIcon()));
+			info.GetColumn()->SetTitle(modSource->GetName());
+			info.GetColumn()->SetBitmap(KGetBitmap(modSource->GetIcon()));
 		}
 
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.DateInstall"), ColumnID::DateInstall, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
@@ -349,16 +349,16 @@ namespace Kortex::ModManager
 				SitesValue::ArrayT list;
 				SitesValue::ClearArray(list);
 				
-				mod->GetProviderStore().Visit([&list](const ModSourceItem& item)
+				mod->GetModSourceStore().Visit([&list](const ModSourceItem& item)
 				{
-					INetworkModSource* provider = nullptr;
-					if (item.TryGetProvider(provider))
+					INetworkModSource* modSource = nullptr;
+					if (item.TryGetModSource(modSource))
 					{
-						list[provider->GetID()] = provider->GetIcon();
+						list[modSource->GetID()] = modSource->GetIcon();
 					}
 					else
 					{
-						list[NetworkProviderIDs::MAX_SYSTEM] = INetworkModSource::GetGenericIcon();
+						list[ModSourceIDs::MAX_SYSTEM] = INetworkModSource::GetGenericIcon();
 					}
 					return true;
 				});
@@ -369,11 +369,11 @@ namespace Kortex::ModManager
 			case ColumnID::Sites_NexusID:
 			case ColumnID::Sites_LoversLabID:
 			{
-				const NetworkProviderID index = (NetworkProviderID)(column->GetID() - ColumnID::Sites - 1);
-				const INetworkModSource* provider = INetworkManager::GetInstance()->GetProvider(index);
-				if (provider)
+				const ModSourceID index = (ModSourceID)(column->GetID() - ColumnID::Sites - 1);
+				const INetworkModSource* modSource = INetworkManager::GetInstance()->GetModSource(index);
+				if (modSource)
 				{
-					const ModSourceItem* providerItem = mod->GetProviderStore().GetItem(*provider);
+					const ModSourceItem* providerItem = mod->GetModSourceStore().GetItem(*modSource);
 					
 					NetworkModInfo modInfo;
 					if (providerItem && providerItem->TryGetModInfo(modInfo))
@@ -652,11 +652,11 @@ namespace Kortex::ModManager
 			{
 				if (IsSpecialSiteColumn(columnID))
 				{
-					INetworkModSource* provider = INetworkManager::GetInstance()->GetProvider(ColumnToSpecialSite(columnID));
-					if (provider)
+					INetworkModSource* modSource = INetworkManager::GetInstance()->GetModSource(ColumnToSpecialSite(columnID));
+					if (modSource)
 					{
-						ModSourceItem* item1 = entry1->GetProviderStore().GetItem(*provider);
-						ModSourceItem* item2 = entry2->GetProviderStore().GetItem(*provider);
+						ModSourceItem* item1 = entry1->GetModSourceStore().GetItem(*modSource);
+						ModSourceItem* item2 = entry2->GetModSourceStore().GetItem(*modSource);
 
 						return item1 && item2 && (item1->GetModInfo().GetModID().GetValue() < item2->GetModInfo().GetModID().GetValue());
 					}
@@ -760,14 +760,14 @@ namespace Kortex::ModManager
 			int columnID = column->GetID();
 
 			// If this is a site open click
-			NetworkProviderID providerID = ColumnToSpecialSite(columnID);
+			ModSourceID sourceID = ColumnToSpecialSite(columnID);
 			if (IsSpecialSiteColumn(columnID))
 			{
-				const ModSourceStore& store = entry->GetProviderStore();
-				const INetworkModSource* provider = INetworkManager::GetInstance()->GetProvider(providerID);
-				if (provider)
+				const ModSourceStore& store = entry->GetModSourceStore();
+				const INetworkModSource* modSource = INetworkManager::GetInstance()->GetModSource(sourceID);
+				if (modSource)
 				{
-					if (const ModSourceItem* providerItem = store.GetItem(*provider))
+					if (const ModSourceItem* providerItem = store.GetItem(*modSource))
 					{
 						KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
 					}
@@ -800,7 +800,7 @@ namespace Kortex::ModManager
 				}
 				case ColumnID::Sites:
 				{
-					const ModSourceStore& store = entry->GetProviderStore();
+					const ModSourceStore& store = entry->GetModSourceStore();
 					if (!store.IsEmpty())
 					{
 						KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());

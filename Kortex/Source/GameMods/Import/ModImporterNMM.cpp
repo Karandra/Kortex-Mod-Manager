@@ -210,7 +210,7 @@ namespace Kortex::ModManager
 			{
 				modID = infoNode.GetFirstChildElement("Id").GetValueInt(modID.GetValue());
 			}
-			mod.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(modID);
+			mod.GetModSourceStore().AssignWith<NetworkManager::NexusProvider>(modID);
 
 			// Install date
 			mod.SetInstallTime(KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
@@ -292,7 +292,7 @@ namespace Kortex::ModManager
 
 				IDownloadEntry& entry = manager->NewDownload();
 				entry.SetTargetGame(m_TargetGame);
-				entry.SetProvider(NetworkManager::NexusProvider::GetInstance());
+				entry.SetModSource(NetworkManager::NexusProvider::GetInstance());
 				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
 				entry.GetDownloadInfo().SetURL(infoNode.GetFirstChildElement("Website").GetValue());

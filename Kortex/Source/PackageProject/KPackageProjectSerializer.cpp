@@ -10,7 +10,7 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 	using namespace Kortex::NetworkManager;
 
 	long long id = -1;
-	Kortex::INetworkModSource* provider = nullptr;
+	Kortex::INetworkModSource* modSource = nullptr;
 
 	// https://regex101.com
 	wxString regEx = wxString::FromUTF8Unchecked(u8R"((?:http:\/\/)?(?:https:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)(?:.*\/)(?:[^\d]+)(\d+))");
@@ -22,15 +22,15 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 		wxString siteName = KAux::ExtractDomainName(url);
 		if (siteName == "tesall.ru")
 		{
-			provider = Kortex::NetworkManager::TESALLProvider::GetInstance();
+			modSource = Kortex::NetworkManager::TESALLProvider::GetInstance();
 		}
 		else if (siteName == "nexusmods.com" || siteName.AfterFirst('.') == "nexusmods.com" || siteName.Contains("nexus"))
 		{
-			provider = Kortex::NetworkManager::NexusProvider::GetInstance();
+			modSource = Kortex::NetworkManager::NexusProvider::GetInstance();
 		}
 		else if (siteName == "loverslab.com")
 		{
-			provider = Kortex::NetworkManager::LoversLabProvider::GetInstance();
+			modSource = Kortex::NetworkManager::LoversLabProvider::GetInstance();
 		}
 		KxUtility::SetIfNotNull(domainNameOut, siteName);
 
@@ -38,9 +38,9 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 		reURL.GetMatch(url, 2).ToLongLong(&id);
 	}
 
-	if (provider)
+	if (modSource)
 	{
-		return Kortex::ModSourceItem(provider->GetName(), Kortex::ModID(id));
+		return Kortex::ModSourceItem(modSource->GetName(), Kortex::ModID(id));
 	}
 	return Kortex::ModSourceItem();
 }

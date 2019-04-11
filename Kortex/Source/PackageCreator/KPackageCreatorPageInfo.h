@@ -64,7 +64,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		void CalculateMemoryRequiredForCompression(int nPower);
 		template<class T> void OnOpenSite(wxTextUrlEvent& event)
 		{
-			Kortex::ModSourceStore& store = GetProjectInfo().GetProviderStore();
+			Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
 
 			wxString url = store.GetModURL(T::GetInstance()->GetName());
 			if (!url.IsEmpty())
@@ -76,7 +76,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		template<class T> void OnEditSite(wxCommandEvent& event)
 		{
 			KxTextBox* textBox = static_cast<KxTextBox*>(event.GetEventObject());
-			Kortex::ModSourceStore& store = GetProjectInfo().GetProviderStore();
+			Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
 
 			NetworkModInfo modInfo;
 			modInfo.FromString(textBox->GetValue());
@@ -84,16 +84,16 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 
 			event.Skip();
 		}
-		template<class T> KxTextBox* AddProviderControl(wxSizer* sizer)
+		template<class T> KxTextBox* AddModSourceControl(wxSizer* sizer)
 		{
-			Kortex::INetworkModSource* provider = T::GetInstance();
-			if (provider)
+			Kortex::INetworkModSource* modSource = T::GetInstance();
+			if (modSource)
 			{
 				
-				wxString name = provider->GetName().BeforeLast('.');
+				wxString name = modSource->GetName().BeforeLast('.');
 				if (name.IsEmpty())
 				{
-					name = provider->GetName();
+					name = modSource->GetName();
 				}
 
 				KxLabel* label = nullptr;
@@ -101,7 +101,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 				control->SetValidator(NetworkModInfo::GetValidator());
 
 				label->ToggleWindowStyle(KxLABEL_HYPERLINK);
-				label->SetBitmap(KGetBitmap(provider->GetIcon()));
+				label->SetBitmap(KGetBitmap(modSource->GetIcon()));
 				label->Bind(wxEVT_TEXT_URL, &KPackageCreatorPageInfo::OnOpenSite<T>, this);
 
 				return control;

@@ -540,7 +540,7 @@
 		<String ID="NetworkModule.Name">Модуль работы с сетью</String>
 
 		<!-- Network -->
-		<String ID="Network.Provider">Провайдер</String>
+		<String ID="Network.ModSource">Источник модов</String>
 
 		<String ID="Network.AuthCaption">Аутентификация на %1</String>
 		<String ID="Network.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
@@ -582,7 +582,7 @@
 		<String ID="DownloadManager.Menu.Resume">Продолжить</String>
 		<String ID="DownloadManager.Menu.Restart">Перезапустить</String>
 
-		<String ID="DownloadManager.Menu.SetProvider">Изменить провайдер</String>
+		<String ID="DownloadManager.Menu.SetModSource">Сменить источник мода</String>
 		<String ID="DownloadManager.Menu.QueryInfo">Запросить информацию</String>
 		<String ID="DownloadManager.Menu.ShowChangeLog">Показать список изменений</String>
 

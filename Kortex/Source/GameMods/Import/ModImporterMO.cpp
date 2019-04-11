@@ -291,7 +291,7 @@ namespace Kortex::ModManager
 					ModID nexusID = modINI.GetValueInt("General", "modid", ModID::GetInvalidValue());
 					if (nexusID)
 					{
-						mod.GetProviderStore().AssignWith<NetworkManager::NexusProvider>(nexusID);
+						mod.GetModSourceStore().AssignWith<NetworkManager::NexusProvider>(nexusID);
 					}
 
 					// Install date
@@ -413,7 +413,7 @@ namespace Kortex::ModManager
 
 				IDownloadEntry& entry = manager->NewDownload();
 				entry.SetTargetGameID(ini.GetValue("General", "gameName"));
-				entry.SetProvider(INetworkManager::GetInstance()->FindProvider(ini.GetValue("General", "repository")));
+				entry.SetModSource(INetworkManager::GetInstance()->FindModSource(ini.GetValue("General", "repository")));
 				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
 				entry.GetDownloadInfo().SetURL(ini.GetValue("General", "url").AfterFirst('"').BeforeLast('"'));

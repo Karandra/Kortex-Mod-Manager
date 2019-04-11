@@ -5,7 +5,7 @@ namespace Kortex::NetworkManager
 {
 	namespace Internal
 	{
-		enum ProviderIDs
+		enum ModSourceIDs
 		{
 			Nexus,
 			LoversLab,
@@ -32,6 +32,6 @@ namespace Kortex
 	using ModID = Utility::UniqueID::IntegerID<int64_t, -1, false, NetworkManager::Internal::Tags::ModID>;
 	using ModFileID = Utility::UniqueID::IntegerID<int64_t, -1, false, NetworkManager::Internal::Tags::ModFileID>;
 	
-	using NetworkProviderID = intptr_t;
-	using NetworkProviderIDs = NetworkManager::Internal::ProviderIDs;
+	using ModSourceID = intptr_t;
+	using ModSourceIDs = NetworkManager::Internal::ModSourceIDs;
 }

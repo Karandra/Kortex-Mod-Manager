@@ -11,9 +11,9 @@ namespace Kortex::NetworkManager
 	class TESALLProvider: public INetworkModSource, public KxSingletonPtr<TESALLProvider>
 	{
 		public:
-			static constexpr NetworkProviderID GetTypeID()
+			static constexpr ModSourceID GetTypeID()
 			{
-				return NetworkProviderIDs::TESALL;
+				return ModSourceIDs::TESALL;
 			}
 
 		protected:

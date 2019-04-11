@@ -57,8 +57,8 @@ namespace Kortex
 			virtual wxDateTime GetUninstallTime() const = 0;
 			virtual void SetUninstallTime(const wxDateTime& date) = 0;
 
-			virtual const ModSourceStore& GetProviderStore() const = 0;
-			virtual ModSourceStore& GetProviderStore() = 0;
+			virtual const ModSourceStore& GetModSourceStore() const = 0;
+			virtual ModSourceStore& GetModSourceStore() = 0;
 
 			virtual const ModTagStore& GetTagStore() const = 0;
 			virtual ModTagStore& GetTagStore() = 0;

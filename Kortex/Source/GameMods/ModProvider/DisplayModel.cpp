@@ -16,8 +16,8 @@ namespace Kortex::ModProvider
 	{
 		if (item.IsTreeRootItem())
 		{
-			children.reserve(m_ProviderStore.GetSize());
-			m_ProviderStore.Visit([&children](ModSourceItem& item)
+			children.reserve(m_ModSourceStore.GetSize());
+			m_ModSourceStore.Visit([&children](ModSourceItem& item)
 			{
 				children.push_back(&item);
 				return true;
@@ -38,7 +38,7 @@ namespace Kortex::ModProvider
 		const ModSourceItem* node = GetNode(item);
 		if (node)
 		{
-			if (node->HasProvider())
+			if (node->HasModSource())
 			{
 				return column->GetID() == ColumnID::Value;
 			}
@@ -70,7 +70,7 @@ namespace Kortex::ModProvider
 				}
 				case ColumnID::Value:
 				{
-					if (node->HasProvider())
+					if (node->HasModSource())
 					{
 						value = node->GetModInfo().ToString();
 					}
@@ -90,8 +90,8 @@ namespace Kortex::ModProvider
 		{
 			case ColumnID::Name:
 			{
-				INetworkModSource* provider = nullptr;
-				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetProvider(provider) ? provider->GetIcon() : INetworkModSource::GetGenericIcon()));
+				INetworkModSource* modSource = nullptr;
+				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetModSource(modSource) ? modSource->GetIcon() : INetworkModSource::GetGenericIcon()));
 				break;
 			}
 			case ColumnID::Value:
@@ -121,7 +121,7 @@ namespace Kortex::ModProvider
 			case ColumnID::Value:
 			{
 				wxString newValue = data.As<wxString>();
-				if (node->HasProvider())
+				if (node->HasModSource())
 				{
 					NetworkModInfo modInfo;
 					if (modInfo.FromString(newValue))
@@ -150,9 +150,9 @@ namespace Kortex::ModProvider
 		const ModSourceItem* node = GetNode(event.GetItem());
 		if (node)
 		{
-			// Allow edit both name and value for unknown providers (with URL),
-			// and restrict editing to modID only for known providers.
-			KxDataViewColumn* column = node->HasProvider() ? GetView()->GetColumnByID(ColumnID::Value) : event.GetColumn();
+			// Allow edit both name and value for unknown sources (with URL),
+			// and restrict editing to modID only for known sources.
+			KxDataViewColumn* column = node->HasModSource() ? GetView()->GetColumnByID(ColumnID::Value) : event.GetColumn();
 			if (column)
 			{
 				GetView()->EditItem(event.GetItem(), column);
@@ -161,7 +161,7 @@ namespace Kortex::ModProvider
 	}
 	void DisplayModel::ApplyChanges()
 	{
-		m_ProviderStore.RemoveIf([](ModSourceItem& item)
+		m_ModSourceStore.RemoveIf([](ModSourceItem& item)
 		{
 			return !item.IsOK();
 		});

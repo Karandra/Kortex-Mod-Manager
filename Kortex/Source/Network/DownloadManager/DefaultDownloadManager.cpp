@@ -227,13 +227,13 @@ namespace Kortex::DownloadManager
 	}
 	bool DefaultDownloadManager::QueueDownload(const IModDownloadInfo& downloadInfo,
 											   const IModFileInfo& fileInfo,
-											   const INetworkModSource* provider,
+											   const INetworkModSource* modSource,
 											   const GameID& id
 	)
 	{
 		if (downloadInfo.IsOK() && fileInfo.IsOK())
 		{
-			IDownloadEntry& entry = *m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>(downloadInfo, fileInfo, provider, id));
+			IDownloadEntry& entry = *m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>(downloadInfo, fileInfo, modSource, id));
 			AutoRenameIncrement(entry);
 
 			OnAddEntry(entry);

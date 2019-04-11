@@ -328,14 +328,14 @@ namespace Kortex::ModManager
 		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModByNetworkID(NetworkProviderID providerID, NetworkModInfo modInfo, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByNetworkID(ModSourceID sourceID, NetworkModInfo modInfo, intptr_t* index) const
 	{
-		if (INetworkModSource* provider = INetworkManager::GetInstance()->GetProvider(providerID))
+		if (INetworkModSource* modSource = INetworkManager::GetInstance()->GetModSource(sourceID))
 		{
 			intptr_t i = 0;
 			for (auto& entry: m_Mods)
 			{
-				ModSourceItem* item = entry->GetProviderStore().GetItem(*provider);
+				ModSourceItem* item = entry->GetModSourceStore().GetItem(*modSource);
 				if (item && item->GetModInfo() == modInfo)
 				{
 					KxUtility::SetIfNotNull(index, i);
@@ -457,7 +457,7 @@ namespace Kortex::ModManager
 
 			// Add sites
 			KxXMLNode sitesNode = rowNode.NewElement("td");
-			modEntry->GetProviderStore().Visit([&sitesNode](const ModSourceItem& item)
+			modEntry->GetModSourceStore().Visit([&sitesNode](const ModSourceItem& item)
 			{
 				KxXMLNode linkNode = sitesNode.NewElement("a");
 				linkNode.SetValue(item.GetName());

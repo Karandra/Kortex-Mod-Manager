@@ -16,16 +16,16 @@ namespace Kortex
 
 	bool INetworkManager::IsDefaultProviderAvailable() const
 	{
-		const INetworkModSource* provider = GetDefaultProvider();
-		if (provider && provider->IsAuthenticated())
+		const INetworkModSource* modSource = GetDefaultModSource();
+		if (modSource && modSource->IsAuthenticated())
 		{
 			return true;
 		}
 		return false;
 	}
-	NetworkProviderID INetworkManager::GetDefaultProviderID() const
+	ModSourceID INetworkManager::GetDefaultProviderID() const
 	{
-		const INetworkModSource* provider = GetDefaultProvider();
-		return provider ? provider->GetID() : NetworkProviderIDs::Invalid;
+		const INetworkModSource* modSource = GetDefaultModSource();
+		return modSource ? modSource->GetID() : ModSourceIDs::Invalid;
 	}
 }

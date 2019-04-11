@@ -119,7 +119,7 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 }
 void KPackageProjectSerializerSMI::AddSite(const wxString& url)
 {
-	Kortex::ModSourceStore& store = m_Project->GetInfo().GetProviderStore();
+	Kortex::ModSourceStore& store = m_Project->GetInfo().GetModSourceStore();
 
 	wxString siteName;
 	Kortex::ModSourceItem item = TryParseWebSite(url, &siteName);
@@ -362,7 +362,7 @@ void KPackageProjectSerializerSMI::ReadInfo3x()
 		wxString discussion = basicInfoNode.GetFirstChildElement("Discussion").GetValue();
 		if (!discussion.IsEmpty())
 		{
-			info.GetProviderStore().AssignWith("Discussion", discussion);
+			info.GetModSourceStore().AssignWith("Discussion", discussion);
 		}
 	}
 

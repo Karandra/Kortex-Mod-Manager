@@ -29,7 +29,7 @@ namespace Kortex::ModProvider
 			void OnCloseDialog(wxCloseEvent& event);
 
 		public:
-			Dialog(wxWindow* parent, ModSourceStore& providerStore);
+			Dialog(wxWindow* parent, ModSourceStore& store);
 			virtual ~Dialog();
 	};
 }

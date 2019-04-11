@@ -6,9 +6,9 @@ namespace Kortex
 {
 	bool ModSourceItem::IsOK() const
 	{
-		// Items with known provider valid if both provider and mod ID is valid.
+		// Items with known modSource valid if both modSource and mod ID is valid.
 		// Unknown items valid if at least name is present.
-		if (HasProvider())
+		if (HasModSource())
 		{
 			return HasModInfo();
 		}
@@ -53,24 +53,24 @@ namespace Kortex
 		}
 	}
 
-	INetworkModSource* ModSourceItem::GetProvider() const
+	INetworkModSource* ModSourceItem::GetModSource() const
 	{
-		if (auto provider = std::get_if<INetworkModSource*>(&m_ID))
+		if (auto modSource = std::get_if<INetworkModSource*>(&m_ID))
 		{
-			return *provider;
+			return *modSource;
 		}
 		else if (const wxString* name = std::get_if<wxString>(&m_ID))
 		{
-			return INetworkManager::GetInstance()->FindProvider(*name);
+			return INetworkManager::GetInstance()->FindModSource(*name);
 		}
 		return nullptr;
 	}
 	
 	wxString ModSourceItem::GetName() const
 	{
-		if (auto provider = std::get_if<INetworkModSource*>(&m_ID); provider && *provider)
+		if (auto modSource = std::get_if<INetworkModSource*>(&m_ID); modSource && *modSource)
 		{
-			return (*provider)->GetName();
+			return (*modSource)->GetName();
 		}
 		else if (const wxString* name = std::get_if<wxString>(&m_ID))
 		{
@@ -80,9 +80,9 @@ namespace Kortex
 	}
 	void ModSourceItem::SetName(const wxString& name)
 	{
-		if (INetworkModSource* provider = INetworkManager::GetInstance()->FindProvider(name))
+		if (INetworkModSource* modSource = INetworkManager::GetInstance()->FindModSource(name))
 		{
-			m_ID = provider;
+			m_ID = modSource;
 		}
 		else
 		{
@@ -92,14 +92,14 @@ namespace Kortex
 
 	wxString ModSourceItem::GetURL(const GameID& gameID) const
 	{
-		INetworkModSource* provider = nullptr;
+		INetworkModSource* modSource = nullptr;
 		if (const wxString* url = std::get_if<wxString>(&m_Data))
 		{
 			return *url;
 		}
-		else if (NetworkModInfo modInfo; TryGetModInfo(modInfo) && TryGetProvider(provider))
+		else if (NetworkModInfo modInfo; TryGetModInfo(modInfo) && TryGetModSource(modSource))
 		{
-			return provider->GetModURL(modInfo);
+			return modSource->GetModURL(modInfo);
 		}
 		return wxEmptyString;
 	}

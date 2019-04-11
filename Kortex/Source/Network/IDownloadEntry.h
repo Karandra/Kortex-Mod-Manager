@@ -38,15 +38,15 @@ namespace Kortex
 			virtual const IGameMod* GetMod() const = 0;
 			virtual bool IsInstalled() const = 0;
 
-			virtual const INetworkModSource* GetProvider() const = 0;
-			virtual void SetProvider(const INetworkModSource* provider) = 0;
-			bool HasProvider() const;
-			bool IsProviderOfType(NetworkProviderID providerID) const;
-			template<class T> bool IsProviderOfType() const
+			virtual const INetworkModSource* GetModSource() const = 0;
+			virtual void SetModSource(const INetworkModSource* modSource) = 0;
+			bool HasModSource() const;
+			bool IsModSourceOfType(ModSourceID sourceID) const;
+			template<class T> bool IsModSourceOfType() const
 			{
-				if (const INetworkModSource* provider = GetProvider())
+				if (const INetworkModSource* modSource = GetModSource())
 				{
-					return provider->GetID() == T::GetTypeID();
+					return modSource->GetID() == T::GetTypeID();
 				}
 				return false;
 			}
@@ -83,7 +83,7 @@ namespace Kortex
 			virtual void Run(int64_t resumeFrom = 0) = 0;
 			virtual bool Restart() = 0;
 
-			// Restores download info depending of this download provider and its filename
+			// Restores download info depending of this download modSource and its filename
 			// which is set in 'DefaultDownloadEntry::DeSerializeDefault' if something goes wrong.
 			// Restoration is performed by analyzing file name to get file id and mod id
 			// and querying rest of the information form internet.

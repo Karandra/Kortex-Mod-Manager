@@ -19,9 +19,9 @@ namespace Kortex::NetworkManager
 	class NexusProvider: public INetworkModSource, public KxSingletonPtr<NexusProvider>
 	{
 		public:
-			static constexpr NetworkProviderID GetTypeID()
+			static constexpr ModSourceID GetTypeID()
 			{
-				return NetworkProviderIDs::Nexus;
+				return ModSourceIDs::Nexus;
 			}
 
 		private:

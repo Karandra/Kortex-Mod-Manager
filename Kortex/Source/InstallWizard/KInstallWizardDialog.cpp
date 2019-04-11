@@ -414,9 +414,9 @@ void KInstallWizardDialog::AcceptExistingMod(const Kortex::IGameMod& mod)
 	{
 		packageInfo.SetName(mod.GetName());
 	}
-	if (packageInfo.GetProviderStore().IsEmpty())
+	if (packageInfo.GetModSourceStore().IsEmpty())
 	{
-		packageInfo.GetProviderStore() = mod.GetProviderStore();
+		packageInfo.GetModSourceStore() = mod.GetModSourceStore();
 	}
 
 	// Linked mod configuration
@@ -460,10 +460,10 @@ void KInstallWizardDialog::LoadInfoList()
 	};
 	auto AddSites = [this, &info, &AddString]()
 	{
-		info.GetProviderStore().Visit([this](const Kortex::ModSourceItem& item)
+		info.GetModSourceStore().Visit([this](const Kortex::ModSourceItem& item)
 		{
-			Kortex::INetworkModSource* provider = nullptr;
-			KImageEnum icon = item.TryGetProvider(provider) ? provider->GetIcon() : Kortex::INetworkModSource::GetGenericIcon();
+			Kortex::INetworkModSource* modSource = nullptr;
+			KImageEnum icon = item.TryGetModSource(modSource) ? modSource->GetIcon() : Kortex::INetworkModSource::GetGenericIcon();
 			m_Info_PackageInfoList->AddItem(KLabeledValue(item.GetURL(), item.GetName()), icon, KIWI_TYPE_SITE);
 			return true;
 		});

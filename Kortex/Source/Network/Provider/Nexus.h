@@ -33,7 +33,7 @@ namespace Kortex::NetworkManager
 		private:
 			void OnAuthSuccess(wxWindow* window = nullptr);
 			void OnAuthFail(wxWindow* window = nullptr);
-		
+			
 			wxString EndorsementStateToString(const ModEndorsement& state) const;
 			KxCURLSession& ConfigureRequest(KxCURLSession& request, const wxString& apiKey = wxEmptyString) const;
 			bool ShouldTryLater(const KxCURLReplyBase& reply) const;

@@ -128,9 +128,9 @@ namespace
 		info.ID = json["file_id"].get<ModID::TValue>();
 		info.IsPrimary = json["is_primary"];
 		info.Name = json["file_name"].get<wxString>();
-		info.m_DisplayName = ConvertDisplayName(json["name"].get<wxString>());
+		info.DisplayName = ConvertDisplayName(json["name"].get<wxString>());
 		info.Version = json["version"].get<wxString>();
-		info.m_ChangeLog = ConvertChangeLog(json["changelog_html"].get<wxString>());
+		info.ChangeLog = ConvertChangeLog(json["changelog_html"].get<wxString>());
 		info.UploadDate = ReadDateTime(json["uploaded_time"]);
 
 		// WTF?! Why file size is in kilobytes instead of bytes?
@@ -577,7 +577,7 @@ namespace Kortex::NetworkManager
 
 			data.Version = json["version"].get<wxString>();
 			data.UploadDate = ReadDateTime(json["created_time"]);
-			data.m_LastUpdateDate = ReadDateTime(json["updated_time"]);
+			data.LastUpdateDate = ReadDateTime(json["updated_time"]);
 
 			data.ContainsAdultContent = json["contains_adult_content?"];
 

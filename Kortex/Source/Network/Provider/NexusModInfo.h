@@ -116,11 +116,11 @@ namespace Kortex::Nexus
 			
 			wxString GetDisplayName() const override
 			{
-				return m_Data.m_DisplayName.IsEmpty() ? m_Data.Name : m_Data.m_DisplayName;
+				return m_Data.DisplayName.IsEmpty() ? m_Data.Name : m_Data.DisplayName;
 			}
 			void SetDisplayName(const wxString& value) override
 			{
-				m_Data.m_DisplayName = value;
+				m_Data.DisplayName = value;
 			}
 
 			KxVersion GetVersion() const override
@@ -134,11 +134,11 @@ namespace Kortex::Nexus
 
 			wxString GetChangeLog() const override
 			{
-				return m_Data.m_ChangeLog;
+				return m_Data.ChangeLog;
 			}
 			void SetChangeLog(const wxString& value)
 			{
-				m_Data.m_ChangeLog = value;
+				m_Data.ChangeLog = value;
 			}
 
 			wxDateTime GetUploadDate() const override
@@ -223,7 +223,7 @@ namespace Kortex::Nexus
 			}
 			wxDateTime GetLastUpdateDate() const override
 			{
-				return m_Data.m_LastUpdateDate;
+				return m_Data.LastUpdateDate;
 			}
 
 			IModFileInfo* GetPrimaryFile() override

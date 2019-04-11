@@ -17,7 +17,7 @@ namespace Kortex::NetworkManager::ReplyStructs
 		wxString MainImage;
 		KxVersion Version;
 		wxDateTime UploadDate;
-		wxDateTime m_LastUpdateDate;
+		wxDateTime LastUpdateDate;
 		bool ContainsAdultContent = false;
 		ModEndorsement EndorsementState = ModEndorsement::Undecided();
 	};
@@ -29,8 +29,8 @@ namespace Kortex::NetworkManager::ReplyStructs
 		ModFileID ID;
 		int64_t Size = -1;
 		wxString Name;
-		wxString m_DisplayName;
-		wxString m_ChangeLog;
+		wxString DisplayName;
+		wxString ChangeLog;
 		KxVersion Version;
 		wxDateTime UploadDate;
 		CategoryID Category = CategoryID::Unknown;

@@ -21,7 +21,7 @@ namespace Kortex::ModProvider
 				return m_ViewPane;
 			}
 			void CreateAddMenu();
-			void OnAddItem(ModProviderItem& node);
+			void OnAddItem(ModSourceItem& node);
 
 			void OnSelectItem(KxDataViewEvent& event);
 			void OnAddProvider(wxCommandEvent& event);
@@ -29,7 +29,7 @@ namespace Kortex::ModProvider
 			void OnCloseDialog(wxCloseEvent& event);
 
 		public:
-			Dialog(wxWindow* parent, ModProviderStore& providerStore);
+			Dialog(wxWindow* parent, ModSourceStore& providerStore);
 			virtual ~Dialog();
 	};
 }

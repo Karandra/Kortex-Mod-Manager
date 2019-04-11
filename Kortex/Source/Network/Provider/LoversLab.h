@@ -1,14 +1,14 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/INetworkProvider.h"
+#include "Network/INetworkModSource.h"
 #include "LoversLabModInfo.h"
 #include <KxFramework/KxSingleton.h>
 class KxCURLSession;
 
 namespace Kortex::NetworkManager
 {
-	class LoversLabProvider: public INetworkProvider, public KxSingletonPtr<LoversLabProvider>
+	class LoversLabProvider: public INetworkModSource, public KxSingletonPtr<LoversLabProvider>
 	{
 		public:
 			static constexpr NetworkProviderID GetTypeID()

@@ -1,19 +1,19 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/INetworkProvider.h"
+#include "Network/INetworkModSource.h"
 #include "Network/NetworkModInfo.h"
 #include "GameInstance/GameID.h"
 
 namespace Kortex
 {
-	class ModProviderStore;
-	class ModProviderItem
+	class ModSourceStore;
+	class ModSourceItem
 	{
-		friend class ModProviderStore;
+		friend class ModSourceStore;
 
 		private:
-			using TID = std::variant<wxString, INetworkProvider*>;
+			using TID = std::variant<wxString, INetworkModSource*>;
 			using TData = std::variant<wxString, NetworkModInfo>;
 
 		private:
@@ -21,22 +21,22 @@ namespace Kortex
 			TData m_Data = NetworkModInfo();
 
 		public:
-			ModProviderItem() = default;
+			ModSourceItem() = default;
 
-			ModProviderItem(const wxString& name, const wxString& url)
+			ModSourceItem(const wxString& name, const wxString& url)
 				:m_ID(name), m_Data(url)
 			{
 			}
-			ModProviderItem(const wxString& name, NetworkModInfo id)
+			ModSourceItem(const wxString& name, NetworkModInfo id)
 				:m_ID(name), m_Data(id)
 			{
 			}
 
-			ModProviderItem(INetworkProvider* provider, const wxString& url)
+			ModSourceItem(INetworkModSource* provider, const wxString& url)
 				:m_ID(provider), m_Data(url)
 			{
 			}
-			ModProviderItem(INetworkProvider* provider, NetworkModInfo id)
+			ModSourceItem(INetworkModSource* provider, NetworkModInfo id)
 				:m_ID(provider), m_Data(id)
 			{
 			}
@@ -48,8 +48,8 @@ namespace Kortex
 			void Load(const KxXMLNode& node);
 			void Save(KxXMLNode& node) const;
 
-			INetworkProvider* GetProvider() const;
-			void SetProvider(INetworkProvider& provider)
+			INetworkModSource* GetProvider() const;
+			void SetProvider(INetworkModSource& provider)
 			{
 				m_ID = &provider;
 			}
@@ -57,7 +57,7 @@ namespace Kortex
 			{
 				m_ID = T::GetInstance();
 			}
-			bool TryGetProvider(INetworkProvider*& provider) const
+			bool TryGetProvider(INetworkModSource*& provider) const
 			{
 				provider = GetProvider();
 				return provider != nullptr;

@@ -7,7 +7,7 @@
 namespace Kortex::NetworkManager
 {
 	LoversLabProvider::LoversLabProvider()
-		:INetworkProvider(wxS("LoversLab"))
+		:INetworkModSource(wxS("LoversLab"))
 	{
 	}
 
@@ -36,11 +36,11 @@ namespace Kortex::NetworkManager
 	}
 	bool LoversLabProvider::DoSignOut(wxWindow* window)
 	{
-		return INetworkProvider::DoSignOut(window);
+		return INetworkModSource::DoSignOut(window);
 	}
 	bool LoversLabProvider::DoIsAuthenticated() const
 	{
-		return INetworkProvider::DoIsAuthenticated();
+		return INetworkModSource::DoIsAuthenticated();
 	}
 
 	KImageEnum LoversLabProvider::GetIcon() const
@@ -53,7 +53,7 @@ namespace Kortex::NetworkManager
 	}
 	wxString LoversLabProvider::GetGameID(const GameID& id) const
 	{
-		return INetworkProvider::GetGameID(id);
+		return INetworkModSource::GetGameID(id);
 	}
 	wxString LoversLabProvider::GetModURLBasePart(const GameID& id) const
 	{

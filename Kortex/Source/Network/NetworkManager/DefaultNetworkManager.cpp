@@ -26,7 +26,7 @@ namespace Kortex::NetworkManager
 
 		// Load default provider
 		m_DefaultProvider = 0;
-		if (INetworkProvider* provider = FindProvider(GetAInstanceOption(OName::Provider).GetAttribute(OName::Default)))
+		if (INetworkModSource* provider = FindProvider(GetAInstanceOption(OName::Provider).GetAttribute(OName::Default)))
 		{
 			m_DefaultProvider = provider->GetID();
 		}
@@ -36,7 +36,7 @@ namespace Kortex::NetworkManager
 	{
 		using namespace Application;
 
-		const INetworkProvider* provider = GetDefaultProvider();
+		const INetworkModSource* provider = GetDefaultProvider();
 		GetAInstanceOption(OName::Provider).SetAttribute(OName::Default, provider ? provider->GetName() : wxEmptyString);
 	}
 	void DefaultNetworkManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
@@ -79,7 +79,7 @@ namespace Kortex::NetworkManager
 		UpdateButton();
 		CreateMenu();
 	}
-	bool DefaultNetworkManager::GetProviderInfo(const INetworkProvider& provider, wxString& label, wxBitmap& bitmap, bool name) const
+	bool DefaultNetworkManager::GetProviderInfo(const INetworkModSource& provider, wxString& label, wxBitmap& bitmap, bool name) const
 	{
 		bool authOK = false;
 		wxString userName;
@@ -103,7 +103,7 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::UpdateButton()
 	{
-		INetworkProvider* provider = GetProvider(m_DefaultProvider);
+		INetworkModSource* provider = GetProvider(m_DefaultProvider);
 		if (provider && provider->IsAuthenticated())
 		{
 			wxString label;
@@ -116,7 +116,7 @@ namespace Kortex::NetworkManager
 		else
 		{
 			m_LoginButton->SetLabel(KTr("Network.NotSignedIn"));
-			m_LoginButton->SetBitmap(KGetBitmap(INetworkProvider::GetGenericIcon()));
+			m_LoginButton->SetBitmap(KGetBitmap(INetworkModSource::GetGenericIcon()));
 		}
 
 		m_LoginButton->GetToolBar()->Realize();
@@ -183,7 +183,7 @@ namespace Kortex::NetworkManager
 
 	void DefaultNetworkManager::OnSignInOut(KxMenuEvent& event)
 	{
-		INetworkProvider* provider = static_cast<INetworkProvider*>(event.GetItem()->GetClientData());
+		INetworkModSource* provider = static_cast<INetworkModSource*>(event.GetItem()->GetClientData());
 		if (provider->IsAuthenticated())
 		{
 			KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("Network.SignOutMessage", provider->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
@@ -196,7 +196,7 @@ namespace Kortex::NetworkManager
 		}
 		else
 		{
-			// Additional call to "INetworkProvider::IsAuthenticated' to make sure that provider is ready
+			// Additional call to "INetworkModSource::IsAuthenticated' to make sure that provider is ready
 			// as authentication process can be async.
 			if (provider->Authenticate(KMainWindow::GetInstance()) && provider->IsAuthenticated() && !IsDefaultProviderAvailable())
 			{
@@ -207,7 +207,7 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::OnSelectActiveProvider(KxMenuEvent& event)
 	{
-		INetworkProvider* provider = static_cast<INetworkProvider*>(event.GetItem()->GetClientData());
+		INetworkModSource* provider = static_cast<INetworkModSource*>(event.GetItem()->GetClientData());
 		m_DefaultProvider = provider->GetID();
 
 		UpdateButton();
@@ -231,12 +231,12 @@ namespace Kortex::NetworkManager
 		return IApplication::GetInstance()->GetUserSettingsFolder() + wxS("\\WebCache");
 	}
 
-	INetworkProvider* DefaultNetworkManager::GetDefaultProvider() const
+	INetworkModSource* DefaultNetworkManager::GetDefaultProvider() const
 	{
 		return GetProvider(m_DefaultProvider);
 	}
 
-	INetworkProvider* DefaultNetworkManager::FindProvider(const wxString& name) const
+	INetworkModSource* DefaultNetworkManager::FindProvider(const wxString& name) const
 	{
 		for (const auto& provider: m_Providers)
 		{
@@ -247,7 +247,7 @@ namespace Kortex::NetworkManager
 		}
 		return nullptr;
 	}
-	INetworkProvider* DefaultNetworkManager::GetProvider(NetworkProviderID providerID) const
+	INetworkModSource* DefaultNetworkManager::GetProvider(NetworkProviderID providerID) const
 	{
 		if (providerID >= 0 && (size_t)providerID < m_Providers.size())
 		{

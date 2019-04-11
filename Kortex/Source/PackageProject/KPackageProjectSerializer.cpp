@@ -5,12 +5,12 @@
 #include "Utility/KAux.h"
 #include <KxFramework/KxTextFile.h>
 
-Kortex::ModProviderItem KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
+Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
 {
 	using namespace Kortex::NetworkManager;
 
 	long long id = -1;
-	Kortex::INetworkProvider* provider = nullptr;
+	Kortex::INetworkModSource* provider = nullptr;
 
 	// https://regex101.com
 	wxString regEx = wxString::FromUTF8Unchecked(u8R"((?:http:\/\/)?(?:https:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)(?:.*\/)(?:[^\d]+)(\d+))");
@@ -40,9 +40,9 @@ Kortex::ModProviderItem KPackageProjectSerializer::TryParseWebSite(const wxStrin
 
 	if (provider)
 	{
-		return Kortex::ModProviderItem(provider->GetName(), Kortex::ModID(id));
+		return Kortex::ModSourceItem(provider->GetName(), Kortex::ModID(id));
 	}
-	return Kortex::ModProviderItem();
+	return Kortex::ModSourceItem();
 }
 wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
 {

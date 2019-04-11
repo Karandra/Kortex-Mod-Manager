@@ -126,7 +126,7 @@ void KPackageProjectSerializerKMP::ReadInfo()
 
 		// Web-sites
 		using namespace Kortex::NetworkManager;
-		Kortex::ModProviderStore& store = info.GetProviderStore();
+		Kortex::ModSourceStore& store = info.GetProviderStore();
 		store.LoadAssign(infoNode.GetFirstChildElement("Provider"));
 
 		// Documents

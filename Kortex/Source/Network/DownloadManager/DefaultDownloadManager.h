@@ -57,7 +57,7 @@ namespace Kortex::DownloadManager
 			bool RemoveDownload(IDownloadEntry& download) override;
 			bool QueueDownload(const IModDownloadInfo& downloadInfo,
 							   const IModFileInfo& fileInfo,
-							   const INetworkProvider* provider,
+							   const INetworkModSource* provider,
 							   const GameID& id = GameIDs::NullGameID
 			) override;
 			bool QueueFromOutside(const wxString& link) override;

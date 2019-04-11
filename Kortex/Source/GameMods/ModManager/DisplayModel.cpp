@@ -349,16 +349,16 @@ namespace Kortex::ModManager
 				SitesValue::ArrayT list;
 				SitesValue::ClearArray(list);
 				
-				mod->GetProviderStore().Visit([&list](const ModProviderItem& item)
+				mod->GetProviderStore().Visit([&list](const ModSourceItem& item)
 				{
-					INetworkProvider* provider = nullptr;
+					INetworkModSource* provider = nullptr;
 					if (item.TryGetProvider(provider))
 					{
 						list[provider->GetID()] = provider->GetIcon();
 					}
 					else
 					{
-						list[NetworkProviderIDs::MAX_SYSTEM] = INetworkProvider::GetGenericIcon();
+						list[NetworkProviderIDs::MAX_SYSTEM] = INetworkModSource::GetGenericIcon();
 					}
 					return true;
 				});
@@ -370,10 +370,10 @@ namespace Kortex::ModManager
 			case ColumnID::Sites_LoversLabID:
 			{
 				const NetworkProviderID index = (NetworkProviderID)(column->GetID() - ColumnID::Sites - 1);
-				const INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(index);
+				const INetworkModSource* provider = INetworkManager::GetInstance()->GetProvider(index);
 				if (provider)
 				{
-					const ModProviderItem* providerItem = mod->GetProviderStore().GetItem(*provider);
+					const ModSourceItem* providerItem = mod->GetProviderStore().GetItem(*provider);
 					
 					NetworkModInfo modInfo;
 					if (providerItem && providerItem->TryGetModInfo(modInfo))
@@ -652,11 +652,11 @@ namespace Kortex::ModManager
 			{
 				if (IsSpecialSiteColumn(columnID))
 				{
-					INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(ColumnToSpecialSite(columnID));
+					INetworkModSource* provider = INetworkManager::GetInstance()->GetProvider(ColumnToSpecialSite(columnID));
 					if (provider)
 					{
-						ModProviderItem* item1 = entry1->GetProviderStore().GetItem(*provider);
-						ModProviderItem* item2 = entry2->GetProviderStore().GetItem(*provider);
+						ModSourceItem* item1 = entry1->GetProviderStore().GetItem(*provider);
+						ModSourceItem* item2 = entry2->GetProviderStore().GetItem(*provider);
 
 						return item1 && item2 && (item1->GetModInfo().GetModID().GetValue() < item2->GetModInfo().GetModID().GetValue());
 					}
@@ -763,11 +763,11 @@ namespace Kortex::ModManager
 			NetworkProviderID providerID = ColumnToSpecialSite(columnID);
 			if (IsSpecialSiteColumn(columnID))
 			{
-				const ModProviderStore& store = entry->GetProviderStore();
-				const INetworkProvider* provider = INetworkManager::GetInstance()->GetProvider(providerID);
+				const ModSourceStore& store = entry->GetProviderStore();
+				const INetworkModSource* provider = INetworkManager::GetInstance()->GetProvider(providerID);
 				if (provider)
 				{
-					if (const ModProviderItem* providerItem = store.GetItem(*provider))
+					if (const ModSourceItem* providerItem = store.GetItem(*provider))
 					{
 						KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
 					}
@@ -800,7 +800,7 @@ namespace Kortex::ModManager
 				}
 				case ColumnID::Sites:
 				{
-					const ModProviderStore& store = entry->GetProviderStore();
+					const ModSourceStore& store = entry->GetProviderStore();
 					if (!store.IsEmpty())
 					{
 						KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());

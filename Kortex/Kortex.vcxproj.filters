@@ -690,9 +690,6 @@
     <ClCompile Include="Source\Network\IDownloadEntry.cpp">
       <Filter>Code\Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\INetworkProvider.cpp">
-      <Filter>Code\Source\Network</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadManager.cpp">
       <Filter>Code\Source\Network\DownloadManager</Filter>
     </ClCompile>
@@ -1125,6 +1122,9 @@
     <ClCompile Include="Source\Application\Module\Info.cpp">
       <Filter>Code\Source\Application\Module</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Network\INetworkModSource.cpp">
+      <Filter>Code\Source\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1524,9 +1524,6 @@
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\IDownloadEntry.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\INetworkProvider.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\NetworkProviderReply.h">
@@ -2140,6 +2137,9 @@
     </ClInclude>
     <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h">
       <Filter>Code\Headers\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\INetworkModSource.h">
+      <Filter>Code\Headers\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,25 +3,25 @@
 
 namespace Kortex
 {
-	const ModProviderItem* ModProviderStore::GetItem(const wxString& name) const
+	const ModSourceItem* ModSourceStore::GetItem(const wxString& name) const
 	{
 		return FindItemPtr(m_Items, name);
 	}
-	ModProviderItem* ModProviderStore::GetItem(const wxString& name)
+	ModSourceItem* ModSourceStore::GetItem(const wxString& name)
 	{
 		return FindItemPtr(m_Items, name);
 	}
 
-	const ModProviderItem* ModProviderStore::GetItem(const INetworkProvider& provider) const
+	const ModSourceItem* ModSourceStore::GetItem(const INetworkModSource& provider) const
 	{
 		return FindItemPtr(m_Items, &provider);
 	}
-	ModProviderItem* ModProviderStore::GetItem(const INetworkProvider& provider)
+	ModSourceItem* ModSourceStore::GetItem(const INetworkModSource& provider)
 	{
 		return FindItemPtr(m_Items, &provider);
 	}
 
-	ModProviderItem& ModProviderStore::AssignWith(const wxString& name, const wxString& url)
+	ModSourceItem& ModSourceStore::AssignWith(const wxString& name, const wxString& url)
 	{
 		auto it = FindItem(m_Items, name);
 		if (it == m_Items.end())
@@ -35,7 +35,7 @@ namespace Kortex
 			return *it;
 		}
 	}
-	ModProviderItem& ModProviderStore::AssignWith(const wxString& name, NetworkModInfo modInfo)
+	ModSourceItem& ModSourceStore::AssignWith(const wxString& name, NetworkModInfo modInfo)
 	{
 		auto it = FindItem(m_Items, name);
 		if (it == m_Items.end())
@@ -50,7 +50,7 @@ namespace Kortex
 		}
 	}
 
-	ModProviderItem& ModProviderStore::AssignWith(INetworkProvider& provider, const wxString& url)
+	ModSourceItem& ModSourceStore::AssignWith(INetworkModSource& provider, const wxString& url)
 	{
 		auto it = FindItem(m_Items, &provider);
 		if (it == m_Items.end())
@@ -64,7 +64,7 @@ namespace Kortex
 			return *it;
 		}
 	}
-	ModProviderItem& ModProviderStore::AssignWith(INetworkProvider& provider, NetworkModInfo modInfo)
+	ModSourceItem& ModSourceStore::AssignWith(INetworkModSource& provider, NetworkModInfo modInfo)
 	{
 		auto it = FindItem(m_Items, &provider);
 		if (it == m_Items.end())
@@ -79,7 +79,7 @@ namespace Kortex
 		}
 	}
 
-	bool ModProviderStore::RemoveItem(const wxString& name)
+	bool ModSourceStore::RemoveItem(const wxString& name)
 	{
 		auto it = FindItem(m_Items, name);
 		if (it != m_Items.end())
@@ -89,7 +89,7 @@ namespace Kortex
 		}
 		return false;
 	}
-	bool ModProviderStore::RemoveItem(const INetworkProvider& provider)
+	bool ModSourceStore::RemoveItem(const INetworkModSource& provider)
 	{
 		auto it = FindItem(m_Items, &provider);
 		if (it != m_Items.end())
@@ -100,57 +100,57 @@ namespace Kortex
 		return false;
 	}
 
-	wxString ModProviderStore::GetModURL(const wxString& name, const GameID& gameID) const
+	wxString ModSourceStore::GetModURL(const wxString& name, const GameID& gameID) const
 	{
-		if (const ModProviderItem* item = GetItem(name))
+		if (const ModSourceItem* item = GetItem(name))
 		{
 			return item->GetURL(gameID);
 		}
 		return wxEmptyString;
 	}
-	wxString ModProviderStore::GetModURL(const INetworkProvider& provider, const GameID& gameID) const
+	wxString ModSourceStore::GetModURL(const INetworkModSource& provider, const GameID& gameID) const
 	{
-		if (const ModProviderItem* item = GetItem(provider))
+		if (const ModSourceItem* item = GetItem(provider))
 		{
 			return item->GetURL(gameID);
 		}
 		return wxEmptyString;
 	}
 	
-	KxStringVector ModProviderStore::GetModURLs(const GameID& gameID) const
+	KxStringVector ModSourceStore::GetModURLs(const GameID& gameID) const
 	{
 		KxStringVector items;
 		items.reserve(m_Items.size());
 
-		for (const ModProviderItem& item: m_Items)
+		for (const ModSourceItem& item: m_Items)
 		{
 			items.push_back(item.GetURL(gameID));
 		}
 		return items;
 	}
-	KLabeledValue::Vector ModProviderStore::GetModNamedURLs(const GameID& gameID) const
+	KLabeledValue::Vector ModSourceStore::GetModNamedURLs(const GameID& gameID) const
 	{
 		KLabeledValue::Vector items;
 		items.reserve(m_Items.size());
 
-		for (const ModProviderItem& item: m_Items)
+		for (const ModSourceItem& item: m_Items)
 		{
 			items.emplace_back(item.GetURL(gameID), item.GetName());
 		}
 		return items;
 	}
 
-	void ModProviderStore::LoadTryAdd(const KxXMLNode& arrayNode)
+	void ModSourceStore::LoadTryAdd(const KxXMLNode& arrayNode)
 	{
 		LoadHelper<LoadMode::TryAdd>(*this, arrayNode);
 	}
-	void ModProviderStore::LoadAssign(const KxXMLNode& arrayNode)
+	void ModSourceStore::LoadAssign(const KxXMLNode& arrayNode)
 	{
 		LoadHelper<LoadMode::Assign>(*this, arrayNode);
 	}
-	void ModProviderStore::Save(KxXMLNode& arrayNode) const
+	void ModSourceStore::Save(KxXMLNode& arrayNode) const
 	{
-		for (const ModProviderItem& item: m_Items)
+		for (const ModSourceItem& item: m_Items)
 		{
 			if (item.IsOK() && !item.IsEmptyValue())
 			{

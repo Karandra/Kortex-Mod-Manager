@@ -138,7 +138,7 @@ namespace Kortex::DownloadManager
 				}
 				case ColumnID::Provider:
 				{
-					const INetworkProvider* provider = entry->GetProvider();
+					const INetworkModSource* provider = entry->GetProvider();
 					if (provider)
 					{
 						value = provider->GetName();

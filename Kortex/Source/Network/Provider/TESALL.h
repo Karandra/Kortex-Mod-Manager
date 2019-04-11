@@ -1,14 +1,14 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/INetworkProvider.h"
+#include "Network/INetworkModSource.h"
 #include "TESALLModInfo.h"
 #include <KxFramework/KxSingleton.h>
 class KxCURLSession;
 
 namespace Kortex::NetworkManager
 {
-	class TESALLProvider: public INetworkProvider, public KxSingletonPtr<TESALLProvider>
+	class TESALLProvider: public INetworkModSource, public KxSingletonPtr<TESALLProvider>
 	{
 		public:
 			static constexpr NetworkProviderID GetTypeID()

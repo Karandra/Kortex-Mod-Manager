@@ -19,7 +19,7 @@ class KPackageProjectSerializer
 			return root;
 		}
 
-		static Kortex::ModProviderItem TryParseWebSite(const wxString& url, wxString* domainNameOut = nullptr);
+		static Kortex::ModSourceItem TryParseWebSite(const wxString& url, wxString* domainNameOut = nullptr);
 		static wxString ConvertBBCode(const wxString& bbSource);
 
 	private:

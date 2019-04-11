@@ -227,7 +227,7 @@ namespace Kortex::DownloadManager
 	}
 	bool DefaultDownloadManager::QueueDownload(const IModDownloadInfo& downloadInfo,
 											   const IModFileInfo& fileInfo,
-											   const INetworkProvider* provider,
+											   const INetworkModSource* provider,
 											   const GameID& id
 	)
 	{

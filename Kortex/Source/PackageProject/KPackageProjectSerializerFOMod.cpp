@@ -277,9 +277,9 @@ namespace
 			});
 		}
 	}
-	template<class T> bool WriteSite(const ModProviderStore& providerStore, KxXMLNode& node)
+	template<class T> bool WriteSite(const ModSourceStore& providerStore, KxXMLNode& node)
 	{
-		if (const ModProviderItem* item = providerStore.GetItem<T>())
+		if (const ModSourceItem* item = providerStore.GetItem<T>())
 		{
 			node.SetValue(item->GetURL());
 			return true;
@@ -345,7 +345,7 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 		info.SetDescription(ConvertBBCode(KxString::Trim(infoNode.GetFirstChildElement("Description").GetValue(), true, true)));
 
 		// Web-site
-		Kortex::ModProviderStore& providerStore = info.GetProviderStore();
+		Kortex::ModSourceStore& providerStore = info.GetProviderStore();
 
 		ModID nexusID = infoNode.GetFirstChildElement("Id").GetValueInt(ModID::GetInvalidValue());
 		if (nexusID.HasValue())
@@ -362,11 +362,11 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 			};
 
 			wxString siteName;
-			Kortex::ModProviderItem webSite = TryParseWebSite(siteURL, &siteName);
+			Kortex::ModSourceItem webSite = TryParseWebSite(siteURL, &siteName);
 			if (webSite.IsOK())
 			{
 				// Site for Nexus already retrieved, so add as generic
-				Kortex::INetworkProvider* provider = nullptr;
+				Kortex::INetworkModSource* provider = nullptr;
 				if (webSite.TryGetProvider(provider) && provider == Kortex::NetworkManager::NexusProvider::GetInstance())
 				{
 					AddAsGenericSite(siteName);
@@ -723,10 +723,10 @@ void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& 
 	// FOMod supports only one web-site and field for site ID, so I need to decide which one to write.
 	// The order will be: Nexus (as ID) -> LoversLab -> TESALL -> other (if any)
 
-	const ModProviderStore& providerStore = m_ProjectSave->GetInfo().GetProviderStore();
+	const ModSourceStore& providerStore = m_ProjectSave->GetInfo().GetProviderStore();
 
 	// Write Nexus to 'Id'
-	if (const ModProviderItem* nexusItem = providerStore.GetItem(NexusProvider::GetInstance()->GetName()))
+	if (const ModSourceItem* nexusItem = providerStore.GetItem(NexusProvider::GetInstance()->GetName()))
 	{
 		infoNode.NewElement("Id").SetValue(nexusItem->GetModInfo().GetModID().GetValue());
 	}
@@ -734,7 +734,7 @@ void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& 
 	if (!(WriteSite<LoversLabProvider>(providerStore, sitesNode) || WriteSite<TESALLProvider>(providerStore, sitesNode)))
 	{
 		// Write first one from store
-		providerStore.Visit([&sitesNode](const ModProviderItem& item)
+		providerStore.Visit([&sitesNode](const ModSourceItem& item)
 		{
 			sitesNode.SetValue(item.GetURL());
 			return false;

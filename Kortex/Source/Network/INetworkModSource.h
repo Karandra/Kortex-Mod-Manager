@@ -10,13 +10,13 @@
 
 namespace Kortex
 {
-	class INetworkProvider
+	class INetworkModSource
 	{
 		friend class INetworkManager;
 
 		public:
-			using Vector = std::vector<std::unique_ptr<INetworkProvider>>;
-			using RefVector = std::vector<INetworkProvider*>;
+			using Vector = std::vector<std::unique_ptr<INetworkModSource>>;
+			using RefVector = std::vector<INetworkModSource*>;
 
 		public:
 			static KImageEnum GetGenericIcon();
@@ -57,8 +57,8 @@ namespace Kortex
 			virtual bool DoSignOut(wxWindow* window = nullptr) = 0;
 
 		public:
-			INetworkProvider(const wxString& name);
-			virtual ~INetworkProvider();
+			INetworkModSource(const wxString& name);
+			virtual ~INetworkModSource();
 
 		public:
 			NetworkProviderID GetID() const

@@ -119,10 +119,10 @@ wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVaria
 }
 void KPackageProjectSerializerSMI::AddSite(const wxString& url)
 {
-	Kortex::ModProviderStore& store = m_Project->GetInfo().GetProviderStore();
+	Kortex::ModSourceStore& store = m_Project->GetInfo().GetProviderStore();
 
 	wxString siteName;
-	Kortex::ModProviderItem item = TryParseWebSite(url, &siteName);
+	Kortex::ModSourceItem item = TryParseWebSite(url, &siteName);
 	if (item.IsOK())
 	{
 		store.TryAddItem(std::move(item));

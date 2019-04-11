@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Application/IManager.h"
 #include "Common.h"
-#include "INetworkProvider.h"
+#include "INetworkModSource.h"
 #include <KxFramework/KxSingleton.h>
 class KMainWindow;
 class KxAuiToolBarItem;
@@ -37,8 +37,8 @@ namespace Kortex
 
 			template<class T> T& AddProvider()
 			{
-				INetworkProvider::Vector& items = GetProviders();
-				return static_cast<T&>(*items.emplace_back(INetworkProvider::Create<T>(items.size())));
+				INetworkModSource::Vector& items = GetProviders();
+				return static_cast<T&>(*items.emplace_back(INetworkModSource::Create<T>(items.size())));
 			}
 
 		public:
@@ -48,15 +48,15 @@ namespace Kortex
 			virtual const NetworkManager::Config& GetConfig() const = 0;
 			virtual wxString GetCacheFolder() const = 0;
 		
-			virtual const INetworkProvider::Vector& GetProviders() const = 0;
-			virtual INetworkProvider::Vector& GetProviders() = 0;
+			virtual const INetworkModSource::Vector& GetProviders() const = 0;
+			virtual INetworkModSource::Vector& GetProviders() = 0;
 
-			virtual INetworkProvider* GetDefaultProvider() const = 0;
+			virtual INetworkModSource* GetDefaultProvider() const = 0;
 			bool IsDefaultProviderAvailable() const;
 			NetworkProviderID GetDefaultProviderID() const;
 		
-			virtual INetworkProvider* FindProvider(const wxString& name) const = 0;
-			virtual INetworkProvider* GetProvider(NetworkProviderID providerID) const = 0;
+			virtual INetworkModSource* FindProvider(const wxString& name) const = 0;
+			virtual INetworkModSource* GetProvider(NetworkProviderID providerID) const = 0;
 			bool HasProvider(NetworkProviderID providerID) const
 			{
 				return GetProvider(providerID) != nullptr;

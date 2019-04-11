@@ -220,7 +220,7 @@
     <ClCompile Include="Source\Network\INetworkManager.cpp" />
     <ClCompile Include="Source\Network\NetworkModInfo.cpp" />
     <ClCompile Include="Source\Network\NetworkModule.cpp" />
-    <ClCompile Include="Source\Network\INetworkProvider.cpp" />
+    <ClCompile Include="Source\Network\INetworkModSource.cpp" />
     <ClCompile Include="Source\Network\NetworkManager\DefaultNetworkManager.cpp" />
     <ClCompile Include="Source\Network\Provider\LoversLab.cpp" />
     <ClCompile Include="Source\Network\Provider\Nexus.cpp" />
@@ -541,7 +541,7 @@
     <ClInclude Include="Source\Network\NetworkModInfo.h" />
     <ClInclude Include="Source\Network\NetworkModule.h" />
     <ClInclude Include="Source\Network\Common.h" />
-    <ClInclude Include="Source\Network\INetworkProvider.h" />
+    <ClInclude Include="Source\Network\INetworkModSource.h" />
     <ClInclude Include="Source\Network\NetworkManager\DefaultNetworkManager.h" />
     <ClInclude Include="Source\Network\NetworkProviderReplyStructs.h" />
     <ClInclude Include="Source\Network\NetworkProviderReply.h" />

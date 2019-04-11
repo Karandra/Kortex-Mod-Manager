@@ -24,13 +24,13 @@ namespace Kortex::ModProvider
 		// Add generic
 		m_AddButtonMenu.AddSeparator();
 		KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(KAux::MakeBracketedLabel(KTr(KxID_NEW))));
-		item->SetBitmap(KGetBitmap(INetworkProvider::GetGenericIcon()));
+		item->SetBitmap(KGetBitmap(INetworkModSource::GetGenericIcon()));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
 			OnAddItem(m_ProviderStore.AssignWith(wxEmptyString, wxEmptyString));
 		});
 	}
-	void Dialog::OnAddItem(ModProviderItem& node)
+	void Dialog::OnAddItem(ModSourceItem& node)
 	{
 		m_IsModified = true;
 
@@ -41,7 +41,7 @@ namespace Kortex::ModProvider
 
 	void Dialog::OnSelectItem(KxDataViewEvent& event)
 	{
-		const ModProviderItem* node = GetNode(event.GetItem());
+		const ModSourceItem* node = GetNode(event.GetItem());
 		m_RemoveButton->Enable(node != nullptr);
 	}
 	void Dialog::OnAddProvider(wxCommandEvent& event)
@@ -50,7 +50,7 @@ namespace Kortex::ModProvider
 	}
 	void Dialog::OnRemoveProvider(wxCommandEvent& event)
 	{
-		ModProviderItem* node = GetNode(GetView()->GetSelection());
+		ModSourceItem* node = GetNode(GetView()->GetSelection());
 		if (node)
 		{
 			m_ProviderStore.RemoveItem(node->GetName());
@@ -61,7 +61,7 @@ namespace Kortex::ModProvider
 		}
 	}
 
-	Dialog::Dialog(wxWindow* parent, ModProviderStore& providerStore)
+	Dialog::Dialog(wxWindow* parent, ModSourceStore& providerStore)
 		:DisplayModel(providerStore)
 	{
 		if (KxStdDialog::Create(parent, KxID_NONE, KTr("ModManager.SitesEditor"), wxDefaultPosition, wxDefaultSize, KxBTN_OK))

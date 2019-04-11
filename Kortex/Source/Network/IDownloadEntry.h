@@ -8,7 +8,7 @@ class KxFileItem;
 namespace Kortex
 {
 	class IGameMod;
-	class INetworkProvider;
+	class INetworkModSource;
 
 	class IModFileInfo;
 	class IModDownloadInfo;
@@ -38,13 +38,13 @@ namespace Kortex
 			virtual const IGameMod* GetMod() const = 0;
 			virtual bool IsInstalled() const = 0;
 
-			virtual const INetworkProvider* GetProvider() const = 0;
-			virtual void SetProvider(const INetworkProvider* provider) = 0;
+			virtual const INetworkModSource* GetProvider() const = 0;
+			virtual void SetProvider(const INetworkModSource* provider) = 0;
 			bool HasProvider() const;
 			bool IsProviderOfType(NetworkProviderID providerID) const;
 			template<class T> bool IsProviderOfType() const
 			{
-				if (const INetworkProvider* provider = GetProvider())
+				if (const INetworkModSource* provider = GetProvider())
 				{
 					return provider->GetID() == T::GetTypeID();
 				}

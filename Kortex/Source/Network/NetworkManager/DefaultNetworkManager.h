@@ -41,7 +41,7 @@ namespace Kortex::NetworkManager
 	class DefaultNetworkManager: public INetworkManager
 	{
 		private:
-			INetworkProvider::Vector m_Providers;
+			INetworkModSource::Vector m_Providers;
 			NetworkProviderID m_DefaultProvider = NetworkProviderIDs::Invalid;
 			NetworkManager::Config m_Config;
 
@@ -58,7 +58,7 @@ namespace Kortex::NetworkManager
 
 		private:
 			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
-			bool GetProviderInfo(const INetworkProvider& provider, wxString& label, wxBitmap& bitmap, bool name = true) const;
+			bool GetProviderInfo(const INetworkModSource& provider, wxString& label, wxBitmap& bitmap, bool name = true) const;
 			void UpdateButton();
 			void CreateMenu();
 			void QueueUIUpdate();
@@ -74,18 +74,18 @@ namespace Kortex::NetworkManager
 			}
 			wxString GetCacheFolder() const override;
 		
-			const INetworkProvider::Vector& GetProviders() const override
+			const INetworkModSource::Vector& GetProviders() const override
 			{
 				return m_Providers;
 			}
-			INetworkProvider::Vector& GetProviders() override
+			INetworkModSource::Vector& GetProviders() override
 			{
 				return m_Providers;
 			}
-			INetworkProvider* GetDefaultProvider() const override;
+			INetworkModSource* GetDefaultProvider() const override;
 
-			INetworkProvider* FindProvider(const wxString& name) const override;
-			INetworkProvider* GetProvider(NetworkProviderID providerID) const override;
+			INetworkModSource* FindProvider(const wxString& name) const override;
+			INetworkModSource* GetProvider(NetworkProviderID providerID) const override;
 			
 			void OnAuthStateChanged() override;
 	};

@@ -23,7 +23,7 @@ namespace Kortex
 	}
 	bool IDownloadEntry::IsProviderOfType(NetworkProviderID providerID) const
 	{
-		if (const INetworkProvider* provider = GetProvider())
+		if (const INetworkModSource* provider = GetProvider())
 		{
 			return provider->GetID() == providerID;
 		}

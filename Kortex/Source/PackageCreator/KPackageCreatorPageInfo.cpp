@@ -197,16 +197,16 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 
 	m_WebSitesButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		Kortex::ModProviderStore& store = GetProjectInfo().GetProviderStore();
+		Kortex::ModSourceStore& store = GetProjectInfo().GetProviderStore();
 		Kortex::ModProvider::Dialog dialog(GetMainWindow(), store);
 		dialog.ShowModal();
 
 		// Update "free" inputs
-		auto UpdateWebInput = [&store](KxTextBox* textBox, INetworkProvider* provider)
+		auto UpdateWebInput = [&store](KxTextBox* textBox, INetworkModSource* provider)
 		{
 			if (provider)
 			{
-				if (ModProviderItem* item = store.GetItem(*provider))
+				if (ModSourceItem* item = store.GetItem(*provider))
 				{
 					textBox->SetValue(item->GetModInfo().ToString());
 				}

@@ -64,7 +64,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		void CalculateMemoryRequiredForCompression(int nPower);
 		template<class T> void OnOpenSite(wxTextUrlEvent& event)
 		{
-			Kortex::ModProviderStore& store = GetProjectInfo().GetProviderStore();
+			Kortex::ModSourceStore& store = GetProjectInfo().GetProviderStore();
 
 			wxString url = store.GetModURL(T::GetInstance()->GetName());
 			if (!url.IsEmpty())
@@ -76,7 +76,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		template<class T> void OnEditSite(wxCommandEvent& event)
 		{
 			KxTextBox* textBox = static_cast<KxTextBox*>(event.GetEventObject());
-			Kortex::ModProviderStore& store = GetProjectInfo().GetProviderStore();
+			Kortex::ModSourceStore& store = GetProjectInfo().GetProviderStore();
 
 			NetworkModInfo modInfo;
 			modInfo.FromString(textBox->GetValue());
@@ -86,7 +86,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		}
 		template<class T> KxTextBox* AddProviderControl(wxSizer* sizer)
 		{
-			Kortex::INetworkProvider* provider = T::GetInstance();
+			Kortex::INetworkModSource* provider = T::GetInstance();
 			if (provider)
 			{
 				

@@ -4,7 +4,7 @@
 
 namespace Kortex
 {
-	bool ModProviderItem::IsOK() const
+	bool ModSourceItem::IsOK() const
 	{
 		// Items with known provider valid if both provider and mod ID is valid.
 		// Unknown items valid if at least name is present.
@@ -17,12 +17,12 @@ namespace Kortex
 			return HasName();
 		}
 	}
-	bool ModProviderItem::IsEmptyValue() const
+	bool ModSourceItem::IsEmptyValue() const
 	{
 		return !HasModInfo() || !HasURL();
 	}
 
-	void ModProviderItem::Load(const KxXMLNode& node)
+	void ModSourceItem::Load(const KxXMLNode& node)
 	{
 		SetName(node.GetAttribute("Name"));
 
@@ -36,7 +36,7 @@ namespace Kortex
 			m_Data = node.GetAttribute("URL");
 		}
 	}
-	void ModProviderItem::Save(KxXMLNode& node) const
+	void ModSourceItem::Save(KxXMLNode& node) const
 	{
 		node.SetAttribute("Name", GetName());
 		if (NetworkModInfo modInfo; TryGetModInfo(modInfo))
@@ -53,9 +53,9 @@ namespace Kortex
 		}
 	}
 
-	INetworkProvider* ModProviderItem::GetProvider() const
+	INetworkModSource* ModSourceItem::GetProvider() const
 	{
-		if (auto provider = std::get_if<INetworkProvider*>(&m_ID))
+		if (auto provider = std::get_if<INetworkModSource*>(&m_ID))
 		{
 			return *provider;
 		}
@@ -66,9 +66,9 @@ namespace Kortex
 		return nullptr;
 	}
 	
-	wxString ModProviderItem::GetName() const
+	wxString ModSourceItem::GetName() const
 	{
-		if (auto provider = std::get_if<INetworkProvider*>(&m_ID); provider && *provider)
+		if (auto provider = std::get_if<INetworkModSource*>(&m_ID); provider && *provider)
 		{
 			return (*provider)->GetName();
 		}
@@ -78,9 +78,9 @@ namespace Kortex
 		}
 		return wxEmptyString;
 	}
-	void ModProviderItem::SetName(const wxString& name)
+	void ModSourceItem::SetName(const wxString& name)
 	{
-		if (INetworkProvider* provider = INetworkManager::GetInstance()->FindProvider(name))
+		if (INetworkModSource* provider = INetworkManager::GetInstance()->FindProvider(name))
 		{
 			m_ID = provider;
 		}
@@ -90,9 +90,9 @@ namespace Kortex
 		}
 	}
 
-	wxString ModProviderItem::GetURL(const GameID& gameID) const
+	wxString ModSourceItem::GetURL(const GameID& gameID) const
 	{
-		INetworkProvider* provider = nullptr;
+		INetworkModSource* provider = nullptr;
 		if (const wxString* url = std::get_if<wxString>(&m_Data))
 		{
 			return *url;
@@ -103,7 +103,7 @@ namespace Kortex
 		}
 		return wxEmptyString;
 	}
-	NetworkModInfo ModProviderItem::GetModInfo() const
+	NetworkModInfo ModSourceItem::GetModInfo() const
 	{
 		if (const NetworkModInfo* modInfo = std::get_if<NetworkModInfo>(&m_Data))
 		{

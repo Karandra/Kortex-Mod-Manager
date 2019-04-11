@@ -17,7 +17,7 @@ namespace Kortex::ModProvider
 		if (item.IsTreeRootItem())
 		{
 			children.reserve(m_ProviderStore.GetSize());
-			m_ProviderStore.Visit([&children](ModProviderItem& item)
+			m_ProviderStore.Visit([&children](ModSourceItem& item)
 			{
 				children.push_back(&item);
 				return true;
@@ -35,7 +35,7 @@ namespace Kortex::ModProvider
 
 	bool DisplayModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		const ModProviderItem* node = GetNode(item);
+		const ModSourceItem* node = GetNode(item);
 		if (node)
 		{
 			if (node->HasProvider())
@@ -58,7 +58,7 @@ namespace Kortex::ModProvider
 	}
 	void DisplayModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		const ModProviderItem* node = GetNode(item);
+		const ModSourceItem* node = GetNode(item);
 		if (node)
 		{
 			switch (column->GetID())
@@ -85,13 +85,13 @@ namespace Kortex::ModProvider
 	}
 	void DisplayModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		const ModProviderItem* node = GetNode(item);
+		const ModSourceItem* node = GetNode(item);
 		switch (column->GetID())
 		{
 			case ColumnID::Name:
 			{
-				INetworkProvider* provider = nullptr;
-				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetProvider(provider) ? provider->GetIcon() : INetworkProvider::GetGenericIcon()));
+				INetworkModSource* provider = nullptr;
+				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetProvider(provider) ? provider->GetIcon() : INetworkModSource::GetGenericIcon()));
 				break;
 			}
 			case ColumnID::Value:
@@ -103,7 +103,7 @@ namespace Kortex::ModProvider
 	}
 	bool DisplayModel::SetValue(const wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column)
 	{
-		ModProviderItem* node = GetNode(item);
+		ModSourceItem* node = GetNode(item);
 
 		switch (column->GetID())
 		{
@@ -147,7 +147,7 @@ namespace Kortex::ModProvider
 
 	void DisplayModel::OnActivate(KxDataViewEvent& event)
 	{
-		const ModProviderItem* node = GetNode(event.GetItem());
+		const ModSourceItem* node = GetNode(event.GetItem());
 		if (node)
 		{
 			// Allow edit both name and value for unknown providers (with URL),
@@ -161,7 +161,7 @@ namespace Kortex::ModProvider
 	}
 	void DisplayModel::ApplyChanges()
 	{
-		m_ProviderStore.RemoveIf([](ModProviderItem& item)
+		m_ProviderStore.RemoveIf([](ModSourceItem& item)
 		{
 			return !item.IsOK();
 		});

@@ -17,12 +17,12 @@ namespace
 {
 	using namespace Kortex;
 
-	template<class T> void LoadOldSite(ModProviderStore& store, KxXMLNode& node, const wxString& attributeName, const wxString& providerName)
+	template<class T> void LoadOldSite(ModSourceStore& store, KxXMLNode& node, const wxString& attributeName, const wxString& providerName)
 	{
 		ModID modID = node.GetAttributeInt(attributeName, ModID::GetInvalidValue());
 		if (modID.HasValue())
 		{
-			auto AddName = [&providerName](ModProviderItem& item)
+			auto AddName = [&providerName](ModSourceItem& item)
 			{
 				if (!item.HasName())
 				{
@@ -32,17 +32,17 @@ namespace
 
 			if (T* provider = T::GetInstance())
 			{
-				ModProviderItem& item = store.AssignWith(*provider, modID);
+				ModSourceItem& item = store.AssignWith(*provider, modID);
 				AddName(item);
 			}
 			else
 			{
-				ModProviderItem& item = store.AssignWith(providerName, modID);
+				ModSourceItem& item = store.AssignWith(providerName, modID);
 				AddName(item);
 			}
 		}
 	}
-	void LoadOldSites(ModProviderStore& store, KxXMLNode& sitesNode)
+	void LoadOldSites(ModSourceStore& store, KxXMLNode& sitesNode)
 	{
 		LoadOldSite<NetworkManager::NexusProvider>(store, sitesNode, "NexusID", "Nexus");
 		LoadOldSite<NetworkManager::LoversLabProvider>(store, sitesNode, "LoversLabID", "LoversLab");
@@ -51,7 +51,7 @@ namespace
 		// Load any "free" sites
 		for (KxXMLNode node = sitesNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			store.TryAddItem(ModProviderItem(node.GetAttribute("Label"), node.GetValue()));
+			store.TryAddItem(ModSourceItem(node.GetAttribute("Label"), node.GetValue()));
 		}
 	}
 }

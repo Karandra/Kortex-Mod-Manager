@@ -27,15 +27,15 @@ namespace Kortex::NetworkManager
 	}
 	bool TESALLProvider::DoSignOut(wxWindow* window)
 	{
-		return INetworkProvider::DoSignOut(window);
+		return INetworkModSource::DoSignOut(window);
 	}
 	bool TESALLProvider::DoIsAuthenticated() const
 	{
-		return INetworkProvider::DoIsAuthenticated();
+		return INetworkModSource::DoIsAuthenticated();
 	}
 
 	TESALLProvider::TESALLProvider()
-		:INetworkProvider(wxS("TESALL"))
+		:INetworkModSource(wxS("TESALL"))
 	{
 	}
 
@@ -49,7 +49,7 @@ namespace Kortex::NetworkManager
 	}
 	wxString TESALLProvider::GetGameID(const GameID& id) const
 	{
-		return INetworkProvider::GetGameID(id);
+		return INetworkModSource::GetGameID(id);
 	}
 	wxString TESALLProvider::GetModURLBasePart(const GameID& id) const
 	{

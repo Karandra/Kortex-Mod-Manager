@@ -16,7 +16,7 @@ namespace Kortex
 
 	bool INetworkManager::IsDefaultProviderAvailable() const
 	{
-		const INetworkProvider* provider = GetDefaultProvider();
+		const INetworkModSource* provider = GetDefaultProvider();
 		if (provider && provider->IsAuthenticated())
 		{
 			return true;
@@ -25,7 +25,7 @@ namespace Kortex
 	}
 	NetworkProviderID INetworkManager::GetDefaultProviderID() const
 	{
-		const INetworkProvider* provider = GetDefaultProvider();
+		const INetworkModSource* provider = GetDefaultProvider();
 		return provider ? provider->GetID() : NetworkProviderIDs::Invalid;
 	}
 }

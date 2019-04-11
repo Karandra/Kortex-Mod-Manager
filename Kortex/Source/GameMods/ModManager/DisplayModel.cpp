@@ -25,43 +25,20 @@ namespace
 		Author,
 		Tags,
 
-		Sites,
-		Sites_TESALLID,
-		Sites_NexusID,
-		Sites_LoversLabID,
-
 		DateInstall,
 		DateUninstall,
 		ModFolder,
 		PackagePath,
 		Signature,
 
-		MAX
-	};
+		MAX,
 
-	using SitesRenderer = KxDataViewImageListRenderer<Kortex::ModSourceIDs::MAX_SYSTEM + 1>;
-	using SitesValue = typename SitesRenderer::ValueT;
+		ModSource = -1,
+	};
 }
 
 namespace Kortex::ModManager
 {
-	bool DisplayModel::IsSpecialSiteColumn(int column) const
-	{
-		switch (column)
-		{
-			case ColumnID::Sites_TESALLID:
-			case ColumnID::Sites_NexusID:
-			case ColumnID::Sites_LoversLabID:
-			{
-				return true;
-			}
-		};
-		return false;
-	}
-	ModSourceID DisplayModel::ColumnToSpecialSite(int column) const
-	{
-		return (ModSourceID)(column - ColumnID::Sites - 1);
-	}
 	wxString DisplayModel::FormatTagList(const IGameMod& entry) const
 	{
 		return KxString::Join(entry.GetTagStore().GetNames(), wxS("; "));
@@ -111,21 +88,11 @@ namespace Kortex::ModManager
 		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Author"), ColumnID::Author, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.Tags"), ColumnID::Tags, KxDATAVIEW_CELL_INERT, 100, defaultFlags);
 	
-		{
-			int spacing = 1;
-			int width = (spacing +  16) * (ModSourceIDs::MAX_SYSTEM + 1);
-			auto info = GetView()->AppendColumn<SitesRenderer>(KTr("ModManager.ModList.Sites"), ColumnID::Sites, KxDATAVIEW_CELL_INERT, width, defaultFlagsNoSort);
-
-			info.GetRenderer()->SetImageList(&IApplication::GetInstance()->GetImageList());
-			info.GetRenderer()->SetSpacing(1);
-			info.GetRenderer()->SetAlignment(wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL);
-		}
-
 		for (const auto& modSource: INetworkManager::GetInstance()->GetModSources())
 		{
-			int id = ColumnID::Sites + modSource->GetID() + 1;
-			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, id, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
+			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, ColumnID::ModSource, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
 
+			info.GetColumn()->SetClientData(modSource.get());
 			info.GetColumn()->SetTitle(modSource->GetName());
 			info.GetColumn()->SetBitmap(KGetBitmap(modSource->GetIcon()));
 		}
@@ -338,48 +305,24 @@ namespace Kortex::ModManager
 				value = mod->GetAuthor();
 				break;
 			}
-			case ColumnID::Tags:
+			case ColumnID::ModSource:
 			{
-				value = FormatTagList(*mod);
-				break;
-			}
-			case ColumnID::Sites:
-			{
-				SitesValue::ArrayT list;
-				SitesValue::ClearArray(list);
-				
-				mod->GetModSourceStore().Visit([&list](const ModSourceItem& item)
-				{
-					IModSource* modSource = nullptr;
-					if (item.TryGetModSource(modSource))
-					{
-						list[modSource->GetID()] = modSource->GetIcon();
-					}
-					else
-					{
-						list[ModSourceIDs::MAX_SYSTEM] = IModSource::GetGenericIcon();
-					}
-					return true;
-				});
-				value = SitesValue(list);
-				break;
-			}
-			case ColumnID::Sites_TESALLID:
-			case ColumnID::Sites_NexusID:
-			case ColumnID::Sites_LoversLabID:
-			{
-				const ModSourceID index = (ModSourceID)(column->GetID() - ColumnID::Sites - 1);
-				const IModSource* modSource = INetworkManager::GetInstance()->GetModSource(index);
+				const IModSource* modSource = static_cast<const IModSource*>(column->GetClientData());
 				if (modSource)
 				{
-					const ModSourceItem* providerItem = mod->GetModSourceStore().GetItem(*modSource);
-					
+					const ModSourceItem* item = mod->GetModSourceStore().GetItem(*modSource);
+
 					NetworkModInfo modInfo;
-					if (providerItem && providerItem->TryGetModInfo(modInfo))
+					if (item && item->TryGetModInfo(modInfo))
 					{
 						value = modInfo.ToString();
 					}
 				}
+				break;
+			}
+			case ColumnID::Tags:
+			{
+				value = FormatTagList(*mod);
 				break;
 			}
 			case ColumnID::DateInstall:
@@ -589,7 +532,7 @@ namespace Kortex::ModManager
 			{
 				attributes.SetBackgroundColor(mod->GetColor());
 			}
-			if (!fixed && (columnID == ColumnID::Name || IsSpecialSiteColumn(columnID)))
+			if (!fixed && (columnID == ColumnID::Name || columnID == ColumnID::ModSource))
 			{
 				attributes.SetUnderlined(cellState & KxDATAVIEW_CELL_HIGHLIGHTED && column->IsHotTracked());
 			}
@@ -639,70 +582,69 @@ namespace Kortex::ModManager
 	}
 	bool DisplayModel::Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const
 	{
-		const DisplayModelNode* node1 = GetNode(item1);
-		const DisplayModelNode* node2 = GetNode(item2);
-		if (node1 && node2)
+		const DisplayModelNode* nodeLeft = GetNode(item1);
+		const DisplayModelNode* nodeRight = GetNode(item2);
+		if (nodeLeft && nodeRight)
 		{
 			ColumnID columnID = column ? (ColumnID)column->GetID() : ColumnID::Priority;
 
-			IGameMod* entry1 = node1->GetEntry();
-			IGameMod* entry2 = node2->GetEntry();
-			if (entry1 && entry2)
+			IGameMod* modLeft = nodeLeft->GetEntry();
+			IGameMod* modRight = nodeRight->GetEntry();
+			if (modLeft && modRight)
 			{
-				if (IsSpecialSiteColumn(columnID))
-				{
-					IModSource* modSource = INetworkManager::GetInstance()->GetModSource(ColumnToSpecialSite(columnID));
-					if (modSource)
-					{
-						ModSourceItem* item1 = entry1->GetModSourceStore().GetItem(*modSource);
-						ModSourceItem* item2 = entry2->GetModSourceStore().GetItem(*modSource);
-
-						return item1 && item2 && (item1->GetModInfo().GetModID().GetValue() < item2->GetModInfo().GetModID().GetValue());
-					}
-					return false;
-				}
-
 				switch (columnID)
 				{
 					case ColumnID::Name:
 					{
-						return KxComparator::IsLess(entry1->GetName(), entry2->GetName());
+						return KxComparator::IsLess(modLeft->GetName(), modRight->GetName());
 					}
 					case ColumnID::Priority:
 					{
-						return entry1->GetOrderIndex() < entry2->GetOrderIndex();
+						return modLeft->GetOrderIndex() < modRight->GetOrderIndex();
 					}
 					case ColumnID::Version:
 					{
-						return entry1->GetVersion() < entry2->GetVersion();
+						return modLeft->GetVersion() < modRight->GetVersion();
 					}
 					case ColumnID::Author:
 					{
-						return KxComparator::IsLess(entry1->GetAuthor(), entry2->GetAuthor());
+						return KxComparator::IsLess(modLeft->GetAuthor(), modRight->GetAuthor());
 					}
 					case ColumnID::Tags:
 					{
-						return KxComparator::IsLess(FormatTagList(*entry1), FormatTagList(*entry2));
+						return KxComparator::IsLess(FormatTagList(*modLeft), FormatTagList(*modRight));
+					}
+					case ColumnID::ModSource:
+					{
+						const IModSource* modSource = static_cast<const IModSource*>(column->GetClientData());
+						if (modSource)
+						{
+							ModSourceItem* item1 = modLeft->GetModSourceStore().GetItem(*modSource);
+							ModSourceItem* item2 = modRight->GetModSourceStore().GetItem(*modSource);
+
+							return item1 && item2 && (item1->GetModInfo().GetModID().GetValue() < item2->GetModInfo().GetModID().GetValue());
+						}
+						return false;
 					}
 					case ColumnID::DateInstall:
 					{
-						return entry1->GetInstallTime() < entry2->GetInstallTime();
+						return modLeft->GetInstallTime() < modRight->GetInstallTime();
 					}
 					case ColumnID::DateUninstall:
 					{
-						return entry1->GetUninstallTime() < entry2->GetUninstallTime();
+						return modLeft->GetUninstallTime() < modRight->GetUninstallTime();
 					}
 					case ColumnID::ModFolder:
 					{
-						return KxComparator::IsLess(entry1->GetModFilesDir(), entry2->GetModFilesDir());
+						return KxComparator::IsLess(modLeft->GetModFilesDir(), modRight->GetModFilesDir());
 					}
 					case ColumnID::PackagePath:
 					{
-						return KxComparator::IsLess(entry1->GetPackageFile(), entry2->GetPackageFile());
+						return KxComparator::IsLess(modLeft->GetPackageFile(), modRight->GetPackageFile());
 					}
 					case ColumnID::Signature:
 					{
-						return KxComparator::IsLess(entry1->GetSignature(), entry2->GetSignature());
+						return KxComparator::IsLess(modLeft->GetSignature(), modRight->GetSignature());
 					}
 				};
 			}
@@ -748,36 +690,14 @@ namespace Kortex::ModManager
 		KxDataViewItem item = event.GetItem();
 		KxDataViewColumn* column = event.GetColumn();
 		const DisplayModelNode* node = GetNode(item);
-		IGameMod* entry = node->GetEntry();
+		IGameMod* mod = node->GetEntry();
 
 		if (node->IsGroup() || node->GetEntry()->QueryInterface<IPriorityGroup>())
 		{
 			GetView()->ToggleItemExpanded(item);
 		}
-		else if (column && entry)
+		else if (column && mod)
 		{
-			int columnID = column->GetID();
-
-			// If this is a site open click
-			ModSourceID sourceID = ColumnToSpecialSite(columnID);
-			if (IsSpecialSiteColumn(columnID))
-			{
-				const ModSourceStore& store = entry->GetModSourceStore();
-				const IModSource* modSource = INetworkManager::GetInstance()->GetModSource(sourceID);
-				if (modSource)
-				{
-					if (const ModSourceItem* providerItem = store.GetItem(*modSource))
-					{
-						KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
-					}
-					else if (!store.IsEmpty())
-					{
-						KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());
-					}
-				}
-				return;
-			}
-
 			switch (column->GetID())
 			{
 				case ColumnID::Name:
@@ -787,22 +707,30 @@ namespace Kortex::ModManager
 				case ColumnID::Bitmap:
 				{
 					IGameModWithImage* withImage = nullptr;
-					if (entry->QueryInterface(withImage) && withImage->HasBitmap())
+					if (mod->QueryInterface(withImage) && withImage->HasBitmap())
 					{
-						KImageViewerDialog dialog(GetViewTLW(), entry->GetName());
+						KImageViewerDialog dialog(GetViewTLW(), mod->GetName());
 
-						KImageViewerEvent imageEvent(wxEVT_NULL, entry->GetImageFile());
+						KImageViewerEvent imageEvent(wxEVT_NULL, mod->GetImageFile());
 						dialog.Navigate(imageEvent);
 						dialog.ShowModal();
 					}
 					break;
 				}
-				case ColumnID::Sites:
+				case ColumnID::ModSource:
 				{
-					const ModSourceStore& store = entry->GetModSourceStore();
-					if (!store.IsEmpty())
+					const IModSource* modSource = static_cast<const IModSource*>(column->GetClientData());
+					if (modSource)
 					{
-						KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());
+						const ModSourceStore& store = mod->GetModSourceStore();
+						if (const ModSourceItem* providerItem = store.GetItem(*modSource))
+						{
+							KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
+						}
+						else if (!store.IsEmpty())
+						{
+							KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());
+						}
 					}
 					break;
 				}

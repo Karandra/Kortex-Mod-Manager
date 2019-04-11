@@ -67,12 +67,10 @@ namespace Kortex::ModManager
 			{
 				return m_DisplayMode == DisplayModelType::Manager;
 			}
-			bool IsSpecialSiteColumn(int column) const;
 			bool CanShowPriorityGroups() const
 			{
 				return m_ShowPriorityGroups && !m_ShowPriorityGroupsSuppress;
 			}
-			ModSourceID ColumnToSpecialSite(int column) const;
 			wxString FormatTagList(const IGameMod& entry) const;
 
 			virtual void OnInitControl() override;

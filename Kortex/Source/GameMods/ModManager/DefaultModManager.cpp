@@ -200,8 +200,7 @@ namespace Kortex::ModManager
 			{
 				if (item.IsNormalItem() && item.IsDirectory())
 				{
-					const wxString signature = item.GetName();
-					DoCreateMod(signature);
+					DoCreateMod(item.GetName());
 				}
 			}
 		}
@@ -215,11 +214,6 @@ namespace Kortex::ModManager
 		{
 			entry->UpdateFileTree();
 		});
-
-		if (IModDispatcher::HasInstance())
-		{
-			IModDispatcher::GetInstance()->InvalidateVirtualTree();
-		}
 	}
 	void DefaultModManager::Save() const
 	{

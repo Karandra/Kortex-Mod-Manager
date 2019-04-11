@@ -61,16 +61,15 @@ namespace Kortex::Notification
 		Utility::Log::LogInfo("Caption: %1", notification->GetCaption());
 		Utility::Log::LogInfo("Message: %1", notification->GetMessage());
 
-		IEvent::CallAfter([this, notification]()
+		INotification& notificationRef = *m_Notifications.emplace(m_Notifications.begin(), notification)->get();
+		IEvent::CallAfter([this, &notificationRef]()
 		{
-			m_Notifications.emplace(m_Notifications.begin(), notification);
-
 			UpdateToolBarButton();
 			if (m_PopupWindow->IsShown())
 			{
 				m_PopupDisplayModel->RefreshItems();
 			}
-			notification->ShowPopupWindow();
+			notificationRef.ShowPopupWindow();
 		});
 	}
 

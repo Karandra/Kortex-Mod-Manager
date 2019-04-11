@@ -74,17 +74,13 @@ namespace Kortex::Notification
 	}
 	void DisplayModel::OnActivateItem(KxDataViewEvent& event)
 	{
-		const INotification* notification = GetDataEntry(event.GetItem());
-		if (notification)
+		if (const INotification* notification = GetDataEntry(event.GetItem()))
 		{
 			IEvent::CallAfter([notification]()
 			{
-				KxTaskDialog dialog(::KMainWindow::GetInstance(), KxID_NONE, notification->GetCaption(), notification->GetMessage());
+				KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, notification->GetCaption(), notification->GetMessage());
 
-				wxIcon icon;
-				icon.CopyFromBitmap(notification->GetBitmap());
-				dialog.SetMainIcon(icon);
-
+				dialog.SetMainIcon(notification->GetBitmap());
 				dialog.ShowModal();
 			});
 		}

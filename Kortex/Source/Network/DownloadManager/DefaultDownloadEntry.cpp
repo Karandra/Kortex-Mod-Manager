@@ -229,10 +229,10 @@ namespace Kortex::DownloadManager
 			return mod;
 		}
 
-		// Try to find download by its file ID
+		// Try to find download by its ID
 		if (m_ModSource)
 		{
-			return IModManager::GetInstance()->FindModByNetworkID(m_ModSource->GetID(), m_FileInfo->GetModID());
+			return IModManager::GetInstance()->FindModBySource(*m_ModSource, m_FileInfo->GetModID());
 		}
 		return nullptr;
 	}

@@ -16,18 +16,9 @@ namespace Kortex
 	{
 		SetTargetGame(IGameInstance::GetTemplate(id));
 	}
-	
 	bool IDownloadEntry::HasModSource() const
 	{
 		return GetModSource() != nullptr;
-	}
-	bool IDownloadEntry::IsModSourceOfType(ModSourceID sourceID) const
-	{
-		if (const IModSource* modSource = GetModSource())
-		{
-			return modSource->GetID() == sourceID;
-		}
-		return sourceID == ModSourceIDs::Invalid;
 	}
 
 	bool IDownloadEntry::Save() const

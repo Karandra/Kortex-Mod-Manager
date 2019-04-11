@@ -127,15 +127,18 @@ namespace Kortex::ModManager
 						m_TagStore.AddTag(node.GetValue());
 					}
 
-					// Sites
-					KxXMLNode oldSitesNode = rootNode.GetFirstChildElement("Sites");
-					if (oldSitesNode.IsOK())
+					// Sources
+					if (KxXMLNode node = rootNode.GetFirstChildElement("Sites"); node.IsOK())
 					{
-						LoadOldSites(m_ModSourceStore, oldSitesNode);
+						LoadOldSites(m_ModSourceStore, node);
 					}
-					else
+					else if (KxXMLNode node = rootNode.GetFirstChildElement("Provider"); node.IsOK())
 					{
-						m_ModSourceStore.LoadAssign(rootNode.GetFirstChildElement("Source"));
+						m_ModSourceStore.LoadAssign(node);
+					}
+					else if (KxXMLNode node = rootNode.GetFirstChildElement("Source"); node.IsOK())
+					{
+						m_ModSourceStore.LoadAssign(node);
 					}
 
 					// Time

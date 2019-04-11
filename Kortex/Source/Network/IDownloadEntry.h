@@ -41,12 +41,11 @@ namespace Kortex
 			virtual const IModSource* GetModSource() const = 0;
 			virtual void SetModSource(const IModSource* modSource) = 0;
 			bool HasModSource() const;
-			bool IsModSourceOfType(ModSourceID sourceID) const;
 			template<class T> bool IsModSourceOfType() const
 			{
 				if (const IModSource* modSource = GetModSource())
 				{
-					return modSource->GetID() == T::GetTypeID();
+					return modSource == T::GetInstance();
 				}
 				return false;
 			}

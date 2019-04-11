@@ -101,7 +101,7 @@ namespace Kortex::DownloadManager
 	}
 	bool DefaultDownloadEntry::RestoreDownloadTESALL()
 	{
-		return true;
+		return false;
 	}
 	bool DefaultDownloadEntry::RestoreDownloadLoversLab()
 	{

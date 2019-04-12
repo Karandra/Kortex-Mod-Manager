@@ -19,16 +19,15 @@ namespace Kortex::NetworkManager
 		using namespace Application;
 
 		// Init sources
-		m_ModSources.reserve(ModSourceIDs::MAX_SYSTEM);
+		m_ModSources.reserve(3);
 		AddModSource<NexusProvider>();
 		AddModSource<LoversLabProvider>();
 		AddModSource<TESALLProvider>();
 
 		// Load default source
-		m_DefaultModSource = 0;
-		if (IModSource* modSource = FindModSource(GetAInstanceOption(OName::ModSource).GetAttribute(OName::Default)))
+		if (IModSource* modSource = GetModSource(GetAInstanceOption(OName::ModSource).GetAttribute(OName::Default)))
 		{
-			m_DefaultModSource = modSource->GetID();
+			m_DefaultModSource = modSource;
 		}
 		KxFile(GetCacheFolder()).CreateFolder();
 	}
@@ -54,18 +53,18 @@ namespace Kortex::NetworkManager
 	}
 	bool DefaultNetworkManager::SetDefaultProviderToFirstAvailableIfNone()
 	{
-		if (!IsDefaultProviderAvailable())
+		if (!IsDefaultProviderAuthenticated())
 		{
-			for (const auto& modSource: m_ModSources)
+			for (auto& modSource: m_ModSources)
 			{
 				if (modSource->IsAuthenticated())
 				{
-					m_DefaultModSource = modSource->GetID();
+					m_DefaultModSource = modSource.get();
 					return true;
 				}
 			}
 
-			m_DefaultModSource = ModSourceIDs::Invalid;
+			m_DefaultModSource = nullptr;
 			return false;
 		}
 		return true;
@@ -103,15 +102,14 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::UpdateButton()
 	{
-		IModSource* modSource = GetModSource(m_DefaultModSource);
-		if (modSource && modSource->IsAuthenticated())
+		if (m_DefaultModSource && m_DefaultModSource->IsAuthenticated())
 		{
 			wxString label;
 			wxBitmap bitmap;
-			GetProviderInfo(*modSource, label, bitmap);
+			GetProviderInfo(*m_DefaultModSource, label, bitmap);
 
 			m_LoginButton->SetLabel(KTr("Network.SignedIn") + ": " + label);
-			m_LoginButton->SetBitmap(KGetBitmap(modSource->GetIcon()));
+			m_LoginButton->SetBitmap(KGetBitmap(m_DefaultModSource->GetIcon()));
 		}
 		else
 		{
@@ -166,7 +164,7 @@ namespace Kortex::NetworkManager
 			KxMenuItem* item = m_Menu->Add(new KxMenuItem(label, wxEmptyString, wxITEM_RADIO));
 			item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSelectActiveProvider, this);
 
-			item->Check(m_DefaultModSource == modSource->GetID());
+			item->Check(m_DefaultModSource == modSource.get());
 			item->Enable(authOK);
 			item->SetBitmap(KGetBitmap(modSource->GetIcon()));
 			item->SetClientData(modSource.get());
@@ -198,9 +196,9 @@ namespace Kortex::NetworkManager
 		{
 			// Additional call to "IModSource::IsAuthenticated' to make sure that modSource is ready
 			// as authentication process can be async.
-			if (modSource->Authenticate(KMainWindow::GetInstance()) && modSource->IsAuthenticated() && !IsDefaultProviderAvailable())
+			if (modSource->Authenticate(KMainWindow::GetInstance()) && modSource->IsAuthenticated() && !IsDefaultProviderAuthenticated())
 			{
-				m_DefaultModSource = modSource->GetID();
+				m_DefaultModSource = modSource;
 			}
 			QueueUIUpdate();
 		}
@@ -208,7 +206,7 @@ namespace Kortex::NetworkManager
 	void DefaultNetworkManager::OnSelectActiveProvider(KxMenuEvent& event)
 	{
 		IModSource* modSource = static_cast<IModSource*>(event.GetItem()->GetClientData());
-		m_DefaultModSource = modSource->GetID();
+		m_DefaultModSource = modSource;
 
 		UpdateButton();
 		GetAInstanceOption().SetAttribute("DefaultProvider", modSource->GetName());
@@ -233,10 +231,9 @@ namespace Kortex::NetworkManager
 
 	IModSource* DefaultNetworkManager::GetDefaultModSource() const
 	{
-		return GetModSource(m_DefaultModSource);
+		return m_DefaultModSource;
 	}
-
-	IModSource* DefaultNetworkManager::FindModSource(const wxString& name) const
+	IModSource* DefaultNetworkManager::GetModSource(const wxString& name) const
 	{
 		for (const auto& modSource: m_ModSources)
 		{
@@ -244,14 +241,6 @@ namespace Kortex::NetworkManager
 			{
 				return modSource.get();
 			}
-		}
-		return nullptr;
-	}
-	IModSource* DefaultNetworkManager::GetModSource(ModSourceID sourceID) const
-	{
-		if (sourceID >= 0 && (size_t)sourceID < m_ModSources.size())
-		{
-			return m_ModSources[sourceID].get();
 		}
 		return nullptr;
 	}

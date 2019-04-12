@@ -55,59 +55,6 @@ namespace Kortex::DownloadManager
 		return false;
 	}
 
-	bool DefaultDownloadEntry::RestoreDownloadNexus()
-	{
-		wxRegEx reg(u8R"((.*?)\-(\d+)\-(.*)\.)", wxRE_EXTENDED|wxRE_ADVANCED|wxRE_ICASE);
-		if (reg.Matches(m_FileInfo->GetName()))
-		{
-			// Mod ID
-			ModID modID(reg.GetMatch(m_FileInfo->GetName(), 2));
-			if (modID)
-			{
-				ProviderRequest request(modID, {}, GetTargetGameID());
-				for (auto& fileInfo: m_ModSource->GetFilesList(request))
-				{
-					if (fileInfo->GetName() == m_FileInfo->GetName())
-					{
-						m_FileInfo = std::move(fileInfo);
-
-						// Fix size discrepancy caused by Nexus sending size in kilobytes
-						constexpr const int64_t oneKB = 1024 * 1024;
-						const int64_t difference = m_DownloadedSize - m_FileInfo->GetSize();
-						if (difference > 0 && difference <= oneKB)
-						{
-							m_FileInfo->SetSize(m_DownloadedSize);
-						}
-						return true;
-					}
-				}
-			}
-
-			// If we got here, file is not found on Nexus, but we can try to restore as much as possible from the file name itself.
-			// Set mod ID
-			m_FileInfo->SetModID(modID);
-
-			// Display name
-			wxString name = reg.GetMatch(m_FileInfo->GetName(), 1);
-			name.Replace("_", " ");
-			m_FileInfo->SetDisplayName(name);
-
-			// File version
-			wxString version = reg.GetMatch(m_FileInfo->GetName(), 2);
-			version.Replace("-", ".");
-			m_FileInfo->SetVersion(version);
-		}
-		return false;
-	}
-	bool DefaultDownloadEntry::RestoreDownloadTESALL()
-	{
-		return false;
-	}
-	bool DefaultDownloadEntry::RestoreDownloadLoversLab()
-	{
-		return false;
-	}
-
 	void DefaultDownloadEntry::OnDownload(KxCURLEvent& event)
 	{
 		m_Thread->TestDestroy();
@@ -195,7 +142,7 @@ namespace Kortex::DownloadManager
 	}
 	DefaultDownloadEntry::DefaultDownloadEntry(const IModDownloadInfo& downloadInfo,
 											   const IModFileInfo& fileInfo,
-											   const IModSource* modSource,
+											   IModSource* modSource,
 											   const GameID& id
 	)
 		:m_DownloadInfo(downloadInfo.Clone()),
@@ -339,35 +286,10 @@ namespace Kortex::DownloadManager
 
 	bool DefaultDownloadEntry::RepairBrokedDownload()
 	{
-		if (m_ModSource)
+		if (m_ModSource && m_ModSource->RestoreBrokenDownload(GetFullPath(), *this))
 		{
-			using namespace NetworkManager;
-
-			bool isSucceed = false;
-			switch (m_ModSource->GetID())
-			{
-				case ModSourceIDs::Nexus:
-				{
-					isSucceed = RestoreDownloadNexus();
-					break;
-				}
-				case ModSourceIDs::TESALL:
-				{
-					isSucceed = RestoreDownloadTESALL();
-					break;
-				}
-				case ModSourceIDs::LoversLab:
-				{
-					isSucceed = RestoreDownloadLoversLab();
-					break;
-				}
-			};
-
-			if (isSucceed)
-			{
-				Save();
-			}
-			return isSucceed;
+			Save();
+			return true;
 		}
 		return false;
 	}
@@ -428,7 +350,7 @@ namespace Kortex::DownloadManager
 		KxXMLNode rootNode = xml.GetFirstChildElement("Download");
 		if (loaded && rootNode.IsOK())
 		{
-			m_ModSource = INetworkManager::GetInstance()->FindModSource(rootNode.GetFirstChildElement("Source").GetValue());
+			m_ModSource = INetworkManager::GetInstance()->GetModSource(rootNode.GetFirstChildElement("Source").GetValue());
 			if (m_ModSource == nullptr)
 			{
 				// TODO: maybe I should create 'dummy' modSource?

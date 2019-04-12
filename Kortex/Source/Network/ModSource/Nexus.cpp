@@ -546,6 +546,58 @@ namespace Kortex::NetworkManager
 		return KxString::Format("%1/%2", GetModURLBasePart(request.GetGameID()), request.GetModID().GetValue());
 	}
 
+	bool NexusProvider::RestoreBrokenDownload(const wxString& filePath, IDownloadEntry& download)
+	{
+		wxString name = filePath.AfterLast(wxS('\\'));
+		wxRegEx reg(u8R"((.*?)\-(\d+)\-(.*)\.)", wxRE_EXTENDED|wxRE_ADVANCED|wxRE_ICASE);
+		if (reg.Matches(name))
+		{
+			// Mod ID
+			ModID modID(reg.GetMatch(name, 2));
+			if (modID)
+			{
+				ProviderRequest request(modID, {}, download.GetTargetGameID());
+				for (auto& fileInfo: GetFilesList(request))
+				{
+					if (fileInfo->GetName() == name)
+					{
+						// Fix size discrepancy caused by Nexus sending size in kilobytes
+						constexpr const int64_t oneKB = 1024 * 1024;
+						const int64_t downloadedSize = download.GetDownloadedSize();
+						const int64_t difference = downloadedSize - fileInfo->GetSize();
+						if (difference > 0 && difference <= oneKB)
+						{
+							fileInfo->SetSize(downloadedSize);
+						}
+
+						download.SetFileInfo(std::move(fileInfo));
+						return true;
+					}
+				}
+			}
+
+			IModFileInfo& fileInfo = download.GetFileInfo();
+
+			// If we got here, file is not found on Nexus, but we can try to restore as much as possible from the file name itself.
+			// Set mod ID
+			fileInfo.SetModID(modID);
+
+			// Display name
+			wxString name = reg.GetMatch(fileInfo.GetName(), 1);
+			name.Replace("_", " ");
+			fileInfo.SetDisplayName(name);
+
+			// File version
+			wxString version = reg.GetMatch(fileInfo.GetName(), 2);
+			version.Replace("-", ".");
+			fileInfo.SetVersion(version);
+
+			// Still return fail status
+			return false;
+		}
+		return false;
+	}
+
 	std::unique_ptr<IModInfo> NexusProvider::GetModInfo(const ProviderRequest& request) const
 	{
 		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3",

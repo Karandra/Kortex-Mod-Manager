@@ -42,7 +42,7 @@ namespace Kortex::NetworkManager
 	{
 		private:
 			IModSource::Vector m_ModSources;
-			ModSourceID m_DefaultModSource = ModSourceIDs::Invalid;
+			IModSource* m_DefaultModSource = nullptr;
 			NetworkManager::Config m_Config;
 
 			KxAuiToolBarItem* m_LoginButton = nullptr;
@@ -83,9 +83,7 @@ namespace Kortex::NetworkManager
 				return m_ModSources;
 			}
 			IModSource* GetDefaultModSource() const override;
-
-			IModSource* FindModSource(const wxString& name) const override;
-			IModSource* GetModSource(ModSourceID sourceID) const override;
+			IModSource* GetModSource(const wxString& name) const override;
 			
 			void OnAuthStateChanged() override;
 	};

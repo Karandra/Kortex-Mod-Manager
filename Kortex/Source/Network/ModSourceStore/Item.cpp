@@ -61,7 +61,7 @@ namespace Kortex
 		}
 		else if (const wxString* name = std::get_if<wxString>(&m_ID))
 		{
-			return INetworkManager::GetInstance()->FindModSource(*name);
+			return INetworkManager::GetInstance()->GetModSource(*name);
 		}
 		return nullptr;
 	}
@@ -80,7 +80,7 @@ namespace Kortex
 	}
 	void ModSourceItem::SetName(const wxString& name)
 	{
-		if (IModSource* modSource = INetworkManager::GetInstance()->FindModSource(name))
+		if (IModSource* modSource = INetworkManager::GetInstance()->GetModSource(name))
 		{
 			m_ID = modSource;
 		}

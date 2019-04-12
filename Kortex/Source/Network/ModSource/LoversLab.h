@@ -10,12 +10,6 @@ namespace Kortex::NetworkManager
 {
 	class LoversLabProvider: public IModSource, public KxSingletonPtr<LoversLabProvider>
 	{
-		public:
-			static constexpr ModSourceID GetTypeID()
-			{
-				return ModSourceIDs::LoversLab;
-			}
-
 		private:
 			wxString GetAPIURL() const;
 

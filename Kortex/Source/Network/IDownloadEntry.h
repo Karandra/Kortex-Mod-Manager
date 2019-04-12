@@ -38,8 +38,8 @@ namespace Kortex
 			virtual const IGameMod* GetMod() const = 0;
 			virtual bool IsInstalled() const = 0;
 
-			virtual const IModSource* GetModSource() const = 0;
-			virtual void SetModSource(const IModSource* modSource) = 0;
+			virtual IModSource* GetModSource() const = 0;
+			virtual void SetModSource(IModSource* modSource) = 0;
 			bool HasModSource() const;
 			template<class T> bool IsModSourceOfType() const
 			{
@@ -62,6 +62,7 @@ namespace Kortex
 
 			virtual const IModFileInfo& GetFileInfo() const = 0;
 			virtual IModFileInfo& GetFileInfo() = 0;
+			virtual void SetFileInfo(std::unique_ptr<IModFileInfo> fileInfo) = 0;
 
 			virtual const IModDownloadInfo& GetDownloadInfo() const = 0;
 			virtual IModDownloadInfo& GetDownloadInfo() = 0;

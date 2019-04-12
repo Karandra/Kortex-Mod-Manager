@@ -27,7 +27,7 @@ namespace Kortex::DownloadManager
 			std::unique_ptr<KxCURLSession> m_Session;
 
 			const IGameInstance* m_TargetGame = nullptr;
-			const IModSource* m_ModSource = nullptr;
+			IModSource* m_ModSource = nullptr;
 			wxDateTime m_Date;
 			int64_t m_DownloadedSize = 0;
 			int64_t m_Speed = 0;
@@ -42,10 +42,6 @@ namespace Kortex::DownloadManager
 			void CleanupDownload();
 			bool RequestNewLink();
 
-			bool RestoreDownloadNexus();
-			bool RestoreDownloadTESALL();
-			bool RestoreDownloadLoversLab();
-
 			void OnDownload(KxCURLEvent& event);
 			void OnThreadExit(wxNotifyEvent& event);
 			void DoRun(int64_t resumePos = 0);
@@ -54,7 +50,7 @@ namespace Kortex::DownloadManager
 			DefaultDownloadEntry();
 			DefaultDownloadEntry(const IModDownloadInfo& downloadInfo,
 								 const IModFileInfo& fileInfo,
-								 const IModSource* modSource,
+								 IModSource* modSource,
 								 const GameID& id);
 			virtual ~DefaultDownloadEntry();
 
@@ -78,11 +74,11 @@ namespace Kortex::DownloadManager
 			const IGameMod* GetMod() const override;
 			bool IsInstalled() const override;
 
-			const IModSource* GetModSource() const override
+			IModSource* GetModSource() const override
 			{
 				return m_ModSource;
 			}
-			void SetModSource(const IModSource* modSource) override
+			void SetModSource(IModSource* modSource) override
 			{
 				m_ModSource = modSource;
 			}
@@ -125,6 +121,10 @@ namespace Kortex::DownloadManager
 			IModFileInfo& GetFileInfo() override
 			{
 				return *m_FileInfo;
+			}
+			void SetFileInfo(std::unique_ptr<IModFileInfo> fileInfo) override
+			{
+				m_FileInfo = std::move(fileInfo);
 			}
 
 			const IModDownloadInfo& GetDownloadInfo() const override

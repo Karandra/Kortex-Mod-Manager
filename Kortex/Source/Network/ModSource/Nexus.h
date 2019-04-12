@@ -18,12 +18,6 @@ namespace Kortex::NetworkManager
 {
 	class NexusProvider: public IModSource, public KxSingletonPtr<NexusProvider>
 	{
-		public:
-			static constexpr ModSourceID GetTypeID()
-			{
-				return ModSourceIDs::Nexus;
-			}
-
 		private:
 			std::unique_ptr<KxWebSocket::IClient> m_WebSocketClient;
 			const wxString m_UserAgent;
@@ -79,6 +73,8 @@ namespace Kortex::NetworkManager
 			{
 				return std::make_unique<Nexus::ModEndorsementInfo>();
 			}
+
+			bool RestoreBrokenDownload(const wxString& filePath, IDownloadEntry& download);
 
 			std::unique_ptr<IModInfo> GetModInfo(const ProviderRequest& request) const override;
 			std::unique_ptr<IModFileInfo> GetFileInfo(const ProviderRequest& request) const override;

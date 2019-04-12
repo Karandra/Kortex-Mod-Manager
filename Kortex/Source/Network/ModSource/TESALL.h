@@ -10,12 +10,6 @@ namespace Kortex::NetworkManager
 {
 	class TESALLProvider: public IModSource, public KxSingletonPtr<TESALLProvider>
 	{
-		public:
-			static constexpr ModSourceID GetTypeID()
-			{
-				return ModSourceIDs::TESALL;
-			}
-
 		protected:
 			virtual bool DoAuthenticate(wxWindow* window = nullptr) override;
 			virtual bool DoValidateAuth(wxWindow* window = nullptr) override;

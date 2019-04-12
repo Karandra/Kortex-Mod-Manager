@@ -244,41 +244,41 @@ namespace Kortex::DownloadManager
 	}
 	bool DisplayModel::CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const
 	{
-		const IDownloadEntry* entry1 = GetDataEntry(row1);
-		const IDownloadEntry* entry2 = GetDataEntry(row2);
+		const IDownloadEntry* left = GetDataEntry(row1);
+		const IDownloadEntry* right = GetDataEntry(row2);
 
 		switch (column ? column->GetID() : ColumnID::Date)
 		{
 			case ColumnID::Name:
 			{
-				return KxComparator::IsLess(entry1->GetFileInfo().GetName(), entry2->GetFileInfo().GetName());
+				return KxComparator::IsLess(left->GetFileInfo().GetName(), right->GetFileInfo().GetName());
 			}
 			case ColumnID::Version:
 			{
-				return entry1->GetFileInfo().GetVersion() < entry2->GetFileInfo().GetVersion();
+				return left->GetFileInfo().GetVersion() < right->GetFileInfo().GetVersion();
 			}
 			case ColumnID::Size:
 			{
-				return entry1->GetFileInfo().GetSize() < entry2->GetFileInfo().GetSize();
+				return left->GetFileInfo().GetSize() < right->GetFileInfo().GetSize();
 			}
 			case ColumnID::Game:
 			{
-				const wxString name1 = entry1->GetTargetGame() ? entry1->GetTargetGame()->GetGameShortName() : wxEmptyString;
-				const wxString name2 = entry2->GetTargetGame() ? entry2->GetTargetGame()->GetGameShortName() : wxEmptyString;
+				const wxString nameLeft = left->GetTargetGame() ? left->GetTargetGame()->GetGameShortName() : wxEmptyString;
+				const wxString nameRight = right->GetTargetGame() ? right->GetTargetGame()->GetGameShortName() : wxEmptyString;
 
-				return KxComparator::IsLess(name1, name2);
+				return KxComparator::IsLess(nameLeft, nameRight);
 			}
 			case ColumnID::ModSource:
 			{
 				using namespace NetworkManager;
-				ModSourceID id1 = entry1->GetModSource() ? entry1->GetModSource()->GetID() : ModSourceIDs::Invalid;
-				ModSourceID id2 = entry2->GetModSource() ? entry2->GetModSource()->GetID() : ModSourceIDs::Invalid;
+				wxString nameLeft = left->GetModSource() ? left->GetModSource()->GetName() : wxEmptyString;
+				wxString nameRight = right->GetModSource() ? right->GetModSource()->GetName() : wxEmptyString;
 
-				return id1 < id2;
+				return nameLeft < nameRight;
 			}
 			case Date:
 			{
-				return entry1->GetDate() < entry2->GetDate();
+				return left->GetDate() < right->GetDate();
 			}
 		};
 		return false;

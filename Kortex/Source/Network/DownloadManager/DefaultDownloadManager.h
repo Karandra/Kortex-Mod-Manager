@@ -5,7 +5,7 @@
 
 namespace Kortex::DownloadManager
 {
-	class DefaultDownloadManager: public RTTI::IExtendInterface<DefaultDownloadManager, Kortex::IDownloadManager, IDownloadManagerNXM>
+	class DefaultDownloadManager: public RTTI::IExtendInterface<DefaultDownloadManager, IDownloadManager, IDownloadManagerNXM>
 	{
 		private:
 			IDownloadEntry::Vector m_Downloads;
@@ -57,7 +57,7 @@ namespace Kortex::DownloadManager
 			bool RemoveDownload(IDownloadEntry& download) override;
 			bool QueueDownload(const IModDownloadInfo& downloadInfo,
 							   const IModFileInfo& fileInfo,
-							   const IModSource* modSource,
+							   IModSource* modSource,
 							   const GameID& id = GameIDs::NullGameID
 			) override;
 			bool QueueFromOutside(const wxString& link) override;

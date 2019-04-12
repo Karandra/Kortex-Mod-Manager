@@ -1,29 +1,16 @@
 #pragma once
 #include "Utility/UniqueID.h"
 
-namespace Kortex::NetworkManager
+namespace Kortex::NetworkManager::Internal
 {
-	namespace Internal
+	namespace Tags
 	{
-		enum ModSourceIDs
+		struct ModID
 		{
-			Nexus,
-			LoversLab,
-			TESALL,
-
-			MAX_SYSTEM,
-			Invalid = -1
 		};
-
-		namespace Tags
+		struct ModFileID
 		{
-			struct ModID
-			{
-			};
-			struct ModFileID
-			{
-			};
-		}
+		};
 	}
 }
 
@@ -31,7 +18,4 @@ namespace Kortex
 {
 	using ModID = Utility::UniqueID::IntegerID<int64_t, -1, false, NetworkManager::Internal::Tags::ModID>;
 	using ModFileID = Utility::UniqueID::IntegerID<int64_t, -1, false, NetworkManager::Internal::Tags::ModFileID>;
-	
-	using ModSourceID = intptr_t;
-	using ModSourceIDs = NetworkManager::Internal::ModSourceIDs;
 }

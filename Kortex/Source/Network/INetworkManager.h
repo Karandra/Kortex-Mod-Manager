@@ -38,7 +38,7 @@ namespace Kortex
 			template<class T> T& AddModSource()
 			{
 				IModSource::Vector& items = GetModSources();
-				return static_cast<T&>(*items.emplace_back(IModSource::Create<T>(items.size())));
+				return static_cast<T&>(*items.emplace_back(IModSource::Create<T>()));
 			}
 
 		public:
@@ -52,16 +52,13 @@ namespace Kortex
 			virtual IModSource::Vector& GetModSources() = 0;
 
 			virtual IModSource* GetDefaultModSource() const = 0;
-			bool IsDefaultProviderAvailable() const;
-			ModSourceID GetDefaultProviderID() const;
-			
-			virtual IModSource* FindModSource(const wxString& name) const = 0;
-			virtual IModSource* GetModSource(ModSourceID sourceID) const = 0;
-			bool HasModSource(ModSourceID sourceID) const
+			virtual IModSource* GetModSource(const wxString& name) const = 0;
+			bool HasModSource(const wxString& name) const
 			{
-				return GetModSource(sourceID) != nullptr;
+				return GetModSource(name) != nullptr;
 			}
-	
+			bool IsDefaultProviderAuthenticated() const;
+			
 			virtual void OnAuthStateChanged() = 0;
 	};
 }

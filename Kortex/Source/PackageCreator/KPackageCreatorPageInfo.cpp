@@ -365,37 +365,37 @@ bool KPackageCreatorPageInfo::OnCloseWorkspace()
 {
 	return true;
 }
-void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& tProjectInfo)
+void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& projectInfo)
 {
 	wxWindowUpdateLocker lock(this);
 
 	/* Basic info */
-	m_IDInput->SetValue(tProjectInfo.GetProject().GetModID());
-	m_NameInput->SetValue(tProjectInfo.GetName());
-	m_TranslatedNameInput->SetValue(tProjectInfo.GetTranslatedName());
-	m_VersionInput->SetValue(tProjectInfo.GetVersion());
-	m_AuthorInput->SetValue(tProjectInfo.GetAuthor());
-	m_TranslatorNameInput->SetValue(tProjectInfo.GetTranslator());
-	m_TagsModel->SetDataVector(&tProjectInfo.GetTagStore());
+	m_IDInput->SetValue(projectInfo.GetProject().GetModID());
+	m_NameInput->SetValue(projectInfo.GetName());
+	m_TranslatedNameInput->SetValue(projectInfo.GetTranslatedName());
+	m_VersionInput->SetValue(projectInfo.GetVersion());
+	m_AuthorInput->SetValue(projectInfo.GetAuthor());
+	m_TranslatorNameInput->SetValue(projectInfo.GetTranslator());
+	m_TagsModel->SetDataVector(&projectInfo.GetTagStore());
 
 	/* Web sites */
 	using namespace Kortex::NetworkManager;
-	auto LoadFixedSite = [tProjectInfo](ModSourceID index, KxTextBox* input)
+	auto SetModSourceValue = [&projectInfo](IModSource* source, KxTextBox* input)
 	{
-		#if 0
-		if (tProjectInfo.HasWebSite(index))
+		if (source)
 		{
-			input->SetValue(std::to_wstring(tProjectInfo.GetWebSiteModID(index)));
+			const ModSourceItem* item = projectInfo.GetModSourceStore().GetItem(*source);
+			if (NetworkModInfo info; item && item->TryGetModInfo(info))
+			{
+				input->SetValue(info.ToString());
+				return;
+			}
 		}
-		else
-		{
-			input->Clear();
-		}
-		#endif
+		input->Clear();
 	};
-	LoadFixedSite(ModSourceIDs::TESALL, m_WebSitesTESALLID);
-	LoadFixedSite(ModSourceIDs::Nexus, m_WebSitesNexusID);
-	LoadFixedSite(ModSourceIDs::LoversLab, m_WebSitesLoversLabID);
+	SetModSourceValue(NexusProvider::GetInstance(), m_WebSitesNexusID);
+	SetModSourceValue(LoversLabProvider::GetInstance(), m_WebSitesLoversLabID);
+	SetModSourceValue(TESALLProvider::GetInstance(), m_WebSitesTESALLID);
 
 	/* Config */
 	// Package path

@@ -14,7 +14,7 @@ namespace Kortex
 	{
 	}
 
-	bool INetworkManager::IsDefaultProviderAvailable() const
+	bool INetworkManager::IsDefaultProviderAuthenticated() const
 	{
 		const IModSource* modSource = GetDefaultModSource();
 		if (modSource && modSource->IsAuthenticated())
@@ -22,10 +22,5 @@ namespace Kortex
 			return true;
 		}
 		return false;
-	}
-	ModSourceID INetworkManager::GetDefaultProviderID() const
-	{
-		const IModSource* modSource = GetDefaultModSource();
-		return modSource ? modSource->GetID() : ModSourceIDs::Invalid;
 	}
 }

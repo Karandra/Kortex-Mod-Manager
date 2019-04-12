@@ -11,6 +11,11 @@
 
 namespace Kortex
 {
+	class IDownloadEntry;
+}
+
+namespace Kortex
+{
 	class IModSource: public KxRTTI::IInterface<IModSource>
 	{
 		friend class INetworkManager;
@@ -23,10 +28,9 @@ namespace Kortex
 			static KImageEnum GetGenericIcon();
 
 		private:
-			template<class T> static std::unique_ptr<T> Create(ModSourceID id)
+			template<class T> static std::unique_ptr<T> Create()
 			{
 				auto modSource = std::make_unique<T>();
-				modSource->SetID(id);
 				modSource->Init();
 				return modSource;
 			}
@@ -34,14 +38,7 @@ namespace Kortex
 		private:
 			KxSecretDefaultStoreService m_LoginStore;
 			wxBitmap m_UserPicture;
-			ModSourceID m_ID = ModSourceIDs::Invalid;
 			bool m_RequiresAuthentication = true;
-
-		private:
-			void SetID(ModSourceID id)
-			{
-				m_ID = id;
-			}
 
 		protected:
 			void OnAuthSuccess(wxWindow* window = nullptr);
@@ -62,10 +59,6 @@ namespace Kortex
 			virtual ~IModSource();
 
 		public:
-			ModSourceID GetID() const
-			{
-				return m_ID;
-			}
 			bool IsDefault() const;
 
 			bool HasUserPicture() const
@@ -120,6 +113,11 @@ namespace Kortex
 			virtual std::unique_ptr<IModFileInfo> NewModFileInfo() const = 0;
 			virtual std::unique_ptr<IModDownloadInfo> NewModDownloadInfo() const = 0;
 			virtual std::unique_ptr<IModEndorsementInfo> NewModEndorsementInfo() const = 0;
+
+			virtual bool RestoreBrokenDownload(const wxString& filePath, IDownloadEntry& download)
+			{
+				return false;
+			}
 
 			virtual std::unique_ptr<IModInfo> GetModInfo(const ProviderRequest& request) const = 0;
 			virtual std::unique_ptr<IModFileInfo> GetFileInfo(const ProviderRequest& request) const = 0;

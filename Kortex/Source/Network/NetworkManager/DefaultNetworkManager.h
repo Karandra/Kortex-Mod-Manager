@@ -58,13 +58,13 @@ namespace Kortex::NetworkManager
 
 		private:
 			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
-			bool GetProviderInfo(const IModSource& modSource, wxString& label, wxBitmap& bitmap, bool name = true) const;
+			bool GetModSourceInfo(const IModSource& modSource, wxString& label, wxBitmap& bitmap, bool name = true) const;
 			void UpdateButton();
 			void CreateMenu();
 			void QueueUIUpdate();
 
 			void OnSignInOut(KxMenuEvent& event);
-			void OnSelectActiveProvider(KxMenuEvent& event);
+			void OnSelectActiveModSource(KxMenuEvent& event);
 			void OnToolBarButton(KxAuiToolBarEvent& event) override;
 
 		public:

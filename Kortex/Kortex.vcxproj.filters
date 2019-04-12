@@ -1125,6 +1125,9 @@
     <ClCompile Include="Source\Network\IModSource.cpp">
       <Filter>Code\Source\Network</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Network\IAuthenticableModSource.cpp">
+      <Filter>Code\Source\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2139,6 +2142,9 @@
       <Filter>Code\Headers\Network\ModSourceStore</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\IModSource.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\IAuthenticableModSource.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
   </ItemGroup>

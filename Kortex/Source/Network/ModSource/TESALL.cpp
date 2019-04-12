@@ -7,35 +7,7 @@
 
 namespace Kortex::NetworkManager
 {
-	bool TESALLProvider::DoAuthenticate(wxWindow* window)
-	{
-		bool cancelled = false;
-		if (RequestAuthInfoAndSave(window, &cancelled))
-		{
-			OnAuthSuccess(window);
-			return true;
-		}
-		else if (!cancelled)
-		{
-			OnAuthFail(window);
-		}
-		return false;
-	}
-	bool TESALLProvider::DoValidateAuth(wxWindow* window)
-	{
-		return HasAuthInfo();
-	}
-	bool TESALLProvider::DoSignOut(wxWindow* window)
-	{
-		return IModSource::DoSignOut(window);
-	}
-	bool TESALLProvider::DoIsAuthenticated() const
-	{
-		return IModSource::DoIsAuthenticated();
-	}
-
 	TESALLProvider::TESALLProvider()
-		:IModSource(wxS("TESALL"))
 	{
 	}
 

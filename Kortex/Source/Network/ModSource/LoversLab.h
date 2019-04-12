@@ -8,16 +8,12 @@ class KxCURLSession;
 
 namespace Kortex::NetworkManager
 {
-	class LoversLabProvider: public IModSource, public KxSingletonPtr<LoversLabProvider>
+	class LoversLabProvider:
+		public KxRTTI::IExtendInterface<LoversLabProvider, IModSource>,
+		public KxSingletonPtr<LoversLabProvider>
 	{
 		private:
 			wxString GetAPIURL() const;
-
-		protected:
-			virtual bool DoAuthenticate(wxWindow* window = nullptr) override;
-			virtual bool DoValidateAuth(wxWindow* window = nullptr) override;
-			virtual bool DoSignOut(wxWindow* window = nullptr) override;
-			virtual bool DoIsAuthenticated() const override;
 
 		public:
 			LoversLabProvider();

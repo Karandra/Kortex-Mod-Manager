@@ -47,24 +47,27 @@ namespace Kortex::NetworkManager
 	{
 		for (auto& modSource: m_ModSources)
 		{
-			modSource->ValidateAuth();
+			if (auto auth = modSource->QueryInterface<IAuthenticableModSource>())
+			{
+				auth->ValidateAuth();
+			}
 		}
 		SetDefaultProviderToFirstAvailableIfNone();
 	}
 	bool DefaultNetworkManager::SetDefaultProviderToFirstAvailableIfNone()
 	{
-		if (!IsDefaultProviderAuthenticated())
+		if (!IsDefaultModSourceAuthenticated())
 		{
+			m_DefaultModSource = nullptr;
 			for (auto& modSource: m_ModSources)
 			{
-				if (modSource->IsAuthenticated())
+				const IAuthenticableModSource* auth = nullptr;
+				if (modSource->QueryInterface(auth) && auth->IsAuthenticated())
 				{
 					m_DefaultModSource = modSource.get();
 					return true;
 				}
 			}
-
-			m_DefaultModSource = nullptr;
 			return false;
 		}
 		return true;
@@ -78,35 +81,38 @@ namespace Kortex::NetworkManager
 		UpdateButton();
 		CreateMenu();
 	}
-	bool DefaultNetworkManager::GetProviderInfo(const IModSource& modSource, wxString& label, wxBitmap& bitmap, bool name) const
+	bool DefaultNetworkManager::GetModSourceInfo(const IModSource& modSource, wxString& label, wxBitmap& bitmap, bool name) const
 	{
-		bool authOK = false;
-		wxString userName;
-		if (modSource.IsAuthenticated() && modSource.LoadAuthInfo(userName))
+		const IAuthenticableModSource* auth = nullptr;
+		if (modSource.QueryInterface(auth) && auth->IsAuthenticated())
 		{
-			authOK = true;
-
-			label += modSource.GetName();
-			if (name)
+			if (auto credentials = auth->LoadCredentials())
 			{
-				label += wxS('/') + userName;
+				label += modSource.GetName();
+				if (name)
+				{
+					label += wxS('/') + credentials->UserID;
+				}
+				bitmap = modSource.GetUserPicture();
+
+				return true;
 			}
-			bitmap = modSource.GetUserPicture();
+			else
+			{
+				label = modSource.GetName();
+				bitmap = KGetBitmap(KIMG_CROSS_CIRCLE_FRAME);
+			}
 		}
-		else
-		{
-			label = modSource.GetName();
-			bitmap = KGetBitmap(KIMG_CROSS_CIRCLE_FRAME);
-		}
-		return authOK;
+		return false;
 	}
 	void DefaultNetworkManager::UpdateButton()
 	{
-		if (m_DefaultModSource && m_DefaultModSource->IsAuthenticated())
+		const IAuthenticableModSource* auth = nullptr;
+		if (m_DefaultModSource && m_DefaultModSource->QueryInterface(auth) && auth->IsAuthenticated())
 		{
 			wxString label;
 			wxBitmap bitmap;
-			GetProviderInfo(*m_DefaultModSource, label, bitmap);
+			GetModSourceInfo(*m_DefaultModSource, label, bitmap);
 
 			m_LoginButton->SetLabel(KTr("Network.SignedIn") + ": " + label);
 			m_LoginButton->SetBitmap(KGetBitmap(m_DefaultModSource->GetIcon()));
@@ -130,44 +136,50 @@ namespace Kortex::NetworkManager
 		// Add sign-in/sign-out items.
 		for (const auto& modSource: m_ModSources)
 		{
-			wxString label;
-			wxBitmap bitmap;
-			bool authOK = GetProviderInfo(*modSource, label, bitmap);
-			if (authOK)
+			if (modSource->QueryInterface<IAuthenticableModSource>())
 			{
-				label = KTr("Network.SignOut") + ": " + label;
-			}
-			else
-			{
-				label = KTr("Network.SignIn") + ": " + label;
-			}
+				wxString label;
+				wxBitmap bitmap;
+				bool authOK = GetModSourceInfo(*modSource, label, bitmap);
+				if (authOK)
+				{
+					label = KTr("Network.SignOut") + ": " + label;
+				}
+				else
+				{
+					label = KTr("Network.SignIn") + ": " + label;
+				}
 
-			KxMenuItem* item = m_Menu->Add(new KxMenuItem(label));
-			item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSignInOut, this);
+				KxMenuItem* item = m_Menu->Add(new KxMenuItem(label));
+				item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSignInOut, this);
 
-			item->SetBitmap(bitmap);
-			item->SetClientData(modSource.get());
+				item->SetBitmap(bitmap);
+				item->SetClientData(modSource.get());
+			}
 		}
 
 		// Add current modSource selections
 		m_Menu->AddSeparator();
 		for (const auto& modSource: m_ModSources)
 		{
-			wxString label;
-			wxBitmap bitmap;
-			bool authOK = GetProviderInfo(*modSource, label, bitmap, false);
-			if (!authOK)
+			if (modSource->QueryInterface<IAuthenticableModSource>())
 			{
-				label = KTr("Network.NotSignedIn") + ": " + label;
+				wxString label;
+				wxBitmap bitmap;
+				bool authOK = GetModSourceInfo(*modSource, label, bitmap, false);
+				if (!authOK)
+				{
+					label = KTr("Network.NotSignedIn") + ": " + label;
+				}
+
+				KxMenuItem* item = m_Menu->Add(new KxMenuItem(label, wxEmptyString, wxITEM_RADIO));
+				item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSelectActiveModSource, this);
+
+				item->Check(m_DefaultModSource == modSource.get());
+				item->Enable(authOK);
+				item->SetBitmap(KGetBitmap(modSource->GetIcon()));
+				item->SetClientData(modSource.get());
 			}
-
-			KxMenuItem* item = m_Menu->Add(new KxMenuItem(label, wxEmptyString, wxITEM_RADIO));
-			item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSelectActiveProvider, this);
-
-			item->Check(m_DefaultModSource == modSource.get());
-			item->Enable(authOK);
-			item->SetBitmap(KGetBitmap(modSource->GetIcon()));
-			item->SetClientData(modSource.get());
 		}
 	}
 	void DefaultNetworkManager::QueueUIUpdate()
@@ -182,12 +194,12 @@ namespace Kortex::NetworkManager
 	void DefaultNetworkManager::OnSignInOut(KxMenuEvent& event)
 	{
 		IModSource* modSource = static_cast<IModSource*>(event.GetItem()->GetClientData());
-		if (modSource->IsAuthenticated())
+		if (auto auth = modSource->QueryInterface<IAuthenticableModSource>(); auth && auth->IsAuthenticated())
 		{
 			KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("Network.SignOutMessage", modSource->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 			if (dialog.ShowModal() == KxID_YES)
 			{
-				modSource->SignOut();
+				auth->SignOut();
 				SetDefaultProviderToFirstAvailableIfNone();
 				QueueUIUpdate();
 			}
@@ -196,14 +208,14 @@ namespace Kortex::NetworkManager
 		{
 			// Additional call to "IModSource::IsAuthenticated' to make sure that modSource is ready
 			// as authentication process can be async.
-			if (modSource->Authenticate(KMainWindow::GetInstance()) && modSource->IsAuthenticated() && !IsDefaultProviderAuthenticated())
+			if (auth->Authenticate() && auth->IsAuthenticated() && !IsDefaultModSourceAuthenticated())
 			{
 				m_DefaultModSource = modSource;
 			}
 			QueueUIUpdate();
 		}
 	}
-	void DefaultNetworkManager::OnSelectActiveProvider(KxMenuEvent& event)
+	void DefaultNetworkManager::OnSelectActiveModSource(KxMenuEvent& event)
 	{
 		IModSource* modSource = static_cast<IModSource*>(event.GetItem()->GetClientData());
 		m_DefaultModSource = modSource;

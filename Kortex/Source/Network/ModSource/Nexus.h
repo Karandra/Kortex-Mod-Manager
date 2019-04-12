@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Network/Common.h"
 #include "Network/IModSource.h"
+#include "Network/IAuthenticableModSource.h"
 #include "NexusModInfo.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxUUID.h>
@@ -16,18 +17,30 @@ namespace KxWebSocket
 
 namespace Kortex::NetworkManager
 {
-	class NexusProvider: public IModSource, public KxSingletonPtr<NexusProvider>
+	class NexusProvider:
+		public KxRTTI::IExtendInterface<NexusProvider, IModSource, IAuthenticableModSource>,
+		public KxSingletonPtr<NexusProvider>
 	{
 		private:
+			KxSecretDefaultStoreService m_CredentialsStore;
 			std::unique_ptr<KxWebSocket::IClient> m_WebSocketClient;
-			const wxString m_UserAgent;
-			KxUUID m_UserID;
-			wxString m_UserToken;
 
-		private:
-			void OnAuthSuccess(wxWindow* window = nullptr);
-			void OnAuthFail(wxWindow* window = nullptr);
+			wxString m_UserToken;
+			wxString m_UserAgent;
+			KxUUID m_SessionGUID;
+			bool m_IsAuthenticated = false;
+
+		protected:
+			// IAuthenticableModSource
+			wxWindow* GetInvokingWindow() const override;
+			KxStandardID OnAuthSuccess() override;
+			KxStandardID OnAuthFail() override;
+			KxSecretDefaultStoreService& GetSecretStore() override
+			{
+				return m_CredentialsStore;
+			}
 			
+		private:
 			wxString EndorsementStateToString(const ModEndorsement& state) const;
 			KxCURLSession& ConfigureRequest(KxCURLSession& request, const wxString& apiKey = wxEmptyString) const;
 			bool ShouldTryLater(const KxCURLReplyBase& reply) const;
@@ -35,16 +48,11 @@ namespace Kortex::NetworkManager
 			wxString GetAPIKey(wxString* userName = nullptr) const;
 			void RequestUserAvatar(Nexus::ValidationInfo& info);
 
-		protected:
-			virtual bool DoAuthenticate(wxWindow* window = nullptr) override;
-			virtual bool DoValidateAuth(wxWindow* window = nullptr) override;
-			virtual bool DoSignOut(wxWindow* window = nullptr) override;
-			virtual bool DoIsAuthenticated() const override;
-
 		public:
 			NexusProvider();
 
 		public:
+			// IModSource
 			KImageEnum GetIcon() const override;
 			wxString GetName() const override;
 			wxString GetGameID(const GameID& id = GameIDs::NullGameID) const override;
@@ -57,6 +65,14 @@ namespace Kortex::NetworkManager
 			wxString GetModURL(const ProviderRequest& request) override;
 
 		public:
+			// IAuthenticableModSource
+			bool IsAuthenticated() const override;
+			bool Authenticate() override;
+			bool ValidateAuth() override;
+			bool SignOut() override;
+
+		public:
+			// IModSource
 			std::unique_ptr<IModInfo> NewModInfo() const override
 			{
 				return std::make_unique<Nexus::ModInfo>();

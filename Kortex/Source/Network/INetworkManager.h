@@ -57,7 +57,7 @@ namespace Kortex
 			{
 				return GetModSource(name) != nullptr;
 			}
-			bool IsDefaultProviderAuthenticated() const;
+			bool IsDefaultModSourceAuthenticated() const;
 			
 			virtual void OnAuthStateChanged() = 0;
 	};

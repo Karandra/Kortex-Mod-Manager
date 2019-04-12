@@ -7,40 +7,12 @@
 namespace Kortex::NetworkManager
 {
 	LoversLabProvider::LoversLabProvider()
-		:IModSource(wxS("LoversLab"))
 	{
 	}
 
 	wxString LoversLabProvider::GetAPIURL() const
 	{
 		return "https://www.loverslab.com/api";
-	}
-
-	bool LoversLabProvider::DoAuthenticate(wxWindow* window)
-	{
-		bool cancelled = false;
-		if (RequestAuthInfoAndSave(window, &cancelled))
-		{
-			OnAuthSuccess(window);
-			return true;
-		}
-		else if (!cancelled)
-		{
-			OnAuthFail(window);
-		}
-		return false;
-	}
-	bool LoversLabProvider::DoValidateAuth(wxWindow* window)
-	{
-		return HasAuthInfo();
-	}
-	bool LoversLabProvider::DoSignOut(wxWindow* window)
-	{
-		return IModSource::DoSignOut(window);
-	}
-	bool LoversLabProvider::DoIsAuthenticated() const
-	{
-		return IModSource::DoIsAuthenticated();
 	}
 
 	KImageEnum LoversLabProvider::GetIcon() const

@@ -14,13 +14,11 @@ namespace Kortex
 	{
 	}
 
-	bool INetworkManager::IsDefaultProviderAuthenticated() const
+	bool INetworkManager::IsDefaultModSourceAuthenticated() const
 	{
 		const IModSource* modSource = GetDefaultModSource();
-		if (modSource && modSource->IsAuthenticated())
-		{
-			return true;
-		}
-		return false;
+		const IAuthenticableModSource* auth = nullptr;
+		
+		return modSource && modSource->QueryInterface(auth) && auth->IsAuthenticated();
 	}
 }

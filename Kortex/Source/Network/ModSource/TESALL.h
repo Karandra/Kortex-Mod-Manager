@@ -8,14 +8,10 @@ class KxCURLSession;
 
 namespace Kortex::NetworkManager
 {
-	class TESALLProvider: public IModSource, public KxSingletonPtr<TESALLProvider>
+	class TESALLProvider:
+		public KxRTTI::IExtendInterface<TESALLProvider, IModSource>,
+		public KxSingletonPtr<TESALLProvider>
 	{
-		protected:
-			virtual bool DoAuthenticate(wxWindow* window = nullptr) override;
-			virtual bool DoValidateAuth(wxWindow* window = nullptr) override;
-			virtual bool DoSignOut(wxWindow* window = nullptr) override;
-			virtual bool DoIsAuthenticated() const override;
-
 		public:
 			TESALLProvider();
 

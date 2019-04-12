@@ -36,27 +36,13 @@ namespace Kortex
 			}
 
 		private:
-			KxSecretDefaultStoreService m_LoginStore;
 			wxBitmap m_UserPicture;
-			bool m_RequiresAuthentication = true;
 
 		protected:
-			void OnAuthSuccess(wxWindow* window = nullptr);
-			void OnAuthFail(wxWindow* window = nullptr);
 			wxString ConstructIPBModURL(int64_t modID, const wxString& modSignature = wxEmptyString) const;
 			wxBitmap DownloadSmallBitmap(const wxString& url) const;
 
-		protected:
 			virtual void Init();
-
-			virtual bool DoIsAuthenticated() const;
-			virtual bool DoAuthenticate(wxWindow* window = nullptr) = 0;
-			virtual bool DoValidateAuth(wxWindow* window = nullptr) = 0;
-			virtual bool DoSignOut(wxWindow* window = nullptr) = 0;
-
-		public:
-			IModSource(const wxString& name);
-			virtual ~IModSource();
 
 		public:
 			bool IsDefault() const;
@@ -87,27 +73,6 @@ namespace Kortex
 			}
 			virtual wxString GetModURLBasePart(const GameID& id = GameIDs::NullGameID) const = 0;
 			virtual wxString GetModURL(const ProviderRequest& request) = 0;
-
-			bool HasAuthInfo() const;
-			bool LoadAuthInfo(wxString& userName, KxSecretValue& password) const;
-			bool LoadAuthInfo(wxString& userName) const
-			{
-				KxSecretValue password;
-				return LoadAuthInfo(userName, password);
-			}
-			bool LoadAuthInfo(KxSecretValue& password) const
-			{
-				wxString userName;
-				return LoadAuthInfo(userName, password);
-			}
-			bool SaveAuthInfo(const wxString& userName, const KxSecretValue& password);
-			bool RequestAuthInfo(wxString& userName, KxSecretValue& password, wxWindow* window = nullptr, bool* cancelled = nullptr) const;
-			bool RequestAuthInfoAndSave(wxWindow* window = nullptr, bool* cancelled = nullptr);
-
-			bool IsAuthenticated() const;
-			bool Authenticate(wxWindow* window = nullptr);
-			bool ValidateAuth(wxWindow* window = nullptr);
-			bool SignOut(wxWindow* window = nullptr);
 
 			virtual std::unique_ptr<IModInfo> NewModInfo() const = 0;
 			virtual std::unique_ptr<IModFileInfo> NewModFileInfo() const = 0;

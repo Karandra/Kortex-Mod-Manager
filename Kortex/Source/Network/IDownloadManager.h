@@ -6,6 +6,12 @@
 
 namespace Kortex
 {
+	class IModSource;
+	class IModRepository;
+}
+
+namespace Kortex
+{
 	namespace DownloadManager::Internal
 	{
 		extern const SimpleManagerInfo TypeInfo;
@@ -61,10 +67,10 @@ namespace Kortex
 
 			virtual IDownloadEntry& NewDownload() = 0;
 			virtual bool RemoveDownload(IDownloadEntry& download) = 0;
-			virtual bool QueueDownload(const IModDownloadInfo& downloadInfo,
-									   const IModFileInfo& fileInfo,
-									   IModSource* modSource,
-									   const GameID& id = GameIDs::NullGameID
+			virtual bool QueueDownload(const ModDownloadReply& downloadInfo,
+									   const ModFileReply& fileInfo,
+									   IModRepository& modRepository,
+									   const GameID& id = {}
 			) = 0;
 			virtual bool QueueFromOutside(const wxString& link) = 0;
 	};

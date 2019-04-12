@@ -6,7 +6,7 @@ namespace Kortex
 {
 	namespace NetworkManager::Internal
 	{
-		const SimpleManagerInfo TypeInfo("NetworkManager", "Network.Name");
+		const SimpleManagerInfo TypeInfo("NetworkManager", "NetworkManager.Name");
 	}
 
 	INetworkManager::INetworkManager()

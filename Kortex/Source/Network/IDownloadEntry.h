@@ -1,23 +1,21 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
+#include "Network/ModRepositoryReply.h"
 #include "GameInstance/GameID.h"
+#include <KxFramework/KxFileItem.h>
 #include <KxFramework/KxISerializer.h>
-class KxFileItem;
-
-namespace Kortex
-{
-	class IGameMod;
-	class IModSource;
-
-	class IModFileInfo;
-	class IModDownloadInfo;
-}
 
 namespace Kortex
 {
 	class IGameInstance;
+	class IGameMod;
+	class IModSource;
+	class IModRepository;
+}
 
+namespace Kortex
+{
 	class IDownloadEntry: public KxISerializer
 	{
 		public:
@@ -60,12 +58,11 @@ namespace Kortex
 			virtual bool IsCompleted() const = 0;
 			virtual bool CanRestart() const = 0;
 
-			virtual const IModFileInfo& GetFileInfo() const = 0;
-			virtual IModFileInfo& GetFileInfo() = 0;
-			virtual void SetFileInfo(std::unique_ptr<IModFileInfo> fileInfo) = 0;
+			virtual const ModFileReply& GetFileInfo() const = 0;
+			virtual ModFileReply& GetFileInfo() = 0;
 
-			virtual const IModDownloadInfo& GetDownloadInfo() const = 0;
-			virtual IModDownloadInfo& GetDownloadInfo() = 0;
+			virtual const ModDownloadReply& GetDownloadInfo() const = 0;
+			virtual ModDownloadReply& GetDownloadInfo() = 0;
 
 			virtual bool IsRunning() const = 0;
 			virtual bool IsPaused() const = 0;

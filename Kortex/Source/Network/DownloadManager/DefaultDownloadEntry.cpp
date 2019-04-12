@@ -45,12 +45,15 @@ namespace Kortex::DownloadManager
 	}
 	bool DefaultDownloadEntry::RequestNewLink()
 	{
-		ProviderRequest request(m_FileInfo->GetModID(), m_FileInfo->GetID(), GetTargetGameID());
-		auto info = m_ModSource->GetFileDownloadLinks(request);
-		if (!info.empty())
+		IModRepository* repository = nullptr;
+		if (m_ModSource && m_ModSource->QueryInterface(repository))
 		{
-			m_DownloadInfo = std::move(info.front());
-			return true;
+			ModRepositoryRequest request(m_FileInfo.ModID, m_FileInfo.ID, GetTargetGameID());
+			if (auto info = repository->GetFileDownloads(request); !info.empty())
+			{
+				m_DownloadInfo = std::move(info.front());
+				return true;
+			}
 		}
 		return false;
 	}
@@ -66,7 +69,7 @@ namespace Kortex::DownloadManager
 		int64_t totalSize = event.GetMajorTotal();
 		if (totalSize > 0)
 		{
-			m_FileInfo->SetSize(totalSize + reply.GetResumeFromPosition());
+			m_FileInfo.Size = totalSize + reply.GetResumeFromPosition();
 		}
 
 		// Downloaded size
@@ -102,7 +105,7 @@ namespace Kortex::DownloadManager
 		if (m_Stream->IsOk())
 		{
 			// Download session
-			m_Session = std::make_unique<KxCURLSession>(m_DownloadInfo->GetURL());
+			m_Session = std::make_unique<KxCURLSession>(m_DownloadInfo.URL);
 			m_Session->Bind(KxEVT_CURL_DOWNLOAD, &DefaultDownloadEntry::OnDownload, this);
 
 			// Initial view update
@@ -133,23 +136,18 @@ namespace Kortex::DownloadManager
 	}
 
 	DefaultDownloadEntry::DefaultDownloadEntry()
-		:m_ModSource(INetworkManager::GetInstance()->GetDefaultModSource())
 	{
-		m_FileInfo = m_ModSource->NewModFileInfo();
-		m_DownloadInfo = m_ModSource->NewModDownloadInfo();
-
-		Create();
 	}
-	DefaultDownloadEntry::DefaultDownloadEntry(const IModDownloadInfo& downloadInfo,
-											   const IModFileInfo& fileInfo,
-											   IModSource* modSource,
+	DefaultDownloadEntry::DefaultDownloadEntry(const ModDownloadReply& downloadInfo,
+											   const ModFileReply& fileInfo,
+											   IModRepository& modRepository,
 											   const GameID& id
 	)
-		:m_DownloadInfo(downloadInfo.Clone()),
-		m_FileInfo(fileInfo.Clone()),
+		:m_DownloadInfo(downloadInfo),
+		m_FileInfo(fileInfo),
 		m_Date(wxDateTime::Now()),
 		m_TargetGame(IGameInstance::GetTemplate(id)),
-		m_ModSource(modSource)
+		m_ModSource(modRepository.QueryInterface<IModSource>())
 	{
 		Create();
 	}
@@ -160,17 +158,17 @@ namespace Kortex::DownloadManager
 
 	wxString DefaultDownloadEntry::GetFullPath() const
 	{
-		return IDownloadManager::GetInstance()->GetDownloadsLocation() + '\\' + GetFileInfo().GetName();
+		return IDownloadManager::GetInstance()->GetDownloadsLocation() + '\\' + m_FileInfo.Name;
 	}
 	wxString DefaultDownloadEntry::GetMetaFilePath() const
 	{
-		return IDownloadManager::GetInstance()->GetDownloadsLocation() + '\\' + m_FileInfo->GetName() + ".xml";
+		return IDownloadManager::GetInstance()->GetDownloadsLocation() + '\\' + m_FileInfo.Name + ".xml";
 	}
 
 	const IGameMod* DefaultDownloadEntry::GetMod() const
 	{
 		// Try to find download by its file name first
-		IGameMod* mod = IModManager::GetInstance()->FindModByName(m_FileInfo->GetName());
+		IGameMod* mod = IModManager::GetInstance()->FindModByName(m_FileInfo.Name);
 		if (mod)
 		{
 			return mod;
@@ -179,7 +177,7 @@ namespace Kortex::DownloadManager
 		// Try to find download by its ID
 		if (m_ModSource)
 		{
-			return IModManager::GetInstance()->FindModBySource(*m_ModSource, m_FileInfo->GetModID());
+			return IModManager::GetInstance()->FindModBySource(*m_ModSource, m_FileInfo.ModID);
 		}
 		return nullptr;
 	}
@@ -286,20 +284,28 @@ namespace Kortex::DownloadManager
 
 	bool DefaultDownloadEntry::RepairBrokedDownload()
 	{
-		if (m_ModSource && m_ModSource->RestoreBrokenDownload(GetFullPath(), *this))
+		IModRepository* repository = nullptr;
+		if (m_ModSource && m_ModSource->QueryInterface(repository))
 		{
-			Save();
-			return true;
+			if (repository->RestoreBrokenDownload(GetFullPath(), *this))
+			{
+				Save();
+				return true;
+			}
 		}
 		return false;
 	}
 	bool DefaultDownloadEntry::QueryInfo()
 	{
-		if (m_ModSource)
+		IModRepository* repository = nullptr;
+		if (m_ModSource && m_ModSource->QueryInterface(repository))
 		{
-			ProviderRequest request(m_FileInfo->GetModID(), m_FileInfo->GetID(), GetTargetGameID());
-			m_FileInfo = m_ModSource->GetFileInfo(request);
-			return m_FileInfo && m_FileInfo->IsOK();
+			ModRepositoryRequest request(m_FileInfo.ModID, m_FileInfo.ID, GetTargetGameID());
+			if (auto fileInfo = repository->GetModFileInfo(request); fileInfo && fileInfo->IsOK())
+			{
+				m_FileInfo = std::move(*fileInfo);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -318,20 +324,20 @@ namespace Kortex::DownloadManager
 			rootNode.NewElement("Game").SetValue(m_TargetGame->GetGameID().ToString());
 		}
 
-		rootNode.NewElement("ModID").SetValue(m_FileInfo->GetModID().GetValue());
-		rootNode.NewElement("FileID").SetValue(m_FileInfo->GetID().GetValue());
-		rootNode.NewElement("Name").SetValue(m_FileInfo->GetName());
-		rootNode.NewElement("DisplayName").SetValue(m_FileInfo->GetDisplayName());
-		rootNode.NewElement("Version").SetValue(m_FileInfo->GetVersion());
+		rootNode.NewElement("ModID").SetValue(m_FileInfo.ModID.GetValue());
+		rootNode.NewElement("FileID").SetValue(m_FileInfo.ID.GetValue());
+		rootNode.NewElement("Name").SetValue(m_FileInfo.Name);
+		rootNode.NewElement("DisplayName").SetValue(m_FileInfo.DisplayName);
+		rootNode.NewElement("Version").SetValue(m_FileInfo.Version);
 		rootNode.NewElement("Date").SetValue(m_Date.FormatISOCombined());
 
-		if (wxString changeLog = m_FileInfo->GetChangeLog(); !changeLog.IsEmpty())
+		if (!m_FileInfo.ChangeLog.IsEmpty())
 		{
-			rootNode.NewElement("ChangeLog").SetValue(changeLog, true);
+			rootNode.NewElement("ChangeLog").SetValue(m_FileInfo.ChangeLog, true);
 		}
 
 		KxXMLNode sizeNode = rootNode.NewElement("Size");
-		sizeNode.SetAttribute("Total", m_FileInfo->GetSize());
+		sizeNode.SetAttribute("Total", m_FileInfo.Size);
 		sizeNode.SetAttribute("Downloaded", m_DownloadedSize);
 
 		KxXMLNode stateNode = rootNode.NewElement("State");
@@ -351,35 +357,21 @@ namespace Kortex::DownloadManager
 		if (loaded && rootNode.IsOK())
 		{
 			m_ModSource = INetworkManager::GetInstance()->GetModSource(rootNode.GetFirstChildElement("Source").GetValue());
-			if (m_ModSource == nullptr)
-			{
-				// TODO: maybe I should create 'dummy' modSource?
-				m_ModSource = nullptr;
-			}
-
-			if (m_ModSource)
-			{
-				m_FileInfo = m_ModSource->NewModFileInfo();
-				m_DownloadInfo = m_ModSource->NewModDownloadInfo();
-			}
-
 			m_TargetGame = IGameInstance::GetTemplate(rootNode.GetFirstChildElement("Game").GetValue());
 			if (m_TargetGame == nullptr)
 			{
 				m_TargetGame = IGameInstance::GetActive();
 			}
 
+			m_FileInfo.ModID = rootNode.GetFirstChildElement("ModID").GetValueInt(-1);
+			m_FileInfo.ID = rootNode.GetFirstChildElement("FileID").GetValueInt(-1);
+			m_FileInfo.Name = rootNode.GetFirstChildElement("Name").GetValue();
+			m_FileInfo.DisplayName = rootNode.GetFirstChildElement("DisplayName").GetValue();
+			m_FileInfo.Version = rootNode.GetFirstChildElement("Version").GetValue();
+			m_FileInfo.ChangeLog = rootNode.GetFirstChildElement("ChangeLog").GetValue();
+
 			KxXMLNode sizeNode = rootNode.GetFirstChildElement("Size");
-			if (m_FileInfo)
-			{
-				m_FileInfo->SetModID(rootNode.GetFirstChildElement("ModID").GetValueInt(-1));
-				m_FileInfo->SetID(rootNode.GetFirstChildElement("FileID").GetValueInt(-1));
-				m_FileInfo->SetName(rootNode.GetFirstChildElement("Name").GetValue());
-				m_FileInfo->SetDisplayName(rootNode.GetFirstChildElement("DisplayName").GetValue());
-				m_FileInfo->SetVersion(rootNode.GetFirstChildElement("Version").GetValue());
-				m_FileInfo->SetChangeLog(rootNode.GetFirstChildElement("ChangeLog").GetValue());
-				m_FileInfo->SetSize(sizeNode.GetAttributeInt("Total", -1));
-			}
+			m_FileInfo.Size = sizeNode.GetAttributeInt("Total", -1);
 
 			m_Date.ParseISOCombined(rootNode.GetFirstChildElement("Date").GetValue());
 			m_DownloadedSize = sizeNode.GetAttributeInt("Downloaded", -1);
@@ -387,7 +379,7 @@ namespace Kortex::DownloadManager
 			KxXMLNode stateNode = rootNode.GetFirstChildElement("State");
 			m_IsPaused = stateNode.GetAttributeBool("Paused", false);
 			m_IsHidden = stateNode.GetAttributeBool("Hidden", false);
-			m_IsFailed = stateNode.GetAttributeBool("Failed", m_DownloadedSize != m_FileInfo->GetSize()) || !KxFile(GetFullPath()).IsFileExist();
+			m_IsFailed = stateNode.GetAttributeBool("Failed", m_DownloadedSize != m_FileInfo.Size) || !KxFile(GetFullPath()).IsFileExist();
 
 			return true;
 		}
@@ -398,18 +390,19 @@ namespace Kortex::DownloadManager
 		m_ModSource = INetworkManager::GetInstance()->GetDefaultModSource();
 		m_TargetGame = IGameInstance::GetActive();
 		m_Date = fileItem.GetModificationTime();
-		m_FileInfo->SetName(fileItem.GetName());
+
+		m_FileInfo.Name = fileItem.GetName();
 
 		if (fileItem.IsOK())
 		{
 			m_DownloadedSize = fileItem.GetFileSize();
-			m_FileInfo->SetSize(fileItem.GetFileSize());
+			m_FileInfo.Size = fileItem.GetFileSize();
 			m_IsFailed = false;
 		}
 		else
 		{
 			m_DownloadedSize = 0;
-			m_FileInfo->SetSize(-1);
+			m_FileInfo.Size = -1;
 			m_IsFailed = true;
 		}
 	}

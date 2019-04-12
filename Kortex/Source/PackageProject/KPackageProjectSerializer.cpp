@@ -22,15 +22,15 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 		wxString siteName = KAux::ExtractDomainName(url);
 		if (siteName == "tesall.ru")
 		{
-			modSource = Kortex::NetworkManager::TESALLProvider::GetInstance();
+			modSource = Kortex::NetworkManager::TESALLSource::GetInstance();
 		}
 		else if (siteName == "nexusmods.com" || siteName.AfterFirst('.') == "nexusmods.com" || siteName.Contains("nexus"))
 		{
-			modSource = Kortex::NetworkManager::NexusProvider::GetInstance();
+			modSource = Kortex::NetworkManager::NexusSource::GetInstance();
 		}
 		else if (siteName == "loverslab.com")
 		{
-			modSource = Kortex::NetworkManager::LoversLabProvider::GetInstance();
+			modSource = Kortex::NetworkManager::LoversLabSource::GetInstance();
 		}
 		KxUtility::SetIfNotNull(domainNameOut, siteName);
 
@@ -47,7 +47,7 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
 {
 	wxString copy = bbSource;
-	return Kortex::NetworkManager::NexusProvider::GetInstance()->ConvertDescriptionToHTML(copy);
+	return Kortex::NetworkManager::NexusSource::GetInstance()->ConvertDescriptionToHTML(copy);
 }
 wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, KPPContentType type) const
 {

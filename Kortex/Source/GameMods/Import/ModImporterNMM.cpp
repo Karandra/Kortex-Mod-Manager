@@ -210,7 +210,7 @@ namespace Kortex::ModManager
 			{
 				modID = infoNode.GetFirstChildElement("Id").GetValueInt(modID.GetValue());
 			}
-			mod.GetModSourceStore().AssignWith<NetworkManager::NexusProvider>(modID);
+			mod.GetModSourceStore().AssignWith<NetworkManager::NexusSource>(modID);
 
 			// Install date
 			mod.SetInstallTime(KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
@@ -292,19 +292,19 @@ namespace Kortex::ModManager
 
 				IDownloadEntry& entry = manager->NewDownload();
 				entry.SetTargetGame(m_TargetGame);
-				entry.SetModSource(NetworkManager::NexusProvider::GetInstance());
+				entry.SetModSource(NetworkManager::NexusSource::GetInstance());
 				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
-				entry.GetDownloadInfo().SetURL(infoNode.GetFirstChildElement("Website").GetValue());
+				entry.GetDownloadInfo().URL = infoNode.GetFirstChildElement("Website").GetValue();
 
-				entry.GetFileInfo().SetModID(infoNode.GetFirstChildElement("Id").GetValueInt(-1));
-				entry.GetFileInfo().SetID(infoNode.GetFirstChildElement("DownloadId").GetValueInt(-1));
-				entry.GetFileInfo().SetName(fileItem.GetName());
-				entry.GetFileInfo().SetDisplayName(infoNode.GetFirstChildElement("Name").GetValue());
-				entry.GetFileInfo().SetVersion(infoNode.GetFirstChildElement("Version").GetValue());
+				entry.GetFileInfo().ModID = infoNode.GetFirstChildElement("Id").GetValueInt(-1);
+				entry.GetFileInfo().ID = infoNode.GetFirstChildElement("DownloadId").GetValueInt(-1);
+				entry.GetFileInfo().Name = fileItem.GetName();
+				entry.GetFileInfo().DisplayName = infoNode.GetFirstChildElement("Name").GetValue();
+				entry.GetFileInfo().Version = infoNode.GetFirstChildElement("Version").GetValue();
 
-				int64_t size = archiveFile.GetFileSize();
-				entry.GetFileInfo().SetSize(size);
+				const int64_t size = archiveFile.GetFileSize();
+				entry.GetFileInfo().Size = size;
 				entry.SetDownloadedSize(size);
 
 				entry.SetPaused(false);

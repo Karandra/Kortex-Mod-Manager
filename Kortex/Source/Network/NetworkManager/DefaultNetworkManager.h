@@ -54,7 +54,7 @@ namespace Kortex::NetworkManager
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 
 			void ValidateAuth();
-			bool SetDefaultProviderToFirstAvailableIfNone();
+			bool AdjustDefaultModSource();
 
 		private:
 			void OnSetToolBarButton(KxAuiToolBarItem* button) override;

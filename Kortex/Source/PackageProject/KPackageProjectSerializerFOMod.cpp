@@ -350,7 +350,7 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 		ModID nexusID = infoNode.GetFirstChildElement("Id").GetValueInt(ModID::GetInvalidValue());
 		if (nexusID.HasValue())
 		{
-			modSourceStore.TryAddWith<Kortex::NetworkManager::NexusProvider>(nexusID);
+			modSourceStore.TryAddWith<Kortex::NetworkManager::NexusSource>(nexusID);
 		}
 
 		wxString siteURL = infoNode.GetFirstChildElement("Website").GetValue();
@@ -367,7 +367,7 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 			{
 				// Site for Nexus already retrieved, so add as generic
 				Kortex::IModSource* modSource = nullptr;
-				if (webSite.TryGetModSource(modSource) && modSource == Kortex::NetworkManager::NexusProvider::GetInstance())
+				if (webSite.TryGetModSource(modSource) && modSource == Kortex::NetworkManager::NexusSource::GetInstance())
 				{
 					AddAsGenericSite(siteName);
 				}
@@ -726,12 +726,12 @@ void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& 
 	const ModSourceStore& modSourceStore = m_ProjectSave->GetInfo().GetModSourceStore();
 
 	// Write Nexus to 'Id'
-	if (const ModSourceItem* nexusItem = modSourceStore.GetItem(NexusProvider::GetInstance()->GetName()))
+	if (const ModSourceItem* nexusItem = modSourceStore.GetItem(NexusSource::GetInstance()->GetName()))
 	{
 		infoNode.NewElement("Id").SetValue(nexusItem->GetModInfo().GetModID().GetValue());
 	}
 
-	if (!(WriteSite<LoversLabProvider>(modSourceStore, sitesNode) || WriteSite<TESALLProvider>(modSourceStore, sitesNode)))
+	if (!(WriteSite<LoversLabSource>(modSourceStore, sitesNode) || WriteSite<TESALLSource>(modSourceStore, sitesNode)))
 	{
 		// Write first one from store
 		modSourceStore.Visit([&sitesNode](const ModSourceItem& item)

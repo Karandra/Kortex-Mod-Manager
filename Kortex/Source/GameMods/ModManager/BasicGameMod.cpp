@@ -43,9 +43,9 @@ namespace
 	}
 	void LoadOldSites(ModSourceStore& store, KxXMLNode& sitesNode)
 	{
-		LoadOldSite<NetworkManager::NexusProvider>(store, sitesNode, "NexusID", "Nexus");
-		LoadOldSite<NetworkManager::LoversLabProvider>(store, sitesNode, "LoversLabID", "LoversLab");
-		LoadOldSite<NetworkManager::TESALLProvider>(store, sitesNode, "TESALLID", "TESALL");
+		LoadOldSite<NetworkManager::NexusSource>(store, sitesNode, "NexusID", "Nexus");
+		LoadOldSite<NetworkManager::LoversLabSource>(store, sitesNode, "LoversLabID", "LoversLab");
+		LoadOldSite<NetworkManager::TESALLSource>(store, sitesNode, "TESALLID", "TESALL");
 
 		// Load any "free" sites
 		for (KxXMLNode node = sitesNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())

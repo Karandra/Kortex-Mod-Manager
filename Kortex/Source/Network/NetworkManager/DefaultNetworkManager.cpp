@@ -20,9 +20,9 @@ namespace Kortex::NetworkManager
 
 		// Init sources
 		m_ModSources.reserve(3);
-		AddModSource<NexusProvider>();
-		AddModSource<LoversLabProvider>();
-		AddModSource<TESALLProvider>();
+		AddModSource<NexusSource>();
+		AddModSource<LoversLabSource>();
+		AddModSource<TESALLSource>();
 
 		// Load default source
 		if (IModSource* modSource = GetModSource(GetAInstanceOption(OName::ModSource).GetAttribute(OName::Default)))
@@ -52,9 +52,9 @@ namespace Kortex::NetworkManager
 				auth->ValidateAuth();
 			}
 		}
-		SetDefaultProviderToFirstAvailableIfNone();
+		AdjustDefaultModSource();
 	}
-	bool DefaultNetworkManager::SetDefaultProviderToFirstAvailableIfNone()
+	bool DefaultNetworkManager::AdjustDefaultModSource()
 	{
 		if (!IsDefaultModSourceAuthenticated())
 		{
@@ -200,7 +200,7 @@ namespace Kortex::NetworkManager
 			if (dialog.ShowModal() == KxID_YES)
 			{
 				auth->SignOut();
-				SetDefaultProviderToFirstAvailableIfNone();
+				AdjustDefaultModSource();
 				QueueUIUpdate();
 			}
 		}
@@ -231,10 +231,10 @@ namespace Kortex::NetworkManager
 
 	void DefaultNetworkManager::OnAuthStateChanged()
 	{
+		AdjustDefaultModSource();
+
 		CreateMenu();
 		UpdateButton();
-
-		SetDefaultProviderToFirstAvailableIfNone();
 	}
 	wxString DefaultNetworkManager::GetCacheFolder() const
 	{

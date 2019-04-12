@@ -180,17 +180,17 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 
 	// Providers
 	using namespace Kortex::NetworkManager;
-	if (m_WebSitesNexusID = AddModSourceControl<NexusProvider>(sitesSizer))
+	if (m_WebSitesNexusID = AddModSourceControl<NexusSource>(sitesSizer))
 	{
-		m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusProvider>, this);
+		m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusSource>, this);
 	}
-	if (m_WebSitesLoversLabID = AddModSourceControl<LoversLabProvider>(sitesSizer))
+	if (m_WebSitesLoversLabID = AddModSourceControl<LoversLabSource>(sitesSizer))
 	{
-		m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabProvider>, this);
+		m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabSource>, this);
 	}
-	if (m_WebSitesTESALLID = AddModSourceControl<TESALLProvider>(sitesSizer))
+	if (m_WebSitesTESALLID = AddModSourceControl<TESALLSource>(sitesSizer))
 	{
-		m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLProvider>, this);
+		m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLSource>, this);
 	}
 	m_WebSitesButton = AddControlsRow(sitesSizer, KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), new KxButton(m_Pane, KxID_NONE, KTr(KxID_EDIT)), 0);
 
@@ -215,9 +215,9 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 				}
 			}
 		};
-		UpdateWebInput(m_WebSitesNexusID, NexusProvider::GetInstance());
-		UpdateWebInput(m_WebSitesLoversLabID, LoversLabProvider::GetInstance());
-		UpdateWebInput(m_WebSitesTESALLID, TESALLProvider::GetInstance());
+		UpdateWebInput(m_WebSitesNexusID, NexusSource::GetInstance());
+		UpdateWebInput(m_WebSitesLoversLabID, LoversLabSource::GetInstance());
+		UpdateWebInput(m_WebSitesTESALLID, TESALLSource::GetInstance());
 
 		event.Skip();
 	});
@@ -393,9 +393,9 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& projectInfo)
 		}
 		input->Clear();
 	};
-	SetModSourceValue(NexusProvider::GetInstance(), m_WebSitesNexusID);
-	SetModSourceValue(LoversLabProvider::GetInstance(), m_WebSitesLoversLabID);
-	SetModSourceValue(TESALLProvider::GetInstance(), m_WebSitesTESALLID);
+	SetModSourceValue(NexusSource::GetInstance(), m_WebSitesNexusID);
+	SetModSourceValue(LoversLabSource::GetInstance(), m_WebSitesLoversLabID);
+	SetModSourceValue(TESALLSource::GetInstance(), m_WebSitesTESALLID);
 
 	/* Config */
 	// Package path

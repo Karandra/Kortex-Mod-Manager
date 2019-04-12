@@ -20,12 +20,12 @@ namespace
 	using namespace Kortex::NetworkManager;
 	using TJsonValue = typename nlohmann::json::value_type;
 
-	struct CategoryDef: public KxIndexedEnum::Definition<CategoryDef, IModFileInfo::CategoryID, wxString>
+	struct CategoryDef: public KxIndexedEnum::Definition<CategoryDef, ModFileCategory, wxString>
 	{
 		inline static const TItem ms_Index[] = 
 		{
-			{IModFileInfo::CategoryID::Main, wxS("MAIN")},
-			{IModFileInfo::CategoryID::Optional, wxS("OPTIONAL")},
+			{ModFileCategory::Main, wxS("MAIN")},
+			{ModFileCategory::Optional, wxS("OPTIONAL")},
 		};
 	};
 
@@ -123,7 +123,7 @@ namespace
 		date.ParseISOCombined(json.get<wxString>());
 		return date.FromUTC(date.IsDST());
 	}
-	void ReadFileInfo(const TJsonValue& json, ReplyStructs::ModFileInfo& info)
+	void ReadFileInfo(const TJsonValue& json, ModFileReply& info)
 	{
 		info.ID = json["file_id"].get<ModID::TValue>();
 		info.IsPrimary = json["is_primary"];
@@ -139,9 +139,9 @@ namespace
 		info.Size = json["size"].get<int64_t>() * 1024;
 
 		// Values: 'MAIN', 'OPTIONAL', <TBD>.
-		info.Category = CategoryDef::FromString(json["category_name"].get<wxString>(), IModFileInfo::CategoryID::Unknown);
+		info.Category = CategoryDef::FromString(json["category_name"].get<wxString>(), ModFileCategory::Unknown);
 	}
-	void ReadGameInfo(const TJsonValue& json, Nexus::Internal::ReplyStructs::GameInfo& info)
+	void ReadGameInfo(const TJsonValue& json, NetworkManager::NexusGameReply& info)
 	{
 		info.ID = json["id"];
 		info.Name = json["name"].get<wxString>();
@@ -156,11 +156,7 @@ namespace
 		info.m_ApprovedDate = wxDateTime((time_t)json["approved_date"]);
 	}
 
-	void ReportRequestQuoteReached(const NexusProvider& nexus)
-	{
-		INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("Network.RequestQuotaReched", nexus.GetName()), KxICON_WARNING);
-	}
-	void ReportRequestError(const NexusProvider& nexus, const wxString& message)
+	void ReportRequestError(const wxString& message)
 	{
 		try
 		{
@@ -172,15 +168,29 @@ namespace
 			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message, KxICON_ERROR);
 		}
 	}
+	bool TestRequestError(const KxCURLReplyBase& reply, const wxString& message = {})
+	{
+		if (reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests)
+		{
+			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("Network.RequestQuotaReched", NexusSource::GetInstance()->GetName()), KxICON_WARNING);
+			return true;
+		}
+		else if (!reply.IsOK())
+		{
+			ReportRequestError(message);
+			return true;
+		}
+		return false;
+	}
 }
 
 namespace Kortex::NetworkManager
 {
-	wxWindow* NexusProvider::GetInvokingWindow() const
+	wxWindow* NexusSource::GetInvokingWindow() const
 	{
 		return KMainWindow::GetInstance();
 	}
-	KxStandardID NexusProvider::OnAuthSuccess()
+	KxStandardID NexusSource::OnAuthSuccess()
 	{
 		m_WebSocketClient.reset();
 		m_IsAuthenticated = true;
@@ -192,7 +202,7 @@ namespace Kortex::NetworkManager
 		});
 		return KxID_OK;
 	}
-	KxStandardID NexusProvider::OnAuthFail()
+	KxStandardID NexusSource::OnAuthFail()
 	{
 		m_WebSocketClient.reset();
 		m_UserToken.clear();
@@ -207,7 +217,7 @@ namespace Kortex::NetworkManager
 		return KxID_OK;
 	}
 
-	wxString NexusProvider::EndorsementStateToString(const ModEndorsement& state) const
+	wxString NexusSource::EndorsementStateToString(const ModEndorsement& state) const
 	{
 		if (state.IsEndorsed())
 		{
@@ -219,7 +229,7 @@ namespace Kortex::NetworkManager
 		}
 		return "undecided";
 	}
-	KxCURLSession& NexusProvider::ConfigureRequest(KxCURLSession& request, const wxString& apiKey) const
+	KxCURLSession& NexusSource::ConfigureRequest(KxCURLSession& request, const wxString& apiKey) const
 	{
 		const IApplication* app = IApplication::GetInstance();
 
@@ -232,15 +242,12 @@ namespace Kortex::NetworkManager
 
 		return request;
 	}
-	bool NexusProvider::ShouldTryLater(const KxCURLReplyBase& reply) const
-	{
-		return reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests;
-	}
-	wxString NexusProvider::GetAPIURL() const
+
+	wxString NexusSource::GetAPIURL() const
 	{
 		return "https://api.nexusmods.com/v1";
 	}
-	wxString NexusProvider::GetAPIKey(wxString* userName) const
+	wxString NexusSource::GetAPIKey(wxString* userName) const
 	{
 		if (auto credentials = LoadCredentials())
 		{
@@ -249,20 +256,20 @@ namespace Kortex::NetworkManager
 		}
 		return {};
 	}
-	void NexusProvider::RequestUserAvatar(Nexus::ValidationInfo& info)
+	void NexusSource::RequestUserAvatar(const NexusValidationReply& info)
 	{
 		if (!HasUserPicture())
 		{
-			SetUserPicture(DownloadSmallBitmap(info.GetProfilePicture()));
+			SetUserPicture(DownloadSmallBitmap(info.ProfilePicture));
 		}
 	}
 
-	NexusProvider::NexusProvider()
+	NexusSource::NexusSource()
 		:m_CredentialsStore(wxS("Kortex/NexusMods")), m_UserAgent(GetUserAgent(NetworkSoftware::CURL))
 	{
 	}
 
-	bool NexusProvider::Authenticate()
+	bool NexusSource::Authenticate()
 	{
 		m_WebSocketClient = KxWebSocket::NewSecureClient("wss://sso.nexusmods.com");
 		m_WebSocketClient->SetUserAgent(GetUserAgent(NetworkSoftware::WebSocket));
@@ -292,10 +299,9 @@ namespace Kortex::NetworkManager
 			{
 				json["token"] = m_UserToken;
 			}
-			INotificationCenter::GetInstance()->Notify("GUID", guid, KxICON_INFO);
-
 			m_WebSocketClient->Send(KxJSON::Save(json));
-			wxString openURL = KxString::Format("https://www.nexusmods.com/sso?id=%1&application=%2", guid, appID);
+
+			const wxString openURL = KxString::Format("https://www.nexusmods.com/sso?id=%1&application=%2", guid, appID);
 			KxShell::Execute(GetInvokingWindow(), KxShell::GetDefaultViewer("html"), "open", openURL);
 		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_MESSAGE, [this](KxWebSocketEvent& event)
@@ -311,8 +317,6 @@ namespace Kortex::NetworkManager
 					if (auto it = data.find("connection_token"); it != data.end())
 					{
 						m_UserToken = it->get<wxString>();
-						INotificationCenter::GetInstance()->Notify("UserToken", m_UserToken, KxICON_INFO);
-
 						if (m_UserToken.IsEmpty())
 						{
 							OnAuthFail();
@@ -324,12 +328,11 @@ namespace Kortex::NetworkManager
 					if (auto it = data.find("api_key"); it != data.end())
 					{
 						const wxString apiKey = it->get<wxString>();
-						INotificationCenter::GetInstance()->Notify("API Key", apiKey, KxICON_INFO);
-
 						auto info = GetValidationInfo(apiKey);
-						if (info->IsOK() && info->GetAPIKey() == apiKey)
+
+						if (info && info->APIKey == apiKey)
 						{
-							if (SaveCredentials(Credentials(info->GetUserName(), apiKey)))
+							if (SaveCredentials(Credentials(info->UserName, apiKey)))
 							{
 								RequestUserAvatar(*info);
 								OnAuthSuccess();
@@ -365,38 +368,41 @@ namespace Kortex::NetworkManager
 
 		return m_WebSocketClient->Connect();
 	}
-	bool NexusProvider::ValidateAuth()
+	bool NexusSource::ValidateAuth()
 	{
-		if (auto info = GetValidationInfo())
+		if (LoadCredentials())
 		{
-			RequestUserAvatar(*info);
-			m_IsAuthenticated = info->GetAPIKey() == GetAPIKey();
+			if (auto info = GetValidationInfo())
+			{
+				RequestUserAvatar(*info);
+
+				m_IsAuthenticated = info->APIKey == GetAPIKey();
+				return m_IsAuthenticated;
+			}
 		}
-		else
-		{
-			m_IsAuthenticated = false;
-		}
+
+		m_IsAuthenticated = false;
 		return m_IsAuthenticated;
 	}
-	bool NexusProvider::SignOut()
+	bool NexusSource::SignOut()
 	{
 		m_IsAuthenticated = false;
 		return m_CredentialsStore.Delete();
 	}
-	bool NexusProvider::IsAuthenticated() const
+	bool NexusSource::IsAuthenticated() const
 	{
 		return m_IsAuthenticated;
 	}
 
-	KImageEnum NexusProvider::GetIcon() const
+	KImageEnum NexusSource::GetIcon() const
 	{
 		return KIMG_SITE_NEXUS;
 	}
-	wxString NexusProvider::GetName() const
+	wxString NexusSource::GetName() const
 	{
 		return "Nexus";
 	}
-	wxString NexusProvider::GetGameID(const GameID& id) const
+	wxString NexusSource::GetGameID(const GameID& id) const
 	{
 		// If invalid profile is passed, return ID for current profile.
 		if (id.IsOK())
@@ -435,7 +441,7 @@ namespace Kortex::NetworkManager
 		}
 		return IModSource::GetGameID(id);
 	}
-	wxString& NexusProvider::ConvertDescriptionToHTML(wxString& description) const
+	wxString& NexusSource::ConvertDescriptionToHTML(wxString& description) const
 	{
 		auto RAW = [](const auto& s)
 		{
@@ -544,18 +550,18 @@ namespace Kortex::NetworkManager
 
 		return description;
 	}
-	wxString NexusProvider::GetModURLBasePart(const GameID& id) const
+	wxString NexusSource::GetModURLBasePart(const GameID& id) const
 	{
 		return wxString::Format("https://www.nexusmods.com/%s/mods", GetGameID(id)).MakeLower();
 	}
-	wxString NexusProvider::GetModURL(const ProviderRequest& request)
+	wxString NexusSource::GetModURL(const ModRepositoryRequest& request)
 	{
 		return KxString::Format("%1/%2", GetModURLBasePart(request.GetGameID()), request.GetModID().GetValue());
 	}
 
-	bool NexusProvider::RestoreBrokenDownload(const wxString& filePath, IDownloadEntry& download)
+	bool NexusSource::RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download)
 	{
-		wxString name = filePath.AfterLast(wxS('\\'));
+		wxString name = fileItem.GetName();
 		wxRegEx reg(u8R"((.*?)\-(\d+)\-(.*)\.)", wxRE_EXTENDED|wxRE_ADVANCED|wxRE_ICASE);
 		if (reg.Matches(name))
 		{
@@ -563,41 +569,41 @@ namespace Kortex::NetworkManager
 			ModID modID(reg.GetMatch(name, 2));
 			if (modID)
 			{
-				ProviderRequest request(modID, {}, download.GetTargetGameID());
-				for (auto& fileInfo: GetFilesList(request))
+				ModRepositoryRequest request(modID, {}, download.GetTargetGameID());
+				for (ModFileReply& fileInfo: GetModFiles(request))
 				{
-					if (fileInfo->GetName() == name)
+					if (fileInfo.Name == name)
 					{
 						// Fix size discrepancy caused by Nexus sending size in kilobytes
 						constexpr const int64_t oneKB = 1024 * 1024;
 						const int64_t downloadedSize = download.GetDownloadedSize();
-						const int64_t difference = downloadedSize - fileInfo->GetSize();
+						const int64_t difference = downloadedSize - fileInfo.Size;
 						if (difference > 0 && difference <= oneKB)
 						{
-							fileInfo->SetSize(downloadedSize);
+							fileInfo.Size = downloadedSize;
 						}
 
-						download.SetFileInfo(std::move(fileInfo));
+						download.GetFileInfo() = fileInfo;
 						return true;
 					}
 				}
 			}
 
-			IModFileInfo& fileInfo = download.GetFileInfo();
-
 			// If we got here, file is not found on Nexus, but we can try to restore as much as possible from the file name itself.
+			ModFileReply& fileInfo = download.GetFileInfo();
+
 			// Set mod ID
-			fileInfo.SetModID(modID);
+			fileInfo.ModID = modID;
 
 			// Display name
-			wxString name = reg.GetMatch(fileInfo.GetName(), 1);
-			name.Replace("_", " ");
-			fileInfo.SetDisplayName(name);
+			wxString displayName = reg.GetMatch(name, 1);
+			displayName.Replace("_", " ");
+			fileInfo.DisplayName = displayName;
 
 			// File version
-			wxString version = reg.GetMatch(fileInfo.GetName(), 2);
+			wxString version = reg.GetMatch(name, 2);
 			version.Replace("-", ".");
-			fileInfo.SetVersion(version);
+			fileInfo.Version = version;
 
 			// Still return fail status
 			return false;
@@ -605,7 +611,7 @@ namespace Kortex::NetworkManager
 		return false;
 	}
 
-	std::unique_ptr<IModInfo> NexusProvider::GetModInfo(const ProviderRequest& request) const
+	std::optional<ModInfoReply> NexusSource::GetModInfo(const ModRepositoryRequest& request) const
 	{
 		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3",
 												  GetAPIURL(),
@@ -613,39 +619,35 @@ namespace Kortex::NetworkManager
 												  request.GetModID().GetValue())
 		);
 		KxCURLReply reply = ConfigureRequest(connection).Send();
-		if (ShouldTryLater(reply))
+		if (TestRequestError(reply, reply))
 		{
-			ReportRequestQuoteReached(*this);
-			return nullptr;
+			return std::nullopt;
 		}
 
-		auto info = std::make_unique<Nexus::ModInfo>();
+		ModInfoReply info;
 		try
 		{
 			KxJSONObject json = KxJSON::Load(reply);
-			auto& data = info->m_Data;
 
-			data.ID = request.GetModID();
-			data.Name = json["name"].get<wxString>();
-			data.m_Summary = json["summary"].get<wxString>();
-			data.m_Description = json["description"].get<wxString>();
-			data.Author = json["author"].get<wxString>();
-			data.Uploader = json["uploaded_by"].get<wxString>();
-			data.UploaderProfile = json["uploaded_users_profile_url"].get<wxString>();
-			data.MainImage = json["picture_url"].get<wxString>();
+			info.ID = request.GetModID();
+			info.Name = json["name"].get<wxString>();
+			info.Summary = json["summary"].get<wxString>();
+			info.Description = json["description"].get<wxString>();
+			info.Author = json["author"].get<wxString>();
+			info.Uploader = json["uploaded_by"].get<wxString>();
+			info.UploaderProfile = json["uploaded_users_profile_url"].get<wxString>();
+			info.MainImage = json["picture_url"].get<wxString>();
 
-			data.Version = json["version"].get<wxString>();
-			data.UploadDate = ReadDateTime(json["created_time"]);
-			data.LastUpdateDate = ReadDateTime(json["updated_time"]);
+			info.Version = json["version"].get<wxString>();
+			info.UploadDate = ReadDateTime(json["created_time"]);
+			info.LastUpdateDate = ReadDateTime(json["updated_time"]);
 
-			data.ContainsAdultContent = json["contains_adult_content?"];
+			info.ContainsAdultContent = json["contains_adult_content"];
 
 			// Primary file
 			if (auto primaryFileIt = json.find("primary_file"); primaryFileIt != json.end())
 			{
-				auto fileInfo = std::make_unique<Nexus::ModFileInfo>();
-				ReadFileInfo(*primaryFileIt, fileInfo->m_Data);
-				info->m_PrimaryFile = std::move(fileInfo);
+				ReadFileInfo(*primaryFileIt, info.PrimaryFile);
 			}
 
 			// Endorsement state
@@ -654,158 +656,26 @@ namespace Kortex::NetworkManager
 			{
 				if (*endorsementStateIt == "Endorse")
 				{
-					data.EndorsementState = ModEndorsement::Endorsed();
+					info.EndorsementState = ModEndorsement::Endorsed();
 				}
 				else if (*endorsementStateIt == "Abstain")
 				{
-					data.EndorsementState = ModEndorsement::Abstained();
+					info.EndorsementState = ModEndorsement::Abstained();
 				}
 				else
 				{
-					data.EndorsementState = ModEndorsement::Undecided();
+					info.EndorsementState = ModEndorsement::Undecided();
 				}
 			}
 		}
 		catch (...)
 		{
-			ReportRequestError(*this, reply);
-			return nullptr;
+			ReportRequestError(reply);
+			return std::nullopt;
 		}
-
-		if (info->IsOK())
-		{
-			return info;
-		}
-		ReportRequestError(*this, reply);
-		return nullptr;
+		return info;
 	}
-	std::unique_ptr<IModFileInfo> NexusProvider::GetFileInfo(const ProviderRequest& request) const
-	{
-		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3/files/%4",
-												  GetAPIURL(),
-												  GetGameID(request),
-												  request.GetModID().GetValue(),
-												  request.GetFileID().GetValue())
-		);
-		KxCURLReply reply = ConfigureRequest(connection).Send();
-		if (ShouldTryLater(reply))
-		{
-			ReportRequestQuoteReached(*this);
-			return nullptr;
-		}
-
-		auto info = std::make_unique<Nexus::ModFileInfo>();
-		try
-		{
-			KxJSONObject json = KxJSON::Load(reply);
-
-			info->m_Data.ModID = request.GetModID();
-			ReadFileInfo(json, info->m_Data);
-		}
-		catch (...)
-		{
-			ReportRequestError(*this, reply);
-			return nullptr;
-		}
-
-		if (info->IsOK())
-		{
-			return info;
-		}
-		ReportRequestError(*this, reply);
-		return nullptr;
-	}
-	IModFileInfo::Vector NexusProvider::GetFilesList(const ProviderRequest& request) const
-	{
-		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3/files",
-												  GetAPIURL(),
-												  GetGameID(request),
-												  request.GetModID().GetValue())
-		);
-		KxCURLReply reply = ConfigureRequest(connection).Send();
-		if (ShouldTryLater(reply))
-		{
-			ReportRequestQuoteReached(*this);
-			return {};
-		}
-
-		IModFileInfo::Vector infoVector;
-		try
-		{
-			KxJSONObject json = KxJSON::Load(reply);
-			infoVector.reserve(json.size());
-
-			for (const KxJSONObject& value: json["files"])
-			{
-				auto info = std::make_unique<Nexus::ModFileInfo>();
-				info->m_Data.ModID = request.GetModID();
-				ReadFileInfo(value, info->m_Data);
-
-				if (info->IsOK())
-				{
-					infoVector.emplace_back(std::move(info));
-				}
-			}
-		}
-		catch (...)
-		{
-			ReportRequestError(*this, reply);
-			infoVector.clear();
-		}
-		return infoVector;
-	}
-	IModDownloadInfo::Vector NexusProvider::GetFileDownloadLinks(const ProviderRequest& request) const
-	{
-		wxString query = KxString::Format("%1/games/%2/mods/%3/files/%4/download_link",
-										  GetAPIURL(),
-										  GetGameID(request),
-										  request.GetModID().GetValue(),
-										  request.GetFileID().GetValue()
-		);
-
-		Nexus::Internal::ReplyStructs::ModDownloadInfoNXM nxmExtraInfo;
-		if (request.GetExtraInfo(nxmExtraInfo))
-		{
-			query += KxString::Format("?key=%1&expires=%2", nxmExtraInfo.Key, nxmExtraInfo.Expires);
-		}
-		KxCURLSession connection(query);
-
-		KxCURLReply reply = ConfigureRequest(connection).Send();
-		if (ShouldTryLater(reply))
-		{
-			ReportRequestQuoteReached(*this);
-			return {};
-		}
-
-		IModDownloadInfo::Vector infoVector;
-		try
-		{
-			KxJSONObject json = KxJSON::Load(reply);
-			infoVector.reserve(json.size());
-
-			for (const KxJSONObject& value: json)
-			{
-				auto info = std::make_unique<Nexus::ModDownloadInfo>();
-				auto& data = info->m_Data;
-
-				data.Name = value["name"].get<wxString>();
-				data.ShortName = value["short_name"].get<wxString>();
-				data.URL = ConvertUnicodeEscapes(value["URI"].get<wxString>());
-
-				if (info->IsOK())
-				{
-					infoVector.emplace_back(std::move(info));
-				}
-			}
-		}
-		catch (...)
-		{
-			ReportRequestError(*this, reply);
-			infoVector.clear();
-		}
-		return infoVector;
-	}
-	std::unique_ptr<IModEndorsementInfo> NexusProvider::EndorseMod(const ProviderRequest& request, ModEndorsement state)
+	std::optional<ModEndorsementReply> NexusSource::EndorseMod(const ModRepositoryRequest& request, ModEndorsement state)
 	{
 		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3/%4",
 												  GetAPIURL(),
@@ -823,130 +693,127 @@ namespace Kortex::NetworkManager
 		{
 			connection.SetPostData(KxJSON::Save(KxJSONObject {{"Version", "x"}}));
 		}
-		KxCURLReply reply = ConfigureRequest(connection).Send();
 
-		if (ShouldTryLater(reply))
+		KxCURLReply reply = ConfigureRequest(connection).Send();
+		if (TestRequestError(reply, reply))
 		{
-			ReportRequestQuoteReached(*this);
-			return nullptr;
+			return std::nullopt;
 		}
 
-		auto info = std::make_unique<Nexus::ModEndorsementInfo>();
+		ModEndorsementReply info;
 		try
 		{
 			KxJSONObject json = KxJSON::Load(reply);
+			info.Message = json["message"].get<wxString>();
 
-			auto& data = info->m_Data;
-			data.Message = json["message"].get<wxString>();
-
-			auto statusIt = json.find("status");
-			if (statusIt != json.end())
+			if (auto statusIt = json.find("status"); statusIt != json.end())
 			{
 				if (*statusIt == "Endorsed")
 				{
-					data.Endorsement = ModEndorsement::Endorsed();
+					info.Endorsement = ModEndorsement::Endorsed();
 				}
 				else if (*statusIt == "Abstained")
 				{
-					data.Endorsement = ModEndorsement::Abstained();
+					info.Endorsement = ModEndorsement::Abstained();
 				}
 				else
 				{
-					data.Endorsement = ModEndorsement::Undecided();
+					info.Endorsement = ModEndorsement::Undecided();
 				}
 			}
 		}
 		catch (...)
 		{
-			ReportRequestError(*this, reply);
-			return nullptr;
+			ReportRequestError(reply);
+			return std::nullopt;
 		}
-
-		if (info->IsOK())
-		{
-			return info;
-		}
-		ReportRequestError(*this, reply);
-		return nullptr;
+		return info;
 	}
-
-	std::unique_ptr<Nexus::ValidationInfo> NexusProvider::GetValidationInfo(const wxString& apiKey) const
+	
+	std::optional<ModFileReply> NexusSource::GetModFileInfo(const ModRepositoryRequest& request) const
 	{
-		KxCURLSession connection(KxString::Format("%1/users/validate", GetAPIURL()));
-		KxCURLReply reply = ConfigureRequest(connection, apiKey).Send();
-		if (ShouldTryLater(reply))
+		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3/files/%4",
+												  GetAPIURL(),
+												  GetGameID(request),
+												  request.GetModID().GetValue(),
+												  request.GetFileID().GetValue())
+		);
+		KxCURLReply reply = ConfigureRequest(connection).Send();
+		if (TestRequestError(reply, reply))
 		{
-			ReportRequestQuoteReached(*this);
-			return nullptr;
+			return std::nullopt;
 		}
 
-		auto info = std::make_unique<Nexus::ValidationInfo>();
+		ModFileReply info;
 		try
 		{
 			KxJSONObject json = KxJSON::Load(reply);
 
-			auto& data = info->m_Data;
-			data.UserID = json["user_id"];
-			data.UserName = json["name"].get<wxString>();
-			data.APIKey = json["key"].get<wxString>();
-			data.EMail = json["email"].get<wxString>();
-			data.ProfilePicture = json["profile_url"].get<wxString>();
-			data.IsPremium = json["is_premium"];
-			data.IsSupporter = json["is_supporter"];
+			info.ModID = request.GetModID();
+			ReadFileInfo(json, info);
 		}
 		catch (...)
 		{
-			ReportRequestError(*this, reply);
-			return nullptr;
+			ReportRequestError(reply);
+			return std::nullopt;
 		}
-		
-		if (info->IsOK())
-		{
-			return info;
-		}
-		ReportRequestError(*this, reply);
-		return nullptr;
+		return info;
 	}
-	std::unique_ptr<Nexus::GameInfo> NexusProvider::GetGameInfo(const GameID& id) const
+	std::vector<ModFileReply> NexusSource::GetModFiles(const ModRepositoryRequest& request) const
 	{
-		KxCURLSession connection(KxString::Format("%1/games/%2", GetAPIURL(), GetGameID(id)));
+		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3/files",
+												  GetAPIURL(),
+												  GetGameID(request),
+												  request.GetModID().GetValue())
+		);
 		KxCURLReply reply = ConfigureRequest(connection).Send();
-		if (ShouldTryLater(reply))
+		if (TestRequestError(reply, reply))
 		{
-			ReportRequestQuoteReached(*this);
-			return nullptr;
-		}
-
-		auto info = std::make_unique<Nexus::GameInfo>();
-		try
-		{
-			KxJSONObject json = KxJSON::Load(reply);
-			ReadGameInfo(json, info->m_Data);
-		}
-		catch (...)
-		{
-			ReportRequestError(*this, reply);
-			return nullptr;
-		}
-		
-		if (info->IsOK())
-		{
-			return info;
-		}
-		ReportRequestError(*this, reply);
-		return nullptr;
-	}
-	Nexus::GameInfo::Vector NexusProvider::GetGamesList() const
-	{
-		KxCURLSession connection(KxString::Format("%1/games", GetAPIURL()));
-		KxCURLReply reply = ConfigureRequest(connection).Send();
-		if (ShouldTryLater(reply))
-		{
-			ReportRequestQuoteReached(*this);
 			return {};
 		}
 
-		Nexus::GameInfo::Vector infoVector;
+		std::vector<ModFileReply> infoVector;
+		try
+		{
+			KxJSONObject json = KxJSON::Load(reply);
+			infoVector.reserve(json.size());
+
+			for (const KxJSONObject& value: json["files"])
+			{
+				ModFileReply& info = infoVector.emplace_back();
+				info.ModID = request.GetModID();
+				ReadFileInfo(value, info);
+			}
+		}
+		catch (...)
+		{
+			infoVector.clear();
+		}
+		return infoVector;
+	}
+	std::vector<ModDownloadReply> NexusSource::GetFileDownloads(const ModRepositoryRequest& request) const
+	{
+		wxString query = KxString::Format("%1/games/%2/mods/%3/files/%4/download_link",
+										  GetAPIURL(),
+										  GetGameID(request),
+										  request.GetModID().GetValue(),
+										  request.GetFileID().GetValue()
+		);
+
+		NexusDownloadExtraReply nxmExtraInfo;
+		if (request.GetExtraInfo(nxmExtraInfo))
+		{
+			query += KxString::Format("?key=%1&expires=%2", nxmExtraInfo.Key, nxmExtraInfo.Expires);
+		}
+		KxCURLSession connection(query);
+
+		KxCURLReply reply = ConfigureRequest(connection).Send();
+		if (TestRequestError(reply, reply))
+		{
+			return {};
+		}
+
+		std::vector<ModDownloadReply> infoVector;
 		try
 		{
 			KxJSONObject json = KxJSON::Load(reply);
@@ -954,56 +821,97 @@ namespace Kortex::NetworkManager
 
 			for (const KxJSONObject& value: json)
 			{
-				auto info = std::make_unique<Nexus::GameInfo>();
-				ReadGameInfo(value, info->m_Data);
-
-				if (info->IsOK())
-				{
-					infoVector.emplace_back(std::move(info));
-				}
+				ModDownloadReply& info = infoVector.emplace_back();
+				info.Name = value["name"].get<wxString>();
+				info.ShortName = value["short_name"].get<wxString>();
+				info.URL = ConvertUnicodeEscapes(value["URI"].get<wxString>());
 			}
 		}
 		catch (...)
 		{
-			ReportRequestError(*this, reply);
 			infoVector.clear();
 		}
 		return infoVector;
 	}
-	Nexus::IssueInfo::Vector NexusProvider::GetIssues() const
+
+	std::optional<NexusValidationReply> NexusSource::GetValidationInfo(const wxString& apiKey) const
 	{
-		KxCURLSession connection(KxString::Format("%1/feedbacks/list_user_issues/", GetAPIURL()));
-		KxCURLReply reply = ConfigureRequest(connection).Send();
-		if (ShouldTryLater(reply))
+		KxCURLSession connection(KxString::Format("%1/users/validate", GetAPIURL()));
+		KxCURLReply reply = ConfigureRequest(connection, apiKey).Send();
+		if (TestRequestError(reply, reply))
 		{
-			ReportRequestQuoteReached(*this);
+			return std::nullopt;
+		}
+
+		NexusValidationReply info;
+		try
+		{
+			KxJSONObject json = KxJSON::Load(reply);
+
+			info.UserID = json["user_id"];
+			info.UserName = json["name"].get<wxString>();
+			info.APIKey = json["key"].get<wxString>();
+			info.EMail = json["email"].get<wxString>();
+			info.ProfilePicture = json["profile_url"].get<wxString>();
+			info.IsPremium = json["is_premium"];
+			info.IsSupporter = json["is_supporter"];
+		}
+		catch (...)
+		{
+			return std::nullopt;
+		}
+		return info;
+	}
+	std::optional<NexusGameReply> NexusSource::GetGameInfo(const GameID& id) const
+	{
+		KxCURLSession connection(KxString::Format("%1/games/%2", GetAPIURL(), GetGameID(id)));
+		KxCURLReply reply = ConfigureRequest(connection).Send();
+		if (TestRequestError(reply, reply))
+		{
+			return std::nullopt;
+		}
+
+		NexusGameReply info;
+		try
+		{
+			KxJSONObject json = KxJSON::Load(reply);
+			ReadGameInfo(json, info);
+		}
+		catch (...)
+		{
+			return std::nullopt;
+		}
+		return info;
+	}
+	std::vector<NexusGameReply> NexusSource::GetGamesList() const
+	{
+		KxCURLSession connection(KxString::Format("%1/games", GetAPIURL()));
+		KxCURLReply reply = ConfigureRequest(connection).Send();
+		if (TestRequestError(reply, reply))
+		{
 			return {};
 		}
 
-		Nexus::IssueInfo::Vector infoVector;
+		std::vector<NexusGameReply> infoVector;
 		try
 		{
 			KxJSONObject json = KxJSON::Load(reply);
 			infoVector.reserve(json.size());
 
-			for (const KxJSONObject& value: json["issues"])
+			for (const KxJSONObject& value: json)
 			{
-				auto info = std::make_unique<Nexus::IssueInfo>();
-				if (info->IsOK())
-				{
-					infoVector.emplace_back(std::move(info));
-				}
+				NexusGameReply& info = infoVector.emplace_back();
+				ReadGameInfo(value, info);
 			}
 		}
 		catch (...)
 		{
-			ReportRequestError(*this, reply);
 			infoVector.clear();
 		}
 		return infoVector;
 	}
 
-	GameID NexusProvider::TranslateNxmGameID(const wxString& id) const
+	GameID NexusSource::TranslateNxmGameID(const wxString& id) const
 	{
 		if (!id.IsEmpty())
 		{
@@ -1041,8 +949,8 @@ namespace Kortex::NetworkManager
 		}
 		return GameIDs::NullGameID;
 	}
-	wxString NexusProvider::ConstructNXM(const IModFileInfo& fileInfo, const GameID& id) const
+	wxString NexusSource::ConstructNXM(const ModFileReply& fileInfo, const GameID& id) const
 	{
-		return KxString::Format("nxm://%1/mods/%2/files/%3", GetGameID(id), fileInfo.GetModID().GetValue(), fileInfo.GetID().GetValue()).Lower();
+		return KxString::Format("nxm://%1/mods/%2/files/%3", GetGameID(id), fileInfo.ModID.GetValue(), fileInfo.ID.GetValue()).Lower();
 	}
 }

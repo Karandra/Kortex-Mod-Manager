@@ -34,7 +34,7 @@ namespace Kortex
 			if (fileItem.IsOK())
 			{
 				SetDownloadedSize(fileItem.GetFileSize());
-				if (fileItem.GetFileSize() == GetFileInfo().GetSize())
+				if (fileItem.GetFileSize() == GetFileInfo().Size)
 				{
 					SetPaused(false);
 					SetFailed(false);

@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/IDownloadEntry.h"
-#include "Network/NetworkProviderReply.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxFileStream.h>
 class KQuickThread;
@@ -18,8 +17,8 @@ namespace Kortex::DownloadManager
 	class DefaultDownloadEntry: public IDownloadEntry
 	{
 		private:
-			std::unique_ptr<IModDownloadInfo> m_DownloadInfo;
-			std::unique_ptr<IModFileInfo> m_FileInfo;
+			ModFileReply m_FileInfo;
+			ModDownloadReply m_DownloadInfo;
 
 			wxEvtHandler m_EvtHandler;
 			KQuickThread* m_Thread = nullptr;
@@ -28,6 +27,7 @@ namespace Kortex::DownloadManager
 
 			const IGameInstance* m_TargetGame = nullptr;
 			IModSource* m_ModSource = nullptr;
+
 			wxDateTime m_Date;
 			int64_t m_DownloadedSize = 0;
 			int64_t m_Speed = 0;
@@ -48,16 +48,16 @@ namespace Kortex::DownloadManager
 
 		public:
 			DefaultDownloadEntry();
-			DefaultDownloadEntry(const IModDownloadInfo& downloadInfo,
-								 const IModFileInfo& fileInfo,
-								 IModSource* modSource,
-								 const GameID& id);
+			DefaultDownloadEntry(const ModDownloadReply& downloadInfo,
+								 const ModFileReply& fileInfo,
+								 IModRepository& modRepository,
+								 const GameID& id = {});
 			virtual ~DefaultDownloadEntry();
 
 		public:
 			bool IsOK() const override
 			{
-				return m_ModSource && m_TargetGame && m_DownloadInfo->IsOK() && m_FileInfo->IsOK();
+				return m_ModSource && m_TargetGame && m_FileInfo.IsOK() && m_DownloadInfo.IsOK();
 			}
 			wxString GetFullPath() const override;
 			wxString GetMetaFilePath() const override;
@@ -107,33 +107,29 @@ namespace Kortex::DownloadManager
 			}
 			bool IsCompleted() const override
 			{
-				return !IsFailed() && m_FileInfo->GetSize() == m_DownloadedSize;
+				return !IsFailed() && m_FileInfo.Size == m_DownloadedSize;
 			}
 			bool CanRestart() const override
 			{
-				return !IsRunning() && m_ModSource && m_FileInfo->IsOK();
+				return !IsRunning() && m_ModSource && m_FileInfo.IsOK();
 			}
 
-			const IModFileInfo& GetFileInfo() const override
+			const ModFileReply& GetFileInfo() const override
 			{
-				return *m_FileInfo;
+				return m_FileInfo;
 			}
-			IModFileInfo& GetFileInfo() override
+			ModFileReply& GetFileInfo() override
 			{
-				return *m_FileInfo;
-			}
-			void SetFileInfo(std::unique_ptr<IModFileInfo> fileInfo) override
-			{
-				m_FileInfo = std::move(fileInfo);
+				return m_FileInfo;
 			}
 
-			const IModDownloadInfo& GetDownloadInfo() const override
+			const ModDownloadReply& GetDownloadInfo() const override
 			{
-				return *m_DownloadInfo;
+				return m_DownloadInfo;
 			}
-			IModDownloadInfo& GetDownloadInfo() override
+			ModDownloadReply& GetDownloadInfo() override
 			{
-				return *m_DownloadInfo;
+				return m_DownloadInfo;
 			}
 
 			bool IsRunning() const override

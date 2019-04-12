@@ -6,54 +6,33 @@
 
 namespace Kortex::NetworkManager
 {
-	LoversLabProvider::LoversLabProvider()
+	LoversLabSource::LoversLabSource()
 	{
 	}
 
-	wxString LoversLabProvider::GetAPIURL() const
+	wxString LoversLabSource::GetAPIURL() const
 	{
 		return "https://www.loverslab.com/api";
 	}
 
-	KImageEnum LoversLabProvider::GetIcon() const
+	KImageEnum LoversLabSource::GetIcon() const
 	{
 		return KIMG_SITE_LOVERSLAB;
 	}
-	wxString LoversLabProvider::GetName() const
+	wxString LoversLabSource::GetName() const
 	{
 		return "LoversLab";
 	}
-	wxString LoversLabProvider::GetGameID(const GameID& id) const
+	wxString LoversLabSource::GetGameID(const GameID& id) const
 	{
 		return IModSource::GetGameID(id);
 	}
-	wxString LoversLabProvider::GetModURLBasePart(const GameID& id) const
+	wxString LoversLabSource::GetModURLBasePart(const GameID& id) const
 	{
 		return "https://www.loverslab.com/files/file";
 	}
-	wxString LoversLabProvider::GetModURL(const ProviderRequest& request)
+	wxString LoversLabSource::GetModURL(const ModRepositoryRequest& request)
 	{
 		return ConstructIPBModURL(request.GetModID().GetValue(), request.GetExtraInfo<wxString>());
-	}
-
-	std::unique_ptr<IModInfo> LoversLabProvider::GetModInfo(const ProviderRequest& request) const
-	{
-		return nullptr;
-	}
-	std::unique_ptr<IModFileInfo> LoversLabProvider::GetFileInfo(const ProviderRequest& request) const
-	{
-		return nullptr;
-	}
-	IModFileInfo::Vector LoversLabProvider::GetFilesList(const ProviderRequest& request) const
-	{
-		return {};
-	}
-	IModDownloadInfo::Vector LoversLabProvider::GetFileDownloadLinks(const ProviderRequest& request) const
-	{
-		return {};
-	}
-	std::unique_ptr<IModEndorsementInfo> LoversLabProvider::EndorseMod(const ProviderRequest& request, ModEndorsement state)
-	{
-		return nullptr;
 	}
 }

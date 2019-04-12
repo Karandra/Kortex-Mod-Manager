@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
-#include "NetworkProviderRequest.h"
-#include "NetworkProviderReply.h"
+#include "ModRepositoryReply.h"
+#include "ModRepositoryRequest.h"
 #include "GameInstance/GameID.h"
 #include "Utility/KImageProvider.h"
 #include <KxFramework/KxQueryInterface.h>
@@ -39,7 +39,7 @@ namespace Kortex
 			wxBitmap m_UserPicture;
 
 		protected:
-			wxString ConstructIPBModURL(int64_t modID, const wxString& modSignature = wxEmptyString) const;
+			wxString ConstructIPBModURL(int64_t modID, const wxString& modSignature = {}) const;
 			wxBitmap DownloadSmallBitmap(const wxString& url) const;
 
 			virtual void Init();
@@ -66,28 +66,12 @@ namespace Kortex
 
 			virtual KImageEnum GetIcon() const = 0;
 			virtual wxString GetName() const = 0;
-			virtual wxString GetGameID(const GameID& id = GameIDs::NullGameID) const = 0;
+			virtual wxString GetGameID(const GameID& id = {}) const = 0;
 			virtual wxString& ConvertDescriptionToHTML(wxString& description) const
 			{
 				return description;
 			}
-			virtual wxString GetModURLBasePart(const GameID& id = GameIDs::NullGameID) const = 0;
-			virtual wxString GetModURL(const ProviderRequest& request) = 0;
-
-			virtual std::unique_ptr<IModInfo> NewModInfo() const = 0;
-			virtual std::unique_ptr<IModFileInfo> NewModFileInfo() const = 0;
-			virtual std::unique_ptr<IModDownloadInfo> NewModDownloadInfo() const = 0;
-			virtual std::unique_ptr<IModEndorsementInfo> NewModEndorsementInfo() const = 0;
-
-			virtual bool RestoreBrokenDownload(const wxString& filePath, IDownloadEntry& download)
-			{
-				return false;
-			}
-
-			virtual std::unique_ptr<IModInfo> GetModInfo(const ProviderRequest& request) const = 0;
-			virtual std::unique_ptr<IModFileInfo> GetFileInfo(const ProviderRequest& request) const = 0;
-			virtual IModFileInfo::Vector GetFilesList(const ProviderRequest& request) const = 0;
-			virtual IModDownloadInfo::Vector GetFileDownloadLinks(const ProviderRequest& request) const = 0;
-			virtual std::unique_ptr<IModEndorsementInfo> EndorseMod(const ProviderRequest& request, ModEndorsement state) = 0;
+			virtual wxString GetModURLBasePart(const GameID& id = {}) const = 0;
+			virtual wxString GetModURL(const ModRepositoryRequest& request) = 0;
 	};
 }

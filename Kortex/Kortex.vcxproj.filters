@@ -1529,9 +1529,6 @@
     <ClInclude Include="Source\Network\IDownloadEntry.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\NetworkProviderReply.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadManager.h">
       <Filter>Code\Headers\Network\DownloadManager</Filter>
     </ClInclude>
@@ -1865,9 +1862,6 @@
     <ClInclude Include="Source\Utility\String.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\NetworkProviderReplyStructs.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\About\Dialog.h">
       <Filter>Code\Headers\Application\About</Filter>
     </ClInclude>
@@ -2093,9 +2087,6 @@
     <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h">
       <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\NetworkProviderRequest.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\NetworkModInfo.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
@@ -2123,13 +2114,7 @@
     <ClInclude Include="Source\Network\ModSource\TESALL.h">
       <Filter>Code\Headers\Network\ModSource</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\ModSource\TESALLModInfo.h">
-      <Filter>Code\Headers\Network\ModSource</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\ModSource\LoversLab.h">
-      <Filter>Code\Headers\Network\ModSource</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSource\LoversLabModInfo.h">
       <Filter>Code\Headers\Network\ModSource</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\ModSourceStore.h">
@@ -2145,6 +2130,15 @@
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\IAuthenticableModSource.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\IModRepository.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModRepositoryReply.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModRepositoryRequest.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
   </ItemGroup>

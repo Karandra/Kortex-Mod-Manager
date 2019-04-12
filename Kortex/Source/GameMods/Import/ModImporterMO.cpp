@@ -291,7 +291,7 @@ namespace Kortex::ModManager
 					ModID nexusID = modINI.GetValueInt("General", "modid", ModID::GetInvalidValue());
 					if (nexusID)
 					{
-						mod.GetModSourceStore().AssignWith<NetworkManager::NexusProvider>(nexusID);
+						mod.GetModSourceStore().AssignWith<NetworkManager::NexusSource>(nexusID);
 					}
 
 					// Install date
@@ -416,16 +416,16 @@ namespace Kortex::ModManager
 				entry.SetModSource(INetworkManager::GetInstance()->GetModSource(ini.GetValue("General", "repository")));
 				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
-				entry.GetDownloadInfo().SetURL(ini.GetValue("General", "url").AfterFirst('"').BeforeLast('"'));
+				entry.GetDownloadInfo().URL = ini.GetValue("General", "url").AfterFirst('"').BeforeLast('"');
 
-				entry.GetFileInfo().SetModID(ini.GetValueInt("General", "modID", -1));
-				entry.GetFileInfo().SetID(ini.GetValueInt("General", "fileID", -1));
-				entry.GetFileInfo().SetName(item.GetName().BeforeLast('.'));
-				entry.GetFileInfo().SetDisplayName(ini.GetValue("General", "modName"));
-				entry.GetFileInfo().SetVersion(ini.GetValue("General", "version"));
+				entry.GetFileInfo().ModID = ini.GetValueInt("General", "modID", -1);
+				entry.GetFileInfo().ID = ini.GetValueInt("General", "fileID", -1);
+				entry.GetFileInfo().Name = item.GetName().BeforeLast('.');
+				entry.GetFileInfo().DisplayName = ini.GetValue("General", "modName");
+				entry.GetFileInfo().Version = ini.GetValue("General", "version");
 
-				int64_t size = archiveFile.GetFileSize();
-				entry.GetFileInfo().SetSize(size);
+				const int64_t size = archiveFile.GetFileSize();
+				entry.GetFileInfo().Size = size;
 				entry.SetDownloadedSize(size);
 
 				entry.SetPaused(ini.GetValueBool("General", "paused", false));

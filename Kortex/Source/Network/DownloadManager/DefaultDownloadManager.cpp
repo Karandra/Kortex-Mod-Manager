@@ -3,6 +3,7 @@
 #include "DefaultDownloadEntry.h"
 #include "DisplayModel.h"
 #include "Workspace.h"
+#include "Network/ModSource/Nexus.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/NetworkManager.hpp>
@@ -91,7 +92,7 @@ namespace Kortex::DownloadManager
 	void DefaultDownloadManager::OnDownloadComplete(IDownloadEntry& entry)
 	{
 		OnChangeEntry(entry);
-		INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.Notification.DownloadCompleted"), KTrf("DownloadManager.Notification.DownloadCompletedEx", entry.GetFileInfo().GetName()), KxICON_INFORMATION);
+		INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.Notification.DownloadCompleted"), KTrf("DownloadManager.Notification.DownloadCompletedEx", entry.GetFileInfo().Name), KxICON_INFORMATION);
 	}
 	void DefaultDownloadManager::OnDownloadPaused(IDownloadEntry& entry)
 	{
@@ -108,7 +109,7 @@ namespace Kortex::DownloadManager
 	void DefaultDownloadManager::OnDownloadFailed(IDownloadEntry& entry)
 	{
 		OnChangeEntry(entry);
-		INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.Notification.DownloadFailed"), KTrf("DownloadManager.Notification.DownloadFailedEx", entry.GetFileInfo().GetName()), KxICON_WARNING);
+		INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.Notification.DownloadFailed"), KTrf("DownloadManager.Notification.DownloadFailedEx", entry.GetFileInfo().Name), KxICON_WARNING);
 	}
 
 	void DefaultDownloadManager::OnInit()
@@ -225,15 +226,15 @@ namespace Kortex::DownloadManager
 		}
 		return false;
 	}
-	bool DefaultDownloadManager::QueueDownload(const IModDownloadInfo& downloadInfo,
-											   const IModFileInfo& fileInfo,
-											   IModSource* modSource,
+	bool DefaultDownloadManager::QueueDownload(const ModDownloadReply& downloadInfo,
+											   const ModFileReply& fileInfo,
+											   IModRepository& modRepository,
 											   const GameID& id
 	)
 	{
 		if (downloadInfo.IsOK() && fileInfo.IsOK())
 		{
-			IDownloadEntry& entry = *m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>(downloadInfo, fileInfo, modSource, id));
+			IDownloadEntry& entry = *m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>(downloadInfo, fileInfo, modRepository, id));
 			AutoRenameIncrement(entry);
 
 			OnAddEntry(entry);
@@ -299,33 +300,34 @@ namespace Kortex::DownloadManager
 
 	bool DefaultDownloadManager::QueueNXM(const wxString& link)
 	{
-		wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+))", wxRE_ADVANCED|wxRE_ICASE);
-		if (reg.Matches(link))
+		using namespace NetworkManager;
+
+		if (NexusSource* nexus = NexusSource::GetInstance())
 		{
-			NetworkManager::NexusProvider* nexus = NetworkManager::NexusProvider::GetInstance();
-
-			GameID game = nexus->TranslateNxmGameID(reg.GetMatch(link, 1));
-			ModID modID(reg.GetMatch(link, 2));
-			ModFileID fileID(reg.GetMatch(link, 3));
-
-			Nexus::Internal::ReplyStructs::ModDownloadInfoNXM nxmExtraInfo;
-			nxmExtraInfo.Key = reg.GetMatch(link, 4);
-			nxmExtraInfo.Expires = reg.GetMatch(link, 5);
-
-			if (game.IsOK() && modID && fileID)
+			wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+))", wxRE_ADVANCED|wxRE_ICASE);
+			if (reg.Matches(link))
 			{
-				auto fileInfo = nexus->GetFileInfo(ProviderRequest(modID, fileID, game));
-				if (fileInfo)
-				{
-					ProviderRequest request(modID, fileID, game);
-					request.SetExtraInfo(nxmExtraInfo);
-					auto linkItems = nexus->GetFileDownloadLinks(request);
+				GameID game = nexus->TranslateNxmGameID(reg.GetMatch(link, 1));
+				ModID modID(reg.GetMatch(link, 2));
+				ModFileID fileID(reg.GetMatch(link, 3));
 
-					if (!linkItems.empty())
+				NexusDownloadExtraReply nxmExtraInfo;
+				nxmExtraInfo.Key = reg.GetMatch(link, 4);
+				nxmExtraInfo.Expires = reg.GetMatch(link, 5);
+
+				if (game.IsOK() && modID && fileID)
+				{
+					if (auto fileInfo = nexus->GetModFileInfo(ModRepositoryRequest(modID, fileID, game)))
 					{
-						return QueueDownload(*linkItems.front(), *fileInfo, nexus, game);
+						ModRepositoryRequest request(modID, fileID, game);
+						request.SetExtraInfo(nxmExtraInfo);
+						
+						if (auto linkItems = nexus->GetFileDownloads(request); !linkItems.empty())
+						{
+							return QueueDownload(linkItems.front(), *fileInfo, *nexus->QueryInterface<IModRepository>(), game);
+						}
+						return false;
 					}
-					return false;
 				}
 			}
 		}

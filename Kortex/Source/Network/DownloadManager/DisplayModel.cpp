@@ -114,17 +114,17 @@ namespace Kortex::DownloadManager
 			{
 				case ColumnID::Name:
 				{
-					value = KxDataViewBitmapTextValue(entry->GetFileInfo().GetName(), GetStateBitmap(*entry));
+					value = KxDataViewBitmapTextValue(entry->GetFileInfo().Name, GetStateBitmap(*entry));
 					break;
 				}
 				case ColumnID::Version:
 				{
-					value = entry->GetFileInfo().GetVersion().ToString();
+					value = entry->GetFileInfo().Version.ToString();
 					break;
 				}
 				case ColumnID::Size:
 				{
-					value = KxFile::FormatFileSize(entry->GetFileInfo().GetSize(), 2);
+					value = KxFile::FormatFileSize(entry->GetFileInfo().Size, 2);
 					break;
 				}
 				case ColumnID::Game:
@@ -154,7 +154,7 @@ namespace Kortex::DownloadManager
 				{
 					// Percent
 					const int64_t downloadedSize = entry->GetDownloadedSize();
-					const int64_t totalSize = entry->GetFileInfo().GetSize();
+					const int64_t totalSize = entry->GetFileInfo().Size;
 					int percent = 0;
 					if (totalSize > 0)
 					{
@@ -251,15 +251,15 @@ namespace Kortex::DownloadManager
 		{
 			case ColumnID::Name:
 			{
-				return KxComparator::IsLess(left->GetFileInfo().GetName(), right->GetFileInfo().GetName());
+				return KxComparator::IsLess(left->GetFileInfo().Name, right->GetFileInfo().Name);
 			}
 			case ColumnID::Version:
 			{
-				return left->GetFileInfo().GetVersion() < right->GetFileInfo().GetVersion();
+				return left->GetFileInfo().Version < right->GetFileInfo().Version;
 			}
 			case ColumnID::Size:
 			{
-				return left->GetFileInfo().GetSize() < right->GetFileInfo().GetSize();
+				return left->GetFileInfo().Size < right->GetFileInfo().Size;
 			}
 			case ColumnID::Game:
 			{
@@ -342,13 +342,16 @@ namespace Kortex::DownloadManager
 			{
 				for (auto& modSource: INetworkManager::GetInstance()->GetModSources())
 				{
-					KxMenuItem* item = providerMenu->Add(new KxMenuItem(modSource->GetName(), wxEmptyString, wxITEM_CHECK));
-					item->Check(modSource.get() == entry->GetModSource());
-					item->Bind(KxEVT_MENU_SELECT, [entry, &modSource](KxMenuEvent& event)
+					if (modSource->QueryInterface<IModRepository>())
 					{
-						entry->SetModSource(modSource.get());
-						entry->Save();
-					});
+						KxMenuItem* item = providerMenu->Add(new KxMenuItem(modSource->GetName(), wxEmptyString, wxITEM_CHECK));
+						item->Check(modSource.get() == entry->GetModSource());
+						item->Bind(KxEVT_MENU_SELECT, [entry, &modSource](KxMenuEvent& event)
+						{
+							entry->SetModSource(modSource.get());
+							entry->Save();
+						});
+					}
 				}
 			}
 
@@ -361,7 +364,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ShowChangeLog, KTr("DownloadManager.Menu.ShowChangeLog")));
-			item->Enable(entry && !entry->GetFileInfo().GetChangeLog().IsEmpty());
+			item->Enable(entry && !entry->GetFileInfo().ChangeLog.IsEmpty());
 		}
 		contextMenu.AddSeparator();
 
@@ -419,7 +422,7 @@ namespace Kortex::DownloadManager
 				item->Check(assocOK);
 				item->SetBitmap(KGetBitmap(KIMG_SITE_NEXUS));
 			}
-			if (entry && entry->IsModSourceOfType<NetworkManager::NexusProvider>())
+			if (entry && entry->IsModSourceOfType<NetworkManager::NexusSource>())
 			{
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::CopyNXM, KTr("DownloadManager.Menu.CopyNXM")));
 			}
@@ -489,11 +492,11 @@ namespace Kortex::DownloadManager
 					wxString message;
 					if (isQueryInfo)
 					{
-						message = KTrf("DownloadManager.Notification.QueryDownloadInfoFailed", entry->GetFileInfo().GetName());
+						message = KTrf("DownloadManager.Notification.QueryDownloadInfoFailed", entry->GetFileInfo().Name);
 					}
 					else
 					{
-						message = KTrf("DownloadManager.Notification.RestoreDownloadFailed", entry->GetFileInfo().GetName());
+						message = KTrf("DownloadManager.Notification.RestoreDownloadFailed", entry->GetFileInfo().Name);
 					}
 					INotificationCenter::GetInstance()->NotifyUsing<IDownloadManager>(message, KxICON_WARNING);
 				}
@@ -501,9 +504,9 @@ namespace Kortex::DownloadManager
 			}
 			case MenuID::ShowChangeLog:
 			{
-				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, entry->GetFileInfo().GetDisplayName(), wxEmptyString, KxBTN_OK, KxICON_NONE);
-				dialog.SetMessage(KxString::Format("%1 %2", KTr("Generic.Version"), entry->GetFileInfo().GetVersion()));
-				dialog.SetExMessage(entry->GetFileInfo().GetChangeLog());
+				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, entry->GetFileInfo().DisplayName, wxEmptyString, KxBTN_OK, KxICON_NONE);
+				dialog.SetMessage(KxString::Format("%1 %2", KTr("Generic.Version"), entry->GetFileInfo().Version));
+				dialog.SetExMessage(entry->GetFileInfo().ChangeLog);
 				dialog.SetMainIcon(KxShell::GetFileIcon(entry->GetFullPath()));
 				dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
 				dialog.ShowModal();
@@ -580,7 +583,7 @@ namespace Kortex::DownloadManager
 			}
 			case MenuID::CopyNXM:
 			{
-				const NetworkManager::NexusProvider* nexus = NetworkManager::NexusProvider::GetInstance();
+				const NetworkManager::NexusSource* nexus = NetworkManager::NexusSource::GetInstance();
 				if (wxTheClipboard->Open())
 				{
 					wxTheClipboard->SetData(new wxTextDataObject(nexus->ConstructNXM(entry->GetFileInfo(), entry->GetTargetGameID())));

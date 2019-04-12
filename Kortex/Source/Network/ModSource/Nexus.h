@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Network/Common.h"
 #include "Network/IModSource.h"
+#include "Network/IModRepository.h"
 #include "Network/IAuthenticableModSource.h"
 #include "NexusModInfo.h"
 #include <KxFramework/KxSingleton.h>
@@ -17,9 +18,9 @@ namespace KxWebSocket
 
 namespace Kortex::NetworkManager
 {
-	class NexusProvider:
-		public KxRTTI::IExtendInterface<NexusProvider, IModSource, IAuthenticableModSource>,
-		public KxSingletonPtr<NexusProvider>
+	class NexusSource:
+		public KxRTTI::IExtendInterface<NexusSource, IModSource, IAuthenticableModSource, IModRepository>,
+		public KxSingletonPtr<NexusSource>
 	{
 		private:
 			KxSecretDefaultStoreService m_CredentialsStore;
@@ -42,27 +43,26 @@ namespace Kortex::NetworkManager
 			
 		private:
 			wxString EndorsementStateToString(const ModEndorsement& state) const;
-			KxCURLSession& ConfigureRequest(KxCURLSession& request, const wxString& apiKey = wxEmptyString) const;
-			bool ShouldTryLater(const KxCURLReplyBase& reply) const;
+			KxCURLSession& ConfigureRequest(KxCURLSession& request, const wxString& apiKey = {}) const;
 			wxString GetAPIURL() const;
 			wxString GetAPIKey(wxString* userName = nullptr) const;
-			void RequestUserAvatar(Nexus::ValidationInfo& info);
+			void RequestUserAvatar(const NexusValidationReply& info);
 
 		public:
-			NexusProvider();
+			NexusSource();
 
 		public:
 			// IModSource
 			KImageEnum GetIcon() const override;
 			wxString GetName() const override;
-			wxString GetGameID(const GameID& id = GameIDs::NullGameID) const override;
-			wxString GetGameID(const ProviderRequest& request) const
+			wxString GetGameID(const GameID& id = {}) const override;
+			wxString GetGameID(const ModRepositoryRequest& request) const
 			{
 				return GetGameID(request.GetGameID());
 			}
 			wxString& ConvertDescriptionToHTML(wxString& description) const override;
-			wxString GetModURLBasePart(const GameID& id = GameIDs::NullGameID) const override;
-			wxString GetModURL(const ProviderRequest& request) override;
+			wxString GetModURLBasePart(const GameID& id = {}) const override;
+			wxString GetModURL(const ModRepositoryRequest& request) override;
 
 		public:
 			// IAuthenticableModSource
@@ -72,38 +72,23 @@ namespace Kortex::NetworkManager
 			bool SignOut() override;
 
 		public:
-			// IModSource
-			std::unique_ptr<IModInfo> NewModInfo() const override
-			{
-				return std::make_unique<Nexus::ModInfo>();
-			}
-			std::unique_ptr<IModFileInfo> NewModFileInfo() const override
-			{
-				return std::make_unique<Nexus::ModFileInfo>();
-			}
-			std::unique_ptr<IModDownloadInfo> NewModDownloadInfo() const override
-			{
-				return std::make_unique<Nexus::ModDownloadInfo>();
-			}
-			std::unique_ptr<IModEndorsementInfo> NewModEndorsementInfo() const override
-			{
-				return std::make_unique<Nexus::ModEndorsementInfo>();
-			}
+			// IModRepository
+			bool RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download) override;
 
-			bool RestoreBrokenDownload(const wxString& filePath, IDownloadEntry& download);
+			std::optional<ModInfoReply> GetModInfo(const ModRepositoryRequest& request) const override;
+			std::optional<ModEndorsementReply> EndorseMod(const ModRepositoryRequest& request, ModEndorsement state) override;
 
-			std::unique_ptr<IModInfo> GetModInfo(const ProviderRequest& request) const override;
-			std::unique_ptr<IModFileInfo> GetFileInfo(const ProviderRequest& request) const override;
-			IModFileInfo::Vector GetFilesList(const ProviderRequest& request) const override;
-			IModDownloadInfo::Vector GetFileDownloadLinks(const ProviderRequest& request) const override;
-			std::unique_ptr<IModEndorsementInfo> EndorseMod(const ProviderRequest& request, ModEndorsement state) override;
+			std::optional<ModFileReply> GetModFileInfo(const ModRepositoryRequest& request) const override;
+			std::vector<ModFileReply> GetModFiles(const ModRepositoryRequest& request) const override;
+			std::vector<ModDownloadReply> GetFileDownloads(const ModRepositoryRequest& request) const override;
 
-			std::unique_ptr<Nexus::ValidationInfo> GetValidationInfo(const wxString& apiKey = wxEmptyString) const;
-			std::unique_ptr<Nexus::GameInfo> GetGameInfo(const GameID& id = GameIDs::NullGameID) const;
-			Nexus::GameInfo::Vector GetGamesList() const;
-			Nexus::IssueInfo::Vector GetIssues() const;
+		public:
+			// NexusSource
+			std::optional<NexusValidationReply> GetValidationInfo(const wxString& apiKey = wxEmptyString) const;
+			std::optional<NexusGameReply> GetGameInfo(const GameID& id = {}) const;
+			std::vector<NexusGameReply> GetGamesList() const;
 
 			GameID TranslateNxmGameID(const wxString& id) const;
-			wxString ConstructNXM(const IModFileInfo& fileInfo, const GameID& id = GameIDs::NullGameID) const;
+			wxString ConstructNXM(const ModFileReply& fileInfo, const GameID& id = {}) const;
 	};
 }

@@ -5,7 +5,7 @@
 
 namespace Kortex
 {
-	class ProviderRequest
+	class ModRepositoryRequest
 	{
 		private:
 			NetworkModInfo m_ModInfo;
@@ -13,20 +13,20 @@ namespace Kortex
 			wxAny m_ExtraInfo;
 
 		public:
-			ProviderRequest() = default;
-			ProviderRequest(ModID id)
+			ModRepositoryRequest() = default;
+			ModRepositoryRequest(ModID id)
 				:m_ModInfo(id)
 			{
 			}
-			ProviderRequest(ModID modID, ModFileID fileID)
+			ModRepositoryRequest(ModID modID, ModFileID fileID)
 				:m_ModInfo(modID, fileID)
 			{
 			}
-			ProviderRequest(ModID modID, ModFileID fileID, const GameID& gameID)
+			ModRepositoryRequest(ModID modID, ModFileID fileID, const GameID& gameID)
 				:m_ModInfo(modID, fileID), m_GameID(gameID)
 			{
 			}
-			ProviderRequest(NetworkModInfo modInfo)
+			ModRepositoryRequest(NetworkModInfo modInfo)
 				:m_ModInfo(modInfo)
 			{
 			}

@@ -70,7 +70,7 @@ namespace Kortex
 	{
 		for (const auto& entry: GetDownloads())
 		{
-			if (entry.get() != except && KxComparator::IsEqual(name, entry->GetFileInfo().GetName()))
+			if (entry.get() != except && KxComparator::IsEqual(name, entry->GetFileInfo().Name))
 			{
 				return entry.get();
 			}
@@ -80,9 +80,9 @@ namespace Kortex
 	
 	void IDownloadManager::AutoRenameIncrement(IDownloadEntry& entry) const
 	{
-		while (FindDownloadByFileName(entry.GetFileInfo().GetName(), &entry))
+		while (FindDownloadByFileName(entry.GetFileInfo().Name, &entry))
 		{
-			entry.GetFileInfo().SetName(RenameIncrement(entry.GetFileInfo().GetName()));
+			entry.GetFileInfo().Name = RenameIncrement(entry.GetFileInfo().Name);
 		}
 	}
 }

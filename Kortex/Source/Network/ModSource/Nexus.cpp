@@ -956,6 +956,8 @@ namespace Kortex::NetworkManager
 		{
 			nxm += KxString::Format(wxS("?key=%1&expires=%2&user_id=%3"), linkData.Key, linkData.Expires, linkData.UserID);
 		}
+
+		nxm.MakeLower();
 		return nxm;
 	}
 	bool NexusSource::ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData)

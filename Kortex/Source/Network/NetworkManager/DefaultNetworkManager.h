@@ -7,6 +7,12 @@ class KxAuiToolBarItem;
 class KxMenuEvent;
 class KxMenu;
 
+namespace Kortex
+{
+	class IAuthenticableModSource;
+	class IModRepository;
+}
+
 namespace Kortex::NetworkManager
 {
 	class Config
@@ -58,13 +64,12 @@ namespace Kortex::NetworkManager
 
 		private:
 			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
-			bool GetModSourceInfo(const IModSource& modSource, wxString& label, wxBitmap& bitmap, bool name = true) const;
 			void UpdateButton();
 			void CreateMenu();
 			void QueueUIUpdate();
 
 			void OnSignInOut(KxMenuEvent& event);
-			void OnSelectActiveModSource(KxMenuEvent& event);
+			void OnSelectDefaultModSource(KxMenuEvent& event);
 			void OnToolBarButton(KxAuiToolBarEvent& event) override;
 
 		public:

@@ -542,6 +542,8 @@
 		<!-- NetworkManager -->
 		<String ID="NetworkManager.Name">Менеджер сети</String>>
 		<String ID="NetworkManager.ModSource">Источник модов</String>
+		<String ID="NetworkManager.ModSource.Default">Источник модов по умолчанию</String>
+		<String ID="NetworkManager.ModSource.MakeDefault">Использовать по умолчанию</String>
 
 		<String ID="NetworkManager.AuthCaption">Аутентификация на %1</String>
 		<String ID="NetworkManager.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
@@ -554,7 +556,10 @@
 		<String ID="NetworkManager.NotSignedIn">Вход не выполнен</String>
 		<String ID="NetworkManager.SignOutMessage">Вы действительно хотите выйти из аккаунта %1?</String>
 
-		<String ID="NetworkManager.RequestQuotaReched">Query limit reached to %1 for a period of time</String>
+		<String ID="NetworkManager.QueryLimits">Предел запросов</String>
+		<String ID="NetworkManager.QueryLimits.Hourly">За час: %1/%2</String>
+		<String ID="NetworkManager.QueryLimits.Daily">За день: %1/%2</String>
+		<String ID="NetworkManager.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>

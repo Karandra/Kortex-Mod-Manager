@@ -81,40 +81,12 @@ namespace Kortex::NetworkManager
 		UpdateButton();
 		CreateMenu();
 	}
-	bool DefaultNetworkManager::GetModSourceInfo(const IModSource& modSource, wxString& label, wxBitmap& bitmap, bool name) const
-	{
-		const IAuthenticableModSource* auth = nullptr;
-		if (modSource.QueryInterface(auth) && auth->IsAuthenticated())
-		{
-			if (auto credentials = auth->LoadCredentials())
-			{
-				label += modSource.GetName();
-				if (name)
-				{
-					label += wxS('/') + credentials->UserID;
-				}
-				bitmap = modSource.GetUserPicture();
-
-				return true;
-			}
-			else
-			{
-				label = modSource.GetName();
-				bitmap = KGetBitmap(KIMG_CROSS_CIRCLE_FRAME);
-			}
-		}
-		return false;
-	}
 	void DefaultNetworkManager::UpdateButton()
 	{
 		const IAuthenticableModSource* auth = nullptr;
 		if (m_DefaultModSource && m_DefaultModSource->QueryInterface(auth) && auth->IsAuthenticated())
 		{
-			wxString label;
-			wxBitmap bitmap;
-			GetModSourceInfo(*m_DefaultModSource, label, bitmap);
-
-			m_LoginButton->SetLabel(KTr("NetworkManager.SignedIn") + ": " + label);
+			m_LoginButton->SetLabel(KTr("NetworkManager.SignedIn") + ": " + m_DefaultModSource->GetName());
 			m_LoginButton->SetBitmap(KGetBitmap(m_DefaultModSource->GetIcon()));
 		}
 		else
@@ -133,52 +105,96 @@ namespace Kortex::NetworkManager
 		m_Menu = new KxMenu();
 		m_LoginButton->AssignDropdownMenu(m_Menu);
 
-		// Add sign-in/sign-out items.
 		for (const auto& modSource: m_ModSources)
 		{
-			if (modSource->QueryInterface<IAuthenticableModSource>())
+			if (KxMenu* subMenu = new KxMenu(); true)
 			{
-				wxString label;
-				wxBitmap bitmap;
-				bool authOK = GetModSourceInfo(*modSource, label, bitmap);
-				if (authOK)
+				KxMenuItem* rootItem = m_Menu->Add(subMenu, modSource->GetName());
+				rootItem->SetBitmap(KGetBitmap(modSource->GetIcon()));
+
+				const IAuthenticableModSource* authenticable = modSource->QueryInterface<IAuthenticableModSource>();
+				const IModRepository* repository = modSource->QueryInterface<IModRepository>();
+
+				// Add default source toggle
 				{
-					label = KTr("NetworkManager.SignOut") + ": " + label;
+					KxMenuItem* item = subMenu->Add(new KxMenuItem(wxEmptyString, wxEmptyString, wxITEM_CHECK));
+					item->SetClientData(modSource.get());
+					item->Enable(false);
+
+					if (authenticable)
+					{
+						if (m_DefaultModSource == modSource.get())
+						{
+							item->Check();
+							item->SetItemLabel(KTr("NetworkManager.ModSource.Default"));
+						}
+						else if (!authenticable->IsAuthenticated())
+						{
+							item->SetItemLabel(KxString::Format("%1 (%2)", KTr("NetworkManager.ModSource.MakeDefault"), KTr("NetworkManager.NotSignedIn")));
+						}
+						else
+						{
+							item->Enable();
+							item->SetItemLabel(KTr("NetworkManager.ModSource.MakeDefault"));
+							item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSelectDefaultModSource, this);
+						}
+					}
+					else
+					{
+						item->SetItemLabel(KTr("NetworkManager.ModSource.MakeDefault"));
+					}
 				}
-				else
+
+				// Add sign-in/sign-out items.
+				if (authenticable)
 				{
-					label = KTr("NetworkManager.SignIn") + ": " + label;
+					wxString label;
+					if (authenticable->IsAuthenticated())
+					{
+						label = KTr("NetworkManager.SignOut") + ": " + modSource->GetName();
+					}
+					else
+					{
+						label = KTr("NetworkManager.SignIn") + ": " + modSource->GetName();
+					}
+					
+					KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
+					item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSignInOut, this);
+					item->SetBitmap(modSource->GetUserPicture());
+					item->SetClientData(modSource.get());
 				}
 
-				KxMenuItem* item = m_Menu->Add(new KxMenuItem(label));
-				item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSignInOut, this);
-
-				item->SetBitmap(bitmap);
-				item->SetClientData(modSource.get());
-			}
-		}
-
-		// Add current modSource selections
-		m_Menu->AddSeparator();
-		for (const auto& modSource: m_ModSources)
-		{
-			if (modSource->QueryInterface<IAuthenticableModSource>())
-			{
-				wxString label;
-				wxBitmap bitmap;
-				bool authOK = GetModSourceInfo(*modSource, label, bitmap, false);
-				if (!authOK)
+				// Add limits information display
+				if (repository)
 				{
-					label = KTr("NetworkManager.NotSignedIn") + ": " + label;
+					if (ModRepositoryLimits limits = repository->GetRequestLimits(); limits.IsOK() && limits.HasLimits())
+					{
+						wxString label;
+						auto AddSeparator = [&label]()
+						{
+							if (!label.IsEmpty())
+							{
+								label += wxS("; ");
+							}
+						};
+
+						if (limits.HasHourlyLimit())
+						{
+							label += KTrf(wxS("NetworkManager.QueryLimits.Hourly"), limits.GetHourlyRemaining(), limits.GetHourlyLimit());
+						}
+						if (limits.HasDailyLimit())
+						{
+							AddSeparator();
+							label += KTrf(wxS("NetworkManager.QueryLimits.Daily"), limits.GetDailyRemaining(), limits.GetDailyLimit());
+						}
+						label = KxString::Format(wxS("%1: [%2]"), KTr(wxS("NetworkManager.QueryLimits")), label);
+
+						KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
+						item->SetBitmap(KGetBitmap(limits.AnyLimitDepleted() ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
+						item->SetClientData(modSource.get());
+						item->Enable(false);
+					}
 				}
-
-				KxMenuItem* item = m_Menu->Add(new KxMenuItem(label, wxEmptyString, wxITEM_RADIO));
-				item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSelectActiveModSource, this);
-
-				item->Check(m_DefaultModSource == modSource.get());
-				item->Enable(authOK);
-				item->SetBitmap(KGetBitmap(modSource->GetIcon()));
-				item->SetClientData(modSource.get());
 			}
 		}
 	}
@@ -215,7 +231,7 @@ namespace Kortex::NetworkManager
 			QueueUIUpdate();
 		}
 	}
-	void DefaultNetworkManager::OnSelectActiveModSource(KxMenuEvent& event)
+	void DefaultNetworkManager::OnSelectDefaultModSource(KxMenuEvent& event)
 	{
 		IModSource* modSource = static_cast<IModSource*>(event.GetItem()->GetClientData());
 		m_DefaultModSource = modSource;
@@ -225,8 +241,7 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::OnToolBarButton(KxAuiToolBarEvent& event)
 	{
-		wxPoint pos = m_LoginButton->GetDropdownMenuPosition();
-		m_Menu->Show(m_LoginButton->GetToolBar(), pos);
+		m_LoginButton->ShowDropdownMenuLeftAlign();
 	}
 
 	void DefaultNetworkManager::OnAuthStateChanged()

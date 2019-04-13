@@ -52,15 +52,27 @@ namespace Kortex
 			{
 				return m_Data.has_value();
 			}
+			
 			bool HasLimits() const
 			{
-				return !IsOK() || (HasHourlyLimit() || HasDailyLimit());
+				return HasHourlyLimit() || HasDailyLimit();
+			}
+			bool AnyLimitDepleted() const
+			{
+				return HourlyDepleted() || DailyDepleted();
 			}
 
+		public:
+			// Hourly
 			bool HasHourlyLimit() const
 			{
 				return m_Data->HourlyLimit >= 0;
 			}
+			bool HourlyDepleted() const
+			{
+				return m_Data->HourlyRemaining == 0;
+			}
+
 			int GetHourlyLimit() const
 			{
 				return m_Data->HourlyLimit;
@@ -74,10 +86,17 @@ namespace Kortex
 				return m_Data->HourlyLimitReset;
 			}
 
+		public:
+			// Daily
 			bool HasDailyLimit() const
 			{
 				return m_Data->DailyLimit >= 0;
 			}
+			bool DailyDepleted() const
+			{
+				return m_Data->DailyRemaining == 0;
+			}
+			
 			int GetDailyLimit() const
 			{
 				return m_Data->DailyLimit;

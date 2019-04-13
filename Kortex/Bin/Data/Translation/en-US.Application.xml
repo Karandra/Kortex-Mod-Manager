@@ -537,6 +537,8 @@ This folder and all its contents will be deleted: %1]]>
 		<!-- NetworkManager -->
 		<String ID="NetworkManager.Name">Network manager</String>>
 		<String ID="NetworkManager.ModSource">Mod source</String>
+		<String ID="NetworkManager.ModSource.Default">Default mod source</String>
+		<String ID="NetworkManager.ModSource.MakeDefault">Make default</String>
 
 		<String ID="NetworkManager.AuthCaption">Authentication on %1</String>
 		<String ID="NetworkManager.AuthMessage">Enter your username and password to log in to your account.</String>
@@ -549,7 +551,10 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.NotSignedIn">Not signed in</String>
 		<String ID="NetworkManager.SignOutMessage">Are you sure you want to sign out of "%1" account?</String>
 
-		<String ID="NetworkManager.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</String>
+		<String ID="NetworkManager.QueryLimits">Query limits</String>
+		<String ID="NetworkManager.QueryLimits.Hourly">Hourly: %1/%2</String>
+		<String ID="NetworkManager.QueryLimits.Daily">Daily: %1/%2</String>
+		<String ID="NetworkManager.RequestQuotaReched">Query limit to %1 has been reached for a period of time</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Download manager</String>

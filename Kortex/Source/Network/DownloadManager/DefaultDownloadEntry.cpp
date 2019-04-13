@@ -64,7 +64,7 @@ namespace Kortex::DownloadManager
 		KxCURLStreamReply& reply = static_cast<KxCURLStreamReply&>(event.GetReply());
 
 		// Update file size. Nexus reports file size in KB, so initial info maybe
-		// incorrect, see 'NexusProvider::ReadFileInfo<T>' function for details.
+		// incorrect, see 'NexusSource::ReadFileInfo<T>' function for details.
 		// Other sources can return correct sizes, but it's better to request it here.
 		int64_t totalSize = event.GetMajorTotal();
 		if (totalSize > 0)
@@ -101,7 +101,7 @@ namespace Kortex::DownloadManager
 	void DefaultDownloadEntry::DoRun(int64_t resumePos)
 	{
 		KxFileStream::Disposition disposition = resumePos > 0 ? KxFileStream::Disposition::OpenExisting : KxFileStream::Disposition::CreateAlways;
-		m_Stream = std::make_unique<KxFileStream>(GetFullPath(), KxFileStream::Access::RW, disposition, KxFileStream::Share::Read);
+		m_Stream = std::make_unique<KxFileStream>(GetFullPath(), KxFileStream::Access::Write, disposition, KxFileStream::Share::Read);
 		if (m_Stream->IsOk())
 		{
 			// Download session
@@ -262,6 +262,9 @@ namespace Kortex::DownloadManager
 		m_Thread = new KQuickThread([this, resumePos](KQuickThread& thread)
 		{
 			DoRun(resumePos);
+
+			m_Thread = nullptr;
+			CleanupDownload();
 		}, &m_EvtHandler);
 		m_Thread->Run();
 	}

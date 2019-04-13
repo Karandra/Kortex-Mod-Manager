@@ -218,7 +218,7 @@ namespace Kortex
 
 		// Log system info
 		KxSystem::VersionInfo versionInfo = KxSystem::GetVersionInfo();
-		Utility::Log::LogInfo("System: %1 %2 %3. Kernel version: %4.%5", KxSystem::GetName(), m_Application->IsSystem64Bit() ? "x64" : "x86", versionInfo.ServicePack, versionInfo.MajorVersion, versionInfo.MinorVersion);
+		Utility::Log::LogInfo("System: %1 %2 %3. Kernel version: %4.%5", KxSystem::GetName(), m_Application->IsSystem64Bit() ? "x64" : "x86", versionInfo.ServicePack, versionInfo.Kernel.Major, versionInfo.Kernel.Minor);
 		Utility::Log::LogInfo("Another instance detected: %1", IsAnotherRunning() ? "true" : "false");
 
 		// Log paths

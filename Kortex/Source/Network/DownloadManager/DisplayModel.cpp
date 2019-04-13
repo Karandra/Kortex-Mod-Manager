@@ -38,6 +38,7 @@ namespace
 
 		QueryInfo,
 		ShowChangeLog,
+		ResetDownloadLink,
 
 		Remove,
 		RemoveAll,
@@ -49,6 +50,7 @@ namespace
 		ShowHidden,
 
 		OpenLocation,
+		VisitOnWebSite,
 		Refresh,
 
 		AssociateWithNXM,
@@ -301,15 +303,16 @@ namespace Kortex::DownloadManager
 	void DisplayModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		IDownloadEntry* entry = GetDataEntry(GetRow(item));
-		bool isRunning = entry && entry->IsRunning();
-		bool isEmpty = IsEmpty();
+		IDownloadEntry* download = GetDataEntry(GetRow(item));
+		const IModSource* modSource = download ? download->GetModSource() : nullptr;
+		const bool isRunning = download && download->IsRunning();
+		const bool isEmpty = IsEmpty();
 
 		KxMenu contextMenu;
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Install, KTr("DownloadManager.Menu.Install")));
 			item->SetBitmap(KGetBitmap(KIMG_BOX));
-			item->Enable(entry && entry->IsCompleted());
+			item->Enable(download && download->IsCompleted());
 		}
 		contextMenu.AddSeparator();
 
@@ -320,36 +323,36 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Pause, KTr("DownloadManager.Menu.Pause")));
-			item->Enable(entry && isRunning && !entry->IsPaused() && !entry->IsCompleted() && !entry->IsFailed());
+			item->Enable(download && isRunning && !download->IsPaused() && !download->IsCompleted() && !download->IsFailed());
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Abort, KTr("DownloadManager.Menu.Abort")));
-			item->Enable(entry && isRunning && !entry->IsCompleted() && !entry->IsFailed());
+			item->Enable(download && isRunning && !download->IsCompleted() && !download->IsFailed());
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Resume, KTr("DownloadManager.Menu.Resume")));
-			item->Enable(entry && entry->IsPaused() && !entry->IsCompleted());
+			item->Enable(download && download->IsPaused() && !download->IsCompleted());
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Restart, KTr("DownloadManager.Menu.Restart")));
-			item->Enable(entry && entry->CanRestart());
+			item->Enable(download && download->CanRestart());
 		}
 
 		contextMenu.AddSeparator();
 		{
 			KxMenu* providerMenu = new KxMenu();
-			if (entry && !entry->IsRunning())
+			if (download && !download->IsRunning())
 			{
 				for (auto& modSource: INetworkManager::GetInstance()->GetModSources())
 				{
 					if (modSource->QueryInterface<IModRepository>())
 					{
 						KxMenuItem* item = providerMenu->Add(new KxMenuItem(modSource->GetName(), wxEmptyString, wxITEM_CHECK));
-						item->Check(modSource.get() == entry->GetModSource());
-						item->Bind(KxEVT_MENU_SELECT, [entry, &modSource](KxMenuEvent& event)
+						item->Check(modSource.get() == download->GetModSource());
+						item->Bind(KxEVT_MENU_SELECT, [download, &modSource](KxMenuEvent& event)
 						{
-							entry->SetModSource(modSource.get());
-							entry->Save();
+							download->SetModSource(modSource.get());
+							download->Save();
 						});
 					}
 				}
@@ -360,18 +363,22 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::QueryInfo, KTr("DownloadManager.Menu.QueryInfo")));
-			item->Enable(entry && !entry->IsRunning() && entry->HasModSource());
+			item->Enable(download && !download->IsRunning() && modSource);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ShowChangeLog, KTr("DownloadManager.Menu.ShowChangeLog")));
-			item->Enable(entry && !entry->GetFileInfo().ChangeLog.IsEmpty());
+			item->Enable(download && !download->GetFileInfo().ChangeLog.IsEmpty());
+		}
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ResetDownloadLink, KTr("DownloadManager.Menu.ResetDownloadLink")));
+			item->Enable(download && download->GetDownloadInfo().IsOK());
 		}
 		contextMenu.AddSeparator();
 
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Remove, KTr("DownloadManager.Menu.Remove")));
 			item->SetBitmap(KGetBitmap(KIMG_MINUS_SMALL));
-			item->Enable(entry && !isEmpty && !isRunning);
+			item->Enable(download && !isEmpty && !isRunning);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::RemoveAll, KTr("DownloadManager.Menu.RemoveAll")));
@@ -385,7 +392,7 @@ namespace Kortex::DownloadManager
 
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Hide, KTr("DownloadManager.Menu.Hide")));
-			item->Enable(entry && !isEmpty && !isRunning);
+			item->Enable(download && !isEmpty && !isRunning);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::HideAll, KTr("DownloadManager.Menu.HideAll")));
@@ -404,17 +411,21 @@ namespace Kortex::DownloadManager
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::OpenLocation, KTr("MainMenu.OpenLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
 		}
+		if (modSource)
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::VisitOnWebSite, KTrf("DownloadManager.Menu.VisitOnWebSite", modSource->GetName())));
+			item->SetBitmap(KGetBitmap(modSource->GetIcon()));
+		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Refresh, KTr(KxID_REFRESH)));
 			item->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
 		}
 
-		IDownloadManagerNXM* nxm = nullptr;
-		if (m_DownloadManager->QueryInterface(nxm))
+		if (IDownloadManagerNXM* nxm = nullptr; m_DownloadManager->QueryInterface(nxm))
 		{
 			contextMenu.AddSeparator();
 			{
-				bool assocOK = nxm->IsAssociatedWithNXM();
+				const bool assocOK = nxm->IsAssociatedWithNXM();
 				wxString label = assocOK ? KTr("DownloadManager.Menu.AssocianedWithNXM") : KTr("DownloadManager.Menu.AssociateWithNXM");
 
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AssociateWithNXM, label, wxEmptyString, wxITEM_CHECK));
@@ -422,20 +433,20 @@ namespace Kortex::DownloadManager
 				item->Check(assocOK);
 				item->SetBitmap(KGetBitmap(KIMG_SITE_NEXUS));
 			}
-			if (entry && entry->IsModSourceOfType<NetworkManager::NexusSource>())
+			if (download && download->IsModSourceOfType<NetworkManager::NexusSource>())
 			{
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::CopyNXM, KTr("DownloadManager.Menu.CopyNXM")));
 			}
 		}
 
-		contextMenu.Bind(KxEVT_MENU_SELECT, [this, entry](KxMenuEvent& event)
+		contextMenu.Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 		{
-			OnContextMenuSelected(event, entry);
+			OnContextMenuSelected(event, download);
 			event.Skip();
 		});
 		contextMenu.Show(GetView());
 	}
-	void DisplayModel::OnContextMenuSelected(KxMenuEvent& event, IDownloadEntry* entry)
+	void DisplayModel::OnContextMenuSelected(KxMenuEvent& event, IDownloadEntry* download)
 	{
 		IDownloadManager* downloadManager = IDownloadManager::GetInstance();
 
@@ -443,7 +454,7 @@ namespace Kortex::DownloadManager
 		{
 			case MenuID::Install:
 			{
-				Install(*entry);
+				Install(*download);
 				break;
 			}
 
@@ -453,22 +464,22 @@ namespace Kortex::DownloadManager
 			}
 			case MenuID::Pause:
 			{
-				entry->Pause();
+				download->Pause();
 				break;
 			}
 			case MenuID::Abort:
 			{
-				entry->Stop();
+				download->Stop();
 				break;
 			}
 			case MenuID::Resume:
 			{
-				entry->Resume();
+				download->Resume();
 				break;
 			}
 			case MenuID::Restart:
 			{
-				entry->Restart();
+				download->Restart();
 				break;
 			}
 
@@ -476,15 +487,15 @@ namespace Kortex::DownloadManager
 			{
 				bool isSucceed = false;
 				bool isQueryInfo = false;
-				if (entry->IsOK())
+				if (download->IsOK())
 				{
 					isQueryInfo = true;
-					isSucceed = entry->QueryInfo();
+					isSucceed = download->QueryInfo();
 				}
 				else
 				{
 					isQueryInfo = false;
-					isSucceed = entry->RepairBrokedDownload();
+					isSucceed = download->RepairBrokedDownload();
 				}
 
 				if (!isSucceed)
@@ -492,11 +503,11 @@ namespace Kortex::DownloadManager
 					wxString message;
 					if (isQueryInfo)
 					{
-						message = KTrf("DownloadManager.Notification.QueryDownloadInfoFailed", entry->GetFileInfo().Name);
+						message = KTrf("DownloadManager.Notification.QueryDownloadInfoFailed", download->GetFileInfo().Name);
 					}
 					else
 					{
-						message = KTrf("DownloadManager.Notification.RestoreDownloadFailed", entry->GetFileInfo().Name);
+						message = KTrf("DownloadManager.Notification.RestoreDownloadFailed", download->GetFileInfo().Name);
 					}
 					INotificationCenter::GetInstance()->NotifyUsing<IDownloadManager>(message, KxICON_WARNING);
 				}
@@ -504,18 +515,24 @@ namespace Kortex::DownloadManager
 			}
 			case MenuID::ShowChangeLog:
 			{
-				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, entry->GetFileInfo().DisplayName, wxEmptyString, KxBTN_OK, KxICON_NONE);
-				dialog.SetMessage(KxString::Format("%1 %2", KTr("Generic.Version"), entry->GetFileInfo().Version));
-				dialog.SetExMessage(entry->GetFileInfo().ChangeLog);
-				dialog.SetMainIcon(KxShell::GetFileIcon(entry->GetFullPath()));
+				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, download->GetFileInfo().DisplayName, wxEmptyString, KxBTN_OK, KxICON_NONE);
+				dialog.SetMessage(KxString::Format("%1 %2", KTr("Generic.Version"), download->GetFileInfo().Version));
+				dialog.SetExMessage(download->GetFileInfo().ChangeLog);
+				dialog.SetMainIcon(KxShell::GetFileIcon(download->GetFullPath()));
 				dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
 				dialog.ShowModal();
+				break;
+			}
+			case MenuID::ResetDownloadLink:
+			{
+				download->ResetDownloadLink();
+				download->Save();
 				break;
 			}
 
 			case MenuID::Remove:
 			{
-				if (downloadManager->RemoveDownload(*entry))
+				if (downloadManager->RemoveDownload(*download))
 				{
 					RefreshItems();
 				}
@@ -534,8 +551,8 @@ namespace Kortex::DownloadManager
 
 			case MenuID::Hide:
 			{
-				entry->SetHidden(true);
-				entry->Save();
+				download->SetHidden(true);
+				download->Save();
 				RefreshItems();
 				break;
 			}
@@ -559,14 +576,19 @@ namespace Kortex::DownloadManager
 
 			case MenuID::OpenLocation:
 			{
-				if (entry)
+				if (download)
 				{
-					KxShell::OpenFolderAndSelectItem(entry->GetFullPath());
+					KxShell::OpenFolderAndSelectItem(download->GetFullPath());
 				}
 				else
 				{
 					KxShell::Execute(GetViewTLW(), downloadManager->GetDownloadsLocation(), "open");
 				}
+				break;
+			}
+			case MenuID::VisitOnWebSite:
+			{
+				KxShell::Execute(GetViewTLW(), download->GetModSource()->GetModURL(ModRepositoryRequest(download->GetFileInfo())), "open");
 				break;
 			}
 			case MenuID::Refresh:
@@ -586,7 +608,7 @@ namespace Kortex::DownloadManager
 				const NetworkManager::NexusSource* nexus = NetworkManager::NexusSource::GetInstance();
 				if (wxTheClipboard->Open())
 				{
-					wxTheClipboard->SetData(new wxTextDataObject(nexus->ConstructNXM(entry->GetFileInfo(), entry->GetTargetGameID())));
+					wxTheClipboard->SetData(new wxTextDataObject(nexus->ConstructNXM(download->GetFileInfo(), download->GetTargetGameID())));
 					wxTheClipboard->Close();
 				}
 				break;

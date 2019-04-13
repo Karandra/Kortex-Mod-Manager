@@ -581,6 +581,8 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.SetModSource">Change mod source</String>
 		<String ID="DownloadManager.Menu.QueryInfo">Query info</String>
 		<String ID="DownloadManager.Menu.ShowChangeLog">Show change log</String>
+		<String ID="DownloadManager.Menu.ResetDownloadLink">Reset download link</String>
+		<String ID="DownloadManager.Menu.VisitOnWebSite">Visit on %1</String>
 
 		<String ID="DownloadManager.Menu.Remove">Remove download</String>
 		<String ID="DownloadManager.Menu.RemoveAll">Remove all downloads</String>

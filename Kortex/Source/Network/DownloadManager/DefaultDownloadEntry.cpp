@@ -235,7 +235,7 @@ namespace Kortex::DownloadManager
 			// Resume after restart
 			if (!m_Session)
 			{
-				if (RequestNewLink())
+				if (m_DownloadInfo.IsOK() || RequestNewLink())
 				{
 					Run(m_DownloadedSize);
 				}
@@ -269,8 +269,8 @@ namespace Kortex::DownloadManager
 	{
 		if (!IsRunning() && m_ModSource)
 		{
-			// Most likely link is expired or unavailable by now so request a new one.
-			if (RequestNewLink())
+			// Request new link if old one is expired or unavailable
+			if (m_DownloadInfo.IsOK() || RequestNewLink())
 			{
 				m_DownloadedSize = 0;
 				m_Date = wxDateTime::Now();
@@ -313,73 +313,98 @@ namespace Kortex::DownloadManager
 	bool DefaultDownloadEntry::Serialize(wxOutputStream& stream) const
 	{
 		KxXMLDocument xml;
-		KxXMLNode rootNode = xml.NewElement("Download");
-
-		if (m_ModSource)
+		if (KxXMLNode rootNode = xml.NewElement("Download"); true)
 		{
-			rootNode.NewElement("Source").SetValue(m_ModSource->GetName());
+			if (KxXMLNode sourceNode = rootNode.NewElement("Source"); true)
+			{
+				if (m_ModSource)
+				{
+					sourceNode.SetAttribute("Name", m_ModSource->GetName());
+				}
+				if (!m_DownloadInfo.URL.IsEmpty())
+				{
+					sourceNode.NewElement("URL").SetValue(m_DownloadInfo.URL, true);
+				}
+				if (m_TargetGame)
+				{
+					sourceNode.NewElement("Game").SetValue(m_TargetGame->GetGameID());
+				}
+				sourceNode.NewElement("ModID").SetValue(m_FileInfo.ModID.GetValue());
+				sourceNode.NewElement("FileID").SetValue(m_FileInfo.ID.GetValue());
+			}
+
+			if (KxXMLNode infoNode = rootNode.NewElement("Info"); true)
+			{
+				infoNode.NewElement("Name").SetValue(m_FileInfo.Name);
+				infoNode.NewElement("DisplayName").SetValue(m_FileInfo.DisplayName);
+				infoNode.NewElement("Version").SetValue(m_FileInfo.Version);
+				infoNode.NewElement("Date").SetValue(m_Date.FormatISOCombined());
+
+				if (!m_FileInfo.ChangeLog.IsEmpty())
+				{
+					infoNode.NewElement("ChangeLog").SetValue(m_FileInfo.ChangeLog, true);
+				}
+
+				if (KxXMLNode sizeNode = infoNode.NewElement("Size"); true)
+				{
+					sizeNode.SetAttribute("Total", m_FileInfo.Size);
+					sizeNode.SetAttribute("Downloaded", m_DownloadedSize);
+				}
+			}
+
+			if (KxXMLNode stateNode = rootNode.NewElement("State"); true)
+			{
+				stateNode.SetAttribute("Paused", m_IsPaused);
+				stateNode.SetAttribute("Hidden", m_IsHidden);
+				stateNode.SetAttribute("Failed", m_IsFailed);
+				stateNode.SetAttribute("Installed", IsInstalled());
+			}
 		}
-		if (m_TargetGame)
-		{
-			rootNode.NewElement("Game").SetValue(m_TargetGame->GetGameID().ToString());
-		}
-
-		rootNode.NewElement("ModID").SetValue(m_FileInfo.ModID.GetValue());
-		rootNode.NewElement("FileID").SetValue(m_FileInfo.ID.GetValue());
-		rootNode.NewElement("Name").SetValue(m_FileInfo.Name);
-		rootNode.NewElement("DisplayName").SetValue(m_FileInfo.DisplayName);
-		rootNode.NewElement("Version").SetValue(m_FileInfo.Version);
-		rootNode.NewElement("Date").SetValue(m_Date.FormatISOCombined());
-
-		if (!m_FileInfo.ChangeLog.IsEmpty())
-		{
-			rootNode.NewElement("ChangeLog").SetValue(m_FileInfo.ChangeLog, true);
-		}
-
-		KxXMLNode sizeNode = rootNode.NewElement("Size");
-		sizeNode.SetAttribute("Total", m_FileInfo.Size);
-		sizeNode.SetAttribute("Downloaded", m_DownloadedSize);
-
-		KxXMLNode stateNode = rootNode.NewElement("State");
-		stateNode.SetAttribute("Paused", m_IsPaused);
-		stateNode.SetAttribute("Hidden", m_IsHidden);
-		stateNode.SetAttribute("Failed", m_IsFailed);
-		stateNode.SetAttribute("Installed", IsInstalled());
-
 		return xml.Save(stream);
 	}
 	bool DefaultDownloadEntry::DeSerialize(wxInputStream& stream)
 	{
 		KxXMLDocument xml;
-		bool loaded = xml.Load(stream);
+		xml.Load(stream);
 
-		KxXMLNode rootNode = xml.GetFirstChildElement("Download");
-		if (loaded && rootNode.IsOK())
+		if (KxXMLNode rootNode = xml.GetFirstChildElement("Download"); rootNode.IsOK())
 		{
-			m_ModSource = INetworkManager::GetInstance()->GetModSource(rootNode.GetFirstChildElement("Source").GetValue());
-			m_TargetGame = IGameInstance::GetTemplate(rootNode.GetFirstChildElement("Game").GetValue());
-			if (m_TargetGame == nullptr)
+			if (KxXMLNode sourceNode = rootNode.GetFirstChildElement("Source"); sourceNode.IsOK())
 			{
-				m_TargetGame = IGameInstance::GetActive();
+				m_ModSource = INetworkManager::GetInstance()->GetModSource(sourceNode.GetAttribute("Name"));
+				m_DownloadInfo.URL = sourceNode.GetFirstChildElement("URL").GetValue();
+
+				m_TargetGame = IGameInstance::GetTemplate(sourceNode.GetFirstChildElement("Game").GetValue());
+				if (m_TargetGame == nullptr)
+				{
+					m_TargetGame = IGameInstance::GetActive();
+				}
+
+				m_FileInfo.ModID = sourceNode.GetFirstChildElement("ModID").GetValueInt(-1);
+				m_FileInfo.ID = sourceNode.GetFirstChildElement("FileID").GetValueInt(-1);
 			}
 
-			m_FileInfo.ModID = rootNode.GetFirstChildElement("ModID").GetValueInt(-1);
-			m_FileInfo.ID = rootNode.GetFirstChildElement("FileID").GetValueInt(-1);
-			m_FileInfo.Name = rootNode.GetFirstChildElement("Name").GetValue();
-			m_FileInfo.DisplayName = rootNode.GetFirstChildElement("DisplayName").GetValue();
-			m_FileInfo.Version = rootNode.GetFirstChildElement("Version").GetValue();
-			m_FileInfo.ChangeLog = rootNode.GetFirstChildElement("ChangeLog").GetValue();
+			if (KxXMLNode infoNode = rootNode.GetFirstChildElement("Info"); infoNode.IsOK())
+			{
+				m_FileInfo.Name = infoNode.GetFirstChildElement("Name").GetValue();
+				m_FileInfo.DisplayName = infoNode.GetFirstChildElement("DisplayName").GetValue();
+				m_FileInfo.Version = infoNode.GetFirstChildElement("Version").GetValue();
+				m_FileInfo.ChangeLog = infoNode.GetFirstChildElement("ChangeLog").GetValue();
+				m_Date.ParseISOCombined(infoNode.GetFirstChildElement("Date").GetValue());
 
-			KxXMLNode sizeNode = rootNode.GetFirstChildElement("Size");
-			m_FileInfo.Size = sizeNode.GetAttributeInt("Total", -1);
+				if (KxXMLNode sizeNode = infoNode.GetFirstChildElement("Size"); sizeNode.IsOK())
+				{
+					m_FileInfo.Size = sizeNode.GetAttributeInt("Total", -1);
+					m_DownloadedSize = sizeNode.GetAttributeInt("Downloaded", -1);
+				}
+			}
 
-			m_Date.ParseISOCombined(rootNode.GetFirstChildElement("Date").GetValue());
-			m_DownloadedSize = sizeNode.GetAttributeInt("Downloaded", -1);
-			
-			KxXMLNode stateNode = rootNode.GetFirstChildElement("State");
-			m_IsPaused = stateNode.GetAttributeBool("Paused", false);
-			m_IsHidden = stateNode.GetAttributeBool("Hidden", false);
-			m_IsFailed = stateNode.GetAttributeBool("Failed", m_DownloadedSize != m_FileInfo.Size) || !KxFile(GetFullPath()).IsFileExist();
+			if (KxXMLNode stateNode = rootNode.GetFirstChildElement("State"); stateNode.IsOK())
+			{
+				m_IsPaused = stateNode.GetAttributeBool("Paused", false);
+				m_IsHidden = stateNode.GetAttributeBool("Hidden", false);
+				m_IsFailed = stateNode.GetAttributeBool("Failed", m_DownloadedSize != m_FileInfo.Size) || !KxFile(GetFullPath()).IsFileExist();
+			}
 
 			return true;
 		}

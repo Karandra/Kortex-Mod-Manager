@@ -21,6 +21,11 @@ namespace Kortex
 		return GetModSource() != nullptr;
 	}
 
+	void IDownloadEntry::ResetDownloadLink()
+	{
+		GetDownloadInfo() = {};
+	}
+
 	bool IDownloadEntry::Save() const
 	{
 		KxFileStream stream(GetMetaFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);

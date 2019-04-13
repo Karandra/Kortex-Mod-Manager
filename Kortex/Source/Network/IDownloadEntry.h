@@ -86,6 +86,7 @@ namespace Kortex
 			// and querying rest of the information form internet.
 			virtual bool RepairBrokedDownload() = 0;
 			virtual bool QueryInfo() = 0;
+			void ResetDownloadLink();
 
 		public:
 			virtual void LoadDefault(const KxFileItem& fileItem) = 0;

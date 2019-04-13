@@ -29,51 +29,6 @@ namespace
 		};
 	};
 
-	enum class NetworkSoftware
-	{
-		CURL,
-		WebSocket,
-	};
-	wxString GetUserAgent(NetworkSoftware networkSoftware)
-	{
-		const IApplication* app = IApplication::GetInstance();
-		KxFormat formatter("%1/%2 (Windows_NT %3; %4) %5/%6");
-
-		// Application name and version
-		formatter(app->GetShortName());
-		formatter(app->GetVersion());
-
-		// Windows version
-		auto versionInfo = KxSystem::GetVersionInfo();
-		formatter(KxString::Format("%1.%2.%3", versionInfo.MajorVersion, versionInfo.MinorVersion, versionInfo.BuildNumber));
-
-		// System "bitness" (x86/x64)
-		formatter(KVarExp("$(SystemArchitectureName)"));
-
-		// Network software
-		switch (networkSoftware)
-		{
-			case NetworkSoftware::CURL:
-			{
-				formatter(KxCURL::GetLibraryName());
-				formatter(KxCURL::GetLibraryVersion());
-				break;
-			}
-			case NetworkSoftware::WebSocket:
-			{
-				formatter(KxWebSocket::GetLibraryName());
-				formatter(KxWebSocket::GetLibraryVersion());
-				break;
-			}
-			default:
-			{
-				formatter("Unknown");
-				formatter("0.0");
-			}
-		};
-
-		return formatter;
-	}
 	wxString& ConvertChangeLog(wxString& changeLog)
 	{
 		changeLog.Replace(wxS("<br>"), wxS("\r\n"));
@@ -229,18 +184,14 @@ namespace Kortex::NetworkManager
 		}
 		return "undecided";
 	}
-	KxCURLSession& NexusSource::ConfigureRequest(KxCURLSession& request, const wxString& apiKey) const
+	std::unique_ptr<KxCURLSession> NexusSource::NewCURLSession(const wxString& address, const wxString& apiKey) const
 	{
-		const IApplication* app = IApplication::GetInstance();
+		auto session = INetworkManager::GetInstance()->NewCURLSession(address);
+		session->AddHeader(wxS("APIKey"), apiKey.IsEmpty() ? GetAPIKey() : apiKey);
+		session->AddHeader(wxS("Content-Type"), wxS("application/json"));
+		session->AddHeader(wxS("Protocol-Version"), wxS("0.15.5"));
 
-		request.AddHeader("APIKey", apiKey.IsEmpty() ? GetAPIKey() : apiKey);
-		request.AddHeader("Content-Type", "application/json");
-		request.AddHeader("Protocol-Version", "0.15.5");
-		request.AddHeader("Application-Name", app->GetShortName());
-		request.AddHeader("Application-Version", app->GetVersion());
-		request.SetUserAgent(m_UserAgent);
-
-		return request;
+		return session;
 	}
 
 	wxString NexusSource::GetAPIURL() const
@@ -265,14 +216,13 @@ namespace Kortex::NetworkManager
 	}
 
 	NexusSource::NexusSource()
-		:m_CredentialsStore(wxS("Kortex/NexusMods")), m_UserAgent(GetUserAgent(NetworkSoftware::CURL))
+		:m_CredentialsStore(wxS("Kortex/NexusMods"))
 	{
 	}
 
 	bool NexusSource::Authenticate()
 	{
-		m_WebSocketClient = KxWebSocket::NewSecureClient("wss://sso.nexusmods.com");
-		m_WebSocketClient->SetUserAgent(GetUserAgent(NetworkSoftware::WebSocket));
+		m_WebSocketClient = INetworkManager::GetInstance()->NewWebSocketClient("wss://sso.nexusmods.com");
 
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_CONNECTING, [this](KxWebSocketEvent& event)
 		{
@@ -613,12 +563,12 @@ namespace Kortex::NetworkManager
 
 	std::optional<ModInfoReply> NexusSource::GetModInfo(const ModRepositoryRequest& request) const
 	{
-		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3",
+		auto connection = NewCURLSession(KxString::Format("%1/games/%2/mods/%3",
 												  GetAPIURL(),
 												  GetGameID(request.GetGameID()),
 												  request.GetModID().GetValue())
 		);
-		KxCURLReply reply = ConfigureRequest(connection).Send();
+		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
 			return std::nullopt;
@@ -677,7 +627,7 @@ namespace Kortex::NetworkManager
 	}
 	std::optional<ModEndorsementReply> NexusSource::EndorseMod(const ModRepositoryRequest& request, ModEndorsement state)
 	{
-		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3/%4",
+		auto connection = NewCURLSession(KxString::Format("%1/games/%2/mods/%3/%4",
 												  GetAPIURL(),
 												  GetGameID(request),
 												  request.GetModID().GetValue(),
@@ -687,14 +637,14 @@ namespace Kortex::NetworkManager
 		KxVersion modVersion;
 		if (request.GetExtraInfo(modVersion))
 		{
-			connection.SetPostData(KxJSON::Save(KxJSONObject {{"Version", modVersion.ToString()}}));
+			connection->SetPostData(KxJSON::Save(KxJSONObject {{"Version", modVersion.ToString()}}));
 		}
 		else
 		{
-			connection.SetPostData(KxJSON::Save(KxJSONObject {{"Version", "x"}}));
+			connection->SetPostData(KxJSON::Save(KxJSONObject {{"Version", "x"}}));
 		}
 
-		KxCURLReply reply = ConfigureRequest(connection).Send();
+		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
 			return std::nullopt;
@@ -732,13 +682,13 @@ namespace Kortex::NetworkManager
 	
 	std::optional<ModFileReply> NexusSource::GetModFileInfo(const ModRepositoryRequest& request) const
 	{
-		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3/files/%4",
+		auto connection = NewCURLSession(KxString::Format("%1/games/%2/mods/%3/files/%4",
 												  GetAPIURL(),
 												  GetGameID(request),
 												  request.GetModID().GetValue(),
 												  request.GetFileID().GetValue())
 		);
-		KxCURLReply reply = ConfigureRequest(connection).Send();
+		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
 			return std::nullopt;
@@ -761,12 +711,12 @@ namespace Kortex::NetworkManager
 	}
 	std::vector<ModFileReply> NexusSource::GetModFiles(const ModRepositoryRequest& request) const
 	{
-		KxCURLSession connection(KxString::Format("%1/games/%2/mods/%3/files",
+		auto connection = NewCURLSession(KxString::Format("%1/games/%2/mods/%3/files",
 												  GetAPIURL(),
 												  GetGameID(request),
 												  request.GetModID().GetValue())
 		);
-		KxCURLReply reply = ConfigureRequest(connection).Send();
+		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
 			return {};
@@ -805,9 +755,9 @@ namespace Kortex::NetworkManager
 		{
 			query += KxString::Format("?key=%1&expires=%2", nxmExtraInfo.Key, nxmExtraInfo.Expires);
 		}
-		KxCURLSession connection(query);
+		auto connection = NewCURLSession(query);
 
-		KxCURLReply reply = ConfigureRequest(connection).Send();
+		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
 			return {};
@@ -836,8 +786,8 @@ namespace Kortex::NetworkManager
 
 	std::optional<NexusValidationReply> NexusSource::GetValidationInfo(const wxString& apiKey) const
 	{
-		KxCURLSession connection(KxString::Format("%1/users/validate", GetAPIURL()));
-		KxCURLReply reply = ConfigureRequest(connection, apiKey).Send();
+		auto connection = NewCURLSession(KxString::Format("%1/users/validate", GetAPIURL()), apiKey);
+		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
 			return std::nullopt;
@@ -864,8 +814,8 @@ namespace Kortex::NetworkManager
 	}
 	std::optional<NexusGameReply> NexusSource::GetGameInfo(const GameID& id) const
 	{
-		KxCURLSession connection(KxString::Format("%1/games/%2", GetAPIURL(), GetGameID(id)));
-		KxCURLReply reply = ConfigureRequest(connection).Send();
+		auto connection = NewCURLSession(KxString::Format("%1/games/%2", GetAPIURL(), GetGameID(id)));
+		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
 			return std::nullopt;
@@ -885,8 +835,8 @@ namespace Kortex::NetworkManager
 	}
 	std::vector<NexusGameReply> NexusSource::GetGamesList() const
 	{
-		KxCURLSession connection(KxString::Format("%1/games", GetAPIURL()));
-		KxCURLReply reply = ConfigureRequest(connection).Send();
+		auto connection = NewCURLSession(KxString::Format("%1/games", GetAPIURL()));
+		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
 			return {};

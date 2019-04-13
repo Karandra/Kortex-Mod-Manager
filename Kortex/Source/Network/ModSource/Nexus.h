@@ -27,7 +27,6 @@ namespace Kortex::NetworkManager
 			std::unique_ptr<KxWebSocket::IClient> m_WebSocketClient;
 
 			wxString m_UserToken;
-			wxString m_UserAgent;
 			KxUUID m_SessionGUID;
 			bool m_IsAuthenticated = false;
 
@@ -43,10 +42,11 @@ namespace Kortex::NetworkManager
 			
 		private:
 			wxString EndorsementStateToString(const ModEndorsement& state) const;
-			KxCURLSession& ConfigureRequest(KxCURLSession& request, const wxString& apiKey = {}) const;
 			wxString GetAPIURL() const;
 			wxString GetAPIKey(wxString* userName = nullptr) const;
+
 			void RequestUserAvatar(const NexusValidationReply& info);
+			std::unique_ptr<KxCURLSession> NewCURLSession(const wxString& address, const wxString& apiKey = {}) const;
 
 		public:
 			NexusSource();

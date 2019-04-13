@@ -105,7 +105,7 @@ namespace Kortex::DownloadManager
 		if (m_Stream->IsOk())
 		{
 			// Download session
-			m_Session = std::make_unique<KxCURLSession>(m_DownloadInfo.URL);
+			m_Session = INetworkManager::GetInstance()->NewCURLSession(m_DownloadInfo.URL);
 			m_Session->Bind(KxEVT_CURL_DOWNLOAD, &DefaultDownloadEntry::OnDownload, this);
 
 			// Initial view update

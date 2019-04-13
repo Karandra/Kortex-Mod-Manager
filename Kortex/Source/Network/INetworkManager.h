@@ -4,9 +4,16 @@
 #include "Common.h"
 #include "IModSource.h"
 #include <KxFramework/KxSingleton.h>
+#include <KxFramework/KxCURL.h>
 class KMainWindow;
 class KxAuiToolBarItem;
 class KxAuiToolBarEvent;
+class KxCURLSession;
+
+namespace KxWebSocket
+{
+	class IClient;
+}
 
 namespace Kortex
 {
@@ -25,6 +32,13 @@ namespace Kortex
 	{
 		friend class KMainWindow;
 
+		protected:
+			enum class NetworkSoftware
+			{
+				CURL,
+				WebSocket,
+			};
+
 		private:
 			void CallOnToolBarButton(KxAuiToolBarEvent& event)
 			{
@@ -40,6 +54,7 @@ namespace Kortex
 				IModSource::Vector& items = GetModSources();
 				return static_cast<T&>(*items.emplace_back(IModSource::Create<T>()));
 			}
+			wxString GetUserAgentString(NetworkSoftware networkSoftware) const;
 
 		public:
 			INetworkManager();
@@ -60,5 +75,9 @@ namespace Kortex
 			bool IsDefaultModSourceAuthenticated() const;
 			
 			virtual void OnAuthStateChanged() = 0;
+
+		public:
+			virtual std::unique_ptr<KxWebSocket::IClient> NewWebSocketClient(const wxString& address);
+			virtual std::unique_ptr<KxCURLSession> NewCURLSession(const wxString& address);
 	};
 }

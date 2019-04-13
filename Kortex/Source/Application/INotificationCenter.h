@@ -8,15 +8,18 @@ class KxAuiToolBarEvent;
 
 namespace Kortex
 {
-	namespace Notification
-	{
-		class DisplayModel;
-	}
-
 	class INotification;
 	class IManager;
 	class IModule;
+	class IModSource;
+}
+namespace Kortex::Notification
+{
+	class DisplayModel;
+}
 
+namespace Kortex
+{
 	class INotificationCenter: public KxSingletonPtr<INotificationCenter>
 	{
 		friend class KMainWindow;
@@ -43,25 +46,34 @@ namespace Kortex
 			virtual ~INotificationCenter() = default;
 
 		public:
+			virtual bool HasActivePopups() const = 0;
+			virtual size_t GetActivePopupsCount() const = 0;
+
+		public:
 			void Notify(INotification* notification)
 			{
 				DoNotify(notification);
 			}
+			
 			void Notify(const wxString& caption, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
 			void Notify(const wxString& caption, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
-			void Notify(const IManager* manager, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
-			void Notify(const IManager* manager, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+
+			void Notify(const IModule& module, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
+			void Notify(const IModule& module, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+
+			void Notify(const IManager& manager, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
+			void Notify(const IManager& manager, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+
+			void Notify(const IModSource& modSource, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
+			void Notify(const IModSource& modSource, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
 			
 			template<class T, class... Args> void Notify(Args&&... arg)
 			{
 				DoNotify(new T(std::forward<Args>(arg)...));
 			}
-			template<class TManager, class... Args> void NotifyUsing(Args&&... arg)
+			template<class TSingletonPtr, class... Args> void NotifyUsing(Args&&... arg)
 			{
-				Notify(TManager::GetInstance(), std::forward<Args>(arg)...);
+				Notify(*TSingletonPtr::GetInstance(), std::forward<Args>(arg)...);
 			}
-
-			virtual bool HasActivePopups() const = 0;
-			virtual size_t GetActivePopupsCount() const = 0;
 	};
 }

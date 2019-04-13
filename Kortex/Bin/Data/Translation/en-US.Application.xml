@@ -534,21 +534,22 @@ This folder and all its contents will be deleted: %1]]>
 		<!-- Network module-->
 		<String ID="NetworkModule.Name">Network</String>
 
-		<!-- Network -->
-		<String ID="Network.ModSource">Mod source</String>
+		<!-- NetworkManager -->
+		<String ID="NetworkManager.Name">Network manager</String>>
+		<String ID="NetworkManager.ModSource">Mod source</String>
 
-		<String ID="Network.AuthCaption">Authentication on %1</String>
-		<String ID="Network.AuthMessage">Enter your username and password to log in to your account.</String>
-		<String ID="Network.AuthSuccess">Authentication on %1 completed successfully</String>
-		<String ID="Network.AuthFail">Authentication on %1 failed</String>
+		<String ID="NetworkManager.AuthCaption">Authentication on %1</String>
+		<String ID="NetworkManager.AuthMessage">Enter your username and password to log in to your account.</String>
+		<String ID="NetworkManager.AuthSuccess">Authentication on %1 completed successfully</String>
+		<String ID="NetworkManager.AuthFail">Authentication on %1 failed</String>
 
-		<String ID="Network.SignIn">Sign in</String>
-		<String ID="Network.SignOut">Sign out</String>
-		<String ID="Network.SignedIn">Signed in</String>
-		<String ID="Network.NotSignedIn">Not signed in</String>
-		<String ID="Network.SignOutMessage">Are you sure you want to sign out of "%1" account?</String>
+		<String ID="NetworkManager.SignIn">Sign in</String>
+		<String ID="NetworkManager.SignOut">Sign out</String>
+		<String ID="NetworkManager.SignedIn">Signed in</String>
+		<String ID="NetworkManager.NotSignedIn">Not signed in</String>
+		<String ID="NetworkManager.SignOutMessage">Are you sure you want to sign out of "%1" account?</String>
 
-		<String ID="Network.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</String>
+		<String ID="NetworkManager.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Download manager</String>

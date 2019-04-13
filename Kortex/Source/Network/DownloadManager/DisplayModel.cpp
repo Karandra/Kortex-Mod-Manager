@@ -78,7 +78,7 @@ namespace Kortex::DownloadManager
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Version"), ColumnID::Version, KxDATAVIEW_CELL_INERT, 100, flags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 200, flags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Game"), ColumnID::Game, KxDATAVIEW_CELL_INERT, 100, flags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Network.ModSource"), ColumnID::ModSource, KxDATAVIEW_CELL_INERT, 100, flags);
+		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("NetworkManager.ModSource"), ColumnID::ModSource, KxDATAVIEW_CELL_INERT, 100, flags);
 		{
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Date"), ColumnID::Date, KxDATAVIEW_CELL_INERT, 125, flags);
 			info.GetColumn()->SortDescending();

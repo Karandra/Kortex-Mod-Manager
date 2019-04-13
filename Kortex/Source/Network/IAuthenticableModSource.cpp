@@ -14,20 +14,20 @@ namespace Kortex
 {
 	KxStandardID IAuthenticableModSource::OnAuthSuccess()
 	{
-		KxTaskDialog dialog(GetInvokingWindow(), KxID_NONE, KTrf("Network.AuthSuccess", QueryInterface<IModSource>()->GetName()));
+		KxTaskDialog dialog(GetInvokingWindow(), KxID_NONE, KTrf("NetworkManager.AuthSuccess", QueryInterface<IModSource>()->GetName()));
 		dialog.SetMainIcon(KxICON_INFO);
 		return static_cast<KxStandardID>(dialog.ShowModal());
 	}
 	KxStandardID IAuthenticableModSource::OnAuthFail()
 	{
-		KxTaskDialog dialog(GetInvokingWindow(), KxID_NONE, KTrf("Network.AuthFail", QueryInterface<IModSource>()->GetName()));
+		KxTaskDialog dialog(GetInvokingWindow(), KxID_NONE, KTrf("NetworkManager.AuthFail", QueryInterface<IModSource>()->GetName()));
 		dialog.SetMainIcon(KxICON_ERROR);
 		return static_cast<KxStandardID>(dialog.ShowModal());
 	}
 
 	std::optional<Credentials> IAuthenticableModSource::ShowCredentialsDialog(wxWindow* parent) const
 	{
-		KxCredentialsDialog dialog(parent, KxID_NONE, KTrf("Network.AuthCaption", QueryInterface<IModSource>()->GetName()), KTr("Network.AuthMessage"));
+		KxCredentialsDialog dialog(parent, KxID_NONE, KTrf("NetworkManager.AuthCaption", QueryInterface<IModSource>()->GetName()), KTr("NetworkManager.AuthMessage"));
 		if (dialog.ShowModal() == KxID_OK)
 		{
 			wxString userName = dialog.GetUserName();

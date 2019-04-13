@@ -537,23 +537,24 @@
 		<String ID="VirtualGameFolderWS.NameShort">Данные игры</String>
 
 		<!-- Network module-->
-		<String ID="NetworkModule.Name">Модуль работы с сетью</String>
+		<String ID="NetworkModule.Name">Сетевое взаимодействие</String>
 
-		<!-- Network -->
-		<String ID="Network.ModSource">Источник модов</String>
+		<!-- NetworkManager -->
+		<String ID="NetworkManager.Name">Менеджер сети</String>>
+		<String ID="NetworkManager.ModSource">Источник модов</String>
 
-		<String ID="Network.AuthCaption">Аутентификация на %1</String>
-		<String ID="Network.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
-		<String ID="Network.AuthSuccess">Аутентификация на %1 успешно выполнена</String>
-		<String ID="Network.AuthFail">Не удалось выполнить аутентификацию на %1</String>
+		<String ID="NetworkManager.AuthCaption">Аутентификация на %1</String>
+		<String ID="NetworkManager.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
+		<String ID="NetworkManager.AuthSuccess">Аутентификация на %1 успешно выполнена</String>
+		<String ID="NetworkManager.AuthFail">Не удалось выполнить аутентификацию на %1</String>
 
-		<String ID="Network.SignIn">Выполнить вход</String>
-		<String ID="Network.SignOut">Выйти из аккаунта</String>
-		<String ID="Network.SignedIn">Вход выполнен</String>
-		<String ID="Network.NotSignedIn">Вход не выполнен</String>
-		<String ID="Network.SignOutMessage">Вы действительно хотите выйти из аккаунта %1?</String>
+		<String ID="NetworkManager.SignIn">Выполнить вход</String>
+		<String ID="NetworkManager.SignOut">Выйти из аккаунта</String>
+		<String ID="NetworkManager.SignedIn">Вход выполнен</String>
+		<String ID="NetworkManager.NotSignedIn">Вход не выполнен</String>
+		<String ID="NetworkManager.SignOutMessage">Вы действительно хотите выйти из аккаунта %1?</String>
 
-		<String ID="Network.RequestQuotaReched">Query limit reached to %1 for a period of time</String>
+		<String ID="NetworkManager.RequestQuotaReched">Query limit reached to %1 for a period of time</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>

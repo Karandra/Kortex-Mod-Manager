@@ -114,12 +114,12 @@ namespace Kortex::NetworkManager
 			wxBitmap bitmap;
 			GetModSourceInfo(*m_DefaultModSource, label, bitmap);
 
-			m_LoginButton->SetLabel(KTr("Network.SignedIn") + ": " + label);
+			m_LoginButton->SetLabel(KTr("NetworkManager.SignedIn") + ": " + label);
 			m_LoginButton->SetBitmap(KGetBitmap(m_DefaultModSource->GetIcon()));
 		}
 		else
 		{
-			m_LoginButton->SetLabel(KTr("Network.NotSignedIn"));
+			m_LoginButton->SetLabel(KTr("NetworkManager.NotSignedIn"));
 			m_LoginButton->SetBitmap(KGetBitmap(IModSource::GetGenericIcon()));
 		}
 
@@ -143,11 +143,11 @@ namespace Kortex::NetworkManager
 				bool authOK = GetModSourceInfo(*modSource, label, bitmap);
 				if (authOK)
 				{
-					label = KTr("Network.SignOut") + ": " + label;
+					label = KTr("NetworkManager.SignOut") + ": " + label;
 				}
 				else
 				{
-					label = KTr("Network.SignIn") + ": " + label;
+					label = KTr("NetworkManager.SignIn") + ": " + label;
 				}
 
 				KxMenuItem* item = m_Menu->Add(new KxMenuItem(label));
@@ -169,7 +169,7 @@ namespace Kortex::NetworkManager
 				bool authOK = GetModSourceInfo(*modSource, label, bitmap, false);
 				if (!authOK)
 				{
-					label = KTr("Network.NotSignedIn") + ": " + label;
+					label = KTr("NetworkManager.NotSignedIn") + ": " + label;
 				}
 
 				KxMenuItem* item = m_Menu->Add(new KxMenuItem(label, wxEmptyString, wxITEM_RADIO));
@@ -196,7 +196,7 @@ namespace Kortex::NetworkManager
 		IModSource* modSource = static_cast<IModSource*>(event.GetItem()->GetClientData());
 		if (auto auth = modSource->QueryInterface<IAuthenticableModSource>(); auth && auth->IsAuthenticated())
 		{
-			KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("Network.SignOutMessage", modSource->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+			KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("NetworkManager.SignOutMessage", modSource->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 			if (dialog.ShowModal() == KxID_YES)
 			{
 				auth->SignOut();

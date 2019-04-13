@@ -172,7 +172,7 @@ namespace
 	{
 		if (reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests)
 		{
-			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("Network.RequestQuotaReched", NexusSource::GetInstance()->GetName()), KxICON_WARNING);
+			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched", NexusSource::GetInstance()->GetName()), KxICON_WARNING);
 			return true;
 		}
 		else if (!reply.IsOK())

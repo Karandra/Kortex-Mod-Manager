@@ -39,11 +39,14 @@ namespace Kortex::Notification
 	{
 		CreateUI();
 
-		const int edgeMargin = KLC_VERTICAL_SPACING * 3;
-		const wxSize size = FromDIP(wxSize(300, 125));
+		const int edgeMargin = std::max(KLC_VERTICAL_SPACING, KLC_HORIZONTAL_SPACING) * 3;
+		const wxSize windowSize = FromDIP(wxSize(300, 125));
 		const wxSize posMagrins = FromDIP(wxSize(edgeMargin, edgeMargin));
 
-		int offsetY = KLC_VERTICAL_SPACING;
+		int offsetX = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X) + 2 * KLC_VERTICAL_SPACING;
+		int offsetY = KLC_HORIZONTAL_SPACING;
+
+		// Adjust offset to not overlap the status bar
 		if (KMainWindow* mainWindow = KMainWindow::GetInstance())
 		{
 			if (KxStatusBarEx* statusBar = mainWindow->GetStatusBar())
@@ -52,14 +55,15 @@ namespace Kortex::Notification
 			}
 		}
 
-		size_t popupCount = INotificationCenter::GetInstance()->GetActivePopupsCount();
+		// Add combined height of all currently visible notifications with some padding
+		const size_t popupCount = INotificationCenter::GetInstance()->GetActivePopupsCount();
 		if (popupCount >= 1)
 		{
-			offsetY += popupCount * (size.GetHeight() + KLC_VERTICAL_SPACING * 2);
+			offsetY += popupCount * (windowSize.GetHeight() + KLC_VERTICAL_SPACING * 2);
 		}
 
-		SetInitialSize(size);
-		Position(KMainWindow::GetInstance()->GetRect().GetRightBottom() - posMagrins - wxSize(0, offsetY), size);
+		SetInitialSize(windowSize);
+		Position(KMainWindow::GetInstance()->GetRect().GetRightBottom() - posMagrins - wxSize(offsetX, offsetY), windowSize);
 	}
 
 	bool PopupWindow::Destroy()

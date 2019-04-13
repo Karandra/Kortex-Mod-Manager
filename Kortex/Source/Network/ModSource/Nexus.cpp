@@ -224,11 +224,6 @@ namespace Kortex::NetworkManager
 	{
 		m_WebSocketClient = INetworkManager::GetInstance()->NewWebSocketClient("wss://sso.nexusmods.com");
 
-		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_CONNECTING, [this](KxWebSocketEvent& event)
-		{
-			m_WebSocketClient->AddHeader("Application-Name", IApplication::GetInstance()->GetShortName());
-			m_WebSocketClient->AddHeader("Application-Version", IApplication::GetInstance()->GetVersion());
-		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_OPEN, [this](KxWebSocketEvent& event)
 		{
 			if (m_SessionGUID.IsNull())

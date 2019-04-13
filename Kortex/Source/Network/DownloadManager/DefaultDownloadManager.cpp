@@ -304,30 +304,22 @@ namespace Kortex::DownloadManager
 
 		if (NexusSource* nexus = NexusSource::GetInstance())
 		{
-			wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+))", wxRE_ADVANCED|wxRE_ICASE);
-			if (reg.Matches(link))
+			GameID gameID;
+			NetworkModInfo modInfo;
+			NexusNXMLinkData nxmExtraInfo;
+
+			if (nexus->ParseNXM(link, gameID, modInfo, nxmExtraInfo))
 			{
-				GameID game = nexus->TranslateNxmGameID(reg.GetMatch(link, 1));
-				ModID modID(reg.GetMatch(link, 2));
-				ModFileID fileID(reg.GetMatch(link, 3));
-
-				NexusDownloadExtraReply nxmExtraInfo;
-				nxmExtraInfo.Key = reg.GetMatch(link, 4);
-				nxmExtraInfo.Expires = reg.GetMatch(link, 5);
-
-				if (game.IsOK() && modID && fileID)
+				if (auto fileInfo = nexus->GetModFileInfo(ModRepositoryRequest(modInfo, gameID)))
 				{
-					if (auto fileInfo = nexus->GetModFileInfo(ModRepositoryRequest(modID, fileID, game)))
+					ModRepositoryRequest request(modInfo, gameID);
+					request.SetExtraInfo(nxmExtraInfo);
+
+					if (auto linkItems = nexus->GetFileDownloads(request); !linkItems.empty())
 					{
-						ModRepositoryRequest request(modID, fileID, game);
-						request.SetExtraInfo(nxmExtraInfo);
-						
-						if (auto linkItems = nexus->GetFileDownloads(request); !linkItems.empty())
-						{
-							return QueueDownload(linkItems.front(), *fileInfo, *nexus->QueryInterface<IModRepository>(), game);
-						}
-						return false;
+						return QueueDownload(linkItems.front(), *fileInfo, *nexus->QueryInterface<IModRepository>(), gameID);
 					}
+					return false;
 				}
 			}
 		}

@@ -404,7 +404,7 @@ namespace Kortex::NetworkManager
 	}
 	wxString NexusSource::GetGameID(const GameID& id) const
 	{
-		// If invalid profile is passed, return ID for current profile.
+		// If invalid ID is passed, return ID for current instance.
 		if (id.IsOK())
 		{
 			// TES
@@ -800,7 +800,7 @@ namespace Kortex::NetworkManager
 										  request.GetFileID().GetValue()
 		);
 
-		NexusDownloadExtraReply nxmExtraInfo;
+		NexusNXMLinkData nxmExtraInfo;
 		if (request.GetExtraInfo(nxmExtraInfo))
 		{
 			query += KxString::Format("?key=%1&expires=%2", nxmExtraInfo.Key, nxmExtraInfo.Expires);
@@ -949,8 +949,32 @@ namespace Kortex::NetworkManager
 		}
 		return GameIDs::NullGameID;
 	}
-	wxString NexusSource::ConstructNXM(const ModFileReply& fileInfo, const GameID& id) const
+	wxString NexusSource::ConstructNXM(const NetworkModInfo& modInfo, const GameID& id, const NexusNXMLinkData& linkData) const
 	{
-		return KxString::Format("nxm://%1/mods/%2/files/%3", GetGameID(id), fileInfo.ModID.GetValue(), fileInfo.ID.GetValue()).Lower();
+		wxString nxm = KxString::Format("nxm://%1/mods/%2/files/%3", GetGameID(id), modInfo.GetModID().GetValue(), modInfo.GetFileID().GetValue());
+		if (!linkData.IsEmpty())
+		{
+			nxm += KxString::Format(wxS("?key=%1&expires=%2&user_id=%3"), linkData.Key, linkData.Expires, linkData.UserID);
+		}
+		return nxm;
+	}
+	bool NexusSource::ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData)
+	{
+		wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+)&user_id=(.+))", wxRE_ADVANCED|wxRE_ICASE);
+		if (reg.Matches(link))
+		{
+			gameID = TranslateNxmGameID(reg.GetMatch(link, 1));
+
+			ModID modID(reg.GetMatch(link, 2));
+			ModFileID fileID(reg.GetMatch(link, 3));
+			modInfo = NetworkModInfo(modID, fileID);
+
+			linkData.Key = reg.GetMatch(link, 4);
+			linkData.Expires = reg.GetMatch(link, 5);
+			linkData.UserID = reg.GetMatch(link, 6);
+
+			return gameID && modID&& fileID;
+		}
+		return false;
 	}
 }

@@ -30,9 +30,17 @@ namespace Kortex::NetworkManager
 		int64_t ModsCount = -1;
 		wxDateTime m_ApprovedDate;
 	};
-	struct NexusDownloadExtraReply
+	class NexusNXMLinkData
 	{
-		wxString Key;
-		wxString Expires;
+		public:
+			wxString Key;
+			wxString Expires;
+			wxString UserID;
+
+		public:
+			bool IsEmpty() const
+			{
+				return Key.IsEmpty() && Expires.IsEmpty() && UserID.IsEmpty();
+			}
 	};
 }

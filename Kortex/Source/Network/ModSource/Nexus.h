@@ -89,6 +89,7 @@ namespace Kortex::NetworkManager
 			std::vector<NexusGameReply> GetGamesList() const;
 
 			GameID TranslateNxmGameID(const wxString& id) const;
-			wxString ConstructNXM(const ModFileReply& fileInfo, const GameID& id = {}) const;
+			wxString ConstructNXM(const NetworkModInfo& modInfo, const GameID& id = {}, const NexusNXMLinkData& linkData = {}) const;
+			bool ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData);
 	};
 }

@@ -26,8 +26,8 @@ namespace Kortex
 				:m_ModInfo(modID, fileID), m_GameID(gameID)
 			{
 			}
-			ModRepositoryRequest(NetworkModInfo modInfo)
-				:m_ModInfo(modInfo)
+			ModRepositoryRequest(NetworkModInfo modInfo, const GameID& gameID = {})
+				:m_ModInfo(modInfo), m_GameID(gameID)
 			{
 			}
 

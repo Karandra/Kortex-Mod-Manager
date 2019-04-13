@@ -3,6 +3,11 @@
 
 namespace Kortex
 {
+	struct ModFileReply;
+}
+
+namespace Kortex
+{
 	class NetworkModInfo
 	{
 		public:
@@ -26,7 +31,8 @@ namespace Kortex
 				:m_ModID(modID), m_FileID(fileID)
 			{
 			}
-			
+			NetworkModInfo(const ModFileReply& fileInfo);
+
 		public:
 			bool IsEmpty() const
 			{

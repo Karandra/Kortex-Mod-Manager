@@ -2141,6 +2141,9 @@
     <ClInclude Include="Source\Network\ModRepositoryRequest.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Network\ModRepositoryLimits.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc">

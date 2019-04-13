@@ -7,7 +7,7 @@
 #include "NexusModInfo.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxUUID.h>
-
+class KxCURLEvent;
 class KxCURLSession;
 class KxCURLReplyBase;
 
@@ -30,6 +30,8 @@ namespace Kortex::NetworkManager
 			KxUUID m_SessionGUID;
 			bool m_IsAuthenticated = false;
 
+			ModRepositoryLimitsData m_LimitsData;
+
 		protected:
 			// IAuthenticableModSource
 			wxWindow* GetInvokingWindow() const override;
@@ -47,6 +49,7 @@ namespace Kortex::NetworkManager
 
 			void RequestUserAvatar(const NexusValidationReply& info);
 			std::unique_ptr<KxCURLSession> NewCURLSession(const wxString& address, const wxString& apiKey = {}) const;
+			void OnResponseHeader(KxCURLEvent& event);
 
 		public:
 			NexusSource();
@@ -73,6 +76,10 @@ namespace Kortex::NetworkManager
 
 		public:
 			// IModRepository
+			ModRepositoryLimits GetRequestLimits() const override
+			{
+				return m_LimitsData;
+			}
 			bool RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download) override;
 
 			std::optional<ModInfoReply> GetModInfo(const ModRepositoryRequest& request) const override;

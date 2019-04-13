@@ -536,6 +536,7 @@
     <ClInclude Include="Source\Network\IDownloadManager.h" />
     <ClInclude Include="Source\Network\IModRepository.h" />
     <ClInclude Include="Source\Network\INetworkManager.h" />
+    <ClInclude Include="Source\Network\ModRepositoryLimits.h" />
     <ClInclude Include="Source\Network\ModSourceStore.h" />
     <ClInclude Include="Source\Network\ModSourceStore\StoreDialog.h" />
     <ClInclude Include="Source\Network\ModSourceStore\StoreDisplayModel.h" />

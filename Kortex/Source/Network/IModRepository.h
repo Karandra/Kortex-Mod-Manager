@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "ModRepositoryRequest.h"
 #include "ModRepositoryReply.h"
+#include "ModRepositoryLimits.h"
 #include <KxFramework/KxQueryInterface.h>
 #include <KxFramework/KxFileItem.h>
 #include <optional>
@@ -17,6 +18,7 @@ namespace Kortex
 	class IModRepository: public KxRTTI::IInterface<IModRepository>
 	{
 		public:
+			virtual ModRepositoryLimits GetRequestLimits() const = 0;
 			virtual bool RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download) = 0;
 
 			virtual std::optional<ModInfoReply> GetModInfo(const ModRepositoryRequest& request) const = 0;

@@ -1128,6 +1128,9 @@
     <ClCompile Include="Source\Network\ModNetwork\LoversLab.cpp">
       <Filter>Code\Source\Network\ModNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.cpp">
+      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1399,9 +1402,6 @@
     </ClInclude>
     <ClInclude Include="Source\GameData\SaveManager\Workspace.h">
       <Filter>Code\Headers\GameData\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\BaseSave.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameData\PluginManager\BethesdaPlugin.h">
       <Filter>Code\Headers\GameData\PluginManager</Filter>
@@ -2143,6 +2143,12 @@
     </ClInclude>
     <ClInclude Include="Source\Network\ModNetwork\Nexus.h">
       <Filter>Code\Headers\Network\ModNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.h">
+      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\SaveInfoPair.h">
+      <Filter>Code\Headers\GameData\SaveManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

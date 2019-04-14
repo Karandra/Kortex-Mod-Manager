@@ -38,13 +38,13 @@ namespace Kortex::SaveManager::BethesdaSave
 				stream.Skip(28);
 
 				// 64 bytes of location name
-				m_BasicInfo.emplace_back(stream.ReadStringACP(64), KTr("SaveManager.Info.Location"));
+				m_BasicInfo.emplace_back(stream.ReadStringACP(64), KTr("SaveManager.Info.Location")).Order(1).Display();
 
 				// Unknown float
 				stream.Skip<float>();
 
 				// 32 bytes of character name
-				m_BasicInfo.emplace_back(stream.ReadStringACP(32), KTr("SaveManager.Info.Name"));
+				m_BasicInfo.emplace_back(stream.ReadStringACP(32), KTr("SaveManager.Info.Name")).Order(0).Display();
 
 				// Skip entire SCRD record and SCRS record name
 				stream.Skip(28 + 4);
@@ -53,6 +53,8 @@ namespace Kortex::SaveManager::BethesdaSave
 				const int width = 128;
 				const int height = 128;
 				m_Bitmap = ReadBitmapRGBA(stream.ReadVector<uint8_t>(width * height * 4), width, height, wxALPHA_OPAQUE);
+
+				SortBasicInfo();
 				return true;
 			}
 		}

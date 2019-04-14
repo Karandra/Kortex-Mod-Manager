@@ -151,6 +151,7 @@
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPluginReaderSkyrim.cpp" />
     <ClCompile Include="Source\GameData\PluginManager\PluginViewModel.cpp" />
     <ClCompile Include="Source\GameData\PluginManager\BethesdaDisplayModel.cpp" />
+    <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.cpp" />
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\Fallout3.cpp" />
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\Fallout4.cpp" />
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\FalloutNV.cpp" />
@@ -464,7 +465,7 @@
     <ClInclude Include="Source\GameData\PluginManager\PluginViewModel.h" />
     <ClInclude Include="Source\GameData\PluginManager\IDisplayModel.h" />
     <ClInclude Include="Source\GameData\PluginManager\BethesdaDisplayModel.h" />
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\BaseSave.h" />
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.h" />
     <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Fallout3.h" />
     <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Fallout4.h" />
     <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\FalloutNV.h" />
@@ -477,6 +478,7 @@
     <ClInclude Include="Source\GameData\SaveManager\EmptySaveFile.h" />
     <ClInclude Include="Source\GameData\SaveManager\DefaultSaveManager.h" />
     <ClInclude Include="Source\GameData\SaveManager\DisplayModel.h" />
+    <ClInclude Include="Source\GameData\SaveManager\SaveInfoPair.h" />
     <ClInclude Include="Source\GameData\SaveManager\Workspace.h" />
     <ClInclude Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.h" />
     <ClInclude Include="Source\GameData\ScreenshotsGallery\Workspace.h" />

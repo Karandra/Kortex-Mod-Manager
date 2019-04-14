@@ -1,47 +1,51 @@
 #pragma once
 #include "stdafx.h"
-#include "../IBethesdaGameSave.h"
+#include "GameData/SaveManager/IBethesdaGameSave.h"
 
 namespace Kortex::SaveManager::BethesdaSave
 {
-	class BaseSave: public IBethesdaGameSave
+	class BethesdaBasicSave: public IBethesdaGameSave
 	{
 		public:
 			using float32_t = float;
 			using float64_t = double;
 
 		protected:
-			KLabeledValue::Vector m_BasicInfo;
+			SaveInfoPair::Vector m_BasicInfo;
 			KxStringVector m_PluginsList;
 			wxBitmap m_Bitmap;
 			uint32_t m_SaveVersion = 0;
 
+		protected:
+			void SortBasicInfo();
+
 		public:
-			virtual wxBitmap GetBitmap() const override
+			wxBitmap GetBitmap() const override
 			{
 				return m_Bitmap;
 			}
-			virtual KLabeledValue::Vector GetBasicInfo() const override
+			const InfoPairVector& GetBasicInfo() const override
 			{
 				return m_BasicInfo;
 			}
 
-			virtual KxStringVector GetPlugins() const override
+			KxStringVector GetPlugins() const override
 			{
 				return m_PluginsList;
 			}
-			virtual size_t GetPluginsCount() const override
+			size_t GetPluginsCount() const override
 			{
 				return m_PluginsList.size();
 			}
-			virtual bool HasPlugins() const override
+			bool HasPlugins() const override
 			{
 				return !m_PluginsList.empty();
 			}
 
-			virtual uint32_t GetVersion() const override
+			uint32_t GetVersion() const override
 			{
 				return m_SaveVersion;
 			}
+			wxString GetDisplayName() const override;
 	};
 }

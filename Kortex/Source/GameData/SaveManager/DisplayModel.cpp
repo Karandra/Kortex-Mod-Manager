@@ -71,7 +71,7 @@ namespace Kortex::SaveManager
 				}
 				case ColumnID::Name:
 				{
-					value = entry->GetFileItem().GetName();
+					value = entry->GetDisplayName();
 					break;
 				}
 				case ColumnID::ModificationDate:

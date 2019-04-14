@@ -142,7 +142,7 @@ namespace Kortex::SaveManager
 
 			if (save)
 			{
-				const KLabeledValue::Vector basicInfo = save->GetBasicInfo();
+				const auto& basicInfo = save->GetBasicInfo();
 				basicInfoMenuItem->Enable(!basicInfo.empty());
 
 				for (const KLabeledValue& entry: basicInfo)
@@ -336,7 +336,7 @@ namespace Kortex::SaveManager
 		{
 			if (saveEntry->IsOK())
 			{
-				mainWindow->SetStatus(saveEntry->GetFileItem().GetName(), statusIndex);
+				mainWindow->SetStatus(saveEntry->GetDisplayName(), statusIndex);
 			}
 			else
 			{

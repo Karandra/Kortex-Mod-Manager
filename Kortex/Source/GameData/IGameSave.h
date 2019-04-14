@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KLabeledValue.h"
+#include "SaveManager/SaveInfoPair.h"
 #include <KxFramework/KxFileItem.h>
 
 namespace Kortex
@@ -18,6 +18,8 @@ namespace Kortex
 			using Vector = std::vector<std::unique_ptr<IGameSave>>;
 			using RefVector = std::vector<IGameSave*>;
 			using CRefVector = std::vector<const IGameSave*>;
+
+			using InfoPairVector = std::vector<SaveManager::SaveInfoPair>;
 
 		public:
 			static wxImage ReadImageRGB(const KxUInt8Vector& rgbData, int width, int height, int alphaOverride = -1, bool isStaticData = false);
@@ -49,6 +51,8 @@ namespace Kortex
 			virtual KxFileItem& GetFileItem() = 0;
 
 			virtual wxBitmap GetBitmap() const = 0;
-			virtual KLabeledValue::Vector GetBasicInfo() const = 0;
+			virtual const InfoPairVector& GetBasicInfo() const = 0;
+
+			virtual wxString GetDisplayName() const = 0;
 	};
 }

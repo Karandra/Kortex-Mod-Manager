@@ -6,6 +6,9 @@ namespace Kortex::SaveManager
 {
 	class EmptySaveFile: public RTTI::IExtendInterface<EmptySaveFile, BaseGameSave>
 	{
+		private:
+			InfoPairVector m_Info;
+
 		protected:
 			virtual bool OnRead(const KxFileItem& fileItem) override
 			{
@@ -17,7 +20,11 @@ namespace Kortex::SaveManager
 			{
 				return wxNullBitmap;
 			}
-			virtual KLabeledValue::Vector GetBasicInfo() const override
+			virtual const InfoPairVector& GetBasicInfo() const override
+			{
+				return m_Info;
+			}
+			wxString GetDisplayName() const override
 			{
 				return {};
 			}

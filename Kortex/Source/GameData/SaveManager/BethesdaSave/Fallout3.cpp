@@ -27,26 +27,26 @@ namespace Kortex::SaveManager::BethesdaSave
 
 				// Read save index
 				stream.Skip<uint8_t>();
-				m_BasicInfo.emplace_back(std::to_wstring(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex"));
+				m_BasicInfo.emplace_back(std::to_wstring(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex")).Order(0).Display().DisplayLabel();
 
 				auto ReadWZString = [this, &stream](const wxString& fieldName)
 				{
 					stream.Skip<uint8_t>();
 					uint16_t length = stream.ReadObject<uint16_t>();
 					stream.Skip<uint8_t>();
-					m_BasicInfo.emplace_back(stream.ReadStringACP(length), KTr(fieldName));
+					return m_BasicInfo.emplace_back(stream.ReadStringACP(length), KTr(fieldName));
 				};
 
 				// Read name
-				ReadWZString("SaveManager.Info.Name");
+				ReadWZString("SaveManager.Info.Name").Order(1).Display();
 				ReadWZString("SaveManager.Info.Karma");
 
 				// Read level
 				stream.Skip<uint8_t>();
-				m_BasicInfo.emplace_back(std::to_wstring(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.Level"));
+				m_BasicInfo.emplace_back(std::to_wstring(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.Level")).Order(2).Display().DisplayLabel();
 
 				// Read location
-				ReadWZString("SaveManager.Info.Location");
+				ReadWZString("SaveManager.Info.Location").Order(3).Display();
 
 				// Read game time
 				ReadWZString("SaveManager.Info.TimeInGame");
@@ -69,6 +69,8 @@ namespace Kortex::SaveManager::BethesdaSave
 					stream.Skip<uint8_t>();
 					m_PluginsList.emplace_back(stream.ReadStringACP(length));
 				}
+
+				SortBasicInfo();
 				return true;
 			}
 		}

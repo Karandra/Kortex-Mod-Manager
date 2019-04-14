@@ -20,10 +20,10 @@ namespace Kortex::SaveManager::BethesdaSave
 				// Skip 'saveHeaderSize' field
 				stream.Skip<uint32_t>();
 
-				m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex"));
-				m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), KTr("SaveManager.Info.Name"));
-				m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Level"));
-				m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), KTr("SaveManager.Info.Location"));
+				m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex")).Order(0).Display().DisplayLabel();
+				m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), KTr("SaveManager.Info.Name")).Order(1).Display();
+				m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Level")).Order(2).Display().DisplayLabel();
+				m_BasicInfo.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()), KTr("SaveManager.Info.Location")).Order(3).Display();
 				m_BasicInfo.emplace_back(wxString::FromCDouble(stream.ReadObject<float32_t>(), 2), KTr("SaveManager.Info.TimeInGame"));
 
 				// Skip 'gameTicks', 'gameTime' and screenshot struct size
@@ -40,6 +40,8 @@ namespace Kortex::SaveManager::BethesdaSave
 				{
 					m_PluginsList.emplace_back(stream.ReadStringACP(stream.ReadObject<uint8_t>()));
 				}
+
+				SortBasicInfo();
 				return true;
 			}
 		}

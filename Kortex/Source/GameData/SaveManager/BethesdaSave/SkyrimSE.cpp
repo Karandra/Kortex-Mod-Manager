@@ -40,10 +40,10 @@ namespace Kortex::SaveManager::BethesdaSave
 				m_SaveVersion = stream.ReadObject<uint32_t>();
 
 				// Read basic info
-				m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex"));
-				m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Name"));
-				m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.Level"));
-				m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Location"));
+				m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.SaveIndex")).Order(0).Display().DisplayLabel();
+				m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Name")).Order(1).Display();
+				m_BasicInfo.emplace_back(std::to_string(stream.ReadObject<uint32_t>()), KTr("SaveManager.Info.Level")).Order(2).Display().DisplayLabel();
+				m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Location")).Order(3).Display();
 				m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.TimeInGame"));
 				m_BasicInfo.emplace_back(stream.ReadStringUTF8(stream.ReadObject<uint16_t>()), KTr("SaveManager.Info.Race"));
 
@@ -92,6 +92,8 @@ namespace Kortex::SaveManager::BethesdaSave
 					// Read plugins list
 					ReadPluginList<uint8_t>(stream, m_PluginsList);
 				}
+
+				SortBasicInfo();
 				return true;
 			}
 		}

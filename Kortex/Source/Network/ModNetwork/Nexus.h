@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/IModSource.h"
-#include "Network/IModRepository.h"
-#include "Network/IAuthenticableModSource.h"
+#include "Network/IModNetwork.h"
+#include "Network/IModNetworkRepository.h"
+#include "Network/IAuthenticableModNetwork.h"
 #include "NexusModInfo.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxUUID.h>
@@ -18,9 +18,9 @@ namespace KxWebSocket
 
 namespace Kortex::NetworkManager
 {
-	class NexusSource:
-		public KxRTTI::IExtendInterface<NexusSource, IModSource, IAuthenticableModSource, IModRepository>,
-		public KxSingletonPtr<NexusSource>
+	class NexusModNetwork:
+		public KxRTTI::IExtendInterface<NexusModNetwork, IModNetwork, IAuthenticableModNetwork, IModNetworkRepository>,
+		public KxSingletonPtr<NexusModNetwork>
 	{
 		private:
 			KxSecretDefaultStoreService m_CredentialsStore;
@@ -52,20 +52,23 @@ namespace Kortex::NetworkManager
 			void OnResponseHeader(KxCURLEvent& event);
 
 		public:
-			NexusSource();
+			NexusModNetwork();
 
 		public:
-			// IModSource
+			// IModNetwork
 			KImageEnum GetIcon() const override;
 			wxString GetName() const override;
-			wxString GetGameID(const GameID& id = {}) const override;
-			wxString GetGameID(const ModRepositoryRequest& request) const
+
+			wxString TranslateGameIDToNetwork(const GameID& id = {}) const override;
+			wxString TranslateGameIDToNetwork(const ModRepositoryRequest& request) const
 			{
-				return GetGameID(request.GetGameID());
+				return TranslateGameIDToNetwork(request.GetGameID());
 			}
-			wxString& ConvertDescriptionToHTML(wxString& description) const override;
-			wxString GetModURLBasePart(const GameID& id = {}) const override;
-			wxString GetModURL(const ModRepositoryRequest& request) override;
+			GameID TranslateGameIDFromNetwork(const wxString& id) const override;
+			void ConvertDescriptionText(wxString& description) const override;
+
+			wxString GetModPageBaseURL(const GameID& id = {}) const override;
+			wxString GetModPageURL(const ModRepositoryRequest& request) override;
 
 		public:
 			// IAuthenticableModSource
@@ -75,7 +78,7 @@ namespace Kortex::NetworkManager
 			bool SignOut() override;
 
 		public:
-			// IModRepository
+			// IModNetworkRepository
 			ModRepositoryLimits GetRequestLimits() const override
 			{
 				return m_LimitsData;
@@ -90,12 +93,11 @@ namespace Kortex::NetworkManager
 			std::vector<ModDownloadReply> GetFileDownloads(const ModRepositoryRequest& request) const override;
 
 		public:
-			// NexusSource
-			std::optional<NexusValidationReply> GetValidationInfo(const wxString& apiKey = wxEmptyString) const;
+			// NexusModNetwork
+			std::optional<NexusValidationReply> GetValidationInfo(const wxString& apiKey = {}) const;
 			std::optional<NexusGameReply> GetGameInfo(const GameID& id = {}) const;
 			std::vector<NexusGameReply> GetGamesList() const;
 
-			GameID TranslateNxmGameID(const wxString& id) const;
 			wxString ConstructNXM(const NetworkModInfo& modInfo, const GameID& id = {}, const NexusNXMLinkData& linkData = {}) const;
 			bool ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData);
 	};

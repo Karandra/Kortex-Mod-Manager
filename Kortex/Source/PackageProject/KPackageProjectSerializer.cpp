@@ -2,6 +2,9 @@
 #include "KPackageProjectSerializer.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
+#include "Network/ModNetwork/Nexus.h"
+#include "Network/ModNetwork/LoversLab.h"
+#include "Network/ModNetwork/TESALL.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxTextFile.h>
 
@@ -10,7 +13,7 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 	using namespace Kortex::NetworkManager;
 
 	long long id = -1;
-	Kortex::IModSource* modSource = nullptr;
+	Kortex::IModNetwork* modNetwork = nullptr;
 
 	// https://regex101.com
 	wxString regEx = wxString::FromUTF8Unchecked(u8R"((?:http:\/\/)?(?:https:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)(?:.*\/)(?:[^\d]+)(\d+))");
@@ -22,15 +25,15 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 		wxString siteName = KAux::ExtractDomainName(url);
 		if (siteName == "tesall.ru")
 		{
-			modSource = Kortex::NetworkManager::TESALLSource::GetInstance();
+			modNetwork = Kortex::NetworkManager::TESALLModNetwork::GetInstance();
 		}
 		else if (siteName == "nexusmods.com" || siteName.AfterFirst('.') == "nexusmods.com" || siteName.Contains("nexus"))
 		{
-			modSource = Kortex::NetworkManager::NexusSource::GetInstance();
+			modNetwork = Kortex::NetworkManager::NexusModNetwork::GetInstance();
 		}
 		else if (siteName == "loverslab.com")
 		{
-			modSource = Kortex::NetworkManager::LoversLabSource::GetInstance();
+			modNetwork = Kortex::NetworkManager::LoversLabModNetwork::GetInstance();
 		}
 		KxUtility::SetIfNotNull(domainNameOut, siteName);
 
@@ -38,16 +41,17 @@ Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString&
 		reURL.GetMatch(url, 2).ToLongLong(&id);
 	}
 
-	if (modSource)
+	if (modNetwork)
 	{
-		return Kortex::ModSourceItem(modSource->GetName(), Kortex::ModID(id));
+		return Kortex::ModSourceItem(modNetwork->GetName(), Kortex::ModID(id));
 	}
 	return Kortex::ModSourceItem();
 }
 wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
 {
 	wxString copy = bbSource;
-	return Kortex::NetworkManager::NexusSource::GetInstance()->ConvertDescriptionToHTML(copy);
+	Kortex::NetworkManager::NexusModNetwork::GetInstance()->ConvertDescriptionText(copy);
+	return copy;
 }
 wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, KPPContentType type) const
 {

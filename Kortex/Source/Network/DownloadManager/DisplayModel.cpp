@@ -4,6 +4,7 @@
 #include <Kortex/Notification.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
+#include "Network/ModNetwork/Nexus.h"
 #include "InstallWizard/KInstallWizardDialog.h"
 #include "Utility/KAux.h"
 #include "UI/KMainWindow.h"
@@ -80,7 +81,7 @@ namespace Kortex::DownloadManager
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Version"), ColumnID::Version, KxDATAVIEW_CELL_INERT, 100, flags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 200, flags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Game"), ColumnID::Game, KxDATAVIEW_CELL_INERT, 100, flags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("NetworkManager.ModSource"), ColumnID::ModSource, KxDATAVIEW_CELL_INERT, 100, flags);
+		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("NetworkManager.ModNetwork"), ColumnID::ModSource, KxDATAVIEW_CELL_INERT, 100, flags);
 		{
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Date"), ColumnID::Date, KxDATAVIEW_CELL_INERT, 125, flags);
 			info.GetColumn()->SortDescending();
@@ -140,10 +141,10 @@ namespace Kortex::DownloadManager
 				}
 				case ColumnID::ModSource:
 				{
-					const IModSource* modSource = entry->GetModSource();
-					if (modSource)
+					const IModNetwork* modNetwork = entry->GetModNetwork();
+					if (modNetwork)
 					{
-						value = modSource->GetName();
+						value = modNetwork->GetName();
 					}
 					break;
 				}
@@ -273,8 +274,8 @@ namespace Kortex::DownloadManager
 			case ColumnID::ModSource:
 			{
 				using namespace NetworkManager;
-				wxString nameLeft = left->GetModSource() ? left->GetModSource()->GetName() : wxEmptyString;
-				wxString nameRight = right->GetModSource() ? right->GetModSource()->GetName() : wxEmptyString;
+				wxString nameLeft = left->GetModNetwork() ? left->GetModNetwork()->GetName() : wxEmptyString;
+				wxString nameRight = right->GetModNetwork() ? right->GetModNetwork()->GetName() : wxEmptyString;
 
 				return nameLeft < nameRight;
 			}
@@ -304,7 +305,7 @@ namespace Kortex::DownloadManager
 	{
 		KxDataViewItem item = event.GetItem();
 		IDownloadEntry* download = GetDataEntry(GetRow(item));
-		const IModSource* modSource = download ? download->GetModSource() : nullptr;
+		const IModNetwork* modNetwork = download ? download->GetModNetwork() : nullptr;
 		const bool isRunning = download && download->IsRunning();
 		const bool isEmpty = IsEmpty();
 
@@ -343,15 +344,15 @@ namespace Kortex::DownloadManager
 			KxMenu* providerMenu = new KxMenu();
 			if (download && !download->IsRunning())
 			{
-				for (auto& modSource: INetworkManager::GetInstance()->GetModSources())
+				for (auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
 				{
-					if (modSource->QueryInterface<IModRepository>())
+					if (IModNetworkRepository* repository = modNetwork->QueryInterface<IModNetworkRepository>())
 					{
-						KxMenuItem* item = providerMenu->Add(new KxMenuItem(modSource->GetName(), wxEmptyString, wxITEM_CHECK));
-						item->Check(modSource.get() == download->GetModSource());
-						item->Bind(KxEVT_MENU_SELECT, [download, &modSource](KxMenuEvent& event)
+						KxMenuItem* item = providerMenu->Add(new KxMenuItem(modNetwork->GetName(), wxEmptyString, wxITEM_CHECK));
+						item->Check(modNetwork.get() == download->GetModNetwork());
+						item->Bind(KxEVT_MENU_SELECT, [download, repository](KxMenuEvent& event)
 						{
-							download->SetModSource(modSource.get());
+							download->SetModNetwork(*repository);
 							download->Save();
 						});
 					}
@@ -363,7 +364,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::QueryInfo, KTr("DownloadManager.Menu.QueryInfo")));
-			item->Enable(download && !download->IsRunning() && modSource);
+			item->Enable(download && !download->IsRunning() && modNetwork);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ShowChangeLog, KTr("DownloadManager.Menu.ShowChangeLog")));
@@ -411,10 +412,10 @@ namespace Kortex::DownloadManager
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::OpenLocation, KTr("MainMenu.OpenLocation")));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
 		}
-		if (modSource)
+		if (modNetwork)
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::VisitOnWebSite, KTrf("DownloadManager.Menu.VisitOnWebSite", modSource->GetName())));
-			item->SetBitmap(KGetBitmap(modSource->GetIcon()));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::VisitOnWebSite, KTrf("DownloadManager.Menu.VisitOnWebSite", modNetwork->GetName())));
+			item->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Refresh, KTr(KxID_REFRESH)));
@@ -433,7 +434,7 @@ namespace Kortex::DownloadManager
 				item->Check(assocOK);
 				item->SetBitmap(KGetBitmap(KIMG_SITE_NEXUS));
 			}
-			if (download && download->IsModSourceOfType<NetworkManager::NexusSource>())
+			if (download && download->IsModNetworkOfType<NetworkManager::NexusModNetwork>())
 			{
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::CopyNXM, KTr("DownloadManager.Menu.CopyNXM")));
 			}
@@ -588,7 +589,7 @@ namespace Kortex::DownloadManager
 			}
 			case MenuID::VisitOnWebSite:
 			{
-				KxShell::Execute(GetViewTLW(), download->GetModSource()->GetModURL(ModRepositoryRequest(download->GetFileInfo())), "open");
+				KxShell::Execute(GetViewTLW(), download->GetModNetwork()->GetModPageURL(ModRepositoryRequest(download->GetFileInfo())), "open");
 				break;
 			}
 			case MenuID::Refresh:
@@ -605,7 +606,7 @@ namespace Kortex::DownloadManager
 			}
 			case MenuID::CopyNXM:
 			{
-				const NetworkManager::NexusSource* nexus = NetworkManager::NexusSource::GetInstance();
+				const NetworkManager::NexusModNetwork* nexus = NetworkManager::NexusModNetwork::GetInstance();
 				if (wxTheClipboard->Open())
 				{
 					wxTheClipboard->SetData(new wxTextDataObject(nexus->ConstructNXM(download->GetFileInfo(), download->GetTargetGameID())));

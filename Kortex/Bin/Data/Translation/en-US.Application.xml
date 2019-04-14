@@ -536,9 +536,9 @@ This folder and all its contents will be deleted: %1]]>
 
 		<!-- NetworkManager -->
 		<String ID="NetworkManager.Name">Network manager</String>>
-		<String ID="NetworkManager.ModSource">Mod source</String>
-		<String ID="NetworkManager.ModSource.Default">Default mod source</String>
-		<String ID="NetworkManager.ModSource.MakeDefault">Make default</String>
+		<String ID="NetworkManager.ModNetwork">Mod network</String>
+		<String ID="NetworkManager.ModNetwork.Default">Default mod network</String>
+		<String ID="NetworkManager.ModNetwork.MakeDefault">Make default</String>
 
 		<String ID="NetworkManager.AuthCaption">Authentication on %1</String>
 		<String ID="NetworkManager.AuthMessage">Enter your username and password to log in to your account.</String>

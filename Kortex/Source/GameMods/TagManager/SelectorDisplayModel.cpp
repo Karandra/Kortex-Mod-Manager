@@ -2,6 +2,7 @@
 #include "SelectorDisplayModel.h"
 #include <Kortex/ModTagManager.hpp>
 #include <Kortex/NetworkManager.hpp>
+#include "Network/ModNetwork/Nexus.h"
 
 namespace Kortex::ModTagManager
 {
@@ -29,9 +30,9 @@ namespace Kortex::ModTagManager
 		// NexusID
 		if (IsFullFeatured())
 		{
-			const IModSource* nexus = NetworkManager::NexusSource::GetInstance();
+			const IModNetwork* nexus = NetworkManager::NexusModNetwork::GetInstance();
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(nexus->GetName() + wxS("ID"), ColumnID::NexusID, KxDATAVIEW_CELL_EDITABLE);
-			info.GetColumn()->SetBitmap(KGetBitmap(NetworkManager::NexusSource::GetInstance()->GetIcon()));
+			info.GetColumn()->SetBitmap(KGetBitmap(NetworkManager::NexusModNetwork::GetInstance()->GetIcon()));
 		}
 
 		// Color

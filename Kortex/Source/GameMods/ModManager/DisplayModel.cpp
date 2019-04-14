@@ -88,13 +88,13 @@ namespace Kortex::ModManager
 		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Author"), ColumnID::Author, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.Tags"), ColumnID::Tags, KxDATAVIEW_CELL_INERT, 100, defaultFlags);
 	
-		for (const auto& modSource: INetworkManager::GetInstance()->GetModSources())
+		for (const auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
 		{
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, ColumnID::ModSource, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
 
-			info.GetColumn()->SetClientData(modSource.get());
-			info.GetColumn()->SetTitle(modSource->GetName());
-			info.GetColumn()->SetBitmap(KGetBitmap(modSource->GetIcon()));
+			info.GetColumn()->SetClientData(modNetwork.get());
+			info.GetColumn()->SetTitle(modNetwork->GetName());
+			info.GetColumn()->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
 		}
 
 		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.DateInstall"), ColumnID::DateInstall, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
@@ -307,10 +307,10 @@ namespace Kortex::ModManager
 			}
 			case ColumnID::ModSource:
 			{
-				const IModSource* modSource = static_cast<const IModSource*>(column->GetClientData());
-				if (modSource)
+				const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column->GetClientData());
+				if (modNetwork)
 				{
-					const ModSourceItem* item = mod->GetModSourceStore().GetItem(*modSource);
+					const ModSourceItem* item = mod->GetModSourceStore().GetItem(*modNetwork);
 
 					NetworkModInfo modInfo;
 					if (item && item->TryGetModInfo(modInfo))
@@ -616,11 +616,11 @@ namespace Kortex::ModManager
 					}
 					case ColumnID::ModSource:
 					{
-						const IModSource* modSource = static_cast<const IModSource*>(column->GetClientData());
-						if (modSource)
+						const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column->GetClientData());
+						if (modNetwork)
 						{
-							ModSourceItem* item1 = modLeft->GetModSourceStore().GetItem(*modSource);
-							ModSourceItem* item2 = modRight->GetModSourceStore().GetItem(*modSource);
+							ModSourceItem* item1 = modLeft->GetModSourceStore().GetItem(*modNetwork);
+							ModSourceItem* item2 = modRight->GetModSourceStore().GetItem(*modNetwork);
 
 							return item1 && item2 && (item1->GetModInfo().GetModID().GetValue() < item2->GetModInfo().GetModID().GetValue());
 						}
@@ -719,17 +719,17 @@ namespace Kortex::ModManager
 				}
 				case ColumnID::ModSource:
 				{
-					const IModSource* modSource = static_cast<const IModSource*>(column->GetClientData());
-					if (modSource)
+					const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column->GetClientData());
+					if (modNetwork)
 					{
 						const ModSourceStore& store = mod->GetModSourceStore();
-						if (const ModSourceItem* providerItem = store.GetItem(*modSource))
+						if (const ModSourceItem* providerItem = store.GetItem(*modNetwork))
 						{
 							KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
 						}
 						else if (!store.IsEmpty())
 						{
-							KAux::AskOpenURL(store.GetModNamedURLs(), GetViewTLW());
+							KAux::AskOpenURL(store.GetLabeledModURLs(), GetViewTLW());
 						}
 					}
 					break;

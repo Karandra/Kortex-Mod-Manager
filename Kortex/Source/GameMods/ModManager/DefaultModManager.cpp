@@ -328,12 +328,12 @@ namespace Kortex::ModManager
 		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModBySource(const wxString& sourceName, NetworkModInfo modInfo, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByModNetwork(const wxString& modNetworkName, NetworkModInfo modInfo, intptr_t* index) const
 	{
 		intptr_t i = 0;
 		for (auto& entry: m_Mods)
 		{
-			ModSourceItem* item = entry->GetModSourceStore().GetItem(sourceName);
+			ModSourceItem* item = entry->GetModSourceStore().GetItem(modNetworkName);
 			if (item && item->GetModInfo() == modInfo)
 			{
 				KxUtility::SetIfNotNull(index, i);
@@ -345,9 +345,9 @@ namespace Kortex::ModManager
 		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModBySource(const IModSource& modSource, NetworkModInfo modInfo, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByModNetwork(const IModNetwork& modNetwork, NetworkModInfo modInfo, intptr_t* index) const
 	{
-		return FindModBySource(modSource.GetName(), modInfo, index);
+		return FindModByModNetwork(modNetwork.GetName(), modInfo, index);
 	}
 
 	bool DefaultModManager::IsModActive(const wxString& modID) const

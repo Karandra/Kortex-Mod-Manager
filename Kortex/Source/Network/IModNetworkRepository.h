@@ -15,7 +15,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IModRepository: public KxRTTI::IInterface<IModRepository>
+	class IModNetworkRepository: public KxRTTI::IInterface<IModNetworkRepository>
 	{
 		public:
 			virtual ModRepositoryLimits GetRequestLimits() const = 0;

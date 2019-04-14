@@ -8,23 +8,23 @@ namespace Kortex::ModSource
 {
 	void StoreDialog::CreateAddMenu()
 	{
-		// Add known modSource
-		for (const auto& modSource: INetworkManager::GetInstance()->GetModSources())
+		// Add known mod networks
+		for (const auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
 		{
-			KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(modSource->GetName()));
-			item->SetBitmap(KGetBitmap(modSource->GetIcon()));
-			item->Enable(!m_ModSourceStore.HasItem(*modSource));
+			KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(modNetwork->GetName()));
+			item->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
+			item->Enable(!m_ModSourceStore.HasItem(*modNetwork));
 
-			item->Bind(KxEVT_MENU_SELECT, [this, &modSource](KxMenuEvent& event)
+			item->Bind(KxEVT_MENU_SELECT, [this, &modNetwork](KxMenuEvent& event)
 			{
-				OnAddItem(m_ModSourceStore.AssignWith(*modSource, ModID()));
+				OnAddItem(m_ModSourceStore.AssignWith(*modNetwork, ModID()));
 			});
 		}
 
 		// Add generic
 		m_AddButtonMenu.AddSeparator();
 		KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(KAux::MakeBracketedLabel(KTr(KxID_NEW))));
-		item->SetBitmap(KGetBitmap(IModSource::GetGenericIcon()));
+		item->SetBitmap(KGetBitmap(IModNetwork::GetGenericIcon()));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
 			OnAddItem(m_ModSourceStore.AssignWith(wxEmptyString, wxEmptyString));
@@ -36,7 +36,7 @@ namespace Kortex::ModSource
 
 		RefreshItems();
 		SelectItem(MakeItem(node));
-		GetView()->EditItem(MakeItem(node), GetView()->GetColumn(node.HasModSource() ? ColumnID::Value : ColumnID::Name));
+		GetView()->EditItem(MakeItem(node), GetView()->GetColumn(node.HasModModNetwork() ? ColumnID::Value : ColumnID::Name));
 	}
 
 	void StoreDialog::OnSelectItem(KxDataViewEvent& event)

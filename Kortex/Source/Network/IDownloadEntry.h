@@ -10,8 +10,8 @@ namespace Kortex
 {
 	class IGameInstance;
 	class IGameMod;
-	class IModSource;
-	class IModRepository;
+	class IModNetwork;
+	class IModNetworkRepository;
 }
 
 namespace Kortex
@@ -36,14 +36,17 @@ namespace Kortex
 			virtual const IGameMod* GetMod() const = 0;
 			virtual bool IsInstalled() const = 0;
 
-			virtual IModSource* GetModSource() const = 0;
-			virtual void SetModSource(IModSource* modSource) = 0;
-			bool HasModSource() const;
-			template<class T> bool IsModSourceOfType() const
+			virtual IModNetwork* GetModNetwork() const = 0;
+			virtual void SetModNetwork(IModNetworkRepository& modRepository) = 0;
+			bool HasModNetwork() const
 			{
-				if (const IModSource* modSource = GetModSource())
+				return GetModNetwork() != nullptr;
+			}
+			template<class T> bool IsModNetworkOfType() const
+			{
+				if (const IModNetwork* modNetwork = GetModNetwork())
 				{
-					return modSource == T::GetInstance();
+					return modNetwork == T::GetInstance();
 				}
 				return false;
 			}
@@ -80,7 +83,7 @@ namespace Kortex
 			virtual void Run(int64_t resumeFrom = 0) = 0;
 			virtual bool Restart() = 0;
 
-			// Restores download info depending of this download modSource and its filename
+			// Restores download info depending of this download modNetwork and its filename
 			// which is set in 'DefaultDownloadEntry::DeSerializeDefault' if something goes wrong.
 			// Restoration is performed by analyzing file name to get file id and mod id
 			// and querying rest of the information form internet.

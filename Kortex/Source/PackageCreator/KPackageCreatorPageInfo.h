@@ -66,7 +66,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		{
 			Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
 
-			wxString url = store.GetModURL(T::GetInstance()->GetName());
+			wxString url = store.GetModPageURL(T::GetInstance()->GetName());
 			if (!url.IsEmpty())
 			{
 				KAux::AskOpenURL(url, this);
@@ -86,14 +86,14 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		}
 		template<class T> KxTextBox* AddModSourceControl(wxSizer* sizer)
 		{
-			Kortex::IModSource* modSource = T::GetInstance();
-			if (modSource)
+			Kortex::IModNetwork* modNetwork = T::GetInstance();
+			if (modNetwork)
 			{
 				
-				wxString name = modSource->GetName().BeforeLast('.');
+				wxString name = modNetwork->GetName().BeforeLast('.');
 				if (name.IsEmpty())
 				{
-					name = modSource->GetName();
+					name = modNetwork->GetName();
 				}
 
 				KxLabel* label = nullptr;
@@ -101,7 +101,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 				control->SetValidator(NetworkModInfo::GetValidator());
 
 				label->ToggleWindowStyle(KxLABEL_HYPERLINK);
-				label->SetBitmap(KGetBitmap(modSource->GetIcon()));
+				label->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
 				label->Bind(wxEVT_TEXT_URL, &KPackageCreatorPageInfo::OnOpenSite<T>, this);
 
 				return control;

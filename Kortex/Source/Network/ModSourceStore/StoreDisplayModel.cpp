@@ -38,7 +38,7 @@ namespace Kortex::ModSource
 		const ModSourceItem* node = GetNode(item);
 		if (node)
 		{
-			if (node->HasModSource())
+			if (node->HasModModNetwork())
 			{
 				return column->GetID() == ColumnID::Value;
 			}
@@ -70,7 +70,7 @@ namespace Kortex::ModSource
 				}
 				case ColumnID::Value:
 				{
-					if (node->HasModSource())
+					if (node->HasModModNetwork())
 					{
 						value = node->GetModInfo().ToString();
 					}
@@ -90,8 +90,8 @@ namespace Kortex::ModSource
 		{
 			case ColumnID::Name:
 			{
-				IModSource* modSource = nullptr;
-				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetModSource(modSource) ? modSource->GetIcon() : IModSource::GetGenericIcon()));
+				IModNetwork* modNetwork = nullptr;
+				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : IModNetwork::GetGenericIcon()));
 				break;
 			}
 			case ColumnID::Value:
@@ -121,7 +121,7 @@ namespace Kortex::ModSource
 			case ColumnID::Value:
 			{
 				wxString newValue = data.As<wxString>();
-				if (node->HasModSource())
+				if (node->HasModModNetwork())
 				{
 					NetworkModInfo modInfo;
 					if (modInfo.FromString(newValue))
@@ -152,7 +152,7 @@ namespace Kortex::ModSource
 		{
 			// Allow edit both name and value for unknown sources (with URL),
 			// and restrict editing to modID only for known sources.
-			KxDataViewColumn* column = node->HasModSource() ? GetView()->GetColumnByID(ColumnID::Value) : event.GetColumn();
+			KxDataViewColumn* column = node->HasModModNetwork() ? GetView()->GetColumnByID(ColumnID::Value) : event.GetColumn();
 			if (column)
 			{
 				GetView()->EditItem(event.GetItem(), column);

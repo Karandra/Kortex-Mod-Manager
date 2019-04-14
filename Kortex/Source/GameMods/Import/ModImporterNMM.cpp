@@ -7,6 +7,9 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameConfig.hpp>
+#include "Network/ModNetwork/Nexus.h"
+#include "Network/ModNetwork/LoversLab.h"
+#include "Network/ModNetwork/TESALL.h"
 #include "PackageProject/KPackageProjectSerializer.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
@@ -210,7 +213,7 @@ namespace Kortex::ModManager
 			{
 				modID = infoNode.GetFirstChildElement("Id").GetValueInt(modID.GetValue());
 			}
-			mod.GetModSourceStore().AssignWith<NetworkManager::NexusSource>(modID);
+			mod.GetModSourceStore().AssignWith<NetworkManager::NexusModNetwork>(modID);
 
 			// Install date
 			mod.SetInstallTime(KxFile(infoStream.GetFileName()).GetFileTime(KxFILETIME_CREATION));
@@ -292,7 +295,7 @@ namespace Kortex::ModManager
 
 				IDownloadEntry& entry = manager->NewDownload();
 				entry.SetTargetGame(m_TargetGame);
-				entry.SetModSource(NetworkManager::NexusSource::GetInstance());
+				entry.SetModNetwork(*NetworkManager::NexusModNetwork::GetInstance());
 				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
 				entry.GetDownloadInfo().URL = infoNode.GetFirstChildElement("Website").GetValue();

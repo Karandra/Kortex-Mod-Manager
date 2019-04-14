@@ -3,11 +3,11 @@
 #include "Network/NetworkModule.h"
 
 #include "Network/INetworkManager.h"
-#include "Network/IModSource.h"
+
+#include "Network/IModNetwork.h"
+#include "Network/IModNetworkRepository.h"
+#include "Network/IAuthenticableModNetwork.h"
 #include "Network/ModSourceStore.h"
-#include "Network/ModSource/Nexus.h"
-#include "Network/ModSource/LoversLab.h"
-#include "Network/ModSource/TESALL.h"
 
 #include "Network/IDownloadManager.h"
 #include "Network/IDownloadEntry.h"

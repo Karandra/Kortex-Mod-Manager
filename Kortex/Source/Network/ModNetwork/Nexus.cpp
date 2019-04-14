@@ -127,7 +127,7 @@ namespace
 	{
 		if (reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests)
 		{
-			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched", NexusSource::GetInstance()->GetName()), KxICON_WARNING);
+			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched", NexusModNetwork::GetInstance()->GetName()), KxICON_WARNING);
 			return true;
 		}
 		else if (!reply.IsOK())
@@ -141,23 +141,23 @@ namespace
 
 namespace Kortex::NetworkManager
 {
-	wxWindow* NexusSource::GetInvokingWindow() const
+	wxWindow* NexusModNetwork::GetInvokingWindow() const
 	{
 		return KMainWindow::GetInstance();
 	}
-	KxStandardID NexusSource::OnAuthSuccess()
+	KxStandardID NexusModNetwork::OnAuthSuccess()
 	{
 		m_WebSocketClient.reset();
 		m_IsAuthenticated = true;
 
 		IEvent::CallAfter([this]()
 		{
-			IAuthenticableModSource::OnAuthSuccess();
+			IAuthenticableModNetwork::OnAuthSuccess();
 			INetworkManager::GetInstance()->OnAuthStateChanged();
 		});
 		return KxID_OK;
 	}
-	KxStandardID NexusSource::OnAuthFail()
+	KxStandardID NexusModNetwork::OnAuthFail()
 	{
 		m_WebSocketClient.reset();
 		m_UserToken.clear();
@@ -166,13 +166,13 @@ namespace Kortex::NetworkManager
 
 		IEvent::CallAfter([this]()
 		{
-			IAuthenticableModSource::OnAuthFail();
+			IAuthenticableModNetwork::OnAuthFail();
 			INetworkManager::GetInstance()->OnAuthStateChanged();
 		});
 		return KxID_OK;
 	}
 
-	wxString NexusSource::EndorsementStateToString(const ModEndorsement& state) const
+	wxString NexusModNetwork::EndorsementStateToString(const ModEndorsement& state) const
 	{
 		if (state.IsEndorsed())
 		{
@@ -184,18 +184,18 @@ namespace Kortex::NetworkManager
 		}
 		return "undecided";
 	}
-	std::unique_ptr<KxCURLSession> NexusSource::NewCURLSession(const wxString& address, const wxString& apiKey) const
+	std::unique_ptr<KxCURLSession> NexusModNetwork::NewCURLSession(const wxString& address, const wxString& apiKey) const
 	{
 		auto session = INetworkManager::GetInstance()->NewCURLSession(address);
 		session->AddHeader(wxS("APIKey"), apiKey.IsEmpty() ? GetAPIKey() : apiKey);
 		session->AddHeader(wxS("Content-Type"), wxS("application/json"));
 		session->AddHeader(wxS("Protocol-Version"), wxS("0.15.5"));
 
-		session->Bind(KxEVT_CURL_RESPONSE_HEADER, &NexusSource::OnResponseHeader, const_cast<NexusSource*>(this));
+		session->Bind(KxEVT_CURL_RESPONSE_HEADER, &NexusModNetwork::OnResponseHeader, const_cast<NexusModNetwork*>(this));
 
 		return session;
 	}
-	void NexusSource::OnResponseHeader(KxCURLEvent& event)
+	void NexusModNetwork::OnResponseHeader(KxCURLEvent& event)
 	{
 		const wxString headerName = event.GetHeaderKey();
 
@@ -234,11 +234,11 @@ namespace Kortex::NetworkManager
 		TestISODate(wxS("X-RL-Reset-Reset"), m_LimitsData.DailyLimitReset);
 	}
 
-	wxString NexusSource::GetAPIURL() const
+	wxString NexusModNetwork::GetAPIURL() const
 	{
-		return "https://api.nexusmods.com/v1";
+		return wxS("https://api.nexusmods.com/v1");
 	}
-	wxString NexusSource::GetAPIKey(wxString* userName) const
+	wxString NexusModNetwork::GetAPIKey(wxString* userName) const
 	{
 		if (auto credentials = LoadCredentials())
 		{
@@ -247,7 +247,7 @@ namespace Kortex::NetworkManager
 		}
 		return {};
 	}
-	void NexusSource::RequestUserAvatar(const NexusValidationReply& info)
+	void NexusModNetwork::RequestUserAvatar(const NexusValidationReply& info)
 	{
 		if (!HasUserPicture())
 		{
@@ -255,12 +255,12 @@ namespace Kortex::NetworkManager
 		}
 	}
 
-	NexusSource::NexusSource()
+	NexusModNetwork::NexusModNetwork()
 		:m_CredentialsStore(wxS("Kortex/NexusMods"))
 	{
 	}
 
-	bool NexusSource::Authenticate()
+	bool NexusModNetwork::Authenticate()
 	{
 		m_WebSocketClient = INetworkManager::GetInstance()->NewWebSocketClient("wss://sso.nexusmods.com");
 
@@ -353,7 +353,7 @@ namespace Kortex::NetworkManager
 
 		return m_WebSocketClient->Connect();
 	}
-	bool NexusSource::ValidateAuth()
+	bool NexusModNetwork::ValidateAuth()
 	{
 		if (LoadCredentials())
 		{
@@ -369,25 +369,26 @@ namespace Kortex::NetworkManager
 		m_IsAuthenticated = false;
 		return m_IsAuthenticated;
 	}
-	bool NexusSource::SignOut()
+	bool NexusModNetwork::SignOut()
 	{
 		m_IsAuthenticated = false;
 		return m_CredentialsStore.Delete();
 	}
-	bool NexusSource::IsAuthenticated() const
+	bool NexusModNetwork::IsAuthenticated() const
 	{
 		return m_IsAuthenticated;
 	}
 
-	KImageEnum NexusSource::GetIcon() const
+	KImageEnum NexusModNetwork::GetIcon() const
 	{
 		return KIMG_SITE_NEXUS;
 	}
-	wxString NexusSource::GetName() const
+	wxString NexusModNetwork::GetName() const
 	{
-		return "Nexus";
+		return wxS("NexusMods");
 	}
-	wxString NexusSource::GetGameID(const GameID& id) const
+	
+	wxString NexusModNetwork::TranslateGameIDToNetwork(const GameID& id) const
 	{
 		// If invalid ID is passed, return ID for current instance.
 		if (id.IsOK())
@@ -424,9 +425,47 @@ namespace Kortex::NetworkManager
 				return "Fallout4";
 			}
 		}
-		return IModSource::GetGameID(id);
+		return IModNetwork::TranslateGameIDToNetwork(id);
 	}
-	wxString& NexusSource::ConvertDescriptionToHTML(wxString& description) const
+	GameID NexusModNetwork::TranslateGameIDFromNetwork(const wxString& id) const
+	{
+		if (!id.IsEmpty())
+		{
+			// TES
+			if (KxComparator::IsEqual(id, "morrowind"))
+			{
+				return GameIDs::Morrowind;
+			}
+			if (KxComparator::IsEqual(id, "oblivion"))
+			{
+				return GameIDs::Oblivion;
+			}
+			if (KxComparator::IsEqual(id, "skyrim"))
+			{
+				return GameIDs::Skyrim;
+			}
+			if (KxComparator::IsEqual(id, "skyrimse"))
+			{
+				return GameIDs::SkyrimSE;
+			}
+
+			// Fallout
+			if (KxComparator::IsEqual(id, "fallout3"))
+			{
+				return GameIDs::Fallout3;
+			}
+			if (KxComparator::IsEqual(id, "falloutnv"))
+			{
+				return GameIDs::FalloutNV;
+			}
+			if (KxComparator::IsEqual(id, "fallout4"))
+			{
+				return GameIDs::Fallout4;
+			}
+		}
+		return GameIDs::NullGameID;
+	}
+	void NexusModNetwork::ConvertDescriptionText(wxString& description) const
 	{
 		auto RAW = [](const auto& s)
 		{
@@ -458,7 +497,7 @@ namespace Kortex::NetworkManager
 		{
 			wxRegEx regEx(RAW(u8R"(\[NEXUS\s?ID\:\s?(\d+)\])"), wxRE_DEFAULT|wxRE_ADVANCED|wxRE_ICASE|wxRE_NEWLINE);
 			regEx.Matches(description, wxRE_DEFAULT|wxRE_ADVANCED|wxRE_ICASE|wxRE_NEWLINE);
-			regEx.ReplaceAll(&description, wxString::Format(RAW(u8R"(<a href="%s\/\1">\0</a>)"), GetModURLBasePart()));
+			regEx.ReplaceAll(&description, wxString::Format(RAW(u8R"(<a href="%s\/\1">\0</a>)"), GetModPageBaseURL()));
 		}
 
 		// Image: [img]address[/img]
@@ -532,19 +571,18 @@ namespace Kortex::NetworkManager
 				regEx.ReplaceAll(&description, RAW(u8R"(<a href="\1\2\3">\0</a>)"));
 			}
 		}
-
-		return description;
 	}
-	wxString NexusSource::GetModURLBasePart(const GameID& id) const
+	
+	wxString NexusModNetwork::GetModPageBaseURL(const GameID& id) const
 	{
-		return wxString::Format("https://www.nexusmods.com/%s/mods", GetGameID(id)).MakeLower();
+		return KxString::Format(wxS("https://www.nexusmods.com/%1/mods"), TranslateGameIDToNetwork(id)).MakeLower();
 	}
-	wxString NexusSource::GetModURL(const ModRepositoryRequest& request)
+	wxString NexusModNetwork::GetModPageURL(const ModRepositoryRequest& request)
 	{
-		return KxString::Format("%1/%2", GetModURLBasePart(request.GetGameID()), request.GetModID().GetValue());
+		return KxString::Format(wxS("%1/%2"), GetModPageBaseURL(request.GetGameID()), request.GetModID().GetValue());
 	}
 
-	bool NexusSource::RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download)
+	bool NexusModNetwork::RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download)
 	{
 		wxString name = fileItem.GetName();
 		wxRegEx reg(u8R"((.*?)\-(\d+)\-(.*)\.)", wxRE_EXTENDED|wxRE_ADVANCED|wxRE_ICASE);
@@ -596,12 +634,12 @@ namespace Kortex::NetworkManager
 		return false;
 	}
 
-	std::optional<ModInfoReply> NexusSource::GetModInfo(const ModRepositoryRequest& request) const
+	std::optional<ModInfoReply> NexusModNetwork::GetModInfo(const ModRepositoryRequest& request) const
 	{
 		auto connection = NewCURLSession(KxString::Format("%1/games/%2/mods/%3",
-												  GetAPIURL(),
-												  GetGameID(request.GetGameID()),
-												  request.GetModID().GetValue())
+										 GetAPIURL(),
+										 TranslateGameIDToNetwork(request),
+										 request.GetModID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
@@ -660,13 +698,13 @@ namespace Kortex::NetworkManager
 		}
 		return info;
 	}
-	std::optional<ModEndorsementReply> NexusSource::EndorseMod(const ModRepositoryRequest& request, ModEndorsement state)
+	std::optional<ModEndorsementReply> NexusModNetwork::EndorseMod(const ModRepositoryRequest& request, ModEndorsement state)
 	{
 		auto connection = NewCURLSession(KxString::Format("%1/games/%2/mods/%3/%4",
-												  GetAPIURL(),
-												  GetGameID(request),
-												  request.GetModID().GetValue(),
-												  EndorsementStateToString(state))
+										 GetAPIURL(),
+										 TranslateGameIDToNetwork(request),
+										 request.GetModID().GetValue(),
+										 EndorsementStateToString(state))
 		);
 
 		KxVersion modVersion;
@@ -715,13 +753,13 @@ namespace Kortex::NetworkManager
 		return info;
 	}
 	
-	std::optional<ModFileReply> NexusSource::GetModFileInfo(const ModRepositoryRequest& request) const
+	std::optional<ModFileReply> NexusModNetwork::GetModFileInfo(const ModRepositoryRequest& request) const
 	{
 		auto connection = NewCURLSession(KxString::Format("%1/games/%2/mods/%3/files/%4",
-												  GetAPIURL(),
-												  GetGameID(request),
-												  request.GetModID().GetValue(),
-												  request.GetFileID().GetValue())
+										 GetAPIURL(),
+										 TranslateGameIDToNetwork(request),
+										 request.GetModID().GetValue(),
+										 request.GetFileID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
@@ -744,12 +782,12 @@ namespace Kortex::NetworkManager
 		}
 		return info;
 	}
-	std::vector<ModFileReply> NexusSource::GetModFiles(const ModRepositoryRequest& request) const
+	std::vector<ModFileReply> NexusModNetwork::GetModFiles(const ModRepositoryRequest& request) const
 	{
 		auto connection = NewCURLSession(KxString::Format("%1/games/%2/mods/%3/files",
-												  GetAPIURL(),
-												  GetGameID(request),
-												  request.GetModID().GetValue())
+										 GetAPIURL(),
+										 TranslateGameIDToNetwork(request),
+										 request.GetModID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
@@ -776,11 +814,11 @@ namespace Kortex::NetworkManager
 		}
 		return infoVector;
 	}
-	std::vector<ModDownloadReply> NexusSource::GetFileDownloads(const ModRepositoryRequest& request) const
+	std::vector<ModDownloadReply> NexusModNetwork::GetFileDownloads(const ModRepositoryRequest& request) const
 	{
 		wxString query = KxString::Format("%1/games/%2/mods/%3/files/%4/download_link",
 										  GetAPIURL(),
-										  GetGameID(request),
+										  TranslateGameIDToNetwork(request),
 										  request.GetModID().GetValue(),
 										  request.GetFileID().GetValue()
 		);
@@ -819,9 +857,12 @@ namespace Kortex::NetworkManager
 		return infoVector;
 	}
 
-	std::optional<NexusValidationReply> NexusSource::GetValidationInfo(const wxString& apiKey) const
+	std::optional<NexusValidationReply> NexusModNetwork::GetValidationInfo(const wxString& apiKey) const
 	{
-		auto connection = NewCURLSession(KxString::Format("%1/users/validate", GetAPIURL()), apiKey);
+		auto connection = NewCURLSession(KxString::Format("%1/users/validate",
+										 GetAPIURL()),
+										 apiKey
+		);
 		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
@@ -847,9 +888,12 @@ namespace Kortex::NetworkManager
 		}
 		return info;
 	}
-	std::optional<NexusGameReply> NexusSource::GetGameInfo(const GameID& id) const
+	std::optional<NexusGameReply> NexusModNetwork::GetGameInfo(const GameID& id) const
 	{
-		auto connection = NewCURLSession(KxString::Format("%1/games/%2", GetAPIURL(), GetGameID(id)));
+		auto connection = NewCURLSession(KxString::Format("%1/games/%2",
+										 GetAPIURL(), 
+										 TranslateGameIDToNetwork(id))
+		);
 		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
@@ -868,9 +912,11 @@ namespace Kortex::NetworkManager
 		}
 		return info;
 	}
-	std::vector<NexusGameReply> NexusSource::GetGamesList() const
+	std::vector<NexusGameReply> NexusModNetwork::GetGamesList() const
 	{
-		auto connection = NewCURLSession(KxString::Format("%1/games", GetAPIURL()));
+		auto connection = NewCURLSession(KxString::Format("%1/games",
+										 GetAPIURL())
+		);
 		KxCURLReply reply = connection->Send();
 		if (TestRequestError(reply, reply))
 		{
@@ -896,47 +942,13 @@ namespace Kortex::NetworkManager
 		return infoVector;
 	}
 
-	GameID NexusSource::TranslateNxmGameID(const wxString& id) const
+	wxString NexusModNetwork::ConstructNXM(const NetworkModInfo& modInfo, const GameID& id, const NexusNXMLinkData& linkData) const
 	{
-		if (!id.IsEmpty())
-		{
-			// TES
-			if (KxComparator::IsEqual(id, "morrowind"))
-			{
-				return GameIDs::Morrowind;
-			}
-			if (KxComparator::IsEqual(id, "oblivion"))
-			{
-				return GameIDs::Oblivion;
-			}
-			if (KxComparator::IsEqual(id, "skyrim"))
-			{
-				return GameIDs::Skyrim;
-			}
-			if (KxComparator::IsEqual(id, "skyrimse"))
-			{
-				return GameIDs::SkyrimSE;
-			}
-
-			// Fallout
-			if (KxComparator::IsEqual(id, "fallout3"))
-			{
-				return GameIDs::Fallout3;
-			}
-			if (KxComparator::IsEqual(id, "falloutnv"))
-			{
-				return GameIDs::FalloutNV;
-			}
-			if (KxComparator::IsEqual(id, "fallout4"))
-			{
-				return GameIDs::Fallout4;
-			}
-		}
-		return GameIDs::NullGameID;
-	}
-	wxString NexusSource::ConstructNXM(const NetworkModInfo& modInfo, const GameID& id, const NexusNXMLinkData& linkData) const
-	{
-		wxString nxm = KxString::Format("nxm://%1/mods/%2/files/%3", GetGameID(id), modInfo.GetModID().GetValue(), modInfo.GetFileID().GetValue());
+		wxString nxm = KxString::Format(wxS("nxm://%1/mods/%2/files/%3"),
+										TranslateGameIDToNetwork(id),
+										modInfo.GetModID().GetValue(),
+										modInfo.GetFileID().GetValue()
+		);
 		if (!linkData.IsEmpty())
 		{
 			nxm += KxString::Format(wxS("?key=%1&expires=%2&user_id=%3"), linkData.Key, linkData.Expires, linkData.UserID);
@@ -945,12 +957,12 @@ namespace Kortex::NetworkManager
 		nxm.MakeLower();
 		return nxm;
 	}
-	bool NexusSource::ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData)
+	bool NexusModNetwork::ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData)
 	{
 		wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+)&user_id=(.+))", wxRE_ADVANCED|wxRE_ICASE);
 		if (reg.Matches(link))
 		{
-			gameID = TranslateNxmGameID(reg.GetMatch(link, 1));
+			gameID = TranslateGameIDFromNetwork(reg.GetMatch(link, 1));
 
 			ModID modID(reg.GetMatch(link, 2));
 			ModFileID fileID(reg.GetMatch(link, 3));

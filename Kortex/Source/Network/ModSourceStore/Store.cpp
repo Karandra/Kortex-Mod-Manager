@@ -12,13 +12,13 @@ namespace Kortex
 		return FindItemPtr(m_Items, name);
 	}
 
-	const ModSourceItem* ModSourceStore::GetItem(const IModSource& modSource) const
+	const ModSourceItem* ModSourceStore::GetItem(const IModNetwork& modNetwork) const
 	{
-		return FindItemPtr(m_Items, &modSource);
+		return FindItemPtr(m_Items, &modNetwork);
 	}
-	ModSourceItem* ModSourceStore::GetItem(const IModSource& modSource)
+	ModSourceItem* ModSourceStore::GetItem(const IModNetwork& modNetwork)
 	{
-		return FindItemPtr(m_Items, &modSource);
+		return FindItemPtr(m_Items, &modNetwork);
 	}
 
 	ModSourceItem& ModSourceStore::AssignWith(const wxString& name, const wxString& url)
@@ -50,30 +50,30 @@ namespace Kortex
 		}
 	}
 
-	ModSourceItem& ModSourceStore::AssignWith(IModSource& modSource, const wxString& url)
+	ModSourceItem& ModSourceStore::AssignWith(IModNetwork& modNetwork, const wxString& url)
 	{
-		auto it = FindItem(m_Items, &modSource);
+		auto it = FindItem(m_Items, &modNetwork);
 		if (it == m_Items.end())
 		{
-			return m_Items.emplace_back(&modSource, url);
+			return m_Items.emplace_back(&modNetwork, url);
 		}
 		else
 		{
-			it->SetModSource(modSource);
+			it->SetModSource(modNetwork);
 			it->SetURL(url);
 			return *it;
 		}
 	}
-	ModSourceItem& ModSourceStore::AssignWith(IModSource& modSource, NetworkModInfo modInfo)
+	ModSourceItem& ModSourceStore::AssignWith(IModNetwork& modNetwork, NetworkModInfo modInfo)
 	{
-		auto it = FindItem(m_Items, &modSource);
+		auto it = FindItem(m_Items, &modNetwork);
 		if (it == m_Items.end())
 		{
-			return m_Items.emplace_back(&modSource, modInfo);
+			return m_Items.emplace_back(&modNetwork, modInfo);
 		}
 		else
 		{
-			it->SetModSource(modSource);
+			it->SetModSource(modNetwork);
 			it->SetModInfo(modInfo);
 			return *it;
 		}
@@ -89,9 +89,9 @@ namespace Kortex
 		}
 		return false;
 	}
-	bool ModSourceStore::RemoveItem(const IModSource& modSource)
+	bool ModSourceStore::RemoveItem(const IModNetwork& modNetwork)
 	{
-		auto it = FindItem(m_Items, &modSource);
+		auto it = FindItem(m_Items, &modNetwork);
 		if (it != m_Items.end())
 		{
 			m_Items.erase(it);
@@ -100,7 +100,7 @@ namespace Kortex
 		return false;
 	}
 
-	wxString ModSourceStore::GetModURL(const wxString& name, const GameID& gameID) const
+	wxString ModSourceStore::GetModPageURL(const wxString& name, const GameID& gameID) const
 	{
 		if (const ModSourceItem* item = GetItem(name))
 		{
@@ -108,9 +108,9 @@ namespace Kortex
 		}
 		return wxEmptyString;
 	}
-	wxString ModSourceStore::GetModURL(const IModSource& modSource, const GameID& gameID) const
+	wxString ModSourceStore::GetModPageURL(const IModNetwork& modNetwork, const GameID& gameID) const
 	{
-		if (const ModSourceItem* item = GetItem(modSource))
+		if (const ModSourceItem* item = GetItem(modNetwork))
 		{
 			return item->GetURL(gameID);
 		}
@@ -128,7 +128,7 @@ namespace Kortex
 		}
 		return items;
 	}
-	KLabeledValue::Vector ModSourceStore::GetModNamedURLs(const GameID& gameID) const
+	KLabeledValue::Vector ModSourceStore::GetLabeledModURLs(const GameID& gameID) const
 	{
 		KLabeledValue::Vector items;
 		items.reserve(m_Items.size());

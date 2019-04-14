@@ -10,7 +10,7 @@
 namespace Kortex
 {
 	class IGameProfile;
-	class IModSource;
+	class IModNetwork;
 
 	namespace ModManager
 	{
@@ -63,8 +63,8 @@ namespace Kortex
 			virtual IGameMod* FindModByID(const wxString& modID, intptr_t* index = nullptr) const = 0;
 			virtual IGameMod* FindModByName(const wxString& modName, intptr_t* index = nullptr) const = 0;
 			virtual IGameMod* FindModBySignature(const wxString& signature, intptr_t* index = nullptr) const = 0;
-			virtual IGameMod* FindModBySource(const wxString& sourceName, NetworkModInfo modInfo, intptr_t* index = nullptr) const = 0;
-			virtual IGameMod* FindModBySource(const IModSource& modSource, NetworkModInfo modInfo, intptr_t* index = nullptr) const = 0;
+			virtual IGameMod* FindModByModNetwork(const wxString& sourceName, NetworkModInfo modInfo, intptr_t* index = nullptr) const = 0;
+			virtual IGameMod* FindModByModNetwork(const IModNetwork& modNetwork, NetworkModInfo modInfo, intptr_t* index = nullptr) const = 0;
 			
 			virtual bool IsModActive(const wxString& modID) const = 0;
 			virtual bool ChangeModID(IGameMod& mod, const wxString& newID) = 0;

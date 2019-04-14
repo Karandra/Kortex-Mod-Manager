@@ -11,7 +11,7 @@ namespace Kortex
 	class INotification;
 	class IManager;
 	class IModule;
-	class IModSource;
+	class IModNetwork;
 }
 namespace Kortex::Notification
 {
@@ -64,8 +64,8 @@ namespace Kortex
 			void Notify(const IManager& manager, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
 			void Notify(const IManager& manager, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
 
-			void Notify(const IModSource& modSource, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
-			void Notify(const IModSource& modSource, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+			void Notify(const IModNetwork& modNetwork, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
+			void Notify(const IModNetwork& modNetwork, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
 			
 			template<class T, class... Args> void Notify(Args&&... arg)
 			{

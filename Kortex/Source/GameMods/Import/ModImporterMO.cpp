@@ -9,6 +9,9 @@
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/ProgramManager.hpp>
 #include <Kortex/GameConfig.hpp>
+#include "Network/ModNetwork/Nexus.h"
+#include "Network/ModNetwork/LoversLab.h"
+#include "Network/ModNetwork/TESALL.h"
 #include "PackageProject/KPackageProjectSerializer.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
@@ -83,7 +86,7 @@ namespace Kortex::ModManager
 		return path;
 	}
 
-	GameID ModImporterMO::TranslateGameID(const wxString& name)
+	GameID ModImporterMO::TranslateGameIDToNetwork(const wxString& name)
 	{
 		if (!name.IsEmpty())
 		{
@@ -132,7 +135,7 @@ namespace Kortex::ModManager
 	void ModImporterMO::LoadOptions()
 	{
 		// Game name
-		m_TargetGameID = TranslateGameID(m_Options.GetValue("General", "gameName"));
+		m_TargetGameID = TranslateGameIDToNetwork(m_Options.GetValue("General", "gameName"));
 		m_TargetInstance = IGameInstance::GetTemplate(m_TargetGameID);
 		m_ModManagerName = m_TargetGameID.IsOK() ? "Mod Organizer 2.x" : "Mod Organizer 1.x";
 
@@ -291,7 +294,7 @@ namespace Kortex::ModManager
 					ModID nexusID = modINI.GetValueInt("General", "modid", ModID::GetInvalidValue());
 					if (nexusID)
 					{
-						mod.GetModSourceStore().AssignWith<NetworkManager::NexusSource>(nexusID);
+						mod.GetModSourceStore().AssignWith<NetworkManager::NexusModNetwork>(nexusID);
 					}
 
 					// Install date
@@ -413,9 +416,14 @@ namespace Kortex::ModManager
 
 				IDownloadEntry& entry = manager->NewDownload();
 				entry.SetTargetGameID(ini.GetValue("General", "gameName"));
-				entry.SetModSource(INetworkManager::GetInstance()->GetModSource(ini.GetValue("General", "repository")));
-				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
+				IModNetworkRepository* repository = nullptr;
+				IModNetwork* modNetwork = INetworkManager::GetInstance()->GetModNetworkByName(ini.GetValue("General", "repository"));
+				if (modNetwork && modNetwork->QueryInterface(repository))
+				{
+					entry.SetModNetwork(*repository);
+				}
+				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 				entry.GetDownloadInfo().URL = ini.GetValue("General", "url").AfterFirst('"').BeforeLast('"');
 
 				entry.GetFileInfo().ModID = ini.GetValueInt("General", "modID", -1);

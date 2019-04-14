@@ -5,11 +5,32 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Events.hpp>
+#include "Network/ModNetwork/Nexus.h"
+#include "Network/ModNetwork/LoversLab.h"
+#include "Network/ModNetwork/TESALL.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxAuiToolBar.h>
+#include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxMenu.h>
+
+namespace
+{
+	bool IsDefaultModNetworkAuthenticated()
+	{
+		using namespace Kortex;
+
+		const IModNetwork* modNetwork= INetworkManager::GetInstance()->GetDefaultModNetwork();
+		const IAuthenticableModNetwork* auth = nullptr;
+
+		return modNetwork && modNetwork->QueryInterface(auth) && auth->IsAuthenticated();
+	};
+	template<class TModNetwork, class TContainer> TModNetwork& AddModNetwork(TContainer&& container)
+	{
+		return static_cast<TModNetwork&>(*container.emplace_back(Kortex::IModNetwork::Create<TModNetwork>()));
+	}
+}
 
 namespace Kortex::NetworkManager
 {
@@ -19,15 +40,15 @@ namespace Kortex::NetworkManager
 		using namespace Application;
 
 		// Init sources
-		m_ModSources.reserve(3);
-		AddModSource<NexusSource>();
-		AddModSource<LoversLabSource>();
-		AddModSource<TESALLSource>();
+		m_ModNetworks.reserve(3);
+		AddModNetwork<NexusModNetwork>(m_ModNetworks);
+		AddModNetwork<LoversLabModNetwork>(m_ModNetworks);
+		AddModNetwork<TESALLModNetwork>(m_ModNetworks);
 
 		// Load default source
-		if (IModSource* modSource = GetModSource(GetAInstanceOption(OName::ModSource).GetAttribute(OName::Default)))
+		if (IModNetwork* modNetwork = GetModNetworkByName(GetAInstanceOption(OName::ModSource).GetAttribute(OName::Default)))
 		{
-			m_DefaultModSource = modSource;
+			m_DefaultModNetwork = modNetwork;
 		}
 		KxFile(GetCacheFolder()).CreateFolder();
 	}
@@ -35,8 +56,8 @@ namespace Kortex::NetworkManager
 	{
 		using namespace Application;
 
-		const IModSource* modSource = GetDefaultModSource();
-		GetAInstanceOption(OName::ModSource).SetAttribute(OName::Default, modSource ? modSource->GetName() : wxEmptyString);
+		const IModNetwork* modNetwork = GetDefaultModNetwork();
+		GetAInstanceOption(OName::ModSource).SetAttribute(OName::Default, modNetwork ? modNetwork->GetName() : wxEmptyString);
 	}
 	void DefaultNetworkManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
@@ -45,26 +66,26 @@ namespace Kortex::NetworkManager
 
 	void DefaultNetworkManager::ValidateAuth()
 	{
-		for (auto& modSource: m_ModSources)
+		for (auto& modNetwork: m_ModNetworks)
 		{
-			if (auto auth = modSource->QueryInterface<IAuthenticableModSource>())
+			if (auto auth = modNetwork->QueryInterface<IAuthenticableModNetwork>())
 			{
 				auth->ValidateAuth();
 			}
 		}
-		AdjustDefaultModSource();
+		AdjustDefaultModNetwork();
 	}
-	bool DefaultNetworkManager::AdjustDefaultModSource()
+	bool DefaultNetworkManager::AdjustDefaultModNetwork()
 	{
-		if (!IsDefaultModSourceAuthenticated())
+		if (!IsDefaultModNetworkAuthenticated())
 		{
-			m_DefaultModSource = nullptr;
-			for (auto& modSource: m_ModSources)
+			m_DefaultModNetwork = nullptr;
+			for (auto& modNetwork: m_ModNetworks)
 			{
-				const IAuthenticableModSource* auth = nullptr;
-				if (modSource->QueryInterface(auth) && auth->IsAuthenticated())
+				const IAuthenticableModNetwork* auth = nullptr;
+				if (modNetwork->QueryInterface(auth) && auth->IsAuthenticated())
 				{
-					m_DefaultModSource = modSource.get();
+					m_DefaultModNetwork = modNetwork.get();
 					return true;
 				}
 			}
@@ -83,16 +104,16 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::UpdateButton()
 	{
-		const IAuthenticableModSource* auth = nullptr;
-		if (m_DefaultModSource && m_DefaultModSource->QueryInterface(auth) && auth->IsAuthenticated())
+		const IAuthenticableModNetwork* auth = nullptr;
+		if (m_DefaultModNetwork && m_DefaultModNetwork->QueryInterface(auth) && auth->IsAuthenticated())
 		{
-			m_LoginButton->SetLabel(KTr("NetworkManager.SignedIn") + ": " + m_DefaultModSource->GetName());
-			m_LoginButton->SetBitmap(KGetBitmap(m_DefaultModSource->GetIcon()));
+			m_LoginButton->SetLabel(KTr("NetworkManager.SignedIn") + ": " + m_DefaultModNetwork->GetName());
+			m_LoginButton->SetBitmap(KGetBitmap(m_DefaultModNetwork->GetIcon()));
 		}
 		else
 		{
 			m_LoginButton->SetLabel(KTr("NetworkManager.NotSignedIn"));
-			m_LoginButton->SetBitmap(KGetBitmap(IModSource::GetGenericIcon()));
+			m_LoginButton->SetBitmap(KGetBitmap(IModNetwork::GetGenericIcon()));
 		}
 
 		m_LoginButton->GetToolBar()->Realize();
@@ -105,63 +126,55 @@ namespace Kortex::NetworkManager
 		m_Menu = new KxMenu();
 		m_LoginButton->AssignDropdownMenu(m_Menu);
 
-		for (const auto& modSource: m_ModSources)
+		for (const auto& modNetwork: m_ModNetworks)
 		{
 			if (KxMenu* subMenu = new KxMenu(); true)
 			{
-				KxMenuItem* rootItem = m_Menu->Add(subMenu, modSource->GetName());
-				rootItem->SetBitmap(KGetBitmap(modSource->GetIcon()));
+				KxMenuItem* rootItem = m_Menu->Add(subMenu, modNetwork->GetName());
+				rootItem->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
 
-				const IAuthenticableModSource* authenticable = modSource->QueryInterface<IAuthenticableModSource>();
-				const IModRepository* repository = modSource->QueryInterface<IModRepository>();
+				const IAuthenticableModNetwork* authenticable = modNetwork->QueryInterface<IAuthenticableModNetwork>();
+				const IModNetworkRepository* repository = modNetwork->QueryInterface<IModNetworkRepository>();
 
 				// Add default source toggle
 				{
 					KxMenuItem* item = subMenu->Add(new KxMenuItem(wxEmptyString, wxEmptyString, wxITEM_CHECK));
-					item->SetClientData(modSource.get());
+					item->SetClientData(modNetwork.get());
 					item->Enable(false);
 
 					if (authenticable)
 					{
-						if (m_DefaultModSource == modSource.get())
+						if (m_DefaultModNetwork == modNetwork.get())
 						{
 							item->Check();
-							item->SetItemLabel(KTr("NetworkManager.ModSource.Default"));
+							item->SetItemLabel(KTr("NetworkManager.ModNetwork.Default"));
 						}
 						else if (!authenticable->IsAuthenticated())
 						{
-							item->SetItemLabel(KxString::Format("%1 (%2)", KTr("NetworkManager.ModSource.MakeDefault"), KTr("NetworkManager.NotSignedIn")));
+							item->SetItemLabel(KxString::Format("%1 (%2)", KTr("NetworkManager.ModNetwork.MakeDefault"), KTr("NetworkManager.NotSignedIn")));
 						}
 						else
 						{
 							item->Enable();
-							item->SetItemLabel(KTr("NetworkManager.ModSource.MakeDefault"));
+							item->SetItemLabel(KTr("NetworkManager.ModNetwork.MakeDefault"));
 							item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSelectDefaultModSource, this);
 						}
 					}
 					else
 					{
-						item->SetItemLabel(KTr("NetworkManager.ModSource.MakeDefault"));
+						item->SetItemLabel(KTr("NetworkManager.ModNetwork.MakeDefault"));
 					}
 				}
 
 				// Add sign-in/sign-out items.
 				if (authenticable)
 				{
-					wxString label;
-					if (authenticable->IsAuthenticated())
-					{
-						label = KTr("NetworkManager.SignOut") + ": " + modSource->GetName();
-					}
-					else
-					{
-						label = KTr("NetworkManager.SignIn") + ": " + modSource->GetName();
-					}
-					
+					wxString label = authenticable->IsAuthenticated() ? KTr("NetworkManager.SignOut") : KTr("NetworkManager.SignIn");
+
 					KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
 					item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSignInOut, this);
-					item->SetBitmap(modSource->GetUserPicture());
-					item->SetClientData(modSource.get());
+					item->SetBitmap(authenticable->GetUserPicture());
+					item->SetClientData(modNetwork.get());
 				}
 
 				// Add limits information display
@@ -191,7 +204,7 @@ namespace Kortex::NetworkManager
 
 						KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
 						item->SetBitmap(KGetBitmap(limits.AnyLimitDepleted() ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
-						item->SetClientData(modSource.get());
+						item->SetClientData(modNetwork.get());
 						item->Enable(false);
 					}
 				}
@@ -209,35 +222,35 @@ namespace Kortex::NetworkManager
 
 	void DefaultNetworkManager::OnSignInOut(KxMenuEvent& event)
 	{
-		IModSource* modSource = static_cast<IModSource*>(event.GetItem()->GetClientData());
-		if (auto auth = modSource->QueryInterface<IAuthenticableModSource>(); auth && auth->IsAuthenticated())
+		IModNetwork* modNetwork = static_cast<IModNetwork*>(event.GetItem()->GetClientData());
+		if (auto auth = modNetwork->QueryInterface<IAuthenticableModNetwork>(); auth && auth->IsAuthenticated())
 		{
-			KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("NetworkManager.SignOutMessage", modSource->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+			KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("NetworkManager.SignOutMessage", modNetwork->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 			if (dialog.ShowModal() == KxID_YES)
 			{
 				auth->SignOut();
-				AdjustDefaultModSource();
+				AdjustDefaultModNetwork();
 				QueueUIUpdate();
 			}
 		}
 		else
 		{
-			// Additional call to "IModSource::IsAuthenticated' to make sure that modSource is ready
+			// Additional call to "IModSource::IsAuthenticated' to make sure that modNetwork is ready
 			// as authentication process can be async.
-			if (auth->Authenticate() && auth->IsAuthenticated() && !IsDefaultModSourceAuthenticated())
+			if (auth->Authenticate() && auth->IsAuthenticated() && !IsDefaultModNetworkAuthenticated())
 			{
-				m_DefaultModSource = modSource;
+				m_DefaultModNetwork = modNetwork;
 			}
 			QueueUIUpdate();
 		}
 	}
 	void DefaultNetworkManager::OnSelectDefaultModSource(KxMenuEvent& event)
 	{
-		IModSource* modSource = static_cast<IModSource*>(event.GetItem()->GetClientData());
-		m_DefaultModSource = modSource;
+		IModNetwork* modNetwork = static_cast<IModNetwork*>(event.GetItem()->GetClientData());
+		m_DefaultModNetwork = modNetwork;
 
 		UpdateButton();
-		GetAInstanceOption().SetAttribute("DefaultProvider", modSource->GetName());
+		GetAInstanceOption().SetAttribute("DefaultProvider", modNetwork->GetName());
 	}
 	void DefaultNetworkManager::OnToolBarButton(KxAuiToolBarEvent& event)
 	{
@@ -246,7 +259,7 @@ namespace Kortex::NetworkManager
 
 	void DefaultNetworkManager::OnAuthStateChanged()
 	{
-		AdjustDefaultModSource();
+		AdjustDefaultModNetwork();
 
 		CreateMenu();
 		UpdateButton();
@@ -256,20 +269,33 @@ namespace Kortex::NetworkManager
 		return IApplication::GetInstance()->GetUserSettingsFolder() + wxS("\\WebCache");
 	}
 
-	IModSource* DefaultNetworkManager::GetDefaultModSource() const
+	IModNetwork* DefaultNetworkManager::GetDefaultModNetwork() const
 	{
-		return m_DefaultModSource;
+		return m_DefaultModNetwork;
 	}
-	IModSource* DefaultNetworkManager::GetModSource(const wxString& name) const
+	IModNetwork* DefaultNetworkManager::GetModNetworkByName(const wxString& name) const
 	{
-		for (const auto& modSource: m_ModSources)
+		auto FindModNetwork = [this](const wxString& name) -> IModNetwork*
 		{
-			if (modSource->GetName() == name)
+			for (const auto& modNetwork: m_ModNetworks)
 			{
-				return modSource.get();
+				if (modNetwork->GetName() == name)
+				{
+					return modNetwork.get();
+				}
 			}
+			return nullptr;
+		};
+
+		if (KxComparator::IsEqual(name, wxS("Nexus"), true) || KxComparator::IsEqual(name, wxS("NexusMods"), true))
+		{
+			return NexusModNetwork::GetInstance();
 		}
-		return nullptr;
+		else if (KxComparator::IsEqual(name, wxS("TESALL"), true) || KxComparator::IsEqual(name, wxS("TESALL.RU"), true))
+		{
+			return TESALLModNetwork::GetInstance();
+		}
+		return FindModNetwork(name);
 	}
 }
 

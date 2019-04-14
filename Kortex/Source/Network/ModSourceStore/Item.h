@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/IModSource.h"
+#include "Network/IModNetwork.h"
 #include "Network/NetworkModInfo.h"
 #include "GameInstance/GameID.h"
 
@@ -13,7 +13,7 @@ namespace Kortex
 		friend class ModSourceStore;
 
 		private:
-			using TID = std::variant<wxString, IModSource*>;
+			using TID = std::variant<wxString, IModNetwork*>;
 			using TData = std::variant<wxString, NetworkModInfo>;
 
 		private:
@@ -32,12 +32,12 @@ namespace Kortex
 			{
 			}
 
-			ModSourceItem(IModSource* modSource, const wxString& url)
-				:m_ID(modSource), m_Data(url)
+			ModSourceItem(IModNetwork* modNetwork, const wxString& url)
+				:m_ID(modNetwork), m_Data(url)
 			{
 			}
-			ModSourceItem(IModSource* modSource, NetworkModInfo id)
-				:m_ID(modSource), m_Data(id)
+			ModSourceItem(IModNetwork* modNetwork, NetworkModInfo id)
+				:m_ID(modNetwork), m_Data(id)
 			{
 			}
 
@@ -48,23 +48,23 @@ namespace Kortex
 			void Load(const KxXMLNode& node);
 			void Save(KxXMLNode& node) const;
 
-			IModSource* GetModSource() const;
-			void SetModSource(IModSource& modSource)
+			IModNetwork* GetModNetwork() const;
+			void SetModSource(IModNetwork& modNetwork)
 			{
-				m_ID = &modSource;
+				m_ID = &modNetwork;
 			}
 			template<class T> void SetModSource()
 			{
 				m_ID = T::GetInstance();
 			}
-			bool TryGetModSource(IModSource*& modSource) const
+			bool TryGetModNetwork(IModNetwork*& modNetwork) const
 			{
-				modSource = GetModSource();
-				return modSource != nullptr;
+				modNetwork = GetModNetwork();
+				return modNetwork != nullptr;
 			}
-			bool HasModSource() const
+			bool HasModModNetwork() const
 			{
-				return GetModSource() != nullptr;
+				return GetModNetwork() != nullptr;
 			}
 
 			wxString GetName() const;

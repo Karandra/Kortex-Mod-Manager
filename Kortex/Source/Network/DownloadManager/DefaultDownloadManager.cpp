@@ -3,7 +3,7 @@
 #include "DefaultDownloadEntry.h"
 #include "DisplayModel.h"
 #include "Workspace.h"
-#include "Network/ModSource/Nexus.h"
+#include "Network/ModNetwork/Nexus.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/NetworkManager.hpp>
@@ -228,7 +228,7 @@ namespace Kortex::DownloadManager
 	}
 	bool DefaultDownloadManager::QueueDownload(const ModDownloadReply& downloadInfo,
 											   const ModFileReply& fileInfo,
-											   IModRepository& modRepository,
+											   IModNetworkRepository& modRepository,
 											   const GameID& id
 	)
 	{
@@ -302,7 +302,7 @@ namespace Kortex::DownloadManager
 	{
 		using namespace NetworkManager;
 
-		if (NexusSource* nexus = NexusSource::GetInstance())
+		if (NexusModNetwork* nexus = NexusModNetwork::GetInstance())
 		{
 			GameID gameID;
 			NetworkModInfo modInfo;
@@ -317,7 +317,7 @@ namespace Kortex::DownloadManager
 
 					if (auto linkItems = nexus->GetFileDownloads(request); !linkItems.empty())
 					{
-						return QueueDownload(linkItems.front(), *fileInfo, *nexus->QueryInterface<IModRepository>(), gameID);
+						return QueueDownload(linkItems.front(), *fileInfo, *nexus->QueryInterface<IModNetworkRepository>(), gameID);
 					}
 					return false;
 				}

@@ -9,13 +9,19 @@
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
 #include "PackageManager/KPackageManager.h"
+
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
-#include <Kortex/NetworkManager.hpp>
 #include <Kortex/ModTagManager.hpp>
+#include <Kortex/NetworkManager.hpp>
 #include <Kortex/Common/Packages.hpp>
+
+#include "Network/ModNetwork/Nexus.h"
+#include "Network/ModNetwork/LoversLab.h"
+#include "Network/ModNetwork/TESALL.h"
+
 #include "Utility/KAux.h"
 #include "Utility/KUnsortedUnique.h"
 #include <KxFramework/KxString.h>
@@ -350,7 +356,7 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 		ModID nexusID = infoNode.GetFirstChildElement("Id").GetValueInt(ModID::GetInvalidValue());
 		if (nexusID.HasValue())
 		{
-			modSourceStore.TryAddWith<Kortex::NetworkManager::NexusSource>(nexusID);
+			modSourceStore.TryAddWith<Kortex::NetworkManager::NexusModNetwork>(nexusID);
 		}
 
 		wxString siteURL = infoNode.GetFirstChildElement("Website").GetValue();
@@ -366,8 +372,8 @@ void KPackageProjectSerializerFOMod::ReadInfo()
 			if (webSite.IsOK())
 			{
 				// Site for Nexus already retrieved, so add as generic
-				Kortex::IModSource* modSource = nullptr;
-				if (webSite.TryGetModSource(modSource) && modSource == Kortex::NetworkManager::NexusSource::GetInstance())
+				Kortex::IModNetwork* modNetwork = nullptr;
+				if (webSite.TryGetModNetwork(modNetwork) && modNetwork == Kortex::NetworkManager::NexusModNetwork::GetInstance())
 				{
 					AddAsGenericSite(siteName);
 				}
@@ -726,12 +732,12 @@ void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& 
 	const ModSourceStore& modSourceStore = m_ProjectSave->GetInfo().GetModSourceStore();
 
 	// Write Nexus to 'Id'
-	if (const ModSourceItem* nexusItem = modSourceStore.GetItem(NexusSource::GetInstance()->GetName()))
+	if (const ModSourceItem* nexusItem = modSourceStore.GetItem(NexusModNetwork::GetInstance()->GetName()))
 	{
 		infoNode.NewElement("Id").SetValue(nexusItem->GetModInfo().GetModID().GetValue());
 	}
 
-	if (!(WriteSite<LoversLabSource>(modSourceStore, sitesNode) || WriteSite<TESALLSource>(modSourceStore, sitesNode)))
+	if (!(WriteSite<LoversLabModNetwork>(modSourceStore, sitesNode) || WriteSite<TESALLModNetwork>(modSourceStore, sitesNode)))
 	{
 		// Write first one from store
 		modSourceStore.Visit([&sitesNode](const ModSourceItem& item)

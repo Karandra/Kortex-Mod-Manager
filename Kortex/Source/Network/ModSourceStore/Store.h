@@ -3,7 +3,7 @@
 #include "Item.h"
 #include "Network/Common.h"
 #include "Network/NetworkModInfo.h"
-#include "Network/IModSource.h"
+#include "Network/IModNetwork.h"
 #include "GameInstance/GameID.h"
 #include "Utility/Collection.h"
 #include "Utility/KLabeledValue.h"
@@ -23,9 +23,9 @@ namespace Kortex
 					{
 						return item.GetName() == value;
 					}
-					else if constexpr(std::is_same_v<DValue, IModSource*> || std::is_same_v<DValue, const IModSource*>)
+					else if constexpr(std::is_same_v<DValue, IModNetwork*> || std::is_same_v<DValue, const IModNetwork*>)
 					{
-						return item.GetModSource() == value;
+						return item.GetModNetwork() == value;
 					}
 					else if constexpr(std::is_same_v<DValue, ModSourceItem::TID>)
 					{
@@ -99,8 +99,8 @@ namespace Kortex
 			const ModSourceItem* GetItem(const wxString& name) const;
 			ModSourceItem* GetItem(const wxString& name);
 			
-			const ModSourceItem* GetItem(const IModSource& modSource) const;
-			ModSourceItem* GetItem(const IModSource& modSource);
+			const ModSourceItem* GetItem(const IModNetwork& modNetwork) const;
+			ModSourceItem* GetItem(const IModNetwork& modNetwork);
 
 			template<class T> const ModSourceItem* GetItem() const
 			{
@@ -115,9 +115,9 @@ namespace Kortex
 			{
 				return GetItem(name) != nullptr;
 			}
-			bool HasItem(const IModSource& modSource) const
+			bool HasItem(const IModNetwork& modNetwork) const
 			{
-				return GetItem(modSource) != nullptr;
+				return GetItem(modNetwork) != nullptr;
 			}
 			template<class T> bool HasItem()
 			{
@@ -151,19 +151,19 @@ namespace Kortex
 				return nullptr;
 			}
 			
-			ModSourceItem* TryAddWith(IModSource& modSource, const wxString& url)
+			ModSourceItem* TryAddWith(IModNetwork& modNetwork, const wxString& url)
 			{
-				if (!HasItem(modSource))
+				if (!HasItem(modNetwork))
 				{
-					return &m_Items.emplace_back(&modSource, url);
+					return &m_Items.emplace_back(&modNetwork, url);
 				}
 				return nullptr;
 			}
-			ModSourceItem* TryAddWith(IModSource& modSource, NetworkModInfo id)
+			ModSourceItem* TryAddWith(IModNetwork& modNetwork, NetworkModInfo id)
 			{
-				if (!HasItem(modSource))
+				if (!HasItem(modNetwork))
 				{
-					return &m_Items.emplace_back(&modSource, id);
+					return &m_Items.emplace_back(&modNetwork, id);
 				}
 				return nullptr;
 			}
@@ -190,8 +190,8 @@ namespace Kortex
 			ModSourceItem& AssignWith(const wxString& name, const wxString& url);
 			ModSourceItem& AssignWith(const wxString& name, NetworkModInfo modInfo);
 			
-			ModSourceItem& AssignWith(IModSource& modSource, const wxString& url);
-			ModSourceItem& AssignWith(IModSource& modSource, NetworkModInfo modInfo);
+			ModSourceItem& AssignWith(IModNetwork& modNetwork, const wxString& url);
+			ModSourceItem& AssignWith(IModNetwork& modNetwork, NetworkModInfo modInfo);
 
 			template<class T> ModSourceItem& AssignWith(const wxString& url)
 			{
@@ -203,7 +203,7 @@ namespace Kortex
 			}
 
 			bool RemoveItem(const wxString& name);
-			bool RemoveItem(const IModSource& modSource);
+			bool RemoveItem(const IModNetwork& modNetwork);
 
 			void Clear()
 			{
@@ -240,15 +240,15 @@ namespace Kortex
 				}
 			}
 
-			wxString GetModURL(const wxString& name, const GameID& gameID = GameIDs::NullGameID) const;
-			wxString GetModURL(const IModSource& modSource, const GameID& gameID = GameIDs::NullGameID) const;
-			template<class T> wxString GetModURL(const GameID& gameID = GameIDs::NullGameID) const
+			wxString GetModPageURL(const wxString& name, const GameID& gameID = GameIDs::NullGameID) const;
+			wxString GetModPageURL(const IModNetwork& modNetwork, const GameID& gameID = GameIDs::NullGameID) const;
+			template<class T> wxString GetModPageURL(const GameID& gameID = GameIDs::NullGameID) const
 			{
-				return GetModURL(*T::GetInstance(), gameID);
+				return GetModPageURL(*T::GetInstance(), gameID);
 			}
 			
 			KxStringVector GetModURLs(const GameID& gameID = GameIDs::NullGameID) const;
-			KLabeledValue::Vector GetModNamedURLs(const GameID& gameID = GameIDs::NullGameID) const;
+			KLabeledValue::Vector GetLabeledModURLs(const GameID& gameID = GameIDs::NullGameID) const;
 
 			void LoadTryAdd(const KxXMLNode& arrayNode);
 			void LoadAssign(const KxXMLNode& arrayNode);

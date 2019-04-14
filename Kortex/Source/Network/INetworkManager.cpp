@@ -71,14 +71,6 @@ namespace Kortex
 	{
 	}
 
-	bool INetworkManager::IsDefaultModSourceAuthenticated() const
-	{
-		const IModSource* modSource = GetDefaultModSource();
-		const IAuthenticableModSource* auth = nullptr;
-		
-		return modSource && modSource->QueryInterface(auth) && auth->IsAuthenticated();
-	}
-
 	std::unique_ptr<KxWebSocket::IClient> INetworkManager::NewWebSocketClient(const wxString& address)
 	{
 		auto webSocket = KxWebSocket::NewSecureClient(address);

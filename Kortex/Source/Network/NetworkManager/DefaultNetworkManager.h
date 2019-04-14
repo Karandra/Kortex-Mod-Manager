@@ -9,8 +9,8 @@ class KxMenu;
 
 namespace Kortex
 {
-	class IAuthenticableModSource;
-	class IModRepository;
+	class IAuthenticableModNetwork;
+	class IModNetworkRepository;
 }
 
 namespace Kortex::NetworkManager
@@ -47,9 +47,9 @@ namespace Kortex::NetworkManager
 	class DefaultNetworkManager: public INetworkManager
 	{
 		private:
-			IModSource::Vector m_ModSources;
-			IModSource* m_DefaultModSource = nullptr;
-			NetworkManager::Config m_Config;
+			IModNetwork::Vector m_ModNetworks;
+			IModNetwork* m_DefaultModNetwork = nullptr;
+			Config m_Config;
 
 			KxAuiToolBarItem* m_LoginButton = nullptr;
 			KxMenu* m_Menu = nullptr;
@@ -60,7 +60,7 @@ namespace Kortex::NetworkManager
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 
 			void ValidateAuth();
-			bool AdjustDefaultModSource();
+			bool AdjustDefaultModNetwork();
 
 		private:
 			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
@@ -73,22 +73,18 @@ namespace Kortex::NetworkManager
 			void OnToolBarButton(KxAuiToolBarEvent& event) override;
 
 		public:
-			const NetworkManager::Config& GetConfig() const override
+			const Config& GetConfig() const override
 			{
 				return m_Config;
 			}
 			wxString GetCacheFolder() const override;
 			
-			const IModSource::Vector& GetModSources() const override
+			IModNetwork::Vector& GetModNetworks() override
 			{
-				return m_ModSources;
+				return m_ModNetworks;
 			}
-			IModSource::Vector& GetModSources() override
-			{
-				return m_ModSources;
-			}
-			IModSource* GetDefaultModSource() const override;
-			IModSource* GetModSource(const wxString& name) const override;
+			IModNetwork* GetDefaultModNetwork() const override;
+			IModNetwork* GetModNetworkByName(const wxString& name) const override;
 			
 			void OnAuthStateChanged() override;
 	};

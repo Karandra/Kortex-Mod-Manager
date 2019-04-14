@@ -3,6 +3,9 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/GameInstance.hpp>
+#include "Network/ModNetwork/Nexus.h"
+#include "Network/ModNetwork/LoversLab.h"
+#include "Network/ModNetwork/TESALL.h"
 #include "PackageProject/KPackageProject.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxCrypto.h>
@@ -29,9 +32,9 @@ namespace
 				}
 			};
 
-			if (T* modSource = T::GetInstance())
+			if (T* modNetwork = T::GetInstance())
 			{
-				ModSourceItem& item = store.AssignWith(*modSource, modID);
+				ModSourceItem& item = store.AssignWith(*modNetwork, modID);
 				AddName(item);
 			}
 			else
@@ -43,9 +46,9 @@ namespace
 	}
 	void LoadOldSites(ModSourceStore& store, KxXMLNode& sitesNode)
 	{
-		LoadOldSite<NetworkManager::NexusSource>(store, sitesNode, "NexusID", "Nexus");
-		LoadOldSite<NetworkManager::LoversLabSource>(store, sitesNode, "LoversLabID", "LoversLab");
-		LoadOldSite<NetworkManager::TESALLSource>(store, sitesNode, "TESALLID", "TESALL");
+		LoadOldSite<NetworkManager::NexusModNetwork>(store, sitesNode, "NexusID", "Nexus");
+		LoadOldSite<NetworkManager::LoversLabModNetwork>(store, sitesNode, "LoversLabID", "LoversLab");
+		LoadOldSite<NetworkManager::TESALLModNetwork>(store, sitesNode, "TESALLID", "TESALL");
 
 		// Load any "free" sites
 		for (KxXMLNode node = sitesNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())

@@ -25,7 +25,7 @@ namespace Kortex::ModManager
 			wxString& ProcessFilePath(wxString& path) const;
 			wxString& ProcessDescription(wxString& path) const;
 
-			GameID TranslateGameID(const wxString& name);
+			GameID TranslateGameIDToNetwork(const wxString& name);
 			void LoadOptions();
 			wxString GetDataFolderName() const;
 			wxString GetProfileDirectory() const;

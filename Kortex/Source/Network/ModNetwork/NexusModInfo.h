@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/Common.h"
-#include "Network/IModSource.h"
 #include "Network/ModRepositoryReply.h"
 
 namespace Kortex::NetworkManager

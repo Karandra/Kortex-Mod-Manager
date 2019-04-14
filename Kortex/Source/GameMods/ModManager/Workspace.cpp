@@ -879,7 +879,7 @@ namespace Kortex::ModManager
 			}
 			{
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_SITES, KTr("ModManager.Menu.EditSites")));
-				item->SetBitmap(KGetBitmap(IModSource::GetGenericIcon()));
+				item->SetBitmap(KGetBitmap(IModNetwork::GetGenericIcon()));
 				item->Enable(!isMultipleSelection && !isFixedMod);
 			}
 			{

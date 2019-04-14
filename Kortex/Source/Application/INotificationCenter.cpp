@@ -33,12 +33,12 @@ namespace Kortex
 		DoNotify(new SimpleNotification(manager.GetManagerInfo().GetName(), message, bitmap));
 	}
 
-	void INotificationCenter::Notify(const IModSource& modSource, const wxString& message, KxIconType iconID)
+	void INotificationCenter::Notify(const IModNetwork& modNetwork, const wxString& message, KxIconType iconID)
 	{
-		DoNotify(new SimpleNotification(modSource.GetName(), message, iconID));
+		DoNotify(new SimpleNotification(modNetwork.GetName(), message, iconID));
 	}
-	void INotificationCenter::Notify(const IModSource& modSource, const wxString& message, const wxBitmap& bitmap)
+	void INotificationCenter::Notify(const IModNetwork& modNetwork, const wxString& message, const wxBitmap& bitmap)
 	{
-		DoNotify(new SimpleNotification(modSource.GetName(), message, bitmap));
+		DoNotify(new SimpleNotification(modNetwork.GetName(), message, bitmap));
 	}
 }

@@ -343,17 +343,17 @@
     <Filter Include="Code\Source\GameConfig\ConfigManger\Actions">
       <UniqueIdentifier>{8eefe203-9c27-4975-a461-886f0746b901}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\Network\ModSource">
-      <UniqueIdentifier>{fece819f-3c96-4b34-bea2-7c4f8866dba7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Network\ModSource">
-      <UniqueIdentifier>{63e0bdce-a29b-447e-b830-1079bfc9e801}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\Network\ModSourceStore">
       <UniqueIdentifier>{ddb971f4-4b34-4a56-9ee2-9b11f69b5e26}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Source\Network\ModSourceStore">
       <UniqueIdentifier>{d7143fe2-6431-46fd-b4c2-d14686be856d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Network\ModNetwork">
+      <UniqueIdentifier>{63e0bdce-a29b-447e-b830-1079bfc9e801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Network\ModNetwork">
+      <UniqueIdentifier>{fece819f-3c96-4b34-bea2-7c4f8866dba7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1107,26 +1107,26 @@
     <ClCompile Include="Source\Network\ModSourceStore\Store.cpp">
       <Filter>Code\Source\Network\ModSourceStore</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\ModSource\Nexus.cpp">
-      <Filter>Code\Source\Network\ModSource</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Network\ModSource\TESALL.cpp">
-      <Filter>Code\Source\Network\ModSource</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Network\ModSource\LoversLab.cpp">
-      <Filter>Code\Source\Network\ModSource</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Network\ModSourceStore\StoreDisplayModel.cpp">
       <Filter>Code\Source\Network\ModSourceStore</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModSourceStore\StoreDialog.cpp">
       <Filter>Code\Source\Network\ModSourceStore</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\IModSource.cpp">
+    <ClCompile Include="Source\Network\IModNetwork.cpp">
       <Filter>Code\Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\IAuthenticableModSource.cpp">
+    <ClCompile Include="Source\Network\IAuthenticableModNetwork.cpp">
       <Filter>Code\Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus.cpp">
+      <Filter>Code\Source\Network\ModNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\TESALL.cpp">
+      <Filter>Code\Source\Network\ModNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\LoversLab.cpp">
+      <Filter>Code\Source\Network\ModNetwork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2105,18 +2105,6 @@
     <ClInclude Include="Source\Network\ModSourceStore\Store.h">
       <Filter>Code\Headers\Network\ModSourceStore</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\ModSource\Nexus.h">
-      <Filter>Code\Headers\Network\ModSource</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSource\NexusModInfo.h">
-      <Filter>Code\Headers\Network\ModSource</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSource\TESALL.h">
-      <Filter>Code\Headers\Network\ModSource</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSource\LoversLab.h">
-      <Filter>Code\Headers\Network\ModSource</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\ModSourceStore.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
@@ -2126,15 +2114,6 @@
     <ClInclude Include="Source\Network\ModSourceStore\StoreDialog.h">
       <Filter>Code\Headers\Network\ModSourceStore</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\IModSource.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\IAuthenticableModSource.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\IModRepository.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\ModRepositoryReply.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
@@ -2143,6 +2122,27 @@
     </ClInclude>
     <ClInclude Include="Source\Network\ModRepositoryLimits.h">
       <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\IModNetwork.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\IAuthenticableModNetwork.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\IModNetworkRepository.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\NexusModInfo.h">
+      <Filter>Code\Headers\Network\ModNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\TESALL.h">
+      <Filter>Code\Headers\Network\ModNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\LoversLab.h">
+      <Filter>Code\Headers\Network\ModNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus.h">
+      <Filter>Code\Headers\Network\ModNetwork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

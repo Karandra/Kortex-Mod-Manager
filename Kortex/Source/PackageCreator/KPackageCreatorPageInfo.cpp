@@ -9,11 +9,17 @@
 #include "PageInfo/KPCInfoAdditionalInfoModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "PackageProject/KPackageProjectInfo.h"
+
+#include "UI/KTextEditorDialog.h"
+#include "Utility/KAux.h"
+
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include "UI/KTextEditorDialog.h"
-#include "Utility/KAux.h"
+#include "Network/ModNetwork/Nexus.h"
+#include "Network/ModNetwork/LoversLab.h"
+#include "Network/ModNetwork/TESALL.h"
+
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxListBox.h>
@@ -180,17 +186,17 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 
 	// Providers
 	using namespace Kortex::NetworkManager;
-	if (m_WebSitesNexusID = AddModSourceControl<NexusSource>(sitesSizer))
+	if (m_WebSitesNexusID = AddModSourceControl<NexusModNetwork>(sitesSizer))
 	{
-		m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusSource>, this);
+		m_WebSitesNexusID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<NexusModNetwork>, this);
 	}
-	if (m_WebSitesLoversLabID = AddModSourceControl<LoversLabSource>(sitesSizer))
+	if (m_WebSitesLoversLabID = AddModSourceControl<LoversLabModNetwork>(sitesSizer))
 	{
-		m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabSource>, this);
+		m_WebSitesLoversLabID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<LoversLabModNetwork>, this);
 	}
-	if (m_WebSitesTESALLID = AddModSourceControl<TESALLSource>(sitesSizer))
+	if (m_WebSitesTESALLID = AddModSourceControl<TESALLModNetwork>(sitesSizer))
 	{
-		m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLSource>, this);
+		m_WebSitesTESALLID->Bind(wxEVT_TEXT, &KPackageCreatorPageInfo::OnEditSite<TESALLModNetwork>, this);
 	}
 	m_WebSitesButton = AddControlsRow(sitesSizer, KTr("PackageCreator.PageInfo.Sites.AdditionalSites"), new KxButton(m_Pane, KxID_NONE, KTr(KxID_EDIT)), 0);
 
@@ -201,11 +207,11 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 		dialog.ShowModal();
 
 		// Update "free" inputs
-		auto UpdateWebInput = [&store](KxTextBox* textBox, IModSource* modSource)
+		auto UpdateWebInput = [&store](KxTextBox* textBox, IModNetwork* modNetwork)
 		{
-			if (modSource)
+			if (modNetwork)
 			{
-				if (ModSourceItem* item = store.GetItem(*modSource))
+				if (ModSourceItem* item = store.GetItem(*modNetwork))
 				{
 					textBox->SetValue(item->GetModInfo().ToString());
 				}
@@ -215,9 +221,9 @@ void KPackageCreatorPageInfo::CreateSitesControls()
 				}
 			}
 		};
-		UpdateWebInput(m_WebSitesNexusID, NexusSource::GetInstance());
-		UpdateWebInput(m_WebSitesLoversLabID, LoversLabSource::GetInstance());
-		UpdateWebInput(m_WebSitesTESALLID, TESALLSource::GetInstance());
+		UpdateWebInput(m_WebSitesNexusID, NexusModNetwork::GetInstance());
+		UpdateWebInput(m_WebSitesLoversLabID, LoversLabModNetwork::GetInstance());
+		UpdateWebInput(m_WebSitesTESALLID, TESALLModNetwork::GetInstance());
 
 		event.Skip();
 	});
@@ -380,7 +386,7 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& projectInfo)
 
 	/* Web sites */
 	using namespace Kortex::NetworkManager;
-	auto SetModSourceValue = [&projectInfo](IModSource* source, KxTextBox* input)
+	auto SetModSourceValue = [&projectInfo](IModNetwork* source, KxTextBox* input)
 	{
 		if (source)
 		{
@@ -393,9 +399,9 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& projectInfo)
 		}
 		input->Clear();
 	};
-	SetModSourceValue(NexusSource::GetInstance(), m_WebSitesNexusID);
-	SetModSourceValue(LoversLabSource::GetInstance(), m_WebSitesLoversLabID);
-	SetModSourceValue(TESALLSource::GetInstance(), m_WebSitesTESALLID);
+	SetModSourceValue(NexusModNetwork::GetInstance(), m_WebSitesNexusID);
+	SetModSourceValue(LoversLabModNetwork::GetInstance(), m_WebSitesLoversLabID);
+	SetModSourceValue(TESALLModNetwork::GetInstance(), m_WebSitesTESALLID);
 
 	/* Config */
 	// Package path

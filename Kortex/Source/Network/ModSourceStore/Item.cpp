@@ -6,9 +6,9 @@ namespace Kortex
 {
 	bool ModSourceItem::IsOK() const
 	{
-		// Items with known modSource valid if both modSource and mod ID is valid.
+		// Items with known modNetwork valid if both modNetwork and mod ID is valid.
 		// Unknown items valid if at least name is present.
-		if (HasModSource())
+		if (HasModModNetwork())
 		{
 			return HasModInfo();
 		}
@@ -53,24 +53,24 @@ namespace Kortex
 		}
 	}
 
-	IModSource* ModSourceItem::GetModSource() const
+	IModNetwork* ModSourceItem::GetModNetwork() const
 	{
-		if (auto modSource = std::get_if<IModSource*>(&m_ID))
+		if (auto modNetwork = std::get_if<IModNetwork*>(&m_ID))
 		{
-			return *modSource;
+			return *modNetwork;
 		}
 		else if (const wxString* name = std::get_if<wxString>(&m_ID))
 		{
-			return INetworkManager::GetInstance()->GetModSource(*name);
+			return INetworkManager::GetInstance()->GetModNetworkByName(*name);
 		}
 		return nullptr;
 	}
 	
 	wxString ModSourceItem::GetName() const
 	{
-		if (auto modSource = std::get_if<IModSource*>(&m_ID); modSource && *modSource)
+		if (auto modNetwork = std::get_if<IModNetwork*>(&m_ID); modNetwork && *modNetwork)
 		{
-			return (*modSource)->GetName();
+			return (*modNetwork)->GetName();
 		}
 		else if (const wxString* name = std::get_if<wxString>(&m_ID))
 		{
@@ -80,9 +80,9 @@ namespace Kortex
 	}
 	void ModSourceItem::SetName(const wxString& name)
 	{
-		if (IModSource* modSource = INetworkManager::GetInstance()->GetModSource(name))
+		if (IModNetwork* modNetwork = INetworkManager::GetInstance()->GetModNetworkByName(name))
 		{
-			m_ID = modSource;
+			m_ID = modNetwork;
 		}
 		else
 		{
@@ -92,14 +92,14 @@ namespace Kortex
 
 	wxString ModSourceItem::GetURL(const GameID& gameID) const
 	{
-		IModSource* modSource = nullptr;
+		IModNetwork* modNetwork = nullptr;
 		if (const wxString* url = std::get_if<wxString>(&m_Data))
 		{
 			return *url;
 		}
-		else if (NetworkModInfo modInfo; TryGetModInfo(modInfo) && TryGetModSource(modSource))
+		else if (NetworkModInfo modInfo; TryGetModInfo(modInfo) && TryGetModNetwork(modNetwork))
 		{
-			return modSource->GetModURL(modInfo);
+			return modNetwork->GetModPageURL(modInfo);
 		}
 		return wxEmptyString;
 	}

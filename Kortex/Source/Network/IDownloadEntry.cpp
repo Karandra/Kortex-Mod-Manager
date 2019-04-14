@@ -16,10 +16,6 @@ namespace Kortex
 	{
 		SetTargetGame(IGameInstance::GetTemplate(id));
 	}
-	bool IDownloadEntry::HasModSource() const
-	{
-		return GetModSource() != nullptr;
-	}
 
 	void IDownloadEntry::ResetDownloadLink()
 	{

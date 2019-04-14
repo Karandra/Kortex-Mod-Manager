@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/IDownloadEntry.h"
+#include "Network/IModNetwork.h"
+#include "Network/IModNetworkRepository.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxFileStream.h>
 class KQuickThread;
@@ -26,7 +28,7 @@ namespace Kortex::DownloadManager
 			std::unique_ptr<KxCURLSession> m_Session;
 
 			const IGameInstance* m_TargetGame = nullptr;
-			IModSource* m_ModSource = nullptr;
+			IModNetwork* m_ModSource = nullptr;
 
 			wxDateTime m_Date;
 			int64_t m_DownloadedSize = 0;
@@ -50,7 +52,7 @@ namespace Kortex::DownloadManager
 			DefaultDownloadEntry();
 			DefaultDownloadEntry(const ModDownloadReply& downloadInfo,
 								 const ModFileReply& fileInfo,
-								 IModRepository& modRepository,
+								 IModNetworkRepository& modRepository,
 								 const GameID& id = {});
 			virtual ~DefaultDownloadEntry();
 
@@ -74,13 +76,13 @@ namespace Kortex::DownloadManager
 			const IGameMod* GetMod() const override;
 			bool IsInstalled() const override;
 
-			IModSource* GetModSource() const override
+			IModNetwork* GetModNetwork() const override
 			{
 				return m_ModSource;
 			}
-			void SetModSource(IModSource* modSource) override
+			void SetModNetwork(IModNetworkRepository& modRepository) override
 			{
-				m_ModSource = modSource;
+				m_ModSource = modRepository.QueryInterface<IModNetwork>();
 			}
 			
 			wxDateTime GetDate() const override
@@ -169,7 +171,7 @@ namespace Kortex::DownloadManager
 			void Run(int64_t resumeFrom = 0) override;
 			bool Restart() override;
 
-			// Restores download info depending of this download modSource and its filename
+			// Restores download info depending of this download modNetwork and its filename
 			// which is set in 'DefaultDownloadEntry::DeSerializeDefault' if something goes wrong.
 			// Restoration is performed by analyzing file name to get file id and mod id
 			// and querying rest of the information form internet.

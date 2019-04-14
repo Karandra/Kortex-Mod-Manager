@@ -151,8 +151,8 @@ namespace Kortex::ModManager
 			IGameMod* FindModByID(const wxString& modID, intptr_t* index = nullptr) const override;
 			IGameMod* FindModByName(const wxString& modName, intptr_t* index = nullptr) const override;
 			IGameMod* FindModBySignature(const wxString& signature, intptr_t* index = nullptr) const override;
-			IGameMod* FindModBySource(const wxString& sourceName, NetworkModInfo modInfo, intptr_t* index = nullptr) const override;
-			IGameMod* FindModBySource(const IModSource& modSource, NetworkModInfo modInfo, intptr_t* index = nullptr) const override;
+			IGameMod* FindModByModNetwork(const wxString& modNetworkName, NetworkModInfo modInfo, intptr_t* index = nullptr) const override;
+			IGameMod* FindModByModNetwork(const IModNetwork& modNetwork, NetworkModInfo modInfo, intptr_t* index = nullptr) const override;
 		
 			bool IsModActive(const wxString& modID) const override;
 			bool ChangeModID(IGameMod& mod, const wxString& newID) override;

@@ -541,9 +541,9 @@
 
 		<!-- NetworkManager -->
 		<String ID="NetworkManager.Name">Менеджер сети</String>>
-		<String ID="NetworkManager.ModSource">Источник модов</String>
-		<String ID="NetworkManager.ModSource.Default">Источник модов по умолчанию</String>
-		<String ID="NetworkManager.ModSource.MakeDefault">Использовать по умолчанию</String>
+		<String ID="NetworkManager.ModNetwork">Мод-сеть</String>
+		<String ID="NetworkManager.ModNetwork.Default">Мод-сеть по умолчанию</String>
+		<String ID="NetworkManager.ModNetwork.MakeDefault">Использовать по умолчанию</String>
 
 		<String ID="NetworkManager.AuthCaption">Аутентификация на %1</String>
 		<String ID="NetworkManager.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>

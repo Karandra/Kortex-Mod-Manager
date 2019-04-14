@@ -6,8 +6,8 @@ namespace Kortex
 {
 	bool ModSourceItem::IsOK() const
 	{
-		// Items with known modNetwork valid if both modNetwork and mod ID is valid.
-		// Unknown items valid if at least name is present.
+		// Items with known mod network are valid if both mod network and mod ID are valid.
+		// Unknown items are valid if at least name is present.
 		if (HasModModNetwork())
 		{
 			return HasModInfo();
@@ -19,7 +19,7 @@ namespace Kortex
 	}
 	bool ModSourceItem::IsEmptyValue() const
 	{
-		return !HasModInfo() || !HasURL();
+		return !HasModInfo() && !HasURL();
 	}
 
 	void ModSourceItem::Load(const KxXMLNode& node)
@@ -76,7 +76,7 @@ namespace Kortex
 		{
 			return *name;
 		}
-		return wxEmptyString;
+		return {};
 	}
 	void ModSourceItem::SetName(const wxString& name)
 	{
@@ -101,7 +101,7 @@ namespace Kortex
 		{
 			return modNetwork->GetModPageURL(modInfo);
 		}
-		return wxEmptyString;
+		return {};
 	}
 	NetworkModInfo ModSourceItem::GetModInfo() const
 	{
@@ -109,6 +109,6 @@ namespace Kortex
 		{
 			return *modInfo;
 		}
-		return ModID();
+		return {};
 	}
 }

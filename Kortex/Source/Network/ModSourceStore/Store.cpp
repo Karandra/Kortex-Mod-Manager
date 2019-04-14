@@ -106,7 +106,7 @@ namespace Kortex
 		{
 			return item->GetURL(gameID);
 		}
-		return wxEmptyString;
+		return {};
 	}
 	wxString ModSourceStore::GetModPageURL(const IModNetwork& modNetwork, const GameID& gameID) const
 	{
@@ -114,7 +114,7 @@ namespace Kortex
 		{
 			return item->GetURL(gameID);
 		}
-		return wxEmptyString;
+		return {};
 	}
 	
 	KxStringVector ModSourceStore::GetModURLs(const GameID& gameID) const

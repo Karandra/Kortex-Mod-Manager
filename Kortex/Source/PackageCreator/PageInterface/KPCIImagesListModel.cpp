@@ -13,6 +13,7 @@
 #include <KxFramework/KxDualProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
+#include <future>
 
 enum ColumnID
 {
@@ -29,23 +30,35 @@ enum MenuID
 	AddMultipleFiles,
 };
 
+KBitmapSize KPCIImagesListModel::GetThumbnailSize()
+{
+	KBitmapSize size;
+	size.FromHeight(64, KBitmapSize::r16_9);
+	return size;
+}
 void KPCIImagesListModel::LoadBitmap(KPPIImageEntry* entry)
 {
-	wxImage image;
-	image.SetOption(wxIMAGE_OPTION_MAX_WIDTH, ms_BitmapWidth);
-	image.SetOption(wxIMAGE_OPTION_MAX_HEIGHT, ms_BitmapHeight);
-	image.LoadFile(entry->GetPath());
-	entry->SetBitmap(wxBitmap(image, 32));
+	wxImage image(entry->GetPath(), wxBITMAP_TYPE_ANY);
+	if (image.IsOk())
+	{
+		entry->SetBitmap(GetThumbnailSize().ScaleMaintainRatio(image, 4, 4));
+	}
+	else
+	{
+		entry->SetNoBitmap(true);
+	}
 }
 
 void KPCIImagesListModel::OnInitControl()
 {
-	GetView()->SetUniformRowHeight(ms_BitmapHeight + 4);
+	KBitmapSize bitmapSize = GetThumbnailSize();
+
+	GetView()->SetUniformRowHeight(bitmapSize.GetHeight() + 4);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCIImagesListModel::OnActivateItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCIImagesListModel::OnContextMenu, this);
 	GetView()->Bind(KxEVT_DATAVIEW_CACHE_HINT, &KPCIImagesListModel::OnCacheHint, this);
 
-	GetView()->AppendColumn<KxDataViewBitmapRenderer>(wxEmptyString, ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, ms_BitmapWidth, KxDV_COL_NONE);
+	GetView()->AppendColumn<KxDataViewBitmapRenderer>(wxEmptyString, ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, bitmapSize.GetWidth() + 4, KxDV_COL_NONE);
 	GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("PackageCreator.PageInterface.ImageList.Show"), ColumnID::Visible, KxDATAVIEW_CELL_ACTIVATABLE, KxCOL_WIDTH_AUTOSIZE);
 
 	// Main
@@ -296,9 +309,13 @@ void KPCIImagesListModel::OnCacheHint(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = GetView()->GetMainWindow()->GetItemByRow(row);
 		KPPIImageEntry* entry = GetDataEntry(GetRow(item));
-		if (entry && !entry->HasBitmap())
+		if (entry && !entry->HasBitmap() && !entry->IsNoBitmap())
 		{
-			LoadBitmap(entry);
+			GetView()->CallAfter([this, item, entry]()
+			{
+				LoadBitmap(entry);
+				ItemChanged(item);
+			});
 		}
 	}
 }
@@ -328,7 +345,6 @@ void KPCIImagesListModel::OnImportFiles()
 	KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN_FOLDER);
 	if (dialog.ShowModal() == KxID_OK)
 	{
-		GetView()->Freeze();
 		wxString source = dialog.GetResult();
 		auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
 		operation->OnRun([this, source](KOperationWithProgressBase* self)
@@ -355,7 +371,6 @@ void KPCIImagesListModel::OnImportFiles()
 		{
 			RefreshItems();
 			ChangeNotify();
-			GetView()->Thaw();
 		});
 		operation->SetDialogCaption(KTr("Generic.FileSearchInProgress"));
 		operation->Run();
@@ -369,12 +384,12 @@ void KPCIImagesListModel::OnAddMultipleItems()
 	dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 	if (dialog.ShowModal() == KxID_OK)
 	{
-		wxWindowUpdateLocker lock(GetView());
 		for (const wxString& path: dialog.GetResults())
 		{
 			GetDataVector()->emplace_back(KPPIImageEntry(path, wxEmptyString, true));
-			NotifyAddedItem(GetItem(GetItemCount() - 1));
 		}
+		RefreshItems();
+		ChangeNotify();
 	}
 }
 void KPCIImagesListModel::OnRemoveEntry(const KxDataViewItem& item)

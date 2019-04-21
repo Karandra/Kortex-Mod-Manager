@@ -3,18 +3,12 @@
 #include "PackageCreator/KPackageCreatorVectorModel.h"
 #include "PackageProject/KPackageProjectInterface.h"
 #include "PackageCreator/KPackageCreatorIDTracker.h"
+#include "Utility/KBitmapSize.h"
 
 class KPCIImagesListModel: public KPackageCreatorVectorModel<KPPIImageEntryArray>, public KPackageCreatorIDTracker
 {
-	private:
-		static const int ms_BitmapHeight = 64;
-		static const int ms_BitmapWidth = ((ms_BitmapHeight / 9.0) * 16.0);
-
 	public:
-		static wxSize GetThumbnalSize()
-		{
-			return wxSize(ms_BitmapWidth, ms_BitmapHeight);
-		}
+		static KBitmapSize GetThumbnailSize();
 		static void LoadBitmap(KPPIImageEntry* entry);
 
 	private:

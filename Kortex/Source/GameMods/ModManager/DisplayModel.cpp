@@ -124,15 +124,13 @@ namespace Kortex::ModManager
 		}
 		else
 		{
-			const DisplayModelNode* node = GetNode(item);
-			if (node)
+			if (const DisplayModelNode* node = GetNode(item))
 			{
-				if (IGameMod* entry = node->GetEntry())
+				IGameMod* entry = node->GetEntry();
+				PriorityGroup* priorityGroup = nullptr;
+				if (entry && entry->QueryInterface<>(priorityGroup))
 				{
-					if (IPriorityGroup* priorityGroup = entry->QueryInterface<IPriorityGroup>())
-					{
-						return priorityGroup->IsBegin();
-					}
+					return priorityGroup->IsBegin();
 				}
 			}
 		}
@@ -185,7 +183,7 @@ namespace Kortex::ModManager
 			children.reserve(node->GetChildrenCount());
 
 			const IModTag* group = node->GetGroup();
-			if (group || node->GetEntry()->QueryInterface<IPriorityGroup>())
+			if (group || node->GetEntry()->QueryInterface<PriorityGroup>())
 			{
 				for (const DisplayModelNode& entryNode: node->GetChildren())
 				{
@@ -238,11 +236,11 @@ namespace Kortex::ModManager
 				return;
 			}
 
-			if (const IPriorityGroup* priorityGroup = mod->QueryInterface<IPriorityGroup>())
+			if (const PriorityGroup* priorityGroup = mod->QueryInterface<PriorityGroup>())
 			{
 				GetValuePriorityGroup(value, item, column, mod, priorityGroup);
 			}
-			else if (const IFixedGameMod* fixedMod = mod->QueryInterface<IFixedGameMod>())
+			else if (const FixedGameMod* fixedMod = mod->QueryInterface<FixedGameMod>())
 			{
 				GetValueFixedMod(value, item, column, mod);
 			}
@@ -383,7 +381,7 @@ namespace Kortex::ModManager
 			}
 		};
 	}
-	void DisplayModel::GetValuePriorityGroup(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod, const IPriorityGroup* group) const
+	void DisplayModel::GetValuePriorityGroup(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod, const PriorityGroup* group) const
 	{
 		switch (column->GetID())
 		{
@@ -477,7 +475,7 @@ namespace Kortex::ModManager
 		}
 		else if (IGameMod* entry = node->GetEntry())
 		{
-			if (entry->QueryInterface<IFixedGameMod>())
+			if (entry->QueryInterface<FixedGameMod>())
 			{
 				return false;
 			}
@@ -502,7 +500,7 @@ namespace Kortex::ModManager
 		const DisplayModelNode* node = GetNode(item);
 		if (IGameMod* entry = node->GetEntry())
 		{
-			return !entry->QueryInterface<IFixedGameMod>();
+			return !entry->QueryInterface<FixedGameMod>();
 		}
 		return false;
 	}
@@ -521,8 +519,8 @@ namespace Kortex::ModManager
 		}
 		else if (IGameMod* mod = node->GetEntry())
 		{
-			const IFixedGameMod* fixed = mod->QueryInterface<IFixedGameMod>();
-			const IPriorityGroup* priorityGroup = mod->QueryInterface<IPriorityGroup>();
+			const FixedGameMod* fixed = mod->QueryInterface<FixedGameMod>();
+			const PriorityGroup* priorityGroup = mod->QueryInterface<PriorityGroup>();
 
 			if (columnID == ColumnID::Name && fixed && !priorityGroup)
 			{
@@ -563,12 +561,12 @@ namespace Kortex::ModManager
 			IGameMod* entry = node->GetEntry();
 			if (entry)
 			{
-				if (entry->QueryInterface<IPriorityGroup>())
+				if (entry->QueryInterface<PriorityGroup>())
 				{
 					height = m_PriorityGroupRowHeight;
 					return true;
 				}
-				else if (!entry->QueryInterface<IFixedGameMod>())
+				else if (!entry->QueryInterface<FixedGameMod>())
 				{
 					if (m_BitmapColumn->IsVisible())
 					{
@@ -692,7 +690,7 @@ namespace Kortex::ModManager
 		const DisplayModelNode* node = GetNode(item);
 		IGameMod* mod = node->GetEntry();
 
-		if (node->IsGroup() || node->GetEntry()->QueryInterface<IPriorityGroup>())
+		if (node->IsGroup() || node->GetEntry()->QueryInterface<PriorityGroup>())
 		{
 			GetView()->ToggleItemExpanded(item);
 		}
@@ -746,7 +744,7 @@ namespace Kortex::ModManager
 	{
 		if (const DisplayModelNode* node = GetNode(event.GetItem()))
 		{
-			IPriorityGroup* priorityGroup = nullptr;
+			PriorityGroup* priorityGroup = nullptr;
 			if (node->IsEntry() && node->GetEntry()->QueryInterface(priorityGroup))
 			{
 				if (IModTag* tag = priorityGroup->GetTag())
@@ -868,7 +866,7 @@ namespace Kortex::ModManager
 					const DisplayModelNode* node = GetNode(item);
 					if (IGameMod* entry = node->GetEntry())
 					{
-						if (!entry->QueryInterface<IFixedGameMod>())
+						if (!entry->QueryInterface<FixedGameMod>())
 						{
 							if (!dataObject)
 							{
@@ -901,7 +899,7 @@ namespace Kortex::ModManager
 			if (thisEntry && HasDragDropDataObject())
 			{
 				const IGameMod::RefVector& toMove = GetDragDropDataObject()->GetEntries();
-				IPriorityGroup* priorityGroup = thisEntry->QueryInterface<IPriorityGroup>();
+				PriorityGroup* priorityGroup = thisEntry->QueryInterface<PriorityGroup>();
 				if (priorityGroup)
 				{
 					thisEntry = &priorityGroup->GetBaseMod();

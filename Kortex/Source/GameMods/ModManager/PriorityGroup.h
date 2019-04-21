@@ -11,18 +11,7 @@ namespace Kortex
 
 namespace Kortex::ModManager
 {
-	class IPriorityGroup: public RTTI::IInterface<IPriorityGroup>
-	{
-		public:
-			virtual IGameMod& GetBaseMod() const = 0;
-			virtual IModTag* GetTag() const = 0;
-			virtual void SetTag(IModTag* tag) = 0;
-
-			virtual bool IsBegin() const = 0;
-			virtual bool IsEnd() const = 0;
-	};
-
-	class PriorityGroup: public RTTI::IExtendInterface<PriorityGroup, FixedGameMod, IPriorityGroup>
+	class PriorityGroup: public RTTI::IExtendInterface<PriorityGroup, FixedGameMod>
 	{
 		public:
 			IGameMod& m_BaseMod;
@@ -58,24 +47,24 @@ namespace Kortex::ModManager
 			KxColor GetColor() const override;
 			void SetColor(const KxColor& color) override;
 
-			IGameMod& GetBaseMod() const override
+			IGameMod& GetBaseMod() const
 			{
 				return m_BaseMod;
 			}
-			IModTag* GetTag() const override
+			IModTag* GetTag() const
 			{
 				return m_Tag;
 			}
-			void SetTag(IModTag* tag) override
+			void SetTag(IModTag* tag)
 			{
 				m_Tag = tag;
 			}
 
-			bool IsBegin() const override
+			bool IsBegin() const
 			{
 				return m_IsBegin;
 			}
-			bool IsEnd() const override
+			bool IsEnd() const
 			{
 				return !m_IsBegin;
 			}

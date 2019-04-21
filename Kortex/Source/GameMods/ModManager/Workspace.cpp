@@ -810,8 +810,8 @@ namespace Kortex::ModManager
 		if (modEntry)
 		{
 			const bool isMultipleSelection = m_ViewModel->GetView()->GetSelectedItemsCount() > 1;
-			const bool isFixedMod = modEntry->QueryInterface<IFixedGameMod>();
-			const bool isPriorityGroup = modEntry->QueryInterface<IPriorityGroup>();
+			const bool isFixedMod = modEntry->QueryInterface<FixedGameMod>();
+			const bool isPriorityGroup = modEntry->QueryInterface<PriorityGroup>();
 			const bool isLinkedMod = modEntry->IsLinkedMod();
 			const bool isInstalled = modEntry->IsInstalled();
 			const bool isPackageExist = modEntry->IsPackageFileExist() && !isFixedMod;

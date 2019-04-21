@@ -5,11 +5,7 @@
 
 namespace Kortex::ModManager
 {
-	class IFixedGameMod: public RTTI::IInterface<IFixedGameMod>
-	{
-	};
-
-	class FixedGameMod: public RTTI::IExtendInterface<FixedGameMod, BasicGameMod, IFixedGameMod>
+	class FixedGameMod: public RTTI::IExtendInterface<FixedGameMod, BasicGameMod>
 	{
 		private:
 			intptr_t m_Priority = -1;

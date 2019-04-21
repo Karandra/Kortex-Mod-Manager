@@ -108,7 +108,7 @@ namespace Kortex::PluginManager
 					}
 
 					const StdContentEntry* standardContentEntry = plugin.GetStdContentEntry();
-					if (modEntry->QueryInterface<ModManager::IFixedGameMod>() && !standardContentEntry)
+					if (modEntry->QueryInterface<ModManager::FixedGameMod>() && !standardContentEntry)
 					{
 						attributes.SetItalic(true);
 					}

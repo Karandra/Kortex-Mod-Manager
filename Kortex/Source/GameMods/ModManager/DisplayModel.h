@@ -20,8 +20,8 @@ namespace Kortex::ModManager
 		Manager,
 	};
 
-	class IFixedGameMod;
-	class IPriorityGroup;
+	class FixedGameMod;
+	class PriorityGroup;
 	class Workspace;
 	class DisplayModelDNDObject;
 
@@ -89,7 +89,7 @@ namespace Kortex::ModManager
 			virtual void GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const override;
 			void GetValueMod(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod) const;
 			void GetValueFixedMod(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod) const;
-			void GetValuePriorityGroup(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod, const IPriorityGroup* group) const;
+			void GetValuePriorityGroup(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod, const PriorityGroup* group) const;
 		
 			virtual bool SetValue(const wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) override;
 			virtual bool IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;

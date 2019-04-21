@@ -600,7 +600,7 @@ namespace Kortex::ModManager
 					}
 					case ColumnID::Priority:
 					{
-						return modLeft->GetOrderIndex() < modRight->GetOrderIndex();
+						return modLeft->GetPriority() < modRight->GetPriority();
 					}
 					case ColumnID::Version:
 					{
@@ -908,17 +908,7 @@ namespace Kortex::ModManager
 				}
 
 				// Move and refresh
-				bool moved = false;
-				if (toMove.size() > 1)
-				{
-					moved = IModManager::GetInstance()->MoveModsAfter(toMove, *thisEntry);
-				}
-				else
-				{
-					moved = IModManager::GetInstance()->MoveModsBefore(toMove, *thisEntry);
-				}
-
-				if (moved)
+				if (IModManager::GetInstance()->MoveModsTo(toMove, *thisEntry))
 				{
 					// If items dragged over priority group, assign them to it
 					if (priorityGroup)

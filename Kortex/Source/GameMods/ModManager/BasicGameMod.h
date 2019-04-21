@@ -30,6 +30,7 @@ namespace Kortex::ModManager
 			wxString m_Name;
 			wxString m_Author;
 			KxVersion m_Version;
+			intptr_t m_Priority;
 
 			bool m_IsDescriptionChanged = false;
 			mutable wxString m_Description;
@@ -56,6 +57,15 @@ namespace Kortex::ModManager
 
 			void CreateAllFolders();
 			bool Save() override;
+
+			intptr_t GetPriority() const
+			{
+				return m_Priority;
+			}
+			void SetPriority(intptr_t value) override
+			{
+				m_Priority = value;
+			}
 
 			bool LoadUsingSignature(const wxString& signature) override;
 			bool LoadUsingID(const wxString& id) override;
@@ -105,7 +115,7 @@ namespace Kortex::ModManager
 			{
 				m_Version = value;
 			}
-		
+			
 			bool IsDescriptionChanged() const
 			{
 				return m_IsDescriptionChanged;
@@ -130,7 +140,7 @@ namespace Kortex::ModManager
 			{
 				m_TimeUninstall = date;
 			}
-		
+			
 			const ModSourceStore& GetModSourceStore() const override
 			{
 				return m_ModSourceStore;
@@ -166,7 +176,7 @@ namespace Kortex::ModManager
 			{
 				m_PackageFile = value;
 			}
-		
+			
 			const FileTreeNode& GetFileTree() const override;
 			void ClearFileTree() override;
 			void UpdateFileTree() override;
@@ -214,8 +224,6 @@ namespace Kortex::ModManager
 				m_LinkLocation.clear();
 			}
 
-			intptr_t GetPriority() const override;
-			intptr_t GetOrderIndex() const override;
 			wxString GetModFilesDir() const override;
 	};
 }

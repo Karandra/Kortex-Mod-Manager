@@ -237,7 +237,7 @@ namespace Kortex::VirtualGameFolder
 			{
 				const IGameMod& mod1 = node1.GetMod();
 				const IGameMod& mod2 = node2.GetMod();
-				return mod1.GetOrderIndex() < mod2.GetOrderIndex();
+				return mod1.GetPriority() < mod2.GetPriority();
 			}
 			case ColumnID::Size:
 			{

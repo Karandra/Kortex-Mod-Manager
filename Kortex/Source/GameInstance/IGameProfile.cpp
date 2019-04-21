@@ -100,12 +100,12 @@ namespace Kortex
 
 namespace Kortex::GameInstance
 {
-	ProfileMod::ProfileMod(const wxString& signature, bool active)
-		:m_Signature(signature), m_IsActive(active)
+	ProfileMod::ProfileMod(const wxString& signature, bool active, intptr_t priority)
+		:m_Signature(signature), m_Priority(priority >= 0 ? priority : std::numeric_limits<intptr_t>::max()), m_IsActive(active)
 	{
 	}
-	ProfileMod::ProfileMod(const Kortex::IGameMod& modEntry, bool active)
-		: m_Signature(modEntry.GetSignature()), m_IsActive(active)
+	ProfileMod::ProfileMod(const IGameMod& mod, bool active)
+		:m_Signature(mod.GetSignature()), m_Priority(mod.GetPriority()),  m_IsActive(active)
 	{
 	}
 
@@ -121,12 +121,12 @@ namespace Kortex::GameInstance
 
 namespace Kortex::GameInstance
 {
-	ProfilePlugin::ProfilePlugin(const IGamePlugin& pluginEntry, bool active)
-		:m_PluginName(pluginEntry.GetName()), m_IsActive(active)
+	ProfilePlugin::ProfilePlugin(const IGamePlugin& plugin, bool active)
+		:m_Name(plugin.GetName()), m_Priority(plugin.GetPriority()), m_IsActive(active)
 	{
 	}
-	ProfilePlugin::ProfilePlugin(const wxString& name, bool enabled)
-		: m_PluginName(name), m_IsActive(enabled)
+	ProfilePlugin::ProfilePlugin(const wxString& name, bool enabled, intptr_t priority)
+		: m_Name(name), m_Priority(priority >= 0 ? priority : std::numeric_limits<intptr_t>::max()), m_IsActive(enabled)
 	{
 	}
 
@@ -134,7 +134,7 @@ namespace Kortex::GameInstance
 	{
 		if (IPluginManager* manager = IPluginManager::GetInstance())
 		{
-			return manager->FindPluginByName(m_PluginName);
+			return manager->FindPluginByName(m_Name);
 		}
 		return nullptr;
 	}

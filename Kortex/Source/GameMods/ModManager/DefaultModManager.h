@@ -102,7 +102,7 @@ namespace Kortex::ModManager
 			void DoResortMods(const IGameProfile& profile);
 			void DoUninstallMod(IGameMod& mod, wxWindow* window, const bool erase);
 			IGameMod* DoCreateMod(const wxString& signature);
-
+			
 		private:
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 			virtual void OnInit() override;
@@ -125,10 +125,6 @@ namespace Kortex::ModManager
 			}
 
 			std::unique_ptr<IGameMod> NewMod() override;
-			const IGameMod::Vector& GetMods() const override
-			{
-				return m_Mods;
-			}
 			IGameMod::Vector& GetMods() override
 			{
 				return m_Mods;
@@ -147,13 +143,13 @@ namespace Kortex::ModManager
 
 			void ResortMods(const IGameProfile& profile) override;
 			void ResortMods() override;
-		
-			IGameMod* FindModByID(const wxString& modID, intptr_t* index = nullptr) const override;
-			IGameMod* FindModByName(const wxString& modName, intptr_t* index = nullptr) const override;
-			IGameMod* FindModBySignature(const wxString& signature, intptr_t* index = nullptr) const override;
-			IGameMod* FindModByModNetwork(const wxString& modNetworkName, NetworkModInfo modInfo, intptr_t* index = nullptr) const override;
-			IGameMod* FindModByModNetwork(const IModNetwork& modNetwork, NetworkModInfo modInfo, intptr_t* index = nullptr) const override;
-		
+			
+			IGameMod* FindModByID(const wxString& modID) const override;
+			IGameMod* FindModByName(const wxString& modName) const override;
+			IGameMod* FindModBySignature(const wxString& signature) const override;
+			IGameMod* FindModByModNetwork(const wxString& modNetworkName, NetworkModInfo modInfo) const override;
+			IGameMod* FindModByModNetwork(const IModNetwork& modNetwork, NetworkModInfo modInfo) const override;
+			
 			bool IsModActive(const wxString& modID) const override;
 			bool ChangeModID(IGameMod& mod, const wxString& newID) override;
 			void UninstallMod(IGameMod& mod, wxWindow* window = nullptr) override
@@ -165,9 +161,6 @@ namespace Kortex::ModManager
 				DoUninstallMod(mod, window, true);
 			}
 
-			bool MoveModsBefore(const IGameMod::RefVector& toMove, const IGameMod& anchor) override;
-			bool MoveModsAfter(const IGameMod::RefVector& toMove, const IGameMod& anchor) override;
-		
 			void ExportModList(const wxString& outputFilePath) const override;
 			
 			IVirtualFileSystem& GetVFS() override

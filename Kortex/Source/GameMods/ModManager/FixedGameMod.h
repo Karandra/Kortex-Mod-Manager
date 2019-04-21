@@ -48,9 +48,5 @@ namespace Kortex::ModManager
 			{
 				return m_Priority;
 			}
-			virtual intptr_t GetOrderIndex() const override
-			{
-				return m_Priority;
-			}
 	};
 }

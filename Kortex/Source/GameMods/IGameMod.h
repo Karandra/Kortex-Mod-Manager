@@ -33,11 +33,14 @@ namespace Kortex
 			virtual bool LoadUsingSignature(const wxString& signature) = 0;
 			virtual bool LoadUsingID(const wxString& id);
 			virtual bool CreateFromProject(const KPackageProject& config);
+			
+			virtual intptr_t GetPriority() const = 0;
+			virtual void SetPriority(intptr_t value) = 0;
 
 			virtual wxString GetSignature() const = 0;
 			virtual wxString GetID() const = 0;
 			virtual void SetID(const wxString& id) = 0;
-		
+			
 			virtual wxString GetName() const = 0;
 			virtual void SetName(const wxString& value) = 0;
 			wxString GetSafeName() const;
@@ -69,7 +72,7 @@ namespace Kortex
 			virtual wxString GetPackageFile() const = 0;
 			virtual void SetPackageFile(const wxString& value) = 0;
 			bool IsPackageFileExist() const;
-		
+			
 			virtual const FileTreeNode& GetFileTree() const = 0;
 			virtual void ClearFileTree() = 0;
 			virtual void UpdateFileTree() = 0;
@@ -86,9 +89,6 @@ namespace Kortex
 			virtual bool IsLinkedMod() const = 0;
 			virtual void UnlinkLocation() = 0;
 			virtual void LinkLocation(const wxString& path) = 0;
-
-			virtual intptr_t GetOrderIndex() const = 0;
-			virtual intptr_t GetPriority() const = 0;
 
 			wxString GetRootDir() const;
 			wxString GetDescriptionFile() const;

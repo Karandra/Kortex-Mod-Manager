@@ -30,7 +30,7 @@ namespace Kortex::GameInstance
 			{
 				KxXMLNode node = modsNode.NewElement("Entry");
 				node.SetAttribute("Signature", mod.GetSignature());
-				node.SetAttribute("Enabled", mod.IsActive());
+				node.SetAttribute("Active", mod.IsActive());
 			}
 		}
 
@@ -42,8 +42,8 @@ namespace Kortex::GameInstance
 			for (const ProfilePlugin& plugin: m_Plugins)
 			{
 				KxXMLNode node = pluginsNode.NewElement("Entry");
-				node.SetAttribute("Name", plugin.GetPluginName());
-				node.SetAttribute("Enabled", plugin.IsActive());
+				node.SetAttribute("Name", plugin.GetName());
+				node.SetAttribute("Active", plugin.IsActive());
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace Kortex::GameInstance
 			KxXMLNode modsNode = rootNode.GetFirstChildElement("Mods");
 			for (KxXMLNode node = modsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
-				ProfileMod& mod = m_Mods.emplace_back(node.GetAttribute("Signature"), node.GetAttributeBool("Enabled"));
+				ProfileMod& mod = m_Mods.emplace_back(node.GetAttribute("Signature"), node.GetAttributeBool("Active"), m_Mods.size());
 				if (!mod.IsOK())
 				{
 					m_Mods.pop_back();
@@ -77,7 +77,7 @@ namespace Kortex::GameInstance
 			KxXMLNode pluginsNode = rootNode.GetFirstChildElement("Plugins");
 			for (KxXMLNode node = pluginsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
-				ProfilePlugin& plugin = m_Plugins.emplace_back(node.GetAttribute("Name"), node.GetAttributeBool("Enabled"));
+				ProfilePlugin& plugin = m_Plugins.emplace_back(node.GetAttribute("Name"), node.GetAttributeBool("Active"));
 				if (!plugin.IsOK())
 				{
 					m_Plugins.pop_back();
@@ -98,9 +98,9 @@ namespace Kortex::GameInstance
 	{
 		// Mods
 		m_Mods.clear();
-		for (auto& entry: IModManager::GetInstance()->GetMods())
+		for (auto& mod: IModManager::GetInstance()->GetMods())
 		{
-			m_Mods.emplace_back(*entry, entry->IsActive());
+			m_Mods.emplace_back(*mod, mod->IsActive());
 		}
 
 		// Plugins

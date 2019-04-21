@@ -56,12 +56,6 @@ namespace Kortex
 		return KxFile(GetPackageFile()).IsFileExist();
 	}
 
-	intptr_t IGameMod::GetOrderIndex() const
-	{
-		// x2 reserve space for priority groups
-		return IModManager::GetInstance()->GetOrderIndex(*this) * 2;
-	}
-
 	wxString IGameMod::GetRootDir() const
 	{
 		return Util::GetRootPath(GetSignature());

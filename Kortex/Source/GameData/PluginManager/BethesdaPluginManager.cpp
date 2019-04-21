@@ -315,17 +315,17 @@ namespace Kortex::PluginManager
 		{
 			FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, KxFS_FILE), false);
 
-			for (const GameInstance::ProfilePlugin& listEntry: profile->GetPlugins())
+			for (const GameInstance::ProfilePlugin& profilePlugin: profile->GetPlugins())
 			{
 				// Find whether plugin with this name exist
-				auto it = std::find_if(files.begin(), files.end(), [&listEntry](const FileTreeNode* item)
+				auto it = std::find_if(files.begin(), files.end(), [&profilePlugin](const FileTreeNode* item)
 				{
-					return KxComparator::IsEqual(item->GetName(), listEntry.GetPluginName());
+					return KxComparator::IsEqual(item->GetName(), profilePlugin.GetName());
 				});
 
 				if (it != files.end())
 				{
-					if (CheckExtension(listEntry.GetPluginName()))
+					if (CheckExtension(profilePlugin.GetName()))
 					{
 						GetPlugins().emplace_back(CreatePlugin((*it)->GetFullPath(), false));
 					}
@@ -345,12 +345,12 @@ namespace Kortex::PluginManager
 			}
 
 			// Check active
-			for (const GameInstance::ProfilePlugin& listEntry: profile->GetPlugins())
+			for (const GameInstance::ProfilePlugin& profilePlugin: profile->GetPlugins())
 			{
-				IGamePlugin* entry = FindPluginByName(listEntry.GetPluginName());
+				IGamePlugin* entry = FindPluginByName(profilePlugin.GetName());
 				if (entry)
 				{
-					entry->SetActive(listEntry.IsActive());
+					entry->SetActive(profilePlugin.IsActive());
 				}
 			}
 

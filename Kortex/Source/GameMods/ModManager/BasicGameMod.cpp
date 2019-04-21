@@ -384,23 +384,6 @@ namespace Kortex::ModManager
 		}
 	}
 
-	intptr_t BasicGameMod::GetPriority() const
-	{
-		intptr_t priority = 0;
-		for (const auto& mod: IModManager::GetInstance()->GetMods())
-		{
-			if (mod.get() == this)
-			{
-				return priority;
-			}
-			priority++;
-		}
-		return -1;
-	}
-	intptr_t BasicGameMod::GetOrderIndex() const
-	{
-		return IGameMod::GetOrderIndex();
-	}
 	wxString BasicGameMod::GetModFilesDir() const
 	{
 		if (IsLinkedMod())

@@ -30,23 +30,37 @@ namespace Kortex::ModManager
 {
 	void DefaultModManager::DoResortMods(const IGameProfile& profile)
 	{
-		size_t modIndex = 0;
-		for (const GameInstance::ProfileMod& listEntry: profile.GetMods())
+		// Reset priority
+		for (auto& mod: m_Mods)
 		{
-			if (modIndex < m_Mods.size())
-			{
-				intptr_t currentElement = -1;
-				FindModBySignature(listEntry.GetSignature(), &currentElement);
+			mod->SetPriority(-1);
+		}
 
-				if (currentElement != -1)
-				{
-					m_Mods[currentElement]->SetActive(listEntry.IsActive());
-					std::swap(m_Mods[currentElement], m_Mods[modIndex]);
-				}
-				modIndex++;
+		const auto& profileModList = profile.GetMods();
+		for (const GameInstance::ProfileMod& profileMod: profileModList)
+		{
+			if (IGameMod* mod = FindModBySignature(profileMod.GetSignature()))
+			{
+				mod->SetPriority(profileMod.GetPriority());
+				mod->SetActive(profileMod.IsActive());
 			}
 		}
 
+		// Set priority for all unsorted mods to be after sorted
+		intptr_t count = 0;
+		for (auto& mod: m_Mods)
+		{
+			if (mod->GetPriority() == -1)
+			{
+				mod->SetPriority(profileModList.size() + count);
+			}
+		}
+
+		// Sort and invalidate virtual tree
+		std::sort(m_Mods.begin(), m_Mods.end(), [](const auto& left, const auto& right)
+		{
+			return left->GetPriority() < right->GetPriority();
+		});
 		if (IModDispatcher::HasInstance())
 		{
 			IModDispatcher::GetInstance()->InvalidateVirtualTree();
@@ -108,7 +122,7 @@ namespace Kortex::ModManager
 		}
 		return nullptr;
 	}
-
+	
 	void DefaultModManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
 		m_Config.OnLoadInstance(instance, managerNode);
@@ -120,7 +134,7 @@ namespace Kortex::ModManager
 		// Mandatory locations
 		for (const MandatoryLocation& location: m_Config.GetMandatoryLocations())
 		{
-			const int orderIndex = m_BaseGame.GetOrderIndex() + m_MandatoryMods.size() + 1;
+			const int orderIndex = m_BaseGame.GetPriority() + m_MandatoryMods.size() + 1;
 			FixedGameMod& entry = m_MandatoryMods.emplace_back(orderIndex);
 
 			entry.SetID(location.GetName());
@@ -280,74 +294,54 @@ namespace Kortex::ModManager
 		DoResortMods(profile);
 	}
 
-	IGameMod* DefaultModManager::FindModByID(const wxString& modID, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByID(const wxString& modID) const
 	{
-		intptr_t i = 0;
 		for (auto& entry: m_Mods)
 		{
 			if (entry->GetID() == modID)
 			{
-				KxUtility::SetIfNotNull(index, i);
 				return &*entry;
 			}
-			i++;
 		}
-
-		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModByName(const wxString& modName, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByName(const wxString& modName) const
 	{
-		intptr_t i = 0;
 		for (auto& entry: m_Mods)
 		{
 			if (entry->GetName() == modName)
 			{
-				KxUtility::SetIfNotNull(index, i);
 				return &*entry;
 			}
-			i++;
 		}
-
-		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModBySignature(const wxString& signature, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModBySignature(const wxString& signature) const
 	{
-		intptr_t i = 0;
 		for (auto& entry: m_Mods)
 		{
 			if (entry->GetSignature() == signature)
 			{
-				KxUtility::SetIfNotNull(index, i);
 				return &*entry;
 			}
-			i++;
 		}
-
-		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModByModNetwork(const wxString& modNetworkName, NetworkModInfo modInfo, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByModNetwork(const wxString& modNetworkName, NetworkModInfo modInfo) const
 	{
-		intptr_t i = 0;
 		for (auto& entry: m_Mods)
 		{
 			ModSourceItem* item = entry->GetModSourceStore().GetItem(modNetworkName);
 			if (item && item->GetModInfo() == modInfo)
 			{
-				KxUtility::SetIfNotNull(index, i);
 				return &*entry;
 			}
-			i++;
 		}
-
-		KxUtility::SetIfNotNull(index, -1);
 		return nullptr;
 	}
-	IGameMod* DefaultModManager::FindModByModNetwork(const IModNetwork& modNetwork, NetworkModInfo modInfo, intptr_t* index) const
+	IGameMod* DefaultModManager::FindModByModNetwork(const IModNetwork& modNetwork, NetworkModInfo modInfo) const
 	{
-		return FindModByModNetwork(modNetwork.GetName(), modInfo, index);
+		return FindModByModNetwork(modNetwork.GetName(), modInfo);
 	}
 
 	bool DefaultModManager::IsModActive(const wxString& modID) const
@@ -382,15 +376,6 @@ namespace Kortex::ModManager
 			}
 		}
 		return false;
-	}
-
-	bool DefaultModManager::MoveModsBefore(const IGameMod::RefVector& toMove, const IGameMod& anchor)
-	{
-		return KUPtrVectorUtil::MoveBefore(m_Mods, toMove, anchor);
-	}
-	bool DefaultModManager::MoveModsAfter(const IGameMod::RefVector& toMove, const IGameMod& anchor)
-	{
-		return KUPtrVectorUtil::MoveAfter(m_Mods, toMove, anchor);
 	}
 
 	void DefaultModManager::ExportModList(const wxString& outputFilePath) const
@@ -519,11 +504,16 @@ namespace Kortex::ModManager
 	}
 	void DefaultModManager::NotifyModErased(IGameMod& mod)
 	{
-		intptr_t index = GetOrderIndex(mod);
-		if (index != -1)
+		auto it = std::find_if(m_Mods.begin(), m_Mods.end(), [&mod](const auto& searchedMod)
+		{
+			return &mod == searchedMod.get();
+		});
+		if (it != m_Mods.end())
 		{
 			const wxString modID = mod.GetID();
-			m_Mods.erase(m_Mods.begin() + index);
+			const size_t index = std::distance(m_Mods.begin(), it);
+			m_Mods.erase(it);
+			RecalcModIndexes(index);
 
 			IModDispatcher::GetInstance()->InvalidateVirtualTree();
 			Workspace::GetInstance()->ReloadWorkspace();

@@ -32,11 +32,12 @@ namespace Kortex::GameInstance
 
 		public:
 			wxString m_Signature;
+			intptr_t m_Priority = -1;
 			bool m_IsActive = false;
 
 		public:
-			ProfileMod(const IGameMod& modEntry, bool active);
-			ProfileMod(const wxString& signature, bool active);
+			ProfileMod(const IGameMod& mod, bool active);
+			ProfileMod(const wxString& signature, bool active, intptr_t priority = -1);
 
 		public:
 			bool IsOK() const
@@ -44,15 +45,19 @@ namespace Kortex::GameInstance
 				return !m_Signature.IsEmpty();
 			}
 
-			const wxString& GetSignature() const
-			{
-				return m_Signature;
-			}
 			bool IsActive() const
 			{
 				return m_IsActive;
 			}
-			
+			intptr_t GetPriority() const
+			{
+				return m_Priority;
+			}
+
+			const wxString& GetSignature() const
+			{
+				return m_Signature;
+			}
 			IGameMod* GetMod() const;
 	};
 }
@@ -65,26 +70,32 @@ namespace Kortex::GameInstance
 			using Vector = std::vector<ProfilePlugin>;
 
 		public:
-			wxString m_PluginName;
+			wxString m_Name;
+			intptr_t m_Priority = -1;
 			bool m_IsActive = false;
 
 		public:
 			ProfilePlugin(const IGamePlugin& plugin, bool active);
-			ProfilePlugin(const wxString& name, bool active);
+			ProfilePlugin(const wxString& name, bool active, intptr_t priority = -1);
 
 		public:
 			bool IsOK() const
 			{
-				return !m_PluginName.IsEmpty();
+				return !m_Name.IsEmpty();
 			}
 			
 			bool IsActive() const
 			{
 				return m_IsActive;
 			}
-			const wxString& GetPluginName() const
+			intptr_t GetPriority() const
 			{
-				return m_PluginName;
+				return m_Priority;
+			}
+
+			const wxString& GetName() const
+			{
+				return m_Name;
 			}
 			IGamePlugin* GetPlugin() const;
 	};

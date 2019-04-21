@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "IModManager.h"
 #include "GameMods/GameModsModule.h"
+#include "Utility/KUPtrVectorUtil.h"
 
 namespace Kortex
 {
@@ -9,22 +10,27 @@ namespace Kortex
 		const SimpleManagerInfo TypeInfo("ModManager", "ModManager.Name");
 	}
 
-	intptr_t IModManager::GetOrderIndex(const IGameMod& mod) const
+	void IModManager::RecalcModIndexes(size_t startAt)
 	{
-		const IGameMod::Vector& mods = GetMods();
-		auto it = std::find_if(mods.begin(), mods.end(), [&mod](const auto& currentMod)
+		intptr_t priority = 0;
+		for (auto& mod: GetMods())
 		{
-			return currentMod.get() == &mod;
-		});
-		if (it != mods.end())
-		{
-			return std::distance(mods.begin(), it);
+			mod->SetPriority(priority);
+			priority++;
 		}
-		return -1;
 	}
-
 	IModManager::IModManager()
 		:ManagerWithTypeInfo(GameModsModule::GetInstance())
 	{
+	}
+
+	bool IModManager::MoveModsTo(const IGameMod::RefVector& toMove, const IGameMod& anchor)
+	{
+		if (KUPtrVectorUtil::MoveAfter(GetMods(), toMove, anchor))
+		{
+			RecalcModIndexes();
+			return true;
+		}
+		return false;
 	}
 }

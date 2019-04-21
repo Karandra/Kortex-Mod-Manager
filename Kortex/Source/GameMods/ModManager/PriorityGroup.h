@@ -53,10 +53,6 @@ namespace Kortex::ModManager
 			{
 				return m_BaseMod.GetPriority();
 			}
-			intptr_t GetOrderIndex() const override
-			{
-				return m_BaseMod.GetOrderIndex() + (m_IsBegin ? -1 : +1);
-			}
 
 			bool HasColor() const override;
 			KxColor GetColor() const override;

@@ -59,7 +59,7 @@ namespace Kortex::GameInstance
 
 		if (ConfigurableGameInstance::OnLoadInstance(instanceConfig))
 		{
-			IGameProfile::SetGlobalPaths(GetVariables());
+			IGameProfile::UpdateVariablesUsingActive(GetVariables());
 			InitModulesConfig(instanceConfig);
 			return true;
 		}

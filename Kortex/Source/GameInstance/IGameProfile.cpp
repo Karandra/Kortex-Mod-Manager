@@ -44,7 +44,7 @@ namespace Kortex
 		return nullptr;
 	}
 
-	void IGameProfile::SetGlobalPaths(IVariableTable& variables)
+	void IGameProfile::UpdateVariablesUsingActive(IVariableTable& variables)
 	{
 		variables.SetVariable(Variables::KVAR_GLOBAL_SAVES_DIR, Util::GetGlobalRelativePath(GameInstance::FolderName::Saves));
 		variables.SetVariable(Variables::KVAR_GLOBAL_CONFIG_DIR, Util::GetGlobalRelativePath(GameInstance::FolderName::Config));

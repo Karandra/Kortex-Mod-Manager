@@ -52,7 +52,7 @@ namespace Kortex::GameInstance
 			{
 				return m_IsActive;
 			}
-		
+			
 			IGameMod* GetMod() const;
 	};
 }
@@ -77,7 +77,7 @@ namespace Kortex::GameInstance
 			{
 				return !m_PluginName.IsEmpty();
 			}
-		
+			
 			bool IsActive() const
 			{
 				return m_IsActive;
@@ -110,7 +110,7 @@ namespace Kortex
 		public:
 			static IGameProfile* GetActive();
 			static wxString ProcessID(const wxString& id);
-			static void SetGlobalPaths(IVariableTable& variables);
+			static void UpdateVariablesUsingActive(IVariableTable& variables);
 
 		protected:
 			static bool CreateLocalFolder(const wxString& id, const wxString& name);

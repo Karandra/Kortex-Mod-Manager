@@ -833,11 +833,11 @@ namespace Kortex::ModManager
 		{
 			case Workspace::ImageResizeMode::Scale:
 			{
-				return m_BitmapSize.ScaleBitmapAspect(wxBitmap(entry.GetImageFile(), wxBITMAP_TYPE_ANY), magrinX, magrinY);
+				return m_BitmapSize.ScaleMaintainRatio(wxBitmap(entry.GetImageFile(), wxBITMAP_TYPE_ANY), magrinX, magrinY);
 			}
 			case Workspace::ImageResizeMode::Stretch:
 			{
-				return m_BitmapSize.ScaleBitmapStretch(wxBitmap(entry.GetImageFile(), wxBITMAP_TYPE_ANY), magrinX, magrinY);
+				return m_BitmapSize.ScaleStretch(wxBitmap(entry.GetImageFile(), wxBITMAP_TYPE_ANY), magrinX, magrinY);
 			}
 			case Workspace::ImageResizeMode::Fill:
 			{

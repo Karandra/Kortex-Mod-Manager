@@ -25,11 +25,20 @@ KBitmapSize& KBitmapSize::FromSystemSmallIcon()
 	return *this;
 }
 
-wxBitmap KBitmapSize::ScaleBitmapAspect(const wxBitmap& bitmap, int marginsX, int marginsY) const
+wxImage KBitmapSize::ScaleMaintainRatio(const wxImage& image, int marginsX, int marginsY) const
 {
-	return KAux::ScaleImageAspect(bitmap, ProcessMargin(m_Width, marginsX), ProcessMargin(m_Height, marginsY));
+	return KAux::ScaleImageAspect(image, ProcessMargin(m_Width, marginsX), ProcessMargin(m_Height, marginsY));
 }
-wxBitmap KBitmapSize::ScaleBitmapStretch(const wxBitmap& bitmap, int marginsX, int marginsY) const
+wxBitmap KBitmapSize::ScaleMaintainRatio(const wxBitmap& bitmap, int marginsX, int marginsY) const
 {
-	return wxBitmap(bitmap.ConvertToImage().Rescale(ProcessMargin(m_Width, marginsX), ProcessMargin(m_Height, marginsY), wxIMAGE_QUALITY_HIGH), 32);
+	return wxBitmap(ScaleMaintainRatio(bitmap.ConvertToImage(), marginsX, marginsY), 32);
+}
+
+wxImage KBitmapSize::ScaleStretch(const wxImage& image, int marginsX, int marginsY) const
+{
+	return image.Scale(ProcessMargin(m_Width, marginsX), ProcessMargin(m_Height, marginsY), wxIMAGE_QUALITY_HIGH);
+}
+wxBitmap KBitmapSize::ScaleStretch(const wxBitmap& bitmap, int marginsX, int marginsY) const
+{
+	return wxBitmap(ScaleStretch(bitmap.ConvertToImage()), 32);
 }

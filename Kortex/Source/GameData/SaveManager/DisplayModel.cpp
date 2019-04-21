@@ -242,7 +242,7 @@ namespace Kortex::SaveManager
 				if (entry && (!entry->IsOK() || !entry->HasThumbBitmap()))
 				{
 					entry->ReadFile();
-					entry->SetThumbBitmap(m_BitmapSize.ScaleBitmapAspect(entry->GetBitmap(), 0, 4));
+					entry->SetThumbBitmap(m_BitmapSize.ScaleMaintainRatio(entry->GetBitmap(), 0, 4));
 				}
 			}
 		}

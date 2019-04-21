@@ -28,7 +28,7 @@ namespace
 			size.FromSystemIcon();
 			if (bitmap.GetWidth() != size.GetWidth() || bitmap.GetHeight() != size.GetHeight())
 			{
-				bitmap = size.ScaleBitmapAspect(bitmap);
+				bitmap = size.ScaleMaintainRatio(bitmap);
 			}
 		}
 		else

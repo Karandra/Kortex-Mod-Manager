@@ -16,7 +16,7 @@ namespace Kortex
 
 		if (m_Bitmap.GetWidth() != bitmapSize.GetWidth() || m_Bitmap.GetHeight() != bitmapSize.GetHeight())
 		{
-			m_Bitmap = bitmapSize.ScaleBitmapAspect(bitmap);
+			m_Bitmap = bitmapSize.ScaleMaintainRatio(bitmap);
 		}
 		else
 		{

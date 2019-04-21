@@ -75,6 +75,9 @@ class KBitmapSize
 			return GetSize();
 		}
 
-		wxBitmap ScaleBitmapAspect(const wxBitmap& bitmap, int marginsX = 0, int marginsY = 0) const;
-		wxBitmap ScaleBitmapStretch(const wxBitmap& bitmap, int marginsX = 0, int marginsY = 0) const;
+		wxImage ScaleMaintainRatio(const wxImage& image, int marginsX = 0, int marginsY = 0) const;
+		wxBitmap ScaleMaintainRatio(const wxBitmap& bitmap, int marginsX = 0, int marginsY = 0) const;
+
+		wxImage ScaleStretch(const wxImage& image, int marginsX = 0, int marginsY = 0) const;
+		wxBitmap ScaleStretch(const wxBitmap& bitmap, int marginsX = 0, int marginsY = 0) const;
 };

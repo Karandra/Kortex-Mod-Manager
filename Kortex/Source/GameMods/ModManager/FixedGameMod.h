@@ -8,41 +8,44 @@ namespace Kortex::ModManager
 	class FixedGameMod: public RTTI::IExtendInterface<FixedGameMod, BasicGameMod>
 	{
 		private:
-			intptr_t m_Priority = -1;
+			intptr_t m_FixedPriority = -1;
 
 		public:
 			FixedGameMod(intptr_t priority = -1)
-				:m_Priority(priority)
+				:m_FixedPriority(priority)
 			{
 			}
 
 		public:
-			virtual bool LoadUsingSignature(const wxString& signature) override
+			bool LoadUsingSignature(const wxString& signature) override
 			{
 				return false;
 			}
-			virtual bool Save() override
+			bool Save() override
 			{
 				return false;
 			}
 
 		public:
-			virtual bool IsActive() const override
+			bool IsActive() const override
 			{
 				return true;
 			}
-			virtual bool IsInstalled() const override
+			bool IsInstalled() const override
 			{
 				return true;
 			}
 
-			virtual KImageEnum GetIcon() const override
+			KImageEnum GetIcon() const override
 			{
 				return KIMG_FOLDERS;
 			}
-			virtual intptr_t GetPriority() const override
+			intptr_t GetPriority() const override
 			{
-				return m_Priority;
+				return m_FixedPriority;
+			}
+			void SetPriority(intptr_t value) override
+			{
 			}
 	};
 }

@@ -123,6 +123,15 @@ namespace Kortex
 				DataViewLayout(*this, SerializationMode::Load, dataView);
 			}
 
+			void SaveDataViewLayout(KxDataView2::View* dataView)
+			{
+				DataView2Layout(*this, SerializationMode::Save, dataView);
+			}
+			void LoadDataViewLayout(KxDataView2::View* dataView)
+			{
+				DataView2Layout(*this, SerializationMode::Load, dataView);
+			}
+
 			void SaveSplitterLayout(KxSplitterWindow* splitter)
 			{
 				SplitterLayout(*this, SerializationMode::Save, splitter);

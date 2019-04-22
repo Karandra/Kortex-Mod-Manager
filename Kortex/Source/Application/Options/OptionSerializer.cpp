@@ -3,6 +3,7 @@
 #include <Kortex/Application.hpp>
 #include "UI/KWorkspace.h"
 #include <KxFramework/KxDataView.h>
+#include <KxFramework/DataView2/DataView2.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
 #include <KxFramework/KxSplitterWindow.h>
 
@@ -64,6 +65,55 @@ namespace Kortex::Application::OptionSerializer
 			dataView->UpdateWindowUI();
 			dataView->SendSizeEventToParent();
 			dataView->SendSizeEvent();
+			dataView->Update();
+		}
+	}
+	void UILayout::DataView2Layout(IAppOption& option, SerializationMode mode, KxDataView2::View* dataView)
+	{
+		using namespace KxDataView2;
+
+		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(wxS("Columns"));
+		if (mode == SerializationMode::Save)
+		{
+			columnsNode.ClearNode();
+			for (size_t i = 0; i < dataView->GetColumnCount(); i++)
+			{
+				if (const Column* column = dataView->GetColumn(i))
+				{
+					KxXMLNode node = columnsNode.NewElement(wxS("Entry"));
+
+					node.SetAttribute(wxS("DisplayAt"), (int)column->GetDisplayIndex());
+					node.SetAttribute(wxS("Visible"), column->IsVisible());
+					node.SetAttribute(wxS("Width"), column->GetWidthDescriptor());
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		else
+		{
+			size_t i = 0;
+			for (KxXMLNode node = columnsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+			{
+				if (Column* column = dataView->GetColumn(i))
+				{
+					column->SetWidth(node.GetAttributeInt(wxS("Width"), ColumnWidth::Default));
+					column->SetVisible(node.GetAttributeBool(wxS("Visible"), true));
+					column->SetDisplayIndex(node.GetAttributeInt(wxS("DisplayAt"), i));
+
+					i++;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			dataView->SendSizeEventToParent();
+			dataView->SendSizeEvent();
+			dataView->UpdateWindowUI();
 			dataView->Update();
 		}
 	}

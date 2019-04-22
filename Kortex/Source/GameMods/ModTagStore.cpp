@@ -26,19 +26,32 @@ namespace Kortex
 {
 	bool ModTagStore::HasTag(const IModTag& tag) const
 	{
-		return HasTag(tag.GetID());
+		if (tag.IsOK())
+		{
+			return HasTag(tag.GetID());
+		}
+		return false;
 	}
 	void ModTagStore::AddTag(const IModTag& tag)
 	{
-		AddTag(tag.GetID());
+		if (tag.IsOK())
+		{
+			AddTag(tag.GetID());
+		}
 	}
 	void ModTagStore::RemoveTag(const IModTag& tag)
 	{
-		RemoveTag(tag.GetID());
+		if (tag.IsOK())
+		{
+			RemoveTag(tag.GetID());
+		}
 	}
 	void ModTagStore::ToggleTag(const IModTag& tag, bool addTag)
 	{
-		addTag ? AddTag(tag) : RemoveTag(tag);
+		if (tag.IsOK())
+		{
+			addTag ? AddTag(tag) : RemoveTag(tag);
+		}
 	}
 
 	void ModTagStore::Visit(const Visitor& visitor)

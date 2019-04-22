@@ -24,6 +24,10 @@ namespace Kortex::ModTagManager
 			}
 
 		public:
+			bool IsOK() const override
+			{
+				return !m_ID.IsEmpty();
+			}
 			std::unique_ptr<IModTag> Clone() const override
 			{
 				return std::make_unique<DefaultTag>(*this);

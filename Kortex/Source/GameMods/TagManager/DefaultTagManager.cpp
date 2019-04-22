@@ -16,17 +16,6 @@ namespace Kortex::Application::OName
 	KortexDefOption(UserTags);
 }
 
-namespace
-{
-	using namespace Kortex;
-	using namespace Kortex::ModTagManager;
-
-	std::unique_ptr<DefaultTag> NewDefaultTag()
-	{
-		return std::make_unique<DefaultTag>();
-	}
-}
-
 namespace Kortex::ModTagManager
 {
 	void DefaultTagManager::LoadTagsFrom(IModTag::Vector& items, const KxXMLNode& tagsNode)
@@ -57,11 +46,16 @@ namespace Kortex::ModTagManager
 					name = node.GetFirstChildElement(wxS("Name")).GetValue(id);
 				}
 
-				auto tag = NewDefaultTag();
+				auto tag = NewTag();
 				tag->SetID(id);
 				tag->SetName(*name);
-				tag->SetNexusID(node.GetFirstChildElement(wxS("NexusID")).GetValueInt(INexusModTag::InvalidNexusID));
 				tag->SetExpanded(node.GetFirstChildElement(wxS("Expanded")).GetValueBool());
+				
+				INexusModTag* nexusTag = nullptr;
+				if (tag->QueryInterface(nexusTag))
+				{
+					nexusTag->SetNexusID(node.GetFirstChildElement(wxS("NexusID")).GetValueInt(INexusModTag::InvalidNexusID));
+				}
 
 				// Color
 				KxXMLNode colorNode = node.GetFirstChildElement("Color");
@@ -80,7 +74,11 @@ namespace Kortex::ModTagManager
 						tag->SetColor(KxColor(r, g, b, 200));
 					}
 				}
-				EmplaceTag(items, std::move(tag));
+
+				if (tag->IsOK())
+				{
+					EmplaceTag(items, std::move(tag));
+				}
 			}
 		}
 	}
@@ -89,37 +87,40 @@ namespace Kortex::ModTagManager
 		tagsNode.ClearNode();
 		for (const auto& tag: items)
 		{
-			KxXMLNode node = tagsNode.NewElement(wxS("Entry"));
-
-			// ID
-			const wxString id = tag->GetID();
-			node.SetAttribute(wxS("ID"), id);
-
-			// Expanded
-			node.NewElement(wxS("Expanded")).SetValue(tag->IsExpanded());
-
-			// Name
-			const wxString name = tag->GetName();
-			if (!tag->IsDefaultTag() && !name.IsEmpty() && name != id)
+			if (tag->IsOK())
 			{
-				node.NewElement(wxS("Name")).SetValue(name);
-			}
+				KxXMLNode node = tagsNode.NewElement(wxS("Entry"));
 
-			// Nexus ID
-			INexusModTag* nexusTag = nullptr;
-			if (tag->QueryInterface(nexusTag) && nexusTag->HasNexusID())
-			{
-				node.NewElement(wxS("NexusID")).SetValue(nexusTag->GetNexusID());
-			}
+				// ID
+				const wxString id = tag->GetID();
+				node.SetAttribute(wxS("ID"), id);
 
-			// Color
-			KxColor color = tag->GetColor();
-			if (color.IsOk())
-			{
-				KxXMLNode colorNode = node.NewElement(wxS("Color"));
-				colorNode.SetAttribute(wxS("R"), color.GetR());
-				colorNode.SetAttribute(wxS("G"), color.GetG());
-				colorNode.SetAttribute(wxS("B"), color.GetB());
+				// Expanded
+				node.NewElement(wxS("Expanded")).SetValue(tag->IsExpanded());
+
+				// Name
+				const wxString name = tag->GetName();
+				if (!tag->IsDefaultTag() && !name.IsEmpty() && name != id)
+				{
+					node.NewElement(wxS("Name")).SetValue(name);
+				}
+
+				// Nexus ID
+				INexusModTag* nexusTag = nullptr;
+				if (tag->QueryInterface(nexusTag) && nexusTag->HasNexusID())
+				{
+					node.NewElement(wxS("NexusID")).SetValue(nexusTag->GetNexusID());
+				}
+
+				// Color
+				KxColor color = tag->GetColor();
+				if (color.IsOk())
+				{
+					KxXMLNode colorNode = node.NewElement(wxS("Color"));
+					colorNode.SetAttribute(wxS("R"), color.GetR());
+					colorNode.SetAttribute(wxS("G"), color.GetG());
+					colorNode.SetAttribute(wxS("B"), color.GetB());
+				}
 			}
 		}
 	}
@@ -156,6 +157,6 @@ namespace Kortex::ModTagManager
 	}
 	std::unique_ptr<IModTag> DefaultTagManager::NewTag()
 	{
-		return NewDefaultTag();
+		return std::make_unique<DefaultTag>();
 	}
 }

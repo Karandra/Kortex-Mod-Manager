@@ -12,6 +12,7 @@ namespace Kortex
 			using CRefVector = std::vector<const IModTag*>;
 
 		public:
+			virtual bool IsOK() const = 0;
 			virtual std::unique_ptr<IModTag> Clone() const = 0;
 			
 			bool IsDefaultTag() const;

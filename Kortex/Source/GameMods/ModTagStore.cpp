@@ -9,14 +9,16 @@ namespace
 
 	template<class MapT, class Functor> void VisitHelper(MapT&& map, Functor&& functor)
 	{
-		const IModTagManager* manager = IModTagManager::GetInstance();
+		IModTagManager* manager = IModTagManager::GetInstance();
 
 		for (const wxString& tagID: map)
 		{
-			DefaultTag tag(tagID, manager->GetTagNameByID(tagID));
-			if (!functor(tag))
+			if (IModTag* tag = manager->FindTagByID(tagID))
 			{
-				break;
+				if (!functor(*tag))
+				{
+					break;
+				}
 			}
 		}
 	}

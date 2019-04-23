@@ -62,7 +62,7 @@ namespace Kortex::ModManager
 
 			// Mod manager
 			KxPanel* m_ModsPane = nullptr;
-			DisplayModel* m_ViewModel = nullptr;
+			DisplayModel* m_DisplayModel = nullptr;
 
 			/* Right pane */
 			KxAuiNotebook* m_PaneRight_Tabs = nullptr;
@@ -147,7 +147,7 @@ namespace Kortex::ModManager
 		public:
 			DisplayModel* GetModel() const
 			{
-				return m_ViewModel;
+				return m_DisplayModel;
 			}
 			ImageResizeMode GetImageResizeMode() const
 			{

@@ -5,672 +5,304 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include "DisplayModel.h"
+#include "DisplayModelDND.h"
 #include "Workspace.h"
 #include "PriorityGroup.h"
 #include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
-#include <KxFramework/DataView/KxDataViewMainWindow.h>
-
-namespace
-{
-	enum ColumnID
-	{
-		Name,
-		Color,
-		Bitmap,
-		Priority,
-		Version,
-		Author,
-		Tags,
-
-		DateInstall,
-		DateUninstall,
-		ModFolder,
-		PackagePath,
-		Signature,
-
-		MAX,
-
-		ModSource = -1,
-	};
-}
+#include <typeinfo>
 
 namespace Kortex::ModManager
 {
-	wxString DisplayModel::FormatTagList(const IGameMod& entry) const
+	wxString DisplayModel::FormatTagList(const IGameMod& entry)
 	{
 		return KxString::Join(entry.GetTagStore().GetNames(), wxS("; "));
 	}
 
-	void DisplayModel::OnInitControl()
+	void DisplayModel::CreateView(wxWindow* parent, wxSizer* sizer)
 	{
-		/* View */
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnSelectItem, this);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_EXPANDED, &DisplayModel::OnExpandCollapseItem, this);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_COLLAPSED, &DisplayModel::OnExpandCollapseItem, this);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
-		GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &DisplayModel::OnHeaderContextMenu, this);
-		GetView()->Bind(KxEVT_DATAVIEW_COLUMN_SORTED, &DisplayModel::OnColumnSorted, this);
-		GetView()->Bind(KxEVT_DATAVIEW_CACHE_HINT, &DisplayModel::OnCacheHint, this);
-		GetView()->SetIndent(0);
-		EnableDragAndDrop();
+		using KxDataView2::CtrlStyle;
+		using KxDataView2::ColumnStyle;
 
-		/* Columns */
-		KxDataViewColumnFlags defaultFlags = KxDV_COL_RESIZEABLE|KxDV_COL_REORDERABLE|KxDV_COL_SORTABLE;
-		KxDataViewColumnFlags defaultFlagsNoSort = (KxDataViewColumnFlags)(defaultFlags & ~KxDV_COL_SORTABLE);
-		KxDataViewColumnFlags defaultFlagsNoOrder = (KxDataViewColumnFlags)(defaultFlags & ~KxDV_COL_REORDERABLE);
-		KxDataViewColumnFlags defaultFlagsNoSortNoOrder = KxDV_COL_RESIZEABLE;
+		using KxDataView2::TextEditor;
+		using KxDataView2::TextRenderer;
+		using KxDataView2::BitmapRenderer;
+		using KxDataView2::BitmapTextRenderer;
+		using KxDataView2::BitmapTextToggleRenderer;
 
+		// View
+		KxDataView2::View* view = new KxDataView2::View(parent, KxID_NONE, CtrlStyle::MultipleSelection|CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
+		view->AssignModel(this);
+		if (sizer)
 		{
-			auto info = GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE|KxDATAVIEW_CELL_EDITABLE, 400, defaultFlags);;
-			m_NameColumn = info.GetColumn();
+			sizer->Add(view, 1, wxEXPAND);
 		}
+
+		// Columns
+		ColumnStyle columnStyleDefault = ColumnStyle::Size|ColumnStyle::Move|ColumnStyle::Sort;
+		ColumnStyle columnStyleNoSort = ColumnStyle::Size|ColumnStyle::Move;
+		ColumnStyle columnStyleNoMove = ColumnStyle::Size|ColumnStyle::Sort;
+		ColumnStyle columnStyleResizeOnly = ColumnStyle::Size;
+
 		{
-			auto info = GetView()->AppendColumn<KxDataViewBitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, m_BitmapSize.GetWidth() + 4, KxDV_COL_REORDERABLE);
-			m_BitmapColumn = info.GetColumn();
+			auto [column, r, e] = view->AppendColumn<BitmapTextToggleRenderer, TextEditor>(KTr("ModManager.ModList.Name"), ColumnID::Name, {}, columnStyleDefault);
+			m_NameColumn = &column;
 		}
 		{
 			KBitmapSize size;
 			size.FromSystemIcon();
 
-			GetView()->AppendColumn<KxDataViewNullRenderer>(KTr("Generic.Color"), ColumnID::Color, KxDATAVIEW_CELL_INERT, size.GetWidth(), defaultFlagsNoSort);
+			view->AppendColumn(KTr("Generic.Color"), ColumnID::Color, size.GetWidth(), columnStyleNoSort);
 		}
 		{
-			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
-			m_PriorityColumn = info.GetColumn();
+			auto [column, r] = view->AppendColumn<TextRenderer>(KTr("Generic.Priority"), ColumnID::Priority, {}, columnStyleDefault);
+			m_PriorityColumn = &column;
 			m_PriorityColumn->SortAscending();
 		}
-
-		GetView()->AppendColumn<KxDataViewBitmapTextRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Version"), ColumnID::Version, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
-		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("ModManager.ModList.Author"), ColumnID::Author, KxDATAVIEW_CELL_EDITABLE, 100, defaultFlags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.Tags"), ColumnID::Tags, KxDATAVIEW_CELL_INERT, 100, defaultFlags);
-	
-		for (const auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
 		{
-			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, ColumnID::ModSource, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, defaultFlags);
-
-			info.GetColumn()->SetClientData(modNetwork.get());
-			info.GetColumn()->SetTitle(modNetwork->GetName());
-			info.GetColumn()->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
+			view->AppendColumn<BitmapTextRenderer, TextEditor>(KTr("ModManager.ModList.Version"), ColumnID::Version, {}, columnStyleDefault);
+			view->AppendColumn<TextRenderer, TextEditor>(KTr("ModManager.ModList.Author"), ColumnID::Author, {}, columnStyleDefault);
+			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.Tags"), ColumnID::Tags, {}, columnStyleDefault);
 		}
+		{
+			for (const auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
+			{
+				auto [column, r] = view->AppendColumn<TextRenderer>(wxEmptyString, ColumnID::ModSource, {}, columnStyleDefault);
 
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.DateInstall"), ColumnID::DateInstall, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.DateUninstall"), ColumnID::DateUninstall, KxDATAVIEW_CELL_INERT,  125, defaultFlags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.ModFolder"), ColumnID::ModFolder, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.PackagePath"), ColumnID::PackagePath, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("ModManager.ModList.Signature"), ColumnID::Signature, KxDATAVIEW_CELL_INERT, 125, defaultFlags);
+				column.SetClientData(modNetwork.get());
+				column.SetTitle(modNetwork->GetName());
+				column.SetBitmap(KGetBitmap(modNetwork->GetIcon()));
+			}
+		}
+		{
+			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.DateInstall"), ColumnID::DateInstall, {}, columnStyleDefault);
+			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.DateUninstall"), ColumnID::DateUninstall, {}, columnStyleDefault);
+			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.ModFolder"), ColumnID::ModFolder, {}, columnStyleDefault);
+			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.PackagePath"), ColumnID::PackagePath, {}, columnStyleDefault);
+			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.Signature"), ColumnID::Signature, {}, columnStyleDefault);
+		}
 
 		// UI
-		m_PriorityGroupRowHeight = GetView()->GetUniformRowHeight() * 1.2;
+		m_PriorityGroupRowHeight = view->GetUniformRowHeight() * 1.2;
 		m_PriortyGroupColor = KxUtility::GetThemeColor_Caption(GetView());
-	}
+		
+		// Events
+		view->Bind(KxDataView2::EVENT_ITEM_SELECTED, &DisplayModel::OnSelectItem, this);
+		view->Bind(KxDataView2::EVENT_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
+		view->Bind(KxDataView2::EVENT_ITEM_EXPANDED, &DisplayModel::OnExpandCollapseItem, this);
+		view->Bind(KxDataView2::EVENT_ITEM_COLLAPSED, &DisplayModel::OnExpandCollapseItem, this);
+		view->Bind(KxDataView2::EVENT_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
 
-	bool DisplayModel::IsListModel() const
-	{
-		return false;
-	}
-	bool DisplayModel::IsContainer(const KxDataViewItem& item) const
-	{
-		if (IsTree())
-		{
-			if (const DisplayModelNode* node = GetNode(item))
-			{
-				return node->IsGroup() && node->HasChildren();
-			}
-			return item.IsTreeRootItem();
-		}
-		else
-		{
-			if (const DisplayModelNode* node = GetNode(item))
-			{
-				IGameMod* entry = node->GetEntry();
-				PriorityGroup* priorityGroup = nullptr;
-				if (entry && entry->QueryInterface<>(priorityGroup))
-				{
-					return priorityGroup->IsBegin();
-				}
-			}
-		}
-		return item.IsTreeRootItem();
-	}
-	bool DisplayModel::HasContainerColumns(const KxDataViewItem& item) const
-	{
-		return true;
-	}
-	KxDataViewItem DisplayModel::GetParent(const KxDataViewItem& item) const
-	{
-		if (const DisplayModelNode* node = GetNode(item))
-		{
-			if (node->IsEntry() && node->HasParentNode())
-			{
-				return MakeItem(node->GetParentNode());
-			}
-		}
-		return KxDataViewItem();
-	}
+		view->Bind(KxDataView2::EVENT_COLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
+		view->Bind(KxDataView2::EVENT_COLUMN_SORTED, &DisplayModel::OnColumnSorted, this);
 
-	void DisplayModel::GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const
+		// Drag-and-drop
+		using KxDataView2::DNDOpType;
+		view->EnableDND(std::make_unique<DisplayModelDNDObject>(), DNDOpType::Drag|DNDOpType::Drop);
+
+		view->Bind(KxDataView2::EVENT_ITEM_DRAG, &DisplayModel::OnDragItems, this);
+		view->Bind(KxDataView2::EVENT_ITEM_DROP, &DisplayModel::OnDropItems, this);
+		view->Bind(KxDataView2::EVENT_ITEM_DROP_POSSIBLE, &DisplayModel::OnDropItemsPossible, this);
+	}
+	void DisplayModel::ClearView()
 	{
-		// Root item, read groups
-		if (item.IsTreeRootItem())
+		if (KxDataView2::View* view = GetView())
 		{
-			children.reserve(m_DataVector.size());
-			for (const DisplayModelNode& node: m_DataVector)
+			view->GetRootNode().DetachAllChildren();
+		}
+
+		m_TagNodes.clear();
+		m_ModNodes.clear();
+		m_PriortyGroups.clear();
+	}
+	void DisplayModel::LoadView()
+	{
+		wxWindowUpdateLocker lock(GetView());
+		ClearView();
+
+		KxDataView2::Node& rootNode = GetView()->GetRootNode();
+		IModTagManager* tagManager = IModTagManager::GetInstance();
+		IModManager* modManager = IModManager::GetInstance();
+
+		if (m_DisplayMode == DisplayModelType::Connector)
+		{
+			// Add base game
+			m_ModNodes.emplace_back(modManager->GetBaseGame());
+
+			// Add mandatory locations
+			for (IGameMod* mod: modManager->GetMandatoryMods())
 			{
-				if (IsTree())
+				m_ModNodes.emplace_back(*mod);
+			}
+
+			// Add regular mods
+			IGameMod* lastMod = &modManager->GetBaseGame();
+			DisplayModelModNode* lastPriorityGroupNode = nullptr;
+
+			for (auto& currentMod: modManager->GetMods())
+			{
+				if (FilterMod(*currentMod))
 				{
-					if (node.IsGroup())
+					// Add priority group
+					if (CanShowPriorityGroups())
 					{
-						children.push_back(MakeItem(node));
-					}
-				}
-				else
-				{
-					if (node.IsEntry())
-					{
-						children.push_back(MakeItem(node));
-					}
-				}
-			}
-		}
-		else
-		{
-			// Group (priority group) item, read entries
-			const DisplayModelNode* node = GetNode(item);
-			children.reserve(node->GetChildrenCount());
-
-			const IModTag* group = node->GetGroup();
-			if (group || node->GetEntry()->QueryInterface<PriorityGroup>())
-			{
-				for (const DisplayModelNode& entryNode: node->GetChildren())
-				{
-					children.push_back(MakeItem(entryNode));
-				}
-			}
-		}
-	}
-	void DisplayModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
-	{
-		const DisplayModelNode* node = GetNode(item);
-		if (IGameMod* entry = node->GetEntry())
-		{
-			switch (column->GetID())
-			{
-				case ColumnID::Name:
-				{
-					value = entry->GetName();
-					return;
-				}
-				case ColumnID::Version:
-				{
-					value = entry->GetVersion().ToString();
-					return;
-				}
-			};
-		}
-		GetValue(value, item, column);
-	}
-	void DisplayModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
-	{
-		const DisplayModelNode* node = GetNode(item);
-		if (const IModTag* group = node->GetGroup())
-		{
-			switch (column->GetID())
-			{
-				case ColumnID::Name:
-				{
-					value = wxString::Format("%s (%zu)", group->GetName(), CountItemsInGroup(group));
-					break;
-				}
-			};
-		}
-		else if (IGameMod* mod = node->GetEntry())
-		{
-			IGameModWithImage* withImage = nullptr;
-			if (column->GetID() == ColumnID::Bitmap && mod->QueryInterface(withImage))
-			{
-				value = withImage->HasBitmap() ? withImage->GetBitmap() : KGetBitmap(KIMG_CROSS_WHITE);
-				return;
-			}
-
-			if (const PriorityGroup* priorityGroup = mod->QueryInterface<PriorityGroup>())
-			{
-				GetValuePriorityGroup(value, item, column, mod, priorityGroup);
-			}
-			else if (const FixedGameMod* fixedMod = mod->QueryInterface<FixedGameMod>())
-			{
-				GetValueFixedMod(value, item, column, mod);
-			}
-			else
-			{
-				GetValueMod(value, item, column, mod);
-			}
-		}
-	}
-	void DisplayModel::GetValueMod(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod) const
-	{
-		switch (column->GetID())
-		{
-			case ColumnID::Name:
-			{
-				KxDataViewBitmapTextToggleValue valueData(mod->IsActive(), KxDataViewBitmapTextToggleValue::CheckBox);
-				if (mod->GetName() != mod->GetID())
-				{
-					valueData.SetText(wxString::Format("%s (%s)", mod->GetName(), mod->GetID()));
-				}
-				else
-				{
-					valueData.SetText(mod->GetName());
-				}
-
-				valueData.SetBitmap(KGetBitmap(mod->GetIcon()));
-				value = valueData;
-				break;
-			}
-			case ColumnID::Priority:
-			{
-				value = mod->GetPriority();
-				break;
-			}
-			case ColumnID::Version:
-			{
-				const KxVersion& version = mod->GetVersion();
-				KxDataViewBitmapTextValue valueData(version);
-				if (version.IsOK())
-				{
-					switch (version.GetType())
-					{
-						case KxVERSION_DATETIME:
+						if (lastMod->GetPriorityGroupTag() != currentMod->GetPriorityGroupTag())
 						{
-							valueData.SetBitmap(KGetBitmap(KIMG_CALENDAR_DAY));
-							break;
+							bool begin = m_PriortyGroups.empty() || m_PriortyGroups.back()->IsEnd();
+
+							// If next item is from different group, start new group immediately.
+							if (!currentMod->GetPriorityGroupTag().IsEmpty())
+							{
+								begin = true;
+							}
+							if (!begin)
+							{
+								lastPriorityGroupNode = nullptr;
+							}
+
+							IGameMod* anchorMod = begin ? currentMod.get() : lastMod;
+							if (begin)
+							{
+								PriorityGroup& priorityGroup = *m_PriortyGroups.emplace_back(std::make_unique<PriorityGroup>(*anchorMod, begin));
+								IModTag* tag = tagManager->FindTagByID(anchorMod->GetPriorityGroupTag());
+								if (tag)
+								{
+									priorityGroup.SetTag(tag);
+								}
+
+								lastPriorityGroupNode = &m_ModNodes.emplace_back(priorityGroup);
+							}
 						}
-						case KxVERSION_INTEGER:
+						lastMod = currentMod.get();
+
+						if (lastPriorityGroupNode)
 						{
-							valueData.SetBitmap(KGetBitmap(KIMG_NOTIFICATION_COUNTER_42));
-							break;
+							lastPriorityGroupNode->AddModNode(*currentMod);
 						}
-					};
-				}
-				value = valueData;
-				break;
-			}
-			case ColumnID::Author:
-			{
-				value = mod->GetAuthor();
-				break;
-			}
-			case ColumnID::ModSource:
-			{
-				const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column->GetClientData());
-				if (modNetwork)
-				{
-					const ModSourceItem* item = mod->GetModSourceStore().GetItem(*modNetwork);
-
-					NetworkModInfo modInfo;
-					if (item && item->TryGetModInfo(modInfo))
-					{
-						value = modInfo.ToString();
-					}
-				}
-				break;
-			}
-			case ColumnID::Tags:
-			{
-				value = FormatTagList(*mod);
-				break;
-			}
-			case ColumnID::DateInstall:
-			{
-				value = KAux::FormatDateTime(mod->GetInstallTime());
-				break;
-			}
-			case ColumnID::DateUninstall:
-			{
-				value = KAux::FormatDateTime(mod->GetUninstallTime());
-				break;
-			}
-			case ColumnID::ModFolder:
-			{
-				if (mod->IsLinkedMod())
-				{
-					value = mod->GetModFilesDir();
-				}
-				else
-				{
-					value = mod->GetRootDir();
-				}
-				break;
-			}
-			case ColumnID::PackagePath:
-			{
-				value = mod->GetPackageFile();
-				break;
-			}
-			case ColumnID::Signature:
-			{
-				value = mod->GetSignature();
-				break;
-			}
-		};
-	}
-	void DisplayModel::GetValueFixedMod(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod) const
-	{
-		switch (column->GetID())
-		{
-			case ColumnID::Name:
-			{
-				value = KxDataViewBitmapTextToggleValue(true, mod->GetName(), KGetBitmap(mod->GetIcon()), KxDataViewBitmapTextToggleValue::InvalidType);
-				break;
-			}
-			case ColumnID::Priority:
-			{
-				if (mod->IsActive())
-				{
-					value = mod->GetPriority();
-				}
-				break;
-			}
-			case ColumnID::ModFolder:
-			{
-				value = mod->GetRootDir();
-				break;
-			}
-		};
-	}
-	void DisplayModel::GetValuePriorityGroup(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod, const PriorityGroup* group) const
-	{
-		switch (column->GetID())
-		{
-			case ColumnID::Name:
-			{
-				const IModTag* tag = group->GetTag();
-				if (tag)
-				{
-					bool isBegin = group->IsBegin();
-					if (!m_PriorityColumn->IsSortedAscending())
-					{
-						isBegin = !isBegin;
-					}
-
-					wxString name;
-					if (isBegin)
-					{
-						name = tag->GetName();
+						else
+						{
+							m_ModNodes.emplace_back(*currentMod);
+						}
 					}
 					else
 					{
-						name = KxString::Format(wxS("^ %1 ^"), tag->GetName());
+						m_ModNodes.emplace_back(*currentMod);
 					}
-					value = KxDataViewBitmapTextToggleValue(true, name, KGetBitmap(mod->GetIcon()), KxDataViewBitmapTextToggleValue::InvalidType);
 				}
-				break;
 			}
-		};
-	}
 
-	bool DisplayModel::SetValue(const wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column)
-	{
-		const DisplayModelNode* node = GetNode(item);
-		if (IGameMod* mod = node->GetEntry())
-		{
-			switch (column->GetID())
+			// Write target
+			m_ModNodes.emplace_back(IModManager::GetInstance()->GetWriteTarget());
+
+			// Attach nodes
+			for (DisplayModelModNode& modNode: m_ModNodes)
 			{
-				case ColumnID::Name:
+				rootNode.AttachChild(modNode);
+				modNode.OnAttachNode();
+
+				// Expand priority groups according to saved state
+				const PriorityGroup* priorityGroup = nullptr;
+				if (modNode.GetMod().QueryInterface(priorityGroup) && priorityGroup->GetTag())
 				{
-					if (value.CheckType<wxString>())
+					modNode.SetExpanded(priorityGroup->GetTag()->IsExpanded());
+				}
+			}
+		}
+
+		// Tree-like representation
+		if (m_DisplayMode == DisplayModelType::Manager)
+		{
+			// Add node for "none" pseudo-tag
+			DisplayModelTagNode& noneTagNode = m_TagNodes.insert_or_assign(wxEmptyString, *m_NoneTag).first->second;
+
+			// Add nodes for real tags
+			for (auto& mod: modManager->GetMods())
+			{
+				if (FilterMod(*mod))
+				{
+					ModTagStore& tagStore = mod->GetTagStore();
+					if (!tagStore.IsEmpty())
 					{
-						mod->SetName(value.As<wxString>());
-						IEvent::MakeSend<ModEvent>(Events::ModChanged, *mod);
+						tagStore.Visit([this, &mod](IModTag& tag)
+						{
+							auto [it, inserted] = m_TagNodes.try_emplace(tag.GetID(), tag);
+							it->second.AddModNode(*mod);
+							return true;
+						});
 					}
 					else
 					{
-						mod->SetActive(value.As<bool>());
-						IEvent::MakeSend<ModEvent>(Events::ModToggled, *mod);
+						// None tag is always first
+						noneTagNode.AddModNode(*mod);
 					}
-
-					mod->Save();
-					IModManager::GetInstance()->Save();
-					return true;
 				}
-				case ColumnID::Version:
-				{
-					wxString newVersion = value.As<wxString>();
-					if (newVersion != mod->GetVersion())
-					{
-						mod->SetVersion(newVersion);
-						mod->Save();
-
-						IEvent::MakeSend<ModEvent>(Events::ModChanged, *mod);
-						return true;
-					}
-					return false;
-				}
-				case ColumnID::Author:
-				{
-					wxString author = value.As<wxString>();
-					if (author != mod->GetAuthor())
-					{
-						mod->SetAuthor(author);
-						mod->Save();
-
-						IEvent::MakeSend<ModEvent>(Events::ModChanged, *mod);
-						return true;
-					}
-					break;
-				}
-			};
-		}
-		return false;
-	}
-	bool DisplayModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
-	{
-		const DisplayModelNode* node = GetNode(item);
-		if (const IModTag* group = node->GetGroup())
-		{
-			return false;
-		}
-		else if (IGameMod* entry = node->GetEntry())
-		{
-			if (entry->QueryInterface<FixedGameMod>())
-			{
-				return false;
 			}
 
-			bool bChangesAllowed = Workspace::GetInstance()->IsChangingModsAllowed();
-			switch (column->GetID())
+			// Attach nodes
+			for (auto& [id, tagNode]: m_TagNodes)
+			{
+				if (tagNode.HasMods())
+				{
+					rootNode.AttachChild(tagNode);
+					tagNode.OnAttachNode();
+				}
+			}
+		}
+
+		GetView()->ItemsChanged();
+	}
+	void DisplayModel::UpdateUI()
+	{
+		if (KxDataView2::View* view = GetView())
+		{
+			view->Refresh();
+		}
+	}
+
+	DisplayModelModNode* DisplayModel::ModToNode(const IGameMod& mod)
+	{
+		for (DisplayModelModNode& node: m_ModNodes)
+		{
+			if (&node.GetMod() == &mod)
+			{
+				return &node;
+			}
+			for (KxDataView2::Node* node: node.GetChildren())
+			{
+				DisplayModelModNode* modNode = nullptr;
+				if (node->QueryInterface(modNode) && &modNode->GetMod() == &mod)
+				{
+					return modNode;
+				}
+			}
+		}
+		return nullptr;
+	}
+
+	void DisplayModel::OnSelectItem(KxDataView2::Event& event)
+	{
+		IGameMod* mod = nullptr;
+		DisplayModelModNode* modNode = nullptr;
+		if (event.GetNode() && event.GetNode()->QueryInterface(modNode))
+		{
+			KxDataView2::Column* column = event.GetColumn();
+			mod = &modNode->GetMod();
+
+			switch (column->GetID<ColumnID>())
 			{
 				case ColumnID::Name:
 				{
-					return bChangesAllowed && entry->IsInstalled();
-				}
-				default:
-				{
-					return bChangesAllowed;
-				}
-			};
-		}
-		return false;
-	}
-	bool DisplayModel::IsEditorEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
-	{
-		const DisplayModelNode* node = GetNode(item);
-		if (IGameMod* entry = node->GetEntry())
-		{
-			return !entry->QueryInterface<FixedGameMod>();
-		}
-		return false;
-	}
-	bool DisplayModel::GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const
-	{
-		int columnID = column->GetID();
-		const DisplayModelNode* node = GetNode(item);
-
-		if (const IModTag* group = node->GetGroup())
-		{
-			if (GetView()->IsExpanded(item) || columnID == ColumnID::Name)
-			{
-				attributes.SetHeaderButtonBackgound();
-				return true;
-			}
-		}
-		else if (IGameMod* mod = node->GetEntry())
-		{
-			const FixedGameMod* fixed = mod->QueryInterface<FixedGameMod>();
-			const PriorityGroup* priorityGroup = mod->QueryInterface<PriorityGroup>();
-
-			if (columnID == ColumnID::Name && fixed && !priorityGroup)
-			{
-				attributes.SetItalic();
-			}
-			if (columnID == ColumnID::Color && !priorityGroup)
-			{
-				attributes.SetBackgroundColor(mod->GetColor());
-			}
-			if (!fixed && (columnID == ColumnID::Name || columnID == ColumnID::ModSource))
-			{
-				attributes.SetUnderlined(cellState & KxDATAVIEW_CELL_HIGHLIGHTED && column->IsHotTracked());
-			}
-			if (priorityGroup)
-			{
-				KxColor color = mod->GetColor();
-				if (color.IsOk())
-				{
-					attributes.SetForegroundColor(color.GetContrastColor(GetView()));
-				}
-				else
-				{
-					attributes.SetForegroundColor(m_PriortyGroupColor);
-				}
-
-				attributes.SetBackgroundColor(color);
-				attributes.SetBold(m_BoldPriorityGroupLabels);
-				attributes.SetAlignment(m_PriorityGroupLabelAlignment);
-			}
-			return !attributes.IsDefault();
-		}
-		return false;
-	}
-	bool DisplayModel::GetCellHeight(const KxDataViewItem& item, int& height) const
-	{
-		if (const DisplayModelNode* node = GetNode(item))
-		{
-			IGameMod* entry = node->GetEntry();
-			if (entry)
-			{
-				if (entry->QueryInterface<PriorityGroup>())
-				{
-					height = m_PriorityGroupRowHeight;
-					return true;
-				}
-				else if (!entry->QueryInterface<FixedGameMod>())
-				{
-					if (m_BitmapColumn->IsVisible())
+					if (IPluginManager* manager = IPluginManager::GetInstance())
 					{
-						height = m_BitmapSize.GetHeight() + 2;
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-	bool DisplayModel::Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const
-	{
-		const DisplayModelNode* nodeLeft = GetNode(item1);
-		const DisplayModelNode* nodeRight = GetNode(item2);
-		if (nodeLeft && nodeRight)
-		{
-			ColumnID columnID = column ? (ColumnID)column->GetID() : ColumnID::Priority;
-
-			IGameMod* modLeft = nodeLeft->GetEntry();
-			IGameMod* modRight = nodeRight->GetEntry();
-			if (modLeft && modRight)
-			{
-				switch (columnID)
-				{
-					case ColumnID::Name:
-					{
-						return KxComparator::IsLess(modLeft->GetName(), modRight->GetName());
-					}
-					case ColumnID::Priority:
-					{
-						return modLeft->GetPriority() < modRight->GetPriority();
-					}
-					case ColumnID::Version:
-					{
-						return modLeft->GetVersion() < modRight->GetVersion();
-					}
-					case ColumnID::Author:
-					{
-						return KxComparator::IsLess(modLeft->GetAuthor(), modRight->GetAuthor());
-					}
-					case ColumnID::Tags:
-					{
-						return KxComparator::IsLess(FormatTagList(*modLeft), FormatTagList(*modRight));
-					}
-					case ColumnID::ModSource:
-					{
-						const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column->GetClientData());
-						if (modNetwork)
-						{
-							ModSourceItem* item1 = modLeft->GetModSourceStore().GetItem(*modNetwork);
-							ModSourceItem* item2 = modRight->GetModSourceStore().GetItem(*modNetwork);
-
-							return item1 && item2 && (item1->GetModInfo().GetModID().GetValue() < item2->GetModInfo().GetModID().GetValue());
-						}
-						return false;
-					}
-					case ColumnID::DateInstall:
-					{
-						return modLeft->GetInstallTime() < modRight->GetInstallTime();
-					}
-					case ColumnID::DateUninstall:
-					{
-						return modLeft->GetUninstallTime() < modRight->GetUninstallTime();
-					}
-					case ColumnID::ModFolder:
-					{
-						return KxComparator::IsLess(modLeft->GetModFilesDir(), modRight->GetModFilesDir());
-					}
-					case ColumnID::PackagePath:
-					{
-						return KxComparator::IsLess(modLeft->GetPackageFile(), modRight->GetPackageFile());
-					}
-					case ColumnID::Signature:
-					{
-						return KxComparator::IsLess(modLeft->GetSignature(), modRight->GetSignature());
-					}
-				};
-			}
-		}
-		return false;
-	}
-
-	void DisplayModel::OnSelectItem(KxDataViewEvent& event)
-	{
-		KxDataViewItem item = event.GetItem();
-		KxDataViewColumn* column = event.GetColumn();
-		IGameMod* entry = GetModEntry(item);
-
-		if (entry && column)
-		{
-			switch (column->GetID())
-			{
-				case ColumnID::Name:
-				{
-					if (Kortex::IPluginManager* manager = Kortex::IPluginManager::GetInstance())
-					{
-						Kortex::PluginManager::Workspace* workspace = Kortex::PluginManager::Workspace::GetInstance();
+						PluginManager::Workspace* workspace = PluginManager::Workspace::GetInstance();
 						wxWindowUpdateLocker lock(workspace);
 
 						workspace->HighlightPlugin();
 						for (auto& pluginEntry: manager->GetPlugins())
 						{
-							if (pluginEntry->GetOwningMod() == entry)
+							if (pluginEntry->GetOwningMod() == mod)
 							{
 								workspace->HighlightPlugin(pluginEntry.get());
 							}
@@ -679,268 +311,119 @@ namespace Kortex::ModManager
 					break;
 				}
 			};
-		};
-
-		Workspace::GetInstance()->ProcessSelection(entry);
-	}
-	void DisplayModel::OnActivateItem(KxDataViewEvent& event)
-	{
-		KxDataViewItem item = event.GetItem();
-		KxDataViewColumn* column = event.GetColumn();
-		const DisplayModelNode* node = GetNode(item);
-		IGameMod* mod = node->GetEntry();
-
-		if (node->IsGroup() || node->GetEntry()->QueryInterface<PriorityGroup>())
-		{
-			GetView()->ToggleItemExpanded(item);
 		}
-		else if (column && mod)
+		Workspace::GetInstance()->ProcessSelection(mod);
+	}
+	void DisplayModel::OnActivateItem(KxDataView2::Event& event)
+	{
+		DisplayModelModNode* modNode = nullptr;
+		if (event.GetNode()->QueryInterface(modNode))
 		{
-			switch (column->GetID())
+			KxDataView2::Column* column = event.GetColumn();
+
+			if (modNode->GetMod().QueryInterface<PriorityGroup>())
 			{
-				case ColumnID::Name:
+				event.GetNode()->ToggleExpanded();
+			}
+			else
+			{
+				switch (column->GetID<ColumnID>())
 				{
-					break;
-				}
-				case ColumnID::Bitmap:
-				{
-					IGameModWithImage* withImage = nullptr;
-					if (mod->QueryInterface(withImage) && withImage->HasBitmap())
+					case ColumnID::ModSource:
 					{
-						KImageViewerDialog dialog(GetViewTLW(), mod->GetName());
-
-						KImageViewerEvent imageEvent(wxEVT_NULL, mod->GetImageFile());
-						dialog.Navigate(imageEvent);
-						dialog.ShowModal();
+						const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column->GetClientData());
+						if (modNetwork)
+						{
+							const ModSourceStore& store = modNode->GetMod().GetModSourceStore();
+							if (const ModSourceItem* providerItem = store.GetItem(*modNetwork))
+							{
+								KAux::AskOpenURL(providerItem->GetURL(), GetView());
+							}
+							else if (!store.IsEmpty())
+							{
+								KAux::AskOpenURL(store.GetLabeledModURLs(), GetView());
+							}
+						}
+						break;
 					}
-					break;
-				}
-				case ColumnID::ModSource:
-				{
-					const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column->GetClientData());
-					if (modNetwork)
+					default:
 					{
-						const ModSourceStore& store = mod->GetModSourceStore();
-						if (const ModSourceItem* providerItem = store.GetItem(*modNetwork))
-						{
-							KAux::AskOpenURL(providerItem->GetURL(), GetViewTLW());
-						}
-						else if (!store.IsEmpty())
-						{
-							KAux::AskOpenURL(store.GetLabeledModURLs(), GetViewTLW());
-						}
+						GetView()->EditItem(*event.GetNode(), *column);
+						break;
 					}
-					break;
-				}
-				default:
-				{
-					GetView()->EditItem(item, column);
-					break;
-				}
-			};
+				};
+			}
 		}
 	}
-	void DisplayModel::OnExpandCollapseItem(KxDataViewEvent& event)
+	void DisplayModel::OnExpandCollapseItem(KxDataView2::Event& event)
 	{
-		if (const DisplayModelNode* node = GetNode(event.GetItem()))
+		DisplayModelModNode* modNode = nullptr;
+		if (event.GetNode()->QueryInterface(modNode))
 		{
 			PriorityGroup* priorityGroup = nullptr;
-			if (node->IsEntry() && node->GetEntry()->QueryInterface(priorityGroup))
+			if (modNode->GetMod().QueryInterface(priorityGroup))
 			{
 				if (IModTag* tag = priorityGroup->GetTag())
 				{
-					tag->SetExpanded(event.GetEventType() == KxEVT_DATAVIEW_ITEM_EXPANDED);
+					tag->SetExpanded(event.GetEventType() == KxDataView2::EVENT_ITEM_EXPANDED);
 				}
 			}
 		}
 	}
-	void DisplayModel::OnContextMenu(KxDataViewEvent& event)
+	void DisplayModel::OnContextMenu(KxDataView2::Event& event)
 	{
-		const DisplayModelNode* node = GetNode(event.GetItem());
-		KxDataViewColumn* column = event.GetColumn();
-		IGameMod* entry = nullptr;
+		IGameMod* mod = nullptr;
 
-		if (node && column)
+		KxDataView2::Column* column = event.GetColumn();
+		DisplayModelModNode* modNode = nullptr;
+		if (column && event.GetNode() && event.GetNode()->QueryInterface(modNode))
 		{
-			entry = node->GetEntry();
-
-			if (const IModTag* group = node->GetGroup())
+			mod = &modNode->GetMod();
+			
+			PriorityGroup* priorityGroup = nullptr;
+			if (modNode->GetMod().QueryInterface(priorityGroup))
 			{
-				Workspace::GetInstance()->ShowViewContextMenu(group);
+				Workspace::GetInstance()->ShowViewContextMenu(priorityGroup->GetTag());
 				return;
 			}
 		}
-		Workspace::GetInstance()->ShowViewContextMenu(node && column ? entry : nullptr);
+		Workspace::GetInstance()->ShowViewContextMenu(mod);
 	}
-	void DisplayModel::OnHeaderContextMenu(KxDataViewEvent& event)
+	void DisplayModel::OnHeaderContextMenu(KxDataView2::Event& event)
 	{
 		KxMenu menu;
 		if (GetView()->CreateColumnSelectionMenu(menu))
 		{
 			GetView()->OnColumnSelectionMenu(menu);
-			UpdateRowHeight();
 		}
 	}
-	void DisplayModel::OnColumnSorted(KxDataViewEvent& event)
+	void DisplayModel::OnColumnSorted(KxDataView2::Event& event)
 	{
-		KxDataViewColumn* column = event.GetColumn();
-		int id = column->GetID();
+		return;
+		KxDataView2::Column* column = event.GetColumn();
+		const ColumnID id = column->GetID<ColumnID>();
 		bool suppressed = m_ShowPriorityGroupsSuppress;
 
 		if (m_ShowPriorityGroups && id != ColumnID::Priority)
 		{
 			m_ShowPriorityGroupsSuppress = true;
-			RefreshItems();
+			LoadView();
 		}
 		else
 		{
 			m_ShowPriorityGroupsSuppress = false;
 			if (suppressed)
 			{
-				RefreshItems();
-			}
-		}
-	}
-	void DisplayModel::OnCacheHint(KxDataViewEvent& event)
-	{
-		if (m_BitmapColumn->IsVisible())
-		{
-			for (size_t row = event.GetCacheHintFrom(); row <= event.GetCacheHintTo(); row++)
-			{
-				KxDataViewItem item = GetView()->GetMainWindow()->GetItemByRow(row);
-				if (const DisplayModelNode* node = GetNode(item))
-				{
-					IGameMod* entry = node->GetEntry();
-					IGameModWithImage* withImage = nullptr;
-					if (entry && entry->QueryInterface(withImage))
-					{
-						if (!withImage->IsNoBitmap() && !withImage->HasBitmap())
-						{
-							withImage->SetBitmap(CreateModThumbnail(*entry));
-							withImage->SetNoBitmap(!withImage->HasBitmap());
-						}
-					}
-				}
+				LoadView();
 			}
 		}
 	}
 
-	wxBitmap DisplayModel::CreateModThumbnail(const IGameMod& entry) const
-	{
-		const int magrinX = 2;
-		const int magrinY = 2;
-		switch (Workspace::GetInstance()->GetImageResizeMode())
-		{
-			case Workspace::ImageResizeMode::Scale:
-			{
-				return m_BitmapSize.ScaleMaintainRatio(wxBitmap(entry.GetImageFile(), wxBITMAP_TYPE_ANY), magrinX, magrinY);
-			}
-			case Workspace::ImageResizeMode::Stretch:
-			{
-				return m_BitmapSize.ScaleStretch(wxBitmap(entry.GetImageFile(), wxBITMAP_TYPE_ANY), magrinX, magrinY);
-			}
-			case Workspace::ImageResizeMode::Fill:
-			{
-				wxImage image = wxImage(entry.GetImageFile(), wxBITMAP_TYPE_ANY);
-				image = KAux::ScaleImageAspect(image, m_BitmapSize.GetWidth());
-
-				if (image.GetHeight() >= m_BitmapSize.GetHeight())
-				{
-					image.Resize(wxSize(image.GetWidth(), m_BitmapSize.GetHeight()), wxPoint(0, 0));
-				}
-				return wxBitmap(image, 32);
-			}
-		};
-		return wxNullBitmap;
-	}
-	bool DisplayModel::OnDragItems(KxDataViewEventDND& event)
-	{
-		if (CanDragDropNow())
-		{
-			KxDataViewItem::Vector selected;
-			if (GetView()->GetSelections(selected) > 0)
-			{
-				std::unique_ptr<DisplayModelDNDObject> dataObject;
-				for (const auto& item: selected)
-				{
-					const DisplayModelNode* node = GetNode(item);
-					if (IGameMod* entry = node->GetEntry())
-					{
-						if (!entry->QueryInterface<FixedGameMod>())
-						{
-							if (!dataObject)
-							{
-								dataObject = std::make_unique<DisplayModelDNDObject>(selected.size());
-							}
-							dataObject->AddEntry(entry);
-						}
-					}
-				}
-
-				if (dataObject)
-				{
-					SetDragDropDataObject(dataObject.release());
-					event.SetDragFlags(wxDrag_AllowMove);
-					event.SetDropEffect(wxDragMove);
-					return true;
-				}
-			}
-		}
-
-		event.SetDropEffect(wxDragError);
-		return false;
-	}
-	bool DisplayModel::OnDropItems(KxDataViewEventDND& event)
-	{
-		const DisplayModelNode* node = GetNode(event.GetItem());
-		if (node)
-		{
-			IGameMod* thisEntry = node->GetEntry();
-			if (thisEntry && HasDragDropDataObject())
-			{
-				const IGameMod::RefVector& toMove = GetDragDropDataObject()->GetEntries();
-				PriorityGroup* priorityGroup = thisEntry->QueryInterface<PriorityGroup>();
-				if (priorityGroup)
-				{
-					thisEntry = &priorityGroup->GetBaseMod();
-				}
-
-				// Move and refresh
-				if (IModManager::GetInstance()->MoveModsTo(toMove, *thisEntry))
-				{
-					// If items dragged over priority group, assign them to it
-					if (priorityGroup)
-					{
-						for (IGameMod* entry: toMove)
-						{
-							entry->SetPriorityGroupTag(thisEntry->GetPriorityGroupTag());
-						}
-					}
-
-					// Reload control data
-					RefreshItems();
-
-					// Select moved items and Event-select the first one
-					for (IGameMod* entry: toMove)
-					{
-						entry->Save();
-						GetView()->Select(GetItemByEntry(entry));
-					}
-					SelectItem(GetItemByEntry(toMove.front()));
-
-					ModEvent(Events::ModsReordered, toMove).Send();
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-	bool DisplayModel::CanDragDropNow() const
+	bool DisplayModel::CanStartDragOperation() const
 	{
 		if (Workspace::GetInstance()->IsMovingModsAllowed())
 		{
-			if (KxDataViewColumn* column = GetView()->GetSortingColumn())
+			if (KxDataView2::Column* column = GetView()->GetSortingColumn())
 			{
 				return column->GetID() == ColumnID::Priority && column->IsSortedAscending();
 			}
@@ -948,15 +431,108 @@ namespace Kortex::ModManager
 		}
 		return false;
 	}
+	IGameMod* DisplayModel::TestDNDNode(KxDataView2::Node& node, bool allowPriorityGroup) const
+	{
+		DisplayModelModNode* modNode = nullptr;
+		if (node.QueryInterface(modNode))
+		{
+			IGameMod& mod = modNode->GetMod();
+			if (!mod.QueryInterface<FixedGameMod>() && (allowPriorityGroup || !mod.QueryInterface<PriorityGroup>()))
+			{
+				return &mod;
+			}
+		}
+		return nullptr;
+	}
+
+	void DisplayModel::OnDragItems(KxDataView2::EventDND& event)
+	{
+		DisplayModelDNDObject* dataObject = event.GetDragObject<DisplayModelDNDObject>(DisplayModelDNDObject::GetFormat());
+		if (dataObject && CanStartDragOperation())
+		{
+			KxDataView2::Node::Vector selected;
+			if (GetView()->GetSelections(selected) > 0)
+			{
+				for (KxDataView2::Node* node: selected)
+				{
+					if (IGameMod* mod = TestDNDNode(*node))
+					{
+						dataObject->AddMod(*mod);
+					}
+				}
+
+				if (dataObject && !dataObject->IsEmpty())
+				{
+					event.DragDone(*dataObject, wxDrag_AllowMove);
+					return;
+				}
+			}
+		}
+		event.DragCancel();
+	}
+	void DisplayModel::OnDropItems(KxDataView2::EventDND& event)
+	{
+		DisplayModelModNode* modNode = nullptr;
+		if (event.GetNode() && event.GetNode()->QueryInterface(modNode))
+		{
+			if (DisplayModelDNDObject* dataObject = event.GetRecievedDataObject<DisplayModelDNDObject>())
+			{
+				IGameMod* droppedOnMod = &modNode->GetMod();
+				PriorityGroup* droppedOnPriorityGroup = nullptr;
+				if (droppedOnMod->QueryInterface(droppedOnPriorityGroup))
+				{
+					droppedOnMod = &droppedOnPriorityGroup->GetBaseMod();
+				}
+
+				// Move and refresh
+				IGameMod::RefVector& modsToMove = dataObject->GetMods();
+				if (IModManager::GetInstance()->MoveModsTo(modsToMove, *droppedOnMod))
+				{
+					// If items dragged over priority group, assign them to it
+					if (droppedOnPriorityGroup)
+					{
+						for (IGameMod* mod: modsToMove)
+						{
+							mod->SetPriorityGroupTag(droppedOnMod->GetPriorityGroupTag());
+						}
+					}
+
+					// Reload control data
+					LoadView();
+
+					// Select moved items
+					GetView()->UnselectAll();
+					for (IGameMod* mod: dataObject->GetMods())
+					{
+						SelectMod(mod);
+					}
+
+					// Send event
+					ModEvent(Events::ModsReordered, std::move(modsToMove)).Send();
+					
+					event.DropDone();
+					return;
+				}
+			}
+		}
+		event.DropError();
+	}
+	void DisplayModel::OnDropItemsPossible(KxDataView2::EventDND& event)
+	{
+		if (KxDataView2::Node* node = event.GetNode(); node && TestDNDNode(*node, true))
+		{
+			event.Allow();
+		}
+		else
+		{
+			event.Veto();
+		}
+	}
 
 	DisplayModel::DisplayModel()
-		//:m_SearchFilterOptions(Workspace::GetInstance(), "SearchFilter")
 	{
 		m_NoneTag = IModTagManager::GetInstance()->NewTag();
 		m_NoneTag->SetName(KAux::MakeNoneLabel());
-
-		m_BitmapSize.FromHeight(80, KBitmapSize::r16_9);
-		SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES);
 	}
 
 	void DisplayModel::SetDisplayMode(DisplayModelType mode)
@@ -1003,245 +579,17 @@ namespace Kortex::ModManager
 		};
 	}
 
-	void DisplayModel::SetDataVector()
-	{
-		m_Entries = nullptr;
-		m_DataVector.clear();
-		ItemsCleared();
-	}
-	void DisplayModel::SetDataVector(BasicGameMod::Vector& array)
-	{
-		SetDataVector();
-
-		m_Entries = &array;
-		RefreshItems();
-	}
-	void DisplayModel::RefreshItems()
-	{
-		IModTagManager* tagManager = IModTagManager::GetInstance();
-		m_DataVector.clear();
-		m_PriortyGroups.clear();
-		ItemsCleared();
-
-		if (IsTree())
-		{
-			m_DataVector.reserve(tagManager->GetTagsCount() + 1);
-			std::unordered_map<wxString, std::pair<DisplayModelNode*, size_t>> tagsMap;
-			size_t noneCount = 0;
-
-			/* Calculate item count for every tag */
-			for (auto& modEntry: *m_Entries)
-			{
-				if (FilterMod(*modEntry))
-				{
-					modEntry->GetTagStore().Visit([&tagsMap](const IModTag& tag)
-					{
-						// Insert or get element for this tag and increment its count
-						auto& it = tagsMap.emplace(tag.GetID(), std::make_pair((DisplayModelNode*)nullptr, 0)).first;
-						it->second.second++;
-						return true;
-					});
-				}
-				else
-				{
-					noneCount++;
-				}
-			}
-
-			/* Add tags nodes */
-			KxDataViewItem::Vector groupItems;
-			for (const auto& tag: tagManager->GetTags())
-			{
-				const wxString& tagID = tag->GetID();
-				auto& it = tagsMap.find(tagID);
-				if (it != tagsMap.end())
-				{
-					if (it->second.second != 0)
-					{
-						DisplayModelNode& groupNode = m_DataVector.emplace_back(*tag);
-						groupItems.push_back(MakeItem(groupNode));
-
-						it->second.first = &groupNode;
-					}
-				}
-			}
-
-			// Add "none" node
-			DisplayModelNode* noneNode = nullptr;
-			if (noneCount != 0)
-			{
-				noneNode = &m_DataVector.emplace_back(*m_NoneTag);
-				groupItems.push_back(MakeItem(noneNode));
-			}
-			ItemsAdded(groupItems);
-
-			/* Add actual elements */
-			for (auto& modEntry: *m_Entries)
-			{
-				if (FilterMod(*modEntry))
-				{
-					const ModTagStore& tagStore = modEntry->GetTagStore();
-					if (!tagStore.IsEmpty())
-					{
-						tagStore.Visit([this, &tagsMap, &modEntry, noneNode, noneCount](const IModTag& tag)
-						{
-							DisplayModelNode* groupNode = noneNode;
-							size_t count = noneCount;
-
-							auto& it = tagsMap.find(tag.GetID());
-							if (it != tagsMap.end())
-							{
-								groupNode = it->second.first;
-								count = it->second.second;
-							}
-
-							if (groupNode)
-							{
-								groupNode->GetChildren().reserve(count);
-
-								DisplayModelNode& entryNode = groupNode->GetChildren().emplace_back(*modEntry);
-								entryNode.SetParentNode(*groupNode);
-								ItemAdded(MakeItem(groupNode), MakeItem(entryNode));
-							}
-
-							return true;
-						});
-					}
-					else if (noneNode)
-					{
-						noneNode->GetChildren().reserve(noneCount);
-
-						DisplayModelNode& entryNode = noneNode->GetChildren().emplace_back(*modEntry);
-						ItemAdded(MakeItem(noneNode), MakeItem(entryNode));
-					}
-				}
-			}
-		}
-		else
-		{
-			auto& mandatoryLocations = IModManager::GetInstance()->GetMandatoryMods();
-
-			// +2 for base game and overwrite folder
-			m_PriortyGroups.reserve(m_Entries->size() + 1);
-			m_DataVector.reserve(m_Entries->size() + mandatoryLocations.size() + 2 + m_PriortyGroups.capacity());
-
-			// Add base game
-			DisplayModelNode& baseGameNode = m_DataVector.emplace_back(IModManager::GetInstance()->GetBaseGame());
-			ItemAdded(MakeItem(baseGameNode));
-
-			// Add mandatory locations
-			for (IGameMod* entry: mandatoryLocations)
-			{
-				DisplayModelNode& node = m_DataVector.emplace_back(*entry);
-				ItemAdded(MakeItem(node));
-			}
-
-			// Actual mods
-			IGameMod* lastEntry = baseGameNode.GetEntry();
-			DisplayModelNode* priorityGroupNode = nullptr;
-
-			for (auto& currentEntry: *m_Entries)
-			{
-				if (FilterMod(*currentEntry))
-				{
-					// Add priority group
-					if (CanShowPriorityGroups())
-					{
-						if (lastEntry->GetPriorityGroupTag() != currentEntry->GetPriorityGroupTag())
-						{
-							bool begin = m_PriortyGroups.empty() || m_PriortyGroups.back().IsEnd();
-
-							// If next item is from different group, start new group immediately.
-							if (!currentEntry->GetPriorityGroupTag().IsEmpty())
-							{
-								begin = true;
-							}
-
-							IGameMod* anchorEntry = begin ? &*currentEntry : lastEntry;
-							if (begin)
-							{
-								PriorityGroup& entry = m_PriortyGroups.emplace_back(*anchorEntry, begin);
-								IModTag* tag = tagManager->FindTagByID(anchorEntry->GetPriorityGroupTag());
-								if (tag)
-								{
-									entry.SetTag(tag);
-								}
-
-								DisplayModelNode& node = m_DataVector.emplace_back(entry);
-								KxDataViewItem item = MakeItem(node);
-								ItemAdded(item);
-
-								priorityGroupNode = &node;
-								GetView()->SetItemExpanded(item, tag && tag->IsExpanded());
-
-								// Preallocate this size, a bit excessive, but whatever. I need to rewrite all this anyway.
-								node.GetChildren().reserve(m_DataVector.capacity());
-							}
-							else
-							{
-								priorityGroupNode = nullptr;
-							}
-						}
-						lastEntry = &*currentEntry;
-					}
-
-					DisplayModelNode& node = (priorityGroupNode ? priorityGroupNode->GetChildren() : m_DataVector).emplace_back(*currentEntry);
-					node.SetParentNode(*priorityGroupNode);
-					ItemAdded(MakeItem(priorityGroupNode), MakeItem(node));
-				}
-			}
-
-			// If priority group was opened, but wasn't closed, close it manually
-			#if 0
-			if (CanShowPriorityGroups())
-			{
-				if (!m_PriortyGroups.empty() && m_PriortyGroups.back().IsBegin())
-				{
-					IModTag* lastTag = m_PriortyGroups.back().GetTag();
-					PriorityGroup& entry = m_PriortyGroups.emplace_back(*m_Entries->back(), false);
-					entry.SetTag(lastTag);
-
-					DisplayModelNode& node = m_DataVector.emplace_back(entry);
-					ItemAdded(MakeItem(node));
-				}
-			}
-			#endif
-
-			// WriteTargetRoot
-			DisplayModelNode& writeTargetRootNode = m_DataVector.emplace_back(IModManager::GetInstance()->GetWriteTarget());
-			ItemAdded(MakeItem(writeTargetRootNode));
-		}
-		GetView()->SetFocus();
-	}
-	void DisplayModel::UpdateUI()
-	{
-		GetView()->Refresh();
-	}
-	void DisplayModel::UpdateRowHeight()
-	{
-		KxDataViewColumn* column = GetView()->GetColumnByID(ColumnID::Bitmap);
-		if (column)
-		{
-			auto EnableFlag = [this](bool enable)
-			{
-				GetView()->SetWindowStyle(KxUtility::ModFlag(GetView()->GetWindowStyle(), KxDV_MODEL_ROW_HEIGHT, enable));
-			};
-			EnableFlag(true);
-			UpdateUI();
-		}
-	}
-
 	void DisplayModel::CreateSearchColumnsMenu(KxMenu& menu)
 	{
 		auto AddItem = [this, &menu](ColumnID id, bool enable = false) -> KxMenuItem*
 		{
-			KxDataViewColumn* column = GetView()->GetColumnByID(id);
+			KxDataView2::Column* column = GetView()->GetColumnByID(id);
 			if (column)
 			{
 				wxString title = column->GetTitle();
 				if (title.IsEmpty())
 				{
-					title << '<' << (GetView()->GetColumnIndex(column) + 1) << '>';
+					title << '<' << (column->GetDisplayIndex() + 1) << '>';
 				}
 
 				//enable = enable || m_SearchFilterOptions.GetAttributeBool(std::to_string(id));
@@ -1266,11 +614,11 @@ namespace Kortex::ModManager
 		AddItem(ColumnID::PackagePath);
 		AddItem(ColumnID::Signature);
 	}
-	void DisplayModel::SetSearchColumns(const KxDataViewColumn::Vector& columns)
+	void DisplayModel::SetSearchColumns(const std::vector<KxDataView2::Column*>& columns)
 	{
 		auto Save = [this](bool value)
 		{
-			for (const KxDataViewColumn* column: m_SearchColumns)
+			for (const KxDataView2::Column* column: m_SearchColumns)
 			{
 				//m_SearchFilterOptions.SetAttribute(std::to_string(column->GetID()), value);
 			}
@@ -1280,9 +628,9 @@ namespace Kortex::ModManager
 		m_SearchColumns = columns;
 		Save(true);
 	}
-	bool DisplayModel::FilterMod(const IGameMod& modEntry) const
+	bool DisplayModel::FilterMod(const IGameMod& mod) const
 	{
-		if (!modEntry.IsInstalled() && !ShouldShowNotInstalledMods())
+		if (!mod.IsInstalled() && !ShouldShowNotInstalledMods())
 		{
 			return false;
 		}
@@ -1292,38 +640,38 @@ namespace Kortex::ModManager
 		}
 
 		bool found = false;
-		for (const KxDataViewColumn* column: m_SearchColumns)
+		for (const KxDataView2::Column* column: m_SearchColumns)
 		{
-			switch (column->GetID())
+			switch (column->GetID<ColumnID>())
 			{
 				case ColumnID::Name:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetName()) || KAux::CheckSearchMask(m_SearchMask, modEntry.GetID());
+					found = KAux::CheckSearchMask(m_SearchMask, mod.GetName()) || KAux::CheckSearchMask(m_SearchMask, mod.GetID());
 					break;
 				}
 				case ColumnID::Author:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetAuthor());
+					found = KAux::CheckSearchMask(m_SearchMask, mod.GetAuthor());
 					break;
 				}
 				case ColumnID::Version:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetVersion());
+					found = KAux::CheckSearchMask(m_SearchMask, mod.GetVersion());
 					break;
 				}
 				case ColumnID::Tags:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, FormatTagList(modEntry));
+					found = KAux::CheckSearchMask(m_SearchMask, FormatTagList(mod));
 					break;
 				}
 				case ColumnID::PackagePath:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetPackageFile());
+					found = KAux::CheckSearchMask(m_SearchMask, mod.GetPackageFile());
 					break;
 				}
 				case ColumnID::Signature:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, modEntry.GetSignature());
+					found = KAux::CheckSearchMask(m_SearchMask, mod.GetSignature());
 					break;
 				}
 			};
@@ -1336,54 +684,25 @@ namespace Kortex::ModManager
 		return found;
 	}
 
-	KxDataViewItem DisplayModel::MakeItem(const DisplayModelNode* node) const
+	void DisplayModel::SelectMod(const IGameMod* mod)
 	{
-		return KxDataViewItem(node);
-	}
-	DisplayModelNode* DisplayModel::GetNode(const KxDataViewItem& item) const
-	{
-		return item.GetValuePtr<DisplayModelNode>();
-	}
-	KxDataViewItem DisplayModel::GetItemByEntry(const IGameMod* entry) const
-	{
-		if (entry)
+		if (mod)
 		{
-			auto FindIn = [this, entry](const DisplayModelNode::Vector& vector, const DisplayModelNode*& nodeOut)
+			if (DisplayModelModNode* node = ModToNode(*mod))
 			{
-				auto it = std::find_if(vector.begin(), vector.end(), [entry](const DisplayModelNode& node)
-				{
-					return node.GetEntry() == entry;
-				});
-
-				nodeOut = it != vector.end() ? &*it : nullptr;
-				return nodeOut != nullptr;
-			};
-
-			const DisplayModelNode* itemNode = nullptr;
-			if (FindIn(m_DataVector, itemNode))
-			{
-				return MakeItem(itemNode);
-			}
-
-			for (const DisplayModelNode& node: m_DataVector)
-			{
-				if (FindIn(node.GetChildren(), itemNode))
-				{
-					return MakeItem(itemNode);
-				}
+				node->EnsureVisible();
+				node->Select();
 			}
 		}
-		return KxDataViewItem();
 	}
-	size_t DisplayModel::CountItemsInGroup(const IModTag* group) const
+	IGameMod* DisplayModel::GetSelectedMod() const
 	{
-		for (const DisplayModelNode& groupNode: m_DataVector)
+		KxDataView2::Node* node = GetView()->GetSelection();
+		DisplayModelModNode* modNode = nullptr;
+		if (node && node->QueryInterface(modNode))
 		{
-			if (groupNode.GetGroup() == group)
-			{
-				return groupNode.GetChildren().size();
-			}
+			return &modNode->GetMod();
 		}
-		return 0;
+		return nullptr;
 	}
 }

@@ -5,6 +5,15 @@
 
 namespace Kortex::ModManager
 {
+	wxString PriorityGroup::GetName() const
+	{
+		return m_Tag ? m_Tag->GetName() : wxEmptyString;
+	}
+	wxString PriorityGroup::GetID() const
+	{
+		return m_Tag ? m_Tag->GetID() : wxEmptyString;
+	}
+
 	bool PriorityGroup::HasColor() const
 	{
 		return m_Tag && m_Tag->HasColor();

@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "FixedGameMod.h"
+#include "BasicGameMod.h"
 #include "Utility/KImageProvider.h"
 
 namespace Kortex
@@ -11,7 +11,7 @@ namespace Kortex
 
 namespace Kortex::ModManager
 {
-	class PriorityGroup: public RTTI::IExtendInterface<PriorityGroup, FixedGameMod>
+	class PriorityGroup: public RTTI::IExtendInterface<PriorityGroup, BasicGameMod>
 	{
 		public:
 			IGameMod& m_BaseMod;
@@ -33,15 +33,17 @@ namespace Kortex::ModManager
 			{
 				return false;
 			}
-
-			KImageEnum GetIcon() const override
+			bool IsActive() const override
 			{
-				return KIMG_NONE;
+				return false;
 			}
+
 			intptr_t GetPriority() const override
 			{
 				return m_BaseMod.GetPriority();
 			}
+			wxString GetName() const override;
+			wxString GetID() const override;
 
 			bool HasColor() const override;
 			KxColor GetColor() const override;

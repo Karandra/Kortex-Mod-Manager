@@ -1,10 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "DisplayModelNode.h"
-#include "Utility/KDataViewListModel.h"
-#include "Utility/KImageProvider.h"
 #include "Utility/KBitmapSize.h"
-class KxDataViewBitmapTextToggleRenderer;
+#include <KxFramework/DataView2/DataView2.h>
 
 namespace Kortex
 {
@@ -20,20 +18,22 @@ namespace Kortex::ModManager
 		Manager,
 	};
 
-	class FixedGameMod;
-	class PriorityGroup;
-	class Workspace;
-	class DisplayModelDNDObject;
-
-	class DisplayModel:	public KxDataViewModelExBase<KxDataViewModel>, public KxDataViewModelExDragDropEnabled<DisplayModelDNDObject>
+	class DisplayModel: public RTTI::IExtendInterface<DisplayModel, KxDataView2::Model>
 	{
+		friend class Workspace;
+		friend class DisplayModelModNode;
+
 		public:
+			using ColumnID = DisplayModelColumnID;
 			enum class PriorityGroupLabelAlignment
 			{
 				Center,
 				Left,
 				Right,
 			};
+
+		public:
+			static wxString FormatTagList(const IGameMod& entry);
 
 		private:
 			bool m_ShowPriorityGroups = false;
@@ -45,75 +45,46 @@ namespace Kortex::ModManager
 
 			PriorityGroupLabelAlignment m_PriorityGroupLabelAlignmentType = PriorityGroupLabelAlignment::Center;
 			int m_PriorityGroupLabelAlignment = wxALIGN_INVALID;
-
-			KBitmapSize m_BitmapSize;
 			int m_PriorityGroupRowHeight = 0;
 			KxColor m_PriortyGroupColor;
 
-			KxDataViewColumn* m_NameColumn = nullptr;
-			KxDataViewColumn* m_BitmapColumn = nullptr;
-			KxDataViewColumn* m_PriorityColumn = nullptr;
+			KxDataView2::Column* m_NameColumn = nullptr;
+			KxDataView2::Column* m_PriorityColumn = nullptr;
 
 			std::unique_ptr<IModTag> m_NoneTag;
-			DisplayModelNode::Vector m_DataVector;
-			BasicGameMod::Vector* m_Entries = nullptr;
-			std::vector<PriorityGroup> m_PriortyGroups;
+			std::vector<DisplayModelModNode> m_ModNodes;
+			std::unordered_map<wxString, DisplayModelTagNode> m_TagNodes;
+			std::vector<std::unique_ptr<PriorityGroup>> m_PriortyGroups;
 		
 			wxString m_SearchMask;
-			KxDataViewColumn::Vector m_SearchColumns;
+			std::vector<KxDataView2::Column*> m_SearchColumns;
 
 		private:
-			bool IsTree() const
-			{
-				return m_DisplayMode == DisplayModelType::Manager;
-			}
+			void CreateView(wxWindow* parent, wxSizer* sizer = nullptr);
+			void ClearView();
+			void LoadView();
+			void UpdateUI();
+
+			DisplayModelModNode* ModToNode(const IGameMod& mod);
+
+		private:
 			bool CanShowPriorityGroups() const
 			{
 				return m_ShowPriorityGroups && !m_ShowPriorityGroupsSuppress;
 			}
-			wxString FormatTagList(const IGameMod& entry) const;
 
-			virtual void OnInitControl() override;
-		
-			virtual bool IsListModel() const override;
-			virtual bool HasContainerColumns(const KxDataViewItem& item) const override;
-			virtual bool HasDefaultCompare() const override
-			{
-				return true;
-			}
-			virtual bool IsContainer(const KxDataViewItem& item) const override;
-			virtual KxDataViewItem GetParent(const KxDataViewItem& item) const override;
-			virtual void GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const override;
-		
-			virtual void GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const override;
-			virtual void GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const override;
-			void GetValueMod(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod) const;
-			void GetValueFixedMod(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod) const;
-			void GetValuePriorityGroup(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column, const IGameMod* mod, const PriorityGroup* group) const;
-		
-			virtual bool SetValue(const wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) override;
-			virtual bool IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
-			virtual bool IsEditorEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
-			virtual bool GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
-			virtual bool GetCellHeight(const KxDataViewItem& item, int& height) const override;
-			virtual bool Compare(const KxDataViewItem& item1, const KxDataViewItem& item2, const KxDataViewColumn* column) const override;
-
-			void OnSelectItem(KxDataViewEvent& event);
-			void OnActivateItem(KxDataViewEvent& event);
-			void OnExpandCollapseItem(KxDataViewEvent& event);
-			void OnContextMenu(KxDataViewEvent& event);
-			void OnHeaderContextMenu(KxDataViewEvent& event);
-			void OnColumnSorted(KxDataViewEvent& event);
-			void OnCacheHint(KxDataViewEvent& event);
-
-			wxBitmap CreateModThumbnail(const IGameMod& entry) const;
-			virtual KxDataViewCtrl* GetViewCtrl() const override
-			{
-				return GetView();
-			}
-			virtual bool OnDragItems(KxDataViewEventDND& event) override;
-			virtual bool OnDropItems(KxDataViewEventDND& event) override;
-			bool CanDragDropNow() const;
+			void OnSelectItem(KxDataView2::Event& event);
+			void OnActivateItem(KxDataView2::Event& event);
+			void OnExpandCollapseItem(KxDataView2::Event& event);
+			void OnContextMenu(KxDataView2::Event& event);
+			void OnHeaderContextMenu(KxDataView2::Event& event);
+			void OnColumnSorted(KxDataView2::Event& event);
+			
+			bool CanStartDragOperation() const;
+			IGameMod* TestDNDNode(KxDataView2::Node& node, bool allowPriorityGroup = false) const;
+			void OnDragItems(KxDataView2::EventDND& event);
+			void OnDropItems(KxDataView2::EventDND& event);
+			void OnDropItemsPossible(KxDataView2::EventDND& event);
 
 		public:
 			DisplayModel();
@@ -155,72 +126,16 @@ namespace Kortex::ModManager
 			PriorityGroupLabelAlignment GetPriorityGroupLabelAlignment() const;
 			void SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment value);
 
-			void RefreshItem(IGameMod& entry)
-			{
-				ItemChanged(MakeItem(entry));
-			}
-
-			void SetDataVector();
-			void SetDataVector(BasicGameMod::Vector& array);
-			virtual void RefreshItems() override;
-			void UpdateUI();
-			void UpdateRowHeight();
-		
 			void CreateSearchColumnsMenu(KxMenu& menu);
 			bool SetSearchMask(const wxString& mask)
 			{
 				KAux::SetSearchMask(m_SearchMask, mask);
 				return true;
 			}
-			void SetSearchColumns(const KxDataViewColumn::Vector& columns);
-			bool FilterMod(const IGameMod& modEntry) const;
+			void SetSearchColumns(const std::vector<KxDataView2::Column*>& columns);
+			bool FilterMod(const IGameMod& mod) const;
 
-			KxDataViewItem MakeItem(const DisplayModelNode* node) const;
-			KxDataViewItem MakeItem(const DisplayModelNode& node) const
-			{
-				return MakeItem(&node);
-			}
-			DisplayModelNode* GetNode(const KxDataViewItem& item) const;
-		
-			void SelectMod(const IGameMod* entry)
-			{
-				SelectItem(GetItemByEntry(entry));
-			}
-			IGameMod* GetSelectedModEntry() const
-			{
-				return GetModEntry(GetView()->GetSelection());
-			}
-			KxDataViewItem GetItemByEntry(const IGameMod* entry) const;
-			IGameMod* GetModEntry(const KxDataViewItem& item) const
-			{
-				DisplayModelNode* node = GetNode(item);
-				return node ? node->GetEntry() : nullptr;
-			}
-			size_t CountItemsInGroup(const IModTag* group) const;
-	};
-}
-
-namespace Kortex::ModManager
-{
-	class DisplayModelDNDObject: public KxDataViewModelExDragDropData
-	{
-		private:
-			IGameMod::RefVector m_Entries;
-
-		public:
-			DisplayModelDNDObject(size_t count = 0)
-			{
-				m_Entries.reserve(count);
-			}
-
-		public:
-			void AddEntry(IGameMod* entry)
-			{
-				m_Entries.push_back(entry);
-			}
-			const IGameMod::RefVector& GetEntries() const
-			{
-				return m_Entries;
-			}
+			void SelectMod(const IGameMod* mod);
+			IGameMod* GetSelectedMod() const;
 	};
 }

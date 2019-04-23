@@ -110,15 +110,15 @@ namespace
 
 	template<class Functor> bool DoForAllSelectedItems(DisplayModel* model, Functor&& func)
 	{
-		KxDataViewItem::Vector items;
-		if (model->GetView()->GetSelections(items) != 0)
+		KxDataView2::Node::Vector nodes;
+		if (model->GetView()->GetSelections(nodes) != 0)
 		{
-			for (const KxDataViewItem& item: items)
+			for (KxDataView2::Node* item: nodes)
 			{
-				IGameMod* entry = model->GetModEntry(item);
-				if (entry)
+				DisplayModelModNode* modNode = nullptr;
+				if (item->QueryInterface(modNode))
 				{
-					if (!func(*entry))
+					if (!func(modNode->GetMod()))
 					{
 						break;
 					}
@@ -152,13 +152,13 @@ namespace Kortex::ModManager
 		if (IsWorkspaceCreated())
 		{
 			auto options = GetDisplayModelOptions();
-			options.SaveDataViewLayout(m_ViewModel->GetView());
+			options.SaveDataViewLayout(m_DisplayModel->GetView());
 
-			options.SetAttribute(OName::DisplayMode, (int)m_ViewModel->GetDisplayMode());
-			options.SetAttribute(OName::ShowPriorityGroups, m_ViewModel->ShouldShowPriorityGroups());
-			options.SetAttribute(OName::ShowNotInstalledMods, m_ViewModel->ShouldShowNotInstalledMods());
-			options.SetAttribute(OName::BoldPriorityGroupLabels, m_ViewModel->IsBoldPriorityGroupLabels());
-			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_ViewModel->GetPriorityGroupLabelAlignment());
+			options.SetAttribute(OName::DisplayMode, (int)m_DisplayModel->GetDisplayMode());
+			options.SetAttribute(OName::ShowPriorityGroups, m_DisplayModel->ShouldShowPriorityGroups());
+			options.SetAttribute(OName::ShowNotInstalledMods, m_DisplayModel->ShouldShowNotInstalledMods());
+			options.SetAttribute(OName::BoldPriorityGroupLabels, m_DisplayModel->IsBoldPriorityGroupLabels());
+			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
 			options.SetAttribute(OName::ImageResizeMode, (int)m_ImageResizeMode);
 
 			GetVSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
@@ -182,7 +182,7 @@ namespace Kortex::ModManager
 		CreateModsView();
 		CreateToolBar();
 		m_ModsPaneSizer->Add(m_ModsToolBar, 0, wxEXPAND);
-		m_ModsPaneSizer->Add(m_ViewModel->GetView(), 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
+		m_ModsPaneSizer->Add(m_DisplayModel->GetView(), 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 
 		CreateRightPane();
 		CreateControls();
@@ -230,7 +230,7 @@ namespace Kortex::ModManager
 
 		KxMenu* searchMenu = new KxMenu();
 		searchMenu->Bind(KxEVT_MENU_SELECT, &Workspace::OnModSearchColumnsChanged, this);
-		m_ViewModel->CreateSearchColumnsMenu(*searchMenu);
+		m_DisplayModel->CreateSearchColumnsMenu(*searchMenu);
 		m_SearchBox->SetMenu(searchMenu);
 
 		m_ModsToolBar->AddControl(m_SearchBox);
@@ -250,27 +250,27 @@ namespace Kortex::ModManager
 		{
 			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::Connector, KTr("ModManager.DisplayMode.Connector"), wxEmptyString, wxITEM_RADIO));
 			item->SetBitmap(KGetBitmap(KIMG_PLUG_DISCONNECT));
-			item->Check(m_ViewModel->GetDisplayMode() == DisplayModelType::Connector);
+			item->Check(m_DisplayModel->GetDisplayMode() == DisplayModelType::Connector);
 		}
 		{
 			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::Manager, KTr("ModManager.DisplayMode.Log"), wxEmptyString, wxITEM_RADIO));
 			item->SetBitmap(KGetBitmap(KIMG_CATEGORY));
-			item->Check(m_ViewModel->GetDisplayMode() == DisplayModelType::Manager);
+			item->Check(m_DisplayModel->GetDisplayMode() == DisplayModelType::Manager);
 		}
 		m_ToolBar_DisplayModeMenu->AddSeparator();
 
 		{
 			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::ShowPriorityGroups, KTr("ModManager.DisplayMode.ShowPriorityGroups"), wxEmptyString, wxITEM_CHECK));
 			item->SetBitmap(KGetBitmap(KIMG_FOLDERS));
-			item->Check(m_ViewModel->ShouldShowPriorityGroups());
+			item->Check(m_DisplayModel->ShouldShowPriorityGroups());
 		}
 		{
 			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::ShowNotInstalledMods, KTr("ModManager.DisplayMode.ShowNotInstalledMods"), wxEmptyString, wxITEM_CHECK));
-			item->Check(m_ViewModel->ShouldShowNotInstalledMods());
+			item->Check(m_DisplayModel->ShouldShowNotInstalledMods());
 		}
 		{
 			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::BoldPriorityGroupLabels, KTr("ModManager.DisplayMode.BoldPriorityGroupLabels"), wxEmptyString, wxITEM_CHECK));
-			item->Check(m_ViewModel->IsBoldPriorityGroupLabels());
+			item->Check(m_DisplayModel->IsBoldPriorityGroupLabels());
 		}
 		m_ToolBar_DisplayModeMenu->AddSeparator();
 
@@ -282,7 +282,7 @@ namespace Kortex::ModManager
 			auto AddOption = [this, alignmnetMenu](DisplayModeMenuID id, PriorityGroupLabelAlignment type, KxStandardID trId)
 			{
 				KxMenuItem* item = alignmnetMenu->Add(new KxMenuItem(id, KTr(trId), wxEmptyString, wxITEM_RADIO));
-				item->Check(m_ViewModel->GetPriorityGroupLabelAlignment() == type);
+				item->Check(m_DisplayModel->GetPriorityGroupLabelAlignment() == type);
 				return item;
 			};
 			AddOption(DisplayModeMenuID::PriorityGroupLabelAlignment_Left, PriorityGroupLabelAlignment::Left, KxID_JUSTIFY_LEFT);
@@ -343,15 +343,14 @@ namespace Kortex::ModManager
 	{
 		const auto options = GetDisplayModelOptions();
 
-		m_ViewModel = new DisplayModel();
-		m_ViewModel->ShowPriorityGroups(options.GetAttributeBool(OName::ShowPriorityGroups));
-		m_ViewModel->ShowNotInstalledMods(options.GetAttributeBool(OName::ShowNotInstalledMods));
-		m_ViewModel->SetBoldPriorityGroupLabels(options.GetAttributeBool(OName::BoldPriorityGroupLabels));
-		m_ViewModel->SetPriorityGroupLabelAlignment((DisplayModel::PriorityGroupLabelAlignment)options.GetAttributeInt(OName::PriorityGroupLabelAlignment));
+		m_DisplayModel = new DisplayModel();
+		m_DisplayModel->ShowPriorityGroups(options.GetAttributeBool(OName::ShowPriorityGroups));
+		m_DisplayModel->ShowNotInstalledMods(options.GetAttributeBool(OName::ShowNotInstalledMods));
+		m_DisplayModel->SetBoldPriorityGroupLabels(options.GetAttributeBool(OName::BoldPriorityGroupLabels));
+		m_DisplayModel->SetPriorityGroupLabelAlignment((DisplayModel::PriorityGroupLabelAlignment)options.GetAttributeInt(OName::PriorityGroupLabelAlignment));
 	
-		m_ViewModel->Create(m_ModsPane);
-		m_ViewModel->SetDataVector(IModManager::GetInstance()->GetMods());
-		m_ViewModel->SetDisplayMode((DisplayModelType)options.GetAttributeInt(OName::DisplayMode));
+		m_DisplayModel->CreateView(m_ModsPane);
+		m_DisplayModel->SetDisplayMode((DisplayModelType)options.GetAttributeInt(OName::DisplayMode));
 	}
 	void Workspace::CreateControls()
 	{
@@ -386,11 +385,12 @@ namespace Kortex::ModManager
 			GetVSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
 
 			auto displayModelOptions = GetDisplayModelOptions();
-			displayModelOptions.LoadDataViewLayout(m_ViewModel->GetView());
+			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
 
 			m_ImageResizeMode = (ImageResizeMode)displayModelOptions.GetAttributeInt(OName::ImageResizeMode, (int)m_ImageResizeMode);
-			m_ViewModel->UpdateRowHeight();
+			m_DisplayModel->LoadView();
 		}
+		m_DisplayModel->UpdateUI();
 		return true;
 	}
 	bool Workspace::OnCloseWorkspace()
@@ -401,8 +401,8 @@ namespace Kortex::ModManager
 	void Workspace::OnReloadWorkspace()
 	{
 		ClearControls();
-	
-		m_ViewModel->RefreshItems();
+		
+		m_DisplayModel->LoadView();
 		ProcessSelection();
 		UpdateModListContent();
 	}
@@ -520,7 +520,7 @@ namespace Kortex::ModManager
 	void Workspace::OnSelectProfile(wxCommandEvent& event)
 	{
 		ProcessSelectProfile(m_ToolBar_Profiles->GetString(event.GetSelection()));
-		m_ViewModel->GetView()->SetFocus();
+		m_DisplayModel->GetView()->SetFocus();
 	}
 	void Workspace::OnShowProfileEditor(KxAuiToolBarEvent& event)
 	{
@@ -556,56 +556,56 @@ namespace Kortex::ModManager
 			{
 				case DisplayModeMenuID::Connector:
 				{
-					m_ViewModel->SetDisplayMode(DisplayModelType::Connector);
-					m_ViewModel->RefreshItems();
+					m_DisplayModel->SetDisplayMode(DisplayModelType::Connector);
+					m_DisplayModel->LoadView();
 					ProcessSelection();
 					break;
 				}
 				case DisplayModeMenuID::Manager:
 				{
-					m_ViewModel->SetDisplayMode(DisplayModelType::Manager);
-					m_ViewModel->RefreshItems();
+					m_DisplayModel->SetDisplayMode(DisplayModelType::Manager);
+					m_DisplayModel->LoadView();
 					ProcessSelection();
 					break;
 				}
 				case DisplayModeMenuID::ShowPriorityGroups:
 				{
-					m_ViewModel->ShowPriorityGroups(!m_ViewModel->ShouldShowPriorityGroups());
-					m_ViewModel->RefreshItems();
+					m_DisplayModel->ShowPriorityGroups(!m_DisplayModel->ShouldShowPriorityGroups());
+					m_DisplayModel->LoadView();
 					ProcessSelection();
 					break;
 				}
 				case DisplayModeMenuID::ShowNotInstalledMods:
 				{
-					m_ViewModel->ShowNotInstalledMods(!m_ViewModel->ShouldShowNotInstalledMods());
-					m_ViewModel->RefreshItems();
+					m_DisplayModel->ShowNotInstalledMods(!m_DisplayModel->ShouldShowNotInstalledMods());
+					m_DisplayModel->LoadView();
 					ProcessSelection();
 					break;
 				}
 				case DisplayModeMenuID::BoldPriorityGroupLabels:
 				{
-					m_ViewModel->SetBoldPriorityGroupLabels(!m_ViewModel->IsBoldPriorityGroupLabels());
-					m_ViewModel->UpdateUI();
+					m_DisplayModel->SetBoldPriorityGroupLabels(!m_DisplayModel->IsBoldPriorityGroupLabels());
+					m_DisplayModel->UpdateUI();
 					break;
 				}
 
 				using PriorityGroupLabelAlignment = DisplayModel::PriorityGroupLabelAlignment;
 				case DisplayModeMenuID::PriorityGroupLabelAlignment_Left:
 				{
-					m_ViewModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Left);
-					m_ViewModel->UpdateUI();
+					m_DisplayModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Left);
+					m_DisplayModel->UpdateUI();
 					break;
 				}
 				case DisplayModeMenuID::PriorityGroupLabelAlignment_Right:
 				{
-					m_ViewModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Right);
-					m_ViewModel->UpdateUI();
+					m_DisplayModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Right);
+					m_DisplayModel->UpdateUI();
 					break;
 				}
 				case DisplayModeMenuID::PriorityGroupLabelAlignment_Center:
 				{
-					m_ViewModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Center);
-					m_ViewModel->UpdateUI();
+					m_DisplayModel->SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment::Center);
+					m_DisplayModel->UpdateUI();
 					break;
 				}
 			};
@@ -654,7 +654,7 @@ namespace Kortex::ModManager
 			m_ActivateButton->SetLabel(KTr("ModManager.VFS.Activate"));
 			m_ActivateButton->SetBitmap(KGetBitmap(KIMG_TICK_CIRCLE_FRAME_EMPTY));
 		}
-		m_ViewModel->UpdateUI();
+		m_DisplayModel->UpdateUI();
 	}
 	void Workspace::OnAddMod_Empty(KxMenuEvent& event)
 	{
@@ -769,9 +769,9 @@ namespace Kortex::ModManager
 	}
 	void Workspace::OnModSerach(wxCommandEvent& event)
 	{
-		if (m_ViewModel->SetSearchMask(event.GetEventType() == wxEVT_SEARCHCTRL_SEARCH_BTN ? event.GetString() : wxEmptyString))
+		if (m_DisplayModel->SetSearchMask(event.GetEventType() == wxEVT_SEARCHCTRL_SEARCH_BTN ? event.GetString() : wxEmptyString))
 		{
-			m_ViewModel->RefreshItems();
+			m_DisplayModel->LoadView();
 		}
 	}
 	void Workspace::OnModSearchColumnsChanged(KxMenuEvent& event)
@@ -779,15 +779,15 @@ namespace Kortex::ModManager
 		KxMenuItem* item = event.GetItem();
 		item->Check(!item->IsChecked());
 
-		KxDataViewColumn::Vector columns;
+		KxDataView2::Column::Vector columns;
 		for (const auto& item: event.GetMenu()->GetMenuItems())
 		{
 			if (item->IsChecked())
 			{
-				columns.push_back(static_cast<KxDataViewColumn*>(static_cast<KxMenuItem*>(item)->GetClientData()));
+				columns.push_back(static_cast<KxDataView2::Column*>(static_cast<KxMenuItem*>(item)->GetClientData()));
 			}
 		}
-		m_ViewModel->SetSearchColumns(columns);
+		m_DisplayModel->SetSearchColumns(columns);
 	}
 
 	void Workspace::ClearControls()
@@ -809,7 +809,7 @@ namespace Kortex::ModManager
 	{
 		if (modEntry)
 		{
-			const bool isMultipleSelection = m_ViewModel->GetView()->GetSelectedItemsCount() > 1;
+			const bool isMultipleSelection = m_DisplayModel->GetView()->GetSelectedCount() > 1;
 			const bool isFixedMod = modEntry->QueryInterface<FixedGameMod>();
 			const bool isPriorityGroup = modEntry->QueryInterface<PriorityGroup>();
 			const bool isLinkedMod = modEntry->IsLinkedMod();
@@ -955,7 +955,7 @@ namespace Kortex::ModManager
 				}
 				{
 					KxMenuItem* item = colorMenu->Add(new KxMenuItem(KMC_COLOR_RESET, KTr("Generic.Reset")));
-					item->Enable(modEntry->HasColor() || m_ViewModel->GetView()->GetSelectedItemsCount() != 0);
+					item->Enable(modEntry->HasColor() || m_DisplayModel->GetView()->GetSelectedCount() != 0);
 				}
 			}
 			contextMenu.AddSeparator();
@@ -1012,33 +1012,25 @@ namespace Kortex::ModManager
 				withImage->ResetBitmap();
 			}
 		}
-		m_ViewModel->UpdateUI();
+		m_DisplayModel->UpdateUI();
 	}
 
 	void Workspace::SelectMod(const IGameMod* entry)
 	{
-		m_ViewModel->SelectMod(entry);
+		m_DisplayModel->SelectMod(entry);
 	}
 	void Workspace::ProcessSelection(IGameMod* entry)
 	{
 		DisplayModInfo(entry);
 	}
-	void Workspace::HighlightMod(const IGameMod* entry)
+	void Workspace::HighlightMod(const IGameMod* mod)
 	{
-		if (entry)
-		{
-			KxDataViewItem item = m_ViewModel->GetItemByEntry(entry);
-			m_ViewModel->GetView()->Select(item);
-			m_ViewModel->GetView()->EnsureVisible(item);
-		}
-		else
-		{
-			m_ViewModel->GetView()->UnselectAll();
-		}
+		m_DisplayModel->GetView()->UnselectAll();
+		m_DisplayModel->SelectMod(mod);
 	}
 	void Workspace::ReloadView()
 	{
-		m_ViewModel->RefreshItems();
+		m_DisplayModel->LoadView();
 		ProcessSelection();
 	}
 
@@ -1161,7 +1153,7 @@ namespace Kortex::ModManager
 				if (dialog.IsModified())
 				{
 					dialog.ApplyChangesToMod();
-					bool hasSelection = DoForAllSelectedItems(m_ViewModel, [&tempEntry](IGameMod& entry)
+					bool hasSelection = DoForAllSelectedItems(m_DisplayModel, [&tempEntry](IGameMod& entry)
 					{
 						entry.GetTagStore() = tempEntry.GetTagStore();
 						entry.SetPriorityGroupTag(tempEntry.GetPriorityGroupTag());
@@ -1192,7 +1184,7 @@ namespace Kortex::ModManager
 			{
 				if (ShowChangeModIDDialog(modEntry))
 				{
-					m_ViewModel->RefreshItem(*modEntry);
+					m_DisplayModel->UpdateUI();
 				}
 				break;
 			}
@@ -1285,7 +1277,7 @@ namespace Kortex::ModManager
 				wxColourDialog dialog(this, &colorData);
 				if (dialog.ShowModal() == wxID_OK)
 				{
-					DoForAllSelectedItems(m_ViewModel, [&dialog](IGameMod& entry)
+					DoForAllSelectedItems(m_DisplayModel, [&dialog](IGameMod& entry)
 					{
 						entry.SetColor(dialog.GetColourData().GetColour());
 						entry.Save();
@@ -1293,13 +1285,13 @@ namespace Kortex::ModManager
 						ModEvent(Events::ModChanged, entry).Send();
 						return true;
 					});
-					m_ViewModel->UpdateUI();
+					m_DisplayModel->UpdateUI();
 				}
 				break;
 			}
 			case KMC_COLOR_RESET:
 			{
-				DoForAllSelectedItems(m_ViewModel, [](IGameMod& entry)
+				DoForAllSelectedItems(m_DisplayModel, [](IGameMod& entry)
 				{
 					entry.SetColor(KxColor());
 					entry.Save();
@@ -1307,7 +1299,7 @@ namespace Kortex::ModManager
 					ModEvent(Events::ModChanged, entry).Send();
 					return true;
 				});
-				m_ViewModel->UpdateUI();
+				m_DisplayModel->UpdateUI();
 				break;
 			}
 
@@ -1378,7 +1370,7 @@ namespace Kortex::ModManager
 	}
 	bool Workspace::IsMovingModsAllowed() const
 	{
-		return m_ViewModel->GetDisplayMode() == DisplayModelType::Connector && IsChangingModsAllowed();
+		return m_DisplayModel->GetDisplayMode() == DisplayModelType::Connector && IsChangingModsAllowed();
 	}
 	bool Workspace::IsChangingModsAllowed() const
 	{

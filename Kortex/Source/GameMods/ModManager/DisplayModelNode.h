@@ -1,102 +1,140 @@
 #pragma once
 #include "stdafx.h"
+#include <KxFramework/DataView2/DataView2.h>
 
 namespace Kortex
 {
 	class IGameMod;
 	class IModTag;
 }
+namespace Kortex::ModManager
+{
+	class DisplayModel;
+
+	class PriorityGroup;
+	class FixedGameMod;
+}
 
 namespace Kortex::ModManager
 {
-	class DisplayModelNode
+	enum class DisplayModelColumnID
 	{
+		Name,
+		Color,
+		Priority,
+		Version,
+		Author,
+		Tags,
+
+		DateInstall,
+		DateUninstall,
+		ModFolder,
+		PackagePath,
+		Signature,
+
+		MAX,
+
+		ModSource = -1,
+	};
+}
+
+namespace Kortex::ModManager
+{
+	class DisplayModelModNode: public KxRTTI::IExtendInterface<DisplayModelModNode, KxDataView2::Node>
+	{
+		friend class DisplayModel;
+
 		public:
-			using Vector = std::vector<DisplayModelNode>;
-			using RefVector = std::vector<DisplayModelNode*>;
+			using ColumnID = DisplayModelColumnID;
 
 		private:
-			enum Type
-			{
-				None = -1,
-				Group,
-				Entry,
-			};
+			IGameMod* m_Mod = nullptr;
+			std::vector<DisplayModelModNode> m_Children;
 
 		private:
-			Type m_Type = None;
-			union
-			{
-				IGameMod* m_Entry = nullptr;
-				const IModTag* m_Group;
-			};
-			const DisplayModelNode* m_ParentNode = nullptr;
-			Vector m_Children;
+			void OnAttachNode();
 
 		public:
-			DisplayModelNode()
+			DisplayModelModNode(IGameMod& mod)
+				:m_Mod(&mod)
 			{
 			}
-			DisplayModelNode(const IModTag& group)
-				:m_Group(&group), m_Type(Group)
-			{
-			}
-			DisplayModelNode(IGameMod& entry)
-				:m_Entry(&entry), m_Type(Entry)
-			{
-			}
+			
+		public:
+			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
+			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
+
+			wxAny GetValue(const KxDataView2::Column& column) const override;
+			wxAny GetValue(const KxDataView2::Column& column, const PriorityGroup& priorityGroup) const;
+			wxAny GetValue(const KxDataView2::Column& column, const FixedGameMod& fixedGameMod) const;
+			bool SetValue(const wxAny& value, KxDataView2::Column& column);
+
+			bool Compare(const KxDataView2::Node& other, const KxDataView2::Column& column) const override;
+			bool Compare(const IGameMod& left, const IGameMod& right, const KxDataView2::Column& column) const;
+
+			bool GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const;
+			bool IsCategoryNode() const override;
+			int GetRowHeight() const override;
 
 		public:
-			bool IsOK() const
+			IGameMod& GetMod() const
 			{
-				return m_Type != None;
+				return *m_Mod;
 			}
-			bool IsGroup() const
+			DisplayModelModNode& AddModNode(IGameMod& mod)
 			{
-				return m_Type == Group;
-			}
-			bool IsEntry() const
-			{
-				return m_Type == Entry;
+				return m_Children.emplace_back(mod);
 			}
 
-			const IModTag* GetGroup() const
+			DisplayModel& GetDisplayModel() const;
+	};
+}
+
+namespace Kortex::ModManager
+{
+	class DisplayModelTagNode: public KxRTTI::IExtendInterface<DisplayModelTagNode, KxDataView2::Node>
+	{
+		friend class DisplayModel;
+
+		public:
+			using ColumnID = DisplayModelColumnID;
+
+		private:
+			IModTag* m_Tag = nullptr;
+			std::vector<DisplayModelModNode> m_Children;
+
+		private:
+			void OnAttachNode();
+
+		public:
+			DisplayModelTagNode(IModTag& tag)
+				:m_Tag(&tag)
 			{
-				return IsGroup() ? m_Group : nullptr;
 			}
-			IGameMod* GetEntry() const
+			
+		public:
+			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
+			wxAny GetValue(const KxDataView2::Column& column) const override;
+			
+			bool Compare(const KxDataView2::Node& other, const KxDataView2::Column& column) const override;
+			bool Compare(const IModTag& left, const IModTag& right, const KxDataView2::Column& column) const;
+
+			bool GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const;
+			bool IsCategoryNode() const override;
+
+		public:
+			IModTag& GetTag() const
 			{
-				return IsEntry() ? m_Entry : nullptr;
+				return *m_Tag;
 			}
 
-			bool HasParentNode() const
+			DisplayModelModNode& AddModNode(IGameMod& mod)
 			{
-				return m_ParentNode != nullptr;
+				return m_Children.emplace_back(mod);
 			}
-			const DisplayModelNode* GetParentNode() const
-			{
-				return m_ParentNode;
-			}
-			void SetParentNode(const DisplayModelNode& node)
-			{
-				m_ParentNode = &node;
-			}
-
-			bool HasChildren() const
+			bool HasMods() const
 			{
 				return !m_Children.empty();
-			}
-			size_t GetChildrenCount() const
-			{
-				return m_Children.size();
-			}
-			const Vector& GetChildren() const
-			{
-				return m_Children;
-			}
-			Vector& GetChildren()
-			{
-				return m_Children;
 			}
 	};
 }

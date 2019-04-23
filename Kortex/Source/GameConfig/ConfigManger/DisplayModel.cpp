@@ -49,11 +49,11 @@ namespace Kortex::GameConfig
 			IViewItem* viewItem = nullptr;
 			if (Node* node = event.GetNode(); node && node->QueryInterface(viewItem))
 			{
-				if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_ACTIVATED)
+				if (event.GetEventType() == EVENT_ITEM_ACTIVATED)
 				{
 					viewItem->OnActivate(*event.GetColumn());
 				}
-				else if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_SELECTED)
+				else if (event.GetEventType() == EVENT_ITEM_SELECTED)
 				{
 					viewItem->OnSelect(*event.GetColumn());
 				}
@@ -147,10 +147,10 @@ namespace Kortex::GameConfig
 		view->AppendColumn<TextRenderer>(m_Translator.GetString("ConfigManager.View.Type"), ColumnID::Type, {}, columnStyle);
 		view->AppendColumn<BitmapTextToggleRenderer>(m_Translator.GetString("ConfigManager.View.Value"), ColumnID::Value, {}, columnStyle);
 
-		view->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivate, this);
-		view->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnActivate, this);
-		view->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
-		view->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, [this, view](Event& event)
+		view->Bind(EVENT_ITEM_ACTIVATED, &DisplayModel::OnActivate, this);
+		view->Bind(EVENT_ITEM_SELECTED, &DisplayModel::OnActivate, this);
+		view->Bind(EVENT_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
+		view->Bind(EVENT_COLUMN_HEADER_RCLICK, [this, view](Event& event)
 		{
 			if (!m_DisableColumnsMenu)
 			{

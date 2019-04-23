@@ -183,6 +183,7 @@
     <ClCompile Include="Source\GameMods\FileTreeNode.cpp" />
     <ClCompile Include="Source\GameMods\IModTag.cpp" />
     <ClCompile Include="Source\GameMods\IModTagManager.cpp" />
+    <ClCompile Include="Source\GameMods\ModManager\DisplayModelNode.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\NewModDialog.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\VFSActivator.cpp" />
     <ClCompile Include="Source\GameMods\ModTagStore.cpp" />
@@ -501,6 +502,7 @@
     <ClInclude Include="Source\GameMods\IModStatistics.h" />
     <ClInclude Include="Source\GameMods\IModTag.h" />
     <ClInclude Include="Source\GameMods\IModTagManager.h" />
+    <ClInclude Include="Source\GameMods\ModManager\DisplayModelDND.h" />
     <ClInclude Include="Source\GameMods\ModManager\NewModDialog.h" />
     <ClInclude Include="Source\GameMods\ModManager\VFSActivator.h" />
     <ClInclude Include="Source\GameMods\ModTagStore.h" />

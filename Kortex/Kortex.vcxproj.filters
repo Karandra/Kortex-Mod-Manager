@@ -1131,6 +1131,9 @@
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.cpp">
       <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameMods\ModManager\DisplayModelNode.cpp">
+      <Filter>Code\Source\GameMods\ModManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2149,6 +2152,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameData\SaveManager\SaveInfoPair.h">
       <Filter>Code\Headers\GameData\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\DisplayModelDND.h">
+      <Filter>Code\Headers\GameMods\ModManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

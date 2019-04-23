@@ -346,11 +346,6 @@ namespace Kortex::ModManager
 						}
 						break;
 					}
-					default:
-					{
-						GetView()->EditItem(*event.GetNode(), *column);
-						break;
-					}
 				};
 			}
 		}

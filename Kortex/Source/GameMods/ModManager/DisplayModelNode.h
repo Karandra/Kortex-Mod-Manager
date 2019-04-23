@@ -61,6 +61,7 @@ namespace Kortex::ModManager
 			}
 			
 		public:
+			bool IsEnabled(const KxDataView2::Column& column) const override;
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
 			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
 

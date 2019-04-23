@@ -11,6 +11,10 @@ namespace Kortex::ModManager
 		AttachChildren(m_Children);
 	}
 
+	bool DisplayModelModNode::IsEnabled(const KxDataView2::Column& column) const
+	{
+		return Workspace::GetInstance()->IsChangingModsAllowed();
+	}
 	KxDataView2::Editor* DisplayModelModNode::GetEditor(const KxDataView2::Column& column) const
 	{
 		if (m_Mod->QueryInterface<FixedGameMod>() || m_Mod->QueryInterface<PriorityGroup>())
@@ -297,7 +301,7 @@ namespace Kortex::ModManager
 
 		if (!fixed && !priorityGroup)
 		{
-			attributes.SetEnabled(m_Mod->IsInstalled());
+			attributes.SetEnabled(m_Mod->IsInstalled() && IsEnabled(column));
 		}
 		if (columnID == ColumnID::Name && fixed && !priorityGroup)
 		{

@@ -969,7 +969,7 @@ namespace Kortex::ModManager
 			{
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHANGE_LOCATION, KTr("ModManager.Menu.ChangeModFilesLocation")));
 				item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
-				item->Enable(!isMultipleSelection && !isFixedMod);
+				item->Enable(!isMultipleSelection && !isFixedMod && !isVFSActive);
 			}
 			if (!isMultipleSelection && isLinkedMod && !isFixedMod)
 			{

@@ -18,11 +18,6 @@ class KUPtrVectorUtil
 										   MoveMode moveMode
 		)
 		{
-			auto FindAnchor = [&anchor](const auto& entry)
-			{
-				return entry.get() == &anchor;
-			};
-
 			// Check if anchor is not one of moved elements
 			if (std::find(toMove.begin(), toMove.end(), &anchor) != toMove.end())
 			{
@@ -30,36 +25,41 @@ class KUPtrVectorUtil
 			}
 
 			// Remove all moved elements from existing place
-			allItems.erase(std::remove_if(allItems.begin(), allItems.end(), [&toMove](auto& entry)
+			ElementsVector<T> removedItems;
+			allItems.erase(std::remove_if(allItems.begin(), allItems.end(), [&toMove, &removedItems](auto& entry)
 			{
-				// Release unique_ptr's and remove them
-				// Pointer to it is present in 'entriesToMove' vector
 				if (std::find(toMove.begin(), toMove.end(), entry.get()) != toMove.end())
 				{
-					entry.release();
+					removedItems.push_back(std::move(entry));
 					return true;
 				}
 				return false;
 			}), allItems.end());
 
 			// Find anchor position
-			auto anchorIt = std::find_if(allItems.begin(), allItems.end(), FindAnchor);
+			auto anchorIt = std::find_if(allItems.begin(), allItems.end(), [&anchor](const auto& entry)
+			{
+				return entry.get() == &anchor;
+			});
 			if (anchorIt != allItems.end())
 			{
 				switch (moveMode)
 				{
 					case MoveMode::Before:
 					{
-						allItems.insert(anchorIt, toMove.begin(), toMove.end());
+						for (auto& item: removedItems)
+						{
+							allItems.insert(anchorIt, std::move(item));
+						}
 						break;
 					}
 					default:
 					{
-						size_t index = 1;
-						for (auto it = toMove.begin(); it != toMove.end(); ++it)
+						size_t offset = 1;
+						for (auto& item: removedItems)
 						{
-							allItems.emplace(anchorIt + index, *it);
-							index++;
+							allItems.insert(anchorIt + offset, std::move(item));
+							offset++;
 						}
 						break;
 					}

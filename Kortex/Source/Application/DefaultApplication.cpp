@@ -351,7 +351,7 @@ namespace Kortex::Application
 	bool DefaultApplication::Uninstall()
 	{
 		DisableIE10Support();
-		IModManager::GetInstance()->GetVFS().Disable();
+		IModManager::GetInstance()->GetFileSystem().Disable();
 		return m_VFSService->Uninstall();
 	}
 
@@ -584,7 +584,7 @@ namespace Kortex::Application
 	void DefaultApplication::UnInitVFS()
 	{
 		Utility::Log::LogInfo("Unmounting VFS");
-		IModManager::GetInstance()->GetVFS().Disable();
+		IModManager::GetInstance()->GetFileSystem().Disable();
 		m_VFSService->Stop();
 	}
 }

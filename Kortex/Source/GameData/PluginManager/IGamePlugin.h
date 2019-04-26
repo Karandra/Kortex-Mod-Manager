@@ -50,7 +50,7 @@ namespace Kortex
 	
 			intptr_t GetOrderIndex() const;
 			intptr_t GetPriority() const;
-			intptr_t GetDisplayPriority() const;
+			intptr_t GetDisplayOrder() const;
 
 			bool HasDependentPlugins() const;
 			RefVector GetDependentPlugins() const;

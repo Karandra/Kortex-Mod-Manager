@@ -28,7 +28,7 @@ namespace Kortex
 			}
 
 		public:
-			IVirtualFileSystem* GetVFS() const
+			IVirtualFileSystem* GetFileSystem() const
 			{
 				return m_VFS;
 			}

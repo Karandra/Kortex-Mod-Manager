@@ -139,7 +139,7 @@ namespace Kortex::ModManager
 
 	void VFSActivator::OnVFSMounted(VFSEvent& event)
 	{
-		if (!m_IsEnabled && event.GetVFS() && IsOurInstance(*event.GetVFS()))
+		if (!m_IsEnabled && event.GetFileSystem() && IsOurInstance(*event.GetFileSystem()))
 		{
 			m_InstancesCountEnabled++;
 			if (m_InstancesCountEnabled == m_InstancesCountTotal)
@@ -150,7 +150,7 @@ namespace Kortex::ModManager
 	}
 	void VFSActivator::OnVFSUnmounted(VFSEvent& event)
 	{
-		if (m_IsEnabled && m_InstancesCountEnabled != 0 && event.GetVFS() && IsOurInstance(*event.GetVFS()))
+		if (m_IsEnabled && m_InstancesCountEnabled != 0 && event.GetFileSystem() && IsOurInstance(*event.GetFileSystem()))
 		{
 			m_InstancesCountEnabled--;
 			if (m_InstancesCountEnabled == 0)

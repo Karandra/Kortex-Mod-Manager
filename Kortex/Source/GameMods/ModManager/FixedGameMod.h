@@ -8,11 +8,11 @@ namespace Kortex::ModManager
 	class FixedGameMod: public RTTI::IExtendInterface<FixedGameMod, BasicGameMod>
 	{
 		private:
-			intptr_t m_FixedPriority = -1;
+			const intptr_t m_FixedOrder = -1;
 
 		public:
-			FixedGameMod(intptr_t priority = -1)
-				:m_FixedPriority(priority)
+			FixedGameMod(intptr_t order = -1)
+				:m_FixedOrder(order)
 			{
 			}
 
@@ -40,12 +40,9 @@ namespace Kortex::ModManager
 			{
 				return KIMG_FOLDERS;
 			}
-			intptr_t GetPriority() const override
+			intptr_t GetDisplayOrder() const override
 			{
-				return m_FixedPriority;
-			}
-			void SetPriority(intptr_t value) override
-			{
+				return m_FixedOrder;
 			}
 	};
 }

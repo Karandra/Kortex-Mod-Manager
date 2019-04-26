@@ -58,15 +58,6 @@ namespace Kortex::ModManager
 			void CreateAllFolders();
 			bool Save() override;
 
-			intptr_t GetPriority() const
-			{
-				return m_Priority;
-			}
-			void SetPriority(intptr_t value) override
-			{
-				m_Priority = value;
-			}
-
 			bool LoadUsingSignature(const wxString& signature) override;
 			bool LoadUsingID(const wxString& id) override;
 			bool CreateFromProject(const KPackageProject& config) override;

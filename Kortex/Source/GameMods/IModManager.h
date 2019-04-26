@@ -26,7 +26,8 @@ namespace Kortex
 		public KxSingletonPtr<IModManager>
 	{
 		protected:
-			void RecalcModIndexes(size_t startAt = 0);
+			void RecalculatePriority(size_t startAt = 0);
+			void SortByPriority();
 
 		protected:
 			IModManager();
@@ -56,9 +57,12 @@ namespace Kortex
 			virtual IGameMod& GetBaseGame() = 0;
 			virtual IGameMod& GetWriteTarget() = 0;
 
-			virtual void ResortMods(const IGameProfile& profile) = 0;
-			virtual void ResortMods() = 0;
-			virtual bool MoveModsTo(const IGameMod::RefVector& toMove, const IGameMod& anchor);
+			void ResortMods();
+			void ResortMods(const IGameProfile& profile);
+
+			bool MoveModsBefore(const IGameMod::RefVector& movedMods, const IGameMod& anchor);
+			bool MoveModsAfter(const IGameMod::RefVector& movedMods, const IGameMod& anchor);
+			bool ChangeModPriority(IGameMod& movedMod, intptr_t targetPriority);
 
 			virtual IGameMod* FindModByID(const wxString& modID) const = 0;
 			virtual IGameMod* FindModByName(const wxString& modName) const = 0;
@@ -74,7 +78,7 @@ namespace Kortex
 			virtual void ExportModList(const wxString& outputFilePath) const = 0;
 
 		public:
-			virtual IVirtualFileSystem& GetVFS() = 0;
+			virtual IVirtualFileSystem& GetFileSystem() = 0;
 
 		public:
 			virtual void NotifyModInstalled(IGameMod& mod) = 0;

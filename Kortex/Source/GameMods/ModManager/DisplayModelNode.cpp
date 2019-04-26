@@ -2,6 +2,7 @@
 #include "DisplayModelNode.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
+#include <Kortex/Events.hpp>
 #include <KxFramework/KxComparator.h>
 
 namespace Kortex::ModManager
@@ -21,7 +22,22 @@ namespace Kortex::ModManager
 		{
 			return nullptr;
 		}
-		return column.GetEditor();
+		else
+		{
+			switch (column.GetID<ColumnID>())
+			{
+				case ColumnID::Priority:
+				{
+					auto editor = column.GetEditor();
+					auto& validator = static_cast<wxIntegerValidator<intptr_t>&>(editor->GetValidatorRef());
+					validator.SetMin(0);
+					validator.SetMax(IModManager::GetInstance()->GetMods().size() - 1);
+
+					return editor;
+				}
+			};
+			return column.GetEditor();
+		}
 	}
 	wxAny DisplayModelModNode::GetEditorValue(const KxDataView2::Column& column) const
 	{
@@ -168,7 +184,7 @@ namespace Kortex::ModManager
 			}
 			case ColumnID::Priority:
 			{
-				return m_Mod->GetPriority();
+				return m_Mod->GetDisplayOrder();
 			}
 			case ColumnID::ModFolder:
 			{
@@ -197,6 +213,21 @@ namespace Kortex::ModManager
 				m_Mod->Save();
 				IModManager::GetInstance()->Save();
 				return true;
+			}
+			case ColumnID::Priority:
+			{
+				int priority = -1;
+				if (value.GetAs(&priority) && IModManager::GetInstance()->ChangeModPriority(*m_Mod, priority))
+				{
+					IModManager::GetInstance()->Save();
+					IEvent::CallAfter([this]()
+					{
+						GetDisplayModel().LoadView();
+						GetDisplayModel().SelectMod(m_Mod);
+					});
+					return true;
+				}
+				return false;
 			}
 			case ColumnID::Version:
 			{
@@ -243,7 +274,7 @@ namespace Kortex::ModManager
 			}
 			case ColumnID::Priority:
 			{
-				return left.GetPriority() < right.GetPriority();
+				return left.GetDisplayOrder() < right.GetDisplayOrder();
 			}
 			case ColumnID::Version:
 			{

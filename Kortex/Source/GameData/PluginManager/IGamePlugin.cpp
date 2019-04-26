@@ -34,7 +34,7 @@ namespace Kortex
 	{
 		return IPluginManager::GetInstance()->OnGetPluginPriority(*this);
 	}
-	intptr_t IGamePlugin::GetDisplayPriority() const
+	intptr_t IGamePlugin::GetDisplayOrder() const
 	{
 		return IPluginManager::GetInstance()->OnGetPluginDisplayPriority(*this);
 	}

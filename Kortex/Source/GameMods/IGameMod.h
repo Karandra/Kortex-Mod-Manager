@@ -16,12 +16,26 @@ namespace Kortex
 
 	class IGameMod: public RTTI::IInterface<IGameMod>
 	{
+		friend class IModManager;
 		friend class IModDispatcher;
 
 		public:
 			using Vector = std::vector<std::unique_ptr<IGameMod>>;
 			using RefVector = std::vector<IGameMod*>;
 			using CRefVector = std::vector<const IGameMod*>;
+
+		private:
+			intptr_t m_Priority = -1;
+
+		protected:
+			void SetPriority(intptr_t value)
+			{
+				m_Priority = value;
+			}
+			void ModPriority(intptr_t value)
+			{
+				m_Priority += value;
+			}
 
 		public:
 			static wxString GetSignatureFromID(const wxString& id);
@@ -34,8 +48,14 @@ namespace Kortex
 			virtual bool LoadUsingID(const wxString& id);
 			virtual bool CreateFromProject(const KPackageProject& config);
 			
-			virtual intptr_t GetPriority() const = 0;
-			virtual void SetPriority(intptr_t value) = 0;
+			intptr_t GetPriority() const
+			{
+				return m_Priority;
+			}
+			virtual intptr_t GetDisplayOrder() const
+			{
+				return m_Priority;
+			}
 
 			virtual wxString GetSignature() const = 0;
 			virtual wxString GetID() const = 0;

@@ -99,7 +99,6 @@ namespace Kortex::ModManager
 			std::vector<KMandatoryModEntry> m_MandatoryMods;
 
 		protected:
-			void DoResortMods(const IGameProfile& profile);
 			void DoUninstallMod(IGameMod& mod, wxWindow* window, const bool erase);
 			IGameMod* DoCreateMod(const wxString& signature);
 			
@@ -141,9 +140,6 @@ namespace Kortex::ModManager
 				return m_WriteTarget;
 			}
 
-			void ResortMods(const IGameProfile& profile) override;
-			void ResortMods() override;
-			
 			IGameMod* FindModByID(const wxString& modID) const override;
 			IGameMod* FindModByName(const wxString& modName) const override;
 			IGameMod* FindModBySignature(const wxString& signature) const override;
@@ -163,7 +159,7 @@ namespace Kortex::ModManager
 
 			void ExportModList(const wxString& outputFilePath) const override;
 			
-			IVirtualFileSystem& GetVFS() override
+			IVirtualFileSystem& GetFileSystem() override
 			{
 				return m_VFS;
 			}

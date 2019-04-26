@@ -158,7 +158,7 @@ namespace Kortex::PluginManager
 
 	bool LibLoot::CanSortNow() const
 	{
-		return IModManager::GetInstance()->GetVFS().IsEnabled();
+		return IModManager::GetInstance()->GetFileSystem().IsEnabled();
 	}
 	bool LibLoot::SortPlugins(KxStringVector& sortedList, KOperationWithProgressDialogBase* context)
 	{

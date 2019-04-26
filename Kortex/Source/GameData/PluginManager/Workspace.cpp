@@ -297,10 +297,10 @@ namespace Kortex::PluginManager
 			menu.AddSeparator();
 
 			KxMenuItem* item = menu.Add(sortingMenu, KTr("PluginManager.Sorting"));
-			item->Enable(IModManager::GetInstance()->GetVFS().IsEnabled());
+			item->Enable(IModManager::GetInstance()->GetFileSystem().IsEnabled());
 		}
 
-		if (sortingMenu && IModManager::GetInstance()->GetVFS().IsEnabled())
+		if (sortingMenu && IModManager::GetInstance()->GetFileSystem().IsEnabled())
 		{
 			// LibLoot
 			bool hasLoot = false;

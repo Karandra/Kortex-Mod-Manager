@@ -57,9 +57,11 @@ namespace Kortex::ModManager
 			view->AppendColumn(KTr("Generic.Color"), ColumnID::Color, size.GetWidth(), columnStyleNoSort);
 		}
 		{
-			auto [column, r] = view->AppendColumn<TextRenderer>(KTr("Generic.Priority"), ColumnID::Priority, {}, columnStyleDefault);
+			auto [column, r, editor] = view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Priority"), ColumnID::Priority, {}, columnStyleDefault);
 			m_PriorityColumn = &column;
 			m_PriorityColumn->SortAscending();
+
+			editor.NewValidator<wxIntegerValidator<intptr_t>>();
 		}
 		{
 			view->AppendColumn<BitmapTextRenderer, TextEditor>(KTr("ModManager.ModList.Version"), ColumnID::Version, {}, columnStyleDefault);
@@ -110,6 +112,7 @@ namespace Kortex::ModManager
 	{
 		if (KxDataView2::View* view = GetView())
 		{
+			view->UnselectAll();
 			view->GetRootNode().DetachAllChildren();
 		}
 
@@ -445,6 +448,8 @@ namespace Kortex::ModManager
 		DisplayModelDNDObject* dataObject = event.GetDragObject<DisplayModelDNDObject>(DisplayModelDNDObject::GetFormat());
 		if (dataObject && CanStartDragOperation())
 		{
+			dataObject->Clear();
+
 			KxDataView2::Node::Vector selected;
 			if (GetView()->GetSelections(selected) > 0)
 			{
@@ -463,16 +468,18 @@ namespace Kortex::ModManager
 				}
 			}
 		}
+
+		wxBell();
 		event.DragCancel();
 	}
 	void DisplayModel::OnDropItems(KxDataView2::EventDND& event)
 	{
-		DisplayModelModNode* modNode = nullptr;
-		if (event.GetNode() && event.GetNode()->QueryInterface(modNode))
+		DisplayModelModNode* droppenOnNode = nullptr;
+		if (event.GetNode() && event.GetNode()->QueryInterface(droppenOnNode))
 		{
 			if (DisplayModelDNDObject* dataObject = event.GetRecievedDataObject<DisplayModelDNDObject>())
 			{
-				IGameMod* droppedOnMod = &modNode->GetMod();
+				IGameMod* droppedOnMod = &droppenOnNode->GetMod();
 				PriorityGroup* droppedOnPriorityGroup = nullptr;
 				if (droppedOnMod->QueryInterface(droppedOnPriorityGroup))
 				{
@@ -480,15 +487,30 @@ namespace Kortex::ModManager
 				}
 
 				// Move and refresh
+				bool isMoved = false;
 				IGameMod::RefVector& modsToMove = dataObject->GetMods();
-				if (IModManager::GetInstance()->MoveModsTo(modsToMove, *droppedOnMod))
+
+				if (droppedOnPriorityGroup)
 				{
+					isMoved = IModManager::GetInstance()->MoveModsBefore(modsToMove, *droppedOnMod);
+				}
+				else
+				{
+					isMoved = IModManager::GetInstance()->MoveModsAfter(modsToMove, *droppedOnMod);
+				}
+
+				// Update control
+				if (isMoved)
+				{
+					IModManager::GetInstance()->Save();
+
 					// If items dragged over priority group, assign them to it
 					if (droppedOnPriorityGroup)
 					{
 						for (IGameMod* mod: modsToMove)
 						{
 							mod->SetPriorityGroupTag(droppedOnMod->GetPriorityGroupTag());
+							mod->Save();
 						}
 					}
 
@@ -496,7 +518,6 @@ namespace Kortex::ModManager
 					LoadView();
 
 					// Select moved items
-					GetView()->UnselectAll();
 					for (IGameMod* mod: dataObject->GetMods())
 					{
 						SelectMod(mod);
@@ -510,6 +531,8 @@ namespace Kortex::ModManager
 				}
 			}
 		}
+
+		wxBell();
 		event.DropError();
 	}
 	void DisplayModel::OnDropItemsPossible(KxDataView2::EventDND& event)

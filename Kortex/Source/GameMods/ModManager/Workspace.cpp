@@ -454,7 +454,7 @@ namespace Kortex::ModManager
 
 	void Workspace::OnMountButton(wxCommandEvent& event)
 	{
-		IVirtualFileSystem& vfs = IModManager::GetInstance()->GetVFS();
+		IVirtualFileSystem& vfs = IModManager::GetInstance()->GetFileSystem();
 		if (vfs.IsEnabled())
 		{
 			vfs.Disable();
@@ -815,7 +815,7 @@ namespace Kortex::ModManager
 			const bool isLinkedMod = modEntry->IsLinkedMod();
 			const bool isInstalled = modEntry->IsInstalled();
 			const bool isPackageExist = modEntry->IsPackageFileExist() && !isFixedMod;
-			const bool isVFSActive = IModManager::GetInstance()->GetVFS().IsEnabled();
+			const bool isVFSActive = IModManager::GetInstance()->GetFileSystem().IsEnabled();
 
 			if (isInstalled)
 			{
@@ -1319,7 +1319,7 @@ namespace Kortex::ModManager
 			menu.Add(new KxMenuItem(KMC_ID_TAG_DISABLE_ALL, KTr("ModManager.Menu.Tag.DeactivateAll")))->SetBitmap(KGetBitmap(KIMG_TICK_CIRCLE_FRAME_EMPTY));
 
 			// State
-			bool isVFSActive = IModManager::GetInstance()->GetVFS().IsEnabled();
+			bool isVFSActive = IModManager::GetInstance()->GetFileSystem().IsEnabled();
 			for (auto& item: menu.GetMenuItems())
 			{
 				item->Enable(!isVFSActive);
@@ -1374,6 +1374,6 @@ namespace Kortex::ModManager
 	}
 	bool Workspace::IsChangingModsAllowed() const
 	{
-		return !IModManager::GetInstance()->GetVFS().IsEnabled();
+		return !IModManager::GetInstance()->GetFileSystem().IsEnabled();
 	}
 }

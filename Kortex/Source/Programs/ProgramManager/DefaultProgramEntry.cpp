@@ -104,7 +104,7 @@ namespace Kortex::ProgramManager
 	{
 		if (IModManager* manager = IModManager::GetInstance())
 		{
-			if (!RequiresVFS() || manager->GetVFS().IsEnabled())
+			if (!RequiresVFS() || manager->GetFileSystem().IsEnabled())
 			{
 				return KxFile(ResolvePath(m_Executable, Mode::ToVirtual)).IsFileExist();
 			}

@@ -38,9 +38,9 @@ namespace Kortex::ModManager
 				return false;
 			}
 
-			intptr_t GetPriority() const override
+			intptr_t GetDisplayOrder() const override
 			{
-				return m_BaseMod.GetPriority();
+				return m_BaseMod.GetDisplayOrder();
 			}
 			wxString GetName() const override;
 			wxString GetID() const override;

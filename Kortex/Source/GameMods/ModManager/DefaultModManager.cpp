@@ -28,44 +28,6 @@
 
 namespace Kortex::ModManager
 {
-	void DefaultModManager::DoResortMods(const IGameProfile& profile)
-	{
-		// Reset priority
-		for (auto& mod: m_Mods)
-		{
-			mod->SetPriority(-1);
-		}
-
-		const auto& profileModList = profile.GetMods();
-		for (const GameInstance::ProfileMod& profileMod: profileModList)
-		{
-			if (IGameMod* mod = FindModBySignature(profileMod.GetSignature()))
-			{
-				mod->SetPriority(profileMod.GetPriority());
-				mod->SetActive(profileMod.IsActive());
-			}
-		}
-
-		// Set priority for all unsorted mods to be after sorted
-		intptr_t count = 0;
-		for (auto& mod: m_Mods)
-		{
-			if (mod->GetPriority() == -1)
-			{
-				mod->SetPriority(profileModList.size() + count);
-			}
-		}
-
-		// Sort and invalidate virtual tree
-		std::sort(m_Mods.begin(), m_Mods.end(), [](const auto& left, const auto& right)
-		{
-			return left->GetPriority() < right->GetPriority();
-		});
-		if (IModDispatcher::HasInstance())
-		{
-			IModDispatcher::GetInstance()->InvalidateVirtualTree();
-		}
-	}
 	void DefaultModManager::DoUninstallMod(IGameMod& mod, wxWindow* window, const bool erase)
 	{
 		ModEvent event(Events::ModUnsinstalling, mod);
@@ -283,15 +245,6 @@ namespace Kortex::ModManager
 		}
 
 		return allMods;
-	}
-
-	void DefaultModManager::ResortMods()
-	{
-		DoResortMods(*IGameInstance::GetActiveProfile());
-	}
-	void DefaultModManager::ResortMods(const IGameProfile& profile)
-	{
-		DoResortMods(profile);
 	}
 
 	IGameMod* DefaultModManager::FindModByID(const wxString& modID) const
@@ -513,7 +466,7 @@ namespace Kortex::ModManager
 			const wxString modID = mod.GetID();
 			const size_t index = std::distance(m_Mods.begin(), it);
 			m_Mods.erase(it);
-			RecalcModIndexes(index);
+			RecalculatePriority(index);
 
 			IModDispatcher::GetInstance()->InvalidateVirtualTree();
 			Workspace::GetInstance()->ReloadWorkspace();

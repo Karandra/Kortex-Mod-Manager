@@ -2,7 +2,6 @@
 #include "NetworkModule.h"
 #include "NetworkManager/DefaultNetworkManager.h"
 #include "DownloadManager/DefaultDownloadManager.h"
-#include "Utility/KINetFSHandler.h"
 
 namespace Kortex
 {
@@ -13,6 +12,7 @@ namespace Kortex
 
 	void NetworkModule::OnInit()
 	{
+		wxFileSystem::AddHandler(m_NetworkManager->NewWxFSHandler().release());
 	}
 	void NetworkModule::OnExit()
 	{
@@ -21,8 +21,6 @@ namespace Kortex
 	{
 		m_NetworkManager = std::make_unique<NetworkManager::DefaultNetworkManager>();
 		m_DownloadManager = CreateManagerIfEnabled<DownloadManager::DefaultDownloadManager>(node);
-
-		wxFileSystem::AddHandler(new KINetFSHandler());
 	}
 
 	NetworkModule::NetworkModule()

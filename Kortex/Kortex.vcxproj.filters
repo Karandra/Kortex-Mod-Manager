@@ -537,9 +537,6 @@
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.cpp">
       <Filter>Code\Source\PackageCreator\PageComponents</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utility\KINetFSHandler.cpp">
-      <Filter>Code\Source\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\KBitmapSize.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
@@ -1134,6 +1131,9 @@
     <ClCompile Include="Source\GameMods\ModManager\DisplayModelNode.cpp">
       <Filter>Code\Source\GameMods\ModManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Network\NetworkWxFSHandler.cpp">
+      <Filter>Code\Source\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1354,9 +1354,6 @@
     </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.h">
       <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KINetFSHandler.h">
-      <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KBitmapSize.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -2155,6 +2152,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameMods\ModManager\DisplayModelDND.h">
       <Filter>Code\Headers\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkWxFSHandler.h">
+      <Filter>Code\Headers\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

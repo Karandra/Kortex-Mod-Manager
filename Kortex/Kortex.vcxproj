@@ -228,6 +228,7 @@
     <ClCompile Include="Source\Network\NetworkModule.cpp" />
     <ClCompile Include="Source\Network\IModNetwork.cpp" />
     <ClCompile Include="Source\Network\NetworkManager\DefaultNetworkManager.cpp" />
+    <ClCompile Include="Source\Network\NetworkWxFSHandler.cpp" />
     <ClCompile Include="Source\PackageCreator\KPackageCreatorIDTracker.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCCAssignedConditionalsEditor.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModel.cpp" />
@@ -252,7 +253,6 @@
     <ClCompile Include="Source\Programs\ProgramManager\Workspace.cpp" />
     <ClCompile Include="Source\Programs\ProgramsModule.cpp" />
     <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
-    <ClCompile Include="Source\Utility\KINetFSHandler.cpp" />
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp" />
     <ClCompile Include="Source\Utility\KTempFolderKeeper.cpp" />
     <ClCompile Include="Source\PackageManager\KModPackage.cpp" />
@@ -557,6 +557,7 @@
     <ClInclude Include="Source\Network\NetworkManager\DefaultNetworkManager.h" />
     <ClInclude Include="Source\Network\ModRepositoryReply.h" />
     <ClInclude Include="Source\Network\ModRepositoryRequest.h" />
+    <ClInclude Include="Source\Network\NetworkWxFSHandler.h" />
     <ClInclude Include="Source\PackageCreator\KPackageCreatorIDTracker.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCCAssignedConditionalsEditor.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModel.h" />
@@ -572,7 +573,6 @@
     <ClInclude Include="Source\Programs\ProgramsModule.h" />
     <ClInclude Include="Source\Utility\Collection.h" />
     <ClInclude Include="Source\Utility\KBitmapSize.h" />
-    <ClInclude Include="Source\Utility\KINetFSHandler.h" />
     <ClInclude Include="Source\Utility\KUnsortedUnique.h" />
     <ClInclude Include="Source\Utility\KUPtrVectorUtil.h" />
     <ClInclude Include="Source\Utility\KVectorForwarder.h" />

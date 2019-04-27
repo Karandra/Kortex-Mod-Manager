@@ -67,5 +67,6 @@ namespace Kortex
 		public:
 			virtual std::unique_ptr<KxWebSocket::IClient> NewWebSocketClient(const wxString& address);
 			virtual std::unique_ptr<KxCURLSession> NewCURLSession(const wxString& address);
+			virtual std::unique_ptr<wxFileSystemHandler> NewWxFSHandler();
 	};
 }

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "INetworkManager.h"
+#include "NetworkWxFSHandler.h"
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxWebSocket.h>
@@ -86,5 +87,9 @@ namespace Kortex
 		AddDefaultHeaders(*curlSession);
 
 		return curlSession;
+	}
+	std::unique_ptr<wxFileSystemHandler> INetworkManager::NewWxFSHandler()
+	{
+		return std::make_unique<NetworkManager::NetworkWxFSHandler>(*this);
 	}
 }

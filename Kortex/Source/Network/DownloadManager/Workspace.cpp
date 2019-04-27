@@ -49,7 +49,7 @@ namespace Kortex::DownloadManager
 			IDownloadManagerNXM* nxm = nullptr;
 			if (manager->QueryInterface(nxm) && nxm->CheckCmdLineArgs(IApplication::GetInstance()->GetCmdLineParser(), downloadLink))
 			{
-				manager->QueueFromOutside(downloadLink);
+				manager->TryQueueDownloadLink(downloadLink);
 			}
 		});
 		return true;

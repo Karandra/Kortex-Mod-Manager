@@ -137,7 +137,7 @@ WXLRESULT KMainWindow::MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lPara
 	{
 		const COPYDATASTRUCT* data = reinterpret_cast<const COPYDATASTRUCT*>(lParam);
 		const wxString link(reinterpret_cast<const wchar_t*>(data->lpData), data->cbData);
-		Kortex::IDownloadManager::GetInstance()->QueueFromOutside(link);
+		Kortex::IDownloadManager::GetInstance()->TryQueueDownloadLink(link);
 	}
 	return KxFrame::MSWWindowProc(msg, wParam, lParam);
 }

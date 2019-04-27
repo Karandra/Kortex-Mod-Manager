@@ -54,7 +54,7 @@ namespace Kortex
 			virtual const IDownloadEntry::Vector& GetDownloads() const = 0;
 			virtual IDownloadEntry::Vector& GetDownloads() = 0;
 			IDownloadEntry::RefVector GetNotRunningDownloads(bool installedOnly = false) const;
-		
+			
 			IDownloadEntry* FindDownloadByFileName(const wxString& name, const IDownloadEntry* except = nullptr) const;
 			template<class T> static auto GetDownloadIterator(T& items, const IDownloadEntry& entry)
 			{
@@ -72,9 +72,12 @@ namespace Kortex
 									   IModNetworkRepository& modRepository,
 									   const GameID& id = {}
 			) = 0;
-			virtual bool QueueFromOutside(const wxString& link) = 0;
+			virtual bool TryQueueDownloadLink(const wxString& link) = 0;
 	};
+}
 
+namespace Kortex
+{
 	class IDownloadManagerNXM: public RTTI::IInterface<IDownloadManagerNXM>
 	{
 		public:

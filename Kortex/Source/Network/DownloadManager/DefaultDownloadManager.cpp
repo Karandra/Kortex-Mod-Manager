@@ -243,7 +243,7 @@ namespace Kortex::DownloadManager
 		}
 		return false;
 	}
-	bool DefaultDownloadManager::QueueFromOutside(const wxString& link)
+	bool DefaultDownloadManager::TryQueueDownloadLink(const wxString& link)
 	{
 		if (QueueNXM(link))
 		{

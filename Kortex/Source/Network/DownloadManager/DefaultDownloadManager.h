@@ -60,7 +60,7 @@ namespace Kortex::DownloadManager
 							   IModNetworkRepository& modRepository,
 							   const GameID& id = {}
 			) override;
-			bool QueueFromOutside(const wxString& link) override;
+			bool TryQueueDownloadLink(const wxString& link) override;
 
 		// IDownloadManagerNXM
 		private:

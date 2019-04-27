@@ -129,7 +129,9 @@ namespace
 		{
 			if (!noErrorReport)
 			{
-				INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched", NexusModNetwork::GetInstance()->GetName()), KxICON_WARNING);
+				INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched",
+																				 NexusModNetwork::GetInstance()->GetName()),
+																				 KxICON_WARNING);
 			}
 			return true;
 		}
@@ -255,7 +257,7 @@ namespace Kortex::NetworkManager
 	}
 	void NexusModNetwork::RequestUserAvatar(const NexusValidationReply& info)
 	{
-		if (!HasUserPicture())
+		if (!HasUserPicture() && !LoadUserPicture())
 		{
 			SetUserPicture(DownloadSmallBitmap(info.ProfilePicture));
 		}

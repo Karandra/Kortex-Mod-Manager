@@ -28,9 +28,9 @@ namespace Kortex
 		return static_cast<KxStandardID>(dialog.ShowModal());
 	}
 
-	wxBitmap IAuthenticableModNetwork::DownloadSmallBitmap(const wxString& url) const
+	wxBitmap IAuthenticableModNetwork::DownloadSmallBitmap(const wxString& address) const
 	{
-		auto connection = INetworkManager::GetInstance()->NewCURLSession(url);
+		auto connection = INetworkManager::GetInstance()->NewCURLSession(address);
 		KxCURLBinaryReply reply = connection->Download();
 		wxMemoryInputStream stream(reply.GetData(), reply.GetSize());
 

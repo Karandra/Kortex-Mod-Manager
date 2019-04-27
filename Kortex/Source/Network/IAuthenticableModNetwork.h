@@ -43,13 +43,23 @@ namespace Kortex
 				return const_cast<IAuthenticableModNetwork*>(this)->GetSecretStore();
 			}
 			
-			wxBitmap DownloadSmallBitmap(const wxString& url) const;
+			wxBitmap DownloadSmallBitmap(const wxString& address) const;
 
 		public:
 			std::optional<Credentials> ShowCredentialsDialog(wxWindow* parent = nullptr) const;
 			std::optional<Credentials> LoadCredentials() const;
 			bool SaveCredentials(const Credentials& credentials);
 
+			void SetUserPicture(const wxBitmap& userPicture)
+			{
+				m_UserPicture = userPicture;
+				m_UserPicture.SaveFile(GetUserPictureFile(), wxBITMAP_TYPE_PNG);
+			}
+			bool LoadUserPicture()
+			{
+				return m_UserPicture.LoadFile(GetUserPictureFile(), wxBITMAP_TYPE_ANY);
+			}
+			wxString GetUserPictureFile() const;
 			bool HasUserPicture() const
 			{
 				return m_UserPicture.IsOk();
@@ -58,12 +68,6 @@ namespace Kortex
 			{
 				return m_UserPicture;
 			}
-			void SetUserPicture(const wxBitmap& picture)
-			{
-				m_UserPicture = picture;
-				m_UserPicture.SaveFile(GetUserPictureFile(), wxBITMAP_TYPE_PNG);
-			}
-			wxString GetUserPictureFile() const;
 
 		public:
 			virtual bool IsAuthenticated() const = 0;

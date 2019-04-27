@@ -42,6 +42,10 @@ namespace Kortex::ProgramManager
 					if (wxString path = BrowseForLocation(m_ExecutableInput->GetValue(), false); !path.IsEmpty())
 					{
 						m_ExecutableInput->SetValue(path);
+						if (m_NameInput->IsEmpty())
+						{
+							m_NameInput->SetValue(path.AfterLast(wxS('\\')).BeforeLast(wxS('.')));
+						}
 					}
 				});
 

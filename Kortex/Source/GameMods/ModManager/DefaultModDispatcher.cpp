@@ -179,7 +179,7 @@ namespace Kortex::ModManager
 	}
 	void DefaultModDispatcher::UpdateVirtualTree()
 	{
-		const IGameMod::RefVector mods = IModManager::GetInstance()->GetAllMods(true, false);
+		const IGameMod::RefVector mods = IModManager::GetInstance()->GetAllMods(true, true);
 		m_VirtualTree.ClearChildren();
 
 		constexpr const bool useRecursive = false;

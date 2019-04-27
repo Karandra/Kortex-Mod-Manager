@@ -987,7 +987,7 @@ namespace Kortex::NetworkManager
 			linkData.Expires = reg.GetMatch(link, 5);
 			linkData.UserID = reg.GetMatch(link, 6);
 
-			return gameID && modID&& fileID;
+			return gameID && modID && fileID;
 		}
 		return false;
 	}

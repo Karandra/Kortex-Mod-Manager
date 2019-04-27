@@ -133,7 +133,10 @@ namespace Kortex::Application
 		KMainWindow* mainWindow = nullptr;
 		if (!anotherInstanceRunning)
 		{
-			wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", GetSmallIconHeight() + m_InitProgressDialog->FromDIP(3));
+			// Set default table-tree-list like controls
+			const int defaultRowHeight = GetSmallIconHeight() + m_InitProgressDialog->FromDIP(4);
+			wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", defaultRowHeight);
+			wxSystemOptions::SetOption("KxDataView2::DefaultRowHeight", defaultRowHeight);
 
 			// Init systems
 			Utility::Log::LogInfo("Begin initializing core systems");

@@ -25,7 +25,7 @@ namespace Kortex::NetworkManager
 		Utility::Log::LogMessage("[NetworkWxFSHandler] Attempt to download resource: \"%1\"", location);
 		
 		KxFile file = GetCachedCopyFile(location);
-		if (file.IsFileExist() && IsNeverThan(file.GetFileTime(KxFILETIME_MODIFICATION), wxTimeSpan::Days(7)))
+		if (file.IsFileExist() && IsNewerThan(file.GetFileTime(KxFILETIME_MODIFICATION), wxTimeSpan::Days(7)))
 		{
 			wxString fullPath = ConstructFullPath(location);
 			Utility::Log::LogMessage("[NetworkWxFSHandler] Using cached copy: \"%1\"", fullPath);
@@ -63,7 +63,7 @@ namespace Kortex::NetworkManager
 	{
 		return ConstructFullPath(location);
 	}
-	bool NetworkWxFSHandler::IsNeverThan(const wxDateTime& fileDate, const wxTimeSpan& span) const
+	bool NetworkWxFSHandler::IsNewerThan(const wxDateTime& fileDate, const wxTimeSpan& span) const
 	{
 		wxDateTime currentDate = wxDateTime::Now();
 		if (fileDate > currentDate)

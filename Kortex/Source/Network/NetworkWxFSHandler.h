@@ -21,7 +21,7 @@ namespace Kortex::NetworkManager
 			wxFSFile* DoOpenFile(const wxString& location) const;
 
 			KxFile GetCachedCopyFile(const wxString& location) const;
-			bool IsNeverThan(const wxDateTime& fileDate, const wxTimeSpan& span) const;
+			bool IsNewerThan(const wxDateTime& fileDate, const wxTimeSpan& span) const;
 
 		public:
 			NetworkWxFSHandler(INetworkManager& networkManager);

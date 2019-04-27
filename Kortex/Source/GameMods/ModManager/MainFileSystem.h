@@ -16,7 +16,7 @@ namespace Kortex::ModManager
 {
 	class DefaultModManager;
 
-	class VFSActivator: public IVirtualFileSystem
+	class MainFileSystem: public IVirtualFileSystem
 	{
 		private:
 			DefaultModManager& m_Manager;
@@ -65,8 +65,8 @@ namespace Kortex::ModManager
 			void OnDisabled();
 
 		public:
-			VFSActivator(DefaultModManager& manager);
-			virtual ~VFSActivator();
+			MainFileSystem(DefaultModManager& manager);
+			virtual ~MainFileSystem();
 
 		public:
 			IPC::FSHandle GetHandle() const override

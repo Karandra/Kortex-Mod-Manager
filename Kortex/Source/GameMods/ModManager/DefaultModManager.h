@@ -3,7 +3,7 @@
 #include "GameMods/IModManager.h"
 #include "GameMods/IGameMod.h"
 #include "FixedGameMod.h"
-#include "VFSActivator.h"
+#include "MainFileSystem.h"
 #include "MandatoryModEntry.h"
 #include <Kortex/Events.hpp>
 class IGameProfile;
@@ -87,11 +87,11 @@ namespace Kortex::ModManager
 {
 	class DefaultModManager: public IModManager
 	{
-		friend class VFSActivator;
+		friend class MainFileSystem;
 
 		private:
 			Config m_Config;
-			VFSActivator m_VFS;
+			MainFileSystem m_VFS;
 
 			IGameMod::Vector m_Mods;
 			FixedGameMod m_BaseGame;

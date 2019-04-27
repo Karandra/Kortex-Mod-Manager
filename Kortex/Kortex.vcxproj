@@ -185,7 +185,7 @@
     <ClCompile Include="Source\GameMods\IModTagManager.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\DisplayModelNode.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\NewModDialog.cpp" />
-    <ClCompile Include="Source\GameMods\ModManager\VFSActivator.cpp" />
+    <ClCompile Include="Source\GameMods\ModManager\MainFileSystem.cpp" />
     <ClCompile Include="Source\GameMods\ModTagStore.cpp" />
     <ClCompile Include="Source\GameMods\Import\ModImporterMO.cpp" />
     <ClCompile Include="Source\GameMods\Import\ModImporterNMM.cpp" />
@@ -504,7 +504,7 @@
     <ClInclude Include="Source\GameMods\IModTagManager.h" />
     <ClInclude Include="Source\GameMods\ModManager\DisplayModelDND.h" />
     <ClInclude Include="Source\GameMods\ModManager\NewModDialog.h" />
-    <ClInclude Include="Source\GameMods\ModManager\VFSActivator.h" />
+    <ClInclude Include="Source\GameMods\ModManager\MainFileSystem.h" />
     <ClInclude Include="Source\GameMods\ModTagStore.h" />
     <ClInclude Include="Source\GameMods\Import\ModImporterMO.h" />
     <ClInclude Include="Source\GameMods\Import\ModImporterNMM.h" />

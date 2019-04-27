@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "VFSActivator.h"
+#include "MainFileSystem.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Events.hpp>
@@ -27,7 +27,7 @@ namespace
 
 namespace Kortex::ModManager
 {
-	KxStringVector VFSActivator::CheckMountPoints() const
+	KxStringVector MainFileSystem::CheckMountPoints() const
 	{
 		// Main mods
 		KxStringVector items;
@@ -41,7 +41,7 @@ namespace Kortex::ModManager
 
 		return items;
 	}
-	void VFSActivator::InitMainVirtualFolder()
+	void MainFileSystem::InitMainVirtualFolder()
 	{
 		m_Convergence.reset();
 
@@ -63,7 +63,7 @@ namespace Kortex::ModManager
 
 		m_Convergence = std::move(fileSystem);
 	}
-	void VFSActivator::InitMirroredLocations()
+	void MainFileSystem::InitMirroredLocations()
 	{
 		m_Mirrors.clear();
 
@@ -85,14 +85,14 @@ namespace Kortex::ModManager
 			}
 		}
 	}
-	void VFSActivator::SetFileSystemOptions(VirtualFileSystem::BaseFileSystem& fileSystem)
+	void MainFileSystem::SetFileSystemOptions(VirtualFileSystem::BaseFileSystem& fileSystem)
 	{
 		fileSystem.EnableAsyncIO(true);
 		fileSystem.EnableExtendedSecurity(true);
 		fileSystem.EnableImpersonateCallerUser(true);
 	}
 
-	void VFSActivator::ShowStatusDialog()
+	void MainFileSystem::ShowStatusDialog()
 	{
 		if (m_StatusDialog)
 		{
@@ -111,7 +111,7 @@ namespace Kortex::ModManager
 		m_StatusDialog->Pulse();
 		m_StatusDialog->Show();
 	}
-	void VFSActivator::HideStatusDialog()
+	void MainFileSystem::HideStatusDialog()
 	{
 		if (KMainWindow* mainWindow = KMainWindow::GetInstance())
 		{
@@ -125,19 +125,19 @@ namespace Kortex::ModManager
 		}
 	}
 
-	bool VFSActivator::IsOurInstance(const IVirtualFileSystem& instance) const
+	bool MainFileSystem::IsOurInstance(const IVirtualFileSystem& instance) const
 	{
 		return ForEachInstance([&instance](IVirtualFileSystem* vfs)
 		{
 			return &instance == vfs;
 		}) != nullptr;
 	}
-	size_t VFSActivator::GetInstancesCount() const
+	size_t MainFileSystem::GetInstancesCount() const
 	{
 		return m_Mirrors.size() + (m_Convergence ? 1 : 0);
 	}
 
-	void VFSActivator::OnVFSMounted(VFSEvent& event)
+	void MainFileSystem::OnVFSMounted(VFSEvent& event)
 	{
 		if (!m_IsEnabled && event.GetFileSystem() && IsOurInstance(*event.GetFileSystem()))
 		{
@@ -148,7 +148,7 @@ namespace Kortex::ModManager
 			}
 		}
 	}
-	void VFSActivator::OnVFSUnmounted(VFSEvent& event)
+	void MainFileSystem::OnVFSUnmounted(VFSEvent& event)
 	{
 		if (m_IsEnabled && m_InstancesCountEnabled != 0 && event.GetFileSystem() && IsOurInstance(*event.GetFileSystem()))
 		{
@@ -160,34 +160,34 @@ namespace Kortex::ModManager
 		}
 	}
 
-	void VFSActivator::OnEnabled()
+	void MainFileSystem::OnEnabled()
 	{
 		m_IsEnabled = true;
 		IEvent::MakeQueue<VFSEvent>(Events::MainVFSToggled, *this, true);
 	}
-	void VFSActivator::OnDisabled()
+	void MainFileSystem::OnDisabled()
 	{
 		m_IsEnabled = false;
 		IEvent::MakeQueue<VFSEvent>(Events::MainVFSToggled, *this, false);
 	}
 	
-	VFSActivator::VFSActivator(DefaultModManager& manager)
+	MainFileSystem::MainFileSystem(DefaultModManager& manager)
 		:m_Manager(manager)
 	{
-		IEvent::Bind(Events::SingleVFSToggled, &VFSActivator::OnVFSMounted, this);
-		IEvent::Bind(Events::SingleVFSToggled, &VFSActivator::OnVFSUnmounted, this);
+		IEvent::Bind(Events::SingleVFSToggled, &MainFileSystem::OnVFSMounted, this);
+		IEvent::Bind(Events::SingleVFSToggled, &MainFileSystem::OnVFSUnmounted, this);
 	}
-	VFSActivator::~VFSActivator()
+	MainFileSystem::~MainFileSystem()
 	{
 		Disable();
 		HideStatusDialog();
 	}
 
-	bool VFSActivator::IsEnabled() const
+	bool MainFileSystem::IsEnabled() const
 	{
 		return m_IsEnabled;
 	}
-	void VFSActivator::Enable()
+	void MainFileSystem::Enable()
 	{
 		if (!m_IsEnabled)
 		{
@@ -221,7 +221,7 @@ namespace Kortex::ModManager
 			HideStatusDialog();
 		}
 	}
-	void VFSActivator::Disable()
+	void MainFileSystem::Disable()
 	{
 		if (m_IsEnabled)
 		{

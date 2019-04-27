@@ -96,7 +96,7 @@ namespace
 		// Values: 'MAIN', 'OPTIONAL', <TBD>.
 		info.Category = CategoryDef::FromString(json["category_name"].get<wxString>(), ModFileCategory::Unknown);
 	}
-	void ReadGameInfo(const TJsonValue& json, NetworkManager::NexusGameReply& info)
+	void ReadGameInfo(const TJsonValue& json, NexusGameReply& info)
 	{
 		info.ID = json["id"];
 		info.Name = json["name"].get<wxString>();
@@ -123,16 +123,22 @@ namespace
 			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message, KxICON_ERROR);
 		}
 	}
-	bool TestRequestError(const KxCURLReplyBase& reply, const wxString& message = {})
+	bool TestRequestError(const KxCURLReplyBase& reply, const wxString& message = {}, bool noErrorReport = false)
 	{
 		if (reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests)
 		{
-			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched", NexusModNetwork::GetInstance()->GetName()), KxICON_WARNING);
+			if (!noErrorReport)
+			{
+				INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched", NexusModNetwork::GetInstance()->GetName()), KxICON_WARNING);
+			}
 			return true;
 		}
 		else if (!reply.IsOK())
 		{
-			ReportRequestError(message);
+			if (!noErrorReport)
+			{
+				ReportRequestError(message);
+			}
 			return true;
 		}
 		return false;
@@ -262,7 +268,7 @@ namespace Kortex::NetworkManager
 
 	bool NexusModNetwork::Authenticate()
 	{
-		m_WebSocketClient = INetworkManager::GetInstance()->NewWebSocketClient("wss://sso.nexusmods.com");
+		m_WebSocketClient = INetworkManager::GetInstance()->NewWebSocketClient(wxS("wss://sso.nexusmods.com"));
 
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_OPEN, [this](KxWebSocketEvent& event)
 		{
@@ -286,8 +292,8 @@ namespace Kortex::NetworkManager
 			}
 			m_WebSocketClient->Send(KxJSON::Save(json));
 
-			const wxString openURL = KxString::Format("https://www.nexusmods.com/sso?id=%1&application=%2", guid, appID);
-			KxShell::Execute(GetInvokingWindow(), KxShell::GetDefaultViewer("html"), "open", openURL);
+			const wxString openURL = KxString::Format(wxS("https://www.nexusmods.com/sso?id=%1&application=%2"), guid, appID);
+			KxShell::Execute(GetInvokingWindow(), KxShell::GetDefaultViewer(wxS("html")), wxS("open"), openURL);
 		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_MESSAGE, [this](KxWebSocketEvent& event)
 		{
@@ -313,7 +319,7 @@ namespace Kortex::NetworkManager
 					if (auto it = data.find("api_key"); it != data.end())
 					{
 						const wxString apiKey = it->get<wxString>();
-						auto info = GetValidationInfo(apiKey);
+						auto info = DoGetValidationInfo(apiKey);
 
 						if (info && info->APIKey == apiKey)
 						{
@@ -355,13 +361,15 @@ namespace Kortex::NetworkManager
 	}
 	bool NexusModNetwork::ValidateAuth()
 	{
-		if (LoadCredentials())
+		// Load API Key from credentials store
+		if (wxString apiKey = GetAPIKey(); !apiKey.IsEmpty())
 		{
-			if (auto info = GetValidationInfo())
+			// If succeed compare it with key that Nexus returns
+			if (auto info = DoGetValidationInfo({}, true))
 			{
 				RequestUserAvatar(*info);
 
-				m_IsAuthenticated = info->APIKey == GetAPIKey();
+				m_IsAuthenticated = info->APIKey == apiKey;
 				return m_IsAuthenticated;
 			}
 		}
@@ -857,14 +865,14 @@ namespace Kortex::NetworkManager
 		return infoVector;
 	}
 
-	std::optional<NexusValidationReply> NexusModNetwork::GetValidationInfo(const wxString& apiKey) const
+	std::optional<NexusValidationReply> NexusModNetwork::DoGetValidationInfo(const wxString& apiKey, bool noErrorReport) const
 	{
 		auto connection = NewCURLSession(KxString::Format("%1/users/validate",
 										 GetAPIURL()),
 										 apiKey
 		);
 		KxCURLReply reply = connection->Send();
-		if (TestRequestError(reply, reply))
+		if (TestRequestError(reply, reply, noErrorReport))
 		{
 			return std::nullopt;
 		}
@@ -887,6 +895,11 @@ namespace Kortex::NetworkManager
 			return std::nullopt;
 		}
 		return info;
+	}
+
+	std::optional<NexusValidationReply> NexusModNetwork::GetValidationInfo() const
+	{
+		return DoGetValidationInfo({}, false);
 	}
 	std::optional<NexusGameReply> NexusModNetwork::GetGameInfo(const GameID& id) const
 	{

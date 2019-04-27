@@ -32,8 +32,8 @@ namespace Kortex::NetworkManager
 
 			ModRepositoryLimitsData m_LimitsData;
 
+		// IAuthenticableModSource
 		protected:
-			// IAuthenticableModSource
 			wxWindow* GetInvokingWindow() const override;
 			KxStandardID OnAuthSuccess() override;
 			KxStandardID OnAuthFail() override;
@@ -54,8 +54,8 @@ namespace Kortex::NetworkManager
 		public:
 			NexusModNetwork();
 
+		// IModNetwork
 		public:
-			// IModNetwork
 			KImageEnum GetIcon() const override;
 			wxString GetName() const override;
 
@@ -70,15 +70,15 @@ namespace Kortex::NetworkManager
 			wxString GetModPageBaseURL(const GameID& id = {}) const override;
 			wxString GetModPageURL(const ModRepositoryRequest& request) override;
 
+		// IAuthenticableModSource
 		public:
-			// IAuthenticableModSource
 			bool IsAuthenticated() const override;
 			bool Authenticate() override;
 			bool ValidateAuth() override;
 			bool SignOut() override;
 
+		// IModNetworkRepository
 		public:
-			// IModNetworkRepository
 			ModRepositoryLimits GetRequestLimits() const override
 			{
 				return m_LimitsData;
@@ -92,9 +92,12 @@ namespace Kortex::NetworkManager
 			std::vector<ModFileReply> GetModFiles(const ModRepositoryRequest& request) const override;
 			std::vector<ModDownloadReply> GetFileDownloads(const ModRepositoryRequest& request) const override;
 
+		// NexusModNetwork
+		private:
+			std::optional<NexusValidationReply> DoGetValidationInfo(const wxString& apiKey = {}, bool noErrorReport = false) const;
+
 		public:
-			// NexusModNetwork
-			std::optional<NexusValidationReply> GetValidationInfo(const wxString& apiKey = {}) const;
+			std::optional<NexusValidationReply> GetValidationInfo() const;
 			std::optional<NexusGameReply> GetGameInfo(const GameID& id = {}) const;
 			std::vector<NexusGameReply> GetGamesList() const;
 

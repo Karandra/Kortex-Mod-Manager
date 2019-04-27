@@ -151,7 +151,8 @@ namespace Kortex::NetworkManager
 						}
 						else if (!authenticable->IsAuthenticated())
 						{
-							item->SetItemLabel(KxString::Format("%1 (%2)", KTr("NetworkManager.ModNetwork.MakeDefault"), KTr("NetworkManager.NotSignedIn")));
+							wxString label = KxString::Format("%1 (%2)", KTr("NetworkManager.ModNetwork.MakeDefault"), KTr("NetworkManager.NotSignedIn"));
+							item->SetItemLabel(KxString::MakeCapitalized(label));
 						}
 						else
 						{

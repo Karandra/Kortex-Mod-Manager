@@ -100,6 +100,18 @@ namespace Kortex
 		return false;
 	}
 
+	bool ModSourceStore::HasUnknownSources() const
+	{
+		for (const ModSourceItem& item: m_Items)
+		{
+			if (!item.HasModModNetwork())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	wxString ModSourceStore::GetModPageURL(const wxString& name, const GameID& gameID) const
 	{
 		if (const ModSourceItem* item = GetItem(name))

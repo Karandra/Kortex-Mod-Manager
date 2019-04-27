@@ -202,13 +202,15 @@ namespace Kortex
 				return AssignWith(*T::GetInstance(), modInfo);
 			}
 
+			// Remove items
 			bool RemoveItem(const wxString& name);
 			bool RemoveItem(const IModNetwork& modNetwork);
-
 			void Clear()
 			{
 				m_Items.clear();
 			}
+			
+			// Common properties
 			size_t GetSize() const
 			{
 				return m_Items.size();
@@ -217,7 +219,9 @@ namespace Kortex
 			{
 				return m_Items.empty();
 			}
-			
+			bool HasUnknownSources() const;
+
+			// Enumeration
 			template<class TFunctor> void Visit(TFunctor&& func) const
 			{
 				Utility::Collection::Enumerate(m_Items, func);
@@ -240,6 +244,7 @@ namespace Kortex
 				}
 			}
 
+			// Conversion to URL list
 			wxString GetModPageURL(const wxString& name, const GameID& gameID = GameIDs::NullGameID) const;
 			wxString GetModPageURL(const IModNetwork& modNetwork, const GameID& gameID = GameIDs::NullGameID) const;
 			template<class T> wxString GetModPageURL(const GameID& gameID = GameIDs::NullGameID) const
@@ -250,6 +255,7 @@ namespace Kortex
 			KxStringVector GetModURLs(const GameID& gameID = GameIDs::NullGameID) const;
 			KLabeledValue::Vector GetLabeledModURLs(const GameID& gameID = GameIDs::NullGameID) const;
 
+			// Serialization
 			void LoadTryAdd(const KxXMLNode& arrayNode);
 			void LoadAssign(const KxXMLNode& arrayNode);
 			void Save(KxXMLNode& arrayNode) const;

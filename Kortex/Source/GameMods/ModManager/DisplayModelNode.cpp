@@ -118,10 +118,15 @@ namespace Kortex::ModManager
 				{
 					if (const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column.GetClientData()))
 					{
-						const ModSourceItem* item = m_Mod->GetModSourceStore().GetItem(*modNetwork);
+						const ModSourceStore& store = m_Mod->GetModSourceStore();
+						const ModSourceItem* item = store.GetItem(*modNetwork);
 						if (NetworkModInfo modInfo; item && item->TryGetModInfo(modInfo))
 						{
 							return modInfo.ToString();
+						}
+						else if (store.HasUnknownSources())
+						{
+							return wxS("-");
 						}
 					}
 					break;

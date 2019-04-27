@@ -4,6 +4,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFile.h>
+#include <KxFramework/KxDrive.h>
 #include <KxFramework/KxApp.h>
 
 namespace Kortex
@@ -29,6 +30,38 @@ namespace Kortex
 			}
 		}
 		return KxString::Format("%1 (1).%2", name.BeforeLast('.'), name.AfterLast('.'));
+	}
+	auto IDownloadManager::CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize) const -> DownloadLocationError
+	{
+		// Check path and folder existence
+		if (directoryPath.IsEmpty())
+		{
+			return DownloadLocationError::NotSpecified;
+		}
+		if (!KxFile(directoryPath).IsFolderExist())
+		{
+			return DownloadLocationError::NotExist;
+		}
+		
+		// Check volume capabilities
+		KxDrive drive(directoryPath);
+
+		// Add one MB because it's probably impossible to safely save a file with exact size as free space left on disk
+		constexpr int64_t reserveSize = 1024 * 1024 * 1024;
+		if (fileSize > 0 && drive.GetFreeSpace() < (fileSize + reserveSize))
+		{
+			return DownloadLocationError::InsufficientVolumeSpace;
+		}
+
+		#if 0
+		// Check if the volume supports file streams
+		if (!(drive.GetInfo().FileSystemFlags & FILE_NAMED_STREAMS))
+		{
+			return DownloadLocationError::InsufficientVolumeCapabilities;
+		}
+		#endif
+
+		return DownloadLocationError::Success;
 	}
 
 	IDownloadManager::IDownloadManager()

@@ -43,6 +43,7 @@ namespace Kortex::DownloadManager
 
 			wxString GetDownloadsLocation() const override;
 			void SetDownloadsLocation(const wxString& location) override;
+			DownloadLocationError OnAccessDownloadLocation() const override;
 
 			const IDownloadEntry::Vector& GetDownloads() const override
 			{
@@ -55,9 +56,9 @@ namespace Kortex::DownloadManager
 
 			IDownloadEntry& NewDownload() override;
 			bool RemoveDownload(IDownloadEntry& download) override;
-			bool QueueDownload(const ModDownloadReply& downloadInfo,
+			bool QueueDownload(IModNetworkRepository& modRepository,
+							   const ModDownloadReply& downloadInfo,
 							   const ModFileReply& fileInfo,
-							   IModNetworkRepository& modRepository,
 							   const GameID& id = {}
 			) override;
 			bool TryQueueDownloadLink(const wxString& link) override;

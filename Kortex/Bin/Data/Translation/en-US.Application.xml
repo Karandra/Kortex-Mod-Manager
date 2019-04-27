@@ -561,7 +561,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.NameShort">Downloads</String>
 
 		<String ID="DownloadManager.DownloadLocation">Downloads folder</String>
-		<String ID="DownloadManager.DownloadLocationInaccessible">The downloads folder is not specified or does not exist. Select the folder where you want to store the downloads.</String>
+		<String ID="DownloadManager.DownloadLocationInvalid">The downloads folder is not specified or does not exist. Select the folder where you want to store the downloads</String>
+		<String ID="DownloadManager.DownloadLocationInsufficientSpace">Not enough space to save the file</String>
+		<String ID="DownloadManager.DownloadLocationInsufficientCapabilities">The device does not support the features required to save the file</String>
 
 		<String ID="DownloadManager.RemoveDownloadsCaption">Deleting downloads</String>
 		<String ID="DownloadManager.RemoveDownloadsMessage">Are you sure you want to delete all downloads?</String>

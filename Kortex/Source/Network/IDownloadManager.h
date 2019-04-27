@@ -22,8 +22,21 @@ namespace Kortex
 		public KxSingletonPtr<IDownloadManager>,
 		public RTTI::IInterface<IDownloadManager>
 	{
+		public:
+			enum class DownloadLocationError
+			{
+				Success = 0,
+				NotExist,
+				NotSpecified,
+				InsufficientVolumeSpace,
+				InsufficientVolumeCapabilities,
+			};
+
 		protected:
 			static wxString RenameIncrement(const wxString& name);
+
+		protected:
+			DownloadLocationError CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize = -1) const;
 
 		public:
 			IDownloadManager();
@@ -50,6 +63,7 @@ namespace Kortex
 
 			virtual wxString GetDownloadsLocation() const = 0;
 			virtual void SetDownloadsLocation(const wxString& location) = 0;
+			virtual DownloadLocationError OnAccessDownloadLocation() const = 0;
 
 			virtual const IDownloadEntry::Vector& GetDownloads() const = 0;
 			virtual IDownloadEntry::Vector& GetDownloads() = 0;
@@ -67,9 +81,9 @@ namespace Kortex
 
 			virtual IDownloadEntry& NewDownload() = 0;
 			virtual bool RemoveDownload(IDownloadEntry& download) = 0;
-			virtual bool QueueDownload(const ModDownloadReply& downloadInfo,
+			virtual bool QueueDownload(IModNetworkRepository& modRepository,
+									   const ModDownloadReply& downloadInfo,
 									   const ModFileReply& fileInfo,
-									   IModNetworkRepository& modRepository,
 									   const GameID& id = {}
 			) = 0;
 			virtual bool TryQueueDownloadLink(const wxString& link) = 0;

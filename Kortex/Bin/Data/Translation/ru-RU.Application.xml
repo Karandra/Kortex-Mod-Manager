@@ -566,7 +566,9 @@
 		<String ID="DownloadManager.NameShort">Загрузки</String>
 
 		<String ID="DownloadManager.DownloadLocation">Папка загрузок</String>
-		<String ID="DownloadManager.DownloadLocationInaccessible">Папка загрузок не указана или не существует. Выберите папку для сохранения загрузок.</String>
+		<String ID="DownloadManager.DownloadLocationInvalid">Папка загрузок не указана или не существует. Выберите папку для сохранения загрузок</String>
+		<String ID="DownloadManager.DownloadLocationInsufficientSpace">Недостаточно места для сохранения файла</String>
+		<String ID="DownloadManager.DownloadLocationInsufficientCapabilities">Устройство не поддерживает функции, необходимые для сохранения файла</String>
 
 		<String ID="DownloadManager.RemoveDownloadsCaption">Удаление загрузок</String>
 		<String ID="DownloadManager.RemoveDownloadsMessage">Вы действительно хотите удалить все загрузки?</String>

@@ -57,6 +57,9 @@ namespace Kortex::DownloadManager
 
 	bool Workspace::OnOpenWorkspace()
 	{
+		// This will show notification about invalid download location 
+		IDownloadManager::GetInstance()->OnAccessDownloadLocation();
+
 		return true;
 	}
 	bool Workspace::OnCloseWorkspace()

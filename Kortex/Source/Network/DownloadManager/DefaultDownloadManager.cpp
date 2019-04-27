@@ -189,13 +189,7 @@ namespace Kortex::DownloadManager
 		using namespace Application;
 		
 		auto option = GetAInstanceOption(OName::Downloads);
-		wxString location = option.GetAttribute(OName::Location);
-		if (location.IsEmpty())
-		{
-			location = IGameInstance::GetActive()->GetInstanceRelativePath("Downloads");
-			option.SetAttribute(OName::Location, location);
-		}
-		return location;
+		return option.GetAttribute(OName::Location);
 	}
 	void DefaultDownloadManager::SetDownloadsLocation(const wxString& location)
 	{
@@ -204,12 +198,44 @@ namespace Kortex::DownloadManager
 		GetAInstanceOption(OName::Downloads).SetAttribute(OName::Location, location);
 		KxFile(location).CreateFolder();
 	}
+	auto DefaultDownloadManager::OnAccessDownloadLocation() const -> DownloadLocationError
+	{
+		const DownloadLocationError status = CheckDownloadLocation(GetDownloadsLocation());
+		switch (status)
+		{
+			case DownloadLocationError::NotExist:
+			case DownloadLocationError::NotSpecified:
+			{
+				INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.DownloadLocation"),
+														   KTr("DownloadManager.DownloadLocationInvalid"),
+														   KxICON_ERROR
+				);
+				break;
+			}
+			case DownloadLocationError::InsufficientVolumeSpace:
+			{
+				INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.DownloadLocation"),
+														   KTr("DownloadManager.DownloadLocationInsufficientSpace"),
+														   KxICON_ERROR
+				);
+				break;
+			}
+			case DownloadLocationError::InsufficientVolumeCapabilities:
+			{
+				INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.DownloadLocation"),
+														   KTr("DownloadManager.DownloadLocationInsufficientCapabilities"),
+														   KxICON_ERROR
+				);
+				break;
+			}
+		};
+		return status;
+	}
 
 	IDownloadEntry& DefaultDownloadManager::NewDownload()
 	{
-		return *m_Downloads.emplace_back(new DefaultDownloadEntry());
+		return *m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>());
 	}
-
 	bool DefaultDownloadManager::RemoveDownload(IDownloadEntry& download)
 	{
 		if (!download.IsRunning())
@@ -226,12 +252,18 @@ namespace Kortex::DownloadManager
 		}
 		return false;
 	}
-	bool DefaultDownloadManager::QueueDownload(const ModDownloadReply& downloadInfo,
+	
+	bool DefaultDownloadManager::QueueDownload(IModNetworkRepository& modRepository,
+											   const ModDownloadReply& downloadInfo,
 											   const ModFileReply& fileInfo,
-											   IModNetworkRepository& modRepository,
 											   const GameID& id
 	)
 	{
+		if (OnAccessDownloadLocation() != DownloadLocationError::Success)
+		{
+			return false;
+		}
+
 		if (downloadInfo.IsOK() && fileInfo.IsOK())
 		{
 			IDownloadEntry& entry = *m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>(downloadInfo, fileInfo, modRepository, id));
@@ -307,7 +339,9 @@ namespace Kortex::DownloadManager
 
 					if (auto linkItems = nexus->GetFileDownloads(request); !linkItems.empty())
 					{
-						return QueueDownload(linkItems.front(), *fileInfo, *nexus->QueryInterface<IModNetworkRepository>(), gameID);
+						// Here we should actually select preferred download server based on user chose if we got more than one,
+						// but for now just use the first one.
+						return QueueDownload(*nexus->QueryInterface<IModNetworkRepository>(), linkItems.front(), *fileInfo, gameID);
 					}
 					return false;
 				}

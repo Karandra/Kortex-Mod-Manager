@@ -644,7 +644,7 @@ namespace Kortex::DownloadManager
 
 		if (dialog.ShowModal() == KxID_YES)
 		{
-			IDownloadEntry::RefVector items = IDownloadManager::GetInstance()->GetNotRunningDownloads(installedOnly);
+			IDownloadEntry::RefVector items = IDownloadManager::GetInstance()->GetInactiveDownloads(installedOnly);
 			if (!items.empty())
 			{
 				for (IDownloadEntry* entry: items)
@@ -657,7 +657,7 @@ namespace Kortex::DownloadManager
 	}
 	void DisplayModel::SetAllHidden(bool isHidden, bool installedOnly)
 	{
-		IDownloadEntry::RefVector items = IDownloadManager::GetInstance()->GetNotRunningDownloads(installedOnly);
+		IDownloadEntry::RefVector items = IDownloadManager::GetInstance()->GetInactiveDownloads(installedOnly);
 		if (!items.empty())
 		{
 			for (IDownloadEntry* entry: items)

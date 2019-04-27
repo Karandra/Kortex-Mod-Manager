@@ -53,7 +53,7 @@ namespace Kortex
 
 			virtual const IDownloadEntry::Vector& GetDownloads() const = 0;
 			virtual IDownloadEntry::Vector& GetDownloads() = 0;
-			IDownloadEntry::RefVector GetNotRunningDownloads(bool installedOnly = false) const;
+			IDownloadEntry::RefVector GetInactiveDownloads(bool installedOnly = false) const;
 			
 			IDownloadEntry* FindDownloadByFileName(const wxString& name, const IDownloadEntry* except = nullptr) const;
 			template<class T> static auto GetDownloadIterator(T& items, const IDownloadEntry& entry)

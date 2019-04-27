@@ -50,7 +50,7 @@ namespace Kortex
 		}
 	}
 
-	IDownloadEntry::RefVector IDownloadManager::GetNotRunningDownloads(bool installedOnly) const
+	IDownloadEntry::RefVector IDownloadManager::GetInactiveDownloads(bool installedOnly) const
 	{
 		IDownloadEntry::RefVector items;
 		for (const auto& entry: GetDownloads())

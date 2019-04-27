@@ -249,16 +249,6 @@ namespace Kortex::DownloadManager
 		{
 			Workspace* workspace = Workspace::GetInstance();
 			workspace->SwitchHere();
-
-			KMainWindow* mainWindow = KMainWindow::GetInstance();
-			if (mainWindow->IsIconized())
-			{
-				mainWindow->Restore();
-			}
-			if (!mainWindow->IsShownOnScreen() || !mainWindow->IsExposed(wxGetMousePosition()))
-			{
-				mainWindow->Show();
-			}
 			return true;
 		}
 		return false;

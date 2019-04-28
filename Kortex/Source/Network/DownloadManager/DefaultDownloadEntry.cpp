@@ -45,8 +45,8 @@ namespace Kortex::DownloadManager
 	}
 	bool DefaultDownloadEntry::RequestNewLink()
 	{
-		IModNetworkRepository* repository = nullptr;
-		if (m_ModSource && m_ModSource->QueryInterface(repository))
+		ModNetworkRepository* repository = nullptr;
+		if (m_ModSource && m_ModSource->TryGetComponent(repository))
 		{
 			ModRepositoryRequest request(m_FileInfo.ModID, m_FileInfo.ID, GetTargetGameID());
 			if (auto info = repository->GetFileDownloads(request); !info.empty())
@@ -140,14 +140,14 @@ namespace Kortex::DownloadManager
 	}
 	DefaultDownloadEntry::DefaultDownloadEntry(const ModDownloadReply& downloadInfo,
 											   const ModFileReply& fileInfo,
-											   IModNetworkRepository& modRepository,
+											   ModNetworkRepository& modRepository,
 											   const GameID& id
 	)
 		:m_DownloadInfo(downloadInfo),
 		m_FileInfo(fileInfo),
 		m_Date(wxDateTime::Now()),
 		m_TargetGame(IGameInstance::GetTemplate(id)),
-		m_ModSource(modRepository.QueryInterface<IModNetwork>())
+		m_ModSource(&modRepository.GetContainer())
 	{
 		Create();
 	}
@@ -287,8 +287,8 @@ namespace Kortex::DownloadManager
 
 	bool DefaultDownloadEntry::RepairBrokedDownload()
 	{
-		IModNetworkRepository* repository = nullptr;
-		if (m_ModSource && m_ModSource->QueryInterface(repository))
+		ModNetworkRepository* repository = nullptr;
+		if (m_ModSource && m_ModSource->TryGetComponent(repository))
 		{
 			if (repository->RestoreBrokenDownload(GetFullPath(), *this))
 			{
@@ -300,8 +300,8 @@ namespace Kortex::DownloadManager
 	}
 	bool DefaultDownloadEntry::QueryInfo()
 	{
-		IModNetworkRepository* repository = nullptr;
-		if (m_ModSource && m_ModSource->QueryInterface(repository))
+		ModNetworkRepository* repository = nullptr;
+		if (m_ModSource && m_ModSource->TryGetComponent(repository))
 		{
 			ModRepositoryRequest request(m_FileInfo.ModID, m_FileInfo.ID, GetTargetGameID());
 			if (auto fileInfo = repository->GetModFileInfo(request); fileInfo && fileInfo->IsOK())

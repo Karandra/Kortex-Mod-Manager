@@ -1,13 +1,14 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
-#include <KxFramework/KxQueryInterface.h>
+#include "IModNetwork.h"
+#include <KxFramework/KxComponentSystem.h>
 #include <KxFramework/KxSecretStore.h>
 #include <optional>
 
 namespace Kortex
 {
-	class IAuthenticableModNetwork: public KxRTTI::IInterface<IAuthenticableModNetwork>
+	class ModNetworkAuth: public KxComponentOf<IModNetwork>
 	{
 		public:
 			struct Credentials
@@ -40,7 +41,7 @@ namespace Kortex
 			virtual KxSecretDefaultStoreService& GetSecretStore() = 0;
 			const KxSecretDefaultStoreService& GetSecretStore() const
 			{
-				return const_cast<IAuthenticableModNetwork*>(this)->GetSecretStore();
+				return const_cast<ModNetworkAuth*>(this)->GetSecretStore();
 			}
 			
 			wxBitmap DownloadSmallBitmap(const wxString& address) const;

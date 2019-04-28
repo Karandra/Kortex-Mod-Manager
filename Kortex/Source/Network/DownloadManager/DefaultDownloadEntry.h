@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Network/IDownloadEntry.h"
 #include "Network/IModNetwork.h"
-#include "Network/IModNetworkRepository.h"
+#include "Network/ModNetworkRepository.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxFileStream.h>
 class KQuickThread;
@@ -52,7 +52,7 @@ namespace Kortex::DownloadManager
 			DefaultDownloadEntry();
 			DefaultDownloadEntry(const ModDownloadReply& downloadInfo,
 								 const ModFileReply& fileInfo,
-								 IModNetworkRepository& modRepository,
+								 ModNetworkRepository& modRepository,
 								 const GameID& id = {});
 			virtual ~DefaultDownloadEntry();
 
@@ -80,9 +80,9 @@ namespace Kortex::DownloadManager
 			{
 				return m_ModSource;
 			}
-			void SetModNetwork(IModNetworkRepository& modRepository) override
+			void SetModNetwork(ModNetworkRepository& modRepository) override
 			{
-				m_ModSource = modRepository.QueryInterface<IModNetwork>();
+				m_ModSource = &modRepository.GetContainer();
 			}
 			
 			wxDateTime GetDate() const override

@@ -417,9 +417,9 @@ namespace Kortex::ModManager
 				IDownloadEntry& entry = manager->NewDownload();
 				entry.SetTargetGameID(ini.GetValue("General", "gameName"));
 
-				IModNetworkRepository* repository = nullptr;
+				ModNetworkRepository* repository = nullptr;
 				IModNetwork* modNetwork = INetworkManager::GetInstance()->GetModNetworkByName(ini.GetValue("General", "repository"));
-				if (modNetwork && modNetwork->QueryInterface(repository))
+				if (modNetwork && modNetwork->TryGetComponent(repository))
 				{
 					entry.SetModNetwork(*repository);
 				}

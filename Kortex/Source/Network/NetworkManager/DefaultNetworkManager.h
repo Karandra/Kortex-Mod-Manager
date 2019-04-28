@@ -9,8 +9,8 @@ class KxMenu;
 
 namespace Kortex
 {
-	class IAuthenticableModNetwork;
-	class IModNetworkRepository;
+	class ModNetworkAuth;
+	class ModNetworkRepository;
 }
 
 namespace Kortex::NetworkManager

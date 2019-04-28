@@ -22,9 +22,9 @@ namespace
 		using namespace Kortex;
 
 		const IModNetwork* modNetwork= INetworkManager::GetInstance()->GetDefaultModNetwork();
-		const IAuthenticableModNetwork* auth = nullptr;
+		const ModNetworkAuth* auth = nullptr;
 
-		return modNetwork && modNetwork->QueryInterface(auth) && auth->IsAuthenticated();
+		return modNetwork && modNetwork->TryGetComponent(auth) && auth->IsAuthenticated();
 	};
 	template<class TModNetwork, class TContainer> TModNetwork& AddModNetwork(TContainer&& container)
 	{
@@ -68,7 +68,7 @@ namespace Kortex::NetworkManager
 	{
 		for (auto& modNetwork: m_ModNetworks)
 		{
-			if (auto auth = modNetwork->QueryInterface<IAuthenticableModNetwork>())
+			if (auto auth = modNetwork->TryGetComponent<ModNetworkAuth>())
 			{
 				auth->ValidateAuth();
 			}
@@ -82,8 +82,8 @@ namespace Kortex::NetworkManager
 			m_DefaultModNetwork = nullptr;
 			for (auto& modNetwork: m_ModNetworks)
 			{
-				const IAuthenticableModNetwork* auth = nullptr;
-				if (modNetwork->QueryInterface(auth) && auth->IsAuthenticated())
+				const ModNetworkAuth* auth = nullptr;
+				if (modNetwork->TryGetComponent(auth) && auth->IsAuthenticated())
 				{
 					m_DefaultModNetwork = modNetwork.get();
 					return true;
@@ -104,8 +104,8 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::UpdateButton()
 	{
-		const IAuthenticableModNetwork* auth = nullptr;
-		if (m_DefaultModNetwork && m_DefaultModNetwork->QueryInterface(auth) && auth->IsAuthenticated())
+		const ModNetworkAuth* auth = nullptr;
+		if (m_DefaultModNetwork && m_DefaultModNetwork->TryGetComponent(auth) && auth->IsAuthenticated())
 		{
 			m_LoginButton->SetLabel(KTr("NetworkManager.SignedIn") + ": " + m_DefaultModNetwork->GetName());
 			m_LoginButton->SetBitmap(KGetBitmap(m_DefaultModNetwork->GetIcon()));
@@ -133,8 +133,8 @@ namespace Kortex::NetworkManager
 				KxMenuItem* rootItem = m_Menu->Add(subMenu, modNetwork->GetName());
 				rootItem->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
 
-				const IAuthenticableModNetwork* authenticable = modNetwork->QueryInterface<IAuthenticableModNetwork>();
-				const IModNetworkRepository* repository = modNetwork->QueryInterface<IModNetworkRepository>();
+				const ModNetworkAuth* authenticable = modNetwork->TryGetComponent<ModNetworkAuth>();
+				const ModNetworkRepository* repository = modNetwork->TryGetComponent<ModNetworkRepository>();
 
 				// Add default source toggle
 				{
@@ -224,7 +224,7 @@ namespace Kortex::NetworkManager
 	void DefaultNetworkManager::OnSignInOut(KxMenuEvent& event)
 	{
 		IModNetwork* modNetwork = static_cast<IModNetwork*>(event.GetItem()->GetClientData());
-		if (auto auth = modNetwork->QueryInterface<IAuthenticableModNetwork>(); auth && auth->IsAuthenticated())
+		if (auto auth = modNetwork->TryGetComponent<ModNetworkAuth>(); auth && auth->IsAuthenticated())
 		{
 			KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("NetworkManager.SignOutMessage", modNetwork->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 			if (dialog.ShowModal() == KxID_YES)

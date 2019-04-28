@@ -295,7 +295,7 @@ namespace Kortex::ModManager
 
 				IDownloadEntry& entry = manager->NewDownload();
 				entry.SetTargetGame(m_TargetGame);
-				entry.SetModNetwork(*NetworkManager::NexusModNetwork::GetInstance());
+				entry.SetModNetwork(NetworkManager::NexusModNetwork::GetInstance()->GetComponent<ModNetworkRepository>());
 				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
 				entry.GetDownloadInfo().URL = infoNode.GetFirstChildElement("Website").GetValue();

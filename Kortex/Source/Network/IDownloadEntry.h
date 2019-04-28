@@ -11,7 +11,7 @@ namespace Kortex
 	class IGameInstance;
 	class IGameMod;
 	class IModNetwork;
-	class IModNetworkRepository;
+	class ModNetworkRepository;
 }
 
 namespace Kortex
@@ -37,7 +37,7 @@ namespace Kortex
 			virtual bool IsInstalled() const = 0;
 
 			virtual IModNetwork* GetModNetwork() const = 0;
-			virtual void SetModNetwork(IModNetworkRepository& modRepository) = 0;
+			virtual void SetModNetwork(ModNetworkRepository& modRepository) = 0;
 			bool HasModNetwork() const
 			{
 				return GetModNetwork() != nullptr;

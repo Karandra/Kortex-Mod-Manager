@@ -7,7 +7,7 @@
 namespace Kortex
 {
 	class IModNetwork;
-	class IModNetworkRepository;
+	class ModNetworkRepository;
 }
 
 namespace Kortex
@@ -81,7 +81,7 @@ namespace Kortex
 
 			virtual IDownloadEntry& NewDownload() = 0;
 			virtual bool RemoveDownload(IDownloadEntry& download) = 0;
-			virtual bool QueueDownload(IModNetworkRepository& modRepository,
+			virtual bool QueueDownload(ModNetworkRepository& modRepository,
 									   const ModDownloadReply& downloadInfo,
 									   const ModFileReply& fileInfo,
 									   const GameID& id = {}

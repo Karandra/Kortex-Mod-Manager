@@ -346,7 +346,7 @@ namespace Kortex::DownloadManager
 			{
 				for (auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
 				{
-					if (IModNetworkRepository* repository = modNetwork->QueryInterface<IModNetworkRepository>())
+					if (ModNetworkRepository* repository = modNetwork->QueryInterface<ModNetworkRepository>())
 					{
 						KxMenuItem* item = providerMenu->Add(new KxMenuItem(modNetwork->GetName(), wxEmptyString, wxITEM_CHECK));
 						item->Check(modNetwork.get() == download->GetModNetwork());

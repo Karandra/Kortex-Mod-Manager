@@ -27,7 +27,7 @@ namespace Kortex::NetworkManager
 		int64_t FilesCount = -1;
 		int64_t DownloadsCount = -1;
 		int64_t ModsCount = -1;
-		wxDateTime m_ApprovedDate;
+		wxDateTime ApprovedDate;
 	};
 	class NexusNXMLinkData
 	{

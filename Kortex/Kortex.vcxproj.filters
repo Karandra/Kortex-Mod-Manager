@@ -355,6 +355,12 @@
     <Filter Include="Code\Source\Network\ModNetwork">
       <UniqueIdentifier>{fece819f-3c96-4b34-bea2-7c4f8866dba7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\Network\ModNetwork\Nexus">
+      <UniqueIdentifier>{4d0dc77a-8a7d-4db1-91c0-3e0f372c5e4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Network\ModNetwork\Nexus">
+      <UniqueIdentifier>{bd590061-5931-40cf-bf48-8108a9f8cb45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1110,12 +1116,6 @@
     <ClCompile Include="Source\Network\IModNetwork.cpp">
       <Filter>Code\Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\IAuthenticableModNetwork.cpp">
-      <Filter>Code\Source\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Network\ModNetwork\Nexus.cpp">
-      <Filter>Code\Source\Network\ModNetwork</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\TESALL.cpp">
       <Filter>Code\Source\Network\ModNetwork</Filter>
     </ClCompile>
@@ -1133,6 +1133,21 @@
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\MainFileSystem.cpp">
       <Filter>Code\Source\GameMods\ModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetworkAuth.cpp">
+      <Filter>Code\Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\Nexus.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusAuth.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusRepository.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUtility.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2123,22 +2138,10 @@
     <ClInclude Include="Source\Network\IModNetwork.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\IAuthenticableModNetwork.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\IModNetworkRepository.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\NexusModInfo.h">
-      <Filter>Code\Headers\Network\ModNetwork</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\ModNetwork\TESALL.h">
       <Filter>Code\Headers\Network\ModNetwork</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\ModNetwork\LoversLab.h">
-      <Filter>Code\Headers\Network\ModNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus.h">
       <Filter>Code\Headers\Network\ModNetwork</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.h">
@@ -2155,6 +2158,30 @@
     </ClInclude>
     <ClInclude Include="Source\GameMods\ModManager\MainFileSystem.h">
       <Filter>Code\Headers\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetworkRepository.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetworkAuth.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusModInfo.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\Nexus.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusAuth.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusRepository.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUtility.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus.h">
+      <Filter>Code\Headers\Network\ModNetwork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

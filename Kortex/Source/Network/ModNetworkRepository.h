@@ -1,10 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
+#include "IModNetwork.h"
 #include "ModRepositoryRequest.h"
 #include "ModRepositoryReply.h"
 #include "ModRepositoryLimits.h"
-#include <KxFramework/KxQueryInterface.h>
+#include <KxFramework/KxComponentSystem.h>
 #include <KxFramework/KxFileItem.h>
 #include <optional>
 
@@ -15,7 +16,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IModNetworkRepository: public KxRTTI::IInterface<IModNetworkRepository>
+	class ModNetworkRepository: public KxComponentOf<IModNetwork>
 	{
 		public:
 			virtual ModRepositoryLimits GetRequestLimits() const = 0;

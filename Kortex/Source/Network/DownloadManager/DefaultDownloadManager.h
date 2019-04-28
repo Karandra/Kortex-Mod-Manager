@@ -56,7 +56,7 @@ namespace Kortex::DownloadManager
 
 			IDownloadEntry& NewDownload() override;
 			bool RemoveDownload(IDownloadEntry& download) override;
-			bool QueueDownload(IModNetworkRepository& modRepository,
+			bool QueueDownload(ModNetworkRepository& modRepository,
 							   const ModDownloadReply& downloadInfo,
 							   const ModFileReply& fileInfo,
 							   const GameID& id = {}

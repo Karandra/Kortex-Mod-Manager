@@ -5,8 +5,8 @@
 #include "Network/INetworkManager.h"
 
 #include "Network/IModNetwork.h"
-#include "Network/IModNetworkRepository.h"
-#include "Network/IAuthenticableModNetwork.h"
+#include "Network/ModNetworkRepository.h"
+#include "Network/ModNetworkAuth.h"
 #include "Network/ModSourceStore.h"
 
 #include "Network/IDownloadManager.h"

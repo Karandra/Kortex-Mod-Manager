@@ -253,7 +253,7 @@ namespace Kortex::DownloadManager
 		return false;
 	}
 	
-	bool DefaultDownloadManager::QueueDownload(IModNetworkRepository& modRepository,
+	bool DefaultDownloadManager::QueueDownload(ModNetworkRepository& modRepository,
 											   const ModDownloadReply& downloadInfo,
 											   const ModFileReply& fileInfo,
 											   const GameID& id
@@ -332,16 +332,18 @@ namespace Kortex::DownloadManager
 
 			if (nexus->ParseNXM(link, gameID, modInfo, nxmExtraInfo))
 			{
-				if (auto fileInfo = nexus->GetModFileInfo(ModRepositoryRequest(modInfo, gameID)))
+				ModNetworkRepository& repository = nexus->GetComponent<ModNetworkRepository>();
+
+				if (auto fileInfo = repository.GetModFileInfo(ModRepositoryRequest(modInfo, gameID)))
 				{
 					ModRepositoryRequest request(modInfo, gameID);
 					request.SetExtraInfo(nxmExtraInfo);
 
-					if (auto linkItems = nexus->GetFileDownloads(request); !linkItems.empty())
+					if (auto linkItems = repository.GetFileDownloads(request); !linkItems.empty())
 					{
 						// Here we should actually select preferred download server based on user chose if we got more than one,
 						// but for now just use the first one.
-						return QueueDownload(*nexus->QueryInterface<IModNetworkRepository>(), linkItems.front(), *fileInfo, gameID);
+						return QueueDownload(repository, linkItems.front(), *fileInfo, gameID);
 					}
 					return false;
 				}

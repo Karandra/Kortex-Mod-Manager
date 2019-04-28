@@ -6,6 +6,7 @@
 #include "GameInstance/GameID.h"
 #include "Utility/KImageProvider.h"
 #include <KxFramework/KxQueryInterface.h>
+#include <KxFramework/KxComponentSystem.h>
 #include <KxFramework/KxSecretStore.h>
 #include <KxFramework/KxVersion.h>
 
@@ -16,7 +17,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IModNetwork: public KxRTTI::IInterface<IModNetwork>
+	class IModNetwork: public KxRTTI::IInterface<IModNetwork>, public KxComponentContainer
 	{
 		friend class INetworkManager;
 

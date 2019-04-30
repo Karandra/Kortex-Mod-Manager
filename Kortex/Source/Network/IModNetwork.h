@@ -9,6 +9,7 @@
 #include <KxFramework/KxComponentSystem.h>
 #include <KxFramework/KxSecretStore.h>
 #include <KxFramework/KxVersion.h>
+class KxMenu;
 
 namespace Kortex
 {
@@ -58,5 +59,10 @@ namespace Kortex
 			
 			virtual wxString GetModPageBaseURL(const GameID& id = {}) const = 0;
 			virtual wxString GetModPageURL(const ModRepositoryRequest& request) = 0;
+
+		public:
+			virtual void OnMenu(KxMenu& menu)
+			{
+			}
 	};
 }

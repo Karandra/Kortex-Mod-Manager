@@ -224,6 +224,16 @@ namespace Kortex::NetworkManager
 						item->Enable(false);
 					}
 				}
+
+				// Add any custom menu items
+				const size_t itemCount = subMenu->GetMenuItemCount();
+				modNetwork->OnMenu(*subMenu);
+
+				// Check if we need to add separator
+				if (subMenu->GetMenuItemCount() > itemCount)
+				{
+					subMenu->InsertSeparator(itemCount);
+				}
 			}
 		}
 	}

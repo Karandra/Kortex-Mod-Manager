@@ -170,7 +170,22 @@ namespace Kortex::NetworkManager
 				// Add sign-in/sign-out items.
 				if (authenticable)
 				{
-					wxString label = authenticable->IsAuthenticated() ? KTr("NetworkManager.SignOut") : KTr("NetworkManager.SignIn");
+					wxString label;
+					if (bool isAuth = authenticable->IsAuthenticated())
+					{
+						if (auto credentials = authenticable->LoadCredentials())
+						{
+							label = KxString::Format(wxS("%1: %2"), KTr("NetworkManager.SignOut"), credentials->UserID);
+						}
+						else
+						{
+							label = KTr("NetworkManager.SignOut");
+						}
+					}
+					else
+					{
+						label = KTr("NetworkManager.SignIn");
+					}
 
 					KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
 					item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSignInOut, this);

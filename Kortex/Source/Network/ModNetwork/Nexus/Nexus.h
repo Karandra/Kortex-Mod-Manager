@@ -60,5 +60,8 @@ namespace Kortex::NetworkManager
 
 			wxString ConstructNXM(const NetworkModInfo& modInfo, const GameID& id = {}, const NexusNXMLinkData& linkData = {}) const;
 			bool ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const;
+	
+		public:
+			void OnMenu(KxMenu& menu) override;
 	};
 }

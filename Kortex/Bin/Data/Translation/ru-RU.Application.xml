@@ -561,6 +561,9 @@
 		<String ID="NetworkManager.QueryLimits.Daily">За день: %1/%2</String>
 		<String ID="NetworkManager.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</String>
 
+		<String ID="NetworkManager.Nexus.UserIsPremium">Премиум-пользователь</String>
+		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter-пользователь</String>
+
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>
 		<String ID="DownloadManager.NameShort">Загрузки</String>

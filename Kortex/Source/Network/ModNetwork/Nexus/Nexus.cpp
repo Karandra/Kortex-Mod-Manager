@@ -382,4 +382,9 @@ namespace Kortex::NetworkManager
 		}
 		return false;
 	}
+
+	void NexusModNetwork::OnMenu(KxMenu& menu)
+	{
+		m_Auth.OnMenu(menu);
+	}
 }

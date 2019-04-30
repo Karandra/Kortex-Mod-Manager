@@ -45,6 +45,24 @@ namespace Kortex::NetworkManager
 		return KxID_OK;
 	}
 	
+	void NexusAuth::OnMenu(KxMenu& menu)
+	{
+		if (m_LastValidationReply)
+		{
+			if (m_LastValidationReply->IsPremium)
+			{
+				KxMenuItem* item = menu.Add(new KxMenuItem(KTr("NetworkManager.Nexus.UserIsPremium"), wxEmptyString, wxITEM_CHECK));
+				item->Enable(false);
+				item->Check();
+			}
+			else if (m_LastValidationReply->IsSupporter)
+			{
+				KxMenuItem* item = menu.Add(new KxMenuItem(KTr("NetworkManager.Nexus.UserIsSupporter"), wxEmptyString, wxITEM_CHECK));
+				item->Enable(false);
+				item->Check();
+			}
+		}
+	}
 	void NexusAuth::RequestUserPicture(const NexusValidationReply& info)
 	{
 		if (!HasUserPicture() && !LoadUserPicture())
@@ -61,6 +79,7 @@ namespace Kortex::NetworkManager
 		KxCURLReply reply = connection->Send();
 		if (m_Utility.TestRequestError(reply, reply, noErrorReport))
 		{
+			m_LastValidationReply.reset();
 			return std::nullopt;
 		}
 
@@ -79,8 +98,11 @@ namespace Kortex::NetworkManager
 		}
 		catch (...)
 		{
+			m_LastValidationReply.reset();
 			return std::nullopt;
 		}
+
+		m_LastValidationReply = info;
 		return info;
 	}
 

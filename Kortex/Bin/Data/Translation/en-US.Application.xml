@@ -556,6 +556,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.QueryLimits.Daily">Daily: %1/%2</String>
 		<String ID="NetworkManager.RequestQuotaReched">Query limit to %1 has been reached for a period of time</String>
 
+		<String ID="NetworkManager.Nexus.UserIsPremium">Premium user</String>
+		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter user</String>
+
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Download manager</String>
 		<String ID="DownloadManager.NameShort">Downloads</String>

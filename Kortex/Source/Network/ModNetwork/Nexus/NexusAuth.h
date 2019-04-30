@@ -18,6 +18,8 @@ namespace Kortex::NetworkManager
 
 	class NexusAuth: public ModNetworkAuth
 	{
+		friend class NexusModNetwork;
+
 		private:
 			NexusModNetwork& m_Nexus;
 			NexusUtility& m_Utility;
@@ -25,6 +27,7 @@ namespace Kortex::NetworkManager
 			KxSecretDefaultStoreService m_CredentialsStore;
 			std::unique_ptr<KxWebSocket::IClient> m_WebSocketClient;
 
+			mutable std::optional<NexusValidationReply> m_LastValidationReply;
 			wxString m_UserToken;
 			KxUUID m_SessionGUID;
 			bool m_IsAuthenticated = false;
@@ -39,6 +42,7 @@ namespace Kortex::NetworkManager
 			}
 
 		private:
+			void OnMenu(KxMenu& menu);
 			void RequestUserPicture(const NexusValidationReply& info);
 			std::optional<NexusValidationReply> DoGetValidationInfo(const wxString& apiKey = {}, bool noErrorReport = false) const;
 

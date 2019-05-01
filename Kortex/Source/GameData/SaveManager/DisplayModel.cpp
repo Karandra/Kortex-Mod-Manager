@@ -66,7 +66,7 @@ namespace Kortex::SaveManager
 				case ColumnID::Bitmap:
 				{
 					const wxBitmap& bitmap = entry->GetThumbBitmap();
-					value = bitmap.IsOk() ? bitmap : KGetBitmap(KIMG_CROSS_WHITE);
+					value = bitmap.IsOk() ? bitmap : ImageProvider::GetBitmap(ImageResourceID::CrossWhite);
 					break;
 				}
 				case ColumnID::Name:

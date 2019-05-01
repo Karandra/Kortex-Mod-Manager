@@ -16,7 +16,6 @@
 
 namespace Kortex::NetworkManager
 {
-	
 	std::unique_ptr<KxCURLSession> NexusModNetwork::NewCURLSession(const wxString& address, const wxString& apiKey) const
 	{
 		auto session = INetworkManager::GetInstance()->NewCURLSession(address);
@@ -91,9 +90,9 @@ namespace Kortex::NetworkManager
 		AddComponent<ModNetworkRepository>(m_Repository);
 	}
 
-	KImageEnum NexusModNetwork::GetIcon() const
+	ResourceID NexusModNetwork::GetIcon() const
 	{
-		return KIMG_SITE_NEXUS;
+		return ImageResourceID::ModNetwork_Nexus;
 	}
 	wxString NexusModNetwork::GetName() const
 	{

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "StoreDisplayModel.h"
+#include "Application/Resources/IImageProvider.h"
 
 namespace Kortex::ModSource
 {
@@ -91,7 +92,7 @@ namespace Kortex::ModSource
 			case ColumnID::Name:
 			{
 				IModNetwork* modNetwork = nullptr;
-				value = KxDataViewBitmapTextValue(node->GetName(), KGetBitmap(node->TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : IModNetwork::GetGenericIcon()));
+				value = KxDataViewBitmapTextValue(node->GetName(), ImageProvider::GetBitmap(node->TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : IModNetwork::GetGenericIcon()));
 				break;
 			}
 			case ColumnID::Value:

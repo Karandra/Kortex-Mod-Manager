@@ -312,7 +312,7 @@ namespace Kortex::DownloadManager
 		KxMenu contextMenu;
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Install, KTr("DownloadManager.Menu.Install")));
-			item->SetBitmap(KGetBitmap(KIMG_BOX));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Box));
 			item->Enable(download && download->IsCompleted());
 		}
 		contextMenu.AddSeparator();
@@ -320,7 +320,7 @@ namespace Kortex::DownloadManager
 		if constexpr (false)
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Add, KTr("DownloadManager.Menu.Add")));
-			item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Pause, KTr("DownloadManager.Menu.Pause")));
@@ -378,7 +378,7 @@ namespace Kortex::DownloadManager
 
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Remove, KTr("DownloadManager.Menu.Remove")));
-			item->SetBitmap(KGetBitmap(KIMG_MINUS_SMALL));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::MinusSmall));
 			item->Enable(download && !isEmpty && !isRunning);
 		}
 		{
@@ -410,16 +410,16 @@ namespace Kortex::DownloadManager
 		contextMenu.AddSeparator();
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::OpenLocation, KTr("MainMenu.OpenLocation")));
-			item->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
 		}
 		if (modNetwork)
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::VisitOnWebSite, KTrf("DownloadManager.Menu.VisitOnWebSite", modNetwork->GetName())));
-			item->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
+			item->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Refresh, KTr(KxID_REFRESH)));
-			item->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
 		}
 
 		if (IDownloadManagerNXM* nxm = nullptr; m_DownloadManager->QueryInterface(nxm))
@@ -432,7 +432,7 @@ namespace Kortex::DownloadManager
 				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AssociateWithNXM, label, wxEmptyString, wxITEM_CHECK));
 				item->Enable(!assocOK);
 				item->Check(assocOK);
-				item->SetBitmap(KGetBitmap(KIMG_SITE_NEXUS));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ModNetwork_Nexus));
 			}
 			if (download && download->IsModNetworkOfType<NetworkManager::NexusModNetwork>())
 			{
@@ -621,21 +621,21 @@ namespace Kortex::DownloadManager
 	{
 		if (!entry.GetFileInfo().IsOK())
 		{
-			return KGetBitmap(KIMG_EXCLAMATION_CIRCLE_FRAME);
+			return ImageProvider::GetBitmap(ImageResourceID::ExclamationCircleFrame);
 		}
 		if (entry.IsCompleted())
 		{
-			return KGetBitmap(KIMG_TICK_CIRCLE_FRAME);
+			return ImageProvider::GetBitmap(ImageResourceID::TickCircleFrame);
 		}
 		if (entry.IsFailed())
 		{
-			return KGetBitmap(KIMG_CROSS_CIRCLE_FRAME);
+			return ImageProvider::GetBitmap(ImageResourceID::CrossCircleFrame);
 		}
 		if (entry.IsPaused())
 		{
-			return KGetBitmap(KIMG_EXCLAMATION_CIRCLE_FRAME_EMPTY);
+			return ImageProvider::GetBitmap(ImageResourceID::ExclamationCircleFrameEmpty);
 		}
-		return KGetBitmap(KIMG_TICK_CIRCLE_FRAME_EMPTY);
+		return ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty);
 	}
 	void DisplayModel::RemoveAll(bool installedOnly)
 	{

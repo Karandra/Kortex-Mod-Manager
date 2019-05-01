@@ -23,27 +23,19 @@
 
 using namespace Kortex;
 
-KxAuiToolBarItem* KMainWindow::CreateToolBarButton(KxAuiToolBar* toolBar, const wxString& label, KImageEnum imageID, wxItemKind kind, int index)
+KxAuiToolBarItem* KMainWindow::CreateToolBarButton(KxAuiToolBar* toolBar,
+												   const wxString& label,
+												   const Kortex::ResourceID& imageID,
+												   wxItemKind kind,
+												   int index
+)
 {
-	wxBitmap bitmap = wxNullBitmap;
-	if (imageID != KIMG_NONE)
-	{
-		bitmap = KGetBitmap(imageID);
-	}
-
+	wxBitmap bitmap = ImageProvider::GetBitmap(imageID);
 	KxAuiToolBarItem* button = toolBar->AddTool(label, bitmap, kind);
 	if (!toolBar->HasFlag(wxAUI_TB_TEXT))
 	{
 		button->SetShortHelp(label);
 	}
-	
-	#if 0
-	if (imageHoverEffects && bitmap.IsOk())
-	{
-		wxImage temp = bitmap.ConvertToImage();
-		button->SetHoverBitmap(wxBitmap(KAux::ChangeLightness(temp, 200), 32));
-	}
-	#endif
 
 	return button;
 }
@@ -87,7 +79,7 @@ void KMainWindow::CreateToolBar()
 	/* Main ToolBar */
 	m_ToolBar = NewToolBar(1, true);
 	{
-		m_ToolBar_MainMenu = m_ToolBar->AddTool(wxString::Format("%8s%s%8s", "", "Kortex", ""), KGetBitmap(KIMG_APPLICATION_LOGO_SMALL), wxITEM_DROPDOWN);
+		m_ToolBar_MainMenu = m_ToolBar->AddTool(wxString::Format("%8s%s%8s", "", "Kortex", ""), ImageProvider::GetBitmap(ImageResourceID::KortexLogoSmall), wxITEM_DROPDOWN);
 		m_ToolBar_MainMenu->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 		m_ToolBar_MainMenu->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& evnt)
 		{
@@ -106,21 +98,21 @@ void KMainWindow::CreateToolBar()
 	/* Quick ToolBar */
 	m_QuickToolBar = NewToolBar(0, true);
 	{
-		AddToolBarButton<Kortex::INetworkManager>(m_QuickToolBar, KIMG_APPLICATION_LOGO_SMALL);
+		AddToolBarButton<Kortex::INetworkManager>(m_QuickToolBar, ImageResourceID::KortexLogoSmall);
 		m_QuickToolBar->AddSeparator();
-		AddToolBarButton<Kortex::INotificationCenter>(m_QuickToolBar, KIMG_BELL);
+		AddToolBarButton<Kortex::INotificationCenter>(m_QuickToolBar, ImageResourceID::Bell);
 
-		m_QuickToolBar_QuickSettingsMenu = m_QuickToolBar->AddTool(wxEmptyString, KGetBitmap(KIMG_GEAR), wxITEM_NORMAL);
+		m_QuickToolBar_QuickSettingsMenu = m_QuickToolBar->AddTool(wxEmptyString, ImageProvider::GetBitmap(ImageResourceID::Gear), wxITEM_NORMAL);
 		m_QuickToolBar_QuickSettingsMenu->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KMainWindow::OnQSMButton, this);
 
-		m_QuickToolBar_Help = m_QuickToolBar->AddTool(wxEmptyString, KGetBitmap(KIMG_QUESTION_FRAME), wxITEM_NORMAL);
+		m_QuickToolBar_Help = m_QuickToolBar->AddTool(wxEmptyString, ImageProvider::GetBitmap(ImageResourceID::QuestionFrame), wxITEM_NORMAL);
 	}
 	m_QuickToolBar->Realize();
 }
 void KMainWindow::CreateStatusBar()
 {
 	m_StatusBar = new KxStatusBarEx(this, KxID_NONE, 5);
-	m_StatusBar->SetImageList(KGetImageList());
+	m_StatusBar->SetImageList(&ImageProvider::GetImageList());
 	m_StatusBar->SetStatusWidths({12, -3, -3, -1, 50});
 	SetStatusBar(m_StatusBar);
 }
@@ -128,7 +120,7 @@ void KMainWindow::CreateBaseLayout()
 {
 	m_WorkspaceContainer = new wxSimplebook(this, KxID_NONE);
 	m_WorkspaceContainer->SetBackgroundColour(GetBackgroundColour());
-	m_WorkspaceContainer->SetImageList(const_cast<KxImageList*>(KGetImageList()));
+	m_WorkspaceContainer->SetImageList(const_cast<KxImageList*>(&ImageProvider::GetImageList()));
 	m_MainSizer->Add(m_WorkspaceContainer, 1, wxEXPAND);
 }
 WXLRESULT KMainWindow::MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
@@ -209,7 +201,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 {
 	{
 		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.Settings")));
-		item->SetBitmap(KGetBitmap(KIMG_APPLICATION_TASK));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ApplicationTask));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
 			Application::Settings::Window(this).ShowModal();
@@ -237,7 +229,7 @@ void KMainWindow::CreateMainMenu(KxMenu& mainMenu)
 	// Add about
 	{
 		KxMenuItem* item = mainMenu.Add(new KxMenuItem(KTr("MainMenu.About")));
-		item->SetBitmap(KGetBitmap(KIMG_INFORMATION_FRAME));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::InformationFrame));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
 			Kortex::Application::AboutDialog(this).ShowModal();
@@ -292,7 +284,7 @@ void KMainWindow::AddLocationsMenu(KxMenu& mainMenu)
 		else
 		{
 			KxMenuItem* item = locationsMenu->Add(new KxMenuItem(KVarExp(entry.GetLabel())));
-			item->SetBitmap(KGetBitmap(KIMG_FOLDER));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Folder));
 			item->Bind(KxEVT_MENU_SELECT, [this, &entry](KxMenuEvent& event)
 			{
 				// Create the folder, shouldn't be harmful.
@@ -303,7 +295,7 @@ void KMainWindow::AddLocationsMenu(KxMenu& mainMenu)
 			});
 		}
 	}
-	mainMenu.Add(locationsMenu, KTr("MainMenu.OpenLocation"))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+	mainMenu.Add(locationsMenu, KTr("MainMenu.OpenLocation"))->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
 	mainMenu.AddSeparator();
 }
 
@@ -402,12 +394,12 @@ void KMainWindow::OnVFSToggled(VFSEvent& event)
 	if (event.IsActivated())
 	{
 		m_StatusBar->SetStatusText(KTr("VFS.Status.Active"));
-		m_StatusBar->SetStatusImage(KIMG_TICK_CIRCLE_FRAME, 0);
+		m_StatusBar->SetStatusImage((int)ImageResourceID::TickCircleFrame, 0);
 	}
 	else
 	{
 		m_StatusBar->SetStatusText(KTr("VFS.Status.Inactive"));
-		m_StatusBar->SetStatusImage(KIMG_INFORMATION_FRAME_EMPTY, 0);
+		m_StatusBar->SetStatusImage((int)ImageResourceID::InformationFrameEmpty, 0);
 	}
 	IThemeManager::GetActive().ProcessWindow(m_StatusBar, event.IsActivated());
 }
@@ -505,7 +497,7 @@ KWorkspace* KMainWindow::DoAddWorkspace(KWorkspace* workspace)
 {
 	IThemeManager::GetActive().ProcessWindow(workspace);
 	m_WorkspaceInstances.insert(std::make_pair(workspace->GetID(), workspace));
-	m_WorkspaceContainer->AddPage(workspace, workspace->GetName(), false, workspace->GetImageID());
+	m_WorkspaceContainer->AddPage(workspace, workspace->GetName(), false, workspace->GetImageID().AsInt());
 
 	return workspace;
 }
@@ -568,14 +560,14 @@ void KMainWindow::ClearStatus(int index)
 	wxWindowUpdateLocker lock(m_StatusBar);
 
 	m_StatusBar->SetStatusText(wxEmptyString, index + 1);
-	m_StatusBar->SetStatusImage(KIMG_NONE, index + 1);
+	m_StatusBar->SetStatusImage(-1, index + 1);
 }
-void KMainWindow::SetStatus(const wxString& label, int index, KImageEnum image)
+void KMainWindow::SetStatus(const wxString& label, int index, const ResourceID& image)
 {
 	wxWindowUpdateLocker lock(m_StatusBar);
 
 	m_StatusBar->SetStatusText(label, index + 1);
-	m_StatusBar->SetStatusImage(image, index + 1);
+	m_StatusBar->SetStatusImage(image.AsInt(), index + 1);
 }
 void KMainWindow::SetStatusProgress(int current)
 {

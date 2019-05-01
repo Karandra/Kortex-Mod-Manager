@@ -74,7 +74,7 @@ namespace Kortex::ModManager
 
 				column.SetClientData(modNetwork.get());
 				column.SetTitle(modNetwork->GetName());
-				column.SetBitmap(KGetBitmap(modNetwork->GetIcon()));
+				column.SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 			}
 		}
 		{

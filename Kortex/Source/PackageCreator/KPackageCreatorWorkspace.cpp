@@ -115,27 +115,27 @@ void KPackageCreatorWorkspace::CreateProjectMenu()
 	KxMenuItem* item = nullptr;
 
 	item = menu->Add(new KxMenuItem(KxID_NEW, KTr("PackageCreator.MenuProject.New")));
-	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_NEW));
+	item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentNew));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnNewProject, this);
 
 	item = menu->Add(new KxMenuItem(KxID_OPEN, KTr("PackageCreator.MenuProject.Open")));
-	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT));
+	item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Document));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnOpenProject, this);
 	menu->AddSeparator();
 
 	item = menu->Add(new KxMenuItem(KxID_SAVE, KTr("PackageCreator.MenuProject.Save")));
-	item->SetBitmap(KGetBitmap(KIMG_DISK));
+	item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Disk));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnSaveProject, this);
 
 	item = menu->Add(new KxMenuItem(KxID_SAVEAS, KTr("PackageCreator.MenuProject.SaveAs")));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnSaveProject, this);
 
 	item = menu->Add(new KxMenuItem(KxID_HIGHEST + KPP_PACCKAGE_FOMOD_XML, KTr("PackageCreator.MenuProject.SaveAsFOMod")));
-	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_EXPORT));
+	item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentExport));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnExportProject, this);
 
 	item = menu->Add(new KxMenuItem(KxID_HIGHEST + KPP_PACCKAGE_NATIVE, KTr("PackageCreator.MenuProject.SaveAsKMP")));
-	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_EXPORT));
+	item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentExport));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnExportProject, this);
 }
 void KPackageCreatorWorkspace::CreateImportMenu()
@@ -146,11 +146,11 @@ void KPackageCreatorWorkspace::CreateImportMenu()
 	KxMenuItem* item = nullptr;
 
 	item = menu->Add(new KxMenuItem(KxID_HIGHEST + 0, KTr("PackageCreator.MenuImport.FOModXML")));
-	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_IMPORT));
+	item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentImport));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnImportProject, this);
 
 	item = menu->Add(new KxMenuItem(KxID_HIGHEST + 1, KTr("PackageCreator.MenuImport.Package")));
-	item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_IMPORT));
+	item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentImport));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnImportProject, this);
 }
 void KPackageCreatorWorkspace::CreateBuildMenu()
@@ -161,7 +161,7 @@ void KPackageCreatorWorkspace::CreateBuildMenu()
 	KxMenuItem* item = nullptr;
 
 	item = menu->Add(new KxMenuItem(KTr("PackageCreator.MenuBuild.Build")));
-	item->SetBitmap(KGetBitmap(KIMG_COMPILE));
+	item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Compile));
 	item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnBuildProject, this);
 
 	item = menu->Add(new KxMenuItem(KTr("PackageCreator.MenuBuild.Preview")));
@@ -172,7 +172,7 @@ void KPackageCreatorWorkspace::CreatePagesListView()
 {
 	m_PagesList = new KxTreeList(m_MainPane, KxID_NONE, KxTreeList::DefaultStyle|wxTL_NO_HEADER);
 	m_PagesList->GetDataView()->ToggleWindowStyle(wxBORDER_NONE);
-	m_PagesList->SetImageList(const_cast<KxImageList*>(KGetImageList()));
+	m_PagesList->SetImageList(const_cast<KxImageList*>(&ImageProvider::GetImageList()));
 	m_PagesList->SetRowHeight(36);
 	m_PagesList->SetMinSize(wxSize(180, wxDefaultCoord));
 	m_PagesList->SetMaxSize(wxSize(180, wxDefaultCoord));
@@ -202,10 +202,10 @@ void KPackageCreatorWorkspace::AddPageBase(KPackageCreatorPageBase* page, bool s
 {
 	if (page->OnCreateWorkspaceInternal())
 	{
-		m_PagesBook->AddPage(page, page->GetPageName(), select, page->GetImageID());
+		m_PagesBook->AddPage(page, page->GetPageName(), select, page->GetImageID().AsInt());
 
 		KxTreeListItem pageItem = m_PagesList->GetRoot().Add(page->GetPageName());
-		pageItem.SetImage(page->GetImageID());
+		pageItem.SetImage(page->GetImageID().AsInt());
 
 		if (select)
 		{

@@ -86,15 +86,15 @@ namespace
 
 namespace Kortex::PluginManager
 {
-	KImageEnum Workspace::GetStatusImageForPlugin(const IGamePlugin* plugin)
+	ImageResourceID Workspace::GetStatusImageForPlugin(const IGamePlugin* plugin)
 	{
 		if (plugin)
 		{
-			return plugin->IsActive() ? KIMG_TICK_CIRCLE_FRAME_EMPTY : KIMG_INFORMATION_FRAME_EMPTY;
+			return plugin->IsActive() ? ImageResourceID::TickCircleFrameEmpty : ImageResourceID::InformationFrameEmpty;
 		}
 		else
 		{
-			return KIMG_CROSS_CIRCLE_FRAME_EMPTY;
+			return ImageResourceID::CrossCircleEmpty;
 		}
 	}
 
@@ -216,7 +216,7 @@ namespace Kortex::PluginManager
 				if (pluginsConfig.HasPluginLimit())
 				{
 					item->SetItemLabel(KxString::Format("%1: %2/%3", KTr("PluginManager.PluginCounter.Active"), count, pluginsConfig.GetPluginLimit()));
-					item->SetBitmap(KGetBitmap(count >= static_cast<size_t>(pluginsConfig.GetPluginLimit()) ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
+					item->SetBitmap(ImageProvider::GetBitmap(count >= static_cast<size_t>(pluginsConfig.GetPluginLimit()) ? ImageResourceID::Exclamation : ImageResourceID::TickCircleFrame));
 				}
 			}
 			else
@@ -386,7 +386,7 @@ namespace Kortex::PluginManager
 			}
 			else
 			{
-				mainWindow->SetStatus(wxEmptyString, statusIndex, KIMG_CROSS_CIRCLE_FRAME);
+				mainWindow->SetStatus(wxEmptyString, statusIndex, ImageResourceID::CrossCircleFrame);
 			}
 		}
 	}

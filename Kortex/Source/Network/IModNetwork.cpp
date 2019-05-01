@@ -9,9 +9,9 @@
 
 namespace Kortex
 {
-	KImageEnum IModNetwork::GetGenericIcon()
+	ResourceID IModNetwork::GetGenericIcon()
 	{
-		return KIMG_SITE_UNKNOWN;
+		return ImageResourceID::ModNetwork_Unknown;
 	}
 
 	void IModNetwork::Init()

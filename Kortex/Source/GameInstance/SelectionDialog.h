@@ -6,6 +6,7 @@ class KxPanel;
 class KxButton;
 class KxTextBox;
 class KxListBox;
+class KxImageList;
 class KxBitmapComboBox;
 class KxSplitterWindow;
 

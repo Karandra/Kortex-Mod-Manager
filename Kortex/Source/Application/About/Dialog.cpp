@@ -114,7 +114,7 @@ namespace Kortex::Application
 			SetWindowResizeSide((wxOrientation)0);
 
 			m_Logo = new KxImageView(m_ContentPanel, KxID_NONE, wxBORDER_NONE);
-			m_Logo->SetBitmap(KGetBitmap("application-logo"));
+			m_Logo->SetBitmap(ImageProvider::GetBitmap("kortex-logo"));
 			m_Logo->SetScaleMode(KxImageView_ScaleMode::KxIV_SCALE_ASPECT_FIT);
 
 			m_TabView = new KxAuiNotebook(m_ContentPanel, KxID_NONE);

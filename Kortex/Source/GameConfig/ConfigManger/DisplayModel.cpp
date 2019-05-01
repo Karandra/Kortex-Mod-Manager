@@ -68,24 +68,24 @@ namespace Kortex::GameConfig
 		KxMenu menu;
 		{
 			KxMenuItem* menuItem = menu.Add(new KxMenuItem(KxID_EDIT, m_Translator.GetString("ConfigManager.Menu.EditValue")));
-			menuItem->SetBitmap(KGetBitmap(KIMG_PENCIL_SMALL));
+			menuItem->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PencilSmall));
 			menuItem->SetDefault();
 			menuItem->Enable(item);
 		}
 		{
 			KxMenuItem* menuItem = menu.Add(new KxMenuItem(KxID_UNDO, m_Translator.GetString("ConfigManager.Menu.DiscardChange")));
-			menuItem->SetBitmap(KGetBitmap(KIMG_CROSS_WHITE));
+			menuItem->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::CrossWhite));
 			menuItem->Enable(item && item->HasChanges());
 		}
 		{
 			KxMenuItem* menuItem = menu.Add(new KxMenuItem(KxID_REFRESH, m_Translator.GetString(KxID_REFRESH)));
-			menuItem->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
+			menuItem->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
 		}
 
 		menu.AddSeparator();
 		{
 			KxMenuItem* menuItem = menu.Add(new KxMenuItem(KxID_DELETE, m_Translator.GetString("ConfigManager.Menu.RemoveValue")));
-			menuItem->SetBitmap(KGetBitmap(KIMG_MINUS_SMALL));
+			menuItem->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::MinusSmall));
 			menuItem->Enable(item);
 		}
 

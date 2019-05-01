@@ -178,7 +178,7 @@ namespace Kortex::PluginManager
 			for (const wxString& name: dependenciesList)
 			{
 				KxMenuItem* item = dependenciesMenu->Add(new KxMenuItem(name));
-				item->SetBitmap(KGetBitmap(workspace->GetStatusImageForPlugin(manager->FindPluginByName(name))));
+				item->SetBitmap(ImageProvider::GetBitmap(workspace->GetStatusImageForPlugin(manager->FindPluginByName(name))));
 			}
 
 			// Dependent plugins
@@ -190,7 +190,7 @@ namespace Kortex::PluginManager
 			for (const IGamePlugin* depEntry: dependentList)
 			{
 				KxMenuItem* item = dependentMenu->Add(new KxMenuItem(depEntry->GetName()));
-				item->SetBitmap(KGetBitmap(workspace->GetStatusImageForPlugin(depEntry)));
+				item->SetBitmap(ImageProvider::GetBitmap(workspace->GetStatusImageForPlugin(depEntry)));
 			}
 
 			// Plugin select event

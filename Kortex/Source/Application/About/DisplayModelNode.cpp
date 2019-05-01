@@ -69,9 +69,9 @@ namespace Kortex::Application::About
 	{
 		return IApplication::GetInstance()->GetVersion();
 	}
-	KImageEnum AppNode::GetIconID() const
+	ResourceID AppNode::GetIconID() const
 	{
-		return KIMG_APPLICATION_LOGO_SMALL;
+		return ImageResourceID::KortexLogoSmall;
 	}
 	wxString AppNode::GetLicense() const
 	{
@@ -93,7 +93,7 @@ namespace Kortex::Application::About
 	{
 		return m_Module.GetModuleInfo().GetVersion();
 	}
-	KImageEnum ModuleNode::GetIconID() const
+	ResourceID ModuleNode::GetIconID() const
 	{
 		return m_Module.GetModuleInfo().GetImageID();
 	}

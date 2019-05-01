@@ -7,6 +7,8 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
 
+using namespace Kortex;
+
 enum ColumnID
 {
 	Expander,
@@ -262,11 +264,11 @@ wxBitmap KInstallWizardComponnetsModel::GetImageByTypeDescriptor(KPPCTypeDescrip
 	{
 		case KPPC_DESCRIPTOR_NOT_USABLE:
 		{
-			return KGetBitmap(KIMG_CROSS_CIRCLE_FRAME);
+			return ImageProvider::GetBitmap(ImageResourceID::CrossCircleFrame);
 		}
 		case KPPC_DESCRIPTOR_COULD_BE_USABLE:
 		{
-			return KGetBitmap(KIMG_EXCLAMATION);
+			return ImageProvider::GetBitmap(ImageResourceID::Exclamation);
 		}
 	};
 	return wxNullBitmap;

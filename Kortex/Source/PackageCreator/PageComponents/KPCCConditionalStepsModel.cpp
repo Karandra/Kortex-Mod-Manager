@@ -100,7 +100,7 @@ void KPCCConditionalStepsModel::OnContextMenu(KxDataViewEvent& event)
 	KxMenu menu;
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddStep, KTr(KxID_ADD)));
-		item->SetBitmap(KGetBitmap(KIMG_DIRECTION_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DirectionPlus));
 	}
 	menu.AddSeparator();
 	{

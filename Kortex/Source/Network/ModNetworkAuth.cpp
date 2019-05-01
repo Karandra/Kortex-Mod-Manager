@@ -4,6 +4,7 @@
 #include "INetworkManager.h"
 #include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
+#include "Utility/KBitmapSize.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxCredentialsDialog.h>
 #include <KxFramework/KxCURL.h>
@@ -34,7 +35,7 @@ namespace Kortex
 		KxCURLBinaryReply reply = connection->Download();
 		wxMemoryInputStream stream(reply.GetData(), reply.GetSize());
 
-		wxSize size = KGetImageList()->GetSize();
+		wxSize size = KBitmapSize().FromSystemSmallIcon().GetSize();
 		return wxBitmap(KAux::ScaleImageAspect(wxImage(stream), -1, size.GetHeight()), 32);
 	}
 

@@ -89,7 +89,7 @@ KxAuiToolBarItem* KWorkspace::CreateToolBarButton()
 KxMenuItem* KWorkspace::CreateItemInManagersMenu()
 {
 	m_ManagersMenuItem = GetMainWindow()->GetManagersMenu()->Add(new KxMenuItem(GetName()));
-	m_ManagersMenuItem->SetBitmap(KGetBitmap(GetImageID()));
+	m_ManagersMenuItem->SetBitmap(ImageProvider::GetBitmap(GetImageID()));
 	m_ManagersMenuItem->Bind(KxEVT_MENU_SELECT, &KWorkspace::SwitchHereEvent, this);
 
 	return m_ManagersMenuItem;

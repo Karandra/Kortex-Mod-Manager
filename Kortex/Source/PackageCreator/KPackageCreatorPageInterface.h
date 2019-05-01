@@ -32,9 +32,9 @@ class KPackageCreatorPageInterface:	public KPackageCreatorPageBase
 		virtual void OnLoadProject(KPackageProjectInterface& projectInterface);
 
 	public:
-		virtual KImageEnum GetImageID() const override
+		virtual ResourceID GetImageID() const override
 		{
-			return KIMG_IMAGE;
+			return ImageResourceID::Image;
 		}
 		virtual wxString GetID() const override;
 		virtual wxString GetPageName() const override;

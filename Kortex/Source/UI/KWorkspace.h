@@ -3,7 +3,7 @@
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include "Application/Options/Option.h"
-#include "Utility/KImageProvider.h"
+#include "Application/Resources/ImageResourceID.h"
 class KMainWindow;
 class KWorkspaceController;
 class KPackageCreatorWorkspace;
@@ -111,7 +111,7 @@ class KWorkspace: public KxPanel, public Kortex::Application::WithOptions<KWorks
 		{
 			return GetName();
 		}
-		virtual KImageEnum GetImageID() const = 0;
+		virtual Kortex::ResourceID GetImageID() const = 0;
 		int GetWorkspaceIndex() const;
 		KWorkspaceController* GetWorkspaceController()
 		{

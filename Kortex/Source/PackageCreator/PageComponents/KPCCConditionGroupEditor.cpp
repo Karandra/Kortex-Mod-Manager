@@ -271,22 +271,22 @@ void KPCCConditionGroupEditor::OnContextMenu(KxDataViewEvent& event)
 	KxMenu menu;
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddToCondition, KTr("PackageCreator.Conditions.AddToCondition")));
-		item->SetBitmap(KGetBitmap(KIMG_FLAG_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FlagPlus));
 		item->Enable(condition);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddNewCondition, KTr("PackageCreator.Conditions.AddNewCondition")));
-		item->SetBitmap(KGetBitmap(KIMG_FOLDER_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderPlus));
 	}
 	menu.AddSeparator();
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RemoveFromCondition, KTr("PackageCreator.Conditions.RemoveFromCondition")));
-		item->SetBitmap(KGetBitmap(KIMG_FLAG_MINUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FlagMinus));
 		item->Enable(flag);
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RemoveCondition, KTr("PackageCreator.Conditions.RemoveCondition")));
-		item->SetBitmap(KGetBitmap(KIMG_FOLDER_MINUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderMinus));
 		item->Enable(condition);
 	}
 	{

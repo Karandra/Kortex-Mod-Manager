@@ -1,9 +1,11 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KImageProvider.h"
+#include "Application/Resources/ImageResourceID.h"
 #include "Utility/KDataViewListModel.h"
 #include "PackageProject/KPackageProject.h"
 class KInstallWizardDialog;
+
+using namespace Kortex;
 
 namespace Kortex
 {
@@ -25,7 +27,7 @@ class KInstallWizardInfoModel: public KDataViewListModel
 	{
 		KLabeledValue Value;
 		KIWITypes Type = KIWI_TYPE_NONE;
-		KImageEnum IconID = KIMG_NONE;
+		ResourceID IconID;
 
 		Item(const KLabeledValue& value)
 			:Value(value)
@@ -58,7 +60,7 @@ class KInstallWizardInfoModel: public KDataViewListModel
 		}
 
 	public:
-		void AddItem(const KLabeledValue& value, KImageEnum image = KIMG_NONE, KIWITypes type = KIWI_TYPE_NONE);
+		void AddItem(const KLabeledValue& value, const ResourceID& image = {}, KIWITypes type = KIWI_TYPE_NONE);
 
 		size_t GetItemCount() const override
 		{

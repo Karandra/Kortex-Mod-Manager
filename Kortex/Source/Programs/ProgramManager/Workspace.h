@@ -31,9 +31,9 @@ namespace Kortex::ProgramManager
 			wxString GetName() const override;
 			wxString GetNameShort() const override;
 
-			KImageEnum GetImageID() const override
+			ResourceID GetImageID() const override
 			{
-				return KIMG_APPLICATION_RUN;
+				return ImageResourceID::ApplicationRun;
 			}
 			wxSizer* GetWorkspaceSizer() const override
 			{

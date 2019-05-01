@@ -238,7 +238,7 @@ namespace Kortex::GameConfig
 		{
 			if (m_HasChanges)
 			{
-				return KxDataView2::BitmapTextValue(GetViewString(id), KGetBitmap(KIMG_PENCIL_SMALL));
+				return KxDataView2::BitmapTextValue(GetViewString(id), ImageProvider::GetBitmap(ImageResourceID::PencilSmall));
 			}
 			else
 			{

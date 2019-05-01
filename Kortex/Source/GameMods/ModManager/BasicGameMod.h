@@ -8,7 +8,6 @@
 #include "Utility/KLabeledValue.h"
 #include "Utility/KWithBitmap.h"
 #include "Utility/KAux.h"
-#include "Utility/KImageProvider.h"
 #include <KxFramework/KxVersion.h>
 
 namespace Kortex
@@ -197,9 +196,9 @@ namespace Kortex::ModManager
 			{
 				m_Color = color;
 			}
-			KImageEnum BasicGameMod::GetIcon() const
+			ResourceID BasicGameMod::GetIcon() const
 			{
-				return KIMG_NONE;
+				return {};
 			}
 
 			bool IsLinkedMod() const override

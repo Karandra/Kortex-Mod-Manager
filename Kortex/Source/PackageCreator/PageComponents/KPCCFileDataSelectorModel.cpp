@@ -35,7 +35,7 @@ void KPCCFileDataSelectorModel::GetValueByRow(wxAny& value, size_t row, const Kx
 			}
 			case ColumnID::ID:
 			{
-				value = KxDataViewBitmapTextValue(entry->first->GetID(), KGetBitmap(entry->first->ToFolderEntry() ? KIMG_FOLDER : KIMG_DOCUMENT));
+				value = KxDataViewBitmapTextValue(entry->first->GetID(), ImageProvider::GetBitmap(entry->first->ToFolderEntry() ? ImageResourceID::Folder : ImageResourceID::Document));
 				break;
 			}
 			case ColumnID::Source:

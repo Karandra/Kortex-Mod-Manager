@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameInstance/GameID.h"
+#include "Resources/IImageProvider.h"
 #include "Options/Option.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxSingleton.h>
@@ -65,8 +66,7 @@ namespace Kortex
 			virtual const ITranslator& GetTranslator() const = 0;
 			virtual KxTranslation::AvailableMap GetAvailableTranslations() const = 0;
 
-			virtual const KxImageList& GetImageList() const = 0;
-			virtual const KxImageSet& GetImageSet() const = 0;
+			virtual const IImageProvider& GetImageProvider() const = 0;
 
 			virtual IVariableTable& GetVariables() = 0;
 			virtual wxString ExpandVariablesLocally(const wxString& variables) const = 0;

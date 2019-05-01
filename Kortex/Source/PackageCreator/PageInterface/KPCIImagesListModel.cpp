@@ -13,7 +13,8 @@
 #include <KxFramework/KxDualProgressDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
-#include <future>
+
+using namespace Kortex;
 
 enum ColumnID
 {
@@ -263,11 +264,11 @@ void KPCIImagesListModel::OnContextMenu(KxDataViewEvent& event)
 
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ImportFiles, KTr("PackageCreator.ImportFiles")));
-		item->SetBitmap(KGetBitmap(KIMG_FOLDER_SEARCH_RESULT));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderSearchResult));
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFiles, KTr("PackageCreator.AddMultipleFiles")));
-		item->SetBitmap(KGetBitmap(KIMG_DOCUMENTS_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentsPlus));
 	}
 	menu.AddSeparator();
 	{

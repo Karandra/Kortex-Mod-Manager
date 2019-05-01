@@ -54,9 +54,9 @@ class KPackageCreatorPageRequirements: public KPackageCreatorPageBase
 		virtual void OnLoadProject(KPackageProjectRequirements& projectRequirements);
 
 	public:
-		virtual KImageEnum GetImageID() const override
+		virtual ResourceID GetImageID() const override
 		{
-			return KIMG_CHEQUE;
+			return ImageResourceID::Cheque;
 		}
 		virtual wxString GetID() const override;
 		virtual wxString GetPageName() const override;

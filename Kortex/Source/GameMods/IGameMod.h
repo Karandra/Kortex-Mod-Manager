@@ -1,11 +1,10 @@
 #pragma once
 #include "stdafx.h"
+#include "Application/Resources/ImageResourceID.h"
 #include "Utility/KLabeledValue.h"
 #include "Utility/KWithBitmap.h"
-#include <KxFramework/KxVersion.h>
-#include "Utility/KImageProvider.h"
-#include "Utility/KWithBitmap.h"
 #include "Utility/KAux.h"
+#include <KxFramework/KxVersion.h>
 class KPackageProject;
 
 namespace Kortex
@@ -104,7 +103,7 @@ namespace Kortex
 			virtual bool HasColor() const = 0;
 			virtual KxColor GetColor() const = 0;
 			virtual void SetColor(const KxColor& color) = 0;
-			virtual KImageEnum GetIcon() const = 0;
+			virtual ResourceID GetIcon() const = 0;
 
 			virtual bool IsLinkedMod() const = 0;
 			virtual void UnlinkLocation() = 0;

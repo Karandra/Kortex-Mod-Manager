@@ -111,12 +111,12 @@ namespace Kortex::ModManager
 						icon = KxShell::GetFileIcon(node->GetFullPath(), true);
 						if (!icon.IsOk())
 						{
-							icon = KGetIcon(KIMG_DOCUMENT);
+							icon = ImageProvider::GetIcon(ImageResourceID::Document);
 						}
 					}
 					else
 					{
-						icon = KGetIcon(KIMG_FOLDER);
+						icon = ImageProvider::GetIcon(ImageResourceID::Folder);
 					}
 
 					value = KxDataViewBitmapTextValue(node->GetName(), icon);

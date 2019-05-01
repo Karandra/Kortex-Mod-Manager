@@ -207,7 +207,7 @@ wxWindow* KInstallWizardDialog::CreateUI_Components()
 
 	// Tabs
 	m_Components_Tabs = new KxAuiNotebook(m_Components_SplitterHRight, KxID_NONE);
-	m_Components_Tabs->SetImageList(KGetImageList());
+	m_Components_Tabs->SetImageList(&ImageProvider::GetImageList());
 
 	// Description
 	m_Components_Description = new KxHTMLWindow(m_Components_Tabs, KxID_NONE, wxEmptyString, KxHTMLWindow::DefaultStyle|wxBORDER_NONE);
@@ -451,7 +451,7 @@ void KInstallWizardDialog::LoadInfoList()
 {
 	const KPackageProject& project = m_Package->GetConfig();
 	const KPackageProjectInfo& info = project.GetInfo();
-	auto AddString = [this](const wxString& name, const wxString& value, KIWITypes type = KIWI_TYPE_NONE, bool bRequired = false, KImageEnum image = KIMG_NONE)
+	auto AddString = [this](const wxString& name, const wxString& value, KIWITypes type = KIWI_TYPE_NONE, bool bRequired = false, ResourceID image = {})
 	{
 		if (bRequired || !value.IsEmpty())
 		{
@@ -463,7 +463,7 @@ void KInstallWizardDialog::LoadInfoList()
 		info.GetModSourceStore().Visit([this](const Kortex::ModSourceItem& item)
 		{
 			Kortex::IModNetwork* modNetwork = nullptr;
-			KImageEnum icon = item.TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : Kortex::IModNetwork::GetGenericIcon();
+			ResourceID icon = item.TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : Kortex::IModNetwork::GetGenericIcon();
 			m_Info_PackageInfoList->AddItem(KLabeledValue(item.GetURL(), item.GetName()), icon, KIWI_TYPE_SITE);
 			return true;
 		});
@@ -484,7 +484,7 @@ void KInstallWizardDialog::LoadInfoList()
 	AddString(KTr("PackageCreator.PageInfo.BasicInfo.Author"), info.GetAuthor(), KIWI_TYPE_NONE, true);
 	AddSites();
 	AddUserData();
-	AddString(KTr("PackageCreator.PageInfo.BasicInfo.Tags"), wxEmptyString, KIWITypes::KIWI_TYPE_TAGS, true, KIMG_TAGS);
+	AddString(KTr("PackageCreator.PageInfo.BasicInfo.Tags"), wxEmptyString, KIWITypes::KIWI_TYPE_TAGS, true, ImageResourceID::Tags);
 
 	m_Info_PackageInfoList->RefreshItems();
 }
@@ -759,8 +759,8 @@ void KInstallWizardDialog::OnSelectComponent(KxDataViewEvent& event)
 		if (const KPPCEntry* entry = node->GetEntry())
 		{
 			const wxString& description = entry->GetDescription();
-			bool bDescriptionEmpty = description.IsEmpty();
-			if (!bDescriptionEmpty)
+			const bool isDescriptionEmpty = description.IsEmpty();
+			if (!isDescriptionEmpty)
 			{
 				m_Components_Description->SetTextValue(description);
 				m_Components_Description->Enable();
@@ -769,19 +769,19 @@ void KInstallWizardDialog::OnSelectComponent(KxDataViewEvent& event)
 			{
 				m_Components_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Components_Description));
 			}
-			m_Components_Tabs->SetPageImage(ComponentsTabIndex::Description, !bDescriptionEmpty ? KIMG_INFORMATION_FRAME : KIMG_INFORMATION_FRAME_EMPTY);
+			m_Components_Tabs->SetPageImage(ComponentsTabIndex::Description, (int)(!isDescriptionEmpty ? ImageResourceID::InformationFrame : ImageResourceID::InformationFrameEmpty));
 
 			bool bRequirementsEmpty = entry->GetRequirements().empty();
 			if (!bRequirementsEmpty)
 			{
-				bool isOK = GetConfig().GetRequirements().CalcOverallStatus(entry->GetRequirements());
+				const bool isOK = GetConfig().GetRequirements().CalcOverallStatus(entry->GetRequirements());
 
-				m_Components_Tabs->SetPageImage(ComponentsTabIndex::Requirements, isOK ? KIMG_TICK_CIRCLE_FRAME : KIMG_CROSS_CIRCLE_FRAME);
+				m_Components_Tabs->SetPageImage(ComponentsTabIndex::Requirements, (int)(isOK ? ImageResourceID::TickCircleFrame : ImageResourceID::CrossCircleFrame));
 				m_Components_Requirements->SetDataVector(&GetConfig().GetRequirements(), entry->GetRequirements());
 			}
 			else
 			{
-				m_Components_Tabs->SetPageImage(ComponentsTabIndex::Requirements, KIMG_INFORMATION_FRAME_EMPTY);
+				m_Components_Tabs->SetPageImage(ComponentsTabIndex::Requirements, (int)ImageResourceID::InformationFrameEmpty);
 			}
 
 			const KPPIImageEntry* pImageEntry = GetConfig().GetInterface().FindEntryWithValue(entry->GetImage());
@@ -792,7 +792,7 @@ void KInstallWizardDialog::OnSelectComponent(KxDataViewEvent& event)
 			}
 
 			// Tab switch
-			if (!bDescriptionEmpty)
+			if (!isDescriptionEmpty)
 			{
 				m_Components_Tabs->ChangeSelection(ComponentsTabIndex::Description);
 			}
@@ -938,8 +938,8 @@ KPPCStep* KInstallWizardDialog::GetFirstStepSatisfiesConditions(const KPPCStep* 
 
 void KInstallWizardDialog::ClearComponentsViewInfo()
 {
-	m_Components_Tabs->SetPageImage(ComponentsTabIndex::Description, KIMG_INFORMATION_FRAME_EMPTY);
-	m_Components_Tabs->SetPageImage(ComponentsTabIndex::Requirements, KIMG_INFORMATION_FRAME_EMPTY);
+	m_Components_Tabs->SetPageImage(ComponentsTabIndex::Description, (int)ImageResourceID::InformationFrameEmpty);
+	m_Components_Tabs->SetPageImage(ComponentsTabIndex::Requirements, (int)ImageResourceID::InformationFrameEmpty);
 
 	m_Components_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectComponentHint"), m_Components_Description));
 	m_Components_Description->Disable();

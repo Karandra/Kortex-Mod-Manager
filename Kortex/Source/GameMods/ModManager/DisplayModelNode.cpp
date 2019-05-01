@@ -81,7 +81,7 @@ namespace Kortex::ModManager
 						valueData.SetText(m_Mod->GetName());
 					}
 
-					valueData.SetBitmap(KGetBitmap(m_Mod->GetIcon()));
+					valueData.SetBitmap(ImageProvider::GetBitmap(m_Mod->GetIcon()));
 					return valueData;
 				}
 				case ColumnID::Priority:
@@ -98,12 +98,12 @@ namespace Kortex::ModManager
 						{
 							case KxVERSION_DATETIME:
 							{
-								valueData.SetBitmap(KGetBitmap(KIMG_CALENDAR_DAY));
+								valueData.SetBitmap(ImageProvider::GetBitmap(ImageResourceID::CalendarDay));
 								break;
 							}
 							case KxVERSION_INTEGER:
 							{
-								valueData.SetBitmap(KGetBitmap(KIMG_NOTIFICATION_COUNTER_42));
+								valueData.SetBitmap(ImageProvider::GetBitmap(ImageResourceID::NotificationCounter42));
 								break;
 							}
 						};
@@ -172,7 +172,7 @@ namespace Kortex::ModManager
 				const IModTag* tag = priorityGroup.GetTag();
 				if (tag && priorityGroup.IsBegin())
 				{
-					return KxDataView2::BitmapTextToggleValue(tag->GetName(), KGetBitmap(m_Mod->GetIcon()));
+					return KxDataView2::BitmapTextToggleValue(tag->GetName(), ImageProvider::GetBitmap(m_Mod->GetIcon()));
 				}
 				break;
 			}
@@ -185,7 +185,7 @@ namespace Kortex::ModManager
 		{
 			case ColumnID::Name:
 			{
-				return KxDataView2::BitmapTextToggleValue(m_Mod->GetName(), KGetBitmap(m_Mod->GetIcon()));
+				return KxDataView2::BitmapTextToggleValue(m_Mod->GetName(), ImageProvider::GetBitmap(m_Mod->GetIcon()));
 			}
 			case ColumnID::Priority:
 			{

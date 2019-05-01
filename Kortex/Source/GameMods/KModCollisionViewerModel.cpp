@@ -11,6 +11,7 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
 
+using namespace Kortex;
 using namespace Kortex::ModManager;
 
 bool KModCollisionViewerModelNS::ModelEntry::FindCollisions(const Kortex::IGameMod& modEntry)
@@ -95,12 +96,12 @@ void KModCollisionViewerModel::GetValueByRow(wxAny& value, size_t row, const KxD
 					icon = KxShell::GetFileIcon(fileItem.GetFullPath(), true);
 					if (!icon.IsOk())
 					{
-						icon = KGetIcon(KIMG_DOCUMENT);
+						icon = ImageProvider::GetIcon(ImageResourceID::Document);
 					}
 				}
 				else
 				{
-					icon = KGetIcon(KIMG_FOLDER);
+					icon = ImageProvider::GetIcon(ImageResourceID::Folder);
 				}
 
 				value = KxDataViewBitmapTextValue(entry->GetRelativePath(), icon);

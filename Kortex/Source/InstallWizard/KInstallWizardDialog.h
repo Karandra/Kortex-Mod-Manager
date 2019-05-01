@@ -5,7 +5,6 @@
 #include "KInstallWizardStepStack.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KTempFolderKeeper.h"
-#include "Utility/KImageProvider.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxLabel.h>

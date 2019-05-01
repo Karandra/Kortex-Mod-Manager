@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "DefaultNotificationCenter.h"
+#include "Application/Resources/ImageResourceID.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/Events.hpp>
-#include "Utility/KImageProvider.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxCoroutine.h>
 #include <KxFramework/KxAuiToolBar.h>
@@ -47,11 +47,11 @@ namespace Kortex::Notification
 	{
 		if (!m_Notifications.empty())
 		{
-			m_Button->SetBitmap(KGetBitmap(KIMG_BELL_RED_CIRCLE));
+			m_Button->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::BellRedCircle));
 		}
 		else
 		{
-			m_Button->SetBitmap(KGetBitmap(KIMG_BELL));
+			m_Button->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Bell));
 		}
 	}
 

@@ -40,7 +40,7 @@ namespace Kortex::NetworkManager
 			NexusModNetwork();
 
 		public:
-			KImageEnum GetIcon() const override;
+			ResourceID GetIcon() const override;
 			wxString GetName() const override;
 
 			wxString TranslateGameIDToNetwork(const GameID& id = {}) const override;

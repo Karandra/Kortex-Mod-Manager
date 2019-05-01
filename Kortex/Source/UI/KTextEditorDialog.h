@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KImageProvider.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxStyledTextBox.h>
 #include <KxFramework/KxAuiToolBar.h>

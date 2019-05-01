@@ -13,9 +13,9 @@ namespace Kortex::NetworkManager
 		return wxS("https://www.loverslab.com/api");
 	}
 
-	KImageEnum LoversLabModNetwork::GetIcon() const
+	ResourceID LoversLabModNetwork::GetIcon() const
 	{
-		return KIMG_SITE_LOVERSLAB;
+		return ImageResourceID::ModNetwork_LoversLab;
 	}
 	wxString LoversLabModNetwork::GetName() const
 	{

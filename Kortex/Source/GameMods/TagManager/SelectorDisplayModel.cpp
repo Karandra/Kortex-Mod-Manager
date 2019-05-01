@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SelectorDisplayModel.h"
+#include "Application/Resources/IImageProvider.h"
 #include <Kortex/ModTagManager.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include "Network/ModNetwork/Nexus.h"
@@ -32,7 +33,7 @@ namespace Kortex::ModTagManager
 		{
 			const IModNetwork* nexus = NetworkManager::NexusModNetwork::GetInstance();
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(nexus->GetName() + wxS("ID"), ColumnID::NexusID, KxDATAVIEW_CELL_EDITABLE);
-			info.GetColumn()->SetBitmap(KGetBitmap(NetworkManager::NexusModNetwork::GetInstance()->GetIcon()));
+			info.GetColumn()->SetBitmap(ImageProvider::GetBitmap(NetworkManager::NexusModNetwork::GetInstance()->GetIcon()));
 		}
 
 		// Color
@@ -80,7 +81,7 @@ namespace Kortex::ModTagManager
 			{
 				case ColumnID::Name:
 				{
-					wxBitmap icon = !tag->IsDefaultTag() ? KGetBitmap(KIMG_PLUS_SMALL) : wxNullBitmap;
+					wxBitmap icon = !tag->IsDefaultTag() ? ImageProvider::GetBitmap(ImageResourceID::PlusSmall) : wxNullBitmap;
 					value = KxDataViewBitmapTextToggleValue(m_Data->HasTag(*tag), tag->GetName(), icon, KxDataViewBitmapTextToggleValue::CheckBox);
 					break;
 				}

@@ -90,7 +90,7 @@ void KPCFileDataMainListModel::GetValueByRow(wxAny& value, size_t row, const KxD
 		{
 			case ColumnID::ID:
 			{
-				value = KxDataViewBitmapTextValue(entry->GetID(), KGetBitmap(entry->ToFolderEntry() ? KIMG_FOLDER : KIMG_DOCUMENT));
+				value = KxDataViewBitmapTextValue(entry->GetID(), ImageProvider::GetBitmap(entry->ToFolderEntry() ? ImageResourceID::Folder : ImageResourceID::Document));
 				break;
 			}
 			case ColumnID::Source:
@@ -287,20 +287,20 @@ void KPCFileDataMainListModel::OnContextMenu(KxDataViewEvent& event)
 
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFile, KTr("PackageCreator.AddFile")));
-		item->SetBitmap(KGetBitmap(KIMG_DOCUMENT_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentPlus));
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFolder, KTr("PackageCreator.AddFolder")));
-		item->SetBitmap(KGetBitmap(KIMG_FOLDER_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderPlus));
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFolders, KTr("PackageCreator.AddMultipleFolders")));
-		item->SetBitmap(KGetBitmap(KIMG_FOLDERS_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FoldersPlus));
 	}
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ReplaceFolderContent, KTr("PackageCreator.PageFileData.ReplaceFolderContent")));
 		item->Enable(entry && entry->ToFolderEntry());
-		item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderArrow));
 	}
 	menu.AddSeparator();
 	{

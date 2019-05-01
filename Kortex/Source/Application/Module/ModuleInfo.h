@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KImageProvider.h"
+#include "Application/Resources/ResourceID.h"
 #include <KxFramework/KxVersion.h>
 
 namespace Kortex
@@ -14,7 +14,7 @@ namespace Kortex
 			virtual wxString GetID() const = 0;
 			virtual wxString GetName() const = 0;
 			virtual KxVersion GetVersion() const = 0;
-			virtual KImageEnum GetImageID() const = 0;
+			virtual ResourceID GetImageID() const = 0;
 	};
 }
 
@@ -26,10 +26,10 @@ namespace Kortex
 			wxString m_ID;
 			wxString m_Name;
 			KxVersion m_Version;
-			KImageEnum m_ImageID;
+			ResourceID m_ImageID;
 
 		public:
-			SimpleModuleInfo(const wxString& id, const wxString& name, const KxVersion& version, KImageEnum imageID)
+			SimpleModuleInfo(const wxString& id, const wxString& name, const KxVersion& version, const ResourceID& imageID)
 				:m_ID(id), m_Name(name), m_Version(version), m_ImageID(imageID)
 			{
 			}
@@ -44,7 +44,7 @@ namespace Kortex
 			{
 				return m_Version;
 			}
-			virtual KImageEnum GetImageID() const override
+			virtual ResourceID GetImageID() const override
 			{
 				return m_ImageID;
 			}

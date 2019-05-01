@@ -59,9 +59,9 @@ void KInstallWizardInfoModel::GetValueByRow(wxAny& data, size_t row, const KxDat
 	{
 		case ColumnID::Icon:
 		{
-			if (item.IconID != KIMG_NONE)
+			if (item.IconID)
 			{
-				data = KGetBitmap(item.IconID);
+				data = ImageProvider::GetBitmap(item.IconID);
 			}
 			break;
 		}
@@ -219,7 +219,7 @@ void KInstallWizardInfoModel::OnActivateItem(KxDataViewEvent& event)
 	}
 }
 
-void KInstallWizardInfoModel::AddItem(const KLabeledValue& value, KImageEnum image, KIWITypes type)
+void KInstallWizardInfoModel::AddItem(const KLabeledValue& value, const ResourceID& image, KIWITypes type)
 {
 	Item& item = m_DataVector.emplace_back(value);
 	item.IconID = image;

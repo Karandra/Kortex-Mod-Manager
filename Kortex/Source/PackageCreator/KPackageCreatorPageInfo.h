@@ -101,7 +101,7 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 				control->SetValidator(NetworkModInfo::GetValidator());
 
 				label->ToggleWindowStyle(KxLABEL_HYPERLINK);
-				label->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
+				label->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 				label->Bind(wxEVT_TEXT_URL, &KPackageCreatorPageInfo::OnOpenSite<T>, this);
 
 				return control;
@@ -115,9 +115,9 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		virtual void OnLoadProject(KPackageProjectInfo& tProjectInfo);
 
 	public:
-		virtual KImageEnum GetImageID() const override
+		virtual ResourceID GetImageID() const override
 		{
-			return KIMG_INFORMATION_FRAME;
+			return ImageResourceID::InformationFrame;
 		}
 		virtual wxString GetID() const override;
 		virtual wxString GetPageName() const override;

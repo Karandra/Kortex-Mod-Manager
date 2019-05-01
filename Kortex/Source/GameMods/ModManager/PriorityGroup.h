@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "BasicGameMod.h"
-#include "Utility/KImageProvider.h"
 
 namespace Kortex
 {

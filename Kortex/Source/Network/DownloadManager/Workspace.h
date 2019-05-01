@@ -36,9 +36,9 @@ namespace Kortex::DownloadManager
 			virtual wxString GetID() const override;
 			virtual wxString GetName() const override;
 			virtual wxString GetNameShort() const override;
-			virtual KImageEnum GetImageID() const override
+			virtual ResourceID GetImageID() const override
 			{
-				return KIMG_ARROW_270;
+				return ImageResourceID::Arrow270;
 			}
 			virtual wxSizer* GetWorkspaceSizer() const override
 			{

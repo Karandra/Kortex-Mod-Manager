@@ -44,9 +44,9 @@ namespace Kortex::ScreenshotsGallery
 		public:
 			virtual wxString GetID() const override;
 			virtual wxString GetName() const override;
-			virtual KImageEnum GetImageID() const override
+			virtual ResourceID GetImageID() const override
 			{
-				return KIMG_PICTURES;
+				return ImageResourceID::Pictures;
 			}
 			virtual wxSizer* GetWorkspaceSizer() const override
 			{

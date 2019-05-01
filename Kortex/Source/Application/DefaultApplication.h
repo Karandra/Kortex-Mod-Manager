@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "IApplication.h"
 #include "RefTranslator.h"
+#include "Resources/DefaultImageProvider.h"
 #include "Application/VariablesTable/DynamicVariableTable.h"
-#include "Utility/KImageProvider.h"
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxImageList.h>
 #include <KxFramework/KxImageSet.h>
@@ -35,9 +35,7 @@ namespace Kortex::Application
 			wxString m_InstancesFolder;
 
 			wxWindow* m_InitProgressDialog = nullptr;
-			KxImageList m_ImageList;
-			KxImageSet m_ImageSet;
-		
+			DefaultImageProvider m_ImageProvider;
 
 			wxString m_StartupInstanceID;
 			bool m_IsCmdStartupInstanceID = false;
@@ -90,13 +88,9 @@ namespace Kortex::Application
 				return m_StartupInstanceID;
 			}
 
-			const KxImageList& GetImageList() const override
+			const IImageProvider& GetImageProvider() const override
 			{
-				return m_ImageList;
-			}
-			const KxImageSet& GetImageSet() const override
-			{
-				return m_ImageSet;
+				return m_ImageProvider;
 			}
 
 			IVariableTable& GetVariables() override

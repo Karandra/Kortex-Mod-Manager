@@ -4,7 +4,7 @@
 #include "ModRepositoryReply.h"
 #include "ModRepositoryRequest.h"
 #include "GameInstance/GameID.h"
-#include "Utility/KImageProvider.h"
+#include "Application/Resources/ImageResourceID.h"
 #include <KxFramework/KxQueryInterface.h>
 #include <KxFramework/KxComponentSystem.h>
 #include <KxFramework/KxSecretStore.h>
@@ -27,7 +27,7 @@ namespace Kortex
 			using RefVector = std::vector<IModNetwork*>;
 
 		public:
-			static KImageEnum GetGenericIcon();
+			static ResourceID GetGenericIcon();
 			template<class TModNetwork, class... Args> static std::unique_ptr<TModNetwork> Create(Args&&... arg)
 			{
 				auto modNetwork = std::make_unique<TModNetwork>(std::forward<Args>(arg)...);
@@ -48,7 +48,7 @@ namespace Kortex
 			bool IsDefault() const;
 			wxString GetCacheFolder() const;
 			
-			virtual KImageEnum GetIcon() const = 0;
+			virtual ResourceID GetIcon() const = 0;
 			virtual wxString GetName() const = 0;
 			
 			virtual wxString TranslateGameIDToNetwork(const GameID& id = {}) const = 0;

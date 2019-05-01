@@ -1,7 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/Options/Option.h"
-#include "Utility/KImageProvider.h"
+#include "Application/Resources/IImageProvider.h"
+#include "Application/Resources/ImageResourceID.h"
 #include "Utility/KLabeledValue.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxFrame.h>
@@ -31,14 +32,19 @@ class KMainWindow:
 		typedef std::unordered_map<wxString, KWorkspace*> WorkspaceInstancesMapType;
 
 	public:
-		static KxAuiToolBarItem* CreateToolBarButton(KxAuiToolBar* toolBar, const wxString& label = wxEmptyString, KImageEnum imageID = KIMG_NONE, wxItemKind kind = wxITEM_NORMAL, int index = -1);
+		static KxAuiToolBarItem* CreateToolBarButton(KxAuiToolBar* toolBar,
+													 const wxString& label = wxEmptyString,
+													 const Kortex::ResourceID& imageID = {},
+													 wxItemKind kind = wxITEM_NORMAL,
+													 int index = -1
+		);
 		static wxSize GetDialogBestSize(wxWindow* dialog);
 		static const void* GetUniqueID();
 
 	private:
-		template<class T> static KxAuiToolBarItem* AddToolBarButton(KxAuiToolBar* toolBar, KImageEnum imageID = KIMG_NONE)
+		template<class T> static KxAuiToolBarItem* AddToolBarButton(KxAuiToolBar* toolBar, const Kortex::ResourceID& imageID = {})
 		{
-			KxAuiToolBarItem* button = toolBar->AddTool(wxEmptyString, KGetBitmap(imageID), wxITEM_NORMAL);
+			KxAuiToolBarItem* button = toolBar->AddTool(wxEmptyString, ImageProvider::GetBitmap(imageID), wxITEM_NORMAL);
 			button->Bind(KxEVT_AUI_TOOLBAR_CLICK, &T::CallOnToolBarButton, T::GetInstance());
 			T::GetInstance()->OnSetToolBarButton(button);
 			return button;
@@ -143,7 +149,7 @@ class KMainWindow:
 		bool SwitchWorkspace(const wxString& id);
 
 		void ClearStatus(int index = 0);
-		void SetStatus(const wxString& label, int index = 0, KImageEnum image = KIMG_NONE);
+		void SetStatus(const wxString& label, int index = 0, const Kortex::ResourceID& image = {});
 		void SetStatusProgress(int current);
 		void SetStatusProgress(int64_t current, int64_t total);
 };

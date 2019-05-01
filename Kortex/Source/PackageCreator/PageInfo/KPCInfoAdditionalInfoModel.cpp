@@ -116,7 +116,7 @@ void KPCInfoAdditionalInfoModel::OnContextMenu(KxDataViewEvent& event)
 	KxMenu menu;
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddEntry, KTr(KxID_ADD)));
-		item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
 	}
 	menu.AddSeparator();
 	{

@@ -25,12 +25,12 @@ namespace Kortex::GameConfig
 		// Buttons
 		m_SaveButton = new KxButton(this, KxID_NONE, KTr("Controller.SaveChanges.Save"));
 		m_SaveButton->Bind(wxEVT_BUTTON, &Workspace::OnSaveButton, this);
-		m_SaveButton->SetBitmap(KGetBitmap(KIMG_DISK));
+		m_SaveButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Disk));
 		m_SaveButton->Disable();
 
 		m_DiscardButton = new KxButton(this, KxID_NONE, KTr("Controller.SaveChanges.Discard"));
 		m_DiscardButton->Bind(wxEVT_BUTTON, &Workspace::OnDiscardButton, this);
-		m_DiscardButton->SetBitmap(KGetBitmap(KIMG_CROSS_WHITE));
+		m_DiscardButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::CrossWhite));
 		m_DiscardButton->Disable();
 
 		wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);

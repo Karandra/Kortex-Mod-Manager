@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KImageProvider.h"
 #include "Utility/KDataViewListModel.h"
 #include "KModPackage.h"
 #include "Utility/KOperationWithProgress.h"

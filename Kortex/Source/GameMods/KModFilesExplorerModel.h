@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include <Kortex/ModManager.hpp>
 #include "Utility/KDataViewListModel.h"
-#include "Utility/KImageProvider.h"
 
 namespace Kortex
 {

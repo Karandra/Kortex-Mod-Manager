@@ -108,12 +108,12 @@ namespace Kortex::NetworkManager
 		if (m_DefaultModNetwork && m_DefaultModNetwork->TryGetComponent(auth) && auth->IsAuthenticated())
 		{
 			m_LoginButton->SetLabel(KTr("NetworkManager.SignedIn") + ": " + m_DefaultModNetwork->GetName());
-			m_LoginButton->SetBitmap(KGetBitmap(m_DefaultModNetwork->GetIcon()));
+			m_LoginButton->SetBitmap(ImageProvider::GetBitmap(m_DefaultModNetwork->GetIcon()));
 		}
 		else
 		{
 			m_LoginButton->SetLabel(KTr("NetworkManager.NotSignedIn"));
-			m_LoginButton->SetBitmap(KGetBitmap(IModNetwork::GetGenericIcon()));
+			m_LoginButton->SetBitmap(ImageProvider::GetBitmap(IModNetwork::GetGenericIcon()));
 		}
 
 		m_LoginButton->GetToolBar()->Realize();
@@ -131,7 +131,7 @@ namespace Kortex::NetworkManager
 			if (KxMenu* subMenu = new KxMenu(); true)
 			{
 				KxMenuItem* rootItem = m_Menu->Add(subMenu, modNetwork->GetName());
-				rootItem->SetBitmap(KGetBitmap(modNetwork->GetIcon()));
+				rootItem->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 
 				const ModNetworkAuth* authenticable = modNetwork->TryGetComponent<ModNetworkAuth>();
 				const ModNetworkRepository* repository = modNetwork->TryGetComponent<ModNetworkRepository>();
@@ -219,7 +219,7 @@ namespace Kortex::NetworkManager
 						label = KxString::Format(wxS("%1: [%2]"), KTr(wxS("NetworkManager.QueryLimits")), label);
 
 						KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
-						item->SetBitmap(KGetBitmap(limits.AnyLimitDepleted() ? KIMG_EXCLAMATION : KIMG_TICK_CIRCLE_FRAME));
+						item->SetBitmap(ImageProvider::GetBitmap(limits.AnyLimitDepleted() ? ImageResourceID::Exclamation : ImageResourceID::TickCircleFrame));
 						item->SetClientData(modNetwork.get());
 						item->Enable(false);
 					}

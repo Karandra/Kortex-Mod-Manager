@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
+#include "Application/Resources/ImageResourceID.h"
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxPanel.h>
@@ -18,7 +19,7 @@ class KPackageManagerWorkspace: public KWorkspace, public KxSingletonPtr<KPackag
 	private:
 		//KProgramOptionAI m_PackageListViewOptions;
 		//KProgramOptionAI m_MainOptions;
-
+		
 		/* Layout */
 		wxBoxSizer* m_MainSizer = nullptr;
 		wxBoxSizer* m_ViewSizer = nullptr;
@@ -59,9 +60,9 @@ class KPackageManagerWorkspace: public KWorkspace, public KxSingletonPtr<KPackag
 	public:
 		virtual wxString GetID() const override;
 		virtual wxString GetName() const override;
-		virtual KImageEnum GetImageID() const override
+		virtual Kortex::ResourceID GetImageID() const override
 		{
-			return KIMG_CATEGORY_ITEM;
+			return Kortex::ImageResourceID::CategoryItem;
 		}
 		virtual wxSizer* GetWorkspaceSizer() const override
 		{

@@ -2,12 +2,15 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
+#include "Application/Resources/ImageResourceID.h"
 #include "KPackageCreatorWorkspace.h"
 #include "Utility/KLabeledValue.h"
 class KPackageCreatorController;
 class KPackageProject;
 class KxLabel;
 class KxTextBox;
+
+using namespace Kortex;
 
 class KPackageCreatorPageBase: public KWorkspace
 {
@@ -34,9 +37,9 @@ class KPackageCreatorPageBase: public KWorkspace
 		KPackageProject* GetProject() const;
 
 	public:
-		virtual KImageEnum GetImageID() const override
+		virtual ResourceID GetImageID() const override
 		{
-			return KIMG_BOX;
+			return ImageResourceID::Box;
 		}
 		virtual wxSizer* GetWorkspaceSizer() const override
 		{

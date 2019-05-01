@@ -130,7 +130,7 @@ namespace Kortex::SaveManager
 			for (const wxString& name: pluginsList)
 			{
 				KxMenuItem* item = pluginsMenu->Add(new KxMenuItem(name));
-				item->SetBitmap(KGetBitmap(pluginWorkspace->GetStatusImageForPlugin(pluginManager->FindPluginByName(name))));
+				item->SetBitmap(ImageProvider::GetBitmap(pluginWorkspace->GetStatusImageForPlugin(pluginManager->FindPluginByName(name))));
 			}
 		}
 
@@ -166,14 +166,14 @@ namespace Kortex::SaveManager
 		// Sync
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_APPLY, KTr("SaveManager.SyncPluginsList")));
-			item->SetBitmap(KGetBitmap(KIMG_PLUG_DISCONNECT));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlugDisconnect));
 			item->Enable(!isMultiSelect && save && hasPlugins && pluginManager);
 		}
 
 		// Save
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_SAVE, KTr("SaveManager.SavePluginsList")));
-			item->SetBitmap(KGetBitmap(KIMG_DISK));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Disk));
 			item->Enable(!isMultiSelect && save && hasPlugins);
 		}
 		menu.AddSeparator();
@@ -204,7 +204,7 @@ namespace Kortex::SaveManager
 		// Reload data
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REFRESH, KTr(KxID_REFRESH)));
-			item->SetBitmap(KGetBitmap(KIMG_ARROW_CIRCLE_DOUBLE));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
 		}
 		// Remove
 		{
@@ -340,7 +340,7 @@ namespace Kortex::SaveManager
 			}
 			else
 			{
-				mainWindow->SetStatus(KTr("SaveManager.InvalidFile"), statusIndex, KIMG_CROSS_CIRCLE_FRAME);
+				mainWindow->SetStatus(KTr("SaveManager.InvalidFile"), statusIndex, ImageResourceID::CrossCircleFrame);
 			}
 		}
 	}

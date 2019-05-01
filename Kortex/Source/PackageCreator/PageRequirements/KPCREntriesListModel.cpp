@@ -413,7 +413,7 @@ void KPCREntriesListModel::OnContextMenuItem(KxDataViewEvent& event)
 
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddEntry, KTr(KxID_ADD)));
-		item->SetBitmap(KGetBitmap(KIMG_CHEQUE_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ChequePlus));
 	}
 	menu.AddSeparator();
 	{

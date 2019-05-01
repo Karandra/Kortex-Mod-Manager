@@ -24,18 +24,6 @@
 #include <KxFramework/KxTaskScheduler.h>
 #include <KxFramework/KxCallAtScopeExit.h>
 
-namespace
-{
-	int GetSmallIconWidth()
-	{
-		return KBitmapSize().FromSystemSmallIcon().GetWidth();
-	}
-	int GetSmallIconHeight()
-	{
-		return KBitmapSize().FromSystemSmallIcon().GetHeight();
-	}
-}
-
 namespace Kortex::Application
 {
 	namespace OName
@@ -45,8 +33,7 @@ namespace Kortex::Application
 	}
 
 	DefaultApplication::DefaultApplication()
-		:m_ImageList(GetSmallIconWidth(), GetSmallIconHeight(), false, KIMG_COUNT),
-		m_Translator(m_Translation)
+		:m_Translator(m_Translation)
 	{
 	}
 
@@ -126,7 +113,7 @@ namespace Kortex::Application
 		// Don't show loading screen if it's a download link request
 		if (downloadLink.IsEmpty() || !anotherInstanceRunning)
 		{
-			splashWindow->Create(nullptr, m_ImageSet.GetBitmap("application-logo"));
+			splashWindow->Create(nullptr, ImageProvider::GetBitmap("application-logo"));
 			splashWindow->Show();
 		}
 		
@@ -134,7 +121,7 @@ namespace Kortex::Application
 		if (!anotherInstanceRunning)
 		{
 			// Set default table-tree-list like controls
-			const int defaultRowHeight = GetSmallIconHeight() + m_InitProgressDialog->FromDIP(4);
+			const int defaultRowHeight = KBitmapSize().FromSystemSmallIcon().GetHeight() + m_InitProgressDialog->FromDIP(4);
 			wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", defaultRowHeight);
 			wxSystemOptions::SetOption("KxDataView2::DefaultRowHeight", defaultRowHeight);
 
@@ -210,7 +197,7 @@ namespace Kortex::Application
 	void DefaultApplication::OnError(LogEvent& event)
 	{
 		KxIconType iconType = KxICON_NONE;
-		KImageEnum iconImageID = KIMG_NONE;
+		ImageResourceID iconImageID = ImageResourceID::None;
 		LogLevel logLevel = event.GetLevel();
 		wxWindow* window = event.GetWindow();
 		bool isCritical = event.IsCritical();
@@ -220,20 +207,20 @@ namespace Kortex::Application
 			case LogLevel::Info:
 			{
 				iconType = KxICON_INFORMATION;
-				iconImageID = KIMG_INFORMATION_FRAME;
+				iconImageID = ImageResourceID::InformationFrame;
 				break;
 			}
 			case LogLevel::Warning:
 			{
 				iconType = KxICON_WARNING;
-				iconImageID = KIMG_EXCLAMATION_CIRCLE_FRAME;
+				iconImageID = ImageResourceID::ExclamationCircleFrame;
 				break;
 			}
 			case LogLevel::Error:
 			case LogLevel::Critical:
 			{
 				iconType = KxICON_ERROR;
-				iconImageID = KIMG_CROSS_CIRCLE_FRAME;
+				iconImageID = ImageResourceID::CrossCircleFrame;
 				break;
 			}
 		};
@@ -385,7 +372,7 @@ namespace Kortex::Application
 	}
 	void DefaultApplication::LoadImages()
 	{
-		KImageProvider::KLoadImages(m_ImageList, m_ImageSet);
+		m_ImageProvider.LoadImages();
 	}
 	void DefaultApplication::ShowWorkspace()
 	{

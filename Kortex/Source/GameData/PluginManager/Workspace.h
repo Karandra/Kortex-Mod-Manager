@@ -24,11 +24,11 @@ namespace Kortex::PluginManager
 	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
 	{
 		public:
-			static KImageEnum GetStatusImageForPlugin(const IGamePlugin* plugin = nullptr);
+			static ImageResourceID GetStatusImageForPlugin(const IGamePlugin* plugin = nullptr);
 
 		private:
 			//KProgramOptionAI m_PluginListViewOptions;
-
+			
 			wxBoxSizer* m_MainSizer = nullptr;
 			PluginViewModel* m_ModelView = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
@@ -60,9 +60,9 @@ namespace Kortex::PluginManager
 			virtual wxString GetID() const override;
 			virtual wxString GetName() const override;
 			virtual wxString GetNameShort() const;
-			virtual KImageEnum GetImageID() const override
+			virtual ResourceID GetImageID() const override
 			{
-				return KIMG_PLUG_DISCONNECT;
+				return ImageResourceID::PlugDisconnect;
 			}
 			virtual wxSizer* GetWorkspaceSizer() const override
 			{

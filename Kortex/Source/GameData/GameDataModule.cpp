@@ -8,7 +8,7 @@ namespace Kortex
 {
 	namespace Internal
 	{
-		const SimpleModuleInfo GameDataTypeInfo("GameData", "GameDataModule.Name", "1.3", KIMG_PLUG_DISCONNECT);
+		const SimpleModuleInfo GameDataTypeInfo("GameData", "GameDataModule.Name", "1.3", ImageResourceID::PlugDisconnect);
 	}
 
 	void GameDataModule::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)

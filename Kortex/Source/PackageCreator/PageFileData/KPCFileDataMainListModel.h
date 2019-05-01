@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KImageProvider.h"
 #include "PackageCreator/KPackageCreatorVectorModel.h"
 #include "PackageCreator/KPackageCreatorIDTracker.h"
 #include "PackageProject/KPackageProjectFileData.h"

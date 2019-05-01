@@ -4,6 +4,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Events.hpp>
+#include "Application/Resources/ImageResourceID.h"
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -53,8 +54,8 @@ namespace Kortex::GameInstance
 			m_GameFilter = static_cast<KxBitmapComboBox*>(GetDialogMainCtrl());
 
 			m_InstancesList = new KxListBox(m_LeftPane, KxID_NONE);
-			m_InstancesList->SetImageList(const_cast<KxImageList*>(KGetImageList()), wxIMAGE_LIST_NORMAL);
-			m_InstancesList->SetImageList(const_cast<KxImageList*>(KGetImageList()), wxIMAGE_LIST_SMALL);
+			m_InstancesList->SetImageList(const_cast<KxImageList*>(&ImageProvider::GetImageList()), wxIMAGE_LIST_NORMAL);
+			m_InstancesList->SetImageList(const_cast<KxImageList*>(&ImageProvider::GetImageList()), wxIMAGE_LIST_SMALL);
 			m_LeftSizer->Add(m_InstancesList, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 			AddUserWindow(m_InstancesList);
 
@@ -165,12 +166,12 @@ namespace Kortex::GameInstance
 			}
 
 			wxString name;
-			int imageID = KIMG_NONE;
+			ImageResourceID imageID = ImageResourceID::None;
 			if (instnace->IsOK())
 			{
 				if (instnace->IsActiveInstance())
 				{
-					imageID = KIMG_TICK_CIRCLE_FRAME;
+					imageID = ImageResourceID::TickCircleFrame;
 				}
 
 				if (gameID)
@@ -184,11 +185,11 @@ namespace Kortex::GameInstance
 			}
 			else
 			{
-				imageID = KIMG_CROSS_CIRCLE_FRAME;
+				imageID = ImageResourceID::CrossCircleFrame;
 				name = KxString::Format("%1 (%2)", instnace->GetInstanceID(), KTr("InstanceSelection.InvalidInstance"));
 			}
 
-			int index = m_InstancesList->AddItem(name, imageID);
+			int index = m_InstancesList->AddItem(name, (int)imageID);
 			m_InstancesList->SetItemPtrData(index, reinterpret_cast<wxUIntPtr>(instnace.get()));
 			if (selectInstance && selectInstance == instnace.get())
 			{

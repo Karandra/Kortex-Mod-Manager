@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KImageProvider.h"
 #include "Utility/KDataViewListModel.h"
 #include "PackageProject/KPackageProjectRequirements.h"
 

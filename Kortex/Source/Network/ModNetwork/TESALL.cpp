@@ -8,9 +8,9 @@ namespace Kortex::NetworkManager
 	{
 	}
 
-	KImageEnum TESALLModNetwork::GetIcon() const
+	ResourceID TESALLModNetwork::GetIcon() const
 	{
-		return KIMG_SITE_TESALL;
+		return ImageResourceID::ModNetwork_TESALL;
 	}
 	wxString TESALLModNetwork::GetName() const
 	{

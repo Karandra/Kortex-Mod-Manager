@@ -266,34 +266,34 @@ namespace Kortex::ProgramManager
 			{
 				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RunProgram, KTr("ProgramManager.Menu.RunProgram")));
 				item->Enable(entry && entry->CanRunNow());
-				item->SetBitmap(KGetBitmap(KIMG_APPLICATION_RUN));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ApplicationRun));
 			}
 
 			menu.AddSeparator();
 			if (entry && column->IsEditable())
 			{
 				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::Edit, KTrf("ProgramManager.Menu.EditProgram", column->GetTitle())));
-				item->SetBitmap(KGetBitmap(KIMG_PENCIL_SMALL));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PencilSmall));
 			}
 			{
 				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ChooseIcon, KTr("ProgramManager.Menu.ChooseIcon")));
-				item->SetBitmap(KGetBitmap(KIMG_IMAGE));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Image));
 				item->Enable(entry);
 			}
 			{
 				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ShowExpandedValues, KTr("ProgramManager.Menu.ShowExpandedValues"), wxEmptyString, wxITEM_CHECK));
-				item->SetBitmap(KGetBitmap(KIMG_EDIT_CODE));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::EditCode));
 				item->Check(m_ShowExpandedValues);
 			}
 
 			menu.AddSeparator();
 			{
 				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddProgram, KTr("ProgramManager.Menu.AddProgram")));
-				item->SetBitmap(KGetBitmap(KIMG_PLUS_SMALL));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
 			}
 			{
 				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::RemoveProgram, KTr("ProgramManager.Menu.RemoveProgram")));
-				item->SetBitmap(KGetBitmap(KIMG_MINUS_SMALL));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::MinusSmall));
 				item->Enable(entry);
 			}
 
@@ -304,7 +304,7 @@ namespace Kortex::ProgramManager
 			}
 			{
 				KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::LoadDefaultPrograms, KTr("ProgramManager.Menu.LoadDefaultPrograms")));
-				item->SetBitmap(KGetBitmap(KIMG_APPLICATION_RUN));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ApplicationRun));
 			}
 
 			switch (menu.Show(GetView()))

@@ -14,6 +14,8 @@
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxTextBoxDialog.h>
 
+using namespace Kortex;
+
 enum ColumnID
 {
 	Name,
@@ -126,14 +128,14 @@ wxIcon KInstallWizardRequirementsModel::GetIconByState(KPPReqState state) const
 	{
 		case KPPReqState::False:
 		{
-			return KGetIcon(KIMG_CROSS_CIRCLE_FRAME);
+			return ImageProvider::GetIcon(ImageResourceID::CrossCircleFrame);
 		}
 		case KPPReqState::Unknown:
 		{
-			return KGetIcon(KIMG_EXCLAMATION);
+			return ImageProvider::GetIcon(ImageResourceID::Exclamation);
 		}
 	};
-	return KGetIcon(KIMG_TICK_CIRCLE_FRAME);
+	return ImageProvider::GetIcon(ImageResourceID::TickCircleFrame);
 }
 void KInstallWizardRequirementsModel::OnActivateItem(KxDataViewEvent& event)
 {

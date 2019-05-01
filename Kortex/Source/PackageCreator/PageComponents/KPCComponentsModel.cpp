@@ -209,7 +209,6 @@ void KPCComponentsModel::OnInitControl()
 {
 	/* View */
 	EnableDragAndDrop();
-	GetView()->SetIndent(KGetImageList()->GetSize().GetWidth());
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KPCComponentsModel::OnSelectItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCComponentsModel::OnActivateItem, this);
 	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCComponentsModel::OnContextMenu, this);
@@ -393,7 +392,7 @@ void KPCComponentsModel::GetStepValue(wxAny& value, const KxDataViewColumn* colu
 			}
 			else
 			{
-				value = KxDataViewBitmapTextValue(step->GetName(), KGetBitmap(KIMG_DIRECTION));
+				value = KxDataViewBitmapTextValue(step->GetName(), ImageProvider::GetBitmap(ImageResourceID::Direction));
 			}
 			break;
 		}
@@ -421,7 +420,7 @@ void KPCComponentsModel::GetGroupValue(wxAny& value, const KxDataViewColumn* col
 			}
 			else
 			{
-				value = KxDataViewBitmapTextValue(group->GetName(), KGetBitmap(KIMG_FOLDER));
+				value = KxDataViewBitmapTextValue(group->GetName(), ImageProvider::GetBitmap(ImageResourceID::Folder));
 			}
 			break;
 		}
@@ -451,7 +450,7 @@ void KPCComponentsModel::GetEntryValue(wxAny& value, const KxDataViewColumn* col
 			}
 			else
 			{
-				value = KxDataViewBitmapTextValue(entry->GetName(), KGetBitmap(KIMG_BLOCK));
+				value = KxDataViewBitmapTextValue(entry->GetName(), ImageProvider::GetBitmap(ImageResourceID::Block));
 			}
 			break;
 		}
@@ -863,7 +862,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 			CreateAllItemsMenuEntry(allItemsMenu, node, KTr("PackageCreator.PageComponents.Conditions"), &KPCComponentsModel::AllSteps_Conditions);
 
 			KxMenuItem* item = contextMenu.Add(allItemsMenu, KTr("PackageCreator.PageComponents.AllSteps"));
-			item->SetBitmap(KGetBitmap(KIMG_DIRECTION));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Direction));
 		}
 		if (node)
 		{
@@ -875,7 +874,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.SelectionMode"), &KPCComponentsModel::AllGroups_SelectionMode);
 
 				KxMenuItem* item = contextMenu.Add(allItemsMenu, KTrf("PackageCreator.PageComponents.AllGroupsOf", parent->GetStep()->GetName()));
-				item->SetBitmap(KGetBitmap(KIMG_FOLDER));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Folder));
 			}
 		}
 		if (node && (node->GetGroup() || node->GetEntry() || node->IsEntryItem()))
@@ -894,7 +893,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 				CreateAllItemsMenuEntry(allItemsMenu, parent, KTr("PackageCreator.PageComponents.AssignedFlags"), &KPCComponentsModel::AllEntries_AssignedFlags);
 
 				KxMenuItem* item = contextMenu.Add(allItemsMenu, KTrf("PackageCreator.PageComponents.AllEntriesOf", parent->GetGroup()->GetName()));
-				item->SetBitmap(KGetBitmap(KIMG_BLOCK));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Block));
 				item->SetClientData(node);
 			}
 		}
@@ -903,22 +902,22 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 		// Add item
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddStep, KTr("PackageCreator.PageComponents.AddStep")));
-			item->SetBitmap(KGetBitmap(KIMG_DIRECTION_PLUS));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DirectionPlus));
 			item->Enable(true);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddGroup, KTr("PackageCreator.PageComponents.AddGroup")));
-			item->SetBitmap(KGetBitmap(KIMG_FOLDER_PLUS));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderPlus));
 			item->Enable(node);
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddEntry, KTr("PackageCreator.PageComponents.AddEntry")));
-			item->SetBitmap(KGetBitmap(KIMG_BLOCK_PLUS));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::BlockPlus));
 			item->Enable(node && (node->GetGroup() || node->GetEntry() || node->IsEntryItem()));
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AddEntriesFromFiles, KTr("PackageCreator.PageComponents.AddEntriesFromFiles")));
-			item->SetBitmap(KGetBitmap(KIMG_FOLDER_ARROW));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FoldersPlus));
 			item->Enable(node && (node->GetGroup() || node->GetEntry() || node->IsEntryItem()));
 		}
 
@@ -932,14 +931,14 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 
 			if (const KPPCStep* step = node->GetStep())
 			{
-				menuItemRemove->SetBitmap(KGetBitmap(KIMG_DIRECTION_MINUS));
+				menuItemRemove->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DirectionMinus));
 				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveStep"), step->GetName()));
 				menuItemRemove->SetClientData(node);
 				menuItemRemove->Enable(true);
 			}
 			else if (const KPPCGroup* group = node->GetGroup())
 			{
-				menuItemRemove->SetBitmap(KGetBitmap(KIMG_FOLDER_MINUS));
+				menuItemRemove->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderMinus));
 				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveGroup"), group->GetName()));
 				menuItemRemove->SetClientData(node);
 				menuItemRemove->Enable(true);
@@ -948,7 +947,7 @@ void KPCComponentsModel::OnContextMenu(KxDataViewEvent& event)
 			{
 				const KPPCEntry* entry = node->GetEntry() ? node->GetEntry() : node->GetParent()->GetEntry();
 
-				menuItemRemove->SetBitmap(KGetBitmap(KIMG_BLOCK_MINUS));
+				menuItemRemove->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::BlockMinus));
 				menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveEntry"), entry->GetName()));
 				menuItemRemove->SetClientData(node->GetEntry() ? node : node->GetParent());
 				menuItemRemove->Enable(true);

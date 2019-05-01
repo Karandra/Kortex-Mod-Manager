@@ -81,9 +81,9 @@ class KPackageCreatorWorkspace: public KWorkspace, public KxSingletonPtr<KPackag
 	public:
 		virtual wxString GetID() const override;
 		virtual wxString GetName() const override;
-		virtual KImageEnum GetImageID() const override
+		virtual Kortex::ResourceID GetImageID() const override
 		{
-			return KIMG_BOX;
+			return Kortex::ImageResourceID::Box;
 		}
 		virtual wxSizer* GetWorkspaceSizer() const override
 		{

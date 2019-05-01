@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "PriorityGroup.h"
 #include <Kortex/ModTagManager.hpp>
-#include "Utility/KImageProvider.h"
 
 namespace Kortex::ModManager
 {

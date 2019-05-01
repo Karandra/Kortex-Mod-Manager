@@ -85,7 +85,7 @@ void KPackageManagerWorkspace::CreateViewPane()
 	sizer->Add(m_ToolBar, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
 	{
-		KxAuiToolBarItem* item = KMainWindow::CreateToolBarButton(m_ToolBar, wxEmptyString, KIMG_HOME);
+		KxAuiToolBarItem* item = KMainWindow::CreateToolBarButton(m_ToolBar, wxEmptyString, ImageResourceID::Home);
 		item->SetShortHelp(KTr(KxID_HOME));
 		item->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{
@@ -93,7 +93,7 @@ void KPackageManagerWorkspace::CreateViewPane()
 		});
 	}
 	{
-		KxAuiToolBarItem* item = KMainWindow::CreateToolBarButton(m_ToolBar, wxEmptyString, KIMG_FOLDER_ARROW);
+		KxAuiToolBarItem* item = KMainWindow::CreateToolBarButton(m_ToolBar, wxEmptyString, ImageResourceID::FolderArrow);
 		item->SetShortHelp(KTr(KxID_UP));
 		item->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 		{

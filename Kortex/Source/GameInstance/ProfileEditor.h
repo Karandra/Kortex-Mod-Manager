@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "IGameProfile.h"
-#include "Utility/KImageProvider.h"
 #include "Utility/KDataViewListModel.h"
 #include "Utility/KLabeledValue.h"
 #include <KxFramework/KxStdDialog.h>

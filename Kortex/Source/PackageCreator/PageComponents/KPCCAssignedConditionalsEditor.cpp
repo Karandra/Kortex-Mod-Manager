@@ -136,7 +136,7 @@ void KPCCAssignedConditionalsEditor::OnContextMenu(KxDataViewEvent& event)
 	KxMenu menu;
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFlag, KTr(KxID_ADD)));
-		item->SetBitmap(KGetBitmap(KIMG_FLAG_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FlagPlus));
 	}
 	menu.AddSeparator();
 	{

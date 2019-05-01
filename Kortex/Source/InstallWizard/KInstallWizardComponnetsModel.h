@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KImageProvider.h"
 #include "Utility/KDataViewTreeModel.h"
 #include "KInstallWizardDefs.h"
 #include "KInstallWizardComponnetsModelNode.h"

@@ -72,6 +72,8 @@
     <ClCompile Include="Source\Application\IVariableTable.cpp" />
     <ClCompile Include="Source\Application\Options\Option.cpp" />
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp" />
+    <ClCompile Include="Source\Application\Resources\DefaultImageProvider.cpp" />
+    <ClCompile Include="Source\Application\Resources\IImageProvider.cpp" />
     <ClCompile Include="Source\Application\Settings\ConfigManager.cpp" />
     <ClCompile Include="Source\Application\Settings\Window.cpp" />
     <ClCompile Include="Source\Application\Translation.cpp" />
@@ -307,7 +309,6 @@
     <ClCompile Include="Source\UI\KMainWindow.cpp" />
     <ClCompile Include="Source\UI\KWorkspace.cpp" />
     <ClCompile Include="Source\Utility\KAux.cpp" />
-    <ClCompile Include="Source\Utility\KImageProvider.cpp" />
     <ClCompile Include="Source\Utility\KQuickThread.cpp" />
     <ClCompile Include="Source\Utility\Log.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\Convergence.cpp" />
@@ -375,6 +376,10 @@
     <ClInclude Include="Source\Application\Options\Option.h" />
     <ClInclude Include="Source\Application\Options\OptionDatabase.h" />
     <ClInclude Include="Source\Application\Options\OptionSerializer.h" />
+    <ClInclude Include="Source\Application\Resources\DefaultImageProvider.h" />
+    <ClInclude Include="Source\Application\Resources\IImageProvider.h" />
+    <ClInclude Include="Source\Application\Resources\ImageResourceID.h" />
+    <ClInclude Include="Source\Application\Resources\ResourceID.h" />
     <ClInclude Include="Source\Application\RTTI.h" />
     <ClInclude Include="Source\Application\Settings\ConfigManager.h" />
     <ClInclude Include="Source\Application\Settings\Window.h" />
@@ -653,7 +658,6 @@
     <ClInclude Include="Source\UI\KMainWindow.h" />
     <ClInclude Include="Source\UI\KWorkspace.h" />
     <ClInclude Include="Source\Utility\KAux.h" />
-    <ClInclude Include="Source\Utility\KImageProvider.h" />
     <ClInclude Include="Source\Utility\KQuickThread.h" />
     <ClInclude Include="Source\Utility\KThemeManager.h" />
     <ClInclude Include="Source\VirtualFileSystem\BaseFileSystem.h" />

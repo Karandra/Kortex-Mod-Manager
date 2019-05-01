@@ -70,9 +70,9 @@ namespace Kortex::SaveManager
 			virtual wxString GetID() const override;
 			virtual wxString GetName() const override;
 			virtual wxString GetNameShort() const;
-			virtual KImageEnum GetImageID() const override
+			virtual ResourceID GetImageID() const override
 			{
-				return KIMG_JAR;
+				return ImageResourceID::Jar;
 			}
 			virtual wxSizer* GetWorkspaceSizer() const override
 			{

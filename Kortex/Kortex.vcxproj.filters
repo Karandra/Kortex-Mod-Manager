@@ -361,6 +361,12 @@
     <Filter Include="Code\Headers\Network\ModNetwork\Nexus">
       <UniqueIdentifier>{bd590061-5931-40cf-bf48-8108a9f8cb45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\Application\Resources">
+      <UniqueIdentifier>{11c1661f-9f2d-468a-9b85-87ad07e85567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Application\Resources">
+      <UniqueIdentifier>{75a165eb-9ac1-447b-8c15-e14bd8fe9023}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -371,9 +377,6 @@
     </ClCompile>
     <ClCompile Include="Source\UI\KWorkspace.cpp">
       <Filter>Code\Source\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\KImageProvider.cpp">
-      <Filter>Code\Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\KAux.cpp">
       <Filter>Code\Source\Utility</Filter>
@@ -1149,6 +1152,12 @@
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUtility.cpp">
       <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Application\Resources\DefaultImageProvider.cpp">
+      <Filter>Code\Source\Application\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Resources\IImageProvider.cpp">
+      <Filter>Code\Source\Application\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1159,9 +1168,6 @@
     </ClInclude>
     <ClInclude Include="Source\UI\KWorkspace.h">
       <Filter>Code\Headers\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KImageProvider.h">
-      <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KAux.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -2182,6 +2188,18 @@
     </ClInclude>
     <ClInclude Include="Source\Network\ModNetwork\Nexus.h">
       <Filter>Code\Headers\Network\ModNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Resources\IImageProvider.h">
+      <Filter>Code\Headers\Application\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Resources\ResourceID.h">
+      <Filter>Code\Headers\Application\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Resources\DefaultImageProvider.h">
+      <Filter>Code\Headers\Application\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Resources\ImageResourceID.h">
+      <Filter>Code\Headers\Application\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

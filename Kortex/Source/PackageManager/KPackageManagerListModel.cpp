@@ -301,7 +301,7 @@ void KPackageManagerListModel::CreateContextMenu()
 	m_ContextMenu_Open = m_ContextMenu.Add(new KxMenuItem(MenuID::Open, KTr(KxID_OPEN)));
 	m_ContextMenu_Open->SetDefault();
 
-	m_ContextMenu.Add(new KxMenuItem(MenuID::OpenLocation, KTr("MainMenu.OpenLocation")))->SetBitmap(KGetBitmap(KIMG_FOLDER_OPEN));
+	m_ContextMenu.Add(new KxMenuItem(MenuID::OpenLocation, KTr("MainMenu.OpenLocation")))->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
 	m_ContextMenu_ImportProject = m_ContextMenu.Add(new KxMenuItem(MenuID::ImportProject, KTr("ModManager.Menu.Package.ImportProject")));
 	m_ContextMenu_ExtractFiles = m_ContextMenu.Add(new KxMenuItem(MenuID::ExtractFiles, KTr("ModManager.Menu.Package.Extract")));
 
@@ -329,22 +329,22 @@ wxBitmap KPackageManagerListModel::GetIcon(const KxFileItem& entry) const
 	wxBitmap icon;
 	if (entry.IsDirectory())
 	{
-		icon = KGetBitmap(KIMG_FOLDER);
+		icon = ImageProvider::GetBitmap(ImageResourceID::Folder);
 	}
 	else if (KAux::IsSingleFileExtensionMatches(entry.GetName(), "kmp"))
 	{
-		icon = KGetBitmap(KIMG_APPLICATION_LOGO_SMALL);
+		icon = ImageProvider::GetBitmap(ImageResourceID::KortexLogoSmall);
 	}
 	else if (KAux::IsSingleFileExtensionMatches(entry.GetName(), "smi"))
 	{
-		icon = KGetBitmap(KIMG_SKSM_LOGO_SMALL);
+		icon = ImageProvider::GetBitmap(ImageResourceID::SKSMLogoSmall);
 	}
 	else
 	{
 		icon = KxShell::GetFileIcon(entry.GetFullPath(), true);
 		if (!icon.IsOk())
 		{
-			icon = KGetBitmap(KIMG_DOCUMENT);
+			icon = ImageProvider::GetBitmap(ImageResourceID::Document);
 		}
 	}
 	return icon;
@@ -459,7 +459,7 @@ void KPackageManagerListModel::LoadInfo()
 	if (IsPackageOK())
 	{
 		// Name
-		KMainWindow::GetInstance()->SetStatus(m_Package->GetName(), 0, KIMG_TICK_CIRCLE_FRAME);
+		KMainWindow::GetInstance()->SetStatus(m_Package->GetName(), 0, ImageResourceID::TickCircleFrame);
 
 		// Logo
 		const KPPIImageEntry* pLogo = m_Package->GetLogoImage();

@@ -2,8 +2,12 @@
 #include "KPCFileDataFolderContentModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "UI/KMainWindow.h"
+#include "Application/Resources/ImageResourceID.h"
+#include "Application/Resources/IImageProvider.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
+
+using namespace Kortex;
 
 enum ColumnID
 {
@@ -134,7 +138,7 @@ void KPCFileDataFolderContentModel::OnContextMenu(KxDataViewEvent& event)
 	KxMenu menu;
 	{
 		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddMultipleFiles, KTr("PackageCreator.AddMultipleFiles")));
-		item->SetBitmap(KGetBitmap(KIMG_DOCUMENTS_PLUS));
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentsPlus));
 	}
 	menu.AddSeparator();
 	{

@@ -34,9 +34,9 @@ namespace Kortex::GameConfig
 			wxString GetID() const override;
 			wxString GetName() const override;
 			wxString GetNameShort() const;
-			KImageEnum GetImageID() const override
+			ResourceID GetImageID() const override
 			{
-				return KIMG_GEAR_PENCIL;
+				return ImageResourceID::GearPencil;
 			}
 			wxSizer* GetWorkspaceSizer() const override
 			{

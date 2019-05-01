@@ -6,7 +6,7 @@ namespace Kortex
 {
 	namespace Internal
 	{
-		const SimpleModuleInfo ProgramModuleTypeInfo("Programs", "ProgramsModule.Name", "2.0", KIMG_APPLICATION_RUN);
+		const SimpleModuleInfo ProgramModuleTypeInfo("Programs", "ProgramsModule.Name", "2.0", ImageResourceID::ApplicationRun);
 	}
 
 	void KProgramModule::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)

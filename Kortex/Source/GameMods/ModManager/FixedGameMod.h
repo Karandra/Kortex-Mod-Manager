@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "BasicGameMod.h"
-#include "Utility/KImageProvider.h"
 
 namespace Kortex::ModManager
 {
@@ -36,9 +35,9 @@ namespace Kortex::ModManager
 				return true;
 			}
 
-			KImageEnum GetIcon() const override
+			ResourceID GetIcon() const override
 			{
-				return KIMG_FOLDERS;
+				return ImageResourceID::Folders;
 			}
 			intptr_t GetDisplayOrder() const override
 			{

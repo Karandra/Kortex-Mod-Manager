@@ -260,7 +260,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 		m_ToolBar->AddControl(m_ColorBGCtrl);
 
 		// Backward
-		m_Backward = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_BACKWARD), KIMG_CONTROL_LEFT);
+		m_Backward = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_BACKWARD), ImageResourceID::ControlLeft);
 
 		// Scale
 		m_ScaleSlider = new KxSlider(m_ToolBar, KxID_NONE, 100, 10, 500);
@@ -268,7 +268,7 @@ bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 		m_ToolBar->AddControl(m_ScaleSlider);
 
 		// Forward
-		m_Forward = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_FORWARD), KIMG_CONTROL_RIGHT);
+		m_Forward = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_FORWARD), ImageResourceID::ControlRight);
 		
 		// FG color
 		m_ColorFGCtrl = new wxColourPickerCtrl(m_ToolBar, KxID_NONE, m_ImageView->GetForegroundColour());

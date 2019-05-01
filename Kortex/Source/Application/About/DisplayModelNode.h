@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KImageProvider.h"
+#include "Application/Resources/ImageResourceID.h"
 #include <KxFramework/KxVersion.h>
 
 namespace Kortex
@@ -50,7 +50,7 @@ namespace Kortex::Application::About
 		public:
 			virtual wxString GetName() const = 0;
 			virtual KxVersion GetVersion() const = 0;
-			virtual KImageEnum GetIconID() const = 0;
+			virtual ResourceID GetIconID() const = 0;
 			virtual wxString GetLicense() const = 0;
 			virtual wxString GetURL() const = 0;
 	};
@@ -66,7 +66,7 @@ namespace Kortex::Application::About
 		public:
 			wxString GetName() const override;
 			KxVersion GetVersion() const override;
-			KImageEnum GetIconID() const override;
+			ResourceID GetIconID() const override;
 			wxString GetLicense() const override;
 			wxString GetURL() const override;
 	};
@@ -89,7 +89,7 @@ namespace Kortex::Application::About
 		public:
 			wxString GetName() const override;
 			KxVersion GetVersion() const override;
-			KImageEnum GetIconID() const override;
+			ResourceID GetIconID() const override;
 			wxString GetLicense() const override;
 			wxString GetURL() const override
 			{
@@ -107,11 +107,11 @@ namespace Kortex::Application::About
 			const wxString m_Name;
 			const KxVersion m_Version;
 			const wxString m_URL;
-			const KImageEnum m_IconID;
+			const ResourceID m_IconID;
 			mutable LicenseData m_Licence;
 
 		public:
-			GenericNode(Type type, const wxString& name, const KxVersion& version, const wxString& url, KImageEnum iconID)
+			GenericNode(Type type, const wxString& name, const KxVersion& version, const wxString& url, const ResourceID& iconID)
 				:m_Type(type), m_Name(name), m_Version(version), m_URL(url), m_IconID(iconID)
 			{
 			}
@@ -125,7 +125,7 @@ namespace Kortex::Application::About
 			{
 				return m_Version;
 			}
-			KImageEnum GetIconID() const override
+			ResourceID GetIconID() const override
 			{
 				return m_IconID;
 			}
@@ -145,7 +145,7 @@ namespace Kortex::Application::About
 	class SoftwareNode: public GenericNode
 	{
 		public:
-			SoftwareNode(const wxString& name, const KxVersion& version, const wxString& url, KImageEnum iconID = KIMG_NONE)
+			SoftwareNode(const wxString& name, const KxVersion& version, const wxString& url, const ResourceID& iconID = ImageResourceID::None)
 				:GenericNode(Type::Software, name, version, url, iconID)
 			{
 			}
@@ -176,9 +176,9 @@ namespace Kortex::Application::About
 			{
 				return KxVersion();
 			}
-			KImageEnum GetIconID() const override
+			ResourceID GetIconID() const override
 			{
-				return KIMG_NONE;
+				return {};
 			}
 			wxString GetLicense() const override
 			{

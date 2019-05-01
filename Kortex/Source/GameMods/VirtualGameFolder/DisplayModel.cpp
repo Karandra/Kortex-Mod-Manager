@@ -151,7 +151,7 @@ namespace Kortex::VirtualGameFolder
 						if (!bitmap.IsOk())
 						{
 							// Couldn't get bitmap from system, use our own
-							bitmap = KGetBitmap(node->IsDirectory() ? KIMG_FOLDER : KIMG_DOCUMENT);
+							bitmap = ImageProvider::GetBitmap(node->IsDirectory() ? ImageResourceID::Folder : ImageResourceID::Document);
 						}
 						m_IconCache.insert_or_assign(node, bitmap);
 
@@ -164,7 +164,7 @@ namespace Kortex::VirtualGameFolder
 					KxDataViewBitmapTextValue data(mod.GetName());
 					if (node->HasAlternativesFromActiveMods())
 					{
-						data.SetBitmap(KGetBitmap(node->IsDirectory() ? KIMG_EXCLAMATION_CIRCLE_FRAME_EMPTY : KIMG_EXCLAMATION));
+						data.SetBitmap(ImageProvider::GetBitmap(node->IsDirectory() ? ImageResourceID::ExclamationCircleFrameEmpty : ImageResourceID::Exclamation));
 					}
 					value = data;
 					break;

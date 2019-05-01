@@ -90,7 +90,7 @@ namespace Kortex
 	}
 	wxString IGameInstance::GetGenericIconLocation()
 	{
-		return IApplication::GetInstance()->GetDataFolder() + wxS("\\UI\\application-logo-icon.ico");
+		return IApplication::GetInstance()->GetDataFolder() + wxS("\\UI\\kortex-logo-icon.ico");
 	}
 
 	IGameInstance* IGameInstance::CreateActive(const IGameInstance& instanceTemplate, const wxString& instanceID)

@@ -113,7 +113,7 @@ namespace Kortex::Application
 		// Don't show loading screen if it's a download link request
 		if (downloadLink.IsEmpty() || !anotherInstanceRunning)
 		{
-			splashWindow->Create(nullptr, ImageProvider::GetBitmap("application-logo"));
+			splashWindow->Create(nullptr, ImageProvider::GetBitmap("kortex-logo"));
 			splashWindow->Show();
 		}
 		

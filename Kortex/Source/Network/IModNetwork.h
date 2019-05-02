@@ -14,6 +14,7 @@ class KxMenu;
 namespace Kortex
 {
 	class IDownloadEntry;
+	class IGameMod;
 }
 
 namespace Kortex
@@ -25,6 +26,7 @@ namespace Kortex
 		public:
 			using Vector = std::vector<std::unique_ptr<IModNetwork>>;
 			using RefVector = std::vector<IModNetwork*>;
+			using ModsRefVector = std::vector<IGameMod*>;
 
 		public:
 			static ResourceID GetGenericIcon();
@@ -62,6 +64,9 @@ namespace Kortex
 
 		public:
 			virtual void OnToolBarMenu(KxMenu& menu)
+			{
+			}
+			virtual void OnModsMenu(KxMenu& menu, const ModsRefVector& selectedMods, IGameMod* focusedMod)
 			{
 			}
 	};

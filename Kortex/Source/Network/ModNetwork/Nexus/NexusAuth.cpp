@@ -34,7 +34,7 @@ namespace Kortex::NetworkManager
 	{
 		m_WebSocketClient.reset();
 		m_UserToken.clear();
-		m_SessionGUID = UUID {0};
+		m_SessionGUID = {};
 		m_IsAuthenticated = false;
 
 		IEvent::CallAfter([this]()
@@ -45,7 +45,7 @@ namespace Kortex::NetworkManager
 		return KxID_OK;
 	}
 	
-	void NexusAuth::OnMenu(KxMenu& menu)
+	void NexusAuth::OnToolBarMenu(KxMenu& menu)
 	{
 		if (m_LastValidationReply)
 		{

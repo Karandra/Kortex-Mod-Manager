@@ -42,7 +42,7 @@ namespace Kortex::NetworkManager
 			}
 
 		private:
-			void OnMenu(KxMenu& menu);
+			void OnToolBarMenu(KxMenu& menu);
 			void RequestUserPicture(const NexusValidationReply& info);
 			std::optional<NexusValidationReply> DoGetValidationInfo(const wxString& apiKey = {}, bool noErrorReport = false) const;
 

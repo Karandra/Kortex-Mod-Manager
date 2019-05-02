@@ -61,7 +61,7 @@ namespace Kortex
 			virtual wxString GetModPageURL(const ModRepositoryRequest& request) = 0;
 
 		public:
-			virtual void OnMenu(KxMenu& menu)
+			virtual void OnToolBarMenu(KxMenu& menu)
 			{
 			}
 	};

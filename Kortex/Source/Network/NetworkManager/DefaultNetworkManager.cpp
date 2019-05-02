@@ -227,7 +227,7 @@ namespace Kortex::NetworkManager
 
 				// Add any custom menu items
 				const size_t itemCount = subMenu->GetMenuItemCount();
-				modNetwork->OnMenu(*subMenu);
+				modNetwork->OnToolBarMenu(*subMenu);
 
 				// Check if we need to add separator
 				if (subMenu->GetMenuItemCount() > itemCount)

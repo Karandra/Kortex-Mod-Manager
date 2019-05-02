@@ -1158,6 +1158,9 @@
     <ClCompile Include="Source\Application\Resources\IImageProvider.cpp">
       <Filter>Code\Source\Application\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utility\MenuSeparator.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2200,6 +2203,9 @@
     </ClInclude>
     <ClInclude Include="Source\Application\Resources\ImageResourceID.h">
       <Filter>Code\Headers\Application\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\MenuSeparator.h">
+      <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

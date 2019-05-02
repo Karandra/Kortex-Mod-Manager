@@ -311,6 +311,7 @@
     <ClCompile Include="Source\Utility\KAux.cpp" />
     <ClCompile Include="Source\Utility\KQuickThread.cpp" />
     <ClCompile Include="Source\Utility\Log.cpp" />
+    <ClCompile Include="Source\Utility\MenuSeparator.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\Convergence.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\DefaultVFSService.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\BaseFileSystem.cpp" />
@@ -651,6 +652,7 @@
     <ClInclude Include="Source\UI\KWorkspaceController.h" />
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
     <ClInclude Include="Source\Utility\Log.h" />
+    <ClInclude Include="Source\Utility\MenuSeparator.h" />
     <ClInclude Include="Source\Utility\String.h" />
     <ClInclude Include="Source\Utility\UniqueID.h" />
     <ClInclude Include="Source\Events\LogEvent.h" />

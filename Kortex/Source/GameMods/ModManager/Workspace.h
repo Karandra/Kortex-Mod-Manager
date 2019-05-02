@@ -141,7 +141,7 @@ namespace Kortex::ModManager
 
 			void ClearControls();
 			void DisplayModInfo(IGameMod* entry);
-			void CreateViewContextMenu(KxMenu& contextMenu, IGameMod* entry);
+			void CreateViewContextMenu(KxMenu& contextMenu, const IGameMod::RefVector& selectedMods, IGameMod* focusedMod);
 			void ChangeImageResizeMode(ImageResizeMode mode);
 
 		public:
@@ -160,8 +160,7 @@ namespace Kortex::ModManager
 			void HighlightMod(const IGameMod* entry = nullptr);
 			void ReloadView();
 
-			void ShowViewContextMenu(IGameMod* entry);
-			void ShowViewContextMenu(const IModTag* modTag);
+			void OnModsContextMenu(const IGameMod::RefVector& selectedMods, IGameMod* focusedMod);
 			void UpdateModListContent();
 
 			bool IsAnyChangeAllowed() const;

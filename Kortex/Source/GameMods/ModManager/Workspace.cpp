@@ -23,9 +23,9 @@
 #include "UI/KImageViewerDialog.h"
 #include "UI/KTextEditorDialog.h"
 #include "InstallWizard/KInstallWizardDialog.h"
-#include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
+#include "Utility/MenuSeparator.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLabel.h>
@@ -55,7 +55,7 @@ namespace
 	using namespace Kortex::ModManager;
 	using namespace Kortex::Application;
 
-	enum DisplayModeMenuID
+	enum class DisplayModeMenuID
 	{
 		Connector,
 		Manager,
@@ -67,64 +67,52 @@ namespace
 		PriorityGroupLabelAlignment_Right,
 		PriorityGroupLabelAlignment_Center,
 	};
-	enum ToolsMenuID
+	enum class ToolsMenuID
 	{
-		TOOLS_ID_STATISTICS = KxID_HIGHEST + 1,
-		TOOLS_ID_EXPORT_MOD_LIST,
+		Statistics = KxID_HIGHEST + 1,
+		ExportModList,
 	};
-	enum ContextMenuID
+	enum class ContextMenuID
 	{
-		KMC_ID_START = KxID_HIGHEST,
+		BeginIndex = KxID_HIGHEST,
 
-		KMC_ID_MOD_OPEN_LOCATION,
-		KMC_ID_MOD_CHANGE_LOCATION,
-		KMC_ID_MOD_REVERT_LOCATION,
-		KMC_ID_MOD_INSTALL,
-		KMC_ID_MOD_UNINSTALL,
-		KMC_ID_MOD_UNINSTALL_AND_ERASE,
-		KMC_ID_MOD_IMAGE_SHOW,
-		KMC_ID_MOD_IMAGE_ASSIGN,
-		KMC_ID_MOD_EDIT_DESCRIPTION,
-		KMC_ID_MOD_EDIT_TAGS,
-		KMC_ID_MOD_EDIT_SITES,
-		KMC_ID_MOD_CHANGE_ID,
-		KMC_ID_MOD_EXPLORE_FILES,
-		KMC_ID_MOD_SHOW_COLLISIONS,
-		KMC_ID_MOD_PROPERTIES,
+		ModOpenLocation,
+		ModChangeLocation,
+		ModRevertLocation,
 
-		KMC_ID_PACKAGE_OPEN,
-		KMC_ID_PACKAGE_ASSIGN,
-		KMC_ID_PACKAGE_OPEN_LOCATION,
-		KMC_ID_PACKAGE_REMOVE,
-		KMC_ID_PACKAGE_EXTRACT,
-		KMC_ID_PACKAGE_IMPORT_PROJECT,
-		KMC_ID_PACKAGE_CREATE_PROJECT,
-		KMC_ID_PACKAGE_PROPERTIES,
+		ModInstall,
+		ModUninstall,
+		ModErase,
 
-		KMC_COLOR_ASSIGN,
-		KMC_COLOR_RESET,
+		ModImageShow,
+		ModImageAssign,
 
-		KMC_ID_TAG_ENABLE_ALL,
-		KMC_ID_TAG_DISABLE_ALL,
+		ModEditDescription,
+		ModEditTags,
+		ModEditSources,
+		ModChangeID,
+		ModExploreFiles,
+		ModShowCollisions,
+		ModProperties,
+
+		ColorAssign,
+		ColorReset,
 	};
 
-	template<class Functor> bool DoForAllSelectedItems(DisplayModel* model, Functor&& func)
+	template<class Functor> bool DoForAllSelectedItems(const IGameMod::RefVector& selectedMods, Functor&& func)
 	{
-		KxDataView2::Node::Vector nodes;
-		if (model->GetView()->GetSelections(nodes) != 0)
+		if (!selectedMods.empty())
 		{
-			for (KxDataView2::Node* item: nodes)
+			bool result = false;
+			for (IGameMod* gameMod: selectedMods)
 			{
-				DisplayModelModNode* modNode = nullptr;
-				if (item->QueryInterface(modNode))
+				if (!func(*gameMod))
 				{
-					if (!func(modNode->GetMod()))
-					{
-						break;
-					}
+					break;
 				}
+				result = true;
 			}
-			return true;
+			return result;
 		}
 		return false;
 	}
@@ -248,28 +236,28 @@ namespace Kortex::ModManager
 		m_ToolBar_ChangeDisplayMode->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 
 		{
-			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::Connector, KTr("ModManager.DisplayMode.Connector"), wxEmptyString, wxITEM_RADIO));
+			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem((int)DisplayModeMenuID::Connector, KTr("ModManager.DisplayMode.Connector"), wxEmptyString, wxITEM_RADIO));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlugDisconnect));
 			item->Check(m_DisplayModel->GetDisplayMode() == DisplayModelType::Connector);
 		}
 		{
-			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::Manager, KTr("ModManager.DisplayMode.Log"), wxEmptyString, wxITEM_RADIO));
+			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem((int)DisplayModeMenuID::Manager, KTr("ModManager.DisplayMode.Log"), wxEmptyString, wxITEM_RADIO));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Category));
 			item->Check(m_DisplayModel->GetDisplayMode() == DisplayModelType::Manager);
 		}
 		m_ToolBar_DisplayModeMenu->AddSeparator();
 
 		{
-			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::ShowPriorityGroups, KTr("ModManager.DisplayMode.ShowPriorityGroups"), wxEmptyString, wxITEM_CHECK));
+			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem((int)DisplayModeMenuID::ShowPriorityGroups, KTr("ModManager.DisplayMode.ShowPriorityGroups"), wxEmptyString, wxITEM_CHECK));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Folders));
 			item->Check(m_DisplayModel->ShouldShowPriorityGroups());
 		}
 		{
-			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::ShowNotInstalledMods, KTr("ModManager.DisplayMode.ShowNotInstalledMods"), wxEmptyString, wxITEM_CHECK));
+			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem((int)DisplayModeMenuID::ShowNotInstalledMods, KTr("ModManager.DisplayMode.ShowNotInstalledMods"), wxEmptyString, wxITEM_CHECK));
 			item->Check(m_DisplayModel->ShouldShowNotInstalledMods());
 		}
 		{
-			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem(DisplayModeMenuID::BoldPriorityGroupLabels, KTr("ModManager.DisplayMode.BoldPriorityGroupLabels"), wxEmptyString, wxITEM_CHECK));
+			KxMenuItem* item = m_ToolBar_DisplayModeMenu->Add(new KxMenuItem((int)DisplayModeMenuID::BoldPriorityGroupLabels, KTr("ModManager.DisplayMode.BoldPriorityGroupLabels"), wxEmptyString, wxITEM_CHECK));
 			item->Check(m_DisplayModel->IsBoldPriorityGroupLabels());
 		}
 		m_ToolBar_DisplayModeMenu->AddSeparator();
@@ -281,7 +269,7 @@ namespace Kortex::ModManager
 			using PriorityGroupLabelAlignment = DisplayModel::PriorityGroupLabelAlignment;
 			auto AddOption = [this, alignmnetMenu](DisplayModeMenuID id, PriorityGroupLabelAlignment type, KxStandardID trId)
 			{
-				KxMenuItem* item = alignmnetMenu->Add(new KxMenuItem(id, KTr(trId), wxEmptyString, wxITEM_RADIO));
+				KxMenuItem* item = alignmnetMenu->Add(new KxMenuItem((int)id, KTr(trId), wxEmptyString, wxITEM_RADIO));
 				item->Check(m_DisplayModel->GetPriorityGroupLabelAlignment() == type);
 				return item;
 			};
@@ -332,10 +320,10 @@ namespace Kortex::ModManager
 		m_ToolBar_Tools->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 		KxMenuItem* item = nullptr;
 
-		item = menu->Add(new KxMenuItem(TOOLS_ID_STATISTICS, KTr("ModManager.Statistics")));
+		item = menu->Add(new KxMenuItem((int)ToolsMenuID::Statistics, KTr("ModManager.Statistics")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Chart));
 
-		item = menu->Add(new KxMenuItem(TOOLS_ID_EXPORT_MOD_LIST, KTr("Generic.Export")));
+		item = menu->Add(new KxMenuItem((int)ToolsMenuID::ExportModList, KTr("Generic.Export")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Disk));
 	}
 
@@ -543,7 +531,7 @@ namespace Kortex::ModManager
 		KInstallWizardDialog* dialog = new KInstallWizardDialog(GetMainWindow(), path);
 		dialog->Bind(KEVT_IW_DONE, [this](wxNotifyEvent& event)
 		{
-			ReloadWorkspace();
+			ScheduleReload();
 		});
 	}
 
@@ -552,7 +540,7 @@ namespace Kortex::ModManager
 		wxWindowID id = m_ToolBar_ChangeDisplayMode->ShowDropdownMenu();
 		if (id != KxID_NONE)
 		{
-			switch (id)
+			switch ((DisplayModeMenuID)id)
 			{
 				case DisplayModeMenuID::Connector:
 				{
@@ -613,21 +601,20 @@ namespace Kortex::ModManager
 	}
 	void Workspace::OnToolsMenu(KxAuiToolBarEvent& event)
 	{
-		wxWindowID id = m_ToolBar_Tools->ShowDropdownMenu();
-		switch (id)
+		switch ((ToolsMenuID)m_ToolBar_Tools->ShowDropdownMenu())
 		{
-			case TOOLS_ID_STATISTICS:
+			case ToolsMenuID::Statistics:
 			{
 				ModStatistics::Dialog dialog(this);
 				dialog.ShowModal();
 				break;
 			}
-			case TOOLS_ID_EXPORT_MOD_LIST:
+			case ToolsMenuID::ExportModList:
 			{
 				KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 				dialog.AddFilter("*.html", KTr("FileFilter.HTML"));
 				dialog.SetDefaultExtension("html");
-				dialog.SetFileName(IGameInstance::GetActive()->GetGameID() + " - " + IGameInstance::GetActive()->GetInstanceID());
+				dialog.SetFileName(IGameInstance::GetActive()->GetGameID() + wxS(" - ") + IGameInstance::GetActive()->GetInstanceID());
 
 				if (dialog.ShowModal() == KxID_OK)
 				{
@@ -805,58 +792,62 @@ namespace Kortex::ModManager
 			GetMainWindow()->SetStatus(entry->GetName());
 		}
 	}
-	void Workspace::CreateViewContextMenu(KxMenu& contextMenu, IGameMod* modEntry)
+	void Workspace::CreateViewContextMenu(KxMenu& contextMenu, const IGameMod::RefVector& selectedMods, IGameMod* focusedMod)
 	{
-		if (modEntry)
+		if (focusedMod)
 		{
-			const bool isMultipleSelection = m_DisplayModel->GetView()->GetSelectedCount() > 1;
-			const bool isFixedMod = modEntry->QueryInterface<FixedGameMod>();
-			const bool isPriorityGroup = modEntry->QueryInterface<PriorityGroup>();
-			const bool isLinkedMod = modEntry->IsLinkedMod();
-			const bool isInstalled = modEntry->IsInstalled();
-			const bool isPackageExist = modEntry->IsPackageFileExist() && !isFixedMod;
+			const bool isMultipleSelection = selectedMods.size() > 1;
+			
+			const bool isFixedMod = focusedMod->QueryInterface<FixedGameMod>();
+			const bool isPriorityGroup = focusedMod->QueryInterface<PriorityGroup>();
+			const bool isNormalMod = !isFixedMod && !isPriorityGroup;
+
+			const bool isLinkedMod = focusedMod->IsLinkedMod();
+			const bool isInstalled = focusedMod->IsInstalled();
+			const bool isPackageExist = !isFixedMod && !isPriorityGroup && focusedMod->IsPackageFileExist();
 			const bool isVFSActive = IModManager::GetInstance()->GetFileSystem().IsEnabled();
 
+			// Install and Uninstall
 			if (isInstalled)
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_UNINSTALL, KTr("ModManager.Menu.UninstallMod")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModUninstall, KTr("ModManager.Menu.UninstallMod"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::BoxMinus));
-				item->Enable(!isMultipleSelection && !isVFSActive && !isFixedMod);
+				item->Enable(!isMultipleSelection && !isVFSActive && isNormalMod);
 			}
 			else
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_INSTALL, KTr("ModManager.Menu.InstallMod")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModInstall, KTr("ModManager.Menu.InstallMod"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Box));
-				item->Enable(!isMultipleSelection && isPackageExist && !isFixedMod);
+				item->Enable(!isMultipleSelection && isPackageExist && isNormalMod);
 			}
 			{
 				// Linked mods can't be uninstalled on erase
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_UNINSTALL_AND_ERASE));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModErase);
 				item->SetItemLabel(isInstalled && !isLinkedMod ? KTr("ModManager.Menu.UninstallAndErase") : KTr("ModManager.Menu.Erase"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Eraser));
-				item->Enable(!isMultipleSelection && !isFixedMod && !isVFSActive);
+				item->Enable(!isMultipleSelection && !isVFSActive && isNormalMod);
 			}
 			contextMenu.AddSeparator();
 
+			// Image menu
+			if (KxMenu* imageMenu = new KxMenu(); true)
 			{
-				/* Image menu */
-				KxMenu* imageMenu = new KxMenu();
 				contextMenu.Add(imageMenu, KTr("ModManager.Menu.Image"));
 
 				{
-					KxMenuItem* item = imageMenu->Add(new KxMenuItem(KMC_ID_MOD_IMAGE_SHOW, KTr("ModManager.Menu.Image.Show")));
-					item->Enable(!isMultipleSelection && !isFixedMod);
+					KxMenuItem* item = imageMenu->AddItem(ContextMenuID::ModImageShow, KTr("ModManager.Menu.Image.Show"));
+					item->Enable(!isMultipleSelection && isNormalMod);
 				}
 				{
-					KxMenuItem* item = imageMenu->Add(new KxMenuItem(KMC_ID_MOD_IMAGE_ASSIGN, KTr("ModManager.Menu.Image.Assign")));
+					KxMenuItem* item = imageMenu->AddItem(ContextMenuID::ModImageAssign, KTr("ModManager.Menu.Image.Assign"));
 					item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Image));
-					item->Enable(!isMultipleSelection && !isFixedMod);
+					item->Enable(!isMultipleSelection && isNormalMod);
 				}
 				imageMenu->AddSeparator();
 
-				auto AddOption = [this, imageMenu](ImageResizeMode mode, const wxString& anme)
+				auto AddOption = [this, imageMenu](ImageResizeMode mode, const wxString& name)
 				{
-					KxMenuItem* item = imageMenu->Add(new KxMenuItem(anme, wxEmptyString, wxITEM_RADIO));
+					KxMenuItem* item = imageMenu->AddItem(name, wxEmptyString, wxITEM_RADIO);
 					item->Check(mode == m_ImageResizeMode);
 					item->Bind(KxEVT_MENU_SELECT, [this, mode](KxMenuEvent& event)
 					{
@@ -868,136 +859,89 @@ namespace Kortex::ModManager
 				AddOption(ImageResizeMode::Fill, KTr("ModManager.Menu.Image.Fill"));
 			}
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_DESCRIPTION, KTr("ModManager.Menu.EditDescription")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModEditDescription, KTr("ModManager.Menu.EditDescription"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentPencil));
-				item->Enable(!isMultipleSelection && !isFixedMod);
+				item->Enable(!isMultipleSelection && isNormalMod);
 			}
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_TAGS, KTr("ModManager.Menu.EditTags")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModEditTags, KTr("ModManager.Menu.EditTags"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Tags));
 				item->Enable(!isFixedMod);
 			}
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EDIT_SITES, KTr("ModManager.Menu.EditSites")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModEditSources, KTr("ModManager.Menu.EditSites"));
 				item->SetBitmap(ImageProvider::GetBitmap(IModNetwork::GetGenericIcon()));
-				item->Enable(!isMultipleSelection && !isFixedMod);
+				item->Enable(!isMultipleSelection && isNormalMod);
 			}
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHANGE_ID, KTr("ModManager.Menu.ChangeID")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModChangeID, KTr("ModManager.Menu.ChangeID"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Key));
-				item->Enable(!isMultipleSelection && !isVFSActive && !isFixedMod);
+				item->Enable(!isMultipleSelection && !isVFSActive && isNormalMod);
 			}
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_EXPLORE_FILES, KTr("ModManager.Menu.ExploreFiles")));
-				item->Enable(!isMultipleSelection && !isPriorityGroup);
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModExploreFiles, KTr("ModManager.Menu.ExploreFiles"));
+				item->Enable(!isMultipleSelection && isNormalMod);
 			}
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_SHOW_COLLISIONS, KTr("ModManager.Menu.ShowCollisions")));
-				item->Enable(!isMultipleSelection && !isPriorityGroup);
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModShowCollisions, KTr("ModManager.Menu.ShowCollisions"));
+				item->Enable(!isMultipleSelection && isNormalMod);
 			}
 
-			/* Package menu */
+			// Package menu
+			if (KPackageManager* packageManager = KPackageManager::GetInstance())
 			{
-				KxMenu* packageMenu = new KxMenu();
-				KxMenuItem* packageMenuItem = contextMenu.Add(packageMenu, KTr("ModManager.Menu.Package"));
-				packageMenuItem->Enable(!isMultipleSelection && !isFixedMod && !isPriorityGroup);
-
-				{
-					KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_OPEN, KTr("ModManager.Menu.Package.Open")));
-					item->SetDefault();
-					item->Enable(isPackageExist);
-				}
-				{
-					KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_OPEN_LOCATION, KTr("ModManager.Menu.Package.OpenLocation")));
-					item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
-					item->Enable(isPackageExist);
-				}
-				packageMenu->AddSeparator();
-
-				{
-					KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_ASSIGN, KTr("ModManager.Menu.Package.Assign")));
-					item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::BoxSearchResult));
-					item->Enable(!isFixedMod);
-				}
-				{
-					KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_REMOVE, KTr("ModManager.Menu.Package.Remove")));
-					item->Enable(isPackageExist);
-				}
-				{
-					KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_EXTRACT, KTr("ModManager.Menu.Package.Extract")));
-					item->Enable(isPackageExist);
-				}
-				{
-					KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_IMPORT_PROJECT, KTr("ModManager.Menu.Package.ImportProject")));
-					item->Enable(isPackageExist);
-				}
-				{
-					KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_CREATE_PROJECT, KTr("ModManager.Menu.Package.CreateProject")));
-					item->Enable(isPackageExist);
-				}
-				packageMenu->AddSeparator();
-
-				{
-					KxMenuItem* item = packageMenu->Add(new KxMenuItem(KMC_ID_PACKAGE_PROPERTIES, KTr("ModManager.Menu.Properties")));
-					item->Enable(isPackageExist);
-				}
+				Utility::MenuSeparatorAfter separator(contextMenu);
+				packageManager->OnModsMenu(contextMenu, selectedMods, focusedMod);
 			}
-			contextMenu.AddSeparator();
 
 			// Color menu
+			if (KxMenu* colorMenu = new KxMenu(); true)
 			{
-				KxMenu* colorMenu = new KxMenu();
 				contextMenu.Add(colorMenu, KTr("Generic.Color"));
-
 				{
-					KxMenuItem* item = colorMenu->Add(new KxMenuItem(KMC_COLOR_ASSIGN, KTr("Generic.Assign")));
+					KxMenuItem* item = colorMenu->AddItem(ContextMenuID::ColorAssign, KTr("Generic.Assign"));
 					item->SetDefault();
 				}
 				{
-					KxMenuItem* item = colorMenu->Add(new KxMenuItem(KMC_COLOR_RESET, KTr("Generic.Reset")));
-					item->Enable(modEntry->HasColor() || m_DisplayModel->GetView()->GetSelectedCount() != 0);
+					KxMenuItem* item = colorMenu->AddItem(ContextMenuID::ColorReset, KTr("Generic.Reset"));
+					item->Enable((focusedMod && focusedMod->HasColor()) || isMultipleSelection);
 				}
 			}
 			contextMenu.AddSeparator();
 
 			// Other items
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_OPEN_LOCATION, KTr("ModManager.Menu.OpenModFilesLocation")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModOpenLocation, KTr("ModManager.Menu.OpenModFilesLocation"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
 				item->Enable(!isMultipleSelection && !isPriorityGroup);
 			}
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_CHANGE_LOCATION, KTr("ModManager.Menu.ChangeModFilesLocation")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModChangeLocation, KTr("ModManager.Menu.ChangeModFilesLocation"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderArrow));
-				item->Enable(!isMultipleSelection && !isFixedMod && !isVFSActive);
+				item->Enable(!isMultipleSelection && isNormalMod && !isVFSActive);
 			}
-			if (!isMultipleSelection && isLinkedMod && !isFixedMod)
+			if (!isMultipleSelection && isLinkedMod && isNormalMod)
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_REVERT_LOCATION, KTr("ModManager.Menu.RevertModFilesLocation")));
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModRevertLocation, KTr("ModManager.Menu.RevertModFilesLocation"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderArrow));
 			}
-			contextMenu.AddSeparator();
-
 			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(KMC_ID_MOD_PROPERTIES, KTr("ModManager.Menu.Properties")));
-				item->Enable(!isMultipleSelection && !isPriorityGroup);
+				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModProperties, KTr("ModManager.Menu.Properties"));
+				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::InformationFrame));
+				item->Enable(!isMultipleSelection && isNormalMod);
 			}
 		}
+		contextMenu.AddSeparator();
 
-		/* Generic items */
-		if (contextMenu.GetMenuItemCount() != 0)
+		// Refresh
 		{
-			contextMenu.AddSeparator();
-		}
-
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr(KxID_REFRESH)));
+			KxMenuItem* item = contextMenu.AddItem(KTr(KxID_REFRESH));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				IModManager::GetInstance()->Load();
 				IModManager::GetInstance()->ResortMods();
-				ReloadWorkspace();
+				ScheduleReload();
 			});
 		}
 	}
@@ -1034,118 +978,125 @@ namespace Kortex::ModManager
 		ProcessSelection();
 	}
 
-	void Workspace::ShowViewContextMenu(IGameMod* modEntry)
+	void Workspace::OnModsContextMenu(const IGameMod::RefVector& selectedMods, IGameMod* focusedMod)
 	{
 		// Get mouse position before doing anything else,
 		// as mouse pointer can move before displaying showing the menu.
 		wxPoint mousePos = wxGetMousePosition();
 
-		// Show menu
+		// Create menu
 		KxMenu contextMenu;
-		CreateViewContextMenu(contextMenu, modEntry);
+		CreateViewContextMenu(contextMenu, selectedMods, focusedMod);
 
-		wxWindowID menuID = contextMenu.Show(nullptr, mousePos);
+		// Mod network menu for these mods
+		for (auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
+		{
+			modNetwork->OnModsMenu(contextMenu, selectedMods, focusedMod);
+		}
+
+		// Show menu
+		const ContextMenuID menuID = (ContextMenuID)contextMenu.Show(nullptr, mousePos);
 		switch (menuID)
 		{
 			// Mod
-			case KMC_ID_MOD_OPEN_LOCATION:
+			case ContextMenuID::ModOpenLocation:
 			{
-				wxString location = modEntry->IsInstalled() ? modEntry->GetModFilesDir() : modEntry->GetRootDir();
+				wxString location = focusedMod->IsInstalled() ? focusedMod->GetModFilesDir() : focusedMod->GetRootDir();
 				KxShell::Execute(GetMainWindow(), location, "open");
 				break;
 			}
-			case KMC_ID_MOD_CHANGE_LOCATION:
+			case ContextMenuID::ModChangeLocation:
 			{
 				KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
 				if (dialog.ShowModal() == KxID_OK)
 				{
-					if (!modEntry->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, modEntry->GetModFilesDir() + "\\*", dialog.GetResult(), this, true, false, false, true))
+					if (!focusedMod->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, focusedMod->GetModFilesDir() + "\\*", dialog.GetResult(), this, true, false, false, true))
 					{
-						KxFile(modEntry->GetModFilesDir()).RemoveFolder(true);
-						modEntry->LinkLocation(dialog.GetResult());
-						modEntry->Save();
+						KxFile(focusedMod->GetModFilesDir()).RemoveFolder(true);
+						focusedMod->LinkLocation(dialog.GetResult());
+						focusedMod->Save();
 
-						ModEvent(Events::ModFilesChanged, *modEntry).Send();
-						ModEvent(Events::ModChanged, *modEntry).Send();
+						ModEvent(Events::ModFilesChanged, *focusedMod).Send();
+						ModEvent(Events::ModChanged, *focusedMod).Send();
 					}
 				}
 				break;
 			}
-			case KMC_ID_MOD_REVERT_LOCATION:
+			case ContextMenuID::ModRevertLocation:
 			{
-				if (!modEntry->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, modEntry->GetModFilesDir() + "\\*", modEntry->GetDefaultModFilesDir(), this, true, false, false, true))
+				if (!focusedMod->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, focusedMod->GetModFilesDir() + "\\*", focusedMod->GetDefaultModFilesDir(), this, true, false, false, true))
 				{
 					// Remove file folder if it's empty
-					KxFile(modEntry->GetModFilesDir()).RemoveFolder(true);
+					KxFile(focusedMod->GetModFilesDir()).RemoveFolder(true);
 
-					modEntry->LinkLocation(wxEmptyString);
-					modEntry->Save();
+					focusedMod->LinkLocation(wxEmptyString);
+					focusedMod->Save();
 
-					ModEvent(Events::ModFilesChanged, *modEntry).Send();
-					ModEvent(Events::ModChanged, *modEntry).Send();
+					ModEvent(Events::ModFilesChanged, *focusedMod).Send();
+					ModEvent(Events::ModChanged, *focusedMod).Send();
 				}
 				break;
 			}
-			case KMC_ID_MOD_INSTALL:
+			case ContextMenuID::ModInstall:
 			{
-				InstallMod(modEntry);
+				InstallMod(focusedMod);
 				break;
 			}
-			case KMC_ID_MOD_UNINSTALL:
-			case KMC_ID_MOD_UNINSTALL_AND_ERASE:
+			case ContextMenuID::ModUninstall:
+			case ContextMenuID::ModErase:
 			{
-				UninstallMod(modEntry, menuID == KMC_ID_MOD_UNINSTALL_AND_ERASE);
+				UninstallMod(focusedMod, menuID == ContextMenuID::ModErase);
 				break;
 			}
-			case KMC_ID_MOD_IMAGE_SHOW:
+			case ContextMenuID::ModImageShow:
 			{
 				KImageViewerDialog dialog(this);
 
-				KImageViewerEvent event(wxEVT_NULL, modEntry->GetImageFile());
+				KImageViewerEvent event(wxEVT_NULL, focusedMod->GetImageFile());
 				dialog.Navigate(event);
 				dialog.ShowModal();
 				break;
 			}
-			case KMC_ID_MOD_IMAGE_ASSIGN:
+			case ContextMenuID::ModImageAssign:
 			{
 				IGameModWithImage* withImage = nullptr;
-				if (modEntry->QueryInterface(withImage))
+				if (focusedMod->QueryInterface(withImage))
 				{
 					KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN);
 					dialog.AddFilter(KxString::Join(IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
 					if (dialog.ShowModal() == KxID_OK)
 					{
-						KxFile(dialog.GetResult()).CopyFile(modEntry->GetImageFile(), true);
+						KxFile(dialog.GetResult()).CopyFile(focusedMod->GetImageFile(), true);
 						withImage->ResetBitmap();
 						withImage->ResetNoBitmap();
-						modEntry->Save();
+						focusedMod->Save();
 
-						ModEvent(Events::ModChanged, *modEntry).Send();
+						ModEvent(Events::ModChanged, *focusedMod).Send();
 					}
 				}
 				break;
 			}
-			case KMC_ID_MOD_EDIT_DESCRIPTION:
+			case ContextMenuID::ModEditDescription:
 			{
-				wxString oldDescription = modEntry->GetDescription();
+				wxString oldDescription = focusedMod->GetDescription();
 				KTextEditorDialog dialog(GetMainWindow());
 				dialog.SetText(oldDescription);
 
 				if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 				{
-					modEntry->SetDescription(dialog.GetText());
-					modEntry->Save();
+					focusedMod->SetDescription(dialog.GetText());
+					focusedMod->Save();
 
-					ModEvent event(Events::ModChanged, *modEntry);
+					ModEvent event(Events::ModChanged, *focusedMod);
 					ProcessEvent(event);
 				}
 				break;
 			}
-			case KMC_ID_MOD_EDIT_TAGS:
+			case ContextMenuID::ModEditTags:
 			{
 				BasicGameMod tempEntry;
-				tempEntry.GetTagStore() = modEntry->GetTagStore();
-				tempEntry.SetPriorityGroupTag(modEntry->GetPriorityGroupTag());
+				tempEntry.GetTagStore() = focusedMod->GetTagStore();
+				tempEntry.SetPriorityGroupTag(focusedMod->GetPriorityGroupTag());
 
 				ModTagManager::SelectorDialog dialog(GetMainWindow(), KTr("ModManager.TagsDialog"));
 				dialog.SetDataVector(&tempEntry.GetTagStore(), &tempEntry);
@@ -1153,7 +1104,7 @@ namespace Kortex::ModManager
 				if (dialog.IsModified())
 				{
 					dialog.ApplyChangesToMod();
-					bool hasSelection = DoForAllSelectedItems(m_DisplayModel, [&tempEntry](IGameMod& entry)
+					bool hasSelection = DoForAllSelectedItems(selectedMods, [&tempEntry](IGameMod& entry)
 					{
 						entry.GetTagStore() = tempEntry.GetTagStore();
 						entry.SetPriorityGroupTag(tempEntry.GetPriorityGroupTag());
@@ -1169,115 +1120,54 @@ namespace Kortex::ModManager
 				}
 				break;
 			}
-			case KMC_ID_MOD_EDIT_SITES:
+			case ContextMenuID::ModEditSources:
 			{
-				ModSource::StoreDialog dialog(GetMainWindow(), modEntry->GetModSourceStore());
+				ModSource::StoreDialog dialog(GetMainWindow(), focusedMod->GetModSourceStore());
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{
-					modEntry->Save();
-					ModEvent(Events::ModChanged, *modEntry).Send();
+					focusedMod->Save();
+					ModEvent(Events::ModChanged, *focusedMod).Send();
 				}
 				break;
 			}
-			case KMC_ID_MOD_CHANGE_ID:
+			case ContextMenuID::ModChangeID:
 			{
-				if (ShowChangeModIDDialog(modEntry))
+				if (ShowChangeModIDDialog(focusedMod))
 				{
 					m_DisplayModel->UpdateUI();
 				}
 				break;
 			}
-			case KMC_ID_MOD_EXPLORE_FILES:
+			case ContextMenuID::ModExploreFiles:
 			{
-				KModFilesExplorerDialog dialog(this, *modEntry);
+				KModFilesExplorerDialog dialog(this, *focusedMod);
 				dialog.ShowModal();
 				break;
 			}
-			case KMC_ID_MOD_SHOW_COLLISIONS:
+			case ContextMenuID::ModShowCollisions:
 			{
-				new KModCollisionViewerModelDialog(this, modEntry);
+				new KModCollisionViewerModelDialog(this, focusedMod);
 				break;
 			}
-			case KMC_ID_MOD_PROPERTIES:
+			case ContextMenuID::ModProperties:
 			{
-				KxShell::Execute(GetMainWindow(), modEntry->GetModFilesDir(), "properties");
-				break;
-			}
-
-			// Package
-			case KMC_ID_PACKAGE_OPEN:
-			{
-				OpenPackage(modEntry->GetPackageFile());
-				break;
-			}
-			case KMC_ID_PACKAGE_OPEN_LOCATION:
-			{
-				KxShell::OpenFolderAndSelectItem(modEntry->GetPackageFile());
-				break;
-			}
-			case KMC_ID_PACKAGE_ASSIGN:
-			{
-				KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN);
-				dialog.SetFolder(modEntry->GetPackageFile().BeforeLast('\\'));
-				dialog.AddFilter("*.kmp;*.smi;*.fomod;*.7z;*.zip;", KTr("FileFilter.AllSupportedFormats"));
-				dialog.AddFilter("*.kmp", KTr("FileFilter.ModPackage"));
-				dialog.AddFilter("*.smi", KTr("FileFilter.ModPackageSMI"));
-				dialog.AddFilter("*.fomod", KTr("FileFilter.ModPackageFOMod"));
-				dialog.AddFilter("*.7z;*.zip;", KTr("FileFilter.Archives"));
-				if (dialog.ShowModal() == KxID_OK)
-				{
-					modEntry->SetPackageFile(dialog.GetResult());
-					modEntry->Save();
-
-					ModEvent(Events::ModChanged, *modEntry).Send();
-				}
-				break;
-			}
-			case KMC_ID_PACKAGE_REMOVE:
-			{
-				KxShell::FileOperation(modEntry->GetPackageFile(), KxFS_FILE, KxFOF_DELETE, true, false, this);
-				break;
-			}
-			case KMC_ID_PACKAGE_EXTRACT:
-			{
-				KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
-				if (dialog.ShowModal() == KxID_OK)
-				{
-					// Extract archive in mod name folder inside the specified one.
-					wxString outPath = dialog.GetResult() + '\\' + modEntry->GetSafeName();
-
-					KPackageManager::ExtractAcrhiveThreaded(this, modEntry->GetPackageFile(), outPath);
-				}
-				break;
-			}
-			case KMC_ID_PACKAGE_IMPORT_PROJECT:
-			{
-				KPackageCreatorWorkspace::GetInstance()->CreateNow();
-				KPackageCreatorWorkspace::GetInstance()->ImportProjectFromPackage(modEntry->GetPackageFile());
-				KPackageCreatorWorkspace::GetInstance()->SwitchHere();
-				break;
-			}
-			case KMC_ID_PACKAGE_CREATE_PROJECT:
-			{
-				KPackageCreatorWorkspace::GetInstance()->CreateNow();
-				KPackageCreatorWorkspace::GetInstance()->CreateProjectFromModEntry(*modEntry);
-				KPackageCreatorWorkspace::GetInstance()->SwitchHere();
+				KxShell::Execute(GetMainWindow(), focusedMod->GetModFilesDir(), "properties");
 				break;
 			}
 
 			// Color menu
-			case KMC_COLOR_ASSIGN:
+			case ContextMenuID::ColorAssign:
 			{
 				wxColourData colorData;
-				colorData.SetColour(modEntry->GetColor());
+				colorData.SetColour(focusedMod->GetColor());
 				colorData.SetChooseFull(true);
 				colorData.SetChooseAlpha(true);
 
 				wxColourDialog dialog(this, &colorData);
 				if (dialog.ShowModal() == wxID_OK)
 				{
-					DoForAllSelectedItems(m_DisplayModel, [&dialog](IGameMod& entry)
+					DoForAllSelectedItems(selectedMods, [&dialog](IGameMod& entry)
 					{
 						entry.SetColor(dialog.GetColourData().GetColour());
 						entry.Save();
@@ -1289,9 +1179,9 @@ namespace Kortex::ModManager
 				}
 				break;
 			}
-			case KMC_COLOR_RESET:
+			case ContextMenuID::ColorReset:
 			{
-				DoForAllSelectedItems(m_DisplayModel, [](IGameMod& entry)
+				DoForAllSelectedItems(selectedMods, [](IGameMod& entry)
 				{
 					entry.SetColor(KxColor());
 					entry.Save();
@@ -1302,52 +1192,7 @@ namespace Kortex::ModManager
 				m_DisplayModel->UpdateUI();
 				break;
 			}
-
-			case KMC_ID_PACKAGE_PROPERTIES:
-			{
-				KxShell::Execute(GetMainWindow(), modEntry->GetPackageFile(), "properties");
-				break;
-			}
 		};
-	}
-	void Workspace::ShowViewContextMenu(const IModTag* modTag)
-	{
-		if (modTag)
-		{
-			KxMenu menu;
-			menu.Add(new KxMenuItem(KMC_ID_TAG_ENABLE_ALL, KTr("ModManager.Menu.Tag.ActivateAll")))->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrame));
-			menu.Add(new KxMenuItem(KMC_ID_TAG_DISABLE_ALL, KTr("ModManager.Menu.Tag.DeactivateAll")))->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
-
-			// State
-			bool isVFSActive = IModManager::GetInstance()->GetFileSystem().IsEnabled();
-			for (auto& item: menu.GetMenuItems())
-			{
-				item->Enable(!isVFSActive);
-			}
-
-			wxWindowID menuID = menu.Show();
-			switch (menuID)
-			{
-				case KMC_ID_TAG_ENABLE_ALL:
-				case KMC_ID_TAG_DISABLE_ALL:
-				{
-					auto CheckTag = [modTag](const IGameMod& modEntry)
-					{
-						return modEntry.GetTagStore().HasTag(*modTag);
-					};
-
-					for (auto& modEntry: IModManager::GetInstance()->GetAllMods(false, false))
-					{
-						if (modEntry->IsInstalled() && CheckTag(*modEntry))
-						{
-							modEntry->SetActive(menuID == KMC_ID_TAG_ENABLE_ALL);
-							modEntry->Save();
-						}
-					}
-					break;
-				}
-			};
-		}
 	}
 	void Workspace::UpdateModListContent()
 	{

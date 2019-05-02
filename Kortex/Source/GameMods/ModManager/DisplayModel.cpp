@@ -369,22 +369,37 @@ namespace Kortex::ModManager
 	}
 	void DisplayModel::OnContextMenu(KxDataView2::Event& event)
 	{
-		IGameMod* mod = nullptr;
-
-		KxDataView2::Column* column = event.GetColumn();
-		DisplayModelModNode* modNode = nullptr;
-		if (column && event.GetNode() && event.GetNode()->QueryInterface(modNode))
+		if (event.GetColumn())
 		{
-			mod = &modNode->GetMod();
-			
-			PriorityGroup* priorityGroup = nullptr;
-			if (modNode->GetMod().QueryInterface(priorityGroup))
+			KxDataView2::Node::Vector selectedNodes = GetView()->GetSelections();
+			if (!selectedNodes.empty())
 			{
-				Workspace::GetInstance()->ShowViewContextMenu(priorityGroup->GetTag());
-				return;
+				IGameMod* currentMod = nullptr;
+				IGameMod::RefVector selectedMods;
+
+				for (KxDataView2::Node* node: selectedNodes)
+				{
+					DisplayModelModNode* modNode = nullptr;
+					if (node->QueryInterface(modNode))
+					{
+						selectedMods.push_back(&modNode->GetMod());
+						if (node == event.GetNode())
+						{
+							currentMod = &modNode->GetMod();
+						}
+					}
+				}
+
+				if (!selectedMods.empty())
+				{
+					Workspace::GetInstance()->OnModsContextMenu(selectedMods, currentMod);
+					return;
+				}
 			}
 		}
-		Workspace::GetInstance()->ShowViewContextMenu(mod);
+
+		// Menu for empty out of items area selection
+		Workspace::GetInstance()->OnModsContextMenu({}, nullptr);
 	}
 	void DisplayModel::OnHeaderContextMenu(KxDataView2::Event& event)
 	{

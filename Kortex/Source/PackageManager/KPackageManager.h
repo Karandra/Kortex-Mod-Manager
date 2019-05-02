@@ -8,6 +8,12 @@
 #include <KxFramework/KxVersion.h>
 #include <KxFramework/KxSingleton.h>
 class KxXMLNode;
+class KxMenu;
+
+namespace Kortex
+{
+	class IGameMod;
+}
 
 namespace Kortex
 {
@@ -69,6 +75,7 @@ namespace Kortex
 			}
 
 			wxString GetPackagesFolder() const;
+			void OnModsMenu(KxMenu& menu, const std::vector<IGameMod*>& selectedMods, IGameMod* focusedMod);
 	};
 }
 

@@ -331,29 +331,39 @@ namespace Kortex::ModManager
 
 	bool DisplayModelModNode::GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const
 	{
-		const FixedGameMod* fixed = m_Mod->QueryInterface<FixedGameMod>();
-		const PriorityGroup* priorityGroup = m_Mod->QueryInterface<PriorityGroup>();
 		const ColumnID columnID = column.GetID<ColumnID>();
-
-		if (!fixed && !priorityGroup)
+		const FixedGameMod* fixedMod = m_Mod->QueryInterface<FixedGameMod>();
+		const PriorityGroup* priorityGroup = m_Mod->QueryInterface<PriorityGroup>();
+		
+		// Visually disable actually disabled and not installed items
+		if (!fixedMod && !priorityGroup)
 		{
 			attributes.SetEnabled(m_Mod->IsInstalled() && IsEnabled(column));
 		}
-		if (columnID == ColumnID::Name && fixed && !priorityGroup)
+
+		// Fixed mods drawn in italic font
+		if (columnID == ColumnID::Name && fixedMod && !priorityGroup)
 		{
 			attributes.SetItalic();
 		}
-		if (columnID == ColumnID::Color && !priorityGroup)
+
+		// Color entire row if color is assigned
+		if (KxColor color = m_Mod->GetColor(); color.IsOk() && !priorityGroup)
 		{
-			attributes.SetBackgroundColor(m_Mod->GetColor());
+			attributes.SetBackgroundColor(color);
+			attributes.SetForegroundColor(color.GetContrastColor(GetView()));
 		}
-		if (!fixed && !priorityGroup && (columnID == ColumnID::Name || columnID == ColumnID::ModSource))
+
+		// Make mod name underlined
+		if (!fixedMod && !priorityGroup && (columnID == ColumnID::Name || columnID == ColumnID::ModSource))
 		{
 			attributes.SetUnderlined(cellState.IsHotTracked() && column.IsHotTracked());
 		}
+
+		// Handle priority group styling
 		if (priorityGroup)
 		{
-			DisplayModel& displayModel = GetDisplayModel();
+			const DisplayModel& displayModel = GetDisplayModel();
 
 			KxColor color = m_Mod->GetColor();
 			if (color.IsOk())

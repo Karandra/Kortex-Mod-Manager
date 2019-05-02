@@ -50,12 +50,6 @@ namespace Kortex::ModManager
 			m_NameColumn = &column;
 		}
 		{
-			KBitmapSize size;
-			size.FromSystemIcon();
-
-			view->AppendColumn(KTr("Generic.Color"), ColumnID::Color, size.GetWidth(), columnStyleNoSort);
-		}
-		{
 			auto [column, r, editor] = view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Priority"), ColumnID::Priority, {}, columnStyleDefault);
 			m_PriorityColumn = &column;
 			m_PriorityColumn->SortAscending();

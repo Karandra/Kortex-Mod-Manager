@@ -20,7 +20,6 @@ namespace Kortex::ModManager
 	enum class DisplayModelColumnID
 	{
 		Name,
-		Color,
 		Priority,
 		Version,
 		Author,

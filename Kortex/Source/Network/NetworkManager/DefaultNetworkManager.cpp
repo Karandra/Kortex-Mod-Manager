@@ -9,6 +9,7 @@
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
 #include "UI/KMainWindow.h"
+#include "Utility/MenuSeparator.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxComparator.h>
@@ -226,13 +227,9 @@ namespace Kortex::NetworkManager
 				}
 
 				// Add any custom menu items
-				const size_t itemCount = subMenu->GetMenuItemCount();
-				modNetwork->OnToolBarMenu(*subMenu);
-
-				// Check if we need to add separator
-				if (subMenu->GetMenuItemCount() > itemCount)
 				{
-					subMenu->InsertSeparator(itemCount);
+					Utility::MenuSeparatorBefore separator(*subMenu);
+					modNetwork->OnToolBarMenu(*subMenu);
 				}
 			}
 		}

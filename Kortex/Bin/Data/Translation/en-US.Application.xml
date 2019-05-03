@@ -122,6 +122,8 @@
 		<String ID="Generic.IDInvalid">Invalid identifier</String>
 		<String ID="Generic.Invalid">Invalid</String>
 		<String ID="Generic.Name">Name</String>
+		<String ID="Generic.UserName">User name</String>
+		<String ID="Generic.EMailAddress">Email address</String>
 		<String ID="Generic.Index">Index</String>
 		<String ID="Generic.PartOf">Part of</String>
 		<String ID="Generic.Value">Value</String>
@@ -540,6 +542,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.ModNetwork.Default">Default mod network</String>
 		<String ID="NetworkManager.ModNetwork.MakeDefault">Make default</String>
 
+		<String ID="NetworkManager.ModNetwork.AccountInfo">Account information</String>
+		<String ID="NetworkManager.ModNetwork.ShowAccountInfo">Show account information</String>
+
 		<String ID="NetworkManager.AuthCaption">Authentication on %1</String>
 		<String ID="NetworkManager.AuthMessage">Enter your username and password to log in to your account.</String>
 		<String ID="NetworkManager.AuthSuccess">Authentication on %1 completed successfully</String>
@@ -559,6 +564,7 @@ This folder and all its contents will be deleted: %1]]>
 
 		<String ID="NetworkManager.Nexus.UserIsPremium">Premium user</String>
 		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter user</String>
+		<String ID="NetworkManager.Nexus.APIKey">API Key</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Download manager</String>

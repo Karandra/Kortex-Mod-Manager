@@ -122,6 +122,8 @@
 		<String ID="Generic.IDInvalid">Некорретный идентификатор</String>
 		<String ID="Generic.Invalid">Некорретный</String>
 		<String ID="Generic.Name">Название</String>
+		<String ID="Generic.UserName">Имя пользователя</String>
+		<String ID="Generic.EMailAddress">Адрес электронной почты</String>
 		<String ID="Generic.Index">Индекс</String>
 		<String ID="Generic.PartOf">Часть</String>
 		<String ID="Generic.Value">Значение</String>
@@ -544,6 +546,9 @@
 		<String ID="NetworkManager.ModNetwork">Мод-сеть</String>
 		<String ID="NetworkManager.ModNetwork.Default">Мод-сеть по умолчанию</String>
 		<String ID="NetworkManager.ModNetwork.MakeDefault">Использовать по умолчанию</String>
+		
+		<String ID="NetworkManager.ModNetwork.AccountInfo">Информация об аккаунте</String>
+		<String ID="NetworkManager.ModNetwork.ShowAccountInfo">Показать информацию об аккаунте</String>
 
 		<String ID="NetworkManager.AuthCaption">Аутентификация на %1</String>
 		<String ID="NetworkManager.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
@@ -564,6 +569,7 @@
 
 		<String ID="NetworkManager.Nexus.UserIsPremium">Премиум-пользователь</String>
 		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter-пользователь</String>
+		<String ID="NetworkManager.Nexus.APIKey">API-ключ</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>

@@ -9,7 +9,7 @@ namespace Kortex::NetworkManager
 	{
 		wxString UserName;
 		wxString APIKey;
-		wxString EMail;
+		wxString EMailAddress;
 		wxString ProfilePicture;
 		int64_t UserID = -1;
 		bool IsPremium = false;

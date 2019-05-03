@@ -11,6 +11,23 @@
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxWebSocket.h>
+#include <KxFramework/KxTaskDialog.h>
+
+namespace
+{
+	void AddMessage(wxString& message, const wxString& label, const wxString& value)
+	{
+		if (!message.IsEmpty())
+		{
+			message += wxS("\r\n");
+		}
+		message += KxString::Format(wxS("%1: %2"), label, value);
+	};
+	void AddMessage(wxString& message, const wxString& label, bool value)
+	{
+		AddMessage(message, label, value ? KTr(KxID_YES) : KTr(KxID_NO));
+	};
+}
 
 namespace Kortex::NetworkManager
 {
@@ -45,18 +62,24 @@ namespace Kortex::NetworkManager
 	{
 		if (m_LastValidationReply)
 		{
-			if (m_LastValidationReply->IsPremium)
+			KxMenuItem* item = menu.AddItem(KTr("NetworkManager.ModNetwork.ShowAccountInfo"));
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
-				KxMenuItem* item = menu.AddItem(KTr("NetworkManager.Nexus.UserIsPremium"), wxEmptyString, wxITEM_CHECK);
-				item->Enable(false);
-				item->Check();
-			}
-			else if (m_LastValidationReply->IsSupporter)
-			{
-				KxMenuItem* item = menu.AddItem(KTr("NetworkManager.Nexus.UserIsSupporter"), wxEmptyString, wxITEM_CHECK);
-				item->Enable(false);
-				item->Check();
-			}
+				KxTaskDialog dialog(GetInvokingWindow(), KxID_NONE, KTr("NetworkManager.ModNetwork.AccountInfo"), {}, KxBTN_OK, KxICON_INFORMATION);
+				dialog.SetOptionEnabled(KxTD_SIZE_TO_CONTENT);
+
+				// Create message
+				wxString message;
+				AddMessage(message, KTr("Generic.UserName"), m_LastValidationReply->UserName);
+				AddMessage(message, KTr("Generic.EMailAddress"), m_LastValidationReply->EMailAddress);
+				AddMessage(message, KTr("NetworkManager.Nexus.APIKey"), m_LastValidationReply->APIKey);
+				AddMessage(message, KTr("NetworkManager.Nexus.UserIsPremium"), m_LastValidationReply->IsPremium);
+				AddMessage(message, KTr("NetworkManager.Nexus.UserIsSupporter"), m_LastValidationReply->IsSupporter);
+				dialog.SetMessage(message);
+
+				// Show the dialog
+				dialog.ShowModal();
+			});
 		}
 	}
 	void NexusAuth::RequestUserPicture(const NexusValidationReply& info)
@@ -91,7 +114,7 @@ namespace Kortex::NetworkManager
 			info.UserID = json["user_id"];
 			info.UserName = json["name"].get<wxString>();
 			info.APIKey = json["key"].get<wxString>();
-			info.EMail = json["email"].get<wxString>();
+			info.EMailAddress = json["email"].get<wxString>();
 			info.ProfilePicture = json["profile_url"].get<wxString>();
 			info.IsPremium = json["is_premium"];
 			info.IsSupporter = json["is_supporter"];

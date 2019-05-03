@@ -4,6 +4,7 @@
 #include "Network/IModNetwork.h"
 #include "NexusModInfo.h"
 #include <KxFramework/KxJSON.h>
+#include <KxFramework/KxHTTPStatusCode.h>
 class KxCURLReplyBase;
 
 namespace Kortex::NetworkManager
@@ -34,6 +35,7 @@ namespace Kortex::NetworkManager
 			void ReadGameInfo(const TJsonValue& json, NexusGameReply& info) const;
 
 			void ReportRequestError(const wxString& message) const;
-			bool TestRequestError(const KxCURLReplyBase& reply, const wxString& message = {}, bool noErrorReport = false) const;
+			void ReportRequestQuoteReached() const;
+			KxHTTPStatusValue TestRequestError(const KxCURLReplyBase& reply, const wxString& message = {}, bool noErrorReport = false) const;
 	};
 }

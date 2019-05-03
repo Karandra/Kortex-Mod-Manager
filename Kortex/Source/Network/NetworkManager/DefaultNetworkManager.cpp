@@ -258,9 +258,9 @@ namespace Kortex::NetworkManager
 		}
 		else
 		{
-			// Additional call to "IModSource::IsAuthenticated' to make sure that modNetwork is ready
-			// as authentication process can be async.
-			if (auth->Authenticate() && auth->IsAuthenticated() && !IsDefaultModNetworkAuthenticated())
+			// Authentication process can be async, in this case auth handler should call 'OnAuthStateChanged'
+			auth->Authenticate();
+			if (auth->IsAuthenticated() && !IsDefaultModNetworkAuthenticated())
 			{
 				m_DefaultModNetwork = modNetwork;
 			}

@@ -549,6 +549,7 @@
 		<String ID="NetworkManager.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</String>
 		<String ID="NetworkManager.AuthSuccess">Аутентификация на %1 успешно выполнена</String>
 		<String ID="NetworkManager.AuthFail">Не удалось выполнить аутентификацию на %1</String>
+		<String ID="NetworkManager.AuthReset">Аутентификация на %1 была сброшена</String>
 
 		<String ID="NetworkManager.SignIn">Выполнить вход</String>
 		<String ID="NetworkManager.SignOut">Выйти из аккаунта</String>

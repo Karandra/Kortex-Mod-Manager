@@ -33,15 +33,16 @@ namespace Kortex
 		private:
 			wxBitmap m_UserPicture;
 
-		protected:
+		public:
 			virtual wxWindow* GetInvokingWindow() const = 0;
-			virtual KxStandardID OnAuthSuccess();
-			virtual KxStandardID OnAuthFail();
+			virtual void OnAuthSuccess();
+			virtual void OnAuthFail();
+			virtual void OnAuthReset();
 
-			virtual KxSecretDefaultStoreService& GetSecretStore() = 0;
-			const KxSecretDefaultStoreService& GetSecretStore() const
+			virtual KxSecretDefaultStoreService& GetCredentialsStore() = 0;
+			const KxSecretDefaultStoreService& GetCredentialsStore() const
 			{
-				return const_cast<ModNetworkAuth*>(this)->GetSecretStore();
+				return const_cast<ModNetworkAuth*>(this)->GetCredentialsStore();
 			}
 			
 			wxBitmap DownloadSmallBitmap(const wxString& address) const;
@@ -51,15 +52,8 @@ namespace Kortex
 			std::optional<Credentials> LoadCredentials() const;
 			bool SaveCredentials(const Credentials& credentials);
 
-			void SetUserPicture(const wxBitmap& userPicture)
-			{
-				m_UserPicture = userPicture;
-				m_UserPicture.SaveFile(GetUserPictureFile(), wxBITMAP_TYPE_PNG);
-			}
-			bool LoadUserPicture()
-			{
-				return m_UserPicture.LoadFile(GetUserPictureFile(), wxBITMAP_TYPE_ANY);
-			}
+			void SetUserPicture(const wxBitmap& userPicture);
+			bool LoadUserPicture();
 			wxString GetUserPictureFile() const;
 			bool HasUserPicture() const
 			{
@@ -72,8 +66,8 @@ namespace Kortex
 
 		public:
 			virtual bool IsAuthenticated() const = 0;
-			virtual bool Authenticate() = 0;
-			virtual bool ValidateAuth() = 0;
-			virtual bool SignOut() = 0;
+			virtual void Authenticate() = 0;
+			virtual void ValidateAuth() = 0;
+			virtual void SignOut() = 0;
 	};
 }

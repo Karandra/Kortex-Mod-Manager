@@ -31,7 +31,7 @@ namespace Kortex::NetworkManager
 
 		private:
 			wxString GetAPIURL() const;
-			wxString GetAPIKey(wxString* userName = nullptr) const;
+			wxString GetAPIKey() const;
 
 			std::unique_ptr<KxCURLSession> NewCURLSession(const wxString& address, const wxString& apiKey = {}) const;
 			void OnResponseHeader(KxCURLEvent& event);

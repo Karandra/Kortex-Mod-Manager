@@ -2,31 +2,40 @@
 #include "ModNetworkAuth.h"
 #include "IModNetwork.h"
 #include "INetworkManager.h"
+#include "Application/IApplication.h"
+#include "Application/INotificationCenter.h"
 #include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
 #include "Utility/KBitmapSize.h"
-#include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxCredentialsDialog.h>
 #include <KxFramework/KxCURL.h>
-
-namespace
-{
-	using Credentials = Kortex::ModNetworkAuth::Credentials;
-}
+#include <KxFramework/KxFile.h>
 
 namespace Kortex
 {
-	KxStandardID ModNetworkAuth::OnAuthSuccess()
+	void ModNetworkAuth::OnAuthSuccess()
 	{
-		KxTaskDialog dialog(GetInvokingWindow(), KxID_NONE, KTrf("NetworkManager.AuthSuccess", GetContainer().GetName()));
-		dialog.SetMainIcon(KxICON_INFO);
-		return static_cast<KxStandardID>(dialog.ShowModal());
+		INetworkManager::GetInstance()->OnAuthStateChanged();
+
+		const IApplication* app = IApplication::GetInstance();
+		const IModNetwork& modNetwork = GetContainer();
+		INotificationCenter::GetInstance()->Notify(app->GetName(), KTrf("NetworkManager.AuthSuccess", modNetwork.GetName()), KxICON_INFORMATION);
 	}
-	KxStandardID ModNetworkAuth::OnAuthFail()
+	void ModNetworkAuth::OnAuthFail()
 	{
-		KxTaskDialog dialog(GetInvokingWindow(), KxID_NONE, KTrf("NetworkManager.AuthFail", GetContainer().GetName()));
-		dialog.SetMainIcon(KxICON_ERROR);
-		return static_cast<KxStandardID>(dialog.ShowModal());
+		INetworkManager::GetInstance()->OnAuthStateChanged();
+
+		const IApplication* app = IApplication::GetInstance();
+		const IModNetwork& modNetwork = GetContainer();
+		INotificationCenter::GetInstance()->Notify(app->GetName(), KTrf("NetworkManager.AuthFail", modNetwork.GetName()), KxICON_ERROR);
+	}
+	void ModNetworkAuth::OnAuthReset()
+	{
+		INetworkManager::GetInstance()->OnAuthStateChanged();
+
+		const IApplication* app = IApplication::GetInstance();
+		const IModNetwork& modNetwork = GetContainer();
+		INotificationCenter::GetInstance()->Notify(app->GetName(), KTrf("NetworkManager.AuthReset", modNetwork.GetName()), KxICON_WARNING);
 	}
 
 	wxBitmap ModNetworkAuth::DownloadSmallBitmap(const wxString& address) const
@@ -39,7 +48,7 @@ namespace Kortex
 		return wxBitmap(KAux::ScaleImageAspect(wxImage(stream), -1, size.GetHeight()), 32);
 	}
 
-	std::optional<Credentials> ModNetworkAuth::ShowCredentialsDialog(wxWindow* parent) const
+	auto ModNetworkAuth::ShowCredentialsDialog(wxWindow* parent) const -> std::optional<Credentials>
 	{
 		KxCredentialsDialog dialog(parent, KxID_NONE, KTrf("NetworkManager.AuthCaption", GetContainer().GetName()), KTr("NetworkManager.AuthMessage"));
 		if (dialog.ShowModal() == KxID_OK)
@@ -53,11 +62,11 @@ namespace Kortex
 		}
 		return std::nullopt;
 	}
-	std::optional<Credentials> ModNetworkAuth::LoadCredentials() const
+	auto ModNetworkAuth::LoadCredentials() const -> std::optional<Credentials>
 	{
 		wxString userName;
 		KxSecretValue password;
-		if (GetSecretStore().Load(userName, password))
+		if (GetCredentialsStore().Load(userName, password))
 		{
 			return Credentials(userName, std::move(password));
 		}
@@ -65,9 +74,25 @@ namespace Kortex
 	}
 	bool ModNetworkAuth::SaveCredentials(const Credentials& credentials)
 	{
-		return GetSecretStore().Save(credentials.UserID, credentials.Password);
+		return GetCredentialsStore().Save(credentials.UserID, credentials.Password);
 	}
 
+	void ModNetworkAuth::SetUserPicture(const wxBitmap& userPicture)
+	{
+		m_UserPicture = userPicture;
+		if (m_UserPicture.IsOk())
+		{
+			m_UserPicture.SaveFile(GetUserPictureFile(), wxBITMAP_TYPE_PNG);
+		}
+		else
+		{
+			KxFile(GetUserPictureFile()).RemoveFile();
+		}
+	}
+	bool ModNetworkAuth::LoadUserPicture()
+	{
+		return m_UserPicture.LoadFile(GetUserPictureFile(), wxBITMAP_TYPE_ANY);
+	}
 	wxString ModNetworkAuth::GetUserPictureFile() const
 	{
 		return GetContainer().GetCacheFolder() + wxS("\\UserPicture.png");

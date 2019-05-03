@@ -544,6 +544,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.AuthMessage">Enter your username and password to log in to your account.</String>
 		<String ID="NetworkManager.AuthSuccess">Authentication on %1 completed successfully</String>
 		<String ID="NetworkManager.AuthFail">Authentication on %1 failed</String>
+		<String ID="NetworkManager.AuthReset">Authentication on %1 was reset</String>
 
 		<String ID="NetworkManager.SignIn">Sign in</String>
 		<String ID="NetworkManager.SignOut">Sign out</String>

@@ -27,16 +27,18 @@ namespace Kortex::NetworkManager
 			KxSecretDefaultStoreService m_CredentialsStore;
 			std::unique_ptr<KxWebSocket::IClient> m_WebSocketClient;
 
-			mutable std::optional<NexusValidationReply> m_LastValidationReply;
+			std::optional<NexusValidationReply> m_LastValidationReply;
 			wxString m_UserToken;
 			KxUUID m_SessionGUID;
-			bool m_IsAuthenticated = false;
 
 		protected:
 			wxWindow* GetInvokingWindow() const override;
-			KxStandardID OnAuthSuccess() override;
-			KxStandardID OnAuthFail() override;
-			KxSecretDefaultStoreService& GetSecretStore() override
+			void OnAuthSuccess() override;
+			void OnAuthFail() override;
+			void OnAuthReset() override;
+
+			void ResetSessionInfo();
+			KxSecretDefaultStoreService& GetCredentialsStore() override
 			{
 				return m_CredentialsStore;
 			}
@@ -44,17 +46,23 @@ namespace Kortex::NetworkManager
 		private:
 			void OnToolBarMenu(KxMenu& menu);
 			void RequestUserPicture(const NexusValidationReply& info);
-			std::optional<NexusValidationReply> DoGetValidationInfo(const wxString& apiKey = {}, bool noErrorReport = false) const;
+			
+			const NexusValidationReply* GetLastValidationReply() const
+			{
+				return m_LastValidationReply ? &m_LastValidationReply.value() : nullptr;
+			}
+			std::optional<NexusValidationReply> DoGetValidationInfo(const wxString& apiKey = {}, bool noErrorReport = false);
 
 		public:
 			NexusAuth(NexusModNetwork& nexus, NexusUtility& utility);
 
 		public:
 			bool IsAuthenticated() const override;
-			bool Authenticate() override;
-			bool ValidateAuth() override;
-			bool SignOut() override;
+			void Authenticate() override;
+			void ValidateAuth() override;
+			void SignOut() override;
 
-			std::optional<NexusValidationReply> GetValidationInfo() const;
+		public:
+			std::optional<NexusValidationReply> GetValidationInfo();
 	};
 }

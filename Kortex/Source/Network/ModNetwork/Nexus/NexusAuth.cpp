@@ -18,31 +18,27 @@ namespace Kortex::NetworkManager
 	{
 		return KMainWindow::GetInstance();
 	}
-	KxStandardID NexusAuth::OnAuthSuccess()
+	void NexusAuth::OnAuthSuccess()
 	{
 		m_WebSocketClient.reset();
-		m_IsAuthenticated = true;
-
-		IEvent::CallAfter([this]()
-		{
-			ModNetworkAuth::OnAuthSuccess();
-			INetworkManager::GetInstance()->OnAuthStateChanged();
-		});
-		return KxID_OK;
+		ModNetworkAuth::OnAuthSuccess();
 	}
-	KxStandardID NexusAuth::OnAuthFail()
+	void NexusAuth::OnAuthFail()
+	{
+		ResetSessionInfo();
+		ModNetworkAuth::OnAuthFail();
+	}
+	void NexusAuth::OnAuthReset()
+	{
+		ResetSessionInfo();
+		return ModNetworkAuth::OnAuthReset();
+	}
+	void NexusAuth::ResetSessionInfo()
 	{
 		m_WebSocketClient.reset();
 		m_UserToken.clear();
 		m_SessionGUID = {};
-		m_IsAuthenticated = false;
-
-		IEvent::CallAfter([this]()
-		{
-			ModNetworkAuth::OnAuthFail();
-			INetworkManager::GetInstance()->OnAuthStateChanged();
-		});
-		return KxID_OK;
+		m_LastValidationReply.reset();
 	}
 	
 	void NexusAuth::OnToolBarMenu(KxMenu& menu)
@@ -51,13 +47,13 @@ namespace Kortex::NetworkManager
 		{
 			if (m_LastValidationReply->IsPremium)
 			{
-				KxMenuItem* item = menu.Add(new KxMenuItem(KTr("NetworkManager.Nexus.UserIsPremium"), wxEmptyString, wxITEM_CHECK));
+				KxMenuItem* item = menu.AddItem(KTr("NetworkManager.Nexus.UserIsPremium"), wxEmptyString, wxITEM_CHECK);
 				item->Enable(false);
 				item->Check();
 			}
 			else if (m_LastValidationReply->IsSupporter)
 			{
-				KxMenuItem* item = menu.Add(new KxMenuItem(KTr("NetworkManager.Nexus.UserIsSupporter"), wxEmptyString, wxITEM_CHECK));
+				KxMenuItem* item = menu.AddItem(KTr("NetworkManager.Nexus.UserIsSupporter"), wxEmptyString, wxITEM_CHECK);
 				item->Enable(false);
 				item->Check();
 			}
@@ -70,16 +66,20 @@ namespace Kortex::NetworkManager
 			SetUserPicture(DownloadSmallBitmap(info.ProfilePicture));
 		}
 	}
-	std::optional<NexusValidationReply> NexusAuth::DoGetValidationInfo(const wxString& apiKey, bool noErrorReport) const
+	std::optional<NexusValidationReply> NexusAuth::DoGetValidationInfo(const wxString& apiKey, bool noErrorReport)
 	{
-		auto connection = m_Nexus.NewCURLSession(KxString::Format("%1/users/validate",
-												 m_Nexus.GetAPIURL()),
-												 apiKey
-		);
+		auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/users/validate"), m_Nexus.GetAPIURL()), apiKey);
 		KxCURLReply reply = connection->Send();
-		if (m_Utility.TestRequestError(reply, reply, noErrorReport))
+		if (!m_Utility.TestRequestError(reply, reply, noErrorReport).IsSuccessful())
 		{
+			const bool stateChanged = m_LastValidationReply.has_value();
 			m_LastValidationReply.reset();
+
+			// If we were authenticated notify network manager that auth state was lost
+			if (stateChanged)
+			{
+				OnAuthReset();
+			}
 			return std::nullopt;
 		}
 
@@ -111,7 +111,11 @@ namespace Kortex::NetworkManager
 	{
 	}
 
-	bool NexusAuth::Authenticate()
+	bool NexusAuth::IsAuthenticated() const
+	{
+		return m_LastValidationReply.has_value();
+	}
+	void NexusAuth::Authenticate()
 	{
 		m_WebSocketClient = INetworkManager::GetInstance()->NewWebSocketClient(wxS("wss://sso.nexusmods.com"));
 
@@ -202,37 +206,37 @@ namespace Kortex::NetworkManager
 			OnAuthFail();
 		});
 
-		return m_WebSocketClient->Connect();
+		m_WebSocketClient->Connect();
 	}
-	bool NexusAuth::ValidateAuth()
+	void NexusAuth::ValidateAuth()
 	{
-		// Load API Key from credentials store
-		if (wxString apiKey = m_Nexus.GetAPIKey(); !apiKey.IsEmpty())
+		// Load data from credentials store
+		if (auto credentials = LoadCredentials())
 		{
-			// If succeed compare it with key that Nexus returns
-			if (auto info = DoGetValidationInfo({}, true))
+			// Get API Key from there
+			const wxString apiKey = credentials->Password.GetAsString();
+			if (!apiKey.IsEmpty())
 			{
-				RequestUserPicture(*info);
-
-				m_IsAuthenticated = info->APIKey == apiKey;
-				return m_IsAuthenticated;
+				// If succeed compare it with key that Nexus returns
+				auto info = DoGetValidationInfo(apiKey, true);
+				if (info && info->APIKey == apiKey)
+				{
+					RequestUserPicture(*info);
+					return;
+				}
 			}
 		}
 
-		m_IsAuthenticated = false;
-		return m_IsAuthenticated;
+		SetUserPicture(wxNullBitmap);
+		m_LastValidationReply.reset();
 	}
-	bool NexusAuth::SignOut()
+	void NexusAuth::SignOut()
 	{
-		m_IsAuthenticated = false;
-		return m_CredentialsStore.Delete();
-	}
-	bool NexusAuth::IsAuthenticated() const
-	{
-		return m_IsAuthenticated;
+		m_LastValidationReply.reset();
+		m_CredentialsStore.Delete();
 	}
 
-	std::optional<NexusValidationReply> NexusAuth::GetValidationInfo() const
+	std::optional<NexusValidationReply> NexusAuth::GetValidationInfo()
 	{
 		return DoGetValidationInfo({}, false);
 	}

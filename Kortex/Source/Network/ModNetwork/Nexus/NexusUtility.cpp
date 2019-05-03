@@ -114,26 +114,37 @@ namespace Kortex::NetworkManager
 			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message, KxICON_ERROR);
 		}
 	}
-	bool NexusUtility::TestRequestError(const KxCURLReplyBase& reply, const wxString& message, bool noErrorReport) const
+	void NexusUtility::ReportRequestQuoteReached() const
+	{
+		INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched",
+																		 m_Nexus.GetName()),
+																		 KxICON_WARNING);
+	}
+	KxHTTPStatusValue NexusUtility::TestRequestError(const KxCURLReplyBase& reply, const wxString& message, bool noErrorReport) const
 	{
 		if (reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests)
 		{
 			if (!noErrorReport)
 			{
-				INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched",
-																				 NexusModNetwork::GetInstance()->GetName()),
-																				 KxICON_WARNING);
+				ReportRequestQuoteReached();
 			}
-			return true;
 		}
 		else if (!reply.IsOK())
 		{
 			if (!noErrorReport)
 			{
-				ReportRequestError(message);
+				// If we get code 401 "Unauthorized", then API key has changed while program is running.
+				// Notify auth component and network manager about that but don't show regular error message.
+				if (reply.GetResponseCode() == KxHTTPStatusCode::Unauthorized)
+				{
+					const_cast<NexusUtility*>(this)->GetComponent<ModNetworkAuth>().OnAuthReset();
+				}
+				else
+				{
+					ReportRequestError(message);
+				}
 			}
-			return true;
 		}
-		return false;
+		return reply.GetResponseCode();
 	}
 }

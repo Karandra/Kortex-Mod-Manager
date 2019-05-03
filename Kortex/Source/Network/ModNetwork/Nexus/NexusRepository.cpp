@@ -80,7 +80,7 @@ namespace Kortex::NetworkManager
 												 request.GetModID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
-		if (m_Utility.TestRequestError(reply, reply))
+		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
 		{
 			return std::nullopt;
 		}
@@ -156,7 +156,7 @@ namespace Kortex::NetworkManager
 		}
 
 		KxCURLReply reply = connection->Send();
-		if (m_Utility.TestRequestError(reply, reply))
+		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
 		{
 			return std::nullopt;
 		}
@@ -200,7 +200,7 @@ namespace Kortex::NetworkManager
 												 request.GetFileID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
-		if (m_Utility.TestRequestError(reply, reply))
+		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
 		{
 			return std::nullopt;
 		}
@@ -228,7 +228,7 @@ namespace Kortex::NetworkManager
 												 request.GetModID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
-		if (m_Utility.TestRequestError(reply, reply))
+		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
 		{
 			return {};
 		}
@@ -269,7 +269,7 @@ namespace Kortex::NetworkManager
 		auto connection = m_Nexus.NewCURLSession(query);
 
 		KxCURLReply reply = connection->Send();
-		if (m_Utility.TestRequestError(reply, reply))
+		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
 		{
 			return {};
 		}

@@ -72,12 +72,11 @@ namespace Kortex::NetworkManager
 	{
 		return wxS("https://api.nexusmods.com/v1");
 	}
-	wxString NexusModNetwork::GetAPIKey(wxString* userName) const
+	wxString NexusModNetwork::GetAPIKey() const
 	{
-		if (auto credentials = m_Auth.LoadCredentials())
+		if (const NexusValidationReply* info = m_Auth.GetLastValidationReply())
 		{
-			KxUtility::SetIfNotNull(userName, credentials->UserID);
-			return credentials->Password.GetAsString();
+			return info->APIKey;
 		}
 		return {};
 	}

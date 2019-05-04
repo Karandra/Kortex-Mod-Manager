@@ -22,6 +22,7 @@ namespace Kortex
 	void IModNetwork::DoOnExit()
 	{
 		OnExit();
+		RemoveAllComponents();
 	}
 
 	wxString IModNetwork::GetIPBModPageURL(ModID modID, const wxString& modSignature) const

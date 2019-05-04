@@ -19,6 +19,7 @@ namespace Kortex
 		private:
 			TID m_ID = nullptr;
 			TData m_Data = NetworkModInfo();
+			wxDateTime m_LastUpdateCheck;
 
 		public:
 			ModSourceItem() = default;
@@ -45,9 +46,11 @@ namespace Kortex
 			bool IsOK() const;
 			bool IsEmptyValue() const;
 			
+			// Serialization
 			void Load(const KxXMLNode& node);
 			void Save(KxXMLNode& node) const;
 
+			// Mod network instance
 			IModNetwork* GetModNetwork() const;
 			void SetModSource(IModNetwork& modNetwork)
 			{
@@ -62,11 +65,12 @@ namespace Kortex
 				modNetwork = GetModNetwork();
 				return modNetwork != nullptr;
 			}
-			bool HasModModNetwork() const
+			bool HasModNetwork() const
 			{
 				return GetModNetwork() != nullptr;
 			}
 
+			// Name
 			wxString GetName() const;
 			void SetName(const wxString& name);
 			bool TryGetName(wxString& name) const
@@ -79,6 +83,7 @@ namespace Kortex
 				return !GetName().IsEmpty();
 			}
 
+			// URL
 			wxString GetURL(const GameID& gameID = GameIDs::NullGameID) const;
 			void SetURL(const wxString& url, const GameID& gameID = GameIDs::NullGameID)
 			{
@@ -94,6 +99,7 @@ namespace Kortex
 				return !GetURL(gameID).IsEmpty();
 			}
 
+			// Network mod info
 			NetworkModInfo GetModInfo() const;
 			void SetModInfo(NetworkModInfo modInfo)
 			{
@@ -107,6 +113,25 @@ namespace Kortex
 			bool HasModInfo() const
 			{
 				return !GetModInfo().IsEmpty();
+			}
+	
+			// Last update check
+			wxDateTime GetLastUpdateCheck() const
+			{
+				return m_LastUpdateCheck;
+			}
+			void SetLastUpdateCheck(const wxDateTime& date)
+			{
+				m_LastUpdateCheck = date;
+			}
+			bool TryGetLastUpdateCheck(wxDateTime& date)
+			{
+				date = GetLastUpdateCheck();
+				date.IsValid();
+			}
+			bool HasLastUpdateCheck() const
+			{
+				return m_LastUpdateCheck.IsValid();
 			}
 	};
 }

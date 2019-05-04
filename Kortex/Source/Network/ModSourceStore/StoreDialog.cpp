@@ -37,7 +37,7 @@ namespace Kortex::ModSource
 
 		RefreshItems();
 		SelectItem(MakeItem(node));
-		GetView()->EditItem(MakeItem(node), GetView()->GetColumn(node.HasModModNetwork() ? ColumnID::Value : ColumnID::Name));
+		GetView()->EditItem(MakeItem(node), GetView()->GetColumn(node.HasModNetwork() ? ColumnID::Value : ColumnID::Name));
 	}
 
 	void StoreDialog::OnSelectItem(KxDataViewEvent& event)

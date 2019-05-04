@@ -104,7 +104,7 @@ namespace Kortex
 	{
 		for (const ModSourceItem& item: m_Items)
 		{
-			if (!item.HasModModNetwork())
+			if (!item.HasModNetwork())
 			{
 				return true;
 			}

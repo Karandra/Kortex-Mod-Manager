@@ -8,7 +8,7 @@ namespace Kortex
 	{
 		// Items with known mod network are valid if both mod network and mod ID are valid.
 		// Unknown items are valid if at least name is present.
-		if (HasModModNetwork())
+		if (HasModNetwork())
 		{
 			return HasModInfo();
 		}
@@ -24,32 +24,50 @@ namespace Kortex
 
 	void ModSourceItem::Load(const KxXMLNode& node)
 	{
-		SetName(node.GetAttribute("Name"));
+		// Load name. This function will automatically set IModNetwork instance if it exist
+		SetName(node.GetAttribute(wxS("Name")));
 
-		NetworkModInfo modInfo(node.GetAttributeInt("ModID", ModID().GetValue()), node.GetAttributeInt("FileID", ModFileID().GetValue()));
-		if (!modInfo.IsEmpty())
+		// Load source data
+		if (HasModNetwork())
 		{
-			m_Data = std::move(modInfo);
+			NetworkModInfo modInfo(node.GetAttributeInt(wxS("ModID"), ModID().GetValue()), node.GetAttributeInt(wxS("FileID"), ModFileID().GetValue()));
+			if (!modInfo.IsEmpty())
+			{
+				m_Data = std::move(modInfo);
+			}
 		}
 		else
 		{
-			m_Data = node.GetAttribute("URL");
+			m_Data = node.GetAttribute(wxS("URL"));
 		}
+
+		// Load last update check date
+		m_LastUpdateCheck.ParseISOCombined(node.GetFirstChildElement(wxS("LastUpdateCheck")).GetValue());
 	}
 	void ModSourceItem::Save(KxXMLNode& node) const
 	{
-		node.SetAttribute("Name", GetName());
+		// Save name
+		node.SetAttribute(wxS("Name"), GetName());
+
+		// Save actual source info. As mod and file IDs for known sources (represented by IModNetwork instance)
+		// and as web-address for everything else
 		if (NetworkModInfo modInfo; TryGetModInfo(modInfo))
 		{
-			node.SetAttribute("ModID", modInfo.GetModID().GetValue());
+			node.SetAttribute(wxS("ModID"), modInfo.GetModID().GetValue());
 			if (modInfo.HasFileID())
 			{
-				node.SetAttribute("FileID", modInfo.GetFileID().GetValue());
+				node.SetAttribute(wxS("FileID"), modInfo.GetFileID().GetValue());
 			}
 		}
 		else if (wxString url; TryGetURL(url))
 		{
-			node.SetAttribute("URL", url);
+			node.SetAttribute(wxS("URL"), url);
+		}
+		
+		// Save last update date
+		if (m_LastUpdateCheck.IsValid())
+		{
+			node.NewElement(wxS("LastUpdateCheck")).SetValue(m_LastUpdateCheck.FormatISOCombined());
 		}
 	}
 

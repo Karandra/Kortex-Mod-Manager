@@ -221,12 +221,12 @@ namespace Kortex::NetworkManager
 
 						if (limits.HasHourlyLimit())
 						{
-							label += KTrf(wxS("NetworkManager.QueryLimits.Hourly"), limits.GetHourlyRemaining(), limits.GetHourlyLimit());
+							label += KTrf(wxS("NetworkManager.QueryLimits.Hourly"), limits.GetHourlyRemaining(), limits.GetHourlyTotal());
 						}
 						if (limits.HasDailyLimit())
 						{
 							AddSeparator();
-							label += KTrf(wxS("NetworkManager.QueryLimits.Daily"), limits.GetDailyRemaining(), limits.GetDailyLimit());
+							label += KTrf(wxS("NetworkManager.QueryLimits.Daily"), limits.GetDailyRemaining(), limits.GetDailyTotal());
 						}
 						label = KxString::Format(wxS("%1: [%2]"), KTr(wxS("NetworkManager.QueryLimits")), label);
 

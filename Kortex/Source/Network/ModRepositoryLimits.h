@@ -6,25 +6,25 @@ namespace Kortex::NetworkManager
 	struct ModRepositoryLimitsData
 	{
 		public:
-			int HourlyLimit = -1;
+			int HourlyTotal = -1;
 			int HourlyRemaining = -1;
 			wxDateTime HourlyLimitReset;
 
-			int DailyLimit = -1;
+			int DailyTotal = -1;
 			int DailyRemaining = -1;
 			wxDateTime DailyLimitReset;
 
 		public:
 			ModRepositoryLimitsData() = default;
-			ModRepositoryLimitsData(int hourlyLimit,
+			ModRepositoryLimitsData(int hourlyTotal,
 									int hourlyRemaining,
 									const wxDateTime& hourlyLimitReset,
-									int dailyLimit,
+									int dailyTotal,
 									int dailyRemaining,
 									const wxDateTime& dailyLimitReset
 			)
-				:HourlyLimit(hourlyLimit), HourlyRemaining(hourlyRemaining), HourlyLimitReset(hourlyLimitReset),
-				DailyLimit(dailyLimit), DailyRemaining(dailyRemaining), DailyLimitReset(dailyLimitReset)
+				:HourlyTotal(hourlyTotal), HourlyRemaining(hourlyRemaining), HourlyLimitReset(hourlyLimitReset),
+				DailyTotal(dailyTotal), DailyRemaining(dailyRemaining), DailyLimitReset(dailyLimitReset)
 			{
 			}
 	};
@@ -66,16 +66,16 @@ namespace Kortex
 			// Hourly
 			bool HasHourlyLimit() const
 			{
-				return m_Data->HourlyLimit >= 0;
+				return m_Data->HourlyTotal >= 0;
 			}
 			bool HourlyDepleted() const
 			{
 				return m_Data->HourlyRemaining == 0;
 			}
 
-			int GetHourlyLimit() const
+			int GetHourlyTotal() const
 			{
-				return m_Data->HourlyLimit;
+				return m_Data->HourlyTotal;
 			}
 			int GetHourlyRemaining() const
 			{
@@ -90,16 +90,16 @@ namespace Kortex
 			// Daily
 			bool HasDailyLimit() const
 			{
-				return m_Data->DailyLimit >= 0;
+				return m_Data->DailyTotal >= 0;
 			}
 			bool DailyDepleted() const
 			{
 				return m_Data->DailyRemaining == 0;
 			}
 			
-			int GetDailyLimit() const
+			int GetDailyTotal() const
 			{
-				return m_Data->DailyLimit;
+				return m_Data->DailyTotal;
 			}
 			int GetDailyRemaining() const
 			{

@@ -15,6 +15,15 @@ namespace Kortex::NetworkManager
 	{
 		friend class NexusModNetwork;
 
+		public:
+			enum class UpdatedModsInterval
+			{
+				Default = 0,
+				Day,
+				Week,
+				Month
+			};
+
 		private:
 			NexusModNetwork& m_Nexus;
 			NexusUtility& m_Utility;
@@ -30,8 +39,8 @@ namespace Kortex::NetworkManager
 			void OnResponseHeader(KxCURLEvent& event);
 
 			wxString GetLastUpdatedModsCacheFile() const;
-			void OnModsUpdateCheck();
-			void DoInitialUpdateCheck();
+			void OnModsUpdateCheck(UpdatedModsInterval interval = UpdatedModsInterval::Default);
+			void DoInitialUpdateCheck(UpdatedModsInterval interval = UpdatedModsInterval::Default);
 
 			void OnInit() override;
 			void OnUninit() override;

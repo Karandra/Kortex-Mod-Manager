@@ -69,14 +69,35 @@ namespace Kortex::NetworkManager
 	{
 		return m_Nexus.GetCacheFolder() + wxS("\\LastUpdatedMods.json");
 	}
-	void NexusRepository::OnModsUpdateCheck()
+	void NexusRepository::OnModsUpdateCheck(UpdatedModsInterval interval)
 	{
-		std::thread thread([this]()
+		std::thread thread([this, interval]()
 		{
-			// Get updates for last month
-			auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/games/%2/mods/updated?period=1m"),
+			wxChar intervalValue = 0;
+			switch (interval)
+			{
+				case UpdatedModsInterval::Day:
+				{
+					intervalValue = wxS('d');
+					break;
+				}
+				case UpdatedModsInterval::Week:
+				{
+					intervalValue = wxS('w');
+					break;
+				}
+				default:
+				{
+					intervalValue = wxS('m');
+					break;
+				}
+			};
+
+			// Get updates for last day/week/month (only one, no check for updates for last three months are supported).
+			auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/games/%2/mods/updated?period=1%3"),
 													 m_Nexus.GetAPIURL(),
-													 m_Nexus.TranslateGameIDToNetwork())
+													 m_Nexus.TranslateGameIDToNetwork(),
+													 intervalValue)
 			);
 			KxCURLReply reply = connection->Send();
 			if (m_Utility.TestRequestErrorSilent(reply).IsSuccessful())
@@ -90,19 +111,19 @@ namespace Kortex::NetworkManager
 		});
 		thread.detach();
 	}
-	void NexusRepository::DoInitialUpdateCheck()
+	void NexusRepository::DoInitialUpdateCheck(UpdatedModsInterval interval)
 	{
 		const int updateInterval = m_Nexus.GetModsUpateCheckInterval();
 		if (m_LastUpdatedModsJson.IsEmpty() || updateInterval <= 0)
 		{
-			OnModsUpdateCheck();
+			OnModsUpdateCheck(interval);
 		}
 		else
 		{
 			const wxDateTime lastModificationDate = KxFile(GetLastUpdatedModsCacheFile()).GetFileTime(KxFILETIME_MODIFICATION);
-			if (wxDateTime::UNow() - lastModificationDate > wxTimeSpan::Seconds(updateInterval))
+			if (!lastModificationDate.IsEqualUpTo(wxDateTime::UNow(), wxTimeSpan::Seconds(updateInterval)))
 			{
-				OnModsUpdateCheck();
+				OnModsUpdateCheck(interval);
 			}
 		}
 	}

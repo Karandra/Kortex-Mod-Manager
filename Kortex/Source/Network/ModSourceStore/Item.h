@@ -124,7 +124,7 @@ namespace Kortex
 			{
 				m_LastUpdateCheck = date;
 			}
-			bool TryGetLastUpdateCheck(wxDateTime& date)
+			bool TryGetLastUpdateCheck(wxDateTime& date) const
 			{
 				date = GetLastUpdateCheck();
 				date.IsValid();
@@ -133,5 +133,6 @@ namespace Kortex
 			{
 				return m_LastUpdateCheck.IsValid();
 			}
+			bool IsLastUpdateCheckOlderThan(const wxTimeSpan& span) const;
 	};
 }

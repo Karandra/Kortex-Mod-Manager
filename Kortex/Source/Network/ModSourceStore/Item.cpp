@@ -129,4 +129,13 @@ namespace Kortex
 		}
 		return {};
 	}
+
+	bool ModSourceItem::IsLastUpdateCheckOlderThan(const wxTimeSpan& span) const
+	{
+		if (m_LastUpdateCheck.IsValid())
+		{
+			return !m_LastUpdateCheck.IsEqualUpTo(wxDateTime::UNow(), span);
+		}
+		return true;
+	}
 }

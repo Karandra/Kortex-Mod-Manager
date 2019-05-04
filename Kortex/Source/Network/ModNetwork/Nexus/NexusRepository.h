@@ -3,6 +3,7 @@
 #include "Network/Common.h"
 #include "Network/ModNetworkRepository.h"
 #include "NexusModInfo.h"
+class KxCURLEvent;
 
 namespace Kortex::NetworkManager
 {
@@ -20,6 +21,7 @@ namespace Kortex::NetworkManager
 
 		private:
 			wxString ConvertEndorsementState(const ModEndorsement& state) const;
+			void OnResponseHeader(KxCURLEvent& event);
 
 		public:
 			NexusRepository(NexusModNetwork& nexus, NexusUtility& utility)

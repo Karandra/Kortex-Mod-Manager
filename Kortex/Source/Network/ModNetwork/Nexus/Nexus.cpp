@@ -23,49 +23,9 @@ namespace Kortex::NetworkManager
 		session->AddHeader(wxS("Content-Type"), wxS("application/json"));
 		session->AddHeader(wxS("Protocol-Version"), wxS("0.15.5"));
 
-		session->Bind(KxEVT_CURL_RESPONSE_HEADER, &NexusModNetwork::OnResponseHeader, const_cast<NexusModNetwork*>(this));
+		session->Bind(KxEVT_CURL_RESPONSE_HEADER, &NexusRepository::OnResponseHeader, const_cast<NexusRepository*>(&m_Repository));
 
 		return session;
-	}
-	void NexusModNetwork::OnResponseHeader(KxCURLEvent& event)
-	{
-		const wxString headerName = event.GetHeaderKey();
-
-		auto ToInt = [&event]() -> std::optional<int>
-		{
-			if (long intValue = -1; event.GetHeaderValue().ToCLong(&intValue))
-			{
-				return intValue;
-			}
-			return std::nullopt;
-		};
-		auto TestInt = [&headerName, &ToInt](const wxChar* name, int& ref)
-		{
-			if (headerName == name)
-			{
-				if (auto value = ToInt())
-				{
-					ref = *value;
-				}
-			}
-		};
-		auto TestISODate = [&headerName, &event](const wxChar* name, wxDateTime& ref)
-		{
-			if (headerName == name)
-			{
-				ref.ParseISOCombined(event.GetHeaderValue());
-			}
-		};
-
-		ModRepositoryLimitsData& limits = m_Repository.m_LimitsData;
-
-		TestInt(wxS("X-RL-Hourly-Limit"), limits.HourlyLimit);
-		TestInt(wxS("X-RL-Hourly-Remaining"), limits.HourlyRemaining);
-		TestISODate(wxS("X-RL-Hourly-Reset"), limits.HourlyLimitReset);
-
-		TestInt(wxS("X-RL-Daily-Limit"), limits.DailyLimit);
-		TestInt(wxS("X-RL-Daily-Remaining"), limits.DailyRemaining);
-		TestISODate(wxS("X-RL-Reset-Reset"), limits.DailyLimitReset);
 	}
 
 	wxString NexusModNetwork::GetAPIURL() const

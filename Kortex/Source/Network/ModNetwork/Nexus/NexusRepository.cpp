@@ -20,6 +20,46 @@ namespace Kortex::NetworkManager
 		}
 		return wxS("undecided");
 	}
+	void NexusRepository::OnResponseHeader(KxCURLEvent& event)
+	{
+		event.Skip();
+		const wxString headerName = event.GetHeaderKey();
+
+		auto ToInt = [&event]() -> std::optional<int>
+		{
+			if (long intValue = -1; event.GetHeaderValue().ToCLong(&intValue))
+			{
+				return intValue;
+			}
+			return std::nullopt;
+		};
+		auto TestInt = [&headerName, &ToInt](const wxChar* name, int& ref)
+		{
+			if (headerName == name)
+			{
+				if (auto value = ToInt())
+				{
+					ref = *value;
+				}
+			}
+		};
+		auto TestISODate = [&headerName, &event](const wxChar* name, wxDateTime& ref)
+		{
+			if (headerName == name)
+			{
+				ref.ParseISOCombined(event.GetHeaderValue());
+			}
+		};
+
+		TestInt(wxS("X-RL-Hourly-Limit"), m_LimitsData.HourlyLimit);
+		TestInt(wxS("X-RL-Hourly-Remaining"), m_LimitsData.HourlyRemaining);
+		TestISODate(wxS("X-RL-Hourly-Reset"), m_LimitsData.HourlyLimitReset);
+
+		TestInt(wxS("X-RL-Daily-Limit"), m_LimitsData.DailyLimit);
+		TestInt(wxS("X-RL-Daily-Remaining"), m_LimitsData.DailyRemaining);
+		TestISODate(wxS("X-RL-Reset-Reset"), m_LimitsData.DailyLimitReset);
+	}
+	
 	bool NexusRepository::RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download)
 	{
 		wxString name = fileItem.GetName();

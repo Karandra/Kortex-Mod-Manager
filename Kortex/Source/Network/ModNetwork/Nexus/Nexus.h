@@ -34,7 +34,6 @@ namespace Kortex::NetworkManager
 			wxString GetAPIKey() const;
 
 			std::unique_ptr<KxCURLSession> NewCURLSession(const wxString& address, const wxString& apiKey = {}) const;
-			void OnResponseHeader(KxCURLEvent& event);
 
 		public:
 			NexusModNetwork();
@@ -60,7 +59,7 @@ namespace Kortex::NetworkManager
 
 			wxString ConstructNXM(const NetworkModInfo& modInfo, const GameID& id = {}, const NexusNXMLinkData& linkData = {}) const;
 			bool ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const;
-	
+			
 		public:
 			void OnToolBarMenu(KxMenu& menu) override;
 	};

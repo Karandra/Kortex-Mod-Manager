@@ -2,9 +2,14 @@
 #include "NexusRepository.h"
 #include "NexusUtility.h"
 #include "Nexus.h"
-#include <Network/IDownloadEntry.h>
+#include "Network/IDownloadEntry.h"
+#include "Application/IApplication.h"
+#include "UI/KMainWindow.h"
+#include <Kortex/Events.hpp>
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
+#include <KxFramework/KxTextFile.h>
+#include <thread>
 
 namespace Kortex::NetworkManager
 {
@@ -51,15 +56,97 @@ namespace Kortex::NetworkManager
 			}
 		};
 
-		TestInt(wxS("X-RL-Hourly-Limit"), m_LimitsData.HourlyLimit);
+		TestInt(wxS("X-RL-Hourly-Limit"), m_LimitsData.HourlyTotal);
 		TestInt(wxS("X-RL-Hourly-Remaining"), m_LimitsData.HourlyRemaining);
 		TestISODate(wxS("X-RL-Hourly-Reset"), m_LimitsData.HourlyLimitReset);
 
-		TestInt(wxS("X-RL-Daily-Limit"), m_LimitsData.DailyLimit);
+		TestInt(wxS("X-RL-Daily-Limit"), m_LimitsData.DailyTotal);
 		TestInt(wxS("X-RL-Daily-Remaining"), m_LimitsData.DailyRemaining);
 		TestISODate(wxS("X-RL-Reset-Reset"), m_LimitsData.DailyLimitReset);
 	}
 	
+	wxString NexusRepository::GetLastUpdatedModsCacheFile() const
+	{
+		return m_Nexus.GetCacheFolder() + wxS("\\LastUpdatedMods.json");
+	}
+	void NexusRepository::OnModsUpdateCheck()
+	{
+		std::thread thread([this]()
+		{
+			// Get updates for last month
+			auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/games/%2/mods/updated?period=1m"),
+													 m_Nexus.GetAPIURL(),
+													 m_Nexus.TranslateGameIDToNetwork())
+			);
+			KxCURLReply reply = connection->Send();
+			if (m_Utility.TestRequestErrorSilent(reply).IsSuccessful())
+			{
+				IEvent::CallAfter([this, json = reply.AsString()]()
+				{
+					m_LastUpdatedModsJson = json;
+					KxTextFile::WriteToFile(GetLastUpdatedModsCacheFile(), m_LastUpdatedModsJson);
+				});
+			}
+		});
+		thread.detach();
+	}
+	void NexusRepository::DoInitialUpdateCheck()
+	{
+		const int updateInterval = m_Nexus.GetModsUpateCheckInterval();
+		if (m_LastUpdatedModsJson.IsEmpty() || updateInterval <= 0)
+		{
+			OnModsUpdateCheck();
+		}
+		else
+		{
+			const wxDateTime lastModificationDate = KxFile(GetLastUpdatedModsCacheFile()).GetFileTime(KxFILETIME_MODIFICATION);
+			if (wxDateTime::UNow() - lastModificationDate > wxTimeSpan::Seconds(updateInterval))
+			{
+				OnModsUpdateCheck();
+			}
+		}
+	}
+
+	void NexusRepository::OnInit()
+	{
+		m_LastUpdatedModsJson = KxTextFile::ReadToString(GetLastUpdatedModsCacheFile());
+
+		// Start the timer
+		if (int updateInterval = m_Nexus.GetModsUpateCheckInterval(); updateInterval > 0)
+		{
+			m_ModsUpdateCheckTimer.Bind(wxEVT_TIMER, [this](wxTimerEvent& event)
+			{
+				KMainWindow* mainWindow = KMainWindow::GetInstance();
+				if (mainWindow && IApplication::GetInstance()->GetActiveWindow() && IsAutomaticUpdateCheckAllowed())
+				{
+					OnModsUpdateCheck();
+				}
+			});
+			m_ModsUpdateCheckTimer.Start(updateInterval);
+		}
+	}
+	void NexusRepository::OnUninit()
+	{
+		m_ModsUpdateCheckTimer.Stop();
+	}
+
+	bool NexusRepository::IsAutomaticUpdateCheckAllowed() const
+	{
+		// Allow only if:
+		// - We are authenticated on Nexus.
+		// - Remaining daily limit is greater than 10% of total limit.
+		// - Remaining hourly limit is greater than 70% of total limit.
+
+		auto CheckDaily = [this](double percent = 0.1)
+		{
+			return m_LimitsData.DailyRemaining > m_LimitsData.DailyTotal * percent;
+		};
+		auto CheckHourly = [this](double percent = 0.7)
+		{
+			return m_LimitsData.HourlyRemaining > m_LimitsData.HourlyTotal * percent;
+		};
+		return m_Auth.IsAuthenticated() && CheckDaily() && CheckHourly();
+	}
 	bool NexusRepository::RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download)
 	{
 		wxString name = fileItem.GetName();
@@ -120,7 +207,7 @@ namespace Kortex::NetworkManager
 												 request.GetModID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
-		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
+		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
 		{
 			return std::nullopt;
 		}
@@ -196,7 +283,7 @@ namespace Kortex::NetworkManager
 		}
 
 		KxCURLReply reply = connection->Send();
-		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
+		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
 		{
 			return std::nullopt;
 		}
@@ -240,7 +327,7 @@ namespace Kortex::NetworkManager
 												 request.GetFileID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
-		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
+		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
 		{
 			return std::nullopt;
 		}
@@ -268,7 +355,7 @@ namespace Kortex::NetworkManager
 												 request.GetModID().GetValue())
 		);
 		KxCURLReply reply = connection->Send();
-		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
+		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
 		{
 			return {};
 		}
@@ -309,7 +396,7 @@ namespace Kortex::NetworkManager
 		auto connection = m_Nexus.NewCURLSession(query);
 
 		KxCURLReply reply = connection->Send();
-		if (!m_Utility.TestRequestError(reply, reply).IsSuccessful())
+		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
 		{
 			return {};
 		}

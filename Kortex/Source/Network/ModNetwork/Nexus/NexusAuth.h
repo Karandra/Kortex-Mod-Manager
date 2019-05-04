@@ -51,7 +51,7 @@ namespace Kortex::NetworkManager
 			{
 				return m_LastValidationReply ? &m_LastValidationReply.value() : nullptr;
 			}
-			std::optional<NexusValidationReply> DoGetValidationInfo(const wxString& apiKey = {}, bool noErrorReport = false);
+			std::optional<NexusValidationReply> DoGetValidationInfo(const wxString& apiKey = {}, bool silent = false);
 
 		public:
 			NexusAuth(NexusModNetwork& nexus, NexusUtility& utility);

@@ -31,6 +31,9 @@ namespace Kortex::NetworkManager
 
 			int m_ModsUpdateCheckInterval = 0;
 
+		private:
+			void OnAuthenticated();
+
 		protected:
 			wxString GetAPIURL() const;
 			wxString GetAPIKey() const;

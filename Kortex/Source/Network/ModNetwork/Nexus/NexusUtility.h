@@ -19,6 +19,9 @@ namespace Kortex::NetworkManager
 		private:
 			NexusModNetwork& m_Nexus;
 
+		private:
+			KxHTTPStatusValue DoTestRequestError(const KxCURLReplyBase& reply, const wxString& message, bool noErrorReport) const;
+
 		public:
 			NexusUtility(NexusModNetwork& nexus)
 				:m_Nexus(nexus)
@@ -36,6 +39,7 @@ namespace Kortex::NetworkManager
 
 			void ReportRequestError(const wxString& message) const;
 			void ReportRequestQuoteReached() const;
-			KxHTTPStatusValue TestRequestError(const KxCURLReplyBase& reply, const wxString& message = {}, bool noErrorReport = false) const;
+			KxHTTPStatusValue TestRequestError(const KxCURLReplyBase& reply, const wxString& message = {}) const;
+			KxHTTPStatusValue TestRequestErrorSilent(const KxCURLReplyBase& reply) const;
 	};
 }

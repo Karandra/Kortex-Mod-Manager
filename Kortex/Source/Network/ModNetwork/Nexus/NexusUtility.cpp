@@ -22,6 +22,34 @@ namespace
 
 namespace Kortex::NetworkManager
 {
+	KxHTTPStatusValue NexusUtility::DoTestRequestError(const KxCURLReplyBase& reply, const wxString& message, bool noErrorReport) const
+	{
+		if (reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests)
+		{
+			if (!noErrorReport)
+			{
+				ReportRequestQuoteReached();
+			}
+		}
+		else if (!reply.IsOK())
+		{
+			if (!noErrorReport)
+			{
+				// If we get code 401 "Unauthorized", then API key has changed while program is running.
+				// Notify auth component and network manager about that but don't show regular error message.
+				if (reply.GetResponseCode() == KxHTTPStatusCode::Unauthorized)
+				{
+					const_cast<NexusUtility*>(this)->GetComponent<ModNetworkAuth>().OnAuthReset();
+				}
+				else
+				{
+					ReportRequestError(message);
+				}
+			}
+		}
+		return reply.GetResponseCode();
+	}
+
 	void NexusUtility::ConvertChangeLog(wxString& changeLog) const
 	{
 		changeLog.Replace(wxS("<br>"), wxS("\r\n"));
@@ -111,7 +139,7 @@ namespace Kortex::NetworkManager
 		}
 		catch (...)
 		{
-			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message, KxICON_ERROR);
+			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message.IsEmpty() ? message : KTr(KxID_ERROR), KxICON_ERROR);
 		}
 	}
 	void NexusUtility::ReportRequestQuoteReached() const
@@ -120,31 +148,12 @@ namespace Kortex::NetworkManager
 																		 m_Nexus.GetName()),
 																		 KxICON_WARNING);
 	}
-	KxHTTPStatusValue NexusUtility::TestRequestError(const KxCURLReplyBase& reply, const wxString& message, bool noErrorReport) const
+	KxHTTPStatusValue NexusUtility::TestRequestError(const KxCURLReplyBase& reply, const wxString& message) const
 	{
-		if (reply.GetResponseCode() == KxHTTPStatusCode::TooManyRequests)
-		{
-			if (!noErrorReport)
-			{
-				ReportRequestQuoteReached();
-			}
-		}
-		else if (!reply.IsOK())
-		{
-			if (!noErrorReport)
-			{
-				// If we get code 401 "Unauthorized", then API key has changed while program is running.
-				// Notify auth component and network manager about that but don't show regular error message.
-				if (reply.GetResponseCode() == KxHTTPStatusCode::Unauthorized)
-				{
-					const_cast<NexusUtility*>(this)->GetComponent<ModNetworkAuth>().OnAuthReset();
-				}
-				else
-				{
-					ReportRequestError(message);
-				}
-			}
-		}
-		return reply.GetResponseCode();
+		return DoTestRequestError(reply, message, false);
+	}
+	KxHTTPStatusValue NexusUtility::TestRequestErrorSilent(const KxCURLReplyBase& reply) const
+	{
+		return DoTestRequestError(reply, {}, true);
 	}
 }

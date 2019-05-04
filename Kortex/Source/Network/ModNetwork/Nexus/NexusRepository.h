@@ -9,6 +9,7 @@ namespace Kortex::NetworkManager
 {
 	class NexusModNetwork;
 	class NexusUtility;
+	class NexusAuth;
 
 	class NexusRepository: public ModNetworkRepository
 	{
@@ -17,15 +18,27 @@ namespace Kortex::NetworkManager
 		private:
 			NexusModNetwork& m_Nexus;
 			NexusUtility& m_Utility;
+			NexusAuth& m_Auth;
+
 			ModRepositoryLimitsData m_LimitsData;
 
-		private:
+			wxTimer m_ModsUpdateCheckTimer;
+			wxString m_LastUpdatedModsJson;
+
+		protected:
 			wxString ConvertEndorsementState(const ModEndorsement& state) const;
 			void OnResponseHeader(KxCURLEvent& event);
 
+			wxString GetLastUpdatedModsCacheFile() const;
+			void OnModsUpdateCheck();
+			void DoInitialUpdateCheck();
+
+			void OnInit() override;
+			void OnUninit() override;
+
 		public:
-			NexusRepository(NexusModNetwork& nexus, NexusUtility& utility)
-				:m_Nexus(nexus), m_Utility(utility)
+			NexusRepository(NexusModNetwork& nexus, NexusUtility& utility, NexusAuth& auth)
+				:m_Nexus(nexus), m_Utility(utility), m_Auth(auth)
 			{
 			}
 
@@ -34,6 +47,8 @@ namespace Kortex::NetworkManager
 			{
 				return m_LimitsData;
 			}
+			bool IsAutomaticUpdateCheckAllowed() const override;
+			
 			bool RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download) override;
 
 			std::optional<ModInfoReply> GetModInfo(const ModRepositoryRequest& request) const override;

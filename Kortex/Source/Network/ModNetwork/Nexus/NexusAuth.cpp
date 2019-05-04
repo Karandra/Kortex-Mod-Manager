@@ -89,11 +89,22 @@ namespace Kortex::NetworkManager
 			SetUserPicture(DownloadSmallBitmap(info.ProfilePicture));
 		}
 	}
-	std::optional<NexusValidationReply> NexusAuth::DoGetValidationInfo(const wxString& apiKey, bool noErrorReport)
+	std::optional<NexusValidationReply> NexusAuth::DoGetValidationInfo(const wxString& apiKey, bool silent)
 	{
 		auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/users/validate"), m_Nexus.GetAPIURL()), apiKey);
 		KxCURLReply reply = connection->Send();
-		if (!m_Utility.TestRequestError(reply, reply, noErrorReport).IsSuccessful())
+
+		KxHTTPStatusValue code;
+		if (silent)
+		{
+			code = m_Utility.TestRequestErrorSilent(reply);
+		}
+		else
+		{
+			code = m_Utility.TestRequestError(reply, reply.AsString());
+		}
+
+		if (!code.IsSuccessful())
 		{
 			const bool stateChanged = m_LastValidationReply.has_value();
 			m_LastValidationReply.reset();
@@ -125,7 +136,15 @@ namespace Kortex::NetworkManager
 			return std::nullopt;
 		}
 
+		// Save reply state and update it
+		const bool hasValue = m_LastValidationReply.has_value();
 		m_LastValidationReply = info;
+
+		// We just logged in successfully, notify mod network
+		if (!hasValue)
+		{
+			m_Nexus.OnAuthenticated();
+		}
 		return info;
 	}
 

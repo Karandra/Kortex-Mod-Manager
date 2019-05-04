@@ -546,7 +546,7 @@
 		<String ID="NetworkManager.ModNetwork">Мод-сеть</String>
 		<String ID="NetworkManager.ModNetwork.Default">Мод-сеть по умолчанию</String>
 		<String ID="NetworkManager.ModNetwork.MakeDefault">Использовать по умолчанию</String>
-		
+
 		<String ID="NetworkManager.ModNetwork.AccountInfo">Информация об аккаунте</String>
 		<String ID="NetworkManager.ModNetwork.ShowAccountInfo">Показать информацию об аккаунте</String>
 
@@ -565,6 +565,7 @@
 		<String ID="NetworkManager.QueryLimits">Предел запросов</String>
 		<String ID="NetworkManager.QueryLimits.Hourly">За час: %1/%2</String>
 		<String ID="NetworkManager.QueryLimits.Daily">За день: %1/%2</String>
+		<String ID="NetworkManager.QueryLimits.Description"><![CDATA[Этот индикатор отслеживает количество отправленных запросов к %1 и количество оставшееся запросов на текущий день и час. %1 API предоставляет ограниченное количество (пул) запросов в день и в час. Эти значения динамически обновляется каждый раз при выполнении запроса. Если пул запросов будет исчерпан, вы не сможете ставить в очередь загрузки, проверять обновления, запрашивать информацию о моде и так далее. Оба пула должны быть использованы до того, как это произойдет.]]></String>
 		<String ID="NetworkManager.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</String>
 
 		<String ID="NetworkManager.Nexus.UserIsPremium">Премиум-пользователь</String>
@@ -615,8 +616,8 @@
 		<String ID="DownloadManager.Menu.HideAll">Скрыть все загрузки</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Скрыть все загрузки с установленными модами</String>
 
-		<String ID="DownloadManager.Menu.AssociateWithNXM">Ассоциировать NXM</String>
-		<String ID="DownloadManager.Menu.AssocianedWithNXM">Ассоциирован с NXM</String>
+		<String ID="DownloadManager.Menu.AssociateWithNXM">Ассоциировать NXM-ссылками</String>
+		<String ID="DownloadManager.Menu.AssocianedWithNXM">Ассоциирован с NXM-ссылками</String>
 		<String ID="DownloadManager.Menu.CopyNXM">Скопировать NXM-ссылку</String>
 
 		<!-- VFS -->

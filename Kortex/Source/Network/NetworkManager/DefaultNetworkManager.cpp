@@ -222,7 +222,14 @@ namespace Kortex::NetworkManager
 						KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
 						item->SetBitmap(ImageProvider::GetBitmap(limits.AnyLimitDepleted() ? ImageResourceID::Exclamation : ImageResourceID::TickCircleFrame));
 						item->SetClientData(modNetwork.get());
-						item->Enable(false);
+						item->Bind(KxEVT_MENU_SELECT, [&modNetwork](KxMenuEvent& event)
+						{
+							KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("NetworkManager.QueryLimits"));
+							dialog.SetMainIcon(KxICON_INFORMATION);
+							dialog.SetOptionEnabled(KxTD_SIZE_TO_CONTENT);
+							dialog.SetMessage(KTrf("NetworkManager.QueryLimits.Description", modNetwork->GetName()));
+							dialog.ShowModal();
+						});
 					}
 				}
 

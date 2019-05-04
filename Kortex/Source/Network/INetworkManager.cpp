@@ -67,6 +67,46 @@ namespace Kortex
 		return formatter;
 	}
 
+	void INetworkManager::OnInit()
+	{
+		for (auto& modNetwork: GetModNetworks())
+		{
+			modNetwork->DoOnInit();
+		}
+	}
+	void INetworkManager::OnExit()
+	{
+		for (auto& modNetwork: GetModNetworks())
+		{
+			modNetwork->DoOnExit();
+		}
+	}
+	void INetworkManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
+	{
+		std::unordered_set<IModNetwork*> initialized;
+
+		for (KxXMLNode node = managerNode.GetFirstChildElement(wxS("ModNetwork")); node.IsOK(); node = node.GetNextSiblingElement(wxS("ModNetwork")))
+		{
+			IModNetwork* modNetwork = GetModNetworkByName(node.GetAttribute(wxS("Name")));
+
+			// Initialize mod network only once even if there are multiple configurations for the same network
+			if (modNetwork && initialized.count(modNetwork) == 0)
+			{
+				modNetwork->OnLoadInstance(instance, node);
+				initialized.insert(modNetwork);
+			}
+		}
+
+		// Call 'OnLoadInstance' with invalid node for every not already loaded mod network
+		for (auto& modNetwork: GetModNetworks())
+		{
+			if (initialized.count(modNetwork.get()) == 0)
+			{
+				modNetwork->OnLoadInstance(instance, {});
+			}
+		}
+	}
+
 	INetworkManager::INetworkManager()
 		:ManagerWithTypeInfo(NetworkModule::GetInstance())
 	{

@@ -29,7 +29,7 @@ namespace
 	};
 	template<class TModNetwork, class TContainer> TModNetwork& AddModNetwork(TContainer&& container)
 	{
-		return static_cast<TModNetwork&>(*container.emplace_back(Kortex::IModNetwork::Create<TModNetwork>()));
+		return static_cast<TModNetwork&>(*container.emplace_back(std::make_unique<TModNetwork>()));
 	}
 }
 
@@ -39,19 +39,18 @@ namespace Kortex::NetworkManager
 	{
 		using namespace NetworkManager;
 		using namespace Application;
-
-		// Init sources
-		m_ModNetworks.reserve(3);
-		AddModNetwork<NexusModNetwork>(m_ModNetworks);
-		AddModNetwork<LoversLabModNetwork>(m_ModNetworks);
-		AddModNetwork<TESALLModNetwork>(m_ModNetworks);
+		
+		// Create cache folder first
+		KxFile(GetCacheFolder()).CreateFolder();
 
 		// Load default source
 		if (IModNetwork* modNetwork = GetModNetworkByName(GetAInstanceOption(OName::ModSource).GetAttribute(OName::Default)))
 		{
 			m_DefaultModNetwork = modNetwork;
 		}
-		KxFile(GetCacheFolder()).CreateFolder();
+
+		// Let the base class complete initialization
+		INetworkManager::OnInit();
 	}
 	void DefaultNetworkManager::OnExit()
 	{
@@ -59,10 +58,22 @@ namespace Kortex::NetworkManager
 
 		const IModNetwork* modNetwork = GetDefaultModNetwork();
 		GetAInstanceOption(OName::ModSource).SetAttribute(OName::Default, modNetwork ? modNetwork->GetName() : wxEmptyString);
+
+		INetworkManager::OnExit();
 	}
 	void DefaultNetworkManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
+		// Load manager config
 		m_Config.OnLoadInstance(instance, managerNode);
+
+		// Create sources
+		m_ModNetworks.reserve(3);
+		AddModNetwork<NexusModNetwork>(m_ModNetworks);
+		AddModNetwork<LoversLabModNetwork>(m_ModNetworks);
+		AddModNetwork<TESALLModNetwork>(m_ModNetworks);
+
+		// Base class will initialize created networks
+		INetworkManager::OnLoadInstance(instance, managerNode);
 	}
 
 	void DefaultNetworkManager::ValidateAuth()

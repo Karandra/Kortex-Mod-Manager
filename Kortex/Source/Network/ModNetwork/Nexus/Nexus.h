@@ -29,11 +29,16 @@ namespace Kortex::NetworkManager
 			NexusRepository m_Repository;
 			NexusAuth m_Auth;
 
-		private:
+			int m_ModsUpdateCheckInterval = 0;
+
+		protected:
 			wxString GetAPIURL() const;
 			wxString GetAPIKey() const;
-
 			std::unique_ptr<KxCURLSession> NewCURLSession(const wxString& address, const wxString& apiKey = {}) const;
+
+			void OnInit() override;
+			void OnExit() override;
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode) override;
 
 		public:
 			NexusModNetwork();
@@ -52,6 +57,12 @@ namespace Kortex::NetworkManager
 
 			wxString GetModPageBaseURL(const GameID& id = {}) const override;
 			wxString GetModPageURL(const ModRepositoryRequest& request) override;
+
+		public:
+			int GetModsUpateCheckInterval() const
+			{
+				return m_ModsUpdateCheckInterval;
+			}
 
 		public:
 			std::optional<NexusGameReply> GetGameInfo(const GameID& id = {}) const;

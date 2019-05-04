@@ -10,10 +10,12 @@
 #include <KxFramework/KxSecretStore.h>
 #include <KxFramework/KxVersion.h>
 class KxMenu;
+class KxXMLNode;
 
 namespace Kortex
 {
 	class IDownloadEntry;
+	class IGameInstance;
 	class IGameMod;
 }
 
@@ -22,6 +24,7 @@ namespace Kortex
 	class IModNetwork: public KxRTTI::IInterface<IModNetwork>, public KxComponentContainer
 	{
 		friend class INetworkManager;
+		friend class NetworkModule;
 
 		public:
 			using Vector = std::vector<std::unique_ptr<IModNetwork>>;
@@ -30,20 +33,16 @@ namespace Kortex
 
 		public:
 			static ResourceID GetGenericIcon();
-			template<class TModNetwork, class... Args> static std::unique_ptr<TModNetwork> Create(Args&&... arg)
-			{
-				auto modNetwork = std::make_unique<TModNetwork>(std::forward<Args>(arg)...);
-
-				IModNetwork& modNetworkBase = *modNetwork;
-				modNetworkBase.Init();
-
-				return modNetwork;
-			}
 
 		private:
-			void Init();
+			void DoOnInit();
+			void DoOnExit();
+
+			virtual void OnInit() = 0;
+			virtual void OnExit() = 0;
 
 		protected:
+			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode) = 0;
 			wxString GetIPBModPageURL(ModID modID, const wxString& modSignature = {}) const;
 
 		public:

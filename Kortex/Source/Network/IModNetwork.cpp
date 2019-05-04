@@ -14,9 +14,14 @@ namespace Kortex
 		return ImageResourceID::ModNetwork_Unknown;
 	}
 
-	void IModNetwork::Init()
+	void IModNetwork::DoOnInit()
 	{
 		KxFile(GetCacheFolder()).CreateFolder();
+		OnInit();
+	}
+	void IModNetwork::DoOnExit()
+	{
+		OnExit();
 	}
 
 	wxString IModNetwork::GetIPBModPageURL(ModID modID, const wxString& modSignature) const

@@ -16,18 +16,40 @@
 
 namespace Kortex::NetworkManager
 {
+	void NexusModNetwork::OnInit()
+	{
+	}
+	void NexusModNetwork::OnExit()
+	{
+	}
+	void NexusModNetwork::OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode)
+	{
+		// Default interval is 5 minutes
+		constexpr int defaultIntervalMin = 5;
+		constexpr int defaultInterval = defaultIntervalMin * 60;
+		m_ModsUpdateCheckInterval = networkNode.GetFirstChildElement(wxS("ModUpdatesCheckInterval")).GetValueFloat(defaultIntervalMin) * 60.0;
+
+		// Don't allow to query often than once per minute
+		if (m_ModsUpdateCheckInterval < 60)
+		{
+			m_ModsUpdateCheckInterval = defaultInterval;
+		}
+	}
+
 	std::unique_ptr<KxCURLSession> NexusModNetwork::NewCURLSession(const wxString& address, const wxString& apiKey) const
 	{
 		auto session = INetworkManager::GetInstance()->NewCURLSession(address);
+
+		// Add Nexus specific headers
 		session->AddHeader(wxS("APIKey"), apiKey.IsEmpty() ? GetAPIKey() : apiKey);
 		session->AddHeader(wxS("Content-Type"), wxS("application/json"));
 		session->AddHeader(wxS("Protocol-Version"), wxS("0.15.5"));
 
+		// Allow repository component to read query limits info from response headers
 		session->Bind(KxEVT_CURL_RESPONSE_HEADER, &NexusRepository::OnResponseHeader, const_cast<NexusRepository*>(&m_Repository));
 
 		return session;
 	}
-
 	wxString NexusModNetwork::GetAPIURL() const
 	{
 		return wxS("https://api.nexusmods.com/v1");

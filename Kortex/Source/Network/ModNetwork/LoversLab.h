@@ -14,6 +14,17 @@ namespace Kortex::NetworkManager
 		private:
 			wxString GetAPIURL() const;
 
+		protected:
+			void OnInit() override
+			{
+			}
+			void OnExit() override
+			{
+			}
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode) override
+			{
+			}
+
 		public:
 			LoversLabModNetwork();
 

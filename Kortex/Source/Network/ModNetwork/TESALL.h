@@ -11,6 +11,17 @@ namespace Kortex::NetworkManager
 		public KxRTTI::IExtendInterface<TESALLModNetwork, IModNetwork>,
 		public KxSingletonPtr<TESALLModNetwork>
 	{
+		protected:
+			void OnInit() override
+			{
+			}
+			void OnExit() override
+			{
+			}
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode) override
+			{
+			}
+
 		public:
 			TESALLModNetwork();
 

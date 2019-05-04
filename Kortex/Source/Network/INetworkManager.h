@@ -50,6 +50,10 @@ namespace Kortex
 			virtual void OnToolBarButton(KxAuiToolBarEvent& event) = 0;
 
 			wxString GetUserAgentString(NetworkSoftware networkSoftware) const;
+
+			void OnInit() override;
+			void OnExit() override;
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 			
 		public:
 			INetworkManager();

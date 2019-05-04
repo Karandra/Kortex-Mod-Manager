@@ -13,13 +13,23 @@ namespace Kortex
 	class IAppOption;
 	class IThemeManager;
 	class INotificationCenter;
+}
+namespace Kortex::GameInstance
+{
+	class TemplateLoader;
+}
 
+namespace Kortex
+{
 	class SystemApplicationTraits;
 	class SystemApplication final: public KxApp<wxApp, SystemApplication>
 	{
 		friend class SystemApplicationTraits;
 		friend class IApplication;
 		friend class IAppOption;
+
+		friend class IGameInstance;
+		friend class GameInstance::TemplateLoader;
 
 		private:
 			wxString m_RootFolder;
@@ -31,6 +41,10 @@ namespace Kortex
 			std::unique_ptr<INotificationCenter> m_NotificationCenter;
 			bool m_IsApplicationInitialized = false;
 			int m_ExitCode = 0;
+
+			std::unique_ptr<IGameInstance> m_ActiveGameInstance;
+			std::vector<std::unique_ptr<IGameInstance>> m_GameInstanceTemplates;
+			std::vector<std::unique_ptr<IGameInstance>> m_ShallowGameInstances;
 
 			SystemApplicationTraits* m_AppTraits = nullptr;
 			wxSingleInstanceChecker m_SingleInstanceChecker;
@@ -46,7 +60,7 @@ namespace Kortex
 
 			void LoadGlobalConfig();
 			void SaveGlobalConfig();
-			void SaveActiveInstanceSettings();
+			void TerminateActiveInstance();
 
 		public:
 			SystemApplication();
@@ -60,6 +74,17 @@ namespace Kortex
 			void OnGlobalConfigChanged(IAppOption& option);
 			void OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance);
 			void OnProfileConfigChanged(IAppOption& option, IGameProfile& profile);
+
+			auto& GetGameInstanceTemplates()
+			{
+				return m_GameInstanceTemplates;
+			}
+			auto& GetShallowGameInstances()
+			{
+				return m_ShallowGameInstances;
+			}
+			IGameInstance* GetActiveGameInstance();
+			void AssignActiveGameInstance(std::unique_ptr<IGameInstance> instance);
 
 			bool OnException();
 			bool OnExceptionInMainLoop() override;

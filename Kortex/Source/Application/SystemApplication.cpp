@@ -150,13 +150,10 @@ namespace Kortex
 		const bool success = m_GlobalConfig.Save(stream);
 
 		Utility::Log::LogInfo("SystemApplication::SaveGlobalConfig -> %1", success ? "true" : "false");
-
-		Utility::Log::LogInfo("SystemApplication::SaveGlobalConfig -> Destroying active instance");
-		IGameInstance::DestroyActive();
 	}
-	void SystemApplication::SaveActiveInstanceSettings()
+	void SystemApplication::TerminateActiveInstance()
 	{
-		Utility::Log::LogInfo("SystemApplication::SaveActiveInstanceSettings");
+		Utility::Log::LogInfo("SystemApplication::TerminateActiveInstance");
 		
 		IGameInstance* instance = IGameInstance::GetActive();
 		IConfigurableGameInstance* configurableInstance = nullptr;
@@ -165,6 +162,11 @@ namespace Kortex
 			Utility::Log::LogInfo("Calling IConfigurableGameInstance::OnExit");
 			configurableInstance->OnExit();
 		}
+
+		Utility::Log::LogInfo("SystemApplication::TerminateActiveInstance -> Destroying active instance");
+		m_ActiveGameInstance.reset();
+		m_ShallowGameInstances.clear();
+		m_GameInstanceTemplates.clear();
 	}
 
 	SystemApplication::SystemApplication()
@@ -256,8 +258,8 @@ namespace Kortex
 		Utility::Log::LogInfo("Exit code: %1", m_ExitCode);
 		
 		UninitComponents();
-		SaveActiveInstanceSettings();
 		SaveGlobalConfig();
+		TerminateActiveInstance();
 
 		// Close log now, it will be closed after call to 'KxApp::OnExit' anyway.
 		UninitLogging();
@@ -302,6 +304,15 @@ namespace Kortex
 
 		profile.OnConfigChanged(option);
 		m_Application->OnProfileConfigChanged(option, profile);
+	}
+
+	IGameInstance* SystemApplication::GetActiveGameInstance()
+	{
+		return m_ActiveGameInstance.get();
+	}
+	void SystemApplication::AssignActiveGameInstance(std::unique_ptr<IGameInstance> instance)
+	{
+		m_ActiveGameInstance = std::move(instance);
 	}
 
 	bool SystemApplication::OnException()

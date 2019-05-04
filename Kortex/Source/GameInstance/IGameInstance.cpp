@@ -4,6 +4,7 @@
 #include "ActiveGameInstance.h"
 #include "DefaultGameInstance.h"
 #include <Kortex/Application.hpp>
+#include "Application/SystemApplication.h"
 #include "Utility/KBitmapSize.h"
 #include "Util.h"
 #include <KxFramework/KxShell.h>
@@ -14,11 +15,6 @@
 namespace
 {
 	using namespace Kortex;
-
-	std::unique_ptr<IGameInstance> ms_ActiveInstance;
-	IGameInstance::Vector ms_InstanceTemplates;
-	IGameInstance::Vector ms_Instances;
-
 	wxBitmap LoadIconFromFile(const wxString& path)
 	{
 		wxBitmap bitmap(path, wxBITMAP_TYPE_ANY);
@@ -55,10 +51,13 @@ namespace Kortex::GameInstance
 				{
 					if (item.IsFile() && item.IsNormalItem())
 					{
-						IGameInstance& instance = *ms_InstanceTemplates.emplace_back(std::make_unique<GameInstance::DefaultGameInstance>(item.GetFullPath(), wxEmptyString, isSystem));
-						if (!instance.InitInstance())
+						auto& templates = SystemApplication::GetInstance()->GetGameInstanceTemplates();
+
+						auto instance = std::make_unique<GameInstance::DefaultGameInstance>(item.GetFullPath(), wxEmptyString, isSystem);
+						IGameInstance& ref = *templates.emplace_back(std::move(instance));
+						if (!ref.InitInstance())
 						{
-							ms_InstanceTemplates.pop_back();
+							templates.pop_back();
 						}
 					}
 				}
@@ -95,36 +94,34 @@ namespace Kortex
 
 	IGameInstance* IGameInstance::CreateActive(const IGameInstance& instanceTemplate, const wxString& instanceID)
 	{
-		IGameInstance& instance = AssignActive(std::make_unique<GameInstance::ActiveGameInstance>(instanceTemplate, instanceID));
-		if (instance.InitInstance())
-		{
-			return &instance;
-		}
+		AssignActive(std::move(std::make_unique<GameInstance::ActiveGameInstance>(instanceTemplate, instanceID)));
 
-		DestroyActive();
-		return nullptr;
+		if (IGameInstance* instance = GetActive(); instance && instance->InitInstance())
+		{
+			return instance;
+		}
+		else
+		{
+			AssignActive(nullptr);
+			return nullptr;
+		}
 	}
 	IGameInstance* IGameInstance::GetActive()
 	{
-		return ms_ActiveInstance.get();
+		return SystemApplication::GetInstance()->GetActiveGameInstance();
 	}
-	IGameInstance& IGameInstance::AssignActive(std::unique_ptr<IGameInstance> instance)
+	void IGameInstance::AssignActive(std::unique_ptr<IGameInstance> instance)
 	{
-		ms_ActiveInstance = std::move(instance);
-		return *ms_ActiveInstance;
-	}
-	void IGameInstance::DestroyActive()
-	{
-		ms_ActiveInstance.reset();
+		SystemApplication::GetInstance()->AssignActiveGameInstance(std::move(instance));
 	}
 	
 	IGameInstance::Vector& IGameInstance::GetShallowInstances()
 	{
-		return ms_Instances;
+		return SystemApplication::GetInstance()->GetShallowGameInstances();
 	}
 	IGameInstance* IGameInstance::GetShallowInstance(const wxString& instanceID)
 	{
-		return Util::FindObjectInVector<IGameInstance, Util::FindBy::InstanceID>(ms_Instances, instanceID);
+		return Util::FindObjectInVector<IGameInstance, Util::FindBy::InstanceID>(GetShallowInstances(), instanceID);
 	}
 	IGameInstance* IGameInstance::NewShallowInstance(const wxString& instanceID, const GameID& gameID)
 	{
@@ -134,8 +131,10 @@ namespace Kortex
 			if (instanceTemplate)
 			{
 				auto instance = std::make_unique<GameInstance::ConfigurableGameInstance>(*instanceTemplate, instanceID);
-				IGameInstance& ref = *ms_Instances.emplace_back(std::move(instance));
-				Util::SortByInstanceID(ms_Instances);
+
+				auto& shallowInstances = GetShallowInstances();
+				IGameInstance& ref = *shallowInstances.emplace_back(std::move(instance));
+				Util::SortByInstanceID(shallowInstances);
 
 				ref.InitInstance();
 				return &ref;
@@ -155,17 +154,19 @@ namespace Kortex
 	
 	void IGameInstance::LoadTemplates()
 	{
-		ms_InstanceTemplates.clear();
+		auto& templates = GetTemplates();
+		templates.clear();
 
 		GameInstance::TemplateLoader loader;
 		loader.FindInstanceTemplates(GetGameDefinitionsFolder(), true);
 		loader.FindInstanceTemplates(GetUserGameDefinitionsFolder(), false);
 
-		Util::SortByOrder(ms_InstanceTemplates);
+		Util::SortByOrder(templates);
 	}
 	void IGameInstance::LoadInstances()
 	{
-		ms_Instances.clear();
+		auto& shallowInstances = GetShallowInstances();
+		shallowInstances.clear();
 
 		KxFileFinder finder(IApplication::GetInstance()->GetInstancesFolder(), wxS("*"));
 		for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
@@ -174,33 +175,31 @@ namespace Kortex
 			{
 				// Allow loading of invalid instances. They should be available so
 				// instance selection window can report that and not just silently ignore them.
-				IGameInstance& instance = *ms_Instances.emplace_back(std::make_unique<GameInstance::ConfigurableGameInstance>(item.GetName()));
+				IGameInstance& instance = *shallowInstances.emplace_back(std::make_unique<GameInstance::ConfigurableGameInstance>(item.GetName()));
 				instance.InitInstance();
 			}
 		}
-		Util::SortByOrder(ms_Instances);
+		Util::SortByOrder(shallowInstances);
 	}
 
 	size_t IGameInstance::GetTemplatesCount()
 	{
-		return ms_InstanceTemplates.size();
+		return GetTemplates().size();
 	}
 	IGameInstance::Vector& IGameInstance::GetTemplates()
 	{
-		return ms_InstanceTemplates;
+		return SystemApplication::GetInstance()->GetGameInstanceTemplates();
 	}
 
 	bool IGameInstance::IsActiveInstance() const
 	{
-		return ms_ActiveInstance &&
-			!IsTemplate() &&
-			ms_ActiveInstance->GetGameID() == GetGameID() &&
-			ms_ActiveInstance->GetInstanceID() == GetInstanceID();
+		const IGameInstance* active = GetActive();
+		return active && !IsTemplate() && active->GetGameID() == GetGameID() && active->GetInstanceID() == GetInstanceID();
 	}
 
 	IGameInstance* IGameInstance::GetTemplate(const GameID& id)
 	{
-		return Util::FindObjectInVector<IGameInstance, Util::FindBy::GameID>(ms_InstanceTemplates, id);
+		return Util::FindObjectInVector<IGameInstance, Util::FindBy::GameID>(GetTemplates(), id);
 	}
 	bool IGameInstance::HasTemplate(const GameID& id)
 	{
@@ -264,9 +263,10 @@ namespace Kortex
 			path.RemoveFolder(true);
 
 			Vector::const_iterator it;
-			if (Util::FindObjectInVector<IGameInstance, Util::FindBy::InstanceID>(ms_Instances, GetInstanceID(), &it))
+			auto& shallowInstances = GetShallowInstances();
+			if (Util::FindObjectInVector<IGameInstance, Util::FindBy::InstanceID>(shallowInstances, GetInstanceID(), &it))
 			{
-				ms_Instances.erase(it);
+				shallowInstances.erase(it);
 			}
 			return true;
 		}

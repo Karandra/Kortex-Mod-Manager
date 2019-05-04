@@ -51,8 +51,7 @@ namespace Kortex
 		public:
 			static IGameInstance* CreateActive(const IGameInstance& instanceTemplate, const wxString& instanceID);
 			static IGameInstance* GetActive();
-			static IGameInstance& AssignActive(std::unique_ptr<IGameInstance> instance);
-			static void DestroyActive();
+			static void AssignActive(std::unique_ptr<IGameInstance> instance);
 
 			static Vector& GetShallowInstances();
 			static IGameInstance* GetShallowInstance(const wxString& instanceID);

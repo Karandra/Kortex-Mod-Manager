@@ -301,6 +301,8 @@ namespace Kortex::NetworkManager
 					std::invoke(*onDone);
 				}
 				INotificationCenter::GetInstance()->Notify(m_Nexus, KTrf("NetworkManager.UpdateCheck.AutoCheckDone", updatesCount), KxICON_INFORMATION);
+				
+				SaveUpdateInfo();
 				m_UpdateCheckInProgress = false;
 			}).detach();
 			return true;

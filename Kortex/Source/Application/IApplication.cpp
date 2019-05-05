@@ -114,6 +114,10 @@ namespace Kortex
 	{
 		return GetSystemApp()->SetTopWindow(window);
 	}
+	bool IApplication::IsActive() const
+	{
+		GetSystemApp()->IsActive();
+	}
 
 	void IApplication::ExitApp(int exitCode)
 	{

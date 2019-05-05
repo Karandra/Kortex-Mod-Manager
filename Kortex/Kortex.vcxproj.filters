@@ -114,9 +114,6 @@
     <Filter Include="Code\Source\Application">
       <UniqueIdentifier>{0f73dc8b-efce-481a-abf3-24442642de86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\Application\Notification">
-      <UniqueIdentifier>{41f68988-7646-4ebc-ad46-f6ec722fc3ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\Application\Themes">
       <UniqueIdentifier>{340bc6e8-5807-47be-8b57-94e7771d7471}</UniqueIdentifier>
     </Filter>
@@ -216,9 +213,6 @@
     </Filter>
     <Filter Include="Code\Headers\Application">
       <UniqueIdentifier>{cdc8b6c9-a0f5-4aab-b19b-1d5acc28ef34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Application\Notification">
-      <UniqueIdentifier>{4bcd5849-822a-4fb6-b85a-97c10b1dc01c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers\Application\Themes">
       <UniqueIdentifier>{8a0fbc76-53f5-4f4b-b194-8f3b0428de97}</UniqueIdentifier>
@@ -366,6 +360,12 @@
     </Filter>
     <Filter Include="Code\Source\Application\Resources">
       <UniqueIdentifier>{75a165eb-9ac1-447b-8c15-e14bd8fe9023}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Application\Notifications">
+      <UniqueIdentifier>{41f68988-7646-4ebc-ad46-f6ec722fc3ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Application\Notifications">
+      <UniqueIdentifier>{4bcd5849-822a-4fb6-b85a-97c10b1dc01c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -825,21 +825,6 @@
     <ClCompile Include="Source\Application\INotificationCenter.cpp">
       <Filter>Code\Source\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Application\Notification\DefaultNotificationCenter.cpp">
-      <Filter>Code\Source\Application\Notification</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application\Notification\DisplayModel.cpp">
-      <Filter>Code\Source\Application\Notification</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application\Notification\PopupWindow.cpp">
-      <Filter>Code\Source\Application\Notification</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application\Notification\SimpleNotification.cpp">
-      <Filter>Code\Source\Application\Notification</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application\Notification\BaseNotification.cpp">
-      <Filter>Code\Source\Application\Notification</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application\Theme\VisualStudio.cpp">
       <Filter>Code\Source\Application\Themes</Filter>
     </ClCompile>
@@ -1172,6 +1157,21 @@
     </ClCompile>
     <ClCompile Include="Source\Network\NetworkModUpdateInfo.cpp">
       <Filter>Code\Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Notifications\BaseNotification.cpp">
+      <Filter>Code\Headers\Application\Notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Notifications\DefaultNotificationCenter.cpp">
+      <Filter>Code\Headers\Application\Notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Notifications\DisplayModel.cpp">
+      <Filter>Code\Headers\Application\Notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Notifications\PopupWindow.cpp">
+      <Filter>Code\Headers\Application\Notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Notifications\SimpleNotification.cpp">
+      <Filter>Code\Headers\Application\Notifications</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1718,21 +1718,6 @@
     <ClInclude Include="Source\Application\INotificationCenter.h">
       <Filter>Code\Headers\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\Notification\BaseNotification.h">
-      <Filter>Code\Headers\Application\Notification</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notification\DefaultNotificationCenter.h">
-      <Filter>Code\Headers\Application\Notification</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notification\DisplayModel.h">
-      <Filter>Code\Headers\Application\Notification</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notification\PopupWindow.h">
-      <Filter>Code\Headers\Application\Notification</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notification\SimpleNotification.h">
-      <Filter>Code\Headers\Application\Notification</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\IThemeManager.h">
       <Filter>Code\Headers\Application</Filter>
     </ClInclude>
@@ -2230,6 +2215,21 @@
     </ClInclude>
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusNetworkReply.h">
       <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Notifications\DefaultNotificationCenter.h">
+      <Filter>Code\Source\Application\Notifications</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Notifications\DisplayModel.h">
+      <Filter>Code\Source\Application\Notifications</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Notifications\PopupWindow.h">
+      <Filter>Code\Source\Application\Notifications</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Notifications\SimpleNotification.h">
+      <Filter>Code\Source\Application\Notifications</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Notifications\BaseNotification.h">
+      <Filter>Code\Source\Application\Notifications</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

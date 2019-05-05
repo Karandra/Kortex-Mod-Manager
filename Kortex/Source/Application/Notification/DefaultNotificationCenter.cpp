@@ -26,22 +26,7 @@ namespace Kortex::Notification
 	}
 	void DefaultNotificationCenter::OnToolBarButton(KxAuiToolBarEvent& event)
 	{
-		wxPoint pos = m_Button->GetToolBar()->ClientToScreen(m_Button->GetDropdownMenuPosition());
-		const int offset = 10;
-		const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
-		const int rightSide = pos.x + m_PopupWindow->GetSize().GetWidth();
-		if (rightSide > screenWidth)
-		{
-			pos.x -= (rightSide - screenWidth) + offset;
-		}
-
-		m_PopupWindow->Layout();
-		m_PopupWindow->SetPosition(pos);
-
-		m_PopupDisplayModel->RefreshItems();
-		m_PopupDisplayModel->OnShowWindow(m_PopupWindow);
-
-		m_PopupWindow->Popup(wxWindow::FindFocus());
+		ShowNotificationsWindow();
 	}
 	void DefaultNotificationCenter::UpdateToolBarButton()
 	{
@@ -100,5 +85,29 @@ namespace Kortex::Notification
 			}
 		}
 		return count;
+	}
+
+	void DefaultNotificationCenter::ShowNotificationsWindow()
+	{
+		wxPoint pos = m_Button->GetToolBar()->ClientToScreen(m_Button->GetDropdownMenuPosition());
+		const int offset = 10;
+		const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
+		const int rightSide = pos.x + m_PopupWindow->GetSize().GetWidth();
+		if (rightSide > screenWidth)
+		{
+			pos.x -= (rightSide - screenWidth) + offset;
+		}
+
+		m_PopupWindow->Layout();
+		m_PopupWindow->SetPosition(pos);
+
+		m_PopupDisplayModel->RefreshItems();
+		m_PopupDisplayModel->OnShowWindow(m_PopupWindow);
+
+		m_PopupWindow->Popup(wxWindow::FindFocus());
+	}
+	void DefaultNotificationCenter::HideNotificationsWindow()
+	{
+		m_PopupWindow->Dismiss();
 	}
 }

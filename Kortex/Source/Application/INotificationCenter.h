@@ -49,6 +49,9 @@ namespace Kortex
 			virtual bool HasActivePopups() const = 0;
 			virtual size_t GetActivePopupsCount() const = 0;
 
+			virtual void ShowNotificationsWindow() = 0;
+			virtual void HideNotificationsWindow() = 0;
+
 		public:
 			void Notify(std::unique_ptr<INotification> notification)
 			{

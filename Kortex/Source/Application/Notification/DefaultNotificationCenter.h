@@ -41,5 +41,8 @@ namespace Kortex::Notification
 		public:
 			bool HasActivePopups() const override;
 			size_t GetActivePopupsCount() const override;
+
+			void ShowNotificationsWindow() override;
+			void HideNotificationsWindow() override;
 	};
 }

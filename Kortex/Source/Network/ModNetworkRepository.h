@@ -20,7 +20,6 @@ namespace Kortex
 	{
 		public:
 			virtual ModRepositoryLimits GetRequestLimits() const = 0;
-			virtual bool IsAutomaticUpdateCheckAllowed() const = 0;
 			virtual bool RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download) = 0;
 
 			virtual std::optional<ModInfoReply> GetModInfo(const ModRepositoryRequest& request) const = 0;

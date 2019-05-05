@@ -52,6 +52,7 @@ namespace Kortex::ModManager
 
 		private:
 			void OnAttachNode();
+			bool HasAnyUpdates() const;
 
 		public:
 			DisplayModelModNode(IGameMod& mod)

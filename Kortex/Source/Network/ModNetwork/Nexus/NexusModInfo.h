@@ -29,17 +29,25 @@ namespace Kortex::NetworkManager
 		int64_t ModsCount = -1;
 		wxDateTime ApprovedDate;
 	};
-	class NexusNXMLinkData
+	struct NexusModFileUpdateReply
 	{
-		public:
-			wxString Key;
-			wxString Expires;
-			wxString UserID;
+		ModFileID OldID;
+		ModFileID NewID;
 
-		public:
-			bool IsEmpty() const
-			{
-				return Key.IsEmpty() && Expires.IsEmpty() && UserID.IsEmpty();
-			}
+		wxString OldName;
+		wxString NewName;
+
+		wxDateTime UploadedDate;
+	};
+	struct NexusNXMLinkData
+	{
+		wxString Key;
+		wxString Expires;
+		wxString UserID;
+
+		bool IsEmpty() const
+		{
+			return Key.IsEmpty() && Expires.IsEmpty() && UserID.IsEmpty();
+		}
 	};
 }

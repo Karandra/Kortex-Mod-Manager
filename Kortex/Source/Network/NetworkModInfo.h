@@ -78,3 +78,14 @@ namespace Kortex
 			}
 	};
 }
+
+namespace std
+{
+	template<> struct hash<Kortex::NetworkModInfo>
+	{
+		size_t operator()(const Kortex::NetworkModInfo& modinfo) const
+		{
+			return std::hash<wxString>()(modinfo.ToString());
+		}
+	};
+}

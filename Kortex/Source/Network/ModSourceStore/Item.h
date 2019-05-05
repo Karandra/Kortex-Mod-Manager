@@ -19,7 +19,6 @@ namespace Kortex
 		private:
 			TID m_ID = nullptr;
 			TData m_Data = NetworkModInfo();
-			wxDateTime m_LastUpdateCheck;
 
 		public:
 			ModSourceItem() = default;
@@ -114,25 +113,5 @@ namespace Kortex
 			{
 				return !GetModInfo().IsEmpty();
 			}
-	
-			// Last update check
-			wxDateTime GetLastUpdateCheck() const
-			{
-				return m_LastUpdateCheck;
-			}
-			void SetLastUpdateCheck(const wxDateTime& date)
-			{
-				m_LastUpdateCheck = date;
-			}
-			bool TryGetLastUpdateCheck(wxDateTime& date) const
-			{
-				date = GetLastUpdateCheck();
-				date.IsValid();
-			}
-			bool HasLastUpdateCheck() const
-			{
-				return m_LastUpdateCheck.IsValid();
-			}
-			bool IsLastUpdateCheckOlderThan(const wxTimeSpan& span) const;
 	};
 }

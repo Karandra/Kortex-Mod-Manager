@@ -40,9 +40,6 @@ namespace Kortex
 		{
 			m_Data = node.GetAttribute(wxS("URL"));
 		}
-
-		// Load last update check date
-		m_LastUpdateCheck.ParseISOCombined(node.GetFirstChildElement(wxS("LastUpdateCheck")).GetValue());
 	}
 	void ModSourceItem::Save(KxXMLNode& node) const
 	{
@@ -62,12 +59,6 @@ namespace Kortex
 		else if (wxString url; TryGetURL(url))
 		{
 			node.SetAttribute(wxS("URL"), url);
-		}
-		
-		// Save last update date
-		if (m_LastUpdateCheck.IsValid())
-		{
-			node.NewElement(wxS("LastUpdateCheck")).SetValue(m_LastUpdateCheck.FormatISOCombined());
 		}
 	}
 
@@ -128,14 +119,5 @@ namespace Kortex
 			return *modInfo;
 		}
 		return {};
-	}
-
-	bool ModSourceItem::IsLastUpdateCheckOlderThan(const wxTimeSpan& span) const
-	{
-		if (m_LastUpdateCheck.IsValid())
-		{
-			return !m_LastUpdateCheck.IsEqualUpTo(wxDateTime::UNow(), span);
-		}
-		return true;
 	}
 }

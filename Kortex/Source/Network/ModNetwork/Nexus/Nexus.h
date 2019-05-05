@@ -2,9 +2,10 @@
 #include "stdafx.h"
 #include "Network/Common.h"
 #include "Network/IModNetwork.h"
-#include "NexusAuth.h"
+#include "NexusUpdateChecker.h"
 #include "NexusRepository.h"
 #include "NexusUtility.h"
+#include "NexusAuth.h"
 #include "NexusModInfo.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxUUID.h>
@@ -23,13 +24,13 @@ namespace Kortex::NetworkManager
 	{
 		friend class NexusAuth;
 		friend class NexusRepository;
+		friend class NexusUpdateChecker;
 
 		private:
 			NexusUtility m_Utility;
 			NexusRepository m_Repository;
 			NexusAuth m_Auth;
-
-			int m_ModsUpdateCheckInterval = 0;
+			NexusUpdateChecker m_UpdateChecker;
 
 		private:
 			void OnAuthenticated();
@@ -60,12 +61,6 @@ namespace Kortex::NetworkManager
 
 			wxString GetModPageBaseURL(const GameID& id = {}) const override;
 			wxString GetModPageURL(const ModRepositoryRequest& request) override;
-
-		public:
-			int GetModsUpateCheckInterval() const
-			{
-				return m_ModsUpdateCheckInterval;
-			}
 
 		public:
 			std::optional<NexusGameReply> GetGameInfo(const GameID& id = {}) const;

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DisplayModelNode.h"
+#include "Network/ModNetworkUpdateChecker.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include <Kortex/Events.hpp>
@@ -10,6 +11,24 @@ namespace Kortex::ModManager
 	void DisplayModelModNode::OnAttachNode()
 	{
 		AttachChildren(m_Children);
+	}
+	bool DisplayModelModNode::HasAnyUpdates() const
+	{
+		bool hasAnyUpdates = false;
+		m_Mod->GetModSourceStore().Visit([&hasAnyUpdates](const ModSourceItem& item)
+		{
+			if (const IModNetwork* modNetwork = item.GetModNetwork())
+			{
+				const ModNetworkUpdateChecker* checker = nullptr;
+				if (modNetwork->TryGetComponent(checker) && checker->HasNewVesion(item.GetModInfo()))
+				{
+					hasAnyUpdates = true;
+					return false;
+				}
+			}
+			return true;
+		});
+		return hasAnyUpdates;
 	}
 
 	bool DisplayModelModNode::IsEnabled(const KxDataView2::Column& column) const
@@ -90,25 +109,12 @@ namespace Kortex::ModManager
 				}
 				case ColumnID::Version:
 				{
-					const KxVersion& version = m_Mod->GetVersion();
-					KxDataView2::BitmapTextValue valueData(version);
-					if (version.IsOK())
+					KxVersion version = m_Mod->GetVersion();
+					if (version.IsOK() && HasAnyUpdates())
 					{
-						switch (version.GetType())
-						{
-							case KxVERSION_DATETIME:
-							{
-								valueData.SetBitmap(ImageProvider::GetBitmap(ImageResourceID::CalendarDay));
-								break;
-							}
-							case KxVERSION_INTEGER:
-							{
-								valueData.SetBitmap(ImageProvider::GetBitmap(ImageResourceID::NotificationCounter42));
-								break;
-							}
-						};
+						return KxDataView2::BitmapTextValue(version, ImageProvider::GetBitmap(ImageResourceID::Exclamation));
 					}
-					return valueData;
+					return version.ToString();
 				}
 				case ColumnID::Author:
 				{

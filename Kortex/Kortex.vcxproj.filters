@@ -1161,6 +1161,12 @@
     <ClCompile Include="Source\Utility\MenuSeparator.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUpdateChecker.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetworkUpdateChecker.cpp">
+      <Filter>Code\Source\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2206,6 +2212,12 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\MenuSeparator.h">
       <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateChecker.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetworkUpdateChecker.h">
+      <Filter>Code\Headers\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

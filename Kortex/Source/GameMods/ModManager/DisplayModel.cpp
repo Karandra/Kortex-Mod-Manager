@@ -64,7 +64,7 @@ namespace Kortex::ModManager
 		{
 			for (const auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
 			{
-				auto [column, r] = view->AppendColumn<TextRenderer>(wxEmptyString, ColumnID::ModSource, {}, columnStyleDefault);
+				auto [column, r] = view->AppendColumn<BitmapTextRenderer>(wxEmptyString, ColumnID::ModSource, {}, columnStyleDefault);
 
 				column.SetClientData(modNetwork.get());
 				column.SetTitle(modNetwork->GetName());

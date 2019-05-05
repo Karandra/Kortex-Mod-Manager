@@ -18,7 +18,10 @@ namespace Kortex::NetworkManager
 {
 	void NexusModNetwork::OnAuthenticated()
 	{
-		m_Repository.DoInitialUpdateCheck();
+		IEvent::CallAfter([this]()
+		{
+			m_UpdateChecker.CheckModUpdates();
+		});
 	}
 
 	std::unique_ptr<KxCURLSession> NexusModNetwork::NewCURLSession(const wxString& address, const wxString& apiKey) const
@@ -56,24 +59,19 @@ namespace Kortex::NetworkManager
 	}
 	void NexusModNetwork::OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode)
 	{
-		// Default interval is 5 minutes
-		constexpr int defaultIntervalMin = 5;
-		constexpr int defaultInterval = defaultIntervalMin * 60;
-		m_ModsUpdateCheckInterval = networkNode.GetFirstChildElement(wxS("ModUpdatesCheckInterval")).GetValueFloat(defaultIntervalMin) * 60.0;
-
-		// Don't allow to query often than once per minute
-		if (m_ModsUpdateCheckInterval < 60)
-		{
-			m_ModsUpdateCheckInterval = defaultInterval;
-		}
+		m_UpdateChecker.OnLoadInstance(instance, networkNode);
 	}
 
 	NexusModNetwork::NexusModNetwork()
-		:m_Utility(*this), m_Auth(*this, m_Utility), m_Repository(*this, m_Utility, m_Auth)
+		:m_Utility(*this),
+		m_Auth(*this, m_Utility),
+		m_Repository(*this, m_Utility, m_Auth),
+		m_UpdateChecker(*this, m_Utility, m_Repository)
 	{
 		AddComponent(m_Utility);
 		AddComponent<ModNetworkAuth>(m_Auth);
 		AddComponent<ModNetworkRepository>(m_Repository);
+		AddComponent<ModNetworkUpdateChecker>(m_UpdateChecker);
 	}
 
 	ResourceID NexusModNetwork::GetIcon() const

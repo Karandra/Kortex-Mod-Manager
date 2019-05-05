@@ -3,13 +3,9 @@
 #include "NexusUtility.h"
 #include "Nexus.h"
 #include "Network/IDownloadEntry.h"
-#include "Application/IApplication.h"
-#include "UI/KMainWindow.h"
 #include <Kortex/Events.hpp>
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
-#include <KxFramework/KxTextFile.h>
-#include <thread>
 
 namespace Kortex::NetworkManager
 {
@@ -65,92 +61,6 @@ namespace Kortex::NetworkManager
 		TestISODate(wxS("X-RL-Reset-Reset"), m_LimitsData.DailyLimitReset);
 	}
 	
-	wxString NexusRepository::GetLastUpdatedModsCacheFile() const
-	{
-		return m_Nexus.GetCacheFolder() + wxS("\\LastUpdatedMods.json");
-	}
-	void NexusRepository::OnModsUpdateCheck(UpdatedModsInterval interval)
-	{
-		std::thread thread([this, interval]()
-		{
-			wxChar intervalValue = 0;
-			switch (interval)
-			{
-				case UpdatedModsInterval::Day:
-				{
-					intervalValue = wxS('d');
-					break;
-				}
-				case UpdatedModsInterval::Week:
-				{
-					intervalValue = wxS('w');
-					break;
-				}
-				default:
-				{
-					intervalValue = wxS('m');
-					break;
-				}
-			};
-
-			// Get updates for last day/week/month (only one, no check for updates for last three months are supported).
-			auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/games/%2/mods/updated?period=1%3"),
-													 m_Nexus.GetAPIURL(),
-													 m_Nexus.TranslateGameIDToNetwork(),
-													 intervalValue)
-			);
-			KxCURLReply reply = connection->Send();
-			if (m_Utility.TestRequestErrorSilent(reply).IsSuccessful())
-			{
-				IEvent::CallAfter([this, json = reply.AsString()]()
-				{
-					m_LastUpdatedModsJson = json;
-					KxTextFile::WriteToFile(GetLastUpdatedModsCacheFile(), m_LastUpdatedModsJson);
-				});
-			}
-		});
-		thread.detach();
-	}
-	void NexusRepository::DoInitialUpdateCheck(UpdatedModsInterval interval)
-	{
-		const int updateInterval = m_Nexus.GetModsUpateCheckInterval();
-		if (m_LastUpdatedModsJson.IsEmpty() || updateInterval <= 0)
-		{
-			OnModsUpdateCheck(interval);
-		}
-		else
-		{
-			const wxDateTime lastModificationDate = KxFile(GetLastUpdatedModsCacheFile()).GetFileTime(KxFILETIME_MODIFICATION);
-			if (!lastModificationDate.IsEqualUpTo(wxDateTime::UNow(), wxTimeSpan::Seconds(updateInterval)))
-			{
-				OnModsUpdateCheck(interval);
-			}
-		}
-	}
-
-	void NexusRepository::OnInit()
-	{
-		m_LastUpdatedModsJson = KxTextFile::ReadToString(GetLastUpdatedModsCacheFile());
-
-		// Start the timer
-		if (int updateInterval = m_Nexus.GetModsUpateCheckInterval(); updateInterval > 0)
-		{
-			m_ModsUpdateCheckTimer.Bind(wxEVT_TIMER, [this](wxTimerEvent& event)
-			{
-				KMainWindow* mainWindow = KMainWindow::GetInstance();
-				if (mainWindow && IApplication::GetInstance()->GetActiveWindow() && IsAutomaticUpdateCheckAllowed())
-				{
-					OnModsUpdateCheck();
-				}
-			});
-			m_ModsUpdateCheckTimer.Start(updateInterval);
-		}
-	}
-	void NexusRepository::OnUninit()
-	{
-		m_ModsUpdateCheckTimer.Stop();
-	}
-
 	bool NexusRepository::IsAutomaticUpdateCheckAllowed() const
 	{
 		// Allow only if:
@@ -370,35 +280,12 @@ namespace Kortex::NetworkManager
 	}
 	std::vector<ModFileReply> NexusRepository::GetModFiles(const ModRepositoryRequest& request) const
 	{
-		auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/games/%2/mods/%3/files"),
-												 m_Nexus.GetAPIURL(),
-												 m_Nexus.TranslateGameIDToNetwork(request),
-												 request.GetModID().GetValue())
-		);
-		KxCURLReply reply = connection->Send();
-		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
+		auto reply = GetModFiles2(request, true, false);
+		if (reply)
 		{
-			return {};
+			return reply->first;
 		}
-
-		std::vector<ModFileReply> infoVector;
-		try
-		{
-			KxJSONObject json = KxJSON::Load(reply);
-			infoVector.reserve(json.size());
-
-			for (const KxJSONObject& value: json["files"])
-			{
-				ModFileReply& info = infoVector.emplace_back();
-				info.ModID = request.GetModID();
-				m_Utility.ReadFileInfo(value, info);
-			}
-		}
-		catch (...)
-		{
-			infoVector.clear();
-		}
-		return infoVector;
+		return {};
 	}
 	std::vector<ModDownloadReply> NexusRepository::GetFileDownloads(const ModRepositoryRequest& request) const
 	{
@@ -441,6 +328,61 @@ namespace Kortex::NetworkManager
 		catch (...)
 		{
 			infoVector.clear();
+		}
+		return infoVector;
+	}
+
+	auto NexusRepository::GetModFiles2(const ModRepositoryRequest& request, bool files, bool updates) const -> std::optional<GetModFiles2Result>
+	{
+		auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/games/%2/mods/%3/files"),
+												 m_Nexus.GetAPIURL(),
+												 m_Nexus.TranslateGameIDToNetwork(request),
+												 request.GetModID().GetValue())
+		);
+		KxCURLReply reply = connection->Send();
+		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
+		{
+			return std::nullopt;
+		}
+
+		GetModFiles2Result infoVector;
+		try
+		{
+			KxJSONObject json = KxJSON::Load(reply);
+
+			std::vector<ModFileReply> filesVector;
+			if (files)
+			{
+				for (const KxJSONObject& value: json["files"])
+				{
+					ModFileReply& info = filesVector.emplace_back();
+					info.ModID = request.GetModID();
+					m_Utility.ReadFileInfo(value, info);
+				}
+			}
+
+			std::vector<NexusModFileUpdateReply> updatesVector;
+			if (updates)
+			{
+				for (const KxJSONObject& value: json["file_updates"])
+				{
+					NexusModFileUpdateReply& info = updatesVector.emplace_back();
+
+					info.OldID = value["old_file_id"].get<ModFileID::TValue>();
+					info.NewID = value["new_file_id"].get<ModFileID::TValue>();
+
+					info.OldName = value["old_file_name"].get<wxString>();
+					info.NewName = value["new_file_name"].get<wxString>();
+
+					info.UploadedDate = m_Utility.ReadDateTime(value["uploaded_time"]);
+				}
+			}
+
+			infoVector = {std::move(filesVector), std::move(updatesVector)};
+		}
+		catch (...)
+		{
+			return std::nullopt;
 		}
 		return infoVector;
 	}

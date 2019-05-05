@@ -138,3 +138,15 @@ namespace Kortex::Utility::UniqueID
 			}
 	};
 }
+
+namespace std
+{
+	template<class T, T t_InvalidValue, bool t_AllowNegative, class TTag>
+	struct hash<Kortex::Utility::UniqueID::IntegerID<T, t_InvalidValue, t_AllowNegative, TTag>>
+	{
+		template<class T> size_t operator()(const T& value) const
+		{
+			return std::hash<typename T::TValue>()(value.GetValue());
+		}
+	};
+}

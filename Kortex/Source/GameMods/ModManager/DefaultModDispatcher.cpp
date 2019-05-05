@@ -225,7 +225,7 @@ namespace Kortex::ModManager
 				directories = std::move(roundDirectories);
 			}
 		}
-		Utility::Log::LogInfo("KDispatcher::UpdateVirtualTree: %1", GetClockTime() - t1);
+		Utility::Log::LogInfo("DefaultModDispatcher::UpdateVirtualTree: %1", GetClockTime() - t1);
 	}
 
 	const FileTreeNode& DefaultModDispatcher::GetVirtualTree() const

@@ -66,13 +66,13 @@ namespace Kortex::NetworkManager
 		// Allow only if:
 		// - We are authenticated on Nexus.
 		// - Remaining daily limit is greater than 10% of total limit.
-		// - Remaining hourly limit is greater than 70% of total limit.
+		// - Remaining hourly limit is greater than 50% of total limit.
 
 		auto CheckDaily = [this](double percent = 0.1)
 		{
 			return m_LimitsData.DailyRemaining > m_LimitsData.DailyTotal * percent;
 		};
-		auto CheckHourly = [this](double percent = 0.7)
+		auto CheckHourly = [this](double percent = 0.5)
 		{
 			return m_LimitsData.HourlyRemaining > m_LimitsData.HourlyTotal * percent;
 		};

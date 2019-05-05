@@ -40,6 +40,16 @@ namespace Kortex
 		private:
 			std::optional<Data> m_Data;
 
+		private:
+			double GetRatio(double value, double total) const
+			{
+				if (total > 0)
+				{
+					return value / total;
+				}
+				return 0;
+			}
+
 		public:
 			ModRepositoryLimits() = default;
 			ModRepositoryLimits(const Data& data)
@@ -81,6 +91,10 @@ namespace Kortex
 			{
 				return m_Data->HourlyRemaining;
 			}
+			double GetHourlyRemainingRatio() const
+			{
+				return GetRatio(m_Data->HourlyRemaining, m_Data->HourlyTotal);
+			}
 			wxDateTime GetHourlyReset() const
 			{
 				return m_Data->HourlyLimitReset;
@@ -104,6 +118,10 @@ namespace Kortex
 			int GetDailyRemaining() const
 			{
 				return m_Data->DailyRemaining;
+			}
+			double GetDailyRemainingRatio() const
+			{
+				return GetRatio(m_Data->DailyRemaining, m_Data->DailyTotal);
 			}
 			wxDateTime GetDailyReset() const
 			{

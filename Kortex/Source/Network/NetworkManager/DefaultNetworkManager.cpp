@@ -112,7 +112,6 @@ namespace Kortex::NetworkManager
 
 		ValidateAuth();
 		UpdateButton();
-		CreateMenu();
 	}
 	void DefaultNetworkManager::UpdateButton()
 	{
@@ -256,7 +255,7 @@ namespace Kortex::NetworkManager
 	{
 		IEvent::CallAfter([this]()
 		{
-			CreateMenu();
+			KxMenu::EndMenu();
 			UpdateButton();
 		});
 	}
@@ -295,6 +294,7 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::OnToolBarButton(KxAuiToolBarEvent& event)
 	{
+		CreateMenu();
 		m_LoginButton->ShowDropdownMenuLeftAlign();
 	}
 

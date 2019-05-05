@@ -30,7 +30,7 @@ namespace Kortex::NetworkManager
 				Week,
 				Month
 			};
-
+			
 		private:
 			NexusModNetwork& m_Nexus;
 			NexusUtility& m_Utility;
@@ -38,7 +38,7 @@ namespace Kortex::NetworkManager
 
 			KxTimerMethod<NexusUpdateChecker> m_Timer;
 			wxTimeSpan m_TimeElapsed;
-			int64_t m_AutomaticCheckInterval = 0;
+			wxTimeSpan m_AutomaticCheckInterval;
 			KxJSONObject m_MonthlyModActivity;
 			std::unordered_map<NetworkModInfo, std::pair<wxDateTime, bool>> m_UpdateInfo;
 
@@ -64,7 +64,7 @@ namespace Kortex::NetworkManager
 	
 		public:
 			bool IsAutomaticCheckAllowed() const override;
-			int64_t GetAutomaticCheckInterval() const override;
+			wxTimeSpan GetAutomaticCheckInterval() const override;
 
 			bool HasNewVesion(const NetworkModInfo& modInfo) const override;
 

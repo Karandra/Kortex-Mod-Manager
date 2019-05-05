@@ -17,17 +17,15 @@ namespace Kortex::NetworkManager
 	void NexusUpdateChecker::OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode)
 	{
 		// Default interval is 5 minutes
-		constexpr double defaultIntervalMin = 5;
-		constexpr int64_t defaultInterval = defaultIntervalMin * 60 * 1000;
-		constexpr int64_t minInterval = 60 * 1000;
+		constexpr int defaultIntervalMin = 5;
 
 		// Get the interval
-		m_AutomaticCheckInterval = networkNode.GetFirstChildElement(wxS("ModUpdatesCheckInterval")).GetValueFloat(defaultIntervalMin) * 60.0 * 1000.0;
+		m_AutomaticCheckInterval = wxTimeSpan::Seconds(networkNode.GetFirstChildElement(wxS("ModUpdatesCheckInterval")).GetValueFloat() * 60.0);
 
 		// Don't allow to query often than once per minute
-		if (m_AutomaticCheckInterval < minInterval)
+		if (m_AutomaticCheckInterval < wxTimeSpan::Minutes(1))
 		{
-			m_AutomaticCheckInterval = defaultInterval;
+			m_AutomaticCheckInterval = wxTimeSpan::Minutes(defaultIntervalMin);
 		}
 	}
 
@@ -188,10 +186,10 @@ namespace Kortex::NetworkManager
 	void NexusUpdateChecker::OnInit()
 	{
 		// Start the timer
-		if (m_AutomaticCheckInterval > 0)
+		if (m_AutomaticCheckInterval.IsPositive())
 		{
 			m_Timer.BindFunction(&NexusUpdateChecker::OnTimer, this);
-			m_Timer.Start(m_AutomaticCheckInterval);
+			m_Timer.Start(m_AutomaticCheckInterval.GetMilliseconds().GetValue());
 		}
 	}
 	void NexusUpdateChecker::OnUninit()
@@ -213,7 +211,7 @@ namespace Kortex::NetworkManager
 	{
 		return m_Repository.IsAutomaticUpdateCheckAllowed();
 	}
-	int64_t NexusUpdateChecker::GetAutomaticCheckInterval() const
+	wxTimeSpan NexusUpdateChecker::GetAutomaticCheckInterval() const
 	{
 		return m_AutomaticCheckInterval;
 	}

@@ -14,7 +14,7 @@ namespace Kortex
 
 		public:
 			virtual bool IsAutomaticCheckAllowed() const = 0;
-			virtual int64_t GetAutomaticCheckInterval() const = 0;
+			virtual wxTimeSpan GetAutomaticCheckInterval() const = 0;
 
 			virtual bool HasNewVesion(const NetworkModInfo& modInfo) const = 0;
 			bool HasNewVesion(const IGameMod& gameMod) const;

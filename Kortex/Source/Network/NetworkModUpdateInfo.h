@@ -48,6 +48,7 @@ namespace Kortex
 			KxVersion m_Version;
 			wxDateTime m_UpdateCheckDate;
 			UpdateState m_State = UpdateState::Unknown;
+			size_t m_ActivityHash = 0;
 
 		public:
 			NetworkModUpdateInfo() = default;
@@ -95,6 +96,15 @@ namespace Kortex
 			void SetVersion(const KxVersion& version)
 			{
 				m_Version = version;
+			}
+
+			size_t GetActivityHash() const
+			{
+				return m_ActivityHash;
+			}
+			void SetActivityHash(size_t value)
+			{
+				m_ActivityHash = value;
 			}
 
 		public:

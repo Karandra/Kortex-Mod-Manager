@@ -9,6 +9,7 @@
 #include "Application/IApplication.h"
 #include "Application/INotificationCenter.h"
 #include "Utility/DateTime.h"
+#include "Utility/Log.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
 #include <KxFramework/KxXML.h>
@@ -87,6 +88,8 @@ namespace Kortex::NetworkManager
 	
 	void NexusUpdateChecker::DoRunUpdateCheckEntry(std::optional<OnUpdateEvent> onUpdate, size_t& updatesCount)
 	{
+		using namespace Utility::Log;
+
 		IModManager* modManager = IModManager::GetInstance();
 		const wxDateTime currentDate = Utility::DateTime::Now();
 
@@ -263,7 +266,17 @@ namespace Kortex::NetworkManager
 					const NexusModActivityReply& activity = it->second;
 					if (modInfo.HasFileID() && modInfo.GetFileID() == activity.LatestFileUpdate)
 					{
-						CheckForSingleUpdate();
+						if (activity.LatestModActivity != updateInfo->GetActivityHash())
+						{
+							CheckForSingleUpdate();
+							updateInfo->SetActivityHash(activity.LatestModActivity);
+						}
+						else
+						{
+							// Skip full check but check date
+							updateInfo->SetUpdateCheckDate(currentDate);
+							LogMessage(wxS("Skipping full mod update check for \"%1\" because no new activity has beed detected"), gameMod->GetName());
+						}
 					}
 				}
 				else if (updateInfo->GetState() == ModUpdateState::Unknown)

@@ -14,7 +14,7 @@ namespace
 	};
 }
 
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	void DisplayModel::OnInitControl()
 	{

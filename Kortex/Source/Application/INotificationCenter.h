@@ -13,7 +13,7 @@ namespace Kortex
 	class IModule;
 	class IModNetwork;
 }
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	class DisplayModel;
 }
@@ -23,7 +23,7 @@ namespace Kortex
 	class INotificationCenter: public KxSingletonPtr<INotificationCenter>
 	{
 		friend class KMainWindow;
-		friend class Notification::DisplayModel;
+		friend class Notifications::DisplayModel;
 
 		private:
 			void CallOnToolBarButton(KxAuiToolBarEvent& event)

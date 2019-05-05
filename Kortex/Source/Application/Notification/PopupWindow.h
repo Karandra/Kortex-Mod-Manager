@@ -7,7 +7,7 @@ namespace Kortex
 	class INotification;
 }
 
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	class PopupWindow: public wxPopupWindow
 	{

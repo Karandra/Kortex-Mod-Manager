@@ -4,7 +4,7 @@
 
 namespace Kortex
 {
-	class SimpleNotification: public Notification::BaseNotification
+	class SimpleNotification: public Notifications::BaseNotification
 	{
 		private:
 			wxString m_Caption;

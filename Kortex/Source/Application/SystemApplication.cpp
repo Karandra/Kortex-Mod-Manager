@@ -108,7 +108,7 @@ namespace Kortex
 
 		KArchive::Init();
 		m_ThemeManager = std::make_unique<Theme::Default>();
-		m_NotificationCenter = std::make_unique<Notification::DefaultNotificationCenter>();
+		m_NotificationCenter = std::make_unique<Notifications::DefaultNotificationCenter>();
 	}
 	void SystemApplication::UninitComponents()
 	{

@@ -3,7 +3,7 @@
 
 namespace Kortex
 {
-	namespace Notification
+	namespace Notifications
 	{
 		class PopupWindow;
 	}
@@ -16,8 +16,8 @@ namespace Kortex
 
 		private:
 			virtual void DestroyPopupWindow() = 0;
-			virtual void SetPopupWindow(Notification::PopupWindow* window) = 0;
-			virtual Notification::PopupWindow* GetPopupWindow() const = 0;
+			virtual void SetPopupWindow(Notifications::PopupWindow* window) = 0;
+			virtual Notifications::PopupWindow* GetPopupWindow() const = 0;
 
 		public:
 			INotification() = default;

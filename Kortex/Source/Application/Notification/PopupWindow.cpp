@@ -7,7 +7,7 @@
 #include <KxFramework/KxStaticBitmap.h>
 #include <KxFramework/KxHTMLWindow.h>
 
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	void PopupWindow::CreateUI()
 	{

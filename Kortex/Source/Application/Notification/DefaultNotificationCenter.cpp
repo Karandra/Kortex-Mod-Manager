@@ -9,7 +9,7 @@
 #include <KxFramework/KxAuiToolBar.h>
 #include <wx/popupwin.h>
 
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	void DefaultNotificationCenter::OnSetToolBarButton(KxAuiToolBarItem* button)
 	{

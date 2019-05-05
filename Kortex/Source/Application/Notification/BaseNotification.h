@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Application/INotification.h"
 
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	class BaseNotification: public INotification
 	{

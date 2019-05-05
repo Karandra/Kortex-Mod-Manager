@@ -4,7 +4,7 @@
 #include "BaseNotification.h"
 #include "Utility/KBitmapSize.h"
 
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	class DisplayModel: public KxDataViewVectorListModelEx<INotification::Vector, KxDataViewListModelEx>
 	{

@@ -3,7 +3,7 @@
 #include <Kortex/Notification.hpp>
 #include <KxFramework/KxCoroutine.h>
 
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	BaseNotification::~BaseNotification()
 	{
@@ -17,7 +17,7 @@ namespace Kortex::Notification
 	{
 		wxApp::GetInstance()->ScheduleForDestruction(m_PopupWindow);
 	}
-	void BaseNotification::SetPopupWindow(Notification::PopupWindow* window)
+	void BaseNotification::SetPopupWindow(Notifications::PopupWindow* window)
 	{
 		m_PopupWindow = window;
 	}
@@ -43,7 +43,7 @@ namespace Kortex::Notification
 			{
 				HWND previousForegroundWindow = ::GetForegroundWindow();
 
-				m_PopupWindow = new Notification::PopupWindow(this);
+				m_PopupWindow = new Notifications::PopupWindow(this);
 				m_PopupWindow->Show();
 
 				if (previousForegroundWindow)

@@ -4,7 +4,7 @@
 #include "Application/INotificationCenter.h"
 class wxPopupTransientWindow;
 
-namespace Kortex::Notification
+namespace Kortex::Notifications
 {
 	class DisplayModel;
 

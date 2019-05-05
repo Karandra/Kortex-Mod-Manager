@@ -11,9 +11,9 @@ namespace Kortex
 	{
 		return m_ConfigNode.GetValue(defaultValue);
 	}
-	bool IAppOption::DoSetValue(const wxString& value, bool isCDATA)
+	bool IAppOption::DoSetValue(const wxString& value, AsCDATA asCDATA)
 	{
-		const bool res = m_ConfigNode.SetValue(value, isCDATA);
+		const bool res = m_ConfigNode.SetValue(value, asCDATA);
 		NotifyChange();
 		return res;
 	}

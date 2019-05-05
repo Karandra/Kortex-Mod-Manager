@@ -710,7 +710,7 @@ void KPackageProjectSerializerFOMod::WriteInfo()
 
 	if (!info.GetDescription().IsEmpty())
 	{
-		infoNode.NewElement("Description").SetValue(info.GetDescription(), true);
+		infoNode.NewElement("Description").SetValue(info.GetDescription());
 	}
 
 	// Sites
@@ -872,7 +872,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 						// Description
 						if (!entry->GetDescription().IsEmpty())
 						{
-							entryNode.NewElement("description").SetValue(entry->GetDescription(), true);
+							entryNode.NewElement("description").SetValue(entry->GetDescription());
 						}
 
 						// Image
@@ -953,7 +953,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 
 		if (!m_ProjectSave->GetInfo().GetDescription().IsEmpty())
 		{
-			entryNode.NewElement("description").SetValue(m_ProjectSave->GetInfo().GetDescription(), true);
+			entryNode.NewElement("description").SetValue(m_ProjectSave->GetInfo().GetDescription());
 		}
 
 		if (const KPPIImageEntry* imageEntry = m_ProjectSave->GetInterface().GetMainImageEntry())

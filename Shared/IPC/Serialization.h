@@ -83,7 +83,7 @@ namespace Kortex::IPC
 			}
 			template<> void PushValue(const wxString& value)
 			{
-				m_RootNode.NewElement(m_EntryName).SetValue(value, true);
+				m_RootNode.NewElement(m_EntryName).SetValue(value);
 			}
 	
 			template<class T> T Get(size_t index, T defaultValue = {}) const

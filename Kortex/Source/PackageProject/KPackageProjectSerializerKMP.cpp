@@ -70,7 +70,7 @@ namespace
 		{
 			KxXMLNode elementNode = arrayNode.NewElement("Entry");
 
-			elementNode.SetValue(Func(value), isCDATA);
+			elementNode.SetValue(Func(value));
 			if (value.HasLabel())
 			{
 				elementNode.SetAttribute("Name", value.GetLabel());
@@ -399,7 +399,7 @@ void KPackageProjectSerializerKMP::WriteInfo(KxXMLNode& baseNode)
 		infoNode.NewElement("TranslatedName").SetValue(info.GetTranslatedName());
 	}
 
-	infoNode.NewElement("Description").SetValue(info.GetDescription(), true);
+	infoNode.NewElement("Description").SetValue(info.GetDescription());
 
 	// Custom info
 	if (!info.GetCustomFields().empty())
@@ -467,7 +467,7 @@ void KPackageProjectSerializerKMP::WriteInterface(KxXMLNode& baseNode)
 				{
 					if (entry->HasDescription())
 					{
-						node.NewElement("Description").SetValue(entry->GetDescriptionRaw(), true);
+						node.NewElement("Description").SetValue(entry->GetDescriptionRaw());
 					}
 				}
 				else
@@ -580,7 +580,7 @@ void KPackageProjectSerializerKMP::WriteRequirements(KxXMLNode& baseNode)
 					// Description
 					if (!entry->GetDescription().IsEmpty())
 					{
-						entryNode.NewElement("Description").SetValue(entry->GetDescription(), true);
+						entryNode.NewElement("Description").SetValue(entry->GetDescription());
 					}
 				}
 			}
@@ -651,7 +651,7 @@ void KPackageProjectSerializerKMP::WriteComponents(KxXMLNode& baseNode)
 							// Description
 							if (!entry->GetDescription().IsEmpty())
 							{
-								entryNode.NewElement("Description").SetValue(entry->GetDescription(), true);
+								entryNode.NewElement("Description").SetValue(entry->GetDescription());
 							}
 
 							// Type descriptor

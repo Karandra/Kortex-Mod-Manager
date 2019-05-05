@@ -326,7 +326,7 @@ namespace Kortex::DownloadManager
 				}
 				if (!m_DownloadInfo.URL.IsEmpty())
 				{
-					sourceNode.NewElement("URL").SetValue(m_DownloadInfo.URL, true);
+					sourceNode.NewElement("URL").SetValue(m_DownloadInfo.URL);
 				}
 				if (m_TargetGame)
 				{
@@ -345,7 +345,7 @@ namespace Kortex::DownloadManager
 
 				if (!m_FileInfo.ChangeLog.IsEmpty())
 				{
-					infoNode.NewElement("ChangeLog").SetValue(m_FileInfo.ChangeLog, true);
+					infoNode.NewElement("ChangeLog").SetValue(m_FileInfo.ChangeLog);
 				}
 
 				if (KxXMLNode sizeNode = infoNode.NewElement("Size"); true)

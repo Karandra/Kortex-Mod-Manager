@@ -415,7 +415,7 @@ namespace Kortex::ModManager
 				description.Replace("\r", "<br/>", true);
 				description.Replace("\n", "<br/>", true);
 
-				descriptionNode.NewElement("details").SetValue(description, true);
+				descriptionNode.NewElement("details").SetValue(description);
 			}
 		}
 

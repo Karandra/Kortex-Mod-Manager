@@ -55,21 +55,26 @@ namespace Kortex::Notification
 		}
 	}
 
-	void DefaultNotificationCenter::DoNotify(INotification* notification)
+	void DefaultNotificationCenter::DoNotify(std::unique_ptr<INotification> notification)
 	{
 		Utility::Log::LogInfo("DefaultNotificationCenter::DoNotify");
 		Utility::Log::LogInfo("Caption: %1", notification->GetCaption());
 		Utility::Log::LogInfo("Message: %1", notification->GetMessage());
 
-		INotification& notificationRef = *m_Notifications.emplace(m_Notifications.begin(), notification)->get();
-		IEvent::CallAfter([this, &notificationRef]()
+		INotification& ref = *notification;
+		if (wxCriticalSectionLocker lock(m_NotificationsCS); true)
+		{
+			m_Notifications.emplace(m_Notifications.begin(), std::move(notification));
+		}
+
+		IEvent::CallAfter([this, &ref]()
 		{
 			UpdateToolBarButton();
 			if (m_PopupWindow->IsShown())
 			{
 				m_PopupDisplayModel->RefreshItems();
 			}
-			notificationRef.ShowPopupWindow();
+			ref.ShowPopupWindow();
 		});
 	}
 

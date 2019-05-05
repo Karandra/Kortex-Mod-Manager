@@ -32,7 +32,7 @@ namespace Kortex
 			}
 
 		protected:
-			virtual void DoNotify(INotification* notification) = 0;
+			virtual void DoNotify(std::unique_ptr<INotification> notification) = 0;
 
 			virtual void OnSetToolBarButton(KxAuiToolBarItem* button) = 0;
 			virtual void OnToolBarButton(KxAuiToolBarEvent& event) = 0;
@@ -50,9 +50,9 @@ namespace Kortex
 			virtual size_t GetActivePopupsCount() const = 0;
 
 		public:
-			void Notify(INotification* notification)
+			void Notify(std::unique_ptr<INotification> notification)
 			{
-				DoNotify(notification);
+				DoNotify(std::move(notification));
 			}
 			
 			void Notify(const wxString& caption, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
@@ -69,7 +69,7 @@ namespace Kortex
 			
 			template<class T, class... Args> void Notify(Args&&... arg)
 			{
-				DoNotify(new T(std::forward<Args>(arg)...));
+				DoNotify(std::make_unique<T>(std::forward<Args>(arg)...));
 			}
 			template<class TSingletonPtr, class... Args> void NotifyUsing(Args&&... arg)
 			{

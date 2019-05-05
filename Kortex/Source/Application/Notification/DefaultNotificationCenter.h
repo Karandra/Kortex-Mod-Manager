@@ -15,6 +15,7 @@ namespace Kortex::Notification
 		friend class DisplayModel;
 
 		private:
+			wxCriticalSection m_NotificationsCS;
 			INotification::Vector m_Notifications;
 			KxAuiToolBarItem* m_Button = nullptr;
 
@@ -22,7 +23,7 @@ namespace Kortex::Notification
 			DisplayModel* m_PopupDisplayModel = nullptr;
 
 		protected:
-			void DoNotify(INotification* notification) override;
+			void DoNotify(std::unique_ptr<INotification> notification) override;
 
 			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
 			void OnToolBarButton(KxAuiToolBarEvent& event) override;

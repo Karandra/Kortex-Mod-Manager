@@ -8,9 +8,13 @@
 #include "GameMods/IGameMod.h"
 #include "Application/IApplication.h"
 #include "Application/INotificationCenter.h"
-#include "UI/KMainWindow.h"
+#include "Utility/DateTime.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
+#include <KxFramework/KxXML.h>
+#include <KxFramework/KxFileStream.h>
+#include <KxFramework/KxCallAtScopeExit.h>
+#include <thread>
 
 namespace Kortex::NetworkManager
 {
@@ -20,7 +24,7 @@ namespace Kortex::NetworkManager
 		constexpr int defaultIntervalMin = 5;
 
 		// Get the interval
-		m_AutomaticCheckInterval = wxTimeSpan::Seconds(networkNode.GetFirstChildElement(wxS("ModUpdatesCheckInterval")).GetValueFloat() * 60.0);
+		m_AutomaticCheckInterval = wxTimeSpan::Seconds(networkNode.GetFirstChildElement(wxS("AutomaticCheckInterval")).GetValueFloat() * 60.0);
 
 		// Don't allow to query often than once per minute
 		if (m_AutomaticCheckInterval < wxTimeSpan::Minutes(1))
@@ -44,7 +48,7 @@ namespace Kortex::NetworkManager
 		};
 		return wxS('m');
 	}
-	wxString NexusUpdateChecker::GetModsActivityFor(ModActivity interval)
+	auto NexusUpdateChecker::GetModsActivityFor(ModActivity interval) const -> std::optional<ActivityMap>
 	{
 		// Get updates for last day/week/month (only one, no check for updates for last three months are supported).
 		auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/games/%2/mods/updated?period=1%3"),
@@ -55,50 +59,84 @@ namespace Kortex::NetworkManager
 		KxCURLReply reply = connection->Send();
 		if (m_Utility.TestRequestErrorSilent(reply).IsSuccessful())
 		{
-			return reply.AsString();
-		}
-		return {};
-	}
-	const KxJSONObject* NexusUpdateChecker::GetOrQueryActivity(ModActivity interval)
-	{
-		if (m_MonthlyModActivity.empty())
-		{
 			try
 			{
-				m_MonthlyModActivity = KxJSON::Load(GetModsActivityFor(interval));
-				return &m_MonthlyModActivity;
+				ActivityMap activityMap;
+
+				const KxJSONObject json = KxJSON::Load(reply.AsString());
+				for (const KxJSONObject& updateItem: json)
+				{
+					ModID modID = updateItem["mod_id"].get<ModID::TValue>();
+					ModFileID fileID = updateItem["latest_file_update"].get<ModFileID::TValue>();
+					int64_t activityID = updateItem["latest_mod_activity"];
+
+					NexusModActivityReply& value = activityMap.emplace(modID, NexusModActivityReply()).first->second;
+					value.ModID = modID;
+					value.LatestFileUpdate = fileID;
+					value.LatestModActivity = activityID;
+				}
+				return activityMap;
 			}
 			catch (...)
 			{
-				return nullptr;
+				return std::nullopt;
 			}
 		}
-		else
-		{
-			return &m_MonthlyModActivity;
-		}
+		return std::nullopt;
 	}
 	
-	void NexusUpdateChecker::CheckModUpdates()
+	void NexusUpdateChecker::DoRunUpdateCheckEntry(std::optional<OnUpdateEvent> onUpdate, size_t& updatesCount)
 	{
 		IModManager* modManager = IModManager::GetInstance();
-		const wxDateTime currentDate = wxDateTime::UNow();
+		const wxDateTime currentDate = Utility::DateTime::Now();
+
+		// Get new activity list if needed (we don't have at all it or it's outdated)
+		if (!m_MonthlyModActivity || Utility::DateTime::IsLaterThanBy(currentDate, m_MonthlyModActivityDate, m_AutomaticCheckInterval))
+		{
+			m_MonthlyModActivity = GetModsActivityFor(ModActivity::Month);
+			m_MonthlyModActivityDate = currentDate;
+		}
+		if (!m_MonthlyModActivity)
+		{
+			return;
+		}
 
 		std::unordered_map<ModID::TValue, ModInfoReply> modInfoReplies;
 		std::unordered_map<ModID::TValue, NexusRepository::GetModFiles2Result> modFileReplies;
 
 		for (auto& gameMod: modManager->GetMods())
 		{
-			ModSourceItem* sourceItem = gameMod->GetModSourceStore().GetItem(m_Nexus);
+			// Stop if we have used enough requests
+			if (!m_Repository.IsAutomaticUpdateCheckAllowed())
+			{
+				INotificationCenter::GetInstance()->Notify(m_Nexus, KTrf("NetworkManager.RequestQuotaReched", m_Nexus.GetName()), KxICON_WARNING);
+				return;
+			}
+
+			// Get mod source item and check if mod is installed
+			const ModSourceItem* sourceItem = gameMod->GetModSourceStore().GetItem(m_Nexus);
 			if (!sourceItem || !gameMod->IsInstalled())
 			{
 				continue;
 			}
+			const NetworkModInfo modInfo = sourceItem->GetModInfo();
 
-			const wxDateTime lastUpdateCheck = GetLastUpdateCheck(sourceItem->GetModInfo());
-			auto IsLastCheckOlderThanDays = [&currentDate, &lastUpdateCheck](int days)
+			// Get existing update info or create new
+			NetworkModUpdateInfo* updateInfo = GetUpdateInfoPtr(sourceItem->GetModInfo());
+			if (updateInfo == nullptr)
 			{
-				return !lastUpdateCheck.IsValid() || !lastUpdateCheck.IsEqualUpTo(currentDate, wxTimeSpan::Days(days));
+				updateInfo = &m_UpdateInfo.emplace(modInfo, NetworkModUpdateInfo()).first->second;
+			}
+
+			auto IsLastCheckOlderThanDays = [&currentDate, &updateInfo](int days)
+			{
+				const wxDateTime checkDate = updateInfo->GetUpdateCheckDate();
+				return !checkDate.IsValid() || Utility::DateTime::IsLaterThanBy(currentDate, checkDate, wxTimeSpan::Days(days));
+			};
+			auto IsLastCheckNewerThan = [&currentDate, &updateInfo](const wxTimeSpan& span)
+			{
+				const wxDateTime checkDate = updateInfo->GetUpdateCheckDate();
+				return !checkDate.IsValid() || Utility::DateTime::IsEarlierThanBy(currentDate, checkDate, span);
 			};
 
 			auto GetOrQueryModInfo = [this, &modInfoReplies](ModID id) -> const ModInfoReply*
@@ -128,63 +166,152 @@ namespace Kortex::NetworkManager
 				return nullptr;
 			};
 			
-			auto OnChecked = [this, &currentDate](const ModSourceItem& sourceItem, bool hasNewVersion)
+			auto OnUpdateChecked = [&](ModUpdateState state, std::optional<KxVersion> version = {})
 			{
-				SetLastUpdateCheck(sourceItem, currentDate, hasNewVersion);
-			};
-			auto CheckForSingleUpdate = [this, &GetOrQueryModInfo, &GetOrQueryModFiles, &OnChecked](ModID modID, ModFileID fileID, const IGameMod& gameMod, const ModSourceItem& sourceItem)
-			{
-				const NetworkModInfo modInfo = sourceItem.GetModInfo();
-				if (modInfo.GetModID() == modID && modInfo.GetFileID() == fileID)
+				updateInfo->SetState(state);
+				updateInfo->SetUpdateCheckDate(currentDate);
+				if (version)
 				{
-					// Full match, use all possible info
-					const NetworkManager::NexusRepository::GetModFiles2Result* filesUpdateInfo = GetOrQueryModFiles(modID);
-					if (filesUpdateInfo)
-					{
-						// TODO
-						OnChecked(sourceItem, false);
-					}
-					return true;
+					updateInfo->SetVersion(*version);
 				}
-				else if (modInfo.GetModID() == modID)
-				{
-					// Only mod ID matches, using only mod version
-					const ModInfoReply* reply = GetOrQueryModInfo(modID);
-					const bool hasNewVersion = reply && reply->Version > gameMod.GetVersion();
-					OnChecked(sourceItem, hasNewVersion);
 
-					return true;
+				if (updateInfo->AnyUpdated())
+				{
+					updatesCount++;
 				}
-				return false;
 			};
-			
-			const KxJSONObject* json = nullptr;
-			if (IsLastCheckOlderThanDays(30))
+			auto CheckForSingleUpdate = [&, this]()
 			{
-				if (const KxJSONObject* json = GetOrQueryActivity(ModActivity::Month))
+				if (modInfo.HasFileID())
 				{
-					for (const KxJSONObject& updatedItem: *json)
+					// Use all possible info
+					if (const auto* fileUpdatesInfo = GetOrQueryModFiles(modInfo.GetModID()))
 					{
-						ModID modID = updatedItem["mod_id"].get<ModID::TValue>();
-						ModFileID fileID = updatedItem["latest_file_update"].get<ModFileID::TValue>();
+						const auto& [files, fileUpdates] = *fileUpdatesInfo;
 
-						if (CheckForSingleUpdate(modID, fileID, *gameMod, *sourceItem))
+						auto it = files.find(modInfo.GetFileID());
+						if (it != files.end())
 						{
-							break;
+							// Find file in updates to see if it was changed
+							const ModFileReply& thisFileInfo = it->second;
+
+							// See if there's an update for that file
+							auto it = fileUpdates.find(modInfo.GetFileID());
+							if (it != fileUpdates.end())
+							{
+								const NexusModFileUpdateReply& fileUpdateInfo = it->second;
+								const ModFileReply& newFileInfo = files.find(fileUpdateInfo.NewID)->second;
+
+								// We have an update, look up new version
+								OnUpdateChecked(ModUpdateState::ModFileUpdated, newFileInfo.Version);
+							}
+							else
+							{
+								// No updates available
+								OnUpdateChecked(ModUpdateState::NoUpdates, gameMod->GetVersion());
+							}
+						}
+						else
+						{
+							// File has been deleted
+							OnUpdateChecked(ModUpdateState::ModFileDeleted, gameMod->GetVersion());
 						}
 					}
+					else
+					{
+						OnUpdateChecked(ModUpdateState::ModDeleted, gameMod->GetVersion());
+					}
+				}
+				else
+				{
+					// We have only mod ID, using overall mod version
+					if (const ModInfoReply* reply = GetOrQueryModInfo(modInfo.GetModID()))
+					{
+						if (reply->Version > gameMod->GetVersion())
+						{
+							OnUpdateChecked(ModUpdateState::ModUpdated, gameMod->GetVersion());
+						}
+						else
+						{
+							OnUpdateChecked(ModUpdateState::NoUpdates, gameMod->GetVersion());
+						}
+					}
+					else
+					{
+						OnUpdateChecked(ModUpdateState::ModDeleted, gameMod->GetVersion());
+					}
+				}
+			};
+			
+			if (IsLastCheckOlderThanDays(30))
+			{
+				if (const ModInfoReply* reply = GetOrQueryModInfo(modInfo.GetModID()))
+				{
+					CheckForSingleUpdate();
+				}
+				else
+				{
+					updateInfo->SetState(ModUpdateState::ModDeleted);
+					updateInfo->SetUpdateCheckDate(currentDate);
 				}
 			}
-			else if (IsLastCheckOlderThanDays(1))
+			else if (IsLastCheckNewerThan(std::max(m_AutomaticCheckInterval, wxTimeSpan::Minutes(5))))
 			{
-				const NetworkModInfo modInfo = sourceItem->GetModInfo();
-				CheckForSingleUpdate(modInfo.GetModID(), modInfo.GetFileID(), *gameMod, *sourceItem);
+				auto it = m_MonthlyModActivity->find(modInfo.GetModID());
+				if (it != m_MonthlyModActivity->end())
+				{
+					const NexusModActivityReply& activity = it->second;
+					if (modInfo.HasFileID() && modInfo.GetFileID() == activity.LatestFileUpdate)
+					{
+						CheckForSingleUpdate();
+					}
+				}
+				else if (updateInfo->GetState() == ModUpdateState::Unknown)
+				{
+					OnUpdateChecked(ModUpdateState::NoUpdates, gameMod->GetVersion());
+				}
+			}
+
+			if (onUpdate)
+			{
+				std::invoke(*onUpdate, *gameMod, *updateInfo);
 			}
 		}
+	}
+	bool NexusUpdateChecker::DoRunUpdateCheck(std::optional<OnUpdateEvent> onUpdate, std::optional<OnUpdateDoneEvent> onDone)
+	{
+		if (!m_UpdateCheckInProgress)
+		{
+			if (!m_Repository.IsAutomaticUpdateCheckAllowed())
+			{
+				INotificationCenter::GetInstance()->Notify(m_Nexus, KTr("NetworkManager.UpdateCheck.AutoCheckQuoteReqched"), KxICON_WARNING);
+				return false;
+			}
+
+			std::thread([this, onUpdate = std::move(onUpdate), onDone = std::move(onDone)]()
+			{
+				m_UpdateCheckInProgress = true;
+				INotificationCenter::GetInstance()->Notify(m_Nexus, KTr("NetworkManager.UpdateCheck.AutoCheckStarted"), KxICON_INFORMATION);
+
+				size_t updatesCount = 0;
+				DoRunUpdateCheckEntry(std::move(onUpdate), updatesCount);
+
+				if (onDone)
+				{
+					std::invoke(*onDone);
+				}
+				INotificationCenter::GetInstance()->Notify(m_Nexus, KTrf("NetworkManager.UpdateCheck.AutoCheckDone", updatesCount), KxICON_INFORMATION);
+				m_UpdateCheckInProgress = false;
+			}).detach();
+			return true;
+		}
+		return false;
 	}
 
 	void NexusUpdateChecker::OnInit()
 	{
+		LoadUpdateInfo();
+
 		// Start the timer
 		if (m_AutomaticCheckInterval.IsPositive())
 		{
@@ -200,11 +327,96 @@ namespace Kortex::NetworkManager
 	{
 		m_TimeElapsed += wxTimeSpan::Milliseconds(m_Timer.GetInterval());
 
-		KMainWindow* mainWindow = KMainWindow::GetInstance();
-		if (mainWindow && IApplication::GetInstance()->GetActiveWindow() && IsAutomaticCheckAllowed())
+		if (IApplication::GetInstance()->IsActive() && IsAutomaticCheckAllowed())
 		{
-			CheckModUpdates();
+			DoRunUpdateCheck();
 		}
+	}
+
+	wxString NexusUpdateChecker::GetUpdateInfoFile() const
+	{
+		return m_Nexus.GetLocationInCache(KxString::Format(wxS("UpdateInfo-%1.xml"), KAux::MakeSafeFileName(m_Nexus.TranslateGameIDToNetwork())));
+	}
+	bool NexusUpdateChecker::SaveUpdateInfo()
+	{
+		KxFileStream stream(GetUpdateInfoFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways);
+		if (stream.IsOk())
+		{
+			KxXMLDocument xml;
+			KxXMLNode rootNode = xml.NewElement(wxS("UpdateInfo"));
+
+			const IModManager* modManager = IModManager::GetInstance();
+			for (auto& [modInfo, updateInfo]: m_UpdateInfo)
+			{
+				if (modInfo.HasModID())
+				{
+					KxXMLNode node = rootNode.NewElement(wxS("Entry"));
+
+					// Required mod info
+					node.SetAttribute(wxS("ModID"), modInfo.GetModID().GetValue());
+					if (modInfo.HasFileID())
+					{
+						node.SetAttribute(wxS("FileID"), modInfo.GetFileID().GetValue());
+					}
+
+					// Optional info that doesn't really needed by the updater, but useful to have in update info file
+					if (const IGameMod* gameMod = modManager->FindModByModNetwork(m_Nexus, NetworkModInfo(modInfo.GetModID(), modInfo.GetFileID())))
+					{
+						node.NewElement(wxS("Name")).SetValue(gameMod->GetName());
+					}
+
+					// Update info
+					updateInfo.Save(node);
+				}
+			}
+			return xml.Save(stream);
+		}
+		return false;
+	}
+	bool NexusUpdateChecker::LoadUpdateInfo()
+	{
+		KxFileStream stream(GetUpdateInfoFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
+		if (KxXMLDocument xml; stream.IsOk() && xml.Load(stream))
+		{
+			m_MonthlyModActivityDate = KxFile(stream.GetFileName()).GetFileTime(KxFILETIME_MODIFICATION);
+			m_UpdateInfo.clear();
+
+			KxXMLNode rootNode = xml.GetFirstChildElement(wxS("UpdateInfo"));
+			for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+			{
+				ModID modID = node.GetAttributeInt(wxS("ModID"), ModID::GetInvalidValue());
+				ModFileID fileID = node.GetAttributeInt(wxS("FileID"), ModFileID::GetInvalidValue());
+
+				wxDateTime lastUpdateCheck;
+				lastUpdateCheck.ParseISOCombined(node.GetFirstChildElement(wxS("LastUpdateCheck")).GetValue());
+
+				NetworkModUpdateInfo updateInfo;
+				updateInfo.Load(node);
+
+				m_UpdateInfo.insert_or_assign(NetworkModInfo(modID, fileID), updateInfo);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	NetworkModUpdateInfo* NexusUpdateChecker::GetUpdateInfoPtr(const NetworkModInfo& modInfo)
+	{
+		auto it = m_UpdateInfo.find(modInfo);
+		if (it != m_UpdateInfo.end())
+		{
+			return &it->second;
+		}
+		return nullptr;
+	}
+	const NetworkModUpdateInfo* NexusUpdateChecker::GetUpdateInfoPtr(const NetworkModInfo& modInfo) const
+	{
+		return const_cast<NexusUpdateChecker*>(this)->GetUpdateInfoPtr(modInfo);
+	}
+
+	bool NexusUpdateChecker::RunUpdateCheck(std::optional<OnUpdateEvent> onUpdate, std::optional<OnUpdateDoneEvent> onDone)
+	{
+		return DoRunUpdateCheck(std::move(onUpdate), std::move(onDone));
 	}
 
 	bool NexusUpdateChecker::IsAutomaticCheckAllowed() const
@@ -216,36 +428,12 @@ namespace Kortex::NetworkManager
 		return m_AutomaticCheckInterval;
 	}
 
-	bool NexusUpdateChecker::HasNewVesion(const NetworkModInfo& modInfo) const
+	NetworkModUpdateInfo NexusUpdateChecker::GetUpdateInfo(const NetworkModInfo& modInfo) const
 	{
-		auto it = m_UpdateInfo.find(modInfo);
-		if (it != m_UpdateInfo.end())
+		if (const NetworkModUpdateInfo* info = GetUpdateInfoPtr(modInfo))
 		{
-			return it->second.second;
-		}
-		return false;
-	}
-	wxDateTime NexusUpdateChecker::GetLastUpdateCheck(const NetworkModInfo& modInfo) const
-	{
-		auto it = m_UpdateInfo.find(modInfo);
-		if (it != m_UpdateInfo.end())
-		{
-			return it->second.first;
+			return *info;
 		}
 		return {};
-	}
-	void NexusUpdateChecker::SetLastUpdateCheck(const ModSourceItem& sourceItem, const wxDateTime& date, bool hasNewVersion)
-	{
-		const NetworkModInfo modInfo = sourceItem.GetModInfo();
-
-		auto it = m_UpdateInfo.find(modInfo);
-		if (it != m_UpdateInfo.end())
-		{
-			it->second.first = date;
-		}
-		else
-		{
-			m_UpdateInfo.insert_or_assign(modInfo, std::pair(date, hasNewVersion));
-		}
 	}
 }

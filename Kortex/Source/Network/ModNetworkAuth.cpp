@@ -95,6 +95,6 @@ namespace Kortex
 	}
 	wxString ModNetworkAuth::GetUserPictureFile() const
 	{
-		return GetContainer().GetCacheFolder() + wxS("\\UserPicture.png");
+		return GetContainer().GetLocationInCache(wxS("UserPicture.png"));
 	}
 }

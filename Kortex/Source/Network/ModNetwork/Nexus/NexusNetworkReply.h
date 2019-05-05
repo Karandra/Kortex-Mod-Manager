@@ -39,6 +39,12 @@ namespace Kortex::NetworkManager
 
 		wxDateTime UploadedDate;
 	};
+	struct NexusModActivityReply
+	{
+		ModID ModID;
+		ModFileID LatestFileUpdate;
+		int64_t LatestModActivity = 0;
+	};
 	struct NexusNXMLinkData
 	{
 		wxString Key;

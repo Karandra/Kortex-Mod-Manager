@@ -283,7 +283,16 @@ namespace Kortex::NetworkManager
 		auto reply = GetModFiles2(request, true, false);
 		if (reply)
 		{
-			return reply->first;
+			auto& filesMap = reply->first;
+
+			std::vector<ModFileReply> filesVector;
+			filesVector.reserve(filesMap.size());
+
+			for (auto& [id, fileReply]: reply->first)
+			{
+				filesVector.push_back(std::move(fileReply));
+			}
+			return filesVector;
 		}
 		return {};
 	}
@@ -350,25 +359,26 @@ namespace Kortex::NetworkManager
 		{
 			KxJSONObject json = KxJSON::Load(reply);
 
-			std::vector<ModFileReply> filesVector;
+			GetModFiles2Result::first_type filesMap;
 			if (files)
 			{
 				for (const KxJSONObject& value: json["files"])
 				{
-					ModFileReply& info = filesVector.emplace_back();
+					ModFileReply& info = filesMap.emplace(value["file_id"].get<ModID::TValue>(), ModFileReply()).first->second;
 					info.ModID = request.GetModID();
 					m_Utility.ReadFileInfo(value, info);
 				}
 			}
 
-			std::vector<NexusModFileUpdateReply> updatesVector;
+			GetModFiles2Result::second_type updatesMap;
 			if (updates)
 			{
 				for (const KxJSONObject& value: json["file_updates"])
 				{
-					NexusModFileUpdateReply& info = updatesVector.emplace_back();
+					ModFileID oldID = value["old_file_id"].get<ModFileID::TValue>();
+					NexusModFileUpdateReply& info = updatesMap.emplace(oldID, NexusModFileUpdateReply()).first->second;
 
-					info.OldID = value["old_file_id"].get<ModFileID::TValue>();
+					info.OldID = oldID;
 					info.NewID = value["new_file_id"].get<ModFileID::TValue>();
 
 					info.OldName = value["old_file_name"].get<wxString>();
@@ -378,7 +388,7 @@ namespace Kortex::NetworkManager
 				}
 			}
 
-			infoVector = {std::move(filesVector), std::move(updatesVector)};
+			infoVector = {std::move(filesMap), std::move(updatesMap)};
 		}
 		catch (...)
 		{

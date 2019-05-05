@@ -16,7 +16,7 @@ namespace Kortex
 
 	void IModNetwork::DoOnInit()
 	{
-		KxFile(GetCacheFolder()).CreateFolder();
+		KxFile(GetCacheDirectory()).CreateFolder();
 		OnInit();
 	}
 	void IModNetwork::DoOnExit()
@@ -34,11 +34,15 @@ namespace Kortex
 	{
 		return this == INetworkManager::GetInstance()->GetDefaultModNetwork();
 	}
-	wxString IModNetwork::GetCacheFolder() const
+	wxString IModNetwork::GetCacheDirectory() const
 	{
-		return INetworkManager::GetInstance()->GetCacheFolder() + '\\' + KAux::MakeSafeFileName(GetName());
+		return INetworkManager::GetInstance()->GetCacheDirectory() + wxS('\\') + KAux::MakeSafeFileName(GetName());
 	}
-	
+	wxString IModNetwork::GetLocationInCache(const wxString& relativePath) const
+	{
+		return GetCacheDirectory() + wxS('\\') + relativePath;
+	}
+
 	wxString IModNetwork::TranslateGameIDToNetwork(const GameID& id) const
 	{
 		return id.IsOK() ? id : INetworkManager::GetInstance()->GetConfig().GetNexusID();

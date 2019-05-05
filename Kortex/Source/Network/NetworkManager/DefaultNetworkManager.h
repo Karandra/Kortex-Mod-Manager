@@ -77,7 +77,7 @@ namespace Kortex::NetworkManager
 			{
 				return m_Config;
 			}
-			wxString GetCacheFolder() const override;
+			wxString GetCacheDirectory() const override;
 			
 			IModNetwork::Vector& GetModNetworks() override
 			{

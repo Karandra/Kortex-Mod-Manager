@@ -3,7 +3,7 @@
 #include "Network/Common.h"
 #include "Network/IModNetwork.h"
 #include "Network/ModNetworkAuth.h"
-#include "NexusModInfo.h"
+#include "NexusNetworkReply.h"
 #include <KxFramework/KxUUID.h>
 
 namespace KxWebSocket

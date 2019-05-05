@@ -568,6 +568,10 @@
 		<String ID="NetworkManager.QueryLimits.Description"><![CDATA[Этот индикатор отслеживает количество отправленных запросов к %1 и количество оставшееся запросов на текущий день и час. %1 API предоставляет ограниченное количество (пул) запросов в день и в час. Эти значения динамически обновляется каждый раз при выполнении запроса. Если пул запросов будет исчерпан, вы не сможете ставить в очередь загрузки, проверять обновления, запрашивать информацию о моде и так далее. Оба пула должны быть использованы до того, как это произойдет.]]></String>
 		<String ID="NetworkManager.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</String>
 
+		<String ID="NetworkManager.UpdateCheck.AutoCheckStarted">Начата автоматическая проверка обновлений модов</String>
+		<String ID="NetworkManager.UpdateCheck.AutoCheckDone">Автоматическая проверка обновлений мода завершена. Найдено обновлений: %1.</String>
+		<String ID="NetworkManager.UpdateCheck.AutoCheckQuoteReqched">Невозможно начать автоматическую проверка обновлений модов так как исчерпано доступное количество запросов</String>
+
 		<String ID="NetworkManager.Nexus.UserIsPremium">Премиум-пользователь</String>
 		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter-пользователь</String>
 		<String ID="NetworkManager.Nexus.APIKey">API-ключ</String>

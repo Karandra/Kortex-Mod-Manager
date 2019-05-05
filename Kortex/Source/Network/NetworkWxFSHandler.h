@@ -15,7 +15,7 @@ namespace Kortex::NetworkManager
 			INetworkManager& m_NetworkManager;
 
 		private:
-			wxString GetCacheFolder() const;
+			wxString GetCacheDirectory() const;
 			wxString ExtractFileName(const wxString& location) const;
 			wxString ConstructFullPath(const wxString& location) const;
 			wxFSFile* DoOpenFile(const wxString& location) const;

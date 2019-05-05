@@ -47,7 +47,8 @@ namespace Kortex
 
 		public:
 			bool IsDefault() const;
-			wxString GetCacheFolder() const;
+			wxString GetCacheDirectory() const;
+			wxString GetLocationInCache(const wxString& relativePath) const;
 			
 			virtual ResourceID GetIcon() const = 0;
 			virtual wxString GetName() const = 0;

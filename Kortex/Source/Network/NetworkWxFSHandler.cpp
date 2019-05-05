@@ -8,9 +8,9 @@
 
 namespace Kortex::NetworkManager
 {
-	wxString NetworkWxFSHandler::GetCacheFolder() const
+	wxString NetworkWxFSHandler::GetCacheDirectory() const
 	{
-		return m_NetworkManager.GetCacheFolder();
+		return m_NetworkManager.GetCacheDirectory();
 	}
 	wxString NetworkWxFSHandler::ExtractFileName(const wxString& location) const
 	{
@@ -18,7 +18,7 @@ namespace Kortex::NetworkManager
 	}
 	wxString NetworkWxFSHandler::ConstructFullPath(const wxString& location) const
 	{
-		return GetCacheFolder() + wxS('\\') + ExtractFileName(location);
+		return GetCacheDirectory() + wxS('\\') + ExtractFileName(location);
 	}
 	wxFSFile* NetworkWxFSHandler::DoOpenFile(const wxString& location) const
 	{
@@ -80,7 +80,7 @@ namespace Kortex::NetworkManager
 	NetworkWxFSHandler::NetworkWxFSHandler(INetworkManager& networkManager)
 		:m_NetworkManager(networkManager)
 	{
-		KxFile(GetCacheFolder()).CreateFolder();
+		KxFile(GetCacheDirectory()).CreateFolder();
 	}
 	NetworkWxFSHandler::~NetworkWxFSHandler()
 	{

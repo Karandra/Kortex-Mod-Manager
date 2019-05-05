@@ -13,14 +13,24 @@
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxIndexedEnum.h>
 #include <KxFramework/KxWebSocket.h>
+#include <KxFramework/KxCoroutine.h>
 
 namespace Kortex::NetworkManager
 {
 	void NexusModNetwork::OnAuthenticated()
 	{
-		IEvent::CallAfter([this]()
+		KxCoroutine::Run([this, wait = true](KxCoroutineBase& coroutine) mutable
 		{
-			m_UpdateChecker.CheckModUpdates();
+			if (wait)
+			{
+				wait = false;
+				return coroutine.YieldWaitSeconds(3);
+			}
+			else
+			{
+				m_UpdateChecker.DoRunUpdateCheck();
+				return coroutine.YieldStop();
+			}
 		});
 	}
 
@@ -59,7 +69,7 @@ namespace Kortex::NetworkManager
 	}
 	void NexusModNetwork::OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode)
 	{
-		m_UpdateChecker.OnLoadInstance(instance, networkNode);
+		m_UpdateChecker.OnLoadInstance(instance, networkNode.GetFirstChildElement(wxS("UpdateChecker")));
 	}
 
 	NexusModNetwork::NexusModNetwork()

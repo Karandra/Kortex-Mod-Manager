@@ -41,7 +41,7 @@ namespace Kortex::NetworkManager
 		using namespace Application;
 		
 		// Create cache folder first
-		KxFile(GetCacheFolder()).CreateFolder();
+		KxFile(GetCacheDirectory()).CreateFolder();
 
 		// Load default source
 		if (IModNetwork* modNetwork = GetModNetworkByName(GetAInstanceOption(OName::ModSource).GetAttribute(OName::Default)))
@@ -305,7 +305,7 @@ namespace Kortex::NetworkManager
 		CreateMenu();
 		UpdateButton();
 	}
-	wxString DefaultNetworkManager::GetCacheFolder() const
+	wxString DefaultNetworkManager::GetCacheDirectory() const
 	{
 		return IApplication::GetInstance()->GetUserSettingsFolder() + wxS("\\WebCache");
 	}

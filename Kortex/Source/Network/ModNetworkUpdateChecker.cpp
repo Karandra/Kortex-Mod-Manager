@@ -9,19 +9,11 @@ namespace Kortex
 		return gameMod.GetModSourceStore().GetItem(GetContainer());
 	}
 
-	bool ModNetworkUpdateChecker::HasNewVesion(const IGameMod& gameMod) const
+	NetworkModUpdateInfo ModNetworkUpdateChecker::GetUpdateInfo(const IGameMod& gameMod) const
 	{
 		if (const ModSourceItem* item = GetModSourceItemFromMod(gameMod))
 		{
-			return HasNewVesion(item->GetModInfo());
-		}
-		return false;
-	}
-	wxDateTime ModNetworkUpdateChecker::GetLastUpdateCheck(const IGameMod& gameMod) const
-	{
-		if (const ModSourceItem* item = GetModSourceItemFromMod(gameMod))
-		{
-			return GetLastUpdateCheck(item->GetModInfo());
+			return GetUpdateInfo(item->GetModInfo());
 		}
 		return {};
 	}

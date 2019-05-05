@@ -6,7 +6,7 @@
 #include "NexusRepository.h"
 #include "NexusUtility.h"
 #include "NexusAuth.h"
-#include "NexusModInfo.h"
+#include "NexusNetworkReply.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxUUID.h>
 class KxCURLEvent;

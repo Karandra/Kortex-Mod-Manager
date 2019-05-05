@@ -20,7 +20,7 @@ namespace Kortex::ModManager
 			if (const IModNetwork* modNetwork = item.GetModNetwork())
 			{
 				const ModNetworkUpdateChecker* checker = nullptr;
-				if (modNetwork->TryGetComponent(checker) && checker->HasNewVesion(item.GetModInfo()))
+				if (modNetwork->TryGetComponent(checker) && checker->GetUpdateInfo(item.GetModInfo()).AnyUpdated())
 				{
 					hasAnyUpdates = true;
 					return false;

@@ -1167,6 +1167,12 @@
     <ClCompile Include="Source\Network\ModNetworkUpdateChecker.cpp">
       <Filter>Code\Source\Network</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utility\DateTime.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\NetworkModUpdateInfo.cpp">
+      <Filter>Code\Source\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2180,9 +2186,6 @@
     <ClInclude Include="Source\Network\ModNetworkAuth.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusModInfo.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\ModNetwork\Nexus\Nexus.h">
       <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
     </ClInclude>
@@ -2218,6 +2221,15 @@
     </ClInclude>
     <ClInclude Include="Source\Network\ModNetworkUpdateChecker.h">
       <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkModUpdateInfo.h">
+      <Filter>Code\Headers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DateTime.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusNetworkReply.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

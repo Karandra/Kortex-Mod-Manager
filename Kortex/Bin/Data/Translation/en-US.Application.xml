@@ -563,6 +563,10 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.QueryLimits.Description"><![CDATA[This display tracks the number of queued requests to %1 and the remaining daily and hourly requests. The %1 API limits you to a pool of requests per day and requests per hour. It is dynamically updated every time a request is completed. If you run out of requests, you will be unable to queue downloads, check updates, query mod info and so on. Both pools must be consumed before this happens.]]></String>
 		<String ID="NetworkManager.RequestQuotaReched">Query limit to %1 has been reached for a period of time</String>
 
+		<String ID="NetworkManager.UpdateCheck.AutoCheckStarted">Automatic check for mods updates started</String>
+		<String ID="NetworkManager.UpdateCheck.AutoCheckDone">Automatic check for mod updates done. %1 mod(s) updated</String>
+		<String ID="NetworkManager.UpdateCheck.AutoCheckQuoteReqched">Unable to start the automatic mods update check because the available number of requests has been exhausted</String>
+		
 		<String ID="NetworkManager.Nexus.UserIsPremium">Premium user</String>
 		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter user</String>
 		<String ID="NetworkManager.Nexus.APIKey">API Key</String>

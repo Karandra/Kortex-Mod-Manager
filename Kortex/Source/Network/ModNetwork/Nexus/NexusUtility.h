@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Network/Common.h"
 #include "Network/IModNetwork.h"
-#include "NexusModInfo.h"
+#include "NexusNetworkReply.h"
 #include <KxFramework/KxJSON.h>
 #include <KxFramework/KxHTTPStatusCode.h>
 class KxCURLReplyBase;

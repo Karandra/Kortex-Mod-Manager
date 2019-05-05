@@ -3,7 +3,7 @@
 #include "Network/Common.h"
 #include "Network/ModNetworkUpdateChecker.h"
 #include "Network/NetworkModInfo.h"
-#include <KxFramework/KxJSON.h>
+#include "NexusNetworkReply.h"
 #include <KxFramework/KxTimer.h>
 
 namespace Kortex
@@ -30,7 +30,8 @@ namespace Kortex::NetworkManager
 				Week,
 				Month
 			};
-			
+			using ActivityMap = std::unordered_map<ModID, NexusModActivityReply>;
+
 		private:
 			NexusModNetwork& m_Nexus;
 			NexusUtility& m_Utility;
@@ -39,36 +40,45 @@ namespace Kortex::NetworkManager
 			KxTimerMethod<NexusUpdateChecker> m_Timer;
 			wxTimeSpan m_TimeElapsed;
 			wxTimeSpan m_AutomaticCheckInterval;
-			KxJSONObject m_MonthlyModActivity;
-			std::unordered_map<NetworkModInfo, std::pair<wxDateTime, bool>> m_UpdateInfo;
+			std::unordered_map<NetworkModInfo, NetworkModUpdateInfo> m_UpdateInfo;
+
+			std::optional<ActivityMap> m_MonthlyModActivity;
+			wxDateTime m_MonthlyModActivityDate;
+			bool m_UpdateCheckInProgress = false;
 
 		private:
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode);
 
 			wxString ModActivityToString(ModActivity interval) const;
-			wxString GetModsActivityFor(ModActivity interval);
-			const KxJSONObject* GetOrQueryActivity(ModActivity interval);
+			std::optional<ActivityMap> GetModsActivityFor(ModActivity interval) const;
 
-			void CheckModUpdates();
+			void DoRunUpdateCheckEntry(std::optional<OnUpdateEvent> onUpdate, size_t& updatesCount);
+			bool DoRunUpdateCheck(std::optional<OnUpdateEvent> onUpdate = {}, std::optional<OnUpdateDoneEvent> onDone = {});
 
 		private:
 			void OnInit() override;
 			void OnUninit() override;
 			void OnTimer();
 
+			wxString GetUpdateInfoFile() const;
+			bool SaveUpdateInfo();
+			bool LoadUpdateInfo();
+
+			NetworkModUpdateInfo* GetUpdateInfoPtr(const NetworkModInfo& modInfo);
+			const NetworkModUpdateInfo* GetUpdateInfoPtr(const NetworkModInfo& modInfo) const;
+
 		public:
 			NexusUpdateChecker(NexusModNetwork& nexus, NexusUtility& utility, NexusRepository& repository)
 				:m_Nexus(nexus), m_Utility(utility), m_Repository(repository)
 			{
 			}
-	
+			
 		public:
+			bool RunUpdateCheck(std::optional<OnUpdateEvent> onUpdate = {}, std::optional<OnUpdateDoneEvent> onDone = {}) override;
+			
 			bool IsAutomaticCheckAllowed() const override;
 			wxTimeSpan GetAutomaticCheckInterval() const override;
 
-			bool HasNewVesion(const NetworkModInfo& modInfo) const override;
-
-			wxDateTime GetLastUpdateCheck(const NetworkModInfo& modInfo) const override;
-			void SetLastUpdateCheck(const ModSourceItem& sourceItem, const wxDateTime& date, bool hasNewVersion);
+			NetworkModUpdateInfo GetUpdateInfo(const NetworkModInfo& modInfo) const override;
 	};
 }

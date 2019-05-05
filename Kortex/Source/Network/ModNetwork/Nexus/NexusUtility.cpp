@@ -15,7 +15,9 @@ namespace
 		inline static const TItem ms_Index[] =
 		{
 			{ModFileCategory::Main, wxS("MAIN")},
+			{ModFileCategory::Misc, wxS("MISCELLANEOUS")},
 			{ModFileCategory::Optional, wxS("OPTIONAL")},
+			{ModFileCategory::OldVersion, wxS("OLD_VERSION")},
 		};
 	};
 }

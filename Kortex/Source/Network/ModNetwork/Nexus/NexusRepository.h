@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Network/Common.h"
 #include "Network/ModNetworkRepository.h"
-#include "NexusModInfo.h"
+#include "NexusNetworkReply.h"
 #include <KxFramework/KxJSON.h>
 class KxCURLEvent;
 
@@ -24,7 +24,7 @@ namespace Kortex::NetworkManager
 				Week,
 				Month
 			};
-			using GetModFiles2Result = std::pair<std::vector<ModFileReply>, std::vector<NexusModFileUpdateReply>>;
+			using GetModFiles2Result = std::pair<std::unordered_map<ModFileID, ModFileReply>, std::unordered_map<ModFileID, NexusModFileUpdateReply>>;
 
 		private:
 			NexusModNetwork& m_Nexus;

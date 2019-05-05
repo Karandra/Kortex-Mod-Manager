@@ -74,7 +74,9 @@ namespace Kortex
 	{
 		Unknown = 0,
 		Main,
-		Optional
+		Misc,
+		Optional,
+		OldVersion,
 	};
 }
 

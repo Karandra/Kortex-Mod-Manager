@@ -116,7 +116,7 @@ namespace Kortex
 	}
 	bool IApplication::IsActive() const
 	{
-		GetSystemApp()->IsActive();
+		return GetSystemApp()->IsActive();
 	}
 
 	void IApplication::ExitApp(int exitCode)

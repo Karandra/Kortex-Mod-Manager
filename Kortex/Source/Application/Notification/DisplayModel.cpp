@@ -76,10 +76,10 @@ namespace Kortex::Notification
 	{
 		if (const INotification* notification = GetDataEntry(event.GetItem()))
 		{
+			INotificationCenter::GetInstance()->HideNotificationsWindow();
 			IEvent::CallAfter([notification]()
 			{
 				KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, notification->GetCaption(), notification->GetMessage());
-
 				dialog.SetMainIcon(notification->GetBitmap());
 				dialog.ShowModal();
 			});

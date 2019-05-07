@@ -8,10 +8,10 @@
 
 namespace
 {
-	using Kortex::ModFileCategory;
-
-	struct CategoryDef: public KxIndexedEnum::Definition<CategoryDef, ModFileCategory, wxString>
+	struct CategoryDef: public KxIndexedEnum::Definition<CategoryDef, Kortex::ModFileCategory, wxString>
 	{
+		using ModFileCategory = Kortex::ModFileCategory;
+
 		inline static const TItem ms_Index[] =
 		{
 			{ModFileCategory::Main, wxS("MAIN")},

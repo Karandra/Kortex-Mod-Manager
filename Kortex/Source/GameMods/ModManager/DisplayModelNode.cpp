@@ -12,23 +12,29 @@ namespace Kortex::ModManager
 	{
 		AttachChildren(m_Children);
 	}
-	bool DisplayModelModNode::HasAnyUpdates() const
+	std::pair<bool, bool> DisplayModelModNode::HasAnyNetworkUpdates() const
 	{
-		bool hasAnyUpdates = false;
-		m_Mod->GetModSourceStore().Visit([&hasAnyUpdates](const ModSourceItem& item)
+		bool anyUpdates = false;
+		bool anyDeletions = false;
+		m_Mod->GetModSourceStore().Visit([&anyUpdates, &anyDeletions](const ModSourceItem& item)
 		{
 			if (const IModNetwork* modNetwork = item.GetModNetwork())
 			{
 				const ModNetworkUpdateChecker* checker = nullptr;
-				if (modNetwork->TryGetComponent(checker) && checker->GetUpdateInfo(item.GetModInfo()).AnyUpdated())
+				if (modNetwork->TryGetComponent(checker))
 				{
-					hasAnyUpdates = true;
-					return false;
+					const NetworkModUpdateInfo info = checker->GetUpdateInfo(item.GetModInfo());
+					anyUpdates = info.AnyUpdated();
+					anyDeletions = info.AnyDeleted();
+
+					// Return early if have all results
+					return !(anyUpdates && anyDeletions);
 				}
 			}
 			return true;
 		});
-		return hasAnyUpdates;
+
+		return {anyUpdates, anyDeletions};
 	}
 
 	bool DisplayModelModNode::IsEnabled(const KxDataView2::Column& column) const
@@ -110,9 +116,17 @@ namespace Kortex::ModManager
 				case ColumnID::Version:
 				{
 					KxVersion version = m_Mod->GetVersion();
-					if (version.IsOK() && HasAnyUpdates())
+					if (version.IsOK())
 					{
-						return KxDataView2::BitmapTextValue(version, ImageProvider::GetBitmap(ImageResourceID::Exclamation));
+						auto [anyUpdates, anyDeletions] = HasAnyNetworkUpdates();
+						if (anyUpdates)
+						{
+							return KxDataView2::BitmapTextValue(version, ImageProvider::GetBitmap(ImageResourceID::InformationFrame));
+						}
+						else if (anyDeletions)
+						{
+							return KxDataView2::BitmapTextValue(version, ImageProvider::GetBitmap(ImageResourceID::Exclamation));
+						}
 					}
 					return version.ToString();
 				}

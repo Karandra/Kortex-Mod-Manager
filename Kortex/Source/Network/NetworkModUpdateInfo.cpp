@@ -18,14 +18,25 @@ namespace Kortex
 		{
 			node.NewElement(wxS("Version")).SetValue(m_Version);
 		}
-		node.NewElement(wxS("State")).SetValue(UpdateStateDef::ToString(m_State));
+
+		// State
+		KxXMLNode stateNode = node.NewElement(wxS("State"));
+		stateNode.SetValue(UpdateStateDef::ToString(m_State));
+
+		if (m_Details != UpdateDetails::None)
+		{
+			stateNode.SetAttribute(wxS("Details"), UpdateDetailsDef::ToOrExpression(m_Details));
+		}
 	}
 	void NetworkModUpdateInfo::Load(const KxXMLNode& node)
 	{
 		m_UpdateCheckDate.ParseISOCombined(node.GetFirstChildElement(wxS("UpdateCheckDate")).GetValue());
 		m_ActivityHash = static_cast<size_t>(node.GetFirstChildElement(wxS("ActivityHash")).GetValueInt());
 		m_Version = node.GetFirstChildElement(wxS("Version")).GetValue();
-		m_State = UpdateStateDef::FromString(node.GetFirstChildElement(wxS("State")).GetValue(), UpdateState::Unknown);
 
+		// State
+		const KxXMLNode detailsNode = node.GetFirstChildElement(wxS("State"));
+		m_State = UpdateStateDef::FromString(detailsNode.GetValue(), UpdateState::Unknown);
+		m_Details = UpdateDetailsDef::FromOrExpression(detailsNode.GetAttribute(wxS("Details")), UpdateDetails::None);
 	}
 }

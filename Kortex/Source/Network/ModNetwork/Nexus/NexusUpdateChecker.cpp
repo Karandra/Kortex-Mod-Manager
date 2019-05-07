@@ -109,7 +109,7 @@ namespace Kortex::NetworkManager
 
 		for (auto& gameMod: modManager->GetMods())
 		{
-			// Stop if we have used enough requests
+			// Stop if there are too little requests left
 			if (!m_Repository.IsAutomaticUpdateCheckAllowed())
 			{
 				INotificationCenter::GetInstance()->Notify(m_Nexus, KTrf("NetworkManager.RequestQuotaReched", m_Nexus.GetName()), KxICON_WARNING);
@@ -131,15 +131,14 @@ namespace Kortex::NetworkManager
 				updateInfo = &m_UpdateInfo.emplace(modInfo, NetworkModUpdateInfo()).first->second;
 			}
 
-			auto IsLastCheckOlderThanDays = [&currentDate, &updateInfo](int days)
+			auto IsLastCheckOlderThan = [&currentDate, &updateInfo](const wxTimeSpan& span)
 			{
 				const wxDateTime checkDate = updateInfo->GetUpdateCheckDate();
-				return !checkDate.IsValid() || Utility::DateTime::IsLaterThanBy(currentDate, checkDate, wxTimeSpan::Days(days));
+				return !checkDate.IsValid() || Utility::DateTime::IsLaterThanBy(currentDate, checkDate, span);
 			};
-			auto IsLastCheckNewerThan = [&currentDate, &updateInfo](const wxTimeSpan& span)
+			auto IsLastCheckOlderThanUpdateInterval = [this, &IsLastCheckOlderThan]()
 			{
-				const wxDateTime checkDate = updateInfo->GetUpdateCheckDate();
-				return !checkDate.IsValid() || Utility::DateTime::IsEarlierThanBy(currentDate, checkDate, span);
+				return IsLastCheckOlderThan(std::max(m_AutomaticCheckInterval, wxTimeSpan::Minutes(5)));
 			};
 
 			auto GetOrQueryModInfo = [this, &modInfoReplies](ModID id) -> const ModInfoReply*
@@ -210,6 +209,16 @@ namespace Kortex::NetworkManager
 							}
 							else
 							{
+								// Check if marked as old file
+								if (thisFileInfo.Category == ModFileCategory::OldVersion)
+								{
+									updateInfo->ModDetails(ModUpdateDetails::MarkedOld);
+								}
+								else
+								{
+									updateInfo->SetDetails(ModUpdateDetails::None);
+								}
+
 								// No updates available
 								OnUpdateChecked(ModUpdateState::NoUpdates, gameMod->GetVersion());
 							}
@@ -246,37 +255,26 @@ namespace Kortex::NetworkManager
 				}
 			};
 			
-			if (IsLastCheckOlderThanDays(30))
+			if (IsLastCheckOlderThan(wxTimeSpan::Days(30)))
 			{
-				if (const ModInfoReply* reply = GetOrQueryModInfo(modInfo.GetModID()))
-				{
-					CheckForSingleUpdate();
-				}
-				else
-				{
-					updateInfo->SetState(ModUpdateState::ModDeleted);
-					updateInfo->SetUpdateCheckDate(currentDate);
-				}
+				CheckForSingleUpdate();
 			}
-			else if (IsLastCheckNewerThan(std::max(m_AutomaticCheckInterval, wxTimeSpan::Minutes(5))))
+			else
 			{
 				auto it = m_MonthlyModActivity->find(modInfo.GetModID());
 				if (it != m_MonthlyModActivity->end())
 				{
 					const NexusModActivityReply& activity = it->second;
-					if (modInfo.HasFileID() && modInfo.GetFileID() == activity.LatestFileUpdate)
+					if (activity.LatestModActivity != updateInfo->GetActivityHash())
 					{
-						if (activity.LatestModActivity != updateInfo->GetActivityHash())
-						{
-							CheckForSingleUpdate();
-							updateInfo->SetActivityHash(activity.LatestModActivity);
-						}
-						else
-						{
-							// Skip full check but check date
-							updateInfo->SetUpdateCheckDate(currentDate);
-							LogMessage(wxS("Skipping full mod update check for \"%1\" because no new activity has beed detected"), gameMod->GetName());
-						}
+						CheckForSingleUpdate();
+						updateInfo->SetActivityHash(activity.LatestModActivity);
+					}
+					else
+					{
+						// Skip full check but check date
+						updateInfo->SetUpdateCheckDate(currentDate);
+						LogMessage(wxS("Skipping full mod update check for \"%1\" because no new activity has beed found"), gameMod->GetName());
 					}
 				}
 				else if (updateInfo->GetState() == ModUpdateState::Unknown)

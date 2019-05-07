@@ -17,7 +17,6 @@ namespace Kortex::NetworkManager
 		ModFileUpdated,
 		ModFileDeleted
 	};
-
 	struct ModUpdateStateDef: KxIndexedEnum::Definition<ModUpdateStateDef, ModUpdateState, wxString, true>
 	{
 		using UpdateState = ModUpdateState;
@@ -36,6 +35,36 @@ namespace Kortex::NetworkManager
 	};
 }
 
+namespace Kortex::NetworkManager
+{
+	enum class ModUpdateDetails
+	{
+		None = 0,
+		MarkedOld = 1 << 0,
+	};
+	inline constexpr ModUpdateDetails operator|(ModUpdateDetails left, ModUpdateDetails right)
+	{
+		using T = std::underlying_type_t<ModUpdateDetails>;
+		return static_cast<ModUpdateDetails>(static_cast<T>(left) | static_cast<T>(right));
+	}
+	inline constexpr bool operator&(ModUpdateDetails left, ModUpdateDetails right)
+	{
+		using T = std::underlying_type_t<ModUpdateDetails>;
+		return (static_cast<T>(left) & static_cast<T>(right)) != 0;
+	}
+
+	struct ModUpdateDetailsDef: KxIndexedEnum::Definition<ModUpdateDetailsDef, ModUpdateDetails, wxString, true>
+	{
+		using UpdateDetails = ModUpdateDetails;
+
+		inline static const TItem ms_Index[] =
+		{
+			{UpdateDetails::None, wxS("None")},
+			{UpdateDetails::MarkedOld, wxS("MarkedOld")},
+		};
+	};
+}
+
 namespace Kortex
 {
 	class NetworkModUpdateInfo
@@ -43,11 +72,15 @@ namespace Kortex
 		public:
 			using UpdateState = NetworkManager::ModUpdateState;
 			using UpdateStateDef = NetworkManager::ModUpdateStateDef;
+
+			using UpdateDetails = NetworkManager::ModUpdateDetails;
+			using UpdateDetailsDef = NetworkManager::ModUpdateDetailsDef;
 			
 		private:
 			KxVersion m_Version;
 			wxDateTime m_UpdateCheckDate;
 			UpdateState m_State = UpdateState::Unknown;
+			UpdateDetails m_Details = UpdateDetails::None;
 			size_t m_ActivityHash = 0;
 
 		public:
@@ -74,7 +107,7 @@ namespace Kortex
 			
 			bool AnyUpdated() const
 			{
-				return m_State == UpdateState::ModUpdated || m_State == UpdateState::ModFileUpdated;
+				return m_State == UpdateState::ModUpdated || m_State == UpdateState::ModFileUpdated || m_Details & UpdateDetails::MarkedOld;
 			}
 			bool AnyDeleted() const
 			{
@@ -89,6 +122,19 @@ namespace Kortex
 				m_State = state;
 			}
 			
+			UpdateDetails GetDetails() const
+			{
+				return m_Details;
+			}
+			void SetDetails(UpdateDetails details)
+			{
+				m_Details = details;
+			}
+			void ModDetails(UpdateDetails details)
+			{
+				m_Details = m_Details|details;
+			}
+
 			KxVersion GetVersion() const
 			{
 				return m_Version;

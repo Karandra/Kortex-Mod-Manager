@@ -32,6 +32,13 @@ namespace Kortex::NetworkManager
 		{
 			m_AutomaticCheckInterval = wxTimeSpan::Minutes(defaultIntervalMin);
 		}
+
+		// Start the timer
+		if (m_AutomaticCheckInterval.IsPositive())
+		{
+			m_Timer.BindFunction(&NexusUpdateChecker::OnTimer, this);
+			m_Timer.Start(m_AutomaticCheckInterval.GetMilliseconds().GetValue());
+		}
 	}
 
 	wxString NexusUpdateChecker::ModActivityToString(ModActivity interval) const
@@ -324,13 +331,6 @@ namespace Kortex::NetworkManager
 	void NexusUpdateChecker::OnInit()
 	{
 		LoadUpdateInfo();
-
-		// Start the timer
-		if (m_AutomaticCheckInterval.IsPositive())
-		{
-			m_Timer.BindFunction(&NexusUpdateChecker::OnTimer, this);
-			m_Timer.Start(m_AutomaticCheckInterval.GetMilliseconds().GetValue());
-		}
 	}
 	void NexusUpdateChecker::OnUninit()
 	{

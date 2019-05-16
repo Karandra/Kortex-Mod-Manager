@@ -1817,9 +1817,6 @@
     <ClInclude Include="Source\Application\IVariableTable.h">
       <Filter>Code\Headers\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\VariablesTable\VariableValueInternals.h">
-      <Filter>Code\Headers\Application\VariablesTable</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\VariablesTable\VariablesDatabase.h">
       <Filter>Code\Headers\Application\VariablesTable</Filter>
     </ClInclude>

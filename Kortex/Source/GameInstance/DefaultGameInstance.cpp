@@ -132,7 +132,7 @@ namespace Kortex::GameInstance
 	}
 	wxString DefaultGameInstance::GetGameDir() const
 	{
-		return GetVariables().GetVariable(Variables::KVAR_ACTUAL_GAME_DIR);
+		return GetVariables().GetVariable(Variables::KVAR_ACTUAL_GAME_DIR).AsString();
 	}
 	wxString DefaultGameInstance::GetVirtualGameDir() const
 	{
@@ -381,17 +381,21 @@ namespace Kortex::GameInstance
 				// Process depending on type
 				using Type = VariableValue::Type;
 
-				Type type = Type::None;
+				std::optional<Type> type = Type::String;
 				if (typeString == wxS("FSPath"))
 				{
 					type = Type::FSPath;
 					value = KxFile(value).GetPath();
 				}
+				else if (typeString == wxS("Integer"))
+				{
+					type = Type::Integer;
+				}
 
 				// Override mode
 				using Override = VariableValue::Override;
 
-				Override overrideMode = Override::DoNotChange;
+				std::optional<Override> overrideMode;
 				if (saveAsOverride)
 				{
 					overrideMode = Override::True;
@@ -460,7 +464,7 @@ namespace Kortex::GameInstance
 	void ConfigurableGameInstance::DetectGameArchitecture(const KxXMLDocument& instanceConfig)
 	{
 		IVariableTable& variables = GetVariables();
-		bool is64Bit = KxFile(variables.GetVariable("GameExecutable")).GetBinaryType() == KxFBF_WIN64;
+		bool is64Bit = KxFile(variables.GetVariable("GameExecutable").AsString()).GetBinaryType() == KxFBF_WIN64;
 
 		variables.SetVariable("GameArchitecture", KAux::ArchitectureToNumber(is64Bit));
 		variables.SetVariable("GameArchitectureName", KAux::ArchitectureToString(is64Bit));
@@ -554,7 +558,7 @@ namespace Kortex::GameInstance
 					}
 				};
 				
-				node.SetValue(value.GetValue());
+				node.SetValue(value.AsString());
 			}
 			return true;
 		});

@@ -400,7 +400,6 @@
     <ClInclude Include="Source\Application\Theme\Default.h" />
     <ClInclude Include="Source\Application\Theme\VisualStudio.h" />
     <ClInclude Include="Source\Application\ITranslator.h" />
-    <ClInclude Include="Source\Application\VariablesTable\VariableValueInternals.h" />
     <ClInclude Include="Source\Application\VariablesTable\VariableValue.h" />
     <ClInclude Include="Source\Application\VariablesTable\DynamicVariableTable.h" />
     <ClInclude Include="Source\Application\VariablesTable\StaticVariableTable.h" />

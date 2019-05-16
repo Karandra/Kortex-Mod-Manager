@@ -55,7 +55,7 @@ namespace Kortex::Application
 		// Revision variable
 		m_Variables.SetDynamicVariable(wxS("AppRevision"), [this]()
 		{
-			return m_Variables.GetVariable(wxS("AppCommitHash")).GetValue().Left(7);
+			return m_Variables.GetVariable(wxS("AppCommitHash")).AsString().Left(7);
 		});
 
 		// Setup paths

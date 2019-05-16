@@ -375,7 +375,7 @@ namespace Kortex::GameInstance
 		{
 			variables.Accept([this](const wxString& name, const VariableValue& value)
 			{
-				*m_TextBox << KxString::Format(wxS("$(%1)%2 = \"%3\"\r\n"), name, value.IsOverride() ? wxS("*") : wxS(""), value);
+				*m_TextBox << KxString::Format(wxS("$(%1)%2 = \"%3\"\r\n"), name, value.IsOverride() ? wxS("*") : wxS(""), value.AsString());
 				return true;
 			});
 		};

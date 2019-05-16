@@ -100,7 +100,7 @@ namespace Kortex
 						}
 						else
 						{
-							value = GetVariable(varName).GetValue();
+							value = GetVariable(varName).AsString();
 						}
 
 						if (!value.IsEmpty())

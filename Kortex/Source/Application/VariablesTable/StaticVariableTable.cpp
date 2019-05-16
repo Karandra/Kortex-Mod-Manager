@@ -22,7 +22,7 @@ namespace Kortex
 
 	bool StaticVariableTable::HasVariable(const wxString& id) const
 	{
-		return m_StaticVariables.count(id);
+		return m_StaticVariables.find(id) != m_StaticVariables.end();
 	}
 	VariableValue StaticVariableTable::GetVariable(const wxString& id) const
 	{
@@ -31,7 +31,7 @@ namespace Kortex
 		{
 			return it->second;
 		}
-		return VariableValue();
+		return {};
 	}
 	void StaticVariableTable::SetVariable(const wxString& id, const VariableValue& value)
 	{
@@ -40,12 +40,15 @@ namespace Kortex
 		{
 			VariableValue& variable = it->second;
 
-			variable.SetValue(value.GetValue());
-			if (value.GetOverride() != VariableValue::Override::DoNotChange)
+			// Change variable value
+			variable.Assign(value.AsString());
+
+			// Change attributes if we have asked to
+			if (value.GetRawOverride())
 			{
-				variable.SetOverride(value.GetOverride());
+				variable.SetOverride(value.IsOverride());
 			}
-			if (value.GetType() != VariableValue::Type::DoNotChange)
+			if (value.GetRawType())
 			{
 				variable.SetType(value.GetType());
 			}

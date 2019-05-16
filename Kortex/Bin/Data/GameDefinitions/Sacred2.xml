@@ -13,15 +13,9 @@
 		</Entry>
 		<Entry ID="ActualConfigDir">$SHF(SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
 
-		<!--<Entry ID="GameEditorName"></Entry>-->
-	</Variables>
-
-	<Network>
-		<NetworkManager>
-			<NexusID>Sacred2</NexusID>
-			<SteamID>225640</SteamID>
-		</NetworkManager>
-	</Network>
+		<Entry ID="SteamID" Type="Integer">225640</Entry>
+		<Entry ID="NexusDomainName">Sacred2</Entry>
+	</Variables>>
 	
 	<GameMods>
 		<ModManager>

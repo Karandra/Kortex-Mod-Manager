@@ -15,14 +15,11 @@
 		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
 		
 		<Entry ID="GameEditorName">Creation Kit</Entry>
-		<!--<Entry ID="ScriptExtenderID">F4SEVR</Entry>-->
-		<Entry ID="xEditID">fo4vr</Entry>
-	</Variables>
 
-	<Network>
-		<NexusID>Fallout4</NexusID>
-		<SteamID>611660</SteamID>
-	</Network>
+		<Entry ID="xEditID">fo4vr</Entry>
+		<Entry ID="SteamID" Type="Integer">611660</Entry>
+		<Entry ID="NexusDomainName">Fallout4</Entry>
+	</Variables>
 
 	<Virtualization>
 		<MirroredLocations>

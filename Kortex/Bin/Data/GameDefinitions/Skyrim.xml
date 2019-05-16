@@ -16,15 +16,11 @@
 		
 		<Entry ID="GameEditorName">Creation Kit</Entry>
 		<Entry ID="ScriptExtenderID">SKSE</Entry>
-		<Entry ID="xEditID">tes5</Entry>
-	</Variables>
 
-	<Network>
-		<NetworkManager>
-			<NexusID>Skyrim</NexusID>
-			<SteamID>72850</SteamID>
-		</NetworkManager>
-	</Network>
+		<Entry ID="xEditID">tes5</Entry>
+		<Entry ID="SteamID" Type="Integer">72850</Entry>
+		<Entry ID="NexusDomainName">Skyrim</Entry>
+	</Variables>
 
 	<Programs>
 		<ProgramManager>

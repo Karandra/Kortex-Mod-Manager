@@ -16,15 +16,11 @@
 		
 		<Entry ID="GameEditorName">Creation Kit</Entry>
 		<Entry ID="ScriptExtenderID">F4SE</Entry>
-		<Entry ID="xEditID">fo4</Entry>
-	</Variables>
 
-	<Network>
-		<NetworkManager>
-			<NexusID>Fallout4</NexusID>
-			<SteamID>377160</SteamID>
-		</NetworkManager>
-	</Network>
+		<Entry ID="xEditID">fo4</Entry>
+		<Entry ID="SteamID" Type="Integer">377160</Entry>
+		<Entry ID="NexusDomainName">Fallout4</Entry>
+	</Variables>
 	
 	<Programs>
 		<ProgramManager>

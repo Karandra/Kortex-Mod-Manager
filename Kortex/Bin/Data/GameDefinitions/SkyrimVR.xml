@@ -16,15 +16,11 @@
 		
 		<Entry ID="GameEditorName">Creation Kit</Entry>
 		<Entry ID="ScriptExtenderID">SKSEVR</Entry>
-		<Entry ID="xEditID">tes5vr</Entry>
-	</Variables>
 
-	<Network>
-		<NetworkManager>
-			<NexusID>SkyrimSpecialEdition</NexusID>
-			<SteamID>611670</SteamID>
-		</NetworkManager>
-	</Network>
+		<Entry ID="xEditID">tes5vr</Entry>
+		<Entry ID="SteamID" Type="Integer">611670</Entry>
+		<Entry ID="NexusDomainName">SkyrimSpecialEdition</Entry>
+	</Variables>
 
 	<GameMods>
 		<ModManager>

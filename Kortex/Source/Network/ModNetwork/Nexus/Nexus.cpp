@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Nexus.h"
 #include <Kortex/NetworkManager.hpp>
+#include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>
 #include "UI/KMainWindow.h"
@@ -14,6 +15,11 @@
 #include <KxFramework/KxIndexedEnum.h>
 #include <KxFramework/KxWebSocket.h>
 #include <KxFramework/KxCoroutine.h>
+
+namespace Kortex::Variables
+{
+	constexpr auto NexusDomainName = wxS("NexusDomainName");
+}
 
 namespace Kortex::NetworkManager
 {
@@ -95,80 +101,36 @@ namespace Kortex::NetworkManager
 	
 	wxString NexusModNetwork::TranslateGameIDToNetwork(const GameID& id) const
 	{
-		// If invalid ID is passed, return ID for current instance.
 		if (id.IsOK())
 		{
-			// TES
-			if (id == GameIDs::Morrowind)
+			for (const auto& instance: IGameInstance::GetShallowInstances())
 			{
-				return "Morrowind";
+				if (instance->GetGameID() == id)
+				{
+					return instance->GetVariables().GetVariable(Variables::NexusDomainName);
+				}
 			}
-			if (id == GameIDs::Oblivion)
-			{
-				return "Oblivion";
-			}
-			if (id == GameIDs::Skyrim)
-			{
-				return "Skyrim";
-			}
-			if (id == GameIDs::SkyrimSE)
-			{
-				return "SkyrimSpecialEdition";
-			}
-
-			// Fallout
-			if (id == GameIDs::Fallout3)
-			{
-				return "Fallout3";
-			}
-			if (id == GameIDs::FalloutNV)
-			{
-				return "NewVegas";
-			}
-			if (id == GameIDs::Fallout4)
-			{
-				return "Fallout4";
-			}
+			return {};
 		}
-		return IModNetwork::TranslateGameIDToNetwork(id);
+		else
+		{
+			// If invalid ID is passed, return ID for current game
+			return IGameInstance::GetActive()->GetVariables().GetVariable(Variables::NexusDomainName);
+		}
 	}
 	GameID NexusModNetwork::TranslateGameIDFromNetwork(const wxString& id) const
 	{
 		if (!id.IsEmpty())
 		{
-			// TES
-			if (KxComparator::IsEqual(id, "morrowind"))
+			for (const auto& instance: IGameInstance::GetShallowInstances())
 			{
-				return GameIDs::Morrowind;
-			}
-			if (KxComparator::IsEqual(id, "oblivion"))
-			{
-				return GameIDs::Oblivion;
-			}
-			if (KxComparator::IsEqual(id, "skyrim"))
-			{
-				return GameIDs::Skyrim;
-			}
-			if (KxComparator::IsEqual(id, "skyrimse"))
-			{
-				return GameIDs::SkyrimSE;
-			}
-
-			// Fallout
-			if (KxComparator::IsEqual(id, "fallout3"))
-			{
-				return GameIDs::Fallout3;
-			}
-			if (KxComparator::IsEqual(id, "falloutnv"))
-			{
-				return GameIDs::FalloutNV;
-			}
-			if (KxComparator::IsEqual(id, "fallout4"))
-			{
-				return GameIDs::Fallout4;
+				if (instance->GetVariables().GetVariable(Variables::NexusDomainName) == id)
+				{
+					return instance->GetGameID();
+				}
 			}
 		}
-		return GameIDs::NullGameID;
+		return {};
 	}
 	void NexusModNetwork::ConvertDescriptionText(wxString& description) const
 	{

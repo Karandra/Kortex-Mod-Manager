@@ -16,15 +16,11 @@
 		
 		<Entry ID="GameEditorName">GECK</Entry>
 		<Entry ID="ScriptExtenderID">FOSE</Entry>
-		<Entry ID="xEditID">fo3</Entry>
-	</Variables>
 
-	<Network>
-		<NetworkManager>
-			<NexusID>Fallout3</NexusID>
-			<SteamID>22370</SteamID>
-		</NetworkManager>
-	</Network>
+		<Entry ID="xEditID">fo3</Entry>
+		<Entry ID="SteamID" Type="Integer">22370</Entry>
+		<Entry ID="NexusDomainName">Fallout3</Entry>
+	</Variables>
 
 	<GameMods>
 		<ModManager>

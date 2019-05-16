@@ -16,7 +16,10 @@
 		
 		<Entry ID="GameEditorName">GECK</Entry>
 		<Entry ID="ScriptExtenderID">NVSE</Entry>
+
 		<Entry ID="xEditID">fnv</Entry>
+		<Entry ID="SteamID" Type="Integer">22490</Entry>
+		<Entry ID="NexusDomainName">NewVegas</Entry>
 
 		<!-- INI -->
 		<Entry ID="FalloutNVINI">$(ConfigRootLocal)\Fallout.ini</Entry>
@@ -30,13 +33,6 @@
 		<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderID)_Loader.exe</Entry>
 		<Entry ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Entry>
 	</Variables>
-
-	<Network>
-		<NetworkManager>
-			<NexusID>NewVegas</NexusID>
-			<SteamID>22490</SteamID>
-		</NetworkManager>
-	</Network>
 
 	<Virtualization>
 		<MirroredLocations>

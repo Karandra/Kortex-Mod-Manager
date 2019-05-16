@@ -15,16 +15,11 @@
 		<Entry ID="ActualSavesDir">$(ActualGameDir)\Saves</Entry>
 
 		<Entry ID="GameEditorName">Construction Set</Entry>
-		<!--<Entry ID="ScriptExtenderID">MWSE</Entry>-->
-		<Entry ID="xEditID">tes3</Entry>
-	</Variables>
 
-	<Network>
-		<NetworkManager>
-			<NexusID>Morrowind</NexusID>
-			<SteamID>22320</SteamID>
-		</NetworkManager>
-	</Network>
+		<Entry ID="xEditID">tes3</Entry>
+		<Entry ID="SteamID" Type="Integer">22320</Entry>
+		<Entry ID="NexusDomainName">Morrowind</Entry>
+	</Variables>
 
 	<Programs>
 		<ProgramManager>

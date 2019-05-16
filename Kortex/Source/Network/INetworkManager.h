@@ -59,7 +59,6 @@ namespace Kortex
 			INetworkManager();
 
 		public:
-			virtual const NetworkManager::Config& GetConfig() const = 0;
 			virtual wxString GetCacheDirectory() const = 0;
 			
 			virtual IModNetwork::Vector& GetModNetworks() = 0;

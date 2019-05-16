@@ -16,15 +16,11 @@
 		
 		<Entry ID="GameEditorName">Construction Set</Entry>
 		<Entry ID="ScriptExtenderID">OBSE</Entry>
+
 		<Entry ID="xEditID">tes4</Entry>
+		<Entry ID="SteamID" Type="Integer">22330</Entry>
+		<Entry ID="NexusDomainName">Oblivion</Entry>
 	</Variables>
-	
-	<Network>
-		<NetworkManager>
-			<NexusID>Oblivion</NexusID>
-			<SteamID>22330</SteamID>
-		</NetworkManager>
-	</Network>
 
 	<Programs>
 		<ProgramManager>

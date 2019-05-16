@@ -42,9 +42,4 @@ namespace Kortex
 	{
 		return GetCacheDirectory() + wxS('\\') + relativePath;
 	}
-
-	wxString IModNetwork::TranslateGameIDToNetwork(const GameID& id) const
-	{
-		return id.IsOK() ? id : INetworkManager::GetInstance()->GetConfig().GetNexusID();
-	}
 }

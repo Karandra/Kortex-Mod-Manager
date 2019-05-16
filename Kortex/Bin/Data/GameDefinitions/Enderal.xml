@@ -16,15 +16,11 @@
 		
 		<Entry ID="GameEditorName">Creation Kit</Entry>
 		<Entry ID="ScriptExtenderID">SKSE</Entry>
-		<Entry ID="xEditID">enderal</Entry>
-	</Variables>
 
-	<Network>
-		<NetworkManager>
-			<NexusID>Enderal</NexusID>
-			<SteamID>933480</SteamID>
-		</NetworkManager>
-	</Network>
+		<Entry ID="xEditID">enderal</Entry>
+		<Entry ID="SteamID" Type="Integer">933480</Entry>
+		<Entry ID="NexusDomainName">Enderal</Entry>
+	</Variables>
 
 	<Programs>
 		<ProgramManager>

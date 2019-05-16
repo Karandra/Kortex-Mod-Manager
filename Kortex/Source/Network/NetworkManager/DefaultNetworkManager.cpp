@@ -63,9 +63,6 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
-		// Load manager config
-		m_Config.OnLoadInstance(instance, managerNode);
-
 		// Create sources
 		m_ModNetworks.reserve(3);
 		AddModNetwork<NexusModNetwork>(m_ModNetworks);
@@ -337,18 +334,5 @@ namespace Kortex::NetworkManager
 			return TESALLModNetwork::GetInstance();
 		}
 		return FindModNetwork(name);
-	}
-}
-
-namespace Kortex::NetworkManager
-{
-	void Config::OnLoadInstance(IGameInstance& profile, const KxXMLNode& node)
-	{
-		m_NexusID = node.GetFirstChildElement("NexusID").GetValue();
-		m_SteamID = node.GetFirstChildElement("SteamID").GetValueInt(m_SteamID);
-	}
-	wxString Config::GetNexusID() const
-	{
-		return KVarExp(m_NexusID);
 	}
 }

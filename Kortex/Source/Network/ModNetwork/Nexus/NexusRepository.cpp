@@ -303,7 +303,7 @@ namespace Kortex::NetworkManager
 		NexusNXMLinkData nxmExtraInfo;
 		if (request.GetExtraInfo(nxmExtraInfo))
 		{
-			query += KxString::Format("?key=%1&expires=%2", nxmExtraInfo.Key, nxmExtraInfo.Expires);
+			query += KxString::Format("?key=%1&expires=%2&user_id=%3", nxmExtraInfo.Key, nxmExtraInfo.Expires, nxmExtraInfo.UserID);
 		}
 		auto connection = m_Nexus.NewCURLSession(query);
 

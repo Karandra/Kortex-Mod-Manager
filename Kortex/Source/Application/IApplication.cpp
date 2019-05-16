@@ -3,6 +3,7 @@
 #include "SystemApplication.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>
+#include "UI/KMainWindow.h"
 #include "Archive/KArchive.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxSystem.h>
@@ -116,7 +117,8 @@ namespace Kortex
 	}
 	bool IApplication::IsActive() const
 	{
-		return GetSystemApp()->IsActive();
+		const KMainWindow* mainWindow = KMainWindow::GetInstance();
+		return GetSystemApp()->IsActive() && mainWindow && mainWindow == GetActiveWindow() && mainWindow->HasFocus();
 	}
 
 	void IApplication::ExitApp(int exitCode)

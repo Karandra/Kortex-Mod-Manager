@@ -60,7 +60,10 @@ namespace Kortex::DownloadManager
 
 	void DefaultDownloadEntry::OnDownload(KxCURLEvent& event)
 	{
-		m_Thread->TestDestroy();
+		if (m_Thread->TestDestroy() && m_Session)
+		{
+			m_Session->Stop();
+		}
 		KxCURLStreamReply& reply = static_cast<KxCURLStreamReply&>(event.GetReply());
 
 		// Update file size. Nexus reports file size in KB, so initial info maybe
@@ -109,7 +112,10 @@ namespace Kortex::DownloadManager
 			m_Session->Bind(KxEVT_CURL_DOWNLOAD, &DefaultDownloadEntry::OnDownload, this);
 
 			// Initial view update
-			IDownloadManager::GetInstance()->OnChangeEntry(*this, true);
+			IEvent::CallAfter([this]()
+			{
+				IDownloadManager::GetInstance()->OnChangeEntry(*this, true);
+			});
 
 			// Begin download, blocking operation.
 			m_TimeStamp = GetClockTime();
@@ -119,7 +125,10 @@ namespace Kortex::DownloadManager
 			// Notify result
 			if (!m_Session->IsStopped() && reply.IsOK() && m_DownloadedSize == m_Stream->GetLength())
 			{
-				IDownloadManager::GetInstance()->OnDownloadComplete(*this);
+				IEvent::CallAfter([this]()
+				{
+					IDownloadManager::GetInstance()->OnDownloadComplete(*this);
+				});
 				return;
 			}
 		}
@@ -127,11 +136,17 @@ namespace Kortex::DownloadManager
 		m_IsFailed = true;
 		if (m_Session && m_Session->IsStopped())
 		{
-			IDownloadManager::GetInstance()->OnDownloadStopped(*this);
+			IEvent::CallAfter([this]()
+			{
+				IDownloadManager::GetInstance()->OnDownloadStopped(*this);
+			});
 		}
 		else
 		{
-			IDownloadManager::GetInstance()->OnDownloadFailed(*this);
+			IEvent::CallAfter([this]()
+			{
+				IDownloadManager::GetInstance()->OnDownloadFailed(*this);
+			});
 		}
 	}
 

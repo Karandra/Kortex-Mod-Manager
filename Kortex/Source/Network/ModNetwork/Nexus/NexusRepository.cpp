@@ -24,7 +24,7 @@ namespace Kortex::NetworkManager
 	void NexusRepository::OnResponseHeader(KxCURLEvent& event)
 	{
 		event.Skip();
-		const wxString headerName = event.GetHeaderKey();
+		const wxString headerName = event.GetHeaderName();
 
 		auto ToInt = [&event]() -> std::optional<int>
 		{

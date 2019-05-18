@@ -155,8 +155,7 @@ namespace Kortex::ModManager
 	}
 
 	DefaultModManager::DefaultModManager()
-		:m_VFS(*this),
-		m_BaseGame(std::numeric_limits<int>::min()), m_WriteTarget(std::numeric_limits<int>::max())
+		:m_VFS(*this), m_BaseGame(-65535), m_WriteTarget(65535)
 	{
 	}
 

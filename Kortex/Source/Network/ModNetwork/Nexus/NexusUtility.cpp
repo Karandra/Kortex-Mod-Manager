@@ -45,7 +45,7 @@ namespace Kortex::NetworkManager
 				}
 				else
 				{
-					ReportRequestError(message);
+					ReportRequestError(message.IsEmpty() ? reply.GetErrorMessage() : message);
 				}
 			}
 		}
@@ -141,7 +141,7 @@ namespace Kortex::NetworkManager
 		}
 		catch (...)
 		{
-			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message.IsEmpty() ? message : KTr(KxID_ERROR), KxICON_ERROR);
+			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message, KxICON_ERROR);
 		}
 	}
 	void NexusUtility::ReportRequestQuoteReached() const

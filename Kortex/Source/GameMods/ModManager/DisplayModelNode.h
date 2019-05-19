@@ -4,13 +4,13 @@
 
 namespace Kortex
 {
+	class IModNetwork;
 	class IGameMod;
 	class IModTag;
 }
 namespace Kortex::ModManager
 {
 	class DisplayModel;
-
 	class PriorityGroup;
 	class FixedGameMod;
 }
@@ -52,7 +52,7 @@ namespace Kortex::ModManager
 
 		private:
 			void OnAttachNode();
-			std::pair<bool, bool> HasAnyNetworkUpdates() const;
+			std::pair<bool, bool> HasAnyNetworkUpdates(std::vector<IModNetwork*>* networks = nullptr) const;
 
 		public:
 			DisplayModelModNode(IGameMod& mod)
@@ -65,6 +65,7 @@ namespace Kortex::ModManager
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
 			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
 
+			KxDataView2::ToolTip GetToolTip(const KxDataView2::Column& column) const override;
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			wxAny GetValue(const KxDataView2::Column& column, const PriorityGroup& priorityGroup) const;
 			wxAny GetValue(const KxDataView2::Column& column, const FixedGameMod& fixedGameMod) const;

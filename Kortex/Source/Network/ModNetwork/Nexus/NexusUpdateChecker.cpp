@@ -336,9 +336,9 @@ namespace Kortex::NetworkManager
 	{
 		m_Timer.Stop();
 	}
-	void NexusUpdateChecker::OnTimer()
+	void NexusUpdateChecker::OnTimer(wxTimerEvent& event)
 	{
-		m_TimeElapsed += wxTimeSpan::Milliseconds(m_Timer.GetInterval());
+		m_TimeElapsed += wxTimeSpan::Milliseconds(event.GetInterval());
 
 		if (IApplication::GetInstance()->IsActive() && IsAutomaticCheckAllowed())
 		{

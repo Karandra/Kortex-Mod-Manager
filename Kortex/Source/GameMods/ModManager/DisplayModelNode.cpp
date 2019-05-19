@@ -12,23 +12,30 @@ namespace Kortex::ModManager
 	{
 		AttachChildren(m_Children);
 	}
-	std::pair<bool, bool> DisplayModelModNode::HasAnyNetworkUpdates() const
+	std::pair<bool, bool> DisplayModelModNode::HasAnyNetworkUpdates(std::vector<IModNetwork*>* networks) const
 	{
 		bool anyUpdates = false;
 		bool anyDeletions = false;
-		m_Mod->GetModSourceStore().Visit([&anyUpdates, &anyDeletions](const ModSourceItem& item)
+		m_Mod->GetModSourceStore().Visit([networks, &anyUpdates, &anyDeletions](const ModSourceItem& item)
 		{
-			if (const IModNetwork* modNetwork = item.GetModNetwork())
+			if (IModNetwork* modNetwork = item.GetModNetwork())
 			{
-				const ModNetworkUpdateChecker* checker = nullptr;
+				ModNetworkUpdateChecker* checker = nullptr;
 				if (modNetwork->TryGetComponent(checker))
 				{
 					const NetworkModUpdateInfo info = checker->GetUpdateInfo(item.GetModInfo());
-					anyUpdates = info.AnyUpdated();
-					anyDeletions = info.AnyDeleted();
+					anyUpdates = anyUpdates || info.AnyUpdated();
+					anyDeletions = anyDeletions || info.AnyDeleted();
 
-					// Return early if have all results
-					return !(anyUpdates && anyDeletions);
+					if (networks)
+					{
+						networks->push_back(modNetwork);
+					}
+					else
+					{
+						// Return early if we have all results
+						return !(anyUpdates && anyDeletions);
+					}
 				}
 			}
 			return true;
@@ -80,6 +87,54 @@ namespace Kortex::ModManager
 		return GetValue(column);
 	}
 	
+	KxDataView2::ToolTip DisplayModelModNode::GetToolTip(const KxDataView2::Column& column) const
+	{
+		if (!m_Mod->QueryInterface<PriorityGroup>() && !m_Mod->QueryInterface<FixedGameMod>())
+		{
+			switch (column.GetID<ColumnID>())
+			{
+				case ColumnID::Version:
+				{
+					std::vector<IModNetwork*> networks;
+					auto [anyUpdates, anyDeletions] = HasAnyNetworkUpdates(&networks);
+					auto FormatNames = [&networks]()
+					{
+						wxString names;
+						for (const IModNetwork* network: networks)
+						{
+							if (!names.IsEmpty())
+							{
+								names += wxS(", ");
+							}
+							names += network->GetName();
+						}
+						return names;
+					};
+
+					if (anyUpdates)
+					{
+						return
+						{
+							KTr("NetworkManager.UpdateTooltip.Caption"),
+							KTrf("NetworkManager.UpdateTooltip.AnyUpdates", FormatNames()),
+							KxICON_INFORMATION
+						};
+					}
+					else if (anyDeletions)
+					{
+						return
+						{
+							KTr("NetworkManager.UpdateTooltip.Caption"),
+							KTrf("NetworkManager.UpdateTooltip.AnyDeletions", FormatNames()),
+							KxICON_WARNING
+						};
+					}
+					break;
+				}
+			};
+		}
+		return KxDataView2::Node::GetToolTip(column);
+	}
 	wxAny DisplayModelModNode::GetValue(const KxDataView2::Column& column) const
 	{
 		if (const PriorityGroup* priorityGroup = m_Mod->QueryInterface<PriorityGroup>())

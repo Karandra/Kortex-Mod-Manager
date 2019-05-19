@@ -571,6 +571,10 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter user</String>
 		<String ID="NetworkManager.Nexus.APIKey">API Key</String>
 
+		<String ID="NetworkManager.UpdateTooltip.Caption">Updates information available</String>
+		<String ID="NetworkManager.UpdateTooltip.AnyUpdates">There's a new version of this mod available on %1</String>
+		<String ID="NetworkManager.UpdateTooltip.AnyDeletions">This mod was not found on %1</String>
+
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Download manager</String>
 		<String ID="DownloadManager.NameShort">Downloads</String>

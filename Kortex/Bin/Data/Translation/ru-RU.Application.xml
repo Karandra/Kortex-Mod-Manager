@@ -576,6 +576,10 @@
 		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter-пользователь</String>
 		<String ID="NetworkManager.Nexus.APIKey">API-ключ</String>
 
+		<String ID="NetworkManager.UpdateTooltip.Caption">Доступна информация об обновленииях</String>
+		<String ID="NetworkManager.UpdateTooltip.AnyUpdates">Новая версия этого мода доступна на %1</String>
+		<String ID="NetworkManager.UpdateTooltip.AnyDeletions">Этот мод не был найден на %1</String>
+
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>
 		<String ID="DownloadManager.NameShort">Загрузки</String>

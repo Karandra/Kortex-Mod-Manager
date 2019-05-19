@@ -58,7 +58,7 @@ namespace Kortex::NetworkManager
 		private:
 			void OnInit() override;
 			void OnUninit() override;
-			void OnTimer();
+			void OnTimer(wxTimerEvent& event);
 
 			wxString GetUpdateInfoFile() const;
 			bool SaveUpdateInfo();

@@ -57,6 +57,14 @@ namespace
 		}
 		return wxEmptyString;
 	}
+	KxVFS::KxDynamicStringW GetServiceName()
+	{
+		if (KxVFS::FileSystemService::IsDokanyDefaultInstallPresent())
+		{
+			return KxVFS::FileSystemService::GetDokanyDefaultServiceName();
+		}
+		return L"KortexVFS";
+	}
 }
 
 namespace Kortex::VirtualFileSystem
@@ -68,7 +76,7 @@ namespace Kortex::VirtualFileSystem
 			case RequestID::Exit:
 			{
 				// If the window wasn't displayed, it won't cause app exit when closed.
-				// So show it once,the window will be destroyed right after anyway.
+				// So show it once, the window will be destroyed right after anyway.
 				m_RecievingWindow->Show();
 				m_RecievingWindow->Destroy();
 				break;
@@ -103,7 +111,7 @@ namespace Kortex::VirtualFileSystem
 
 			case RequestID::CreateFS:
 			{
-				auto[id] = message.DeserializePayload<FileSystemID>();
+				auto [id] = message.DeserializePayload<FileSystemID>();
 
 				IPC::FSHandle handle = CreateFS(id);
 				message.SerializePayload(handle);
@@ -111,14 +119,14 @@ namespace Kortex::VirtualFileSystem
 			}
 			case RequestID::DestroyFS:
 			{
-				auto[handle] = message.DeserializePayload<IPC::FSHandle>();
+				auto [handle] = message.DeserializePayload<IPC::FSHandle>();
 				DestroyFS(GetFileSystemByHandle(handle));
 				break;
 			}
 
 			case RequestID::FSEnable:
 			{
-				auto[handle] = message.DeserializePayload<IPC::FSHandle>();
+				auto [handle] = message.DeserializePayload<IPC::FSHandle>();
 
 				KxVFS::IFileSystem& vfs = GetFileSystemByHandle(handle);
 				message.SerializePayload(vfs.Mount().GetCode());
@@ -126,7 +134,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			case RequestID::FSDisable:
 			{
-				auto[handle] = message.DeserializePayload<IPC::FSHandle>();
+				auto [handle] = message.DeserializePayload<IPC::FSHandle>();
 
 				KxVFS::IFileSystem& vfs = GetFileSystemByHandle(handle);
 				message.SerializePayload(vfs.UnMount());
@@ -135,7 +143,7 @@ namespace Kortex::VirtualFileSystem
 
 			case RequestID::FSGetMountPoint:
 			{
-				auto[handle] = message.DeserializePayload<IPC::FSHandle>();
+				auto [handle] = message.DeserializePayload<IPC::FSHandle>();
 
 				KxVFS::IFileSystem& vfs = GetFileSystemByHandle(handle);
 				message.SerializePayload(ToWxString(vfs.GetMountPoint()));
@@ -143,7 +151,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			case RequestID::FSSetMountPoint:
 			{
-				auto[handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
+				auto [handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
 
 				KxVFS::IFileSystem& vfs = GetFileSystemByHandle(handle);
 				vfs.SetMountPoint(ToKxDynamicStringRef(path));
@@ -152,7 +160,7 @@ namespace Kortex::VirtualFileSystem
 
 			case RequestID::FSSetWriteTarget:
 			{
-				auto[handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
+				auto [handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
 
 				auto& vfs = GetFileSystemByHandle<KxVFS::ConvergenceFS>(handle);
 				vfs.SetWriteTarget(ToKxDynamicStringRef(path));
@@ -160,7 +168,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			case RequestID::FSSetSource:
 			{
-				auto[handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
+				auto [handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
 
 				auto& vfs = GetFileSystemByHandle<KxVFS::MirrorFS>(handle);
 				vfs.SetSource(ToKxDynamicStringRef(path));
@@ -168,7 +176,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			case RequestID::FSBuildFileTree:
 			{
-				auto[handle] = message.DeserializePayload<IPC::FSHandle>();
+				auto [handle] = message.DeserializePayload<IPC::FSHandle>();
 
 				auto& vfs = GetFileSystemByHandle<KxVFS::ConvergenceFS>(handle);
 				message.SerializePayload(vfs.BuildFileTree());
@@ -176,7 +184,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			case RequestID::FSAddVirtualFolder:
 			{
-				auto[handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
+				auto [handle, path] = message.DeserializePayload<IPC::FSHandle, wxString>();
 
 				auto& vfs = GetFileSystemByHandle<KxVFS::ConvergenceFS>(handle);
 				vfs.AddVirtualFolder(ToKxDynamicStringRef(path));
@@ -185,7 +193,7 @@ namespace Kortex::VirtualFileSystem
 
 			case RequestID::FSEnableAsyncIO:
 			{
-				auto[handle, value] = message.DeserializePayload<IPC::FSHandle, bool>();
+				auto [handle, value] = message.DeserializePayload<IPC::FSHandle, bool>();
 
 				auto& vfs = GetFileSystemByHandle<KxVFS::MirrorFS>(handle);
 				vfs.GetIOManager().EnableAsyncIO(value);
@@ -193,7 +201,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			case RequestID::FSEnableExtendedSecurity:
 			{
-				auto[handle, value] = message.DeserializePayload<IPC::FSHandle, bool>();
+				auto [handle, value] = message.DeserializePayload<IPC::FSHandle, bool>();
 
 				auto& vfs = GetFileSystemByHandle<KxVFS::MirrorFS>(handle);
 				vfs.EnableExtendedSecurity(value);
@@ -201,7 +209,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			case RequestID::FSEnableImpersonateCallerUser:
 			{
-				auto[handle, value] = message.DeserializePayload<IPC::FSHandle, bool>();
+				auto [handle, value] = message.DeserializePayload<IPC::FSHandle, bool>();
 
 				auto& vfs = GetFileSystemByHandle<KxVFS::MirrorFS>(handle);
 				vfs.EnableImpersonateCallerUser(value);
@@ -275,7 +283,7 @@ namespace Kortex::VirtualFileSystem
 	}
 
 	FSControllerService::FSControllerService()
-		:FileSystemService(L"KortexVFS")
+		:FileSystemService(::GetServiceName())
 	{
 	}
 	FSControllerService::~FSControllerService()
@@ -284,14 +292,21 @@ namespace Kortex::VirtualFileSystem
 
 	bool FSControllerService::Install()
 	{
-		const constexpr wxChar name[] = wxS("Kortex Mod Manager");
-		const wxString displayName = KxString::Format("%1 Virtual File System Service", name);
-		const wxString description = KxString::Format("The VFS service provides support for the virtual file system for %1", name);
+		if (FileSystemService::IsDokanyDefaultInstallPresent())
+		{
+			return true;
+		}
+		else
+		{
+			const constexpr wxChar name[] = wxS("Kortex Mod Manager");
+			const wxString displayName = KxString::Format("%1 Virtual File System Service", name);
+			const wxString description = KxString::Format("The VFS service provides support for the virtual file system for %1", name);
 
-		return KxVFS::FileSystemService::Install(ToKxDynamicStringRef(GetDriverPath()),
-												 ToKxDynamicStringRef(displayName),
-												 ToKxDynamicStringRef(description)
-		);
+			return FileSystemService::Install(ToKxDynamicStringRef(GetDriverPath()),
+											  ToKxDynamicStringRef(displayName),
+											  ToKxDynamicStringRef(description)
+			);
+		}
 	}
 	bool FSControllerService::Uninstall()
 	{

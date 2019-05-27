@@ -196,14 +196,8 @@ namespace Kortex::GameInstance
 			// Reload after task is completed (successfully or not)
 			operation->OnEnd([this, &newProfile](KOperationWithProgressBase* self)
 			{
-				{
-					ProfileEvent* event = new ProfileEvent(Events::ProfileAdded, newProfile);
-					event->Queue();
-				}
-				{
-					ProfileEvent* event = new ProfileEvent(Events::ProfileRefreshList);
-					event->Queue();
-				}
+				IEvent::MakeQueue<ProfileEvent>(Events::ProfileAdded, newProfile);
+				IEvent::MakeQueue<ProfileEvent>(Events::ProfileRefreshList);
 			});
 
 			// Configure and run

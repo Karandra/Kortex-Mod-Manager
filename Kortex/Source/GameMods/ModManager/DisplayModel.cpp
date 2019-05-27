@@ -89,9 +89,7 @@ namespace Kortex::ModManager
 		view->Bind(KxDataView2::EVENT_ITEM_EXPANDED, &DisplayModel::OnExpandCollapseItem, this);
 		view->Bind(KxDataView2::EVENT_ITEM_COLLAPSED, &DisplayModel::OnExpandCollapseItem, this);
 		view->Bind(KxDataView2::EVENT_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
-
 		view->Bind(KxDataView2::EVENT_COLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
-		view->Bind(KxDataView2::EVENT_COLUMN_SORTED, &DisplayModel::OnColumnSorted, this);
 
 		// Drag-and-drop
 		using KxDataView2::DNDOpType;
@@ -401,27 +399,6 @@ namespace Kortex::ModManager
 		if (GetView()->CreateColumnSelectionMenu(menu))
 		{
 			GetView()->OnColumnSelectionMenu(menu);
-		}
-	}
-	void DisplayModel::OnColumnSorted(KxDataView2::Event& event)
-	{
-		return;
-		KxDataView2::Column* column = event.GetColumn();
-		const ColumnID id = column->GetID<ColumnID>();
-		bool suppressed = m_ShowPriorityGroupsSuppress;
-
-		if (m_ShowPriorityGroups && id != ColumnID::Priority)
-		{
-			m_ShowPriorityGroupsSuppress = true;
-			LoadView();
-		}
-		else
-		{
-			m_ShowPriorityGroupsSuppress = false;
-			if (suppressed)
-			{
-				LoadView();
-			}
 		}
 	}
 

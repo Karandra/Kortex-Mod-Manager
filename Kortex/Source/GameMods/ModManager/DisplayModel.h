@@ -37,7 +37,6 @@ namespace Kortex::ModManager
 
 		private:
 			bool m_ShowPriorityGroups = false;
-			bool m_ShowPriorityGroupsSuppress = false;
 		
 			DisplayModelType m_DisplayMode = DisplayModelType::Connector;
 			bool m_ShowNotInstalledMods = false;
@@ -78,7 +77,6 @@ namespace Kortex::ModManager
 			void OnExpandCollapseItem(KxDataView2::Event& event);
 			void OnContextMenu(KxDataView2::Event& event);
 			void OnHeaderContextMenu(KxDataView2::Event& event);
-			void OnColumnSorted(KxDataView2::Event& event);
 			
 			bool CanStartDragOperation() const;
 			IGameMod* TestDNDNode(KxDataView2::Node& node, bool allowPriorityGroup = false) const;

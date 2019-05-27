@@ -231,11 +231,10 @@ namespace Kortex::GameInstance
 
 	bool DefaultGameInstance::RemoveProfile(IGameProfile& profile)
 	{
-		ProfileEvent removingEvent(Events::ProfileRemoving);
+		ProfileEvent removingEvent(Events::ProfileRemoving, profile);
 		removingEvent.Send();
 
-		bool isCurrent = profile.IsActive();
-		if (removingEvent.IsAllowed() && !isCurrent && HasProfile(profile.GetID()))
+		if (removingEvent.IsAllowed() && !profile.IsActive())
 		{
 			// Move files to recycle bin
 			KxFile path(profile.GetProfileDir());
@@ -251,19 +250,6 @@ namespace Kortex::GameInstance
 
 				ProfileEvent removedEvent(Events::ProfileRemoved, id);
 				removedEvent.Send();
-
-				if (IsActiveInstance())
-				{
-					if (!HasProfiles())
-					{
-						ChangeProfileTo(*CreateProfile(CreateDefaultProfileID()));
-					}
-
-					if (isCurrent)
-					{
-						ChangeProfileTo(*GetProfiles().front());
-					}
-				}
 				return true;
 			}
 		}

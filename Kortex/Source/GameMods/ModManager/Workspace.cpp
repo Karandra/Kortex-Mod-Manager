@@ -904,7 +904,7 @@ namespace Kortex::ModManager
 				}
 				{
 					KxMenuItem* item = colorMenu->AddItem(ContextMenuID::ColorReset, KTr("Generic.Reset"));
-					item->Enable((focusedMod && focusedMod->HasColor()) || isMultipleSelection);
+					item->Enable(focusedMod->HasColor() || isMultipleSelection);
 				}
 			}
 			contextMenu.AddSeparator();

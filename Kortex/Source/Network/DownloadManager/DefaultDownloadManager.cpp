@@ -145,7 +145,7 @@ namespace Kortex::DownloadManager
 				if (!KAux::IsSingleFileExtensionMatches(item.GetName(), wxS("xml")))
 				{
 					const wxString xmlPath = item.GetFullPath() + wxS(".xml");
-					auto& entry = m_Downloads.emplace_back(new DefaultDownloadEntry());
+					auto& entry = m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>());
 
 					// Try to load from download xml or load as much as possible from download itself
 					if (!entry->Load(xmlPath, item))

@@ -387,7 +387,7 @@ void KPackageProjectSerializerSMI::ReadRequirements3x()
 	KxXMLNode requirementsNode = m_XML.QueryElement("SetupInfo/Installer/Dependencies");
 	if (requirementsNode.IsOK())
 	{
-		KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
+		KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(std::make_unique<KPPRRequirementsGroup>()).get();
 		requirementGroup->SetID("Main");
 		requirements.GetDefaultGroup().push_back(requirementGroup->GetID());
 
@@ -396,7 +396,7 @@ void KPackageProjectSerializerSMI::ReadRequirements3x()
 		{
 			if (node.HasChildren())
 			{
-				KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(new KPPRRequirementEntry()).get();
+				KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>()).get();
 				entry->SetID(node.GetValue());
 				entry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
 				entry->SetRequiredVersion(node.GetAttribute("RequiredVersion"));
@@ -424,16 +424,16 @@ void KPackageProjectSerializerSMI::ReadComponents3x()
 		// Ignore bool attribute 'Use' as it almost always just reflect existence of components array
 
 		// Version 3.x supports only one step and one group
-		KPPCStep* step = components.GetSteps().emplace_back(new KPPCStep()).get();
+		KPPCStep* step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>()).get();
 		step->SetName("Select options");
 
-		KPPCGroup* group = step->GetGroups().emplace_back(new KPPCGroup()).get();
+		KPPCGroup* group = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>()).get();
 		group->SetName("Options");
 		group->SetSelectionMode(KPPC_SELECT_ANY);
 
 		for (KxXMLNode entryNode = componentsNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 		{
-			KPPCEntry* entry = group->GetEntries().emplace_back(new KPPCEntry()).get();
+			KPPCEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPCEntry>()).get();
 			entry->SetName(entryNode.GetAttribute("Name"));
 			entry->SetDescription(entryNode.GetAttribute("Description"));
 			entry->SetTDDefaultValue(entryNode.GetAttributeBool("Main") ? KPPC_DESCRIPTOR_RECOMMENDED : KPPC_DESCRIPTOR_OPTIONAL);
@@ -538,7 +538,7 @@ void KPackageProjectSerializerSMI::ReadRequirements4x()
 		{
 			if (setNode.HasChildren())
 			{
-				KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
+				KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(std::make_unique<KPPRRequirementsGroup>()).get();
 				requirementGroup->SetID(setNode.GetAttribute("ID"));
 
 				// ID of '---' denotes main set
@@ -551,7 +551,7 @@ void KPackageProjectSerializerSMI::ReadRequirements4x()
 				{
 					if (entryNode.HasChildren())
 					{
-						KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(new KPPRRequirementEntry()).get();
+						KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>()).get();
 						entry->SetID(entryNode.GetAttribute("ID"));
 						entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 						entry->SetRequiredVersion(entryNode.GetFirstChildElement("RequiredVersion").GetValue());
@@ -586,7 +586,7 @@ void KPackageProjectSerializerSMI::ReadComponents4x()
 			{
 				for (KxXMLNode entryNode = groupNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 				{
-					KPPCEntry* entry = group->GetEntries().emplace_back(new KPPCEntry()).get();
+					KPPCEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPCEntry>()).get();
 					entry->SetName(KAux::StrOr(entryNode.GetFirstChildElement("Name").GetValue(), entryNode.GetAttribute("ID")));
 					if (entry->GetName() == "---")
 					{
@@ -619,10 +619,10 @@ void KPackageProjectSerializerSMI::ReadComponents4x()
 			// Versions before 4.3 supports only one group
 			if (m_ProjectVersion < KxVersion("4.3"))
 			{
-				KPPCStep* step = components.GetSteps().emplace_back(new KPPCStep()).get();
+				KPPCStep* step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>()).get();
 				step->SetName("Select options");
 
-				KPPCGroup* group = step->GetGroups().emplace_back(new KPPCGroup()).get();
+				KPPCGroup* group = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>()).get();
 				group->SetName("Options");
 
 				ReadEntriesArray(group, componentsNode);
@@ -634,12 +634,12 @@ void KPackageProjectSerializerSMI::ReadComponents4x()
 
 				if (componentsNode.HasChildren())
 				{
-					KPPCStep* step = components.GetSteps().emplace_back(new KPPCStep()).get();
+					KPPCStep* step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>()).get();
 					step->SetName("Select options");
 
 					for (KxXMLNode groupNode = componentsNode.GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 					{
-						KPPCGroup* group = step->GetGroups().emplace_back(new KPPCGroup()).get();
+						KPPCGroup* group = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>()).get();
 						group->SetName(KAux::StrOr(groupNode.GetFirstChildElement("Name").GetValue(), groupNode.GetAttribute("ID")));
 						group->SetSelectionMode(components.StringToSelectionMode(groupNode.GetAttribute("SelectionMode")));
 
@@ -765,7 +765,7 @@ void KPackageProjectSerializerSMI::ReadRequirements5x()
 		{
 			if (setsNode.HasChildren())
 			{
-				KPPRRequirementsGroup* group = requirements.GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
+				KPPRRequirementsGroup* group = requirements.GetGroups().emplace_back(std::make_unique<KPPRRequirementsGroup>()).get();
 				group->SetID(setsNode.GetAttribute("ID"));
 				group->SetOperator(setsNode.GetAttribute("Operator") == "Or" ? KPP_OPERATOR_OR : KPP_OPERATOR_AND);
 
@@ -779,7 +779,7 @@ void KPackageProjectSerializerSMI::ReadRequirements5x()
 				{
 					if (entryNode.HasChildren())
 					{
-						KPPRRequirementEntry* entry = group->GetEntries().emplace_back(new KPPRRequirementEntry()).get();
+						KPPRRequirementEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>()).get();
 						entry->SetID(entryNode.GetFirstChildElement("ID").GetValue());
 						entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 						entry->SetRequiredVersion(entryNode.GetFirstChildElement("RequiredVersion").GetValue());
@@ -911,7 +911,7 @@ void KPackageProjectSerializerSMI::ReadComponents5x()
 				/* Entries */
 				for (KxXMLNode entryNode = groupNode.GetFirstChildElement("Data").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 				{
-					KPPCEntry* entry = group->GetEntries().emplace_back(new KPPCEntry()).get();
+					KPPCEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPCEntry>()).get();
 					entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 					entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
 
@@ -956,7 +956,7 @@ void KPackageProjectSerializerSMI::ReadComponents5x()
 			// Read steps
 			for (KxXMLNode stepNode = componentsNode.GetFirstChildElement("Steps").GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 			{
-				KPPCStep* step = components.GetSteps().emplace_back(new KPPCStep()).get();
+				KPPCStep* step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>()).get();
 				step->SetName(stepNode.GetAttribute("Name"));
 				ReadFlagsArray(step->GetConditionGroup().GetOrCreateFirstCondition(), stepNode.GetFirstChildElement("RequiredFlags"));
 
@@ -983,7 +983,7 @@ void KPackageProjectSerializerSMI::ReadComponents5x()
 			{
 				for (KxXMLNode stepNode = componentsNode.GetFirstChildElement(sRootNodeName).GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 				{
-					auto& step = components.GetConditionalSteps().emplace_back(new KPPCConditionalStep());
+					auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<KPPCConditionalStep>());
 					ReadFlagsArray(step->GetConditionGroup().GetOrCreateFirstCondition(), stepNode.GetFirstChildElement("RequiredFlags"));
 					KAux::LoadStringArray(step->GetEntries(), stepNode.GetFirstChildElement(sNodeName));
 				}

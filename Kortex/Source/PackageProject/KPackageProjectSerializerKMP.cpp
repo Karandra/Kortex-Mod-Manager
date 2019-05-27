@@ -235,7 +235,7 @@ void KPackageProjectSerializerKMP::ReadRequirements()
 
 		for (KxXMLNode groupNode = requirementsNode.GetFirstChildElement("Groups").GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 		{
-			KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
+			KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(std::make_unique<KPPRRequirementsGroup>()).get();
 			requirementGroup->SetID(groupNode.GetAttribute("ID"));
 			requirementGroup->SetOperator(KPackageProject::StringToOperator(groupNode.GetAttribute("Operator"), false, requirements.ms_DefaultGroupOperator));
 
@@ -243,7 +243,7 @@ void KPackageProjectSerializerKMP::ReadRequirements()
 			{
 				KPPRTypeDescriptor type = requirements.StringToTypeDescriptor(entryNode.GetAttribute("Type"));
 
-				KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(new KPPRRequirementEntry(type)).get();
+				KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>(type)).get();
 				entry->SetID(entryNode.GetAttribute("ID"));
 				entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 
@@ -279,19 +279,19 @@ void KPackageProjectSerializerKMP::ReadComponents()
 		// Read steps
 		for (KxXMLNode stepNode = componentsNode.GetFirstChildElement("Steps").GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 		{
-			auto& step = components.GetSteps().emplace_back(new KPPCStep());
+			auto& step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>());
 			step->SetName(stepNode.GetAttribute("Name"));
 			ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("Conditions"));
 
 			for (KxXMLNode groupNode = stepNode.GetFirstChildElement("Groups").GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 			{
-				auto& pSet = step->GetGroups().emplace_back(new KPPCGroup());
+				auto& pSet = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>());
 				pSet->SetName(groupNode.GetAttribute("Name"));
 				pSet->SetSelectionMode(components.StringToSelectionMode(groupNode.GetAttribute("SelectionMode")));
 
 				for (KxXMLNode entryNode = groupNode.GetFirstChildElement("Entries").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 				{
-					auto& entry = pSet->GetEntries().emplace_back(new KPPCEntry());
+					auto& entry = pSet->GetEntries().emplace_back(std::make_unique<KPPCEntry>());
 					entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 					entry->SetImage(entryNode.GetFirstChildElement("Image").GetAttribute("Path"));
 					entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
@@ -344,7 +344,7 @@ void KPackageProjectSerializerKMP::ReadComponents()
 		{
 			for (KxXMLNode stepNode = componentsNode.GetFirstChildElement(sRootNodeName).GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 			{
-				auto& step = components.GetConditionalSteps().emplace_back(new KPPCConditionalStep());
+				auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<KPPCConditionalStep>());
 				ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("Conditions"));
 				KAux::LoadStringArray(step->GetEntries(), stepNode.GetFirstChildElement(sNodeName));
 			}

@@ -81,7 +81,7 @@ class KPCComponentsModelNode
 		}
 		KPCComponentsModelNode* AddEntryItem(EntryID id)
 		{
-			return m_Children.emplace_back(new KPCComponentsModelNode(id, this)).get();
+			return m_Children.emplace_back(std::make_unique<KPCComponentsModelNode>(id, this)).get();
 		}
 		void CreateFullEntryNode()
 		{

@@ -199,7 +199,7 @@ namespace Kortex
 	{
 		for (KxXMLNode entryNode = rootNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 		{
-			auto& entry = m_StdEntries.GetEntries().emplace_back(new KPPRRequirementEntry(KPPR_TYPE_SYSTEM));
+			auto& entry = m_StdEntries.GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>(KPPR_TYPE_SYSTEM));
 			entry->SetID(KVarExp(entryNode.GetAttribute("ID")));
 			entry->SetCategory(KVarExp(entryNode.GetAttribute("Category")));
 			entry->SetName(KVarExp(entryNode.GetFirstChildElement("Name").GetValue()));

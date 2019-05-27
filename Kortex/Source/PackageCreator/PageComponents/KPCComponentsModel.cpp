@@ -1144,8 +1144,8 @@ bool KPCComponentsModel::OnDropItemsPossible(KxDataViewEventDND& event)
 void KPCComponentsModel::AddStep(KPCComponentsModelNode* node, const KxDataViewItem& item)
 {
 	GetView()->Expand(item);
-	auto& step = GetComponents().GetSteps().emplace_back(new KPPCStep());
-	auto& newNode = m_Steps.emplace_back(new KPCComponentsModelNode(step.get()));
+	auto& step = GetComponents().GetSteps().emplace_back(std::make_unique<KPPCStep>());
+	auto& newNode = m_Steps.emplace_back(std::make_unique<KPCComponentsModelNode>(step.get()));
 
 	KxDataViewItem newItem = GetItem(newNode.get());
 	ItemAdded(newItem);
@@ -1159,8 +1159,8 @@ void KPCComponentsModel::AddGroup(KPCComponentsModelNode* node, const KxDataView
 	if (parent && parent->GetStep())
 	{
 		GetView()->Expand(item);
-		auto& group = parent->GetStep()->GetGroups().emplace_back(new KPPCGroup());
-		auto& newNode = parent->GetChildren().emplace_back(new KPCComponentsModelNode(group.get(), parent));
+		auto& group = parent->GetStep()->GetGroups().emplace_back(std::make_unique<KPPCGroup>());
+		auto& newNode = parent->GetChildren().emplace_back(std::make_unique<KPCComponentsModelNode>(group.get(), parent));
 
 		KxDataViewItem newItem = GetItem(newNode.get());
 		ItemAdded(GetItem(parent), newItem);
@@ -1175,8 +1175,8 @@ void KPCComponentsModel::AddEntry(KPCComponentsModelNode* node, KxDataViewItem& 
 	if (parent && parent->GetGroup())
 	{
 		GetView()->Expand(item);
-		auto& entry = parent->GetGroup()->GetEntries().emplace_back(new KPPCEntry());
-		auto& newNode = parent->GetChildren().emplace_back(new KPCComponentsModelNode(entry.get(), parent));
+		auto& entry = parent->GetGroup()->GetEntries().emplace_back(std::make_unique<KPPCEntry>());
+		auto& newNode = parent->GetChildren().emplace_back(std::make_unique<KPCComponentsModelNode>(entry.get(), parent));
 		newNode->CreateFullEntryNode();
 
 		KxDataViewItem newItem = GetItem(newNode.get());
@@ -1194,8 +1194,8 @@ void KPCComponentsModel::AddEntriesFromFiles(KPCComponentsModelNode* node, KxDat
 	{
 		for (const auto& fileEntry: m_Controller->GetProject()->GetFileData().GetData())
 		{
-			auto& entry = parent->GetGroup()->GetEntries().emplace_back(new KPPCEntry());
-			auto& newNode = parent->GetChildren().emplace_back(new KPCComponentsModelNode(entry.get(), parent));
+			auto& entry = parent->GetGroup()->GetEntries().emplace_back(std::make_unique<KPPCEntry>());
+			auto& newNode = parent->GetChildren().emplace_back(std::make_unique<KPCComponentsModelNode>(entry.get(), parent));
 			newNode->CreateFullEntryNode();
 
 			entry->SetName(fileEntry->GetID());
@@ -1530,13 +1530,13 @@ void KPCComponentsModel::RefreshItems()
 	m_Steps.clear();
 	for (const auto& step: GetComponents().GetSteps())
 	{
-		auto& stepNode = m_Steps.emplace_back(new KPCComponentsModelNode(step.get()));
+		auto& stepNode = m_Steps.emplace_back(std::make_unique<KPCComponentsModelNode>(step.get()));
 		for (const auto& group: step->GetGroups())
 		{
-			auto& groupNode = stepNode->GetChildren().emplace_back(new KPCComponentsModelNode(group.get(), stepNode.get()));
+			auto& groupNode = stepNode->GetChildren().emplace_back(std::make_unique<KPCComponentsModelNode>(group.get(), stepNode.get()));
 			for (const auto& entry: group->GetEntries())
 			{
-				auto& entryNode = groupNode->GetChildren().emplace_back(new KPCComponentsModelNode(entry.get(), groupNode.get()));
+				auto& entryNode = groupNode->GetChildren().emplace_back(std::make_unique<KPCComponentsModelNode>(entry.get(), groupNode.get()));
 				entryNode->CreateFullEntryNode();
 			}
 		}

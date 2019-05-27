@@ -69,7 +69,7 @@ namespace Kortex::ModManager
 		private:
 			bool CanShowPriorityGroups() const
 			{
-				return m_ShowPriorityGroups && !m_ShowPriorityGroupsSuppress;
+				return m_ShowPriorityGroups;
 			}
 
 			void OnSelectItem(KxDataView2::Event& event);

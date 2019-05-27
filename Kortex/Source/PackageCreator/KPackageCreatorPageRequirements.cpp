@@ -192,7 +192,7 @@ void KPackageCreatorPageRequirements::OnAddStdReq(wxCommandEvent& event)
 			{
 				if (!pSet->HasEntryWithID(stdEntry->GetID()))
 				{
-					auto& newEntry = pSet->GetEntries().emplace_back(new KPPRRequirementEntry(*stdEntry));
+					auto& newEntry = pSet->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>(*stdEntry));
 					newEntry->ResetObjectFunctionResult();
 					newEntry->SetCurrentVersion(KxNullVersion);
 

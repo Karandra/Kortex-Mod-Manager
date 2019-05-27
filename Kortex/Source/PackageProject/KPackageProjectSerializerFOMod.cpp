@@ -480,7 +480,7 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 			// If main requirements group is empty - add current game with no required version
 			if (mainReqsGroup->GetEntries().empty())
 			{
-				KPPRRequirementEntry* entry = mainReqsGroup->GetEntries().emplace_back(new KPPRRequirementEntry()).get();
+				KPPRRequirementEntry* entry = mainReqsGroup->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>()).get();
 				entry->SetID(Kortex::IGameInstance::GetActive()->GetGameID());
 				entry->ConformToTypeDescriptor();
 			}
@@ -494,7 +494,7 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 		wxString stepsOrder = tInstallStepsArrayNode.GetAttribute("order");
 		for (KxXMLNode stepNode = tInstallStepsArrayNode.GetFirstChildElement("installStep"); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement("installStep"))
 		{
-			KPPCStep* step = steps.emplace_back(new KPPCStep()).get();
+			KPPCStep* step = steps.emplace_back(std::make_unique<KPPCStep>()).get();
 			step->SetName(stepNode.GetAttribute("name"));
 
 			// Step conditions
@@ -512,7 +512,7 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 			{
 				for (KxXMLNode groupNode = optionalFileGroupsNode.GetFirstChildElement("group"); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement("group"))
 				{
-					KPPCGroup* group = step->GetGroups().emplace_back(new KPPCGroup()).get();
+					KPPCGroup* group = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>()).get();
 					group->SetName(groupNode.GetAttribute("name"));
 					group->SetSelectionMode(ConvertSelectionMode(groupNode.GetAttribute("type")));
 
@@ -521,7 +521,7 @@ void KPackageProjectSerializerFOMod::ReadInstallSteps()
 
 					for (KxXMLNode pluginNode = pluginsArrayNode.GetFirstChildElement("plugin"); pluginNode.IsOK(); pluginNode = pluginNode.GetNextSiblingElement("plugin"))
 					{
-						KPPCEntry* entry = group->GetEntries().emplace_back(new KPPCEntry()).get();
+						KPPCEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPCEntry>()).get();
 						entry->SetName(pluginNode.GetAttribute("name"));
 
 						// Description
@@ -595,7 +595,7 @@ void KPackageProjectSerializerFOMod::ReadConditionalSteps(const KxXMLNode& steps
 	size_t index = 1;
 	for (KxXMLNode stepNode = stepsArrayNode.GetFirstChildElement("pattern"); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement("pattern"))
 	{
-		KPPCConditionalStep* step = tConditionalSteps.emplace_back(new KPPCConditionalStep()).get();
+		KPPCConditionalStep* step = tConditionalSteps.emplace_back(std::make_unique<KPPCConditionalStep>()).get();
 
 		// Files
 		for (const auto& v: ReadFileData(stepNode.GetFirstChildElement("files")))

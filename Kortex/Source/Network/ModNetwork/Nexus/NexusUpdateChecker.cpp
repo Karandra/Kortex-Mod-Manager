@@ -340,7 +340,7 @@ namespace Kortex::NetworkManager
 	{
 		m_TimeElapsed += wxTimeSpan::Milliseconds(event.GetInterval());
 
-		if (IApplication::GetInstance()->IsActive() && IsAutomaticCheckAllowed())
+		if (IApplication::GetInstance()->IsMainWindowActive() && IsAutomaticCheckAllowed())
 		{
 			DoRunUpdateCheck();
 		}

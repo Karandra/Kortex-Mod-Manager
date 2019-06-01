@@ -102,6 +102,7 @@ namespace Kortex
 			wxWindow* GetTopWindow() const;
 			void SetTopWindow(wxWindow* window);
 			bool IsActive() const;
+			bool IsMainWindowActive() const;
 
 			void ExitApp(int exitCode = 0);
 			wxLog& GetLogger();

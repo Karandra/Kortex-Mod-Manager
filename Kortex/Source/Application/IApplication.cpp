@@ -120,8 +120,19 @@ namespace Kortex
 	}
 	bool IApplication::IsActive() const
 	{
-		const KMainWindow* mainWindow = KMainWindow::GetInstance();
-		return GetSystemApp()->IsActive() && mainWindow && mainWindow == GetActiveWindow() && mainWindow->HasFocus();
+		return GetSystemApp()->IsActive();
+	}
+	bool IApplication::IsMainWindowActive() const
+	{
+		if (IsActive())
+		{
+			const KMainWindow* mainWindow = KMainWindow::GetInstance();
+			if (mainWindow)
+			{
+				return mainWindow->GetHandle() == ::GetForegroundWindow();
+			}
+		}
+		return false;
 	}
 
 	void IApplication::ExitApp(int exitCode)

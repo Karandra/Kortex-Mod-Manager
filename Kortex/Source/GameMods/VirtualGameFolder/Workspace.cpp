@@ -26,10 +26,7 @@ namespace Kortex::VirtualGameFolder
 	Workspace::Workspace(KMainWindow* mainWindow)
 		:KWorkspace(mainWindow)
 	{
-		IEvent::Bind(Kortex::Events::ProfileSelected, &Workspace::OnViewInvalidated, this);
-		IEvent::Bind(Kortex::Events::ModsReordered, &Workspace::OnViewInvalidated, this);
-		IEvent::Bind(Kortex::Events::ModToggled, &Workspace::OnViewInvalidated, this);
-		IEvent::Bind(Kortex::Events::ModFilesChanged, &Workspace::OnViewInvalidated, this);
+		IEvent::Bind(Events::ModVirtualTreeInvalidated, &Workspace::OnViewInvalidated, this);
 
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	}

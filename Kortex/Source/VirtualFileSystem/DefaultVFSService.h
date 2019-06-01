@@ -22,6 +22,9 @@ namespace Kortex::VirtualFileSystem
 
 		private:
 			void OnDestroyRecievingWindow();
+			void DestroyRecievingWindow();
+
+			void OnFSControllerTerminated();
 			void OnMessage(const IPC::Message& message);
 			void RunController();
 

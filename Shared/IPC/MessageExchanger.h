@@ -27,6 +27,13 @@ namespace Kortex::IPC
 				}
 			}
 			
+			virtual void OnSendMessage(const Message& message, const void* userData, size_t dataSize)
+			{
+			}
+			virtual void OnMessageSent(const Message& message, const void* userData, size_t dataSize, const KxSharedMemoryBuffer& returnValue)
+			{
+			}
+
 		protected:
 			void Create(HWND windowHandle);
 

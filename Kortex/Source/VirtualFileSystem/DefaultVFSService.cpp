@@ -2,6 +2,7 @@
 #include "DefaultVFSService.h"
 #include "RecievingWindow.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/Notification.hpp>
 #include <Kortex/Events.hpp>
 #include "Application/SystemApplication.h"
 #include "UI/KMainWindow.h"
@@ -33,6 +34,20 @@ namespace Kortex::VirtualFileSystem
 	void DefaultVFSService::OnDestroyRecievingWindow()
 	{
 		m_RecievingWindow = nullptr;
+	}
+	void DefaultVFSService::DestroyRecievingWindow()
+	{
+		if (m_RecievingWindow)
+		{
+			m_RecievingWindow->Destroy();
+			m_RecievingWindow = nullptr;
+		}
+	}
+	
+	void DefaultVFSService::OnFSControllerTerminated()
+	{
+		INotificationCenter::GetInstance()->Notify(KTr("VFS.Caption"), KTr("VFS.Service.UnhandledException"), KxICON_ERROR);
+		RunController();
 	}
 	void DefaultVFSService::OnMessage(const IPC::Message& message)
 	{
@@ -81,14 +96,20 @@ namespace Kortex::VirtualFileSystem
 		if (!m_RecievingWindow)
 		{
 			m_RecievingWindow = new RecievingWindow(*this);
-			KMainWindow::GetInstance()->Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent& evnet)
-			{
-				Stop();
-				evnet.Skip();
-			});
-			
+		}
+
+		if (!m_Controller.IsRunning())
+		{
 			m_Controller.SetProcessingWindow(*m_RecievingWindow);
+
 			m_Controller.Run();
+			m_Controller.WaitForTermination([this]()
+			{
+				IEvent::CallAfter([this]()
+				{
+					OnFSControllerTerminated();
+				});
+			});
 		}
 	}
 
@@ -105,10 +126,16 @@ namespace Kortex::VirtualFileSystem
 		:m_Controller(GetFSControllerPath())
 	{
 		RunController();
+
+		KMainWindow::GetInstance()->Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent& evnet)
+		{
+			Stop();
+			evnet.Skip();
+		});
 	}
 	DefaultVFSService::~DefaultVFSService()
 	{
-		m_Controller.SendExit();
+		DestroyRecievingWindow();
 	}
 
 	bool DefaultVFSService::IsOK() const
@@ -138,7 +165,7 @@ namespace Kortex::VirtualFileSystem
 	{
 		if (m_RecievingWindow)
 		{
-			m_RecievingWindow->Destroy();
+			DestroyRecievingWindow();
 			return m_Controller.Send(RequestID::Stop).GetAs<bool>();
 		}
 		return false;

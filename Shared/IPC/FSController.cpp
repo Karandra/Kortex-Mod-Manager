@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "FSController.h"
 #include "ProcessingWindow.h"
+#include <thread>
 
 namespace Kortex::IPC
 {
@@ -18,9 +19,43 @@ namespace Kortex::IPC
 			if (name == searchedName)
 			{
 				Create(hWnd);
-				m_IsReady = true;
+				m_IsProcessIdle = true;
 				break;
 			}
+		}
+	}
+	void FSController::EndWaitForTermination()
+	{
+		if (m_ProcessHandle)
+		{
+			if (std::unique_lock lock(m_ThreadMutex); true)
+			{
+				SendExit();
+				Reset();
+
+				m_ThreadCondition.wait(lock);
+			}
+		}
+	}
+	bool FSController::Reset()
+	{
+		m_IsProcessIdle = false;
+
+		if (m_ProcessHandle)
+		{
+			::CloseHandle(m_ProcessHandle);
+			m_ProcessHandle = nullptr;
+
+			return true;
+		}
+		return false;
+	}
+	
+	void FSController::OnSendMessage(const Message& message, const void* userData, size_t dataSize)
+	{
+		if (message.GetRequestID() == RequestID::Exit)
+		{
+			EndWaitForTermination();
 		}
 	}
 
@@ -32,7 +67,12 @@ namespace Kortex::IPC
 	}
 	FSController::~FSController()
 	{
-		SendExit();
+		EndWaitForTermination();
+	}
+
+	bool FSController::IsRunning() const
+	{
+		return m_ProcessHandle != nullptr || m_IsProcessIdle;
 	}
 
 	void FSController::Run()
@@ -43,5 +83,36 @@ namespace Kortex::IPC
 	{
 		const size_t handle = reinterpret_cast<size_t>(processingWindow.GetHandle());
 		m_Process.SetArguments(KxString::Format(wxS("-HWND \"%1\" -PID \"%2\""), handle, KxProcess(0).GetPID()));
+	}
+	bool FSController::WaitForTermination(std::function<void()> func)
+	{
+		const uint32_t pid = m_Process.GetPID();
+		if (pid != 0 && m_ProcessHandle == nullptr)
+		{
+			std::thread([this, pid, func = std::move(func)]()
+			{
+				const HANDLE handle = ::OpenProcess(SYNCHRONIZE, false, pid);
+				if (std::unique_lock lock(m_ThreadMutex); true)
+				{
+					m_ProcessHandle = handle;
+				}
+
+				if (handle)
+				{
+					const DWORD status = ::WaitForSingleObject(handle, INFINITE);
+					if (std::unique_lock lock(m_ThreadMutex); true)
+					{
+						Reset();
+						if (status == WAIT_OBJECT_0)
+						{
+							func();
+						}
+					}
+					m_ThreadCondition.notify_one();
+				}
+			}).detach();
+			return true;
+		}
+		return false;
 	}
 }

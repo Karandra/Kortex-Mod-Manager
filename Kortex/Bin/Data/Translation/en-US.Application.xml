@@ -624,6 +624,8 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.CopyNXM">Copy NXM-link</String>
 
 		<!-- VFS -->
+		<String ID="VFS.Caption">Virtual File System</String>
+
 		<String ID="VFS.Service.InitFailed">Failed to load the virtual file system library. Unable to continue.</String>
 		<String ID="VFS.Service.InstallCaption">Install virtual file system service</String>
 		<String ID="VFS.Service.InstallMessage">Virtual file system (VFS) service has not been installed. After this window has been closed, VFS service and driver will be installed.</String>

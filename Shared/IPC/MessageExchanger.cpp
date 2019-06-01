@@ -6,6 +6,8 @@ namespace Kortex::IPC
 {
 	KxSharedMemoryBuffer MessageExchanger::DoSendMessage(const Message& message, const void* userData, size_t dataSize)
 	{
+		OnSendMessage(message, userData, dataSize);
+
 		COPYDATASTRUCT data = {0};
 		data.cbData = sizeof(message);
 		data.lpData = const_cast<void*>(reinterpret_cast<const void*>(&message));
@@ -25,6 +27,7 @@ namespace Kortex::IPC
 
 		// Send message
 		::SendMessageW(m_ProcessingWindow, WM_COPYDATA, 0, reinterpret_cast<LPARAM>(&data));
+		OnMessageSent(message, userData, dataSize, sharedBuffer);
 
 		// Return to caller
 		return sharedBuffer;

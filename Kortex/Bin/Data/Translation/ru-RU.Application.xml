@@ -629,6 +629,8 @@
 		<String ID="DownloadManager.Menu.CopyNXM">Скопировать NXM-ссылку</String>
 
 		<!-- VFS -->
+		<String ID="VFS.Caption">Виртуальная файловая система</String>
+
 		<String ID="VFS.Service.InitFailed">Не удалось загрузить библиотеку виртуальной файловой системы. Продолжение невозможно.</String>
 		<String ID="VFS.Service.InstallCaption">Установка службы виртуальной файловой системы</String>
 		<String ID="VFS.Service.InstallMessage">Служба виртуальной файловой системы (VFS) не установлена. После закрытия этого окна будет произведена установка службы и драйвера ФС.</String>

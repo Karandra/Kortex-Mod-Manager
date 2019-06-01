@@ -796,6 +796,8 @@ namespace Kortex::ModManager
 	{
 		if (focusedMod)
 		{
+			Utility::MenuSeparatorAfter separator1(contextMenu);
+
 			const bool isMultipleSelection = selectedMods.size() > 1;
 			
 			const bool isFixedMod = focusedMod->QueryInterface<FixedGameMod>();
@@ -807,7 +809,7 @@ namespace Kortex::ModManager
 			const bool isPackageExist = !isFixedMod && !isPriorityGroup && focusedMod->IsPackageFileExist();
 			const bool isVFSActive = IModManager::GetInstance()->GetFileSystem().IsEnabled();
 
-			// Install and Uninstall
+			// Install and uninstall
 			if (isInstalled)
 			{
 				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModUninstall, KTr("ModManager.Menu.UninstallMod"));
@@ -931,7 +933,6 @@ namespace Kortex::ModManager
 				item->Enable(!isMultipleSelection && isNormalMod);
 			}
 		}
-		contextMenu.AddSeparator();
 
 		// Refresh
 		{

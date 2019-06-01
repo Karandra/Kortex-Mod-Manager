@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "ApplicationModule.h"
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxXML.h>
 #include <wx/snglinst.h>
@@ -36,6 +37,7 @@ namespace Kortex
 			wxString m_ExecutableName;
 			wxString m_ExecutablePath;
 
+			Application::ApplicationModule m_ApplicationModule;
 			std::unique_ptr<IApplication> m_Application;
 			std::unique_ptr<IThemeManager> m_ThemeManager;
 			std::unique_ptr<INotificationCenter> m_NotificationCenter;

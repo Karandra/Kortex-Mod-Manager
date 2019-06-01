@@ -10,7 +10,10 @@ namespace Kortex
 	class IApplication;
 	class IGameInstance;
 	class IPluggableManager;
+}
 
+namespace Kortex
+{
 	namespace GameInstance
 	{
 		class InstanceModuleLoader;
@@ -61,11 +64,11 @@ namespace Kortex
 			}
 			void ScheduleReloadWorkspace() const;
 
-			virtual const Kortex::IPluggableManager* ToPluggableManager() const
+			virtual const IPluggableManager* ToPluggableManager() const
 			{
 				return nullptr;
 			}
-			virtual Kortex::IPluggableManager* ToPluggableManager()
+			virtual IPluggableManager* ToPluggableManager()
 			{
 				return nullptr;
 			}

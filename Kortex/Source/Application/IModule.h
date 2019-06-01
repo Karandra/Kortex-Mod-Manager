@@ -10,7 +10,10 @@ namespace Kortex
 	class IManager;
 	class IApplication;
 	class IGameInstance;
+}
 
+namespace Kortex
+{
 	namespace GameInstance
 	{
 		class InstanceModuleLoader;

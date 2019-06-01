@@ -1159,19 +1159,22 @@
       <Filter>Code\Source\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\BaseNotification.cpp">
-      <Filter>Code\Headers\Application\Notifications</Filter>
+      <Filter>Code\Source\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\DefaultNotificationCenter.cpp">
-      <Filter>Code\Headers\Application\Notifications</Filter>
+      <Filter>Code\Source\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\DisplayModel.cpp">
-      <Filter>Code\Headers\Application\Notifications</Filter>
+      <Filter>Code\Source\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\PopupWindow.cpp">
-      <Filter>Code\Headers\Application\Notifications</Filter>
+      <Filter>Code\Source\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\SimpleNotification.cpp">
-      <Filter>Code\Headers\Application\Notifications</Filter>
+      <Filter>Code\Source\Application\Notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\ApplicationModule.cpp">
+      <Filter>Code\Source\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2213,20 +2216,23 @@
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusNetworkReply.h">
       <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\Notifications\BaseNotification.h">
+      <Filter>Code\Headers\Application\Notifications</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Application\Notifications\DefaultNotificationCenter.h">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Headers\Application\Notifications</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Notifications\DisplayModel.h">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Headers\Application\Notifications</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Notifications\PopupWindow.h">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Headers\Application\Notifications</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Notifications\SimpleNotification.h">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Headers\Application\Notifications</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\Notifications\BaseNotification.h">
-      <Filter>Code\Source\Application\Notifications</Filter>
+    <ClInclude Include="Source\Application\ApplicationModule.h">
+      <Filter>Code\Headers\Application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

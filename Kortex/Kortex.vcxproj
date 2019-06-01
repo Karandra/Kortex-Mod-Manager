@@ -58,6 +58,7 @@
     <ClCompile Include="Source\Application\About\Dialog.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModel.cpp" />
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp" />
+    <ClCompile Include="Source\Application\ApplicationModule.cpp" />
     <ClCompile Include="Source\Application\Module\Info.cpp" />
     <ClCompile Include="Source\Application\Notifications\BaseNotification.cpp" />
     <ClCompile Include="Source\Application\Notifications\DefaultNotificationCenter.cpp" />
@@ -365,6 +366,7 @@
     <ClInclude Include="Source\Application\About\Dialog.h" />
     <ClInclude Include="Source\Application\About\DisplayModel.h" />
     <ClInclude Include="Source\Application\About\DisplayModelNode.h" />
+    <ClInclude Include="Source\Application\ApplicationModule.h" />
     <ClInclude Include="Source\Application\Notifications\BaseNotification.h" />
     <ClInclude Include="Source\Application\Notifications\DefaultNotificationCenter.h" />
     <ClInclude Include="Source\Application\Notifications\DisplayModel.h" />

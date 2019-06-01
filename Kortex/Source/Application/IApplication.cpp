@@ -88,10 +88,13 @@ namespace Kortex
 	{
 		return wxGetLibraryVersionInfo();
 	}
-
 	KxXMLDocument& IApplication::GetGlobalConfig() const
 	{
 		return GetSystemApp()->GetGlobalConfig();
+	}
+	IModule& IApplication::GetModule() const
+	{
+		return GetSystemApp()->m_ApplicationModule;
 	}
 
 	wxCmdLineParser& IApplication::GetCmdLineParser() const

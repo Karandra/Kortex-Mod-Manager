@@ -71,7 +71,7 @@ namespace Kortex
 			virtual IVariableTable& GetVariables() = 0;
 			virtual wxString ExpandVariablesLocally(const wxString& variables) const = 0;
 			virtual wxString ExpandVariables(const wxString& variables) const = 0;
-		
+			
 			virtual bool OpenInstanceSelectionDialog() = 0;
 			virtual bool ScheduleRestart() = 0;
 			virtual bool Uninstall() = 0;
@@ -93,6 +93,7 @@ namespace Kortex
 			KxVersion GetVersion() const;
 			KxVersion GetWxWidgetsVersion() const;
 			KxXMLDocument& GetGlobalConfig() const;
+			IModule& GetModule() const;
 
 			wxCmdLineParser& GetCmdLineParser() const;
 			bool ParseCommandLine();

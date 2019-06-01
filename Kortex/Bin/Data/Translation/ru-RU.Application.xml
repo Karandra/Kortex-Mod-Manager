@@ -221,6 +221,9 @@
 
 		<String ID="Settings.ValueName.Var.ActualGameDir">Установочная папка $(GameShortName)</String>
 
+		<!-- Notification Center -->
+		<String ID="NotificationCenter.Name">Центр уведомлений</String>
+
 		<!-- About dialog -->
 		<String ID="About.SourceCodeLocation">Исходный код может быть найден на</String>
 		<String ID="About.Components">Компоненты</String>

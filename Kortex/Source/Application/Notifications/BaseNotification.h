@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/INotification.h"
+class KxCoroutineBase;
 
 namespace Kortex::Notifications
 {
@@ -11,9 +12,9 @@ namespace Kortex::Notifications
 
 		private:
 			PopupWindow* m_PopupWindow = nullptr;
+			KxCoroutineBase* m_PopupWindowCoroutine = nullptr;
 
 		private:
-			void DestroyPopupWindow() override;
 			void SetPopupWindow(PopupWindow* window) override;
 			PopupWindow* GetPopupWindow() const
 			{
@@ -26,6 +27,7 @@ namespace Kortex::Notifications
 		public:
 			void ShowPopupWindow() override;
 			bool HasPopupWindow() const override;
+			void DestroyPopupWindow() override;
 
 			virtual wxString GetCaption() const = 0;
 			virtual wxString GetMessage() const = 0;

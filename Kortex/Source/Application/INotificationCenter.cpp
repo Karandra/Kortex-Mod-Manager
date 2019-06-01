@@ -4,8 +4,32 @@
 #include <Kortex/Notification.hpp>
 #include <Kortex/NetworkManager.hpp>
 
+namespace Kortex::Notifications::Internal
+{
+	const SimpleManagerInfo TypeInfo("NotificationCenter", "NotificationCenter.Name");
+}
+
 namespace Kortex
 {
+	void INotificationCenter::OnInit()
+	{
+	}
+	void INotificationCenter::OnExit()
+	{
+		for (auto& notification: GetNotifications())
+		{
+			notification->DestroyPopupWindow();
+		}
+	}
+	void INotificationCenter::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
+	{
+	}
+
+	INotificationCenter::INotificationCenter()
+		:ManagerWithTypeInfo(&IApplication::GetInstance()->GetModule())
+	{
+	}
+
 	void INotificationCenter::Notify(const wxString& caption, const wxString& message, KxIconType iconID)
 	{
 		DoNotify(std::make_unique<SimpleNotification>(caption, message, iconID));

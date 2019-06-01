@@ -13,10 +13,6 @@ namespace Kortex::Notifications
 		}
 	}
 
-	void BaseNotification::DestroyPopupWindow()
-	{
-		wxApp::GetInstance()->ScheduleForDestruction(m_PopupWindow);
-	}
 	void BaseNotification::SetPopupWindow(Notifications::PopupWindow* window)
 	{
 		m_PopupWindow = window;
@@ -24,7 +20,7 @@ namespace Kortex::Notifications
 
 	void BaseNotification::ShowPopupWindow()
 	{
-		KxCoroutine::Run([this](KxCoroutineBase& coroutine)
+		m_PopupWindowCoroutine = KxCoroutine::Run([this](KxCoroutineBase& coroutine)
 		{
 			if (m_PopupWindow)
 			{
@@ -36,6 +32,8 @@ namespace Kortex::Notifications
 				{
 					DestroyPopupWindow();
 					m_PopupWindow = nullptr;
+
+					m_PopupWindowCoroutine = nullptr;
 					return coroutine.YieldStop();
 				}
 			}
@@ -57,5 +55,16 @@ namespace Kortex::Notifications
 	bool BaseNotification::HasPopupWindow() const
 	{
 		return m_PopupWindow && !wxTheApp->IsScheduledForDestruction(m_PopupWindow) && !m_PopupWindow->IsBeingDeleted();
+	}
+	void BaseNotification::DestroyPopupWindow()
+	{
+		if (m_PopupWindowCoroutine)
+		{
+			KxCoroutine::Stop(m_PopupWindowCoroutine);
+		}
+		if (m_PopupWindow)
+		{
+			m_PopupWindow->Destroy();
+		}
 	}
 }

@@ -216,6 +216,9 @@ Using the default folder is not recommended because profile data can occupy a lo
 
 		<String ID="Settings.ValueName.Var.ActualGameDir">$(GameShortName) installation folder</String>
 
+		<!-- Notification Center -->
+		<String ID="NotificationCenter.Name">Notification center</String>
+
 		<!-- About dialog -->
 		<String ID="About.SourceCodeLocation">Source code can be found on</String>
 		<String ID="About.Components">Components</String>

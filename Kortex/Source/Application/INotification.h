@@ -15,7 +15,6 @@ namespace Kortex
 			using RefVector = std::vector<INotification*>;
 
 		private:
-			virtual void DestroyPopupWindow() = 0;
 			virtual void SetPopupWindow(Notifications::PopupWindow* window) = 0;
 			virtual Notifications::PopupWindow* GetPopupWindow() const = 0;
 
@@ -26,6 +25,7 @@ namespace Kortex
 		public:
 			virtual void ShowPopupWindow() = 0;
 			virtual bool HasPopupWindow() const = 0;
+			virtual void DestroyPopupWindow() = 0;
 
 			virtual wxString GetCaption() const = 0;
 			virtual wxString GetMessage() const = 0;

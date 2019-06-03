@@ -12,6 +12,7 @@
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxWebSocket.h>
 #include <KxFramework/KxTaskDialog.h>
+#include <KxFramework/KxTextBoxDialog.h>
 
 namespace
 {
@@ -60,6 +61,7 @@ namespace Kortex::NetworkManager
 	
 	void NexusAuth::OnToolBarMenu(KxMenu& menu)
 	{
+		// Show account info
 		if (m_LastValidationReply)
 		{
 			KxMenuItem* item = menu.AddItem(KTr("NetworkManager.ModNetwork.ShowAccountInfo"));
@@ -79,6 +81,62 @@ namespace Kortex::NetworkManager
 
 				// Show the dialog
 				dialog.ShowModal();
+			});
+		}
+
+		// Manual API key input
+		if (!IsAuthenticated())
+		{
+			KxMenuItem* item = menu.AddItem(KTr("NetworkManager.Nexus.EnterAPIKey"));
+			item->Bind(KxEVT_MENU_SELECT, [this, item](KxMenuEvent& event)
+			{
+				KxTextBoxDialog dialog(GetInvokingWindow(),
+									   KxID_NONE,
+									   item->GetItemLabelText(),
+									   wxDefaultPosition,
+									   wxDefaultSize,
+									   KxBTN_OK|KxBTN_CANCEL
+				);
+
+				wxString apiKey;
+				wxRegEx apiKeyRegEx(wxS("[A-Za-z0-9-]"), wxRE_ADVANCED);
+				wxButton* buttonOK = dialog.GetButton(KxID_OK).As<wxButton>();
+
+				buttonOK->Disable();
+				dialog.SetMainIcon(KxICON_INFORMATION);
+				dialog.GetTextBox()->Bind(wxEVT_TEXT, [&dialog, &apiKey, &apiKeyRegEx, buttonOK](wxCommandEvent& event)
+				{
+					apiKey = event.GetString();
+					if (!apiKey.IsEmpty() && apiKeyRegEx.Matches(apiKey))
+					{
+						buttonOK->Enable();
+						dialog.SetMainIcon(KxICON_INFORMATION);
+					}
+					else
+					{
+						buttonOK->Disable();
+						dialog.SetMainIcon(KxICON_ERROR);
+					}
+					dialog.Layout();
+				});
+
+				if (dialog.ShowModal() == KxID_OK)
+				{
+					IEvent::CallAfter([this, apiKey = std::move(apiKey)]()
+					{
+						auto info = DoGetValidationInfo(apiKey, true);
+						if (info && info->APIKey == apiKey)
+						{
+							if (SaveCredentials({info->UserName, apiKey}))
+							{
+								RequestUserPicture(*info);
+								OnAuthSuccess();
+								return;
+							}
+						}
+						OnAuthFail();
+					});
+				}
 			});
 		}
 	}
@@ -214,7 +272,7 @@ namespace Kortex::NetworkManager
 
 						if (info && info->APIKey == apiKey)
 						{
-							if (SaveCredentials(Credentials(info->UserName, apiKey)))
+							if (SaveCredentials({info->UserName, apiKey}))
 							{
 								RequestUserPicture(*info);
 								OnAuthSuccess();
@@ -234,8 +292,6 @@ namespace Kortex::NetworkManager
 		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_CLOSE, [this](KxWebSocketEvent& event)
 		{
-			INotificationCenter::GetInstance()->Notify("WSS", "OnClose", KxICON_INFO);
-
 			if (!LoadCredentials())
 			{
 				OnAuthFail();
@@ -244,7 +300,6 @@ namespace Kortex::NetworkManager
 		});
 		m_WebSocketClient->Bind(KxEVT_WEBSOCKET_FAIL, [this](KxWebSocketEvent& event)
 		{
-			INotificationCenter::GetInstance()->Notify("WSS", "OnFail", KxICON_ERROR);
 			OnAuthFail();
 		});
 

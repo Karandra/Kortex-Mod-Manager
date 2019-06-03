@@ -573,6 +573,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.Nexus.UserIsPremium">Premium user</String>
 		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter user</String>
 		<String ID="NetworkManager.Nexus.APIKey">API Key</String>
+		<String ID="NetworkManager.Nexus.EnterAPIKey">Enter API Key</String>
 
 		<String ID="NetworkManager.UpdateTooltip.Caption">Updates information available</String>
 		<String ID="NetworkManager.UpdateTooltip.AnyUpdates">There's a new version of this mod available on %1</String>

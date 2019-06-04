@@ -66,7 +66,7 @@ namespace Kortex
 			virtual void OnToolBarMenu(KxMenu& menu)
 			{
 			}
-			virtual void OnModsMenu(KxMenu& menu, const ModsRefVector& selectedMods, IGameMod* focusedMod)
+			virtual void OnModListMenu(KxMenu& menu, const ModsRefVector& selectedMods, IGameMod* focusedMod)
 			{
 			}
 	};

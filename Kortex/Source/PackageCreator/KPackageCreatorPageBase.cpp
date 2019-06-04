@@ -3,7 +3,7 @@
 #include "PackageProject/KPackageProject.h"
 #include "KPackageCreatorWorkspace.h"
 #include "KPackageCreatorController.h"
-#include "PackageManager/KPackageManager.h"
+#include "ModPackages/IPackageManager.h"
 #include "GameInstance/IGameInstance.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Events.hpp>

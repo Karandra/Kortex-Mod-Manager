@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
+#include <Kortex/PackageManager.hpp>
 #include "KInstallWizardRequirementsModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
-#include "PackageManager/KPackageManager.h"
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"

@@ -3,7 +3,7 @@
 #include "KPCREntriesListModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageProject/KPackageProject.h"
-#include "PackageManager/KPackageManager.h"
+#include "ModPackages/IPackageManager.h"
 #include "UI/KMainWindow.h"
 #include "UI/KTextEditorDialog.h"
 #include "UI/KImageViewerDialog.h"

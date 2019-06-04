@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPackageProjectRequirements.h"
 #include "KPackageProject.h"
-#include "PackageManager/KPackageManager.h"
+#include "ModPackages/IPackageManager.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 
@@ -19,7 +19,7 @@ const KxVersion& KPPRRequirementEntry::GetCurrentVersion() const
 {
 	if (!m_CurrentVersionChecked)
 	{
-		m_CurrentVersion = Kortex::KPackageManager::GetInstance()->GetRequirementVersion(this);
+		m_CurrentVersion = Kortex::IPackageManager::GetInstance()->GetRequirementVersion(this);
 		m_CurrentVersionChecked = true;
 	}
 	return m_CurrentVersion;
@@ -38,7 +38,7 @@ KPPReqState KPPRRequirementEntry::GetObjectFunctionResult() const
 {
 	if (!m_ObjectFunctionResultChecked)
 	{
-		m_ObjectFunctionResult = Kortex::KPackageManager::GetInstance()->CheckRequirementState(this);
+		m_ObjectFunctionResult = Kortex::IPackageManager::GetInstance()->CheckRequirementState(this);
 		m_ObjectFunctionResultChecked = true;
 	}
 	return m_ObjectFunctionResult;
@@ -51,7 +51,7 @@ void KPPRRequirementEntry::ResetObjectFunctionResult()
 
 bool KPPRRequirementEntry::IsStd() const
 {
-	return Kortex::KPackageManager::GetInstance()->IsStdReqirement(GetID());
+	return Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID()) != nullptr;
 }
 bool KPPRRequirementEntry::IsSystem() const
 {
@@ -102,7 +102,7 @@ bool KPPRRequirementEntry::ConformToTypeDescriptor()
 {
 	if (m_TypeDescriptor == KPPR_TYPE_SYSTEM || m_TypeDescriptor == KPPR_TYPE_AUTO)
 	{
-		const KPPRRequirementEntry* stdEntry = Kortex::KPackageManager::GetInstance()->FindStdReqirement(GetID());
+		const KPPRRequirementEntry* stdEntry = Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID());
 		if (stdEntry)
 		{
 			SetName(stdEntry->GetName());

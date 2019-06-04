@@ -8,15 +8,15 @@
 #include "KPackageProjectFileData.h"
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
-#include "PackageManager/KPackageManager.h"
+#include "ModPackages/IPackageManager.h"
 
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include <Kortex/NetworkManager.hpp>
-#include <Kortex/Common/Packages.hpp>
+#include <Kortex/ModTagManager.hpp>
+#include <Kortex/PackageManager.hpp>
 
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/ModNetwork/LoversLab.h"
@@ -152,7 +152,7 @@ namespace
 				reqEntry = std::make_unique<KPPRRequirementEntry>();
 
 				// Copy std requirement for current game and set required version from FOMod
-				const KPPRRequirementEntry* stdEntry = Kortex::KPackageManager::GetInstance()->FindStdReqirement(Kortex::IGameInstance::GetActive()->GetGameID());
+				const KPPRRequirementEntry* stdEntry = IPackageManager::GetInstance()->FindStdReqirement(Kortex::IGameInstance::GetActive()->GetGameID());
 
 				// This check probably redundant, but just in case
 				if (stdEntry)
@@ -172,15 +172,14 @@ namespace
 				reqEntry = std::make_unique<KPPRRequirementEntry>();
 
 				// There may be no Script Extender
-				const KPPRRequirementEntry* stdEntry = Kortex::KPackageManager::GetInstance()->GetScriptExtenderRequirement();
-				if (stdEntry)
+				if (auto se = IPackageManager::GetInstance()->TryGetComponent<PackageManager::IWithScriptExtender>())
 				{
-					*reqEntry = *stdEntry;
+					*reqEntry = se->GetEntry();
 				}
 				else
 				{
 					// No SE, fill with something meaningful
-					reqEntry->SetName(Kortex::IGameInstance::GetActive()->GetGameShortName() + " Script Extender");
+					reqEntry->SetName(IGameInstance::GetActive()->GetGameShortName() + " Script Extender");
 					reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
 				}
 			}
@@ -759,7 +758,7 @@ void KPackageProjectSerializerFOMod::WriteInstallSteps()
 	KxXMLNode configRootNode = m_XML.NewElement("config");
 
 	// Write XML-Schema
-	if (GetGlobalOptionOf<KPackageManager>(OName::FOMod).GetAttributeBool(OName::UseHTTPSForXMLScheme, true))
+	if (GetGlobalOptionOf<IPackageManager>(OName::FOMod).GetAttributeBool(OName::UseHTTPSForXMLScheme, true))
 	{
 		configRootNode.SetAttribute("xmlns:xsi", "https://www.w3.org/2001/XMLSchema-instance");
 		configRootNode.SetAttribute("xsi:noNamespaceSchemaLocation", "https://qconsulting.ca/fo3/ModConfig5.0.xsd");
@@ -1044,7 +1043,7 @@ void KPackageProjectSerializerFOMod::WriteFileData(KxXMLNode& node, const KxStri
 void KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const KxStringVector& requiremetSets)
 {
 	const KPackageProjectRequirements& requirements = m_ProjectSave->GetRequirements();
-	const KPPRRequirementEntry* scriptExtenderReqEntry = Kortex::KPackageManager::GetInstance()->GetScriptExtenderRequirement();
+	const PackageManager::IWithScriptExtender* se = IPackageManager::GetInstance()->TryGetComponent<PackageManager::IWithScriptExtender>();
 
 	for (const wxString& id: requiremetSets)
 	{
@@ -1054,11 +1053,11 @@ void KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const Kx
 			node.SetAttribute("operator", group->GetOperator() == KPP_OPERATOR_AND ? "And" : "Or");
 			for (const auto& entry: group->GetEntries())
 			{
-				if (entry->GetID() == Kortex::IGameInstance::GetActive()->GetGameID())
+				if (entry->GetID() == IGameInstance::GetActive()->GetGameID())
 				{
 					node.NewElement("gameDependency").SetAttribute("version", entry->GetRequiredVersion());
 				}
-				else if (scriptExtenderReqEntry && entry->GetID() == scriptExtenderReqEntry->GetID())
+				else if (se && entry->GetID() == se->GetEntry().GetID())
 				{
 					node.NewElement("foseDependency").SetAttribute("version", entry->GetRequiredVersion());
 				}

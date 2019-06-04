@@ -1377,7 +1377,7 @@ KInstallWizardDialog::KInstallWizardDialog(wxWindow* parent, const wxString& pac
 }
 bool KInstallWizardDialog::Create(wxWindow* parent, const wxString& packagePath)
 {
-	m_Package = std::make_unique<KModPackage>();
+	m_Package = std::make_unique<ModPackage>();
 	if (CreateUI(parent))
 	{
 		OpenPackage(packagePath);
@@ -1385,7 +1385,7 @@ bool KInstallWizardDialog::Create(wxWindow* parent, const wxString& packagePath)
 	}
 	return false;
 }
-bool KInstallWizardDialog::Create(wxWindow* parent, std::unique_ptr<KModPackage>&& package)
+bool KInstallWizardDialog::Create(wxWindow* parent, std::unique_ptr<ModPackage>&& package)
 {
 	m_Package = std::move(package);
 	if (CreateUI(parent))

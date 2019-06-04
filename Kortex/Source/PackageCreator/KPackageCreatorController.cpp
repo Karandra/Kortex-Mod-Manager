@@ -6,13 +6,14 @@
 #include "PackageProject/KPackageProjectDefs.h"
 #include "PackageProject/KPackageProjectSerializerKMP.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
-#include "PackageManager/KModPackage.h"
+#include "ModPackages/ModPackage.h"
 #include "Archive/KArchive.h"
 #include "Utility/KOperationWithProgress.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxTextFile.h>
 
+using namespace Kortex;
 using namespace Kortex::ModManager;
 
 wxString KPackageCreatorController::GetNewProjectName()
@@ -144,7 +145,7 @@ void KPackageCreatorController::ImportProjectFromPackage(const wxString& package
 	m_ProjectFile.Clear();
 	m_Project = std::make_unique<KPackageProject>();
 
-	KModPackage(packagePath, *m_Project.get());
+	ModPackage(packagePath, *m_Project.get());
 	m_Project->GetConfig().SetInstallPackageFile(packagePath);
 
 	Reload();

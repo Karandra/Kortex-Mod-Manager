@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "KPackageProject.h"
-#include "PackageManager/KPackageManager.h"
 #include <Kortex/ModManager.hpp>
+#include <Kortex/PackageManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
@@ -200,7 +200,7 @@ KPackageProject::KPackageProject()
 	m_Requirements(*this),
 	m_Components(*this),
 
-	m_FormatVersion(Kortex::KPackageModule::GetInstance()->GetModuleInfo().GetVersion()),
+	m_FormatVersion(Kortex::ModPackagesModule::GetInstance()->GetModuleInfo().GetVersion()),
 	m_TargetProfileID(Kortex::IGameInstance::GetActive()->GetGameID())
 {
 }

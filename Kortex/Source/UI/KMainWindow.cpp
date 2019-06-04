@@ -18,7 +18,7 @@
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxShell.h>
 
-#include "PackageManager/KPackageManagerWorkspace.h"
+#include "ModPackages/PackageManager/Workspace.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 
 using namespace Kortex;
@@ -181,7 +181,7 @@ void KMainWindow::CreateMainWorkspaces()
 	//AddWorkspace(new KGameConfigWorkspace(this))->CreateNow();
 	AddWorkspace(new Kortex::ModManager::Workspace(this))->CreateNow();
 	AddWorkspace(new KPackageCreatorWorkspace(this));
-	AddWorkspace(new KPackageManagerWorkspace(this));
+	AddWorkspace(new PackageManager::Workspace(this));
 	CreatePluggableManagersWorkspaces(Kortex::ModManager::Workspace::GetInstance());
 
 	// Create toolbar button and assign menu to it

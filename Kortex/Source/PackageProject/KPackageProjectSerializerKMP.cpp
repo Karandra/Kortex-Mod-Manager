@@ -10,7 +10,7 @@
 #include "KPackageProjectComponents.h"
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include "PackageManager/KPackageManager.h"
+#include <Kortex/PackageManager.hpp>
 #include "GameInstance/IGameInstance.h"
 #include "Utility/KAux.h"
 
@@ -356,7 +356,7 @@ void KPackageProjectSerializerKMP::ReadComponents()
 KxXMLNode KPackageProjectSerializerKMP::WriteBase()
 {
 	KxXMLNode baseNode = m_XML.NewElement("Package");
-	baseNode.SetAttribute("FormatVersion", Kortex::KPackageModule::GetInstance()->GetModuleInfo().GetVersion());
+	baseNode.SetAttribute("FormatVersion", Kortex::ModPackagesModule::GetInstance()->GetModuleInfo().GetVersion());
 	baseNode.SetAttribute("ID", m_ProjectSave->GetModID());
 
 	KxXMLNode targetProfileNode = baseNode.NewElement("TargetProfile");

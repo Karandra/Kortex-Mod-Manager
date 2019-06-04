@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "PackageManager/KModPackage.h"
+#include "ModPackages/ModPackage.h"
 #include "GameMods/ModManager/BasicGameMod.h"
 #include "KInstallWizardStepStack.h"
 #include "Utility/KOperationWithProgress.h"
@@ -27,6 +27,8 @@ class KInstallWizardComponnetsModel;
 class KImageViewerEvent;
 class KIWDInstallOperation;
 class KInstallWizardInfoModel;
+
+using namespace Kortex;
 
 wxDECLARE_EVENT(KEVT_IW_DONE, wxNotifyEvent);
 
@@ -116,9 +118,9 @@ class KInstallWizardDialog:
 		/* Package */
 		KIWImagesMap m_ImagesMap;
 		int m_CurrentImageIndex = -1;
-		std::unique_ptr<KModPackage> m_Package;
-		Kortex::ModManager::BasicGameMod m_ModEntry;
-		const Kortex::IGameMod* m_ExistingMod = nullptr;
+		std::unique_ptr<ModPackage> m_Package;
+		ModManager::BasicGameMod m_ModEntry;
+		const IGameMod* m_ExistingMod = nullptr;
 
 		// Components
 		bool m_HasManualComponents = false;
@@ -225,7 +227,7 @@ class KInstallWizardDialog:
 		KInstallWizardDialog();
 		KInstallWizardDialog(wxWindow* parent, const wxString& packagePath);
 		bool Create(wxWindow* parent, const wxString& packagePath);
-		bool Create(wxWindow* parent, std::unique_ptr<KModPackage>&& package);
+		bool Create(wxWindow* parent, std::unique_ptr<ModPackage>&& package);
 		virtual ~KInstallWizardDialog();
 
 	public:

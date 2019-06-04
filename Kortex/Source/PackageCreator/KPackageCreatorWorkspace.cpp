@@ -13,7 +13,7 @@
 #include "PackageProject/KPackageProjectDefs.h"
 #include "PackageProject/KPackageProjectSerializerKMP.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
-#include "PackageManager/KModPackage.h"
+#include "ModPackages/ModPackage.h"
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxTextFile.h>

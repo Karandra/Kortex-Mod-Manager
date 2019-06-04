@@ -212,6 +212,12 @@
     <ClCompile Include="Source\GameMods\VirtualGameFolder\DisplayModel.cpp" />
     <ClCompile Include="Source\GameMods\VirtualGameFolder\Workspace.cpp" />
     <ClCompile Include="Source\InstallWizard\KInstallWizardInfoModel.cpp" />
+    <ClCompile Include="Source\ModPackages\IPackageManager.cpp" />
+    <ClCompile Include="Source\ModPackages\ModPackage.cpp" />
+    <ClCompile Include="Source\ModPackages\ModPackagesModule.cpp" />
+    <ClCompile Include="Source\ModPackages\PackageManager\DefaultPackageManager.cpp" />
+    <ClCompile Include="Source\ModPackages\PackageManager\DisplayModel.cpp" />
+    <ClCompile Include="Source\ModPackages\PackageManager\Workspace.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadEntry.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadManager.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DisplayModel.cpp" />
@@ -265,9 +271,6 @@
     <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp" />
     <ClCompile Include="Source\Utility\KTempFolderKeeper.cpp" />
-    <ClCompile Include="Source\PackageManager\KModPackage.cpp" />
-    <ClCompile Include="Source\PackageManager\KPackageManagerWorkspace.cpp" />
-    <ClCompile Include="Source\PackageManager\KPackageManagerListModel.cpp" />
     <ClCompile Include="Source\PackageCreator\KPackageCreatorFOModIEDialog.cpp" />
     <ClCompile Include="Source\PackageCreator\KPackageCreatorListModel.cpp" />
     <ClCompile Include="Source\PackageCreator\KPackageCreatorPageBase.cpp" />
@@ -286,7 +289,6 @@
     <ClCompile Include="Source\PackageCreator\PageInterface\KPCIImagesListModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageRequirements\KPCREntriesListModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageRequirements\KPCRGroupsModel.cpp" />
-    <ClCompile Include="Source\PackageManager\KPackageManager.cpp" />
     <ClCompile Include="Source\PackageProject\KPackageProjectComponents.cpp" />
     <ClCompile Include="Source\PackageCreator\KPackageCreatorPageInfo.cpp" />
     <ClCompile Include="Source\PackageCreator\KPackageCreatorPageInterface.cpp" />
@@ -354,6 +356,7 @@
     <ClInclude Include="Include\Kortex\ModTagManager.hpp" />
     <ClInclude Include="Include\Kortex\NetworkManager.hpp" />
     <ClInclude Include="Include\Kortex\Notification.hpp" />
+    <ClInclude Include="Include\Kortex\PackageManager.hpp" />
     <ClInclude Include="Include\Kortex\PluginManager.hpp" />
     <ClInclude Include="Include\Kortex\ProgramManager.hpp" />
     <ClInclude Include="Include\Kortex\SaveManager.hpp" />
@@ -545,6 +548,13 @@
     <ClInclude Include="Source\GameMods\VirtualGameFolder\DisplayModel.h" />
     <ClInclude Include="Source\GameMods\VirtualGameFolder\Workspace.h" />
     <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h" />
+    <ClInclude Include="Source\ModPackages\IPackageManager.h" />
+    <ClInclude Include="Source\ModPackages\ModPackage.h" />
+    <ClInclude Include="Source\ModPackages\ModPackagesModule.h" />
+    <ClInclude Include="Source\ModPackages\PackageManager\DefaultPackageManager.h" />
+    <ClInclude Include="Source\ModPackages\PackageManager\IWithScriptExtender.h" />
+    <ClInclude Include="Source\ModPackages\PackageManager\DisplayModel.h" />
+    <ClInclude Include="Source\ModPackages\PackageManager\Workspace.h" />
     <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadEntry.h" />
     <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadManager.h" />
     <ClInclude Include="Source\Network\DownloadManager\DisplayModel.h" />
@@ -615,9 +625,6 @@
     <ClInclude Include="Source\Utility\KDataViewTreeModel.h" />
     <ClInclude Include="Source\Utility\KOperationWithProgress.h" />
     <ClInclude Include="Source\Utility\KTempFolderKeeper.h" />
-    <ClInclude Include="Source\PackageManager\KModPackage.h" />
-    <ClInclude Include="Source\PackageManager\KPackageManagerWorkspace.h" />
-    <ClInclude Include="Source\PackageManager\KPackageManagerListModel.h" />
     <ClInclude Include="Source\Utility\KDataViewListModel.h" />
     <ClInclude Include="Source\PackageCreator\KPackageCreatorFOModIEDialog.h" />
     <ClInclude Include="Source\PackageCreator\KPackageCreatorListModel.h" />
@@ -637,7 +644,6 @@
     <ClInclude Include="Source\PackageCreator\PageInterface\KPCIImagesListModel.h" />
     <ClInclude Include="Source\PackageCreator\PageRequirements\KPCREntriesListModel.h" />
     <ClInclude Include="Source\PackageCreator\PageRequirements\KPCRGroupsModel.h" />
-    <ClInclude Include="Source\PackageManager\KPackageManager.h" />
     <ClInclude Include="Source\PackageProject\KPackageProjectComponents.h" />
     <ClInclude Include="Source\PackageProject\KPackageProjectDefs.h" />
     <ClInclude Include="Source\Utility\KWithIDName.h" />

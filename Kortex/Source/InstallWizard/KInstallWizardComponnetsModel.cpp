@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/PackageManager.hpp>
 #include "KInstallWizardComponnetsModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
-#include "PackageManager/KPackageManager.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>

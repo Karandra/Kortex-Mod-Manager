@@ -890,10 +890,10 @@ namespace Kortex::ModManager
 			}
 
 			// Package menu
-			if (KPackageManager* packageManager = KPackageManager::GetInstance())
+			if (IPackageManager* packageManager = IPackageManager::GetInstance())
 			{
 				Utility::MenuSeparatorAfter separator(contextMenu);
-				packageManager->OnModsMenu(contextMenu, selectedMods, focusedMod);
+				packageManager->OnModListMenu(contextMenu, selectedMods, focusedMod);
 			}
 
 			// Color menu
@@ -992,7 +992,7 @@ namespace Kortex::ModManager
 		// Mod network menu for these mods
 		for (auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
 		{
-			modNetwork->OnModsMenu(contextMenu, selectedMods, focusedMod);
+			modNetwork->OnModListMenu(contextMenu, selectedMods, focusedMod);
 		}
 
 		// Show menu

@@ -4,8 +4,8 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ModManager.hpp>
+#include <Kortex/PackageManager.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "PackageManager/KPackageManager.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxXML.h>
@@ -20,7 +20,7 @@ namespace Kortex::ModTagManager
 {
 	void DefaultTagManager::LoadTagsFrom(IModTag::Vector& items, const KxXMLNode& tagsNode)
 	{
-		const bool hasSE = KPackageManager::GetInstance()->HasScriptExtender();
+		const bool hasSE = IPackageManager::GetInstance()->HasComponent<PackageManager::IWithScriptExtender>();
 
 		for (KxXMLNode node = tagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{

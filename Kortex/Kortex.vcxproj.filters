@@ -57,9 +57,6 @@
     <Filter Include="Code\Source\PackageProject">
       <UniqueIdentifier>{e9e9b99d-3ac0-4aa0-9a95-630b6d728d15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\PackageManager">
-      <UniqueIdentifier>{6627ffce-bf5f-48a0-b6db-7af51ec1e115}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\Archive">
       <UniqueIdentifier>{b222a7fd-1abb-453b-b9eb-023d5b3820f9}</UniqueIdentifier>
     </Filter>
@@ -156,9 +153,6 @@
     </Filter>
     <Filter Include="Code\Headers\PackageProject">
       <UniqueIdentifier>{5bd24315-33cb-4c78-bbab-9287412ccf1a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\PackageManager">
-      <UniqueIdentifier>{fee31dc7-735c-40af-bda6-91e47285bb7c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers\Archive">
       <UniqueIdentifier>{57fb0d5f-55ad-4aee-9227-f22eef7feeb3}</UniqueIdentifier>
@@ -367,6 +361,18 @@
     <Filter Include="Code\Headers\Application\Notifications">
       <UniqueIdentifier>{4bcd5849-822a-4fb6-b85a-97c10b1dc01c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\ModPackages">
+      <UniqueIdentifier>{766cd037-14aa-4ecc-8fe5-11de0a7c3a3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\ModPackages">
+      <UniqueIdentifier>{799e5445-21d6-4b47-adf6-b065c1f11073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\ModPackages\PackageManager">
+      <UniqueIdentifier>{fee31dc7-735c-40af-bda6-91e47285bb7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\ModPackages\PackageManager">
+      <UniqueIdentifier>{6627ffce-bf5f-48a0-b6db-7af51ec1e115}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -444,9 +450,6 @@
     <ClCompile Include="Source\PackageCreator\KPackageCreatorPageRequirements.cpp">
       <Filter>Code\Source\PackageCreator</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageManager\KPackageManager.cpp">
-      <Filter>Code\Source\PackageManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageProject\KPackageProjectRequirements.cpp">
       <Filter>Code\Source\PackageProject</Filter>
     </ClCompile>
@@ -486,12 +489,6 @@
     <ClCompile Include="Source\PackageCreator\KPackageCreatorFOModIEDialog.cpp">
       <Filter>Code\Source\PackageCreator</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageManager\KPackageManagerWorkspace.cpp">
-      <Filter>Code\Source\PackageManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageManager\KModPackage.cpp">
-      <Filter>Code\Source\PackageManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\KPCCConditionalStepsModel.cpp">
       <Filter>Code\Source\PackageCreator\PageComponents</Filter>
     </ClCompile>
@@ -527,9 +524,6 @@
     </ClCompile>
     <ClCompile Include="Source\InstallWizard\KInstallWizardInfoModel.cpp">
       <Filter>Code\Source\InstallWizard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageManager\KPackageManagerListModel.cpp">
-      <Filter>Code\Source\PackageManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.cpp">
       <Filter>Code\Source\PackageCreator\PageInfo</Filter>
@@ -1176,6 +1170,24 @@
     <ClCompile Include="Source\Application\ApplicationModule.cpp">
       <Filter>Code\Source\Application</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ModPackages\ModPackagesModule.cpp">
+      <Filter>Code\Source\ModPackages</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\IPackageManager.cpp">
+      <Filter>Code\Source\ModPackages</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\PackageManager\DefaultPackageManager.cpp">
+      <Filter>Code\Source\ModPackages\PackageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\PackageManager\Workspace.cpp">
+      <Filter>Code\Source\ModPackages\PackageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\PackageManager\DisplayModel.cpp">
+      <Filter>Code\Source\ModPackages\PackageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\ModPackage.cpp">
+      <Filter>Code\Source\ModPackages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1268,9 +1280,6 @@
     <ClInclude Include="Source\PackageCreator\KPackageCreatorPageRequirements.h">
       <Filter>Code\Headers\PackageCreator</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageManager\KPackageManager.h">
-      <Filter>Code\Headers\PackageManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PackageProject\KPackageProjectComponents.h">
       <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
@@ -1315,12 +1324,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\KDataViewListModel.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageManager\KPackageManagerWorkspace.h">
-      <Filter>Code\Headers\PackageManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageManager\KModPackage.h">
-      <Filter>Code\Headers\PackageManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageComponents\KPCCConditionalStepsModel.h">
       <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
@@ -1375,9 +1378,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\KUnsortedUnique.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageManager\KPackageManagerListModel.h">
-      <Filter>Code\Headers\PackageManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.h">
       <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
@@ -2233,6 +2233,30 @@
     </ClInclude>
     <ClInclude Include="Source\Application\ApplicationModule.h">
       <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\ModPackagesModule.h">
+      <Filter>Code\Headers\ModPackages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\IPackageManager.h">
+      <Filter>Code\Headers\ModPackages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\PackageManager\DefaultPackageManager.h">
+      <Filter>Code\Headers\ModPackages\PackageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\PackageManager\IWithScriptExtender.h">
+      <Filter>Code\Headers\ModPackages\PackageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\PackageManager\Workspace.h">
+      <Filter>Code\Headers\ModPackages\PackageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\PackageManager\DisplayModel.h">
+      <Filter>Code\Headers\ModPackages\PackageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\ModPackage.h">
+      <Filter>Code\Headers\ModPackages</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\PackageManager.hpp">
+      <Filter>Code\Include\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

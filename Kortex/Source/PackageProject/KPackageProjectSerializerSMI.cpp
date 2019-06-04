@@ -8,7 +8,7 @@
 #include "KPackageProjectFileData.h"
 #include "KPackageProjectRequirements.h"
 #include "KPackageProjectComponents.h"
-#include "PackageManager/KPackageManager.h"
+#include "ModPackages/IPackageManager.h"
 #include "GameInstance/IGameInstance.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModTagManager.hpp>

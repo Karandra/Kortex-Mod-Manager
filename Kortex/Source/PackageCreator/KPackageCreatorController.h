@@ -5,11 +5,11 @@
 class KPackageCreatorWorkspace;
 class KPackageManager;
 class KPackageProjectSerializer;
-class KModPackage;
 enum KPPPackageType;
 
 namespace Kortex
 {
+	class ModPackage;
 	class IGameMod;
 }
 

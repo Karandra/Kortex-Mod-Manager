@@ -2,9 +2,9 @@
 #include "Option.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "PackageManager/KPackageManager.h"
-#include "UI/KWorkspace.h"
+#include <Kortex/PackageManager.hpp>
 #include "InstallWizard/KInstallWizardDialog.h"
+#include "UI/KWorkspace.h"
 
 namespace
 {
@@ -98,7 +98,7 @@ namespace Kortex::Application
 	}
 	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const KInstallWizardDialog& installWizard, const wxString& branch)
 	{
-		KxXMLNode node = InitNodeUsingManager(disposition, xml, *KPackageManager::GetInstance(), wxS("InstallWizard"), branch);
+		KxXMLNode node = InitNodeUsingManager(disposition, xml, *IPackageManager::GetInstance(), wxS("InstallWizard"), branch);
 		AssignDisposition(disposition);
 		AssignNode(node);
 	}

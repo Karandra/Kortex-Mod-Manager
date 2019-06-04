@@ -13,7 +13,7 @@ namespace Kortex
 	class IVFSService;
 
 	class GameModsModule;
-	class KPackageModule;
+	class ModPackagesModule;
 	class KProgramModule;
 	class NetworkModule;
 }
@@ -41,7 +41,7 @@ namespace Kortex::Application
 			bool m_IsCmdStartupInstanceID = false;
 
 			std::unique_ptr<GameModsModule> m_GameModsModule;
-			std::unique_ptr<KPackageModule> m_PackagesModule;
+			std::unique_ptr<ModPackagesModule> m_PackagesModule;
 			std::unique_ptr<KProgramModule> m_ProgramModule;
 			std::unique_ptr<NetworkModule> m_NetworkModule;
 			std::unique_ptr<IVFSService> m_VFSService;

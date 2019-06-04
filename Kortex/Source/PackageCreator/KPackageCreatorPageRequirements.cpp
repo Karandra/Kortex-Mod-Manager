@@ -6,7 +6,7 @@
 #include "PageRequirements/KPCRGroupsModel.h"
 #include "PageRequirements/KPCREntriesListModel.h"
 #include "PageComponents/KPCCRequirementsSelectorModel.h"
-#include "PackageManager/KPackageManager.h"
+#include "ModPackages/IPackageManager.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxComboBox.h>
@@ -132,7 +132,7 @@ void KPackageCreatorPageRequirements::LoadStdReqs()
 	m_StdReqs_Categories->AddItem(KVarExp("<$T(Generic.All)>"));
 
 	std::unordered_set<wxString> categoriesSet;
-	for (const auto& entry: Kortex::KPackageManager::GetInstance()->GetStdRequirements())
+	for (const auto& entry: Kortex::IPackageManager::GetInstance()->GetStdRequirements())
 	{
 		if (categoriesSet.emplace(entry->GetCategory()).second)
 		{
@@ -156,7 +156,7 @@ void KPackageCreatorPageRequirements::OnSelectStdReqCategory(wxCommandEvent& eve
 
 		m_StdReqs_List->Clear();
 
-		for (const auto& entry: Kortex::KPackageManager::GetInstance()->GetStdRequirements())
+		for (const auto& entry: Kortex::IPackageManager::GetInstance()->GetStdRequirements())
 		{
 			if (requestedCategory.IsEmpty() || requestedCategory == entry->GetCategory())
 			{

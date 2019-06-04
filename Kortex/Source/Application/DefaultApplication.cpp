@@ -4,11 +4,11 @@
 #include "UI/KWorkspace.h"
 #include "GameInstance/SelectionDialog.h"
 #include "VirtualFileSystem/DefaultVFSService.h"
-#include "PackageManager/KPackageManager.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/ProgramManager.hpp>
+#include <Kortex/PackageManager.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
@@ -137,7 +137,7 @@ namespace Kortex::Application
 			
 			// Order is important
 			m_NetworkModule = std::make_unique<NetworkModule>();
-			m_PackagesModule = std::make_unique<KPackageModule>();
+			m_PackagesModule = std::make_unique<ModPackagesModule>();
 			m_ProgramModule = std::make_unique<KProgramModule>();
 			m_GameModsModule = std::make_unique<GameModsModule>();
 			Utility::Log::LogInfo("Core systems initialized");

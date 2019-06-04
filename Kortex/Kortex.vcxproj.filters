@@ -60,9 +60,6 @@
     <Filter Include="Code\Source\Archive">
       <UniqueIdentifier>{b222a7fd-1abb-453b-b9eb-023d5b3820f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\InstallWizard">
-      <UniqueIdentifier>{eb1f8d1e-9c5c-4fd8-b7b4-b6c475b9d12f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\Network">
       <UniqueIdentifier>{1cf732ae-1aa0-424c-94d5-446352cdfb8c}</UniqueIdentifier>
     </Filter>
@@ -156,9 +153,6 @@
     </Filter>
     <Filter Include="Code\Headers\Archive">
       <UniqueIdentifier>{57fb0d5f-55ad-4aee-9227-f22eef7feeb3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\InstallWizard">
-      <UniqueIdentifier>{56b3d8e2-4a4a-44d5-92f7-7a4701e4108a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers\Network">
       <UniqueIdentifier>{73439ed9-5d64-4c3e-b8c6-d01d9f165780}</UniqueIdentifier>
@@ -373,6 +367,12 @@
     <Filter Include="Code\Source\ModPackages\PackageManager">
       <UniqueIdentifier>{6627ffce-bf5f-48a0-b6db-7af51ec1e115}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\ModPackages\InstallWizard">
+      <UniqueIdentifier>{56b3d8e2-4a4a-44d5-92f7-7a4701e4108a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\ModPackages\InstallWizard">
+      <UniqueIdentifier>{eb1f8d1e-9c5c-4fd8-b7b4-b6c475b9d12f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -504,26 +504,11 @@
     <ClCompile Include="Source\PackageCreator\KPackageCreatorBuilder.cpp">
       <Filter>Code\Source\PackageCreator</Filter>
     </ClCompile>
-    <ClCompile Include="Source\InstallWizard\KInstallWizardDialog.cpp">
-      <Filter>Code\Source\InstallWizard</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\KTempFolderKeeper.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\InstallWizard\KInstallWizardRequirementsModel.cpp">
-      <Filter>Code\Source\InstallWizard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\InstallWizard\KInstallWizardComponnetsModel.cpp">
-      <Filter>Code\Source\InstallWizard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\InstallWizard\KInstallWizardStepStack.cpp">
-      <Filter>Code\Source\InstallWizard</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Archive\KArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\InstallWizard\KInstallWizardInfoModel.cpp">
-      <Filter>Code\Source\InstallWizard</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.cpp">
       <Filter>Code\Source\PackageCreator\PageInfo</Filter>
@@ -1188,6 +1173,18 @@
     <ClCompile Include="Source\ModPackages\ModPackage.cpp">
       <Filter>Code\Source\ModPackages</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\RequirementsDisplayModel.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\InfoDisplayModel.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\ComponentsDisplayModel.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\WizardDialog.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1340,14 +1337,8 @@
     <ClInclude Include="Source\PackageCreator\KPackageCreatorBuilder.h">
       <Filter>Code\Headers\PackageCreator</Filter>
     </ClInclude>
-    <ClInclude Include="Source\InstallWizard\KInstallWizardDialog.h">
-      <Filter>Code\Headers\InstallWizard</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utility\KTempFolderKeeper.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\InstallWizard\KInstallWizardRequirementsModel.h">
-      <Filter>Code\Headers\InstallWizard</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KDataViewTreeModel.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -1355,26 +1346,11 @@
     <ClInclude Include="Source\Utility\KDataViewModelBase.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\InstallWizard\KInstallWizardComponnetsModel.h">
-      <Filter>Code\Headers\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\InstallWizard\KInstallWizardComponnetsModelNode.h">
-      <Filter>Code\Headers\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\InstallWizard\KInstallWizardStepStack.h">
-      <Filter>Code\Headers\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\InstallWizard\KInstallWizardDefs.h">
-      <Filter>Code\Headers\InstallWizard</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Archive\KArchive.h">
       <Filter>Code\Headers\Archive</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KWithBitmap.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\InstallWizard\KInstallWizardInfoModel.h">
-      <Filter>Code\Headers\InstallWizard</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KUnsortedUnique.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -2257,6 +2233,30 @@
     </ClInclude>
     <ClInclude Include="Include\Kortex\PackageManager.hpp">
       <Filter>Code\Include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kortex\InstallWizard.hpp">
+      <Filter>Code\Include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\RequirementsDisplayModel.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\StepStack.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\InfoDisplayModel.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Common.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\ComponentsDisplayModelNode.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\ComponentsDisplayModel.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\WizardDialog.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,8 +3,8 @@
 #include "PackageProject/KPackageProject.h"
 #include "PackageProject/KPackageProjectSerializerKMP.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
-#include "InstallWizard/KInstallWizardDialog.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/InstallWizard.hpp>
 #include "Utility/KAux.h"
 #include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxFile.h>
@@ -12,6 +12,7 @@
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxTaskDialog.h>
 
+using namespace Kortex;
 #define TestContinue()		if (!m_Thread->CanContinue()) { return; }
 
 wxString KPackageCreatorBuilder::GetTempPackagePath() const
@@ -310,22 +311,24 @@ void KPackageCreatorBuilderOperation::OnEndHandler()
 		{
 			if (m_BuildPreview)
 			{
-				KInstallWizardDialog* dialog = new KInstallWizardDialog();
-				dialog->SetOptionEnabled(KIWD_OPTION_PREVIEW);
-				dialog->SetOptionEnabled(KIWD_OPTION_CLEANUP);
-				dialog->Create(Kortex::IApplication::GetInstance()->GetTopWindow(), m_PackagePath);
+				using namespace InstallWizard;
+
+				WizardDialog* dialog = new WizardDialog();
+				dialog->SetOptionEnabled(DialogOptions::Debug);
+				dialog->SetOptionEnabled(DialogOptions::Cleanup);
+				dialog->Create(IApplication::GetInstance()->GetTopWindow(), m_PackagePath);
 			}
 			else
 			{
 				wxString path = m_Project->GetConfig().GetInstallPackageFile();
 				wxString size = KxFile(path).GetFormattedFileSize(2);
 				wxString info = wxString::Format("%s: \"%s\"\r\n%s: %s", KTr(KxID_FILE), path, KTr("Generic.Size"), size);
-				KxTaskDialog(Kortex::IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.Complete"), info, KxBTN_OK, KxICON_INFORMATION).ShowModal();
+				KxTaskDialog(IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.Complete"), info, KxBTN_OK, KxICON_INFORMATION).ShowModal();
 			}
 		}
 		else
 		{
-			KxTaskDialog(Kortex::IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.BuildError"), wxEmptyString, KxBTN_OK, KxICON_ERROR).ShowModal();
+			KxTaskDialog(IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.BuildError"), wxEmptyString, KxBTN_OK, KxICON_ERROR).ShowModal();
 		}
 	}
 }

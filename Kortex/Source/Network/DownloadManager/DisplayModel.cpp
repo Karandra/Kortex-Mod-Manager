@@ -3,9 +3,9 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/GameInstance.hpp>
+#include <Kortex/InstallWizard.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include "Network/ModNetwork/Nexus.h"
-#include "InstallWizard/KInstallWizardDialog.h"
 #include "Utility/KAux.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxMenu.h>
@@ -673,7 +673,7 @@ namespace Kortex::DownloadManager
 	void DisplayModel::Install(IDownloadEntry& entry)
 	{
 		entry.Save();
-		new KInstallWizardDialog(GetViewTLW(), entry.GetFullPath());
+		new InstallWizard::WizardDialog(GetViewTLW(), entry.GetFullPath());
 	}
 
 	DisplayModel::DisplayModel()

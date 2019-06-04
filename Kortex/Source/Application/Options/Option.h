@@ -3,7 +3,6 @@
 #include "Application/IAppOption.h"
 class KWorkspace;
 class KMainWindow;
-class KInstallWizardDialog;
 
 namespace Kortex
 {
@@ -12,6 +11,10 @@ namespace Kortex
 	class IManager;
 	class IGameInstance;
 	class IGameProfile;
+}
+namespace Kortex::InstallWizard
+{
+	class WizardDialog;
 }
 
 namespace Kortex::Application
@@ -27,7 +30,7 @@ namespace Kortex::Application
 			void Create(Disposition disposition, KxXMLDocument& xml, const IManager& manager, const wxString& branch = wxEmptyString);
 			void Create(Disposition disposition, KxXMLDocument& xml, const KWorkspace& workspace, const wxString& branch = wxEmptyString);
 			void Create(Disposition disposition, KxXMLDocument& xml, const KMainWindow& mainWindow, const wxString& branch = wxEmptyString);
-			void Create(Disposition disposition, KxXMLDocument& xml, const KInstallWizardDialog& installWizard, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const InstallWizard::WizardDialog& installWizard, const wxString& branch = wxEmptyString);
 	};
 }
 

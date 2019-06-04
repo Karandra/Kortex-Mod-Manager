@@ -8,6 +8,7 @@
 #include <Kortex/SaveManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
 #include <Kortex/ProgramManager.hpp>
+#include <Kortex/InstallWizard.hpp>
 #include <Kortex/VirtualGameFolder.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
@@ -22,7 +23,6 @@
 #include "GameMods/KModCollisionViewerModel.h"
 #include "UI/KImageViewerDialog.h"
 #include "UI/KTextEditorDialog.h"
-#include "InstallWizard/KInstallWizardDialog.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
 #include "Utility/MenuSeparator.h"
@@ -528,8 +528,8 @@ namespace Kortex::ModManager
 
 	void Workspace::OpenPackage(const wxString& path)
 	{
-		KInstallWizardDialog* dialog = new KInstallWizardDialog(GetMainWindow(), path);
-		dialog->Bind(KEVT_IW_DONE, [this](wxNotifyEvent& event)
+		InstallWizard::WizardDialog* dialog = new InstallWizard::WizardDialog(GetMainWindow(), path);
+		dialog->Bind(InstallWizard::KEVT_IW_DONE, [this](wxNotifyEvent& event)
 		{
 			ScheduleReload();
 		});
@@ -724,7 +724,7 @@ namespace Kortex::ModManager
 
 	void Workspace::InstallMod(IGameMod* entry)
 	{
-		new KInstallWizardDialog(this, entry->GetPackageFile());
+		new InstallWizard::WizardDialog(this, entry->GetPackageFile());
 	}
 	void Workspace::UninstallMod(IGameMod* entry, bool eraseLog)
 	{

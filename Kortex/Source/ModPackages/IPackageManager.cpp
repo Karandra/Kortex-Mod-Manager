@@ -10,7 +10,6 @@
 #include <Kortex/Common/Packages.hpp>
 #include "PackageProject/KPackageProject.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
-#include "InstallWizard/KInstallWizardDialog.h"
 #include "Archive/KArchive.h"
 #include "Utility/KAux.h"
 #include "Utility/KOperationWithProgress.h"

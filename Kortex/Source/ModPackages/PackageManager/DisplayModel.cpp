@@ -2,12 +2,12 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/GameInstance.hpp>
-#include <Kortex/Common/Packages.hpp>
+#include <Kortex/PackageManager.hpp>
+#include <Kortex/InstallWizard.hpp>
 #include "DisplayModel.h"
 #include "ModPackages/IPackageManager.h"
 #include "ModPackages/ModPackage.h"
 #include "UI/KMainWindow.h"
-#include "InstallWizard/KInstallWizardDialog.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
@@ -210,7 +210,7 @@ namespace Kortex::PackageManager
 				}
 				else
 				{
-					KInstallWizardDialog::ShowInvalidPackageDialog(GetViewTLW(), entry->GetFullPath());
+					InstallWizard::WizardDialog::ShowInvalidPackageDialog(GetViewTLW(), entry->GetFullPath());
 				}
 			}
 		}
@@ -316,7 +316,7 @@ namespace Kortex::PackageManager
 	}
 	void DisplayModel::RunInstallWizard(const KxFileItem& entry)
 	{
-		KInstallWizardDialog* installWizard = new KInstallWizardDialog();
+		InstallWizard::WizardDialog* installWizard = new InstallWizard::WizardDialog();
 		if (m_Package && m_Package->IsOK())
 		{
 			installWizard->Create(GetViewTLW(), std::move(m_Package));

@@ -47,6 +47,7 @@ namespace Kortex::InstallWizard
 			wxAny GetEditorValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
 			bool SetValue(KxDataView2::Node& node, const wxAny& value, KxDataView2::Column& column) override;
 			bool IsEnabled(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
+			bool GetAttributes(const KxDataView2::Node& node, KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const override;
 
 			bool CheckModID(const wxString& id);
 			void OnActivateItem(KxDataView2::Event& event);

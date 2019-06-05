@@ -484,9 +484,12 @@ namespace Kortex::InstallWizard
 		{
 			info.GetModSourceStore().Visit([this](const ModSourceItem& item)
 			{
-				IModNetwork* modNetwork = nullptr;
-				ResourceID icon = item.TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : IModNetwork::GetGenericIcon();
-				m_Info_PackageInfoList->AddItem(KLabeledValue(item.GetURL(), item.GetName()), icon, InfoKind::ModSource);
+				if (item.IsOK())
+				{
+					IModNetwork* modNetwork = nullptr;
+					ResourceID icon = item.TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : IModNetwork::GetGenericIcon();
+					m_Info_PackageInfoList->AddItem(KLabeledValue(item.GetURL(), item.GetName()), icon, InfoKind::ModSource);
+				}
 				return true;
 			});
 		};

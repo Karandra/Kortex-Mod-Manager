@@ -71,7 +71,7 @@ namespace Kortex
 		public:
 			bool IsOK() const
 			{
-				return !m_Value.valueless_by_exception();
+				return IsInteger() || IsString();
 			}
 			explicit operator bool() const
 			{
@@ -88,12 +88,13 @@ namespace Kortex
 			}
 			bool IsString() const
 			{
-				return std::holds_alternative<wxString>(m_Value);
+				return TryAsString().has_value();
 			}
 
 			std::optional<std::reference_wrapper<const wxString>> TryAsString() const
 			{
-				if (const wxString* value = std::get_if<wxString>(&m_Value))
+				const wxString* value = std::get_if<wxString>(&m_Value);
+				if (value && !value->IsEmpty())
 				{
 					return *value;
 				}

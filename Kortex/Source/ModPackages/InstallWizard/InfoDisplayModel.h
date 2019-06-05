@@ -1,20 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/Resources/ImageResourceID.h"
-#include "Utility/KDataViewListModel.h"
+#include <KxFramework/DataView2/DataView2.h>
 #include "PackageProject/KPackageProject.h"
 
-namespace Kortex
-{
-	class ModTagStore;
-}
 namespace Kortex::InstallWizard
 {
 	class WizardDialog;
-}
-
-namespace Kortex::InstallWizard
-{
 	enum class InfoKind
 	{
 		None = 0,
@@ -23,79 +15,50 @@ namespace Kortex::InstallWizard
 		ModSource,
 		Tags,
 	};
-}
 
-namespace Kortex::InstallWizard
-{
-	class InfoDisplayModel: public KxDataViewListModelEx
+	class Item
 	{
-		struct Item 
-		{
-			KLabeledValue Value;
-			InfoKind Type = InfoKind::None;
-			ResourceID IconID;
+		friend class InfoDisplayModel;
 
+		private:
+			KLabeledValue Value;
+			ResourceID IconID;
+			InfoKind Type = InfoKind::None;
+
+		public:
 			Item(const KLabeledValue& value)
 				:Value(value)
 			{
 			}
-		};
-		typedef std::vector<Item> ItemVector;
+	};
+}
 
+namespace Kortex::InstallWizard
+{
+	class InfoDisplayModel: public KxDataView2::VirtualListModel
+	{
 		private:
 			WizardDialog& m_InstallWizard;
-			KPackageProject& m_Config;
-			ItemVector m_DataVector;
+			KPackageProject& m_PackageConfig;
+			std::vector<Item> m_Items;
 
 		private:
-			void OnInitControl() override;
-
-			void GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
-			void GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
-			bool SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column) override;
-			bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
+			wxAny GetValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
+			wxAny GetEditorValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
+			bool SetValue(KxDataView2::Node& node, const wxAny& value, KxDataView2::Column& column) override;
+			bool IsEnabled(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
 
 			bool CheckModID(const wxString& id);
-			ModTagStore& GetTagStore() const;
-			void OnActivateItem(KxDataViewEvent& event);
+			void OnActivateItem(KxDataView2::Event& event);
 
 		public:
-			InfoDisplayModel(WizardDialog& installWizard, KPackageProject& config)
-				:m_InstallWizard(installWizard), m_Config(config)
+			InfoDisplayModel(WizardDialog& installWizard, KPackageProject& packageProject)
+				:m_InstallWizard(installWizard), m_PackageConfig(packageProject)
 			{
 			}
 
 		public:
+			void CreateView(wxWindow* parent);
 			void AddItem(const KLabeledValue& value, const ResourceID& image = {}, InfoKind type = InfoKind::None);
-
-			size_t GetItemCount() const override
-			{
-				return m_DataVector.size();
-			}
-		
-			const Item* GetDataEntry(size_t index) const
-			{
-				if (index < GetItemCount())
-				{
-					return &m_DataVector.at(index);
-				}
-				return nullptr;
-			}
-			Item* GetDataEntry(size_t index)
-			{
-				if (index < GetItemCount())
-				{
-					return &m_DataVector.at(index);
-				}
-				return nullptr;
-			}
-			const Item* GetDataEntry(const KxDataViewItem& item) const
-			{
-				return GetDataEntry(GetRow(item));
-			}
-			Item* GetDataEntry(const KxDataViewItem& item)
-			{
-				return GetDataEntry(GetRow(item));
-			}
 	};
 }

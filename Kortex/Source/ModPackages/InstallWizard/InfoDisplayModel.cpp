@@ -13,9 +13,8 @@
 
 namespace
 {
-	enum ColumnID
+	enum class ColumnID
 	{
-		Icon,
 		Name,
 		Value,
 	};
@@ -23,65 +22,38 @@ namespace
 
 namespace Kortex::InstallWizard
 {
-	void InfoDisplayModel::OnInitControl()
+	wxAny InfoDisplayModel::GetValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{
-		/* View */
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &InfoDisplayModel::OnActivateItem, this);
+		const Item& item = m_Items[node.GetRow()];
+		const KLabeledValue& itemValue = item.Value;
 
-		/* Columns */
-		GetView()->AppendColumn<KxDataViewBitmapRenderer>(wxEmptyString, ColumnID::Icon, KxDATAVIEW_CELL_INERT, KxCOL_WIDTH_AUTOSIZE, KxDV_COL_NONE);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT, 250);
-		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
-	}
-
-	void InfoDisplayModel::GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
-	{
-		const Item& item = m_DataVector[row];
-		if (column->GetID() == ColumnID::Value)
+		switch (column.GetID<ColumnID>())
 		{
-			switch (item.Type)
-			{
-				case InfoKind::ID:
-				{
-					data = m_Config.GetModID();
-					break;
-				}
-				case InfoKind::Name:
-				{
-					data = m_Config.GetModName();
-					break;
-				}
-			};
-		}
-	}
-	void InfoDisplayModel::GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
-	{
-		const Item& item = m_DataVector[row];
-		switch (column->GetID())
-		{
-			case ColumnID::Icon:
-			{
-				if (item.IconID)
-				{
-					data = ImageProvider::GetBitmap(item.IconID);
-				}
-				break;
-			}
 			case ColumnID::Name:
 			{
-				if (!item.Value.HasLabel())
+				KxDataView2::BitmapTextValue value;
+
+				// Label
+				if (!itemValue.HasLabel())
 				{
-					wxString name = KAux::ExtractDomainName(item.Value.GetValue());
-					if (!name.IsEmpty())
-					{
-						data = name;
-					}
+					value.SetText(KAux::ExtractDomainName(itemValue.GetValue()));
 				}
 				else
 				{
-					data = item.Value.GetLabel();
+					value.SetText(itemValue.GetLabel());
 				}
-				break;
+
+				// Icon
+				if (item.IconID)
+				{
+					value.SetBitmap(ImageProvider::GetBitmap(item.IconID));
+				}
+				else
+				{
+					value.SetReservedBitmapWidth(KBitmapSize().FromSystemSmallIcon().GetWidth());
+				}
+
+				return value;
 			}
 			case ColumnID::Value:
 			{
@@ -89,60 +61,74 @@ namespace Kortex::InstallWizard
 				{
 					case InfoKind::Tags:
 					{
-						data = KPackageCreatorPageComponents::FormatArrayToText(GetTagStore().GetNames());
-						break;
+						const ModTagStore& tags = m_PackageConfig.GetInfo().GetTagStore();
+						return KPackageCreatorPageComponents::FormatArrayToText(tags.GetNames());
 					}
 					case InfoKind::ID:
 					{
-						data = KxString::Format("%1 (%2)", m_Config.GetModID(), m_Config.GetSignature());
-						break;
+						return KxString::Format(wxS("%1 (%2)"), m_PackageConfig.GetModID(), m_PackageConfig.GetSignature());
 					}
 					case InfoKind::Name:
 					{
-						data = m_Config.GetModName();
-						break;
-					}
-					default:
-					{
-						data = item.Value.GetValue();
+						return m_PackageConfig.GetModName();
 					}
 				};
-				break;
+				return itemValue.GetValue();
 			}
 		};
+		return {};
 	}
-	bool InfoDisplayModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
+	wxAny InfoDisplayModel::GetEditorValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{
-		Item& item = m_DataVector[row];
-		if (column->GetID() == ColumnID::Value)
+		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
+			const Item& item = m_Items[node.GetRow()];
 			switch (item.Type)
 			{
 				case InfoKind::ID:
 				{
-					wxString id = data.As<wxString>();
-					if (id != m_Config.GetModID() && CheckModID(id))
-					{
-						m_Config.SetModID(id);
-						m_InstallWizard.FindExistingMod();
-						return true;
-					}
-					break;
+					return m_PackageConfig.GetModID();
 				}
 				case InfoKind::Name:
 				{
-					m_Config.GetInfo().SetName(data.As<wxString>());
+					return m_PackageConfig.GetModName();
+				}
+			};
+		}
+		return {};
+	}
+	bool InfoDisplayModel::SetValue(KxDataView2::Node& node, const wxAny& value, KxDataView2::Column& column)
+	{
+		if (column.GetID<ColumnID>() == ColumnID::Value)
+		{
+			const Item& item = m_Items[node.GetRow()];
+			switch (item.Type)
+			{
+				case InfoKind::ID:
+				{
+					wxString id = value.As<wxString>();
+					if (id != m_PackageConfig.GetModID() && CheckModID(id))
+					{
+						m_PackageConfig.SetModID(id);
+						m_InstallWizard.FindExistingMod();
+						return true;
+					}
+					return false;
+				}
+				case InfoKind::Name:
+				{
+					m_PackageConfig.GetInfo().SetName(value.As<wxString>());
 					return true;
 				}
-			}
+			};
 		}
 		return false;
 	}
-	bool InfoDisplayModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
+	bool InfoDisplayModel::IsEnabled(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{
-		if (column->GetID() == ColumnID::Value)
+		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{
-			const Item& item = m_DataVector[row];
+			const Item& item = m_Items[node.GetRow()];
 			switch (item.Type)
 			{
 				case InfoKind::ID:
@@ -159,72 +145,87 @@ namespace Kortex::InstallWizard
 	{
 		if (id.IsEmpty())
 		{
-			KxTaskDialog msg(GetViewTLW(), KxID_NONE, KTr("InstallWizard.ChangeID.Invalid"), wxEmptyString, KxBTN_OK, KxICON_WARNING);
+			KxTaskDialog msg(GetView(), KxID_NONE, KTr("InstallWizard.ChangeID.Invalid"), wxEmptyString, KxBTN_OK, KxICON_WARNING);
 			msg.ShowModal();
 			return false;
 		}
 		return true;
 	}
-	Kortex::ModTagStore& InfoDisplayModel::GetTagStore() const
+	void InfoDisplayModel::OnActivateItem(KxDataView2::Event& event)
 	{
-		return m_Config.GetInfo().GetTagStore();
-	}
-	void InfoDisplayModel::OnActivateItem(KxDataViewEvent& event)
-	{
-		Item* entry = GetDataEntry(event.GetItem());
-		if (entry)
+		KxDataView2::Node* node = event.GetNode();
+		const Item& item = m_Items[node->GetRow()];
+		const KLabeledValue& itemValue = item.Value;
+
+		switch (item.Type)
 		{
-			switch (entry->Type)
+			case InfoKind::ID:
+			case InfoKind::Name:
 			{
-				case InfoKind::ID:
-				case InfoKind::Name:
+				if (KxDataView2::Column* column = event.GetColumn())
 				{
-					if (KxDataViewColumn* column = event.GetColumn())
-					{
-						GetView()->EditItem(event.GetItem(), column);
-					}
-					break;
+					node->Edit(*column);
 				}
-				case InfoKind::ModSource:
+				break;
+			}
+			case InfoKind::ModSource:
+			{
+				if (itemValue.HasValue())
 				{
-					if (entry->Value.HasValue())
-					{
-						KAux::AskOpenURL(entry->Value.GetValue(), GetViewTLW());
-					}
-					break;
+					KAux::AskOpenURL(itemValue.GetValue(), GetView());
 				}
-				case InfoKind::Tags:
+				break;
+			}
+			case InfoKind::Tags:
+			{
+				ModTagStore& tags = m_PackageConfig.GetInfo().GetTagStore();
+
+				ModTagManager::SelectorDialog dialog(GetView(), itemValue.GetLabel());
+				dialog.SetDataVector(&tags, m_InstallWizard.GetModEntry());
+				dialog.ShowModal();
+				if (dialog.IsModified())
 				{
-					ModTagManager::SelectorDialog dialog(GetViewTLW(), entry->Value.GetLabel());
-					dialog.SetDataVector(&GetTagStore(), m_InstallWizard.GetModEntry());
+					dialog.ApplyChangesToMod();
+					node->Refresh();
+				}
+				break;
+			}
+			default:
+			{
+				if (itemValue.HasValue())
+				{
+					KTextEditorDialog dialog(GetView());
+					dialog.SetText(itemValue.GetValue());
+					dialog.SetEditable(false);
+					dialog.ShowPreview(true);
 					dialog.ShowModal();
-					if (dialog.IsModified())
-					{
-						dialog.ApplyChangesToMod();
-						ItemChanged(event.GetItem());
-					}
-					break;
 				}
-				default:
-				{
-					if (entry->Value.HasValue())
-					{
-						KTextEditorDialog dialog(GetViewTLW());
-						dialog.SetText(entry->Value.GetValue());
-						dialog.SetEditable(false);
-						dialog.ShowPreview(true);
-						dialog.ShowModal();
-					}
-					break;
-				}
-			};
-		}
+				break;
+			}
+		};
 	}
 
+	void InfoDisplayModel::CreateView(wxWindow* parent)
+	{
+		using namespace KxDataView2;
+
+		// View
+		View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
+		view->AssignModel(this);
+
+		// Columns
+		view->AppendColumn<BitmapTextRenderer>(KTr("Generic.Name"), ::ColumnID::Name, 250);
+		view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Value"), ::ColumnID::Value);
+
+		// Events
+		view->Bind(KxDataView2::EVENT_ITEM_ACTIVATED, &InfoDisplayModel::OnActivateItem, this);
+	}
 	void InfoDisplayModel::AddItem(const KLabeledValue& value, const ResourceID& image, InfoKind type)
 	{
-		Item& item = m_DataVector.emplace_back(value);
+		Item& item = m_Items.emplace_back(value);
 		item.IconID = image;
 		item.Type = type;
+
+		SetItemCount(m_Items.size());
 	}
 }

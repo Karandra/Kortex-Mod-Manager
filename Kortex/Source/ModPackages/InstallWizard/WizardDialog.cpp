@@ -28,6 +28,14 @@ namespace
 		Description = 0,
 		Requirements = 1,
 	};
+	namespace OName
+	{
+		KortexDefOption(MainUI);
+		KortexDefOption(InfoView);
+		KortexDefOption(RequirementsView);
+		KortexDefOption(ComponentRequirementsView);
+		KortexDefOption(ComponentsView);
+	}
 }
 
 namespace Kortex::InstallWizard
@@ -37,6 +45,14 @@ namespace Kortex::InstallWizard
 
 namespace Kortex::InstallWizard
 {
+	namespace
+	{
+		auto GetUIOption(const wxString& option = {})
+		{
+			return Application::GetAInstanceOptionOf<IPackageManager>(wxS("InstallWizard"), option);
+		};
+	}
+
 	void WizardDialog::ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath)
 	{
 		KxTaskDialog dialog(window, KxID_NONE, KTrf("InstallWizard.LoadFailed.Caption", packagePath), KTr("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
@@ -82,17 +98,17 @@ namespace Kortex::InstallWizard
 	}
 	void WizardDialog::LoadUIOptions()
 	{
-		//KProgramOptionSerializer::LoadWindowSize(this, m_Option_Window);
+		GetUIOption().LoadWindowLayout(this);
 		Center();
 
-		//KProgramOptionSerializer::LoadSplitterLayout(m_Info_DocumentsSplitter, m_Option_MainUI);
-		//KProgramOptionSerializer::LoadSplitterLayout(m_Components_SplitterV, m_Option_MainUI);
-		//KProgramOptionSerializer::LoadSplitterLayout(m_Components_SplitterHRight, m_Option_MainUI);
-		//
-		//KProgramOptionSerializer::LoadDataViewLayout(m_Info_PackageInfoList->GetView(), m_Option_InfoView);
-		//KProgramOptionSerializer::LoadDataViewLayout(m_Requirements_Main->GetView(), m_Option_RequirementsView);
-		//KProgramOptionSerializer::LoadDataViewLayout(m_Components_ItemList->GetView(), m_Option_ComponentsView);
-		//KProgramOptionSerializer::LoadDataViewLayout(m_Components_Requirements->GetView(), m_Option_ComponentRequirementsView);
+		GetUIOption(OName::MainUI).LoadSplitterLayout(m_Info_DocumentsSplitter);
+		GetUIOption(OName::MainUI).LoadSplitterLayout(m_Components_SplitterV);
+		GetUIOption(OName::MainUI).LoadSplitterLayout(m_Components_SplitterHRight);
+
+		GetUIOption(OName::InfoView).LoadDataViewLayout(m_Info_PackageInfoList->GetView());
+		GetUIOption(OName::RequirementsView).LoadDataViewLayout(m_Requirements_Main->GetView());
+		GetUIOption(OName::ComponentRequirementsView).LoadDataViewLayout(m_Components_ItemList->GetView());
+		GetUIOption(OName::ComponentsView).LoadDataViewLayout(m_Components_Requirements->GetView());
 	}
 
 	wxWindow* WizardDialog::CreateUI_Info()
@@ -101,7 +117,7 @@ namespace Kortex::InstallWizard
 
 		/* Info */
 		m_Info_PackageInfoList = new InfoDisplayModel(*this, GetConfig());
-		m_Info_PackageInfoList->Create(m_Info_Tabs);
+		m_Info_PackageInfoList->CreateView(m_Info_Tabs);
 		m_Info_Tabs->AddPage(m_Info_PackageInfoList->GetView(), KTr("InstallWizard.Page.Info"), true);
 
 		/* Description */
@@ -492,7 +508,7 @@ namespace Kortex::InstallWizard
 		AddUserData();
 		AddString(KTr("PackageCreator.PageInfo.BasicInfo.Tags"), wxEmptyString, InfoKind::Tags, true, ImageResourceID::Tags);
 
-		m_Info_PackageInfoList->RefreshItems();
+		m_Info_PackageInfoList->ItemsChanged();
 	}
 	void WizardDialog::LoadMainRequirements()
 	{
@@ -1411,16 +1427,16 @@ namespace Kortex::InstallWizard
 
 		if (m_Package->IsOK())
 		{
-			//KProgramOptionSerializer::SaveWindowSize(this, m_Option_Window);
+			GetUIOption().SaveWindowLayout(this);
 
-			//KProgramOptionSerializer::SaveSplitterLayout(m_Info_DocumentsSplitter, m_Option_MainUI);
-			//KProgramOptionSerializer::SaveSplitterLayout(m_Components_SplitterV, m_Option_MainUI);
-			//KProgramOptionSerializer::SaveSplitterLayout(m_Components_SplitterHRight, m_Option_MainUI);
+			GetUIOption(OName::MainUI).SaveSplitterLayout(m_Info_DocumentsSplitter);
+			GetUIOption(OName::MainUI).SaveSplitterLayout(m_Components_SplitterV);
+			GetUIOption(OName::MainUI).SaveSplitterLayout(m_Components_SplitterHRight);
 
-			//KProgramOptionSerializer::SaveDataViewLayout(m_Info_PackageInfoList->GetView(), m_Option_InfoView);
-			//KProgramOptionSerializer::SaveDataViewLayout(m_Requirements_Main->GetView(), m_Option_RequirementsView);
-			//KProgramOptionSerializer::SaveDataViewLayout(m_Components_ItemList->GetView(), m_Option_ComponentsView);
-			//KProgramOptionSerializer::SaveDataViewLayout(m_Components_Requirements->GetView(), m_Option_ComponentRequirementsView);
+			GetUIOption(OName::InfoView).SaveDataViewLayout(m_Info_PackageInfoList->GetView());
+			GetUIOption(OName::RequirementsView).SaveDataViewLayout(m_Requirements_Main->GetView());
+			GetUIOption(OName::ComponentRequirementsView).SaveDataViewLayout(m_Components_ItemList->GetView());
+			GetUIOption(OName::ComponentsView).SaveDataViewLayout(m_Components_Requirements->GetView());
 		}
 	}
 

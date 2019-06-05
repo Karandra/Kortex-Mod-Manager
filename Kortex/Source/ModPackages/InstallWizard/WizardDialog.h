@@ -114,14 +114,6 @@ namespace Kortex::InstallWizard
 			KxPanel* m_Done_Pane = nullptr;
 			KxLabel* m_Done_Label = nullptr;
 
-			/* UI options */
-			//KProgramOptionAI m_Option_Window;
-			//KProgramOptionAI m_Option_MainUI;
-			//KProgramOptionAI m_Option_InfoView;
-			//KProgramOptionAI m_Option_RequirementsView;
-			//KProgramOptionAI m_Option_ComponentsView;
-			//KProgramOptionAI m_Option_ComponentRequirementsView;
-
 			/* Package */
 			TImagesMap m_ImagesMap;
 			int m_CurrentImageIndex = -1;

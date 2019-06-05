@@ -11,11 +11,7 @@ namespace Kortex::InstallWizard
 			KPPCEntry::RefVector m_CheckedEntries;
 
 		public:
-			StepStackItem(KPPCStep* step)
-				:m_Step(step)
-			{
-			}
-			StepStackItem(KPPCStep* step, const KPPCEntry::RefVector& checked)
+			StepStackItem(KPPCStep* step, const KPPCEntry::RefVector& checked = {})
 				:m_Step(step), m_CheckedEntries(checked)
 			{
 			}
@@ -50,19 +46,15 @@ namespace Kortex::InstallWizard
 			~StepStack() = default;
 
 		public:
-			void PushStep(KPPCStep* step)
-			{
-				push(step);
-			}
-			void PushStep(KPPCStep* step, const KPPCEntry::RefVector& checked)
+			void PushStep(KPPCStep* step, const KPPCEntry::RefVector& checked = {})
 			{
 				push({step, checked});
 			}
-			
 			void PopItem()
 			{
 				pop();
 			}
+
 			StepStackItem* GetTopItem()
 			{
 				return !empty() ? &top() : nullptr;

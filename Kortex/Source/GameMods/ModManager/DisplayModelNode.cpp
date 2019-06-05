@@ -406,6 +406,8 @@ namespace Kortex::ModManager
 
 	bool DisplayModelModNode::GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const
 	{
+		using namespace KxDataView2;
+
 		const ColumnID columnID = column.GetID<ColumnID>();
 		const FixedGameMod* fixedMod = m_Mod->QueryInterface<FixedGameMod>();
 		const PriorityGroup* priorityGroup = m_Mod->QueryInterface<PriorityGroup>();
@@ -413,26 +415,26 @@ namespace Kortex::ModManager
 		// Visually disable actually disabled and not installed items
 		if (!fixedMod && !priorityGroup)
 		{
-			attributes.SetEnabled(m_Mod->IsInstalled() && IsEnabled(column));
+			attributes.Options().Enable(CellOption::Enabled, m_Mod->IsInstalled() && IsEnabled(column));
 		}
 
 		// Fixed mods drawn in italic font
 		if (columnID == ColumnID::Name && fixedMod && !priorityGroup)
 		{
-			attributes.SetItalic();
+			attributes.FontOptions().Enable(CellFontOption::Italic);
 		}
 
 		// Color entire row if color is assigned
 		if (KxColor color = m_Mod->GetColor(); color.IsOk() && !priorityGroup)
 		{
-			attributes.SetBackgroundColor(color);
-			attributes.SetForegroundColor(color.GetContrastColor(GetView()));
+			attributes.Options().SetBackgroundColor(color);
+			attributes.Options().SetForegroundColor(color.GetContrastColor(GetView()));
 		}
 
 		// Make mod name underlined
 		if (!fixedMod && !priorityGroup && (columnID == ColumnID::Name || columnID == ColumnID::ModSource))
 		{
-			attributes.SetUnderlined(cellState.IsHotTracked() && column.IsHotTracked());
+			attributes.FontOptions().Enable(CellFontOption::Underlined, cellState.IsHotTracked() && column.IsHotTracked());
 		}
 
 		// Handle priority group styling
@@ -443,16 +445,16 @@ namespace Kortex::ModManager
 			KxColor color = m_Mod->GetColor();
 			if (color.IsOk())
 			{
-				attributes.SetForegroundColor(color.GetContrastColor(GetView()));
+				attributes.Options().SetForegroundColor(color.GetContrastColor(GetView()));
 			}
 			else
 			{
-				attributes.SetForegroundColor(displayModel.m_PriortyGroupColor);
+				attributes.Options().SetForegroundColor(displayModel.m_PriortyGroupColor);
 			}
 
-			attributes.SetBackgroundColor(color);
-			attributes.SetBold(displayModel.m_BoldPriorityGroupLabels);
-			attributes.SetAlignment(displayModel.m_PriorityGroupLabelAlignment);
+			attributes.Options().SetBackgroundColor(color);
+			attributes.Options().SetAlignment(displayModel.m_PriorityGroupLabelAlignment);
+			attributes.FontOptions().Enable(CellFontOption::Bold, displayModel.m_BoldPriorityGroupLabels);
 		}
 		return !attributes.IsDefault();
 	}
@@ -522,7 +524,7 @@ namespace Kortex::ModManager
 	{
 		if (IsExpanded() || column.GetID<ColumnID>() == ColumnID::Name)
 		{
-			attributes.SetHeaderBackgound();
+			attributes.BGOptions().Enable(KxDataView2::CellBGOption::Header);
 			return true;
 		}
 		return false;

@@ -157,6 +157,7 @@ namespace Kortex::InstallWizard
 				case InfoKind::Tags:
 				{
 					attributes.BGOptions().Enable(CellBGOption::ComboBox);
+					attributes.Options().Enable(CellOption::Editable, false);
 					return true;
 				}
 			};

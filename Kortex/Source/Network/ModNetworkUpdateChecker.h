@@ -18,7 +18,7 @@ namespace Kortex
 			const ModSourceItem* GetModSourceItemFromMod(const IGameMod& gameMod) const;
 
 		public:
-			virtual bool RunUpdateCheck(std::optional<OnUpdateEvent> onUpdate = {}, std::optional<OnUpdateDoneEvent> onDone = {}) = 0;
+			virtual bool RunUpdateCheck(OnUpdateEvent onUpdate = {}, OnUpdateDoneEvent onDone = {}) = 0;
 
 			virtual bool IsAutomaticCheckAllowed() const = 0;
 			virtual wxTimeSpan GetAutomaticCheckInterval() const = 0;

@@ -93,7 +93,7 @@ namespace Kortex::NetworkManager
 		return std::nullopt;
 	}
 	
-	void NexusUpdateChecker::DoRunUpdateCheckEntry(std::optional<OnUpdateEvent> onUpdate, size_t& updatesCount)
+	void NexusUpdateChecker::DoRunUpdateCheckEntry(OnUpdateEvent onUpdate, size_t& updatesCount)
 	{
 		using namespace Utility::Log;
 
@@ -292,11 +292,11 @@ namespace Kortex::NetworkManager
 
 			if (onUpdate)
 			{
-				std::invoke(*onUpdate, *gameMod, *updateInfo);
+				onUpdate(*gameMod, *updateInfo);
 			}
 		}
 	}
-	bool NexusUpdateChecker::DoRunUpdateCheck(std::optional<OnUpdateEvent> onUpdate, std::optional<OnUpdateDoneEvent> onDone)
+	bool NexusUpdateChecker::DoRunUpdateCheck(OnUpdateEvent onUpdate, OnUpdateDoneEvent onDone)
 	{
 		if (!m_UpdateCheckInProgress)
 		{
@@ -316,7 +316,7 @@ namespace Kortex::NetworkManager
 
 				if (onDone)
 				{
-					std::invoke(*onDone);
+					onDone();
 				}
 				INotificationCenter::GetInstance()->Notify(m_Nexus, KTrf("NetworkManager.UpdateCheck.AutoCheckDone", updatesCount), KxICON_INFORMATION);
 				
@@ -427,7 +427,7 @@ namespace Kortex::NetworkManager
 		return const_cast<NexusUpdateChecker*>(this)->GetUpdateInfoPtr(modInfo);
 	}
 
-	bool NexusUpdateChecker::RunUpdateCheck(std::optional<OnUpdateEvent> onUpdate, std::optional<OnUpdateDoneEvent> onDone)
+	bool NexusUpdateChecker::RunUpdateCheck(OnUpdateEvent onUpdate, OnUpdateDoneEvent onDone)
 	{
 		return DoRunUpdateCheck(std::move(onUpdate), std::move(onDone));
 	}

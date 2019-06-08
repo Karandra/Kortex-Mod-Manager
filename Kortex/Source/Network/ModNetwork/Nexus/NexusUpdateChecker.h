@@ -52,8 +52,8 @@ namespace Kortex::NetworkManager
 			wxString ModActivityToString(ModActivity interval) const;
 			std::optional<ActivityMap> GetModsActivityFor(ModActivity interval) const;
 
-			void DoRunUpdateCheckEntry(std::optional<OnUpdateEvent> onUpdate, size_t& updatesCount);
-			bool DoRunUpdateCheck(std::optional<OnUpdateEvent> onUpdate = {}, std::optional<OnUpdateDoneEvent> onDone = {});
+			void DoRunUpdateCheckEntry(OnUpdateEvent onUpdate, size_t& updatesCount);
+			bool DoRunUpdateCheck(OnUpdateEvent onUpdate = {}, OnUpdateDoneEvent onDone = {});
 
 		private:
 			void OnInit() override;
@@ -74,7 +74,7 @@ namespace Kortex::NetworkManager
 			}
 			
 		public:
-			bool RunUpdateCheck(std::optional<OnUpdateEvent> onUpdate = {}, std::optional<OnUpdateDoneEvent> onDone = {}) override;
+			bool RunUpdateCheck(OnUpdateEvent onUpdate = {}, OnUpdateDoneEvent onDone = {}) override;
 			
 			bool IsAutomaticCheckAllowed() const override;
 			wxTimeSpan GetAutomaticCheckInterval() const override;

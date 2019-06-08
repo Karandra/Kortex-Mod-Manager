@@ -25,19 +25,22 @@ namespace Kortex::NetworkManager
 {
 	void NexusModNetwork::OnAuthenticated()
 	{
-		KxCoroutine::Run([this, wait = true](KxCoroutineBase& coroutine) mutable
+		if (m_UpdateChecker.CanIssueNewAutomaticCheck())
 		{
-			if (wait)
+			KxCoroutine::Run([this, wait = true](KxCoroutineBase& coroutine) mutable
 			{
-				wait = false;
-				return coroutine.YieldWaitSeconds(3);
-			}
-			else
-			{
-				m_UpdateChecker.DoRunUpdateCheck();
-				return coroutine.YieldStop();
-			}
-		});
+				if (wait)
+				{
+					wait = false;
+					return coroutine.YieldWaitSeconds(3);
+				}
+				else
+				{
+					m_UpdateChecker.DoRunUpdateCheck();
+					return coroutine.YieldStop();
+				}
+			});
+		}
 	}
 
 	std::unique_ptr<KxCURLSession> NexusModNetwork::NewCURLSession(const wxString& address, const wxString& apiKey) const

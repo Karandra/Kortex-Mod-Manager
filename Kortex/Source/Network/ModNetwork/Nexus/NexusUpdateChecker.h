@@ -78,6 +78,10 @@ namespace Kortex::NetworkManager
 			
 			bool IsAutomaticCheckAllowed() const override;
 			wxTimeSpan GetAutomaticCheckInterval() const override;
+			wxDateTime GetLastAutomaticCheckDate() const override
+			{
+				return m_MonthlyModActivityDate;
+			}
 
 			NetworkModUpdateInfo GetUpdateInfo(const NetworkModInfo& modInfo) const override;
 	};

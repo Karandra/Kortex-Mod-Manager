@@ -21,7 +21,9 @@ namespace Kortex
 			virtual bool RunUpdateCheck(OnUpdateEvent onUpdate = {}, OnUpdateDoneEvent onDone = {}) = 0;
 
 			virtual bool IsAutomaticCheckAllowed() const = 0;
+			virtual wxDateTime GetLastAutomaticCheckDate() const = 0;
 			virtual wxTimeSpan GetAutomaticCheckInterval() const = 0;
+			bool CanIssueNewAutomaticCheck() const;
 
 			virtual NetworkModUpdateInfo GetUpdateInfo(const NetworkModInfo& modInfo) const = 0;
 			NetworkModUpdateInfo GetUpdateInfo(const IGameMod& gameMod) const;

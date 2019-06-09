@@ -134,7 +134,7 @@ namespace Kortex::GameConfig
 	{
 		using namespace KxDataView2;
 
-		KxDataView2::View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
+		KxDataView2::View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus|CtrlStyle::FitLastColumn);
 		view->SetModel(this);
 		if (sizer)
 		{

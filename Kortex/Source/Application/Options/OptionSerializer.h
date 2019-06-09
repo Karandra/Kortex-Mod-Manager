@@ -27,13 +27,10 @@ namespace Kortex::Application::OptionSerializer
 {
 	class UILayout
 	{
-		protected:
-			using SerializationMode = OptionSerializer::SerializationMode;
-
-		protected:
+		public:
 			static void DataViewLayout(IAppOption& option, SerializationMode mode, KxDataViewCtrl* dataView);
 			static void DataView2Layout(IAppOption& option, SerializationMode mode, KxDataView2::View* dataView);
 			static void SplitterLayout(IAppOption& option, SerializationMode mode, KxSplitterWindow* window);
-			static void WindowSize(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window);
+			static void WindowGeometry(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window);
 	};
 }

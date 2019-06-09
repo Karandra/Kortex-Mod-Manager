@@ -14,13 +14,12 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IAppOption: 
-		public KxXDocumentNode<IAppOption>,
-		public Application::OptionSerializer::UILayout
+	class IAppOption: public KxXDocumentNode<IAppOption>
 	{
 		friend class KxXDocumentNode<IAppOption>;
 
 		public:
+			using SerializationMode = Application::OptionSerializer::SerializationMode;
 			enum class Disposition
 			{
 				None,
@@ -48,6 +47,8 @@ namespace Kortex
 			IConfigurableGameInstance* m_Instance = nullptr;
 			IGameProfile* m_Profile = nullptr;
 			Disposition m_Disposition = Disposition::None;
+
+			Application::OptionSerializer::UILayout m_UISerializer;
 			
 		protected:
 			wxString DoGetValue(const wxString& defaultValue = wxEmptyString) const override;
@@ -114,40 +115,40 @@ namespace Kortex
 			void NotifyChange();
 
 		public:
-			void SaveDataViewLayout(KxDataViewCtrl* dataView)
+			void SaveDataViewLayout(const KxDataViewCtrl* dataView)
 			{
-				DataViewLayout(*this, SerializationMode::Save, dataView);
+				m_UISerializer.DataViewLayout(*this, SerializationMode::Save, const_cast<KxDataViewCtrl*>(dataView));
 			}
-			void LoadDataViewLayout(KxDataViewCtrl* dataView)
+			void LoadDataViewLayout(KxDataViewCtrl* dataView) const
 			{
-				DataViewLayout(*this, SerializationMode::Load, dataView);
-			}
-
-			void SaveDataViewLayout(KxDataView2::View* dataView)
-			{
-				DataView2Layout(*this, SerializationMode::Save, dataView);
-			}
-			void LoadDataViewLayout(KxDataView2::View* dataView)
-			{
-				DataView2Layout(*this, SerializationMode::Load, dataView);
+				m_UISerializer.DataViewLayout(const_cast<IAppOption&>(*this), SerializationMode::Load, dataView);
 			}
 
-			void SaveSplitterLayout(KxSplitterWindow* splitter)
+			void SaveDataViewLayout(const KxDataView2::View* dataView)
 			{
-				SplitterLayout(*this, SerializationMode::Save, splitter);
+				m_UISerializer.DataView2Layout(*this, SerializationMode::Save, const_cast<KxDataView2::View*>(dataView));
 			}
-			void LoadSplitterLayout(KxSplitterWindow* splitter)
+			void LoadDataViewLayout(KxDataView2::View* dataView) const
 			{
-				SplitterLayout(*this, SerializationMode::Load, splitter);
+				m_UISerializer.DataView2Layout(const_cast<IAppOption&>(*this), SerializationMode::Load, dataView);
+			}
+
+			void SaveSplitterLayout(const KxSplitterWindow* splitter)
+			{
+				m_UISerializer.SplitterLayout(*this, SerializationMode::Save, const_cast<KxSplitterWindow*>(splitter));
+			}
+			void LoadSplitterLayout(KxSplitterWindow* splitter) const
+			{
+				m_UISerializer.SplitterLayout(const_cast<IAppOption&>(*this), SerializationMode::Load, splitter);
 			}
 	
-			void SaveWindowLayout(wxTopLevelWindow* window)
+			void SaveWindowGeometry(const wxTopLevelWindow* window)
 			{
-				WindowSize(*this, SerializationMode::Save, window);
+				m_UISerializer.WindowGeometry(*this, SerializationMode::Save, const_cast<wxTopLevelWindow*>(window));
 			}
-			void LoadWindowLayout(wxTopLevelWindow* window)
+			void LoadWindowGeometry(wxTopLevelWindow* window) const
 			{
-				WindowSize(*this, SerializationMode::Load, window);
+				m_UISerializer.WindowGeometry(const_cast<IAppOption&>(*this), SerializationMode::Load, window);
 			}
 	};
 }

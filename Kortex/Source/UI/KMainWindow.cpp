@@ -372,7 +372,7 @@ void KMainWindow::OnWindowClose(wxCloseEvent& event)
 	if (skip)
 	{
 		event.Skip();
-		GetAInstanceOption().SaveWindowLayout(this);
+		GetAInstanceOption().SaveWindowGeometry(this);
 	}
 }
 void KMainWindow::OnChangeInstance(KxMenuEvent& event)
@@ -437,7 +437,7 @@ bool KMainWindow::Create(wxWindow* parent)
 		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnVFSToggled, this);
 		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
 
-		GetAInstanceOption().LoadWindowLayout(this);
+		GetAInstanceOption().LoadWindowGeometry(this);
 
 		// Update status bar
 		VFSEvent event(Events::MainVFSToggled, false);

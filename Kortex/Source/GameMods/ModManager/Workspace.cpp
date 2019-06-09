@@ -39,7 +39,7 @@
 
 namespace Kortex::Application::OName
 {
-	KortexDefOption(VSplitter);
+	KortexDefOption(Splitter);
 
 	KortexDefOption(ShowPriorityGroups);
 	KortexDefOption(ShowNotInstalledMods);
@@ -121,9 +121,9 @@ namespace
 	{
 		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::DisplayModel);
 	}
-	auto GetVSplitterOptions()
+	auto GetSplitterOptions()
 	{
-		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::VSplitter);
+		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::Splitter);
 	}
 }
 
@@ -149,14 +149,14 @@ namespace Kortex::ModManager
 			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
 			options.SetAttribute(OName::ImageResizeMode, (int)m_ImageResizeMode);
 
-			GetVSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
+			GetSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
 			
 		}
 	}
 	bool Workspace::OnCreateWorkspace()
 	{
 		m_SplitterLeftRight = new KxSplitterWindow(this, KxID_NONE);
-		m_SplitterLeftRight->SetName("ModViewPaneSize");
+		m_SplitterLeftRight->SetName("Horizontal");
 		m_SplitterLeftRight->SetMinimumPaneSize(250);
 		m_MainSizer->Add(m_SplitterLeftRight, 1, wxEXPAND);
 		IThemeManager::GetActive().ProcessWindow(m_SplitterLeftRight, true);
@@ -370,7 +370,7 @@ namespace Kortex::ModManager
 				m_SplitterLeftRight->Unsplit(m_PaneRight_Tabs);
 			}
 
-			GetVSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
+			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
 
 			auto displayModelOptions = GetDisplayModelOptions();
 			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());

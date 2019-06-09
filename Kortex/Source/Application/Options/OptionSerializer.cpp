@@ -9,23 +9,38 @@
 
 namespace Kortex::Application::OptionSerializer
 {
+	namespace OName
+	{
+		KortexDefOption(Item);
+		KortexDefOption(UIOption);
+
+		KortexDefOption(Columns);
+		KortexDefOption(DisplayAt);
+		KortexDefOption(Visible);
+		KortexDefOption(Width);
+
+		KortexDefOption(Splitter);
+		KortexDefOption(SashPosition);
+	}
+
 	void UILayout::DataViewLayout(IAppOption& option, SerializationMode mode, KxDataViewCtrl* dataView)
 	{
 		const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
-		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(wxS("Columns"));
+		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(OName::Columns);
 
 		if (mode == SerializationMode::Save)
 		{
 			columnsNode.ClearNode();
+			columnsNode.SetAttribute(OName::UIOption, true);
 
 			for (size_t i = 0; i < dataView->GetColumnCount(); i++)
 			{
-				KxXMLNode node = columnsNode.NewElement(wxS("Entry"));
+				KxXMLNode node = columnsNode.NewElement(OName::Item);
 				const KxDataViewColumn* column = dataView->GetColumn(i);
 
-				node.SetAttribute(wxS("DisplayAt"), (int64_t)dataView->GetColumnPosition(column));
-				node.SetAttribute(wxS("Visible"), column->IsVisible());
-				node.SetAttribute(wxS("Width"), column->GetWidth());
+				node.SetAttribute(OName::DisplayAt, (int64_t)dataView->GetColumnPosition(column));
+				node.SetAttribute(OName::Visible, column->IsVisible());
+				node.SetAttribute(OName::Width, column->GetWidth());
 			}
 		}
 		else
@@ -44,14 +59,14 @@ namespace Kortex::Application::OptionSerializer
 
 					if (column->IsResizeable())
 					{
-						int width = node.GetAttributeInt(wxS("Width"), -1);
+						int width = node.GetAttributeInt(OName::Width, -1);
 						if (width > 0)
 						{
 							column->SetWidth(std::clamp(width, column->GetMinWidth(), screenWidth));
 						}
 					}
-					column->SetVisible(node.GetAttributeBool(wxS("Visible"), true));
-					indexes[i] = node.GetAttributeInt(wxS("DisplayAt"), i);
+					column->SetVisible(node.GetAttributeBool(OName::Visible, true));
+					indexes[i] = node.GetAttributeInt(OName::DisplayAt, i);
 
 					node = node.GetNextSiblingElement();
 				}
@@ -72,19 +87,21 @@ namespace Kortex::Application::OptionSerializer
 	{
 		using namespace KxDataView2;
 
-		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(wxS("Columns"));
+		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(OName::Columns);
 		if (mode == SerializationMode::Save)
 		{
 			columnsNode.ClearNode();
+			columnsNode.SetAttribute(OName::UIOption, true);
+
 			for (size_t i = 0; i < dataView->GetColumnCount(); i++)
 			{
 				if (const Column* column = dataView->GetColumn(i))
 				{
-					KxXMLNode node = columnsNode.NewElement(wxS("Entry"));
+					KxXMLNode node = columnsNode.NewElement(OName::Item);
 
-					node.SetAttribute(wxS("DisplayAt"), (int)column->GetDisplayIndex());
-					node.SetAttribute(wxS("Visible"), column->IsVisible());
-					node.SetAttribute(wxS("Width"), column->GetWidthDescriptor());
+					node.SetAttribute(OName::DisplayAt, (int)column->GetDisplayIndex());
+					node.SetAttribute(OName::Visible, column->IsVisible());
+					node.SetAttribute(OName::Width, column->GetWidthDescriptor());
 				}
 				else
 				{
@@ -99,9 +116,9 @@ namespace Kortex::Application::OptionSerializer
 			{
 				if (Column* column = dataView->GetColumn(i))
 				{
-					column->SetWidth(node.GetAttributeInt(wxS("Width"), ColumnWidth::Default));
-					column->SetVisible(node.GetAttributeBool(wxS("Visible"), true));
-					column->SetDisplayIndex(node.GetAttributeInt(wxS("DisplayAt"), i));
+					column->SetWidth(node.GetAttributeInt(OName::Width, ColumnWidth::Default));
+					column->SetVisible(node.GetAttributeBool(OName::Visible, true));
+					column->SetDisplayIndex(node.GetAttributeInt(OName::DisplayAt, i));
 
 					i++;
 				}
@@ -121,20 +138,27 @@ namespace Kortex::Application::OptionSerializer
 	{
 		if (mode == SerializationMode::Save)
 		{
-			option.SetAttribute(window->GetName(), window->GetSashPosition());
+			KxXMLNode node = option.GetNode().QueryOrCreateElement(window->GetName());
+			node.SetAttribute(OName::UIOption, true);
+			node.SetAttribute(OName::SashPosition, window->GetSashPosition());
 		}
 		else
 		{
-			window->SetInitialPosition(option.GetAttributeInt(window->GetName(), window->GetMinimumPaneSize()));
+			const bool isVertical = window->GetSplitMode() == wxSPLIT_VERTICAL;
+			const int value = option.GetNode().GetFirstChildElement(window->GetName()).GetAttributeInt(OName::SashPosition);
+			const int maxValue = wxSystemSettings::GetMetric(isVertical ? wxSYS_SCREEN_Y : wxSYS_SCREEN_X);
+
+			window->SetInitialPosition(std::clamp(value, window->GetMinimumPaneSize(), maxValue));
 		}
 	}
-	void UILayout::WindowSize(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window)
+	void UILayout::WindowGeometry(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window)
 	{
-		KxXMLNode geometryNode = option.GetNode().QueryOrCreateElement(wxS("Geometry"));
+		KxXMLNode geometryNode = option.GetNode().QueryOrCreateElement(wxS("WindowGeometry"));
 
 		if (mode == SerializationMode::Save)
 		{
 			geometryNode.ClearNode();
+			geometryNode.SetAttribute(OName::UIOption, true);
 
 			const bool isMaximized = window->IsMaximized();
 			geometryNode.NewElement(wxS("Maximized")).SetValue(isMaximized);

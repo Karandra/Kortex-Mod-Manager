@@ -212,9 +212,11 @@
     <ClCompile Include="Source\GameMods\VirtualGameFolder\DisplayModel.cpp" />
     <ClCompile Include="Source\GameMods\VirtualGameFolder\Workspace.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\ComponentsDisplayModel.cpp" />
+    <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.cpp" />
+    <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoPage.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\WizardDialog.cpp" />
-    <ClCompile Include="Source\ModPackages\InstallWizard\InfoDisplayModel.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\RequirementsDisplayModel.cpp" />
+    <ClCompile Include="Source\ModPackages\InstallWizard\WizardPage.cpp" />
     <ClCompile Include="Source\ModPackages\IPackageManager.cpp" />
     <ClCompile Include="Source\ModPackages\ModPackage.cpp" />
     <ClCompile Include="Source\ModPackages\ModPackagesModule.cpp" />
@@ -550,10 +552,12 @@
     <ClInclude Include="Source\ModPackages\InstallWizard\ComponentsDisplayModel.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\ComponentsDisplayModelNode.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Common.h" />
+    <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.h" />
+    <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoPage.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\WizardDialog.h" />
-    <ClInclude Include="Source\ModPackages\InstallWizard\InfoDisplayModel.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\RequirementsDisplayModel.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\StepStack.h" />
+    <ClInclude Include="Source\ModPackages\InstallWizard\WizardPage.h" />
     <ClInclude Include="Source\ModPackages\IPackageManager.h" />
     <ClInclude Include="Source\ModPackages\ModPackage.h" />
     <ClInclude Include="Source\ModPackages\ModPackagesModule.h" />

@@ -5,7 +5,6 @@
 #include <Kortex/Events.hpp>
 #include "Common.h"
 #include "WizardDialog.h"
-#include "InfoDisplayModel.h"
 #include "RequirementsDisplayModel.h"
 #include "ComponentsDisplayModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
@@ -85,7 +84,7 @@ namespace Kortex::InstallWizard
 			EnableMaximizeButton();
 
 			m_TabView = new wxSimplebook(m_ContentPanel, KxID_NONE, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-			m_TabView->AddPage(CreateUI_Info(), wxEmptyString);
+			m_TabView->AddPage(m_PageInfo.Create(), wxEmptyString);
 			m_TabView->AddPage(CreateUI_Requirements(), wxEmptyString);
 			m_TabView->AddPage(CreateUI_Components(), wxEmptyString);
 			m_TabView->AddPage(CreateUI_Installing(), wxEmptyString);
@@ -98,85 +97,21 @@ namespace Kortex::InstallWizard
 	}
 	void WizardDialog::LoadUIOptions()
 	{
-		GetUIOption().LoadWindowLayout(this);
+		GetUIOption().LoadWindowGeometry(this);
 		Center();
 
-		GetUIOption(OName::MainUI).LoadSplitterLayout(m_Info_DocumentsSplitter);
+		for (WizardPage* page: {&m_PageInfo})
+		{
+			page->OnLoadUIOptions(GetUIOption(page->GetOptionName()));
+		}
+
 		GetUIOption(OName::MainUI).LoadSplitterLayout(m_Components_SplitterV);
 		GetUIOption(OName::MainUI).LoadSplitterLayout(m_Components_SplitterHRight);
-
-		GetUIOption(OName::InfoView).LoadDataViewLayout(m_Info_PackageInfoList->GetView());
 		GetUIOption(OName::RequirementsView).LoadDataViewLayout(m_Requirements_Main->GetView());
 		GetUIOption(OName::ComponentRequirementsView).LoadDataViewLayout(m_Components_ItemList->GetView());
 		GetUIOption(OName::ComponentsView).LoadDataViewLayout(m_Components_Requirements->GetView());
 	}
 
-	wxWindow* WizardDialog::CreateUI_Info()
-	{
-		m_Info_Tabs = new KxAuiNotebook(m_TabView, KxID_NONE, KxAuiNotebook::DefaultStyle|wxBORDER_NONE);
-
-		/* Info */
-		m_Info_PackageInfoList = new InfoDisplayModel(*this, GetConfig());
-		m_Info_PackageInfoList->CreateView(m_Info_Tabs);
-		m_Info_Tabs->AddPage(m_Info_PackageInfoList->GetView(), KTr("InstallWizard.Page.Info"), true);
-
-		/* Description */
-		m_Info_Description = new KxHTMLWindow(m_Info_Tabs, KxID_NONE);
-		m_Info_Description->Bind(wxEVT_HTML_LINK_CLICKED, [this](wxHtmlLinkEvent& event)
-		{
-			KAux::AskOpenURL(event.GetLinkInfo().GetHref(), this);
-		});
-		m_Info_Tabs->AddPage(m_Info_Description, KTr("Generic.Description"));
-
-		/* Documents */
-		// Pane and sizer
-		m_Info_DocumentsSplitter = new KxSplitterWindow(m_Info_Tabs, KxID_NONE);
-		m_Info_DocumentsSplitter->SetName("DocumentsListSize");
-		m_Info_DocumentsSplitter->SetMinimumPaneSize(200);
-		m_Info_DocumentsSplitter->SetSashColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::WindowBG));
-
-		// List
-		m_Info_DocumentsList = new KxListBox(m_Info_DocumentsSplitter, KxID_NONE);
-		m_Info_DocumentsList->Bind(wxEVT_LISTBOX, [this](wxCommandEvent& event)
-		{
-			OnSelectDocument(event.GetInt());
-		});
-
-		m_Info_DocumentSimple = new KxHTMLWindow(m_Info_DocumentsSplitter, KxID_NONE, wxEmptyString, KxThumbView::DefaultStyle|wxBORDER_THEME);
-		m_Info_DocumentAdvanced = wxWebView::New(m_Info_DocumentsSplitter, KxID_NONE);
-
-		m_Info_DocumentsSplitter->SplitVertically(m_Info_DocumentsList, m_Info_DocumentSimple, m_Info_DocumentsSplitter->GetMinimumPaneSize());
-		m_Info_Tabs->AddPage(m_Info_DocumentsSplitter, KTr("InstallWizard.Page.Documnets"));
-
-		/* Screenshots */
-		m_Info_Screenshots = new KxThumbView(m_Info_Tabs, KxID_NONE, KxThumbView::DefaultStyle|wxBORDER_NONE);
-		m_Info_Screenshots->Bind(KxEVT_THUMBVIEW_ACTIVATED, [this](wxCommandEvent& event)
-		{
-			m_CurrentImageIndex = event.GetInt();
-			if (m_ImagesMap.count(m_CurrentImageIndex))
-			{
-				KImageViewerDialog dialog(this);
-				dialog.Bind(KEVT_IMAGEVIEWER_PREV_IMAGE, &WizardDialog::OnNavigateImageViewer, this);
-				dialog.Bind(KEVT_IMAGEVIEWER_NEXT_IMAGE, &WizardDialog::OnNavigateImageViewer, this);
-
-				const KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
-				KImageViewerEvent evt;
-				evt.SetBitmap(entry->GetBitmap());
-				evt.SetDescription(entry->GetDescription());
-				SetImageViewerNavigationInfo(evt);
-				dialog.Navigate(evt);
-
-				dialog.ShowModal();
-				m_CurrentImageIndex = -1;
-			}
-		});
-		IThemeManager::GetActive().ProcessWindow(m_Info_Screenshots);
-
-		m_Info_Tabs->AddPage(m_Info_Screenshots, KTr("InstallWizard.Page.Screenshots"));
-
-		// Return page
-		return m_Info_Tabs;
-	}
 	wxWindow* WizardDialog::CreateUI_Requirements()
 	{
 		m_Requirements_Main = new RequirementsDisplayModel();
@@ -292,27 +227,27 @@ namespace Kortex::InstallWizard
 	{
 		switch (m_CurrentPage)
 		{
-			case PageIndex::Info:
+			case WizardPageID::Info:
 			{
 				SetLabel(KTr("InstallWizard.Page.Info"));
 				break;
 			}
-			case PageIndex::Requirements:
+			case WizardPageID::Requirements:
 			{
 				SetLabel(KTr("InstallWizard.Page.Requirements"));
 				break;
 			}
-			case PageIndex::Components:
+			case WizardPageID::Components:
 			{
 				SetLabel(KTr("InstallWizard.Page.Components"));
 				break;
 			}
-			case PageIndex::Installation:
+			case WizardPageID::Installation:
 			{
 				SetLabel(KTr("InstallWizard.Page.Installing"));
 				break;
 			}
-			case PageIndex::Done:
+			case WizardPageID::Done:
 			{
 				SetLabel(KTr("InstallWizard.Page.Done"));
 				break;
@@ -346,8 +281,6 @@ namespace Kortex::InstallWizard
 			const KPackageProjectInfo& info = GetConfig().GetInfo();
 			const KPackageProjectInterface& interfaceConfig = GetConfig().GetInterface();
 
-			/* Info and misc */
-
 			// Window caption
 			SetCaption(KTrf("InstallWizard.WindowCaption", m_Package->GetName()) + ' ' + info.GetVersion());
 
@@ -358,35 +291,13 @@ namespace Kortex::InstallWizard
 				AcceptExistingMod(*m_ExistingMod);
 			}
 
-			// Info
-			LoadInfoList();
-
-			// Description
-			m_Info_Description->SetTextValue(info.GetDescription());
-
-			// Documents
-			for (const KLabeledValue& entry: info.GetDocuments())
-			{
-				m_Info_DocumentsList->AddItem(entry.GetLabel());
-			}
-
-			wxCommandEvent event(wxEVT_LISTBOX, m_Info_DocumentsList->GetId());
-			event.SetEventObject(m_Info_DocumentsList);
-			event.SetInt(-1);
-			m_Info_DocumentsList->HandleWindowEvent(event);
-
-			// Screenshots
-			for (const KPPIImageEntry& entry: interfaceConfig.GetImages())
-			{
-				if (entry.IsVisible() && entry.HasBitmap())
-				{
-					size_t index = m_Info_Screenshots->AddThumb(entry.GetBitmap());
-					m_ImagesMap.insert_or_assign(index, &entry);
-				}
-			}
-
 			// Header
 			LoadHeaderImage();
+
+			for (WizardPage* page: {&m_PageInfo})
+			{
+				page->OnPackageLoaded();
+			}
 
 			/* Requirements */
 			StoreRequirementsFlags();
@@ -408,7 +319,7 @@ namespace Kortex::InstallWizard
 	bool WizardDialog::ProcessLoadPackage()
 	{
 		bool ret = LoadPackage();
-		SwitchPage(PageIndex::Info);
+		SwitchPage(WizardPageID::Info);
 
 		Show();
 		Raise();
@@ -469,165 +380,17 @@ namespace Kortex::InstallWizard
 		}
 		SetAutoSize(false);
 	}
-	void WizardDialog::LoadInfoList()
-	{
-		const KPackageProject& project = m_Package->GetConfig();
-		const KPackageProjectInfo& info = project.GetInfo();
-		auto AddString = [this](const wxString& name, const wxString& value, InfoKind type = InfoKind::None, bool isRequired = false, ResourceID image = {})
-		{
-			if (isRequired || !value.IsEmpty())
-			{
-				m_Info_PackageInfoList->AddItem(KLabeledValue(value, name), image, type);
-			}
-		};
-		auto AddSites = [this, &info, &AddString]()
-		{
-			info.GetModSourceStore().Visit([this](const ModSourceItem& item)
-			{
-				if (item.IsOK())
-				{
-					IModNetwork* modNetwork = nullptr;
-					ResourceID icon = item.TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : IModNetwork::GetGenericIcon();
-					m_Info_PackageInfoList->AddItem(KLabeledValue(item.GetURL(), item.GetName()), icon, InfoKind::ModSource);
-				}
-				return true;
-			});
-		};
-		auto AddUserData = [this, &info, &AddString]()
-		{
-			for (const KLabeledValue& entry: info.GetCustomFields())
-			{
-				m_Info_PackageInfoList->AddItem(entry);
-			}
-		};
-
-		AddString(KTr("PackageCreator.PageInfo.BasicInfo.ID"), wxEmptyString, InfoKind::ID, true);
-		AddString(KTr("PackageCreator.PageInfo.BasicInfo.Name"), wxEmptyString, InfoKind::Name, true);
-		AddString(KTr("PackageCreator.PageInfo.BasicInfo.TranslatedName"), info.GetTranslatedName());
-		AddString(KTr("PackageCreator.PageInfo.BasicInfo.Translatior"), info.GetTranslator());
-		AddString(KTr("PackageCreator.PageInfo.BasicInfo.Version"), info.GetVersion(), InfoKind::None, true);
-		AddString(KTr("PackageCreator.PageInfo.BasicInfo.Author"), info.GetAuthor(), InfoKind::None, true);
-		AddSites();
-		AddUserData();
-		AddString(KTr("PackageCreator.PageInfo.BasicInfo.Tags"), wxEmptyString, InfoKind::Tags, true, ImageResourceID::Tags);
-
-		m_Info_PackageInfoList->ItemsChanged();
-	}
 	void WizardDialog::LoadMainRequirements()
 	{
 		const KPackageProjectRequirements& tReqs = m_Package->GetConfig().GetRequirements();
 		m_Requirements_Main->SetDataVector(&tReqs, tReqs.GetDefaultGroup());
 	}
 
-	void WizardDialog::OnNavigateImageViewer(KImageViewerEvent& event)
-	{
-		int oldIndex = m_CurrentImageIndex;
-		if (event.GetEventType() == KEVT_IMAGEVIEWER_NEXT_IMAGE)
-		{
-			m_CurrentImageIndex++;
-		}
-		else
-		{
-			m_CurrentImageIndex--;
-		}
-
-		SetImageViewerNavigationInfo(event);
-		if (m_CurrentImageIndex >= 0 && (size_t)m_CurrentImageIndex < m_ImagesMap.size())
-		{
-			const KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
-			event.SetBitmap(entry->GetBitmap());
-			event.SetDescription(entry->GetDescription());
-		}
-		else
-		{
-			m_CurrentImageIndex = oldIndex;
-			event.Veto();
-		}
-	}
-	void WizardDialog::SetImageViewerNavigationInfo(KImageViewerEvent& event)
-	{
-		event.SetHasPrevNext(m_CurrentImageIndex > 0, (size_t)(m_CurrentImageIndex + 1) < m_ImagesMap.size());
-	}
-	void WizardDialog::OnSelectDocument(int index, bool useAdvancedEditor)
-	{
-		wxWindowUpdateLocker lock(m_Info_DocumentsSplitter);
-		m_Info_DocumentSimple->Show();
-		m_Info_DocumentAdvanced->Hide();
-		m_Info_DocumentAdvanced->LoadURL(wxWebViewDefaultURLStr);
-
-		auto UnSplit = [this]()
-		{
-			m_Info_DocumentsSplitter->Unsplit(m_Info_DocumentsList);
-			m_Info_DocumentsSplitter->Unsplit(m_Info_DocumentSimple);
-			m_Info_DocumentsSplitter->Unsplit(m_Info_DocumentAdvanced);
-			m_Info_DocumentSimple->Hide();
-			m_Info_DocumentAdvanced->Hide();
-		};
-		auto SwitchSimple = [this, &UnSplit]()
-		{
-			UnSplit();
-			m_Info_DocumentSimple->Show();
-			m_Info_DocumentSimple->Enable();
-			m_Info_DocumentsSplitter->SplitVertically(m_Info_DocumentsList, m_Info_DocumentSimple, m_Info_DocumentsSplitter->GetSashPosition());
-		};
-		auto SwitchAdvanced = [this, &UnSplit]()
-		{
-			UnSplit();
-			m_Info_DocumentAdvanced->Show();
-			m_Info_DocumentAdvanced->Enable();
-			m_Info_DocumentsSplitter->SplitVertically(m_Info_DocumentsList, m_Info_DocumentAdvanced, m_Info_DocumentsSplitter->GetSashPosition());
-		};
-
-		const KLabeledValue::Vector& documents = m_Package->GetConfig().GetInfo().GetDocuments();
-		if (index != -1 && (size_t)index < documents.size())
-		{
-			try
-			{
-				const KLabeledValue& entry = documents[index];
-				if (useAdvancedEditor || KAux::IsFileExtensionMatches(entry.GetValue(), {"pdf", "xml", "htm", "html", "doc", "docx"}))
-				{
-					KxFileStream file(CreateTempFile(entry.GetValue().AfterLast('\\')), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Everything);
-					const KArchive::Buffer& fileBuffer = m_Package->GetDocumentBuffer(entry);
-					file.Write(fileBuffer.data(), fileBuffer.size());
-
-					m_Info_DocumentAdvanced->LoadURL(file.GetFileName());
-					SwitchAdvanced();
-				}
-				else
-				{
-					const KArchive::Buffer& buffer = m_Package->GetDocumentBuffer(entry);
-					wxString text = m_Package->ReadString(buffer);
-					if (text.IsEmpty() && !buffer.empty())
-					{
-						// Couldn't load the document, maybe unsupported encoding. Try WebView.
-						OnSelectDocument(index, true);
-					}
-					else
-					{
-						m_Info_DocumentSimple->SetTextValue(text);
-						SwitchSimple();
-					}
-				}
-			}
-			catch (const std::out_of_range& exc)
-			{
-				// Getting the document can throw
-				Utility::Log::LogInfo("Can't load document at index %1: %2", index, exc.what());
-			}
-		}
-		else
-		{
-			SwitchSimple();
-			m_Info_DocumentSimple->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectDocumentHint"), m_Info_DocumentSimple));
-			m_Info_DocumentSimple->Disable();
-		}
-	}
-
 	bool WizardDialog::AskCancel(bool canCancel)
 	{
 		if (canCancel)
 		{
-			if (m_CurrentPage != PageIndex::Components && m_CurrentPage != PageIndex::Installation)
+			if (m_CurrentPage != WizardPageID::Components && m_CurrentPage != WizardPageID::Installation)
 			{
 				return true;
 			}
@@ -669,17 +432,17 @@ namespace Kortex::InstallWizard
 	}
 	void WizardDialog::OnGoBackward(wxCommandEvent& event)
 	{
-		PageIndex page = PageIndex::None;
+		WizardPageID page = WizardPageID::None;
 		switch (m_CurrentPage)
 		{
-			case PageIndex::Requirements:
+			case WizardPageID::Requirements:
 			{
-				page = PageIndex::Info;
+				page = WizardPageID::Info;
 				break;
 			}
-			case PageIndex::Components:
+			case WizardPageID::Components:
 			{
-				page = HasMainRequirements() ? PageIndex::Requirements : PageIndex::Info;
+				page = HasMainRequirements() ? WizardPageID::Requirements : WizardPageID::Info;
 				break;
 			}
 		};
@@ -693,26 +456,26 @@ namespace Kortex::InstallWizard
 		}
 		else
 		{
-			PageIndex page = PageIndex::None;
+			WizardPageID page = WizardPageID::None;
 			switch (m_CurrentPage)
 			{
-				case PageIndex::Info:
+				case WizardPageID::Info:
 				{
-					page = HasMainRequirements() ? PageIndex::Requirements : PageIndex::Components;
-					if (page == PageIndex::Components && !HasManualComponents())
+					page = HasMainRequirements() ? WizardPageID::Requirements : WizardPageID::Components;
+					if (page == WizardPageID::Components && !HasManualComponents())
 					{
-						page = PageIndex::Installation;
+						page = WizardPageID::Installation;
 					}
 					break;
 				}
-				case PageIndex::Requirements:
+				case WizardPageID::Requirements:
 				{
-					page = HasManualComponents() ? PageIndex::Components : PageIndex::Installation;
+					page = HasManualComponents() ? WizardPageID::Components : WizardPageID::Installation;
 					break;
 				}
-				case PageIndex::Components:
+				case WizardPageID::Components:
 				{
-					page = PageIndex::Installation;
+					page = WizardPageID::Installation;
 					break;
 				}
 			};
@@ -1228,7 +991,7 @@ namespace Kortex::InstallWizard
 			}
 			else
 			{
-				SwitchPage(PageIndex::Done);
+				SwitchPage(WizardPageID::Done);
 			}
 			return true;
 		}
@@ -1387,12 +1150,7 @@ namespace Kortex::InstallWizard
 	}
 
 	WizardDialog::WizardDialog()
-		//:m_Option_Window(this, "Window"),
-		//m_Option_MainUI(this, "MainUI"),
-		//m_Option_InfoView(this, "InfoView"),
-		//m_Option_RequirementsView(this, "RequirementsView"),
-		//m_Option_ComponentsView(this, "ComponentsView"),
-		//m_Option_ComponentRequirementsView(this, "ComponentRequirementsView")
+		:m_PageInfo(*this)
 	{
 	}
 	WizardDialog::WizardDialog(wxWindow* parent, const wxString& packagePath)
@@ -1430,22 +1188,23 @@ namespace Kortex::InstallWizard
 
 		if (m_Package->IsOK())
 		{
-			GetUIOption().SaveWindowLayout(this);
+			GetUIOption().SaveWindowGeometry(this);
+			for (const WizardPage* page: {&m_PageInfo})
+			{
+				page->OnSaveUIOptions(GetUIOption(page->GetOptionName()));
+			}
 
-			GetUIOption(OName::MainUI).SaveSplitterLayout(m_Info_DocumentsSplitter);
 			GetUIOption(OName::MainUI).SaveSplitterLayout(m_Components_SplitterV);
 			GetUIOption(OName::MainUI).SaveSplitterLayout(m_Components_SplitterHRight);
-
-			GetUIOption(OName::InfoView).SaveDataViewLayout(m_Info_PackageInfoList->GetView());
 			GetUIOption(OName::RequirementsView).SaveDataViewLayout(m_Requirements_Main->GetView());
 			GetUIOption(OName::ComponentRequirementsView).SaveDataViewLayout(m_Components_ItemList->GetView());
 			GetUIOption(OName::ComponentsView).SaveDataViewLayout(m_Components_Requirements->GetView());
 		}
 	}
 
-	void WizardDialog::SwitchPage(PageIndex page)
+	void WizardDialog::SwitchPage(WizardPageID page)
 	{
-		if (page != m_CurrentPage && page != PageIndex::None && page < (PageIndex)m_TabView->GetPageCount())
+		if (page != m_CurrentPage && page != WizardPageID::None && page < (WizardPageID)m_TabView->GetPageCount())
 		{
 			if (!OnLeavingPage(m_CurrentPage))
 			{
@@ -1454,7 +1213,7 @@ namespace Kortex::InstallWizard
 
 			switch (page)
 			{
-				case PageIndex::Info:
+				case WizardPageID::Info:
 				{
 					m_BackwardButton->Disable();
 					m_ForwardButton->Enable();
@@ -1464,7 +1223,7 @@ namespace Kortex::InstallWizard
 					m_TabView->ChangeSelection((size_t)page);
 					break;
 				}
-				case PageIndex::Requirements:
+				case WizardPageID::Requirements:
 				{
 					m_BackwardButton->Enable();
 					m_ForwardButton->Enable();
@@ -1474,7 +1233,7 @@ namespace Kortex::InstallWizard
 					m_TabView->ChangeSelection((size_t)page);
 					break;
 				}
-				case PageIndex::Components:
+				case WizardPageID::Components:
 				{
 					m_BackwardButton->Enable();
 					m_ForwardButton->Enable();
@@ -1491,7 +1250,7 @@ namespace Kortex::InstallWizard
 					m_TabView->ChangeSelection((size_t)page);
 					break;
 				}
-				case PageIndex::Installation:
+				case WizardPageID::Installation:
 				{
 					if (IsOptionEnabled(DialogOptions::Debug))
 					{
@@ -1499,7 +1258,7 @@ namespace Kortex::InstallWizard
 						ShowInstallableFilesPreview();
 
 						// Switch back to info page to reset components state.
-						SwitchPage(PageIndex::Info);
+						SwitchPage(WizardPageID::Info);
 						break;
 					}
 
@@ -1517,7 +1276,7 @@ namespace Kortex::InstallWizard
 					m_TabView->ChangeSelection((size_t)page);
 					break;
 				}
-				case PageIndex::Done:
+				case WizardPageID::Done:
 				{
 					m_IsComplete = true;
 
@@ -1535,17 +1294,17 @@ namespace Kortex::InstallWizard
 				}
 			};
 
-			if (page != PageIndex::Info)
+			if (page != WizardPageID::Info)
 			{
 				m_InfoPageLeft = true;
 			}
 		}
 	}
-	bool WizardDialog::OnLeavingPage(PageIndex page)
+	bool WizardDialog::OnLeavingPage(WizardPageID page)
 	{
 		switch (page)
 		{
-			case PageIndex::Info:
+			case WizardPageID::Info:
 			{
 				// Show this only if this is the first time user leaving info page
 				if (!IsInfoPageLeft())

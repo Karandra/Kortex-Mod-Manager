@@ -373,6 +373,12 @@
     <Filter Include="Code\Source\ModPackages\InstallWizard">
       <UniqueIdentifier>{eb1f8d1e-9c5c-4fd8-b7b4-b6c475b9d12f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\ModPackages\InstallWizard\Info">
+      <UniqueIdentifier>{55ee647c-7f11-44ee-9601-266a3824a782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\ModPackages\InstallWizard\Info">
+      <UniqueIdentifier>{1477e059-642f-494d-895d-a6b47847a993}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1176,14 +1182,20 @@
     <ClCompile Include="Source\ModPackages\InstallWizard\RequirementsDisplayModel.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModPackages\InstallWizard\InfoDisplayModel.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\ComponentsDisplayModel.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\WizardDialog.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\WizardPage.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoPage.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Info</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2243,9 +2255,6 @@
     <ClInclude Include="Source\ModPackages\InstallWizard\StepStack.h">
       <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\InfoDisplayModel.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\Common.h">
       <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
     </ClInclude>
@@ -2257,6 +2266,15 @@
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\WizardDialog.h">
       <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\WizardPage.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoPage.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

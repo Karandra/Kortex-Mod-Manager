@@ -1,12 +1,10 @@
 #pragma once
 #include "stdafx.h"
-#include "Application/Resources/ImageResourceID.h"
+#include "InfoPage.h"
 #include <KxFramework/DataView2/DataView2.h>
-#include "PackageProject/KPackageProject.h"
 
-namespace Kortex::InstallWizard
+namespace Kortex::InstallWizard::InfoPageNS
 {
-	class WizardDialog;
 	enum class InfoKind
 	{
 		None = 0,
@@ -33,13 +31,12 @@ namespace Kortex::InstallWizard
 	};
 }
 
-namespace Kortex::InstallWizard
+namespace Kortex::InstallWizard::InfoPageNS
 {
 	class InfoDisplayModel: public KxDataView2::VirtualListModel
 	{
 		private:
-			WizardDialog& m_InstallWizard;
-			KPackageProject& m_PackageConfig;
+			InfoPage& m_Page;
 			std::vector<Item> m_Items;
 
 		private:
@@ -53,9 +50,10 @@ namespace Kortex::InstallWizard
 			void OnActivateItem(KxDataView2::Event& event);
 
 		public:
-			InfoDisplayModel(WizardDialog& installWizard, KPackageProject& packageProject)
-				:m_InstallWizard(installWizard), m_PackageConfig(packageProject)
+			InfoDisplayModel(InfoPage& page, size_t initialCount = 0)
+				:m_Page(page)
 			{
+				m_Items.reserve(initialCount);
 			}
 
 		public:

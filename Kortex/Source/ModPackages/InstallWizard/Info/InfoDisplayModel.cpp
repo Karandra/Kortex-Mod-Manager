@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/InstallWizard.hpp>
 #include "InfoDisplayModel.h"
-#include "WizardDialog.h"
 #include "PackageCreator/KPackageCreatorPageComponents.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
@@ -22,7 +22,7 @@ namespace
 	};
 }
 
-namespace Kortex::InstallWizard
+namespace Kortex::InstallWizard::InfoPageNS
 {
 	wxAny InfoDisplayModel::GetValue(const Node& node, const Column& column) const
 	{
@@ -59,20 +59,21 @@ namespace Kortex::InstallWizard
 			}
 			case ColumnRef::Value:
 			{
+				KPackageProject& packageConfig = m_Page.GetPackageConfig();
 				switch (item.Type)
 				{
 					case InfoKind::Tags:
 					{
-						const ModTagStore& tags = m_PackageConfig.GetInfo().GetTagStore();
+						const ModTagStore& tags = packageConfig.GetInfo().GetTagStore();
 						return KPackageCreatorPageComponents::FormatArrayToText(tags.GetNames());
 					}
 					case InfoKind::ID:
 					{
-						return KxString::Format(wxS("%1 (%2)"), m_PackageConfig.GetModID(), m_PackageConfig.GetSignature());
+						return KxString::Format(wxS("%1 (%2)"), packageConfig.GetModID(), packageConfig.GetSignature());
 					}
 					case InfoKind::Name:
 					{
-						return m_PackageConfig.GetModName();
+						return packageConfig.GetModName();
 					}
 				};
 				return itemValue.GetValue();
@@ -85,15 +86,17 @@ namespace Kortex::InstallWizard
 		if (column.GetID<ColumnRef>() == ColumnRef::Value)
 		{
 			const Item& item = m_Items[node.GetRow()];
+			KPackageProject& packageConfig = m_Page.GetPackageConfig();
+
 			switch (item.Type)
 			{
 				case InfoKind::ID:
 				{
-					return m_PackageConfig.GetModID();
+					return packageConfig.GetModID();
 				}
 				case InfoKind::Name:
 				{
-					return m_PackageConfig.GetModName();
+					return packageConfig.GetModName();
 				}
 			};
 		}
@@ -104,22 +107,24 @@ namespace Kortex::InstallWizard
 		if (column.GetID<ColumnRef>() == ColumnRef::Value)
 		{
 			const Item& item = m_Items[node.GetRow()];
+			KPackageProject& packageConfig = m_Page.GetPackageConfig();
+
 			switch (item.Type)
 			{
 				case InfoKind::ID:
 				{
 					wxString id = value.As<wxString>();
-					if (id != m_PackageConfig.GetModID() && CheckModID(id))
+					if (id != packageConfig.GetModID() && CheckModID(id))
 					{
-						m_PackageConfig.SetModID(id);
-						m_InstallWizard.FindExistingMod();
+						packageConfig.SetModID(id);
+						m_Page.GetWizard().FindExistingMod();
 						return true;
 					}
 					return false;
 				}
 				case InfoKind::Name:
 				{
-					m_PackageConfig.GetInfo().SetName(value.As<wxString>());
+					packageConfig.GetInfo().SetName(value.As<wxString>());
 					return true;
 				}
 			};
@@ -204,10 +209,11 @@ namespace Kortex::InstallWizard
 				}
 				case InfoKind::Tags:
 				{
-					ModTagStore& tags = m_PackageConfig.GetInfo().GetTagStore();
+					KPackageProject& packageConfig = m_Page.GetPackageConfig();
+					ModTagStore& tags = packageConfig.GetInfo().GetTagStore();
 
 					ModTagManager::SelectorDialog dialog(GetView(), itemValue.GetLabel());
-					dialog.SetDataVector(&tags, m_InstallWizard.GetModEntry());
+					dialog.SetDataVector(&tags, m_Page.GetWizard().GetModEntry());
 					dialog.ShowModal();
 					if (dialog.IsModified())
 					{
@@ -237,7 +243,7 @@ namespace Kortex::InstallWizard
 		using namespace KxDataView2;
 
 		// View
-		View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
+		View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus|CtrlStyle::FitLastColumn);
 		view->AssignModel(this);
 
 		// Columns

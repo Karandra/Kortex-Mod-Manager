@@ -1,8 +1,9 @@
 #pragma once
 #include "stdafx.h"
+#include "StepStack.h"
+#include "Info/InfoPage.h"
 #include "ModPackages/ModPackage.h"
 #include "GameMods/ModManager/BasicGameMod.h"
-#include "StepStack.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KTempFolderKeeper.h"
 #include <KxFramework/KxPanel.h>
@@ -25,7 +26,6 @@ class KImageViewerEvent;
 
 namespace Kortex::InstallWizard
 {
-	class InfoDisplayModel;
 	class RequirementsDisplayModel;
 	class ComponentsDisplayModel;
 
@@ -42,15 +42,6 @@ namespace Kortex::InstallWizard
 		Debug = 1 << 0,
 		Cleanup = 1 << 1,
 	};
-	enum class PageIndex
-	{
-		None = -1,
-		Info,
-		Requirements,
-		Components,
-		Installation,
-		Done,
-	};
 }
 
 namespace Kortex::InstallWizard
@@ -60,8 +51,8 @@ namespace Kortex::InstallWizard
 		public KTempFolderKeeper,
 		public KxWithOptions<DialogOptions, DialogOptions::None>
 	{
+		friend class WizardPage;
 		friend class InstallationOperation;
-		friend class InfoDisplayModel;
 
 		public:
 			static void ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath);
@@ -72,19 +63,9 @@ namespace Kortex::InstallWizard
 			KxButton* m_BackwardButton = nullptr;
 			KxButton* m_ForwardButton = nullptr;
 			wxSimplebook* m_TabView = nullptr;
-			PageIndex m_CurrentPage = PageIndex::None;
+			WizardPageID m_CurrentPage = WizardPageID::None;
 
-			// Info
-			KxAuiNotebook* m_Info_Tabs = nullptr;
-			InfoDisplayModel* m_Info_PackageInfoList = nullptr;
-			KxHTMLWindow* m_Info_Description = nullptr;
-
-			KxSplitterWindow* m_Info_DocumentsSplitter = nullptr;
-			KxListBox* m_Info_DocumentsList = nullptr;
-			KxHTMLWindow* m_Info_DocumentSimple = nullptr;
-			wxWebView* m_Info_DocumentAdvanced = nullptr;
-
-			KxThumbView* m_Info_Screenshots = nullptr;
+			InfoPage m_PageInfo;
 
 			// Main requirements
 			RequirementsDisplayModel* m_Requirements_Main = nullptr;
@@ -115,8 +96,6 @@ namespace Kortex::InstallWizard
 			KxLabel* m_Done_Label = nullptr;
 
 			/* Package */
-			TImagesMap m_ImagesMap;
-			int m_CurrentImageIndex = -1;
 			std::unique_ptr<ModPackage> m_Package;
 			ModManager::BasicGameMod m_ModEntry;
 			const IGameMod* m_ExistingMod = nullptr;
@@ -131,7 +110,6 @@ namespace Kortex::InstallWizard
 			bool CreateUI(wxWindow* parent);
 			void LoadUIOptions();
 
-			wxWindow* CreateUI_Info();
 			wxWindow* CreateUI_Requirements();
 			wxWindow* CreateUI_Components();
 			wxWindow* CreateUI_Installing();
@@ -139,19 +117,14 @@ namespace Kortex::InstallWizard
 
 			void SetLabelByCurrentPage();
 
-		private:
+		public:
 			void OpenPackage(const wxString& packagePath);
 			bool LoadPackage();
 			bool ProcessLoadPackage();
 			void FindExistingMod();
 			void AcceptExistingMod(const Kortex::IGameMod& mod);
 			void LoadHeaderImage();
-			void LoadInfoList();
 			void LoadMainRequirements();
-
-			void OnNavigateImageViewer(KImageViewerEvent& event);
-			void SetImageViewerNavigationInfo(KImageViewerEvent& event);
-			void OnSelectDocument(int index, bool useAdvancedEditor = false);
 
 			bool AskCancel(bool canCancel);
 			void OnClose(wxCloseEvent& event);
@@ -247,6 +220,10 @@ namespace Kortex::InstallWizard
 			{
 				return m_ExistingMod;
 			}
+			const ModPackage& GetPackage() const
+			{
+				return *m_Package;
+			}
 
 			const ModManager::BasicGameMod* GetModEntry() const
 			{
@@ -270,8 +247,8 @@ namespace Kortex::InstallWizard
 				return m_InfoPageLeft;
 			}
 
-			void SwitchPage(PageIndex page);
-			bool OnLeavingPage(PageIndex page);
+			void SwitchPage(WizardPageID page);
+			bool OnLeavingPage(WizardPageID page);
 
 			KPPCStep* GetCurrentStep() const
 			{

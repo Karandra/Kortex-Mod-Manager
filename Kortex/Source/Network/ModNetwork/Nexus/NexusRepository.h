@@ -31,6 +31,7 @@ namespace Kortex::NetworkManager
 			NexusUtility& m_Utility;
 			NexusAuth& m_Auth;
 
+			mutable wxCriticalSection m_LimitsDataCS;
 			ModRepositoryLimitsData m_LimitsData;
 
 		protected:
@@ -44,10 +45,7 @@ namespace Kortex::NetworkManager
 			}
 
 		public:
-			ModRepositoryLimits GetRequestLimits() const override
-			{
-				return m_LimitsData;
-			}
+			ModRepositoryLimits GetRequestLimits() const override;
 			bool IsAutomaticUpdateCheckAllowed() const;
 			bool RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download) override;
 

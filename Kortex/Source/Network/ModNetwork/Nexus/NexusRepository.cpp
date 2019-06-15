@@ -52,15 +52,23 @@ namespace Kortex::NetworkManager
 			}
 		};
 
-		TestInt(wxS("X-RL-Hourly-Limit"), m_LimitsData.HourlyTotal);
-		TestInt(wxS("X-RL-Hourly-Remaining"), m_LimitsData.HourlyRemaining);
-		TestISODate(wxS("X-RL-Hourly-Reset"), m_LimitsData.HourlyLimitReset);
+		if (wxCriticalSectionLocker lock(m_LimitsDataCS); true)
+		{
+			TestInt(wxS("X-RL-Hourly-Limit"), m_LimitsData.HourlyTotal);
+			TestInt(wxS("X-RL-Hourly-Remaining"), m_LimitsData.HourlyRemaining);
+			TestISODate(wxS("X-RL-Hourly-Reset"), m_LimitsData.HourlyLimitReset);
 
-		TestInt(wxS("X-RL-Daily-Limit"), m_LimitsData.DailyTotal);
-		TestInt(wxS("X-RL-Daily-Remaining"), m_LimitsData.DailyRemaining);
-		TestISODate(wxS("X-RL-Reset-Reset"), m_LimitsData.DailyLimitReset);
+			TestInt(wxS("X-RL-Daily-Limit"), m_LimitsData.DailyTotal);
+			TestInt(wxS("X-RL-Daily-Remaining"), m_LimitsData.DailyRemaining);
+			TestISODate(wxS("X-RL-Reset-Reset"), m_LimitsData.DailyLimitReset);
+		}
 	}
 	
+	ModRepositoryLimits NexusRepository::GetRequestLimits() const
+	{
+		wxCriticalSectionLocker lock(m_LimitsDataCS);
+		return m_LimitsData;
+	}
 	bool NexusRepository::IsAutomaticUpdateCheckAllowed() const
 	{
 		// Allow only if:
@@ -69,6 +77,7 @@ namespace Kortex::NetworkManager
 
 		auto CheckDaily = [this](double percent)
 		{
+			wxCriticalSectionLocker lock(m_LimitsDataCS);
 			return m_LimitsData.DailyRemaining > m_LimitsData.DailyTotal * percent;
 		};
 		return m_Auth.IsAuthenticated() && CheckDaily(0.1);

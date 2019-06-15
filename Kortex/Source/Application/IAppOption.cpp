@@ -57,6 +57,35 @@ namespace Kortex
 		m_Profile = IGameProfile::GetActive();
 	}
 
+	IAppOption::IAppOption(const IAppOption& other, const KxXMLNode& node)
+	{
+		*this = other;
+		m_ConfigNode = node;
+	}
+
+	bool IAppOption::IsOK() const
+	{
+		return m_ConfigNode.IsOK() && m_Disposition != Disposition::None;
+	}
+	IAppOption IAppOption::QueryElement(const wxString& XPath) const
+	{
+		KxXMLNode node = m_ConfigNode.QueryElement(XPath);
+		if (node.IsOK())
+		{
+			return IAppOption(*this, node);
+		}
+		return {};
+	}
+	IAppOption IAppOption::QueryOrCreateElement(const wxString& XPath)
+	{
+		KxXMLNode node = m_ConfigNode.QueryOrCreateElement(XPath);
+		if (node.IsOK())
+		{
+			return IAppOption(*this, node);
+		}
+		return {};
+	}
+
 	void IAppOption::NotifyChange()
 	{
 		// Disable for now

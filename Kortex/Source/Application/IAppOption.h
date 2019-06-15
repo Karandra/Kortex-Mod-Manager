@@ -73,15 +73,15 @@ namespace Kortex
 			void AssignActiveProfile();
 
 		protected:
+			IAppOption(const IAppOption& other, const KxXMLNode& node);
 			IAppOption() = default;
 
 		public:
 			/* General */
-			bool IsOK() const override
-			{
-				return m_ConfigNode.IsOK() && m_Disposition != Disposition::None;
-			}
-			
+			bool IsOK() const override;
+			IAppOption QueryElement(const wxString& XPath) const override;
+			IAppOption QueryOrCreateElement(const wxString& XPath) override;
+
 			Disposition GetDisposition() const
 			{
 				return m_Disposition;

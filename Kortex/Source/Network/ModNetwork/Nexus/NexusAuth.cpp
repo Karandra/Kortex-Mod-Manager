@@ -85,9 +85,13 @@ namespace Kortex::NetworkManager
 		}
 
 		// Manual API key input
-		if (!IsAuthenticated())
+		KxMenuItem* item = menu.AddItem(KTr("NetworkManager.Nexus.EnterAPIKey"));
+		if (IsAuthenticated())
 		{
-			KxMenuItem* item = menu.AddItem(KTr("NetworkManager.Nexus.EnterAPIKey"));
+			item->Enable(false);
+		}
+		else
+		{
 			item->Bind(KxEVT_MENU_SELECT, [this, item](KxMenuEvent& event)
 			{
 				KxTextBoxDialog dialog(GetInvokingWindow(),
@@ -147,7 +151,7 @@ namespace Kortex::NetworkManager
 			SetUserPicture(DownloadSmallBitmap(info.ProfilePicture));
 		}
 	}
-	std::optional<NexusValidationReply> NexusAuth::DoGetValidationInfo(const wxString& apiKey, bool silent)
+	auto NexusAuth::DoGetValidationInfo(const wxString& apiKey, bool silent) -> std::optional<NexusValidationReply>
 	{
 		auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/users/validate"), m_Nexus.GetAPIURL()), apiKey);
 		KxCURLReply reply = connection->Send();
@@ -333,7 +337,7 @@ namespace Kortex::NetworkManager
 		m_CredentialsStore.Delete();
 	}
 
-	std::optional<NexusValidationReply> NexusAuth::GetValidationInfo()
+	auto NexusAuth::GetValidationInfo() -> std::optional<NexusValidationReply>
 	{
 		return DoGetValidationInfo({}, false);
 	}

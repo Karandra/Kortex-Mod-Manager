@@ -4,9 +4,9 @@
 #include "Info/InfoPage.h"
 #include "Requiremets/RequirementsPage.h"
 #include "Components/ComponentsPage.h"
+#include "Installation/InstallationPage.h"
 #include "ModPackages/ModPackage.h"
 #include "GameMods/ModManager/BasicGameMod.h"
-#include "Utility/KOperationWithProgress.h"
 #include "Utility/KTempFolderKeeper.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxButton.h>
@@ -23,8 +23,6 @@
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxProgressBar.h>
 #include <KxFramework/KxWithOptions.h>
-#include <KxFramework/KxDataView.h>
-class KImageViewerEvent;
 
 namespace Kortex::InstallWizard
 {
@@ -46,7 +44,7 @@ namespace Kortex::InstallWizard
 		public KxWithOptions<DialogOptions, DialogOptions::None>
 	{
 		friend class WizardPage;
-		friend class InstallationOperation;
+		friend class InstallOperation;
 
 		public:
 			static void ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath);
@@ -62,38 +60,28 @@ namespace Kortex::InstallWizard
 			InfoPage m_PageInfo;
 			RequirementsPage m_PageRequirements;
 			ComponentsPage m_PageComponents;
-
-			// Installing
-			KxPanel* m_Installing_Pane = nullptr;
-			KxProgressBar* m_Installing_MinorProgress = nullptr;
-			KxProgressBar* m_Installing_MajorProgress = nullptr;
-			KxLabel* m_Installing_MinorStatus = nullptr;
-			KxLabel* m_Installing_MajorStatus = nullptr;
-			bool m_ShouldCancel = false;
-			bool m_IsComplete = false;
-			bool m_InfoPageLeft = false;
-			InstallationOperation* m_InstallThread = nullptr;
+			InstallationPage m_PageInstallation;
 
 			// Done
 			KxPanel* m_Done_Pane = nullptr;
 			KxLabel* m_Done_Label = nullptr;
 
-			/* Package */
+			bool m_InfoPageLeft = false;
+
+			// Package
 			std::unique_ptr<ModPackage> m_Package;
 			ModManager::BasicGameMod m_ModEntry;
 			const IGameMod* m_ExistingMod = nullptr;
-			KPPFFileEntryRefArray m_InstallableFiles;
 
 		private:
 			bool CreateUI(wxWindow* parent);
 			void LoadUIOptions();
 
-			std::array<WizardPage*, 3> GetPages()
+			std::array<WizardPage*, 4> GetPages()
 			{
-				return {&m_PageInfo, &m_PageRequirements, &m_PageComponents};
+				return {&m_PageInfo, &m_PageRequirements, &m_PageComponents, &m_PageInstallation};
 			}
 
-			wxWindow* CreateUI_Installing();
 			wxWindow* CreateUI_Done();
 
 			void SetLabelByCurrentPage();
@@ -111,15 +99,6 @@ namespace Kortex::InstallWizard
 			void OnCancelButton(wxCommandEvent& event);
 			void OnGoBackward(wxCommandEvent& event);
 			void OnGoForward(wxCommandEvent& event);
-
-			void CollectAllInstallableEntries();
-			void SortInstallableFiles();
-			void ShowInstallableFilesPreview();
-
-			bool OnBeginInstall();
-			bool OnEndInstall();
-			void OnMinorProgress(KxFileOperationEvent& event);
-			void OnMajorProgress(KxFileOperationEvent& event);
 
 			void SetModData();
 			KxUInt32Vector GetFilesOfFolder(const KPPFFolderEntry* folder) const;
@@ -198,6 +177,10 @@ namespace Kortex::InstallWizard
 			{
 				return m_PageComponents;
 			}
+			InstallationPage& GetInstallationPage()
+			{
+				return m_PageInstallation;
+			}
 
 			const ModManager::BasicGameMod* GetModEntry() const
 			{
@@ -208,14 +191,6 @@ namespace Kortex::InstallWizard
 				return &m_ModEntry;
 			}
 
-			bool ShouldCancel() const
-			{
-				return m_ShouldCancel;
-			}
-			bool IsCompleted() const
-			{
-				return m_IsComplete;
-			}
 			bool IsInfoPageLeft() const
 			{
 				return m_InfoPageLeft;
@@ -223,28 +198,5 @@ namespace Kortex::InstallWizard
 
 			void SwitchPage(WizardPageID page);
 			bool OnLeavingPage(WizardPageID page);
-	};
-}
-
-namespace Kortex::InstallWizard
-{
-	class InstallationOperation: public KOperationWithProgressBase
-	{
-		private:
-			WizardDialog* m_InstallWizard = nullptr;
-
-		public:
-			InstallationOperation(WizardDialog* installWizard)
-				:KOperationWithProgressBase(true), m_InstallWizard(installWizard)
-			{
-			}
-
-		public:
-			void LinkHandler(wxEvtHandler* eventHandler, wxEventType type) override
-			{
-				using T = wxEventTypeTag<KxFileOperationEvent>;
-				GetEventHandler()->Bind(static_cast<T>(type), &WizardDialog::OnMinorProgress, m_InstallWizard);
-				KOperationWithProgressBase::LinkHandler(eventHandler, type);
-			}
 	};
 }

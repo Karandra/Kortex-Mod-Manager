@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "../Common.h"
 #include "DisplayModelNode.h"
+#include <KxFramework/KxDataView.h>
 #include "Utility/KDataViewTreeModel.h"
 
 namespace Kortex::InstallWizard::ComponentsPageNS

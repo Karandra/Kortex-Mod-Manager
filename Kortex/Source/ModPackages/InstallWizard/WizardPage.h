@@ -24,7 +24,7 @@ namespace Kortex::InstallWizard
 
 namespace Kortex::InstallWizard
 {
-	class WizardPage
+	class WizardPage: public wxEvtHandler
 	{
 		friend class WizardDialog;
 

@@ -69,7 +69,6 @@ namespace Kortex::InstallWizard
 			{
 				m_PageContainer->AddPage(page->Create(), page->GetCaption());
 			}
-			m_PageContainer->AddPage(CreateUI_Installing(), wxEmptyString);
 			m_PageContainer->AddPage(CreateUI_Done(), wxEmptyString);
 
 			PostCreate();
@@ -88,26 +87,6 @@ namespace Kortex::InstallWizard
 		}
 	}
 
-	wxWindow* WizardDialog::CreateUI_Installing()
-	{
-		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		m_Installing_Pane = new KxPanel(m_PageContainer, KxID_NONE);
-		m_Installing_Pane->SetSizer(sizer);
-
-		m_Installing_MinorProgress = new KxProgressBar(m_Installing_Pane, KxID_NONE, 100);
-		m_Installing_MajorProgress = new KxProgressBar(m_Installing_Pane, KxID_NONE, 100);
-		m_Installing_MinorStatus = KPackageCreatorPageBase::CreateNormalLabel(m_Installing_Pane, wxEmptyString, false);
-		m_Installing_MajorStatus = KPackageCreatorPageBase::CreateNormalLabel(m_Installing_Pane, wxEmptyString, false);
-
-		sizer->Add(m_Installing_MinorStatus, 0, wxEXPAND);
-		sizer->Add(m_Installing_MinorProgress, 0, wxEXPAND);
-		sizer->AddSpacer(15);
-		sizer->Add(m_Installing_MajorStatus, 0, wxEXPAND);
-		sizer->Add(m_Installing_MajorProgress, 0, wxEXPAND);
-
-		Bind(KxEVT_ARCHIVE, &WizardDialog::OnMajorProgress, this);
-		return m_Installing_Pane;
-	}
 	wxWindow* WizardDialog::CreateUI_Done()
 	{
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -290,19 +269,19 @@ namespace Kortex::InstallWizard
 	}
 	void WizardDialog::OnClose(wxCloseEvent& event)
 	{
-		if (!IsCompleted())
+		if (!m_PageInstallation.IsCompleted())
 		{
-			m_ShouldCancel = AskCancel(event.CanVeto());
-			if (m_InstallThread)
+			m_PageInstallation.m_ShouldCancel = AskCancel(event.CanVeto());
+			if (m_PageInstallation.m_InstallThread)
 			{
-				m_InstallThread->Stop();
+				m_PageInstallation.m_InstallThread->Stop();
 				event.Skip(false);
 				event.Veto(true);
 			}
 			else
 			{
-				event.Veto(!m_ShouldCancel);
-				event.Skip(m_ShouldCancel);
+				event.Veto(!m_PageInstallation.m_ShouldCancel);
+				event.Skip(m_PageInstallation.m_ShouldCancel);
 			}
 		}
 		else
@@ -338,7 +317,7 @@ namespace Kortex::InstallWizard
 	}
 	void WizardDialog::OnGoForward(wxCommandEvent& event)
 	{
-		if (IsCompleted())
+		if (m_PageInstallation.IsCompleted())
 		{
 			Close(true);
 		}
@@ -369,243 +348,6 @@ namespace Kortex::InstallWizard
 			};
 			SwitchPage(page);
 		}
-	}
-
-	void WizardDialog::CollectAllInstallableEntries()
-	{
-		auto AddFilesFromList = [this](const KxStringVector& list, bool pushBack = true)
-		{
-			for (const wxString& id: list)
-			{
-				KPPFFileEntry* entry = GetConfig().GetFileData().FindEntryWithID(id);
-				if (entry)
-				{
-					if (pushBack)
-					{
-						m_InstallableFiles.push_back(entry);
-					}
-					else
-					{
-						m_InstallableFiles.insert(m_InstallableFiles.begin(), entry);
-					}
-				}
-			}
-		};
-		auto UniqueFiles = [this]()
-		{
-			m_InstallableFiles.erase(std::unique(m_InstallableFiles.begin(), m_InstallableFiles.end()), m_InstallableFiles.end());
-		};
-
-		m_InstallableFiles.clear();
-
-		// No manual install steps and no conditional install.
-		// Saves list of all files in the package.
-		if (!m_PageComponents.HasManualComponents() && !m_PageComponents.HasConditionalInstall())
-		{
-			for (const auto& entry: GetConfig().GetFileData().GetData())
-			{
-				m_InstallableFiles.push_back(entry.get());
-			}
-			SortInstallableFiles();
-		}
-		else
-		{
-			// Manual steps present, get files from checked entries
-			if (m_PageComponents.HasManualComponents())
-			{
-				for (const StepStackItem& step: m_PageComponents.m_InstallSteps)
-				{
-					for (const KPPCEntry* entry: step.GetChecked())
-					{
-						AddFilesFromList(entry->GetFileData());
-					}
-				}
-			}
-
-			// Conditional install present. Run it and store files.
-			if (m_PageComponents.HasConditionalInstall())
-			{
-				for (const auto& step: GetConfig().GetComponents().GetConditionalSteps())
-				{
-					if (m_PageComponents.IsConditionsSatisfied(step->GetConditionGroup()))
-					{
-						AddFilesFromList(step->GetEntries());
-					}
-				}
-			}
-
-			// Sort all files excluding required
-			SortInstallableFiles();
-
-			// Add required files to the beginning
-			AddFilesFromList(GetConfig().GetComponents().GetRequiredFileData(), false);
-		}
-
-		// Remove duplicates
-		UniqueFiles();
-	}
-	void WizardDialog::SortInstallableFiles()
-	{
-		// Sort all files by its priorities.
-		// Leave all files with default priority (-1) at end.
-		// So split all files into two arrays: first with assigned priorities and second with default.
-		// Sort arrays with non-default priorities.
-		// Merge the two arrays. First sorted, then unsorted.
-
-		KPPFFileEntryRefArray defaultPriority;
-		KPPFFileEntryRefArray nonDefaultPriority;
-		for (KPPFFileEntry* entry: m_InstallableFiles)
-		{
-			if (entry->IsDefaultPriority())
-			{
-				defaultPriority.push_back(entry);
-			}
-			else
-			{
-				nonDefaultPriority.push_back(entry);
-			}
-		}
-
-		// Sort non-default
-		std::sort(nonDefaultPriority.begin(), nonDefaultPriority.end(), [](const KPPFFileEntry* entry1, const KPPFFileEntry* entry2)
-		{
-			return entry1->GetPriority() < entry2->GetPriority();
-		});
-
-		// Merge back
-		m_InstallableFiles.clear();
-		for (KPPFFileEntry* entry: nonDefaultPriority)
-		{
-			m_InstallableFiles.push_back(entry);
-		}
-		for (KPPFFileEntry* entry: defaultPriority)
-		{
-			m_InstallableFiles.push_back(entry);
-		}
-	}
-	void WizardDialog::ShowInstallableFilesPreview()
-	{
-		KxStringVector files;
-		files.reserve(m_InstallableFiles.size());
-
-		for (const auto& fileEntry: m_InstallableFiles)
-		{
-			if (fileEntry->GetID() != fileEntry->GetSource())
-			{
-				files.push_back(wxString::Format("%s (%s)", fileEntry->GetID(), fileEntry->GetSource()));
-			}
-			else
-			{
-				files.push_back(fileEntry->GetID());
-			}
-		}
-
-		KxTaskDialog dialog(this, KxID_NONE, KTr("InstallWizard.CollectedFiles.Caption"), KxString::Join(files, "\r\n"), KxBTN_OK, KxICON_INFORMATION);
-		dialog.ShowModal();
-	}
-
-	bool WizardDialog::OnBeginInstall()
-	{
-		CollectAllInstallableEntries();
-		if (!m_InstallableFiles.empty())
-		{
-			m_InstallThread = new InstallationOperation(this);
-			m_InstallThread->OnRun([this](KOperationWithProgressBase* self)
-			{
-				self->LinkHandler(&m_Package->GetArchive(), KxEVT_ARCHIVE);
-				RunInstall();
-			});
-			m_InstallThread->OnEnd([this](KOperationWithProgressBase* self)
-			{
-				m_InstallThread = nullptr;
-				OnEndInstall();
-			});
-
-			m_InstallThread->Run();
-			return true;
-		}
-		else
-		{
-			KxTaskDialog dialog(this, KxID_NONE, KTr("InstallWizard.NoFiles.Caption"), KTr("InstallWizard.NoFiles.Message"), KxBTN_OK, KxICON_ERROR);
-			dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
-			dialog.ShowModal();
-			return false;
-		}
-	}
-	bool WizardDialog::OnEndInstall()
-	{
-		if (m_ModEntry.Save())
-		{
-			// Save main or header image
-			const KPackageProjectInterface& interfaceConfig = m_Package->GetConfig().GetInterface();
-			const KPPIImageEntry* imageEntry = interfaceConfig.GetMainImageEntry();
-			imageEntry = imageEntry ? imageEntry : interfaceConfig.GetHeaderImageEntry();
-			if (imageEntry && imageEntry->HasBitmap())
-			{
-				const wxBitmap& bitmap = imageEntry->GetBitmap();
-				bitmap.SaveFile(m_ModEntry.GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
-			}
-
-			Kortex::IModManager::GetInstance()->NotifyModInstalled(m_ModEntry);
-			if (ShouldCancel())
-			{
-				// We were canceled, but mod is partially installed.
-				// Just exit immediately, user can uninstall this.
-				Destroy();
-			}
-			else
-			{
-				SwitchPage(WizardPageID::Done);
-			}
-			return true;
-		}
-		return false;
-	}
-	void WizardDialog::OnMinorProgress(KxFileOperationEvent& event)
-	{
-		if (m_ShouldCancel)
-		{
-			event.Veto();
-			return;
-		}
-
-		m_Installing_MinorStatus->SetLabel(event.GetCurrent());
-		if (!event.GetSource().IsEmpty())
-		{
-			m_Installing_MajorStatus->SetLabel(event.GetSource());
-		}
-
-		int64_t minorMin = event.GetMinorProcessed();
-		int64_t minorMax = event.GetMinorTotal();
-		if (event.IsMinorKnown())
-		{
-			m_Installing_MinorProgress->SetValue(minorMin, minorMax);
-		}
-		else if (minorMin != -2 && minorMax != -2)
-		{
-			m_Installing_MinorProgress->Pulse();
-		}
-
-		if (event.IsMajorKnown())
-		{
-			m_Installing_MajorProgress->SetValue(event.GetMajorProcessed(), event.GetMajorTotal());
-		}
-		else
-		{
-			m_Installing_MajorProgress->Pulse();
-		}
-	}
-	void WizardDialog::OnMajorProgress(KxFileOperationEvent& event)
-	{
-		if (m_ShouldCancel)
-		{
-			event.Veto();
-			return;
-		}
-
-		int64_t current = event.GetMajorProcessed();
-		int64_t max = event.GetMajorTotal();
-		m_Installing_MajorStatus->SetLabel(KTrf("InstallWizard.InstalledXOfY", current, max) + wxS(". ") + event.GetSource());
 	}
 
 	void WizardDialog::SetModData()
@@ -681,11 +423,12 @@ namespace Kortex::InstallWizard
 		};
 
 		size_t processed = 0;
-		for (const KPPFFileEntry* fileEntry: m_InstallableFiles)
+		const KPPFFileEntryRefArray& installableFiles = m_PageInstallation.GetInstallableFiles();
+		for (const KPPFFileEntry* fileEntry: installableFiles)
 		{
-			if (m_InstallThread->CanContinue())
+			if (m_PageInstallation.m_InstallThread->CanContinue())
 			{
-				NotifyMajor(processed, m_InstallableFiles.size(), fileEntry->GetSource());
+				NotifyMajor(processed, installableFiles.size(), fileEntry->GetSource());
 
 				if (const KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
 				{
@@ -704,7 +447,7 @@ namespace Kortex::InstallWizard
 				}
 
 				processed++;
-				NotifyMajor(processed, m_InstallableFiles.size(), fileEntry->GetSource());
+				NotifyMajor(processed, installableFiles.size(), fileEntry->GetSource());
 			}
 			else
 			{
@@ -716,7 +459,8 @@ namespace Kortex::InstallWizard
 	WizardDialog::WizardDialog()
 		:m_PageInfo(*this),
 		m_PageRequirements(*this),
-		m_PageComponents(*this)
+		m_PageComponents(*this),
+		m_PageInstallation(*this)
 	{
 	}
 	WizardDialog::WizardDialog(wxWindow* parent, const wxString& packagePath)
@@ -814,15 +558,15 @@ namespace Kortex::InstallWizard
 				{
 					if (IsOptionEnabled(DialogOptions::Debug))
 					{
-						CollectAllInstallableEntries();
-						ShowInstallableFilesPreview();
+						m_PageInstallation.CollectAllInstallableEntries();
+						m_PageInstallation.ShowInstallableFilesPreview();
 
 						// Switch back to info page to reset components state.
 						SwitchPage(WizardPageID::Info);
 						break;
 					}
 
-					if (!OnBeginInstall())
+					if (!m_PageInstallation.OnBeginInstall())
 					{
 						Close(true);
 						break;
@@ -838,7 +582,7 @@ namespace Kortex::InstallWizard
 				}
 				case WizardPageID::Done:
 				{
-					m_IsComplete = true;
+					m_PageInstallation.m_IsComplete = true;
 
 					m_CancelButton->Disable();
 					m_BackwardButton->Disable();

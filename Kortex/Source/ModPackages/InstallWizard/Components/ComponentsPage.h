@@ -96,7 +96,11 @@ namespace Kortex::InstallWizard
 			bool CheckIsManualComponentsAvailable() const;
 			KPPCStep* GetFirstStepSatisfiesConditions() const;
 			KPPCStep* GetFirstStepSatisfiesConditions(const KPPCStep* afterThis) const;
-
+			
+			const StepStack& GetInstallSteps() const
+			{
+				return m_InstallSteps;
+			}
 			KPPCStep* GetCurrentStep() const;
 			const StepStackItem* GetCurrentStepItem() const;
 			void LoadManualStep(KPPCStep& step);

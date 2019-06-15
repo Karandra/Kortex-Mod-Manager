@@ -215,6 +215,7 @@
     <ClCompile Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoPage.cpp" />
+    <ClCompile Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Requiremets\DisplayModel.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Requiremets\RequirementsPage.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\WizardDialog.cpp" />
@@ -557,6 +558,7 @@
     <ClInclude Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoPage.h" />
+    <ClInclude Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Requiremets\DisplayModel.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Requiremets\RequirementsPage.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\WizardDialog.h" />

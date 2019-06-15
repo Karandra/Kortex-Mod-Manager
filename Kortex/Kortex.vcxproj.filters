@@ -391,6 +391,12 @@
     <Filter Include="Code\Headers\ModPackages\InstallWizard\Components">
       <UniqueIdentifier>{4cda8c9a-a77d-4a07-ae0e-7bff13d2d2f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\ModPackages\InstallWizard\Installation">
+      <UniqueIdentifier>{d0f6496a-3be3-45f6-a128-e3b92c2739eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\ModPackages\InstallWizard\Installation">
+      <UniqueIdentifier>{3499a9af-2030-4407-856a-c5619e8d3302}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1214,6 +1220,9 @@
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Components\DisplayModel.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Installation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2299,6 +2308,9 @@
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModelNode.h">
       <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Installation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

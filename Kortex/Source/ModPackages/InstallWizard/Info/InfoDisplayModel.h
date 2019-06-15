@@ -33,21 +33,21 @@ namespace Kortex::InstallWizard::InfoPageNS
 
 namespace Kortex::InstallWizard::InfoPageNS
 {
-	class InfoDisplayModel: public KxDataView2::VirtualListModel
+	class InfoDisplayModel: public KxDataView2::VirtualListModel, public KxDataView2::TypeAliases
 	{
 		private:
 			InfoPage& m_Page;
 			std::vector<Item> m_Items;
 
 		private:
-			wxAny GetValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
-			wxAny GetEditorValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
-			bool SetValue(KxDataView2::Node& node, const wxAny& value, KxDataView2::Column& column) override;
-			bool IsEnabled(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
-			bool GetAttributes(const KxDataView2::Node& node, KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const override;
+			wxAny GetValue(const Node& node, const Column& column) const override;
+			wxAny GetEditorValue(const Node& node, const Column& column) const override;
+			bool SetValue(Node& node, const wxAny& value, Column& column) override;
+			bool IsEnabled(const Node& node, const Column& column) const override;
+			bool GetAttributes(const Node& node, CellAttributes& attributes, const CellState& cellState, const Column& column) const override;
 
 			bool CheckModID(const wxString& id);
-			void OnActivateItem(KxDataView2::Event& event);
+			void OnActivateItem(Event& event);
 
 		public:
 			InfoDisplayModel(InfoPage& page, size_t initialCount = 0)

@@ -1,14 +1,14 @@
 #pragma once
 #include "stdafx.h"
-#include "Common.h"
+#include "../Common.h"
 
-namespace Kortex::InstallWizard
+namespace Kortex::InstallWizard::ComponentsPageNS
 {
-	class ComponentsDisplayModelNode
+	class DisplayModelNode
 	{
 		public:
-			using Vector = std::vector<ComponentsDisplayModelNode>;
-			using RefVector = std::vector<ComponentsDisplayModelNode*>;
+			using Vector = std::vector<DisplayModelNode>;
+			using RefVector = std::vector<DisplayModelNode*>;
 
 		private:
 			enum Type
@@ -24,7 +24,7 @@ namespace Kortex::InstallWizard
 				const KPPCGroup* m_Group = nullptr;
 				const KPPCEntry* m_Entry;
 			};
-			const ComponentsDisplayModelNode* m_ParentNode = nullptr;
+			const DisplayModelNode* m_ParentNode = nullptr;
 
 			size_t m_Begin = 0;
 			size_t m_Size = 0;
@@ -32,14 +32,14 @@ namespace Kortex::InstallWizard
 			wxCheckBoxState m_CheckState = wxCHK_UNDETERMINED;
 
 		public:
-			ComponentsDisplayModelNode()
+			DisplayModelNode()
 			{
 			}
-			ComponentsDisplayModelNode(const KPPCGroup& group)
+			DisplayModelNode(const KPPCGroup& group)
 				:m_Group(&group), m_Type(Group)
 			{
 			}
-			ComponentsDisplayModelNode(const KPPCEntry& entry)
+			DisplayModelNode(const KPPCEntry& entry)
 				:m_Entry(&entry), m_Type(Entry)
 			{
 			}
@@ -71,11 +71,11 @@ namespace Kortex::InstallWizard
 			{
 				return m_ParentNode != nullptr;
 			}
-			const ComponentsDisplayModelNode* GetParentNode() const
+			const DisplayModelNode* GetParentNode() const
 			{
 				return m_ParentNode;
 			}
-			void SetParentNode(const ComponentsDisplayModelNode& node)
+			void SetParentNode(const DisplayModelNode& node)
 			{
 				m_ParentNode = &node;
 			}

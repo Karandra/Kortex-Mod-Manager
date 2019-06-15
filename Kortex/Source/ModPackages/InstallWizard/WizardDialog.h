@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "StepStack.h"
 #include "Info/InfoPage.h"
+#include "Requiremets/RequirementsPage.h"
+#include "Components/ComponentsPage.h"
 #include "ModPackages/ModPackage.h"
 #include "GameMods/ModManager/BasicGameMod.h"
 #include "Utility/KOperationWithProgress.h"
@@ -23,14 +25,6 @@
 #include <KxFramework/KxWithOptions.h>
 #include <KxFramework/KxDataView.h>
 class KImageViewerEvent;
-
-namespace Kortex::InstallWizard
-{
-	class RequirementsDisplayModel;
-	class ComponentsDisplayModel;
-
-	class InstallationOperation;
-}
 
 namespace Kortex::InstallWizard
 {
@@ -62,23 +56,12 @@ namespace Kortex::InstallWizard
 			KxButton* m_CancelButton = nullptr;
 			KxButton* m_BackwardButton = nullptr;
 			KxButton* m_ForwardButton = nullptr;
-			wxSimplebook* m_TabView = nullptr;
+			wxSimplebook* m_PageContainer = nullptr;
 			WizardPageID m_CurrentPage = WizardPageID::None;
 
 			InfoPage m_PageInfo;
-
-			// Main requirements
-			RequirementsDisplayModel* m_Requirements_Main = nullptr;
-
-			// Components
-			KxSplitterWindow* m_Components_SplitterV = nullptr;
-			KxSplitterWindow* m_Components_SplitterHRight = nullptr;
-
-			ComponentsDisplayModel* m_Components_ItemList = nullptr;
-			KxAuiNotebook* m_Components_Tabs = nullptr;
-			KxImageView* m_Components_ImageView = nullptr;
-			KxHTMLWindow* m_Components_Description = nullptr;
-			RequirementsDisplayModel* m_Components_Requirements = nullptr;
+			RequirementsPage m_PageRequirements;
+			ComponentsPage m_PageComponents;
 
 			// Installing
 			KxPanel* m_Installing_Pane = nullptr;
@@ -99,19 +82,17 @@ namespace Kortex::InstallWizard
 			std::unique_ptr<ModPackage> m_Package;
 			ModManager::BasicGameMod m_ModEntry;
 			const IGameMod* m_ExistingMod = nullptr;
-
-			// Components
-			bool m_HasManualComponents = false;
-			TFlagsMap m_FlagsStorage;
-			StepStack m_InstallSteps;
 			KPPFFileEntryRefArray m_InstallableFiles;
 
 		private:
 			bool CreateUI(wxWindow* parent);
 			void LoadUIOptions();
 
-			wxWindow* CreateUI_Requirements();
-			wxWindow* CreateUI_Components();
+			std::array<WizardPage*, 3> GetPages()
+			{
+				return {&m_PageInfo, &m_PageRequirements, &m_PageComponents};
+			}
+
 			wxWindow* CreateUI_Installing();
 			wxWindow* CreateUI_Done();
 
@@ -124,7 +105,6 @@ namespace Kortex::InstallWizard
 			void FindExistingMod();
 			void AcceptExistingMod(const Kortex::IGameMod& mod);
 			void LoadHeaderImage();
-			void LoadMainRequirements();
 
 			bool AskCancel(bool canCancel);
 			void OnClose(wxCloseEvent& event);
@@ -132,25 +112,6 @@ namespace Kortex::InstallWizard
 			void OnGoBackward(wxCommandEvent& event);
 			void OnGoForward(wxCommandEvent& event);
 
-			void OnGoStepBackward(wxCommandEvent& event);
-			void OnGoStepForward(wxCommandEvent& event);
-			void OnSelectComponent(KxDataViewEvent& event);
-
-			void StoreRequirementsFlags();
-			void StoreStepFlags(const KPPCEntry::RefVector& checkedEntries);
-			void RestoreStepFlagsUpToThis(const KPPCStep& step);
-
-			bool IsConditionSatisfied(const KPPCFlagEntry& flagEntry) const;
-			bool IsConditionsSatisfied(const KPPCConditionGroup& conditionGroup) const;
-			bool IsStepSatisfiesConditions(const KPPCStep& step) const;
-			bool CheckIsManualComponentsAvailable() const;
-			KPPCStep* GetFirstStepSatisfiesConditions() const;
-			KPPCStep* GetFirstStepSatisfiesConditions(const KPPCStep* afterThis) const;
-
-			void ClearComponentsViewInfo();
-			void ResetComponents();
-			bool BeginComponents();
-			void LoadManualStep(KPPCStep& step);
 			void CollectAllInstallableEntries();
 			void SortInstallableFiles();
 			void ShowInstallableFilesPreview();
@@ -189,7 +150,7 @@ namespace Kortex::InstallWizard
 			}
 			wxWindow* GetDialogMainCtrl() const override
 			{
-				return m_TabView;
+				return m_PageContainer;
 			}
 
 		public:
@@ -225,6 +186,19 @@ namespace Kortex::InstallWizard
 				return *m_Package;
 			}
 
+			InfoPage& GetInfoPage()
+			{
+				return m_PageInfo;
+			}
+			RequirementsPage& GetRequirementsPage()
+			{
+				return m_PageRequirements;
+			}
+			ComponentsPage& GetComponentsPage()
+			{
+				return m_PageComponents;
+			}
+
 			const ModManager::BasicGameMod* GetModEntry() const
 			{
 				return &m_ModEntry;
@@ -249,18 +223,6 @@ namespace Kortex::InstallWizard
 
 			void SwitchPage(WizardPageID page);
 			bool OnLeavingPage(WizardPageID page);
-
-			KPPCStep* GetCurrentStep() const
-			{
-				return m_InstallSteps.GetTopStep();
-			}
-			const StepStackItem* GetCurrentStepItem() const
-			{
-				return m_InstallSteps.GetTopItem();
-			}
-			bool HasMainRequirements() const;
-			bool HasManualComponents() const;
-			bool HasConditionalInstall() const;
 	};
 }
 

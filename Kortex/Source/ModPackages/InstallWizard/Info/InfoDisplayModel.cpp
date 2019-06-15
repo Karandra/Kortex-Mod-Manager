@@ -14,7 +14,6 @@
 namespace
 {
 	using namespace KxDataView2;
-
 	enum class ColumnRef
 	{
 		Name,
@@ -247,8 +246,8 @@ namespace Kortex::InstallWizard::InfoPageNS
 		view->AssignModel(this);
 
 		// Columns
-		view->AppendColumn<BitmapTextRenderer>(KTr("Generic.Name"), ::ColumnRef::Name, 250);
-		view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Value"), ::ColumnRef::Value);
+		view->AppendColumn<BitmapTextRenderer>(KTr("Generic.Name"), ColumnRef::Name, 250);
+		view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Value"), ColumnRef::Value);
 
 		// Events
 		view->Bind(EVENT_ITEM_ACTIVATED, &InfoDisplayModel::OnActivateItem, this);

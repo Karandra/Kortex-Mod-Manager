@@ -1,17 +1,17 @@
 #pragma once
 #include "stdafx.h"
+#include "../Common.h"
+#include "DisplayModelNode.h"
 #include "Utility/KDataViewTreeModel.h"
-#include "Common.h"
-#include "ComponentsDisplayModelNode.h"
 
-namespace Kortex::InstallWizard
+namespace Kortex::InstallWizard::ComponentsPageNS
 {
-	class ComponentsDisplayModel: public KxDataViewTreeModelEx<KxDataViewModel>
+	class DisplayModel: public KxDataViewTreeModelEx<KxDataViewModel>
 	{
 		private:
 			const KPackageProjectComponents* m_ComponentsInfo = nullptr;
 			const KPPCStep* m_Step = nullptr;
-			ComponentsDisplayModelNode::Vector m_DataVector;
+			DisplayModelNode::Vector m_DataVector;
 			KPPCEntry::RefVector m_CheckedEntries;
 
 			const KPPCEntry* m_HotItem = nullptr;
@@ -33,8 +33,8 @@ namespace Kortex::InstallWizard
 			wxString GetMessageTypeDescriptor(KPPCTypeDescriptor type) const;
 			KxDataViewBitmapTextToggleValue::ToggleType GetToggleType(KPPCSelectionMode mode) const;
 			const wxString& GetSelectionModeString(const KPPCGroup& group) const;
-			ComponentsDisplayModelNode::RefVector GetGroupNodes(const ComponentsDisplayModelNode* groupNode);
-			bool NodeChanged(const ComponentsDisplayModelNode* node)
+			DisplayModelNode::RefVector GetGroupNodes(const DisplayModelNode* groupNode);
+			bool NodeChanged(const DisplayModelNode* node)
 			{
 				return ItemChanged(MakeItem(node));
 			}
@@ -44,7 +44,7 @@ namespace Kortex::InstallWizard
 			void OnHotTrackItem(KxDataViewEvent& event);
 
 		public:
-			ComponentsDisplayModel();
+			DisplayModel();
 
 		public:
 			size_t GetItemsCount() const;
@@ -59,12 +59,12 @@ namespace Kortex::InstallWizard
 				return m_HotItem;
 			}
 
-			KxDataViewItem MakeItem(const ComponentsDisplayModelNode* node) const;
-			KxDataViewItem MakeItem(const ComponentsDisplayModelNode& node) const
+			KxDataViewItem MakeItem(const DisplayModelNode* node) const;
+			KxDataViewItem MakeItem(const DisplayModelNode& node) const
 			{
 				return MakeItem(&node);
 			}
-			ComponentsDisplayModelNode* GetNode(const KxDataViewItem& item) const;
+			DisplayModelNode* GetNode(const KxDataViewItem& item) const;
 			KPPCEntry::RefVector GetCheckedEntries() const;
 	};
 }

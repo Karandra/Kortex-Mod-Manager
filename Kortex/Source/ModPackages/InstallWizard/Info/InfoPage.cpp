@@ -141,7 +141,7 @@ namespace Kortex::InstallWizard
 	wxWindow* InfoPage::CreateDocumentsTab()
 	{
 		m_DocumentsContainer = new KxSplitterWindow(m_TabsContainer, KxID_NONE);
-		m_DocumentsContainer->SetName("DocumentsListSize");
+		m_DocumentsContainer->SetName("VSplitter");
 		m_DocumentsContainer->SetMinimumPaneSize(200);
 		m_DocumentsContainer->SetSashColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::WindowBG));
 
@@ -156,8 +156,6 @@ namespace Kortex::InstallWizard
 		m_DocumentAdvanced = wxWebView::New(m_DocumentsContainer, KxID_NONE);
 
 		m_DocumentsContainer->SplitVertically(m_DocumentsList, m_DocumentSimple, m_DocumentsContainer->GetMinimumPaneSize());
-		
-
 		return m_DocumentsContainer;
 	}
 	wxWindow* InfoPage::CreateScreenshotsTab()

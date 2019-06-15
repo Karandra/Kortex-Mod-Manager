@@ -5,8 +5,6 @@
 #include <Kortex/Events.hpp>
 #include "Common.h"
 #include "WizardDialog.h"
-#include "RequirementsDisplayModel.h"
-#include "ComponentsDisplayModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
@@ -20,23 +18,6 @@
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxString.h>
 
-namespace
-{
-	enum class ComponentsTabIndex
-	{
-		Description = 0,
-		Requirements = 1,
-	};
-	namespace OName
-	{
-		KortexDefOption(MainUI);
-		KortexDefOption(InfoView);
-		KortexDefOption(RequirementsView);
-		KortexDefOption(ComponentRequirementsView);
-		KortexDefOption(ComponentsView);
-	}
-}
-
 namespace Kortex::InstallWizard
 {
 	wxDEFINE_EVENT(KEVT_IW_DONE, wxNotifyEvent);
@@ -44,14 +25,14 @@ namespace Kortex::InstallWizard
 
 namespace Kortex::InstallWizard
 {
-	namespace
+	auto GetUIOption(const wxString& option = {})
 	{
-		auto GetUIOption(const wxString& option = {})
-		{
-			return Application::GetAInstanceOptionOf<IPackageManager>(wxS("InstallWizard"), option);
-		};
-	}
+		return Application::GetAInstanceOptionOf<IPackageManager>(wxS("InstallWizard"), option);
+	};
+}
 
+namespace Kortex::InstallWizard
+{
 	void WizardDialog::ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath)
 	{
 		KxTaskDialog dialog(window, KxID_NONE, KTrf("InstallWizard.LoadFailed.Caption", packagePath), KTr("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
@@ -67,11 +48,11 @@ namespace Kortex::InstallWizard
 
 			m_BackwardButton = AddButton(KxID_BACKWARD, "< " + KTr("InstallWizard.BackwardButton")).As<KxButton>();
 			m_BackwardButton->Bind(wxEVT_BUTTON, &WizardDialog::OnGoBackward, this);
-			m_BackwardButton->Bind(wxEVT_BUTTON, &WizardDialog::OnGoStepBackward, this);
+			m_BackwardButton->Bind(wxEVT_BUTTON, &ComponentsPage::OnGoStepBackward, &m_PageComponents);
 
 			m_ForwardButton = AddButton(KxID_FORWARD, KTr("InstallWizard.ForwardButton") + " >").As<KxButton>();
 			m_ForwardButton->Bind(wxEVT_BUTTON, &WizardDialog::OnGoForward, this);
-			m_ForwardButton->Bind(wxEVT_BUTTON, &WizardDialog::OnGoStepForward, this);
+			m_ForwardButton->Bind(wxEVT_BUTTON, &ComponentsPage::OnGoStepForward, &m_PageComponents);
 
 			m_CancelButton = AddButton(KxID_CANCEL).As<KxButton>();
 			m_CancelButton->Bind(wxEVT_BUTTON, &WizardDialog::OnCancelButton, this);
@@ -83,12 +64,13 @@ namespace Kortex::InstallWizard
 			EnableMinimizeButton();
 			EnableMaximizeButton();
 
-			m_TabView = new wxSimplebook(m_ContentPanel, KxID_NONE, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-			m_TabView->AddPage(m_PageInfo.Create(), wxEmptyString);
-			m_TabView->AddPage(CreateUI_Requirements(), wxEmptyString);
-			m_TabView->AddPage(CreateUI_Components(), wxEmptyString);
-			m_TabView->AddPage(CreateUI_Installing(), wxEmptyString);
-			m_TabView->AddPage(CreateUI_Done(), wxEmptyString);
+			m_PageContainer = new wxSimplebook(m_ContentPanel, KxID_NONE, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+			for (WizardPage* page: GetPages())
+			{
+				m_PageContainer->AddPage(page->Create(), page->GetCaption());
+			}
+			m_PageContainer->AddPage(CreateUI_Installing(), wxEmptyString);
+			m_PageContainer->AddPage(CreateUI_Done(), wxEmptyString);
 
 			PostCreate();
 			return true;
@@ -100,98 +82,16 @@ namespace Kortex::InstallWizard
 		GetUIOption().LoadWindowGeometry(this);
 		Center();
 
-		for (WizardPage* page: {&m_PageInfo})
+		for (WizardPage* page: GetPages())
 		{
 			page->OnLoadUIOptions(GetUIOption(page->GetOptionName()));
 		}
-
-		GetUIOption(OName::MainUI).LoadSplitterLayout(m_Components_SplitterV);
-		GetUIOption(OName::MainUI).LoadSplitterLayout(m_Components_SplitterHRight);
-		GetUIOption(OName::RequirementsView).LoadDataViewLayout(m_Requirements_Main->GetView());
-		GetUIOption(OName::ComponentRequirementsView).LoadDataViewLayout(m_Components_ItemList->GetView());
-		GetUIOption(OName::ComponentsView).LoadDataViewLayout(m_Components_Requirements->GetView());
 	}
 
-	wxWindow* WizardDialog::CreateUI_Requirements()
-	{
-		m_Requirements_Main = new RequirementsDisplayModel();
-		m_Requirements_Main->Create(m_TabView);
-
-		return m_Requirements_Main->GetView();
-	}
-	wxWindow* WizardDialog::CreateUI_Components()
-	{
-		/* Create splitters */
-		m_Components_SplitterV = new KxSplitterWindow(m_TabView, KxID_NONE);
-		m_Components_SplitterV->SetMinimumPaneSize(150);
-		m_Components_SplitterV->SetName("ComponentsPaneSize");
-		IThemeManager::GetActive().ProcessWindow(m_Components_SplitterV);
-
-		m_Components_SplitterHRight = new KxSplitterWindow(m_Components_SplitterV, KxID_NONE);
-		m_Components_SplitterHRight->SetName("ComponentImageHeight");
-		m_Components_SplitterHRight->SetMinimumPaneSize(150);
-		IThemeManager::GetActive().ProcessWindow(m_Components_SplitterHRight);
-
-		/* Controls */
-		// Item list
-		m_Components_ItemList = new ComponentsDisplayModel();
-		m_Components_ItemList->Create(m_Components_SplitterV);
-		m_Components_ItemList->SetDataVector();
-		m_Components_ItemList->GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &WizardDialog::OnSelectComponent, this);
-		m_Components_ItemList->GetView()->Bind(KxEVT_DATAVIEW_ITEM_HOVERED, &WizardDialog::OnSelectComponent, this);
-
-		// Image view
-		m_Components_ImageView = new KxImageView(m_Components_SplitterHRight, KxID_NONE, wxBORDER_THEME);
-		m_Components_ImageView->SetScaleMode(KxIV_SCALE_ASPECT_FIT);
-		m_Components_ImageView->Bind(wxEVT_LEFT_DCLICK, [this](wxMouseEvent& event)
-		{
-			event.Skip();
-			if (const KPPCEntry* pComponent = m_Components_ItemList->GetHotTrackedEntry())
-			{
-				const KPPIImageEntry* entry = GetConfig().GetInterface().FindEntryWithValue(pComponent->GetImage());
-				if (entry)
-				{
-					KImageViewerEvent evt;
-					evt.SetBitmap(entry->GetBitmap());
-					evt.SetDescription(entry->GetDescription());
-
-					KImageViewerDialog dialog(this);
-					dialog.Navigate(evt);
-					dialog.ShowModal();
-				}
-			}
-		});
-
-		// Tabs
-		m_Components_Tabs = new KxAuiNotebook(m_Components_SplitterHRight, KxID_NONE);
-		m_Components_Tabs->SetImageList(&ImageProvider::GetImageList());
-
-		// Description
-		m_Components_Description = new KxHTMLWindow(m_Components_Tabs, KxID_NONE, wxEmptyString, KxHTMLWindow::DefaultStyle|wxBORDER_NONE);
-		m_Components_Description->Bind(wxEVT_HTML_LINK_CLICKED, [this](wxHtmlLinkEvent& event)
-		{
-			KAux::AskOpenURL(event.GetLinkInfo().GetHref(), this);
-		});
-		m_Components_Tabs->InsertPage((size_t)ComponentsTabIndex::Description, m_Components_Description, KTr("Generic.Description"), true);
-
-		// Requirements
-		m_Components_Requirements = new RequirementsDisplayModel();
-		m_Components_Requirements->SetDataViewFlags(KxDataViewCtrl::DefaultStyle|(KxDataViewCtrlStyles)wxBORDER_NONE);
-		m_Components_Requirements->Create(m_Components_Tabs);
-		m_Components_Requirements->SetDataVector();
-		m_Components_Tabs->InsertPage((size_t)ComponentsTabIndex::Requirements, m_Components_Requirements->GetView(), KTr("InstallWizard.Page.Requirements"));
-
-		/* Split */
-		m_Components_SplitterHRight->SplitHorizontally(m_Components_ImageView, m_Components_Tabs, -m_Components_SplitterHRight->GetMinimumPaneSize());
-		m_Components_SplitterV->SplitVertically(m_Components_ItemList->GetView(), m_Components_SplitterHRight, m_Components_SplitterV->GetMinimumPaneSize());
-
-		// Return main splitter
-		return m_Components_SplitterV;
-	}
 	wxWindow* WizardDialog::CreateUI_Installing()
 	{
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		m_Installing_Pane = new KxPanel(m_TabView, KxID_NONE);
+		m_Installing_Pane = new KxPanel(m_PageContainer, KxID_NONE);
 		m_Installing_Pane->SetSizer(sizer);
 
 		m_Installing_MinorProgress = new KxProgressBar(m_Installing_Pane, KxID_NONE, 100);
@@ -211,7 +111,7 @@ namespace Kortex::InstallWizard
 	wxWindow* WizardDialog::CreateUI_Done()
 	{
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		m_Done_Pane = new KxPanel(m_TabView, KxID_NONE);
+		m_Done_Pane = new KxPanel(m_PageContainer, KxID_NONE);
 		m_Done_Pane->SetSizer(sizer);
 
 		m_Done_Label = KPackageCreatorPageBase::CreateCaptionLabel(m_Done_Pane, wxEmptyString);
@@ -294,19 +194,12 @@ namespace Kortex::InstallWizard
 			// Header
 			LoadHeaderImage();
 
-			for (WizardPage* page: {&m_PageInfo})
+			for (WizardPage* page: GetPages())
 			{
 				page->OnPackageLoaded();
 			}
-
-			/* Requirements */
-			StoreRequirementsFlags();
-			LoadMainRequirements();
-
-			/* Components */
-			m_HasManualComponents = CheckIsManualComponentsAvailable();
-
 			LoadUIOptions();
+
 			return true;
 		}
 		else
@@ -324,7 +217,7 @@ namespace Kortex::InstallWizard
 		Show();
 		Raise();
 
-		Kortex::ModManager::ModEvent(Kortex::Events::ModInstalling, m_ModEntry).Send();
+		ModManager::ModEvent(Events::ModInstalling, m_ModEntry).Send();
 
 		return ret;
 	}
@@ -333,7 +226,7 @@ namespace Kortex::InstallWizard
 	{
 		m_ExistingMod = Kortex::IModManager::GetInstance()->FindModByID(GetConfig().GetModID());
 	}
-	void WizardDialog::AcceptExistingMod(const Kortex::IGameMod& mod)
+	void WizardDialog::AcceptExistingMod(const IGameMod& mod)
 	{
 		// Info
 		KPackageProjectInfo& packageInfo = GetConfig().GetInfo();
@@ -379,11 +272,6 @@ namespace Kortex::InstallWizard
 			}
 		}
 		SetAutoSize(false);
-	}
-	void WizardDialog::LoadMainRequirements()
-	{
-		const KPackageProjectRequirements& tReqs = m_Package->GetConfig().GetRequirements();
-		m_Requirements_Main->SetDataVector(&tReqs, tReqs.GetDefaultGroup());
 	}
 
 	bool WizardDialog::AskCancel(bool canCancel)
@@ -442,7 +330,7 @@ namespace Kortex::InstallWizard
 			}
 			case WizardPageID::Components:
 			{
-				page = HasMainRequirements() ? WizardPageID::Requirements : WizardPageID::Info;
+				page = m_PageRequirements.HasMainRequirements() ? WizardPageID::Requirements : WizardPageID::Info;
 				break;
 			}
 		};
@@ -461,8 +349,8 @@ namespace Kortex::InstallWizard
 			{
 				case WizardPageID::Info:
 				{
-					page = HasMainRequirements() ? WizardPageID::Requirements : WizardPageID::Components;
-					if (page == WizardPageID::Components && !HasManualComponents())
+					page = m_PageRequirements.HasMainRequirements() ? WizardPageID::Requirements : WizardPageID::Components;
+					if (page == WizardPageID::Components && !m_PageComponents.HasManualComponents())
 					{
 						page = WizardPageID::Installation;
 					}
@@ -470,7 +358,7 @@ namespace Kortex::InstallWizard
 				}
 				case WizardPageID::Requirements:
 				{
-					page = HasManualComponents() ? WizardPageID::Components : WizardPageID::Installation;
+					page = m_PageComponents.HasManualComponents() ? WizardPageID::Components : WizardPageID::Installation;
 					break;
 				}
 				case WizardPageID::Components:
@@ -483,330 +371,6 @@ namespace Kortex::InstallWizard
 		}
 	}
 
-	void WizardDialog::OnGoStepBackward(wxCommandEvent& event)
-	{
-		if (m_InstallSteps.GetSize() > 1)
-		{
-			m_InstallSteps.PopItem();
-
-			RestoreStepFlagsUpToThis(*m_InstallSteps.GetTopStep());
-			LoadManualStep(*m_InstallSteps.GetTopStep());
-		}
-		else
-		{
-			// Now stack has only first step. Clear it.
-			m_InstallSteps.Clear();
-			event.Skip();
-		}
-	}
-	void WizardDialog::OnGoStepForward(wxCommandEvent& event)
-	{
-		if (GetCurrentStep())
-		{
-			KPPCEntry::RefVector checkedEntries;
-			if (m_Components_ItemList->OnLeaveStep(checkedEntries))
-			{
-				// Store flags from checked entries and save list of checked entries to current step.
-				// This is needed for reverting checked status and correctly resetting flags when going step back.
-				StoreStepFlags(checkedEntries);
-				m_InstallSteps.GetTopItem()->GetChecked() = checkedEntries;
-
-				KPPCStep* step = GetFirstStepSatisfiesConditions(GetCurrentStep());
-				if (step)
-				{
-					m_InstallSteps.PushStep(step);
-					LoadManualStep(*step);
-				}
-				else
-				{
-					// No steps left, go to install now
-					event.Skip();
-				}
-			}
-			return;
-		}
-		event.Skip();
-	}
-	void WizardDialog::OnSelectComponent(KxDataViewEvent& event)
-	{
-		wxWindowUpdateLocker lock1(m_Components_Tabs);
-		wxWindowUpdateLocker lock2(m_Components_ImageView);
-		wxWindowUpdateLocker lock3(m_Components_Description);
-		wxWindowUpdateLocker lock4(m_Components_ItemList->GetView());
-		wxWindowUpdateLocker lock5(m_Components_Requirements->GetView());
-
-		ComponentsDisplayModelNode* node = m_Components_ItemList->GetNode(event.GetItem());
-		if (event.GetEventType() == KxEVT_DATAVIEW_ITEM_HOVERED && (!event.GetItem().IsOK() || !node || node->IsGroup()))
-		{
-			return;
-		}
-		ClearComponentsViewInfo();
-
-		if (node)
-		{
-			if (const KPPCEntry* entry = node->GetEntry())
-			{
-				const wxString& description = entry->GetDescription();
-				const bool isDescriptionEmpty = description.IsEmpty();
-				if (!isDescriptionEmpty)
-				{
-					m_Components_Description->SetTextValue(description);
-					m_Components_Description->Enable();
-				}
-				else
-				{
-					m_Components_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Components_Description));
-				}
-				m_Components_Tabs->SetPageImage((size_t)ComponentsTabIndex::Description, (int)(!isDescriptionEmpty ? ImageResourceID::InformationFrame : ImageResourceID::InformationFrameEmpty));
-
-				bool bRequirementsEmpty = entry->GetRequirements().empty();
-				if (!bRequirementsEmpty)
-				{
-					const bool isOK = GetConfig().GetRequirements().CalcOverallStatus(entry->GetRequirements());
-
-					m_Components_Tabs->SetPageImage((size_t)ComponentsTabIndex::Requirements, (int)(isOK ? ImageResourceID::TickCircleFrame : ImageResourceID::CrossCircleFrame));
-					m_Components_Requirements->SetDataVector(&GetConfig().GetRequirements(), entry->GetRequirements());
-				}
-				else
-				{
-					m_Components_Tabs->SetPageImage((size_t)ComponentsTabIndex::Requirements, (int)ImageResourceID::InformationFrameEmpty);
-				}
-
-				const KPPIImageEntry* pImageEntry = GetConfig().GetInterface().FindEntryWithValue(entry->GetImage());
-				if (pImageEntry && pImageEntry->HasBitmap())
-				{
-					m_Components_ImageView->SetBitmap(pImageEntry->GetBitmap());
-					m_Components_ImageView->Enable();
-				}
-
-				// Tab switch
-				if (!isDescriptionEmpty)
-				{
-					m_Components_Tabs->ChangeSelection((size_t)ComponentsTabIndex::Description);
-				}
-				else
-				{
-					m_Components_Tabs->ChangeSelection((size_t)ComponentsTabIndex::Requirements);
-				}
-				m_Components_ItemList->GetView()->SetFocus();
-			}
-		}
-		event.Skip();
-	}
-
-	void WizardDialog::StoreRequirementsFlags()
-	{
-		for (const auto& group: GetConfig().GetRequirements().GetGroups())
-		{
-			m_FlagsStorage.insert_or_assign(group->GetFlagName(), group->CalcGroupStatus() ? "true" : "false");
-		}
-	}
-	void WizardDialog::StoreStepFlags(const KPPCEntry::RefVector& checkedEntries)
-	{
-		for (KPPCEntry* entry: checkedEntries)
-		{
-			for (const KPPCFlagEntry& flagEntry: entry->GetConditionalFlags().GetFlags())
-			{
-				m_FlagsStorage.insert_or_assign(flagEntry.GetName(), flagEntry.GetValue());
-			}
-		}
-	}
-	void WizardDialog::RestoreStepFlagsUpToThis(const KPPCStep& step)
-	{
-		m_FlagsStorage.clear();
-		StoreRequirementsFlags();
-
-		for (const StepStackItem& tStepItem: m_InstallSteps)
-		{
-			if (tStepItem.GetStep() != &step)
-			{
-				StoreStepFlags(tStepItem.GetChecked());
-			}
-			else
-			{
-				return;
-			}
-		}
-	}
-
-	bool WizardDialog::IsConditionSatisfied(const KPPCFlagEntry& flagEntry) const
-	{
-		auto it = m_FlagsStorage.find(flagEntry.GetName());
-		if (it != m_FlagsStorage.end())
-		{
-			return it->second == flagEntry.GetValue();
-		}
-		return !flagEntry.HasValue();
-	}
-	bool WizardDialog::IsConditionsSatisfied(const KPPCConditionGroup& conditionGroup) const
-	{
-		if (conditionGroup.HasConditions())
-		{
-			KPackageProjectConditionChecker groupChecker;
-			for (const KPPCCondition& condition: conditionGroup.GetConditions())
-			{
-				// Evaluate each condition
-				KPackageProjectConditionChecker conditionChecker;
-				for (const KPPCFlagEntry& flag: condition.GetFlags())
-				{
-					conditionChecker(IsConditionSatisfied(flag), condition.GetOperator());
-					if (condition.GetOperator() == KPP_OPERATOR_AND && !conditionChecker.GetResult())
-					{
-						break;
-					}
-				}
-
-				// Then combine it
-				groupChecker(conditionChecker.GetResult(), conditionGroup.GetOperator());
-				if (conditionGroup.GetOperator() == KPP_OPERATOR_AND && !groupChecker.GetResult())
-				{
-					break;
-				}
-			}
-			return groupChecker.GetResult();
-		}
-		return true;
-	}
-	bool WizardDialog::IsStepSatisfiesConditions(const KPPCStep& step) const
-	{
-		return IsConditionsSatisfied(step.GetConditionGroup());
-	}
-	bool WizardDialog::CheckIsManualComponentsAvailable() const
-	{
-		const KPackageProjectComponents& components = GetConfig().GetComponents();
-		if (!components.GetSteps().empty())
-		{
-			// Iterate over all steps from the beginning
-			// and if at least one step satisfies conditions return true.
-			for (const auto& step: components.GetSteps())
-			{
-				if (IsStepSatisfiesConditions(*step))
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	KPPCStep* WizardDialog::GetFirstStepSatisfiesConditions() const
-	{
-		const KPPCStep::Vector& steps = GetConfig().GetComponents().GetSteps();
-		for (size_t i = 0; i < steps.size(); i++)
-		{
-			KPPCStep* pCurrentStep = steps[i].get();
-			if (IsStepSatisfiesConditions(*pCurrentStep))
-			{
-				return pCurrentStep;
-			}
-		}
-		return nullptr;
-	}
-	KPPCStep* WizardDialog::GetFirstStepSatisfiesConditions(const KPPCStep* afterThis) const
-	{
-		const KPPCStep::Vector& steps = GetConfig().GetComponents().GetSteps();
-		const auto itAfterThis = std::find_if(steps.begin(), steps.end(), [afterThis](const auto& step)
-		{
-			return step.get() == afterThis;
-		});
-
-		auto itNextAfterThis = itAfterThis + 1;
-		if (itAfterThis != steps.end() && itNextAfterThis != steps.end())
-		{
-			for (auto it = itNextAfterThis; it != steps.end(); ++it)
-			{
-				KPPCStep& currentStep = **it;
-				if (IsStepSatisfiesConditions(currentStep))
-				{
-					return &currentStep;
-				}
-			}
-		}
-		return nullptr;
-	}
-
-	void WizardDialog::ClearComponentsViewInfo()
-	{
-		m_Components_Tabs->SetPageImage((size_t)ComponentsTabIndex::Description, (int)ImageResourceID::InformationFrameEmpty);
-		m_Components_Tabs->SetPageImage((size_t)ComponentsTabIndex::Requirements, (int)ImageResourceID::InformationFrameEmpty);
-
-		m_Components_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectComponentHint"), m_Components_Description));
-		m_Components_Description->Disable();
-
-		m_Components_ImageView->SetBitmap(wxNullBitmap);
-		m_Components_ImageView->Disable();
-
-		m_Components_Requirements->SetDataVector();
-	}
-	void WizardDialog::ResetComponents()
-	{
-		// Reset steps stack
-		m_InstallSteps.Clear();
-
-		// Reset flags
-		m_FlagsStorage.clear();
-
-		// Reset entries conditional type descriptors
-		for (auto& step: GetConfig().GetComponents().GetSteps())
-		{
-			for (auto& group: step->GetGroups())
-			{
-				for (auto& entry: group->GetEntries())
-				{
-					entry->SetTDCurrentValue(KPPC_DESCRIPTOR_INVALID);
-				}
-			}
-		}
-
-		// Reset view
-		ClearComponentsViewInfo();
-		m_Components_ItemList->SetDataVector();
-	}
-	bool WizardDialog::BeginComponents()
-	{
-		ResetComponents();
-		StoreRequirementsFlags();
-
-		KPPCStep* step = GetFirstStepSatisfiesConditions();
-		if (step)
-		{
-			m_InstallSteps.PushStep(step);
-			LoadManualStep(*step);
-			return true;
-		}
-		else
-		{
-			KxTaskDialog(this, KxID_NONE, KTr("InstallWizard.InvalidStepsConfig.Caption"), KTr("InstallWizard.InvalidStepsConfig.Message"), KxBTN_OK, KxICON_ERROR).ShowModal();
-			return false;
-		}
-	}
-	void WizardDialog::LoadManualStep(KPPCStep& step)
-	{
-		// Set step name if any
-		if (!step.GetName().IsEmpty())
-		{
-			SetLabel(step.GetName());
-		}
-		else
-		{
-			SetLabelByCurrentPage();
-		}
-
-		// Check entries conditions and set its type descriptors current value
-		for (auto& group: step.GetGroups())
-		{
-			for (auto& entry: group->GetEntries())
-			{
-				entry->SetTDCurrentValue(KPPC_DESCRIPTOR_INVALID);
-				if (IsConditionsSatisfied(entry->GetTDConditionGroup()))
-				{
-					entry->SetTDCurrentValue(entry->GetTDConditionalValue());
-				}
-			}
-		}
-
-		m_Components_ItemList->SetDataVector(&GetConfig().GetComponents(), &step, GetCurrentStepItem()->GetChecked());
-		m_Components_ItemList->GetView()->SetFocus();
-	}
 	void WizardDialog::CollectAllInstallableEntries()
 	{
 		auto AddFilesFromList = [this](const KxStringVector& list, bool pushBack = true)
@@ -836,7 +400,7 @@ namespace Kortex::InstallWizard
 
 		// No manual install steps and no conditional install.
 		// Saves list of all files in the package.
-		if (!HasManualComponents() && !HasConditionalInstall())
+		if (!m_PageComponents.HasManualComponents() && !m_PageComponents.HasConditionalInstall())
 		{
 			for (const auto& entry: GetConfig().GetFileData().GetData())
 			{
@@ -847,9 +411,9 @@ namespace Kortex::InstallWizard
 		else
 		{
 			// Manual steps present, get files from checked entries
-			if (HasManualComponents())
+			if (m_PageComponents.HasManualComponents())
 			{
-				for (const StepStackItem& step: m_InstallSteps)
+				for (const StepStackItem& step: m_PageComponents.m_InstallSteps)
 				{
 					for (const KPPCEntry* entry: step.GetChecked())
 					{
@@ -859,11 +423,11 @@ namespace Kortex::InstallWizard
 			}
 
 			// Conditional install present. Run it and store files.
-			if (HasConditionalInstall())
+			if (m_PageComponents.HasConditionalInstall())
 			{
 				for (const auto& step: GetConfig().GetComponents().GetConditionalSteps())
 				{
-					if (IsConditionsSatisfied(step->GetConditionGroup()))
+					if (m_PageComponents.IsConditionsSatisfied(step->GetConditionGroup()))
 					{
 						AddFilesFromList(step->GetEntries());
 					}
@@ -1150,7 +714,9 @@ namespace Kortex::InstallWizard
 	}
 
 	WizardDialog::WizardDialog()
-		:m_PageInfo(*this)
+		:m_PageInfo(*this),
+		m_PageRequirements(*this),
+		m_PageComponents(*this)
 	{
 	}
 	WizardDialog::WizardDialog(wxWindow* parent, const wxString& packagePath)
@@ -1189,22 +755,16 @@ namespace Kortex::InstallWizard
 		if (m_Package->IsOK())
 		{
 			GetUIOption().SaveWindowGeometry(this);
-			for (const WizardPage* page: {&m_PageInfo})
+			for (const WizardPage* page: GetPages())
 			{
 				page->OnSaveUIOptions(GetUIOption(page->GetOptionName()));
 			}
-
-			GetUIOption(OName::MainUI).SaveSplitterLayout(m_Components_SplitterV);
-			GetUIOption(OName::MainUI).SaveSplitterLayout(m_Components_SplitterHRight);
-			GetUIOption(OName::RequirementsView).SaveDataViewLayout(m_Requirements_Main->GetView());
-			GetUIOption(OName::ComponentRequirementsView).SaveDataViewLayout(m_Components_ItemList->GetView());
-			GetUIOption(OName::ComponentsView).SaveDataViewLayout(m_Components_Requirements->GetView());
 		}
 	}
 
 	void WizardDialog::SwitchPage(WizardPageID page)
 	{
-		if (page != m_CurrentPage && page != WizardPageID::None && page < (WizardPageID)m_TabView->GetPageCount())
+		if (page != m_CurrentPage && page != WizardPageID::None && page < (WizardPageID)m_PageContainer->GetPageCount())
 		{
 			if (!OnLeavingPage(m_CurrentPage))
 			{
@@ -1220,7 +780,7 @@ namespace Kortex::InstallWizard
 
 					m_CurrentPage = page;
 					SetLabelByCurrentPage();
-					m_TabView->ChangeSelection((size_t)page);
+					m_PageContainer->ChangeSelection((size_t)page);
 					break;
 				}
 				case WizardPageID::Requirements:
@@ -1230,7 +790,7 @@ namespace Kortex::InstallWizard
 
 					m_CurrentPage = page;
 					SetLabelByCurrentPage();
-					m_TabView->ChangeSelection((size_t)page);
+					m_PageContainer->ChangeSelection((size_t)page);
 					break;
 				}
 				case WizardPageID::Components:
@@ -1241,13 +801,13 @@ namespace Kortex::InstallWizard
 					m_CurrentPage = page;
 					SetLabelByCurrentPage();
 
-					if (!BeginComponents())
+					if (!m_PageComponents.BeginComponents())
 					{
 						Close(true);
 						break;
 					}
 
-					m_TabView->ChangeSelection((size_t)page);
+					m_PageContainer->ChangeSelection((size_t)page);
 					break;
 				}
 				case WizardPageID::Installation:
@@ -1273,7 +833,7 @@ namespace Kortex::InstallWizard
 
 					m_CurrentPage = page;
 					SetLabelByCurrentPage();
-					m_TabView->ChangeSelection((size_t)page);
+					m_PageContainer->ChangeSelection((size_t)page);
 					break;
 				}
 				case WizardPageID::Done:
@@ -1289,7 +849,7 @@ namespace Kortex::InstallWizard
 
 					m_CurrentPage = page;
 					SetLabelByCurrentPage();
-					m_TabView->ChangeSelection((size_t)page);
+					m_PageContainer->ChangeSelection((size_t)page);
 					break;
 				}
 			};
@@ -1321,17 +881,5 @@ namespace Kortex::InstallWizard
 			}
 		};
 		return true;
-	}
-	bool WizardDialog::HasMainRequirements() const
-	{
-		return !GetConfig().GetRequirements().IsDefaultGroupEmpty();
-	}
-	bool WizardDialog::HasManualComponents() const
-	{
-		return m_HasManualComponents;
-	}
-	bool WizardDialog::HasConditionalInstall() const
-	{
-		return !GetConfig().GetComponents().GetConditionalSteps().empty();
 	}
 }

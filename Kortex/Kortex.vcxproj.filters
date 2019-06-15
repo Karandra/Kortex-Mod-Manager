@@ -379,6 +379,18 @@
     <Filter Include="Code\Headers\ModPackages\InstallWizard\Info">
       <UniqueIdentifier>{1477e059-642f-494d-895d-a6b47847a993}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\ModPackages\InstallWizard\Requiremets">
+      <UniqueIdentifier>{2ec8edb0-1e7d-44ec-b80c-f9d7d281be3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\ModPackages\InstallWizard\Requiremets">
+      <UniqueIdentifier>{6ffb82b6-d585-4be7-a482-3aadee3b0411}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\ModPackages\InstallWizard\Components">
+      <UniqueIdentifier>{e6b25946-94d8-4d18-9f69-01959c28f4fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\ModPackages\InstallWizard\Components">
+      <UniqueIdentifier>{4cda8c9a-a77d-4a07-ae0e-7bff13d2d2f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1179,12 +1191,6 @@
     <ClCompile Include="Source\ModPackages\ModPackage.cpp">
       <Filter>Code\Source\ModPackages</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModPackages\InstallWizard\RequirementsDisplayModel.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModPackages\InstallWizard\ComponentsDisplayModel.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\WizardDialog.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard</Filter>
     </ClCompile>
@@ -1196,6 +1202,18 @@
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Requiremets\RequirementsPage.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Requiremets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Requiremets\DisplayModel.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Requiremets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Components\DisplayModel.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2249,19 +2267,10 @@
     <ClInclude Include="Include\Kortex\InstallWizard.hpp">
       <Filter>Code\Include\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\RequirementsDisplayModel.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\StepStack.h">
       <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\Common.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\ComponentsDisplayModelNode.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\ComponentsDisplayModel.h">
       <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\WizardDialog.h">
@@ -2275,6 +2284,21 @@
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.h">
       <Filter>Code\Headers\ModPackages\InstallWizard\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Requiremets\RequirementsPage.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Requiremets\DisplayModel.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModel.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModelNode.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

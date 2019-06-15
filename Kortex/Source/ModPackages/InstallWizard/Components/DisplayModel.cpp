@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/PackageManager.hpp>
-#include "ComponentsDisplayModel.h"
+#include "DisplayModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -9,37 +9,37 @@
 
 namespace
 {
-	enum ColumnID
+	enum ColumnRef
 	{
 		Expander,
 		Name,
 	};
 }
 
-namespace Kortex::InstallWizard
+namespace Kortex::InstallWizard::ComponentsPageNS
 {
-	void ComponentsDisplayModel::OnInitControl()
+	void DisplayModel::OnInitControl()
 	{
 		/* View */
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &ComponentsDisplayModel::OnActivateItem, this);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_HOVERED, &ComponentsDisplayModel::OnHotTrackItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_HOVERED, &DisplayModel::OnHotTrackItem, this);
 
 		/* Columns */
-		GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, ColumnID::Expander, KxDATAVIEW_CELL_INERT, 0, KxDV_COL_HIDDEN);
-		GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_ACTIVATABLE);
+		GetView()->AppendColumn<KxDataViewTextRenderer>(wxEmptyString, ColumnRef::Expander, KxDATAVIEW_CELL_INERT, 0, KxDV_COL_HIDDEN);
+		GetView()->AppendColumn<KxDataViewBitmapTextToggleRenderer>(KTr("Generic.Name"), ColumnRef::Name, KxDATAVIEW_CELL_ACTIVATABLE);
 	}
 
-	bool ComponentsDisplayModel::IsContainer(const KxDataViewItem& item) const
+	bool DisplayModel::IsContainer(const KxDataViewItem& item) const
 	{
-		if (const ComponentsDisplayModelNode* node = GetNode(item))
+		if (const DisplayModelNode* node = GetNode(item))
 		{
 			return node->IsGroup() && node->HasChildren();
 		}
 		return false;
 	}
-	KxDataViewItem ComponentsDisplayModel::GetParent(const KxDataViewItem& item) const
+	KxDataViewItem DisplayModel::GetParent(const KxDataViewItem& item) const
 	{
-		if (const ComponentsDisplayModelNode* node = GetNode(item))
+		if (const DisplayModelNode* node = GetNode(item))
 		{
 			if (node->IsEntry() && node->HasParentNode())
 			{
@@ -48,12 +48,12 @@ namespace Kortex::InstallWizard
 		}
 		return KxDataViewItem();
 	}
-	void ComponentsDisplayModel::GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const
+	void DisplayModel::GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const
 	{
 		// Root item, read groups
 		if (item.IsTreeRootItem())
 		{
-			for (const ComponentsDisplayModelNode& node: m_DataVector)
+			for (const DisplayModelNode& node: m_DataVector)
 			{
 				if (node.IsGroup())
 				{
@@ -64,7 +64,7 @@ namespace Kortex::InstallWizard
 		}
 
 		// Group item, read entries
-		const ComponentsDisplayModelNode* node = GetNode(item);
+		const DisplayModelNode* node = GetNode(item);
 		if (const KPPCGroup* group = node->GetGroup())
 		{
 			for (size_t i = node->GetBegin(); i < node->GetSize(); i++)
@@ -77,16 +77,16 @@ namespace Kortex::InstallWizard
 		}
 	}
 
-	bool ComponentsDisplayModel::GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attibutes, KxDataViewCellState cellState) const
+	bool DisplayModel::GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attibutes, KxDataViewCellState cellState) const
 	{
-		const ComponentsDisplayModelNode* node = GetNode(item);
+		const DisplayModelNode* node = GetNode(item);
 		if (node)
 		{
 			if (const KPPCGroup* group = node->GetGroup())
 			{
 				switch (column->GetID())
 				{
-					case ColumnID::Name:
+					case ColumnRef::Name:
 					{
 						attibutes.SetForegroundColor(KxUtility::GetThemeColor_Caption(GetView()));
 						attibutes.SetBold(true);
@@ -98,7 +98,7 @@ namespace Kortex::InstallWizard
 			{
 				switch (column->GetID())
 				{
-					case ColumnID::Name:
+					case ColumnRef::Name:
 					{
 						switch (entry->GetTDCurrentValue())
 						{
@@ -114,15 +114,15 @@ namespace Kortex::InstallWizard
 		}
 		return false;
 	}
-	void ComponentsDisplayModel::GetValue(wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column) const
+	void DisplayModel::GetValue(wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		if (const ComponentsDisplayModelNode* node = GetNode(item))
+		if (const DisplayModelNode* node = GetNode(item))
 		{
 			if (const KPPCGroup* group = node->GetGroup())
 			{
 				switch (column->GetID())
 				{
-					case ColumnID::Name:
+					case ColumnRef::Name:
 					{
 						data = wxString::Format("%s (%s)", group->GetName(), GetSelectionModeString(*group));
 						break;
@@ -133,7 +133,7 @@ namespace Kortex::InstallWizard
 			{
 				switch (column->GetID())
 				{
-					case ColumnID::Name:
+					case ColumnRef::Name:
 					{
 						KxDataViewBitmapTextToggleValue value(node->IsChecked(), GetToggleType(node->GetParentNode()->GetGroup()->GetSelectionMode()));
 						value.SetBitmap(GetImageByTypeDescriptor(entry->GetTDCurrentValue()));
@@ -145,9 +145,9 @@ namespace Kortex::InstallWizard
 			}
 		}
 	}
-	bool ComponentsDisplayModel::SetValue(const wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column)
+	bool DisplayModel::SetValue(const wxAny& data, const KxDataViewItem& item, const KxDataViewColumn* column)
 	{
-		ComponentsDisplayModelNode* entryNode = GetNode(item);
+		DisplayModelNode* entryNode = GetNode(item);
 		if (entryNode)
 		{
 			if (const KPPCEntry* entry = entryNode->GetEntry())
@@ -156,12 +156,12 @@ namespace Kortex::InstallWizard
 				KPPCSelectionMode selMode = group->GetSelectionMode();
 				KPPCTypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
 
-				if (column->GetID() == ColumnID::Name)
+				if (column->GetID() == ColumnRef::Name)
 				{
 					auto CountChecked = [this, entryNode]()
 					{
 						size_t checkedCount = 0;
-						for (const ComponentsDisplayModelNode* node: GetGroupNodes(entryNode->GetParentNode()))
+						for (const DisplayModelNode* node: GetGroupNodes(entryNode->GetParentNode()))
 						{
 							if (node->IsChecked())
 							{
@@ -172,7 +172,7 @@ namespace Kortex::InstallWizard
 					};
 					auto SetAllChecked = [this, entryNode](bool bCheck)
 					{
-						for (ComponentsDisplayModelNode* node: GetGroupNodes(entryNode->GetParentNode()))
+						for (DisplayModelNode* node: GetGroupNodes(entryNode->GetParentNode()))
 						{
 							node->SetChecked(false);
 							NodeChanged(node);
@@ -248,12 +248,12 @@ namespace Kortex::InstallWizard
 		}
 		return false;
 	}
-	bool ComponentsDisplayModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
+	bool DisplayModel::IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		const ComponentsDisplayModelNode* node = GetNode(item);
+		const DisplayModelNode* node = GetNode(item);
 		switch (column->GetID())
 		{
-			case ColumnID::Name:
+			case ColumnRef::Name:
 			{
 				return node && node->IsEntry() && !node->IsRequiredEntry();
 			}
@@ -261,7 +261,7 @@ namespace Kortex::InstallWizard
 		return true;
 	}
 
-	wxBitmap ComponentsDisplayModel::GetImageByTypeDescriptor(KPPCTypeDescriptor type) const
+	wxBitmap DisplayModel::GetImageByTypeDescriptor(KPPCTypeDescriptor type) const
 	{
 		switch (type)
 		{
@@ -276,11 +276,11 @@ namespace Kortex::InstallWizard
 		};
 		return wxNullBitmap;
 	}
-	wxString ComponentsDisplayModel::GetMessageTypeDescriptor(KPPCTypeDescriptor type) const
+	wxString DisplayModel::GetMessageTypeDescriptor(KPPCTypeDescriptor type) const
 	{
 		return KTr("PackageCreator.TypeDescriptor." + KPackageProjectComponents::TypeDescriptorToString(type));
 	}
-	KxDataViewBitmapTextToggleValue::ToggleType ComponentsDisplayModel::GetToggleType(KPPCSelectionMode mode) const
+	KxDataViewBitmapTextToggleValue::ToggleType DisplayModel::GetToggleType(KPPCSelectionMode mode) const
 	{
 		switch (mode)
 		{
@@ -292,7 +292,7 @@ namespace Kortex::InstallWizard
 		};
 		return KxDataViewBitmapTextToggleValue::CheckBox;
 	}
-	const wxString& ComponentsDisplayModel::GetSelectionModeString(const KPPCGroup& group) const
+	const wxString& DisplayModel::GetSelectionModeString(const KPPCGroup& group) const
 	{
 		static const wxString ms_Select = KTr("Generic.Select");
 		auto MakeString = [](KPPCSelectionMode mode) -> wxString
@@ -327,9 +327,9 @@ namespace Kortex::InstallWizard
 		};
 		return ms_Any;
 	}
-	ComponentsDisplayModelNode::RefVector ComponentsDisplayModel::GetGroupNodes(const ComponentsDisplayModelNode* groupNode)
+	DisplayModelNode::RefVector DisplayModel::GetGroupNodes(const DisplayModelNode* groupNode)
 	{
-		ComponentsDisplayModelNode::RefVector items;
+		DisplayModelNode::RefVector items;
 		if (groupNode && groupNode->IsGroup())
 		{
 			for (size_t i = groupNode->GetBegin(); i < groupNode->GetSize(); i++)
@@ -342,7 +342,7 @@ namespace Kortex::InstallWizard
 		}
 		return items;
 	}
-	bool ComponentsDisplayModel::IsEntryShouldBeChecked(const KPPCEntry* entry) const
+	bool DisplayModel::IsEntryShouldBeChecked(const KPPCEntry* entry) const
 	{
 		KPPCTypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
 		if (typeDescriptor == KPPC_DESCRIPTOR_REQUIRED || typeDescriptor == KPPC_DESCRIPTOR_RECOMMENDED)
@@ -358,10 +358,10 @@ namespace Kortex::InstallWizard
 		}
 	}
 
-	void ComponentsDisplayModel::OnActivateItem(KxDataViewEvent& event)
+	void DisplayModel::OnActivateItem(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		if (const ComponentsDisplayModelNode* node = GetNode(item))
+		if (const DisplayModelNode* node = GetNode(item))
 		{
 			if (const KPPCGroup* group = node->GetGroup())
 			{
@@ -381,10 +381,10 @@ namespace Kortex::InstallWizard
 			}
 		}
 	}
-	void ComponentsDisplayModel::OnHotTrackItem(KxDataViewEvent& event)
+	void DisplayModel::OnHotTrackItem(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		if (const ComponentsDisplayModelNode* node = GetNode(item))
+		if (const DisplayModelNode* node = GetNode(item))
 		{
 			if (const KPPCEntry* entry = node->GetEntry())
 			{
@@ -395,12 +395,12 @@ namespace Kortex::InstallWizard
 		m_HotItem = nullptr;
 	}
 
-	ComponentsDisplayModel::ComponentsDisplayModel()
+	DisplayModel::DisplayModel()
 	{
 		SetDataViewFlags(KxDV_NO_HEADER);
 	}
 
-	size_t ComponentsDisplayModel::GetItemsCount() const
+	size_t DisplayModel::GetItemsCount() const
 	{
 		size_t count = 0;
 		if (m_Step)
@@ -412,7 +412,7 @@ namespace Kortex::InstallWizard
 		}
 		return count;
 	}
-	void ComponentsDisplayModel::SetDataVector()
+	void DisplayModel::SetDataVector()
 	{
 		m_DataVector.clear();
 		m_CheckedEntries.clear();
@@ -422,7 +422,7 @@ namespace Kortex::InstallWizard
 		ItemsCleared();
 		GetView()->Disable();
 	}
-	void ComponentsDisplayModel::SetDataVector(const KPackageProjectComponents* compInfo, const KPPCStep* step, const KPPCEntry::RefVector& checkedEntries)
+	void DisplayModel::SetDataVector(const KPackageProjectComponents* compInfo, const KPPCStep* step, const KPPCEntry::RefVector& checkedEntries)
 	{
 		SetDataVector();
 
@@ -433,7 +433,7 @@ namespace Kortex::InstallWizard
 		RefreshItems();
 		GetView()->Enable();
 	}
-	void ComponentsDisplayModel::RefreshItems()
+	void DisplayModel::RefreshItems()
 	{
 		m_DataVector.clear();
 		m_DataVector.reserve(GetItemsCount());
@@ -444,7 +444,7 @@ namespace Kortex::InstallWizard
 		groupItems.reserve(m_Step->GetGroups().size());
 		for (const auto& group: m_Step->GetGroups())
 		{
-			ComponentsDisplayModelNode& groupNode = m_DataVector.emplace_back(*group);
+			DisplayModelNode& groupNode = m_DataVector.emplace_back(*group);
 
 			size_t groupSize = group->GetEntries().size();
 			groupNode.SetBounds(m_DataVector.size(), (m_DataVector.size() - 1) + groupSize + 1);
@@ -457,7 +457,7 @@ namespace Kortex::InstallWizard
 			size_t checkedCount = 0;
 			for (const auto& entry: group->GetEntries())
 			{
-				ComponentsDisplayModelNode& entryNode = m_DataVector.emplace_back(*entry);
+				DisplayModelNode& entryNode = m_DataVector.emplace_back(*entry);
 				entryNode.SetParentNode(groupNode);
 
 				KxDataViewItem entryItem = MakeItem(entryNode);
@@ -495,7 +495,7 @@ namespace Kortex::InstallWizard
 		ItemsAdded(KxDataViewItem(), groupItems);
 
 		// Expand all groups
-		for (const ComponentsDisplayModelNode& node: m_DataVector)
+		for (const DisplayModelNode& node: m_DataVector)
 		{
 			if (node.IsGroup())
 			{
@@ -507,15 +507,15 @@ namespace Kortex::InstallWizard
 		SelectItem(selection);
 		GetView()->SetFocus();
 	}
-	bool ComponentsDisplayModel::OnLeaveStep(KPPCEntry::RefVector& checkedEntries)
+	bool DisplayModel::OnLeaveStep(KPPCEntry::RefVector& checkedEntries)
 	{
 		checkedEntries = GetCheckedEntries();
 		return true;
 	}
 
-	const KPPCEntry* ComponentsDisplayModel::GetSelectedEntry() const
+	const KPPCEntry* DisplayModel::GetSelectedEntry() const
 	{
-		ComponentsDisplayModelNode* node = GetNode(GetView()->GetSelection());
+		DisplayModelNode* node = GetNode(GetView()->GetSelection());
 		if (node)
 		{
 			return node->GetEntry();
@@ -523,18 +523,18 @@ namespace Kortex::InstallWizard
 		return nullptr;
 	}
 
-	KxDataViewItem ComponentsDisplayModel::MakeItem(const ComponentsDisplayModelNode* node) const
+	KxDataViewItem DisplayModel::MakeItem(const DisplayModelNode* node) const
 	{
 		return KxDataViewItem(node);
 	}
-	ComponentsDisplayModelNode* ComponentsDisplayModel::GetNode(const KxDataViewItem& item) const
+	DisplayModelNode* DisplayModel::GetNode(const KxDataViewItem& item) const
 	{
-		return item.GetValuePtr<ComponentsDisplayModelNode>();
+		return item.GetValuePtr<DisplayModelNode>();
 	}
-	KPPCEntry::RefVector ComponentsDisplayModel::GetCheckedEntries() const
+	KPPCEntry::RefVector DisplayModel::GetCheckedEntries() const
 	{
 		KPPCEntry::RefVector entries;
-		for (const ComponentsDisplayModelNode& node: m_DataVector)
+		for (const DisplayModelNode& node: m_DataVector)
 		{
 			if (node.IsEntry() && node.IsChecked())
 			{

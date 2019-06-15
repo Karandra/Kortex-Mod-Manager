@@ -6,7 +6,7 @@ namespace Kortex::InstallWizard
 {
 	wxWindow* WizardPage::GetPageContainer() const
 	{
-		return m_Wizard.m_TabView;
+		return m_Wizard.m_PageContainer;
 	}
 	KPackageProject& WizardPage::GetPackageConfig() const
 	{

@@ -21,16 +21,17 @@ namespace Kortex::NetworkManager
 {
 	void NexusUpdateChecker::OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode)
 	{
-		// Default interval is 5 minutes
-		constexpr int defaultIntervalMin = 5;
+		// Default interval is 15 minutes, minimum is 5 minutes
+		constexpr int defaultInterval = 15;
+		constexpr int minInterval = 5;
 
 		// Get the interval
 		m_AutomaticCheckInterval = wxTimeSpan::Seconds(networkNode.GetFirstChildElement(wxS("AutomaticCheckInterval")).GetValueFloat() * 60.0);
 
-		// Don't allow to query often than once per minute
-		if (m_AutomaticCheckInterval < wxTimeSpan::Minutes(1))
+		// Don't allow to query often than minimum interval
+		if (m_AutomaticCheckInterval < wxTimeSpan::Minutes(minInterval))
 		{
-			m_AutomaticCheckInterval = wxTimeSpan::Minutes(defaultIntervalMin);
+			m_AutomaticCheckInterval = wxTimeSpan::Minutes(defaultInterval);
 		}
 
 		// Start the timer

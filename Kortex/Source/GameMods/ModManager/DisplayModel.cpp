@@ -22,14 +22,7 @@ namespace Kortex::ModManager
 
 	void DisplayModel::CreateView(wxWindow* parent, wxSizer* sizer)
 	{
-		using KxDataView2::CtrlStyle;
-		using KxDataView2::ColumnStyle;
-
-		using KxDataView2::TextEditor;
-		using KxDataView2::TextRenderer;
-		using KxDataView2::BitmapRenderer;
-		using KxDataView2::BitmapTextRenderer;
-		using KxDataView2::BitmapTextToggleRenderer;
+		using namespace KxDataView2;
 
 		// View
 		KxDataView2::View* view = new KxDataView2::View(parent, KxID_NONE, CtrlStyle::MultipleSelection|CtrlStyle::VerticalRules|CtrlStyle::CellFocus);

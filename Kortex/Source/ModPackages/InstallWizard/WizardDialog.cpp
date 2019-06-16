@@ -69,7 +69,6 @@ namespace Kortex::InstallWizard
 			{
 				m_PageContainer->AddPage(page->Create(), page->GetCaption());
 			}
-			m_PageContainer->AddPage(CreateUI_Done(), wxEmptyString);
 
 			PostCreate();
 			return true;
@@ -86,22 +85,6 @@ namespace Kortex::InstallWizard
 			page->OnLoadUIOptions(GetUIOption(page->GetOptionName()));
 		}
 	}
-
-	wxWindow* WizardDialog::CreateUI_Done()
-	{
-		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		m_Done_Pane = new KxPanel(m_PageContainer, KxID_NONE);
-		m_Done_Pane->SetSizer(sizer);
-
-		m_Done_Label = KPackageCreatorPageBase::CreateCaptionLabel(m_Done_Pane, wxEmptyString);
-		m_Done_Label->ToggleWindowStyle(KxLABEL_LINE);
-		m_Done_Label->SetForegroundColour(m_Done_Pane->GetForegroundColour());
-
-		sizer->AddSpacer(25);
-		sizer->Add(m_Done_Label, 0, wxEXPAND|wxLEFT, 50);
-		return m_Done_Pane;
-	}
-
 	void WizardDialog::SetLabelByCurrentPage()
 	{
 		switch (m_CurrentPage)
@@ -126,7 +109,7 @@ namespace Kortex::InstallWizard
 				SetLabel(KTr("InstallWizard.Page.Installing"));
 				break;
 			}
-			case WizardPageID::Done:
+			case WizardPageID::Completed:
 			{
 				SetLabel(KTr("InstallWizard.Page.Done"));
 				break;
@@ -203,7 +186,7 @@ namespace Kortex::InstallWizard
 
 	void WizardDialog::FindExistingMod()
 	{
-		m_ExistingMod = Kortex::IModManager::GetInstance()->FindModByID(GetConfig().GetModID());
+		m_ExistingMod = IModManager::GetInstance()->FindModByID(GetConfig().GetModID());
 	}
 	void WizardDialog::AcceptExistingMod(const IGameMod& mod)
 	{
@@ -460,7 +443,8 @@ namespace Kortex::InstallWizard
 		:m_PageInfo(*this),
 		m_PageRequirements(*this),
 		m_PageComponents(*this),
-		m_PageInstallation(*this)
+		m_PageInstallation(*this),
+		m_PageCompleted(*this)
 	{
 	}
 	WizardDialog::WizardDialog(wxWindow* parent, const wxString& packagePath)
@@ -580,17 +564,16 @@ namespace Kortex::InstallWizard
 					m_PageContainer->ChangeSelection((size_t)page);
 					break;
 				}
-				case WizardPageID::Done:
+				case WizardPageID::Completed:
 				{
 					m_PageInstallation.m_IsComplete = true;
 
 					m_CancelButton->Disable();
 					m_BackwardButton->Disable();
 					m_ForwardButton->Enable();
-
 					m_ForwardButton->SetLabel(KTr(KxID_CLOSE));
-					m_Done_Label->SetLabel(KTrf("InstallWizard.InstallationComplete", m_Package->GetName()));
-
+					
+					m_PageCompleted.WizardPage::OnOpenPage();
 					m_CurrentPage = page;
 					SetLabelByCurrentPage();
 					m_PageContainer->ChangeSelection((size_t)page);
@@ -600,7 +583,7 @@ namespace Kortex::InstallWizard
 
 			if (page != WizardPageID::Info)
 			{
-				m_InfoPageLeft = true;
+				m_LeftInfoPage = true;
 			}
 		}
 	}

@@ -5,23 +5,14 @@
 #include "Requiremets/RequirementsPage.h"
 #include "Components/ComponentsPage.h"
 #include "Installation/InstallationPage.h"
+#include "Completed/CompletedPage.h"
 #include "ModPackages/ModPackage.h"
 #include "GameMods/ModManager/BasicGameMod.h"
 #include "Utility/KTempFolderKeeper.h"
-#include <KxFramework/KxPanel.h>
 #include <KxFramework/KxButton.h>
-#include <KxFramework/KxLabel.h>
-#include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxStdDialog.h>
 #include <KxFramework/KxNotebook.h>
 #include <KxFramework/KxAuiNotebook.h>
-#include <KxFramework/KxTreeList.h>
-#include <KxFramework/KxListBox.h>
-#include <KxFramework/KxImageView.h>
-#include <KxFramework/KxThumbView.h>
-#include <KxFramework/KxHTMLWindow.h>
-#include <KxFramework/KxSplitterWindow.h>
-#include <KxFramework/KxProgressBar.h>
 #include <KxFramework/KxWithOptions.h>
 
 namespace Kortex::InstallWizard
@@ -50,7 +41,6 @@ namespace Kortex::InstallWizard
 			static void ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath);
 
 		private:
-			/* UI */
 			KxButton* m_CancelButton = nullptr;
 			KxButton* m_BackwardButton = nullptr;
 			KxButton* m_ForwardButton = nullptr;
@@ -61,30 +51,21 @@ namespace Kortex::InstallWizard
 			RequirementsPage m_PageRequirements;
 			ComponentsPage m_PageComponents;
 			InstallationPage m_PageInstallation;
+			CompletedPage m_PageCompleted;
 
-			// Done
-			KxPanel* m_Done_Pane = nullptr;
-			KxLabel* m_Done_Label = nullptr;
-
-			bool m_InfoPageLeft = false;
-
-			// Package
 			std::unique_ptr<ModPackage> m_Package;
 			ModManager::BasicGameMod m_ModEntry;
 			const IGameMod* m_ExistingMod = nullptr;
+			bool m_LeftInfoPage = false;
 
 		private:
 			bool CreateUI(wxWindow* parent);
 			void LoadUIOptions();
-
-			std::array<WizardPage*, 4> GetPages()
-			{
-				return {&m_PageInfo, &m_PageRequirements, &m_PageComponents, &m_PageInstallation};
-			}
-
-			wxWindow* CreateUI_Done();
-
 			void SetLabelByCurrentPage();
+			bool IsInfoPageLeft() const
+			{
+				return m_LeftInfoPage;
+			}
 
 		public:
 			void OpenPackage(const wxString& packagePath);
@@ -165,6 +146,10 @@ namespace Kortex::InstallWizard
 				return *m_Package;
 			}
 
+			std::array<WizardPage*, 5> GetPages()
+			{
+				return {&m_PageInfo, &m_PageRequirements, &m_PageComponents, &m_PageInstallation, &m_PageCompleted};
+			}
 			InfoPage& GetInfoPage()
 			{
 				return m_PageInfo;
@@ -181,19 +166,18 @@ namespace Kortex::InstallWizard
 			{
 				return m_PageInstallation;
 			}
-
-			const ModManager::BasicGameMod* GetModEntry() const
+			CompletedPage& GetCompletedPage()
 			{
-				return &m_ModEntry;
-			}
-			ModManager::BasicGameMod* GetModEntry()
-			{
-				return &m_ModEntry;
+				return m_PageCompleted;
 			}
 
-			bool IsInfoPageLeft() const
+			const IGameMod& GetModEntry() const
 			{
-				return m_InfoPageLeft;
+				return m_ModEntry;
+			}
+			IGameMod& GetModEntry()
+			{
+				return m_ModEntry;
 			}
 
 			void SwitchPage(WizardPageID page);

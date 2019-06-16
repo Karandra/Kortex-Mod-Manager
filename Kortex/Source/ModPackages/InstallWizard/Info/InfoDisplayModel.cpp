@@ -212,7 +212,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 					ModTagStore& tags = packageConfig.GetInfo().GetTagStore();
 
 					ModTagManager::SelectorDialog dialog(GetView(), itemValue.GetLabel());
-					dialog.SetDataVector(&tags, m_Page.GetWizard().GetModEntry());
+					dialog.SetDataVector(&tags, &m_Page.GetWizard().GetModEntry());
 					dialog.ShowModal();
 					if (dialog.IsModified())
 					{

@@ -3,6 +3,10 @@
 #include "Application/Resources/ImageResourceID.h"
 #include "PackageProject/KPackageProject.h"
 
+namespace Kortex
+{
+	class ModPackage;
+}
 namespace Kortex::Application
 {
 	class ActiveInstanceOption;
@@ -18,7 +22,7 @@ namespace Kortex::InstallWizard
 		Requirements,
 		Components,
 		Installation,
-		Done,
+		Completed,
 	};
 }
 
@@ -35,6 +39,9 @@ namespace Kortex::InstallWizard
 			virtual void OnLoadUIOptions(const Application::ActiveInstanceOption& option) = 0;
 			virtual void OnSaveUIOptions(Application::ActiveInstanceOption& option) const = 0;
 			virtual void OnPackageLoaded() = 0;
+
+			virtual void OnOpenPage() {}
+			virtual void OnClosePage() {}
 
 		public:
 			WizardPage(WizardDialog& wizard)
@@ -53,6 +60,7 @@ namespace Kortex::InstallWizard
 			}
 
 			wxWindow* GetPageContainer() const;
+			ModPackage& GetPackage() const;
 			KPackageProject& GetPackageConfig() const;
 
 		public:

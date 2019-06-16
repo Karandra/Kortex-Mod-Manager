@@ -47,8 +47,8 @@ namespace Kortex::InstallWizard
 	}
 	bool InstallationPage::OnEndInstall()
 	{
-		IGameMod* mod = GetWizard().GetModEntry();
-		if (mod->Save())
+		IGameMod& mod = GetWizard().GetModEntry();
+		if (mod.Save())
 		{
 			// Save main or header image
 			const KPackageProjectInterface& interfaceConfig = GetPackageConfig().GetInterface();
@@ -57,10 +57,10 @@ namespace Kortex::InstallWizard
 			if (imageEntry && imageEntry->HasBitmap())
 			{
 				const wxBitmap& bitmap = imageEntry->GetBitmap();
-				bitmap.SaveFile(mod->GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
+				bitmap.SaveFile(mod.GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
 			}
 
-			IModManager::GetInstance()->NotifyModInstalled(*mod);
+			IModManager::GetInstance()->NotifyModInstalled(mod);
 			if (ShouldCancel())
 			{
 				// We were canceled, but mod is partially installed.
@@ -69,7 +69,7 @@ namespace Kortex::InstallWizard
 			}
 			else
 			{
-				GetWizard().SwitchPage(WizardPageID::Done);
+				GetWizard().SwitchPage(WizardPageID::Completed);
 			}
 			return true;
 		}

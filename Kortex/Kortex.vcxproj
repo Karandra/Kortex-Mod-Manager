@@ -211,6 +211,7 @@
     <ClCompile Include="Source\GameMods\TagManager\SelectorDisplayModelCB.cpp" />
     <ClCompile Include="Source\GameMods\VirtualGameFolder\DisplayModel.cpp" />
     <ClCompile Include="Source\GameMods\VirtualGameFolder\Workspace.cpp" />
+    <ClCompile Include="Source\ModPackages\InstallWizard\Completed\CompletedPage.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Components\DisplayModel.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.cpp" />
@@ -553,6 +554,7 @@
     <ClInclude Include="Source\GameMods\VirtualGameFolder\DisplayModel.h" />
     <ClInclude Include="Source\GameMods\VirtualGameFolder\Workspace.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Common.h" />
+    <ClInclude Include="Source\ModPackages\InstallWizard\Completed\CompletedPage.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModel.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModelNode.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.h" />

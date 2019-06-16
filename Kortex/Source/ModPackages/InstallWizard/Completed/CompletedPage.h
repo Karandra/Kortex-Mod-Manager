@@ -18,7 +18,20 @@ namespace Kortex::InstallWizard
 			void OnSaveUIOptions(Application::ActiveInstanceOption& option) const override;
 			void OnPackageLoaded() override;
 
-			void OnOpenPage() override;
+			bool OnOpenPage() override;
+
+			WizardButton GetCancelButton() override
+			{
+				return WizardButton({}, false);
+			}
+			WizardButton GetBackwardButton() override
+			{
+				return WizardButton({}, false);
+			}
+			WizardButton GetForwardButton() override
+			{
+				return WizardButton(KTr(KxID_CLOSE), true);
+			}
 
 		public:
 			CompletedPage(WizardDialog& wizard)
@@ -45,8 +58,5 @@ namespace Kortex::InstallWizard
 			{
 				return wxS("Page/Completed");
 			}
-	
-		public:
-			
 	};
 }

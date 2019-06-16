@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "InfoPage.h"
 #include "InfoDisplayModel.h"
-#include "UI/KImageViewerDialog.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
+#include "UI/KImageViewerDialog.h"
 #include "Utility/Log.h"
+#include <KxFramework/KxTaskDialog.h>
 
 namespace
 {
@@ -278,6 +279,33 @@ namespace Kortex::InstallWizard
 		LoadDescriptionTab(package);
 		LoadDocumentsTab(package);
 		LoadScreenshotsTab(package);
+	}
+
+	bool InfoPage::OnOpenPage()
+	{
+		return true;
+	}
+	bool InfoPage::OnClosePage()
+	{
+		bool allowSwitch = true;
+
+		// Show this only if this is the first time user leaving info page
+		if (!m_PageVisited)
+		{
+			// Reinstall confirmation
+			WizardDialog& wizard = GetWizard();
+			const IGameMod* existingMod = wizard.GetExistingMod();
+
+			if (!wizard.IsOptionEnabled(DialogOptions::Debug) && existingMod && existingMod->IsInstalled())
+			{
+				KxTaskDialog dialog(&wizard, KxID_NONE, KTr("InstallWizard.Reinstall.Caption"), KTr("InstallWizard.Reinstall.Message"), KxBTN_YES|KxBTN_NO);
+				dialog.SetMainIcon(KxICON_WARNING);
+				allowSwitch = dialog.ShowModal() == KxID_YES;
+			}
+		}
+
+		m_PageVisited = true;
+		return allowSwitch;
 	}
 
 	InfoPage::InfoPage(WizardDialog& wizard)

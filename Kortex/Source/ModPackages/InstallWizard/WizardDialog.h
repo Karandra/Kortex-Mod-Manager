@@ -41,51 +41,29 @@ namespace Kortex::InstallWizard
 			static void ShowInvalidPackageDialog(wxWindow* window, const wxString& packagePath);
 
 		private:
-			KxButton* m_CancelButton = nullptr;
-			KxButton* m_BackwardButton = nullptr;
-			KxButton* m_ForwardButton = nullptr;
-			wxSimplebook* m_PageContainer = nullptr;
-			WizardPageID m_CurrentPage = WizardPageID::None;
-
+			// Pages
 			InfoPage m_PageInfo;
 			RequirementsPage m_PageRequirements;
 			ComponentsPage m_PageComponents;
 			InstallationPage m_PageInstallation;
 			CompletedPage m_PageCompleted;
 
+			// Currently displayed page
+			WizardPage* m_CurrentPage = nullptr;
+
+			// UI
+			const wxString m_CancelDefaultLabel;
+			const wxString m_BackwardDefaultLabel;
+			const wxString m_ForwardDefaultLabel;
+
+			KxButton* m_CancelButton = nullptr;
+			KxButton* m_BackwardButton = nullptr;
+			KxButton* m_ForwardButton = nullptr;
+			wxSimplebook* m_PageContainer = nullptr;
+
 			std::unique_ptr<ModPackage> m_Package;
 			ModManager::BasicGameMod m_ModEntry;
 			const IGameMod* m_ExistingMod = nullptr;
-			bool m_LeftInfoPage = false;
-
-		private:
-			bool CreateUI(wxWindow* parent);
-			void LoadUIOptions();
-			void SetLabelByCurrentPage();
-			bool IsInfoPageLeft() const
-			{
-				return m_LeftInfoPage;
-			}
-
-		public:
-			void OpenPackage(const wxString& packagePath);
-			bool LoadPackage();
-			bool ProcessLoadPackage();
-			void FindExistingMod();
-			void AcceptExistingMod(const Kortex::IGameMod& mod);
-			void LoadHeaderImage();
-
-			bool AskCancel(bool canCancel);
-			void OnClose(wxCloseEvent& event);
-			void OnCancelButton(wxCommandEvent& event);
-			void OnGoBackward(wxCommandEvent& event);
-			void OnGoForward(wxCommandEvent& event);
-
-			void SetModData();
-			KxUInt32Vector GetFilesOfFolder(const KPPFFolderEntry* folder) const;
-			wxString GetFinalPath(uint32_t index, const wxString& installLocation, const KPPFFileEntry* fileEntry) const;
-			KxStringVector GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const KPPFFolderEntry* folder) const;
-			void RunInstall();
 
 		private:
 			int GetViewSizerProportion() const override
@@ -112,6 +90,32 @@ namespace Kortex::InstallWizard
 			{
 				return m_PageContainer;
 			}
+
+		private:
+			bool CreateUI(wxWindow* parent);
+			void LoadUIOptions();
+
+			bool DoSwitchPage(WizardPage& targetPage);
+
+		public:
+			void OpenPackage(const wxString& packagePath);
+			bool LoadPackage();
+			bool ProcessLoadPackage();
+			void FindExistingMod();
+			void AcceptExistingMod(const Kortex::IGameMod& mod);
+			void LoadHeaderImage();
+
+			bool AskCancel(bool canCancel);
+			void OnClose(wxCloseEvent& event);
+			void OnCancelButton(wxCommandEvent& event);
+			void OnGoBackward(wxCommandEvent& event);
+			void OnGoForward(wxCommandEvent& event);
+
+			void SetModData();
+			KxUInt32Vector GetFilesOfFolder(const KPPFFolderEntry* folder) const;
+			wxString GetFinalPath(uint32_t index, const wxString& installLocation, const KPPFFileEntry* fileEntry) const;
+			KxStringVector GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const KPPFFolderEntry* folder) const;
+			void RunInstall();
 
 		public:
 			WizardDialog();
@@ -180,7 +184,7 @@ namespace Kortex::InstallWizard
 				return m_ModEntry;
 			}
 
-			void SwitchPage(WizardPageID page);
-			bool OnLeavingPage(WizardPageID page);
+			bool SwitchPage(WizardPage& targetPage);
+			bool SwitchPage(WizardPageID targetPage);
 	};
 }

@@ -17,6 +17,32 @@ namespace Kortex::InstallWizard
 	{
 	}
 
+	bool InstallationPage::OnOpenPage()
+	{
+		WizardDialog& wizard = GetWizard();
+
+		if (wizard.IsOptionEnabled(DialogOptions::Debug))
+		{
+			CollectAllInstallableEntries();
+			ShowInstallableFilesPreview();
+
+			// Switch back to info page to reset components state.
+			wizard.SwitchPage(WizardPageID::Info);
+			return false;
+		}
+		else if (!OnBeginInstall())
+		{
+			wizard.Close(true);
+			return false;
+		}
+		return true;
+	}
+	bool InstallationPage::OnClosePage()
+	{
+		m_IsComplete = true;
+		return true;
+	}
+
 	bool InstallationPage::OnBeginInstall()
 	{
 		CollectAllInstallableEntries();

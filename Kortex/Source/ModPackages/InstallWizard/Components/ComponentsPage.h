@@ -48,6 +48,8 @@ namespace Kortex::InstallWizard
 			void OnSaveUIOptions(Application::ActiveInstanceOption& option) const override;
 			void OnPackageLoaded() override;
 
+			bool OnOpenPage() override;
+
 		private:
 			void OnSelectComponent(KxDataViewEvent& event);
 			void ClearComponentsViewInfo();

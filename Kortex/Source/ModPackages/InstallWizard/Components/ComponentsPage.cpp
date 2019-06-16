@@ -43,6 +43,16 @@ namespace Kortex::InstallWizard
 		m_HasManualComponents = CheckIsManualComponentsAvailable();
 	}
 
+	bool ComponentsPage::OnOpenPage()
+	{
+		if (!BeginComponents())
+		{
+			GetWizard().Close(true);
+			return false;
+		}
+		return true;
+	}
+
 	void ComponentsPage::OnSelectComponent(KxDataViewEvent& event)
 	{
 		DisplayModelNode* node = m_ComponentsModel->GetNode(event.GetItem());

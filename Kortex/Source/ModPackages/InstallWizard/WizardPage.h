@@ -14,7 +14,6 @@ namespace Kortex::Application
 namespace Kortex::InstallWizard
 {
 	class WizardDialog;
-
 	enum class WizardPageID
 	{
 		None = -1,
@@ -23,6 +22,37 @@ namespace Kortex::InstallWizard
 		Components,
 		Installation,
 		Completed,
+	};
+}
+
+namespace Kortex::InstallWizard
+{
+	class WizardButton
+	{
+		private:
+			wxString m_Label;
+			bool m_Enabled = true;
+
+		public:
+			WizardButton() = default;
+			WizardButton(const wxString& label, bool isEnabled)
+				:m_Label(label), m_Enabled(isEnabled)
+			{
+			}
+
+		public:
+			bool HasLabel() const
+			{
+				return !m_Label.IsEmpty();
+			}
+			const wxString& GetLabel() const
+			{
+				return m_Label;
+			}
+			bool IsEnabled() const
+			{
+				return m_Enabled;
+			}
 	};
 }
 
@@ -40,8 +70,27 @@ namespace Kortex::InstallWizard
 			virtual void OnSaveUIOptions(Application::ActiveInstanceOption& option) const = 0;
 			virtual void OnPackageLoaded() = 0;
 
-			virtual void OnOpenPage() {}
-			virtual void OnClosePage() {}
+			virtual bool OnOpenPage()
+			{
+				return true;
+			}
+			virtual bool OnClosePage()
+			{
+				return true;
+			}
+
+			virtual WizardButton GetCancelButton()
+			{
+				return {};
+			}
+			virtual WizardButton GetBackwardButton()
+			{
+				return {};
+			}
+			virtual WizardButton GetForwardButton()
+			{
+				return {};
+			}
 
 		public:
 			WizardPage(WizardDialog& wizard)

@@ -34,6 +34,8 @@ namespace Kortex::InstallWizard
 			std::unordered_map<int, const KPPIImageEntry*> m_ImagesMap;
 			int m_CurrentImageIndex = -1;
 
+			bool m_PageVisited = false;
+
 		private:
 			wxWindow* CreateInfoTab();
 			wxWindow* CreateDescriptionTab();
@@ -53,6 +55,18 @@ namespace Kortex::InstallWizard
 			void OnLoadUIOptions(const Application::ActiveInstanceOption& option) override;
 			void OnSaveUIOptions(Application::ActiveInstanceOption& option) const override;
 			void OnPackageLoaded() override;
+
+			bool OnOpenPage() override;
+			bool OnClosePage() override;
+
+			WizardButton GetBackwardButton() override
+			{
+				return WizardButton({}, false);
+			}
+			WizardButton GetForwardButton() override
+			{
+				return WizardButton({}, true);
+			}
 
 		public:
 			InfoPage(WizardDialog& wizard);
@@ -75,6 +89,11 @@ namespace Kortex::InstallWizard
 			wxString GetOptionName() const override
 			{
 				return wxS("Page/Information");
+			}
+			
+			bool IsVisited() const
+			{
+				return m_PageVisited;
 			}
 	};
 }

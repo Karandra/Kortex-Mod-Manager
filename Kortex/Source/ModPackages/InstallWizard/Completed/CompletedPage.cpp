@@ -15,9 +15,10 @@ namespace Kortex::InstallWizard
 	{
 	}
 
-	void CompletedPage::OnOpenPage()
+	bool CompletedPage::OnOpenPage()
 	{
 		m_Label->SetLabel(KTrf("InstallWizard.InstallationComplete", GetPackage().GetName()));
+		return true;
 	}
 
 	wxWindow* CompletedPage::Create()

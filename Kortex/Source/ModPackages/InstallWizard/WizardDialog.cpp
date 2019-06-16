@@ -46,15 +46,15 @@ namespace Kortex::InstallWizard
 		{
 			GetContentWindow()->SetBackgroundColour(GetBackgroundColour());
 
-			m_BackwardButton = AddButton(KxID_BACKWARD, "< " + KTr("InstallWizard.BackwardButton")).As<KxButton>();
+			m_BackwardButton = AddButton(KxID_BACKWARD, m_BackwardDefaultLabel).As<KxButton>();
 			m_BackwardButton->Bind(wxEVT_BUTTON, &WizardDialog::OnGoBackward, this);
 			m_BackwardButton->Bind(wxEVT_BUTTON, &ComponentsPage::OnGoStepBackward, &m_PageComponents);
 
-			m_ForwardButton = AddButton(KxID_FORWARD, KTr("InstallWizard.ForwardButton") + " >").As<KxButton>();
+			m_ForwardButton = AddButton(KxID_FORWARD, m_ForwardDefaultLabel).As<KxButton>();
 			m_ForwardButton->Bind(wxEVT_BUTTON, &WizardDialog::OnGoForward, this);
 			m_ForwardButton->Bind(wxEVT_BUTTON, &ComponentsPage::OnGoStepForward, &m_PageComponents);
 
-			m_CancelButton = AddButton(KxID_CANCEL).As<KxButton>();
+			m_CancelButton = AddButton(KxID_CANCEL, m_CancelDefaultLabel).As<KxButton>();
 			m_CancelButton->Bind(wxEVT_BUTTON, &WizardDialog::OnCancelButton, this);
 			Bind(wxEVT_CLOSE_WINDOW, &WizardDialog::OnClose, this);
 			SetCloseIDs({});
@@ -85,36 +85,28 @@ namespace Kortex::InstallWizard
 			page->OnLoadUIOptions(GetUIOption(page->GetOptionName()));
 		}
 	}
-	void WizardDialog::SetLabelByCurrentPage()
+
+	bool WizardDialog::DoSwitchPage(WizardPage& targetPage)
 	{
-		switch (m_CurrentPage)
+		if (&targetPage != m_CurrentPage && m_CurrentPage->OnClosePage())
 		{
-			case WizardPageID::Info:
+			if (targetPage.OnOpenPage())
 			{
-				SetLabel(KTr("InstallWizard.Page.Info"));
-				break;
+				auto ProcessButton = [](KxButton* button, const WizardButton& config, const wxString& defaultLabel)
+				{
+					button->SetLabel(config.HasLabel() ? config.GetLabel() : defaultLabel);
+					button->Enable(config.IsEnabled());
+				};
+				ProcessButton(m_CancelButton, targetPage.GetCancelButton(), m_CancelDefaultLabel);
+				ProcessButton(m_BackwardButton, targetPage.GetBackwardButton(), m_BackwardDefaultLabel);
+				ProcessButton(m_ForwardButton, targetPage.GetForwardButton(), m_ForwardDefaultLabel);
+
+				m_CurrentPage = &targetPage;
+				m_PageContainer->ChangeSelection((size_t)targetPage.GetID());
+				return true;
 			}
-			case WizardPageID::Requirements:
-			{
-				SetLabel(KTr("InstallWizard.Page.Requirements"));
-				break;
-			}
-			case WizardPageID::Components:
-			{
-				SetLabel(KTr("InstallWizard.Page.Components"));
-				break;
-			}
-			case WizardPageID::Installation:
-			{
-				SetLabel(KTr("InstallWizard.Page.Installing"));
-				break;
-			}
-			case WizardPageID::Completed:
-			{
-				SetLabel(KTr("InstallWizard.Page.Done"));
-				break;
-			}
-		};
+		}
+		return false;
 	}
 
 	void WizardDialog::OpenPackage(const wxString& packagePath)
@@ -161,8 +153,10 @@ namespace Kortex::InstallWizard
 				page->OnPackageLoaded();
 			}
 			LoadUIOptions();
-
-			return true;
+			
+			// Manually open info page
+			m_CurrentPage = &m_PageInfo;
+			return m_CurrentPage->OnOpenPage();
 		}
 		else
 		{
@@ -240,7 +234,7 @@ namespace Kortex::InstallWizard
 	{
 		if (canCancel)
 		{
-			if (m_CurrentPage != WizardPageID::Components && m_CurrentPage != WizardPageID::Installation)
+			if (m_CurrentPage->GetID() != WizardPageID::Components && m_CurrentPage->GetID() != WizardPageID::Installation)
 			{
 				return true;
 			}
@@ -283,7 +277,7 @@ namespace Kortex::InstallWizard
 	void WizardDialog::OnGoBackward(wxCommandEvent& event)
 	{
 		WizardPageID page = WizardPageID::None;
-		switch (m_CurrentPage)
+		switch (m_CurrentPage->GetID())
 		{
 			case WizardPageID::Requirements:
 			{
@@ -307,7 +301,7 @@ namespace Kortex::InstallWizard
 		else
 		{
 			WizardPageID page = WizardPageID::None;
-			switch (m_CurrentPage)
+			switch (m_CurrentPage->GetID())
 			{
 				case WizardPageID::Info:
 				{
@@ -440,11 +434,10 @@ namespace Kortex::InstallWizard
 	}
 
 	WizardDialog::WizardDialog()
-		:m_PageInfo(*this),
-		m_PageRequirements(*this),
-		m_PageComponents(*this),
-		m_PageInstallation(*this),
-		m_PageCompleted(*this)
+		:m_PageInfo(*this), m_PageRequirements(*this), m_PageComponents(*this), m_PageInstallation(*this), m_PageCompleted(*this),
+		m_CancelDefaultLabel(KTr(KxID_CANCEL)),
+		m_BackwardDefaultLabel(wxS("< ") + KTr("InstallWizard.BackwardButton")),
+		m_ForwardDefaultLabel(KTr("InstallWizard.ForwardButton") + wxS(" >"))
 	{
 	}
 	WizardDialog::WizardDialog(wxWindow* parent, const wxString& packagePath)
@@ -490,123 +483,38 @@ namespace Kortex::InstallWizard
 		}
 	}
 
-	void WizardDialog::SwitchPage(WizardPageID page)
+	bool WizardDialog::SwitchPage(WizardPage& targetPage)
 	{
-		if (page != m_CurrentPage && page != WizardPageID::None && page < (WizardPageID)m_PageContainer->GetPageCount())
+		return DoSwitchPage(targetPage);
+	}
+	bool WizardDialog::SwitchPage(WizardPageID targetPage)
+	{
+		if ((int)targetPage >= 0 && (size_t)targetPage < m_PageContainer->GetPageCount())
 		{
-			if (!OnLeavingPage(m_CurrentPage))
-			{
-				return;
-			}
-
-			switch (page)
+			switch (targetPage)
 			{
 				case WizardPageID::Info:
 				{
-					m_BackwardButton->Disable();
-					m_ForwardButton->Enable();
-
-					m_CurrentPage = page;
-					SetLabelByCurrentPage();
-					m_PageContainer->ChangeSelection((size_t)page);
-					break;
+					return DoSwitchPage(m_PageInfo);
 				}
 				case WizardPageID::Requirements:
 				{
-					m_BackwardButton->Enable();
-					m_ForwardButton->Enable();
-
-					m_CurrentPage = page;
-					SetLabelByCurrentPage();
-					m_PageContainer->ChangeSelection((size_t)page);
-					break;
+					return DoSwitchPage(m_PageRequirements);
 				}
 				case WizardPageID::Components:
 				{
-					m_BackwardButton->Enable();
-					m_ForwardButton->Enable();
-
-					m_CurrentPage = page;
-					SetLabelByCurrentPage();
-
-					if (!m_PageComponents.BeginComponents())
-					{
-						Close(true);
-						break;
-					}
-
-					m_PageContainer->ChangeSelection((size_t)page);
-					break;
+					return DoSwitchPage(m_PageComponents);
 				}
 				case WizardPageID::Installation:
 				{
-					if (IsOptionEnabled(DialogOptions::Debug))
-					{
-						m_PageInstallation.CollectAllInstallableEntries();
-						m_PageInstallation.ShowInstallableFilesPreview();
-
-						// Switch back to info page to reset components state.
-						SwitchPage(WizardPageID::Info);
-						break;
-					}
-
-					if (!m_PageInstallation.OnBeginInstall())
-					{
-						Close(true);
-						break;
-					}
-
-					m_BackwardButton->Disable();
-					m_ForwardButton->Disable();
-
-					m_CurrentPage = page;
-					SetLabelByCurrentPage();
-					m_PageContainer->ChangeSelection((size_t)page);
-					break;
+					return DoSwitchPage(m_PageInstallation);
 				}
 				case WizardPageID::Completed:
 				{
-					m_PageInstallation.m_IsComplete = true;
-
-					m_CancelButton->Disable();
-					m_BackwardButton->Disable();
-					m_ForwardButton->Enable();
-					m_ForwardButton->SetLabel(KTr(KxID_CLOSE));
-					
-					m_PageCompleted.WizardPage::OnOpenPage();
-					m_CurrentPage = page;
-					SetLabelByCurrentPage();
-					m_PageContainer->ChangeSelection((size_t)page);
-					break;
+					return DoSwitchPage(m_PageCompleted);
 				}
 			};
-
-			if (page != WizardPageID::Info)
-			{
-				m_LeftInfoPage = true;
-			}
 		}
-	}
-	bool WizardDialog::OnLeavingPage(WizardPageID page)
-	{
-		switch (page)
-		{
-			case WizardPageID::Info:
-			{
-				// Show this only if this is the first time user leaving info page
-				if (!IsInfoPageLeft())
-				{
-					// Reinstall confirmation
-					if (!IsOptionEnabled(DialogOptions::Debug) && m_ExistingMod && m_ExistingMod->IsInstalled())
-					{
-						KxTaskDialog dialog(this, KxID_NONE, KTr("InstallWizard.Reinstall.Caption"), KTr("InstallWizard.Reinstall.Message"), KxBTN_YES|KxBTN_NO);
-						dialog.SetMainIcon(KxICON_WARNING);
-						return dialog.ShowModal() == KxID_YES;
-					}
-				}
-				break;
-			}
-		};
-		return true;
+		return false;
 	}
 }

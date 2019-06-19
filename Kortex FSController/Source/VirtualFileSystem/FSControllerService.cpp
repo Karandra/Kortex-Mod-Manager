@@ -271,7 +271,7 @@ namespace Kortex::VirtualFileSystem
 				return GetFileSystemHandle(*m_FileSystems.emplace_back(std::make_unique<Convergence>()));
 			}
 		}
-		return {};
+		return 0;
 	}
 	void FSControllerService::DestroyFS(KxVFS::IFileSystem& fileSystem)
 	{

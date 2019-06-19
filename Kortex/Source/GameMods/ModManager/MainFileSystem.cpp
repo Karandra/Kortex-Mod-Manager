@@ -69,8 +69,6 @@ namespace Kortex::ModManager
 
 		for (const MirroredLocation& location: m_Manager.GetOptions().GetMirroredLocations())
 		{
-			
-
 			if (location.ShouldUseMultiMirror())
 			{
 				auto fileSystem = std::make_unique<VirtualFileSystem::MultiMirror>(location.GetTarget(), location.GetSources());

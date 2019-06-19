@@ -456,7 +456,7 @@ namespace Kortex::ModManager
 			attributes.Options().SetAlignment(displayModel.m_PriorityGroupLabelAlignment);
 			attributes.FontOptions().Enable(CellFontOption::Bold, displayModel.m_BoldPriorityGroupLabels);
 		}
-		return !attributes.IsDefault();
+		return true;
 	}
 	bool DisplayModelModNode::IsCategoryNode() const
 	{

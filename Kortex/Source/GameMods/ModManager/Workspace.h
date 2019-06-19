@@ -12,7 +12,6 @@
 #include <KxFramework/KxComboBox.h>
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxSingleton.h>
-class KVFSEvent;
 class KxSearchBox;
 class KxHTMLWindow;
 class KxParagraph;
@@ -21,6 +20,10 @@ namespace Kortex
 {
 	class IModTag;
 	class IGameMod;
+}
+namespace Kortex::GameInstance
+{
+	class ProfileEvent;
 }
 
 namespace Kortex::ModManager
@@ -129,6 +132,7 @@ namespace Kortex::ModManager
 			void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 			void OnToolsMenu(KxAuiToolBarEvent& event);
 			void OnVFSToggled(VFSEvent& event);
+			void OnProfileSelected(GameInstance::ProfileEvent& event);
 		
 			void OnAddMod_Empty(KxMenuEvent& event);
 			void OnAddMod_FromFolder(KxMenuEvent& event);

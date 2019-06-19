@@ -179,6 +179,7 @@ namespace Kortex::ModManager
 		UpdateModListContent();
 
 		IEvent::Bind(Events::MainVFSToggled, &Workspace::OnVFSToggled, this);
+		IEvent::Bind(Events::ProfileSelected, &Workspace::OnProfileSelected, this);
 
 		CreateAsSubWorkspace<VirtualGameFolder::Workspace>();
 		CreateAsSubWorkspace<ProgramManager::Workspace>();
@@ -624,7 +625,6 @@ namespace Kortex::ModManager
 			}
 		};
 	}
-
 	void Workspace::OnVFSToggled(VFSEvent& event)
 	{
 		m_ToolBar_Profiles->Enable(!event.IsActivated());
@@ -643,6 +643,11 @@ namespace Kortex::ModManager
 		}
 		m_DisplayModel->UpdateUI();
 	}
+	void Workspace::OnProfileSelected(GameInstance::ProfileEvent& event)
+	{
+		ReloadView();
+	}
+
 	void Workspace::OnAddMod_Empty(KxMenuEvent& event)
 	{
 		NewModDialog dialog(this);

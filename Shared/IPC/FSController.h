@@ -17,6 +17,7 @@ namespace Kortex::IPC
 			HANDLE m_ProcessHandle = nullptr;
 			std::mutex m_ThreadMutex;
 			std::condition_variable m_ThreadCondition;
+			bool m_IsDestroyed = false;
 
 		private:
 			void OnProcessReady(wxProcessEvent& event);
@@ -48,6 +49,6 @@ namespace Kortex::IPC
 
 			void SetProcessingWindow(const ProcessingWindow& processingWindow);
 			void Run();
-			bool WaitForTermination(std::function<void()> func);
+			bool WaitForTermination(std::function<void()> func = {});
 	};
 }

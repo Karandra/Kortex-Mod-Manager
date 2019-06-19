@@ -30,8 +30,8 @@ namespace Kortex::IPC
 		{
 			if (std::unique_lock lock(m_ThreadMutex); true)
 			{
-				SendExit();
 				Reset();
+				SendExit();
 
 				m_ThreadCondition.wait(lock);
 			}
@@ -67,6 +67,7 @@ namespace Kortex::IPC
 	}
 	FSController::~FSController()
 	{
+		m_IsDestroyed = true;
 		EndWaitForTermination();
 	}
 
@@ -103,7 +104,7 @@ namespace Kortex::IPC
 					if (std::unique_lock lock(m_ThreadMutex); true)
 					{
 						Reset();
-						if (status == WAIT_OBJECT_0)
+						if (status == WAIT_OBJECT_0 && func && !m_IsDestroyed)
 						{
 							func();
 						}

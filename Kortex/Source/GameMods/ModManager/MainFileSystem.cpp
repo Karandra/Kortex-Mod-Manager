@@ -9,9 +9,17 @@
 #include "Utility/Log.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxProgressDialog.h>
+#include <KxFramework/KxCoroutine.h>
 
 namespace
 {
+	enum class State
+	{
+		ShowDialog,
+		Run,
+		HideDialog
+	};
+
 	bool CheckMountPoint(const wxString& folderPath)
 	{
 		return KxFileFinder::IsDirectoryEmpty(folderPath);
@@ -189,49 +197,91 @@ namespace Kortex::ModManager
 	{
 		if (!m_IsEnabled)
 		{
-			ShowStatusDialog();
-
-			// Reset counters, we'll use them to detect is all vfs instances are active.
-			m_InstancesCountEnabled = 0;
-			m_InstancesCountTotal = 0;
-
-			KxStringVector nonEmptyMountPoints = CheckMountPoints();
-			if (nonEmptyMountPoints.empty())
+			KxCoroutine::Run([this, state = State::ShowDialog](KxCoroutineBase& coroutine) mutable
 			{
-				InitMainVirtualFolder();
-				InitMirroredLocations();
-
-				// Cache active instances count
-				m_InstancesCountTotal = GetInstancesCount();
-
-				// Mount all
-				m_Convergence->Enable();
-				for (auto& vfs: m_Mirrors)
+				switch (state)
 				{
-					vfs->Enable();
-				}
-			}
-			else
-			{
-				m_Manager.OnMountPointError(nonEmptyMountPoints);
-			}
+					case State::ShowDialog:
+					{
+						ShowStatusDialog();
 
-			HideStatusDialog();
+						state = State::Run;
+						return coroutine.YieldWaitSeconds(0.5);
+					}
+					case State::Run:
+					{
+						// Reset counters, we'll use them to detect is all vfs instances are active.
+						m_InstancesCountEnabled = 0;
+						m_InstancesCountTotal = 0;
+
+						KxStringVector nonEmptyMountPoints = CheckMountPoints();
+						if (nonEmptyMountPoints.empty())
+						{
+							InitMainVirtualFolder();
+							InitMirroredLocations();
+
+							// Cache active instances count
+							m_InstancesCountTotal = GetInstancesCount();
+
+							// Mount all
+							m_Convergence->Enable();
+							for (auto& vfs: m_Mirrors)
+							{
+								vfs->Enable();
+							}
+						}
+						else
+						{
+							m_Manager.OnMountPointError(nonEmptyMountPoints);
+						}
+
+						state = State::HideDialog;
+						return coroutine.YieldWaitSeconds(0.1);
+					}
+					case State::HideDialog:
+					{
+						HideStatusDialog();
+						break;
+					}
+				};
+				return coroutine.YieldStop();
+			});
 		}
 	}
 	void MainFileSystem::Disable()
 	{
 		if (m_IsEnabled)
 		{
-			ShowStatusDialog();
-
-			m_Convergence->Disable();
-			for (auto& vfs: m_Mirrors)
+			KxCoroutine::Run([this, state = State::ShowDialog](KxCoroutineBase& coroutine) mutable
 			{
-				vfs->Disable();
-			}
+				switch (state)
+				{
+					case State::ShowDialog:
+					{
+						ShowStatusDialog();
 
-			HideStatusDialog();
+						state = State::Run;
+						return coroutine.YieldWaitSeconds(0.5);
+					}
+					case State::Run:
+					{
+						m_Convergence->Disable();
+						for (auto& vfs: m_Mirrors)
+						{
+							vfs->Disable();
+						}
+
+						state = State::HideDialog;
+						return coroutine.YieldWaitSeconds(0.1);
+					}
+					case State::HideDialog:
+					{
+						HideStatusDialog();
+						break;
+					}
+				};
+				return coroutine.YieldStop();
+			});
 		}
 	}
 }

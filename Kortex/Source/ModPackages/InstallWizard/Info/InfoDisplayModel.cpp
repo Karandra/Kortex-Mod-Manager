@@ -6,10 +6,13 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include "UI/KMainWindow.h"
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
+
+using namespace Kortex;
+using namespace Kortex::UI;
 
 namespace
 {
@@ -225,7 +228,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 				{
 					if (itemValue.HasValue())
 					{
-						KTextEditorDialog dialog(GetView());
+						TextEditDialog dialog(GetView());
 						dialog.SetText(itemValue.GetValue());
 						dialog.SetEditable(false);
 						dialog.ShowPreview(true);

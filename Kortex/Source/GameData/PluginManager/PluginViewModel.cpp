@@ -4,10 +4,13 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include "UI/KMainWindow.h"
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxMenu.h>
+
+using namespace Kortex;
+using namespace Kortex::UI;
 
 namespace Kortex::PluginManager
 {
@@ -160,7 +163,7 @@ namespace Kortex::PluginManager
 			descriptionItem->Enable(!bethesdaPlugin->GetDescription().IsEmpty());
 			descriptionItem->Bind(KxEVT_MENU_SELECT, [this, bethesdaPlugin](KxMenuEvent& event)
 			{
-				KTextEditorDialog dialog(GetView());
+				TextEditDialog dialog(GetView());
 				dialog.SetText(bethesdaPlugin->GetDescription());
 				dialog.SetEditable(false);
 				dialog.ShowPreview(true);

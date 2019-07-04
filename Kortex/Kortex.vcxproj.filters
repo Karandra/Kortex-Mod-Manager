@@ -426,9 +426,6 @@
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp">
       <Filter>Code\Source\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UI\KTextEditorDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
@@ -1236,6 +1233,9 @@
     <ClCompile Include="Source\UI\WebView.cpp">
       <Filter>Code\Source\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\TextEditDialog.cpp">
+      <Filter>Code\Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1267,9 +1267,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\KLabeledValue.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KTextEditorDialog.h">
-      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -2328,6 +2325,9 @@
       <Filter>Code\Headers\ModPackages\InstallWizard\Completed</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\WebView.h">
+      <Filter>Code\Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\TextEditDialog.h">
       <Filter>Code\Headers\UI</Filter>
     </ClInclude>
   </ItemGroup>

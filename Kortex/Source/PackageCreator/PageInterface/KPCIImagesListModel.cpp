@@ -3,7 +3,7 @@
 #include "KPCIImagesListModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "UI/KMainWindow.h"
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include "UI/KImageViewerDialog.h"
 #include "Utility/KOperationWithProgress.h"
 #include <Kortex/Application.hpp>
@@ -15,6 +15,7 @@
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
 
 using namespace Kortex;
+using namespace Kortex::UI;
 
 enum ColumnID
 {
@@ -237,7 +238,7 @@ void KPCIImagesListModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (entry)
 				{
-					KTextEditorDialog dialog(KMainWindow::GetInstance());
+					TextEditDialog dialog(KMainWindow::GetInstance());
 					dialog.SetText(entry->GetDescriptionRaw());
 					if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 					{
@@ -327,7 +328,7 @@ void KPCIImagesListModel::OnAllItemsMenuSelect(KxDataViewColumn* column)
 	{
 		case ColumnID::Description:
 		{
-			KTextEditorDialog dialog(GetView());
+			TextEditDialog dialog(GetView());
 			if (dialog.ShowModal() == KxID_OK)
 			{
 				for (auto& entry: *GetDataVector())

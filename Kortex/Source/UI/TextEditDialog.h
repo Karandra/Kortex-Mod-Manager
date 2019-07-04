@@ -7,49 +7,51 @@ class KxBitmapComboBox;
 class KxStyledTextBox;
 class KxAuiToolBar;
 class KxAuiToolBarItem;
+class KxAuiToolBarEvent;
 
 namespace Kortex::UI
 {
 	class TextEditDialog: public KxStdDialog
 	{
 		private:
-			KxPanel* m_View = nullptr;
-			wxSimplebook* m_Container = nullptr;
-			wxString m_Text;
-			bool m_TextModified = false;
-
-			bool m_EditMode = true;
-			bool m_Editable = true;
 			KxAuiToolBar* m_ToolBar = nullptr;
 			KxAuiToolBarItem* m_ToolBar_SwitchMode = nullptr;
 			KxAuiToolBarItem* m_ToolBar_Save = nullptr;
 			KxAuiToolBarItem* m_ToolBar_Open = nullptr;
 			KxBitmapComboBox* m_HeadingList = nullptr;
-			KxStyledTextBox* m_Editor = nullptr;
 
+			KxPanel* m_View = nullptr;
+			wxSimplebook* m_Container = nullptr;
+
+			KxStyledTextBox* m_Editor = nullptr;
 			WebView m_Preview;
+			
+			wxString m_Text;
+			bool m_IsTextModified = false;
+			bool m_EditMode = true;
+			bool m_Editable = true;
 
 		private:
 			bool Create(wxWindow* parent);
 
 		private:
-			int GetViewSizerProportion() const override
+			virtual int GetViewSizerProportion() const override
 			{
 				return 1;
 			}
-			wxOrientation GetViewSizerOrientation() const override
+			virtual wxOrientation GetViewSizerOrientation() const override
 			{
 				return wxVERTICAL;
 			}
-			wxOrientation GetViewLabelSizerOrientation() const override
+			virtual wxOrientation GetViewLabelSizerOrientation() const override
 			{
 				return wxHORIZONTAL;
 			}
-			bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
+			virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
 			{
 				return true;
 			}
-			wxWindow* GetDialogMainCtrl() const override
+			virtual wxWindow* GetDialogMainCtrl() const override
 			{
 				return m_View;
 			}
@@ -80,14 +82,14 @@ namespace Kortex::UI
 			virtual ~TextEditDialog();
 
 		public:
-			int ShowModal() override;
+			virtual int ShowModal() override;
 
 		public:
 			const wxString& GetText() const;
 			void SetText(const wxString& text);
 			bool IsModified() const
 			{
-				return m_TextModified;
+				return m_IsTextModified;
 			}
 			void ShowPreview(bool show)
 			{

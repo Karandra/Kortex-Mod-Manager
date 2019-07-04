@@ -81,10 +81,6 @@ namespace Kortex::UI
 		m_View->Bind(wxEVT_WEBVIEW_NAVIGATING, &WebView::OnNavigate, this);
 		m_IsEmpty = m_View->GetPageText().IsEmpty();
 
-		//m_View->SelectAll();
-		//ExecCommand(wxS("FontSize"), 7);
-		//m_View->ClearSelection();
-
 		event.Skip();
 	}
 

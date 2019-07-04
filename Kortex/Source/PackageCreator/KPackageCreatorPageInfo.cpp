@@ -10,7 +10,7 @@
 #include "PackageProject/KPackageProject.h"
 #include "PackageProject/KPackageProjectInfo.h"
 
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
 
 #include <Kortex/Application.hpp>
@@ -34,6 +34,7 @@
 #pragma warning(disable: 4312)
 
 using namespace Kortex;
+using namespace Kortex::UI;
 
 KPackageCreatorPageInfo::KPackageCreatorPageInfo(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller)
 	:KPackageCreatorPageBase(mainWorkspace, controller)
@@ -150,7 +151,7 @@ void KPackageCreatorPageInfo::CreateBasicInfoControls()
 	
 	m_DescriptionButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 	{
-		KTextEditorDialog dialog(GetMainWindow());
+		TextEditDialog dialog(GetMainWindow());
 		dialog.SetText(GetProjectInfo().GetDescription());
 		if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 		{

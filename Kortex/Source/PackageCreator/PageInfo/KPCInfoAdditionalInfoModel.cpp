@@ -2,11 +2,14 @@
 #include "KPCInfoAdditionalInfoModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxFileBrowseDialog.h>
+
+using namespace Kortex;
+using namespace Kortex::UI;
 
 enum ColumnID
 {
@@ -94,7 +97,7 @@ void KPCInfoAdditionalInfoModel::OnActivateItem(KxDataViewEvent& event)
 					KLabeledValue* entry = GetDataEntry(GetRow(event.GetItem()));
 					if (entry)
 					{
-						KTextEditorDialog dialog(KMainWindow::GetInstance());
+						TextEditDialog dialog(KMainWindow::GetInstance());
 						dialog.SetText(entry->GetValue());
 						if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 						{

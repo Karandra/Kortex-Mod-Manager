@@ -308,7 +308,7 @@
     <ClCompile Include="Source\PackageProject\KPackageProjectRequirements.cpp" />
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializer.cpp" />
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerKMP.cpp" />
-    <ClCompile Include="Source\UI\KTextEditorDialog.cpp" />
+    <ClCompile Include="Source\UI\TextEditDialog.cpp" />
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp" />
     <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
@@ -674,7 +674,7 @@
     <ClInclude Include="Source\PackageProject\KPackageProjectRequirements.h" />
     <ClInclude Include="Source\PackageProject\KPackageProjectSerializer.h" />
     <ClInclude Include="Source\PackageProject\KPackageProjectSerializerKMP.h" />
-    <ClInclude Include="Source\UI\KTextEditorDialog.h" />
+    <ClInclude Include="Source\UI\TextEditDialog.h" />
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
     <ClInclude Include="Source\UI\KImageViewerDialog.h" />
     <ClInclude Include="Source\Utility\KLabeledValue.h" />

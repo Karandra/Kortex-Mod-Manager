@@ -22,7 +22,7 @@
 #include "GameMods/KModFilesExplorerDialog.h"
 #include "GameMods/KModCollisionViewerModel.h"
 #include "UI/KImageViewerDialog.h"
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
 #include "Utility/MenuSeparator.h"
@@ -1085,7 +1085,7 @@ namespace Kortex::ModManager
 			case ContextMenuID::ModEditDescription:
 			{
 				wxString oldDescription = focusedMod->GetDescription();
-				KTextEditorDialog dialog(GetMainWindow());
+				UI::TextEditDialog dialog(GetMainWindow());
 				dialog.SetText(oldDescription);
 
 				if (dialog.ShowModal() == KxID_OK && dialog.IsModified())

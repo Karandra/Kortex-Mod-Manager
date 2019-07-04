@@ -5,7 +5,7 @@
 #include "PackageProject/KPackageProject.h"
 #include "ModPackages/IPackageManager.h"
 #include "UI/KMainWindow.h"
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include "UI/KImageViewerDialog.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
@@ -13,6 +13,9 @@
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxTextBoxDialog.h>
+
+using namespace Kortex;
+using namespace Kortex::UI;
 
 enum ColumnID
 {
@@ -364,7 +367,7 @@ void KPCREntriesListModel::OnActivateItem(KxDataViewEvent& event)
 			{
 				if (entry)
 				{
-					KTextEditorDialog dialog(GetView());
+					TextEditDialog dialog(GetView());
 					dialog.SetText(entry->GetDescription());
 					if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 					{
@@ -482,7 +485,7 @@ void KPCREntriesListModel::OnAllItemsMenuSelect(KxDataViewColumn* column)
 		}
 		case ColumnID::Description:
 		{
-			KTextEditorDialog dialog(GetView());
+			TextEditDialog dialog(GetView());
 			if (dialog.ShowModal() == KxID_OK)
 			{
 				for (auto& entry: *GetDataVector())

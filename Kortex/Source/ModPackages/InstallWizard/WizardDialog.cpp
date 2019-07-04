@@ -8,7 +8,7 @@
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxImageView.h>

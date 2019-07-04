@@ -9,7 +9,7 @@
 #include "KPCCAssignedConditionalsEditor.h"
 #include "KPCCConditionGroupEditor.h"
 #include "UI/KMainWindow.h"
-#include "UI/KTextEditorDialog.h"
+#include "UI/TextEditDialog.h"
 #include "UI/KImageViewerDialog.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
@@ -17,6 +17,9 @@
 #include <KxFramework/KxComboBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
+
+using namespace Kortex;
+using namespace Kortex::UI;
 
 namespace
 {
@@ -826,7 +829,7 @@ void KPCComponentsModel::OnActivateItem(KxDataViewEvent& event)
 				{
 					if (entry)
 					{
-						KTextEditorDialog dialog(KMainWindow::GetInstance());
+						TextEditDialog dialog(KMainWindow::GetInstance());
 						dialog.SetText(entry->GetDescription());
 						if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
 						{
@@ -1451,7 +1454,7 @@ void KPCComponentsModel::AllEntries_Description(KPCComponentsModelNode* node, co
 {
 	KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 
-	KTextEditorDialog dialog(GetView());
+	TextEditDialog dialog(GetView());
 	if (dialog.ShowModal() == KxID_OK)
 	{
 		for (auto& entry: entries)

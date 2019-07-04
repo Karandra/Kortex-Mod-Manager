@@ -1233,6 +1233,9 @@
     <ClCompile Include="Source\ModPackages\InstallWizard\Completed\CompletedPage.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard\Completed</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\WebView.cpp">
+      <Filter>Code\Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2323,6 +2326,9 @@
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\Completed\CompletedPage.h">
       <Filter>Code\Headers\ModPackages\InstallWizard\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebView.h">
+      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

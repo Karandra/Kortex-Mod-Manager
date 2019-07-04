@@ -119,11 +119,7 @@ bool KTextEditorDialog::Create(wxWindow* parent)
 		m_Tabs->AddPage(m_Editor, wxEmptyString, true);
 
 		/* Preview page */
-		m_Preview = new KxHTMLWindow(m_Tabs, KxID_NONE, wxEmptyString, KxHTMLWindow::DefaultStyle|wxBORDER_THEME);
-		m_Preview->Bind(wxEVT_HTML_LINK_CLICKED, [this](wxHtmlLinkEvent& event)
-		{
-			KAux::AskOpenURL(event.GetLinkInfo().GetHref(), this);
-		});
+		m_Preview.Create(m_Tabs, wxBORDER_THEME);
 		m_Tabs->AddPage(m_Preview, wxEmptyString);
 
 		/* Complete creation */
@@ -234,10 +230,10 @@ void KTextEditorDialog::DoShowPreview(bool show)
 
 	if (show)
 	{
-		m_Preview->SetTextValue(m_Editor->GetValue());
+		m_Preview.LoadText(m_Editor->GetValue());
 		m_Tabs->ChangeSelection(1);
 		m_ToolBar_SwitchMode->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::EditCodeDivision));
-		m_Preview->SetFocus();
+		m_Preview.GetWindow()->SetFocus();
 
 		m_EditMode = false;
 	}

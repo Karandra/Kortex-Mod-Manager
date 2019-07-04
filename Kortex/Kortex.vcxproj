@@ -272,6 +272,7 @@
     <ClCompile Include="Source\Programs\ProgramManager\ProgramEditorDialog.cpp" />
     <ClCompile Include="Source\Programs\ProgramManager\Workspace.cpp" />
     <ClCompile Include="Source\Programs\ProgramsModule.cpp" />
+    <ClCompile Include="Source\UI\WebView.cpp" />
     <ClCompile Include="Source\Utility\DateTime.cpp" />
     <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp" />
@@ -620,6 +621,7 @@
     <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h" />
     <ClInclude Include="Source\Programs\ProgramManager\Workspace.h" />
     <ClInclude Include="Source\Programs\ProgramsModule.h" />
+    <ClInclude Include="Source\UI\WebView.h" />
     <ClInclude Include="Source\Utility\Collection.h" />
     <ClInclude Include="Source\Utility\DateTime.h" />
     <ClInclude Include="Source\Utility\KBitmapSize.h" />
@@ -923,6 +925,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
+      <Profile>true</Profile>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -969,6 +972,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>

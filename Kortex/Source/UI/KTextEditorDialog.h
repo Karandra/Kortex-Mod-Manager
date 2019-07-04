@@ -3,8 +3,8 @@
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxStyledTextBox.h>
 #include <KxFramework/KxAuiToolBar.h>
-#include <KxFramework/KxHTMLWindow.h>
 #include <KxFramework/KxStdDialog.h>
+#include "WebView.h"
 class KxBitmapComboBox;
 
 class KTextEditorDialog: public KxStdDialog
@@ -24,7 +24,7 @@ class KTextEditorDialog: public KxStdDialog
 		KxBitmapComboBox* m_HeadingList = nullptr;
 		KxStyledTextBox* m_Editor = nullptr;
 
-		KxHTMLWindow* m_Preview = nullptr;
+		Kortex::UI::WebView m_Preview;
 
 	private:
 		bool Create(wxWindow* parent);
@@ -49,11 +49,6 @@ class KTextEditorDialog: public KxStdDialog
 		virtual wxWindow* GetDialogMainCtrl() const override
 		{
 			return m_View;
-		}
-		virtual void ResetState()
-		{
-			m_Editor->Clear();
-			m_Preview->Clear();
 		}
 
 		void OnNewTextSet();

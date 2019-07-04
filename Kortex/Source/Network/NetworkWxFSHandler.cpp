@@ -30,25 +30,28 @@ namespace Kortex::NetworkManager
 			wxString fullPath = ConstructFullPath(location);
 			Utility::Log::LogMessage("[NetworkWxFSHandler] Using cached copy: \"%1\"", fullPath);
 
-			KxFileStream* stream = new KxFileStream(fullPath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-			return new wxFSFile(stream, fullPath, wxEmptyString, GetAnchor(location), wxFileName(fullPath).GetModificationTime());
+			auto stream = std::make_unique<KxFileStream>(fullPath, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+			return new wxFSFile(stream.release(), fullPath, wxEmptyString, GetAnchor(location), wxFileName(fullPath).GetModificationTime());
 		}
 		else if (KxINet::IsInternetAvailable())
 		{
-			Utility::Log::LogMessage("[NetworkWxFSHandler] No cached copy, downloading");
+			Utility::Log::LogMessage("[NetworkWxFSHandler] No cached copy or cached copy is too old, downloading");
 
 			wxString fullPath = ConstructFullPath(location);
-			KxFileStream* stream = new KxFileStream(fullPath, KxFileStream::Access::RW, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+			auto stream = std::make_unique<KxFileStream>(fullPath, KxFileStream::Access::RW, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 			KxCURLStreamReply reply(*stream);
 
 			auto session = m_NetworkManager.NewCURLSession(location);
+			session->SetTimeout(wxTimeSpan::Milliseconds(250));
+			session->SetConnectionTimeout(wxTimeSpan::Milliseconds(250));
+
 			session->Download(reply);
 			if (reply.IsOK())
 			{
 				stream->Rewind();
 
 				Utility::Log::LogMessage("[NetworkWxFSHandler] Resource downloaded to: \"%1\"", fullPath);
-				return new wxFSFile(stream, fullPath, wxEmptyString, GetAnchor(location), wxFileName(fullPath).GetModificationTime());
+				return new wxFSFile(stream.release(), fullPath, wxEmptyString, GetAnchor(location), wxFileName(fullPath).GetModificationTime());
 			}
 		}
 

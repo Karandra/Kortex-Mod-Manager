@@ -196,6 +196,12 @@ namespace Kortex
 		BellMinus,
 		BellPlus,
 
+		Bin,
+		BinArrow,
+		BinFull,
+
+		Broom,
+
 		MAX_ELEMENT
 	};
 }

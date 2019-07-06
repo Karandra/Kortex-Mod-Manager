@@ -207,6 +207,12 @@ namespace Kortex::Application
 		LoadItem(ImageResourceID::BellPencil, wxS("bell--pencil"));
 		LoadItem(ImageResourceID::BellPlus, wxS("bell--plus"));
 		LoadItem(ImageResourceID::BellMinus, wxS("bell--minus"));
+
+		LoadItem(ImageResourceID::Bin, wxS("bin"));
+		LoadItem(ImageResourceID::BinArrow, wxS("bin--arrow"));
+		LoadItem(ImageResourceID::BinFull, wxS("bin--full"));
+
+		LoadItem(ImageResourceID::Broom, wxS("broom"));
 	}
 
 	DefaultImageProvider::DefaultImageProvider()

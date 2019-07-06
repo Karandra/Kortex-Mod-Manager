@@ -20,28 +20,42 @@ namespace Kortex::Notifications
 			KxAuiToolBarItem* m_Button = nullptr;
 
 			wxPopupTransientWindow* m_PopupWindow = nullptr;
+			KxAuiToolBar* m_PpoupToolbar = nullptr;
+			KxAuiToolBarItem* m_PpoupToolbar_Label = nullptr;
+			KxAuiToolBarItem* m_PpoupToolbar_ClearNotifications = nullptr;
 			DisplayModel* m_PopupDisplayModel = nullptr;
 
-		protected:
-			void DoNotify(std::unique_ptr<INotification> notification) override;
+		private:
+			void UpdateLabel();
+			void OnClearNotifications(KxAuiToolBarEvent& event);
+			void OnNotificationsCountChanged();
 
+		protected:
 			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
 			void OnToolBarButton(KxAuiToolBarEvent& event) override;
 			void UpdateToolBarButton() override;
 
-			const INotification::Vector& GetNotifications() const override
+			void DoNotify(std::unique_ptr<INotification> notification) override;
+			void OnNotificationAdded(INotification& notification) override
 			{
-				return m_Notifications;
+				OnNotificationsCountChanged();
 			}
+			void OnNotificationRemoved(INotification& notification) override
+			{
+				OnNotificationsCountChanged();
+			}
+			void OnNotificationsCleared() override
+			{
+				OnNotificationsCountChanged();
+			}
+
 			INotification::Vector& GetNotifications() override
 			{
 				return m_Notifications;
 			}
 
 		public:
-			bool HasActivePopups() const override;
-			size_t GetActivePopupsCount() const override;
-
+			bool IsNotificationsDisplayed() const override;
 			void ShowNotificationsWindow() override;
 			void HideNotificationsWindow() override;
 	};

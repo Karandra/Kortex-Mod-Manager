@@ -1,62 +1,40 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KDataViewListModel.h"
+#include <KxFramework/DataView2/DataView2.h>
 #include "BaseNotification.h"
 #include "Utility/KBitmapSize.h"
 
 namespace Kortex::Notifications
 {
-	class DisplayModel: public KxDataViewVectorListModelEx<INotification::Vector, KxDataViewListModelEx>
+	class DisplayModel: public KxDataView2::VirtualListModel, public KxDataView2::TypeAliases
 	{
 		private:
 			KBitmapSize m_BitmapSize;
-			INotification::Vector& m_Data;
-
-			KxDataViewColumn* m_BitmapColumn = nullptr;
-			KxDataViewColumn* m_MessageColumn = nullptr;
+			INotification::Vector& m_Notifications;
 
 		private:
-			template<class EntryT, class VectorT> static EntryT* GetEntryFrom(VectorT& items, size_t index)
+			wxAny GetValue(const Node& node, const Column& column) const override;
+			ToolTip GetToolTip(const Node& node, const Column& column) const override;
+
+			void OnSelectItem(Event& event);
+			void OnActivateItem(Event& event);
+
+			const INotification& GetItem(const Node& node) const
 			{
-				if (index < items.size())
-				{
-					return items[index].get();
-				}
-				return nullptr;
+				return *m_Notifications[node.GetRow()];
 			}
-
-			virtual void OnInitControl() override;
-			virtual void GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
-			virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
-			virtual bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const override;
-			virtual bool GetCellHeightByRow(size_t row, int& height) const override;
-
-			void OnSelectItem(KxDataViewEvent& event);
-			void OnActivateItem(KxDataViewEvent& event);
-
-			wxString FormatToHTML(const INotification& notification) const;
+			INotification& GetItem(Node& node)
+			{
+				return *m_Notifications[node.GetRow()];
+			}
+			wxString FormatText(const INotification& notification) const;
 
 		public:
 			DisplayModel();
 
 		public:
-			void OnShowWindow(wxWindow* parent);
-
-			const INotification* GetDataEntry(size_t index) const
-			{
-				return GetEntryFrom<const INotification>(m_Data, index);
-			}
-			INotification* GetDataEntry(size_t index)
-			{
-				return GetEntryFrom<INotification>(m_Data, index);
-			}
-			const INotification* GetDataEntry(const KxDataViewItem& item) const
-			{
-				return GetEntryFrom<const INotification>(m_Data, GetRow(item));
-			}
-			INotification* GetDataEntry(const KxDataViewItem& item)
-			{
-				return GetEntryFrom<INotification>(m_Data, GetRow(item));
-			}
+			void CreateView(wxWindow* parent);
+			void OnShowWindow();
+			void RefreshItems();
 	};
 }

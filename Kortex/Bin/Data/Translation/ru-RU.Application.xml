@@ -288,6 +288,14 @@
 		<String ID="MainMenu.OpenLocation">Открыть расположение</String>
 		<String ID="MainMenu.About">О программе</String>
 
+		<!-- Notification Center -->
+		<String ID="NotificationCenter.Name">Центр уведомлений</String>
+		<String ID="NotificationCenter.NameShort">Уведомления</String>
+
+		<String ID="NotificationCenter.ClearNotifications">Удалить все уведомления</String>
+		<String ID="NotificationCenter.RemoveNotification">Удалить уведомление</String>
+		<String ID="NotificationCenter.NoNotifications">Нет новых уведомлений</String>
+
 		<!-- Workspace controller -->
 		<String ID="Controller.SaveChanges.Caption">Имеются несохранённые изменения</String>
 		<String ID="Controller.SaveChanges.Message">Сохранить внесённые изменения?</String>

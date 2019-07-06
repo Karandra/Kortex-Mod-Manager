@@ -16,10 +16,7 @@ namespace Kortex
 	}
 	void INotificationCenter::OnExit()
 	{
-		for (auto& notification: GetNotifications())
-		{
-			notification->DestroyPopupWindow();
-		}
+		GetNotifications().clear();
 	}
 	void INotificationCenter::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
@@ -28,6 +25,30 @@ namespace Kortex
 	INotificationCenter::INotificationCenter()
 		:ManagerWithTypeInfo(&IApplication::GetInstance()->GetModule())
 	{
+	}
+
+	bool INotificationCenter::HasActivePopups() const
+	{
+		for (const auto& notification: GetNotifications())
+		{
+			if (notification->HasPopupWindow())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	size_t INotificationCenter::GetActivePopupsCount() const
+	{
+		size_t count = 0;
+		for (const auto& notification: GetNotifications())
+		{
+			if (notification->HasPopupWindow())
+			{
+				count++;
+			}
+		}
+		return count;
 	}
 
 	void INotificationCenter::Notify(const wxString& caption, const wxString& message, KxIconType iconID)
@@ -64,5 +85,40 @@ namespace Kortex
 	void INotificationCenter::Notify(const IModNetwork& modNetwork, const wxString& message, const wxBitmap& bitmap)
 	{
 		DoNotify(std::make_unique<SimpleNotification>(modNetwork.GetName(), message, bitmap));
+	}
+
+	bool INotificationCenter::RemoveNotification(INotification& notification)
+	{
+		INotification::Vector& items = GetNotifications();
+		auto it = std::find_if(items.begin(), items.end(), [&notification](const auto& value)
+		{
+			return value.get() == &notification;
+		});
+		if (it != items.end())
+		{
+			auto temp = std::move(*it);
+			items.erase(it);
+
+			if (items.empty())
+			{
+				UpdateToolBarButton();
+			}
+			OnNotificationRemoved(*temp);
+			return true;
+		}
+		return false;
+	}
+	bool INotificationCenter::ClearNotifications()
+	{
+		INotification::Vector& items = GetNotifications();
+		if (!items.empty())
+		{
+			items.clear();
+			UpdateToolBarButton();
+			OnNotificationsCleared();
+
+			return true;
+		}
+		return false;
 	}
 }

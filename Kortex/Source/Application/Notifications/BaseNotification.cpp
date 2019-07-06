@@ -31,7 +31,6 @@ namespace Kortex::Notifications
 				else
 				{
 					DestroyPopupWindow();
-					m_PopupWindow = nullptr;
 
 					m_PopupWindowCoroutine = nullptr;
 					return coroutine.YieldStop();
@@ -41,8 +40,8 @@ namespace Kortex::Notifications
 			{
 				HWND previousForegroundWindow = ::GetForegroundWindow();
 
-				m_PopupWindow = new Notifications::PopupWindow(this);
-				m_PopupWindow->Show();
+				m_PopupWindow = new Notifications::PopupWindow(*this);
+				m_PopupWindow->Popup();
 
 				if (previousForegroundWindow)
 				{
@@ -65,6 +64,7 @@ namespace Kortex::Notifications
 		if (m_PopupWindow)
 		{
 			m_PopupWindow->Destroy();
+			m_PopupWindow = nullptr;
 		}
 	}
 }

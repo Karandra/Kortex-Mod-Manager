@@ -4,6 +4,7 @@
 #include "IManager.h"
 #include <KxFramework/KxSingleton.h>
 class KMainWindow;
+class KxAuiToolBar;
 class KxAuiToolBarItem;
 class KxAuiToolBarEvent;
 
@@ -44,22 +45,30 @@ namespace Kortex
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 
-			virtual void DoNotify(std::unique_ptr<INotification> notification) = 0;
 			virtual void OnSetToolBarButton(KxAuiToolBarItem* button) = 0;
 			virtual void OnToolBarButton(KxAuiToolBarEvent& event) = 0;
 			virtual void UpdateToolBarButton() = 0;
 
-			virtual const INotification::Vector& GetNotifications() const = 0;
+			virtual void DoNotify(std::unique_ptr<INotification> notification) = 0;
+			virtual void OnNotificationAdded(INotification& notification) { }
+			virtual void OnNotificationRemoved(INotification& notification) { }
+			virtual void OnNotificationsCleared() { }
+
 			virtual INotification::Vector& GetNotifications() = 0;
+			const INotification::Vector& GetNotifications() const
+			{
+				return const_cast<INotificationCenter*>(this)->GetNotifications();
+			}
 
 		public:
 			INotificationCenter();
 			virtual ~INotificationCenter() = default;
 
 		public:
-			virtual bool HasActivePopups() const = 0;
-			virtual size_t GetActivePopupsCount() const = 0;
+			bool HasActivePopups() const;
+			size_t GetActivePopupsCount() const;
 
+			virtual bool IsNotificationsDisplayed() const = 0;
 			virtual void ShowNotificationsWindow() = 0;
 			virtual void HideNotificationsWindow() = 0;
 
@@ -89,5 +98,8 @@ namespace Kortex
 			{
 				Notify(*TSingletonPtr::GetInstance(), std::forward<Args>(arg)...);
 			}
+			
+			bool RemoveNotification(INotification& notification);
+			bool ClearNotifications();
 	};
 }

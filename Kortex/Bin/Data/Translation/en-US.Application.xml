@@ -283,6 +283,14 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="MainMenu.OpenLocation">Open location</String>
 		<String ID="MainMenu.About">About</String>
 
+		<!-- Notification Center -->
+		<String ID="NotificationCenter.Name">Notification center</String>
+		<String ID="NotificationCenter.NameShort">Notifications</String>
+
+		<String ID="NotificationCenter.ClearNotifications">Clear notifications</String>
+		<String ID="NotificationCenter.RemoveNotification">Remove notification</String>
+		<String ID="NotificationCenter.NoNotifications">No new notifications</String>
+
 		<!-- Workspace controller -->
 		<String ID="Controller.SaveChanges.Caption">You have unsaved changes</String>
 		<String ID="Controller.SaveChanges.Message">Do you want to save changes?</String>

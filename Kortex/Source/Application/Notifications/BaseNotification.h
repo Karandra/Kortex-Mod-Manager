@@ -22,6 +22,7 @@ namespace Kortex::Notifications
 			}
 
 		public:
+			BaseNotification() = default;
 			~BaseNotification();
 
 		public:

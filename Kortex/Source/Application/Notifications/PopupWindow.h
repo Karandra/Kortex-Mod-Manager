@@ -12,15 +12,18 @@ namespace Kortex::Notifications
 	class PopupWindow: public wxPopupWindow
 	{
 		private:
-			INotification* m_Notification = nullptr;
+			const INotification* m_Notification = nullptr;
+			wxSize m_Size;
+			wxSize m_Margin;
 
 		private:
 			void CreateUI();
 
 		public:
-			PopupWindow(INotification* notification);
+			PopupWindow(const INotification& notification);
 
 		public:
-			virtual bool Destroy() override;
+			void Popup();
+			void Dismiss();
 	};
 }

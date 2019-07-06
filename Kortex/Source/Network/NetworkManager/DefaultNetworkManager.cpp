@@ -124,9 +124,7 @@ namespace Kortex::NetworkManager
 			m_LoginButton->SetBitmap(ImageProvider::GetBitmap(IModNetwork::GetGenericIcon()));
 		}
 
-		m_LoginButton->GetToolBar()->Realize();
-		m_LoginButton->GetToolBar()->Refresh();
-		KMainWindow::GetInstance()->Layout();
+		m_LoginButton->GetToolBar()->UpdateUI();
 	}
 	void DefaultNetworkManager::CreateMenu()
 	{

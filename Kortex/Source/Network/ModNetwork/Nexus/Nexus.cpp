@@ -27,12 +27,12 @@ namespace Kortex::NetworkManager
 	{
 		if (m_UpdateChecker.CanIssueNewAutomaticCheck())
 		{
-			KxCoroutine::Run([this, wait = true](KxCoroutineBase& coroutine) mutable
+			KxCoroutine::Run([this, wait = true](KxCoroutine& coroutine) mutable
 			{
 				if (wait)
 				{
 					wait = false;
-					return coroutine.YieldWaitSeconds(3);
+					return coroutine.YieldWait(wxTimeSpan::Seconds(3));
 				}
 				else
 				{

@@ -20,13 +20,13 @@ namespace Kortex::Notifications
 
 	void BaseNotification::ShowPopupWindow()
 	{
-		m_PopupWindowCoroutine = KxCoroutine::Run([this](KxCoroutineBase& coroutine)
+		m_PopupWindowCoroutine = KxCoroutine::Run([this](KxCoroutine& coroutine)
 		{
 			if (m_PopupWindow)
 			{
 				if (m_PopupWindow->IsMouseInWindow())
 				{
-					return coroutine.YieldWaitSeconds(1.5);
+					return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(1500));
 				}
 				else
 				{
@@ -38,7 +38,7 @@ namespace Kortex::Notifications
 			}
 			else
 			{
-				HWND previousForegroundWindow = ::GetForegroundWindow();
+				const HWND previousForegroundWindow = ::GetForegroundWindow();
 
 				m_PopupWindow = new Notifications::PopupWindow(*this);
 				m_PopupWindow->Popup();
@@ -47,7 +47,7 @@ namespace Kortex::Notifications
 				{
 					::SetForegroundWindow(previousForegroundWindow);
 				}
-				return coroutine.YieldWaitSeconds(3);
+				return coroutine.YieldWait(wxTimeSpan::Milliseconds(3000));
 			}
 		});
 	}
@@ -59,7 +59,8 @@ namespace Kortex::Notifications
 	{
 		if (m_PopupWindowCoroutine)
 		{
-			KxCoroutine::Stop(m_PopupWindowCoroutine);
+			m_PopupWindowCoroutine->Terminate();
+			m_PopupWindowCoroutine = nullptr;
 		}
 		if (m_PopupWindow)
 		{

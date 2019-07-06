@@ -197,16 +197,16 @@ namespace Kortex::ModManager
 	{
 		if (!m_IsEnabled)
 		{
-			KxCoroutine::Run([this, state = State::ShowDialog](KxCoroutineBase& coroutine) mutable
+			KxCoroutine::Run([this](KxCoroutine& coroutine)
 			{
-				switch (state)
+				auto state = coroutine.GetNextState<State>();
+				switch (state ? *state : State::ShowDialog)
 				{
 					case State::ShowDialog:
 					{
 						ShowStatusDialog();
 
-						state = State::Run;
-						return coroutine.YieldWaitSeconds(0.5);
+						return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(500), State::Run);
 					}
 					case State::Run:
 					{
@@ -235,8 +235,7 @@ namespace Kortex::ModManager
 							m_Manager.OnMountPointError(nonEmptyMountPoints);
 						}
 
-						state = State::HideDialog;
-						return coroutine.YieldWaitSeconds(0.1);
+						return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(100), State::HideDialog);
 					}
 					case State::HideDialog:
 					{
@@ -244,7 +243,7 @@ namespace Kortex::ModManager
 						break;
 					}
 				};
-				return coroutine.YieldStop();
+				return KxCoroutine::YieldStop();
 			});
 		}
 	}
@@ -252,16 +251,15 @@ namespace Kortex::ModManager
 	{
 		if (m_IsEnabled)
 		{
-			KxCoroutine::Run([this, state = State::ShowDialog](KxCoroutineBase& coroutine) mutable
+			KxCoroutine::Run([this, state = State::ShowDialog](KxCoroutine& coroutine)
 			{
-				switch (state)
+				auto state = coroutine.GetNextState<State>();
+				switch (state ? *state : State::ShowDialog)
 				{
 					case State::ShowDialog:
 					{
 						ShowStatusDialog();
-
-						state = State::Run;
-						return coroutine.YieldWaitSeconds(0.5);
+						return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(500), State::Run);
 					}
 					case State::Run:
 					{
@@ -270,9 +268,7 @@ namespace Kortex::ModManager
 						{
 							vfs->Disable();
 						}
-
-						state = State::HideDialog;
-						return coroutine.YieldWaitSeconds(0.1);
+						return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(100), State::HideDialog);
 					}
 					case State::HideDialog:
 					{
@@ -280,7 +276,7 @@ namespace Kortex::ModManager
 						break;
 					}
 				};
-				return coroutine.YieldStop();
+				return KxCoroutine::YieldStop();
 			});
 		}
 	}

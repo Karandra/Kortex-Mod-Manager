@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/INotification.h"
-class KxCoroutineBase;
+class KxCoroutine;
 
 namespace Kortex::Notifications
 {
@@ -12,7 +12,7 @@ namespace Kortex::Notifications
 
 		private:
 			PopupWindow* m_PopupWindow = nullptr;
-			KxCoroutineBase* m_PopupWindowCoroutine = nullptr;
+			KxCoroutine* m_PopupWindowCoroutine = nullptr;
 
 		private:
 			void SetPopupWindow(PopupWindow* window) override;

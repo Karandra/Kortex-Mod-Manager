@@ -69,12 +69,6 @@ namespace Kortex::Notifications
 		m_PopupDisplayModel = new DisplayModel();
 		m_PopupDisplayModel->CreateView(m_PopupWindow);
 		sizer->Add(m_PopupDisplayModel->GetView(), 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
-
-		for (int i = 0; i < 5; i++)
-		{
-			Notify("Test", "Test notification", KxICON_INFORMATION);
-			Notify("Test", "Test notification Test notification Test notification Test notification", KxICON_QUESTION);
-		}
 	}
 	void DefaultNotificationCenter::OnToolBarButton(KxAuiToolBarEvent& event)
 	{

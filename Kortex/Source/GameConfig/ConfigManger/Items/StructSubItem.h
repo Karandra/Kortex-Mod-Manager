@@ -31,6 +31,6 @@ namespace Kortex::GameConfig
 			}
 
 		public:
-			bool SetValue(const wxAny& value, KxDataView2::Column& column) override;
+			bool SetValue(KxDataView2::Column& column, const wxAny& value) override;
 	};
 }

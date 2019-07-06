@@ -11,9 +11,6 @@
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 
-using namespace Kortex;
-using namespace Kortex::UI;
-
 namespace
 {
 	using namespace KxDataView2;
@@ -104,7 +101,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		}
 		return {};
 	}
-	bool InfoDisplayModel::SetValue(Node& node, const wxAny& value, Column& column)
+	bool InfoDisplayModel::SetValue(Node& node, Column& column, const wxAny& value)
 	{
 		if (column.GetID<ColumnRef>() == ColumnRef::Value)
 		{
@@ -228,7 +225,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 				{
 					if (itemValue.HasValue())
 					{
-						TextEditDialog dialog(GetView());
+						UI::TextEditDialog dialog(GetView());
 						dialog.SetText(itemValue.GetValue());
 						dialog.SetEditable(false);
 						dialog.ShowPreview(true);

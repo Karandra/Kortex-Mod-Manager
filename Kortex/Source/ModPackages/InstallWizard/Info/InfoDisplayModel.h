@@ -42,7 +42,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		private:
 			wxAny GetValue(const Node& node, const Column& column) const override;
 			wxAny GetEditorValue(const Node& node, const Column& column) const override;
-			bool SetValue(Node& node, const wxAny& value, Column& column) override;
+			bool SetValue(Node& node, Column& column, const wxAny& value) override;
 			bool IsEnabled(const Node& node, const Column& column) const override;
 			bool GetAttributes(const Node& node, CellAttributes& attributes, const CellState& cellState, const Column& column) const override;
 

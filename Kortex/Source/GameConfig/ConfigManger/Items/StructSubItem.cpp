@@ -30,9 +30,9 @@ namespace Kortex::GameConfig
 		return m_Struct.GetPath();
 	}
 
-	bool StructSubItem::SetValue(const wxAny& value, KxDataView2::Column& column)
+	bool StructSubItem::SetValue(KxDataView2::Column& column, const wxAny& value)
 	{
-		if (SimpleItem::SetValue(value, column))
+		if (SimpleItem::SetValue(column, value))
 		{
 			m_Struct.ChangeNotify();
 			return true;

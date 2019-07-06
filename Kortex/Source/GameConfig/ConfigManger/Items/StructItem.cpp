@@ -326,7 +326,7 @@ namespace Kortex::GameConfig
 		}
 		return {};
 	}
-	bool StructItem::SetValue(const wxAny& value, KxDataView2::Column& column)
+	bool StructItem::SetValue(KxDataView2::Column& column, const wxAny& value)
 	{
 		if (column.GetID<ColumnID>() == ColumnID::Value && value.CheckType<int>())
 		{

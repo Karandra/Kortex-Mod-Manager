@@ -248,7 +248,7 @@ namespace Kortex::GameConfig
 		}
 		return {};
 	}
-	bool SimpleItem::SetValue(const wxAny& value, KxDataView2::Column& column)
+	bool SimpleItem::SetValue(KxDataView2::Column& column, const wxAny& value)
 	{
 		if (column.GetID<ColumnID>() == ColumnID::Value)
 		{

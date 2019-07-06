@@ -57,7 +57,7 @@ namespace Kortex::GameConfig
 
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
-			bool SetValue(const wxAny& value, KxDataView2::Column& column) override;
+			bool SetValue(KxDataView2::Column& column, const wxAny& value) override;
 
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
 	};

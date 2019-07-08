@@ -1,0 +1,14 @@
+div {
+	font-family: 'Roboto', sans-serif;
+}
+
+code {
+	font-family: 'Consolas', monospace, sans-serif;
+	font-size: 10pt;
+	display: block;
+	white-space: pre-wrap;
+	padding: 4px 6px;
+	margin: 4px 8px 4px 2px;
+	background-color: #F9FBFF;
+	border: 1px solid #99BBFF;
+}

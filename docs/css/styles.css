@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inconsolata&display=swap');
+
 div {
 	font-family: 'Roboto', sans-serif;
 }
 
 code {
-	font-family: 'Consolas', monospace, sans-serif;
+	font-family: 'Consolas', 'Inconsolata', monospace, sans-serif;
 	font-size: 10pt;
 	display: block;
 	white-space: pre-wrap;

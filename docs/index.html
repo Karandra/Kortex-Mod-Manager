@@ -8,22 +8,72 @@
 		<title>Kortex Mod Manager</title>
 	</head>
 	<body>
-		<script src="js/scripts.js"></script>
-		
-		<div align="center">
-			<a href="https://github.com/KerberX/Kortex-Mod-Manager">Kortex Mod Manager</a> GitHub pages site.
-			<br/>
-			<br/>
-			There's nothing to see here right now...
-			<br/>
-			<br/>
+		<div class="header">
+			<div class="header-content">
+				<a class="header-link" href="/">
+					<img class="header-logo" src="res/logo.png" />
+					<div>Home page</div>
+				</a>
+				<ul class="header-navigation-items">
+					<li class="header-navigation-item">
+						<a class="header-link" href="https://www.nexusmods.com/skyrim/mods/90868">NexusMods</a>
+					</li>
+					<li class="header-navigation-item">
+						<a class="header-link" href="https://github.com/KerberX/Kortex-Mod-Manager">Repository</a>
+					</li>
+				</ul>
+			</div>
 		</div>
-		<code>#include &lt;stdio.h&gt;
 
-int main(int argc, char* argv)
-{
-	printf("Hello world, %s!", "%username%");
-	return 0;
-}</code>
+		<div class="page-container">
+			<div class="page-content">
+				<h1>Kortex Mod Manager</h1>
+				<div>
+					Kortex Mod Manager is a mod-manager that uses a virtual file system (VFS) to isolate mods
+					and provide simple resolution of conflicts between mods, clean installation and uninstallation.
+				</div>
+				<div>
+					<h1>Configurator</h1>
+					<div>
+						Customize game parameters (graphics and similar). The full-featured configurator is currently only available for Skyrim, SkyrimSE and Fallout 4 (but SkyrimSE and Fallout use a copy of the settings for Skyrim because it is reasonably compatible). The rest of the games will have only with what Kortex can determine automatically (spoiler: only the types of parameters).
+					</div>
+
+					<h1>Plugin activation</h1>
+					<div>
+						Like most other mod-managers Kortex can activate plugins. For Oblivion, Fallout 3 and FalloutNV, changing the file modification date is supported so that the load order will remain correct. For Fallout 4 and SkyrimSE, prepending of the asterisks in front of non-official plugins is supported.
+					</div>
+
+					<h1>Mod installation</h1>
+					<div>
+						Currently Kortex supports the mods installation only from the special installers. Supported formats: FOMod (for Nexus Mod Manager, XML config only), Kortex Mod Package (KMP) - native format of Kortex. Support for other formats like OMOD or BAIN can be added in the future (when I find specifications for these formats).
+					</div>
+
+					<h1>Virtual file system</h1>
+					<div>
+						This is perhaps the most interesting. Unlike KMM1, Kortex does not dump all mod files into the game folder, but dynamically combines them using VFS. This means that the mod's files is not copied into the game folder and nothing there is cluttered and not overwritten. Also VFS allows to simply move the mod in the list to change its priority (the mod is lower in the list -> priority is higher). If you used Mod Organizer, maybe you will be familiar with such a system.
+						<br>
+						<br>
+						Unfortunately, VFS slows down the game starting. I have more than 200 mods installed and I wait ~2-3 minutes with ENB and 1-1.5 without ENB (you can reduce this time a bit using PrivateProfileRedirector LE, SE, F4). You may have a different result. Also I advise you to disable the antivirus (or add Kortex to its exclusion list) before starting the game otherwise AV most likely will increase game start time.
+					</div>
+
+					<h1>Package creator</h1>
+					<div>
+						Kortex have built-in installer creation tool. This tool can be used to create full featured install packages in KMP and FOMod format.
+					</div>
+				</div>
+			</div>
+			<aside class="side-panel">
+				<section class="side-panel-content">
+					<h2 class="side-panel-title">Navigation</h2>
+					<div class="side-panel-items">
+						<div class="side-panel-item">Comparison</div>
+					</div>
+				</section>
+			</aside>
+		</div>
+
+		<footer class="page-footer">
+			<div class="page-footer-copyrights">© 2008-2019 Kerber</div>
+		</footer>
 	</body>
 </html>

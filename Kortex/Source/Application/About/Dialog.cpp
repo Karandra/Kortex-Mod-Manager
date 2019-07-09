@@ -92,7 +92,6 @@ namespace Kortex::Application
 			}
 		}
 	}
-
 	void AboutDialog::OnLinkClicked(wxHtmlLinkEvent& event)
 	{
 		KAux::AskOpenURL(event.GetLinkInfo().GetHref(), this);
@@ -115,7 +114,6 @@ namespace Kortex::Application
 
 			m_TabView = new KxAuiNotebook(m_ContentPanel, KxID_NONE);
 			m_TabView->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &AboutDialog::OnTabChanged, this);
-			IThemeManager::GetActive().ProcessWindow(m_TabView);
 
 			m_TabView->InsertPage(TabID::Info, CreateTab_Info(), KTr("Generic.Info"), true);
 			m_TabView->InsertPage(TabID::Components, CreateTab_Components(), KTr("About.Components"));

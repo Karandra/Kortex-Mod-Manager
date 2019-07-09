@@ -34,16 +34,16 @@ namespace Kortex::Application::About
 		wxString license = KxTextFile::ReadToString(String::ConcatWithSeparator(wxS('\\'), GetLocation(type), wxS("License.txt")));
 		if (!license.IsEmpty())
 		{
-			// Convert any '<text>' which is not a link to '&lt;text&gt;'
+			// Create clickable links (<a href="link">link</a>) from '<link>' or just link
 			{
-				wxRegEx regex("<(?!http:)(.*?)>", wxRE_ADVANCED|wxRE_ICASE);
-				regex.ReplaceAll(&license, wxS("\\&lt;\\1\\&gt;"));
+				wxRegEx regex("(<?)(https?:\\/\\/|www.)([\\w\\d\\$\\-\\._+!*'(),\\/]+)(>?)", wxRE_ADVANCED|wxRE_ICASE);
+				regex.ReplaceAll(&license, wxS("<a href=\"\\2\\3\">\\2\\3</a>"));
 			}
-
-			// Create clickable links
+			
+			// Convert emails
 			{
-				wxRegEx regex("<http:(.*?)>", wxRE_ADVANCED|wxRE_ICASE);
-				regex.ReplaceAll(&license, wxS("<a href=\"http:\\1\">http:\\1</a>"));
+				wxRegEx regex("(<?)([a-zA-Z0-9.!#$%&’*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(>?)", wxRE_ADVANCED|wxRE_ICASE);
+				regex.ReplaceAll(&license, wxS("<a href=\"mailto:\\2\">\\2</a>"));
 			}
 		}
 		return license;

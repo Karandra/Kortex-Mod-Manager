@@ -17,7 +17,8 @@
 
 namespace
 {
-	enum ColumnID
+	using namespace KxDataView2;
+	enum class ColumnRef
 	{
 		Name,
 		Version,
@@ -28,130 +29,88 @@ namespace
 
 namespace Kortex::Application::About
 {
-	void DisplayModel::OnInitControl()
+	wxAny DisplayModel::GetValue(const Node& node, const Column& column) const
 	{
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
-		GetView()->SetUniformRowHeight(GetView()->GetDefaultRowHeight(KxDVC_ROW_HEIGHT_EXPLORER));
-
-		// Columns
-		GetView()->AppendColumn<KxDataViewBitmapTextRenderer>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_INERT);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Version"), ColumnID::Version, KxDATAVIEW_CELL_INERT);
-		GetView()->AppendColumn<KxDataViewBitmapRenderer>(KTr("Generic.License"), ColumnID::License, KxDATAVIEW_CELL_INERT);
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Address"), ColumnID::URL, KxDATAVIEW_CELL_INERT);
-	}
-
-	void DisplayModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
-	{
-		if (const INode* node = GetDataEntry(row))
+		const INode& item = GetItem(node);
+		switch (column.GetID<ColumnRef>())
 		{
-			switch (column->GetID())
+			case ColumnRef::Name:
 			{
-				case ColumnID::Name:
+				return BitmapTextValue(item.GetName(), ImageProvider::GetBitmap(item.GetIconID()));
+			}
+			case ColumnRef::Version:
+			{
+				return item.GetVersion().ToString();
+			}
+			case ColumnRef::License:
+			{
+				if (!item.GetLicense().IsEmpty())
 				{
-					value = KxDataViewBitmapTextValue(node->GetName(), ImageProvider::GetBitmap(node->GetIconID()));
-					break;
+					return ImageProvider::GetBitmap(ImageResourceID::Cheque);
 				}
-				case ColumnID::Version:
-				{
-					value = node->GetVersion().ToString();
-					break;
-				}
-				case ColumnID::License:
-				{
-					if (!node->GetLicense().IsEmpty())
-					{
-						value = ImageProvider::GetBitmap(ImageResourceID::Cheque);
-					}
-					break;
-				}
-				case ColumnID::URL:
-				{
-					value = node->GetURL();
-					break;
-				}
-			};
-		}
+				break;
+			}
+			case ColumnRef::URL:
+			{
+				return item.GetURL();
+			}
+		};
+		return {};
 	}
-	bool DisplayModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+	bool DisplayModel::GetAttributes(const Node& node, CellAttributes& attributes, const CellState& cellState, const Column& column) const
 	{
-		return false;
-	}
-	bool DisplayModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
-	{
-		return false;
-	}
-	bool DisplayModel::GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const
-	{
-		if (const INode* node = GetDataEntry(row))
+		const INode& item = GetItem(node);
+		switch (column.GetID<ColumnRef>())
 		{
-			auto GetLinkColor = [this]()
+			case ColumnRef::Version:
 			{
-				return KxColor(GetView()->GetBackgroundColour()).GetContrastColor(KxColor(0, 0, 255), KxColor(25, 25, 100));
-			};
-
-			switch (column->GetID())
+				attributes.Options().SetAlignment(wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT);
+				return true;
+			}
+			case ColumnRef::License:
+			case ColumnRef::URL:
 			{
-				case ColumnID::Version:
+				attributes.FontOptions().Enable(CellFontOption::Bold, column.GetID<ColumnRef>() == ColumnRef::License);
+				if (cellState.IsHotTracked())
 				{
-					attribute.SetAlignment(wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT);
-					return true;
+					KxColor linkColor = KxColor(GetView()->GetBackgroundColour()).GetContrastColor(KxColor(0, 0, 255), KxColor(25, 25, 100));
+					attributes.Options().SetForegroundColor(linkColor);
+					attributes.FontOptions().Enable(CellFontOption::Underlined);
 				}
-				case ColumnID::License:
-				{
-					attribute.SetBold();
-					if (cellState & KxDATAVIEW_CELL_HIGHLIGHTED)
-					{
-						attribute.SetForegroundColor(GetLinkColor());
-						attribute.SetUnderlined();
-					}
-					return true;
-				}
-				case ColumnID::URL:
-				{
-					if (cellState & KxDATAVIEW_CELL_HIGHLIGHTED)
-					{
-						
-						attribute.SetForegroundColor(GetLinkColor());
-						attribute.SetUnderlined();
-						return true;
-					}
-					break;
-				}
-			};
-		}
+				return true;
+			}
+		};
 		return false;
 	}
 
-	void DisplayModel::OnActivateItem(KxDataViewEvent& event)
+	void DisplayModel::OnActivateItem(Event& event)
 	{
-		KxDataViewColumn* column = event.GetColumn();
-		KxDataViewItem item = event.GetItem();
-
-		if (const INode* node = GetDataEntry(GetRow(item)))
+		if (event.GetNode() && event.GetColumn())
 		{
-			switch (column->GetID())
+			const INode& item = GetItem(*event.GetNode());
+			switch (event.GetColumn()->GetID<ColumnRef>())
 			{
-				case ColumnID::License:
+				case ColumnRef::License:
 				{
-					wxString license = node->GetLicense();
+					wxString license = item.GetLicense();
 					if (!license.IsEmpty())
 					{
 						KxHTMLWindow* window = m_Dialog.CreateHTMLWindow();
-						window->SetTextValue(node->GetLicense());
+						window->SetTextValue(license);
 
 						m_Dialog.CreateTemporaryTab(window,
-													KxString::Format("%1 \"%2\"", KTr("Generic.License"), node->GetName()),
-													ImageProvider::GetBitmap(node->GetIconID())
+													KxString::Format("%1 \"%2\"", KTr("Generic.License"), item.GetName()),
+													ImageProvider::GetBitmap(item.GetIconID())
 						);
 					}
 					break;
 				}
-				case ColumnID::URL:
+				case ColumnRef::URL:
 				{
-					wxString url = node->GetURL();
+					wxString url = item.GetURL();
 					if (!url.IsEmpty())
 					{
-						KAux::AskOpenURL(url, GetViewTLW());
+						KAux::AskOpenURL(url, GetView());
 					}
 					break;
 				}
@@ -162,7 +121,6 @@ namespace Kortex::Application::About
 	DisplayModel::DisplayModel(AboutDialog& dialog)
 		:m_Dialog(dialog)
 	{
-		SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_NO_HEADER);
 	}
 
 	void DisplayModel::RefreshItems()
@@ -205,7 +163,19 @@ namespace Kortex::Application::About
 		AddResourceNode("Fugue Icons", "http://p.yusukekamiyamane.com");
 		AddResourceNode("Tango 7-zip", "https://laoism.deviantart.com/art/Tango-7-zip-2-1-113983312");
 
-		KxDataViewVectorListModelEx::SetDataVector(&m_DataVector);
-		KxDataViewVectorListModelEx::RefreshItems();
+		SetItemCount(m_DataVector.size());
+	}
+	void DisplayModel::CreateView(wxWindow* parent)
+	{
+		View* view = new View(parent, KxID_NONE, CtrlStyle::NoHeader|CtrlStyle::FitLastColumn);
+		view->ToggleWindowStyle(wxBORDER_NONE);
+		view->AssignModel(this);
+
+		view->Bind(EVENT_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
+
+		view->AppendColumn<BitmapTextRenderer>(KTr("Generic.Name"), ColumnRef::Name);
+		view->AppendColumn<TextRenderer>(KTr("Generic.Version"), ColumnRef::Version);
+		view->AppendColumn<BitmapRenderer>(KTr("Generic.License"), ColumnRef::License);
+		view->AppendColumn<TextRenderer>(KTr("Generic.Address"), ColumnRef::URL);
 	}
 }

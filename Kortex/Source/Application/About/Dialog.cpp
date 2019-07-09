@@ -56,7 +56,7 @@ namespace Kortex::Application
 	wxWindow* AboutDialog::CreateTab_Components()
 	{
 		m_DisplayModel = new About::DisplayModel(*this);
-		m_DisplayModel->Create(m_TabView);
+		m_DisplayModel->CreateView(m_TabView);
 		m_DisplayModel->RefreshItems();
 
 		return m_DisplayModel->GetView();
@@ -72,10 +72,6 @@ namespace Kortex::Application
 	KxHTMLWindow* AboutDialog::CreateHTMLWindow()
 	{
 		KxHTMLWindow* window = new KxHTMLWindow(m_TabView, KxID_NONE);
-
-		const wxFont font = GetFont();
-		window->SetStandardFonts(font.GetPointSize(), font.GetFaceName(), font.GetFaceName());
-		window->SetBorders(KLC_HORIZONTAL_SPACING);
 		window->Bind(wxEVT_HTML_LINK_CLICKED, &AboutDialog::OnLinkClicked, this);
 		return window;
 	}

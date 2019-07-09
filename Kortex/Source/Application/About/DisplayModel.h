@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KDataViewListModel.h"
 #include "DisplayModelNode.h"
+#include <KxFramework/DataView2/DataView2.h>
 class KxHTMLWindow;
 
 namespace Kortex::Application
@@ -11,44 +11,42 @@ namespace Kortex::Application
 
 namespace Kortex::Application::About
 {
-	class DisplayModel: public KxDataViewVectorListModelEx<INode::Vector, KxDataViewListModelEx>
+	class DisplayModel: public KxDataView2::VirtualListModel, public KxDataView2::TypeAliases
 	{
 		private:
 			AboutDialog& m_Dialog;
 			INode::Vector m_DataVector;
 
 		private:
-			void OnInitControl() override;
+			wxAny GetValue(const Node& node, const Column& column) const override;
+			bool GetAttributes(const Node& node, CellAttributes& attributes, const CellState& cellState, const Column& column) const override;
 
-			void GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
-			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
-			bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
-			bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const override;
-
-			void OnActivateItem(KxDataViewEvent& event);
+			void OnActivateItem(Event& event);
 
 		private:
+			template<class T, class... Args> INode& AddNode(Args&&... arg)
+			{
+				return *m_DataVector.emplace_back(std::make_unique<T>(std::forward<Args>(arg)...));
+			}
 			template<class... Args> INode& AddSoftwareNode(Args&&... arg)
 			{
-				return *m_DataVector.emplace_back(std::make_unique<SoftwareNode>(std::forward<Args>(arg)...));
+				return AddNode<SoftwareNode>(std::forward<Args>(arg)...);
 			}
 			template<class... Args> INode& AddResourceNode(Args&&... arg)
 			{
-				return *m_DataVector.emplace_back(std::make_unique<ResourceNode>(std::forward<Args>(arg)...));
+				return AddNode<ResourceNode>(std::forward<Args>(arg)...);
+			}
+
+			const INode& GetItem(const Node& node) const
+			{
+				return *m_DataVector[node.GetRow()];
 			}
 
 		public:
 			DisplayModel(AboutDialog& dialog);
 
 		public:
-			const INode* GetDataEntry(size_t row) const
-			{
-				if (row < GetItemCount())
-				{
-					return m_DataVector[row].get();
-				}
-				return nullptr;
-			}
-			void RefreshItems() override;
+			void RefreshItems();
+			void CreateView(wxWindow* parent);
 	};
 }

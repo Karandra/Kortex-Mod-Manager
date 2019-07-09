@@ -19,7 +19,7 @@ namespace Kortex::Application::About
 
 		private:
 			wxAny GetValue(const Node& node, const Column& column) const override;
-			bool GetAttributes(const Node& node, CellAttributes& attributes, const CellState& cellState, const Column& column) const override;
+			bool GetAttributes(const Node& node, const Column& column, const CellState& cellState, CellAttributes& attributes) const override;
 
 			void OnActivateItem(Event& event);
 

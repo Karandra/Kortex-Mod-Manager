@@ -44,7 +44,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 			wxAny GetEditorValue(const Node& node, const Column& column) const override;
 			bool SetValue(Node& node, Column& column, const wxAny& value) override;
 			bool IsEnabled(const Node& node, const Column& column) const override;
-			bool GetAttributes(const Node& node, CellAttributes& attributes, const CellState& cellState, const Column& column) const override;
+			bool GetAttributes(const Node& node, const Column& column, const CellState& cellState, CellAttributes& attributes) const override;
 
 			bool CheckModID(const wxString& id);
 			void OnActivateItem(Event& event);

@@ -37,6 +37,6 @@ namespace Kortex::GameConfig
 			KxDataView2::Renderer& GetRenderer(const KxDataView2::Column& column) const override;
 			KxDataView2::Editor* GetEditor(const KxDataView2::Column& column) const override;
 			
-			bool GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const override;
+			bool GetAttributes(const KxDataView2::Column& column, const KxDataView2::CellState& cellState, KxDataView2::CellAttributes& attributes) const override;
 	};
 }

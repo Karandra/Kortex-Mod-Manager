@@ -146,7 +146,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		}
 		return false;
 	}
-	bool InfoDisplayModel::GetAttributes(const Node& node, CellAttributes& attributes, const CellState& cellState, const Column& column) const
+	bool InfoDisplayModel::GetAttributes(const Node& node, const Column& column, const CellState& cellState, CellAttributes& attributes) const
 	{
 		if (column.GetID<ColumnRef>() == ColumnRef::Value)
 		{

@@ -57,7 +57,7 @@ namespace Kortex::Application::About
 		};
 		return {};
 	}
-	bool DisplayModel::GetAttributes(const Node& node, CellAttributes& attributes, const CellState& cellState, const Column& column) const
+	bool DisplayModel::GetAttributes(const Node& node, const Column& column, const CellState& cellState, CellAttributes& attributes) const
 	{
 		const INode& item = GetItem(node);
 		switch (column.GetID<ColumnRef>())

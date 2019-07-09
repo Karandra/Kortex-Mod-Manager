@@ -73,7 +73,7 @@ namespace Kortex::GameConfig
 	{
 		return nullptr;
 	}
-	bool CategoryItem::GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const
+	bool CategoryItem::GetAttributes(const KxDataView2::Column& column, const KxDataView2::CellState& cellState, KxDataView2::CellAttributes& attributes) const
 	{
 		return false;
 	}

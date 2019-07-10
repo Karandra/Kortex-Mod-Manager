@@ -56,7 +56,7 @@ namespace Kortex::ModManager
 		}
 		{
 			auto [column, renderer] = view->AppendColumn<BitmapListRenderer>(KTr("ModManager.ModList.ModSource"), ColumnID::ModSource, {}, columnStyleDefault);
-			renderer.SetAlignment(wxALIGN_CENTER_HORIZONTAL);
+			renderer.SetAlignment(wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL);
 			renderer.SetSpacing(1);
 		}
 		{

@@ -6,8 +6,11 @@ body {
 	line-height: 1.6;
 	font-family: 'Roboto', sans-serif;
 	color: #cacaca;
+	background: url(../res/nebula-1897595.jpg) center top #000;
 	background-color: #171a1d;
-	background: url(../res/abstract-1779512.png) center top no-repeat #000;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
 	display: block;
 	position: relative;
 }
@@ -98,7 +101,7 @@ a {
 .page-container {
 	display: flex;
 	flex-flow: row nowrap;
-	background-color: rgba(23, 26, 29, 0.9);
+	background-color: rgba(23, 26, 29, 0.8);
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 2rem;

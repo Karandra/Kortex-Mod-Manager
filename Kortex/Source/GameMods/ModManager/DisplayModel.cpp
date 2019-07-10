@@ -55,14 +55,8 @@ namespace Kortex::ModManager
 			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.Tags"), ColumnID::Tags, {}, columnStyleDefault);
 		}
 		{
-			for (const auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
-			{
-				auto [column, r] = view->AppendColumn<BitmapTextRenderer>(wxEmptyString, ColumnID::ModSource, {}, columnStyleDefault);
-
-				column.SetClientData(modNetwork.get());
-				column.SetTitle(modNetwork->GetName());
-				column.SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
-			}
+			auto [column, renderer] = view->AppendColumn<BitmapListRenderer>(KTr("NetworkManager.ModNetwork"), ColumnID::ModSource, {}, columnStyleDefault);
+			renderer.SetSpacing(1);
 		}
 		{
 			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.DateInstall"), ColumnID::DateInstall, {}, columnStyleDefault);
@@ -318,18 +312,10 @@ namespace Kortex::ModManager
 				{
 					case ColumnID::ModSource:
 					{
-						const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column->GetClientData());
-						if (modNetwork)
+						const ModSourceStore& store = modNode->GetMod().GetModSourceStore();
+						if (!store.IsEmpty())
 						{
-							const ModSourceStore& store = modNode->GetMod().GetModSourceStore();
-							if (const ModSourceItem* providerItem = store.GetItem(*modNetwork))
-							{
-								KAux::AskOpenURL(providerItem->GetURL(), GetView());
-							}
-							else if (!store.IsEmpty())
-							{
-								KAux::AskOpenURL(store.GetLabeledModURLs(), GetView());
-							}
+							KAux::AskOpenURL(store.GetLabeledModURLs(), GetView());
 						}
 						break;
 					}

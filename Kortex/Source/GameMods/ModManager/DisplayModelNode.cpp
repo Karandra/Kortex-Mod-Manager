@@ -191,20 +191,20 @@ namespace Kortex::ModManager
 				}
 				case ColumnID::ModSource:
 				{
-					if (const IModNetwork* modNetwork = static_cast<const IModNetwork*>(column.GetClientData()))
+					std::vector<wxBitmap> bitmaps;
+					const ModSourceStore& store = m_Mod->GetModSourceStore();
+					store.Visit([&bitmaps](const ModSourceItem& item)
 					{
-						const ModSourceStore& store = m_Mod->GetModSourceStore();
-						const ModSourceItem* item = store.GetItem(*modNetwork);
-						if (NetworkModInfo modInfo; item && item->TryGetModInfo(modInfo))
+						if (const IModNetwork* modNetwork = item.GetModNetwork())
 						{
-							return modInfo.ToString();
+							bitmaps.push_back(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 						}
-						else if (store.HasUnknownSources())
-						{
-							return wxS("-");
-						}
+					});
+					if (store.HasUnknownSources())
+					{
+						bitmaps.push_back(ImageProvider::GetBitmap(IModNetwork::GetGenericIcon()));
 					}
-					break;
+					return bitmaps;
 				}
 				case ColumnID::Tags:
 				{
@@ -432,7 +432,7 @@ namespace Kortex::ModManager
 		}
 
 		// Make mod name underlined
-		if (!fixedMod && !priorityGroup && (columnID == ColumnID::Name || columnID == ColumnID::ModSource))
+		if (!fixedMod && !priorityGroup && columnID == ColumnID::Name)
 		{
 			attributes.FontOptions().Enable(CellFontOption::Underlined, cellState.IsHotTracked() && column.IsHotTracked());
 		}

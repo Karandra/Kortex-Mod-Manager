@@ -84,9 +84,6 @@ namespace
 		ModUninstall,
 		ModErase,
 
-		ModImageShow,
-		ModImageAssign,
-
 		ModEditDescription,
 		ModEditTags,
 		ModEditSources,
@@ -1003,34 +1000,6 @@ namespace Kortex::ModManager
 			case ContextMenuID::ModErase:
 			{
 				UninstallMod(*focusedMod, menuID == ContextMenuID::ModErase);
-				break;
-			}
-			case ContextMenuID::ModImageShow:
-			{
-				KImageViewerDialog dialog(this);
-
-				KImageViewerEvent event(wxEVT_NULL, focusedMod->GetImageFile());
-				dialog.Navigate(event);
-				dialog.ShowModal();
-				break;
-			}
-			case ContextMenuID::ModImageAssign:
-			{
-				IGameModWithImage* withImage = nullptr;
-				if (focusedMod->QueryInterface(withImage))
-				{
-					KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN);
-					dialog.AddFilter(KxString::Join(IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
-					if (dialog.ShowModal() == KxID_OK)
-					{
-						KxFile(dialog.GetResult()).CopyFile(focusedMod->GetImageFile(), true);
-						withImage->ResetBitmap();
-						withImage->ResetNoBitmap();
-						focusedMod->Save();
-
-						ModEvent(Events::ModChanged, *focusedMod).Send();
-					}
-				}
 				break;
 			}
 			case ContextMenuID::ModEditDescription:

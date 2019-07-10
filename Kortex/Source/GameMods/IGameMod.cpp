@@ -7,24 +7,21 @@
 
 namespace
 {
-	namespace Util
+	wxString GetRootPath(const wxString& signature)
 	{
-		wxString GetRootPath(const wxString& signature)
+		if (const Kortex::IGameInstance* instance = Kortex::IGameInstance::GetActive())
 		{
-			if (const Kortex::IGameInstance* instance = Kortex::IGameInstance::GetActive())
-			{
-				return instance->GetModsDir() + wxS('\\') + signature;
-			}
-			return wxEmptyString;
+			return instance->GetModsDir() + wxS('\\') + signature;
 		}
-		wxString GetRootRelativePath(const wxString& signature, const wxString& name)
-		{
-			return GetRootPath(signature) + wxS('\\') + name;
-		}
-		wxString GetRootRelativePath(const wxString& signature, const wxChar* name)
-		{
-			return GetRootPath(signature) + wxS('\\') + name;
-		}
+		return wxEmptyString;
+	}
+	wxString GetRootRelativePath(const wxString& signature, const wxString& name)
+	{
+		return GetRootPath(signature) + wxS('\\') + name;
+	}
+	wxString GetRootRelativePath(const wxString& signature, const wxChar* name)
+	{
+		return GetRootPath(signature) + wxS('\\') + name;
 	}
 }
 
@@ -58,23 +55,23 @@ namespace Kortex
 
 	wxString IGameMod::GetRootDir() const
 	{
-		return Util::GetRootPath(GetSignature());
+		return GetRootPath(GetSignature());
 	}
 	wxString IGameMod::GetDescriptionFile() const
 	{
-		return Util::GetRootRelativePath(GetSignature(), wxS("Description.txt"));
+		return GetRootRelativePath(GetSignature(), wxS("Description.txt"));
 	}
 	wxString IGameMod::GetInfoFile() const
 	{
-		return Util::GetRootRelativePath(GetSignature(), wxS("Info.xml"));
+		return GetRootRelativePath(GetSignature(), wxS("Info.xml"));
 	}
 	wxString IGameMod::GetImageFile() const
 	{
-		return Util::GetRootRelativePath(GetSignature(), wxS("Image.img"));
+		return GetRootRelativePath(GetSignature(), wxS("Image.img"));
 	}
 	wxString IGameMod::GetDefaultModFilesDir() const
 	{
-		return Util::GetRootRelativePath(GetSignature(), wxS("ModFiles"));
+		return GetRootRelativePath(GetSignature(), wxS("ModFiles"));
 	}
 	wxString IGameMod::GetModFilesDir() const
 	{

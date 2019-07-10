@@ -117,10 +117,3 @@ namespace Kortex
 			virtual wxString GetModFilesDir() const = 0;
 	};
 }
-
-namespace Kortex
-{
-	class IGameModWithImage: public RTTI::IInterface<IGameModWithImage>, public KWithBitmap
-	{
-	};
-}

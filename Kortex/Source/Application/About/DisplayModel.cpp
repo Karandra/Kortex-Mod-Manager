@@ -103,7 +103,7 @@ namespace Kortex::Application::About
 					if (!license.IsEmpty())
 					{
 						KxHTMLWindow* window = m_Dialog.CreateHTMLWindow();
-						window->SetTextValue(license);
+						window->SetValue(license);
 
 						m_Dialog.CreateTemporaryTab(window,
 													KxString::Format("%1 \"%2\"", KTr("Generic.License"), item.GetName()),

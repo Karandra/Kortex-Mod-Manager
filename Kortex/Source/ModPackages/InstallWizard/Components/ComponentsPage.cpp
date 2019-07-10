@@ -70,12 +70,12 @@ namespace Kortex::InstallWizard
 				const bool isDescriptionEmpty = description.IsEmpty();
 				if (!isDescriptionEmpty)
 				{
-					m_Description->SetTextValue(description);
+					m_Description->SetValue(description);
 					m_Description->Enable();
 				}
 				else
 				{
-					m_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
+					m_Description->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
 				}
 				m_TabView->SetPageImage((size_t)TabIndex::Description, (int)(!isDescriptionEmpty ? ImageResourceID::InformationFrame : ImageResourceID::InformationFrameEmpty));
 
@@ -118,7 +118,7 @@ namespace Kortex::InstallWizard
 		m_TabView->SetPageImage((size_t)TabIndex::Description, (int)ImageResourceID::InformationFrameEmpty);
 		m_TabView->SetPageImage((size_t)TabIndex::Requirements, (int)ImageResourceID::InformationFrameEmpty);
 
-		m_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectComponentHint"), m_Description));
+		m_Description->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectComponentHint"), m_Description));
 		m_Description->Disable();
 
 		m_ImageView->SetBitmap(wxNullBitmap);

@@ -50,7 +50,7 @@ namespace Kortex::Application
 	wxWindow* AboutDialog::CreateTab_Info()
 	{
 		KxHTMLWindow* info = CreateHTMLWindow();
-		info->SetTextValue(CreateInfoText(2018, 2019, *m_AppInfo));
+		info->SetValue(CreateInfoText(2018, 2019, *m_AppInfo));
 		return info;
 	}
 	wxWindow* AboutDialog::CreateTab_Components()
@@ -64,7 +64,7 @@ namespace Kortex::Application
 	wxWindow* AboutDialog::CreateTab_License()
 	{
 		KxHTMLWindow* info = CreateHTMLWindow();
-		info->SetTextValue(m_AppInfo->GetLicense());
+		info->SetValue(m_AppInfo->GetLicense());
 
 		return info;
 	}

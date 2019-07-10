@@ -30,7 +30,6 @@
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxSearchBox.h>
-#include <KxFramework/KxParagraph.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxDualProgressDialog.h>

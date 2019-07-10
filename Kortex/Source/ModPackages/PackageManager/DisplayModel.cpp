@@ -468,7 +468,7 @@ namespace Kortex::PackageManager
 			m_ImageView->SetBitmap(pLogo ? pLogo->GetBitmap() : wxNullBitmap);
 
 			// Description
-			m_Description->SetTextValue(m_Package->GetDescription());
+			m_Description->SetValue(m_Package->GetDescription());
 			m_Description->Enable(true);
 		}
 	}

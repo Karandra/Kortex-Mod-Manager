@@ -4,7 +4,6 @@
 #include "Workspace.h"
 #include "GameInstance/IGameInstance.h"
 #include "UI/KImageViewerDialog.h"
-#include <KxFramework/KxParagraph.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxTextBox.h>
 #include <KxFramework/KxThumbView.h>

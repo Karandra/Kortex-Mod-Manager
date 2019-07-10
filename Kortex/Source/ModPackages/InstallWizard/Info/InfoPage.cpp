@@ -76,7 +76,7 @@ namespace Kortex::InstallWizard
 					}
 					else
 					{
-						m_DocumentSimple->SetTextValue(text);
+						m_DocumentSimple->SetValue(text);
 						SwitchSimple();
 					}
 				}
@@ -90,7 +90,7 @@ namespace Kortex::InstallWizard
 		else
 		{
 			SwitchSimple();
-			m_DocumentSimple->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectDocumentHint"), m_DocumentSimple));
+			m_DocumentSimple->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectDocumentHint"), m_DocumentSimple));
 			m_DocumentSimple->Disable();
 		}
 	}
@@ -234,7 +234,7 @@ namespace Kortex::InstallWizard
 	}
 	void InfoPage::LoadDescriptionTab(const KPackageProject& package)
 	{
-		m_DescriptionView->SetTextValue(package.GetInfo().GetDescription());
+		m_DescriptionView->SetValue(package.GetInfo().GetDescription());
 	}
 	void InfoPage::LoadDocumentsTab(const KPackageProject& package)
 	{

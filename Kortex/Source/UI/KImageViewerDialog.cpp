@@ -127,7 +127,7 @@ void KImageViewerDialog::OnAcceptNavigation(KImageViewerEvent& event)
 			m_Splitter->Unsplit(m_ImageView);
 			m_Splitter->Unsplit(m_Description);
 
-			m_Description->SetTextValue(wxString::Format("<div align=\"center\">%s</div>", description));
+			m_Description->SetValue(wxString::Format(wxS("<div align=\"center\">%s</div>"), description));
 			m_Description->Enable(true);
 
 			int nMinHeight = m_Splitter->GetMinimumPaneSize();
@@ -140,7 +140,7 @@ void KImageViewerDialog::OnAcceptNavigation(KImageViewerEvent& event)
 			m_Splitter->Unsplit(m_Description);
 			m_Splitter->Initialize(m_ImageView);
 
-			m_Description->SetTextValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
+			m_Description->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
 			m_Description->Enable(false);
 		}
 

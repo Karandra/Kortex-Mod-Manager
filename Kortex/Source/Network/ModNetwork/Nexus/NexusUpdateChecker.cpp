@@ -249,7 +249,7 @@ namespace Kortex::NetworkManager
 					{
 						if (reply->Version > gameMod->GetVersion())
 						{
-							OnUpdateChecked(ModUpdateState::ModUpdated, gameMod->GetVersion());
+							OnUpdateChecked(ModUpdateState::ModUpdated, reply->Version);
 						}
 						else
 						{

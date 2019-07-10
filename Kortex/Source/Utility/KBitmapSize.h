@@ -18,6 +18,10 @@ class KBitmapSize
 			:m_Width(width), m_Height(height)
 		{
 		}
+		KBitmapSize(const wxSize& size)
+			:m_Width(size.GetWidth()), m_Height(size.GetHeight())
+		{
+		}
 
 	public:
 		KBitmapSize& FromWidth(int width, double ratio)
@@ -66,6 +70,17 @@ class KBitmapSize
 			return m_Height;
 		}
 		
+		KBitmapSize& ScaleSize(double scale)
+		{
+			return ScaleSize(scale, scale);
+		}
+		KBitmapSize& ScaleSize(double xScale, double yScale)
+		{
+			m_Width *= xScale;
+			m_Height *= yScale;
+			return *this;
+		}
+
 		wxSize GetSize() const
 		{
 			return wxSize(m_Width, m_Height);

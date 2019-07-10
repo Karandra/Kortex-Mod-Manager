@@ -15,6 +15,7 @@ namespace Kortex::Notifications
 		private:
 			wxAny GetValue(const Node& node, const Column& column) const override;
 			ToolTip GetToolTip(const Node& node, const Column& column) const override;
+			bool GetAttributes(const Node& node, const Column& column, const CellState& cellState, CellAttributes& attributes) const override;
 
 			void OnSelectItem(Event& event);
 			void OnActivateItem(Event& event);

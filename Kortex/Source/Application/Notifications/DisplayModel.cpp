@@ -58,6 +58,23 @@ namespace Kortex::Notifications
 		};
 		return VirtualListModel::GetToolTip(node, column);
 	}
+	bool DisplayModel::GetAttributes(const Node& node, const Column& column, const CellState& cellState, CellAttributes& attributes) const
+	{
+		const INotification& notification = GetItem(node);
+		switch (column.GetID<ColumnRef>())
+		{
+			case ColumnRef::ActionRemove:
+			{
+				if (cellState.IsHotTracked() && column.IsHotTracked())
+				{
+					attributes.Options().Enable(CellOption::HighlightItem);
+					return true;
+				}
+				break;
+			}
+		};
+		return false;
+	}
 
 	void DisplayModel::OnSelectItem(Event& event)
 	{

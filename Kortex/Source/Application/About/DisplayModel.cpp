@@ -69,7 +69,7 @@ namespace Kortex::Application::About
 			}
 			case ColumnRef::License:
 			{
-				if (cellState.IsHotTracked() && item.HasLicense())
+				if (cellState.IsHotTracked() && column.IsHotTracked() && item.HasLicense())
 				{
 					attributes.Options().Enable(CellOption::HighlightItem);
 				}

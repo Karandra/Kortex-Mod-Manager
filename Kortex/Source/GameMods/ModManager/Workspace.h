@@ -13,8 +13,6 @@
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxSingleton.h>
 class KxSearchBox;
-class KxHTMLWindow;
-class KxParagraph;
 
 namespace Kortex
 {
@@ -32,17 +30,7 @@ namespace Kortex::ModManager
 
 	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
 	{
-		public:
-			enum class ImageResizeMode
-			{
-				Scale,
-				Stretch,
-				Fill,
-			};
-
 		private:
-			ImageResizeMode m_ImageResizeMode = ImageResizeMode::Scale;
-
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxSplitterWindow* m_SplitterLeftRight = nullptr;
 
@@ -138,24 +126,19 @@ namespace Kortex::ModManager
 			void OnAddMod_FromFolder(KxMenuEvent& event);
 			void OnAddMod_InstallPackage(KxMenuEvent& event);
 
-			void InstallMod(IGameMod* entry);
-			void UninstallMod(IGameMod* entry, bool eraseLog);
+			void InstallMod(IGameMod& mod);
+			void UninstallMod(IGameMod& mod, bool eraseLog);
 			void OnModSerach(wxCommandEvent& event);
 			void OnModSearchColumnsChanged(KxMenuEvent& event);
 
 			void ClearControls();
 			void DisplayModInfo(IGameMod* entry);
 			void CreateViewContextMenu(KxMenu& contextMenu, const IGameMod::RefVector& selectedMods, IGameMod* focusedMod);
-			void ChangeImageResizeMode(ImageResizeMode mode);
 
 		public:
 			DisplayModel* GetModel() const
 			{
 				return m_DisplayModel;
-			}
-			ImageResizeMode GetImageResizeMode() const
-			{
-				return m_ImageResizeMode;
 			}
 
 			void OpenPackage(const wxString& path);

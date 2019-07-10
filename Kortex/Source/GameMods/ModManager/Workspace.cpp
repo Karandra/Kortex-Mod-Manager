@@ -147,10 +147,8 @@ namespace Kortex::ModManager
 			options.SetAttribute(OName::ShowNotInstalledMods, m_DisplayModel->ShouldShowNotInstalledMods());
 			options.SetAttribute(OName::BoldPriorityGroupLabels, m_DisplayModel->IsBoldPriorityGroupLabels());
 			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
-			options.SetAttribute(OName::ImageResizeMode, (int)m_ImageResizeMode);
 
 			GetSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
-			
 		}
 	}
 	bool Workspace::OnCreateWorkspace()
@@ -376,7 +374,6 @@ namespace Kortex::ModManager
 			auto displayModelOptions = GetDisplayModelOptions();
 			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
 
-			m_ImageResizeMode = (ImageResizeMode)displayModelOptions.GetAttributeInt(OName::ImageResizeMode, (int)m_ImageResizeMode);
 			m_DisplayModel->LoadView();
 		}
 		m_DisplayModel->UpdateUI();
@@ -398,7 +395,7 @@ namespace Kortex::ModManager
 
 	wxString Workspace::GetID() const
 	{
-		return "ModManager::Workspace";
+		return wxS("ModManager::Workspace");
 	}
 	wxString Workspace::GetName() const
 	{
@@ -727,35 +724,32 @@ namespace Kortex::ModManager
 		}
 	}
 
-	void Workspace::InstallMod(IGameMod* entry)
+	void Workspace::InstallMod(IGameMod& mod)
 	{
-		new InstallWizard::WizardDialog(this, entry->GetPackageFile());
+		new InstallWizard::WizardDialog(this, mod.GetPackageFile());
 	}
-	void Workspace::UninstallMod(IGameMod* entry, bool eraseLog)
+	void Workspace::UninstallMod(IGameMod& mod, bool eraseLog)
 	{
-		if (entry)
+		KxTaskDialog dialog(GetMainWindow(), KxID_NONE, wxEmptyString, KTr("ModManager.RemoveMod.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		if (mod.IsInstalled())
 		{
-			KxTaskDialog dialog(GetMainWindow(), KxID_NONE, wxEmptyString, KTr("ModManager.RemoveMod.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
-			if (entry->IsInstalled())
+			dialog.SetCaption(eraseLog ? KTrf("ModManager.RemoveMod.CaptionUninstallAndErase", mod.GetName()) : KTrf("ModManager.RemoveMod.CaptionUninstall", mod.GetName()));
+		}
+		else
+		{
+			dialog.SetCaption(KTrf("ModManager.RemoveMod.CaptionErase", mod.GetName()));
+			eraseLog = true;
+		}
+
+		if (dialog.ShowModal() == KxID_YES)
+		{
+			if (eraseLog)
 			{
-				dialog.SetCaption(eraseLog ? KTrf("ModManager.RemoveMod.CaptionUninstallAndErase", entry->GetName()) : KTrf("ModManager.RemoveMod.CaptionUninstall", entry->GetName()));
+				IModManager::GetInstance()->EraseMod(mod, GetMainWindow());
 			}
 			else
 			{
-				dialog.SetCaption(KTrf("ModManager.RemoveMod.CaptionErase", entry->GetName()));
-				eraseLog = true;
-			}
-
-			if (dialog.ShowModal() == KxID_YES)
-			{
-				if (eraseLog)
-				{
-					IModManager::GetInstance()->EraseMod(*entry, GetMainWindow());
-				}
-				else
-				{
-					IModManager::GetInstance()->UninstallMod(*entry, GetMainWindow());
-				}
+				IModManager::GetInstance()->UninstallMod(mod, GetMainWindow());
 			}
 		}
 	}
@@ -835,36 +829,6 @@ namespace Kortex::ModManager
 				item->Enable(!isMultipleSelection && !isVFSActive && isNormalMod);
 			}
 			contextMenu.AddSeparator();
-
-			// Image menu
-			if (KxMenu* imageMenu = new KxMenu(); true)
-			{
-				contextMenu.Add(imageMenu, KTr("ModManager.Menu.Image"));
-
-				{
-					KxMenuItem* item = imageMenu->AddItem(ContextMenuID::ModImageShow, KTr("ModManager.Menu.Image.Show"));
-					item->Enable(!isMultipleSelection && isNormalMod);
-				}
-				{
-					KxMenuItem* item = imageMenu->AddItem(ContextMenuID::ModImageAssign, KTr("ModManager.Menu.Image.Assign"));
-					item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Image));
-					item->Enable(!isMultipleSelection && isNormalMod);
-				}
-				imageMenu->AddSeparator();
-
-				auto AddOption = [this, imageMenu](ImageResizeMode mode, const wxString& name)
-				{
-					KxMenuItem* item = imageMenu->AddItem(name, wxEmptyString, wxITEM_RADIO);
-					item->Check(mode == m_ImageResizeMode);
-					item->Bind(KxEVT_MENU_SELECT, [this, mode](KxMenuEvent& event)
-					{
-						ChangeImageResizeMode(mode);
-					});
-				};
-				AddOption(ImageResizeMode::Scale, KTr("ModManager.Menu.Image.ScaleAspect"));
-				AddOption(ImageResizeMode::Stretch, KTr("ModManager.Menu.Image.Stretch"));
-				AddOption(ImageResizeMode::Fill, KTr("ModManager.Menu.Image.Fill"));
-			}
 			{
 				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModEditDescription, KTr("ModManager.Menu.EditDescription"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentPencil));
@@ -951,19 +915,6 @@ namespace Kortex::ModManager
 			});
 		}
 	}
-	void Workspace::ChangeImageResizeMode(ImageResizeMode mode)
-	{
-		m_ImageResizeMode = mode;
-		for (auto& mod: IModManager::GetInstance()->GetAllMods(false, false))
-		{
-			IGameModWithImage* withImage = nullptr;
-			if (mod->QueryInterface(withImage))
-			{
-				withImage->ResetBitmap();
-			}
-		}
-		m_DisplayModel->UpdateUI();
-	}
 
 	void Workspace::SelectMod(const IGameMod* entry)
 	{
@@ -1045,13 +996,13 @@ namespace Kortex::ModManager
 			}
 			case ContextMenuID::ModInstall:
 			{
-				InstallMod(focusedMod);
+				InstallMod(*focusedMod);
 				break;
 			}
 			case ContextMenuID::ModUninstall:
 			case ContextMenuID::ModErase:
 			{
-				UninstallMod(focusedMod, menuID == ContextMenuID::ModErase);
+				UninstallMod(*focusedMod, menuID == ContextMenuID::ModErase);
 				break;
 			}
 			case ContextMenuID::ModImageShow:

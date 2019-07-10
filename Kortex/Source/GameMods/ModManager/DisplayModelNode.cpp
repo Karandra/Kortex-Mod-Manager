@@ -404,7 +404,7 @@ namespace Kortex::ModManager
 		return false;
 	}
 
-	bool DisplayModelModNode::GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const
+	bool DisplayModelModNode::GetAttributes(const KxDataView2::Column& column, const KxDataView2::CellState& cellState, KxDataView2::CellAttributes& attributes) const
 	{
 		using namespace KxDataView2;
 

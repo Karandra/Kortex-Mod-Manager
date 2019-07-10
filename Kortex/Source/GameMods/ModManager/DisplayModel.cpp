@@ -55,7 +55,8 @@ namespace Kortex::ModManager
 			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.Tags"), ColumnID::Tags, {}, columnStyleDefault);
 		}
 		{
-			auto [column, renderer] = view->AppendColumn<BitmapListRenderer>(KTr("NetworkManager.ModNetwork"), ColumnID::ModSource, {}, columnStyleDefault);
+			auto [column, renderer] = view->AppendColumn<BitmapListRenderer>(KTr("ModManager.ModList.ModSource"), ColumnID::ModSource, {}, columnStyleDefault);
+			renderer.SetAlignment(wxALIGN_CENTER_HORIZONTAL);
 			renderer.SetSpacing(1);
 		}
 		{

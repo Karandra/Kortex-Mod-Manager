@@ -370,7 +370,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="ModManager.ModList.Version">Version</String>
 		<String ID="ModManager.ModList.Author">Author</String>
 		<String ID="ModManager.ModList.Tags">Tags</String>
-		<String ID="ModManager.ModList.Sites">Websites</String>
+		<String ID="ModManager.ModList.ModSource">Source</String>
 		<String ID="ModManager.ModList.DateInstall">Date installed</String>
 		<String ID="ModManager.ModList.DateUninstall">Date uninstalled</String>
 		<String ID="ModManager.ModList.ModFolder">Folder</String>

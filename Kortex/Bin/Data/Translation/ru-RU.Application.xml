@@ -375,7 +375,7 @@
 		<String ID="ModManager.ModList.Version">Версия</String>
 		<String ID="ModManager.ModList.Author">Автор</String>
 		<String ID="ModManager.ModList.Tags">Теги</String>
-		<String ID="ModManager.ModList.Sites">Сайты</String>
+		<String ID="ModManager.ModList.ModSource">Источник</String>
 		<String ID="ModManager.ModList.DateInstall">Дата установки</String>
 		<String ID="ModManager.ModList.DateUninstall">Дата деинсталляции</String>
 		<String ID="ModManager.ModList.ModFolder">Папка</String>

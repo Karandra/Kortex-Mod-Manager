@@ -589,7 +589,7 @@
 		<String ID="NetworkManager.Nexus.EnterAPIKey">Ввести API-ключ</String>
 
 		<String ID="NetworkManager.UpdateTooltip.Caption">Доступна информация об обновленииях</String>
-		<String ID="NetworkManager.UpdateTooltip.AnyUpdates">Новая версия этого мода доступна на %1</String>
+		<String ID="NetworkManager.UpdateTooltip.AnyUpdates">Новая версия (%1) этого мода доступна на %2</String>
 		<String ID="NetworkManager.UpdateTooltip.AnyDeletions">Этот мод не был найден на %1</String>
 
 		<!-- Download Manager -->

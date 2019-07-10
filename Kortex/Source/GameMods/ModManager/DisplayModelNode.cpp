@@ -95,39 +95,39 @@ namespace Kortex::ModManager
 			{
 				case ColumnID::Version:
 				{
-					std::vector<IModNetwork*> networks;
-					auto [anyUpdates, anyDeletions] = HasAnyNetworkUpdates(&networks);
-					auto FormatNames = [&networks]()
-					{
-						wxString names;
-						for (const IModNetwork* network: networks)
-						{
-							if (!names.IsEmpty())
-							{
-								names += wxS(", ");
-							}
-							names += network->GetName();
-						}
-						return names;
-					};
+					KxIconType icon = KxICON_NONE;
+					wxString message;
 
-					if (anyUpdates)
+					m_Mod->GetModSourceStore().Visit([&icon, &message](const ModSourceItem& item)
 					{
-						return
+						if (IModNetwork* modNetwork = item.GetModNetwork())
 						{
-							KTr("NetworkManager.UpdateTooltip.Caption"),
-							KTrf("NetworkManager.UpdateTooltip.AnyUpdates", FormatNames()),
-							KxICON_INFORMATION
-						};
-					}
-					else if (anyDeletions)
+							ModNetworkUpdateChecker* checker = nullptr;
+							if (modNetwork->TryGetComponent(checker))
+							{
+								const NetworkModUpdateInfo info = checker->GetUpdateInfo(item.GetModInfo());
+								if (info.AnyUpdated())
+								{
+									icon = KxICON_INFORMATION;
+
+									message += KTrf("NetworkManager.UpdateTooltip.AnyUpdates", info.GetVersion(), modNetwork->GetName());
+									message += wxS("\r\n");
+								}
+								else if (info.AnyDeleted())
+								{
+									icon = KxICON_WARNING;
+
+									message += KTrf("NetworkManager.UpdateTooltip.AnyDeletions", modNetwork->GetName());
+									message += wxS("\r\n");
+								}
+							}
+						}
+						return true;
+					});
+
+					if (!message.IsEmpty())
 					{
-						return
-						{
-							KTr("NetworkManager.UpdateTooltip.Caption"),
-							KTrf("NetworkManager.UpdateTooltip.AnyDeletions", FormatNames()),
-							KxICON_WARNING
-						};
+						return KxDataView2::ToolTip(KTr("NetworkManager.UpdateTooltip.Caption"), message, icon);
 					}
 					break;
 				}
@@ -538,7 +538,7 @@ namespace Kortex::ModManager
 		return false;
 	}
 
-	bool DisplayModelTagNode::GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const
+	bool DisplayModelTagNode::GetAttributes(const KxDataView2::Column& column, const KxDataView2::CellState& cellState, KxDataView2::CellAttributes& attributes) const
 	{
 		if (IsExpanded() || column.GetID<ColumnID>() == ColumnID::Name)
 		{

@@ -131,6 +131,24 @@ namespace Kortex::ModManager
 					}
 					break;
 				}
+				case ColumnID::ModSource:
+				{
+					wxString text;
+					m_Mod->GetModSourceStore().Visit([&text](const ModSourceItem& item)
+					{
+						if (!text.IsEmpty())
+						{
+							text += wxS("\r\n");
+						}
+						if (wxString name; item.TryGetName(name))
+						{
+							text += name;
+							text += wxS(": ");
+						}
+						text += item.GetURL();
+					});
+					return text;
+				}
 			};
 		}
 		return KxDataView2::Node::GetToolTip(column);

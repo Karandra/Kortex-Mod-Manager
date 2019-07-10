@@ -1,0 +1,22 @@
+table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.req-group {
+}
+
+.req-item-name {
+	width: 25%;
+}
+
+.req-item-value {
+	width: 75%;
+}
+
+.req-notes
+{
+	padding-left: 1rem;
+	font-size: 80%;
+	margin: 0;
+}

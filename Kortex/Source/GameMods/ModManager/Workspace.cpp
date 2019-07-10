@@ -447,12 +447,14 @@ namespace Kortex::ModManager
 			vfs.Enable();
 		}
 	}
-	bool Workspace::ShowChangeModIDDialog(IGameMod* entry)
+	bool Workspace::ShowChangeModIDDialog(IGameMod& mod)
 	{
 		wxString newID;
+		const wxString oldID = mod.GetID();
+
 		KxTextBoxDialog dialog(GetMainWindow(), KxID_NONE, KTr("ModManager.Menu.ChangeID"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL);
-		dialog.SetValue(entry->GetID());
-		dialog.Bind(KxEVT_STDDIALOG_BUTTON, [this, entry, &dialog, &newID](wxNotifyEvent& event)
+		dialog.SetValue(oldID);
+		dialog.Bind(KxEVT_STDDIALOG_BUTTON, [this, &mod, &dialog, &newID](wxNotifyEvent& event)
 		{
 			if (event.GetId() == KxID_OK)
 			{
@@ -464,7 +466,7 @@ namespace Kortex::ModManager
 				}
 				else if (const IGameMod* existingMod = IModManager::GetInstance()->FindModByID(newID))
 				{
-					if (existingMod != entry)
+					if (existingMod != &mod)
 					{
 						KxTaskDialog(&dialog, KxID_NONE, KTrf("InstallWizard.ChangeID.Used", existingMod->GetName()), wxEmptyString, KxBTN_OK, KxICON_WARNING).ShowModal();
 						event.Veto();
@@ -473,9 +475,17 @@ namespace Kortex::ModManager
 			}
 		});
 
-		if (dialog.ShowModal() == KxID_OK && newID != entry->GetID())
+		if (dialog.ShowModal() == KxID_OK && newID != oldID)
 		{
-			return IModManager::GetInstance()->ChangeModID(*entry, newID);
+			const bool nameIsSame = mod.GetName() == oldID;
+			if (IModManager::GetInstance()->ChangeModID(mod, newID))
+			{
+				if (nameIsSame)
+				{
+					mod.SetName(newID);
+				}
+				return true;
+			}
 		}
 		return false;
 	}
@@ -1059,7 +1069,7 @@ namespace Kortex::ModManager
 			}
 			case ContextMenuID::ModChangeID:
 			{
-				if (ShowChangeModIDDialog(focusedMod))
+				if (ShowChangeModIDDialog(*focusedMod))
 				{
 					m_DisplayModel->UpdateUI();
 				}

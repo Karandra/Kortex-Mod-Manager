@@ -111,7 +111,7 @@ namespace Kortex::ModManager
 
 		private:
 			void OnMountButton(wxCommandEvent& event);
-			bool ShowChangeModIDDialog(IGameMod* entry);
+			bool ShowChangeModIDDialog(IGameMod& mod);
 
 			void ProcessSelectProfile(const wxString& newProfileID);
 			void OnSelectProfile(wxCommandEvent& event);

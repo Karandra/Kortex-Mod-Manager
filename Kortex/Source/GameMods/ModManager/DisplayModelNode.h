@@ -69,7 +69,7 @@ namespace Kortex::ModManager
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			wxAny GetValue(const KxDataView2::Column& column, const PriorityGroup& priorityGroup) const;
 			wxAny GetValue(const KxDataView2::Column& column, const FixedGameMod& fixedGameMod) const;
-			bool SetValue(const wxAny& value, KxDataView2::Column& column);
+			bool SetValue(KxDataView2::Column& column, const wxAny& value) override;
 
 			bool Compare(const KxDataView2::Node& other, const KxDataView2::Column& column) const override;
 			bool Compare(const IGameMod& left, const IGameMod& right, const KxDataView2::Column& column) const;

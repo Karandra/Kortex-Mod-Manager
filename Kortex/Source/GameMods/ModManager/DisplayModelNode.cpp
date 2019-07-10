@@ -291,7 +291,7 @@ namespace Kortex::ModManager
 		};
 		return {};
 	}
-	bool DisplayModelModNode::SetValue(const wxAny& value, KxDataView2::Column& column)
+	bool DisplayModelModNode::SetValue(KxDataView2::Column& column, const wxAny& value)
 	{
 		switch (column.GetID<ColumnID>())
 		{
@@ -299,7 +299,22 @@ namespace Kortex::ModManager
 			{
 				if (value.CheckType<wxString>())
 				{
-					m_Mod->SetName(value.As<wxString>());
+					wxString newName = value.As<wxString>();
+					
+					// If mod name is the same as ID change its ID as well
+					if (m_Mod->GetID() == m_Mod->GetName())
+					{
+						if (IModManager::GetInstance()->ChangeModID(*m_Mod, newName))
+						{
+							m_Mod->SetName(newName);
+						}
+					}
+					else
+					{
+						// Otherwise change just the name
+						m_Mod->SetName(newName);
+					}
+					
 					IEvent::MakeSend<ModEvent>(Events::ModChanged, *m_Mod);
 				}
 				else

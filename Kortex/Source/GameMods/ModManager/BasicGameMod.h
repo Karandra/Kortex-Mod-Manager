@@ -74,7 +74,7 @@ namespace Kortex::ModManager
 				m_ID = id;
 				m_Signature = GetSignatureFromID(id);
 			}
-		
+			
 			wxString GetName() const override
 			{
 				if (!m_Name.IsEmpty())
@@ -87,7 +87,7 @@ namespace Kortex::ModManager
 			{
 				m_Name = value;
 			}
-		
+			
 			wxString GetAuthor() const override
 			{
 				return m_Author;

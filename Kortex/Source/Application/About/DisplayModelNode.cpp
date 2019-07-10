@@ -42,7 +42,7 @@ namespace Kortex::Application::About
 			
 			// Convert emails
 			{
-				wxRegEx regex("(<?)([a-zA-Z0-9.!#$%&’*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(>?)", wxRE_ADVANCED|wxRE_ICASE);
+				wxRegEx regex("(<?)([a-zA-Z0-9.!#$%&’*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)(>?)", wxRE_ADVANCED|wxRE_ICASE);
 				regex.ReplaceAll(&license, wxS("<a href=\"mailto:\\2\">\\2</a>"));
 			}
 		}

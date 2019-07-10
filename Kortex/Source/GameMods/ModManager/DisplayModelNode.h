@@ -121,7 +121,7 @@ namespace Kortex::ModManager
 			bool Compare(const KxDataView2::Node& other, const KxDataView2::Column& column) const override;
 			bool Compare(const IModTag& left, const IModTag& right, const KxDataView2::Column& column) const;
 
-			bool GetAttributes(KxDataView2::CellAttributes& attributes, const KxDataView2::CellState& cellState, const KxDataView2::Column& column) const;
+			bool GetAttributes(const KxDataView2::Column& column, const KxDataView2::CellState& cellState, KxDataView2::CellAttributes& attributes) const override;
 			bool IsCategoryNode() const override;
 
 		public:

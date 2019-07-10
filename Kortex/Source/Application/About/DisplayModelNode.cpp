@@ -73,13 +73,18 @@ namespace Kortex::Application::About
 	{
 		return ImageResourceID::KortexLogoSmall;
 	}
-	wxString AppNode::GetLicense() const
-	{
-		return LoadLicense(m_Licence, Type::Application);
-	}
 	wxString AppNode::GetURL() const
 	{
 		return "https://github.com/KerberX/Kortex-Mod-Manager";
+	}
+	
+	bool AppNode::HasLicense() const
+	{
+		return !LoadLicense(m_Licence, Type::Application).IsEmpty();
+	}
+	wxString AppNode::GetLicense() const
+	{
+		return LoadLicense(m_Licence, Type::Application);
 	}
 }
 
@@ -96,6 +101,11 @@ namespace Kortex::Application::About
 	ResourceID ModuleNode::GetIconID() const
 	{
 		return m_Module.GetModuleInfo().GetImageID();
+	}
+	
+	bool ModuleNode::HasLicense() const
+	{
+		return !LoadLicense(m_Licence, Type::Software).IsEmpty();
 	}
 	wxString ModuleNode::GetLicense() const
 	{

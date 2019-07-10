@@ -44,7 +44,7 @@ namespace Kortex::Application::About
 			}
 			case ColumnRef::License:
 			{
-				if (!item.GetLicense().IsEmpty())
+				if (item.HasLicense())
 				{
 					return ImageProvider::GetBitmap(ImageResourceID::Cheque);
 				}
@@ -68,16 +68,23 @@ namespace Kortex::Application::About
 				return true;
 			}
 			case ColumnRef::License:
+			{
+				if (cellState.IsHotTracked() && item.HasLicense())
+				{
+					attributes.Options().Enable(CellOption::HighlightItem);
+				}
+				return true;
+			}
 			case ColumnRef::URL:
 			{
-				attributes.FontOptions().Enable(CellFontOption::Bold, column.GetID<ColumnRef>() == ColumnRef::License);
 				if (cellState.IsHotTracked())
 				{
 					KxColor linkColor = KxColor(GetView()->GetBackgroundColour()).GetContrastColor(KxColor(0, 0, 255), KxColor(25, 25, 100));
 					attributes.Options().SetForegroundColor(linkColor);
 					attributes.FontOptions().Enable(CellFontOption::Underlined);
+					return true;
 				}
-				return true;
+				return false;
 			}
 		};
 		return false;

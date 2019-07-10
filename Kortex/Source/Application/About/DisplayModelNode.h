@@ -51,8 +51,10 @@ namespace Kortex::Application::About
 			virtual wxString GetName() const = 0;
 			virtual KxVersion GetVersion() const = 0;
 			virtual ResourceID GetIconID() const = 0;
-			virtual wxString GetLicense() const = 0;
 			virtual wxString GetURL() const = 0;
+
+			virtual bool HasLicense() const = 0;
+			virtual wxString GetLicense() const = 0;
 	};
 }
 
@@ -67,8 +69,11 @@ namespace Kortex::Application::About
 			wxString GetName() const override;
 			KxVersion GetVersion() const override;
 			ResourceID GetIconID() const override;
-			wxString GetLicense() const override;
 			wxString GetURL() const override;
+
+			bool HasLicense() const override;
+			wxString GetLicense() const override;
+
 	};
 }
 
@@ -90,11 +95,13 @@ namespace Kortex::Application::About
 			wxString GetName() const override;
 			KxVersion GetVersion() const override;
 			ResourceID GetIconID() const override;
-			wxString GetLicense() const override;
 			wxString GetURL() const override
 			{
 				return wxString();
 			}
+			
+			bool HasLicense() const override;
+			wxString GetLicense() const override;
 	};
 }
 
@@ -129,13 +136,18 @@ namespace Kortex::Application::About
 			{
 				return m_IconID;
 			}
-			wxString GetLicense() const override
-			{
-				return LoadLicense(m_Licence, m_Type);
-			}
 			wxString GetURL() const override
 			{
 				return m_URL;
+			}
+			
+			bool HasLicense() const override
+			{
+				return !LoadLicense(m_Licence, m_Type).IsEmpty();
+			}
+			wxString GetLicense() const override
+			{
+				return LoadLicense(m_Licence, m_Type);
 			}
 	};
 }
@@ -180,13 +192,18 @@ namespace Kortex::Application::About
 			{
 				return {};
 			}
-			wxString GetLicense() const override
-			{
-				return LoadLicense(m_Licence, Type::Resource);
-			}
 			wxString GetURL() const override
 			{
 				return m_URL;
+			}
+			
+			bool HasLicense() const override
+			{
+				return !LoadLicense(m_Licence, Type::Resource).IsEmpty();
+			}
+			wxString GetLicense() const override
+			{
+				return LoadLicense(m_Licence, Type::Resource);
 			}
 	};
 }

@@ -29,7 +29,7 @@ namespace Kortex::Notifications
 		caption->SetFont(caption->GetFont().MakeLarger());
 		sizerRight->Add(caption, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING * 2);
 
-		KxHTMLWindow* message = new KxHTMLWindow(this, KxID_NONE, m_Notification->GetMessage());
+		KxHTMLWindow* message = new KxHTMLWindow(this, KxID_NONE, m_Notification->GetMessage(), KxHTMLWindow::DefaultStyle|wxBORDER_NONE);
 		message->ShowScrollbars(wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT);
 		sizerRight->Add(message, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 	}

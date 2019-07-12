@@ -403,6 +403,12 @@
     <Filter Include="Code\Source\ModPackages\InstallWizard\Completed">
       <UniqueIdentifier>{c3d782e6-426f-4cc0-b980-a88823a76545}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\UI\WebViewBackend">
+      <UniqueIdentifier>{3f78e5b9-b576-42ab-ae3d-fecfdbf8f903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\UI\WebViewBackend">
+      <UniqueIdentifier>{6b550dfd-87c7-43d8-9bfb-1bd193595c94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1235,6 +1241,12 @@
     </ClCompile>
     <ClCompile Include="Source\UI\TextEditDialog.cpp">
       <Filter>Code\Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\WebViewBackend\InternetExplorer.cpp">
+      <Filter>Code\Source\UI\WebViewBackend</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\WebViewBackend\Generic.cpp">
+      <Filter>Code\Source\UI\WebViewBackend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2329,6 +2341,15 @@
     </ClInclude>
     <ClInclude Include="Source\UI\TextEditDialog.h">
       <Filter>Code\Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\IWebView.h">
+      <Filter>Code\Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebViewBackend\Generic.h">
+      <Filter>Code\Headers\UI\WebViewBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebViewBackend\InternetExplorer.h">
+      <Filter>Code\Headers\UI\WebViewBackend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

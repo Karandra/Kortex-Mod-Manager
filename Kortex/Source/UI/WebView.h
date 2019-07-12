@@ -1,49 +1,61 @@
 #pragma once
 #include "stdafx.h"
-#include <KxFramework/KxCOM.h>
-#include <mshtmhst.h>
-struct IWebBrowser2;
-struct IHTMLDocument2;
+#include <KxFramework/KxHTMLWindow.h>
+#include "IWebView.h"
 
 namespace Kortex::UI
 {
-	class WebView final
+	class WebView final: public wxEvtHandler, public IWebView
 	{
-		private:
-			wxWebView* m_View = nullptr;
-			bool m_IsEmpty = true;
+		public:
+			enum class Backend
+			{
+				Default = 0,
+				Generic,
+				InternetExplorer
+			};
 
 		private:
-			void DoLoadPage(const wxString& html);
-			void DoLoadURL(const wxString& url);
+			wxEvtHandler m_EvtHandler;
+			IWebView* m_Backend = nullptr;
 
-			void AskOpenURL(const wxString& url);
-			void OnNavigate(wxWebViewEvent& event);
+		private:
+			void OnNavigating(wxWebViewEvent& event);
 			void OnNavigated(wxWebViewEvent& event);
-
-			IWebBrowser2& GetWebBrowser() const;
-			KxCOMPtr<IHTMLDocument2> GetDocument2() const;
-			bool ExecCommand(const wxString& command, const wxAny& arg = {});
+			void OnLoaded(wxWebViewEvent& event);
+			void OnError(wxWebViewEvent& event);
+			void OnBackendDestroyed(wxWindowDestroyEvent& event);
 
 		public:
 			WebView() = default;
-			WebView(wxWindow* parent, long style = 0)
+			WebView(wxWindow* parent, Backend backend = Backend::Default, long style = 0)
 			{
-				Create(parent, style);
+				Create(parent, backend, style);
 			}
-			bool Create(wxWindow* parent, long style = 0);
+			bool Create(wxWindow* parent, Backend backend = Backend::Default, long style = 0);
 
 		public:
-			operator wxWebView*() const
+			IWebView* GetBackend() const
 			{
-				return m_View;
+				return m_Backend;
 			}
-			wxWebView* GetWindow() const
+			wxWindow* GetWindow() override
 			{
-				return m_View;
+				return m_Backend ? m_Backend->GetWindow() : nullptr;
 			}
 
-			void LoadText(const wxString& text);
-			void LoadURL(const wxString& url);
+		public:
+			bool LoadText(const wxString& text) override
+			{
+				return m_Backend->LoadText(text);
+			}
+			bool LoadHTML(const wxString& html) override
+			{
+				return m_Backend->LoadHTML(html);
+			}
+			bool LoadURL(const wxString& url) override
+			{
+				return m_Backend->LoadURL(url);
+			}
 	};
 }

@@ -123,7 +123,7 @@ namespace Kortex::UI
 			m_Container->AddPage(m_Editor, wxEmptyString, true);
 
 			/* Preview page */
-			m_Preview.Create(m_Container, wxBORDER_THEME);
+			m_Preview.Create(m_Container);
 			m_Container->AddPage(m_Preview, wxEmptyString);
 
 			/* Complete creation */

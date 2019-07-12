@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <KxFramework/KxHTMLWindow.h>
-#include "IWebView.h"
+#include "WebViewBackend/IWebView.h"
 
 namespace Kortex::UI
 {
@@ -44,7 +44,29 @@ namespace Kortex::UI
 				return m_Backend ? m_Backend->GetWindow() : nullptr;
 			}
 
+			KxColor GetBackgroundColor() const override
+			{
+				return m_Backend->GetBackgroundColor();
+			}
+			bool SetBackgroundColor(const KxColor& color)
+			{
+				return m_Backend->SetBackgroundColor(color);
+			}
+
+			KxColor GetForegroundColor() const override
+			{
+				return m_Backend->GetForegroundColor();
+			}
+			bool SetForegroundColor(const KxColor& color) override
+			{
+				return m_Backend->SetForegroundColor(color);
+			}
+
 		public:
+			void Unload() override
+			{
+				m_Backend->Unload();
+			}
 			bool LoadText(const wxString& text) override
 			{
 				return m_Backend->LoadText(text);

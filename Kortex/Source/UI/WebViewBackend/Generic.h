@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include <KxFramework/KxHTMLWindow.h>
 #include <KxFramework/KxCallAtScopeExit.h>
-#include "UI/IWebView.h"
+#include "IWebView.h"
 
 namespace Kortex::UI::WebViewBackend
 {
@@ -24,14 +24,36 @@ namespace Kortex::UI::WebViewBackend
 				return this;
 			}
 
+			KxColor GetBackgroundColor() const override
+			{
+				return KxHTMLWindow::GetBackgroundColour();
+			}
+			bool SetBackgroundColor(const KxColor& color)
+			{
+				return KxHTMLWindow::SetBackgroundColour(color);
+			}
+
+			KxColor GetForegroundColor() const override
+			{
+				return KxHTMLWindow::GetForegroundColour();
+			}
+			bool SetForegroundColor(const KxColor& color) override
+			{
+				return KxHTMLWindow::SetForegroundColour(color);
+			}
+
 		public:
+			void Unload() override
+			{
+				KxHTMLWindow::SetPage(wxEmptyString);
+			}
 			bool LoadText(const wxString& text) override
 			{
 				KxCallAtScopeExit atExit([this]()
 				{
 					SendEvent(IWebView::EvtLoaded);
 				});
-				return DoSetValue(text);
+				return KxHTMLWindow::DoSetValue(text);
 			}
 			bool LoadHTML(const wxString& html) override
 			{

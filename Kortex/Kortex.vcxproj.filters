@@ -2342,13 +2342,13 @@
     <ClInclude Include="Source\UI\TextEditDialog.h">
       <Filter>Code\Headers\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UI\IWebView.h">
-      <Filter>Code\Headers\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\UI\WebViewBackend\Generic.h">
       <Filter>Code\Headers\UI\WebViewBackend</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\WebViewBackend\InternetExplorer.h">
+      <Filter>Code\Headers\UI\WebViewBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebViewBackend\IWebView.h">
       <Filter>Code\Headers\UI\WebViewBackend</Filter>
     </ClInclude>
   </ItemGroup>

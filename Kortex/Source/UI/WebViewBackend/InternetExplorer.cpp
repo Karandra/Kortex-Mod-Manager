@@ -47,8 +47,12 @@ namespace Kortex::UI::WebViewBackend
 
 	void InternetExplorer::OnNavigating(wxWebViewEvent& event)
 	{
-		event.SetEventType(IWebView::EvtNavigating);
-		m_EvtHandler.ProcessEvent(event);
+		const wxString& url = event.GetURL();
+		if (!url.IsEmpty() && url != wxWebViewDefaultURLStr)
+		{
+			event.SetEventType(IWebView::EvtNavigating);
+			m_EvtHandler.ProcessEvent(event);
+		}
 	}
 	void InternetExplorer::OnNavigated(wxWebViewEvent& event)
 	{
@@ -137,18 +141,18 @@ namespace Kortex::UI::WebViewBackend
 		const KxColor bgColor = m_WebView->GetBackgroundColour();
 		const wxFont font = m_WebView->GetFont();
 
-		const wxString css = KxString::Format(wxS("font-family: '%1', sans-serif; font-size: %2pt; color: %3; background-color: %4;"),
-											  font.GetFaceName(),
-											  font.GetPointSize(),
-											  fgColor.ToString(KxColor::C2S::CSS, KxColor::C2SAlpha::Auto),
-											  bgColor.ToString(KxColor::C2S::CSS, KxColor::C2SAlpha::Auto)
-		);
-		const wxString html = KxString::Format(wxS("<html><body style=\"%1\">%2</body></html>"),
-											   css,
-											   KxHTMLWindow::ProcessPlainText(text)
-		);
+		auto FormatElement = [&](const wxString& html)
+		{
+			const wxString css = KxString::Format(wxS("font-family: '%1', sans-serif; font-size: %2pt; color: %3; background: %4; background-color: %4;"),
+												  font.GetFaceName(),
+												  font.GetPointSize(),
+												  fgColor.ToString(KxColor::C2S::CSS, KxColor::C2SAlpha::Auto),
+												  bgColor.ToString(KxColor::C2S::CSS, KxColor::C2SAlpha::Auto)
+			);
+			return KxString::Format(wxS("<html><body style=\"%1\">%2</body></html>"), css, html);
+		};
 
-		DoLoadPage(html);
+		DoLoadPage(FormatElement(KxHTMLWindow::ProcessPlainText(text)));
 		return true;
 	}
 }

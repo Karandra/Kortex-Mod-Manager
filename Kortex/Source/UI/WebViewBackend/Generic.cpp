@@ -26,7 +26,6 @@ namespace Kortex::UI::WebViewBackend
 		if (KxHTMLWindow::Create(parent, KxID_NONE, wxEmptyString, style))
 		{
 			Bind(wxEVT_HTML_LINK_CLICKED, &Generic::OnLinkClicked, this);
-			SetBackgroundColour(parent->GetBackgroundColour());
 		}
 	}
 }

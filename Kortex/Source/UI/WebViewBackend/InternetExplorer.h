@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/IWebView.h"
+#include "IWebView.h"
 #include <wx/webview.h>
 #include <KxFramework/KxCOM.h>
 struct IWebBrowser2;
@@ -37,7 +37,29 @@ namespace Kortex::UI::WebViewBackend
 				return m_WebView;
 			}
 
+			KxColor GetBackgroundColor() const override
+			{
+				return m_WebView->GetBackgroundColour();
+			}
+			bool SetBackgroundColor(const KxColor& color)
+			{
+				return m_WebView->SetBackgroundColour(color);
+			}
+
+			KxColor GetForegroundColor() const override
+			{
+				return m_WebView->GetForegroundColour();
+			}
+			bool SetForegroundColor(const KxColor& color) override
+			{
+				return m_WebView->SetForegroundColour(color);
+			}
+
 		public:
+			void Unload() override
+			{
+				m_WebView->LoadURL(wxWebViewDefaultURLStr);
+			}
 			bool LoadText(const wxString& text) override;
 			bool LoadHTML(const wxString& html) override
 			{

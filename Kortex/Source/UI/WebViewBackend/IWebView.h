@@ -32,7 +32,14 @@ namespace Kortex::UI
 				return GetWindow();
 			}
 
+			virtual KxColor GetBackgroundColor() const = 0;
+			virtual bool SetBackgroundColor(const KxColor& color) = 0;
+
+			virtual KxColor GetForegroundColor() const = 0;
+			virtual bool SetForegroundColor(const KxColor& color) = 0;
+
 		public:
+			virtual void Unload() = 0;
 			virtual bool LoadText(const wxString& text) = 0;
 			virtual bool LoadHTML(const wxString& html) = 0;
 			virtual bool LoadURL(const wxString& url) = 0;

@@ -1,13 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "ModPackages/InstallWizard/WizardPage.h"
+#include "UI/WebView.h"
 #include <KxFramework/KxNotebook.h>
 #include <KxFramework/KxAuiNotebook.h>
 #include <KxFramework/KxTreeList.h>
 #include <KxFramework/KxListBox.h>
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxThumbView.h>
-#include <KxFramework/KxHTMLWindow.h>
 #include <KxFramework/KxSplitterWindow.h>
 class KImageViewerEvent;
 
@@ -23,18 +23,19 @@ namespace Kortex::InstallWizard
 		private:
 			KxAuiNotebook* m_TabsContainer = nullptr;
 			InfoPageNS::InfoDisplayModel* m_InfoDisplayModel = nullptr;
-			KxHTMLWindow* m_DescriptionView = nullptr;
+			UI::WebView m_DescriptionView;
 
 			KxSplitterWindow* m_DocumentsContainer = nullptr;
 			KxListBox* m_DocumentsList = nullptr;
-			KxHTMLWindow* m_DocumentSimple = nullptr;
-			wxWebView* m_DocumentAdvanced = nullptr;
+			UI::WebView m_DocumentSimple;
+			UI::WebView m_DocumentAdvanced;
 
 			KxThumbView* m_ScreenshotsView = nullptr;
 			std::unordered_map<int, const KPPIImageEntry*> m_ImagesMap;
 			int m_CurrentImageIndex = -1;
 
 			bool m_PageVisited = false;
+			bool m_DescriptionLoaded = false;
 
 		private:
 			wxWindow* CreateInfoTab();
@@ -47,6 +48,7 @@ namespace Kortex::InstallWizard
 			void LoadDocumentsTab(const KPackageProject& package);
 			void LoadScreenshotsTab(const KPackageProject& package);
 			
+			void OnTabOpened(wxAuiNotebookEvent& event);
 			void OnSelectDocument(int index, bool useAdvancedEditor = false);
 			void SetImageViewerNavigationInfo(KImageViewerEvent& event) const;
 			void OnNavigateImageViewer(KImageViewerEvent& event);

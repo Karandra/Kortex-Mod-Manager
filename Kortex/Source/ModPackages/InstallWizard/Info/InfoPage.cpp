@@ -18,33 +18,41 @@ namespace
 
 namespace Kortex::InstallWizard
 {
+	void InfoPage::OnTabOpened(wxAuiNotebookEvent& event)
+	{
+		if (!m_DescriptionLoaded)
+		{
+			LoadDescriptionTab(GetPackageConfig());
+			m_DescriptionLoaded = true;
+		}
+	}
 	void InfoPage::OnSelectDocument(int index, bool useAdvancedEditor)
 	{
 		wxWindowUpdateLocker lock(m_DocumentsContainer);
-		m_DocumentSimple->Show();
-		m_DocumentAdvanced->Hide();
-		m_DocumentAdvanced->LoadURL(wxWebViewDefaultURLStr);
+		m_DocumentSimple.GetWindow()->Show();
+		m_DocumentAdvanced.GetWindow()->Hide();
+		m_DocumentAdvanced.Unload();
 
 		auto UnSplit = [this]()
 		{
 			m_DocumentsContainer->Unsplit(m_DocumentsList);
 			m_DocumentsContainer->Unsplit(m_DocumentSimple);
 			m_DocumentsContainer->Unsplit(m_DocumentAdvanced);
-			m_DocumentSimple->Hide();
-			m_DocumentAdvanced->Hide();
+			m_DocumentSimple.GetWindow()->Hide();
+			m_DocumentAdvanced.GetWindow()->Hide();
 		};
 		auto SwitchSimple = [this, &UnSplit]()
 		{
 			UnSplit();
-			m_DocumentSimple->Show();
-			m_DocumentSimple->Enable();
+			m_DocumentSimple.GetWindow()->Show();
+			m_DocumentSimple.GetWindow()->Enable();
 			m_DocumentsContainer->SplitVertically(m_DocumentsList, m_DocumentSimple, m_DocumentsContainer->GetSashPosition());
 		};
 		auto SwitchAdvanced = [this, &UnSplit]()
 		{
 			UnSplit();
-			m_DocumentAdvanced->Show();
-			m_DocumentAdvanced->Enable();
+			m_DocumentAdvanced.GetWindow()->Show();
+			m_DocumentAdvanced.GetWindow()->Enable();
 			m_DocumentsContainer->SplitVertically(m_DocumentsList, m_DocumentAdvanced, m_DocumentsContainer->GetSashPosition());
 		};
 
@@ -62,7 +70,7 @@ namespace Kortex::InstallWizard
 					const KArchive::Buffer& fileBuffer = package.GetDocumentBuffer(entry);
 					file.Write(fileBuffer.data(), fileBuffer.size());
 
-					m_DocumentAdvanced->LoadURL(file.GetFileName());
+					m_DocumentAdvanced.LoadURL(file.GetFileName());
 					SwitchAdvanced();
 				}
 				else
@@ -76,7 +84,7 @@ namespace Kortex::InstallWizard
 					}
 					else
 					{
-						m_DocumentSimple->SetValue(text);
+						m_DocumentSimple.LoadText(text);
 						SwitchSimple();
 					}
 				}
@@ -90,8 +98,8 @@ namespace Kortex::InstallWizard
 		else
 		{
 			SwitchSimple();
-			m_DocumentSimple->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectDocumentHint"), m_DocumentSimple));
-			m_DocumentSimple->Disable();
+			m_DocumentSimple.LoadHTML(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectDocumentHint"), m_DocumentSimple));
+			m_DocumentSimple.GetWindow()->Disable();
 		}
 	}
 	void InfoPage::SetImageViewerNavigationInfo(KImageViewerEvent& event) const
@@ -132,11 +140,7 @@ namespace Kortex::InstallWizard
 	}
 	wxWindow* InfoPage::CreateDescriptionTab()
 	{
-		m_DescriptionView = new KxHTMLWindow(m_TabsContainer, KxID_NONE);
-		m_DescriptionView->Bind(wxEVT_HTML_LINK_CLICKED, [this](wxHtmlLinkEvent& event)
-		{
-			KAux::AskOpenURL(event.GetLinkInfo().GetHref(), &GetWizard());
-		});
+		m_DescriptionView.Create(m_TabsContainer, UI::WebView::Backend::Default, wxBORDER_NONE);
 		return m_DescriptionView;
 	}
 	wxWindow* InfoPage::CreateDocumentsTab()
@@ -153,8 +157,8 @@ namespace Kortex::InstallWizard
 			OnSelectDocument(event.GetInt());
 		});
 
-		m_DocumentSimple = new KxHTMLWindow(m_DocumentsContainer, KxID_NONE, wxEmptyString, KxThumbView::DefaultStyle|wxBORDER_THEME);
-		m_DocumentAdvanced = wxWebView::New(m_DocumentsContainer, KxID_NONE);
+		m_DocumentSimple.Create(m_DocumentsContainer);
+		m_DocumentAdvanced.Create(m_DocumentsContainer, UI::WebView::Backend::InternetExplorer);
 
 		m_DocumentsContainer->SplitVertically(m_DocumentsList, m_DocumentSimple, m_DocumentsContainer->GetMinimumPaneSize());
 		return m_DocumentsContainer;
@@ -234,7 +238,7 @@ namespace Kortex::InstallWizard
 	}
 	void InfoPage::LoadDescriptionTab(const KPackageProject& package)
 	{
-		m_DescriptionView->SetValue(package.GetInfo().GetDescription());
+		m_DescriptionView.LoadText(package.GetInfo().GetDescription());
 	}
 	void InfoPage::LoadDocumentsTab(const KPackageProject& package)
 	{
@@ -276,7 +280,6 @@ namespace Kortex::InstallWizard
 		const KPackageProject& package = GetPackageConfig();
 
 		LoadInfoTab(package);
-		LoadDescriptionTab(package);
 		LoadDocumentsTab(package);
 		LoadScreenshotsTab(package);
 	}
@@ -320,6 +323,8 @@ namespace Kortex::InstallWizard
 		m_TabsContainer->AddPage(CreateDescriptionTab(), KTr("Generic.Description"));
 		m_TabsContainer->AddPage(CreateDocumentsTab(), KTr("InstallWizard.Page.Documnets"));
 		m_TabsContainer->AddPage(CreateScreenshotsTab(), KTr("InstallWizard.Page.Screenshots"));
+
+		m_TabsContainer->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &InfoPage::OnTabOpened, this);
 
 		return m_TabsContainer;
 	}

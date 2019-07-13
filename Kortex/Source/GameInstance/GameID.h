@@ -10,20 +10,18 @@ namespace Kortex
 		private:
 			wxString m_ID;
 
-		public:
-			GameID(const wxString& id = wxEmptyString)
-				:m_ID(id)
-			{
-			}
-			GameID(const IGameInstance& instance);
-			GameID(const IGameInstance* instance);
+		private:
+			bool TestGameID(const wxString& id) const;
+			IGameInstance* GetInstanceByID(const wxString& id) const;
 
 		public:
-			bool IsOK() const
-			{
-				return !m_ID.IsEmpty();
-			}
-		
+			GameID(const wxString& id = wxEmptyString);
+			GameID(const IGameInstance& instance);
+			GameID(const GameID&) = default;
+			GameID(GameID&&) = default;
+
+		public:
+			bool IsOK() const;
 			explicit operator bool() const
 			{
 				return IsOK();
@@ -32,7 +30,24 @@ namespace Kortex
 			{
 				return !IsOK();
 			}
-		
+
+			wxString ToString() const;
+			operator wxString() const
+			{
+				return ToString();
+			}
+			
+			IGameInstance* ToGameInstance() const;
+			IGameInstance* operator->()
+			{
+				return ToGameInstance();
+			}
+
+		public:
+			GameID& operator=(const GameID&) = default;
+			GameID& operator=(GameID&&) = default;
+			GameID& operator=(const wxString& id);
+
 			bool operator==(const GameID& other) const
 			{
 				return m_ID == other.m_ID;
@@ -48,15 +63,6 @@ namespace Kortex
 			bool operator!=(const wxString& other) const
 			{
 				return m_ID != other;
-			}
-
-			wxString ToString() const
-			{
-				return m_ID;
-			}
-			operator const wxString&() const
-			{
-				return m_ID;
 			}
 	};
 }

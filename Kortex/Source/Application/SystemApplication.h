@@ -8,6 +8,7 @@
 namespace Kortex
 {
 	class LogEvent;
+	class GameID;
 	class IGameInstance;
 	class IGameProfile;
 	class IApplication;
@@ -31,6 +32,7 @@ namespace Kortex
 
 		friend class IGameInstance;
 		friend class GameInstance::TemplateLoader;
+		friend class GameID;
 
 		private:
 			wxString m_RootFolder;

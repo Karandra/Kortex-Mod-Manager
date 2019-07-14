@@ -51,7 +51,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 				}
 				else
 				{
-					value.SetReservedBitmapWidth(KBitmapSize().FromSystemSmallIcon().GetWidth());
+					value.SetDefaultBitmapWidth(KBitmapSize().FromSystemSmallIcon().GetWidth());
 				}
 
 				return value;

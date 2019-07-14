@@ -209,18 +209,20 @@ namespace Kortex::ModManager
 				}
 				case ColumnID::ModSource:
 				{
-					std::vector<wxBitmap> bitmaps;
+					KxDataView2::BitmapListValue bitmaps;
+					bitmaps.SetSpacing(1);
+
 					const ModSourceStore& store = m_Mod->GetModSourceStore();
 					store.Visit([&bitmaps](const ModSourceItem& item)
 					{
 						if (const IModNetwork* modNetwork = item.GetModNetwork())
 						{
-							bitmaps.push_back(ImageProvider::GetBitmap(modNetwork->GetIcon()));
+							bitmaps.AddBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 						}
 					});
 					if (store.HasUnknownSources())
 					{
-						bitmaps.push_back(ImageProvider::GetBitmap(IModNetwork::GetGenericIcon()));
+						bitmaps.AddBitmap(ImageProvider::GetBitmap(IModNetwork::GetGenericIcon()));
 					}
 					return bitmaps;
 				}

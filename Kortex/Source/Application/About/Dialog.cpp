@@ -71,7 +71,7 @@ namespace Kortex::Application
 
 	KxHTMLWindow* AboutDialog::CreateHTMLWindow()
 	{
-		KxHTMLWindow* window = new KxHTMLWindow(m_TabView, KxID_NONE);
+		KxHTMLWindow* window = new KxHTMLWindow(m_TabView, KxID_NONE, wxEmptyString, wxBORDER_NONE);
 		window->Bind(wxEVT_HTML_LINK_CLICKED, &AboutDialog::OnLinkClicked, this);
 		return window;
 	}

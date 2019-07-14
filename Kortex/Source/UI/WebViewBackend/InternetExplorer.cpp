@@ -143,7 +143,7 @@ namespace Kortex::UI::WebViewBackend
 
 		auto FormatElement = [&](const wxString& html)
 		{
-			const wxString css = KxString::Format(wxS("font-family: '%1', sans-serif; font-size: %2pt; color: %3; background: %4; background-color: %4;"),
+			const wxString css = KxString::Format(wxS("font-family: '%1', sans-serif; font-size: %2pt; color: %3; background-color: %4;"),
 												  font.GetFaceName(),
 												  font.GetPointSize(),
 												  fgColor.ToString(KxColor::C2S::CSS, KxColor::C2SAlpha::Auto),

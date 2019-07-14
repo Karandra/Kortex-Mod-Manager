@@ -28,4 +28,26 @@ namespace Kortex::UI::WebViewBackend
 			Bind(wxEVT_HTML_LINK_CLICKED, &Generic::OnLinkClicked, this);
 		}
 	}
+
+	bool Generic::LoadText(const wxString& text)
+	{
+		KxCallAtScopeExit atExit([this]()
+		{
+			SendEvent(IWebView::EvtLoaded);
+		});
+
+		const KxColor fgColor = GetForegroundColour();
+		const KxColor bgColor = GetHTMLBackgroundColour();
+
+		auto FormatElement = [&](const wxString& html)
+		{
+			const wxString css = KxString::Format(wxS("color: %1; background-color: %2;"),
+												  fgColor.ToString(KxColor::C2S::CSS, KxColor::C2SAlpha::Auto),
+												  bgColor.ToString(KxColor::C2S::CSS, KxColor::C2SAlpha::Auto)
+			);
+			return KxString::Format(wxS("<html><body><span style=\"%1\">%2</span></body></html>"), css, html);
+		};
+
+		return KxHTMLWindow::SetPage(FormatElement(KxHTMLWindow::ProcessPlainText(text)));
+	}
 }

@@ -47,14 +47,7 @@ namespace Kortex::UI::WebViewBackend
 			{
 				KxHTMLWindow::SetPage(wxEmptyString);
 			}
-			bool LoadText(const wxString& text) override
-			{
-				KxCallAtScopeExit atExit([this]()
-				{
-					SendEvent(IWebView::EvtLoaded);
-				});
-				return KxHTMLWindow::DoSetValue(text);
-			}
+			bool LoadText(const wxString& text) override;
 			bool LoadHTML(const wxString& html) override
 			{
 				KxCallAtScopeExit atExit([this]()

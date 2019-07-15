@@ -60,6 +60,7 @@ const
     // Directories
     dirCSS = "css/",
     dirSrcs = "srcs/",
+    dirUp = ".../",
     // File Extensions
     extCSS = ".css",
 //  extHTML = ".html",
@@ -157,9 +158,9 @@ function getFilePrimer(resource, type) {
     }
 }
 function getFile(file, resource, type) {
-    if (type === content) file.open(get, dirSrcs + resource + extMD, true); // content block
-    if (type === css) file.open(get, dirCSS + resource + extCSS, true); // CSS sheet
-    if (type === menu) file.open(get, dirSrcs + resource + extMD, true); // menu block
+    if (type === content) file.open(get, dirUp + dirSrcs + resource + extMD, true); // content block
+    if (type === css) file.open(get, dirUp + dirCSS + resource + extCSS, true); // CSS sheet
+    if (type === menu) file.open(get, dirUp + dirSrcs + resource + extMD, true); // menu block
     file.onreadystatechange = function() { xhttpReady(this, resource, type); };
     file.send();
     sameResource = resource;

@@ -1,0 +1,65 @@
+table, td, th {
+	border: 1px solid;
+	border-collapse: collapse;
+	padding: 0.50rem;
+}
+/* table {
+	border-collapse: collapse;
+}
+td, th {
+	border: 1px solid;
+	border-collapse: collapse;
+	padding: 0.50rem;
+} */
+
+tr {
+	text-align: center;
+}
+
+ul {
+	text-align: left;
+}
+li {
+	word-wrap: hyphenate;
+}
+
+th {
+	font-weight: bold;
+	text-align: center;
+}
+tr:first-child > th:first-child {
+    border: 0;
+}
+
+.feature-name {
+	text-align: left;
+	font-weight: bold;
+}
+
+.cmp-no, .cmp-unknown, .cmp-yes {
+    background-repeat: no-repeat;
+	width: 3.2rem;
+	height: 3.2rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+.cmp-yes {
+	background-image: url(../res/tick.png);
+}
+.cmp-no {
+	background-image: url(../res/cross.png);
+}
+.cmp-unknown {
+	background-image: url(../res/question.png);
+}
+
+cmp-legend {
+}
+
+.cmp-notes {
+	padding-left: 2rem;
+	font-size: 80%;
+	margin: 0;
+}

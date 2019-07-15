@@ -1,4 +1,6 @@
-/** Core **/
+/********************
+* Core
+********************/
 html, body {
     /* Dimensions */
     height: 100%;
@@ -20,22 +22,26 @@ body {
     /* Dimensions */
     width: 100%;
     /* General */
-    font-size: 1.6rem; /* Reset general font sizes to comparitive 16px default */
+    font-size: 1.6rem; /* Reset general font sizes to comparative 16px default */
     position: absolute;
 }
 a {
-	color: #cacaca;
+    color: rgba(202,202,202,1.000);
+    transition: .15s;
 }
 a:hover {
-    color: #e0e0e0;
     text-decoration: underline;
+}
+a:hover, .linkHandle:hover {
+    color: rgba(224,224,224,1.000);
+    cursor: pointer;
     text-shadow: #3171a7 0.1rem 0.1rem 0.3rem;
 }
 h1, h2, h3, h4 {
-	font-weight: normal;
+    font-weight: normal;
 }
 h1, h2 {
-    border: 0 solid #aca1a1;
+    border: 0 solid rgba(172,161,161,1.000);
 }
 h1 {
     border-bottom-width: 0.2rem;
@@ -48,24 +54,34 @@ h2 {
     margin: 2.1rem 0;
 }
 h3 {
-	font-size: 2.2rem;
+    font-size: 2.2rem;
 }
 h4 {
-	font-size: 1.9rem;
+    font-size: 1.9rem;
+}
+code {
+    font-family: 'Consolas', 'Inconsolata', monospace, sans-serif;
+    font-size: 10pt;
+    display: block;
+    white-space: pre-wrap;
+    padding: 4px 6px;
+    margin: 4px 8px 4px 2px;
+    background-color: rgba(249,251,255,1.000);
+    border: 1px solid rgba(153,187,255,1.000);
 }
 
 
-/** Page Sizing Control **/
+/********************
+* Page Sizing Control
+********************/
 #globalbox {
     /* Dimensions */
     height: 100%;
     min-height: 100%;
-    /* Flex Contents */
-    display: flex;
-    flex-flow: column nowrap;
     /* General */
     overflow-x: hidden;
     overflow-y: auto;
+    position: relative;
 }
 .page {
     /* Dimensions */
@@ -76,96 +92,268 @@ h4 {
 }
 
 
-/** Section Blocks **/
-.header, .footer {
+/********************
+* Shared Styles
+********************/
+#footer_container,
+#github-logo,
+#header_container,
+#header-links,
+#header-links-panel,
+#header-logo,
+#main,
+#main_loading,
+#nexusmods-logo
+{
+    height: 100%;
+}
+
+#footer_container,
+#globalbox,
+#header_container,
+#header-links-panel,
+#main_container,
+#main_loading,
+#side-menu,
+#side-menu_items
+{
+    display: flex;
+}
+
+#footer_container,
+#header_container,
+#header-links-panel,
+#main_container
+{
+    flex-flow: row nowrap;
+}
+
+#globalbox,
+#main_loading,
+#side-menu,
+#side-menu_items
+{
+    flex-flow: column nowrap;
+}
+
+#header_container,
+#footer_container,
+#main_container,
+#main_loading
+{
+    /* Flex Contents */
+    justify-content: space-between;
+}
+
+#header_container,
+#header-links-panel,
+#footer_container
+{
+    align-items: center;
+}
+
+#header-links-panel,
+#side-menu
+{
+    justify-content: flex-end
+}
+
+#github-logo,
+#header-links,
+#header-links-panel,
+#header-logo,
+#nexusmods-logo
+{
+    /* Flex Self */
+    flex: 1 0 5.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 5.4rem (parent: row) */
+    /* General */
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#github-logo,
+#nexusmods-logo
+{
+    /* Dimensions */
+    height: 4.4rem;
+    /* Flex Self */
+    flex: 1 0 4.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 4.4rem (parent: row) */
+    /* General */
+    margin-left: 1.2rem;
+}
+
+.side-menu_title,
+.side-menu_items,
+#side-panel
+{
+    flex: 0 0 auto; /* flex-grow 0, flex-shrink 0, flex-basis auto (parent: row) */
+}
+#main_container,
+#main_loading
+{
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+
+/********************
+* Section Blocks
+********************/
+#footer,
+#header {
     background: rgba(135,105,92,0.175);
     background: radial-gradient(rgba(39,57,50,0.200), rgba(230,152,133,0.150));
     border: 0 solid rgba(92,92,92,1.000);
 }
-.header {
+#header {
     /* Flex Self */
-    flex: 1 0 5.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 5.4rem (parent: column) */
+    flex: 0 0 5.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 5.4rem (parent: row) */
     /* General */
     border-bottom-width: 0.1rem;
 }
-.footer {
+#footer {
     /* Flex Self */
-    flex: 1 0 2.7rem; /* flex-grow 1, flex-shrink 0, flex-basis 5.4rem (parent: column) */
+    flex: 0 0 2.7rem; /* flex-grow 0, flex-shrink 0, flex-basis 2.7rem (parent: column) */
     /* General */
     border-top-width: 0.1rem;
 }
-
-.main {
+#main {
     /* Flex Self */
-    flex: 1 1 100%; /* flex-grow 1, flex-shrink 1, flex-basis 100% (parent: column) */
+    flex: 0 1 auto; /* flex-grow 1, flex-shrink 1, flex-basis 100% (parent: column) */
+    /* General */
+    overflow: hidden;
+    position: relative;
 }
-
-
-/** Section Containers **/
-.header_container, .footer_container, .main_container {
-    /* Dimensions */
-    height: 100%;
-    /* Flex Contents */
-    display: flex;
-    flex-flow: row nowrap;
-}
-.header_container, .footer_container {
-    align-items: center;
-}
-.footer_container {
-    justify-content: right;
-}
-.main_container {
+#main_container {
     background-color: rgba(23, 26, 29, 0.800);
-}
-
-
-/** Header Contents **/
-.header-panel {
-    flex: 1 0 auto; /* flex-grow 1, flex-shrink 0, flex-basis auto (parent: row) */
-    /* Dimensions */
-    height: 5.4rem;
-}
-.header-logo {
-    height: 5.4rem;
-}
-.header-logo img {
     height: 100%;
 }
+#main_loading {
+
+}
 
 
-/** Main Contents **/
-.content-panel {
+
+/********************
+* Header Frames
+********************/
+#header-links {
+    width: 100%;
     /* Flex Self */
-    flex: 0 0 calc(100% - 20rem); /* flex-grow 0, flex-shrink 0, flex-basis 75% (parent: row) */
+}
+#header-links-panel {
+    /* Dimensions */
+    min-width: 5.4rem;
+    /* General */
+    margin: 0 2.4rem;
+}
+
+
+/********************
+* Header Contents
+********************/
+#github-logo {
+    background-image: url("../res/github_wht.svg");
+    background: 
+}
+#header-logo {
+    background-image: url("../res/logo.png");
+    margin-left: 2.4rem;
+}
+#header-title {
+    /* Flex Self */
+    flex: 1 1 100%; /* flex-grow 1, flex-shrink 0, flex-basis 5.4rem (parent: row) */
+    /* General */
+    display: block;
+    margin: 0;
+    padding-left: 1.2rem;
+    transition: .15s;
+}
+#nexusmods-logo {
+    background-image: url("../res/nexus-mods.svg");
+}
+
+
+/********************
+* Main Contents
+********************/
+#content-panel {
+    /* Flex Self */
+    flex: 0 1 100%; /* flex-grow 0, flex-shrink 0, flex-basis 75% (parent: row) */
     /* General */
     line-height: 1.6;
     margin: 2.4rem 0;
+    opacity: 0;
+    position: relative;
+    transition: opacity 0.15s;
 }
 #content {
-    margin: 0 2.4rem;
+    padding: 0 2.4rem;
 }
 #content > h1:first-child {
     line-height: 1;
 }
+#content img {
+    max-width: 100%;
+}
+.quote {
+    background-color: rgba(56,56,56,0.250);
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJmaWxsOnJnYig2OSwgNjksIDcwKTtmb250LXNpemU6MC42MjVyZW07aGVpZ2h0OjIuOXJlbTtsZWZ0OjEuNXJlbTtwb3NpdGlvbjphYnNvbHV0ZTt0b3A6MS41cmVtO3dpZHRoOjMuOHJlbTsiPjxwYXRoIGNsYXNzPSJwYXRoMSIgZD0iTTAgMjAuNjc0YzAgNy4yMjUgNC42NjggMTEuMzM3IDkuODkyIDExLjMzNyA0LjgyNC0wLjA2MiA4LjcxOS0zLjk1NiA4Ljc4MS04Ljc3NSAwLTQuNzg1LTMuMzM0LTguMDA5LTcuNTU4LTguMDA5LTAuMDc4LTAuMDA0LTAuMTctMC4wMDYtMC4yNjItMC4wMDYtMC43MDMgMC0xLjM3NyAwLjEyNC0yLjAwMSAwLjM1MiAxLjA0MS00LjAxNCA1LjE1My04LjY4MyA4LjcxLTEwLjU3MmwtNi4xMTMtNS4wMDJjLTYuODkxIDQuODkxLTExLjQ0OCAxMi4zMzgtMTEuNDQ4IDIwLjY3NHpNMjIuNjc1IDIwLjY3NGMwIDcuMjI1IDQuNjY4IDExLjMzNyA5Ljg5MiAxMS4zMzcgNC44LTAuMDU2IDguNjctMy45NjEgOC42Ny04Ljc2OSAwLTAuMDA0IDAtMC4wMDggMC0wLjAxMiAwLTQuNzc5LTMuMjIzLTguMDAyLTcuNDQ3LTguMDAyLTAuMDk1LTAuMDA2LTAuMjA2LTAuMDA5LTAuMzE4LTAuMDA5LTAuNjg0IDAtMS4zMzkgMC4xMjYtMS45NDMgMC4zNTUgMC45MjctNC4wMTQgNS4xNS04LjY4MiA4LjcwNy0xMC41NzJsLTYuMTI0LTUuMDAyYy02Ljg5MSA0Ljg5MS0xMS40MzcgMTIuMzM4LTExLjQzNyAyMC42NzR6IiBzdHlsZT0iZmlsbDpyZ2IoNjksIDY5LCA3MCk7aGVpZ2h0OmF1dG87d2lkdGg6YXV0bzsiLz48L3N2Zz4=);
+    border-left: 0.6rem solid;
+    border-left-color: rgba(125, 25, 25, 1.000);
+    font-style: italic;
+    line-height: 1.5;
+    margin: 2.1rem;
+    padding: 2.5rem;
+    position: relative;
+}
+.quote blockquote {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+.quote blockquote p:first-child {
+    margin-top: 0;
+}
+.quote blockquote p:last-child {
+    margin-bottom: 0;
+}
 
 
-/** Navigation Contents **/
-.side-panel {
-    flex: 1 0 auto; /* flex-grow 0, flex-shrink 0, flex-basis auto (parent: row) */
-    margin: 2.4rem 0 2.4rem;
+/********************
+* Navigation Contents
+********************/
+#menu-toggle {
+    /* Dimensions */
+    height: 2rem;
+    width: 2rem;
+    /* General */
+    background-image: url("../res/arrow-wht.svg");
+    left: -4.4rem;
+    position: absolute;
+    top: 0.6rem;
+    transition: transform 0.25s;
+    z-index: 100;
+}
+#side-panel {
+    margin: 2.4rem 0;
+    opacity: 0;
+    position: relative;
+    transition: opacity 0.15s;
 }
 #side-menu {
     /* Dimensions */
-    min-width: 20rem;
-    /* Flex Contents */
-    display: flex;
-    flex-flow: column nowrap;
+    width: 20rem;
+    /* General */
+    overflow: hidden;
+    transition: width 0.4s;
 }
 .side-menu_title {
+    /* General */
     line-height: 1;
     margin: 0.3rem 2.4rem 1.3rem 1.6rem; /* 0.3: align bottom with content h1, 1.3: padding before items, 1.6: counterweight to content margin */
-	text-align: left;
+    text-align: left;
 }
 .side-menu_title h2 {
     border: none;
@@ -173,10 +361,6 @@ h4 {
     margin: 0;
 }
 .side-menu_items {
-    /* Flex Contents */
-    align-items: left;
-    display: flex;
-    flex-flow: column nowrap;
     /* General */
     line-height: 1.6;
     margin: 0 2.4rem 0 1.6rem;
@@ -185,22 +369,25 @@ h4 {
     /* Dimensions */
     width: 100%;
     /* General */
-    border-bottom: 0.1rem solid #262627;
+    border-bottom: 0.1rem solid rgba(38,38,39,1.000);
     padding: 0.5rem 0;
-    
-}
-.side-menu_item:first-child {
-    border-top: 0.1rem solid #262627; 
-}
-.side-menu_item a {
-    display: block;
-    text-decoration: none;
     transition: .15s;
 }
+.side-menu_item:first-child {
+    border-top: 0.1rem solid rgba(38,38,39,1.000); 
+}
 
 
-/** Footer Contents **/
-.copyrights {
+/********************
+* Footer Contents
+********************/
+#copyrights,
+.placeholder
+{
+    flex: 1 0 5.4rem;
+}
+#copyrights {
     font-size: 1.4rem;
     margin: 0 2.4rem;
+    text-align: right;
 }

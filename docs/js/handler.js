@@ -60,7 +60,7 @@ const
     // Directories
     dirCSS = "css/",
     dirSrcs = "srcs/",
-    dirUp = ".../",
+    dirUtil = "util/",
     // File Extensions
     extCSS = ".css",
 //  extHTML = ".html",
@@ -75,13 +75,13 @@ const
     loading = "loading",
     // General    
     auto = "auto",
-    badTimes = "_404",
+    badTimes = "404",
     content = "content",
     external = "external",
     home = "home",
     internal = "internal",
     link = "link",
-    menu = "_menu",
+    menu = "menu",
     transform = "transform",
     width = "width"
 ;
@@ -158,16 +158,16 @@ function getFilePrimer(resource, type) {
     }
 }
 function getFile(file, resource, type) {
-    if (type === content) file.open(get, dirUp + dirSrcs + resource + extMD, true); // content block
-    if (type === css) file.open(get, dirUp + dirCSS + resource + extCSS, true); // CSS sheet
-    if (type === menu) file.open(get, dirUp + dirSrcs + resource + extMD, true); // menu block
+    if (type === content) file.open(get, dirSrcs + resource + extMD, true); // content block
+    if (type === css) file.open(get, dirCSS + resource + extCSS, true); // CSS sheet
+    if (type === menu || type === badTimes) file.open(get, dirSrcs + dirUtil + resource + extMD, true); // menu block
     file.onreadystatechange = function() { xhttpReady(this, resource, type); };
     file.send();
     sameResource = resource;
 }
 function xhttpReady(file, resource, type) {
     if (xhttpStatus(file) === 204) {
-        if (type === content) {
+        if (type === content || type === badTimes) {
             contentBoxID.innerHTML = marked(file.response, markedOpt);
             setTimeout(function() {
                 contentVisibility(contentShow);
@@ -181,7 +181,10 @@ function xhttpReady(file, resource, type) {
             initListenAssign(menu);
         }
     }
-    if (xhttpStatus(file) === 408 && type === content) getFilePrimer(badTimes, content);
+    if (xhttpStatus(file) === 408 && type === content) {
+        console.log(xhttpStatus(file) + " " + type);
+        getFilePrimer(badTimes, badTimes);
+    }
 }
 function xhttpStatus(request) {
     return request.readyState + request.status;
@@ -247,7 +250,7 @@ function menuOpen() {
 /********************
 * Initializations
 ********************/
-function readyUp(caller) {
+function readyUtil(caller) {
     if (document.readyState !== loading) return caller();
     if (document.addEventListener) return document.addEventListener("DOMContentLoaded", caller);
     /********************
@@ -257,7 +260,7 @@ function readyUp(caller) {
     ********************/
     return null;
 }
-readyUp(function() {
+readyUtil(function() {
     // Setting vars
     initVarAssign(home);
     // Attach listeners

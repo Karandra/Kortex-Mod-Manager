@@ -10,7 +10,7 @@ namespace Kortex::Application::OName
 	KortexDefOption(Variables);
 	KortexDefOption(Language);
 	KortexDefOption(Workspace);
-	KortexDefOption(ModSource);
+	KortexDefOption(ModNetwork);
 	KortexDefOption(DisplayModel);
 
 	KortexDefOption(ID);

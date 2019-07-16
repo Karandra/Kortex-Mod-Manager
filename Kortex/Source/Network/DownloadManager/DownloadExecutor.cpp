@@ -87,6 +87,9 @@ namespace Kortex::DownloadManager
 	{
 		m_EvtHandler.CallAfter([this]()
 		{
+			// Close the stream now to allow download item or manager to manipulate the file
+			m_Stream->Close();
+
 			// Download item relinquished ownership to the executor to us.
 			// It will be deleted when we are done executing events dispatching below.
 			auto executor = m_Item.OnExecutorDone();

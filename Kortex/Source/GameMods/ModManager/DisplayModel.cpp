@@ -55,7 +55,7 @@ namespace Kortex::ModManager
 			view->AppendColumn<TextRenderer>(KTr("ModManager.ModList.Tags"), ColumnID::Tags, {}, columnStyleDefault);
 		}
 		{
-			auto [column, renderer] = view->AppendColumn<BitmapListRenderer>(KTr("ModManager.ModList.ModSource"), ColumnID::ModSource, {}, columnStyleDefault);
+			auto [column, renderer] = view->AppendColumn<BitmapListRenderer>(KTr("ModManager.ModList.Sources"), ColumnID::ModSource, {}, columnStyleDefault);
 			renderer.SetAlignment(wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL);
 		}
 		{
@@ -315,7 +315,7 @@ namespace Kortex::ModManager
 						const ModSourceStore& store = modNode->GetMod().GetModSourceStore();
 						if (!store.IsEmpty())
 						{
-							KAux::AskOpenURL(store.GetLabeledModURLs(), GetView());
+							KAux::AskOpenURL(store.GetLabeledModURIs(), GetView());
 						}
 						break;
 					}

@@ -176,7 +176,7 @@ namespace Kortex
 
 	bool DownloadItem::CanVisitSource() const
 	{
-		return m_FileInfo.IsIDsValid();
+		return m_FileInfo.IDsValid();
 	}
 	bool DownloadItem::CanQueryInfo() const
 	{

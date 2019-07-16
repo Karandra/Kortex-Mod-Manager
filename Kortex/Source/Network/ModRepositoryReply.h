@@ -100,9 +100,9 @@ namespace Kortex
 		public:
 			bool IsOK() const
 			{
-				return IsIDsValid() && Size > 0 && !Name.IsEmpty();
+				return IDsValid() && Size > 0 && !Name.IsEmpty();
 			}
-			bool IsIDsValid() const
+			bool IDsValid() const
 			{
 				return ModID.HasValue() && ID.HasValue();
 			}

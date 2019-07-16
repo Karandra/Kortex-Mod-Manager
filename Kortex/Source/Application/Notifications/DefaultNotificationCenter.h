@@ -35,7 +35,7 @@ namespace Kortex::Notifications
 			void OnToolBarButton(KxAuiToolBarEvent& event) override;
 			void UpdateToolBarButton() override;
 
-			void DoNotify(std::unique_ptr<INotification> notification) override;
+			void QueueNotification(std::unique_ptr<INotification> notification) override;
 			void OnNotificationAdded(INotification& notification) override
 			{
 				OnNotificationsCountChanged();

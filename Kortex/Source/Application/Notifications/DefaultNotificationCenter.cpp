@@ -102,7 +102,7 @@ namespace Kortex::Notifications
 		}
 	}
 
-	void DefaultNotificationCenter::DoNotify(std::unique_ptr<INotification> notification)
+	void DefaultNotificationCenter::QueueNotification(std::unique_ptr<INotification> notification)
 	{
 		Utility::Log::LogInfo("DefaultNotificationCenter::DoNotify");
 		Utility::Log::LogInfo("Caption: %1", notification->GetCaption());

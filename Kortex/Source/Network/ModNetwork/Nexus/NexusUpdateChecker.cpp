@@ -120,7 +120,7 @@ namespace Kortex::NetworkManager
 			// Stop if there are too little requests left
 			if (!m_Repository.IsAutomaticUpdateCheckAllowed())
 			{
-				INotificationCenter::GetInstance()->Notify(m_Nexus, KTrf("NetworkManager.RequestQuotaReched", m_Nexus.GetName()), KxICON_WARNING);
+				INotificationCenter::Notify(m_Nexus, KTrf("NetworkManager.RequestQuotaReched", m_Nexus.GetName()), KxICON_WARNING);
 				return;
 			}
 
@@ -303,14 +303,20 @@ namespace Kortex::NetworkManager
 		{
 			if (!m_Repository.IsAutomaticUpdateCheckAllowed())
 			{
-				INotificationCenter::GetInstance()->Notify(m_Nexus, KTr("NetworkManager.UpdateCheck.AutoCheckQuoteReqched"), KxICON_WARNING);
+				INotificationCenter::Notify(m_Nexus,
+											KTr("NetworkManager.UpdateCheck.AutoCheckQuoteReqched"),
+											KxICON_WARNING
+				);
 				return false;
 			}
 
 			std::thread([this, onUpdate = std::move(onUpdate), onDone = std::move(onDone)]()
 			{
 				m_UpdateCheckInProgress = true;
-				INotificationCenter::GetInstance()->Notify(m_Nexus, KTr("NetworkManager.UpdateCheck.AutoCheckStarted"), KxICON_INFORMATION);
+				INotificationCenter::Notify(m_Nexus,
+											KTr("NetworkManager.UpdateCheck.AutoCheckStarted"),
+											KxICON_INFORMATION
+				);
 
 				size_t updatesCount = 0;
 				DoRunUpdateCheckEntry(std::move(onUpdate), updatesCount);
@@ -319,7 +325,10 @@ namespace Kortex::NetworkManager
 				{
 					onDone();
 				}
-				INotificationCenter::GetInstance()->Notify(m_Nexus, KTrf("NetworkManager.UpdateCheck.AutoCheckDone", updatesCount), KxICON_INFORMATION);
+				INotificationCenter::Notify(m_Nexus,
+											KTrf("NetworkManager.UpdateCheck.AutoCheckDone", updatesCount),
+											KxICON_INFORMATION
+				);
 				
 				SaveUpdateInfo();
 				m_UpdateCheckInProgress = false;

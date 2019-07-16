@@ -19,7 +19,7 @@ namespace Kortex
 
 		const IApplication* app = IApplication::GetInstance();
 		const IModNetwork& modNetwork = GetContainer();
-		INotificationCenter::GetInstance()->Notify(app->GetName(), KTrf("NetworkManager.AuthSuccess", modNetwork.GetName()), KxICON_INFORMATION);
+		INotificationCenter::Notify(app->GetName(), KTrf("NetworkManager.AuthSuccess", modNetwork.GetName()), KxICON_INFORMATION);
 	}
 	void ModNetworkAuth::OnAuthFail()
 	{
@@ -27,7 +27,7 @@ namespace Kortex
 
 		const IApplication* app = IApplication::GetInstance();
 		const IModNetwork& modNetwork = GetContainer();
-		INotificationCenter::GetInstance()->Notify(app->GetName(), KTrf("NetworkManager.AuthFail", modNetwork.GetName()), KxICON_ERROR);
+		INotificationCenter::Notify(app->GetName(), KTrf("NetworkManager.AuthFail", modNetwork.GetName()), KxICON_ERROR);
 	}
 	void ModNetworkAuth::OnAuthReset()
 	{
@@ -35,7 +35,7 @@ namespace Kortex
 
 		const IApplication* app = IApplication::GetInstance();
 		const IModNetwork& modNetwork = GetContainer();
-		INotificationCenter::GetInstance()->Notify(app->GetName(), KTrf("NetworkManager.AuthReset", modNetwork.GetName()), KxICON_WARNING);
+		INotificationCenter::Notify(app->GetName(), KTrf("NetworkManager.AuthReset", modNetwork.GetName()), KxICON_WARNING);
 	}
 
 	wxBitmap ModNetworkAuth::DownloadSmallBitmap(const wxString& address) const

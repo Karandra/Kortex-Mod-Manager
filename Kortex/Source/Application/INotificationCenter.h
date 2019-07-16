@@ -49,7 +49,7 @@ namespace Kortex
 			virtual void OnToolBarButton(KxAuiToolBarEvent& event) = 0;
 			virtual void UpdateToolBarButton() = 0;
 
-			virtual void DoNotify(std::unique_ptr<INotification> notification) = 0;
+			virtual void QueueNotification(std::unique_ptr<INotification> notification) = 0;
 			virtual void OnNotificationAdded(INotification& notification) { }
 			virtual void OnNotificationRemoved(INotification& notification) { }
 			virtual void OnNotificationsCleared() { }
@@ -71,35 +71,35 @@ namespace Kortex
 			virtual bool IsNotificationsDisplayed() const = 0;
 			virtual void ShowNotificationsWindow() = 0;
 			virtual void HideNotificationsWindow() = 0;
+			
+			bool RemoveNotification(INotification& notification);
+			bool ClearNotifications();
 
 		public:
 			void Notify(std::unique_ptr<INotification> notification)
 			{
-				DoNotify(std::move(notification));
+				QueueNotification(std::move(notification));
 			}
 			
-			void Notify(const wxString& caption, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
-			void Notify(const wxString& caption, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+			static void Notify(const wxString& caption, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
+			static void Notify(const wxString& caption, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
 
-			void Notify(const IModule& module, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
-			void Notify(const IModule& module, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+			static void Notify(const IModule& module, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
+			static void Notify(const IModule& module, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
 
-			void Notify(const IManager& manager, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
-			void Notify(const IManager& manager, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+			static void Notify(const IManager& manager, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
+			static void Notify(const IManager& manager, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
 
-			void Notify(const IModNetwork& modNetwork, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
-			void Notify(const IModNetwork& modNetwork, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
+			static void Notify(const IModNetwork& modNetwork, const wxString& message, KxIconType iconID = KxICON_INFORMATION);
+			static void Notify(const IModNetwork& modNetwork, const wxString& message, const wxBitmap& bitmap = wxNullBitmap);
 			
-			template<class T, class... Args> void Notify(Args&&... arg)
+			template<class T, class... Args> static void Notify(Args&&... arg)
 			{
-				DoNotify(std::make_unique<T>(std::forward<Args>(arg)...));
+				GetInstance()->DoNotify(std::make_unique<T>(std::forward<Args>(arg)...));
 			}
-			template<class TSingletonPtr, class... Args> void NotifyUsing(Args&&... arg)
+			template<class TSingletonPtr, class... Args> static void NotifyUsing(Args&&... arg)
 			{
 				Notify(*TSingletonPtr::GetInstance(), std::forward<Args>(arg)...);
 			}
-			
-			bool RemoveNotification(INotification& notification);
-			bool ClearNotifications();
 	};
 }

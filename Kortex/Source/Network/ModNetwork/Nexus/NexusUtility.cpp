@@ -137,18 +137,19 @@ namespace Kortex::NetworkManager
 		try
 		{
 			KxJSONObject json = KxJSON::Load(message);
-			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(json["message"].get<wxString>(), KxICON_ERROR);
+			INotificationCenter::NotifyUsing<INetworkManager>(json["message"].get<wxString>(), KxICON_ERROR);
 		}
 		catch (...)
 		{
-			INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(message, KxICON_ERROR);
+			INotificationCenter::NotifyUsing<INetworkManager>(message, KxICON_ERROR);
 		}
 	}
 	void NexusUtility::ReportRequestQuoteReached() const
 	{
-		INotificationCenter::GetInstance()->NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched",
-																		 m_Nexus.GetName()),
-																		 KxICON_WARNING);
+		INotificationCenter::NotifyUsing<INetworkManager>(KTrf("NetworkManager.RequestQuotaReched",
+														  m_Nexus.GetName()),
+														  KxICON_WARNING
+														  );
 	}
 	KxHTTPStatusValue NexusUtility::TestRequestError(const KxCURLReplyBase& reply, const wxString& message) const
 	{

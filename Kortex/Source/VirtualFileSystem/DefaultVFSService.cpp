@@ -46,7 +46,7 @@ namespace Kortex::VirtualFileSystem
 	
 	void DefaultVFSService::OnFSControllerTerminated()
 	{
-		INotificationCenter::GetInstance()->Notify(KTr("VFS.Caption"), KTr("VFS.Service.UnhandledException"), KxICON_ERROR);
+		INotificationCenter::Notify(KTr("VFS.Caption"), KTr("VFS.Service.UnhandledException"), KxICON_ERROR);
 		RunController();
 	}
 	void DefaultVFSService::OnMessage(const IPC::Message& message)

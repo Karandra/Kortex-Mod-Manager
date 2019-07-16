@@ -11,11 +11,13 @@ namespace Kortex
 {
 	class IDownloadItem
 	{
-		public:
-			virtual ~IDownloadItem() = default;
+		friend class IDownloadExecutor;
+
+		protected:
+			virtual std::unique_ptr<IDownloadExecutor> OnExecutorEnd() = 0;
+			virtual void OnExecutorProgress() = 0;
 
 		public:
-			virtual std::unique_ptr<IDownloadExecutor> OnExecutorDone() = 0;
-			virtual void OnUpdateProgress() = 0;
+			virtual ~IDownloadItem() = default;
 	};
 }

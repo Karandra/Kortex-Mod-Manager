@@ -78,7 +78,7 @@ namespace Kortex::DownloadManager
 			m_TimeStamp = time;
 			m_EvtHandler.CallAfter([this]()
 			{
-				m_Item.OnUpdateProgress();
+				OnTaskProgress(m_Item);
 				NotifyEvent(ItemEvent::Progress);
 			});
 		}
@@ -92,7 +92,7 @@ namespace Kortex::DownloadManager
 
 			// Download item relinquished ownership to the executor to us.
 			// It will be deleted when we are done executing events dispatching below.
-			auto executor = m_Item.OnExecutorDone();
+			auto executor = OnTaskEnd(m_Item);
 
 			// Send event to download manager
 			if (m_IsCompleted)

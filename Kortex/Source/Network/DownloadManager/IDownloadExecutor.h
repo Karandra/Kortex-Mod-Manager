@@ -3,12 +3,17 @@
 
 namespace Kortex
 {
+	class IDownloadItem;
 	class DownloadItem;
 }
 namespace Kortex
 {
 	class IDownloadExecutor
 	{
+		protected:
+			std::unique_ptr<IDownloadExecutor> OnTaskEnd(IDownloadItem& item);
+			void OnTaskProgress(IDownloadItem& item);
+
 		public:
 			virtual ~IDownloadExecutor() = default;
 

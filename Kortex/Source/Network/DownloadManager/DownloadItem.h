@@ -36,6 +36,7 @@ namespace Kortex
 			ModDownloadReply m_DownloadInfo;
 			
 			int64_t m_DownloadedSize = 0;
+			int64_t m_DownloadSpeed = 0;
 			wxDateTime m_DownloadDate;
 			bool m_IsHidden = false;
 
@@ -53,6 +54,10 @@ namespace Kortex
 			bool Deserialize(wxInputStream& stream);
 
 			bool DoStart(int64_t startAt = 0);
+
+		protected:
+			std::unique_ptr<IDownloadExecutor> OnExecutorEnd() override;
+			void OnExecutorProgress() override;
 
 		public:
 			DownloadItem() = default;
@@ -78,6 +83,10 @@ namespace Kortex
 			wxDateTime GetDownloadDate() const
 			{
 				return m_DownloadDate;
+			}
+			int64_t GetDownloadSpeed() const
+			{
+				return m_DownloadSpeed;
 			}
 			int64_t GetDownloadedSize() const
 			{
@@ -129,13 +138,6 @@ namespace Kortex
 			bool Save() const;
 
 		public:
-			IDownloadExecutor* GetExecutor() const
-			{
-				return m_Executor.get();
-			}
-			std::unique_ptr<IDownloadExecutor> OnExecutorDone() override;
-			void OnUpdateProgress() override;
-
 			bool IsCompleted() const
 			{
 				return !IsFailed() && !IsPaused() && !IsRunning();

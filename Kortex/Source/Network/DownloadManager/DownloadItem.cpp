@@ -109,6 +109,22 @@ namespace Kortex
 		return m_Executor->Start(startAt);
 	}
 
+	std::unique_ptr<IDownloadExecutor> DownloadItem::OnExecutorEnd()
+	{
+		OnExecutorProgress();
+		m_ShouldResume = false;
+
+		return std::move(m_Executor);
+	}
+	void DownloadItem::OnExecutorProgress()
+	{
+		m_IsFailed = m_Executor->IsFailed();
+		m_DownloadSpeed = m_Executor->GetSpeed();
+		m_DownloadedSize = m_Executor->GetDownloadedSize();
+		m_FileInfo.Size = m_Executor->GetTotalSize();
+		m_DownloadDate = m_Executor->GetStartDate();
+	}
+
 	DownloadItem::DownloadItem(const ModDownloadReply& downloadInfo,
 							   const ModFileReply& fileInfo,
 							   ModNetworkRepository& modRepository,
@@ -224,21 +240,6 @@ namespace Kortex
 	{
 		KxFileStream stream(GetFullPath() + StreamName, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 		return stream.IsOk() && Serialize(stream);
-	}
-
-	std::unique_ptr<IDownloadExecutor> DownloadItem::OnExecutorDone()
-	{
-		OnUpdateProgress();
-		m_ShouldResume = false;
-
-		return std::move(m_Executor);
-	}
-	void DownloadItem::OnUpdateProgress()
-	{
-		m_IsFailed = m_Executor->IsFailed();
-		m_DownloadDate = m_Executor->GetStartDate();
-		m_DownloadedSize = m_Executor->GetDownloadedSize();
-		m_FileInfo.Size = m_Executor->GetTotalSize();
 	}
 
 	bool DownloadItem::CanStart() const

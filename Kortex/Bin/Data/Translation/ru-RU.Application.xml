@@ -375,7 +375,7 @@
 		<String ID="ModManager.ModList.Version">Версия</String>
 		<String ID="ModManager.ModList.Author">Автор</String>
 		<String ID="ModManager.ModList.Tags">Теги</String>
-		<String ID="ModManager.ModList.ModSource">Источник</String>
+		<String ID="ModManager.ModList.Sources">Источники</String>
 		<String ID="ModManager.ModList.DateInstall">Дата установки</String>
 		<String ID="ModManager.ModList.DateUninstall">Дата деинсталляции</String>
 		<String ID="ModManager.ModList.ModFolder">Папка</String>
@@ -605,6 +605,8 @@
 		<String ID="DownloadManager.RemoveDownloadsMessage">Вы действительно хотите удалить все загрузки?</String>
 		<String ID="DownloadManager.RemoveInstalledDownloadsMessage">Вы действительно хотите удалить все загрузки с установленными модами?</String>
 
+		<String ID="DownloadManager.Notification.DownloadStarted">Загрузка начата</String>
+		<String ID="DownloadManager.Notification.DownloadStartedEx">%1</String>
 		<String ID="DownloadManager.Notification.DownloadCompleted">Загрузка завершена</String>
 		<String ID="DownloadManager.Notification.DownloadCompletedEx">%1</String>
 		<String ID="DownloadManager.Notification.DownloadFailed">Загрузка не удалась</String>
@@ -616,12 +618,12 @@
 		<String ID="DownloadManager.Menu.Install">Установить</String>
 		<String ID="DownloadManager.Menu.Add">Добавить загрузку</String>
 
+		<String ID="DownloadManager.Menu.Start">Запустить</String>
+		<String ID="DownloadManager.Menu.Resume">Продолжить</String>
 		<String ID="DownloadManager.Menu.Pause">Приостановить</String>
 		<String ID="DownloadManager.Menu.Abort">Прервать</String>
-		<String ID="DownloadManager.Menu.Resume">Продолжить</String>
-		<String ID="DownloadManager.Menu.Restart">Перезапустить</String>
 
-		<String ID="DownloadManager.Menu.SetModSource">Сменить источник мода</String>
+		<String ID="DownloadManager.Menu.SetSource">Сменить источник</String>
 		<String ID="DownloadManager.Menu.QueryInfo">Запросить информацию</String>
 		<String ID="DownloadManager.Menu.ShowChangeLog">Показать список изменений</String>
 		<String ID="DownloadManager.Menu.ResetDownloadLink">Сбросить ссылку для загрузки</String>

@@ -370,7 +370,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="ModManager.ModList.Version">Version</String>
 		<String ID="ModManager.ModList.Author">Author</String>
 		<String ID="ModManager.ModList.Tags">Tags</String>
-		<String ID="ModManager.ModList.ModSource">Source</String>
+		<String ID="ModManager.ModList.Sources">Sources</String>
 		<String ID="ModManager.ModList.DateInstall">Date installed</String>
 		<String ID="ModManager.ModList.DateUninstall">Date uninstalled</String>
 		<String ID="ModManager.ModList.ModFolder">Folder</String>
@@ -600,6 +600,8 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.RemoveDownloadsMessage">Are you sure you want to delete all downloads?</String>
 		<String ID="DownloadManager.RemoveInstalledDownloadsMessage">Are you sure you want to delete all installed downloads?</String>
 
+		<String ID="DownloadManager.Notification.DownloadStarted">Download started</String>
+		<String ID="DownloadManager.Notification.DownloadStartedEx">%1</String>
 		<String ID="DownloadManager.Notification.DownloadCompleted">Download completed</String>
 		<String ID="DownloadManager.Notification.DownloadCompletedEx">%1</String>
 		<String ID="DownloadManager.Notification.DownloadFailed">Download failed</String>
@@ -611,12 +613,12 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.Install">Install</String>
 		<String ID="DownloadManager.Menu.Add">Add download</String>
 
+		<String ID="DownloadManager.Menu.Start">Start</String>
+		<String ID="DownloadManager.Menu.Resume">Resume</String>
 		<String ID="DownloadManager.Menu.Pause">Pause</String>
 		<String ID="DownloadManager.Menu.Abort">Abort</String>
-		<String ID="DownloadManager.Menu.Resume">Resume</String>
-		<String ID="DownloadManager.Menu.Restart">Restart</String>
 
-		<String ID="DownloadManager.Menu.SetModSource">Change mod source</String>
+		<String ID="DownloadManager.Menu.SetSource">Change source</String>
 		<String ID="DownloadManager.Menu.QueryInfo">Query info</String>
 		<String ID="DownloadManager.Menu.ShowChangeLog">Show change log</String>
 		<String ID="DownloadManager.Menu.ResetDownloadLink">Reset download link</String>

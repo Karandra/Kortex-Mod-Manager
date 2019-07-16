@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Network/Common.h"
 #include "Network/ModRepositoryReply.h"
+#include "Network/NetworkModInfo.h"
 #include "IDownloadItem.h"
 #include "IDownloadExecutor.h"
 #include "GameInstance/GameID.h"
@@ -17,6 +18,10 @@ namespace Kortex
 	class IDownloadExecutor;
 	class DownloadItemBuilder;
 	class ModNetworkRepository;
+}
+namespace Kortex::DownloadManager
+{
+	class DisplayModelNode;
 }
 
 namespace Kortex
@@ -49,6 +54,9 @@ namespace Kortex
 			bool m_IsFailed = false;
 			bool m_ShouldResume = false;
 
+			// View
+			DownloadManager::DisplayModelNode* m_DispalyNode = nullptr;
+
 		private:
 			bool Serialize(wxOutputStream& stream) const;
 			bool Deserialize(wxInputStream& stream);
@@ -70,14 +78,18 @@ namespace Kortex
 		public:
 			bool IsOK() const;
 			wxString GetFullPath() const;
-			
-			const ModFileReply& GetFileInfo() const
+
+			KxURI GetURI() const
 			{
-				return m_FileInfo;
+				return m_DownloadInfo.URI;
 			}
-			const ModDownloadReply& GetDownloadInfo() const
+			wxString GetServerName() const
 			{
-				return m_DownloadInfo;
+				return !m_DownloadInfo.Name.IsEmpty() ? m_DownloadInfo.Name : m_DownloadInfo.ShortName;
+			}
+			NetworkModInfo GetNetworkModInfo() const
+			{
+				return NetworkModInfo(m_FileInfo.ModID, m_FileInfo.ID);
 			}
 
 			wxDateTime GetDownloadDate() const
@@ -95,6 +107,28 @@ namespace Kortex
 			int64_t GetTotalSize() const
 			{
 				return m_FileInfo.Size;
+			}
+
+			wxString GetName() const
+			{
+				return m_FileInfo.Name;
+			}
+			wxString GetDisplayName() const
+			{
+				return !m_FileInfo.DisplayName.IsEmpty() ? m_FileInfo.DisplayName : m_FileInfo.Name;
+			}
+			KxVersion GetVersion() const
+			{
+				return m_FileInfo.Version;
+			}
+			
+			bool HasChangeLog() const
+			{
+				return !m_FileInfo.ChangeLog.IsEmpty();
+			}
+			wxString GetChangeLog() const
+			{
+				return m_FileInfo.ChangeLog;
 			}
 
 			GameID GetTargetGame() const
@@ -162,6 +196,16 @@ namespace Kortex
 			bool CanResume() const;
 			bool Pause();
 			bool Resume();
+
+		public:
+			DownloadManager::DisplayModelNode* GetDisplayNode() const
+			{
+				return m_DispalyNode;
+			}
+			void SetDisplayNode(DownloadManager::DisplayModelNode* node)
+			{
+				m_DispalyNode = node;
+			}
 
 		public:
 			DownloadItem& operator=(const DownloadItem&) = delete;

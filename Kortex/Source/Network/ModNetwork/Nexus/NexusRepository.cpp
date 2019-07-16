@@ -211,7 +211,9 @@ namespace Kortex::NetworkManager
 			{
 				if (wxTheClipboard->Open())
 				{
-					wxTheClipboard->SetData(new wxTextDataObject(m_Nexus.ConstructNXM(download->GetFileInfo(), download->GetTargetGame()).BuildUnescapedURI()));
+					wxTheClipboard->SetData(new wxTextDataObject(m_Nexus.ConstructNXM(download->GetNetworkModInfo(),
+											download->GetTargetGame()).BuildUnescapedURI())
+					);
 					wxTheClipboard->Close();
 				}
 			});

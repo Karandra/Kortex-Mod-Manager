@@ -85,8 +85,7 @@ namespace Kortex::Application
 	}
 	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const KWorkspace& workspace, const wxString& branch)
 	{
-		// TODO: Workspace
-		KxXMLNode node;
+		KxXMLNode node = InitNode(disposition, xml, wxS("Workspace"), workspace.GetID(), branch);
 		AssignDisposition(disposition);
 		AssignNode(node);
 	}

@@ -31,7 +31,7 @@ namespace Kortex
 		else
 		{
 			it->SetName(name);
-			it->SetURL(url);
+			it->SetURI(url);
 			return *it;
 		}
 	}
@@ -60,7 +60,7 @@ namespace Kortex
 		else
 		{
 			it->SetModSource(modNetwork);
-			it->SetURL(url);
+			it->SetURI(url);
 			return *it;
 		}
 	}
@@ -112,42 +112,42 @@ namespace Kortex
 		return false;
 	}
 
-	wxString ModSourceStore::GetModPageURL(const wxString& name, const GameID& gameID) const
+	KxURI ModSourceStore::GetModPageURI(const wxString& name, const GameID& gameID) const
 	{
 		if (const ModSourceItem* item = GetItem(name))
 		{
-			return item->GetURL(gameID);
+			return item->GetURI(gameID);
 		}
 		return {};
 	}
-	wxString ModSourceStore::GetModPageURL(const IModNetwork& modNetwork, const GameID& gameID) const
+	KxURI ModSourceStore::GetModPageURI(const IModNetwork& modNetwork, const GameID& gameID) const
 	{
 		if (const ModSourceItem* item = GetItem(modNetwork))
 		{
-			return item->GetURL(gameID);
+			return item->GetURI(gameID);
 		}
 		return {};
 	}
 	
-	KxStringVector ModSourceStore::GetModURLs(const GameID& gameID) const
+	std::vector<KxURI> ModSourceStore::GetModURIs(const GameID& gameID) const
 	{
-		KxStringVector items;
+		std::vector<KxURI> items;
 		items.reserve(m_Items.size());
 
 		for (const ModSourceItem& item: m_Items)
 		{
-			items.push_back(item.GetURL(gameID));
+			items.push_back(item.GetURI(gameID));
 		}
 		return items;
 	}
-	KLabeledValue::Vector ModSourceStore::GetLabeledModURLs(const GameID& gameID) const
+	KLabeledValue::Vector ModSourceStore::GetLabeledModURIs(const GameID& gameID) const
 	{
 		KLabeledValue::Vector items;
 		items.reserve(m_Items.size());
 
 		for (const ModSourceItem& item: m_Items)
 		{
-			items.emplace_back(item.GetURL(gameID), item.GetName());
+			items.emplace_back(item.GetURI(gameID).BuildUnescapedURI(), item.GetName());
 		}
 		return items;
 	}

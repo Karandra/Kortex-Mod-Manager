@@ -77,7 +77,7 @@ namespace Kortex::ModSource
 					}
 					else
 					{
-						value = node->GetURL();
+						value = node->GetURI().BuildUnescapedURI();
 					}
 					break;
 				}
@@ -97,7 +97,7 @@ namespace Kortex::ModSource
 			}
 			case ColumnID::Value:
 			{
-				value = node->GetURL();
+				value = node->GetURI().BuildUnescapedURI();
 				break;
 			}
 		};
@@ -134,9 +134,9 @@ namespace Kortex::ModSource
 				}
 				else
 				{
-					if (newValue != node->GetURL())
+					if (KxURI uri(newValue); uri != node->GetURI())
 					{
-						node->SetURL(newValue);
+						node->SetURI(uri);
 						m_IsModified = true;
 						return true;
 					}

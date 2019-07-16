@@ -167,7 +167,7 @@ namespace Kortex::NetworkManager
 		{
 			wxRegEx regEx(RAW(u8R"(\[NEXUS\s?ID\:\s?(\d+)\])"), wxRE_DEFAULT|wxRE_ADVANCED|wxRE_ICASE|wxRE_NEWLINE);
 			regEx.Matches(description, wxRE_DEFAULT|wxRE_ADVANCED|wxRE_ICASE|wxRE_NEWLINE);
-			regEx.ReplaceAll(&description, wxString::Format(RAW(u8R"(<a href="%s\/\1">\0</a>)"), GetModPageBaseURL()));
+			regEx.ReplaceAll(&description, KxString::Format(RAW(u8R"(<a href="%1\/\1">\0</a>)"), GetModPageBaseURI().BuildUnescapedURI()));
 		}
 
 		// Image: [img]address[/img]
@@ -243,13 +243,16 @@ namespace Kortex::NetworkManager
 		}
 	}
 	
-	wxString NexusModNetwork::GetModPageBaseURL(const GameID& id) const
+	KxURI NexusModNetwork::GetModPageBaseURI(const GameID& id) const
 	{
 		return KxString::Format(wxS("https://www.nexusmods.com/%1/mods"), TranslateGameIDToNetwork(id)).MakeLower();
 	}
-	wxString NexusModNetwork::GetModPageURL(const ModRepositoryRequest& request)
+	KxURI NexusModNetwork::GetModPageURI(const ModRepositoryRequest& request)
 	{
-		return KxString::Format(wxS("%1/%2"), GetModPageBaseURL(request.GetGameID()), request.GetModID().GetValue());
+		return KxString::Format(wxS("%1/%2"),
+								GetModPageBaseURI(request.GetGameID()).BuildUnescapedURI(),
+								request.GetModID().GetValue()
+		);
 	}
 
 	std::optional<NexusGameReply> NexusModNetwork::GetGameInfo(const GameID& id) const
@@ -306,7 +309,7 @@ namespace Kortex::NetworkManager
 		return infoVector;
 	}
 
-	wxString NexusModNetwork::ConstructNXM(const NetworkModInfo& modInfo, const GameID& id, const NexusNXMLinkData& linkData) const
+	KxURI NexusModNetwork::ConstructNXM(const NetworkModInfo& modInfo, const GameID& id, const NexusNXMLinkData& linkData) const
 	{
 		wxString nxm = KxString::Format(wxS("nxm://%1/mods/%2/files/%3"),
 										TranslateGameIDToNetwork(id),
@@ -321,22 +324,26 @@ namespace Kortex::NetworkManager
 		nxm.MakeLower();
 		return nxm;
 	}
-	bool NexusModNetwork::ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const
+	bool NexusModNetwork::ParseNXM(const KxURI& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const
 	{
-		wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+)&user_id=(.+))", wxRE_ADVANCED|wxRE_ICASE);
-		if (reg.Matches(link))
+		if (link.IsOk())
 		{
-			gameID = TranslateGameIDFromNetwork(reg.GetMatch(link, 1));
+			const wxString text = link.BuildUnescapedURI();
+			wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+)&user_id=(.+))", wxRE_ADVANCED|wxRE_ICASE);
+			if (reg.Matches(text))
+			{
+				gameID = TranslateGameIDFromNetwork(reg.GetMatch(text, 1));
 
-			ModID modID(reg.GetMatch(link, 2));
-			ModFileID fileID(reg.GetMatch(link, 3));
-			modInfo = NetworkModInfo(modID, fileID);
+				ModID modID(reg.GetMatch(text, 2));
+				ModFileID fileID(reg.GetMatch(text, 3));
+				modInfo = NetworkModInfo(modID, fileID);
 
-			linkData.Key = reg.GetMatch(link, 4);
-			linkData.Expires = reg.GetMatch(link, 5);
-			linkData.UserID = reg.GetMatch(link, 6);
+				linkData.Key = reg.GetMatch(text, 4);
+				linkData.Expires = reg.GetMatch(text, 5);
+				linkData.UserID = reg.GetMatch(text, 6);
 
-			return gameID && modID && fileID;
+				return gameID && modID && fileID;
+			}
 		}
 		return false;
 	}
@@ -344,5 +351,6 @@ namespace Kortex::NetworkManager
 	void NexusModNetwork::OnToolBarMenu(KxMenu& menu)
 	{
 		m_Auth.OnToolBarMenu(menu);
+		m_Repository.OnToolBarMenu(menu);
 	}
 }

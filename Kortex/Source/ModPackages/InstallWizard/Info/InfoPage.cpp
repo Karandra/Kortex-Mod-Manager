@@ -211,7 +211,7 @@ namespace Kortex::InstallWizard
 				{
 					IModNetwork* modNetwork = nullptr;
 					ResourceID icon = item.TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : IModNetwork::GetGenericIcon();
-					m_InfoDisplayModel->AddItem(KLabeledValue(item.GetURL(), item.GetName()), icon, InfoKind::ModSource);
+					m_InfoDisplayModel->AddItem(KLabeledValue(item.GetURI().BuildUnescapedURI(), item.GetName()), icon, InfoKind::ModSource);
 				}
 				return true;
 			});

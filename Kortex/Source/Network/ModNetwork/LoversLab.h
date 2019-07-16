@@ -41,7 +41,7 @@ namespace Kortex::NetworkManager
 				return {};
 			}
 
-			wxString GetModPageBaseURL(const GameID& id = {}) const override;
-			wxString GetModPageURL(const ModRepositoryRequest& request) override;
+			KxURI GetModPageBaseURI(const GameID& id = {}) const override;
+			KxURI GetModPageURI(const ModRepositoryRequest& request) override;
 	};
 }

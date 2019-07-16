@@ -7,6 +7,7 @@
 #include "GameInstance/GameID.h"
 #include "Utility/Collection.h"
 #include "Utility/KLabeledValue.h"
+#include <KxFramework/KxURI.h>
 
 namespace Kortex
 {
@@ -245,15 +246,15 @@ namespace Kortex
 			}
 
 			// Conversion to URL list
-			wxString GetModPageURL(const wxString& name, const GameID& gameID = GameIDs::NullGameID) const;
-			wxString GetModPageURL(const IModNetwork& modNetwork, const GameID& gameID = GameIDs::NullGameID) const;
-			template<class T> wxString GetModPageURL(const GameID& gameID = GameIDs::NullGameID) const
+			KxURI GetModPageURI(const wxString& name, const GameID& gameID = GameIDs::NullGameID) const;
+			KxURI GetModPageURI(const IModNetwork& modNetwork, const GameID& gameID = GameIDs::NullGameID) const;
+			template<class T> KxURI GetModPageURI(const GameID& gameID = GameIDs::NullGameID) const
 			{
-				return GetModPageURL(*T::GetInstance(), gameID);
+				return GetModPageURI(*T::GetInstance(), gameID);
 			}
 			
-			KxStringVector GetModURLs(const GameID& gameID = GameIDs::NullGameID) const;
-			KLabeledValue::Vector GetLabeledModURLs(const GameID& gameID = GameIDs::NullGameID) const;
+			std::vector<KxURI> GetModURIs(const GameID& gameID = GameIDs::NullGameID) const;
+			KLabeledValue::Vector GetLabeledModURIs(const GameID& gameID = GameIDs::NullGameID) const;
 
 			// Serialization
 			void LoadTryAdd(const KxXMLNode& arrayNode);

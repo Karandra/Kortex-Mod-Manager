@@ -25,9 +25,9 @@ namespace Kortex
 		RemoveAllComponents();
 	}
 
-	wxString IModNetwork::GetIPBModPageURL(ModID modID, const wxString& modSignature) const
+	KxURI IModNetwork::GetIPBModPageURI(ModID modID, const wxString& modSignature) const
 	{
-		return KxString::Format("%1/%2-%3", GetModPageBaseURL(), modID.GetValue(), modSignature.IsEmpty() ? wxS("x") : modSignature);
+		return KxString::Format(wxS("%1/%2-%3"), GetModPageBaseURI().BuildUnescapedURI(), modID.GetValue(), modSignature.IsEmpty() ? wxS("x") : modSignature);
 	}
 
 	bool IModNetwork::IsDefault() const

@@ -9,12 +9,13 @@
 #include <KxFramework/KxComponentSystem.h>
 #include <KxFramework/KxSecretStore.h>
 #include <KxFramework/KxVersion.h>
+#include <KxFramework/KxURI.h>
 class KxMenu;
 class KxXMLNode;
 
 namespace Kortex
 {
-	class IDownloadEntry;
+	class DownloadItem;
 	class IGameInstance;
 	class IGameMod;
 }
@@ -43,7 +44,7 @@ namespace Kortex
 
 		protected:
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& networkNode) = 0;
-			wxString GetIPBModPageURL(ModID modID, const wxString& modSignature = {}) const;
+			KxURI GetIPBModPageURI(ModID modID, const wxString& modSignature = {}) const;
 
 		public:
 			bool IsDefault() const;
@@ -59,8 +60,8 @@ namespace Kortex
 			{
 			}
 			
-			virtual wxString GetModPageBaseURL(const GameID& id = {}) const = 0;
-			virtual wxString GetModPageURL(const ModRepositoryRequest& request) = 0;
+			virtual KxURI GetModPageBaseURI(const GameID& id = {}) const = 0;
+			virtual KxURI GetModPageURI(const ModRepositoryRequest& request) = 0;
 
 		public:
 			virtual void OnToolBarMenu(KxMenu& menu)

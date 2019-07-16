@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Application/RTTI.h"
 #include <KxFramework/KxVersion.h>
+#include <KxFramework/KxURI.h>
 
 namespace Kortex
 {
@@ -99,7 +100,11 @@ namespace Kortex
 		public:
 			bool IsOK() const
 			{
-				return ModID.HasValue() && ID.HasValue() && Size > 0 && !Name.IsEmpty();
+				return IsIDsValid() && Size > 0 && !Name.IsEmpty();
+			}
+			bool IsIDsValid() const
+			{
+				return ModID.HasValue() && ID.HasValue();
 			}
 	};
 	struct ModInfoReply
@@ -136,12 +141,12 @@ namespace Kortex
 		public:
 			wxString Name;
 			wxString ShortName;
-			wxString URL;
+			KxURI URI;
 			
 		public:
 			bool IsOK() const
 			{
-				return !URL.IsEmpty();
+				return URI.IsOk();
 			}
 	};
 	struct ModEndorsementReply

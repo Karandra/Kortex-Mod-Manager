@@ -52,7 +52,7 @@ namespace Kortex::Application::About
 			}
 			case ColumnRef::URL:
 			{
-				return item.GetURL();
+				return item.GetURI().BuildUnescapedURI();
 			}
 		};
 		return {};
@@ -114,10 +114,9 @@ namespace Kortex::Application::About
 				}
 				case ColumnRef::URL:
 				{
-					wxString url = item.GetURL();
-					if (!url.IsEmpty())
+					if (KxURI uri = item.GetURI())
 					{
-						KAux::AskOpenURL(url, GetView());
+						KAux::AskOpenURL(uri, GetView());
 					}
 					break;
 				}

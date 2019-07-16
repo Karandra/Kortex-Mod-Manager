@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "KLabeledValue.h"
 class KxXMLNode;
+class KxURI;
 
 enum KAuxCharCode
 {
@@ -51,8 +52,8 @@ class KAux
 		static bool IsFileExtensionMatches(const wxString& filePath, const KxStringVector& extensions);
 		static bool IsSingleFileExtensionMatches(const wxString& filePath, const wxString& ext);
 
-		// Shows a dialog that asks user to confirm opening the URL in default web-browser. Returns true if user has agreed.
-		static bool AskOpenURL(const wxString& url, wxWindow* parent = nullptr);
+		// Shows a dialog that asks user to confirm opening the URI in default web-browser. Returns true if user has agreed.
+		static bool AskOpenURL(const KxURI& uri, wxWindow* parent = nullptr);
 		static bool AskOpenURL(const KLabeledValue::Vector& urlList, wxWindow* parent = nullptr);
 
 		// Saves KLabeledValue::Vector into specified node, clearing the node first.

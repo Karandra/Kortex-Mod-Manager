@@ -4,6 +4,7 @@
 #include "WebViewBackend/InternetExplorer.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
+#include <KxFramework/KxURI.h>
 
 namespace Kortex::UI
 {

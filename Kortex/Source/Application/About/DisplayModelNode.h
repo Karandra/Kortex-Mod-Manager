@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Application/Resources/ImageResourceID.h"
 #include <KxFramework/KxVersion.h>
+#include <KxFramework/KxURI.h>
 
 namespace Kortex
 {
@@ -51,7 +52,7 @@ namespace Kortex::Application::About
 			virtual wxString GetName() const = 0;
 			virtual KxVersion GetVersion() const = 0;
 			virtual ResourceID GetIconID() const = 0;
-			virtual wxString GetURL() const = 0;
+			virtual KxURI GetURI() const = 0;
 
 			virtual bool HasLicense() const = 0;
 			virtual wxString GetLicense() const = 0;
@@ -69,7 +70,7 @@ namespace Kortex::Application::About
 			wxString GetName() const override;
 			KxVersion GetVersion() const override;
 			ResourceID GetIconID() const override;
-			wxString GetURL() const override;
+			KxURI GetURI() const override;
 
 			bool HasLicense() const override;
 			wxString GetLicense() const override;
@@ -95,9 +96,9 @@ namespace Kortex::Application::About
 			wxString GetName() const override;
 			KxVersion GetVersion() const override;
 			ResourceID GetIconID() const override;
-			wxString GetURL() const override
+			KxURI GetURI() const override
 			{
-				return wxString();
+				return {};
 			}
 			
 			bool HasLicense() const override;
@@ -113,7 +114,7 @@ namespace Kortex::Application::About
 			const Type m_Type;
 			const wxString m_Name;
 			const KxVersion m_Version;
-			const wxString m_URL;
+			const KxURI m_URL;
 			const ResourceID m_IconID;
 			mutable LicenseData m_Licence;
 
@@ -136,7 +137,7 @@ namespace Kortex::Application::About
 			{
 				return m_IconID;
 			}
-			wxString GetURL() const override
+			KxURI GetURI() const override
 			{
 				return m_URL;
 			}
@@ -170,7 +171,7 @@ namespace Kortex::Application::About
 	{
 		private:
 			const wxString m_Name;
-			const wxString m_URL;
+			const KxURI m_URL;
 			mutable LicenseData m_Licence;
 
 		public:
@@ -192,7 +193,7 @@ namespace Kortex::Application::About
 			{
 				return {};
 			}
-			wxString GetURL() const override
+			KxURI GetURI() const override
 			{
 				return m_URL;
 			}

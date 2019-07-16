@@ -4,6 +4,7 @@
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include "Utility/KBitmapSize.h"
+#include <KxFramework/KxURI.h>
 #include <KxFramework/KxHTMLWindow.h>
 
 namespace
@@ -32,7 +33,7 @@ namespace
 										 "Copyright %1-%2 $(AppDeveloper).\n\n"
 										 "$T(About.SourceCodeLocation) <a href=\"%3\">GitHub</a>."
 		);
-		return KxString::Format(KVarExp(formatString), yearBegin, yearEnd, info.GetURL());
+		return KxString::Format(KVarExp(formatString), yearBegin, yearEnd, info.GetURI().BuildUnescapedURI());
 	}
 }
 

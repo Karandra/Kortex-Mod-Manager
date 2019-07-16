@@ -286,7 +286,7 @@ namespace
 	{
 		if (const ModSourceItem* item = modSourceStore.GetItem<T>())
 		{
-			node.SetValue(item->GetURL());
+			node.SetValue(item->GetURI().BuildUnescapedURI());
 			return true;
 		}
 		return false;
@@ -741,7 +741,7 @@ void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& 
 		// Write first one from store
 		modSourceStore.Visit([&sitesNode](const ModSourceItem& item)
 		{
-			sitesNode.SetValue(item.GetURL());
+			sitesNode.SetValue(item.GetURI().BuildUnescapedURI());
 			return false;
 		});
 	}

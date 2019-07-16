@@ -66,10 +66,10 @@ class KPackageCreatorPageInfo: public KPackageCreatorPageBase
 		{
 			Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
 
-			wxString url = store.GetModPageURL(T::GetInstance()->GetName());
-			if (!url.IsEmpty())
+			KxURI uri = store.GetModPageURI(T::GetInstance()->GetName());
+			if (uri.IsOk())
 			{
-				KAux::AskOpenURL(url, this);
+				KAux::AskOpenURL(uri, this);
 			}
 			event.Skip();
 		}

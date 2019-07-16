@@ -19,7 +19,7 @@ namespace Kortex
 	}
 	bool ModSourceItem::IsEmptyValue() const
 	{
-		return !HasModInfo() && !HasURL();
+		return !HasModInfo() && !HasURI();
 	}
 
 	void ModSourceItem::Load(const KxXMLNode& node)
@@ -36,9 +36,13 @@ namespace Kortex
 				m_Data = std::move(modInfo);
 			}
 		}
-		else
+		else if (wxString uri = node.GetAttribute(wxS("URI")); !uri.IsEmpty())
 		{
-			m_Data = node.GetAttribute(wxS("URL"));
+			m_Data = uri;
+		}
+		else if (wxString url = node.GetAttribute(wxS("URL")); !url.IsEmpty())
+		{
+			m_Data = url;
 		}
 	}
 	void ModSourceItem::Save(KxXMLNode& node) const
@@ -56,9 +60,9 @@ namespace Kortex
 				node.SetAttribute(wxS("FileID"), modInfo.GetFileID().GetValue());
 			}
 		}
-		else if (wxString url; TryGetURL(url))
+		else if (KxURI uri; TryGetURI(uri))
 		{
-			node.SetAttribute(wxS("URL"), url);
+			node.SetAttribute(wxS("URI"), uri.BuildUnescapedURI());
 		}
 	}
 
@@ -99,16 +103,16 @@ namespace Kortex
 		}
 	}
 
-	wxString ModSourceItem::GetURL(const GameID& gameID) const
+	KxURI ModSourceItem::GetURI(const GameID& gameID) const
 	{
 		IModNetwork* modNetwork = nullptr;
-		if (const wxString* url = std::get_if<wxString>(&m_Data))
+		if (const KxURI* uri = std::get_if<KxURI>(&m_Data); uri && uri->IsOk())
 		{
-			return *url;
+			return *uri;
 		}
 		else if (NetworkModInfo modInfo; TryGetModInfo(modInfo) && TryGetModNetwork(modNetwork))
 		{
-			return modNetwork->GetModPageURL(modInfo);
+			return modNetwork->GetModPageURI(modInfo);
 		}
 		return {};
 	}

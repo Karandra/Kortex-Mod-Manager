@@ -4,6 +4,7 @@
 #include "Network/IModNetwork.h"
 #include "Network/NetworkModInfo.h"
 #include "GameInstance/GameID.h"
+#include <KxFramework/KxURI.h>
 
 namespace Kortex
 {
@@ -14,7 +15,7 @@ namespace Kortex
 
 		private:
 			using TID = std::variant<wxString, IModNetwork*>;
-			using TData = std::variant<wxString, NetworkModInfo>;
+			using TData = std::variant<KxURI, NetworkModInfo>;
 
 		private:
 			TID m_ID = nullptr;
@@ -23,8 +24,8 @@ namespace Kortex
 		public:
 			ModSourceItem() = default;
 
-			ModSourceItem(const wxString& name, const wxString& url)
-				:m_ID(name), m_Data(url)
+			ModSourceItem(const wxString& name, const KxURI& uri)
+				:m_ID(name), m_Data(uri)
 			{
 			}
 			ModSourceItem(const wxString& name, NetworkModInfo id)
@@ -32,8 +33,8 @@ namespace Kortex
 			{
 			}
 
-			ModSourceItem(IModNetwork* modNetwork, const wxString& url)
-				:m_ID(modNetwork), m_Data(url)
+			ModSourceItem(IModNetwork* modNetwork, const KxURI& uri)
+				:m_ID(modNetwork), m_Data(uri)
 			{
 			}
 			ModSourceItem(IModNetwork* modNetwork, NetworkModInfo id)
@@ -82,20 +83,20 @@ namespace Kortex
 				return !GetName().IsEmpty();
 			}
 
-			// URL
-			wxString GetURL(const GameID& gameID = GameIDs::NullGameID) const;
-			void SetURL(const wxString& url, const GameID& gameID = GameIDs::NullGameID)
+			// URI
+			KxURI GetURI(const GameID& gameID = GameIDs::NullGameID) const;
+			void SetURI(const KxURI& uri, const GameID& gameID = GameIDs::NullGameID)
 			{
-				m_Data = url;
+				m_Data = uri;
 			}
-			bool TryGetURL(wxString& url, const GameID& gameID = GameIDs::NullGameID) const
+			bool TryGetURI(KxURI& uri, const GameID& gameID = GameIDs::NullGameID) const
 			{
-				url = GetURL(gameID);
-				return !url.IsEmpty();
+				uri = GetURI(gameID);
+				return uri.IsOk();
 			}
-			bool HasURL(const GameID& gameID = GameIDs::NullGameID) const
+			bool HasURI(const GameID& gameID = GameIDs::NullGameID) const
 			{
-				return !GetURL(gameID).IsEmpty();
+				return GetURI(gameID).IsOk();
 			}
 
 			// Network mod info

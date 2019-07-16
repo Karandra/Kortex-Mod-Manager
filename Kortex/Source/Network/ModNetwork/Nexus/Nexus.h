@@ -13,11 +13,6 @@ class KxCURLEvent;
 class KxCURLSession;
 class KxCURLReplyBase;
 
-namespace KxWebSocket
-{
-	class IClient;
-}
-
 namespace Kortex::NetworkManager
 {
 	class NexusModNetwork: public KxRTTI::IExtendInterface<NexusModNetwork, IModNetwork>, public KxSingletonPtr<NexusModNetwork>
@@ -59,15 +54,15 @@ namespace Kortex::NetworkManager
 			GameID TranslateGameIDFromNetwork(const wxString& id) const override;
 			void ConvertDescriptionText(wxString& description) const override;
 
-			wxString GetModPageBaseURL(const GameID& id = {}) const override;
-			wxString GetModPageURL(const ModRepositoryRequest& request) override;
+			KxURI GetModPageBaseURI(const GameID& id = {}) const override;
+			KxURI GetModPageURI(const ModRepositoryRequest& request) override;
 
 		public:
 			std::optional<NexusGameReply> GetGameInfo(const GameID& id = {}) const;
 			std::vector<NexusGameReply> GetGamesList() const;
 
-			wxString ConstructNXM(const NetworkModInfo& modInfo, const GameID& id = {}, const NexusNXMLinkData& linkData = {}) const;
-			bool ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const;
+			KxURI ConstructNXM(const NetworkModInfo& modInfo, const GameID& id = {}, const NexusNXMLinkData& linkData = {}) const;
+			bool ParseNXM(const KxURI& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const;
 			
 		public:
 			void OnToolBarMenu(KxMenu& menu) override;

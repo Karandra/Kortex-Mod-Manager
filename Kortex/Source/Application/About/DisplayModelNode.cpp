@@ -73,9 +73,9 @@ namespace Kortex::Application::About
 	{
 		return ImageResourceID::KortexLogoSmall;
 	}
-	wxString AppNode::GetURL() const
+	KxURI AppNode::GetURI() const
 	{
-		return "https://github.com/KerberX/Kortex-Mod-Manager";
+		return wxS("https://github.com/KerberX/Kortex-Mod-Manager");
 	}
 	
 	bool AppNode::HasLicense() const

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Utility/KAux.h"
 #include <Kortex/Application.hpp>
+#include <KxFramework/KxURI.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
@@ -165,13 +166,13 @@ bool KAux::IsSingleFileExtensionMatches(const wxString& filePath, const wxString
 	wxString fileExt = KxString::ToLower(filePath.AfterLast('.'));
 	return fileExt.Matches(ext);
 }
-bool KAux::AskOpenURL(const wxString& url, wxWindow* parent)
+bool KAux::AskOpenURL(const KxURI& uri, wxWindow* parent)
 {
-	KxTaskDialog dialog(parent, KxID_NONE, KTr("Generic.OpenWebSiteDialog.Caption"), url, KxBTN_YES|KxBTN_NO);
+	KxTaskDialog dialog(parent, KxID_NONE, KTr("Generic.OpenWebSiteDialog.Caption"), uri.BuildUnescapedURI(), KxBTN_YES|KxBTN_NO);
 	dialog.SetOptionEnabled(KxTD_SIZE_TO_CONTENT);
 	if (dialog.ShowModal() == KxID_YES)
 	{
-		KxShell::Execute(parent, url, "open");
+		KxShell::Execute(parent, uri.BuildUnescapedURI(), "open");
 		return true;
 	}
 	return false;

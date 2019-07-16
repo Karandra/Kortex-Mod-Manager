@@ -22,12 +22,12 @@ namespace Kortex::NetworkManager
 		return wxS("LoversLab");
 	}
 
-	wxString LoversLabModNetwork::GetModPageBaseURL(const GameID& id) const
+	KxURI LoversLabModNetwork::GetModPageBaseURI(const GameID& id) const
 	{
 		return wxS("https://www.loverslab.com/files/file");
 	}
-	wxString LoversLabModNetwork::GetModPageURL(const ModRepositoryRequest& request)
+	KxURI LoversLabModNetwork::GetModPageURI(const ModRepositoryRequest& request)
 	{
-		return GetIPBModPageURL(request.GetModID(), request.GetExtraInfo<wxString>());
+		return GetIPBModPageURI(request.GetModID(), request.GetExtraInfo<wxString>());
 	}
 }

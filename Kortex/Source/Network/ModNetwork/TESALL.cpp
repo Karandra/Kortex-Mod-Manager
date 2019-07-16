@@ -17,12 +17,12 @@ namespace Kortex::NetworkManager
 		return wxS("TESALL.RU");
 	}
 
-	wxString TESALLModNetwork::GetModPageBaseURL(const GameID& id) const
+	KxURI TESALLModNetwork::GetModPageBaseURI(const GameID& id) const
 	{
 		return wxS("http://tesall.ru/files/file");
 	}
-	wxString TESALLModNetwork::GetModPageURL(const ModRepositoryRequest& request)
+	KxURI TESALLModNetwork::GetModPageURI(const ModRepositoryRequest& request)
 	{
-		return GetIPBModPageURL(request.GetModID(), request.GetExtraInfo<wxString>());
+		return GetIPBModPageURI(request.GetModID(), request.GetExtraInfo<wxString>());
 	}
 }

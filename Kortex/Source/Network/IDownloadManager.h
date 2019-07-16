@@ -81,6 +81,10 @@ namespace Kortex
 
 			virtual bool ShouldShowHiddenDownloads() const = 0;
 			virtual void ShowHiddenDownloads(bool show = true) = 0;
+			void ToggleHiddenDownloads()
+			{
+				ShowHiddenDownloads(!ShouldShowHiddenDownloads());
+			}
 
 			virtual wxString GetDownloadsLocation() const = 0;
 			virtual void SetDownloadsLocation(const wxString& location) = 0;

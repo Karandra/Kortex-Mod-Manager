@@ -100,6 +100,15 @@ namespace Kortex
 		return false;
 	}
 
+	bool DownloadItem::DoStart(int64_t startAt)
+	{
+		m_Executor = IDownloadManager::GetInstance()->NewDownloadExecutor(*this, m_DownloadInfo.URI, GetFullPath());
+		m_IsFailed = false;
+		m_ShouldResume = false;
+
+		return m_Executor->Start(startAt);
+	}
+
 	DownloadItem::DownloadItem(const ModDownloadReply& downloadInfo,
 							   const ModFileReply& fileInfo,
 							   ModNetworkRepository& modRepository,
@@ -199,7 +208,7 @@ namespace Kortex
 			{
 				m_FileInfo.Name = fileItem.GetName();
 				m_DownloadedSize = fileItem.GetFileSize();
-				m_IsFailed = m_DownloadedSize != m_FileInfo.Size && !IsPaused();
+				m_IsFailed = m_DownloadedSize != m_FileInfo.Size && !m_ShouldResume;
 
 				if (!m_DownloadDate.IsValid())
 				{
@@ -236,13 +245,9 @@ namespace Kortex
 	{
 		return IsOK() && !IsRunning() && !IsPaused() && m_ModNetwork;
 	}
-	bool DownloadItem::Start(int64_t startAt)
+	bool DownloadItem::Start()
 	{
-		m_Executor = IDownloadManager::GetInstance()->NewDownloadExecutor(*this, m_DownloadInfo.URI, GetFullPath());
-		m_IsFailed = false;
-		m_ShouldResume = false;
-
-		return m_Executor->Start(startAt);
+		return DoStart();
 	}
 	bool DownloadItem::Stop()
 	{
@@ -254,6 +259,10 @@ namespace Kortex
 		return false;
 	}
 
+	bool DownloadItem::CanResume() const
+	{
+		return IsOK() && !IsRunning() && IsPaused();
+	}
 	bool DownloadItem::Pause()
 	{
 		if (m_Executor)
@@ -266,7 +275,7 @@ namespace Kortex
 	{
 		if (m_ShouldResume)
 		{
-			return Start(m_DownloadedSize);
+			return DoStart(m_DownloadedSize);
 		}
 		else if (m_Executor)
 		{

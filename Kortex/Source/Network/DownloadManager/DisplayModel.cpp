@@ -321,7 +321,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(isPaused ? KTr("DownloadManager.Menu.Resume") : KTr("DownloadManager.Menu.Start")));
-			item->Enable(isPaused || (download && download->CanStart()));
+			item->Enable(download && (download->CanStart() || download->CanResume()));
 			item->Bind(KxEVT_MENU_SELECT, [download, isPaused](KxMenuEvent& event)
 			{
 				if (isPaused)

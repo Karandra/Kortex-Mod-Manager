@@ -52,6 +52,8 @@ namespace Kortex
 			bool Serialize(wxOutputStream& stream) const;
 			bool Deserialize(wxInputStream& stream);
 
+			bool DoStart(int64_t startAt = 0);
+
 		public:
 			DownloadItem() = default;
 			DownloadItem(const ModDownloadReply& downloadInfo,
@@ -144,7 +146,7 @@ namespace Kortex
 			}
 			bool IsPaused() const
 			{
-				return m_Executor && m_Executor->IsPaused();
+				return m_ShouldResume || (m_Executor && m_Executor->IsPaused());
 			}
 			bool IsFailed() const
 			{
@@ -152,9 +154,10 @@ namespace Kortex
 			}
 			
 			bool CanStart() const;
-			bool Start(int64_t startAt = 0);
+			bool Start();
 			bool Stop();
 
+			bool CanResume() const;
 			bool Pause();
 			bool Resume();
 

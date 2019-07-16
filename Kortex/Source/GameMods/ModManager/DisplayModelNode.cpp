@@ -145,7 +145,7 @@ namespace Kortex::ModManager
 							text += name;
 							text += wxS(": ");
 						}
-						text += item.GetURL();
+						text += item.GetURI().BuildUnescapedURI();
 					});
 					return text;
 				}

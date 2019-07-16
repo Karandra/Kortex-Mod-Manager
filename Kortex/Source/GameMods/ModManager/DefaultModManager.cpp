@@ -399,7 +399,7 @@ namespace Kortex::ModManager
 			{
 				KxXMLNode linkNode = sitesNode.NewElement("a");
 				linkNode.SetValue(item.GetName());
-				linkNode.SetAttribute("href", item.GetURL());
+				linkNode.SetAttribute("href", item.GetURI().BuildUnescapedURI());
 
 				sitesNode.NewElement("br");
 				return true;

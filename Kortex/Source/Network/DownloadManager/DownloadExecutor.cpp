@@ -85,7 +85,6 @@ namespace Kortex::DownloadManager
 	}
 	void DownloadExecutor::OnEnd()
 	{
-		m_Thread = nullptr;
 		m_EvtHandler.CallAfter([this]()
 		{
 			// Download item relinquished ownership to the executor to us.
@@ -119,6 +118,14 @@ namespace Kortex::DownloadManager
 	{
 		m_DownloadManager.OnDownloadEvent(m_Item, eventType);
 	}
+	void DownloadExecutor::Terminate()
+	{
+		Stop();
+		if (m_Thread)
+		{
+			m_Thread->Delete();
+		}
+	}
 
 	DownloadExecutor::DownloadExecutor(DownloadItem& item, const KxURI& url, const wxString& localPath)
 		:m_Item(item), m_DownloadManager(*IDownloadManager::GetInstance()), m_URL(url), m_LocalPath(localPath)
@@ -126,14 +133,7 @@ namespace Kortex::DownloadManager
 	}
 	DownloadExecutor::~DownloadExecutor()
 	{
-		if (m_Thread)
-		{
-			if (m_Thread->IsPaused())
-			{
-				m_Thread->Resume();
-			}
-			m_Thread->Delete();
-		}
+		Terminate();
 	}
 
 	void DownloadExecutor::Stop()
@@ -141,14 +141,8 @@ namespace Kortex::DownloadManager
 		// If download is paused resume it first
 		if (IsPaused())
 		{
-			if (m_Session)
-			{
-				m_Session->Resume();
-			}
-			if (m_Thread)
-			{
-				m_Thread->Resume();
-			}
+			m_Session->Resume();
+			m_Thread->Resume();
 		}
 
 		// Stop CURL now. This will cause download thread to terminate itself

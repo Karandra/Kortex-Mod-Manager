@@ -48,6 +48,7 @@ namespace Kortex::DownloadManager
 
 			void NotifyEvent(ItemEvent eventType);
 			void QueueNotifyEvent(ItemEvent eventType);
+			void Terminate();
 
 		public:
 			DownloadExecutor(DownloadItem& item, const KxURI& url, const wxString& localPath);

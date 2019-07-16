@@ -7,7 +7,7 @@
 
 namespace
 {
-	constexpr wxChar StreamName[] = wxS(":KortexDownload");
+	constexpr wxChar StreamName[] = wxS(":Kortex.Download");
 }
 
 namespace Kortex

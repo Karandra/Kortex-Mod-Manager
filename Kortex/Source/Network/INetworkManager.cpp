@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "INetworkManager.h"
 #include "NetworkWxFSHandler.h"
+#include "ModNetworkRepository.h"
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxWebSocket.h>
@@ -98,9 +99,9 @@ namespace Kortex
 		}
 
 		// Call 'OnLoadInstance' with invalid node for every not already loaded mod network
-		for (auto& modNetwork: GetModNetworks())
+		for (IModNetwork* modNetwork: GetModNetworks())
 		{
-			if (initialized.count(modNetwork.get()) == 0)
+			if (initialized.count(modNetwork) == 0)
 			{
 				modNetwork->OnLoadInstance(instance, {});
 			}
@@ -112,7 +113,21 @@ namespace Kortex
 	{
 	}
 
-	std::unique_ptr<KxWebSocket::IClient> INetworkManager::NewWebSocketClient(const wxString& address)
+	std::vector<ModNetworkRepository*> INetworkManager::GetModRepositories()
+	{
+		std::vector<ModNetworkRepository*> reposirories;
+		for (IModNetwork* modNetwork: GetModNetworks())
+		{
+			ModNetworkRepository* repository = nullptr;
+			if (modNetwork->TryGetComponent(repository))
+			{
+				reposirories.push_back(repository);
+			}
+		}
+		return reposirories;
+	}
+
+	std::unique_ptr<KxIWebSocketClient> INetworkManager::NewWebSocketClient(const KxURI& address)
 	{
 		auto webSocket = KxWebSocket::NewSecureClient(address);
 		webSocket->SetUserAgent(GetUserAgentString(NetworkSoftware::WebSocket));
@@ -120,7 +135,7 @@ namespace Kortex
 
 		return webSocket;
 	}
-	std::unique_ptr<KxCURLSession> INetworkManager::NewCURLSession(const wxString& address)
+	std::unique_ptr<KxCURLSession> INetworkManager::NewCURLSession(const KxURI& address)
 	{
 		auto curlSession = std::make_unique<KxCURLSession>(address);
 		curlSession->SetUserAgent(GetUserAgentString(NetworkSoftware::CURL));

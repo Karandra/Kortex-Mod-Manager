@@ -7,6 +7,7 @@
 #include <Kortex/NetworkManager.hpp>
 #include "Network/ModNetwork/Nexus.h"
 #include "Utility/KAux.h"
+#include "Utility/MenuSeparator.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxFile.h>
@@ -26,36 +27,6 @@ namespace
 		ModSource,
 		Date,
 		Status,
-	};
-	enum MenuID
-	{
-		Install,
-
-		Add,
-		Pause,
-		Abort,
-		Resume,
-		Restart,
-
-		QueryInfo,
-		ShowChangeLog,
-		ResetDownloadLink,
-
-		Remove,
-		RemoveAll,
-		RemoveInstalled,
-
-		Hide,
-		HideAll,
-		HideInstalled,
-		ShowHidden,
-
-		OpenLocation,
-		VisitOnWebSite,
-		Refresh,
-
-		AssociateWithNXM,
-		CopyNXM,
 	};
 }
 
@@ -95,7 +66,7 @@ namespace Kortex::DownloadManager
 
 	void DisplayModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const IDownloadEntry* entry = GetDataEntry(row);
+		const DownloadItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -110,38 +81,38 @@ namespace Kortex::DownloadManager
 	}
 	void DisplayModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const IDownloadEntry* entry = GetDataEntry(row);
-		if (entry)
+		const DownloadItem* item = GetDataEntry(row);
+		if (item)
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Name:
 				{
-					value = KxDataViewBitmapTextValue(entry->GetFileInfo().Name, GetStateBitmap(*entry));
+					value = KxDataViewBitmapTextValue(item->GetFileInfo().Name, GetStateBitmap(*item));
 					break;
 				}
 				case ColumnID::Version:
 				{
-					value = entry->GetFileInfo().Version.ToString();
+					value = item->GetFileInfo().Version.ToString();
 					break;
 				}
 				case ColumnID::Size:
 				{
-					value = KxFile::FormatFileSize(entry->GetFileInfo().Size, 2);
+					value = KxFile::FormatFileSize(item->GetFileInfo().Size, 2);
 					break;
 				}
 				case ColumnID::Game:
 				{
-					const IGameInstance* instance = entry->GetTargetGame();
-					if (instance)
+					const GameID gameID = item->GetTargetGame();
+					if (gameID)
 					{
-						value = instance->GetGameShortName();
+						value = gameID.ToGameInstance()->GetGameShortName();
 					}
 					break;
 				}
 				case ColumnID::ModSource:
 				{
-					const IModNetwork* modNetwork = entry->GetModNetwork();
+					const IModNetwork* modNetwork = item->GetModNetwork();
 					if (modNetwork)
 					{
 						value = modNetwork->GetName();
@@ -150,14 +121,14 @@ namespace Kortex::DownloadManager
 				}
 				case ColumnID::Date:
 				{
-					value = KAux::FormatDateTime(entry->GetDate());
+					value = KAux::FormatDateTime(item->GetDownloadDate());
 					break;
 				}
 				case ColumnID::Status:
 				{
 					// Percent
-					const int64_t downloadedSize = entry->GetDownloadedSize();
-					const int64_t totalSize = entry->GetFileInfo().Size;
+					const int64_t downloadedSize = item->GetDownloadedSize();
+					const int64_t totalSize = item->GetTotalSize();
 					int percent = 0;
 					if (totalSize > 0)
 					{
@@ -166,28 +137,30 @@ namespace Kortex::DownloadManager
 
 					// Bar color
 					KxDataViewProgressState state = KxDVR_PROGRESS_STATE_NORMAL;
-					if (entry->IsPaused())
+					if (item->IsPaused())
 					{
 						state = KxDVR_PROGRESS_STATE_PAUSED;
 					}
-					else if (entry->IsFailed())
+					else if (item->IsFailed())
 					{
 						state = KxDVR_PROGRESS_STATE_ERROR;
 					}
 
 					// Label
 					wxString label;
-					if (entry->IsRunning())
+					if (item->IsRunning())
 					{
+						const IDownloadExecutor* executor = item->GetExecutor();
+
 						static wxString sec = KTr(wxS("Generic.Sec"));
-						label = KxString::Format(wxS("%1%, %2/%3"), percent, KxFile::FormatFileSize(entry->GetSpeed(), 0), sec);
+						label = KxString::Format(wxS("%1%, %2/%3"), percent, KxFile::FormatFileSize(executor->GetSpeed(), 0), sec);
 					}
 					else
 					{
 						label = KxString::Format(wxS("%1%"), percent);
 					}
 
-					if (!entry->IsCompleted())
+					if (!item->IsCompleted())
 					{
 						label += wxS(", ");
 						label += KxFile::FormatFileSize(downloadedSize, 2) + wxS('/') + KxFile::FormatFileSize(totalSize, 2);
@@ -201,7 +174,7 @@ namespace Kortex::DownloadManager
 	}
 	bool DisplayModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		IDownloadEntry* entry = GetDataEntry(row);
+		DownloadItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -216,7 +189,7 @@ namespace Kortex::DownloadManager
 	}
 	bool DisplayModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 	{
-		const IDownloadEntry* entry = GetDataEntry(row);
+		const DownloadItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -231,7 +204,7 @@ namespace Kortex::DownloadManager
 	}
 	bool DisplayModel::GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const
 	{
-		const IDownloadEntry* entry = GetDataEntry(row);
+		const DownloadItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -247,8 +220,8 @@ namespace Kortex::DownloadManager
 	}
 	bool DisplayModel::CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const
 	{
-		const IDownloadEntry* left = GetDataEntry(row1);
-		const IDownloadEntry* right = GetDataEntry(row2);
+		const DownloadItem* left = GetDataEntry(row1);
+		const DownloadItem* right = GetDataEntry(row2);
 
 		switch (column ? column->GetID() : ColumnID::Date)
 		{
@@ -281,7 +254,7 @@ namespace Kortex::DownloadManager
 			}
 			case Date:
 			{
-				return left->GetDate() < right->GetDate();
+				return left->GetDownloadDate() < right->GetDownloadDate();
 			}
 		};
 		return false;
@@ -289,13 +262,13 @@ namespace Kortex::DownloadManager
 
 	void DisplayModel::OnSelectItem(KxDataViewEvent& event)
 	{
-		//const IDownloadEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+		//const DownloadItem* entry = GetDataEntry(GetRow(event.GetItem()));
 	}
 	void DisplayModel::OnActivateItem(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
 		KxDataViewColumn* column = event.GetColumn();
-		IDownloadEntry* entry = GetDataEntry(GetRow(item));
+		DownloadItem* entry = GetDataEntry(GetRow(item));
 		if (entry && column)
 		{
 			Install(*entry);
@@ -304,278 +277,183 @@ namespace Kortex::DownloadManager
 	void DisplayModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		IDownloadEntry* download = GetDataEntry(GetRow(item));
+		DownloadItem* download = GetDataEntry(GetRow(item));
 		const IModNetwork* modNetwork = download ? download->GetModNetwork() : nullptr;
+
 		const bool isRunning = download && download->IsRunning();
+		const bool isPaused = download && download->IsPaused();
+		const bool isFailed = download && download->IsFailed();
+		const bool isCompleted = download && download->IsCompleted();
 		const bool isEmpty = IsEmpty();
 
 		KxMenu contextMenu;
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Install, KTr("DownloadManager.Menu.Install")));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Install")));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Box));
-			item->Enable(download && download->IsCompleted());
+			item->Enable(isCompleted);
+			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
+			{
+				Install(*download);
+			});
 		}
 		contextMenu.AddSeparator();
 
 		if constexpr (false)
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Add, KTr("DownloadManager.Menu.Add")));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Add")));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Pause, KTr("DownloadManager.Menu.Pause")));
-			item->Enable(download && isRunning && !download->IsPaused() && !download->IsCompleted() && !download->IsFailed());
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Pause")));
+			item->Enable(isRunning);
+			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
+			{
+				download->Pause();
+			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Abort, KTr("DownloadManager.Menu.Abort")));
-			item->Enable(download && isRunning && !download->IsCompleted() && !download->IsFailed());
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Abort")));
+			item->Enable(isRunning);
+			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
+			{
+				download->Stop();
+			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Resume, KTr("DownloadManager.Menu.Resume")));
-			item->Enable(download && download->IsPaused() && !download->IsCompleted());
-		}
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Restart, KTr("DownloadManager.Menu.Restart")));
-			item->Enable(download && download->CanRestart());
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(isPaused ? KTr("DownloadManager.Menu.Resume") : KTr("DownloadManager.Menu.Start")));
+			item->Enable(isPaused || (download && download->CanStart()));
+			item->Bind(KxEVT_MENU_SELECT, [download, isPaused](KxMenuEvent& event)
+			{
+				if (isPaused)
+				{
+					download->Resume();
+				}
+				else
+				{
+					download->Start();
+				}
+			});
 		}
 
 		contextMenu.AddSeparator();
 		{
 			KxMenu* providerMenu = new KxMenu();
-			if (download && !download->IsRunning())
+			if (download && !isRunning)
 			{
-				for (auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
+				for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 				{
-					if (ModNetworkRepository* repository = modNetwork->QueryInterface<ModNetworkRepository>())
+					KxMenuItem* item = providerMenu->Add(new KxMenuItem(repository->GetContainer().GetName(), wxEmptyString, wxITEM_RADIO));
+					item->Check(repository == download->GetModRepository());
+					item->Enable(!item->IsChecked());
+					item->Bind(KxEVT_MENU_SELECT, [download, repository](KxMenuEvent& event)
 					{
-						KxMenuItem* item = providerMenu->Add(new KxMenuItem(modNetwork->GetName(), wxEmptyString, wxITEM_CHECK));
-						item->Check(modNetwork.get() == download->GetModNetwork());
-						item->Bind(KxEVT_MENU_SELECT, [download, repository](KxMenuEvent& event)
-						{
-							download->SetModNetwork(*repository);
-							download->Save();
-						});
-					}
+						download->SetModRepository(*repository);
+						download->Save();
+					});
 				}
 			}
 
-			KxMenuItem* item = contextMenu.Add(providerMenu, KTr("DownloadManager.Menu.SetModSource"));
+			KxMenuItem* item = contextMenu.Add(providerMenu, KTr("DownloadManager.Menu.SetSource"));
 			item->Enable(providerMenu->GetMenuItemCount() != 0);
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::QueryInfo, KTr("DownloadManager.Menu.QueryInfo")));
-			item->Enable(download && !download->IsRunning() && modNetwork);
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.QueryInfo")));
+			item->Enable(download && download->CanQueryInfo());
+			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
+			{
+				if (!download->QueryInfo())
+				{
+					wxString message = KTrf("DownloadManager.Notification.QueryDownloadInfoFailed", download->GetFileInfo().Name);
+					INotificationCenter::NotifyUsing<IDownloadManager>(message, KxICON_WARNING);
+				}
+			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ShowChangeLog, KTr("DownloadManager.Menu.ShowChangeLog")));
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.ShowChangeLog")));
 			item->Enable(download && !download->GetFileInfo().ChangeLog.IsEmpty());
-		}
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ResetDownloadLink, KTr("DownloadManager.Menu.ResetDownloadLink")));
-			item->Enable(download && download->GetDownloadInfo().IsOK());
-		}
-		contextMenu.AddSeparator();
-
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Remove, KTr("DownloadManager.Menu.Remove")));
-			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::MinusSmall));
-			item->Enable(download && !isEmpty && !isRunning);
-		}
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::RemoveAll, KTr("DownloadManager.Menu.RemoveAll")));
-			item->Enable(!isEmpty);
-		}
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::RemoveInstalled, KTr("DownloadManager.Menu.RemoveInstalled")));
-			item->Enable(!isEmpty);
-		}
-		contextMenu.AddSeparator();
-
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Hide, KTr("DownloadManager.Menu.Hide")));
-			item->Enable(download && !isEmpty && !isRunning);
-		}
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::HideAll, KTr("DownloadManager.Menu.HideAll")));
-			item->Enable(!isEmpty);
-		}
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::HideInstalled, KTr("DownloadManager.Menu.HideInstalled")));
-			item->Enable(!isEmpty);
-		}
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::ShowHidden, KTr("DownloadManager.Menu.ShowHidden"), wxEmptyString, wxITEM_CHECK));
-			item->Check(m_DownloadManager->ShouldShowHiddenDownloads());
-		}
-		contextMenu.AddSeparator();
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::OpenLocation, KTr("MainMenu.OpenLocation")));
-			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
-		}
-		if (modNetwork)
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::VisitOnWebSite, KTrf("DownloadManager.Menu.VisitOnWebSite", modNetwork->GetName())));
-			item->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
-		}
-		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::Refresh, KTr(KxID_REFRESH)));
-			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
-		}
-
-		if (IDownloadManagerNXM* nxm = nullptr; m_DownloadManager->QueryInterface(nxm))
-		{
-			contextMenu.AddSeparator();
+			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
-				const bool assocOK = nxm->IsAssociatedWithNXM();
-				wxString label = assocOK ? KTr("DownloadManager.Menu.AssocianedWithNXM") : KTr("DownloadManager.Menu.AssociateWithNXM");
-
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::AssociateWithNXM, label, wxEmptyString, wxITEM_CHECK));
-				item->Enable(!assocOK);
-				item->Check(assocOK);
-				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ModNetwork_Nexus));
-			}
-			if (download && download->IsModNetworkOfType<NetworkManager::NexusModNetwork>())
-			{
-				KxMenuItem* item = contextMenu.Add(new KxMenuItem(MenuID::CopyNXM, KTr("DownloadManager.Menu.CopyNXM")));
-			}
-		}
-
-		contextMenu.Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
-		{
-			OnContextMenuSelected(event, download);
-			event.Skip();
-		});
-		contextMenu.Show(GetView());
-	}
-	void DisplayModel::OnContextMenuSelected(KxMenuEvent& event, IDownloadEntry* download)
-	{
-		IDownloadManager* downloadManager = IDownloadManager::GetInstance();
-
-		switch (event.GetItem()->GetId())
-		{
-			case MenuID::Install:
-			{
-				Install(*download);
-				break;
-			}
-
-			case MenuID::Add:
-			{
-				break;
-			}
-			case MenuID::Pause:
-			{
-				download->Pause();
-				break;
-			}
-			case MenuID::Abort:
-			{
-				download->Stop();
-				break;
-			}
-			case MenuID::Resume:
-			{
-				download->Resume();
-				break;
-			}
-			case MenuID::Restart:
-			{
-				download->Restart();
-				break;
-			}
-
-			case MenuID::QueryInfo:
-			{
-				bool isSucceed = false;
-				bool isQueryInfo = false;
-				if (download->IsOK())
-				{
-					isQueryInfo = true;
-					isSucceed = download->QueryInfo();
-				}
-				else
-				{
-					isQueryInfo = false;
-					isSucceed = download->RepairBrokedDownload();
-				}
-
-				if (!isSucceed)
-				{
-					wxString message;
-					if (isQueryInfo)
-					{
-						message = KTrf("DownloadManager.Notification.QueryDownloadInfoFailed", download->GetFileInfo().Name);
-					}
-					else
-					{
-						message = KTrf("DownloadManager.Notification.RestoreDownloadFailed", download->GetFileInfo().Name);
-					}
-					INotificationCenter::GetInstance()->NotifyUsing<IDownloadManager>(message, KxICON_WARNING);
-				}
-				break;
-			}
-			case MenuID::ShowChangeLog:
-			{
-				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, download->GetFileInfo().DisplayName, wxEmptyString, KxBTN_OK, KxICON_NONE);
+				KxTaskDialog dialog(GetView(), KxID_NONE, download->GetFileInfo().DisplayName, wxEmptyString, KxBTN_OK, KxICON_NONE);
 				dialog.SetMessage(KxString::Format("%1 %2", KTr("Generic.Version"), download->GetFileInfo().Version));
 				dialog.SetExMessage(download->GetFileInfo().ChangeLog);
 				dialog.SetMainIcon(KxShell::GetFileIcon(download->GetFullPath()));
 				dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
 				dialog.ShowModal();
-				break;
-			}
-			case MenuID::ResetDownloadLink:
-			{
-				download->ResetDownloadLink();
-				download->Save();
-				break;
-			}
+			});
+		}
+		contextMenu.AddSeparator();
 
-			case MenuID::Remove:
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Remove")));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::MinusSmall));
+			item->Enable(download && !isEmpty && !isRunning);
+			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
-				if (downloadManager->RemoveDownload(*download))
+				if (m_DownloadManager->RemoveDownload(*download))
 				{
 					RefreshItems();
 				}
-				break;
-			}
-			case MenuID::RemoveAll:
+			});
+		}
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.RemoveAll")));
+			item->Enable(!isEmpty);
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				RemoveAll();
-				break;
-			}
-			case MenuID::RemoveInstalled:
+			});
+		}
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.RemoveInstalled")));
+			item->Enable(!isEmpty);
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				RemoveAll(true);
-				break;
-			}
+			});
+		}
+		contextMenu.AddSeparator();
 
-			case MenuID::Hide:
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Hide")));
+			item->Enable(download && !isEmpty && !isRunning);
+			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
 				download->SetHidden(true);
 				download->Save();
 				RefreshItems();
-				break;
-			}
-			case MenuID::HideAll:
+			});
+		}
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.HideAll")));
+			item->Enable(!isEmpty);
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				SetAllHidden(true);
-				break;
-			}
-			case MenuID::HideInstalled:
+			});
+		}
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.HideInstalled")));
+			item->Enable(!isEmpty);
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				SetAllHidden(true, true);
-				break;
-			}
-			case MenuID::ShowHidden:
+			});
+		}
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.ShowHidden"), wxEmptyString, wxITEM_CHECK));
+			item->Check(m_DownloadManager->ShouldShowHiddenDownloads());
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
-				downloadManager->ShowHiddenDownloads(!downloadManager->ShouldShowHiddenDownloads());
-				downloadManager->LoadDownloads();
+				m_DownloadManager->ShowHiddenDownloads(!m_DownloadManager->ShouldShowHiddenDownloads());
+				m_DownloadManager->LoadDownloads();
 				RefreshItems();
-				break;
-			}
-
-			case MenuID::OpenLocation:
+			});
+		}
+		contextMenu.AddSeparator();
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("MainMenu.OpenLocation")));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
+			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
 				if (download)
 				{
@@ -583,41 +461,42 @@ namespace Kortex::DownloadManager
 				}
 				else
 				{
-					KxShell::Execute(GetViewTLW(), downloadManager->GetDownloadsLocation(), "open");
+					KxShell::Execute(GetView(), m_DownloadManager->GetDownloadsLocation(), "open");
 				}
-				break;
-			}
-			case MenuID::VisitOnWebSite:
+			});
+		}
+		if (modNetwork)
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTrf("DownloadManager.Menu.VisitOnWebSite", modNetwork->GetName())));
+			item->Enable(download && download->CanVisitSource());
+			item->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
+			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
-				KxShell::Execute(GetViewTLW(), download->GetModNetwork()->GetModPageURL(ModRepositoryRequest(download->GetFileInfo())), "open");
-				break;
-			}
-			case MenuID::Refresh:
+				KxShell::Execute(GetView(), download->GetModNetwork()->GetModPageURI(ModRepositoryRequest(download->GetFileInfo())).BuildUnescapedURI(), "open");
+			});
+		}
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr(KxID_REFRESH)));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
-				downloadManager->LoadDownloads();
+				m_DownloadManager->LoadDownloads();
 				RefreshItems();
-				break;
-			}
+			});
+		}
 
-			case MenuID::AssociateWithNXM:
+		if (Utility::MenuSeparatorBefore separator(contextMenu); true)
+		{
+			for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 			{
-				downloadManager->QueryInterface<IDownloadManagerNXM>()->AssociateWithNXM();
-				break;
+				repository->OnDownloadMenu(contextMenu, download);
 			}
-			case MenuID::CopyNXM:
-			{
-				const NetworkManager::NexusModNetwork* nexus = NetworkManager::NexusModNetwork::GetInstance();
-				if (wxTheClipboard->Open())
-				{
-					wxTheClipboard->SetData(new wxTextDataObject(nexus->ConstructNXM(download->GetFileInfo(), download->GetTargetGameID())));
-					wxTheClipboard->Close();
-				}
-				break;
-			}
-		};
+		}
+
+		contextMenu.Show(GetView());
 	}
 
-	wxBitmap DisplayModel::GetStateBitmap(const IDownloadEntry& entry) const
+	wxBitmap DisplayModel::GetStateBitmap(const DownloadItem& entry) const
 	{
 		if (!entry.GetFileInfo().IsOK())
 		{
@@ -639,15 +518,15 @@ namespace Kortex::DownloadManager
 	}
 	void DisplayModel::RemoveAll(bool installedOnly)
 	{
-		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTr("DownloadManager.RemoveDownloadsCaption"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		KxTaskDialog dialog(GetView(), KxID_NONE, KTr("DownloadManager.RemoveDownloadsCaption"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		dialog.SetMessage(installedOnly ? KTr("DownloadManager.RemoveInstalledDownloadsMessage") : KTr("DownloadManager.RemoveDownloadsMessage"));
 
 		if (dialog.ShowModal() == KxID_YES)
 		{
-			IDownloadEntry::RefVector items = IDownloadManager::GetInstance()->GetInactiveDownloads(installedOnly);
+			DownloadItem::RefVector items = IDownloadManager::GetInstance()->GetInactiveDownloads(installedOnly);
 			if (!items.empty())
 			{
-				for (IDownloadEntry* entry: items)
+				for (DownloadItem* entry: items)
 				{
 					IDownloadManager::GetInstance()->RemoveDownload(*entry);
 				}
@@ -657,10 +536,10 @@ namespace Kortex::DownloadManager
 	}
 	void DisplayModel::SetAllHidden(bool isHidden, bool installedOnly)
 	{
-		IDownloadEntry::RefVector items = IDownloadManager::GetInstance()->GetInactiveDownloads(installedOnly);
+		DownloadItem::RefVector items = IDownloadManager::GetInstance()->GetInactiveDownloads(installedOnly);
 		if (!items.empty())
 		{
-			for (IDownloadEntry* entry: items)
+			for (DownloadItem* entry: items)
 			{
 				entry->SetHidden(isHidden);
 				entry->Save();
@@ -670,7 +549,7 @@ namespace Kortex::DownloadManager
 			RefreshItems();
 		}
 	}
-	void DisplayModel::Install(IDownloadEntry& entry)
+	void DisplayModel::Install(DownloadItem& entry)
 	{
 		entry.Save();
 		new InstallWizard::WizardDialog(GetViewTLW(), entry.GetFullPath());
@@ -683,14 +562,8 @@ namespace Kortex::DownloadManager
 		SetDataVector(&IDownloadManager::GetInstance()->GetDownloads());
 	}
 
-	KxDataViewItem DisplayModel::FindItem(const IDownloadEntry& entry) const
+	KxDataViewItem DisplayModel::FindItem(const DownloadItem& entry) const
 	{
-		IDownloadEntry::Vector& items = m_DownloadManager->GetDownloads();
-		auto it = m_DownloadManager->GetDownloadIterator(items, entry);
-		if (it != items.end())
-		{
-			return GetItem(std::distance(items.begin(), it));
-		}
 		return KxDataViewItem();
 	}
 }

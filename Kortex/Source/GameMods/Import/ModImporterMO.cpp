@@ -414,42 +414,38 @@ namespace Kortex::ModManager
 				KxFileStream stream(item.GetFullPath(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting);
 				KxINI ini(stream);
 
-				IDownloadEntry& entry = manager->NewDownload();
-				entry.SetTargetGameID(ini.GetValue("General", "gameName"));
+				DownloadItemBuilder download;
+				download.SetTargetGame(ini.GetValue("General", "gameName"));
 
 				ModNetworkRepository* repository = nullptr;
 				IModNetwork* modNetwork = INetworkManager::GetInstance()->GetModNetworkByName(ini.GetValue("General", "repository"));
 				if (modNetwork && modNetwork->TryGetComponent(repository))
 				{
-					entry.SetModNetwork(*repository);
+					download.SetModRepository(*repository);
 				}
-				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
-				entry.GetDownloadInfo().URL = ini.GetValue("General", "url").AfterFirst('"').BeforeLast('"');
+				download.SetDownloadDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
+				download.SetURI(ini.GetValue("General", "url").AfterFirst('"').BeforeLast('"'));
 
-				entry.GetFileInfo().ModID = ini.GetValueInt("General", "modID", -1);
-				entry.GetFileInfo().ID = ini.GetValueInt("General", "fileID", -1);
-				entry.GetFileInfo().Name = item.GetName().BeforeLast('.');
-				entry.GetFileInfo().DisplayName = ini.GetValue("General", "modName");
-				entry.GetFileInfo().Version = ini.GetValue("General", "version");
+				download.SetModID(ini.GetValueInt("General", "modID", -1));
+				download.SetFileID(ini.GetValueInt("General", "fileID", -1));
+				download.SetName(item.GetName().BeforeLast('.'));
+				download.SetDisplayName(ini.GetValue("General", "modName"));
+				download.SetVersion(ini.GetValue("General", "version"));
 
 				const int64_t size = archiveFile.GetFileSize();
-				entry.GetFileInfo().Size = size;
-				entry.SetDownloadedSize(size);
+				download.SetTotalSize(size);
+				download.SetDownloadedSize(size);
+				download.SetHidden(ini.GetValueBool("General", "removed", false));
 
-				entry.SetPaused(ini.GetValueBool("General", "paused", false));
-				entry.SetHidden(ini.GetValueBool("General", "removed", false));
-
-				if (entry.IsOK())
+				if (ini.GetValueBool("General", "paused", false))
 				{
-					manager->AutoRenameIncrement(entry);
-					entry.Save();
-
-					context->LinkHandler(&archiveFile, KxEVT_FILEOP_COPY);
-					archiveFile.CopyFile(entry.GetFullPath(), false);
+					download.SetResumePos(size);
 				}
-				else
+
+				if (DownloadItem* item = download.Save())
 				{
-					manager->GetDownloads().pop_back();
+					context->LinkHandler(&archiveFile, KxEVT_FILEOP_COPY);
+					archiveFile.CopyFile(item->GetFullPath(), false);
 				}
 			}
 		}

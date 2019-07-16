@@ -5,14 +5,16 @@
 #include "IModNetwork.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxCURL.h>
+#include <KxFramework/KxURI.h>
 class KMainWindow;
 class KxAuiToolBarItem;
 class KxAuiToolBarEvent;
 class KxCURLSession;
+class KxIWebSocketClient;
 
-namespace KxWebSocket
+namespace Kortex
 {
-	class IClient;
+	class ModNetworkRepository;
 }
 
 namespace Kortex
@@ -61,15 +63,17 @@ namespace Kortex
 		public:
 			virtual wxString GetCacheDirectory() const = 0;
 			
-			virtual IModNetwork::Vector& GetModNetworks() = 0;
+			virtual IModNetwork::RefVector GetModNetworks() = 0;
+			std::vector<ModNetworkRepository*> GetModRepositories();
+
 			virtual IModNetwork* GetDefaultModNetwork() const = 0;
 			virtual IModNetwork* GetModNetworkByName(const wxString& name) const = 0;
 
 			virtual void OnAuthStateChanged() = 0;
 
 		public:
-			virtual std::unique_ptr<KxWebSocket::IClient> NewWebSocketClient(const wxString& address);
-			virtual std::unique_ptr<KxCURLSession> NewCURLSession(const wxString& address);
+			virtual std::unique_ptr<KxIWebSocketClient> NewWebSocketClient(const KxURI& address);
+			virtual std::unique_ptr<KxCURLSession> NewCURLSession(const KxURI& address);
 			virtual std::unique_ptr<wxFileSystemHandler> NewWxFSHandler();
 	};
 }

@@ -47,7 +47,12 @@ namespace Kortex::NetworkManager
 		public:
 			ModRepositoryLimits GetRequestLimits() const override;
 			bool IsAutomaticUpdateCheckAllowed() const;
-			bool RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download) override;
+			bool ParseDownloadName(const wxString& name, ModFileReply& result);
+
+			bool QueueDownload(const wxString& link) override;
+			bool QueryDownload(const KxFileItem& fileItem, const DownloadItem& download, ModFileReply& fileReply) override;
+			void OnToolBarMenu(KxMenu& menu);
+			void OnDownloadMenu(KxMenu& menu, DownloadItem* download = nullptr) override;
 
 			std::optional<ModInfoReply> GetModInfo(const ModRepositoryRequest& request) const override;
 			std::optional<ModEndorsementReply> EndorseMod(const ModRepositoryRequest& request, ModEndorsement state) override;
@@ -58,5 +63,8 @@ namespace Kortex::NetworkManager
 
 		public:
 			std::optional<GetModFiles2Result> GetModFiles2(const ModRepositoryRequest& request, bool files, bool updates) const;
+			
+			bool IsAssociatedWithNXM();
+			void AssociateWithNXM();
 	};
 }

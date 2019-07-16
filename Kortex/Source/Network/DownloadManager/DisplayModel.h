@@ -2,12 +2,12 @@
 #include "stdafx.h"
 #include "Utility/KDataViewListModel.h"
 #include "Network/IDownloadManager.h"
-#include "Network/IDownloadEntry.h"
+#include "DownloadItem.h"
 class KxMenuEvent;
 
 namespace Kortex::DownloadManager
 {
-	class DisplayModel: public KxDataViewVectorListModelEx<IDownloadEntry::Vector, KxDataViewListModelEx>
+	class DisplayModel: public KxDataViewVectorListModelEx<DownloadItem::Vector, KxDataViewListModelEx>
 	{
 		private:
 			IDownloadManager* m_DownloadManager = nullptr;
@@ -29,13 +29,12 @@ namespace Kortex::DownloadManager
 			void OnActivateItem(KxDataViewEvent& event);
 			void OnSelectItem(KxDataViewEvent& event);
 			void OnContextMenu(KxDataViewEvent& event);
-			void OnContextMenuSelected(KxMenuEvent& event, IDownloadEntry* entry = nullptr);
 
 		private:
-			wxBitmap GetStateBitmap(const IDownloadEntry& entry) const;
+			wxBitmap GetStateBitmap(const DownloadItem& entry) const;
 			void RemoveAll(bool installedOnly = false);
 			void SetAllHidden(bool isHidden, bool installedOnly = false);
-			void Install(IDownloadEntry& entry);
+			void Install(DownloadItem& entry);
 
 		public:
 			DisplayModel();
@@ -46,7 +45,7 @@ namespace Kortex::DownloadManager
 				return HasDataVector() ? GetDataVector()->size() : 0;
 			}
 
-			IDownloadEntry* GetDataEntry(const size_t i)
+			DownloadItem* GetDataEntry(const size_t i)
 			{
 				if (i < GetItemCount())
 				{
@@ -54,7 +53,7 @@ namespace Kortex::DownloadManager
 				}
 				return nullptr;
 			}
-			const IDownloadEntry* GetDataEntry(const size_t i) const
+			const DownloadItem* GetDataEntry(const size_t i) const
 			{
 				if (i < GetItemCount())
 				{
@@ -62,6 +61,6 @@ namespace Kortex::DownloadManager
 				}
 				return nullptr;
 			}
-			KxDataViewItem FindItem(const IDownloadEntry& entry) const;
+			KxDataViewItem FindItem(const DownloadItem& entry) const;
 	};
 }

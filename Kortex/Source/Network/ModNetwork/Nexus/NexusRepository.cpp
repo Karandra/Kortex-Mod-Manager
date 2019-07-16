@@ -2,10 +2,13 @@
 #include "NexusRepository.h"
 #include "NexusUtility.h"
 #include "Nexus.h"
-#include "Network/IDownloadEntry.h"
 #include <Kortex/Events.hpp>
+#include <Kortex/Application.hpp>
+#include <Kortex/DownloadManager.hpp>
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
+#include <KxFramework/KxMenu.h>
+#include <wx/clipbrd.h>
 
 namespace Kortex::NetworkManager
 {
@@ -82,56 +85,137 @@ namespace Kortex::NetworkManager
 		};
 		return m_Auth.IsAuthenticated() && CheckDaily(0.1);
 	}
-	bool NexusRepository::RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download)
+	bool NexusRepository::ParseDownloadName(const wxString& name, ModFileReply& result)
 	{
-		wxString name = fileItem.GetName();
-		wxRegEx reg(u8R"((.*?)\-(\d+)\-(.*)\.)", wxRE_EXTENDED|wxRE_ADVANCED|wxRE_ICASE);
+		wxRegEx reg(u8R"((.+?)\-(\d+)\-(.+?\-?.*?)\-(.+)\.)", wxRE_ADVANCED|wxRE_ICASE);
 		if (reg.Matches(name))
 		{
-			// Mod ID
-			ModID modID(reg.GetMatch(name, 2));
-			if (modID)
-			{
-				ModRepositoryRequest request(modID, {}, download.GetTargetGameID());
-				for (ModFileReply& fileInfo: GetModFiles(request))
-				{
-					if (fileInfo.Name == name)
-					{
-						// Fix size discrepancy caused by Nexus sending size in kilobytes
-						constexpr const int64_t oneKB = 1024 * 1024;
-						const int64_t downloadedSize = download.GetDownloadedSize();
-						const int64_t difference = downloadedSize - fileInfo.Size;
-						if (difference > 0 && difference <= oneKB)
-						{
-							fileInfo.Size = downloadedSize;
-						}
+			result.Name = reg.GetMatch(name, 1);
+			result.ModID = reg.GetMatch(name, 2);
+			result.ID = reg.GetMatch(name, 4);
 
-						download.GetFileInfo() = fileInfo;
-						return true;
-					}
-				}
+			wxString version = reg.GetMatch(name, 3);
+			version.Replace(wxS("-"), wxS("."));
+			result.Version = version;
+
+			if (result.DisplayName.IsEmpty())
+			{
+				result.DisplayName = result.Name;
+				result.DisplayName.Replace("_", " ");
 			}
 
-			// If we got here, file is not found on Nexus, but we can try to restore as much as possible from the file name itself.
-			ModFileReply& fileInfo = download.GetFileInfo();
-
-			// Set mod ID
-			fileInfo.ModID = modID;
-
-			// Display name
-			wxString displayName = reg.GetMatch(name, 1);
-			displayName.Replace("_", " ");
-			fileInfo.DisplayName = displayName;
-
-			// File version
-			wxString version = reg.GetMatch(name, 2);
-			version.Replace("-", ".");
-			fileInfo.Version = version;
-
-			// Still return fail status
-			return false;
+			return !result.Name.IsEmpty() && result.ModID && result.ID && result.Version.IsOK();
 		}
 		return false;
+	}
+
+	bool NexusRepository::QueueDownload(const wxString& link)
+	{
+		GameID gameID;
+		NetworkModInfo modInfo;
+		NexusNXMLinkData nxmExtraInfo;
+
+		if (m_Nexus.ParseNXM(link, gameID, modInfo, nxmExtraInfo))
+		{
+			if (auto fileInfo = GetModFileInfo(ModRepositoryRequest(modInfo, gameID)))
+			{
+				ModRepositoryRequest request(modInfo, gameID);
+				request.SetExtraInfo(nxmExtraInfo);
+
+				if (auto linkItems = GetFileDownloads(request); !linkItems.empty())
+				{
+					// Here we should actually select preferred download server based on user choice if we got more than one,
+					// but for now just use the first one.
+					return IDownloadManager::GetInstance()->QueueDownload(*this, linkItems.front(), *fileInfo, gameID);
+				}
+				return false;
+			}
+		}
+		return false;
+	}
+	bool NexusRepository::QueryDownload(const KxFileItem& fileItem, const DownloadItem& download, ModFileReply& fileReply)
+	{
+		auto QueryInfo = [this, &download](ModID modID, ModFileID fileID) -> std::optional<ModFileReply>
+		{
+			ModRepositoryRequest request(modID, fileID, download.GetTargetGame());
+			auto fileReply = GetModFileInfo(request);
+			if (fileReply)
+			{
+				// Fix size discrepancy caused by Nexus sending size in kilobytes
+				constexpr const int64_t oneKB = 1024 * 1024;
+				const int64_t downloadedSize = download.GetDownloadedSize();
+				const int64_t difference = downloadedSize - fileReply->Size;
+				if (difference > 0 && difference <= oneKB)
+				{
+					fileReply->Size = downloadedSize;
+				}
+
+				return fileReply;
+			}
+			return std::nullopt;
+		};
+
+		// If the download contains no usable info, parse file name to try to find mod and file IDs
+		bool nameParsed = false;
+		if (!download.IsOK())
+		{
+			if (!ParseDownloadName(fileItem.GetName(), fileReply))
+			{
+				return false;
+			}
+			nameParsed = true;
+		}
+
+		// Query new mod file info
+		if (auto newFileReply = QueryInfo(fileReply.ModID, fileReply.ID))
+		{
+			fileReply = std::move(*newFileReply);
+			return true;
+		}
+		else
+		{
+			// If we got here, file is not found on Nexus (either because it was deleted or because we've recovered wrong IDs).
+			// But we can still try to restore as much as possible from the file name itself.
+			
+			if (!nameParsed && !ParseDownloadName(fileItem.GetName(), fileReply))
+			{
+				return false;
+			}
+			return true;
+		}
+	}
+	void NexusRepository::OnToolBarMenu(KxMenu& menu)
+	{
+		const bool assocOK = IsAssociatedWithNXM();
+		wxString label = assocOK ? KTr("DownloadManager.Menu.AssocianedWithNXM") : KTr("DownloadManager.Menu.AssociateWithNXM");
+
+		KxMenuItem* item = menu.Add(new KxMenuItem(label, wxEmptyString, wxITEM_CHECK));
+		item->Enable(!assocOK);
+		item->Check(assocOK);
+		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ModNetwork_Nexus));
+
+		if (!assocOK)
+		{
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+			{
+				AssociateWithNXM();
+			});
+		}
+	}
+	void NexusRepository::OnDownloadMenu(KxMenu& menu, DownloadItem* download)
+	{
+		if (download && download->GetModNetwork() == &m_Nexus)
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KTr("DownloadManager.Menu.CopyNXM")));
+			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
+			{
+				if (wxTheClipboard->Open())
+				{
+					wxTheClipboard->SetData(new wxTextDataObject(m_Nexus.ConstructNXM(download->GetFileInfo(), download->GetTargetGame()).BuildUnescapedURI()));
+					wxTheClipboard->Close();
+				}
+			});
+		}
 	}
 
 	std::optional<ModInfoReply> NexusRepository::GetModInfo(const ModRepositoryRequest& request) const
@@ -334,8 +418,9 @@ namespace Kortex::NetworkManager
 				info.Name = value["name"].get<wxString>();
 				info.ShortName = value["short_name"].get<wxString>();
 
-				info.URL = value["URI"].get<wxString>();
-				m_Utility.ConvertUnicodeEscapes(info.URL);
+				wxString url = value["URI"].get<wxString>();
+				m_Utility.ConvertUnicodeEscapes(url);
+				info.URI = url;
 			}
 		}
 		catch (...)
@@ -399,5 +484,14 @@ namespace Kortex::NetworkManager
 			return std::nullopt;
 		}
 		return infoVector;
+	}
+
+	bool NexusRepository::IsAssociatedWithNXM()
+	{
+		return IDownloadManager::IsAssociatedWithLink("NXM");
+	}
+	void NexusRepository::AssociateWithNXM()
+	{
+		IDownloadManager::AssociateWithLink("NXM");
 	}
 }

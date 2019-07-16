@@ -1,8 +1,10 @@
 #pragma once
 #include "stdafx.h"
 #include "GameInstance/GameID.h"
-#include "IDownloadEntry.h"
+#include "DownloadManager/DownloadItem.h"
+#include <KxFramework/KxURI.h>
 #include <KxFramework/KxSingleton.h>
+#include <KxFramework/KxComponentSystem.h>
 
 namespace Kortex
 {
@@ -20,10 +22,10 @@ namespace Kortex
 	class IDownloadManager:
 		public ManagerWithTypeInfo<IPluggableManager, DownloadManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IDownloadManager>,
-		public RTTI::IInterface<IDownloadManager>
+		public KxComponentContainer
 	{
 		public:
-			enum class DownloadLocationError
+			enum class LocationStatus
 			{
 				Success = 0,
 				NotExist,
@@ -31,29 +33,48 @@ namespace Kortex
 				InsufficientVolumeSpace,
 				InsufficientVolumeCapabilities,
 			};
+			enum class ItemEvent
+			{
+				Added,
+				Removed,
+				Changed,
 
-		protected:
+				Started,
+				Stopped,
+
+				Paused,
+				Resumed,
+				Progress,
+
+				Completed,
+				Failed,
+			};
+
+		public:
 			static wxString RenameIncrement(const wxString& name);
+			static void ConfigureCommandLine(wxCmdLineParser& parser);
+			static std::optional<wxString> GetLinkFromCommandLine(const wxCmdLineParser& parser);
 
+			static bool IsAssociatedWithLink(const wxString& type);
+			static void AssociateWithLink(const wxString& type);
+			
 		protected:
-			DownloadLocationError CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize = -1) const;
+			LocationStatus CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize = -1) const;
 
 		public:
 			IDownloadManager();
 			virtual ~IDownloadManager();
 
 		public:
-			virtual void OnChangeEntry(const IDownloadEntry& entry, bool noSave = false) const = 0;
-			virtual void OnAddEntry(const IDownloadEntry& entry) const = 0;
-			virtual void OnRemoveEntry(const IDownloadEntry& entry) const = 0;
-
-			virtual void OnDownloadComplete(IDownloadEntry& entry) = 0;
-			virtual void OnDownloadPaused(IDownloadEntry& entry) = 0;
-			virtual void OnDownloadStopped(IDownloadEntry& entry) = 0;
-			virtual void OnDownloadResumed(IDownloadEntry& entry) = 0;
-			virtual void OnDownloadFailed(IDownloadEntry& entry) = 0;
+			virtual void OnDownloadEvent(const DownloadItem& item, ItemEvent eventType) = 0;
 
 		public:
+			virtual DownloadItem::Vector& GetDownloads() = 0;
+			const DownloadItem::Vector& GetDownloads() const
+			{
+				return const_cast<IDownloadManager*>(this)->GetDownloads();
+			}
+			
 			virtual void LoadDownloads() = 0;
 			virtual void SaveDownloads() = 0;
 			void PauseAllActive();
@@ -63,44 +84,24 @@ namespace Kortex
 
 			virtual wxString GetDownloadsLocation() const = 0;
 			virtual void SetDownloadsLocation(const wxString& location) = 0;
-			virtual DownloadLocationError OnAccessDownloadLocation() const = 0;
-
-			virtual const IDownloadEntry::Vector& GetDownloads() const = 0;
-			virtual IDownloadEntry::Vector& GetDownloads() = 0;
-			IDownloadEntry::RefVector GetInactiveDownloads(bool installedOnly = false) const;
+			virtual LocationStatus OnAccessDownloadLocation(int64_t fileSize = -1) const = 0;
 			
-			IDownloadEntry* FindDownloadByFileName(const wxString& name, const IDownloadEntry* except = nullptr) const;
-			template<class T> static auto GetDownloadIterator(T& items, const IDownloadEntry& entry)
-			{
-				return std::find_if(items.begin(), items.end(), [&entry](const auto& v)
-				{
-					return v.get() == &entry;
-				});
-			}
-			void AutoRenameIncrement(IDownloadEntry& entry) const;
+			DownloadItem::RefVector GetInactiveDownloads(bool installedOnly = false) const;
+			DownloadItem* FindDownloadByFileName(const wxString& name, const DownloadItem* except = nullptr) const;
+			void AutoRenameIncrement(DownloadItem& entry) const;
 
-			virtual IDownloadEntry& NewDownload() = 0;
-			virtual bool RemoveDownload(IDownloadEntry& download) = 0;
+			DownloadItem& AddDownload(std::unique_ptr<DownloadItem> download);
+			bool RemoveDownload(DownloadItem& download);
+
+			virtual std::unique_ptr<IDownloadExecutor> NewDownloadExecutor(DownloadItem& item,
+																		   const KxURI& url,
+																		   const wxString& localPath
+			) = 0;
 			virtual bool QueueDownload(ModNetworkRepository& modRepository,
 									   const ModDownloadReply& downloadInfo,
 									   const ModFileReply& fileInfo,
 									   const GameID& id = {}
 			) = 0;
-			virtual bool TryQueueDownloadLink(const wxString& link) = 0;
-	};
-}
-
-namespace Kortex
-{
-	class IDownloadManagerNXM: public RTTI::IInterface<IDownloadManagerNXM>
-	{
-		public:
-			static bool CheckCmdLineArgs(const wxCmdLineParser& args, wxString& link);
-
-		public:
-			virtual bool IsAssociatedWithNXM() const = 0;
-			virtual void AssociateWithNXM() = 0;
-
-			virtual bool QueueNXM(const wxString& link) = 0;
+			bool TryQueueDownloadLink(const wxString& link);
 	};
 }

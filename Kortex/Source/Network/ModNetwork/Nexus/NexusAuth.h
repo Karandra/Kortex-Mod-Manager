@@ -5,11 +5,7 @@
 #include "Network/ModNetworkAuth.h"
 #include "NexusNetworkReply.h"
 #include <KxFramework/KxUUID.h>
-
-namespace KxWebSocket
-{
-	class IClient;
-}
+class KxIWebSocketClient;
 
 namespace Kortex::NetworkManager
 {
@@ -25,7 +21,7 @@ namespace Kortex::NetworkManager
 			NexusUtility& m_Utility;
 
 			KxSecretDefaultStoreService m_CredentialsStore;
-			std::unique_ptr<KxWebSocket::IClient> m_WebSocketClient;
+			std::unique_ptr<KxIWebSocketClient> m_WebSocketClient;
 
 			std::optional<NexusValidationReply> m_LastValidationReply;
 			wxString m_UserToken;

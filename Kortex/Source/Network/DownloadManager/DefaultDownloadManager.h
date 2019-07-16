@@ -1,15 +1,13 @@
 #pragma once
 #include "stdafx.h"
-#include "Network/IDownloadEntry.h"
 #include "Network/IDownloadManager.h"
 
 namespace Kortex::DownloadManager
 {
-	class DefaultDownloadManager: public RTTI::IExtendInterface<DefaultDownloadManager, IDownloadManager, IDownloadManagerNXM>
+	class DefaultDownloadManager: public IDownloadManager
 	{
 		private:
-			IDownloadEntry::Vector m_Downloads;
-			bool m_IsAssociatedWithNXM = false;
+			DownloadItem::Vector m_Downloads;
 			bool m_IsReady = false;
 
 		private:
@@ -19,15 +17,7 @@ namespace Kortex::DownloadManager
 				m_IsReady = true;
 			}
 
-			void OnChangeEntry(const IDownloadEntry& entry, bool noSave = false) const override;
-			void OnAddEntry(const IDownloadEntry& entry) const override;
-			void OnRemoveEntry(const IDownloadEntry& entry) const override;
-
-			void OnDownloadComplete(IDownloadEntry& entry) override;
-			void OnDownloadPaused(IDownloadEntry& entry) override;
-			void OnDownloadStopped(IDownloadEntry& entry) override;
-			void OnDownloadResumed(IDownloadEntry& entry) override;
-			void OnDownloadFailed(IDownloadEntry& entry) override;
+			void OnDownloadEvent(const DownloadItem& item, ItemEvent eventType) override;
 
 		protected:
 			virtual void OnInit() override;
@@ -35,6 +25,10 @@ namespace Kortex::DownloadManager
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode);
 
 		public:
+			DownloadItem::Vector& GetDownloads() override
+			{
+				return m_Downloads;
+			}
 			void LoadDownloads() override;
 			void SaveDownloads() override;
 
@@ -43,34 +37,16 @@ namespace Kortex::DownloadManager
 
 			wxString GetDownloadsLocation() const override;
 			void SetDownloadsLocation(const wxString& location) override;
-			DownloadLocationError OnAccessDownloadLocation() const override;
+			LocationStatus OnAccessDownloadLocation(int64_t fileSize = -1) const override;
 
-			const IDownloadEntry::Vector& GetDownloads() const override
-			{
-				return m_Downloads;
-			}
-			IDownloadEntry::Vector& GetDownloads() override
-			{
-				return m_Downloads;
-			}
-
-			IDownloadEntry& NewDownload() override;
-			bool RemoveDownload(IDownloadEntry& download) override;
+			std::unique_ptr<IDownloadExecutor> NewDownloadExecutor(DownloadItem& item,
+																   const KxURI& url,
+																   const wxString& localPath
+			) override;
 			bool QueueDownload(ModNetworkRepository& modRepository,
 							   const ModDownloadReply& downloadInfo,
 							   const ModFileReply& fileInfo,
 							   const GameID& id = {}
 			) override;
-			bool TryQueueDownloadLink(const wxString& link) override;
-
-		// IDownloadManagerNXM
-		private:
-			bool CheckIsAssociatedWithNXM() const;
-
-		public:
-			bool IsAssociatedWithNXM() const override;
-			void AssociateWithNXM() override;
-
-			bool QueueNXM(const wxString& link) override;
 	};
 }

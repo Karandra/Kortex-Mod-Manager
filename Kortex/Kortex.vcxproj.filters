@@ -705,13 +705,7 @@
     <ClCompile Include="Source\Network\IDownloadManager.cpp">
       <Filter>Code\Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\IDownloadEntry.cpp">
-      <Filter>Code\Source\Network</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadManager.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadEntry.cpp">
       <Filter>Code\Source\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DisplayModel.cpp">
@@ -1248,6 +1242,15 @@
     <ClCompile Include="Source\UI\WebViewBackend\Generic.cpp">
       <Filter>Code\Source\UI\WebViewBackend</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Network\DownloadManager\DownloadItem.cpp">
+      <Filter>Code\Source\Network\DownloadManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\DownloadManager\DownloadExecutor.cpp">
+      <Filter>Code\Source\Network\DownloadManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\DownloadManager\DownloadItemBuilder.cpp">
+      <Filter>Code\Source\Network\DownloadManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1601,13 +1604,7 @@
     <ClInclude Include="Source\Network\IDownloadManager.h">
       <Filter>Code\Headers\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\IDownloadEntry.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadManager.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadEntry.h">
       <Filter>Code\Headers\Network\DownloadManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\DownloadManager\DisplayModel.h">
@@ -2350,6 +2347,21 @@
     </ClInclude>
     <ClInclude Include="Source\UI\WebViewBackend\IWebView.h">
       <Filter>Code\Headers\UI\WebViewBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DownloadItem.h">
+      <Filter>Code\Headers\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DownloadExecutor.h">
+      <Filter>Code\Headers\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\IDownloadExecutor.h">
+      <Filter>Code\Headers\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\IDownloadItem.h">
+      <Filter>Code\Headers\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DownloadItemBuilder.h">
+      <Filter>Code\Headers\Network\DownloadManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

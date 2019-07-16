@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "DefaultDownloadManager.h"
-#include "DefaultDownloadEntry.h"
+#include "DownloadExecutor.h"
 #include "DisplayModel.h"
 #include "Workspace.h"
-#include "Network/ModNetwork/Nexus.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/NetworkManager.hpp>
@@ -13,15 +12,13 @@
 #include "Utility/KAux.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxDataView.h>
-#include <KxFramework/KxRegistry.h>
-#include <KxFramework/KxLibrary.h>
 
 namespace
 {
 	using namespace Kortex;
 	using namespace Kortex::DownloadManager;
 
-	DisplayModel* GetViewAndItem(const IDownloadEntry& entry, KxDataViewItem& item)
+	DisplayModel* GetViewAndItem(const DownloadItem& entry, KxDataViewItem& item)
 	{
 		Workspace* workspace = Workspace::GetInstance();
 		if (workspace)
@@ -52,77 +49,90 @@ namespace Kortex::DownloadManager
 		return new Workspace(mainWindow);
 	}
 
-	void DefaultDownloadManager::OnChangeEntry(const IDownloadEntry& entry, bool noSave) const
+	void DefaultDownloadManager::OnDownloadEvent(const DownloadItem& item, ItemEvent eventType)
 	{
-		if (!noSave)
+		bool allowSave = true;
+		bool allowUpdate = true;
+
+		switch (eventType)
 		{
-			entry.Save();
-		}
+			case ItemEvent::Added:
+			case ItemEvent::Changed:
+			case ItemEvent::Stopped:
+			case ItemEvent::Paused:
+			case ItemEvent::Resumed:
+			{
+				break;
+			}
+			case ItemEvent::Started:
+			{
+				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadStarted"),
+											KTrf("DownloadManager.Notification.DownloadStartedEx", item.GetFileInfo().Name),
+											KxICON_INFORMATION
+				);
+				break;
+			}
+			case ItemEvent::Completed:
+			{
+				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadCompleted"),
+											KTrf("DownloadManager.Notification.DownloadCompletedEx", item.GetFileInfo().Name),
+											KxICON_INFORMATION
+				);
+				break;
+			}
+			case ItemEvent::Failed:
+			{
+				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadFailed"),
+											KTrf("DownloadManager.Notification.DownloadFailedEx", item.GetFileInfo().Name),
+											KxICON_WARNING
+				);
+				break;
+			}
+			case ItemEvent::Removed:
+			case ItemEvent::Progress:
+			{
+				allowSave = false;
+				break;
+			}
+			default:
+			{
+				allowSave = false;
+				allowUpdate = false;
+			}
+		};
 
 		if (m_IsReady)
 		{
-			KxDataViewItem item;
-			DisplayModel* view = GetViewAndItem(entry, item);
-			view->ItemChanged(item);
+			if (allowUpdate)
+			{
+				KxDataViewItem viewItem;
+				DisplayModel* view = GetViewAndItem(item, viewItem);
+				
+				if (viewItem.IsOK())
+				{
+					view->ItemChanged(viewItem);
+				}
+				else
+				{
+					view->RefreshItems();
+				}
+			}
+			if (allowSave)
+			{
+				item.Save();
+			}
 		}
-	}
-	void DefaultDownloadManager::OnAddEntry(const IDownloadEntry& entry) const
-	{
-		entry.Save();
-
-		if (m_IsReady)
-		{
-			KxDataViewItem item;
-			DisplayModel* view = GetViewAndItem(entry, item);
-			view->ItemAdded(item);
-		}
-	}
-	void DefaultDownloadManager::OnRemoveEntry(const IDownloadEntry& entry) const
-	{
-		entry.Save();
-
-		if (m_IsReady)
-		{
-			KxDataViewItem item;
-			DisplayModel* view = GetViewAndItem(entry, item);
-			view->ItemDeleted(item);
-		}
-	}
-
-	void DefaultDownloadManager::OnDownloadComplete(IDownloadEntry& entry)
-	{
-		OnChangeEntry(entry);
-		INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.Notification.DownloadCompleted"), KTrf("DownloadManager.Notification.DownloadCompletedEx", entry.GetFileInfo().Name), KxICON_INFORMATION);
-	}
-	void DefaultDownloadManager::OnDownloadPaused(IDownloadEntry& entry)
-	{
-		OnChangeEntry(entry);
-	}
-	void DefaultDownloadManager::OnDownloadStopped(IDownloadEntry& entry)
-	{
-		OnChangeEntry(entry);
-	}
-	void DefaultDownloadManager::OnDownloadResumed(IDownloadEntry& entry)
-	{
-		OnChangeEntry(entry);
-	}
-	void DefaultDownloadManager::OnDownloadFailed(IDownloadEntry& entry)
-	{
-		OnChangeEntry(entry);
-		INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.Notification.DownloadFailed"), KTrf("DownloadManager.Notification.DownloadFailedEx", entry.GetFileInfo().Name), KxICON_WARNING);
 	}
 
 	void DefaultDownloadManager::OnInit()
 	{
 		m_IsReady = true;
-		m_IsAssociatedWithNXM = CheckIsAssociatedWithNXM();
-
 		KxFile(GetDownloadsLocation()).CreateFolder();
 	}
 	void DefaultDownloadManager::OnExit()
 	{
-		m_IsReady = false;
 		PauseAllActive();
+		m_IsReady = false;
 	}
 	void DefaultDownloadManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
@@ -136,30 +146,19 @@ namespace Kortex::DownloadManager
 		bool showHidden = ShouldShowHiddenDownloads();
 
 		KxFileFinder finder(GetDownloadsLocation(), "*");
-		KxFileItem item = finder.FindNext();
-		while (item.IsOK())
+		for (KxFileItem fileItem = finder.FindNext(); fileItem.IsOK(); fileItem = finder.FindNext())
 		{
-			if (item.IsNormalItem() && item.IsFile() && !item.GetName().IsEmpty())
+			if (fileItem.IsNormalItem() && fileItem.IsFile())
 			{
-				// Load everything that's not XML file
-				if (!KAux::IsSingleFileExtensionMatches(item.GetName(), wxS("xml")))
-				{
-					const wxString xmlPath = item.GetFullPath() + wxS(".xml");
-					auto& entry = m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>());
+				DownloadItem& download = *m_Downloads.emplace_back(std::make_unique<DownloadItem>());
 
-					// Try to load from download xml or load as much as possible from download itself
-					if (!entry->Load(xmlPath, item))
-					{
-						entry->LoadDefault(item);
-						entry->Save();
-					}
-					if (entry->IsHidden() && !showHidden)
-					{
-						m_Downloads.pop_back();
-					}
+				// Try to load from download xml or load as much as possible from download itself
+				if (!download.Load(fileItem))
+				{
+					download.LoadDefault(fileItem);
+					download.Save();
 				}
 			}
-			item = finder.FindNext();
 		}
 	}
 	void DefaultDownloadManager::SaveDownloads()
@@ -187,7 +186,7 @@ namespace Kortex::DownloadManager
 	wxString DefaultDownloadManager::GetDownloadsLocation() const
 	{
 		using namespace Application;
-		
+
 		auto option = GetAInstanceOption(OName::Downloads);
 		return option.GetAttribute(OName::Location);
 	}
@@ -198,33 +197,33 @@ namespace Kortex::DownloadManager
 		GetAInstanceOption(OName::Downloads).SetAttribute(OName::Location, location);
 		KxFile(location).CreateFolder();
 	}
-	auto DefaultDownloadManager::OnAccessDownloadLocation() const -> DownloadLocationError
+	auto DefaultDownloadManager::OnAccessDownloadLocation(int64_t fileSize) const -> LocationStatus
 	{
-		const DownloadLocationError status = CheckDownloadLocation(GetDownloadsLocation());
+		const LocationStatus status = CheckDownloadLocation(GetDownloadsLocation(), fileSize);
 		switch (status)
 		{
-			case DownloadLocationError::NotExist:
-			case DownloadLocationError::NotSpecified:
+			case LocationStatus::NotExist:
+			case LocationStatus::NotSpecified:
 			{
-				INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.DownloadLocation"),
-														   KTr("DownloadManager.DownloadLocationInvalid"),
-														   KxICON_ERROR
+				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
+											KTr("DownloadManager.DownloadLocationInvalid"),
+											KxICON_ERROR
 				);
 				break;
 			}
-			case DownloadLocationError::InsufficientVolumeSpace:
+			case LocationStatus::InsufficientVolumeSpace:
 			{
-				INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.DownloadLocation"),
-														   KTr("DownloadManager.DownloadLocationInsufficientSpace"),
-														   KxICON_ERROR
+				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
+											KTr("DownloadManager.DownloadLocationInsufficientSpace"),
+											KxICON_ERROR
 				);
 				break;
 			}
-			case DownloadLocationError::InsufficientVolumeCapabilities:
+			case LocationStatus::InsufficientVolumeCapabilities:
 			{
-				INotificationCenter::GetInstance()->Notify(KTr("DownloadManager.DownloadLocation"),
-														   KTr("DownloadManager.DownloadLocationInsufficientCapabilities"),
-														   KxICON_ERROR
+				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
+											KTr("DownloadManager.DownloadLocationInsufficientCapabilities"),
+											KxICON_ERROR
 				);
 				break;
 			}
@@ -232,122 +231,31 @@ namespace Kortex::DownloadManager
 		return status;
 	}
 
-	IDownloadEntry& DefaultDownloadManager::NewDownload()
+	std::unique_ptr<IDownloadExecutor> DefaultDownloadManager::NewDownloadExecutor(DownloadItem& item,
+																				   const KxURI& url,
+																				   const wxString& localPath
+	)
 	{
-		return *m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>());
+		return std::make_unique<DownloadExecutor>(item, url, localPath);
 	}
-	bool DefaultDownloadManager::RemoveDownload(IDownloadEntry& download)
-	{
-		if (!download.IsRunning())
-		{
-			auto it = GetDownloadIterator(m_Downloads, download);
-			if (it != m_Downloads.end())
-			{
-				if (KxFile(download.GetFullPath()).RemoveFile(true) && KxFile(download.GetMetaFilePath()).RemoveFile(true))
-				{
-					m_Downloads.erase(it);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
 	bool DefaultDownloadManager::QueueDownload(ModNetworkRepository& modRepository,
 											   const ModDownloadReply& downloadInfo,
 											   const ModFileReply& fileInfo,
 											   const GameID& id
 	)
 	{
-		if (OnAccessDownloadLocation() != DownloadLocationError::Success)
+		if (OnAccessDownloadLocation(fileInfo.Size) != LocationStatus::Success)
 		{
 			return false;
 		}
 
 		if (downloadInfo.IsOK() && fileInfo.IsOK())
 		{
-			IDownloadEntry& entry = *m_Downloads.emplace_back(std::make_unique<DefaultDownloadEntry>(downloadInfo, fileInfo, modRepository, id));
-			AutoRenameIncrement(entry);
+			DownloadItem& item = *m_Downloads.emplace_back(std::make_unique<DownloadItem>(downloadInfo, fileInfo, modRepository, id));
+			AutoRenameIncrement(item);
+			OnDownloadEvent(item, ItemEvent::Added);
 
-			OnAddEntry(entry);
-			entry.Run();
-			return true;
-		}
-		return false;
-	}
-	bool DefaultDownloadManager::TryQueueDownloadLink(const wxString& link)
-	{
-		if (QueueNXM(link))
-		{
-			Workspace* workspace = Workspace::GetInstance();
-			workspace->SwitchHere();
-			return true;
-		}
-		return false;
-	}
-	
-	// IDownloadManagerNXM
-	bool DefaultDownloadManager::CheckIsAssociatedWithNXM() const
-	{
-		wxString path = KxRegistry::GetValue(KxREG_HKEY_CLASSES_ROOT, "NXM\\shell\\open\\command", "", KxREG_VALUE_SZ, KxREG_NODE_SYS, true).As<wxString>();
-		return IApplication::GetInstance()->GetExecutablePath() == path.AfterFirst('"').BeforeFirst('"');
-	}
-	bool DefaultDownloadManager::IsAssociatedWithNXM() const
-	{
-		return m_IsAssociatedWithNXM;
-	}
-	void DefaultDownloadManager::AssociateWithNXM()
-	{
-		wxString appPath = KxLibrary(nullptr).GetFileName();
-
-		auto SetValue = [&appPath](const wxString& name, bool protocol = false)
-		{
-			if (protocol)
-			{
-				KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, name, "", "URL:NXM Protocol", KxREG_VALUE_SZ);
-				KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, name, "URL Protocol", "URL:NXM Protocol", KxREG_VALUE_SZ);
-			}
-			else
-			{
-				KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, name, "", IApplication::GetInstance()->GetName() + " Package", KxREG_VALUE_SZ);
-			}
-			KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, name + "\\DefaultIcon", "", appPath, KxREG_VALUE_SZ);
-			KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, name + "\\shell\\open\\command", "", wxString::Format("\"%s\" \"-NXM %%1\"", appPath), KxREG_VALUE_SZ);
-		};
-
-		SetValue("NXM", true);
-		SetValue("NXM_File_Type", false);
-		m_IsAssociatedWithNXM = CheckIsAssociatedWithNXM();
-	}
-
-	bool DefaultDownloadManager::QueueNXM(const wxString& link)
-	{
-		using namespace NetworkManager;
-
-		if (NexusModNetwork* nexus = NexusModNetwork::GetInstance())
-		{
-			GameID gameID;
-			NetworkModInfo modInfo;
-			NexusNXMLinkData nxmExtraInfo;
-
-			if (nexus->ParseNXM(link, gameID, modInfo, nxmExtraInfo))
-			{
-				ModNetworkRepository& repository = nexus->GetComponent<ModNetworkRepository>();
-
-				if (auto fileInfo = repository.GetModFileInfo(ModRepositoryRequest(modInfo, gameID)))
-				{
-					ModRepositoryRequest request(modInfo, gameID);
-					request.SetExtraInfo(nxmExtraInfo);
-
-					if (auto linkItems = repository.GetFileDownloads(request); !linkItems.empty())
-					{
-						// Here we should actually select preferred download server based on user chose if we got more than one,
-						// but for now just use the first one.
-						return QueueDownload(repository, linkItems.front(), *fileInfo, gameID);
-					}
-					return false;
-				}
-			}
+			return item.Start();
 		}
 		return false;
 	}

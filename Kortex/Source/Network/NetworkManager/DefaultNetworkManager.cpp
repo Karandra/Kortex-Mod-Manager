@@ -44,7 +44,7 @@ namespace Kortex::NetworkManager
 		KxFile(GetCacheDirectory()).CreateFolder();
 
 		// Load default source
-		if (IModNetwork* modNetwork = GetModNetworkByName(GetAInstanceOption(OName::ModSource).GetAttribute(OName::Default)))
+		if (IModNetwork* modNetwork = GetModNetworkByName(GetAInstanceOption(OName::ModNetwork).GetAttribute(OName::Default)))
 		{
 			m_DefaultModNetwork = modNetwork;
 		}
@@ -57,7 +57,7 @@ namespace Kortex::NetworkManager
 		using namespace Application;
 
 		const IModNetwork* modNetwork = GetDefaultModNetwork();
-		GetAInstanceOption(OName::ModSource).SetAttribute(OName::Default, modNetwork ? modNetwork->GetName() : wxEmptyString);
+		GetAInstanceOption(OName::ModNetwork).SetAttribute(OName::Default, modNetwork ? modNetwork->GetName() : wxEmptyString);
 
 		INetworkManager::OnExit();
 	}
@@ -281,11 +281,13 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::OnSelectDefaultModSource(KxMenuEvent& event)
 	{
+		using namespace Application;
+
 		IModNetwork* modNetwork = static_cast<IModNetwork*>(event.GetItem()->GetClientData());
 		m_DefaultModNetwork = modNetwork;
 
 		UpdateButton();
-		GetAInstanceOption().SetAttribute("DefaultProvider", modNetwork->GetName());
+		GetAInstanceOption(OName::ModNetwork).SetAttribute(OName::Default, modNetwork->GetName());
 	}
 	void DefaultNetworkManager::OnToolBarButton(KxAuiToolBarEvent& event)
 	{
@@ -305,6 +307,24 @@ namespace Kortex::NetworkManager
 		return IApplication::GetInstance()->GetUserSettingsFolder() + wxS("\\WebCache");
 	}
 
+	IModNetwork::RefVector DefaultNetworkManager::GetModNetworks()
+	{
+		IModNetwork::RefVector refs;
+		refs.reserve(m_ModNetworks.size());
+		if (m_DefaultModNetwork)
+		{
+			refs.push_back(m_DefaultModNetwork);
+		}
+
+		for (auto& modNetwork: m_ModNetworks)
+		{
+			if (modNetwork.get() != m_DefaultModNetwork)
+			{
+				refs.push_back(modNetwork.get());
+			}
+		}
+		return refs;
+	}
 	IModNetwork* DefaultNetworkManager::GetDefaultModNetwork() const
 	{
 		return m_DefaultModNetwork;

@@ -43,15 +43,6 @@ namespace Kortex::DownloadManager
 		m_ViewModel->Create(this, m_MainSizer);
 		GetDisplayModelOptions().LoadDataViewLayout(m_ViewModel->GetView());
 
-		CallAfter([manager]()
-		{
-			wxString downloadLink;
-			IDownloadManagerNXM* nxm = nullptr;
-			if (manager->QueryInterface(nxm) && nxm->CheckCmdLineArgs(IApplication::GetInstance()->GetCmdLineParser(), downloadLink))
-			{
-				manager->TryQueueDownloadLink(downloadLink);
-			}
-		});
 		return true;
 	}
 

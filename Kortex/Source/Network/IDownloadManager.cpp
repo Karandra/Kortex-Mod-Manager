@@ -1,11 +1,23 @@
 #include "stdafx.h"
 #include "IDownloadManager.h"
 #include <Kortex/NetworkManager.hpp>
+#include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxDrive.h>
-#include <KxFramework/KxApp.h>
+#include <KxFramework/KxRegistry.h>
+
+namespace
+{
+	template<class T> static auto GetDownloadIterator(T&& items, const Kortex::DownloadItem& item)
+	{
+		return std::find_if(items.begin(), items.end(), [&item](const auto& v)
+		{
+			return v.get() == &item;
+		});
+	}
+}
 
 namespace Kortex
 {
@@ -31,37 +43,83 @@ namespace Kortex
 		}
 		return KxString::Format("%1 (1).%2", name.BeforeLast('.'), name.AfterLast('.'));
 	}
-	auto IDownloadManager::CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize) const -> DownloadLocationError
+	void IDownloadManager::ConfigureCommandLine(wxCmdLineParser& parser)
+	{
+		parser.AddOption(wxS("DownloadLink"), wxEmptyString, "Download link");
+	}
+	std::optional<wxString> IDownloadManager::GetLinkFromCommandLine(const wxCmdLineParser& parser)
+	{
+		wxString link;
+		if (parser.Found(wxS("DownloadLink"), &link) && !link.IsEmpty())
+		{
+			return link;
+		}
+		return std::nullopt;
+	}
+
+	bool IDownloadManager::IsAssociatedWithLink(const wxString& type)
+	{
+		wxAny path = KxRegistry::GetValue(KxREG_HKEY_CLASSES_ROOT, wxS("NXM\\shell\\open\\command"), "", KxREG_VALUE_SZ, KxREG_NODE_SYS, true);
+		return IApplication::GetInstance()->GetExecutablePath() == path.As<wxString>().AfterFirst('"').BeforeFirst('"');
+	}
+	void IDownloadManager::AssociateWithLink(const wxString& type)
+	{
+		wxString appPath = IApplication::GetInstance()->GetExecutablePath();
+		
+		wxString linkType = type.Upper();
+		linkType.StartsWith(wxS("."), &linkType);
+
+		auto SetValue = [&appPath, &linkType](const wxString& subKey, bool protocol = false)
+		{
+			if (protocol)
+			{
+				KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey, "", KxString::Format("URL:%1 Protocol", linkType), KxREG_VALUE_SZ);
+				KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey, "URL Protocol", KxString::Format("URL:%1 Protocol", linkType), KxREG_VALUE_SZ);
+			}
+			else
+			{
+				KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey, "", IApplication::GetInstance()->GetShortName() + " Download Link", KxREG_VALUE_SZ);
+			}
+			KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey + "\\DefaultIcon", "", appPath, KxREG_VALUE_SZ);
+			KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey + "\\shell\\open\\command", "", KxString::Format("\"%1\" \"-DownloadLink %2\"", appPath, "%1"), KxREG_VALUE_SZ);
+		};
+
+		SetValue(linkType, true);
+		SetValue(linkType + wxS("_File_Type"));
+	}
+
+	auto IDownloadManager::CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize) const -> LocationStatus
 	{
 		// Check path and folder existence
 		if (directoryPath.IsEmpty())
 		{
-			return DownloadLocationError::NotSpecified;
+			return LocationStatus::NotSpecified;
 		}
 		if (!KxFile(directoryPath).IsFolderExist())
 		{
-			return DownloadLocationError::NotExist;
+			return LocationStatus::NotExist;
 		}
 		
 		// Check volume capabilities
 		KxDrive drive(directoryPath);
 
-		// Add one MB because it's probably impossible to safely save a file with exact size as free space left on disk
+		// Add one megabyte because it's probably impossible to safely save a file
+		// with exactly the same size as the free space left on the disk.
 		constexpr int64_t reserveSize = 1024 * 1024 * 1024;
 		if (fileSize > 0 && drive.GetFreeSpace() < (fileSize + reserveSize))
 		{
-			return DownloadLocationError::InsufficientVolumeSpace;
+			return LocationStatus::InsufficientVolumeSpace;
 		}
 
 		#if 0
 		// Check if the volume supports file streams
 		if (!(drive.GetInfo().FileSystemFlags & FILE_NAMED_STREAMS))
 		{
-			return DownloadLocationError::InsufficientVolumeCapabilities;
+			return LocationStatus::InsufficientVolumeCapabilities;
 		}
 		#endif
 
-		return DownloadLocationError::Success;
+		return LocationStatus::Success;
 	}
 
 	IDownloadManager::IDownloadManager()
@@ -82,10 +140,9 @@ namespace Kortex
 			}
 		}
 	}
-
-	IDownloadEntry::RefVector IDownloadManager::GetInactiveDownloads(bool installedOnly) const
+	DownloadItem::RefVector IDownloadManager::GetInactiveDownloads(bool installedOnly) const
 	{
-		IDownloadEntry::RefVector items;
+		DownloadItem::RefVector items;
 		for (const auto& entry: GetDownloads())
 		{
 			if (!entry->IsRunning())
@@ -99,7 +156,7 @@ namespace Kortex
 		}
 		return items;
 	}
-	IDownloadEntry* IDownloadManager::FindDownloadByFileName(const wxString& name, const IDownloadEntry* except) const
+	DownloadItem* IDownloadManager::FindDownloadByFileName(const wxString& name, const DownloadItem* except) const
 	{
 		for (const auto& entry: GetDownloads())
 		{
@@ -110,20 +167,52 @@ namespace Kortex
 		}
 		return nullptr;
 	}
-	
-	void IDownloadManager::AutoRenameIncrement(IDownloadEntry& entry) const
+	void IDownloadManager::AutoRenameIncrement(DownloadItem& entry) const
 	{
 		while (FindDownloadByFileName(entry.GetFileInfo().Name, &entry))
 		{
-			entry.GetFileInfo().Name = RenameIncrement(entry.GetFileInfo().Name);
+			entry.m_FileInfo.Name = RenameIncrement(entry.GetFileInfo().Name);
 		}
 	}
-}
 
-namespace Kortex
-{
-	bool IDownloadManagerNXM::CheckCmdLineArgs(const wxCmdLineParser& args, wxString& link)
+	DownloadItem& IDownloadManager::AddDownload(std::unique_ptr<DownloadItem> download)
 	{
-		return args.Found("NXM", &link);
+		DownloadItem& ref = *GetDownloads().emplace_back(std::move(download));
+		AutoRenameIncrement(ref);
+
+		return ref;
+	}
+	bool IDownloadManager::RemoveDownload(DownloadItem& download)
+	{
+		if (!download.IsRunning())
+		{
+			auto& items = GetDownloads();
+			auto it = GetDownloadIterator(items, download);
+			if (it != items.end())
+			{
+				// Remove download file
+				KxFile(download.GetFullPath()).RemoveFile(true);
+
+				// Erase the item
+				auto temp = std::move(*it);
+				items.erase(it);
+				OnDownloadEvent(*temp, ItemEvent::Removed);
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool IDownloadManager::TryQueueDownloadLink(const wxString& link)
+	{
+		for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
+		{
+			if (repository->QueueDownload(link))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

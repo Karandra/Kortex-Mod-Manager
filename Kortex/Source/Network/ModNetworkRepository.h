@@ -8,10 +8,11 @@
 #include <KxFramework/KxComponentSystem.h>
 #include <KxFramework/KxFileItem.h>
 #include <optional>
+class KxMenu;
 
 namespace Kortex
 {
-	class IDownloadEntry;
+	class DownloadItem;
 }
 
 namespace Kortex
@@ -20,7 +21,9 @@ namespace Kortex
 	{
 		public:
 			virtual ModRepositoryLimits GetRequestLimits() const = 0;
-			virtual bool RestoreBrokenDownload(const KxFileItem& fileItem, IDownloadEntry& download) = 0;
+			virtual bool QueueDownload(const wxString& link) = 0;
+			virtual void OnDownloadMenu(KxMenu& menu, DownloadItem* download = nullptr) = 0;
+			virtual bool QueryDownload(const KxFileItem& fileItem, const DownloadItem& download, ModFileReply& fileReply) = 0;
 
 			virtual std::optional<ModInfoReply> GetModInfo(const ModRepositoryRequest& request) const = 0;
 			virtual std::optional<ModEndorsementReply> EndorseMod(const ModRepositoryRequest& request, ModEndorsement state) = 0;

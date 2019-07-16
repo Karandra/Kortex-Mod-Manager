@@ -293,37 +293,27 @@ namespace Kortex::ModManager
 				KxXMLDocument info(stream);
 				KxXMLNode infoNode = info.QueryElement("fomod");
 
-				IDownloadEntry& entry = manager->NewDownload();
-				entry.SetTargetGame(m_TargetGame);
-				entry.SetModNetwork(NetworkManager::NexusModNetwork::GetInstance()->GetComponent<ModNetworkRepository>());
-				entry.SetDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
+				DownloadItemBuilder download;
+				download.SetTargetGame(m_TargetGame ? m_TargetGame->GetGameID() : GameIDs::NullGameID);
+				download.SetModRepository(NetworkManager::NexusModNetwork::GetInstance()->GetComponent<ModNetworkRepository>());
+				download.SetDownloadDate(archiveFile.GetFileTime(KxFileTime::KxFILETIME_CREATION));
 
-				entry.GetDownloadInfo().URL = infoNode.GetFirstChildElement("Website").GetValue();
+				download.SetName(fileItem.GetName());
+				download.SetDisplayName(infoNode.GetFirstChildElement("Name").GetValue());
+				download.SetVersion(infoNode.GetFirstChildElement("Version").GetValue());
+				
+				download.SetURI(infoNode.GetFirstChildElement("Website").GetValue());
+				download.SetModID(infoNode.GetFirstChildElement("Id").GetValueInt(-1));
+				download.SetFileID(infoNode.GetFirstChildElement("DownloadId").GetValueInt(-1));
 
-				entry.GetFileInfo().ModID = infoNode.GetFirstChildElement("Id").GetValueInt(-1);
-				entry.GetFileInfo().ID = infoNode.GetFirstChildElement("DownloadId").GetValueInt(-1);
-				entry.GetFileInfo().Name = fileItem.GetName();
-				entry.GetFileInfo().DisplayName = infoNode.GetFirstChildElement("Name").GetValue();
-				entry.GetFileInfo().Version = infoNode.GetFirstChildElement("Version").GetValue();
+				download.SetTotalSize(archiveFile.GetFileSize());
+				download.SetDownloadedSize(archiveFile.GetFileSize());
+				download.SetHidden(false);
 
-				const int64_t size = archiveFile.GetFileSize();
-				entry.GetFileInfo().Size = size;
-				entry.SetDownloadedSize(size);
-
-				entry.SetPaused(false);
-				entry.SetHidden(false);
-
-				if (entry.IsOK())
+				if (DownloadItem* item = download.Save())
 				{
-					manager->AutoRenameIncrement(entry);
-					entry.Save();
-
 					context->LinkHandler(&archiveFile, KxEVT_FILEOP_COPY);
-					archiveFile.CopyFile(entry.GetFullPath(), false);
-				}
-				else
-				{
-					manager->GetDownloads().pop_back();
+					archiveFile.CopyFile(item->GetFullPath(), false);
 				}
 			}
 		}

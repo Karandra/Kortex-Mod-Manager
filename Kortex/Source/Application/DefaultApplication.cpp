@@ -74,7 +74,7 @@ namespace Kortex::Application
 		cmdLineParser.AddOption("InstanceID", wxEmptyString, "Instance ID");
 		cmdLineParser.AddOption("ProfileID", wxEmptyString, "Profile ID");
 		cmdLineParser.AddOption("GlobalConfigPath", wxEmptyString, "Folder path for app-wide config");
-		cmdLineParser.AddOption("NXM", wxEmptyString, "Nexus download link");
+		IDownloadManager::ConfigureCommandLine(cmdLineParser);
 
 		// Init global settings folder
 		ParseCommandLine();
@@ -95,11 +95,7 @@ namespace Kortex::Application
 		LoadImages();
 
 		// Check download
-		wxString downloadLink;
-		if (!IDownloadManagerNXM::CheckCmdLineArgs(GetCmdLineParser(), downloadLink))
-		{
-			downloadLink.clear();
-		}
+		auto downloadLink = IDownloadManager::GetLinkFromCommandLine(GetCmdLineParser());
 
 		// Show loading window
 		KxSplashWindow* splashWindow = new KxSplashWindow();
@@ -111,7 +107,7 @@ namespace Kortex::Application
 		});
 
 		// Don't show loading screen if it's a download link request
-		if (downloadLink.IsEmpty() || !anotherInstanceRunning)
+		if (!downloadLink || !anotherInstanceRunning)
 		{
 			splashWindow->Create(nullptr, ImageProvider::GetBitmap("kortex-logo"));
 			splashWindow->Show();
@@ -164,9 +160,9 @@ namespace Kortex::Application
 		else
 		{
 			// Send download
-			if (!downloadLink.IsEmpty())
+			if (downloadLink)
 			{
-				QueueDownloadToMainProcess(downloadLink);
+				QueueDownloadToMainProcess(*downloadLink);
 				return false;
 			}
 

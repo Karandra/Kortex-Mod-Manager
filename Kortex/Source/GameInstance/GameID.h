@@ -38,7 +38,7 @@ namespace Kortex
 			}
 			
 			IGameInstance* ToGameInstance() const;
-			IGameInstance* operator->()
+			IGameInstance* operator->() const
 			{
 				return ToGameInstance();
 			}

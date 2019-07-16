@@ -313,7 +313,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Abort")));
-			item->Enable(isRunning);
+			item->Enable(isRunning || isPaused);
 			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
 			{
 				download->Stop();

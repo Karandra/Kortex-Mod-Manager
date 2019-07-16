@@ -256,6 +256,11 @@ namespace Kortex
 			m_Executor->Stop();
 			return true;
 		}
+		else if (m_ShouldResume)
+		{
+			m_ShouldResume = false;
+			return true;
+		}
 		return false;
 	}
 

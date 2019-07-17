@@ -177,7 +177,7 @@ namespace Kortex::Application::About
 		view->ToggleWindowStyle(wxBORDER_NONE);
 		view->AssignModel(this);
 
-		view->Bind(EVENT_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
+		view->Bind(EvtITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
 
 		view->AppendColumn<BitmapTextRenderer>(KTr("Generic.Name"), ColumnRef::Name);
 		view->AppendColumn<TextRenderer>(KTr("Generic.Version"), ColumnRef::Version);

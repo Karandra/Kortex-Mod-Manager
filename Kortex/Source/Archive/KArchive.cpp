@@ -31,7 +31,7 @@ namespace
 
 	SevenZip::TStringVector ToTStringVector(const KxStringVector& vector)
 	{
-		return KxUtility::RepackVector<wxString, SevenZip::TString>(vector, [](const wxString& value)
+		return KxUtility::ConvertVector<SevenZip::TString>(vector, [](const wxString& value)
 		{
 			return ToTString(value);
 		});

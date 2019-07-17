@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <KxFramework/KxEvent.h>
 #include <KxFramework/KxBroadcastEvent.h>
 
 namespace Kortex

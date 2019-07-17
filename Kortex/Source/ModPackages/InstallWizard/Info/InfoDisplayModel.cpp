@@ -250,7 +250,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Value"), ColumnRef::Value);
 
 		// Events
-		view->Bind(EVENT_ITEM_ACTIVATED, &InfoDisplayModel::OnActivateItem, this);
+		view->Bind(EvtITEM_ACTIVATED, &InfoDisplayModel::OnActivateItem, this);
 	}
 	void InfoDisplayModel::AddItem(const KLabeledValue& value, const ResourceID& image, InfoKind type)
 	{

@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <KxFramework/KxEvent.h>
 #include <wx/webview.h>
 
 namespace Kortex::UI
@@ -7,10 +8,10 @@ namespace Kortex::UI
 	class IWebView
 	{
 		public:
-			inline static const wxEventTypeTag<wxWebViewEvent> EvtNavigating = wxEVT_WEBVIEW_NAVIGATING;
-			inline static const wxEventTypeTag<wxWebViewEvent> EvtNavigated = wxEVT_WEBVIEW_NAVIGATED;
-			inline static const wxEventTypeTag<wxWebViewEvent> EvtLoaded = wxEVT_WEBVIEW_LOADED;
-			inline static const wxEventTypeTag<wxWebViewEvent> EvtError = wxEVT_WEBVIEW_ERROR;
+			KxEVENT_MEMBER_AS(wxWebViewEvent, Navigating, wxEVT_WEBVIEW_NAVIGATING);
+			KxEVENT_MEMBER_AS(wxWebViewEvent, Navigated, wxEVT_WEBVIEW_NAVIGATED);
+			KxEVENT_MEMBER_AS(wxWebViewEvent, Loaded, wxEVT_WEBVIEW_LOADED);
+			KxEVENT_MEMBER_AS(wxWebViewEvent, Error, wxEVT_WEBVIEW_ERROR);
 
 		public:
 			IWebView() = default;

@@ -140,8 +140,8 @@ namespace Kortex::Notifications
 		view->SetEmptyControlLabel(KTr("NotificationCenter.NoNotifications"));
 		view->AssignModel(this);
 
-		view->Bind(EVENT_ITEM_SELECTED, &DisplayModel::OnSelectItem, this);
-		view->Bind(EVENT_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
+		view->Bind(EvtITEM_SELECTED, &DisplayModel::OnSelectItem, this);
+		view->Bind(EvtITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
 		view->SetUniformRowHeight(m_BitmapSize.GetHeight() * 1.5);
 
 		view->AppendColumn<BitmapRenderer>(wxEmptyString, ColumnRef::Icon, m_BitmapSize.GetWidth() + view->FromDIP(8));

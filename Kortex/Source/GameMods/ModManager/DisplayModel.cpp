@@ -71,20 +71,20 @@ namespace Kortex::ModManager
 		m_PriortyGroupColor = KxUtility::GetThemeColor_Caption(GetView());
 		
 		// Events
-		view->Bind(KxDataView2::EVENT_ITEM_SELECTED, &DisplayModel::OnSelectItem, this);
-		view->Bind(KxDataView2::EVENT_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
-		view->Bind(KxDataView2::EVENT_ITEM_EXPANDED, &DisplayModel::OnExpandCollapseItem, this);
-		view->Bind(KxDataView2::EVENT_ITEM_COLLAPSED, &DisplayModel::OnExpandCollapseItem, this);
-		view->Bind(KxDataView2::EVENT_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
-		view->Bind(KxDataView2::EVENT_COLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
+		view->Bind(KxDataView2::EvtITEM_SELECTED, &DisplayModel::OnSelectItem, this);
+		view->Bind(KxDataView2::EvtITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
+		view->Bind(KxDataView2::EvtITEM_EXPANDED, &DisplayModel::OnExpandCollapseItem, this);
+		view->Bind(KxDataView2::EvtITEM_COLLAPSED, &DisplayModel::OnExpandCollapseItem, this);
+		view->Bind(KxDataView2::EvtITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
+		view->Bind(KxDataView2::EvtCOLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
 
 		// Drag-and-drop
 		using KxDataView2::DNDOpType;
 		view->EnableDND(std::make_unique<DisplayModelDNDObject>(), DNDOpType::Drag|DNDOpType::Drop);
 
-		view->Bind(KxDataView2::EVENT_ITEM_DRAG, &DisplayModel::OnDragItems, this);
-		view->Bind(KxDataView2::EVENT_ITEM_DROP, &DisplayModel::OnDropItems, this);
-		view->Bind(KxDataView2::EVENT_ITEM_DROP_POSSIBLE, &DisplayModel::OnDropItemsPossible, this);
+		view->Bind(KxDataView2::EvtITEM_DRAG, &DisplayModel::OnDragItems, this);
+		view->Bind(KxDataView2::EvtITEM_DROP, &DisplayModel::OnDropItems, this);
+		view->Bind(KxDataView2::EvtITEM_DROP_POSSIBLE, &DisplayModel::OnDropItemsPossible, this);
 	}
 	void DisplayModel::ClearView()
 	{
@@ -333,7 +333,7 @@ namespace Kortex::ModManager
 			{
 				if (IModTag* tag = priorityGroup->GetTag())
 				{
-					tag->SetExpanded(event.GetEventType() == KxDataView2::EVENT_ITEM_EXPANDED);
+					tag->SetExpanded(event.GetEventType() == KxDataView2::EvtITEM_EXPANDED);
 				}
 			}
 		}

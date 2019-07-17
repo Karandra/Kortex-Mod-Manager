@@ -109,7 +109,7 @@ namespace Kortex::NetworkManager
 		return false;
 	}
 
-	bool NexusRepository::QueueDownload(const wxString& link)
+	bool NexusRepository::QueueDownload(const KxURI& link)
 	{
 		GameID gameID;
 		NetworkModInfo modInfo;

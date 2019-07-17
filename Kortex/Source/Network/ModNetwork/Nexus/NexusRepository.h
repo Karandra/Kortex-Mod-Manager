@@ -49,7 +49,7 @@ namespace Kortex::NetworkManager
 			bool IsAutomaticUpdateCheckAllowed() const;
 			bool ParseDownloadName(const wxString& name, ModFileReply& result);
 
-			bool QueueDownload(const wxString& link) override;
+			bool QueueDownload(const KxURI& link) override;
 			bool QueryDownload(const KxFileItem& fileItem, const DownloadItem& download, ModFileReply& fileReply) override;
 			void OnToolBarMenu(KxMenu& menu);
 			void OnDownloadMenu(KxMenu& menu, DownloadItem* download = nullptr) override;

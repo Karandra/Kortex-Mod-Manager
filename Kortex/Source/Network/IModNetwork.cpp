@@ -48,7 +48,9 @@ namespace Kortex
 	{
 		if (const ModSourceItem* item = mod.GetModSourceStore().GetItem(*this))
 		{
-			return GetModPageURI(item->GetModInfo());
+			ModRepositoryRequest request(item->GetModInfo());
+			request.SetExtraInfo(mod.GetSignature());
+			return GetModPageURI(request);
 		}
 		return {};
 	}

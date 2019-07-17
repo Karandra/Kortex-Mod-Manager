@@ -14,16 +14,6 @@ namespace Kortex::DownloadManager
 			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
 
 		public:
-			void LoadDownloads() override;
-			void SaveDownloads() override;
-
-			bool ShouldShowHiddenDownloads() const override;
-			void ShowHiddenDownloads(bool show = true) override;
-
-			wxString GetDownloadsLocation() const override;
-			void SetDownloadsLocation(const wxString& location) override;
-			LocationStatus OnAccessDownloadLocation(int64_t fileSize = -1) const override;
-
 			std::unique_ptr<IDownloadExecutor> NewDownloadExecutor(DownloadItem& item,
 																   const KxURI& uri,
 																   const wxString& localPath

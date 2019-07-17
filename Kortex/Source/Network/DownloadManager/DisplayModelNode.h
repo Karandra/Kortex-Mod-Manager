@@ -22,7 +22,7 @@ namespace Kortex::DownloadManager
 				Version,
 				Size,
 				Game,
-				ModNetwork,
+				Source,
 				Date,
 				Status,
 			};

@@ -46,8 +46,18 @@ namespace Kortex
 		protected:
 			DownloadItem::Vector m_Downloads;
 			
+			wxString m_Location;
+			int m_MaxConcurrentDownloads = -1;
+			bool m_ShowHiddenDownloads = true;
+
+		protected:
+			void OnInit() override;
+			void OnExit() override;
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
+			
 		protected:
 			LocationStatus CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize = -1) const;
+			LocationStatus OnAccessDownloadLocation(int64_t fileSize = -1) const;
 
 		public:
 			IDownloadManager();
@@ -55,29 +65,45 @@ namespace Kortex
 
 		public:
 			DownloadItem::RefVector GetDownloads() const;
-			
-			virtual void LoadDownloads() = 0;
-			virtual void SaveDownloads() = 0;
-			void PauseAllActive();
-
-			virtual bool ShouldShowHiddenDownloads() const = 0;
-			virtual void ShowHiddenDownloads(bool show = true) = 0;
-			void ToggleHiddenDownloads()
-			{
-				ShowHiddenDownloads(!ShouldShowHiddenDownloads());
-			}
-
-			virtual wxString GetDownloadsLocation() const = 0;
-			virtual void SetDownloadsLocation(const wxString& location) = 0;
-			virtual LocationStatus OnAccessDownloadLocation(int64_t fileSize = -1) const = 0;
-			
 			DownloadItem::RefVector GetInactiveDownloads(bool installedOnly = false) const;
-			DownloadItem* FindDownloadByFileName(const wxString& name, const DownloadItem* except = nullptr) const;
-			void AutoRenameIncrement(DownloadItem& entry) const;
 
 			DownloadItem& AddDownload(std::unique_ptr<DownloadItem> download);
 			bool RemoveDownload(DownloadItem& download);
 
+			void LoadDownloads();
+			void SaveDownloads();
+			void PauseAllActive();
+
+			bool ShouldShowHiddenDownloads() const
+			{
+				return m_ShowHiddenDownloads;
+			}
+			void ShowHiddenDownloads(bool show = true);
+			void ToggleHiddenDownloads()
+			{
+				ShowHiddenDownloads(!m_ShowHiddenDownloads);
+			}
+
+			wxString GetDownloadsLocation() const
+			{
+				return m_Location;
+			}
+			void SetDownloadsLocation(const wxString& location);
+			
+			bool HasConcurrentDownloadsLimit() const
+			{
+				return m_MaxConcurrentDownloads >= 0;
+			}
+			int GetMaxConcurrentDownloads() const
+			{
+				return m_MaxConcurrentDownloads;
+			}
+			void SetMaxConcurrentDownloads(size_t count);
+
+			DownloadItem* FindDownloadByFileName(const wxString& name, const DownloadItem* except = nullptr) const;
+			void AutoRenameIncrement(DownloadItem& entry) const;
+
+		public:
 			virtual std::unique_ptr<IDownloadExecutor> NewDownloadExecutor(DownloadItem& item,
 																		   const KxURI& uri,
 																		   const wxString& localPath

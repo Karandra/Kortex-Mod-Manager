@@ -128,6 +128,7 @@
 		<String ID="Generic.PartOf">Часть</String>
 		<String ID="Generic.Value">Значение</String>
 		<String ID="Generic.Address">Адрес</String>
+		<String ID="Generic.Source">Источник</String>
 		<String ID="Generic.Size">Размер</String>
 		<String ID="Generic.Type">Тип</String>
 		<String ID="Generic.Priority">Приоритет</String>
@@ -632,11 +633,12 @@
 		<String ID="DownloadManager.Menu.Remove">Удалить загрузку</String>
 		<String ID="DownloadManager.Menu.RemoveAll">Удалить все загрузки</String>
 		<String ID="DownloadManager.Menu.RemoveInstalled">Удалить все загрузки с установленными модами</String>
-		<String ID="DownloadManager.Menu.ShowHidden">Показывать скытые загрузки</String>
 
+		<String ID="DownloadManager.Menu.ShowHidden">Всегда показывать скрытые загрузки</String>
 		<String ID="DownloadManager.Menu.Hide">Скрыть</String>
 		<String ID="DownloadManager.Menu.HideAll">Скрыть все загрузки</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Скрыть все загрузки с установленными модами</String>
+		<String ID="DownloadManager.Menu.UnhideAll">Показать все загрузки</String>
 
 		<String ID="DownloadManager.Menu.AssociateWithNXM">Ассоциировать NXM-ссылками</String>
 		<String ID="DownloadManager.Menu.AssocianedWithNXM">Ассоциирован с NXM-ссылками</String>

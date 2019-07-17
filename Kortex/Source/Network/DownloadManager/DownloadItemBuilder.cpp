@@ -92,12 +92,17 @@ namespace Kortex
 		return *this;
 	}
 	
-	DownloadItemBuilder& DownloadItemBuilder::SetHidden(bool value)
+	DownloadItemBuilder& DownloadItemBuilder::Hide(bool value)
 	{
-		m_Item->SetHidden(value);
+		m_Item->Hide(value);
 		return *this;
 	}
-	DownloadItemBuilder& DownloadItemBuilder::SetResumePos(int64_t pos)
+	DownloadItemBuilder& DownloadItemBuilder::Show(bool value)
+	{
+		m_Item->Show(value);
+		return *this;
+	}
+	DownloadItemBuilder& DownloadItemBuilder::ResumeFrom(int64_t pos)
 	{
 		m_Item->m_ShouldResume = true;
 		m_Item->m_DownloadedSize = pos;

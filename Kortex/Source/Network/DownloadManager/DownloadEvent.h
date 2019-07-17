@@ -14,19 +14,25 @@ namespace Kortex
 		public:
 			KxEVENT_MEMBER(DownloadEvent, Added);
 			KxEVENT_MEMBER(DownloadEvent, Removed);
-			KxEVENT_MEMBER(DownloadEvent, Changed);
+			KxEVENT_MEMBER(DownloadEvent, Progress);
+
 			KxEVENT_MEMBER(DownloadEvent, Started);
 			KxEVENT_MEMBER(DownloadEvent, Stopped);
 			KxEVENT_MEMBER(DownloadEvent, Paused);
 			KxEVENT_MEMBER(DownloadEvent, Resumed);
-			KxEVENT_MEMBER(DownloadEvent, Progress);
 			KxEVENT_MEMBER(DownloadEvent, Completed);
 			KxEVENT_MEMBER(DownloadEvent, Failed);
+
+			KxEVENT_MEMBER(DownloadEvent, RefreshItems);
 
 		private:
 			DownloadItem* m_Download = nullptr;
 
 		public:
+			DownloadEvent(wxEventType type)
+				:IEvent(type)
+			{
+			}
 			DownloadEvent(wxEventType type, DownloadItem& item)
 				:IEvent(type), m_Download(&item)
 			{
@@ -37,9 +43,11 @@ namespace Kortex
 			{
 				return new DownloadEvent(*this);
 			}
+			
 			DownloadItem& GetDownload() const
 			{
 				return *m_Download;
 			}
+			bool ShouldShowHidden() const;
 	};
 }

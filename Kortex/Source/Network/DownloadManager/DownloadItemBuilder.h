@@ -51,7 +51,8 @@ namespace Kortex
 			DownloadItemBuilder& SetModID(ModID modID);
 			DownloadItemBuilder& SetFileID(ModFileID fileID);
 			
-			DownloadItemBuilder& SetHidden(bool value = true);
-			DownloadItemBuilder& SetResumePos(int64_t pos);
+			DownloadItemBuilder& Hide(bool value = true);
+			DownloadItemBuilder& Show(bool value = true);
+			DownloadItemBuilder& ResumeFrom(int64_t pos);
 	};
 }

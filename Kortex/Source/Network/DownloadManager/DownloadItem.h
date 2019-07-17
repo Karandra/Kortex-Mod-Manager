@@ -151,9 +151,20 @@ namespace Kortex
 			{
 				return m_IsHidden && !IsRunning();
 			}
-			void SetHidden(bool value)
+			bool IsVisible() const
 			{
-				m_IsHidden = value;
+				return !IsHidden();
+			}
+			void Hide(bool value = true)
+			{
+				if (!IsRunning())
+				{
+					m_IsHidden = value;
+				}
+			}
+			void Show(bool value = true)
+			{
+				Hide(!value);
 			}
 
 			bool CanVisitSource() const;

@@ -18,7 +18,7 @@
 
 namespace Kortex::DownloadManager
 {
-	void DisplayModel::OnContextMenu(Event& event)
+	void DisplayModel::OnContextMenu(KxDataView2::Event& event)
 	{
 		DownloadItem* download = GetItem(event.GetNode());
 		const IModNetwork* modNetwork = download ? download->GetModNetwork() : nullptr;
@@ -158,10 +158,10 @@ namespace Kortex::DownloadManager
 
 		{
 			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Hide")));
-			item->Enable(download && !isEmpty && !isRunning);
+			item->Enable(download && download->IsVisible());
 			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
-				download->SetHidden(true);
+				download->Hide(true);
 				download->Save();
 				RefreshItems();
 			});
@@ -180,6 +180,13 @@ namespace Kortex::DownloadManager
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				SetAllHidden(true, true);
+			});
+		}
+		{
+			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.UnhideAll")));
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+			{
+				SetAllHidden(false);
 			});
 		}
 		{
@@ -240,21 +247,25 @@ namespace Kortex::DownloadManager
 	
 	void DisplayModel::OnDownloadAdded(DownloadEvent& event)
 	{
-		AddNode(event.GetDownload());
-		ItemsChanged();
+		DownloadItem& item = event.GetDownload();
+		if (AddNode(item) && !item.IsHidden())
+		{
+			ItemsChanged();
+		}
 	}
 	void DisplayModel::OnDownloadRemoved(DownloadEvent& event)
 	{
-		if (RemoveNode(event.GetDownload()))
+		DownloadItem& item = event.GetDownload();
+		if (RemoveNode(item) && !item.IsHidden())
 		{
 			ItemsChanged();
 		}
 	}
 	void DisplayModel::OnDownloadProgress(DownloadEvent& event)
 	{
-		if (GetView()->IsShownOnScreen())
+		DownloadItem& item = event.GetDownload();
+		if (!item.IsHidden() && GetView()->IsShownOnScreen())
 		{
-			DownloadItem& item = event.GetDownload();
 			if (auto node = GetNode(item); node != m_Nodes.end())
 			{
 				node->Refresh();
@@ -296,6 +307,34 @@ namespace Kortex::DownloadManager
 		OnDownloadProgress(event);
 	}
 
+	void DisplayModel::OnRefreshItems(DownloadEvent& event)
+	{
+		RefreshItems();
+	}
+
+	DisplayModelNode* DisplayModel::AddNode(DownloadItem& item)
+	{
+		if (!item.IsHidden() || m_DownloadManager.ShouldShowHiddenDownloads())
+		{
+			DisplayModelNode& node = m_Nodes.emplace_back(item);
+			GetView()->GetRootNode().AttachChild(node);
+			node.OnAttachNode();
+
+			return &node;
+		}
+		return nullptr;
+	}
+	bool DisplayModel::RemoveNode(DownloadItem& item)
+	{
+		if (auto node = GetNode(item); node != m_Nodes.end())
+		{
+			GetView()->GetRootNode().DetachChild(*node);
+			m_Nodes.erase(node);
+			return true;
+		}
+		return false;
+	}
+
 	void DisplayModel::RemoveAll(bool installedOnly)
 	{
 		KxTaskDialog dialog(GetView(), KxID_NONE, KTr("DownloadManager.RemoveDownloadsCaption"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
@@ -323,7 +362,7 @@ namespace Kortex::DownloadManager
 			wxWindowUpdateLocker lock(GetView());
 			for (DownloadItem* item: items)
 			{
-				item->SetHidden(isHidden);
+				item->Hide(isHidden);
 				item->Save();
 			}
 			RefreshItems();
@@ -345,6 +384,8 @@ namespace Kortex::DownloadManager
 		IEvent::Bind(DownloadEvent::EvtStarted, &DisplayModel::OnDownloadStarted, this);
 		IEvent::Bind(DownloadEvent::EvtCompleted, &DisplayModel::OnDownloadCompleted, this);
 		IEvent::Bind(DownloadEvent::EvtFailed, &DisplayModel::OnDownloadFailed, this);
+
+		IEvent::Bind(DownloadEvent::EvtRefreshItems, &DisplayModel::OnRefreshItems, this);
 	}
 	DisplayModel::~DisplayModel()
 	{
@@ -355,6 +396,8 @@ namespace Kortex::DownloadManager
 		IEvent::Unbind(DownloadEvent::EvtStarted, &DisplayModel::OnDownloadStarted, this);
 		IEvent::Unbind(DownloadEvent::EvtCompleted, &DisplayModel::OnDownloadCompleted, this);
 		IEvent::Unbind(DownloadEvent::EvtFailed, &DisplayModel::OnDownloadFailed, this);
+
+		IEvent::Unbind(DownloadEvent::EvtRefreshItems, &DisplayModel::OnRefreshItems, this);
 	}
 
 	void DisplayModel::CreateView(wxWindow* parent)
@@ -386,7 +429,7 @@ namespace Kortex::DownloadManager
 			renderer.SetAlignment(wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT);
 		}
 		view->AppendColumn<TextRenderer>(KTr("Generic.Game"), ColumnID::Game, {}, columnStyle);
-		view->AppendColumn<TextRenderer>(KTr("NetworkManager.ModNetwork"), ColumnID::ModNetwork, {}, columnStyle);
+		view->AppendColumn<TextRenderer>(KTr("Generic.Source"), ColumnID::Source, {}, columnStyle);
 		{
 			auto [column, renderer] = view->AppendColumn<TextRenderer>(KTr("Generic.Date"), ColumnID::Date, {}, columnStyle);
 			column.SortDescending();
@@ -401,9 +444,7 @@ namespace Kortex::DownloadManager
 	}
 	void DisplayModel::RefreshItems()
 	{
-		Node& root = GetView()->GetRootNode();
-
-		root.DetachAllChildren();
+		GetView()->GetRootNode().DetachAllChildren();
 		m_Nodes.clear();
 
 		for (DownloadItem* item: m_DownloadManager.GetDownloads())

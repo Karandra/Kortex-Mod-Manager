@@ -7,6 +7,7 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxDrive.h>
 #include <KxFramework/KxRegistry.h>
+#include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxUtility.h>
 
 namespace
@@ -17,6 +18,16 @@ namespace
 		{
 			return v.get() == &item;
 		});
+	}
+}
+
+namespace Kortex::Application
+{
+	namespace OName
+	{
+		KortexDefOption(Downloads);
+		KortexDefOption(ShowHidden);
+		KortexDefOption(MaxConcurrentDownloads);
 	}
 }
 
@@ -89,6 +100,28 @@ namespace Kortex
 		SetValue(linkType + wxS("_File_Type"));
 	}
 
+	void IDownloadManager::OnInit()
+	{
+		using namespace Application;
+		m_Location = GetAInstanceOption(OName::Downloads).GetAttribute(OName::Location);
+		m_ShowHiddenDownloads = GetAInstanceOption(OName::ShowHidden).GetValueBool(m_ShowHiddenDownloads);
+		m_MaxConcurrentDownloads = GetAInstanceOption(OName::MaxConcurrentDownloads).GetValueInt(m_MaxConcurrentDownloads);
+
+		KxFile(GetDownloadsLocation()).CreateFolder();
+	}
+	void IDownloadManager::OnExit()
+	{
+		using namespace Application;
+		GetAInstanceOption(OName::Downloads).SetAttribute(OName::Location, m_Location);
+		GetAInstanceOption(OName::ShowHidden).SetValue(m_ShowHiddenDownloads);
+		GetAInstanceOption(OName::MaxConcurrentDownloads).SetValue(m_MaxConcurrentDownloads);
+
+		PauseAllActive();
+	}
+	void IDownloadManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
+	{
+	}
+
 	auto IDownloadManager::CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize) const -> LocationStatus
 	{
 		// Check path and folder existence
@@ -112,15 +145,46 @@ namespace Kortex
 			return LocationStatus::InsufficientVolumeSpace;
 		}
 
-		#if 0
 		// Check if the volume supports file streams
 		if (!(drive.GetInfo().FileSystemFlags & FILE_NAMED_STREAMS))
 		{
 			return LocationStatus::InsufficientVolumeCapabilities;
 		}
-		#endif
 
 		return LocationStatus::Success;
+	}
+	auto IDownloadManager::OnAccessDownloadLocation(int64_t fileSize) const -> LocationStatus
+	{
+		const LocationStatus status = CheckDownloadLocation(GetDownloadsLocation(), fileSize);
+		switch (status)
+		{
+			case LocationStatus::NotExist:
+			case LocationStatus::NotSpecified:
+			{
+				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
+											KTr("DownloadManager.DownloadLocationInvalid"),
+											KxICON_ERROR
+				);
+				break;
+			}
+			case LocationStatus::InsufficientVolumeSpace:
+			{
+				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
+											KTr("DownloadManager.DownloadLocationInsufficientSpace"),
+											KxICON_ERROR
+				);
+				break;
+			}
+			case LocationStatus::InsufficientVolumeCapabilities:
+			{
+				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
+											KTr("DownloadManager.DownloadLocationInsufficientCapabilities"),
+											KxICON_ERROR
+				);
+				break;
+			}
+		};
+		return status;
 	}
 
 	IDownloadManager::IDownloadManager()
@@ -138,17 +202,6 @@ namespace Kortex
 			return item.get();
 		});
 	}
-
-	void IDownloadManager::PauseAllActive()
-	{
-		for (const auto& entry: m_Downloads)
-		{
-			if (entry->IsRunning())
-			{
-				entry->Pause();
-			}
-		}
-	}
 	DownloadItem::RefVector IDownloadManager::GetInactiveDownloads(bool installedOnly) const
 	{
 		DownloadItem::RefVector items;
@@ -165,25 +218,7 @@ namespace Kortex
 		}
 		return items;
 	}
-	DownloadItem* IDownloadManager::FindDownloadByFileName(const wxString& name, const DownloadItem* except) const
-	{
-		for (const auto& item: m_Downloads)
-		{
-			if (item.get() != except && KxComparator::IsEqual(name, item->GetName()))
-			{
-				return item.get();
-			}
-		}
-		return nullptr;
-	}
-	void IDownloadManager::AutoRenameIncrement(DownloadItem& item) const
-	{
-		while (FindDownloadByFileName(item.GetName(), &item))
-		{
-			item.m_FileInfo.Name = RenameIncrement(item.GetName());
-		}
-	}
-
+	
 	DownloadItem& IDownloadManager::AddDownload(std::unique_ptr<DownloadItem> download)
 	{
 		DownloadItem& ref = *m_Downloads.emplace_back(std::move(download));
@@ -212,6 +247,82 @@ namespace Kortex
 			}
 		}
 		return false;
+	}
+
+	void IDownloadManager::LoadDownloads()
+	{
+		PauseAllActive();
+		m_Downloads.clear();
+
+		KxFileFinder finder(GetDownloadsLocation(), wxS("*"));
+		for (KxFileItem fileItem = finder.FindNext(); fileItem.IsOK(); fileItem = finder.FindNext())
+		{
+			if (fileItem.IsNormalItem() && fileItem.IsFile())
+			{
+				DownloadItem& download = *m_Downloads.emplace_back(std::make_unique<DownloadItem>());
+				if (!download.Load(fileItem))
+				{
+					download.LoadDefault(fileItem);
+					download.Save();
+				}
+			}
+		}
+	}
+	void IDownloadManager::SaveDownloads()
+	{
+		for (const auto& download: m_Downloads)
+		{
+			if (!download->IsRunning())
+			{
+				download->Save();
+			}
+		}
+	}
+	void IDownloadManager::PauseAllActive()
+	{
+		for (const auto& entry: m_Downloads)
+		{
+			if (entry->IsRunning())
+			{
+				entry->Pause();
+			}
+		}
+	}
+	
+	void IDownloadManager::ShowHiddenDownloads(bool show)
+	{
+		m_ShowHiddenDownloads = show;
+		IEvent::MakeQueue<DownloadEvent>(DownloadEvent::EvtRefreshItems);
+	}
+	void IDownloadManager::SetDownloadsLocation(const wxString& location)
+	{
+		m_Location = location;
+
+		KxFile(location).CreateFolder();
+		LoadDownloads();
+	}
+	void IDownloadManager::SetMaxConcurrentDownloads(size_t count)
+	{
+		m_MaxConcurrentDownloads = count;
+	}
+
+	DownloadItem* IDownloadManager::FindDownloadByFileName(const wxString& name, const DownloadItem* except) const
+	{
+		for (const auto& item: m_Downloads)
+		{
+			if (item.get() != except && KxComparator::IsEqual(name, item->GetName()))
+			{
+				return item.get();
+			}
+		}
+		return nullptr;
+	}
+	void IDownloadManager::AutoRenameIncrement(DownloadItem& item) const
+	{
+		while (FindDownloadByFileName(item.GetName(), &item))
+		{
+			item.m_FileInfo.Name = RenameIncrement(item.GetName());
+		}
 	}
 
 	bool IDownloadManager::TryQueueDownloadLink(const KxURI& link)

@@ -7,23 +7,14 @@
 
 namespace Kortex::DownloadManager
 {
-	class DisplayModel: public KxDataView2::ListModel, public KxDataView2::TypeAliases
+	class DisplayModel: public KxDataView2::Model
 	{
-		private:
-			template<class T> static auto FindNode(T&& items, const DownloadItem& item)
-			{
-				return std::find_if(items.begin(), items.end(), [&item](auto&& node)
-				{
-					return &node.m_Item == &item;
-				});
-			}
-
 		private:
 			IDownloadManager& m_DownloadManager;
 			std::list<DisplayModelNode> m_Nodes;
 
 		private:
-			void OnContextMenu(Event& event);
+			void OnContextMenu(KxDataView2::Event& event);
 
 			void OnDownloadAdded(DownloadEvent& event);
 			void OnDownloadRemoved(DownloadEvent& event);
@@ -33,8 +24,22 @@ namespace Kortex::DownloadManager
 			void OnDownloadCompleted(DownloadEvent& event);
 			void OnDownloadFailed(DownloadEvent& event);
 
+			void OnRefreshItems(DownloadEvent& event);
+
 		private:
-			DownloadItem* GetItem(Node* node)
+			template<class T> auto FindNode(T&& items, const DownloadItem& item) const
+			{
+				if (!item.IsHidden() || m_DownloadManager.ShouldShowHiddenDownloads())
+				{
+					return std::find_if(items.begin(), items.end(), [&item](auto&& node)
+					{
+						return &node.m_Item == &item;
+					});
+				}
+				return items.end();
+			}
+
+			DownloadItem* GetItem(KxDataView2::Node* node)
 			{
 				DisplayModelNode* displayNode = static_cast<DisplayModelNode*>(node);
 				return displayNode ? &displayNode->m_Item : nullptr;
@@ -48,24 +53,8 @@ namespace Kortex::DownloadManager
 				return FindNode(m_Nodes, item);
 			}
 
-			DisplayModelNode& AddNode(DownloadItem& item)
-			{
-				DisplayModelNode& node = m_Nodes.emplace_back(item);
-				GetView()->GetRootNode().AttachChild(node);
-				node.OnAttachNode();
-
-				return node;
-			}
-			bool RemoveNode(DownloadItem& item)
-			{
-				if (auto node = GetNode(item); node != m_Nodes.end())
-				{
-					GetView()->GetRootNode().DetachChild(*node);
-					m_Nodes.erase(node);
-					return true;
-				}
-				return false;
-			}
+			DisplayModelNode* AddNode(DownloadItem& item);
+			bool RemoveNode(DownloadItem& item);
 
 			void RemoveAll(bool installedOnly = false);
 			void SetAllHidden(bool isHidden, bool installedOnly = false);

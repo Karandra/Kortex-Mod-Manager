@@ -308,7 +308,7 @@ namespace Kortex::ModManager
 
 				download.SetTotalSize(archiveFile.GetFileSize());
 				download.SetDownloadedSize(archiveFile.GetFileSize());
-				download.SetHidden(false);
+				download.Hide(false);
 
 				if (DownloadItem* item = download.Save())
 				{

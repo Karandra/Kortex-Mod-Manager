@@ -128,6 +128,7 @@
 		<String ID="Generic.PartOf">Part of</String>
 		<String ID="Generic.Value">Value</String>
 		<String ID="Generic.Address">Address</String>
+		<String ID="Generic.Source">Source</String>
 		<String ID="Generic.Size">Size</String>
 		<String ID="Generic.Type">Type</String>
 		<String ID="Generic.Priority">Priority</String>
@@ -628,10 +629,11 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.RemoveAll">Remove all downloads</String>
 		<String ID="DownloadManager.Menu.RemoveInstalled">Remove all installed</String>
 
-		<String ID="DownloadManager.Menu.ShowHidden">Show hidden</String>
+		<String ID="DownloadManager.Menu.ShowHidden">Always show hidden downloads</String>
 		<String ID="DownloadManager.Menu.Hide">Hide</String>
 		<String ID="DownloadManager.Menu.HideAll">Hide all downloads</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Hide all installed downloads</String>
+		<String ID="DownloadManager.Menu.UnhideAll">Unhide all downloads</String>
 
 		<String ID="DownloadManager.Menu.AssociateWithNXM">Associate with NXM-links</String>
 		<String ID="DownloadManager.Menu.AssocianedWithNXM">Associated with NXM-links</String>

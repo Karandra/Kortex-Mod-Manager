@@ -435,11 +435,11 @@ namespace Kortex::ModManager
 				const int64_t size = archiveFile.GetFileSize();
 				download.SetTotalSize(size);
 				download.SetDownloadedSize(size);
-				download.SetHidden(ini.GetValueBool("General", "removed", false));
+				download.Hide(ini.GetValueBool("General", "removed", false));
 
 				if (ini.GetValueBool("General", "paused", false))
 				{
-					download.SetResumePos(size);
+					download.ResumeFrom(size);
 				}
 
 				if (DownloadItem* item = download.Save())

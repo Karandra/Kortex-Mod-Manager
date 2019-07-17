@@ -36,7 +36,7 @@ namespace Kortex::DownloadManager
 				}
 				break;
 			}
-			case ColumnID::ModNetwork:
+			case ColumnID::Source:
 			{
 				wxString label;
 				if (IModNetwork* modNetwork = m_Item.GetModNetwork())
@@ -157,7 +157,7 @@ namespace Kortex::DownloadManager
 				return KxComparator::IsLess(left ? left->GetGameShortName() : wxEmptyString,
 											right ? right->GetGameShortName() : wxEmptyString);
 			}
-			case ColumnID::ModNetwork:
+			case ColumnID::Source:
 			{
 				const IModNetwork* left = m_Item.GetModNetwork();
 				const IModNetwork* right = other.GetModNetwork();

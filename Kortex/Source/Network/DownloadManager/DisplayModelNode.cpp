@@ -97,18 +97,20 @@ namespace Kortex::DownloadManager
 					label += KxString::Format(wxS(", %1/%2"), KxFile::FormatFileSize(m_Item.GetDownloadSpeed(), 0), KTr(wxS("Generic.Sec")));
 				}
 
+				bool addedDownloaded = false;
 				if (!m_Item.IsCompleted() && downloadedSize >= 0)
 				{
 					// Add downloaded bytes so far
+					addedDownloaded = true;
+
 					label += wxS(", ");
 					label += KxFile::FormatFileSize(downloadedSize, 2);
-					
-					if (!m_SizeColumn->IsVisible() && totalSize >= 0)
-					{
-						// Add total size if size column is hidden
-						label += wxS('/');
-						label += KxFile::FormatFileSize(totalSize, 2);
-					}
+				}
+				if (!m_SizeColumn->IsVisible() && totalSize >= 0)
+				{
+					// Add total size if size column is hidden
+					label += addedDownloaded ? wxS("/") : wxS(", ");
+					label += KxFile::FormatFileSize(totalSize, 2);
 				}
 
 				return ProgressValue(percent, label, state);;

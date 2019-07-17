@@ -132,6 +132,10 @@ namespace Kortex::Application
 		LoadItem(ImageResourceID::BlockPlus, wxS("block--plus"));
 		LoadItem(ImageResourceID::BlockMinus, wxS("block--minus"));
 
+		LoadItem(ImageResourceID::ControlCursor, wxS("control-cursor"));
+		LoadItem(ImageResourceID::ControlPause, wxS("control-pause"));
+		LoadItem(ImageResourceID::ControlStop, wxS("control-stop"));
+		LoadItem(ImageResourceID::ControlStopSquare, wxS("control-stop-square"));
 		LoadItem(ImageResourceID::ControlDown, wxS("control-down"));
 		LoadItem(ImageResourceID::ControlLeft, wxS("control-left"));
 		LoadItem(ImageResourceID::ControlRight, wxS("control-right"));
@@ -207,6 +211,15 @@ namespace Kortex::Application
 		LoadItem(ImageResourceID::Lock, wxS("lock"));
 		LoadItem(ImageResourceID::LockSSL, wxS("lock-ssl"));
 		
+		LoadItem(ImageResourceID::Magnifier, wxS("magnifier"));
+		LoadItem(ImageResourceID::MagnifierPlus, wxS("magnifier--plus"));
+		LoadItem(ImageResourceID::MagnifierMinus, wxS("magnifier--minus"));
+		LoadItem(ImageResourceID::MagnifierPencil, wxS("magnifier--pencil"));
+		LoadItem(ImageResourceID::MagnifierLeft, wxS("magnifier-left"));
+		LoadItem(ImageResourceID::MagnifierZoom, wxS("magnifier-zoom"));
+		LoadItem(ImageResourceID::MagnifierZoomIn, wxS("magnifier-zoom-in"));
+		LoadItem(ImageResourceID::MagnifierZoomOut, wxS("magnifier-zoom-out"));
+		
 		LoadItem(ImageResourceID::SortAlphabet, wxS("sort-alphabet"));
 		LoadItem(ImageResourceID::SortAlphabetDescending, wxS("sort-alphabet-descending"));
 		LoadItem(ImageResourceID::SorNumber, wxS("sort-number"));
@@ -246,7 +259,7 @@ namespace Kortex::Application
 
 		LoadItem(ImageResourceID::Bin, wxS("bin"));
 		LoadItem(ImageResourceID::BinArrow, wxS("bin--arrow"));
-		LoadItem(ImageResourceID::BinFull, wxS("bin--full"));
+		LoadItem(ImageResourceID::BinFull, wxS("bin-full"));
 
 		LoadItem(ImageResourceID::Broom, wxS("broom"));
 	}

@@ -166,6 +166,15 @@ namespace Kortex
 		Lock,
 		LockSSL,
 
+		Magnifier,
+		MagnifierPlus,
+		MagnifierMinus,
+		MagnifierPencil,
+		MagnifierLeft,
+		MagnifierZoom,
+		MagnifierZoomIn,
+		MagnifierZoomOut,
+
 		SortAlphabet,
 		SortAlphabetDescending,
 		SorNumber,

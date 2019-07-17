@@ -247,7 +247,7 @@ namespace Kortex::NetworkManager
 	{
 		return KxString::Format(wxS("https://www.nexusmods.com/%1/mods"), TranslateGameIDToNetwork(id)).MakeLower();
 	}
-	KxURI NexusModNetwork::GetModPageURI(const ModRepositoryRequest& request)
+	KxURI NexusModNetwork::GetModPageURI(const ModRepositoryRequest& request) const
 	{
 		return KxString::Format(wxS("%1/%2"),
 								GetModPageBaseURI(request.GetGameID()).BuildUnescapedURI(),

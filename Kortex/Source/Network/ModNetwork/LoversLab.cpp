@@ -26,7 +26,7 @@ namespace Kortex::NetworkManager
 	{
 		return wxS("https://www.loverslab.com/files/file");
 	}
-	KxURI LoversLabModNetwork::GetModPageURI(const ModRepositoryRequest& request)
+	KxURI LoversLabModNetwork::GetModPageURI(const ModRepositoryRequest& request) const
 	{
 		return GetIPBModPageURI(request.GetModID(), request.GetExtraInfo<wxString>());
 	}

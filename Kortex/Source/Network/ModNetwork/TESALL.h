@@ -39,6 +39,6 @@ namespace Kortex::NetworkManager
 			}
 
 			KxURI GetModPageBaseURI(const GameID& id = {}) const override;
-			KxURI GetModPageURI(const ModRepositoryRequest& request) override;
+			KxURI GetModPageURI(const ModRepositoryRequest& request) const override;
 	};
 }

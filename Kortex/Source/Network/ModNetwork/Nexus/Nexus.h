@@ -55,7 +55,7 @@ namespace Kortex::NetworkManager
 			void ConvertDescriptionText(wxString& description) const override;
 
 			KxURI GetModPageBaseURI(const GameID& id = {}) const override;
-			KxURI GetModPageURI(const ModRepositoryRequest& request) override;
+			KxURI GetModPageURI(const ModRepositoryRequest& request) const override;
 
 		public:
 			std::optional<NexusGameReply> GetGameInfo(const GameID& id = {}) const;

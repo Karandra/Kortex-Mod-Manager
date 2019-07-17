@@ -21,7 +21,7 @@ namespace Kortex::NetworkManager
 	{
 		return wxS("http://tesall.ru/files/file");
 	}
-	KxURI TESALLModNetwork::GetModPageURI(const ModRepositoryRequest& request)
+	KxURI TESALLModNetwork::GetModPageURI(const ModRepositoryRequest& request) const
 	{
 		return GetIPBModPageURI(request.GetModID(), request.GetExtraInfo<wxString>());
 	}

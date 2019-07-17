@@ -17,7 +17,7 @@ namespace Kortex::DownloadManager
 				m_IsReady = true;
 			}
 
-			void OnDownloadEvent(const DownloadItem& item, ItemEvent eventType) override;
+			void OnDownloadEvent(DownloadItem& item, ItemEvent eventType) override;
 
 		protected:
 			virtual void OnInit() override;

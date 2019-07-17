@@ -11,48 +11,48 @@ namespace Kortex::DownloadManager
 	{
 		private:
 			wxBoxSizer* m_MainSizer = nullptr;
-			DisplayModel* m_ViewModel = nullptr;
+			DisplayModel* m_DisplayModel = nullptr;
 
 		public:
 			Workspace(KMainWindow* mainWindow);
-			virtual ~Workspace();
-			virtual bool OnCreateWorkspace() override;
+			~Workspace();
+			bool OnCreateWorkspace() override;
 
 		private:
-			virtual bool IsSubWorkspace() const override
+			bool IsSubWorkspace() const override
 			{
 				return true;
 			}
-			virtual size_t GetTabIndex() const
+			size_t GetTabIndex() const
 			{
 				return (size_t)TabIndex::Downloads;
 			}
 		
-			virtual bool OnOpenWorkspace() override;
-			virtual bool OnCloseWorkspace() override;
-			virtual void OnReloadWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
 
 		public:
-			virtual wxString GetID() const override;
-			virtual wxString GetName() const override;
-			virtual wxString GetNameShort() const override;
-			virtual ResourceID GetImageID() const override
+			wxString GetID() const override;
+			wxString GetName() const override;
+			wxString GetNameShort() const override;
+			ResourceID GetImageID() const override
 			{
 				return ImageResourceID::Arrow270;
 			}
-			virtual wxSizer* GetWorkspaceSizer() const override
+			wxSizer* GetWorkspaceSizer() const override
 			{
 				return m_MainSizer;
 			}
-			virtual bool CanReload() const override
+			bool CanReload() const override
 			{
 				return true;
 			}
 
 		public:
-			DisplayModel* GetModelView() const
+			DisplayModel* GetDisplayModel() const
 			{
-				return m_ViewModel;
+				return m_DisplayModel;
 			}
 	};
 }

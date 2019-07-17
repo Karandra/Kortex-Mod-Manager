@@ -66,7 +66,7 @@ namespace Kortex
 			virtual ~IDownloadManager();
 
 		public:
-			virtual void OnDownloadEvent(const DownloadItem& item, ItemEvent eventType) = 0;
+			virtual void OnDownloadEvent(DownloadItem& item, ItemEvent eventType) = 0;
 
 		public:
 			virtual DownloadItem::Vector& GetDownloads() = 0;

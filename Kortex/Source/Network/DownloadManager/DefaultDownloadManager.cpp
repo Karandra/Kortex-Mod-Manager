@@ -13,29 +13,6 @@
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxDataView.h>
 
-namespace
-{
-	using namespace Kortex;
-	using namespace Kortex::DownloadManager;
-
-	DisplayModel* GetViewAndItem(const DownloadItem& entry, KxDataViewItem& item)
-	{
-		Workspace* workspace = Workspace::GetInstance();
-		if (workspace)
-		{
-			DisplayModel* view = workspace->GetModelView();
-			if (view)
-			{
-				item = view->FindItem(entry);
-				return view;
-			}
-		}
-
-		item = KxDataViewItem();
-		return nullptr;
-	}
-}
-
 namespace Kortex::Application::OName
 {
 	KortexDefOption(Downloads);
@@ -49,7 +26,7 @@ namespace Kortex::DownloadManager
 		return new Workspace(mainWindow);
 	}
 
-	void DefaultDownloadManager::OnDownloadEvent(const DownloadItem& item, ItemEvent eventType)
+	void DefaultDownloadManager::OnDownloadEvent(DownloadItem& item, ItemEvent eventType)
 	{
 		bool allowSave = true;
 		bool allowUpdate = true;
@@ -57,6 +34,10 @@ namespace Kortex::DownloadManager
 		switch (eventType)
 		{
 			case ItemEvent::Added:
+			{
+				Workspace::GetInstance()->GetDisplayModel()->OnDonwloadAdded(item);
+				break;
+			}
 			case ItemEvent::Changed:
 			case ItemEvent::Stopped:
 			case ItemEvent::Paused:
@@ -67,7 +48,7 @@ namespace Kortex::DownloadManager
 			case ItemEvent::Started:
 			{
 				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadStarted"),
-											KTrf("DownloadManager.Notification.DownloadStartedEx", item.GetFileInfo().Name),
+											KTrf("DownloadManager.Notification.DownloadStartedEx", item.GetName()),
 											KxICON_INFORMATION
 				);
 				break;
@@ -75,7 +56,7 @@ namespace Kortex::DownloadManager
 			case ItemEvent::Completed:
 			{
 				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadCompleted"),
-											KTrf("DownloadManager.Notification.DownloadCompletedEx", item.GetFileInfo().Name),
+											KTrf("DownloadManager.Notification.DownloadCompletedEx", item.GetName()),
 											KxICON_INFORMATION
 				);
 				break;
@@ -83,12 +64,17 @@ namespace Kortex::DownloadManager
 			case ItemEvent::Failed:
 			{
 				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadFailed"),
-											KTrf("DownloadManager.Notification.DownloadFailedEx", item.GetFileInfo().Name),
+											KTrf("DownloadManager.Notification.DownloadFailedEx", item.GetName()),
 											KxICON_WARNING
 				);
 				break;
 			}
 			case ItemEvent::Removed:
+			{
+				Workspace::GetInstance()->GetDisplayModel()->OnDonwloadRemoved(item);
+				allowSave = false;
+				break;
+			}
 			case ItemEvent::Progress:
 			{
 				allowSave = false;
@@ -103,19 +89,10 @@ namespace Kortex::DownloadManager
 
 		if (m_IsReady)
 		{
-			if (allowUpdate)
+			DisplayModelNode* node = item.GetDisplayNode();
+			if (allowUpdate && node)
 			{
-				KxDataViewItem viewItem;
-				DisplayModel* view = GetViewAndItem(item, viewItem);
-				
-				if (viewItem.IsOK())
-				{
-					view->ItemChanged(viewItem);
-				}
-				else
-				{
-					view->RefreshItems();
-				}
+				node->Refresh();
 			}
 			if (allowSave)
 			{

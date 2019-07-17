@@ -31,7 +31,7 @@ namespace Kortex::DownloadManager
 	{
 		if (IsWorkspaceCreated())
 		{
-			GetDisplayModelOptions().SaveDataViewLayout(m_ViewModel->GetView());
+			GetDisplayModelOptions().SaveDataViewLayout(m_DisplayModel->GetView());
 		}
 	}
 	bool Workspace::OnCreateWorkspace()
@@ -39,18 +39,17 @@ namespace Kortex::DownloadManager
 		IDownloadManager* manager = IDownloadManager::GetInstance();
 		manager->LoadDownloads();
 
-		m_ViewModel = new DisplayModel();
-		m_ViewModel->Create(this, m_MainSizer);
-		GetDisplayModelOptions().LoadDataViewLayout(m_ViewModel->GetView());
+		m_DisplayModel = new DisplayModel();
+		m_DisplayModel->CreateView(this);
+		m_MainSizer->Add(m_DisplayModel->GetView(), 1, wxEXPAND);
+
+		GetDisplayModelOptions().LoadDataViewLayout(m_DisplayModel->GetView());
 
 		return true;
 	}
 
 	bool Workspace::OnOpenWorkspace()
 	{
-		// This will show notification about invalid download location 
-		IDownloadManager::GetInstance()->OnAccessDownloadLocation();
-
 		return true;
 	}
 	bool Workspace::OnCloseWorkspace()
@@ -59,8 +58,7 @@ namespace Kortex::DownloadManager
 	}
 	void Workspace::OnReloadWorkspace()
 	{
-		IDownloadManager::GetInstance()->LoadDownloads();
-		m_ViewModel->RefreshItems();
+		m_DisplayModel->RefreshItems();
 	}
 
 	wxString Workspace::GetID() const

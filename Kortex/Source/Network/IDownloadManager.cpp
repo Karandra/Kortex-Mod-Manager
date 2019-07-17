@@ -158,20 +158,20 @@ namespace Kortex
 	}
 	DownloadItem* IDownloadManager::FindDownloadByFileName(const wxString& name, const DownloadItem* except) const
 	{
-		for (const auto& entry: GetDownloads())
+		for (const auto& item: GetDownloads())
 		{
-			if (entry.get() != except && KxComparator::IsEqual(name, entry->GetFileInfo().Name))
+			if (item.get() != except && KxComparator::IsEqual(name, item->GetName()))
 			{
-				return entry.get();
+				return item.get();
 			}
 		}
 		return nullptr;
 	}
-	void IDownloadManager::AutoRenameIncrement(DownloadItem& entry) const
+	void IDownloadManager::AutoRenameIncrement(DownloadItem& item) const
 	{
-		while (FindDownloadByFileName(entry.GetFileInfo().Name, &entry))
+		while (FindDownloadByFileName(item.GetName(), &item))
 		{
-			entry.m_FileInfo.Name = RenameIncrement(entry.GetFileInfo().Name);
+			item.m_FileInfo.Name = RenameIncrement(item.GetName());
 		}
 	}
 
@@ -196,8 +196,8 @@ namespace Kortex
 				// Erase the item
 				auto temp = std::move(*it);
 				items.erase(it);
-				OnDownloadEvent(*temp, ItemEvent::Removed);
 
+				OnDownloadEvent(*temp, ItemEvent::Removed);
 				return true;
 			}
 		}

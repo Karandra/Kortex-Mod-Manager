@@ -87,6 +87,10 @@ namespace Kortex
 		BlockPlus,
 		BlockMinus,
 
+		ControlCursor,
+		ControlPause,
+		ControlStop,
+		ControlStopSquare,
 		ControlDown,
 		ControlLeft,
 		ControlRight,
@@ -188,6 +192,9 @@ namespace Kortex
 		EditAlignmentRight,
 		EditAlignmentCenter,
 		EditAlignmentJustify,
+
+		EditList,
+		EditListOrder,
 
 		Bell,
 		BellExclamation,

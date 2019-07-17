@@ -47,7 +47,14 @@ namespace Kortex::DownloadManager
 				{
 					if (!label.IsEmpty())
 					{
-						label += KxString::Format(wxS(" (%1)"), server);
+						if (server.Contains(wxS("(")) || server.Contains(wxS(")")))
+						{
+							label += KxString::Format(wxS(" [%1]"), server);
+						}
+						else
+						{
+							label += KxString::Format(wxS(" (%1)"), server);
+						}
 					}
 					else
 					{

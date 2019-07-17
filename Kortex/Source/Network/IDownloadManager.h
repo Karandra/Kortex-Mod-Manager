@@ -79,7 +79,7 @@ namespace Kortex
 			bool RemoveDownload(DownloadItem& download);
 
 			virtual std::unique_ptr<IDownloadExecutor> NewDownloadExecutor(DownloadItem& item,
-																		   const KxURI& url,
+																		   const KxURI& uri,
 																		   const wxString& localPath
 			) = 0;
 			virtual bool QueueDownload(ModNetworkRepository& modRepository,

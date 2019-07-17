@@ -25,7 +25,7 @@ namespace Kortex::DownloadManager
 			LocationStatus OnAccessDownloadLocation(int64_t fileSize = -1) const override;
 
 			std::unique_ptr<IDownloadExecutor> NewDownloadExecutor(DownloadItem& item,
-																   const KxURI& url,
+																   const KxURI& uri,
 																   const wxString& localPath
 			) override;
 			bool QueueDownload(ModNetworkRepository& modRepository,

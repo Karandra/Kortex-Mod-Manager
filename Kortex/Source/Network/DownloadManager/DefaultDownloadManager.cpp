@@ -127,11 +127,11 @@ namespace Kortex::DownloadManager
 	}
 
 	std::unique_ptr<IDownloadExecutor> DefaultDownloadManager::NewDownloadExecutor(DownloadItem& item,
-																				   const KxURI& url,
+																				   const KxURI& uri,
 																				   const wxString& localPath
 	)
 	{
-		return std::make_unique<DownloadExecutor>(item, url, localPath);
+		return std::make_unique<DownloadExecutor>(item, uri, localPath);
 	}
 	bool DefaultDownloadManager::QueueDownload(ModNetworkRepository& modRepository,
 											   const ModDownloadReply& downloadInfo,

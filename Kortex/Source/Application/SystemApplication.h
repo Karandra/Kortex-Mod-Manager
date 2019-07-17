@@ -3,6 +3,8 @@
 #include "ApplicationModule.h"
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxXML.h>
+#include <KxFramework/KxURI.h>
+#include <wx/apptrait.h>
 #include <wx/snglinst.h>
 
 namespace Kortex
@@ -23,7 +25,30 @@ namespace Kortex::GameInstance
 
 namespace Kortex
 {
-	class SystemApplicationTraits;
+	class SystemApplication;
+	class SystemApplicationTraits: public wxGUIAppTraits
+	{
+		friend class SystemApplication;
+
+		private:
+			SystemApplication& m_SystemApp;
+
+			FILE* m_LogTargetFILE = nullptr;
+			wxLogStderr* m_LogTarget = nullptr;
+
+		private:
+			FILE* CreateLogFile() const;
+
+		public:
+			SystemApplicationTraits(SystemApplication& systemApp);
+
+		public:
+			wxLog* CreateLogTarget() override;
+	};
+}
+
+namespace Kortex
+{
 	class SystemApplication final: public KxApp<wxApp, SystemApplication>
 	{
 		friend class SystemApplicationTraits;
@@ -101,7 +126,7 @@ namespace Kortex
 		public:
 			bool IsAnotherRunning() const;
 			void ConfigureForInternetExplorer10(bool init) const;
-			bool QueueDownloadToMainProcess(const wxString& link) const;
+			bool QueueDownloadToMainProcess(const KxURI& uri) const;
 			
 			wxString GetShortName() const;
 			wxString GetRootFolder() const

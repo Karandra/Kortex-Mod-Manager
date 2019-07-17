@@ -50,9 +50,9 @@ namespace Kortex
 	{
 		return GetSystemApp()->IsAnotherRunning();
 	}
-	bool IApplication::QueueDownloadToMainProcess(const wxString& link)
+	bool IApplication::QueueDownloadToMainProcess(const KxURI& uri)
 	{
-		return GetSystemApp()->QueueDownloadToMainProcess(link);
+		return GetSystemApp()->QueueDownloadToMainProcess(uri);
 	}
 
 	void IApplication::EnableIE10Support()

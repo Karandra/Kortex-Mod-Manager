@@ -7,6 +7,7 @@
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxTranslation.h>
 #include <KxFramework/KxVersion.h>
+#include <KxFramework/KxURI.h>
 class KxImageList;
 class KxImageSet;
 
@@ -81,7 +82,7 @@ namespace Kortex
 			bool IsSystem64Bit() const;
 
 			bool IsAnotherRunning() const;
-			bool QueueDownloadToMainProcess(const wxString& link);
+			bool QueueDownloadToMainProcess(const KxURI& uri);
 
 			void EnableIE10Support();
 			void DisableIE10Support();

@@ -17,57 +17,43 @@
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxSystem.h>
-#include <wx/apptrait.h>
 
 namespace
 {
-	using namespace Kortex;
-
-	void LogConfigChnage(const IAppOption& option)
+	void LogConfigChange(const Kortex::IAppOption& option)
 	{
-		Utility::Log::LogInfo(wxS("Path: \"%1\", Value: \"%2\""), option.GetXPath(), option.GetValue());
+		using namespace Kortex::Utility::Log;
+
+		LogInfo(wxS("Path: \"%1\", Value: \"%2\""), option.GetXPath(), option.GetValue());
 	}
 }
 
 namespace Kortex
 {
-	class SystemApplicationTraits: public wxGUIAppTraits
+	FILE* SystemApplicationTraits::CreateLogFile() const
 	{
-		friend class SystemApplication;
+		wxString fileName = wxDateTime::Now().Format(wxS("%Y-%m-%d %H-%M-%S")) + wxS(".log");
+		wxString filePath = m_SystemApp.m_Application->GetLogsFolder();
+		wxFileName::Mkdir(filePath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
-		private:
-			SystemApplication& m_SysApp;
-			FILE* m_LogTargetFILE = nullptr;
-			wxLogStderr* m_LogTarget = nullptr;
+		wxString fullPath = filePath + wxS('\\') + fileName;
 
-		private:
-			FILE* CreateLogFile() const
-			{
-				wxString fileName = wxDateTime::Now().Format("%Y-%m-%d %H-%M-%S") + ".log";
-				wxString filePath = m_SysApp.m_Application->GetLogsFolder();
-				wxFileName::Mkdir(filePath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+		FILE* handle = nullptr;
+		::_wfopen_s(&handle, fullPath.wc_str(), L"w+b");
+		return handle;
+	}
 
-				wxString fullPath = filePath + wxS('\\') + fileName;
+	SystemApplicationTraits::SystemApplicationTraits(SystemApplication& systemApp)
+		:m_SystemApp(systemApp)
+	{
+	}
 
-				FILE* handle = nullptr;
-				::_wfopen_s(&handle, fullPath.wc_str(), L"w+b");
-				return handle;
-			}
-
-		public:
-			SystemApplicationTraits(SystemApplication& sysApp)
-				:m_SysApp(sysApp)
-			{
-			}
-
-		public:
-			wxLog* CreateLogTarget() override
-			{
-				m_LogTargetFILE = CreateLogFile();
-				m_LogTarget = new wxLogStderr(m_LogTargetFILE);
-				return m_LogTarget;
-			}
-	};
+	wxLog* SystemApplicationTraits::CreateLogTarget()
+	{
+		m_LogTargetFILE = CreateLogFile();
+		m_LogTarget = new wxLogStderr(m_LogTargetFILE);
+		return m_LogTarget;
+	}
 }
 
 namespace Kortex
@@ -282,7 +268,7 @@ namespace Kortex
 	void SystemApplication::OnGlobalConfigChanged(IAppOption& option)
 	{
 		Utility::Log::LogInfo("SystemApplication::OnGlobalConfigChanged");
-		LogConfigChnage(option);
+		LogConfigChange(option);
 
 		m_Application->OnGlobalConfigChanged(option);
 	}
@@ -290,7 +276,7 @@ namespace Kortex
 	{
 		Utility::Log::LogInfo("SystemApplication::OnInstanceConfigChanged");
 		Utility::Log::LogInfo("InstanceID: %1", instance.GetInstanceID());
-		LogConfigChnage(option);
+		LogConfigChange(option);
 
 		// If this function called, it's certainly 'IConfigurableGameInstance'
 		instance.QueryInterface<IConfigurableGameInstance>()->OnConfigChanged(option);
@@ -300,7 +286,7 @@ namespace Kortex
 	{
 		Utility::Log::LogInfo("SystemApplication::OnProfileConfigChanged");
 		Utility::Log::LogInfo("ProfileID: %1", profile.GetID());
-		LogConfigChnage(option);
+		LogConfigChange(option);
 
 		profile.OnConfigChanged(option);
 		m_Application->OnProfileConfigChanged(option, profile);
@@ -407,7 +393,7 @@ namespace Kortex
 			// If there are no main loop then initialization process is not completed.
 			// In such case, we need to set exit code and call 'SystemApplication::OnExit' manually
 			// and then terminate the program without invoking wxWidgets. Because without main loop
-			// the 'wxExit' will call 'abort(-1)' anyway, but we need to exit with out own exit code.
+			// the 'wxExit' will call 'abort(-1)' anyway, but we need to exit with our own exit code.
 
 			m_ExitCode = exitCode;
 			std::exit(OnExit());
@@ -438,20 +424,28 @@ namespace Kortex
 		}
 		#undef IERegPath
 	}
-	bool SystemApplication::QueueDownloadToMainProcess(const wxString& link) const
+	bool SystemApplication::QueueDownloadToMainProcess(const KxURI& uri) const
 	{
-		KxProcess process(KxLibrary(nullptr).GetFileName());
+		if (!uri)
+		{
+			return false;
+		}
+
+		KxProcess process(m_Application->GetExecutableName());
 		if (process.Find())
 		{
-			for (HWND hWnd: process.EnumWindows())
+			for (HWND handle: process.EnumWindows())
 			{
-				if (KxTLWInternal::GetWindowUserData(hWnd) == KMainWindow::GetUniqueID())
+				if (KxTLWInternal::GetWindowUserData(handle) == KMainWindow::GetUniqueID())
 				{
-					COPYDATASTRUCT data = {0};
-					data.lpData = (void*)link.wc_str();
-					data.cbData = link.Length() * sizeof(WCHAR) + sizeof(WCHAR);
+					wxString link = uri.BuildUnescapedURI();
 
-					::SendMessageW(hWnd, WM_COPYDATA, 0, (LPARAM)&data);
+					COPYDATASTRUCT data = {0};
+					data.lpData = const_cast<wchar_t*>(link.wc_str());
+					data.dwData = link.length();
+					data.cbData = link.length() * sizeof(wchar_t) + sizeof(wchar_t);
+
+					::SendMessageW(handle, WM_COPYDATA, 0, reinterpret_cast<LPARAM>(&data));
 					return true;
 				}
 			}
@@ -470,26 +464,24 @@ namespace Kortex
 	}
 	void SystemApplication::CleanupLogs()
 	{
-		const size_t countToKeep = 10;
+		constexpr size_t countToKeep = 10;
 
-		KxFileFinder finder(m_Application->GetLogsFolder(), "*.log");
+		KxFileFinder finder(m_Application->GetLogsFolder(), wxS("*.log"));
 		std::vector<KxFileItem> items;
 		items.reserve(countToKeep);
 
-		KxFileItem item = finder.FindNext();
-		while (item.IsOK())
+		for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
 		{
 			if (item.IsNormalItem() && item.IsFile())
 			{
 				items.push_back(item);
 			}
-			item = finder.FindNext();
 		}
 
 		// Sort by creation date. Most recent first.
-		std::sort(items.begin(), items.end(), [](const KxFileItem& v1, const KxFileItem& v2)
+		std::sort(items.begin(), items.end(), [](const KxFileItem& left, const KxFileItem& right)
 		{
-			return v1.GetCreationTime() > v2.GetCreationTime();
+			return left.GetCreationTime() > right.GetCreationTime();
 		});
 
 		// Delete all old logs

@@ -95,7 +95,7 @@ namespace Kortex::Application
 		LoadImages();
 
 		// Check download
-		auto downloadLink = IDownloadManager::GetLinkFromCommandLine(GetCmdLineParser());
+		KxURI downloadLink = IDownloadManager::GetLinkFromCommandLine(GetCmdLineParser());
 
 		// Show loading window
 		KxSplashWindow* splashWindow = new KxSplashWindow();
@@ -162,7 +162,7 @@ namespace Kortex::Application
 			// Send download
 			if (downloadLink)
 			{
-				QueueDownloadToMainProcess(*downloadLink);
+				QueueDownloadToMainProcess(downloadLink);
 				return false;
 			}
 

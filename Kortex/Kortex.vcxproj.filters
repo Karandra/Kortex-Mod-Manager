@@ -1257,6 +1257,9 @@
     <ClCompile Include="Source\Network\DownloadManager\DownloadEvent.cpp">
       <Filter>Code\Source\Network\DownloadManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utility\Common.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2377,6 +2380,9 @@
     </ClInclude>
     <ClInclude Include="Source\Network\DownloadManager\DownloadEvent.h">
       <Filter>Code\Headers\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Common.h">
+      <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

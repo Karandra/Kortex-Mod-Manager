@@ -114,6 +114,17 @@ namespace Kortex
 		OnExecutorProgress();
 		m_ShouldResume = false;
 
+		// If download failed delete the file.
+		if (m_IsFailed)
+		{
+			KxFile(GetFullPath()).RemoveFile(true);
+
+			// This will remove meta-data stored in the ADS so save it again. It will create zero-sized file
+			// and it will indicate failed status.
+			m_FileInfo.Size = -1;
+			Save();
+		}
+
 		return std::move(m_Executor);
 	}
 	void DownloadItem::OnExecutorProgress()
@@ -137,7 +148,7 @@ namespace Kortex
 
 	bool DownloadItem::IsOK() const
 	{
-		return m_FileInfo.IsOK() && m_DownloadInfo.IsOK();
+		return m_FileInfo.IDsValid() && m_DownloadInfo.URI.IsOk();
 	}
 	wxString DownloadItem::GetFullPath() const
 	{
@@ -224,7 +235,7 @@ namespace Kortex
 			{
 				m_FileInfo.Name = fileItem.GetName();
 				m_DownloadedSize = fileItem.GetFileSize();
-				m_IsFailed = m_DownloadedSize != m_FileInfo.Size && !m_ShouldResume;
+				m_IsFailed = m_FileInfo.Size <= 0 || (m_DownloadedSize != m_FileInfo.Size && !m_ShouldResume);
 
 				if (!m_DownloadDate.IsValid())
 				{

@@ -100,11 +100,15 @@ namespace Kortex
 		public:
 			bool IsOK() const
 			{
-				return IDsValid() && Size > 0 && !Name.IsEmpty();
-			}
-			bool IDsValid() const
-			{
 				return ModID.HasValue() && ID.HasValue();
+			}
+			bool HasName() const
+			{
+				return !Name.IsEmpty();
+			}
+			bool HasSize() const
+			{
+				return Size > 0;
 			}
 	};
 	struct ModInfoReply

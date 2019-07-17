@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "IModNetwork.h"
 #include <Kortex/NetworkManager.hpp>
+#include "GameMods/IGameMod.h"
 #include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
@@ -41,5 +42,22 @@ namespace Kortex
 	wxString IModNetwork::GetLocationInCache(const wxString& relativePath) const
 	{
 		return GetCacheDirectory() + wxS('\\') + relativePath;
+	}
+
+	KxURI IModNetwork::GetModPageURI(const IGameMod& mod) const
+	{
+		if (const ModSourceItem* item = mod.GetModSourceStore().GetItem(*this))
+		{
+			return GetModPageURI(item->GetModInfo());
+		}
+		return {};
+	}
+	KxURI IModNetwork::GetModPageURI(const DownloadItem& download) const
+	{
+		if (download.IsOK())
+		{
+			return GetModPageURI(download.GetNetworkModInfo());
+		}
+		return {};
 	}
 }

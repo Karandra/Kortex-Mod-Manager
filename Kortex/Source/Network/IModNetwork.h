@@ -61,7 +61,9 @@ namespace Kortex
 			}
 			
 			virtual KxURI GetModPageBaseURI(const GameID& id = {}) const = 0;
-			virtual KxURI GetModPageURI(const ModRepositoryRequest& request) = 0;
+			virtual KxURI GetModPageURI(const ModRepositoryRequest& request) const = 0;
+			KxURI GetModPageURI(const IGameMod& mod) const;
+			KxURI GetModPageURI(const DownloadItem& download) const;
 
 		public:
 			virtual void OnToolBarMenu(KxMenu& menu)

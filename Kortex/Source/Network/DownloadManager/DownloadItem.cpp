@@ -148,7 +148,7 @@ namespace Kortex
 
 	bool DownloadItem::IsOK() const
 	{
-		return m_FileInfo.IDsValid() && m_DownloadInfo.URI.IsOk();
+		return m_FileInfo.IsOK() && m_DownloadInfo.URI.IsOk();
 	}
 	wxString DownloadItem::GetFullPath() const
 	{
@@ -187,7 +187,7 @@ namespace Kortex
 
 	bool DownloadItem::CanVisitSource() const
 	{
-		return m_FileInfo.IDsValid();
+		return m_FileInfo.IsOK();
 	}
 	bool DownloadItem::CanQueryInfo() const
 	{

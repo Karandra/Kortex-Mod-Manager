@@ -19,10 +19,6 @@ namespace Kortex
 	class DownloadItemBuilder;
 	class ModNetworkRepository;
 }
-namespace Kortex::DownloadManager
-{
-	class DisplayModelNode;
-}
 
 namespace Kortex
 {
@@ -53,9 +49,6 @@ namespace Kortex
 			std::unique_ptr<IDownloadExecutor> m_Executor;
 			bool m_IsFailed = false;
 			bool m_ShouldResume = false;
-
-			// View
-			DownloadManager::DisplayModelNode* m_DispalyNode = nullptr;
 
 		private:
 			bool Serialize(wxOutputStream& stream) const;
@@ -196,16 +189,6 @@ namespace Kortex
 			bool CanResume() const;
 			bool Pause();
 			bool Resume();
-
-		public:
-			DownloadManager::DisplayModelNode* GetDisplayNode() const
-			{
-				return m_DispalyNode;
-			}
-			void SetDisplayNode(DownloadManager::DisplayModelNode* node)
-			{
-				m_DispalyNode = node;
-			}
 
 		public:
 			DownloadItem& operator=(const DownloadItem&) = delete;

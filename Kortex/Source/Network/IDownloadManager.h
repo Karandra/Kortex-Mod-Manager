@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "GameInstance/GameID.h"
 #include "DownloadManager/DownloadItem.h"
+#include "DownloadManager/DownloadEvent.h"
 #include <KxFramework/KxURI.h>
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxComponentSystem.h>
@@ -33,30 +34,17 @@ namespace Kortex
 				InsufficientVolumeSpace,
 				InsufficientVolumeCapabilities,
 			};
-			enum class ItemEvent
-			{
-				Added,
-				Removed,
-				Changed,
-
-				Started,
-				Stopped,
-
-				Paused,
-				Resumed,
-				Progress,
-
-				Completed,
-				Failed,
-			};
 
 		public:
 			static wxString RenameIncrement(const wxString& name);
 			static void ConfigureCommandLine(wxCmdLineParser& parser);
-			static std::optional<wxString> GetLinkFromCommandLine(const wxCmdLineParser& parser);
+			static KxURI GetLinkFromCommandLine(const wxCmdLineParser& parser);
 
 			static bool IsAssociatedWithLink(const wxString& type);
 			static void AssociateWithLink(const wxString& type);
+
+		protected:
+			DownloadItem::Vector m_Downloads;
 			
 		protected:
 			LocationStatus CheckDownloadLocation(const wxString& directoryPath, int64_t fileSize = -1) const;
@@ -66,14 +54,7 @@ namespace Kortex
 			virtual ~IDownloadManager();
 
 		public:
-			virtual void OnDownloadEvent(DownloadItem& item, ItemEvent eventType) = 0;
-
-		public:
-			virtual DownloadItem::Vector& GetDownloads() = 0;
-			const DownloadItem::Vector& GetDownloads() const
-			{
-				return const_cast<IDownloadManager*>(this)->GetDownloads();
-			}
+			DownloadItem::RefVector GetDownloads() const;
 			
 			virtual void LoadDownloads() = 0;
 			virtual void SaveDownloads() = 0;
@@ -106,6 +87,6 @@ namespace Kortex
 									   const ModFileReply& fileInfo,
 									   const GameID& id = {}
 			) = 0;
-			bool TryQueueDownloadLink(const wxString& link);
+			virtual bool TryQueueDownloadLink(const KxURI& link);
 	};
 }

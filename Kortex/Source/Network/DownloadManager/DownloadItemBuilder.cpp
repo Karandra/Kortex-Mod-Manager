@@ -19,11 +19,7 @@ namespace Kortex
 	{
 		if (m_Item)
 		{
-			DownloadItem& ref = *m_DownloadManager->GetDownloads().emplace_back(std::move(m_Item));
-			m_DownloadManager->AutoRenameIncrement(ref);
-			m_DownloadManager->OnDownloadEvent(ref, IDownloadManager::ItemEvent::Added);
-
-			return &ref;
+			return &m_DownloadManager->AddDownload(std::move(m_Item));
 		}
 		return nullptr;
 	}

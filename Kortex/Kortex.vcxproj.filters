@@ -1254,9 +1254,6 @@
     <ClCompile Include="Source\Network\DownloadManager\DisplayModelNode.cpp">
       <Filter>Code\Source\Network\DownloadManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\DownloadManager\IDownloadExecutor.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2374,6 +2371,9 @@
     </ClInclude>
     <ClInclude Include="Include\Kortex\Resources.hpp">
       <Filter>Code\Include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DownloadEvent.h">
+      <Filter>Code\Headers\Network\DownloadManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

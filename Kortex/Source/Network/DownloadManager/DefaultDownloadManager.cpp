@@ -1,17 +1,12 @@
 #include "stdafx.h"
 #include "DefaultDownloadManager.h"
 #include "DownloadExecutor.h"
-#include "DisplayModel.h"
 #include "Workspace.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include <Kortex/Notification.hpp>
-#include <Kortex/GameInstance.hpp>
 #include "UI/KMainWindow.h"
-#include "Utility/KAux.h"
 #include <KxFramework/KxFileFinder.h>
-#include <KxFramework/KxDataView.h>
 
 namespace Kortex::Application::OName
 {
@@ -21,98 +16,21 @@ namespace Kortex::Application::OName
 
 namespace Kortex::DownloadManager
 {
-	KWorkspace* DefaultDownloadManager::CreateWorkspace(KMainWindow* mainWindow)
-	{
-		return new Workspace(mainWindow);
-	}
-
-	void DefaultDownloadManager::OnDownloadEvent(DownloadItem& item, ItemEvent eventType)
-	{
-		bool allowSave = true;
-		bool allowUpdate = true;
-
-		switch (eventType)
-		{
-			case ItemEvent::Added:
-			{
-				Workspace::GetInstance()->GetDisplayModel()->OnDonwloadAdded(item);
-				break;
-			}
-			case ItemEvent::Changed:
-			case ItemEvent::Stopped:
-			case ItemEvent::Paused:
-			case ItemEvent::Resumed:
-			{
-				break;
-			}
-			case ItemEvent::Started:
-			{
-				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadStarted"),
-											KTrf("DownloadManager.Notification.DownloadStartedEx", item.GetName()),
-											KxICON_INFORMATION
-				);
-				break;
-			}
-			case ItemEvent::Completed:
-			{
-				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadCompleted"),
-											KTrf("DownloadManager.Notification.DownloadCompletedEx", item.GetName()),
-											KxICON_INFORMATION
-				);
-				break;
-			}
-			case ItemEvent::Failed:
-			{
-				INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadFailed"),
-											KTrf("DownloadManager.Notification.DownloadFailedEx", item.GetName()),
-											KxICON_WARNING
-				);
-				break;
-			}
-			case ItemEvent::Removed:
-			{
-				Workspace::GetInstance()->GetDisplayModel()->OnDonwloadRemoved(item);
-				allowSave = false;
-				break;
-			}
-			case ItemEvent::Progress:
-			{
-				allowSave = false;
-				break;
-			}
-			default:
-			{
-				allowSave = false;
-				allowUpdate = false;
-			}
-		};
-
-		if (m_IsReady)
-		{
-			DisplayModelNode* node = item.GetDisplayNode();
-			if (allowUpdate && node)
-			{
-				node->Refresh();
-			}
-			if (allowSave)
-			{
-				item.Save();
-			}
-		}
-	}
-
 	void DefaultDownloadManager::OnInit()
 	{
-		m_IsReady = true;
 		KxFile(GetDownloadsLocation()).CreateFolder();
 	}
 	void DefaultDownloadManager::OnExit()
 	{
 		PauseAllActive();
-		m_IsReady = false;
 	}
 	void DefaultDownloadManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
+	}
+	
+	KWorkspace* DefaultDownloadManager::CreateWorkspace(KMainWindow* mainWindow)
+	{
+		return new Workspace(mainWindow);
 	}
 
 	void DefaultDownloadManager::LoadDownloads()
@@ -228,10 +146,7 @@ namespace Kortex::DownloadManager
 
 		if (downloadInfo.IsOK() && fileInfo.IsOK())
 		{
-			DownloadItem& item = *m_Downloads.emplace_back(std::make_unique<DownloadItem>(downloadInfo, fileInfo, modRepository, id));
-			AutoRenameIncrement(item);
-			OnDownloadEvent(item, ItemEvent::Added);
-
+			DownloadItem& item = AddDownload(std::make_unique<DownloadItem>(downloadInfo, fileInfo, modRepository, id));
 			return item.Start();
 		}
 		return false;

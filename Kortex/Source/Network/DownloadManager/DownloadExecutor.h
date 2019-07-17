@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "Network/IModNetwork.h"
 #include "Network/ModNetworkRepository.h"
+#include "DownloadEvent.h"
 #include "IDownloadExecutor.h"
-#include "Utility/KQuickThread.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxFileStream.h>
 
@@ -16,9 +16,6 @@ namespace Kortex::DownloadManager
 {
 	class DownloadExecutor: public IDownloadExecutor, public wxThreadHelper
 	{
-		private:
-			using ItemEvent = IDownloadManager::ItemEvent;
-
 		private:
 			wxEvtHandler m_EvtHandler;
 			IDownloadManager& m_DownloadManager;
@@ -46,8 +43,8 @@ namespace Kortex::DownloadManager
 			void OnDownload(KxCURLEvent& event);
 			void OnEnd();
 
-			void NotifyEvent(ItemEvent eventType);
-			void QueueNotifyEvent(ItemEvent eventType);
+			void NotifyEvent(wxEventTypeTag<DownloadEvent> eventType);
+			void QueueNotifyEvent(wxEventTypeTag<DownloadEvent> eventType);
 			void Terminate();
 
 		public:

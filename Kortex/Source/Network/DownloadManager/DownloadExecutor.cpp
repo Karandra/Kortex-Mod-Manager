@@ -30,7 +30,7 @@ namespace Kortex::DownloadManager
 		if (m_Stream->IsOk())
 		{
 			// Notify download manager about start of download
-			QueueNotifyEvent(ItemEvent::Started);
+			QueueNotifyEvent(DownloadEvent::EvtStarted);
 
 			// Begin download, blocking operation.
 			m_TimeStamp = GetClockTime();
@@ -79,7 +79,7 @@ namespace Kortex::DownloadManager
 			m_EvtHandler.CallAfter([this]()
 			{
 				OnTaskProgress(m_Item);
-				NotifyEvent(ItemEvent::Progress);
+				NotifyEvent(DownloadEvent::EvtProgress);
 			});
 		}
 	}
@@ -97,29 +97,29 @@ namespace Kortex::DownloadManager
 			// Send event to download manager
 			if (m_IsCompleted)
 			{
-				NotifyEvent(ItemEvent::Completed);
+				NotifyEvent(DownloadEvent::EvtCompleted);
 			}
 			else if (m_Session->IsStopped())
 			{
-				NotifyEvent(ItemEvent::Stopped);
+				NotifyEvent(DownloadEvent::EvtStopped);
 			}
 			else
 			{
-				NotifyEvent(ItemEvent::Failed);
+				NotifyEvent(DownloadEvent::EvtFailed);
 			}
 		});
 	}
 
-	void DownloadExecutor::QueueNotifyEvent(ItemEvent eventType)
+	void DownloadExecutor::QueueNotifyEvent(wxEventTypeTag<DownloadEvent> eventType)
 	{
 		m_EvtHandler.CallAfter([this, eventType]()
 		{
 			NotifyEvent(eventType);
 		});
 	}
-	void DownloadExecutor::NotifyEvent(ItemEvent eventType)
+	void DownloadExecutor::NotifyEvent(wxEventTypeTag<DownloadEvent> eventType)
 	{
-		m_DownloadManager.OnDownloadEvent(m_Item, eventType);
+		IEvent::MakeSend<DownloadEvent>(eventType, m_Item);
 	}
 	void DownloadExecutor::Terminate()
 	{
@@ -158,7 +158,7 @@ namespace Kortex::DownloadManager
 	{
 		if (IsRunning() && m_Session->Pause() && m_Thread->Pause() == wxTHREAD_NO_ERROR)
 		{
-			QueueNotifyEvent(ItemEvent::Paused);
+			QueueNotifyEvent(DownloadEvent::EvtPaused);
 			return true;
 		}
 		return false;
@@ -167,7 +167,7 @@ namespace Kortex::DownloadManager
 	{
 		if (IsPaused() && m_Session->Resume() && m_Thread->Resume() == wxTHREAD_NO_ERROR)
 		{
-			QueueNotifyEvent(ItemEvent::Resumed);
+			QueueNotifyEvent(DownloadEvent::EvtResumed);
 			return true;
 		}
 		return false;

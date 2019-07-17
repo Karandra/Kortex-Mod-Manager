@@ -233,7 +233,6 @@
     <ClCompile Include="Source\Network\DownloadManager\DownloadExecutor.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DownloadItem.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DownloadItemBuilder.cpp" />
-    <ClCompile Include="Source\Network\DownloadManager\IDownloadExecutor.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\Workspace.cpp" />
     <ClCompile Include="Source\Network\ModNetworkAuth.cpp" />
     <ClCompile Include="Source\Network\IDownloadManager.cpp" />
@@ -583,6 +582,7 @@
     <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadManager.h" />
     <ClInclude Include="Source\Network\DownloadManager\DisplayModel.h" />
     <ClInclude Include="Source\Network\DownloadManager\DisplayModelNode.h" />
+    <ClInclude Include="Source\Network\DownloadManager\DownloadEvent.h" />
     <ClInclude Include="Source\Network\DownloadManager\DownloadExecutor.h" />
     <ClInclude Include="Source\Network\DownloadManager\DownloadItem.h" />
     <ClInclude Include="Source\Network\DownloadManager\DownloadItemBuilder.h" />

@@ -6,29 +6,14 @@ namespace Kortex::DownloadManager
 {
 	class DefaultDownloadManager: public IDownloadManager
 	{
-		private:
-			DownloadItem::Vector m_Downloads;
-			bool m_IsReady = false;
-
-		private:
-			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
-			void SetReady(bool value = true)
-			{
-				m_IsReady = true;
-			}
-
-			void OnDownloadEvent(DownloadItem& item, ItemEvent eventType) override;
-
 		protected:
-			virtual void OnInit() override;
-			virtual void OnExit() override;
-			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode);
+			void OnInit() override;
+			void OnExit() override;
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
+			
+			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
 
 		public:
-			DownloadItem::Vector& GetDownloads() override
-			{
-				return m_Downloads;
-			}
 			void LoadDownloads() override;
 			void SaveDownloads() override;
 

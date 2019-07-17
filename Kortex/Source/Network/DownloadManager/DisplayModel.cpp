@@ -237,6 +237,64 @@ namespace Kortex::DownloadManager
 
 		contextMenu.Show(GetView());
 	}
+	
+	void DisplayModel::OnDownloadAdded(DownloadEvent& event)
+	{
+		AddNode(event.GetDownload());
+		ItemsChanged();
+	}
+	void DisplayModel::OnDownloadRemoved(DownloadEvent& event)
+	{
+		if (RemoveNode(event.GetDownload()))
+		{
+			ItemsChanged();
+		}
+	}
+	void DisplayModel::OnDownloadProgress(DownloadEvent& event)
+	{
+		if (GetView()->IsShownOnScreen())
+		{
+			DownloadItem& item = event.GetDownload();
+			if (auto node = GetNode(item); node != m_Nodes.end())
+			{
+				node->Refresh();
+			}
+		}
+	}
+
+	void DisplayModel::OnDownloadStarted(DownloadEvent& event)
+	{
+		DownloadItem& item = event.GetDownload();
+		item.Save();
+
+		INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadStarted"),
+									KTrf("DownloadManager.Notification.DownloadStartedEx", item.GetName()),
+									KxICON_INFORMATION
+		);
+		OnDownloadProgress(event);
+	}
+	void DisplayModel::OnDownloadCompleted(DownloadEvent& event)
+	{
+		DownloadItem& item = event.GetDownload();
+		item.Save();
+
+		INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadCompleted"),
+									KTrf("DownloadManager.Notification.DownloadCompletedEx", item.GetName()),
+									KxICON_INFORMATION
+		);
+		OnDownloadProgress(event);
+	}
+	void DisplayModel::OnDownloadFailed(DownloadEvent& event)
+	{
+		DownloadItem& item = event.GetDownload();
+		item.Save();
+
+		INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadFailed"),
+									KTrf("DownloadManager.Notification.DownloadFailedEx", item.GetName()),
+									KxICON_WARNING
+		);
+		OnDownloadProgress(event);
+	}
 
 	void DisplayModel::RemoveAll(bool installedOnly)
 	{
@@ -280,6 +338,23 @@ namespace Kortex::DownloadManager
 	DisplayModel::DisplayModel()
 		:m_DownloadManager(*IDownloadManager::GetInstance())
 	{
+		IEvent::Bind(DownloadEvent::EvtAdded, &DisplayModel::OnDownloadAdded, this);
+		IEvent::Bind(DownloadEvent::EvtRemoved, &DisplayModel::OnDownloadRemoved, this);
+		IEvent::Bind(DownloadEvent::EvtProgress, &DisplayModel::OnDownloadProgress, this);
+
+		IEvent::Bind(DownloadEvent::EvtStarted, &DisplayModel::OnDownloadStarted, this);
+		IEvent::Bind(DownloadEvent::EvtCompleted, &DisplayModel::OnDownloadCompleted, this);
+		IEvent::Bind(DownloadEvent::EvtFailed, &DisplayModel::OnDownloadFailed, this);
+	}
+	DisplayModel::~DisplayModel()
+	{
+		IEvent::Unbind(DownloadEvent::EvtAdded, &DisplayModel::OnDownloadAdded, this);
+		IEvent::Unbind(DownloadEvent::EvtRemoved, &DisplayModel::OnDownloadRemoved, this);
+		IEvent::Unbind(DownloadEvent::EvtProgress, &DisplayModel::OnDownloadProgress, this);
+
+		IEvent::Unbind(DownloadEvent::EvtStarted, &DisplayModel::OnDownloadStarted, this);
+		IEvent::Unbind(DownloadEvent::EvtCompleted, &DisplayModel::OnDownloadCompleted, this);
+		IEvent::Unbind(DownloadEvent::EvtFailed, &DisplayModel::OnDownloadFailed, this);
 	}
 
 	void DisplayModel::CreateView(wxWindow* parent)
@@ -292,8 +367,8 @@ namespace Kortex::DownloadManager
 		view->SetUniformRowHeight(view->GetDefaultRowHeight(UniformHeight::Explorer));
 
 		// Events
-		view->Bind(KxDataView2::EVENT_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
-		view->Bind(KxDataView2::EVENT_COLUMN_HEADER_RCLICK, [this](Event& event)
+		view->Bind(KxDataView2::EvtITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
+		view->Bind(KxDataView2::EvtCOLUMN_HEADER_RCLICK, [this](Event& event)
 		{
 			KxMenu menu;
 			if (GetView()->CreateColumnSelectionMenu(menu))
@@ -324,35 +399,6 @@ namespace Kortex::DownloadManager
 		// Add items
 		RefreshItems();
 	}
-
-	DisplayModelNode& DisplayModel::OnDonwloadAdded(DownloadItem& item)
-	{
-		DisplayModelNode& node = m_Nodes.emplace_back(item);
-		item.SetDisplayNode(&node);
-
-		GetView()->GetRootNode().AttachChild(node);
-		node.OnAttachNode();
-		ItemsChanged();
-
-		return node;
-	}
-	bool DisplayModel::OnDonwloadRemoved(DownloadItem& item)
-	{
-		auto it = std::find_if(m_Nodes.begin(), m_Nodes.end(), [&item](DisplayModelNode& node)
-		{
-			return &node.m_Item == &item;
-		});
-		if (it != m_Nodes.end())
-		{
-			item.SetDisplayNode(nullptr);
-			GetView()->GetRootNode().DetachChild(*it);
-
-			m_Nodes.erase(it);
-			ItemsChanged();
-			return true;
-		}
-		return false;
-	}
 	void DisplayModel::RefreshItems()
 	{
 		Node& root = GetView()->GetRootNode();
@@ -360,9 +406,9 @@ namespace Kortex::DownloadManager
 		root.DetachAllChildren();
 		m_Nodes.clear();
 
-		for (auto& item: m_DownloadManager.GetDownloads())
+		for (DownloadItem* item: m_DownloadManager.GetDownloads())
 		{
-			OnDonwloadAdded(*item);
+			AddNode(*item);
 		}
 		ItemsChanged();
 	}

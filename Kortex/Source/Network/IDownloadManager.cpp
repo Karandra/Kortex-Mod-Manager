@@ -7,6 +7,7 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxDrive.h>
 #include <KxFramework/KxRegistry.h>
+#include <KxFramework/KxUtility.h>
 
 namespace
 {
@@ -47,14 +48,14 @@ namespace Kortex
 	{
 		parser.AddOption(wxS("DownloadLink"), wxEmptyString, "Download link");
 	}
-	std::optional<wxString> IDownloadManager::GetLinkFromCommandLine(const wxCmdLineParser& parser)
+	KxURI IDownloadManager::GetLinkFromCommandLine(const wxCmdLineParser& parser)
 	{
 		wxString link;
 		if (parser.Found(wxS("DownloadLink"), &link) && !link.IsEmpty())
 		{
 			return link;
 		}
-		return std::nullopt;
+		return {};
 	}
 
 	bool IDownloadManager::IsAssociatedWithLink(const wxString& type)
@@ -81,7 +82,7 @@ namespace Kortex
 				KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey, "", IApplication::GetInstance()->GetShortName() + " Download Link", KxREG_VALUE_SZ);
 			}
 			KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey + "\\DefaultIcon", "", appPath, KxREG_VALUE_SZ);
-			KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey + "\\shell\\open\\command", "", KxString::Format("\"%1\" \"-DownloadLink %2\"", appPath, "%1"), KxREG_VALUE_SZ);
+			KxRegistry::SetValue(KxREG_HKEY_CLASSES_ROOT, subKey + "\\shell\\open\\command", "", KxString::Format("\"%1\" -DownloadLink \"%2\"", appPath, "%1"), KxREG_VALUE_SZ);
 		};
 
 		SetValue(linkType, true);
@@ -130,9 +131,17 @@ namespace Kortex
 	{
 	}
 
+	DownloadItem::RefVector IDownloadManager::GetDownloads() const
+	{
+		return KxUtility::ConvertVector<DownloadItem*>(m_Downloads, [](auto& item)
+		{
+			return item.get();
+		});
+	}
+
 	void IDownloadManager::PauseAllActive()
 	{
-		for (const auto& entry: GetDownloads())
+		for (const auto& entry: m_Downloads)
 		{
 			if (entry->IsRunning())
 			{
@@ -143,7 +152,7 @@ namespace Kortex
 	DownloadItem::RefVector IDownloadManager::GetInactiveDownloads(bool installedOnly) const
 	{
 		DownloadItem::RefVector items;
-		for (const auto& entry: GetDownloads())
+		for (const auto& entry: m_Downloads)
 		{
 			if (!entry->IsRunning())
 			{
@@ -158,7 +167,7 @@ namespace Kortex
 	}
 	DownloadItem* IDownloadManager::FindDownloadByFileName(const wxString& name, const DownloadItem* except) const
 	{
-		for (const auto& item: GetDownloads())
+		for (const auto& item: m_Downloads)
 		{
 			if (item.get() != except && KxComparator::IsEqual(name, item->GetName()))
 			{
@@ -177,8 +186,10 @@ namespace Kortex
 
 	DownloadItem& IDownloadManager::AddDownload(std::unique_ptr<DownloadItem> download)
 	{
-		DownloadItem& ref = *GetDownloads().emplace_back(std::move(download));
+		DownloadItem& ref = *m_Downloads.emplace_back(std::move(download));
 		AutoRenameIncrement(ref);
+
+		IEvent::MakeSend<DownloadEvent>(DownloadEvent::EvtAdded, ref);
 
 		return ref;
 	}
@@ -186,25 +197,24 @@ namespace Kortex
 	{
 		if (!download.IsRunning())
 		{
-			auto& items = GetDownloads();
-			auto it = GetDownloadIterator(items, download);
-			if (it != items.end())
+			auto it = GetDownloadIterator(m_Downloads, download);
+			if (it != m_Downloads.end())
 			{
 				// Remove download file
 				KxFile(download.GetFullPath()).RemoveFile(true);
 
 				// Erase the item
 				auto temp = std::move(*it);
-				items.erase(it);
+				m_Downloads.erase(it);
 
-				OnDownloadEvent(*temp, ItemEvent::Removed);
+				IEvent::MakeSend<DownloadEvent>(DownloadEvent::EvtRemoved, *temp);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	bool IDownloadManager::TryQueueDownloadLink(const wxString& link)
+	bool IDownloadManager::TryQueueDownloadLink(const KxURI& link)
 	{
 		for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 		{

@@ -1,18 +1,20 @@
 #pragma once
 #include "stdafx.h"
+#include "IDownloadItem.h"
 
-namespace Kortex
-{
-	class IDownloadItem;
-	class DownloadItem;
-}
 namespace Kortex
 {
 	class IDownloadExecutor
 	{
 		protected:
-			std::unique_ptr<IDownloadExecutor> OnTaskEnd(IDownloadItem& item);
-			void OnTaskProgress(IDownloadItem& item);
+			std::unique_ptr<IDownloadExecutor> OnTaskEnd(IDownloadItem& item)
+			{
+				return item.OnExecutorEnd();
+			}
+			void OnTaskProgress(IDownloadItem& item)
+			{
+				item.OnExecutorProgress();
+			}
 
 		public:
 			virtual ~IDownloadExecutor() = default;

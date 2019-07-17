@@ -8,6 +8,7 @@
 #include "Network/ModNetwork/Nexus.h"
 #include "Utility/KAux.h"
 #include "Utility/MenuSeparator.h"
+#include "Utility/Common.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxFile.h>
@@ -31,7 +32,7 @@ namespace Kortex::DownloadManager
 
 		KxMenu contextMenu;
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Install")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Install"));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Box));
 			item->Enable(isCompleted);
 			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
@@ -43,28 +44,31 @@ namespace Kortex::DownloadManager
 
 		if constexpr (false)
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Add")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Add"));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Pause")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Pause"));
 			item->Enable(isRunning);
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlPause));
 			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
 			{
 				download->Pause();
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Abort")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Abort"));
 			item->Enable(isRunning || isPaused);
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlStopSquare));
 			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
 			{
 				download->Stop();
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(isPaused ? KTr("DownloadManager.Menu.Resume") : KTr("DownloadManager.Menu.Start")));
+			KxMenuItem* item = contextMenu.AddItem(isPaused ? KTr("DownloadManager.Menu.Resume") : KTr("DownloadManager.Menu.Start"));
 			item->Enable(download && (download->CanStart() || download->CanResume()));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlRight));
 			item->Bind(KxEVT_MENU_SELECT, [download, isPaused](KxMenuEvent& event)
 			{
 				if (isPaused)
@@ -85,7 +89,7 @@ namespace Kortex::DownloadManager
 			{
 				for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 				{
-					KxMenuItem* item = providerMenu->Add(new KxMenuItem(repository->GetContainer().GetName(), wxEmptyString, wxITEM_RADIO));
+					KxMenuItem* item = providerMenu->AddItem(repository->GetContainer().GetName(), wxEmptyString, wxITEM_RADIO);
 					item->Check(repository == download->GetModRepository());
 					item->Enable(!item->IsChecked());
 					item->Bind(KxEVT_MENU_SELECT, [download, repository](KxMenuEvent& event)
@@ -100,7 +104,7 @@ namespace Kortex::DownloadManager
 			item->Enable(providerMenu->GetMenuItemCount() != 0);
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.QueryInfo")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.QueryInfo"));
 			item->Enable(download && download->CanQueryInfo());
 			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
 			{
@@ -112,8 +116,9 @@ namespace Kortex::DownloadManager
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.ShowChangeLog")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.ShowChangeLog"));
 			item->Enable(download && download->HasChangeLog());
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::EditList));
 			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
 				KxTaskDialog dialog(GetView(), KxID_NONE, download->GetDisplayName(), wxEmptyString, KxBTN_OK, KxICON_NONE);
@@ -127,8 +132,8 @@ namespace Kortex::DownloadManager
 		contextMenu.AddSeparator();
 
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Remove")));
-			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::MinusSmall));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Remove"));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Bin));
 			item->Enable(download && !isEmpty && !isRunning);
 			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
@@ -139,7 +144,7 @@ namespace Kortex::DownloadManager
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.RemoveAll")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.RemoveAll"));
 			item->Enable(!isEmpty);
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
@@ -147,7 +152,7 @@ namespace Kortex::DownloadManager
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.RemoveInstalled")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.RemoveInstalled"));
 			item->Enable(!isEmpty);
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
@@ -156,18 +161,22 @@ namespace Kortex::DownloadManager
 		}
 		contextMenu.AddSeparator();
 
+		if (download)
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.Hide")));
-			item->Enable(download && download->IsVisible());
-			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
+			const bool isVisible = download->IsVisible();
+
+			KxMenuItem* item = contextMenu.AddItem(isVisible ? KTr("DownloadManager.Menu.Hide") : KTr("DownloadManager.Menu.Show"));
+			item->Enable(!isRunning);
+			item->SetBitmap(ImageProvider::GetBitmap(isVisible ? ImageResourceID::MagnifierMinus : ImageResourceID::MagnifierPlus));
+			item->Bind(KxEVT_MENU_SELECT, [this, download, isVisible](KxMenuEvent& event)
 			{
-				download->Hide(true);
+				download->Show(!isVisible);
 				download->Save();
 				RefreshItems();
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.HideAll")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.HideAll"));
 			item->Enable(!isEmpty);
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
@@ -175,7 +184,7 @@ namespace Kortex::DownloadManager
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.HideInstalled")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.HideInstalled"));
 			item->Enable(!isEmpty);
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
@@ -183,14 +192,14 @@ namespace Kortex::DownloadManager
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.UnhideAll")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.UnhideAll"));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				SetAllHidden(false);
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("DownloadManager.Menu.ShowHidden"), wxEmptyString, wxITEM_CHECK));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.AlwaysShowHidden"), wxEmptyString, wxITEM_CHECK);
 			item->Check(m_DownloadManager.ShouldShowHiddenDownloads());
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
@@ -199,8 +208,9 @@ namespace Kortex::DownloadManager
 			});
 		}
 		contextMenu.AddSeparator();
+
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr("MainMenu.OpenLocation")));
+			KxMenuItem* item = contextMenu.AddItem(KTr("MainMenu.OpenLocation"));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
 			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
@@ -216,16 +226,16 @@ namespace Kortex::DownloadManager
 		}
 		if (modNetwork)
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTrf("DownloadManager.Menu.VisitOnWebSite", modNetwork->GetName())));
+			KxMenuItem* item = contextMenu.AddItem(KTrf("DownloadManager.Menu.VisitOnWebSite", modNetwork->GetName()));
 			item->Enable(download && download->CanVisitSource());
 			item->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
-				KxShell::Execute(GetView(), download->GetModNetwork()->GetModPageURI(download->GetNetworkModInfo()).BuildUnescapedURI(), "open");
+				KxShell::OpenURI(GetView(), download->GetModNetwork()->GetModPageURI(*download));
 			});
 		}
 		{
-			KxMenuItem* item = contextMenu.Add(new KxMenuItem(KTr(KxID_REFRESH)));
+			KxMenuItem* item = contextMenu.AddItem(KTr(KxID_REFRESH));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
@@ -233,13 +243,21 @@ namespace Kortex::DownloadManager
 				RefreshItems();
 			});
 		}
+		contextMenu.AddSeparator();
 
-		if (Utility::MenuSeparatorBefore separator(contextMenu); true)
 		{
-			for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.CopyLink"));
+			item->Enable(download && download->IsOK());
+			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
 			{
-				repository->OnDownloadMenu(contextMenu, download);
-			}
+				Utility::CopyTextToClipboard(download->GetURI().BuildUnescapedURI());
+			});
+		}
+
+		// Add any options from mod repositories
+		for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
+		{
+			repository->OnDownloadMenu(contextMenu, download);
 		}
 
 		contextMenu.Show(GetView());

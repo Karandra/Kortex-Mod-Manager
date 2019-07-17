@@ -629,15 +629,17 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.RemoveAll">Remove all downloads</String>
 		<String ID="DownloadManager.Menu.RemoveInstalled">Remove all installed</String>
 
-		<String ID="DownloadManager.Menu.ShowHidden">Always show hidden downloads</String>
+		<String ID="DownloadManager.Menu.Show">Show</String>
 		<String ID="DownloadManager.Menu.Hide">Hide</String>
 		<String ID="DownloadManager.Menu.HideAll">Hide all downloads</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Hide all installed downloads</String>
 		<String ID="DownloadManager.Menu.UnhideAll">Unhide all downloads</String>
+		<String ID="DownloadManager.Menu.AlwaysShowHidden">Always show hidden downloads</String>
 
+		<String ID="DownloadManager.Menu.CopyLink">Copy link</String>
+		<String ID="DownloadManager.Menu.CopyNXM">Copy NXM-link</String>
 		<String ID="DownloadManager.Menu.AssociateWithNXM">Associate with NXM-links</String>
 		<String ID="DownloadManager.Menu.AssocianedWithNXM">Associated with NXM-links</String>
-		<String ID="DownloadManager.Menu.CopyNXM">Copy NXM-link</String>
 
 		<!-- VFS -->
 		<String ID="VFS.Caption">Virtual File System</String>

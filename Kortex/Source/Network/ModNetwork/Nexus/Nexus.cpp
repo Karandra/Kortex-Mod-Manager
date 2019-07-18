@@ -104,22 +104,26 @@ namespace Kortex::NetworkManager
 	
 	wxString NexusModNetwork::TranslateGameIDToNetwork(const GameID& id) const
 	{
+		wxString networkID;
 		if (id.IsOK())
 		{
 			for (const auto& instance: IGameInstance::GetShallowInstances())
 			{
 				if (instance->GetGameID() == id)
 				{
-					return instance->GetVariables().GetVariable(Variables::NexusDomainName);
+					networkID = instance->GetVariables().GetVariable(Variables::NexusDomainName);
+					break;
 				}
 			}
-			return {};
 		}
 		else
 		{
 			// If invalid ID is passed, return ID for current game
-			return IGameInstance::GetActive()->GetVariables().GetVariable(Variables::NexusDomainName);
+			networkID = IGameInstance::GetActive()->GetVariables().GetVariable(Variables::NexusDomainName);
 		}
+
+		KxString::MakeLower(networkID);
+		return networkID;
 	}
 	GameID NexusModNetwork::TranslateGameIDFromNetwork(const wxString& id) const
 	{
@@ -127,7 +131,7 @@ namespace Kortex::NetworkManager
 		{
 			for (const auto& instance: IGameInstance::GetShallowInstances())
 			{
-				if (instance->GetVariables().GetVariable(Variables::NexusDomainName) == id)
+				if (KxComparator::IsEqual(instance->GetVariables().GetVariable(Variables::NexusDomainName), id))
 				{
 					return instance->GetGameID();
 				}

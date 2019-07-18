@@ -634,8 +634,8 @@
 		<String ID="DownloadManager.Menu.RemoveAll">Удалить все загрузки</String>
 		<String ID="DownloadManager.Menu.RemoveInstalled">Удалить все загрузки с установленными модами</String>
 
-		<String ID="DownloadManager.Menu.Show">Показать</String>
 		<String ID="DownloadManager.Menu.Hide">Скрыть</String>
+		<String ID="DownloadManager.Menu.Unhide">Не скрывать</String>
 		<String ID="DownloadManager.Menu.HideAll">Скрыть все загрузки</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Скрыть все загрузки с установленными модами</String>
 		<String ID="DownloadManager.Menu.UnhideAll">Показать все загрузки</String>

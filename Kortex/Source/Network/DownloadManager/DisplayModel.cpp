@@ -165,7 +165,7 @@ namespace Kortex::DownloadManager
 		{
 			const bool isVisible = download->IsVisible();
 
-			KxMenuItem* item = contextMenu.AddItem(isVisible ? KTr("DownloadManager.Menu.Hide") : KTr("DownloadManager.Menu.Show"));
+			KxMenuItem* item = contextMenu.AddItem(isVisible ? KTr("DownloadManager.Menu.Hide") : KTr("DownloadManager.Menu.Unhide"));
 			item->Enable(!isRunning);
 			item->SetBitmap(ImageProvider::GetBitmap(isVisible ? ImageResourceID::MagnifierMinus : ImageResourceID::MagnifierPlus));
 			item->Bind(KxEVT_MENU_SELECT, [this, download, isVisible](KxMenuEvent& event)

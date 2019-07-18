@@ -25,7 +25,7 @@ namespace Kortex::Notifications
 		{
 			case ColumnRef::ActionRemove:
 			{
-				return ImageProvider::GetBitmap(ImageResourceID::Eraser);
+				return ImageProvider::GetBitmap(ImageResourceID::BellMinus);
 			}
 			case ColumnRef::Icon:
 			{

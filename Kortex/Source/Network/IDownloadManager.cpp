@@ -12,7 +12,7 @@
 
 namespace
 {
-	template<class T> static auto GetDownloadIterator(T&& items, const Kortex::DownloadItem& item)
+	template<class T> auto GetDownloadIterator(T&& items, const Kortex::DownloadItem& item)
 	{
 		return std::find_if(items.begin(), items.end(), [&item](const auto& v)
 		{

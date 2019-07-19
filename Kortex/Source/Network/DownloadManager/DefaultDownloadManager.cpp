@@ -8,7 +8,6 @@
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxFileFinder.h>
 
-
 namespace Kortex::DownloadManager
 {
 	DownloadItem* DefaultDownloadManager::CheckQueue()

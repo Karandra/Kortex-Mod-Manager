@@ -46,6 +46,7 @@ namespace Kortex
 		protected:
 			DownloadItem::Vector m_Downloads;
 			
+		private:
 			wxString m_Location;
 			int m_MaxConcurrentDownloads = -1;
 			bool m_ShowHiddenDownloads = true;
@@ -66,6 +67,7 @@ namespace Kortex
 		public:
 			DownloadItem::RefVector GetDownloads() const;
 			DownloadItem::RefVector GetInactiveDownloads(bool installedOnly = false) const;
+			size_t GetActiveDownloadsCount() const;
 
 			DownloadItem& AddDownload(std::unique_ptr<DownloadItem> download);
 			bool RemoveDownload(DownloadItem& download);

@@ -28,7 +28,7 @@ namespace Kortex::DownloadManager
 		const bool isPaused = download && download->IsPaused();
 		const bool isFailed = download && download->IsFailed();
 		const bool isCompleted = download && download->IsCompleted();
-		const bool isEmpty = m_Nodes.empty();
+		const bool isListEmpty = m_Nodes.empty();
 
 		KxMenu contextMenu;
 		{
@@ -134,7 +134,7 @@ namespace Kortex::DownloadManager
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Remove"));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Bin));
-			item->Enable(download && !isEmpty && !isRunning);
+			item->Enable(download && !isListEmpty && !isRunning);
 			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
 				if (m_DownloadManager.RemoveDownload(*download))
@@ -145,7 +145,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.RemoveAll"));
-			item->Enable(!isEmpty);
+			item->Enable(!isListEmpty);
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				RemoveAll();
@@ -153,7 +153,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.RemoveInstalled"));
-			item->Enable(!isEmpty);
+			item->Enable(!isListEmpty);
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				RemoveAll(true);
@@ -177,7 +177,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.HideAll"));
-			item->Enable(!isEmpty);
+			item->Enable(!isListEmpty);
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				SetAllHidden(true);
@@ -185,7 +185,7 @@ namespace Kortex::DownloadManager
 		}
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.HideInstalled"));
-			item->Enable(!isEmpty);
+			item->Enable(!isListEmpty);
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				SetAllHidden(true, true);
@@ -296,6 +296,7 @@ namespace Kortex::DownloadManager
 		DownloadItem& item = event.GetDownload();
 		item.Save();
 
+		GetView()->GetRootNode().SortChildren();
 		INotificationCenter::Notify(KTr("DownloadManager.Notification.DownloadStarted"),
 									KTrf("DownloadManager.Notification.DownloadStartedEx", item.GetName()),
 									KxICON_INFORMATION

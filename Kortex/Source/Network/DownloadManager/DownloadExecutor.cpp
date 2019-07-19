@@ -130,8 +130,8 @@ namespace Kortex::DownloadManager
 		}
 	}
 
-	DownloadExecutor::DownloadExecutor(DownloadItem& item, const KxURI& url, const wxString& localPath)
-		:m_Item(item), m_DownloadManager(*IDownloadManager::GetInstance()), m_URL(url), m_LocalPath(localPath)
+	DownloadExecutor::DownloadExecutor(DownloadItem& item, const KxURI& uri, const wxString& localPath)
+		:m_Item(item), m_DownloadManager(*IDownloadManager::GetInstance()), m_URI(uri), m_LocalPath(localPath)
 	{
 	}
 	DownloadExecutor::~DownloadExecutor()
@@ -179,7 +179,7 @@ namespace Kortex::DownloadManager
 		{
 			m_StartDate = Utility::DateTime::Now();
 
-			m_Session = INetworkManager::GetInstance()->NewCURLSession(m_URL);
+			m_Session = INetworkManager::GetInstance()->NewCURLSession(m_URI);
 			m_Session->Bind(KxEVT_CURL_DOWNLOAD, &DownloadExecutor::OnDownload, this);
 
 			m_Thread = GetThread();
@@ -198,7 +198,7 @@ namespace Kortex::DownloadManager
 	{
 		int64_t contentLength = -1;
 
-		auto session = INetworkManager::GetInstance()->NewCURLSession(m_URL);
+		auto session = INetworkManager::GetInstance()->NewCURLSession(m_URI);
 		session->Bind(KxEVT_CURL_DOWNLOAD, [&session, &contentLength](KxCURLEvent& event)
 		{
 			contentLength = event.GetMajorTotal();

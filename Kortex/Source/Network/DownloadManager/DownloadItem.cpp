@@ -103,6 +103,7 @@ namespace Kortex
 	bool DownloadItem::DoStart(int64_t startAt)
 	{
 		m_Executor = IDownloadManager::GetInstance()->NewDownloadExecutor(*this, m_DownloadInfo.URI, GetFullPath());
+		m_IsWaiting = false;
 		m_IsFailed = false;
 		m_ShouldResume = false;
 
@@ -255,7 +256,12 @@ namespace Kortex
 
 	bool DownloadItem::CanStart() const
 	{
-		return IsOK() && !IsRunning() && !IsPaused() && m_ModNetwork;
+		if (IsOK() && !m_IsWaiting && !IsRunning() && !IsPaused() && m_ModNetwork)
+		{
+			IDownloadManager* manager = IDownloadManager::GetInstance();
+			return manager->GetActiveDownloadsCount() < manager->GetMaxConcurrentDownloads();
+		}
+		return false;
 	}
 	bool DownloadItem::Start()
 	{
@@ -278,7 +284,12 @@ namespace Kortex
 
 	bool DownloadItem::CanResume() const
 	{
-		return IsOK() && !IsRunning() && IsPaused();
+		if (IsOK() && !m_IsWaiting && !IsRunning() && IsPaused())
+		{
+			IDownloadManager* manager = IDownloadManager::GetInstance();
+			return manager->GetActiveDownloadsCount() < manager->GetMaxConcurrentDownloads();
+		}
+		return false;
 	}
 	bool DownloadItem::Pause()
 	{

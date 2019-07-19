@@ -80,7 +80,7 @@ namespace Kortex::DownloadManager
 
 				// Bar color
 				ProgressState state = ProgressState::Normal;
-				if (m_Item.IsPaused())
+				if (m_Item.IsPaused() || m_Item.IsWaiting())
 				{
 					state = ProgressState::Paused;
 				}
@@ -98,7 +98,7 @@ namespace Kortex::DownloadManager
 				}
 
 				bool addedDownloaded = false;
-				if (!m_Item.IsCompleted() && downloadedSize >= 0)
+				if (!m_Item.IsCompleted() && downloadedSize >= 0 && !m_Item.IsWaiting())
 				{
 					// Add downloaded bytes so far
 					addedDownloaded = true;
@@ -187,7 +187,7 @@ namespace Kortex::DownloadManager
 		{
 			return ImageProvider::GetBitmap(ImageResourceID::CrossCircleFrame);
 		}
-		if (m_Item.IsPaused())
+		if (m_Item.IsPaused() || m_Item.IsWaiting())
 		{
 			return ImageProvider::GetBitmap(ImageResourceID::ExclamationCircleFrameEmpty);
 		}

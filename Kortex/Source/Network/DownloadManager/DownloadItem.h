@@ -40,6 +40,7 @@ namespace Kortex
 			int64_t m_DownloadSpeed = 0;
 			wxDateTime m_DownloadDate;
 			bool m_IsHidden = false;
+			bool m_IsWaiting = false;
 
 			// Source
 			GameID m_TargetGame;
@@ -55,6 +56,10 @@ namespace Kortex
 			bool Deserialize(wxInputStream& stream);
 
 			bool DoStart(int64_t startAt = 0);
+			void SetWaiting(bool value = true)
+			{
+				m_IsWaiting = value;
+			}
 
 		protected:
 			std::unique_ptr<IDownloadExecutor> OnExecutorEnd() override;
@@ -78,7 +83,7 @@ namespace Kortex
 			}
 			wxString GetServerName() const
 			{
-				return !m_DownloadInfo.Name.IsEmpty() ? m_DownloadInfo.Name : m_DownloadInfo.ShortName;
+				return !m_DownloadInfo.ShortName.IsEmpty() ? m_DownloadInfo.ShortName : m_DownloadInfo.Name;
 			}
 			NetworkModInfo GetNetworkModInfo() const
 			{
@@ -178,7 +183,7 @@ namespace Kortex
 		public:
 			bool IsCompleted() const
 			{
-				return !IsFailed() && !IsPaused() && !IsRunning();
+				return !m_IsWaiting && !IsFailed() && !IsPaused() && !IsRunning();
 			}
 			bool IsRunning() const
 			{
@@ -192,7 +197,11 @@ namespace Kortex
 			{
 				return m_IsFailed;
 			}
-			
+			bool IsWaiting() const
+			{
+				return m_IsWaiting;
+			}
+
 			bool CanStart() const;
 			bool Start();
 			bool Stop();

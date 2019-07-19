@@ -22,7 +22,7 @@ namespace Kortex::DownloadManager
 			DownloadItem& m_Item;
 
 			wxString m_LocalPath;
-			KxURI m_URL;
+			KxURI m_URI;
 
 			wxThread* m_Thread = nullptr;
 			std::unique_ptr<KxFileStream> m_Stream;
@@ -48,7 +48,7 @@ namespace Kortex::DownloadManager
 			void Terminate();
 
 		public:
-			DownloadExecutor(DownloadItem& item, const KxURI& url, const wxString& localPath);
+			DownloadExecutor(DownloadItem& item, const KxURI& uri, const wxString& localPath);
 			~DownloadExecutor();
 
 		public:

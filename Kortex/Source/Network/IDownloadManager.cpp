@@ -117,6 +117,7 @@ namespace Kortex
 		GetAInstanceOption(OName::MaxConcurrentDownloads).SetValue(m_MaxConcurrentDownloads);
 
 		PauseAllActive();
+		SaveDownloads();
 	}
 	void IDownloadManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
@@ -204,28 +205,40 @@ namespace Kortex
 	}
 	DownloadItem::RefVector IDownloadManager::GetInactiveDownloads(bool installedOnly) const
 	{
-		DownloadItem::RefVector items;
-		for (const auto& entry: m_Downloads)
+		DownloadItem::RefVector refItems;
+		for (const auto& item: m_Downloads)
 		{
-			if (!entry->IsRunning())
+			if (!item->IsRunning())
 			{
-				if (installedOnly && !entry->IsInstalled())
+				if (installedOnly && !item->IsInstalled())
 				{
 					continue;
 				}
-				items.push_back(entry.get());
+				refItems.push_back(item.get());
 			}
 		}
-		return items;
+		return refItems;
 	}
-	
+	size_t IDownloadManager::GetActiveDownloadsCount() const
+	{
+		size_t count = 0;
+		for (const auto& item: m_Downloads)
+		{
+			if (item->IsRunning())
+			{
+				count++;
+			}
+		}
+		return count;
+	}
+
 	DownloadItem& IDownloadManager::AddDownload(std::unique_ptr<DownloadItem> download)
 	{
 		DownloadItem& ref = *m_Downloads.emplace_back(std::move(download));
+		ref.SetWaiting();
 		AutoRenameIncrement(ref);
 
 		IEvent::MakeSend<DownloadEvent>(DownloadEvent::EvtAdded, ref);
-
 		return ref;
 	}
 	bool IDownloadManager::RemoveDownload(DownloadItem& download)
@@ -280,11 +293,11 @@ namespace Kortex
 	}
 	void IDownloadManager::PauseAllActive()
 	{
-		for (const auto& entry: m_Downloads)
+		for (const auto& download: m_Downloads)
 		{
-			if (entry->IsRunning())
+			if (download->IsRunning())
 			{
-				entry->Pause();
+				download->Pause();
 			}
 		}
 	}

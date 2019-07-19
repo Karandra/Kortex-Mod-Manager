@@ -6,6 +6,19 @@ namespace Kortex::DownloadManager
 {
 	class DefaultDownloadManager: public IDownloadManager
 	{
+		private:
+			DownloadItem::RefVector m_Queue;
+
+		private:
+			DownloadItem* CheckQueue();
+			bool TryStartDownload();
+
+			void DefaultDownloadManager::OnDownloadStarted(DownloadEvent& event);
+			void DefaultDownloadManager::OnDownloadCompleted(DownloadEvent& event);
+			void DefaultDownloadManager::OnDownloadPaused(DownloadEvent& event);
+			void DefaultDownloadManager::OnDownloadResumed(DownloadEvent& event);
+			void DefaultDownloadManager::OnDownloadRemoved(DownloadEvent& event);
+
 		protected:
 			void OnInit() override;
 			void OnExit() override;

@@ -125,7 +125,7 @@ namespace Kortex::NetworkManager
 				if (auto linkItems = GetFileDownloads(request); !linkItems.empty())
 				{
 					// Here we should actually select preferred download server based on user choice if we got more than one,
-					// but for now just use the first one.
+					// but for now just use the first one (it's the preferred server selected in user preferences on Nexus).
 					return IDownloadManager::GetInstance()->QueueDownload(*this, linkItems.front(), *fileInfo, gameID);
 				}
 				return false;

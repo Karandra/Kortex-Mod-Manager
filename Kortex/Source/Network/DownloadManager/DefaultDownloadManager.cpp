@@ -84,7 +84,22 @@ namespace Kortex::DownloadManager
 	
 	KWorkspace* DefaultDownloadManager::CreateWorkspace(KMainWindow* mainWindow)
 	{
-		return new Workspace(mainWindow);
+		// Create workspace
+		Workspace* workspace = new Workspace(mainWindow);
+
+		// If we're the primary instance and we were launched with URL as command line
+		// argument we need to manually queue it since IApplication instance merely checks
+		// its existence and otherwise does nothing with it.
+		workspace->CallAfter([]()
+		{
+			KxURI uri = IDownloadManager::GetLinkFromCommandLine(IApplication::GetInstance()->GetCmdLineParser());
+			if (uri)
+			{
+				IDownloadManager::GetInstance()->TryQueueDownloadLink(uri);
+			}
+		});
+
+		return workspace;
 	}
 
 	std::unique_ptr<IDownloadExecutor> DefaultDownloadManager::NewDownloadExecutor(DownloadItem& item,

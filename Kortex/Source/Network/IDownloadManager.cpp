@@ -340,11 +340,14 @@ namespace Kortex
 
 	bool IDownloadManager::TryQueueDownloadLink(const KxURI& link)
 	{
-		for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
+		if (link)
 		{
-			if (repository->QueueDownload(link))
+			for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 			{
-				return true;
+				if (repository->QueueDownload(link))
+				{
+					return true;
+				}
 			}
 		}
 		return false;

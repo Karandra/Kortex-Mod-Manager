@@ -13,10 +13,7 @@ namespace Kortex::DownloadManager
 			DownloadItem* CheckQueue();
 			bool TryStartDownload();
 
-			void DefaultDownloadManager::OnDownloadStarted(DownloadEvent& event);
-			void DefaultDownloadManager::OnDownloadCompleted(DownloadEvent& event);
-			void DefaultDownloadManager::OnDownloadPaused(DownloadEvent& event);
-			void DefaultDownloadManager::OnDownloadResumed(DownloadEvent& event);
+			void DefaultDownloadManager::OnNeedToStartDownload(DownloadEvent& event);
 			void DefaultDownloadManager::OnDownloadRemoved(DownloadEvent& event);
 
 		protected:

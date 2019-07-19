@@ -8,4 +8,8 @@ namespace Kortex
 	{
 		return IDownloadManager::GetInstance()->ShouldShowHiddenDownloads();
 	}
+	int DownloadEvent::GetMaxConcurrentDownloads() const
+	{
+		return IDownloadManager::GetInstance()->GetMaxConcurrentDownloads();
+	}
 }

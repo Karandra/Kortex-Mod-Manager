@@ -33,19 +33,7 @@ namespace Kortex::DownloadManager
 		return false;
 	}
 
-	void DefaultDownloadManager::OnDownloadStarted(DownloadEvent& event)
-	{
-		TryStartDownload();
-	}
-	void DefaultDownloadManager::OnDownloadCompleted(DownloadEvent& event)
-	{
-		TryStartDownload();
-	}
-	void DefaultDownloadManager::OnDownloadPaused(DownloadEvent& event)
-	{
-		TryStartDownload();
-	}
-	void DefaultDownloadManager::OnDownloadResumed(DownloadEvent& event)
+	void DefaultDownloadManager::OnNeedToStartDownload(DownloadEvent& event)
 	{
 		TryStartDownload();
 	}
@@ -69,18 +57,22 @@ namespace Kortex::DownloadManager
 		IDownloadManager::OnInit();
 		m_Queue.reserve(HasConcurrentDownloadsLimit() ? GetMaxConcurrentDownloads() * 2 : 0);
 
-		IEvent::Bind(DownloadEvent::EvtStarted, &DefaultDownloadManager::OnDownloadStarted, this);
-		IEvent::Bind(DownloadEvent::EvtCompleted, &DefaultDownloadManager::OnDownloadCompleted, this);
-		IEvent::Bind(DownloadEvent::EvtPaused, &DefaultDownloadManager::OnDownloadPaused, this);
-		IEvent::Bind(DownloadEvent::EvtResumed, &DefaultDownloadManager::OnDownloadResumed, this);
+		IEvent::Bind(DownloadEvent::EvtStarted, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		IEvent::Bind(DownloadEvent::EvtCompleted, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		IEvent::Bind(DownloadEvent::EvtPaused, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		IEvent::Bind(DownloadEvent::EvtResumed, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		IEvent::Bind(DownloadEvent::EvtConcurrentDownloadsCountChanged, &DefaultDownloadManager::OnNeedToStartDownload, this);
+
 		IEvent::Bind(DownloadEvent::EvtRemoved, &DefaultDownloadManager::OnDownloadRemoved, this);
 	}
 	void DefaultDownloadManager::OnExit()
 	{
-		IEvent::Unbind(DownloadEvent::EvtStarted, &DefaultDownloadManager::OnDownloadStarted, this);
-		IEvent::Unbind(DownloadEvent::EvtCompleted, &DefaultDownloadManager::OnDownloadCompleted, this);
-		IEvent::Unbind(DownloadEvent::EvtPaused, &DefaultDownloadManager::OnDownloadPaused, this);
-		IEvent::Unbind(DownloadEvent::EvtResumed, &DefaultDownloadManager::OnDownloadResumed, this);
+		IEvent::Unbind(DownloadEvent::EvtStarted, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		IEvent::Unbind(DownloadEvent::EvtCompleted, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		IEvent::Unbind(DownloadEvent::EvtPaused, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		IEvent::Unbind(DownloadEvent::EvtResumed, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		IEvent::Unbind(DownloadEvent::EvtConcurrentDownloadsCountChanged, &DefaultDownloadManager::OnNeedToStartDownload, this);
+
 		IEvent::Unbind(DownloadEvent::EvtRemoved, &DefaultDownloadManager::OnDownloadRemoved, this);
 
 		IDownloadManager::OnExit();

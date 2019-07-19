@@ -314,7 +314,7 @@ namespace Kortex
 		KxFile(location).CreateFolder();
 		LoadDownloads();
 	}
-	void IDownloadManager::SetMaxConcurrentDownloads(size_t count)
+	void IDownloadManager::SetMaxConcurrentDownloads(int count)
 	{
 		m_MaxConcurrentDownloads = count;
 	}

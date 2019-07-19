@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include <KxFramework/KxSingleton.h>
+#include <KxFramework/KxAuiToolBar.h>
 
 namespace Kortex::DownloadManager
 {
@@ -12,11 +13,14 @@ namespace Kortex::DownloadManager
 		private:
 			wxBoxSizer* m_MainSizer = nullptr;
 			DisplayModel* m_DisplayModel = nullptr;
+			KxAuiToolBar* m_ToolBar = nullptr;
+
+		private:
+			void OnSelectConcurrentDownloadsCount(wxCommandEvent& event);
 
 		public:
 			Workspace(KMainWindow* mainWindow);
 			~Workspace();
-			bool OnCreateWorkspace() override;
 
 		private:
 			bool IsSubWorkspace() const override
@@ -28,6 +32,7 @@ namespace Kortex::DownloadManager
 				return (size_t)TabIndex::Downloads;
 			}
 		
+			bool OnCreateWorkspace() override;
 			bool OnOpenWorkspace() override;
 			bool OnCloseWorkspace() override;
 			void OnReloadWorkspace() override;

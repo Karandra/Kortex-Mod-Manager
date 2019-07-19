@@ -610,6 +610,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Notification.QueryDownloadInfoFailed">Could not request download information for %1</String>
 		<String ID="DownloadManager.Notification.RestoreDownloadFailed">Failed to restore download information from %1</String>
 
+		<String ID="DownloadManager.ConcurrentDownloads.Label">Concurrent downloads</String>
+		<String ID="DownloadManager.ConcurrentDownloads.Unlimited">Unlimited</String>
+
 		<!-- Context menu -->
 		<String ID="DownloadManager.Menu.Install">Install</String>
 		<String ID="DownloadManager.Menu.Add">Add download</String>

@@ -615,6 +615,9 @@
 		<String ID="DownloadManager.Notification.QueryDownloadInfoFailed">Не удалось запросить информацию о загрузке для %1</String>
 		<String ID="DownloadManager.Notification.RestoreDownloadFailed">Не удалось восстановить информацию о загрузке для %1</String>
 
+		<String ID="DownloadManager.ConcurrentDownloads.Label">Одновременные загрузки</String>
+		<String ID="DownloadManager.ConcurrentDownloads.Unlimited">Неограниченно</String>
+
 		<!-- Context menu -->
 		<String ID="DownloadManager.Menu.Install">Установить</String>
 		<String ID="DownloadManager.Menu.Add">Добавить загрузку</String>

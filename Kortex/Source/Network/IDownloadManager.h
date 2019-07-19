@@ -100,10 +100,10 @@ namespace Kortex
 			{
 				return m_MaxConcurrentDownloads;
 			}
-			void SetMaxConcurrentDownloads(size_t count);
+			void SetMaxConcurrentDownloads(int count);
 
 			DownloadItem* FindDownloadByFileName(const wxString& name, const DownloadItem* except = nullptr) const;
-			void AutoRenameIncrement(DownloadItem& entry) const;
+			void AutoRenameIncrement(DownloadItem& item) const;
 
 		public:
 			virtual std::unique_ptr<IDownloadExecutor> NewDownloadExecutor(DownloadItem& item,

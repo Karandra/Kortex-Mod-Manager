@@ -24,6 +24,7 @@ namespace Kortex
 			KxEVENT_MEMBER(DownloadEvent, Failed);
 
 			KxEVENT_MEMBER(DownloadEvent, RefreshItems);
+			KxEVENT_MEMBER(DownloadEvent, ConcurrentDownloadsCountChanged);
 
 		private:
 			DownloadItem* m_Download = nullptr;
@@ -49,5 +50,6 @@ namespace Kortex
 				return *m_Download;
 			}
 			bool ShouldShowHidden() const;
+			int GetMaxConcurrentDownloads() const;
 	};
 }

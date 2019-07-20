@@ -3,6 +3,7 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
+#include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxDrive.h>
@@ -272,11 +273,14 @@ namespace Kortex
 		{
 			if (fileItem.IsNormalItem() && fileItem.IsFile())
 			{
-				DownloadItem& download = *m_Downloads.emplace_back(std::make_unique<DownloadItem>());
-				if (!download.Load(fileItem))
+				if (!KAux::IsSingleFileExtensionMatches(fileItem.GetFileExtension(), wxS("tmp")))
 				{
-					download.LoadDefault(fileItem);
-					download.Save();
+					DownloadItem& download = *m_Downloads.emplace_back(std::make_unique<DownloadItem>());
+					if (!download.Load(fileItem))
+					{
+						download.LoadDefault(fileItem);
+						download.Save();
+					}
 				}
 			}
 		}

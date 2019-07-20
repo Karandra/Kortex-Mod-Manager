@@ -8,6 +8,7 @@
 namespace
 {
 	constexpr wxChar StreamName[] = wxS(":Kortex.Download");
+	constexpr wxChar TempDownloadExt[] = wxS(".tmp");
 }
 
 namespace Kortex
@@ -124,8 +125,6 @@ namespace Kortex
 		// If download failed delete the file.
 		if (m_IsFailed)
 		{
-			KxFile(GetFullPath()).RemoveFile(true);
-
 			// This will remove meta-data stored in the ADS so save it again. It will create zero-sized file
 			// and it will indicate failed status.
 			m_FileInfo.Size = -1;
@@ -242,6 +241,16 @@ namespace Kortex
 			{
 				m_FileInfo.Name = fileItem.GetName();
 				m_DownloadedSize = fileItem.GetFileSize();
+
+				// Try to use temp file to get downloaded size if the download were paused
+				if (m_ShouldResume)
+				{
+					KxFileItem tempFile(fileItem.GetFullPath() + TempDownloadExt);
+					if (tempFile.IsNormalItem() && tempFile.IsFile())
+					{
+						m_DownloadedSize = tempFile.GetFileSize();
+					}
+				}
 				m_IsFailed = m_FileInfo.Size <= 0 || (m_DownloadedSize != m_FileInfo.Size && !m_ShouldResume);
 
 				if (!m_DownloadDate.IsValid())

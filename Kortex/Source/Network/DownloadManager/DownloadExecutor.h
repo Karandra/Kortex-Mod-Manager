@@ -47,6 +47,10 @@ namespace Kortex::DownloadManager
 			void QueueNotifyEvent(KxEventTag<DownloadEvent> eventType);
 			void Terminate();
 
+			wxString GetTempFile() const;
+			bool RenameTempFile();
+			bool DeleteTempFile();
+
 		public:
 			DownloadExecutor(DownloadItem& item, const KxURI& uri, const wxString& localPath);
 			~DownloadExecutor();

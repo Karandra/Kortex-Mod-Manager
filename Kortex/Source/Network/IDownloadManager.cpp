@@ -268,12 +268,14 @@ namespace Kortex
 		PauseAllActive();
 		m_Downloads.clear();
 
+		const wxString tempExt = wxS("tmp");
 		KxFileFinder finder(GetDownloadsLocation(), wxS("*"));
+
 		for (KxFileItem fileItem = finder.FindNext(); fileItem.IsOK(); fileItem = finder.FindNext())
 		{
 			if (fileItem.IsNormalItem() && fileItem.IsFile())
 			{
-				if (!KAux::IsSingleFileExtensionMatches(fileItem.GetFileExtension(), wxS("tmp")))
+				if (!KAux::IsSingleFileExtensionMatches(fileItem.GetFileExtension(), tempExt))
 				{
 					DownloadItem& download = *m_Downloads.emplace_back(std::make_unique<DownloadItem>());
 					if (!download.Load(fileItem))

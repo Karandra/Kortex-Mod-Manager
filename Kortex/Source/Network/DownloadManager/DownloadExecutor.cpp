@@ -25,7 +25,7 @@ namespace Kortex::DownloadManager
 	void DownloadExecutor::OnStart()
 	{
 		KxFileStream::Disposition disposition = m_StartDownloadAt > 0 ? KxFileStream::Disposition::OpenExisting : KxFileStream::Disposition::CreateAlways;
-		m_Stream = std::make_unique<KxFileStream>(m_LocalPath, KxFileStream::Access::Write, disposition, KxFileStream::Share::Read);
+		m_Stream = std::make_unique<KxFileStream>(GetTempFile(), KxFileStream::Access::Write, disposition, KxFileStream::Share::Read);
 		if (m_Stream->IsOk())
 		{
 			// Notify download manager about start of download
@@ -96,14 +96,17 @@ namespace Kortex::DownloadManager
 			// Send event to download manager
 			if (m_IsCompleted)
 			{
+				RenameTempFile();
 				NotifyEvent(DownloadEvent::EvtCompleted);
 			}
 			else if (m_Session->IsStopped())
 			{
+				DeleteTempFile();
 				NotifyEvent(DownloadEvent::EvtStopped);
 			}
 			else
 			{
+				DeleteTempFile();
 				NotifyEvent(DownloadEvent::EvtFailed);
 			}
 		});
@@ -127,6 +130,19 @@ namespace Kortex::DownloadManager
 		{
 			m_Thread->Delete();
 		}
+	}
+
+	wxString DownloadExecutor::GetTempFile() const
+	{
+		return m_LocalPath + wxS(".tmp");
+	}
+	bool DownloadExecutor::RenameTempFile()
+	{
+		return KxFile(GetTempFile()).Rename(m_LocalPath, true);
+	}
+	bool DownloadExecutor::DeleteTempFile()
+	{
+		return KxFile(GetTempFile()).RemoveFile();
 	}
 
 	DownloadExecutor::DownloadExecutor(DownloadItem& item, const KxURI& uri, const wxString& localPath)

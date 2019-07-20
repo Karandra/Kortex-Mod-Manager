@@ -166,14 +166,16 @@ namespace Kortex::InstallWizard
 	}
 	bool WizardDialog::ProcessLoadPackage()
 	{
-		bool ret = LoadPackage();
-		SwitchPage(WizardPageID::Info);
+		if (LoadPackage())
+		{
+			SwitchPage(WizardPageID::Info);
+			Show();
+			Raise();
 
-		Show();
-		Raise();
-
-		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalling, m_ModEntry);
-		return ret;
+			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalling, m_ModEntry);
+			return true;
+		}
+		return false;
 	}
 
 	void WizardDialog::FindExistingMod()

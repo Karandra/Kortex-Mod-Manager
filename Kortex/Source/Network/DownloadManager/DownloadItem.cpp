@@ -27,8 +27,14 @@ namespace Kortex
 				{
 					sourceNode.NewElement("Game").SetValue(m_TargetGame);
 				}
-				sourceNode.NewElement("ModID").SetValue(m_FileInfo.ModID.GetValue());
-				sourceNode.NewElement("FileID").SetValue(m_FileInfo.ID.GetValue());
+				if (m_FileInfo.ModID)
+				{
+					sourceNode.NewElement("ModID").SetValue(m_FileInfo.ModID.GetValue());
+				}
+				if (m_FileInfo.ID)
+				{
+					sourceNode.NewElement("FileID").SetValue(m_FileInfo.ID.GetValue());
+				}
 				if (m_DownloadInfo.URI.IsOk())
 				{
 					sourceNode.NewElement("URI").SetValue(m_DownloadInfo.URI.BuildUnescapedURI());

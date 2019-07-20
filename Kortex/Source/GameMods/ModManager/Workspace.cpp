@@ -12,7 +12,6 @@
 #include <Kortex/VirtualGameFolder.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include <Kortex/Events.hpp>
 
 #include "GameInstance/ProfileEditor.h"
 #include "DisplayModel.h"
@@ -21,6 +20,7 @@
 #include "NewModDialog.h"
 #include "GameMods/KModFilesExplorerDialog.h"
 #include "GameMods/KModCollisionViewerModel.h"
+#include "VirtualFileSystem/VirtualFSEvent.h"
 #include "UI/KImageViewerDialog.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KOperationWithProgress.h"
@@ -172,8 +172,8 @@ namespace Kortex::ModManager
 		ReloadView();
 		UpdateModListContent();
 
-		IEvent::Bind(Events::MainVFSToggled, &Workspace::OnVFSToggled, this);
-		IEvent::Bind(Events::ProfileSelected, &Workspace::OnProfileSelected, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &Workspace::OnMainFSToggled, this);
+		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &Workspace::OnProfileSelected, this);
 
 		CreateAsSubWorkspace<VirtualGameFolder::Workspace>();
 		CreateAsSubWorkspace<ProgramManager::Workspace>();
@@ -628,7 +628,7 @@ namespace Kortex::ModManager
 			}
 		};
 	}
-	void Workspace::OnVFSToggled(VFSEvent& event)
+	void Workspace::OnMainFSToggled(VirtualFSEvent& event)
 	{
 		m_ToolBar_Profiles->Enable(!event.IsActivated());
 		m_ToolBar_EditProfiles->SetEnabled(!event.IsActivated());
@@ -646,7 +646,7 @@ namespace Kortex::ModManager
 		}
 		m_DisplayModel->UpdateUI();
 	}
-	void Workspace::OnProfileSelected(GameInstance::ProfileEvent& event)
+	void Workspace::OnProfileSelected(ProfileEvent& event)
 	{
 		ReloadView();
 	}
@@ -656,13 +656,13 @@ namespace Kortex::ModManager
 		NewModDialog dialog(this);
 		if (dialog.ShowModal() == KxID_OK)
 		{
-			BasicGameMod entry;
-			entry.SetID(dialog.GetFolderName());
-			entry.CreateAllFolders();
-			entry.SetInstallTime(wxDateTime::Now());
-			entry.Save();
+			BasicGameMod mod;
+			mod.SetID(dialog.GetFolderName());
+			mod.CreateAllFolders();
+			mod.SetInstallTime(wxDateTime::Now());
+			mod.Save();
 
-			ModEvent(Events::ModInstalled, entry).Send();
+			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, mod);
 		}
 	}
 	void Workspace::OnAddMod_FromFolder(KxMenuEvent& event)
@@ -670,22 +670,22 @@ namespace Kortex::ModManager
 		NewModFromFolderDialog dialog(this);
 		if (dialog.ShowModal() == KxID_OK)
 		{
-			BasicGameMod modEntry;
-			modEntry.SetID(dialog.GetFolderName());
-			modEntry.CreateAllFolders();
-			modEntry.SetInstallTime(wxDateTime::Now());
+			BasicGameMod mod;
+			mod.SetID(dialog.GetFolderName());
+			mod.CreateAllFolders();
+			mod.SetInstallTime(wxDateTime::Now());
 
 			if (dialog.ShouldCreateAsLinkedMod())
 			{
-				modEntry.LinkLocation(dialog.GetFolderPath());
+				mod.LinkLocation(dialog.GetFolderPath());
 			}
-			modEntry.Save();
+			mod.Save();
 
 			if (!dialog.ShouldCreateAsLinkedMod())
 			{
 				// Copy files
 				wxString sourcePath = dialog.GetFolderPath();
-				wxString destinationPath = modEntry.GetModFilesDir();
+				wxString destinationPath = mod.GetModFilesDir();
 				auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
 				operation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
 				{
@@ -695,16 +695,16 @@ namespace Kortex::ModManager
 				});
 
 				// If canceled, remove entire mod folder
-				wxString modRoot = modEntry.GetRootDir();
+				wxString modRoot = mod.GetRootDir();
 				operation->OnCancel([modRoot](KOperationWithProgressBase* self)
 				{
 					KxFile(modRoot).RemoveFolderTree(true);
 				});
 
 				// Reload after task is completed (successfully or not)
-				operation->OnEnd([this, name = modEntry.GetID().Clone()](KOperationWithProgressBase* self)
+				operation->OnEnd([this, name = mod.GetID().Clone()](KOperationWithProgressBase* self)
 				{
-					ModEvent(Events::ModInstalled, name).Send();
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, name);
 					ReloadWorkspace();
 				});
 
@@ -714,7 +714,7 @@ namespace Kortex::ModManager
 			}
 			else
 			{
-				ModEvent(Events::ModInstalled, modEntry).Send();
+				BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, mod);
 			}
 		}
 	}
@@ -979,8 +979,8 @@ namespace Kortex::ModManager
 						focusedMod->LinkLocation(dialog.GetResult());
 						focusedMod->Save();
 
-						ModEvent(Events::ModFilesChanged, *focusedMod).Send();
-						ModEvent(Events::ModChanged, *focusedMod).Send();
+						BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtFilesChanged, *focusedMod);
+						BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, *focusedMod);
 					}
 				}
 				break;
@@ -995,8 +995,8 @@ namespace Kortex::ModManager
 					focusedMod->LinkLocation(wxEmptyString);
 					focusedMod->Save();
 
-					ModEvent(Events::ModFilesChanged, *focusedMod).Send();
-					ModEvent(Events::ModChanged, *focusedMod).Send();
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtFilesChanged, *focusedMod);
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, *focusedMod);
 				}
 				break;
 			}
@@ -1022,30 +1022,29 @@ namespace Kortex::ModManager
 					focusedMod->SetDescription(dialog.GetText());
 					focusedMod->Save();
 
-					ModEvent event(Events::ModChanged, *focusedMod);
-					ProcessEvent(event);
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, *focusedMod);
 				}
 				break;
 			}
 			case ContextMenuID::ModEditTags:
 			{
-				BasicGameMod tempEntry;
-				tempEntry.GetTagStore() = focusedMod->GetTagStore();
-				tempEntry.SetPriorityGroupTag(focusedMod->GetPriorityGroupTag());
+				BasicGameMod tempMod;
+				tempMod.GetTagStore() = focusedMod->GetTagStore();
+				tempMod.SetPriorityGroupTag(focusedMod->GetPriorityGroupTag());
 
 				ModTagManager::SelectorDialog dialog(GetMainWindow(), KTr("ModManager.TagsDialog"));
-				dialog.SetDataVector(&tempEntry.GetTagStore(), &tempEntry);
+				dialog.SetDataVector(&tempMod.GetTagStore(), &tempMod);
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{
 					dialog.ApplyChangesToMod();
-					bool hasSelection = DoForAllSelectedItems(selectedMods, [&tempEntry](IGameMod& entry)
+					bool hasSelection = DoForAllSelectedItems(selectedMods, [&tempMod](IGameMod& mod)
 					{
-						entry.GetTagStore() = tempEntry.GetTagStore();
-						entry.SetPriorityGroupTag(tempEntry.GetPriorityGroupTag());
-						entry.Save();
+						mod.GetTagStore() = tempMod.GetTagStore();
+						mod.SetPriorityGroupTag(tempMod.GetPriorityGroupTag());
+						mod.Save();
 
-						ModEvent(Events::ModChanged, entry).Send();
+						BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, mod);
 						return true;
 					});
 					if (hasSelection)
@@ -1062,7 +1061,7 @@ namespace Kortex::ModManager
 				if (dialog.IsModified())
 				{
 					focusedMod->Save();
-					ModEvent(Events::ModChanged, *focusedMod).Send();
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, *focusedMod);
 				}
 				break;
 			}
@@ -1102,12 +1101,12 @@ namespace Kortex::ModManager
 				wxColourDialog dialog(this, &colorData);
 				if (dialog.ShowModal() == wxID_OK)
 				{
-					DoForAllSelectedItems(selectedMods, [&dialog](IGameMod& entry)
+					DoForAllSelectedItems(selectedMods, [&dialog](IGameMod& mod)
 					{
-						entry.SetColor(dialog.GetColourData().GetColour());
-						entry.Save();
+						mod.SetColor(dialog.GetColourData().GetColour());
+						mod.Save();
 
-						ModEvent(Events::ModChanged, entry).Send();
+						BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, mod);
 						return true;
 					});
 					m_DisplayModel->UpdateUI();
@@ -1116,12 +1115,12 @@ namespace Kortex::ModManager
 			}
 			case ContextMenuID::ColorReset:
 			{
-				DoForAllSelectedItems(selectedMods, [](IGameMod& entry)
+				DoForAllSelectedItems(selectedMods, [](IGameMod& mod)
 				{
-					entry.SetColor(KxColor());
-					entry.Save();
+					mod.SetColor(KxColor());
+					mod.Save();
 
-					ModEvent(Events::ModChanged, entry).Send();
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, mod);
 					return true;
 				});
 				m_DisplayModel->UpdateUI();

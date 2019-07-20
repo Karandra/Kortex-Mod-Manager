@@ -2,8 +2,8 @@
 #include "DefaultGameConfigManager.h"
 #include "Definition.h"
 #include "Workspace.h"
+#include "GameInstance/ProfileEvent.h"
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 
 namespace Kortex::GameConfig
 {
@@ -19,20 +19,16 @@ namespace Kortex::GameConfig
 			}
 		}
 	}
-	void DefaultGameConfigManager::OnChangeProfile(GameInstance::ProfileEvent& event)
+	void DefaultGameConfigManager::OnChangeProfile(ProfileEvent& event)
 	{
 		Load();
-
-		if (Workspace* workspace = Workspace::GetInstance())
-		{
-			workspace->ScheduleReload();
-		}
+		KWorkspace::ScheduleReloadOf<Workspace>();
 	}
 
 	void DefaultGameConfigManager::OnInit()
 	{
 		IConfigManager::OnInit();
-		IEvent::Bind(Events::ProfileSelected, &DefaultGameConfigManager::OnChangeProfile, this);
+		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &DefaultGameConfigManager::OnChangeProfile, this);
 	}
 	void DefaultGameConfigManager::OnExit()
 	{

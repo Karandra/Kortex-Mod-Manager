@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "CreationDialog.h"
-#include "Events/LogEvent.h"
 #include "GameInstance/IGameInstance.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxTaskDialog.h>
@@ -101,12 +100,12 @@ namespace Kortex::GameInstance
 		m_InstanceID = m_NameInput->GetValue();
 		if (!IGameInstance::IsValidInstanceID(m_InstanceID))
 		{
-			LogEvent(KTr("InstanceCreatorDialog.InstanceNameInvalid"), LogLevel::Warning, this).Send();
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtWarning, KTr("InstanceCreatorDialog.InstanceNameInvalid"));
 			return false;
 		}
 		else if (IGameInstance::GetShallowInstance(m_InstanceID) != nullptr)
 		{
-			LogEvent(KTr("InstanceCreatorDialog.InstanceNameCollision"), LogLevel::Warning, this).Send();
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtWarning, KTr("InstanceCreatorDialog.InstanceNameCollision"));
 			return false;
 		}
 		else
@@ -129,7 +128,7 @@ namespace Kortex::GameInstance
 				}
 			}
 
-			LogEvent(KTr("InstanceCreatorDialog.CreationError"), LogLevel::Error, this).Send();
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("InstanceCreatorDialog.CreationError"));
 			return false;
 		}
 	}

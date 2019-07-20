@@ -3,7 +3,6 @@
 #include "Nexus.h"
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 #include "UI/KMainWindow.h"
 #include "Utility/String.h"
 #include <KxFramework/KxCURL.h>
@@ -126,7 +125,7 @@ namespace Kortex::NetworkManager
 
 				if (dialog.ShowModal() == KxID_OK)
 				{
-					IEvent::CallAfter([this, apiKey = std::move(apiKey)]()
+					BroadcastProcessor::Get().CallAfter([this, apiKey = std::move(apiKey)]()
 					{
 						auto info = DoGetValidationInfo(apiKey, true);
 						if (info && info->APIKey == apiKey)

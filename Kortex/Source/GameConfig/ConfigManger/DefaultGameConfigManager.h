@@ -4,7 +4,7 @@
 #include "Definition.h"
 #include <KxFramework/KxTranslation.h>
 
-namespace Kortex::GameInstance
+namespace Kortex
 {
 	class ProfileEvent;
 }
@@ -16,6 +16,7 @@ namespace Kortex::GameConfig
 	class DefaultGameConfigManager: public IGameConfigManager
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
 			std::unordered_map<wxString, std::unique_ptr<Definition>> m_Definitions;
 
 			KxTranslation m_Translation;
@@ -25,7 +26,7 @@ namespace Kortex::GameConfig
 
 		private:
 			void LoadGroup(const KxXMLNode& definitionNode, ItemGroup& group);
-			void OnChangeProfile(GameInstance::ProfileEvent& event);
+			void OnChangeProfile(ProfileEvent& event);
 
 		protected:
 			void OnInit() override;

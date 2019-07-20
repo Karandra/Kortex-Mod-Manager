@@ -10,6 +10,7 @@ namespace Kortex::DownloadManager
 	class DisplayModel: public KxDataView2::Model
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
 			IDownloadManager& m_DownloadManager;
 			std::list<DisplayModelNode> m_Nodes;
 
@@ -62,7 +63,6 @@ namespace Kortex::DownloadManager
 
 		public:
 			DisplayModel();
-			~DisplayModel();
 
 		public:
 			void CreateView(wxWindow* parent);

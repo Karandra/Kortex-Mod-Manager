@@ -3,7 +3,6 @@
 #include "CreationDialog.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
-#include <Kortex/Events.hpp>
 #include "Application/Resources/ImageResourceID.h"
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
@@ -98,7 +97,7 @@ namespace Kortex::GameInstance
 	void SelectionDialog::Configure()
 	{
 		Bind(KxEVT_STDDIALOG_BUTTON, &SelectionDialog::OnButton, this);
-		Bind(Kortex::Events::ProfileRefreshList, &SelectionDialog::OnUpdateProfiles, this);
+		m_BroadcastReciever.Bind(ProfileEvent::EvtRefreshList, &SelectionDialog::OnUpdateProfiles, this);
 
 		m_GameFilter->Bind(wxEVT_COMBOBOX, [this](wxCommandEvent& event)
 		{
@@ -272,7 +271,7 @@ namespace Kortex::GameInstance
 			}
 			else
 			{
-				LogEvent(KTr("InstanceCreatorDialog.DeletionError"), LogLevel::Error).Send();
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("InstanceCreatorDialog.DeletionError"));
 			}
 		}
 	}

@@ -6,7 +6,6 @@
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
-#include <Kortex/Events.hpp>
 #include <Kortex/Common/Packages.hpp>
 #include "PackageProject/KPackageProject.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"

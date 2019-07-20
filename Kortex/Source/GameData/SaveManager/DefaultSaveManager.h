@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "GameData/ISaveManager.h"
-#include <Kortex/Events.hpp>
 #include "Utility/KLabeledValue.h"
 
 namespace Kortex::SaveManager
@@ -57,11 +56,12 @@ namespace Kortex::SaveManager
 	class DefaultSaveManager: public ISaveManager
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
 			Config m_Config;
 
 		private:
 			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
-			void OnSavesLocationChanged(GameInstance::ProfileEvent& event);
+			void OnSavesLocationChanged(BroadcastEvent& event);
 
 		protected:
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;

@@ -18,10 +18,8 @@ namespace Kortex
 {
 	class IModTag;
 	class IGameMod;
-}
-namespace Kortex::GameInstance
-{
 	class ProfileEvent;
+	class VirtualFSEvent;
 }
 
 namespace Kortex::ModManager
@@ -31,13 +29,15 @@ namespace Kortex::ModManager
 	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
+
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxSplitterWindow* m_SplitterLeftRight = nullptr;
 
-			/* Mods pane */
+			// Mods pane
 			wxBoxSizer* m_ModsPaneSizer = nullptr;
 
-			/* ToolBar */
+			// ToolBar
 			KxAuiToolBar* m_ModsToolBar = nullptr;
 
 			KxComboBox* m_ToolBar_Profiles = nullptr;
@@ -55,10 +55,10 @@ namespace Kortex::ModManager
 			KxPanel* m_ModsPane = nullptr;
 			DisplayModel* m_DisplayModel = nullptr;
 
-			/* Right pane */
+			// Right pane
 			KxAuiNotebook* m_PaneRight_Tabs = nullptr;
 
-			/* Controls */
+			// Controls
 			KxButton* m_ActivateButton = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
 
@@ -77,32 +77,32 @@ namespace Kortex::ModManager
 			void CreateControls();
 			void CreateRightPane();
 
-			virtual bool OnOpenWorkspace() override;
-			virtual bool OnCloseWorkspace() override;
-			virtual void OnReloadWorkspace() override;
-			virtual bool DoCanBeStartPage() const
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
+			bool DoCanBeStartPage() const
 			{
 				return true;
 			}
 
 		public:
-			virtual wxString GetID() const override;
-			virtual wxString GetName() const override;
-			virtual ResourceID GetImageID() const override
+			wxString GetID() const override;
+			wxString GetName() const override;
+			ResourceID GetImageID() const override
 			{
 				return ImageResourceID::Puzzle;
 			}
-			virtual wxSizer* GetWorkspaceSizer() const override
+			wxSizer* GetWorkspaceSizer() const override
 			{
 				return m_MainSizer;
 			}
-			virtual bool CanReload() const override
+			bool CanReload() const override
 			{
 				return true;
 			}
 
-			virtual bool AddSubWorkspace(KWorkspace* workspace) override;
-			virtual wxBookCtrlBase* GetSubWorkspaceContainer() override
+			bool AddSubWorkspace(KWorkspace* workspace) override;
+			wxBookCtrlBase* GetSubWorkspaceContainer() override
 			{
 				return m_PaneRight_Tabs;
 			}
@@ -119,8 +119,8 @@ namespace Kortex::ModManager
 		
 			void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 			void OnToolsMenu(KxAuiToolBarEvent& event);
-			void OnVFSToggled(VFSEvent& event);
-			void OnProfileSelected(GameInstance::ProfileEvent& event);
+			void OnMainFSToggled(VirtualFSEvent& event);
+			void OnProfileSelected(ProfileEvent& event);
 		
 			void OnAddMod_Empty(KxMenuEvent& event);
 			void OnAddMod_FromFolder(KxMenuEvent& event);

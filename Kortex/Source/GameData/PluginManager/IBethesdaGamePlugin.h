@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "IGamePlugin.h"
+#include "GameData/IGamePlugin.h"
 
 namespace Kortex
 {

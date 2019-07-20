@@ -3,7 +3,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxShell.h>
@@ -171,7 +170,7 @@ namespace Kortex::PluginManager
 		try
 		{
 			int gameID = GetLootGameID();
-			if (gameID != INVALID_GAME_ID)
+			if (gameID != (int)INVALID_GAME_ID)
 			{
 				std::locale locale("");
 				loot::InitialiseLocale("en.UTF-8");
@@ -239,7 +238,7 @@ namespace Kortex::PluginManager
 			LoggerCallback((int)loot::LogLevel::fatal, e.what(), context);
 			sortedList.clear();
 
-			LogEvent(FromLootString(e.what()), LogLevel::Error).Send();
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, FromLootString(e.what()));
 		}
 		return false;
 	}

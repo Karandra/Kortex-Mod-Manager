@@ -488,8 +488,8 @@ namespace Kortex::ModManager
 					}
 
 					// Send event
-					ModEvent(Events::ModsReordered, std::move(modsToMove)).Send();
-					
+					BroadcastProcessor::Get().QueueEvent(ModEvent::EvtReordered, std::move(modsToMove));
+
 					event.DropDone();
 					return;
 				}

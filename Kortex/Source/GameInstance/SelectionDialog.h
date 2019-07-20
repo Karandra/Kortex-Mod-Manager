@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameInstance/GameID.h"
+#include "Application/BroadcastProcessor.h"
 #include <KxFramework/KxComboBoxDialog.h>
 class KxPanel;
 class KxButton;
@@ -20,6 +21,8 @@ namespace Kortex::GameInstance
 	class SelectionDialog: public KxComboBoxDialog
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
+
 			KxSplitterWindow* m_Splitter = nullptr;
 
 			KxPanel* m_LeftPane = nullptr;

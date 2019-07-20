@@ -27,9 +27,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Code\Source\Events">
-      <UniqueIdentifier>{d536f7e4-3332-4aec-b729-de1d6c7a1ff2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\UI">
       <UniqueIdentifier>{51d2b7a4-c61f-41fb-afcb-6710b7efdfa3}</UniqueIdentifier>
     </Filter>
@@ -120,9 +117,6 @@
     <Filter Include="Code\Headers">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Code\Headers\Events">
-      <UniqueIdentifier>{ba91d700-872c-407c-a5c6-46fadb8ab5e4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers\UI">
       <UniqueIdentifier>{68fa5ef4-f841-4a93-98e7-fc49c7beef2b}</UniqueIdentifier>
@@ -409,6 +403,12 @@
     <Filter Include="Code\Headers\UI\WebViewBackend">
       <UniqueIdentifier>{6b550dfd-87c7-43d8-9bfb-1bd193595c94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\Application\Events">
+      <UniqueIdentifier>{ba91d700-872c-407c-a5c6-46fadb8ab5e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Application\Events">
+      <UniqueIdentifier>{d536f7e4-3332-4aec-b729-de1d6c7a1ff2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -606,9 +606,6 @@
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPlugin2.cpp">
       <Filter>Code\Source\GameData\PluginManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameData\PluginManager\IPluginManager.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\Workspace.cpp">
       <Filter>Code\Source\GameData\PluginManager</Filter>
     </ClCompile>
@@ -640,9 +637,6 @@
       <Filter>Code\Source\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPluginReaderSkyrim.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameData\PluginManager\IGamePlugin.cpp">
       <Filter>Code\Source\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\Common.cpp">
@@ -764,21 +758,6 @@
     </ClCompile>
     <ClCompile Include="Source\Application\DefaultApplication.cpp">
       <Filter>Code\Source\Application</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Events\SaveEvent.cpp">
-      <Filter>Code\Source\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Events\ProfileEvent.cpp">
-      <Filter>Code\Source\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Events\PluginEvent.cpp">
-      <Filter>Code\Source\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Events\ModEvent.cpp">
-      <Filter>Code\Source\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Events\LogEvent.cpp">
-      <Filter>Code\Source\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\VirtualGameFolder\DisplayModel.cpp">
       <Filter>Code\Source\GameMods\VirtualGameFolder</Filter>
@@ -905,9 +884,6 @@
     </ClCompile>
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp">
       <Filter>Code\Source\Application\About</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Events\VFSEvent.cpp">
-      <Filter>Code\Source\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\DefaultVFSService.cpp">
       <Filter>Code\Source\VirtualFileSystem</Filter>
@@ -1260,6 +1236,27 @@
     <ClCompile Include="Source\Utility\Common.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Application\BroadcastProcessor.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameMods\ModEvent.cpp">
+      <Filter>Code\Source\GameMods</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameData\PluginEvent.cpp">
+      <Filter>Code\Source\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameData\IGamePlugin.cpp">
+      <Filter>Code\Source\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameData\IPluginManager.cpp">
+      <Filter>Code\Source\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameData\SaveEvent.cpp">
+      <Filter>Code\Source\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\ProfileEvent.cpp">
+      <Filter>Code\Source\GameInstance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1496,9 +1493,6 @@
     <ClInclude Include="Source\GameData\PluginManager\BethesdaPlugin2.h">
       <Filter>Code\Headers\GameData\PluginManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\IPluginManager.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameData\PluginManager\Workspace.h">
       <Filter>Code\Headers\GameData\PluginManager</Filter>
     </ClInclude>
@@ -1525,9 +1519,6 @@
     </ClInclude>
     <ClInclude Include="Source\GameMods\KModFilesExplorerDialog.h">
       <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\IGamePlugin.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameData\PluginManager\BaseGamePlugin.h">
       <Filter>Code\Headers\GameData\PluginManager</Filter>
@@ -1682,24 +1673,6 @@
     <ClInclude Include="Source\Application\DefaultApplication.h">
       <Filter>Code\Headers\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Events\SaveEvent.h">
-      <Filter>Code\Headers\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Events\ProfileEvent.h">
-      <Filter>Code\Headers\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Events\PluginEvent.h">
-      <Filter>Code\Headers\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Events\ModEvent.h">
-      <Filter>Code\Headers\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Events\LogEvent.h">
-      <Filter>Code\Headers\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Events\IEvent.h">
-      <Filter>Code\Headers\Events</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameMods\VirtualGameFolder\DisplayModel.h">
       <Filter>Code\Headers\GameMods\VirtualGameFolder</Filter>
     </ClInclude>
@@ -1797,9 +1770,6 @@
       <Filter>Code\Include\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\DownloadManager.hpp">
-      <Filter>Code\Include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Kortex\Events.hpp">
       <Filter>Code\Include\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\GameInstance.hpp">
@@ -1933,9 +1903,6 @@
     </ClInclude>
     <ClInclude Include="Source\Application\About\DisplayModelNode.h">
       <Filter>Code\Headers\Application\About</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Events\VFSEvent.h">
-      <Filter>Code\Headers\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\VirtualFileSystem\DefaultVFSService.h">
       <Filter>Code\Headers\VirtualFileSystem</Filter>
@@ -2383,6 +2350,33 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\Common.h">
       <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\BroadcastProcessor.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Events\LogEvent.h">
+      <Filter>Code\Headers\Application\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\VirtualFSEvent.h">
+      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModEvent.h">
+      <Filter>Code\Headers\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginEvent.h">
+      <Filter>Code\Headers\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\IGamePlugin.h">
+      <Filter>Code\Headers\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\IPluginManager.h">
+      <Filter>Code\Headers\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveEvent.h">
+      <Filter>Code\Headers\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\ProfileEvent.h">
+      <Filter>Code\Headers\GameInstance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

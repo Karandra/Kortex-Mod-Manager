@@ -396,27 +396,15 @@ namespace Kortex::DownloadManager
 	DisplayModel::DisplayModel()
 		:m_DownloadManager(*IDownloadManager::GetInstance())
 	{
-		IEvent::Bind(DownloadEvent::EvtAdded, &DisplayModel::OnDownloadAdded, this);
-		IEvent::Bind(DownloadEvent::EvtRemoved, &DisplayModel::OnDownloadRemoved, this);
-		IEvent::Bind(DownloadEvent::EvtProgress, &DisplayModel::OnDownloadProgress, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtAdded, &DisplayModel::OnDownloadAdded, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtRemoved, &DisplayModel::OnDownloadRemoved, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtProgress, &DisplayModel::OnDownloadProgress, this);
 
-		IEvent::Bind(DownloadEvent::EvtStarted, &DisplayModel::OnDownloadStarted, this);
-		IEvent::Bind(DownloadEvent::EvtCompleted, &DisplayModel::OnDownloadCompleted, this);
-		IEvent::Bind(DownloadEvent::EvtFailed, &DisplayModel::OnDownloadFailed, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtStarted, &DisplayModel::OnDownloadStarted, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtCompleted, &DisplayModel::OnDownloadCompleted, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtFailed, &DisplayModel::OnDownloadFailed, this);
 
-		IEvent::Bind(DownloadEvent::EvtRefreshItems, &DisplayModel::OnRefreshItems, this);
-	}
-	DisplayModel::~DisplayModel()
-	{
-		IEvent::Unbind(DownloadEvent::EvtAdded, &DisplayModel::OnDownloadAdded, this);
-		IEvent::Unbind(DownloadEvent::EvtRemoved, &DisplayModel::OnDownloadRemoved, this);
-		IEvent::Unbind(DownloadEvent::EvtProgress, &DisplayModel::OnDownloadProgress, this);
-
-		IEvent::Unbind(DownloadEvent::EvtStarted, &DisplayModel::OnDownloadStarted, this);
-		IEvent::Unbind(DownloadEvent::EvtCompleted, &DisplayModel::OnDownloadCompleted, this);
-		IEvent::Unbind(DownloadEvent::EvtFailed, &DisplayModel::OnDownloadFailed, this);
-
-		IEvent::Unbind(DownloadEvent::EvtRefreshItems, &DisplayModel::OnRefreshItems, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtRefreshItems, &DisplayModel::OnRefreshItems, this);
 	}
 
 	void DisplayModel::CreateView(wxWindow* parent)

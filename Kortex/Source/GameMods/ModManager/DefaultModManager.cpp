@@ -30,8 +30,8 @@ namespace Kortex::ModManager
 {
 	void DefaultModManager::DoUninstallMod(IGameMod& mod, wxWindow* window, const bool erase)
 	{
-		ModEvent event(Events::ModUnsinstalling, mod);
-		event.Send();
+		ModEvent event(mod);
+		BroadcastProcessor::Get().ProcessEvent(event, ModEvent::EvtUnsinstalling);
 
 		// If signature is empty, removing this mod can cause removing ALL other mods
 		// because mod folder path will point to all mods directory instead of its own.
@@ -91,7 +91,7 @@ namespace Kortex::ModManager
 	}
 	void DefaultModManager::OnInit()
 	{
-		IEvent::Bind(Events::ModFilesChanged, &DefaultModManager::OnModFilesChanged, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModManager::OnModFilesChanged, this);
 
 		// Mandatory locations
 		for (const MandatoryLocation& location: m_Config.GetMandatoryLocations())
@@ -323,7 +323,7 @@ namespace Kortex::ModManager
 				Save();
 
 				// This will take care of file tree
-				ModEvent(Events::ModFilesChanged, mod).Send();
+				BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtFilesChanged, mod);
 				return true;
 			}
 		}
@@ -440,7 +440,7 @@ namespace Kortex::ModManager
 			ResortMods();
 
 			IModDispatcher::GetInstance()->InvalidateVirtualTree();
-			IEvent::MakeSend<ModEvent>(Events::ModInstalled, *newMod);
+			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, *newMod);
 			ScheduleReloadWorkspace();
 
 			Save();
@@ -452,7 +452,7 @@ namespace Kortex::ModManager
 		IModDispatcher::GetInstance()->InvalidateVirtualTree();
 
 		Save();
-		IEvent::MakeSend<ModEvent>(Events::ModUninstalled, mod);
+		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtUninstalled, mod);
 	}
 	void DefaultModManager::NotifyModErased(IGameMod& mod)
 	{
@@ -471,7 +471,7 @@ namespace Kortex::ModManager
 			Workspace::GetInstance()->ReloadWorkspace();
 
 			Save();
-			IEvent::MakeSend<ModEvent>(Events::ModUninstalled, modID);
+			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtUninstalled, modID);
 		}
 	}
 }

@@ -3,7 +3,6 @@
 #include "KWorkspaceController.h"
 #include "KMainWindow.h"
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 #include <Kortex/GameInstance.hpp>
 
 using namespace Kortex;

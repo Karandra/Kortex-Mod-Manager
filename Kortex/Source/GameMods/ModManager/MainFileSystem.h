@@ -1,11 +1,12 @@
 #pragma once
 #include "stdafx.h"
+#include "Application/BroadcastProcessor.h"
 #include "VirtualFileSystem/IVirtualFileSystem.h"
 class KxProgressDialog;
 
 namespace Kortex
 {
-	class VFSEvent;
+	class VirtualFSEvent;
 }
 namespace Kortex::VirtualFileSystem
 {
@@ -20,6 +21,7 @@ namespace Kortex::ModManager
 	{
 		private:
 			DefaultModManager& m_Manager;
+			BroadcastReciever m_BroadcastReciever;
 			KxProgressDialog* m_StatusDialog = nullptr;
 			
 			size_t m_InstancesCountEnabled = 0;
@@ -57,8 +59,8 @@ namespace Kortex::ModManager
 			size_t GetInstancesCount() const;
 			
 			bool IsOurInstance(const IVirtualFileSystem& instance) const;
-			void OnVFSMounted(VFSEvent& event);
-			void OnVFSUnmounted(VFSEvent& event);
+			void OnFSMounted(VirtualFSEvent& event);
+			void OnFSUnmounted(VirtualFSEvent& event);
 
 		protected:
 			void OnEnabled();

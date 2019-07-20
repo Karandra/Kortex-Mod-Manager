@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DefaultApplication.h"
+#include "SystemApplication.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "GameInstance/SelectionDialog.h"
@@ -12,7 +13,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
-#include <Kortex/Events.hpp>
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
 #include "Utility/Log.h"
@@ -33,8 +33,12 @@ namespace Kortex::Application
 	}
 
 	DefaultApplication::DefaultApplication()
-		:m_Translator(m_Translation)
+		:m_Translator(m_Translation), m_BroadcastReciever(m_BroadcastProcessor)
 	{
+		m_BroadcastReciever.Bind(LogEvent::EvtInfo, &DefaultApplication::OnError, this);
+		m_BroadcastReciever.Bind(LogEvent::EvtError, &DefaultApplication::OnError, this);
+		m_BroadcastReciever.Bind(LogEvent::EvtWarning, &DefaultApplication::OnError, this);
+		m_BroadcastReciever.Bind(LogEvent::EvtCritical, &DefaultApplication::OnError, this);
 	}
 
 	wxString DefaultApplication::ExpandVariablesLocally(const wxString& variables) const
@@ -166,7 +170,7 @@ namespace Kortex::Application
 				return false;
 			}
 
-			LogEvent(KTr("Init.AnotherInstanceRunning"), LogLevel::Error);
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("Init.AnotherInstanceRunning"));
 			return false;
 		}
 	}
@@ -194,32 +198,22 @@ namespace Kortex::Application
 	{
 		KxIconType iconType = KxICON_NONE;
 		ImageResourceID iconImageID = ImageResourceID::None;
-		LogLevel logLevel = event.GetLevel();
-		wxWindow* window = event.GetWindow();
-		bool isCritical = event.IsCritical();
 
-		switch (logLevel)
+		if (event.GetLevel() == LogEvent::EvtInfo)
 		{
-			case LogLevel::Info:
-			{
-				iconType = KxICON_INFORMATION;
-				iconImageID = ImageResourceID::InformationFrame;
-				break;
-			}
-			case LogLevel::Warning:
-			{
-				iconType = KxICON_WARNING;
-				iconImageID = ImageResourceID::ExclamationCircleFrame;
-				break;
-			}
-			case LogLevel::Error:
-			case LogLevel::Critical:
-			{
-				iconType = KxICON_ERROR;
-				iconImageID = ImageResourceID::CrossCircleFrame;
-				break;
-			}
-		};
+			iconType = KxICON_INFORMATION;
+			iconImageID = ImageResourceID::InformationFrame;
+		}
+		else if (event.GetLevel() == LogEvent::EvtWarning)
+		{
+			iconType = KxICON_WARNING;
+			iconImageID = ImageResourceID::ExclamationCircleFrame;
+		}
+		else if (event.GetLevel() == LogEvent::EvtError || event.GetLevel() == LogEvent::EvtCritical)
+		{
+			iconType = KxICON_ERROR;
+			iconImageID = ImageResourceID::CrossCircleFrame;
+		}
 
 		wxString caption;
 		wxString message;
@@ -233,44 +227,36 @@ namespace Kortex::Application
 			{
 				caption = KTr(KxID_ERROR);
 			}
-			message = event.GetMessage();
+			message = event.GetString();
 		}
 		else
 		{
 			caption = "Error";
-			message = event.GetMessage();
+			message = event.GetString();
 		}
 
-		Utility::Log::LogMessage("%1: %2", caption, message);
-		auto ShowErrorMessageFunc = [this, caption, message, iconType, window, logLevel, isCritical]()
+		GetSystemApp()->ProcessEvent(event);
+		BroadcastProcessor::Get().CallAfter([&, window = event.GetWindow()]()
 		{
 			KxTaskDialog dialog(window ? window : GetTopWindow(), KxID_NONE, caption, message, KxBTN_OK, iconType);
 			dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
-			if (logLevel == LogLevel::Info)
+			if (event.GetLevel() == LogEvent::EvtInfo)
 			{
 				dialog.Show();
 			}
 			else
 			{
 				dialog.ShowModal();
-				if (isCritical)
+				if (event.IsCritical())
 				{
 					ExitApp(KxID_ERROR);
 				}
 			}
-		};
-		if (wxThread::IsMain())
-		{
-			ShowErrorMessageFunc();
-		}
-		else
-		{
-			IEvent::CallAfter(ShowErrorMessageFunc);
-		}
+		});
 	}
 	bool DefaultApplication::OnException()
 	{
-		LogEvent(RethrowCatchAndGetExceptionInfo(), LogLevel::Error);
+		BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, RethrowCatchAndGetExceptionInfo());
 		return false;
 	}
 	
@@ -356,12 +342,12 @@ namespace Kortex::Application
 			}
 			case LoadTranslationStatus::LoadingError:
 			{
-				LogEvent("Can't load translation from file", LogLevel::Critical).Send();
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, "Can't load translation from file");
 				break;
 			}
 			case LoadTranslationStatus::NoTranslations:
 			{
-				LogEvent("No translations found. Terminating.", LogLevel::Critical).Send();
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, "No translations found. Terminating.");
 				break;
 			}
 		};
@@ -401,7 +387,7 @@ namespace Kortex::Application
 			else
 			{
 				Utility::Log::LogInfo("No workspaces available. Terminating");
-				LogEvent(KTr("Init.Error3"), LogLevel::Critical, KMainWindow::GetInstance()).Send();
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("Init.Error3"), KMainWindow::GetInstance());
 			}
 		}
 		else
@@ -427,7 +413,7 @@ namespace Kortex::Application
 			Utility::Log::LogInfo("Pre start config needed");
 			if (!ShowFirstTimeConfigDialog(m_InitProgressDialog))
 			{
-				LogEvent(KTr("Init.Error1"), LogLevel::Critical).Send();
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("Init.Error1"));
 				return;
 			}
 		}
@@ -505,7 +491,7 @@ namespace Kortex::Application
 
 				if (!LoadInstance())
 				{
-					LogEvent(KTr("Init.Error1"), LogLevel::Critical).Send();
+					BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("Init.Error1"));
 				}
 				return;
 			}
@@ -564,7 +550,7 @@ namespace Kortex::Application
 		else
 		{
 			Utility::Log::LogInfo("Server: Not started.");
-			LogEvent(KTr("VFS.Service.InstallFailed"), LogLevel::Critical).Send();
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("VFS.Service.InstallFailed"));
 		}
 	}
 	void DefaultApplication::UnInitVFS()

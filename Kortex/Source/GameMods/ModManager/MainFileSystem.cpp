@@ -2,10 +2,10 @@
 #include "MainFileSystem.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
-#include <Kortex/Events.hpp>
 #include "VirtualFileSystem/Mirror.h"
 #include "VirtualFileSystem/MultiMirror.h"
 #include "VirtualFileSystem/Convergence.h"
+#include "VirtualFileSystem/VirtualFSEvent.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxProgressDialog.h>
@@ -143,9 +143,9 @@ namespace Kortex::ModManager
 		return m_Mirrors.size() + (m_Convergence ? 1 : 0);
 	}
 
-	void MainFileSystem::OnVFSMounted(VFSEvent& event)
+	void MainFileSystem::OnFSMounted(VirtualFSEvent& event)
 	{
-		if (!m_IsEnabled && event.GetFileSystem() && IsOurInstance(*event.GetFileSystem()))
+		if (!m_IsEnabled && IsOurInstance(event.GetFileSystem()))
 		{
 			m_InstancesCountEnabled++;
 			if (m_InstancesCountEnabled == m_InstancesCountTotal)
@@ -154,9 +154,9 @@ namespace Kortex::ModManager
 			}
 		}
 	}
-	void MainFileSystem::OnVFSUnmounted(VFSEvent& event)
+	void MainFileSystem::OnFSUnmounted(VirtualFSEvent& event)
 	{
-		if (m_IsEnabled && m_InstancesCountEnabled != 0 && event.GetFileSystem() && IsOurInstance(*event.GetFileSystem()))
+		if (m_IsEnabled && m_InstancesCountEnabled != 0 && IsOurInstance(event.GetFileSystem()))
 		{
 			m_InstancesCountEnabled--;
 			if (m_InstancesCountEnabled == 0)
@@ -169,19 +169,19 @@ namespace Kortex::ModManager
 	void MainFileSystem::OnEnabled()
 	{
 		m_IsEnabled = true;
-		IEvent::MakeQueue<VFSEvent>(Events::MainVFSToggled, *this, true);
+		BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtMainToggled, *this, true);
 	}
 	void MainFileSystem::OnDisabled()
 	{
 		m_IsEnabled = false;
-		IEvent::MakeQueue<VFSEvent>(Events::MainVFSToggled, *this, false);
+		BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtMainToggled, *this, false);
 	}
 	
 	MainFileSystem::MainFileSystem(DefaultModManager& manager)
 		:m_Manager(manager)
 	{
-		IEvent::Bind(Events::SingleVFSToggled, &MainFileSystem::OnVFSMounted, this);
-		IEvent::Bind(Events::SingleVFSToggled, &MainFileSystem::OnVFSUnmounted, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtSingleToggled, &MainFileSystem::OnFSMounted, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtSingleToggled, &MainFileSystem::OnFSUnmounted, this);
 	}
 	MainFileSystem::~MainFileSystem()
 	{

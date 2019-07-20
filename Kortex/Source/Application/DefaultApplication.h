@@ -2,8 +2,9 @@
 #include "stdafx.h"
 #include "IApplication.h"
 #include "RefTranslator.h"
+#include "BroadcastProcessor.h"
 #include "Resources/DefaultImageProvider.h"
-#include "Application/VariablesTable/DynamicVariableTable.h"
+#include "VariablesTable/DynamicVariableTable.h"
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxImageList.h>
 #include <KxFramework/KxImageSet.h>
@@ -36,6 +37,8 @@ namespace Kortex::Application
 
 			wxWindow* m_InitProgressDialog = nullptr;
 			DefaultImageProvider m_ImageProvider;
+			BroadcastProcessor m_BroadcastProcessor;
+			BroadcastReciever m_BroadcastReciever;
 
 			wxString m_StartupInstanceID;
 			bool m_IsCmdStartupInstanceID = false;
@@ -91,6 +94,10 @@ namespace Kortex::Application
 			const IImageProvider& GetImageProvider() const override
 			{
 				return m_ImageProvider;
+			}
+			BroadcastProcessor& GetBroadcastProcessor() override
+			{
+				return m_BroadcastProcessor;
 			}
 
 			IVariableTable& GetVariables() override

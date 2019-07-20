@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "DefaultModDispatcher.h"
-#include "GameMods/IModManager.h"
-#include "GameMods/FileTreeNode.h"
-#include <Kortex/Events.hpp>
+#include <Kortex/ModManager.hpp>
 #include "Utility/KAux.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxComparator.h>
@@ -168,14 +166,14 @@ namespace Kortex::ModManager
 
 namespace Kortex::ModManager
 {
-	void DefaultModDispatcher::OnVirtualTreeInvalidated(IEvent& event)
+	void DefaultModDispatcher::OnVirtualTreeInvalidated(BroadcastEvent& event)
 	{
 		InvalidateVirtualTree();
 	}
 	void DefaultModDispatcher::InvalidateVirtualTree()
 	{
 		UpdateVirtualTree();
-		IEvent::MakeSend<ModEvent>(Events::ModVirtualTreeInvalidated);
+		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtVirtualTreeInvalidated);
 	}
 	void DefaultModDispatcher::UpdateVirtualTree()
 	{
@@ -323,10 +321,10 @@ namespace Kortex::ModManager
 
 	DefaultModDispatcher::DefaultModDispatcher()
 	{
-		IEvent::Bind(Events::ModFilesChanged, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
-		IEvent::Bind(Events::ModInstalled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
-		IEvent::Bind(Events::ModUninstalled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
-		IEvent::Bind(Events::ModToggled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
-		IEvent::Bind(Events::ModsReordered, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtToggled, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtReordered, &DefaultModDispatcher::OnVirtualTreeInvalidated, this);
 	}
 }

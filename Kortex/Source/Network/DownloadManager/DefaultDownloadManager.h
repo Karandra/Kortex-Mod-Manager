@@ -7,6 +7,7 @@ namespace Kortex::DownloadManager
 	class DefaultDownloadManager: public IDownloadManager
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
 			DownloadItem::RefVector m_Queue;
 
 		private:

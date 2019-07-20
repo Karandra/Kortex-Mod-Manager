@@ -7,6 +7,7 @@
 #include "GameMods/IModDispatcher.h"
 #include "GameMods/IModTagManager.h"
 #include "GameMods/ModTagStore.h"
+#include "GameMods/ModEvent.h"
 
 #include "GameMods/ModTagStore.h"
 #include "GameMods/FileTreeNode.h"

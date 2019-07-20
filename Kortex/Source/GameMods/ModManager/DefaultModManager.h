@@ -2,10 +2,10 @@
 #include "stdafx.h"
 #include "GameMods/IModManager.h"
 #include "GameMods/IGameMod.h"
+#include "GameMods/ModEvent.h"
 #include "FixedGameMod.h"
 #include "MainFileSystem.h"
 #include "MandatoryModEntry.h"
-#include <Kortex/Events.hpp>
 class IGameProfile;
 
 namespace Kortex::ModManager
@@ -90,6 +90,7 @@ namespace Kortex::ModManager
 		friend class MainFileSystem;
 
 		private:
+			BroadcastReciever m_BroadcastReciever;
 			Config m_Config;
 			MainFileSystem m_VFS;
 

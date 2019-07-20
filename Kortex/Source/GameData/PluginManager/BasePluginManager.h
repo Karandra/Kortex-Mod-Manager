@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "IPluginManager.h"
+#include "GameData/IPluginManager.h"
 
 namespace Kortex::PluginManager
 {

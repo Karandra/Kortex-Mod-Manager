@@ -43,8 +43,8 @@ namespace Kortex::DownloadManager
 			void OnDownload(KxCURLEvent& event);
 			void OnEnd();
 
-			void NotifyEvent(wxEventTypeTag<DownloadEvent> eventType);
-			void QueueNotifyEvent(wxEventTypeTag<DownloadEvent> eventType);
+			void NotifyEvent(KxEventTag<DownloadEvent> eventType);
+			void QueueNotifyEvent(KxEventTag<DownloadEvent> eventType);
 			void Terminate();
 
 		public:

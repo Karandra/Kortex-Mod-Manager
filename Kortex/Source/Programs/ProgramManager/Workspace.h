@@ -1,8 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
-#include <Kortex/Events.hpp>
 #include <KxFramework/KxSingleton.h>
+
+namespace Kortex
+{
+	class VirtualFSEvent;
+}
 
 namespace Kortex::ProgramManager
 {
@@ -11,6 +15,7 @@ namespace Kortex::ProgramManager
 	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
 			wxBoxSizer* m_MainSizer = nullptr;
 			DisplayModel* m_ViewModel = nullptr;
 
@@ -24,7 +29,7 @@ namespace Kortex::ProgramManager
 			bool OnCloseWorkspace() override;
 			void OnReloadWorkspace() override;
 
-			void OnVFSToggled(Kortex::VFSEvent& event);
+			void OnMainFSToggled(VirtualFSEvent& event);
 
 		public:
 			wxString GetID() const override;

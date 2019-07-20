@@ -2,7 +2,6 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include <Kortex/Events.hpp>
 #include "Common.h"
 #include "WizardDialog.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
@@ -173,8 +172,7 @@ namespace Kortex::InstallWizard
 		Show();
 		Raise();
 
-		ModManager::ModEvent(Events::ModInstalling, m_ModEntry).Send();
-
+		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalling, m_ModEntry);
 		return ret;
 	}
 

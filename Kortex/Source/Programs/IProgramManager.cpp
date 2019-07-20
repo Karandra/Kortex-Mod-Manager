@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "IProgramManager.h"
+#include <Kortex/Application.hpp>
 #include <Kortex/Common/Programs.hpp>
-#include <Kortex/Events.hpp>
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
@@ -86,7 +86,7 @@ namespace Kortex
 		}
 		else
 		{
-			LogEvent(KTr("ProgramManager.FileNotFound") + ":\r\n" + entry.GetExecutable(), LogLevel::Error);
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("ProgramManager.FileNotFound") + ":\r\n" + entry.GetExecutable());
 			return false;
 		}
 	}

@@ -56,24 +56,17 @@ namespace Kortex::DownloadManager
 		IDownloadManager::OnInit();
 		m_Queue.reserve(HasConcurrentDownloadsLimit() ? GetMaxConcurrentDownloads() * 2 : 0);
 
-		IEvent::Bind(DownloadEvent::EvtStarted, &DefaultDownloadManager::OnNeedToStartDownload, this);
-		IEvent::Bind(DownloadEvent::EvtCompleted, &DefaultDownloadManager::OnNeedToStartDownload, this);
-		IEvent::Bind(DownloadEvent::EvtPaused, &DefaultDownloadManager::OnNeedToStartDownload, this);
-		IEvent::Bind(DownloadEvent::EvtResumed, &DefaultDownloadManager::OnNeedToStartDownload, this);
-		IEvent::Bind(DownloadEvent::EvtConcurrentDownloadsCountChanged, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtStarted, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtCompleted, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtPaused, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtResumed, &DefaultDownloadManager::OnNeedToStartDownload, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtConcurrentDownloadsCountChanged, &DefaultDownloadManager::OnNeedToStartDownload, this);
 
-		IEvent::Bind(DownloadEvent::EvtRemoved, &DefaultDownloadManager::OnDownloadRemoved, this);
+		m_BroadcastReciever.Bind(DownloadEvent::EvtRemoved, &DefaultDownloadManager::OnDownloadRemoved, this);
 	}
 	void DefaultDownloadManager::OnExit()
 	{
-		IEvent::Unbind(DownloadEvent::EvtStarted, &DefaultDownloadManager::OnNeedToStartDownload, this);
-		IEvent::Unbind(DownloadEvent::EvtCompleted, &DefaultDownloadManager::OnNeedToStartDownload, this);
-		IEvent::Unbind(DownloadEvent::EvtPaused, &DefaultDownloadManager::OnNeedToStartDownload, this);
-		IEvent::Unbind(DownloadEvent::EvtResumed, &DefaultDownloadManager::OnNeedToStartDownload, this);
-		IEvent::Unbind(DownloadEvent::EvtConcurrentDownloadsCountChanged, &DefaultDownloadManager::OnNeedToStartDownload, this);
-
-		IEvent::Unbind(DownloadEvent::EvtRemoved, &DefaultDownloadManager::OnDownloadRemoved, this);
-
+		m_BroadcastReciever.UnbindAll();
 		IDownloadManager::OnExit();
 	}
 	void DefaultDownloadManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)

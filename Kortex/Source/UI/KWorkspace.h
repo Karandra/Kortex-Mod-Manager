@@ -3,6 +3,7 @@
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include "Application/Options/Option.h"
+#include "Application/BroadcastProcessor.h"
 #include "Application/Resources/ImageResourceID.h"
 class KMainWindow;
 class KWorkspaceController;

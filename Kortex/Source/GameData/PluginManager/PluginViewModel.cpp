@@ -256,25 +256,25 @@ namespace Kortex::PluginManager
 	}
 	bool PluginViewModel::OnDropItems(KxDataViewEventDND& event)
 	{
-		const IGamePlugin* entry = GetDataEntry(GetRow(event.GetItem()));
-		if (entry && HasDragDropDataObject())
+		const IGamePlugin* anchorPlugin = GetDataEntry(GetRow(event.GetItem()));
+		if (anchorPlugin && HasDragDropDataObject())
 		{
-			const IGamePlugin::RefVector& entriesToMove = GetDragDropDataObject()->GetEntries();
+			const IGamePlugin::RefVector& toMove = GetDragDropDataObject()->GetEntries();
 
 			// Move and refresh
-			if (IPluginManager::GetInstance()->MovePlugins(entriesToMove, *entry))
+			if (IPluginManager::GetInstance()->MovePlugins(toMove, *anchorPlugin))
 			{
 				ChangeNotify();
 				RefreshItems();
 
 				// Select moved items and event-select the first one
-				for (IGamePlugin* entry: entriesToMove)
+				for (IGamePlugin* plugin: toMove)
 				{
-					GetView()->Select(GetItemByEntry(entry));
+					GetView()->Select(GetItemByEntry(plugin));
 				}
-				SelectItem(GetItemByEntry(entriesToMove.front()));
+				SelectItem(GetItemByEntry(toMove.front()));
 
-				IEvent::MakeSend<PluginEvent>(Events::PluginsReordered, entriesToMove);
+				BroadcastProcessor::Get().ProcessEvent(PluginEvent::EvtReordered, toMove);
 				return true;
 			}
 		}

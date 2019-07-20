@@ -4,6 +4,8 @@
 
 #include "Application/IApplication.h"
 #include "Application/DefaultApplication.h"
+#include "Application/BroadcastProcessor.h"
+#include "Application/Events/LogEvent.h"
 
 #include "Application/IAppOption.h"
 #include "Application/Options/Option.h"

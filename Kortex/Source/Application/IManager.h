@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "Application/BroadcastProcessor.h"
 #include "Application/Module/ManagerInfo.h"
 #include "Application/Options/Option.h"
 class KWorkspace;

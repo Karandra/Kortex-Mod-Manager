@@ -6,7 +6,6 @@
 #include "ModPackages/IPackageManager.h"
 #include "GameInstance/IGameInstance.h"
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 #include <KxFramework/KxStdDialogSimple.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxTextBox.h>

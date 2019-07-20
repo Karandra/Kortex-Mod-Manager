@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/Options/Option.h"
+#include "Application/BroadcastProcessor.h"
 #include "Application/Resources/IImageProvider.h"
 #include "Application/Resources/ImageResourceID.h"
 #include "Utility/KLabeledValue.h"
@@ -20,7 +21,7 @@ class KWorkspace;
 
 namespace Kortex
 {
-	class VFSEvent;
+	class VirtualFSEvent;
 }
 
 class KMainWindow:
@@ -51,6 +52,8 @@ class KMainWindow:
 		}
 
 	private:
+		Kortex::BroadcastReciever m_BroadcastReciever;
+
 		wxBoxSizer* m_MainSizer = nullptr;
 		wxBoxSizer* m_ToolBarSizer = nullptr;
 
@@ -94,8 +97,8 @@ class KMainWindow:
 		void OnWindowClose(wxCloseEvent& event);
 		void OnChangeInstance(KxMenuEvent& event);
 
-		void OnVFSToggled(Kortex::VFSEvent& event);
-		void OnPluggableManagersMenuVFSToggled(Kortex::VFSEvent& event);
+		void OnMainFSToggled(bool isActive);
+		void OnMainFSToggled(Kortex::VirtualFSEvent& event);
 	
 	public:
 		bool Create(wxWindow* parent = nullptr);

@@ -1,12 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "IGamePlugin.h"
+#include "GameData/IGamePlugin.h"
 #include <KxFramework/KxFileItem.h>
-
-namespace Kortex::ModManager
-{
-	class ModEvent;
-}
 
 namespace Kortex::PluginManager
 {

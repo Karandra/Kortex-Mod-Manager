@@ -26,7 +26,7 @@ namespace Kortex::DownloadManager
 	void Workspace::OnSelectConcurrentDownloadsCount(wxCommandEvent& event)
 	{
 		IDownloadManager::GetInstance()->SetMaxConcurrentDownloads(event.GetSelection());
-		IEvent::MakeSend<DownloadEvent>(DownloadEvent::EvtConcurrentDownloadsCountChanged);
+		BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtConcurrentDownloadsCountChanged);
 	}
 
 	Workspace::Workspace(KMainWindow* mainWindow)

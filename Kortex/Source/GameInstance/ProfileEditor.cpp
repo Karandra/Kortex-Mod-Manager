@@ -3,7 +3,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 #include "Utility/KAux.h"
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxString.h>
@@ -70,8 +69,8 @@ namespace Kortex::ProfileEditor
 	}
 	bool DisplayModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		IGameProfile* entry = GetDataEntry(row);
-		if (entry)
+		IGameProfile* profile = GetDataEntry(row);
+		if (profile)
 		{
 			switch (column->GetID())
 			{
@@ -80,7 +79,7 @@ namespace Kortex::ProfileEditor
 					if (value.CheckType<wxString>())
 					{
 						wxString name = value.As<wxString>();
-						if (!name.IsEmpty() && name != entry->GetID())
+						if (!name.IsEmpty() && name != profile->GetID())
 						{
 							if (IGameInstance::GetActive()->HasProfile(name))
 							{
@@ -88,15 +87,15 @@ namespace Kortex::ProfileEditor
 								return false;
 							}
 
-							bool isCurrent = entry->IsActive();
-							if (IGameInstance::GetActive()->RenameProfile(*entry, name))
+							bool isCurrent = profile->IsActive();
+							if (IGameInstance::GetActive()->RenameProfile(*profile, name))
 							{
 								if (!isCurrent)
 								{
-									SetNewProfile(entry->GetID());
+									SetNewProfile(profile->GetID());
 									MarkModified();
 								}
-								ProfileEvent(Events::ProfileChanged, *entry).Send();
+								BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtChanged, *profile);
 								return true;
 							}
 							else
@@ -107,7 +106,7 @@ namespace Kortex::ProfileEditor
 					}
 					else
 					{
-						m_NewCurrentProfile = entry->GetID();
+						m_NewCurrentProfile = profile->GetID();
 						MarkModified();
 						return true;
 					}
@@ -115,14 +114,14 @@ namespace Kortex::ProfileEditor
 				}
 				case ColumnID::LocalSaves:
 				{
-					entry->SetLocalSavesEnabled(value.As<bool>());
-					ProfileEvent(Events::ProfileChanged, *entry).Send();
+					profile->SetLocalSavesEnabled(value.As<bool>());
+					BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtChanged, *profile);
 					return true;
 				}
 				case ColumnID::LocalConfig:
 				{
-					entry->SetLocalConfigEnabled(value.As<bool>());
-					ProfileEvent(Events::ProfileChanged, *entry).Send();
+					profile->SetLocalConfigEnabled(value.As<bool>());
+					BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtChanged, *profile);
 					return true;
 				}
 			};
@@ -167,17 +166,17 @@ namespace Kortex::ProfileEditor
 	}
 	void Dialog::OnAddProfile(wxCommandEvent& event)
 	{
-		ProfileEvent listEvent(Events::ProfileAdding);
-		listEvent.Send();
-		if (!listEvent.IsAllowed())
+		ProfileEvent addingEvent;
+		BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtAdding, addingEvent);
+		if (!addingEvent.IsAllowed())
 		{
 			return;
 		}
 
-		IGameProfile* newProfile = IGameInstance::GetActive()->CreateProfile(listEvent.GetProfileID());
+		IGameProfile* newProfile = IGameInstance::GetActive()->CreateProfile(addingEvent.GetProfileID());
 		if (newProfile)
 		{
-			ProfileEvent(Events::ProfileAdded, *newProfile).Send();
+			BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtAdded, *newProfile);
 
 			MarkModified();
 			RefreshItems();
@@ -193,17 +192,17 @@ namespace Kortex::ProfileEditor
 		KxDataViewItem item = GetView()->GetSelection();
 		if (IGameProfile* profile = GetDataEntry(GetRow(item)))
 		{
-			ProfileEvent listEvent(Events::ProfileAdding, *profile);
-			listEvent.Send();
-			if (!listEvent.IsAllowed())
+			ProfileEvent addingEvent(*profile);
+			BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtAdding, addingEvent);
+			if (!addingEvent.IsAllowed())
 			{
 				return;
 			}
 
-			IGameProfile* newProfile = IGameInstance::GetActive()->ShallowCopyProfile(*profile, listEvent.GetProfileID());
+			IGameProfile* newProfile = IGameInstance::GetActive()->ShallowCopyProfile(*profile, addingEvent.GetProfileID());
 			if (newProfile)
 			{
-				ProfileEvent(Events::ProfileAdded, *newProfile).Send();
+				BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtAdded, *newProfile);
 
 				MarkModified();
 				RefreshItems();
@@ -221,9 +220,9 @@ namespace Kortex::ProfileEditor
 			KxDataViewItem item = GetView()->GetSelection();
 			if (IGameProfile* profile = GetDataEntry(GetRow(item)))
 			{
-				ProfileEvent listEvent(Events::ProfileRemoving, *profile);
-				listEvent.Send();
-				if (!listEvent.IsAllowed())
+				ProfileEvent removingEvent(*profile);
+				BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtRemoving, removingEvent);
+				if (!removingEvent.IsAllowed())
 				{
 					return;
 				}
@@ -235,7 +234,7 @@ namespace Kortex::ProfileEditor
 					if (IGameInstance::GetActive()->RemoveProfile(*profile))
 					{
 						SetNewProfile(IGameInstance::GetActive()->GetActiveProfileID());
-						ProfileEvent(Events::ProfileRemoved, profileID).Send();
+						BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtRemoved, profileID);
 
 						size_t index = GetRow(item);
 						MarkModified();

@@ -5,7 +5,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 #include "UI/KImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/KOperationWithProgress.h"
@@ -248,7 +247,7 @@ namespace Kortex::PluginManager
 		});
 		operation->OnEnd([this](KOperationWithProgressBase* self)
 		{
-			PluginEvent(Events::PluginsReordered).Send();
+			BroadcastProcessor::Get().ProcessEvent(PluginEvent::EvtReordered);
 		});
 		operation->SetDialogCaption(event.GetItem()->GetItemLabelText());
 		operation->Run();

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameMods/IModDispatcher.h"
-#include <Kortex/Events.hpp>
+#include "Application/BroadcastProcessor.h"
 #include <KxFramework/KxFile.h>
 
 namespace Kortex::ModManager
@@ -67,10 +67,11 @@ namespace Kortex::ModManager
 	class DefaultModDispatcher: public IModDispatcher
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
 			FileTreeNode m_VirtualTree;
 
 		private:
-			void OnVirtualTreeInvalidated(IEvent& event);
+			void OnVirtualTreeInvalidated(BroadcastEvent& event);
 
 		public:
 			void InvalidateVirtualTree() override;

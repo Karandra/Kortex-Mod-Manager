@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "BasePluginManager.h"
 #include "Workspace.h"
+#include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ProgramManager.hpp>
-#include <Kortex/Events.hpp>
+#include <Kortex/PluginManager.hpp>
 #include "UI/KWorkspace.h"
 #include "Utility/KUPtrVectorUtil.h"
 #include <KxFramework/KxFile.h>
@@ -60,7 +61,7 @@ namespace Kortex::PluginManager
 
 		Load();
 		KWorkspace::ScheduleReloadOf<PluginManager::Workspace>();
-		IEvent::MakeSend<PluginManager::PluginEvent>(Events::PluginsReordered);
+		BroadcastProcessor::Get().ProcessEvent(PluginEvent::EvtReordered);
 	}
 	bool BasePluginManager::MovePlugins(const IGamePlugin::RefVector& entriesToMove, const IGamePlugin& anchor, MoveMode moveMode)
 	{
@@ -180,7 +181,7 @@ namespace Kortex::PluginManager
 				dialog->Destroy();
 				KMainWindow::GetInstance()->Show();
 
-				IEvent::CallAfter([&process]()
+				BroadcastProcessor::Get().CallAfter([&process]()
 				{
 					delete process;
 				});

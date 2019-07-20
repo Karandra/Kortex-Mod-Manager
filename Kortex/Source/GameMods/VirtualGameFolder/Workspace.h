@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
-#include <Kortex/Events.hpp>
 #include <KxFramework/KxSingleton.h>
 class KxSearchBox;
 
@@ -13,6 +12,8 @@ namespace Kortex::VirtualGameFolder
 	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
 	{
 		private:
+			BroadcastReciever m_BroadcastReciever;
+
 			wxBoxSizer* m_MainSizer = nullptr;
 			DisplayModel* m_Model = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
@@ -28,7 +29,7 @@ namespace Kortex::VirtualGameFolder
 			virtual void OnReloadWorkspace() override;
 
 			void OnModSerach(wxCommandEvent& event);
-			void OnViewInvalidated(IEvent& event);
+			void OnViewInvalidated(BroadcastEvent& event);
 
 		public:
 			virtual wxString GetID() const override;

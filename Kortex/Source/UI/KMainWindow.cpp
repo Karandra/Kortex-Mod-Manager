@@ -2,7 +2,6 @@
 #include "KMainWindow.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
-#include <Kortex/Events.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/ProgramManager.hpp>
@@ -10,6 +9,7 @@
 #include <Kortex/GameInstance.hpp>
 #include "Application/About/Dialog.h"
 #include "Application/Settings/Window.h"
+#include "VirtualFileSystem/VirtualFSEvent.h"
 #include "KWorkspace.h"
 #include "KWorkspaceController.h"
 #include "Utility/KAux.h"
@@ -390,9 +390,9 @@ void KMainWindow::OnChangeInstance(KxMenuEvent& event)
 	}
 }
 
-void KMainWindow::OnVFSToggled(VFSEvent& event)
+void KMainWindow::OnMainFSToggled(bool isActive)
 {
-	if (event.IsActivated())
+	if (isActive)
 	{
 		m_StatusBar->SetStatusText(KTr("VFS.Status.Active"));
 		m_StatusBar->SetStatusImage((int)ImageResourceID::TickCircleFrame, 0);
@@ -402,18 +402,11 @@ void KMainWindow::OnVFSToggled(VFSEvent& event)
 		m_StatusBar->SetStatusText(KTr("VFS.Status.Inactive"));
 		m_StatusBar->SetStatusImage((int)ImageResourceID::InformationFrameEmpty, 0);
 	}
-	IThemeManager::GetActive().ProcessWindow(m_StatusBar, event.IsActivated());
+	IThemeManager::GetActive().ProcessWindow(m_StatusBar, isActive);
 }
-void KMainWindow::OnPluggableManagersMenuVFSToggled(VFSEvent& event)
+void KMainWindow::OnMainFSToggled(VirtualFSEvent& event)
 {
-	for (wxMenuItem* item: m_ManagersMenu->GetMenuItems())
-	{
-		IPluggableManager* manager = static_cast<IPluggableManager*>(static_cast<KxMenuItem*>(item)->GetClientData());
-		if (manager)
-		{
-			//item->Enable(event.IsActivated());
-		}
-	}
+	OnMainFSToggled(event.IsActivated());
 }
 
 bool KMainWindow::Create(wxWindow* parent)
@@ -435,14 +428,10 @@ bool KMainWindow::Create(wxWindow* parent)
 		CreateMainWorkspaces();
 
 		Bind(wxEVT_CLOSE_WINDOW, &KMainWindow::OnWindowClose, this);
-		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnVFSToggled, this);
-		IEvent::Bind(Events::MainVFSToggled, &KMainWindow::OnPluggableManagersMenuVFSToggled, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &KMainWindow::OnMainFSToggled, this);
 
 		GetAInstanceOption().LoadWindowGeometry(this);
-
-		// Update status bar
-		VFSEvent event(Events::MainVFSToggled, false);
-		OnVFSToggled(event);
+		OnMainFSToggled(false);
 		return true;
 	}
 	return false;

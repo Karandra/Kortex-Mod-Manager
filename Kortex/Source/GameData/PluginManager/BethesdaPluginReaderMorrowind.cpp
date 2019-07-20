@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "BethesdaPluginReaderMorrowind.h"
-#include "IGamePlugin.h"
+#include "GameData/IGamePlugin.h"
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxComparator.h>
 

@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/GameInstance.hpp>
+#include <Kortex/ModManager.hpp>
 #include "UI/KWorkspace.h"
-#include <Kortex/Events.hpp>
 #include "Utility/KUPtrVectorUtil.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
@@ -30,7 +30,7 @@ namespace Kortex
 		}
 		return -1;
 	}
-	void IPluginManager::OnVirtualTreeInvalidated(IEvent& event)
+	void IPluginManager::OnVirtualTreeInvalidated(BroadcastEvent& event)
 	{
 		Invalidate();
 	}
@@ -38,8 +38,8 @@ namespace Kortex
 	IPluginManager::IPluginManager()
 		:ManagerWithTypeInfo(GameDataModule::GetInstance())
 	{
-		IEvent::Bind(Events::ProfileSelected, &IPluginManager::OnVirtualTreeInvalidated, this);
-		IEvent::Bind(Events::ModVirtualTreeInvalidated, &IPluginManager::OnVirtualTreeInvalidated, this);
+		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &IPluginManager::OnVirtualTreeInvalidated, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtVirtualTreeInvalidated, &IPluginManager::OnVirtualTreeInvalidated, this);
 	}
 
 	bool IPluginManager::IsPluginActive(const wxString& pluginName) const

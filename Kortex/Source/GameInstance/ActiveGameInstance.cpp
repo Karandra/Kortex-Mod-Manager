@@ -3,6 +3,7 @@
 #include "IGameProfile.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
+#include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/Common/GameData.hpp>
 #include <Kortex/Common/GameConfig.hpp>
@@ -113,7 +114,7 @@ namespace Kortex::GameInstance
 		}
 
 		// Finally send event
-		ProfileEvent(Events::ProfileSelected, const_cast<IGameProfile&>(profile)).Send();
+		BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtSelected, const_cast<IGameProfile&>(profile));
 	}
 	void ActiveGameInstance::LoadSavedProfileOrDefault()
 	{

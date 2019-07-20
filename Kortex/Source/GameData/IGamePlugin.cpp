@@ -2,7 +2,7 @@
 #include <Kortex/ModManager.hpp>
 #include "IGamePlugin.h"
 #include "IPluginManager.h"
-#include "IPluginReader.h"
+#include "PluginManager/IPluginReader.h"
 
 namespace Kortex
 {
@@ -43,7 +43,7 @@ namespace Kortex
 	{
 		return IPluginManager::GetInstance()->HasDependentPlugins(*this);
 	}
-	Kortex::IGamePlugin::RefVector IGamePlugin::GetDependentPlugins() const
+	IGamePlugin::RefVector IGamePlugin::GetDependentPlugins() const
 	{
 		return IPluginManager::GetInstance()->GetDependentPlugins(*this);
 	}

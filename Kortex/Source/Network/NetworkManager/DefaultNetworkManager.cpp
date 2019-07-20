@@ -4,7 +4,6 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include <Kortex/Events.hpp>
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
@@ -248,7 +247,7 @@ namespace Kortex::NetworkManager
 	}
 	void DefaultNetworkManager::QueueUIUpdate()
 	{
-		IEvent::CallAfter([this]()
+		BroadcastProcessor::Get().CallAfter([this]()
 		{
 			KxMenu::EndMenu();
 			UpdateButton();

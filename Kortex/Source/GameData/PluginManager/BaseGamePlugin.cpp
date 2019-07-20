@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BaseGamePlugin.h"
-#include "IPluginManager.h"
-#include <Kortex/Events.hpp>
+#include "GameData/IPluginManager.h"
 
 namespace Kortex::PluginManager
 {

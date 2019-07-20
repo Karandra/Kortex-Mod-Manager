@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include <Kortex/NetworkManager.hpp>
-#include <Kortex/Events.hpp>
 #include "DownloadExecutor.h"
 #include "Utility/DateTime.h"
 #include <chrono>
@@ -110,16 +109,16 @@ namespace Kortex::DownloadManager
 		});
 	}
 
-	void DownloadExecutor::QueueNotifyEvent(wxEventTypeTag<DownloadEvent> eventType)
+	void DownloadExecutor::QueueNotifyEvent(KxEventTag<DownloadEvent> eventID)
 	{
-		m_EvtHandler.CallAfter([this, eventType]()
+		m_EvtHandler.CallAfter([this, eventID]()
 		{
-			NotifyEvent(eventType);
+			NotifyEvent(eventID);
 		});
 	}
-	void DownloadExecutor::NotifyEvent(wxEventTypeTag<DownloadEvent> eventType)
+	void DownloadExecutor::NotifyEvent(KxEventTag<DownloadEvent> eventID)
 	{
-		IEvent::MakeSend<DownloadEvent>(eventType, m_Item);
+		BroadcastProcessor::Get().ProcessEvent(eventID, m_Item);
 	}
 	void DownloadExecutor::Terminate()
 	{

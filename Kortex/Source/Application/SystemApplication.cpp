@@ -4,7 +4,6 @@
 #include <Kortex/Notification.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Theme.hpp>
-#include <Kortex/Events.hpp>
 #include <Kortex/Git/Constants.h>
 #include "Archive/KArchive.h"
 #include "UI/KMainWindow.h"
@@ -76,7 +75,10 @@ namespace Kortex
 
 	void SystemApplication::InitLogging()
 	{
-		Bind(Events::Log, &SystemApplication::OnError, this);
+		Bind(LogEvent::EvtInfo, &SystemApplication::OnError, this);
+		Bind(LogEvent::EvtError, &SystemApplication::OnError, this);
+		Bind(LogEvent::EvtWarning, &SystemApplication::OnError, this);
+		Bind(LogEvent::EvtCritical, &SystemApplication::OnError, this);
 		wxLog::SetVerbose(true);
 
 		Utility::Log::LogInfo("%1 v%2: Log opened", SystemApplicationInfo::Name, SystemApplicationInfo::Version);
@@ -260,7 +262,7 @@ namespace Kortex
 	void SystemApplication::OnError(LogEvent& event)
 	{
 		Utility::Log::LogInfo("SystemApplication::OnError");
-		Utility::Log::LogInfo("An error occurred:\r\n\r\n%1", event.GetMessage());
+		Utility::Log::LogInfo("An error occurred:\r\n\r\n%1", event.GetString());
 
 		m_Application->OnError(event);
 	}

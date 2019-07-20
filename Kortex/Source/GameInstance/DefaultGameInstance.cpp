@@ -4,8 +4,8 @@
 #include "DefaultGameProfile.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
-#include <Kortex/Events.hpp>
 #include "IGameProfile.h"
+#include "ProfileEvent.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
@@ -155,16 +155,14 @@ namespace Kortex::GameInstance
 	}
 	IGameProfile* DefaultGameInstance::CreateProfile(const wxString& profileID, const IGameProfile* baseProfile, uint32_t copyOptions)
 	{
-		ProfileEvent event(Events::ProfileAdding);
-		event.Send();
-
 		wxString id = profileID;
 		if (id.IsEmpty())
 		{
 			id = CreateProfileID(id);
 		}
 
-		if (event.IsAllowed() && !HasProfile(id))
+		bool isAllowed = BroadcastProcessor::Get().ProcessEventEx(ProfileEvent::EvtAdding).Do().IsAllowed();
+		if (isAllowed && !HasProfile(id))
 		{
 			IGameProfile& newProfile = *m_Profiles.emplace_back(NewProfile());
 			newProfile.SetID(id);
@@ -196,8 +194,8 @@ namespace Kortex::GameInstance
 			// Reload after task is completed (successfully or not)
 			operation->OnEnd([this, &newProfile](KOperationWithProgressBase* self)
 			{
-				IEvent::MakeQueue<ProfileEvent>(Events::ProfileAdded, newProfile);
-				IEvent::MakeQueue<ProfileEvent>(Events::ProfileRefreshList);
+				BroadcastProcessor::Get().QueueEvent(ProfileEvent::EvtAdded, newProfile);
+				BroadcastProcessor::Get().QueueEvent(ProfileEvent::EvtRefreshList);
 			});
 
 			// Configure and run
@@ -209,11 +207,10 @@ namespace Kortex::GameInstance
 	}
 	IGameProfile* DefaultGameInstance::ShallowCopyProfile(const IGameProfile& profile, const wxString& nameSuggets)
 	{
-		ProfileEvent event(Events::ProfileAdding);
-		event.Send();
-
 		wxString newName = CreateProfileID(nameSuggets.IsEmpty() ? profile.GetID() : nameSuggets);
-		if (event.IsAllowed() && !HasProfile(newName))
+
+		bool isAllowed = BroadcastProcessor::Get().ProcessEventEx(ProfileEvent::EvtAdding).Do().IsAllowed();
+		if (isAllowed && !HasProfile(newName))
 		{
 			IGameProfile& newProfile = *m_Profiles.emplace_back(profile.Clone());
 			newProfile.SetID(newName);
@@ -221,9 +218,7 @@ namespace Kortex::GameInstance
 			KxFile(newProfile.GetProfileDir()).CreateFolder();
 			newProfile.SaveConfig();
 
-			ProfileEvent event(Events::ProfileAdded, newProfile);
-			event.Send();
-
+			BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtAdded, newProfile);
 			return &newProfile;
 		}
 		return nullptr;
@@ -231,10 +226,8 @@ namespace Kortex::GameInstance
 
 	bool DefaultGameInstance::RemoveProfile(IGameProfile& profile)
 	{
-		ProfileEvent removingEvent(Events::ProfileRemoving, profile);
-		removingEvent.Send();
-
-		if (removingEvent.IsAllowed() && !profile.IsActive())
+		bool isAllowed = BroadcastProcessor::Get().ProcessEventEx(ProfileEvent::EvtRemoving, profile).Do().IsAllowed();
+		if (isAllowed && !profile.IsActive())
 		{
 			// Move files to recycle bin
 			KxFile path(profile.GetProfileDir());
@@ -248,8 +241,7 @@ namespace Kortex::GameInstance
 				wxString id = profile.GetID();
 				m_Profiles.erase(it);
 
-				ProfileEvent removedEvent(Events::ProfileRemoved, id);
-				removedEvent.Send();
+				BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtRemoved, id);
 				return true;
 			}
 		}

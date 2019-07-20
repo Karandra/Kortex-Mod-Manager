@@ -32,7 +32,7 @@ namespace Kortex::SaveManager
 	{
 		return new Workspace(mainWindow);
 	}
-	void DefaultSaveManager::OnSavesLocationChanged(GameInstance::ProfileEvent& event)
+	void DefaultSaveManager::OnSavesLocationChanged(BroadcastEvent& event)
 	{
 		KWorkspace::ScheduleReloadOf<Workspace>();
 	}
@@ -43,8 +43,8 @@ namespace Kortex::SaveManager
 	}
 	void DefaultSaveManager::OnInit()
 	{
-		IEvent::Bind(Events::ProfileChanged, &DefaultSaveManager::OnSavesLocationChanged, this);
-		IEvent::Bind(Events::ProfileSelected, &DefaultSaveManager::OnSavesLocationChanged, this);
+		m_BroadcastReciever.Bind(ProfileEvent::EvtChanged, &DefaultSaveManager::OnSavesLocationChanged, this);
+		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &DefaultSaveManager::OnSavesLocationChanged, this);
 	}
 	void DefaultSaveManager::OnExit()
 	{

@@ -2,7 +2,6 @@
 #include "IApplication.h"
 #include "SystemApplication.h"
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 #include "UI/KMainWindow.h"
 #include "Archive/KArchive.h"
 #include "Utility/Log.h"

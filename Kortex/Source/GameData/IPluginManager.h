@@ -1,12 +1,10 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/IPluggableManager.h"
+#include "PluginManager/Common.h"
 #include "IGamePlugin.h"
-#include "Common.h"
-#include <Kortex/Events.hpp>
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxXML.h>
-class IEvent;
 
 namespace Kortex
 {
@@ -63,7 +61,10 @@ namespace Kortex
 			using SyncListMode = PluginManager::SyncListMode;
 
 		private:
-			void OnVirtualTreeInvalidated(IEvent& event);
+			BroadcastReciever m_BroadcastReciever;
+
+		private:
+			void OnVirtualTreeInvalidated(BroadcastEvent& event);
 			intptr_t OnGetOrderIndex(const IGamePlugin& plugin) const;
 			
 		protected:

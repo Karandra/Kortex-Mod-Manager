@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "IPluginManager.h"
+#include "GameData/IPluginManager.h"
 #include "BasePluginManager.h"
 #include "BethesdaPlugin.h"
 #include <KxFramework/KxLibrary.h>

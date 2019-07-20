@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Events/IEvent.h"
+#include "Application/BroadcastProcessor.h"
 
 namespace Kortex
 {
@@ -9,7 +9,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class DownloadEvent: public IEvent
+	class DownloadEvent: public BroadcastEvent
 	{
 		public:
 			KxEVENT_MEMBER(DownloadEvent, Added);
@@ -30,12 +30,9 @@ namespace Kortex
 			DownloadItem* m_Download = nullptr;
 
 		public:
-			DownloadEvent(wxEventType type)
-				:IEvent(type)
-			{
-			}
-			DownloadEvent(wxEventType type, DownloadItem& item)
-				:IEvent(type), m_Download(&item)
+			DownloadEvent() = default;
+			DownloadEvent(DownloadItem& item)
+				:m_Download(&item)
 			{
 			}
 

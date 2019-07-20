@@ -3,7 +3,6 @@
 #include "Application/Resources/ImageResourceID.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
-#include <Kortex/Events.hpp>
 #include "Utility/Log.h"
 #include <KxFramework/KxCoroutine.h>
 #include <KxFramework/KxAuiToolBar.h>
@@ -115,7 +114,7 @@ namespace Kortex::Notifications
 			m_Notifications.emplace(m_Notifications.begin(), std::move(notification));
 		}
 
-		IEvent::CallAfter([this, &ref]()
+		BroadcastProcessor::Get().CallAfter([this, &ref]()
 		{
 			UpdateToolBarButton();
 			OnNotificationAdded(ref);

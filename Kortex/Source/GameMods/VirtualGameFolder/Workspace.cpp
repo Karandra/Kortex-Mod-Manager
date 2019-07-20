@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Workspace.h"
 #include "DisplayModel.h"
-#include <Kortex/Events.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <KxFramework/KxSearchBox.h>
 
@@ -26,7 +25,7 @@ namespace Kortex::VirtualGameFolder
 	Workspace::Workspace(KMainWindow* mainWindow)
 		:KWorkspace(mainWindow)
 	{
-		IEvent::Bind(Events::ModVirtualTreeInvalidated, &Workspace::OnViewInvalidated, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtVirtualTreeInvalidated, &Workspace::OnViewInvalidated, this);
 
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	}
@@ -72,7 +71,7 @@ namespace Kortex::VirtualGameFolder
 			m_Model->RefreshItems();
 		}
 	}
-	void Workspace::OnViewInvalidated(IEvent& event)
+	void Workspace::OnViewInvalidated(BroadcastEvent& event)
 	{
 		if (IsWorkspaceCreated())
 		{

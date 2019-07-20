@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "DefaultVFSService.h"
 #include "RecievingWindow.h"
+#include "VirtualFSEvent.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
-#include <Kortex/Events.hpp>
 #include "Application/SystemApplication.h"
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -77,7 +77,7 @@ namespace Kortex::VirtualFileSystem
 			{
 				if (IVirtualFileSystem* vfs = FindFSByhandle(message.GetPayload<IPC::FSHandle>()))
 				{
-					IEvent::MakeQueue<VFSEvent>(Events::SingleVFSToggled, *vfs, true);
+					BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtSingleToggled, *vfs, true);
 				}
 				break;
 			}
@@ -85,7 +85,7 @@ namespace Kortex::VirtualFileSystem
 			{
 				if (IVirtualFileSystem* vfs = FindFSByhandle(message.GetPayload<IPC::FSHandle>()))
 				{
-					IEvent::MakeQueue<VFSEvent>(Events::SingleVFSToggled, *vfs, false);
+					BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtSingleToggled, *vfs, false);
 				}
 				break;
 			}
@@ -105,7 +105,7 @@ namespace Kortex::VirtualFileSystem
 			m_Controller.Run();
 			m_Controller.WaitForTermination([this]()
 			{
-				IEvent::CallAfter([this]()
+				BroadcastProcessor::Get().CallAfter([this]()
 				{
 					OnFSControllerTerminated();
 				});

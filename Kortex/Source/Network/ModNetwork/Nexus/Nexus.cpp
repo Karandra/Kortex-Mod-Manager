@@ -3,7 +3,6 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include <Kortex/Events.hpp>
 #include "UI/KMainWindow.h"
 #include "Utility/String.h"
 #include <KxFramework/KxCURL.h>

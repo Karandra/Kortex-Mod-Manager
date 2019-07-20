@@ -3,7 +3,6 @@
 #include "Network/ModNetworkUpdateChecker.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include <Kortex/Events.hpp>
 #include <KxFramework/KxComparator.h>
 
 namespace Kortex::ModManager
@@ -317,12 +316,12 @@ namespace Kortex::ModManager
 						m_Mod->SetName(newName);
 					}
 					
-					IEvent::MakeSend<ModEvent>(Events::ModChanged, *m_Mod);
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, *m_Mod);
 				}
 				else
 				{
 					m_Mod->SetActive(value.As<bool>());
-					IEvent::MakeSend<ModEvent>(Events::ModToggled, *m_Mod);
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtToggled, *m_Mod);
 				}
 
 				m_Mod->Save();
@@ -335,7 +334,7 @@ namespace Kortex::ModManager
 				if (value.GetAs(&priority) && IModManager::GetInstance()->ChangeModPriority(*m_Mod, priority))
 				{
 					IModManager::GetInstance()->Save();
-					IEvent::CallAfter([this]()
+					BroadcastProcessor::Get().CallAfter([this]()
 					{
 						GetDisplayModel().LoadView();
 						GetDisplayModel().SelectMod(m_Mod);
@@ -352,7 +351,7 @@ namespace Kortex::ModManager
 					m_Mod->SetVersion(newVersion);
 					m_Mod->Save();
 
-					IEvent::MakeSend<ModEvent>(Events::ModChanged, *m_Mod);
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, *m_Mod);
 					return true;
 				}
 				return false;
@@ -365,7 +364,7 @@ namespace Kortex::ModManager
 					m_Mod->SetAuthor(author);
 					m_Mod->Save();
 
-					IEvent::MakeSend<ModEvent>(Events::ModChanged, *m_Mod);
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, *m_Mod);
 					return true;
 				}
 				break;

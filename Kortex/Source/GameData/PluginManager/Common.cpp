@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Common.h"
-#include "IPluginManager.h"
+#include "GameData/IPluginManager.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxComparator.h>
 

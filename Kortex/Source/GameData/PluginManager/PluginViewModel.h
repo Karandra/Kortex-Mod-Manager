@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Utility/KDataViewListModel.h"
-#include "IPluginManager.h"
+#include "GameData/IPluginManager.h"
 #include "BethesdaPluginManager.h"
 
 namespace Kortex::PluginManager

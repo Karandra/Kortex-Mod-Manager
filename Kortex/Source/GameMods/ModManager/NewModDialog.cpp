@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "NewModDialog.h"
-#include <Kortex/ModManager.hpp>
-#include "Events/LogEvent.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/ModManager.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxFile.h>
 
@@ -18,7 +17,7 @@ namespace Kortex::ModManager
 				const IGameMod* existingMod = IModManager::GetInstance()->FindModByID(name);
 				if (existingMod)
 				{
-					Kortex::LogEvent(KTr("ModManager.NewMod.NameCollision"), LogLevel::Warning, this);
+					BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtWarning, KTr("ModManager.NewMod.NameCollision"), this);
 				}
 				else
 				{
@@ -29,7 +28,7 @@ namespace Kortex::ModManager
 			}
 			else
 			{
-				Kortex::LogEvent(KTr("ModManager.NewMod.NameInvalid"), LogLevel::Warning, this);
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtWarning, KTr("ModManager.NewMod.NameInvalid"), this);
 			}
 			event.Veto();
 		}
@@ -79,7 +78,7 @@ namespace Kortex::ModManager
 		{
 			if (m_FolderPath.IsEmpty())
 			{
-				Kortex::LogEvent(KTr("ModManager.NewMod.SelectedFolderNone"), LogLevel::Warning, this);
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtWarning, KTr("ModManager.NewMod.SelectedFolderNone"), this);
 				event.Veto();
 			}
 			else

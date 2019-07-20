@@ -2,7 +2,6 @@
 #include "NexusRepository.h"
 #include "NexusUtility.h"
 #include "Nexus.h"
-#include <Kortex/Events.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <KxFramework/KxCURL.h>

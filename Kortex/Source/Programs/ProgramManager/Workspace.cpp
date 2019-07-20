@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Workspace.h"
 #include "DisplayModel.h"
-#include <Kortex/Events.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
+#include "VirtualFileSystem/VirtualFSEvent.h"
 #include "Utility/KAux.h"
 
 namespace
@@ -38,7 +38,7 @@ namespace Kortex::ProgramManager
 		m_ViewModel->Create(this, m_MainSizer);
 		GetDisplayModelOption().LoadDataViewLayout(m_ViewModel->GetView());
 
-		IEvent::Bind(Events::MainVFSToggled, &Workspace::OnVFSToggled, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &Workspace::OnMainFSToggled, this);
 		return true;
 	}
 
@@ -58,7 +58,7 @@ namespace Kortex::ProgramManager
 		m_ViewModel->RefreshItems();
 	}
 
-	void Workspace::OnVFSToggled(VFSEvent& event)
+	void Workspace::OnMainFSToggled(VirtualFSEvent& event)
 	{
 		ScheduleReload();
 	}

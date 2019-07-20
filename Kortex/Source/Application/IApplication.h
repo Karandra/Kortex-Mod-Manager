@@ -15,6 +15,7 @@ namespace Kortex
 {
 	class LogEvent;
 	class SystemApplication;
+	class BroadcastProcessor;
 	class IVariableTable;
 	class IGameInstance;
 	class IGameProfile;
@@ -68,6 +69,7 @@ namespace Kortex
 			virtual KxTranslation::AvailableMap GetAvailableTranslations() const = 0;
 
 			virtual const IImageProvider& GetImageProvider() const = 0;
+			virtual BroadcastProcessor& GetBroadcastProcessor() = 0;
 
 			virtual IVariableTable& GetVariables() = 0;
 			virtual wxString ExpandVariablesLocally(const wxString& variables) const = 0;

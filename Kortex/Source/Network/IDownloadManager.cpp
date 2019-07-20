@@ -238,7 +238,7 @@ namespace Kortex
 		ref.SetWaiting();
 		AutoRenameIncrement(ref);
 
-		IEvent::MakeSend<DownloadEvent>(DownloadEvent::EvtAdded, ref);
+		BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtAdded, ref);
 		return ref;
 	}
 	bool IDownloadManager::RemoveDownload(DownloadItem& download)
@@ -255,7 +255,7 @@ namespace Kortex
 				auto temp = std::move(*it);
 				m_Downloads.erase(it);
 
-				IEvent::MakeSend<DownloadEvent>(DownloadEvent::EvtRemoved, *temp);
+				BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRemoved, *temp);
 				return true;
 			}
 		}
@@ -305,7 +305,7 @@ namespace Kortex
 	void IDownloadManager::ShowHiddenDownloads(bool show)
 	{
 		m_ShowHiddenDownloads = show;
-		IEvent::MakeQueue<DownloadEvent>(DownloadEvent::EvtRefreshItems);
+		BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
 	}
 	void IDownloadManager::SetDownloadsLocation(const wxString& location)
 	{

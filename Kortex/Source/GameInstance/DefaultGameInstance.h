@@ -3,7 +3,6 @@
 #include "IGameInstance.h"
 #include "Application/VariablesTable/VariablesDatabase.h"
 #include "Application/VariablesTable/StaticVariableTable.h"
-#include <Kortex/Events.hpp>
 #include "GameID.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxXML.h>

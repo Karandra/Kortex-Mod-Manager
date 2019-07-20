@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
 #include <Kortex/Notification.hpp>
-#include <Kortex/Events.hpp>
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxTaskDialog.h>
 using namespace KxDataView2;
@@ -106,7 +105,7 @@ namespace Kortex::Notifications
 				case ColumnRef::Value:
 				{
 					INotificationCenter::GetInstance()->HideNotificationsWindow();
-					IEvent::CallAfter([&notification]()
+					BroadcastProcessor::Get().CallAfter([&notification]()
 					{
 						KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, notification.GetCaption(), notification.GetMessage());
 						dialog.SetMainIcon(notification.GetBitmap());

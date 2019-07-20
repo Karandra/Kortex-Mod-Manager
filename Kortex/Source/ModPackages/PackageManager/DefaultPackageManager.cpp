@@ -80,7 +80,7 @@ namespace Kortex::PackageManager
 					focusedMod->SetPackageFile(dialog.GetResult());
 					focusedMod->Save();
 
-					ModManager::ModEvent(Events::ModChanged, *focusedMod).Send();
+					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, *focusedMod);
 				}
 			});
 		}

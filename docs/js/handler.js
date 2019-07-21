@@ -112,8 +112,8 @@ const
     contentShow = "100",
     displayBlock = "block",
     displayNone = "none",
-    menuToggleLeft = "rotate(-180deg)",
-    menuToggleRight = "rotate(0deg)",
+    menuToggleLeft = "rotate(0deg)",
+    menuToggleRight = "rotate(180deg)",
     sideMenuHide = "0",
     sideMenuShow = "20rem"
 ;

@@ -39,15 +39,15 @@ a:hover {
     text-shadow: rgba(49,113,167,1.000) 0.1rem 0.1rem 0.3rem;
 }
 h1, h2, h3, h4 {
-    font-weight: normal;
+	font-weight: normal;
 }
 h1, h2 {
-    border: 0 solid rgba(172,161,161,1.000);
+	border: 0 solid rgba(172,161,161,1.000);
 }
 h1 {
-    border-bottom-width: 0.2rem;
-    font-size: 3.2rem;
-    margin: 0 0 2.1rem;
+	border-bottom-width: 0.2rem;
+	font-size: 3.2rem;
+	margin: 0 0 2.1rem;
 }
 h2 {
     border-bottom-width: 0.1rem;
@@ -343,20 +343,35 @@ code {
 /********************
 * Navigation Contents
 ********************/
+
 #menu-toggle {
-    /* Dimensions */
-    height: 2rem;
-    width: 2rem;
-    /* General */
-    cursor: pointer;
-    font-size: 1rem;
-    left: -4.4rem;
-    opacity: 100;
-    position: absolute;
-    top: 0.6rem;
-    transition: transform 0.25s;
-    z-index: 100;
+	/* Dimensions */
+	height: 2.5rem;
+	width: 2.5rem;
+	/* Spacings */
+	left: -4.5rem;
+	top: 0.3rem;
+	bottom: 0.5rem;
+	/* Image */
+	transform: rotate(180deg);
+	transition: transform 0.25s;
+	filter: brightness(0.8);
+	background-image: url(../res/arrow-left.svg);
+	background-repeat: no-repeat;
+	background-position-x: center;
+	background-position-y: center;
+	background-size: 1.5rem;
+	/* General */
+	font-size: 1rem;
+	border: 1px solid rgba(255, 255, 255, 0.30);
+	position: absolute;
+	cursor: pointer;
+	z-index: 100;
 }
+#menu-toggle:hover {
+	filter: brightness(0.95);
+}
+
 #side-panel {
     margin: 2.4rem 0;
     opacity: 0;

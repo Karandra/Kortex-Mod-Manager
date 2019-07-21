@@ -1,56 +1,70 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Kortex Mod Manager</title>
+		<link rel="shortcut icon" href="res/logo.png" type="image/png">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:400,400i,700,700i&display=swap&subset=latin-ext" type="text/css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/font-awesome-animation@0.2.1/dist/font-awesome-animation.min.css,npm/overlayscrollbars@1/css/OverlayScrollbars.min.css">
+		<link rel="stylesheet" href="css/styles.css" type="text/css">
 
-    <head>
-        <meta charset="utf-8">
-        <title>Kortex Mod Manager</title>
-        <link rel="shortcut icon" href="res/logo.png" type="image/png">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:400,400i,700,700i&display=swap&subset=latin-ext" type="text/css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/font-awesome-animation@0.2.1/dist/font-awesome-animation.min.css,npm/overlayscrollbars@1/css/OverlayScrollbars.min.css">
-        <link rel="stylesheet" href="css/styles.css" type="text/css">
-        <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2Ces2015%2Ces2016%2Ces2017%2Ces5%2Ces6%2Ces7default%2Cdocument.getElementsByClassName%2Cdocument.head%2CElement.prototype.dataset%2CgetComputedStyle%2CPromise.prototype.finally"></script>
-        <script src="https://cdn.jsdelivr.net/combine/npm/css-vars-ponyfill@2,npm/marked@0.7.0,npm/overlayscrollbars@1,npm/vanilla-lazyload@12"></script>
-        <script src="https://kit.fontawesome.com/4fa85e1be7.js"></script>
-        <script src="js/handler.js" async defer></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome-animation@0.2.1/dist/font-awesome-animation.min.css">
-    </head>
+		<script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2Ces2015%2Ces2016%2Ces2017%2Ces5%2Ces6%2Ces7default%2Cdocument.getElementsByClassName%2Cdocument.head%2CElement.prototype.dataset%2CgetComputedStyle%2CPromise.prototype.finally"></script>
+		<script src="https://cdn.jsdelivr.net/combine/npm/css-vars-ponyfill@2,npm/marked@0.7.0,npm/overlayscrollbars@1,npm/vanilla-lazyload@12"></script>
+		<script src="https://kit.fontawesome.com/4fa85e1be7.js"></script>
+		<script src="js/handler.js" async defer></script>
 
-    <body>
-        <div id="loading"><span class="fas fa-cog fa-10x faa-spin animated"></span></div>
-        <div id="globalbox">
-            <div id="header">
-                <div id="header_container" class="page">
-                    <div id="header-logo" title="Kortex Mod Manager Home" class="linkHandle"><a href="?page=home"><img src="res/logo.png"></a></div>
-                    <h3 title="Kortex Mod Manager Home" id="header-title" class="linkHandle"><a href="?page=home">Kortex Mod Manager</a></h3>
-                    <div id="header-links">
-                        <div id="header-links-panel">
-                            <div title="GitHub Repo" class="link-logo"><a href="https://github.com/KerberX/Kortex-Mod-Manager"><i class="fab fa-github fa-10x"></i></a></div>
-                            <div title="NexusMods Page" class="link-logo" class="linkHandle"><a href="https://www.nexusmods.com/skyrim/mods/90868"><img src="res/nexus-mods.svg"></a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="main">
-                <!-- <div id="main_loading" class=""></div> -->
-                <div id="main_container" class="page">
-                    <div id="content-panel" class="os-host-flexbox">
-                        <div id="content"></div>
-                    </div>
-                    <div id="side-panel">
-                        <div id="menu-toggle"><span class="fas fa-chevron-circle-right fa-2x"></span></div>
-                        <div id="side-menu">
-                            <div class="side-menu_items"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="footer">
-                <div id="footer_container" class="page">
-                    <!-- <div class="placeholder"></div> -->
-                    <div id="copyrights">© 2018-2019 Kerber</div>
-                </div>
-            </div>
-        </div>
-    </body>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome-animation@0.2.1/dist/font-awesome-animation.min.css">
+	</head>
 
+	<body>
+		<div id="loading"><span class="fas fa-cog fa-10x faa-spin animated"></span></div>
+		<div id="globalbox">
+			<div id="header">
+				<div id="header_container" class="page">
+					<div id="header-logo" title="Kortex Mod Manager Home" class="linkHandle">
+						<a href="?page=home"><img src="res/logo.png"></a>
+					</div>
+					<h3 title="Kortex Mod Manager Home" id="header-title" class="linkHandle">
+						<a href="?page=home">Kortex Mod Manager</a>
+					</h3>
+					<div id="header-links">
+						<div id="header-links-panel">
+							<div title="GitHub Repo" class="link-logo">
+								<a href="https://github.com/KerberX/Kortex-Mod-Manager">
+									<i class="fab fa-github fa-10x"></i>
+								</a>
+							</div>
+							<div title="NexusMods Page" class="link-logo" class="linkHandle">
+								<a href="https://www.nexusmods.com/skyrim/mods/90868">
+									<img src="res/nexus-mods.svg">
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="main">
+				<!-- <div id="main_loading" class=""></div> -->
+				<div id="main_container" class="page">
+					<div id="content-panel" class="os-host-flexbox">
+						<div id="content"></div>
+					</div>
+					<div id="side-panel">
+						<div id="menu-toggle">
+							<!--<span class="fas fa-chevron-circle-right fa-2x"></span>-->
+						</div>
+						<div id="side-menu">
+							<div class="side-menu_items"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+				<div id="footer_container" class="page">
+					<!-- <div class="placeholder"></div> -->
+					<div id="copyrights">© 2018-2019 Kerber</div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

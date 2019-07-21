@@ -14,6 +14,7 @@ namespace Kortex::NetworkManager
 
 		private:
 			bool CreateUI(wxWindow* parent);
+			IAppOption GetOptions() const;
 
 		private:
 			int GetViewSizerProportion() const override
@@ -38,10 +39,7 @@ namespace Kortex::NetworkManager
 			}
 
 		public:
-			NXMHandlerDialog(wxWindow* parent)
-				:m_Nexus(*NexusModNetwork::GetInstance())
-			{
-				CreateUI(parent);
-			}
+			NXMHandlerDialog(wxWindow* parent);
+			~NXMHandlerDialog();
 	};
 }

@@ -13,6 +13,7 @@ const
     headerTitle = "header-title",
     linkLogo = "link-logo",
     menuToggle = "menu-toggle",
+    menuToggleIcon = "menu-toggle-icon",
     scrollbarBox = "os-viewport",
     sideMenu = "side-menu",
     // sideMenuItem = "side-menu_item",
@@ -32,6 +33,7 @@ let
     linkLogoClass = "",
     loadingID = "",
     menuToggleID = "",
+    menuToggleIconID = "",
     scrollbarBoxID = "",
     sideMenuID = "",
     sideMenuItemTag,
@@ -112,8 +114,8 @@ const
     contentShow = "100",
     displayBlock = "block",
     displayNone = "none",
-    menuToggleLeft = "rotate(-180deg)",
-    menuToggleRight = "rotate(0deg)",
+    menuToggleLeft = "rotate(0deg)",
+    menuToggleRight = "rotate(180deg)",
     sideMenuHide = "0",
     sideMenuShow = "20rem"
 ;
@@ -150,6 +152,7 @@ function initVarAssign(initType) {
             linkLogoClass = headerID.getElementsByClassName(linkLogo);
             loadingID = document.getElementById(loading);
             menuToggleID = document.getElementById(menuToggle);
+            menuToggleIconID = document.getElementById(menuToggleIcon);
             sideMenuID = document.getElementById(sideMenu);
             sideMenuItemsClass = document.getElementsByClassName(sideMenuItems)[0];
             sidePanelID = document.getElementById(sidePanel);
@@ -348,7 +351,7 @@ function menuClose() {
     menuToggleID.removeEventListener(click, menuClose);
     menuToggleID.addEventListener(click, menuOpen);
     setTimeout(function() {
-        menuToggleID.style.transform = menuToggleLeft;
+        menuToggleIconID.style.transform = menuToggleLeft;
     }, menuSlideFlip);
     sideMenuID.style.width = sideMenuHide;
 }
@@ -357,7 +360,7 @@ function menuOpen() {
     menuToggleID.removeEventListener(click, menuOpen);
     menuToggleID.addEventListener(click, menuClose);
     setTimeout(function() {
-        menuToggleID.style.transform = menuToggleRight;
+        menuToggleIconID.style.transform = menuToggleRight;
     }, menuSlideFlip);
     sideMenuID.style.width = sideMenuShow;
 }

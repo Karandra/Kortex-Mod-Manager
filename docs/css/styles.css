@@ -39,15 +39,16 @@ a:hover {
     text-shadow: rgba(49,113,167,1.000) 0.1rem 0.1rem 0.3rem;
 }
 h1, h2, h3, h4 {
-    font-weight: normal;
+	font-weight: normal;
 }
 h1, h2 {
-    border: 0 solid rgba(172,161,161,1.000);
+	border: 0 solid rgb(172, 161, 161);
 }
 h1 {
-    border-bottom-width: 0.2rem;
-    font-size: 3.2rem;
-    margin: 0 0 2.1rem;
+	border-bottom-width: 0.2rem;
+	padding-bottom: 0.5rem;
+	font-size: 3.2rem;
+	margin: 0 0 2.1rem;
 }
 h2 {
     border-bottom-width: 0.1rem;
@@ -318,8 +319,8 @@ code {
 }
 .quote {
     background-color: rgba(56,56,56,0.250);
-    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJmaWxsOnJnYig2OSwgNjksIDcwKTtmb250LXNpemU6MC42MjVyZW07aGVpZ2h0OjIuOXJlbTtsZWZ0OjEuNXJlbTtwb3NpdGlvbjphYnNvbHV0ZTt0b3A6MS41cmVtO3dpZHRoOjMuOHJlbTsiPjxwYXRoIGNsYXNzPSJwYXRoMSIgZD0iTTAgMjAuNjc0YzAgNy4yMjUgNC42NjggMTEuMzM3IDkuODkyIDExLjMzNyA0LjgyNC0wLjA2MiA4LjcxOS0zLjk1NiA4Ljc4MS04Ljc3NSAwLTQuNzg1LTMuMzM0LTguMDA5LTcuNTU4LTguMDA5LTAuMDc4LTAuMDA0LTAuMTctMC4wMDYtMC4yNjItMC4wMDYtMC43MDMgMC0xLjM3NyAwLjEyNC0yLjAwMSAwLjM1MiAxLjA0MS00LjAxNCA1LjE1My04LjY4MyA4LjcxLTEwLjU3MmwtNi4xMTMtNS4wMDJjLTYuODkxIDQuODkxLTExLjQ0OCAxMi4zMzgtMTEuNDQ4IDIwLjY3NHpNMjIuNjc1IDIwLjY3NGMwIDcuMjI1IDQuNjY4IDExLjMzNyA5Ljg5MiAxMS4zMzcgNC44LTAuMDU2IDguNjctMy45NjEgOC42Ny04Ljc2OSAwLTAuMDA0IDAtMC4wMDggMC0wLjAxMiAwLTQuNzc5LTMuMjIzLTguMDAyLTcuNDQ3LTguMDAyLTAuMDk1LTAuMDA2LTAuMjA2LTAuMDA5LTAuMzE4LTAuMDA5LTAuNjg0IDAtMS4zMzkgMC4xMjYtMS45NDMgMC4zNTUgMC45MjctNC4wMTQgNS4xNS04LjY4MiA4LjcwNy0xMC41NzJsLTYuMTI0LTUuMDAyYy02Ljg5MSA0Ljg5MS0xMS40MzcgMTIuMzM4LTExLjQzNyAyMC42NzR6IiBzdHlsZT0iZmlsbDpyZ2IoNjksIDY5LCA3MCk7aGVpZ2h0OmF1dG87d2lkdGg6YXV0bzsiLz48L3N2Zz4=);
-    border-left: 0.6rem solid;
+    background-image: url(../res/icon-quote.svg);
+	border-left: 0.6rem solid;
     border-left-color: rgba(125, 25, 25, 1.000);
     font-style: italic;
     line-height: 1.5;
@@ -343,20 +344,41 @@ code {
 /********************
 * Navigation Contents
 ********************/
+
 #menu-toggle {
-    /* Dimensions */
-    height: 2rem;
-    width: 2rem;
-    /* General */
-    cursor: pointer;
-    font-size: 1rem;
-    left: -4.4rem;
-    opacity: 100;
-    position: absolute;
-    top: 0.6rem;
-    transition: transform 0.25s;
-    z-index: 100;
+	/* Dimensions */
+	height: 2.5rem;
+	width: 2.5rem;
+	/* Spacings */
+	left: -4.5rem;
+	top: 0.3rem;
+	bottom: 0.5rem;
+	/* General */
+	font-size: 1rem;
+	border: 0.1rem solid rgba(255, 255, 255, 0.30);
+	position: absolute;
+	cursor: pointer;
+	z-index: 100;
 }
+
+#menu-toggle-icon {
+	/* Dimensions */
+	height: 2.5rem;
+	width: 2.5rem;
+	/* General */
+	transform: rotate(180deg);
+	transition: transform 0.25s;
+	filter: brightness(0.8);
+	background-image: url(../res/arrow-left.svg);
+	background-repeat: no-repeat;
+	background-position-x: center;
+	background-position-y: center;
+	background-size: 1.5rem;
+}
+#menu-toggle-icon:hover {
+	filter: brightness(0.95);
+}
+
 #side-panel {
     margin: 2.4rem 0;
     opacity: 0;

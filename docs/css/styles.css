@@ -353,7 +353,19 @@ code {
 	left: -4.5rem;
 	top: 0.3rem;
 	bottom: 0.5rem;
-	/* Image */
+	/* General */
+	font-size: 1rem;
+	border: 1px solid rgba(255, 255, 255, 0.30);
+	position: absolute;
+	cursor: pointer;
+	z-index: 100;
+}
+
+#menu-toggle-icon {
+	/* Dimensions */
+	height: 2.5rem;
+	width: 2.5rem;
+	/* General */
 	transform: rotate(180deg);
 	transition: transform 0.25s;
 	filter: brightness(0.8);
@@ -362,14 +374,8 @@ code {
 	background-position-x: center;
 	background-position-y: center;
 	background-size: 1.5rem;
-	/* General */
-	font-size: 1rem;
-	border: 1px solid rgba(255, 255, 255, 0.30);
-	position: absolute;
-	cursor: pointer;
-	z-index: 100;
 }
-#menu-toggle:hover {
+#menu-toggle-icon:hover {
 	filter: brightness(0.95);
 }
 

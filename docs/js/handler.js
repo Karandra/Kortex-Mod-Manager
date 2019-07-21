@@ -15,7 +15,7 @@ const
     menuToggle = "menu-toggle",
     scrollbarBox = "os-viewport",
     sideMenu = "side-menu",
-    sideMenuItem = "side-menu_item",
+    // sideMenuItem = "side-menu_item",
     sideMenuItems = "side-menu_items",
     sidePanel = "side-panel"
 ;
@@ -30,6 +30,7 @@ let
     headerTitleID = "",
     headerTitleLink = "",
     linkLogoClass = "",
+    loadingID = "",
     menuToggleID = "",
     scrollbarBoxID = "",
     sideMenuID = "",
@@ -106,9 +107,11 @@ let
     sameLocation = ""
 ;
 // Style Values
-let
+const
     contentHide = "0",
     contentShow = "100",
+    displayBlock = "block",
+    displayNone = "none",
     menuToggleLeft = "rotate(-180deg)",
     menuToggleRight = "rotate(0deg)",
     sideMenuHide = "0",
@@ -145,6 +148,7 @@ function initVarAssign(initType) {
             headerTitleID = document.getElementById(headerTitle);
             headerTitleLink = headerTitleID.querySelector("A");
             linkLogoClass = headerID.getElementsByClassName(linkLogo);
+            loadingID = document.getElementById(loading);
             menuToggleID = document.getElementById(menuToggle);
             sideMenuID = document.getElementById(sideMenu);
             sideMenuItemsClass = document.getElementsByClassName(sideMenuItems)[0];
@@ -309,10 +313,19 @@ function importCSS(fileName) {
 }
 
 function contentVisibility(toggle) {
-    if (toggle === contentHide) contentPanelID.style.opacity = contentHide;
+    if (toggle === contentHide) {
+        contentPanelID.style.opacity = contentHide;
+        loadingID.style.display = displayBlock;
+        loadingID.style.opacity = contentShow;
+    }
     if (toggle === contentShow) {
+        console.log("wut");
         contentPanelID.style.opacity = contentShow;
         sidePanelID.style.opacity = contentShow;
+        loadingID.style.opacity = contentHide;
+        setTimeout(function() {
+            loadingID.style.display = displayNone;
+        }, contentCloakTime);
     }
 }
 

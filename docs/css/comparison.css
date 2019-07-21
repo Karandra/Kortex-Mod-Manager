@@ -63,3 +63,11 @@ cmp-legend {
 	font-size: 80%;
 	margin: 0;
 }
+
+ol, sup {
+    font-size: 1.2rem;
+}
+ol {
+	margin: 1.9rem 0 0;
+	padding-left: 1.6rem;
+}

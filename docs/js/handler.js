@@ -16,6 +16,7 @@ const
     scrollbarBox = "os-viewport",
     sideMenu = "side-menu",
     sideMenuItem = "side-menu_item",
+    sideMenuItems = "side-menu_items",
     sidePanel = "side-panel"
 ;
 let
@@ -32,7 +33,8 @@ let
     menuToggleID = "",
     scrollbarBoxID = "",
     sideMenuID = "",
-    sideMenuItemClass,
+    sideMenuItemTag,
+    sideMenuItemsClass = "",
     sidePanelID = ""
 ;
 // Options
@@ -145,10 +147,11 @@ function initVarAssign(initType) {
             linkLogoClass = headerID.getElementsByClassName(linkLogo);
             menuToggleID = document.getElementById(menuToggle);
             sideMenuID = document.getElementById(sideMenu);
+            sideMenuItemsClass = document.getElementsByClassName(sideMenuItems)[0];
             sidePanelID = document.getElementById(sidePanel);
             break;
         case menu:
-            sideMenuItemClass = document.getElementsByClassName(sideMenuItem);
+            sideMenuItemTag = sideMenuItemsClass.getElementsByTagName("A");
             break;
         default: 
             contentLinkItems = contentBoxID.getElementsByTagName("A");
@@ -183,7 +186,7 @@ function initListenAssign(initType) {
             break;
         default:
             if (initType === content) linkType = contentLinkItems;
-            if (initType === menu) linkType = sideMenuItemClass;
+            if (initType === menu) linkType = sideMenuItemTag;
             Object.keys(linkType).forEach(function(i) {
                 let linkHREFParam = linkType[i].getAttribute("href");
                 linkType[i].addEventListener(click, function(event) { event.preventDefault(); linkHandler(linkHREFParam, content); });
@@ -262,7 +265,7 @@ function xhttpReady(file, resource, type) {
                 importCSS(resource);
                 break;
             case menu:
-                sideMenuID.innerHTML = marked(file.response, markedOpt);
+                sideMenuItemsClass.innerHTML = marked(file.response, markedOpt);
                 initVarAssign(menu);
                 break;
             default:

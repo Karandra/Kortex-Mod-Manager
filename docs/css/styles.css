@@ -363,19 +363,23 @@ code {
     line-height: 1.6;
     margin: 0 2.4rem 0 1.6rem;
 }
-.side-menu_item {
+.side-menu_items a {
     /* Dimensions */
     width: 100%;
     /* General */
     border-bottom: 0.1rem solid rgba(38,38,39,1.000);
     display: block;
     padding: 0.5rem 0;
+    text-decoration: none;
 }
-.side-menu_item:first-child {
+.side-menu_items a:first-child {
     border-top: 0.1rem solid rgba(38,38,39,1.000); 
 }
-a.side-menu_item {
-    text-decoration: none;
+.side-menu_items p:first-of-type {
+    margin: 0;
+}
+.side-menu_items p:first-of-type br {
+    display: none;
 }
 
 

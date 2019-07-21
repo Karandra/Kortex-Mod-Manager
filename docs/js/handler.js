@@ -319,7 +319,6 @@ function contentVisibility(toggle) {
         loadingID.style.opacity = contentShow;
     }
     if (toggle === contentShow) {
-        console.log("wut");
         contentPanelID.style.opacity = contentShow;
         sidePanelID.style.opacity = contentShow;
         loadingID.style.opacity = contentHide;

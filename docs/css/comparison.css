@@ -28,7 +28,7 @@ th {
 	text-align: center;
 }
 tr:first-child > th:first-child {
-    border: 0;
+	border: 0;
 }
 
 .feature-name {
@@ -37,7 +37,7 @@ tr:first-child > th:first-child {
 }
 
 .cmp-no, .cmp-unknown, .cmp-yes {
-    background-repeat: no-repeat;
+	background-repeat: no-repeat;
 	width: 3.2rem;
 	height: 3.2rem;
 	margin-left: auto;
@@ -65,7 +65,7 @@ cmp-legend {
 }
 
 ol, sup {
-    font-size: 1.2rem;
+	font-size: 1.2rem;
 }
 ol {
 	margin: 1.9rem 0 0;

@@ -1,7 +1,7 @@
 <!-- <div class="side-menu_title">
 
 ## Navigation
-    
+
 </div> -->
 
 [Home](?page=home "Kortex Mod Manager Home")

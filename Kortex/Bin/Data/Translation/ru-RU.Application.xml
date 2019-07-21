@@ -193,6 +193,7 @@
 			<![CDATA[Вы можете использовать папку по умолчанию или выбрать другую.
 Использование папки по умолчанию не рекомендуется так как данные профилей могут занимать значительный размер, что может быть нежелательно для системного диска.]]>
 		</String>
+		<String ID="Init.DownloadLinkDispatchFailed">Невозможно диспетчеризовать ссылку на загрузку: %1</String>
 
 		<!-- Settings Window -->
 		<String ID="Settings.Caption">Настройки программы</String>
@@ -593,6 +594,12 @@
 		<String ID="NetworkManager.UpdateTooltip.AnyUpdates">Новая версия (%1) этого мода доступна на %2</String>
 		<String ID="NetworkManager.UpdateTooltip.AnyDeletions">Этот мод не был найден на %1</String>
 
+		<String ID="DownloadManager.Nexus.CopyNXM">Скопировать NXM-ссылку</String>
+
+		<String ID="DownloadManager.NXMHandler.Caption">Настроить обработчик NXM-ссылок</String>
+		<String ID="DownloadManager.NXMHandler.NexusID">Nexus ID</String>
+		<String ID="DownloadManager.NXMHandler.Target">Цель</String>
+
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>
 		<String ID="DownloadManager.NameShort">Загрузки</String>
@@ -645,9 +652,6 @@
 		<String ID="DownloadManager.Menu.AlwaysShowHidden">Всегда показывать скрытые загрузки</String>
 
 		<String ID="DownloadManager.Menu.CopyLink">Скопировать ссылку</String>
-		<String ID="DownloadManager.Menu.CopyNXM">Скопировать NXM-ссылку</String>
-		<String ID="DownloadManager.Menu.AssociateWithNXM">Ассоциировать NXM-ссылками</String>
-		<String ID="DownloadManager.Menu.AssocianedWithNXM">Ассоциирован с NXM-ссылками</String>
 
 		<!-- VFS -->
 		<String ID="VFS.Caption">Виртуальная файловая система</String>

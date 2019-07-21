@@ -597,6 +597,7 @@
 		<String ID="DownloadManager.Nexus.CopyNXM">Скопировать NXM-ссылку</String>
 
 		<String ID="DownloadManager.NXMHandler.Caption">Настроить обработчик NXM-ссылок</String>
+		<String ID="NetworkManager.NXMHandler.Game">Игра</String>
 		<String ID="DownloadManager.NXMHandler.NexusID">Nexus ID</String>
 		<String ID="DownloadManager.NXMHandler.Target">Цель</String>
 

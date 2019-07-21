@@ -12,11 +12,15 @@ namespace Kortex::NetworkManager
 			enum class ColumnID
 			{
 				NexusID,
+				Game,
 				Target,
 			};
 
 		private:
 			std::vector<NXMHandlerModelNode> m_Nodes;
+
+		private:
+			void OnActivate(KxDataView2::Event& event);
 
 		public:
 			NXMHandlerModel();

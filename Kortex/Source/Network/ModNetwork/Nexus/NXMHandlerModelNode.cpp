@@ -2,6 +2,7 @@
 #include "NXMHandlerModel.h"
 #include "NXMHandlerModelNode.h"
 #include <Kortex/GameInstance.hpp>
+#include <Kortex/Application.hpp>
 
 namespace Kortex::NetworkManager
 {
@@ -14,11 +15,29 @@ namespace Kortex::NetworkManager
 		{
 			case ColumnID::NexusID:
 			{
+				return m_Instance.GetVariables().GetVariable(wxS("NexusDomainName")).AsString();
+			}
+			case ColumnID::Game:
+			{
 				return m_Instance.GetGameName();
 			}
 			case ColumnID::Target:
 			{
 				return {};
+			}
+		};
+		return {};
+	}
+	wxAny NXMHandlerModelNode::GetEditorValue(const KxDataView2::Column& column) const
+	{
+		using namespace KxDataView2;
+		using ColumnID = NXMHandlerModel::ColumnID;
+
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Target:
+			{
+				return 0;
 			}
 		};
 		return {};
@@ -30,6 +49,7 @@ namespace Kortex::NetworkManager
 
 	bool NXMHandlerModelNode::IsEnabled(const KxDataView2::Column& column) const
 	{
-		return true;
+		using ColumnID = NXMHandlerModel::ColumnID;
+		return column.GetID<ColumnID>() == ColumnID::Target;
 	}
 }

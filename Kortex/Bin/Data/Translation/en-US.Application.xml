@@ -592,6 +592,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.Nexus.CopyNXM">Copy NXM-link</String>
 
 		<String ID="NetworkManager.NXMHandler.Caption">Configure NXM-handler</String>
+		<String ID="NetworkManager.NXMHandler.Game">Game</String>
 		<String ID="NetworkManager.NXMHandler.NexusID">Nexus ID</String>
 		<String ID="NetworkManager.NXMHandler.Target">Target</String>
 

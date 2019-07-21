@@ -16,6 +16,7 @@ namespace Kortex::NetworkManager
 
 		private:
 			wxAny GetValue(const KxDataView2::Column& column) const override;
+			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
 			bool SetValue(KxDataView2::Column& column, const wxAny& value) override;
 
 			bool IsEnabled(const KxDataView2::Column& column) const override;

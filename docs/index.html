@@ -3,13 +3,13 @@
 
     <head>
         <meta charset="utf-8">
+        <title>Kortex Mod Manager</title>
         <link rel="shortcut icon" href="res/logo.png" type="image/png">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:r,b,bi,i|Inconsolata:r,b,bi,i&subset=latin-ext,cyrillic,cyrillic-ext&display=swap" type="text/css">
-        <link rel="stylesheet" href="css/lib/OverlayScrollbars.css" type="text/css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:400,400i,700,700i&display=swap&subset=latin-ext" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/font-awesome@4/css/font-awesome.min.css,npm/overlayscrollbars@1/css/OverlayScrollbars.min.css">
         <link rel="stylesheet" href="css/styles.css" type="text/css">
-        <script src="js/libs/marked.min.js"></script>
-        <script src="js/libs/purify.min.js"></script>
-        <script src="js/libs/OverlayScrollbars.min.js"></script>
+        <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2Ces2015%2Ces2016%2Ces2017%2Ces5%2Ces6%2Ces7default%2Cdocument.getElementsByClassName%2Cdocument.head%2CElement.prototype.dataset%2CgetComputedStyle%2CPromise.prototype.finally"></script>
+        <script src="https://cdn.jsdelivr.net/combine/npm/css-vars-ponyfill@2,npm/marked@0.7.0,npm/overlayscrollbars@1,npm/vanilla-lazyload@12"></script>
         <script src="js/handler.js" async defer></script>
     </head>
 
@@ -17,12 +17,12 @@
         <div id="globalbox">
             <div id="header">
                 <div id="header_container" class="page">
-                    <div title="Kortex Mod Manager Home" id="header-logo" class="linkHandle"></div>
-                    <h3 title="Kortex Mod Manager Home" id="header-title" class="linkHandle">Kortex Mod Manager</h3>
+                    <div id="header-logo" title="Kortex Mod Manager Home" class="linkHandle"><a href="?page=home"><img src="res/logo.png"></a></div>
+                    <h3 title="Kortex Mod Manager Home" id="header-title" class="linkHandle"><a href="?page=home">Kortex Mod Manager</a></h3>
                     <div id="header-links">
                         <div id="header-links-panel">
-                            <div title="GitHub Repo" id="github-logo" class="linkHandle"></div>
-                            <div title="NexusMods Page" id="nexusmods-logo" class="linkHandle"></div>
+                            <div title="GitHub Repo" class="link-logo"><a href="https://github.com/KerberX/Kortex-Mod-Manager"><img src="res/github_wht.svg"></a></div>
+                            <div title="NexusMods Page" class="link-logo" class="linkHandle"><a href="https://www.nexusmods.com/skyrim/mods/90868"><img src="res/nexus-mods.svg"></a></div>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
             </div>
             <div id="footer">
                 <div id="footer_container" class="page">
-                    <div class="placeholder"></div>
+                    <!-- <div class="placeholder"></div> -->
                     <div id="copyrights">© 2018-2019 Kerber</div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ html {
     background: rgba(23,26,29,1.000) url(../res/nebula-1897595.jpg) no-repeat fixed center;
     background-size: cover;
     color: rgba(202,202,202,1.000);
-    font: 0.625rem 'Roboto', sans-serif;
+    font-size: 0.625rem;
     /* Root EM default is 16px: 0.625rem means Root becomes 10px */
     /* 10px provides very easy accurate REM measurements for all elements */
     /* Using REM instead of PX means site scales with user custom font size */
@@ -22,20 +22,21 @@ body {
     /* Dimensions */
     width: 100%;
     /* General */
+    font-family: "Roboto", sans-serif;
     font-size: 1.6rem; /* Reset general font sizes to comparative 16px default */
     position: absolute;
 }
 a {
     color: rgba(202,202,202,1.000);
-    transition: .15s;
+    transition: color 0.15s, text-shadow 0.15s;
 }
-a:hover {
+/* a:hover {
     text-decoration: underline;
-}
-a:hover, .linkHandle:hover {
+} */
+a:hover {
     color: rgba(224,224,224,1.000);
     cursor: pointer;
-    text-shadow: #3171a7 0.1rem 0.1rem 0.3rem;
+    text-shadow: rgba(49,113,167,1.000) 0.1rem 0.1rem 0.3rem;
 }
 h1, h2, h3, h4 {
     font-weight: normal;
@@ -60,7 +61,7 @@ h4 {
     font-size: 1.9rem;
 }
 code {
-    font-family: 'Consolas', 'Inconsolata', monospace, sans-serif;
+    font-family: "Inconsolata", Consolas, monospace;
     font-size: 10pt;
     display: block;
     white-space: pre-wrap;
@@ -96,14 +97,13 @@ code {
 * Shared Styles
 ********************/
 #footer_container,
-#github-logo,
 #header_container,
 #header-links,
 #header-links-panel,
 #header-logo,
 #main,
 #main_loading,
-#nexusmods-logo
+.link-logo
 {
     height: 100%;
 }
@@ -158,11 +158,10 @@ code {
     justify-content: flex-end
 }
 
-#github-logo,
 #header-links,
 #header-links-panel,
 #header-logo,
-#nexusmods-logo
+.link-logo
 {
     /* Flex Self */
     flex: 1 0 5.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 5.4rem (parent: row) */
@@ -171,20 +170,9 @@ code {
     background-size: contain;
 }
 
-#github-logo,
-#nexusmods-logo
-{
-    /* Dimensions */
-    height: 4.4rem;
-    /* Flex Self */
-    flex: 1 0 4.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 4.4rem (parent: row) */
-    /* General */
-    margin-left: 1.2rem;
-}
-
+#side-panel,
 .side-menu_title,
-.side-menu_items,
-#side-panel
+.side-menu_items
 {
     flex: 0 0 auto; /* flex-grow 0, flex-shrink 0, flex-basis auto (parent: row) */
 }
@@ -207,10 +195,18 @@ code {
     border: 0 solid rgba(92,92,92,1.000);
 }
 #header {
+    /* Dimensions */
+    max-height: 5.4rem;
     /* Flex Self */
     flex: 0 0 5.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 5.4rem (parent: row) */
     /* General */
     border-bottom-width: 0.1rem;
+}
+#header * {
+    max-height: inherit;
+}
+#header a {
+    text-decoration: none;
 }
 #footer {
     /* Flex Self */
@@ -240,7 +236,6 @@ code {
 ********************/
 #header-links {
     width: 100%;
-    /* Flex Self */
 }
 #header-links-panel {
     /* Dimensions */
@@ -253,12 +248,8 @@ code {
 /********************
 * Header Contents
 ********************/
-#github-logo {
-    background-image: url("../res/github_wht.svg");
-    background: 
-}
-#header-logo {
-    background-image: url("../res/logo.png");
+#header-logo img {
+    display: inline;
     margin-left: 2.4rem;
 }
 #header-title {
@@ -268,10 +259,15 @@ code {
     display: block;
     margin: 0;
     padding-left: 1.2rem;
-    transition: .15s;
+    transition: 0.15s;
 }
-#nexusmods-logo {
-    background-image: url("../res/nexus-mods.svg");
+.link-logo {
+    /* Dimensions */
+    height: 4.4rem;
+    /* Flex Self */
+    flex: 1 0 4.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 4.4rem (parent: row) */
+    /* General */
+    margin-left: 1.2rem;
 }
 
 
@@ -289,6 +285,8 @@ code {
     transition: opacity 0.15s;
 }
 #content {
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 0 2.4rem;
 }
 #content > h1:first-child {
@@ -370,11 +368,14 @@ code {
     width: 100%;
     /* General */
     border-bottom: 0.1rem solid rgba(38,38,39,1.000);
+    display: block;
     padding: 0.5rem 0;
-    transition: .15s;
 }
 .side-menu_item:first-child {
     border-top: 0.1rem solid rgba(38,38,39,1.000); 
+}
+a.side-menu_item {
+    text-decoration: none;
 }
 
 
@@ -391,3 +392,8 @@ code {
     margin: 0 2.4rem;
     text-align: right;
 }
+
+
+/********************
+* Media Queries
+********************/

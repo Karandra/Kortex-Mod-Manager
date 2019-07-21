@@ -1,7 +1,6 @@
 # Features and comparison to other mod managers
 
-There's a few mod managers around these days and it's may be a bit difficult to choose the one you need.
-This page is designed to highlight key features of known mod managers.
+There's a few mod managers around these days and it's may be a bit difficult to choose the one you need. This page is designed to highlight key features of known mod managers.
 
 ## Legend
 

@@ -355,7 +355,7 @@ code {
 	bottom: 0.5rem;
 	/* General */
 	font-size: 1rem;
-	border: 1px solid rgba(255, 255, 255, 0.30);
+	border: 0.1rem solid rgba(255, 255, 255, 0.30);
 	position: absolute;
 	cursor: pointer;
 	z-index: 100;

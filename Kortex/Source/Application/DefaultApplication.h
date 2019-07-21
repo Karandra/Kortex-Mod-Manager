@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "IApplication.h"
 #include "RefTranslator.h"
-#include "BroadcastProcessor.h"
 #include "Resources/DefaultImageProvider.h"
 #include "VariablesTable/DynamicVariableTable.h"
 #include <KxFramework/KxApp.h>
@@ -37,7 +36,6 @@ namespace Kortex::Application
 
 			wxWindow* m_InitProgressDialog = nullptr;
 			DefaultImageProvider m_ImageProvider;
-			BroadcastProcessor m_BroadcastProcessor;
 			BroadcastReciever m_BroadcastReciever;
 
 			wxString m_StartupInstanceID;
@@ -95,10 +93,6 @@ namespace Kortex::Application
 			{
 				return m_ImageProvider;
 			}
-			BroadcastProcessor& GetBroadcastProcessor() override
-			{
-				return m_BroadcastProcessor;
-			}
 
 			IVariableTable& GetVariables() override
 			{
@@ -125,19 +119,21 @@ namespace Kortex::Application
 			}
 
 			bool OpenInstanceSelectionDialog() override;
-			bool ScheduleRestart() override;
 			bool Uninstall() override;
 
 			void LoadTranslation();
 			void LoadImages();
 			void ShowWorkspace();
 
-			void InitSettings();
+			bool InitSettings(bool downloadLinkPresent = false);
 			bool IsPreStartConfigNeeded();
 			bool ShowFirstTimeConfigDialog(wxWindow* parent);
-			void InitInstancesData(wxWindow* parent);
-			bool LoadInstance();
+			
 			void LoadStartupInstanceID();
+			bool BeginLoadCurrentInstance(wxWindow* parent = nullptr, bool downloadLinkPresent = false);
+			bool LoadInstance();
+			bool DispatchDownloadLink(const wxString& link, bool* canContinue = nullptr);
+			bool FinalizeInitialization();
 
 			void InitVFS();
 			void UnInitVFS();

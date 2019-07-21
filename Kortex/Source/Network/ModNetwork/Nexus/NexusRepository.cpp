@@ -2,12 +2,14 @@
 #include "NexusRepository.h"
 #include "NexusUtility.h"
 #include "Nexus.h"
+#include "NXMHandlerDialog.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/DownloadManager.hpp>
+#include <Kortex/GameInstance.hpp>
+#include "Utility/Common.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
 #include <KxFramework/KxMenu.h>
-#include <wx/clipbrd.h>
 
 namespace Kortex::NetworkManager
 {
@@ -108,30 +110,6 @@ namespace Kortex::NetworkManager
 		return false;
 	}
 
-	bool NexusRepository::QueueDownload(const KxURI& link)
-	{
-		GameID gameID;
-		NetworkModInfo modInfo;
-		NexusNXMLinkData nxmExtraInfo;
-
-		if (m_Nexus.ParseNXM(link, gameID, modInfo, nxmExtraInfo))
-		{
-			if (auto fileInfo = GetModFileInfo(ModRepositoryRequest(modInfo, gameID)))
-			{
-				ModRepositoryRequest request(modInfo, gameID);
-				request.SetExtraInfo(nxmExtraInfo);
-
-				if (auto linkItems = GetFileDownloads(request); !linkItems.empty())
-				{
-					// Here we should actually select preferred download server based on user choice if we got more than one,
-					// but for now just use the first one (it's the preferred server selected in user preferences on Nexus).
-					return IDownloadManager::GetInstance()->QueueDownload(*this, linkItems.front(), *fileInfo, gameID);
-				}
-				return false;
-			}
-		}
-		return false;
-	}
 	bool NexusRepository::QueryDownload(const KxFileItem& fileItem, const DownloadItem& download, ModFileReply& fileReply)
 	{
 		auto QueryInfo = [this, &download](ModID modID, ModFileID fileID) -> std::optional<ModFileReply>
@@ -185,38 +163,52 @@ namespace Kortex::NetworkManager
 	}
 	void NexusRepository::OnToolBarMenu(KxMenu& menu)
 	{
-		const bool assocOK = IsAssociatedWithNXM();
-		wxString label = assocOK ? KTr("DownloadManager.Menu.AssocianedWithNXM") : KTr("DownloadManager.Menu.AssociateWithNXM");
-
-		KxMenuItem* item = menu.Add(new KxMenuItem(label, wxEmptyString, wxITEM_CHECK));
-		item->Enable(!assocOK);
-		item->Check(assocOK);
+		KxMenuItem* item = menu.Add(new KxMenuItem(KTr("NetworkManager.NXMHandler.Caption"), wxEmptyString, wxITEM_CHECK));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ModNetwork_Nexus));
-
-		if (!assocOK)
+		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
-			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
-			{
-				AssociateWithNXM();
-			});
-		}
+			ConfigureNXMHandler();
+		});
 	}
 	void NexusRepository::OnDownloadMenu(KxMenu& menu, DownloadItem* download)
 	{
 		if (download && download->GetModNetwork() == &m_Nexus)
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(KTr("DownloadManager.Menu.CopyNXM")));
+			KxMenuItem* item = menu.Add(new KxMenuItem(KTr("NetworkManager.Nexus.CopyNXM")));
 			item->Bind(KxEVT_MENU_SELECT, [this, download](KxMenuEvent& event)
 			{
-				if (wxTheClipboard->Open())
-				{
-					wxTheClipboard->SetData(new wxTextDataObject(m_Nexus.ConstructNXM(download->GetNetworkModInfo(),
-											download->GetTargetGame()).BuildUnescapedURI())
-					);
-					wxTheClipboard->Close();
-				}
+				Utility::CopyTextToClipboard(ConstructNXM(download->GetNetworkModInfo(), download->GetTargetGame()).BuildUnescapedURI());
 			});
 		}
+	}
+	
+	bool NexusRepository::QueueDownload(const wxString& link)
+	{
+		GameID gameID;
+		NetworkModInfo modInfo;
+		NexusNXMLinkData nxmExtraInfo;
+
+		if (ParseNXM(link, gameID, modInfo, nxmExtraInfo))
+		{
+			if (auto fileInfo = GetModFileInfo(ModRepositoryRequest(modInfo, gameID)))
+			{
+				ModRepositoryRequest request(modInfo, gameID);
+				request.SetExtraInfo(nxmExtraInfo);
+
+				if (auto linkItems = GetFileDownloads(request); !linkItems.empty())
+				{
+					// Here we should actually select preferred download server based on user choice if we got more than one,
+					// but for now just use the first one (it's the preferred server selected in user preferences on Nexus).
+					return IDownloadManager::GetInstance()->QueueDownload(*this, linkItems.front(), *fileInfo, gameID);
+				}
+				return false;
+			}
+		}
+		return false;
+	}
+	wxAny NexusRepository::GetDownloadTarget(const wxString& link)
+	{
+		return {};
 	}
 
 	std::optional<ModInfoReply> NexusRepository::GetModInfo(const ModRepositoryRequest& request) const
@@ -385,52 +377,6 @@ namespace Kortex::NetworkManager
 		}
 		return {};
 	}
-	std::vector<ModDownloadReply> NexusRepository::GetFileDownloads(const ModRepositoryRequest& request) const
-	{
-		wxString query = KxString::Format(wxS("%1/games/%2/mods/%3/files/%4/download_link"),
-										  m_Nexus.GetAPIURL(),
-										  m_Nexus.TranslateGameIDToNetwork(request),
-										  request.GetModID().GetValue(),
-										  request.GetFileID().GetValue()
-		);
-
-		NexusNXMLinkData nxmExtraInfo;
-		if (request.GetExtraInfo(nxmExtraInfo))
-		{
-			query += KxString::Format("?key=%1&expires=%2&user_id=%3", nxmExtraInfo.Key, nxmExtraInfo.Expires, nxmExtraInfo.UserID);
-		}
-		auto connection = m_Nexus.NewCURLSession(query);
-
-		KxCURLReply reply = connection->Send();
-		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
-		{
-			return {};
-		}
-
-		std::vector<ModDownloadReply> infoVector;
-		try
-		{
-			KxJSONObject json = KxJSON::Load(reply);
-			infoVector.reserve(json.size());
-
-			for (const KxJSONObject& value: json)
-			{
-				ModDownloadReply& info = infoVector.emplace_back();
-				info.Name = value["name"].get<wxString>();
-				info.ShortName = value["short_name"].get<wxString>();
-
-				wxString url = value["URI"].get<wxString>();
-				m_Utility.ConvertUnicodeEscapes(url);
-				info.URI = url;
-			}
-		}
-		catch (...)
-		{
-			infoVector.clear();
-		}
-		return infoVector;
-	}
-
 	auto NexusRepository::GetModFiles2(const ModRepositoryRequest& request, bool files, bool updates) const -> std::optional<GetModFiles2Result>
 	{
 		auto connection = m_Nexus.NewCURLSession(KxString::Format(wxS("%1/games/%2/mods/%3/files"),
@@ -486,13 +432,109 @@ namespace Kortex::NetworkManager
 		}
 		return infoVector;
 	}
+	std::vector<ModDownloadReply> NexusRepository::GetFileDownloads(const ModRepositoryRequest& request) const
+	{
+		wxString query = KxString::Format(wxS("%1/games/%2/mods/%3/files/%4/download_link"),
+										  m_Nexus.GetAPIURL(),
+										  m_Nexus.TranslateGameIDToNetwork(request),
+										  request.GetModID().GetValue(),
+										  request.GetFileID().GetValue()
+		);
 
-	bool NexusRepository::IsAssociatedWithNXM()
-	{
-		return IDownloadManager::IsAssociatedWithLink("NXM");
+		NexusNXMLinkData nxmExtraInfo;
+		if (request.GetExtraInfo(nxmExtraInfo))
+		{
+			query += KxString::Format("?key=%1&expires=%2&user_id=%3", nxmExtraInfo.Key, nxmExtraInfo.Expires, nxmExtraInfo.UserID);
+		}
+		auto connection = m_Nexus.NewCURLSession(query);
+
+		KxCURLReply reply = connection->Send();
+		if (!m_Utility.TestRequestError(reply, reply.AsString()).IsSuccessful())
+		{
+			return {};
+		}
+
+		std::vector<ModDownloadReply> infoVector;
+		try
+		{
+			KxJSONObject json = KxJSON::Load(reply);
+			infoVector.reserve(json.size());
+
+			for (const KxJSONObject& value: json)
+			{
+				ModDownloadReply& info = infoVector.emplace_back();
+				info.Name = value["name"].get<wxString>();
+				info.ShortName = value["short_name"].get<wxString>();
+
+				wxString url = value["URI"].get<wxString>();
+				m_Utility.ConvertUnicodeEscapes(url);
+				info.URI = url;
+			}
+		}
+		catch (...)
+		{
+			infoVector.clear();
+		}
+		return infoVector;
 	}
-	void NexusRepository::AssociateWithNXM()
+
+	KxURI NexusRepository::ConstructNXM(const NetworkModInfo& modInfo, const GameID& id, const NexusNXMLinkData& linkData) const
 	{
-		IDownloadManager::AssociateWithLink("NXM");
+		wxString nxm = KxString::Format(wxS("nxm://%1/mods/%2/files/%3"),
+										m_Nexus.TranslateGameIDToNetwork(id),
+										modInfo.GetModID().GetValue(),
+										modInfo.GetFileID().GetValue()
+		);
+		if (!linkData.IsEmpty())
+		{
+			nxm += KxString::Format(wxS("?key=%1&expires=%2&user_id=%3"), linkData.Key, linkData.Expires, linkData.UserID);
+		}
+
+		nxm.MakeLower();
+		return nxm;
+	}
+	bool NexusRepository::ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const
+	{
+		if (KxURI uri(link); uri.IsOk())
+		{
+			// Check if it's a well-formed NXM
+			if (uri.HasScheme() && uri.HasServer() && uri.HasPath() && uri.GetScheme() == wxS("nxm"))
+			{
+				gameID = m_Nexus.TranslateGameIDFromNetwork(uri.GetServer());
+
+				// Parse base part of the link
+				constexpr auto baseNXM = u8R"(mods\/(\d+)\/files\/(\d+))";
+				const wxString& path = uri.GetPath();
+
+				if (wxRegEx regEx(baseNXM, wxRE_ADVANCED|wxRE_ICASE); regEx.Matches(path))
+				{
+					ModID modID(regEx.GetMatch(path, 1));
+					ModFileID fileID(regEx.GetMatch(path, 2));
+					modInfo = NetworkModInfo(modID, fileID);
+				}
+
+				// If there's a query parse it
+				if (const wxString& query = uri.GetQuery(); uri.HasQuery())
+				{
+					constexpr auto extraInfo = u8R"(key=(.*)&expires=(.*)&user_id=(.*))";
+					if (wxRegEx regEx(extraInfo, wxRE_ADVANCED|wxRE_ICASE); regEx.Matches(query))
+					{
+						linkData.Key = regEx.GetMatch(query, 1);
+						linkData.Expires = regEx.GetMatch(query, 2);
+						linkData.UserID = regEx.GetMatch(query, 3);
+					}
+				}
+
+				// Return true if at least game, mod and file IDs are parsed
+				return gameID && !modInfo.IsEmpty();
+			}
+		}
+		return false;
+	}
+	
+	void NexusRepository::ConfigureNXMHandler()
+	{
+		NXMHandlerDialog dialog(IApplication::GetInstance()->GetActiveWindow());
+		dialog.ShowModal();
 	}
 }

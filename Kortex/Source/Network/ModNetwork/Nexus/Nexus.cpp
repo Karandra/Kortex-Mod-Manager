@@ -13,7 +13,7 @@
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxIndexedEnum.h>
 #include <KxFramework/KxWebSocket.h>
-#include <KxFramework/KxCoroutine.h>
+#include <Kx/Async/DelayedCall.h>
 
 namespace Kortex::Variables
 {
@@ -26,19 +26,10 @@ namespace Kortex::NetworkManager
 	{
 		if (m_UpdateChecker.CanIssueNewAutomaticCheck())
 		{
-			KxCoroutine::Run([this, wait = true](KxCoroutine& coroutine) mutable
+			Kx::Async::DelayedCall([this]()
 			{
-				if (wait)
-				{
-					wait = false;
-					return coroutine.YieldWait(wxTimeSpan::Seconds(3));
-				}
-				else
-				{
-					m_UpdateChecker.DoRunUpdateCheck();
-					return coroutine.YieldStop();
-				}
-			});
+				m_UpdateChecker.DoRunUpdateCheck();
+			}, wxTimeSpan::Seconds(3));
 		}
 	}
 
@@ -310,45 +301,6 @@ namespace Kortex::NetworkManager
 			infoVector.clear();
 		}
 		return infoVector;
-	}
-
-	KxURI NexusModNetwork::ConstructNXM(const NetworkModInfo& modInfo, const GameID& id, const NexusNXMLinkData& linkData) const
-	{
-		wxString nxm = KxString::Format(wxS("nxm://%1/mods/%2/files/%3"),
-										TranslateGameIDToNetwork(id),
-										modInfo.GetModID().GetValue(),
-										modInfo.GetFileID().GetValue()
-		);
-		if (!linkData.IsEmpty())
-		{
-			nxm += KxString::Format(wxS("?key=%1&expires=%2&user_id=%3"), linkData.Key, linkData.Expires, linkData.UserID);
-		}
-
-		nxm.MakeLower();
-		return nxm;
-	}
-	bool NexusModNetwork::ParseNXM(const KxURI& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const
-	{
-		if (link.IsOk())
-		{
-			const wxString text = link.BuildUnescapedURI();
-			wxRegEx reg(u8R"(nxm:\/\/(\w+)\/mods\/(\d+)\/files\/(\d+)\?key=(.+)&expires=(.+)&user_id=(.+))", wxRE_ADVANCED|wxRE_ICASE);
-			if (reg.Matches(text))
-			{
-				gameID = TranslateGameIDFromNetwork(reg.GetMatch(text, 1));
-
-				ModID modID(reg.GetMatch(text, 2));
-				ModFileID fileID(reg.GetMatch(text, 3));
-				modInfo = NetworkModInfo(modID, fileID);
-
-				linkData.Key = reg.GetMatch(text, 4);
-				linkData.Expires = reg.GetMatch(text, 5);
-				linkData.UserID = reg.GetMatch(text, 6);
-
-				return gameID && modID && fileID;
-			}
-		}
-		return false;
 	}
 
 	void NexusModNetwork::OnToolBarMenu(KxMenu& menu)

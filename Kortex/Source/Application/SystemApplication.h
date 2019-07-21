@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "ApplicationModule.h"
+#include "BroadcastProcessor.h"
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxURI.h>
@@ -17,6 +18,7 @@ namespace Kortex
 	class IAppOption;
 	class IThemeManager;
 	class INotificationCenter;
+	class BroadcastProcessor;
 }
 namespace Kortex::GameInstance
 {
@@ -60,6 +62,9 @@ namespace Kortex
 		friend class GameID;
 
 		private:
+			BroadcastProcessor m_BroadcastProcessor;
+			BroadcastReciever m_BroadcastReciever;
+
 			wxString m_RootFolder;
 			wxString m_ExecutableName;
 			wxString m_ExecutablePath;
@@ -126,7 +131,7 @@ namespace Kortex
 		public:
 			bool IsAnotherRunning() const;
 			void ConfigureForInternetExplorer10(bool init) const;
-			bool QueueDownloadToMainProcess(const KxURI& uri) const;
+			bool QueueDownloadToMainProcess(const wxString& link) const;
 			
 			wxString GetShortName() const;
 			wxString GetRootFolder() const
@@ -149,6 +154,10 @@ namespace Kortex
 			IThemeManager& GetThemeManager() const
 			{
 				return *m_ThemeManager;
+			}
+			BroadcastProcessor& GetBroadcastProcessor()
+			{
+				return m_BroadcastProcessor;
 			}
 			wxLog* GetLogger() const;
 			void CleanupLogs();

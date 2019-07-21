@@ -49,22 +49,29 @@ namespace Kortex::NetworkManager
 			bool IsAutomaticUpdateCheckAllowed() const;
 			bool ParseDownloadName(const wxString& name, ModFileReply& result);
 
-			bool QueueDownload(const KxURI& link) override;
 			bool QueryDownload(const KxFileItem& fileItem, const DownloadItem& download, ModFileReply& fileReply) override;
 			void OnToolBarMenu(KxMenu& menu);
 			void OnDownloadMenu(KxMenu& menu, DownloadItem* download = nullptr) override;
+
+			bool QueueDownload(const wxString& link) override;
+			wxAny GetDownloadTarget(const wxString& link) override;
 
 			std::optional<ModInfoReply> GetModInfo(const ModRepositoryRequest& request) const override;
 			std::optional<ModEndorsementReply> EndorseMod(const ModRepositoryRequest& request, ModEndorsement state) override;
 
 			std::optional<ModFileReply> GetModFileInfo(const ModRepositoryRequest& request) const override;
 			std::vector<ModFileReply> GetModFiles(const ModRepositoryRequest& request) const override;
+			std::optional<GetModFiles2Result> GetModFiles2(const ModRepositoryRequest& request, bool files, bool updates) const;
 			std::vector<ModDownloadReply> GetFileDownloads(const ModRepositoryRequest& request) const override;
 
 		public:
-			std::optional<GetModFiles2Result> GetModFiles2(const ModRepositoryRequest& request, bool files, bool updates) const;
+			KxURI ConstructNXM(const NetworkModInfo& modInfo, const GameID& id = {}, const NexusNXMLinkData& linkData = {}) const;
+			bool ParseNXM(const wxString& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const;
+			bool ParseNXM(const KxURI& uri, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const
+			{
+				return ParseNXM(uri.BuildUnescapedURI(), gameID, modInfo, linkData);
+			}
 			
-			bool IsAssociatedWithNXM();
-			void AssociateWithNXM();
+			void ConfigureNXMHandler();
 	};
 }

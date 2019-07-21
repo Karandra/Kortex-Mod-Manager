@@ -20,14 +20,24 @@ namespace Kortex
 	class IGameInstance;
 	class IGameProfile;
 	class ITranslator;
+}
+namespace Kortex
+{
+	struct CmdLineParameters;
+}
 
+namespace Kortex
+{
 	enum class LoadTranslationStatus
 	{
 		Success = 0,
 		NoTranslations,
 		LoadingError
 	};
+}
 
+namespace Kortex
+{
 	class IApplication:
 		public KxSingletonPtr<IApplication>,
 		public Application::WithOptions<IApplication>
@@ -36,6 +46,9 @@ namespace Kortex
 
 		public:
 			static SystemApplication* GetSystemApp();
+
+		private:
+			void OnConfigureCommandLine();
 
 		protected:
 			virtual void OnCreate() = 0;
@@ -69,22 +82,25 @@ namespace Kortex
 			virtual KxTranslation::AvailableMap GetAvailableTranslations() const = 0;
 
 			virtual const IImageProvider& GetImageProvider() const = 0;
-			virtual BroadcastProcessor& GetBroadcastProcessor() = 0;
 
 			virtual IVariableTable& GetVariables() = 0;
 			virtual wxString ExpandVariablesLocally(const wxString& variables) const = 0;
 			virtual wxString ExpandVariables(const wxString& variables) const = 0;
 			
 			virtual bool OpenInstanceSelectionDialog() = 0;
-			virtual bool ScheduleRestart() = 0;
 			virtual bool Uninstall() = 0;
 
 		public:
 			bool Is64Bit() const;
 			bool IsSystem64Bit() const;
-
 			bool IsAnotherRunning() const;
-			bool QueueDownloadToMainProcess(const KxURI& uri);
+
+			bool QueueDownloadToMainProcess(const wxString& link);
+			std::optional<wxString> GetLinkFromCommandLine() const;
+
+			wxCmdLineParser& GetCmdLineParser() const;
+			wxString FormatCommandLine(const CmdLineParameters& parameters);
+			bool ScheduleRestart(const wxString& commandLine = {});
 
 			void EnableIE10Support();
 			void DisableIE10Support();
@@ -98,9 +114,6 @@ namespace Kortex
 			KxXMLDocument& GetGlobalConfig() const;
 			IModule& GetModule() const;
 
-			wxCmdLineParser& GetCmdLineParser() const;
-			bool ParseCommandLine();
-
 			wxWindow* GetActiveWindow() const;
 			wxWindow* GetTopWindow() const;
 			void SetTopWindow(wxWindow* window);
@@ -109,6 +122,7 @@ namespace Kortex
 
 			void ExitApp(int exitCode = 0);
 			wxLog& GetLogger();
+			BroadcastProcessor& GetBroadcastProcessor();
 			LoadTranslationStatus TryLoadTranslation(KxTranslation& translation,
 													 const KxTranslation::AvailableMap& availableTranslations,
 													 const wxString& component,

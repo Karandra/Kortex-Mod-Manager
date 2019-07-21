@@ -205,12 +205,6 @@
     <Filter Include="Code\Headers\Application\VariablesTable">
       <UniqueIdentifier>{e029bab9-2e50-48a1-a98a-720023d325bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\Application\Option">
-      <UniqueIdentifier>{fcc4e747-5513-4819-91ee-7888fbb62841}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\Option">
-      <UniqueIdentifier>{f8dee2e9-4626-42bf-95eb-0f0d1f9534f7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\Programs">
       <UniqueIdentifier>{12602aa1-3fe1-499e-8830-e016580559ff}</UniqueIdentifier>
     </Filter>
@@ -408,6 +402,12 @@
     </Filter>
     <Filter Include="Code\Source\Application\Events">
       <UniqueIdentifier>{d536f7e4-3332-4aec-b729-de1d6c7a1ff2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Headers\Application\Options">
+      <UniqueIdentifier>{fcc4e747-5513-4819-91ee-7888fbb62841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Application\Options">
+      <UniqueIdentifier>{f8dee2e9-4626-42bf-95eb-0f0d1f9534f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -844,13 +844,13 @@
       <Filter>Code\Source\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp">
-      <Filter>Code\Source\Application\Option</Filter>
+      <Filter>Code\Source\Application\Options</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IAppOption.cpp">
       <Filter>Code\Source\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Options\Option.cpp">
-      <Filter>Code\Source\Application\Option</Filter>
+      <Filter>Code\Source\Application\Options</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\IProgramEntry.cpp">
       <Filter>Code\Source\Programs</Filter>
@@ -1256,6 +1256,15 @@
     </ClCompile>
     <ClCompile Include="Source\GameInstance\ProfileEvent.cpp">
       <Filter>Code\Source\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandlerDialog.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandlerModel.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandlerModelNode.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1836,16 +1845,16 @@
       <Filter>Code\Headers\Application\VariablesTable</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Options\OptionSerializer.h">
-      <Filter>Code\Headers\Application\Option</Filter>
+      <Filter>Code\Headers\Application\Options</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\IAppOption.h">
       <Filter>Code\Headers\Application</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Options\Option.h">
-      <Filter>Code\Headers\Application\Option</Filter>
+      <Filter>Code\Headers\Application\Options</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Options\OptionDatabase.h">
-      <Filter>Code\Headers\Application\Option</Filter>
+      <Filter>Code\Headers\Application\Options</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ApplicationOptions.hpp">
       <Filter>Code\Include\Components</Filter>
@@ -1884,7 +1893,7 @@
       <Filter>Code\Include\Common</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Options\Macros.h">
-      <Filter>Code\Headers\Application\Option</Filter>
+      <Filter>Code\Headers\Application\Options</Filter>
     </ClInclude>
     <ClInclude Include="Source\Network\Common.h">
       <Filter>Code\Headers\Network</Filter>
@@ -2377,6 +2386,18 @@
     </ClInclude>
     <ClInclude Include="Source\GameInstance\ProfileEvent.h">
       <Filter>Code\Headers\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandlerDialog.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandlerModel.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandlerModelNode.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Options\CmdLineDatabase.h">
+      <Filter>Code\Headers\Application\Options</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

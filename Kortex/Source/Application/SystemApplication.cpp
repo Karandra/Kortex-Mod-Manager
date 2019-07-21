@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SystemApplication.h"
+#include "DefaultApplication.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/GameInstance.hpp>
@@ -75,10 +76,10 @@ namespace Kortex
 
 	void SystemApplication::InitLogging()
 	{
-		Bind(LogEvent::EvtInfo, &SystemApplication::OnError, this);
-		Bind(LogEvent::EvtError, &SystemApplication::OnError, this);
-		Bind(LogEvent::EvtWarning, &SystemApplication::OnError, this);
-		Bind(LogEvent::EvtCritical, &SystemApplication::OnError, this);
+		m_BroadcastReciever.Bind(LogEvent::EvtInfo, &SystemApplication::OnError, this);
+		m_BroadcastReciever.Bind(LogEvent::EvtError, &SystemApplication::OnError, this);
+		m_BroadcastReciever.Bind(LogEvent::EvtWarning, &SystemApplication::OnError, this);
+		m_BroadcastReciever.Bind(LogEvent::EvtCritical, &SystemApplication::OnError, this);
 		wxLog::SetVerbose(true);
 
 		Utility::Log::LogInfo("%1 v%2: Log opened", SystemApplicationInfo::Name, SystemApplicationInfo::Version);
@@ -200,6 +201,11 @@ namespace Kortex
 	{
 		// Call creation function
 		m_Application->OnCreate();
+
+		// Configure command line and parse it
+		m_Application->OnConfigureCommandLine();
+		ParseCommandLine();
+
 		SetPostCreateVariables();
 
 		// Initialize logging
@@ -426,13 +432,8 @@ namespace Kortex
 		}
 		#undef IERegPath
 	}
-	bool SystemApplication::QueueDownloadToMainProcess(const KxURI& uri) const
+	bool SystemApplication::QueueDownloadToMainProcess(const wxString& link) const
 	{
-		if (!uri)
-		{
-			return false;
-		}
-
 		KxProcess process(m_Application->GetExecutableName());
 		if (process.Find())
 		{
@@ -440,8 +441,6 @@ namespace Kortex
 			{
 				if (KxTLWInternal::GetWindowUserData(handle) == KMainWindow::GetUniqueID())
 				{
-					wxString link = uri.BuildUnescapedURI();
-
 					COPYDATASTRUCT data = {0};
 					data.lpData = const_cast<wchar_t*>(link.wc_str());
 					data.dwData = link.length();

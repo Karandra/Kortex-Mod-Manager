@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include <Kx/Core/EventSystem/BroadcastProcessor.h>
+#include <Kx/EventSystem/BroadcastProcessor.h>
 
 namespace Kortex
 {

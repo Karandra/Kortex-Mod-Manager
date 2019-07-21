@@ -4,6 +4,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "Application/Resources/ImageResourceID.h"
+#include "Application/Options/CmdLineDatabase.h"
 #include "Utility/KBitmapSize.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -328,7 +329,11 @@ namespace Kortex::GameInstance
 			{
 				KxShellLink link;
 				link.SetTarget(IApplication::GetInstance()->GetExecutablePath());
-				link.SetArguments(KxString::Format("-InstanceID \"%1\"", instance->GetInstanceID()));
+
+				CmdLineParameters parameters;
+				parameters.InstanceID = instance->GetInstanceID();
+
+				link.SetArguments(IApplication::GetInstance()->FormatCommandLine(parameters));
 				link.SetWorkingFolder(KxFile::GetCWD());
 				link.SetIconLocation(instance->GetIconLocation());
 				link.Save(dialog.GetResult());

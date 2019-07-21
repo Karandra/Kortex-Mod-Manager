@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "BroadcastProcessor.h"
-#include "IApplication.h"
+#include "SystemApplication.h"
 
 namespace Kortex
 {
 	BroadcastProcessor& BroadcastProcessor::Get()
 	{
-		return IApplication::GetInstance()->GetBroadcastProcessor();
+		return SystemApplication::GetInstance()->GetBroadcastProcessor();
 	}
 
 	bool BroadcastProcessor::AddReciever(BroadcastReciever& reciever)

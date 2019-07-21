@@ -60,9 +60,6 @@ namespace Kortex::NetworkManager
 		public:
 			std::optional<NexusGameReply> GetGameInfo(const GameID& id = {}) const;
 			std::vector<NexusGameReply> GetGamesList() const;
-
-			KxURI ConstructNXM(const NetworkModInfo& modInfo, const GameID& id = {}, const NexusNXMLinkData& linkData = {}) const;
-			bool ParseNXM(const KxURI& link, GameID& gameID, NetworkModInfo& modInfo, NexusNXMLinkData& linkData) const;
 			
 		public:
 			void OnToolBarMenu(KxMenu& menu) override;

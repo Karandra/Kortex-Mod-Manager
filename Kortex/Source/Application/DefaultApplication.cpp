@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultApplication.h"
 #include "SystemApplication.h"
+#include "Options/CmdLineDatabase.h"
 #include "UI/KMainWindow.h"
 #include "UI/KWorkspace.h"
 #include "GameInstance/SelectionDialog.h"
@@ -21,7 +22,6 @@
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxSplashWindow.h>
-#include <KxFramework/KxTaskScheduler.h>
 #include <KxFramework/KxCallAtScopeExit.h>
 
 namespace Kortex::Application
@@ -31,14 +31,13 @@ namespace Kortex::Application
 		KortexDefOption(RestartDelay);
 		KortexDefOption(Instances);
 	}
+}
 
+namespace Kortex::Application
+{
 	DefaultApplication::DefaultApplication()
-		:m_Translator(m_Translation), m_BroadcastReciever(m_BroadcastProcessor)
+		:m_Translator(m_Translation)
 	{
-		m_BroadcastReciever.Bind(LogEvent::EvtInfo, &DefaultApplication::OnError, this);
-		m_BroadcastReciever.Bind(LogEvent::EvtError, &DefaultApplication::OnError, this);
-		m_BroadcastReciever.Bind(LogEvent::EvtWarning, &DefaultApplication::OnError, this);
-		m_BroadcastReciever.Bind(LogEvent::EvtCritical, &DefaultApplication::OnError, this);
 	}
 
 	wxString DefaultApplication::ExpandVariablesLocally(const wxString& variables) const
@@ -70,21 +69,6 @@ namespace Kortex::Application
 		m_UserSettingsFile = m_UserSettingsFolder + "\\Settings.xml";
 		m_LogsFolder = m_UserSettingsFolder + "\\Logs";
 		m_InstancesFolder = m_UserSettingsFolder + "\\Instances";
-
-		// Configure command line parsing options
-		wxCmdLineParser& cmdLineParser = GetCmdLineParser();
-		cmdLineParser.SetSwitchChars("-");
-		cmdLineParser.AddOption("GameID", wxEmptyString, "Game ID");
-		cmdLineParser.AddOption("InstanceID", wxEmptyString, "Instance ID");
-		cmdLineParser.AddOption("ProfileID", wxEmptyString, "Profile ID");
-		cmdLineParser.AddOption("GlobalConfigPath", wxEmptyString, "Folder path for app-wide config");
-		IDownloadManager::ConfigureCommandLine(cmdLineParser);
-
-		// Init global settings folder
-		ParseCommandLine();
-		GetCmdLineParser().Found("GlobalConfigPath", &m_UserSettingsFolder);
-		m_Variables.SetVariable("AppSettings", m_UserSettingsFolder);
-		KxFile(m_UserSettingsFolder).CreateFolder();
 	}
 	void DefaultApplication::OnDestroy()
 	{
@@ -99,7 +83,7 @@ namespace Kortex::Application
 		LoadImages();
 
 		// Check download
-		KxURI downloadLink = IDownloadManager::GetLinkFromCommandLine(GetCmdLineParser());
+		auto downloadLink = GetLinkFromCommandLine();
 
 		// Show loading window
 		KxSplashWindow* splashWindow = new KxSplashWindow();
@@ -110,14 +94,13 @@ namespace Kortex::Application
 			m_InitProgressDialog = nullptr;
 		});
 
-		// Don't show loading screen if it's a download link request
-		if (!downloadLink || !anotherInstanceRunning)
+		// Don't show loading screen if there's a download link or it's secondary process
+		if (!downloadLink && !anotherInstanceRunning)
 		{
 			splashWindow->Create(nullptr, ImageProvider::GetBitmap("kortex-logo"));
 			splashWindow->Show();
 		}
 		
-		KMainWindow* mainWindow = nullptr;
 		if (!anotherInstanceRunning)
 		{
 			// Set default table-tree-list like controls
@@ -129,50 +112,50 @@ namespace Kortex::Application
 			Utility::Log::LogInfo("Begin initializing core systems");
 			
 			// Initialize main window
-			mainWindow = new KMainWindow();
-			SetTopWindow(mainWindow);
+			SetTopWindow(new KMainWindow());
 
-			InitSettings();
-			InitVFS();
-			
-			// Order is important
-			m_NetworkModule = std::make_unique<NetworkModule>();
-			m_PackagesModule = std::make_unique<ModPackagesModule>();
-			m_ProgramModule = std::make_unique<KProgramModule>();
-			m_GameModsModule = std::make_unique<GameModsModule>();
-			Utility::Log::LogInfo("Core systems initialized");
+			if (InitSettings(downloadLink.has_value()))
+			{
+				// Order is important
+				m_NetworkModule = std::make_unique<NetworkModule>();
+				m_PackagesModule = std::make_unique<ModPackagesModule>();
+				m_ProgramModule = std::make_unique<KProgramModule>();
+				m_GameModsModule = std::make_unique<GameModsModule>();
+				Utility::Log::LogInfo("Core systems initialized");
 
-			Utility::Log::LogInfo("Initializing instances");
-			InitInstancesData(m_InitProgressDialog);
-			IModule::InitModulesWithDisposition(IModule::Disposition::Global);
-			IModule::InitModulesWithDisposition(IModule::Disposition::ActiveInstance);
-			IModule::InitModulesWithDisposition(IModule::Disposition::Local);
-
-			Utility::Log::LogInfo("Loading saved profile");
-			IGameInstance::GetActive()->LoadSavedProfileOrDefault();
-
-			// All required managers initialized, can create main window now
-			Utility::Log::LogInfo("Creating main window");
-			mainWindow->Create();
-
-			// Show main window and selected workspace
-			Utility::Log::LogInfo("Main window created. Showing workspace.");
-			ShowWorkspace();
-			mainWindow->Show();
-			return true;
+				Utility::Log::LogInfo("Initializing instances");
+				if (BeginLoadCurrentInstance(m_InitProgressDialog, downloadLink.has_value()))
+				{
+					// Hook-in processing of download link dispatching
+					if (downloadLink)
+					{
+						Utility::Log::LogInfo("Download link found (%1), trying to dispatch it its target", *downloadLink);
+						
+						bool canContinue = false;
+						if (!DispatchDownloadLink(*downloadLink, &canContinue))
+						{
+							BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTrf("Init.DownloadLinkDispatchFailed", *downloadLink));
+						}
+						if (!canContinue)
+						{
+							return false;
+						}
+					}
+					return FinalizeInitialization();
+				}
+			}
 		}
 		else
 		{
 			// Send download
 			if (downloadLink)
 			{
-				QueueDownloadToMainProcess(downloadLink);
+				QueueDownloadToMainProcess(*downloadLink);
 				return false;
 			}
-
 			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("Init.AnotherInstanceRunning"));
-			return false;
 		}
+		return false;
 	}
 	int DefaultApplication::OnExit()
 	{
@@ -235,8 +218,7 @@ namespace Kortex::Application
 			message = event.GetString();
 		}
 
-		GetSystemApp()->ProcessEvent(event);
-		BroadcastProcessor::Get().CallAfter([&, window = event.GetWindow()]()
+		auto ShowMessage = [&, window = event.GetWindow()]()
 		{
 			KxTaskDialog dialog(window ? window : GetTopWindow(), KxID_NONE, caption, message, KxBTN_OK, iconType);
 			dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
@@ -252,7 +234,16 @@ namespace Kortex::Application
 					ExitApp(KxID_ERROR);
 				}
 			}
-		});
+		};
+
+		if (wxThread::IsMain())
+		{
+			ShowMessage();
+		}
+		else
+		{
+			BroadcastProcessor::Get().CallAfter(std::move(ShowMessage));
+		}
 	}
 	bool DefaultApplication::OnException()
 	{
@@ -305,20 +296,6 @@ namespace Kortex::Application
 			}
 		}
 		return false;
-	}
-	bool DefaultApplication::ScheduleRestart()
-	{
-		int delaySec = GetGlobalOption(OName::RestartDelay).GetValueInt(5);
-		const wxString taskName = "Kortex::ScheduleRestart";
-
-		KxTaskScheduler taskSheduler;
-		KxTaskSchedulerTask task = taskSheduler.NewTask();
-		task.SetExecutable(KxProcess(0).GetImageName());
-		task.SetRegistrationTrigger("Restart", wxTimeSpan(0, 0, delaySec), wxDateTime::Now());
-		task.DeleteExpiredTaskAfter(wxTimeSpan(0, 0, 5));
-
-		taskSheduler.DeleteTask(taskName);
-		return taskSheduler.SaveTask(task, taskName);
 	}
 	bool DefaultApplication::Uninstall()
 	{
@@ -398,10 +375,17 @@ namespace Kortex::Application
 		option.SetValue(startPage);
 	}
 
-	void DefaultApplication::InitSettings()
+	bool DefaultApplication::InitSettings(bool downloadLinkPresent)
 	{
-		EnableIE10Support();
 		Utility::Log::LogInfo("Initializing app settings");
+
+		// Init global settings folder
+		GetCmdLineParser().Found(CmdLineName::GlobalConfigPath, &m_UserSettingsFolder);
+		m_Variables.SetVariable("AppSettings", m_UserSettingsFolder);
+		KxFile(m_UserSettingsFolder).CreateFolder();
+
+		// Enable IE10 emulation level for WebView
+		EnableIE10Support();
 
 		// Init some application-wide variables
 		auto options = GetGlobalOption(OName::Instances, OName::Location);
@@ -410,11 +394,16 @@ namespace Kortex::Application
 		// Show first time config dialog if needed and save new 'ProfilesFolder'
 		if (IsPreStartConfigNeeded())
 		{
+			if (downloadLinkPresent)
+			{
+				return false;
+			}
+
 			Utility::Log::LogInfo("Pre start config needed");
 			if (!ShowFirstTimeConfigDialog(m_InitProgressDialog))
 			{
 				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("Init.Error1"));
-				return;
+				return false;
 			}
 		}
 
@@ -424,6 +413,8 @@ namespace Kortex::Application
 
 		// Init all profiles and load current one if specified (or ask user to choose it)
 		Utility::Log::LogInfo("Settings initialized. Begin loading profile.");
+
+		return true;
 	}
 	bool DefaultApplication::IsPreStartConfigNeeded()
 	{
@@ -457,17 +448,35 @@ namespace Kortex::Application
 			return false;
 		}
 	}
-	void DefaultApplication::InitInstancesData(wxWindow* parent)
+	
+	void DefaultApplication::LoadStartupInstanceID()
+	{
+		wxCmdLineParser& parser = GetCmdLineParser();
+		if (parser.Found("InstanceID", &m_StartupInstanceID))
+		{
+			m_IsCmdStartupInstanceID = true;
+		}
+		else
+		{
+			m_StartupInstanceID = GetGlobalOption(OName::Instances, OName::Active).GetValue();
+		}
+		Utility::Log::LogInfo("Instance: %1", m_StartupInstanceID);
+	}
+	bool DefaultApplication::BeginLoadCurrentInstance(wxWindow* parent, bool downloadLinkPresent)
 	{
 		LoadStartupInstanceID();
 		IGameInstance::LoadTemplates();
 		IGameInstance::LoadInstances();
 
-		if (!LoadInstance())
+		if (!LoadInstance() && !downloadLinkPresent)
 		{
 			Utility::Log::LogInfo("Unable to load saved instance. Asking user to choose one.");
 
-			parent->Hide();
+			if (parent)
+			{
+				parent->Hide();
+			}
+
 			GameInstance::SelectionDialog dialog(parent);
 			wxWindowID ret = dialog.ShowModal();
 			if (ret == KxID_OK)
@@ -492,16 +501,24 @@ namespace Kortex::Application
 				if (!LoadInstance())
 				{
 					BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("Init.Error1"));
+					return false;
 				}
-				return;
+				return true;
 			}
 			else if (ret == KxID_CANCEL)
 			{
 				Utility::Log::LogInfo("Instance loading canceled. Exiting.");
 				ExitApp();
+
+				return false;
 			}
 		}
-		parent->Show();
+
+		if (parent)
+		{
+			parent->Show();
+		}
+		return true;
 	}
 	bool DefaultApplication::LoadInstance()
 	{
@@ -520,18 +537,66 @@ namespace Kortex::Application
 		}
 		return false;
 	}
-	void DefaultApplication::LoadStartupInstanceID()
+	bool DefaultApplication::DispatchDownloadLink(const wxString& link, bool* canContinue)
 	{
-		wxCmdLineParser& parser = GetCmdLineParser();
-		if (parser.Found("InstanceID", &m_StartupInstanceID))
+		// Enum all mod repositories and ask them to process the link
+		for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 		{
-			m_IsCmdStartupInstanceID = true;
+			Utility::Log::LogInfo("Trying repository '%1'", repository->GetContainer().GetName());
+
+			wxAny target = repository->GetDownloadTarget(link);
+			if (IGameInstance* instance = nullptr; target.GetAs(&instance))
+			{
+				if (instance->GetInstanceID() != m_StartupInstanceID)
+				{
+					Utility::Log::LogInfo("Restarting with queuing download to another instance: '%1'", instance->GetInstanceID());
+
+					CmdLineParameters parameters;
+					parameters.InstanceID = instance->GetInstanceID();
+					parameters.DownloadLink = link;
+					ScheduleRestart(FormatCommandLine(parameters));
+				}
+				else
+				{
+					Utility::Log::LogInfo("Current instance matches with target instance (%1), proceeding", instance->GetInstanceID());
+					
+					if (canContinue)
+					{
+						*canContinue = true;
+					}
+				}
+				return true;
+			}
+			else if (CmdLine command; target.GetAs(&command))
+			{
+				Utility::Log::LogInfo("Starting external process '%1' with arguments '%2'", command.Executable, command.Arguments);
+
+				KxProcess process(command.Executable, command.Arguments);
+				process.Run(KxPROCESS_RUN_SYNC);
+				return true;
+			}
 		}
-		else
-		{
-			m_StartupInstanceID = GetGlobalOption(OName::Instances, OName::Active).GetValue();
-		}
-		Utility::Log::LogInfo("Instance: %1", m_StartupInstanceID);
+		return false;
+	}
+	bool DefaultApplication::FinalizeInitialization()
+	{
+		IModule::InitModulesWithDisposition(IModule::Disposition::Global);
+		IModule::InitModulesWithDisposition(IModule::Disposition::ActiveInstance);
+		IModule::InitModulesWithDisposition(IModule::Disposition::Local);
+		InitVFS();
+
+		Utility::Log::LogInfo("Loading saved profile");
+		IGameInstance::GetActive()->LoadSavedProfileOrDefault();
+
+		// All required managers initialized, can create main window now
+		Utility::Log::LogInfo("Creating main window");
+		KMainWindow::GetInstance()->Create();
+
+		// Show main window and selected workspace
+		Utility::Log::LogInfo("Main window created, displaying initial workspace.");
+		ShowWorkspace();
+		KMainWindow::GetInstance()->Show();
+		return true;
 	}
 
 	void DefaultApplication::InitVFS()

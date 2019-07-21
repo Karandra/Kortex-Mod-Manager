@@ -37,8 +37,6 @@ namespace Kortex
 
 		public:
 			static wxString RenameIncrement(const wxString& name);
-			static void ConfigureCommandLine(wxCmdLineParser& parser);
-			static KxURI GetLinkFromCommandLine(const wxCmdLineParser& parser);
 
 			static bool IsAssociatedWithLink(const wxString& type);
 			static void AssociateWithLink(const wxString& type);
@@ -115,6 +113,6 @@ namespace Kortex
 									   const ModFileReply& fileInfo,
 									   const GameID& id = {}
 			) = 0;
-			virtual bool TryQueueDownloadLink(const KxURI& link);
+			virtual bool QueueUnknownDownload(const wxString& link);
 	};
 }

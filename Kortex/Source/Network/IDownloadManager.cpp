@@ -56,19 +56,6 @@ namespace Kortex
 		}
 		return KxString::Format("%1 (1).%2", name.BeforeLast('.'), name.AfterLast('.'));
 	}
-	void IDownloadManager::ConfigureCommandLine(wxCmdLineParser& parser)
-	{
-		parser.AddOption(wxS("DownloadLink"), wxEmptyString, "Download link");
-	}
-	KxURI IDownloadManager::GetLinkFromCommandLine(const wxCmdLineParser& parser)
-	{
-		wxString link;
-		if (parser.Found(wxS("DownloadLink"), &link) && !link.IsEmpty())
-		{
-			return link;
-		}
-		return {};
-	}
 
 	bool IDownloadManager::IsAssociatedWithLink(const wxString& type)
 	{
@@ -344,16 +331,13 @@ namespace Kortex
 		}
 	}
 
-	bool IDownloadManager::TryQueueDownloadLink(const KxURI& link)
+	bool IDownloadManager::QueueUnknownDownload(const wxString& link)
 	{
-		if (link)
+		for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 		{
-			for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
+			if (repository->QueueDownload(link))
 			{
-				if (repository->QueueDownload(link))
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;

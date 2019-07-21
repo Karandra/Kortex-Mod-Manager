@@ -42,10 +42,11 @@ h1, h2, h3, h4 {
 	font-weight: normal;
 }
 h1, h2 {
-	border: 0 solid rgba(172,161,161,1.000);
+	border: 0 solid rgb(172, 161, 161);
 }
 h1 {
 	border-bottom-width: 0.2rem;
+	padding-bottom: 0.5rem;
 	font-size: 3.2rem;
 	margin: 0 0 2.1rem;
 }

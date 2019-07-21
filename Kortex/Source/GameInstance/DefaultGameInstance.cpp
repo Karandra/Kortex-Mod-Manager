@@ -23,6 +23,32 @@
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxIndexedEnum.h>
 
+namespace
+{
+	struct NameToRegKeyDef: public KxIndexedEnum::Definition<NameToRegKeyDef, KxRegistryHKey, wxString>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{KxREG_HKEY_CLASSES_ROOT, wxS("HKEY_CLASSES_ROOT")},
+			{KxREG_HKEY_CURRENT_USER, wxS("HKEY_CURRENT_USER")},
+			{KxREG_HKEY_LOCAL_MACHINE, wxS("HKEY_LOCAL_MACHINE")},
+			{KxREG_HKEY_USERS, wxS("HKEY_USERS")},
+			{KxREG_HKEY_CURRENT_CONFIG, wxS("HKEY_CURRENT_CONFIG")},
+		};
+	};
+	struct NameToRegTypeDef: public KxIndexedEnum::Definition<NameToRegTypeDef, KxRegistryValueType, wxString>
+	{
+		inline static const TItem ms_Index[] =
+		{
+			{KxREG_VALUE_SZ, wxS("REG_VALUE_SZ")},
+			{KxREG_VALUE_EXPAND_SZ, wxS("REG_VALUE_EXPAND_SZ")},
+			{KxREG_VALUE_MULTI_SZ, wxS("REG_VALUE_MULTI_SZ")},
+			{KxREG_VALUE_DWORD, wxS("REG_VALUE_DWORD")},
+			{KxREG_VALUE_QWORD, wxS("REG_VALUE_QWORD")},
+		};
+	};
+}
+
 namespace Kortex::Application::OName
 {
 	KortexDefOption(GameID);
@@ -56,17 +82,18 @@ namespace Kortex::GameInstance
 			m_Variables.SetVariable(wxS("GameShortName"), KAux::StrOr(m_GameShortName, m_GameName, m_GameID));
 			m_Variables.SetVariable(wxS("GameSortOrder"), VariableValue(KxString::Format(wxS("%1"), m_SortOrder)));
 
-			if (!IsTemplate())
+			if (IsTemplate())
 			{
-				if (OnLoadInstance(templateConfig))
-				{
-					return IsOK();
-				}
-				else
-				{
-					// Reset ID if instance is not loaded correctly
-					m_GameID = GameIDs::NullGameID;
-				}
+				LoadVariables(templateConfig);
+			}
+			else if (OnLoadInstance(templateConfig))
+			{
+				return IsOK();
+			}
+			else
+			{
+				// Reset ID if instance is not loaded correctly
+				m_GameID = GameIDs::NullGameID;
 			}
 		}
 		return IsOK();
@@ -82,6 +109,114 @@ namespace Kortex::GameInstance
 	wxString DefaultGameInstance::CreateDefaultProfileID() const
 	{
 		return wxS("Default");
+	}
+
+	void DefaultGameInstance::LoadVariables(const KxXMLDocument& instanceConfig, const KxXMLDocument* userConfig)
+	{
+		IVariableTable& variables = GetVariables();
+
+		// System variables
+		variables.SetVariable(Variables::KVAR_INSTANCE_DIR, GetInstanceDir());
+		variables.SetVariable(Variables::KVAR_VIRTUAL_GAME_DIR, GetVirtualGameDir());
+		variables.SetVariable(Variables::KVAR_MODS_DIR, GetModsDir());
+		variables.SetVariable(Variables::KVAR_PROFILES_DIR, GetProfilesDir());
+
+		auto LoadVariablesFrom = [this, &variables](const KxXMLNode& arrayNode, bool noEmptyValues)
+		{
+			for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+			{
+				const wxString id = node.GetAttribute("ID");
+				const wxString typeString = node.GetAttribute("Type");
+				const wxString source = node.GetAttribute("Source");
+				const bool saveAsOverride = node.GetAttributeBool("SaveAsOverride");
+
+				wxString value;
+				if (source == wxS("Registry"))
+				{
+					value = LoadRegistryVariable(node);
+				}
+				else
+				{
+					value = ExpandVariables(node.GetValue());
+				}
+				if (noEmptyValues && value.IsEmpty())
+				{
+					continue;
+				}
+
+				// Process depending on type
+				using Type = VariableValue::Type;
+
+				std::optional<Type> type = Type::String;
+				if (typeString == wxS("FSPath"))
+				{
+					type = Type::FSPath;
+					value = KxFile(value).GetPath();
+				}
+				else if (typeString == wxS("Integer"))
+				{
+					type = Type::Integer;
+				}
+
+				// Override mode
+				using Override = VariableValue::Override;
+
+				std::optional<Override> overrideMode;
+				if (saveAsOverride)
+				{
+					overrideMode = Override::True;
+				}
+
+				variables.SetVariable(id, VariableValue(value, overrideMode, type));
+			}
+		};
+
+		// Load template variables
+		LoadVariablesFrom(instanceConfig.QueryElement("Definition/Variables"), false);
+
+		// Override any variables from file
+		if (userConfig)
+		{
+			LoadVariablesFrom(userConfig->QueryElement("Instance/Variables"), true);
+		}
+	}
+	wxString DefaultGameInstance::LoadRegistryVariable(const KxXMLNode& node) const
+	{
+		// 32 or 64 bit registry branch
+		KxRegistryNode regBranch = KxREG_NODE_SYS;
+		switch (node.GetFirstChildElement("Branch").GetValueInt(0))
+		{
+			case 32:
+			{
+				regBranch = KxREG_NODE_32;
+				break;
+			}
+			case 64:
+			{
+				regBranch = KxREG_NODE_64;
+				break;
+			}
+		};
+
+		// Main key
+		auto mainKey = NameToRegKeyDef::TryFromString(node.GetFirstChildElement("Root").GetValue());
+		if (mainKey)
+		{
+			wxString path = ExpandVariables(node.GetFirstChildElement("Path").GetValue());
+			wxString name = ExpandVariables(node.GetFirstChildElement("Name").GetValue());
+			auto type = NameToRegTypeDef::TryFromString(node.GetFirstChildElement("Type").GetValue());
+
+			return KxRegistry::GetValue(*mainKey, path, name, type ? *type : KxREG_VALUE_ANY, regBranch, true).As<wxString>();
+		}
+		return wxEmptyString;
+	}
+	void DefaultGameInstance::DetectGameArchitecture(const KxXMLDocument& instanceConfig)
+	{
+		IVariableTable& variables = GetVariables();
+		bool is64Bit = KxFile(variables.GetVariable("GameExecutable").AsString()).GetBinaryType() == KxFBF_WIN64;
+
+		variables.SetVariable("GameArchitecture", KAux::ArchitectureToNumber(is64Bit));
+		variables.SetVariable("GameArchitectureName", KAux::ArchitectureToString(is64Bit));
 	}
 
 	// Variables
@@ -289,100 +424,8 @@ namespace Kortex::GameInstance
 	}
 }
 
-namespace
-{
-	struct NameToRegKeyDef: public KxIndexedEnum::Definition<NameToRegKeyDef, KxRegistryHKey, wxString>
-	{
-		inline static const TItem ms_Index[] =
-		{
-			{KxREG_HKEY_CLASSES_ROOT, wxS("HKEY_CLASSES_ROOT")},
-			{KxREG_HKEY_CURRENT_USER, wxS("HKEY_CURRENT_USER")},
-			{KxREG_HKEY_LOCAL_MACHINE, wxS("HKEY_LOCAL_MACHINE")},
-			{KxREG_HKEY_USERS, wxS("HKEY_USERS")},
-			{KxREG_HKEY_CURRENT_CONFIG, wxS("HKEY_CURRENT_CONFIG")},
-		};
-	};
-	struct NameToRegTypeDef: public KxIndexedEnum::Definition<NameToRegTypeDef, KxRegistryValueType, wxString>
-	{
-		inline static const TItem ms_Index[] =
-		{
-			{KxREG_VALUE_SZ, wxS("REG_VALUE_SZ")},
-			{KxREG_VALUE_EXPAND_SZ, wxS("REG_VALUE_EXPAND_SZ")},
-			{KxREG_VALUE_MULTI_SZ, wxS("REG_VALUE_MULTI_SZ")},
-			{KxREG_VALUE_DWORD, wxS("REG_VALUE_DWORD")},
-			{KxREG_VALUE_QWORD, wxS("REG_VALUE_QWORD")},
-		};
-	};
-}
-
 namespace Kortex::GameInstance
 {
-	void ConfigurableGameInstance::LoadVariables(const KxXMLDocument& instanceConfig)
-	{
-		IVariableTable& variables = GetVariables();
-
-		// System variables
-		variables.SetVariable(Variables::KVAR_INSTANCE_DIR, GetInstanceDir());
-		variables.SetVariable(Variables::KVAR_VIRTUAL_GAME_DIR, GetVirtualGameDir());
-		variables.SetVariable(Variables::KVAR_MODS_DIR, GetModsDir());
-		variables.SetVariable(Variables::KVAR_PROFILES_DIR, GetProfilesDir());
-
-		auto LoadVariables = [this, &variables](const KxXMLNode& arrayNode, bool noEmptyValues)
-		{
-			for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
-			{
-				const wxString id = node.GetAttribute("ID");
-				const wxString typeString = node.GetAttribute("Type");
-				const wxString source = node.GetAttribute("Source");
-				const bool saveAsOverride = node.GetAttributeBool("SaveAsOverride");
-
-				wxString value;
-				if (source == wxS("Registry"))
-				{
-					value = LoadRegistryVariable(node);
-				}
-				else
-				{
-					value = ExpandVariables(node.GetValue());
-				}
-				if (noEmptyValues && value.IsEmpty())
-				{
-					continue;
-				}
-
-				// Process depending on type
-				using Type = VariableValue::Type;
-
-				std::optional<Type> type = Type::String;
-				if (typeString == wxS("FSPath"))
-				{
-					type = Type::FSPath;
-					value = KxFile(value).GetPath();
-				}
-				else if (typeString == wxS("Integer"))
-				{
-					type = Type::Integer;
-				}
-
-				// Override mode
-				using Override = VariableValue::Override;
-
-				std::optional<Override> overrideMode;
-				if (saveAsOverride)
-				{
-					overrideMode = Override::True;
-				}
-				
-				variables.SetVariable(id, VariableValue(value, overrideMode, type));
-			}
-		};
-		
-		// Load template variables
-		LoadVariables(instanceConfig.QueryElement("Definition/Variables"), false);
-
-		// Override any variables from file
-		LoadVariables(m_Config.QueryElement("Instance/Variables"), true);
-	}
 	void ConfigurableGameInstance::LoadProfiles(const KxXMLDocument& instanceConfig)
 	{
 		GetProfiles().clear();
@@ -403,45 +446,6 @@ namespace Kortex::GameInstance
 			item = finder.FindNext();
 		};
 	}
-	wxString ConfigurableGameInstance::LoadRegistryVariable(const KxXMLNode& node) const
-	{
-		// 32 or 64 bit registry branch
-		KxRegistryNode regBranch = KxREG_NODE_SYS;
-		switch (node.GetFirstChildElement("Branch").GetValueInt(0))
-		{
-			case 32:
-			{
-				regBranch = KxREG_NODE_32;
-				break;
-			}
-			case 64:
-			{
-				regBranch = KxREG_NODE_64;
-				break;
-			}
-		};
-
-		// Main key
-		auto mainKey = NameToRegKeyDef::TryFromString(node.GetFirstChildElement("Root").GetValue());
-		if (mainKey)
-		{
-			wxString path = ExpandVariables(node.GetFirstChildElement("Path").GetValue());
-			wxString name = ExpandVariables(node.GetFirstChildElement("Name").GetValue());
-			auto type = NameToRegTypeDef::TryFromString(node.GetFirstChildElement("Type").GetValue());
-
-			return KxRegistry::GetValue(*mainKey, path, name, type ? *type : KxREG_VALUE_ANY, regBranch, true).As<wxString>();
-		}
-		return wxEmptyString;
-	}
-	void ConfigurableGameInstance::DetectGameArchitecture(const KxXMLDocument& instanceConfig)
-	{
-		IVariableTable& variables = GetVariables();
-		bool is64Bit = KxFile(variables.GetVariable("GameExecutable").AsString()).GetBinaryType() == KxFBF_WIN64;
-
-		variables.SetVariable("GameArchitecture", KAux::ArchitectureToNumber(is64Bit));
-		variables.SetVariable("GameArchitectureName", KAux::ArchitectureToString(is64Bit));
-	}
-
 	void ConfigurableGameInstance::LoadConfigFile()
 	{
 		KxFileStream configStream(GetConfigFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
@@ -482,7 +486,7 @@ namespace Kortex::GameInstance
 		}
 
 		// Load data
-		LoadVariables(templateConfig);
+		LoadVariables(templateConfig, &m_Config);
 		DetectGameArchitecture(templateConfig);
 		LoadProfiles(templateConfig);
 

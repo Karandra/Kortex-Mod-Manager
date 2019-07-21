@@ -35,6 +35,10 @@ namespace Kortex::GameInstance
 			wxString CreateProfileID(const wxString& id) const override;
 			wxString CreateDefaultProfileID() const override;
 
+			void LoadVariables(const KxXMLDocument& instanceConfig, const KxXMLDocument* userConfig = nullptr);
+			wxString LoadRegistryVariable(const KxXMLNode& node) const;
+			void DetectGameArchitecture(const KxXMLDocument& instanceConfig);
+
 			virtual bool OnLoadInstance(const KxXMLDocument& templateConfig)
 			{
 				return true;
@@ -158,11 +162,7 @@ namespace Kortex::GameInstance
 			const bool m_WasCreatedUsingOnlyInstanceID = false;
 
 		protected:
-			void LoadVariables(const KxXMLDocument& instanceConfig);
-			void DetectGameArchitecture(const KxXMLDocument& instanceConfig);
 			void LoadProfiles(const KxXMLDocument& instanceConfig);
-			wxString LoadRegistryVariable(const KxXMLNode& node) const;
-
 			void LoadConfigFile();
 			bool InitInstance() override;
 			bool OnLoadInstance(const KxXMLDocument& templateConfig) override;

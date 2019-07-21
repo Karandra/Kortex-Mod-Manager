@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BaseNotification.h"
 #include <Kortex/Notification.hpp>
-#include <KxFramework/KxCoroutine.h>
+#include <Kx/Async/Coroutine.h>
 
 namespace Kortex::Notifications
 {

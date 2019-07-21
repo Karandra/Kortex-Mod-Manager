@@ -9,7 +9,7 @@
 #include "Utility/Log.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxProgressDialog.h>
-#include <KxFramework/KxCoroutine.h>
+#include <Kx/Async/Coroutine.h>
 
 namespace
 {

@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "DefaultNotificationCenter.h"
 #include "Application/Resources/ImageResourceID.h"
+#include "Utility/Log.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
-#include "Utility/Log.h"
-#include <KxFramework/KxCoroutine.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <wx/popupwin.h>
 

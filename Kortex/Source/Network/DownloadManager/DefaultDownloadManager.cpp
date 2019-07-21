@@ -7,6 +7,7 @@
 #include <Kortex/NetworkManager.hpp>
 #include "UI/KMainWindow.h"
 #include <KxFramework/KxFileFinder.h>
+#include <Kx/Async/DelayedCall.h>
 
 namespace Kortex::DownloadManager
 {
@@ -79,18 +80,18 @@ namespace Kortex::DownloadManager
 		// Create workspace
 		Workspace* workspace = new Workspace(mainWindow);
 
-		// If we're the primary instance and we were launched with URL as command line
+		// If we're the primary instance and we were launched with link as command line
 		// argument we need to manually queue it since IApplication instance merely checks
 		// its existence and otherwise does nothing with it.
-		workspace->CallAfter([]()
+		Kx::Async::DelayedCall([]()
 		{
-			KxURI uri = IDownloadManager::GetLinkFromCommandLine(IApplication::GetInstance()->GetCmdLineParser());
-			if (uri)
+			if (auto link = IApplication::GetInstance()->GetLinkFromCommandLine())
 			{
-				IDownloadManager::GetInstance()->TryQueueDownloadLink(uri);
+				IDownloadManager::GetInstance()->QueueUnknownDownload(*link);
 			}
-		});
+		}, wxTimeSpan::Seconds(2));
 
+		// Return the workspace
 		return workspace;
 	}
 

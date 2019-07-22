@@ -200,12 +200,17 @@ function initListenAssign(initType) {
 			Object.keys(linkLogoClass).forEach(function(i) {
 				let linkLogoHREF = linkLogoClass[i].querySelector("A");
 				let linkHREFParam = linkLogoHREF.getAttribute("href");
-				linkLogoClass[i].addEventListener(click, function(event) { event.preventDefault(); linkHandler(linkHREFParam, content); });
+				linkLogoClass[i].addEventListener(click, function(event) {
+					event.preventDefault();
+					linkHandler(linkHREFParam, content); });
 			});
-			// linkLogoClass.addEventListener(click, function() { event.preventDefault(); linkHandler(externalGithub); });
 			// Links: Internal
-			headerLogoLink.addEventListener(click, function() { event.preventDefault(); linkHandler(this.search, content); });
-			headerTitleLink.addEventListener(click, function() { event.preventDefault(); linkHandler(this.search, content); });
+			headerLogoLink.addEventListener(click, function() {
+				event.preventDefault();
+				linkHandler(this.search, content); });
+			headerTitleLink.addEventListener(click, function() {
+				event.preventDefault();
+				linkHandler(this.search, content); });
 			// Scrollbar
 			if (OverlayScrollbars) OverlayScrollbars(contentPanelID, { className : "os-theme-block-light" });
 			break;
@@ -221,7 +226,10 @@ function initListenAssign(initType) {
 
 			Object.keys(linkType).forEach(function(i) {
 				let linkHREFParam = linkType[i].getAttribute("href");
-				linkType[i].addEventListener(click, function(event) { event.preventDefault(); linkHandler(linkHREFParam, content); });
+				linkType[i].addEventListener(click, function(event) {
+					event.preventDefault();
+					linkHandler(linkHREFParam, content);
+				});
 			});
 	}
 }
@@ -417,6 +425,7 @@ function readyUtil(caller) {
 
 readyUtil(function() {
 	// Init vars and listeners
+	cssVars();
 	initVarAssign(home);
 	// Analyze URL and repair if necessary
 	initVarAssign(entry);

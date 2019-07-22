@@ -289,15 +289,16 @@ code {
 }
 .link-logo {
 	/* Flex Self */
-	flex: 1 0 5.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 4.4rem (parent: row) */
+	flex: 1 0 4.4rem; /* flex-grow 1, flex-shrink 0, flex-basis 4.4rem (parent: row) */
 	/* General */
+	font-size: 1rem;
 	margin-left: 1.2rem;
 }
 #header-links-panel .link-logo, #header-links-panel .link-logo * {
-	height: inherit;
-	min-height: inherit;
-	min-width: inherit;
-	width: inherit;
+	height: 4.4rem;
+	min-height: 4.4rem;
+	min-width: 4.4rem;
+	width: 4.4rem;
 }
 
 

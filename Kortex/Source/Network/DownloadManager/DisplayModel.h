@@ -15,6 +15,7 @@ namespace Kortex::DownloadManager
 			std::list<DisplayModelNode> m_Nodes;
 
 		private:
+			void OnActivate(KxDataView2::Event& event);
 			void OnContextMenu(KxDataView2::Event& event);
 
 			void OnDownloadAdded(DownloadEvent& event);

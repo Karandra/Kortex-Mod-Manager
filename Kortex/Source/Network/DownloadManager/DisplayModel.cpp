@@ -19,6 +19,14 @@
 
 namespace Kortex::DownloadManager
 {
+	void DisplayModel::OnActivate(KxDataView2::Event& event)
+	{
+		DownloadItem* download = GetItem(event.GetNode());
+		if (download && download->IsCompleted())
+		{
+			KxShell::Execute(GetView(), download->GetFullPath());
+		}
+	}
 	void DisplayModel::OnContextMenu(KxDataView2::Event& event)
 	{
 		DownloadItem* download = GetItem(event.GetNode());
@@ -262,7 +270,7 @@ namespace Kortex::DownloadManager
 
 		contextMenu.Show(GetView());
 	}
-	
+
 	void DisplayModel::OnDownloadAdded(DownloadEvent& event)
 	{
 		DownloadItem& item = event.GetDownload();
@@ -417,6 +425,7 @@ namespace Kortex::DownloadManager
 		view->SetUniformRowHeight(view->GetDefaultRowHeight(UniformHeight::Explorer));
 
 		// Events
+		view->Bind(KxDataView2::EvtITEM_ACTIVATED, &DisplayModel::OnActivate, this);
 		view->Bind(KxDataView2::EvtITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
 		view->Bind(KxDataView2::EvtCOLUMN_HEADER_RCLICK, [this](Event& event)
 		{

@@ -287,7 +287,6 @@ function linkHandler(inputHREF, accessType) {
 	}
 	return null;
 }
-
 function getFile(file, resource, type) {
 	switch (type) {
 		case css:
@@ -303,7 +302,6 @@ function getFile(file, resource, type) {
 	file.onreadystatechange = function() { xhttpReady(this, resource, type); };
 	file.send();
 }
-
 function xhttpReady(file, resource, type) {
 	let fileCheck = file.readyState + file.status;
 	if (fileCheck === reqPass)

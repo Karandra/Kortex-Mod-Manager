@@ -30,11 +30,8 @@ a {
 	color: rgba(202,202,202,1.000);
 	transition: color 0.15s, text-shadow 0.15s;
 }
-/* a:hover {
-	text-decoration: underline;
-} */
 a:hover {
-	color: rgba(224,224,224,1.000);
+	color: rgba(255,224,224,1.000);
 	cursor: pointer;
 	text-shadow: rgba(49,113,167,1.000) 0.1rem 0.1rem 0.3rem;
 }
@@ -42,7 +39,7 @@ h1, h2, h3, h4 {
 	font-weight: normal;
 }
 h1, h2 {
-	border: 0 solid rgb(172, 161, 161);
+	border: 0 solid rgba(255, 255, 255, 0.15);
 }
 h1 {
 	border-bottom-width: 0.2rem;
@@ -113,6 +110,7 @@ code {
 #header-links-panel,
 #loading,
 #main_container,
+#menu-toggle,
 #side-menu,
 #side-menu_items
 {
@@ -128,7 +126,6 @@ code {
 }
 
 #globalbox,
-#loading,
 #side-menu,
 #side-menu_items
 {
@@ -146,7 +143,9 @@ code {
 
 #header_container,
 #header-links-panel,
-#footer_container
+#footer_container,
+#loading,
+#menu-toggle
 {
 	align-items: center;
 }
@@ -154,7 +153,13 @@ code {
 #header-links-panel,
 #side-menu
 {
-	justify-content: flex-end
+	justify-content: flex-end;
+}
+
+#loading,
+#menu-toggle
+{
+	justify-content: center;
 }
 
 #header-links,
@@ -194,7 +199,7 @@ code {
 #header {
 	background: rgba(135,105,92,0.175);
 	background: radial-gradient(rgba(39,57,50,0.200), rgba(230,152,133,0.150));
-	border: 0 solid rgba(92,92,92,1.000);
+	border: 0 solid rgba(255, 255, 255, 0.15);
 }
 #header {
 	/* Dimensions */
@@ -315,7 +320,28 @@ code {
 	line-height: 1;
 }
 #content img {
-	max-width: 100%;
+	max-width: 96%;
+}
+#content h1 svg.anchor, #content h2 svg.anchor {
+	/* Dimensions */
+	height: 1.4rem;
+	width: 1.4rem;
+	/* General */
+	color: rgba(202,202,202,1.000);
+	opacity: 0;
+	margin-bottom: -0.4rem;
+	padding-bottom: 0.8rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	padding-top: 1.0rem;
+	transition: color 0.15s, opacity 0.15s;
+}
+#content h1:hover .anchor, #content h2:hover .anchor {
+	cursor: pointer;
+	opacity: 100;
+}
+#content h1 .anchor:hover, #content h2 .anchor:hover  {
+	color: rgba(109,173,237,1.000);
 }
 .quote {
 	background-color: rgba(56,56,56,0.250);
@@ -344,41 +370,34 @@ code {
 /********************
 * Navigation Contents
 ********************/
-
 #menu-toggle {
 	/* Dimensions */
 	height: 2.5rem;
 	width: 2.5rem;
 	/* Spacings */
-	left: -4.5rem;
-	top: 0.3rem;
+	left: -5.1rem;
+	top: 0.4rem;
 	bottom: 0.5rem;
 	/* General */
-	font-size: 1rem;
-	border: 0.1rem solid rgba(255, 255, 255, 0.30);
-	position: absolute;
+	border: 0.1rem solid rgba(255, 255, 255, 0.15);
 	cursor: pointer;
+	position: absolute;
 	z-index: 100;
 }
-
 #menu-toggle-icon {
 	/* Dimensions */
-	height: 2.5rem;
-	width: 2.5rem;
+	height: 2.0rem;
+	width: 2.0rem;
+	/* Spacings */
+	margin: 0;
 	/* General */
+	background: url(../res/arrow-left.svg) center/1.5rem no-repeat fixed;
+	/* display: block;
+	line-height: 0; */
+	filter: url(#menu-toggle-icon-filter);
 	transform: rotate(180deg);
 	transition: transform 0.25s;
-	filter: brightness(0.8);
-	background-image: url(../res/arrow-left.svg);
-	background-repeat: no-repeat;
-	background-position-x: center;
-	background-position-y: center;
-	background-size: 1.5rem;
 }
-#menu-toggle-icon:hover {
-	filter: brightness(0.95);
-}
-
 #side-panel {
 	margin: 2.4rem 0;
 	opacity: 0;
@@ -406,19 +425,19 @@ code {
 .side-menu_items {
 	/* General */
 	line-height: 1.6;
-	margin: 0 2.4rem 0 1.6rem;
+	margin: 0.4rem 2.4rem 0 1.6rem;
 }
 .side-menu_items a {
 	/* Dimensions */
 	width: 100%;
 	/* General */
-	border-bottom: 0.1rem solid rgba(38,38,39,1.000);
+	border-bottom: 0.1rem solid rgba(255, 255, 255, 0.15);
 	display: block;
 	padding: 0.5rem 0;
 	text-decoration: none;
 }
 .side-menu_items a:first-child {
-	border-top: 0.1rem solid rgba(38,38,39,1.000); 
+	border-top: 0.1rem solid rgba(255, 255, 255, 0.15);
 }
 .side-menu_items p:first-of-type {
 	margin: 0;
@@ -440,6 +459,34 @@ code {
 	font-size: 1.4rem;
 	margin: 0 2.4rem;
 	text-align: right;
+}
+
+
+/********************
+* Scrollbar Overrides
+********************/
+.os-theme-block-light > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle:before {
+    background: rgba(202,202,202,1.000);
+}
+.os-theme-block-light > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle:hover:before,
+.os-theme-block-light > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle.active:before {
+    background: rgba(224,224,224,1.000);
+}
+
+
+/********************
+* SVG Template
+********************/
+/* Faux-hidden without "display: none" to keep contents */
+#svgTemplateBlock {
+	/* Dimensions */
+	height: 0rem;
+	left: 0;
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	visibility: hidden;
+	width: 0rem;
 }
 
 

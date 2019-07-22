@@ -14,6 +14,8 @@ const
 	linkLogo = "link-logo",
 	menuToggle = "menu-toggle",
 	menuToggleIcon = "menu-toggle-icon",
+	menuToggleIconFadeIn = "menu-toggle-icon-filter-enter",
+	menuToggleIconFadeOut = "menu-toggle-icon-filter-exit",
 	scrollbarBox = "os-viewport",
 	sideMenu = "side-menu",
 	sideMenuItems = "side-menu_items",
@@ -33,6 +35,8 @@ let
 	loadingID = "",
 	menuToggleID = "",
 	menuToggleIconID = "",
+	menuToggleIconFadeInID = "",
+	menuToggleIconFadeOutID = "",
 	scrollbarBoxID = "",
 	sideMenuID = "",
 	sideMenuItemTag,
@@ -59,6 +63,19 @@ let
 	xhttpCSSFile = xhttpAssign(),
 	xhttpMDFile = xhttpAssign(),
 	xhttpMenuFile = xhttpAssign()
+;
+// Resource Constructors
+const
+	anchorLinkStart = "<a ",
+	anchorLinkHREF = "href=\"",
+	anchorLinkTitle = "\" title=\"",
+	anchorSpanStart = "<span ",
+	anchorClass = "class=\"",
+	anchorSpanClass = "anchor fas fa-link",
+	anchorSpanEnd = "</span>",
+	anchorLinkEnd = "</a>",
+	anchorCloseTag = "\">",
+	anchorHash = "#"
 ;
 // Strings
 const
@@ -152,6 +169,8 @@ function initVarAssign(initType) {
 			loadingID = document.getElementById(loading);
 			menuToggleID = document.getElementById(menuToggle);
 			menuToggleIconID = document.getElementById(menuToggleIcon);
+			menuToggleIconFadeInID = document.getElementById(menuToggleIconFadeIn);
+			menuToggleIconFadeOutID = document.getElementById(menuToggleIconFadeOut);
 			sideMenuID = document.getElementById(sideMenu);
 			sideMenuItemsClass = document.getElementsByClassName(sideMenuItems)[0];
 			sidePanelID = document.getElementById(sidePanel);
@@ -188,16 +207,32 @@ function initListenAssign(initType) {
 			headerLogoLink.addEventListener(click, function() { event.preventDefault(); linkHandler(this.search, content); });
 			headerTitleLink.addEventListener(click, function() { event.preventDefault(); linkHandler(this.search, content); });
 			// Scrollbar
-			if (OverlayScrollbars) OverlayScrollbars(contentPanelID, { className : "os-theme-light" });
+			if (OverlayScrollbars) OverlayScrollbars(contentPanelID, { className : "os-theme-block-light" });
 			break;
 		default:
-			if (initType === content) linkType = contentLinkItems;
+			if (initType === content) {
+				let h1Anchors = contentBoxID.getElementsByTagName("H1");
+				let h2Anchors = contentBoxID.getElementsByTagName("H2");
+				insertHeaderAnchors(h1Anchors);
+				insertHeaderAnchors(h2Anchors);				
+				linkType = contentLinkItems;
+			}
 			if (initType === menu) linkType = sideMenuItemTag;
+
 			Object.keys(linkType).forEach(function(i) {
 				let linkHREFParam = linkType[i].getAttribute("href");
 				linkType[i].addEventListener(click, function(event) { event.preventDefault(); linkHandler(linkHREFParam, content); });
 			});
 	}
+}
+function insertHeaderAnchors(elementList) {
+	Object.keys(elementList).forEach(function(i) {
+		let headerID = elementList[i].getAttribute("id");
+		let headerAnchorString = anchorLinkStart + anchorLinkHREF + anchorHash + headerID + anchorLinkTitle + headerID + anchorCloseTag
+								+ anchorSpanStart + anchorClass + anchorSpanClass + anchorCloseTag + anchorSpanEnd
+								+ anchorLinkEnd;
+		elementList[i].insertAdjacentHTML("beforeend", headerAnchorString);
+	});
 }
 
 
@@ -334,13 +369,15 @@ function contentVisibility(toggle) {
 * Menu Control
 ********************/
 function elementWillChange() {
-	menuToggleID.style.willChange = transform;
+	if ('beginElement' in menuToggleIconFadeInID) menuToggleIconFadeInID.beginElement();
+	menuToggleIconID.style.willChange = transform;
 	sideMenuID.style.willChange = width;
 }
 
 function elementWillChangeFinish() {
+	if ('beginElement' in menuToggleIconFadeOutID) menuToggleIconFadeOutID.beginElement();
 	setTimeout(function() {
-		menuToggleID.style.willChange = auto;
+		menuToggleIconID.style.willChange = auto;
 		sideMenuID.style.willChange = auto;
 	}, menuChangeTimeout);
 }
@@ -395,7 +432,7 @@ window.onpopstate = function() {
 	// Analyze URL
 	initVarAssign(entry);
 	// Build input
-	let urlHistory = String();
+	let urlHistory = "";
 	if (urlParam !== null) urlHistory += urlParam;
 	if (urlHash !== null) urlHistory += urlHash;
 	// Load destination

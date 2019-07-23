@@ -7,22 +7,11 @@ namespace Kortex
 {
 	bool GameID::TestGameID(const wxString& id) const
 	{
-		if (!id.IsEmpty())
-		{
-			// Assume we can check ID if there are at least one shallow instance.
-			// Otherwise just check is the string is not empty.
-			SystemApplication* sysApp = SystemApplication::GetInstance();
-			if (sysApp && !sysApp->GetShallowGameInstances().empty())
-			{
-				return GetInstanceByID(id) != nullptr;
-			}
-			return true;
-		}
-		return false;
+		return !id.IsEmpty();
 	}
 	IGameInstance* GameID::GetInstanceByID(const wxString& id) const
 	{
-		if (!id.IsEmpty())
+		if (TestGameID(id))
 		{
 			IGameInstance* active = IGameInstance::GetActive();
 			if (active && active->GetGameID() == id)
@@ -45,12 +34,7 @@ namespace Kortex
 
 	bool GameID::IsOK() const
 	{
-		if (!TestGameID(m_ID))
-		{
-			const_cast<wxString&>(m_ID).clear();
-			return false;
-		}
-		return true;
+		return TestGameID(m_ID);
 	}
 	wxString GameID::ToString() const
 	{

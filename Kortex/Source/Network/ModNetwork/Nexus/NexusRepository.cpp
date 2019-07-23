@@ -224,7 +224,6 @@ namespace Kortex::NetworkManager
 					// but for now just use the first one (it's the preferred server selected in user preferences on Nexus).
 					return IDownloadManager::GetInstance()->QueueDownload(*this, linkItems.front(), *fileInfo, gameID);
 				}
-				return false;
 			}
 		}
 		return false;

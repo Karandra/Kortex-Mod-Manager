@@ -122,11 +122,15 @@ namespace Kortex::NetworkManager::NXMHandler
 			BroadcastProcessor::Get().QueueEvent(LogEvent::EvtError, KTr("NetworkManager.NXMHandler.GetAssociationsFailed"), this);
 		}
 
-		GetOptions().LoadDataViewLayout(m_DisplayModel->GetView());
+		IAppOption uiOptions = GetOptions();
+		uiOptions.LoadDataViewLayout(m_DisplayModel->GetView());
+		uiOptions.LoadWindowGeometry(this);
 		UpdateButtons();
 	}
 	Dialog::~Dialog()
 	{
-		GetOptions().SaveDataViewLayout(m_DisplayModel->GetView());
+		IAppOption uiOptions = GetOptions();
+		uiOptions.SaveDataViewLayout(m_DisplayModel->GetView());
+		uiOptions.SaveWindowGeometry(this);
 	}
 }

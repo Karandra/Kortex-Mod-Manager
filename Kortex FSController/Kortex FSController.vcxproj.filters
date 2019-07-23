@@ -146,5 +146,13 @@
     <ClInclude Include="..\Shared\IPC\ProcessingWindow.h">
       <Filter>Shared Code\Headers\IPC</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Kortex FSController.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

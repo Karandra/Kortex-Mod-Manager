@@ -1,4 +1,6 @@
 //{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ generated include file.
+// Used by Kortex.rc
 //
 #define IDI_ICON_APP                    101
 #define IDI_PNG1                        102

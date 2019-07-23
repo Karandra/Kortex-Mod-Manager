@@ -119,7 +119,7 @@ namespace Kortex
 	{
 		if (KxTaskScheduler taskSheduler; taskSheduler.IsOK())
 		{
-			const wxTimeSpan delay = wxTimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(5));
+			const wxTimeSpan delay = wxTimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(3));
 
 			KxTaskSchedulerTask task = taskSheduler.NewTask();
 			task.SetExecutable(GetExecutablePath(), commandLine);

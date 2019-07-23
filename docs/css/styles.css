@@ -36,7 +36,8 @@ body {
 }
 a {
 	color: var(--color-white-base);
-	transition: var(--transition-color), var(--transition-text-shadow);
+	-webkit-transition: var(--transition-color), var(--transition-text-shadow);
+	        transition: var(--transition-color), var(--transition-text-shadow);
 }
 a:hover {
 	color: var(--color-white-hover);
@@ -92,8 +93,13 @@ code {
 	height: 100%;
     min-height: 100%;
     /* Flex Contents */
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-flow: column nowrap;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: column nowrap;
+            flex-flow: column nowrap;
 	/* General */
 	position: relative;
 }
@@ -116,7 +122,9 @@ code {
 	min-height: var(--size-header);
 	min-width: var(--size-header);
 	/* Flex Self */
-    flex: var(--flex-self-nogrow-noshrink) var(--size-header);
+    -webkit-box-flex: var(--flex-self-nogrow-noshrink);
+        -ms-flex: var(--flex-self-nogrow-noshrink) var(--size-header);
+            flex: var(--flex-self-nogrow-noshrink) var(--size-header);
             /* flex-grow 1, flex-shrink 0, flex-basis var(--size-header) (parent: row) */
     /* General */
     background: var(--color-background-page-ends-fallback);
@@ -134,14 +142,25 @@ code {
     /* Dimensions */
     height: 100%;
     /* Flex Contents */
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
 }
 #footer {
 	/* Flex Self */
-    flex: var(--flex-self-nogrow-noshrink) 2.7rem;
+    -webkit-box-flex: var(--flex-self-nogrow-noshrink);
+        -ms-flex: var(--flex-self-nogrow-noshrink) 2.7rem;
+            flex: var(--flex-self-nogrow-noshrink) 2.7rem;
             /* flex-grow 0, flex-shrink 0, flex-basis 2.7rem (parent: column) */
     /* General */
     background: var(--color-background-page-ends-fallback);
@@ -153,16 +172,27 @@ code {
     /* Dimensions */
     height: 100%;
     /* Flex Contents */
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
 }
 #main {
     /* Dimensions */
     height: 100%;
 	/* Flex Self */
-    flex: var(--flex-self-nogrow-shrink) auto;
+    -webkit-box-flex: var(--flex-self-nogrow-shrink);
+        -ms-flex: var(--flex-self-nogrow-shrink) auto;
+            flex: var(--flex-self-nogrow-shrink) auto;
             /* flex-grow 1, flex-shrink 1, flex-basis 100% (parent: column) */
 	/* General */
 	overflow: hidden;
@@ -172,9 +202,16 @@ code {
     /* Dimensions */
     height: 100%;
     /* Flex Contents */
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     /* Spacings */
     left: 0;
     top: 0;
@@ -189,9 +226,15 @@ code {
 	max-width: var(--size-loading-max);
 	width: var(--size--root-200px);
     /* Flex Contents */
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     /* Spacings */
     bottom: 0;
     left: 0;
@@ -201,7 +244,8 @@ code {
 	/* General */
 	font-size: var(--size--root-20px);
     position: absolute;
-    transition: var(--transition-opacity);
+    -webkit-transition: var(--transition-opacity);
+            transition: var(--transition-opacity);
 	z-index: 999;
 }
 #loading * {
@@ -219,7 +263,9 @@ code {
     height: 100%;
     width: 100%;
     /* Flex Self */
-    flex: var(--flex-self-grow-noshrink) var(--size-header);
+    -webkit-box-flex: var(--flex-self-grow-noshrink);
+        -ms-flex: var(--flex-self-grow-noshrink) var(--size-header);
+            flex: var(--flex-self-grow-noshrink) var(--size-header);
             /* flex-grow 1, flex-shrink 0, flex-basis var(--size-header) (parent: row) */
 	/* General */
 	background-repeat: no-repeat;
@@ -232,12 +278,23 @@ code {
 	min-width: var(--size-header);
 	width: var(--size-header);
     /* Flex Content */
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-end;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
     /* Flex Self */
-    flex: var(--flex-self-grow-noshrink) var(--size-header);
+    -webkit-box-flex: var(--flex-self-grow-noshrink);
+        -ms-flex: var(--flex-self-grow-noshrink) var(--size-header);
+            flex: var(--flex-self-grow-noshrink) var(--size-header);
             /* flex-grow 1, flex-shrink 0, flex-basis var(--size-header) (parent: row) */
     /* Spacings */
 	margin: var(--short-header-links-panel-margins);
@@ -254,7 +311,9 @@ code {
     /* Dimensions */
     height: 100%;
     /* Flex Self */
-    flex: var(--flex-self-grow-noshrink) var(--size-header);
+    -webkit-box-flex: var(--flex-self-grow-noshrink);
+        -ms-flex: var(--flex-self-grow-noshrink) var(--size-header);
+            flex: var(--flex-self-grow-noshrink) var(--size-header);
             /* flex-grow 1, flex-shrink 0, flex-basis var(--size-header) (parent: row) */
 	/* General */
 	background-repeat: no-repeat;
@@ -268,14 +327,17 @@ code {
 }
 #header-title {
 	/* Flex Self */
-    flex: var(--flex-self-grow-shrink) 100%;
+    -webkit-box-flex: var(--flex-self-grow-shrink);
+        -ms-flex: var(--flex-self-grow-shrink) 100%;
+            flex: var(--flex-self-grow-shrink) 100%;
             /* flex-grow 1, flex-shrink 0, flex-basis var(--size-header) (parent: row) */
     /* Spacings */
     margin: 0;
 	padding-left: 1.2rem;
 	/* General */
 	display: block;
-	transition: var(--transition-color), var(--transition-text-shadow);
+	-webkit-transition: var(--transition-color), var(--transition-text-shadow);
+	        transition: var(--transition-color), var(--transition-text-shadow);
 }
 .link-logo {
     /* Dimensions */
@@ -284,7 +346,9 @@ code {
 	min-width: var(--size-header-reduced);
 	width: var(--size-header-reduced);
 	/* Flex Self */
-    flex: var(--flex-self-grow-noshrink) var(--size-header-reduced);
+    -webkit-box-flex: var(--flex-self-grow-noshrink);
+        -ms-flex: var(--flex-self-grow-noshrink) var(--size-header-reduced);
+            flex: var(--flex-self-grow-noshrink) var(--size-header-reduced);
             /* flex-grow 1, flex-shrink 0, flex-basis var(--size-header-reduced) (parent: row) */
     /* Spacings */
     margin-left: 1.2rem;
@@ -306,7 +370,9 @@ code {
 ********************/
 #content-panel {
 	/* Flex Self */
-    flex: var(--flex-self-nogrow-shrink) 100%;
+    -webkit-box-flex: var(--flex-self-nogrow-shrink);
+        -ms-flex: var(--flex-self-nogrow-shrink) 100%;
+            flex: var(--flex-self-nogrow-shrink) 100%;
             /* flex-grow 0, flex-shrink 0, flex-basis 75% (parent: row) */
     /* Spacings */
     line-height: 1.6;
@@ -314,7 +380,8 @@ code {
 	/* General */
 	opacity: 0;
     position: relative;
-    transition: var(--transition-opacity);
+    -webkit-transition: var(--transition-opacity);
+            transition: var(--transition-opacity);
 }
 #content {
 	padding: var(--short-content-padding);
@@ -335,7 +402,8 @@ code {
 	/* General */
 	color: var(--color-white-base);
 	opacity: 0;
-	transition: var(--transition-color), var(--transition-opacity);
+	-webkit-transition: var(--transition-color), var(--transition-opacity);
+	        transition: var(--transition-color), var(--transition-opacity);
 }
 #content h1:hover .anchor, #content h2:hover .anchor {
 	cursor: pointer;
@@ -380,9 +448,15 @@ code {
 	height: var(--size-menu-toggle);
     width: var(--size-menu-toggle);
     /* Flex Contents */
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
 	/* Spacings */
 	left: var(--size-menu-toggle-pos-left);
 	top: var(--size-menu-toggle-pos-top);
@@ -401,35 +475,51 @@ code {
 	margin: 0;
 	/* General */
 	background: var(--short-menu-toggle-background);
-	filter: url(#menu-toggle-icon-filter);
-	transform: rotate(180deg);
-	transition: var(--transition-transform);
+	-webkit-filter: url(#menu-toggle-icon-filter);
+	        filter: url(#menu-toggle-icon-filter);
+	-webkit-transform: rotate(180deg);
+	        transform: rotate(180deg);
+	-webkit-transition: var(--transition-transform);
+	        transition: var(--transition-transform);
 }
 #side-panel {
     /* Flex Self */
-    flex: var(--flex-self-nogrow-noshrink) auto;
+    -webkit-box-flex: var(--flex-self-nogrow-noshrink);
+        -ms-flex: var(--flex-self-nogrow-noshrink) auto;
+            flex: var(--flex-self-nogrow-noshrink) auto;
             /* flex-grow 0, flex-shrink 0, flex-basis auto (parent: row) */
     /* Spacings */
     margin: var(--size-spacing-standard) 0;
     /* General */
 	opacity: 0;
 	position: relative;
-	transition: var(--transition-opacity);
+	-webkit-transition: var(--transition-opacity);
+	        transition: var(--transition-opacity);
 }
 #side-menu {
 	/* Dimensions */
     width: var(--size-menu-width);
     /* Flex Content */
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-flow: column nowrap;
-    justify-content: flex-end;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: column nowrap;
+            flex-flow: column nowrap;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
 	/* General */
 	overflow: hidden;
-	transition: var(--transition-width-menu);
+	-webkit-transition: var(--transition-width-menu);
+	        transition: var(--transition-width-menu);
 }
 .side-menu_title {
     /* Flex Self */
-    flex: var(--flex-self-nogrow-noshrink) auto;
+    -webkit-box-flex: var(--flex-self-nogrow-noshrink);
+        -ms-flex: var(--flex-self-nogrow-noshrink) auto;
+            flex: var(--flex-self-nogrow-noshrink) auto;
              /* flex-grow 0, flex-shrink 0, flex-basis auto (parent: row) */
     /* Spacings */
     line-height: 1;
@@ -447,7 +537,9 @@ code {
 }
 .side-menu_items {
     /* Flex Self */
-    flex: var(--flex-self-nogrow-noshrink) auto;
+    -webkit-box-flex: var(--flex-self-nogrow-noshrink);
+        -ms-flex: var(--flex-self-nogrow-noshrink) auto;
+            flex: var(--flex-self-nogrow-noshrink) auto;
             /* flex-grow 0, flex-shrink 0, flex-basis auto (parent: row) */
     /* Spacings */
     line-height: 1.6;
@@ -478,7 +570,9 @@ code {
 * Footer Contents
 ********************/
 #copyrights, .placeholder {
-	flex: var(--flex-self-grow-noshrink) var(--size-header);
+	-webkit-box-flex: var(--flex-self-grow-noshrink);
+	    -ms-flex: var(--flex-self-grow-noshrink) var(--size-header);
+	        flex: var(--flex-self-grow-noshrink) var(--size-header);
 }
 #copyrights {
     /* Spacings */

@@ -1,5 +1,5 @@
 /*eslint-disable no-console */
-"use strict";
+// "use strict";
 
 
 /********************
@@ -45,13 +45,24 @@ let
 ;
 // Options
 const
+	cssVarsOpt = {
+		silent: false,
+		watch: true
+	},
 	markedOpt = {
-	pedantic: false,
-	gfm: true,
-	breaks: true,
-	smartLists: true,
-	smartypants: false,
-	xhtml: false
+		pedantic: false,
+		gfm: true,
+		breaks: true,
+		smartLists: true,
+		smartypants: false,
+		xhtml: false
+	},
+	scrollbarOpt = {
+	className: "os-theme-block-light",
+	scrollbars: {
+		clickScrolling: true,
+		snapHandle: false
+		},
 	}
 ;
 // Request Assignments
@@ -212,7 +223,7 @@ function initListenAssign(initType) {
 				event.preventDefault();
 				linkHandler(this.search, content); });
 			// Scrollbar
-			if (OverlayScrollbars) OverlayScrollbars(contentPanelID, { className : "os-theme-block-light" });
+			if (OverlayScrollbars) OverlayScrollbars(contentPanelID, scrollbarOpt);
 			break;
 		default:
 			if (initType === content) {
@@ -423,7 +434,7 @@ function readyUtil(caller) {
 
 readyUtil(function() {
 	// Init vars and listeners
-	cssVars();
+	if (cssVars) cssVars(cssVarsOpt);
 	initVarAssign(home);
 	// Analyze URL and repair if necessary
 	initVarAssign(entry);

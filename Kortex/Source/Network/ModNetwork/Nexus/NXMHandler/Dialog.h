@@ -3,6 +3,8 @@
 #include "DisplayModel.h"
 #include "OptionStore.h"
 #include <KxFramework/KxStdDialog.h>
+#include <KxFramework/KxLabel.h>
+#include <KxFramework/KxPanel.h>
 #include <Kx/System/FileTypeManager.h>
 
 namespace Kortex::NetworkManager
@@ -19,7 +21,9 @@ namespace Kortex::NetworkManager::NXMHandler
 			KxFileType m_NXMFileType;
 			OptionStore& m_Options;
 
+			KxPanel* m_Panel = nullptr;
 			DisplayModel* m_DisplayModel = nullptr;
+			KxLabel* m_RegisteredToLabel = nullptr;
 			wxWindow* m_RegisterButton = nullptr;
 			wxWindow* m_UnregisterButton = nullptr;
 
@@ -46,9 +50,13 @@ namespace Kortex::NetworkManager::NXMHandler
 			}
 			bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
 			{
-				return true;
+				return false;
 			}
 			wxWindow* GetDialogMainCtrl() const override
+			{
+				return m_Panel;
+			}
+			wxWindow* GetDialogFocusCtrl() const override
 			{
 				return m_DisplayModel->GetView();
 			}

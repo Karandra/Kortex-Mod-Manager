@@ -2,6 +2,7 @@
 #include "Dialog.h"
 #include <Kortex/Application.hpp>
 #include "Application/Options/CmdLineDatabase.h"
+#include "Utility/KAux.h"
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/INetworkManager.h"
 
@@ -14,6 +15,7 @@ namespace Kortex::NetworkManager::NXMHandler
 			SetMainIcon(KxICON_NONE);
 			SetWindowResizeSide(wxBOTH);
 			SetInitialSize(wxSize(840, 470));
+			SetDefaultButton(KxID_CLOSE);
 
 			// Buttons
 			m_UnregisterButton = AddButton(KxID_REMOVE, KTr("NetworkManager.NXMHandler.UnregisterAssociations"), true).GetControl();
@@ -23,8 +25,16 @@ namespace Kortex::NetworkManager::NXMHandler
 			m_RegisterButton->Bind(wxEVT_BUTTON, &Dialog::OnRegisterAssociations, this);
 
 			// View
+			wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+			m_Panel = new KxPanel(m_ContentPanel, KxID_NONE);
+			m_Panel->SetSizer(sizer);
+
 			m_DisplayModel = new DisplayModel(m_Options);
-			m_DisplayModel->CreateView(m_ContentPanel);
+			m_DisplayModel->CreateView(m_Panel);
+			sizer->Add(m_DisplayModel->GetView(), 1, wxEXPAND);
+
+			m_RegisteredToLabel = new KxLabel(m_Panel, KxID_NONE, wxEmptyString);
+			sizer->Add(m_RegisteredToLabel, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 
 			PostCreate(wxDefaultPosition);
 			return true;
@@ -33,6 +43,11 @@ namespace Kortex::NetworkManager::NXMHandler
 	}
 	void Dialog::UpdateButtons()
 	{
+		auto ResetLabel = [this]()
+		{
+			m_RegisteredToLabel->SetLabel(KTrf("NetworkManager.NXMHandler.RegisteredToLabel", KAux::MakeNoneLabel()));
+		};
+
 		if (m_NXMFileType)
 		{
 			const IApplication* app = IApplication::GetInstance();
@@ -40,11 +55,21 @@ namespace Kortex::NetworkManager::NXMHandler
 
 			m_RegisterButton->Enable(!isAssociated);
 			m_UnregisterButton->Enable(isAssociated);
+
+			if (wxString path = m_NXMFileType.GetOpenExecutable(); !path.IsEmpty())
+			{
+				m_RegisteredToLabel->SetLabel(KTrf("NetworkManager.NXMHandler.RegisteredToLabel", path));
+			}
+			else
+			{
+				ResetLabel();
+			}
 		}
 		else
 		{
 			m_RegisterButton->Disable();
 			m_UnregisterButton->Disable();
+			ResetLabel();
 		}
 	}
 	IAppOption Dialog::GetOptions() const

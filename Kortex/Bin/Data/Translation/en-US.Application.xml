@@ -601,6 +601,7 @@ This folder and all its contents will be deleted: %1]]>
 
 		<String ID="NetworkManager.NXMHandler.RegisterAssociations">Register associations</String>
 		<String ID="NetworkManager.NXMHandler.UnregisterAssociations">Unregister associations</String>
+		<String ID="NetworkManager.NXMHandler.RegisteredToLabel">Currently registered to: %1</String>
 
 		<String ID="NetworkManager.NXMHandler.GetAssociationsFailed">Failed to get file association information</String>
 		<String ID="NetworkManager.NXMHandler.RegisterAssociationsFailed">Failed to register file associations</String>

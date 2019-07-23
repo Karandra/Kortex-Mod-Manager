@@ -606,6 +606,7 @@
 
 		<String ID="NetworkManager.NXMHandler.RegisterAssociations">Зарегистрировать ассоциации</String>
 		<String ID="NetworkManager.NXMHandler.UnregisterAssociations">Удалить ассоциации</String>
+		<String ID="NetworkManager.NXMHandler.RegisteredToLabel">Зарегистрировано на: %1</String>
 
 		<String ID="NetworkManager.NXMHandler.GetAssociationsFailed">Не удалось получить информацию о файловых ассоциациях</String>
 		<String ID="NetworkManager.NXMHandler.RegisterAssociationsFailed">Не удалось зарегистрировать файловые ассоциации</String>

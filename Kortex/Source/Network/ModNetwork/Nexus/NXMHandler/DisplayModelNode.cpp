@@ -132,6 +132,10 @@ namespace Kortex::NetworkManager::NXMHandler
 			dialog.SetValue1(value->Executable);
 			dialog.SetValue2(value->Arguments);
 		}
+		else
+		{
+			dialog.SetValue2(wxS("\"%1\""));
+		}
 
 		dialog.AddButton(KxID_SELECT_FILE, {}, true).GetControl()->Bind(wxEVT_BUTTON, [&dialog](wxCommandEvent& event)
 		{

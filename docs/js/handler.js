@@ -16,7 +16,7 @@ const
 	sideMenu = "side-menu",
 	sideMenuItems = "side-menu_items",
 	sidePanel = "side-panel"
-;
+	;
 let
 	contentBoxID = "",
 	contentLinkItems,
@@ -38,7 +38,7 @@ let
 	sideMenuItemTag,
 	sideMenuItemsClass = "",
 	sidePanelID = ""
-;
+	;
 // Options
 const
 	cssVarsOpt = {
@@ -54,13 +54,13 @@ const
 		xhtml: false
 	},
 	scrollbarOpt = {
-	className: "os-theme-block-light",
-	scrollbars: {
-		clickScrolling: true,
-		snapHandle: false
+		className: "os-theme-block-light",
+		scrollbars: {
+			clickScrolling: true,
+			snapHandle: false
 		},
 	}
-;
+	;
 // Request Assignments
 let
 	urlFixed = null,
@@ -70,7 +70,7 @@ let
 	xhttpCSSFile = xhttpAssign(),
 	xhttpMDFile = xhttpAssign(),
 	xhttpMenuFile = xhttpAssign()
-;
+	;
 // Resource Constructors
 const
 	anchorLinkStart = "<a ",
@@ -83,7 +83,7 @@ const
 	anchorLinkEnd = "</a>",
 	anchorCloseTag = "\">",
 	anchorHash = "#"
-;
+	;
 // Strings
 const
 	// Directories
@@ -127,10 +127,10 @@ const
 	regexHREF = /(?:http:)|(?:https:)/,
 	regexParam = /(?:\?page=)[\w\d-]*/,
 	regexParamPage = /(?:\?page=)/
-;
+	;
 let
 	sameLocation = ""
-;
+	;
 // Style Values
 const
 	contentHide = "0",
@@ -141,7 +141,7 @@ const
 	menuToggleRight = "rotate(180deg)",
 	sideMenuHide = "0",
 	sideMenuShow = "20rem"
-;
+	;
 
 
 // ********************\
@@ -170,7 +170,7 @@ function xhttpAssign() {
  * @param {*} initType - Category to run assignments for.
  */
 function initVarAssign(initType) {
-	switch(initType) {
+	switch (initType) {
 		case entry:
 			// Get URL pieces
 			urlRaw = window.location;
@@ -207,14 +207,14 @@ function initVarAssign(initType) {
 			sideMenuItemTag = sideMenuItemsClass.getElementsByTagName("A");
 			break;
 
-		default: 
+		default:
 			contentLinkItems = contentBoxID.getElementsByTagName("A");
 			scrollbarBoxID = contentPanelID.getElementsByClassName(scrollbarBox)[0];
 			if (initType === content) {
 				let h1Anchors = contentBoxID.getElementsByTagName("H1");
 				let h2Anchors = contentBoxID.getElementsByTagName("H2");
 				insertHeaderAnchors(h1Anchors);
-				insertHeaderAnchors(h2Anchors);	
+				insertHeaderAnchors(h2Anchors);
 			}
 	}
 	// Init listeners post-var assign
@@ -232,7 +232,7 @@ function initVarAssign(initType) {
 function initListenAssign(initType) {
 	// Should only receive content, home, or menu
 	let linkType;
-	switch (initType){
+	switch (initType) {
 		case badTimes:
 			break;
 
@@ -243,21 +243,24 @@ function initListenAssign(initType) {
 			menuToggleID.addEventListener(mouseLeave, elementWillChangeFinish);
 
 			// Links: External
-			Object.keys(linkLogoClass).forEach(function(i) {
+			Object.keys(linkLogoClass).forEach(function (i) {
 				let linkLogoHREF = linkLogoClass[i].querySelector("A");
 				let linkHREFParam = linkLogoHREF.getAttribute("href");
-				linkLogoClass[i].addEventListener(click, function(event) {
+				linkLogoClass[i].addEventListener(click, function (event) {
 					event.preventDefault();
-					linkHandler(linkHREFParam, external); });
+					linkHandler(linkHREFParam, external);
+				});
 			});
 
 			// Links: Internal
-			headerLogoLink.addEventListener(click, function() {
+			headerLogoLink.addEventListener(click, function () {
 				event.preventDefault();
-				linkHandler(this.search, content); });
-			headerTitleLink.addEventListener(click, function() {
+				linkHandler(this.search, content);
+			});
+			headerTitleLink.addEventListener(click, function () {
 				event.preventDefault();
-				linkHandler(this.search, content); });
+				linkHandler(this.search, content);
+			});
 
 			// Scrollbar
 			if (OverlayScrollbars) OverlayScrollbars(contentPanelID, scrollbarOpt);
@@ -266,9 +269,9 @@ function initListenAssign(initType) {
 		default:
 			if (initType === content) linkType = contentLinkItems;
 			if (initType === menu) linkType = sideMenuItemTag;
-			Object.keys(linkType).forEach(function(i) {
+			Object.keys(linkType).forEach(function (i) {
 				let linkHREFParam = linkType[i].getAttribute("href");
-				linkType[i].addEventListener(click, function(event) {
+				linkType[i].addEventListener(click, function (event) {
 					event.preventDefault();
 					linkHandler(linkHREFParam, content);
 				});
@@ -282,11 +285,14 @@ function initListenAssign(initType) {
  * @param {*} elementList - Array of heading elements to process.
  */
 function insertHeaderAnchors(elementList) {
-	Object.keys(elementList).forEach(function(i) {
+	Object.keys(elementList).forEach(function (i) {
 		let headerID = elementList[i].getAttribute("id");
-		let headerAnchorString = anchorLinkStart + anchorLinkHREF + anchorHash + headerID + anchorLinkTitle + headerID + anchorCloseTag
-								+ anchorSpanStart + anchorClass + anchorSpanClass + anchorCloseTag + anchorSpanEnd
-								+ anchorLinkEnd;
+		let headerAnchorString =
+			anchorLinkStart + anchorLinkHREF + anchorHash + headerID + anchorLinkTitle + headerID + anchorCloseTag
+			+ 
+			anchorSpanStart + anchorClass + anchorSpanClass + anchorCloseTag + anchorSpanEnd
+			+
+			anchorLinkEnd;
 		elementList[i].insertAdjacentHTML("beforeend", headerAnchorString);
 	});
 }
@@ -343,7 +349,7 @@ function linkHandler(inputHREF, accessType) {
 		// Engage cloaking device for content swap
 		contentVisibility(contentHide);
 		// Wait 150ms while content opacity finishes dropping
-		return setTimeout(function() {
+		return setTimeout(function () {
 			getFile(xhttpCSSFile, locationTrimString, css);
 			getFile(xhttpInstance, locationTrimString, locationType);
 		}, contentCloakTime);
@@ -378,7 +384,7 @@ function getFile(request, resource, type) {
 	}
 
 	// Assign ready state watch and initiate load
-	request.onreadystatechange = function() { xhttpReady(this, resource, type); };
+	request.onreadystatechange = function () { xhttpReady(this, resource, type); };
 	request.send();
 }
 /**
@@ -451,10 +457,10 @@ function importCSSClean() {
  */
 function importCSS(resource) {
 	if (resource !== home) {
-		let element = document.createElement(link);  
+		let element = document.createElement(link);
 		element.type = txtcss;
 		element.rel = stylesheet;
-		element.href = dirCSS + resource + extCSS;  
+		element.href = dirCSS + resource + extCSS;
 		head.appendChild(element);
 	}
 }
@@ -477,7 +483,7 @@ function contentVisibility(toggle) {
 		contentPanelID.style.opacity = contentShow;
 		sidePanelID.style.opacity = contentShow;
 		loadingID.style.opacity = contentHide;
-		setTimeout(function() {
+		setTimeout(function () {
 			loadingID.style.display = displayNone;
 		}, contentCloakTime);
 	}
@@ -503,7 +509,7 @@ function elementWillChange() {
 function elementWillChangeFinish() {
 	if ('beginElement' in menuToggleIconFadeOutID) menuToggleIconFadeOutID.beginElement();
 	// Removing will-change after 1 second
-	setTimeout(function() {
+	setTimeout(function () {
 		menuToggleIconID.style.willChange = auto;
 		sideMenuID.style.willChange = auto;
 	}, menuChangeTimeout);
@@ -516,7 +522,7 @@ function menuClose() {
 	menuToggleID.addEventListener(click, menuOpen);
 	sideMenuID.style.width = sideMenuHide;
 	// Drawer animates over 400ms, flip arrow at 450ms
-	setTimeout(function() {
+	setTimeout(function () {
 		menuToggleIconID.style.transform = menuToggleLeft;
 	}, menuSlideFlip);
 }
@@ -528,7 +534,7 @@ function menuOpen() {
 	menuToggleID.addEventListener(click, menuClose);
 	sideMenuID.style.width = sideMenuShow;
 	// Drawer animates over 400ms, flip arrow at 450ms
-	setTimeout(function() {
+	setTimeout(function () {
 		menuToggleIconID.style.transform = menuToggleRight;
 	}, menuSlideFlip);
 }
@@ -559,7 +565,7 @@ function readyUtil(caller) {
  * @description Function to run when DOM content is ready, repairing malformed URLs 
  *	and initializing page operations.
  */
-readyUtil(function() {
+readyUtil(function () {
 	// Analyze URL and repair if necessary
 	initVarAssign(entry);
 	if (urlFixed !== urlRaw.toString()) return window.location.assign(urlFixed);
@@ -572,7 +578,7 @@ readyUtil(function() {
 
 	// Load menu
 	linkHandler(menuParam, menu);
-	
+
 	// Load pre-designated destination
 	if (urlParam !== null) return linkHandler(urlParam, reentry);
 
@@ -583,7 +589,7 @@ readyUtil(function() {
  * @description Function that triggers on window history changes, checking 
  *	current `window.location` and triggering appropriate content load.
  */
-window.onpopstate = function() {
+window.onpopstate = function () {
 	// Analyze URL
 	initVarAssign(entry);
 

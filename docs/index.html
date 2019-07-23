@@ -6,14 +6,13 @@
 		<link rel="shortcut icon" href="res/logo.png" type="image/png">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:400,400i,700,700i&display=swap&subset=latin-ext" type="text/css">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/font-awesome-animation@0.2.1/dist/font-awesome-animation.min.css,npm/overlayscrollbars@1/css/OverlayScrollbars.min.css">
+		<link rel="stylesheet" href="css/lib/os-theme-block-light.css" type="text/css">
 		<link rel="stylesheet" href="css/styles.css" type="text/css">
 
-		<script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2Ces2015%2Ces2016%2Ces2017%2Ces5%2Ces6%2Ces7default%2Cdocument.getElementsByClassName%2Cdocument.head%2CElement.prototype.dataset%2CgetComputedStyle%2CPromise.prototype.finally"></script>
-		<script src="https://cdn.jsdelivr.net/combine/npm/css-vars-ponyfill@2,npm/marked@0.7.0,npm/overlayscrollbars@1,npm/vanilla-lazyload@12"></script>
+		<script src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2Ces2015%2Ces2016%2Ces2017%2Ces5%2Ces6%2Ces7default%2Cdocument.getElementsByClassName%2Cdocument.head%2CElement.prototype.dataset%2CgetComputedStyle%2CPromise.prototype.finally" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/combine/npm/css-vars-ponyfill@2,npm/html5-history-api@4,npm/intersection-observer@0.7.0/intersection-observer.min.js,npm/marked@0.7.0,npm/overlayscrollbars@1,npm/smoothscroll-polyfill@0.4.4,npm/snapsvg@0.5.1,npm/vanilla-lazyload@12"></script>
 		<script src="https://kit.fontawesome.com/4fa85e1be7.js"></script>
 		<script src="js/handler.js" async defer></script>
-
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome-animation@0.2.1/dist/font-awesome-animation.min.css">
 	</head>
 
 	<body>
@@ -44,15 +43,13 @@
 				</div>
 			</div>
 			<div id="main">
-				<!-- <div id="main_loading" class=""></div> -->
 				<div id="main_container" class="page">
 					<div id="content-panel" class="os-host-flexbox">
 						<div id="content"></div>
 					</div>
 					<div id="side-panel">
 						<div id="menu-toggle">
-							<div id="menu-toggle-icon"></div>
-							<!--<span class="fas fa-chevron-circle-right fa-2x"></span>-->
+							<img id="menu-toggle-icon" src="res/arrow-left.svg">
 						</div>
 						<div id="side-menu">
 							<div class="side-menu_items"></div>
@@ -62,10 +59,51 @@
 			</div>
 			<div id="footer">
 				<div id="footer_container" class="page">
-					<!-- <div class="placeholder"></div> -->
 					<div id="copyrights">© 2018-2019 Kerber</div>
 				</div>
 			</div>
 		</div>
+
+		<!-- BEGIN: Filters for SVGs -->
+		<div id="svgTemplateBlock">
+			<svg xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<filter id="menu-toggle-icon-filter">
+						<feColorMatrix 
+							color-interpolation-filters="sRGB"
+							type="matrix"
+							values="0.79  0.00  0.00  0.00  0.00
+									0.00  0.79  0.00  0.00  0.00
+									0.00  0.00  0.79  0.00  0.00
+									0.00  0.00  0.00  1.00  0.00 ">
+							<animate id="menu-toggle-icon-filter-enter"
+								attributeName="values"
+								attributeType="XML"
+								begin="indefinite"
+								dur="0.15"
+								end="indefinite"
+								fill="freeze"												
+								to="0.88  0.00  0.00  0.00  0.00
+									0.00  0.88  0.00  0.00  0.00
+									0.00  0.00  0.88  0.00  0.00
+									0.00  0.00  0.00  1.00  0.00 " />
+							<animate id="menu-toggle-icon-filter-exit"
+								attributeName="values"
+								attributeType="XML"
+								begin="indefinite"
+								dur="0.15"
+								end="indefinite"
+								fill="freeze"												
+								to="0.79  0.00  0.00  0.00  0.00
+									0.00  0.79  0.00  0.00  0.00
+									0.00  0.00  0.79  0.00  0.00
+									0.00  0.00  0.00  1.00  0.00 " />
+						</feColorMatrix>
+					</filter>
+				</defs>
+			</svg>
+		</div>
+		<!-- END: Filters for SVGs -->
+
 	</body>
 </html>

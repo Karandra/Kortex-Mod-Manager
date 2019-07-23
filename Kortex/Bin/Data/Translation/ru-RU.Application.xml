@@ -152,6 +152,11 @@
 		<String ID="Generic.DefaultValue">Значение по умолчанию</String>
 		<String ID="Generic.UseDefaultValue">Использовать значение по умолчанию</String>
 		<String ID="Generic.Operator">Оператор</String>
+		<String ID="Generic.Operators">Операторы</String>
+		<String ID="Generic.Argument">Аргумент</String>
+		<String ID="Generic.Arguments">Аргументы</String>
+		<String ID="Generic.Parameter">Параметр</String>
+		<String ID="Generic.Parameters">Параметры</String>
 		<String ID="Generic.Expanded">Раскрыт</String>
 		<String ID="Generic.Collapsed">Свёрнут</String>
 		<String ID="Generic.SystemMenu">Системное меню</String>
@@ -596,10 +601,22 @@
 
 		<String ID="DownloadManager.Nexus.CopyNXM">Скопировать NXM-ссылку</String>
 
-		<String ID="DownloadManager.NXMHandler.Caption">Настроить обработчик NXM-ссылок</String>
+		<!-- NXMHandler -->
+		<String ID="NetworkManager.NXMHandler.Caption">Настроить обработчик NXM-ссылок</String>
+
+		<String ID="NetworkManager.NXMHandler.RegisterAssociations">Зарегистрировать ассоциации</String>
+		<String ID="NetworkManager.NXMHandler.UnregisterAssociations">Удалить ассоциации</String>
+
+		<String ID="NetworkManager.NXMHandler.GetAssociationsFailed">Не удалось получить информацию о файловых ассоциациях</String>
+		<String ID="NetworkManager.NXMHandler.RegisterAssociationsFailed">Не удалось зарегистрировать файловые ассоциации</String>
+		<String ID="NetworkManager.NXMHandler.UnregisterAssociationsFailed">Не удалось удалить файловые ассоциации</String>
+
 		<String ID="NetworkManager.NXMHandler.Game">Игра</String>
-		<String ID="DownloadManager.NXMHandler.NexusID">Nexus ID</String>
-		<String ID="DownloadManager.NXMHandler.Target">Цель</String>
+		<String ID="NetworkManager.NXMHandler.NexusID">Nexus ID</String>
+		<String ID="NetworkManager.NXMHandler.Target">Цель</String>
+
+		<String ID="NetworkManager.NXMHandler.ExternalProgram">Внешняя программа</String>
+		<String ID="NetworkManager.NXMHandler.ConfigureExecutable">Настройка программы</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>

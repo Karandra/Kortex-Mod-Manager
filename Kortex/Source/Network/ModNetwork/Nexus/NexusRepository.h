@@ -6,6 +6,11 @@
 #include <KxFramework/KxJSON.h>
 class KxCURLEvent;
 
+namespace Kortex::NetworkManager::NXMHandler
+{
+	class OptionStore;
+}
+
 namespace Kortex::NetworkManager
 {
 	class NexusModNetwork;
@@ -34,15 +39,18 @@ namespace Kortex::NetworkManager
 			mutable wxCriticalSection m_LimitsDataCS;
 			ModRepositoryLimitsData m_LimitsData;
 
+			std::unique_ptr<NXMHandler::OptionStore> m_NXMHandlerOptions;
+
 		protected:
 			wxString ConvertEndorsementState(const ModEndorsement& state) const;
 			void OnResponseHeader(KxCURLEvent& event);
 
+			IAppOption GetNXMHandlerOptions() const;
+			void LoadNXMHandlerOptions();
+
 		public:
-			NexusRepository(NexusModNetwork& nexus, NexusUtility& utility, NexusAuth& auth)
-				:m_Nexus(nexus), m_Utility(utility), m_Auth(auth)
-			{
-			}
+			NexusRepository(NexusModNetwork& nexus, NexusUtility& utility, NexusAuth& auth);
+			~NexusRepository();
 
 		public:
 			ModRepositoryLimits GetRequestLimits() const override;

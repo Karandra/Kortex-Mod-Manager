@@ -2,7 +2,9 @@
 #include "NexusRepository.h"
 #include "NexusUtility.h"
 #include "Nexus.h"
-#include "NXMHandlerDialog.h"
+#include "NXMHandler/Dialog.h"
+#include "NXMHandler/OptionStore.h"
+#include "Application/Options/CmdLineDatabase.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
@@ -68,6 +70,27 @@ namespace Kortex::NetworkManager
 		}
 	}
 	
+	IAppOption NexusRepository::GetNXMHandlerOptions() const
+	{
+		return Application::GetGlobalOptionOf<INetworkManager>(m_Nexus.GetName(), wxS("NXMHandler"));
+	}
+	void NexusRepository::LoadNXMHandlerOptions()
+	{
+		if (!m_NXMHandlerOptions)
+		{
+			m_NXMHandlerOptions = std::make_unique<NXMHandler::OptionStore>();
+			m_NXMHandlerOptions->Load(GetNXMHandlerOptions());
+		}
+	}
+	
+	NexusRepository::NexusRepository(NexusModNetwork& nexus, NexusUtility& utility, NexusAuth& auth)
+		:m_Nexus(nexus), m_Utility(utility), m_Auth(auth)
+	{
+	}
+	NexusRepository::~NexusRepository()
+	{
+	}
+
 	ModRepositoryLimits NexusRepository::GetRequestLimits() const
 	{
 		wxCriticalSectionLocker lock(m_LimitsDataCS);
@@ -208,6 +231,28 @@ namespace Kortex::NetworkManager
 	}
 	wxAny NexusRepository::GetDownloadTarget(const wxString& link)
 	{
+		LoadNXMHandlerOptions();
+		
+		GameID gameID;
+		NetworkModInfo modInfo;
+		NexusNXMLinkData nxmExtraInfo;
+		if (ParseNXM(link, gameID, modInfo, nxmExtraInfo))
+		{
+			wxString nexusID = m_Nexus.TranslateGameIDToNetwork(gameID);
+
+			using namespace NXMHandler;
+			if (auto value = m_NXMHandlerOptions->GetOption<OptionStore::Instance>(nexusID))
+			{
+				return IGameInstance::GetShallowInstance(value->ID);
+			}
+			else if (auto value = m_NXMHandlerOptions->GetOption<OptionStore::Command>(nexusID))
+			{
+				CmdLine cmdLine;
+				cmdLine.Executable = value->Executable;
+				cmdLine.Arguments = value->Arguments;
+				return cmdLine;
+			}
+		}
 		return {};
 	}
 
@@ -534,7 +579,10 @@ namespace Kortex::NetworkManager
 	
 	void NexusRepository::ConfigureNXMHandler()
 	{
-		NXMHandlerDialog dialog(IApplication::GetInstance()->GetActiveWindow());
+		LoadNXMHandlerOptions();
+		
+		NXMHandler::Dialog dialog(IApplication::GetInstance()->GetActiveWindow(), *m_NXMHandlerOptions);
 		dialog.ShowModal();
+		m_NXMHandlerOptions->Save(GetNXMHandlerOptions());
 	}
 }

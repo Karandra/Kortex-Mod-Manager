@@ -409,6 +409,12 @@
     <Filter Include="Code\Source\Application\Options">
       <UniqueIdentifier>{f8dee2e9-4626-42bf-95eb-0f0d1f9534f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\Network\ModNetwork\Nexus\NXMHandler">
+      <UniqueIdentifier>{f89fe98c-af20-4fc6-ace3-a8791652ef3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Network\ModNetwork\Nexus\NXMHandler">
+      <UniqueIdentifier>{f264d46b-471a-4d2d-97be-3451701a6ab9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1257,14 +1263,17 @@
     <ClCompile Include="Source\GameInstance\ProfileEvent.cpp">
       <Filter>Code\Source\GameInstance</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandlerDialog.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\Dialog.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandlerModel.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModel.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandlerModelNode.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModelNode.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\OptionStore.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2387,17 +2396,20 @@
     <ClInclude Include="Source\GameInstance\ProfileEvent.h">
       <Filter>Code\Headers\GameInstance</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandlerDialog.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandlerModel.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandlerModelNode.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\Options\CmdLineDatabase.h">
       <Filter>Code\Headers\Application\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\Dialog.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModel.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModelNode.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\OptionStore.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

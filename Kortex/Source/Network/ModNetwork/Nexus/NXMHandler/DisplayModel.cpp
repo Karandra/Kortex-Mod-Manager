@@ -1,16 +1,13 @@
 #include "stdafx.h"
-#include "NXMHandlerModel.h"
+#include "DisplayModel.h"
+#include "Utility/KAux.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxMenu.h>
 
-namespace Kortex::NetworkManager
+namespace Kortex::NetworkManager::NXMHandler
 {
-	NXMHandlerModel::NXMHandlerModel()
-	{
-	}
-
-	void NXMHandlerModel::OnActivate(KxDataView2::Event& event)
+	void DisplayModel::OnActivate(KxDataView2::Event& event)
 	{
 		if (event.GetNode() && event.GetColumn())
 		{
@@ -18,7 +15,12 @@ namespace Kortex::NetworkManager
 		}
 	}
 
-	void NXMHandlerModel::CreateView(wxWindow* parent)
+	DisplayModel::DisplayModel(OptionStore& options)
+		:m_Options(options)
+	{
+	}
+
+	void DisplayModel::CreateView(wxWindow* parent)
 	{
 		using namespace KxDataView2;
 
@@ -28,15 +30,21 @@ namespace Kortex::NetworkManager
 		view->SetUniformRowHeight(view->GetDefaultRowHeight(UniformHeight::Explorer));
 
 		// Columns
-		view->AppendColumn<TextRenderer>(KTr("NetworkManager.NXMHandler.NexusID"), ColumnID::NexusID);
+		ColumnStyle columnStyle = ColumnStyle::Move|ColumnStyle::Size|ColumnStyle::Sort;
+		view->AppendColumn<TextRenderer>(KTr("NetworkManager.NXMHandler.NexusID"), ColumnID::NexusID, {}, columnStyle);
 		{
-			auto [column, r] = view->AppendColumn<TextRenderer>(KTr("NetworkManager.NXMHandler.Game"), ColumnID::Game);
+			auto [column, r] = view->AppendColumn<TextRenderer>(KTr("NetworkManager.NXMHandler.Game"), ColumnID::Game, {}, columnStyle);
 			column.SetVisible(false);
 		}
 		{
-			auto [c, r, editor] = view->AppendColumn<TextRenderer, ComboBoxEditor>(KTr("NetworkManager.NXMHandler.Target"), ColumnID::Target);
+			auto [c, r, editor] = view->AppendColumn<TextRenderer, ComboBoxEditor>(KTr("NetworkManager.NXMHandler.Target"), ColumnID::Target, {}, columnStyle);
+			editor.AlwaysUseStringSelection(false);
+			editor.EndEditOnCloseup(true);
 			editor.SetEditable(false);
 			editor.AutoPopup();
+
+			editor.AddItem(KAux::MakeNoneLabel());
+			editor.AddItem(KAux::MakeBracketedLabel(KTr("NetworkManager.NXMHandler.ExternalProgram")));
 			for (const auto& instance: IGameInstance::GetShallowInstances())
 			{
 				editor.AddItem(instance->GetInstanceID());
@@ -44,7 +52,7 @@ namespace Kortex::NetworkManager
 		}
 
 		// Events
-		view->Bind(EvtITEM_ACTIVATED, &NXMHandlerModel::OnActivate, this);
+		view->Bind(EvtITEM_ACTIVATED, &DisplayModel::OnActivate, this);
 		view->Bind(EvtCOLUMN_HEADER_RCLICK, [view](Event& event)
 		{
 			KxMenu menu;
@@ -57,14 +65,14 @@ namespace Kortex::NetworkManager
 		// Add items
 		RefreshItems();
 	}
-	void NXMHandlerModel::RefreshItems()
+	void DisplayModel::RefreshItems()
 	{
 		std::unordered_set<wxString> hash;
 		for (const auto& instance: IGameInstance::GetTemplates())
 		{
 			if (hash.insert(instance->GetVariables().GetVariable("NexusDomainName").AsString()).second)
 			{
-				m_Nodes.emplace_back(*instance);
+				m_Nodes.emplace_back(m_Options, *instance);
 			}
 		}
 

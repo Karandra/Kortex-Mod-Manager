@@ -7,11 +7,18 @@ namespace Kortex
 	class IGameInstance;
 }
 
-namespace Kortex::NetworkManager
+namespace Kortex::NetworkManager::NXMHandler
 {
-	class NXMHandlerModelNode: public KxDataView2::Node
+	class OptionStore;
+}
+
+namespace Kortex::NetworkManager::NXMHandler
+{
+	class DisplayModelNode: public KxDataView2::Node
 	{
 		private:
+			wxString m_NexusID;
+			OptionStore& m_Options;
 			IGameInstance& m_Instance;
 
 		private:
@@ -19,12 +26,12 @@ namespace Kortex::NetworkManager
 			wxAny GetEditorValue(const KxDataView2::Column& column) const override;
 			bool SetValue(KxDataView2::Column& column, const wxAny& value) override;
 
+			bool Compare(const KxDataView2::Node& other, const KxDataView2::Column& column) const override;
 			bool IsEnabled(const KxDataView2::Column& column) const override;
 
+			void OpenExecutableDialog();
+
 		public:
-			NXMHandlerModelNode(IGameInstance& instance)
-				:m_Instance(instance)
-			{
-			}
+			DisplayModelNode(OptionStore& options, IGameInstance& instance);
 	};
 }

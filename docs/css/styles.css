@@ -469,12 +469,12 @@ code {
 }
 #menu-toggle-icon {
 	/* Dimensions */
-	height: var(--size--root-20px);
-	width: var(--size--root-20px);
+	height: 2.2rem;
+	width: 2.2rem;
 	/* Spacings */
 	margin: 0;
 	/* General */
-	background: var(--short-menu-toggle-background);
+		/* background: var(--short-menu-toggle-background); */
 	-webkit-filter: url(#menu-toggle-icon-filter);
 			filter: url(#menu-toggle-icon-filter);
 	-webkit-transform: rotate(180deg);

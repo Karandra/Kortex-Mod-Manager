@@ -3,104 +3,104 @@ os-theme-block-light
 */
 
 .os-theme-block-light > .os-scrollbar {
-    padding: 0;
+	padding: 0;
 }
 .os-theme-block-light > .os-scrollbar-horizontal {
-    right: 16px;
-    height: 16px;
+	right: 16px;
+	height: 16px;
 }
 .os-theme-block-light > .os-scrollbar-vertical {
-    bottom: 16px;
-    width: 16px;
+	bottom: 16px;
+	width: 16px;
 }
 .os-theme-block-light.os-host-rtl > .os-scrollbar-horizontal {
-    left: 16px;
-    right: 0;
+	left: 16px;
+	right: 0;
 }
 .os-theme-block-light > .os-scrollbar-corner {
-    height: 16px;
-    width: 16px;
-    background-color: transparent;
+	height: 16px;
+	width: 16px;
+	background-color: transparent;
 }
 .os-theme-block-light > .os-scrollbar > .os-scrollbar-track {
-    background: transparent;
+	background: transparent;
 }
 .os-theme-block-light > .os-scrollbar-horizontal > .os-scrollbar-track:before,
 .os-theme-block-light > .os-scrollbar-vertical > .os-scrollbar-track:before {
-    content: '';
-    display: block;
-    position: absolute;
-    background: rgba(255, 255, 255, 0.15);
+	content: '';
+	display: block;
+	position: absolute;
+	background: rgba(255, 255, 255, 0.15);
 }
 .os-theme-block-light > .os-scrollbar-horizontal > .os-scrollbar-track:before {
-    left: 5px;
-    right: 5px;
-    height: 2px;
-    top: 50%;
-    margin-top: -1px;
+	left: 5px;
+	right: 5px;
+	height: 2px;
+	top: 50%;
+	margin-top: -1px;
 }
 .os-theme-block-light > .os-scrollbar-vertical > .os-scrollbar-track:before {
-    top: 5px;
-    bottom: 3px;
-    width: 2px;
-    left: 50%;
-    margin-left: -1px;
+	top: 5px;
+	bottom: 3px;
+	width: 2px;
+	left: 50%;
+	margin-left: -1px;
 }
 .os-theme-block-light > .os-scrollbar-horizontal:hover > .os-scrollbar-track:before,
 .os-theme-block-light > .os-scrollbar-horizontal.active > .os-scrollbar-track:before {
-    left: 0;
-    right: 0;
-    height: 100%;
-    top: 0;
-    margin-top: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	top: 0;
+	margin-top: 0;
 }
 .os-theme-block-light > .os-scrollbar-vertical:hover > .os-scrollbar-track:before,
 .os-theme-block-light > .os-scrollbar-vertical.active > .os-scrollbar-track:before {
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    margin-left: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	left: 0;
+	margin-left: 0;
 }
 .os-theme-block-light > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
-    background: transparent;
+	background: transparent;
 }
 .os-theme-block-light > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle {
-    min-width: 100px;
-    max-width: 100px;
+	min-width: 100px;
+	max-width: 100px;
 }
 .os-theme-block-light > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
-    min-height: 100px;
-    max-height: 100px;
+	min-height: 100px;
+	max-height: 100px;
 }
 .os-theme-block-light > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle:before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 4px;
-    bottom: 4px;
-    left: 4px;
-    right: 4px;
-    background: #afafaf;
+	content: '';
+	display: block;
+	position: absolute;
+	top: 4px;
+	bottom: 4px;
+	left: 4px;
+	right: 4px;
+	background: #afafaf;
 }
 .os-theme-block-light.os-host-scrolling > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle:before {
-    background: #cecece;
+	background: #cecece;
 }
 .os-theme-block-light > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle:hover:before,
 .os-theme-block-light > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle.active:before {
-    background: #fff;
+	background: #fff;
 }
 .os-theme-block-light > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle {
-    height: 100%;
-    min-width: 16px;
+	height: 100%;
+	min-width: 16px;
 }
 .os-theme-block-light > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
-    width: 100%;
-    min-height: 16px;
+	width: 100%;
+	min-height: 16px;
 }
 .os-theme-block-light.os-host-transition > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle:before {
-    transition: background 0.3s;
+	transition: background 0.3s;
 }
 .os-theme-block-light.os-host-transition > .os-scrollbar > .os-scrollbar-track:before {
-    transition: margin 0.3s, height 0.3s, width 0.3s, top 0.3s, right 0.3s, bottom 0.3s, left 0.3s;
+	transition: margin 0.3s, height 0.3s, width 0.3s, top 0.3s, right 0.3s, bottom 0.3s, left 0.3s;
 }

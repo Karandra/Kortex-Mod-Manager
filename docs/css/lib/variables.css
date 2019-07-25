@@ -58,9 +58,9 @@
 }
 :root {
 	/* Images */
-	--image-menu-toggle: url(../../res/arrow-left.svg);
-	--image-page-bg: url(../../res/nebula-1897595.jpg);
-	--image-quote-bg: url(../../res/icon-quote.svg);
+	--image-menu-toggle: url(../res/arrow-left.svg);
+	--image-page-bg: url(../res/nebula-1897595.jpg);
+	--image-quote-bg: url(../res/icon-quote.svg);
 }
 :root {
 	/* Transitions */

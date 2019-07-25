@@ -301,7 +301,7 @@ namespace Kortex::GameConfig
 						}
 						counter++;
 					});
-					return index < counter ? index : 0;
+					return (int)(index < counter ? index : 0);
 				}
 				case StructKindID::SideBySide:
 				{
@@ -317,10 +317,11 @@ namespace Kortex::GameConfig
 							}
 							if (formatter == currentValue)
 							{
-								return i;
+								return (int)i;
 							}
 						}
 					}
+					break;
 				}
 			};
 		}

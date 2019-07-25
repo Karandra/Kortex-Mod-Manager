@@ -238,13 +238,12 @@ namespace Kortex::GameConfig
 			if (IsComboBoxEditor() && !IsEditable())
 			{
 				size_t index = 0;
-				GetSamples().FindSampleByValue(m_Value, &index);
-				return index;
+				if (GetSamples().FindSampleByValue(m_Value, &index))
+				{
+					return (int)index;
+				}
 			}
-			else
-			{
-				return m_Value.Serialize(*this);
-			}
+			return m_Value.Serialize(*this);
 		}
 		return {};
 	}

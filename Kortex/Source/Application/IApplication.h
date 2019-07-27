@@ -100,7 +100,7 @@ namespace Kortex
 
 			wxCmdLineParser& GetCmdLineParser() const;
 			wxString FormatCommandLine(const CmdLineParameters& parameters);
-			bool ScheduleRestart(const wxString& commandLine = {});
+			bool ScheduleRestart(const wxString& commandLine = {}, std::optional<wxTimeSpan> timeout = {});
 
 			void EnableIE10Support();
 			void DisableIE10Support();

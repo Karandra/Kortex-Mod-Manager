@@ -115,11 +115,19 @@ namespace Kortex
 		}
 		return commandLine;
 	}
-	bool IApplication::ScheduleRestart(const wxString& commandLine)
+	bool IApplication::ScheduleRestart(const wxString& commandLine, std::optional<wxTimeSpan> timeout)
 	{
 		if (KxTaskScheduler taskSheduler; taskSheduler.IsOK())
 		{
-			const wxTimeSpan delay = wxTimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(3));
+			wxTimeSpan delay;
+			if (timeout && timeout->IsPositive())
+			{
+				delay = *timeout;
+			}
+			else
+			{
+				delay = wxTimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(3));
+			}
 
 			KxTaskSchedulerTask task = taskSheduler.NewTask();
 			task.SetExecutable(GetExecutablePath(), commandLine);

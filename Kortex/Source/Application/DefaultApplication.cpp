@@ -554,7 +554,7 @@ namespace Kortex::Application
 					CmdLineParameters parameters;
 					parameters.InstanceID = instance->GetInstanceID();
 					parameters.DownloadLink = link;
-					ScheduleRestart(FormatCommandLine(parameters));
+					ScheduleRestart(FormatCommandLine(parameters), wxTimeSpan::Seconds(1));
 				}
 				else
 				{

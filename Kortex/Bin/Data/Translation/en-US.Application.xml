@@ -613,6 +613,7 @@ This folder and all its contents will be deleted: %1]]>
 
 		<String ID="NetworkManager.NXMHandler.ExternalProgram">External program</String>
 		<String ID="NetworkManager.NXMHandler.ConfigureExecutable">Configure executable</String>
+		<String ID="NetworkManager.NXMHandler.InvalidExecutable">Invalid executable</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Download manager</String>

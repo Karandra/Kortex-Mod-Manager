@@ -618,6 +618,7 @@
 
 		<String ID="NetworkManager.NXMHandler.ExternalProgram">Внешняя программа</String>
 		<String ID="NetworkManager.NXMHandler.ConfigureExecutable">Настройка программы</String>
+		<String ID="NetworkManager.NXMHandler.InvalidExecutable">Некорректная программа</String>
 
 		<!-- Download Manager -->
 		<String ID="DownloadManager.Name">Менеджер загрузок</String>

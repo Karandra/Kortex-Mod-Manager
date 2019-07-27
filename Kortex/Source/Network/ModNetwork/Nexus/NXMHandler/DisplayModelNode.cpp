@@ -149,17 +149,34 @@ namespace Kortex::NetworkManager::NXMHandler
 				dialog.SetValue1(fileDialog.GetResult());
 			}
 		});
+		dialog.Bind(KxEVT_STDDIALOG_BUTTON, [this, &dialog](wxNotifyEvent& event)
+		{
+			if (event.GetId() == KxID_OK)
+			{
+				const IApplication* app = IApplication::GetInstance();
+				if (wxString path = dialog.GetValue1(); path != app->GetExecutablePath())
+				{
+					OptionStore::Command command;
+					command.Executable = path;
+					command.Arguments = dialog.GetValue2();
+					m_Options.SetOption(m_NexusID, std::move(command));
+
+					Refresh();
+				}
+				else
+				{
+					BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtWarning, KTr("NetworkManager.NXMHandler.InvalidExecutable"), &dialog);
+					event.Veto();
+				}
+			}
+			else
+			{
+				event.Skip();
+			}
+		});
 
 		dialog.Center();
-		if (dialog.ShowModal() == KxID_OK)
-		{
-			OptionStore::Command command;
-			command.Executable = dialog.GetValue1();
-			command.Arguments = dialog.GetValue2();
-			m_Options.SetOption(m_NexusID, std::move(command));
-
-			Refresh();
-		}
+		dialog.ShowModal() == KxID_OK;
 	}
 
 	DisplayModelNode::DisplayModelNode(OptionStore& options, IGameInstance& instance)

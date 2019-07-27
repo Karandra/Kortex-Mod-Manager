@@ -571,9 +571,17 @@ namespace Kortex::Application
 			{
 				Utility::Log::LogInfo("Starting external process '%1' with arguments '%2'", command.Executable, command.Arguments);
 
-				KxProcess process(command.Executable, KxString::Format(command.Arguments, link));
-				process.Run(KxPROCESS_RUN_SYNC);
-				return true;
+				if (command.Executable != GetExecutablePath())
+				{
+					KxProcess process(command.Executable, KxString::Format(command.Arguments, link));
+					process.Run(KxPROCESS_RUN_SYNC);
+					return true;
+				}
+				else
+				{
+					Utility::Log::LogInfo("Attempt to run itself as an external program");
+					return false;
+				}
 			}
 		}
 		return false;

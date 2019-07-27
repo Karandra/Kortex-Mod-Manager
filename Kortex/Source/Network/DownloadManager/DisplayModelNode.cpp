@@ -122,10 +122,6 @@ namespace Kortex::DownloadManager
 	{
 		return false;
 	}
-	KxDataView2::ToolTip DisplayModelNode::GetToolTip(const KxDataView2::Column& column) const
-	{
-		return KxDataView2::Node::GetToolTip(column);
-	}
 
 	bool DisplayModelNode::IsEnabled(const KxDataView2::Column& column) const
 	{

@@ -34,7 +34,6 @@ namespace Kortex::DownloadManager
 		private:
 			wxAny GetValue(const KxDataView2::Column& column) const override;
 			bool SetValue(KxDataView2::Column& column, const wxAny& value) override;
-			KxDataView2::ToolTip GetToolTip(const KxDataView2::Column& column) const override;
 
 			bool IsEnabled(const KxDataView2::Column& column) const override;
 			bool Compare(const Node& otherNode, const KxDataView2::Column& column) const override;

@@ -19,6 +19,35 @@
 
 namespace Kortex::DownloadManager
 {
+	KxDataView2::ToolTip DisplayModel::GetToolTip(const KxDataView2::Node& node, const KxDataView2::Column& column) const
+	{
+		using ColumnID = DisplayModelNode::ColumnID;
+		if (column.GetID<ColumnID>() == ColumnID::Name)
+		{
+			const DisplayModelNode& displayNode = static_cast<const DisplayModelNode&>(node);
+
+			wxString message;
+			for (size_t i = 0; i < GetView()->GetColumnCount(); i++)
+			{
+				KxDataView2::Column* column = GetView()->GetColumn(i);
+				if (column)
+				{
+					wxString text = column->GetRenderer().GetTextValue(displayNode.GetValue(*column));
+					if (!text.IsEmpty())
+					{
+						if (!message.IsEmpty())
+						{
+							message += wxS("\r\n");
+						}
+						message += KxString::Format(wxS("%1:\t%2"), column->GetTitle(), text);
+					}
+				}
+			}
+			return message;
+		}
+		return KxDataView2::Model::GetToolTip(node, column);
+	}
+
 	void DisplayModel::OnActivate(KxDataView2::Event& event)
 	{
 		DownloadItem* download = GetItem(event.GetNode());

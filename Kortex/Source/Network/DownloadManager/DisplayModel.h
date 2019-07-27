@@ -15,6 +15,9 @@ namespace Kortex::DownloadManager
 			std::list<DisplayModelNode> m_Nodes;
 
 		private:
+			KxDataView2::ToolTip GetToolTip(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
+
+		private:
 			void OnActivate(KxDataView2::Event& event);
 			void OnContextMenu(KxDataView2::Event& event);
 

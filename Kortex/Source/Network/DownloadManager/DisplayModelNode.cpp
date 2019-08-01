@@ -94,7 +94,7 @@ namespace Kortex::DownloadManager
 				if (m_Item.IsRunning())
 				{
 					// Add speed per sec
-					label += KxString::Format(wxS(", %1/%2"), KxFile::FormatFileSize(m_Item.GetDownloadSpeed(), 0), KTr(wxS("Generic.Sec")));
+					label += KxString::Format(wxS(", %1/%2"), KxFile::FormatFileSize(m_Item.GetDownloadSpeed(), 2), KTr(wxS("Generic.Sec")));
 				}
 
 				bool addedDownloaded = false;

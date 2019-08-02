@@ -148,8 +148,7 @@ let
 	loadedCSS = false,
 	loadedMD = false,
 	loadedMenu = false,
-	maxAttemptCSS = 3,
-	redirect404 = false
+	maxAttemptCSS = 3
 	;
 
 
@@ -460,20 +459,20 @@ function xhttpReady(request, resource, type) {
 			case css:
 				// CSS can't be loaded, record attempt
 				attemptCSS += 1;
-				// Retry loading the stylesheet, up to 3 times
-				if (attemptCSS < maxAttemptCSS && !redirect404) getFile(xhttpCSSFile, resource, css); 
-				// Halt retries, fake success and continue page processing
+				// Halt retries at 3, fake success and continue page processing
 				if (attemptCSS === maxAttemptCSS) {
 					loadedCSS = true;
 					importCSSClean();
+					break;
 				}
+				// Retry loading the stylesheet up to 3 times
+				getFile(xhttpCSSFile, resource, css); 
 				break;
 
 			default:
 				// Content can't be loaded, flag 404 and ensure flags are reset
 				loadedCSS = false;
 				loadedMD = false;
-				redirect404 = true;
 				linkHandler(badTimes, badTimes);
 		}
 	// Make sure all resources loaded flags are true
@@ -484,7 +483,6 @@ function xhttpReady(request, resource, type) {
 		attemptCSS = 0;
 		loadedCSS = false;
 		loadedMD = false;
-		redirect404 = false;
 	}
 }
 

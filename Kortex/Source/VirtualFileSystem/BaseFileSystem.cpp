@@ -48,14 +48,14 @@ namespace Kortex::VirtualFileSystem
 
 	bool BaseFileSystem::EnableAsyncIO(bool value)
 	{
-		return m_Controller.Send(RequestID::FSEnableAsyncIO, m_Handle).GetAs<bool>();
+		return m_Controller.Send(RequestID::FSEnableAsyncIO, m_Handle, value).GetAs<bool>();
 	}
 	bool BaseFileSystem::EnableExtendedSecurity(bool value)
 	{
-		return m_Controller.Send(RequestID::FSEnableExtendedSecurity, m_Handle).GetAs<bool>();
+		return m_Controller.Send(RequestID::FSEnableExtendedSecurity, m_Handle, value).GetAs<bool>();
 	}
 	bool BaseFileSystem::EnableImpersonateCallerUser(bool value)
 	{
-		return m_Controller.Send(RequestID::FSEnableImpersonateCallerUser, m_Handle).GetAs<bool>();
+		return m_Controller.Send(RequestID::FSEnableImpersonateCallerUser, m_Handle, value).GetAs<bool>();
 	}
 }

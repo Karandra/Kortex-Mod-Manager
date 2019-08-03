@@ -95,7 +95,7 @@ namespace Kortex::ModManager
 	{
 		fileSystem.EnableAsyncIO(true);
 		fileSystem.EnableExtendedSecurity(true);
-		fileSystem.EnableImpersonateCallerUser(true);
+		fileSystem.EnableImpersonateCallerUser(false);
 	}
 
 	void MainFileSystem::ShowStatusDialog()

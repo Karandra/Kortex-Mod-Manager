@@ -142,6 +142,14 @@ const
 	sideMenuHide = "0",
 	sideMenuShow = "20rem"
 	;
+// Switches
+let
+	attemptCSS = 0,
+	loadedCSS = false,
+	loadedMD = false,
+	loadedMenu = false,
+	maxAttemptCSS = 3
+	;
 
 
 // ********************\
@@ -331,9 +339,15 @@ function linkHandler(inputHREF, accessType) {
 		let locationType;
 		let xhttpInstance = xhttpMDFile;
 		switch (accessType) {
-			case menu: locationType = menu; xhttpInstance = xhttpMenuFile; break;
-			case badTimes: locationType = badTimes; break;
-			default: locationType = content;
+			case menu:
+				locationType = menu;
+				xhttpInstance = xhttpMenuFile;
+				break;
+			case badTimes:
+				locationType = badTimes;
+				break;
+			default:
+				locationType = content;
 		}
 
 		// Browser history manipulation
@@ -371,15 +385,21 @@ function getFile(request, resource, type) {
 	// Construct path to file
 	switch (type) {
 		case css:
+			loadedCSS = false;
 			request.open(get, dirCSS + resource + extCSS, true);
 			break;
 
-		case menu:
 		case badTimes:
+			loadedMD = false;
+			request.open(get, dirSrcs + dirUtil + resource + extMD, true);
+			break;
+
+		case menu:
 			request.open(get, dirSrcs + dirUtil + resource + extMD, true);
 			break;
 
 		default:
+			loadedMD = false;
 			request.open(get, dirSrcs + resource + extMD, true);
 	}
 
@@ -402,20 +422,25 @@ function getFile(request, resource, type) {
 function xhttpReady(request, resource, type) {
 	let requestCheck = request.readyState + request.status;
 
-	// Process when file is ready
+	// Process when file is ready, writing to page
 	if (requestCheck === reqPass)
 		switch (type) {
 			case css:
+				// Clean any previous unique CSS out, insert new, flag load success
 				importCSSClean();
 				importCSS(resource);
+				loadedCSS = true;
 				break;
 
 			case menu:
+				// Write menu to page, set vars and listeners, flag load success
 				sideMenuItemsClass.innerHTML = marked(request.response, markedOpt);
 				initVarAssign(menu);
+				loadedMenu = true;
 				break;
 
 			default:
+				// Write content page, set vars and listeners, scroll up, move to any hash
 				contentBoxID.innerHTML = marked(request.response, markedOpt);
 				initVarAssign(type);
 				scrollbarBoxID.scrollTo(0, 0);
@@ -423,21 +448,42 @@ function xhttpReady(request, resource, type) {
 					location.assign(urlHash);
 					urlHash = null;
 				}
+				// Note loaded page to avoid repeat nav OR blank for 404, flag load uccess
 				sameLocation = resource;
 				if (type === badTimes) sameLocation = "";
-
-				// Wait 200ms to ensure content and styles are rendered before disengaging cloak.
-				setTimeout(contentVisibility(contentShow), contentUncloakTime);
+				loadedMD = true;
 		}
 	// Process when file fails to load
 	if (requestCheck === reqFail)
 		switch (type) {
 			case css:
-				importCSSClean();
+				// CSS can't be loaded, record attempt
+				attemptCSS += 1;
+				// Halt retries at 3, fake success and continue page processing
+				if (attemptCSS === maxAttemptCSS) {
+					loadedCSS = true;
+					importCSSClean();
+					break;
+				}
+				// Retry loading the stylesheet up to 3 times
+				getFile(xhttpCSSFile, resource, css); 
 				break;
+
 			default:
+				// Content can't be loaded, flag 404 and ensure flags are reset
+				loadedCSS = false;
+				loadedMD = false;
 				linkHandler(badTimes, badTimes);
 		}
+	// Make sure all resources loaded flags are true
+	if (loadedCSS && loadedMD && loadedMenu) {
+		// Wait 200ms to ensure content and styles are rendered before disengaging cloak
+		setTimeout(contentVisibility(contentShow), contentUncloakTime);
+		// Return content and CSS resource flags and attempts to defaults for next cycle
+		attemptCSS = 0;
+		loadedCSS = false;
+		loadedMD = false;
+	}
 }
 
 

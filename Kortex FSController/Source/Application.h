@@ -18,6 +18,7 @@ namespace Kortex::FSController
 		private:
 			wxString m_RootFolder;
 			wxString m_DataFolder;
+			wxString m_LogFolder;
 
 			RecievingWindow* m_RecievingWindow = NULL;
 			std::unique_ptr<KxProcess> m_MainProcess;
@@ -42,6 +43,10 @@ namespace Kortex::FSController
 			wxString GetDataFolder() const
 			{
 				return m_DataFolder;
+			}
+			wxString GetLogFolder() const
+			{
+				return m_LogFolder;
 			}
 	};
 }

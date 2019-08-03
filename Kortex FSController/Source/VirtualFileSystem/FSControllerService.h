@@ -6,6 +6,7 @@
 #include "VirtualFileSystem/IVFSService.h"
 #include <KxVirtualFileSystem/FileSystemService.h>
 #include <KxVirtualFileSystem/IFileSystem.h>
+#include <KxVirtualFileSystem/Logger/FileLogger.h>
 
 namespace Kortex::FSController
 {
@@ -21,6 +22,7 @@ namespace Kortex::VirtualFileSystem
 		private:
 			FSController::RecievingWindow* m_RecievingWindow = nullptr;
 			std::vector<std::unique_ptr<KxVFS::IFileSystem>> m_FileSystems;
+			KxVFS::FileLogger m_Logger;
 
 		private:
 			void OnMessage(const IPC::Message& message);
@@ -114,6 +116,12 @@ namespace Kortex::VirtualFileSystem
 			KxVersion GetNativeLibraryVersion() const override
 			{
 				return ToWxString(KxVFS::FileSystemService::GetDokanyVersion());
+			}
+			
+		public:
+			KxVFS::ILogger& GetLogger() override
+			{
+				return m_Logger;
 			}
 	};
 }

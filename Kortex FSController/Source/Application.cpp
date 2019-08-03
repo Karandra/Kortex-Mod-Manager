@@ -5,6 +5,7 @@
 #include "VirtualFileSystem/FSControllerService.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxLibrary.h>
+#include <KxFramework/KxShell.h>
 #include <KxFramework/KxFile.h>
 
 namespace
@@ -59,6 +60,7 @@ namespace Kortex::FSController
 		m_RootFolder = KxLibrary(nullptr).GetFileName().BeforeLast('\\');
 		KxFile::SetCWD(m_RootFolder);
 		m_DataFolder = m_RootFolder + "\\Data";
+		m_LogFolder = KxShell::GetFolder(KxSHF_APPLICATIONDATA_LOCAL) + wxS("\\KortexModManager\\Logs");
 
 		// Configure command line
 		wxCmdLineParser& parser = GetCmdLineParser();

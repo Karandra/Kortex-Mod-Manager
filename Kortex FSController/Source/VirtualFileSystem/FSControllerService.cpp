@@ -57,6 +57,17 @@ namespace
 		}
 		return wxEmptyString;
 	}
+	wxString GetLogPath()
+	{
+		const auto app = FSController::Application::GetInstance();
+
+		wxString path = app->GetLogFolder() + wxS("\\FileSystemController");
+		if (KxSystem::Is64Bit())
+		{
+			path += wxS(" x64");
+		}
+		return path + wxS(".log");
+	}
 	KxVFS::KxDynamicStringW GetServiceName()
 	{
 		if (KxVFS::FileSystemService::IsDokanyDefaultInstallPresent())
@@ -283,11 +294,13 @@ namespace Kortex::VirtualFileSystem
 	}
 
 	FSControllerService::FSControllerService()
-		:FileSystemService(::GetServiceName())
+		:FileSystemService(::GetServiceName()), m_Logger(ToKxDynamicStringRef(GetLogPath()))
 	{
+		m_Logger.Log(KxVFS::LogLevel::Info, L"Log opened");
 	}
 	FSControllerService::~FSControllerService()
 	{
+		m_Logger.Log(KxVFS::LogLevel::Info, L"Log closed");
 	}
 
 	bool FSControllerService::Install()

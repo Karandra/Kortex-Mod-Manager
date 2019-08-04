@@ -2,6 +2,7 @@
 #include "DefaultPackageManager.h"
 #include "PackageCreator/KPackageCreatorWorkspace.h"
 #include <Kortex/Application.hpp>
+#include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxShell.h>
@@ -14,9 +15,10 @@ namespace Kortex::PackageManager
 		LoadRequirementsGroup(m_StandardRequirements, managerNode.GetFirstChildElement("Requirements"));
 		
 		// Find script extender
-		if (KPPRRequirementEntry* se = m_StandardRequirements.FindEntry(Variables::KVAR_SCRIPT_EXTENDER_ID))
+		wxString xSEID = instance.GetVariables().GetVariable(Variables::KVAR_SCRIPT_EXTENDER_ID).AsString();
+		if (KPPRRequirementEntry* xSE = m_StandardRequirements.FindEntry(xSEID))
 		{
-			m_WithScriptExtender.Assign(*se);
+			m_WithScriptExtender.Assign(*xSE);
 			AddComponent<IWithScriptExtender>(m_WithScriptExtender);
 		}
 	}

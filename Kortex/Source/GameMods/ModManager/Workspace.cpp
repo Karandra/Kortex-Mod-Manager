@@ -971,17 +971,16 @@ namespace Kortex::ModManager
 				if (dialog.IsModified())
 				{
 					dialog.ApplyChangesToMod();
-					bool hasSelection = DoForAllSelectedItems(selectedMods, [&tempMod](IGameMod& mod)
+					bool changesMade = DoForAllSelectedItems(selectedMods, [&tempMod](IGameMod& mod)
 					{
 						mod.GetTagStore() = tempMod.GetTagStore();
 						mod.SetPriorityGroupTag(tempMod.GetPriorityGroupTag());
 						mod.Save();
-
-						BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, mod);
 						return true;
 					});
-					if (hasSelection)
+					if (changesMade)
 					{
+						BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtChanged, selectedMods);
 						ReloadView();
 					}
 				}

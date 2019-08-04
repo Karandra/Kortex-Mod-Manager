@@ -228,6 +228,9 @@ namespace Kortex::ModManager
 				{
 					rootNode.AttachChild(tagNode);
 					tagNode.OnAttachNode();
+
+					// Expand groups according to saved state
+					tagNode.SetExpanded(tagNode.GetTag().IsExpanded());
 				}
 			}
 		}
@@ -325,8 +328,7 @@ namespace Kortex::ModManager
 	}
 	void DisplayModel::OnExpandCollapseItem(KxDataView2::Event& event)
 	{
-		DisplayModelModNode* modNode = nullptr;
-		if (event.GetNode()->QueryInterface(modNode))
+		if (DisplayModelModNode* modNode = nullptr; event.GetNode()->QueryInterface(modNode))
 		{
 			PriorityGroup* priorityGroup = nullptr;
 			if (modNode->GetMod().QueryInterface(priorityGroup))
@@ -336,6 +338,10 @@ namespace Kortex::ModManager
 					tag->SetExpanded(event.GetEventType() == KxDataView2::EvtITEM_EXPANDED);
 				}
 			}
+		}
+		else if (DisplayModelTagNode* tagNode = nullptr; event.GetNode()->QueryInterface(modNode))
+		{
+			tagNode->GetTag().SetExpanded(event.GetEventType() == KxDataView2::EvtITEM_EXPANDED);
 		}
 	}
 	void DisplayModel::OnContextMenu(KxDataView2::Event& event)

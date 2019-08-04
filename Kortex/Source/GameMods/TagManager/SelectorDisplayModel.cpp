@@ -151,6 +151,7 @@ namespace Kortex::ModTagManager
 					{
 						const bool hasTag = m_Data->HasTag(*tag);
 						m_Data->ToggleTag(*tag, value.As<bool>());
+						m_IsModified = true;
 						return hasTag;
 					}
 					return false;

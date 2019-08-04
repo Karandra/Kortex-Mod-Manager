@@ -473,7 +473,7 @@ This folder and all its contents will be deleted: %1]]>
 
 		<String ID="ModManager.RemoveMod.CaptionUninstall">Are you sure you want to uninstall "%1"?</String>
 		<String ID="ModManager.RemoveMod.CaptionUninstallAndErase">Are you sure you want to uninstall "%1" and delete the corresponding log entry?</String>
-		<String ID="ModManager.RemoveMod.CaptionErase">Are you sure you want to delete "%1" entry from log?></String>
+		<String ID="ModManager.RemoveMod.CaptionErase">Are you sure you want to delete "%1" entry from log?</String>
 		<String ID="ModManager.RemoveMod.Message">This action cannot be undone</String>
 		<String ID="ModManager.RemoveMod.RemovingMessage">Delete mod data</String>
 

@@ -158,14 +158,6 @@ namespace Kortex::ModManager
 
 namespace Kortex::ModManager
 {
-	bool DispatcherSearcher::operator()(const FileTreeNode& node) const
-	{
-		return node.GetItem().IsElementType(m_ElementType) && KxComparator::Matches(node.GetName(), m_Filter, true);
-	}
-}
-
-namespace Kortex::ModManager
-{
 	void DefaultModDispatcher::OnVirtualTreeInvalidated(BroadcastEvent& event)
 	{
 		InvalidateVirtualTree();
@@ -177,7 +169,7 @@ namespace Kortex::ModManager
 	}
 	void DefaultModDispatcher::UpdateVirtualTree()
 	{
-		const IGameMod::RefVector mods = IModManager::GetInstance()->GetAllMods(true, true);
+		const IGameMod::RefVector mods = IModManager::GetInstance()->GetMods(GetModsFlags::Everything);
 		m_VirtualTree.ClearChildren();
 
 		constexpr const bool useRecursive = false;
@@ -314,7 +306,7 @@ namespace Kortex::ModManager
 			return true;
 		};
 
-		IterateModsBackward(CheckMod, true);
+		IterateModsBackward(CheckMod, GetModsFlags::Everything);
 		std::reverse(collisions.begin(), collisions.end());
 		return collisions;
 	}

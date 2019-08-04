@@ -26,7 +26,10 @@ namespace Kortex::PluginManager
 
 	void BethesdaPluginManagerMW::ReadOrderMW(const KxINI& ini)
 	{
-		auto files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, ModManager::DispatcherSearcher(wxEmptyString, KxFS_FILE), false);
+		auto files = IModDispatcher::GetInstance()->Find(m_PluginsLocation, [](const FileTreeNode& node)
+		{
+			return node.IsFile();
+		}, false);
 
 		// Load all names from 'Game Files Order' section. Discard non-existing files.
 		KxStringVector loadOrder = ini.GetKeyNames("Game Files Order");

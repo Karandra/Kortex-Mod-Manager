@@ -45,25 +45,6 @@ namespace Kortex::ModManager
 
 namespace Kortex::ModManager
 {
-	class DispatcherSearcher
-	{
-		private:
-			const wxString m_Filter;
-			const KxFileSearchType m_ElementType = KxFS_ALL;
-
-		public:
-			DispatcherSearcher(const wxString& filter = wxEmptyString, KxFileSearchType type = KxFS_FILE)
-				:m_Filter(filter), m_ElementType(type)
-			{
-			}
-
-		public:
-			bool operator()(const FileTreeNode& node) const;
-	};
-}
-
-namespace Kortex::ModManager
-{
 	class DefaultModDispatcher: public IModDispatcher
 	{
 		private:

@@ -7,6 +7,6 @@ namespace Kortex
 	bool IModTag::IsDefaultTag() const
 	{
 		IModTagManager* manager = IModTagManager::GetInstance();
-		return manager->FindTagByID(manager->GetDefaultTags(), GetID()) != nullptr;
+		return manager && manager->FindTagByID(manager->GetDefaultTags(), GetID()) != nullptr;
 	}
 }

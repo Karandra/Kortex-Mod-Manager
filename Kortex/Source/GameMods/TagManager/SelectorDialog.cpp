@@ -50,7 +50,7 @@ namespace Kortex::ModTagManager
 			if (tag)
 			{
 				// Find all mods with this tag and remove it from them
-				for (auto& mod: IModManager::GetInstance()->GetMods())
+				for (IGameMod* mod: IModManager::GetInstance()->GetMods())
 				{
 					ModTagStore& tagStore = mod->GetTagStore();
 					if (tagStore.HasTag(*tag))

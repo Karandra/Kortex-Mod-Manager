@@ -122,7 +122,7 @@ namespace Kortex::ModManager
 			IGameMod* lastMod = &modManager->GetBaseGame();
 			DisplayModelModNode* lastPriorityGroupNode = nullptr;
 
-			for (auto& currentMod: modManager->GetMods())
+			for (IGameMod* currentMod: modManager->GetMods())
 			{
 				if (FilterMod(*currentMod))
 				{
@@ -143,7 +143,7 @@ namespace Kortex::ModManager
 								lastPriorityGroupNode = nullptr;
 							}
 
-							IGameMod* anchorMod = begin ? currentMod.get() : lastMod;
+							IGameMod* anchorMod = begin ? currentMod : lastMod;
 							if (begin)
 							{
 								PriorityGroup& priorityGroup = *m_PriortyGroups.emplace_back(std::make_unique<PriorityGroup>(*anchorMod, begin));
@@ -156,7 +156,7 @@ namespace Kortex::ModManager
 								lastPriorityGroupNode = &m_ModNodes.emplace_back(priorityGroup);
 							}
 						}
-						lastMod = currentMod.get();
+						lastMod = currentMod;
 
 						if (lastPriorityGroupNode)
 						{
@@ -199,7 +199,7 @@ namespace Kortex::ModManager
 			DisplayModelTagNode& noneTagNode = m_TagNodes.insert_or_assign(wxEmptyString, *m_NoneTag).first->second;
 
 			// Add nodes for real tags
-			for (auto& mod: modManager->GetMods())
+			for (IGameMod* mod: modManager->GetMods())
 			{
 				if (FilterMod(*mod))
 				{

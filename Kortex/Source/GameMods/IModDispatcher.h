@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "FileTreeNode.h"
 #include "IGameMod.h"
+#include "ModManager/Common.h"
 #include <KxFramework/KxSingleton.h>
 
 namespace Kortex
@@ -13,8 +14,8 @@ namespace Kortex
 		public:
 			enum class IterationOrder
 			{
-				Direct,
-				Reversed
+				Forward,
+				Backward
 			};
 			using IterationFunctor = std::function<bool(const IGameMod&)>;
 			using FilterFunctor = std::function<bool(const FileTreeNode&)>;
@@ -54,13 +55,13 @@ namespace Kortex
 			// Return 'false' from functor to stop iteration.
 			IGameMod* IterateModsForward(const IGameMod::RefVector& mods, IterationFunctor functor) const
 			{
-				return DoIterateMods(mods, functor, IterationOrder::Direct);
+				return DoIterateMods(mods, functor, IterationOrder::Forward);
 			}
 			IGameMod* IterateModsBackward(const IGameMod::RefVector& mods, IterationFunctor functor) const
 			{
-				return DoIterateMods(mods, functor, IterationOrder::Reversed);
+				return DoIterateMods(mods, functor, IterationOrder::Backward);
 			}
-			IGameMod* IterateModsForward(IterationFunctor functor, bool includeWriteTarget = false) const;
-			IGameMod* IterateModsBackward(IterationFunctor functor, bool includeWriteTarget = false) const;
+			IGameMod* IterateModsForward(IterationFunctor functor, ModManager::GetModsFlags flags = ModManager::GetModsFlags::None) const;
+			IGameMod* IterateModsBackward(IterationFunctor functor, ModManager::GetModsFlags flags = ModManager::GetModsFlags::None) const;
 	};
 }

@@ -7,6 +7,7 @@
 #include <Kortex/ProgramManager.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
+#include "GameMods/ModManager/Workspace.h"
 #include "Application/About/Dialog.h"
 #include "Application/Settings/Window.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
@@ -179,7 +180,6 @@ void KMainWindow::CreateMainWorkspaces()
 	m_ManagersMenu = new KxMenu();
 
 	// Add workspaces
-	//AddWorkspace(new KGameConfigWorkspace(this))->CreateNow();
 	AddWorkspace(new Kortex::ModManager::Workspace(this))->CreateNow();
 	AddWorkspace(new KPackageCreatorWorkspace(this));
 	AddWorkspace(new PackageManager::Workspace(this));

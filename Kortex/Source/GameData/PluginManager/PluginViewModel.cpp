@@ -3,6 +3,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
+#include "GameMods/ModManager/Workspace.h"
 #include "UI/KMainWindow.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"

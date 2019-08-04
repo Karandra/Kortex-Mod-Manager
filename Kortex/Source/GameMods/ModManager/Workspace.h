@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "UI/KWorkspace.h"
 #include "UI/KMainWindow.h"
+#include "GameMods/IGameMod.h"
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxAuiNotebook.h>
 #include <KxFramework/KxNotebook.h>
@@ -17,7 +18,7 @@ class KxSearchBox;
 namespace Kortex
 {
 	class IModTag;
-	class IGameMod;
+	class ModEvent;
 	class ProfileEvent;
 	class VirtualFSEvent;
 }
@@ -64,8 +65,8 @@ namespace Kortex::ModManager
 
 		public:
 			Workspace(KMainWindow* mainWindow);
-			virtual ~Workspace();
-			virtual bool OnCreateWorkspace() override;
+			~Workspace();
+			bool OnCreateWorkspace() override;
 
 		private:
 			void CreateToolBar();
@@ -116,6 +117,7 @@ namespace Kortex::ModManager
 			void ProcessSelectProfile(const wxString& newProfileID);
 			void OnSelectProfile(wxCommandEvent& event);
 			void OnShowProfileEditor(KxAuiToolBarEvent& event);
+			void OnUpdateModLayoutNeeded(ModEvent& event);
 		
 			void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 			void OnToolsMenu(KxAuiToolBarEvent& event);
@@ -141,7 +143,6 @@ namespace Kortex::ModManager
 				return m_DisplayModel;
 			}
 
-			void OpenPackage(const wxString& path);
 			void SelectMod(const IGameMod* entry);
 			void ProcessSelection(IGameMod* entry = nullptr);
 			void HighlightMod(const IGameMod* entry = nullptr);

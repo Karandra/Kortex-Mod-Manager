@@ -3,6 +3,7 @@
 #include "Application/IManager.h"
 #include "GameMods/IGameMod.h"
 #include "VirtualFileSystem/IVirtualFileSystem.h"
+#include "ModManager/Common.h"
 #include "Network/Common.h"
 #include "Network/NetworkModInfo.h"
 #include <KxFramework/KxSingleton.h>
@@ -11,20 +12,28 @@ namespace Kortex
 {
 	class IGameProfile;
 	class IModNetwork;
-
-	namespace ModManager
-	{
-		class Config;
-	}
-	namespace ModManager::Internal
+}
+namespace Kortex::ModManager
+{
+	class Config;
+	namespace Internal
 	{
 		extern const SimpleManagerInfo TypeInfo;
 	}
+}
 
+namespace Kortex
+{
 	class IModManager:
 		public ManagerWithTypeInfo<IManager, ModManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IModManager>
 	{
+		public:
+			using GetModsFlags = ModManager::GetModsFlags;
+
+		protected:
+			IGameMod::Vector m_Mods;
+
 		protected:
 			void RecalculatePriority(size_t startAt = 0);
 			void SortByPriority();
@@ -42,16 +51,15 @@ namespace Kortex
 			}
 			IGameMod& EmplaceMod(std::unique_ptr<IGameMod> mod)
 			{
-				auto& mods = GetMods();
-				mod->SetPriority(mods.size());
-				return *mods.emplace_back(std::move(mod));
+				mod->SetPriority(m_Mods.size());
+				return *m_Mods.emplace_back(std::move(mod));
 			}
 
 			virtual void Load() = 0;
 			virtual void Save() const = 0;
 
-			virtual IGameMod::Vector& GetMods() = 0;
-			virtual IGameMod::RefVector GetAllMods(bool activeOnly = false, bool includeWriteTarget = false) = 0;
+			virtual IGameMod::RefVector GetMods(ModManager::GetModsFlags flags = ModManager::GetModsFlags::None) = 0;
+			virtual size_t GetModsCount(ModManager::GetModsFlags flags = ModManager::GetModsFlags::None) = 0;
 			virtual IGameMod::RefVector GetMandatoryMods() = 0;
 
 			virtual IGameMod& GetBaseGame() = 0;
@@ -72,17 +80,15 @@ namespace Kortex
 			
 			virtual bool IsModActive(const wxString& modID) const = 0;
 			virtual bool ChangeModID(IGameMod& mod, const wxString& newID) = 0;
-			virtual void UninstallMod(IGameMod& mod, wxWindow* window = nullptr) = 0;
-			virtual void EraseMod(IGameMod& mod, wxWindow* window = nullptr) = 0;
-
 			virtual void ExportModList(const wxString& outputFilePath) const = 0;
+
+			virtual void InstallEmptyMod(const wxString& name) = 0;
+			virtual void InstallModFromFolder(const wxString& sourcePath, const wxString& name, bool linkLocation = false) = 0;
+			virtual void InstallModFromPackage(const wxString& packagePath) = 0;
+			virtual void UninstallMod(IGameMod& mod) = 0;
+			virtual void EraseMod(IGameMod& mod) = 0;
 
 		public:
 			virtual IVirtualFileSystem& GetFileSystem() = 0;
-
-		public:
-			virtual void NotifyModInstalled(IGameMod& mod) = 0;
-			virtual void NotifyModUninstalled(IGameMod& mod) = 0;
-			virtual void NotifyModErased(IGameMod& mod) = 0;
 	};
 }

@@ -3,6 +3,8 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModStatistics.hpp>
 #include <Kortex/ModTagManager.hpp>
+#include "ModManager/DefaultModManager.h"
+#include "ModManager/DefaultModDispatcher.h"
 
 namespace Kortex
 {

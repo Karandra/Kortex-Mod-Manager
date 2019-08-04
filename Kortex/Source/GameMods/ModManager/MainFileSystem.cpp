@@ -6,6 +6,8 @@
 #include "VirtualFileSystem/MultiMirror.h"
 #include "VirtualFileSystem/Convergence.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
+#include "DefaultModManager.h"
+#include "UI/KMainWindow.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxProgressDialog.h>
@@ -54,7 +56,7 @@ namespace Kortex::ModManager
 		m_Convergence.reset();
 
 		KxStringVector folders;
-		for (const IGameMod* entry: m_Manager.GetAllMods(true, true))
+		for (const IGameMod* entry: m_Manager.GetMods(GetModsFlags::Everything))
 		{
 			folders.push_back(entry->GetModFilesDir());
 		}

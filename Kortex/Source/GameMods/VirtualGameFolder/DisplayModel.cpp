@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
 #include <Kortex/ModManager.hpp>
+#include <Kortex/Application.hpp>
+#include "GameMods/ModManager/Workspace.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLibrary.h>
-#include <wx/mimetype.h>
-
-using namespace Kortex::ModManager;
+#include <Kx/System/FileTypeManager.h>
 
 namespace
 {
@@ -262,7 +262,7 @@ namespace Kortex::VirtualGameFolder
 
 		if (node && column && column->GetID() == ColumnID::PartOf)
 		{
-			Kortex::ModManager::Workspace* workspace = Kortex::ModManager::Workspace::GetInstance();
+			ModManager::Workspace* workspace = ModManager::Workspace::GetInstance();
 			wxWindowUpdateLocker lock(workspace);
 
 			workspace->HighlightMod();
@@ -306,7 +306,10 @@ namespace Kortex::VirtualGameFolder
 		{
 			m_TreeItems = &m_FoundItems;
 
-			FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(wxEmptyString, ModManager::DispatcherSearcher(m_SearchMask, KxFS_FILE), true);
+			FileTreeNode::CRefVector files = IModDispatcher::GetInstance()->Find(wxEmptyString, [](const FileTreeNode& node)
+			{
+				return node.IsFile();
+			}, true);
 			m_FoundItems.reserve(files.size());
 
 			for (const FileTreeNode* node: files)

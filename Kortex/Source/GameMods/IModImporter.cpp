@@ -90,10 +90,10 @@ namespace Kortex
 						});
 						operation->OnEnd([](KOperationWithProgressBase* self)
 						{
-							KWorkspace::ScheduleReloadOf<ModManager::Workspace>();
+							IModManager::GetInstance()->ScheduleReloadWorkspace();
+							IDownloadManager::GetInstance()->ScheduleReloadWorkspace();
+							IProgramManager::GetInstance()->ScheduleReloadWorkspace();
 							KWorkspace::ScheduleReloadOf<VirtualGameFolder::Workspace>();
-							KWorkspace::ScheduleReloadOf<DownloadManager::Workspace>();
-							KWorkspace::ScheduleReloadOf<ProgramManager::Workspace>();
 						});
 						operation->SetDialogCaption(KTr("ModManager.Import.Caption"));
 						operation->SetOptionEnabled(KOWPD_OPTION_RUN_ONEND_BEFORE_DIALOG_DESTRUCTION);

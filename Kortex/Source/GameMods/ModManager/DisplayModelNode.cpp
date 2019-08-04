@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "DisplayModelNode.h"
 #include "Network/ModNetworkUpdateChecker.h"
+#include "Workspace.h"
+#include "DisplayModel.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include <KxFramework/KxComparator.h>
@@ -62,7 +64,7 @@ namespace Kortex::ModManager
 					auto editor = column.GetEditor();
 					auto& validator = static_cast<wxIntegerValidator<intptr_t>&>(editor->GetValidatorRef());
 					validator.SetMin(0);
-					validator.SetMax(IModManager::GetInstance()->GetMods().size() - 1);
+					validator.SetMax(IModManager::GetInstance()->GetModsCount() - 1);
 
 					return editor;
 				}

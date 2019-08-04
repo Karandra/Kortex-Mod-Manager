@@ -8,7 +8,7 @@ namespace Kortex
 	{
 		switch (order)
 		{
-			case IterationOrder::Direct:
+			case IterationOrder::Forward:
 			{
 				for (IGameMod* mod: mods)
 				{
@@ -19,7 +19,7 @@ namespace Kortex
 				}
 				break;
 			}
-			case IterationOrder::Reversed:
+			case IterationOrder::Backward:
 			{
 				for (auto it = mods.rbegin(); it != mods.rend(); ++it)
 				{
@@ -34,12 +34,12 @@ namespace Kortex
 		return nullptr;
 	}
 
-	IGameMod* IModDispatcher::IterateModsForward(IterationFunctor functor, bool includeWriteTarget) const
+	IGameMod* IModDispatcher::IterateModsForward(IterationFunctor functor, ModManager::GetModsFlags flags) const
 	{
-		return DoIterateMods(IModManager::GetInstance()->GetAllMods(false, includeWriteTarget), functor, IterationOrder::Direct);
+		return DoIterateMods(IModManager::GetInstance()->GetMods(flags), functor, IterationOrder::Forward);
 	}
-	IGameMod* IModDispatcher::IterateModsBackward(IterationFunctor functor, bool includeWriteTarget) const
+	IGameMod* IModDispatcher::IterateModsBackward(IterationFunctor functor, ModManager::GetModsFlags flags) const
 	{
-		return DoIterateMods(IModManager::GetInstance()->GetAllMods(false, includeWriteTarget), functor, IterationOrder::Reversed);
+		return DoIterateMods(IModManager::GetInstance()->GetMods(flags), functor, IterationOrder::Backward);
 	}
 }

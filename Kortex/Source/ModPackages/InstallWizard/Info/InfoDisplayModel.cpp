@@ -8,6 +8,7 @@
 #include "UI/KMainWindow.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
+#include "Utility/KBitmapSize.h"
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 

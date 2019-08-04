@@ -193,9 +193,6 @@
     <ClCompile Include="Source\GameMods\ModTagStore.cpp" />
     <ClCompile Include="Source\GameMods\Import\ModImporterMO.cpp" />
     <ClCompile Include="Source\GameMods\Import\ModImporterNMM.cpp" />
-    <ClCompile Include="Source\GameMods\KModCollisionViewerModel.cpp" />
-    <ClCompile Include="Source\GameMods\KModFilesExplorerDialog.cpp" />
-    <ClCompile Include="Source\GameMods\KModFilesExplorerModel.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\DefaultModDispatcher.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\BasicGameMod.cpp" />
     <ClCompile Include="Source\GameMods\ModManager\DefaultModManager.cpp" />
@@ -537,16 +534,14 @@
     <ClInclude Include="Source\GameMods\IModTag.h" />
     <ClInclude Include="Source\GameMods\IModTagManager.h" />
     <ClInclude Include="Source\GameMods\ModEvent.h" />
+    <ClInclude Include="Source\GameMods\ModManager\Common.h" />
+    <ClInclude Include="Source\GameMods\ModManager\DefaultModDispatcher.h" />
     <ClInclude Include="Source\GameMods\ModManager\DisplayModelDND.h" />
     <ClInclude Include="Source\GameMods\ModManager\NewModDialog.h" />
     <ClInclude Include="Source\GameMods\ModManager\MainFileSystem.h" />
     <ClInclude Include="Source\GameMods\ModTagStore.h" />
     <ClInclude Include="Source\GameMods\Import\ModImporterMO.h" />
     <ClInclude Include="Source\GameMods\Import\ModImporterNMM.h" />
-    <ClInclude Include="Source\GameMods\KModCollisionViewerModel.h" />
-    <ClInclude Include="Source\GameMods\KModFilesExplorerDialog.h" />
-    <ClInclude Include="Source\GameMods\KModFilesExplorerModel.h" />
-    <ClInclude Include="Source\GameMods\ModManager\DefaultDispatcher.h" />
     <ClInclude Include="Source\GameMods\ModManager\FixedGameMod.h" />
     <ClInclude Include="Source\GameMods\ModManager\MandatoryModEntry.h" />
     <ClInclude Include="Source\GameMods\ModManager\BasicGameMod.h" />
@@ -648,6 +643,7 @@
     <ClInclude Include="Source\Utility\Collection.h" />
     <ClInclude Include="Source\Utility\Common.h" />
     <ClInclude Include="Source\Utility\DateTime.h" />
+    <ClInclude Include="Source\Utility\EnumClassOperations.h" />
     <ClInclude Include="Source\Utility\KBitmapSize.h" />
     <ClInclude Include="Source\Utility\KUnsortedUnique.h" />
     <ClInclude Include="Source\Utility\KUPtrVectorUtil.h" />

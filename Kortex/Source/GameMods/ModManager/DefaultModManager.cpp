@@ -5,7 +5,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include <Kortex/VirtualGameFolder.hpp>
+#include <Kortex/InstallWizard.hpp>
 
 #include "DefaultModManager.h"
 #include "Workspace.h"
@@ -28,12 +28,42 @@
 
 namespace Kortex::ModManager
 {
-	void DefaultModManager::DoUninstallMod(IGameMod& mod, wxWindow* window, const bool erase)
+	IGameMod* DefaultModManager::DoCreateMod(const wxString& signature)
+	{
+		if (!signature.IsEmpty())
+		{
+			auto mod = NewMod();
+			if (mod->LoadUsingSignature(signature))
+			{
+				IModTagManager::GetInstance()->LoadTagsFromMod(*mod);
+				return &EmplaceMod(std::move(mod));
+			}
+		}
+		return nullptr;
+	}
+	void DefaultModManager::ProcessInstallMod(IGameMod& mod)
+	{
+		// Find mod in mod list
+		IGameMod* newMod = FindModBySignature(mod.GetSignature());
+
+		// If it's not found that means this is completely new mod,
+		// so create its entry now.
+		if (newMod == nullptr)
+		{
+			newMod = DoCreateMod(mod.GetSignature());
+		}
+		if (newMod)
+		{
+			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, *newMod);
+		}
+	}
+
+	void DefaultModManager::DoUninstallMod(IGameMod& mod, const bool erase)
 	{
 		ModEvent event(mod);
 		BroadcastProcessor::Get().ProcessEvent(event, ModEvent::EvtUnsinstalling);
 
-		// If signature is empty, removing this mod can cause removing ALL other mods
+		// If signature is empty, removing this mod can cause removing *ALL* other mods
 		// because mod folder path will point to all mods directory instead of its own.
 		// Just ignore this. User can always delete this folder manually.
 		if (event.IsAllowed() && !mod.GetSignature().IsEmpty())
@@ -48,7 +78,7 @@ namespace Kortex::ModManager
 			}
 			const wxString path = erase ? mod.GetRootDir() : mod.GetModFilesDir();
 
-			KOperationWithProgressDialogBase* operation = new KOperationWithProgressDialogBase(true, window);
+			auto operation = new KOperationWithProgressDialogBase(true, KMainWindow::GetInstance());
 			operation->OnRun([path = path.Clone()](KOperationWithProgressBase* self)
 			{
 				KxEvtFile folder(path);
@@ -57,32 +87,77 @@ namespace Kortex::ModManager
 			});
 			operation->OnEnd([this, &mod, erase](KOperationWithProgressBase* self)
 			{
-				Save();
-				if (erase)
+				BroadcastProcessor::Get().CallAfter([this, &mod, erase]()
 				{
-					NotifyModErased(mod);
-				}
-				else
-				{
-					NotifyModUninstalled(mod);
-				}
+					Save();
+					if (erase)
+					{
+						ProcessEraseMod(mod);
+					}
+					else
+					{
+						ProcessUninstallMod(mod);
+					}
+				});
 			});
 			operation->SetDialogCaption(KTr("ModManager.RemoveMod.RemovingMessage"));
 			operation->Run();
 		}
 	}
-	IGameMod* DefaultModManager::DoCreateMod(const wxString& signature)
+	void DefaultModManager::ProcessUninstallMod(IGameMod& mod)
 	{
-		if (!signature.IsEmpty())
+		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtUninstalled, mod);
+	}
+	void DefaultModManager::ProcessEraseMod(IGameMod& mod)
+	{
+		auto it = std::find_if(m_Mods.begin(), m_Mods.end(), [&mod](const auto& searchedMod)
 		{
-			auto mod = NewMod();
-			if (mod->LoadUsingSignature(signature))
-			{
-				IModTagManager::GetInstance()->LoadTagsFromMod(*mod);
-				return &EmplaceMod(std::move(mod));
-			}
+			return &mod == searchedMod.get();
+		});
+		if (it != m_Mods.end())
+		{
+			const wxString modID = mod.GetID();
+			const size_t index = std::distance(m_Mods.begin(), it);
+			m_Mods.erase(it);
+			RecalculatePriority(index);
+
+			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtUninstalled, modID);
 		}
-		return nullptr;
+	}
+
+	void DefaultModManager::OnMountPointError(const KxStringVector& locations)
+	{
+		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
+		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
+		dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
+
+		wxString message;
+		for (const wxString& path: locations)
+		{
+			message += KxString::Format(wxS("<a href=\"%1\">%2</a>\r\n"), path, path);
+		}
+		dialog.SetExMessage(message);
+
+		dialog.Bind(wxEVT_TEXT_URL, [&dialog](wxTextUrlEvent& event)
+		{
+			KxShell::Execute(&dialog, event.GetString(), wxS("open"));
+		});
+		dialog.ShowModal();
+	}
+	void DefaultModManager::OnUpdateModLayoutNeeded(ModEvent& event)
+	{
+		if (IGameMod* mod = event.GetMod())
+		{
+			mod->UpdateFileTree();
+		}
+		for (IGameMod* mod: event.GetModsArray())
+		{
+			mod->UpdateFileTree();
+		}
+		IModDispatcher::GetInstance()->InvalidateVirtualTree();
+
+		ResortMods();
+		Save();
 	}
 	
 	void DefaultModManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
@@ -91,7 +166,10 @@ namespace Kortex::ModManager
 	}
 	void DefaultModManager::OnInit()
 	{
-		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModManager::OnModFilesChanged, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtToggled, &DefaultModManager::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &DefaultModManager::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &DefaultModManager::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModManager::OnUpdateModLayoutNeeded, this);
 
 		// Mandatory locations
 		for (const MandatoryLocation& location: m_Config.GetMandatoryLocations())
@@ -123,37 +201,6 @@ namespace Kortex::ModManager
 		m_VFS.Disable();
 	}
 
-	void DefaultModManager::OnMountPointError(const KxStringVector& locations)
-	{
-		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
-		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
-		dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
-
-		wxString message;
-		for (const wxString& path: locations)
-		{
-			message += KxString::Format(wxS("<a href=\"%1\">%2</a>\r\n"), path, path);
-		}
-		dialog.SetExMessage(message);
-
-		dialog.Bind(wxEVT_TEXT_URL, [&dialog](wxTextUrlEvent& event)
-		{
-			KxShell::Execute(&dialog, event.GetString(), wxS("open"));
-		});
-		dialog.ShowModal();
-	}
-	void DefaultModManager::OnModFilesChanged(ModEvent& event)
-	{
-		if (event.HasMod())
-		{
-			event.GetMod()->UpdateFileTree();
-		}
-		for (IGameMod* mod: event.GetModsArray())
-		{
-			mod->UpdateFileTree();
-		}
-	}
-
 	DefaultModManager::DefaultModManager()
 		:m_VFS(*this), m_BaseGame(-65535), m_WriteTarget(65535)
 	{
@@ -181,7 +228,7 @@ namespace Kortex::ModManager
 		}
 
 		// Build mod file trees
-		IGameMod::RefVector allEntries = GetAllMods(false, true);
+		IGameMod::RefVector allEntries = GetMods(GetModsFlags::WriteTarget);
 
 		// Using 'std::execution::seq/unseq' generates too much strain on IO.
 		// And doesn't really improves loading speed. Using 'seq' for now.
@@ -214,36 +261,77 @@ namespace Kortex::ModManager
 		}
 		return refs;
 	}
-	IGameMod::RefVector DefaultModManager::GetAllMods(bool activeOnly, bool includeWriteTarget)
+	IGameMod::RefVector DefaultModManager::GetMods(GetModsFlags flags)
 	{
 		IGameMod::RefVector allMods;
 		allMods.reserve(m_Mods.size() + m_MandatoryMods.size() + 2);
 
-		// Add game root as first virtual folder
-		allMods.push_back(&m_BaseGame);
-
-		// Add mandatory virtual folders
-		for (KMandatoryModEntry& mod: m_MandatoryMods)
+		if (flags & GetModsFlags::BaseGame)
 		{
-			allMods.push_back(&mod);
+			// Add game root as first virtual folder
+			allMods.push_back(&m_BaseGame);
 		}
 
-		// Add mods
+		if (flags & GetModsFlags::MandatoryMods)
+		{
+			// Add mandatory virtual folders
+			for (KMandatoryModEntry& mod: m_MandatoryMods)
+			{
+				allMods.push_back(&mod);
+			}
+		}
+
+		// Add regular mods
 		for (auto& mod: m_Mods)
 		{
-			if (!activeOnly || mod->IsActive())
+			if (!(flags & GetModsFlags::ActiveOnly) || mod->IsActive())
 			{
 				allMods.push_back(mod.get());
 			}
 		}
 
 		// Add write target
-		if (includeWriteTarget)
+		if (flags & GetModsFlags::WriteTarget)
 		{
 			allMods.push_back(&m_WriteTarget);
 		}
 
 		return allMods;
+	}
+	size_t DefaultModManager::GetModsCount(ModManager::GetModsFlags flags)
+	{
+		size_t count = 0;
+
+		if (flags & GetModsFlags::BaseGame)
+		{
+			count++;
+		}
+
+		if (flags & GetModsFlags::MandatoryMods)
+		{
+			// Add mandatory virtual folders
+			for (KMandatoryModEntry& mod: m_MandatoryMods)
+			{
+				count++;
+			}
+		}
+
+		// Add regular mods
+		for (auto& mod: m_Mods)
+		{
+			if (!(flags & GetModsFlags::ActiveOnly) || mod->IsActive())
+			{
+				count++;
+			}
+		}
+
+		// Add write target
+		if (flags & GetModsFlags::WriteTarget)
+		{
+			count++;
+		}
+
+		return count;
 	}
 
 	IGameMod* DefaultModManager::FindModByID(const wxString& modID) const
@@ -329,7 +417,6 @@ namespace Kortex::ModManager
 		}
 		return false;
 	}
-
 	void DefaultModManager::ExportModList(const wxString& outputFilePath) const
 	{
 		KxXMLDocument xml;
@@ -422,57 +509,73 @@ namespace Kortex::ModManager
 		stream.WriteStringUTF8(xml.GetXML(KxXML_PRINT_HTML5));
 	}
 
-	void DefaultModManager::NotifyModInstalled(IGameMod& mod)
+	void DefaultModManager::InstallEmptyMod(const wxString& name)
 	{
-		// Find mod in mod list
-		IGameMod* newMod = FindModBySignature(mod.GetSignature());
-
-		// If it's not not found that means this is completely new mod,
-		// so create its entry now.
-		if (newMod == nullptr)
+		if (!FindModByID(name))
 		{
-			newMod = DoCreateMod(mod.GetSignature());
-		}
+			IGameMod& mod = IModManager::GetInstance()->EmplaceMod();
+			mod.SetID(name);
+			mod.SetInstallTime(wxDateTime::Now());
+			mod.Save();
 
-		if (newMod)
-		{
-			newMod->UpdateFileTree();
-			ResortMods();
-
-			IModDispatcher::GetInstance()->InvalidateVirtualTree();
-			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, *newMod);
-			ScheduleReloadWorkspace();
-
-			Save();
+			BroadcastProcessor::Get().QueueEvent(ModEvent::EvtInstalled, mod);
 		}
 	}
-	void DefaultModManager::NotifyModUninstalled(IGameMod& mod)
+	void DefaultModManager::InstallModFromFolder(const wxString& sourcePath, const wxString& name, bool linkLocation)
 	{
-		mod.UpdateFileTree();
-		IModDispatcher::GetInstance()->InvalidateVirtualTree();
-
-		Save();
-		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtUninstalled, mod);
-	}
-	void DefaultModManager::NotifyModErased(IGameMod& mod)
-	{
-		auto it = std::find_if(m_Mods.begin(), m_Mods.end(), [&mod](const auto& searchedMod)
+		if (!FindModByID(name))
 		{
-			return &mod == searchedMod.get();
-		});
-		if (it != m_Mods.end())
-		{
-			const wxString modID = mod.GetID();
-			const size_t index = std::distance(m_Mods.begin(), it);
-			m_Mods.erase(it);
-			RecalculatePriority(index);
+			IGameMod& mod = IModManager::GetInstance()->EmplaceMod();
+			mod.SetID(name);
+			mod.SetInstallTime(wxDateTime::Now());
+			if (linkLocation)
+			{
+				mod.LinkLocation(sourcePath);
+			}
+			mod.Save();
 
-			IModDispatcher::GetInstance()->InvalidateVirtualTree();
-			Workspace::GetInstance()->ReloadWorkspace();
+			if (!linkLocation)
+			{
+				// Copy files
+				wxString destinationPath = mod.GetModFilesDir();
+				auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, KMainWindow::GetInstance());
+				operation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
+				{
+					KxEvtFile folder(sourcePath);
+					self->LinkHandler(&folder, KxEVT_FILEOP_COPY_FOLDER);
+					folder.CopyFolder(KxFile::NullFilter, destinationPath, true, true);
+				});
 
-			Save();
-			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtUninstalled, modID);
+				// If canceled, remove entire mod folder
+				operation->OnCancel([&mod](KOperationWithProgressBase* self)
+				{
+					KxFile(mod.GetRootDir()).RemoveFolderTree(true);
+
+					// Still send an event because mod entry was created regardless of
+					// whether the process was canceled or not.
+					BroadcastProcessor::Get().QueueEvent(ModEvent::EvtInstalled, mod);
+				});
+
+				// Reload after task is completed (successfully or not)
+				operation->OnEnd([&mod](KOperationWithProgressBase* self)
+				{
+					BroadcastProcessor::Get().QueueEvent(ModEvent::EvtInstalled, mod);
+				});
+
+				// Configure and run
+				operation->SetDialogCaption(KTr("ModManager.NewMod.CopyDialogCaption"));
+				operation->Run();
+			}
+			else
+			{
+				BroadcastProcessor::Get().QueueEvent(ModEvent::EvtInstalled, mod);
+			}
 		}
+	}
+	void DefaultModManager::InstallModFromPackage(const wxString& packagePath)
+	{
+		// Install Wizard's dialog is auto-managed class, it will delete itself when needed
+		new InstallWizard::WizardDialog(KMainWindow::GetInstance(), packagePath);
 	}
 }
 

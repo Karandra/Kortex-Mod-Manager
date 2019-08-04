@@ -336,7 +336,7 @@ namespace Kortex::Application
 	void DefaultApplication::ShowWorkspace()
 	{
 		auto option = GetAInstanceOption(OName::Workspace);
-		wxString startPage = option.GetValue(ModManager::Workspace::GetInstance()->GetID());
+		wxString startPage = option.GetValue(IModManager::GetInstance()->GetWorkspace()->GetID());
 		Utility::Log::LogInfo("Start page is: %1", startPage);
 
 		KWorkspace* workspace = KMainWindow::GetInstance()->GetWorkspace(startPage);

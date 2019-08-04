@@ -15,7 +15,7 @@ namespace Kortex
 	void IModManager::RecalculatePriority(size_t startAt)
 	{
 		intptr_t priority = 0;
-		for (auto& gameMod: GetMods())
+		for (auto& gameMod: m_Mods)
 		{
 			if (gameMod->GetPriority() != -1)
 			{
@@ -26,8 +26,7 @@ namespace Kortex
 	}
 	void IModManager::SortByPriority()
 	{
-		auto& mods = GetMods();
-		std::sort(mods.begin(), mods.end(), [](const auto& left, const auto& right)
+		std::sort(m_Mods.begin(), m_Mods.end(), [](const auto& left, const auto& right)
 		{
 			return left->GetPriority() < right->GetPriority();
 		});
@@ -44,10 +43,8 @@ namespace Kortex
 	}
 	void IModManager::ResortMods(const IGameProfile& profile)
 	{
-		auto& mods = GetMods();
-
 		// Reset priority
-		for (auto& gameMod: mods)
+		for (auto& gameMod: m_Mods)
 		{
 			gameMod->SetPriority(-1);
 		}
@@ -64,7 +61,7 @@ namespace Kortex
 
 		// Set priority for all unsorted mods to be after sorted
 		intptr_t count = 0;
-		for (auto& gameMod: mods)
+		for (auto& gameMod: m_Mods)
 		{
 			if (gameMod->GetPriority() == -1)
 			{
@@ -82,7 +79,7 @@ namespace Kortex
 
 	bool IModManager::MoveModsBefore(const IGameMod::RefVector& movedMods, const IGameMod& anchor)
 	{
-		if (KUPtrVectorUtil::MoveBefore(GetMods(), movedMods, anchor))
+		if (KUPtrVectorUtil::MoveBefore(m_Mods, movedMods, anchor))
 		{
 			RecalculatePriority();
 			return true;
@@ -91,7 +88,7 @@ namespace Kortex
 	}
 	bool IModManager::MoveModsAfter(const IGameMod::RefVector& movedMods, const IGameMod& anchor)
 	{
-		if (KUPtrVectorUtil::MoveAfter(GetMods(), movedMods, anchor))
+		if (KUPtrVectorUtil::MoveAfter(m_Mods, movedMods, anchor))
 		{
 			RecalculatePriority();
 			return true;
@@ -100,16 +97,15 @@ namespace Kortex
 	}
 	bool IModManager::ChangeModPriority(IGameMod& movedMod, intptr_t targetPriority)
 	{
-		auto& mods = GetMods();
-		if (movedMod.GetPriority() != targetPriority && targetPriority >= 0 && (size_t)targetPriority < mods.size())
+		if (movedMod.GetPriority() != targetPriority && targetPriority >= 0 && (size_t)targetPriority < m_Mods.size())
 		{
 			// Extract mod from list
-			auto it = mods.begin() + movedMod.GetPriority();
+			auto it = m_Mods.begin() + movedMod.GetPriority();
 			auto temp = std::move(*it);
-			mods.erase(it);
+			m_Mods.erase(it);
 
 			// Place it into position
-			mods.insert(mods.begin() + targetPriority, std::move(temp));
+			m_Mods.insert(m_Mods.begin() + targetPriority, std::move(temp));
 
 			RecalculatePriority();
 			return true;

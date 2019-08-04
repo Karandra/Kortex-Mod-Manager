@@ -5,8 +5,6 @@
 #include <Kortex/ModImporter.hpp>
 #include <Kortex/ModStatistics.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include <Kortex/SaveManager.hpp>
-#include <Kortex/ScreenshotsGallery.hpp>
 #include <Kortex/ProgramManager.hpp>
 #include <Kortex/InstallWizard.hpp>
 #include <Kortex/VirtualGameFolder.hpp>
@@ -14,14 +12,10 @@
 #include <Kortex/NetworkManager.hpp>
 
 #include "GameInstance/ProfileEditor.h"
+#include "Workspace.h"
 #include "DisplayModel.h"
-#include "DefaultModManager.h"
-#include "BasicGameMod.h"
 #include "NewModDialog.h"
-#include "GameMods/KModFilesExplorerDialog.h"
-#include "GameMods/KModCollisionViewerModel.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
-#include "UI/KImageViewerDialog.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
@@ -87,8 +81,6 @@ namespace
 		ModEditTags,
 		ModEditSources,
 		ModChangeID,
-		ModExploreFiles,
-		ModShowCollisions,
 		ModProperties,
 
 		ColorAssign,
@@ -174,6 +166,11 @@ namespace Kortex::ModManager
 
 		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &Workspace::OnMainFSToggled, this);
 		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &Workspace::OnProfileSelected, this);
+
+		m_BroadcastReciever.Bind(ModEvent::EvtToggled, &Workspace::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &Workspace::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &Workspace::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
 
 		CreateAsSubWorkspace<VirtualGameFolder::Workspace>();
 		CreateAsSubWorkspace<ProgramManager::Workspace>();
@@ -529,14 +526,9 @@ namespace Kortex::ModManager
 			UpdateModListContent();
 		}
 	}
-
-	void Workspace::OpenPackage(const wxString& path)
+	void Workspace::OnUpdateModLayoutNeeded(ModEvent& event)
 	{
-		InstallWizard::WizardDialog* dialog = new InstallWizard::WizardDialog(GetMainWindow(), path);
-		dialog->Bind(InstallWizard::KEVT_IW_DONE, [this](wxNotifyEvent& event)
-		{
-			ScheduleReload();
-		});
+		ScheduleReload();
 	}
 
 	void Workspace::OnDisplayModeMenu(KxAuiToolBarEvent& event)
@@ -656,13 +648,7 @@ namespace Kortex::ModManager
 		NewModDialog dialog(this);
 		if (dialog.ShowModal() == KxID_OK)
 		{
-			BasicGameMod mod;
-			mod.SetID(dialog.GetFolderName());
-			mod.CreateAllFolders();
-			mod.SetInstallTime(wxDateTime::Now());
-			mod.Save();
-
-			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, mod);
+			IModManager::GetInstance()->InstallEmptyMod(dialog.GetFolderName());
 		}
 	}
 	void Workspace::OnAddMod_FromFolder(KxMenuEvent& event)
@@ -670,52 +656,7 @@ namespace Kortex::ModManager
 		NewModFromFolderDialog dialog(this);
 		if (dialog.ShowModal() == KxID_OK)
 		{
-			BasicGameMod mod;
-			mod.SetID(dialog.GetFolderName());
-			mod.CreateAllFolders();
-			mod.SetInstallTime(wxDateTime::Now());
-
-			if (dialog.ShouldCreateAsLinkedMod())
-			{
-				mod.LinkLocation(dialog.GetFolderPath());
-			}
-			mod.Save();
-
-			if (!dialog.ShouldCreateAsLinkedMod())
-			{
-				// Copy files
-				wxString sourcePath = dialog.GetFolderPath();
-				wxString destinationPath = mod.GetModFilesDir();
-				auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
-				operation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
-				{
-					KxEvtFile folder(sourcePath);
-					self->LinkHandler(&folder, KxEVT_FILEOP_COPY_FOLDER);
-					folder.CopyFolder(KxFile::NullFilter, destinationPath, true, true);
-				});
-
-				// If canceled, remove entire mod folder
-				wxString modRoot = mod.GetRootDir();
-				operation->OnCancel([modRoot](KOperationWithProgressBase* self)
-				{
-					KxFile(modRoot).RemoveFolderTree(true);
-				});
-
-				// Reload after task is completed (successfully or not)
-				operation->OnEnd([this, name = mod.GetID().Clone()](KOperationWithProgressBase* self)
-				{
-					BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, name);
-					ReloadWorkspace();
-				});
-
-				// Configure and run
-				operation->SetDialogCaption(KTr("ModManager.NewMod.CopyDialogCaption"));
-				operation->Run();
-			}
-			else
-			{
-				BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalled, mod);
-			}
+			IModManager::GetInstance()->InstallModFromFolder(dialog.GetFolderPath(), dialog.GetFolderName(), dialog.ShouldCreateAsLinkedMod());
 		}
 	}
 	void Workspace::OnAddMod_InstallPackage(KxMenuEvent& event)
@@ -726,7 +667,7 @@ namespace Kortex::ModManager
 		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 		if (dialog.ShowModal() == KxID_OK)
 		{
-			OpenPackage(dialog.GetResult());
+			IModManager::GetInstance()->InstallModFromPackage(dialog.GetResult());
 		}
 	}
 
@@ -751,11 +692,11 @@ namespace Kortex::ModManager
 		{
 			if (eraseLog)
 			{
-				IModManager::GetInstance()->EraseMod(mod, GetMainWindow());
+				IModManager::GetInstance()->EraseMod(mod);
 			}
 			else
 			{
-				IModManager::GetInstance()->UninstallMod(mod, GetMainWindow());
+				IModManager::GetInstance()->UninstallMod(mod);
 			}
 		}
 	}
@@ -854,14 +795,6 @@ namespace Kortex::ModManager
 				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModChangeID, KTr("ModManager.Menu.ChangeID"));
 				item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Key));
 				item->Enable(!isMultipleSelection && !isVFSActive && isNormalMod);
-			}
-			{
-				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModExploreFiles, KTr("ModManager.Menu.ExploreFiles"));
-				item->Enable(!isMultipleSelection && isNormalMod);
-			}
-			{
-				KxMenuItem* item = contextMenu.AddItem(ContextMenuID::ModShowCollisions, KTr("ModManager.Menu.ShowCollisions"));
-				item->Enable(!isMultipleSelection && isNormalMod);
 			}
 
 			// Package menu
@@ -1071,17 +1004,6 @@ namespace Kortex::ModManager
 				{
 					m_DisplayModel->UpdateUI();
 				}
-				break;
-			}
-			case ContextMenuID::ModExploreFiles:
-			{
-				KModFilesExplorerDialog dialog(this, *focusedMod);
-				dialog.ShowModal();
-				break;
-			}
-			case ContextMenuID::ModShowCollisions:
-			{
-				new KModCollisionViewerModelDialog(this, focusedMod);
 				break;
 			}
 			case ContextMenuID::ModProperties:

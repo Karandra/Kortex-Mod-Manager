@@ -86,7 +86,7 @@ namespace Kortex::InstallWizard
 				bitmap.SaveFile(mod.GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
 			}
 
-			IModManager::GetInstance()->NotifyModInstalled(mod);
+			BroadcastProcessor::Get().QueueEvent(ModEvent::EvtInstalled, mod);
 			if (ShouldCancel())
 			{
 				// We were canceled, but mod is partially installed.

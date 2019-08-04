@@ -627,15 +627,6 @@
     <ClCompile Include="Source\GameData\ScreenshotsGallery\Workspace.cpp">
       <Filter>Code\Source\GameData\ScreenshotsGallery</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameMods\KModFilesExplorerDialog.cpp">
-      <Filter>Code\Source\GameMods</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameMods\KModFilesExplorerModel.cpp">
-      <Filter>Code\Source\GameMods</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameMods\KModCollisionViewerModel.cpp">
-      <Filter>Code\Source\GameMods</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BaseGamePlugin.cpp">
       <Filter>Code\Source\GameData\PluginManager</Filter>
     </ClCompile>
@@ -1529,15 +1520,6 @@
     <ClInclude Include="Source\GameData\ScreenshotsGallery\Workspace.h">
       <Filter>Code\Headers\GameData\ScreenshotsGallery</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameMods\KModFilesExplorerModel.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\KModCollisionViewerModel.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\KModFilesExplorerDialog.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameData\PluginManager\BaseGamePlugin.h">
       <Filter>Code\Headers\GameData\PluginManager</Filter>
     </ClInclude>
@@ -1590,9 +1572,6 @@
       <Filter>Code\Headers\GameMods\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameMods\ModManager\PriorityGroup.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\DefaultDispatcher.h">
       <Filter>Code\Headers\GameMods\ModManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameMods\ModManager\DisplayModel.h">
@@ -2410,6 +2389,15 @@
     </ClInclude>
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\OptionStore.h">
       <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\DefaultModDispatcher.h">
+      <Filter>Code\Headers\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\EnumClassOperations.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\Common.h">
+      <Filter>Code\Headers\GameMods\ModManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

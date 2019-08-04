@@ -98,7 +98,7 @@ namespace Kortex::GameInstance
 	{
 		// Mods
 		m_Mods.clear();
-		for (auto& mod: IModManager::GetInstance()->GetMods())
+		for (IGameMod* mod: IModManager::GetInstance()->GetMods())
 		{
 			m_Mods.emplace_back(*mod, mod->IsActive());
 		}

@@ -94,22 +94,25 @@ namespace Kortex::ModManager
 			Config m_Config;
 			MainFileSystem m_VFS;
 
-			IGameMod::Vector m_Mods;
 			FixedGameMod m_BaseGame;
 			FixedGameMod m_WriteTarget;
 			std::vector<KMandatoryModEntry> m_MandatoryMods;
 
-		protected:
-			void DoUninstallMod(IGameMod& mod, wxWindow* window, const bool erase);
-			IGameMod* DoCreateMod(const wxString& signature);
-			
 		private:
-			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
-			virtual void OnInit() override;
-			virtual void OnExit() override;
+			IGameMod* DoCreateMod(const wxString& signature);
+			void ProcessInstallMod(IGameMod& mod);
+			
+			void DoUninstallMod(IGameMod& mod, const bool erase);
+			void ProcessEraseMod(IGameMod& mod);
+			void ProcessUninstallMod(IGameMod& mod);
 
 			void OnMountPointError(const KxStringVector& locations);
-			void OnModFilesChanged(ModEvent& event);
+			void OnUpdateModLayoutNeeded(ModEvent& event);
+			
+		protected:
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
+			void OnInit() override;
+			void OnExit() override;
 
 		public:
 			DefaultModManager();
@@ -125,11 +128,8 @@ namespace Kortex::ModManager
 			}
 
 			std::unique_ptr<IGameMod> NewMod() override;
-			IGameMod::Vector& GetMods() override
-			{
-				return m_Mods;
-			}
-			IGameMod::RefVector GetAllMods(bool activeOnly = false, bool includeWriteTarget = false) override;
+			IGameMod::RefVector GetMods(GetModsFlags flags = GetModsFlags::None) override;
+			size_t GetModsCount(ModManager::GetModsFlags flags = ModManager::GetModsFlags::None) override;
 			IGameMod::RefVector GetMandatoryMods() override;
 
 			IGameMod& GetBaseGame() override
@@ -149,25 +149,24 @@ namespace Kortex::ModManager
 			
 			bool IsModActive(const wxString& modID) const override;
 			bool ChangeModID(IGameMod& mod, const wxString& newID) override;
-			void UninstallMod(IGameMod& mod, wxWindow* window = nullptr) override
-			{
-				DoUninstallMod(mod, window, false);
-			}
-			void EraseMod(IGameMod& mod, wxWindow* window = nullptr) override
-			{
-				DoUninstallMod(mod, window, true);
-			}
-
 			void ExportModList(const wxString& outputFilePath) const override;
+
+			void InstallEmptyMod(const wxString& name) override;
+			void InstallModFromFolder(const wxString& sourcePath, const wxString& name, bool linkLocation = false) override;
+			void InstallModFromPackage(const wxString& packagePath) override;
+			void UninstallMod(IGameMod& mod) override
+			{
+				DoUninstallMod(mod, false);
+			}
+			void EraseMod(IGameMod& mod) override
+			{
+				DoUninstallMod(mod, true);
+			}
 			
+		public:
 			IVirtualFileSystem& GetFileSystem() override
 			{
 				return m_VFS;
 			}
-
-		public:
-			void NotifyModInstalled(IGameMod& mod) override;
-			void NotifyModUninstalled(IGameMod& mod) override;
-			void NotifyModErased(IGameMod& mod) override;
 	};
 }

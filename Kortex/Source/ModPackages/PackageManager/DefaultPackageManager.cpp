@@ -48,7 +48,7 @@ namespace Kortex::PackageManager
 			item->SetDefault();
 			item->Bind(KxEVT_MENU_SELECT, [focusedMod](KxMenuEvent& event)
 			{
-				ModManager::Workspace::GetInstance()->OpenPackage(focusedMod->GetPackageFile());
+				IModManager::GetInstance()->InstallModFromPackage(focusedMod->GetPackageFile());
 			});
 		}
 		{

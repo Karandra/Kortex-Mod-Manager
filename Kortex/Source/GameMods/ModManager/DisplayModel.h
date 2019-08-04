@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "DisplayModelNode.h"
 #include "Utility/KBitmapSize.h"
+#include "Utility/KAux.h"
 #include <KxFramework/DataView2/DataView2.h>
 
 namespace Kortex

@@ -25,7 +25,8 @@ namespace Kortex::ModManager
 		using namespace KxDataView2;
 
 		// View
-		KxDataView2::View* view = new KxDataView2::View(parent, KxID_NONE, CtrlStyle::MultipleSelection|CtrlStyle::VerticalRules|CtrlStyle::CellFocus);
+		const CtrlStyle ctrlStyle = CtrlStyle::MultipleSelection|CtrlStyle::VerticalRules|CtrlStyle::CellFocus|CtrlStyle::FitLastColumn;
+		KxDataView2::View* view = new KxDataView2::View(parent, KxID_NONE, ctrlStyle);
 		view->AssignModel(this);
 		if (sizer)
 		{

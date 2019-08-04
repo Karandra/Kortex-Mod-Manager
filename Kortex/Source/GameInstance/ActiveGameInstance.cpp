@@ -94,6 +94,7 @@ namespace Kortex::GameInstance
 		KxFile(profile.GetSavesDir()).CreateFolder();
 		KxFile(profile.GetOverwritesDir()).CreateFolder();
 
+		IGameProfile* oldProfile = GetActiveProfile();
 		SetCurrentProfileID(profile.GetID());
 		InitVariables(profile);
 
@@ -114,7 +115,7 @@ namespace Kortex::GameInstance
 		}
 
 		// Finally send event
-		BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtSelected, const_cast<IGameProfile&>(profile));
+		BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtSelected, const_cast<IGameProfile&>(profile), oldProfile);
 	}
 	void ActiveGameInstance::LoadSavedProfileOrDefault()
 	{

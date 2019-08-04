@@ -25,11 +25,12 @@ namespace Kortex
 
 		private:
 			IGameProfile* m_Profile = nullptr;
+			IGameProfile* m_PreviousProfile = nullptr;
 
 		public:
 			ProfileEvent() = default;
-			ProfileEvent(IGameProfile& profile)
-				:m_Profile(&profile)
+			ProfileEvent(IGameProfile& profile, IGameProfile* previousProfile = nullptr)
+				:m_Profile(&profile), m_PreviousProfile(previousProfile)
 			{
 			}
 			ProfileEvent(const wxString& id)
@@ -52,5 +53,10 @@ namespace Kortex
 				return m_Profile;
 			}
 			wxString GetProfileID() const;
+
+			IGameProfile* GetPreviousProfile() const
+			{
+				return m_PreviousProfile;
+			}
 	};
 }

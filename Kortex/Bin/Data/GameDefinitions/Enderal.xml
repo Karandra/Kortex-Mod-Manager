@@ -113,10 +113,10 @@
 				<Entry ID="Magic">
 					<NexusID>113</NexusID>
 				</Entry>
-				<Entry ID="Player Homes">
+				<Entry ID="PlayerHomes">
 					<NexusID>107</NexusID>
 				</Entry>
-				<Entry ID="User Interface">
+				<Entry ID="UserInterface">
 					<NexusID>109</NexusID>
 				</Entry>
 				<Entry ID="Cheats">

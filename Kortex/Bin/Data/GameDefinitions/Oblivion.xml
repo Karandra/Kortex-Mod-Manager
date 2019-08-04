@@ -195,7 +195,7 @@
 				<Entry ID="AbandonedStructures">
 					<NexusID>70</NexusID>
 				</Entry>
-				<Entry ID="Player Homes">
+				<Entry ID="PlayerHomes">
 					<NexusID>67</NexusID>
 				</Entry>
 				<Entry ID="Landscape">
@@ -210,7 +210,7 @@
 				<Entry ID="Audio">
 					<NexusID>61</NexusID>
 				</Entry>
-				<Entry ID="User Interface">
+				<Entry ID="UserInterface">
 					<NexusID>42</NexusID>
 				</Entry>
 				<Entry ID="NPC">

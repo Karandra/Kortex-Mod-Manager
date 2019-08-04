@@ -2,20 +2,88 @@
 #include "ModTagStore.h"
 #include <Kortex/ModTagManager.hpp>
 
-namespace
+namespace Kortex
 {
-	using namespace Kortex;
-	using namespace Kortex::ModTagManager;
+	class ModTagStoreTag: public IModTag
+	{
+		private:
+			wxString m_ID;
 
+		public:
+			ModTagStoreTag(const wxString& id)
+				:m_ID(id)
+			{
+			}
+
+		public:
+			bool IsOK() const override
+			{
+				return !m_ID.IsEmpty();
+			}
+			std::unique_ptr<IModTag> Clone() const override
+			{
+				return nullptr;
+			}
+			
+			bool IsExpanded() const override
+			{
+				return false;
+			}
+			void SetExpanded(bool isExpanded) override
+			{
+			}
+
+			wxString GetID() const override
+			{
+				return m_ID;
+			}
+			void SetID(const wxString& value) override
+			{
+				m_ID = value;
+			}
+
+			wxString GetName() const override
+			{
+				if (auto name = GetTranslatedNameByID(m_ID))
+				{
+					return *name;
+				}
+				return m_ID;
+			}
+			void SetName(const wxString& label) override
+			{
+				m_ID = label;
+			}
+
+			KxColor GetColor() const override
+			{
+				return {};
+			}
+			void SetColor(const KxColor& color) override
+			{
+			}
+	};
+}
+
+namespace Kortex
+{
 	template<class MapT, class Functor> void VisitHelper(MapT&& map, Functor&& functor)
 	{
 		IModTagManager* manager = IModTagManager::GetInstance();
 
 		for (const wxString& tagID: map)
 		{
-			if (IModTag* tag = manager->FindTagByID(tagID))
+			if (IModTag* realTag = manager->FindTagByID(tagID))
 			{
-				if (!functor(*tag))
+				if (!functor(*realTag))
+				{
+					break;
+				}
+			}
+			else
+			{
+				ModTagStoreTag tag(tagID);
+				if (!functor(tag))
 				{
 					break;
 				}

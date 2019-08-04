@@ -12,6 +12,9 @@ namespace Kortex
 			using CRefVector = std::vector<const IModTag*>;
 
 		public:
+			static std::optional<wxString> GetTranslatedNameByID(const wxString& id);
+
+		public:
 			virtual bool IsOK() const = 0;
 			virtual std::unique_ptr<IModTag> Clone() const = 0;
 			

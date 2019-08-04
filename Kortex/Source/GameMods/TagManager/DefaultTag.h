@@ -6,9 +6,6 @@ namespace Kortex::ModTagManager
 {
 	class DefaultTag: public RTTI::IExtendInterface<DefaultTag, IModTag, INexusModTag>
 	{
-		public:
-			static std::optional<wxString> TryGetTranslatedName(const wxString& id);
-
 		private:
 			wxString m_ID;
 			wxString m_Name;

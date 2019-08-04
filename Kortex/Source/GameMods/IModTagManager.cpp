@@ -12,10 +12,10 @@ namespace
 		Name
 	};
 
-	template<class TagT, FindBy findBy, class VectorT, class ValueT>
-	TagT* FindModTag(VectorT& tags, ValueT&& value, typename VectorT::const_iterator* iterator = nullptr)
+	template<class TagT, FindBy findBy, class TVector, class TValue, class TIterator = void>
+	TagT* FindModTag(TVector&& items, TValue&& value, TIterator* iterator = nullptr)
 	{
-		auto it = std::find_if(tags.begin(), tags.end(), [&value](const auto& tag)
+		auto it = std::find_if(items.begin(), items.end(), [&value](const auto& tag)
 		{
 			if constexpr(findBy == FindBy::Object)
 			{
@@ -32,14 +32,20 @@ namespace
 			return false;
 		});
 
-		if (it != tags.end())
+		if (it != items.end())
 		{
-			KxUtility::SetIfNotNull(iterator, it);
+			if constexpr(!std::is_void_v<TIterator>)
+			{
+				KxUtility::SetIfNotNull(iterator, it);
+			}
 			return (*it).get();
 		}
 		else
 		{
-			KxUtility::SetIfNotNull(iterator, tags.end());
+			if constexpr (!std::is_void_v<TIterator>)
+			{
+				KxUtility::SetIfNotNull(iterator, items.end());
+			}
 			return nullptr;
 		}
 	}
@@ -61,7 +67,15 @@ namespace Kortex
 	{
 		for (const auto& tag: GetDefaultTags())
 		{
-			items.emplace_back(tag->Clone());
+			IModTag::Vector::iterator it;
+			if (FindModTag<IModTag, FindBy::ID>(items, tag->GetID(), &it))
+			{
+				(*it) = tag->Clone();
+			}
+			else
+			{
+				items.emplace_back(tag->Clone());
+			}
 		}
 	}
 	void IModTagManager::LoadDefaultTags()
@@ -84,8 +98,7 @@ namespace Kortex
 	}
 	IModTag& IModTagManager::EmplaceTag(IModTag::Vector& items, std::unique_ptr<IModTag> tag)
 	{
-		IModTag* existingTag = FindModTag<IModTag, FindBy::Object>(items, *tag);
-		if (existingTag)
+		if (IModTag* existingTag = FindModTag<IModTag, FindBy::ID>(items, tag->GetID()))
 		{
 			return *existingTag;
 		}
@@ -98,8 +111,7 @@ namespace Kortex
 	}
 	IModTag& IModTagManager::EmplaceTagWith(IModTag::Vector& items, const wxString& id, const wxString& name)
 	{
-		IModTag* existingTag = FindTagByID(items, id);
-		if (existingTag)
+		if (IModTag* existingTag = FindTagByID(items, id))
 		{
 			return *existingTag;
 		}

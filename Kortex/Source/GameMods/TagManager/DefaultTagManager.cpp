@@ -18,6 +18,31 @@ namespace Kortex::Application::OName
 
 namespace Kortex::ModTagManager
 {
+	void DefaultTagManager::OnProfileSelected(ProfileEvent& event)
+	{
+		if (IGameProfile* oldProfile = event.GetPreviousProfile())
+		{
+			SaveUserTags(*oldProfile);
+			oldProfile->SaveConfig();
+		}
+
+		ClearUserTags();
+		if (IGameProfile* newProfile = event.GetProfile())
+		{
+			// Load tags from newly selected profile
+			LoadUserTags(*newProfile);
+		}
+
+		// Reload tags from mods
+		if (IModManager* modManager = IModManager::GetInstance())
+		{
+			for (IGameMod* mod: modManager->GetMods())
+			{
+				LoadTagsFromMod(m_UserTags, *mod);
+			}
+		}
+	}
+
 	void DefaultTagManager::LoadTagsFrom(IModTag::Vector& items, const KxXMLNode& tagsNode)
 	{
 		const bool hasSE = IPackageManager::GetInstance()->HasComponent<PackageManager::IWithScriptExtender>();
@@ -40,7 +65,7 @@ namespace Kortex::ModTagManager
 				}
 
 				// Name
-				auto name = DefaultTag::TryGetTranslatedName(id);
+				auto name = IModTag::GetTranslatedNameByID(id);
 				if (!name)
 				{
 					name = node.GetFirstChildElement(wxS("Name")).GetValue(id);
@@ -125,13 +150,17 @@ namespace Kortex::ModTagManager
 		}
 	}
 
-	void DefaultTagManager::LoadUserTags()
+	void DefaultTagManager::LoadUserTags(const IGameProfile& profile)
 	{
-		LoadTagsFrom(m_UserTags, GetAInstanceOption(Application::OName::UserTags).GetNode());
+		LoadTagsFrom(m_UserTags, profile.GetProfileOption(Application::OName::UserTags).GetNode());
 	}
-	void DefaultTagManager::SaveUserTags() const
+	void DefaultTagManager::SaveUserTags(IGameProfile& profile) const
 	{
-		SaveTagsTo(m_UserTags, GetAInstanceOption(Application::OName::UserTags).GetNode());
+		SaveTagsTo(m_UserTags, profile.GetProfileOption(Application::OName::UserTags).GetNode());
+	}
+	void DefaultTagManager::ClearUserTags()
+	{
+		m_UserTags.clear();
 	}
 
 	void DefaultTagManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
@@ -140,18 +169,29 @@ namespace Kortex::ModTagManager
 	}
 	void DefaultTagManager::OnInit()
 	{
-		LoadUserTags();
+		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &DefaultTagManager::OnProfileSelected, this);
 	}
 	void DefaultTagManager::OnExit()
 	{
-		SaveUserTags();
+		if (IGameProfile* profile = IGameProfile::GetActive())
+		{
+			SaveUserTags(*profile);
+			profile->SaveConfig();
+		}
 	}
 
 	void DefaultTagManager::LoadTagsFromMod(IModTag::Vector& items, const IGameMod& mod)
 	{
 		mod.GetTagStore().Visit([this, &items](const IModTag& tag)
 		{
-			EmplaceTagWith(items, tag.GetID(), tag.GetName());
+			if (const IModTag* defaultTag = FindTagByID(GetDefaultTags(), tag.GetID()))
+			{
+				EmplaceTag(items, defaultTag->Clone());
+			}
+			else
+			{
+				EmplaceTagWith(items, tag.GetID(), tag.GetName());
+			}
 			return true;
 		});
 	}

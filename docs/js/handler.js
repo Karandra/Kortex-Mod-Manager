@@ -364,7 +364,6 @@ function linkHandler(inputHREF, accessType) {
 		contentVisibility(contentHide);
 		// Wait 150ms while content opacity finishes dropping
 		return setTimeout(function () {
-			getFile(xhttpCSSFile, locationTrimString, css);
 			getFile(xhttpInstance, locationTrimString, locationType);
 		}, contentCloakTime);
 	}
@@ -448,7 +447,9 @@ function xhttpReady(request, resource, type) {
 					location.assign(urlHash);
 					urlHash = null;
 				}
-				// Note loaded page to avoid repeat nav OR blank for 404, flag load uccess
+				// Begin loading CSS
+				getFile(xhttpCSSFile, resource, css);
+				// Note loaded page to avoid repeat nav OR blank for 404, flag load success
 				sameLocation = resource;
 				if (type === badTimes) sameLocation = "";
 				loadedMD = true;

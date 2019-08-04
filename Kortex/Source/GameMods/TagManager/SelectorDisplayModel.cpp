@@ -31,9 +31,12 @@ namespace Kortex::ModTagManager
 		// NexusID
 		if (IsFullFeatured())
 		{
-			const IModNetwork* nexus = NetworkManager::NexusModNetwork::GetInstance();
-			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(nexus->GetName() + wxS("ID"), ColumnID::NexusID, KxDATAVIEW_CELL_EDITABLE);
-			info.GetColumn()->SetBitmap(ImageProvider::GetBitmap(NetworkManager::NexusModNetwork::GetInstance()->GetIcon()));
+			using namespace NetworkManager;
+			if (const IModNetwork* nexus = NexusModNetwork::GetInstance())
+			{
+				auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(nexus->GetName(), ColumnID::NexusID, KxDATAVIEW_CELL_EDITABLE);
+				info.GetColumn()->SetBitmap(ImageProvider::GetBitmap(nexus->GetIcon()));
+			}
 		}
 
 		// Color

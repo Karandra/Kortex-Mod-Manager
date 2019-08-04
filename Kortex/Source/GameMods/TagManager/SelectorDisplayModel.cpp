@@ -164,17 +164,24 @@ namespace Kortex::ModTagManager
 				}
 				case ColumnID::PriorityGroup:
 				{
+					auto QueueRefresh = [this]()
+					{
+						GetView()->CallAfter(&KxDataViewCtrl::Refresh, true, nullptr);
+					};
+
 					bool checked = value.As<bool>();
 					if (checked && m_PriorityGroupTag != tag)
 					{
 						m_PriorityGroupTag = tag;
 						m_IsModified = true;
+						QueueRefresh();
 						return true;
 					}
 					else if (!checked && m_PriorityGroupTag)
 					{
 						m_PriorityGroupTag = nullptr;
 						m_IsModified = true;
+						QueueRefresh();
 						return true;
 					}
 					return false;

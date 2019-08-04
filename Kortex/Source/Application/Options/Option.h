@@ -85,8 +85,8 @@ namespace Kortex::Application
 		public:
 			template<class... Args> ProfileOption(IGameProfile* profile, Args&&... arg)
 			{
-				Create(Disposition::Profile, GetXML(profile), std::forward<Args>(arg)...);
-				AssignProfile(&profile);
+				Create(Disposition::Profile, GetXML(*profile), std::forward<Args>(arg)...);
+				AssignProfile(profile);
 			}
 	};
 

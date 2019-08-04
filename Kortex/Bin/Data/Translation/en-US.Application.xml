@@ -420,7 +420,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="TagManager.Tag.Overhauls">Overhauls</String>
 		<String ID="TagManager.Tag.Conversions">Total conversions</String>
 		<String ID="TagManager.Tag.Audio">Music, SFX and voices</String>
-		<String ID="TagManager.Tag.Interface">User Interface and Controls</String>
+		<String ID="TagManager.Tag.UserInterface">User Interface and Controls</String>
 		<String ID="TagManager.Tag.NPC">NPC</String>
 		<String ID="TagManager.Tag.Body">Body</String>
 		<String ID="TagManager.Tag.Face">Face</String>
@@ -436,7 +436,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="TagManager.Tag.ItemsAndObjects">Items and objects</String>
 		<String ID="TagManager.Tag.Cheats">Cheats and God items</String>
 		<String ID="TagManager.Tag.Fixes">Bug fixes</String>
-		<String ID="TagManager.Tag.ScriptExtenderPlugins">Plugins for $(ScriptExtenderID)</String>
+		<String ID="TagManager.Tag.xSEPlugins">Plugins for $(ScriptExtenderID)</String>
 		<String ID="TagManager.Tag.Utilities">Utilities</String>
 		<String ID="TagManager.Tag.Resources">Modders resources and tutorials</String>
 		<String ID="TagManager.Tag.SaveGames">Save Games</String>

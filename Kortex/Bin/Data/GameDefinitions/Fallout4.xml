@@ -132,7 +132,7 @@
 				<Entry ID="Mercantiles">
 					<NexusID>69</NexusID>
 				</Entry>
-				<Entry ID="New Lands">
+				<Entry ID="NewLands">
 					<NexusID>30</NexusID>
 				</Entry>
 				<Entry ID="Dungeons">
@@ -204,7 +204,7 @@
 				<Entry ID="Fixes">
 					<NexusID>95</NexusID>
 				</Entry>
-				<Entry ID="ScriptExtenderPlugins" RequiresScriptExtender="1">
+				<Entry ID="xSEPlugins" RequiresScriptExtender="1">
 					<NexusID>-1</NexusID>
 				</Entry>
 				<Entry ID="Utilities">

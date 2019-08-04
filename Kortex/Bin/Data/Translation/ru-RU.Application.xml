@@ -411,7 +411,7 @@
 		<String ID="TagManager.Tag.Crafting">Создание вещей и ремёсла</String>
 		<String ID="TagManager.Tag.Magic">Магия - заклинания и зачарования</String>
 		<String ID="TagManager.Tag.MagicGameplay">Магия - геймплей</String>
-		<String ID="TagManager.Tag.BooksScrolls">Книги и свитки</String>
+		<String ID="TagManager.Tag.BooksAndScrolls">Книги и свитки</String>
 		<String ID="TagManager.Tag.Alchemy">Алхимия</String>
 		<String ID="TagManager.Tag.Quests">Квесты и приключения</String>
 		<String ID="TagManager.Tag.Buildings">Замки, дворцы, особняки и поместья</String>
@@ -425,7 +425,7 @@
 		<String ID="TagManager.Tag.Overhauls">Глобальные изменения</String>
 		<String ID="TagManager.Tag.Conversions">Тотальные конверсии</String>
 		<String ID="TagManager.Tag.Audio">Музыка, звуки SFX и голос</String>
-		<String ID="TagManager.Tag.Interface">Интерфейс и управление</String>
+		<String ID="TagManager.Tag.UserInterface">Интерфейс и управление</String>
 		<String ID="TagManager.Tag.NPC">Неигровые персонажи (NPC)</String>
 		<String ID="TagManager.Tag.Body">Тела</String>
 		<String ID="TagManager.Tag.Face">Лица</String>
@@ -434,14 +434,14 @@
 		<String ID="TagManager.Tag.Followers">Компаньоны</String>
 		<String ID="TagManager.Tag.Creatures">Существа</String>
 		<String ID="TagManager.Tag.Mounts">Ездовые животные</String>
-		<String ID="TagManager.Tag.ModelsTextures">Модели и текстуры</String>
+		<String ID="TagManager.Tag.ModelsAndTextures">Модели и текстуры</String>
 		<String ID="TagManager.Tag.Graphics">Графика и визуальные эффекты</String>
 		<String ID="TagManager.Tag.ENBPresets">Пресеты для ENB</String>
 		<String ID="TagManager.Tag.Collectables">Сокровища и коллекционные предметы</String>
-		<String ID="TagManager.Tag.ItemsObjects">Разные предметы и объекты</String>
+		<String ID="TagManager.Tag.ItemsAndObjects">Разные предметы и объекты</String>
 		<String ID="TagManager.Tag.Cheats">Читы и "божественные" вещи</String>
 		<String ID="TagManager.Tag.Fixes">Исправления и патчи</String>
-		<String ID="TagManager.Tag.ScriptExtenderPlugins">Плагины для $(ScriptExtenderID)</String>
+		<String ID="TagManager.Tag.xSEPlugins">Плагины для $(ScriptExtenderID)</String>
 		<String ID="TagManager.Tag.Utilities">Программы</String>
 		<String ID="TagManager.Tag.Resources">Инструкции и ресурсы для модмейкеров</String>
 		<String ID="TagManager.Tag.SaveGames">Сохранения игры</String>

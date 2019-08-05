@@ -53,10 +53,9 @@ namespace Kortex::GameInstance
 	void DefaultGameProfile::LoadConfig()
 	{
 		KxFileStream stream(GetConfigFile(), KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
-		KxXMLDocument xml(stream);
-		if (xml.IsOK())
+		if (m_Config.Load(stream))
 		{
-			KxXMLNode rootNode = xml.GetFirstChildElement("Profile");
+			KxXMLNode rootNode = m_Config.GetFirstChildElement("Profile");
 
 			KxXMLNode configNode = rootNode.GetFirstChildElement("Config");
 			m_LocalSavesEnabled = configNode.GetFirstChildElement("LocalSaves").GetAttributeBool("Enabled");

@@ -15,14 +15,14 @@ namespace Kortex::ModTagManager
 		// Priority group
 		if (IsFullFeatured())
 		{
-			auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("TagManager.PriorityGroup"), ColumnID::PriorityGroup, KxDATAVIEW_CELL_ACTIVATABLE);
+			auto info = GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("TagManager.PrimaryTag"), ColumnID::PriorityTag, KxDATAVIEW_CELL_ACTIVATABLE);
 			info.GetRenderer()->SetDefaultToggleType(KxDataViewToggleRenderer::ToggleType::RadioBox);
 		}
 		
 		// Expanded
 		if (IsFullFeatured())
 		{
-			GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("Generic.Expanded"), ColumnID::ExpandedState, KxDATAVIEW_CELL_ACTIVATABLE);
+			GetView()->AppendColumn<KxDataViewToggleRenderer>(KTr("Generic.Expanded"), ColumnID::Expanded, KxDATAVIEW_CELL_ACTIVATABLE);
 		}
 
 		// Name
@@ -88,12 +88,12 @@ namespace Kortex::ModTagManager
 					value = KxDataViewBitmapTextToggleValue(m_Data->HasTag(*tag), tag->GetName(), icon, KxDataViewBitmapTextToggleValue::CheckBox);
 					break;
 				}
-				case ColumnID::PriorityGroup:
+				case ColumnID::PriorityTag:
 				{
-					value = tag == m_PriorityGroupTag;
+					value = tag == m_PromaryTag;
 					break;
 				}
-				case ColumnID::ExpandedState:
+				case ColumnID::Expanded:
 				{
 					value = tag->IsExpanded();
 					break;
@@ -122,6 +122,11 @@ namespace Kortex::ModTagManager
 	}
 	bool SelectorDisplayModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
+		auto QueueRefresh = [this]()
+		{
+			GetView()->CallAfter(&KxDataViewCtrl::Refresh, true, nullptr);
+		};
+
 		IModTag* tag = GetDataEntry(row);
 		if (tag)
 		{
@@ -155,34 +160,31 @@ namespace Kortex::ModTagManager
 						const bool hasTag = m_Data->HasTag(*tag);
 						m_Data->ToggleTag(*tag, value.As<bool>());
 						m_IsModified = true;
+
+						QueueRefresh();
 						return hasTag;
 					}
 					return false;
 				}
-				case ColumnID::ExpandedState:
+				case ColumnID::Expanded:
 				{
 					tag->SetExpanded(value.As<bool>());
 					m_IsModified = true;
 					return true;
 				}
-				case ColumnID::PriorityGroup:
+				case ColumnID::PriorityTag:
 				{
-					auto QueueRefresh = [this]()
-					{
-						GetView()->CallAfter(&KxDataViewCtrl::Refresh, true, nullptr);
-					};
-
 					bool checked = value.As<bool>();
-					if (checked && m_PriorityGroupTag != tag)
+					if (checked && m_PromaryTag != tag)
 					{
-						m_PriorityGroupTag = tag;
+						m_PromaryTag = tag;
 						m_IsModified = true;
 						QueueRefresh();
 						return true;
 					}
-					else if (!checked && m_PriorityGroupTag)
+					else if (!checked && m_PromaryTag)
 					{
-						m_PriorityGroupTag = nullptr;
+						m_PromaryTag = nullptr;
 						m_IsModified = true;
 						QueueRefresh();
 						return true;
@@ -213,13 +215,27 @@ namespace Kortex::ModTagManager
 	}
 	bool SelectorDisplayModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
 	{
-		return true;
+		IModTag* tag = GetDataEntry(row);
+		if (tag)
+		{
+			switch (column->GetID())
+			{
+				case ColumnID::PriorityTag:
+				{
+					return m_GameMod->GetTagStore().HasTag(*tag);
+				}
+			};
+			return true;
+		}
+		return false;
 	}
 	bool SelectorDisplayModel::GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attribute, KxDataViewCellState cellState) const
 	{
 		const IModTag* entry = GetDataEntry(row);
 		if (entry)
 		{
+			attribute.SetEnabled(IsEnabledByRow(row, column));
+
 			switch (column->GetID())
 			{
 				case ColumnID::Color:
@@ -229,11 +245,11 @@ namespace Kortex::ModTagManager
 					{
 						attribute.SetBackgroundColor(color);
 						attribute.SetForegroundColor(color.GetContrastColor(GetView()));
-						return true;
 					}
 					break;
 				}
 			};
+			return true;
 		}
 		return false;
 	}
@@ -278,7 +294,7 @@ namespace Kortex::ModTagManager
 
 		if (m_GameMod)
 		{
-			m_PriorityGroupTag = IModTagManager::GetInstance()->FindTagByID(m_GameMod->GetPriorityGroupTag());
+			m_PromaryTag = m_GameMod->GetTagStore().GetPrimaryTag();
 		}
 		RefreshItems();
 	}
@@ -300,7 +316,14 @@ namespace Kortex::ModTagManager
 	{
 		if (m_GameMod)
 		{
-			m_GameMod->SetPriorityGroupTag(m_PriorityGroupTag ? m_PriorityGroupTag->GetID() : wxEmptyString);
+			if (m_PromaryTag)
+			{
+				m_GameMod->GetTagStore().SetPrimaryTag(*m_PromaryTag);
+			}
+			else
+			{
+				m_GameMod->GetTagStore().ClearPrimaryTag();
+			}
 		}
 	}
 }

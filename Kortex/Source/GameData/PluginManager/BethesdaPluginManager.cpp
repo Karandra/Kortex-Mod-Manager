@@ -365,7 +365,6 @@ namespace Kortex::PluginManager
 			{
 				SortByDate();
 			}
-			profile->SyncWithCurrentState();
 		}
 	}
 	void BethesdaPluginManager::LoadNativeOrder()

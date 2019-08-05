@@ -6,7 +6,11 @@
 #include "FixedGameMod.h"
 #include "MainFileSystem.h"
 #include "MandatoryModEntry.h"
-class IGameProfile;
+
+namespace Kortex
+{
+	class ProfileEvent;
+}
 
 namespace Kortex::ModManager
 {
@@ -98,6 +102,8 @@ namespace Kortex::ModManager
 			FixedGameMod m_WriteTarget;
 			std::vector<KMandatoryModEntry> m_MandatoryMods;
 
+			bool m_LoadMods = false;
+
 		private:
 			IGameMod* DoCreateMod(const wxString& signature);
 			void ProcessInstallMod(IGameMod& mod);
@@ -108,6 +114,7 @@ namespace Kortex::ModManager
 
 			void OnMountPointError(const KxStringVector& locations);
 			void OnUpdateModLayoutNeeded(ModEvent& event);
+			void OnProfileSelected(ProfileEvent& event);
 			
 		protected:
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;

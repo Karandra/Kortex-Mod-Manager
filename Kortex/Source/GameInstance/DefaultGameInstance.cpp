@@ -404,7 +404,7 @@ namespace Kortex::GameInstance
 			return false;
 		}
 	}
-	bool DefaultGameInstance::ChangeProfileTo(const IGameProfile& profile)
+	bool DefaultGameInstance::ChangeProfileTo(IGameProfile& profile)
 	{
 		if (IGameInstance::GetActive())
 		{

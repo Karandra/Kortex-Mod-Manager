@@ -150,7 +150,7 @@ namespace Kortex
 			virtual IGameProfile* ShallowCopyProfile(const IGameProfile& profile, const wxString& nameSuggets = wxEmptyString) = 0;
 			virtual bool RemoveProfile(IGameProfile& profile) = 0;
 			virtual bool RenameProfile(IGameProfile& profile, const wxString& newID) = 0;
-			virtual bool ChangeProfileTo(const IGameProfile& profile) = 0;
+			virtual bool ChangeProfileTo(IGameProfile& profile) = 0;
 			virtual void LoadSavedProfileOrDefault() = 0;
 	};
 }

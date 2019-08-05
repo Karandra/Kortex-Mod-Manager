@@ -189,7 +189,6 @@ namespace Kortex::InstallWizard
 
 		// Tags
 		packageInfo.GetTagStore() = mod.GetTagStore();
-		m_ModEntry.SetPriorityGroupTag(mod.GetPriorityGroupTag());
 
 		// Other info
 		if (packageInfo.GetName().IsEmpty())

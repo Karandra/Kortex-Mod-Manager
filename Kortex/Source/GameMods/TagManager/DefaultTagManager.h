@@ -50,6 +50,7 @@ namespace Kortex::ModTagManager
 				return m_UserTags;
 			}
 	
+			void OnInitialModsLoading() override;
 			void LoadTagsFromMod(IModTag::Vector& items, const IGameMod& mod) override;
 			std::unique_ptr<IModTag> NewTag() override;
 	};

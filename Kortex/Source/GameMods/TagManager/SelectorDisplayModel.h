@@ -16,8 +16,8 @@ namespace Kortex::ModTagManager
 		protected:
 			enum ColumnID
 			{
-				PriorityGroup,
-				ExpandedState,
+				PriorityTag,
+				Expanded,
 				Name,
 				NexusID,
 				Color,
@@ -29,7 +29,7 @@ namespace Kortex::ModTagManager
 		protected:
 			ModTagStore* m_Data = nullptr;
 			IGameMod* m_GameMod = nullptr;
-			const IModTag* m_PriorityGroupTag = nullptr;
+			const IModTag* m_PromaryTag = nullptr;
 			bool m_IsModified = false;
 
 		protected:
@@ -63,7 +63,7 @@ namespace Kortex::ModTagManager
 			
 			bool HasPriorityGroupTag() const
 			{
-				return m_PriorityGroupTag != nullptr;
+				return m_PromaryTag != nullptr;
 			}
 			void ApplyChangesToMod();
 	};

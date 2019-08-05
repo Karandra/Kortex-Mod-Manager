@@ -385,7 +385,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="ModManager.ModList.Signature">Signature</String>
 
 		<String ID="TagManager.Name">Tag manager</String>
-		<String ID="TagManager.PriorityGroup">Priority group</String>
+		<String ID="TagManager.PrimaryTag">Primary tag</String>
 
 		<String ID="TagManager.LoadDefaultTags">Load default tags</String>
 		<String ID="TagManager.LoadDefaultTags.Message">Are you sure you want to laod default tags?</String>

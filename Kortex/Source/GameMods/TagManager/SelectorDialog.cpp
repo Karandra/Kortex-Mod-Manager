@@ -55,11 +55,6 @@ namespace Kortex::ModTagManager
 					ModTagStore& tagStore = mod->GetTagStore();
 					if (tagStore.HasTag(*tag))
 					{
-						if (mod->GetPriorityGroupTag() == tag->GetID())
-						{
-							mod->SetPriorityGroupTag(wxString());
-						}
-
 						tagStore.RemoveTag(*tag);
 						mod->Save();
 						m_IsModified = true;

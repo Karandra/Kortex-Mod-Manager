@@ -114,7 +114,7 @@ namespace Kortex::ModTagManager
 		{
 			if (tag->IsOK())
 			{
-				KxXMLNode node = tagsNode.NewElement(wxS("Entry"));
+				KxXMLNode node = tagsNode.NewElement(wxS("Item"));
 
 				// ID
 				const wxString id = tag->GetID();
@@ -169,7 +169,6 @@ namespace Kortex::ModTagManager
 	}
 	void DefaultTagManager::OnInit()
 	{
-		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &DefaultTagManager::OnProfileSelected, this);
 	}
 	void DefaultTagManager::OnExit()
 	{
@@ -180,6 +179,14 @@ namespace Kortex::ModTagManager
 		}
 	}
 
+	void DefaultTagManager::OnInitialModsLoading()
+	{
+		if (IGameProfile* profile = IGameProfile::GetActive())
+		{
+			LoadUserTags(*profile);
+		}
+		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &DefaultTagManager::OnProfileSelected, this);
+	}
 	void DefaultTagManager::LoadTagsFromMod(IModTag::Vector& items, const IGameMod& mod)
 	{
 		mod.GetTagStore().Visit([this, &items](const IModTag& tag)

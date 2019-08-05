@@ -9,48 +9,24 @@ namespace Kortex
 	{
 		private:
 			std::unordered_set<wxString> m_TagIDs;
+			wxString m_PrimaryTag;
 
 		public:
 			using Visitor = std::function<bool(IModTag&)>;
 			using CVisitor = std::function<bool(const IModTag&)>;
 
 		public:
-			bool HasTag(const wxString& tag) const
-			{
-				if (!tag.IsEmpty())
-				{
-					return m_TagIDs.find(tag) != m_TagIDs.end();
-				}
-				return false;
-			}
+			bool HasTag(const wxString& tagID) const;
 			bool HasTag(const IModTag& tag) const;
 
-			void AddTag(const wxString& tag)
-			{
-				if (!tag.IsEmpty())
-				{
-					m_TagIDs.insert(tag);
-				}
-			}
+			void AddTag(const wxString& tagID);
 			void AddTag(const IModTag& tag);
 
-			void RemoveTag(const wxString& tag)
-			{
-				if (!tag.IsEmpty())
-				{
-					m_TagIDs.erase(tag);
-				}
-			}
+			void RemoveTag(const wxString& tagID);
 			void RemoveTag(const IModTag& tag);
 
-			void ToggleTag(const IModTag& tag, bool addTag);
-			void ToggleTag(const wxString& tag, bool addTag)
-			{
-				if (!tag.IsEmpty())
-				{
-					addTag ? AddTag(tag) : RemoveTag(tag);
-				}
-			}
+			void ToggleTag(const wxString& tagID, bool addTag);
+			void ToggleTag(const IModTag& tagID, bool addTag);
 			
 			size_t GetSize() const
 			{
@@ -60,13 +36,16 @@ namespace Kortex
 			{
 				return m_TagIDs.empty();
 			}
-			void Clear()
-			{
-				m_TagIDs.clear();
-			}
+			void Clear();
 
 			void Visit(const Visitor& visitor);
 			void Visit(const CVisitor& visitor) const;
+
+			IModTag* GetPrimaryTag() const;
+			wxString GetPrimaryTagID() const;
+			bool SetPrimaryTag(const IModTag& tag);
+			bool SetPrimaryTag(const wxString& tagID);
+			bool ClearPrimaryTag();
 
 			KxStringVector GetIDs() const;
 			KxStringVector GetNames() const;

@@ -88,13 +88,15 @@ namespace Kortex::GameInstance
 		GetInstanceOption(OName::Profile).SetAttribute(OName::ID, id);
 	}
 
-	void ActiveGameInstance::DoChangeProfileTo(const IGameProfile& profile)
+	void ActiveGameInstance::DoChangeProfileTo(IGameProfile& profile)
 	{
 		KxFile(profile.GetConfigDir()).CreateFolder();
 		KxFile(profile.GetSavesDir()).CreateFolder();
 		KxFile(profile.GetOverwritesDir()).CreateFolder();
 
 		IGameProfile* oldProfile = GetActiveProfile();
+
+		profile.LoadConfig();
 		SetCurrentProfileID(profile.GetID());
 		InitVariables(profile);
 
@@ -109,18 +111,15 @@ namespace Kortex::GameInstance
 			{
 				mod->UpdateFileTree();
 			}
-
-			// This will invalidate virtual tree
-			modManager->ResortMods(profile);
 		}
 
 		// Finally send event
-		BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtSelected, const_cast<IGameProfile&>(profile), oldProfile);
+		BroadcastProcessor::Get().ProcessEvent(ProfileEvent::EvtSelected, profile, oldProfile);
 	}
 	void ActiveGameInstance::LoadSavedProfileOrDefault()
 	{
 		// Load saved profile or create a default one in none is exist yet
-		const IGameProfile* profile = GetProfile(GetInstanceOption("Profile").GetAttribute("ID"));
+		IGameProfile* profile = GetProfile(GetInstanceOption("Profile").GetAttribute("ID"));
 		if (profile)
 		{
 			ChangeProfileTo(*profile);

@@ -36,7 +36,6 @@ namespace Kortex::ModManager
 
 			ModSourceStore m_ModSourceStore;
 			ModTagStore m_TagStore;
-			wxString m_PriorityGroupTag;
 
 			wxDateTime m_TimeInstall;
 			wxDateTime m_TimeUninstall;
@@ -147,15 +146,6 @@ namespace Kortex::ModManager
 			ModTagStore& GetTagStore() override
 			{
 				return m_TagStore;
-			}
-
-			wxString GetPriorityGroupTag() const override
-			{
-				return m_PriorityGroupTag;
-			}
-			void SetPriorityGroupTag(const wxString& value)
-			{
-				m_PriorityGroupTag = value;
 			}
 
 			wxString GetPackageFile() const override

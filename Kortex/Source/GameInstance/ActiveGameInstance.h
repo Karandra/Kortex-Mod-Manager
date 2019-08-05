@@ -74,7 +74,7 @@ namespace Kortex::GameInstance
 				return GetProfile(m_CurrentProfileID);
 			}
 
-			void DoChangeProfileTo(const IGameProfile& profile);
+			void DoChangeProfileTo(IGameProfile& profile);
 			void LoadSavedProfileOrDefault();
 	};
 }

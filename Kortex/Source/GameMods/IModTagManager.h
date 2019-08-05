@@ -33,6 +33,7 @@ namespace Kortex
 				return !GetTags().empty();
 			}
 
+			virtual void OnInitialModsLoading() = 0;
 			virtual void LoadTagsFromMod(IModTag::Vector& items, const IGameMod& mod) = 0;
 			void LoadTagsFromMod(const IGameMod& mod)
 			{

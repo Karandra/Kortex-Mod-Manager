@@ -390,7 +390,7 @@
 		<String ID="ModManager.ModList.Signature">Сигнатура</String>
 
 		<String ID="ModManager.Tags">Теги</String>
-		<String ID="TagManager.PriorityGroup">Группа приоритета</String>
+		<String ID="TagManager.PrimaryTag">Основной тег</String>
 
 		<String ID="TagManager.LoadDefaultTags">Загрузить теги по умолчанию</String>
 		<String ID="TagManager.LoadDefaultTags.Message">Вы уверены, что хотите загрузить теги по умолчанию?</String>

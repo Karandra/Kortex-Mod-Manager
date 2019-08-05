@@ -963,7 +963,6 @@ namespace Kortex::ModManager
 			{
 				BasicGameMod tempMod;
 				tempMod.GetTagStore() = focusedMod->GetTagStore();
-				tempMod.SetPriorityGroupTag(focusedMod->GetPriorityGroupTag());
 
 				ModTagManager::SelectorDialog dialog(GetMainWindow(), KTr("ModManager.TagsDialog"));
 				dialog.SetDataVector(&tempMod.GetTagStore(), &tempMod);
@@ -974,7 +973,6 @@ namespace Kortex::ModManager
 					bool changesMade = DoForAllSelectedItems(selectedMods, [&tempMod](IGameMod& mod)
 					{
 						mod.GetTagStore() = tempMod.GetTagStore();
-						mod.SetPriorityGroupTag(tempMod.GetPriorityGroupTag());
 						mod.Save();
 						return true;
 					});

@@ -85,9 +85,6 @@ namespace Kortex
 			virtual const ModTagStore& GetTagStore() const = 0;
 			virtual ModTagStore& GetTagStore() = 0;
 
-			virtual wxString GetPriorityGroupTag() const = 0;
-			virtual void SetPriorityGroupTag(const wxString& value) = 0;
-
 			virtual wxString GetPackageFile() const = 0;
 			virtual void SetPackageFile(const wxString& value) = 0;
 			bool IsPackageFileExist() const;

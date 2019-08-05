@@ -159,7 +159,21 @@ namespace Kortex::ModManager
 		ResortMods();
 		Save();
 	}
-	
+	void DefaultModManager::OnProfileSelected(ProfileEvent& event)
+	{
+		if (m_LoadMods)
+		{
+			m_LoadMods = false;
+
+			IModTagManager::GetInstance()->OnInitialModsLoading();
+			Load();
+		}
+		if (IGameProfile* profile = event.GetProfile())
+		{
+			ResortMods(*profile);
+		}
+	}
+
 	void DefaultModManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
 		m_Config.OnLoadInstance(instance, managerNode);
@@ -170,6 +184,8 @@ namespace Kortex::ModManager
 		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &DefaultModManager::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &DefaultModManager::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModManager::OnUpdateModLayoutNeeded, this);
+		
+		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &DefaultModManager::OnProfileSelected, this);
 
 		// Mandatory locations
 		for (const MandatoryLocation& location: m_Config.GetMandatoryLocations())
@@ -194,7 +210,7 @@ namespace Kortex::ModManager
 		m_WriteTarget.SetActive(true);
 		// m_WriteTarget.LinkLocation(...) Location will be linked on profile change
 
-		Load();
+		m_LoadMods = true;
 	}
 	void DefaultModManager::OnExit()
 	{

@@ -114,20 +114,33 @@ namespace Kortex::ModManager
 						int r = colorNode.GetAttributeInt("R", -1);
 						int g = colorNode.GetAttributeInt("G", -1);
 						int b = colorNode.GetAttributeInt("B", -1);
-						if (r >= 0 && g >= 0 && b >= 0)
+						int a = colorNode.GetAttributeInt("A", -1);
+						if (r >= 0 && g >= 0 && b >= 0 && a >= 0)
 						{
-							m_Color.Set(r, g, b, 225);
+							m_Color.Set(r, g, b, a);
 						}
 					}
 
 					// Tags
 					KxXMLNode tagsNode = rootNode.GetFirstChildElement("Tags");
-					m_PriorityGroupTag = tagsNode.GetAttribute("PriorityGroup");
 
 					m_TagStore.Clear();
 					for (KxXMLNode node = tagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 					{
-						m_TagStore.AddTag(node.GetValue());
+						wxString tagID = node.GetValue();
+						m_TagStore.AddTag(tagID);
+						if (node.GetAttributeBool("Primary"))
+						{
+							m_TagStore.SetPrimaryTag(tagID);
+						}
+					}
+
+					// TODO: remove on v2.0 release
+					bool save = false;
+					if (wxString priorityGroupTag = tagsNode.GetAttribute("PriorityGroup"); !priorityGroupTag.IsEmpty())
+					{
+						m_TagStore.SetPrimaryTag(priorityGroupTag);
+						save = true;
 					}
 
 					// Sources
@@ -170,6 +183,10 @@ namespace Kortex::ModManager
 						m_LinkLocation = linkedModNode.GetAttribute("FolderPath");
 					}
 
+					if (save)
+					{
+						Save();
+					}
 					return true;
 				}
 			}
@@ -257,17 +274,21 @@ namespace Kortex::ModManager
 				colorNode.SetAttribute("R", m_Color.GetR());
 				colorNode.SetAttribute("G", m_Color.GetG());
 				colorNode.SetAttribute("B", m_Color.GetB());
+				colorNode.SetAttribute("A", m_Color.GetA());
 			}
 
 			// Tags
 			KxXMLNode tagsNode = rootNode.NewElement("Tags");
-			if (!m_PriorityGroupTag.IsEmpty())
+
+			const IModTag* primaryTag = m_TagStore.GetPrimaryTag();
+			m_TagStore.Visit([&tagsNode, primaryTagID = primaryTag ? primaryTag->GetID() : wxEmptyString](const IModTag& tag)
 			{
-				tagsNode.SetAttribute("PriorityGroup", m_PriorityGroupTag);
-			}
-			m_TagStore.Visit([&tagsNode](const IModTag& tag)
-			{
-				tagsNode.NewElement("Entry").SetValue(tag.GetID());
+				KxXMLNode node = tagsNode.NewElement("Item");
+				node.SetValue(tag.GetID());
+				if (primaryTagID == tag.GetID())
+				{
+					node.SetAttribute("Primary", true);
+				}
 				return true;
 			});
 

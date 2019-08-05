@@ -102,6 +102,15 @@ namespace Kortex
 		}
 		return false;
 	}
+	bool ModTagStore::HasTag(const wxString& tagID) const
+	{
+		if (!tagID.IsEmpty())
+		{
+			return m_TagIDs.find(tagID) != m_TagIDs.end();
+		}
+		return false;
+	}
+
 	void ModTagStore::AddTag(const IModTag& tag)
 	{
 		if (tag.IsOK())
@@ -109,6 +118,14 @@ namespace Kortex
 			AddTag(tag.GetID());
 		}
 	}
+	void ModTagStore::AddTag(const wxString& tagID)
+	{
+		if (!tagID.IsEmpty())
+		{
+			m_TagIDs.insert(tagID);
+		}
+	}
+
 	void ModTagStore::RemoveTag(const IModTag& tag)
 	{
 		if (tag.IsOK())
@@ -116,6 +133,14 @@ namespace Kortex
 			RemoveTag(tag.GetID());
 		}
 	}
+	void ModTagStore::RemoveTag(const wxString& tagID)
+	{
+		if (!tagID.IsEmpty())
+		{
+			m_TagIDs.erase(tagID);
+		}
+	}
+
 	void ModTagStore::ToggleTag(const IModTag& tag, bool addTag)
 	{
 		if (tag.IsOK())
@@ -123,7 +148,19 @@ namespace Kortex
 			addTag ? AddTag(tag) : RemoveTag(tag);
 		}
 	}
+	void ModTagStore::ToggleTag(const wxString& tagID, bool addTag)
+	{
+		if (!tagID.IsEmpty())
+		{
+			addTag ? AddTag(tagID) : RemoveTag(tagID);
+		}
+	}
 
+	void ModTagStore::Clear()
+	{
+		m_TagIDs.clear();
+		ClearPrimaryTag();
+	}
 	void ModTagStore::Visit(const Visitor& visitor)
 	{
 		VisitHelper(m_TagIDs, visitor);
@@ -131,6 +168,55 @@ namespace Kortex
 	void ModTagStore::Visit(const CVisitor& visitor) const
 	{
 		VisitHelper(m_TagIDs, visitor);
+	}
+
+	IModTag* ModTagStore::GetPrimaryTag() const
+	{
+		if (!m_PrimaryTag.IsEmpty())
+		{
+			return IModTagManager::GetInstance()->FindTagByID(m_PrimaryTag);
+		}
+		return nullptr;
+	}
+	wxString ModTagStore::GetPrimaryTagID() const
+	{
+		return m_PrimaryTag;
+	}
+	bool ModTagStore::SetPrimaryTag(const IModTag& tag)
+	{
+		ClearPrimaryTag();
+		if (tag.IsOK())
+		{
+			if (!HasTag(tag))
+			{
+				AddTag(tag);
+			}
+			m_PrimaryTag = tag.GetID();
+
+			return true;
+		}
+		return false;
+	}
+	bool ModTagStore::SetPrimaryTag(const wxString& tagID)
+	{
+		if (tagID.IsEmpty())
+		{
+			return ClearPrimaryTag();
+		}
+		else if (const IModTag* tag = IModTagManager::GetInstance()->FindTagByID(tagID))
+		{
+			return SetPrimaryTag(*tag);
+		}
+		return false;
+	}
+	bool ModTagStore::ClearPrimaryTag()
+	{
+		if (!m_PrimaryTag.IsEmpty())
+		{
+			m_PrimaryTag.clear();
+			return true;
+		}
+		return false;
 	}
 
 	KxStringVector ModTagStore::GetIDs() const

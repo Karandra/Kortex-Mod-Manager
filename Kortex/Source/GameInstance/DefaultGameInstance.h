@@ -148,7 +148,7 @@ namespace Kortex::GameInstance
 			IGameProfile* ShallowCopyProfile(const IGameProfile& profile, const wxString& nameSuggets = wxEmptyString) override;
 			bool RemoveProfile(IGameProfile& profile) override;
 			bool RenameProfile(IGameProfile& profile, const wxString& newID) override;
-			bool ChangeProfileTo(const IGameProfile& profile) override;
+			bool ChangeProfileTo(IGameProfile& profile) override;
 			void LoadSavedProfileOrDefault() override;
 	};
 }

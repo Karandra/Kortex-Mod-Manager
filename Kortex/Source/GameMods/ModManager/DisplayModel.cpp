@@ -130,12 +130,12 @@ namespace Kortex::ModManager
 					// Add priority group
 					if (CanShowPriorityGroups())
 					{
-						if (lastMod->GetPriorityGroupTag() != currentMod->GetPriorityGroupTag())
+						if (lastMod->GetTagStore().GetPrimaryTag() != currentMod->GetTagStore().GetPrimaryTag())
 						{
 							bool begin = m_PriortyGroups.empty() || m_PriortyGroups.back()->IsEnd();
 
 							// If next item is from different group, start new group immediately.
-							if (!currentMod->GetPriorityGroupTag().IsEmpty())
+							if (currentMod->GetTagStore().GetPrimaryTag())
 							{
 								begin = true;
 							}
@@ -148,8 +148,7 @@ namespace Kortex::ModManager
 							if (begin)
 							{
 								PriorityGroup& priorityGroup = *m_PriortyGroups.emplace_back(std::make_unique<PriorityGroup>(*anchorMod, begin));
-								IModTag* tag = tagManager->FindTagByID(anchorMod->GetPriorityGroupTag());
-								if (tag)
+								if (IModTag* tag = anchorMod->GetTagStore().GetPrimaryTag())
 								{
 									priorityGroup.SetTag(tag);
 								}
@@ -480,7 +479,10 @@ namespace Kortex::ModManager
 					{
 						for (IGameMod* mod: modsToMove)
 						{
-							mod->SetPriorityGroupTag(droppedOnMod->GetPriorityGroupTag());
+							if (const IModTag* tag = droppedOnMod->GetTagStore().GetPrimaryTag())
+							{
+								mod->GetTagStore().SetPrimaryTag(*tag);
+							}
 							mod->Save();
 						}
 					}

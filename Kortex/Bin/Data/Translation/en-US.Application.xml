@@ -438,6 +438,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="TagManager.Tag.Fixes">Bug fixes</String>
 		<String ID="TagManager.Tag.xSEPlugins">Plugins for $(ScriptExtenderID)</String>
 		<String ID="TagManager.Tag.Utilities">Utilities</String>
+		<String ID="TagManager.Tag.Configuration">Configuration</String>
 		<String ID="TagManager.Tag.Resources">Modders resources and tutorials</String>
 		<String ID="TagManager.Tag.SaveGames">Save Games</String>
 		<String ID="TagManager.Tag.Misc">Miscellaneous</String>

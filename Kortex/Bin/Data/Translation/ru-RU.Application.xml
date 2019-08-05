@@ -443,6 +443,7 @@
 		<String ID="TagManager.Tag.Fixes">Исправления и патчи</String>
 		<String ID="TagManager.Tag.xSEPlugins">Плагины для $(ScriptExtenderID)</String>
 		<String ID="TagManager.Tag.Utilities">Программы</String>
+		<String ID="TagManager.Tag.Configuration">Настройки</String>
 		<String ID="TagManager.Tag.Resources">Инструкции и ресурсы для модмейкеров</String>
 		<String ID="TagManager.Tag.SaveGames">Сохранения игры</String>
 		<String ID="TagManager.Tag.Misc">Разное</String>

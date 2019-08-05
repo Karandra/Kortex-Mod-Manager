@@ -339,7 +339,7 @@ namespace Kortex::ModManager
 				}
 			}
 		}
-		else if (DisplayModelTagNode* tagNode = nullptr; event.GetNode()->QueryInterface(modNode))
+		else if (DisplayModelTagNode* tagNode = nullptr; event.GetNode()->QueryInterface(tagNode))
 		{
 			tagNode->GetTag().SetExpanded(event.GetEventType() == KxDataView2::EvtITEM_EXPANDED);
 		}

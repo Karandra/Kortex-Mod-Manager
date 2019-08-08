@@ -645,6 +645,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.Install">Install</String>
 		<String ID="DownloadManager.Menu.Add">Add download</String>
 
+		<String ID="DownloadManager.Menu.AddFromURL">Add download from URL</String>
+		<String ID="DownloadManager.Menu.AddFromURL.Message">Enter a URL to start download</String>
+
 		<String ID="DownloadManager.Menu.Start">Start</String>
 		<String ID="DownloadManager.Menu.Resume">Resume</String>
 		<String ID="DownloadManager.Menu.Pause">Pause</String>

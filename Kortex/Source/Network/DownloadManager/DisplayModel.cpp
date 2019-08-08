@@ -14,6 +14,7 @@
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxTaskDialog.h>
+#include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxComparator.h>
 #include <wx/clipbrd.h>
 
@@ -79,19 +80,22 @@ namespace Kortex::DownloadManager
 		}
 		contextMenu.AddSeparator();
 
-		if constexpr (false)
 		{
-			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Add"));
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.AddFromURL"));
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+			{
+				KxTextBoxDialog dialog(GetView(), KxID_NONE, KTr("DownloadManager.Menu.AddFromURL.Message"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL);
+				if (dialog.ShowModal() == KxID_OK)
+				{
+					m_DownloadManager.QueueSimpleDownload(dialog.GetValue());
+				}
+			});
 		}
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Pause"));
 			item->Enable(isRunning);
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlPause));
-			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
-			{
-				download->Pause();
-			});
 		}
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Abort"));
@@ -126,7 +130,7 @@ namespace Kortex::DownloadManager
 			{
 				for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 				{
-					KxMenuItem* item = providerMenu->AddItem(repository->GetContainer().GetName(), wxEmptyString, wxITEM_RADIO);
+					KxMenuItem* item = providerMenu->AddItem(repository->GetContainer().GetName(), wxEmptyString, wxITEM_CHECK);
 					item->Check(repository == download->GetModRepository());
 					item->Enable(!item->IsChecked());
 					item->Bind(KxEVT_MENU_SELECT, [download, repository](KxMenuEvent& event)

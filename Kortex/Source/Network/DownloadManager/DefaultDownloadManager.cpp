@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultDownloadManager.h"
 #include "DownloadExecutor.h"
+#include "DownloadItemBuilder.h"
 #include "Workspace.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
@@ -124,6 +125,54 @@ namespace Kortex::DownloadManager
 			else
 			{
 				return item.Start();
+			}
+		}
+		return false;
+	}
+	bool DefaultDownloadManager::QueueSimpleDownload(const KxURI& uri, const wxString& localPath)
+	{
+		if (uri)
+		{
+			wxString name;
+			if (!localPath.IsEmpty())
+			{
+				// Get file name from destination path
+				name = localPath.AfterLast(wxS('/'));
+				if (name == localPath)
+				{
+					name.clear();
+				}
+			}
+			else if (uri.HasPath())
+			{
+				// Try to get file name from remote URI
+				name = uri.GetPath().AfterLast(wxS('/'));
+				if (!name.Contains(wxS('.')) || name == uri.GetPath())
+				{
+					// If no extension found in file name it probably means
+					// that the URI can not be used to set local file name.
+					name.clear();
+				}
+			}
+
+			if (!name.IsEmpty())
+			{
+				DownloadItemBuilder builder;
+				builder.SetURI(uri);
+				builder.SetName(name);
+
+				if (DownloadItem* item = builder.Commit())
+				{
+					if (HasConcurrentDownloadsLimit())
+					{
+						m_Queue.insert(m_Queue.begin(), item);
+						return TryStartDownload();
+					}
+					else
+					{
+						return item->Start();
+					}
+				}
 			}
 		}
 		return false;

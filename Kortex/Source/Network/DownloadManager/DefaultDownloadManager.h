@@ -34,5 +34,6 @@ namespace Kortex::DownloadManager
 							   const ModFileReply& fileInfo,
 							   const GameID& id = {}
 			) override;
+			bool QueueSimpleDownload(const KxURI& uri, const wxString& localPath = {}) override;
 	};
 }

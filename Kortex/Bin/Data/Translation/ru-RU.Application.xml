@@ -650,6 +650,9 @@
 		<String ID="DownloadManager.Menu.Install">Установить</String>
 		<String ID="DownloadManager.Menu.Add">Добавить загрузку</String>
 
+		<String ID="DownloadManager.Menu.AddFromURL">Добавить загрузку из URL</String>
+		<String ID="DownloadManager.Menu.AddFromURL.Message">Введите URL для загрузки</String>
+
 		<String ID="DownloadManager.Menu.Start">Запустить</String>
 		<String ID="DownloadManager.Menu.Resume">Продолжить</String>
 		<String ID="DownloadManager.Menu.Pause">Приостановить</String>

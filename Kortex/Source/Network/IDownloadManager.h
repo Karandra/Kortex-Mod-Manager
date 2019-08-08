@@ -113,6 +113,7 @@ namespace Kortex
 									   const ModFileReply& fileInfo,
 									   const GameID& id = {}
 			) = 0;
+			virtual bool QueueSimpleDownload(const KxURI& uri, const wxString& localPath = {}) = 0;
 			virtual bool QueueUnknownDownload(const wxString& link);
 	};
 }

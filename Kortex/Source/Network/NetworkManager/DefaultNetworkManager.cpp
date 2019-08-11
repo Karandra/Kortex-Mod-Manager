@@ -138,8 +138,8 @@ namespace Kortex::NetworkManager
 				KxMenuItem* rootItem = m_Menu->Add(subMenu, modNetwork->GetName());
 				rootItem->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 
-				const ModNetworkAuth* authenticable = modNetwork->TryGetComponent<ModNetworkAuth>();
-				const ModNetworkRepository* repository = modNetwork->TryGetComponent<ModNetworkRepository>();
+				ModNetworkAuth* authenticable = modNetwork->TryGetComponent<ModNetworkAuth>();
+				ModNetworkRepository* repository = modNetwork->TryGetComponent<ModNetworkRepository>();
 
 				// Add default source toggle
 				{
@@ -175,27 +175,38 @@ namespace Kortex::NetworkManager
 				// Add sign-in/sign-out items.
 				if (authenticable)
 				{
-					wxString label;
-					if (bool isAuth = authenticable->IsAuthenticated())
 					{
-						if (auto credentials = authenticable->LoadCredentials())
+						wxString label;
+						if (bool isAuth = authenticable->IsAuthenticated())
 						{
-							label = KxString::Format(wxS("%1: %2"), KTr("NetworkManager.SignOut"), credentials->UserID);
+							if (auto credentials = authenticable->LoadCredentials())
+							{
+								label = KxString::Format(wxS("%1: %2"), KTr("NetworkManager.SignOut"), credentials->UserID);
+							}
+							else
+							{
+								label = KTr("NetworkManager.SignOut");
+							}
 						}
 						else
 						{
-							label = KTr("NetworkManager.SignOut");
+							label = KTr("NetworkManager.SignIn");
 						}
-					}
-					else
-					{
-						label = KTr("NetworkManager.SignIn");
-					}
 
-					KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
-					item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSignInOut, this);
-					item->SetBitmap(authenticable->GetUserPicture());
-					item->SetClientData(modNetwork.get());
+						KxMenuItem* item = subMenu->Add(new KxMenuItem(label));
+						item->Bind(KxEVT_MENU_SELECT, &DefaultNetworkManager::OnSignInOut, this);
+						item->SetBitmap(authenticable->GetUserPicture());
+						item->SetClientData(modNetwork.get());
+					}
+					if (!authenticable->IsAuthenticated())
+					{
+						KxMenuItem* item = subMenu->Add(new KxMenuItem(KTr("NetworkManager.RetrySignIn")));
+						item->Enable(authenticable->LoadCredentials().has_value());
+						item->Bind(KxEVT_MENU_SELECT, [authenticable](KxMenuEvent& event)
+						{
+							authenticable->ValidateAuth();
+						});
+					}
 				}
 
 				// Add limits information display

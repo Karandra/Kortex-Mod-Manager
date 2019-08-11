@@ -571,6 +571,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.AuthReset">Authentication on %1 was reset</String>
 
 		<String ID="NetworkManager.SignIn">Sign in</String>
+		<String ID="NetworkManager.RetrySignIn">Retry sign in</String>
 		<String ID="NetworkManager.SignOut">Sign out</String>
 		<String ID="NetworkManager.SignedIn">Signed in</String>
 		<String ID="NetworkManager.NotSignedIn">Not signed in</String>

@@ -576,6 +576,7 @@
 		<String ID="NetworkManager.AuthReset">Аутентификация на %1 была сброшена</String>
 
 		<String ID="NetworkManager.SignIn">Выполнить вход</String>
+		<String ID="NetworkManager.RetrySignIn">Повторить попытку входа</String>
 		<String ID="NetworkManager.SignOut">Выйти из аккаунта</String>
 		<String ID="NetworkManager.SignedIn">Вход выполнен</String>
 		<String ID="NetworkManager.NotSignedIn">Вход не выполнен</String>

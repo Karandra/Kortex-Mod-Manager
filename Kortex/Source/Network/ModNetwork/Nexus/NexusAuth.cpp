@@ -167,11 +167,11 @@ namespace Kortex::NetworkManager
 
 		if (!code.IsSuccessful())
 		{
-			const bool stateChanged = m_LastValidationReply.has_value();
+			const bool hasValue = m_LastValidationReply.has_value();
 			m_LastValidationReply.reset();
 
 			// If we were authenticated notify network manager that auth state was lost
-			if (stateChanged)
+			if (hasValue)
 			{
 				OnAuthReset();
 			}
@@ -194,6 +194,8 @@ namespace Kortex::NetworkManager
 		catch (...)
 		{
 			m_LastValidationReply.reset();
+			OnAuthFail();
+
 			return std::nullopt;
 		}
 
@@ -205,6 +207,7 @@ namespace Kortex::NetworkManager
 		if (!hasValue)
 		{
 			m_Nexus.OnAuthenticated();
+			OnAuthSuccess();
 		}
 		return info;
 	}

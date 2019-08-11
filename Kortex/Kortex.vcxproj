@@ -242,6 +242,7 @@
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusAuth.cpp" />
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusRepository.cpp" />
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUpdateChecker.cpp" />
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.cpp" />
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUtility.cpp" />
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\Dialog.cpp" />
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModel.cpp" />
@@ -602,6 +603,7 @@
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusNetworkReply.h" />
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusRepository.h" />
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateChecker.h" />
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.h" />
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUtility.h" />
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\Dialog.h" />
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModel.h" />

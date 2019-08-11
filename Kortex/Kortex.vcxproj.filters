@@ -1266,6 +1266,9 @@
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\OptionStore.cpp">
       <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.cpp">
+      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2398,6 +2401,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameMods\ModManager\Common.h">
       <Filter>Code\Headers\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.h">
+      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

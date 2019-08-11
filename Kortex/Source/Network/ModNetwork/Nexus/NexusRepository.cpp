@@ -98,13 +98,14 @@ namespace Kortex::NetworkManager
 	}
 	bool NexusRepository::IsAutomaticUpdateCheckAllowed() const
 	{
+		wxCriticalSectionLocker lock(m_LimitsDataCS);
+
 		// Allow only if:
 		// - We are authenticated on Nexus.
 		// - Remaining daily limit is greater than 10% of total limit.
 
 		auto CheckDaily = [this](double percent)
 		{
-			wxCriticalSectionLocker lock(m_LimitsDataCS);
 			return m_LimitsData.DailyRemaining > m_LimitsData.DailyTotal * percent;
 		};
 		return m_Auth.IsAuthenticated() && CheckDaily(0.1);

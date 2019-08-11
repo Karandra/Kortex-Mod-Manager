@@ -28,7 +28,7 @@ namespace Kortex::NetworkManager
 		{
 			Kx::Async::DelayedCall([this]()
 			{
-				m_UpdateChecker.DoRunUpdateCheck();
+				m_UpdateChecker.RunUpdateCheck();
 			}, wxTimeSpan::Seconds(3));
 		}
 	}

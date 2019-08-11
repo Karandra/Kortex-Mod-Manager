@@ -10,15 +10,11 @@ namespace Kortex
 {
 	class ModNetworkUpdateChecker: public KxComponentOf<IModNetwork>
 	{
-		public:
-			using OnUpdateEvent = std::function<void(IGameMod& gameMod, NetworkModUpdateInfo& updateInfo)>;
-			using OnUpdateDoneEvent = std::function<void()>;
-
 		protected:
 			const ModSourceItem* GetModSourceItemFromMod(const IGameMod& gameMod) const;
 
 		public:
-			virtual bool RunUpdateCheck(OnUpdateEvent onUpdate = {}, OnUpdateDoneEvent onDone = {}) = 0;
+			virtual bool RunUpdateCheck() = 0;
 
 			virtual bool IsAutomaticCheckAllowed() const = 0;
 			virtual wxDateTime GetLastAutomaticCheckDate() const = 0;

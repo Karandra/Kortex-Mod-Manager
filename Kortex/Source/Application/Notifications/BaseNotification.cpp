@@ -13,11 +13,6 @@ namespace Kortex::Notifications
 		}
 	}
 
-	void BaseNotification::SetPopupWindow(Notifications::PopupWindow* window)
-	{
-		m_PopupWindow = window;
-	}
-
 	void BaseNotification::ShowPopupWindow()
 	{
 		m_PopupWindowCoroutine = KxCoroutine::Run([this](KxCoroutine& coroutine)

@@ -3,20 +3,24 @@
 
 namespace Kortex
 {
-	namespace Notifications
+	class INotificationPopup
 	{
-		class PopupWindow;
-	}
+		public:
+			virtual ~INotificationPopup() = default;
 
+		public:
+			virtual void Popup() = 0;
+			virtual void Dismiss() = 0;
+	};
+}
+
+namespace Kortex
+{
 	class INotification
 	{
 		public:
 			using Vector = std::vector<std::unique_ptr<INotification>>;
 			using RefVector = std::vector<INotification*>;
-
-		private:
-			virtual void SetPopupWindow(Notifications::PopupWindow* window) = 0;
-			virtual Notifications::PopupWindow* GetPopupWindow() const = 0;
 
 		public:
 			INotification() = default;

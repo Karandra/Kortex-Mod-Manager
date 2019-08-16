@@ -881,7 +881,11 @@
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 "C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
+      <Message>Outputs latest commit full hash into the file</Message>
     </PreBuildEvent>
+    <ResourceCompile>
+      <NullTerminateStrings>true</NullTerminateStrings>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -916,7 +920,11 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 "C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
+      <Message>Outputs latest commit full hash into the file</Message>
     </PreBuildEvent>
+    <ResourceCompile>
+      <NullTerminateStrings>true</NullTerminateStrings>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -964,7 +972,11 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 "C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
+      <Message>Outputs latest commit full hash into the file</Message>
     </PreBuildEvent>
+    <ResourceCompile>
+      <NullTerminateStrings>true</NullTerminateStrings>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -1006,7 +1018,11 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 "C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
+      <Message>Outputs latest commit full hash into the file</Message>
     </PreBuildEvent>
+    <ResourceCompile>
+      <NullTerminateStrings>true</NullTerminateStrings>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

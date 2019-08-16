@@ -15,7 +15,10 @@ namespace Kortex::Notifications
 			KxCoroutine* m_PopupWindowCoroutine = nullptr;
 
 		private:
-			void SetPopupWindow(PopupWindow* window) override;
+			void SetPopupWindow(PopupWindow* window)
+			{
+				m_PopupWindow = window;
+			}
 			PopupWindow* GetPopupWindow() const
 			{
 				return m_PopupWindow;
@@ -29,9 +32,5 @@ namespace Kortex::Notifications
 			void ShowPopupWindow() override;
 			bool HasPopupWindow() const override;
 			void DestroyPopupWindow() override;
-
-			virtual wxString GetCaption() const = 0;
-			virtual wxString GetMessage() const = 0;
-			virtual wxBitmap GetBitmap() const = 0;
 	};
 }

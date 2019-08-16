@@ -1,15 +1,11 @@
 #pragma once
 #include "stdafx.h"
+#include "Application/INotification.h"
 #include <wx/popupwin.h>
-
-namespace Kortex
-{
-	class INotification;
-}
 
 namespace Kortex::Notifications
 {
-	class PopupWindow: public wxPopupWindow
+	class PopupWindow: public wxPopupWindow, public INotificationPopup
 	{
 		private:
 			const INotification* m_Notification = nullptr;
@@ -23,7 +19,7 @@ namespace Kortex::Notifications
 			PopupWindow(const INotification& notification);
 
 		public:
-			void Popup();
-			void Dismiss();
+			void Popup() override;
+			void Dismiss() override;
 	};
 }

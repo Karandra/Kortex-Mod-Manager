@@ -114,6 +114,7 @@ namespace Kortex::ModManager
 
 			void OnMountPointError(const KxStringVector& locations);
 			void OnUpdateModLayoutNeeded(ModEvent& event);
+			void OnModLayoutSaveNeeded(ModEvent& event);
 			void OnProfileSelected(ProfileEvent& event);
 			
 		protected:

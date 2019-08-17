@@ -13,10 +13,10 @@ namespace
 	using namespace Kortex;
 	using namespace Kortex::ModManager;
 
-	int64_t GetClockTime()
+	wxTimeSpan GetClockTime()
 	{
 		using namespace std::chrono;
-		return duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
+		return wxTimeSpan::Milliseconds(duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count());
 	};
 
 	struct FinderHashComparator
@@ -165,7 +165,6 @@ namespace Kortex::ModManager
 	void DefaultModDispatcher::InvalidateVirtualTree()
 	{
 		UpdateVirtualTree();
-		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtVirtualTreeInvalidated);
 	}
 	void DefaultModDispatcher::UpdateVirtualTree()
 	{
@@ -173,7 +172,7 @@ namespace Kortex::ModManager
 		m_VirtualTree.ClearChildren();
 
 		constexpr const bool useRecursive = false;
-		const int64_t t1 = GetClockTime();
+		const wxTimeSpan startTime = GetClockTime();
 
 		if constexpr(useRecursive)
 		{
@@ -215,7 +214,9 @@ namespace Kortex::ModManager
 				directories = std::move(roundDirectories);
 			}
 		}
-		Utility::Log::LogInfo("DefaultModDispatcher::UpdateVirtualTree: %1", GetClockTime() - t1);
+		Utility::Log::LogInfo("DefaultModDispatcher::UpdateVirtualTree: %1", GetClockTime().Subtract(startTime).Format());
+
+		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtVirtualTreeInvalidated);
 	}
 
 	const FileTreeNode& DefaultModDispatcher::GetVirtualTree() const

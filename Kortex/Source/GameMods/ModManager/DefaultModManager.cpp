@@ -154,9 +154,10 @@ namespace Kortex::ModManager
 		{
 			mod->UpdateFileTree();
 		}
-		IModDispatcher::GetInstance()->InvalidateVirtualTree();
-
 		ResortMods();
+	}
+	void DefaultModManager::OnModLayoutSaveNeeded(ModEvent& event)
+	{
 		Save();
 	}
 	void DefaultModManager::OnProfileSelected(ProfileEvent& event)
@@ -180,10 +181,17 @@ namespace Kortex::ModManager
 	}
 	void DefaultModManager::OnInit()
 	{
-		m_BroadcastReciever.Bind(ModEvent::EvtToggled, &DefaultModManager::OnUpdateModLayoutNeeded, this);
+		// Events
+		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &DefaultModManager::OnModLayoutSaveNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &DefaultModManager::OnUpdateModLayoutNeeded, this);
+
+		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &DefaultModManager::OnModLayoutSaveNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &DefaultModManager::OnUpdateModLayoutNeeded, this);
+
+		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModManager::OnModLayoutSaveNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModManager::OnUpdateModLayoutNeeded, this);
+
+		m_BroadcastReciever.Bind(ModEvent::EvtToggled, &DefaultModManager::OnModLayoutSaveNeeded, this);
 		
 		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &DefaultModManager::OnProfileSelected, this);
 

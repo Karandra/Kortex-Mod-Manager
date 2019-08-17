@@ -71,10 +71,7 @@ namespace Kortex
 
 		// Sort and invalidate virtual tree
 		SortByPriority();
-		if (IModDispatcher::HasInstance())
-		{
-			IModDispatcher::GetInstance()->InvalidateVirtualTree();
-		}
+		IModDispatcher::GetInstance()->InvalidateVirtualTree();
 	}
 
 	bool IModManager::MoveModsBefore(const IGameMod::RefVector& movedMods, const IGameMod& anchor)

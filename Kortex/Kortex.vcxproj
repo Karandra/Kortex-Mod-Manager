@@ -64,7 +64,6 @@
     <ClCompile Include="Source\Application\Notifications\BaseNotification.cpp" />
     <ClCompile Include="Source\Application\Notifications\DefaultNotificationCenter.cpp" />
     <ClCompile Include="Source\Application\Notifications\DisplayModel.cpp" />
-    <ClCompile Include="Source\Application\Notifications\PopupWindow.cpp" />
     <ClCompile Include="Source\Application\Notifications\SimpleNotification.cpp" />
     <ClCompile Include="Source\Application\Notifications\TrayPopup.cpp" />
     <ClCompile Include="Source\Application\RefStackTranslator.cpp" />
@@ -390,7 +389,6 @@
     <ClInclude Include="Source\Application\Notifications\BaseNotification.h" />
     <ClInclude Include="Source\Application\Notifications\DefaultNotificationCenter.h" />
     <ClInclude Include="Source\Application\Notifications\DisplayModel.h" />
-    <ClInclude Include="Source\Application\Notifications\PopupWindow.h" />
     <ClInclude Include="Source\Application\Notifications\SimpleNotification.h" />
     <ClInclude Include="Source\Application\Notifications\TrayPopup.h" />
     <ClInclude Include="Source\Application\Options\CmdLineDatabase.h" />

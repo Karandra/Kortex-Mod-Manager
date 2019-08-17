@@ -1146,9 +1146,6 @@
     <ClCompile Include="Source\Application\Notifications\DisplayModel.cpp">
       <Filter>Code\Source\Application\Notifications</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Application\Notifications\PopupWindow.cpp">
-      <Filter>Code\Source\Application\Notifications</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application\Notifications\SimpleNotification.cpp">
       <Filter>Code\Source\Application\Notifications</Filter>
     </ClCompile>
@@ -2235,9 +2232,6 @@
       <Filter>Code\Headers\Application\Notifications</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Notifications\DisplayModel.h">
-      <Filter>Code\Headers\Application\Notifications</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notifications\PopupWindow.h">
       <Filter>Code\Headers\Application\Notifications</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\Notifications\SimpleNotification.h">

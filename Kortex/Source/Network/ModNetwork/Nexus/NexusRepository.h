@@ -45,7 +45,7 @@ namespace Kortex::NetworkManager
 			wxString ConvertEndorsementState(const ModEndorsement& state) const;
 			void OnResponseHeader(KxCURLEvent& event);
 
-			IAppOption GetNXMHandlerOptions() const;
+			AppOption GetNXMHandlerOptions() const;
 			void LoadNXMHandlerOptions();
 
 		public:

@@ -77,7 +77,7 @@ namespace Kortex::Notifications
 	}
 	void TrayPopupHandler::InitGUID()
 	{
-		IAppOption option = Application::GetGlobalOptionOf<IApplication>().QueryOrCreateElement("NotificationGUID");
+		AppOption option = Application::GetGlobalOptionOf<IApplication>().QueryOrCreateElement("NotificationGUID");
 		if (m_NotifyGUID.FromString(option.GetValue()) != KxUUIDStatus::OK)
 		{
 			m_NotifyGUID.Create();

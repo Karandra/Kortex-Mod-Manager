@@ -15,7 +15,7 @@ namespace Kortex
 	class IGameInstance;
 	class IGameProfile;
 	class IApplication;
-	class IAppOption;
+	class AppOption;
 	class IThemeManager;
 	class INotificationCenter;
 	class BroadcastProcessor;
@@ -55,7 +55,7 @@ namespace Kortex
 	{
 		friend class SystemApplicationTraits;
 		friend class IApplication;
-		friend class IAppOption;
+		friend class AppOption;
 
 		friend class IGameInstance;
 		friend class GameInstance::TemplateLoader;
@@ -105,9 +105,9 @@ namespace Kortex
 			int OnExit() override;
 			void OnError(LogEvent& event);
 
-			void OnGlobalConfigChanged(IAppOption& option);
-			void OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance);
-			void OnProfileConfigChanged(IAppOption& option, IGameProfile& profile);
+			void OnGlobalConfigChanged(AppOption& option);
+			void OnInstanceConfigChanged(AppOption& option, IGameInstance& instance);
+			void OnProfileConfigChanged(AppOption& option, IGameProfile& profile);
 
 			auto& GetGameInstanceTemplates()
 			{

@@ -6,7 +6,7 @@
 #include "Application/BroadcastProcessor.h"
 #include "Application/Events/LogEvent.h"
 
-#include "Application/IAppOption.h"
+#include "Application/AppOption.h"
 #include "Application/Options/Option.h"
 #include "Application/Options/OptionDatabase.h"
 

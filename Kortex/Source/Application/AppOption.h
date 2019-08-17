@@ -14,9 +14,9 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IAppOption: public KxXDocumentNode<IAppOption>
+	class AppOption: public KxXDocumentNode<AppOption>
 	{
-		friend class KxXDocumentNode<IAppOption>;
+		friend class KxXDocumentNode<AppOption>;
 
 		public:
 			using SerializationMode = Application::OptionSerializer::SerializationMode;
@@ -73,14 +73,14 @@ namespace Kortex
 			void AssignActiveProfile();
 
 		protected:
-			IAppOption(const IAppOption& other, const KxXMLNode& node);
-			IAppOption() = default;
+			AppOption(const AppOption& other, const KxXMLNode& node);
+			AppOption() = default;
 
 		public:
-			/* General */
+			// General
 			bool IsOK() const override;
-			IAppOption QueryElement(const wxString& XPath) const override;
-			IAppOption QueryOrCreateElement(const wxString& XPath) override;
+			AppOption QueryElement(const wxString& XPath) const override;
+			AppOption QueryOrCreateElement(const wxString& XPath) override;
 
 			Disposition GetDisposition() const
 			{
@@ -121,7 +121,7 @@ namespace Kortex
 			}
 			void LoadDataViewLayout(KxDataViewCtrl* dataView) const
 			{
-				m_UISerializer.DataViewLayout(const_cast<IAppOption&>(*this), SerializationMode::Load, dataView);
+				m_UISerializer.DataViewLayout(const_cast<AppOption&>(*this), SerializationMode::Load, dataView);
 			}
 
 			void SaveDataViewLayout(const KxDataView2::View* dataView)
@@ -130,7 +130,7 @@ namespace Kortex
 			}
 			void LoadDataViewLayout(KxDataView2::View* dataView) const
 			{
-				m_UISerializer.DataView2Layout(const_cast<IAppOption&>(*this), SerializationMode::Load, dataView);
+				m_UISerializer.DataView2Layout(const_cast<AppOption&>(*this), SerializationMode::Load, dataView);
 			}
 
 			void SaveSplitterLayout(const KxSplitterWindow* splitter)
@@ -139,7 +139,7 @@ namespace Kortex
 			}
 			void LoadSplitterLayout(KxSplitterWindow* splitter) const
 			{
-				m_UISerializer.SplitterLayout(const_cast<IAppOption&>(*this), SerializationMode::Load, splitter);
+				m_UISerializer.SplitterLayout(const_cast<AppOption&>(*this), SerializationMode::Load, splitter);
 			}
 	
 			void SaveWindowGeometry(const wxTopLevelWindow* window)
@@ -148,7 +148,7 @@ namespace Kortex
 			}
 			void LoadWindowGeometry(wxTopLevelWindow* window) const
 			{
-				m_UISerializer.WindowGeometry(const_cast<IAppOption&>(*this), SerializationMode::Load, window);
+				m_UISerializer.WindowGeometry(const_cast<AppOption&>(*this), SerializationMode::Load, window);
 			}
 	};
 }
@@ -164,7 +164,7 @@ namespace Kortex::Application
 			virtual const KxXMLDocument& GetConfig() const = 0;
 			virtual KxXMLDocument& GetConfig() = 0;
 
-			virtual void OnConfigChanged(IAppOption& option) = 0;
+			virtual void OnConfigChanged(AppOption& option) = 0;
 			virtual void SaveConfig() = 0;
 	};
 }

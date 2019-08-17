@@ -23,7 +23,7 @@ namespace Kortex::Application::OptionSerializer
 		KortexDefOption(SashPosition);
 	}
 
-	void UILayout::DataViewLayout(IAppOption& option, SerializationMode mode, KxDataViewCtrl* dataView)
+	void UILayout::DataViewLayout(AppOption& option, SerializationMode mode, KxDataViewCtrl* dataView)
 	{
 		const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
 		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(OName::Columns);
@@ -83,7 +83,7 @@ namespace Kortex::Application::OptionSerializer
 			dataView->Update();
 		}
 	}
-	void UILayout::DataView2Layout(IAppOption& option, SerializationMode mode, KxDataView2::View* dataView)
+	void UILayout::DataView2Layout(AppOption& option, SerializationMode mode, KxDataView2::View* dataView)
 	{
 		using namespace KxDataView2;
 
@@ -134,7 +134,7 @@ namespace Kortex::Application::OptionSerializer
 			dataView->Update();
 		}
 	}
-	void UILayout::SplitterLayout(IAppOption& option, SerializationMode mode, KxSplitterWindow* window)
+	void UILayout::SplitterLayout(AppOption& option, SerializationMode mode, KxSplitterWindow* window)
 	{
 		if (mode == SerializationMode::Save)
 		{
@@ -151,7 +151,7 @@ namespace Kortex::Application::OptionSerializer
 			window->SetInitialPosition(std::clamp(value, window->GetMinimumPaneSize(), maxValue));
 		}
 	}
-	void UILayout::WindowGeometry(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window)
+	void UILayout::WindowGeometry(AppOption& option, SerializationMode mode, wxTopLevelWindow* window)
 	{
 		KxXMLNode geometryNode = option.GetNode().QueryOrCreateElement(wxS("WindowGeometry"));
 

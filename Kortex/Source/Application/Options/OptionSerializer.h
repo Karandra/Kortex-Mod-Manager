@@ -11,7 +11,7 @@ namespace KxDataView2
 
 namespace Kortex
 {
-	class IAppOption;
+	class AppOption;
 }
 
 namespace Kortex::Application::OptionSerializer
@@ -28,9 +28,9 @@ namespace Kortex::Application::OptionSerializer
 	class UILayout
 	{
 		public:
-			static void DataViewLayout(IAppOption& option, SerializationMode mode, KxDataViewCtrl* dataView);
-			static void DataView2Layout(IAppOption& option, SerializationMode mode, KxDataView2::View* dataView);
-			static void SplitterLayout(IAppOption& option, SerializationMode mode, KxSplitterWindow* window);
-			static void WindowGeometry(IAppOption& option, SerializationMode mode, wxTopLevelWindow* window);
+			static void DataViewLayout(AppOption& option, SerializationMode mode, KxDataViewCtrl* dataView);
+			static void DataView2Layout(AppOption& option, SerializationMode mode, KxDataView2::View* dataView);
+			static void SplitterLayout(AppOption& option, SerializationMode mode, KxSplitterWindow* window);
+			static void WindowGeometry(AppOption& option, SerializationMode mode, wxTopLevelWindow* window);
 	};
 }

@@ -504,7 +504,7 @@ namespace Kortex::GameInstance
 		m_GameID = instanceTemplate.GetGameID();
 	}
 
-	void ConfigurableGameInstance::OnConfigChanged(IAppOption& option)
+	void ConfigurableGameInstance::OnConfigChanged(AppOption& option)
 	{
 		Utility::Log::LogInfo("ConfigurableGameInstance::OnConfigChanged -> %1", option.GetXPath());
 	}

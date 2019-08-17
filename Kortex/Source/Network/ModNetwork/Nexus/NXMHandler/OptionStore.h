@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Application/IAppOption.h"
+#include "Application/AppOption.h"
 #include <KxFramework/KxString.h>
 
 namespace Kortex::NetworkManager::NXMHandler
@@ -59,8 +59,8 @@ namespace Kortex::NetworkManager::NXMHandler
 			std::unordered_map<wxString, std::variant<Instance, Command>> m_Options;
 
 		public:
-			void Save(IAppOption& option) const;
-			void Load(const IAppOption& option);
+			void Save(AppOption& option) const;
+			void Load(const AppOption& option);
 
 			template<class T> const T* GetOption(const wxString& nexusID) const;
 			template<> const Instance* GetOption(const wxString& nexusID) const

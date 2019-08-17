@@ -9,7 +9,7 @@
 
 namespace Kortex::GameInstance
 {
-	void DefaultGameProfile::OnConfigChanged(IAppOption& option)
+	void DefaultGameProfile::OnConfigChanged(AppOption& option)
 	{
 		Utility::Log::LogInfo("DefaultGameProfile::OnConfigChanged -> %1", option.GetXPath());
 	}

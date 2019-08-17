@@ -72,7 +72,7 @@ namespace Kortex::NetworkManager::NXMHandler
 			ResetLabel();
 		}
 	}
-	IAppOption Dialog::GetOptions() const
+	AppOption Dialog::GetOptions() const
 	{
 		return Application::GetGlobalOptionOf<INetworkManager>(NexusModNetwork::GetInstance()->GetName(), wxS("NXMHandlerDialog"));
 	}
@@ -122,14 +122,14 @@ namespace Kortex::NetworkManager::NXMHandler
 			BroadcastProcessor::Get().QueueEvent(LogEvent::EvtError, KTr("NetworkManager.NXMHandler.GetAssociationsFailed"), this);
 		}
 
-		IAppOption uiOptions = GetOptions();
+		AppOption uiOptions = GetOptions();
 		uiOptions.LoadDataViewLayout(m_DisplayModel->GetView());
 		uiOptions.LoadWindowGeometry(this);
 		UpdateButtons();
 	}
 	Dialog::~Dialog()
 	{
-		IAppOption uiOptions = GetOptions();
+		AppOption uiOptions = GetOptions();
 		uiOptions.SaveDataViewLayout(m_DisplayModel->GetView());
 		uiOptions.SaveWindowGeometry(this);
 	}

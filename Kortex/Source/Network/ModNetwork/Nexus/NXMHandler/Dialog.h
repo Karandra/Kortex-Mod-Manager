@@ -30,7 +30,7 @@ namespace Kortex::NetworkManager::NXMHandler
 		private:
 			bool CreateUI(wxWindow* parent);
 			void UpdateButtons();
-			IAppOption GetOptions() const;
+			AppOption GetOptions() const;
 
 			void OnRegisterAssociations(wxCommandEvent& event);
 			void OnUnregisterAssociations(wxCommandEvent& event);

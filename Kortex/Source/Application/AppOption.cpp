@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "IAppOption.h"
+#include "AppOption.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "SystemApplication.h"
@@ -7,34 +7,34 @@
 
 namespace Kortex
 {
-	wxString IAppOption::DoGetValue(const wxString& defaultValue) const
+	wxString AppOption::DoGetValue(const wxString& defaultValue) const
 	{
 		return m_ConfigNode.GetValue(defaultValue);
 	}
-	bool IAppOption::DoSetValue(const wxString& value, AsCDATA asCDATA)
+	bool AppOption::DoSetValue(const wxString& value, AsCDATA asCDATA)
 	{
 		const bool res = m_ConfigNode.SetValue(value, asCDATA);
 		NotifyChange();
 		return res;
 	}
 
-	wxString IAppOption::DoGetAttribute(const wxString& name, const wxString& defaultValue) const
+	wxString AppOption::DoGetAttribute(const wxString& name, const wxString& defaultValue) const
 	{
 		return m_ConfigNode.GetAttribute(name, defaultValue);
 	}
-	bool IAppOption::DoSetAttribute(const wxString& name, const wxString& value)
+	bool AppOption::DoSetAttribute(const wxString& name, const wxString& value)
 	{
 		const bool res = m_ConfigNode.SetAttribute(name, value);
 		NotifyChange();
 		return res;
 	}
 	
-	bool IAppOption::AssignInstance(const IConfigurableGameInstance* instance)
+	bool AppOption::AssignInstance(const IConfigurableGameInstance* instance)
 	{
 		m_Instance = const_cast<IConfigurableGameInstance*>(instance);
 		return true;
 	}
-	bool IAppOption::AssignActiveInstance()
+	bool AppOption::AssignActiveInstance()
 	{
 		IGameInstance* instance = IGameInstance::GetActive();
 		if (instance && instance->QueryInterface(m_Instance))
@@ -43,50 +43,50 @@ namespace Kortex
 		}
 		else
 		{
-			Utility::Log::LogError("Failed to assign 'IConfigurableGameInstance' interface to 'IAppOption' object");
+			Utility::Log::LogError("Failed to assign 'IConfigurableGameInstance' interface to an 'AppOption' object");
 			return false;
 		}
 	}
 	
-	void IAppOption::AssignProfile(IGameProfile* profile)
+	void AppOption::AssignProfile(IGameProfile* profile)
 	{
 		m_Profile = profile;
 	}
-	void IAppOption::AssignActiveProfile()
+	void AppOption::AssignActiveProfile()
 	{
 		m_Profile = IGameProfile::GetActive();
 	}
 
-	IAppOption::IAppOption(const IAppOption& other, const KxXMLNode& node)
+	AppOption::AppOption(const AppOption& other, const KxXMLNode& node)
 	{
 		*this = other;
 		m_ConfigNode = node;
 	}
 
-	bool IAppOption::IsOK() const
+	bool AppOption::IsOK() const
 	{
 		return m_ConfigNode.IsOK() && m_Disposition != Disposition::None;
 	}
-	IAppOption IAppOption::QueryElement(const wxString& XPath) const
+	AppOption AppOption::QueryElement(const wxString& XPath) const
 	{
 		KxXMLNode node = m_ConfigNode.QueryElement(XPath);
 		if (node.IsOK())
 		{
-			return IAppOption(*this, node);
+			return AppOption(*this, node);
 		}
 		return {};
 	}
-	IAppOption IAppOption::QueryOrCreateElement(const wxString& XPath)
+	AppOption AppOption::QueryOrCreateElement(const wxString& XPath)
 	{
 		KxXMLNode node = m_ConfigNode.QueryOrCreateElement(XPath);
 		if (node.IsOK())
 		{
-			return IAppOption(*this, node);
+			return AppOption(*this, node);
 		}
 		return {};
 	}
 
-	void IAppOption::NotifyChange()
+	void AppOption::NotifyChange()
 	{
 		// Disable for now
 		return;

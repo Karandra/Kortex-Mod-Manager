@@ -20,7 +20,7 @@
 
 namespace
 {
-	void LogConfigChange(const Kortex::IAppOption& option)
+	void LogConfigChange(const Kortex::AppOption& option)
 	{
 		using namespace Kortex::Utility::Log;
 
@@ -273,14 +273,14 @@ namespace Kortex
 		m_Application->OnError(event);
 	}
 	
-	void SystemApplication::OnGlobalConfigChanged(IAppOption& option)
+	void SystemApplication::OnGlobalConfigChanged(AppOption& option)
 	{
 		Utility::Log::LogInfo("SystemApplication::OnGlobalConfigChanged");
 		LogConfigChange(option);
 
 		m_Application->OnGlobalConfigChanged(option);
 	}
-	void SystemApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
+	void SystemApplication::OnInstanceConfigChanged(AppOption& option, IGameInstance& instance)
 	{
 		Utility::Log::LogInfo("SystemApplication::OnInstanceConfigChanged");
 		Utility::Log::LogInfo("InstanceID: %1", instance.GetInstanceID());
@@ -290,7 +290,7 @@ namespace Kortex
 		instance.QueryInterface<IConfigurableGameInstance>()->OnConfigChanged(option);
 		m_Application->OnInstanceConfigChanged(option, instance);
 	}
-	void SystemApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
+	void SystemApplication::OnProfileConfigChanged(AppOption& option, IGameProfile& profile)
 	{
 		Utility::Log::LogInfo("SystemApplication::OnProfileConfigChanged");
 		Utility::Log::LogInfo("ProfileID: %1", profile.GetID());

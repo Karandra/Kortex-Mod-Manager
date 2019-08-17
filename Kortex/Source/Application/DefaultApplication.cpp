@@ -251,13 +251,13 @@ namespace Kortex::Application
 		return false;
 	}
 	
-	void DefaultApplication::OnGlobalConfigChanged(IAppOption& option)
+	void DefaultApplication::OnGlobalConfigChanged(AppOption& option)
 	{
 	}
-	void DefaultApplication::OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance)
+	void DefaultApplication::OnInstanceConfigChanged(AppOption& option, IGameInstance& instance)
 	{
 	}
-	void DefaultApplication::OnProfileConfigChanged(IAppOption& option, IGameProfile& profile)
+	void DefaultApplication::OnProfileConfigChanged(AppOption& option, IGameProfile& profile)
 	{
 	}
 

@@ -70,7 +70,7 @@ namespace Kortex::NetworkManager
 		}
 	}
 	
-	IAppOption NexusRepository::GetNXMHandlerOptions() const
+	AppOption NexusRepository::GetNXMHandlerOptions() const
 	{
 		return Application::GetGlobalOptionOf<INetworkManager>(m_Nexus.GetName(), wxS("NXMHandler"));
 	}

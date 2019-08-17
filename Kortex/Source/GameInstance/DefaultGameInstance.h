@@ -181,7 +181,7 @@ namespace Kortex::GameInstance
 				return m_Config;
 			}
 			
-			void OnConfigChanged(IAppOption& option) override;
+			void OnConfigChanged(AppOption& option) override;
 			void SaveConfig() override;
 			void OnExit() override;
 	};

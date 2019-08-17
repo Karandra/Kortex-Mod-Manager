@@ -843,9 +843,6 @@
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp">
       <Filter>Code\Source\Application\Options</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Application\IAppOption.cpp">
-      <Filter>Code\Source\Application</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application\Options\Option.cpp">
       <Filter>Code\Source\Application\Options</Filter>
     </ClCompile>
@@ -1268,6 +1265,9 @@
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\TrayPopup.cpp">
       <Filter>Code\Source\Application\Notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\AppOption.cpp">
+      <Filter>Code\Source\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1838,9 +1838,6 @@
     <ClInclude Include="Source\Application\Options\OptionSerializer.h">
       <Filter>Code\Headers\Application\Options</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\IAppOption.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\Options\Option.h">
       <Filter>Code\Headers\Application\Options</Filter>
     </ClInclude>
@@ -2404,6 +2401,9 @@
     </ClInclude>
     <ClInclude Include="Source\Application\Notifications\TrayPopup.h">
       <Filter>Code\Headers\Application\Notifications</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\AppOption.h">
+      <Filter>Code\Headers\Application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

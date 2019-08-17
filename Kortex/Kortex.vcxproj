@@ -70,7 +70,7 @@
     <ClCompile Include="Source\Application\RefTranslator.cpp" />
     <ClCompile Include="Source\Application\DefaultApplication.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
-    <ClCompile Include="Source\Application\IAppOption.cpp" />
+    <ClCompile Include="Source\Application\AppOption.cpp" />
     <ClCompile Include="Source\Application\IManager.cpp" />
     <ClCompile Include="Source\Application\IModule.cpp" />
     <ClCompile Include="Source\Application\INotification.cpp" />
@@ -396,7 +396,7 @@
     <ClInclude Include="Source\Application\RefTranslator.h" />
     <ClInclude Include="Source\Application\DefaultApplication.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
-    <ClInclude Include="Source\Application\IAppOption.h" />
+    <ClInclude Include="Source\Application\AppOption.h" />
     <ClInclude Include="Source\Application\IManager.h" />
     <ClInclude Include="Source\Application\IModule.h" />
     <ClInclude Include="Source\Application\INotification.h" />

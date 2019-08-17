@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Application/IAppOption.h"
+#include "Application/AppOption.h"
 class KWorkspace;
 class KMainWindow;
 
@@ -19,7 +19,7 @@ namespace Kortex::InstallWizard
 
 namespace Kortex::Application
 {
-	class BasicOption: public IAppOption
+	class BasicOption: public AppOption
 	{
 		protected:
 			void Create(Disposition disposition, KxXMLDocument& xml, const wxString& branch = wxEmptyString);
@@ -120,15 +120,15 @@ namespace Kortex::Application
 		public:
 			template<class... Args> GlobalOption GetGlobalOption(Args&&... arg) const
 			{
-				return GlobalOption(NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
+				return GlobalOption(NCSelf(), AppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
 			template<class... Args> ActiveInstanceOption GetAInstanceOption(Args&&... arg) const
 			{
-				return ActiveInstanceOption(NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
+				return ActiveInstanceOption(NCSelf(), AppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
 			template<class... Args> ActiveProfileOption GetAProfileOption(Args&&... arg) const
 			{
-				return ActiveProfileOption(NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
+				return ActiveProfileOption(NCSelf(), AppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
 	};
 
@@ -137,7 +137,7 @@ namespace Kortex::Application
 		public:
 			template<class... Args> InstanceOption GetInstanceOption(Args&&... arg) const
 			{
-				return InstanceOption(&NCSelf(), NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
+				return InstanceOption(&NCSelf(), NCSelf(), AppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
 	};
 
@@ -146,7 +146,7 @@ namespace Kortex::Application
 		public:
 			template<class... Args> ProfileOption GetProfileOption(Args&&... arg) const
 			{
-				return ProfileOption(&NCSelf(), NCSelf(), IAppOption::MakeXPath(std::forward<Args>(arg)...));
+				return ProfileOption(&NCSelf(), NCSelf(), AppOption::MakeXPath(std::forward<Args>(arg)...));
 			}
 	};
 }

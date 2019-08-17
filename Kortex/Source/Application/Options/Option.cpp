@@ -33,7 +33,7 @@ namespace
 				break;
 			}
 		};
-		return xml.QueryOrCreateElement(IAppOption::MakeXPath(root, std::forward<Args>(arg)...));
+		return xml.QueryOrCreateElement(AppOption::MakeXPath(root, std::forward<Args>(arg)...));
 	}
 	template<class... Args> KxXMLNode InitNodeUsingModule(Disposition disposition, KxXMLDocument& xml, const  IModule& module, Args&&... arg)
 	{

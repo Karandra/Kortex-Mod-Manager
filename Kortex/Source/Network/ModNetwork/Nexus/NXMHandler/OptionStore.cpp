@@ -3,7 +3,7 @@
 
 namespace Kortex::NetworkManager::NXMHandler
 {
-	void OptionStore::Save(IAppOption& option) const
+	void OptionStore::Save(AppOption& option) const
 	{
 		KxXMLNode rootNode = option.GetNode();
 		rootNode.ClearChildren();
@@ -25,7 +25,7 @@ namespace Kortex::NetworkManager::NXMHandler
 			}
 		}
 	}
-	void OptionStore::Load(const IAppOption& option)
+	void OptionStore::Load(const AppOption& option)
 	{
 		KxXMLNode rootNode = option.GetNode();
 		for (KxXMLNode itemNode = rootNode.GetFirstChildElement(); itemNode.IsOK(); itemNode = itemNode.GetNextSiblingElement())

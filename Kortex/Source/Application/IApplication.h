@@ -60,9 +60,9 @@ namespace Kortex
 			virtual bool OnException() = 0;
 			wxString RethrowCatchAndGetExceptionInfo() const;
 
-			virtual void OnGlobalConfigChanged(IAppOption& option) = 0;
-			virtual void OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance) = 0;
-			virtual void OnProfileConfigChanged(IAppOption& option, IGameProfile& profile) = 0;
+			virtual void OnGlobalConfigChanged(AppOption& option) = 0;
+			virtual void OnInstanceConfigChanged(AppOption& option, IGameInstance& instance) = 0;
+			virtual void OnProfileConfigChanged(AppOption& option, IGameProfile& profile) = 0;
 
 		public:
 			wxString GetRootFolder() const;

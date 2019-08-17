@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameID.h"
-#include "Application/IAppOption.h"
+#include "Application/AppOption.h"
 #include "Application/Options/Option.h"
 #include <KxFramework/KxINI.h>
 #include <KxFramework/KxFileStream.h>

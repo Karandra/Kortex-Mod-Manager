@@ -59,9 +59,9 @@ namespace Kortex::Application
 			void OnError(LogEvent& event) override;
 			bool OnException() override;
 
-			void OnGlobalConfigChanged(IAppOption& option) override;
-			void OnInstanceConfigChanged(IAppOption& option, IGameInstance& instance) override;
-			void OnProfileConfigChanged(IAppOption& option, IGameProfile& profile) override;
+			void OnGlobalConfigChanged(AppOption& option) override;
+			void OnInstanceConfigChanged(AppOption& option, IGameInstance& instance) override;
+			void OnProfileConfigChanged(AppOption& option, IGameProfile& profile) override;
 
 		public:
 			wxString GetDataFolder() const override

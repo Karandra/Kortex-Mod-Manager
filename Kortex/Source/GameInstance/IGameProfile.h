@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Application/IAppOption.h"
+#include "Application/AppOption.h"
 #include <KxFramework/KxSingleton.h>
 class KxXMLDocument;
 
@@ -9,7 +9,7 @@ namespace Kortex
 	class IGameMod;
 	class IGamePlugin;
 	class IGameInstance;
-	class IAppOption;
+	class AppOption;
 	class IVariableTable;
 
 	namespace GameInstance
@@ -108,7 +108,7 @@ namespace Kortex
 		public Application::WithProfileOptions<IGameProfile>
 	{
 		friend class IGameInstance;
-		friend class IAppOption;
+		friend class AppOption;
 
 		public:
 			using ProfileMod = GameInstance::ProfileMod;

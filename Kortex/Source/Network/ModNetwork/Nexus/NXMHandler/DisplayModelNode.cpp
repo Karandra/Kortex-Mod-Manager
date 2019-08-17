@@ -176,7 +176,7 @@ namespace Kortex::NetworkManager::NXMHandler
 		});
 
 		dialog.Center();
-		dialog.ShowModal() == KxID_OK;
+		dialog.ShowModal();
 	}
 
 	DisplayModelNode::DisplayModelNode(OptionStore& options, IGameInstance& instance)

@@ -96,6 +96,10 @@ namespace Kortex::DownloadManager
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Pause"));
 			item->Enable(isRunning);
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlPause));
+			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
+			{
+				download->Pause();
+			});
 		}
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.Abort"));

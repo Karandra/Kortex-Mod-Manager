@@ -118,7 +118,12 @@ namespace Kortex::Notifications
 		{
 			UpdateToolBarButton();
 			OnNotificationAdded(ref);
-			ref.Popup();
+
+			QUERY_USER_NOTIFICATION_STATE state = QUNS_ACCEPTS_NOTIFICATIONS;
+			if (SUCCEEDED(::SHQueryUserNotificationState(&state)) && state == QUNS_ACCEPTS_NOTIFICATIONS)
+			{
+				ref.Popup();
+			}
 		});
 	}
 

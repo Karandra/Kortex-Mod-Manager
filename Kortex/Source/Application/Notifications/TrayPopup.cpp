@@ -169,7 +169,7 @@ namespace Kortex::Notifications
 	}
 
 	void TrayPopup::Popup()
-	{
+	{	
 		if (m_Notification)
 		{
 			if (!::Shell_NotifyIconW(NIM_MODIFY, &m_Info))

@@ -98,7 +98,7 @@ namespace Kortex::Notifications
 		m_Info.cbSize = sizeof(m_Info);
 		m_Info.hWnd = m_Handler.GetHandle();
 		m_Info.uID = g_NotifyID;
-		m_Info.guidItem = m_GUID.GetID();
+		m_Info.guidItem = m_GUID;
 		m_Info.uCallbackMessage = g_NotifyMessage;
 		m_Info.uVersion = NOTIFYICON_VERSION_4;
 		m_Info.uFlags = NIF_STATE|NIF_INFO|NIF_TIP|NIF_MESSAGE|NIF_SHOWTIP|NIF_GUID;

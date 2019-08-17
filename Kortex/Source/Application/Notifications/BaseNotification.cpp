@@ -2,6 +2,7 @@
 #include "BaseNotification.h"
 #include "PopupWindow.h"
 #include "TrayPopup.h"
+#include <Kortex/Application.hpp>
 #include <Kx/Async/Coroutine.h>
 
 namespace
@@ -46,7 +47,13 @@ namespace Kortex::Notifications
 	{
 		if (g_NotificationGUID.IsNull())
 		{
-			g_NotificationGUID.Create();
+			IAppOption option = Application::GetGlobalOptionOf<IApplication>().QueryOrCreateElement("NotificationGUID");
+
+			if (g_NotificationGUID.FromString(option.GetValue()) != KxUUIDStatus::OK)
+			{
+				g_NotificationGUID.Create();
+			}
+			option.SetValue(g_NotificationGUID.ToString());
 		}
 
 		m_Popup = std::make_unique<TrayPopup>(*this, g_NotificationGUID);

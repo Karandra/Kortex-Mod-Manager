@@ -17,12 +17,17 @@ namespace Kortex
 	{
 		INetworkManager::GetInstance()->OnAuthStateChanged();
 
-		const IApplication* app = IApplication::GetInstance();
-		const IModNetwork& modNetwork = GetContainer();
-		INotificationCenter::Notify(app->GetName(), KTrf("NetworkManager.AuthSuccess", modNetwork.GetName()), KxICON_INFORMATION);
+		if (m_AuthSuccessCount != 0)
+		{
+			const IApplication* app = IApplication::GetInstance();
+			const IModNetwork& modNetwork = GetContainer();
+			INotificationCenter::Notify(app->GetName(), KTrf("NetworkManager.AuthSuccess", modNetwork.GetName()), KxICON_INFORMATION);
+		}
+		m_AuthSuccessCount++;
 	}
 	void ModNetworkAuth::OnAuthFail()
 	{
+		m_AuthFailCount++;
 		INetworkManager::GetInstance()->OnAuthStateChanged();
 
 		const IApplication* app = IApplication::GetInstance();
@@ -31,6 +36,7 @@ namespace Kortex
 	}
 	void ModNetworkAuth::OnAuthReset()
 	{
+		m_AuthResetCount++;
 		INetworkManager::GetInstance()->OnAuthStateChanged();
 
 		const IApplication* app = IApplication::GetInstance();

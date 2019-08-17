@@ -33,6 +33,10 @@ namespace Kortex
 		private:
 			wxBitmap m_UserPicture;
 
+			size_t m_AuthSuccessCount = 0;
+			size_t m_AuthFailCount = 0;
+			size_t m_AuthResetCount = 0;
+
 		public:
 			virtual wxWindow* GetInvokingWindow() const = 0;
 			virtual void OnAuthSuccess();

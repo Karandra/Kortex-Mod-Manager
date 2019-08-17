@@ -66,6 +66,7 @@
     <ClCompile Include="Source\Application\Notifications\DisplayModel.cpp" />
     <ClCompile Include="Source\Application\Notifications\PopupWindow.cpp" />
     <ClCompile Include="Source\Application\Notifications\SimpleNotification.cpp" />
+    <ClCompile Include="Source\Application\Notifications\TrayPopup.cpp" />
     <ClCompile Include="Source\Application\RefStackTranslator.cpp" />
     <ClCompile Include="Source\Application\RefTranslator.cpp" />
     <ClCompile Include="Source\Application\DefaultApplication.cpp" />
@@ -391,6 +392,7 @@
     <ClInclude Include="Source\Application\Notifications\DisplayModel.h" />
     <ClInclude Include="Source\Application\Notifications\PopupWindow.h" />
     <ClInclude Include="Source\Application\Notifications\SimpleNotification.h" />
+    <ClInclude Include="Source\Application\Notifications\TrayPopup.h" />
     <ClInclude Include="Source\Application\Options\CmdLineDatabase.h" />
     <ClInclude Include="Source\Application\RefStackTranslator.h" />
     <ClInclude Include="Source\Application\RefTranslator.h" />
@@ -881,7 +883,7 @@
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 "C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
-      <Message>Outputs latest commit full hash into the file</Message>
+      <Message>Writing latest commit hash</Message>
     </PreBuildEvent>
     <ResourceCompile>
       <NullTerminateStrings>true</NullTerminateStrings>
@@ -920,7 +922,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 "C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
-      <Message>Outputs latest commit full hash into the file</Message>
+      <Message>Writing latest commit hash</Message>
     </PreBuildEvent>
     <ResourceCompile>
       <NullTerminateStrings>true</NullTerminateStrings>
@@ -972,7 +974,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 "C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
-      <Message>Outputs latest commit full hash into the file</Message>
+      <Message>Writing latest commit hash</Message>
     </PreBuildEvent>
     <ResourceCompile>
       <NullTerminateStrings>true</NullTerminateStrings>
@@ -1018,7 +1020,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 "C:\Program Files\Git\bin\git.exe" rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
 echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
-      <Message>Outputs latest commit full hash into the file</Message>
+      <Message>Writing latest commit hash</Message>
     </PreBuildEvent>
     <ResourceCompile>
       <NullTerminateStrings>true</NullTerminateStrings>

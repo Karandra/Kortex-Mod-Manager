@@ -6,56 +6,66 @@
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxStaticBitmap.h>
 #include <KxFramework/KxHTMLWindow.h>
+#include <wx/popupwin.h>
 
 namespace Kortex::Notifications
 {
 	void PopupWindow::CreateUI()
 	{
-		IThemeManager::GetActive().ProcessWindow(this);
+		m_Window = new wxPopupWindow(&m_DesktopWindow, wxBORDER_THEME),
+		IThemeManager::GetActive().ProcessWindow(m_Window);
 
 		wxBoxSizer* sizerH = new wxBoxSizer(wxHORIZONTAL);
 		wxBitmap bitmap = m_Notification->GetBitmap();
 		if (bitmap.IsOk())
 		{
-			KxStaticBitmap* staticBitmap = new KxStaticBitmap(this, KxID_NONE, bitmap);
+			KxStaticBitmap* staticBitmap = new KxStaticBitmap(m_Window, KxID_NONE, bitmap);
 			sizerH->Add(staticBitmap, 0, wxEXPAND|wxALL, KLC_HORIZONTAL_SPACING * 3);
 		}
-		SetSizer(sizerH);
+		m_Window->SetSizer(sizerH);
 
 		wxBoxSizer* sizerRight = new wxBoxSizer(wxVERTICAL);
 		sizerH->Add(sizerRight, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING * 2);
 
-		KxLabel* caption = new KxLabel(this, KxID_NONE, m_Notification->GetCaption(), KxLABEL_CAPTION|KxLABEL_COLORED);
+		KxLabel* caption = new KxLabel(m_Window, KxID_NONE, m_Notification->GetCaption(), KxLABEL_CAPTION|KxLABEL_COLORED);
 		caption->SetFont(caption->GetFont().MakeLarger());
 		sizerRight->Add(caption, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING * 2);
 
-		KxHTMLWindow* message = new KxHTMLWindow(this, KxID_NONE, m_Notification->GetMessage(), KxHTMLWindow::DefaultStyle|wxBORDER_NONE);
+		KxHTMLWindow* message = new KxHTMLWindow(m_Window, KxID_NONE, m_Notification->GetMessage(), KxHTMLWindow::DefaultStyle|wxBORDER_NONE);
 		message->ShowScrollbars(wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT);
 		sizerRight->Add(message, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 	}
-
-	PopupWindow::PopupWindow(const INotification& notification)
-		:wxPopupWindow(IApplication::GetInstance()->GetTopWindow(), wxBORDER_THEME),
-		m_Notification(&notification)
+	void PopupWindow::DoDestroy()
 	{
-		if (GetParent())
+		if (wxWindow* window = m_Window)
 		{
-			CreateUI();
-
-			const int edgeMargin = std::max(KLC_VERTICAL_SPACING, KLC_HORIZONTAL_SPACING) * 3;
-			m_Size = FromDIP(wxSize(300, 125));
-			m_Margin = FromDIP(wxSize(edgeMargin, edgeMargin));
-			SetInitialSize(m_Size);
+			m_Window = nullptr;
+			window->Destroy();
 		}
-		else
+		if (INotification* notification = m_Notification)
 		{
 			m_Notification = nullptr;
 		}
 	}
 
+	PopupWindow::PopupWindow(INotification& notification)
+		:m_Notification(&notification), m_DesktopWindow(nullptr, KxID_NONE, ::GetShellWindow())
+	{
+		CreateUI();
+
+		const int edgeMargin = std::max(KLC_VERTICAL_SPACING, KLC_HORIZONTAL_SPACING) * 3;
+		m_Size = m_Window->FromDIP(wxSize(300, 125));
+		m_Margin = m_Window->FromDIP(wxSize(edgeMargin, edgeMargin));
+		m_Window->SetInitialSize(m_Size);
+	}
+	PopupWindow::~PopupWindow()
+	{
+		DoDestroy();
+	}
+
 	void PopupWindow::Popup()
 	{
-		if (m_Notification)
+		if (m_Window)
 		{
 			wxSize offset;
 			offset.x = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X) + 2 * KLC_VERTICAL_SPACING;
@@ -77,13 +87,24 @@ namespace Kortex::Notifications
 				offset.y += popupCount * (m_Size.GetHeight() + KLC_VERTICAL_SPACING * 2);
 			}
 
-			wxPopupWindow::Position(GetParent()->GetRect().GetRightBottom() - m_Margin - offset, m_Size);
-			wxPopupWindow::Show();
+			m_Window->Position(m_DesktopWindow.GetRect().GetRightBottom() - m_Margin - offset, m_Size);
+			m_Window->Show();
 		}
 	}
 	void PopupWindow::Dismiss()
 	{
-		Destroy();
-		m_Notification = nullptr;
+		if (m_Window)
+		{
+			m_Window->Hide();
+		}
+	}
+	void PopupWindow::Destroy()
+	{
+		DoDestroy();
+	}
+
+	wxWindow* PopupWindow::GetWindow() const
+	{
+		return m_Window;
 	}
 }

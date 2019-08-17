@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DefaultNotificationCenter.h"
+#include "DisplayModel.h"
 #include "Application/Resources/ImageResourceID.h"
 #include "Utility/Log.h"
 #include <Kortex/Application.hpp>
@@ -117,7 +118,7 @@ namespace Kortex::Notifications
 		{
 			UpdateToolBarButton();
 			OnNotificationAdded(ref);
-			ref.ShowPopupWindow();
+			ref.Popup();
 		});
 	}
 

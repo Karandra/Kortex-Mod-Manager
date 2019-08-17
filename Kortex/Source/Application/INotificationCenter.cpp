@@ -31,7 +31,7 @@ namespace Kortex
 	{
 		for (const auto& notification: GetNotifications())
 		{
-			if (notification->HasPopupWindow())
+			if (notification->HasPopup())
 			{
 				return true;
 			}
@@ -43,7 +43,7 @@ namespace Kortex
 		size_t count = 0;
 		for (const auto& notification: GetNotifications())
 		{
-			if (notification->HasPopupWindow())
+			if (notification->HasPopup())
 			{
 				count++;
 			}

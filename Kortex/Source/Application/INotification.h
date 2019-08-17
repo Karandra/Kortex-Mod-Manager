@@ -11,6 +11,7 @@ namespace Kortex
 		public:
 			virtual void Popup() = 0;
 			virtual void Dismiss() = 0;
+			virtual void Destroy() = 0;
 	};
 }
 
@@ -27,9 +28,9 @@ namespace Kortex
 			virtual ~INotification() = default;
 
 		public:
-			virtual void ShowPopupWindow() = 0;
-			virtual bool HasPopupWindow() const = 0;
-			virtual void DestroyPopupWindow() = 0;
+			virtual void Popup() = 0;
+			virtual bool HasPopup() const = 0;
+			virtual void DestroyPopup() = 0;
 
 			virtual wxString GetCaption() const = 0;
 			virtual wxString GetMessage() const = 0;

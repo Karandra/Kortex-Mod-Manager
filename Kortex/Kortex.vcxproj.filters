@@ -1269,6 +1269,9 @@
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.cpp">
       <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Application\Notifications\TrayPopup.cpp">
+      <Filter>Code\Source\Application\Notifications</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2404,6 +2407,9 @@
     </ClInclude>
     <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.h">
       <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Notifications\TrayPopup.h">
+      <Filter>Code\Headers\Application\Notifications</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

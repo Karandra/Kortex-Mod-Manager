@@ -1,42 +1,26 @@
 #include "stdafx.h"
 #include "BaseNotification.h"
-#include <Kortex/Notification.hpp>
+#include "PopupWindow.h"
+#include "TrayPopup.h"
 #include <Kx/Async/Coroutine.h>
+
+namespace
+{
+	KxUUID g_NotificationGUID;
+}
 
 namespace Kortex::Notifications
 {
-	BaseNotification::~BaseNotification()
+	void BaseNotification::UsePopupWindow()
 	{
-		if (HasPopupWindow())
+		m_Coroutine = KxCoroutine::Run([this](KxCoroutine& coroutine)
 		{
-			DestroyPopupWindow();
-		}
-	}
-
-	void BaseNotification::ShowPopupWindow()
-	{
-		m_PopupWindowCoroutine = KxCoroutine::Run([this](KxCoroutine& coroutine)
-		{
-			if (m_PopupWindow)
-			{
-				if (m_PopupWindow->IsMouseInWindow())
-				{
-					return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(1500));
-				}
-				else
-				{
-					DestroyPopupWindow();
-
-					m_PopupWindowCoroutine = nullptr;
-					return coroutine.YieldStop();
-				}
-			}
-			else
+			if (!m_Popup)
 			{
 				const HWND previousForegroundWindow = ::GetForegroundWindow();
 
-				m_PopupWindow = new Notifications::PopupWindow(*this);
-				m_PopupWindow->Popup();
+				m_Popup = std::make_unique<PopupWindow>(*this);
+				m_Popup->Popup();
 
 				if (previousForegroundWindow)
 				{
@@ -44,23 +28,66 @@ namespace Kortex::Notifications
 				}
 				return coroutine.YieldWait(wxTimeSpan::Milliseconds(3000));
 			}
+			else
+			{
+				if (static_cast<PopupWindow&>(*m_Popup).GetWindow()->IsMouseInWindow())
+				{
+					return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(1500));
+				}
+				else
+				{
+					DestroyPopup();
+					return coroutine.YieldStop();
+				}
+			}
 		});
 	}
-	bool BaseNotification::HasPopupWindow() const
+	void BaseNotification::UseTray()
 	{
-		return m_PopupWindow && !wxTheApp->IsScheduledForDestruction(m_PopupWindow) && !m_PopupWindow->IsBeingDeleted();
+		if (g_NotificationGUID.IsNull())
+		{
+			g_NotificationGUID.Create();
+		}
+
+		m_Popup = std::make_unique<TrayPopup>(*this, g_NotificationGUID);
+		m_Popup->Popup();
 	}
-	void BaseNotification::DestroyPopupWindow()
+
+	void BaseNotification::DoDestroy()
 	{
-		if (m_PopupWindowCoroutine)
+		if (KxCoroutine* coroutine = m_Coroutine)
 		{
-			m_PopupWindowCoroutine->Terminate();
-			m_PopupWindowCoroutine = nullptr;
+			m_Coroutine = nullptr;
+			coroutine->Terminate();
 		}
-		if (m_PopupWindow)
+		if (auto popup = std::move(m_Popup))
 		{
-			m_PopupWindow->Destroy();
-			m_PopupWindow = nullptr;
+			popup->Destroy();
 		}
+	}
+
+	void BaseNotification::Popup()
+	{
+		switch (m_Type)
+		{
+			case PopupType::PopupWindow:
+			{
+				UsePopupWindow();
+				break;
+			}
+			case PopupType::Tray:
+			{
+				UseTray();
+				break;
+			}
+		};
+	}
+	bool BaseNotification::HasPopup() const
+	{
+		return m_Popup != nullptr;
+	}
+	void BaseNotification::DestroyPopup()
+	{
+		DoDestroy();
 	}
 }

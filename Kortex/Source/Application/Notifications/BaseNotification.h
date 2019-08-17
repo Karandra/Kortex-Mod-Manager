@@ -8,29 +8,35 @@ namespace Kortex::Notifications
 	class BaseNotification: public INotification
 	{
 		friend class DefaultNotificationCenter;
-		friend class PopupWindow;
+
+		public:
+			enum class PopupType
+			{
+				PopupWindow,
+				Tray
+			};
 
 		private:
-			PopupWindow* m_PopupWindow = nullptr;
-			KxCoroutine* m_PopupWindowCoroutine = nullptr;
+			std::unique_ptr<INotificationPopup> m_Popup;
+			KxCoroutine* m_Coroutine = nullptr;
+			PopupType m_Type = PopupType::Tray;
 
 		private:
-			void SetPopupWindow(PopupWindow* window)
-			{
-				m_PopupWindow = window;
-			}
-			PopupWindow* GetPopupWindow() const
-			{
-				return m_PopupWindow;
-			}
+			void UsePopupWindow();
+			void UseTray();
+
+			void DoDestroy();
 
 		public:
 			BaseNotification() = default;
-			~BaseNotification();
+			~BaseNotification()
+			{
+				DoDestroy();
+			}
 
 		public:
-			void ShowPopupWindow() override;
-			bool HasPopupWindow() const override;
-			void DestroyPopupWindow() override;
+			void Popup() override;
+			bool HasPopup() const override;
+			void DestroyPopup() override;
 	};
 }

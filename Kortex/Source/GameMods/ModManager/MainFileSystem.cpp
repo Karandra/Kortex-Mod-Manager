@@ -56,9 +56,9 @@ namespace Kortex::ModManager
 		m_Convergence.reset();
 
 		KxStringVector folders;
-		for (const IGameMod* entry: m_Manager.GetMods(GetModsFlags::Everything))
+		for (const IGameMod* mod: m_Manager.GetMods(GetModsFlags::Everything|GetModsFlags::ActiveOnly))
 		{
-			folders.push_back(entry->GetModFilesDir());
+			folders.push_back(mod->GetModFilesDir());
 		}
 
 		const IGameInstance* instance = IGameInstance::GetActive();

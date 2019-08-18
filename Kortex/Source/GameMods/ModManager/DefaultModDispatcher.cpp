@@ -178,7 +178,7 @@ namespace Kortex::ModManager
 	}
 	void DefaultModDispatcher::UpdateVirtualTree()
 	{
-		const IGameMod::RefVector mods = IModManager::GetInstance()->GetMods(GetModsFlags::Everything);
+		const IGameMod::RefVector mods = IModManager::GetInstance()->GetMods(GetModsFlags::Everything|GetModsFlags::ActiveOnly);
 		m_VirtualTree.ClearChildren();
 
 		constexpr const bool useRecursive = false;
@@ -329,7 +329,7 @@ namespace Kortex::ModManager
 			return true;
 		};
 
-		IterateModsBackward(CheckMod, GetModsFlags::Everything);
+		IterateModsBackward(CheckMod, GetModsFlags::Everything|GetModsFlags::ActiveOnly);
 		std::reverse(collisions.begin(), collisions.end());
 		return collisions;
 	}

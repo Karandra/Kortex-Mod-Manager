@@ -251,12 +251,12 @@ namespace Kortex::ModManager
 			}
 		}
 
-		// Build mod file trees
-		IGameMod::RefVector allEntries = GetMods(GetModsFlags::WriteTarget);
+		// Build mod file trees for all mods
+		IGameMod::RefVector allMods = GetMods(GetModsFlags::Everything);
 
 		// Using 'std::execution::seq/unseq' generates too much strain on IO.
 		// And doesn't really improves loading speed. Using 'seq' for now.
-		std::for_each(std::execution::seq, allEntries.begin(), allEntries.end(), [](IGameMod* entry)
+		std::for_each(std::execution::seq, allMods.begin(), allMods.end(), [](IGameMod* entry)
 		{
 			entry->UpdateFileTree();
 		});

@@ -4,15 +4,15 @@
 
 namespace Kortex::ModManager
 {
-	enum class GetModsFlags
+	enum class GetModsFlags: uint32_t
 	{
 		None = 0,
 		ActiveOnly = 1 << 0,
-		WriteTarget = 1 << 1,
-		BaseGame = 1 << 2,
-		MandatoryMods = 1 << 3,
+		BaseGame = 1 << 1,
+		MandatoryMods = 1 << 2,
+		WriteTarget = 1 << 3,
 
-		Everything = ActiveOnly|WriteTarget|BaseGame|MandatoryMods
+		Everything = BaseGame|MandatoryMods|WriteTarget
 	};
 }
 

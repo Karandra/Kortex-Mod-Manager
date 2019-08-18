@@ -162,9 +162,19 @@ namespace Kortex::ModManager
 	{
 		InvalidateVirtualTree();
 	}
+	void DefaultModDispatcher::OnAccessVirtualTree() const
+	{
+		if (m_IsInvalidated)
+		{
+			const_cast<DefaultModDispatcher*>(this)->UpdateVirtualTree();
+			m_IsInvalidated = false;
+		}
+	}
+	
 	void DefaultModDispatcher::InvalidateVirtualTree()
 	{
-		UpdateVirtualTree();
+		m_IsInvalidated = true;
+		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtVirtualTreeInvalidated);
 	}
 	void DefaultModDispatcher::UpdateVirtualTree()
 	{
@@ -214,18 +224,20 @@ namespace Kortex::ModManager
 				directories = std::move(roundDirectories);
 			}
 		}
-		Utility::Log::LogInfo("DefaultModDispatcher::UpdateVirtualTree: %1", GetClockTime().Subtract(startTime).Format());
-
-		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtVirtualTreeInvalidated);
+		Utility::Log::LogInfo("DefaultModDispatcher::UpdateVirtualTree: %1 ms", (GetClockTime() - startTime).GetMilliseconds().GetValue());
 	}
 
 	const FileTreeNode& DefaultModDispatcher::GetVirtualTree() const
 	{
+		OnAccessVirtualTree();
+
 		return m_VirtualTree;
 	}
 
 	const FileTreeNode* DefaultModDispatcher::ResolveLocation(const wxString& relativePath) const
 	{
+		OnAccessVirtualTree();
+
 		return FileTreeNode::NavigateToAny(m_VirtualTree, relativePath);
 	}
 	wxString DefaultModDispatcher::ResolveLocationPath(const wxString& relativePath, const IGameMod** owningMod) const
@@ -249,6 +261,8 @@ namespace Kortex::ModManager
 	}
 	const FileTreeNode* DefaultModDispatcher::BackTrackFullPath(const wxString& fullPath) const
 	{
+		OnAccessVirtualTree();
+
 		return m_VirtualTree.WalkTree([&fullPath](const FileTreeNode& node)
 		{
 			return KxComparator::IsEqual(node.GetFullPath(), fullPath, true);
@@ -257,6 +271,8 @@ namespace Kortex::ModManager
 
 	FileTreeNode::CRefVector DefaultModDispatcher::Find(const wxString& relativePath, const FilterFunctor& filter, bool recurse) const
 	{
+		OnAccessVirtualTree();
+
 		FileTreeNode::CRefVector nodes;
 		const FileTreeNode* folderNode = FileTreeNode::NavigateToFolder(m_VirtualTree, relativePath);
 		if (folderNode)
@@ -267,6 +283,8 @@ namespace Kortex::ModManager
 	}
 	FileTreeNode::CRefVector DefaultModDispatcher::Find(const FileTreeNode& rootNode, const FilterFunctor& filter, bool recurse) const
 	{
+		OnAccessVirtualTree();
+
 		FileTreeNode::CRefVector nodes;
 		FindFilesInTree(nodes, rootNode, filter, recurse);
 
@@ -274,6 +292,8 @@ namespace Kortex::ModManager
 	}
 	FileTreeNode::CRefVector DefaultModDispatcher::Find(const IGameMod& mod, const FilterFunctor& filter, bool recurse) const
 	{
+		OnAccessVirtualTree();
+
 		FileTreeNode::CRefVector nodes;
 		FindFilesInTree(nodes, mod.GetFileTree(), filter, recurse);
 
@@ -282,6 +302,8 @@ namespace Kortex::ModManager
 
 	KDispatcherCollision::Vector DefaultModDispatcher::FindCollisions(const IGameMod& scannedMod, const wxString& relativePath) const
 	{
+		OnAccessVirtualTree();
+
 		KDispatcherCollision::Vector collisions;
 		KMMDispatcherCollisionType type = KMM_DCT_OVERWRITTEN;
 		auto CheckMod = [&scannedMod, &collisions, &type, &relativePath](const IGameMod& currentMod)

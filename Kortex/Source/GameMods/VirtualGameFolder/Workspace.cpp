@@ -25,8 +25,6 @@ namespace Kortex::VirtualGameFolder
 	Workspace::Workspace(KMainWindow* mainWindow)
 		:KWorkspace(mainWindow)
 	{
-		m_BroadcastReciever.Bind(ModEvent::EvtVirtualTreeInvalidated, &Workspace::OnViewInvalidated, this);
-
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	}
 	Workspace::~Workspace()
@@ -47,6 +45,7 @@ namespace Kortex::VirtualGameFolder
 		m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &Workspace::OnModSerach, this);
 		m_MainSizer->Add(m_SearchBox, 0, wxTOP|wxEXPAND, KLC_VERTICAL_SPACING);
 
+		m_BroadcastReciever.Bind(ModEvent::EvtVirtualTreeInvalidated, &Workspace::OnViewInvalidated, this);
 		GetDisplayModelOption().LoadDataViewLayout(m_Model->GetView());
 		return true;
 	}
@@ -73,10 +72,7 @@ namespace Kortex::VirtualGameFolder
 	}
 	void Workspace::OnViewInvalidated(BroadcastEvent& event)
 	{
-		if (IsWorkspaceCreated())
-		{
-			ScheduleReload();
-		}
+		ScheduleReload();
 	}
 
 	wxString Workspace::GetID() const

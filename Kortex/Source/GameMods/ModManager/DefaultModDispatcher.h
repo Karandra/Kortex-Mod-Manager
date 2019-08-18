@@ -51,8 +51,11 @@ namespace Kortex::ModManager
 			BroadcastReciever m_BroadcastReciever;
 			FileTreeNode m_VirtualTree;
 
+			mutable bool m_IsInvalidated = true;
+
 		private:
 			void OnVirtualTreeInvalidated(BroadcastEvent& event);
+			void OnAccessVirtualTree() const;
 
 		public:
 			void InvalidateVirtualTree() override;

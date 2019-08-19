@@ -18,12 +18,14 @@ namespace Kortex
 			KxEVENT_MEMBER(SaveEvent, Removing);
 			KxEVENT_MEMBER(SaveEvent, Removed);
 			KxEVENT_MEMBER(SaveEvent, Changed);
+			KxEVENT_MEMBER(SaveEvent, FiltersChanged);
 
 		private:
 			RefVector m_SavesArray;
 			IGameSave* m_Save = nullptr;
 
 		public:
+			SaveEvent() = default;
 			SaveEvent(IGameSave& save)
 				:m_Save(&save)
 			{

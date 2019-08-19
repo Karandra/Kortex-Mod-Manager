@@ -727,8 +727,8 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="PluginManager.PluginType.Master">Master</String>
 		<String ID="PluginManager.PluginType.Light">Light</String>
 
-		<String ID="PluginManager.EnableAll">Enable all plugins</String>
-		<String ID="PluginManager.DisableAll">Disable all plugins</String>
+		<String ID="PluginManager.ActivateAll">Activate all plugins</String>
+		<String ID="PluginManager.DeactivateAll">Deactivate all plugins</String>
 		<String ID="PluginManager.Sorting">Sorting</String>
 		<String ID="PluginManager.PluginDependencies">Plugin dependencies</String>
 		<String ID="PluginManager.DependentPlugins">Dependent plugins</String>

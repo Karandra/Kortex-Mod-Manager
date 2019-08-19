@@ -335,7 +335,6 @@ namespace Kortex::PluginManager
 	void Workspace::OnCreateImportExportMenu(KxMenu& menu, const IGamePlugin* plugin)
 	{
 		menu.AddSeparator();
-
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(KTr("PluginManager.Tools.ImportList")));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)

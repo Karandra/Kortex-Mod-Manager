@@ -7,8 +7,10 @@
 #include "UI/KMainWindow.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
-#include <KxFramework/KxComparator.h>
+#include "Utility/MenuSeparator.h"
 #include <KxFramework/KxMenu.h>
+#include <KxFramework/KxShell.h>
+#include <KxFramework/KxComparator.h>
 
 using namespace Kortex;
 using namespace Kortex::UI;
@@ -127,9 +129,11 @@ namespace Kortex::PluginManager
 	}
 	void PluginViewModel::OnContextMenu(KxDataViewEvent& event)
 	{
+		using namespace Utility;
+
 		KxDataViewItem item = event.GetItem();
 		KxDataViewColumn* column = event.GetColumn();
-		const IGamePlugin* entry = GetDataEntry(GetRow(item));
+		const IGamePlugin* plugin = GetDataEntry(GetRow(item));
 
 		KxMenu menu;
 		IPluginManager* manager = IPluginManager::GetInstance();
@@ -137,14 +141,14 @@ namespace Kortex::PluginManager
 
 		// Base items
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(KTr("PluginManager.ActivateAll")));
+			KxMenuItem* item = menu.AddItem(KTr("PluginManager.ActivateAll"));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				SetAllEnabled(true);
 			});
 		}
 		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(KTr("PluginManager.DeactivateAll")));
+			KxMenuItem* item = menu.AddItem(KTr("PluginManager.DeactivateAll"));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				SetAllEnabled(false);
@@ -152,71 +156,90 @@ namespace Kortex::PluginManager
 		}
 
 		const IBethesdaGamePlugin* bethesdaPlugin = nullptr;
-		if (entry && entry->QueryInterface(bethesdaPlugin))
+		if (MenuSeparatorBefore sep(menu); plugin && plugin->QueryInterface(bethesdaPlugin))
 		{
-			if (menu.GetMenuItemCount() != 0)
-			{
-				menu.AddSeparator();
-			}
-
 			// Description
-			KxMenuItem* descriptionItem = menu.Add(new KxMenuItem(KTr("Generic.Description")));
-			descriptionItem->Enable(!bethesdaPlugin->GetDescription().IsEmpty());
-			descriptionItem->Bind(KxEVT_MENU_SELECT, [this, bethesdaPlugin](KxMenuEvent& event)
 			{
-				TextEditDialog dialog(GetView());
-				dialog.SetText(bethesdaPlugin->GetDescription());
-				dialog.SetEditable(false);
-				dialog.ShowPreview(true);
-				dialog.ShowModal();
-			});
+				wxString description = bethesdaPlugin->GetDescription();
 
-			menu.AddSeparator();
-
-			// Dependencies
-			const KxStringVector& dependenciesList = bethesdaPlugin->GetRequiredPlugins();
-			KxMenu* dependenciesMenu = new KxMenu();
-			KxMenuItem* dependenciesMenuItem = menu.Add(dependenciesMenu, wxString::Format("%s (%zu)", KTr("PluginManager.PluginDependencies"), dependenciesList.size()));
-			dependenciesMenuItem->Enable(!dependenciesList.empty());
-
-			for (const wxString& name: dependenciesList)
-			{
-				KxMenuItem* item = dependenciesMenu->Add(new KxMenuItem(name));
-				item->SetBitmap(ImageProvider::GetBitmap(workspace->GetStatusImageForPlugin(manager->FindPluginByName(name))));
-			}
-
-			// Dependent plugins
-			IGamePlugin::RefVector dependentList = entry->GetDependentPlugins();
-			KxMenu* dependentMenu = new KxMenu();
-			KxMenuItem* dependentMenuItem = menu.Add(dependentMenu, KxString::Format("%1 (%2)", KTr("PluginManager.DependentPlugins"), dependentList.size()));
-			dependentMenuItem->Enable(!dependentList.empty());
-
-			for (const IGamePlugin* depEntry: dependentList)
-			{
-				KxMenuItem* item = dependentMenu->Add(new KxMenuItem(depEntry->GetName()));
-				item->SetBitmap(ImageProvider::GetBitmap(workspace->GetStatusImageForPlugin(depEntry)));
+				KxMenuItem* item = menu.AddItem(KTr("Generic.Description"));
+				item->Enable(!description.IsEmpty());
+				item->Bind(KxEVT_MENU_SELECT, [this, description](KxMenuEvent& event)
+				{
+					TextEditDialog dialog(GetView());
+					dialog.SetText(description);
+					dialog.SetEditable(false);
+					dialog.ShowPreview(true);
+					dialog.ShowModal();
+				});
 			}
 
 			// Plugin select event
-			auto OnSelectPlugin = [this](KxMenuEvent& event)
+			auto SelectPlugin = [this](KxMenuEvent& event)
 			{
 				const IGamePlugin* entry = IPluginManager::GetInstance()->FindPluginByName(event.GetItem()->GetItemLabelText());
 				SelectItem(GetItemByEntry(entry), true);
 				GetView()->SetFocus();
 			};
-			dependenciesMenu->Bind(KxEVT_MENU_SELECT, OnSelectPlugin);
-			dependentMenu->Bind(KxEVT_MENU_SELECT, OnSelectPlugin);
+
+			// Dependencies
+			{
+				KxStringVector dependenciesList = bethesdaPlugin->GetRequiredPlugins();
+				KxMenu* dependenciesMenu = new KxMenu();
+				KxMenuItem* dependenciesMenuItem = menu.Add(dependenciesMenu,
+															wxString::Format(wxS("%s (%zu)"),
+															KTr("PluginManager.PluginDependencies"),
+															dependenciesList.size())
+				);
+				dependenciesMenuItem->Enable(!dependenciesList.empty());
+
+				for (const wxString& name: dependenciesList)
+				{
+					KxMenuItem* item = dependenciesMenu->AddItem(name);
+					item->SetBitmap(ImageProvider::GetBitmap(workspace->GetStatusImageForPlugin(manager->FindPluginByName(name))));
+				}
+				dependenciesMenu->Bind(KxEVT_MENU_SELECT, SelectPlugin);
+			}
+
+			// Dependent plugins
+			{
+				IGamePlugin::RefVector dependentList = plugin->GetDependentPlugins();
+				KxMenu* dependentMenu = new KxMenu();
+				KxMenuItem* dependentMenuItem = menu.Add(dependentMenu,
+														 KxString::Format(wxS("%1 (%2)"),
+														 KTr("PluginManager.DependentPlugins"),
+														 dependentList.size())
+				);
+				dependentMenuItem->Enable(!dependentList.empty());
+
+				for (const IGamePlugin* depEntry: dependentList)
+				{
+					KxMenuItem* item = dependentMenu->AddItem(depEntry->GetName());
+					item->SetBitmap(ImageProvider::GetBitmap(workspace->GetStatusImageForPlugin(depEntry)));
+				}
+				dependentMenu->Bind(KxEVT_MENU_SELECT, SelectPlugin);
+			}
 		}
 
 		// Workspace specific menus
-		if (menu.GetMenuItemCount() != 0)
+		if (MenuSeparatorBefore sep(menu); true)
 		{
-			menu.AddSeparator();
+			workspace->OnCreateViewContextMenu(menu, plugin);
+			workspace->OnCreateSortingToolsMenu(menu, plugin);
+			workspace->OnCreateImportExportMenu(menu, plugin);
 		}
 
-		workspace->OnCreateViewContextMenu(menu, entry);
-		workspace->OnCreateSortingToolsMenu(menu, entry);
-		workspace->OnCreateImportExportMenu(menu, entry);
+		// Misc options
+		if (MenuSeparatorBefore sep(menu); true)
+		{
+			KxMenuItem* item = menu.AddItem(KTr("Generic.FileLocation"));
+			item->Enable(plugin);
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
+			item->Bind(KxEVT_MENU_SELECT, [plugin](KxMenuEvent& event)
+			{
+				KxShell::OpenFolderAndSelectItem(plugin->GetFullPath());
+			});
+		}
 
 		// Show
 		menu.Show(GetView());

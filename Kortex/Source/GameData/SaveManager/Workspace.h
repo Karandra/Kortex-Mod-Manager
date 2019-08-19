@@ -34,12 +34,12 @@ namespace Kortex::SaveManager
 
 		public:
 			Workspace(KMainWindow* mainWindow);
-			virtual ~Workspace();
-			virtual bool OnCreateWorkspace() override;
+			~Workspace();
+			bool OnCreateWorkspace() override;
 
 		private:
 			void CreateViewPane();
-			void CreateContextMenu(KxMenu& menu, const IGameSave* saveEntry);
+			void UpdateFilters();
 
 			bool FiltersMenu_IsAllFiltersActive() const;
 			bool FiltersMenu_IsFilterActive(const wxString& filter) const
@@ -49,45 +49,42 @@ namespace Kortex::SaveManager
 			void FiltersMenu_AllFiles(KxMenuEvent& event);
 			void FiltersMenu_SpecificFilter(KxMenuEvent& event);
 
-			void OnSyncPluginsList(const IBethesdaGameSave* saveEntry);
-			void OnSavePluginsList(const IBethesdaGameSave* saveEntry);
-			void OnRemoveSave(IGameSave* saveEntry);
+			void OnSyncPluginsList(const IBethesdaGameSave& save);
+			void OnSavePluginsList(const IBethesdaGameSave& save);
+			bool OnRemoveSave(IGameSave& save);
 
-			virtual bool IsSubWorkspace() const override
+			bool IsSubWorkspace() const override
 			{
 				return true;
 			}
-			virtual size_t GetTabIndex() const
+			size_t GetTabIndex() const
 			{
 				return (size_t)TabIndex::Saves;
 			}
 		
-			virtual bool OnOpenWorkspace() override;
-			virtual bool OnCloseWorkspace() override;
-			virtual void OnReloadWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
 
 		public:
-			virtual wxString GetID() const override;
-			virtual wxString GetName() const override;
-			virtual wxString GetNameShort() const;
-			virtual ResourceID GetImageID() const override
+			wxString GetID() const override;
+			wxString GetName() const override;
+			wxString GetNameShort() const;
+			ResourceID GetImageID() const override
 			{
 				return ImageResourceID::Jar;
 			}
-			virtual wxSizer* GetWorkspaceSizer() const override
+			wxSizer* GetWorkspaceSizer() const override
 			{
 				return m_MainSizer;
 			}
-			virtual bool CanReload() const override
+			bool CanReload() const override
 			{
-				return false;
+				return true;
 			}
 
-		private:
-			void LoadData();
-
 		public:
-			void ProcessSelection(const IGameSave* saveEntry);
-			void ProcessContextMenu(const IGameSave* saveEntry);
+			void OnSelection(const IGameSave* save);
+			void OnContextMenu(const IGameSave* save);
 	};
 }

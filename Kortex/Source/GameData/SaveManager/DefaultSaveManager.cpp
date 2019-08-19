@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include <Kortex/SaveManager.hpp>
-#include <Kortex/GameInstance.hpp>
 #include "DefaultSaveManager.h"
+#include "Workspace.h"
 #include "BaseGameSave.h"
 #include "EmptySaveFile.h"
 #include "BethesdaSave/Morrowind.h"
@@ -11,7 +10,9 @@
 #include "BethesdaSave/Fallout3.h"
 #include "BethesdaSave/FalloutNV.h"
 #include "BethesdaSave/Fallout4.h"
-#include "Workspace.h"
+#include <Kortex/SaveManager.hpp>
+#include <Kortex/GameInstance.hpp>
+#include <KxFramework/KxFileFinder.h>
 
 namespace
 {
@@ -34,7 +35,7 @@ namespace Kortex::SaveManager
 	}
 	void DefaultSaveManager::OnSavesLocationChanged(BroadcastEvent& event)
 	{
-		KWorkspace::ScheduleReloadOf<Workspace>();
+		ScheduleReloadWorkspace();
 	}
 
 	void DefaultSaveManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
@@ -71,6 +72,27 @@ namespace Kortex::SaveManager
 
 		return object;
 	}
+
+	void DefaultSaveManager::UpdateActiveFilters(const KxStringVector& filters)
+	{
+		m_ActiveFilters = filters;
+		ClearSaves();
+
+		for (const wxString& filter: m_ActiveFilters)
+		{
+			KxFileFinder finder(m_Config.GetLocation(), filter);
+			for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
+			{
+				auto entry = NewSave();
+				if (entry && entry->Create(item.GetFullPath()))
+				{
+					EmplaceSave(std::move(entry));
+				}
+			}
+		}
+
+		BroadcastProcessor::Get().ProcessEvent(SaveEvent::EvtFiltersChanged);
+	}
 }
 
 namespace Kortex::SaveManager
@@ -89,6 +111,36 @@ namespace Kortex::SaveManager
 		// Multi-file save config
 		m_PrimarySaveExt = node.GetFirstChildElement("PrimaryExtension").GetValue();
 		m_SecondarySaveExt = node.GetFirstChildElement("SecondaryExtension").GetValue();
+
+		// Bitmap size
+		constexpr int defaultScreenshotHeight = 96;
+		if (KxXMLNode sizeNode = node.GetFirstChildElement("ScreenshotSize"); sizeNode.IsOK())
+		{
+			if (double ratio = sizeNode.GetAttributeFloat("Ratio"); ratio > 0)
+			{
+				if (int width = sizeNode.GetAttributeInt("Width"); width > 0)
+				{
+					m_BitmapSize.FromWidth(width, ratio);
+				}
+				else if (int height = sizeNode.GetAttributeInt("Height", defaultScreenshotHeight); height > 0)
+				{
+					m_BitmapSize.FromHeight(height, ratio);
+				}
+			}
+			else
+			{
+				int width = sizeNode.GetAttributeInt("Width");
+				int height = sizeNode.GetAttributeInt("Height");
+				if (width > 0 && height > 0)
+				{
+					m_BitmapSize = KBitmapSize(width, height);
+				}
+			}
+		}
+		if (!m_BitmapSize.IsFullySpecified())
+		{
+			m_BitmapSize.FromHeight(defaultScreenshotHeight, KBitmapSize::r16_9);
+		}
 	}
 
 	wxString Config::GetSaveImplementation() const

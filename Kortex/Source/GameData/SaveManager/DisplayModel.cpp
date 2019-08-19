@@ -1,210 +1,195 @@
 #include "stdafx.h"
 #include <Kortex/SaveManager.hpp>
 #include <Kortex/Application.hpp>
+#include "GameMods/IModManager.h"
 #include "UI/KImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
-#include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxComparator.h>
-#include <KxFramework/DataView/KxDataViewMainWindow.h>
 
 namespace Kortex::SaveManager
 {
-	enum ColumnID
+	wxAny DisplayModel::GetEditorValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{
-		Bitmap,
-		Name,
-		ModificationDate,
-		Size,
-	};
+		const IGameSave& save = GetItem(node);
 
-	void DisplayModel::OnInitControl()
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Name:
+			{
+				wxString name = save.GetFileItem().GetName().BeforeLast(wxS('.'));
+				return !name.IsEmpty() ? name : save.GetFileItem().GetName();
+			}
+		};
+		return {};
+	}
+	wxAny DisplayModel::GetValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{
-		GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight());
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &DisplayModel::OnSelectItem, this);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);
-		GetView()->Bind(KxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &DisplayModel::OnHeaderContextMenu, this);
-		GetView()->Bind(KxEVT_DATAVIEW_CACHE_HINT, &DisplayModel::OnCacheHint, this);
+		const IGameSave& save = GetItem(node);
 
-		// Columns
-		KxDataViewColumnFlags flags = KxDV_COL_DEFAULT_FLAGS|KxDV_COL_SORTABLE;
+		switch (column.GetID<ColumnID>())
 		{
-			auto info = GetView()->AppendColumn<KxDataViewBitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, KxDATAVIEW_CELL_INERT, m_BitmapSize.GetWidth(), KxDV_COL_REORDERABLE);
-			m_BitmapColumn = info.GetColumn();
-		}
-		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 200, flags);
-		{
-			auto info = GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.ModificationDate"), ColumnID::ModificationDate, KxDATAVIEW_CELL_INERT, 100, flags);
-			info.GetColumn()->SortDescending();
-		}
-		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("Generic.Size"), ColumnID::Size, KxDATAVIEW_CELL_INERT, 100, flags);
-	}
-	void DisplayModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
-	{
-		const IGameSave* entry = GetDataEntry(row);
-		if (entry)
-		{
-			switch (column->GetID())
+			case ColumnID::Bitmap:
 			{
-				case ColumnID::Name:
-				{
-					wxString name = entry->GetFileItem().GetName().BeforeLast('.');
-					value = !name.IsEmpty() ? name : entry->GetFileItem().GetName();
-					return;
-				}
-			};
-		}
-	}
-	void DisplayModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
-	{
-		IGameSave* entry = GetDataEntry(row);
-		if (entry)
-		{
-			switch (column->GetID())
+				return save.HasThumbBitmap() ? save.GetThumbBitmap() : ImageProvider::GetBitmap(ImageResourceID::CrossWhite);
+			}
+			case ColumnID::Name:
 			{
-				case ColumnID::Bitmap:
-				{
-					const wxBitmap& bitmap = entry->GetThumbBitmap();
-					value = bitmap.IsOk() ? bitmap : ImageProvider::GetBitmap(ImageResourceID::CrossWhite);
-					break;
-				}
-				case ColumnID::Name:
-				{
-					value = entry->GetDisplayName();
-					break;
-				}
-				case ColumnID::ModificationDate:
-				{
-					value = KAux::FormatDateTime(entry->GetFileItem().GetModificationTime());
-					break;
-				}
-				case ColumnID::Size:
-				{
-					value = KxFile::FormatFileSize(entry->GetFileItem().GetFileSize(), 2);
-					break;
-				}
-			};
-		}
-	}
-	bool DisplayModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
-	{
-		IGameSave* entry = GetDataEntry(row);
-		if (entry)
-		{
-			switch (column->GetID())
+				return save.GetDisplayName();
+			}
+			case ColumnID::ModificationDate:
 			{
-				case ColumnID::Name:
-				{
-					const Config& savesConfig = m_Manager->GetConfig();
-					KxFileItem& infoPrimary = entry->GetFileItem();
+				return KAux::FormatDateTime(save.GetFileItem().GetModificationTime());
+			}
+			case ColumnID::Size:
+			{
+				return KxFile::FormatFileSize(save.GetFileItem().GetFileSize(), 2);
+			}
+		};
+		return {};
+	}
+	bool DisplayModel::SetValue(KxDataView2::Node& node, KxDataView2::Column& column, const wxAny& value)
+	{
+		IGameSave& save = GetItem(node);
 
-					if (savesConfig.HasMultiFileSaveConfig())
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Name:
+			{
+				const Config& savesConfig = m_Manager.GetConfig();
+				KxFileItem& infoPrimary = save.GetFileItem();
+
+				if (savesConfig.HasMultiFileSaveConfig())
+				{
+					KxFileItem infoSecondary(infoPrimary);
+					KxFileItem newInfoPrimary(infoPrimary);
+					KxFileItem newInfoSecondary(infoPrimary);
+
+					// Set new name
+					infoSecondary.SetName(infoPrimary.GetName().BeforeLast('.') + '.' + savesConfig.GetSecondarySaveExtension());
+					newInfoPrimary.SetName(value.As<wxString>() + '.' + savesConfig.GetPrimarySaveExtension());
+					newInfoSecondary.SetName(value.As<wxString>() + '.' + savesConfig.GetSecondarySaveExtension());
+
+					newInfoPrimary.UpdateInfo();
+					newInfoSecondary.UpdateInfo();
+					if (!newInfoPrimary.IsOK() && !newInfoSecondary.IsOK())
 					{
-						KxFileItem infoSecondary(infoPrimary);
-						KxFileItem newInfoPrimary(infoPrimary);
-						KxFileItem newInfoSecondary(infoPrimary);
-
-						// Set new name
-						infoSecondary.SetName(infoPrimary.GetName().BeforeLast('.') + '.' + savesConfig.GetSecondarySaveExtension());
-						newInfoPrimary.SetName(value.As<wxString>() + '.' + savesConfig.GetPrimarySaveExtension());
-						newInfoSecondary.SetName(value.As<wxString>() + '.' + savesConfig.GetSecondarySaveExtension());
-
-						newInfoPrimary.UpdateInfo();
-						newInfoSecondary.UpdateInfo();
-						if (!newInfoPrimary.IsOK() && !newInfoSecondary.IsOK())
+						bool b1 = KxFile(infoPrimary.GetFullPath()).Rename(newInfoPrimary.GetFullPath(), false);
+						bool b2 = KxFile(infoSecondary.GetFullPath()).Rename(newInfoSecondary.GetFullPath(), false);
+						if (b1 && b2)
 						{
-							bool b1 = KxFile(infoPrimary.GetFullPath()).Rename(newInfoPrimary.GetFullPath(), false);
-							bool b2 = KxFile(infoSecondary.GetFullPath()).Rename(newInfoSecondary.GetFullPath(), false);
-							if (b1 && b2)
-							{
-								// Secondary info is not referring to currently known KxDataViewItem
-								// so don't even try to find it.
-								infoPrimary = newInfoPrimary;
-								infoPrimary.UpdateInfo();
-								m_Workspace->ProcessSelection(entry);
-								return true;
-							}
-						}
-					}
-					else
-					{
-						KxFileItem newPrimaryInfo(infoPrimary);
+							infoPrimary = newInfoPrimary;
+							infoPrimary.UpdateInfo();
+							BroadcastProcessor::Get().ProcessEvent(SaveEvent::EvtChanged, save);
 
-						wxString ext = infoPrimary.GetName().AfterLast('.');
-						if (ext != infoPrimary.GetName())
-						{
-							newPrimaryInfo.SetName(value.As<wxString>() + '.' + ext);
-						}
-						else
-						{
-							newPrimaryInfo.SetName(value.As<wxString>());
-						}
-
-						newPrimaryInfo.UpdateInfo();
-						if (!newPrimaryInfo.IsOK())
-						{
-							KxFile(infoPrimary.GetFullPath()).Rename(newPrimaryInfo.GetFullPath(), false);
-							infoPrimary = newPrimaryInfo;
-							m_Workspace->ProcessSelection(entry);
+							m_Workspace->OnSelection(&save);
 							return true;
 						}
 					}
-					break;
 				}
-			};
-		}
-		return false;
-	}
-	bool DisplayModel::IsEnabledByRow(size_t row, const KxDataViewColumn* column) const
-	{
-		const IGameSave* entry = GetDataEntry(row);
-		return entry && entry->IsOK();
-	}
-	bool DisplayModel::CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const
-	{
-		const IGameSave* entry1 = GetDataEntry(row1);
-		const IGameSave* entry2 = GetDataEntry(row2);
+				else
+				{
+					KxFileItem newPrimaryInfo(infoPrimary);
 
-		if (entry1 && entry2)
+					wxString ext = infoPrimary.GetName().AfterLast(wxS('.'));
+					if (ext != infoPrimary.GetName())
+					{
+						newPrimaryInfo.SetName(value.As<wxString>() + wxS('.') + ext);
+					}
+					else
+					{
+						newPrimaryInfo.SetName(value.As<wxString>());
+					}
+
+					newPrimaryInfo.UpdateInfo();
+					if (!newPrimaryInfo.IsOK())
+					{
+						KxFile(infoPrimary.GetFullPath()).Rename(newPrimaryInfo.GetFullPath(), false);
+						infoPrimary = newPrimaryInfo;
+						BroadcastProcessor::Get().ProcessEvent(SaveEvent::EvtChanged, save);
+
+						m_Workspace->OnSelection(&save);
+						return true;
+					}
+				}
+				break;
+			}
+		};
+	}
+	bool DisplayModel::IsEnabled(const KxDataView2::Node& node, const KxDataView2::Column& column) const
+	{
+		return GetItem(node).IsOK() && !IModManager::GetInstance()->GetFileSystem().IsEnabled();
+	}
+	bool DisplayModel::Compare(const KxDataView2::Node& leftNode, const KxDataView2::Node& rightNode, const KxDataView2::Column& column) const
+	{
+		const IGameSave& left = GetItem(leftNode);
+		const IGameSave& right = GetItem(rightNode);
+
+		switch (column.GetID<ColumnID>())
 		{
-			switch (column ? column->GetID() : ColumnID::ModificationDate)
+			case ColumnID::Name:
 			{
-				case ColumnID::Name:
-				{
-					return KxComparator::IsLess(entry1->GetFileItem().GetName(), entry2->GetFileItem().GetName());
-				}
-				case ColumnID::Size:
-				{
-					return entry1->GetFileItem().GetFileSize() < entry2->GetFileItem().GetFileSize();
-				}
-				case ModificationDate:
-				{
-					return entry1->GetFileItem().GetModificationTime() < entry2->GetFileItem().GetModificationTime();
-				}
-			};
-		}
+				return KxComparator::IsLess(left.GetFileItem().GetName(), right.GetFileItem().GetName());
+			}
+			case ColumnID::Size:
+			{
+				return left.GetFileItem().GetFileSize() < right.GetFileItem().GetFileSize();
+			}
+			case ColumnID::ModificationDate:
+			{
+				return left.GetFileItem().GetModificationTime() < right.GetFileItem().GetModificationTime();
+			}
+		};
+		return false;
+	}
+	bool DisplayModel::GetAttributes(const KxDataView2::Node& node,
+									 const KxDataView2::Column& column,
+									 const KxDataView2::CellState& cellState,
+									 KxDataView2::CellAttributes& attributes
+	) const
+	{
+		const IGameSave& save = GetItem(node);
+
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Name:
+			case ColumnID::ModificationDate:
+			case ColumnID::Size:
+			{
+				attributes.Options().Enable(KxDataView2::CellOption::Enabled, IsEnabled(node, column));
+				return true;
+			}
+		};
 		return false;
 	}
 
-	void DisplayModel::OnSelectItem(KxDataViewEvent& event)
+	void DisplayModel::OnSelectItem(KxDataView2::Event& event)
 	{
-		m_Workspace->ProcessSelection(GetDataEntry(GetRow(event.GetItem())));
-	}
-	void DisplayModel::OnActivateItem(KxDataViewEvent& event)
-	{
-		KxDataViewColumn* column = event.GetColumn();
-		const IGameSave* entry = GetDataEntry(GetRow(event.GetItem()));
-		if (column && entry && entry->IsOK())
+		if (KxDataView2::Node* node = event.GetNode())
 		{
-			switch (column->GetID())
+			m_Workspace->OnSelection(&GetItem(*node));
+		}
+		else
+		{
+			m_Workspace->OnSelection(nullptr);
+		}
+	}
+	void DisplayModel::OnActivateItem(KxDataView2::Event& event)
+	{
+		KxDataView2::Node* node = event.GetNode();
+		KxDataView2::Column* column = event.GetColumn();
+		if (column && node)
+		{
+			IGameSave& save = GetItem(*node);
+
+			switch (column->GetID<ColumnID>())
 			{
 				case ColumnID::Bitmap:
 				{
-					KImageViewerDialog dialog(GetViewTLW(), entry->GetFileItem().GetName());
+					KImageViewerDialog dialog(GetView(), save.GetFileItem().GetName());
 
 					KImageViewerEvent evt;
-					evt.SetBitmap(entry->GetBitmap());
+					evt.SetBitmap(save.GetBitmap());
 					dialog.Navigate(evt);
 
 					dialog.ShowModal();
@@ -212,91 +197,103 @@ namespace Kortex::SaveManager
 				}
 				case ColumnID::Name:
 				{
-					GetView()->EditItem(event.GetItem(), column);
+					GetView()->EditItem(*node, *column);
 					break;
 				}
 			};
 		}
 	}
-	void DisplayModel::OnContextMenu(KxDataViewEvent& event)
+	void DisplayModel::OnContextMenu(KxDataView2::Event& event)
 	{
-		m_Workspace->ProcessContextMenu(GetDataEntry(GetRow(event.GetItem())));
+		if (KxDataView2::Node* node = event.GetNode())
+		{
+			m_Workspace->OnContextMenu(&GetItem(*node));
+		}
+		else
+		{
+			m_Workspace->OnContextMenu(nullptr);
+		}
 	}
-	void DisplayModel::OnHeaderContextMenu(KxDataViewEvent& event)
+	void DisplayModel::OnHeaderContextMenu(KxDataView2::Event& event)
 	{
 		KxMenu menu;
 		if (GetView()->CreateColumnSelectionMenu(menu))
 		{
 			GetView()->OnColumnSelectionMenu(menu);
-			UpdateRowHeight();
+			UpdateBitmapCellDimensions();
 		}
 	}
-	void DisplayModel::OnCacheHint(KxDataViewEvent& event)
+	void DisplayModel::OnCacheHint(KxDataView2::Event& event)
 	{
 		if (m_BitmapColumn->IsVisible())
 		{
-			for (size_t row = event.GetCacheHintFrom(); row <= event.GetCacheHintTo(); row++)
+			for (KxDataView2::Row row = event.GetCacheHintFrom(); row <= event.GetCacheHintTo(); row++)
 			{
-				KxDataViewItem item = GetView()->GetMainWindow()->GetItemByRow(row);
-				IGameSave* entry = GetDataEntry(GetRow(item));
-				if (entry && (!entry->IsOK() || !entry->HasThumbBitmap()))
+				IGameSave& save = *m_Saves[row];
+				if (!save.IsOK() || !save.HasThumbBitmap())
 				{
-					entry->ReadFile();
-					entry->SetThumbBitmap(m_BitmapSize.ScaleMaintainRatio(entry->GetBitmap(), 0, 4));
+					save.ReadFile();
+					save.SetThumbBitmap(m_BitmapSize.ScaleMaintainRatio(save.GetBitmap(), 0, 4));
 				}
 			}
 		}
 	}
 
-	DisplayModel::DisplayModel(ISaveManager* manager, Workspace* workspace)
-		:m_Manager(manager), m_Workspace(workspace)
+	void DisplayModel::OnFiltersChanged(SaveEvent& event)
 	{
-		m_BitmapSize.FromHeight(78, KBitmapSize::r16_9);
-		SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION);
+		RefreshItems();
 	}
 
-	void DisplayModel::SetDataVector()
+	DisplayModel::DisplayModel()
+		:m_Manager(*ISaveManager::GetInstance())
 	{
-		m_DataVector.clear();
-		KDataViewVectorListModel::SetDataVector();
-	}
-	void DisplayModel::SetDataVector(const wxString& folder, const KxStringVector& filtersList)
-	{
-		m_DataVector.clear();
-		for (const wxString& filter: filtersList)
-		{
-			KxFileFinder finder(folder, filter);
-			KxFileItem item;
-			do
-			{
-				item = finder.FindNext();
-				if (item.IsOK())
-				{
-					auto& entry = ISaveManager::GetInstance()->NewSave();
-					if (entry && entry->Create(item.GetFullPath()))
-					{
-						m_DataVector.emplace_back(std::move(entry));
-					}
-				}
-			}
-			while (item.IsOK());
-		}
-		KxDataViewVectorListModelEx::SetDataVector(&m_DataVector);
+		m_Workspace = Workspace::GetInstance();
+		m_BroadcastReciever.Bind(SaveEvent::EvtFiltersChanged, &DisplayModel::OnFiltersChanged, this);
 	}
 
-	void DisplayModel::UpdateRowHeight()
+	void DisplayModel::UpdateBitmapCellDimensions()
 	{
-		KxDataViewColumn* column = GetView()->GetColumnByID(ColumnID::Bitmap);
-		if (column)
+		m_BitmapSize = m_Manager.GetConfig().GetBitmapSize();
+
+		m_BitmapColumn->SetWidth(m_BitmapSize.GetWidth());
+		if (m_BitmapColumn->IsVisible())
 		{
-			if (column->IsVisible())
-			{
-				GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight());
-			}
-			else
-			{
-				GetView()->SetUniformRowHeight(-1);
-			}
+			GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight());
 		}
+		else
+		{
+			GetView()->SetUniformRowHeight(-1);
+		}
+	}
+	void DisplayModel::CreateView(wxWindow* parent)
+	{
+		using namespace KxDataView2;
+
+		View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus|CtrlStyle::FitLastColumn);
+		view->AssignModel(this);
+
+		// Events
+		view->Bind(KxDataView2::EvtITEM_SELECTED, &DisplayModel::OnSelectItem, this);
+		view->Bind(KxDataView2::EvtITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
+		view->Bind(KxDataView2::EvtITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);;
+		view->Bind(KxDataView2::EvtVIEW_CACHE_HINT, &DisplayModel::OnCacheHint, this);
+		view->Bind(KxDataView2::EvtCOLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
+
+		// Columns
+		const ColumnStyle columnStyle = ColumnStyle::Sort|ColumnStyle::Move|ColumnStyle::Size;
+		view->AppendColumn<BitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, m_BitmapSize.GetWidth(), ColumnStyle::Move);
+		view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Name"), ColumnID::Name, {}, columnStyle);
+		view->AppendColumn<TextRenderer>(KTr("Generic.ModificationDate"), ColumnID::ModificationDate, {}, columnStyle);
+		view->AppendColumn<TextRenderer>(KTr("Generic.Size"), ColumnID::Size, {}, columnStyle);
+
+		m_BitmapColumn = view->GetColumnByID(ColumnID::Bitmap);
+		view->GetColumnByID(ColumnID::Size)->GetRenderer().SetAlignment(wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT);
+		view->GetColumnByID(ColumnID::ModificationDate)->SortDescending();
+	}
+	void DisplayModel::RefreshItems()
+	{
+		UpdateBitmapCellDimensions();
+		m_Saves = m_Manager.GetSaves();
+		SetItemCount(m_Saves.size());
 	}
 }

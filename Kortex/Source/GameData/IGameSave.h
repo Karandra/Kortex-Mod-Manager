@@ -17,7 +17,6 @@ namespace Kortex
 		public:
 			using Vector = std::vector<std::unique_ptr<IGameSave>>;
 			using RefVector = std::vector<IGameSave*>;
-			using CRefVector = std::vector<const IGameSave*>;
 
 			using InfoPairVector = std::vector<SaveManager::SaveInfoPair>;
 

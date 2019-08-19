@@ -7,6 +7,7 @@
 #include <Kortex/GameInstance.hpp>
 #include "UI/KImageViewerDialog.h"
 #include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxAuiNotebook.h>
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -74,143 +75,35 @@ namespace Kortex::SaveManager
 
 		// Load options
 		GetDisplayModelOptions().LoadDataViewLayout(m_DisplayModel->GetView());
-		m_DisplayModel->UpdateRowHeight();
 		m_ActiveFilters.clear();
 
-		KxStringVector filters;
+		// Load filters
 		auto filterOptions = GetFiltersOptions();
 		for (const auto& filter: m_Manager->GetConfig().GetFileFilters())
 		{
 			if (GetFilterOption(filter).GetAttributeBool(OName::Enabled, true))
 			{
 				m_ActiveFilters.insert(filter.GetValue());
-				filters.push_back(filter.GetValue());
 			}
 		}
 
-		LoadData();
+		ScheduleReload();
 		return true;
 	}
 
 	void Workspace::CreateViewPane()
 	{
-		m_DisplayModel = new DisplayModel(m_Manager, this);
-		m_DisplayModel->Create(this);
-		m_DisplayModel->SetDataVector();
+		m_DisplayModel = new DisplayModel();
+		m_DisplayModel->CreateView(this);
 	}
-	void Workspace::CreateContextMenu(KxMenu& menu, const IGameSave* save)
+	void Workspace::UpdateFilters()
 	{
-		IPluginManager* pluginManager = IPluginManager::GetInstance();
-		PluginManager::Workspace* pluginWorkspace = PluginManager::Workspace::GetInstance();
-
-		const size_t selectedItemCount = m_DisplayModel->GetView()->GetSelectedItemsCount();
-		const bool isMultiSelect = selectedItemCount > 1;
-
-		const IBethesdaGameSave* bethesdaSave = nullptr;
-		if (save)
+		KxStringVector filterList;
+		for (const wxString& filter: m_ActiveFilters)
 		{
-			save->QueryInterface(bethesdaSave);
+			filterList.push_back(filter);
 		}
-		const bool hasPlugins = bethesdaSave && bethesdaSave->HasPlugins();
-
-		// Plugins list
-		if (pluginManager && pluginWorkspace && bethesdaSave)
-		{
-			const KxStringVector pluginsList = bethesdaSave->GetPlugins();
-
-			KxMenu* pluginsMenu = new KxMenu();
-			KxMenuItem* pluginsMenuItem = menu.Add(pluginsMenu, KxString::Format("%1 (%2)", KTr("SaveManager.Tab.PluginsList"), pluginsList.size()));
-			pluginsMenuItem->Enable(!pluginsList.empty());
-
-			if (!pluginManager->HasPlugins())
-			{
-				pluginManager->Load();
-			}
-
-			for (const wxString& name: pluginsList)
-			{
-				KxMenuItem* item = pluginsMenu->Add(new KxMenuItem(name));
-				item->SetBitmap(ImageProvider::GetBitmap(pluginWorkspace->GetStatusImageForPlugin(pluginManager->FindPluginByName(name))));
-			}
-		}
-
-		// Basic info
-		{
-			KxMenu* basicInfoMenu = new KxMenu();
-			KxMenuItem* basicInfoMenuItem = menu.Add(basicInfoMenu, KTr("SaveManager.Tab.BasicInfo"));
-			basicInfoMenuItem->Enable(false);
-
-			if (save)
-			{
-				const auto& basicInfo = save->GetBasicInfo();
-				basicInfoMenuItem->Enable(!basicInfo.empty());
-
-				for (const KLabeledValue& entry: basicInfo)
-				{
-					KxMenuItem* item = basicInfoMenu->Add(new KxMenuItem(KxString::Format("%1: %2", entry.GetLabel(), entry.GetValue())));
-				}
-
-				basicInfoMenu->Bind(KxEVT_MENU_SELECT, [](KxMenuEvent& event)
-				{
-					if (wxTheClipboard->Open())
-					{
-						KxMenuItem* item = event.GetItem();
-						wxTheClipboard->SetData(new wxTextDataObject(item->GetItemLabelText()));
-						wxTheClipboard->Close();
-					}
-				});
-			}
-		}
-		menu.AddSeparator();
-
-		// Sync
-		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_APPLY, KTr("SaveManager.SyncPluginsList")));
-			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlugDisconnect));
-			item->Enable(!isMultiSelect && save && hasPlugins && pluginManager);
-		}
-
-		// Save
-		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_SAVE, KTr("SaveManager.SavePluginsList")));
-			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Disk));
-			item->Enable(!isMultiSelect && save && hasPlugins);
-		}
-		menu.AddSeparator();
-
-		// File filter
-		{
-			KxMenu* filtersMenu = new KxMenu();
-			menu.Add(filtersMenu, KTr("FileFilter"));
-
-			// All files
-			KxMenuItem* allFilesItem = filtersMenu->Add(new KxMenuItem(KTr("FileFilter.AllFiles"), wxEmptyString, wxITEM_CHECK));
-			allFilesItem->Check(FiltersMenu_IsAllFiltersActive());
-			allFilesItem->Bind(KxEVT_MENU_SELECT, &Workspace::FiltersMenu_AllFiles, this);
-
-			filtersMenu->AddSeparator();
-
-			// Specific
-			for (const KLabeledValue& filter: m_Manager->GetConfig().GetFileFilters())
-			{
-				KxMenuItem* item = filtersMenu->Add(new KxMenuItem(filter.GetLabel(), wxEmptyString, wxITEM_CHECK));
-				item->Bind(KxEVT_MENU_SELECT, &Workspace::FiltersMenu_SpecificFilter, this);
-				item->SetClientData(const_cast<KLabeledValue*>(&filter));
-				item->Check(FiltersMenu_IsFilterActive(filter.GetValue()));
-			}
-		}
-		menu.AddSeparator();
-
-		// Reload data
-		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REFRESH, KTr(KxID_REFRESH)));
-			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
-		}
-		// Remove
-		{
-			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-			item->Enable(selectedItemCount != 0);
-		}
+		m_Manager->UpdateActiveFilters(filterList);
 	}
 
 	bool Workspace::FiltersMenu_IsAllFiltersActive() const
@@ -230,8 +123,7 @@ namespace Kortex::SaveManager
 				m_ActiveFilters.insert(v.GetValue());
 			}
 		}
-
-		LoadData();
+		ScheduleReload();
 	}
 	void Workspace::FiltersMenu_SpecificFilter(KxMenuEvent& event)
 	{
@@ -246,38 +138,37 @@ namespace Kortex::SaveManager
 		{
 			m_ActiveFilters.erase(pFilter->GetValue());
 		}
-
-		LoadData();
+		ScheduleReload();
 	}
 
-	void Workspace::OnSyncPluginsList(const IBethesdaGameSave* saveEntry)
+	void Workspace::OnSyncPluginsList(const IBethesdaGameSave& save)
 	{
 		if (IPluginManager* manager = IPluginManager::GetInstance())
 		{
-			manager->SyncWithPluginsList(saveEntry->GetPlugins(), PluginManager::SyncListMode::ActivateAll);
+			manager->SyncWithPluginsList(save.GetPlugins(), PluginManager::SyncListMode::ActivateAll);
 			manager->Save();
-			KWorkspace::ScheduleReloadOf<PluginManager::Workspace>();
+			manager->ScheduleReloadWorkspace();
 		}
 	}
-	void Workspace::OnSavePluginsList(const IBethesdaGameSave* saveEntry)
+	void Workspace::OnSavePluginsList(const IBethesdaGameSave& save)
 	{
 		KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_SAVE);
 		dialog.SetDefaultExtension("txt");
-		dialog.SetFileName(saveEntry->GetFileItem().GetName().BeforeLast('.'));
+		dialog.SetFileName(save.GetFileItem().GetName().BeforeLast('.'));
 		dialog.AddFilter("*.txt", KTr("FileFilter.Text"));
 		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 		if (dialog.ShowModal() == KxID_OK)
 		{
-			KxTextFile::WriteToFile(dialog.GetResult(), saveEntry->GetPlugins());
+			KxTextFile::WriteToFile(dialog.GetResult(), save.GetPlugins());
 		}
 	}
-	void Workspace::OnRemoveSave(IGameSave* saveEntry)
+	bool Workspace::OnRemoveSave(IGameSave& save)
 	{
-		if (saveEntry)
+		if (BroadcastProcessor::Get().ProcessEventEx(SaveEvent::EvtRemoving, save).Do().IsAllowed())
 		{
 			const Config& config = m_Manager->GetConfig();
-			const KxFileItem& primaryInfo = saveEntry->GetFileItem();
+			const KxFileItem& primaryInfo = save.GetFileItem();
 
 			KxFile(primaryInfo.GetFullPath()).RemoveFile(true);
 			if (config.HasMultiFileSaveConfig())
@@ -286,7 +177,11 @@ namespace Kortex::SaveManager
 				secondaryInfo.SetName(primaryInfo.GetName().BeforeLast('.') + '.' + config.GetSecondarySaveExtension());
 				KxFile(secondaryInfo.GetFullPath()).RemoveFile(true);
 			}
+
+			BroadcastProcessor::Get().ProcessEvent(SaveEvent::EvtRemoved);
+			return true;
 		}
+		return false;
 	}
 
 	bool Workspace::OnOpenWorkspace()
@@ -300,12 +195,12 @@ namespace Kortex::SaveManager
 	}
 	void Workspace::OnReloadWorkspace()
 	{
-		LoadData();
+		UpdateFilters();
 	}
 
 	wxString Workspace::GetID() const
 	{
-		return "KSaveManagerWorkspace";
+		return "SaveManager::Workspace";
 	}
 	wxString Workspace::GetName() const
 	{
@@ -316,27 +211,17 @@ namespace Kortex::SaveManager
 		return KTr("SaveManager.NameShort");
 	}
 
-	void Workspace::LoadData()
-	{
-		KxStringVector filterList;
-		for (const wxString& filter: m_ActiveFilters)
-		{
-			filterList.push_back(filter);
-		}
-		m_DisplayModel->SetDataVector(m_Manager->GetConfig().GetLocation(), filterList);
-	}
-
-	void Workspace::ProcessSelection(const IGameSave* saveEntry)
+	void Workspace::OnSelection(const IGameSave* save)
 	{
 		const int statusIndex = 1;
 		KMainWindow* mainWindow = KMainWindow::GetInstance();
 		mainWindow->ClearStatus(statusIndex);
 
-		if (saveEntry)
+		if (save)
 		{
-			if (saveEntry->IsOK())
+			if (save->IsOK())
 			{
-				mainWindow->SetStatus(saveEntry->GetDisplayName(), statusIndex);
+				mainWindow->SetStatus(save->GetDisplayName(), statusIndex);
 			}
 			else
 			{
@@ -344,42 +229,131 @@ namespace Kortex::SaveManager
 			}
 		}
 	}
-	void Workspace::ProcessContextMenu(const IGameSave* saveEntry)
+	void Workspace::OnContextMenu(const IGameSave* save)
 	{
 		KxMenu menu;
-		CreateContextMenu(menu, saveEntry);
 
-		switch (menu.Show(this))
+		IPluginManager* pluginManager = IPluginManager::GetInstance();
+		PluginManager::Workspace* pluginWorkspace = PluginManager::Workspace::GetInstance();
+
+		const bool isMultiSelect = m_DisplayModel->GetView()->GetSelectedCount() > 1;
+		const IBethesdaGameSave* bethesdaSave = save ? save->QueryInterface<IBethesdaGameSave>() : nullptr;
+		const bool hasPlugins = bethesdaSave && bethesdaSave->HasPlugins();
+
+		// Plugins list
+		if (pluginManager && pluginWorkspace && bethesdaSave)
 		{
-			case KxID_APPLY:
+			const KxStringVector pluginsList = bethesdaSave->GetPlugins();
+
+			KxMenu* pluginsMenu = new KxMenu();
+			KxMenuItem* pluginsMenuItem = menu.Add(pluginsMenu, KxString::Format(wxS("%1 (%2)"), KTr("SaveManager.Tab.PluginsList"), pluginsList.size()));
+			pluginsMenuItem->Enable(!pluginsList.empty());
+
+			if (!pluginManager->HasPlugins())
 			{
-				OnSyncPluginsList(saveEntry->QueryInterface<IBethesdaGameSave>());
-				break;
+				pluginManager->Load();
 			}
-			case KxID_SAVE:
+
+			for (const wxString& name: pluginsList)
 			{
-				OnSavePluginsList(saveEntry->QueryInterface<IBethesdaGameSave>());
-				break;
+				KxMenuItem* item = pluginsMenu->AddItem(name);
+				item->SetBitmap(ImageProvider::GetBitmap(pluginWorkspace->GetStatusImageForPlugin(pluginManager->FindPluginByName(name))));
 			}
-			case KxID_REFRESH:
+		}
+
+		// Basic info
+		{
+			KxMenu* basicInfoMenu = new KxMenu();
+			KxMenuItem* basicInfoMenuItem = menu.Add(basicInfoMenu, KTr("SaveManager.Tab.BasicInfo"));
+			basicInfoMenuItem->Enable(false);
+
+			if (save)
 			{
-				ReloadWorkspace();
-				break;
-			}
-			case KxID_REMOVE:
-			{
-				KxDataViewItem::Vector items;
-				m_DisplayModel->GetView()->GetSelections(items);
-				if (!items.empty())
+				const auto& basicInfo = save->GetBasicInfo();
+				basicInfoMenuItem->Enable(!basicInfo.empty());
+
+				for (const KLabeledValue& entry: basicInfo)
 				{
-					for (KxDataViewItem& item: items)
-					{
-						OnRemoveSave(m_DisplayModel->GetDataEntry(m_DisplayModel->GetRow(item)));
-					}
-					LoadData();
+					KxMenuItem* item = basicInfoMenu->AddItem(KxString::Format(wxS("%1: %2"), entry.GetLabel(), entry.GetValue()));
 				}
-				break;
+				basicInfoMenu->Bind(KxEVT_MENU_SELECT, [](KxMenuEvent& event)
+				{
+					Utility::CopyTextToClipboard(event.GetItem()->GetItemLabelText());
+				});
 			}
-		};
+		}
+		menu.AddSeparator();
+
+		// Sync
+		{
+			KxMenuItem* item = menu.AddItem(KTr("SaveManager.SyncPluginsList"));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlugDisconnect));
+			item->Enable(!isMultiSelect && bethesdaSave && hasPlugins && pluginManager);
+			item->Bind(KxEVT_MENU_SELECT, [this, bethesdaSave](KxMenuEvent& event)
+			{
+				OnSyncPluginsList(*bethesdaSave);
+			});
+		}
+
+		// Save
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_SAVE, KTr("SaveManager.SavePluginsList")));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Disk));
+			item->Enable(!isMultiSelect && bethesdaSave && hasPlugins);
+			item->Bind(KxEVT_MENU_SELECT, [this, bethesdaSave](KxMenuEvent& event)
+			{
+				OnSavePluginsList(*bethesdaSave);
+			});
+		}
+		menu.AddSeparator();
+
+		// File filter
+		{
+			KxMenu* filtersMenu = new KxMenu();
+			menu.Add(filtersMenu, KTr("FileFilter"));
+
+			// All files
+			{
+				KxMenuItem* item = filtersMenu->Add(new KxMenuItem(KTr("FileFilter.AllFiles"), wxEmptyString, wxITEM_CHECK));
+				item->Check(FiltersMenu_IsAllFiltersActive());
+				item->Bind(KxEVT_MENU_SELECT, &Workspace::FiltersMenu_AllFiles, this);
+			}
+
+			filtersMenu->AddSeparator();
+
+			// Specific
+			for (const KLabeledValue& filter: m_Manager->GetConfig().GetFileFilters())
+			{
+				KxMenuItem* item = filtersMenu->Add(new KxMenuItem(filter.GetLabel(), wxEmptyString, wxITEM_CHECK));
+				item->Bind(KxEVT_MENU_SELECT, &Workspace::FiltersMenu_SpecificFilter, this);
+				item->SetClientData(const_cast<KLabeledValue*>(&filter));
+				item->Check(FiltersMenu_IsFilterActive(filter.GetValue()));
+			}
+		}
+		menu.AddSeparator();
+
+		// Reload items
+		{
+			KxMenuItem* item = menu.AddItem(KTr(KxID_REFRESH));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+			{
+				ScheduleReload();
+			});
+		}
+
+		// Remove
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
+			item->Enable(save);
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+			{
+				for (KxDataView2::Node* node: m_DisplayModel->GetView()->GetSelections())
+				{
+					OnRemoveSave(m_DisplayModel->GetItem(*node));
+				}
+				ScheduleReload();
+			});
+		}
 	}
 }

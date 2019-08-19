@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "GameData/ISaveManager.h"
 #include "Utility/KLabeledValue.h"
+#include "Utility/KBitmapSize.h"
 
 namespace Kortex::SaveManager
 {
@@ -11,6 +12,7 @@ namespace Kortex::SaveManager
 			KLabeledValue::Vector m_FileFilters;
 			wxString m_SaveImplementation;
 			wxString m_Location;
+			KBitmapSize m_BitmapSize;
 
 			wxString m_PrimarySaveExt;
 			wxString m_SecondarySaveExt;
@@ -21,7 +23,11 @@ namespace Kortex::SaveManager
 		public:
 			wxString GetSaveImplementation() const;
 			wxString GetLocation() const;
-		
+			KBitmapSize GetBitmapSize() const
+			{
+				return m_BitmapSize;
+			}
+
 			bool HasFileFilter() const
 			{
 				return !m_FileFilters.empty();
@@ -58,6 +64,7 @@ namespace Kortex::SaveManager
 		private:
 			BroadcastReciever m_BroadcastReciever;
 			Config m_Config;
+			KxStringVector m_ActiveFilters;
 
 		private:
 			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
@@ -75,5 +82,7 @@ namespace Kortex::SaveManager
 			}
 			KWorkspace* GetWorkspace() const override;
 			std::unique_ptr<IGameSave> NewSave() const override;
+
+			void UpdateActiveFilters(const KxStringVector& filters) override;
 	};
 }

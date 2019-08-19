@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KDataViewListModel.h"
 #include "GameData/IGameSave.h"
-#include "Utility/KBitmapSize.h"
+#include "GameData/SaveEvent.h"
+#include <DataView2/DataView2.h>
 
 namespace Kortex
 {
@@ -13,51 +13,61 @@ namespace Kortex::SaveManager
 {
 	class Workspace;
 
-	class DisplayModel: public KxDataViewVectorListModelEx<IGameSave::Vector, KxDataViewListModelEx>
+	class DisplayModel: public KxDataView2::VirtualListModel
 	{
-		private:
-			ISaveManager* m_Manager = nullptr;
-			Workspace* m_Workspace = nullptr;
-			IGameSave::Vector m_DataVector;
+		public:
+			enum class ColumnID
+			{
+				Bitmap,
+				Name,
+				ModificationDate,
+				Size,
+			};
 
-			KxDataViewColumn* m_BitmapColumn = nullptr;
+		private:
+			BroadcastReciever m_BroadcastReciever;
+			IGameSave::RefVector m_Saves;
 			KBitmapSize m_BitmapSize;
 
+			ISaveManager& m_Manager;
+			Workspace* m_Workspace = nullptr;
+			KxDataView2::Column* m_BitmapColumn = nullptr;
+
 		private:
-			virtual void OnInitControl() override;
+			wxAny GetEditorValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
+			wxAny GetValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
+			bool SetValue(KxDataView2::Node& node, KxDataView2::Column& column, const wxAny& value) override;
+			bool IsEnabled(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
+			bool Compare(const KxDataView2::Node& leftNode, const KxDataView2::Node& rightNode, const KxDataView2::Column& column) const override;
+			bool GetAttributes(const KxDataView2::Node& node,
+							   const KxDataView2::Column& column,
+							   const KxDataView2::CellState& cellState,
+							   KxDataView2::CellAttributes& attributes
+			) const override;
 
-			virtual void GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
-			virtual void GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
-			virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
-			virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
-			virtual bool HasDefaultCompare() const override
-			{
-				return true;
-			}
-			virtual bool CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const override;
+			void OnSelectItem(KxDataView2::Event& event);
+			void OnActivateItem(KxDataView2::Event& event);
+			void OnContextMenu(KxDataView2::Event& event);
+			void OnHeaderContextMenu(KxDataView2::Event& event);
+			void OnCacheHint(KxDataView2::Event& event);
 
-			void OnSelectItem(KxDataViewEvent& event);
-			void OnActivateItem(KxDataViewEvent& event);
-			void OnContextMenu(KxDataViewEvent& event);
-			void OnHeaderContextMenu(KxDataViewEvent& event);
-			void OnCacheHint(KxDataViewEvent& event);
-
-		public:
-			DisplayModel(ISaveManager* manager, Workspace* workspace);
+			void OnFiltersChanged(SaveEvent& event);
 
 		public:
-			void SetDataVector();
-			void SetDataVector(const wxString& folder, const KxStringVector& filtersList);
+			DisplayModel();
 
-			IGameSave* GetDataEntry(size_t row) const
+		public:
+			void CreateView(wxWindow* parent);
+			void RefreshItems();
+			void UpdateBitmapCellDimensions();
+
+			const IGameSave& GetItem(const KxDataView2::Node& node) const
 			{
-				if (row < GetItemCount())
-				{
-					return m_DataVector[row].get();
-				}
-				return nullptr;
+				return *m_Saves[node.GetRow()];
 			}
-
-			void UpdateRowHeight();
+			IGameSave& GetItem(const KxDataView2::Node& node)
+			{
+				return *m_Saves[node.GetRow()];
+			}
 	};
 }

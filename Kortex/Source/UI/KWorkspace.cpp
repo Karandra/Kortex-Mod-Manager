@@ -14,7 +14,7 @@ bool KWorkspace::OnOpenWorkspaceInternal()
 		m_IsReloadSheduled = false;
 		ReloadWorkspace();
 	}
-	
+
 	RefreshWindowTitle();
 	if (OnOpenWorkspace())
 	{
@@ -177,9 +177,9 @@ bool KWorkspace::CreateNow()
 }
 void KWorkspace::ScheduleReload()
 {
-	if (IsWorkspaceCreated())
+	CallAfter([this]()
 	{
-		CallAfter([this]()
+		if (IsWorkspaceCreated())
 		{
 			if (IsWorkspaceVisible())
 			{
@@ -188,9 +188,9 @@ void KWorkspace::ScheduleReload()
 			}
 			else
 			{
-				// ReloadWorkspace will be called when workspace is opened
+				// ReloadWorkspace will be called when workspace will be opened
 				m_IsReloadSheduled = true;
 			}
-		});
-	}
+		}
+	});
 }

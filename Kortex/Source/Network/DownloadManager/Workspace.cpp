@@ -98,7 +98,7 @@ namespace Kortex::DownloadManager
 
 	wxString Workspace::GetID() const
 	{
-		return "KDownloadManagerWorkspace";
+		return "DownloadManager::Workspace";
 	}
 	wxString Workspace::GetName() const
 	{

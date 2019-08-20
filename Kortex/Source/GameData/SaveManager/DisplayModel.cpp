@@ -135,28 +135,6 @@ namespace Kortex::SaveManager
 	{
 		return GetItem(node).IsOK() && !IModManager::GetInstance()->GetFileSystem().IsEnabled();
 	}
-	bool DisplayModel::Compare(const KxDataView2::Node& leftNode, const KxDataView2::Node& rightNode, const KxDataView2::Column& column) const
-	{
-		const IGameSave& left = GetItem(leftNode);
-		const IGameSave& right = GetItem(rightNode);
-
-		switch (column.GetID<ColumnID>())
-		{
-			case ColumnID::Name:
-			{
-				return KxComparator::IsLess(left.GetFileItem().GetName(), right.GetFileItem().GetName());
-			}
-			case ColumnID::Size:
-			{
-				return left.GetFileItem().GetFileSize() < right.GetFileItem().GetFileSize();
-			}
-			case ColumnID::ModificationDate:
-			{
-				return left.GetFileItem().GetModificationTime() < right.GetFileItem().GetModificationTime();
-			}
-		};
-		return false;
-	}
 	bool DisplayModel::GetAttributes(const KxDataView2::Node& node,
 									 const KxDataView2::Column& column,
 									 const KxDataView2::CellState& cellState,
@@ -173,6 +151,40 @@ namespace Kortex::SaveManager
 			{
 				attributes.Options().Enable(KxDataView2::CellOption::Enabled, IsEnabled(node, column));
 				return true;
+			}
+		};
+		return false;
+	}
+
+	void DisplayModel::Resort()
+	{
+		KxDataView2::Column* column =  GetView()->GetSortingColumn();
+		if (!column)
+		{
+			column = GetView()->GetColumnByID(ColumnID::ModificationDate);
+		}
+
+		std::sort(m_Saves.begin(), m_Saves.end(), [this, column](IGameSave* left, IGameSave* right)
+		{
+			const bool ret = Compare(*left, *right, *column);
+			return column->IsSortedAscending() ? ret : !ret;
+		});
+	}
+	bool DisplayModel::Compare(const IGameSave& left, const IGameSave& right, const KxDataView2::Column& column) const
+	{
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Name:
+			{
+				return KxComparator::IsLess(left.GetFileItem().GetName(), right.GetFileItem().GetName());
+			}
+			case ColumnID::Size:
+			{
+				return left.GetFileItem().GetFileSize() < right.GetFileItem().GetFileSize();
+			}
+			case ColumnID::ModificationDate:
+			{
+				return left.GetFileItem().GetModificationTime() < right.GetFileItem().GetModificationTime();
 			}
 		};
 		return false;
@@ -232,15 +244,6 @@ namespace Kortex::SaveManager
 			m_Workspace->OnContextMenu(nullptr);
 		}
 	}
-	void DisplayModel::OnHeaderContextMenu(KxDataView2::Event& event)
-	{
-		KxMenu menu;
-		if (GetView()->CreateColumnSelectionMenu(menu))
-		{
-			GetView()->OnColumnSelectionMenu(menu);
-			UpdateBitmapCellDimensions();
-		}
-	}
 	void DisplayModel::OnCacheHint(KxDataView2::Event& event)
 	{
 		if (m_BitmapColumn->IsVisible())
@@ -254,6 +257,19 @@ namespace Kortex::SaveManager
 					save.SetThumbBitmap(m_BitmapSize.ScaleMaintainRatio(save.GetBitmap(), 0, 4));
 				}
 			}
+		}
+	}
+	void DisplayModel::OnHeaderSorted(KxDataView2::Event& event)
+	{
+		Resort();
+	}
+	void DisplayModel::OnHeaderContextMenu(KxDataView2::Event& event)
+	{
+		KxMenu menu;
+		if (GetView()->CreateColumnSelectionMenu(menu))
+		{
+			GetView()->OnColumnSelectionMenu(menu);
+			UpdateBitmapCellDimensions();
 		}
 	}
 
@@ -303,6 +319,7 @@ namespace Kortex::SaveManager
 		view->Bind(KxDataView2::EvtITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
 		view->Bind(KxDataView2::EvtITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);;
 		view->Bind(KxDataView2::EvtVIEW_CACHE_HINT, &DisplayModel::OnCacheHint, this);
+		view->Bind(KxDataView2::EvtCOLUMN_SORTED, &DisplayModel::OnHeaderSorted, this);
 		view->Bind(KxDataView2::EvtCOLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
 
 		// Columns
@@ -320,6 +337,8 @@ namespace Kortex::SaveManager
 	{
 		UpdateBitmapCellDimensions();
 		m_Saves = m_Manager.GetSaves();
+		Resort();
+
 		SetItemCount(m_Saves.size());
 	}
 }

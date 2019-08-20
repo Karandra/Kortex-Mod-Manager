@@ -355,5 +355,7 @@ namespace Kortex::SaveManager
 				ScheduleReload();
 			});
 		}
+
+		menu.Show(m_DisplayModel->GetView());
 	}
 }

@@ -129,6 +129,7 @@ namespace Kortex::SaveManager
 				break;
 			}
 		};
+		return false;
 	}
 	bool DisplayModel::IsEnabled(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{

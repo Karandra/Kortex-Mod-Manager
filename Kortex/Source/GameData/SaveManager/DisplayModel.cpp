@@ -9,6 +9,19 @@
 
 namespace Kortex::SaveManager
 {
+	KxDataView2::ToolTip DisplayModel::GetToolTip(const KxDataView2::Node& node, const KxDataView2::Column& column) const
+	{
+		const IGameSave& save = GetItem(node);
+
+		switch (column.GetID<ColumnID>())
+		{
+			case ColumnID::Name:
+			{
+				return save.GetFileItem().GetName();
+			}
+		};
+		return VirtualListModel::GetToolTip(node, column);
+	}
 	wxAny DisplayModel::GetEditorValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const
 	{
 		const IGameSave& save = GetItem(node);

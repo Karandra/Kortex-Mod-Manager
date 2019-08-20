@@ -34,6 +34,7 @@ namespace Kortex::SaveManager
 			KxDataView2::Column* m_BitmapColumn = nullptr;
 
 		private:
+			KxDataView2::ToolTip GetToolTip(const  KxDataView2::Node& node, const  KxDataView2::Column& column) const override;
 			wxAny GetEditorValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
 			wxAny GetValue(const KxDataView2::Node& node, const KxDataView2::Column& column) const override;
 			bool SetValue(KxDataView2::Node& node, KxDataView2::Column& column, const wxAny& value) override;

@@ -13,7 +13,7 @@
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxCrypto.h>
-#include <wx/clipbrd.h>
+#include <KxFramework/KxShell.h>
 
 namespace Kortex::Application::OName
 {
@@ -48,7 +48,7 @@ namespace
 namespace Kortex::SaveManager
 {
 	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow), m_Manager(ISaveManager::GetInstance())
+		:KWorkspace(mainWindow)
 	{
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 	}
@@ -79,7 +79,7 @@ namespace Kortex::SaveManager
 
 		// Load filters
 		auto filterOptions = GetFiltersOptions();
-		for (const auto& filter: m_Manager->GetConfig().GetFileFilters())
+		for (const auto& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
 		{
 			if (GetFilterOption(filter).GetAttributeBool(OName::Enabled, true))
 			{
@@ -103,12 +103,12 @@ namespace Kortex::SaveManager
 		{
 			filterList.push_back(filter);
 		}
-		m_Manager->UpdateActiveFilters(filterList);
+		ISaveManager::GetInstance()->UpdateActiveFilters(filterList);
 	}
 
 	bool Workspace::FiltersMenu_IsAllFiltersActive() const
 	{
-		return m_ActiveFilters.size() == m_Manager->GetConfig().GetFileFilters().size();
+		return m_ActiveFilters.size() == ISaveManager::GetInstance()->GetConfig().GetFileFilters().size();
 	}
 	void Workspace::FiltersMenu_AllFiles(KxMenuEvent& event)
 	{
@@ -118,9 +118,9 @@ namespace Kortex::SaveManager
 		}
 		else
 		{
-			for (const KLabeledValue& v: m_Manager->GetConfig().GetFileFilters())
+			for (const KLabeledValue& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
 			{
-				m_ActiveFilters.insert(v.GetValue());
+				m_ActiveFilters.insert(filter.GetValue());
 			}
 		}
 		ScheduleReload();
@@ -167,7 +167,7 @@ namespace Kortex::SaveManager
 	{
 		if (BroadcastProcessor::Get().ProcessEventEx(SaveEvent::EvtRemoving, save).Do().IsAllowed())
 		{
-			const Config& config = m_Manager->GetConfig();
+			const Config& config = ISaveManager::GetInstance()->GetConfig();
 			const KxFileItem& primaryInfo = save.GetFileItem();
 
 			KxFile(primaryInfo.GetFullPath()).RemoveFile(true);
@@ -322,7 +322,7 @@ namespace Kortex::SaveManager
 			filtersMenu->AddSeparator();
 
 			// Specific
-			for (const KLabeledValue& filter: m_Manager->GetConfig().GetFileFilters())
+			for (const KLabeledValue& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
 			{
 				KxMenuItem* item = filtersMenu->Add(new KxMenuItem(filter.GetLabel(), wxEmptyString, wxITEM_CHECK));
 				item->Bind(KxEVT_MENU_SELECT, &Workspace::FiltersMenu_SpecificFilter, this);
@@ -331,6 +331,23 @@ namespace Kortex::SaveManager
 			}
 		}
 		menu.AddSeparator();
+
+		// Open location
+		{
+			KxMenuItem* item = menu.AddItem(save ? KTr("Generic.FileLocation") : KTr("Generic.FolderLocation"));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderOpen));
+			item->Bind(KxEVT_MENU_SELECT, [this, save](KxMenuEvent& event)
+			{
+				if (save)
+				{
+					KxShell::OpenFolderAndSelectItem(save->GetFileItem().GetFullPath());
+				}
+				else
+				{
+					KxShell::Execute(this, ISaveManager::GetInstance()->GetConfig().GetLocation(), wxS("open"));
+				}
+			});
+		}
 
 		// Reload items
 		{

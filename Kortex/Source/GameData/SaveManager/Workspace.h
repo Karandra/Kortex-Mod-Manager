@@ -24,7 +24,6 @@ namespace Kortex::SaveManager
 	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
 	{
 		private:
-			ISaveManager* m_Manager = nullptr;
 			std::unordered_set<wxString> m_ActiveFilters;
 
 			wxBoxSizer* m_MainSizer = nullptr;

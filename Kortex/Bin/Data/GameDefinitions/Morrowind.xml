@@ -250,6 +250,7 @@
 			</FileFilters>
 
 			<PrimaryExtension>ess</PrimaryExtension>
+			<ScreenshotSize Ratio="1"/>
 		</SaveManager>
 
 		<ScreenshotsGallery>

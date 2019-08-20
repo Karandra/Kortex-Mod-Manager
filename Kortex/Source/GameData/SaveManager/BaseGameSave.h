@@ -13,6 +13,16 @@ namespace Kortex::SaveManager
 			bool m_IsOK = false;
 
 		protected:
+			bool OnCreate(KxFileItem& fileItem) override
+			{
+				return fileItem.IsOK();
+			}
+
+		public:
+			bool IsOK() const override;
+			bool Create(const wxString& filePath) override;
+			bool ReadFile() override;
+
 			wxBitmap GetThumbBitmap() const override
 			{
 				return m_Thumb;
@@ -29,16 +39,6 @@ namespace Kortex::SaveManager
 			{
 				m_Thumb = wxNullBitmap;
 			}
-
-			virtual bool OnCreate(KxFileItem& fileItem) override
-			{
-				return fileItem.IsOK();
-			}
-
-		public:
-			bool IsOK() const override;
-			bool Create(const wxString& filePath) override;
-			bool ReadFile() override;
 
 			const KxFileItem& GetFileItem() const override
 			{

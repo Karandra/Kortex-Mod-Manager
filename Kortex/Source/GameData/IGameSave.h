@@ -36,11 +36,6 @@ namespace Kortex
 			virtual bool OnCreate(KxFileItem& fileItem) = 0;
 			virtual bool OnRead(const KxFileItem& fileItem) = 0;
 
-			virtual wxBitmap GetThumbBitmap() const = 0;
-			virtual bool HasThumbBitmap() const = 0;
-			virtual void SetThumbBitmap(const wxBitmap& bitmap) = 0;
-			virtual void ResetThumbBitmap() = 0;
-
 		public:
 			virtual bool IsOK() const = 0;
 			virtual bool Create(const wxString& filePath) = 0;
@@ -53,5 +48,9 @@ namespace Kortex
 			virtual const InfoPairVector& GetBasicInfo() const = 0;
 
 			virtual wxString GetDisplayName() const = 0;
+			virtual wxBitmap GetThumbBitmap() const = 0;
+			virtual bool HasThumbBitmap() const = 0;
+			virtual void SetThumbBitmap(const wxBitmap& bitmap) = 0;
+			virtual void ResetThumbBitmap() = 0;
 	};
 }

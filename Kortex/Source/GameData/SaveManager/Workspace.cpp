@@ -362,7 +362,7 @@ namespace Kortex::SaveManager
 		// Remove
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-			item->Enable(save);
+			item->Enable(save && !IModManager::GetInstance()->GetFileSystem().IsEnabled());
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				for (KxDataView2::Node* node: m_DisplayModel->GetView()->GetSelections())

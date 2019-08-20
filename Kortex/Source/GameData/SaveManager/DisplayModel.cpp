@@ -2,6 +2,7 @@
 #include <Kortex/SaveManager.hpp>
 #include <Kortex/Application.hpp>
 #include "GameMods/IModManager.h"
+#include "VirtualFileSystem/VirtualFSEvent.h"
 #include "UI/KImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
@@ -210,7 +211,10 @@ namespace Kortex::SaveManager
 				}
 				case ColumnID::Name:
 				{
-					GetView()->EditItem(*node, *column);
+					if (IsEnabled(*node, *column))
+					{
+						GetView()->EditItem(*node, *column);
+					}
 					break;
 				}
 			};
@@ -252,9 +256,16 @@ namespace Kortex::SaveManager
 		}
 	}
 
-	void DisplayModel::OnFiltersChanged(SaveEvent& event)
+	void DisplayModel::OnFiltersChanged(BroadcastEvent& event)
 	{
 		RefreshItems();
+	}
+	void DisplayModel::OnVFSToggled(BroadcastEvent& event)
+	{
+		if (m_Workspace->IsWorkspaceVisible())
+		{
+			GetView()->Refresh();
+		}
 	}
 
 	DisplayModel::DisplayModel()
@@ -262,6 +273,7 @@ namespace Kortex::SaveManager
 	{
 		m_Workspace = Workspace::GetInstance();
 		m_BroadcastReciever.Bind(SaveEvent::EvtFiltersChanged, &DisplayModel::OnFiltersChanged, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &DisplayModel::OnVFSToggled, this);
 	}
 
 	void DisplayModel::UpdateBitmapCellDimensions()

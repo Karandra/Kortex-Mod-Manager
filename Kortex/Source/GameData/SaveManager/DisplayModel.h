@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "GameData/IGameSave.h"
-#include "GameData/SaveEvent.h"
 #include <DataView2/DataView2.h>
 
 namespace Kortex
@@ -52,7 +51,8 @@ namespace Kortex::SaveManager
 			void OnHeaderContextMenu(KxDataView2::Event& event);
 			void OnCacheHint(KxDataView2::Event& event);
 
-			void OnFiltersChanged(SaveEvent& event);
+			void OnFiltersChanged(BroadcastEvent& event);
+			void OnVFSToggled(BroadcastEvent& event);
 
 		public:
 			DisplayModel();

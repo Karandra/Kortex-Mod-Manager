@@ -399,7 +399,7 @@ namespace Kortex::SaveManager
 
 		// Columns
 		constexpr ColumnStyle columnStyle = ColumnStyle::Sort|ColumnStyle::Move|ColumnStyle::Size;
-		view->AppendColumn<BitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, {}, columnStyle);
+		view->AppendColumn<BitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, {}, ColumnStyle::Move|ColumnStyle::Size);
 		view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Name"), ColumnID::Name, {}, columnStyle);
 		view->AppendColumn<TextRenderer>(KTr("Generic.ModificationDate"), ColumnID::ModificationDate, {}, columnStyle);
 		view->AppendColumn<TextRenderer>(KTr("Generic.Size"), ColumnID::Size, {}, columnStyle);

@@ -52,7 +52,6 @@ namespace Kortex::SaveManager
 
 			void Resort();
 			bool Compare(const IGameSave& left, const IGameSave& right, const KxDataView2::Column& column) const;
-		
 
 			bool UpdateBitmapSize(int width = -1);
 			void UpdateBitmapCellDimensions();

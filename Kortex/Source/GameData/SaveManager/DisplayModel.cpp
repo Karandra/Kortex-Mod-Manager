@@ -189,6 +189,55 @@ namespace Kortex::SaveManager
 		};
 		return false;
 	}
+	bool DisplayModel::UpdateBitmapSize(int width)
+	{
+		if (width < 0)
+		{
+			width = m_BitmapColumn->GetWidth();
+		}
+
+		if (width < m_MinBitmapSize.GetWidth())
+		{
+			m_BitmapColumn->SetWidth(m_MinBitmapSize.GetWidth());
+			return false;
+		}
+		else if (width > m_MaxWidth)
+		{
+			m_BitmapColumn->SetWidth(m_MaxWidth);
+			return false;
+		}
+		else
+		{
+			const KBitmapSize oldSize = m_BitmapSize;
+			m_BitmapSize.FromWidth(width, m_DefaultBitmapSize.GetRatio());
+			if (m_BitmapSize.GetHeight() < m_MinBitmapSize.GetHeight())
+			{
+				m_BitmapSize.FromHeight(m_MinBitmapSize.GetHeight(), m_DefaultBitmapSize.GetRatio());
+			}
+
+			if (m_BitmapSize != oldSize)
+			{
+				for (IGameSave* save: m_Saves)
+				{
+					save->ResetThumbBitmap();
+				}
+				UpdateBitmapCellDimensions();
+			}
+			return true;
+		}
+	}
+	void DisplayModel::UpdateBitmapCellDimensions()
+	{
+		m_BitmapColumn->SetWidth(m_BitmapSize.GetWidth());
+		if (m_BitmapColumn->IsVisible())
+		{
+			GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight());
+		}
+		else
+		{
+			GetView()->SetUniformRowHeight(-1);
+		}
+	}
 
 	void DisplayModel::OnSelectItem(KxDataView2::Event& event)
 	{
@@ -254,14 +303,26 @@ namespace Kortex::SaveManager
 				if (!save.IsOK() || !save.HasThumbBitmap())
 				{
 					save.ReadFile();
-					save.SetThumbBitmap(m_BitmapSize.ScaleMaintainRatio(save.GetBitmap(), 0, 4));
+					save.SetThumbBitmap(m_BitmapSize.ScaleMaintainRatio(save.GetBitmap(), 0, 2));
 				}
 			}
 		}
 	}
+	
 	void DisplayModel::OnHeaderSorted(KxDataView2::Event& event)
 	{
 		Resort();
+	}
+	void DisplayModel::OnHeaderResized(KxDataView2::Event& event)
+	{
+		KxDataView2::Column* column = event.GetColumn();
+		if (column == m_BitmapColumn && column->IsVisible())
+		{
+			if (!UpdateBitmapSize(event.GetWidth()))
+			{
+				event.Veto();
+			}
+		}
 	}
 	void DisplayModel::OnHeaderContextMenu(KxDataView2::Event& event)
 	{
@@ -293,20 +354,6 @@ namespace Kortex::SaveManager
 		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &DisplayModel::OnVFSToggled, this);
 	}
 
-	void DisplayModel::UpdateBitmapCellDimensions()
-	{
-		m_BitmapSize = m_Manager.GetConfig().GetBitmapSize();
-
-		m_BitmapColumn->SetWidth(m_BitmapSize.GetWidth());
-		if (m_BitmapColumn->IsVisible())
-		{
-			GetView()->SetUniformRowHeight(m_BitmapSize.GetHeight());
-		}
-		else
-		{
-			GetView()->SetUniformRowHeight(-1);
-		}
-	}
 	void DisplayModel::CreateView(wxWindow* parent)
 	{
 		using namespace KxDataView2;
@@ -319,26 +366,36 @@ namespace Kortex::SaveManager
 		view->Bind(KxDataView2::EvtITEM_ACTIVATED, &DisplayModel::OnActivateItem, this);
 		view->Bind(KxDataView2::EvtITEM_CONTEXT_MENU, &DisplayModel::OnContextMenu, this);;
 		view->Bind(KxDataView2::EvtVIEW_CACHE_HINT, &DisplayModel::OnCacheHint, this);
+
 		view->Bind(KxDataView2::EvtCOLUMN_SORTED, &DisplayModel::OnHeaderSorted, this);
+		view->Bind(KxDataView2::EvtCOLUMN_RESIZE, &DisplayModel::OnHeaderResized, this);
+		view->Bind(KxDataView2::EvtCOLUMN_END_RESIZE, &DisplayModel::OnHeaderResized, this);
+		view->Bind(KxDataView2::EvtCOLUMN_HEADER_SEPARATOR_CLICK, &DisplayModel::OnHeaderResized, this);
 		view->Bind(KxDataView2::EvtCOLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
 
 		// Columns
-		const ColumnStyle columnStyle = ColumnStyle::Sort|ColumnStyle::Move|ColumnStyle::Size;
-		view->AppendColumn<BitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, m_BitmapSize.GetWidth(), ColumnStyle::Move);
+		constexpr ColumnStyle columnStyle = ColumnStyle::Sort|ColumnStyle::Move|ColumnStyle::Size;
+		view->AppendColumn<BitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, {}, columnStyle);
 		view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Name"), ColumnID::Name, {}, columnStyle);
 		view->AppendColumn<TextRenderer>(KTr("Generic.ModificationDate"), ColumnID::ModificationDate, {}, columnStyle);
 		view->AppendColumn<TextRenderer>(KTr("Generic.Size"), ColumnID::Size, {}, columnStyle);
 
-		m_BitmapColumn = view->GetColumnByID(ColumnID::Bitmap);
 		view->GetColumnByID(ColumnID::Size)->GetRenderer().SetAlignment(wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT);
 		view->GetColumnByID(ColumnID::ModificationDate)->SortDescending();
+		
+		// Bitmap setup
+		m_BitmapColumn = view->GetColumnByID(ColumnID::Bitmap);
+		m_BitmapColumn->SetMinWidth(view->GetUniformRowHeight());
 	}
 	void DisplayModel::RefreshItems()
 	{
-		UpdateBitmapCellDimensions();
+		m_DefaultBitmapSize = m_Manager.GetConfig().GetBitmapSize();
+		m_MinBitmapSize.FromHeight(m_BitmapColumn->GetMinWidth(), m_DefaultBitmapSize.GetRatio());
+		m_MaxWidth = m_DefaultBitmapSize.GetWidth() * 3;
+		UpdateBitmapSize();
+
 		m_Saves = m_Manager.GetSaves();
 		Resort();
-
 		SetItemCount(m_Saves.size());
 	}
 }

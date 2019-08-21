@@ -26,11 +26,15 @@ namespace Kortex::SaveManager
 		private:
 			BroadcastReciever m_BroadcastReciever;
 			IGameSave::RefVector m_Saves;
-			KBitmapSize m_BitmapSize;
 
 			ISaveManager& m_Manager;
 			Workspace* m_Workspace = nullptr;
+
 			KxDataView2::Column* m_BitmapColumn = nullptr;
+			KBitmapSize m_DefaultBitmapSize;
+			KBitmapSize m_BitmapSize;
+			KBitmapSize m_MinBitmapSize;
+			int m_MaxWidth = 0;
 
 		private:
 			KxDataView2::ToolTip GetToolTip(const  KxDataView2::Node& node, const  KxDataView2::Column& column) const override;
@@ -46,6 +50,8 @@ namespace Kortex::SaveManager
 
 			void Resort();
 			bool Compare(const IGameSave& left, const IGameSave& right, const KxDataView2::Column& column) const;
+			bool UpdateBitmapSize(int width = -1);
+			void UpdateBitmapCellDimensions();
 
 			void OnSelectItem(KxDataView2::Event& event);
 			void OnActivateItem(KxDataView2::Event& event);
@@ -53,6 +59,7 @@ namespace Kortex::SaveManager
 			void OnCacheHint(KxDataView2::Event& event);
 
 			void OnHeaderSorted(KxDataView2::Event& event);
+			void OnHeaderResized(KxDataView2::Event& event);
 			void OnHeaderContextMenu(KxDataView2::Event& event);
 
 			void OnFiltersChanged(BroadcastEvent& event);
@@ -64,7 +71,6 @@ namespace Kortex::SaveManager
 		public:
 			void CreateView(wxWindow* parent);
 			void RefreshItems();
-			void UpdateBitmapCellDimensions();
 
 			const IGameSave& GetItem(const KxDataView2::Node& node) const
 			{

@@ -32,8 +32,10 @@ namespace Kortex::SaveManager
 
 			KxDataView2::Column* m_BitmapColumn = nullptr;
 			KBitmapSize m_DefaultBitmapSize;
-			KBitmapSize m_BitmapSize;
+			KBitmapSize m_NativeBitmapSize;
 			KBitmapSize m_MinBitmapSize;
+			KBitmapSize m_BitmapSize;
+			double m_BitmapRatio = 0;
 			int m_MaxWidth = 0;
 
 		private:
@@ -50,8 +52,11 @@ namespace Kortex::SaveManager
 
 			void Resort();
 			bool Compare(const IGameSave& left, const IGameSave& right, const KxDataView2::Column& column) const;
+		
+
 			bool UpdateBitmapSize(int width = -1);
 			void UpdateBitmapCellDimensions();
+			void UpdateNativeBitmapSize();
 
 			void OnSelectItem(KxDataView2::Event& event);
 			void OnActivateItem(KxDataView2::Event& event);
@@ -60,7 +65,7 @@ namespace Kortex::SaveManager
 
 			void OnHeaderSorted(KxDataView2::Event& event);
 			void OnHeaderResized(KxDataView2::Event& event);
-			void OnHeaderContextMenu(KxDataView2::Event& event);
+			void OnHeaderMenuItem(KxDataView2::Event& event);
 
 			void OnFiltersChanged(BroadcastEvent& event);
 			void OnVFSToggled(BroadcastEvent& event);

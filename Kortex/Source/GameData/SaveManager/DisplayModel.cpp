@@ -189,6 +189,7 @@ namespace Kortex::SaveManager
 		};
 		return false;
 	}
+	
 	bool DisplayModel::UpdateBitmapSize(int width)
 	{
 		if (width < 0)
@@ -209,10 +210,10 @@ namespace Kortex::SaveManager
 		else
 		{
 			const KBitmapSize oldSize = m_BitmapSize;
-			m_BitmapSize.FromWidth(width, m_DefaultBitmapSize.GetRatio());
+			m_BitmapSize.FromWidth(width, m_BitmapRatio);
 			if (m_BitmapSize.GetHeight() < m_MinBitmapSize.GetHeight())
 			{
-				m_BitmapSize.FromHeight(m_MinBitmapSize.GetHeight(), m_DefaultBitmapSize.GetRatio());
+				m_BitmapSize.FromHeight(m_MinBitmapSize.GetHeight(), m_BitmapRatio);
 			}
 
 			if (m_BitmapSize != oldSize)
@@ -237,6 +238,15 @@ namespace Kortex::SaveManager
 		{
 			GetView()->SetUniformRowHeight(-1);
 		}
+	}
+	void DisplayModel::UpdateNativeBitmapSize()
+	{
+		KBitmapSize& size = m_NativeBitmapSize.IsFullySpecified() ? m_NativeBitmapSize : m_DefaultBitmapSize;
+		m_BitmapSize = size;
+		m_BitmapRatio = size.GetRatio();
+		m_MaxWidth = size.GetWidth() * 2;
+
+		UpdateBitmapCellDimensions();
 	}
 
 	void DisplayModel::OnSelectItem(KxDataView2::Event& event)
@@ -303,7 +313,14 @@ namespace Kortex::SaveManager
 				if (!save.IsOK() || !save.HasThumbBitmap())
 				{
 					save.ReadFile();
-					save.SetThumbBitmap(m_BitmapSize.ScaleMaintainRatio(save.GetBitmap(), 0, 2));
+
+					wxBitmap bitmap = save.GetBitmap();
+					if (!m_NativeBitmapSize.IsFullySpecified() && bitmap.IsOk())
+					{
+						m_NativeBitmapSize = bitmap.GetSize();
+						UpdateNativeBitmapSize();
+					}
+					save.SetThumbBitmap(m_BitmapSize.ScaleMaintainRatio(bitmap, 0, 4));
 				}
 			}
 		}
@@ -318,20 +335,27 @@ namespace Kortex::SaveManager
 		KxDataView2::Column* column = event.GetColumn();
 		if (column == m_BitmapColumn && column->IsVisible())
 		{
-			if (!UpdateBitmapSize(event.GetWidth()))
+			int width = event.GetWidth();
+			if (event.GetEventType() == KxDataView2::EvtCOLUMN_HEADER_WIDTH_FIT)
+			{
+				width = (m_NativeBitmapSize.IsFullySpecified() ? m_NativeBitmapSize : m_DefaultBitmapSize).GetWidth();
+			}
+
+			const int maxAvailableWidth = 0.95 * GetView()->GetClientSize().GetWidth();
+			if (width < maxAvailableWidth && UpdateBitmapSize(width))
+			{
+				width = m_BitmapSize.GetWidth();
+			}
+			else
 			{
 				event.Veto();
 			}
+			event.SetWidth(width);
 		}
 	}
-	void DisplayModel::OnHeaderContextMenu(KxDataView2::Event& event)
+	void DisplayModel::OnHeaderMenuItem(KxDataView2::Event& event)
 	{
-		KxMenu menu;
-		if (GetView()->CreateColumnSelectionMenu(menu))
-		{
-			GetView()->OnColumnSelectionMenu(menu);
-			UpdateBitmapCellDimensions();
-		}
+		UpdateBitmapCellDimensions();
 	}
 
 	void DisplayModel::OnFiltersChanged(BroadcastEvent& event)
@@ -370,8 +394,8 @@ namespace Kortex::SaveManager
 		view->Bind(KxDataView2::EvtCOLUMN_SORTED, &DisplayModel::OnHeaderSorted, this);
 		view->Bind(KxDataView2::EvtCOLUMN_RESIZE, &DisplayModel::OnHeaderResized, this);
 		view->Bind(KxDataView2::EvtCOLUMN_END_RESIZE, &DisplayModel::OnHeaderResized, this);
-		view->Bind(KxDataView2::EvtCOLUMN_HEADER_SEPARATOR_CLICK, &DisplayModel::OnHeaderResized, this);
-		view->Bind(KxDataView2::EvtCOLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
+		view->Bind(KxDataView2::EvtCOLUMN_HEADER_WIDTH_FIT, &DisplayModel::OnHeaderResized, this);
+		view->Bind(KxDataView2::EvtCOLUMN_HEADER_MENU_ITEM, &DisplayModel::OnHeaderMenuItem, this);
 
 		// Columns
 		constexpr ColumnStyle columnStyle = ColumnStyle::Sort|ColumnStyle::Move|ColumnStyle::Size;
@@ -391,8 +415,9 @@ namespace Kortex::SaveManager
 	{
 		m_DefaultBitmapSize = m_Manager.GetConfig().GetBitmapSize();
 		m_MinBitmapSize.FromHeight(m_BitmapColumn->GetMinWidth(), m_DefaultBitmapSize.GetRatio());
-		m_MaxWidth = m_DefaultBitmapSize.GetWidth() * 3;
+		UpdateNativeBitmapSize();
 		UpdateBitmapSize();
+		UpdateBitmapCellDimensions();
 
 		m_Saves = m_Manager.GetSaves();
 		Resort();

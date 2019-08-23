@@ -302,7 +302,11 @@ namespace Kortex
 		if (IsOK() && !m_IsWaiting && !IsRunning() && IsPaused())
 		{
 			IDownloadManager* manager = IDownloadManager::GetInstance();
-			return manager->GetActiveDownloadsCount() < manager->GetMaxConcurrentDownloads();
+			if (manager->HasConcurrentDownloadsLimit())
+			{
+				return (int)manager->GetActiveDownloadsCount() < manager->GetMaxConcurrentDownloads();
+			}
+			return true;
 		}
 		return false;
 	}

@@ -1,6 +1,6 @@
-# Features and comparison to other mod managers
+# Comparison to other mod managers
 
-There's a few mod managers around these days and it's may be a bit difficult to choose the one you need. This page is designed to highlight key features of known mod managers.
+There are many mod managers around these days and it's may be a bit difficult to choose the one you need. This page is designed to highlight key features of known mod managers.
 
 ## Legend
 
@@ -362,7 +362,7 @@ There's a few mod managers around these days and it's may be a bit difficult to 
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2.MO1" colspan="2">
-				Bundeled with some extensions, additional are available at <b>NexusMods</b>.
+				Bundled with some extensions, additional are available at <b>NexusMods</b>.
 			</td>
 			<td id="Vortex">
 				Additional extensions are available at <b>NexusMods</b>.

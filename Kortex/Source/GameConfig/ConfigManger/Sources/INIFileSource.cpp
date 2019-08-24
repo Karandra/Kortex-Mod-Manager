@@ -19,15 +19,11 @@ namespace Kortex::GameConfig
 	}
 	bool INIFileSource::Save()
 	{
-		if (INISource::IsOpened())
+		KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+		if (stream.IsOk())
 		{
-			KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
-			if (stream.IsOk())
-			{
-				return GetINI().Save(stream);
-			}
+			return GetINI().Save(stream);
 		}
-		return false;
 	}
 	void INIFileSource::Close()
 	{

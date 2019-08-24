@@ -19,15 +19,11 @@ namespace Kortex::GameConfig
 	}
 	bool XMLFileSource::Save()
 	{
-		if (XMLSource::IsOpened())
+		KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+		if (stream.IsOk())
 		{
-			KxFileStream stream(GetResolvedFilePath(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
-			if (stream.IsOk())
-			{
-				return GetXML().Save(stream);
-			}
+			return GetXML().Save(stream);
 		}
-		return false;
 	}
 	void XMLFileSource::Close()
 	{

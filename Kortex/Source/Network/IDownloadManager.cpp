@@ -345,6 +345,6 @@ namespace Kortex
 				return true;
 			}
 		}
-		return false;
+		return QueueSimpleDownload(link);
 	}
 }

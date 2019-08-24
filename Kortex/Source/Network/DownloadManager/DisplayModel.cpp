@@ -88,7 +88,7 @@ namespace Kortex::DownloadManager
 				KxTextBoxDialog dialog(GetView(), KxID_NONE, KTr("DownloadManager.Menu.AddFromURL.Message"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL);
 				if (dialog.ShowModal() == KxID_OK)
 				{
-					m_DownloadManager.QueueSimpleDownload(dialog.GetValue());
+					m_DownloadManager.QueueUnknownDownload(dialog.GetValue());
 				}
 			});
 		}

@@ -121,11 +121,33 @@ namespace Kortex::NetworkManager
 		{
 			for (const auto& instance: IGameInstance::GetShallowInstances())
 			{
-				if (KxComparator::IsEqual(instance->GetVariables().GetVariable(Variables::NexusDomainName), id))
+				const IVariableTable& table = instance->GetVariables();
+				wxString value = table.GetVariable(Variables::NexusDomainName).AsString();
+				if (KxComparator::IsEqual(id, value, true))
 				{
 					return instance->GetGameID();
 				}
 			}
+
+			// Try names that doesn't match domain names
+			auto GetInstanceGameID = [&](const wxString& id)
+			{
+				if (IGameInstance* instance = IGameInstance::GetShallowInstance(id))
+				{
+					return instance->GetGameID();
+				}
+				return GameIDs::NullGameID;
+			};
+
+			if (KxComparator::IsEqual(id, wxS("SkyrimSE"), true))
+			{
+				return GetInstanceGameID(GameIDs::SkyrimSE);
+			}
+			else if (KxComparator::IsEqual(id, wxS("FalloutNV"), true))
+			{
+				return GetInstanceGameID(GameIDs::FalloutNV);
+			}
+			// There's also 'TESO' -> 'ElderScrollsOnline' but Kortex doesn't support TESO.
 		}
 		return {};
 	}

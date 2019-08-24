@@ -45,7 +45,6 @@ namespace Kortex
 			DownloadItem::Vector m_Downloads;
 			
 		private:
-			wxString m_Location;
 			int m_MaxConcurrentDownloads = -1;
 			bool m_ShowHiddenDownloads = true;
 
@@ -84,10 +83,7 @@ namespace Kortex
 				ShowHiddenDownloads(!m_ShowHiddenDownloads);
 			}
 
-			wxString GetDownloadsLocation() const
-			{
-				return m_Location;
-			}
+			wxString GetDownloadsLocation() const;
 			void SetDownloadsLocation(const wxString& location);
 			
 			bool HasConcurrentDownloadsLimit() const

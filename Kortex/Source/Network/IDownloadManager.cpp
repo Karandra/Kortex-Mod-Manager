@@ -91,7 +91,6 @@ namespace Kortex
 	void IDownloadManager::OnInit()
 	{
 		using namespace Application;
-		m_Location = GetAInstanceOption(OName::Downloads).GetAttribute(OName::Location);
 		m_ShowHiddenDownloads = GetAInstanceOption(OName::ShowHidden).GetValueBool(m_ShowHiddenDownloads);
 		m_MaxConcurrentDownloads = GetAInstanceOption(OName::MaxConcurrentDownloads).GetValueInt(m_MaxConcurrentDownloads);
 
@@ -100,7 +99,6 @@ namespace Kortex
 	void IDownloadManager::OnExit()
 	{
 		using namespace Application;
-		GetAInstanceOption(OName::Downloads).SetAttribute(OName::Location, m_Location);
 		GetAInstanceOption(OName::ShowHidden).SetValue(m_ShowHiddenDownloads);
 		GetAInstanceOption(OName::MaxConcurrentDownloads).SetValue(m_MaxConcurrentDownloads);
 
@@ -151,7 +149,7 @@ namespace Kortex
 			case LocationStatus::NotSpecified:
 			{
 				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
-											KTr("DownloadManager.DownloadLocationInvalid"),
+											KTr("DownloadManager.DownloadLocation.Invalid"),
 											KxICON_ERROR
 				);
 				break;
@@ -159,7 +157,7 @@ namespace Kortex
 			case LocationStatus::InsufficientVolumeSpace:
 			{
 				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
-											KTr("DownloadManager.DownloadLocationInsufficientSpace"),
+											KTr("DownloadManager.DownloadLocation.InsufficientSpace"),
 											KxICON_ERROR
 				);
 				break;
@@ -167,7 +165,7 @@ namespace Kortex
 			case LocationStatus::InsufficientVolumeCapabilities:
 			{
 				INotificationCenter::Notify(KTr("DownloadManager.DownloadLocation"),
-											KTr("DownloadManager.DownloadLocationInsufficientCapabilities"),
+											KTr("DownloadManager.DownloadLocation.InsufficientCapabilities"),
 											KxICON_ERROR
 				);
 				break;
@@ -300,11 +298,18 @@ namespace Kortex
 		m_ShowHiddenDownloads = show;
 		BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
 	}
+
+	wxString IDownloadManager::GetDownloadsLocation() const
+	{
+		using namespace Application;
+		return GetAInstanceOption(OName::Downloads).GetAttribute(OName::Location);
+	}
 	void IDownloadManager::SetDownloadsLocation(const wxString& location)
 	{
-		m_Location = location;
-
+		using namespace Application;
+		GetAInstanceOption(OName::Downloads).SetAttribute(OName::Location, location);
 		KxFile(location).CreateFolder();
+
 		LoadDownloads();
 	}
 	void IDownloadManager::SetMaxConcurrentDownloads(int count)

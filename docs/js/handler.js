@@ -221,8 +221,10 @@ function initVarAssign(initType) {
 			if (initType === content) {
 				let h1Anchors = contentBoxID.getElementsByTagName("H1");
 				let h2Anchors = contentBoxID.getElementsByTagName("H2");
+				let h3Anchors = contentBoxID.getElementsByTagName("H3");
 				insertHeaderAnchors(h1Anchors);
 				insertHeaderAnchors(h2Anchors);
+				insertHeaderAnchors(h3Anchors);
 			}
 	}
 	// Init listeners post-var assign

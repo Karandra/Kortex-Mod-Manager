@@ -37,6 +37,7 @@
 	--size-heading-anchor: 1.4rem;
 	--size-heading-anchor-margin-bottom: -0.4rem;
 	--size-heading-anchor-padding-bottom: 0.8rem;
+	--size-heading3-anchor-padding-bottom: 0.6rem;
 	--size-heading-vert-spacing: 2.0rem;
 	--size-loading-max: 33%;
 	--size-menu-left-spacing: 1.6rem;
@@ -79,6 +80,7 @@
 	--short-content-padding: 0 var(--size-spacing-standard);
 	--short-copyright-margins: 0 var(--size-spacing-standard);
 	--short-heading-anchor-margins: var(--size--root-10px) var(--size--root-10px) var(--size-heading-anchor-padding-bottom);
+	--short-heading3-anchor-margins: var(--size--root-10px) var(--size--root-10px) var(--size-heading3-anchor-padding-bottom);
 	--short-header-links-panel-margins: 0 var(--size-spacing-standard);
 	--short-heading-h1-margins: 0 0 var(--size-heading-vert-spacing);
 	--short-heading-h2-margins: var(--size-heading-vert-spacing) 0;

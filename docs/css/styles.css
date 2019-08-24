@@ -395,7 +395,7 @@ code {
 #content img {
 	max-width: var(--size-content-image-max-width);
 }
-#content h1 svg.anchor, #content h2 svg.anchor {
+#content h1 svg.anchor, #content h2 svg.anchor, #content h3 svg.anchor {
 	/* Dimensions */
 	height: var(--size-heading-anchor);
 	width: var(--size-heading-anchor);
@@ -408,11 +408,14 @@ code {
 	-webkit-transition: var(--transition-color), var(--transition-opacity);
 			transition: var(--transition-color), var(--transition-opacity);
 }
-#content h1:hover .anchor, #content h2:hover .anchor {
+#content h3 svg.anchor {
+	padding: var(--short-heading3-anchor-margins);
+}
+#content h1:hover .anchor, #content h2:hover .anchor, #content h3:hover .anchor {
 	cursor: pointer;
 	opacity: 100;
 }
-#content h1 .anchor:hover, #content h2 .anchor:hover  {
+#content h1 .anchor:hover, #content h2 .anchor:hover,#content h3 .anchor:hover {
 	color: var(--color-heading-anchor-hover);
 }
 .quote {

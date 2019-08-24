@@ -497,7 +497,17 @@ namespace Kortex::DownloadManager
 	}
 	void DisplayModel::RefreshItems()
 	{
-		GetView()->GetRootNode().DetachAllChildren();
+		KxDataView2::View* view = GetView();
+		if (m_DownloadManager.GetDownloadsLocation().IsEmpty())
+		{
+			view->SetEmptyControlLabel(KTr("DownloadManager.DownloadLocation.Invalid"));
+		}
+		else
+		{
+			view->SetEmptyControlLabel(KTr("Generic.NoItemsToDisplay"));
+		}
+
+		view->GetRootNode().DetachAllChildren();
 		m_Nodes.clear();
 
 		for (DownloadItem* item: m_DownloadManager.GetDownloads())

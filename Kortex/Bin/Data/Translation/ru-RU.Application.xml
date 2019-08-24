@@ -166,6 +166,7 @@
 		<String ID="Generic.OpenWebSiteListDialog.Caption">Выберите веб-страницу, которую хотите открыть</String>
 		<String ID="Generic.FileSearchInProgress">Выполняется поиск файлов</String>
 		<String ID="Generic.FileCopyInProgress">Выполняется копирование файлов</String>
+		<String ID="Generic.NoItemsToDisplay">Нет элементов для отображения</String>
 
 		<String ID="FileFilter">Фильтр файлов</String>
 		<String ID="FileFilter.AllFiles">Все файлы</String>
@@ -601,7 +602,7 @@
 		<String ID="NetworkManager.UpdateTooltip.AnyUpdates">Новая версия (%1) этого мода доступна на %2</String>
 		<String ID="NetworkManager.UpdateTooltip.AnyDeletions">Этот мод не был найден на %1</String>
 
-		<String ID="DownloadManager.Nexus.CopyNXM">Скопировать NXM-ссылку</String>
+		<String ID="NetworkManager.Nexus.CopyNXM">Скопировать NXM-ссылку</String>
 
 		<!-- NXMHandler -->
 		<String ID="NetworkManager.NXMHandler.Caption">Настроить обработчик NXM-ссылок</String>
@@ -627,9 +628,9 @@
 		<String ID="DownloadManager.NameShort">Загрузки</String>
 
 		<String ID="DownloadManager.DownloadLocation">Папка загрузок</String>
-		<String ID="DownloadManager.DownloadLocationInvalid">Папка загрузок не указана или не существует. Выберите папку для сохранения загрузок</String>
-		<String ID="DownloadManager.DownloadLocationInsufficientSpace">Недостаточно места для сохранения файла</String>
-		<String ID="DownloadManager.DownloadLocationInsufficientCapabilities">Устройство не поддерживает функции, необходимые для сохранения файла</String>
+		<String ID="DownloadManager.DownloadLocation.Invalid">Папка загрузок не указана или не существует. Выберите папку для сохранения загрузок</String>
+		<String ID="DownloadManager.DownloadLocation.InsufficientSpace">Недостаточно места для сохранения файла</String>
+		<String ID="DownloadManager.DownloadLocation.InsufficientCapabilities">Устройство не поддерживает функции, необходимые для сохранения файла</String>
 
 		<String ID="DownloadManager.RemoveDownloadsCaption">Удаление загрузок</String>
 		<String ID="DownloadManager.RemoveDownloadsMessage">Вы действительно хотите удалить все загрузки?</String>

@@ -138,6 +138,7 @@ namespace Kortex::InstallWizard
 			SetCaption(KTrf("InstallWizard.WindowCaption", m_Package->GetName()) + ' ' + info.GetVersion());
 
 			// Try to find existing mod for this package
+			m_Mod = IModManager::GetInstance()->NewMod();
 			FindExistingMod();
 			if (m_ExistingMod)
 			{
@@ -172,7 +173,7 @@ namespace Kortex::InstallWizard
 			Show();
 			Raise();
 
-			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalling, m_ModEntry);
+			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtInstalling, *m_Mod);
 			return true;
 		}
 		return false;
@@ -203,7 +204,7 @@ namespace Kortex::InstallWizard
 		// Linked mod configuration
 		if (mod.IsLinkedMod())
 		{
-			m_ModEntry.LinkLocation(mod.GetModFilesDir());
+			m_Mod->LinkLocation(mod.GetModFilesDir());
 		}
 	}
 	void WizardDialog::LoadHeaderImage()
@@ -328,10 +329,9 @@ namespace Kortex::InstallWizard
 
 	void WizardDialog::SetModData()
 	{
-		m_ModEntry.CreateFromProject(GetConfig());
-		m_ModEntry.SetInstallTime(wxDateTime::Now());
-		m_ModEntry.SetPackageFile(m_Package->GetPackageFilePath());
-		m_ModEntry.CreateAllFolders();
+		m_Mod->CreateFromProject(GetConfig());
+		m_Mod->SetInstallTime(wxDateTime::Now());
+		m_Mod->SetPackageFile(m_Package->GetPackageFilePath());
 	}
 	KxUInt32Vector WizardDialog::GetFilesOfFolder(const KPPFFolderEntry* folder) const
 	{
@@ -382,7 +382,7 @@ namespace Kortex::InstallWizard
 	{
 		SetModData();
 
-		wxString installLocation = m_ModEntry.GetModFilesDir();
+		wxString installLocation = m_Mod->GetModFilesDir();
 		if (installLocation.Last() == '\\')
 		{
 			installLocation.RemoveLast(1);
@@ -454,7 +454,7 @@ namespace Kortex::InstallWizard
 		}
 		return false;
 	}
-	bool WizardDialog::Create(wxWindow* parent, std::unique_ptr<ModPackage>&& package)
+	bool WizardDialog::Create(wxWindow* parent, std::unique_ptr<ModPackage> package)
 	{
 		m_Package = std::move(package);
 		if (CreateUI(parent))

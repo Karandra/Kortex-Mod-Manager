@@ -62,7 +62,7 @@ namespace Kortex::InstallWizard
 			wxSimplebook* m_PageContainer = nullptr;
 
 			std::unique_ptr<ModPackage> m_Package;
-			ModManager::BasicGameMod m_ModEntry;
+			std::unique_ptr<IGameMod> m_Mod;
 			const IGameMod* m_ExistingMod = nullptr;
 
 		private:
@@ -121,7 +121,7 @@ namespace Kortex::InstallWizard
 			WizardDialog();
 			WizardDialog(wxWindow* parent, const wxString& packagePath);
 			bool Create(wxWindow* parent, const wxString& packagePath);
-			bool Create(wxWindow* parent, std::unique_ptr<ModPackage>&& package);
+			bool Create(wxWindow* parent, std::unique_ptr<ModPackage> package);
 			~WizardDialog();
 
 		public:
@@ -175,13 +175,17 @@ namespace Kortex::InstallWizard
 				return m_PageCompleted;
 			}
 
-			const IGameMod& GetModEntry() const
+			const IGameMod& GetMod() const
 			{
-				return m_ModEntry;
+				return *m_Mod;
 			}
-			IGameMod& GetModEntry()
+			IGameMod& GetMod()
 			{
-				return m_ModEntry;
+				return *m_Mod;
+			}
+			std::unique_ptr<IGameMod> TakeMod()
+			{
+				return std::move(m_Mod);
 			}
 
 			bool SwitchPage(WizardPage& targetPage);

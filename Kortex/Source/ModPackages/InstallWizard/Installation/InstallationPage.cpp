@@ -73,8 +73,8 @@ namespace Kortex::InstallWizard
 	}
 	bool InstallationPage::OnEndInstall()
 	{
-		IGameMod& mod = GetWizard().GetModEntry();
-		if (mod.Save())
+		auto mod = GetWizard().TakeMod();
+		if (mod->Save())
 		{
 			// Save main or header image
 			const KPackageProjectInterface& interfaceConfig = GetPackageConfig().GetInterface();
@@ -83,10 +83,13 @@ namespace Kortex::InstallWizard
 			if (imageEntry && imageEntry->HasBitmap())
 			{
 				const wxBitmap& bitmap = imageEntry->GetBitmap();
-				bitmap.SaveFile(mod.GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
+				bitmap.SaveFile(mod->GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
 			}
 
-			BroadcastProcessor::Get().QueueEvent(ModEvent::EvtInstalled, mod);
+			// Add mod to manager
+			IGameMod& modRef = IModManager::GetInstance()->EmplaceMod(std::move(mod));
+
+			BroadcastProcessor::Get().QueueEvent(ModEvent::EvtInstalled, modRef);
 			if (ShouldCancel())
 			{
 				// We were canceled, but mod is partially installed.

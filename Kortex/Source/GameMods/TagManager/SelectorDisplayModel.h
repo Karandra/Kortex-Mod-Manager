@@ -29,7 +29,7 @@ namespace Kortex::ModTagManager
 		protected:
 			ModTagStore* m_Data = nullptr;
 			IGameMod* m_GameMod = nullptr;
-			const IModTag* m_PromaryTag = nullptr;
+			const IModTag* m_PrimaryTag = nullptr;
 			bool m_IsModified = false;
 
 		protected:
@@ -63,7 +63,7 @@ namespace Kortex::ModTagManager
 			
 			bool HasPriorityGroupTag() const
 			{
-				return m_PromaryTag != nullptr;
+				return m_PrimaryTag != nullptr;
 			}
 			void ApplyChangesToMod();
 	};

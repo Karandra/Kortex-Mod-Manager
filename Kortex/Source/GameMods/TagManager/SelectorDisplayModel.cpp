@@ -90,7 +90,7 @@ namespace Kortex::ModTagManager
 				}
 				case ColumnID::PriorityTag:
 				{
-					value = tag == m_PromaryTag;
+					value = tag == m_PrimaryTag;
 					break;
 				}
 				case ColumnID::Expanded:
@@ -175,16 +175,16 @@ namespace Kortex::ModTagManager
 				case ColumnID::PriorityTag:
 				{
 					bool checked = value.As<bool>();
-					if (checked && m_PromaryTag != tag)
+					if (checked && m_PrimaryTag != tag)
 					{
-						m_PromaryTag = tag;
+						m_PrimaryTag = tag;
 						m_IsModified = true;
 						QueueRefresh();
 						return true;
 					}
-					else if (!checked && m_PromaryTag)
+					else if (!checked && m_PrimaryTag)
 					{
-						m_PromaryTag = nullptr;
+						m_PrimaryTag = nullptr;
 						m_IsModified = true;
 						QueueRefresh();
 						return true;
@@ -222,7 +222,7 @@ namespace Kortex::ModTagManager
 			{
 				case ColumnID::PriorityTag:
 				{
-					return m_GameMod->GetTagStore().HasTag(*tag);
+					return m_Data->HasTag(*tag);
 				}
 			};
 			return true;
@@ -294,7 +294,7 @@ namespace Kortex::ModTagManager
 
 		if (m_GameMod)
 		{
-			m_PromaryTag = m_GameMod->GetTagStore().GetPrimaryTag();
+			m_PrimaryTag = m_GameMod->GetTagStore().GetPrimaryTag();
 		}
 		RefreshItems();
 	}
@@ -316,9 +316,9 @@ namespace Kortex::ModTagManager
 	{
 		if (m_GameMod)
 		{
-			if (m_PromaryTag)
+			if (m_PrimaryTag)
 			{
-				m_GameMod->GetTagStore().SetPrimaryTag(*m_PromaryTag);
+				m_GameMod->GetTagStore().SetPrimaryTag(*m_PrimaryTag);
 			}
 			else
 			{

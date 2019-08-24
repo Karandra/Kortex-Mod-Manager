@@ -2,7 +2,7 @@
 
 Kortex Mod Manager (KMM) is a general purpose mod-manager that uses a virtual file system (VFS) to isolate mods and provide simple resolution of conflicts between mods, clean installation and uninstallation.
 
-# Featues
+# Features
 - [Virtual file system (VFS)](?page=features#virtual-file-system-vfs)
 - [Mod management](?page=features#mod-management)
 - [Plugin management](?page=features#plugin-management)

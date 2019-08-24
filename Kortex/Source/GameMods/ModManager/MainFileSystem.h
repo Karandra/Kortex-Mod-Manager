@@ -59,12 +59,12 @@ namespace Kortex::ModManager
 			size_t GetInstancesCount() const;
 			
 			bool IsOurInstance(const IVirtualFileSystem& instance) const;
-			void OnFSMounted(VirtualFSEvent& event);
-			void OnFSUnmounted(VirtualFSEvent& event);
+			void OnSingleFSMounted(VirtualFSEvent& event);
+			void OnSingleFSUnmounted(VirtualFSEvent& event);
 
 		protected:
-			void OnEnabled();
-			void OnDisabled();
+			void OnEnabled() override;
+			void OnDisabled() override;
 
 		public:
 			MainFileSystem(DefaultModManager& manager);

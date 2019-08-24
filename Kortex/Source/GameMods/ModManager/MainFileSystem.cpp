@@ -145,7 +145,7 @@ namespace Kortex::ModManager
 		return m_Mirrors.size() + (m_Convergence ? 1 : 0);
 	}
 
-	void MainFileSystem::OnFSMounted(VirtualFSEvent& event)
+	void MainFileSystem::OnSingleFSMounted(VirtualFSEvent& event)
 	{
 		if (!m_IsEnabled && IsOurInstance(event.GetFileSystem()))
 		{
@@ -156,7 +156,7 @@ namespace Kortex::ModManager
 			}
 		}
 	}
-	void MainFileSystem::OnFSUnmounted(VirtualFSEvent& event)
+	void MainFileSystem::OnSingleFSUnmounted(VirtualFSEvent& event)
 	{
 		if (m_IsEnabled && m_InstancesCountEnabled != 0 && IsOurInstance(event.GetFileSystem()))
 		{
@@ -182,8 +182,17 @@ namespace Kortex::ModManager
 	MainFileSystem::MainFileSystem(DefaultModManager& manager)
 		:m_Manager(manager)
 	{
-		m_BroadcastReciever.Bind(VirtualFSEvent::EvtSingleToggled, &MainFileSystem::OnFSMounted, this);
-		m_BroadcastReciever.Bind(VirtualFSEvent::EvtSingleToggled, &MainFileSystem::OnFSUnmounted, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtSingleToggled, [this](VirtualFSEvent& event)
+		{
+			if (event.IsActivated())
+			{
+				OnSingleFSMounted(event);
+			}
+			else
+			{
+				OnSingleFSUnmounted(event);
+			}
+		});
 	}
 	MainFileSystem::~MainFileSystem()
 	{

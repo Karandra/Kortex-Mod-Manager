@@ -383,7 +383,7 @@ void KPackageCreatorPageInfo::OnLoadProject(KPackageProjectInfo& projectInfo)
 	m_VersionInput->SetValue(projectInfo.GetVersion());
 	m_AuthorInput->SetValue(projectInfo.GetAuthor());
 	m_TranslatorNameInput->SetValue(projectInfo.GetTranslator());
-	m_TagsModel->SetDataVector(&projectInfo.GetTagStore());
+	m_TagsModel->SetDataVector(projectInfo.GetTagStore());
 
 	/* Web sites */
 	using namespace Kortex::NetworkManager;

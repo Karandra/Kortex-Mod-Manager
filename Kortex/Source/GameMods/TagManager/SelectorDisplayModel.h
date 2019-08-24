@@ -27,8 +27,8 @@ namespace Kortex::ModTagManager
 			const bool m_FullFeatured = false;
 
 		protected:
-			ModTagStore* m_Data = nullptr;
-			IGameMod* m_GameMod = nullptr;
+			IGameMod* m_Mod = nullptr;
+			ModTagStore* m_TagStore = nullptr;
 			const IModTag* m_PrimaryTag = nullptr;
 			bool m_IsModified = false;
 
@@ -48,7 +48,8 @@ namespace Kortex::ModTagManager
 			SelectorDisplayModel(bool isFullFeatured = false);
 
 		public:
-			void SetDataVector(ModTagStore* tagStore = nullptr, IGameMod* mod = nullptr);
+			void SetDataVector(ModTagStore& tagStore, IGameMod& mod);
+			void SetDataVector(ModTagStore& tagStore);
 			size_t GetItemCount() const override;
 			IModTag* GetDataEntry(size_t index) const;
 
@@ -65,6 +66,6 @@ namespace Kortex::ModTagManager
 			{
 				return m_PrimaryTag != nullptr;
 			}
-			void ApplyChangesToMod();
+			void ApplyChanges();
 	};
 }

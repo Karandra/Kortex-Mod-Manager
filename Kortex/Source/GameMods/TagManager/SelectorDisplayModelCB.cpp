@@ -23,9 +23,9 @@ namespace Kortex::ModTagManager
 
 	wxString SelectorDisplayModelCB::DoGetStingValue() const
 	{
-		if (!m_Data->IsEmpty())
+		if (!m_TagStore->IsEmpty())
 		{
-			return KxString::Join(m_Data->GetNames(), ", ");
+			return KxString::Join(m_TagStore->GetNames(), ", ");
 		}
 		else
 		{
@@ -52,11 +52,5 @@ namespace Kortex::ModTagManager
 	bool SelectorDisplayModelCB::IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const
 	{
 		return false;
-	}
-
-	void SelectorDisplayModelCB::SetDataVector(ModTagStore* tagStore)
-	{
-		SelectorDisplayModel::SetDataVector(tagStore);
-		SetStringValue(m_Data ? DoGetStingValue() : wxEmptyString);
 	}
 }

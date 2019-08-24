@@ -22,6 +22,14 @@ namespace Kortex::ModTagManager
 			void OnGetStringValue(KxDataViewEvent& event);
 
 		public:
-			virtual void SetDataVector(ModTagStore* tagStore = nullptr);
+			void SetDataVector(ModTagStore& tagStore)
+			{
+				SelectorDisplayModel::SetDataVector(tagStore);
+				SetStringValue(m_TagStore ? DoGetStingValue() : wxEmptyString);
+			}
+			void SetDataVector(ModTagStore& tagStore, IGameMod& mod)
+			{
+				SelectorDisplayModel::SetDataVector(tagStore, mod);
+			}
 	};
 }

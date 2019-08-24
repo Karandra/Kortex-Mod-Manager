@@ -964,11 +964,11 @@ namespace Kortex::ModManager
 				tempMod.GetTagStore() = focusedMod->GetTagStore();
 
 				ModTagManager::SelectorDialog dialog(GetMainWindow(), KTr("ModManager.TagsDialog"));
-				dialog.SetDataVector(&tempMod.GetTagStore(), &tempMod);
+				dialog.SetDataVector(tempMod.GetTagStore(), tempMod);
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{
-					dialog.ApplyChangesToMod();
+					dialog.ApplyChanges();
 					bool changesMade = DoForAllSelectedItems(selectedMods, [&tempMod](IGameMod& mod)
 					{
 						mod.GetTagStore() = tempMod.GetTagStore();

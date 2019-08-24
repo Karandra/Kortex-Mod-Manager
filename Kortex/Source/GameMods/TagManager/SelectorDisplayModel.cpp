@@ -85,7 +85,7 @@ namespace Kortex::ModTagManager
 				case ColumnID::Name:
 				{
 					wxBitmap icon = !tag->IsDefaultTag() ? ImageProvider::GetBitmap(ImageResourceID::PlusSmall) : wxNullBitmap;
-					value = KxDataViewBitmapTextToggleValue(m_Data->HasTag(*tag), tag->GetName(), icon, KxDataViewBitmapTextToggleValue::CheckBox);
+					value = KxDataViewBitmapTextToggleValue(m_TagStore->HasTag(*tag), tag->GetName(), icon, KxDataViewBitmapTextToggleValue::CheckBox);
 					break;
 				}
 				case ColumnID::PriorityTag:
@@ -139,8 +139,8 @@ namespace Kortex::ModTagManager
 						wxString name = value.As<wxString>();
 						if (!name.IsEmpty() && tag->GetID() != name)
 						{
-							const bool hasTag = m_Data->HasTag(*tag);
-							m_Data->ToggleTag(*tag, false);
+							const bool hasTag = m_TagStore->HasTag(*tag);
+							m_TagStore->ToggleTag(*tag, false);
 
 							tag->SetID(name);
 							tag->SetName(name);
@@ -148,7 +148,7 @@ namespace Kortex::ModTagManager
 							// Re-add this tag if needed
 							if (hasTag)
 							{
-								m_Data->ToggleTag(*tag, true);
+								m_TagStore->ToggleTag(*tag, true);
 							}
 
 							m_IsModified = true;
@@ -157,8 +157,8 @@ namespace Kortex::ModTagManager
 					}
 					else
 					{
-						const bool hasTag = m_Data->HasTag(*tag);
-						m_Data->ToggleTag(*tag, value.As<bool>());
+						const bool hasTag = m_TagStore->HasTag(*tag);
+						m_TagStore->ToggleTag(*tag, value.As<bool>());
 						m_IsModified = true;
 
 						QueueRefresh();
@@ -222,7 +222,7 @@ namespace Kortex::ModTagManager
 			{
 				case ColumnID::PriorityTag:
 				{
-					return m_Data->HasTag(*tag);
+					return m_TagStore->HasTag(*tag);
 				}
 			};
 			return true;
@@ -287,42 +287,48 @@ namespace Kortex::ModTagManager
 		SetDataViewFlags(GetDataViewFlags()|KxDV_NO_TIMEOUT_EDIT);
 	}
 
-	void SelectorDisplayModel::SetDataVector(ModTagStore* tagStore, IGameMod* mod)
+	void SelectorDisplayModel::SetDataVector(ModTagStore& tagStore, IGameMod& mod)
 	{
-		m_Data = tagStore;
-		m_GameMod = mod;
+		m_Mod = &mod;
+		m_TagStore = &tagStore;
+		m_PrimaryTag = mod.GetTagStore().GetPrimaryTag();
 
-		if (m_GameMod)
-		{
-			m_PrimaryTag = m_GameMod->GetTagStore().GetPrimaryTag();
-		}
 		RefreshItems();
 	}
+	void SelectorDisplayModel::SetDataVector(ModTagStore& tagStore)
+	{
+		m_Mod = nullptr;
+		m_TagStore = &tagStore;
+		m_PrimaryTag = tagStore.GetPrimaryTag();
+
+		RefreshItems();
+	}
+
 	size_t SelectorDisplayModel::GetItemCount() const
 	{
-		return m_Data ? IModTagManager::GetInstance()->GetTagsCount() : 0;
+		return m_TagStore ? IModTagManager::GetInstance()->GetTagsCount() : 0;
 	}
 	IModTag* SelectorDisplayModel::GetDataEntry(size_t index) const
 	{
 		IModTag::Vector& tags = IModTagManager::GetInstance()->GetTags();
-		if (m_Data && index < tags.size())
+		if (m_TagStore && index < tags.size())
 		{
 			return tags[index].get();
 		}
 		return nullptr;
 	}
 
-	void SelectorDisplayModel::ApplyChangesToMod()
+	void SelectorDisplayModel::ApplyChanges()
 	{
-		if (m_GameMod)
+		if (m_TagStore)
 		{
 			if (m_PrimaryTag)
 			{
-				m_GameMod->GetTagStore().SetPrimaryTag(*m_PrimaryTag);
+				m_TagStore->SetPrimaryTag(*m_PrimaryTag);
 			}
 			else
 			{
-				m_GameMod->GetTagStore().ClearPrimaryTag();
+				m_TagStore->ClearPrimaryTag();
 			}
 		}
 	}

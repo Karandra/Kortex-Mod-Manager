@@ -37,7 +37,7 @@
 	--size-heading-anchor: 1.4rem;
 	--size-heading-anchor-margin-bottom: -0.4rem;
 	--size-heading-anchor-padding-bottom: 0.8rem;
-	--size-heading-vert-spacing: 2.1rem;
+	--size-heading-vert-spacing: 2.0rem;
 	--size-loading-max: 33%;
 	--size-menu-left-spacing: 1.6rem;
 	--size-menu-width: var(--size--root-200px);
@@ -82,6 +82,7 @@
 	--short-header-links-panel-margins: 0 var(--size-spacing-standard);
 	--short-heading-h1-margins: 0 0 var(--size-heading-vert-spacing);
 	--short-heading-h2-margins: var(--size-heading-vert-spacing) 0;
+	--short-heading-h3-margins: 0 0 0 0;
 	--short-link-shadow: var(--color-text-shadow) var(--size--root-1px) var(--size--root-1px) 0.3rem;
 	--short-menu-borders: var(--size--root-1px) solid var(--color-borders);
 	--short-menu-title-margin: 0.3rem var(--size-spacing-standard) 1.3rem var(--size-menu-left-spacing);

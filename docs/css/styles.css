@@ -60,15 +60,18 @@ h2 {
 	/* General */
 	border: var(--short-borders-init);
 	border-bottom-width: var(--size--root-1px);
-	font-size: 2.6rem;
+	font-size: 2.4rem;
 	font-weight: normal;
 }
 h3 {
-	font-size: 2.2rem;
+	margin: var(--short-heading-h3-margins);
+	/* General */
+	font-size: 2.1rem;
 	font-weight: normal;
 }
 h4 {
-	font-size: 1.9rem;
+	/* General */
+	font-size: 1.7rem;
 	font-weight: normal;
 }
 code {

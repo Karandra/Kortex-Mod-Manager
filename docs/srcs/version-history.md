@@ -7,13 +7,16 @@
 More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/commits/master).
 
 ### Version 2.0a7 - 25.08.2019
-- [General] Added network functionality, sign-in and download system for NexusMods.
+- [General] Added network functionality, sign-in, updates, download system for NexusMods.
 - [General] Removed refresh button from toolbar.
+- [General] Fixed some crashes at startup.
 - [General] Drag and drop will cause scroll on attempt to drop to first or last visible row.
 - [General] Fixed loading instance when Kortex is unable to locate game directory automatically.
 - [General] Profile system reworked, adopted Mod Organizer naming convention (Instance -> Profile instead of Profile -> Mod list).
 - [General] Added local saves and local game configuration options for profiles.
 - [General] Instances no longer required to be inside folder named after managed game.
+- [General] Added game definition for Enderal.
+- [General] Fixed plugins limit values in game definitions.
 - [General] Added notifications center.
 - [General] New UI for About dialog.
 - [Mod Manager] Added grouping by priority with collapsible groups.
@@ -25,8 +28,10 @@ More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/c
 - [Mod Manager] Removed save-undo functions. All changes applied immediately.
 - [Mod Manager] Improved performance of statistics calculation.
 - [Mod Manager] Added game data window with entire virtual files tree.
-- [Mod Manager] Added column with mod main image.
 - [Mod Manager] Fixed dropped mod position when only one mod is selected in drag and drop operation.
+- [Mod Manager] Fixed crash when on sequentially enabling-disabling mod in mod list.
+- [Mod Manager] Added column with mod main image.
+- [Mod Manager] Various VFS improvements regarding loading speed and file access latency.
 - [Mod Manager] Version 1.3.
 - [Package Manager] Fixed assigning image as main or as header in "Interface" page.
 - [Package Manager] Added back "Import from files" option to components.
@@ -36,12 +41,13 @@ More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/c
 - [Package Manager] Component entries in package creator view can now be moved between different branches.
 - [Package Manager] Changed conditions system. Fixed undefined condition evaluation order.
 - [Package Manager] Version 1.3.
-- [Program Manager] Program manager redone. Workspace moved to mods window as separate tab.
+- [Program Manager] Program manager redone. Workspace moved to mods window as a separate tab.
 - [Program Manager] Version 2.0.
 - [Download Manager] Support for association with NXM links.
 - [Download Manager] Support for mod downloads from NexusMods.
 - [Download Manager] Support for querying info for unknown downloads.
 - [Download Manager] Support for file change log displaying.
+- [Download Manager] Added NXM handler to dispatch download link to desired instance or to an external program.
 - [Download Manager] Version 1.0.
 - [Plugin Manager] For Morrowind, Oblivion, Fallout 3 and Fallout: New Vegas forced sorting by plugin modification date is disabled.
 - [Plugin Manager] Added plugins counter for all types.

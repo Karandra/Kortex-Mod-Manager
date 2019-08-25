@@ -162,7 +162,8 @@ let
  * @returns `ActiveXObject("Microsoft.XMLHTTP")` - IE
  */
 function xhttpAssign() {
-	if (!window.XMLHttpRequest) return new ActiveXObject("Microsoft.XMLHTTP");
+	if (!window.XMLHttpRequest)
+		return new ActiveXObject("Microsoft.XMLHTTP");
 	return new XMLHttpRequest();
 }
 /**
@@ -188,8 +189,10 @@ function initVarAssign(initType) {
 			// Assemble URL pieces      
 			urlFixed = urlRaw.origin;
 			urlFixed += urlRaw.pathname;
-			if (urlParam !== null) urlFixed += urlParam;
-			if (urlHash !== null) urlFixed += urlHash;
+			if (urlParam !== null)
+				urlFixed += urlParam;
+			if (urlHash !== null)
+				urlFixed += urlHash;
 			break;
 
 		case home:
@@ -228,7 +231,8 @@ function initVarAssign(initType) {
 			}
 	}
 	// Init listeners post-var assign
-	if (initType !== entry) initListenAssign(initType);
+	if (initType !== entry)
+		initListenAssign(initType);
 }
 /**
  * @description Applies event listeners to appropriate objects.
@@ -273,12 +277,15 @@ function initListenAssign(initType) {
 			});
 
 			// Scrollbar
-			if (OverlayScrollbars) OverlayScrollbars(contentPanelID, scrollbarOpt);
+			if (OverlayScrollbars)
+				OverlayScrollbars(contentPanelID, scrollbarOpt);
 			break;
 
 		default:
-			if (initType === content) linkType = contentLinkItems;
-			if (initType === menu) linkType = sideMenuItemTag;
+			if (initType === content)
+				linkType = contentLinkItems;
+			if (initType === menu)
+				linkType = sideMenuItemTag;
 			Object.keys(linkType).forEach(function (i) {
 				let linkHREFParam = linkType[i].getAttribute("href");
 				linkType[i].addEventListener(click, function (event) {
@@ -326,10 +333,12 @@ function insertHeaderAnchors(elementList) {
  */
 function linkHandler(inputHREF, accessType) {
 	// Abort
-	if (inputHREF === null) return null;
+	if (inputHREF === null)
+		return null;
 
 	// External links out
-	if (regexHREF.test(inputHREF) || accessType === external) return window.location.assign(inputHREF);
+	if (regexHREF.test(inputHREF) || accessType === external)
+		return window.location.assign(inputHREF);
 
 	// Internal links in
 	let locationString = inputHREF.toString();
@@ -353,12 +362,15 @@ function linkHandler(inputHREF, accessType) {
 		}
 
 		// Browser history manipulation
-		if (accessType === content) window.history.pushState(null, null, locationString);
-		if (accessType === entry) window.history.replaceState(null, null, locationString);
+		if (accessType === content)
+			window.history.pushState(null, null, locationString);
+		if (accessType === entry)
+			window.history.replaceState(null, null, locationString);
 
 		// Hash links navigation
 		if (regexHash.test(inputHREF)) {
-			if (!regexParam.test(inputHREF)) return window.location.assign(inputHREF);
+			if (!regexParam.test(inputHREF))
+				return window.location.assign(inputHREF);
 			urlHash = inputHREF.match(regexHash);
 		}
 
@@ -486,11 +498,11 @@ function allLoaded() {
 		setTimeout(function() {	urlHash = null; }, contentUncloakTime);
 	}
 	setTimeout(function() { contentVisibility(contentShow); }, contentUncloakTime);
-		// Return content and CSS resource flags and attempts to defaults for next cycle
-		attemptCSS = 0;
-		loadedCSS = false;
-		loadedMD = false;
-	}
+	// Return content and CSS resource flags and attempts to defaults for next cycle
+	attemptCSS = 0;
+	loadedCSS = false;
+	loadedMD = false;
+}
 
 
 // ********************\
@@ -500,7 +512,8 @@ function allLoaded() {
  * @description Removes page-unique stylesheet so new one can be applied.
  */
 function importCSSClean() {
-	if (head.lastElementChild.type === txtcss) head.removeChild(head.lastElementChild);
+	if (head.lastElementChild.type === txtcss)
+		head.removeChild(head.lastElementChild);
 }
 /**
  * @description Constructs page-unique stylesheet link element and appends to `<head>`.
@@ -550,7 +563,8 @@ function contentVisibility(toggle) {
  * - Currently only used for menu drawer.
  */
 function elementWillChange() {
-	if ('beginElement' in menuToggleIconFadeInID) menuToggleIconFadeInID.beginElement();
+	if ('beginElement' in menuToggleIconFadeInID)
+		menuToggleIconFadeInID.beginElement();
 	menuToggleIconID.style.willChange = transform;
 	sideMenuID.style.willChange = width;
 }
@@ -559,7 +573,8 @@ function elementWillChange() {
  * - Currently only used for menu drawer.
  */
 function elementWillChangeFinish() {
-	if ('beginElement' in menuToggleIconFadeOutID) menuToggleIconFadeOutID.beginElement();
+	if ('beginElement' in menuToggleIconFadeOutID)
+		menuToggleIconFadeOutID.beginElement();
 	// Removing will-change after 1 second
 	setTimeout(function () {
 		menuToggleIconID.style.willChange = auto;
@@ -604,8 +619,10 @@ function menuOpen() {
  * @returns `document.addEventListener` - DOM not ready yet, so apply listener for required status.
  */
 function readyUtil(caller) {
-	if (document.readyState !== loading) return caller();
-	if (document.addEventListener) return document.addEventListener("DOMContentLoaded", caller);
+	if (document.readyState !== loading)
+		return caller();
+	if (document.addEventListener)
+		return document.addEventListener("DOMContentLoaded", caller);
 	/********************
 	* This check should never return null, ever.
 	* The script is set to dynamically load content, and the calls
@@ -620,10 +637,12 @@ function readyUtil(caller) {
 readyUtil(function () {
 	// Analyze URL and repair if necessary
 	initVarAssign(entry);
-	if (urlFixed !== urlRaw.toString()) return window.location.assign(urlFixed);
+	if (urlFixed !== urlRaw.toString())
+		return window.location.assign(urlFixed);
 
 	// Start CSS variable polyfill
-	if (cssVars) cssVars(cssVarsOpt);
+	if (cssVars)
+		cssVars(cssVarsOpt);
 
 	// Init vars and listeners
 	initVarAssign(home);
@@ -632,7 +651,8 @@ readyUtil(function () {
 	linkHandler(menuParam, menu);
 
 	// Load pre-designated destination
-	if (urlParam !== null) return linkHandler(urlParam, reentry);
+	if (urlParam !== null)
+		return linkHandler(urlParam, reentry);
 
 	// Load default destination
 	return linkHandler(homeParam, entry);
@@ -647,8 +667,10 @@ window.onpopstate = function () {
 
 	// Build input
 	let urlHistory = "";
-	if (urlParam !== null) urlHistory += urlParam;
-	if (urlHash !== null) urlHistory += urlHash;
+	if (urlParam !== null)
+		urlHistory += urlParam;
+	if (urlHash !== null)
+		urlHistory += urlHash;
 
 	// Load destination without modifying browser history
 	linkHandler(urlHistory, null);

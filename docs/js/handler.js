@@ -445,10 +445,6 @@ function xhttpReady(request, resource, type) {
 				contentBoxID.innerHTML = marked(request.response, markedOpt);
 				initVarAssign(type);
 				scrollbarBoxID.scrollTo(0, 0);
-				if (urlHash !== null) {
-					location.assign(urlHash);
-					urlHash = null;
-				}
 				// Begin loading CSS
 				getFile(xhttpCSSFile, resource, css);
 				// Note loaded page to avoid repeat nav OR blank for 404, flag load success
@@ -479,15 +475,22 @@ function xhttpReady(request, resource, type) {
 				linkHandler(badTimes, badTimes);
 		}
 	// Make sure all resources loaded flags are true
-	if (loadedCSS && loadedMD && loadedMenu) {
-		// Wait 200ms to ensure content and styles are rendered before disengaging cloak
-		setTimeout(contentVisibility(contentShow), contentUncloakTime);
+	if (loadedCSS && loadedMD && loadedMenu)
+		allLoaded();
+}
+// Make sure all resources loaded flags are true
+function allLoaded() {
+	// Wait 200ms to ensure content and styles are rendered and page has navigated to hash before disengaging cloak
+	if (urlHash !== null) { 
+		location.assign(urlHash); 
+		setTimeout(function() {	urlHash = null; }, contentUncloakTime);
+	}
+	setTimeout(function() { contentVisibility(contentShow); }, contentUncloakTime);
 		// Return content and CSS resource flags and attempts to defaults for next cycle
 		attemptCSS = 0;
 		loadedCSS = false;
 		loadedMD = false;
 	}
-}
 
 
 // ********************\
@@ -649,4 +652,8 @@ window.onpopstate = function () {
 
 	// Load destination without modifying browser history
 	linkHandler(urlHistory, null);
+};
+window.onhashchange = function () {
+	if (urlHash !== null)
+		allLoaded();
 };

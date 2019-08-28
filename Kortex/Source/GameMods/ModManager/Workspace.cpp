@@ -711,7 +711,7 @@ namespace Kortex::ModManager
 		KxMenuItem* item = event.GetItem();
 		item->Check(!item->IsChecked());
 
-		KxDataView2::Column::Vector columns;
+		KxDataView2::Column::RefVector columns;
 		for (const auto& item: event.GetMenu()->GetMenuItems())
 		{
 			if (item->IsChecked())

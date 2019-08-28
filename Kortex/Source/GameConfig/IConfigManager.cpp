@@ -26,13 +26,7 @@ namespace Kortex
 	}
 	void IConfigManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
-		RefStackTranslator& translator = GetTranslatorStack();
-		translator.Push(IApplication::GetInstance()->GetTranslation());
-
-		if (LoadTranslation(m_Translation, "ConfigManager"))
-		{
-			translator.Push(m_Translation);
-		}
+		LoadDefaultTranslation();
 	}
 
 	bool IConfigManager::LoadTranslation(KxTranslation& translation, const wxString& component)
@@ -43,6 +37,18 @@ namespace Kortex
 
 		LoadTranslationStatus status = app->TryLoadTranslation(translation, app->GetAvailableTranslations(), component, locale);
 		return status == LoadTranslationStatus::Success;
+	}
+	bool IConfigManager::LoadDefaultTranslation()
+	{
+		RefStackTranslator& translator = GetTranslatorStack();
+		translator.Push(IApplication::GetInstance()->GetTranslation());
+
+		if (LoadTranslation(m_Translation, "ConfigManager"))
+		{
+			translator.Push(m_Translation);
+			return true;
+		}
+		return false;
 	}
 
 	IConfigManager::IConfigManager()

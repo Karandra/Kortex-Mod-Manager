@@ -14,19 +14,19 @@ namespace Kortex::Application::Settings
 			GameConfig::DisplayModel m_DisplayModel;
 
 		private:
-			virtual int GetViewSizerProportion() const override
+			int GetViewSizerProportion() const override
 			{
 				return 1;
 			}
-			virtual wxOrientation GetViewLabelSizerOrientation() const override
+			wxOrientation GetViewLabelSizerOrientation() const override
 			{
 				return wxVERTICAL;
 			}
-			virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id) const override
+			bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id) const override
 			{
 				return true;
 			}
-			virtual wxWindow* GetDialogMainCtrl() const override
+			wxWindow* GetDialogMainCtrl() const override
 			{
 				return m_DisplayModel.GetView();
 			}

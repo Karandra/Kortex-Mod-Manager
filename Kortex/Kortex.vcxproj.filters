@@ -301,9 +301,6 @@
     <Filter Include="Code\Headers\GameConfig\ConfigManger\Sources">
       <UniqueIdentifier>{d441cc9e-18f3-461e-8b28-2762735d2b8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\Application\Window">
-      <UniqueIdentifier>{e9b8debe-3e5f-4a98-b530-52a2df3ad7a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\Application\Settings">
       <UniqueIdentifier>{e905e6c3-93c4-4dfe-a7e4-e8e63dfc9180}</UniqueIdentifier>
     </Filter>
@@ -414,6 +411,9 @@
     </Filter>
     <Filter Include="Code\Source\Network\ModNetwork\Nexus\NXMHandler">
       <UniqueIdentifier>{f264d46b-471a-4d2d-97be-3451701a6ab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Application\Settings">
+      <UniqueIdentifier>{e9b8debe-3e5f-4a98-b530-52a2df3ad7a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1015,10 +1015,10 @@
       <Filter>Code\Source\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Settings\Window.cpp">
-      <Filter>Code\Source\Application\Window</Filter>
+      <Filter>Code\Source\Application\Settings</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Settings\ConfigManager.cpp">
-      <Filter>Code\Source\Application\Window</Filter>
+      <Filter>Code\Source\Application\Settings</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetAvailableTranslations.cpp">
       <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>

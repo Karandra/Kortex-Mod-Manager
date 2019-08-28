@@ -47,7 +47,8 @@ namespace Kortex
 
 			virtual RefStackTranslator& GetTranslatorStack() = 0;
 			bool LoadTranslation(KxTranslation& translation, const wxString& component);
-			
+			bool LoadDefaultTranslation();
+
 			virtual void OnItemChanged(GameConfig::Item& item) = 0;
 			virtual void OnItemChangeDiscarded(GameConfig::Item& item) = 0;
 

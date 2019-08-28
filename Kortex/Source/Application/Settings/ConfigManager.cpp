@@ -10,6 +10,7 @@ namespace Kortex::Application::Settings
 	void ConfigManager::OnInit()
 	{
 		IConfigManager::OnInit();
+		IConfigManager::LoadDefaultTranslation();
 		
 		m_Definition.Load();
 

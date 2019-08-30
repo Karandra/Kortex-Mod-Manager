@@ -7,3 +7,4 @@
 [Features](?page=features)
 [Comparison](?page=comparison)
 [Version history](?page=version-history)
+[Frequently asked questions](?page=frequently-asked-questions)

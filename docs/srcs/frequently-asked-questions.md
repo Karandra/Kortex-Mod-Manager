@@ -18,3 +18,6 @@ No, it's not true. Well, actually it depends. In comparison to pure NTFS (no VFS
 Yes at the moment. Other games can be added in the future. In theory Kortex should be able to support almost any game but there is no simple way to add completely new game. There is **Sacred 2** as an example of non-Bethesda game.
 
 You can try to add a new game by creating game definition file in **Data\GameDefinitions** folder. I do not provide any support in that case.
+
+## Can I manage ENB/DInput/Creation Kit/etc with Kortex?
+Yes. Kortex virtualizes game's root folder so mods that need to be installed there are supported.

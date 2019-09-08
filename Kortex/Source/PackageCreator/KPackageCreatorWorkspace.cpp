@@ -265,11 +265,15 @@ bool KPackageCreatorWorkspace::SwitchToPage(size_t index)
 }
 KPackageProject& KPackageCreatorWorkspace::ImportProjectFromPackage(const wxString& path)
 {
+	CreateNow();
+
 	m_Controller->ImportProjectFromPackage(path);
 	return *m_Controller->GetProject();
 }
 KPackageProject& KPackageCreatorWorkspace::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
 {
+	CreateNow();
+
 	m_Controller->CreateProjectFromModEntry(modEntry);
 	return *m_Controller->GetProject();
 }

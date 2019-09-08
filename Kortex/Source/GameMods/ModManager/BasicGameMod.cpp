@@ -226,8 +226,7 @@ namespace Kortex::ModManager
 	}
 	bool BasicGameMod::Save()
 	{
-		// Mod root is always needed here but other folders isn't
-		KxFile(GetRootDir()).CreateFolder();
+		CreateAllFolders();
 
 		KxFileStream stream(GetInfoFile(), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways);
 		if (stream.IsOk())

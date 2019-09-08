@@ -896,8 +896,11 @@ namespace Kortex::ModManager
 			// Mod
 			case ContextMenuID::ModOpenLocation:
 			{
-				wxString location = focusedMod->IsInstalled() ? focusedMod->GetModFilesDir() : focusedMod->GetRootDir();
-				KxShell::Execute(GetMainWindow(), location, "open");
+				// Try to open mod files folder without displaying the error. If it fails open root folder with error message.
+				if (!KxShell::Execute(GetMainWindow(), focusedMod->GetModFilesDir(), {}, {}, {}, SW_SHOWNORMAL, true))
+				{
+					KxShell::Execute(GetMainWindow(), focusedMod->GetRootDir());
+				}
 				break;
 			}
 			case ContextMenuID::ModChangeLocation:

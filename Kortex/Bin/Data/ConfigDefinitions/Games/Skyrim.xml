@@ -161,7 +161,7 @@
 					</Output>
 				</Options>
 				<Samples Source="Function">
-					<Function Name="GetVideoAdapters"/>
+					<Function Name="Intrinsic/GetVideoAdapters"/>
 				</Samples>
 			</Item>
 			<Item Category="Game/Graphics" Path="Display" Name="fGamma" Type="float32">
@@ -212,7 +212,7 @@
 				</Options>
 				
 				<Samples Source="Function">
-					<Function Name="GetVideoModes">
+					<Function Name="Intrinsic/GetVideoModes">
 						<Arg Type="string">Component::Width|Component::Height</Arg>
 						<Arg Type="string"><![CDATA[%1×%2]]></Arg>
 					</Function>
@@ -224,7 +224,7 @@
 							<EditableBehavior Value="Editable"/>
 						</Options>
 						<Samples Source="Function">
-							<Function Name="GetVideoModes">
+							<Function Name="Intrinsic/GetVideoModes">
 								<Arg Type="string">Component::Width</Arg>
 							</Function>
 						</Samples>
@@ -234,7 +234,7 @@
 							<EditableBehavior Value="Editable"/>
 						</Options>
 						<Samples Source="Function">
-							<Function Name="GetVideoModes">
+							<Function Name="Intrinsic/GetVideoModes">
 								<Arg Type="string">Component::Height</Arg>
 							</Function>
 						</Samples>

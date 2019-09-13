@@ -64,53 +64,53 @@
 			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="EnableProxyLibrary" Type="bool"/>
 			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="InitProxyFunctions" Type="bool"/>
 			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="ProxyLibrary" Type="string">
-				<Action Name="BrowseFile"/>
+				<Action Name="Intrinsic/BrowseFile"/>
 			</Item>
 
 			<!-- Controls -->
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyReadConfig" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyCombination" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyUseEffect" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyFPSLimit" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyShowFPS" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyScreenshot" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyEditor" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyFreeVRAM" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 			<Item Category="ENB/Controls" Path="INPUT" Name="KeyBruteForce" Type="int32">
 				<Samples Source="Function">
-					<Function Name="GetVirtualKeys"/>
+					<Function Name="Intrinsic/GetVirtualKeys"/>
 				</Samples>
 			</Item>
 

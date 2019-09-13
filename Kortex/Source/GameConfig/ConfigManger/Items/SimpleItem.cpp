@@ -184,9 +184,20 @@ namespace Kortex::GameConfig
 		{
 			if (HasAction())
 			{
-				wxString oldVaue = m_Value.Serialize(*this);
-				IAction::InvokeAction(GetAction(), *this, m_Value);
-				if (oldVaue != m_Value.Serialize(*this))
+				const wxString oldVaue = m_Value.Serialize(*this);
+
+				bool isInvoked = false;
+				if (auto action = GetManager().QueryAction(GetActionName()))
+				{
+					action->Invoke(*this, m_Value);
+					isInvoked = true;
+				}
+				else
+				{
+					isInvoked = IAction::InvokeIntrinsicAction(GetIntrinsicAction(), *this, m_Value);
+				}
+
+				if (isInvoked && oldVaue != m_Value.Serialize(*this))
 				{
 					ChangeNotify();
 					Refresh(column);

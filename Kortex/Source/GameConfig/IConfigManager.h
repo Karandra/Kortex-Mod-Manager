@@ -2,6 +2,9 @@
 #include "stdafx.h"
 #include "Application/IPluggableManager.h"
 #include "Application/RefStackTranslator.h"
+#include "ConfigManger/ItemValue.h"
+#include "ConfigManger/IAction.h"
+#include "ConfigManger/ISamplingFunction.h"
 #include <KxFramework/KxTranslation.h>
 class KxXMLNode;
 
@@ -83,5 +86,14 @@ namespace Kortex
 			wxString TranslateItemLabel(const wxString& name, const wxString& perfix) const;
 			wxString TranslateItemLabel(const KxXMLNode& itemNode, const wxString& name, const wxString& perfix, bool isAttribute = false) const;
 			std::pair<wxString, bool> TranslateItemElement(const KxXMLNode& itemNode, bool isAttribute = false, const wxString& attributeName = {}) const;
+
+			virtual std::unique_ptr<GameConfig::IAction> QueryAction(const wxString& name)
+			{
+				return nullptr;
+			}
+			virtual std::unique_ptr<GameConfig::ISamplingFunction> QuerySamplingFunction(const wxString& name, GameConfig::SampleValue::Vector& samples)
+			{
+				return nullptr;
+			}
 	};
 }

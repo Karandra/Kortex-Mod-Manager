@@ -54,7 +54,9 @@ namespace Kortex::GameConfig
 			ItemOptions m_Options;
 			HashStore m_HashStore;
 			TypeID m_TypeID;
-			ActionValue m_Action;
+
+			wxString m_ActionName;
+			IntrinsicActionValue m_IntrinsicAction;
 
 			bool m_HasChanges = false;
 			mutable std::optional<wxString> m_DisplayPath;
@@ -169,11 +171,15 @@ namespace Kortex::GameConfig
 
 			bool HasAction() const
 			{
-				return !m_Action.IsDefault();
+				return !m_IntrinsicAction.IsDefault() || !m_ActionName.IsEmpty();
 			}
-			ActionValue GetAction() const
+			wxString GetActionName() const
 			{
-				return m_Action;
+				return m_ActionName;
+			}
+			IntrinsicActionValue GetIntrinsicAction() const
+			{
+				return m_IntrinsicAction;
 			}
 
 			virtual bool IsEditable() const;

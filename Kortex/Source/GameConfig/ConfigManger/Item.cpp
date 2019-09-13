@@ -89,7 +89,8 @@ namespace Kortex::GameConfig
 			m_Samples.Load(itemNode.GetFirstChildElement(wxS("Samples")));
 
 			// Action
-			m_Action.FromString(itemNode.GetFirstChildElement(wxS("Action")).GetAttribute(wxS("Name")));
+			m_ActionName = itemNode.GetFirstChildElement(wxS("Action")).GetAttribute(wxS("Name"));
+			m_IntrinsicAction.FromString(m_ActionName);
 		}
 	}
 	Item::~Item()

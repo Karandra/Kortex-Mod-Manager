@@ -6,21 +6,21 @@
 
 namespace Kortex::GameConfig
 {
-	bool IAction::InvokeAction(ActionID id, Item& item, ItemValue& value)
+	bool IAction::InvokeIntrinsicAction(IntrinsicActionID id, Item& item, ItemValue& value)
 	{
 		switch (id)
 		{
-			case ActionID::BrowseFile:
+			case IntrinsicActionID::BrowseFile:
 			{
 				Actions::BrowseFile().Invoke(item, value);
 				break;
 			}
-			case ActionID::BrowseFolder:
+			case IntrinsicActionID::BrowseFolder:
 			{
 				Actions::BrowseFolder().Invoke(item, value);
 				break;
 			}
-			case ActionID::PickColor:
+			case IntrinsicActionID::PickColor:
 			{
 				Actions::PickColor().Invoke(item, value);
 				break;

@@ -19,7 +19,7 @@ namespace Kortex::GameConfig
 
 namespace Kortex::GameConfig
 {
-	enum class SamplingFunctionID: uint32_t
+	enum class IntrinsicSamplingFunctionID: uint32_t
 	{
 		None = 0,
 		FindFiles,
@@ -29,20 +29,20 @@ namespace Kortex::GameConfig
 		GetVideoModes,
 		GetVirtualKeys,
 	};
-	struct SamplingFunctionDef: public KxIndexedEnum::Definition<SamplingFunctionDef, SamplingFunctionID, wxString, true>
+	struct IntrinsicSamplingFunctionDef: public KxIndexedEnum::Definition<IntrinsicSamplingFunctionDef, IntrinsicSamplingFunctionID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{
-			{SamplingFunctionID::None, wxS("None")},
-			{SamplingFunctionID::FindFiles, wxS("FindFiles")},
-			{SamplingFunctionID::GetAvailableTranslations, wxS("GetAvailableTranslations")},
-			{SamplingFunctionID::GetStartupWorkspaces, wxS("GetStartupWorkspaces")},
-			{SamplingFunctionID::GetVideoAdapters, wxS("GetVideoAdapters")},
-			{SamplingFunctionID::GetVideoModes, wxS("GetVideoModes")},
-			{SamplingFunctionID::GetVirtualKeys, wxS("GetVirtualKeys")},
+			{IntrinsicSamplingFunctionID::None, wxS("None")},
+			{IntrinsicSamplingFunctionID::FindFiles, wxS("Intrinsic/FindFiles")},
+			{IntrinsicSamplingFunctionID::GetAvailableTranslations, wxS("Intrinsic/GetAvailableTranslations")},
+			{IntrinsicSamplingFunctionID::GetStartupWorkspaces, wxS("Intrinsic/GetStartupWorkspaces")},
+			{IntrinsicSamplingFunctionID::GetVideoAdapters, wxS("Intrinsic/GetVideoAdapters")},
+			{IntrinsicSamplingFunctionID::GetVideoModes, wxS("Intrinsic/GetVideoModes")},
+			{IntrinsicSamplingFunctionID::GetVirtualKeys, wxS("Intrinsic/GetVirtualKeys")},
 		};
 	};
-	using SamplingFunctionValue = KxIndexedEnum::Value<SamplingFunctionDef, SamplingFunctionID::None>;
+	using IntrinsicSamplingFunctionValue = KxIndexedEnum::Value<IntrinsicSamplingFunctionDef, IntrinsicSamplingFunctionID::None>;
 }
 
 namespace Kortex::GameConfig
@@ -126,7 +126,9 @@ namespace Kortex::GameConfig
 			SamplesSourceValue m_SourceType;
 			SortOrderValue m_SortOrder;
 			SortOptionsValue m_SortOptions;
-			SamplingFunctionValue m_SampligFunction;
+			
+			wxString m_SamplingFunctionName;
+			IntrinsicSamplingFunctionValue m_IntrinsicSampligFunction;
 
 			SampleValue::Vector m_Values;
 			wxAny m_MinValue;
@@ -136,7 +138,7 @@ namespace Kortex::GameConfig
 		private:
 			size_t LoadImmediateItems(const KxXMLNode& rootNode);
 			void SortImmediateItems();
-			void GenerateItems(const ItemValue::Vector& arguments);
+			void InvokeIntrinsicSamplingFunction(const ItemValue::Vector& arguments);
 			template<class T> SortOrderValue LoadRange(T min, T max, T step)
 			{
 				if constexpr(std::is_signed_v<T>)
@@ -199,9 +201,14 @@ namespace Kortex::GameConfig
 			{
 				return m_SortOptions;
 			}
-			SamplingFunctionValue GetSamplingFunction() const
+			
+			wxString GetSamplingFunctionName() const
 			{
-				return m_SampligFunction;
+				return m_SamplingFunctionName;
+			}
+			IntrinsicSamplingFunctionValue GetIntrinsicSamplingFunction() const
+			{
+				return m_IntrinsicSampligFunction;
 			}
 
 			bool HasStep() const;

@@ -102,36 +102,36 @@ namespace Kortex::GameConfig
 			std::sort(m_Values.begin(), m_Values.end(), Comparator);
 		}
 	}
-	void ItemSamples::GenerateItems(const ItemValue::Vector& arguments)
+	void ItemSamples::InvokeIntrinsicSamplingFunction(const ItemValue::Vector& arguments)
 	{
-		switch (m_SampligFunction.GetValue())
+		switch (m_IntrinsicSampligFunction.GetValue())
 		{
-			case SamplingFunctionID::FindFiles:
+			case IntrinsicSamplingFunctionID::FindFiles:
 			{
 				SamplingFunction::FindFiles(m_Values).Invoke(arguments);
 				break;
 			}
-			case SamplingFunctionID::GetAvailableTranslations:
+			case IntrinsicSamplingFunctionID::GetAvailableTranslations:
 			{
 				SamplingFunction::GetAvailableTranslations(m_Values).Invoke(arguments);
 				break;
 			}
-			case SamplingFunctionID::GetStartupWorkspaces:
+			case IntrinsicSamplingFunctionID::GetStartupWorkspaces:
 			{
 				SamplingFunction::GetStartupWorkspaces(m_Values).Invoke(arguments);
 				break;
 			}
-			case SamplingFunctionID::GetVideoAdapters:
+			case IntrinsicSamplingFunctionID::GetVideoAdapters:
 			{
 				SamplingFunction::GetVideoAdapters(m_Values).Invoke(arguments);
 				break;
 			}
-			case SamplingFunctionID::GetVideoModes:
+			case IntrinsicSamplingFunctionID::GetVideoModes:
 			{
 				SamplingFunction::GetVideoModes(m_Values, m_Item.GetManager()).Invoke(arguments);
 				break;
 			}
-			case SamplingFunctionID::GetVirtualKeys:
+			case IntrinsicSamplingFunctionID::GetVirtualKeys:
 			{
 				SamplingFunction::GetVirtualKeys(m_Values, m_Item.GetManager()).Invoke(arguments);
 
@@ -208,23 +208,29 @@ namespace Kortex::GameConfig
 				case SamplesSourceID::Function:
 				{
 					const KxXMLNode functionNode = samplesNode.GetFirstChildElement(wxS("Function"));
-					if (m_SampligFunction.FromString(functionNode.GetAttribute(wxS("Name"))))
+					m_SamplingFunctionName = functionNode.GetAttribute(wxS("Name"));
+
+					ItemValue::Vector arguments;
+					for (KxXMLNode argNode = functionNode.GetFirstChildElement(wxS("Arg")); argNode.IsOK(); argNode = argNode.GetNextSiblingElement(wxS("Arg")))
 					{
-						ItemValue::Vector arguments;
-
-						for (KxXMLNode argNode = functionNode.GetFirstChildElement(wxS("Arg")); argNode.IsOK(); argNode = argNode.GetNextSiblingElement(wxS("Arg")))
+						TypeID type;
+						if (type.FromString(argNode.GetAttribute(wxS("Type"))))
 						{
-							TypeID type;
-							if (type.FromString(argNode.GetAttribute(wxS("Type"))))
-							{
-								SimpleItem item(m_Item.GetGroup());
-								item.SetTypeID(type);
-								item.GetValue().Deserialize(argNode.GetValue(), item);
+							SimpleItem item(m_Item.GetGroup());
+							item.SetTypeID(type);
+							item.GetValue().Deserialize(argNode.GetValue(), item);
 
-								arguments.emplace_back(std::move(item.GetValue()));
-							}
+							arguments.emplace_back(std::move(item.GetValue()));
 						}
-						GenerateItems(arguments);
+					}
+
+					if (auto func = m_Item.GetManager().QuerySamplingFunction(m_SamplingFunctionName, m_Values))
+					{
+						func->Invoke(arguments);
+					}
+					else if (m_IntrinsicSampligFunction.FromString(m_SamplingFunctionName))
+					{
+						InvokeIntrinsicSamplingFunction(arguments);
 					}
 					break;
 				}

@@ -6,7 +6,7 @@
 
 namespace Kortex::GameConfig
 {
-	enum class ActionID
+	enum class IntrinsicActionID
 	{
 		None,
 
@@ -14,17 +14,17 @@ namespace Kortex::GameConfig
 		BrowseFolder,
 		PickColor,
 	};
-	struct ActionDef: public KxIndexedEnum::Definition<ActionDef, ActionID, wxString, true>
+	struct IntrinsicActionDef: public KxIndexedEnum::Definition<IntrinsicActionDef, IntrinsicActionID, wxString, true>
 	{
 		inline static const TItem ms_Index[] =
 		{
-			{ActionID::None, wxS("None")},
-			{ActionID::BrowseFile, wxS("BrowseFile")},
-			{ActionID::BrowseFolder, wxS("BrowseFolder")},
-			{ActionID::PickColor, wxS("PickColor")},
+			{IntrinsicActionID::None, wxS("None")},
+			{IntrinsicActionID::BrowseFile, wxS("Intrinsic/BrowseFile")},
+			{IntrinsicActionID::BrowseFolder, wxS("Intrinsic/BrowseFolder")},
+			{IntrinsicActionID::PickColor, wxS("Intrinsic/PickColor")},
 		};
 	};
-	using ActionValue = KxIndexedEnum::Value<ActionDef, ActionID::None>;
+	using IntrinsicActionValue = KxIndexedEnum::Value<IntrinsicActionDef, IntrinsicActionID::None>;
 }
 
 namespace Kortex::GameConfig
@@ -34,7 +34,7 @@ namespace Kortex::GameConfig
 	class IAction: public RTTI::IInterface<IAction>
 	{
 		public:
-			static bool InvokeAction(ActionID id, Item& item, ItemValue& value);
+			static bool InvokeIntrinsicAction(IntrinsicActionID id, Item& item, ItemValue& value);
 
 		public:
 			IAction() = default;
@@ -44,9 +44,34 @@ namespace Kortex::GameConfig
 
 		public:
 			virtual void Invoke(Item& item, ItemValue& value) = 0;
-	
+			
 		public:
 			IAction& operator=(const IAction&) = delete;
 			IAction& operator=(IAction&&) = delete;
 	};
+
+	template<class TFunc>
+	class GenericAction: public IAction
+	{
+		private:
+			TFunc m_Function;
+
+		public:
+			GenericAction(TFunc func)
+				:m_Function(std::move(func))
+			{
+			}
+
+		public:
+			void Invoke(Item& item, ItemValue& value) override
+			{
+				std::invoke(m_Function, item, value);
+			}
+	};
+
+	template<class TFunc>
+	std::unique_ptr<IAction> MakeGenericAction(TFunc func)
+	{
+		return std::make_unique<GenericAction<TFunc>>(std::move(func));
+	}
 }

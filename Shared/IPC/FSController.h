@@ -13,6 +13,7 @@ namespace Kortex::IPC
 		private:
 			KxProcess m_Process;
 			bool m_IsProcessIdle = false;
+			wxString m_Library;
 
 			HANDLE m_ProcessHandle = nullptr;
 			std::mutex m_ThreadMutex;
@@ -47,6 +48,10 @@ namespace Kortex::IPC
 				return m_Process;
 			}
 
+			void SetLibrary(const wxString& library)
+			{
+				m_Library = library;
+			}
 			void SetProcessingWindow(const ProcessingWindow& processingWindow);
 			void Run();
 			bool WaitForTermination(std::function<void()> func = {});

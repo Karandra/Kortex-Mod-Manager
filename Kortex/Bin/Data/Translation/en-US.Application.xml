@@ -222,6 +222,8 @@ Using the default folder is not recommended because profile data can occupy a lo
 		<String ID="Settings.ValueName.FOModUseHTTPSForXMLScheme">Use HTTPS protocol in FOMod XML-scheme</String>
 		<String ID="Settings.ValueName.DownloadsFolder">Downloads folder</String>
 
+		<String ID="Settings.ValueName.VirtualFileSystem.Library">Library</String>
+
 		<String ID="Settings.ValueName.Var.ActualGameDir">$(GameShortName) installation folder</String>
 
 		<!-- Notification Center -->

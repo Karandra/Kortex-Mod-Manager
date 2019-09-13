@@ -23,7 +23,7 @@ namespace Kortex::Application::Settings
 		KxTaskDialog askDialog(this, KxID_NONE, KTrf("Settings.PrepareUninstall.Caption", Kortex::IApplication::GetInstance()->GetName()), KTr("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (askDialog.ShowModal() == KxID_YES)
 		{
-			if (Kortex::IApplication::GetInstance()->Uninstall())
+			if (IApplication::GetInstance()->Uninstall())
 			{
 				KxTaskDialog dialog(this, KxID_NONE, KTr("Settings.PrepareUninstall.Success"), wxEmptyString, KxBTN_NONE, KxICON_INFORMATION);
 				dialog.AddButton(KxID_OK, KTr("Settings.PrepareUninstall.RebootNow"));

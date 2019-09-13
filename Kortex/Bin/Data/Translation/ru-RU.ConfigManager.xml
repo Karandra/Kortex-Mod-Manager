@@ -43,7 +43,7 @@
 		<String ID="Category.Variables">Переменные</String>
 		<String ID="Category.DownloadManager">Менеджер загрузок</String>
 		<String ID="Category.PackageManager">Менеджер установщиков</String>
-		<String ID="Category.VFS">Виртуальная файловая система (VFS)</String>
+		<String ID="Category.VirtualFileSystem">Виртуальная файловая система (VFS)</String>
 
 		<String ID="SampleValue.None">Нет</String>
 		<String ID="SampleValue.VeryLow">Очень низкий</String>

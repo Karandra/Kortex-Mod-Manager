@@ -100,6 +100,7 @@ namespace Kortex::VirtualFileSystem
 
 		if (!m_Controller.IsRunning())
 		{
+			m_Controller.SetLibrary(Application::GlobalOption("VirtualFileSystem").GetAttribute("Library"));
 			m_Controller.SetProcessingWindow(*m_RecievingWindow);
 
 			m_Controller.Run();

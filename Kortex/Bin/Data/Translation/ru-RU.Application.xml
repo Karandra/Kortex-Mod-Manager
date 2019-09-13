@@ -227,6 +227,8 @@
 		<String ID="Settings.ValueName.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</String>
 		<String ID="Settings.ValueName.DownloadsFolder">Папка загрузок</String>
 
+		<String ID="Settings.ValueName.VirtualFileSystem.Library">Библиотека</String>
+
 		<String ID="Settings.ValueName.Var.ActualGameDir">Установочная папка $(GameShortName)</String>
 
 		<!-- Notification Center -->

@@ -4,6 +4,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include "Application/SystemApplication.h"
+#include <KxFramework/KxFileFinder.h>
 
 namespace Kortex::Application::Settings
 {
@@ -87,5 +88,26 @@ namespace Kortex::Application::Settings
 	bool ConfigManager::HasUnsavedChanges() const
 	{
 		return !m_ChangedItems.empty();
+	}
+
+	std::unique_ptr<GameConfig::ISamplingFunction> ConfigManager::QuerySamplingFunction(const wxString& name, GameConfig::SampleValue::Vector& samples)
+	{
+		using namespace GameConfig;
+
+		if (name == wxS("VirtualFileSystem/GetLibraries"))
+		{
+			return MakeGenericSamplingFunction([&samples](const ItemValue::Vector& arguments)
+			{
+				KxFileFinder finder(IApplication::GetInstance()->GetDataFolder() + wxS("\\VFS\\Library\\*"));
+				for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
+				{
+					if (item.IsDirectory() && item.IsNormalItem())
+					{
+						samples.emplace_back(item.GetName());
+					}
+				}
+			});
+		}
+		return nullptr;
 	}
 }

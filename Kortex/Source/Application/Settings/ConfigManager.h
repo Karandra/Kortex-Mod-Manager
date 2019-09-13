@@ -76,5 +76,7 @@ namespace Kortex::Application::Settings
 			void SaveChanges() override;
 			void DiscardChanges() override;
 			bool HasUnsavedChanges() const override;
+
+			std::unique_ptr<GameConfig::ISamplingFunction> QuerySamplingFunction(const wxString& name, GameConfig::SampleValue::Vector& samples) override;
 	};
 }

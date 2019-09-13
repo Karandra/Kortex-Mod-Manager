@@ -28,12 +28,23 @@
 					<EditableBehavior Value="Selectable"/>
 				</Options>
 				<Samples Source="Function">
-					<Function Name="GetAvailableTranslations"/>
+					<Function Name="Intrinsic/GetAvailableTranslations"/>
 				</Samples>
 			</Item>
 			<Item Category="Global/General" Path="Global/Application/Instances/Location" Name="" Type="string">
 				<Label>Settings.ValueName.InstancesLocation</Label>
-				<Action Name="BrowseFolder"/>
+				<Action Name="Intrinsic/BrowseFolder"/>
+			</Item>
+
+			<!-- VFS -->
+			<Item Category="VirtualFileSystem" Path="Global/VirtualFileSystem" Name="Library" Type="string">
+				<Label>Settings.ValueName.VirtualFileSystem.Library</Label>
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
+				<Samples Source="Function">
+					<Function Name="VirtualFileSystem/GetLibraries"/>
+				</Samples>
 			</Item>
 			
 			<!-- Packages -->
@@ -53,26 +64,26 @@
 					<EditableBehavior Value="Selectable"/>
 				</Options>
 				<Samples Source="Function">
-					<Function Name="GetStartupWorkspaces"/>
+					<Function Name="Intrinsic/GetStartupWorkspaces"/>
 				</Samples>
 			</Item>
 			
 			<!-- Downloads -->
 			<Item Category="Instance/DownloadManager" Path="Instance/Network/DownloadManager/Downloads" Name="Location" Type="string">
 				<Label>Settings.ValueName.DownloadsFolder</Label>
-				<Action Name="BrowseFolder"/>
+				<Action Name="Intrinsic/BrowseFolder"/>
 			</Item>
 			
 			<!-- Packages -->
 			<Item Category="Instance/PackageManager" Path="Instance/Packages/PackageManager/Packages" Name="Location" Type="string">
 				<Label>Settings.ValueName.PackagesLocation</Label>
-				<Action Name="BrowseFolder"/>
+				<Action Name="Intrinsic/BrowseFolder"/>
 			</Item>
 			
 			<!-- Variables -->
 			<Item Category="Instance/Variables" Path="Instance/Variables/Entry" Name="ID=ActualGameDir" Type="string">
 				<Label>Settings.ValueName.Var.ActualGameDir</Label>
-				<Action Name="BrowseFolder"/>
+				<Action Name="Intrinsic/BrowseFolder"/>
 			</Item>
 		</Group>
 	</Groups>

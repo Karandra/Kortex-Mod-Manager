@@ -11,12 +11,6 @@
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxFile.h>
 
-#if defined _WIN64
-#pragma comment(lib, "KxVirtualFileSystem x64.lib")
-#else
-#pragma comment(lib, "KxVirtualFileSystem.lib")
-#endif
-
 namespace
 {
 	using namespace Kortex;
@@ -68,6 +62,7 @@ namespace
 		}
 		return path + wxS(".log");
 	}
+	
 	KxVFS::KxDynamicStringW GetServiceName()
 	{
 		if (KxVFS::FileSystemService::IsDokanyDefaultInstallPresent())

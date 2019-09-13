@@ -8,6 +8,12 @@
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxFile.h>
 
+#if defined _WIN64
+#pragma comment(lib, "KxVirtualFileSystem x64.lib")
+#else
+#pragma comment(lib, "KxVirtualFileSystem.lib")
+#endif
+
 namespace
 {
 	template<class T> bool GetCmdArgIntValue(const wxCmdLineParser& parser, const wxString& name, T& value)
@@ -41,6 +47,14 @@ namespace
 		GetCmdArgIntValue(parser, "PID", pid);
 		return pid;
 	}
+	wxString GetLibrary(const wxCmdLineParser& parser)
+	{
+		if (wxString value; parser.Found(wxS("Library"), &value))
+		{
+			return value;
+		}
+		return wxS("Release");
+	}
 }
 
 namespace Kortex::FSController
@@ -67,6 +81,7 @@ namespace Kortex::FSController
 		parser.SetSwitchChars("-");
 		parser.AddOption("HWND");
 		parser.AddOption("PID");
+		parser.AddOption("Library");
 	}
 	Application::~Application()
 	{
@@ -75,10 +90,13 @@ namespace Kortex::FSController
 	bool Application::OnInit()
 	{
 		ParseCommandLine();
-		HWND windowHandle = GetMainAppWindow(GetCmdLineParser());
-		DWORD pid = GetMainAppProcessID(GetCmdLineParser());
+		const wxCmdLineParser& parser = GetCmdLineParser();
 
-		if (windowHandle != nullptr && pid != 0)
+		const HWND windowHandle = GetMainAppWindow(parser);
+		const DWORD pid = GetMainAppProcessID(parser);
+		const wxString library = GetLibrary(parser);
+
+		if (windowHandle != nullptr && pid != 0 && m_Library.Load(GetLibraryPath(library)))
 		{
 			if (m_MainApp = std::make_unique<MainApplicationLink>(windowHandle); m_MainApp->IsOK())
 			{
@@ -157,6 +175,18 @@ namespace Kortex::FSController
 	{
 		OnExceptionInMainLoop();
 		ExitApp(std::numeric_limits<int>::min());
+	}
+	
+	wxString Application::GetLibraryPath(const wxString& libraryType) const
+	{
+		wxString path = m_DataFolder + wxS("\\VFS\\Library\\") + libraryType + wxS("\\KxVirtualFileSystem");
+
+		#if defined _WIN64
+		path += wxS(" x64");
+		#endif
+		path += wxS(".dll");
+
+		return path;
 	}
 }
 

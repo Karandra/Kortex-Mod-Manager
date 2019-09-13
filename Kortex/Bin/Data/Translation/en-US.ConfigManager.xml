@@ -43,7 +43,7 @@
 		<String ID="Category.Variables">Variables</String>
 		<String ID="Category.DownloadManager">Download manager</String>
 		<String ID="Category.PackageManager">Package manager</String>
-		<String ID="Category.VFS">Virtual file system (VFS)</String>
+		<String ID="Category.VirtualFileSystem">Virtual file system (VFS)</String>
 
 		<String ID="SampleValue.None">None</String>
 		<String ID="SampleValue.VeryLow">Very low</String>

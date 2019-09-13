@@ -83,7 +83,7 @@ namespace Kortex::IPC
 	void FSController::SetProcessingWindow(const ProcessingWindow& processingWindow)
 	{
 		const size_t handle = reinterpret_cast<size_t>(processingWindow.GetHandle());
-		m_Process.SetArguments(KxString::Format(wxS("-HWND \"%1\" -PID \"%2\""), handle, KxProcess(0).GetPID()));
+		m_Process.SetArguments(KxString::Format(wxS("-HWND \"%1\" -PID \"%2\" -Library \"%3\""), handle, KxProcess(0).GetPID(), m_Library));
 	}
 	bool FSController::WaitForTermination(std::function<void()> func)
 	{

@@ -37,7 +37,10 @@
 			</Item>
 
 			<!-- VFS -->
-			<Item Category="VirtualFileSystem" Path="Global/VirtualFileSystem" Name="Library" Type="string">
+			<Item Category="VirtualFileSystem" Path="Global/VirtualFileSystem/Log" Name="Enabled" Type="bool">
+				<Label>Settings.ValueName.VirtualFileSystem.Log</Label>
+			</Item>
+			<Item Category="VirtualFileSystem" Path="Global/VirtualFileSystem/Library" Name="Name" Type="string">
 				<Label>Settings.ValueName.VirtualFileSystem.Library</Label>
 				<Options>
 					<EditableBehavior Value="Selectable"/>

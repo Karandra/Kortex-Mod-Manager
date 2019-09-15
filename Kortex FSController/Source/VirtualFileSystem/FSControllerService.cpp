@@ -104,6 +104,18 @@ namespace Kortex::VirtualFileSystem
 				break;
 			}
 
+			case RequestID::IsLogEnabled:
+			{
+				message.SerializePayload(IsLogEnabled());
+				break;
+			}
+			case RequestID::EnableLog:
+			{
+				auto [value] = message.DeserializePayload<bool>();
+				EnableLog(value);
+				break;
+			}
+
 			case RequestID::Start:
 			{
 				message.SerializePayload(Start());

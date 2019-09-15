@@ -75,6 +75,15 @@ namespace Kortex::VirtualFileSystem
 			bool Install() override;
 			bool Uninstall() override;
 
+			bool IsLogEnabled() const override
+			{
+				return KxVFS::ILogger::IsLogEnabled();
+			}
+			void EnableLog(bool value = true) override
+			{
+				KxVFS::ILogger::EnableLog(value);
+			}
+
 			void SetRecievingWindow(FSController::RecievingWindow* recievingWindow)
 			{
 				m_RecievingWindow = recievingWindow;

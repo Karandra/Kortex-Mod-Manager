@@ -216,6 +216,7 @@ namespace Kortex::ModManager
 					case State::ShowDialog:
 					{
 						ShowStatusDialog();
+						IVFSService::GetInstance()->EnableLog(Application::GlobalOption("VirtualFileSystem/Log").GetAttributeBool("Enabled"));
 
 						return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(500), State::Run);
 					}

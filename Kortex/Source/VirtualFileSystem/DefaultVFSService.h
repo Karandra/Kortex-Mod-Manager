@@ -63,6 +63,9 @@ namespace Kortex::VirtualFileSystem
 			bool Install() override;
 			bool Uninstall() override;
 
+			bool IsLogEnabled() const override;
+			void EnableLog(bool value = true) override;
+
 		public:
 			wxString GetLibraryName() const override;
 			wxString GetLibraryURL() const override;

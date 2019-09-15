@@ -49,7 +49,7 @@ namespace
 	}
 	wxString GetLibrary(const wxCmdLineParser& parser)
 	{
-		if (wxString value; parser.Found(wxS("Library"), &value))
+		if (wxString value; parser.Found(wxS("Library"), &value) && !value.IsEmpty())
 		{
 			return value;
 		}

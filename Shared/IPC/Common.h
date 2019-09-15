@@ -19,6 +19,9 @@ namespace Kortex::IPC
 		Start,
 		Stop,
 
+		IsLogEnabled,
+		EnableLog,
+
 		CreateFS,
 		DestroyFS,
 
@@ -28,7 +31,6 @@ namespace Kortex::IPC
 
 		FSEnable,
 		FSDisable,
-
 
 		FSGetMountPoint,
 		FSSetMountPoint,

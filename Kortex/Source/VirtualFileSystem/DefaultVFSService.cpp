@@ -100,7 +100,7 @@ namespace Kortex::VirtualFileSystem
 
 		if (!m_Controller.IsRunning())
 		{
-			m_Controller.SetLibrary(Application::GlobalOption("VirtualFileSystem").GetAttribute("Library"));
+			m_Controller.SetLibrary(Application::GlobalOption("VirtualFileSystem/Library").GetAttribute("Name"));
 			m_Controller.SetProcessingWindow(*m_RecievingWindow);
 
 			m_Controller.Run();
@@ -179,6 +179,15 @@ namespace Kortex::VirtualFileSystem
 	bool DefaultVFSService::Uninstall()
 	{
 		return m_Controller.Send(RequestID::Uninstall).GetAs<bool>();
+	}
+
+	bool DefaultVFSService::IsLogEnabled() const
+	{
+		return m_Controller.Send(RequestID::IsLogEnabled).GetAs<bool>();
+	}
+	void DefaultVFSService::EnableLog(bool value)
+	{
+		m_Controller.Send(RequestID::EnableLog, value);
 	}
 
 	wxString DefaultVFSService::GetLibraryName() const

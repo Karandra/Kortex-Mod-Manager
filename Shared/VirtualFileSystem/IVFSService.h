@@ -32,6 +32,9 @@ namespace Kortex
 			virtual bool Install() = 0;
 			virtual bool Uninstall() = 0;
 
+			virtual bool IsLogEnabled() const = 0;
+			virtual void EnableLog(bool value = true) = 0;
+
 		public:
 			virtual wxString GetLibraryName() const = 0;
 			virtual wxString GetLibraryURL() const = 0;

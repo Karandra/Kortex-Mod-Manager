@@ -4,7 +4,7 @@
 
 namespace Kortex::ModTagManager
 {
-	class DefaultTag: public RTTI::IExtendInterface<DefaultTag, IModTag, INexusModTag>
+	class DefaultTag: public KxRTTI::ExtendInterface<DefaultTag, IModTag, INexusModTag>
 	{
 		private:
 			wxString m_ID;

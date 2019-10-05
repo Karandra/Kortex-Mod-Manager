@@ -8,7 +8,7 @@ class KxCURLSession;
 namespace Kortex::NetworkManager
 {
 	class TESALLModNetwork:
-		public KxRTTI::IExtendInterface<TESALLModNetwork, IModNetwork>,
+		public KxRTTI::ExtendInterface<TESALLModNetwork, IModNetwork>,
 		public KxSingletonPtr<TESALLModNetwork>
 	{
 		protected:

@@ -4,7 +4,7 @@
 
 namespace Kortex
 {
-	class IModTag: public RTTI::IInterface<IModTag>
+	class IModTag: public KxRTTI::Interface<IModTag>
 	{
 		public:
 			using Vector = std::vector<std::unique_ptr<IModTag>>;
@@ -56,7 +56,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class INexusModTag: public RTTI::IInterface<INexusModTag>
+	class INexusModTag: public KxRTTI::Interface<INexusModTag>
 	{
 		public:
 			enum

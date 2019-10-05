@@ -14,7 +14,7 @@ class KxXMLDocument;
 
 namespace Kortex::GameInstance
 {
-	class DefaultGameInstance: public RTTI::IExtendInterface<DefaultGameInstance, IGameInstance>
+	class DefaultGameInstance: public KxRTTI::ExtendInterface<DefaultGameInstance, IGameInstance>
 	{
 		friend class IGameInstance;
 
@@ -155,7 +155,7 @@ namespace Kortex::GameInstance
 
 namespace Kortex::GameInstance
 {
-	class ConfigurableGameInstance: public RTTI::IExtendInterface<ConfigurableGameInstance, DefaultGameInstance, IConfigurableGameInstance>
+	class ConfigurableGameInstance: public KxRTTI::ExtendInterface<ConfigurableGameInstance, DefaultGameInstance, IConfigurableGameInstance>
 	{
 		private:
 			KxXMLDocument m_Config;

@@ -126,11 +126,11 @@ namespace Kortex::GameConfig
 	}
 
 	SimpleItem::SimpleItem(ItemGroup& group, const KxXMLNode& itemNode)
-		:IExtendInterface(group, itemNode)
+		:ExtendInterface(group, itemNode)
 	{
 	}
 	SimpleItem::SimpleItem(ItemGroup& group, bool isUnknown)
-		:IExtendInterface(group), m_IsUnknown(isUnknown)
+		:ExtendInterface(group), m_IsUnknown(isUnknown)
 	{
 		GetOptions().CopyIfNotSpecified(group.GetOptions(), GetDataType());
 	}

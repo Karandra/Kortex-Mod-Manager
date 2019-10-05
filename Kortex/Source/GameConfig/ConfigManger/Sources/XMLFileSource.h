@@ -5,7 +5,7 @@
 
 namespace Kortex::GameConfig
 {
-	class XMLFileSource: public RTTI::IExtendInterface<XMLFileSource, XMLSource, IFileSource>
+	class XMLFileSource: public KxRTTI::ExtendInterface<XMLFileSource, XMLSource, IFileSource>
 	{
 		private:
 			wxString m_FilePath;

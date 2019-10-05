@@ -162,11 +162,11 @@ namespace Kortex::GameConfig
 	}
 
 	StructItem::StructItem(ItemGroup& group, const KxXMLNode& itemNode)
-		:IExtendInterface(group, itemNode)
+		:ExtendInterface(group, itemNode)
 	{
 	}
 	StructItem::StructItem(ItemGroup& group, bool isUnknown)
-		:IExtendInterface(group)
+		:ExtendInterface(group)
 	{
 	}
 
@@ -214,7 +214,7 @@ namespace Kortex::GameConfig
 					}
 					else
 					{
-						value = Kx::Utility::String::ConcatWithSeparator(wxS(", "), value, type);
+						value = KxUtility::String::ConcatWithSeparator(wxS(", "), value, type);
 					}
 				}
 				m_CachedViewType = KxString::Format(wxS("struct<%1>"), value, 1, 4);
@@ -241,7 +241,7 @@ namespace Kortex::GameConfig
 						}
 						else
 						{
-							finalValue = Kx::Utility::String::ConcatWithSeparator(wxS(", "), finalValue, value);
+							finalValue = KxUtility::String::ConcatWithSeparator(wxS(", "), finalValue, value);
 						}
 					}
 					finalValue = KxString::Format(wxS("{%1}"), finalValue);

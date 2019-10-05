@@ -42,6 +42,12 @@ namespace Kortex
 			IModManager();
 
 		public:
+			using KxIObject::QueryInterface;
+			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
+			{
+				return QueryAnyOf(iid, ptr, *this);
+			}
+
 			virtual const ModManager::Config& GetOptions() const = 0;
 
 			virtual std::unique_ptr<IGameMod> NewMod() = 0;

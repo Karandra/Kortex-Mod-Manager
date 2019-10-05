@@ -4,10 +4,10 @@
 
 namespace Kortex::GameConfig
 {
-	class INISource: public RTTI::IExtendInterface<INISource, INIRefSource>
+	class INISource: public KxRTTI::ExtendInterface<INISource, INIRefSource>
 	{
 		private:
-			using Base = RTTI::IExtendInterface<INISource, INIRefSource>;
+			using Base = KxRTTI::ExtendInterface<INISource, INIRefSource>;
 
 		private:
 			KxINI m_INI;

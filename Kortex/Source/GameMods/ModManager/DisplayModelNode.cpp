@@ -3,6 +3,7 @@
 #include "Network/ModNetworkUpdateChecker.h"
 #include "Workspace.h"
 #include "DisplayModel.h"
+#include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include <KxFramework/KxComparator.h>

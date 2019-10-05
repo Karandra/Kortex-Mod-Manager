@@ -5,7 +5,7 @@
 
 namespace Kortex::GameConfig
 {
-	class XMLRefSource: public RTTI::IExtendInterface<XMLRefSource, ISource>
+	class XMLRefSource: public KxRTTI::ExtendInterface<XMLRefSource, ISource>
 	{
 		private:
 			KxXMLDocument& m_XML;

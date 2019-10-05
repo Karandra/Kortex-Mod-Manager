@@ -40,7 +40,7 @@ namespace Kortex::GameConfig
 	class ItemGroup;
 	class Definition;
 
-	class Item: public RTTI::IExtendInterface<Item, IViewItem, KxDataView2::Node>
+	class Item: public KxRTTI::ExtendInterface<Item, IViewItem, KxDataView2::Node>
 	{
 		friend class ItemGroup;
 

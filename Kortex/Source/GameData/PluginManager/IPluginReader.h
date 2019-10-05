@@ -8,7 +8,7 @@ namespace Kortex
 
 namespace Kortex::PluginManager
 {
-	class IPluginReader: public RTTI::IInterface<IPluginReader>
+	class IPluginReader: public KxRTTI::Interface<IPluginReader>
 	{
 		friend class IGamePlugin;
 

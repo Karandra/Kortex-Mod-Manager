@@ -5,6 +5,7 @@
 #include "Application/Options/Option.h"
 #include <KxFramework/KxINI.h>
 #include <KxFramework/KxFileStream.h>
+#include <Kx/RTTI.hpp>
 
 namespace Kortex
 {
@@ -30,7 +31,7 @@ namespace Kortex
 	}
 
 	class IGameInstance:
-		public RTTI::IInterface<IGameInstance>,
+		public KxRTTI::Interface<IGameInstance>,
 		public Application::WithInstanceOptions<IGameInstance>
 	{
 		friend class GameInstance::TemplateLoader;
@@ -158,7 +159,7 @@ namespace Kortex
 namespace Kortex
 {
 	class IConfigurableGameInstance:
-		public RTTI::IInterface<IConfigurableGameInstance>,
+		public KxRTTI::Interface<IConfigurableGameInstance>,
 		public Application::IWithConfig
 	{
 		public:

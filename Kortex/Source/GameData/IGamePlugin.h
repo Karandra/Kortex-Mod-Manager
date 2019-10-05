@@ -11,7 +11,7 @@ namespace Kortex
 	
 	class IGameMod;
 	class IPluginManager;
-	class IGamePlugin: public RTTI::IInterface<IGamePlugin>
+	class IGamePlugin: public KxRTTI::Interface<IGamePlugin>
 	{
 		friend class IPluginManager;
 

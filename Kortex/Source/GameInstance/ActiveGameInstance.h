@@ -23,7 +23,9 @@ namespace Kortex::GameInstance
 		protected:
 			void LoadGlobalModule(IModule& module, const KxXMLDocument& instanceConfig);
 			void LoadModule(IModule& module, const KxXMLNode& node);
-			template<class T, bool isAlwaysEnabled = false> std::unique_ptr<T> InitModule(const KxXMLDocument& instanceConfig)
+			
+			template<class T, bool isAlwaysEnabled = false>
+			std::unique_ptr<T> InitModule(const KxXMLDocument& instanceConfig)
 			{
 				const KxXMLNode node = instanceConfig.GetFirstChildElement("Definition").GetFirstChildElement(T::GetModuleTypeInfo().GetID());
 				if (isAlwaysEnabled || node.GetAttributeBool("Enabled", true))
@@ -48,15 +50,15 @@ namespace Kortex::GameInstance
 			KxFileStream m_DirectoryLock;
 			wxString m_CurrentProfileID;
 		
-			std::unique_ptr<Kortex::GameDataModule> m_GameDataModule;
-			std::unique_ptr<Kortex::GameConfigModule> m_GameConfigModule;
+			std::unique_ptr<GameDataModule> m_GameDataModule;
+			std::unique_ptr<GameConfigModule> m_GameConfigModule;
 
 		protected:
 			void InitModulesConfig(const KxXMLDocument& instanceConfig);
 			void InitVariables(const IGameProfile& profile);
 		
-			virtual bool OnLoadInstance(const KxXMLDocument& instanceConfig) override;
-			virtual bool ShouldInitProfiles() const override;
+			bool OnLoadInstance(const KxXMLDocument& instanceConfig) override;
+			bool ShouldInitProfiles() const override;
 
 		public:
 			ActiveGameInstance(const IGameInstance& instanceTemplate, const wxString& instanceID);
@@ -75,6 +77,6 @@ namespace Kortex::GameInstance
 			}
 
 			void DoChangeProfileTo(IGameProfile& profile);
-			void LoadSavedProfileOrDefault();
+			void LoadSavedProfileOrDefault() override;
 	};
 }

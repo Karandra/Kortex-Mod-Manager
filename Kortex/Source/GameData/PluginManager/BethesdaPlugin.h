@@ -8,7 +8,7 @@ namespace Kortex::PluginManager
 {
 	class IPluginReader;
 
-	class BethesdaPlugin: public RTTI::IExtendInterface<BethesdaPlugin, BaseGamePlugin, IBethesdaGamePlugin>
+	class BethesdaPlugin: public KxRTTI::ExtendInterface<BethesdaPlugin, BaseGamePlugin, IBethesdaGamePlugin>
 	{
 		public:
 			using HeaderFlags = BethesdaPluginData::HeaderFlags;

@@ -48,7 +48,7 @@ namespace Kortex::GameConfig
 
 namespace Kortex::GameConfig
 {
-	class StructItem: public RTTI::IExtendInterface<StructItem, Item>
+	class StructItem: public KxRTTI::ExtendInterface<StructItem, Item>
 	{
 		friend class StructSubItem;
 

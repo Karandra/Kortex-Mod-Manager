@@ -31,7 +31,7 @@ namespace Kortex::GameConfig
 {
 	class Item;
 
-	class IAction: public RTTI::IInterface<IAction>
+	class IAction: public KxRTTI::Interface<IAction>
 	{
 		public:
 			static bool InvokeIntrinsicAction(IntrinsicActionID id, Item& item, ItemValue& value);

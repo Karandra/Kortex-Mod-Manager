@@ -15,7 +15,9 @@ class KxCURLReplyBase;
 
 namespace Kortex::NetworkManager
 {
-	class NexusModNetwork: public KxRTTI::IExtendInterface<NexusModNetwork, IModNetwork>, public KxSingletonPtr<NexusModNetwork>
+	class NexusModNetwork:
+		public KxRTTI::ExtendInterface<NexusModNetwork, IModNetwork>,
+		public KxSingletonPtr<NexusModNetwork>
 	{
 		friend class NexusAuth;
 		friend class NexusRepository;

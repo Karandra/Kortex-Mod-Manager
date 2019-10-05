@@ -5,7 +5,7 @@
 
 namespace Kortex::GameConfig
 {
-	class IFileSource: public RTTI::IInterface<IFileSource>
+	class IFileSource: public KxRTTI::Interface<IFileSource>
 	{
 		protected:
 			wxString ResolveFSLocation(const wxString& path) const;

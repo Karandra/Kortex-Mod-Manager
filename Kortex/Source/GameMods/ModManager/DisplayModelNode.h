@@ -39,7 +39,7 @@ namespace Kortex::ModManager
 
 namespace Kortex::ModManager
 {
-	class DisplayModelModNode: public KxRTTI::IExtendInterface<DisplayModelModNode, KxDataView2::Node>
+	class DisplayModelModNode: public KxRTTI::ExtendInterface<DisplayModelModNode, KxDataView2::Node>
 	{
 		friend class DisplayModel;
 
@@ -94,7 +94,7 @@ namespace Kortex::ModManager
 
 namespace Kortex::ModManager
 {
-	class DisplayModelTagNode: public KxRTTI::IExtendInterface<DisplayModelTagNode, KxDataView2::Node>
+	class DisplayModelTagNode: public KxRTTI::ExtendInterface<DisplayModelTagNode, KxDataView2::Node>
 	{
 		friend class DisplayModel;
 

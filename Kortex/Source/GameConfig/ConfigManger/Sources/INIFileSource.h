@@ -5,7 +5,7 @@
 
 namespace Kortex::GameConfig
 {
-	class INIFileSource: public RTTI::IExtendInterface<INIFileSource, INISource, IFileSource>
+	class INIFileSource: public KxRTTI::ExtendInterface<INIFileSource, INISource, IFileSource>
 	{
 		private:
 			wxString m_FilePath;

@@ -22,7 +22,7 @@ namespace Kortex::PluginManager
 		uint32_t m_FormVersion = 0;
 	};
 
-	class IBethesdaPluginReader: public RTTI::IExtendInterface<IBethesdaPluginReader, IPluginReader>
+	class IBethesdaPluginReader: public KxRTTI::ExtendInterface<IBethesdaPluginReader, IPluginReader>
 	{
 		public:
 			using HeaderFlags = BethesdaPluginData::HeaderFlags;

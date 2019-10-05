@@ -10,7 +10,7 @@ namespace Kortex
 
 namespace Kortex::ModManager
 {
-	class PriorityGroup: public RTTI::IExtendInterface<PriorityGroup, BasicGameMod>
+	class PriorityGroup: public KxRTTI::ExtendInterface<PriorityGroup, BasicGameMod>
 	{
 		public:
 			IGameMod& m_BaseMod;

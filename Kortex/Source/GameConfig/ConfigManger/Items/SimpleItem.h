@@ -4,7 +4,7 @@
 
 namespace Kortex::GameConfig
 {
-	class SimpleItem: public RTTI::IExtendInterface<SimpleItem, Item>
+	class SimpleItem: public KxRTTI::ExtendInterface<SimpleItem, Item>
 	{
 		private:
 			ItemValue m_Value;

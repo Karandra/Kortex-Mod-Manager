@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
-#include "Application/RTTI.h"
 #include <KxFramework/KxVersion.h>
 #include <KxFramework/KxURI.h>
 

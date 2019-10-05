@@ -4,7 +4,7 @@
 
 namespace Kortex
 {
-	class IBethesdaGamePlugin: public RTTI::IInterface<IBethesdaGamePlugin>
+	class IBethesdaGamePlugin: public KxRTTI::Interface<IBethesdaGamePlugin>
 	{
 		public:
 			virtual bool IsLocalized() const = 0;

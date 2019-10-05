@@ -5,11 +5,11 @@
 #include "ModRepositoryRequest.h"
 #include "GameInstance/GameID.h"
 #include "Application/Resources/ImageResourceID.h"
-#include <KxFramework/KxQueryInterface.h>
 #include <KxFramework/KxComponentSystem.h>
 #include <KxFramework/KxSecretStore.h>
 #include <KxFramework/KxVersion.h>
 #include <KxFramework/KxURI.h>
+#include <Kx/RTTI.hpp>
 class KxMenu;
 class KxXMLNode;
 
@@ -22,7 +22,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IModNetwork: public KxRTTI::IInterface<IModNetwork>, public KxComponentContainer
+	class IModNetwork: public KxRTTI::Interface<IModNetwork>, public KxComponentContainer
 	{
 		friend class INetworkManager;
 		friend class NetworkModule;

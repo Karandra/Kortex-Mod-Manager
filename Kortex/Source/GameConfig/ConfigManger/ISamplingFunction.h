@@ -6,7 +6,7 @@
 
 namespace Kortex::GameConfig
 {
-	class ISamplingFunction: RTTI::IInterface<ISamplingFunction>
+	class ISamplingFunction: public KxRTTI::Interface<ISamplingFunction>
 	{
 		protected:
 			virtual void OnCall(const ItemValue::Vector& arguments) = 0;

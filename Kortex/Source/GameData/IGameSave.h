@@ -10,7 +10,7 @@ namespace Kortex
 		class DisplayModel;
 	}
 
-	class IGameSave: public RTTI::IInterface<IGameSave>
+	class IGameSave: public KxRTTI::Interface<IGameSave>
 	{
 		friend class SaveManager::DisplayModel;
 

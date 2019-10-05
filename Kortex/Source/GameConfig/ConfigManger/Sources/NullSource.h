@@ -4,7 +4,7 @@
 
 namespace Kortex::GameConfig
 {
-	class NullSource: public RTTI::IExtendInterface<NullSource, ISource>
+	class NullSource: public KxRTTI::ExtendInterface<NullSource, ISource>
 	{
 		private:
 			bool m_IsOpened = false;

@@ -4,7 +4,7 @@
 
 namespace Kortex::ModManager
 {
-	class FixedGameMod: public RTTI::IExtendInterface<FixedGameMod, BasicGameMod>
+	class FixedGameMod: public KxRTTI::ExtendInterface<FixedGameMod, BasicGameMod>
 	{
 		private:
 			const intptr_t m_FixedOrder = -1;

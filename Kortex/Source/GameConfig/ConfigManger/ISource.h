@@ -13,7 +13,7 @@ namespace Kortex::GameConfig
 
 namespace Kortex::GameConfig
 {
-	class ISource: public RTTI::IInterface<ISource>
+	class ISource: public KxRTTI::Interface<ISource>
 	{
 		protected:
 			template<class TFunctor> TypeID InvokeTypeDetectors(const ItemGroup& group, TFunctor&& func)

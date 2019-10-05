@@ -5,7 +5,7 @@
 
 namespace Kortex::GameConfig
 {
-	class CategoryItem: public RTTI::IExtendInterface<CategoryItem, IViewItem, KxDataView2::Node>
+	class CategoryItem: public KxRTTI::ExtendInterface<CategoryItem, IViewItem, KxDataView2::Node>
 	{
 		private:
 			wxString m_CategoryPath;

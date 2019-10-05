@@ -4,7 +4,7 @@
 
 namespace Kortex::SaveManager
 {
-	class EmptySaveFile: public RTTI::IExtendInterface<EmptySaveFile, BaseGameSave>
+	class EmptySaveFile: public KxRTTI::ExtendInterface<EmptySaveFile, BaseGameSave>
 	{
 		private:
 			InfoPairVector m_Info;

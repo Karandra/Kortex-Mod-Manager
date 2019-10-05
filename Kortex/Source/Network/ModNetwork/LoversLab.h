@@ -8,7 +8,7 @@ class KxCURLSession;
 namespace Kortex::NetworkManager
 {
 	class LoversLabModNetwork:
-		public KxRTTI::IExtendInterface<LoversLabModNetwork, IModNetwork>,
+		public KxRTTI::ExtendInterface<LoversLabModNetwork, IModNetwork>,
 		public KxSingletonPtr<LoversLabModNetwork>
 	{
 		private:

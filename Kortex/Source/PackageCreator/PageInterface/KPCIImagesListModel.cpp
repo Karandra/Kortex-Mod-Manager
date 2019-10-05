@@ -3,7 +3,7 @@
 #include "KPCIImagesListModel.h"
 #include "PackageProject/KPackageProject.h"
 #include "UI/TextEditDialog.h"
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include "Utility/KOperationWithProgress.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxFile.h>
@@ -205,9 +205,9 @@ namespace Kortex::PackageDesigner
 				{
 					if (entry && entry->HasBitmap())
 					{
-						UI::KImageViewerDialog dialog(GetView(), entry->GetPath());
+						UI::ImageViewerDialog dialog(GetView(), entry->GetPath());
 						
-						UI::KImageViewerEvent imageEvent;
+						UI::ImageViewerEvent imageEvent;
 						imageEvent.SetFilePath(entry->GetPath());
 						imageEvent.SetDescription(entry->GetDescription());
 						dialog.Navigate(imageEvent);

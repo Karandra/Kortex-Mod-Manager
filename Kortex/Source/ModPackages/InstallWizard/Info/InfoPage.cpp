@@ -3,7 +3,7 @@
 #include "InfoDisplayModel.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxTaskDialog.h>
 
@@ -102,14 +102,14 @@ namespace Kortex::InstallWizard
 			m_DocumentSimple.GetWindow()->Disable();
 		}
 	}
-	void InfoPage::SetImageViewerNavigationInfo(UI::KImageViewerEvent& event) const
+	void InfoPage::SetImageViewerNavigationInfo(UI::ImageViewerEvent& event) const
 	{
 		event.SetHasPrevNext(m_CurrentImageIndex > 0, (size_t)(m_CurrentImageIndex + 1) < m_ImagesMap.size());
 	}
-	void InfoPage::OnNavigateImageViewer(UI::KImageViewerEvent& event)
+	void InfoPage::OnNavigateImageViewer(UI::ImageViewerEvent& event)
 	{
 		int oldIndex = m_CurrentImageIndex;
-		if (event.GetEventType() == UI::KImageViewerEvent::EvtNext)
+		if (event.GetEventType() == UI::ImageViewerEvent::EvtNext)
 		{
 			m_CurrentImageIndex++;
 		}
@@ -171,12 +171,12 @@ namespace Kortex::InstallWizard
 			m_CurrentImageIndex = event.GetInt();
 			if (m_ImagesMap.count(m_CurrentImageIndex))
 			{
-				UI::KImageViewerDialog dialog(&GetWizard());
-				dialog.Bind(UI::KImageViewerEvent::EvtPrevious, &InfoPage::OnNavigateImageViewer, this);
-				dialog.Bind(UI::KImageViewerEvent::EvtNext, &InfoPage::OnNavigateImageViewer, this);
+				UI::ImageViewerDialog dialog(&GetWizard());
+				dialog.Bind(UI::ImageViewerEvent::EvtPrevious, &InfoPage::OnNavigateImageViewer, this);
+				dialog.Bind(UI::ImageViewerEvent::EvtNext, &InfoPage::OnNavigateImageViewer, this);
 
 				const PackageDesigner::KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
-				UI::KImageViewerEvent evt;
+				UI::ImageViewerEvent evt;
 				evt.SetBitmap(entry->GetBitmap());
 				evt.SetDescription(entry->GetDescription());
 				SetImageViewerNavigationInfo(evt);

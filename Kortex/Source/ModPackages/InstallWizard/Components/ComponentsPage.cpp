@@ -2,7 +2,7 @@
 #include "ComponentsPage.h"
 #include "DisplayModel.h"
 #include "../Requirements/DisplayModel.h"
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
 #include <KxFramework/KxTaskDialog.h>
@@ -205,11 +205,11 @@ namespace Kortex::InstallWizard
 				const KPPIImageEntry* entry = GetPackageConfig().GetInterface().FindEntryWithValue(pComponent->GetImage());
 				if (entry)
 				{
-					UI::KImageViewerEvent evt;
+					UI::ImageViewerEvent evt;
 					evt.SetBitmap(entry->GetBitmap());
 					evt.SetDescription(entry->GetDescription());
 
-					UI::KImageViewerDialog dialog(&GetWizard());
+					UI::ImageViewerDialog dialog(&GetWizard());
 					dialog.Navigate(evt);
 					dialog.ShowModal();
 				}

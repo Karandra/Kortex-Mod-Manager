@@ -5,7 +5,7 @@
 #include "Common.h"
 #include "WizardDialog.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/Log.h"

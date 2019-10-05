@@ -323,7 +323,7 @@
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerKMP.cpp" />
     <ClCompile Include="Source\UI\TextEditDialog.cpp" />
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
-    <ClCompile Include="Source\UI\KImageViewerDialog.cpp" />
+    <ClCompile Include="Source\UI\ImageViewerDialog.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -703,7 +703,7 @@
     <ClInclude Include="Source\PackageProject\KPackageProjectSerializerKMP.h" />
     <ClInclude Include="Source\UI\TextEditDialog.h" />
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
-    <ClInclude Include="Source\UI\KImageViewerDialog.h" />
+    <ClInclude Include="Source\UI\ImageViewerDialog.h" />
     <ClInclude Include="Source\Utility\KLabeledValue.h" />
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
     <ClInclude Include="Source\Utility\Log.h" />

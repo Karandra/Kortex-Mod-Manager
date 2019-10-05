@@ -12,7 +12,7 @@
 
 namespace Kortex::UI
 {
-	class KImageViewerEvent: public wxNotifyEvent
+	class ImageViewerEvent: public wxNotifyEvent
 	{
 		public:
 			enum Type
@@ -23,8 +23,8 @@ namespace Kortex::UI
 			};
 			
 		public:
-			KxEVENT_MEMBER(KImageViewerEvent, Next);
-			KxEVENT_MEMBER(KImageViewerEvent, Previous);
+			KxEVENT_MEMBER(ImageViewerEvent, Next);
+			KxEVENT_MEMBER(ImageViewerEvent, Previous);
 
 		private:
 			std::variant<wxString, wxBitmap, const KArchive::Buffer*> m_Data;
@@ -36,27 +36,27 @@ namespace Kortex::UI
 			void SetString(const wxString& s) = delete;
 			
 		public:
-			KImageViewerEvent() = default;
-			KImageViewerEvent(wxEventType type, const wxBitmap& bitmap)
+			ImageViewerEvent() = default;
+			ImageViewerEvent(wxEventType type, const wxBitmap& bitmap)
 				:wxNotifyEvent(type)
 			{
 				SetBitmap(bitmap);
 			}
-			KImageViewerEvent(wxEventType type, const wxString& filePath)
+			ImageViewerEvent(wxEventType type, const wxString& filePath)
 				:wxNotifyEvent(type)
 			{
 				SetFilePath(filePath);
 			}
-			KImageViewerEvent(wxEventType type, const KArchive::Buffer& buffer)
+			ImageViewerEvent(wxEventType type, const KArchive::Buffer& buffer)
 				:wxNotifyEvent(type)
 			{
 				SetInputStream(buffer);
 			}
 
 		public:
-			KImageViewerEvent* Clone() const override
+			ImageViewerEvent* Clone() const override
 			{
-				return new KImageViewerEvent(*this);
+				return new ImageViewerEvent(*this);
 			}
 			Type GetType() const
 			{
@@ -103,7 +103,7 @@ namespace Kortex::UI
 
 namespace Kortex::UI
 {
-	class KImageViewerDialog: public KxStdDialog
+	class ImageViewerDialog: public KxStdDialog
 	{
 		private:
 			KxSplitterWindow* m_Splitter = nullptr;
@@ -147,18 +147,18 @@ namespace Kortex::UI
 	
 			void OnLoadFromDisk(const wxString& filePath);
 			void OnNavigation(wxAuiToolBarEvent& event);
-			void OnAcceptNavigation(KImageViewerEvent& event);
+			void OnAcceptNavigation(ImageViewerEvent& event);
 			void OnScaleChanged(wxCommandEvent& event);
 			void OnSaveImage(wxCommandEvent& event);
 			void OnChangeColor(wxColourPickerEvent& event);
 	
 		public:
-			KImageViewerDialog(wxWindow* parent, const wxString& caption = wxEmptyString);
-			~KImageViewerDialog();
+			ImageViewerDialog(wxWindow* parent, const wxString& caption = wxEmptyString);
+			~ImageViewerDialog();
 	
 		public:
 			bool Create(wxWindow* parent, const wxString& caption = wxEmptyString);
-			void Navigate(KImageViewerEvent& event)
+			void Navigate(ImageViewerEvent& event)
 			{
 				OnAcceptNavigation(event);
 			}

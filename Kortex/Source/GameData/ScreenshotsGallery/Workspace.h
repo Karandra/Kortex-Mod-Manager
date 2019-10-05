@@ -12,7 +12,7 @@ namespace Kortex
 }
 namespace Kortex::UI
 {
-	class KImageViewerEvent;
+	class ImageViewerEvent;
 }
 
 namespace Kortex::ScreenshotsGallery
@@ -39,8 +39,8 @@ namespace Kortex::ScreenshotsGallery
 			void OnSelectItem(wxCommandEvent& event);
 			void OnActivateItem(wxCommandEvent& event);
 			void OnItemMenu(wxContextMenuEvent& event);
-			void OnDialogNavigate(UI::KImageViewerEvent& event);
-			void SetNavigationInfo(UI::KImageViewerEvent& event);
+			void OnDialogNavigate(UI::ImageViewerEvent& event);
+			void SetNavigationInfo(UI::ImageViewerEvent& event);
 
 		public:
 			wxString GetID() const override;

@@ -3,7 +3,7 @@
 #include <Kortex/ScreenshotsGallery.hpp>
 #include "Workspace.h"
 #include "GameInstance/IGameInstance.h"
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxTextBox.h>
 #include <KxFramework/KxThumbView.h>
@@ -79,11 +79,11 @@ namespace Kortex::ScreenshotsGallery
 		if (event.GetInt() != wxNOT_FOUND)
 		{
 			m_CurrentImageIndex = event.GetInt();
-			UI::KImageViewerDialog dialog(this);
-			dialog.Bind(UI::KImageViewerEvent::EvtPrevious, &Workspace::OnDialogNavigate, this);
-			dialog.Bind(UI::KImageViewerEvent::EvtNext, &Workspace::OnDialogNavigate, this);
+			UI::ImageViewerDialog dialog(this);
+			dialog.Bind(UI::ImageViewerEvent::EvtPrevious, &Workspace::OnDialogNavigate, this);
+			dialog.Bind(UI::ImageViewerEvent::EvtNext, &Workspace::OnDialogNavigate, this);
 
-			UI::KImageViewerEvent evt;
+			UI::ImageViewerEvent evt;
 			SetNavigationInfo(evt);
 			evt.SetFilePath(m_LoadedImages[m_CurrentImageIndex]);
 			dialog.Navigate(evt);
@@ -108,10 +108,10 @@ namespace Kortex::ScreenshotsGallery
 			}
 		}
 	}
-	void Workspace::OnDialogNavigate(UI::KImageViewerEvent& event)
+	void Workspace::OnDialogNavigate(UI::ImageViewerEvent& event)
 	{
 		int oldIndex = m_CurrentImageIndex;
-		if (event.GetEventType() == UI::KImageViewerEvent::EvtNext)
+		if (event.GetEventType() == UI::ImageViewerEvent::EvtNext)
 		{
 			m_CurrentImageIndex++;
 		}
@@ -131,7 +131,7 @@ namespace Kortex::ScreenshotsGallery
 			event.Veto();
 		}
 	}
-	void Workspace::SetNavigationInfo(UI::KImageViewerEvent& event)
+	void Workspace::SetNavigationInfo(UI::ImageViewerEvent& event)
 	{
 		event.SetHasPrevNext(m_CurrentImageIndex > 0, (size_t)(m_CurrentImageIndex + 1) < m_LoadedImages.size());
 	}

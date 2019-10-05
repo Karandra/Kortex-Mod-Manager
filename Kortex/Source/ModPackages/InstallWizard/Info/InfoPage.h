@@ -12,7 +12,7 @@
 
 namespace Kortex::UI
 {
-	class KImageViewerEvent;
+	class ImageViewerEvent;
 }
 
 namespace Kortex::InstallWizard
@@ -54,8 +54,8 @@ namespace Kortex::InstallWizard
 			
 			void OnTabOpened(wxAuiNotebookEvent& event);
 			void OnSelectDocument(int index, bool useAdvancedEditor = false);
-			void SetImageViewerNavigationInfo(UI::KImageViewerEvent& event) const;
-			void OnNavigateImageViewer(UI::KImageViewerEvent& event);
+			void SetImageViewerNavigationInfo(UI::ImageViewerEvent& event) const;
+			void OnNavigateImageViewer(UI::ImageViewerEvent& event);
 
 		protected:
 			void OnLoadUIOptions(const Application::ActiveInstanceOption& option) override;

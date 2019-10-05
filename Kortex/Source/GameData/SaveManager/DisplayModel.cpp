@@ -3,7 +3,7 @@
 #include <Kortex/Application.hpp>
 #include "GameMods/IModManager.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxComparator.h>
@@ -272,9 +272,9 @@ namespace Kortex::SaveManager
 			{
 				case ColumnID::Bitmap:
 				{
-					UI::KImageViewerDialog dialog(GetView(), save.GetFileItem().GetName());
+					UI::ImageViewerDialog dialog(GetView(), save.GetFileItem().GetName());
 
-					UI::KImageViewerEvent evt;
+					UI::ImageViewerEvent evt;
 					evt.SetBitmap(save.GetBitmap());
 					dialog.Navigate(evt);
 

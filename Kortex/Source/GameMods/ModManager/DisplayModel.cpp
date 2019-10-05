@@ -9,7 +9,7 @@
 #include "DisplayModelNode.h"
 #include "Workspace.h"
 #include "PriorityGroup.h"
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 

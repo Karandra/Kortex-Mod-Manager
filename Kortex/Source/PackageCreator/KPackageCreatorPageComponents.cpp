@@ -7,7 +7,7 @@
 #include "PageComponents/KPCCFileDataSelectorModel.h"
 #include "PageComponents/KPCCConditionalStepsModel.h"
 #include "PageComponents/KPCComponentsModel.h"
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
@@ -110,9 +110,9 @@ namespace Kortex::PackageDesigner
 			event.Skip();
 			if (const KPPIImageEntry* imageEntry = static_cast<const KPPIImageEntry*>(m_EntryImage->GetClientData()))
 			{
-				UI::KImageViewerDialog dialog(this);
+				UI::ImageViewerDialog dialog(this);
 
-				UI::KImageViewerEvent event;
+				UI::ImageViewerEvent event;
 				event.SetFilePath(imageEntry->GetPath());
 				dialog.Navigate(event);
 				dialog.ShowModal();

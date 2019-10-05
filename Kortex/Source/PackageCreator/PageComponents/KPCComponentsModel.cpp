@@ -9,7 +9,7 @@
 #include "KPCCAssignedConditionalsEditor.h"
 #include "KPCCConditionGroupEditor.h"
 #include "UI/TextEditDialog.h"
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include <KxFramework/KxTextBoxDialog.h>

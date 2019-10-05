@@ -2,7 +2,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
-#include "KImageViewerDialog.h"
+#include "ImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/UI.h"
 #include <Kortex/Application.hpp>
@@ -19,41 +19,41 @@ namespace Kortex::Application::OName
 
 namespace Kortex::UI
 {
-	bool KImageViewerEvent::HasBitmap() const
+	bool ImageViewerEvent::HasBitmap() const
 	{
 		return GetType() == BitmapPtr;
 	}
-	wxBitmap KImageViewerEvent::GetBitmap() const
+	wxBitmap ImageViewerEvent::GetBitmap() const
 	{
 		return HasBitmap() ? std::get<BitmapPtr>(m_Data) : wxNullBitmap;
 	}
-	void KImageViewerEvent::SetBitmap(const wxBitmap& bitmap)
+	void ImageViewerEvent::SetBitmap(const wxBitmap& bitmap)
 	{
 		m_Data = bitmap.IsOk() ? bitmap : wxNullBitmap;
 	}
 	
-	bool KImageViewerEvent::IsAnimationFile() const
+	bool ImageViewerEvent::IsAnimationFile() const
 	{
 		return HasFilePath() && Kortex::IScreenshotsGallery::IsAnimationFile(GetFilePath());
 	}
-	bool KImageViewerEvent::HasFilePath() const
+	bool ImageViewerEvent::HasFilePath() const
 	{
 		return GetType() == FilePath;
 	}
-	wxString KImageViewerEvent::GetFilePath() const
+	wxString ImageViewerEvent::GetFilePath() const
 	{
 		return HasFilePath() ? std::get<FilePath>(m_Data) : KxNullWxString;
 	}
-	void KImageViewerEvent::SetFilePath(const wxString& filePath)
+	void ImageViewerEvent::SetFilePath(const wxString& filePath)
 	{
 		m_Data = filePath;
 	}
 	
-	bool KImageViewerEvent::IsInputStream() const
+	bool ImageViewerEvent::IsInputStream() const
 	{
 		return GetType() == InputStream;
 	}
-	wxMemoryInputStream KImageViewerEvent::GetInputSteram()
+	wxMemoryInputStream ImageViewerEvent::GetInputSteram()
 	{
 		if (IsInputStream())
 		{
@@ -65,7 +65,7 @@ namespace Kortex::UI
 		}
 		return wxMemoryInputStream(nullptr, 0);
 	}
-	void KImageViewerEvent::SetInputStream(const KArchive::Buffer& buffer)
+	void ImageViewerEvent::SetInputStream(const KArchive::Buffer& buffer)
 	{
 		m_Data = &buffer;
 	}
@@ -73,20 +73,20 @@ namespace Kortex::UI
 
 namespace Kortex::UI
 {
-	bool KImageViewerDialog::OnDynamicBind(wxDynamicEventTableEntry& entry)
+	bool ImageViewerDialog::OnDynamicBind(wxDynamicEventTableEntry& entry)
 	{
-		if (entry.m_eventType == KImageViewerEvent::EvtNext)
+		if (entry.m_eventType == ImageViewerEvent::EvtNext)
 		{
 			m_Forward->SetEnabled(true);
 		}
-		if (entry.m_eventType == KImageViewerEvent::EvtPrevious)
+		if (entry.m_eventType == ImageViewerEvent::EvtPrevious)
 		{
 			m_Backward->SetEnabled(true);
 		}
 		return KxStdDialog::OnDynamicBind(entry);
 	}
 	
-	void KImageViewerDialog::OnLoadFromDisk(const wxString& filePath)
+	void ImageViewerDialog::OnLoadFromDisk(const wxString& filePath)
 	{
 		if (Kortex::IScreenshotsGallery::IsAnimationFile(filePath))
 		{
@@ -97,22 +97,22 @@ namespace Kortex::UI
 			m_ImageView->SetBitmap(wxBitmap(filePath, wxBITMAP_TYPE_ANY));
 		}
 	}
-	void KImageViewerDialog::OnNavigation(wxAuiToolBarEvent& event)
+	void ImageViewerDialog::OnNavigation(wxAuiToolBarEvent& event)
 	{
-		KImageViewerEvent evt;
+		ImageViewerEvent evt;
 		evt.SetEventObject(this);
 		if (event.GetEventObject() == m_Backward)
 		{
-			evt.SetEventType(KImageViewerEvent::EvtPrevious);
+			evt.SetEventType(ImageViewerEvent::EvtPrevious);
 		}
 		else
 		{
-			evt.SetEventType(KImageViewerEvent::EvtNext);
+			evt.SetEventType(ImageViewerEvent::EvtNext);
 		}
 		HandleWindowEvent(evt);
 		OnAcceptNavigation(evt);
 	}
-	void KImageViewerDialog::OnAcceptNavigation(KImageViewerEvent& event)
+	void ImageViewerDialog::OnAcceptNavigation(ImageViewerEvent& event)
 	{
 		if (event.IsAllowed())
 		{
@@ -158,11 +158,11 @@ namespace Kortex::UI
 			wxBell();
 		}
 	}
-	void KImageViewerDialog::OnScaleChanged(wxCommandEvent& event)
+	void ImageViewerDialog::OnScaleChanged(wxCommandEvent& event)
 	{
 		m_ImageView->SetScaleFactor(event.GetInt() / 100.0);
 	}
-	void KImageViewerDialog::OnSaveImage(wxCommandEvent& event)
+	void ImageViewerDialog::OnSaveImage(wxCommandEvent& event)
 	{
 		KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 		const KxStringVector& exts = Kortex::IScreenshotsGallery::GetSupportedExtensions();
@@ -179,7 +179,7 @@ namespace Kortex::UI
 			m_ImageView->GetBitmap().SaveFile(dialog.GetResult(), formats[dialog.GetSelectedFilter()]);
 		}
 	}
-	void KImageViewerDialog::OnChangeColor(wxColourPickerEvent& event)
+	void ImageViewerDialog::OnChangeColor(wxColourPickerEvent& event)
 	{
 		wxColour color = event.GetColour();
 		if (event.GetEventObject() == m_ColorBGCtrl)
@@ -193,7 +193,7 @@ namespace Kortex::UI
 		m_ImageView->Refresh();
 	}
 	
-	KImageViewerDialog::KImageViewerDialog(wxWindow* parent, const wxString& caption)
+	ImageViewerDialog::ImageViewerDialog(wxWindow* parent, const wxString& caption)
 	{
 		if (Create(parent, caption))
 		{
@@ -202,7 +202,7 @@ namespace Kortex::UI
 			CenterOnScreen();
 		}
 	}
-	KImageViewerDialog::~KImageViewerDialog()
+	ImageViewerDialog::~ImageViewerDialog()
 	{
 		using namespace Application;
 
@@ -211,11 +211,11 @@ namespace Kortex::UI
 		options.SetAttribute(OName::ColorFG, (int64_t)m_ImageView->GetForegroundColour().GetPixel());
 	}
 	
-	bool KImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
+	bool ImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 	{
 		if (KxStdDialog::Create(parent, KxID_NONE, KAux::StrOr(caption, KTr("ImageViewer.Caption")), wxDefaultPosition, wxDefaultSize, KxBTN_CLOSE))
 		{
-			AddButton(KxID_SAVE, wxEmptyString, true).GetControl()->Bind(wxEVT_BUTTON, &KImageViewerDialog::OnSaveImage, this);
+			AddButton(KxID_SAVE, wxEmptyString, true).GetControl()->Bind(wxEVT_BUTTON, &ImageViewerDialog::OnSaveImage, this);
 	
 			SetMainIcon(KxICON_NONE);
 			SetWindowResizeSide(wxBOTH);
@@ -274,7 +274,7 @@ namespace Kortex::UI
 	
 			// BG color
 			m_ColorBGCtrl = new wxColourPickerCtrl(m_ToolBar, KxID_NONE, m_ImageView->GetBackgroundColour());
-			m_ColorBGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &KImageViewerDialog::OnChangeColor, this);
+			m_ColorBGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &ImageViewerDialog::OnChangeColor, this);
 			m_ToolBar->AddControl(m_ColorBGCtrl);
 	
 			// Backward
@@ -282,7 +282,7 @@ namespace Kortex::UI
 			
 			// Scale
 			m_ScaleSlider = new KxSlider(m_ToolBar, KxID_NONE, 100, 10, 500);
-			m_ScaleSlider->Bind(wxEVT_SLIDER, &KImageViewerDialog::OnScaleChanged, this);
+			m_ScaleSlider->Bind(wxEVT_SLIDER, &ImageViewerDialog::OnScaleChanged, this);
 			m_ToolBar->AddControl(m_ScaleSlider);
 	
 			// Forward
@@ -290,7 +290,7 @@ namespace Kortex::UI
 			
 			// FG color
 			m_ColorFGCtrl = new wxColourPickerCtrl(m_ToolBar, KxID_NONE, m_ImageView->GetForegroundColour());
-			m_ColorFGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &KImageViewerDialog::OnChangeColor, this);
+			m_ColorFGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &ImageViewerDialog::OnChangeColor, this);
 			m_ToolBar->AddControl(m_ColorFGCtrl);
 			
 			m_ToolBar->AddStretchSpacer(1);
@@ -299,8 +299,8 @@ namespace Kortex::UI
 			m_Backward->SetEnabled(false);
 			m_Forward->SetEnabled(false);
 	
-			m_Backward->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KImageViewerDialog::OnNavigation, this);
-			m_Forward->Bind(KxEVT_AUI_TOOLBAR_CLICK, &KImageViewerDialog::OnNavigation, this);
+			m_Backward->Bind(KxEVT_AUI_TOOLBAR_CLICK, &ImageViewerDialog::OnNavigation, this);
+			m_Forward->Bind(KxEVT_AUI_TOOLBAR_CLICK, &ImageViewerDialog::OnNavigation, this);
 			
 			m_ToolBar->Realize();
 	

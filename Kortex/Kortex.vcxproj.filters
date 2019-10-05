@@ -426,9 +426,6 @@
     <ClCompile Include="Source\Utility\KQuickThread.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UI\KImageViewerDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
@@ -1278,6 +1275,9 @@
     <ClCompile Include="Source\ModPackages\InstallWizard\Requirements\RequirementsPage.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard\Requirements</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\ImageViewerDialog.cpp">
+      <Filter>Code\Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1294,9 +1294,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\KEntryRefT.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KImageViewerDialog.h">
-      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KLabeledValue.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -2416,6 +2413,9 @@
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\DisplayModel.h">
       <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\ImageViewerDialog.h">
+      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

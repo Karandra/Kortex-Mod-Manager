@@ -5,7 +5,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "UI/KImageViewerDialog.h"
+#include "UI/ImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/Common.h"
 #include <KxFramework/KxFile.h>

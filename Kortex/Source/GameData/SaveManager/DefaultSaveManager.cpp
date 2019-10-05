@@ -29,13 +29,13 @@ namespace
 
 namespace Kortex::SaveManager
 {
-	KWorkspace* DefaultSaveManager::CreateWorkspace(KMainWindow* mainWindow)
+	void DefaultSaveManager::CreateWorkspace()
 	{
-		return new Workspace(mainWindow);
+		new Workspace();
 	}
 	void DefaultSaveManager::OnSavesLocationChanged(BroadcastEvent& event)
 	{
-		ScheduleReloadWorkspace();
+		ScheduleWorkspacesReload();
 	}
 
 	void DefaultSaveManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
@@ -51,9 +51,9 @@ namespace Kortex::SaveManager
 	{
 	}
 
-	KWorkspace* DefaultSaveManager::GetWorkspace() const
+	IWorkspace::RefVector DefaultSaveManager::EnumWorkspaces() const
 	{
-		return Workspace::GetInstance();
+		return {Workspace::GetInstance()};
 	}
 	std::unique_ptr<IGameSave> DefaultSaveManager::NewSave() const
 	{

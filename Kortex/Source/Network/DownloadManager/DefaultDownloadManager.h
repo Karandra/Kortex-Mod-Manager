@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/IDownloadManager.h"
+#include "Application/IWorkspace.h"
 
 namespace Kortex::DownloadManager
 {
@@ -21,10 +22,11 @@ namespace Kortex::DownloadManager
 			void OnInit() override;
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
-			
-			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+			void CreateWorkspace() override;
 
 		public:
+			IWorkspace::RefVector EnumWorkspaces() const override;
+
 			std::unique_ptr<IDownloadExecutor> NewDownloadExecutor(DownloadItem& item,
 																   const KxURI& uri,
 																   const wxString& localPath

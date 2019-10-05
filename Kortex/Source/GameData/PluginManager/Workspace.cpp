@@ -97,60 +97,12 @@ namespace Kortex::PluginManager
 		}
 	}
 
-	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)
-	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-	}
-	Workspace::~Workspace()
-	{
-		if (IsWorkspaceCreated())
-		{
-			IGameInstance::GetActive()->GetActiveProfile()->SyncWithCurrentState();
-			GetDisplayModelOptions().SaveDataViewLayout(m_ModelView->GetView());
-		}
-	}
-	bool Workspace::OnCreateWorkspace()
-	{
-		CreateModelView();
-		m_MainSizer->Add(m_ModelView->GetView(), 1, wxEXPAND);
-
-		m_SearchBox = new KxSearchBox(this, KxID_NONE);
-		m_SearchBox->Bind(wxEVT_SEARCHCTRL_SEARCH_BTN, &Workspace::OnModSerach, this);
-		m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &Workspace::OnModSerach, this);
-		m_MainSizer->Add(m_SearchBox, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
-
-		GetDisplayModelOptions().LoadDataViewLayout(m_ModelView->GetView());
-		return true;
-	}
-
 	void Workspace::CreateModelView()
 	{
 		m_ModelView = new PluginViewModel();
 		m_ModelView->Create(this);
 		m_ModelView->SetDataVector(IPluginManager::GetInstance()->GetPlugins());
 	}
-
-	bool Workspace::OnOpenWorkspace()
-	{
-		if (IsFirstTimeOpen())
-		{
-			IPluginManager::GetInstance()->Load();
-			m_ModelView->RefreshItems();
-		}
-		return true;
-	}
-	bool Workspace::OnCloseWorkspace()
-	{
-		KMainWindow::GetInstance()->ClearStatus(1);
-		return true;
-	}
-	void Workspace::OnReloadWorkspace()
-	{
-		m_ModelView->RefreshItems();
-		ProcessSelection();
-	}
-
 	void Workspace::OnModSerach(wxCommandEvent& event)
 	{
 		if (m_ModelView->SetSearchMask(event.GetEventType() == wxEVT_SEARCHCTRL_SEARCH_BTN ? event.GetString() : wxEmptyString))
@@ -158,20 +110,6 @@ namespace Kortex::PluginManager
 			m_ModelView->RefreshItems();
 		}
 	}
-
-	wxString Workspace::GetID() const
-	{
-		return "KPluginManagerWorkspace";
-	}
-	wxString Workspace::GetName() const
-	{
-		return KTr("PluginManager.Name");
-	}
-	wxString Workspace::GetNameShort() const
-	{
-		return KTr("PluginManager.NameShort");
-	}
-
 	void Workspace::UpdatePluginTypeCounter(KxMenuItem* item)
 	{
 		using namespace MenuCounter;
@@ -251,6 +189,63 @@ namespace Kortex::PluginManager
 		});
 		operation->SetDialogCaption(event.GetItem()->GetItemLabelText());
 		operation->Run();
+	}
+
+	bool Workspace::OnCreateWorkspace()
+	{
+		CreateModelView();
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		m_MainSizer->Add(m_ModelView->GetView(), 1, wxEXPAND);
+
+		m_SearchBox = new KxSearchBox(this, KxID_NONE);
+		m_SearchBox->Bind(wxEVT_SEARCHCTRL_SEARCH_BTN, &Workspace::OnModSerach, this);
+		m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &Workspace::OnModSerach, this);
+		m_MainSizer->Add(m_SearchBox, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
+
+		SetSizer(m_MainSizer);
+		GetDisplayModelOptions().LoadDataViewLayout(m_ModelView->GetView());
+		return true;
+	}
+	bool Workspace::OnOpenWorkspace()
+	{
+		if (!OpenedOnce())
+		{
+			IPluginManager::GetInstance()->Load();
+			m_ModelView->RefreshItems();
+		}
+		return true;
+	}
+	bool Workspace::OnCloseWorkspace()
+	{
+		IMainWindow::GetInstance()->ClearStatus(1);
+		return true;
+	}
+	void Workspace::OnReloadWorkspace()
+	{
+		m_ModelView->RefreshItems();
+		ProcessSelection();
+	}
+	
+	Workspace::~Workspace()
+	{
+		if (IsCreated())
+		{
+			IGameInstance::GetActive()->GetActiveProfile()->SyncWithCurrentState();
+			GetDisplayModelOptions().SaveDataViewLayout(m_ModelView->GetView());
+		}
+	}
+
+	wxString Workspace::GetID() const
+	{
+		return "KPluginManagerWorkspace";
+	}
+	wxString Workspace::GetName() const
+	{
+		return KTr("PluginManager.Name");
+	}
+	wxString Workspace::GetNameShort() const
+	{
+		return KTr("PluginManager.NameShort");
 	}
 
 	void Workspace::OnCreateViewContextMenu(KxMenu& menu, const IGamePlugin* plugin)
@@ -373,7 +368,7 @@ namespace Kortex::PluginManager
 	void Workspace::ProcessSelection(const IGamePlugin* plugin)
 	{
 		const int statusIndex = 1;
-		KMainWindow* mainWindow = KMainWindow::GetInstance();
+		IMainWindow* mainWindow = IMainWindow::GetInstance();
 		mainWindow->ClearStatus(statusIndex);
 
 		if (plugin)

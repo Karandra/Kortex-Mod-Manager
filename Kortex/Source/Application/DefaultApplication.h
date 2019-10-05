@@ -20,6 +20,8 @@ namespace Kortex
 
 namespace Kortex::Application
 {
+	class MainWindow;
+
 	class DefaultApplication: public IApplication
 	{
 		private:
@@ -35,6 +37,7 @@ namespace Kortex::Application
 			wxString m_InstancesFolder;
 
 			wxWindow* m_InitProgressDialog = nullptr;
+			MainWindow* m_MainWindow = nullptr;
 			DefaultImageProvider m_ImageProvider;
 			BroadcastReciever m_BroadcastReciever;
 

@@ -3,6 +3,7 @@
 #include "GameMods/IModManager.h"
 #include "GameMods/IGameMod.h"
 #include "GameMods/ModEvent.h"
+#include "Application/IWorkspace.h"
 #include "FixedGameMod.h"
 #include "MainFileSystem.h"
 #include "MandatoryModEntry.h"
@@ -126,11 +127,11 @@ namespace Kortex::ModManager
 			DefaultModManager();
 
 		public:
-			KWorkspace* GetWorkspace() const override;
+			IWorkspace::RefVector EnumWorkspaces() const override;
 			void Load() override;
 			void Save() const override;
 
-			const ModManager::Config& GetOptions() const
+			const ModManager::Config& GetOptions() const override
 			{
 				return m_Config;
 			}

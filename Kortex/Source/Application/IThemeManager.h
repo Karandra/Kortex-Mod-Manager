@@ -4,8 +4,8 @@
 class KxSplitterWindow;
 class KxStatusBarEx;
 class KxAuiToolBar;
-class KMainWindow;
-class KWorkspace;
+class IMainWindow;
+class IWorkspace;
 class KApp;
 
 
@@ -47,8 +47,8 @@ namespace Kortex
 			virtual KxColor GetColor(ColorIndex index) const = 0;
 
 			virtual void ProcessWindow(wxWindow* window) = 0;
-			virtual void ProcessWindow(KMainWindow* window) = 0;
-			virtual void ProcessWindow(KWorkspace* window) = 0;
+			virtual void ProcessWindow(IMainWindow* window) = 0;
+			virtual void ProcessWindow(IWorkspace* window) = 0;
 			virtual void ProcessWindow(KxSplitterWindow* window, bool visibleSash = false) = 0;
 			virtual void ProcessWindow(KxAuiToolBar* window) = 0;
 			virtual void ProcessWindow(KxStatusBarEx* window, bool isActive) = 0;

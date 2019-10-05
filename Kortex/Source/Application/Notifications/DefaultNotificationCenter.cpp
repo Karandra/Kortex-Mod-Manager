@@ -35,11 +35,11 @@ namespace Kortex::Notifications
 		}
 	}
 
-	void DefaultNotificationCenter::OnSetToolBarButton(KxAuiToolBarItem* button)
+	void DefaultNotificationCenter::OnSetToolbarButton(KxAuiToolBarItem& button)
 	{
-		m_Button = button;
+		m_Button = &button;
 		m_Button->SetShortHelp(KTr("NotificationCenter.Name"));
-		UpdateToolBarButton();
+		UpdateToolbarButton();
 
 		// Popup window
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -70,7 +70,7 @@ namespace Kortex::Notifications
 		m_PopupDisplayModel->CreateView(m_PopupWindow);
 		sizer->Add(m_PopupDisplayModel->GetView(), 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING_SMALL);
 	}
-	void DefaultNotificationCenter::OnToolBarButton(KxAuiToolBarEvent& event)
+	void DefaultNotificationCenter::OnToolbarButton(KxAuiToolBarEvent& event)
 	{
 		if (IsNotificationsDisplayed())
 		{
@@ -81,7 +81,7 @@ namespace Kortex::Notifications
 			ShowNotificationsWindow();
 		}
 	}
-	void DefaultNotificationCenter::UpdateToolBarButton()
+	void DefaultNotificationCenter::UpdateToolbarButton()
 	{
 		const bool isEmpty = m_Notifications.empty();
 
@@ -116,7 +116,7 @@ namespace Kortex::Notifications
 
 		BroadcastProcessor::Get().CallAfter([this, &ref]()
 		{
-			UpdateToolBarButton();
+			UpdateToolbarButton();
 			OnNotificationAdded(ref);
 
 			QUERY_USER_NOTIFICATION_STATE state = QUNS_ACCEPTS_NOTIFICATIONS;

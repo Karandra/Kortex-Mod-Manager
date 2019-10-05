@@ -11,9 +11,6 @@
 #include "Workspace.h"
 #include "DisplayModel.h"
 #include "BasicGameMod.h"
-#include "UI/KMainWindow.h"
-#include "UI/KWorkspace.h"
-#include "UI/KWorkspaceController.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KUPtrVectorUtil.h"
 #include <KxFramework/KxXML.h>
@@ -78,7 +75,7 @@ namespace Kortex::ModManager
 			}
 			const wxString path = erase ? mod.GetRootDir() : mod.GetModFilesDir();
 
-			auto operation = new KOperationWithProgressDialogBase(true, KMainWindow::GetInstance());
+			auto operation = new KOperationWithProgressDialogBase(true, Workspace::GetInstance());
 			operation->OnRun([path = path.Clone()](KOperationWithProgressBase* self)
 			{
 				KxEvtFile folder(path);
@@ -127,7 +124,7 @@ namespace Kortex::ModManager
 
 	void DefaultModManager::OnMountPointError(const KxStringVector& locations)
 	{
-		KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
+		KxTaskDialog dialog(Workspace::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
 		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
 		dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
 
@@ -230,9 +227,9 @@ namespace Kortex::ModManager
 	{
 	}
 
-	KWorkspace* DefaultModManager::GetWorkspace() const
+	IWorkspace::RefVector DefaultModManager::EnumWorkspaces() const
 	{
-		return Workspace::GetInstance();
+		return {Workspace::GetInstance()};
 	}
 	void DefaultModManager::Load()
 	{
@@ -562,7 +559,7 @@ namespace Kortex::ModManager
 			{
 				// Copy files
 				wxString destinationPath = mod.GetModFilesDir();
-				auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, KMainWindow::GetInstance());
+				auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, Workspace::GetInstance());
 				operation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
 				{
 					KxEvtFile folder(sourcePath);
@@ -599,7 +596,7 @@ namespace Kortex::ModManager
 	void DefaultModManager::InstallModFromPackage(const wxString& packagePath)
 	{
 		// Install Wizard's dialog is auto-managed class, it will delete itself when needed
-		new InstallWizard::WizardDialog(KMainWindow::GetInstance(), packagePath);
+		new InstallWizard::WizardDialog(Workspace::GetInstance(), packagePath);
 	}
 }
 

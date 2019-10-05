@@ -156,7 +156,7 @@ namespace Kortex::Application::About
 		AddSoftwareNode(KxXMLDocument::GetLibraryName(), KxXMLDocument::GetLibraryVersion(), "https://github.com/leethomason/tinyxml2", ImageResourceID::EditCode);
 		AddSoftwareNode("OpenSSL", KxCrypto::GetOpenSSLVersion(), "https://www.openssl.org", ImageResourceID::LockSSL);
 		AddSoftwareNode("7-Zip", KArchive::GetLibraryVersion(), "https://www.7-zip.org", ImageResourceID::SevenZip);
-		AddSoftwareNode(KxCURL::GetLibraryName(), KxCURL::GetLibraryVersion(), "https://curl.haxx.se", ImageResourceID::CURL);
+		AddSoftwareNode(KxCURL::GetLibraryName(), KxCURL::GetLibraryVersion(), "https://curl.haxx.se", ImageResourceID::LibCURL);
 		AddSoftwareNode(KxWebSocket::GetLibraryName(), KxWebSocket::GetLibraryVersion(), "https://github.com/zaphoyd/websocketpp", ImageResourceID::WebSocket);
 		AddSoftwareNode(KxJSON::GetLibraryName(), KxJSON::GetLibraryVersion(), "https://github.com/nlohmann/json", ImageResourceID::JSON);
 

@@ -3,6 +3,7 @@
 #include "GameData/IPluginManager.h"
 #include "BasePluginManager.h"
 #include "BethesdaPlugin.h"
+#include "Application/IWorkspace.h"
 #include <KxFramework/KxLibrary.h>
 
 namespace Kortex::PluginManager
@@ -34,7 +35,7 @@ namespace Kortex::PluginManager
 	class LibLoot;
 	class BethesdaDisplayModel;
 
-	class BethesdaPluginManager: public RTTI::IExtendInterface<BethesdaPluginManager, BasePluginManager>
+	class BethesdaPluginManager: public KxRTTI::ExtendInterface<BethesdaPluginManager, BasePluginManager>
 	{
 		protected:
 			LootAPIConfig m_LibLootConfig;
@@ -68,7 +69,7 @@ namespace Kortex::PluginManager
 
 			virtual wxString OnWriteToLoadOrder(const IGamePlugin& plugin) const;
 			virtual wxString OnWriteToActiveOrder(const IGamePlugin& plugin) const;
-			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+			void CreateWorkspace() override;
 
 		public:
 			BethesdaPluginManager();
@@ -79,7 +80,7 @@ namespace Kortex::PluginManager
 			{
 				return m_LibLootConfig;
 			}
-			KWorkspace* GetWorkspace() const override;
+			IWorkspace::RefVector EnumWorkspaces() const override;
 
 			std::unique_ptr<PluginManager::IDisplayModel> CreateDisplayModel() override;
 			std::unique_ptr<IPluginReader> CreatePluginReader() override;

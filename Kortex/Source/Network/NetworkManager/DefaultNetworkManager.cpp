@@ -7,7 +7,6 @@
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
-#include "UI/KMainWindow.h"
 #include "Utility/MenuSeparator.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxAuiToolBar.h>
@@ -102,9 +101,9 @@ namespace Kortex::NetworkManager
 		return true;
 	}
 
-	void DefaultNetworkManager::OnSetToolBarButton(KxAuiToolBarItem* button)
+	void DefaultNetworkManager::OnSetToolbarButton(KxAuiToolBarItem& button)
 	{
-		m_LoginButton = button;
+		m_LoginButton = &button;
 
 		ValidateAuth();
 		UpdateButton();
@@ -239,7 +238,7 @@ namespace Kortex::NetworkManager
 						item->SetClientData(modNetwork.get());
 						item->Bind(KxEVT_MENU_SELECT, [&modNetwork](KxMenuEvent& event)
 						{
-							KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("NetworkManager.QueryLimits"));
+							KxTaskDialog dialog(&IMainWindow::GetInstance()->GetFrame(), KxID_NONE, KTr("NetworkManager.QueryLimits"));
 							dialog.SetMainIcon(KxICON_INFORMATION);
 							dialog.SetOptionEnabled(KxTD_SIZE_TO_CONTENT);
 							dialog.SetMessage(KTrf("NetworkManager.QueryLimits.Description", modNetwork->GetName()));
@@ -270,7 +269,7 @@ namespace Kortex::NetworkManager
 		IModNetwork* modNetwork = static_cast<IModNetwork*>(event.GetItem()->GetClientData());
 		if (auto auth = modNetwork->TryGetComponent<ModNetworkAuth>(); auth && auth->IsAuthenticated())
 		{
-			KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTrf("NetworkManager.SignOutMessage", modNetwork->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+			KxTaskDialog dialog(event.GetInvokingWindow(), KxID_NONE, KTrf("NetworkManager.SignOutMessage", modNetwork->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 			if (dialog.ShowModal() == KxID_YES)
 			{
 				auth->SignOut();
@@ -299,7 +298,7 @@ namespace Kortex::NetworkManager
 		UpdateButton();
 		GetAInstanceOption(OName::ModNetwork).SetAttribute(OName::Default, modNetwork->GetName());
 	}
-	void DefaultNetworkManager::OnToolBarButton(KxAuiToolBarEvent& event)
+	void DefaultNetworkManager::OnToolbarButton(KxAuiToolBarEvent& event)
 	{
 		CreateMenu();
 		m_LoginButton->ShowDropdownMenuLeftAlign();

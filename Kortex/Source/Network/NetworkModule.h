@@ -3,7 +3,6 @@
 #include "Application/IModule.h"
 #include "Common.h"
 #include <KxFramework/KxSingleton.h>
-class KMainWindow;
 class KxAuiToolBarEvent;
 class KxAuiToolBarItem;
 class KxMenuEvent;
@@ -23,8 +22,6 @@ namespace Kortex
 		public ModuleWithTypeInfo<IModule, Internal::NetworkModuleTypeInfo>,
 		public KxSingletonPtr<NetworkModule>
 	{
-		friend class KMainWindow;
-
 		private:
 			std::unique_ptr<INetworkManager> m_NetworkManager;
 			std::unique_ptr<IDownloadManager> m_DownloadManager;

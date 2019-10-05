@@ -4,16 +4,12 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include "GameMods/ModManager/Workspace.h"
-#include "UI/KMainWindow.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/MenuSeparator.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxComparator.h>
-
-using namespace Kortex;
-using namespace Kortex::UI;
 
 namespace Kortex::PluginManager
 {
@@ -166,7 +162,7 @@ namespace Kortex::PluginManager
 				item->Enable(!description.IsEmpty());
 				item->Bind(KxEVT_MENU_SELECT, [this, description](KxMenuEvent& event)
 				{
-					TextEditDialog dialog(GetView());
+					UI::TextEditDialog dialog(GetView());
 					dialog.SetText(description);
 					dialog.SetEditable(false);
 					dialog.ShowPreview(true);

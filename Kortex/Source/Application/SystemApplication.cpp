@@ -6,8 +6,8 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Theme.hpp>
 #include <Kortex/Git/Constants.h>
+#include "MainWindow.h"
 #include "Archive/KArchive.h"
-#include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxFile.h>
@@ -434,12 +434,11 @@ namespace Kortex
 	}
 	bool SystemApplication::QueueDownloadToMainProcess(const wxString& link) const
 	{
-		KxProcess process(m_Application->GetExecutableName());
-		if (process.Find())
+		if (KxProcess process(m_Application->GetExecutableName()); process.Find())
 		{
 			for (HWND handle: process.EnumWindows())
 			{
-				if (KxTLWInternal::GetWindowUserData(handle) == KMainWindow::GetUniqueID())
+				if (KxTLWInternal::GetWindowUserData(handle) == Application::MainWindow::GetUniqueID())
 				{
 					COPYDATASTRUCT data = {0};
 					data.lpData = const_cast<wchar_t*>(link.wc_str());

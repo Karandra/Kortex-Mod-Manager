@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "Application/IPluggableManager.h"
 #include "PluginManager/Common.h"
 #include "IGamePlugin.h"
+#include "Application/IManager.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxXML.h>
 
@@ -50,8 +50,7 @@ namespace Kortex::PluginManager
 namespace Kortex
 {
 	class IPluginManager:
-		public ManagerWithTypeInfo<IPluggableManager, PluginManager::Internal::TypeInfo>,
-		public RTTI::IInterface<IPluginManager>,
+		public ManagerWithTypeInfo<IManager, PluginManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IPluginManager>
 	{
 		friend class IGamePlugin;
@@ -78,6 +77,12 @@ namespace Kortex
 			IPluginManager();
 
 		public:
+			using KxIObject::QueryInterface;
+			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
+			{
+				return KxIObject::QueryAnyOf<IPluginManager>(iid, ptr, *this);
+			}
+
 			virtual const PluginManager::Config& GetConfig() const = 0;
 
 			virtual std::unique_ptr<PluginManager::IPluginReader> CreatePluginReader() = 0;

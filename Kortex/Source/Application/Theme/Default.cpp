@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "Default.h"
 #include <Kortex/Theme.hpp>
-#include "UI/KMainWindow.h"
-#include "UI/KWorkspace.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxSystem.h>
 #include <KxFramework/KxTopLevelWindow.h>
 #include <KxFramework/KxSystemSettings.h>
@@ -71,12 +70,13 @@ namespace Kortex::Theme
 		wxWindowUpdateLocker redrawLock(window);
 		AsWindow(window);
 	}
-	void Default::ProcessWindow(KWorkspace* window)
+	void Default::ProcessWindow(IWorkspace* workspace)
 	{
+		wxWindow* window = &workspace->GetWindow();
 		wxWindowUpdateLocker redrawLock(window);
 
 		window->SetForegroundColour(GetColor(ColorIndex::WindowFG));
-		if (window->IsSubWorkspace())
+		if (workspace->IsSubWorkspace())
 		{
 			window->SetBackgroundColour(GetColor(ColorIndex::WindowBG));
 		}
@@ -85,9 +85,11 @@ namespace Kortex::Theme
 			window->SetBackgroundColour(GetColor(ColorIndex::WorkspaceBG));
 		}
 	}
-	void Default::ProcessWindow(KMainWindow* window)
+	void Default::ProcessWindow(IMainWindow* mainWindow)
 	{
+		wxWindow* window = &mainWindow->GetFrame();
 		wxWindowUpdateLocker redrawLock(window);
+
 		AsWindow(window);
 		window->SetBackgroundColour(GetColor(ColorIndex::WorkspaceBG));
 	}

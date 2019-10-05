@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "OptionSerializer.h"
 #include <Kortex/Application.hpp>
-#include "UI/KWorkspace.h"
 #include <KxFramework/KxDataView.h>
 #include <KxFramework/DataView2/DataView2.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>

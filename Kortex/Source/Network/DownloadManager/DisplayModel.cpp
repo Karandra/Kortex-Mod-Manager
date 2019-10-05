@@ -9,14 +9,12 @@
 #include "Utility/KAux.h"
 #include "Utility/MenuSeparator.h"
 #include "Utility/Common.h"
-#include "UI/KMainWindow.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxComparator.h>
-#include <wx/clipbrd.h>
 
 namespace Kortex::DownloadManager
 {

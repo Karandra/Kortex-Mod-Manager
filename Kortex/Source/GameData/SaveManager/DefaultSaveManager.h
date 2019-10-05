@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameData/ISaveManager.h"
+#include "Application/IWorkspace.h"
 #include "Utility/KLabeledValue.h"
 #include "Utility/KBitmapSize.h"
 
@@ -67,7 +68,7 @@ namespace Kortex::SaveManager
 			KxStringVector m_ActiveFilters;
 
 		private:
-			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+			void CreateWorkspace() override;
 			void OnSavesLocationChanged(BroadcastEvent& event);
 
 		protected:
@@ -80,7 +81,7 @@ namespace Kortex::SaveManager
 			{
 				return m_Config;
 			}
-			KWorkspace* GetWorkspace() const override;
+			IWorkspace::RefVector EnumWorkspaces() const override;
 			std::unique_ptr<IGameSave> NewSave() const override;
 
 			void UpdateActiveFilters(const KxStringVector& filters) override;

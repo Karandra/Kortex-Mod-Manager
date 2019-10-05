@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "RecievingWindow.h"
 #include "DefaultVFSService.h"
-#include "UI/KMainWindow.h"
 
 namespace Kortex::VirtualFileSystem
 {

@@ -3,7 +3,6 @@
 #include "Nexus.h"
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Application.hpp>
-#include "UI/KMainWindow.h"
 #include "Utility/String.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
@@ -33,7 +32,7 @@ namespace Kortex::NetworkManager
 {
 	wxWindow* NexusAuth::GetInvokingWindow() const
 	{
-		return KMainWindow::GetInstance();
+		return &IMainWindow::GetInstance()->GetFrame();
 	}
 	void NexusAuth::OnAuthSuccess()
 	{

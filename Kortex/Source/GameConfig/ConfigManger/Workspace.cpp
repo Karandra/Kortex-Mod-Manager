@@ -8,17 +8,20 @@
 
 namespace Kortex::GameConfig
 {
-	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow), m_DisplayModel(*IGameConfigManager::GetInstance())
+	void Workspace::OnSaveButton(wxCommandEvent& event)
 	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-		SetWorkspaceController(new WorkspaceController(this));
+		IGameConfigManager::GetInstance()->SaveChanges();
 	}
-	Workspace::~Workspace()
+	void Workspace::OnDiscardButton(wxCommandEvent& event)
 	{
+		IGameConfigManager::GetInstance()->DiscardChanges();
 	}
+
 	bool Workspace::OnCreateWorkspace()
 	{
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(m_MainSizer);
+
 		m_DisplayModel.CreateView(this, m_MainSizer);
 		m_DisplayModel.LoadView();
 
@@ -41,32 +44,33 @@ namespace Kortex::GameConfig
 		buttonSizer->Add(m_DiscardButton, 0, wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 		return true;
 	}
-
 	bool Workspace::OnOpenWorkspace()
 	{
 		return true;
 	}
 	bool Workspace::OnCloseWorkspace()
 	{
+		// Workspace controller
+		/*
 		if (GetWorkspaceController()->AskForSave() == KxID_OK)
 		{
-			KMainWindow::GetInstance()->ClearStatus(1);
+			IMainWindow::GetInstance()->ClearStatus(1);
 			return true;
 		}
+		*/
 		return true;
 	}
 	void Workspace::OnReloadWorkspace()
 	{
 		m_DisplayModel.LoadView();
 	}
-
-	void Workspace::OnSaveButton(wxCommandEvent& event)
+	
+	Workspace::Workspace()
+		:m_DisplayModel(*IGameConfigManager::GetInstance())
 	{
-		IGameConfigManager::GetInstance()->SaveChanges();
 	}
-	void Workspace::OnDiscardButton(wxCommandEvent& event)
+	Workspace::~Workspace()
 	{
-		IGameConfigManager::GetInstance()->DiscardChanges();
 	}
 
 	wxString Workspace::GetID() const

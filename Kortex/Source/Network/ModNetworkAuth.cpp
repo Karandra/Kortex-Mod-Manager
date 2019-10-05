@@ -4,7 +4,6 @@
 #include "INetworkManager.h"
 #include "Application/IApplication.h"
 #include "Application/INotificationCenter.h"
-#include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
 #include "Utility/KBitmapSize.h"
 #include <KxFramework/KxCredentialsDialog.h>

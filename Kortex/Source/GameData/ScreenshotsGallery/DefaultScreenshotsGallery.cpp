@@ -7,9 +7,9 @@
 
 namespace Kortex::ScreenshotsGallery
 {
-	KWorkspace* DefaultScreenshotsGallery::CreateWorkspace(KMainWindow* mainWindow)
+	void DefaultScreenshotsGallery::CreateWorkspace()
 	{
-		return new Workspace(mainWindow);
+		new Workspace();
 	}
 
 	void DefaultScreenshotsGallery::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
@@ -23,9 +23,9 @@ namespace Kortex::ScreenshotsGallery
 	{
 	}
 
-	KWorkspace* DefaultScreenshotsGallery::GetWorkspace() const
+	IWorkspace::RefVector DefaultScreenshotsGallery::EnumWorkspaces() const
 	{
-		return Workspace::GetInstance();
+		return {Workspace::GetInstance()};
 	}
 }
 

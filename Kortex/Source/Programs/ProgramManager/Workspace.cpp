@@ -20,28 +20,23 @@ namespace
 
 namespace Kortex::ProgramManager
 {
-	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)
+	void Workspace::OnMainFSToggled(VirtualFSEvent& event)
 	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		ScheduleReload();
 	}
-	Workspace::~Workspace()
-	{
-		if (IsWorkspaceCreated())
-		{
-			GetDisplayModelOption().SaveDataViewLayout(m_ViewModel->GetView());
-		}
-	}
+
 	bool Workspace::OnCreateWorkspace()
 	{
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 		m_ViewModel = new DisplayModel();
 		m_ViewModel->Create(this, m_MainSizer);
+		
+		SetSizer(m_MainSizer);
 		GetDisplayModelOption().LoadDataViewLayout(m_ViewModel->GetView());
 
 		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &Workspace::OnMainFSToggled, this);
 		return true;
 	}
-
 	bool Workspace::OnOpenWorkspace()
 	{
 		size_t sel = m_ViewModel->GetRow(m_ViewModel->GetView()->GetSelection());
@@ -58,9 +53,12 @@ namespace Kortex::ProgramManager
 		m_ViewModel->RefreshItems();
 	}
 
-	void Workspace::OnMainFSToggled(VirtualFSEvent& event)
+	Workspace::~Workspace()
 	{
-		ScheduleReload();
+		if (IsCreated())
+		{
+			GetDisplayModelOption().SaveDataViewLayout(m_ViewModel->GetView());
+		}
 	}
 
 	wxString Workspace::GetID() const

@@ -1,12 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/AppOption.h"
-class KWorkspace;
-class KMainWindow;
 
 namespace Kortex
 {
 	class IApplication;
+	class IWorkspace;
+	class IMainWindow;
 	class IModule;
 	class IManager;
 	class IGameInstance;
@@ -28,8 +28,8 @@ namespace Kortex::Application
 			void Create(Disposition disposition, KxXMLDocument& xml, const IGameProfile& profile, const wxString& branch = wxEmptyString);
 			void Create(Disposition disposition, KxXMLDocument& xml, const IModule& module, const wxString& branch = wxEmptyString);
 			void Create(Disposition disposition, KxXMLDocument& xml, const IManager& manager, const wxString& branch = wxEmptyString);
-			void Create(Disposition disposition, KxXMLDocument& xml, const KWorkspace& workspace, const wxString& branch = wxEmptyString);
-			void Create(Disposition disposition, KxXMLDocument& xml, const KMainWindow& mainWindow, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const IWorkspace& workspace, const wxString& branch = wxEmptyString);
+			void Create(Disposition disposition, KxXMLDocument& xml, const IMainWindow& mainWindow, const wxString& branch = wxEmptyString);
 			void Create(Disposition disposition, KxXMLDocument& xml, const InstallWizard::WizardDialog& installWizard, const wxString& branch = wxEmptyString);
 	};
 }

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
 #include "Workspace.h"
-#include "UI/KWorkspaceController.h"
+#include "Application/IWorkspaceDocument.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameConfig.hpp>
 #include <Kortex/Utility.hpp>
@@ -14,10 +14,13 @@ namespace Kortex::GameConfig
 		Workspace* workspace = Workspace::GetInstance();
 		if (workspace)
 		{
-			if (KWorkspaceController* controller = workspace->GetWorkspaceController())
+			// TODO: Workspace controller
+			/*
+			if (IWorkspaceDocument* controller = workspace->GetWorkspaceController())
 			{
 				return controller->AskForSave();
 			}
+			*/
 		}
 		return true;
 	}

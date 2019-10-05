@@ -47,29 +47,11 @@ namespace
 
 namespace Kortex::SaveManager
 {
-	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)
-	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-	}
-	Workspace::~Workspace()
-	{
-		if (IsWorkspaceCreated())
-		{
-			GetDisplayModelOptions().SaveDataViewLayout(m_DisplayModel->GetView());
-
-			KxXMLNode filterNode = GetFiltersOptions().GetNode();
-			filterNode.ClearNode();
-
-			for (const auto& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
-			{
-				KxXMLNode node = filterNode.NewElement(FilterNameToSignature(filter));
-				node.SetAttribute(OName::Enabled, FiltersMenu_IsFilterActive(filter.GetValue()));
-			}
-		}
-	}
 	bool Workspace::OnCreateWorkspace()
 	{
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(m_MainSizer);
+
 		CreateViewPane();
 		m_MainSizer->Add(m_DisplayModel->GetView(), 1, wxEXPAND);
 
@@ -89,6 +71,36 @@ namespace Kortex::SaveManager
 
 		ScheduleReload();
 		return true;
+	}
+	bool Workspace::OnOpenWorkspace()
+	{
+		return true;
+	}
+	bool Workspace::OnCloseWorkspace()
+	{
+		IMainWindow::GetInstance()->ClearStatus(1);
+		return true;
+	}
+	void Workspace::OnReloadWorkspace()
+	{
+		UpdateFilters();
+	}
+
+	Workspace::~Workspace()
+	{
+		if (IsCreated())
+		{
+			GetDisplayModelOptions().SaveDataViewLayout(m_DisplayModel->GetView());
+
+			KxXMLNode filterNode = GetFiltersOptions().GetNode();
+			filterNode.ClearNode();
+
+			for (const auto& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
+			{
+				KxXMLNode node = filterNode.NewElement(FilterNameToSignature(filter));
+				node.SetAttribute(OName::Enabled, FiltersMenu_IsFilterActive(filter.GetValue()));
+			}
+		}
 	}
 
 	void Workspace::CreateViewPane()
@@ -147,12 +159,12 @@ namespace Kortex::SaveManager
 		{
 			manager->SyncWithPluginsList(save.GetPlugins(), PluginManager::SyncListMode::ActivateAll);
 			manager->Save();
-			manager->ScheduleReloadWorkspace();
+			manager->ScheduleWorkspacesReload();
 		}
 	}
 	void Workspace::OnSavePluginsList(const IBethesdaGameSave& save)
 	{
-		KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_SAVE);
+		KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 		dialog.SetDefaultExtension("txt");
 		dialog.SetFileName(save.GetFileItem().GetName().BeforeLast('.'));
 		dialog.AddFilter("*.txt", KTr("FileFilter.Text"));
@@ -184,20 +196,6 @@ namespace Kortex::SaveManager
 		return false;
 	}
 
-	bool Workspace::OnOpenWorkspace()
-	{
-		return true;
-	}
-	bool Workspace::OnCloseWorkspace()
-	{
-		KMainWindow::GetInstance()->ClearStatus(1);
-		return true;
-	}
-	void Workspace::OnReloadWorkspace()
-	{
-		UpdateFilters();
-	}
-
 	wxString Workspace::GetID() const
 	{
 		return "SaveManager::Workspace";
@@ -214,7 +212,7 @@ namespace Kortex::SaveManager
 	void Workspace::OnSelection(const IGameSave* save)
 	{
 		const int statusIndex = 1;
-		KMainWindow* mainWindow = KMainWindow::GetInstance();
+		IMainWindow* mainWindow = IMainWindow::GetInstance();
 		mainWindow->ClearStatus(statusIndex);
 
 		if (save)

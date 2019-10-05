@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameData/IScreenshotsGallery.h"
+#include "Application/IWorkspace.h"
 
 namespace Kortex::ScreenshotsGallery
 {
@@ -24,8 +25,8 @@ namespace Kortex::ScreenshotsGallery
 		private:
 			Config m_Config;
 
-		private:
-			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+		protected:
+			void CreateWorkspace() override;
 
 		protected:
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
@@ -37,6 +38,6 @@ namespace Kortex::ScreenshotsGallery
 			{
 				return m_Config;
 			}
-			KWorkspace* GetWorkspace() const override;
+			IWorkspace::RefVector EnumWorkspaces() const override;
 	};
 }

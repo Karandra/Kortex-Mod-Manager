@@ -1,15 +1,15 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
+#include "Application/DefaultWorkspace.h"
 #include <KxFramework/KxSingleton.h>
+#include <KxFramework/KxPanel.h>
 class KxSearchBox;
 
 namespace Kortex::VirtualGameFolder
 {
 	class DisplayModel;
 
-	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
+	class Workspace: public Application::DefaultWindowWorkspace<KxPanel>, public KxSingletonPtr<Workspace>
 	{
 		private:
 			BroadcastReciever m_BroadcastReciever;
@@ -18,43 +18,26 @@ namespace Kortex::VirtualGameFolder
 			DisplayModel* m_Model = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
 
+		protected:
+			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
+
 		public:
-			Workspace(KMainWindow* mainWindow);
-			virtual ~Workspace();
-			virtual bool OnCreateWorkspace() override;
+			~Workspace();
 
 		private:
-			virtual bool OnOpenWorkspace() override;
-			virtual bool OnCloseWorkspace() override;
-			virtual void OnReloadWorkspace() override;
-
 			void OnModSerach(wxCommandEvent& event);
 			void OnViewInvalidated(BroadcastEvent& event);
 
 		public:
-			virtual wxString GetID() const override;
-			virtual wxString GetName() const override;
-			virtual wxString GetNameShort() const override;
-			virtual ResourceID GetImageID() const override
+			wxString GetID() const override;
+			wxString GetName() const override;
+			wxString GetNameShort() const override;
+			ResourceID GetIcon() const override
 			{
 				return ImageResourceID::Folders;
-			}
-			virtual wxSizer* GetWorkspaceSizer() const override
-			{
-				return m_MainSizer;
-			}
-			virtual bool CanReload() const override
-			{
-				return true;
-			}
-		
-			virtual bool IsSubWorkspace() const override
-			{
-				return true;
-			}
-			virtual size_t GetTabIndex() const override
-			{
-				return (size_t)TabIndex::VirtualGameFolder;
 			}
 	};
 }

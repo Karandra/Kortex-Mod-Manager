@@ -1,14 +1,15 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
+#include "Application/DefaultWorkspace.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxAuiToolBar.h>
+#include <KxFramework/KxPanel.h>
 
 namespace Kortex::DownloadManager
 {
 	class DisplayModel;
 
-	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
+	class Workspace: public Application::DefaultWindowWorkspace<KxPanel>, public KxSingletonPtr<Workspace>
 	{
 		private:
 			wxBoxSizer* m_MainSizer = nullptr;
@@ -18,40 +19,23 @@ namespace Kortex::DownloadManager
 		private:
 			void OnSelectConcurrentDownloadsCount(wxCommandEvent& event);
 
-		public:
-			Workspace(KMainWindow* mainWindow);
-			~Workspace();
-
-		private:
-			bool IsSubWorkspace() const override
-			{
-				return true;
-			}
-			size_t GetTabIndex() const
-			{
-				return (size_t)TabIndex::Downloads;
-			}
-		
+		protected:
 			bool OnCreateWorkspace() override;
 			bool OnOpenWorkspace() override;
 			bool OnCloseWorkspace() override;
 			void OnReloadWorkspace() override;
 
 		public:
+			Workspace() = default;
+			~Workspace();
+
+		public:
 			wxString GetID() const override;
 			wxString GetName() const override;
 			wxString GetNameShort() const override;
-			ResourceID GetImageID() const override
+			ResourceID GetIcon() const override
 			{
 				return ImageResourceID::Arrow270;
-			}
-			wxSizer* GetWorkspaceSizer() const override
-			{
-				return m_MainSizer;
-			}
-			bool CanReload() const override
-			{
-				return true;
 			}
 
 		public:

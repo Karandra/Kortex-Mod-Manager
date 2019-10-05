@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "DefaultApplication.h"
 #include "SystemApplication.h"
+#include "MainWindow.h"
 #include "Options/CmdLineDatabase.h"
-#include "UI/KMainWindow.h"
-#include "UI/KWorkspace.h"
 #include "GameInstance/SelectionDialog.h"
 #include "VirtualFileSystem/DefaultVFSService.h"
 #include <Kortex/Application.hpp>
@@ -112,7 +111,8 @@ namespace Kortex::Application
 			Utility::Log::LogInfo("Begin initializing core systems");
 			
 			// Initialize main window
-			SetTopWindow(new KMainWindow());
+			m_MainWindow = new MainWindow();
+			SetTopWindow(m_MainWindow);
 
 			if (InitSettings(downloadLink.has_value()))
 			{
@@ -263,13 +263,13 @@ namespace Kortex::Application
 
 	bool DefaultApplication::OpenInstanceSelectionDialog()
 	{
-		GameInstance::SelectionDialog dialog(KMainWindow::GetInstance());
+		GameInstance::SelectionDialog dialog(m_MainWindow);
 		wxWindowID ret = dialog.ShowModal();
 		IGameInstance* selectedInstance = dialog.GetSelectedInstance();
 
 		if (ret == KxID_OK && (selectedInstance && m_StartupInstanceID != selectedInstance->GetInstanceID()))
 		{
-			KxTaskDialog confirmDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("InstanceSelection.ChangeInstanceDialog.Caption"), KTr("InstanceSelection.ChangeInstanceDialog.Message"), KxBTN_NONE, KxICON_WARNING);
+			KxTaskDialog confirmDialog(m_MainWindow, KxID_NONE, KTr("InstanceSelection.ChangeInstanceDialog.Caption"), KTr("InstanceSelection.ChangeInstanceDialog.Message"), KxBTN_NONE, KxICON_WARNING);
 			confirmDialog.AddButton(KxID_YES, KTr("InstanceSelection.ChangeInstanceDialog.Yes"));
 			confirmDialog.AddButton(KxID_NO, KTr("InstanceSelection.ChangeInstanceDialog.No"));
 			confirmDialog.AddButton(KxID_CANCEL, KTr("InstanceSelection.ChangeInstanceDialog.Cancel"));
@@ -336,35 +336,36 @@ namespace Kortex::Application
 	void DefaultApplication::ShowWorkspace()
 	{
 		auto option = GetAInstanceOption(OName::Workspace);
-		wxString startPage = option.GetValue(IModManager::GetInstance()->GetWorkspace()->GetID());
+		wxString startPage = option.GetValue();
 		Utility::Log::LogInfo("Start page is: %1", startPage);
 
-		KWorkspace* workspace = KMainWindow::GetInstance()->GetWorkspace(startPage);
-		if (!workspace || !workspace->CanBeStartPage() || !workspace->SwitchHere())
+		IWorkspaceContainer& container = m_MainWindow->GetWorkspaceContainer();
+		IWorkspace* initialWorkspace = container.GetWorkspaceByID(startPage);
+		if (initialWorkspace == nullptr || !initialWorkspace->SwitchHere())
 		{
 			Utility::Log::LogInfo("Can't show workspace %1. Trying first available", startPage);
 
-			bool isSuccess = false;
-			for (const auto& v: KMainWindow::GetInstance()->GetWorkspacesList())
+			initialWorkspace = nullptr;
+			for (IWorkspace* workspace: container.EnumWorkspaces())
 			{
-				workspace = v.second;
-				if (workspace->CanBeStartPage())
+				Utility::Log::LogInfo("Trying to show %1 workspace", workspace->GetID());
+
+				if (workspace->SwitchHere())
 				{
-					Utility::Log::LogInfo("Trying to load %1 workspace", workspace->GetID());
-					isSuccess = workspace->SwitchHere();
+					initialWorkspace = workspace;
 					break;
 				}
 			}
 
-			if (isSuccess)
+			if (initialWorkspace)
 			{
-				startPage = workspace->GetID();
+				startPage = initialWorkspace->GetID();
 				Utility::Log::LogInfo("Successfully showed %1 workspace", startPage);
 			}
 			else
 			{
 				Utility::Log::LogInfo("No workspaces available. Terminating");
-				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("Init.Error3"), KMainWindow::GetInstance());
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("Init.Error3"), m_MainWindow);
 			}
 		}
 		else
@@ -399,7 +400,7 @@ namespace Kortex::Application
 				return false;
 			}
 
-			Utility::Log::LogInfo("Pre start config needed");
+			Utility::Log::LogInfo("Initial config needed");
 			if (!ShowFirstTimeConfigDialog(m_InitProgressDialog))
 			{
 				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtCritical, KTr("Init.Error1"));
@@ -598,12 +599,12 @@ namespace Kortex::Application
 
 		// All required managers initialized, can create main window now
 		Utility::Log::LogInfo("Creating main window");
-		KMainWindow::GetInstance()->Create();
+		m_MainWindow->Create();
 
 		// Show main window and selected workspace
 		Utility::Log::LogInfo("Main window created, displaying initial workspace.");
 		ShowWorkspace();
-		KMainWindow::GetInstance()->Show();
+		m_MainWindow->Show();
 		return true;
 	}
 

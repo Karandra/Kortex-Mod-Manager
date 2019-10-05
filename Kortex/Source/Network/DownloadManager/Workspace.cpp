@@ -29,25 +29,14 @@ namespace Kortex::DownloadManager
 		BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtConcurrentDownloadsCountChanged);
 	}
 
-	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)
-	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-	}
-	Workspace::~Workspace()
-	{
-		if (IsWorkspaceCreated())
-		{
-			GetDisplayModelOptions().SaveDataViewLayout(m_DisplayModel->GetView());
-		}
-	}
-
 	bool Workspace::OnCreateWorkspace()
 	{
 		IDownloadManager* manager = IDownloadManager::GetInstance();
 		manager->LoadDownloads();
 
 		// Main view
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+
 		m_DisplayModel = new DisplayModel();
 		m_DisplayModel->CreateView(this);
 
@@ -81,6 +70,7 @@ namespace Kortex::DownloadManager
 
 		m_ToolBar->UpdateUI();
 		m_MainSizer->Add(m_ToolBar, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
+		SetSizer(m_MainSizer);
 		return true;
 	}
 	bool Workspace::OnOpenWorkspace()
@@ -94,6 +84,14 @@ namespace Kortex::DownloadManager
 	void Workspace::OnReloadWorkspace()
 	{
 		m_DisplayModel->RefreshItems();
+	}
+
+	Workspace::~Workspace()
+	{
+		if (IsCreated())
+		{
+			GetDisplayModelOptions().SaveDataViewLayout(m_DisplayModel->GetView());
+		}
 	}
 
 	wxString Workspace::GetID() const

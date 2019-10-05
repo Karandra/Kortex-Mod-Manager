@@ -6,8 +6,8 @@
 #include "GameConfig/ConfigManger/Item.h"
 #include "GameConfig/ConfigManger/ISource.h"
 #include <KxFramework/KxTranslation.h>
-class KWorkspace;
-class KMainWindow;
+class IWorkspace;
+class IMainWindow;
 
 namespace Kortex::Application::Settings
 {
@@ -27,10 +27,6 @@ namespace Kortex::Application::Settings
 			void OnInit() override;
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
-			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override
-			{
-				return nullptr;
-			}
 
 			void OnCreateDisplayModel(GameConfig::DisplayModel& displayModel) override
 			{

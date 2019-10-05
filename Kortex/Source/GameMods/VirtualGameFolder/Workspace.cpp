@@ -22,20 +22,11 @@ namespace
 
 namespace Kortex::VirtualGameFolder
 {
-	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)
-	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-	}
-	Workspace::~Workspace()
-	{
-		if (IsWorkspaceCreated())
-		{
-			GetDisplayModelOption().SaveDataViewLayout(m_Model->GetView());
-		}
-	}
 	bool Workspace::OnCreateWorkspace()
 	{
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(m_MainSizer);
+
 		m_Model = new DisplayModel();
 		m_Model->Create(this, m_MainSizer);
 		m_Model->RefreshItems();
@@ -49,7 +40,6 @@ namespace Kortex::VirtualGameFolder
 		GetDisplayModelOption().LoadDataViewLayout(m_Model->GetView());
 		return true;
 	}
-
 	bool Workspace::OnOpenWorkspace()
 	{
 		return true;
@@ -61,6 +51,14 @@ namespace Kortex::VirtualGameFolder
 	void Workspace::OnReloadWorkspace()
 	{
 		m_Model->RefreshItems();
+	}
+
+	Workspace::~Workspace()
+	{
+		if (IsCreated())
+		{
+			GetDisplayModelOption().SaveDataViewLayout(m_Model->GetView());
+		}
 	}
 
 	void Workspace::OnModSerach(wxCommandEvent& event)

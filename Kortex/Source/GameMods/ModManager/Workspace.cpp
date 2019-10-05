@@ -19,6 +19,7 @@
 #include "UI/TextEditDialog.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
+#include "Utility/UI.h"
 #include "Utility/MenuSeparator.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxShell.h>
@@ -117,30 +118,52 @@ namespace
 
 namespace Kortex::ModManager
 {
-	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)//, m_OptionsUI(this, "MainUI"), m_ModListViewOptions(this, "ModListView")
+	void WorkspaceContainer::Create(wxWindow* parent)
 	{
-		CreateToolBarButton();
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		m_BookCtrl = new KxAuiNotebook(parent, KxID_NONE);
+		m_BookCtrl->SetImageList(&ImageProvider::GetImageList());
+
+		m_BookCtrl->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &WorkspaceContainer::OnPageOpening, this);
+		m_BookCtrl->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &WorkspaceContainer::OnPageOpened, this);
 	}
-	Workspace::~Workspace()
+	
+	void WorkspaceContainer::OnPageOpening(wxAuiNotebookEvent& event)
 	{
-		if (IsWorkspaceCreated())
+		if (IWorkspace* nextWorkspace = GetWorkspaceByIndex(event.GetSelection()))
 		{
-			auto options = GetDisplayModelOptions();
-			options.SaveDataViewLayout(m_DisplayModel->GetView());
-
-			options.SetAttribute(OName::DisplayMode, (int)m_DisplayModel->GetDisplayMode());
-			options.SetAttribute(OName::ShowPriorityGroups, m_DisplayModel->ShouldShowPriorityGroups());
-			options.SetAttribute(OName::ShowNotInstalledMods, m_DisplayModel->ShouldShowNotInstalledMods());
-			options.SetAttribute(OName::BoldPriorityGroupLabels, m_DisplayModel->IsBoldPriorityGroupLabels());
-			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
-
-			GetSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
+			if (nextWorkspace->SwitchHere())
+			{
+				event.Allow();
+			}
+			else
+			{
+				event.Veto();
+			}
 		}
+		event.Skip();
 	}
+	void WorkspaceContainer::OnPageOpened(wxAuiNotebookEvent& event)
+	{
+		IWorkspace* workspace = GetWorkspaceByIndex(event.GetSelection());
+		if (workspace && workspace->IsCreated())
+		{
+			event.Allow();
+		}
+		else
+		{
+			event.Veto();
+		}
+		event.Skip();
+	}
+}
+
+namespace Kortex::ModManager
+{
 	bool Workspace::OnCreateWorkspace()
 	{
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(m_MainSizer);
+
 		m_SplitterLeftRight = new KxSplitterWindow(this, KxID_NONE);
 		m_SplitterLeftRight->SetName("Horizontal");
 		m_SplitterLeftRight->SetMinimumPaneSize(250);
@@ -158,7 +181,7 @@ namespace Kortex::ModManager
 		m_ModsPaneSizer->Add(m_ModsToolBar, 0, wxEXPAND);
 		m_ModsPaneSizer->Add(m_DisplayModel->GetView(), 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 
-		CreateRightPane();
+		m_WorkspaceContainer.Create(m_SplitterLeftRight);
 		CreateControls();
 
 		ReloadView();
@@ -170,10 +193,57 @@ namespace Kortex::ModManager
 		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &Workspace::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &Workspace::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
-
-		CreateAsSubWorkspace<VirtualGameFolder::Workspace>();
-		CreateAsSubWorkspace<ProgramManager::Workspace>();
 		return true;
+	}
+	bool Workspace::OnOpenWorkspace()
+	{
+		if (!OpenedOnce())
+		{
+			m_SplitterLeftRight->SplitVertically(m_ModsPane, m_PaneRight_Tabs);
+			if (m_PaneRight_Tabs->GetPageCount() == 0)
+			{
+				m_SplitterLeftRight->Unsplit(m_PaneRight_Tabs);
+			}
+
+			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
+
+			auto displayModelOptions = GetDisplayModelOptions();
+			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
+
+			m_DisplayModel->LoadView();
+		}
+		m_DisplayModel->UpdateUI();
+		return true;
+	}
+	bool Workspace::OnCloseWorkspace()
+	{
+		IMainWindow::GetInstance()->ClearStatus();
+		return true;
+	}
+	void Workspace::OnReloadWorkspace()
+	{
+		ClearControls();
+
+		m_DisplayModel->LoadView();
+		ProcessSelection();
+		UpdateModListContent();
+	}
+
+	Workspace::~Workspace()
+	{
+		if (IsCreated())
+		{
+			auto options = GetDisplayModelOptions();
+			options.SaveDataViewLayout(m_DisplayModel->GetView());
+
+			options.SetAttribute(OName::DisplayMode, (int)m_DisplayModel->GetDisplayMode());
+			options.SetAttribute(OName::ShowPriorityGroups, m_DisplayModel->ShouldShowPriorityGroups());
+			options.SetAttribute(OName::ShowNotInstalledMods, m_DisplayModel->ShouldShowNotInstalledMods());
+			options.SetAttribute(OName::BoldPriorityGroupLabels, m_DisplayModel->IsBoldPriorityGroupLabels());
+			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
+
+			GetSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
+		}
 	}
 
 	void Workspace::CreateToolBar()
@@ -188,17 +258,17 @@ namespace Kortex::ModManager
 		m_ModsToolBar->AddLabel(KTr("ModManager.Profile") + ':');
 		m_ModsToolBar->AddControl(m_ToolBar_Profiles)->SetProportion(1);
 
-		m_ToolBar_EditProfiles = KMainWindow::CreateToolBarButton(m_ModsToolBar, wxEmptyString, ImageResourceID::Gear);
+		m_ToolBar_EditProfiles = Utility::UI::CreateToolBarButton(m_ModsToolBar, wxEmptyString, ImageResourceID::Gear);
 		m_ToolBar_EditProfiles->SetShortHelp(KTr("ModManager.Profile.Configure"));
 		m_ToolBar_EditProfiles->Bind(KxEVT_AUI_TOOLBAR_CLICK, &Workspace::OnShowProfileEditor, this);
 		m_ModsToolBar->AddSeparator();
 
-		m_ToolBar_AddMod = KMainWindow::CreateToolBarButton(m_ModsToolBar, KTr(KxID_ADD), ImageResourceID::PlusSmall);
+		m_ToolBar_AddMod = Utility::UI::CreateToolBarButton(m_ModsToolBar, KTr(KxID_ADD), ImageResourceID::PlusSmall);
 	
-		m_ToolBar_ChangeDisplayMode = KMainWindow::CreateToolBarButton(m_ModsToolBar, KTr("ModManager.DisplayMode.Caption"), ImageResourceID::ProjectionScreen);
+		m_ToolBar_ChangeDisplayMode = Utility::UI::CreateToolBarButton(m_ModsToolBar, KTr("ModManager.DisplayMode.Caption"), ImageResourceID::ProjectionScreen);
 		m_ToolBar_ChangeDisplayMode->Bind(KxEVT_AUI_TOOLBAR_CLICK, &Workspace::OnDisplayModeMenu, this);
 	
-		m_ToolBar_Tools = KMainWindow::CreateToolBarButton(m_ModsToolBar, wxEmptyString, ImageResourceID::WrenchScrewdriver);
+		m_ToolBar_Tools = Utility::UI::CreateToolBarButton(m_ModsToolBar, wxEmptyString, ImageResourceID::WrenchScrewdriver);
 		m_ToolBar_Tools->SetShortHelp(KTr("ModManager.Tools"));
 		m_ToolBar_Tools->Bind(KxEVT_AUI_TOOLBAR_CLICK, &Workspace::OnToolsMenu, this);
 
@@ -342,48 +412,6 @@ namespace Kortex::ModManager
 
 		controlsSizer->Add(m_ActivateButton);
 	}
-	void Workspace::CreateRightPane()
-	{
-		m_PaneRight_Tabs = new KxAuiNotebook(m_SplitterLeftRight, KxID_NONE);
-		m_PaneRight_Tabs->SetImageList(&ImageProvider::GetImageList());
-
-		m_PaneRight_Tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &Workspace::OnSubWorkspaceOpening, this);
-		m_PaneRight_Tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &Workspace::OnSubWorkspaceOpened, this);
-	}
-
-	bool Workspace::OnOpenWorkspace()
-	{
-		if (IsFirstTimeOpen())
-		{
-			m_SplitterLeftRight->SplitVertically(m_ModsPane, m_PaneRight_Tabs);
-			if (m_PaneRight_Tabs->GetPageCount() == 0)
-			{
-				m_SplitterLeftRight->Unsplit(m_PaneRight_Tabs);
-			}
-
-			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
-
-			auto displayModelOptions = GetDisplayModelOptions();
-			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
-
-			m_DisplayModel->LoadView();
-		}
-		m_DisplayModel->UpdateUI();
-		return true;
-	}
-	bool Workspace::OnCloseWorkspace()
-	{
-		GetMainWindow()->ClearStatus();
-		return true;
-	}
-	void Workspace::OnReloadWorkspace()
-	{
-		ClearControls();
-		
-		m_DisplayModel->LoadView();
-		ProcessSelection();
-		UpdateModListContent();
-	}
 
 	wxString Workspace::GetID() const
 	{
@@ -392,42 +420,6 @@ namespace Kortex::ModManager
 	wxString Workspace::GetName() const
 	{
 		return KTr("ModManager.Name");
-	}
-
-	bool Workspace::AddSubWorkspace(KWorkspace* workspace)
-	{
-		m_PaneRight_Tabs->InsertPage(workspace->GetTabIndex(), workspace, workspace->GetNameShort(), workspace->GetTabIndex() == 0, workspace->GetImageID().AsInt());
-		return true;
-	}
-	void Workspace::OnSubWorkspaceOpening(wxAuiNotebookEvent& event)
-	{
-		event.Skip();
-		KWorkspace* oldWorkspace = static_cast<KWorkspace*>(m_PaneRight_Tabs->GetPage(event.GetOldSelection()));
-		KWorkspace* workspace = static_cast<KWorkspace*>(m_PaneRight_Tabs->GetPage(event.GetSelection()));
-
-		if (oldWorkspace != workspace)
-		{
-			if (oldWorkspace && !oldWorkspace->OnCloseWorkspaceInternal())
-			{
-				event.Veto();
-				return;
-			}
-
-			if (workspace && workspace->CreateNow() && workspace->OnOpenWorkspaceInternal())
-			{
-				event.Allow();
-			}
-		}
-	}
-	void Workspace::OnSubWorkspaceOpened(wxAuiNotebookEvent& event)
-	{
-		event.Skip();
-
-		KWorkspace* workspace = static_cast<KWorkspace*>(m_PaneRight_Tabs->GetPage(event.GetSelection()));
-		if (workspace && workspace->IsWorkspaceCreated())
-		{
-			event.Allow();
-		}
 	}
 
 	void Workspace::OnMountButton(wxCommandEvent& event)
@@ -447,7 +439,7 @@ namespace Kortex::ModManager
 		wxString newID;
 		const wxString oldID = mod.GetID();
 
-		KxTextBoxDialog dialog(GetMainWindow(), KxID_NONE, KTr("ModManager.Menu.ChangeID"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL);
+		KxTextBoxDialog dialog(this, KxID_NONE, KTr("ModManager.Menu.ChangeID"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL);
 		dialog.SetValue(oldID);
 		dialog.Bind(KxEVT_STDDIALOG_BUTTON, [this, &mod, &dialog, &newID](wxNotifyEvent& event)
 		{
@@ -660,7 +652,7 @@ namespace Kortex::ModManager
 	}
 	void Workspace::OnAddMod_InstallPackage(KxMenuEvent& event)
 	{
-		KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN);
+		KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_OPEN);
 		dialog.AddFilter("*.kmp;*.smi;*.7z;*.zip;*.fomod", KTr("FileFilter.AllSupportedFormats"));
 		dialog.AddFilter("*.kmp", KTr("FileFilter.ModPackage"));
 		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
@@ -676,7 +668,7 @@ namespace Kortex::ModManager
 	}
 	void Workspace::UninstallMod(IGameMod& mod, bool eraseLog)
 	{
-		KxTaskDialog dialog(GetMainWindow(), KxID_NONE, wxEmptyString, KTr("ModManager.RemoveMod.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		KxTaskDialog dialog(this, KxID_NONE, wxEmptyString, KTr("ModManager.RemoveMod.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (mod.IsInstalled())
 		{
 			dialog.SetCaption(eraseLog ? KTrf("ModManager.RemoveMod.CaptionUninstallAndErase", mod.GetName()) : KTrf("ModManager.RemoveMod.CaptionUninstall", mod.GetName()));
@@ -725,7 +717,7 @@ namespace Kortex::ModManager
 	void Workspace::ClearControls()
 	{
 		m_SearchBox->Clear();
-		GetMainWindow()->ClearStatus();
+		IMainWindow::GetInstance()->ClearStatus();
 	}
 	void Workspace::DisplayModInfo(IGameMod* entry)
 	{
@@ -734,7 +726,7 @@ namespace Kortex::ModManager
 
 		if (entry)
 		{
-			GetMainWindow()->SetStatus(entry->GetName());
+			IMainWindow::GetInstance()->SetStatus(entry->GetName());
 		}
 	}
 	void Workspace::CreateViewContextMenu(KxMenu& contextMenu, const IGameMod::RefVector& selectedMods, IGameMod* focusedMod)
@@ -897,15 +889,15 @@ namespace Kortex::ModManager
 			case ContextMenuID::ModOpenLocation:
 			{
 				// Try to open mod files folder without displaying the error. If it fails open root folder with error message.
-				if (!KxShell::Execute(GetMainWindow(), focusedMod->GetModFilesDir(), {}, {}, {}, SW_SHOWNORMAL, true))
+				if (!KxShell::Execute(this, focusedMod->GetModFilesDir(), {}, {}, {}, SW_SHOWNORMAL, true))
 				{
-					KxShell::Execute(GetMainWindow(), focusedMod->GetRootDir());
+					KxShell::Execute(this, focusedMod->GetRootDir());
 				}
 				break;
 			}
 			case ContextMenuID::ModChangeLocation:
 			{
-				KxFileBrowseDialog dialog(GetMainWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
+				KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_OPEN_FOLDER);
 				if (dialog.ShowModal() == KxID_OK)
 				{
 					if (!focusedMod->IsInstalled() || KxShell::FileOperationEx(KxFOF_MOVE, focusedMod->GetModFilesDir() + "\\*", dialog.GetResult(), this, true, false, false, true))
@@ -949,7 +941,7 @@ namespace Kortex::ModManager
 			case ContextMenuID::ModEditDescription:
 			{
 				wxString oldDescription = focusedMod->GetDescription();
-				UI::TextEditDialog dialog(GetMainWindow());
+				UI::TextEditDialog dialog(this);
 				dialog.SetText(oldDescription);
 
 				if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
@@ -966,7 +958,7 @@ namespace Kortex::ModManager
 				BasicGameMod tempMod;
 				tempMod.GetTagStore() = focusedMod->GetTagStore();
 
-				ModTagManager::SelectorDialog dialog(GetMainWindow(), KTr("ModManager.TagsDialog"));
+				ModTagManager::SelectorDialog dialog(this, KTr("ModManager.TagsDialog"));
 				dialog.SetDataVector(tempMod.GetTagStore(), tempMod);
 				dialog.ShowModal();
 				if (dialog.IsModified())
@@ -988,7 +980,7 @@ namespace Kortex::ModManager
 			}
 			case ContextMenuID::ModEditSources:
 			{
-				ModSource::StoreDialog dialog(GetMainWindow(), focusedMod->GetModSourceStore());
+				ModSource::StoreDialog dialog(this, focusedMod->GetModSourceStore());
 				dialog.ShowModal();
 				if (dialog.IsModified())
 				{
@@ -1007,7 +999,7 @@ namespace Kortex::ModManager
 			}
 			case ContextMenuID::ModProperties:
 			{
-				KxShell::Execute(GetMainWindow(), focusedMod->GetModFilesDir(), "properties");
+				KxShell::Execute(this, focusedMod->GetModFilesDir(), "properties");
 				break;
 			}
 

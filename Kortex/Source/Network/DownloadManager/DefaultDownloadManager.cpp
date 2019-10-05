@@ -6,7 +6,6 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include "UI/KMainWindow.h"
 #include <KxFramework/KxFileFinder.h>
 #include <Kx/Async/DelayedCall.h>
 
@@ -76,24 +75,21 @@ namespace Kortex::DownloadManager
 		IDownloadManager::OnLoadInstance(instance, managerNode);
 	}
 	
-	KWorkspace* DefaultDownloadManager::CreateWorkspace(KMainWindow* mainWindow)
+	void DefaultDownloadManager::CreateWorkspace()
 	{
 		// Create workspace
-		Workspace* workspace = new Workspace(mainWindow);
+		Workspace* workspace = new Workspace();
 
 		// If we're the primary instance and we were launched with link as command line
 		// argument we need to manually queue it since IApplication instance merely checks
 		// its existence and otherwise does nothing with it.
-		Kx::Async::DelayedCall([]()
+		KxAsync::DelayedCall([]()
 		{
 			if (auto link = IApplication::GetInstance()->GetLinkFromCommandLine())
 			{
 				IDownloadManager::GetInstance()->QueueUnknownDownload(*link);
 			}
 		}, wxTimeSpan::Seconds(2));
-
-		// Return the workspace
-		return workspace;
 	}
 
 	std::unique_ptr<IDownloadExecutor> DefaultDownloadManager::NewDownloadExecutor(DownloadItem& item,
@@ -176,5 +172,10 @@ namespace Kortex::DownloadManager
 			}
 		}
 		return false;
+	}
+
+	IWorkspace::RefVector DefaultDownloadManager::EnumWorkspaces() const
+	{
+		return {Workspace::GetInstance()};
 	}
 }

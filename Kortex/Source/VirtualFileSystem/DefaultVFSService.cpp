@@ -5,7 +5,6 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
 #include "Application/SystemApplication.h"
-#include "UI/KMainWindow.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxSystem.h>
@@ -55,9 +54,9 @@ namespace Kortex::VirtualFileSystem
 		{
 			case RequestID::Exit:
 			{
-				if (KMainWindow* mainWindow = KMainWindow::GetInstance())
+				if (IMainWindow* mainWindow = IMainWindow::GetInstance())
 				{
-					mainWindow->Close();
+					mainWindow->GetFrame().Close();
 				}
 				break;
 			}
@@ -65,7 +64,7 @@ namespace Kortex::VirtualFileSystem
 			{
 				auto [exceptionMessage] = message.DeserializePayload<wxString>();
 
-				KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KTr("VFS.Service.UnhandledException"), exceptionMessage, KxBTN_OK, KxICON_ERROR);
+				KxTaskDialog dialog(&IMainWindow::GetInstance()->GetFrame(), KxID_NONE, KTr("VFS.Service.UnhandledException"), exceptionMessage, KxBTN_OK, KxICON_ERROR);
 				dialog.ShowModal();
 
 				Stop();
@@ -128,7 +127,7 @@ namespace Kortex::VirtualFileSystem
 	{
 		RunController();
 
-		KMainWindow::GetInstance()->Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent& evnet)
+		IMainWindow::GetInstance()->GetFrame().Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent& evnet)
 		{
 			Stop();
 			evnet.Skip();

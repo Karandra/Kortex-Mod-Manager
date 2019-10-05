@@ -46,7 +46,7 @@ namespace Kortex
 		// Network software
 		switch (networkSoftware)
 		{
-			case NetworkSoftware::CURL:
+			case NetworkSoftware::LibCURL:
 			{
 				formatter(KxCURL::GetLibraryName());
 				formatter(KxCURL::GetLibraryVersion());
@@ -138,7 +138,7 @@ namespace Kortex
 	std::unique_ptr<KxCURLSession> INetworkManager::NewCURLSession(const KxURI& address)
 	{
 		auto curlSession = std::make_unique<KxCURLSession>(address);
-		curlSession->SetUserAgent(GetUserAgentString(NetworkSoftware::CURL));
+		curlSession->SetUserAgent(GetUserAgentString(NetworkSoftware::LibCURL));
 		AddDefaultHeaders(*curlSession);
 
 		return curlSession;

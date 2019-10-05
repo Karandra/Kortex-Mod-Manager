@@ -272,9 +272,9 @@ namespace Kortex::SaveManager
 			{
 				case ColumnID::Bitmap:
 				{
-					KImageViewerDialog dialog(GetView(), save.GetFileItem().GetName());
+					UI::KImageViewerDialog dialog(GetView(), save.GetFileItem().GetName());
 
-					KImageViewerEvent evt;
+					UI::KImageViewerEvent evt;
 					evt.SetBitmap(save.GetBitmap());
 					dialog.Navigate(evt);
 
@@ -364,7 +364,7 @@ namespace Kortex::SaveManager
 	}
 	void DisplayModel::OnVFSToggled(BroadcastEvent& event)
 	{
-		if (m_Workspace->IsWorkspaceVisible())
+		if (m_Workspace->IsActive())
 		{
 			GetView()->Refresh();
 		}

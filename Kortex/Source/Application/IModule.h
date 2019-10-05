@@ -154,7 +154,8 @@ namespace Kortex
 
 namespace Kortex
 {
-	template<class t_Base, const auto& t_TypeInfo> class ModuleWithTypeInfo: public t_Base
+	template<class t_Base, const auto& t_TypeInfo>
+	class ModuleWithTypeInfo: public t_Base
 	{
 		public:
 			static const IModuleInfo& GetModuleTypeInfo()

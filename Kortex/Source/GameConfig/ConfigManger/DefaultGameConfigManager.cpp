@@ -22,7 +22,7 @@ namespace Kortex::GameConfig
 	void DefaultGameConfigManager::OnChangeProfile(ProfileEvent& event)
 	{
 		Load();
-		KWorkspace::ScheduleReloadOf<Workspace>();
+		IWorkspace::ScheduleReloadOf<Workspace>();
 	}
 
 	void DefaultGameConfigManager::OnInit()
@@ -59,9 +59,9 @@ namespace Kortex::GameConfig
 			}
 		}
 	}
-	KWorkspace* DefaultGameConfigManager::CreateWorkspace(KMainWindow* mainWindow)
+	void DefaultGameConfigManager::CreateWorkspace()
 	{
-		return new Workspace(mainWindow);
+		new Workspace();
 	}
 
 	void DefaultGameConfigManager::OnItemChanged(GameConfig::Item& item)
@@ -89,6 +89,11 @@ namespace Kortex::GameConfig
 				workspace->OnChangesDiscarded();
 			}
 		}
+	}
+
+	IWorkspace::RefVector DefaultGameConfigManager::EnumWorkspaces() const
+	{
+		return {Workspace::GetInstance()};
 	}
 
 	void DefaultGameConfigManager::Load()

@@ -36,7 +36,7 @@ namespace Kortex::Application::Settings
 	{
 		IConfigManager::OnLoadInstance(instance, managerNode);
 	}
-	
+
 	ConfigManager::ConfigManager()
 		:m_Definition(*this, wxS("AppSettings"), GetDefinitionFileByID(wxS("AppSettings")))
 	{

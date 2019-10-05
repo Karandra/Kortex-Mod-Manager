@@ -3,7 +3,6 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "UI/KMainWindow.h"
 #include "Utility/String.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
@@ -26,7 +25,7 @@ namespace Kortex::NetworkManager
 	{
 		if (m_UpdateChecker.CanIssueNewAutomaticCheck())
 		{
-			Kx::Async::DelayedCall([this]()
+			KxAsync::DelayedCall([this]()
 			{
 				m_UpdateChecker.RunUpdateCheck();
 			}, wxTimeSpan::Seconds(3));

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameData/IGameSave.h"
-#include "Application/IPluggableManager.h"
+#include "Application/IManager.h"
 #include <KxFramework/KxSingleton.h>
 
 namespace Kortex
@@ -16,7 +16,7 @@ namespace Kortex
 	}
 
 	class ISaveManager:
-		public ManagerWithTypeInfo<IPluggableManager, SaveManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, SaveManager::Internal::TypeInfo>,
 		public KxSingletonPtr<ISaveManager>
 	{
 		protected:

@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "VisualStudio.h"
 #include <Kortex/Theme.hpp>
-#include "UI/KMainWindow.h"
-#include "UI/KWorkspace.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/KxSystemSettings.h>
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxAuiToolBar.h>
@@ -58,14 +57,16 @@ namespace Kortex::Theme
 		wxWindowUpdateLocker redrawLock(window);
 		AsWindow(window);
 	}
-	void VisualStudio::ProcessWindow(KWorkspace* window)
+	void VisualStudio::ProcessWindow(IWorkspace* workspace)
 	{
+		wxWindow* window = &workspace->GetWindow();
 		wxWindowUpdateLocker redrawLock(window);
 
 		AsWindow(window);
 	}
-	void VisualStudio::ProcessWindow(KMainWindow* window)
+	void VisualStudio::ProcessWindow(IMainWindow* mainWindow)
 	{
+		wxWindow* window = &mainWindow->GetFrame();
 		wxWindowUpdateLocker redrawLock(window);
 
 		window->SetBackgroundColour(GetColor(ColorIndex::WorkspaceBG));

@@ -1,21 +1,18 @@
 #include "stdafx.h"
 #include "GetStartupWorkspaces.h"
-#include "UI/KMainWindow.h"
-#include "UI/KWorkspace.h"
+#include "Application/IMainWindow.h"
+#include "Application/IWorkspace.h"
 
 namespace Kortex::GameConfig::SamplingFunction
 {
 	void GetStartupWorkspaces::OnCall(const ItemValue::Vector& arguments)
 	{
-		const KMainWindow* mainWindow = KMainWindow::GetInstance();
+		const IMainWindow* mainWindow = IMainWindow::GetInstance();
 		if (mainWindow)
 		{
-			for (const auto&[id, workspace]: mainWindow->GetWorkspacesList())
+			for (const IWorkspace* workspace: mainWindow->GetWorkspaceContainer().EnumWorkspaces())
 			{
-				if (workspace->CanBeStartPage())
-				{
-					m_Values.emplace_back(id).SetLabel(workspace->GetNameShort());
-				}
+				m_Values.emplace_back(workspace->GetID()).SetLabel(workspace->GetNameShort());
 			}
 		}
 	}

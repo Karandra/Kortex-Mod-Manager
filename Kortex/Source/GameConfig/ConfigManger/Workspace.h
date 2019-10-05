@@ -1,14 +1,16 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
+#include "Application/DefaultWorkspace.h"
 #include "DisplayModel.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxButton.h>
+#include <KxFramework/KxPanel.h>
 
 namespace Kortex::GameConfig
 {
-	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
+	class Workspace:
+		public Application::DefaultWindowWorkspace<KxPanel>,
+		public KxSingletonPtr<Workspace>
 	{
 		private:
 			wxBoxSizer* m_MainSizer = nullptr;
@@ -17,34 +19,27 @@ namespace Kortex::GameConfig
 			KxButton* m_SaveButton = nullptr;
 			KxButton* m_DiscardButton = nullptr;
 
-		public:
-			Workspace(KMainWindow* mainWindow);
-			~Workspace();
-
 		private:
+			void OnSaveButton(wxCommandEvent& event);
+			void OnDiscardButton(wxCommandEvent& event);
+
+		protected:
 			bool OnCreateWorkspace() override;
 			bool OnOpenWorkspace() override;
 			bool OnCloseWorkspace() override;
 			void OnReloadWorkspace() override;
 
-			void OnSaveButton(wxCommandEvent& event);
-			void OnDiscardButton(wxCommandEvent& event);
+		public:
+			Workspace();
+			~Workspace();
 
 		public:
 			wxString GetID() const override;
 			wxString GetName() const override;
-			wxString GetNameShort() const;
-			ResourceID GetImageID() const override
+			wxString GetNameShort() const override;
+			ResourceID GetIcon() const override
 			{
 				return ImageResourceID::GearPencil;
-			}
-			wxSizer* GetWorkspaceSizer() const override
-			{
-				return m_MainSizer;
-			}
-			bool CanReload() const override
-			{
-				return true;
 			}
 
 		public:

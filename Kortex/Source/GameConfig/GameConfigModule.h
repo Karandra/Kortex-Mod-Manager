@@ -16,7 +16,7 @@ namespace Kortex
 		public ModuleWithTypeInfo<IModule, Internal::GameConfigModuleTypeInfo>,
 		public KxSingletonPtr<GameConfigModule>
 	{
-		friend class KMainWindow;
+		friend class IMainWindow;
 
 		private:
 			std::unique_ptr<IGameConfigManager> m_GameConfigManager;

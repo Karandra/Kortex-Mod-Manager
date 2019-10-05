@@ -3,7 +3,7 @@
 #include "INotification.h"
 #include "IManager.h"
 #include <KxFramework/KxSingleton.h>
-class KMainWindow;
+class IMainWindow;
 class KxAuiToolBar;
 class KxAuiToolBarItem;
 class KxAuiToolBarEvent;
@@ -29,25 +29,16 @@ namespace Kortex
 {
 	class INotificationCenter:
 		public ManagerWithTypeInfo<IManager, Notifications::Internal::TypeInfo>,
+		public Application::ManagerWithToolbarButton,
 		public KxSingletonPtr<INotificationCenter>
 	{
-		friend class KMainWindow;
+		friend class IMainWindow;
 		friend class Notifications::DisplayModel;
-
-		private:
-			void CallOnToolBarButton(KxAuiToolBarEvent& event)
-			{
-				OnToolBarButton(event);
-			}
 
 		protected:
 			void OnInit() override;
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
-
-			virtual void OnSetToolBarButton(KxAuiToolBarItem* button) = 0;
-			virtual void OnToolBarButton(KxAuiToolBarEvent& event) = 0;
-			virtual void UpdateToolBarButton() = 0;
 
 			virtual void QueueNotification(std::unique_ptr<INotification> notification) = 0;
 			virtual void OnNotificationAdded(INotification& notification) { }

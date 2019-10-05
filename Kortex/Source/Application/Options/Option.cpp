@@ -4,7 +4,6 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/PackageManager.hpp>
 #include <Kortex/InstallWizard.hpp>
-#include "UI/KWorkspace.h"
 
 namespace
 {
@@ -83,13 +82,13 @@ namespace Kortex::Application
 		AssignDisposition(disposition);
 		AssignNode(node);
 	}
-	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const KWorkspace& workspace, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const IWorkspace& workspace, const wxString& branch)
 	{
 		KxXMLNode node = InitNode(disposition, xml, wxS("Workspace"), workspace.GetID(), branch);
 		AssignDisposition(disposition);
 		AssignNode(node);
 	}
-	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const KMainWindow& mainWindow, const wxString& branch)
+	void BasicOption::Create(Disposition disposition, KxXMLDocument& xml, const IMainWindow& mainWindow, const wxString& branch)
 	{
 		KxXMLNode node = InitNode(disposition, xml, wxS("Application/MainWindow"), branch);
 		AssignDisposition(disposition);

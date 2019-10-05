@@ -5,7 +5,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
 #include "ProgramEditorDialog.h"
-#include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
 #include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxMenu.h>
@@ -217,10 +216,10 @@ namespace Kortex::ProgramManager
 		const IProgramEntry* entry = GetDataEntry(GetRow(event.GetItem()));
 		if (entry)
 		{
-			KMainWindow::GetInstance()->SetStatus(entry->GetName() + wxS(": ") + entry->GetExecutable());
+			IMainWindow::GetInstance()->SetStatus(entry->GetName() + wxS(": ") + entry->GetExecutable());
 			return;
 		}
-		KMainWindow::GetInstance()->ClearStatus();
+		IMainWindow::GetInstance()->ClearStatus();
 	}
 	void DisplayModel::OnActivateItem(KxDataViewEvent& event)
 	{

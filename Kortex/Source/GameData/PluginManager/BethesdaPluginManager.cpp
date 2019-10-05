@@ -3,8 +3,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "UI/KWorkspace.h"
-#include "UI/KWorkspaceController.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
@@ -112,9 +110,9 @@ namespace Kortex::PluginManager
 	{
 		return plugin.IsActive() ? plugin.GetName() : wxEmptyString;
 	}
-	KWorkspace* BethesdaPluginManager::CreateWorkspace(KMainWindow* mainWindow)
+	void BethesdaPluginManager::CreateWorkspace()
 	{
-		return new Workspace(mainWindow);
+		new Workspace();
 	}
 
 	void BethesdaPluginManager::LoadNativeOrderBG()
@@ -262,9 +260,9 @@ namespace Kortex::PluginManager
 		return nullptr;
 	}
 
-	KWorkspace* BethesdaPluginManager::GetWorkspace() const
+	IWorkspace::RefVector BethesdaPluginManager::EnumWorkspaces() const
 	{
-		return Workspace::GetInstance();
+		return {Workspace::GetInstance()};
 	}
 	std::unique_ptr<IDisplayModel> BethesdaPluginManager::CreateDisplayModel()
 	{

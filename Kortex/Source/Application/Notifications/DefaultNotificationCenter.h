@@ -10,7 +10,7 @@ namespace Kortex::Notifications
 
 	class DefaultNotificationCenter: public INotificationCenter
 	{
-		friend class KMainWindow;
+		friend class IMainWindow;
 		friend class PopupWindow;
 		friend class DisplayModel;
 
@@ -31,9 +31,9 @@ namespace Kortex::Notifications
 			void OnNotificationsCountChanged();
 
 		protected:
-			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
-			void OnToolBarButton(KxAuiToolBarEvent& event) override;
-			void UpdateToolBarButton() override;
+			void OnSetToolbarButton(KxAuiToolBarItem& button) override;
+			void OnToolbarButton(KxAuiToolBarEvent& event) override;
+			void UpdateToolbarButton() override;
 
 			void QueueNotification(std::unique_ptr<INotification> notification) override;
 			void OnNotificationAdded(INotification& notification) override

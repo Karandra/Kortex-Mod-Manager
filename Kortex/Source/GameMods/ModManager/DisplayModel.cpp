@@ -6,9 +6,9 @@
 #include <Kortex/ModTagManager.hpp>
 #include "DisplayModel.h"
 #include "DisplayModelDND.h"
+#include "DisplayModelNode.h"
 #include "Workspace.h"
 #include "PriorityGroup.h"
-#include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>

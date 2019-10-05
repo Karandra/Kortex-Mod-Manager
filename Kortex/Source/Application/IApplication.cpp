@@ -3,7 +3,7 @@
 #include "SystemApplication.h"
 #include "Options/CmdLineDatabase.h"
 #include <Kortex/Application.hpp>
-#include "UI/KMainWindow.h"
+#include "IMainWindow.h"
 #include "Archive/KArchive.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxSystem.h>
@@ -203,10 +203,10 @@ namespace Kortex
 	{
 		if (IsActive())
 		{
-			const KMainWindow* mainWindow = KMainWindow::GetInstance();
+			const IMainWindow* mainWindow = IMainWindow::GetInstance();
 			if (mainWindow)
 			{
-				return mainWindow->GetHandle() == ::GetForegroundWindow();
+				return mainWindow->GetFrame().GetHandle() == ::GetForegroundWindow();
 			}
 		}
 		return false;

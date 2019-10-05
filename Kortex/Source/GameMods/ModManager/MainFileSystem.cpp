@@ -2,12 +2,12 @@
 #include "MainFileSystem.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
+#include <Kortex/Application.hpp>
 #include "VirtualFileSystem/Mirror.h"
 #include "VirtualFileSystem/MultiMirror.h"
 #include "VirtualFileSystem/Convergence.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
 #include "DefaultModManager.h"
-#include "UI/KMainWindow.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxProgressDialog.h>
@@ -107,13 +107,13 @@ namespace Kortex::ModManager
 			HideStatusDialog();
 		}
 
-		KMainWindow* mainWindow = KMainWindow::GetInstance();
+		IMainWindow* mainWindow = IMainWindow::GetInstance();
 		if (mainWindow)
 		{
-			mainWindow->Disable();
+			mainWindow->GetFrame().Disable();
 		}
 
-		m_StatusDialog = new KxProgressDialog(mainWindow, KxID_NONE, wxEmptyString, wxDefaultPosition, wxDefaultSize, KxBTN_NONE);
+		m_StatusDialog = new KxProgressDialog(&mainWindow->GetFrame(), KxID_NONE, wxEmptyString, wxDefaultPosition, wxDefaultSize, KxBTN_NONE);
 		m_StatusDialog->SetCaption(IsEnabled() ? KTr("VFS.MountingCaptionDisable") : KTr("VFS.MountingCaptionEnable"));
 		m_StatusDialog->SetLabel(KTr("VFS.MountingMessage"));
 		m_StatusDialog->Pulse();
@@ -121,9 +121,9 @@ namespace Kortex::ModManager
 	}
 	void MainFileSystem::HideStatusDialog()
 	{
-		if (KMainWindow* mainWindow = KMainWindow::GetInstance())
+		if (IMainWindow* mainWindow = IMainWindow::GetInstance())
 		{
-			mainWindow->Enable();
+			mainWindow->GetFrame().Enable();
 		}
 
 		if (m_StatusDialog)

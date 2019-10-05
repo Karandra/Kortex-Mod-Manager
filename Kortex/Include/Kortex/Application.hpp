@@ -3,6 +3,7 @@
 #include "Core.hpp"
 
 #include "Application/IApplication.h"
+#include "Application/IMainWindow.h"
 #include "Application/BroadcastProcessor.h"
 #include "Application/Events/LogEvent.h"
 

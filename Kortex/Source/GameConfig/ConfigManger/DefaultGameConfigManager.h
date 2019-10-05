@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "GameConfig/IGameConfigManager.h"
 #include "Definition.h"
+#include "Application/IWorkspace.h"
 #include <KxFramework/KxTranslation.h>
 
 namespace Kortex
@@ -32,7 +33,7 @@ namespace Kortex::GameConfig
 			void OnInit() override;
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
-			KWorkspace* CreateWorkspace(KMainWindow* mainWindow) override;
+			void CreateWorkspace() override;
 
 			void OnCreateDisplayModel(DisplayModel& displayModel) override
 			{
@@ -51,6 +52,8 @@ namespace Kortex::GameConfig
 			void OnItemChangeDiscarded(GameConfig::Item& item) override;
 
 		public:
+			IWorkspace::RefVector EnumWorkspaces() const override;
+
 			const ITranslator& GetTranslator() const override
 			{
 				return m_Translator;

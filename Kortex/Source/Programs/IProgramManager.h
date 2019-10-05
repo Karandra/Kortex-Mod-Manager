@@ -6,7 +6,6 @@
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxProcess.h>
-class KMainWindow;
 class KxXMLNode;
 class KxMenu;
 
@@ -21,8 +20,6 @@ namespace Kortex
 		public ManagerWithTypeInfo<IManager, ProgramManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IProgramManager>
 	{
-		friend class KMainWindow;
-
 		public:
 			enum class BitmapVariant
 			{

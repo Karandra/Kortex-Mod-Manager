@@ -2,7 +2,6 @@
 #include "IModNetwork.h"
 #include <Kortex/NetworkManager.hpp>
 #include "GameMods/IGameMod.h"
-#include "UI/KMainWindow.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxTaskDialog.h>

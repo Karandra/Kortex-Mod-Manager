@@ -75,7 +75,7 @@ namespace Kortex::Application
 
 		LoadItem(ImageResourceID::LOOT, wxS("LOOT"));
 		LoadItem(ImageResourceID::JSON, wxS("JSON"));
-		LoadItem(ImageResourceID::CURL, wxS("curl"));
+		LoadItem(ImageResourceID::LibCURL, wxS("curl"));
 		LoadItem(ImageResourceID::WebSocket, wxS("websocket"));
 
 		LoadItem(ImageResourceID::Application, wxS("application"));

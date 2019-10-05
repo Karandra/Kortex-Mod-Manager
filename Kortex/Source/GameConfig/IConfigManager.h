@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Application/IPluggableManager.h"
+#include "Application/IManager.h"
 #include "Application/RefStackTranslator.h"
 #include "ConfigManger/ItemValue.h"
 #include "ConfigManger/IAction.h"
@@ -22,7 +22,7 @@ namespace Kortex
 		extern const SimpleManagerInfo TypeInfo;
 	};
 
-	class IConfigManager: public ManagerWithTypeInfo<IPluggableManager, ConfigManager::Internal::TypeInfo>
+	class IConfigManager: public ManagerWithTypeInfo<IManager, ConfigManager::Internal::TypeInfo>
 	{
 		friend class GameConfig::Item;
 		friend class GameConfig::DisplayModel;

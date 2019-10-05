@@ -1,13 +1,13 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
+#include "Application/DefaultWorkspace.h"
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxTextBox.h>
 #include <KxFramework/KxTreeList.h>
 #include <KxFramework/KxButton.h>
+#include <KxFramework/KxMenu.h>
 #include <KxFramework/KxSingleton.h>
 
 namespace Kortex
@@ -21,7 +21,7 @@ namespace Kortex::SaveManager
 	class IBethesdaGameSave;
 	class DisplayModel;
 
-	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
+	class Workspace: public Application::DefaultWindowWorkspace<KxPanel>, public KxSingletonPtr<Workspace>
 	{
 		private:
 			std::unordered_set<wxString> m_ActiveFilters;
@@ -31,10 +31,14 @@ namespace Kortex::SaveManager
 			KxSplitterWindow* m_Splitter = nullptr;
 			DisplayModel* m_DisplayModel = nullptr;
 
-		public:
-			Workspace(KMainWindow* mainWindow);
-			~Workspace();
+		protected:
 			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
+
+		public:
+			~Workspace();
 
 		private:
 			void CreateViewPane();
@@ -52,34 +56,13 @@ namespace Kortex::SaveManager
 			void OnSavePluginsList(const IBethesdaGameSave& save);
 			bool OnRemoveSave(IGameSave& save);
 
-			bool IsSubWorkspace() const override
-			{
-				return true;
-			}
-			size_t GetTabIndex() const
-			{
-				return (size_t)TabIndex::Saves;
-			}
-		
-			bool OnOpenWorkspace() override;
-			bool OnCloseWorkspace() override;
-			void OnReloadWorkspace() override;
-
 		public:
 			wxString GetID() const override;
 			wxString GetName() const override;
-			wxString GetNameShort() const;
-			ResourceID GetImageID() const override
+			wxString GetNameShort() const override;
+			ResourceID GetIcon() const override
 			{
 				return ImageResourceID::Jar;
-			}
-			wxSizer* GetWorkspaceSizer() const override
-			{
-				return m_MainSizer;
-			}
-			bool CanReload() const override
-			{
-				return true;
 			}
 
 		public:

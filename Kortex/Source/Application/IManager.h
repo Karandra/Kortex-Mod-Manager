@@ -3,14 +3,19 @@
 #include "Application/BroadcastProcessor.h"
 #include "Application/Module/ManagerInfo.h"
 #include "Application/Options/Option.h"
-class KWorkspace;
+#include <Kx/RTTI.hpp>
+class KxAuiToolBar;
+class KxAuiToolBarItem;
+class KxAuiToolBarEvent;
 
 namespace Kortex
 {
 	class IModule;
+	class IWorkspace;
+	class IMainWindow;
 	class IApplication;
 	class IGameInstance;
-	class IPluggableManager;
+	class ResourceID;
 }
 
 namespace Kortex
@@ -20,14 +25,17 @@ namespace Kortex
 		class InstanceModuleLoader;
 	}
 
-	class IManager: public Application::WithOptions<IManager>
+	class IManager: public KxRTTI::Interface<IManager>, public Application::WithOptions<IManager>
 	{
 		friend class IModule;
+		friend class IMainWindow;
 		friend class IApplication;
 		friend class GameInstance::InstanceModuleLoader;
+		friend class KxIObject;
 
 		public:
 			using RefList = std::list<IManager*>;
+			using RefVector = std::vector<IManager*>;
 
 		private:
 			IModule& m_Module;
@@ -36,6 +44,9 @@ namespace Kortex
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) = 0;
 			virtual void OnInit() = 0;
 			virtual void OnExit() = 0;
+			virtual void CreateWorkspace()
+			{
+			}
 
 		public:
 			IManager(IModule* module)
@@ -45,40 +56,29 @@ namespace Kortex
 			virtual ~IManager() = default;
 
 		public:
-			virtual const IManagerInfo& GetManagerInfo() const = 0;
-			const IModule& GetModule() const
-			{
-				return m_Module;
-			}
 			IModule& GetModule()
 			{
 				return m_Module;
 			}
-
-			virtual KWorkspace* GetWorkspace() const
+			const IModule& GetModule() const
 			{
-				return nullptr;
+				return m_Module;
 			}
-			bool HasWorkspace() const
+			
+			virtual const IManagerInfo& GetManagerInfo() const = 0;
+			virtual std::vector<IWorkspace*> EnumWorkspaces() const
 			{
-				return GetWorkspace() != nullptr;
+				return {};
 			}
-			void ScheduleReloadWorkspace() const;
-
-			virtual const IPluggableManager* ToPluggableManager() const
-			{
-				return nullptr;
-			}
-			virtual IPluggableManager* ToPluggableManager()
-			{
-				return nullptr;
-			}
+	
+			void ScheduleWorkspacesReload();
 	};
 }
 
 namespace Kortex
 {
-	template<class t_Base, const auto& t_TypeInfo> class ManagerWithTypeInfo: public t_Base
+	template<class t_Base, const auto& t_TypeInfo>
+	class ManagerWithTypeInfo: public t_Base
 	{
 		public:
 			static const IManagerInfo& GetManagerTypeInfo()
@@ -97,5 +97,25 @@ namespace Kortex
 			{
 				return t_TypeInfo;
 			}
+	};
+}
+
+namespace Kortex::Application
+{
+	class ManagerWithToolbarButton
+	{
+		protected:
+			virtual void OnSetToolbarButton(KxAuiToolBarItem& button) = 0;
+			virtual void OnToolbarButton(KxAuiToolBarEvent& event) = 0;
+
+		public:
+			virtual ~ManagerWithToolbarButton() = default;
+
+		public:
+			virtual void UpdateToolbarButton()
+			{
+			}
+			
+			KxAuiToolBarItem& AddToolbarButton(KxAuiToolBar& toolbar, const ResourceID& image);
 	};
 }

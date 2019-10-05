@@ -5,7 +5,6 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ProgramManager.hpp>
 #include <Kortex/PluginManager.hpp>
-#include "UI/KWorkspace.h"
 #include "Utility/KUPtrVectorUtil.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
@@ -60,7 +59,7 @@ namespace Kortex::PluginManager
 		}
 
 		Load();
-		KWorkspace::ScheduleReloadOf<PluginManager::Workspace>();
+		IWorkspace::ScheduleReloadOf<PluginManager::Workspace>();
 		BroadcastProcessor::Get().ProcessEvent(PluginEvent::EvtReordered);
 	}
 	bool BasePluginManager::MovePlugins(const IGamePlugin::RefVector& entriesToMove, const IGamePlugin& anchor, MoveMode moveMode)
@@ -138,10 +137,10 @@ namespace Kortex::PluginManager
 	{
 		if (entry.GetExecutable().IsEmpty() || !KxFile(entry.GetExecutable()).IsFileExist())
 		{
-			KxTaskDialog dalog(KMainWindow::GetInstance(), KxID_NONE, KTrf("PluginManager.Sorting.Missing.Caption", entry.GetName()), KTr("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
+			KxTaskDialog dalog(Workspace::GetInstance(), KxID_NONE, KTrf("PluginManager.Sorting.Missing.Caption", entry.GetName()), KTr("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
 			if (dalog.ShowModal() == KxID_OK)
 			{
-				KxFileBrowseDialog browseDialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
+				KxFileBrowseDialog browseDialog(Workspace::GetInstance(), KxID_NONE, KxFBD_OPEN);
 				browseDialog.AddFilter("*.exe", KTr("FileFilter.Programs"));
 				if (browseDialog.ShowModal() == KxID_OK)
 				{
@@ -166,7 +165,7 @@ namespace Kortex::PluginManager
 			process->SetOptionEnabled(KxPROCESS_WAIT_END, true);
 			process->SetOptionEnabled(KxPROCESS_DETACHED, false);
 
-			KxProgressDialog* dialog = new KxProgressDialog(KMainWindow::GetInstance(), KxID_NONE, KTr("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
+			KxProgressDialog* dialog = new KxProgressDialog(Workspace::GetInstance(), KxID_NONE, KTr("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
 			dialog->Bind(KxEVT_STDDIALOG_BUTTON, [process](wxNotifyEvent& event)
 			{
 				if (event.GetId() == KxID_CANCEL)
@@ -179,7 +178,7 @@ namespace Kortex::PluginManager
 			{
 				LoadNativeOrder();
 				dialog->Destroy();
-				KMainWindow::GetInstance()->Show();
+				IMainWindow::GetInstance()->GetFrame().Enable();
 
 				BroadcastProcessor::Get().CallAfter([&process]()
 				{
@@ -187,7 +186,7 @@ namespace Kortex::PluginManager
 				});
 			});
 
-			KMainWindow::GetInstance()->Hide();
+			IMainWindow::GetInstance()->GetFrame().Disable();
 			dialog->SetMainIcon(KxICON_INFORMATION);
 			dialog->Pulse();
 			dialog->Show();

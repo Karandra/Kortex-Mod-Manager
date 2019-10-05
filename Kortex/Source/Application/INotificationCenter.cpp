@@ -65,7 +65,7 @@ namespace Kortex
 
 			if (items.empty())
 			{
-				UpdateToolBarButton();
+				UpdateToolbarButton();
 			}
 			OnNotificationRemoved(*temp);
 			return true;
@@ -78,7 +78,7 @@ namespace Kortex
 		if (!items.empty())
 		{
 			items.clear();
-			UpdateToolBarButton();
+			UpdateToolbarButton();
 			OnNotificationsCleared();
 
 			return true;

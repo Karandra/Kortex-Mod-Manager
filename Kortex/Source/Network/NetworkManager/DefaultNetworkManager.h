@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "Network/INetworkManager.h"
-class KMainWindow;
 class KxAuiToolBarEvent;
 class KxAuiToolBarItem;
 class KxMenuEvent;
@@ -33,14 +32,14 @@ namespace Kortex::NetworkManager
 			bool AdjustDefaultModNetwork();
 
 		private:
-			void OnSetToolBarButton(KxAuiToolBarItem* button) override;
+			void OnSetToolbarButton(KxAuiToolBarItem& button) override;
 			void UpdateButton();
 			void CreateMenu();
 			void QueueUIUpdate();
 
 			void OnSignInOut(KxMenuEvent& event);
 			void OnSelectDefaultModSource(KxMenuEvent& event);
-			void OnToolBarButton(KxAuiToolBarEvent& event) override;
+			void OnToolbarButton(KxAuiToolBarEvent& event) override;
 
 		public:
 			wxString GetCacheDirectory() const override;

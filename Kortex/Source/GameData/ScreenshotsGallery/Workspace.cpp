@@ -12,17 +12,11 @@
 
 namespace Kortex::ScreenshotsGallery
 {
-	Workspace::Workspace(KMainWindow* mainWindow)
-		:KWorkspace(mainWindow)
-	{
-		m_Manager = IScreenshotsGallery::GetInstance();
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-	}
-	Workspace::~Workspace()
-	{
-	}
 	bool Workspace::OnCreateWorkspace()
 	{
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(m_MainSizer);
+
 		m_ViewPane = new KxThumbView(this, KxID_NONE);
 		m_ViewPane->SetSpacing(wxSize(KLC_VERTICAL_SPACING, KLC_HORIZONTAL_SPACING));
 		m_MainSizer->Add(m_ViewPane, 1, wxEXPAND);
@@ -35,15 +29,33 @@ namespace Kortex::ScreenshotsGallery
 		OnReloadWorkspace();
 		return true;
 	}
+	bool Workspace::OnOpenWorkspace()
+	{
+		m_ViewPane->SetFocus();
+		return true;
+	}
+	bool Workspace::OnCloseWorkspace()
+	{
+		return true;
+	}
+	void Workspace::OnReloadWorkspace()
+	{
+		LoadData();
+	}
+
+	Workspace::~Workspace()
+	{
+	}
 
 	void Workspace::LoadData()
 	{
 		m_ViewPane->ClearThumbs();
 		m_LoadedImages.clear();
 
-		for (const wxString& folderPath: m_Manager->GetConfig().GetLocations())
+		IScreenshotsGallery* manager = IScreenshotsGallery::GetInstance();
+		for (const wxString& folderPath: manager->GetConfig().GetLocations())
 		{
-			KxStringVector files = KxFile(KVarExp(folderPath)).Find(m_Manager->GetSupportedExtensions(), KxFS_FILE, false);
+			KxStringVector files = KxFile(KVarExp(folderPath)).Find(manager->GetSupportedExtensions(), KxFS_FILE, false);
 			for (const wxString& path: files)
 			{
 				m_LoadedImages.emplace_back(path);
@@ -67,11 +79,11 @@ namespace Kortex::ScreenshotsGallery
 		if (event.GetInt() != wxNOT_FOUND)
 		{
 			m_CurrentImageIndex = event.GetInt();
-			KImageViewerDialog dialog(this);
-			dialog.Bind(KEVT_IMAGEVIEWER_PREV_IMAGE, &Workspace::OnDialogNavigate, this);
-			dialog.Bind(KEVT_IMAGEVIEWER_NEXT_IMAGE, &Workspace::OnDialogNavigate, this);
+			UI::KImageViewerDialog dialog(this);
+			dialog.Bind(UI::KImageViewerEvent::EvtPrevious, &Workspace::OnDialogNavigate, this);
+			dialog.Bind(UI::KImageViewerEvent::EvtNext, &Workspace::OnDialogNavigate, this);
 
-			KImageViewerEvent evt;
+			UI::KImageViewerEvent evt;
 			SetNavigationInfo(evt);
 			evt.SetFilePath(m_LoadedImages[m_CurrentImageIndex]);
 			dialog.Navigate(evt);
@@ -88,18 +100,18 @@ namespace Kortex::ScreenshotsGallery
 			KxShellMenu menu(path);
 			if (menu.IsOK())
 			{
-				menu.Bind(KxEVT_MENU_HOVER, [this](KxMenuEvent& event)
+				menu.Bind(KxEVT_MENU_HOVER, [](KxMenuEvent& event)
 				{
-					GetMainWindow()->SetStatus(event.GetHelpString());
+					IMainWindow::GetInstance()->SetStatus(event.GetHelpString());
 				});
-				menu.Show(GetMainWindow(), event.GetPosition());
+				menu.Show(this, event.GetPosition());
 			}
 		}
 	}
-	void Workspace::OnDialogNavigate(KImageViewerEvent& event)
+	void Workspace::OnDialogNavigate(UI::KImageViewerEvent& event)
 	{
 		int oldIndex = m_CurrentImageIndex;
-		if (event.GetEventType() == KEVT_IMAGEVIEWER_NEXT_IMAGE)
+		if (event.GetEventType() == UI::KImageViewerEvent::EvtNext)
 		{
 			m_CurrentImageIndex++;
 		}
@@ -119,23 +131,9 @@ namespace Kortex::ScreenshotsGallery
 			event.Veto();
 		}
 	}
-	void Workspace::SetNavigationInfo(KImageViewerEvent& event)
+	void Workspace::SetNavigationInfo(UI::KImageViewerEvent& event)
 	{
 		event.SetHasPrevNext(m_CurrentImageIndex > 0, (size_t)(m_CurrentImageIndex + 1) < m_LoadedImages.size());
-	}
-
-	bool Workspace::OnOpenWorkspace()
-	{
-		m_ViewPane->SetFocus();
-		return true;
-	}
-	bool Workspace::OnCloseWorkspace()
-	{
-		return true;
-	}
-	void Workspace::OnReloadWorkspace()
-	{
-		LoadData();
 	}
 
 	wxString Workspace::GetID() const

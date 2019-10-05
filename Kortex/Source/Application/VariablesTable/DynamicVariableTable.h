@@ -22,7 +22,7 @@ namespace Kortex
 				// Add new dynamic variable only if this is not one of static variables
 				if (m_StaticVariables.count(id) == 0)
 				{
-					m_DynamicVariables._Insert_or_assign(id, functor);
+					m_DynamicVariables.insert_or_assign(id, functor);
 				}
 			}
 			bool IterateOverDynamic(const Visitor& visitor) const;

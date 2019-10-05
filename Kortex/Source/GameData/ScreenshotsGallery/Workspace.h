@@ -1,9 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
+#include "Application/DefaultWorkspace.h"
 #include <KxFramework/KxSingleton.h>
-class KImageViewerEvent;
+#include <KxFramework/KxPanel.h>
 class KxTextBox;
 class KxThumbView;
 
@@ -11,50 +10,44 @@ namespace Kortex
 {
 	class IScreenshotsGallery;
 }
+namespace Kortex::UI
+{
+	class KImageViewerEvent;
+}
 
 namespace Kortex::ScreenshotsGallery
 {
-	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
+	class Workspace: public Application::DefaultWindowWorkspace<KxPanel>, public KxSingletonPtr<Workspace>
 	{
 		private:
-			IScreenshotsGallery* m_Manager = nullptr;
-
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxThumbView* m_ViewPane = nullptr;
 			KxStringVector m_LoadedImages;
 			int m_CurrentImageIndex = -1;
 
+		protected:
+			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
+
 		public:
-			Workspace(KMainWindow* mainWindow);
-			virtual ~Workspace();
-			virtual bool OnCreateWorkspace() override;
+			~Workspace();
 
 		private:
 			void LoadData();
 			void OnSelectItem(wxCommandEvent& event);
 			void OnActivateItem(wxCommandEvent& event);
 			void OnItemMenu(wxContextMenuEvent& event);
-			void OnDialogNavigate(KImageViewerEvent& event);
-			void SetNavigationInfo(KImageViewerEvent& event);
-
-			virtual bool OnOpenWorkspace() override;
-			virtual bool OnCloseWorkspace() override;
-			virtual void OnReloadWorkspace() override;
+			void OnDialogNavigate(UI::KImageViewerEvent& event);
+			void SetNavigationInfo(UI::KImageViewerEvent& event);
 
 		public:
-			virtual wxString GetID() const override;
-			virtual wxString GetName() const override;
-			virtual ResourceID GetImageID() const override
+			wxString GetID() const override;
+			wxString GetName() const override;
+			ResourceID GetIcon() const override
 			{
 				return ImageResourceID::Pictures;
-			}
-			virtual wxSizer* GetWorkspaceSizer() const override
-			{
-				return m_MainSizer;
-			}
-			virtual bool CanReload() const override
-			{
-				return true;
 			}
 
 		private:

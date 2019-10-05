@@ -21,7 +21,7 @@ namespace Kortex
 	}
 
 	class IDownloadManager:
-		public ManagerWithTypeInfo<IPluggableManager, DownloadManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, DownloadManager::Internal::TypeInfo>,
 		public KxSingletonPtr<IDownloadManager>,
 		public KxComponentContainer
 	{

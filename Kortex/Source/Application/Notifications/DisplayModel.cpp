@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
+#include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
-#include "UI/KMainWindow.h"
 #include <KxFramework/KxTaskDialog.h>
 using namespace KxDataView2;
 
@@ -107,7 +107,7 @@ namespace Kortex::Notifications
 					INotificationCenter::GetInstance()->HideNotificationsWindow();
 					BroadcastProcessor::Get().CallAfter([&notification]()
 					{
-						KxTaskDialog dialog(KMainWindow::GetInstance(), KxID_NONE, notification.GetCaption(), notification.GetMessage());
+						KxTaskDialog dialog(&IMainWindow::GetInstance()->GetFrame(), KxID_NONE, notification.GetCaption(), notification.GetMessage());
 						dialog.SetMainIcon(notification.GetBitmap());
 						dialog.ShowModal();
 					});

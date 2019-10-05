@@ -1,14 +1,17 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspaceController.h"
+#include "Application/IWorkspaceDocument.h"
 
 namespace Kortex::GameConfig
 {
-	class WorkspaceController: public KWorkspaceController
+	class WorkspaceController: public IWorkspaceDocument
 	{
+		private:
+			IWorkspace& m_Workspace;
+
 		public:
-			WorkspaceController(KWorkspace* workspace)
-				:KWorkspaceController(workspace)
+			WorkspaceController(IWorkspace& workspace)
+				:m_Workspace(workspace)
 			{
 			}
 

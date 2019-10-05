@@ -1,11 +1,12 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
+#include "Application/DefaultWorkspace.h"
+#include "Application/WorkspaceBookContainer.h"
 #include "GameMods/IGameMod.h"
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxAuiNotebook.h>
 #include <KxFramework/KxNotebook.h>
+#include <KxFramework/KxPanel.h>
 #include <KxFramework/KxTreeList.h>
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxTextBox.h>
@@ -25,12 +26,45 @@ namespace Kortex
 
 namespace Kortex::ModManager
 {
-	class DisplayModel;
-
-	class Workspace: public KWorkspace, public KxSingletonPtr<Workspace>
+	class Workspace;
+	class WorkspaceContainer: public Application::WorkspaceBookContainer
 	{
+		friend class Workspace;
+
+		private:
+			Workspace& m_Workspace;
+			KxAuiNotebook* m_BookCtrl = nullptr;
+
+		private:
+			void Create(wxWindow* parent);
+
+			void OnPageOpening(wxAuiNotebookEvent& event);
+			void OnPageOpened(wxAuiNotebookEvent& event);
+
+		public:
+			WorkspaceContainer(Workspace& workspace)
+				:m_Workspace(workspace)
+			{
+			}
+
+		public:
+			wxWindow& GetWindow() override
+			{
+				return *m_BookCtrl;
+			}
+	};
+}
+
+namespace Kortex::ModManager
+{
+	class DisplayModel;
+	class Workspace: public Application::DefaultWindowWorkspace<KxPanel>, public KxSingletonPtr<Workspace>
+	{
+		friend class WorkspaceContainer;
+
 		private:
 			BroadcastReciever m_BroadcastReciever;
+			WorkspaceContainer m_WorkspaceContainer;
 
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxSplitterWindow* m_SplitterLeftRight = nullptr;
@@ -63,10 +97,15 @@ namespace Kortex::ModManager
 			KxButton* m_ActivateButton = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
 
-		public:
-			Workspace(KMainWindow* mainWindow);
-			~Workspace();
+		protected:
 			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
+
+		public:
+			Workspace() = default;
+			~Workspace();
 
 		private:
 			void CreateToolBar();
@@ -76,39 +115,14 @@ namespace Kortex::ModManager
 
 			void CreateModsView();
 			void CreateControls();
-			void CreateRightPane();
-
-			bool OnOpenWorkspace() override;
-			bool OnCloseWorkspace() override;
-			void OnReloadWorkspace() override;
-			bool DoCanBeStartPage() const
-			{
-				return true;
-			}
 
 		public:
 			wxString GetID() const override;
 			wxString GetName() const override;
-			ResourceID GetImageID() const override
+			ResourceID GetIcon() const override
 			{
 				return ImageResourceID::Puzzle;
 			}
-			wxSizer* GetWorkspaceSizer() const override
-			{
-				return m_MainSizer;
-			}
-			bool CanReload() const override
-			{
-				return true;
-			}
-
-			bool AddSubWorkspace(KWorkspace* workspace) override;
-			wxBookCtrlBase* GetSubWorkspaceContainer() override
-			{
-				return m_PaneRight_Tabs;
-			}
-			void OnSubWorkspaceOpening(wxAuiNotebookEvent& event);
-			void OnSubWorkspaceOpened(wxAuiNotebookEvent& event);
 
 		private:
 			void OnMountButton(wxCommandEvent& event);

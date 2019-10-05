@@ -6,7 +6,7 @@
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxURI.h>
-class KMainWindow;
+class IMainWindow;
 class KxAuiToolBarItem;
 class KxAuiToolBarEvent;
 class KxCURLSession;
@@ -30,27 +30,19 @@ namespace Kortex
 
 	class INetworkManager:
 		public ManagerWithTypeInfo<IManager, NetworkManager::Internal::TypeInfo>,
+		public Application::ManagerWithToolbarButton,
 		public KxSingletonPtr<INetworkManager>
 	{
-		friend class KMainWindow;
+		friend class IMainWindow;
 
 		protected:
 			enum class NetworkSoftware
 			{
-				CURL,
+				LibCURL,
 				WebSocket,
 			};
 
-		private:
-			void CallOnToolBarButton(KxAuiToolBarEvent& event)
-			{
-				OnToolBarButton(event);
-			}
-
 		protected:
-			virtual void OnSetToolBarButton(KxAuiToolBarItem* button) = 0;
-			virtual void OnToolBarButton(KxAuiToolBarEvent& event) = 0;
-
 			wxString GetUserAgentString(NetworkSoftware networkSoftware) const;
 
 			void OnInit() override;

@@ -4,7 +4,7 @@
 #include "Definition.h"
 #include "GameConfig/IConfigManager.h"
 #include "GameConfig/ConfigManger/DisplayModel.h"
-#include "Application/IApplication.h"
+#include <Kortex/Application.hpp>
 #include <KxFramework/DataView2/DataView2.h>
 #include <KxFramework/KxStringUtility.h>
 #include <KxFramework/KxComparator.h>

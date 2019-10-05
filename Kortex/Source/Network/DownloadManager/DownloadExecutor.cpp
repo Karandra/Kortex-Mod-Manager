@@ -163,7 +163,7 @@ namespace Kortex::DownloadManager
 			m_Thread->Resume();
 		}
 
-		// Stop CURL now. This will cause download thread to terminate itself
+		// Stop LibCURL now. This will cause download thread to terminate itself
 		if (m_Session)
 		{
 			m_Session->Stop();

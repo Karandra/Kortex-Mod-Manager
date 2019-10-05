@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Application/IPluggableManager.h"
+#include "Application/IManager.h"
 #include <KxFramework/KxSingleton.h>
 
 namespace Kortex
@@ -16,7 +16,7 @@ namespace Kortex
 	}
 
 	class IScreenshotsGallery:
-		public ManagerWithTypeInfo<IPluggableManager, ScreenshotsGallery::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, ScreenshotsGallery::Internal::TypeInfo>,
 		public KxSingletonPtr<IScreenshotsGallery>
 	{
 		public:

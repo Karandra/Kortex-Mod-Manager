@@ -3,7 +3,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "UI/KWorkspace.h"
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxINI.h>
 #include <KxFramework/KxFile.h>
@@ -144,7 +143,7 @@ namespace Kortex::PluginManager
 		stream.SetAllocationSize();
 		ini.Save(stream);
 
-		//KWorkspace::ScheduleReloadOf<KGameConfigWorkspace>();
+		//IWorkspace::ScheduleReloadOf<KGameConfigWorkspace>();
 	}
 
 	BethesdaPluginManagerMW::BethesdaPluginManagerMW()

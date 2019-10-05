@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KMainWindow.h"
 #include "Item.h"
 #include "Items/CategoryItem.h"
 #include <KxFramework/DataView2/DataView2.h>
@@ -13,7 +12,7 @@ namespace Kortex
 
 namespace Kortex::GameConfig
 {
-	class DisplayModel: public RTTI::IExtendInterface<DisplayModel, KxDataView2::Model>
+	class DisplayModel: public KxRTTI::ExtendInterface<DisplayModel, KxDataView2::Model>
 	{
 		private:
 			IConfigManager& m_Manager;

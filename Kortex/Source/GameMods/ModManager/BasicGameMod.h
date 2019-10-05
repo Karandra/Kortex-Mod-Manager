@@ -21,7 +21,7 @@ namespace Kortex::ModManager
 	class FixedGameMod;
 	class PriorityGroup;
 
-	class BasicGameMod: public RTTI::IExtendInterface<BasicGameMod, IGameMod>
+	class BasicGameMod: public KxRTTI::ExtendInterface<BasicGameMod, IGameMod>
 	{
 		private:
 			wxString m_Signature;
@@ -58,7 +58,7 @@ namespace Kortex::ModManager
 
 			bool LoadUsingSignature(const wxString& signature) override;
 			bool LoadUsingID(const wxString& id) override;
-			bool CreateFromProject(const KPackageProject& config) override;
+			bool CreateFromProject(const PackageDesigner::KPackageProject& config) override;
 
 			wxString GetSignature() const override
 			{

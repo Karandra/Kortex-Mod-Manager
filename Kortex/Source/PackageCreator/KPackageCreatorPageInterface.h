@@ -1,41 +1,47 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
-class KPackageCreatorWorkspace;
-class KPackageProjectInterface;
-class KPCIImagesListModel;
 class KxComboBox;
 
-class KPackageCreatorPageInterface:	public KPackageCreatorPageBase
+namespace Kortex::PackageDesigner
 {
-	friend class KPackageCreatorWorkspace;
+	class KPackageCreatorWorkspace;
+	class KPackageProjectInterface;
+	class KPCIImagesListModel;
+}
 
-	private:
-		KPCIImagesListModel* m_ImageListModel = nullptr;
-		//KProgramOptionAI m_MainOptions;
-		//KProgramOptionAI m_ListOptions;
+namespace Kortex::PackageDesigner
+{
+	class KPackageCreatorPageInterface:	public KPackageCreatorPageBase
+	{
+		friend class KPackageCreatorWorkspace;
 
-	public:
-		KPackageCreatorPageInterface(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller);
-		virtual ~KPackageCreatorPageInterface();
+		private:
+			wxBoxSizer* m_MainSizer = nullptr;
+			KPCIImagesListModel* m_ImageListModel = nullptr;
+			//KProgramOptionAI m_MainOptions;
+			//KProgramOptionAI m_ListOptions;
 
-	private:
-		virtual bool OnCreateWorkspace() override;
-		KPackageProjectInterface& GetProjectInterface() const;
-		void CreateImageListControls();
+		private:
+			KPackageProjectInterface& GetProjectInterface() const;
+			void OnLoadProject(KPackageProjectInterface& projectInterface);
+			void CreateImageListControls();
 
-	private:
-		virtual bool OnOpenWorkspace() override;
-		virtual bool OnCloseWorkspace() override;
-		virtual void OnLoadProject(KPackageProjectInterface& projectInterface);
+		protected:
+			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
 
-	public:
-		virtual ResourceID GetImageID() const override
-		{
-			return ImageResourceID::Image;
-		}
-		virtual wxString GetID() const override;
-		virtual wxString GetPageName() const override;
-};
+		public:
+			KPackageCreatorPageInterface(KPackageCreatorWorkspace& mainWorkspace, KPackageCreatorController& controller);
+			virtual ~KPackageCreatorPageInterface();
+
+		public:
+			ResourceID GetIcon() const override
+			{
+				return ImageResourceID::Image;
+			}
+			wxString GetID() const override;
+			wxString GetPageName() const override;
+	};
+}

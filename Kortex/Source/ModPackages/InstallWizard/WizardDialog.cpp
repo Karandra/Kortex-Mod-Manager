@@ -5,7 +5,6 @@
 #include "Common.h"
 #include "WizardDialog.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
-#include "UI/KMainWindow.h"
 #include "UI/KImageViewerDialog.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
@@ -17,11 +16,11 @@
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxString.h>
 
+using namespace Kortex::PackageDesigner;
 namespace Kortex::InstallWizard
 {
 	wxDEFINE_EVENT(KEVT_IW_DONE, wxNotifyEvent);
 }
-
 namespace Kortex::InstallWizard
 {
 	auto GetUIOption(const wxString& option = {})
@@ -41,7 +40,7 @@ namespace Kortex::InstallWizard
 	bool WizardDialog::CreateUI(wxWindow* parent)
 	{
 		SetDefaultBackgroundColor();
-		if (KxStdDialog::Create(parent, KxID_NONE, "Install Wizard", wxDefaultPosition, KMainWindow::GetInstance()->GetMinSize(), KxBTN_NONE, KxStdDialog::DefaultStyle))
+		if (KxStdDialog::Create(parent, KxID_NONE, "Install Wizard", wxDefaultPosition, IMainWindow::GetInstance()->GetFrame().GetMinSize(), KxBTN_NONE, KxStdDialog::DefaultStyle))
 		{
 			GetContentWindow()->SetBackgroundColour(GetBackgroundColour());
 

@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "StepStack.h"
 #include "Info/InfoPage.h"
-#include "Requiremets/RequirementsPage.h"
+#include "Requirements/RequirementsPage.h"
 #include "Components/ComponentsPage.h"
 #include "Installation/InstallationPage.h"
 #include "Completed/CompletedPage.h"
@@ -112,9 +112,9 @@ namespace Kortex::InstallWizard
 			void OnGoForward(wxCommandEvent& event);
 
 			void SetModData();
-			KxUInt32Vector GetFilesOfFolder(const KPPFFolderEntry* folder) const;
-			wxString GetFinalPath(uint32_t index, const wxString& installLocation, const KPPFFileEntry* fileEntry) const;
-			KxStringVector GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const KPPFFolderEntry* folder) const;
+			KxUInt32Vector GetFilesOfFolder(const PackageDesigner::KPPFFolderEntry* folder) const;
+			wxString GetFinalPath(uint32_t index, const wxString& installLocation, const PackageDesigner::KPPFFileEntry* fileEntry) const;
+			KxStringVector GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const PackageDesigner::KPPFFolderEntry* folder) const;
 			void RunInstall();
 
 		public:
@@ -125,11 +125,11 @@ namespace Kortex::InstallWizard
 			~WizardDialog();
 
 		public:
-			const KPackageProject& GetConfig() const
+			const PackageDesigner::KPackageProject& GetConfig() const
 			{
 				return m_Package->GetConfig();
 			}
-			KPackageProject& GetConfig()
+			PackageDesigner::KPackageProject& GetConfig()
 			{
 				return m_Package->GetConfig();
 			}

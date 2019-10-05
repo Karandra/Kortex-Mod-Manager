@@ -2,9 +2,13 @@
 #include "stdafx.h"
 #include "ModPackages/IPackageManager.h"
 #include <KxFramework/KxComponentSystem.h>
-class KPPRRequirementEntry;
 
-namespace Kortex::PackageManager
+namespace Kortex::PackageDesigner
+{
+	class KPPRRequirementEntry;
+}
+
+namespace Kortex::PackageDesigner
 {
 	class IWithScriptExtender: public KxComponentOf<IPackageManager>
 	{

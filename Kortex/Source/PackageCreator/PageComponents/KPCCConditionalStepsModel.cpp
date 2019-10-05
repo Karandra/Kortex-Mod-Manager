@@ -6,186 +6,194 @@
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageCreator/KPackageCreatorPageComponents.h"
 #include "PackageCreator/KPackageCreatorController.h"
-#include "UI/KMainWindow.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxDataViewComboBox.h>
 
-enum ColumnID
+namespace
 {
-	Conditions,
-	StepData
-};
-enum MenuID
-{
-	AddStep,
-	AddEntry,
-};
-
-void KPCCConditionalStepsModel::OnInitControl()
-{
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCCConditionalStepsModel::OnActivateItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCCConditionalStepsModel::OnContextMenu, this);
-
-	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageComponents.Conditions"), ColumnID::Conditions, KxDATAVIEW_CELL_INERT, 300);
-	GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageComponents.FileData"), ColumnID::StepData, KxDATAVIEW_CELL_INERT, 300);
+	enum ColumnID
+	{
+		Conditions,
+		StepData
+	};
+	enum MenuID
+	{
+		AddStep,
+		AddEntry,
+	};
 }
 
-void KPCCConditionalStepsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+namespace Kortex::PackageDesigner
 {
-	auto entry = GetDataEntry(row);
-	if (entry)
+	void KPCCConditionalStepsModel::OnInitControl()
 	{
-		switch (column->GetID())
-		{
-			case ColumnID::Conditions:
-			{
-				value = KPackageCreatorPageComponents::ConditionGroupToString(entry->GetConditionGroup());
-				break;
-			}
-			case ColumnID::StepData:
-			{
-				value = KPackageCreatorPageComponents::FormatArrayToText(entry->GetEntries());
-				break;
-			}
-		};
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCCConditionalStepsModel::OnActivateItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCCConditionalStepsModel::OnContextMenu, this);
+	
+		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageComponents.Conditions"), ColumnID::Conditions, KxDATAVIEW_CELL_INERT, 300);
+		GetView()->AppendColumn<KxDataViewTextRenderer>(KTr("PackageCreator.PageComponents.FileData"), ColumnID::StepData, KxDATAVIEW_CELL_INERT, 300);
 	}
-}
-bool KPCCConditionalStepsModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
-{
-	return false;
-}
-
-void KPCCConditionalStepsModel::OnActivateItem(KxDataViewEvent& event)
-{
-	KxDataViewColumn* column = event.GetColumn();
-	if (column)
+	
+	void KPCCConditionalStepsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		KPPCConditionalStep* step = GetDataEntry(GetRow(event.GetItem()));
-		switch (column->GetID())
+		auto entry = GetDataEntry(row);
+		if (entry)
 		{
-			case ColumnID::Conditions:
+			switch (column->GetID())
 			{
-				if (step)
+				case ColumnID::Conditions:
 				{
-					KPCCConditionGroupEditorDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller, step->GetConditionGroup());
-					dialog.ShowModal();
-					NotifyChangedItem(event.GetItem());
+					value = KPackageCreatorPageComponents::ConditionGroupToString(entry->GetConditionGroup());
+					break;
 				}
-				break;
-			}
-			case ColumnID::StepData:
-			{
-				if (step)
+				case ColumnID::StepData:
 				{
-					KPCCFileDataSelectorModelDialog dialog(KMainWindow::GetInstance(), column->GetTitle(), m_Controller);
-					dialog.SetDataVector(step->GetEntries(), &m_Controller->GetProject()->GetFileData());
-					if (dialog.ShowModal() == KxID_OK)
+					value = KPackageCreatorPageComponents::FormatArrayToText(entry->GetEntries());
+					break;
+				}
+			};
+		}
+	}
+	bool KPCCConditionalStepsModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+	{
+		return false;
+	}
+	
+	void KPCCConditionalStepsModel::OnActivateItem(KxDataViewEvent& event)
+	{
+		KxDataViewColumn* column = event.GetColumn();
+		if (column)
+		{
+			KPPCConditionalStep* step = GetDataEntry(GetRow(event.GetItem()));
+			switch (column->GetID())
+			{
+				case ColumnID::Conditions:
+				{
+					if (step)
 					{
-						step->GetEntries() = dialog.GetSelectedItems();
+						KPCCConditionGroupEditorDialog dialog(GetView(), column->GetTitle(), m_Controller, step->GetConditionGroup());
+						dialog.ShowModal();
 						NotifyChangedItem(event.GetItem());
 					}
+					break;
 				}
+				case ColumnID::StepData:
+				{
+					if (step)
+					{
+						KPCCFileDataSelectorModelDialog dialog(GetView(), column->GetTitle(), m_Controller);
+						dialog.SetDataVector(step->GetEntries(), &m_Controller->GetProject()->GetFileData());
+						if (dialog.ShowModal() == KxID_OK)
+						{
+							step->GetEntries() = dialog.GetSelectedItems();
+							NotifyChangedItem(event.GetItem());
+						}
+					}
+					break;
+				}
+			};
+		}
+	}
+	void KPCCConditionalStepsModel::OnContextMenu(KxDataViewEvent& event)
+	{
+		KxDataViewItem item = event.GetItem();
+		const KPPCConditionalStep* entry = GetDataEntry(GetRow(item));
+	
+		KxMenu menu;
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddStep, KTr(KxID_ADD)));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DirectionPlus));
+		}
+		menu.AddSeparator();
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
+			item->Enable(entry != nullptr);
+		}
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
+			item->Enable(!IsEmpty());
+		}
+	
+		switch (menu.Show(GetView()))
+		{
+			case MenuID::AddStep:
+			{
+				OnAddStep();
+				break;
+			}
+			case KxID_REMOVE:
+			{
+				OnRemoveStep(item);
+				break;
+			}
+			case KxID_CLEAR:
+			{
+				OnClearList();
 				break;
 			}
 		};
-	}
-}
-void KPCCConditionalStepsModel::OnContextMenu(KxDataViewEvent& event)
-{
-	KxDataViewItem item = event.GetItem();
-	const KPPCConditionalStep* entry = GetDataEntry(GetRow(item));
-
-	KxMenu menu;
-	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddStep, KTr(KxID_ADD)));
-		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DirectionPlus));
-	}
-	menu.AddSeparator();
-	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != nullptr);
-	}
-	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
-		item->Enable(!IsEmpty());
-	}
-
-	switch (menu.Show(GetView()))
-	{
-		case MenuID::AddStep:
-		{
-			OnAddStep();
-			break;
-		}
-		case KxID_REMOVE:
-		{
-			OnRemoveStep(item);
-			break;
-		}
-		case KxID_CLEAR:
-		{
-			OnClearList();
-			break;
-		}
 	};
-};
-
-void KPCCConditionalStepsModel::OnAddStep()
-{
-	GetDataVector()->emplace_back(new KPPCConditionalStep());
-
-	KxDataViewItem item = GetItem(GetItemCount() - 1);
-	NotifyAddedItem(item);
-	SelectItem(item);
-	GetView()->EditItem(item, GetView()->GetColumn(ColumnID::Conditions));
-}
-void KPCCConditionalStepsModel::OnRemoveStep(const KxDataViewItem& item)
-{
-	RemoveItemAndNotify(*GetDataVector(), item);
-}
-void KPCCConditionalStepsModel::OnClearList()
-{
-	ClearItemsAndNotify(*GetDataVector());
-}
-
-void KPCCConditionalStepsModel::SetDataVector()
-{
-	KPackageCreatorVectorModel::SetDataVector();
-}
-void KPCCConditionalStepsModel::SetDataVector(VectorType& data)
-{
-	KPackageCreatorVectorModel::SetDataVector(&data);
+	
+	void KPCCConditionalStepsModel::OnAddStep()
+	{
+		GetDataVector()->emplace_back(new KPPCConditionalStep());
+	
+		KxDataViewItem item = GetItem(GetItemCount() - 1);
+		NotifyAddedItem(item);
+		SelectItem(item);
+		GetView()->EditItem(item, GetView()->GetColumn(ColumnID::Conditions));
+	}
+	void KPCCConditionalStepsModel::OnRemoveStep(const KxDataViewItem& item)
+	{
+		RemoveItemAndNotify(*GetDataVector(), item);
+	}
+	void KPCCConditionalStepsModel::OnClearList()
+	{
+		ClearItemsAndNotify(*GetDataVector());
+	}
+	
+	void KPCCConditionalStepsModel::SetDataVector()
+	{
+		KPackageCreatorVectorModel::SetDataVector();
+	}
+	void KPCCConditionalStepsModel::SetDataVector(VectorType& data)
+	{
+		KPackageCreatorVectorModel::SetDataVector(&data);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
-KPCCConditionalStepsModelDialog::KPCCConditionalStepsModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, bool isAutomatic)
-	:KPCCConditionalStepsModel(controller)
-	//m_WindowOptions("KPCCConditionalStepsModelDialog", "Window"), m_ViewOptions("KPCCConditionalStepsModelDialog", "View")
+namespace Kortex::PackageDesigner
 {
-	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
+	KPCCConditionalStepsModelDialog::KPCCConditionalStepsModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, bool isAutomatic)
+		:KPCCConditionalStepsModel(controller)
+		//m_WindowOptions("KPCCConditionalStepsModelDialog", "Window"), m_ViewOptions("KPCCConditionalStepsModelDialog", "View")
 	{
-		SetMainIcon(KxICON_NONE);
-		SetWindowResizeSide(wxBOTH);
-
-		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		m_ViewPane = new KxPanel(GetContentWindow(), KxID_NONE);
-		m_ViewPane->SetSizer(sizer);
-		PostCreate();
-
-		// List
-		KPCCConditionalStepsModel::Create(controller, m_ViewPane, sizer);
-
-		AdjustWindow(wxDefaultPosition, wxSize(900, 500));
-		//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-		//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
+		{
+			SetMainIcon(KxICON_NONE);
+			SetWindowResizeSide(wxBOTH);
+	
+			wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+			m_ViewPane = new KxPanel(GetContentWindow(), KxID_NONE);
+			m_ViewPane->SetSizer(sizer);
+			PostCreate();
+	
+			// List
+			KPCCConditionalStepsModel::Create(controller, m_ViewPane, sizer);
+	
+			AdjustWindow(wxDefaultPosition, wxSize(900, 500));
+			//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+			//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		}
 	}
-}
-KPCCConditionalStepsModelDialog::~KPCCConditionalStepsModelDialog()
-{
-	IncRef();
-
-	//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
-	//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	KPCCConditionalStepsModelDialog::~KPCCConditionalStepsModelDialog()
+	{
+		IncRef();
+	
+		//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
+		//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	}
 }

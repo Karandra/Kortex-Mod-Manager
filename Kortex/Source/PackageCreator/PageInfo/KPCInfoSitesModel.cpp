@@ -1,234 +1,238 @@
 #include "stdafx.h"
 #include "KPCInfoSitesModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
-#include "UI/KMainWindow.h"
 #include "UI/TextEditDialog.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
-using namespace Kortex;
-using namespace Kortex::UI;
-
-enum ColumnID
+namespace
 {
-	Name,
-	Value,
-};
-enum MenuID
-{
-	AddSite,
-};
-
-void KPCInfoSitesModel::OnInitControl()
-{
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCInfoSitesModel::OnActivateItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCInfoSitesModel::OnContextMenu, this);
-
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 200);
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Address"), ColumnID::Value, m_UseInlineEditor ? KxDATAVIEW_CELL_EDITABLE : KxDATAVIEW_CELL_INERT, 300);
+	enum ColumnID
+	{
+		Name,
+		Value,
+	};
+	enum MenuID
+	{
+		AddSite,
+	};
 }
 
-void KPCInfoSitesModel::GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
+namespace Kortex::PackageDesigner
 {
-	const KLabeledValue* entry = GetDataEntry(row);
-	if (entry)
+	void KPCInfoSitesModel::OnInitControl()
 	{
-		switch (column->GetID())
-		{
-			case ColumnID::Name:
-			{
-				data = entry->GetLabelRaw();
-				return;
-			}
-			case ColumnID::Value:
-			{
-				data = entry->GetValue();
-				return;
-			}
-		};
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCInfoSitesModel::OnActivateItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCInfoSitesModel::OnContextMenu, this);
+	
+		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE, 200);
+		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Address"), ColumnID::Value, m_UseInlineEditor ? KxDATAVIEW_CELL_EDITABLE : KxDATAVIEW_CELL_INERT, 300);
 	}
-}
-void KPCInfoSitesModel::GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
-{
-	const KLabeledValue* entry = GetDataEntry(row);
-	if (entry)
+	
+	void KPCInfoSitesModel::GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
 	{
-		switch (column->GetID())
+		const KLabeledValue* entry = GetDataEntry(row);
+		if (entry)
 		{
-			case ColumnID::Name:
+			switch (column->GetID())
 			{
-				data = entry->HasLabel() ? entry->GetLabelRaw() : KAux::ExtractDomainName(entry->GetValue());
-				break;
-			}
-			case ColumnID::Value:
-			{
-				data = entry->GetValue();
-				break;
-			}
-		};
+				case ColumnID::Name:
+				{
+					data = entry->GetLabelRaw();
+					return;
+				}
+				case ColumnID::Value:
+				{
+					data = entry->GetValue();
+					return;
+				}
+			};
+		}
 	}
-}
-bool KPCInfoSitesModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
-{
-	KLabeledValue* entry = GetDataEntry(row);
-	if (entry)
+	void KPCInfoSitesModel::GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
 	{
-		switch (column->GetID())
+		const KLabeledValue* entry = GetDataEntry(row);
+		if (entry)
 		{
-			case ColumnID::Name:
+			switch (column->GetID())
 			{
-				entry->SetLabel(data.As<wxString>());
-				ChangeNotify();
-				return true;
-			}
-			case ColumnID::Value:
-			{
-				entry->SetValue(data.As<wxString>());
-				ChangeNotify();
-				return true;
-			}
-		};
+				case ColumnID::Name:
+				{
+					data = entry->HasLabel() ? entry->GetLabelRaw() : KAux::ExtractDomainName(entry->GetValue());
+					break;
+				}
+				case ColumnID::Value:
+				{
+					data = entry->GetValue();
+					break;
+				}
+			};
+		}
 	}
-	return false;
-}
-
-void KPCInfoSitesModel::OnActivateItem(KxDataViewEvent& event)
-{
-	KxDataViewItem item = event.GetItem();
-	KxDataViewColumn* column = event.GetColumn();
-	if (column)
+	bool KPCInfoSitesModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 	{
-		switch (column->GetID())
+		KLabeledValue* entry = GetDataEntry(row);
+		if (entry)
 		{
-			case ColumnID::Name:
+			switch (column->GetID())
 			{
-				GetView()->EditItem(item, column);
-				break;
-			}
-			case ColumnID::Value:
+				case ColumnID::Name:
+				{
+					entry->SetLabel(data.As<wxString>());
+					ChangeNotify();
+					return true;
+				}
+				case ColumnID::Value:
+				{
+					entry->SetValue(data.As<wxString>());
+					ChangeNotify();
+					return true;
+				}
+			};
+		}
+		return false;
+	}
+	
+	void KPCInfoSitesModel::OnActivateItem(KxDataViewEvent& event)
+	{
+		KxDataViewItem item = event.GetItem();
+		KxDataViewColumn* column = event.GetColumn();
+		if (column)
+		{
+			switch (column->GetID())
 			{
-				if (m_UseInlineEditor)
+				case ColumnID::Name:
 				{
 					GetView()->EditItem(item, column);
+					break;
 				}
-				else
+				case ColumnID::Value:
 				{
-					if (KLabeledValue* entry = GetDataEntry(GetRow(item)))
+					if (m_UseInlineEditor)
 					{
-						TextEditDialog dialog(GetView());
-						dialog.SetText(entry->GetValue());
-						if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
+						GetView()->EditItem(item, column);
+					}
+					else
+					{
+						if (KLabeledValue* entry = GetDataEntry(GetRow(item)))
 						{
-							entry->SetValue(dialog.GetText());
-							NotifyChangedItem(item);
+							UI::TextEditDialog dialog(GetView());
+							dialog.SetText(entry->GetValue());
+							if (dialog.ShowModal() == KxID_OK && dialog.IsModified())
+							{
+								entry->SetValue(dialog.GetText());
+								NotifyChangedItem(item);
+							}
 						}
 					}
+					break;
 				}
+			};
+		}
+	}
+	void KPCInfoSitesModel::OnContextMenu(KxDataViewEvent& event)
+	{
+		KxDataViewItem item = event.GetItem();
+		const KLabeledValue* entry = GetDataEntry(GetRow(item));
+	
+		KxMenu menu;
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddSite, KTr(KxID_ADD)));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
+		}
+		menu.AddSeparator();
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
+			item->Enable(entry != nullptr);
+		}
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
+			item->Enable(!IsEmpty());
+		}
+	
+		switch (menu.Show(GetView()))
+		{
+			case MenuID::AddSite:
+			{
+				OnAddSite();
+				break;
+			}
+			case KxID_REMOVE:
+			{
+				OnRemoveSite(item);
+				break;
+			}
+			case KxID_CLEAR:
+			{
+				OnClearList();
 				break;
 			}
 		};
-	}
-}
-void KPCInfoSitesModel::OnContextMenu(KxDataViewEvent& event)
-{
-	KxDataViewItem item = event.GetItem();
-	const KLabeledValue* entry = GetDataEntry(GetRow(item));
-
-	KxMenu menu;
-	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddSite, KTr(KxID_ADD)));
-		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
-	}
-	menu.AddSeparator();
-	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != nullptr);
-	}
-	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
-		item->Enable(!IsEmpty());
-	}
-
-	switch (menu.Show(GetView()))
-	{
-		case MenuID::AddSite:
-		{
-			OnAddSite();
-			break;
-		}
-		case KxID_REMOVE:
-		{
-			OnRemoveSite(item);
-			break;
-		}
-		case KxID_CLEAR:
-		{
-			OnClearList();
-			break;
-		}
 	};
-};
-
-void KPCInfoSitesModel::OnAddSite()
-{
-	GetDataVector()->emplace_back(KLabeledValue(wxEmptyString));
-
-	KxDataViewItem item = GetItem(GetItemCount() - 1);
-	NotifyAddedItem(item);
-	SelectItem(item);
-	GetView()->EditItem(item, GetView()->GetColumn(ColumnID::Name));
-}
-void KPCInfoSitesModel::OnRemoveSite(const KxDataViewItem& item)
-{
-	RemoveItemAndNotify(*GetDataVector(), item);
-}
-void KPCInfoSitesModel::OnClearList()
-{
-	ClearItemsAndNotify(*GetDataVector());
-}
-
-void KPCInfoSitesModel::SetDataVector()
-{
-	m_InfoData = nullptr;
-	KPackageCreatorVectorModel::SetDataVector();
-}
-void KPCInfoSitesModel::SetDataVector(VectorType& data, KPackageProjectInfo* info)
-{
-	m_InfoData = info;
-	KPackageCreatorVectorModel::SetDataVector(&data);
-}
-
-//////////////////////////////////////////////////////////////////////////
-KPCInfoSitesModelDialog::KPCInfoSitesModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, bool bUseInlineEditor)
-	//:m_WindowOptions("KPCInfoSitesModelDialog", "Window"), m_ViewOptions("KPCInfoSitesModelDialog", "View")
-{
-	UseInlineEditor(bUseInlineEditor);
-
-	if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
+	
+	void KPCInfoSitesModel::OnAddSite()
 	{
-		SetMainIcon(KxICON_NONE);
-		SetWindowResizeSide(wxBOTH);
-
-		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		m_ViewPane = new KxPanel(GetContentWindow(), KxID_NONE);
-		m_ViewPane->SetSizer(sizer);
-		PostCreate();
-
-		// List
-		IncRef();
-		KPCInfoSitesModel::Create(controller, m_ViewPane, sizer);
-
-		AdjustWindow(wxDefaultPosition, wxSize(700, 400));
-		//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
-		//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		GetDataVector()->emplace_back(KLabeledValue(wxEmptyString));
+	
+		KxDataViewItem item = GetItem(GetItemCount() - 1);
+		NotifyAddedItem(item);
+		SelectItem(item);
+		GetView()->EditItem(item, GetView()->GetColumn(ColumnID::Name));
+	}
+	void KPCInfoSitesModel::OnRemoveSite(const KxDataViewItem& item)
+	{
+		RemoveItemAndNotify(*GetDataVector(), item);
+	}
+	void KPCInfoSitesModel::OnClearList()
+	{
+		ClearItemsAndNotify(*GetDataVector());
+	}
+	
+	void KPCInfoSitesModel::SetDataVector()
+	{
+		m_InfoData = nullptr;
+		KPackageCreatorVectorModel::SetDataVector();
+	}
+	void KPCInfoSitesModel::SetDataVector(VectorType& data, KPackageProjectInfo* info)
+	{
+		m_InfoData = info;
+		KPackageCreatorVectorModel::SetDataVector(&data);
 	}
 }
-KPCInfoSitesModelDialog::~KPCInfoSitesModelDialog()
-{
-	IncRef();
 
-	//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
-	//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+namespace Kortex::PackageDesigner
+{
+	KPCInfoSitesModelDialog::KPCInfoSitesModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller, bool bUseInlineEditor)
+		//:m_WindowOptions("KPCInfoSitesModelDialog", "Window"), m_ViewOptions("KPCInfoSitesModelDialog", "View")
+	{
+		UseInlineEditor(bUseInlineEditor);
+	
+		if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
+		{
+			SetMainIcon(KxICON_NONE);
+			SetWindowResizeSide(wxBOTH);
+	
+			wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+			m_ViewPane = new KxPanel(GetContentWindow(), KxID_NONE);
+			m_ViewPane->SetSizer(sizer);
+			PostCreate();
+	
+			// List2
+			IncRef();
+			KPCInfoSitesModel::Create(controller, m_ViewPane, sizer);
+	
+			AdjustWindow(wxDefaultPosition, wxSize(700, 400));
+			//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
+			//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
+		}
+	}
+	KPCInfoSitesModelDialog::~KPCInfoSitesModelDialog()
+	{
+		IncRef();
+	
+		//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
+		//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
+	}
 }

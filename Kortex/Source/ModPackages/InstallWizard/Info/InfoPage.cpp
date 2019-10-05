@@ -102,14 +102,14 @@ namespace Kortex::InstallWizard
 			m_DocumentSimple.GetWindow()->Disable();
 		}
 	}
-	void InfoPage::SetImageViewerNavigationInfo(KImageViewerEvent& event) const
+	void InfoPage::SetImageViewerNavigationInfo(UI::KImageViewerEvent& event) const
 	{
 		event.SetHasPrevNext(m_CurrentImageIndex > 0, (size_t)(m_CurrentImageIndex + 1) < m_ImagesMap.size());
 	}
-	void InfoPage::OnNavigateImageViewer(KImageViewerEvent& event)
+	void InfoPage::OnNavigateImageViewer(UI::KImageViewerEvent& event)
 	{
 		int oldIndex = m_CurrentImageIndex;
-		if (event.GetEventType() == KEVT_IMAGEVIEWER_NEXT_IMAGE)
+		if (event.GetEventType() == UI::KImageViewerEvent::EvtNext)
 		{
 			m_CurrentImageIndex++;
 		}
@@ -121,7 +121,7 @@ namespace Kortex::InstallWizard
 		SetImageViewerNavigationInfo(event);
 		if (m_CurrentImageIndex >= 0 && (size_t)m_CurrentImageIndex < m_ImagesMap.size())
 		{
-			const KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
+			const PackageDesigner::KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
 			event.SetBitmap(entry->GetBitmap());
 			event.SetDescription(entry->GetDescription());
 		}
@@ -171,12 +171,12 @@ namespace Kortex::InstallWizard
 			m_CurrentImageIndex = event.GetInt();
 			if (m_ImagesMap.count(m_CurrentImageIndex))
 			{
-				KImageViewerDialog dialog(&GetWizard());
-				dialog.Bind(KEVT_IMAGEVIEWER_PREV_IMAGE, &InfoPage::OnNavigateImageViewer, this);
-				dialog.Bind(KEVT_IMAGEVIEWER_NEXT_IMAGE, &InfoPage::OnNavigateImageViewer, this);
+				UI::KImageViewerDialog dialog(&GetWizard());
+				dialog.Bind(UI::KImageViewerEvent::EvtPrevious, &InfoPage::OnNavigateImageViewer, this);
+				dialog.Bind(UI::KImageViewerEvent::EvtNext, &InfoPage::OnNavigateImageViewer, this);
 
-				const KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
-				KImageViewerEvent evt;
+				const PackageDesigner::KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
+				UI::KImageViewerEvent evt;
 				evt.SetBitmap(entry->GetBitmap());
 				evt.SetDescription(entry->GetDescription());
 				SetImageViewerNavigationInfo(evt);
@@ -191,10 +191,10 @@ namespace Kortex::InstallWizard
 		return m_ScreenshotsView;
 	}
 
-	void InfoPage::LoadInfoTab(const KPackageProject& package)
+	void InfoPage::LoadInfoTab(const PackageDesigner::KPackageProject& package)
 	{
 		using InfoPageNS::InfoKind;
-		const KPackageProjectInfo& info = package.GetInfo();
+		const PackageDesigner::KPackageProjectInfo& info = package.GetInfo();
 
 		auto AddString = [this](const wxString& name, const wxString& value, InfoKind type = InfoKind::None, bool isRequired = false, ResourceID image = {})
 		{
@@ -236,11 +236,11 @@ namespace Kortex::InstallWizard
 
 		m_InfoDisplayModel->ItemsChanged();
 	}
-	void InfoPage::LoadDescriptionTab(const KPackageProject& package)
+	void InfoPage::LoadDescriptionTab(const PackageDesigner::KPackageProject& package)
 	{
 		m_DescriptionView.LoadText(package.GetInfo().GetDescription());
 	}
-	void InfoPage::LoadDocumentsTab(const KPackageProject& package)
+	void InfoPage::LoadDocumentsTab(const PackageDesigner::KPackageProject& package)
 	{
 		for (const KLabeledValue& item: package.GetInfo().GetDocuments())
 		{
@@ -253,9 +253,9 @@ namespace Kortex::InstallWizard
 			m_DocumentsList->HandleWindowEvent(event);
 		}
 	}
-	void InfoPage::LoadScreenshotsTab(const KPackageProject& package)
+	void InfoPage::LoadScreenshotsTab(const PackageDesigner::KPackageProject& package)
 	{
-		for (const KPPIImageEntry& item: package.GetInterface().GetImages())
+		for (const PackageDesigner::KPPIImageEntry& item: package.GetInterface().GetImages())
 		{
 			if (item.IsVisible() && item.HasBitmap())
 			{
@@ -277,7 +277,7 @@ namespace Kortex::InstallWizard
 	}
 	void InfoPage::OnPackageLoaded()
 	{
-		const KPackageProject& package = GetPackageConfig();
+		const PackageDesigner::KPackageProject& package = GetPackageConfig();
 
 		LoadInfoTab(package);
 		LoadDocumentsTab(package);

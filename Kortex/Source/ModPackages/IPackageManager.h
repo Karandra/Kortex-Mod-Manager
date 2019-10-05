@@ -14,13 +14,13 @@ namespace Kortex
 
 namespace Kortex
 {
-	namespace PackageManager::Internal
+	namespace PackageDesigner::Internal
 	{
 		extern const SimpleManagerInfo TypeInfo;
 	}
 
 	class IPackageManager:
-		public ManagerWithTypeInfo<IManager, PackageManager::Internal::TypeInfo>,
+		public ManagerWithTypeInfo<IManager, PackageDesigner::Internal::TypeInfo>,
 		public KxComponentContainer,
 		public KxSingletonPtr<IPackageManager>
 	{
@@ -33,14 +33,14 @@ namespace Kortex
 
 		public:
 			static bool IsPathAbsolute(const wxString& path);
-			static wxString GetRequirementFilePath(const KPPRRequirementEntry* entry);
-			static KPPReqState CheckRequirementState(const KPPRRequirementEntry* entry);
-			static KxVersion GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry);
-			static KxVersion GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry);
-			static KxVersion GetRequirementVersion(const KPPRRequirementEntry* entry);
+			static wxString GetRequirementFilePath(const PackageDesigner::KPPRRequirementEntry* entry);
+			static PackageDesigner::KPPReqState CheckRequirementState(const PackageDesigner::KPPRRequirementEntry* entry);
+			static KxVersion GetRequirementVersionFromBinaryFile(const PackageDesigner::KPPRRequirementEntry* entry);
+			static KxVersion GetRequirementVersionFromModManager(const PackageDesigner::KPPRRequirementEntry* entry);
+			static KxVersion GetRequirementVersion(const PackageDesigner::KPPRRequirementEntry* entry);
 
 		protected:
-			void LoadRequirementsGroup(KPPRRequirementsGroup& group, const KxXMLNode& rootNode);
+			void LoadRequirementsGroup(PackageDesigner::KPPRRequirementsGroup& group, const KxXMLNode& rootNode);
 
 		public:
 			IPackageManager();
@@ -50,8 +50,8 @@ namespace Kortex
 			void SetPackagesFolder(const wxString& path) const;
 
 		public:
-			virtual const KPPRRequirementEntry::Vector& GetStdRequirements() const = 0;
-			virtual const KPPRRequirementEntry* FindStdReqirement(const wxString& id) const = 0;
+			virtual const PackageDesigner::KPPRRequirementEntry::Vector& GetStdRequirements() const = 0;
+			virtual const PackageDesigner::KPPRRequirementEntry* FindStdReqirement(const wxString& id) const = 0;
 
 			virtual void OnModListMenu(KxMenu& menu, const std::vector<IGameMod*>& selectedMods, IGameMod* focusedMod) = 0;
 	};

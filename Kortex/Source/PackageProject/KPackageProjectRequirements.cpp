@@ -5,177 +5,181 @@
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 
-KPPRRequirementEntry::KPPRRequirementEntry(KPPRTypeDescriptor typeDescriptor)
-	:m_ObjectFunction(KPackageProjectRequirements::ms_DefaultObjectFunction),
-	m_RequiredVersionFunction(KPackageProjectRequirements::ms_DefaultVersionOperator),
-	m_TypeDescriptor(typeDescriptor)
+namespace Kortex::PackageDesigner
 {
-}
-KPPRRequirementEntry::~KPPRRequirementEntry()
-{
-}
-
-const KxVersion& KPPRRequirementEntry::GetCurrentVersion() const
-{
-	if (!m_CurrentVersionChecked)
+	KPPRRequirementEntry::KPPRRequirementEntry(KPPRTypeDescriptor typeDescriptor)
+		:m_ObjectFunction(KPackageProjectRequirements::ms_DefaultObjectFunction),
+		m_RequiredVersionFunction(KPackageProjectRequirements::ms_DefaultVersionOperator),
+		m_TypeDescriptor(typeDescriptor)
 	{
-		m_CurrentVersion = Kortex::IPackageManager::GetInstance()->GetRequirementVersion(this);
-		m_CurrentVersionChecked = true;
 	}
-	return m_CurrentVersion;
-}
-void KPPRRequirementEntry::ResetCurrentVersion()
-{
-	m_CurrentVersion = KxNullVersion;
-	m_CurrentVersionChecked = false;
-}
-bool KPPRRequirementEntry::CheckVersion() const
-{
-	return KPackageProjectRequirements::CompareVersions(GetRVFunction(), GetCurrentVersion(), GetRequiredVersion());
-}
-
-KPPReqState KPPRRequirementEntry::GetObjectFunctionResult() const
-{
-	if (!m_ObjectFunctionResultChecked)
+	KPPRRequirementEntry::~KPPRRequirementEntry()
 	{
-		m_ObjectFunctionResult = Kortex::IPackageManager::GetInstance()->CheckRequirementState(this);
-		m_ObjectFunctionResultChecked = true;
 	}
-	return m_ObjectFunctionResult;
-}
-void KPPRRequirementEntry::ResetObjectFunctionResult()
-{
-	m_ObjectFunctionResult = KPPReqState::Unknown;
-	m_ObjectFunctionResultChecked = false;
-}
-
-bool KPPRRequirementEntry::IsStd() const
-{
-	return Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID()) != nullptr;
-}
-bool KPPRRequirementEntry::IsSystem() const
-{
-	switch (m_TypeDescriptor)
+	
+	const KxVersion& KPPRRequirementEntry::GetCurrentVersion() const
 	{
-		case KPPR_TYPE_SYSTEM:
+		if (!m_CurrentVersionChecked)
 		{
-			return true;
+			m_CurrentVersion = Kortex::IPackageManager::GetInstance()->GetRequirementVersion(this);
+			m_CurrentVersionChecked = true;
 		}
-		case KPPR_TYPE_USER:
-		{
-			return false;
-		}
-		case KPPR_TYPE_AUTO:
-		{
-			return IsStd();
-		}
-	};
-	return false;
-}
-bool KPPRRequirementEntry::IsUserEditable() const
-{
-	return !IsSystem();
-}
-
-void KPPRRequirementEntry::TrySetTypeDescriptor(KPPRTypeDescriptor type)
-{
-	switch (type)
+		return m_CurrentVersion;
+	}
+	void KPPRRequirementEntry::ResetCurrentVersion()
 	{
-		case KPPR_TYPE_USER:
-		case KPPR_TYPE_AUTO:
+		m_CurrentVersion = KxNullVersion;
+		m_CurrentVersionChecked = false;
+	}
+	bool KPPRRequirementEntry::CheckVersion() const
+	{
+		return KPackageProjectRequirements::CompareVersions(GetRVFunction(), GetCurrentVersion(), GetRequiredVersion());
+	}
+	
+	KPPReqState KPPRRequirementEntry::GetObjectFunctionResult() const
+	{
+		if (!m_ObjectFunctionResultChecked)
 		{
-			m_TypeDescriptor = type;
-			break;
+			m_ObjectFunctionResult = Kortex::IPackageManager::GetInstance()->CheckRequirementState(this);
+			m_ObjectFunctionResultChecked = true;
 		}
-		case KPPR_TYPE_SYSTEM:
+		return m_ObjectFunctionResult;
+	}
+	void KPPRRequirementEntry::ResetObjectFunctionResult()
+	{
+		m_ObjectFunctionResult = KPPReqState::Unknown;
+		m_ObjectFunctionResultChecked = false;
+	}
+	
+	bool KPPRRequirementEntry::IsStd() const
+	{
+		return Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID()) != nullptr;
+	}
+	bool KPPRRequirementEntry::IsSystem() const
+	{
+		switch (m_TypeDescriptor)
 		{
-			if (IsStd())
+			case KPPR_TYPE_SYSTEM:
+			{
+				return true;
+			}
+			case KPPR_TYPE_USER:
+			{
+				return false;
+			}
+			case KPPR_TYPE_AUTO:
+			{
+				return IsStd();
+			}
+		};
+		return false;
+	}
+	bool KPPRRequirementEntry::IsUserEditable() const
+	{
+		return !IsSystem();
+	}
+	
+	void KPPRRequirementEntry::TrySetTypeDescriptor(KPPRTypeDescriptor type)
+	{
+		switch (type)
+		{
+			case KPPR_TYPE_USER:
+			case KPPR_TYPE_AUTO:
 			{
 				m_TypeDescriptor = type;
+				break;
 			}
-			break;
-		}
-	};
-	ConformToTypeDescriptor();
-}
-bool KPPRRequirementEntry::ConformToTypeDescriptor()
-{
-	if (m_TypeDescriptor == KPPR_TYPE_SYSTEM || m_TypeDescriptor == KPPR_TYPE_AUTO)
+			case KPPR_TYPE_SYSTEM:
+			{
+				if (IsStd())
+				{
+					m_TypeDescriptor = type;
+				}
+				break;
+			}
+		};
+		ConformToTypeDescriptor();
+	}
+	bool KPPRRequirementEntry::ConformToTypeDescriptor()
 	{
-		const KPPRRequirementEntry* stdEntry = Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID());
-		if (stdEntry)
+		if (m_TypeDescriptor == KPPR_TYPE_SYSTEM || m_TypeDescriptor == KPPR_TYPE_AUTO)
 		{
-			SetName(stdEntry->GetName());
-			SetObject(stdEntry->GetObject());
-			SetObjectFunction(stdEntry->GetObjectFunction());
-
-			ResetObjectFunctionResult();
-			ResetCurrentVersion();
-			return true;
+			const KPPRRequirementEntry* stdEntry = Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID());
+			if (stdEntry)
+			{
+				SetName(stdEntry->GetName());
+				SetObject(stdEntry->GetObject());
+				SetObjectFunction(stdEntry->GetObjectFunction());
+	
+				ResetObjectFunctionResult();
+				ResetCurrentVersion();
+				return true;
+			}
 		}
+		return false;
 	}
-	return false;
-}
-
-bool KPPRRequirementEntry::CalcOverallStatus()
-{
-	if (!m_OverallStatusCalculated)
+	
+	bool KPPRRequirementEntry::CalcOverallStatus()
 	{
-		m_OverallStatus = CheckVersion() && GetObjectFunctionResult() == KPPReqState::True;
-		m_OverallStatusCalculated = true;
-	}
-	return m_OverallStatus;
-}
-
-//////////////////////////////////////////////////////////////////////////
-wxString KPPRRequirementsGroup::GetFlagNamePrefix()
-{
-	return "REQFLAG_";
-}
-wxString KPPRRequirementsGroup::GetFlagName(const wxString& id)
-{
-	return GetFlagNamePrefix() + id;
-}
-
-KPPRRequirementsGroup::KPPRRequirementsGroup()
-	:m_Operator(KPackageProjectRequirements::ms_DefaultGroupOperator)
-{
-}
-KPPRRequirementsGroup::~KPPRRequirementsGroup()
-{
-}
-
-KPPRRequirementEntry* KPPRRequirementsGroup::FindEntry(const wxString& id) const
-{
-	auto it = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const KPPRRequirementEntry::Vector::value_type& entry)
-	{
-		return entry->GetID() == id;
-	});
-
-	if (it != m_Entries.cend())
-	{
-		return it->get();
-	}
-	return nullptr;
-}
-
-bool KPPRRequirementsGroup::CalcGroupStatus()
-{
-	if (!m_GroupStatusCalculated)
-	{
-		KPackageProjectConditionChecker checker;
-		for (auto& entry: m_Entries)
+		if (!m_OverallStatusCalculated)
 		{
-			checker(entry->CalcOverallStatus(), m_Operator);
+			m_OverallStatus = CheckVersion() && GetObjectFunctionResult() == KPPReqState::True;
+			m_OverallStatusCalculated = true;
 		}
-
-		m_GroupStatus = checker.GetResult();
-		m_GroupStatusCalculated = true;
+		return m_OverallStatus;
 	}
-	return m_GroupStatus;
 }
 
-//////////////////////////////////////////////////////////////////////////
+namespace Kortex::PackageDesigner
+{
+	wxString KPPRRequirementsGroup::GetFlagNamePrefix()
+	{
+		return "REQFLAG_";
+	}
+	wxString KPPRRequirementsGroup::GetFlagName(const wxString& id)
+	{
+		return GetFlagNamePrefix() + id;
+	}
+	
+	KPPRRequirementsGroup::KPPRRequirementsGroup()
+		:m_Operator(KPackageProjectRequirements::ms_DefaultGroupOperator)
+	{
+	}
+	KPPRRequirementsGroup::~KPPRRequirementsGroup()
+	{
+	}
+	
+	KPPRRequirementEntry* KPPRRequirementsGroup::FindEntry(const wxString& id) const
+	{
+		auto it = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const KPPRRequirementEntry::Vector::value_type& entry)
+		{
+			return entry->GetID() == id;
+		});
+	
+		if (it != m_Entries.cend())
+		{
+			return it->get();
+		}
+		return nullptr;
+	}
+	
+	bool KPPRRequirementsGroup::CalcGroupStatus()
+	{
+		if (!m_GroupStatusCalculated)
+		{
+			KPackageProjectConditionChecker checker;
+			for (auto& entry: m_Entries)
+			{
+				checker(entry->CalcOverallStatus(), m_Operator);
+			}
+	
+			m_GroupStatus = checker.GetResult();
+			m_GroupStatusCalculated = true;
+		}
+		return m_GroupStatus;
+	}
+}
+
 namespace ObjFuncConst
 {
 	constexpr const auto NONE_STRING = wxS("");
@@ -193,201 +197,203 @@ namespace TypeConst
 	constexpr const auto AUTO_STRING = wxS("Auto");
 }
 
-//////////////////////////////////////////////////////////////////////////
-KPPRObjectFunction KPackageProjectRequirements::StringToObjectFunction(const wxString& name)
+namespace Kortex::PackageDesigner
 {
-	if (name == ObjFuncConst::NONE_STRING)
+	KPPRObjectFunction KPackageProjectRequirements::StringToObjectFunction(const wxString& name)
 	{
-		return KPPR_OBJFUNC_NONE;
+		if (name == ObjFuncConst::NONE_STRING)
+		{
+			return KPPR_OBJFUNC_NONE;
+		}
+		if (name == ObjFuncConst::MOD_ACTIVE_STRING)
+		{
+			return KPPR_OBJFUNC_MOD_ACTIVE;
+		}
+		if (name == ObjFuncConst::MOD_INACTIVE_STRING)
+		{
+			return KPPR_OBJFUNC_MOD_INACTIVE;
+		}
+		if (name == ObjFuncConst::PLUGIN_ACTIVE_STRING)
+		{
+			return KPPR_OBJFUNC_PLUGIN_ACTIVE;
+		}
+		if (name == ObjFuncConst::PLUGIN_INACTIVE_STRING)
+		{
+			return KPPR_OBJFUNC_PLUGIN_INACTIVE;
+		}
+		if (name == ObjFuncConst::FILE_EXIST_STRING)
+		{
+			return KPPR_OBJFUNC_FILE_EXIST;
+		}
+		if (name == ObjFuncConst::FILE_NOT_EXIST_STRING)
+		{
+			return KPPR_OBJFUNC_FILE_NOT_EXIST;
+		}
+		return ms_DefaultObjectFunction;
 	}
-	if (name == ObjFuncConst::MOD_ACTIVE_STRING)
+	wxString KPackageProjectRequirements::ObjectFunctionToString(KPPRObjectFunction state)
 	{
-		return KPPR_OBJFUNC_MOD_ACTIVE;
+		switch (state)
+		{
+			case KPPR_OBJFUNC_NONE:
+			{
+				return ObjFuncConst::NONE_STRING;
+			}
+			case KPPR_OBJFUNC_MOD_ACTIVE:
+			{
+				return ObjFuncConst::MOD_ACTIVE_STRING;
+			}
+			case KPPR_OBJFUNC_MOD_INACTIVE:
+			{
+				return ObjFuncConst::MOD_INACTIVE_STRING;
+			}
+			case KPPR_OBJFUNC_PLUGIN_ACTIVE:
+			{
+				return ObjFuncConst::PLUGIN_ACTIVE_STRING;
+			}
+			case KPPR_OBJFUNC_PLUGIN_INACTIVE:
+			{
+				return ObjFuncConst::PLUGIN_INACTIVE_STRING;
+			}
+			case KPPR_OBJFUNC_FILE_EXIST:
+			{
+				return ObjFuncConst::FILE_EXIST_STRING;
+			}
+			case KPPR_OBJFUNC_FILE_NOT_EXIST:
+			{
+				return ObjFuncConst::FILE_NOT_EXIST_STRING;
+			}
+		};
+		return wxEmptyString;
 	}
-	if (name == ObjFuncConst::MOD_INACTIVE_STRING)
+	
+	KPPRTypeDescriptor KPackageProjectRequirements::StringToTypeDescriptor(const wxString& name)
 	{
-		return KPPR_OBJFUNC_MOD_INACTIVE;
+		if (name == TypeConst::USER_STRING)
+		{
+			return KPPR_TYPE_USER;
+		}
+		if (name == TypeConst::SYSTEM_STRING)
+		{
+			return KPPR_TYPE_SYSTEM;
+		}
+		if (name == TypeConst::AUTO_STRING)
+		{
+			return KPPR_TYPE_AUTO;
+		}
+		return ms_DefaultTypeDescriptor;
 	}
-	if (name == ObjFuncConst::PLUGIN_ACTIVE_STRING)
+	wxString KPackageProjectRequirements::TypeDescriptorToString(KPPRTypeDescriptor type)
 	{
-		return KPPR_OBJFUNC_PLUGIN_ACTIVE;
+		switch (type)
+		{
+			case KPPR_TYPE_USER:
+			{
+				return TypeConst::USER_STRING;
+			}
+			case KPPR_TYPE_SYSTEM:
+			{
+				return TypeConst::SYSTEM_STRING;
+			}
+			case KPPR_TYPE_AUTO:
+			{
+				return TypeConst::AUTO_STRING;
+			}
+		};
+		return wxEmptyString;
 	}
-	if (name == ObjFuncConst::PLUGIN_INACTIVE_STRING)
+	
+	bool KPackageProjectRequirements::CompareVersions(KPPOperator operatorType, const KxVersion& current, const KxVersion& required)
 	{
-		return KPPR_OBJFUNC_PLUGIN_INACTIVE;
+		// Always return true when requested to compare against invalid (or unspecified) version.
+		// Or operator is unspecified, which should mean that caller is not interested in this check.
+		if (operatorType == KPP_OPERATOR_NONE || !required.IsOK())
+		{
+			return true;
+		}
+	
+		switch (operatorType)
+		{
+			case KPP_OPERATOR_EQ:
+			{
+				return current == required;
+			}
+			case KPP_OPERATOR_NOT_EQ:
+			{
+				return current != required;
+			}
+			case KPP_OPERATOR_GT:
+			{
+				return current > required;
+			}
+			case KPP_OPERATOR_GTEQ:
+			{
+				return current >= required;
+			}
+			case KPP_OPERATOR_LT:
+			{
+				return current < required;
+			}
+			case KPP_OPERATOR_LTEQ:
+			{
+				return current <= required;
+			}
+		};
+	
+		// Any other unsupported operator, return false.
+		return false;
 	}
-	if (name == ObjFuncConst::FILE_EXIST_STRING)
+	
+	KPackageProjectRequirements::KPackageProjectRequirements(KPackageProject& project)
+		:KPackageProjectPart(project)
 	{
-		return KPPR_OBJFUNC_FILE_EXIST;
 	}
-	if (name == ObjFuncConst::FILE_NOT_EXIST_STRING)
+	KPackageProjectRequirements::~KPackageProjectRequirements()
 	{
-		return KPPR_OBJFUNC_FILE_NOT_EXIST;
 	}
-	return ms_DefaultObjectFunction;
-}
-wxString KPackageProjectRequirements::ObjectFunctionToString(KPPRObjectFunction state)
-{
-	switch (state)
+	
+	KPPRRequirementsGroup* KPackageProjectRequirements::FindGroupWithID(const wxString& id) const
 	{
-		case KPPR_OBJFUNC_NONE:
+		auto it = std::find_if(m_Groups.cbegin(), m_Groups.cend(), [id](const auto& entry)
 		{
-			return ObjFuncConst::NONE_STRING;
-		}
-		case KPPR_OBJFUNC_MOD_ACTIVE:
+			return entry->GetID() == id;
+		});
+	
+		if (it != m_Groups.cend())
 		{
-			return ObjFuncConst::MOD_ACTIVE_STRING;
+			return it->get();
 		}
-		case KPPR_OBJFUNC_MOD_INACTIVE:
-		{
-			return ObjFuncConst::MOD_INACTIVE_STRING;
-		}
-		case KPPR_OBJFUNC_PLUGIN_ACTIVE:
-		{
-			return ObjFuncConst::PLUGIN_ACTIVE_STRING;
-		}
-		case KPPR_OBJFUNC_PLUGIN_INACTIVE:
-		{
-			return ObjFuncConst::PLUGIN_INACTIVE_STRING;
-		}
-		case KPPR_OBJFUNC_FILE_EXIST:
-		{
-			return ObjFuncConst::FILE_EXIST_STRING;
-		}
-		case KPPR_OBJFUNC_FILE_NOT_EXIST:
-		{
-			return ObjFuncConst::FILE_NOT_EXIST_STRING;
-		}
-	};
-	return wxEmptyString;
-}
-
-KPPRTypeDescriptor KPackageProjectRequirements::StringToTypeDescriptor(const wxString& name)
-{
-	if (name == TypeConst::USER_STRING)
-	{
-		return KPPR_TYPE_USER;
+		return nullptr;
 	}
-	if (name == TypeConst::SYSTEM_STRING)
+	
+	bool KPackageProjectRequirements::IsDefaultGroupContains(const wxString& groupID) const
 	{
-		return KPPR_TYPE_SYSTEM;
+		auto it = std::find_if(m_DefaultGroup.begin(), m_DefaultGroup.end(), [&groupID](const wxString& id)
+		{
+			return id == groupID;
+		});
+		return it != m_DefaultGroup.end();
 	}
-	if (name == TypeConst::AUTO_STRING)
+	KxStringVector KPackageProjectRequirements::GetFlagNames() const
 	{
-		return KPPR_TYPE_AUTO;
+		KxStringVector flagNames;
+		for (const auto& group: m_Groups)
+		{
+			flagNames.push_back(group->GetFlagName());
+		}
+		return flagNames;
 	}
-	return ms_DefaultTypeDescriptor;
-}
-wxString KPackageProjectRequirements::TypeDescriptorToString(KPPRTypeDescriptor type)
-{
-	switch (type)
+	bool KPackageProjectRequirements::CalcOverallStatus(const KxStringVector& groups) const
 	{
-		case KPPR_TYPE_USER:
+		KPackageProjectConditionChecker checker;
+		for (const wxString& id: groups)
 		{
-			return TypeConst::USER_STRING;
+			KPPRRequirementsGroup* group = FindGroupWithID(id);
+			if (group)
+			{
+				checker(group->CalcGroupStatus(), KPP_OPERATOR_AND);
+			}
 		}
-		case KPPR_TYPE_SYSTEM:
-		{
-			return TypeConst::SYSTEM_STRING;
-		}
-		case KPPR_TYPE_AUTO:
-		{
-			return TypeConst::AUTO_STRING;
-		}
-	};
-	return wxEmptyString;
-}
-
-bool KPackageProjectRequirements::CompareVersions(KPPOperator operatorType, const KxVersion& current, const KxVersion& required)
-{
-	// Always return true when requested to compare against invalid (or unspecified) version.
-	// Or operator is unspecified, which should mean that caller is not interested in this check.
-	if (operatorType == KPP_OPERATOR_NONE || !required.IsOK())
-	{
-		return true;
+		return checker.GetResult();
 	}
-
-	switch (operatorType)
-	{
-		case KPP_OPERATOR_EQ:
-		{
-			return current == required;
-		}
-		case KPP_OPERATOR_NOT_EQ:
-		{
-			return current != required;
-		}
-		case KPP_OPERATOR_GT:
-		{
-			return current > required;
-		}
-		case KPP_OPERATOR_GTEQ:
-		{
-			return current >= required;
-		}
-		case KPP_OPERATOR_LT:
-		{
-			return current < required;
-		}
-		case KPP_OPERATOR_LTEQ:
-		{
-			return current <= required;
-		}
-	};
-
-	// Any other unsupported operator, return false.
-	return false;
-}
-
-KPackageProjectRequirements::KPackageProjectRequirements(KPackageProject& project)
-	:KPackageProjectPart(project)
-{
-}
-KPackageProjectRequirements::~KPackageProjectRequirements()
-{
-}
-
-KPPRRequirementsGroup* KPackageProjectRequirements::FindGroupWithID(const wxString& id) const
-{
-	auto it = std::find_if(m_Groups.cbegin(), m_Groups.cend(), [id](const auto& entry)
-	{
-		return entry->GetID() == id;
-	});
-
-	if (it != m_Groups.cend())
-	{
-		return it->get();
-	}
-	return nullptr;
-}
-
-bool KPackageProjectRequirements::IsDefaultGroupContains(const wxString& groupID) const
-{
-	auto it = std::find_if(m_DefaultGroup.begin(), m_DefaultGroup.end(), [&groupID](const wxString& id)
-	{
-		return id == groupID;
-	});
-	return it != m_DefaultGroup.end();
-}
-KxStringVector KPackageProjectRequirements::GetFlagNames() const
-{
-	KxStringVector flagNames;
-	for (const auto& group: m_Groups)
-	{
-		flagNames.push_back(group->GetFlagName());
-	}
-	return flagNames;
-}
-bool KPackageProjectRequirements::CalcOverallStatus(const KxStringVector& groups) const
-{
-	KPackageProjectConditionChecker checker;
-	for (const wxString& id: groups)
-	{
-		KPPRRequirementsGroup* group = FindGroupWithID(id);
-		if (group)
-		{
-			checker(group->CalcGroupStatus(), KPP_OPERATOR_AND);
-		}
-	}
-	return checker.GetResult();
 }

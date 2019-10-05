@@ -1,12 +1,17 @@
 #pragma once
 #include "stdafx.h"
 #include "KPackageCreatorListModel.h"
+#include "KxFramework/KxDataViewModelExBase.h"
 
-template<class T> class KPackageCreatorVectorModel: public KDataViewVectorListModel<T, KPackageCreatorListModel>
+namespace Kortex::PackageDesigner
 {
-	private:
-		virtual void OnSetDataVectorInternal() override
-		{
-			KDataViewVectorListModel::OnSetDataVectorInternal();
-		}
-};
+	template<class T>
+	class KPackageCreatorVectorModel: public KxDataViewVectorListModelEx<T, KPackageCreatorListModel>
+	{
+		private:
+			void OnSetDataVectorInternal() override
+			{
+				KxDataViewVectorListModelEx::OnSetDataVectorInternal();
+			}
+	};
+}

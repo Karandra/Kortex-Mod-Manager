@@ -5,6 +5,7 @@
 #include <Kortex/ModManager.hpp>
 #include <KxFramework/KxTaskDialog.h>
 
+using namespace Kortex::PackageDesigner;
 namespace Kortex::InstallWizard
 {
 	void InstallationPage::OnLoadUIOptions(const Application::ActiveInstanceOption& option)

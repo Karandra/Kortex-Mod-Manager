@@ -22,7 +22,7 @@
 
 namespace Kortex
 {
-	namespace PackageManager::Internal
+	namespace PackageDesigner::Internal
 	{
 		const SimpleManagerInfo TypeInfo("PackageManager", "PackageManager.Name");
 	}
@@ -64,7 +64,7 @@ namespace Kortex
 	{
 		return path.IsEmpty() || (path.Length() >= 2 && path[1] == wxS(':'));
 	}
-	wxString IPackageManager::GetRequirementFilePath(const KPPRRequirementEntry* entry)
+	wxString IPackageManager::GetRequirementFilePath(const PackageDesigner::KPPRRequirementEntry* entry)
 	{
 		wxString path = KVarExp(entry->GetObject());
 		if (IsPathAbsolute(path))
@@ -78,8 +78,10 @@ namespace Kortex
 		}
 	}
 
-	KPPReqState IPackageManager::CheckRequirementState(const KPPRRequirementEntry* entry)
+	PackageDesigner::KPPReqState IPackageManager::CheckRequirementState(const PackageDesigner::KPPRRequirementEntry* entry)
 	{
+		using namespace PackageDesigner;
+
 		KPPRObjectFunction objectFunc = entry->GetObjectFunction();
 		switch (objectFunc)
 		{
@@ -130,7 +132,7 @@ namespace Kortex
 		};
 		return KPPReqState::Unknown;
 	}
-	KxVersion IPackageManager::GetRequirementVersionFromBinaryFile(const KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersionFromBinaryFile(const PackageDesigner::KPPRRequirementEntry* entry)
 	{
 		KxVersion version;
 
@@ -177,7 +179,7 @@ namespace Kortex
 		}
 		return version;
 	}
-	KxVersion IPackageManager::GetRequirementVersionFromModManager(const KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersionFromModManager(const PackageDesigner::KPPRRequirementEntry* entry)
 	{
 		const IGameMod* modEntry = IModManager::GetInstance()->FindModByID(entry->GetID());
 		if (modEntry)
@@ -186,14 +188,16 @@ namespace Kortex
 		}
 		return KxNullVersion;
 	}
-	KxVersion IPackageManager::GetRequirementVersion(const KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersion(const PackageDesigner::KPPRRequirementEntry* entry)
 	{
 		KxVersion modVersion = GetRequirementVersionFromModManager(entry);
 		return modVersion.IsOK() ? modVersion : GetRequirementVersionFromBinaryFile(entry);
 	}
 
-	void IPackageManager::LoadRequirementsGroup(KPPRRequirementsGroup& group, const KxXMLNode& rootNode)
+	void IPackageManager::LoadRequirementsGroup(PackageDesigner::KPPRRequirementsGroup& group, const KxXMLNode& rootNode)
 	{
+		using namespace PackageDesigner;
+
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
 			auto& entry = group.GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>(KPPR_TYPE_SYSTEM));

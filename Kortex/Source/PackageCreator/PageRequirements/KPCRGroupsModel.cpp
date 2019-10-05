@@ -4,7 +4,6 @@
 #include "PackageProject/KPackageProject.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include "PackageCreator/KPackageCreatorController.h"
-#include "UI/KMainWindow.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include <KxFramework/KxButton.h>
@@ -12,334 +11,340 @@
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 
-enum ColumnID
+namespace Kortex::PackageDesigner
 {
-	Name,
-	Operator
-};
-enum MenuID
-{
-	AddGroup,
-};
-
-KxDataViewCtrl* KPCRGroupsModel::OnCreateDataView(wxWindow* window)
-{
-	m_ComboView = new KxDataViewComboBox();
-	m_ComboView->SetOptionEnabled(KxDVCB_OPTION_ALT_POPUP_WINDOW);
-	m_ComboView->SetOptionEnabled(KxDVCB_OPTION_HORIZONTAL_SIZER);
-	m_ComboView->SetOptionEnabled(KxDVCB_OPTION_DISMISS_ON_SELECT, false);
-	m_ComboView->SetOptionEnabled(KxDVCB_OPTION_FORCE_GET_STRING_VALUE_ON_DISMISS);
-	m_ComboView->Create(window, KxID_NONE);
-	m_ComboView->ComboSetMaxVisibleItems(16);
-	m_ComboView->Bind(KxEVT_DVCB_GET_STRING_VALUE, &KPCRGroupsModel::OnGetStringValue, this);
-
-	return m_ComboView;
-}
-wxWindow* KPCRGroupsModel::OnGetDataViewWindow()
-{
-	return m_ComboView->GetComboControl();
-}
-void KPCRGroupsModel::OnInitControl()
-{
-	/* View */
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KPCRGroupsModel::OnSelectItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCRGroupsModel::OnActivateItem, this);
-	GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCRGroupsModel::OnContextMenu, this);
-
-	/* Columns */
-	GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
+	enum ColumnID
 	{
-		auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
-		info.GetEditor()->SetItems(KPackageProject::CreateOperatorSymNamesList({KPP_OPERATOR_AND, KPP_OPERATOR_OR}));
+		Name,
+		Operator
+	};
+	enum MenuID
+	{
+		AddGroup,
+	};
+}
+
+namespace Kortex::PackageDesigner
+{
+	KxDataViewCtrl* KPCRGroupsModel::OnCreateDataView(wxWindow* window)
+	{
+		m_ComboView = new KxDataViewComboBox();
+		m_ComboView->SetOptionEnabled(KxDVCB_OPTION_ALT_POPUP_WINDOW);
+		m_ComboView->SetOptionEnabled(KxDVCB_OPTION_HORIZONTAL_SIZER);
+		m_ComboView->SetOptionEnabled(KxDVCB_OPTION_DISMISS_ON_SELECT, false);
+		m_ComboView->SetOptionEnabled(KxDVCB_OPTION_FORCE_GET_STRING_VALUE_ON_DISMISS);
+		m_ComboView->Create(window, KxID_NONE);
+		m_ComboView->ComboSetMaxVisibleItems(16);
+		m_ComboView->Bind(KxEVT_DVCB_GET_STRING_VALUE, &KPCRGroupsModel::OnGetStringValue, this);
+	
+		return m_ComboView;
 	}
-}
-
-void KPCRGroupsModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
-{
-	KPPRRequirementsGroup* group = GetDataEntry(row);
-	if (group)
+	wxWindow* KPCRGroupsModel::OnGetDataViewWindow()
 	{
-		switch (column->GetID())
-		{
-			case ColumnID::Name:
-			{
-				value = group->GetID();
-				break;
-			}
-			case ColumnID::Operator:
-			{
-				value = group->GetOperator() == KPP_OPERATOR_AND ? 0 : 1;
-				break;
-			}
-		};
+		return m_ComboView->GetComboControl();
 	}
-}
-void KPCRGroupsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
-{
-	KPPRRequirementsGroup* group = GetDataEntry(row);
-	if (group)
+	void KPCRGroupsModel::OnInitControl()
 	{
-		switch (column->GetID())
+		/* View */
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &KPCRGroupsModel::OnSelectItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCRGroupsModel::OnActivateItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCRGroupsModel::OnContextMenu, this);
+	
+		/* Columns */
+		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
 		{
-			case ColumnID::Name:
-			{
-				value = group->GetID();
-				break;
-			}
-			case ColumnID::Operator:
-			{
-				value = KPackageProject::OperatorToSymbolicName(group->GetOperator());
-				break;
-			}
-		};
+			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
+			info.GetEditor()->SetItems(KPackageProject::CreateOperatorSymNamesList({KPP_OPERATOR_AND, KPP_OPERATOR_OR}));
+		}
 	}
-}
-bool KPCRGroupsModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
-{
-	KPPRRequirementsGroup* group = GetDataEntry(row);
-	if (group)
+	
+	void KPCRGroupsModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		switch (column->GetID())
+		KPPRRequirementsGroup* group = GetDataEntry(row);
+		if (group)
 		{
-			case ColumnID::Name:
+			switch (column->GetID())
 			{
-				wxString newID = value.As<wxString>();
-				if (newID != group->GetID())
+				case ColumnID::Name:
 				{
-					if (newID.IsEmpty() || !m_Requirements->HasSetWithID(newID))
+					value = group->GetID();
+					break;
+				}
+				case ColumnID::Operator:
+				{
+					value = group->GetOperator() == KPP_OPERATOR_AND ? 0 : 1;
+					break;
+				}
+			};
+		}
+	}
+	void KPCRGroupsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+	{
+		KPPRRequirementsGroup* group = GetDataEntry(row);
+		if (group)
+		{
+			switch (column->GetID())
+			{
+				case ColumnID::Name:
+				{
+					value = group->GetID();
+					break;
+				}
+				case ColumnID::Operator:
+				{
+					value = KPackageProject::OperatorToSymbolicName(group->GetOperator());
+					break;
+				}
+			};
+		}
+	}
+	bool KPCRGroupsModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+	{
+		KPPRRequirementsGroup* group = GetDataEntry(row);
+		if (group)
+		{
+			switch (column->GetID())
+			{
+				case ColumnID::Name:
+				{
+					wxString newID = value.As<wxString>();
+					if (newID != group->GetID())
 					{
-						TrackChangeID(group->GetID(), newID);
-						group->SetID(newID);
-						ChangeNotify();
+						if (newID.IsEmpty() || !m_Requirements->HasSetWithID(newID))
+						{
+							TrackChangeID(group->GetID(), newID);
+							group->SetID(newID);
+							ChangeNotify();
+						}
+						else
+						{
+							KPackageCreatorPageBase::WarnIDCollision(GetView(), GetView()->GetAdjustedItemRect(GetItem(row), column));
+							return false;
+						}
 					}
-					else
+					return true;
+				}
+				case ColumnID::Operator:
+				{
+					group->SetOperator(value.As<int>() == 0 ? KPP_OPERATOR_AND : KPP_OPERATOR_OR);
+					return true;
+				}
+			};
+		}
+		return false;
+	}
+	
+	void KPCRGroupsModel::OnSelectItem(KxDataViewEvent& event)
+	{
+		KxDataViewItem item = event.GetItem();
+		m_RemoveButton->Enable(item.IsOK());
+	
+		KPPRRequirementsGroup* group = GetDataEntry(item);
+		if (group)
+		{
+			m_EntriesModel->SetRequirementsGroup(group);
+			m_EntriesModel->SetDataVector(&group->GetEntries());
+		}
+		else
+		{
+			m_EntriesModel->SetRequirementsGroup(nullptr);
+			m_EntriesModel->SetDataVector();
+		}
+		RefreshComboControl();
+	}
+	void KPCRGroupsModel::OnActivateItem(KxDataViewEvent& event)
+	{
+		KxDataViewItem item = event.GetItem();
+		KxDataViewColumn* column = event.GetColumn();
+		if (item.IsOK() && column)
+		{
+			GetView()->EditItem(item, column);
+		}
+	}
+	void KPCRGroupsModel::OnContextMenu(KxDataViewEvent& event)
+	{
+		KxDataViewItem item = event.GetItem();
+		const KPPRRequirementsGroup* entry = GetDataEntry(item);
+	
+		KxMenu menu;
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddGroup, KTr(KxID_ADD)));
+			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
+		}
+		menu.AddSeparator();
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
+			item->Enable(entry != nullptr);
+		}
+		{
+			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
+			item->Enable(!IsEmpty());
+		}
+	
+		switch (menu.Show(GetView()))
+		{
+			case MenuID::AddGroup:
+			{
+				OnAddGroup(true);
+				break;
+			}
+			case KxID_REMOVE:
+			{
+				OnRemoveGroup(item);
+				break;
+			}
+			case KxID_CLEAR:
+			{
+				OnClearList();
+				break;
+			}
+		};
+	};
+	void KPCRGroupsModel::OnGetStringValue(KxDataViewEvent& event)
+	{
+		KPPRRequirementsGroup* group = GetDataEntry(GetView()->GetSelection());
+		event.SetString(group ? group->GetID() : KAux::MakeNoneLabel());
+	}
+	
+	bool KPCRGroupsModel::DoTrackID(const wxString& trackedID, const wxString& newID, bool remove) const
+	{
+		const wxString trackedFlagName = KPPRRequirementsGroup::GetFlagName(trackedID);
+		const wxString newFlagName = KPPRRequirementsGroup::GetFlagName(newID);
+	
+		// Default groups
+		TrackID_ReplaceOrRemove(trackedID, newID, GetProject().GetRequirements().GetDefaultGroup(), remove);
+	
+		// Manual components and flags
+		for (auto& step: GetProject().GetComponents().GetSteps())
+		{
+			for (auto& group: step->GetGroups())
+			{
+				for (auto& entry: group->GetEntries())
+				{
+					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetRequirements(), remove);
+	
+					// Flags
+					TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, entry->GetConditionalFlags().GetFlags(), remove);
+					for (KPPCCondition& condition: entry->GetTDConditionGroup().GetConditions())
 					{
-						KPackageCreatorPageBase::WarnIDCollision(GetView(), GetView()->GetAdjustedItemRect(GetItem(row), column));
-						return false;
+						TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);
 					}
 				}
-				return true;
 			}
-			case ColumnID::Operator:
+		}
+	
+		// Conditional steps flags
+		for (auto& step: GetProject().GetComponents().GetConditionalSteps())
+		{
+			for (KPPCCondition& condition : step->GetConditionGroup().GetConditions())
 			{
-				group->SetOperator(value.As<int>() == 0 ? KPP_OPERATOR_AND : KPP_OPERATOR_OR);
-				return true;
+				TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);
 			}
-		};
+		}
+	
+		return true;
 	}
-	return false;
-}
-
-void KPCRGroupsModel::OnSelectItem(KxDataViewEvent& event)
-{
-	KxDataViewItem item = event.GetItem();
-	m_RemoveButton->Enable(item.IsOK());
-
-	KPPRRequirementsGroup* group = GetDataEntry(item);
-	if (group)
+	void KPCRGroupsModel::RefreshComboControl()
 	{
-		m_EntriesModel->SetRequirementsGroup(group);
-		m_EntriesModel->SetDataVector(&group->GetEntries());
+		m_ComboView->ComboRefreshLabel();
+		m_ComboView->GetComboControl()->Enable(!IsEmpty());
 	}
-	else
+	
+	void KPCRGroupsModel::OnAddGroup(bool useDialog)
 	{
-		m_EntriesModel->SetRequirementsGroup(nullptr);
-		m_EntriesModel->SetDataVector();
+		wxString name;
+		if (useDialog)
+		{
+			KxTextBoxDialog dialog(GetView(), KxID_NONE, KTr("PackageCreator.NewGroupDialog"));
+			dialog.Bind(KxEVT_STDDIALOG_BUTTON, [this, &dialog](wxNotifyEvent& event)
+			{
+				if (event.GetId() == KxID_OK)
+				{
+					if (m_Requirements->HasSetWithID(dialog.GetValue()))
+					{
+						KPackageCreatorPageBase::WarnIDCollision(dialog.GetDialogMainCtrl());
+						event.Veto();
+					}
+				}
+			});
+	
+			if (dialog.ShowModal() == KxID_OK)
+			{
+				name = dialog.GetValue();
+			}
+		}
+	
+		auto& group = GetDataVector()->emplace_back(new KPPRRequirementsGroup());
+		group->SetID(name);
+	
+		KxDataViewItem item = GetItem(GetItemCount() - 1);
+		NotifyAddedItem(item);
+		if (!useDialog)
+		{
+			GetView()->EditItem(item, GetView()->GetColumnByID(ColumnID::Name));
+		}
 	}
-	RefreshComboControl();
-}
-void KPCRGroupsModel::OnActivateItem(KxDataViewEvent& event)
-{
-	KxDataViewItem item = event.GetItem();
-	KxDataViewColumn* column = event.GetColumn();
-	if (item.IsOK() && column)
+	void KPCRGroupsModel::OnRemoveGroup(const KxDataViewItem& item)
 	{
-		GetView()->EditItem(item, column);
+		if (KPPRRequirementsGroup* group = GetDataEntry(item))
+		{
+			KxTaskDialog dialog(GetView(), KxID_NONE, KTrf("PackageCreator.RemoveGroupDialog", group->GetID()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+			if (dialog.ShowModal() == KxID_YES)
+			{
+				if (IsEmpty())
+				{
+					m_ComboView->ComboDismiss();
+				}
+	
+				TrackRemoveID(group->GetID());
+				RemoveItemAndNotify(*GetDataVector(), item);
+				RefreshComboControl();
+			}
+		}
 	}
-}
-void KPCRGroupsModel::OnContextMenu(KxDataViewEvent& event)
-{
-	KxDataViewItem item = event.GetItem();
-	const KPPRRequirementsGroup* entry = GetDataEntry(item);
-
-	KxMenu menu;
+	void KPCRGroupsModel::OnClearList()
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddGroup, KTr(KxID_ADD)));
-		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::PlusSmall));
+		for (size_t i = 0; i < GetItemCount(); i++)
+		{
+			TrackRemoveID(GetDataEntry(i)->GetID());
+		}
+	
+		m_ComboView->ComboDismiss();
+		ClearItemsAndNotify(*GetDataVector());
+		RefreshComboControl();
 	}
-	menu.AddSeparator();
+	
+	void KPCRGroupsModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* sizer)
 	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-		item->Enable(entry != nullptr);
-	}
-	{
-		KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
-		item->Enable(!IsEmpty());
-	}
-
-	switch (menu.Show(GetView()))
-	{
-		case MenuID::AddGroup:
+		KPackageCreatorVectorModel::Create(controller, window, sizer);
+	
+		m_AddButton = new KxButton(window, KxID_NONE, KTr(KxID_ADD));
+		m_AddButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 		{
 			OnAddGroup(true);
-			break;
-		}
-		case KxID_REMOVE:
-		{
-			OnRemoveGroup(item);
-			break;
-		}
-		case KxID_CLEAR:
-		{
-			OnClearList();
-			break;
-		}
-	};
-};
-void KPCRGroupsModel::OnGetStringValue(KxDataViewEvent& event)
-{
-	KPPRRequirementsGroup* group = GetDataEntry(GetView()->GetSelection());
-	event.SetString(group ? group->GetID() : KAux::MakeNoneLabel());
-}
-
-bool KPCRGroupsModel::DoTrackID(const wxString& trackedID, const wxString& newID, bool remove) const
-{
-	const wxString trackedFlagName = KPPRRequirementsGroup::GetFlagName(trackedID);
-	const wxString newFlagName = KPPRRequirementsGroup::GetFlagName(newID);
-
-	// Default groups
-	TrackID_ReplaceOrRemove(trackedID, newID, GetProject().GetRequirements().GetDefaultGroup(), remove);
-
-	// Manual components and flags
-	for (auto& step: GetProject().GetComponents().GetSteps())
-	{
-		for (auto& group: step->GetGroups())
-		{
-			for (auto& entry: group->GetEntries())
-			{
-				TrackID_ReplaceOrRemove(trackedID, newID, entry->GetRequirements(), remove);
-
-				// Flags
-				TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, entry->GetConditionalFlags().GetFlags(), remove);
-				for (KPPCCondition& condition: entry->GetTDConditionGroup().GetConditions())
-				{
-					TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);
-				}
-			}
-		}
-	}
-
-	// Conditional steps flags
-	for (auto& step: GetProject().GetComponents().GetConditionalSteps())
-	{
-		for (KPPCCondition& condition : step->GetConditionGroup().GetConditions())
-		{
-			TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);
-		}
-	}
-
-	return true;
-}
-void KPCRGroupsModel::RefreshComboControl()
-{
-	m_ComboView->ComboRefreshLabel();
-	m_ComboView->GetComboControl()->Enable(!IsEmpty());
-}
-
-void KPCRGroupsModel::OnAddGroup(bool useDialog)
-{
-	wxString name;
-	if (useDialog)
-	{
-		KxTextBoxDialog dialog(m_Controller->GetWorkspace(), KxID_NONE, KTr("PackageCreator.NewGroupDialog"));
-		dialog.Bind(KxEVT_STDDIALOG_BUTTON, [this, &dialog](wxNotifyEvent& event)
-		{
-			if (event.GetId() == KxID_OK)
-			{
-				if (m_Requirements->HasSetWithID(dialog.GetValue()))
-				{
-					KPackageCreatorPageBase::WarnIDCollision(dialog.GetDialogMainCtrl());
-					event.Veto();
-				}
-			}
 		});
-
-		if (dialog.ShowModal() == KxID_OK)
+		sizer->Add(m_AddButton, 0, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
+	
+		// Remove button
+		m_RemoveButton = new KxButton(window, KxID_NONE, KTr(KxID_REMOVE));
+		m_RemoveButton->Enable(false);
+		m_RemoveButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 		{
-			name = dialog.GetValue();
-		}
+			OnRemoveGroup(GetView()->GetSelection());
+		});
+		sizer->Add(m_RemoveButton, 0, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 	}
-
-	auto& group = GetDataVector()->emplace_back(new KPPRRequirementsGroup());
-	group->SetID(name);
-
-	KxDataViewItem item = GetItem(GetItemCount() - 1);
-	NotifyAddedItem(item);
-	if (!useDialog)
+	void KPCRGroupsModel::ChangeNotify()
 	{
-		GetView()->EditItem(item, GetView()->GetColumnByID(ColumnID::Name));
+		KPackageCreatorVectorModel::ChangeNotify();
+		RefreshComboControl();
 	}
-}
-void KPCRGroupsModel::OnRemoveGroup(const KxDataViewItem& item)
-{
-	if (KPPRRequirementsGroup* group = GetDataEntry(item))
+	void KPCRGroupsModel::SetProject(KPackageProject& projectData)
 	{
-		KxTaskDialog dialog(m_Controller->GetWorkspace(), KxID_NONE, KTrf("PackageCreator.RemoveGroupDialog", group->GetID()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
-		if (dialog.ShowModal() == KxID_YES)
-		{
-			if (IsEmpty())
-			{
-				m_ComboView->ComboDismiss();
-			}
-
-			TrackRemoveID(group->GetID());
-			RemoveItemAndNotify(*GetDataVector(), item);
-			RefreshComboControl();
-		}
+		m_Requirements = &projectData.GetRequirements();
+	
+		KPackageCreatorVectorModel::SetDataVector(&m_Requirements->GetGroups());
+		SelectItem(GetItemCount() != 0 ? 0 : (size_t)-1);
+		RefreshComboControl();
 	}
-}
-void KPCRGroupsModel::OnClearList()
-{
-	for (size_t i = 0; i < GetItemCount(); i++)
-	{
-		TrackRemoveID(GetDataEntry(i)->GetID());
-	}
-
-	m_ComboView->ComboDismiss();
-	ClearItemsAndNotify(*GetDataVector());
-	RefreshComboControl();
-}
-
-void KPCRGroupsModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* sizer)
-{
-	KPackageCreatorVectorModel::Create(controller, window, sizer);
-
-	m_AddButton = new KxButton(window, KxID_NONE, KTr(KxID_ADD));
-	m_AddButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
-	{
-		OnAddGroup(true);
-	});
-	sizer->Add(m_AddButton, 0, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
-
-	// Remove button
-	m_RemoveButton = new KxButton(window, KxID_NONE, KTr(KxID_REMOVE));
-	m_RemoveButton->Enable(false);
-	m_RemoveButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
-	{
-		OnRemoveGroup(GetView()->GetSelection());
-	});
-	sizer->Add(m_RemoveButton, 0, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
-}
-void KPCRGroupsModel::ChangeNotify()
-{
-	KPackageCreatorVectorModel::ChangeNotify();
-	RefreshComboControl();
-}
-void KPCRGroupsModel::SetProject(KPackageProject& projectData)
-{
-	m_Requirements = &projectData.GetRequirements();
-
-	KPackageCreatorVectorModel::SetDataVector(&m_Requirements->GetGroups());
-	SelectItem(GetItemCount() != 0 ? 0 : (size_t)-1);
-	RefreshComboControl();
 }

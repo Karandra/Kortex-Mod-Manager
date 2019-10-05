@@ -1,53 +1,61 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
 #include "PackageProject/KPackageProjectComponents.h"
-class KPackageCreatorWorkspace;
-class KPackageProjectComponents;
-class KPCCFileDataSelectorModelCB;
-class KPCComponentsModel;
+class KxImageView;
 
-class KPackageCreatorPageComponents: public KPackageCreatorPageBase
+namespace Kortex::PackageDesigner
 {
-	friend class KPackageCreatorWorkspace;
+	class KPackageCreatorWorkspace;
+	class KPackageProjectComponents;
+	class KPCCFileDataSelectorModelCB;
+	class KPCComponentsModel;
+}
 
-	public:
-		static wxString FormatArrayToText(const KxStringVector& array);
-		static wxString ConditionToString(const KPPCCondition& condition, bool isRequired);
-		static wxString ConditionGroupToString(const KPPCConditionGroup& conditionGroup);
+namespace Kortex::PackageDesigner
+{
+	class KPackageCreatorPageComponents: public KPackageCreatorPageBase
+	{
+		friend class KPackageCreatorWorkspace;
 
-	private:
-		//KProgramOptionAI m_MainOptions;
-		//KProgramOptionAI m_ComponentsOptions;
-		KPCComponentsModel* m_ComponentsModel = nullptr;
+		public:
+			static wxString FormatArrayToText(const KxStringVector& array);
+			static wxString ConditionToString(const KPPCCondition& condition, bool isRequired);
+			static wxString ConditionGroupToString(const KPPCConditionGroup& conditionGroup);
 
-		// Misc controls
-		KPCCFileDataSelectorModelCB* m_RequiredFilesModel = nullptr;
-		KxImageView* m_EntryImage = nullptr;
+		private:
+			//KProgramOptionAI m_MainOptions;
+			//KProgramOptionAI m_ComponentsOptions;
 
-	public:
-		KPackageCreatorPageComponents(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller);
-		virtual ~KPackageCreatorPageComponents();
+			wxBoxSizer* m_MainSizer = nullptr;
+			KPCComponentsModel* m_ComponentsModel = nullptr;
 
-	private:
-		virtual bool OnCreateWorkspace() override;
-		KPackageProjectComponents& GetProjectComponents() const;
+			// Misc controls
+			KPCCFileDataSelectorModelCB* m_RequiredFilesModel = nullptr;
+			KxImageView* m_EntryImage = nullptr;
 
-		void CreateComponentsView();
-		void CreateMiscControls();
+		private:
+			KPackageProjectComponents& GetProjectComponents() const;
+			void OnLoadProject(KPackageProjectComponents& projectComponents);
+			
+			void CreateComponentsView();
+			void CreateMiscControls();
 
-	private:
-		virtual bool OnOpenWorkspace() override;
-		virtual bool OnCloseWorkspace() override;
-		virtual void OnLoadProject(KPackageProjectComponents& projectComponents);
+		protected:
+			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
 
-	public:
-		virtual ResourceID GetImageID() const override
-		{
-			return ImageResourceID::Block;
-		}
-		virtual wxString GetID() const override;
-		virtual wxString GetPageName() const override;
-};
+		public:
+			KPackageCreatorPageComponents(KPackageCreatorWorkspace& mainWorkspace, KPackageCreatorController& controller);
+			~KPackageCreatorPageComponents();
+
+		public:
+			ResourceID GetIcon() const override
+			{
+				return ImageResourceID::Block;
+			}
+			wxString GetID() const override;
+			wxString GetPageName() const override;
+	};
+}

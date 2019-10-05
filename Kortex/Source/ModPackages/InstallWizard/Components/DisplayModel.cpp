@@ -3,10 +3,10 @@
 #include <Kortex/PackageManager.hpp>
 #include "DisplayModel.h"
 #include "PackageCreator/KPackageCreatorPageBase.h"
-#include "UI/KMainWindow.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
 
+using namespace Kortex::PackageDesigner;
 namespace
 {
 	enum ColumnRef

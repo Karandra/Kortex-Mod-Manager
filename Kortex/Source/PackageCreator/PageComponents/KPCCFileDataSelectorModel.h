@@ -4,88 +4,99 @@
 #include "PackageProject/KPackageProjectComponents.h"
 #include "PackageProject/KPackageProjectFileData.h"
 #include <KxFramework/KxStdDialog.h>
-
-using KPCCFileDataSelectorDataElement = std::pair<KPPFFileEntry*, bool>;
-using KPCCFileDataSelectorDataArray = std::vector<KPCCFileDataSelectorDataElement>;
-class KPCCFileDataSelectorModel: public KPackageCreatorVectorModel<KPCCFileDataSelectorDataArray>
-{
-	private:
-		KPackageProjectFileData* m_FileData = nullptr;
-		KPCCFileDataSelectorDataArray m_DataVector;
-
-	private:
-		virtual void OnInitControl() override;
-
-		virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
-		virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
-		virtual bool OnInsertItem(KxDataViewItem& currentItem, KxDataViewItem& droppedItem) override
-		{
-			OnInsertItemHelperPrimitive(*GetDataVector(), currentItem, droppedItem);
-			return true;
-		}
-
-	public:
-		KPCCFileDataSelectorDataElement* GetDataEntry(size_t index)
-		{
-			if (index < GetItemCount())
-			{
-				return &GetDataVector()->at(index);
-			}
-			return nullptr;
-		}
-		const KPCCFileDataSelectorDataElement* GetDataEntry(size_t index) const
-		{
-			if (index < GetItemCount())
-			{
-				return &GetDataVector()->at(index);
-			}
-			return nullptr;
-		}
-
-		void SetDataVector();
-		void SetDataVector(const KxStringVector& data, KPackageProjectFileData* fileData);
-		KxStringVector GetSelectedItems() const;
-};
-
-//////////////////////////////////////////////////////////////////////////
 class KxDataViewComboBox;
-class KPCCFileDataSelectorModelCB: public KPCCFileDataSelectorModel
+
+namespace Kortex::PackageDesigner
 {
-	private:
-		KxDataViewComboBox* m_ComboView = nullptr;
-		KxStringVector* m_RequiredFiles = nullptr;
+	using KPCCFileDataSelectorDataElement = std::pair<KPPFFileEntry*, bool>;
+	using KPCCFileDataSelectorDataArray = std::vector<KPCCFileDataSelectorDataElement>;
+}
 
-	private:
-		virtual KxDataViewCtrl* OnCreateDataView(wxWindow* window) override;
-		virtual wxWindow* OnGetDataViewWindow() override;
-		virtual void OnSetDataVector() override;
-		void OnGetStringValue(KxDataViewEvent& event);
-
-	public:
-		void SetDataVector();
-		void SetDataVector(KxStringVector& data, KPackageProjectFileData* fileData);
-};
-
-//////////////////////////////////////////////////////////////////////////
-class KPCCFileDataSelectorModelDialog: public KxStdDialog, public KPCCFileDataSelectorModel
+namespace Kortex::PackageDesigner
 {
-	private:
-		wxWindow* m_ViewPane = nullptr;
+	class KPCCFileDataSelectorModel: public KPackageCreatorVectorModel<KPCCFileDataSelectorDataArray>
+	{
+		private:
+			KPackageProjectFileData* m_FileData = nullptr;
+			KPCCFileDataSelectorDataArray m_DataVector;
+	
+		private:
+			void OnInitControl() override;
+	
+			void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
+			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
+			bool OnInsertItem(KxDataViewItem& currentItem, KxDataViewItem& droppedItem) override
+			{
+				OnInsertItemHelperPrimitive(*GetDataVector(), currentItem, droppedItem);
+				return true;
+			}
+	
+		public:
+			KPCCFileDataSelectorDataElement* GetDataEntry(size_t index)
+			{
+				if (index < GetItemCount())
+				{
+					return &GetDataVector()->at(index);
+				}
+				return nullptr;
+			}
+			const KPCCFileDataSelectorDataElement* GetDataEntry(size_t index) const
+			{
+				if (index < GetItemCount())
+				{
+					return &GetDataVector()->at(index);
+				}
+				return nullptr;
+			}
+	
+			void SetDataVector();
+			void SetDataVector(const KxStringVector& data, KPackageProjectFileData* fileData);
+			KxStringVector GetSelectedItems() const;
+	};
+}
 
-		//KProgramOptionAI m_WindowOptions;
-		//KProgramOptionAI m_ViewOptions;
+namespace Kortex::PackageDesigner
+{
+	class KPCCFileDataSelectorModelCB: public KPCCFileDataSelectorModel
+	{
+		private:
+			KxDataViewComboBox* m_ComboView = nullptr;
+			KxStringVector* m_RequiredFiles = nullptr;
+	
+		private:
+			KxDataViewCtrl* OnCreateDataView(wxWindow* window) override;
+			wxWindow* OnGetDataViewWindow() override;
+			void OnSetDataVector() override;
+			void OnGetStringValue(KxDataViewEvent& event);
+	
+		public:
+			void SetDataVector();
+			void SetDataVector(KxStringVector& data, KPackageProjectFileData* fileData);
+	};
+}
 
-	private:
-		wxWindow* GetDialogMainCtrl() const override
-		{
-			return m_ViewPane;
-		}
-		wxWindow* GetDialogFocusCtrl() const override
-		{
-			return GetView();
-		}
-
-	public:
-		KPCCFileDataSelectorModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller);
-		virtual ~KPCCFileDataSelectorModelDialog();
-};
+namespace Kortex::PackageDesigner
+{
+	class KPCCFileDataSelectorModelDialog: public KxStdDialog, public KPCCFileDataSelectorModel
+	{
+		private:
+			wxWindow* m_ViewPane = nullptr;
+	
+			//KProgramOptionAI m_WindowOptions;
+			//KProgramOptionAI m_ViewOptions;
+	
+		private:
+			wxWindow* GetDialogMainCtrl() const override
+			{
+				return m_ViewPane;
+			}
+			wxWindow* GetDialogFocusCtrl() const override
+			{
+				return GetView();
+			}
+	
+		public:
+			KPCCFileDataSelectorModelDialog(wxWindow* parent, const wxString& caption, KPackageCreatorController* controller);
+			~KPCCFileDataSelectorModelDialog();
+	};
+}

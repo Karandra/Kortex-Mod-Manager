@@ -1,79 +1,78 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspaceController.h"
+#include "Application/IWorkspaceDocument.h"
 #include "PackageProject/KPackageProject.h"
-class KPackageCreatorWorkspace;
-class KPackageManager;
-class KPackageProjectSerializer;
-enum KPPPackageType;
 
 namespace Kortex
 {
 	class ModPackage;
 	class IGameMod;
 }
-
-class KPackageCreatorController: public KWorkspaceController
+namespace Kortex::PackageDesigner
 {
-	public:
-		static wxString GetNewProjectName();
+	class KPackageCreatorWorkspace;
+	class KPackageProjectSerializer;
+}
 
-	private:
-		KPackageCreatorWorkspace* m_Workspace = nullptr;
-		std::unique_ptr<KPackageProject> m_Project = nullptr;
-		wxString m_ProjectFile;
-		bool m_HasChanges = false;
+namespace Kortex::PackageDesigner
+{
+	class KPackageCreatorController: public IWorkspaceDocument
+	{
+		public:
+			static wxString GetNewProjectName();
 
-	public:
-		KPackageCreatorController(KPackageCreatorWorkspace* workspace);
-		virtual ~KPackageCreatorController();
+		private:
+			KPackageCreatorWorkspace& m_Workspace;
+			std::unique_ptr<KPackageProject> m_Project = nullptr;
+			wxString m_ProjectFile;
+			bool m_HasChanges = false;
 
-	protected:
-		virtual wxString GetSaveConfirmationCaption() const override;
-		virtual wxString GetSaveConfirmationMessage() const override;
+		protected:
+			wxString GetSaveConfirmationCaption() const override;
+			wxString GetSaveConfirmationMessage() const override;
 
-	public:
-		bool IsOK() const override;
-		KPackageManager* GetManager() const
-		{
-			return nullptr;
-		}
-		KPackageProject* GetProject() const
-		{
-			return m_Project.get();
-		}
-		const wxString& GetProjectFilePath() const
-		{
-			return m_ProjectFile;
-		}
-		wxString GetProjectFileName() const;
-		wxString GetProjectName() const;
-		bool HasProjectFilePath() const
-		{
-			return !m_ProjectFile.IsEmpty();
-		}
+		public:
+			KPackageCreatorController(KPackageCreatorWorkspace& workspace)
+				:m_Workspace(workspace)
+			{
+			}
 
-		void ChangeNotify();
-		bool HasUnsavedChanges() const override
-		{
-			return m_HasChanges;
-		}
-		void SaveChanges() override;
-		void DiscardChanges() override;
+		public:
+			KPackageProject* GetProject() const
+			{
+				return m_Project.get();
+			}
+			const wxString& GetProjectFilePath() const
+			{
+				return m_ProjectFile;
+			}
+			wxString GetProjectFileName() const;
+			wxString GetProjectName() const;
+			bool HasProjectFilePath() const
+			{
+				return !m_ProjectFile.IsEmpty();
+			}
 
-		void NewProject();
-		void OpenProject(const wxString& filePath);
-		void SaveProject();
-		void SaveProject(const wxString& filePath);
-		void ImportProjectFromPackage(const wxString& packagePath);
-		void CreateProjectFromModEntry(const Kortex::IGameMod& modEntry);
-		void ImportProject(KPackageProjectSerializer& serializer);
-		void ExportProject(KPackageProjectSerializer& serializer);
-		void BuildProject(bool buildPreview = false);
+			void ChangeNotify();
+			bool HasUnsavedChanges() const override
+			{
+				return m_HasChanges;
+			}
+			void SaveChanges() override;
+			void DiscardChanges() override;
 
-		virtual void Reload() override;
-		virtual void LoadView() override;
+			void NewProject();
+			void OpenProject(const wxString& filePath);
+			void SaveProject();
+			void SaveProject(const wxString& filePath);
+			void ImportProjectFromPackage(const wxString& packagePath);
+			void CreateProjectFromModEntry(const Kortex::IGameMod& modEntry);
+			void ImportProject(KPackageProjectSerializer& serializer);
+			void ExportProject(KPackageProjectSerializer& serializer);
+			void BuildProject(bool buildPreview = false);
 
-	private:
-		virtual void ResetView() override;
-};
+			void Reload();
+			void LoadView();
+			void ResetView();
+	};
+}

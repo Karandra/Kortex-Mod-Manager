@@ -29,7 +29,9 @@ namespace Kortex
 
 		private:
 			static const FileTreeNode* NavigateToElement(const FileTreeNode& rootNode, const wxString& relativePath, NavigateTo type);
-			template<class T> static T* FindRootNode(T* thisNode)
+			
+			template<class T>
+			static T* FindRootNode(T* thisNode)
 			{
 				T* node = thisNode;
 				while (node && !node->IsRootNode() && node->IsOK())
@@ -38,7 +40,9 @@ namespace Kortex
 				}
 				return node;
 			}
-			template<class NodesVector, class NodesRefVector> static void RepackToRefVector(NodesVector& nodes, NodesRefVector& nodeRefs)
+			
+			template<class NodesVector, class NodesRefVector>
+			static void RepackToRefVector(NodesVector& nodes, NodesRefVector& nodeRefs)
 			{
 				nodeRefs.reserve(nodes.size());
 				for (auto& node: nodes)

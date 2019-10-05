@@ -82,7 +82,7 @@ namespace Kortex::ModManager
 		}
 
 		// Convert BB code
-		path = KPackageProjectSerializer::ConvertBBCode(path);
+		path = PackageDesigner::KPackageProjectSerializer::ConvertBBCode(path);
 		return path;
 	}
 
@@ -218,7 +218,7 @@ namespace Kortex::ModManager
 	}
 	void ModImporterMO::CopySaves(KOperationWithProgressDialogBase* context)
 	{
-		if (const ISaveManager* saveManager = ISaveManager::GetInstance())
+		if (ISaveManager* saveManager = ISaveManager::GetInstance())
 		{
 			context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), saveManager->GetManagerInfo().GetName()));
 
@@ -226,7 +226,7 @@ namespace Kortex::ModManager
 			context->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
 			source.CopyFolder(KxFile::NullFilter, saveManager->GetConfig().GetLocation(), true, true);
 
-			saveManager->ScheduleReloadWorkspace();
+			saveManager->ScheduleWorkspacesReload();
 		}
 	}
 	void ModImporterMO::CopyMods(KOperationWithProgressDialogBase* context)
@@ -372,7 +372,7 @@ namespace Kortex::ModManager
 			profile->SaveConfig();
 
 			pluginManager->Load();
-			pluginManager->ScheduleReloadWorkspace();
+			pluginManager->ScheduleWorkspacesReload();
 		}
 	}
 	void ModImporterMO::CopyGameConfig(KOperationWithProgressDialogBase* context)
@@ -397,7 +397,7 @@ namespace Kortex::ModManager
 				return true;
 			});
 			configManager->Load();
-			configManager->ScheduleReloadWorkspace();
+			configManager->ScheduleWorkspacesReload();
 		}
 	}
 	void ModImporterMO::CopyDownloads(KOperationWithProgressDialogBase* context)

@@ -19,7 +19,7 @@ namespace Kortex::ModManager
 		Manager,
 	};
 
-	class DisplayModel: public RTTI::IExtendInterface<DisplayModel, KxDataView2::Model>
+	class DisplayModel: public KxRTTI::ExtendInterface<DisplayModel, KxDataView2::Model>
 	{
 		friend class Workspace;
 		friend class DisplayModelModNode;

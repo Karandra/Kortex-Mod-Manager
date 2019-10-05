@@ -3,7 +3,7 @@
 #include "ModPackages/IPackageManager.h"
 #include "IWithScriptExtender.h"
 
-namespace Kortex::PackageManager
+namespace Kortex::PackageDesigner
 {
 	class WithScriptExtender: public IWithScriptExtender
 	{
@@ -22,7 +22,7 @@ namespace Kortex::PackageManager
 	};
 }
 
-namespace Kortex::PackageManager
+namespace Kortex::PackageDesigner
 {
 	class DefaultPackageManager: public IPackageManager
 	{

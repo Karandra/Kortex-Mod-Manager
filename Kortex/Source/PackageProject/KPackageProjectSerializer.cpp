@@ -8,80 +8,83 @@
 #include "Utility/KAux.h"
 #include <KxFramework/KxTextFile.h>
 
-Kortex::ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
+namespace Kortex::PackageDesigner
 {
-	using namespace Kortex::NetworkManager;
-
-	long long id = -1;
-	Kortex::IModNetwork* modNetwork = nullptr;
-
-	// https://regex101.com
-	wxString regEx = wxString::FromUTF8Unchecked(u8R"((?:http:\/\/)?(?:https:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)(?:.*\/)(?:[^\d]+)(\d+))");
-	wxRegEx reURL(regEx, wxRE_DEFAULT|wxRE_ADVANCED|wxRE_ICASE|wxRE_NEWLINE);
-	if (reURL.Matches(url))
+	ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
 	{
-		// Site name
-		//wxString siteName = reURL.GetMatch(url, 1).MakeLower();
-		wxString siteName = KAux::ExtractDomainName(url);
-		if (siteName == "tesall.ru")
+		using namespace Kortex::NetworkManager;
+	
+		long long id = -1;
+		Kortex::IModNetwork* modNetwork = nullptr;
+	
+		// https://regex101.com
+		wxString regEx = wxString::FromUTF8Unchecked(u8R"((?:http:\/\/)?(?:https:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)(?:.*\/)(?:[^\d]+)(\d+))");
+		wxRegEx reURL(regEx, wxRE_DEFAULT|wxRE_ADVANCED|wxRE_ICASE|wxRE_NEWLINE);
+		if (reURL.Matches(url))
 		{
-			modNetwork = Kortex::NetworkManager::TESALLModNetwork::GetInstance();
+			// Site name
+			//wxString siteName = reURL.GetMatch(url, 1).MakeLower();
+			wxString siteName = KAux::ExtractDomainName(url);
+			if (siteName == "tesall.ru")
+			{
+				modNetwork = Kortex::NetworkManager::TESALLModNetwork::GetInstance();
+			}
+			else if (siteName == "nexusmods.com" || siteName.AfterFirst('.') == "nexusmods.com" || siteName.Contains("nexus"))
+			{
+				modNetwork = Kortex::NetworkManager::NexusModNetwork::GetInstance();
+			}
+			else if (siteName == "loverslab.com")
+			{
+				modNetwork = Kortex::NetworkManager::LoversLabModNetwork::GetInstance();
+			}
+			KxUtility::SetIfNotNull(domainNameOut, siteName);
+	
+			// ID
+			reURL.GetMatch(url, 2).ToLongLong(&id);
 		}
-		else if (siteName == "nexusmods.com" || siteName.AfterFirst('.') == "nexusmods.com" || siteName.Contains("nexus"))
+	
+		if (modNetwork)
 		{
-			modNetwork = Kortex::NetworkManager::NexusModNetwork::GetInstance();
+			return Kortex::ModSourceItem(modNetwork->GetName(), Kortex::ModID(id));
 		}
-		else if (siteName == "loverslab.com")
-		{
-			modNetwork = Kortex::NetworkManager::LoversLabModNetwork::GetInstance();
-		}
-		KxUtility::SetIfNotNull(domainNameOut, siteName);
-
-		// ID
-		reURL.GetMatch(url, 2).ToLongLong(&id);
+		return Kortex::ModSourceItem();
 	}
-
-	if (modNetwork)
+	wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
 	{
-		return Kortex::ModSourceItem(modNetwork->GetName(), Kortex::ModID(id));
+		wxString copy = bbSource;
+		Kortex::NetworkManager::NexusModNetwork::GetInstance()->ConvertDescriptionText(copy);
+		return copy;
 	}
-	return Kortex::ModSourceItem();
-}
-wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
-{
-	wxString copy = bbSource;
-	Kortex::NetworkManager::NexusModNetwork::GetInstance()->ConvertDescriptionText(copy);
-	return copy;
-}
-wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, KPPContentType type) const
-{
-	switch (type)
+	wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, KPPContentType type) const
 	{
-		case KPP_CONTENT_IMAGES:
+		switch (type)
 		{
-			wxString name = pathName.AfterLast('\\');
-			return m_PackageDataRoot + "\\Images\\" + name;
-		}
-		case KPP_CONTENT_DOCUMENTS:
-		{
-			wxString name = pathName.AfterLast('\\');
-			return m_PackageDataRoot + "\\Documents\\" + name;
-		}
-		case KPP_CONTENT_FILEDATA:
-		{
-			return pathName;
-		}
-	};
-	return wxEmptyString;
-}
-bool KPackageProjectSerializer::CheckTag(const wxString& tagName) const
-{
-	return Kortex::IModTagManager::GetInstance()->FindTagByName(tagName) != nullptr;
-}
-
-KPackageProjectSerializer::KPackageProjectSerializer()
-{
-}
-KPackageProjectSerializer::~KPackageProjectSerializer()
-{
+			case KPP_CONTENT_IMAGES:
+			{
+				wxString name = pathName.AfterLast('\\');
+				return m_PackageDataRoot + "\\Images\\" + name;
+			}
+			case KPP_CONTENT_DOCUMENTS:
+			{
+				wxString name = pathName.AfterLast('\\');
+				return m_PackageDataRoot + "\\Documents\\" + name;
+			}
+			case KPP_CONTENT_FILEDATA:
+			{
+				return pathName;
+			}
+		};
+		return wxEmptyString;
+	}
+	bool KPackageProjectSerializer::CheckTag(const wxString& tagName) const
+	{
+		return Kortex::IModTagManager::GetInstance()->FindTagByName(tagName) != nullptr;
+	}
+	
+	KPackageProjectSerializer::KPackageProjectSerializer()
+	{
+	}
+	KPackageProjectSerializer::~KPackageProjectSerializer()
+	{
+	}
 }

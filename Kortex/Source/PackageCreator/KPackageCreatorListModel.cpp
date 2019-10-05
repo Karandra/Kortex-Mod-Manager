@@ -6,124 +6,127 @@
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxString.h>
 
-KxMenu* KPackageCreatorListModel::CreateAllItemsMenu(KxMenu& menu)
+namespace Kortex::PackageDesigner
 {
-	KxMenu* subMenu = new KxMenu();
-	KxMenuItem* item = menu.Add(subMenu, KTr("Generic.All"));
-	item->Enable(!IsEmpty());
-
-	subMenu->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+	KxMenu* KPackageCreatorListModel::CreateAllItemsMenu(KxMenu& menu)
 	{
-		if (void* clientData = event.GetItem()->GetClientData())
+		KxMenu* subMenu = new KxMenu();
+		KxMenuItem* item = menu.Add(subMenu, KTr("Generic.All"));
+		item->Enable(!IsEmpty());
+
+		subMenu->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{
-			OnAllItemsMenuSelect(static_cast<KxDataViewColumn*>(clientData));
-		}
-		event.Skip();
-	});
-	return subMenu;
-}
-KxMenuItem* KPackageCreatorListModel::CreateAllItemsMenuEntry(KxMenu* menu, int columnID)
-{
-	KxDataViewColumn* column = GetView()->GetColumn(columnID);
-	KxMenuItem* item = menu->Add(new KxMenuItem(column->GetTitle()));
-	item->SetClientData(column);
-
-	return item;
-}
-
-bool KPackageCreatorListModel::OnDragItems(KxDataViewEventDND& event)
-{
-	if (GetView()->GetSelectedItemsCount() == 1)
-	{
-		SetDragDropDataObject(new KPackageCreatorListModelDataObject(GetView()->GetSelection()));
-		return true;
-	}
-	return false;
-}
-bool KPackageCreatorListModel::OnDropItems(KxDataViewEventDND& event)
-{
-	if (HasDragDropDataObject())
-	{
-		KxDataViewItem currentItem = event.GetItem();
-		KxDataViewItem droppedItem = GetDragDropDataObject()->GetItem();
-		if (currentItem.IsOK() && droppedItem.IsOK() && currentItem != droppedItem)
-		{
-			if (OnInsertItem(currentItem, droppedItem))
+			if (void* clientData = event.GetItem()->GetClientData())
 			{
-				NotifyChangedItem(currentItem);
-				NotifyChangedItem(droppedItem);
+				OnAllItemsMenuSelect(static_cast<KxDataViewColumn*>(clientData));
+			}
+			event.Skip();
+		});
+		return subMenu;
+	}
+	KxMenuItem* KPackageCreatorListModel::CreateAllItemsMenuEntry(KxMenu* menu, int columnID)
+	{
+		KxDataViewColumn* column = GetView()->GetColumn(columnID);
+		KxMenuItem* item = menu->Add(new KxMenuItem(column->GetTitle()));
+		item->SetClientData(column);
 
-				if (GetView()->GetSelection() != currentItem)
+		return item;
+	}
+
+	bool KPackageCreatorListModel::OnDragItems(KxDataViewEventDND& event)
+	{
+		if (GetView()->GetSelectedItemsCount() == 1)
+		{
+			SetDragDropDataObject(new KPackageCreatorListModelDataObject(GetView()->GetSelection()));
+			return true;
+		}
+		return false;
+	}
+	bool KPackageCreatorListModel::OnDropItems(KxDataViewEventDND& event)
+	{
+		if (HasDragDropDataObject())
+		{
+			KxDataViewItem currentItem = event.GetItem();
+			KxDataViewItem droppedItem = GetDragDropDataObject()->GetItem();
+			if (currentItem.IsOK() && droppedItem.IsOK() && currentItem != droppedItem)
+			{
+				if (OnInsertItem(currentItem, droppedItem))
 				{
-					SelectItem(currentItem);
+					NotifyChangedItem(currentItem);
+					NotifyChangedItem(droppedItem);
+
+					if (GetView()->GetSelection() != currentItem)
+					{
+						SelectItem(currentItem);
+					}
+					return true;
 				}
-				return true;
 			}
 		}
+		return false;
 	}
-	return false;
-}
 
-KPackageCreatorListModel::KPackageCreatorListModel()
-{
-}
-void KPackageCreatorListModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* sizer)
-{
-	m_Controller = controller;
-
-	SetDataViewFlags(GetDataViewFlags()|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES);
-	KDataViewListModel::Create(window, sizer);
-	EnableDragAndDrop();
-}
-KPackageCreatorListModel::~KPackageCreatorListModel()
-{
-}
-
-KPackageProject& KPackageCreatorListModel::GetProject() const
-{
-	return *m_Controller->GetProject();
-}
-
-void KPackageCreatorListModel::ChangeNotify()
-{
-	m_Controller->ChangeNotify();
-}
-void KPackageCreatorListModel::NotifyChangedItem(const KxDataViewItem& item)
-{
-	ItemChanged(item);
-	ChangeNotify();
-}
-void KPackageCreatorListModel::NotifyAddedItem(const KxDataViewItem& item)
-{
-	if (item.IsOK())
+	KPackageCreatorListModel::KPackageCreatorListModel()
 	{
-		ItemAdded(KxDataViewItem(), item);
-		SelectItem(item);
+	}
+	void KPackageCreatorListModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* sizer)
+	{
+		m_Controller = controller;
+
+		SetDataViewFlags(GetDataViewFlags()|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES);
+		KDataViewListModel::Create(window, sizer);
+		EnableDragAndDrop();
+	}
+	KPackageCreatorListModel::~KPackageCreatorListModel()
+	{
+	}
+
+	KPackageProject& KPackageCreatorListModel::GetProject() const
+	{
+		return *m_Controller->GetProject();
+	}
+
+	void KPackageCreatorListModel::ChangeNotify()
+	{
+		m_Controller->ChangeNotify();
+	}
+	void KPackageCreatorListModel::NotifyChangedItem(const KxDataViewItem& item)
+	{
+		ItemChanged(item);
 		ChangeNotify();
 	}
-}
-void KPackageCreatorListModel::NotifyRemovedItem(const KxDataViewItem& item)
-{
-	if (item.IsOK())
+	void KPackageCreatorListModel::NotifyAddedItem(const KxDataViewItem& item)
 	{
-		size_t index = GetRow(item);
+		if (item.IsOK())
+		{
+			ItemAdded(KxDataViewItem(), item);
+			SelectItem(item);
+			ChangeNotify();
+		}
+	}
+	void KPackageCreatorListModel::NotifyRemovedItem(const KxDataViewItem& item)
+	{
+		if (item.IsOK())
+		{
+			size_t index = GetRow(item);
 
+			RefreshItems();
+			SelectItem(index == 0 ? 0 : index - 1);
+			ChangeNotify();
+		}
+	}
+	void KPackageCreatorListModel::NotifyAllItemsChanged()
+	{
+		for (size_t i = 0; i < GetItemCount(); i++)
+		{
+			ItemChanged(GetItem(i));
+		}
+		ChangeNotify();
+	}
+	void KPackageCreatorListModel::NotifyCleared()
+	{
 		RefreshItems();
-		SelectItem(index == 0 ? 0 : index - 1);
 		ChangeNotify();
+		SelectItem(KxDataViewItem());
 	}
-}
-void KPackageCreatorListModel::NotifyAllItemsChanged()
-{
-	for (size_t i = 0; i < GetItemCount(); i++)
-	{
-		ItemChanged(GetItem(i));
-	}
-	ChangeNotify();
-}
-void KPackageCreatorListModel::NotifyCleared()
-{
-	RefreshItems();
-	ChangeNotify();
-	SelectItem(KxDataViewItem());
 }

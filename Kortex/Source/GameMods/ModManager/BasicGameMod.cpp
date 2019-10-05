@@ -200,9 +200,9 @@ namespace Kortex::ModManager
 
 		return LoadUsingSignature(m_Signature);
 	}
-	bool BasicGameMod::CreateFromProject(const KPackageProject& config)
+	bool BasicGameMod::CreateFromProject(const PackageDesigner::KPackageProject& config)
 	{
-		const KPackageProjectInfo& info = config.GetInfo();
+		const PackageDesigner::KPackageProjectInfo& info = config.GetInfo();
 
 		SetID(config.GetModID());
 		m_Name = config.GetModName();

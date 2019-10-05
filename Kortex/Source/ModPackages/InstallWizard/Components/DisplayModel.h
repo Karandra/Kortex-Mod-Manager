@@ -10,12 +10,12 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 	class DisplayModel: public KxDataViewTreeModelEx<KxDataViewModel>
 	{
 		private:
-			const KPackageProjectComponents* m_ComponentsInfo = nullptr;
-			const KPPCStep* m_Step = nullptr;
+			const PackageDesigner::KPackageProjectComponents* m_ComponentsInfo = nullptr;
+			const PackageDesigner::KPPCStep* m_Step = nullptr;
 			DisplayModelNode::Vector m_DataVector;
-			KPPCEntry::RefVector m_CheckedEntries;
+			PackageDesigner::KPPCEntry::RefVector m_CheckedEntries;
 
-			const KPPCEntry* m_HotItem = nullptr;
+			const PackageDesigner::KPPCEntry* m_HotItem = nullptr;
 
 		private:
 			void OnInitControl() override;
@@ -30,16 +30,16 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 			bool IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
 
 		private:
-			wxBitmap GetImageByTypeDescriptor(KPPCTypeDescriptor type) const;
-			wxString GetMessageTypeDescriptor(KPPCTypeDescriptor type) const;
-			KxDataViewBitmapTextToggleValue::ToggleType GetToggleType(KPPCSelectionMode mode) const;
-			const wxString& GetSelectionModeString(const KPPCGroup& group) const;
+			wxBitmap GetImageByTypeDescriptor(PackageDesigner::KPPCTypeDescriptor type) const;
+			wxString GetMessageTypeDescriptor(PackageDesigner::KPPCTypeDescriptor type) const;
+			KxDataViewBitmapTextToggleValue::ToggleType GetToggleType(PackageDesigner::KPPCSelectionMode mode) const;
+			const wxString& GetSelectionModeString(const PackageDesigner::KPPCGroup& group) const;
 			DisplayModelNode::RefVector GetGroupNodes(const DisplayModelNode* groupNode);
 			bool NodeChanged(const DisplayModelNode* node)
 			{
 				return ItemChanged(MakeItem(node));
 			}
-			bool IsEntryShouldBeChecked(const KPPCEntry* entry) const;
+			bool IsEntryShouldBeChecked(const PackageDesigner::KPPCEntry* entry) const;
 		
 			void OnActivateItem(KxDataViewEvent& event);
 			void OnHotTrackItem(KxDataViewEvent& event);
@@ -50,12 +50,12 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		public:
 			size_t GetItemsCount() const;
 			void SetDataVector();
-			void SetDataVector(const KPackageProjectComponents* compInfo, const KPPCStep* step, const KPPCEntry::RefVector& checkedEntries);
+			void SetDataVector(const PackageDesigner::KPackageProjectComponents* compInfo, const PackageDesigner::KPPCStep* step, const PackageDesigner::KPPCEntry::RefVector& checkedEntries);
 			void RefreshItems() override;
-			bool OnLeaveStep(KPPCEntry::RefVector& checkedEntries);
+			bool OnLeaveStep(PackageDesigner::KPPCEntry::RefVector& checkedEntries);
 
-			const KPPCEntry* GetSelectedEntry() const;
-			const KPPCEntry* GetHotTrackedEntry() const
+			const PackageDesigner::KPPCEntry* GetSelectedEntry() const;
+			const PackageDesigner::KPPCEntry* GetHotTrackedEntry() const
 			{
 				return m_HotItem;
 			}
@@ -66,6 +66,6 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 				return MakeItem(&node);
 			}
 			DisplayModelNode* GetNode(const KxDataViewItem& item) const;
-			KPPCEntry::RefVector GetCheckedEntries() const;
+			PackageDesigner::KPPCEntry::RefVector GetCheckedEntries() const;
 	};
 }

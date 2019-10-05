@@ -6,221 +6,250 @@
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 
-namespace OperatorConst
+namespace 
 {
-	constexpr const auto NONE = wxS("");
-	constexpr const auto EQ = wxS("==");
-	constexpr const auto NOT_EQ = wxS("!=");
-	constexpr const auto LT = wxS("<");
-	constexpr const auto LTEQ = wxS("<=");
-	constexpr const auto GT = wxS(">");
-	constexpr const auto GTEQ = wxS(">=");
-	constexpr const auto AND = wxS("&&");
-	constexpr const auto OR = wxS("||");
-
-	constexpr const auto NONE_STRING = wxS("");
-	constexpr const auto EQ_STRING = wxS("EQ");
-	constexpr const auto NOT_EQ_STRING = wxS("NOTEQ");
-	constexpr const auto LT_STRING = wxS("LT");
-	constexpr const auto LTEQ_STRING = wxS("LTEQ");
-	constexpr const auto GT_STRING = wxS("GT");
-	constexpr const auto GTEQ_STRING = wxS("GTEQ");
-	constexpr const auto AND_STRING = wxS("AND");
-	constexpr const auto OR_STRING = wxS("OR");
-}
-namespace Util
-{
-	KxStringVector CreateOperatorList(const std::initializer_list<KPPOperator>& operators, bool names)
+	namespace OperatorConst
 	{
-		KxStringVector list;
-		list.reserve(operators.size());
-
-		for (KPPOperator value: operators)
+		constexpr auto NONE = wxS("");
+		constexpr auto EQ = wxS("==");
+		constexpr auto NOT_EQ = wxS("!=");
+		constexpr auto LT = wxS("<");
+		constexpr auto LTEQ = wxS("<=");
+		constexpr auto GT = wxS(">");
+		constexpr auto GTEQ = wxS(">=");
+		constexpr auto AND = wxS("&&");
+		constexpr auto OR = wxS("||");
+	
+		constexpr auto NONE_STRING = wxS("");
+		constexpr auto EQ_STRING = wxS("EQ");
+		constexpr auto NOT_EQ_STRING = wxS("NOTEQ");
+		constexpr auto LT_STRING = wxS("LT");
+		constexpr auto LTEQ_STRING = wxS("LTEQ");
+		constexpr auto GT_STRING = wxS("GT");
+		constexpr auto GTEQ_STRING = wxS("GTEQ");
+		constexpr auto AND_STRING = wxS("AND");
+		constexpr auto OR_STRING = wxS("OR");
+	}
+	namespace Util
+	{
+		KxStringVector CreateOperatorList(const std::initializer_list<Kortex::PackageDesigner::KPPOperator>& operators, bool names)
 		{
-			list.push_back(names ? KPackageProject::OperatorToString(value) : KPackageProject::OperatorToSymbolicName(value));
+			using namespace Kortex::PackageDesigner;
+
+			KxStringVector list;
+			list.reserve(operators.size());
+	
+			for (KPPOperator value: operators)
+			{
+				list.push_back(names ? KPackageProject::OperatorToString(value) : KPackageProject::OperatorToSymbolicName(value));
+			}
+			return list;
 		}
-		return list;
 	}
 }
 
-void KPackageProjectConditionChecker::operator()(bool value, KPPOperator operatorType)
+namespace Kortex::PackageDesigner
 {
-	if (m_IsFirstElement)
+	void KPackageProjectConditionChecker::operator()(bool value, KPPOperator operatorType)
 	{
-		m_Result = value;
-		m_IsFirstElement = false;
-	}
-	else
-	{
-		if (operatorType == KPP_OPERATOR_OR)
+		if (m_IsFirstElement)
 		{
-			m_Result = value || m_Result;
+			m_Result = value;
+			m_IsFirstElement = false;
 		}
 		else
 		{
-			m_Result = value && m_Result;
+			if (operatorType == KPP_OPERATOR_OR)
+			{
+				m_Result = value || m_Result;
+			}
+			else
+			{
+				m_Result = value && m_Result;
+			}
 		}
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-wxString KPackageProject::OperatorToSymbolicName(KPPOperator operatorType)
+namespace Kortex::PackageDesigner
 {
-	switch (operatorType)
+	wxString KPackageProject::OperatorToSymbolicName(KPPOperator operatorType)
 	{
-		case KPP_OPERATOR_EQ:
+		switch (operatorType)
 		{
-			return OperatorConst::EQ;
-		}
-		case KPP_OPERATOR_NOT_EQ:
-		{
-			return OperatorConst::NOT_EQ;
-		}
-		case KPP_OPERATOR_LT:
-		{
-			return OperatorConst::LT;
-		}
-		case KPP_OPERATOR_LTEQ:
-		{
-			return OperatorConst::LTEQ;
-		}
-		case KPP_OPERATOR_GT:
-		{
-			return OperatorConst::GT;
-		}
-		case KPP_OPERATOR_GTEQ:
-		{
-			return OperatorConst::GTEQ;
-		}
-		case KPP_OPERATOR_AND:
-		{
-			return OperatorConst::AND;
-		}
-		case KPP_OPERATOR_OR:
-		{
-			return OperatorConst::OR;
-		}
-	};
-	return OperatorConst::NONE;
-}
-wxString KPackageProject::OperatorToString(KPPOperator operatorType)
-{
-	switch (operatorType)
-	{
-		case KPP_OPERATOR_EQ:
-		{
-			return OperatorConst::EQ_STRING;
-		}
-		case KPP_OPERATOR_NOT_EQ:
-		{
-			return OperatorConst::NOT_EQ_STRING;
-		}
-		case KPP_OPERATOR_LT:
-		{
-			return OperatorConst::LT_STRING;
-		}
-		case KPP_OPERATOR_LTEQ:
-		{
-			return OperatorConst::LTEQ_STRING;
-		}
-		case KPP_OPERATOR_GT:
-		{
-			return OperatorConst::GT_STRING;
-		}
-		case KPP_OPERATOR_GTEQ:
-		{
-			return OperatorConst::GTEQ_STRING;
-		}
-		case KPP_OPERATOR_AND:
-		{
-			return OperatorConst::AND_STRING;
-		}
-		case KPP_OPERATOR_OR:
-		{
-			return OperatorConst::OR_STRING;
-		}
-	};
-	return OperatorConst::NONE_STRING;
-}
-KPPOperator KPackageProject::StringToOperator(const wxString& name, bool allowNone, KPPOperator default)
-{
-	if (name == OperatorConst::EQ_STRING)
-	{
-		return KPP_OPERATOR_EQ;
+			case KPP_OPERATOR_EQ:
+			{
+				return OperatorConst::EQ;
+			}
+			case KPP_OPERATOR_NOT_EQ:
+			{
+				return OperatorConst::NOT_EQ;
+			}
+			case KPP_OPERATOR_LT:
+			{
+				return OperatorConst::LT;
+			}
+			case KPP_OPERATOR_LTEQ:
+			{
+				return OperatorConst::LTEQ;
+			}
+			case KPP_OPERATOR_GT:
+			{
+				return OperatorConst::GT;
+			}
+			case KPP_OPERATOR_GTEQ:
+			{
+				return OperatorConst::GTEQ;
+			}
+			case KPP_OPERATOR_AND:
+			{
+				return OperatorConst::AND;
+			}
+			case KPP_OPERATOR_OR:
+			{
+				return OperatorConst::OR;
+			}
+		};
+		return OperatorConst::NONE;
 	}
-	if (name == OperatorConst::NOT_EQ_STRING)
+	wxString KPackageProject::OperatorToString(KPPOperator operatorType)
 	{
-		return KPP_OPERATOR_NOT_EQ;
+		switch (operatorType)
+		{
+			case KPP_OPERATOR_EQ:
+			{
+				return OperatorConst::EQ_STRING;
+			}
+			case KPP_OPERATOR_NOT_EQ:
+			{
+				return OperatorConst::NOT_EQ_STRING;
+			}
+			case KPP_OPERATOR_LT:
+			{
+				return OperatorConst::LT_STRING;
+			}
+			case KPP_OPERATOR_LTEQ:
+			{
+				return OperatorConst::LTEQ_STRING;
+			}
+			case KPP_OPERATOR_GT:
+			{
+				return OperatorConst::GT_STRING;
+			}
+			case KPP_OPERATOR_GTEQ:
+			{
+				return OperatorConst::GTEQ_STRING;
+			}
+			case KPP_OPERATOR_AND:
+			{
+				return OperatorConst::AND_STRING;
+			}
+			case KPP_OPERATOR_OR:
+			{
+				return OperatorConst::OR_STRING;
+			}
+		};
+		return OperatorConst::NONE_STRING;
 	}
-	if (name == OperatorConst::LT_STRING)
+	KPPOperator KPackageProject::StringToOperator(const wxString& name, bool allowNone, KPPOperator default)
 	{
-		return KPP_OPERATOR_LT;
+		if (name == OperatorConst::EQ_STRING)
+		{
+			return KPP_OPERATOR_EQ;
+		}
+		if (name == OperatorConst::NOT_EQ_STRING)
+		{
+			return KPP_OPERATOR_NOT_EQ;
+		}
+		if (name == OperatorConst::LT_STRING)
+		{
+			return KPP_OPERATOR_LT;
+		}
+		if (name == OperatorConst::LTEQ_STRING)
+		{
+			return KPP_OPERATOR_LTEQ;
+		}
+		if (name == OperatorConst::GT_STRING)
+		{
+			return KPP_OPERATOR_GT;
+		}
+		if (name == OperatorConst::GTEQ_STRING)
+		{
+			return KPP_OPERATOR_GTEQ;
+		}
+		if (name == OperatorConst::AND_STRING)
+		{
+			return KPP_OPERATOR_AND;
+		}
+		if (name == OperatorConst::OR_STRING)
+		{
+			return KPP_OPERATOR_OR;
+		}
+		if (allowNone && name == OperatorConst::NONE_STRING)
+		{
+			return KPP_OPERATOR_NONE;
+		}
+		return default;
 	}
-	if (name == OperatorConst::LTEQ_STRING)
+	
+	KxStringVector KPackageProject::CreateOperatorSymNamesList(const std::initializer_list<KPPOperator>& operators)
 	{
-		return KPP_OPERATOR_LTEQ;
+		return Util::CreateOperatorList(operators, false);
 	}
-	if (name == OperatorConst::GT_STRING)
+	KxStringVector KPackageProject::CreateOperatorNamesList(const std::initializer_list<KPPOperator>& operators)
 	{
-		return KPP_OPERATOR_GT;
+		return Util::CreateOperatorList(operators, true);
 	}
-	if (name == OperatorConst::GTEQ_STRING)
+	
+	KPackageProject::KPackageProject()
+		:m_Config(*this),
+		m_Info(*this),
+		m_FileData(*this),
+		m_Interface(*this),
+		m_Requirements(*this),
+		m_Components(*this),
+	
+		m_FormatVersion(Kortex::ModPackagesModule::GetInstance()->GetModuleInfo().GetVersion()),
+		m_TargetProfileID(Kortex::IGameInstance::GetActive()->GetGameID())
 	{
-		return KPP_OPERATOR_GTEQ;
 	}
-	if (name == OperatorConst::AND_STRING)
+	KPackageProject::~KPackageProject()
 	{
-		return KPP_OPERATOR_AND;
 	}
-	if (name == OperatorConst::OR_STRING)
+	
+	void KPackageProject::SetModID(const wxString& id)
 	{
-		return KPP_OPERATOR_OR;
+		m_ModID = id;
 	}
-	if (allowNone && name == OperatorConst::NONE_STRING)
+	wxString KPackageProject::GetModID() const
 	{
-		return KPP_OPERATOR_NONE;
+		// ID -> Name -> translated name -> package file name
+		if (!m_ModID.IsEmpty())
+		{
+			return m_ModID;
+		}
+		else
+		{
+			const wxString& name = GetInfo().GetName();
+			if (!name.IsEmpty())
+			{
+				return name;
+			}
+			else
+			{
+				const wxString& translatedName = GetInfo().GetTranslatedName();
+				if (!translatedName.IsEmpty())
+				{
+					return translatedName;
+				}
+				return GetConfig().GetInstallPackageFile().AfterLast('\\').BeforeFirst('.');
+			}
+		}
+		return wxEmptyString;
 	}
-	return default;
-}
-
-KxStringVector KPackageProject::CreateOperatorSymNamesList(const std::initializer_list<KPPOperator>& operators)
-{
-	return Util::CreateOperatorList(operators, false);
-}
-KxStringVector KPackageProject::CreateOperatorNamesList(const std::initializer_list<KPPOperator>& operators)
-{
-	return Util::CreateOperatorList(operators, true);
-}
-
-KPackageProject::KPackageProject()
-	:m_Config(*this),
-	m_Info(*this),
-	m_FileData(*this),
-	m_Interface(*this),
-	m_Requirements(*this),
-	m_Components(*this),
-
-	m_FormatVersion(Kortex::ModPackagesModule::GetInstance()->GetModuleInfo().GetVersion()),
-	m_TargetProfileID(Kortex::IGameInstance::GetActive()->GetGameID())
-{
-}
-KPackageProject::~KPackageProject()
-{
-}
-
-void KPackageProject::SetModID(const wxString& id)
-{
-	m_ModID = id;
-}
-wxString KPackageProject::GetModID() const
-{
-	// ID -> Name -> translated name -> package file name
-	if (!m_ModID.IsEmpty())
+	wxString KPackageProject::GetModName() const
 	{
-		return m_ModID;
-	}
-	else
-	{
+		// Name -> translated name -> ID (using 'GetModID')
 		const wxString& name = GetInfo().GetName();
 		if (!name.IsEmpty())
 		{
@@ -233,31 +262,12 @@ wxString KPackageProject::GetModID() const
 			{
 				return translatedName;
 			}
-			return GetConfig().GetInstallPackageFile().AfterLast('\\').BeforeFirst('.');
+			return GetModID();
 		}
+		return wxEmptyString;
 	}
-	return wxEmptyString;
-}
-wxString KPackageProject::GetModName() const
-{
-	// Name -> translated name -> ID (using 'GetModID')
-	const wxString& name = GetInfo().GetName();
-	if (!name.IsEmpty())
+	wxString KPackageProject::GetSignature() const
 	{
-		return name;
+		return Kortex::ModManager::BasicGameMod::GetSignatureFromID(GetModID());
 	}
-	else
-	{
-		const wxString& translatedName = GetInfo().GetTranslatedName();
-		if (!translatedName.IsEmpty())
-		{
-			return translatedName;
-		}
-		return GetModID();
-	}
-	return wxEmptyString;
-}
-wxString KPackageProject::GetSignature() const
-{
-	return Kortex::ModManager::BasicGameMod::GetSignatureFromID(GetModID());
 }

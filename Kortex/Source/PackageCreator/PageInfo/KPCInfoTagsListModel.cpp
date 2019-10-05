@@ -5,18 +5,20 @@
 #include <KxFramework/KxDataViewComboBox.h>
 #include <KxFramework/KxString.h>
 
-bool KPCInfoTagsListModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
+namespace Kortex::PackageDesigner
 {
-	bool bRet = SelectorDisplayModelCB::SetValueByRow(data, row, column);
-	if (bRet)
+	bool KPCInfoTagsListModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 	{
-		m_Controller->ChangeNotify();
+		bool result = SelectorDisplayModelCB::SetValueByRow(data, row, column);
+		if (result)
+		{
+			m_Controller->ChangeNotify();
+		}
+		return result;
 	}
-	return bRet;
-}
-
-void KPCInfoTagsListModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* pSzier)
-{
-	m_Controller = controller;
-	SelectorDisplayModelCB::Create(window, pSzier);
+	void KPCInfoTagsListModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* pSzier)
+	{
+		m_Controller = controller;
+		SelectorDisplayModelCB::Create(window, pSzier);
+	}
 }

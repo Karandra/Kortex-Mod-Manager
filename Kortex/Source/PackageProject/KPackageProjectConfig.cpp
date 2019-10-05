@@ -4,51 +4,54 @@
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 
-const wxString KPackageProjectConfig::ms_DefaultCompressionMethod = "LZMA2";
-
-bool KPackageProjectConfig::IsCompressionMethodSupported(const wxString& value)
+namespace Kortex::PackageDesigner
 {
-	return value == "LZMA" || value == "LZMA2" || value == "BZip2" || value == "PPMd";
-}
-
-KPackageProjectConfig::KPackageProjectConfig(KPackageProject& project)
-	:KPackageProjectPart(project)
-{
-}
-KPackageProjectConfig::~KPackageProjectConfig()
-{
-}
-
-void KPackageProjectConfig::SetCompressionMethod(const wxString& value)
-{
-	if (IsCompressionMethodSupported(value))
+	const wxString KPackageProjectConfig::ms_DefaultCompressionMethod = "LZMA2";
+	
+	bool KPackageProjectConfig::IsCompressionMethodSupported(const wxString& value)
 	{
-		m_CompressionMethod = value;
+		return value == "LZMA" || value == "LZMA2" || value == "BZip2" || value == "PPMd";
 	}
-	else
+	
+	KPackageProjectConfig::KPackageProjectConfig(KPackageProject& project)
+		:KPackageProjectPart(project)
 	{
-		m_CompressionMethod = ms_DefaultCompressionMethod;
 	}
-}
-void KPackageProjectConfig::SetCompressionLevel(int value)
-{
-	if (value >= ms_MinCompressionLevel && value <= ms_MaxCompressionLevel)
+	KPackageProjectConfig::~KPackageProjectConfig()
 	{
-		m_CompressionLevel = value;
 	}
-	else
+	
+	void KPackageProjectConfig::SetCompressionMethod(const wxString& value)
 	{
-		m_CompressionLevel = ms_DefaultCompressionLevel;
+		if (IsCompressionMethodSupported(value))
+		{
+			m_CompressionMethod = value;
+		}
+		else
+		{
+			m_CompressionMethod = ms_DefaultCompressionMethod;
+		}
 	}
-}
-void KPackageProjectConfig::SetCompressionDictionarySize(int value)
-{
-	if (value >= ms_MinDictionarySize && value <= ms_MaxDictionarySize)
+	void KPackageProjectConfig::SetCompressionLevel(int value)
 	{
-		m_CompressionDictionarySize = value;
+		if (value >= ms_MinCompressionLevel && value <= ms_MaxCompressionLevel)
+		{
+			m_CompressionLevel = value;
+		}
+		else
+		{
+			m_CompressionLevel = ms_DefaultCompressionLevel;
+		}
 	}
-	else
+	void KPackageProjectConfig::SetCompressionDictionarySize(int value)
 	{
-		m_CompressionDictionarySize = ms_DefaultDictionarySize;
+		if (value >= ms_MinDictionarySize && value <= ms_MaxDictionarySize)
+		{
+			m_CompressionDictionarySize = value;
+		}
+		else
+		{
+			m_CompressionDictionarySize = ms_DefaultDictionarySize;
+		}
 	}
 }

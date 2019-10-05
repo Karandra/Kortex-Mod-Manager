@@ -1,119 +1,148 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
+#include "Application/DefaultWorkspace.h"
+#include "Application/WorkspaceBookContainer.h"
+#include "KPackageCreatorController.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxSplitterWindow.h>
+#include <KxFramework/KxSimplebook.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxTextBox.h>
 #include <KxFramework/KxTreeList.h>
 #include <KxFramework/KxButton.h>
-class KPackageCreatorManager;
-class KPackageCreatorController;
-class KPackageCreatorPageBase;
-class KPackageCreatorPageInfo;
-class KPackageCreatorPageFileData;
-class KPackageCreatorPageInterface;
-class KPackageCreatorPageRequirements;
-class KPackageCreatorPageComponents;
-class KPackageProject;
+#include <KxFramework/KxMenu.h>
 
 namespace Kortex
 {
 	class IGameMod;
 }
-
-class KPackageCreatorWorkspace: public KWorkspace, public KxSingletonPtr<KPackageCreatorWorkspace>
+namespace Kortex::PackageDesigner
 {
-	friend class KPackageCreatorPageBase;
-	friend class KPackageCreatorController;
+	class KPackageCreatorManager;
+	class KPackageCreatorController;
+	class KPackageCreatorPageBase;
+	class KPackageCreatorPageInfo;
+	class KPackageCreatorPageFileData;
+	class KPackageCreatorPageInterface;
+	class KPackageCreatorPageRequirements;
+	class KPackageCreatorPageComponents;
+	class KPackageProject;
+}
 
-	private:
-		KPackageCreatorManager* m_Manager = nullptr;
-		KPackageCreatorController* m_Controller = nullptr;
+namespace Kortex::PackageDesigner
+{
+	class KPackageCreatorWorkspace;
+	class WorkspaceContainer: public Application::WorkspaceBookContainer
+	{
+		friend class KPackageCreatorWorkspace;
 
-		KxAuiToolBar* m_MenuBar = nullptr;
-		KxAuiToolBarItem* m_MenuBar_Project = nullptr;
-		KxAuiToolBarItem* m_MenuBar_Import = nullptr;
-		KxAuiToolBarItem* m_MenuBar_Build = nullptr;
+		private:
+			KPackageCreatorWorkspace& m_Workspace;
+			KxSimplebook* m_BookCtrl = nullptr;
+			KxTreeList* m_PagesList = nullptr;
 
-		wxBoxSizer* m_MainSizer = nullptr;
-		KxPanel* m_MainPane = nullptr;
-		KxPanel* m_PagesBookPane = nullptr;
-		wxSimplebook* m_PagesBook = nullptr;
-		KxTreeList* m_PagesList = nullptr;
+		private:
+			void Create(wxWindow* listParent, wxWindow* viewParent);
+			void OnPageSelected(wxTreeListEvent& event);
+			
+		protected:
+			void ShowWorkspace(IWorkspace& workspace) override;
+			void HideWorkspace(IWorkspace& workspace) override;
+		
+		public:
+			WorkspaceContainer(KPackageCreatorWorkspace& workspace)
+				:m_Workspace(workspace)
+			{
+			}
 
-		// Pages
-		KPackageCreatorPageInfo* m_PageInfo = nullptr;
-		KPackageCreatorPageFileData* m_PageFileData = nullptr;
-		KPackageCreatorPageInterface* m_PageInterface = nullptr;
-		KPackageCreatorPageRequirements* m_PageRequirements = nullptr;
-		KPackageCreatorPageComponents* m_PageComponents = nullptr;
+		public:
+			wxWindow& GetWindow() override
+			{
+				return *m_BookCtrl;
+			}
+			wxWindow& GetListWindow()
+			{
+				return *m_PagesList;
+			}
+	};
+}
+namespace Kortex::PackageDesigner
+{
+	class KPackageCreatorWorkspace: public Application::DefaultWindowWorkspace<KxPanel>, public KxSingletonPtr<KPackageCreatorWorkspace>
+	{
+		friend class KPackageCreatorPageBase;
+		friend class KPackageCreatorController;
 
-	public:
-		KPackageCreatorWorkspace(KMainWindow* mainWindow);
-		virtual ~KPackageCreatorWorkspace();
-		virtual bool OnCreateWorkspace() override;
+		private:
+			KPackageCreatorManager* m_Manager = nullptr;
+			KPackageCreatorController m_Controller;
 
-	private:
-		virtual bool OnOpenWorkspace() override;
-		virtual bool OnCloseWorkspace() override;
-		virtual void OnReloadWorkspace() override;
+			KxAuiToolBar* m_MenuBar = nullptr;
+			KxAuiToolBarItem* m_MenuBar_Project = nullptr;
+			KxAuiToolBarItem* m_MenuBar_Import = nullptr;
+			KxAuiToolBarItem* m_MenuBar_Build = nullptr;
 
-		void CreateMenuBar(wxSizer* sizer);
-		void CreateProjectMenu();
-		void CreateImportMenu();
-		void CreateBuildMenu();
+			wxBoxSizer* m_MainSizer = nullptr;
+			KxPanel* m_MainPane = nullptr;
+			KxPanel* m_PagesBookPane = nullptr;
 
-		void CreatePagesListView();
-		void CreatePagesView();
+			// Pages
+			WorkspaceContainer m_PagesContainer;
+			KPackageCreatorPageInfo* m_PageInfo = nullptr;
+			KPackageCreatorPageFileData* m_PageFileData = nullptr;
+			KPackageCreatorPageInterface* m_PageInterface = nullptr;
+			KPackageCreatorPageRequirements* m_PageRequirements = nullptr;
+			KPackageCreatorPageComponents* m_PageComponents = nullptr;
 
-		template<class T> T* AddPage(T* page, bool select = false)
-		{
-			AddPageBase(page, select);
-			return page;
-		}
-		void AddPageBase(KPackageCreatorPageBase* page, bool select = false);
-		void OnSwitchPage(wxTreeListEvent& event);
-		void DoLoadAllPages();
+		private:
+			void CreateMenuBar(wxSizer* sizer);
+			void CreateProjectMenu();
+			void CreateImportMenu();
+			void CreateBuildMenu();
+			void CreatePagesView();
 
-	public:
-		virtual wxString GetID() const override;
-		virtual wxString GetName() const override;
-		virtual Kortex::ResourceID GetImageID() const override
-		{
-			return Kortex::ImageResourceID::Box;
-		}
-		virtual wxSizer* GetWorkspaceSizer() const override
-		{
-			return m_MainSizer;
-		}
-		virtual bool DoCanBeStartPage() const override
-		{
-			return true;
-		}
-		virtual bool CanReload() const override
-		{
-			return false;
-		}
-		virtual bool ShouldRecieveVFSEvents() const override
-		{
-			return false;
-		}
+			void DoLoadAllPages();
+			void OnNewProject(KxMenuEvent& event);
+			void OnOpenProject(KxMenuEvent& event);
+			void OnSaveProject(KxMenuEvent& event);
+			void OnImportProject(KxMenuEvent& event);
+			void OnExportProject(KxMenuEvent& event);
+			void OnBuildProject(KxMenuEvent& event);
+			void OnBuildProjectPreview(KxMenuEvent& event);
 
-		KPackageCreatorPageBase* GetCurrentPage() const;
-		bool SwitchToPage(size_t index);
-		KPackageProject& ImportProjectFromPackage(const wxString& path);
-		KPackageProject& CreateProjectFromModEntry(const Kortex::IGameMod& modEntry);
+		protected:
+			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
 
-	private:
-		void RefreshWindowTitleForProject();
-		void OnNewProject(KxMenuEvent& event);
-		void OnOpenProject(KxMenuEvent& event);
-		void OnSaveProject(KxMenuEvent& event);
-		void OnImportProject(KxMenuEvent& event);
-		void OnExportProject(KxMenuEvent& event);
-		void OnBuildProject(KxMenuEvent& event);
-		void OnBuildProjectPreview(KxMenuEvent& event);
-};
+		public:
+			KPackageCreatorWorkspace()
+				:m_Controller(*this), m_PagesContainer(*this)
+			{
+			}
+
+		public:
+			using KxIObject::QueryInterface;
+			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
+			{
+				return QueryAnyOf(iid, ptr, *this, m_Controller);
+			}
+
+			wxString GetID() const override;
+			wxString GetName() const override;
+			ResourceID GetIcon() const override
+			{
+				return Kortex::ImageResourceID::Box;
+			}
+
+			void RefreshWindowTitleForProject()
+			{
+				// TODO: update window title
+			}
+			KPackageCreatorPageBase* GetCurrentPage() const;
+			KPackageProject& ImportProjectFromPackage(const wxString& path);
+			KPackageProject& CreateProjectFromModEntry(const IGameMod& modEntry);
+	};
+}

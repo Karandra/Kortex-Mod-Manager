@@ -9,7 +9,11 @@
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxThumbView.h>
 #include <KxFramework/KxSplitterWindow.h>
-class KImageViewerEvent;
+
+namespace Kortex::UI
+{
+	class KImageViewerEvent;
+}
 
 namespace Kortex::InstallWizard
 {
@@ -31,7 +35,7 @@ namespace Kortex::InstallWizard
 			UI::WebView m_DocumentAdvanced;
 
 			KxThumbView* m_ScreenshotsView = nullptr;
-			std::unordered_map<int, const KPPIImageEntry*> m_ImagesMap;
+			std::unordered_map<int, const PackageDesigner::KPPIImageEntry*> m_ImagesMap;
 			int m_CurrentImageIndex = -1;
 
 			bool m_PageVisited = false;
@@ -43,15 +47,15 @@ namespace Kortex::InstallWizard
 			wxWindow* CreateDocumentsTab();
 			wxWindow* CreateScreenshotsTab();
 
-			void LoadInfoTab(const KPackageProject& package);
-			void LoadDescriptionTab(const KPackageProject& package);
-			void LoadDocumentsTab(const KPackageProject& package);
-			void LoadScreenshotsTab(const KPackageProject& package);
+			void LoadInfoTab(const PackageDesigner::KPackageProject& package);
+			void LoadDescriptionTab(const PackageDesigner::KPackageProject& package);
+			void LoadDocumentsTab(const PackageDesigner::KPackageProject& package);
+			void LoadScreenshotsTab(const PackageDesigner::KPackageProject& package);
 			
 			void OnTabOpened(wxAuiNotebookEvent& event);
 			void OnSelectDocument(int index, bool useAdvancedEditor = false);
-			void SetImageViewerNavigationInfo(KImageViewerEvent& event) const;
-			void OnNavigateImageViewer(KImageViewerEvent& event);
+			void SetImageViewerNavigationInfo(UI::KImageViewerEvent& event) const;
+			void OnNavigateImageViewer(UI::KImageViewerEvent& event);
 
 		protected:
 			void OnLoadUIOptions(const Application::ActiveInstanceOption& option) override;

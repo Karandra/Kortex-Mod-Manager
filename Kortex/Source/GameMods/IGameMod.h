@@ -5,7 +5,11 @@
 #include "Utility/KWithBitmap.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxVersion.h>
-class KPackageProject;
+
+namespace Kortex::PackageDesigner
+{
+	class KPackageProject;
+}
 
 namespace Kortex
 {
@@ -13,7 +17,7 @@ namespace Kortex
 	class ModTagStore;
 	class ModSourceStore;
 
-	class IGameMod: public RTTI::IInterface<IGameMod>
+	class IGameMod: public KxRTTI::Interface<IGameMod>
 	{
 		friend class IModManager;
 		friend class IModDispatcher;
@@ -45,7 +49,7 @@ namespace Kortex
 
 			virtual bool LoadUsingSignature(const wxString& signature) = 0;
 			virtual bool LoadUsingID(const wxString& id);
-			virtual bool CreateFromProject(const KPackageProject& config);
+			virtual bool CreateFromProject(const PackageDesigner::KPackageProject& config);
 			
 			intptr_t GetPriority() const
 			{

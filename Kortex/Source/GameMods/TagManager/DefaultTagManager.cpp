@@ -45,7 +45,7 @@ namespace Kortex::ModTagManager
 
 	void DefaultTagManager::LoadTagsFrom(IModTag::Vector& items, const KxXMLNode& tagsNode)
 	{
-		const bool hasSE = IPackageManager::GetInstance()->HasComponent<PackageManager::IWithScriptExtender>();
+		const bool hasSE = IPackageManager::GetInstance()->HasComponent<PackageDesigner::IWithScriptExtender>();
 
 		for (KxXMLNode node = tagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{

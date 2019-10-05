@@ -10,109 +10,110 @@
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxLabel.h>
 
-using namespace Kortex;
-
-KPackageCreatorPageFileData::KPackageCreatorPageFileData(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller)
-	:KPackageCreatorPageBase(mainWorkspace, controller)
-	//m_MainOptions(this, "MainUI"), m_MainListOptions(this, "FolderListView"), m_ContentListModelOptions(this, "FolderContentView")
+namespace Kortex::PackageDesigner
 {
-}
-KPackageCreatorPageFileData::~KPackageCreatorPageFileData()
-{
-	if (IsWorkspaceCreated())
+	void KPackageCreatorPageFileData::OnLoadProject(KPackageProjectFileData& projectFileData)
 	{
-		//KProgramOptionSerializer::SaveDataViewLayout(m_MainListModel->GetView(), m_MainListOptions);
-		//KProgramOptionSerializer::SaveDataViewLayout(m_ContentListModel->GetView(), m_ContentListModelOptions);
-		//KProgramOptionSerializer::SaveSplitterLayout(m_Pane, m_MainOptions);
+		wxWindowUpdateLocker lock(this);
 
-		m_MainListModel->SetDataVector();
+		m_MainListModel->SetProject(projectFileData.GetProject());
+		m_MainListModel->SetDataVector(&projectFileData.GetData());
+
+		m_ContentListModel->SetProject(projectFileData.GetProject());
 		m_ContentListModel->SetDataVector();
 	}
-}
-bool KPackageCreatorPageFileData::OnCreateWorkspace()
-{
-	m_Pane = new KxSplitterWindow(this, KxID_NONE);
-	m_Pane->SetName("FolderListViewSize");
-	m_Pane->SetMinimumPaneSize(150);
-	m_MainSizer->Add(m_Pane, 1, wxEXPAND);
-	m_Pane->SetSashColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::WindowBG));
+	KPackageProjectFileData& KPackageCreatorPageFileData::GetProjectFileData() const
+	{
+		return GetProject()->GetFileData();
+	}
 
-	CreateMainListControls();
-	CreateFolderContentControls();
-	m_Pane->SplitHorizontally(m_MainListPane, m_FolderContentPane, 0);
+	void KPackageCreatorPageFileData::CreateMainListControls()
+	{
+		wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+		m_MainListPane = new KxPanel(m_Pane, KxID_NONE);
+		m_MainListPane->SetSizer(mainSizer);
+		IThemeManager::GetActive().ProcessWindow(m_MainListPane);
 
-	//KProgramOptionSerializer::LoadDataViewLayout(m_MainListModel->GetView(), m_MainListOptions);
-	//KProgramOptionSerializer::LoadDataViewLayout(m_ContentListModel->GetView(), m_ContentListModelOptions);
-	//KProgramOptionSerializer::LoadSplitterLayout(m_Pane, m_MainOptions);
-	return true;
-}
-KPackageProjectFileData& KPackageCreatorPageFileData::GetProjectFileData() const
-{
-	return GetProject()->GetFileData();
-}
+		// Main caption
+		KxLabel* label = CreateCaptionLabel(m_MainListPane, KTr("PackageCreator.PageFileData.MainList"));
+		mainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
-void KPackageCreatorPageFileData::CreateMainListControls()
-{
-	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-	m_MainListPane = new KxPanel(m_Pane, KxID_NONE);
-	m_MainListPane->SetSizer(mainSizer);
-	IThemeManager::GetActive().ProcessWindow(m_MainListPane);
+		// Sizer
+		wxBoxSizer* foldersSizer = new wxBoxSizer(wxVERTICAL);
+		mainSizer->Add(foldersSizer, 1, wxEXPAND|wxLEFT, ms_LeftMargin);
 
-	// Main caption
-	KxLabel* label = CreateCaptionLabel(m_MainListPane, KTr("PackageCreator.PageFileData.MainList"));
-	mainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
+		// List
+		m_MainListModel = new KPCFileDataMainListModel();
+		m_MainListModel->Create(m_Controller, m_MainListPane, foldersSizer);
+	}
+	void KPackageCreatorPageFileData::CreateFolderContentControls()
+	{
+		wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+		m_FolderContentPane = new KxPanel(m_Pane, KxID_NONE);
+		m_FolderContentPane->SetSizer(mainSizer);
+		IThemeManager::GetActive().ProcessWindow(m_FolderContentPane);
 
-	// Sizer
-	wxBoxSizer* foldersSizer = new wxBoxSizer(wxVERTICAL);
-	mainSizer->Add(foldersSizer, 1, wxEXPAND|wxLEFT, ms_LeftMargin);
+		// Main caption
+		KxLabel* label = CreateCaptionLabel(m_FolderContentPane, KTr("PackageCreator.PageFileData.FolderContent"));
+		mainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
 
-	// List
-	m_MainListModel = new KPCFileDataMainListModel();
-	m_MainListModel->Create(m_Controller, m_MainListPane, foldersSizer);
-}
-void KPackageCreatorPageFileData::CreateFolderContentControls()
-{
-	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-	m_FolderContentPane = new KxPanel(m_Pane, KxID_NONE);
-	m_FolderContentPane->SetSizer(mainSizer);
-	IThemeManager::GetActive().ProcessWindow(m_FolderContentPane);
+		wxBoxSizer* filesSizer = new wxBoxSizer(wxVERTICAL);
+		mainSizer->Add(filesSizer, 1, wxEXPAND|wxLEFT, ms_LeftMargin);
 
-	// Main caption
-	KxLabel* label = CreateCaptionLabel(m_FolderContentPane, KTr("PackageCreator.PageFileData.FolderContent"));
-	mainSizer->Add(label, 0, wxEXPAND|wxBOTTOM, KLC_VERTICAL_SPACING);
+		m_ContentListModel = new KPCFileDataFolderContentModel();
+		m_ContentListModel->Create(m_Controller, m_FolderContentPane, filesSizer);
+		m_MainListModel->SetContentModel(m_ContentListModel);
+	}
 
-	wxBoxSizer* filesSizer = new wxBoxSizer(wxVERTICAL);
-	mainSizer->Add(filesSizer, 1, wxEXPAND|wxLEFT, ms_LeftMargin);
+	bool KPackageCreatorPageFileData::OnCreateWorkspace()
+	{
+		m_Pane = new KxSplitterWindow(this, KxID_NONE);
+		m_Pane->SetName("FolderListViewSize");
+		m_Pane->SetMinimumPaneSize(150);
+		m_Pane->SetSashColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::WindowBG));
 
-	m_ContentListModel = new KPCFileDataFolderContentModel();
-	m_ContentListModel->Create(m_Controller, m_FolderContentPane, filesSizer);
-	m_MainListModel->SetContentModel(m_ContentListModel);
-}
+		CreateMainListControls();
+		CreateFolderContentControls();
+		m_Pane->SplitHorizontally(m_MainListPane, m_FolderContentPane, 0);
 
-bool KPackageCreatorPageFileData::OnOpenWorkspace()
-{
-	return true;
-}
-bool KPackageCreatorPageFileData::OnCloseWorkspace()
-{
-	return true;
-}
-void KPackageCreatorPageFileData::OnLoadProject(KPackageProjectFileData& projectFileData)
-{
-	wxWindowUpdateLocker lock(this);
+		//KProgramOptionSerializer::LoadDataViewLayout(m_MainListModel->GetView(), m_MainListOptions);
+		//KProgramOptionSerializer::LoadDataViewLayout(m_ContentListModel->GetView(), m_ContentListModelOptions);
+		//KProgramOptionSerializer::LoadSplitterLayout(m_Pane, m_MainOptions);
+		return true;
+	}
+	bool KPackageCreatorPageFileData::OnOpenWorkspace()
+	{
+		return true;
+	}
+	bool KPackageCreatorPageFileData::OnCloseWorkspace()
+	{
+		return true;
+	}
+	
+	KPackageCreatorPageFileData::KPackageCreatorPageFileData(KPackageCreatorWorkspace& mainWorkspace, KPackageCreatorController& controller)
+		:KPackageCreatorPageBase(mainWorkspace, controller)
+		//m_MainOptions(this, "MainUI"), m_MainListOptions(this, "FolderListView"), m_ContentListModelOptions(this, "FolderContentView")
+	{
+	}
+	KPackageCreatorPageFileData::~KPackageCreatorPageFileData()
+	{
+		if (IsCreated())
+		{
+			//KProgramOptionSerializer::SaveDataViewLayout(m_MainListModel->GetView(), m_MainListOptions);
+			//KProgramOptionSerializer::SaveDataViewLayout(m_ContentListModel->GetView(), m_ContentListModelOptions);
+			//KProgramOptionSerializer::SaveSplitterLayout(m_Pane, m_MainOptions);
 
-	m_MainListModel->SetProject(projectFileData.GetProject());
-	m_MainListModel->SetDataVector(&projectFileData.GetData());
-
-	m_ContentListModel->SetProject(projectFileData.GetProject());
-	m_ContentListModel->SetDataVector();
-}
-
-wxString KPackageCreatorPageFileData::GetID() const
-{
-	return "KPackageCreator.FileData";
-}
-wxString KPackageCreatorPageFileData::GetPageName() const
-{
-	return KTr("PackageCreator.PageFileData.Name");
+			m_MainListModel->SetDataVector();
+			m_ContentListModel->SetDataVector();
+		}
+	}
+	
+	wxString KPackageCreatorPageFileData::GetID() const
+	{
+		return "KPackageCreator.FileData";
+	}
+	wxString KPackageCreatorPageFileData::GetPageName() const
+	{
+		return KTr("PackageCreator.PageFileData.Name");
+	}
 }

@@ -21,7 +21,7 @@ namespace Kortex::ModManager
 	wxString ModImporterNMM::ProcessDescription(const wxString& path) const
 	{
 		// Convert BB code
-		return KPackageProjectSerializer::ConvertBBCode(path);
+		return PackageDesigner::KPackageProjectSerializer::ConvertBBCode(path);
 	}
 
 	GameID ModImporterNMM::GetGameID(const wxString& name)
@@ -128,13 +128,13 @@ namespace Kortex::ModManager
 		context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), ISaveManager::GetInstance()->GetManagerInfo().GetName()));
 
 		// Saves
-		if (const ISaveManager* saveManager = ISaveManager::GetInstance())
+		if (ISaveManager* saveManager = ISaveManager::GetInstance())
 		{
 			KxEvtFile savesSource(ITranslator::GetVariable(Variables::KVAR_ACTUAL_SAVES_DIR));
 			context->LinkHandler(&savesSource, KxEVT_FILEOP_COPY_FOLDER);
 			savesSource.CopyFolder(KxFile::NullFilter, saveManager->GetConfig().GetLocation(), true, true);
 
-			saveManager->ScheduleReloadWorkspace();
+			saveManager->ScheduleWorkspacesReload();
 		}
 
 		// Config
@@ -156,7 +156,7 @@ namespace Kortex::ModManager
 				return true;
 			});
 			configManager->Load();
-			configManager->ScheduleReloadWorkspace();
+			configManager->ScheduleWorkspacesReload();
 		}
 	}
 	void ModImporterNMM::CopyMods(KOperationWithProgressDialogBase* context)
@@ -274,7 +274,7 @@ namespace Kortex::ModManager
 			profile->SaveConfig();
 
 			pluginManager->Load();
-			pluginManager->ScheduleReloadWorkspace();
+			pluginManager->ScheduleWorkspacesReload();
 		}
 	}
 	void ModImporterNMM::CopyDownloads(KOperationWithProgressDialogBase* context)

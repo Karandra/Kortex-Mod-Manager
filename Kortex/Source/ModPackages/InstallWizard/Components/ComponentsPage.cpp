@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "ComponentsPage.h"
 #include "DisplayModel.h"
-#include "../Requiremets/DisplayModel.h"
+#include "../Requirements/DisplayModel.h"
 #include "UI/KImageViewerDialog.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
 #include <KxFramework/KxTaskDialog.h>
 
+using namespace Kortex::PackageDesigner;
 namespace
 {
 	enum class TabIndex
@@ -204,11 +205,11 @@ namespace Kortex::InstallWizard
 				const KPPIImageEntry* entry = GetPackageConfig().GetInterface().FindEntryWithValue(pComponent->GetImage());
 				if (entry)
 				{
-					KImageViewerEvent evt;
+					UI::KImageViewerEvent evt;
 					evt.SetBitmap(entry->GetBitmap());
 					evt.SetDescription(entry->GetDescription());
 
-					KImageViewerDialog dialog(&GetWizard());
+					UI::KImageViewerDialog dialog(&GetWizard());
 					dialog.Navigate(evt);
 					dialog.ShowModal();
 				}

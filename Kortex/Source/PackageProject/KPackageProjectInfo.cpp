@@ -5,10 +5,13 @@
 #include "Utility/KAux.h"
 #include <Kortex/ModManager.hpp>
 
-KPackageProjectInfo::KPackageProjectInfo(KPackageProject& project)
-	:KPackageProjectPart(project)
+namespace Kortex::PackageDesigner
 {
-}
-KPackageProjectInfo::~KPackageProjectInfo()
-{
+	KPackageProjectInfo::KPackageProjectInfo(KPackageProject& project)
+		:KPackageProjectPart(project)
+	{
+	}
+	KPackageProjectInfo::~KPackageProjectInfo()
+	{
+	}
 }

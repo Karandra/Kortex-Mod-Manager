@@ -21,8 +21,8 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		private:
 			union
 			{
-				const KPPCGroup* m_Group = nullptr;
-				const KPPCEntry* m_Entry;
+				const PackageDesigner::KPPCGroup* m_Group = nullptr;
+				const PackageDesigner::KPPCEntry* m_Entry;
 			};
 			const DisplayModelNode* m_ParentNode = nullptr;
 
@@ -32,14 +32,12 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 			wxCheckBoxState m_CheckState = wxCHK_UNDETERMINED;
 
 		public:
-			DisplayModelNode()
-			{
-			}
-			DisplayModelNode(const KPPCGroup& group)
+			DisplayModelNode() = default;
+			DisplayModelNode(const PackageDesigner::KPPCGroup& group)
 				:m_Group(&group), m_Type(Group)
 			{
 			}
-			DisplayModelNode(const KPPCEntry& entry)
+			DisplayModelNode(const PackageDesigner::KPPCEntry& entry)
 				:m_Entry(&entry), m_Type(Entry)
 			{
 			}
@@ -58,11 +56,11 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 				return m_Type == Entry;
 			}
 
-			const KPPCGroup* GetGroup() const
+			const PackageDesigner::KPPCGroup* GetGroup() const
 			{
 				return IsGroup() ? m_Group : nullptr;
 			}
-			const KPPCEntry* GetEntry() const
+			const PackageDesigner::KPPCEntry* GetEntry() const
 			{
 				return IsEntry() ? m_Entry : nullptr;
 			}
@@ -100,9 +98,9 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 			bool IsRequiredEntry() const
 			{
-				if (const KPPCEntry* entry = GetEntry())
+				if (const PackageDesigner::KPPCEntry* entry = GetEntry())
 				{
-					return entry->GetTDCurrentValue() == KPPC_DESCRIPTOR_REQUIRED;
+					return entry->GetTDCurrentValue() == PackageDesigner::KPPC_DESCRIPTOR_REQUIRED;
 				}
 				return false;
 			}

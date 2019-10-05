@@ -1,8 +1,9 @@
 #include "stdafx.h"
-#include "ReqDisplayModel.h"
+#include "DisplayModel.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 
+using namespace Kortex::PackageDesigner;
 namespace
 {
 	enum class ColumnRef
@@ -13,7 +14,7 @@ namespace
 	};
 }
 
-namespace Kortex::InstallWizard::ReqPageNS
+namespace Kortex::InstallWizard::RequirementsPageNS
 {
 	wxAny DisplayModel::GetValue(const Node& node, const Column& column) const
 	{
@@ -109,11 +110,15 @@ namespace Kortex::InstallWizard::ReqPageNS
 		return ImageProvider::GetBitmap(ImageResourceID::TickCircleFrame);
 	}
 
-	void DisplayModel::CreateView(wxWindow* parent)
+	void DisplayModel::CreateView(wxWindow* parent, bool noBorder)
 	{
 		// View
 		View* view = new View(parent, KxID_NONE, CtrlStyle::VerticalRules|CtrlStyle::CellFocus|CtrlStyle::FitLastColumn);
 		view->AssignModel(this);
+		if (noBorder)
+		{
+			view->ToggleWindowStyle(wxBORDER_NONE);
+		}
 
 		// Columns
 		using namespace KxDataView2;

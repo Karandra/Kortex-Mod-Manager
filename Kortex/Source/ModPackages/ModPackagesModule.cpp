@@ -23,6 +23,6 @@ namespace Kortex
 	ModPackagesModule::ModPackagesModule()
 		:ModuleWithTypeInfo(Disposition::Global)
 	{
-		m_PackageManager = std::make_unique<PackageManager::DefaultPackageManager>();
+		m_PackageManager = std::make_unique<PackageDesigner::DefaultPackageManager>();
 	}
 }

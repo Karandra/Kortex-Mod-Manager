@@ -8,7 +8,7 @@
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
-namespace Kortex::PackageManager
+namespace Kortex::PackageDesigner
 {
 	void DefaultPackageManager::OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode)
 	{
@@ -70,7 +70,7 @@ namespace Kortex::PackageManager
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::BoxSearchResult));
 			item->Bind(KxEVT_MENU_SELECT, [focusedMod](KxMenuEvent& event)
 			{
-				KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN);
+				KxFileBrowseDialog dialog(event.GetMenu()->GetWindow(), KxID_NONE, KxFBD_OPEN);
 				dialog.SetFolder(focusedMod->GetPackageFile().BeforeLast('\\'));
 				dialog.AddFilter("*.kmp;*.smi;*.fomod;*.7z;*.zip;", KTr("FileFilter.AllSupportedFormats"));
 				dialog.AddFilter("*.kmp", KTr("FileFilter.ModPackage"));
@@ -91,7 +91,7 @@ namespace Kortex::PackageManager
 			item->Enable(isPackageExist);
 			item->Bind(KxEVT_MENU_SELECT, [focusedMod](KxMenuEvent& event)
 			{
-				KxShell::FileOperation(focusedMod->GetPackageFile(), KxFS_FILE, KxFOF_DELETE, true, false, KMainWindow::GetInstance());
+				KxShell::FileOperation(focusedMod->GetPackageFile(), KxFS_FILE, KxFOF_DELETE, true, false, event.GetMenu()->GetWindow());
 			});
 		}
 		{
@@ -99,13 +99,13 @@ namespace Kortex::PackageManager
 			item->Enable(isPackageExist);
 			item->Bind(KxEVT_MENU_SELECT, [focusedMod](KxMenuEvent& event)
 			{
-				KxFileBrowseDialog dialog(KMainWindow::GetInstance(), KxID_NONE, KxFBD_OPEN_FOLDER);
+				KxFileBrowseDialog dialog(event.GetMenu()->GetWindow(), KxID_NONE, KxFBD_OPEN_FOLDER);
 				if (dialog.ShowModal() == KxID_OK)
 				{
 					// Extract archive in mod name folder inside the specified one.
 					wxString outPath = dialog.GetResult() + wxS('\\') + focusedMod->GetSafeName();
 
-					ExtractAcrhiveWithProgress(KMainWindow::GetInstance(), focusedMod->GetPackageFile(), outPath);
+					ExtractAcrhiveWithProgress(event.GetMenu()->GetWindow(), focusedMod->GetPackageFile(), outPath);
 				}
 			});
 		}
@@ -138,7 +138,7 @@ namespace Kortex::PackageManager
 			item->Enable(isPackageExist);
 			item->Bind(KxEVT_MENU_SELECT, [focusedMod](KxMenuEvent& event)
 			{
-				KxShell::Execute(KMainWindow::GetInstance(), focusedMod->GetPackageFile(), wxS("properties"));
+				KxShell::Execute(event.GetMenu()->GetWindow(), focusedMod->GetPackageFile(), wxS("properties"));
 			});
 		}
 	}

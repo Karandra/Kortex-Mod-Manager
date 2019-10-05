@@ -1,61 +1,66 @@
 #pragma once
 #include "stdafx.h"
-#include "UI/KWorkspace.h"
-#include "UI/KMainWindow.h"
 #include "KPackageCreatorPageBase.h"
-class KPackageCreatorWorkspace;
-class KPackageProjectFileData;
-class KPCFileDataMainListModel;
-class KPCFileDataFolderContentModel;
 
-class KPackageCreatorPageFileData: public KPackageCreatorPageBase
+namespace Kortex::PackageDesigner
 {
-	friend class KPackageCreatorWorkspace;
+	class KPackageCreatorWorkspace;
+	class KPackageProjectFileData;
+	class KPCFileDataMainListModel;
+	class KPCFileDataFolderContentModel;
+}
 
-	private:
-		KxSplitterWindow* m_Pane = nullptr;
-		//KProgramOptionAI m_MainOptions;
+namespace Kortex::PackageDesigner
+{
+	class KPackageCreatorPageFileData: public KPackageCreatorPageBase
+	{
+		friend class KPackageCreatorWorkspace;
 
-		// Folders
-		KxPanel* m_MainListPane = nullptr;
-		KPCFileDataMainListModel* m_MainListModel = nullptr;
-		//KProgramOptionAI m_MainListOptions;
+		private:
+			KxSplitterWindow* m_Pane = nullptr;
+			//KProgramOptionAI m_MainOptions;
 
-		// Files
-		KxPanel* m_FolderContentPane = nullptr;
-		KPCFileDataFolderContentModel* m_ContentListModel = nullptr;
-		//KProgramOptionAI m_ContentListModelOptions;
+			// Folders
+			KxPanel* m_MainListPane = nullptr;
+			KPCFileDataMainListModel* m_MainListModel = nullptr;
+			//KProgramOptionAI m_MainListOptions;
 
-	public:
-		KPackageCreatorPageFileData(KPackageCreatorWorkspace* mainWorkspace, KPackageCreatorController* controller);
-		virtual ~KPackageCreatorPageFileData();
+			// Files
+			KxPanel* m_FolderContentPane = nullptr;
+			KPCFileDataFolderContentModel* m_ContentListModel = nullptr;
+			//KProgramOptionAI m_ContentListModelOptions;
 
-	private:
-		virtual bool OnCreateWorkspace() override;
-		KPackageProjectFileData& GetProjectFileData() const;
+		private:
+			void OnLoadProject(KPackageProjectFileData& projectFileData);
+			KPackageProjectFileData& GetProjectFileData() const;
 
-		void CreateMainListControls();
-		void CreateFolderContentControls();
+			void CreateMainListControls();
+			void CreateFolderContentControls();
 
-	private:
-		virtual bool OnOpenWorkspace() override;
-		virtual bool OnCloseWorkspace() override;
-		virtual void OnLoadProject(KPackageProjectFileData& projectFileData);
+		protected:
+			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
 
-	public:
-		virtual ResourceID GetImageID() const override
-		{
-			return ImageResourceID::Folder;
-		}
-		virtual wxString GetID() const override;
-		virtual wxString GetPageName() const override;
+		public:
+			KPackageCreatorPageFileData(KPackageCreatorWorkspace& mainWorkspace, KPackageCreatorController& controller);
+			~KPackageCreatorPageFileData();
 
-		KPCFileDataMainListModel* GetMainListModel() const
-		{
-			return m_MainListModel;
-		}
-		KPCFileDataFolderContentModel* GetFolderContentModel() const
-		{
-			return m_ContentListModel;
-		}
-};
+		public:
+			ResourceID GetIcon() const override
+			{
+				return ImageResourceID::Folder;
+			}
+			wxString GetID() const override;
+			wxString GetPageName() const override;
+
+			KPCFileDataMainListModel* GetMainListModel() const
+			{
+				return m_MainListModel;
+			}
+			KPCFileDataFolderContentModel* GetFolderContentModel() const
+			{
+				return m_ContentListModel;
+			}
+	};
+}

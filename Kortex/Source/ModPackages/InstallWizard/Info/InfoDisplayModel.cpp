@@ -5,7 +5,6 @@
 #include "PackageCreator/KPackageCreatorPageComponents.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include "UI/KMainWindow.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/KBitmapSize.h"
@@ -59,13 +58,13 @@ namespace Kortex::InstallWizard::InfoPageNS
 			}
 			case ColumnRef::Value:
 			{
-				KPackageProject& packageConfig = m_Page.GetPackageConfig();
+				PackageDesigner::KPackageProject& packageConfig = m_Page.GetPackageConfig();
 				switch (item.Type)
 				{
 					case InfoKind::Tags:
 					{
 						const ModTagStore& tags = packageConfig.GetInfo().GetTagStore();
-						return KPackageCreatorPageComponents::FormatArrayToText(tags.GetNames());
+						return PackageDesigner::KPackageCreatorPageComponents::FormatArrayToText(tags.GetNames());
 					}
 					case InfoKind::ID:
 					{
@@ -86,7 +85,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		if (column.GetID<ColumnRef>() == ColumnRef::Value)
 		{
 			const Item& item = m_Items[node.GetRow()];
-			KPackageProject& packageConfig = m_Page.GetPackageConfig();
+			PackageDesigner::KPackageProject& packageConfig = m_Page.GetPackageConfig();
 
 			switch (item.Type)
 			{
@@ -107,7 +106,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		if (column.GetID<ColumnRef>() == ColumnRef::Value)
 		{
 			const Item& item = m_Items[node.GetRow()];
-			KPackageProject& packageConfig = m_Page.GetPackageConfig();
+			PackageDesigner::KPackageProject& packageConfig = m_Page.GetPackageConfig();
 
 			switch (item.Type)
 			{
@@ -209,7 +208,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 				}
 				case InfoKind::Tags:
 				{
-					KPackageProject& packageConfig = m_Page.GetPackageConfig();
+					PackageDesigner::KPackageProject& packageConfig = m_Page.GetPackageConfig();
 					ModTagStore& tags = packageConfig.GetInfo().GetTagStore();
 
 					ModTagManager::SelectorDialog dialog(GetView(), itemValue.GetLabel());

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TextEditDialog.h"
-#include "KMainWindow.h"
 #include "Utility/KAux.h"
+#include "Utility/UI.h"
 #include <Kortex/Application.hpp>
 #include "Application/Resources/ImageResourceID.h"
 #include <KxFramework/KxPanel.h>
@@ -37,57 +37,57 @@ namespace Kortex::UI
 			viewSizer->Add(m_ToolBar, 0, wxEXPAND);
 
 			// Edit mode
-			m_ToolBar_SwitchMode = KMainWindow::CreateToolBarButton(m_ToolBar, KTr("TextEditor.ToolBar.Mode"), ImageResourceID::Edit);
+			m_ToolBar_SwitchMode = Utility::UI::CreateToolBarButton(m_ToolBar, KTr("TextEditor.ToolBar.Mode"), ImageResourceID::Edit);
 			m_ToolBar_SwitchMode->Bind(KxEVT_AUI_TOOLBAR_CLICK, &TextEditDialog::OnSwitchMode, this);
 			m_ToolBar->AddSeparator();
 
 			// Save/Load
-			m_ToolBar_Save = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_SAVE), ImageResourceID::Disk);
+			m_ToolBar_Save = Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_SAVE), ImageResourceID::Disk);
 			m_ToolBar_Save->Bind(KxEVT_AUI_TOOLBAR_CLICK, &TextEditDialog::OnSaveLoadFile, this);
 
-			m_ToolBar_Open = KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_OPEN), ImageResourceID::FolderOpen);
+			m_ToolBar_Open = Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_OPEN), ImageResourceID::FolderOpen);
 			m_ToolBar_Open->Bind(KxEVT_AUI_TOOLBAR_CLICK, &TextEditDialog::OnSaveLoadFile, this);
 			m_ToolBar->AddSeparator();
 
 			// Undo/Redo
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_UNDO), ImageResourceID::ArrowCurve180Left)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_UNDO), ImageResourceID::ArrowCurve180Left)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				m_Editor->Undo();
 			});
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_REDO), ImageResourceID::ArrowCircle135Left)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_REDO), ImageResourceID::ArrowCircle135Left)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				m_Editor->Redo();
 			});
 			m_ToolBar->AddSeparator();
 
 			// Styles
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_BOLD), ImageResourceID::EditBold)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_BOLD), ImageResourceID::EditBold)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				ToggleTag("b");
 			});
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_ITALIC), ImageResourceID::EditItalic)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_ITALIC), ImageResourceID::EditItalic)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				ToggleTag("i");
 			});
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_UNDERLINE), ImageResourceID::EditUnderline)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_UNDERLINE), ImageResourceID::EditUnderline)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				ToggleTag("u");
 			});
 			m_ToolBar->AddSeparator();
 
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_LEFT), ImageResourceID::EditAlignmentLeft)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_LEFT), ImageResourceID::EditAlignmentLeft)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				ToggleTag("div", "align", "left");
 			});
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_CENTER), ImageResourceID::EditAlignmentCenter)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_CENTER), ImageResourceID::EditAlignmentCenter)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				ToggleTag("div", "align", "center");
 			});
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_RIGHT), ImageResourceID::EditAlignmentRight)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_RIGHT), ImageResourceID::EditAlignmentRight)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				ToggleTag("div", "align", "right");
 			});
-			KMainWindow::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_FILL), ImageResourceID::EditAlignmentJustify)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
+			Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_JUSTIFY_FILL), ImageResourceID::EditAlignmentJustify)->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& event)
 			{
 				ToggleTag("div", "align", "justify");
 			});
@@ -264,7 +264,7 @@ namespace Kortex::UI
 	{
 		if (Create(parent))
 		{
-			SetSize(KMainWindow::GetDialogBestSize(this));
+			SetSize(IMainWindow::GetDialogBestSize(this));
 			CenterOnScreen();
 
 			Bind(wxEVT_CHAR_HOOK, &TextEditDialog::OnKey, this);

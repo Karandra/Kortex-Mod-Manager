@@ -364,9 +364,6 @@
     <Filter Include="Code\Headers\ModPackages\InstallWizard\Info">
       <UniqueIdentifier>{1477e059-642f-494d-895d-a6b47847a993}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\ModPackages\InstallWizard\Requiremets">
-      <UniqueIdentifier>{2ec8edb0-1e7d-44ec-b80c-f9d7d281be3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\ModPackages\InstallWizard\Requiremets">
       <UniqueIdentifier>{6ffb82b6-d585-4be7-a482-3aadee3b0411}</UniqueIdentifier>
     </Filter>
@@ -415,25 +412,19 @@
     <Filter Include="Code\Source\Application\Settings">
       <UniqueIdentifier>{e9b8debe-3e5f-4a98-b530-52a2df3ad7a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Source\ModPackages\InstallWizard\Requirements">
+      <UniqueIdentifier>{2ec8edb0-1e7d-44ec-b80c-f9d7d281be3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Code\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\KMainWindow.cpp">
-      <Filter>Code\Source\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\KWorkspace.cpp">
-      <Filter>Code\Source\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\KAux.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\KQuickThread.cpp">
       <Filter>Code\Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\KWorkspaceController.cpp">
-      <Filter>Code\Source\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp">
       <Filter>Code\Source\UI</Filter>
@@ -1158,12 +1149,6 @@
     <ClCompile Include="Source\ModPackages\PackageManager\DefaultPackageManager.cpp">
       <Filter>Code\Source\ModPackages\PackageManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModPackages\PackageManager\Workspace.cpp">
-      <Filter>Code\Source\ModPackages\PackageManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModPackages\PackageManager\DisplayModel.cpp">
-      <Filter>Code\Source\ModPackages\PackageManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModPackages\ModPackage.cpp">
       <Filter>Code\Source\ModPackages</Filter>
     </ClCompile>
@@ -1181,12 +1166,6 @@
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModPackages\InstallWizard\Requiremets\RequirementsPage.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Requiremets</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModPackages\InstallWizard\Requiremets\DisplayModel.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Requiremets</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Components\DisplayModel.cpp">
       <Filter>Code\Source\ModPackages\InstallWizard\Components</Filter>
@@ -1269,16 +1248,40 @@
     <ClCompile Include="Source\Application\AppOption.cpp">
       <Filter>Code\Source\Application</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Application\DefaultWorkspace.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IWorkspace.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\MainWindow.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IWorkspaceContainer.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IMainWindow.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\WorkspaceBookContainer.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\UI.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IWorkspaceDocument.cpp">
+      <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Requirements\DisplayModel.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Requirements</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModPackages\InstallWizard\Requirements\RequirementsPage.cpp">
+      <Filter>Code\Source\ModPackages\InstallWizard\Requirements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
       <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KMainWindow.h">
-      <Filter>Code\Headers\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KWorkspace.h">
-      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KAux.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -1291,9 +1294,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\KEntryRefT.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\KWorkspaceController.h">
-      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KImageViewerDialog.h">
       <Filter>Code\Headers\UI</Filter>
@@ -1760,9 +1760,6 @@
     <ClInclude Include="Source\Application\IModule.h">
       <Filter>Code\Headers\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\IPluggableManager.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\Translation.h">
       <Filter>Code\Headers\Application</Filter>
     </ClInclude>
@@ -1813,9 +1810,6 @@
     </ClInclude>
     <ClInclude Include="Include\Kortex\VirtualGameFolder.hpp">
       <Filter>Code\Include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\RTTI.h">
-      <Filter>Code\Headers\Application</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Core.hpp">
       <Filter>Code\Include</Filter>
@@ -2249,12 +2243,6 @@
     <ClInclude Include="Source\ModPackages\PackageManager\IWithScriptExtender.h">
       <Filter>Code\Headers\ModPackages\PackageManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModPackages\PackageManager\Workspace.h">
-      <Filter>Code\Headers\ModPackages\PackageManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\PackageManager\DisplayModel.h">
-      <Filter>Code\Headers\ModPackages\PackageManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModPackages\ModPackage.h">
       <Filter>Code\Headers\ModPackages</Filter>
     </ClInclude>
@@ -2284,12 +2272,6 @@
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.h">
       <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Requiremets\RequirementsPage.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Requiremets\DisplayModel.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModel.h">
       <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
@@ -2404,6 +2386,36 @@
     </ClInclude>
     <ClInclude Include="Source\Application\AppOption.h">
       <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\DefaultWorkspace.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IMainWindow.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IWorkspace.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IWorkspaceContainer.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\MainWindow.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\WorkspaceBookContainer.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\UI.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IWorkspaceDocument.h">
+      <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\RequirementsPage.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\DisplayModel.h">
+      <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

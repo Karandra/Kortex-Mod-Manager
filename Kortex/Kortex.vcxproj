@@ -60,6 +60,12 @@
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp" />
     <ClCompile Include="Source\Application\ApplicationModule.cpp" />
     <ClCompile Include="Source\Application\BroadcastProcessor.cpp" />
+    <ClCompile Include="Source\Application\DefaultWorkspace.cpp" />
+    <ClCompile Include="Source\Application\IMainWindow.cpp" />
+    <ClCompile Include="Source\Application\IWorkspace.cpp" />
+    <ClCompile Include="Source\Application\IWorkspaceContainer.cpp" />
+    <ClCompile Include="Source\Application\IWorkspaceDocument.cpp" />
+    <ClCompile Include="Source\Application\MainWindow.cpp" />
     <ClCompile Include="Source\Application\Module\Info.cpp" />
     <ClCompile Include="Source\Application\Notifications\BaseNotification.cpp" />
     <ClCompile Include="Source\Application\Notifications\DefaultNotificationCenter.cpp" />
@@ -91,6 +97,7 @@
     <ClCompile Include="Source\Application\VariablesTable\VariableValue.cpp" />
     <ClCompile Include="Source\Application\VariablesTable\DynamicVariableTable.cpp" />
     <ClCompile Include="Source\Application\VariablesTable\StaticVariableTable.cpp" />
+    <ClCompile Include="Source\Application\WorkspaceBookContainer.cpp" />
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.cpp" />
@@ -215,16 +222,14 @@
     <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoPage.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.cpp" />
-    <ClCompile Include="Source\ModPackages\InstallWizard\Requiremets\DisplayModel.cpp" />
-    <ClCompile Include="Source\ModPackages\InstallWizard\Requiremets\RequirementsPage.cpp" />
+    <ClCompile Include="Source\ModPackages\InstallWizard\Requirements\DisplayModel.cpp" />
+    <ClCompile Include="Source\ModPackages\InstallWizard\Requirements\RequirementsPage.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\WizardDialog.cpp" />
     <ClCompile Include="Source\ModPackages\InstallWizard\WizardPage.cpp" />
     <ClCompile Include="Source\ModPackages\IPackageManager.cpp" />
     <ClCompile Include="Source\ModPackages\ModPackage.cpp" />
     <ClCompile Include="Source\ModPackages\ModPackagesModule.cpp" />
     <ClCompile Include="Source\ModPackages\PackageManager\DefaultPackageManager.cpp" />
-    <ClCompile Include="Source\ModPackages\PackageManager\DisplayModel.cpp" />
-    <ClCompile Include="Source\ModPackages\PackageManager\Workspace.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadManager.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DisplayModel.cpp" />
     <ClCompile Include="Source\Network\DownloadManager\DisplayModelNode.cpp" />
@@ -319,19 +324,17 @@
     <ClCompile Include="Source\UI\TextEditDialog.cpp" />
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
     <ClCompile Include="Source\UI\KImageViewerDialog.cpp" />
-    <ClCompile Include="Source\UI\KWorkspaceController.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\UI\KMainWindow.cpp" />
-    <ClCompile Include="Source\UI\KWorkspace.cpp" />
     <ClCompile Include="Source\Utility\KAux.cpp" />
     <ClCompile Include="Source\Utility\KQuickThread.cpp" />
     <ClCompile Include="Source\Utility\Log.cpp" />
     <ClCompile Include="Source\Utility\MenuSeparator.cpp" />
+    <ClCompile Include="Source\Utility\UI.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\Convergence.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\DefaultVFSService.cpp" />
     <ClCompile Include="Source\VirtualFileSystem\BaseFileSystem.cpp" />
@@ -385,7 +388,13 @@
     <ClInclude Include="Source\Application\About\DisplayModelNode.h" />
     <ClInclude Include="Source\Application\ApplicationModule.h" />
     <ClInclude Include="Source\Application\BroadcastProcessor.h" />
+    <ClInclude Include="Source\Application\DefaultWorkspace.h" />
     <ClInclude Include="Source\Application\Events\LogEvent.h" />
+    <ClInclude Include="Source\Application\IMainWindow.h" />
+    <ClInclude Include="Source\Application\IWorkspace.h" />
+    <ClInclude Include="Source\Application\IWorkspaceContainer.h" />
+    <ClInclude Include="Source\Application\IWorkspaceDocument.h" />
+    <ClInclude Include="Source\Application\MainWindow.h" />
     <ClInclude Include="Source\Application\Notifications\BaseNotification.h" />
     <ClInclude Include="Source\Application\Notifications\DefaultNotificationCenter.h" />
     <ClInclude Include="Source\Application\Notifications\DisplayModel.h" />
@@ -401,7 +410,6 @@
     <ClInclude Include="Source\Application\IModule.h" />
     <ClInclude Include="Source\Application\INotification.h" />
     <ClInclude Include="Source\Application\INotificationCenter.h" />
-    <ClInclude Include="Source\Application\IPluggableManager.h" />
     <ClInclude Include="Source\Application\IThemeManager.h" />
     <ClInclude Include="Source\Application\IVariableTable.h" />
     <ClInclude Include="Source\Application\Options\Macros.h" />
@@ -412,7 +420,6 @@
     <ClInclude Include="Source\Application\Resources\IImageProvider.h" />
     <ClInclude Include="Source\Application\Resources\ImageResourceID.h" />
     <ClInclude Include="Source\Application\Resources\ResourceID.h" />
-    <ClInclude Include="Source\Application\RTTI.h" />
     <ClInclude Include="Source\Application\Settings\ConfigManager.h" />
     <ClInclude Include="Source\Application\Settings\Window.h" />
     <ClInclude Include="Source\Application\Translation.h" />
@@ -426,6 +433,7 @@
     <ClInclude Include="Source\Application\VariablesTable\DynamicVariableTable.h" />
     <ClInclude Include="Source\Application\VariablesTable\StaticVariableTable.h" />
     <ClInclude Include="Source\Application\VariablesTable\VariablesDatabase.h" />
+    <ClInclude Include="Source\Application\WorkspaceBookContainer.h" />
     <ClInclude Include="Source\Archive\KBethesdaArchive.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.h" />
@@ -569,8 +577,8 @@
     <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoPage.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.h" />
-    <ClInclude Include="Source\ModPackages\InstallWizard\Requiremets\DisplayModel.h" />
-    <ClInclude Include="Source\ModPackages\InstallWizard\Requiremets\RequirementsPage.h" />
+    <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\DisplayModel.h" />
+    <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\RequirementsPage.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\WizardDialog.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\StepStack.h" />
     <ClInclude Include="Source\ModPackages\InstallWizard\WizardPage.h" />
@@ -579,8 +587,6 @@
     <ClInclude Include="Source\ModPackages\ModPackagesModule.h" />
     <ClInclude Include="Source\ModPackages\PackageManager\DefaultPackageManager.h" />
     <ClInclude Include="Source\ModPackages\PackageManager\IWithScriptExtender.h" />
-    <ClInclude Include="Source\ModPackages\PackageManager\DisplayModel.h" />
-    <ClInclude Include="Source\ModPackages\PackageManager\Workspace.h" />
     <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadManager.h" />
     <ClInclude Include="Source\Network\DownloadManager\DisplayModel.h" />
     <ClInclude Include="Source\Network\DownloadManager\DisplayModelNode.h" />
@@ -699,15 +705,13 @@
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
     <ClInclude Include="Source\UI\KImageViewerDialog.h" />
     <ClInclude Include="Source\Utility\KLabeledValue.h" />
-    <ClInclude Include="Source\UI\KWorkspaceController.h" />
     <ClInclude Include="Source\Utility\KEntryRefT.h" />
     <ClInclude Include="Source\Utility\Log.h" />
     <ClInclude Include="Source\Utility\MenuSeparator.h" />
     <ClInclude Include="Source\Utility\String.h" />
+    <ClInclude Include="Source\Utility\UI.h" />
     <ClInclude Include="Source\Utility\UniqueID.h" />
     <ClInclude Include="Source\stdafx.h" />
-    <ClInclude Include="Source\UI\KMainWindow.h" />
-    <ClInclude Include="Source\UI\KWorkspace.h" />
     <ClInclude Include="Source\Utility\KAux.h" />
     <ClInclude Include="Source\Utility\KQuickThread.h" />
     <ClInclude Include="Source\Utility\KThemeManager.h" />

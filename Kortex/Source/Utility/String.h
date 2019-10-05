@@ -4,5 +4,5 @@
 
 namespace Kortex::Utility::String
 {
-	using namespace Kx::Utility::String;
+	using namespace KxUtility::String;
 }

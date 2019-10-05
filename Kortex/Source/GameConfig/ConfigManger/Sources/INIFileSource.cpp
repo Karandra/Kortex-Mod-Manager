@@ -24,6 +24,7 @@ namespace Kortex::GameConfig
 		{
 			return GetINI().Save(stream);
 		}
+		return false;
 	}
 	void INIFileSource::Close()
 	{

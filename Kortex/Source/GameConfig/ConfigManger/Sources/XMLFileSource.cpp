@@ -24,6 +24,7 @@ namespace Kortex::GameConfig
 		{
 			return GetXML().Save(stream);
 		}
+		return false;
 	}
 	void XMLFileSource::Close()
 	{

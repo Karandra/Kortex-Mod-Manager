@@ -80,7 +80,7 @@ namespace Kortex
 			using KxIObject::QueryInterface;
 			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
 			{
-				return KxIObject::QueryAnyOf<IPluginManager>(iid, ptr, *this);
+				return KxIObject::QueryAnyOf(iid, ptr, *this);
 			}
 
 			virtual const PluginManager::Config& GetConfig() const = 0;

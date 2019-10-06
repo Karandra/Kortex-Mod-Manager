@@ -176,6 +176,6 @@ namespace Kortex::DownloadManager
 
 	IWorkspace::RefVector DefaultDownloadManager::EnumWorkspaces() const
 	{
-		return {Workspace::GetInstance()};
+		return ToWorkspacesList(Workspace::GetInstance());
 	}
 }

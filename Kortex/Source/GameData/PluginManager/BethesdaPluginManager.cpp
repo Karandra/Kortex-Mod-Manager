@@ -262,7 +262,7 @@ namespace Kortex::PluginManager
 
 	IWorkspace::RefVector BethesdaPluginManager::EnumWorkspaces() const
 	{
-		return {Workspace::GetInstance()};
+		return ToWorkspacesList(Workspace::GetInstance());
 	}
 	std::unique_ptr<IDisplayModel> BethesdaPluginManager::CreateDisplayModel()
 	{

@@ -9,6 +9,7 @@
 
 #include "DefaultModManager.h"
 #include "Workspace.h"
+#include "GameMods/VirtualGameFolder/Workspace.h"
 #include "DisplayModel.h"
 #include "BasicGameMod.h"
 #include "Utility/KOperationWithProgress.h"
@@ -221,6 +222,11 @@ namespace Kortex::ModManager
 	{
 		m_VFS.Disable();
 	}
+	void DefaultModManager::CreateWorkspace()
+	{
+		new Workspace();
+		new VirtualGameFolder::Workspace();
+	}
 
 	DefaultModManager::DefaultModManager()
 		:m_VFS(*this), m_BaseGame(-65535), m_WriteTarget(65535)
@@ -229,7 +235,7 @@ namespace Kortex::ModManager
 
 	IWorkspace::RefVector DefaultModManager::EnumWorkspaces() const
 	{
-		return {Workspace::GetInstance()};
+		return ToWorkspacesList(Workspace::GetInstance(), VirtualGameFolder::Workspace::GetInstance());
 	}
 	void DefaultModManager::Load()
 	{

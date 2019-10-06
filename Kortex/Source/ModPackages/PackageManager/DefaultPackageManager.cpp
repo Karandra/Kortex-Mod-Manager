@@ -28,6 +28,15 @@ namespace Kortex::PackageDesigner
 	void DefaultPackageManager::OnExit()
 	{
 	}
+	void DefaultPackageManager::CreateWorkspace()
+	{
+		new KPackageCreatorWorkspace();
+	}
+
+	IWorkspace::RefVector DefaultPackageManager::EnumWorkspaces() const
+	{
+		return ToWorkspacesList(KPackageCreatorWorkspace::GetInstance());
+	}
 
 	void DefaultPackageManager::OnModListMenu(KxMenu& menu, const std::vector<IGameMod*>& selectedMods, IGameMod* focusedMod)
 	{

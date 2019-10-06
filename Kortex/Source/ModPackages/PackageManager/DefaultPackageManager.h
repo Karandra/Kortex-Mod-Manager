@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "ModPackages/IPackageManager.h"
+#include "Application/IWorkspace.h"
 #include "IWithScriptExtender.h"
 
 namespace Kortex::PackageDesigner
@@ -34,8 +35,11 @@ namespace Kortex::PackageDesigner
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 			void OnInit() override;
 			void OnExit() override;
+			void CreateWorkspace() override;
 
 		public:
+			IWorkspace::RefVector EnumWorkspaces() const override;
+
 			const KPPRRequirementEntry::Vector& GetStdRequirements() const override
 			{
 				return m_StandardRequirements.GetEntries();

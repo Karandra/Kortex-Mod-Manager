@@ -93,7 +93,7 @@ namespace Kortex::GameConfig
 
 	IWorkspace::RefVector DefaultGameConfigManager::EnumWorkspaces() const
 	{
-		return {Workspace::GetInstance()};
+		return ToWorkspacesList(Workspace::GetInstance());
 	}
 
 	void DefaultGameConfigManager::Load()

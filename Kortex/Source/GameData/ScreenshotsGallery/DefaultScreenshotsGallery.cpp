@@ -25,7 +25,7 @@ namespace Kortex::ScreenshotsGallery
 
 	IWorkspace::RefVector DefaultScreenshotsGallery::EnumWorkspaces() const
 	{
-		return {Workspace::GetInstance()};
+		return ToWorkspacesList(Workspace::GetInstance());
 	}
 }
 

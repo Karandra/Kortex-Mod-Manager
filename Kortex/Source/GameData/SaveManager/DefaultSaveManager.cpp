@@ -53,7 +53,7 @@ namespace Kortex::SaveManager
 
 	IWorkspace::RefVector DefaultSaveManager::EnumWorkspaces() const
 	{
-		return {Workspace::GetInstance()};
+		return ToWorkspacesList(Workspace::GetInstance());
 	}
 	std::unique_ptr<IGameSave> DefaultSaveManager::NewSave() const
 	{

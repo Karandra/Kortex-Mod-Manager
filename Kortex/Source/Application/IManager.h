@@ -37,6 +37,24 @@ namespace Kortex
 			using RefList = std::list<IManager*>;
 			using RefVector = std::vector<IManager*>;
 
+		public:
+			template<class... Args>
+			static std::vector<IWorkspace*> ToWorkspacesList(Args&&... arg)
+			{
+				std::vector<IWorkspace*> items;
+				auto Filter = [&items](IWorkspace* workspace)
+				{
+					if (workspace)
+					{
+						items.push_back(workspace);
+					}
+					return 0;
+				};
+
+				std::initializer_list<int>{Filter(arg) ...};
+				return items;
+			}
+
 		private:
 			IModule& m_Module;
 

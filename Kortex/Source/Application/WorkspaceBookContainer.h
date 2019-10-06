@@ -9,7 +9,12 @@ namespace Kortex::Application
 		private:
 			bool m_HasCurrentWorkspace = false;
 
-		private:
+		protected:
+			bool RunSwitchSequence(IWorkspace* fromWorkspace, IWorkspace& toWorkspace);
+			void ShowWorkspace(IWorkspace& workspace) override;
+			void HideWorkspace(IWorkspace& workspace) override;
+
+		public:
 			wxBookCtrlBase& GetBookCtrl()
 			{
 				return static_cast<wxBookCtrlBase&>(GetWindow());
@@ -19,12 +24,6 @@ namespace Kortex::Application
 				return static_cast<const wxBookCtrlBase&>(GetWindow());
 			}
 
-		protected:
-			bool RunSwitchSequence(IWorkspace& fromWorkspace, IWorkspace& toWorkspace);
-			void ShowWorkspace(IWorkspace& workspace) override;
-			void HideWorkspace(IWorkspace& workspace) override;
-
-		public:
 			IWorkspace::RefVector EnumWorkspaces() const override;
 			IWorkspace* GetWorkspaceByID(const wxString& id) const override;
 			IWorkspace* GetCurrentWorkspace() const override;

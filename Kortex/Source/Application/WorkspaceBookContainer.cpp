@@ -4,25 +4,25 @@
 
 namespace Kortex::Application
 {
-	bool WorkspaceBookContainer::RunSwitchSequence(IWorkspace& fromWorkspace, IWorkspace& toWorkspace)
+	bool WorkspaceBookContainer::RunSwitchSequence(IWorkspace* fromWorkspace, IWorkspace& toWorkspace)
 	{
-		Utility::Log::LogInfo("%1: switching from %2 to %3", __FUNCTION__, fromWorkspace.GetID(), toWorkspace.GetID());
+		Utility::Log::LogInfo("%1: switching from %2 to %3", __FUNCTION__, fromWorkspace ? fromWorkspace->GetID() : "null", toWorkspace.GetID());
 
-		if (&fromWorkspace == &toWorkspace)
+		if (fromWorkspace == &toWorkspace)
 		{
 			Utility::Log::LogInfo("Can't switch workspace to itself");
 			return false;
 		}
-		if (!fromWorkspace.HasWorkspaceContainer() || !toWorkspace.HasWorkspaceContainer())
+		if (fromWorkspace && (!fromWorkspace->HasWorkspaceContainer() || !toWorkspace.HasWorkspaceContainer()))
 		{
 			Utility::Log::LogInfo("Invalid workspace");
 			return false;
 		}
 
 		// Close current workspace
-		if (!CallOnClose(fromWorkspace))
+		if (fromWorkspace && !CallOnClose(*fromWorkspace))
 		{
-			Utility::Log::LogInfo("%1: %2 refused to close", __FUNCTION__, fromWorkspace.GetID());
+			Utility::Log::LogInfo("%1: %2 refused to close", __FUNCTION__, fromWorkspace->GetID());
 			return false;
 		}
 
@@ -137,12 +137,7 @@ namespace Kortex::Application
 	{
 		Utility::Log::LogInfo("Attempt to switch workspace to %1", nextWorkspace.GetID());
 
-		IWorkspace* current = GetCurrentWorkspace();
-		if (current != &nextWorkspace)
-		{
-			return RunSwitchSequence(*current, nextWorkspace);
-		}
-		return true;
+		return RunSwitchSequence(GetCurrentWorkspace(), nextWorkspace);
 	}
 
 	IWorkspace* WorkspaceBookContainer::GetWorkspaceByIndex(size_t index) const

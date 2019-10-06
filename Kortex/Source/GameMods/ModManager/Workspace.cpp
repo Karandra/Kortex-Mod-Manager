@@ -199,12 +199,7 @@ namespace Kortex::ModManager
 	{
 		if (!OpenedOnce())
 		{
-			m_SplitterLeftRight->SplitVertically(m_ModsPane, m_PaneRight_Tabs);
-			if (m_PaneRight_Tabs->GetPageCount() == 0)
-			{
-				m_SplitterLeftRight->Unsplit(m_PaneRight_Tabs);
-			}
-
+			m_SplitterLeftRight->SplitVertically(m_ModsPane, &m_WorkspaceContainer.GetWindow());
 			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
 
 			auto displayModelOptions = GetDisplayModelOptions();

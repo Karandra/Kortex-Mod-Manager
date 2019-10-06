@@ -90,9 +90,6 @@ namespace Kortex::ModManager
 			KxPanel* m_ModsPane = nullptr;
 			DisplayModel* m_DisplayModel = nullptr;
 
-			// Right pane
-			KxAuiNotebook* m_PaneRight_Tabs = nullptr;
-
 			// Controls
 			KxButton* m_ActivateButton = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
@@ -104,7 +101,10 @@ namespace Kortex::ModManager
 			void OnReloadWorkspace() override;
 
 		public:
-			Workspace() = default;
+			Workspace()
+				:m_WorkspaceContainer(*this)
+			{
+			}
 			~Workspace();
 
 		private:

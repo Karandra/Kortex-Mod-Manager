@@ -21,7 +21,7 @@ namespace Kortex::GameInstance
 		configNode.QueryOrCreateElement("LocalSaves").SetAttribute("Enabled", m_LocalSavesEnabled);
 		configNode.QueryOrCreateElement("LocalConfig").SetAttribute("Enabled", m_LocalConfigEnabled);
 
-		if (IModManager::HasInstance())
+		if (IModManager::GetInstance())
 		{
 			KxXMLNode modsNode = rootNode.QueryOrCreateElement("Mods");
 			modsNode.ClearChildren();
@@ -34,7 +34,7 @@ namespace Kortex::GameInstance
 			}
 		}
 
-		if (IPluginManager::HasInstance())
+		if (IPluginManager::GetInstance())
 		{
 			KxXMLNode pluginsNode = rootNode.QueryOrCreateElement("Plugins");
 			pluginsNode.ClearChildren();

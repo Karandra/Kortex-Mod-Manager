@@ -49,7 +49,7 @@ namespace Kortex::PluginManager
 	int LibLoot::GetLootGameID() const
 	{
 		loot::GameType gameType = (loot::GameType)INVALID_GAME_ID;
-		if (Kortex::IPluginManager::HasInstance() && IGameInstance::GetActive())
+		if (IPluginManager::GetInstance() && IGameInstance::GetActive())
 		{
 			const GameID gameID = IGameInstance::GetActive()->GetGameID();
 

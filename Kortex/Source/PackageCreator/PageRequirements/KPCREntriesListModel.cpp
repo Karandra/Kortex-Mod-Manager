@@ -72,7 +72,7 @@ namespace Kortex::PackageDesigner
 			choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileExist"));
 			choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileNotExist"));
 	
-			if (Kortex::IPluginManager::HasInstance())
+			if (IPluginManager::GetInstance())
 			{
 				choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.PluginActive"));
 				choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.PluginInactive"));

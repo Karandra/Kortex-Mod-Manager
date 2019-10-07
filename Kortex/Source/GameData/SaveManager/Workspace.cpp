@@ -75,6 +75,10 @@ namespace Kortex::SaveManager
 	}
 	bool Workspace::OnOpenWorkspace()
 	{
+		if (!OpenedOnce())
+		{
+			OnReloadWorkspace();
+		}
 		return true;
 	}
 	bool Workspace::OnCloseWorkspace()

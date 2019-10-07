@@ -7,7 +7,7 @@
 
 namespace Kortex::ScreenshotsGallery
 {
-	void DefaultScreenshotsGallery::CreateWorkspace()
+	void DefaultScreenshotsGallery::CreateWorkspaces()
 	{
 		new Workspace();
 	}

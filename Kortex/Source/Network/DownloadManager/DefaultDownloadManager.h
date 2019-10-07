@@ -22,7 +22,7 @@ namespace Kortex::DownloadManager
 			void OnInit() override;
 			void OnExit() override;
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
-			void CreateWorkspace() override;
+			void CreateWorkspaces() override;
 
 		public:
 			IWorkspace::RefVector EnumWorkspaces() const override;

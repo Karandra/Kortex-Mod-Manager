@@ -69,7 +69,7 @@ namespace Kortex::PluginManager
 
 			virtual wxString OnWriteToLoadOrder(const IGamePlugin& plugin) const;
 			virtual wxString OnWriteToActiveOrder(const IGamePlugin& plugin) const;
-			void CreateWorkspace() override;
+			void CreateWorkspaces() override;
 
 		public:
 			BethesdaPluginManager();

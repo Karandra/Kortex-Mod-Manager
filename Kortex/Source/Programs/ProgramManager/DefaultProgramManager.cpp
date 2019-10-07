@@ -24,7 +24,7 @@ namespace Kortex::ProgramManager
 	{
 		LoadProgramsFromXML(m_DefaultPrograms, managerNode.GetFirstChildElement("DefaultPrograms"));
 	}
-	void DefaultProgramManager::CreateWorkspace()
+	void DefaultProgramManager::CreateWorkspaces()
 	{
 		new Workspace();
 	}

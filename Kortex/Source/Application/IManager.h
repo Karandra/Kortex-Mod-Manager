@@ -62,7 +62,7 @@ namespace Kortex
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) = 0;
 			virtual void OnInit() = 0;
 			virtual void OnExit() = 0;
-			virtual void CreateWorkspace()
+			virtual void CreateWorkspaces()
 			{
 			}
 

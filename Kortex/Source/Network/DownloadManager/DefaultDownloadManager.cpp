@@ -75,7 +75,7 @@ namespace Kortex::DownloadManager
 		IDownloadManager::OnLoadInstance(instance, managerNode);
 	}
 	
-	void DefaultDownloadManager::CreateWorkspace()
+	void DefaultDownloadManager::CreateWorkspaces()
 	{
 		// Create workspace
 		Workspace* workspace = new Workspace();

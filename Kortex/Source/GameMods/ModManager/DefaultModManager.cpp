@@ -222,7 +222,7 @@ namespace Kortex::ModManager
 	{
 		m_VFS.Disable();
 	}
-	void DefaultModManager::CreateWorkspace()
+	void DefaultModManager::CreateWorkspaces()
 	{
 		new Workspace();
 		new VirtualGameFolder::Workspace();

@@ -59,7 +59,7 @@ namespace Kortex::GameConfig
 			}
 		}
 	}
-	void DefaultGameConfigManager::CreateWorkspace()
+	void DefaultGameConfigManager::CreateWorkspaces()
 	{
 		new Workspace();
 	}

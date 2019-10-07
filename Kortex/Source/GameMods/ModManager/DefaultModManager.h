@@ -122,7 +122,7 @@ namespace Kortex::ModManager
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 			void OnInit() override;
 			void OnExit() override;
-			void CreateWorkspace() override;
+			void CreateWorkspaces() override;
 
 		public:
 			DefaultModManager();

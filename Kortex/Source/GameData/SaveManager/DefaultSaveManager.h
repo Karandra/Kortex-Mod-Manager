@@ -68,7 +68,7 @@ namespace Kortex::SaveManager
 			KxStringVector m_ActiveFilters;
 
 		private:
-			void CreateWorkspace() override;
+			void CreateWorkspaces() override;
 			void OnSavesLocationChanged(BroadcastEvent& event);
 
 		protected:

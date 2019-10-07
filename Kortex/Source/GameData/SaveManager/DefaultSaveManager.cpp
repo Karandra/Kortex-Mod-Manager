@@ -29,7 +29,7 @@ namespace
 
 namespace Kortex::SaveManager
 {
-	void DefaultSaveManager::CreateWorkspace()
+	void DefaultSaveManager::CreateWorkspaces()
 	{
 		new Workspace();
 	}

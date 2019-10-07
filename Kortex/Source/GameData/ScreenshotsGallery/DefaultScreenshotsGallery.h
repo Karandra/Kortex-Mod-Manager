@@ -26,7 +26,7 @@ namespace Kortex::ScreenshotsGallery
 			Config m_Config;
 
 		protected:
-			void CreateWorkspace() override;
+			void CreateWorkspaces() override;
 
 		protected:
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;

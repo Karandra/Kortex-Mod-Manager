@@ -110,7 +110,7 @@ namespace Kortex::PluginManager
 	{
 		return plugin.IsActive() ? plugin.GetName() : wxEmptyString;
 	}
-	void BethesdaPluginManager::CreateWorkspace()
+	void BethesdaPluginManager::CreateWorkspaces()
 	{
 		new Workspace();
 	}

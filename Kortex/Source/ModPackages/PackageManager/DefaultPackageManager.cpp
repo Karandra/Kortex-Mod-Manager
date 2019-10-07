@@ -28,7 +28,7 @@ namespace Kortex::PackageDesigner
 	void DefaultPackageManager::OnExit()
 	{
 	}
-	void DefaultPackageManager::CreateWorkspace()
+	void DefaultPackageManager::CreateWorkspaces()
 	{
 		new KPackageCreatorWorkspace();
 	}

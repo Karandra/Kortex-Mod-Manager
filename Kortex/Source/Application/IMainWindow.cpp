@@ -25,7 +25,7 @@ namespace Kortex
 				IWorkspace::RefVector workspaces = manager->EnumWorkspaces();
 				if (workspaces.empty())
 				{
-					manager->CreateWorkspace();
+					manager->CreateWorkspaces();
 				}
 
 				// Add them to containers if the workspace isn't added

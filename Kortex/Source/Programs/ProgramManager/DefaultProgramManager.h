@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Programs/IProgramEntry.h"
 #include "Programs/IProgramManager.h"
+#include "Application/IWorkspace.h"
 #include <KxFramework/KxXML.h>
 
 namespace Kortex::ProgramManager
@@ -17,11 +18,14 @@ namespace Kortex::ProgramManager
 			void SaveUserPrograms() const;
 
 		protected:
-			virtual void OnInit() override;
-			virtual void OnExit() override;
-			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
+			void OnInit() override;
+			void OnExit() override;
+			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
+			void CreateWorkspace() override;
 
 		public:
+			IWorkspace::RefVector EnumWorkspaces() const override;
+
 			const IProgramEntry::Vector& GetProgramList() const override
 			{
 				return m_UserPrograms;
@@ -33,7 +37,6 @@ namespace Kortex::ProgramManager
 			
 			std::unique_ptr<IProgramEntry> NewProgram() override;
 			void RemoveProgram(IProgramEntry& programEntry) override;
-
 			void LoadDefaultPrograms() override;
 	};
 }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultProgramManager.h"
 #include "DefaultProgramEntry.h"
+#include "Workspace.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Common/Programs.hpp>
 
@@ -23,6 +24,10 @@ namespace Kortex::ProgramManager
 	{
 		LoadProgramsFromXML(m_DefaultPrograms, managerNode.GetFirstChildElement("DefaultPrograms"));
 	}
+	void DefaultProgramManager::CreateWorkspace()
+	{
+		new Workspace();
+	}
 
 	void DefaultProgramManager::LoadUserPrograms()
 	{
@@ -43,12 +48,9 @@ namespace Kortex::ProgramManager
 		option.NotifyChange();
 	}
 
-	void DefaultProgramManager::LoadDefaultPrograms()
+	IWorkspace::RefVector DefaultProgramManager::EnumWorkspaces() const
 	{
-		for (const auto& programEntry: m_DefaultPrograms)
-		{
-			m_UserPrograms.emplace_back(std::make_unique<DefaultProgramEntry>(static_cast<DefaultProgramEntry&>(*programEntry)));
-		}
+		return ToWorkspacesList(Workspace::GetInstance());
 	}
 
 	std::unique_ptr<IProgramEntry> DefaultProgramManager::NewProgram()
@@ -62,5 +64,12 @@ namespace Kortex::ProgramManager
 			return item.get() == &programEntry;
 		});
 		m_UserPrograms.erase(it, m_UserPrograms.end());
+	}
+	void DefaultProgramManager::LoadDefaultPrograms()
+	{
+		for (const auto& programEntry: m_DefaultPrograms)
+		{
+			m_UserPrograms.emplace_back(std::make_unique<DefaultProgramEntry>(static_cast<DefaultProgramEntry&>(*programEntry)));
+		}
 	}
 }

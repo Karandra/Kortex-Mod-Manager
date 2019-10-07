@@ -34,6 +34,7 @@
 namespace Kortex::Application::OName
 {
 	KortexDefOption(Splitter);
+	KortexDefOption(RightPane);
 
 	KortexDefOption(ShowPriorityGroups);
 	KortexDefOption(ShowNotInstalledMods);
@@ -114,13 +115,17 @@ namespace
 	{
 		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::Splitter);
 	}
+	auto GetRightPaneOptions()
+	{
+		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::RightPane);
+	}
 }
 
 namespace Kortex::ModManager
 {
 	void WorkspaceContainer::Create(wxWindow* parent)
 	{
-		m_BookCtrl = new KxAuiNotebook(parent, KxID_NONE);
+		m_BookCtrl = new KxAuiNotebook(parent, KxID_NONE, KxAuiNotebook::DefaultStyle|wxAUI_NB_TAB_MOVE);
 		m_BookCtrl->SetImageList(&ImageProvider::GetImageList());
 
 		m_BookCtrl->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &WorkspaceContainer::OnPageOpening, this);
@@ -207,6 +212,7 @@ namespace Kortex::ModManager
 
 			m_SplitterLeftRight->SplitVertically(m_ModsPane, &m_WorkspaceContainer.GetWindow());
 			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
+			//m_WorkspaceContainer.GetAuiManager().LoadPerspective(GetRightPaneOptions().GetValue(), false);
 
 			auto displayModelOptions = GetDisplayModelOptions();
 			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
@@ -244,6 +250,7 @@ namespace Kortex::ModManager
 			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
 
 			GetSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
+			//GetRightPaneOptions().SetValue(m_WorkspaceContainer.GetAuiManager().SavePerspective(), KxXMLDocument::AsCDATA::Always);
 		}
 	}
 

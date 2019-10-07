@@ -52,6 +52,10 @@ namespace Kortex::ModManager
 				return *m_BookCtrl;
 			}
 			IWorkspaceContainer* GetParentContainer() override;
+			wxAuiManager& GetAuiManager()
+			{
+				return const_cast<wxAuiManager&>(m_BookCtrl->GetAuiManager());
+			}
 	};
 }
 

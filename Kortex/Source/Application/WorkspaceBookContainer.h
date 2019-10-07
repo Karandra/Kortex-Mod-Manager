@@ -29,7 +29,7 @@ namespace Kortex::Application
 			IWorkspace* GetCurrentWorkspace() const override;
 			size_t GetWorkspaceCount() const override;
 
-			void AddWorkspace(IWorkspace& workspace) override;
+			bool AddWorkspace(IWorkspace& workspace) override;
 			bool RemoveWorkspace(IWorkspace& workspace) override;
 			bool SwitchWorkspace(IWorkspace& nextWorkspace) override;
 

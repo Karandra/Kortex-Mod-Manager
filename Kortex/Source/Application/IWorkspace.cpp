@@ -21,16 +21,26 @@ namespace Kortex
 
 	void IWorkspace::ShowWorkspace()
 	{
-		GetWorkspaceContainer().ShowWorkspace(*this);
+		if (IWorkspaceContainer* container = GetCurrentContainer())
+		{
+			container->ShowWorkspace(*this);
+		}
 	}
 	void IWorkspace::HideWorkspace()
 	{
-		GetWorkspaceContainer().HideWorkspace(*this);
+		if (IWorkspaceContainer* container = GetCurrentContainer())
+		{
+			container->HideWorkspace(*this);
+		}
 	}
 
 	bool IWorkspace::IsCurrent() const
 	{
-		return GetWorkspaceContainer().GetCurrentWorkspace() == this;
+		if (IWorkspaceContainer* container = GetCurrentContainer())
+		{
+			return container->GetCurrentWorkspace() == this;
+		}
+		return false;
 	}
 	bool IWorkspace::IsActive() const
 	{
@@ -38,10 +48,18 @@ namespace Kortex
 	}
 	bool IWorkspace::IsSubWorkspace() const
 	{
-		return HasWorkspaceContainer() && GetWorkspaceContainer().IsSubContainer();
+		if (IWorkspaceContainer* container = GetCurrentContainer())
+		{
+			return container->IsSubContainer();
+		}
+		return false;
 	}
 	bool IWorkspace::SwitchHere()
 	{
-		return GetWorkspaceContainer().SwitchWorkspace(*this);
+		if (IWorkspaceContainer* container = GetCurrentContainer())
+		{
+			return container->SwitchWorkspace(*this);
+		}
+		return false;
 	}
 }

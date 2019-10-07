@@ -18,6 +18,10 @@ namespace Kortex::VirtualGameFolder
 			DisplayModel* m_Model = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
 
+		private:
+			void OnModSerach(wxCommandEvent& event);
+			void OnViewInvalidated(BroadcastEvent& event);
+
 		protected:
 			bool OnCreateWorkspace() override;
 			bool OnOpenWorkspace() override;
@@ -27,10 +31,6 @@ namespace Kortex::VirtualGameFolder
 		public:
 			~Workspace();
 
-		private:
-			void OnModSerach(wxCommandEvent& event);
-			void OnViewInvalidated(BroadcastEvent& event);
-
 		public:
 			wxString GetID() const override;
 			wxString GetName() const override;
@@ -39,5 +39,6 @@ namespace Kortex::VirtualGameFolder
 			{
 				return ImageResourceID::Folders;
 			}
+			IWorkspaceContainer* GetPreferredContainer() const override;
 	};
 }

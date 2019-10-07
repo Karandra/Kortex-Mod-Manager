@@ -138,17 +138,7 @@ namespace Kortex::Application
 	{
 		m_WorkspacesMenu = new KxMenu();
 
-		for (IModule* module: IModule::GetInstances())
-		{
-			for (IManager* manager: module->GetManagers())
-			{
-				CreateWorkspace(*manager);
-				for (IWorkspace* workspace: manager->EnumWorkspaces())
-				{
-					m_WorkspaceContainer.AddWorkspace(*workspace);
-				}
-			}
-		}
+		InitializeWorkspaces();
 		m_ToolBar->AddSeparator();
 
 		KxAuiToolBarItem* toolBarButton = Utility::UI::CreateToolBarButton(m_ToolBar, ITranslator::GetVariable(Variables::KVAR_GAME_NAME));

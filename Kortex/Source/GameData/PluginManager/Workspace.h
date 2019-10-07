@@ -55,6 +55,7 @@ namespace Kortex::PluginManager
 			{
 				return ImageResourceID::PlugDisconnect;
 			}
+			IWorkspaceContainer* GetPreferredContainer() const override;
 
 		public:
 			PluginViewModel* GetModel() const

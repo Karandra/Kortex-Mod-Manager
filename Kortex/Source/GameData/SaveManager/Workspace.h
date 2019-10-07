@@ -64,6 +64,7 @@ namespace Kortex::SaveManager
 			{
 				return ImageResourceID::Jar;
 			}
+			IWorkspaceContainer* GetPreferredContainer() const override;
 
 		public:
 			void OnSelection(const IGameSave* save);

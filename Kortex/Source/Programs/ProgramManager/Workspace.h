@@ -41,5 +41,6 @@ namespace Kortex::ProgramManager
 			{
 				return ImageResourceID::ApplicationRun;
 			}
+			IWorkspaceContainer* GetPreferredContainer() const override;
 	};
 }

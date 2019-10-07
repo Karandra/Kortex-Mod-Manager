@@ -2,9 +2,10 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/PluginManager.hpp>
-#include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
+#include "GameMods/IModManager.h"
+#include "GameMods/ModManager/Workspace.h"
 #include "UI/ImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/KOperationWithProgress.h"
@@ -247,6 +248,15 @@ namespace Kortex::PluginManager
 	{
 		return KTr("PluginManager.NameShort");
 	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		IWorkspaceContainer* result = nullptr;
+		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
+		{
+			result = &workspace.GetWorkspaceContainer();
+		});
+		return result;
+	}
 
 	void Workspace::OnCreateViewContextMenu(KxMenu& menu, const IGamePlugin* plugin)
 	{
@@ -285,7 +295,7 @@ namespace Kortex::PluginManager
 	{
 		KxMenu* sortingMenu = nullptr;
 		const Config& pluginsConfig = IPluginManager::GetInstance()->GetConfig();
-		if (pluginsConfig.HasSortingTools() || LibLoot::HasInstance())
+		if (pluginsConfig.HasSortingTools() || LibLoot::GetInstance())
 		{
 			sortingMenu = new KxMenu();
 			menu.AddSeparator();

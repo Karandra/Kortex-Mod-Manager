@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Workspace.h"
 #include "DisplayModel.h"
+#include "GameMods/ModManager/Workspace.h"
 #include <Kortex/ApplicationOptions.hpp>
 #include <KxFramework/KxSearchBox.h>
 
@@ -22,6 +23,18 @@ namespace
 
 namespace Kortex::VirtualGameFolder
 {
+	void Workspace::OnModSerach(wxCommandEvent& event)
+	{
+		if (m_Model->SetSearchMask(event.GetEventType() == wxEVT_SEARCHCTRL_SEARCH_BTN ? event.GetString() : wxEmptyString))
+		{
+			m_Model->RefreshItems();
+		}
+	}
+	void Workspace::OnViewInvalidated(BroadcastEvent& event)
+	{
+		ScheduleReload();
+	}
+
 	bool Workspace::OnCreateWorkspace()
 	{
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
@@ -61,18 +74,6 @@ namespace Kortex::VirtualGameFolder
 		}
 	}
 
-	void Workspace::OnModSerach(wxCommandEvent& event)
-	{
-		if (m_Model->SetSearchMask(event.GetEventType() == wxEVT_SEARCHCTRL_SEARCH_BTN ? event.GetString() : wxEmptyString))
-		{
-			m_Model->RefreshItems();
-		}
-	}
-	void Workspace::OnViewInvalidated(BroadcastEvent& event)
-	{
-		ScheduleReload();
-	}
-
 	wxString Workspace::GetID() const
 	{
 		return "KModManagerVirtualGameFolderWS";
@@ -84,5 +85,14 @@ namespace Kortex::VirtualGameFolder
 	wxString Workspace::GetNameShort() const
 	{
 		return KTr("VirtualGameFolderWS.NameShort");
+	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		IWorkspaceContainer* result = nullptr;
+		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
+		{
+			result = &workspace.GetWorkspaceContainer();
+		});
+		return result;
 	}
 }

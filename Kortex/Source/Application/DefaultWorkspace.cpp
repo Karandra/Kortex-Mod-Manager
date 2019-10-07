@@ -49,7 +49,6 @@ namespace Kortex::Application
 				m_InsideOnCreate = false;
 			});
 
-			CreateWindow();
 			if (OnCreateWorkspace())
 			{
 				m_IsCreated = true;

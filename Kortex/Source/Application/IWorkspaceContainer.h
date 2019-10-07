@@ -53,7 +53,7 @@ namespace Kortex
 			virtual IWorkspace* GetCurrentWorkspace() const = 0;
 			virtual size_t GetWorkspaceCount() const = 0;
 
-			virtual void AddWorkspace(IWorkspace& workspace) = 0;
+			virtual bool AddWorkspace(IWorkspace& workspace) = 0;
 			virtual bool RemoveWorkspace(IWorkspace& workspace) = 0;
 			virtual bool SwitchWorkspace(IWorkspace& nextWorkspace) = 0;
 			bool SwitchWorkspaceByID(const wxString& id);

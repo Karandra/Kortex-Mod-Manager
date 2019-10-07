@@ -126,7 +126,6 @@ namespace Kortex::ModManager
 		m_BookCtrl->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &WorkspaceContainer::OnPageOpening, this);
 		m_BookCtrl->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &WorkspaceContainer::OnPageOpened, this);
 	}
-	
 	void WorkspaceContainer::OnPageOpening(wxAuiNotebookEvent& event)
 	{
 		if (IWorkspace* nextWorkspace = GetWorkspaceByIndex(event.GetSelection()))
@@ -154,6 +153,11 @@ namespace Kortex::ModManager
 			event.Veto();
 		}
 		event.Skip();
+	}
+
+	IWorkspaceContainer* WorkspaceContainer::GetParentContainer()
+	{
+		return &IMainWindow::GetInstance()->GetWorkspaceContainer();
 	}
 }
 
@@ -199,6 +203,8 @@ namespace Kortex::ModManager
 	{
 		if (!OpenedOnce())
 		{
+			IMainWindow::GetInstance()->InitializeWorkspaces();
+
 			m_SplitterLeftRight->SplitVertically(m_ModsPane, &m_WorkspaceContainer.GetWindow());
 			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
 
@@ -415,6 +421,10 @@ namespace Kortex::ModManager
 	wxString Workspace::GetName() const
 	{
 		return KTr("ModManager.Name");
+	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		return &IMainWindow::GetInstance()->GetWorkspaceContainer();
 	}
 
 	void Workspace::OnMountButton(wxCommandEvent& event)

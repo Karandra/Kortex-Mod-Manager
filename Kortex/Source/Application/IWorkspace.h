@@ -34,11 +34,26 @@ namespace Kortex
 			}
 			static IWorkspace* FromWindow(const wxWindow* window);
 
+			template<class TWorkspace, class TFunc>
+			static bool CallIfCreated(TFunc&& func)
+			{
+				static_assert(std::is_base_of_v<KxSingletonPtr<TWorkspace>, TWorkspace>, "Must be a 'KxSingletonPtr'");
+
+				TWorkspace* workspace = TWorkspace::GetInstance();
+				if (workspace && workspace->IsCreated())
+				{
+					std::invoke(func, static_cast<TWorkspace&>(*workspace));
+					return true;
+				}
+				return false;
+			}
+
 		protected:
 			virtual bool CallOnCreateWorkspace() = 0;
 			virtual bool CallOnOpenWorkspace() = 0;
 			virtual bool CallOnCloseWorkspace() = 0;
 
+			virtual void CreateWorkspaceWindow(wxWindow& parent) = 0;
 			virtual bool OnCreateWorkspace() = 0;
 			virtual void OnReloadWorkspace()
 			{
@@ -52,7 +67,7 @@ namespace Kortex
 				return true;
 			}
 			
-			virtual void SetWorkspaceContainer(IWorkspaceContainer* contianer) = 0;
+			virtual void SetCurrentContainer(IWorkspaceContainer* contianer) = 0;
 			void ShowWorkspace();
 			void HideWorkspace();
 
@@ -60,11 +75,10 @@ namespace Kortex
 			virtual ~IWorkspace() = default;
 
 		public:
-			virtual bool HasWorkspaceContainer() const = 0;
-			virtual IWorkspaceContainer& GetWorkspaceContainer() = 0;
-			const IWorkspaceContainer& GetWorkspaceContainer() const
+			virtual IWorkspaceContainer* GetCurrentContainer() const = 0;
+			virtual IWorkspaceContainer* GetPreferredContainer() const
 			{
-				return const_cast<IWorkspace&>(*this).GetWorkspaceContainer();
+				return nullptr;
 			}
 
 			virtual wxWindow& GetWindow() = 0;

@@ -37,7 +37,6 @@ namespace Kortex::ModManager
 
 		private:
 			void Create(wxWindow* parent);
-
 			void OnPageOpening(wxAuiNotebookEvent& event);
 			void OnPageOpened(wxAuiNotebookEvent& event);
 
@@ -52,6 +51,7 @@ namespace Kortex::ModManager
 			{
 				return *m_BookCtrl;
 			}
+			IWorkspaceContainer* GetParentContainer() override;
 	};
 }
 
@@ -122,6 +122,12 @@ namespace Kortex::ModManager
 			ResourceID GetIcon() const override
 			{
 				return ImageResourceID::Puzzle;
+			}
+			
+			IWorkspaceContainer* GetPreferredContainer() const override;
+			IWorkspaceContainer& GetWorkspaceContainer()
+			{
+				return m_WorkspaceContainer;
 			}
 
 		private:

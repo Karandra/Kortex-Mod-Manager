@@ -4,6 +4,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ApplicationOptions.hpp>
 #include "VirtualFileSystem/VirtualFSEvent.h"
+#include "GameMods/ModManager/Workspace.h"
 #include "Utility/KAux.h"
 
 namespace
@@ -72,5 +73,14 @@ namespace Kortex::ProgramManager
 	wxString Workspace::GetNameShort() const
 	{
 		return KTr("ProgramManager.NameShort");
+	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		IWorkspaceContainer* result = nullptr;
+		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
+		{
+			result = &workspace.GetWorkspaceContainer();
+		});
+		return result;
 	}
 }

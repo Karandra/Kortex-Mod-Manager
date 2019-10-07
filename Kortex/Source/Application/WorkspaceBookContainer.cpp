@@ -13,7 +13,7 @@ namespace Kortex::Application
 			Utility::Log::LogInfo("Can't switch workspace to itself");
 			return false;
 		}
-		if (fromWorkspace && (!fromWorkspace->HasWorkspaceContainer() || !toWorkspace.HasWorkspaceContainer()))
+		if (fromWorkspace && (!fromWorkspace->GetCurrentContainer() || !toWorkspace.GetCurrentContainer()))
 		{
 			Utility::Log::LogInfo("Invalid workspace");
 			return false;
@@ -109,18 +109,23 @@ namespace Kortex::Application
 		return GetBookCtrl().GetPageCount();
 	}
 
-	void WorkspaceBookContainer::AddWorkspace(IWorkspace& workspace)
+	bool WorkspaceBookContainer::AddWorkspace(IWorkspace& workspace)
 	{
-		wxBookCtrlBase& bookCtrl = GetBookCtrl();
-
-		if (bookCtrl.AddPage(&workspace.GetWindow(), workspace.GetName()))
+		if (IWorkspaceContainer::AddWorkspace(workspace))
 		{
-			if (auto iconID = workspace.GetIcon().TryAsInt())
+			wxBookCtrlBase& bookCtrl = GetBookCtrl();
+			if (bookCtrl.AddPage(&workspace.GetWindow(), workspace.GetName()))
 			{
-				bookCtrl.SetPageImage(bookCtrl.GetPageCount() - 1, *iconID);
+				if (auto iconID = workspace.GetIcon().TryAsInt())
+				{
+					bookCtrl.SetPageImage(bookCtrl.GetPageCount() - 1, *iconID);
+				}
+				return true;
 			}
-			IWorkspaceContainer::AddWorkspace(workspace);
 		}
+
+		IWorkspaceContainer::RemoveWorkspace(workspace);
+		return false;
 	}
 	bool WorkspaceBookContainer::RemoveWorkspace(IWorkspace& workspace)
 	{

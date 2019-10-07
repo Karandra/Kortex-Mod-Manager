@@ -4,6 +4,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
 #include <Kortex/DownloadManager.hpp>
+#include "GameMods/ModManager/Workspace.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxTaskDialog.h>
@@ -105,5 +106,14 @@ namespace Kortex::DownloadManager
 	wxString Workspace::GetNameShort() const
 	{
 		return KTr("DownloadManager.NameShort");
+	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		IWorkspaceContainer* result = nullptr;
+		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
+		{
+			result = &workspace.GetWorkspaceContainer();
+		});
+		return result;
 	}
 }

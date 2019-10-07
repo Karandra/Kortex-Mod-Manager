@@ -37,6 +37,7 @@ namespace Kortex::DownloadManager
 			{
 				return ImageResourceID::Arrow270;
 			}
+			IWorkspaceContainer* GetPreferredContainer() const override;
 
 		public:
 			DisplayModel* GetDisplayModel() const

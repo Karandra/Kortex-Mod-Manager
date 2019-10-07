@@ -20,20 +20,15 @@ namespace Kortex::Application
 			bool CallOnOpenWorkspace() override;
 			bool CallOnCloseWorkspace() override;
 
-			void SetWorkspaceContainer(IWorkspaceContainer* contianer) override
+			void SetCurrentContainer(IWorkspaceContainer* contianer) override
 			{
 				m_Container = contianer;
 			}
-			virtual void CreateWindow() = 0;
 
 		public:
-			bool HasWorkspaceContainer() const override
+			IWorkspaceContainer* GetCurrentContainer() const override
 			{
-				return m_Container != nullptr;
-			}
-			IWorkspaceContainer& GetWorkspaceContainer() override
-			{
-				return *m_Container;
+				return m_Container;
 			}
 
 			bool IsCreated() const override
@@ -58,9 +53,9 @@ namespace Kortex::Application
 	class DefaultWindowWorkspace: public TWindow, public DefaultWorkspace
 	{
 		protected:
-			void CreateWindow() override
+			void CreateWorkspaceWindow(wxWindow& parent) override
 			{
-				TWindow::Create(&GetWorkspaceContainer().GetWindow(), KxID_NONE);
+				TWindow::Create(&parent, KxID_NONE);
 			}
 
 		public:

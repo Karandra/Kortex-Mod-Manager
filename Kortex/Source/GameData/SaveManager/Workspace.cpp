@@ -5,6 +5,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
+#include "GameMods/ModManager/Workspace.h"
 #include "UI/ImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include "Utility/Common.h"
@@ -207,6 +208,15 @@ namespace Kortex::SaveManager
 	wxString Workspace::GetNameShort() const
 	{
 		return KTr("SaveManager.NameShort");
+	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		IWorkspaceContainer* result = nullptr;
+		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
+		{
+			result = &workspace.GetWorkspaceContainer();
+		});
+		return result;
 	}
 
 	void Workspace::OnSelection(const IGameSave* save)

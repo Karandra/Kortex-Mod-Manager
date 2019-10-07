@@ -81,10 +81,6 @@ namespace Kortex::GameConfig
 	{
 		return GameConfigModule::GetInstance()->GetModuleInfo().GetName();
 	}
-	wxString Workspace::GetNameShort() const
-	{
-		return GameConfigModule::GetInstance()->GetModuleInfo().GetName();
-	}
 
 	void Workspace::OnChangesMade()
 	{

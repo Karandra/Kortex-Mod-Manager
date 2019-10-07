@@ -89,10 +89,6 @@ namespace Kortex
 
 			virtual wxString GetID() const = 0;
 			virtual wxString GetName() const = 0;
-			virtual wxString GetNameShort() const
-			{
-				return GetName();
-			}
 			virtual ResourceID GetIcon() const = 0;
 			virtual bool IsCreated() const = 0;
 			virtual bool OpenedOnce() const = 0;

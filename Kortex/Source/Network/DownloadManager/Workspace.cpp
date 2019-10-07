@@ -101,10 +101,6 @@ namespace Kortex::DownloadManager
 	}
 	wxString Workspace::GetName() const
 	{
-		return KTr("DownloadManager.Name");
-	}
-	wxString Workspace::GetNameShort() const
-	{
 		return KTr("DownloadManager.NameShort");
 	}
 	IWorkspaceContainer* Workspace::GetPreferredContainer() const

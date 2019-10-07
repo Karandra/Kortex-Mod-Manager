@@ -242,10 +242,6 @@ namespace Kortex::PluginManager
 	}
 	wxString Workspace::GetName() const
 	{
-		return KTr("PluginManager.Name");
-	}
-	wxString Workspace::GetNameShort() const
-	{
 		return KTr("PluginManager.NameShort");
 	}
 	IWorkspaceContainer* Workspace::GetPreferredContainer() const

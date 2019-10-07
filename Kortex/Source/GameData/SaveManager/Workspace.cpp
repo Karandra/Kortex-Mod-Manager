@@ -203,10 +203,6 @@ namespace Kortex::SaveManager
 	}
 	wxString Workspace::GetName() const
 	{
-		return KTr("SaveManager.Name");
-	}
-	wxString Workspace::GetNameShort() const
-	{
 		return KTr("SaveManager.NameShort");
 	}
 	IWorkspaceContainer* Workspace::GetPreferredContainer() const

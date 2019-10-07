@@ -12,7 +12,7 @@ namespace Kortex::GameConfig::SamplingFunction
 		{
 			for (const IWorkspace* workspace: mainWindow->GetWorkspaceContainer().EnumWorkspaces())
 			{
-				m_Values.emplace_back(workspace->GetID()).SetLabel(workspace->GetNameShort());
+				m_Values.emplace_back(workspace->GetID()).SetLabel(workspace->GetName());
 			}
 		}
 	}

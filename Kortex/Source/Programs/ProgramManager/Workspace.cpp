@@ -68,10 +68,6 @@ namespace Kortex::ProgramManager
 	}
 	wxString Workspace::GetName() const
 	{
-		return KTr("ProgramManager.Name");
-	}
-	wxString Workspace::GetNameShort() const
-	{
 		return KTr("ProgramManager.NameShort");
 	}
 	IWorkspaceContainer* Workspace::GetPreferredContainer() const

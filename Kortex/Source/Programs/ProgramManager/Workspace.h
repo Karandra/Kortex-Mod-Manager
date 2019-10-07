@@ -36,7 +36,6 @@ namespace Kortex::ProgramManager
 		public:
 			wxString GetID() const override;
 			wxString GetName() const override;
-			wxString GetNameShort() const override;
 			ResourceID GetIcon() const override
 			{
 				return ImageResourceID::ApplicationRun;

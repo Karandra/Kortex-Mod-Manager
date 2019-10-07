@@ -80,10 +80,6 @@ namespace Kortex::VirtualGameFolder
 	}
 	wxString Workspace::GetName() const
 	{
-		return KTr("VirtualGameFolderWS.Name");
-	}
-	wxString Workspace::GetNameShort() const
-	{
 		return KTr("VirtualGameFolderWS.NameShort");
 	}
 	IWorkspaceContainer* Workspace::GetPreferredContainer() const

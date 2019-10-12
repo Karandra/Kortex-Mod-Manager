@@ -16,7 +16,7 @@ namespace Kortex::ModManager
 	};
 }
 
-namespace Kortex
+namespace KxEnumClassOperations
 {
-	Kortex_ImplementEnum(ModManager::GetModsFlags);
+	KxImplementEnum(Kortex::ModManager::GetModsFlags);
 }

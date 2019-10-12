@@ -20,7 +20,7 @@ namespace Kortex::ScreenshotsGallery
 		m_ViewPane = new KxThumbView(this, KxID_NONE);
 		m_ViewPane->SetSpacing(wxSize(KLC_VERTICAL_SPACING, KLC_HORIZONTAL_SPACING));
 		m_MainSizer->Add(m_ViewPane, 1, wxEXPAND);
-		IThemeManager::GetActive().ProcessWindow(m_ViewPane);
+		IThemeManager::GetActive().Apply(m_ViewPane);
 
 		m_ViewPane->Bind(KxEVT_THUMBVIEW_SELECTED, &Workspace::OnSelectItem, this);
 		m_ViewPane->Bind(KxEVT_THUMBVIEW_ACTIVATED, &Workspace::OnActivateItem, this);

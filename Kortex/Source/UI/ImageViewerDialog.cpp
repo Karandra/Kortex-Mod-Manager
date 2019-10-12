@@ -223,7 +223,7 @@ namespace Kortex::UI
 	
 			// Splitter
 			m_Splitter = new KxSplitterWindow(m_ContentPanel, KxID_NONE);
-			IThemeManager::GetActive().ProcessWindow(m_Splitter);
+			IThemeManager::GetActive().Apply(m_Splitter);
 			PostCreate(wxDefaultPosition);
 	
 			// View
@@ -234,7 +234,7 @@ namespace Kortex::UI
 			{
 				Close();
 			});
-			IThemeManager::GetActive().ProcessWindow(m_ImageView);
+			IThemeManager::GetActive().Apply(m_ImageView);
 	
 			// Options
 			using namespace Application;

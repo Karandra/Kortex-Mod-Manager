@@ -40,7 +40,7 @@ namespace Kortex::GameInstance
 			// Splitter
 			wxSizer* mainSizer = GetContentWindowSizer();
 			m_Splitter = new KxSplitterWindow(GetContentWindow(), KxID_NONE);
-			IThemeManager::GetActive().ProcessWindow(m_Splitter);
+			IThemeManager::GetActive().Apply(m_Splitter);
 			m_Splitter->SetMinimumPaneSize(200);
 
 			// Left pane

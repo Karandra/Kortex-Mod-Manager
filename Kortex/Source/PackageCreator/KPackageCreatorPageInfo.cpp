@@ -450,7 +450,7 @@ namespace Kortex::PackageDesigner
 
 		m_Pane = new KxScrolledPanel(this, KxID_NONE, wxDefaultPosition, wxDefaultSize);
 		m_Pane->SetSizer(m_PaneSizer);
-		IThemeManager::GetActive().ProcessWindow(m_Pane);
+		IThemeManager::GetActive().Apply(m_Pane);
 
 		CreateBasicInfoControls();
 		CreateSitesControls();

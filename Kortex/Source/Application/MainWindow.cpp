@@ -38,7 +38,6 @@ namespace Kortex::Application
 		{
 			m_MainWindow.ClearStatus(i);
 		}
-
 		WorkspaceBookContainer::ShowWorkspace(workspace);
 	}
 	void MainWindowWorkspaceContainer::HideWorkspace(IWorkspace& workspace)
@@ -71,7 +70,7 @@ namespace Kortex::Application
 			KxAuiToolBar* toolBar = new KxAuiToolBar(this, KxID_NONE, flags);
 			toolBar->SetToolBorderPadding(KLC_HORIZONTAL_SPACING_SMALL);
 			toolBar->SetMargins(KLC_HORIZONTAL_SPACING, KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING, KLC_VERTICAL_SPACING + 1);
-			IThemeManager::GetActive().ProcessWindow(toolBar);
+			IThemeManager::GetActive().Apply(toolBar);
 
 			m_ToolBarSizer->Add(toolBar, proportion, wxEXPAND);
 			return toolBar;
@@ -354,7 +353,7 @@ namespace Kortex::Application
 			m_StatusBar->SetStatusText(KTr("VFS.Status.Inactive"));
 			m_StatusBar->SetStatusImage((int)ImageResourceID::InformationFrameEmpty, 0);
 		}
-		IThemeManager::GetActive().ProcessWindow(m_StatusBar, isActive);
+		IThemeManager::GetActive().Apply(m_StatusBar, isActive);
 	}
 	void MainWindow::OnMainFSToggled(VirtualFSEvent& event)
 	{
@@ -363,13 +362,14 @@ namespace Kortex::Application
 
 	bool MainWindow::Create(wxWindow* parent)
 	{
-		const wxSize size(850, 600);
-		if (KxFrame::Create(parent, KxID_NONE, IApplication::GetInstance()->GetName(), wxDefaultPosition, size, MainWindow::DefaultStyle))
+		const wxSize minSize(850, 600);
+		if (KxFrame::Create(parent, KxID_NONE, IApplication::GetInstance()->GetName(), wxDefaultPosition, minSize, MainWindow::DefaultStyle))
 		{
+			IThemeManager::GetActive().Apply(static_cast<IMainWindow*>(this));
 			SetWindowUserData(GetUniqueID());
 			SetDefaultBackgroundColor();
 			SetIcons(wxICON(IDS_ICON_APP));
-			SetMinSize(size);
+			SetMinSize(minSize);
 
 			m_MainSizer = new wxBoxSizer(wxVERTICAL);
 			SetSizer(m_MainSizer);

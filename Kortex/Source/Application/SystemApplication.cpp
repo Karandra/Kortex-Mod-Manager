@@ -6,6 +6,8 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Theme.hpp>
 #include <Kortex/Git/Constants.h>
+#include "Theme/Default.h"
+#include "Theme/VisualStudio.h"
 #include "MainWindow.h"
 #include "Archive/KArchive.h"
 #include "Utility/KAux.h"

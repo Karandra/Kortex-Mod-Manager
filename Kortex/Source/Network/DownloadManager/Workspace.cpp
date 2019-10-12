@@ -37,6 +37,7 @@ namespace Kortex::DownloadManager
 
 		// Main view
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(m_MainSizer);
 
 		m_DisplayModel = new DisplayModel();
 		m_DisplayModel->CreateView(this);
@@ -46,7 +47,7 @@ namespace Kortex::DownloadManager
 
 		// Toolbar
 		m_ToolBar = new KxAuiToolBar(this, KxID_NONE, KxAuiToolBar::DefaultStyle|wxAUI_TB_PLAIN_BACKGROUND);
-		m_ToolBar->SetBackgroundColour(GetBackgroundColour());
+		m_ToolBar->SetBackgroundColour(IThemeManager::GetActive().GetColor(Theme::ColorIndex::Window, Theme::ColorFlags::Background));
 		m_ToolBar->AddStretchSpacer();
 
 		{
@@ -70,8 +71,9 @@ namespace Kortex::DownloadManager
 		}
 
 		m_ToolBar->UpdateUI();
+		m_ToolBar->SetMargins(0, 0, 0, 0);
 		m_MainSizer->Add(m_ToolBar, 0, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
-		SetSizer(m_MainSizer);
+
 		return true;
 	}
 	bool Workspace::OnOpenWorkspace()

@@ -148,7 +148,7 @@ namespace Kortex::InstallWizard
 		m_DocumentsContainer = new KxSplitterWindow(m_TabsContainer, KxID_NONE);
 		m_DocumentsContainer->SetName("VSplitter");
 		m_DocumentsContainer->SetMinimumPaneSize(200);
-		m_DocumentsContainer->SetSashColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::WindowBG));
+		m_DocumentsContainer->SetSashColor(IThemeManager::GetActive().GetColor(Theme::ColorIndex::Window, Theme::ColorFlags::Background));
 
 		// List
 		m_DocumentsList = new KxListBox(m_DocumentsContainer, KxID_NONE);
@@ -186,7 +186,7 @@ namespace Kortex::InstallWizard
 				m_CurrentImageIndex = -1;
 			}
 		});
-		IThemeManager::GetActive().ProcessWindow(m_ScreenshotsView);
+		IThemeManager::GetActive().Apply(m_ScreenshotsView);
 
 		return m_ScreenshotsView;
 	}

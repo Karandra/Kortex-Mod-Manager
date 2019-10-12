@@ -32,11 +32,11 @@ namespace Kortex::PackageDesigner
 
 		m_PagesList->AddColumn(wxEmptyString);
 		m_PagesList->Bind(wxEVT_TREELIST_SELECTION_CHANGED, &WorkspaceContainer::OnPageSelected, this);
-		IThemeManager::GetActive().ProcessWindow(m_PagesList);
+		IThemeManager::GetActive().Apply(m_PagesList);
 
 		// View
 		m_BookCtrl = new KxSimplebook(viewParent, KxID_NONE);
-		IThemeManager::GetActive().ProcessWindow(m_BookCtrl);
+		IThemeManager::GetActive().Apply(m_BookCtrl);
 	}
 	void WorkspaceContainer::OnPageSelected(wxTreeListEvent& event)
 	{
@@ -77,7 +77,7 @@ namespace Kortex::PackageDesigner
 		m_MainPane->SetSizer(mainPaneSizer);
 
 		m_MainSizer->Add(m_MainPane, 1, wxEXPAND);
-		IThemeManager::GetActive().ProcessWindow(m_MainPane);
+		IThemeManager::GetActive().Apply(m_MainPane);
 		CreatePagesView();
 
 		mainPaneSizer->Add(&m_PagesContainer.GetListWindow(), 0, wxEXPAND);
@@ -113,11 +113,11 @@ namespace Kortex::PackageDesigner
 	{
 		m_MenuBar = new KxAuiToolBar(m_PagesBookPane, KxID_NONE, KxAuiToolBar::DefaultStyle|wxAUI_TB_PLAIN_BACKGROUND|wxAUI_TB_TEXT);
 		m_MenuBar->SetBackgroundColour(GetBackgroundColour());
-		m_MenuBar->SetBorderColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::Border));
+		m_MenuBar->SetBorderColor(IThemeManager::GetActive().GetColor(Theme::ColorIndex::Border, Theme::ColorFlags::Background));
 		m_MenuBar->SetToolPacking(0);
 		m_MenuBar->SetToolSeparation(0);
 		m_MenuBar->SetMargins(0, 0, 0, 2);
-		IThemeManager::GetActive().ProcessWindow(static_cast<wxWindow*>(m_MenuBar));
+		IThemeManager::GetActive().Apply(static_cast<wxWindow*>(m_MenuBar));
 
 		m_MenuBar_Project = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Project"), wxNullBitmap);
 		m_MenuBar_Import = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Import"), wxNullBitmap);

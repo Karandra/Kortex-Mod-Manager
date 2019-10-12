@@ -64,14 +64,16 @@ namespace Kortex::Application
 					workspaceSizer->Add(windowSizer, 1, wxEXPAND|wxALL, std::min(KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING));
 				}
 
-				// Apply any themes
-				IThemeManager::GetActive().ProcessWindow(&window);
-
 				// Open the workspace
 				return CallOnOpenWorkspace();
 			}
 		}
 		return false;
+	}
+	
+	void DefaultWorkspace::ApplyWorkspaceTheme()
+	{
+		// Do nothing
 	}
 
 	bool DefaultWorkspace::Reload()

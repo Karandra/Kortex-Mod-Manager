@@ -29,7 +29,7 @@ namespace Kortex::UI
 			wxBoxSizer* viewSizer = new wxBoxSizer(wxVERTICAL);
 			m_View = new KxPanel(m_ContentPanel, KxID_NONE);
 			m_View->SetSizer(viewSizer);
-			IThemeManager::GetActive().ProcessWindow(m_View);
+			IThemeManager::GetActive().Apply(m_View);
 
 			/* ToolBar */
 			m_ToolBar = new KxAuiToolBar(m_View, KxID_NONE, KxAuiToolBar::DefaultStyle|wxAUI_TB_PLAIN_BACKGROUND);
@@ -114,7 +114,7 @@ namespace Kortex::UI
 			// Tabs
 			m_Container = new wxSimplebook(m_View, KxID_NONE);
 			viewSizer->Add(m_Container, 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
-			IThemeManager::GetActive().ProcessWindow(m_Container);
+			IThemeManager::GetActive().Apply(m_Container);
 
 			PostCreate(wxDefaultPosition);
 

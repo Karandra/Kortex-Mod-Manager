@@ -127,6 +127,7 @@ namespace Kortex::ModManager
 	{
 		m_BookCtrl = new KxAuiNotebook(parent, KxID_NONE, KxAuiNotebook::DefaultStyle|wxAUI_NB_TAB_MOVE);
 		m_BookCtrl->SetImageList(&ImageProvider::GetImageList());
+		IThemeManager::GetActive().Apply(m_BookCtrl);
 
 		m_BookCtrl->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &WorkspaceContainer::OnPageOpening, this);
 		m_BookCtrl->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &WorkspaceContainer::OnPageOpened, this);
@@ -345,14 +346,16 @@ namespace Kortex::ModManager
 		{
 			m_ActivateFSButton = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("ModManager.VFS.Activate"));
 			m_ActivateFSButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
+			m_ActivateFSButton->SetMinSize(FromDIP(wxSize(wxDefaultCoord, 36)));
 			m_ActivateFSButton->Bind(wxEVT_BUTTON, &Workspace::OnMountButton, this);
+
 			controlSizer->Add(m_ActivateFSButton);
 		}
 		mainSizer->AddSpacer(1);
 		mainSizer->Add(controlSizer, 0, wxLEFT|wxBOTTOM|wxRIGHT, KLC_VERTICAL_SPACING);
 
-		m_RightPaneWorkspaces.Create(m_RightPaneWindow);
-		mainSizer->Add(&m_RightPaneWorkspaces.GetWindow(), 1, wxEXPAND);
+		m_RightPaneContainer.Create(m_RightPaneWindow);
+		mainSizer->Add(&m_RightPaneContainer.GetWindow(), 1, wxEXPAND);
 	}
 
 	void Workspace::OnMountButton(wxCommandEvent& event)
@@ -789,7 +792,7 @@ namespace Kortex::ModManager
 		m_SplitterLeftRight->SetName("Horizontal");
 		m_SplitterLeftRight->SetMinimumPaneSize(250);
 		m_MainSizer->Add(m_SplitterLeftRight, 1, wxEXPAND);
-		IThemeManager::GetActive().ProcessWindow(m_SplitterLeftRight, true);
+		IThemeManager::GetActive().Apply(m_SplitterLeftRight);
 
 		// Panes
 		CreateLeftPane();

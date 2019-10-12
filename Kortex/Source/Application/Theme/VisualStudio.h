@@ -10,13 +10,13 @@ namespace Kortex::Theme
 			void AsWindow(wxWindow* window);
 
 		public:
-			KxColor GetColor(ColorIndex index) const override;
+			KxColor GetColor(ColorIndex index, ColorFlags flags = ColorFlags::None) const override;
 
-			void ProcessWindow(wxWindow* window) override;
-			void ProcessWindow(IWorkspace* window) override;
-			void ProcessWindow(IMainWindow* window) override;
-			void ProcessWindow(KxSplitterWindow* window, bool visibleSash = false) override;
-			void ProcessWindow(KxAuiToolBar* window) override;
-			void ProcessWindow(KxStatusBarEx* window, bool isActive) override;
+			void Apply(wxWindow* window) override;
+			void Apply(IWorkspace* window) override;
+			void Apply(IMainWindow* window) override;
+			void Apply(KxSplitterWindow* window) override;
+			void Apply(KxAuiToolBar* window) override;
+			void Apply(KxStatusBarEx* window, bool isActive) override;
 	};
 }

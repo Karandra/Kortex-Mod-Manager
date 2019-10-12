@@ -179,12 +179,12 @@ namespace Kortex::InstallWizard
 		m_SplitterV = new KxSplitterWindow(GetPageContainer(), KxID_NONE);
 		m_SplitterV->SetMinimumPaneSize(150);
 		m_SplitterV->SetName("VSplitter");
-		IThemeManager::GetActive().ProcessWindow(m_SplitterV);
+		IThemeManager::GetActive().Apply(m_SplitterV);
 
 		m_SplitterHRight = new KxSplitterWindow(m_SplitterV, KxID_NONE);
 		m_SplitterHRight->SetName("HSplitterRight");
 		m_SplitterHRight->SetMinimumPaneSize(150);
-		IThemeManager::GetActive().ProcessWindow(m_SplitterHRight);
+		IThemeManager::GetActive().Apply(m_SplitterHRight);
 
 		/* Controls */
 		// Item list

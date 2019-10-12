@@ -126,7 +126,7 @@ namespace Kortex
 			wxString RethrowCatchAndGetExceptionInfo() const;
 
 			wxAppTraits* CreateTraits() override;
-			void ExitApp(int exitCode);
+			void ExitApp(int exitCode) override;
 
 		public:
 			bool IsAnotherRunning() const;

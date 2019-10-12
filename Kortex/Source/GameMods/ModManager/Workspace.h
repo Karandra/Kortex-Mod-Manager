@@ -97,7 +97,7 @@ namespace Kortex::ModManager
 
 			// Right pane
 			KxPanel* m_RightPaneWindow = nullptr;
-			WorkspaceContainer m_RightPaneWorkspaces;
+			WorkspaceContainer m_RightPaneContainer;
 			KxButton* m_ActivateFSButton = nullptr;
 
 		private:
@@ -144,7 +144,7 @@ namespace Kortex::ModManager
 
 		public:
 			Workspace()
-				:m_RightPaneWorkspaces(*this)
+				:m_RightPaneContainer(*this)
 			{
 			}
 			~Workspace();
@@ -160,7 +160,7 @@ namespace Kortex::ModManager
 			IWorkspaceContainer* GetPreferredContainer() const override;
 			IWorkspaceContainer& GetWorkspaceContainer()
 			{
-				return m_RightPaneWorkspaces;
+				return m_RightPaneContainer;
 			}
 
 		public:

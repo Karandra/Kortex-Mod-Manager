@@ -32,7 +32,7 @@ namespace Kortex::PackageDesigner
 		wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 		m_MainListPane = new KxPanel(m_Pane, KxID_NONE);
 		m_MainListPane->SetSizer(mainSizer);
-		IThemeManager::GetActive().ProcessWindow(m_MainListPane);
+		IThemeManager::GetActive().Apply(m_MainListPane);
 
 		// Main caption
 		KxLabel* label = CreateCaptionLabel(m_MainListPane, KTr("PackageCreator.PageFileData.MainList"));
@@ -51,7 +51,7 @@ namespace Kortex::PackageDesigner
 		wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 		m_FolderContentPane = new KxPanel(m_Pane, KxID_NONE);
 		m_FolderContentPane->SetSizer(mainSizer);
-		IThemeManager::GetActive().ProcessWindow(m_FolderContentPane);
+		IThemeManager::GetActive().Apply(m_FolderContentPane);
 
 		// Main caption
 		KxLabel* label = CreateCaptionLabel(m_FolderContentPane, KTr("PackageCreator.PageFileData.FolderContent"));
@@ -70,7 +70,7 @@ namespace Kortex::PackageDesigner
 		m_Pane = new KxSplitterWindow(this, KxID_NONE);
 		m_Pane->SetName("FolderListViewSize");
 		m_Pane->SetMinimumPaneSize(150);
-		m_Pane->SetSashColor(IThemeManager::GetActive().GetColor(IThemeManager::ColorIndex::WindowBG));
+		m_Pane->SetSashColor(IThemeManager::GetActive().GetColor(Theme::ColorIndex::Window, Theme::ColorFlags::Background));
 
 		CreateMainListControls();
 		CreateFolderContentControls();

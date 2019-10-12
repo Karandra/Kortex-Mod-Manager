@@ -24,6 +24,7 @@ namespace Kortex::Application
 			{
 				m_Container = contianer;
 			}
+			void ApplyWorkspaceTheme();
 
 		public:
 			IWorkspaceContainer* GetCurrentContainer() const override
@@ -55,7 +56,10 @@ namespace Kortex::Application
 		protected:
 			void CreateWorkspaceWindow(wxWindow& parent) override
 			{
-				TWindow::Create(&parent, KxID_NONE);
+				if (TWindow::Create(&parent, KxID_NONE))
+				{
+					ApplyWorkspaceTheme();
+				}
 			}
 
 		public:

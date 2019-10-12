@@ -60,7 +60,7 @@ namespace Kortex::Application::Settings
 
 			SetMainIcon(KxICON_NONE);
 			PostCreate();
-			IThemeManager::GetActive().ProcessWindow(GetContentWindow());
+			IThemeManager::GetActive().Apply(GetContentWindow());
 
 			// Create display
 			m_DisplayModel.CreateView(GetContentWindow(), GetContentWindowMainSizer());

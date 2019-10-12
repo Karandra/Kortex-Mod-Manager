@@ -168,95 +168,34 @@ namespace Kortex::ModManager
 
 namespace Kortex::ModManager
 {
-	bool Workspace::OnCreateWorkspace()
+	void Workspace::CreateLeftPane()
 	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-		SetSizer(m_MainSizer);
+		m_LeftPaneSizer = new wxBoxSizer(wxVERTICAL);
+		m_LeftPaneWindow = new KxPanel(m_SplitterLeftRight, KxID_NONE);
+		m_LeftPaneWindow->SetSizer(m_LeftPaneSizer);
+		m_LeftPaneWindow->SetBackgroundColour(GetBackgroundColour());
 
-		m_SplitterLeftRight = new KxSplitterWindow(this, KxID_NONE);
-		m_SplitterLeftRight->SetName("Horizontal");
-		m_SplitterLeftRight->SetMinimumPaneSize(250);
-		m_MainSizer->Add(m_SplitterLeftRight, 1, wxEXPAND);
-		IThemeManager::GetActive().ProcessWindow(m_SplitterLeftRight, true);
-
-		// Mods Panel
-		m_ModsPaneSizer = new wxBoxSizer(wxVERTICAL);
-		m_ModsPane = new KxPanel(m_SplitterLeftRight, KxID_NONE);
-		m_ModsPane->SetSizer(m_ModsPaneSizer);
-		m_ModsPane->SetBackgroundColour(GetBackgroundColour());
-
-		CreateModsView();
-		CreateToolBar();
-		m_ModsPaneSizer->Add(m_ModsToolBar, 0, wxEXPAND);
-		m_ModsPaneSizer->Add(m_DisplayModel->GetView(), 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
-
-		m_WorkspaceContainer.Create(m_SplitterLeftRight);
-		CreateControls();
-
-		ReloadView();
-		UpdateModListContent();
-
-		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &Workspace::OnMainFSToggled, this);
-		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &Workspace::OnProfileSelected, this);
-
-		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &Workspace::OnUpdateModLayoutNeeded, this);
-		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &Workspace::OnUpdateModLayoutNeeded, this);
-		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
-		return true;
+		CreateLeftPaneModList();
+		CreateLeftPaneToolbar();
+		m_LeftPaneSizer->Add(m_ModsToolBar, 0, wxEXPAND);
+		m_LeftPaneSizer->Add(m_DisplayModel->GetView(), 1, wxEXPAND|wxTOP, KLC_VERTICAL_SPACING);
 	}
-	bool Workspace::OnOpenWorkspace()
+	void Workspace::CreateLeftPaneModList()
 	{
-		if (!OpenedOnce())
-		{
-			IMainWindow::GetInstance()->InitializeWorkspaces();
+		const auto options = GetDisplayModelOptions();
 
-			m_SplitterLeftRight->SplitVertically(m_ModsPane, &m_WorkspaceContainer.GetWindow());
-			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
-			//m_WorkspaceContainer.GetAuiManager().LoadPerspective(GetRightPaneOptions().GetValue(), false);
-
-			auto displayModelOptions = GetDisplayModelOptions();
-			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
-
-			m_DisplayModel->LoadView();
-		}
-		m_DisplayModel->UpdateUI();
-		return true;
+		m_DisplayModel = new DisplayModel();
+		m_DisplayModel->ShowPriorityGroups(options.GetAttributeBool(OName::ShowPriorityGroups));
+		m_DisplayModel->ShowNotInstalledMods(options.GetAttributeBool(OName::ShowNotInstalledMods));
+		m_DisplayModel->SetBoldPriorityGroupLabels(options.GetAttributeBool(OName::BoldPriorityGroupLabels));
+		m_DisplayModel->SetPriorityGroupLabelAlignment((DisplayModel::PriorityGroupLabelAlignment)options.GetAttributeInt(OName::PriorityGroupLabelAlignment));
+	
+		m_DisplayModel->CreateView(m_LeftPaneWindow);
+		m_DisplayModel->SetDisplayMode((DisplayModelType)options.GetAttributeInt(OName::DisplayMode));
 	}
-	bool Workspace::OnCloseWorkspace()
+	void Workspace::CreateLeftPaneToolbar()
 	{
-		IMainWindow::GetInstance()->ClearStatus();
-		return true;
-	}
-	void Workspace::OnReloadWorkspace()
-	{
-		ClearControls();
-
-		m_DisplayModel->LoadView();
-		ProcessSelection();
-		UpdateModListContent();
-	}
-
-	Workspace::~Workspace()
-	{
-		if (IsCreated())
-		{
-			auto options = GetDisplayModelOptions();
-			options.SaveDataViewLayout(m_DisplayModel->GetView());
-
-			options.SetAttribute(OName::DisplayMode, (int)m_DisplayModel->GetDisplayMode());
-			options.SetAttribute(OName::ShowPriorityGroups, m_DisplayModel->ShouldShowPriorityGroups());
-			options.SetAttribute(OName::ShowNotInstalledMods, m_DisplayModel->ShouldShowNotInstalledMods());
-			options.SetAttribute(OName::BoldPriorityGroupLabels, m_DisplayModel->IsBoldPriorityGroupLabels());
-			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
-
-			GetSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
-			//GetRightPaneOptions().SetValue(m_WorkspaceContainer.GetAuiManager().SavePerspective(), KxXMLDocument::AsCDATA::Always);
-		}
-	}
-
-	void Workspace::CreateToolBar()
-	{
-		m_ModsToolBar = new KxAuiToolBar(m_ModsPane, KxID_NONE, wxAUI_TB_HORZ_TEXT|wxAUI_TB_PLAIN_BACKGROUND);
+		m_ModsToolBar = new KxAuiToolBar(m_LeftPaneWindow, KxID_NONE, wxAUI_TB_HORZ_TEXT|wxAUI_TB_PLAIN_BACKGROUND);
 		m_ModsToolBar->SetBackgroundColour(GetBackgroundColour());
 		m_ModsToolBar->SetMargins(0, 1, 0, 0);
 
@@ -272,10 +211,10 @@ namespace Kortex::ModManager
 		m_ModsToolBar->AddSeparator();
 
 		m_ToolBar_AddMod = Utility::UI::CreateToolBarButton(m_ModsToolBar, KTr(KxID_ADD), ImageResourceID::PlusSmall);
-	
+
 		m_ToolBar_ChangeDisplayMode = Utility::UI::CreateToolBarButton(m_ModsToolBar, KTr("ModManager.DisplayMode.Caption"), ImageResourceID::ProjectionScreen);
 		m_ToolBar_ChangeDisplayMode->Bind(KxEVT_AUI_TOOLBAR_CLICK, &Workspace::OnDisplayModeMenu, this);
-	
+
 		m_ToolBar_Tools = Utility::UI::CreateToolBarButton(m_ModsToolBar, wxEmptyString, ImageResourceID::WrenchScrewdriver);
 		m_ToolBar_Tools->SetShortHelp(KTr("ModManager.Tools"));
 		m_ToolBar_Tools->Bind(KxEVT_AUI_TOOLBAR_CLICK, &Workspace::OnToolsMenu, this);
@@ -294,11 +233,11 @@ namespace Kortex::ModManager
 
 		m_ModsToolBar->Realize();
 
-		CreateDisplayModeMenu();
-		CreateAddModMenu();
-		CreateToolsMenu();
+		CreateLeftPaneToolbar_DisplayMode();
+		CreateLeftPaneToolbar_AddMod();
+		CreateLeftPaneToolbar_Tools();
 	}
-	void Workspace::CreateDisplayModeMenu()
+	void Workspace::CreateLeftPaneToolbar_DisplayMode()
 	{
 		m_ToolBar_DisplayModeMenu = new KxMenu();
 		m_ToolBar_ChangeDisplayMode->AssignDropdownMenu(m_ToolBar_DisplayModeMenu);
@@ -347,7 +286,7 @@ namespace Kortex::ModManager
 			AddOption(DisplayModeMenuID::PriorityGroupLabelAlignment_Right, PriorityGroupLabelAlignment::Right, KxID_JUSTIFY_RIGHT);
 		}
 	}
-	void Workspace::CreateAddModMenu()
+	void Workspace::CreateLeftPaneToolbar_AddMod()
 	{
 		m_ToolBar_AddModMenu = new KxMenu();
 		m_ToolBar_AddMod->AssignDropdownMenu(m_ToolBar_AddModMenu);
@@ -361,7 +300,7 @@ namespace Kortex::ModManager
 		item = m_ToolBar_AddModMenu->Add(new KxMenuItem(KTr("ModManager.NewMod.NewModFromFolder")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderArrow));
 		item->Bind(KxEVT_MENU_SELECT, &Workspace::OnAddMod_FromFolder, this);
-	
+
 		item = m_ToolBar_AddModMenu->Add(new KxMenuItem(KTr("ModManager.NewMod.InstallPackage")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::BoxSearchResult));
 		item->Bind(KxEVT_MENU_SELECT, &Workspace::OnAddMod_InstallPackage, this);
@@ -382,7 +321,7 @@ namespace Kortex::ModManager
 			IModImporter::PerformImport(IModImporter::Type::NexusModManager, this);
 		});
 	}
-	void Workspace::CreateToolsMenu()
+	void Workspace::CreateLeftPaneToolbar_Tools()
 	{
 		KxMenu* menu = new KxMenu();
 		m_ToolBar_Tools->AssignDropdownMenu(menu);
@@ -395,43 +334,25 @@ namespace Kortex::ModManager
 		item = menu->Add(new KxMenuItem((int)ToolsMenuID::ExportModList, KTr("Generic.Export")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Disk));
 	}
-
-	void Workspace::CreateModsView()
+	void Workspace::CreateRightPane()
 	{
-		const auto options = GetDisplayModelOptions();
+		wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+		m_RightPaneWindow = new KxPanel(m_SplitterLeftRight, KxID_NONE);
+		m_RightPaneWindow->SetSizer(mainSizer);
 
-		m_DisplayModel = new DisplayModel();
-		m_DisplayModel->ShowPriorityGroups(options.GetAttributeBool(OName::ShowPriorityGroups));
-		m_DisplayModel->ShowNotInstalledMods(options.GetAttributeBool(OName::ShowNotInstalledMods));
-		m_DisplayModel->SetBoldPriorityGroupLabels(options.GetAttributeBool(OName::BoldPriorityGroupLabels));
-		m_DisplayModel->SetPriorityGroupLabelAlignment((DisplayModel::PriorityGroupLabelAlignment)options.GetAttributeInt(OName::PriorityGroupLabelAlignment));
-	
-		m_DisplayModel->CreateView(m_ModsPane);
-		m_DisplayModel->SetDisplayMode((DisplayModelType)options.GetAttributeInt(OName::DisplayMode));
-	}
-	void Workspace::CreateControls()
-	{
-		wxBoxSizer* controlsSizer = new wxBoxSizer(wxHORIZONTAL);
-		m_MainSizer->Add(controlsSizer, 0, wxEXPAND|wxALIGN_RIGHT|wxTOP, KLC_VERTICAL_SPACING);
+		// Controls
+		wxBoxSizer* controlSizer = new wxBoxSizer(wxHORIZONTAL);
+		{
+			m_ActivateFSButton = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("ModManager.VFS.Activate"));
+			m_ActivateFSButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
+			m_ActivateFSButton->Bind(wxEVT_BUTTON, &Workspace::OnMountButton, this);
+			controlSizer->Add(m_ActivateFSButton);
+		}
+		mainSizer->AddSpacer(1);
+		mainSizer->Add(controlSizer, 0, wxLEFT|wxBOTTOM|wxRIGHT, KLC_VERTICAL_SPACING);
 
-		m_ActivateButton = new KxButton(this, KxID_NONE, KTr("ModManager.VFS.Activate"));
-		m_ActivateButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
-		m_ActivateButton->Bind(wxEVT_BUTTON, &Workspace::OnMountButton, this);
-
-		controlsSizer->Add(m_ActivateButton);
-	}
-
-	wxString Workspace::GetID() const
-	{
-		return wxS("ModManager::Workspace");
-	}
-	wxString Workspace::GetName() const
-	{
-		return KTr("ModManager.Name");
-	}
-	IWorkspaceContainer* Workspace::GetPreferredContainer() const
-	{
-		return &IMainWindow::GetInstance()->GetWorkspaceContainer();
+		m_RightPaneWorkspaces.Create(m_RightPaneWindow);
+		mainSizer->Add(&m_RightPaneWorkspaces.GetWindow(), 1, wxEXPAND);
 	}
 
 	void Workspace::OnMountButton(wxCommandEvent& event)
@@ -628,16 +549,16 @@ namespace Kortex::ModManager
 		m_ToolBar_Profiles->Enable(!event.IsActivated());
 		m_ToolBar_EditProfiles->SetEnabled(!event.IsActivated());
 
-		wxWindowUpdateLocker lock(m_ActivateButton);
+		wxWindowUpdateLocker lock(m_ActivateFSButton);
 		if (event.IsActivated())
 		{
-			m_ActivateButton->SetLabel(KTr("ModManager.VFS.Deactivate"));
-			m_ActivateButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::InformationFrameEmpty));
+			m_ActivateFSButton->SetLabel(KTr("ModManager.VFS.Deactivate"));
+			m_ActivateFSButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::InformationFrameEmpty));
 		}
 		else
 		{
-			m_ActivateButton->SetLabel(KTr("ModManager.VFS.Activate"));
-			m_ActivateButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
+			m_ActivateFSButton->SetLabel(KTr("ModManager.VFS.Activate"));
+			m_ActivateFSButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
 		}
 		m_DisplayModel->UpdateUI();
 	}
@@ -748,7 +669,7 @@ namespace Kortex::ModManager
 			Utility::MenuSeparatorAfter separator1(contextMenu);
 
 			const bool isMultipleSelection = selectedMods.size() > 1;
-			
+
 			const bool isFixedMod = focusedMod->QueryInterface<FixedGameMod>();
 			const bool isPriorityGroup = focusedMod->QueryInterface<PriorityGroup>();
 			const bool isNormalMod = !isFixedMod && !isPriorityGroup;
@@ -856,6 +777,95 @@ namespace Kortex::ModManager
 				ScheduleReload();
 			});
 		}
+	}
+
+	bool Workspace::OnCreateWorkspace()
+	{
+		m_MainSizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(m_MainSizer);
+
+		// Main view
+		m_SplitterLeftRight = new KxSplitterWindow(this, KxID_NONE);
+		m_SplitterLeftRight->SetName("Horizontal");
+		m_SplitterLeftRight->SetMinimumPaneSize(250);
+		m_MainSizer->Add(m_SplitterLeftRight, 1, wxEXPAND);
+		IThemeManager::GetActive().ProcessWindow(m_SplitterLeftRight, true);
+
+		// Panes
+		CreateLeftPane();
+		CreateRightPane();
+
+		// Events
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &Workspace::OnMainFSToggled, this);
+		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &Workspace::OnProfileSelected, this);
+
+		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &Workspace::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &Workspace::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
+		return true;
+	}
+	bool Workspace::OnOpenWorkspace()
+	{
+		if (!OpenedOnce())
+		{
+			IMainWindow::GetInstance()->InitializeWorkspaces();
+
+			m_SplitterLeftRight->SplitVertically(m_LeftPaneWindow, m_RightPaneWindow);
+			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
+			//m_WorkspaceContainer.GetAuiManager().LoadPerspective(GetRightPaneOptions().GetValue(), false);
+
+			auto displayModelOptions = GetDisplayModelOptions();
+			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
+
+			ReloadView();
+			UpdateModListContent();
+		}
+		m_DisplayModel->UpdateUI();
+		return true;
+	}
+	bool Workspace::OnCloseWorkspace()
+	{
+		IMainWindow::GetInstance()->ClearStatus();
+		return true;
+	}
+	void Workspace::OnReloadWorkspace()
+	{
+		ClearControls();
+
+		m_DisplayModel->LoadView();
+		ProcessSelection();
+		UpdateModListContent();
+	}
+
+	Workspace::~Workspace()
+	{
+		if (IsCreated())
+		{
+			auto options = GetDisplayModelOptions();
+			options.SaveDataViewLayout(m_DisplayModel->GetView());
+
+			options.SetAttribute(OName::DisplayMode, (int)m_DisplayModel->GetDisplayMode());
+			options.SetAttribute(OName::ShowPriorityGroups, m_DisplayModel->ShouldShowPriorityGroups());
+			options.SetAttribute(OName::ShowNotInstalledMods, m_DisplayModel->ShouldShowNotInstalledMods());
+			options.SetAttribute(OName::BoldPriorityGroupLabels, m_DisplayModel->IsBoldPriorityGroupLabels());
+			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
+
+			GetSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
+			//GetRightPaneOptions().SetValue(m_WorkspaceContainer.GetAuiManager().SavePerspective(), KxXMLDocument::AsCDATA::Always);
+		}
+	}
+
+	wxString Workspace::GetID() const
+	{
+		return wxS("ModManager::Workspace");
+	}
+	wxString Workspace::GetName() const
+	{
+		return KTr("ModManager.Name");
+	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		return &IMainWindow::GetInstance()->GetWorkspaceContainer();
 	}
 
 	void Workspace::SelectMod(const IGameMod* entry)

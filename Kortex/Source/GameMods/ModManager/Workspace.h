@@ -68,13 +68,13 @@ namespace Kortex::ModManager
 
 		private:
 			BroadcastReciever m_BroadcastReciever;
-			WorkspaceContainer m_WorkspaceContainer;
+			
 
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxSplitterWindow* m_SplitterLeftRight = nullptr;
 
-			// Mods pane
-			wxBoxSizer* m_ModsPaneSizer = nullptr;
+			// Left pane
+			wxBoxSizer* m_LeftPaneSizer = nullptr;
 
 			// ToolBar
 			KxAuiToolBar* m_ModsToolBar = nullptr;
@@ -89,50 +89,25 @@ namespace Kortex::ModManager
 			KxMenu* m_ToolBar_DisplayModeMenu = nullptr;
 
 			KxAuiToolBarItem* m_ToolBar_Tools = nullptr;
-
-			// Mod manager
-			KxPanel* m_ModsPane = nullptr;
-			DisplayModel* m_DisplayModel = nullptr;
-
-			// Controls
-			KxButton* m_ActivateButton = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
 
-		protected:
-			bool OnCreateWorkspace() override;
-			bool OnOpenWorkspace() override;
-			bool OnCloseWorkspace() override;
-			void OnReloadWorkspace() override;
+			// Mod manager
+			KxPanel* m_LeftPaneWindow = nullptr;
+			DisplayModel* m_DisplayModel = nullptr;
 
-		public:
-			Workspace()
-				:m_WorkspaceContainer(*this)
-			{
-			}
-			~Workspace();
+			// Right pane
+			KxPanel* m_RightPaneWindow = nullptr;
+			WorkspaceContainer m_RightPaneWorkspaces;
+			KxButton* m_ActivateFSButton = nullptr;
 
 		private:
-			void CreateToolBar();
-			void CreateDisplayModeMenu();
-			void CreateAddModMenu();
-			void CreateToolsMenu();
-
-			void CreateModsView();
-			void CreateControls();
-
-		public:
-			wxString GetID() const override;
-			wxString GetName() const override;
-			ResourceID GetIcon() const override
-			{
-				return ImageResourceID::Puzzle;
-			}
-			
-			IWorkspaceContainer* GetPreferredContainer() const override;
-			IWorkspaceContainer& GetWorkspaceContainer()
-			{
-				return m_WorkspaceContainer;
-			}
+			void CreateLeftPane();
+			void CreateLeftPaneModList();
+			void CreateLeftPaneToolbar();
+			void CreateLeftPaneToolbar_DisplayMode();
+			void CreateLeftPaneToolbar_AddMod();
+			void CreateLeftPaneToolbar_Tools();
+			void CreateRightPane();
 
 		private:
 			void OnMountButton(wxCommandEvent& event);
@@ -160,6 +135,33 @@ namespace Kortex::ModManager
 			void ClearControls();
 			void DisplayModInfo(IGameMod* entry);
 			void CreateViewContextMenu(KxMenu& contextMenu, const IGameMod::RefVector& selectedMods, IGameMod* focusedMod);
+
+		protected:
+			bool OnCreateWorkspace() override;
+			bool OnOpenWorkspace() override;
+			bool OnCloseWorkspace() override;
+			void OnReloadWorkspace() override;
+
+		public:
+			Workspace()
+				:m_RightPaneWorkspaces(*this)
+			{
+			}
+			~Workspace();
+
+		public:
+			wxString GetID() const override;
+			wxString GetName() const override;
+			ResourceID GetIcon() const override
+			{
+				return ImageResourceID::Puzzle;
+			}
+			
+			IWorkspaceContainer* GetPreferredContainer() const override;
+			IWorkspaceContainer& GetWorkspaceContainer()
+			{
+				return m_RightPaneWorkspaces;
+			}
 
 		public:
 			DisplayModel* GetModel() const

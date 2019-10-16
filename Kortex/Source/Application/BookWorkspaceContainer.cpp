@@ -4,6 +4,20 @@
 
 namespace Kortex::Application
 {
+	bool BookWorkspaceContainer::DoInsertWorkspacePage(IWorkspace& workspace, size_t index)
+	{
+		wxBookCtrlBase& bookCtrl = GetBookCtrl();
+		if (bookCtrl.InsertPage(index, &workspace.GetWindow(), workspace.GetName()))
+		{
+			if (auto iconID = workspace.GetIcon().TryAsInt())
+			{
+				bookCtrl.SetPageImage(index, *iconID);
+			}
+			return true;
+		}
+		return false;
+	}
+
 	bool BookWorkspaceContainer::RunSwitchSequence(IWorkspace* fromWorkspace, IWorkspace& toWorkspace)
 	{
 		Utility::Log::LogInfo("%1: switching from %2 to %3", __FUNCTION__, fromWorkspace ? fromWorkspace->GetID() : "null", toWorkspace.GetID());
@@ -94,6 +108,10 @@ namespace Kortex::Application
 		}
 		return nullptr;
 	}
+	IWorkspace* BookWorkspaceContainer::GetWorkspaceByIndex(size_t index) const
+	{
+		return IWorkspace::FromWindow(GetBookCtrl().GetPage(index));
+	}
 	IWorkspace* BookWorkspaceContainer::GetCurrentWorkspace() const
 	{
 		Utility::Log::LogInfo("Attempt to get current workspace");
@@ -108,24 +126,39 @@ namespace Kortex::Application
 	{
 		return GetBookCtrl().GetPageCount();
 	}
+	std::optional<size_t> BookWorkspaceContainer::GetWorkspaceIndex(const IWorkspace& workspace) const
+	{
+		int index = GetBookCtrl().FindPage(&workspace.GetWindow());
+		if (index != wxNOT_FOUND)
+		{
+			return index;
+		}
+		return std::nullopt;
+	}
+	bool BookWorkspaceContainer::ChangeWorkspaceIndex(IWorkspace& workspace, size_t newIndex)
+	{
+		if (auto currentIndex = GetWorkspaceIndex(workspace))
+		{
+			wxBookCtrlBase& bookCtrl = GetBookCtrl();
+			if (currentIndex != newIndex && newIndex < bookCtrl.GetPageCount())
+			{
+				return bookCtrl.RemovePage(*currentIndex) && DoInsertWorkspacePage(workspace, newIndex);
+			}
+		}
+		return false;
+	}
 
 	bool BookWorkspaceContainer::AddWorkspace(IWorkspace& workspace)
 	{
 		if (IWorkspaceContainer::AddWorkspace(workspace))
 		{
-			wxBookCtrlBase& bookCtrl = GetBookCtrl();
-			if (bookCtrl.AddPage(&workspace.GetWindow(), workspace.GetName()))
-			{
-				if (auto iconID = workspace.GetIcon().TryAsInt())
-				{
-					bookCtrl.SetPageImage(bookCtrl.GetPageCount() - 1, *iconID);
-				}
-				return true;
-			}
+			return DoInsertWorkspacePage(workspace, GetBookCtrl().GetPageCount());
 		}
-
-		IWorkspaceContainer::RemoveWorkspace(workspace);
-		return false;
+		else
+		{
+			IWorkspaceContainer::RemoveWorkspace(workspace);
+			return false;
+		}
 	}
 	bool BookWorkspaceContainer::RemoveWorkspace(IWorkspace& workspace)
 	{
@@ -143,19 +176,5 @@ namespace Kortex::Application
 		Utility::Log::LogInfo("Attempt to switch workspace to %1", nextWorkspace.GetID());
 
 		return RunSwitchSequence(GetCurrentWorkspace(), nextWorkspace);
-	}
-
-	IWorkspace* BookWorkspaceContainer::GetWorkspaceByIndex(size_t index) const
-	{
-		return IWorkspace::FromWindow(GetBookCtrl().GetPage(index));
-	}
-	std::optional<size_t> BookWorkspaceContainer::GetWorkspaceIndex(const IWorkspace& workspace) const
-	{
-		int index = GetBookCtrl().FindPage(&workspace.GetWindow());
-		if (index != wxNOT_FOUND)
-		{
-			return index;
-		}
-		return std::nullopt;
 	}
 }

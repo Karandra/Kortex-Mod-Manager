@@ -9,6 +9,9 @@ namespace Kortex::Application
 		private:
 			bool m_HasCurrentWorkspace = false;
 
+		private:
+			bool DoInsertWorkspacePage(IWorkspace& workspace, size_t index);
+
 		protected:
 			bool RunSwitchSequence(IWorkspace* fromWorkspace, IWorkspace& toWorkspace);
 			void ShowWorkspace(IWorkspace& workspace) override;
@@ -26,14 +29,15 @@ namespace Kortex::Application
 
 			IWorkspace::RefVector EnumWorkspaces() const override;
 			IWorkspace* GetWorkspaceByID(const wxString& id) const override;
+			IWorkspace* GetWorkspaceByIndex(size_t index) const override;
 			IWorkspace* GetCurrentWorkspace() const override;
 			size_t GetWorkspaceCount() const override;
+			std::optional<size_t> GetWorkspaceIndex(const IWorkspace& workspace) const override;
+			bool ChangeWorkspaceIndex(IWorkspace& workspace, size_t newIndex) override;
 
 			bool AddWorkspace(IWorkspace& workspace) override;
 			bool RemoveWorkspace(IWorkspace& workspace) override;
 			bool SwitchWorkspace(IWorkspace& nextWorkspace) override;
 
-			IWorkspace* GetWorkspaceByIndex(size_t index) const;
-			std::optional<size_t> GetWorkspaceIndex(const IWorkspace& workspace) const;
 	};
 }

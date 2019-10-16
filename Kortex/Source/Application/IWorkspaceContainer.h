@@ -51,8 +51,11 @@ namespace Kortex
 
 			virtual IWorkspace::RefVector EnumWorkspaces() const = 0;
 			virtual IWorkspace* GetWorkspaceByID(const wxString& id) const = 0;
+			virtual IWorkspace* GetWorkspaceByIndex(size_t index) const = 0;
 			virtual IWorkspace* GetCurrentWorkspace() const = 0;
 			virtual size_t GetWorkspaceCount() const = 0;
+			virtual std::optional<size_t> GetWorkspaceIndex(const IWorkspace& workspace) const = 0;
+			virtual bool ChangeWorkspaceIndex(IWorkspace& workspace, size_t newIndex) = 0;
 
 			virtual bool AddWorkspace(IWorkspace& workspace) = 0;
 			virtual bool RemoveWorkspace(IWorkspace& workspace) = 0;

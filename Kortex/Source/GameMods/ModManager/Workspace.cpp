@@ -815,7 +815,7 @@ namespace Kortex::ModManager
 
 			m_SplitterLeftRight->SplitVertically(m_LeftPaneWindow, m_RightPaneWindow);
 			GetSplitterOptions().LoadSplitterLayout(m_SplitterLeftRight);
-			//m_WorkspaceContainer.GetAuiManager().LoadPerspective(GetRightPaneOptions().GetValue(), false);
+			GetRightPaneOptions().LoadWorkspaceContainerLayout(m_RightPaneContainer);
 
 			auto displayModelOptions = GetDisplayModelOptions();
 			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
@@ -854,7 +854,7 @@ namespace Kortex::ModManager
 			options.SetAttribute(OName::PriorityGroupLabelAlignment, (int)m_DisplayModel->GetPriorityGroupLabelAlignment());
 
 			GetSplitterOptions().SaveSplitterLayout(m_SplitterLeftRight);
-			//GetRightPaneOptions().SetValue(m_WorkspaceContainer.GetAuiManager().SavePerspective(), KxXMLDocument::AsCDATA::Always);
+			GetRightPaneOptions().SaveWorkspaceContainerLayout(m_RightPaneContainer);
 		}
 	}
 

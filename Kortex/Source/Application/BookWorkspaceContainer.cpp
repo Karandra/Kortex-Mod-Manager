@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "BookWorkspaceContainer.h"
 #include "Utility/Log.h"
+#include <wx/aui/auibook.h>
 
 namespace Kortex::Application
 {
 	bool BookWorkspaceContainer::DoInsertWorkspacePage(IWorkspace& workspace, size_t index)
 	{
 		wxBookCtrlBase& bookCtrl = GetBookCtrl();
-		if (bookCtrl.InsertPage(index, &workspace.GetWindow(), workspace.GetName()))
+		if (bookCtrl.InsertPage(index, &workspace.GetWindow(), workspace.GetName(), false))
 		{
 			if (auto iconID = workspace.GetIcon().TryAsInt())
 			{
@@ -128,7 +129,18 @@ namespace Kortex::Application
 	}
 	std::optional<size_t> BookWorkspaceContainer::GetWorkspaceIndex(const IWorkspace& workspace) const
 	{
-		int index = GetBookCtrl().FindPage(&workspace.GetWindow());
+		const wxBookCtrlBase& bookCtrl = GetBookCtrl();
+
+		int index = wxNOT_FOUND;
+		if (bookCtrl.IsKindOf(wxCLASSINFO(wxAuiNotebook)))
+		{
+			index = static_cast<const wxAuiNotebook&>(bookCtrl).GetPageIndex(const_cast<wxWindow*>(&workspace.GetWindow()));
+		}
+		else
+		{
+			index = bookCtrl.FindPage(&workspace.GetWindow());
+		}
+
 		if (index != wxNOT_FOUND)
 		{
 			return index;

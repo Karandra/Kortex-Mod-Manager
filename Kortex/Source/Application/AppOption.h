@@ -141,7 +141,16 @@ namespace Kortex
 			{
 				m_UISerializer.SplitterLayout(const_cast<AppOption&>(*this), SerializationMode::Load, splitter);
 			}
-	
+			
+			void SaveWorkspaceContainerLayout(const IWorkspaceContainer& container)
+			{
+				m_UISerializer.WorkspaceContainerLayout(*this, SerializationMode::Save, const_cast<IWorkspaceContainer&>(container));
+			}
+			void LoadWorkspaceContainerLayout(IWorkspaceContainer& container) const
+			{
+				m_UISerializer.WorkspaceContainerLayout(const_cast<AppOption&>(*this), SerializationMode::Load, container);
+			}
+
 			void SaveWindowGeometry(const wxTopLevelWindow* window)
 			{
 				m_UISerializer.WindowGeometry(*this, SerializationMode::Save, const_cast<wxTopLevelWindow*>(window));

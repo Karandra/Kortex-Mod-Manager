@@ -1,27 +1,30 @@
 #include "stdafx.h"
 #include "OptionSerializer.h"
 #include <Kortex/Application.hpp>
+#include "Application/Options/OptionDatabase.h"
 #include <KxFramework/KxDataView.h>
 #include <KxFramework/DataView2/DataView2.h>
 #include <KxFramework/DataView/KxDataViewMainWindow.h>
 #include <KxFramework/KxSplitterWindow.h>
 
+namespace Kortex::Application::OName
+{
+	KortexDefOption(Item);
+	KortexDefOption(UIOption);
+
+	KortexDefOption(Pages);
+	KortexDefOption(Columns);
+	KortexDefOption(DisplayAt);
+	KortexDefOption(Visible);
+	KortexDefOption(Width);
+	KortexDefOption(Current);
+
+	KortexDefOption(Splitter);
+	KortexDefOption(SashPosition);
+}
+
 namespace Kortex::Application::OptionSerializer
 {
-	namespace OName
-	{
-		KortexDefOption(Item);
-		KortexDefOption(UIOption);
-
-		KortexDefOption(Columns);
-		KortexDefOption(DisplayAt);
-		KortexDefOption(Visible);
-		KortexDefOption(Width);
-
-		KortexDefOption(Splitter);
-		KortexDefOption(SashPosition);
-	}
-
 	void UILayout::DataViewLayout(AppOption& option, SerializationMode mode, KxDataViewCtrl* dataView)
 	{
 		const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
@@ -100,7 +103,7 @@ namespace Kortex::Application::OptionSerializer
 
 					node.SetAttribute(OName::DisplayAt, (int)column->GetDisplayIndex());
 					node.SetAttribute(OName::Visible, column->IsVisible());
-					node.SetAttribute(OName::Width, column->GetWidthDescriptor());
+					node.SetAttribute(OName::Width, column->GetWidthDescriptor().GetValue());
 				}
 				else
 				{
@@ -148,6 +151,55 @@ namespace Kortex::Application::OptionSerializer
 			const int maxValue = wxSystemSettings::GetMetric(isVertical ? wxSYS_SCREEN_Y : wxSYS_SCREEN_X);
 
 			window->SetInitialPosition(std::clamp(value, window->GetMinimumPaneSize(), maxValue));
+		}
+	}
+	void UILayout::WorkspaceContainerLayout(AppOption& option, SerializationMode mode, IWorkspaceContainer& container)
+	{
+		KxXMLNode pagesNode = option.GetNode().QueryOrCreateElement(OName::Pages);
+
+		if (mode == SerializationMode::Save)
+		{
+			pagesNode.ClearNode();
+			pagesNode.SetAttribute(OName::UIOption, true);
+
+			for (const IWorkspace* workspace: container.EnumWorkspaces())
+			{
+				if (auto index = container.GetWorkspaceIndex(*workspace))
+				{
+					KxXMLNode node = pagesNode.NewElement(OName::Item);
+					node.SetAttribute(OName::ID, workspace->GetID());
+					if (workspace->IsCurrent())
+					{
+						node.SetAttribute(OName::Current, true);
+					}
+				}
+			}
+		}
+		else
+		{
+			if (pagesNode.GetChildrenCount() == container.GetWorkspaceCount())
+			{
+				IWorkspace* currentWorkspace = nullptr;
+
+				size_t index = 0;
+				for (KxXMLNode node = pagesNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+				{
+					if (IWorkspace* workspace = container.GetWorkspaceByID(node.GetAttribute(OName::ID)))
+					{
+						container.ChangeWorkspaceIndex(*workspace, index);
+						if (node.GetAttributeBool(OName::Current))
+						{
+							currentWorkspace = workspace;
+						}
+					}
+					index++;
+				}
+
+				if (currentWorkspace)
+				{
+					container.SwitchWorkspace(*currentWorkspace);
+				}
+			}
 		}
 	}
 	void UILayout::WindowGeometry(AppOption& option, SerializationMode mode, wxTopLevelWindow* window)

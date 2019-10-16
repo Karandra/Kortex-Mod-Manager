@@ -12,6 +12,7 @@ namespace KxDataView2
 namespace Kortex
 {
 	class AppOption;
+	class IWorkspaceContainer;
 }
 
 namespace Kortex::Application::OptionSerializer
@@ -31,6 +32,7 @@ namespace Kortex::Application::OptionSerializer
 			static void DataViewLayout(AppOption& option, SerializationMode mode, KxDataViewCtrl* dataView);
 			static void DataView2Layout(AppOption& option, SerializationMode mode, KxDataView2::View* dataView);
 			static void SplitterLayout(AppOption& option, SerializationMode mode, KxSplitterWindow* window);
+			static void WorkspaceContainerLayout(AppOption& option, SerializationMode mode, IWorkspaceContainer& container);
 			static void WindowGeometry(AppOption& option, SerializationMode mode, wxTopLevelWindow* window);
 	};
 }

@@ -1,10 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "IWorkspace.h"
+#include <Kx/RTTI.hpp>
 
 namespace Kortex
 {
-	class IWorkspaceContainer
+	class IWorkspaceContainer: public KxRTTI::Interface<IWorkspaceContainer>
 	{
 		friend class IWorkspace;
 

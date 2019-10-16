@@ -32,6 +32,8 @@ namespace Kortex::Application
 			HideWorkspace();
 			GetWindow().Hide();
 			GetWindow().Disable();
+
+			return true;
 		}
 		return false;
 	}

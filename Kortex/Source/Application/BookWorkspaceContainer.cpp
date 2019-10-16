@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "WorkspaceBookContainer.h"
+#include "BookWorkspaceContainer.h"
 #include "Utility/Log.h"
 
 namespace Kortex::Application
 {
-	bool WorkspaceBookContainer::RunSwitchSequence(IWorkspace* fromWorkspace, IWorkspace& toWorkspace)
+	bool BookWorkspaceContainer::RunSwitchSequence(IWorkspace* fromWorkspace, IWorkspace& toWorkspace)
 	{
 		Utility::Log::LogInfo("%1: switching from %2 to %3", __FUNCTION__, fromWorkspace ? fromWorkspace->GetID() : "null", toWorkspace.GetID());
 
@@ -46,7 +46,7 @@ namespace Kortex::Application
 
 		return false;
 	}
-	void WorkspaceBookContainer::ShowWorkspace(IWorkspace& workspace)
+	void BookWorkspaceContainer::ShowWorkspace(IWorkspace& workspace)
 	{
 		Utility::Log::LogInfo("%1: displaying workspace \"%2\"", __FUNCTION__, workspace.GetID());
 
@@ -56,14 +56,14 @@ namespace Kortex::Application
 			m_HasCurrentWorkspace = true;
 		}
 	}
-	void WorkspaceBookContainer::HideWorkspace(IWorkspace& workspace)
+	void BookWorkspaceContainer::HideWorkspace(IWorkspace& workspace)
 	{
 		Utility::Log::LogInfo("%1: hiding workspace \"%2\"", __FUNCTION__, workspace.GetID());
 
 		// Nothing to do
 	}
 
-	IWorkspace::RefVector WorkspaceBookContainer::EnumWorkspaces() const
+	IWorkspace::RefVector BookWorkspaceContainer::EnumWorkspaces() const
 	{
 		const wxBookCtrlBase& bookCtrl = GetBookCtrl();
 
@@ -79,7 +79,7 @@ namespace Kortex::Application
 		}
 		return items;
 	}
-	IWorkspace* WorkspaceBookContainer::GetWorkspaceByID(const wxString& id) const
+	IWorkspace* BookWorkspaceContainer::GetWorkspaceByID(const wxString& id) const
 	{
 		Utility::Log::LogInfo("Attempt to convert workspace ID (%1) to workspace instance", id);
 
@@ -94,7 +94,7 @@ namespace Kortex::Application
 		}
 		return nullptr;
 	}
-	IWorkspace* WorkspaceBookContainer::GetCurrentWorkspace() const
+	IWorkspace* BookWorkspaceContainer::GetCurrentWorkspace() const
 	{
 		Utility::Log::LogInfo("Attempt to get current workspace");
 
@@ -104,12 +104,12 @@ namespace Kortex::Application
 		}
 		return nullptr;
 	}
-	size_t WorkspaceBookContainer::GetWorkspaceCount() const
+	size_t BookWorkspaceContainer::GetWorkspaceCount() const
 	{
 		return GetBookCtrl().GetPageCount();
 	}
 
-	bool WorkspaceBookContainer::AddWorkspace(IWorkspace& workspace)
+	bool BookWorkspaceContainer::AddWorkspace(IWorkspace& workspace)
 	{
 		if (IWorkspaceContainer::AddWorkspace(workspace))
 		{
@@ -127,7 +127,7 @@ namespace Kortex::Application
 		IWorkspaceContainer::RemoveWorkspace(workspace);
 		return false;
 	}
-	bool WorkspaceBookContainer::RemoveWorkspace(IWorkspace& workspace)
+	bool BookWorkspaceContainer::RemoveWorkspace(IWorkspace& workspace)
 	{
 		if (IWorkspaceContainer::RemoveWorkspace(workspace))
 		{
@@ -138,18 +138,18 @@ namespace Kortex::Application
 		}
 		return false;
 	}
-	bool WorkspaceBookContainer::SwitchWorkspace(IWorkspace& nextWorkspace)
+	bool BookWorkspaceContainer::SwitchWorkspace(IWorkspace& nextWorkspace)
 	{
 		Utility::Log::LogInfo("Attempt to switch workspace to %1", nextWorkspace.GetID());
 
 		return RunSwitchSequence(GetCurrentWorkspace(), nextWorkspace);
 	}
 
-	IWorkspace* WorkspaceBookContainer::GetWorkspaceByIndex(size_t index) const
+	IWorkspace* BookWorkspaceContainer::GetWorkspaceByIndex(size_t index) const
 	{
 		return IWorkspace::FromWindow(GetBookCtrl().GetPage(index));
 	}
-	std::optional<size_t> WorkspaceBookContainer::GetWorkspaceIndex(const IWorkspace& workspace) const
+	std::optional<size_t> BookWorkspaceContainer::GetWorkspaceIndex(const IWorkspace& workspace) const
 	{
 		int index = GetBookCtrl().FindPage(&workspace.GetWindow());
 		if (index != wxNOT_FOUND)

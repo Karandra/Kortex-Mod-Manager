@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "IMainWindow.h"
 #include "IWorkspace.h"
-#include "WorkspaceBookContainer.h"
+#include "BookWorkspaceContainer.h"
 #include "Utility/KLabeledValue.h"
 #include <KxFramework/KxFrame.h>
 #include <KxFramework/KxPanel.h>
@@ -23,7 +23,7 @@ namespace Kortex
 namespace Kortex::Application
 {
 	class MainWindow;
-	class MainWindowWorkspaceContainer: public WorkspaceBookContainer
+	class MainWindowWorkspaceContainer: public BookWorkspaceContainer
 	{
 		friend class MainWindow;
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/DefaultWorkspace.h"
-#include "Application/WorkspaceBookContainer.h"
+#include "Application/BookWorkspaceContainer.h"
 #include "KPackageCreatorController.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxSplitterWindow.h>
@@ -33,7 +33,7 @@ namespace Kortex::PackageDesigner
 namespace Kortex::PackageDesigner
 {
 	class KPackageCreatorWorkspace;
-	class WorkspaceContainer: public Application::WorkspaceBookContainer
+	class WorkspaceContainer: public Application::BookWorkspaceContainer
 	{
 		friend class KPackageCreatorWorkspace;
 

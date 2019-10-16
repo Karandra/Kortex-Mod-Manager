@@ -1260,9 +1260,6 @@
     <ClCompile Include="Source\Application\IMainWindow.cpp">
       <Filter>Code\Source\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Application\WorkspaceBookContainer.cpp">
-      <Filter>Code\Source\Application</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\UI.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
@@ -1277,6 +1274,9 @@
     </ClCompile>
     <ClCompile Include="Source\UI\ImageViewerDialog.cpp">
       <Filter>Code\Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp">
+      <Filter>Code\Source\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2399,9 +2399,6 @@
     <ClInclude Include="Source\Application\MainWindow.h">
       <Filter>Code\Headers\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\WorkspaceBookContainer.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utility\UI.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
@@ -2416,6 +2413,9 @@
     </ClInclude>
     <ClInclude Include="Source\UI\ImageViewerDialog.h">
       <Filter>Code\Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\BookWorkspaceContainer.h">
+      <Filter>Code\Headers\Application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@
 
 namespace Kortex::Application
 {
-	class WorkspaceBookContainer: public KxRTTI::ExtendInterface<WorkspaceBookContainer, IWorkspaceContainer>
+	class BookWorkspaceContainer: public KxRTTI::ExtendInterface<BookWorkspaceContainer, IWorkspaceContainer>
 	{
 		private:
 			bool m_HasCurrentWorkspace = false;

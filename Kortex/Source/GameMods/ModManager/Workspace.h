@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/DefaultWorkspace.h"
-#include "Application/WorkspaceBookContainer.h"
+#include "Application/BookWorkspaceContainer.h"
 #include "GameMods/IGameMod.h"
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxAuiNotebook.h>
@@ -27,7 +27,7 @@ namespace Kortex
 namespace Kortex::ModManager
 {
 	class Workspace;
-	class WorkspaceContainer: public Application::WorkspaceBookContainer
+	class WorkspaceContainer: public Application::BookWorkspaceContainer
 	{
 		friend class Workspace;
 

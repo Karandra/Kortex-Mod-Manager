@@ -38,11 +38,11 @@ namespace Kortex::Application
 		{
 			m_MainWindow.ClearStatus(i);
 		}
-		WorkspaceBookContainer::ShowWorkspace(workspace);
+		BookWorkspaceContainer::ShowWorkspace(workspace);
 	}
 	void MainWindowWorkspaceContainer::HideWorkspace(IWorkspace& workspace)
 	{
-		WorkspaceBookContainer::HideWorkspace(workspace);
+		BookWorkspaceContainer::HideWorkspace(workspace);
 	}
 }
 

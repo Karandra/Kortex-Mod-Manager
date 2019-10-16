@@ -97,7 +97,7 @@
     <ClCompile Include="Source\Application\VariablesTable\VariableValue.cpp" />
     <ClCompile Include="Source\Application\VariablesTable\DynamicVariableTable.cpp" />
     <ClCompile Include="Source\Application\VariablesTable\StaticVariableTable.cpp" />
-    <ClCompile Include="Source\Application\WorkspaceBookContainer.cpp" />
+    <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp" />
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.cpp" />
     <ClCompile Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.cpp" />
@@ -433,7 +433,7 @@
     <ClInclude Include="Source\Application\VariablesTable\DynamicVariableTable.h" />
     <ClInclude Include="Source\Application\VariablesTable\StaticVariableTable.h" />
     <ClInclude Include="Source\Application\VariablesTable\VariablesDatabase.h" />
-    <ClInclude Include="Source\Application\WorkspaceBookContainer.h" />
+    <ClInclude Include="Source\Application\BookWorkspaceContainer.h" />
     <ClInclude Include="Source\Archive\KBethesdaArchive.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.h" />

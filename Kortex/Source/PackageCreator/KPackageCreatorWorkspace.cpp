@@ -53,7 +53,7 @@ namespace Kortex::PackageDesigner
 	{
 		if (auto index = GetWorkspaceIndex(workspace))
 		{
-			WorkspaceBookContainer::AddWorkspace(workspace);
+			BookWorkspaceContainer::AddWorkspace(workspace);
 
 			KxTreeListItem item = m_PagesList->GetRoot().GetNthChild(*index);
 			item.SetSelection();
@@ -61,7 +61,7 @@ namespace Kortex::PackageDesigner
 	}
 	void WorkspaceContainer::HideWorkspace(IWorkspace& workspace)
 	{
-		return WorkspaceBookContainer::HideWorkspace(workspace);
+		return BookWorkspaceContainer::HideWorkspace(workspace);
 	}
 }
 

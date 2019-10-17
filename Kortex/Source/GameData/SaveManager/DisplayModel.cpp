@@ -18,7 +18,7 @@ namespace Kortex::SaveManager
 		{
 			case ColumnID::Name:
 			{
-				return save.GetFileItem().GetName();
+				return KxString::Format(wxS("%1\r\n%2"), save.GetDisplayName(), save.GetFileItem().GetName());
 			}
 		};
 		return VirtualListModel::GetToolTip(node, column);
@@ -49,7 +49,7 @@ namespace Kortex::SaveManager
 			}
 			case ColumnID::Name:
 			{
-				return save.GetDisplayName();
+				return KxString::Format(wxS("%1\r\n<i>%2</i>"), save.GetDisplayName(), save.GetFileItem().GetName());
 			}
 			case ColumnID::ModificationDate:
 			{
@@ -400,7 +400,7 @@ namespace Kortex::SaveManager
 		// Columns
 		constexpr ColumnStyle columnStyle = ColumnStyle::Sort|ColumnStyle::Move|ColumnStyle::Size;
 		view->AppendColumn<BitmapRenderer>(KTr("Generic.Image"), ColumnID::Bitmap, {}, ColumnStyle::Move|ColumnStyle::Size);
-		view->AppendColumn<TextRenderer, TextEditor>(KTr("Generic.Name"), ColumnID::Name, {}, columnStyle);
+		view->AppendColumn<HTMLRenderer, TextEditor>(KTr("Generic.Name"), ColumnID::Name, {}, columnStyle);
 		view->AppendColumn<TextRenderer>(KTr("Generic.ModificationDate"), ColumnID::ModificationDate, {}, columnStyle);
 		view->AppendColumn<TextRenderer>(KTr("Generic.Size"), ColumnID::Size, {}, columnStyle);
 

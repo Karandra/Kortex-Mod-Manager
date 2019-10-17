@@ -2,6 +2,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
 #include "Workspace.h"
+#include "GameMods/ModManager/Workspace.h"
 #include "GameInstance/IGameInstance.h"
 #include "UI/ImageViewerDialog.h"
 #include <KxFramework/KxLabel.h>
@@ -142,7 +143,16 @@ namespace Kortex::ScreenshotsGallery
 	}
 	wxString Workspace::GetName() const
 	{
-		return KTr("ScreenshotsGallery.Name");
+		return KTr("ScreenshotsGallery.NameShort");
+	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		IWorkspaceContainer* result = nullptr;
+		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
+		{
+			result = &workspace.GetWorkspaceContainer();
+		});
+		return result;
 	}
 
 	void Workspace::DisplayInfo(const wxString& filePath)

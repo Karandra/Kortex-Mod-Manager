@@ -49,6 +49,7 @@ namespace Kortex::ScreenshotsGallery
 			{
 				return ImageResourceID::Pictures;
 			}
+			IWorkspaceContainer* GetPreferredContainer() const override;
 
 		private:
 			void DisplayInfo(const wxString& filePath);

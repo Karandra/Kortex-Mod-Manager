@@ -25,6 +25,7 @@
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxSearchBox.h>
+#include <KxFramework/KxBitmapComboBox.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxDualProgressDialog.h>
@@ -335,6 +336,7 @@ namespace Kortex::ModManager
 		item = menu->Add(new KxMenuItem((int)ToolsMenuID::ExportModList, KTr("Generic.Export")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::Disk));
 	}
+	
 	void Workspace::CreateRightPane()
 	{
 		wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
@@ -342,20 +344,36 @@ namespace Kortex::ModManager
 		m_RightPaneWindow->SetSizer(mainSizer);
 
 		// Controls
-		wxBoxSizer* controlSizer = new wxBoxSizer(wxHORIZONTAL);
-		{
-			m_ActivateFSButton = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("ModManager.VFS.Activate"));
-			m_ActivateFSButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
-			m_ActivateFSButton->SetMinSize(FromDIP(wxSize(wxDefaultCoord, 36)));
-			m_ActivateFSButton->Bind(wxEVT_BUTTON, &Workspace::OnMountButton, this);
+		m_RightPaneSizer = new wxBoxSizer(wxHORIZONTAL);
+		m_RightPaneSizer->SetMinSize(FromDIP(wxSize(wxDefaultCoord, 36)));
 
-			controlSizer->Add(m_ActivateFSButton);
+		CreateRightPaneProgramList();
+		{
+			m_RightPane_ActivateFS = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("ModManager.VFS.Activate"));
+			m_RightPane_ActivateFS->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
+			m_RightPane_ActivateFS->SetMinSize(m_RightPaneSizer->GetMinSize());
+			m_RightPane_ActivateFS->Bind(wxEVT_BUTTON, &Workspace::OnMountButton, this);
+			m_RightPaneSizer->Add(m_RightPane_ActivateFS, 0, wxLEFT, KLC_HORIZONTAL_SPACING * 2);
 		}
 		mainSizer->AddSpacer(1);
-		mainSizer->Add(controlSizer, 0, wxLEFT|wxBOTTOM|wxRIGHT, KLC_VERTICAL_SPACING);
+		mainSizer->Add(m_RightPaneSizer, 0, wxEXPAND|wxLEFT|wxBOTTOM|wxRIGHT, KLC_VERTICAL_SPACING);
 
 		m_RightPaneContainer.Create(m_RightPaneWindow);
 		mainSizer->Add(&m_RightPaneContainer.GetWindow(), 1, wxEXPAND);
+	}
+	void Workspace::CreateRightPaneProgramList()
+	{
+		m_RightPane_Programs = new KxBitmapComboBox(m_RightPaneWindow, KxID_NONE);
+		m_RightPane_Programs->SetImageList(&ImageProvider::GetImageList());
+		m_RightPane_Programs->AddItem(KAux::MakeNoneLabel(), ResourceID(ImageResourceID::CrossWhite).AsInt());
+		m_RightPane_Programs->SetSelection(0);
+		m_RightPaneSizer->Add(m_RightPane_Programs, 1, wxEXPAND);
+
+		m_RightPane_RunProgram = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("Generic.Run"));
+		m_RightPane_RunProgram->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlRight));
+		m_RightPane_RunProgram->SetMinSize(m_RightPaneSizer->GetMinSize());
+		m_RightPane_RunProgram->Disable();
+		m_RightPaneSizer->Add(m_RightPane_RunProgram, 0, wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 	}
 
 	void Workspace::OnMountButton(wxCommandEvent& event)
@@ -552,16 +570,16 @@ namespace Kortex::ModManager
 		m_ToolBar_Profiles->Enable(!event.IsActivated());
 		m_ToolBar_EditProfiles->SetEnabled(!event.IsActivated());
 
-		wxWindowUpdateLocker lock(m_ActivateFSButton);
+		wxWindowUpdateLocker lock(m_RightPane_ActivateFS);
 		if (event.IsActivated())
 		{
-			m_ActivateFSButton->SetLabel(KTr("ModManager.VFS.Deactivate"));
-			m_ActivateFSButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::InformationFrameEmpty));
+			m_RightPane_ActivateFS->SetLabel(KTr("ModManager.VFS.Deactivate"));
+			m_RightPane_ActivateFS->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::InformationFrameEmpty));
 		}
 		else
 		{
-			m_ActivateFSButton->SetLabel(KTr("ModManager.VFS.Activate"));
-			m_ActivateFSButton->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
+			m_RightPane_ActivateFS->SetLabel(KTr("ModManager.VFS.Activate"));
+			m_RightPane_ActivateFS->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
 		}
 		m_DisplayModel->UpdateUI();
 	}

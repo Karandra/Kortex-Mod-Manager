@@ -15,6 +15,7 @@
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxSingleton.h>
 class KxSearchBox;
+class KxBitmapComboBox;
 class KxMenuEvent;
 
 namespace Kortex
@@ -92,9 +93,14 @@ namespace Kortex::ModManager
 			DisplayModel* m_DisplayModel = nullptr;
 
 			// Right pane
+			wxBoxSizer* m_RightPaneSizer = nullptr;
 			KxPanel* m_RightPaneWindow = nullptr;
 			WorkspaceContainer m_RightPaneContainer;
-			KxButton* m_ActivateFSButton = nullptr;
+
+			// Right pane top bar
+			KxButton* m_RightPane_ActivateFS = nullptr;
+			KxBitmapComboBox* m_RightPane_Programs = nullptr;
+			KxButton* m_RightPane_RunProgram = nullptr;
 
 		private:
 			void CreateLeftPane();
@@ -103,7 +109,9 @@ namespace Kortex::ModManager
 			void CreateLeftPaneToolbar_DisplayMode();
 			void CreateLeftPaneToolbar_AddMod();
 			void CreateLeftPaneToolbar_Tools();
+
 			void CreateRightPane();
+			void CreateRightPaneProgramList();
 
 		private:
 			void OnMountButton(wxCommandEvent& event);

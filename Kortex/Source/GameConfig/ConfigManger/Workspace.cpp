@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Workspace.h"
 #include "WorkspaceController.h"
+#include "GameMods/ModManager/Workspace.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameConfig.hpp>
 #include <Kortex/Utility.hpp>
@@ -79,7 +80,16 @@ namespace Kortex::GameConfig
 	}
 	wxString Workspace::GetName() const
 	{
-		return GameConfigModule::GetInstance()->GetModuleInfo().GetName();
+		return KTr("GameConfigModule.NameShort");
+	}
+	IWorkspaceContainer* Workspace::GetPreferredContainer() const
+	{
+		IWorkspaceContainer* result = nullptr;
+		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
+		{
+			result = &workspace.GetWorkspaceContainer();
+		});
+		return result;
 	}
 
 	void Workspace::OnChangesMade()

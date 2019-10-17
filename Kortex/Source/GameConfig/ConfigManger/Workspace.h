@@ -40,6 +40,7 @@ namespace Kortex::GameConfig
 			{
 				return ImageResourceID::GearPencil;
 			}
+			IWorkspaceContainer* GetPreferredContainer() const override;
 
 		public:
 			void OnChangesMade();

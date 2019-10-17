@@ -15,6 +15,7 @@
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxSingleton.h>
 class KxSearchBox;
+class KxMenuEvent;
 
 namespace Kortex
 {
@@ -64,7 +65,6 @@ namespace Kortex::ModManager
 
 		private:
 			BroadcastReciever m_BroadcastReciever;
-			
 
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxSplitterWindow* m_SplitterLeftRight = nullptr;

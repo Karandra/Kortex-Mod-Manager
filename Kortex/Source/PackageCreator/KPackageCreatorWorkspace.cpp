@@ -78,7 +78,11 @@ namespace Kortex::PackageDesigner
 		if (Application::BookWorkspaceContainer::AddWorkspace(workspace))
 		{
 			KxTreeListItem item = m_PagesList->GetRoot().Add(workspace.GetName(), new Application::WorkspaceClientData(workspace));
-			item.SetImage(workspace.GetIcon().AsInt());
+			if (auto icon = workspace.GetIcon().TryAsInt())
+			{
+				// TODO: KxTreeList is broken, replace with proper control such as KxDataView2
+				m_PagesList->wxTreeListCtrl::SetItemImage(item, *icon, *icon);
+			}
 
 			return true;
 		}

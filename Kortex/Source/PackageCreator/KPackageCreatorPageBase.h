@@ -41,6 +41,10 @@ namespace Kortex::PackageDesigner
 				return ImageResourceID::Box;
 			}
 			wxString GetName() const override;
+			IWorkspaceContainer* GetPreferredContainer() const override
+			{
+				return m_MainWorkspace->QueryInterface<IWorkspaceContainer>();
+			}
 			virtual wxString GetPageName() const = 0;
 
 			KPackageCreatorWorkspace* GetMainWorkspace() const

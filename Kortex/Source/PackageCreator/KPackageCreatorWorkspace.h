@@ -65,6 +65,9 @@ namespace Kortex::PackageDesigner
 			{
 				return *m_PagesList;
 			}
+
+			bool AddWorkspace(IWorkspace& workspace) override;
+			bool RemoveWorkspace(IWorkspace& workspace) override;
 	};
 }
 namespace Kortex::PackageDesigner
@@ -75,7 +78,6 @@ namespace Kortex::PackageDesigner
 		friend class KPackageCreatorController;
 
 		private:
-			KPackageCreatorManager* m_Manager = nullptr;
 			KPackageCreatorController m_Controller;
 
 			KxAuiToolBar* m_MenuBar = nullptr;
@@ -127,7 +129,7 @@ namespace Kortex::PackageDesigner
 			using KxIObject::QueryInterface;
 			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
 			{
-				return QueryAnyOf(iid, ptr, *this, m_Controller);
+				return QueryAnyOf(iid, ptr, *this, m_Controller, m_PagesContainer);
 			}
 
 			wxString GetID() const override;
@@ -136,6 +138,7 @@ namespace Kortex::PackageDesigner
 			{
 				return Kortex::ImageResourceID::Box;
 			}
+			IWorkspaceContainer* GetPreferredContainer() const override;
 
 			void RefreshWindowTitleForProject()
 			{

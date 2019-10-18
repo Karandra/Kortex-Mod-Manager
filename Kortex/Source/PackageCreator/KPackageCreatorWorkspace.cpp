@@ -13,6 +13,7 @@
 #include "PackageProject/KPackageProjectSerializerKMP.h"
 #include "PackageProject/KPackageProjectSerializerFOMod.h"
 #include "ModPackages/ModPackage.h"
+#include "GameMods/ModManager/Workspace.h"
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxProgressDialog.h>
 #include <KxFramework/KxTextFile.h>
@@ -42,9 +43,9 @@ namespace Kortex::PackageDesigner
 	{
 		if (KxTreeListItem item(*m_PagesList, event.GetItem()); item.IsOK())
 		{
-			if (IWorkspace* workspace = GetWorkspaceByIndex(item.GetIndexWithinParent()))
+			if (auto clientData = static_cast<Application::WorkspaceClientData*>(item.GetData()))
 			{
-				workspace->SwitchHere();
+				clientData->GetWorkspace().SwitchHere();
 			}
 		}
 	}
@@ -53,15 +54,52 @@ namespace Kortex::PackageDesigner
 	{
 		if (auto index = GetWorkspaceIndex(workspace))
 		{
-			BookWorkspaceContainer::AddWorkspace(workspace);
+			BookWorkspaceContainer::ShowWorkspace(workspace);
 
-			KxTreeListItem item = m_PagesList->GetRoot().GetNthChild(*index);
-			item.SetSelection();
+			KxTreeListItem root = m_PagesList->GetRoot();
+			for (KxTreeListItem item = root.GetFirstChild(); item.IsOK(); item = item.GetNextSibling())
+			{
+				auto clientData = static_cast<Application::WorkspaceClientData*>(item.GetData());
+				if (clientData && &clientData->GetWorkspace() == &workspace)
+				{
+					item.SetSelection();
+					break;
+				}
+			}
 		}
 	}
 	void WorkspaceContainer::HideWorkspace(IWorkspace& workspace)
 	{
 		return BookWorkspaceContainer::HideWorkspace(workspace);
+	}
+
+	bool WorkspaceContainer::AddWorkspace(IWorkspace& workspace)
+	{
+		if (Application::BookWorkspaceContainer::AddWorkspace(workspace))
+		{
+			KxTreeListItem item = m_PagesList->GetRoot().Add(workspace.GetName(), new Application::WorkspaceClientData(workspace));
+			item.SetImage(workspace.GetIcon().AsInt());
+
+			return true;
+		}
+		return false;
+	}
+	bool WorkspaceContainer::RemoveWorkspace(IWorkspace& workspace)
+	{
+		if (Application::BookWorkspaceContainer::RemoveWorkspace(workspace))
+		{
+			KxTreeListItem root = m_PagesList->GetRoot();
+			for (KxTreeListItem item = root.GetFirstChild(); item.IsOK(); item = item.GetNextSibling())
+			{
+				auto clientData = static_cast<Application::WorkspaceClientData*>(item.GetData());
+				if (clientData && &clientData->GetWorkspace() == &workspace)
+				{
+					item.Remove();
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
 
@@ -89,16 +127,18 @@ namespace Kortex::PackageDesigner
 		m_PageInterface = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageInterface>(*this, m_Controller);
 		m_PageRequirements = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageRequirements>(*this, m_Controller);
 		m_PageComponents = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageComponents>(*this, m_Controller);
-
-		// Open first page (Info)
-		m_PagesContainer.SwitchWorkspace(*m_PageInfo);
-
-		// Create empty project
-		m_Controller.NewProject();
 		return true;
 	}
 	bool KPackageCreatorWorkspace::OnOpenWorkspace()
 	{
+		if (!OpenedOnce())
+		{
+			// Open first page (Info)
+			m_PagesContainer.SwitchWorkspace(*m_PageInfo);
+
+			// Create empty project
+			m_Controller.NewProject();
+		}
 		return true;
 	}
 	bool KPackageCreatorWorkspace::OnCloseWorkspace()
@@ -207,6 +247,12 @@ namespace Kortex::PackageDesigner
 
 	void KPackageCreatorWorkspace::DoLoadAllPages()
 	{
+		m_PageInfo->EnsureCreated();
+		m_PageFileData->EnsureCreated();
+		m_PageInterface->EnsureCreated();
+		m_PageRequirements->EnsureCreated();
+		m_PageComponents->EnsureCreated();
+
 		m_PageInfo->OnLoadProject(m_Controller.GetProject()->GetInfo());
 		m_PageFileData->OnLoadProject(m_Controller.GetProject()->GetFileData());
 		m_PageInterface->OnLoadProject(m_Controller.GetProject()->GetInterface());
@@ -354,6 +400,15 @@ namespace Kortex::PackageDesigner
 	wxString KPackageCreatorWorkspace::GetName() const
 	{
 		return KTr("PackageManager.CreatorName");
+	}
+	IWorkspaceContainer* KPackageCreatorWorkspace::GetPreferredContainer() const
+	{
+		IWorkspaceContainer* result = nullptr;
+		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
+		{
+			result = &workspace.GetWorkspaceContainer();
+		});
+		return result;
 	}
 
 	KPackageCreatorPageBase* KPackageCreatorWorkspace::GetCurrentPage() const

@@ -40,7 +40,7 @@ namespace Kortex::PackageDesigner
 	}
 	wxString KPackageCreatorPageBase::GetName() const
 	{
-		return m_MainWorkspace->GetName();
+		return GetPageName();
 	}
 
 	KxTextBox* KPackageCreatorPageBase::CreateInputField(wxWindow* window)

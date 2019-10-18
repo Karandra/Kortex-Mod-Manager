@@ -61,14 +61,23 @@ namespace Kortex::Application
 
 				// Insert window sizer into our own sizer
 				wxWindow& window = GetWindow();
+				wxBoxSizer* workspaceSizer = new wxBoxSizer(wxVERTICAL);
+
 				wxSizer* windowSizer = window.GetSizer();
+				window.SetSizer(workspaceSizer, false);
+
 				if (windowSizer)
 				{
-					wxBoxSizer* workspaceSizer = new wxBoxSizer(wxVERTICAL);
-					window.SetSizer(workspaceSizer, false);
-
 					workspaceSizer->Add(windowSizer, 1, wxEXPAND|wxALL, std::min(KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING));
 				}
+				else
+				{
+					for (wxWindow* window: window.GetChildren())
+					{
+						workspaceSizer->Add(window, 1, wxEXPAND|wxALL, std::min(KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING));
+					}
+				}
+				
 
 				// Open the workspace
 				return CallOnOpenWorkspace();

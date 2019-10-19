@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Application/BroadcastProcessor.h"
 #include "VirtualFileSystem/IVirtualFileSystem.h"
+class KxProcess;
 class KxProgressDialog;
 
 namespace Kortex
@@ -20,6 +21,10 @@ namespace Kortex::ModManager
 	class MainFileSystem: public IVirtualFileSystem
 	{
 		private:
+			using BaseFileSystem = VirtualFileSystem::BaseFileSystem;
+			using ProcessList = std::vector<std::unique_ptr<KxProcess>>;
+
+		private:
 			DefaultModManager& m_Manager;
 			BroadcastReciever m_BroadcastReciever;
 			KxProgressDialog* m_StatusDialog = nullptr;
@@ -28,19 +33,22 @@ namespace Kortex::ModManager
 			size_t m_InstancesCountTotal = 0;
 			bool m_IsEnabled = false;
 
-			std::unique_ptr<IVirtualFileSystem> m_Convergence;
-			std::vector<std::unique_ptr<IVirtualFileSystem>> m_Mirrors;
+			std::unique_ptr<BaseFileSystem> m_Convergence;
+			std::vector<std::unique_ptr<BaseFileSystem>> m_Mirrors;
 
 		private:
 			KxStringVector CheckMountPoints() const;
 			void InitMainVirtualFolder();
 			void InitMirroredLocations();
 			void SetFileSystemOptions(VirtualFileSystem::BaseFileSystem& fileSystem);
+			
+			ProcessList CheckAllForRunningPrograms();
+			void CheckForRunningPrograms(ProcessList& activeProcesses, const KxUInt32Vector& processes, BaseFileSystem& fileSystem);
 
 			void ShowStatusDialog();
 			void HideStatusDialog();
 
-			template<class TFunctor> IVirtualFileSystem* ForEachInstance(TFunctor&& func) const
+			template<class TFunctor> BaseFileSystem* ForEachInstance(TFunctor&& func) const
 			{
 				if (func(m_Convergence.get()))
 				{

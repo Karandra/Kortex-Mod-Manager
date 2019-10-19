@@ -563,10 +563,17 @@ namespace Kortex::ModManager
 			{
 				BroadcastProcessor::Get().CallAfter([this, vfsEnabled]()
 				{
-					m_RightPane_RunProgram->Disable();
-
 					IVirtualFileSystem& vfs = IModManager::GetInstance()->GetFileSystem();
-					vfsEnabled ? vfs.Disable() : vfs.Enable();
+					
+					m_RightPane_RunProgram->Disable();
+					if (vfsEnabled)
+					{
+						vfs.Disable();
+					}
+					else
+					{
+						vfs.Enable();
+					}
 				});
 			});
 		}

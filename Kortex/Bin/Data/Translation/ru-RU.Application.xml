@@ -711,6 +711,9 @@
 		<String ID="VFS.WriteMode.TargetFile">В исходный файл</String>
 		<String ID="VFS.WriteMode.FileCopy">В копию исходного файла</String>
 
+		<String ID="VFS.ActiveProcesses.Caption">Активные процессы</String>
+		<String ID="VFS.ActiveProcesses.Message">Следующие программы запущены из VFS. Завершите их выполнение и повторите попытку.</String>
+
 		<String ID="VFS.Error0">Виртуальная файловую систему успешно смонтирована.</String>
 		<String ID="VFS.Error1">Ошибка монтирования.</String>
 		<String ID="VFS.Error2">Неверная буква диска.</String>

@@ -58,4 +58,9 @@ namespace Kortex::VirtualFileSystem
 	{
 		return m_Controller.Send(RequestID::FSEnableImpersonateCallerUser, m_Handle, value).GetAs<bool>();
 	}
+
+	bool BaseFileSystem::IsProcessCreatedInVFS(uint32_t pid) const
+	{
+		return m_Controller.Send(RequestID::FSIsProcessCreatedInVFS, m_Handle, pid).GetAs<bool>();
+	}
 }

@@ -33,5 +33,7 @@ namespace Kortex::VirtualFileSystem
 			bool EnableAsyncIO(bool value);
 			bool EnableExtendedSecurity(bool value);
 			bool EnableImpersonateCallerUser(bool value);
+
+			bool IsProcessCreatedInVFS(uint32_t pid) const;
 	};
 }

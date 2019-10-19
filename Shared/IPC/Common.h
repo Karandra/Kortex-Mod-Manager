@@ -44,6 +44,8 @@ namespace Kortex::IPC
 		FSEnableExtendedSecurity,
 		FSEnableImpersonateCallerUser,
 
+		FSIsProcessCreatedInVFS,
+
 		GetLibraryName,
 		GetLibraryURL,
 		GetLibraryVersion,

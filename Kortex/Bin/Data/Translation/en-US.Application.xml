@@ -706,6 +706,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="VFS.WriteMode.TargetFile">Overwrite</String>
 		<String ID="VFS.WriteMode.FileCopy">Write to a copy</String>
 
+		<String ID="VFS.ActiveProcesses.Caption">Active processes</String>
+		<String ID="VFS.ActiveProcesses.Message">Following applications were launched from the VFS. Close them and retry.</String>
+
 		<String ID="VFS.Error0">Virtual file system successfully mounted.</String>
 		<String ID="VFS.Error1">Unable to mount.</String>
 		<String ID="VFS.Error2">Invalid drive.</String>

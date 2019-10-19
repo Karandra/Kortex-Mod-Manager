@@ -9,9 +9,11 @@
 #include "VirtualFileSystem/VirtualFSEvent.h"
 #include "DefaultModManager.h"
 #include "Utility/Log.h"
+#include <KxFramework/KxProcess.h>
 #include <KxFramework/KxFileFinder.h>
+#include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxProgressDialog.h>
-#include <Kx/Async/Coroutine.h>
+#include <Kx/Async.hpp>
 
 namespace
 {
@@ -98,6 +100,29 @@ namespace Kortex::ModManager
 		fileSystem.EnableAsyncIO(true);
 		fileSystem.EnableExtendedSecurity(true);
 		fileSystem.EnableImpersonateCallerUser(false);
+	}
+	
+	MainFileSystem::ProcessList MainFileSystem::CheckAllForRunningPrograms()
+	{
+		const KxUInt32Vector& runningProcesses = KxProcess::EnumProcesses();
+		ProcessList activeProcesses;
+
+		CheckForRunningPrograms(activeProcesses, runningProcesses, *m_Convergence);
+		for (auto& fileSystem: m_Mirrors)
+		{
+			CheckForRunningPrograms(activeProcesses, runningProcesses, *fileSystem);
+		}
+		return activeProcesses;
+	}
+	void MainFileSystem::CheckForRunningPrograms(ProcessList& activeProcesses, const KxUInt32Vector& processes, BaseFileSystem& fileSystem)
+	{
+		for (uint32_t pid: processes)
+		{
+			if (fileSystem.IsProcessCreatedInVFS(pid))
+			{
+				activeProcesses.emplace_back(std::make_unique<KxProcess>(pid));
+			}
+		}
 	}
 
 	void MainFileSystem::ShowStatusDialog()
@@ -275,10 +300,49 @@ namespace Kortex::ModManager
 					}
 					case State::Run:
 					{
-						m_Convergence->Disable();
-						for (auto& vfs: m_Mirrors)
+						ProcessList activeProcesses = CheckAllForRunningPrograms();
+						if (activeProcesses.empty())
 						{
-							vfs->Disable();
+							m_Convergence->Disable();
+							for (auto& vfs: m_Mirrors)
+							{
+								vfs->Disable();
+							}
+						}
+						else
+						{
+							BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtMainToggleError, *this, true);
+
+							KxTaskDialog dialog(m_StatusDialog, KxID_NONE, {}, {}, KxBTN_RETRY|KxBTN_CANCEL, KxICON_WARNING);
+							dialog.SetCaption(KTr("VFS.ActiveProcesses.Caption"));
+							dialog.SetMessage(KTr("VFS.ActiveProcesses.Message"));
+
+							wxString processesList;
+							for (const auto& process: activeProcesses)
+							{
+								// Processes created in VFS has path names if the following format:
+								// \Device\Volume{<GUID>}\<Actual path name>
+								// So we need to extract the path to show it to the user
+								wxString path = process->GetImageName();
+								wxRegEx regex(wxS("\\\\Device\\\\Volume{(.+)}\\\\(.*)"), wxRE_ADVANCED|wxRE_ICASE);
+								if (regex.Matches(path))
+								{
+									path = regex.GetMatch(path, 2);
+								}
+
+								// If path isn't in the format above, display it as is.
+								processesList += KxString::Format(wxS("\"%1\" (ID: %2)\r\n"), path, process->GetPID());
+							}
+							dialog.SetExMessage(processesList);
+							dialog.SetOptionEnabled(KxTD_Options::KxTD_EXMESSAGE_EXPANDED);
+
+							if (dialog.ShowModal() == KxID_RETRY)
+							{
+								KxAsync::DelayedCall([this]()
+								{
+									Disable();
+								}, wxTimeSpan::Milliseconds(150));
+							}
 						}
 						return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(100), State::HideDialog);
 					}

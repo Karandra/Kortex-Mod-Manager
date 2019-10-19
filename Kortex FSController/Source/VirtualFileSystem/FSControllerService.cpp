@@ -234,6 +234,15 @@ namespace Kortex::VirtualFileSystem
 				break;
 			}
 
+			case RequestID::FSIsProcessCreatedInVFS:
+			{
+				auto [handle, pid] = message.DeserializePayload<IPC::FSHandle, uint32_t>();
+
+				auto& vfs = GetFileSystemByHandle<KxVFS::MirrorFS>(handle);
+				message.SerializePayload(vfs.IsProcessCreatedInVFS(pid));
+				break;
+			}
+
 			case RequestID::GetLibraryName:
 			{
 				message.SerializePayload(GetLibraryName());

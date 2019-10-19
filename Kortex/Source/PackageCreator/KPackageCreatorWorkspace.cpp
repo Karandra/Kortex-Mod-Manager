@@ -19,6 +19,23 @@
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxFileStream.h>
 
+namespace Kortex::Application::OName
+{
+	KortexDefOption(Splitter);
+	KortexDefOption(Pages);
+}
+
+namespace
+{
+	template<class T> auto GetUIOption(T&& option)
+	{
+		using namespace Kortex;
+		using namespace Kortex::Application;
+
+		return Application::GetAInstanceOptionOf<PackageDesigner::KPackageCreatorWorkspace>(std::forward<T>(option));
+	}
+}
+
 namespace Kortex::PackageDesigner
 {
 	void WorkspaceContainer::Create(wxWindow* listParent, wxWindow* viewParent)
@@ -28,8 +45,6 @@ namespace Kortex::PackageDesigner
 		m_PagesList->GetDataView()->ToggleWindowStyle(wxBORDER_NONE);
 		m_PagesList->SetImageList(&ImageProvider::GetImageList());
 		m_PagesList->SetRowHeight(36);
-		m_PagesList->SetMinSize(wxSize(180, wxDefaultCoord));
-		m_PagesList->SetMaxSize(wxSize(180, wxDefaultCoord));
 
 		m_PagesList->AddColumn(wxEmptyString);
 		m_PagesList->Bind(wxEVT_TREELIST_SELECTION_CHANGED, &WorkspaceContainer::OnPageSelected, this);
@@ -111,19 +126,25 @@ namespace Kortex::PackageDesigner
 {
 	bool KPackageCreatorWorkspace::OnCreateWorkspace()
 	{
-		m_MainSizer = new wxBoxSizer(wxVERTICAL);
-		SetSizer(m_MainSizer);
+		m_SplitterLeftRight = new KxSplitterWindow(this, KxID_NONE);
+		m_SplitterLeftRight->SetMinimumPaneSize(ImageProvider::GetImageList().GetSize().GetWidth() * 1.5);
 
-		wxBoxSizer* mainPaneSizer = new wxBoxSizer(wxHORIZONTAL);
-		m_MainPane = new KxPanel(this, KxID_NONE);
-		m_MainPane->SetSizer(mainPaneSizer);
+		// Right pane
+		wxBoxSizer* rightPaneSizer = new wxBoxSizer(wxVERTICAL);
+		m_RightPane = new KxPanel(m_SplitterLeftRight, KxID_NONE);
+		m_RightPane->SetSizer(rightPaneSizer);
+		IThemeManager::GetActive().Apply(m_RightPane);
 
-		m_MainSizer->Add(m_MainPane, 1, wxEXPAND);
-		IThemeManager::GetActive().Apply(m_MainPane);
-		CreatePagesView();
+		// Left pane
+		m_PagesContainer.Create(m_SplitterLeftRight, m_RightPane);
+		
+		// Menu bar
+		CreateMenuBar(rightPaneSizer);
 
-		mainPaneSizer->Add(&m_PagesContainer.GetListWindow(), 0, wxEXPAND);
-		mainPaneSizer->Add(m_PagesBookPane, 1, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING);
+		// Layout
+		m_SplitterLeftRight->SplitVertically(&m_PagesContainer.GetListWindow(), m_RightPane);
+		rightPaneSizer->Add(m_MenuBar, 0, wxEXPAND);
+		rightPaneSizer->Add(&m_PagesContainer.GetWindow(), 1, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING);
 
 		// Create pages
 		m_PageInfo = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageInfo>(*this, m_Controller);
@@ -137,11 +158,11 @@ namespace Kortex::PackageDesigner
 	{
 		if (!OpenedOnce())
 		{
-			// Open first page (Info)
-			m_PagesContainer.SwitchWorkspace(*m_PageInfo);
-
-			// Create empty project
 			m_Controller.NewProject();
+
+			using namespace Application;
+			GetUIOption(OName::Splitter).LoadSplitterLayout(m_SplitterLeftRight);
+			GetUIOption(OName::Pages).LoadWorkspaceContainerLayout(m_PagesContainer);
 		}
 		return true;
 	}
@@ -153,9 +174,19 @@ namespace Kortex::PackageDesigner
 	{
 	}
 
+	KPackageCreatorWorkspace::~KPackageCreatorWorkspace()
+	{
+		if (IsCreated())
+		{
+			using namespace Application;
+			GetUIOption(OName::Splitter).SaveSplitterLayout(m_SplitterLeftRight);
+			GetUIOption(OName::Pages).SaveWorkspaceContainerLayout(m_PagesContainer);
+		}
+	}
+
 	void KPackageCreatorWorkspace::CreateMenuBar(wxSizer* sizer)
 	{
-		m_MenuBar = new KxAuiToolBar(m_PagesBookPane, KxID_NONE, KxAuiToolBar::DefaultStyle|wxAUI_TB_PLAIN_BACKGROUND|wxAUI_TB_TEXT);
+		m_MenuBar = new KxAuiToolBar(m_RightPane, KxID_NONE, KxAuiToolBar::DefaultStyle|wxAUI_TB_PLAIN_BACKGROUND|wxAUI_TB_TEXT);
 		m_MenuBar->SetBackgroundColour(GetBackgroundColour());
 		m_MenuBar->SetBorderColor(IThemeManager::GetActive().GetColor(Theme::ColorIndex::Border, Theme::ColorFlags::Background));
 		m_MenuBar->SetToolPacking(0);
@@ -167,9 +198,7 @@ namespace Kortex::PackageDesigner
 		m_MenuBar_Import = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Import"), wxNullBitmap);
 		m_MenuBar_Build = m_MenuBar->AddTool(KTr("PackageCreator.MenuBar.Build"), wxNullBitmap);
 
-		m_MenuBar->Realize();
-		sizer->Add(m_MenuBar, 0, wxEXPAND);
-
+		m_MenuBar->UpdateUI();
 		CreateProjectMenu();
 		CreateImportMenu();
 		CreateBuildMenu();
@@ -233,20 +262,6 @@ namespace Kortex::PackageDesigner
 
 		item = menu->Add(new KxMenuItem(KTr("PackageCreator.MenuBuild.Preview")));
 		item->Bind(KxEVT_MENU_SELECT, &KPackageCreatorWorkspace::OnBuildProjectPreview, this);
-	}
-	void KPackageCreatorWorkspace::CreatePagesView()
-	{
-		// Main workspace area
-		wxBoxSizer* pagesBookPaneSizer = new wxBoxSizer(wxVERTICAL);
-		m_PagesBookPane = new KxPanel(m_MainPane, KxID_NONE);
-		m_PagesBookPane->SetSizer(pagesBookPaneSizer);
-
-		// Menu bar
-		CreateMenuBar(pagesBookPaneSizer);
-
-		// Pages book
-		m_PagesContainer.Create(m_MainPane, m_PagesBookPane);
-		pagesBookPaneSizer->Add(&m_PagesContainer.GetWindow(), 1, wxEXPAND);
 	}
 
 	void KPackageCreatorWorkspace::DoLoadAllPages()
@@ -399,7 +414,7 @@ namespace Kortex::PackageDesigner
 
 	wxString KPackageCreatorWorkspace::GetID() const
 	{
-		return "KPackageCreatorWorkspace";
+		return "PackageDesigner::Workspace";
 	}
 	wxString KPackageCreatorWorkspace::GetName() const
 	{

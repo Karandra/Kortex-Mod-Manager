@@ -85,9 +85,8 @@ namespace Kortex::PackageDesigner
 			KxAuiToolBarItem* m_MenuBar_Import = nullptr;
 			KxAuiToolBarItem* m_MenuBar_Build = nullptr;
 
-			wxBoxSizer* m_MainSizer = nullptr;
-			KxPanel* m_MainPane = nullptr;
-			KxPanel* m_PagesBookPane = nullptr;
+			KxSplitterWindow* m_SplitterLeftRight = nullptr;
+			KxPanel* m_RightPane = nullptr;
 
 			// Pages
 			WorkspaceContainer m_PagesContainer;
@@ -102,7 +101,6 @@ namespace Kortex::PackageDesigner
 			void CreateProjectMenu();
 			void CreateImportMenu();
 			void CreateBuildMenu();
-			void CreatePagesView();
 
 			void DoLoadAllPages();
 			void OnNewProject(KxMenuEvent& event);
@@ -124,6 +122,7 @@ namespace Kortex::PackageDesigner
 				:m_Controller(*this), m_PagesContainer(*this)
 			{
 			}
+			~KPackageCreatorWorkspace();
 
 		public:
 			using KxIObject::QueryInterface;

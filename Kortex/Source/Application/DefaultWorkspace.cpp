@@ -97,7 +97,7 @@ namespace Kortex::Application
 
 		if (m_IsCreated || m_InsideOnCreate)
 		{
-			Reload();
+			OnReloadWorkspace();
 			return true;
 		}
 		return false;

@@ -348,13 +348,6 @@ namespace Kortex::ModManager
 		m_RightPaneSizer->SetMinSize(FromDIP(wxSize(wxDefaultCoord, 36)));
 
 		CreateRightPaneProgramList();
-		{
-			m_RightPane_ActivateFS = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("ModManager.VFS.Activate"));
-			m_RightPane_ActivateFS->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
-			m_RightPane_ActivateFS->SetMinSize(m_RightPaneSizer->GetMinSize());
-			m_RightPane_ActivateFS->Bind(wxEVT_BUTTON, &Workspace::OnMountButton, this);
-			m_RightPaneSizer->Add(m_RightPane_ActivateFS, 0, wxLEFT, KLC_HORIZONTAL_SPACING * 2);
-		}
 		mainSizer->AddSpacer(1);
 		mainSizer->Add(m_RightPaneSizer, 0, wxEXPAND|wxLEFT|wxBOTTOM|wxRIGHT, KLC_VERTICAL_SPACING);
 
@@ -372,22 +365,12 @@ namespace Kortex::ModManager
 		m_RightPane_RunProgram = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("Generic.Run"));
 		m_RightPane_RunProgram->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlRight));
 		m_RightPane_RunProgram->SetMinSize(m_RightPaneSizer->GetMinSize());
-		m_RightPane_RunProgram->Disable();
+		m_RightPane_RunProgram->SetSplitterEnabled();
+		m_RightPane_RunProgram->Bind(KxEVT_BUTTON, &Workspace::OnRunButton, this);
+		m_RightPane_RunProgram->Bind(KxEVT_BUTTON_MENU, &Workspace::OnRunButtonMenu, this);
 		m_RightPaneSizer->Add(m_RightPane_RunProgram, 0, wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 	}
 
-	void Workspace::OnMountButton(wxCommandEvent& event)
-	{
-		IVirtualFileSystem& vfs = IModManager::GetInstance()->GetFileSystem();
-		if (vfs.IsEnabled())
-		{
-			vfs.Disable();
-		}
-		else
-		{
-			vfs.Enable();
-		}
-	}
 	bool Workspace::ShowChangeModIDDialog(IGameMod& mod)
 	{
 		wxString newID;
@@ -430,7 +413,6 @@ namespace Kortex::ModManager
 		}
 		return false;
 	}
-
 	void Workspace::ProcessSelectProfile(const wxString& newProfileID)
 	{
 		if (!newProfileID.IsEmpty())
@@ -565,22 +547,36 @@ namespace Kortex::ModManager
 			}
 		};
 	}
+	void Workspace::OnRunButton(wxCommandEvent& event)
+	{
+	}
+	void Workspace::OnRunButtonMenu(wxCommandEvent& event)
+	{
+		KxMenu menu;
+
+		{
+			const bool vfsEnabled = IModManager::GetInstance()->GetFileSystem().IsEnabled();
+			
+			KxMenuItem* item = menu.AddItem(vfsEnabled ? KTr("ModManager.VFS.Deactivate") : KTr("ModManager.VFS.Activate"));
+			item->SetBitmap(ImageProvider::GetBitmap(vfsEnabled ? ImageResourceID::InformationFrameEmpty : ImageResourceID::TickCircleFrameEmpty));
+			item->Bind(KxEVT_MENU_SELECT, [this, vfsEnabled](KxMenuEvent& event)
+			{
+				BroadcastProcessor::Get().CallAfter([this, vfsEnabled]()
+				{
+					m_RightPane_RunProgram->Disable();
+
+					IVirtualFileSystem& vfs = IModManager::GetInstance()->GetFileSystem();
+					vfsEnabled ? vfs.Disable() : vfs.Enable();
+				});
+			});
+		}
+		menu.ShowAsPopup(m_RightPane_RunProgram, 1, TPM_RIGHTALIGN);
+	}
 	void Workspace::OnMainFSToggled(VirtualFSEvent& event)
 	{
-		m_ToolBar_Profiles->Enable(!event.IsActivated());
 		m_ToolBar_EditProfiles->SetEnabled(!event.IsActivated());
-
-		wxWindowUpdateLocker lock(m_RightPane_ActivateFS);
-		if (event.IsActivated())
-		{
-			m_RightPane_ActivateFS->SetLabel(KTr("ModManager.VFS.Deactivate"));
-			m_RightPane_ActivateFS->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::InformationFrameEmpty));
-		}
-		else
-		{
-			m_RightPane_ActivateFS->SetLabel(KTr("ModManager.VFS.Activate"));
-			m_RightPane_ActivateFS->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::TickCircleFrameEmpty));
-		}
+		m_ToolBar_Profiles->Enable(!event.IsActivated());
+		m_RightPane_RunProgram->Enable();
 		m_DisplayModel->UpdateUI();
 	}
 	void Workspace::OnProfileSelected(ProfileEvent& event)
@@ -818,6 +814,7 @@ namespace Kortex::ModManager
 
 		// Events
 		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &Workspace::OnMainFSToggled, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggleError, &Workspace::OnMainFSToggled, this);
 		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &Workspace::OnProfileSelected, this);
 
 		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &Workspace::OnUpdateModLayoutNeeded, this);

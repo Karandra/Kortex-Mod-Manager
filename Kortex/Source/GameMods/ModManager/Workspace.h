@@ -98,7 +98,6 @@ namespace Kortex::ModManager
 			WorkspaceContainer m_RightPaneContainer;
 
 			// Right pane top bar
-			KxButton* m_RightPane_ActivateFS = nullptr;
 			KxBitmapComboBox* m_RightPane_Programs = nullptr;
 			KxButton* m_RightPane_RunProgram = nullptr;
 
@@ -114,19 +113,19 @@ namespace Kortex::ModManager
 			void CreateRightPaneProgramList();
 
 		private:
-			void OnMountButton(wxCommandEvent& event);
 			bool ShowChangeModIDDialog(IGameMod& mod);
-
 			void ProcessSelectProfile(const wxString& newProfileID);
 			void OnSelectProfile(wxCommandEvent& event);
 			void OnShowProfileEditor(KxAuiToolBarEvent& event);
 			void OnUpdateModLayoutNeeded(ModEvent& event);
-		
+			
 			void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 			void OnToolsMenu(KxAuiToolBarEvent& event);
+			void OnRunButton(wxCommandEvent& event);
+			void OnRunButtonMenu(wxCommandEvent& event);
 			void OnMainFSToggled(VirtualFSEvent& event);
 			void OnProfileSelected(ProfileEvent& event);
-		
+			
 			void OnAddMod_Empty(KxMenuEvent& event);
 			void OnAddMod_FromFolder(KxMenuEvent& event);
 			void OnAddMod_InstallPackage(KxMenuEvent& event);

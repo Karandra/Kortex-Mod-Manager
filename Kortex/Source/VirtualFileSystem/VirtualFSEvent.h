@@ -14,6 +14,7 @@ namespace Kortex
 		public:
 			KxEVENT_MEMBER(VirtualFSEvent, SingleToggled);
 			KxEVENT_MEMBER(VirtualFSEvent, MainToggled);
+			KxEVENT_MEMBER(VirtualFSEvent, MainToggleError);
 
 		private:
 			IVirtualFileSystem* m_FileSustem = nullptr;

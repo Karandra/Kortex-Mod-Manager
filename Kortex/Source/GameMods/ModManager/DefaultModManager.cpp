@@ -7,6 +7,7 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/InstallWizard.hpp>
 
+#include "VirtualFileSystem/VirtualFSEvent.h"
 #include "DefaultModManager.h"
 #include "Workspace.h"
 #include "GameMods/VirtualGameFolder/Workspace.h"
@@ -125,6 +126,8 @@ namespace Kortex::ModManager
 
 	void DefaultModManager::OnMountPointError(const KxStringVector& locations)
 	{
+		BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtMainToggleError, m_VFS, false);
+
 		KxTaskDialog dialog(Workspace::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
 		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
 		dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);

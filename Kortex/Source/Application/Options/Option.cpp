@@ -32,7 +32,10 @@ namespace
 				break;
 			}
 		};
-		return xml.QueryOrCreateElement(AppOption::MakeXPath(root, std::forward<Args>(arg)...));
+
+		wxString xPath = AppOption::MakeXPath(root, std::forward<Args>(arg)...);
+		xPath.Replace(wxS("::"), wxS("-"));
+		return xml.QueryOrCreateElement(xPath);
 	}
 	template<class... Args> KxXMLNode InitNodeUsingModule(Disposition disposition, KxXMLDocument& xml, const  IModule& module, Args&&... arg)
 	{

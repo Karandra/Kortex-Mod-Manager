@@ -391,15 +391,19 @@ namespace Kortex::PluginManager
 	}
 	void Workspace::HighlightPlugin(const IGamePlugin* plugin)
 	{
-		if (plugin)
+		if (m_ModelView)
 		{
-			KxDataViewItem item = m_ModelView->GetItemByEntry(plugin);
-			m_ModelView->GetView()->Select(item);
-			m_ModelView->GetView()->EnsureVisible(item);
-		}
-		else
-		{
-			m_ModelView->GetView()->UnselectAll();
+			KxDataViewCtrl* view = m_ModelView->GetView();
+			if (plugin)
+			{
+				KxDataViewItem item = m_ModelView->GetItemByEntry(plugin);
+				view->Select(item);
+				view->EnsureVisible(item);
+			}
+			else
+			{
+				view->UnselectAll();
+			}
 		}
 	}
 }

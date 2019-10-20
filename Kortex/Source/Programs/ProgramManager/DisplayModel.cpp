@@ -74,7 +74,7 @@ namespace Kortex::ProgramManager
 
 	void DisplayModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const IProgramEntry* entry = GetDataEntry(row);
+		const IProgramItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -104,7 +104,7 @@ namespace Kortex::ProgramManager
 	}
 	void DisplayModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const IProgramEntry* entry = GetDataEntry(row);
+		const IProgramItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -146,7 +146,7 @@ namespace Kortex::ProgramManager
 	}
 	bool DisplayModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		IProgramEntry* entry = GetDataEntry(row);
+		IProgramItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -187,7 +187,7 @@ namespace Kortex::ProgramManager
 	}
 	bool DisplayModel::GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const
 	{
-		const IProgramEntry* entry = GetDataEntry(row);
+		const IProgramItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -213,7 +213,7 @@ namespace Kortex::ProgramManager
 
 	void DisplayModel::OnSelectItem(KxDataViewEvent& event)
 	{
-		const IProgramEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+		const IProgramItem* entry = GetDataEntry(GetRow(event.GetItem()));
 		if (entry)
 		{
 			IMainWindow::GetInstance()->SetStatus(entry->GetName() + wxS(": ") + entry->GetExecutable());
@@ -225,7 +225,7 @@ namespace Kortex::ProgramManager
 	{
 		KxDataViewItem item = event.GetItem();
 		KxDataViewColumn* column = event.GetColumn();
-		IProgramEntry* entry = GetDataEntry(GetRow(item));
+		IProgramItem* entry = GetDataEntry(GetRow(item));
 		if (entry && column)
 		{
 			switch (column->GetID())
@@ -259,7 +259,7 @@ namespace Kortex::ProgramManager
 		KxDataViewColumn* column = event.GetColumn();
 		if (column)
 		{
-			IProgramEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+			IProgramItem* entry = GetDataEntry(GetRow(event.GetItem()));
 
 			KxMenu menu;
 			{
@@ -402,7 +402,7 @@ namespace Kortex::ProgramManager
 	{
 		if (HasDragDropDataObject())
 		{
-			IProgramEntry::Vector& items = *GetDataVector();
+			IProgramItem::Vector& items = *GetDataVector();
 			size_t thisRow = GetRow(event.GetItem());
 			size_t droppedRow = GetRow(GetDragDropDataObject()->GetItem());
 
@@ -434,11 +434,11 @@ namespace Kortex::ProgramManager
 		}
 		return false;
 	}
-	void DisplayModel::RemoveProgram(IProgramEntry* entry)
+	void DisplayModel::RemoveProgram(IProgramItem* entry)
 	{
 		IProgramManager::GetInstance()->RemoveProgram(*entry);
 	}
-	wxString DisplayModel::AskSelectIcon(const IProgramEntry& entry) const
+	wxString DisplayModel::AskSelectIcon(const IProgramItem& entry) const
 	{
 		KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
 		dialog.SetFolder(entry.GetIconPath());

@@ -156,7 +156,7 @@ namespace Kortex::PluginManager
 	{
 		if (CheckSortingTool(entry))
 		{
-			ProgramManager::DefaultProgramEntry runEntry;
+			ProgramManager::DefaultProgramItem runEntry;
 			runEntry.SetName(entry.GetName());
 			runEntry.SetExecutable(entry.GetExecutable());
 			runEntry.SetArguments(entry.GetArguments());

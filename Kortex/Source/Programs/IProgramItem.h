@@ -5,14 +5,14 @@
 
 namespace Kortex
 {
-	class IProgramEntry
+	class IProgramItem
 	{
 		public:
-			using Vector = std::vector<std::unique_ptr<IProgramEntry>>;
-			using RefVector = std::vector<IProgramEntry*>;
+			using Vector = std::vector<std::unique_ptr<IProgramItem>>;
+			using RefVector = std::vector<IProgramItem*>;
 
 		public:
-			virtual ~IProgramEntry() = default;
+			virtual ~IProgramItem() = default;
 
 		public:
 			virtual bool IsOK() const = 0;
@@ -33,7 +33,7 @@ namespace Kortex
 			virtual wxString RawGetIconPath() const = 0;
 			virtual wxString GetIconPath() const = 0;
 			virtual void SetIconPath(const wxString& value) = 0;
-		
+			
 			virtual wxString RawGetExecutable() const = 0;
 			virtual wxString GetExecutable() const = 0;
 			virtual void SetExecutable(const wxString& value) = 0;

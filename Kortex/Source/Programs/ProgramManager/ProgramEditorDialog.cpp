@@ -131,9 +131,9 @@ namespace Kortex::ProgramManager
 		return wxEmptyString;
 	}
 
-	IProgramEntry& ProgramEditorDialog::Accept()
+	IProgramItem& ProgramEditorDialog::Accept()
 	{
-		auto SetData = [this](IProgramEntry& program)
+		auto SetData = [this](IProgramItem& program)
 		{
 			program.SetName(m_NameInput->GetValue());
 			program.SetExecutable(m_ExecutableInput->GetValue());
@@ -148,7 +148,7 @@ namespace Kortex::ProgramManager
 		}
 		else
 		{
-			IProgramEntry& program = IProgramManager::GetInstance()->EmplaceProgram();
+			IProgramItem& program = IProgramManager::GetInstance()->EmplaceProgram();
 			SetData(program);
 			return program;
 		}

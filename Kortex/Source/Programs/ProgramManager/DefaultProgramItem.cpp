@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "DefaultProgramEntry.h"
+#include "DefaultProgramItem.h"
 #include "DefaultProgramManager.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
@@ -63,7 +63,7 @@ namespace
 
 namespace Kortex::ProgramManager
 {
-	void DefaultProgramEntry::Load(const KxXMLNode& node)
+	void DefaultProgramItem::Load(const KxXMLNode& node)
 	{
 		m_ShowInMainMenu = node.GetAttributeBool("ShowInMainMenu");
 
@@ -73,7 +73,7 @@ namespace Kortex::ProgramManager
 		m_Arguments = node.GetFirstChildElement("Arguments").GetValue();
 		m_WorkingDirectory = node.GetFirstChildElement("WorkingDirectory").GetValue();
 	}
-	void DefaultProgramEntry::Save(KxXMLNode& node) const
+	void DefaultProgramItem::Save(KxXMLNode& node) const
 	{
 		node.SetAttribute("ShowInMainMenu", m_ShowInMainMenu);
 
@@ -94,13 +94,13 @@ namespace Kortex::ProgramManager
 		}
 	}
 
-	bool DefaultProgramEntry::RequiresVFS() const
+	bool DefaultProgramItem::RequiresVFS() const
 	{
 		bool isRelative = false;
 		ResolvePath(m_Executable, Mode::ToVirtual, &isRelative);
 		return isRelative;
 	}
-	bool DefaultProgramEntry::CanRunNow() const
+	bool DefaultProgramItem::CanRunNow() const
 	{
 		if (IModManager* manager = IModManager::GetInstance())
 		{
@@ -112,7 +112,7 @@ namespace Kortex::ProgramManager
 		return false;
 	}
 
-	wxString DefaultProgramEntry::GetName() const
+	wxString DefaultProgramItem::GetName() const
 	{
 		if (m_Name.IsEmpty())
 		{
@@ -120,7 +120,7 @@ namespace Kortex::ProgramManager
 		}
 		return KVarExp(m_Name);
 	}
-	wxString DefaultProgramEntry::GetIconPath() const
+	wxString DefaultProgramItem::GetIconPath() const
 	{
 		wxString path = ResolvePath(m_IconPath, Mode::ToReal);
 		if (path.IsEmpty())
@@ -129,20 +129,20 @@ namespace Kortex::ProgramManager
 		}
 		return path;
 	}
-	wxString DefaultProgramEntry::GetExecutable() const
+	wxString DefaultProgramItem::GetExecutable() const
 	{
 		return ResolvePath(m_Executable, Mode::ToVirtual);
 	}
-	wxString DefaultProgramEntry::GetArguments() const
+	wxString DefaultProgramItem::GetArguments() const
 	{
 		return KVarExp(m_Arguments);
 	}
-	wxString DefaultProgramEntry::GetWorkingDirectory() const
+	wxString DefaultProgramItem::GetWorkingDirectory() const
 	{
 		return ResolvePath(m_WorkingDirectory, Mode::ToVirtual);
 	}
 
-	void DefaultProgramEntry::OnRun()
+	void DefaultProgramItem::OnRun()
 	{
 		// Write statistics or something
 	}

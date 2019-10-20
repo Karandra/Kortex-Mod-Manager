@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Utility/KDataViewListModel.h"
-#include "Programs/IProgramEntry.h"
+#include "Programs/IProgramItem.h"
 #include "Programs/IProgramManager.h"
 #include "Utility/KBitmapSize.h"
 
@@ -29,7 +29,7 @@ namespace Kortex::ProgramManager
 namespace Kortex::ProgramManager
 {
 	class DisplayModel:
-		public KxDataViewVectorListModelEx<IProgramEntry::Vector, KxDataViewListModelEx>,
+		public KxDataViewVectorListModelEx<IProgramItem::Vector, KxDataViewListModelEx>,
 		public KxDataViewModelExDragDropEnabled<DisplayModelDND>
 	{
 		private:
@@ -58,8 +58,8 @@ namespace Kortex::ProgramManager
 			bool CanDragDropNow() const;
 
 			bool AddProgram();
-			void RemoveProgram(IProgramEntry* entry);
-			wxString AskSelectIcon(const IProgramEntry& entry) const;
+			void RemoveProgram(IProgramItem* entry);
+			wxString AskSelectIcon(const IProgramItem& entry) const;
 
 			bool SaveLoadExpandedValues(bool save, bool value = false) const;;
 
@@ -68,7 +68,7 @@ namespace Kortex::ProgramManager
 
 		public:
 			virtual void RefreshItems() override;
-			IProgramEntry* GetDataEntry(size_t i) const
+			IProgramItem* GetDataEntry(size_t i) const
 			{
 				if (i < GetItemCount())
 				{

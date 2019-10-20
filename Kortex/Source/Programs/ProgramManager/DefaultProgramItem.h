@@ -1,10 +1,10 @@
 #pragma once
 #include "stdafx.h"
-#include "Programs/IProgramEntry.h"
+#include "Programs/IProgramItem.h"
 
 namespace Kortex::ProgramManager
 {
-	class DefaultProgramEntry: public IProgramEntry
+	class DefaultProgramItem: public IProgramItem
 	{
 		private:
 			KWithBitmap m_SmallBitmap;

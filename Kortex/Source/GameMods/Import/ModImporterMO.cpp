@@ -203,7 +203,7 @@ namespace Kortex::ModManager
 					return m_Options.GetValue(sectionName, KxString::Format("%1\\%2", i, name));
 				};
 
-				IProgramEntry& entry = IProgramManager::GetInstance()->EmplaceProgram();
+				IProgramItem& entry = IProgramManager::GetInstance()->EmplaceProgram();
 				entry.SetName(GetValue("title"));
 				entry.SetExecutable(ProcessFilePath(GetValue("binary")));
 				entry.SetArguments(ProcessFilePath(GetValue("arguments")));

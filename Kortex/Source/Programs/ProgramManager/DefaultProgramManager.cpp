@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultProgramManager.h"
-#include "DefaultProgramEntry.h"
+#include "DefaultProgramItem.h"
+#include "Programs/ProgramEvent.h"
 #include "Workspace.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Common/Programs.hpp>
@@ -53,23 +54,26 @@ namespace Kortex::ProgramManager
 		return ToWorkspacesList(Workspace::GetInstance());
 	}
 
-	std::unique_ptr<IProgramEntry> DefaultProgramManager::NewProgram()
+	std::unique_ptr<IProgramItem> DefaultProgramManager::NewProgram()
 	{
-		return std::make_unique<DefaultProgramEntry>();
+		return std::make_unique<DefaultProgramItem>();
 	}
-	void DefaultProgramManager::RemoveProgram(IProgramEntry& programEntry)
+	void DefaultProgramManager::RemoveProgram(IProgramItem& programEntry)
 	{
 		auto it = std::remove_if(m_UserPrograms.begin(), m_UserPrograms.end(), [&programEntry](const auto& item)
 		{
 			return item.get() == &programEntry;
 		});
-		m_UserPrograms.erase(it, m_UserPrograms.end());
+		if (it != m_UserPrograms.end())
+		{
+			m_UserPrograms.erase(it, m_UserPrograms.end());
+		}
 	}
 	void DefaultProgramManager::LoadDefaultPrograms()
 	{
 		for (const auto& programEntry: m_DefaultPrograms)
 		{
-			m_UserPrograms.emplace_back(std::make_unique<DefaultProgramEntry>(static_cast<DefaultProgramEntry&>(*programEntry)));
+			m_UserPrograms.emplace_back(std::make_unique<DefaultProgramItem>(static_cast<DefaultProgramItem&>(*programEntry)));
 		}
 	}
 }

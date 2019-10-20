@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Programs/IProgramEntry.h"
+#include "Programs/IProgramItem.h"
 #include "Programs/IProgramManager.h"
 #include <KxFramework/KxStdDialog.h>
 #include <KxFramework/KxTextBox.h>
@@ -10,7 +10,7 @@ namespace Kortex::ProgramManager
 	class ProgramEditorDialog: public KxStdDialog
 	{
 		private:
-			IProgramEntry* m_Program = nullptr;
+			IProgramItem* m_Program = nullptr;
 
 			wxWindow* m_ContentPanel = nullptr;
 			KxTextBox* m_NameInput = nullptr;
@@ -37,7 +37,7 @@ namespace Kortex::ProgramManager
 			{
 				CreateUI(parent);
 			}
-			ProgramEditorDialog(wxWindow* parent, IProgramEntry& program)
+			ProgramEditorDialog(wxWindow* parent, IProgramItem& program)
 				:m_Program(&program)
 			{
 				CreateUI(parent);
@@ -48,6 +48,6 @@ namespace Kortex::ProgramManager
 			{
 				return m_ContentPanel;
 			}
-			IProgramEntry& Accept();
+			IProgramItem& Accept();
 	};
 }

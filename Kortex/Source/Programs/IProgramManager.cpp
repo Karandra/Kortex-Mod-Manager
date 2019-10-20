@@ -21,7 +21,7 @@ namespace
 		process.SetWorkingFolder(workingDirectory.IsEmpty() ? executable.BeforeLast(wxS('\\')) : workingDirectory);
 		process.SetArguments(arguments);
 	}
-	void InitProcessPaths(KxProcess& process, const IProgramEntry& runEntry)
+	void InitProcessPaths(KxProcess& process, const IProgramItem& runEntry)
 	{
 		InitProcessPaths(process, runEntry.GetExecutable(), runEntry.GetArguments(), runEntry.GetWorkingDirectory());
 	}
@@ -56,7 +56,7 @@ namespace Kortex
 		}
 	}
 
-	std::unique_ptr<KxProcess> IProgramManager::DoCreateProcess(const IProgramEntry& entry) const
+	std::unique_ptr<KxProcess> IProgramManager::DoCreateProcess(const IProgramItem& entry) const
 	{
 		auto process = std::make_unique<KxProcess>();
 		InitProcessPaths(*process, entry);
@@ -67,18 +67,18 @@ namespace Kortex
 		process->SetOptionEnabled(KxPROCESS_DETACHED, false);
 
 		// Save 'IProgramEntry' pointer
-		process->SetClientData(const_cast<IProgramEntry*>(&entry));
+		process->SetClientData(const_cast<IProgramItem*>(&entry));
 
 		return process;
 	}
 	int IProgramManager::DoRunProcess(std::unique_ptr<KxProcess> process) const
 	{
-		IProgramEntry* entry = static_cast<IProgramEntry*>(process->GetClientData());
+		IProgramItem* entry = static_cast<IProgramItem*>(process->GetClientData());
 		entry->OnRun();
 
 		return process->Run(KxPROCESS_RUN_SYNC);
 	}
-	bool IProgramManager::DoCheckEntry(const IProgramEntry& entry) const
+	bool IProgramManager::DoCheckEntry(const IProgramItem& entry) const
 	{
 		if (KxFile(entry.GetExecutable()).IsFileExist())
 		{
@@ -91,7 +91,7 @@ namespace Kortex
 		}
 	}
 
-	void IProgramManager::LoadProgramsFromXML(IProgramEntry::Vector& programs, const KxXMLNode& rootNode)
+	void IProgramManager::LoadProgramsFromXML(IProgramItem::Vector& programs, const KxXMLNode& rootNode)
 	{
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
@@ -109,7 +109,7 @@ namespace Kortex
 	{
 	}
 
-	std::unique_ptr<KxProcess> IProgramManager::CreateProcess(const IProgramEntry& entry) const
+	std::unique_ptr<KxProcess> IProgramManager::CreateProcess(const IProgramItem& entry) const
 	{
 		return DoCreateProcess(entry);
 	}
@@ -117,7 +117,7 @@ namespace Kortex
 	{
 		return DoRunProcess(std::move(process));
 	}
-	int IProgramManager::RunEntry(const IProgramEntry& entry) const
+	int IProgramManager::RunEntry(const IProgramItem& entry) const
 	{
 		if (DoCheckEntry(entry))
 		{
@@ -126,7 +126,7 @@ namespace Kortex
 		return -1;
 	}
 
-	wxBitmap IProgramManager::LoadProgramIcon(const IProgramEntry& entry, BitmapVariant bitmapVariant) const
+	wxBitmap IProgramManager::LoadProgramIcon(const IProgramItem& entry, BitmapVariant bitmapVariant) const
 	{
 		wxBitmap bitmap;
 		wxString iconPath = entry.GetIconPath();
@@ -167,12 +167,12 @@ namespace Kortex
 		}
 		return bitmap;
 	}
-	void IProgramManager::LoadProgramIcons(IProgramEntry& entry) const
+	void IProgramManager::LoadProgramIcons(IProgramItem& entry) const
 	{
 		entry.GetSmallBitmap().SetBitmap(LoadProgramIcon(entry, BitmapVariant::Small));
 		entry.GetLargeBitmap().SetBitmap(LoadProgramIcon(entry, BitmapVariant::Large));
 	}
-	bool IProgramManager::CheckProgramIcons(const IProgramEntry& entry) const
+	bool IProgramManager::CheckProgramIcons(const IProgramItem& entry) const
 	{
 		return entry.GetSmallBitmap().HasBitmap() && entry.GetLargeBitmap().HasBitmap();
 	}

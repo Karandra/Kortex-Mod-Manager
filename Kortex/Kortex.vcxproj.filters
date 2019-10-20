@@ -834,9 +834,6 @@
     <ClCompile Include="Source\Application\Options\Option.cpp">
       <Filter>Code\Source\Application\Options</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Programs\IProgramEntry.cpp">
-      <Filter>Code\Source\Programs</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Programs\IProgramManager.cpp">
       <Filter>Code\Source\Programs</Filter>
     </ClCompile>
@@ -1277,6 +1274,9 @@
     </ClCompile>
     <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp">
       <Filter>Code\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\IProgramItem.cpp">
+      <Filter>Code\Source\Programs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1837,9 +1837,6 @@
     </ClInclude>
     <ClInclude Include="Include\Kortex\ApplicationOptions.hpp">
       <Filter>Code\Include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Programs\IProgramEntry.h">
-      <Filter>Code\Headers\Programs</Filter>
     </ClInclude>
     <ClInclude Include="Source\Programs\IProgramManager.h">
       <Filter>Code\Headers\Programs</Filter>
@@ -2416,6 +2413,9 @@
     </ClInclude>
     <ClInclude Include="Source\Application\BookWorkspaceContainer.h">
       <Filter>Code\Headers\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\IProgramItem.h">
+      <Filter>Code\Headers\Programs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

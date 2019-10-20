@@ -5,6 +5,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
 #include "ProgramEditorDialog.h"
+#include "Programs/ProgramEvent.h"
 #include "Utility/KAux.h"
 #include "Utility/KOperationWithProgress.h"
 #include <KxFramework/KxMenu.h>
@@ -146,35 +147,45 @@ namespace Kortex::ProgramManager
 	}
 	bool DisplayModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		IProgramItem* entry = GetDataEntry(row);
-		if (entry)
+		IProgramItem* item = GetDataEntry(row);
+		if (item)
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::ShowInMainMenu:
 				{
-					entry->ShowInMainMenu(value.As<bool>());
+					item->ShowInMainMenu(value.As<bool>());
+					BroadcastProcessor::Get().QueueEvent(ProgramEvent::EvtRemoved, *item);
+
 					return true;
 				}
 				case ColumnID::Name:
 				{
-					entry->SetName(value.As<wxString>());
+					item->SetName(value.As<wxString>());
+					BroadcastProcessor::Get().QueueEvent(ProgramEvent::EvtRemoved, *item);
+
 					return true;
 				}
 				case ColumnID::Arguments:
 				{
-					entry->SetArguments(value.As<wxString>());
+					item->SetArguments(value.As<wxString>());
+					BroadcastProcessor::Get().QueueEvent(ProgramEvent::EvtRemoved, *item);
+
 					return true;
 				}
 				case ColumnID::Executable:
 				{
-					entry->SetExecutable(value.As<wxString>());
-					IProgramManager::GetInstance()->LoadProgramIcons(*entry);
+					item->SetExecutable(value.As<wxString>());
+					IProgramManager::GetInstance()->LoadProgramIcons(*item);
+					BroadcastProcessor::Get().QueueEvent(ProgramEvent::EvtRemoved, *item);
+
 					return true;
 				}
 				case ColumnID::WorkingDirectory:
 				{
-					entry->SetWorkingDirectory(value.As<wxString>());
+					item->SetWorkingDirectory(value.As<wxString>());
+					BroadcastProcessor::Get().QueueEvent(ProgramEvent::EvtRemoved, *item);
+
 					return true;
 				}
 			};
@@ -355,7 +366,7 @@ namespace Kortex::ProgramManager
 				case MenuID::RemoveProgram:
 				{
 					size_t sel = GetRow(event.GetItem());
-					RemoveProgram(entry);
+					RemoveProgram(*entry);
 					RefreshItems();
 					SelectItem(sel != 0 ? sel - 1 : 0);
 					break;
@@ -429,14 +440,18 @@ namespace Kortex::ProgramManager
 		ProgramEditorDialog dialog(GetViewTLW());
 		if (dialog.ShowModal() == KxID_OK)
 		{
-			IProgramManager::GetInstance()->LoadProgramIcons(dialog.Accept());
+			IProgramItem& item = dialog.Accept();
+			IProgramManager::GetInstance()->LoadProgramIcons(item);
+
+			BroadcastProcessor::Get().QueueEvent(ProgramEvent::EvtAdded, item);
 			return true;
 		}
 		return false;
 	}
-	void DisplayModel::RemoveProgram(IProgramItem* entry)
+	void DisplayModel::RemoveProgram(IProgramItem& item)
 	{
-		IProgramManager::GetInstance()->RemoveProgram(*entry);
+		BroadcastProcessor::Get().QueueEvent(ProgramEvent::EvtRemoved, item);
+		IProgramManager::GetInstance()->RemoveProgram(item);
 	}
 	wxString DisplayModel::AskSelectIcon(const IProgramItem& entry) const
 	{
@@ -476,13 +491,15 @@ namespace Kortex::ProgramManager
 
 	void DisplayModel::RefreshItems()
 	{
-		for (auto& entry: *GetDataVector())
+		for (auto& item: *GetDataVector())
 		{
-			if (!IProgramManager::GetInstance()->CheckProgramIcons(*entry))
+			if (!IProgramManager::GetInstance()->CheckProgramIcons(*item))
 			{
-				IProgramManager::GetInstance()->LoadProgramIcons(*entry);
+				IProgramManager::GetInstance()->LoadProgramIcons(*item);
 			}
 		}
+
+		BroadcastProcessor::Get().QueueEvent(ProgramEvent::EvtRefreshed);
 		KxDataViewVectorListModelEx::RefreshItems();
 	}
 }

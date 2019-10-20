@@ -849,9 +849,6 @@
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramManager.cpp">
       <Filter>Code\Source\Programs\ProgramManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramEntry.cpp">
-      <Filter>Code\Source\Programs\ProgramManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameMods\IModTag.cpp">
       <Filter>Code\Source\GameMods</Filter>
     </ClCompile>
@@ -1277,6 +1274,12 @@
     </ClCompile>
     <ClCompile Include="Source\Programs\IProgramItem.cpp">
       <Filter>Code\Source\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\ProgramEvent.cpp">
+      <Filter>Code\Source\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramItem.cpp">
+      <Filter>Code\Source\Programs\ProgramManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1859,9 +1862,6 @@
     <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramManager.h">
       <Filter>Code\Headers\Programs\ProgramManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramEntry.h">
-      <Filter>Code\Headers\Programs\ProgramManager</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Kortex\Common\Packages.hpp">
       <Filter>Code\Include\Common</Filter>
     </ClInclude>
@@ -2416,6 +2416,12 @@
     </ClInclude>
     <ClInclude Include="Source\Programs\IProgramItem.h">
       <Filter>Code\Headers\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramEvent.h">
+      <Filter>Code\Headers\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramItem.h">
+      <Filter>Code\Headers\Programs\ProgramManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

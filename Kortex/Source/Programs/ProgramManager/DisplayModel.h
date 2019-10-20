@@ -37,29 +37,29 @@ namespace Kortex::ProgramManager
 			bool m_ShowExpandedValues = false;
 
 		private:
-			virtual void OnInitControl() override;
+			void OnInitControl() override;
 		
-			virtual void GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
-			virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
-			virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
-			virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
-			virtual bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
+			void GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
+			void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
+			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
+			bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
+			bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
 
 			void OnActivateItem(KxDataViewEvent& event);
 			void OnSelectItem(KxDataViewEvent& event);
 			void OnContextMenu(KxDataViewEvent& event);
 
-			virtual KxDataViewCtrl* GetViewCtrl() const override
+			KxDataViewCtrl* GetViewCtrl() const override
 			{
 				return GetView();
 			}
-			virtual bool OnDragItems(KxDataViewEventDND& event) override;
-			virtual bool OnDropItems(KxDataViewEventDND& event) override;
+			bool OnDragItems(KxDataViewEventDND& event) override;
+			bool OnDropItems(KxDataViewEventDND& event) override;
 			bool CanDragDropNow() const;
 
 			bool AddProgram();
-			void RemoveProgram(IProgramItem* entry);
-			wxString AskSelectIcon(const IProgramItem& entry) const;
+			void RemoveProgram(IProgramItem& item);
+			wxString AskSelectIcon(const IProgramItem& item) const;
 
 			bool SaveLoadExpandedValues(bool save, bool value = false) const;;
 
@@ -67,7 +67,7 @@ namespace Kortex::ProgramManager
 			DisplayModel();
 
 		public:
-			virtual void RefreshItems() override;
+			void RefreshItems() override;
 			IProgramItem* GetDataEntry(size_t i) const
 			{
 				if (i < GetItemCount())

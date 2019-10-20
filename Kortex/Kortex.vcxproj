@@ -276,7 +276,8 @@
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerSMI.cpp" />
     <ClCompile Include="Source\Programs\IProgramItem.cpp" />
     <ClCompile Include="Source\Programs\IProgramManager.cpp" />
-    <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramEntry.cpp" />
+    <ClCompile Include="Source\Programs\ProgramEvent.cpp" />
+    <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramItem.cpp" />
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramManager.cpp" />
     <ClCompile Include="Source\Programs\ProgramManager\DisplayModel.cpp" />
     <ClCompile Include="Source\Programs\ProgramManager\ProgramEditorDialog.cpp" />
@@ -638,7 +639,8 @@
     <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.h" />
     <ClInclude Include="Source\Programs\IProgramItem.h" />
     <ClInclude Include="Source\Programs\IProgramManager.h" />
-    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramEntry.h" />
+    <ClInclude Include="Source\Programs\ProgramEvent.h" />
+    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramItem.h" />
     <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramManager.h" />
     <ClInclude Include="Source\Programs\ProgramManager\DisplayModel.h" />
     <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h" />

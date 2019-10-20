@@ -89,17 +89,9 @@ namespace Kortex::ProgramManager
 				m_WorkingDirectory = value;
 			}
 
-			const KWithBitmap& GetSmallBitmap() const override
-			{
-				return m_SmallBitmap;
-			}
 			KWithBitmap& GetSmallBitmap() override
 			{
 				return m_SmallBitmap;
-			}
-			const KWithBitmap& GetLargeBitmap() const override
-			{
-				return m_LargeBitmap;
 			}
 			KWithBitmap& GetLargeBitmap() override
 			{

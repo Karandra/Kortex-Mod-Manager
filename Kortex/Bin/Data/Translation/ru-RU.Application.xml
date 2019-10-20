@@ -103,6 +103,7 @@
 
 		<!-- Generic -->
 		<String ID="Generic.Run">Запустить</String>
+		<String ID="Generic.Terminate">Завершить</String>
 		<String ID="Generic.All">Все</String>
 		<String ID="Generic.using">используя</String>
 		<String ID="Generic.MilliSec">мс</String>
@@ -460,8 +461,8 @@
 		<String ID="ModManager.DisplayMode.BoldPriorityGroupLabels">Полужирный текст меток групп приоритета</String>
 		<String ID="ModManager.DisplayMode.PriorityGroupLabelsAlignment">Выравнивание меток групп приоритета</String>
 
-		<String ID="ModManager.VFS.Activate">Включить VFS</String>
-		<String ID="ModManager.VFS.Deactivate">Выключить VFS</String>
+		<String ID="ModManager.VFS.Enable">Запустить VFS</String>
+		<String ID="ModManager.VFS.Disable">Выключить VFS</String>
 		<String ID="ModManager.VFSActiveWarning">Это действие не может быть выполнено, пока VFS активна</String>
 		<String ID="ModManager.WriteTargetName">Папка перезаписи</String>
 

@@ -3,6 +3,7 @@
 #include "Application/DefaultWorkspace.h"
 #include "Application/BookWorkspaceContainer.h"
 #include "GameMods/IGameMod.h"
+#include "Programs/IProgramItem.h"
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxAuiNotebook.h>
 #include <KxFramework/KxNotebook.h>
@@ -21,9 +22,105 @@ class KxMenuEvent;
 namespace Kortex
 {
 	class IModTag;
+	class IVirtualFileSystem;
+
 	class ModEvent;
 	class ProfileEvent;
+	class ProgramEvent;
 	class VirtualFSEvent;
+}
+
+namespace Kortex::ModManager
+{
+	class Workspace;
+	class VFSProgramItem: public IProgramItem
+	{
+		private:
+			KWithBitmap m_Bitmap;
+			Workspace& m_Workspace;
+			IVirtualFileSystem& m_FileSystem;
+
+		private:
+			void OnRequestBitmap();
+
+		public:
+			VFSProgramItem();
+
+		public:
+			bool IsOK() const override
+			{
+				return true;
+			}
+			void Load(const KxXMLNode& node) override
+			{
+			}
+			void Save(KxXMLNode& node) const override
+			{
+			}
+
+			bool RequiresVFS() const override
+			{
+				return false;
+			}
+			bool CanRunNow() const override;
+			void OnRun() override;
+
+			bool ShouldShowInMainMenu() const override
+			{
+				return false;
+			}
+			void ShowInMainMenu(bool) override
+			{
+			}
+
+			wxString GetName() const override;
+			void SetName(const wxString&) override
+			{
+			}
+
+			wxString GetIconPath() const override
+			{
+				return {};
+			}
+			void SetIconPath(const wxString&) override
+			{
+			}
+
+			wxString GetExecutable() const override
+			{
+				return {};
+			}
+			void SetExecutable(const wxString&) override
+			{
+			}
+
+			wxString GetArguments() const override
+			{
+				return {};
+			}
+			void SetArguments(const wxString&) override
+			{
+			}
+
+			wxString GetWorkingDirectory() const override
+			{
+				return {};
+			}
+			void SetWorkingDirectory(const wxString&) override
+			{
+			}
+
+			KWithBitmap& GetSmallBitmap() override
+			{
+				OnRequestBitmap();
+				return m_Bitmap;
+			}
+			KWithBitmap& GetLargeBitmap() override
+			{
+				OnRequestBitmap();
+				return m_Bitmap;
+			}
+	};
 }
 
 namespace Kortex::ModManager
@@ -63,6 +160,7 @@ namespace Kortex::ModManager
 	class Workspace: public Application::DefaultWindowWorkspace<KxPanel>, public KxSingletonPtr<Workspace>
 	{
 		friend class WorkspaceContainer;
+		friend class VFSProgramItem;
 
 		private:
 			BroadcastReciever m_BroadcastReciever;
@@ -98,6 +196,8 @@ namespace Kortex::ModManager
 			WorkspaceContainer m_RightPaneContainer;
 
 			// Right pane top bar
+			VFSProgramItem m_FileSystemRunItem;
+			IProgramItem* m_QueuedProgram = nullptr;
 			KxBitmapComboBox* m_RightPane_Programs = nullptr;
 			KxButton* m_RightPane_RunProgram = nullptr;
 
@@ -121,10 +221,11 @@ namespace Kortex::ModManager
 			
 			void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 			void OnToolsMenu(KxAuiToolBarEvent& event);
-			void OnRunButton(wxCommandEvent& event);
-			void OnRunButtonMenu(wxCommandEvent& event);
 			void OnMainFSToggled(VirtualFSEvent& event);
 			void OnProfileSelected(ProfileEvent& event);
+			void OnRunButton(wxCommandEvent& event);
+			void OnUpdateProgramsList(ProgramEvent& event);
+			void OnSelectProgram(wxCommandEvent& event);
 			
 			void OnAddMod_Empty(KxMenuEvent& event);
 			void OnAddMod_FromFolder(KxMenuEvent& event);

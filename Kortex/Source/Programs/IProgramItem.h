@@ -26,30 +26,51 @@ namespace Kortex
 			virtual bool ShouldShowInMainMenu() const = 0;
 			virtual void ShowInMainMenu(bool value) = 0;
 
-			virtual wxString RawGetName() const = 0;
+			virtual wxString RawGetName() const
+			{
+				return GetName();
+			}
 			virtual wxString GetName() const = 0;
 			virtual void SetName(const wxString& value) = 0;
 			
-			virtual wxString RawGetIconPath() const = 0;
+			virtual wxString RawGetIconPath() const
+			{
+				return GetIconPath();
+			}
 			virtual wxString GetIconPath() const = 0;
 			virtual void SetIconPath(const wxString& value) = 0;
 			
-			virtual wxString RawGetExecutable() const = 0;
+			virtual wxString RawGetExecutable() const
+			{
+				return GetExecutable();
+			}
 			virtual wxString GetExecutable() const = 0;
 			virtual void SetExecutable(const wxString& value) = 0;
 
-			virtual wxString RawGetArguments() const = 0;
+			virtual wxString RawGetArguments() const
+			{
+				return GetArguments();
+			}
 			virtual wxString GetArguments() const = 0;
 			virtual void SetArguments(const wxString& value) = 0;
 
-			virtual wxString RawGetWorkingDirectory() const = 0;
+			virtual wxString RawGetWorkingDirectory() const
+			{
+				return GetWorkingDirectory();
+			}
 			virtual wxString GetWorkingDirectory() const = 0;
 			virtual void SetWorkingDirectory(const wxString& value) = 0;
 
-			virtual const KWithBitmap& GetSmallBitmap() const = 0;
 			virtual KWithBitmap& GetSmallBitmap() = 0;
+			const KWithBitmap& GetSmallBitmap() const
+			{
+				return const_cast<IProgramItem&>(*this).GetSmallBitmap();
+			}
 
-			virtual const KWithBitmap& GetLargeBitmap() const = 0;
 			virtual KWithBitmap& GetLargeBitmap() = 0;
+			const KWithBitmap& GetLargeBitmap() const
+			{
+				return const_cast<IProgramItem&>(*this).GetLargeBitmap();
+			}
 	};
 }

@@ -103,6 +103,7 @@
 
 		<!-- Generic -->
 		<String ID="Generic.Run">Run</String>
+		<String ID="Generic.Terminate">Terminate</String>
 		<String ID="Generic.All">All</String>
 		<String ID="Generic.using">using</String>
 		<String ID="Generic.MilliSec">ms</String>
@@ -455,8 +456,8 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="ModManager.DisplayMode.BoldPriorityGroupLabels">Bold priority group labels</String>
 		<String ID="ModManager.DisplayMode.PriorityGroupLabelsAlignment">Priority group labels alignment</String>
 
-		<String ID="ModManager.VFS.Activate">Enable virtual file system</String>
-		<String ID="ModManager.VFS.Deactivate">Disable virtual file system</String>
+		<String ID="ModManager.VFS.Enable">Run VFS</String>
+		<String ID="ModManager.VFS.Disable">Terminate VFS</String>
 		<String ID="ModManager.VFSActiveWarning">This action cannot be completed as long as the VFS is active</String>
 		<String ID="ModManager.WriteTargetName">Overwrites folder</String>
 

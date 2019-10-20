@@ -15,6 +15,7 @@
 #include "Workspace.h"
 #include "DisplayModel.h"
 #include "NewModDialog.h"
+#include "Programs/ProgramEvent.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KOperationWithProgress.h"
@@ -30,6 +31,7 @@
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxDualProgressDialog.h>
 #include <KxFramework/KxFileOperationEvent.h>
+#include <Kx/Async.hpp>
 #include <wx/colordlg.h>
 
 namespace Kortex::Application::OName
@@ -119,6 +121,40 @@ namespace
 	auto GetRightPaneOptions()
 	{
 		return Application::GetAInstanceOptionOf<IModManager>(OName::Workspace, OName::RightPane);
+	}
+}
+
+namespace Kortex::ModManager
+{
+	void VFSProgramItem::OnRequestBitmap()
+	{
+		m_Bitmap = ImageProvider::GetBitmap(m_FileSystem.IsEnabled() ? ImageResourceID::ControlStopSquare : ImageResourceID::ControlRight);
+	}
+
+	VFSProgramItem::VFSProgramItem()
+		:m_FileSystem(IModManager::GetInstance()->GetFileSystem()), m_Workspace(*Workspace::GetInstance())
+	{	
+	}
+
+	bool VFSProgramItem::CanRunNow() const
+	{
+		return !m_FileSystem.IsEnabled();
+	}
+	void VFSProgramItem::OnRun()
+	{
+		m_Workspace.m_RightPane_RunProgram->Disable();
+		if (m_FileSystem.IsEnabled())
+		{
+			m_FileSystem.Disable();
+		}
+		else
+		{
+			m_FileSystem.Enable();
+		}
+	}
+	wxString VFSProgramItem::GetName() const
+	{
+		return KTr("VFS.Caption");
 	}
 }
 
@@ -345,7 +381,7 @@ namespace Kortex::ModManager
 
 		// Controls
 		m_RightPaneSizer = new wxBoxSizer(wxHORIZONTAL);
-		m_RightPaneSizer->SetMinSize(FromDIP(wxSize(wxDefaultCoord, 36)));
+		m_RightPaneSizer->SetMinSize(FromDIP(wxSize(wxDefaultCoord, KBitmapSize().FromSystemIcon().GetHeight() + 4)));
 
 		CreateRightPaneProgramList();
 		mainSizer->AddSpacer(1);
@@ -358,16 +394,15 @@ namespace Kortex::ModManager
 	{
 		m_RightPane_Programs = new KxBitmapComboBox(m_RightPaneWindow, KxID_NONE);
 		m_RightPane_Programs->SetImageList(&ImageProvider::GetImageList());
-		m_RightPane_Programs->AddItem(KAux::MakeNoneLabel(), ResourceID(ImageResourceID::CrossWhite).AsInt());
-		m_RightPane_Programs->SetSelection(0);
+		m_RightPane_Programs->SetMinSize(m_RightPaneSizer->GetMinSize());
+		m_RightPane_Programs->SetDefaultBitmapSize(KBitmapSize().FromSystemIcon().GetSize());
+		m_RightPane_Programs->Bind(wxEVT_COMBOBOX, &Workspace::OnSelectProgram, this);
 		m_RightPaneSizer->Add(m_RightPane_Programs, 1, wxEXPAND);
 
 		m_RightPane_RunProgram = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("Generic.Run"));
 		m_RightPane_RunProgram->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlRight));
 		m_RightPane_RunProgram->SetMinSize(m_RightPaneSizer->GetMinSize());
-		m_RightPane_RunProgram->SetSplitterEnabled();
 		m_RightPane_RunProgram->Bind(KxEVT_BUTTON, &Workspace::OnRunButton, this);
-		m_RightPane_RunProgram->Bind(KxEVT_BUTTON_MENU, &Workspace::OnRunButtonMenu, this);
 		m_RightPaneSizer->Add(m_RightPane_RunProgram, 0, wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 	}
 
@@ -547,48 +582,114 @@ namespace Kortex::ModManager
 			}
 		};
 	}
-	void Workspace::OnRunButton(wxCommandEvent& event)
-	{
-	}
-	void Workspace::OnRunButtonMenu(wxCommandEvent& event)
-	{
-		KxMenu menu;
-
-		{
-			const bool vfsEnabled = IModManager::GetInstance()->GetFileSystem().IsEnabled();
-			
-			KxMenuItem* item = menu.AddItem(vfsEnabled ? KTr("ModManager.VFS.Deactivate") : KTr("ModManager.VFS.Activate"));
-			item->SetBitmap(ImageProvider::GetBitmap(vfsEnabled ? ImageResourceID::InformationFrameEmpty : ImageResourceID::TickCircleFrameEmpty));
-			item->Bind(KxEVT_MENU_SELECT, [this, vfsEnabled](KxMenuEvent& event)
-			{
-				BroadcastProcessor::Get().CallAfter([this, vfsEnabled]()
-				{
-					IVirtualFileSystem& vfs = IModManager::GetInstance()->GetFileSystem();
-					
-					m_RightPane_RunProgram->Disable();
-					if (vfsEnabled)
-					{
-						vfs.Disable();
-					}
-					else
-					{
-						vfs.Enable();
-					}
-				});
-			});
-		}
-		menu.ShowAsPopup(m_RightPane_RunProgram, 1, TPM_RIGHTALIGN);
-	}
 	void Workspace::OnMainFSToggled(VirtualFSEvent& event)
 	{
 		m_ToolBar_EditProfiles->SetEnabled(!event.IsActivated());
 		m_ToolBar_Profiles->Enable(!event.IsActivated());
 		m_RightPane_RunProgram->Enable();
 		m_DisplayModel->UpdateUI();
+
+		m_RightPane_Programs->::wxBitmapComboBox::SetItemBitmap(0, m_FileSystemRunItem.GetLargeBitmap().GetBitmap());
+		m_RightPane_Programs->::wxBitmapComboBox::SetString(0, m_FileSystemRunItem.GetName());
+
+		if (m_QueuedProgram)
+		{
+			KxAsync::DelayedCall([&item = *m_QueuedProgram]()
+			{
+				IProgramManager::GetInstance()->RunEntry(item);
+			}, wxTimeSpan::Milliseconds(50));
+			m_QueuedProgram = nullptr;
+		}
 	}
 	void Workspace::OnProfileSelected(ProfileEvent& event)
 	{
 		ReloadView();
+	}
+	void Workspace::OnRunButton(wxCommandEvent& event)
+	{
+		if (IProgramItem* item = reinterpret_cast<IProgramItem*>(m_RightPane_Programs->GetClientData(m_RightPane_Programs->GetSelection())))
+		{
+			const IVirtualFileSystem& fileSystem = IModManager::GetInstance()->GetFileSystem();
+			if (item == &m_FileSystemRunItem)
+			{
+				m_FileSystemRunItem.OnRun();
+			}
+			else
+			{
+				if (item->RequiresVFS() && !fileSystem.IsEnabled())
+				{
+					m_FileSystemRunItem.OnRun();
+					m_QueuedProgram = item;
+				}
+				else
+				{
+					IProgramManager::GetInstance()->RunEntry(*item);
+				}
+			}
+		}
+	}
+	void Workspace::OnUpdateProgramsList(ProgramEvent& event)
+	{
+		int selection = m_RightPane_Programs->GetSelection();
+		m_RightPane_Programs->Clear();
+
+		auto AddItem = [this](IProgramManager* manager, IProgramItem& item, int index = -1)
+		{
+			if (index != 0 && manager && !manager->CheckProgramIcons(item))
+			{
+				manager->LoadProgramIcons(item);
+			}
+
+			index = m_RightPane_Programs->InsertItem(item.GetName(), index >= 0 ? index : m_RightPane_Programs->GetCount());
+			m_RightPane_Programs->SetClientData(index, const_cast<IProgramItem*>(&item));
+			m_RightPane_Programs->SetItemBitmap(index, item.GetLargeBitmap().GetBitmap());
+		};
+
+		IProgramManager::IfHasInstance([&](IProgramManager& manager)
+		{
+			for (auto& item: manager.GetProgramList())
+			{
+				AddItem(&manager, *item);
+			}
+		});
+
+		// Adding VFS item as the last one allows the combo box to use large icon height as its best height
+		// instead of using small icon provided by VFS activation item.
+		AddItem(nullptr, m_FileSystemRunItem, 0);
+
+		// Update selection
+		selection = selection < 0 || selection >= (int)m_RightPane_Programs->GetCount() ? 0 : selection;
+		m_RightPane_Programs->SetSelection(selection);
+
+		wxCommandEvent selectEvent(wxEVT_COMBOBOX);
+		selectEvent.SetInt(selection);
+		m_RightPane_Programs->ProcessWindowEvent(selectEvent);
+
+		// Layout controls and make button height the same as combobox
+		m_RightPane_RunProgram->SetMinSize(wxSize(wxDefaultCoord, m_RightPane_Programs->GetBestSize().GetHeight()));
+	}
+	void Workspace::OnSelectProgram(wxCommandEvent& event)
+	{
+		if (IProgramItem* item = reinterpret_cast<IProgramItem*>(m_RightPane_Programs->GetClientData(event.GetSelection())))
+		{
+			if (item == &m_FileSystemRunItem)
+			{
+				const IVirtualFileSystem& fileSystem = IModManager::GetInstance()->GetFileSystem();
+				if (fileSystem.IsEnabled())
+				{
+					m_RightPane_RunProgram->SetLabel(KTr("ModManager.VFS.Disable"));
+				}
+				else
+				{
+					m_RightPane_RunProgram->SetLabel(KTr("ModManager.VFS.Enable"));
+				}
+			}
+			else
+			{
+				m_RightPane_RunProgram->SetLabel(KTr("Generic.Run"));
+			}
+			m_RightPane_RunProgram->PostSizeEventToParent();
+		}
 	}
 
 	void Workspace::OnAddMod_Empty(KxMenuEvent& event)
@@ -824,6 +925,11 @@ namespace Kortex::ModManager
 		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggleError, &Workspace::OnMainFSToggled, this);
 		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &Workspace::OnProfileSelected, this);
 
+		m_BroadcastReciever.Bind(ProgramEvent::EvtAdded, &Workspace::OnUpdateProgramsList, this);
+		m_BroadcastReciever.Bind(ProgramEvent::EvtRemoved, &Workspace::OnUpdateProgramsList, this);
+		m_BroadcastReciever.Bind(ProgramEvent::EvtChanged, &Workspace::OnUpdateProgramsList, this);
+		m_BroadcastReciever.Bind(ProgramEvent::EvtRefreshed, &Workspace::OnUpdateProgramsList, this);
+
 		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &Workspace::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &Workspace::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
@@ -844,6 +950,7 @@ namespace Kortex::ModManager
 
 			ReloadView();
 			UpdateModListContent();
+			OnUpdateProgramsList(ProgramEvent());
 		}
 		m_DisplayModel->UpdateUI();
 		return true;

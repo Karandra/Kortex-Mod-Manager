@@ -61,9 +61,6 @@ namespace Kortex::NetworkManager::NXMHandler
 				view->OnColumnSelectionMenu(menu);
 			}
 		});
-
-		// Add items
-		RefreshItems();
 	}
 	void DisplayModel::RefreshItems()
 	{

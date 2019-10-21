@@ -168,6 +168,8 @@
 		<String ID="Generic.FileSearchInProgress">Выполняется поиск файлов</String>
 		<String ID="Generic.FileCopyInProgress">Выполняется копирование файлов</String>
 		<String ID="Generic.NoItemsToDisplay">Нет элементов для отображения</String>
+		<String ID="Generic.Install">Установить</String>
+		<String ID="Generic.DoNotInstall">Не устанавливать</String>
 
 		<String ID="FileFilter">Фильтр файлов</String>
 		<String ID="FileFilter.AllFiles">Все файлы</String>
@@ -618,6 +620,9 @@
 		<String ID="NetworkManager.NXMHandler.GetAssociationsFailed">Не удалось получить информацию о файловых ассоциациях</String>
 		<String ID="NetworkManager.NXMHandler.RegisterAssociationsFailed">Не удалось зарегистрировать файловые ассоциации</String>
 		<String ID="NetworkManager.NXMHandler.UnregisterAssociationsFailed">Не удалось удалить файловые ассоциации</String>
+
+		<String ID="NetworkManager.NXMHandler.PrimaryHandler.Caption">Зарегистрировать обработчик NXM-ссылок</String>
+		<String ID="NetworkManager.NXMHandler.PrimaryHandler.Message">В системе не обнаружен обработчик NXM-ссылок. Установить %1 в качестве основного обработчика?</String>
 
 		<String ID="NetworkManager.NXMHandler.Game">Игра</String>
 		<String ID="NetworkManager.NXMHandler.NexusID">Nexus ID</String>

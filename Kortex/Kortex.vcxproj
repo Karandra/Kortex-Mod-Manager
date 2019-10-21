@@ -870,7 +870,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
@@ -909,7 +909,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
@@ -953,7 +953,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -1004,7 +1004,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>

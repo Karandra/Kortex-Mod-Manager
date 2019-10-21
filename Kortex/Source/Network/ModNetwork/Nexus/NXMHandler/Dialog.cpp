@@ -5,6 +5,7 @@
 #include "Utility/KAux.h"
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/INetworkManager.h"
+#include <KxFramework/KxTaskDialog.h>
 
 namespace Kortex::NetworkManager::NXMHandler
 {
@@ -79,35 +80,66 @@ namespace Kortex::NetworkManager::NXMHandler
 
 	void Dialog::OnRegisterAssociations(wxCommandEvent& event)
 	{
-		if (m_NXMFileType)
+		if (!RegisterAssociations())
 		{
-			const IApplication* app = IApplication::GetInstance();
-
-			KxFileTypeInfo info(m_NXMFileType.GetMimeType());
-			info.SetIcon(app->GetExecutablePath());
-			info.SetDescription("URL:NXM Protocol");
-			info.SetShortDescription("nxm");
-			info.AddExtension("nxm");
-			info.SetOpenCommand(KxString::Format("\"%1\" -%2", app->GetExecutablePath(), CmdLineName::DownloadLink));
-
-			m_NXMFileType = m_FileTypeManager.Associate(info);
-			if (!m_NXMFileType)
-			{
-				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("NetworkManager.NXMHandler.RegisterAssociationsFailed"), this);
-			}
-			UpdateButtons();
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("NetworkManager.NXMHandler.RegisterAssociationsFailed"), this);
 		}
+		UpdateButtons();
 	}
 	void Dialog::OnUnregisterAssociations(wxCommandEvent& event)
 	{
-		if (m_NXMFileType)
+		if (!UnregisterAssociations())
 		{
-			if (!m_FileTypeManager.Unassociate(m_NXMFileType))
-			{
-				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("NetworkManager.NXMHandler.UnregisterAssociationsFailed"), this);
-			}
-			UpdateButtons();
+			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("NetworkManager.NXMHandler.UnregisterAssociationsFailed"), this);
 		}
+		UpdateButtons();
+	}
+
+	bool Dialog::RegisterAssociations()
+	{
+		const IApplication* app = IApplication::GetInstance();
+
+		KxFileTypeInfo info("application/x-nexusdownloadlink");
+		info.SetIcon(app->GetExecutablePath());
+		info.SetDescription("URL:NXM Protocol");
+		info.SetShortDescription("nxm");
+		info.AddExtension("nxm");
+		info.SetOpenCommand(KxString::Format("\"%1\" -%2", app->GetExecutablePath(), CmdLineName::DownloadLink));
+
+		m_NXMFileType = m_FileTypeManager.Associate(info);
+		return (bool)m_NXMFileType;
+	}
+	bool Dialog::UnregisterAssociations()
+	{
+		return m_NXMFileType && m_FileTypeManager.Unassociate(m_NXMFileType);
+	}
+	bool Dialog::CheckPrimaryHandler()
+	{
+		m_NXMFileType = m_FileTypeManager.FileTypeFromExtension("nxm");
+		if (!m_NXMFileType)
+		{
+			KxTaskDialog dialog(this, KxID_NONE);
+			dialog.SetCaption(KTr("NetworkManager.NXMHandler.PrimaryHandler.Caption"));
+			dialog.SetMessage(KTrf("NetworkManager.NXMHandler.PrimaryHandler.Message", IApplication::GetInstance()->GetName()));
+			dialog.SetMainIcon(KxICON_WARNING);
+
+			dialog.SetStandardButtons(KxBTN_NONE);
+			dialog.AddButton(KxID_OK, KTr("Generic.Install"));
+			dialog.AddButton(KxID_CANCEL, KTr("Generic.DoNotInstall"));
+
+			if (dialog.ShowModal() == KxID_OK)
+			{
+				if (RegisterAssociations())
+				{
+					return true;
+				}
+				BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, KTr("NetworkManager.NXMHandler.RegisterAssociationsFailed"), this);
+			}
+
+			Close(true);
+			return false;
+		}
+		return true;
 	}
 
 	Dialog::Dialog(wxWindow* parent, OptionStore& options)
@@ -115,17 +147,18 @@ namespace Kortex::NetworkManager::NXMHandler
 	{
 		CreateUI(parent);
 
-		// Load file type info
-		m_NXMFileType = m_FileTypeManager.FileTypeFromExtension("nxm");
-		if (!m_NXMFileType)
-		{
-			BroadcastProcessor::Get().QueueEvent(LogEvent::EvtError, KTr("NetworkManager.NXMHandler.GetAssociationsFailed"), this);
-		}
-
 		AppOption uiOptions = GetOptions();
 		uiOptions.LoadDataViewLayout(m_DisplayModel->GetView());
 		uiOptions.LoadWindowGeometry(this);
-		UpdateButtons();
+		
+		CallAfter([this]()
+		{
+			m_DisplayModel->RefreshItems();
+			if (CheckPrimaryHandler())
+			{
+				UpdateButtons();
+			}
+		});
 	}
 	Dialog::~Dialog()
 	{

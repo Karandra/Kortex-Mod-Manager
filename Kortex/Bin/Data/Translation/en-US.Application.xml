@@ -168,6 +168,8 @@
 		<String ID="Generic.FileSearchInProgress">File search in progress</String>
 		<String ID="Generic.FileCopyInProgress">File copy in progress</String>
 		<String ID="Generic.NoItemsToDisplay">No items to display</String>
+		<String ID="Generic.Install">Install</String>
+		<String ID="Generic.DoNotInstall">Don't install</String>
 
 		<String ID="FileFilter">File filter</String>
 		<String ID="FileFilter.AllFiles">All files</String>
@@ -613,6 +615,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="NetworkManager.NXMHandler.GetAssociationsFailed">Failed to get file association information</String>
 		<String ID="NetworkManager.NXMHandler.RegisterAssociationsFailed">Failed to register file associations</String>
 		<String ID="NetworkManager.NXMHandler.UnregisterAssociationsFailed">Failed to unregister file associations</String>
+
+		<String ID="NetworkManager.NXMHandler.PrimaryHandler.Caption">Register as primary NXM handler</String>
+		<String ID="NetworkManager.NXMHandler.PrimaryHandler.Message">There is no primary NXM handler registered in the system. Install %1 as the primary handler?</String>
 
 		<String ID="NetworkManager.NXMHandler.Game">Game</String>
 		<String ID="NetworkManager.NXMHandler.NexusID">Nexus ID</String>

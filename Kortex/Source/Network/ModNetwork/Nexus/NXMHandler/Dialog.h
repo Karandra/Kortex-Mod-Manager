@@ -35,6 +35,10 @@ namespace Kortex::NetworkManager::NXMHandler
 			void OnRegisterAssociations(wxCommandEvent& event);
 			void OnUnregisterAssociations(wxCommandEvent& event);
 
+			bool RegisterAssociations();
+			bool UnregisterAssociations();
+			bool CheckPrimaryHandler();
+
 		private:
 			int GetViewSizerProportion() const override
 			{

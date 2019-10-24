@@ -27,6 +27,7 @@ namespace Kortex::ModManager
 		// View
 		const CtrlStyle ctrlStyle = CtrlStyle::MultipleSelection|CtrlStyle::VerticalRules|CtrlStyle::CellFocus|CtrlStyle::FitLastColumn;
 		KxDataView2::View* view = new KxDataView2::View(parent, KxID_NONE, ctrlStyle);
+		view->SetEmptyControlLabel(KTr("Generic.NoItemsToDisplay"));
 		view->AssignModel(this);
 		if (sizer)
 		{

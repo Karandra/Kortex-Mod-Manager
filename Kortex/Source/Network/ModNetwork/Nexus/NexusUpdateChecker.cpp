@@ -116,10 +116,7 @@ namespace Kortex::NetworkManager
 		m_LastCheckDate = m_Thread.GetCheckDate();
 		SaveUpdateInfo();
 
-		INotificationCenter::Notify(m_Nexus,
-									KTrf("NetworkManager.UpdateCheck.AutoCheckDone", m_Thread.GetUpdatesCount()),
-									KxICON_INFORMATION
-		);
+		//INotificationCenter::Notify(m_Nexus, KTrf("NetworkManager.UpdateCheck.AutoCheckDone", m_Thread.GetUpdatesCount()), KxICON_INFORMATION);
 		m_UpdateCheckInProgress = false;
 	}
 
@@ -216,18 +213,12 @@ namespace Kortex::NetworkManager
 		{
 			if (!m_Repository.IsAutomaticUpdateCheckAllowed())
 			{
-				INotificationCenter::Notify(m_Nexus,
-											KTr("NetworkManager.UpdateCheck.AutoCheckQuoteReqched"),
-											KxICON_WARNING
-				);
+				INotificationCenter::Notify(m_Nexus, KTr("NetworkManager.UpdateCheck.AutoCheckQuoteReqched"), KxICON_WARNING);
 				return false;
 			}
 
 			m_UpdateCheckInProgress = true;
-			INotificationCenter::Notify(m_Nexus,
-										KTr("NetworkManager.UpdateCheck.AutoCheckStarted"),
-										KxICON_INFORMATION
-			);
+			//INotificationCenter::Notify(m_Nexus, KTr("NetworkManager.UpdateCheck.AutoCheckStarted"), KxICON_INFORMATION);
 
 			if (m_Thread.Run(m_UpdateInfo))
 			{

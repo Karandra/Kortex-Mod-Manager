@@ -4,14 +4,6 @@
 
 namespace Kortex::PluginManager
 {
-	const IGameMod* BaseGamePlugin::GetOwningMod() const
-	{
-		if (m_OwningMod == nullptr)
-		{
-			m_OwningMod = IPluginManager::GetInstance()->FindOwningMod(*this);
-		}
-		return m_OwningMod;
-	}
 	const StdContentEntry* BaseGamePlugin::GetStdContentEntry() const
 	{
 		if (m_StdContent == nullptr)

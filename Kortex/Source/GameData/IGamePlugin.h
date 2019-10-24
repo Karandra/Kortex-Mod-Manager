@@ -39,9 +39,7 @@ namespace Kortex
 			virtual void SetActive(bool isActive) = 0;
 			bool CanToggleActive() const;
 
-			virtual const IGameMod* GetOwningMod() const = 0;
-			virtual void OnResetOwningMod() = 0;
-
+			const IGameMod* GetOwningMod() const;
 			virtual const PluginManager::StdContentEntry* GetStdContentEntry() const = 0;
 			bool IsStdContent() const
 			{

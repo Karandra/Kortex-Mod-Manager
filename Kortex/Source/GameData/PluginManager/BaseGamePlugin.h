@@ -9,7 +9,6 @@ namespace Kortex::PluginManager
 	{
 		private:
 			KxFileItem m_FileItem;
-			mutable const IGameMod* m_OwningMod = nullptr;
 			mutable const StdContentEntry* m_StdContent = nullptr;
 			bool m_IsActive = false;
 
@@ -50,12 +49,7 @@ namespace Kortex::PluginManager
 			{
 				m_IsActive = isActive;
 			}
-
-			const IGameMod* GetOwningMod() const override;
-			void OnResetOwningMod() override
-			{
-				m_OwningMod = nullptr;
-			}
+			
 			const StdContentEntry* GetStdContentEntry() const override;
 	};
 }

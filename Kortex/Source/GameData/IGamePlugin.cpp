@@ -26,6 +26,15 @@ namespace Kortex
 		return true;
 	}
 
+	const IGameMod* IGamePlugin::GetOwningMod() const
+	{
+		if (IPluginManager* manager = IPluginManager::GetInstance())
+		{
+			return manager->FindOwningMod(*this);
+		}
+		return nullptr;
+	}
+
 	intptr_t IGamePlugin::GetOrderIndex() const
 	{
 		return IPluginManager::GetInstance()->OnGetOrderIndex(*this);

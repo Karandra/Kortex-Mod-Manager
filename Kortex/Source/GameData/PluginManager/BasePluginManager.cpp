@@ -53,11 +53,6 @@ namespace Kortex::PluginManager
 
 	void BasePluginManager::Invalidate()
 	{
-		for (auto& plugin: m_Plugins)
-		{
-			plugin->OnResetOwningMod();
-		}
-
 		Load();
 		IWorkspace::ScheduleReloadOf<PluginManager::Workspace>();
 		BroadcastProcessor::Get().ProcessEvent(PluginEvent::EvtReordered);

@@ -391,65 +391,6 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="ModManager.ModList.PackagePath">Installation package</String>
 		<String ID="ModManager.ModList.Signature">Signature</String>
 
-		<String ID="TagManager.Name">Tag manager</String>
-		<String ID="TagManager.PrimaryTag">Primary tag</String>
-
-		<String ID="TagManager.LoadDefaultTags">Load default tags</String>
-		<String ID="TagManager.LoadDefaultTags.Message">Are you sure you want to laod default tags?</String>
-		<String ID="TagManager.RemoveTag.Message">Are you sure you want to delete this tag? This will remove him from the system and break its connection with all mods.</String>
-
-		<String ID="TagManager.Tag.Animation">Animation</String>
-		<String ID="TagManager.Tag.Armor">Armor</String>
-		<String ID="TagManager.Tag.Clothing">Clothing</String>
-		<String ID="TagManager.Tag.Jewelry">Jewelry</String>
-		<String ID="TagManager.Tag.Weapons">Weapons</String>
-		<String ID="TagManager.Tag.Gameplay">Gameplay</String>
-		<String ID="TagManager.Tag.Immersion">Immersion</String>
-		<String ID="TagManager.Tag.Environment">Environment</String>
-		<String ID="TagManager.Tag.SkillsAndLeveling">Skills and Leveling</String>
-		<String ID="TagManager.Tag.GuildsAndFactions">Guilds and Factions</String>
-		<String ID="TagManager.Tag.Stealth">Stealth</String>
-		<String ID="TagManager.Tag.Combat">Combat</String>
-		<String ID="TagManager.Tag.Crafting">Crafting</String>
-		<String ID="TagManager.Tag.Magic">Magic - Spells and Enchantments</String>
-		<String ID="TagManager.Tag.MagicGameplay">Magic - Gameplay</String>
-		<String ID="TagManager.Tag.BooksAndScrolls">Books and Scrolls</String>
-		<String ID="TagManager.Tag.Alchemy">Alchemy</String>
-		<String ID="TagManager.Tag.Quests">Quests and Adventures</String>
-		<String ID="TagManager.Tag.Buildings">Castles, Palaces, Mansions and Estates</String>
-		<String ID="TagManager.Tag.Settlements">Cities, Towns, Villages and Hamlets</String>
-		<String ID="TagManager.Tag.Mercantiles">Shops, Stores, Inns and Taverns</String>
-		<String ID="TagManager.Tag.NewLands">New Lands</String>
-		<String ID="TagManager.Tag.Dungeons">Dungeons</String>
-		<String ID="TagManager.Tag.AbandonedStructures">Forts, Ruins and Abandoned Structures</String>
-		<String ID="TagManager.Tag.PlayerHomes">Player homes</String>
-		<String ID="TagManager.Tag.Landscape">Landscape</String>
-		<String ID="TagManager.Tag.Overhauls">Overhauls</String>
-		<String ID="TagManager.Tag.Conversions">Total conversions</String>
-		<String ID="TagManager.Tag.Audio">Music, SFX and voices</String>
-		<String ID="TagManager.Tag.UserInterface">User Interface and Controls</String>
-		<String ID="TagManager.Tag.NPC">NPC</String>
-		<String ID="TagManager.Tag.Body">Body</String>
-		<String ID="TagManager.Tag.Face">Face</String>
-		<String ID="TagManager.Tag.Hair">Hair</String>
-		<String ID="TagManager.Tag.Races">Races</String>
-		<String ID="TagManager.Tag.Followers">Followers</String>
-		<String ID="TagManager.Tag.Creatures">Creatures</String>
-		<String ID="TagManager.Tag.Mounts">Mounts</String>
-		<String ID="TagManager.Tag.ModelsAndTextures">Models and Textures</String>
-		<String ID="TagManager.Tag.Graphics">Graphics and visuals</String>
-		<String ID="TagManager.Tag.ENBPresets">ENB presets</String>
-		<String ID="TagManager.Tag.Collectables">Collectables</String>
-		<String ID="TagManager.Tag.ItemsAndObjects">Items and objects</String>
-		<String ID="TagManager.Tag.Cheats">Cheats and God items</String>
-		<String ID="TagManager.Tag.Fixes">Bug fixes</String>
-		<String ID="TagManager.Tag.xSEPlugins">Plugins for $(ScriptExtenderID)</String>
-		<String ID="TagManager.Tag.Utilities">Utilities</String>
-		<String ID="TagManager.Tag.Configuration">Configuration</String>
-		<String ID="TagManager.Tag.Resources">Modders resources and tutorials</String>
-		<String ID="TagManager.Tag.SaveGames">Save Games</String>
-		<String ID="TagManager.Tag.Misc">Miscellaneous</String>
-
 		<String ID="ModManager.DisplayMode.Caption">Change display mode</String>
 		<String ID="ModManager.DisplayMode.Connector">Activation</String>
 		<String ID="ModManager.DisplayMode.Log">Log</String>
@@ -558,6 +499,66 @@ This folder and all its contents will be deleted: %1]]>
 
 		<String ID="VirtualGameFolderWS.Name">Virtual game folder</String>
 		<String ID="VirtualGameFolderWS.NameShort">Game data</String>
+
+		<!-- Tag Manager -->
+		<String ID="TagManager.Name">Tag manager</String>
+		<String ID="TagManager.PrimaryTag">Primary tag</String>
+
+		<String ID="TagManager.LoadDefaultTags">Load default tags</String>
+		<String ID="TagManager.LoadDefaultTags.Message">Are you sure you want to laod default tags?</String>
+		<String ID="TagManager.RemoveTag.Message">Are you sure you want to delete this tag? This will remove him from the system and break its connection with all mods.</String>
+
+		<String ID="TagManager.Tag.Animation">Animation</String>
+		<String ID="TagManager.Tag.Armor">Armor</String>
+		<String ID="TagManager.Tag.Clothing">Clothing</String>
+		<String ID="TagManager.Tag.Jewelry">Jewelry</String>
+		<String ID="TagManager.Tag.Weapons">Weapons</String>
+		<String ID="TagManager.Tag.Gameplay">Gameplay</String>
+		<String ID="TagManager.Tag.Immersion">Immersion</String>
+		<String ID="TagManager.Tag.Environment">Environment</String>
+		<String ID="TagManager.Tag.SkillsAndLeveling">Skills and Leveling</String>
+		<String ID="TagManager.Tag.GuildsAndFactions">Guilds and Factions</String>
+		<String ID="TagManager.Tag.Stealth">Stealth</String>
+		<String ID="TagManager.Tag.Combat">Combat</String>
+		<String ID="TagManager.Tag.Crafting">Crafting</String>
+		<String ID="TagManager.Tag.Magic">Magic - Spells and Enchantments</String>
+		<String ID="TagManager.Tag.MagicGameplay">Magic - Gameplay</String>
+		<String ID="TagManager.Tag.BooksAndScrolls">Books and Scrolls</String>
+		<String ID="TagManager.Tag.Alchemy">Alchemy</String>
+		<String ID="TagManager.Tag.Quests">Quests and Adventures</String>
+		<String ID="TagManager.Tag.Buildings">Castles, Palaces, Mansions and Estates</String>
+		<String ID="TagManager.Tag.Settlements">Cities, Towns, Villages and Hamlets</String>
+		<String ID="TagManager.Tag.Mercantiles">Shops, Stores, Inns and Taverns</String>
+		<String ID="TagManager.Tag.NewLands">New Lands</String>
+		<String ID="TagManager.Tag.Dungeons">Dungeons</String>
+		<String ID="TagManager.Tag.AbandonedStructures">Forts, Ruins and Abandoned Structures</String>
+		<String ID="TagManager.Tag.PlayerHomes">Player homes</String>
+		<String ID="TagManager.Tag.Landscape">Landscape</String>
+		<String ID="TagManager.Tag.Overhauls">Overhauls</String>
+		<String ID="TagManager.Tag.Conversions">Total conversions</String>
+		<String ID="TagManager.Tag.Audio">Music, SFX and voices</String>
+		<String ID="TagManager.Tag.UserInterface">User Interface and Controls</String>
+		<String ID="TagManager.Tag.NPC">NPC</String>
+		<String ID="TagManager.Tag.Body">Body</String>
+		<String ID="TagManager.Tag.Face">Face</String>
+		<String ID="TagManager.Tag.Hair">Hair</String>
+		<String ID="TagManager.Tag.Races">Races</String>
+		<String ID="TagManager.Tag.Followers">Followers</String>
+		<String ID="TagManager.Tag.Creatures">Creatures</String>
+		<String ID="TagManager.Tag.Mounts">Mounts</String>
+		<String ID="TagManager.Tag.ModelsAndTextures">Models and Textures</String>
+		<String ID="TagManager.Tag.Graphics">Graphics and visuals</String>
+		<String ID="TagManager.Tag.ENBPresets">ENB presets</String>
+		<String ID="TagManager.Tag.Collectables">Collectables</String>
+		<String ID="TagManager.Tag.ItemsAndObjects">Items and objects</String>
+		<String ID="TagManager.Tag.Cheats">Cheats and God items</String>
+		<String ID="TagManager.Tag.Fixes">Bug fixes</String>
+		<String ID="TagManager.Tag.xSEPlugins">Plugins for $(ScriptExtenderID)</String>
+		<String ID="TagManager.Tag.Utilities">Utilities</String>
+		<String ID="TagManager.Tag.Configuration">Configuration</String>
+		<String ID="TagManager.Tag.Resources">Modders resources and tutorials</String>
+		<String ID="TagManager.Tag.SaveGames">Save Games</String>
+		<String ID="TagManager.Tag.Misc">Miscellaneous</String>
 
 		<!-- Network module-->
 		<String ID="NetworkModule.Name">Network</String>

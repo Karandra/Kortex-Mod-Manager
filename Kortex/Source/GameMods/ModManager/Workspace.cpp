@@ -485,12 +485,23 @@ namespace Kortex::ModManager
 		if (dialog.IsModified())
 		{
 			ProcessSelectProfile(dialog.GetNewProfile());
-			UpdateModListContent();
+			UpdateProfilesList();
 		}
 	}
+	
 	void Workspace::OnUpdateModLayoutNeeded(ModEvent& event)
 	{
 		ScheduleReload();
+	}
+	void Workspace::OnBeginReload(ModEvent& event)
+	{
+		Disable();
+		m_DisplayModel->ClearView();
+	}
+	void Workspace::OnEndReload(ModEvent& event)
+	{
+		m_DisplayModel->LoadView();
+		Enable();
 	}
 
 	void Workspace::OnDisplayModeMenu(KxAuiToolBarEvent& event)
@@ -777,14 +788,14 @@ namespace Kortex::ModManager
 		m_SearchBox->Clear();
 		IMainWindow::GetInstance()->ClearStatus();
 	}
-	void Workspace::DisplayModInfo(IGameMod* entry)
+	void Workspace::DisplayModInfo(IGameMod* mod)
 	{
 		wxWindowUpdateLocker lock(this);
 		ClearControls();
 
-		if (entry)
+		if (mod)
 		{
-			IMainWindow::GetInstance()->SetStatus(entry->GetName());
+			IMainWindow::GetInstance()->SetStatus(mod->GetName());
 		}
 	}
 	void Workspace::CreateViewContextMenu(KxMenu& contextMenu, const IGameMod::RefVector& selectedMods, IGameMod* focusedMod)
@@ -898,8 +909,6 @@ namespace Kortex::ModManager
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
 				IModManager::GetInstance()->Load();
-				IModManager::GetInstance()->ResortMods();
-				ScheduleReload();
 			});
 		}
 	}
@@ -933,6 +942,10 @@ namespace Kortex::ModManager
 		m_BroadcastReciever.Bind(ModEvent::EvtInstalled, &Workspace::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtUninstalled, &Workspace::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
+
+		m_BroadcastReciever.Bind(ModEvent::EvtBeginReload, &Workspace::OnBeginReload, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtEndReload, &Workspace::OnEndReload, this);
 		return true;
 	}
 	bool Workspace::OnOpenWorkspace()
@@ -948,8 +961,7 @@ namespace Kortex::ModManager
 			auto displayModelOptions = GetDisplayModelOptions();
 			displayModelOptions.LoadDataViewLayout(m_DisplayModel->GetView());
 
-			ReloadView();
-			UpdateModListContent();
+			UpdateProfilesList();
 			OnUpdateProgramsList(ProgramEvent());
 		}
 		m_DisplayModel->UpdateUI();
@@ -966,7 +978,7 @@ namespace Kortex::ModManager
 
 		m_DisplayModel->LoadView();
 		ProcessSelection();
-		UpdateModListContent();
+		UpdateProfilesList();
 	}
 
 	Workspace::~Workspace()
@@ -1195,7 +1207,7 @@ namespace Kortex::ModManager
 			}
 		};
 	}
-	void Workspace::UpdateModListContent()
+	void Workspace::UpdateProfilesList()
 	{
 		m_ToolBar_Profiles->Clear();
 		int selectIndex = 0;

@@ -217,7 +217,10 @@ namespace Kortex::ModManager
 			void ProcessSelectProfile(const wxString& newProfileID);
 			void OnSelectProfile(wxCommandEvent& event);
 			void OnShowProfileEditor(KxAuiToolBarEvent& event);
+
 			void OnUpdateModLayoutNeeded(ModEvent& event);
+			void OnBeginReload(ModEvent& event);
+			void OnEndReload(ModEvent& event);
 			
 			void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 			void OnToolsMenu(KxAuiToolBarEvent& event);
@@ -237,7 +240,7 @@ namespace Kortex::ModManager
 			void OnModSearchColumnsChanged(KxMenuEvent& event);
 
 			void ClearControls();
-			void DisplayModInfo(IGameMod* entry);
+			void DisplayModInfo(IGameMod* mod);
 			void CreateViewContextMenu(KxMenu& contextMenu, const IGameMod::RefVector& selectedMods, IGameMod* focusedMod);
 
 		protected:
@@ -279,7 +282,7 @@ namespace Kortex::ModManager
 			void ReloadView();
 
 			void OnModsContextMenu(const IGameMod::RefVector& selectedMods, IGameMod* focusedMod);
-			void UpdateModListContent();
+			void UpdateProfilesList();
 
 			bool IsAnyChangeAllowed() const;
 			bool IsMovingModsAllowed() const;

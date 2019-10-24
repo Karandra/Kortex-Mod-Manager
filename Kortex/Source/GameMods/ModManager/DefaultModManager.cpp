@@ -23,7 +23,6 @@
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
-#include <execution>
 
 namespace Kortex::ModManager
 {
@@ -126,7 +125,7 @@ namespace Kortex::ModManager
 
 	void DefaultModManager::OnMountPointError(const KxStringVector& locations)
 	{
-		BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtMainToggleError, m_VFS, false);
+		BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtMainToggleError, m_FileSystem, false);
 
 		KxTaskDialog dialog(Workspace::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
 		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
@@ -163,16 +162,21 @@ namespace Kortex::ModManager
 	}
 	void DefaultModManager::OnProfileSelected(ProfileEvent& event)
 	{
-		if (m_LoadMods)
-		{
-			m_LoadMods = false;
-
-			IModTagManager::GetInstance()->OnInitialModsLoading();
-			Load();
-		}
 		if (IGameProfile* profile = event.GetProfile())
 		{
-			ResortMods(*profile);
+			if (m_InitialLoadMods)
+			{
+				m_InitialLoadMods = false;
+
+				// Queue resort to loader thread
+				m_SortingProfile = profile;
+				IModTagManager::GetInstance()->OnInitialModsLoading();
+				Load();
+			}
+			else
+			{
+				ResortMods(*profile);
+			}
 		}
 	}
 
@@ -191,9 +195,8 @@ namespace Kortex::ModManager
 
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModManager::OnModLayoutSaveNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &DefaultModManager::OnUpdateModLayoutNeeded, this);
-
 		m_BroadcastReciever.Bind(ModEvent::EvtToggled, &DefaultModManager::OnModLayoutSaveNeeded, this);
-		
+
 		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &DefaultModManager::OnProfileSelected, this);
 
 		// Mandatory locations
@@ -219,11 +222,11 @@ namespace Kortex::ModManager
 		m_WriteTarget.SetActive(true);
 		// m_WriteTarget.LinkLocation(...) Location will be linked on profile change
 
-		m_LoadMods = true;
+		m_InitialLoadMods = true;
 	}
 	void DefaultModManager::OnExit()
 	{
-		m_VFS.Disable();
+		m_FileSystem.Disable();
 	}
 	void DefaultModManager::CreateWorkspaces()
 	{
@@ -232,7 +235,7 @@ namespace Kortex::ModManager
 	}
 
 	DefaultModManager::DefaultModManager()
-		:m_VFS(*this), m_BaseGame(-65535), m_WriteTarget(65535)
+		:m_FileSystem(*this), m_BaseGame(-65535), m_WriteTarget(65535)
 	{
 	}
 
@@ -242,30 +245,57 @@ namespace Kortex::ModManager
 	}
 	void DefaultModManager::Load()
 	{
+		// Clear mods list and update workspace immediately
 		m_Mods.clear();
+		BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtBeginReload);
 
-		// Load entries
-		if (IGameInstance* instnace = IGameInstance::GetActive())
+		m_ModsLoaderThread = std::make_unique<KxThread>();
+		m_ModsLoaderThread->Bind(KxThreadEvent::EvtExecute, [this](KxThreadEvent& event)
 		{
-			KxFileFinder finder(instnace->GetModsDir(), wxS('*'));
-			for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
+			// Load mods from disk
+			if (IGameInstance* instnace = IGameInstance::GetActive())
 			{
-				if (item.IsNormalItem() && item.IsDirectory())
+				KxFileFinder finder(instnace->GetModsDir(), wxS('*'));
+				for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
 				{
-					DoCreateMod(item.GetName());
+					if (item.IsNormalItem() && item.IsDirectory())
+					{
+						DoCreateMod(item.GetName());
+					}
 				}
 			}
-		}
 
-		// Build mod file trees for all mods
-		IGameMod::RefVector allMods = GetMods(GetModsFlags::Everything);
+			// Build mod file trees for all mods
+			IGameMod::RefVector allMods = GetMods(GetModsFlags::Everything);
 
-		// Using 'std::execution::seq/unseq' generates too much strain on IO.
-		// And doesn't really improves loading speed. Using 'seq' for now.
-		std::for_each(std::execution::seq, allMods.begin(), allMods.end(), [](IGameMod* entry)
-		{
-			entry->UpdateFileTree();
+			size_t processed = 0;
+			for (IGameMod* mod: allMods)
+			{
+				mod->UpdateFileTree();
+				processed++;
+
+				m_ModsLoaderThread->CallAfter([processed, total = allMods.size()]()
+				{
+					IMainWindow& mainWindow = *IMainWindow::GetInstance();
+					mainWindow.SetStatusProgress(processed, total);
+				});
+			}
 		});
+		m_ModsLoaderThread->Bind(KxThreadEvent::EvtFinished, [this](KxThreadEvent& event)
+		{
+			const IGameProfile* profile = m_SortingProfile ? m_SortingProfile : IGameProfile::GetActive();
+			m_SortingProfile = nullptr;
+			if (profile)
+			{
+				ResortMods(*profile);
+			}
+
+			IModDispatcher::GetInstance()->InvalidateVirtualTree();
+			BroadcastProcessor::Get().ProcessEvent(ModEvent::EvtEndReload);
+			m_ModsLoaderThread = nullptr;
+		});
+
+		m_ModsLoaderThread->Run();
 	}
 	void DefaultModManager::Save() const
 	{

@@ -15,6 +15,7 @@ class KxHTMLWindow;
 namespace Kortex
 {
 	class IGamePlugin;
+	class ModEvent;
 }
 
 namespace Kortex::PluginManager
@@ -27,6 +28,8 @@ namespace Kortex::PluginManager
 			static ImageResourceID GetStatusImageForPlugin(const IGamePlugin* plugin = nullptr);
 
 		private:
+			BroadcastReciever m_BroadcastReciever;
+			
 			wxBoxSizer* m_MainSizer = nullptr;
 			PluginViewModel* m_ModelView = nullptr;
 			KxSearchBox* m_SearchBox = nullptr;
@@ -42,6 +45,9 @@ namespace Kortex::PluginManager
 			void OnModSerach(wxCommandEvent& event);
 			void UpdatePluginTypeCounter(KxMenuItem* item);
 			void OnRunLootAPI(KxMenuEvent& event);
+
+			void OnBeginReload(ModEvent& event);
+			void OnEndReload(ModEvent& event);
 
 		public:
 			Workspace() = default;

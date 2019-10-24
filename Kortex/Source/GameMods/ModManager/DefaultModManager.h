@@ -7,10 +7,12 @@
 #include "FixedGameMod.h"
 #include "MainFileSystem.h"
 #include "MandatoryModEntry.h"
+#include <Kx/Threading.hpp>
 
 namespace Kortex
 {
 	class ProfileEvent;
+	class IGameProfile;
 }
 
 namespace Kortex::ModManager
@@ -97,13 +99,15 @@ namespace Kortex::ModManager
 		private:
 			BroadcastReciever m_BroadcastReciever;
 			Config m_Config;
-			MainFileSystem m_VFS;
+			MainFileSystem m_FileSystem;
 
 			FixedGameMod m_BaseGame;
 			FixedGameMod m_WriteTarget;
 			std::vector<KMandatoryModEntry> m_MandatoryMods;
 
-			bool m_LoadMods = false;
+			std::unique_ptr<KxThread> m_ModsLoaderThread;
+			IGameProfile* m_SortingProfile = nullptr;
+			bool m_InitialLoadMods = false;
 
 		private:
 			IGameMod* DoCreateMod(const wxString& signature);
@@ -117,7 +121,7 @@ namespace Kortex::ModManager
 			void OnUpdateModLayoutNeeded(ModEvent& event);
 			void OnModLayoutSaveNeeded(ModEvent& event);
 			void OnProfileSelected(ProfileEvent& event);
-			
+
 		protected:
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) override;
 			void OnInit() override;
@@ -176,7 +180,7 @@ namespace Kortex::ModManager
 		public:
 			IVirtualFileSystem& GetFileSystem() override
 			{
-				return m_VFS;
+				return m_FileSystem;
 			}
 	};
 }

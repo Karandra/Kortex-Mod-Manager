@@ -5,6 +5,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include "GameMods/IModManager.h"
+#include "GameMods/ModEvent.h"
 #include "GameMods/ModManager/Workspace.h"
 #include "UI/ImageViewerDialog.h"
 #include "Utility/KAux.h"
@@ -192,6 +193,17 @@ namespace Kortex::PluginManager
 		operation->Run();
 	}
 
+	void Workspace::OnBeginReload(ModEvent& event)
+	{
+		Disable();
+		m_ModelView->SetDataVector();
+	}
+	void Workspace::OnEndReload(ModEvent& event)
+	{
+		m_ModelView->SetDataVector(IPluginManager::GetInstance()->GetPlugins());
+		Enable();
+	}
+
 	bool Workspace::OnCreateWorkspace()
 	{
 		CreateModelView();
@@ -205,6 +217,9 @@ namespace Kortex::PluginManager
 
 		SetSizer(m_MainSizer);
 		GetDisplayModelOptions().LoadDataViewLayout(m_ModelView->GetView());
+
+		m_BroadcastReciever.Bind(ModEvent::EvtBeginReload, &Workspace::OnBeginReload, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtEndReload, &Workspace::OnEndReload, this);
 		return true;
 	}
 	bool Workspace::OnOpenWorkspace()

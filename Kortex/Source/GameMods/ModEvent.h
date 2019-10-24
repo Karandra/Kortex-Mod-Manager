@@ -28,6 +28,9 @@ namespace Kortex
 			KxEVENT_MEMBER(ModEvent, Reordered);
 			KxEVENT_MEMBER(ModEvent, VirtualTreeInvalidated);
 
+			KxEVENT_MEMBER(ModEvent, BeginReload);
+			KxEVENT_MEMBER(ModEvent, EndReload);
+
 		private:
 			RefVector m_ModVector;
 			IGameMod* m_Mod = nullptr;

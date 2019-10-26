@@ -115,8 +115,8 @@ namespace Kortex::PackageDesigner
 
 			Bind(KxEVT_STDDIALOG_BUTTON, &KPackageCreatorFOModIEDialog::OnOK, this);
 			AdjustWindow(wxDefaultPosition);
-			SetInitialSize(wxSize(600, wxDefaultCoord));
-			CenterOnScreen();
+			SetInitialSize(FromDIP(wxSize(600, wxDefaultCoord)));
+			Center();
 		}
 	}
 	KPackageCreatorFOModIEDialog::~KPackageCreatorFOModIEDialog()

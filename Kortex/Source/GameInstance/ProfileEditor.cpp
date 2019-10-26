@@ -278,7 +278,7 @@ namespace Kortex::ProfileEditor
 			SetDataVector(&IGameInstance::GetActive()->GetProfiles());
 			RefreshItems();
 
-			AdjustWindow(wxDefaultPosition, wxSize(500, 375));
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(500, 375)));
 			GetView()->SetFocus();
 		}
 	}

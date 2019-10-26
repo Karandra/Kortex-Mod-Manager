@@ -19,10 +19,25 @@ namespace
 	{
 		return static_cast<int>(Kortex::ImageResourceID::MAX_ELEMENT);
 	}
+
+	bool operator<(const wxSize& left, const wxSize& right)
+	{
+		return left.GetWidth() < right.GetWidth() || left.GetHeight() < right.GetHeight();
+	}
 }
 
 namespace Kortex::Application
 {
+	void DefaultImageProvider::OnLoadBitmap(wxBitmap& bitmap)
+	{
+		if (bitmap.GetSize() < m_ImageList.GetSize())
+		{
+			wxSize targetSize = m_ImageList.GetSize();
+			wxImage image = bitmap.ConvertToImage();
+			image.Rescale(targetSize.GetWidth(), targetSize.GetHeight(), wxImageResizeQuality::wxIMAGE_QUALITY_HIGH);
+			bitmap = wxBitmap(image, 32);
+		}
+	}
 	void DefaultImageProvider::LoadImages()
 	{
 		// Initialize image list with dummy images

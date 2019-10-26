@@ -15,7 +15,7 @@ namespace Kortex::NetworkManager::NXMHandler
 		{
 			SetMainIcon(KxICON_NONE);
 			SetWindowResizeSide(wxBOTH);
-			SetInitialSize(wxSize(840, 470));
+			SetInitialSize(FromDIP(wxSize(840, 470)));
 			SetDefaultButton(KxID_CLOSE);
 
 			// Buttons

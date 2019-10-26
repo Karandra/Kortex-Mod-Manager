@@ -45,8 +45,8 @@ namespace Kortex::Notifications
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 		m_PopupWindow = new wxPopupTransientWindow(m_Button->GetToolBar(), wxBORDER_THEME);
 		IThemeManager::GetActive().Apply(m_PopupWindow);
+		m_PopupWindow->SetInitialSize(m_PopupWindow->FromDIP(wxSize(325, 425)));
 		m_PopupWindow->SetSizer(sizer);
-		m_PopupWindow->SetInitialSize(wxSize(325, 425));
 
 		// Toolbar
 		m_PpoupToolbar = new KxAuiToolBar(m_PopupWindow, KxID_NONE);

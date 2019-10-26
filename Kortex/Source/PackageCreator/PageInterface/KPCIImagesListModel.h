@@ -10,8 +10,8 @@ namespace Kortex::PackageDesigner
 	class KPCIImagesListModel: public KPackageCreatorVectorModel<KPPIImageEntryArray>, public KPackageCreatorIDTracker
 	{
 		public:
-			static KBitmapSize GetThumbnailSize();
-			static void LoadBitmap(KPPIImageEntry* entry);
+			static KBitmapSize GetThumbnailSize(const wxWindow* window = nullptr);
+			static void LoadBitmap(KPPIImageEntry* entry, const wxWindow* window = nullptr);
 	
 		private:
 			KPackageProjectInterface* m_Interface = nullptr;

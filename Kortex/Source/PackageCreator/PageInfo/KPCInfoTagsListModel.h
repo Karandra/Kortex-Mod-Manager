@@ -24,6 +24,6 @@ namespace Kortex::PackageDesigner
 			bool SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column) override;
 			
 		public:
-			void Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* pSzier = nullptr);
+			void Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* sizer = nullptr);
 	};
 }

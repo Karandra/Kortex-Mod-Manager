@@ -33,18 +33,23 @@ namespace
 
 namespace Kortex::PackageDesigner
 {
-	KBitmapSize KPCIImagesListModel::GetThumbnailSize()
+	KBitmapSize KPCIImagesListModel::GetThumbnailSize(const wxWindow* window)
 	{
 		KBitmapSize size;
 		size.FromHeight(64, KBitmapSize::r16_9);
+
+		if (window)
+		{
+			return window->FromDIP(size);
+		}
 		return size;
 	}
-	void KPCIImagesListModel::LoadBitmap(KPPIImageEntry* entry)
+	void KPCIImagesListModel::LoadBitmap(KPPIImageEntry* entry, const wxWindow* window)
 	{
 		wxImage image(entry->GetPath(), wxBITMAP_TYPE_ANY);
 		if (image.IsOk())
 		{
-			entry->SetBitmap(GetThumbnailSize().ScaleMaintainRatio(image, 4, 4));
+			entry->SetBitmap(GetThumbnailSize(window).ScaleMaintainRatio(image, 4, 4));
 		}
 		else
 		{
@@ -54,8 +59,8 @@ namespace Kortex::PackageDesigner
 	
 	void KPCIImagesListModel::OnInitControl()
 	{
-		KBitmapSize bitmapSize = GetThumbnailSize();
-	
+		KBitmapSize bitmapSize = GetThumbnailSize(GetView());
+
 		GetView()->SetUniformRowHeight(bitmapSize.GetHeight() + 4);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCIImagesListModel::OnActivateItem, this);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCIImagesListModel::OnContextMenu, this);
@@ -316,7 +321,7 @@ namespace Kortex::PackageDesigner
 			{
 				GetView()->CallAfter([this, item, entry]()
 				{
-					LoadBitmap(entry);
+					LoadBitmap(entry, GetView());
 					ItemChanged(item);
 				});
 			}

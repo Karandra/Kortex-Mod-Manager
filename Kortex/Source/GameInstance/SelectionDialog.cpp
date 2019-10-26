@@ -41,7 +41,7 @@ namespace Kortex::GameInstance
 			wxSizer* mainSizer = GetContentWindowSizer();
 			m_Splitter = new KxSplitterWindow(GetContentWindow(), KxID_NONE);
 			IThemeManager::GetActive().Apply(m_Splitter);
-			m_Splitter->SetMinimumPaneSize(200);
+			m_Splitter->SetMinimumPaneSize(FromDIP(200));
 
 			// Left pane
 			m_LeftPane = new KxPanel(m_Splitter, KxID_NONE);
@@ -70,7 +70,7 @@ namespace Kortex::GameInstance
 			AddUserWindow(m_TextBox);
 
 			// Done
-			m_Splitter->SplitVertically(m_LeftPane, m_RightPane, 300);
+			m_Splitter->SplitVertically(m_LeftPane, m_RightPane, FromDIP(300));
 			mainSizer->Add(m_Splitter, 1, wxEXPAND);
 			
 
@@ -121,7 +121,7 @@ namespace Kortex::GameInstance
 		wxString instanceID = active ? active->GetInstanceID() : IApplication::GetInstance()->GetStartupInstanceID();
 		OnInstanceSelected(IGameInstance::GetShallowInstance(instanceID));
 
-		AdjustWindow(wxDefaultPosition, wxSize(650, 400));
+		AdjustWindow(wxDefaultPosition, FromDIP(wxSize(650, 400)));
 	}
 	void SelectionDialog::LoadGameFilter(const GameID& gameID)
 	{

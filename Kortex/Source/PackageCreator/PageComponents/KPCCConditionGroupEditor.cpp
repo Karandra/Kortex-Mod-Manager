@@ -616,7 +616,7 @@ namespace Kortex::PackageDesigner
 			AddItem(KPP_OPERATOR_OR);
 	
 			// Prepare
-			AdjustWindow(wxDefaultPosition, wxSize(700, 400));
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(700, 400)));
 			LoadWindowSizes();
 		}
 	}
@@ -675,7 +675,7 @@ namespace Kortex::PackageDesigner
 		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.NotUsable"), KPPC_DESCRIPTOR_NOT_USABLE);
 	
 		// Prepare
-		AdjustWindow(wxDefaultPosition, wxSize(700, 400));
+		AdjustWindow(wxDefaultPosition, FromDIP(wxSize(700, 400)));
 		LoadWindowSizes();
 	}
 	KPCCConditionGroupEditorDialogTD::~KPCCConditionGroupEditorDialogTD()

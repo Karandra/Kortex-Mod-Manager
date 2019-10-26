@@ -21,12 +21,15 @@ namespace Kortex::Application
 			KxImageSet m_ImageSet;
 
 		protected:
-			template<class TImageID, class TImage> void AddSingleItem(TImageID id, const wxChar* name, const TImage& value)
+			template<class TImageID, class TImage>
+			void AddSingleItem(TImageID id, const wxChar* name, const TImage& value)
 			{
 				m_ImageList.Replace(static_cast<int>(id), value);
 				m_ImageSet.Set(name, value);
 			};
-			template<class TImageID> void LoadItem(TImageID id, const wxChar* name, Type type = Type::Default)
+			
+			template<class TImageID>
+			void LoadItem(TImageID id, const wxChar* name, Type type = Type::Default)
 			{
 				wxBitmap img(KxString::Format(wxS("%1\\UI\\%2.%3"),
 							 IApplication::GetInstance()->GetDataFolder(),
@@ -36,10 +39,12 @@ namespace Kortex::Application
 				);
 				if (img.IsOk())
 				{
+					OnLoadBitmap(img);
 					AddSingleItem(id, name, img);
 				}
 			}
 
+			void OnLoadBitmap(wxBitmap& bitmap);
 			void LoadImages();
 
 		public:

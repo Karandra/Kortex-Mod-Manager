@@ -13,7 +13,7 @@ namespace Kortex::ProgramManager
 	void ProgramEditorDialog::CreateUI(wxWindow* parent)
 	{
 		wxString caption = m_Program ? KTr("ProgramManager.Menu.EditProgram") : KTr("ProgramManager.Menu.AddProgram");
-		if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, {640, wxDefaultCoord}, KxBTN_OK|KxBTN_CANCEL))
+		if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, FromDIP(wxSize(640, wxDefaultCoord)), KxBTN_OK|KxBTN_CANCEL))
 		{
 			wxFlexGridSizer* mainSizer = new wxFlexGridSizer(2, KLC_VERTICAL_SPACING, KLC_HORIZONTAL_SPACING);
 			mainSizer->AddGrowableCol(1, 1);

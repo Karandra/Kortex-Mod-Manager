@@ -7,8 +7,6 @@ namespace Kortex
 {
 	class IWorkspaceDocument: public KxRTTI::Interface<IWorkspaceDocument>
 	{
-		friend class KxIObject;
-
 		public:
 			KxEVENT_MEMBER(wxNotifyEvent, Changed);
 			KxEVENT_MEMBER(wxNotifyEvent, Saved);

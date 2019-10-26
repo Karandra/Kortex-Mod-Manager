@@ -51,7 +51,7 @@ namespace Kortex::Application::Settings
 		m_Manager.Load();
 
 		parent = parent ? parent : &IMainWindow::GetInstance()->GetFrame();
-		if (Create(parent, KxID_NONE, KTr("Settings.Caption"), wxDefaultPosition, wxSize(800, 600), KxBTN_OK|KxBTN_CANCEL))
+		if (Create(parent, KxID_NONE, KTr("Settings.Caption"), wxDefaultPosition, FromDIP(wxSize(800, 600)), KxBTN_OK|KxBTN_CANCEL))
 		{
 			Bind(wxEVT_CLOSE_WINDOW, &Window::OnCloseWindow, this);
 

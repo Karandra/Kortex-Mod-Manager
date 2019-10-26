@@ -117,8 +117,8 @@ namespace Kortex::PackageDesigner
 			// List
 			SetDataViewFlags(KxDV_NO_HEADER);
 			KPCCRequirementsSelectorModel::Create(controller, m_ViewPane, sizer);
-	
-			AdjustWindow(wxDefaultPosition, wxSize(400, 320));
+			
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(400, 320)));
 		}
 	}
 	KPCCRequirementsSelectorModelDialog::~KPCCRequirementsSelectorModelDialog()

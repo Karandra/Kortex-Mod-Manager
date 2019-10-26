@@ -25,7 +25,7 @@ namespace Kortex::ModStatistics
 			RefreshItems();
 			dialog.Hide();
 
-			AdjustWindow(wxDefaultPosition, wxSize(500, 350));
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(500, 350)));
 			GetView()->SetFocus();
 		}
 	}

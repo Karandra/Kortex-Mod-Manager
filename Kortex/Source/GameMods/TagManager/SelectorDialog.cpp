@@ -111,7 +111,7 @@ namespace Kortex::ModTagManager
 			GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &SelectorDialog::OnSelectItem, this);
 			GetOptions().LoadDataViewLayout(GetView());
 
-			AdjustWindow(wxDefaultPosition, wxSize(980, 720));
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(980, 720)));
 			GetView()->SetFocus();
 		}
 	}

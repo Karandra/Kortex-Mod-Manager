@@ -178,7 +178,7 @@ namespace Kortex::PackageDesigner
 			// List
 			KPCCFileDataSelectorModel::Create(controller, m_ViewPane, sizer);
 	
-			AdjustWindow(wxDefaultPosition, wxSize(700, 500));
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(700, 500)));
 			//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
 			//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 		}

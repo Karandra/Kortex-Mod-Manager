@@ -31,7 +31,7 @@ namespace Kortex::UI
 	{
 		m_Data = bitmap.IsOk() ? bitmap : wxNullBitmap;
 	}
-	
+
 	bool ImageViewerEvent::IsAnimationFile() const
 	{
 		return HasFilePath() && Kortex::IScreenshotsGallery::IsAnimationFile(GetFilePath());
@@ -48,7 +48,7 @@ namespace Kortex::UI
 	{
 		m_Data = filePath;
 	}
-	
+
 	bool ImageViewerEvent::IsInputStream() const
 	{
 		return GetType() == InputStream;
@@ -85,7 +85,7 @@ namespace Kortex::UI
 		}
 		return KxStdDialog::OnDynamicBind(entry);
 	}
-	
+
 	void ImageViewerDialog::OnLoadFromDisk(const wxString& filePath)
 	{
 		if (Kortex::IScreenshotsGallery::IsAnimationFile(filePath))
@@ -118,16 +118,16 @@ namespace Kortex::UI
 		{
 			m_Backward->SetEnabled(event.HasPrev());
 			m_Forward->SetEnabled(event.HasNext());
-	
+
 			wxString description = event.GetDescription();
 			if (!description.IsEmpty())
 			{
 				m_Splitter->Unsplit(m_ImageView);
 				m_Splitter->Unsplit(m_Description);
-	
+
 				m_Description->SetValue(wxString::Format(wxS("<div align=\"center\">%s</div>"), description));
 				m_Description->Enable(true);
-	
+
 				int nMinHeight = m_Splitter->GetMinimumPaneSize();
 				int height = -std::min(m_Description->GetTextExtent(description).GetHeight() + nMinHeight, nMinHeight);
 				m_Splitter->SplitHorizontally(m_ImageView, m_Description, height);
@@ -137,11 +137,11 @@ namespace Kortex::UI
 				m_Splitter->Unsplit(m_ImageView);
 				m_Splitter->Unsplit(m_Description);
 				m_Splitter->Initialize(m_ImageView);
-	
+
 				m_Description->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
 				m_Description->Enable(false);
 			}
-	
+
 			if (event.HasBitmap())
 			{
 				m_ImageView->SetBitmap(event.GetBitmap());
@@ -173,7 +173,7 @@ namespace Kortex::UI
 		}
 		dialog.SetDefaultExtension(exts[0]);
 		dialog.SetFileName(m_FilePath.AfterLast('\\').BeforeLast('.'));
-	
+
 		if (dialog.ShowModal() == KxID_OK)
 		{
 			m_ImageView->GetBitmap().SaveFile(dialog.GetResult(), formats[dialog.GetSelectedFilter()]);
@@ -192,7 +192,7 @@ namespace Kortex::UI
 		}
 		m_ImageView->Refresh();
 	}
-	
+
 	ImageViewerDialog::ImageViewerDialog(wxWindow* parent, const wxString& caption)
 	{
 		if (Create(parent, caption))
@@ -210,22 +210,22 @@ namespace Kortex::UI
 		options.SetAttribute(OName::ColorBG, (int64_t)m_ImageView->GetBackgroundColour().GetPixel());
 		options.SetAttribute(OName::ColorFG, (int64_t)m_ImageView->GetForegroundColour().GetPixel());
 	}
-	
+
 	bool ImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 	{
 		if (KxStdDialog::Create(parent, KxID_NONE, KAux::StrOr(caption, KTr("ImageViewer.Caption")), wxDefaultPosition, wxDefaultSize, KxBTN_CLOSE))
 		{
 			AddButton(KxID_SAVE, wxEmptyString, true).GetControl()->Bind(wxEVT_BUTTON, &ImageViewerDialog::OnSaveImage, this);
-	
+
 			SetMainIcon(KxICON_NONE);
 			SetWindowResizeSide(wxBOTH);
 			SetInitialSize(parent->GetSize().Scale(0.7f, 0.7f));
-	
+
 			// Splitter
 			m_Splitter = new KxSplitterWindow(m_ContentPanel, KxID_NONE);
 			IThemeManager::GetActive().Apply(m_Splitter);
 			PostCreate(wxDefaultPosition);
-	
+
 			// View
 			m_ImageView = new KxImageView(m_Splitter, KxID_NONE);
 			m_ImageView->SetScaleMode(KxIV_SCALE_ASPECT_FIT);
@@ -235,7 +235,7 @@ namespace Kortex::UI
 				Close();
 			});
 			IThemeManager::GetActive().Apply(m_ImageView);
-	
+
 			// Options
 			using namespace Application;
 
@@ -249,7 +249,7 @@ namespace Kortex::UI
 			{
 				m_ImageView->SetBackgroundColour("LIGHT GREY");
 			}
-	
+
 			int64_t colorFG = options.GetAttributeInt(OName::ColorFG, -1);
 			if (colorFG != -1)
 			{
@@ -259,51 +259,51 @@ namespace Kortex::UI
 			{
 				m_ImageView->SetForegroundColour("WHITE");
 			}
-			
+
 			// Description
 			m_Description = new KxHTMLWindow(m_Splitter, KxID_NONE);
 			AddUserWindow(m_Description);
-	
+
 			// Split
 			m_Splitter->SetSashGravity(0);
 			m_Splitter->SetMinimumPaneSize(m_Description->GetCharHeight() * 3);
-	
+
 			// Toolbar
 			m_ToolBar = new KxAuiToolBar(GetContentWindow(), KxID_NONE, KxAuiToolBar::DefaultStyle|wxAUI_TB_PLAIN_BACKGROUND);
 			m_ToolBar->AddStretchSpacer(1);
-	
+
 			// BG color
 			m_ColorBGCtrl = new wxColourPickerCtrl(m_ToolBar, KxID_NONE, m_ImageView->GetBackgroundColour());
 			m_ColorBGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &ImageViewerDialog::OnChangeColor, this);
 			m_ToolBar->AddControl(m_ColorBGCtrl);
-	
+
 			// Backward
 			m_Backward = Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_BACKWARD), ImageResourceID::ControlLeft);
-			
+
 			// Scale
 			m_ScaleSlider = new KxSlider(m_ToolBar, KxID_NONE, 100, 10, 500);
 			m_ScaleSlider->Bind(wxEVT_SLIDER, &ImageViewerDialog::OnScaleChanged, this);
 			m_ToolBar->AddControl(m_ScaleSlider);
-	
+
 			// Forward
 			m_Forward = Utility::UI::CreateToolBarButton(m_ToolBar, KTr(KxID_FORWARD), ImageResourceID::ControlRight);
-			
+
 			// FG color
 			m_ColorFGCtrl = new wxColourPickerCtrl(m_ToolBar, KxID_NONE, m_ImageView->GetForegroundColour());
 			m_ColorFGCtrl->Bind(wxEVT_COLOURPICKER_CHANGED, &ImageViewerDialog::OnChangeColor, this);
 			m_ToolBar->AddControl(m_ColorFGCtrl);
-			
+
 			m_ToolBar->AddStretchSpacer(1);
-	
+
 			// Realize
 			m_Backward->SetEnabled(false);
 			m_Forward->SetEnabled(false);
-	
+
 			m_Backward->Bind(KxEVT_AUI_TOOLBAR_CLICK, &ImageViewerDialog::OnNavigation, this);
 			m_Forward->Bind(KxEVT_AUI_TOOLBAR_CLICK, &ImageViewerDialog::OnNavigation, this);
-			
+
 			m_ToolBar->Realize();
-	
+
 			m_ToolBar->SetBackgroundColour(GetContentWindow()->GetBackgroundColour());
 			GetContentWindowSizer()->Add(m_ToolBar, 0, wxEXPAND);
 			AddUserWindow(m_ToolBar);

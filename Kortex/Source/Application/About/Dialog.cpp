@@ -122,7 +122,7 @@ namespace Kortex::Application
 
 			PostCreate(wxDefaultPosition);
 			GetContentWindowSizer()->Prepend(m_Logo, 0, wxEXPAND)->SetMinSize(GetLogoSize());
-			AdjustWindow(wxDefaultPosition, wxSize(780, 490));
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(780, 490)));
 		}
 	}
 	AboutDialog::~AboutDialog()

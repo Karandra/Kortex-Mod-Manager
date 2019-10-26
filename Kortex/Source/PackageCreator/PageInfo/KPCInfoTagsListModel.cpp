@@ -16,9 +16,9 @@ namespace Kortex::PackageDesigner
 		}
 		return result;
 	}
-	void KPCInfoTagsListModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* pSzier)
+	void KPCInfoTagsListModel::Create(KPackageCreatorController* controller, wxWindow* window, wxSizer* sizer)
 	{
 		m_Controller = controller;
-		SelectorDisplayModelCB::Create(window, pSzier);
+		SelectorDisplayModelCB::Create(window, sizer);
 	}
 }

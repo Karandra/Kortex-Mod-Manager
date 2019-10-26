@@ -743,7 +743,7 @@ namespace Kortex::PackageDesigner
 			{
 				if (!imageEntry->HasBitmap())
 				{
-					KPCIImagesListModel::LoadBitmap(imageEntry);
+					KPCIImagesListModel::LoadBitmap(imageEntry, GetView());
 				}
 				m_EntryImageView->SetClientData(imageEntry);
 				m_EntryImageView->SetBitmap(imageEntry->GetBitmap());

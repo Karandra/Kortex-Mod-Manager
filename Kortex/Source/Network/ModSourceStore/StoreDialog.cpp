@@ -89,7 +89,7 @@ namespace Kortex::ModSource
 			GetView()->Bind(KxEVT_DATAVIEW_ITEM_SELECTED, &StoreDialog::OnSelectItem, this);
 			RefreshItems();
 
-			AdjustWindow(wxDefaultPosition, wxSize(500, 350));
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(500, 350)));
 			GetView()->SetFocus();
 		}
 	}

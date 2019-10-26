@@ -28,14 +28,14 @@ namespace Kortex::PackageDesigner
 	{
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &KPCCAssignedConditionalsEditor::OnActivateItem, this);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &KPCCAssignedConditionalsEditor::OnContextMenu, this);
-	
+
 		// Label
 		{
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
 			m_LabelEditor = info.GetEditor();
 			m_LabelEditor->SetEditable(true);
 		}
-	
+
 		// Value
 		{
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Value"), ColumnID::Value, KxDATAVIEW_CELL_EDITABLE);
@@ -43,7 +43,7 @@ namespace Kortex::PackageDesigner
 			m_ValueEditor->SetEditable(true);
 		}
 	}
-	
+
 	void KPCCAssignedConditionalsEditor::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
 		auto entry = GetDataEntry(row);
@@ -100,7 +100,7 @@ namespace Kortex::PackageDesigner
 						KPackageCreatorPageBase::ShowTooltipWarning(GetView(), KTr("PackageCreator.InvalidFlagName"), rect);
 						return false;
 					}
-	
+
 					TrackChangeID(entry->GetName(), newName);
 					entry->SetName(newName);
 					ChangeNotify();
@@ -116,7 +116,7 @@ namespace Kortex::PackageDesigner
 		}
 		return false;
 	}
-	
+
 	void KPCCAssignedConditionalsEditor::OnActivateItem(KxDataViewEvent& event)
 	{
 		KxDataViewColumn* column = event.GetColumn();
@@ -136,7 +136,7 @@ namespace Kortex::PackageDesigner
 	{
 		KxDataViewItem item = event.GetItem();
 		const KPPCFlagEntry* entry = GetDataEntry(GetRow(item));
-	
+
 		KxMenu menu;
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::AddFlag, KTr(KxID_ADD)));
@@ -151,7 +151,7 @@ namespace Kortex::PackageDesigner
 			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
 			item->Enable(!IsEmpty());
 		}
-	
+
 		switch (menu.Show(GetView()))
 		{
 			case MenuID::AddFlag:
@@ -171,11 +171,11 @@ namespace Kortex::PackageDesigner
 			}
 		};
 	};
-	
+
 	void KPCCAssignedConditionalsEditor::OnAddFlag()
 	{
 		GetDataVector()->emplace_back(wxEmptyString, wxEmptyString);
-	
+
 		KxDataViewItem item = GetItem(GetItemCount() - 1);
 		NotifyAddedItem(item);
 		SelectItem(item);
@@ -189,7 +189,7 @@ namespace Kortex::PackageDesigner
 			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveFlagDialog.Caption", entry->GetName()), KTrf("PackageCreator.RemoveFlagDialog.Message", deletedName), KxBTN_CANCEL, KxICON_WARNING);
 			dialog.AddButton(KxID_REMOVE, KTr("PackageCreator.RemoveFlagDialog.Remove"));
 			dialog.AddButton(KxID_RENAME, KTr("PackageCreator.RemoveFlagDialog.Rename"));
-	
+
 			switch (dialog.ShowModal())
 			{
 				case KxID_REMOVE:
@@ -221,7 +221,7 @@ namespace Kortex::PackageDesigner
 		}
 		NotifyCleared();
 	}
-	
+
 	bool KPCCAssignedConditionalsEditor::DoTrackID(wxString trackedID, const wxString& newID, bool remove) const
 	{
 		// Manual components
@@ -239,7 +239,7 @@ namespace Kortex::PackageDesigner
 				}
 			}
 		}
-	
+
 		// Conditional steps flags
 		for (auto& step : GetProject().GetComponents().GetConditionalSteps())
 		{
@@ -248,10 +248,10 @@ namespace Kortex::PackageDesigner
 				TrackID_ReplaceOrRemove(trackedID, newID, condition.GetFlags(), remove);
 			}
 		}
-	
+
 		return true;
 	}
-	
+
 	void KPCCAssignedConditionalsEditor::SetDataVector()
 	{
 		m_Condition = nullptr;
@@ -261,7 +261,7 @@ namespace Kortex::PackageDesigner
 	{
 		m_Condition = &data;
 		KPackageCreatorVectorModel::SetDataVector(&m_Condition->GetFlags());
-		
+
 		KPackageProjectComponents& components = m_Controller->GetProject()->GetComponents();
 		m_LabelEditor->SetItems(components.GetFlagsNames());
 		m_ValueEditor->SetItems(components.GetFlagsValues());
@@ -278,16 +278,16 @@ namespace Kortex::PackageDesigner
 		{
 			SetMainIcon(KxICON_NONE);
 			SetWindowResizeSide(wxBOTH);
-	
+
 			m_Sizer = new wxBoxSizer(wxVERTICAL);
 			m_ViewPane = new KxPanel(GetContentWindow(), KxID_NONE);
 			m_ViewPane->SetSizer(m_Sizer);
 			PostCreate();
-	
+
 			// List
 			KPCCAssignedConditionalsEditor::Create(controller, m_ViewPane, m_Sizer);
-	
-			AdjustWindow(wxDefaultPosition, wxSize(700, 400));
+
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(700, 400)));
 			//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
 			//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 		}
@@ -295,7 +295,7 @@ namespace Kortex::PackageDesigner
 	KPCCAssignedConditionalsEditorDialog::~KPCCAssignedConditionalsEditorDialog()
 	{
 		IncRef();
-	
+
 		//KProgramOptionSerializer::SaveDataViewLayout(GetView(), m_ViewOptions);
 		//KProgramOptionSerializer::SaveWindowSize(this, m_WindowOptions);
 	}

@@ -81,7 +81,6 @@ namespace Kortex::ModManager
 		view->Bind(KxDataView2::EvtCOLUMN_HEADER_RCLICK, &DisplayModel::OnHeaderContextMenu, this);
 
 		// Drag-and-drop
-		using KxDataView2::DNDOpType;
 		view->EnableDND(std::make_unique<DisplayModelDNDObject>(), DNDOpType::Drag|DNDOpType::Drop);
 
 		view->Bind(KxDataView2::EvtITEM_DRAG, &DisplayModel::OnDragItems, this);

@@ -38,6 +38,9 @@ namespace Kortex::PackageDesigner
 			}
 
 		public:
+			using KxIObject::QueryInterface;
+			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override;
+
 			KPackageProject* GetProject() const
 			{
 				return m_Project.get();

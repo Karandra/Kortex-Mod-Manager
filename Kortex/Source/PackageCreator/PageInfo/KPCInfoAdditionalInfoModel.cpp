@@ -201,8 +201,8 @@ namespace Kortex::PackageDesigner
 	
 			// List
 			KPCInfoAdditionalInfoModel::Create(controller, m_ViewPane, sizer);
-	
-			AdjustWindow(wxDefaultPosition, wxSize(700, 400));
+			
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(700, 400)));
 			//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
 			//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 		}

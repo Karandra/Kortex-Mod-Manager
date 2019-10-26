@@ -184,7 +184,7 @@ namespace Kortex::PackageDesigner
 			// List
 			KPCCConditionalStepsModel::Create(controller, m_ViewPane, sizer);
 	
-			AdjustWindow(wxDefaultPosition, wxSize(900, 500));
+			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(900, 500)));
 			//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
 			//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 		}

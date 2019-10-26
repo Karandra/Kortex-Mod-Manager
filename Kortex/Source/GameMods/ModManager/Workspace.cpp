@@ -918,6 +918,9 @@ namespace Kortex::ModManager
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(m_MainSizer);
 
+		// Initially disabled
+		Disable();
+
 		// Main view
 		m_SplitterLeftRight = new KxSplitterWindow(this, KxID_NONE);
 		m_SplitterLeftRight->SetName("Horizontal");

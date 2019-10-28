@@ -25,14 +25,24 @@ namespace Kortex::VirtualGameFolder
 {
 	void Workspace::OnModSerach(wxCommandEvent& event)
 	{
-		if (m_Model->SetSearchMask(event.GetEventType() == wxEVT_SEARCHCTRL_SEARCH_BTN ? event.GetString() : wxEmptyString))
+		if (m_DisplayModel->SetSearchMask(event.GetEventType() == wxEVT_SEARCHCTRL_SEARCH_BTN ? event.GetString() : wxEmptyString))
 		{
-			m_Model->RefreshItems();
+			m_DisplayModel->RefreshItems();
 		}
 	}
 	void Workspace::OnViewInvalidated(BroadcastEvent& event)
 	{
 		ScheduleReload();
+	}
+	void Workspace::OnBeginReload(BroadcastEvent& event)
+	{
+		Disable();
+		m_DisplayModel->ClearView();
+	}
+	void Workspace::OnEndReload(BroadcastEvent& event)
+	{
+		m_DisplayModel->RefreshItems();
+		Enable();
 	}
 
 	bool Workspace::OnCreateWorkspace()
@@ -40,17 +50,22 @@ namespace Kortex::VirtualGameFolder
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(m_MainSizer);
 
-		m_Model = new DisplayModel();
-		m_Model->Create(this, m_MainSizer);
-		m_Model->RefreshItems();
+		m_DisplayModel = new DisplayModel();
+		m_DisplayModel->Create(this, m_MainSizer);
+		m_DisplayModel->RefreshItems();
 
 		m_SearchBox = new KxSearchBox(this, wxID_NONE);
 		m_SearchBox->Bind(wxEVT_SEARCHCTRL_SEARCH_BTN, &Workspace::OnModSerach, this);
 		m_SearchBox->Bind(wxEVT_SEARCHCTRL_CANCEL_BTN, &Workspace::OnModSerach, this);
 		m_MainSizer->Add(m_SearchBox, 0, wxTOP|wxEXPAND, KLC_VERTICAL_SPACING);
 
+		GetDisplayModelOption().LoadDataViewLayout(m_DisplayModel->GetView());
+
+		// Events
 		m_BroadcastReciever.Bind(ModEvent::EvtVirtualTreeInvalidated, &Workspace::OnViewInvalidated, this);
-		GetDisplayModelOption().LoadDataViewLayout(m_Model->GetView());
+		m_BroadcastReciever.Bind(ModEvent::EvtBeginReload, &Workspace::OnBeginReload, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtEndReload, &Workspace::OnEndReload, this);
+
 		return true;
 	}
 	bool Workspace::OnOpenWorkspace()
@@ -63,14 +78,14 @@ namespace Kortex::VirtualGameFolder
 	}
 	void Workspace::OnReloadWorkspace()
 	{
-		m_Model->RefreshItems();
+		m_DisplayModel->RefreshItems();
 	}
 
 	Workspace::~Workspace()
 	{
 		if (IsCreated())
 		{
-			GetDisplayModelOption().SaveDataViewLayout(m_Model->GetView());
+			GetDisplayModelOption().SaveDataViewLayout(m_DisplayModel->GetView());
 		}
 	}
 

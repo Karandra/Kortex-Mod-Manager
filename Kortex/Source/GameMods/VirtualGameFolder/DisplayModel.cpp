@@ -298,9 +298,7 @@ namespace Kortex::VirtualGameFolder
 
 	void DisplayModel::RefreshItems()
 	{
-		m_IconCache.clear();
-		m_FoundItems.clear();
-		ItemsCleared();
+		ClearView();
 
 		if (!m_SearchMask.IsEmpty())
 		{
@@ -330,6 +328,13 @@ namespace Kortex::VirtualGameFolder
 		// Reset scrolling
 		GetView()->Scroll(0, 0);
 	}
+	void DisplayModel::ClearView()
+	{
+		m_IconCache.clear();
+		m_FoundItems.clear();
+		ItemsCleared();
+	}
+
 	bool DisplayModel::SetSearchMask(const wxString& mask)
 	{
 		return KAux::SetSearchMask(m_SearchMask, mask);

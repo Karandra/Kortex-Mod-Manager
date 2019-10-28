@@ -96,7 +96,8 @@ namespace Kortex::Application
 		// Don't show loading screen if there's a download link or it's secondary process
 		if (!downloadLink && !anotherInstanceRunning)
 		{
-			splashWindow->Create(nullptr, ImageProvider::GetBitmap("kortex-logo"));
+			wxBitmap logo = ImageProvider::GetBitmap("kortex-logo");
+			splashWindow->Create(nullptr, logo, splashWindow->FromDIP(logo.GetSize()));
 			splashWindow->Show();
 		}
 		

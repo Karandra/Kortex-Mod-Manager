@@ -92,7 +92,8 @@ namespace
 		ColorReset,
 	};
 
-	template<class Functor> bool DoForAllSelectedItems(const IGameMod::RefVector& selectedMods, Functor&& func)
+	template<class TFunction>
+	bool DoForAllSelectedItems(const IGameMod::RefVector& selectedMods, TFunction&& func)
 	{
 		if (!selectedMods.empty())
 		{
@@ -381,8 +382,6 @@ namespace Kortex::ModManager
 
 		// Controls
 		m_RightPaneSizer = new wxBoxSizer(wxHORIZONTAL);
-		m_RightPaneSizer->SetMinSize(FromDIP(wxSize(wxDefaultCoord, KBitmapSize().FromSystemIcon().GetHeight() + 4)));
-
 		CreateRightPaneProgramList();
 		mainSizer->AddSpacer(1);
 		mainSizer->Add(m_RightPaneSizer, 0, wxEXPAND|wxLEFT|wxBOTTOM|wxRIGHT, KLC_VERTICAL_SPACING);
@@ -394,16 +393,14 @@ namespace Kortex::ModManager
 	{
 		m_RightPane_Programs = new KxBitmapComboBox(m_RightPaneWindow, KxID_NONE);
 		m_RightPane_Programs->SetImageList(&ImageProvider::GetImageList());
-		m_RightPane_Programs->SetMinSize(m_RightPaneSizer->GetMinSize());
 		m_RightPane_Programs->SetDefaultBitmapSize(KBitmapSize().FromSystemIcon().GetSize());
 		m_RightPane_Programs->Bind(wxEVT_COMBOBOX, &Workspace::OnSelectProgram, this);
 		m_RightPaneSizer->Add(m_RightPane_Programs, 1, wxEXPAND);
 
 		m_RightPane_RunProgram = new KxButton(m_RightPaneWindow, KxID_NONE, KTr("Generic.Run"));
 		m_RightPane_RunProgram->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ControlRight));
-		m_RightPane_RunProgram->SetMinSize(m_RightPaneSizer->GetMinSize());
 		m_RightPane_RunProgram->Bind(KxEVT_BUTTON, &Workspace::OnRunButton, this);
-		m_RightPaneSizer->Add(m_RightPane_RunProgram, 0, wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
+		m_RightPaneSizer->Add(m_RightPane_RunProgram, 0, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING_SMALL);
 	}
 
 	bool Workspace::ShowChangeModIDDialog(IGameMod& mod)
@@ -677,7 +674,9 @@ namespace Kortex::ModManager
 		m_RightPane_Programs->ProcessWindowEvent(selectEvent);
 
 		// Layout controls and make button height the same as combobox
-		m_RightPane_RunProgram->SetMinSize(wxSize(wxDefaultCoord, m_RightPane_Programs->GetBestSize().GetHeight()));
+		const wxSize size = wxSize(wxDefaultCoord, m_RightPane_Programs->GetSize().GetHeight());
+		m_RightPane_RunProgram->SetMinSize(size);
+		m_RightPane_RunProgram->SetMaxSize(size);
 	}
 	void Workspace::OnSelectProgram(wxCommandEvent& event)
 	{

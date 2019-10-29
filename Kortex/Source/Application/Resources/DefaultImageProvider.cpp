@@ -34,7 +34,7 @@ namespace Kortex::Application
 		{
 			wxSize targetSize = m_ImageList.GetSize();
 			wxImage image = bitmap.ConvertToImage();
-			image.Rescale(targetSize.GetWidth(), targetSize.GetHeight(), wxImageResizeQuality::wxIMAGE_QUALITY_HIGH);
+			image.Rescale(targetSize.GetWidth(), targetSize.GetHeight(), wxImageResizeQuality::wxIMAGE_QUALITY_NORMAL);
 			bitmap = wxBitmap(image, 32);
 		}
 	}

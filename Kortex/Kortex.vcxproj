@@ -883,7 +883,9 @@
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
     <Manifest>
-      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </Manifest>
     <PreBuildEvent>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
@@ -924,7 +926,9 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
     <Manifest>
-      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </Manifest>
     <PreBuildEvent>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
@@ -977,7 +981,9 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
     <Manifest>
-      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </Manifest>
     <PreBuildEvent>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"
@@ -1024,7 +1030,9 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
     <Manifest>
-      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </Manifest>
     <PreBuildEvent>
       <Command>echo LR^"==( &gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"

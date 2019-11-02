@@ -50,7 +50,7 @@ namespace Kortex::Notifications
 
 		// Toolbar
 		m_PpoupToolbar = new KxAuiToolBar(m_PopupWindow, KxID_NONE);
-		m_PpoupToolbar->SetMargins(KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING);
+		m_PpoupToolbar->SetMargins(m_PopupWindow->FromDIP(KLC_HORIZONTAL_SPACING), m_PopupWindow->FromDIP(KLC_VERTICAL_SPACING));
 		m_PpoupToolbar_Label = m_PpoupToolbar->AddLabel(wxEmptyString);
 		m_PpoupToolbar->AddStretchSpacer();
 		

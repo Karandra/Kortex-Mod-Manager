@@ -68,8 +68,8 @@ namespace Kortex::Application
 			}
 
 			KxAuiToolBar* toolBar = new KxAuiToolBar(this, KxID_NONE, flags);
-			toolBar->SetToolBorderPadding(KLC_HORIZONTAL_SPACING_SMALL);
-			toolBar->SetMargins(KLC_HORIZONTAL_SPACING, KLC_HORIZONTAL_SPACING, KLC_VERTICAL_SPACING, KLC_VERTICAL_SPACING + 1);
+			toolBar->SetToolBorderPadding(FromDIP(KLC_HORIZONTAL_SPACING_SMALL));
+			toolBar->SetMargins(FromDIP(KLC_HORIZONTAL_SPACING), FromDIP(KLC_HORIZONTAL_SPACING), FromDIP(KLC_VERTICAL_SPACING), FromDIP(KLC_VERTICAL_SPACING + 1));
 			IThemeManager::GetActive().Apply(toolBar);
 
 			m_ToolBarSizer->Add(toolBar, proportion, wxEXPAND);

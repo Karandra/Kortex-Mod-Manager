@@ -7,6 +7,7 @@
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxImageList.h>
 #include <KxFramework/KxImageSet.h>
+#include <KxFramework/KxDPIAwareness.h>
 
 namespace Kortex
 {
@@ -49,6 +50,8 @@ namespace Kortex::Application
 			std::unique_ptr<KProgramModule> m_ProgramModule;
 			std::unique_ptr<NetworkModule> m_NetworkModule;
 			std::unique_ptr<IVFSService> m_VFSService;
+
+			std::unique_ptr<KxDPIAwareness::ThreadContextChanger> m_ThreadDPIContext;
 
 		public:
 			DefaultApplication();

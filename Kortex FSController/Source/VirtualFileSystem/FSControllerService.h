@@ -25,9 +25,9 @@ namespace Kortex::VirtualFileSystem
 			KxVFS::FileLogger m_Logger;
 
 		private:
-			void OnMessage(const IPC::Message& message);
 			IPC::FSHandle CreateFS(IPC::FileSystemID fileSystemID);
 			void DestroyFS(KxVFS::IFileSystem& fileSystem);
+			void OnMessage(const IPC::Message& message);
 
 		protected:
 			void RegisterFS(IVirtualFileSystem& fileSystem) override

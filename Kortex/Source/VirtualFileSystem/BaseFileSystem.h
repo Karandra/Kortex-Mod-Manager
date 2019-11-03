@@ -23,7 +23,7 @@ namespace Kortex::VirtualFileSystem
 			IPC::FSHandle GetHandle() const override;
 
 			bool IsEnabled() const override;
-			void Enable() override;
+			bool Enable() override;
 			void Disable() override;
 
 		public:

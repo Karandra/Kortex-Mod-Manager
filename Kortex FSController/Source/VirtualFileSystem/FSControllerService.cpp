@@ -75,6 +75,33 @@ namespace
 
 namespace Kortex::VirtualFileSystem
 {
+	IPC::FSHandle FSControllerService::CreateFS(IPC::FileSystemID fileSystemID)
+	{
+		switch (fileSystemID)
+		{
+			case FileSystemID::Mirror:
+			{
+				return GetFileSystemHandle(*m_FileSystems.emplace_back(std::make_unique<Mirror>()));
+			}
+			case FileSystemID::MultiMirror:
+			{
+				return GetFileSystemHandle(*m_FileSystems.emplace_back(std::make_unique<MultiMirror>()));
+			}
+			case FileSystemID::Convergence:
+			{
+				return GetFileSystemHandle(*m_FileSystems.emplace_back(std::make_unique<Convergence>()));
+			}
+		}
+		return 0;
+	}
+	void FSControllerService::DestroyFS(KxVFS::IFileSystem& fileSystem)
+	{
+		auto it = std::find_if(m_FileSystems.begin(), m_FileSystems.end(), [&fileSystem](const auto& value)
+		{
+			return &fileSystem == value.get();
+		});
+		m_FileSystems.erase(it);
+	}
 	void FSControllerService::OnMessage(const IPC::Message& message)
 	{
 		switch (message.GetRequestID())
@@ -280,33 +307,6 @@ namespace Kortex::VirtualFileSystem
 				break;
 			}
 		};
-	}
-	IPC::FSHandle FSControllerService::CreateFS(IPC::FileSystemID fileSystemID)
-	{
-		switch (fileSystemID)
-		{
-			case FileSystemID::Mirror:
-			{
-				return GetFileSystemHandle(*m_FileSystems.emplace_back(std::make_unique<Mirror>()));
-			}
-			case FileSystemID::MultiMirror:
-			{
-				return GetFileSystemHandle(*m_FileSystems.emplace_back(std::make_unique<MultiMirror>()));
-			}
-			case FileSystemID::Convergence:
-			{
-				return GetFileSystemHandle(*m_FileSystems.emplace_back(std::make_unique<Convergence>()));
-			}
-		}
-		return 0;
-	}
-	void FSControllerService::DestroyFS(KxVFS::IFileSystem& fileSystem)
-	{
-		auto it = std::find_if(m_FileSystems.begin(), m_FileSystems.end(), [&fileSystem](const auto& value)
-		{
-			return &fileSystem == value.get();
-		});
-		m_FileSystems.erase(it);
 	}
 
 	FSControllerService::FSControllerService()

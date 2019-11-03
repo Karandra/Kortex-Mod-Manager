@@ -225,6 +225,7 @@ namespace Kortex::ModManager
 			void OnDisplayModeMenu(KxAuiToolBarEvent& event);
 			void OnToolsMenu(KxAuiToolBarEvent& event);
 			void OnMainFSToggled(VirtualFSEvent& event);
+			void OnMainFSToggleError(VirtualFSEvent& event);
 			void OnProfileSelected(ProfileEvent& event);
 			void OnRunButton(wxCommandEvent& event);
 			void OnUpdateProgramsList(ProgramEvent& event);

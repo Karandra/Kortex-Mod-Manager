@@ -117,7 +117,6 @@ namespace Kortex::ModManager
 			void ProcessEraseMod(IGameMod& mod);
 			void ProcessUninstallMod(IGameMod& mod);
 
-			void OnMountPointError(const KxStringVector& locations);
 			void OnUpdateModLayoutNeeded(ModEvent& event);
 			void OnModLayoutSaveNeeded(ModEvent& event);
 			void OnProfileSelected(ProfileEvent& event);

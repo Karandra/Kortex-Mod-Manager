@@ -609,6 +609,39 @@ namespace Kortex::ModManager
 			m_QueuedProgram = nullptr;
 		}
 	}
+	void Workspace::OnMainFSToggleError(VirtualFSEvent& event)
+	{
+		OnMainFSToggled(event);
+
+		switch (event.GetErrorType())
+		{
+			case VirtualFSEvent::Error::NonEmptyMountPoint:
+			{
+				KxTaskDialog dialog(this, KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
+				dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
+				dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
+
+				wxString message;
+				for (const wxString& path: event.GetMountPoints())
+				{
+					message += KxString::Format(wxS("<a href=\"%1\">%2</a>\r\n"), path, path);
+				}
+				dialog.SetExMessage(message);
+
+				dialog.Bind(wxEVT_TEXT_URL, [&dialog](wxTextUrlEvent& event)
+				{
+					KxShell::Execute(&dialog, event.GetString(), wxS("open"));
+				});
+				dialog.ShowModal();
+				break;
+			}
+			case VirtualFSEvent::Error::Unknown:
+			{
+				INotificationCenter::Notify(KTr("VFS.Caption"), KTr("VFS.MountFailed"), KxICON_ERROR);
+				break;
+			}
+		};
+	}
 	void Workspace::OnProfileSelected(ProfileEvent& event)
 	{
 		ReloadView();
@@ -933,7 +966,7 @@ namespace Kortex::ModManager
 
 		// Events
 		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggled, &Workspace::OnMainFSToggled, this);
-		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggleError, &Workspace::OnMainFSToggled, this);
+		m_BroadcastReciever.Bind(VirtualFSEvent::EvtMainToggleError, &Workspace::OnMainFSToggleError, this);
 		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &Workspace::OnProfileSelected, this);
 
 		m_BroadcastReciever.Bind(ProgramEvent::EvtAdded, &Workspace::OnUpdateProgramsList, this);

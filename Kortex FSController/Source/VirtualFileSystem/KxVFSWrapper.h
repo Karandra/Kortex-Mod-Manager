@@ -52,9 +52,9 @@ namespace Kortex::VirtualFileSystem
 			{
 				return TBase::IsMounted();
 			}
-			void Enable() override
+			bool Enable() override
 			{
-				TBase::Mount();
+				return TBase::Mount().IsSuccess();
 			}
 			void Disable() override
 			{

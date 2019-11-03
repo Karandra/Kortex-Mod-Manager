@@ -31,7 +31,7 @@ namespace Kortex
 			virtual IPC::FSHandle GetHandle() const = 0;
 
 			virtual bool IsEnabled() const = 0;
-			virtual void Enable() = 0;
+			virtual bool Enable() = 0;
 			virtual void Disable() = 0;
 	};
 }

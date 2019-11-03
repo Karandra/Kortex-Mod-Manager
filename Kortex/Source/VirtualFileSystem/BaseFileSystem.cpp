@@ -28,9 +28,9 @@ namespace Kortex::VirtualFileSystem
 	{
 		return m_Controller.Send(RequestID::FSIsEnabled, m_Handle).GetAs<bool>();
 	}
-	void BaseFileSystem::Enable()
+	bool BaseFileSystem::Enable()
 	{
-		m_Controller.Send(RequestID::FSEnable, m_Handle);
+		return m_Controller.Send(RequestID::FSEnable, m_Handle).GetAs<int>() == 0;
 	}
 	void BaseFileSystem::Disable()
 	{

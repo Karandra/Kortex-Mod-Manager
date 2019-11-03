@@ -123,27 +123,6 @@ namespace Kortex::ModManager
 		}
 	}
 
-	void DefaultModManager::OnMountPointError(const KxStringVector& locations)
-	{
-		BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtMainToggleError, m_FileSystem, false);
-
-		KxTaskDialog dialog(Workspace::GetInstance(), KxID_NONE, KTr("VFS.MountPointNotEmpty.Caption"), KTr("VFS.MountPointNotEmpty.Message"), KxBTN_OK, KxICON_ERROR);
-		dialog.SetOptionEnabled(KxTD_HYPERLINKS_ENABLED);
-		dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
-
-		wxString message;
-		for (const wxString& path: locations)
-		{
-			message += KxString::Format(wxS("<a href=\"%1\">%2</a>\r\n"), path, path);
-		}
-		dialog.SetExMessage(message);
-
-		dialog.Bind(wxEVT_TEXT_URL, [&dialog](wxTextUrlEvent& event)
-		{
-			KxShell::Execute(&dialog, event.GetString(), wxS("open"));
-		});
-		dialog.ShowModal();
-	}
 	void DefaultModManager::OnUpdateModLayoutNeeded(ModEvent& event)
 	{
 		if (IGameMod* mod = event.GetMod())

@@ -229,7 +229,7 @@ namespace Kortex::ModManager
 	{
 		return m_IsEnabled;
 	}
-	void MainFileSystem::Enable()
+	bool MainFileSystem::Enable()
 	{
 		if (!m_IsEnabled)
 		{
@@ -261,15 +261,38 @@ namespace Kortex::ModManager
 							m_InstancesCountTotal = GetInstancesCount();
 
 							// Mount all
-							m_Convergence->Enable();
-							for (auto& vfs: m_Mirrors)
+							bool isSuccess = m_Convergence->Enable();
+							if (isSuccess)
 							{
-								vfs->Enable();
+								for (auto& vfs: m_Mirrors)
+								{
+									isSuccess = vfs->Enable();
+									if (!isSuccess)
+									{
+										break;
+									}
+								}
+							}
+
+							// In case of error disable all already enabled file systems
+							if (!isSuccess)
+							{
+								m_Convergence->Disable();
+								for (auto& vfs: m_Mirrors)
+								{
+									vfs->Disable();
+								}
+
+								BroadcastProcessor::Get().QueueEvent(VirtualFSEvent::EvtMainToggleError, *this, false, VirtualFSEvent::Error::Unknown);
 							}
 						}
 						else
 						{
-							m_Manager.OnMountPointError(nonEmptyMountPoints);
+							BroadcastProcessor::Get().QueueEventEx(VirtualFSEvent::EvtMainToggleError, *this, false).On([&](VirtualFSEvent& event)
+							{
+								event.SetError(VirtualFSEvent::Error::NonEmptyMountPoint);
+								event.SetMountPoints(std::move(nonEmptyMountPoints));
+							});
 						}
 
 						return KxCoroutine::YieldWait(wxTimeSpan::Milliseconds(100), State::HideDialog);
@@ -282,7 +305,9 @@ namespace Kortex::ModManager
 				};
 				return KxCoroutine::YieldStop();
 			});
+			return true;
 		}
+		return false;
 	}
 	void MainFileSystem::Disable()
 	{

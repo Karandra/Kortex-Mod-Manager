@@ -85,7 +85,7 @@ namespace Kortex::ModManager
 			}
 
 			bool IsEnabled() const override;
-			void Enable() override;
+			bool Enable() override;
 			void Disable() override;
 	};
 }

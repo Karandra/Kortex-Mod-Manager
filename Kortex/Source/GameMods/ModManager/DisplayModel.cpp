@@ -12,6 +12,7 @@
 #include "UI/ImageViewerDialog.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
+#include <KxFramework/KxUxTheme.h>
 
 namespace Kortex::ModManager
 {
@@ -70,7 +71,7 @@ namespace Kortex::ModManager
 
 		// UI
 		m_PriorityGroupRowHeight = view->GetUniformRowHeight() * 1.1;
-		m_PriortyGroupColor = KxUtility::GetThemeColor_Caption(GetView());
+		m_PriortyGroupColor = KxUxTheme::GetDialogMainInstructionColor(*GetView());
 		
 		// Events
 		view->Bind(KxDataView2::EvtITEM_SELECTED, &DisplayModel::OnSelectItem, this);

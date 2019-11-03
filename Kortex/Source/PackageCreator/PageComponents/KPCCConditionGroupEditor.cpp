@@ -10,6 +10,7 @@
 #include <KxFramework/KxComboBox.h>
 #include <KxFramework/KxDataViewComboBox.h>
 #include <KxFramework/KxTaskDialog.h>
+#include <KxFramework/KxUxTheme.h>
 
 namespace
 {
@@ -58,7 +59,7 @@ namespace Kortex::PackageDesigner
 	
 		RefreshItems();
 		SetDataViewFlags(KxDV_NO_TIMEOUT_EDIT|KxDV_MODEL_ROW_HEIGHT);
-		m_ConditionColor = KxUtility::GetThemeColor_Caption(GetView());
+		m_ConditionColor = KxUxTheme::GetDialogMainInstructionColor(*GetView());
 	}
 	
 	bool KPCCConditionGroupEditor::IsContainer(const KxDataViewItem& item) const

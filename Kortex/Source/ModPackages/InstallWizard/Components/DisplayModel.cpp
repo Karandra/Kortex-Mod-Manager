@@ -5,6 +5,7 @@
 #include "PackageCreator/KPackageCreatorPageBase.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
+#include <KxFramework/KxUxTheme.h>
 
 using namespace Kortex::PackageDesigner;
 namespace
@@ -88,7 +89,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 				{
 					case ColumnRef::Name:
 					{
-						attibutes.SetForegroundColor(KxUtility::GetThemeColor_Caption(GetView()));
+						attibutes.SetForegroundColor(KxUxTheme::GetDialogMainInstructionColor(*GetView()));
 						attibutes.SetBold(true);
 						return true;
 					}

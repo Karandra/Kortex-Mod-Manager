@@ -3,6 +3,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/Notification.hpp>
 #include <KxFramework/KxTaskDialog.h>
+#include <KxFramework/KxUxTheme.h>
 using namespace KxDataView2;
 
 namespace
@@ -120,7 +121,7 @@ namespace Kortex::Notifications
 	wxString DisplayModel::FormatText(const INotification& notification) const
 	{
 		return KxString::Format(wxS("<font color='%1'>%2</font>\r\n%3"),
-								KxUtility::GetThemeColor_Caption(GetView()).ToString(KxColor::C2S::HTML),
+								KxUxTheme::GetDialogMainInstructionColor(*GetView()).ToString(KxColor::C2S::HTML),
 								notification.GetCaption(),
 								notification.GetMessage()
 		);

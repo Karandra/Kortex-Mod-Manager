@@ -276,10 +276,15 @@ namespace Kortex::ModManager
 
 				m_ModsLoaderThread->CallAfter([processed, total = allMods.size()]()
 				{
-					IMainWindow& mainWindow = *IMainWindow::GetInstance();
-					mainWindow.SetStatusProgress(processed, total);
+					IMainWindow::GetInstance()->SetStatusProgress(processed, total);
 				});
 			}
+
+			// Reset progress
+			m_ModsLoaderThread->CallAfter([processed, total = allMods.size()]()
+			{
+				IMainWindow::GetInstance()->SetStatusProgress(0);
+			});
 		});
 		m_ModsLoaderThread->Bind(KxThreadEvent::EvtFinished, [this](KxThreadEvent& event)
 		{

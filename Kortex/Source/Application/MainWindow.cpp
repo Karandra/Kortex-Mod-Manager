@@ -116,9 +116,11 @@ namespace Kortex::Application
 	}
 	void MainWindow::CreateStatusBar()
 	{
+		const int iconWidth = KBitmapSize().FromSystemSmallIcon().GetWidth();
+
 		m_StatusBar = new KxStatusBarEx(this, KxID_NONE, 5);
 		m_StatusBar->SetImageList(&ImageProvider::GetImageList());
-		m_StatusBar->SetStatusWidths({12, -3, -3, -1, 50});
+		m_StatusBar->SetStatusWidths({iconWidth, -3, -3, -1, FromDIP(50)});
 		SetStatusBar(m_StatusBar);
 	}
 	void MainWindow::CreateBaseLayout()

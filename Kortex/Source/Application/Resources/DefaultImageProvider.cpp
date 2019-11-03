@@ -7,13 +7,9 @@
 
 namespace
 {
-	int GetIconWidth()
+	wxSize GetIconSIze()
 	{
-		return KBitmapSize().FromSystemSmallIcon().GetWidth();
-	}
-	int GetIconHeight()
-	{
-		return KBitmapSize().FromSystemSmallIcon().GetHeight();
+		return KBitmapSize().FromSystemSmallIcon();
 	}
 	int GetIconCount()
 	{
@@ -50,7 +46,7 @@ namespace Kortex::Application
 		}
 
 		// Add empty transparent icon
-		if (wxImage nullIcon({GetIconWidth(), GetIconHeight()}, true); true)
+		if (wxImage nullIcon(GetIconSIze(), true); true)
 		{
 			nullIcon.InitAlpha();
 			memset(nullIcon.GetAlpha(), 0, (size_t)nullIcon.GetWidth() * (size_t)nullIcon.GetHeight());
@@ -280,7 +276,7 @@ namespace Kortex::Application
 	}
 
 	DefaultImageProvider::DefaultImageProvider()
-		:m_ImageList(GetIconWidth(), GetIconHeight(), false, GetIconCount()), m_ImageSet(GetIconCount())
+		:m_ImageList(GetIconSIze(), GetIconCount()), m_ImageSet(GetIconCount())
 	{
 	}
 }

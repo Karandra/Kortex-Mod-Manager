@@ -126,7 +126,7 @@ namespace Kortex::GameInstance
 	void SelectionDialog::LoadGameFilter(const GameID& gameID)
 	{
 		KBitmapSize bitmapSize = KBitmapSize().FromSystemIcon();
-		m_GameFilterImageList = new KxImageList(bitmapSize.GetWidth(), bitmapSize.GetHeight(), false, IGameInstance::GetTemplatesCount());
+		m_GameFilterImageList = new KxImageList(bitmapSize, IGameInstance::GetTemplatesCount());
 		m_GameFilter->AssignImageList(m_GameFilterImageList);
 
 		int imageID = m_GameFilterImageList->Add(IGameInstance::GetGenericIcon());

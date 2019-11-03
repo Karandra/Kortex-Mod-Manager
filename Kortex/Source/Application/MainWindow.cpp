@@ -79,7 +79,7 @@ namespace Kortex::Application
 		// Main ToolBar
 		m_ToolBar = NewToolBar(1, true);
 		{
-			m_ToolBar_MainMenu = m_ToolBar->AddTool(wxString::Format("%8s%s%8s", "", "Kortex", ""), ImageProvider::GetBitmap(ImageResourceID::KortexLogoSmall), wxITEM_DROPDOWN);
+			m_ToolBar_MainMenu = m_ToolBar->AddTool(wxString::Format("%8s%s%8s", "", "Kortex", ""), wxNullBitmap, wxITEM_DROPDOWN);
 			m_ToolBar_MainMenu->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 			m_ToolBar_MainMenu->Bind(KxEVT_AUI_TOOLBAR_CLICK, [this](KxAuiToolBarEvent& evnt)
 			{
@@ -90,6 +90,11 @@ namespace Kortex::Application
 				wxPoint pos = m_ToolBar_MainMenu->GetDropdownMenuPosition(&alignment);
 				menu.Show(m_ToolBar, pos, alignment);
 			});
+
+			wxImage icon = ImageProvider::GetImage(wxS("kortex-logo"));
+			wxSize size = KBitmapSize().FromSystemSmallIcon();
+			size.Scale(1.15, 1.15);
+			m_ToolBar_MainMenu->SetBitmap(icon.Rescale(size.GetWidth(), size.GetHeight(), wxIMAGE_QUALITY_HIGH));
 
 			m_ToolBar_InsertionIndex = m_ToolBar->AddSeparator()->GetIndex();
 		}

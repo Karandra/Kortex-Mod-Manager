@@ -16,41 +16,6 @@ namespace
 	using namespace Kortex;
 	using namespace Kortex::IPC;
 
-	wxString GetDriverPath()
-	{
-		const auto app = FSController::Application::GetInstance();
-
-		wxString path = app->GetDataFolder() + wxS("\\VFS\\Drivers\\");
-		if (KxSystem::IsWindows10OrGreater())
-		{
-			path += wxS("Win10");
-		}
-		else if (KxSystem::IsWindows8Point1OrGreater())
-		{
-			path += wxS("Win8.1");
-		}
-		else if (KxSystem::IsWindows8OrGreater())
-		{
-			path += wxS("Win8");
-		}
-		else
-		{
-			path += wxS("Win7");
-		}
-
-		if (KxSystem::Is64Bit())
-		{
-			path += wxS(" x64");
-		}
-		path += wxS("\\dokan2.sys");
-
-		KxFile filePath(path);
-		if (filePath.IsFileExist())
-		{
-			return filePath.GetFullPath();
-		}
-		return wxEmptyString;
-	}
 	wxString GetLogPath()
 	{
 		const auto app = FSController::Application::GetInstance();
@@ -63,13 +28,13 @@ namespace
 		return path + wxS(".log");
 	}
 	
+	KxVFS::KxDynamicStringW GetDriverPath()
+	{
+		return KxVFS::FileSystemService::GetDokanyDefaultDriverPath();
+	}
 	KxVFS::KxDynamicStringW GetServiceName()
 	{
-		if (KxVFS::FileSystemService::IsDokanyDefaultInstallPresent())
-		{
-			return KxVFS::FileSystemService::GetDokanyDefaultServiceName();
-		}
-		return L"KortexVFS";
+		return KxVFS::FileSystemService::GetDokanyDefaultServiceName();
 	}
 }
 
@@ -321,21 +286,12 @@ namespace Kortex::VirtualFileSystem
 
 	bool FSControllerService::Install()
 	{
-		if (FileSystemService::IsDokanyDefaultInstallPresent())
+		if (!FileSystemService::IsDokanyDefaultInstallPresent())
 		{
-			return true;
+			return FileSystemService::Install(GetDriverPath(), wxS("Dokany File System Driver"), wxS("Dokan kernel-mode file system driver"));
+			
 		}
-		else
-		{
-			const constexpr wxChar name[] = wxS("Kortex Mod Manager");
-			const wxString displayName = KxString::Format("%1 Virtual File System Service", name);
-			const wxString description = KxString::Format("The VFS service provides support for the virtual file system for %1", name);
-
-			return FileSystemService::Install(ToKxDynamicStringRef(GetDriverPath()),
-											  ToKxDynamicStringRef(displayName),
-											  ToKxDynamicStringRef(description)
-			);
-		}
+		return true;
 	}
 	bool FSControllerService::Uninstall()
 	{

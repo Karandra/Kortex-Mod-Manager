@@ -47,14 +47,6 @@ namespace
 		GetCmdArgIntValue(parser, "PID", pid);
 		return pid;
 	}
-	wxString GetLibrary(const wxCmdLineParser& parser)
-	{
-		if (wxString value; parser.Found(wxS("Library"), &value) && !value.IsEmpty())
-		{
-			return value;
-		}
-		return wxS("Release");
-	}
 }
 
 namespace Kortex::FSController
@@ -94,9 +86,8 @@ namespace Kortex::FSController
 
 		const HWND windowHandle = GetMainAppWindow(parser);
 		const DWORD pid = GetMainAppProcessID(parser);
-		const wxString library = GetLibrary(parser);
 
-		if (windowHandle != nullptr && pid != 0 && m_Library.Load(GetLibraryPath(library)))
+		if (windowHandle != nullptr && pid != 0)
 		{
 			if (m_MainApp = std::make_unique<MainApplicationLink>(windowHandle); m_MainApp->IsOK())
 			{
@@ -177,9 +168,9 @@ namespace Kortex::FSController
 		ExitApp(std::numeric_limits<int>::min());
 	}
 	
-	wxString Application::GetLibraryPath(const wxString& libraryType) const
+	wxString Application::GetLibraryPath() const
 	{
-		wxString path = m_DataFolder + wxS("\\VFS\\Library\\") + libraryType + wxS("\\KxVirtualFileSystem");
+		wxString path = m_RootFolder + wxS("\\KxVirtualFileSystem");
 
 		#if defined _WIN64
 		path += wxS(" x64");

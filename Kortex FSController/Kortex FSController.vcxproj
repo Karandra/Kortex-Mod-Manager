@@ -183,7 +183,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxVirtualFileSystem\Build\Release;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
-      <DelayLoadDLLs>KxVirtualFileSystem x64.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(SolutionDir)Kortex\Bin\$(TargetName)$(TargetExt)"</Command>
@@ -202,7 +203,8 @@
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxVirtualFileSystem\Build\Release;$(SolutionDir)..\wxWidgets\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
-      <DelayLoadDLLs>KxVirtualFileSystem.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(SolutionDir)Kortex\Bin\$(TargetName)$(TargetExt)"</Command>
@@ -221,7 +223,8 @@
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxVirtualFileSystem\Build\Release;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
-      <DelayLoadDLLs>KxVirtualFileSystem x64.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(SolutionDir)Kortex\Bin\$(TargetName)$(TargetExt)"</Command>
@@ -247,7 +250,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxVirtualFileSystem\Build\Release;$(SolutionDir)..\wxWidgets\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
-      <DelayLoadDLLs>KxVirtualFileSystem.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(SolutionDir)Kortex\Bin\$(TargetName)$(TargetExt)"</Command>

@@ -62,15 +62,15 @@ namespace Kortex::VirtualFileSystem
 			}
 
 		protected:
-			NTSTATUS OnMount(KxVFS::EvtMounted& eventInfo) override
+			KxVFS::NtStatus OnMount(KxVFS::EvtMounted& eventInfo) override
 			{
-				const NTSTATUS status = TBase::OnMount(eventInfo);
+				const KxVFS::NtStatus status = TBase::OnMount(eventInfo);
 				OnEnabled();
 				return status;
 			}
-			NTSTATUS OnUnMount(KxVFS::EvtUnMounted& eventInfo) override
+			KxVFS::NtStatus OnUnMount(KxVFS::EvtUnMounted& eventInfo) override
 			{
-				const NTSTATUS status = TBase::OnUnMount(eventInfo);
+				const KxVFS::NtStatus status = TBase::OnUnMount(eventInfo);
 				OnDisabled();
 				return status;
 			}

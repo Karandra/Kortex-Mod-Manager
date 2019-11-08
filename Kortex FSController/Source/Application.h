@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include <KxFramework/KxApp.h>
 #include <KxFramework/KxProcess.h>
-#include <KxFramework/KxLibrary.h>
 
 namespace Kortex::VirtualFileSystem
 {
@@ -17,8 +16,6 @@ namespace Kortex::FSController
 	class Application: public KxApp<wxApp, Application>
 	{
 		private:
-			KxLibrary m_Library;
-
 			wxString m_RootFolder;
 			wxString m_DataFolder;
 			wxString m_LogFolder;
@@ -55,6 +52,6 @@ namespace Kortex::FSController
 			{
 				return m_LogFolder;
 			}
-			wxString GetLibraryPath(const wxString& libraryType) const;
+			wxString GetLibraryPath() const;
 	};
 }

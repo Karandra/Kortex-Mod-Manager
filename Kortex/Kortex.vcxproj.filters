@@ -1281,6 +1281,9 @@
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramItem.cpp">
       <Filter>Code\Source\Programs\ProgramManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\ProgressOverlay.cpp">
+      <Filter>Code\Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2422,6 +2425,9 @@
     </ClInclude>
     <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramItem.h">
       <Filter>Code\Headers\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\ProgressOverlay.h">
+      <Filter>Code\Headers\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -398,20 +398,32 @@ namespace Kortex::Application
 
 	void MainWindow::ClearStatus(int index)
 	{
-		m_StatusBar->SetStatusText(wxEmptyString, index + 1);
-		m_StatusBar->SetStatusImage(-1, index + 1);
+		if (m_StatusBar)
+		{
+			m_StatusBar->SetStatusText(wxEmptyString, index + 1);
+			m_StatusBar->SetStatusImage(-1, index + 1);
+		}
 	}
 	void MainWindow::SetStatus(const wxString& label, int index, const ResourceID& image)
 	{
-		m_StatusBar->SetStatusText(label, index + 1);
-		m_StatusBar->SetStatusImage(image.AsInt(), index + 1);
+		if (m_StatusBar)
+		{
+			m_StatusBar->SetStatusText(label, index + 1);
+			m_StatusBar->SetStatusImage(image.AsInt(), index + 1);
+		}
 	}
 	void MainWindow::SetStatusProgress(int current)
 	{
-		m_StatusBar->SetValue(current);
+		if (m_StatusBar)
+		{
+			m_StatusBar->SetValue(current);
+		}
 	}
 	void MainWindow::SetStatusProgress(int64_t current, int64_t total)
 	{
-		m_StatusBar->SetValue(current, total);
+		if (m_StatusBar)
+		{
+			m_StatusBar->SetValue(current, total);
+		}
 	}
 }

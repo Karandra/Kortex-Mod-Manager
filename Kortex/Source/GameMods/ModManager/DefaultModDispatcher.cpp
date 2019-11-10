@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "DefaultModDispatcher.h"
+#include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include "Utility/KAux.h"
 #include "Utility/Log.h"
+#include "UI/ProgressOverlay.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileFinder.h>
 #include <chrono>
@@ -178,6 +180,8 @@ namespace Kortex::ModManager
 	}
 	void DefaultModDispatcher::UpdateVirtualTree()
 	{
+		UI::ProgressOverlay status;
+
 		const IGameMod::RefVector mods = IModManager::GetInstance()->GetMods(GetModsFlags::Everything|GetModsFlags::ActiveOnly);
 		m_VirtualTree.ClearChildren();
 
@@ -206,10 +210,23 @@ namespace Kortex::ModManager
 		}
 		else
 		{
+			size_t processed = 0;
+			size_t total = 0;
+			auto NotifyProgress = [&](size_t processedInc, size_t totalInc = 0)
+			{
+				processed += processedInc;
+				total += totalInc;
+
+				status.UpdateProgress(processed, total);
+			};
+
 			// Iterational (sequential)
 			// Build top level
-			FileTreeNode::RefVector directories;
+			NotifyProgress(0, 0);
+
+			FileTreeNode::RefVector directories; 
 			BuildTreeBranch(mods, m_VirtualTree.GetChildren(), &m_VirtualTree, directories);
+			NotifyProgress(directories.size(), directories.size());
 
 			// Build subdirectories
 			while (!directories.empty())
@@ -220,10 +237,14 @@ namespace Kortex::ModManager
 				for (FileTreeNode* node: directories)
 				{
 					BuildTreeBranch(mods, node->GetChildren(), node, roundDirectories);
+					NotifyProgress(1, 0);
 				}
+
 				directories = std::move(roundDirectories);
+				NotifyProgress(0, directories.size());
 			}
 		}
+
 		Utility::Log::LogInfo("DefaultModDispatcher::UpdateVirtualTree: %1 ms", (GetClockTime() - startTime).GetMilliseconds().GetValue());
 	}
 

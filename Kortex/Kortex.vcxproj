@@ -283,6 +283,7 @@
     <ClCompile Include="Source\Programs\ProgramManager\ProgramEditorDialog.cpp" />
     <ClCompile Include="Source\Programs\ProgramManager\Workspace.cpp" />
     <ClCompile Include="Source\Programs\ProgramsModule.cpp" />
+    <ClCompile Include="Source\UI\ProgressOverlay.cpp" />
     <ClCompile Include="Source\UI\WebView.cpp" />
     <ClCompile Include="Source\UI\WebViewBackend\Generic.cpp" />
     <ClCompile Include="Source\UI\WebViewBackend\InternetExplorer.cpp" />
@@ -646,6 +647,7 @@
     <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h" />
     <ClInclude Include="Source\Programs\ProgramManager\Workspace.h" />
     <ClInclude Include="Source\Programs\ProgramsModule.h" />
+    <ClInclude Include="Source\UI\ProgressOverlay.h" />
     <ClInclude Include="Source\UI\WebView.h" />
     <ClInclude Include="Source\UI\WebViewBackend\Generic.h" />
     <ClInclude Include="Source\UI\WebViewBackend\InternetExplorer.h" />

@@ -15,6 +15,7 @@
 #include "BasicGameMod.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KUPtrVectorUtil.h"
+#include "UI/ProgressOverlay.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileFinder.h>
@@ -231,6 +232,8 @@ namespace Kortex::ModManager
 		m_ModsLoaderThread = std::make_unique<KxThread>();
 		m_ModsLoaderThread->Bind(KxThreadEvent::EvtExecute, [this](KxThreadEvent& event)
 		{
+			UI::ProgressOverlay status;
+
 			// Load mods from disk
 			if (IGameInstance* instnace = IGameInstance::GetActive())
 			{
@@ -253,17 +256,8 @@ namespace Kortex::ModManager
 				mod->UpdateFileTree();
 				processed++;
 
-				m_ModsLoaderThread->CallAfter([processed, total = allMods.size()]()
-				{
-					IMainWindow::GetInstance()->SetStatusProgress(processed, total);
-				});
+				status.UpdateProgress(processed, allMods.size());
 			}
-
-			// Reset progress
-			m_ModsLoaderThread->CallAfter([processed, total = allMods.size()]()
-			{
-				IMainWindow::GetInstance()->SetStatusProgress(0);
-			});
 		});
 		m_ModsLoaderThread->Bind(KxThreadEvent::EvtFinished, [this](KxThreadEvent& event)
 		{

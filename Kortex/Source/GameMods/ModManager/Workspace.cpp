@@ -838,11 +838,12 @@ namespace Kortex::ModManager
 	}
 	void Workspace::CreateViewContextMenu(KxMenu& contextMenu, const IGameMod::RefVector& selectedMods, IGameMod* focusedMod)
 	{
+		const bool isVFSActive = IModManager::GetInstance()->GetFileSystem().IsEnabled();
+		const bool isMultipleSelection = selectedMods.size() > 1;
+
 		if (focusedMod)
 		{
 			Utility::MenuSeparatorAfter separator1(contextMenu);
-
-			const bool isMultipleSelection = selectedMods.size() > 1;
 
 			const bool isFixedMod = focusedMod->QueryInterface<FixedGameMod>();
 			const bool isPriorityGroup = focusedMod->QueryInterface<PriorityGroup>();
@@ -851,7 +852,6 @@ namespace Kortex::ModManager
 			const bool isLinkedMod = focusedMod->IsLinkedMod();
 			const bool isInstalled = focusedMod->IsInstalled();
 			const bool isPackageExist = !isFixedMod && !isPriorityGroup && focusedMod->IsPackageFileExist();
-			const bool isVFSActive = IModManager::GetInstance()->GetFileSystem().IsEnabled();
 
 			// Install and uninstall
 			if (isInstalled)
@@ -943,6 +943,7 @@ namespace Kortex::ModManager
 		// Refresh
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr(KxID_REFRESH));
+			item->Enable(!isVFSActive);
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{

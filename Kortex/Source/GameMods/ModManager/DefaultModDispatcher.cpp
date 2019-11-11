@@ -72,7 +72,7 @@ namespace
 			directories = std::move(roundDirectories);
 		}
 	}
-	void BuildTreeBranch(const IGameMod::RefVector& mods, FileTreeNode::Vector& children, const FileTreeNode* rootNode, FileTreeNode::RefVector& directories)
+	size_t BuildTreeBranch(const IGameMod::RefVector& mods, FileTreeNode::Vector& children, const FileTreeNode* rootNode, FileTreeNode::RefVector& directories)
 	{
 		std::unordered_map<size_t, size_t> hash;
 		hash.reserve(mods.size());
@@ -121,13 +121,16 @@ namespace
 		}
 
 		// Fill directories array
+		size_t directoriesCount = 0;
 		for (FileTreeNode& node: children)
 		{
 			if (node.IsDirectory())
 			{
 				directories.push_back(&node);
+				directoriesCount++;
 			}
 		}
+		return directoriesCount;
 	}
 }
 
@@ -210,6 +213,7 @@ namespace Kortex::ModManager
 		}
 		else
 		{
+			// Iterational (sequential)
 			size_t processed = 0;
 			size_t total = 0;
 			auto NotifyProgress = [&](size_t processedInc, size_t totalInc = 0)
@@ -220,13 +224,10 @@ namespace Kortex::ModManager
 				status.UpdateProgress(processed, total);
 			};
 
-			// Iterational (sequential)
 			// Build top level
-			NotifyProgress(0, 0);
-
 			FileTreeNode::RefVector directories; 
 			BuildTreeBranch(mods, m_VirtualTree.GetChildren(), &m_VirtualTree, directories);
-			NotifyProgress(directories.size(), directories.size());
+			NotifyProgress(0, directories.size());
 
 			// Build subdirectories
 			while (!directories.empty())
@@ -236,12 +237,10 @@ namespace Kortex::ModManager
 
 				for (FileTreeNode* node: directories)
 				{
-					BuildTreeBranch(mods, node->GetChildren(), node, roundDirectories);
-					NotifyProgress(1, 0);
+					size_t directoriesCount = BuildTreeBranch(mods, node->GetChildren(), node, roundDirectories);
+					NotifyProgress(1, directoriesCount);
 				}
-
 				directories = std::move(roundDirectories);
-				NotifyProgress(0, directories.size());
 			}
 		}
 

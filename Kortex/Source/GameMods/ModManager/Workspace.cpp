@@ -597,8 +597,14 @@ namespace Kortex::ModManager
 		m_RightPane_RunProgram->Enable();
 		m_DisplayModel->UpdateUI();
 
-		m_RightPane_Programs->::wxBitmapComboBox::SetItemBitmap(0, m_FileSystemRunItem.GetLargeBitmap().GetBitmap());
-		m_RightPane_Programs->::wxBitmapComboBox::SetString(0, m_FileSystemRunItem.GetName());
+		// Update VFS item UI
+		m_RightPane_Programs->SetItemBitmap(0, m_FileSystemRunItem.GetLargeBitmap().GetBitmap());
+		m_RightPane_Programs->SetString(0, m_FileSystemRunItem.GetName());
+
+		// Update run button UI
+		wxCommandEvent selectEvent(wxEVT_COMBOBOX);
+		selectEvent.SetInt(m_RightPane_Programs->GetSelection());
+		m_RightPane_Programs->ProcessWindowEvent(selectEvent);
 
 		if (m_QueuedProgram)
 		{

@@ -78,7 +78,7 @@ namespace Kortex::PackageDesigner
 		friend class KPackageCreatorController;
 
 		private:
-			KPackageCreatorController m_Controller;
+			KPackageCreatorController m_WorkspaceDocument;
 
 			KxAuiToolBar* m_MenuBar = nullptr;
 			KxAuiToolBarItem* m_MenuBar_Project = nullptr;
@@ -119,17 +119,14 @@ namespace Kortex::PackageDesigner
 
 		public:
 			KPackageCreatorWorkspace()
-				:m_Controller(*this), m_PagesContainer(*this)
+				:m_WorkspaceDocument(*this), m_PagesContainer(*this)
 			{
 			}
 			~KPackageCreatorWorkspace();
 
 		public:
 			using KxIObject::QueryInterface;
-			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
-			{
-				return QueryAnyOf(iid, ptr, *this, m_Controller, m_PagesContainer);
-			}
+			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override;
 
 			wxString GetID() const override;
 			wxString GetName() const override;

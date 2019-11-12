@@ -2,6 +2,7 @@
 #include "KPackageCreatorController.h"
 #include "KPackageCreatorWorkspace.h"
 #include "KPackageCreatorBuilder.h"
+#include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include "PackageProject/KPackageProjectDefs.h"
 #include "PackageProject/KPackageProjectSerializerKMP.h"
@@ -28,9 +29,10 @@ namespace Kortex::PackageDesigner
 	{
 		return KTr("PackageCreator.SaveChanges.Message");
 	}
+
 	bool KPackageCreatorController::QueryInterface(const KxIID& iid, void*& ptr) noexcept
 	{
-		return KxIObject::QueryAnyOf(iid, ptr, *this);
+		return UseAnyOf<IWorkspace>(iid, ptr, m_Workspace) || QuerySelf(iid, ptr, *this);
 	}
 
 	wxString KPackageCreatorController::GetProjectFileName() const

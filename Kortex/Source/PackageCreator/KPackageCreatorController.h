@@ -16,7 +16,7 @@ namespace Kortex::PackageDesigner
 
 namespace Kortex::PackageDesigner
 {
-	class KPackageCreatorController: public IWorkspaceDocument
+	class KPackageCreatorController: public KxRTTI::ExtendInterface<KPackageCreatorController, IWorkspaceDocument>
 	{
 		public:
 			static wxString GetNewProjectName();

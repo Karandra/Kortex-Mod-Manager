@@ -45,7 +45,7 @@ namespace Kortex
 			using KxIObject::QueryInterface;
 			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
 			{
-				return QueryAnyOf(iid, ptr, *this);
+				return QuerySelf(iid, ptr, *this);
 			}
 
 			virtual const ModManager::Config& GetOptions() const = 0;

@@ -147,18 +147,18 @@ namespace Kortex::PackageDesigner
 		rightPaneSizer->Add(&m_PagesContainer.GetWindow(), 1, wxEXPAND|wxLEFT, KLC_HORIZONTAL_SPACING);
 
 		// Create pages
-		m_PageInfo = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageInfo>(*this, m_Controller);
-		m_PageFileData = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageFileData>(*this, m_Controller);
-		m_PageInterface = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageInterface>(*this, m_Controller);
-		m_PageRequirements = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageRequirements>(*this, m_Controller);
-		m_PageComponents = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageComponents>(*this, m_Controller);
+		m_PageInfo = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageInfo>(*this, m_WorkspaceDocument);
+		m_PageFileData = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageFileData>(*this, m_WorkspaceDocument);
+		m_PageInterface = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageInterface>(*this, m_WorkspaceDocument);
+		m_PageRequirements = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageRequirements>(*this, m_WorkspaceDocument);
+		m_PageComponents = &m_PagesContainer.MakeWorkspace<KPackageCreatorPageComponents>(*this, m_WorkspaceDocument);
 		return true;
 	}
 	bool KPackageCreatorWorkspace::OnOpenWorkspace()
 	{
 		if (!OpenedOnce())
 		{
-			m_Controller.NewProject();
+			m_WorkspaceDocument.NewProject();
 
 			using namespace Application;
 			GetUIOption(OName::Splitter).LoadSplitterLayout(m_SplitterLeftRight);
@@ -168,7 +168,7 @@ namespace Kortex::PackageDesigner
 	}
 	bool KPackageCreatorWorkspace::OnCloseWorkspace()
 	{
-		return m_Controller.AskForSave() == KxID_OK;
+		return m_WorkspaceDocument.AskForSave() == KxID_OK;
 	}
 	void KPackageCreatorWorkspace::OnReloadWorkspace()
 	{
@@ -272,17 +272,17 @@ namespace Kortex::PackageDesigner
 		m_PageRequirements->EnsureCreated();
 		m_PageComponents->EnsureCreated();
 
-		m_PageInfo->OnLoadProject(m_Controller.GetProject()->GetInfo());
-		m_PageFileData->OnLoadProject(m_Controller.GetProject()->GetFileData());
-		m_PageInterface->OnLoadProject(m_Controller.GetProject()->GetInterface());
-		m_PageRequirements->OnLoadProject(m_Controller.GetProject()->GetRequirements());
-		m_PageComponents->OnLoadProject(m_Controller.GetProject()->GetComponents());
+		m_PageInfo->OnLoadProject(m_WorkspaceDocument.GetProject()->GetInfo());
+		m_PageFileData->OnLoadProject(m_WorkspaceDocument.GetProject()->GetFileData());
+		m_PageInterface->OnLoadProject(m_WorkspaceDocument.GetProject()->GetInterface());
+		m_PageRequirements->OnLoadProject(m_WorkspaceDocument.GetProject()->GetRequirements());
+		m_PageComponents->OnLoadProject(m_WorkspaceDocument.GetProject()->GetComponents());
 	}
 	void KPackageCreatorWorkspace::OnNewProject(KxMenuEvent& event)
 	{
-		if (m_Controller.AskForSave() == KxID_OK)
+		if (m_WorkspaceDocument.AskForSave() == KxID_OK)
 		{
-			m_Controller.NewProject();
+			m_WorkspaceDocument.NewProject();
 			DoLoadAllPages();
 		}
 	}
@@ -290,7 +290,7 @@ namespace Kortex::PackageDesigner
 	{
 		wxWindowUpdateLocker lock(this);
 
-		if (m_Controller.AskForSave() == KxID_OK)
+		if (m_WorkspaceDocument.AskForSave() == KxID_OK)
 		{
 			KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_OPEN);
 			dialog.AddFilter("*.kmpproj", KTr("FileFilter.ModProject"));
@@ -298,35 +298,35 @@ namespace Kortex::PackageDesigner
 
 			if (dialog.ShowModal() == KxID_OK)
 			{
-				m_Controller.OpenProject(dialog.GetResult());
+				m_WorkspaceDocument.OpenProject(dialog.GetResult());
 				DoLoadAllPages();
 			}
 		}
 	}
 	void KPackageCreatorWorkspace::OnSaveProject(KxMenuEvent& event)
 	{
-		if (event.GetItem()->GetId() == KxID_SAVEAS || !m_Controller.HasProjectFilePath() || !wxFileName(m_Controller.GetProjectFilePath()).Exists(wxFILE_EXISTS_REGULAR))
+		if (event.GetItem()->GetId() == KxID_SAVEAS || !m_WorkspaceDocument.HasProjectFilePath() || !wxFileName(m_WorkspaceDocument.GetProjectFilePath()).Exists(wxFILE_EXISTS_REGULAR))
 		{
 			KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 			dialog.SetDefaultExtension("kmpproj");
-			dialog.SetFileName(m_Controller.GetProjectName());
+			dialog.SetFileName(m_WorkspaceDocument.GetProjectName());
 			dialog.AddFilter("*.kmpproj", KTr("FileFilter.ModProject"));
 			dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 			if (dialog.ShowModal() == KxID_OK)
 			{
-				m_Controller.SaveProject(dialog.GetResult());
+				m_WorkspaceDocument.SaveProject(dialog.GetResult());
 			}
 		}
 		else
 		{
-			m_Controller.SaveProject();
+			m_WorkspaceDocument.SaveProject();
 		}
 	}
 	void KPackageCreatorWorkspace::OnImportProject(KxMenuEvent& event)
 	{
 		wxWindowUpdateLocker lock(this);
-		if (m_Controller.AskForSave() == KxID_OK)
+		if (m_WorkspaceDocument.AskForSave() == KxID_OK)
 		{
 			KxMenuItem* item = event.GetItem();
 
@@ -342,7 +342,7 @@ namespace Kortex::PackageDesigner
 						wxString sModuleConfig = KxTextFile::ReadToString(dialog.GetModuleConfigFile());
 
 						KPackageProjectSerializerFOMod tSerailizer(info, sModuleConfig, dialog.GetProjectFolder());
-						m_Controller.ImportProject(tSerailizer);
+						m_WorkspaceDocument.ImportProject(tSerailizer);
 					}
 					break;
 				}
@@ -369,14 +369,14 @@ namespace Kortex::PackageDesigner
 			{
 				KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 				dialog.SetDefaultExtension("xml");
-				dialog.SetFileName(m_Controller.GetProjectName());
+				dialog.SetFileName(m_WorkspaceDocument.GetProjectName());
 				dialog.AddFilter("*.xml", KTr("FileFilter.XML"));
 				dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 				if (dialog.ShowModal() == KxID_OK)
 				{
 					KPackageProjectSerializerKMP serializer(false);
-					m_Controller.ExportProject(serializer);
+					m_WorkspaceDocument.ExportProject(serializer);
 					KxTextFile::WriteToFile(dialog.GetResult(), serializer.GetData());
 				}
 				break;
@@ -388,7 +388,7 @@ namespace Kortex::PackageDesigner
 				{
 					KPackageProjectSerializerFOMod serializer(dialog.GetProjectFolder());
 					serializer.ExportToNativeFormat(true);
-					m_Controller.ExportProject(serializer);
+					m_WorkspaceDocument.ExportProject(serializer);
 
 					if (!dialog.GetInfoFile().IsEmpty())
 					{
@@ -405,11 +405,16 @@ namespace Kortex::PackageDesigner
 	}
 	void KPackageCreatorWorkspace::OnBuildProject(KxMenuEvent& event)
 	{
-		m_Controller.BuildProject();
+		m_WorkspaceDocument.BuildProject();
 	}
 	void KPackageCreatorWorkspace::OnBuildProjectPreview(KxMenuEvent& event)
 	{
-		m_Controller.BuildProject(true);
+		m_WorkspaceDocument.BuildProject(true);
+	}
+
+	bool KPackageCreatorWorkspace::QueryInterface(const KxIID& iid, void*& ptr) noexcept
+	{
+		return UseAnyOf<IWorkspaceDocument, IWorkspaceContainer>(iid, ptr, m_WorkspaceDocument, m_PagesContainer) || QuerySelf(iid, ptr, *this);
 	}
 
 	wxString KPackageCreatorWorkspace::GetID() const
@@ -438,14 +443,14 @@ namespace Kortex::PackageDesigner
 	{
 		EnsureCreated();
 
-		m_Controller.ImportProjectFromPackage(path);
-		return *m_Controller.GetProject();
+		m_WorkspaceDocument.ImportProjectFromPackage(path);
+		return *m_WorkspaceDocument.GetProject();
 	}
 	KPackageProject& KPackageCreatorWorkspace::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
 	{
 		EnsureCreated();
 
-		m_Controller.CreateProjectFromModEntry(modEntry);
-		return *m_Controller.GetProject();
+		m_WorkspaceDocument.CreateProjectFromModEntry(modEntry);
+		return *m_WorkspaceDocument.GetProject();
 	}
 }

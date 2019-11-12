@@ -18,10 +18,9 @@ namespace Kortex
 
 	KxStandardID IWorkspaceDocument::AskForSave(bool canCancel)
 	{
-		if (HasUnsavedChanges())
+		IWorkspace* workspace = QueryInterface<IWorkspace>();
+		if (workspace && HasUnsavedChanges())
 		{
-			IWorkspace* workspace = QueryInterface<IWorkspace>();
-
 			KxTaskDialog dialog(&workspace->GetWindow(), KxID_NONE, GetSaveConfirmationCaption(), GetSaveConfirmationMessage(), canCancel ? KxBTN_CANCEL : KxBTN_NONE);
 			dialog.SetMainIcon(KxICON_WARNING);
 			dialog.AddButton(KxID_YES, KTr("Controller.SaveChanges.Save"));

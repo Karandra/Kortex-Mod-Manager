@@ -183,7 +183,6 @@ namespace Kortex::ModManager
 				event.Veto();
 			}
 		}
-		event.Skip();
 	}
 	void WorkspaceContainer::OnPageOpened(wxAuiNotebookEvent& event)
 	{
@@ -196,7 +195,6 @@ namespace Kortex::ModManager
 		{
 			event.Veto();
 		}
-		event.Skip();
 	}
 
 	IWorkspaceContainer* WorkspaceContainer::GetParentContainer()

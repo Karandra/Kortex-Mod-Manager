@@ -108,6 +108,7 @@ namespace Kortex::GameConfig
 			{
 				if (OnAskRefreshView())
 				{
+					ClearView();
 					m_Manager.Load();
 					LoadView();
 				}

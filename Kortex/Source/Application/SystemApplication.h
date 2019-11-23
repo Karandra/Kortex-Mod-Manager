@@ -123,6 +123,7 @@ namespace Kortex
 			bool OnException();
 			bool OnExceptionInMainLoop() override;
 			void OnUnhandledException() override;
+			void OnFatalException() override;
 			wxString RethrowCatchAndGetExceptionInfo() const;
 
 			wxAppTraits* CreateTraits() override;

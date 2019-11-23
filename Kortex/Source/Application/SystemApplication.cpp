@@ -22,6 +22,20 @@
 
 namespace
 {
+	template<class... Args> auto FormatMessage(Args&&... arg)
+	{
+		return FormatMessageW(std::forward<Args>(arg)...);
+	}
+}
+
+#pragma push_macro("NULL")
+#undef NULL
+#define NULL nullptr
+#include <comdef.h>
+#pragma pop_macro("NULL")
+
+namespace
+{
 	void LogConfigChange(const Kortex::AppOption& option)
 	{
 		using namespace Kortex::Utility::Log;
@@ -347,6 +361,12 @@ namespace Kortex
 			ExitApp(exitCode);
 		}
 	}
+	void SystemApplication::OnFatalException()
+	{
+		Utility::Log::LogInfo("SystemApplication::OnFatalException");
+		
+		OnException();
+	}
 	wxString SystemApplication::RethrowCatchAndGetExceptionInfo() const
 	{
 		Utility::Log::LogError("Trying to extract message form current exception");
@@ -361,6 +381,25 @@ namespace Kortex
 		{
 			type = "std::exception";
 			message = e.what();
+		}
+		catch (const _com_error& e)
+		{
+			type = "_com_error";
+			message = e.ErrorMessage();
+			if (!message.IsEmpty())
+			{
+				message += wxS("\r\n");
+				message += e.Description().GetBSTR();
+			}
+			else
+			{
+				message == e.Description().GetBSTR();
+			}
+		}
+		catch (NTSTATUS e)
+		{
+			type = "HRESULT/NTSTATUS";
+			message = KxFormat("%1: 0x%2")(type)(e, 0, 16);
 		}
 		catch (const std::string& e)
 		{

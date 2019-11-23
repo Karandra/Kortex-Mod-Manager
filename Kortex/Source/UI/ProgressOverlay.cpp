@@ -2,24 +2,12 @@
 #include "ProgressOverlay.h"
 #include "Application/IMainWindow.h"
 
-namespace Kortex::UI
+namespace
 {
-	ProgressOverlay::ProgressOverlay()
+	void DoUpdateProgress(int current)
 	{
-		UpdateProgress(0);
-	}
-	ProgressOverlay::~ProgressOverlay()
-	{
-		UpdateProgress(0);
-	}
+		using namespace Kortex;
 
-	bool ProgressOverlay::IsAvailablle() const
-	{
-		return IMainWindow::GetInstance() != nullptr;
-	}
-
-	void ProgressOverlay::UpdateProgress(int current)
-	{
 		if (IMainWindow* mainWindow = IMainWindow::GetInstance())
 		{
 			if (wxThread::IsMain())
@@ -35,8 +23,10 @@ namespace Kortex::UI
 			}
 		}
 	}
-	void ProgressOverlay::UpdateProgress(int64_t current, int64_t total)
+	void DoUpdateProgress(int64_t current, int64_t total)
 	{
+		using namespace Kortex;
+
 		if (IMainWindow* mainWindow = IMainWindow::GetInstance())
 		{
 			if (wxThread::IsMain())
@@ -51,5 +41,31 @@ namespace Kortex::UI
 				});
 			}
 		}
+	}
+}
+
+namespace Kortex::UI
+{
+	ProgressOverlay::ProgressOverlay()
+	{
+		DoUpdateProgress(0);
+	}
+	ProgressOverlay::~ProgressOverlay()
+	{
+		DoUpdateProgress(0);
+	}
+
+	bool ProgressOverlay::IsAvailablle() const
+	{
+		return IMainWindow::GetInstance() != nullptr;
+	}
+
+	void ProgressOverlay::UpdateProgress(int current)
+	{
+		DoUpdateProgress(current);
+	}
+	void ProgressOverlay::UpdateProgress(int64_t current, int64_t total)
+	{
+		DoUpdateProgress(current, total);
 	}
 }

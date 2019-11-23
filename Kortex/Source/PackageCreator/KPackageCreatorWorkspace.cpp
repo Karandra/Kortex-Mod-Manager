@@ -44,7 +44,7 @@ namespace Kortex::PackageDesigner
 		m_PagesList = new KxTreeList(listParent, KxID_NONE, KxTreeList::DefaultStyle|wxTL_NO_HEADER);
 		m_PagesList->GetDataView()->ToggleWindowStyle(wxBORDER_NONE);
 		m_PagesList->SetImageList(&ImageProvider::GetImageList());
-		m_PagesList->SetRowHeight(36);
+		m_PagesList->SetRowHeight(m_PagesList->FromDIP(36));
 
 		m_PagesList->AddColumn(wxEmptyString);
 		m_PagesList->Bind(wxEVT_TREELIST_SELECTION_CHANGED, &WorkspaceContainer::OnPageSelected, this);

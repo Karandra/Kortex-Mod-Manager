@@ -251,10 +251,7 @@ namespace Kortex::ModManager
 			void OnReloadWorkspace() override;
 
 		public:
-			Workspace()
-				:m_RightPaneContainer(*this)
-			{
-			}
+			Workspace();
 			~Workspace();
 
 		public:

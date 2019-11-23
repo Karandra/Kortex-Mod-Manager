@@ -43,7 +43,7 @@ namespace Kortex::Notifications
 
 		// Popup window
 		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		m_PopupWindow = new wxPopupTransientWindow(m_Button->GetToolBar(), wxBORDER_THEME);
+		m_PopupWindow = new wxPopupTransientWindow(&m_Button->GetToolBar(), wxBORDER_THEME);
 		IThemeManager::GetActive().Apply(m_PopupWindow);
 		m_PopupWindow->SetInitialSize(m_PopupWindow->FromDIP(wxSize(325, 425)));
 		m_PopupWindow->SetSizer(sizer);
@@ -135,7 +135,7 @@ namespace Kortex::Notifications
 	{
 		if (m_PopupWindow)
 		{
-			wxPoint pos = m_Button->GetToolBar()->ClientToScreen(m_Button->GetDropdownMenuPosition());
+			wxPoint pos = m_Button->GetToolBar().ClientToScreen(m_Button->GetDropdownMenuPosition());
 			const int offset = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
 			const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
 			const int rightSide = pos.x + m_PopupWindow->GetSize().GetWidth();

@@ -65,7 +65,7 @@ namespace Kortex::Application
 			BroadcastReciever m_BroadcastReciever;
 			MainWindowWorkspaceContainer m_WorkspaceContainer;
 			KLabeledValue::Vector m_Locations;
-			KxMenu* m_WorkspacesMenu = nullptr;
+			KxMenu m_WorkspacesMenu;
 
 			wxBoxSizer* m_MainSizer = nullptr;
 			wxBoxSizer* m_ToolBarSizer = nullptr;
@@ -76,7 +76,7 @@ namespace Kortex::Application
 			// ToolBar
 			KxAuiToolBar* m_ToolBar = nullptr;
 			KxAuiToolBarItem* m_ToolBar_MainMenu = nullptr;
-			int m_ToolBar_InsertionIndex = 0;
+			size_t m_ToolBar_InsertionIndex = KxAuiToolBarItem::npos;
 
 			KxAuiToolBar* m_QuickToolBar = nullptr;
 			KxAuiToolBarItem* m_QuickToolBar_QuickSettingsMenu = nullptr;
@@ -126,7 +126,7 @@ namespace Kortex::Application
 			}
 			KxMenu& GetWorkspacesMenu() override
 			{
-				return *m_WorkspacesMenu;
+				return m_WorkspacesMenu;
 			}
 			IWorkspaceContainer& GetWorkspaceContainer() override
 			{
@@ -137,5 +137,8 @@ namespace Kortex::Application
 			void SetStatus(const wxString& label, int index = 0, const ResourceID& image = {}) override;
 			void SetStatusProgress(int current) override;
 			void SetStatusProgress(int64_t current, int64_t total) override;
+
+			KxAuiToolBarItem* AddToolBarItem(IWorkspace& workspace) override;
+			KxMenuItem* AddToolBarMenuItem(IWorkspace& workspace) override;
 	};
 }

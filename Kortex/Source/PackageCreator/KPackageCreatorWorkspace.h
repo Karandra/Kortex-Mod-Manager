@@ -118,10 +118,7 @@ namespace Kortex::PackageDesigner
 			void OnReloadWorkspace() override;
 
 		public:
-			KPackageCreatorWorkspace()
-				:m_WorkspaceDocument(*this), m_PagesContainer(*this)
-			{
-			}
+			KPackageCreatorWorkspace();
 			~KPackageCreatorWorkspace();
 
 		public:

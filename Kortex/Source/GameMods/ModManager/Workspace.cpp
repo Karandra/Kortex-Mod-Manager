@@ -1021,6 +1021,11 @@ namespace Kortex::ModManager
 		UpdateProfilesList();
 	}
 
+	Workspace::Workspace()
+		:m_RightPaneContainer(*this)
+	{
+		IMainWindow::GetInstance()->AddToolBarItem(*this);
+	}
 	Workspace::~Workspace()
 	{
 		if (IsCreated())

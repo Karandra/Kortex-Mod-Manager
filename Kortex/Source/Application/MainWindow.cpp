@@ -96,7 +96,7 @@ namespace Kortex::Application
 			size.Scale(1.15, 1.15);
 			m_ToolBar_MainMenu->SetBitmap(icon.Rescale(size.GetWidth(), size.GetHeight(), wxIMAGE_QUALITY_HIGH));
 
-			m_ToolBar_InsertionIndex = m_ToolBar->AddSeparator()->GetIndex();
+			m_ToolBar->AddSeparator();
 		}
 		m_ToolBar->Realize();
 
@@ -142,19 +142,18 @@ namespace Kortex::Application
 
 	void MainWindow::CreateWorkspaces()
 	{
-		m_WorkspacesMenu = new KxMenu();
+		m_ToolBar_InsertionIndex = m_ToolBar->AddSeparator()->GetIndex();
 
-		InitializeWorkspaces();
-		m_ToolBar->AddSeparator();
-
+		// Add workspaces menu
 		KxAuiToolBarItem* toolBarButton = Utility::UI::CreateToolBarButton(m_ToolBar, ITranslator::GetVariable(Variables::KVAR_GAME_NAME));
-		wxImage gameIcon = IGameInstance::GetActive()->GetIcon().ConvertToImage();
-		toolBarButton->SetBitmap(gameIcon.Rescale(m_ToolBar->GetToolBitmapSize().GetWidth(), m_ToolBar->GetToolBitmapSize().GetHeight(), wxIMAGE_QUALITY_HIGH));
-
-		toolBarButton->AssignDropdownMenu(m_WorkspacesMenu);
+		toolBarButton->SetBitmap(KBitmapSize(m_ToolBar->GetToolBitmapSize()).ScaleMaintainRatio(IGameInstance::GetActive()->GetIcon()));
 		toolBarButton->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
+		toolBarButton->SetDropdownMenu(&m_WorkspacesMenu);
 
-		m_ToolBar->Realize();
+		// Create workspaces
+		InitializeWorkspaces();
+
+		m_ToolBar->UpdateUI();
 		m_ToolBar->SetOverflowVisible(!m_ToolBar->IsItemsFits());
 	}
 	void MainWindow::CreateMainMenu(KxMenu& mainMenu)
@@ -425,5 +424,28 @@ namespace Kortex::Application
 		{
 			m_StatusBar->SetValue(current, total);
 		}
+	}
+
+	KxAuiToolBarItem* MainWindow::AddToolBarItem(IWorkspace& workspace)
+	{
+		KxAuiToolBarItem* item = m_ToolBar->AddTool(workspace.GetName(), ImageProvider::GetBitmap(workspace.GetIcon()), wxITEM_NORMAL, workspace.GetName());
+		item->SetIndex(m_ToolBar_InsertionIndex);
+		item->Bind(KxEVT_AUI_TOOLBAR_CLICK, [&workspace](wxEvent& event)
+		{
+			workspace.SwitchHere();
+		});
+
+		return item;
+	}
+	KxMenuItem* MainWindow::AddToolBarMenuItem(IWorkspace& workspace)
+	{
+		KxMenuItem* item = m_WorkspacesMenu.AddItem(workspace.GetName());
+		item->SetBitmap(ImageProvider::GetBitmap(workspace.GetIcon()));
+		item->Bind(KxEVT_MENU_SELECT, [&workspace](wxEvent& event)
+		{
+			workspace.SwitchHere();
+		});
+
+		return item;
 	}
 }

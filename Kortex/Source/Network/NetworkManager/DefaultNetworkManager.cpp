@@ -122,7 +122,7 @@ namespace Kortex::NetworkManager
 			m_LoginButton->SetBitmap(ImageProvider::GetBitmap(IModNetwork::GetGenericIcon()));
 		}
 
-		m_LoginButton->GetToolBar()->UpdateUI();
+		m_LoginButton->GetToolBar().UpdateUI();
 	}
 	void DefaultNetworkManager::CreateMenu()
 	{

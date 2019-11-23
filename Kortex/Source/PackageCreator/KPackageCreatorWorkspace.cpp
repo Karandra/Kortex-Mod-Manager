@@ -174,6 +174,11 @@ namespace Kortex::PackageDesigner
 	{
 	}
 
+	KPackageCreatorWorkspace::KPackageCreatorWorkspace()
+		:m_WorkspaceDocument(*this), m_PagesContainer(*this)
+	{
+		IMainWindow::GetInstance()->AddToolBarMenuItem(*this);
+	}
 	KPackageCreatorWorkspace::~KPackageCreatorWorkspace()
 	{
 		if (IsCreated())
@@ -427,12 +432,7 @@ namespace Kortex::PackageDesigner
 	}
 	IWorkspaceContainer* KPackageCreatorWorkspace::GetPreferredContainer() const
 	{
-		IWorkspaceContainer* result = nullptr;
-		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
-		{
-			result = &workspace.GetWorkspaceContainer();
-		});
-		return result;
+		return &IMainWindow::GetInstance()->GetWorkspaceContainer();
 	}
 
 	KPackageCreatorPageBase* KPackageCreatorWorkspace::GetCurrentPage() const

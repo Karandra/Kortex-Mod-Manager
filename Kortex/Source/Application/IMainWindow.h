@@ -46,6 +46,9 @@ namespace Kortex
 			virtual void SetStatusProgress(int current) = 0;
 			virtual void SetStatusProgress(int64_t current, int64_t total) = 0;
 
+			virtual KxAuiToolBarItem* AddToolBarItem(IWorkspace& workspace) = 0;
+			virtual KxMenuItem* AddToolBarMenuItem(IWorkspace& workspace) = 0;
+
 			void InitializeWorkspaces();
 	};
 }

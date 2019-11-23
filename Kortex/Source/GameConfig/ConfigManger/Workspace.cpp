@@ -69,6 +69,7 @@ namespace Kortex::GameConfig
 	Workspace::Workspace()
 		:m_DisplayModel(*IGameConfigManager::GetInstance())
 	{
+		IMainWindow::GetInstance()->AddToolBarMenuItem(*this);
 	}
 	Workspace::~Workspace()
 	{
@@ -84,12 +85,7 @@ namespace Kortex::GameConfig
 	}
 	IWorkspaceContainer* Workspace::GetPreferredContainer() const
 	{
-		IWorkspaceContainer* result = nullptr;
-		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
-		{
-			result = &workspace.GetWorkspaceContainer();
-		});
-		return result;
+		return &IMainWindow::GetInstance()->GetWorkspaceContainer();
 	}
 
 	void Workspace::OnChangesMade()

@@ -1,24 +1,25 @@
 #pragma once
 #include "stdafx.h"
+#include "Utility/EnumClassOperations.h"
 
 namespace Kortex::PackageProject
 {
-	enum ContentType
+	enum class ContentType
 	{
-		KPP_CONTENT_FILEDATA,
-		KPP_CONTENT_IMAGES,
-		KPP_CONTENT_DOCUMENTS,
+		FileData,
+		Images,
+		Documents,
 	};
-	enum PackageType
+	enum class PackageType
 	{
-		KPP_PACCKAGE_UNKNOWN = -1,
+		Unknown = -1,
 	
-		KPP_PACCKAGE_NATIVE,
-		KPP_PACCKAGE_LEGACY,
-		KPP_PACCKAGE_FOMOD_XML,
-		KPP_PACCKAGE_FOMOD_CSHARP,
-		KPP_PACCKAGE_BAIN,
-		KPP_PACCKAGE_OMOD,
+		Native,
+		Legacy,
+		FOModXML,
+		FOModCSharp,
+		BAIN,
+		OMOD,
 	};
 
 	enum class ReqState
@@ -27,60 +28,74 @@ namespace Kortex::PackageProject
 		True = 1,
 		False = 0
 	};
-	enum ObjectFunction
+	enum class ObjectFunction
 	{
-		KPPR_OBJFUNC_INVALID = -1,
-		KPPR_OBJFUNC_NONE = 0,
+		Invalid = -1,
+		None = 0,
 
-		KPPR_OBJFUNC_MOD_ACTIVE,
-		KPPR_OBJFUNC_MOD_INACTIVE,
-		KPPR_OBJFUNC_FILE_EXIST,
-		KPPR_OBJFUNC_FILE_NOT_EXIST,
-		KPPR_OBJFUNC_PLUGIN_ACTIVE,
-		KPPR_OBJFUNC_PLUGIN_INACTIVE,
+		ModActive,
+		ModInactive,
+		FileExist,
+		FileNotExist,
+		PluginActive,
+		PluginInactive,
 	};
-	enum ReqType
+	enum class ReqType
 	{
-		KPPR_TYPE_USER = 0,
-		KPPR_TYPE_SYSTEM = 1,
-		KPPR_TYPE_AUTO = 2,
+		User = 0,
+		System = 1,
+		Auto = 2,
 	};
 
-	enum Operator
+	enum class Operator
 	{
-		KPP_OPERATOR_INVALID = -1,
-		KPP_OPERATOR_NONE = 0,
+		Invalid = -1,
+		None = 0,
 	
-		KPP_OPERATOR_EQ,
-		KPP_OPERATOR_NOT_EQ,
-		KPP_OPERATOR_GT,
-		KPP_OPERATOR_GTEQ,
-		KPP_OPERATOR_LT,
-		KPP_OPERATOR_LTEQ,
+		Equal,
+		NotEqual,
+		GreaterThan,
+		GreaterThanOrEqual,
+		LessThan,
+		LessThanOrEqual,
 	
-		KPP_OPERATOR_AND,
-		KPP_OPERATOR_OR,
+		And,
+		Or,
 	
-		KPP_OPERATOR_COUNT,
-		KPP_OPERATOR_COUNT_COMPARISON = KPP_OPERATOR_AND,
-		KPP_OPERATOR_MIN = KPP_OPERATOR_NONE + 1,
+		MAX,
+		MAX_COMPARISON = And,
+		MIN = Equal,
 	};
-	enum SelectionMode
+	enum class SelectionMode
 	{
-		KPPC_SELECT_ANY,
-		KPPC_SELECT_EXACTLY_ONE, // Only one
-		KPPC_SELECT_AT_LEAST_ONE, // One or more
-		KPPC_SELECT_AT_MOST_ONE, // One or nothing
-		KPPC_SELECT_ALL, // All entries must be selected (pretty useless)
+		Any,
+		ExactlyOne, // Only one
+		AtLeastOne, // One or more
+		AtMostOne, // One or nothing
+		All, // All entries must be selected
 	};
-	enum TypeDescriptor
+	enum class TypeDescriptor
 	{
-		KPPC_DESCRIPTOR_INVALID = -1,
+		Invalid = -1,
 
-		KPPC_DESCRIPTOR_OPTIONAL,
-		KPPC_DESCRIPTOR_REQUIRED,
-		KPPC_DESCRIPTOR_RECOMMENDED,
-		KPPC_DESCRIPTOR_COULD_BE_USABLE,
-		KPPC_DESCRIPTOR_NOT_USABLE,
+		Optional,
+		Required,
+		Recommended,
+		CouldBeUsable,
+		NotUsable,
 	};
+}
+
+namespace KxEnumClassOperations
+{
+	KxAllowEnumCastOp(Kortex::PackageProject::ContentType);
+	KxAllowEnumCastOp(Kortex::PackageProject::PackageType);
+
+	KxAllowEnumCastOp(Kortex::PackageProject::ReqState);
+	KxAllowEnumCastOp(Kortex::PackageProject::ObjectFunction);
+	KxAllowEnumCastOp(Kortex::PackageProject::ReqType);
+
+	KxAllowEnumCastOp(Kortex::PackageProject::Operator);
+	KxAllowEnumCastOp(Kortex::PackageProject::SelectionMode);
+	KxAllowEnumCastOp(Kortex::PackageProject::TypeDescriptor);
 }

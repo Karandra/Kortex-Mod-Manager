@@ -142,10 +142,10 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			{
 				case ColumnID::Name:
 				{
-					m_LabelEditor->SetItems(ModPackageProject::CreateOperatorSymNamesList({PackageProject::KPP_OPERATOR_AND, PackageProject::KPP_OPERATOR_OR}));
+					m_LabelEditor->SetItems(ModPackageProject::CreateOperatorSymNamesList({PackageProject::Operator::And, PackageProject::Operator::Or}));
 					m_LabelEditor->SetEditable(false);
 	
-					value = condition->GetOperator() == PackageProject::KPP_OPERATOR_AND ? 0 : 1;
+					value = condition->GetOperator() == PackageProject::Operator::And ? 0 : 1;
 					break;
 				}
 			};
@@ -211,7 +211,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			{
 				case ColumnID::Name:
 				{
-					condition->SetOperator(value.As<int>() == 0 ? PackageProject::KPP_OPERATOR_AND : PackageProject::KPP_OPERATOR_OR);
+					condition->SetOperator(value.As<int>() == 0 ? PackageProject::Operator::And : PackageProject::Operator::Or);
 					return true;
 				}
 			};
@@ -612,8 +612,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					m_GlobalOperatorCB->SetSelection(index);
 				}
 			};
-			AddItem(PackageProject::KPP_OPERATOR_AND);
-			AddItem(PackageProject::KPP_OPERATOR_OR);
+			AddItem(PackageProject::Operator::And);
+			AddItem(PackageProject::Operator::Or);
 	
 			// Prepare
 			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(700, 400)));
@@ -666,12 +666,12 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				m_NewTypeDescriptorCB->SetSelection(index);
 			}
 		};
-		AddItem(KAux::MakeNoneLabel(), PackageProject::KPPC_DESCRIPTOR_INVALID);
-		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Optional"), PackageProject::KPPC_DESCRIPTOR_OPTIONAL);
-		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Required"), PackageProject::KPPC_DESCRIPTOR_REQUIRED);
-		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Recommended"), PackageProject::KPPC_DESCRIPTOR_RECOMMENDED);
-		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.CouldBeUsable"), PackageProject::KPPC_DESCRIPTOR_COULD_BE_USABLE);
-		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.NotUsable"), PackageProject::KPPC_DESCRIPTOR_NOT_USABLE);
+		AddItem(KAux::MakeNoneLabel(), PackageProject::TypeDescriptor::Invalid);
+		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Optional"), PackageProject::TypeDescriptor::Optional);
+		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Required"), PackageProject::TypeDescriptor::Required);
+		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Recommended"), PackageProject::TypeDescriptor::Recommended);
+		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.CouldBeUsable"), PackageProject::TypeDescriptor::CouldBeUsable);
+		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.NotUsable"), PackageProject::TypeDescriptor::NotUsable);
 	
 		// Prepare
 		AdjustWindow(wxDefaultPosition, FromDIP(wxSize(700, 400)));

@@ -59,17 +59,17 @@ namespace Kortex::PackageProject
 	{
 		switch (type)
 		{
-			case KPP_CONTENT_IMAGES:
+			case ContentType::Images:
 			{
 				wxString name = pathName.AfterLast('\\');
 				return m_PackageDataRoot + "\\Images\\" + name;
 			}
-			case KPP_CONTENT_DOCUMENTS:
+			case ContentType::Documents:
 			{
 				wxString name = pathName.AfterLast('\\');
 				return m_PackageDataRoot + "\\Documents\\" + name;
 			}
-			case KPP_CONTENT_FILEDATA:
+			case ContentType::FileData:
 			{
 				return pathName;
 			}

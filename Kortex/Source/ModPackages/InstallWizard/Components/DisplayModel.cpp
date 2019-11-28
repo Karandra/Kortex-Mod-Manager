@@ -102,7 +102,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 					{
 						switch (entry->GetTDCurrentValue())
 						{
-							case PackageProject::KPPC_DESCRIPTOR_RECOMMENDED:
+							case PackageProject::TypeDescriptor::Recommended:
 							{
 								attibutes.SetItalic();
 								break;
@@ -181,13 +181,13 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 					switch (selMode)
 					{
-						case PackageProject::KPPC_SELECT_ANY:
+						case PackageProject::SelectionMode::Any:
 						{
 							entryNode->ToggleCheck();
 							NodeChanged(entryNode);
 							return true;
 						}
-						case PackageProject::KPPC_SELECT_EXACTLY_ONE:
+						case PackageProject::SelectionMode::ExactlyOne:
 						{
 							// Is this entry is going to be checked, then uncheck all entries in this group
 							// and check this one.
@@ -204,7 +204,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 							}
 							break;
 						}
-						case PackageProject::KPPC_SELECT_AT_LEAST_ONE:
+						case PackageProject::SelectionMode::AtLeastOne:
 						{
 							if (!entryNode->IsChecked())
 							{
@@ -218,7 +218,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 							}
 							return true;
 						}
-						case PackageProject::KPPC_SELECT_AT_MOST_ONE:
+						case PackageProject::SelectionMode::AtMostOne:
 						{
 							if (!entryNode->IsChecked())
 							{
@@ -237,7 +237,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 							}
 							return true;
 						}
-						case PackageProject::KPPC_SELECT_ALL:
+						case PackageProject::SelectionMode::All:
 						{
 							entryNode->SetChecked(true);
 							NodeChanged(entryNode);
@@ -265,11 +265,11 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 	{
 		switch (type)
 		{
-			case PackageProject::KPPC_DESCRIPTOR_NOT_USABLE:
+			case PackageProject::TypeDescriptor::NotUsable:
 			{
 				return ImageProvider::GetBitmap(ImageResourceID::CrossCircleFrame);
 			}
-			case PackageProject::KPPC_DESCRIPTOR_COULD_BE_USABLE:
+			case PackageProject::TypeDescriptor::CouldBeUsable:
 			{
 				return ImageProvider::GetBitmap(ImageResourceID::Exclamation);
 			}
@@ -284,8 +284,8 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 	{
 		switch (mode)
 		{
-			case PackageProject::KPPC_SELECT_EXACTLY_ONE:
-			case PackageProject::KPPC_SELECT_AT_MOST_ONE:
+			case PackageProject::SelectionMode::ExactlyOne:
+			case PackageProject::SelectionMode::AtMostOne:
 			{
 				return KxDataViewBitmapTextToggleValue::RadioBox;
 			}
@@ -300,27 +300,27 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 			return ms_Select + ' ' + KxString::MakeLower(PackageProject::ComponentsSection::SelectionModeToTranslation(mode));
 		};
 
-		static const wxString ms_Any = MakeString(PackageProject::KPPC_SELECT_ANY);
-		static const wxString ms_ExactlyOne = MakeString(PackageProject::KPPC_SELECT_EXACTLY_ONE);
-		static const wxString ms_AtLeastOne = MakeString(PackageProject::KPPC_SELECT_AT_LEAST_ONE);
-		static const wxString ms_AtMostOne = MakeString(PackageProject::KPPC_SELECT_AT_MOST_ONE);
-		static const wxString ms_All = MakeString(PackageProject::KPPC_SELECT_ALL);
+		static const wxString ms_Any = MakeString(PackageProject::SelectionMode::Any);
+		static const wxString ms_ExactlyOne = MakeString(PackageProject::SelectionMode::ExactlyOne);
+		static const wxString ms_AtLeastOne = MakeString(PackageProject::SelectionMode::AtLeastOne);
+		static const wxString ms_AtMostOne = MakeString(PackageProject::SelectionMode::AtMostOne);
+		static const wxString ms_All = MakeString(PackageProject::SelectionMode::All);
 
 		switch (group.GetSelectionMode())
 		{
-			case PackageProject::KPPC_SELECT_EXACTLY_ONE:
+			case PackageProject::SelectionMode::ExactlyOne:
 			{
 				return ms_ExactlyOne;
 			}
-			case PackageProject::KPPC_SELECT_AT_LEAST_ONE:
+			case PackageProject::SelectionMode::AtLeastOne:
 			{
 				return ms_AtLeastOne;
 			}
-			case PackageProject::KPPC_SELECT_AT_MOST_ONE:
+			case PackageProject::SelectionMode::AtMostOne:
 			{
 				return ms_AtMostOne;
 			}
-			case PackageProject::KPPC_SELECT_ALL:
+			case PackageProject::SelectionMode::All:
 			{
 				return ms_All;
 			}
@@ -345,7 +345,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 	bool DisplayModel::IsEntryShouldBeChecked(const PackageProject::ComponentItem* entry) const
 	{
 		PackageProject::TypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
-		if (typeDescriptor == PackageProject::KPPC_DESCRIPTOR_REQUIRED || typeDescriptor == PackageProject::KPPC_DESCRIPTOR_RECOMMENDED)
+		if (typeDescriptor == PackageProject::TypeDescriptor::Required || typeDescriptor == PackageProject::TypeDescriptor::Recommended)
 		{
 			return true;
 		}
@@ -469,7 +469,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 				// Check entries of this group if all of them needs to be checked.
 				// Or if this is required or recommended item.
-				if (group->GetSelectionMode() == PackageProject::KPPC_SELECT_ALL || IsEntryShouldBeChecked(entry.get()))
+				if (group->GetSelectionMode() == PackageProject::SelectionMode::All || IsEntryShouldBeChecked(entry.get()))
 				{
 					checkedCount++;
 					entryNode.SetChecked(true);
@@ -482,8 +482,8 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 			{
 				switch (group->GetSelectionMode())
 				{
-					case PackageProject::KPPC_SELECT_AT_LEAST_ONE:
-					case PackageProject::KPPC_SELECT_EXACTLY_ONE:
+					case PackageProject::SelectionMode::AtLeastOne:
+					case PackageProject::SelectionMode::ExactlyOne:
 					{
 						GetNode(entryItems[0])->SetChecked(true);
 						break;

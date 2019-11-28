@@ -86,26 +86,26 @@ namespace Kortex
 		ObjectFunction objectFunc = entry->GetObjectFunction();
 		switch (objectFunc)
 		{
-			case KPPR_OBJFUNC_NONE:
+			case ObjectFunction::None:
 			{
 				return ReqState::True;
 			}
-			case KPPR_OBJFUNC_MOD_ACTIVE:
-			case KPPR_OBJFUNC_MOD_INACTIVE:
+			case ObjectFunction::ModActive:
+			case ObjectFunction::ModInactive:
 			{
 				if (!entry->GetID().IsEmpty())
 				{
 					bool isActive = IModManager::GetInstance()->IsModActive(entry->GetID());
-					return (ReqState)(objectFunc == KPPR_OBJFUNC_MOD_ACTIVE ? isActive : !isActive);
+					return FromInt<ReqState>(objectFunc == ObjectFunction::ModActive ? isActive : !isActive);
 				}
 				return ReqState::False;
 			}
-			case KPPR_OBJFUNC_PLUGIN_ACTIVE:
-			case KPPR_OBJFUNC_PLUGIN_INACTIVE:
+			case ObjectFunction::PluginActive:
+			case ObjectFunction::PluginInactive:
 			{
 				if (!entry->GetObject().IsEmpty())
 				{
-					Kortex::IPluginManager* manager = Kortex::IPluginManager::GetInstance();
+					IPluginManager* manager = IPluginManager::GetInstance();
 					if (manager)
 					{
 						if (!manager->HasPlugins())
@@ -114,19 +114,19 @@ namespace Kortex
 						}
 
 						bool isActive = manager->IsPluginActive(entry->GetObject());
-						return (ReqState)(objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? isActive : !isActive);
+						return FromInt<ReqState>(objectFunc == ObjectFunction::PluginActive ? isActive : !isActive);
 					}
 					return ReqState::Unknown;
 				}
 				return ReqState::False;
 			}
-			case KPPR_OBJFUNC_FILE_EXIST:
-			case KPPR_OBJFUNC_FILE_NOT_EXIST:
+			case ObjectFunction::FileExist:
+			case ObjectFunction::FileNotExist:
 			{
 				if (!entry->GetObject().IsEmpty())
 				{
 					bool isExist = KxFile(GetRequirementFilePath(entry)).IsExist();
-					return (ReqState)(objectFunc == KPPR_OBJFUNC_FILE_EXIST ? isExist : !isExist);
+					return FromInt<ReqState>(objectFunc == ObjectFunction::FileExist ? isExist : !isExist);
 				}
 				return ReqState::False;
 			}
@@ -202,7 +202,7 @@ namespace Kortex
 
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			auto& entry = group.GetEntries().emplace_back(std::make_unique<RequirementItem>(KPPR_TYPE_SYSTEM));
+			auto& entry = group.GetEntries().emplace_back(std::make_unique<RequirementItem>(ReqType::System));
 			entry->SetID(KVarExp(node.GetAttribute("ID")));
 			entry->SetCategory(KVarExp(node.GetAttribute("Category")));
 			entry->SetName(KVarExp(node.GetFirstChildElement("Name").GetValue()));

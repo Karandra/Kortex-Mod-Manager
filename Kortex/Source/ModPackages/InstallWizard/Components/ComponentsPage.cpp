@@ -260,7 +260,7 @@ namespace Kortex::InstallWizard
 			{
 				for (auto& entry: group->GetEntries())
 				{
-					entry->SetTDCurrentValue(PackageProject::KPPC_DESCRIPTOR_INVALID);
+					entry->SetTDCurrentValue(PackageProject::TypeDescriptor::Invalid);
 				}
 			}
 		}
@@ -343,7 +343,7 @@ namespace Kortex::InstallWizard
 				for (const PackageProject::FlagItem& flag: condition.GetFlags())
 				{
 					conditionChecker(IsConditionSatisfied(flag), condition.GetOperator());
-					if (condition.GetOperator() == PackageProject::KPP_OPERATOR_AND && !conditionChecker.GetResult())
+					if (condition.GetOperator() == PackageProject::Operator::And && !conditionChecker.GetResult())
 					{
 						break;
 					}
@@ -351,7 +351,7 @@ namespace Kortex::InstallWizard
 
 				// Then combine it
 				groupChecker(conditionChecker.GetResult(), conditionGroup.GetOperator());
-				if (conditionGroup.GetOperator() == PackageProject::KPP_OPERATOR_AND && !groupChecker.GetResult())
+				if (conditionGroup.GetOperator() == PackageProject::Operator::And && !groupChecker.GetResult())
 				{
 					break;
 				}
@@ -442,7 +442,7 @@ namespace Kortex::InstallWizard
 		{
 			for (auto& entry: group->GetEntries())
 			{
-				entry->SetTDCurrentValue(PackageProject::KPPC_DESCRIPTOR_INVALID);
+				entry->SetTDCurrentValue(PackageProject::TypeDescriptor::Invalid);
 				if (IsConditionsSatisfied(entry->GetTDConditionGroup()))
 				{
 					entry->SetTDCurrentValue(entry->GetTDConditionalValue());

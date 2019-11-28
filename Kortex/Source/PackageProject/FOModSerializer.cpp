@@ -32,11 +32,11 @@ namespace Kortex::PackageProject
 	{
 		wxString ToFOModOperator(Operator value)
 		{
-			return value == KPP_OPERATOR_OR ? wxS("Or") : wxS("And");
+			return value == Operator::Or ? wxS("Or") : wxS("And");
 		}
 		Operator FromFOModOperator(const wxString& value)
 		{
-			return value == wxS("Or") ? KPP_OPERATOR_OR : KPP_OPERATOR_AND;
+			return value == wxS("Or") ? Operator::Or : Operator::And;
 		}
 	
 		void WriteCondition(const Condition& condition, KxXMLNode& conditionNode)
@@ -130,19 +130,19 @@ namespace Kortex::PackageProject
 					wxString state = depNode.GetAttribute("state");
 					if (state == "Active")
 					{
-						reqEntry->SetObjectFunction(KPPR_OBJFUNC_PLUGIN_ACTIVE);
+						reqEntry->SetObjectFunction(ObjectFunction::PluginActive);
 					}
 					else if (state == "Inactive")
 					{
-						reqEntry->SetObjectFunction(KPPR_OBJFUNC_PLUGIN_INACTIVE);
+						reqEntry->SetObjectFunction(ObjectFunction::PluginInactive);
 					}
 					else if (state == "Missing")
 					{
-						reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_NOT_EXIST);
+						reqEntry->SetObjectFunction(ObjectFunction::FileNotExist);
 					}
 					else
 					{
-						reqEntry->SetObjectFunction(KPPR_OBJFUNC_NONE);
+						reqEntry->SetObjectFunction(ObjectFunction::None);
 					}
 				}
 				else if (name == "gameDependency")
@@ -159,7 +159,7 @@ namespace Kortex::PackageProject
 					}
 					else
 					{
-						reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
+						reqEntry->SetObjectFunction(ObjectFunction::FileExist);
 					}
 					reqEntry->SetRequiredVersion(depNode.GetAttribute("version"));
 				}
@@ -178,7 +178,7 @@ namespace Kortex::PackageProject
 					{
 						// No SE, fill with something meaningful
 						reqEntry->SetName(IGameInstance::GetActive()->GetGameShortName() + " Script Extender");
-						reqEntry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
+						reqEntry->SetObjectFunction(ObjectFunction::FileExist);
 					}
 				}
 				else if (name == "flagDependency")
@@ -224,7 +224,7 @@ namespace Kortex::PackageProject
 					}
 	
 					// Try change type to system. Most likely will fail.
-					reqEntry->TrySetTypeDescriptor(KPPR_TYPE_SYSTEM);
+					reqEntry->TrySetTypeDescriptor(ReqType::System);
 	
 					// Add the entry to its group
 					requirementsGroup->GetEntries().emplace_back(std::move(reqEntry));
@@ -642,7 +642,7 @@ namespace Kortex::PackageProject
 				// Decide whether to add this item to required files or not
 				bool shouldAlwaysInstall = fileDataNode.GetAttributeBool("alwaysInstall", false);
 				bool shouldInstallIfUsable = fileDataNode.GetAttributeBool("installIfUsable", false);
-				if (shouldAlwaysInstall || (shouldInstallIfUsable && entry->GetTDDefaultValue() != KPPC_DESCRIPTOR_NOT_USABLE))
+				if (shouldAlwaysInstall || (shouldInstallIfUsable && entry->GetTDDefaultValue() != TypeDescriptor::NotUsable))
 				{
 					m_ProjectLoad->GetComponents().GetRequiredFileData().emplace_back(fileEntry->GetID());
 				}
@@ -804,7 +804,7 @@ namespace Kortex::PackageProject
 		if (const ImageItem* headerImageEntry = interfaceConfig.GetHeaderImageEntry())
 		{
 			KxXMLNode node = configRootNode.NewElement("moduleImage");
-			node.SetAttribute("path", PathNameToPackage(headerImageEntry->GetPath(), KPP_CONTENT_IMAGES));
+			node.SetAttribute("path", PathNameToPackage(headerImageEntry->GetPath(), ContentType::Images));
 			node.SetAttribute("showImage", headerImageEntry->IsVisible() ? "true" : "false");
 			node.SetAttribute("showFade", headerImageEntry->IsFadeEnabled() ? "true" : "false");
 			
@@ -882,7 +882,7 @@ namespace Kortex::PackageProject
 							// Image
 							if (!entry->GetImage().IsEmpty())
 							{
-								entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(entry->GetImage(), KPP_CONTENT_IMAGES));
+								entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(entry->GetImage(), ContentType::Images));
 							}
 	
 							// FOMod always requires 'files' node, so no check for empty array
@@ -915,7 +915,7 @@ namespace Kortex::PackageProject
 								WriteRequirements(dependenciesNode, entry->GetRequirements());
 	
 								// New type descriptor
-								TypeDescriptor conditionalTD = entry->GetTDConditionalValue() != KPPC_DESCRIPTOR_INVALID ? entry->GetTDConditionalValue() : entry->GetTDDefaultValue();
+								TypeDescriptor conditionalTD = entry->GetTDConditionalValue() != TypeDescriptor::Invalid ? entry->GetTDConditionalValue() : entry->GetTDDefaultValue();
 								patternNode.NewElement("type").SetAttribute("name", components.TypeDescriptorToString(conditionalTD));
 							}
 						}
@@ -946,7 +946,7 @@ namespace Kortex::PackageProject
 	
 			KxXMLNode setNode = optionalFileGroups.NewElement("group");
 			setNode.SetAttribute("name", name);
-			setNode.SetAttribute("type", ConvertSelectionMode(KPPC_SELECT_ALL));
+			setNode.SetAttribute("type", ConvertSelectionMode(SelectionMode::All));
 	
 			KxXMLNode pluginsNode = setNode.NewElement("plugins");
 			pluginsNode.SetAttribute("order", "Explicit");
@@ -962,11 +962,11 @@ namespace Kortex::PackageProject
 	
 			if (const ImageItem* imageEntry = m_ProjectSave->GetInterface().GetMainImageEntry())
 			{
-				entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(imageEntry->GetPath(), KPP_CONTENT_IMAGES));
+				entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(imageEntry->GetPath(), ContentType::Images));
 			}
 	
 			KxXMLNode typeDescriptorNode = entryNode.NewElement("typeDescriptor");
-			typeDescriptorNode.NewElement("type").SetAttribute("name", components.TypeDescriptorToString(KPPC_DESCRIPTOR_REQUIRED));
+			typeDescriptorNode.NewElement("type").SetAttribute("name", components.TypeDescriptorToString(TypeDescriptor::Required));
 	
 			KxStringVector fileNames;
 			for (const auto& fileEntry: m_ProjectSave->GetFileData().GetData())
@@ -1055,7 +1055,7 @@ namespace Kortex::PackageProject
 			RequirementGroup* group = requirements.FindGroupWithID(id);
 			if (group)
 			{
-				node.SetAttribute("operator", group->GetOperator() == KPP_OPERATOR_AND ? "And" : "Or");
+				node.SetAttribute("operator", group->GetOperator() == Operator::And ? "And" : "Or");
 				for (const auto& entry: group->GetEntries())
 				{
 					if (entry->GetID() == IGameInstance::GetActive()->GetGameID())
@@ -1069,11 +1069,11 @@ namespace Kortex::PackageProject
 					else
 					{
 						ObjectFunction objectFunc = entry->GetObjectFunction();
-						if (objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE || objectFunc == KPPR_OBJFUNC_PLUGIN_INACTIVE)
+						if (objectFunc == ObjectFunction::PluginActive || objectFunc == ObjectFunction::PluginInactive)
 						{
 							KxXMLNode tDepNode = node.NewElement("fileDependency");
 							tDepNode.SetAttribute("file", entry->GetObject());
-							tDepNode.SetAttribute("state", objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? "Active" : "Inactive");
+							tDepNode.SetAttribute("state", objectFunc == ObjectFunction::PluginActive ? "Active" : "Inactive");
 						}
 					}
 				}

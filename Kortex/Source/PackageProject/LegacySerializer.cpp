@@ -403,7 +403,7 @@ namespace Kortex::PackageProject
 				{
 					RequirementItem* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
 					entry->SetID(node.GetValue());
-					entry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
+					entry->SetObjectFunction(ObjectFunction::FileExist);
 					entry->SetRequiredVersion(node.GetAttribute("RequiredVersion"));
 					entry->SetDescription(node.GetAttribute("Comment"));
 	
@@ -412,7 +412,7 @@ namespace Kortex::PackageProject
 	
 					// This will likely work, since 3.x not support user requirements,
 					// but since then system ID's may have changed. 
-					entry->TrySetTypeDescriptor(KPPR_TYPE_SYSTEM);
+					entry->TrySetTypeDescriptor(ReqType::System);
 	
 					// Bool attribute 'Necessary' is ignored
 				}
@@ -434,14 +434,14 @@ namespace Kortex::PackageProject
 	
 			ComponentGroup* group = step->GetGroups().emplace_back(std::make_unique<ComponentGroup>()).get();
 			group->SetName("Options");
-			group->SetSelectionMode(KPPC_SELECT_ANY);
+			group->SetSelectionMode(SelectionMode::Any);
 	
 			for (KxXMLNode entryNode = componentsNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 			{
 				ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
 				entry->SetName(entryNode.GetAttribute("Name"));
 				entry->SetDescription(entryNode.GetAttribute("Description"));
-				entry->SetTDDefaultValue(entryNode.GetAttributeBool("Main") ? KPPC_DESCRIPTOR_RECOMMENDED : KPPC_DESCRIPTOR_OPTIONAL);
+				entry->SetTDDefaultValue(entryNode.GetAttributeBool("Main") ? TypeDescriptor::Recommended : TypeDescriptor::Optional);
 				
 				wxString folder = entryNode.GetAttribute("Folder");
 				if (!folder.IsEmpty())
@@ -563,14 +563,14 @@ namespace Kortex::PackageProject
 							entry->SetDescription(entryNode.GetFirstChildElement("Comment").GetValue());
 	
 							// Version 4.x supports custom requirements only with this type (checking mod ID from install log)
-							entry->SetObjectFunction(KPPR_OBJFUNC_MOD_ACTIVE);
+							entry->SetObjectFunction(ObjectFunction::ModActive);
 	
 							// I may be able to fix some IDs
 							FixRequirementID(entry);
 	
 							// Version 4.x supports user requirements. They are denoted by bool attribute 'Standart' (typo in this version again).
 							// But it's better to ignore this flag, as system ID's have changed and list of system requirements have been extended.
-							entry->TrySetTypeDescriptor(KPPR_TYPE_SYSTEM);
+							entry->TrySetTypeDescriptor(ReqType::System);
 						}
 					}
 				}
@@ -599,7 +599,7 @@ namespace Kortex::PackageProject
 						}
 	
 						entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
-						entry->SetTDDefaultValue(entryNode.GetAttributeBool("Checked") ? KPPC_DESCRIPTOR_RECOMMENDED : KPPC_DESCRIPTOR_OPTIONAL);
+						entry->SetTDDefaultValue(entryNode.GetAttributeBool("Checked") ? TypeDescriptor::Recommended : TypeDescriptor::Optional);
 	
 						wxString folder = entryNode.GetFirstChildElement("Folder").GetValue();
 						if (!folder.IsEmpty())
@@ -772,7 +772,7 @@ namespace Kortex::PackageProject
 				{
 					RequirementGroup* group = requirements.GetGroups().emplace_back(std::make_unique<RequirementGroup>()).get();
 					group->SetID(setsNode.GetAttribute("ID"));
-					group->SetOperator(setsNode.GetAttribute("Operator") == "Or" ? KPP_OPERATOR_OR : KPP_OPERATOR_AND);
+					group->SetOperator(setsNode.GetAttribute("Operator") == "Or" ? Operator::Or : Operator::And);
 	
 					// In 5.x default set have ID 'Default'. What a coincidence.
 					if (showCommonRequirements && (group->GetID() == "---" || group->GetID() == "Default"|| group->GetID() == "Main"))
@@ -809,66 +809,66 @@ namespace Kortex::PackageProject
 	
 							// Required state
 							wxString state = entryNode.GetFirstChildElement("State").GetValue();
-							ObjectFunction objectFunction = KPPR_OBJFUNC_INVALID;
+							ObjectFunction objectFunction = ObjectFunction::Invalid;
 							if (state == "Active")
 							{
-								objectFunction = KPPR_OBJFUNC_PLUGIN_ACTIVE;
+								objectFunction = ObjectFunction::PluginActive;
 							}
 							else if (state == "Inactive")
 							{
-								objectFunction = KPPR_OBJFUNC_PLUGIN_INACTIVE;
+								objectFunction = ObjectFunction::PluginInactive;
 							}
 							else if (state == "Present")
 							{
-								objectFunction = KPPR_OBJFUNC_FILE_EXIST;
+								objectFunction = ObjectFunction::FileExist;
 							}
 							else if (state == "Missing")
 							{
-								objectFunction = KPPR_OBJFUNC_FILE_NOT_EXIST;
+								objectFunction = ObjectFunction::FileNotExist;
 							}
 							else if (state == "Installed")
 							{
-								objectFunction = KPPR_OBJFUNC_MOD_ACTIVE;
+								objectFunction = ObjectFunction::ModActive;
 							}
 							// Version 5.x have no 'NotInstalled' state to match to 'KPPR_STATE_MOD_INACTIVE' from KMP.
 	
-							entry->SetObjectFunction(objectFunction != KPPR_OBJFUNC_INVALID ? objectFunction : KPPR_OBJFUNC_MOD_ACTIVE);
+							entry->SetObjectFunction(objectFunction != ObjectFunction::Invalid ? objectFunction : ObjectFunction::ModActive);
 	
 							// Operator
 							wxString operatorRVName = entryNode.GetFirstChildElement("Operator").GetValue();
-							Operator operatorRVType = KPP_OPERATOR_INVALID;
+							Operator operatorRVType = Operator::Invalid;
 							if (operatorRVName == "==")
 							{
-								operatorRVType = KPP_OPERATOR_EQ;
+								operatorRVType = Operator::Equal;
 							}
 							else if (operatorRVName == "!=")
 							{
-								operatorRVType = KPP_OPERATOR_NOT_EQ;
+								operatorRVType = Operator::NotEqual;
 							}
 							else if (operatorRVName == ">=")
 							{
-								operatorRVType = KPP_OPERATOR_GTEQ;
+								operatorRVType = Operator::GreaterThanOrEqual;
 							}
 							else if (operatorRVName == ">")
 							{
-								operatorRVType = KPP_OPERATOR_GT;
+								operatorRVType = Operator::GreaterThan;
 							}
 							else if (operatorRVName == "<=")
 							{
-								operatorRVType = KPP_OPERATOR_LTEQ;
+								operatorRVType = Operator::LessThanOrEqual;
 							}
 							else if (operatorRVName == "<")
 							{
-								operatorRVType = KPP_OPERATOR_LT;
+								operatorRVType = Operator::LessThan;
 							}
 	
-							if (operatorRVType != KPP_OPERATOR_INVALID)
+							if (operatorRVType != Operator::Invalid)
 							{
 								entry->SetRVFunction(operatorRVType);
 							}
 	
 							FixRequirementID(entry);
-							entry->TrySetTypeDescriptor(KPPR_TYPE_SYSTEM);
+							entry->TrySetTypeDescriptor(ReqType::System);
 						}
 					}
 				}
@@ -943,7 +943,7 @@ namespace Kortex::PackageProject
 						ReadFlagsArray(entry->GetTDConditionGroup().GetOrCreateFirstCondition(), entryNode.GetFirstChildElement("RequiredFlags"));
 						if (entry->GetTDConditionGroup().HasConditions())
 						{
-							entry->SetTDDefaultValue(KPPC_DESCRIPTOR_NOT_USABLE);
+							entry->SetTDDefaultValue(TypeDescriptor::NotUsable);
 							entry->SetTDConditionalValue(typeDescriptor);
 						}
 						else

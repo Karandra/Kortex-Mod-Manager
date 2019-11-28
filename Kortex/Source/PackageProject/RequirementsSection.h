@@ -31,12 +31,12 @@ namespace Kortex::PackageProject
 			bool m_OverallStatusCalculated = false;
 			bool m_OverallStatus = false;
 	
-			ReqType m_TypeDescriptor = KPPR_TYPE_AUTO;
+			ReqType m_TypeDescriptor = ReqType::Auto;
 			wxString m_Category;
 			KxStringVector m_Dependencies;
 	
 		public:
-			RequirementItem(ReqType typeDescriptor = KPPR_TYPE_AUTO);
+			RequirementItem(ReqType typeDescriptor = ReqType::Auto);
 			~RequirementItem();
 	
 		public:
@@ -219,10 +219,10 @@ namespace Kortex::PackageProject
 	class RequirementsSection: public ProjectSection
 	{
 		public:
-			static const Operator ms_DefaultGroupOperator = KPP_OPERATOR_AND;
-			static const Operator ms_DefaultVersionOperator = KPP_OPERATOR_GTEQ;
-			static const ObjectFunction ms_DefaultObjectFunction = KPPR_OBJFUNC_NONE;
-			static const ReqType ms_DefaultTypeDescriptor = KPPR_TYPE_AUTO;
+			static const Operator ms_DefaultGroupOperator = Operator::And;
+			static const Operator ms_DefaultVersionOperator = Operator::GreaterThanOrEqual;
+			static const ObjectFunction ms_DefaultObjectFunction = ObjectFunction::None;
+			static const ReqType ms_DefaultTypeDescriptor = ReqType::Auto;
 	
 		public:
 			static ObjectFunction StringToObjectFunction(const wxString& name);

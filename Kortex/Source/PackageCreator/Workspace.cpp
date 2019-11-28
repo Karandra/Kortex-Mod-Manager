@@ -231,11 +231,11 @@ namespace Kortex::PackageDesigner
 		item = menu->Add(new KxMenuItem(KxID_SAVEAS, KTr("PackageCreator.MenuProject.SaveAs")));
 		item->Bind(KxEVT_MENU_SELECT, &Workspace::OnSaveProject, this);
 
-		item = menu->Add(new KxMenuItem(KxID_HIGHEST + PackageProject::KPP_PACCKAGE_FOMOD_XML, KTr("PackageCreator.MenuProject.SaveAsFOMod")));
+		item = menu->Add(new KxMenuItem(KxID_HIGHEST + ToInt(PackageProject::PackageType::FOModXML), KTr("PackageCreator.MenuProject.SaveAsFOMod")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentExport));
 		item->Bind(KxEVT_MENU_SELECT, &Workspace::OnExportProject, this);
 
-		item = menu->Add(new KxMenuItem(KxID_HIGHEST + PackageProject::KPP_PACCKAGE_NATIVE, KTr("PackageCreator.MenuProject.SaveAsKMP")));
+		item = menu->Add(new KxMenuItem(KxID_HIGHEST + ToInt(PackageProject::PackageType::Native), KTr("PackageCreator.MenuProject.SaveAsKMP")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentExport));
 		item->Bind(KxEVT_MENU_SELECT, &Workspace::OnExportProject, this);
 	}
@@ -334,9 +334,7 @@ namespace Kortex::PackageDesigner
 		if (m_WorkspaceDocument.AskForSave() == KxID_OK)
 		{
 			KxMenuItem* item = event.GetItem();
-
-			PackageProject::PackageType type = (PackageProject::PackageType)(item->GetId() - KxID_HIGHEST);
-			switch (type)
+			switch (item->GetId() - KxID_HIGHEST)
 			{
 				case 0:
 				{
@@ -370,7 +368,7 @@ namespace Kortex::PackageDesigner
 		PackageProject::PackageType type = (PackageProject::PackageType)(event.GetItem()->GetId() - KxID_HIGHEST);
 		switch (type)
 		{
-			case PackageProject::KPP_PACCKAGE_NATIVE:
+			case PackageProject::PackageType::Native:
 			{
 				KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 				dialog.SetDefaultExtension("xml");
@@ -386,7 +384,7 @@ namespace Kortex::PackageDesigner
 				}
 				break;
 			}
-			case PackageProject::KPP_PACCKAGE_FOMOD_XML:
+			case PackageProject::PackageType::FOModXML:
 			{
 				FOModImportExportDialog dialog(this, true);
 				if (dialog.ShowModal() == KxID_OK)

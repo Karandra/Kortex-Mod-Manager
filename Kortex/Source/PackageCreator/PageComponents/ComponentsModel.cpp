@@ -436,7 +436,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 				else
 				{
-					value = KTr(wxS("PackageCreator.PageComponents.SelectionMode")) + wxS(": ") + m_SelectionModeEditor.GetItems()[group->GetSelectionMode()];
+					value = KTr(wxS("PackageCreator.PageComponents.SelectionMode")) + wxS(": ") + m_SelectionModeEditor.GetItems()[ToInt(group->GetSelectionMode())];
 				}
 				break;
 			}
@@ -481,7 +481,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 						}
 						else
 						{
-							value = m_TypeDescriptorEditor.GetItems()[entry->GetTDDefaultValue()];
+							value = m_TypeDescriptorEditor.GetItems()[ToInt(entry->GetTDDefaultValue())];
 						}
 						break;
 					}
@@ -604,7 +604,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 							conditions = KAux::MakeNoneLabel();
 						}
 	
-						if (entry->GetTDConditionalValue() != PackageProject::KPPC_DESCRIPTOR_INVALID)
+						if (entry->GetTDConditionalValue() != PackageProject::TypeDescriptor::Invalid)
 						{
 							if (entry->GetTDConditionGroup().GetConditions().size() > 1)
 							{
@@ -1487,11 +1487,11 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			{
 				tChoices.push_back(PackageProject::ComponentsSection::TypeDescriptorToTranslation(type));
 			};
-			AddMode(PackageProject::KPPC_DESCRIPTOR_OPTIONAL);
-			AddMode(PackageProject::KPPC_DESCRIPTOR_REQUIRED);
-			AddMode(PackageProject::KPPC_DESCRIPTOR_RECOMMENDED);
-			AddMode(PackageProject::KPPC_DESCRIPTOR_COULD_BE_USABLE);
-			AddMode(PackageProject::KPPC_DESCRIPTOR_NOT_USABLE);
+			AddMode(PackageProject::TypeDescriptor::Optional);
+			AddMode(PackageProject::TypeDescriptor::Required);
+			AddMode(PackageProject::TypeDescriptor::Recommended);
+			AddMode(PackageProject::TypeDescriptor::CouldBeUsable);
+			AddMode(PackageProject::TypeDescriptor::NotUsable);
 			m_TypeDescriptorEditor.SetItems(tChoices);
 			m_TypeDescriptorEditor.EndEditOnCloseup(true);
 		}
@@ -1503,11 +1503,11 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			{
 				tChoices.push_back(PackageProject::ComponentsSection::SelectionModeToTranslation(mode));
 			};
-			AddMode(PackageProject::KPPC_SELECT_ANY);
-			AddMode(PackageProject::KPPC_SELECT_EXACTLY_ONE);
-			AddMode(PackageProject::KPPC_SELECT_AT_LEAST_ONE);
-			AddMode(PackageProject::KPPC_SELECT_AT_MOST_ONE);
-			AddMode(PackageProject::KPPC_SELECT_ALL);
+			AddMode(PackageProject::SelectionMode::Any);
+			AddMode(PackageProject::SelectionMode::ExactlyOne);
+			AddMode(PackageProject::SelectionMode::AtLeastOne);
+			AddMode(PackageProject::SelectionMode::AtMostOne);
+			AddMode(PackageProject::SelectionMode::All);
 			m_SelectionModeEditor.SetItems(tChoices);
 			m_SelectionModeEditor.EndEditOnCloseup(true);
 		}

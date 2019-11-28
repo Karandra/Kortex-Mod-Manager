@@ -79,15 +79,15 @@ namespace Kortex::PackageProject
 	{
 		switch (m_TypeDescriptor)
 		{
-			case KPPR_TYPE_SYSTEM:
+			case ReqType::System:
 			{
 				return true;
 			}
-			case KPPR_TYPE_USER:
+			case ReqType::User:
 			{
 				return false;
 			}
-			case KPPR_TYPE_AUTO:
+			case ReqType::Auto:
 			{
 				return IsStd();
 			}
@@ -103,13 +103,13 @@ namespace Kortex::PackageProject
 	{
 		switch (type)
 		{
-			case KPPR_TYPE_USER:
-			case KPPR_TYPE_AUTO:
+			case ReqType::User:
+			case ReqType::Auto:
 			{
 				m_TypeDescriptor = type;
 				break;
 			}
-			case KPPR_TYPE_SYSTEM:
+			case ReqType::System:
 			{
 				if (IsStd())
 				{
@@ -122,7 +122,7 @@ namespace Kortex::PackageProject
 	}
 	bool RequirementItem::ConformToTypeDescriptor()
 	{
-		if (m_TypeDescriptor == KPPR_TYPE_SYSTEM || m_TypeDescriptor == KPPR_TYPE_AUTO)
+		if (m_TypeDescriptor == ReqType::System || m_TypeDescriptor == ReqType::Auto)
 		{
 			const RequirementItem* stdEntry = Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID());
 			if (stdEntry)
@@ -206,31 +206,31 @@ namespace Kortex::PackageProject
 	{
 		if (name == ObjFuncConst::NONE_STRING)
 		{
-			return KPPR_OBJFUNC_NONE;
+			return ObjectFunction::None;
 		}
 		if (name == ObjFuncConst::MOD_ACTIVE_STRING)
 		{
-			return KPPR_OBJFUNC_MOD_ACTIVE;
+			return ObjectFunction::ModActive;
 		}
 		if (name == ObjFuncConst::MOD_INACTIVE_STRING)
 		{
-			return KPPR_OBJFUNC_MOD_INACTIVE;
+			return ObjectFunction::ModInactive;
 		}
 		if (name == ObjFuncConst::PLUGIN_ACTIVE_STRING)
 		{
-			return KPPR_OBJFUNC_PLUGIN_ACTIVE;
+			return ObjectFunction::PluginActive;
 		}
 		if (name == ObjFuncConst::PLUGIN_INACTIVE_STRING)
 		{
-			return KPPR_OBJFUNC_PLUGIN_INACTIVE;
+			return ObjectFunction::PluginInactive;
 		}
 		if (name == ObjFuncConst::FILE_EXIST_STRING)
 		{
-			return KPPR_OBJFUNC_FILE_EXIST;
+			return ObjectFunction::FileExist;
 		}
 		if (name == ObjFuncConst::FILE_NOT_EXIST_STRING)
 		{
-			return KPPR_OBJFUNC_FILE_NOT_EXIST;
+			return ObjectFunction::FileNotExist;
 		}
 		return ms_DefaultObjectFunction;
 	}
@@ -238,31 +238,31 @@ namespace Kortex::PackageProject
 	{
 		switch (state)
 		{
-			case KPPR_OBJFUNC_NONE:
+			case ObjectFunction::None:
 			{
 				return ObjFuncConst::NONE_STRING;
 			}
-			case KPPR_OBJFUNC_MOD_ACTIVE:
+			case ObjectFunction::ModActive:
 			{
 				return ObjFuncConst::MOD_ACTIVE_STRING;
 			}
-			case KPPR_OBJFUNC_MOD_INACTIVE:
+			case ObjectFunction::ModInactive:
 			{
 				return ObjFuncConst::MOD_INACTIVE_STRING;
 			}
-			case KPPR_OBJFUNC_PLUGIN_ACTIVE:
+			case ObjectFunction::PluginActive:
 			{
 				return ObjFuncConst::PLUGIN_ACTIVE_STRING;
 			}
-			case KPPR_OBJFUNC_PLUGIN_INACTIVE:
+			case ObjectFunction::PluginInactive:
 			{
 				return ObjFuncConst::PLUGIN_INACTIVE_STRING;
 			}
-			case KPPR_OBJFUNC_FILE_EXIST:
+			case ObjectFunction::FileExist:
 			{
 				return ObjFuncConst::FILE_EXIST_STRING;
 			}
-			case KPPR_OBJFUNC_FILE_NOT_EXIST:
+			case ObjectFunction::FileNotExist:
 			{
 				return ObjFuncConst::FILE_NOT_EXIST_STRING;
 			}
@@ -274,15 +274,15 @@ namespace Kortex::PackageProject
 	{
 		if (name == TypeConst::USER_STRING)
 		{
-			return KPPR_TYPE_USER;
+			return ReqType::User;
 		}
 		if (name == TypeConst::SYSTEM_STRING)
 		{
-			return KPPR_TYPE_SYSTEM;
+			return ReqType::System;
 		}
 		if (name == TypeConst::AUTO_STRING)
 		{
-			return KPPR_TYPE_AUTO;
+			return ReqType::Auto;
 		}
 		return ms_DefaultTypeDescriptor;
 	}
@@ -290,15 +290,15 @@ namespace Kortex::PackageProject
 	{
 		switch (type)
 		{
-			case KPPR_TYPE_USER:
+			case ReqType::User:
 			{
 				return TypeConst::USER_STRING;
 			}
-			case KPPR_TYPE_SYSTEM:
+			case ReqType::System:
 			{
 				return TypeConst::SYSTEM_STRING;
 			}
-			case KPPR_TYPE_AUTO:
+			case ReqType::Auto:
 			{
 				return TypeConst::AUTO_STRING;
 			}
@@ -310,34 +310,34 @@ namespace Kortex::PackageProject
 	{
 		// Always return true when requested to compare against invalid (or unspecified) version.
 		// Or operator is unspecified, which should mean that caller is not interested in this check.
-		if (operatorType == KPP_OPERATOR_NONE || !required.IsOK())
+		if (operatorType == Operator::None || !required.IsOK())
 		{
 			return true;
 		}
 	
 		switch (operatorType)
 		{
-			case KPP_OPERATOR_EQ:
+			case Operator::Equal:
 			{
 				return current == required;
 			}
-			case KPP_OPERATOR_NOT_EQ:
+			case Operator::NotEqual:
 			{
 				return current != required;
 			}
-			case KPP_OPERATOR_GT:
+			case Operator::GreaterThan:
 			{
 				return current > required;
 			}
-			case KPP_OPERATOR_GTEQ:
+			case Operator::GreaterThanOrEqual:
 			{
 				return current >= required;
 			}
-			case KPP_OPERATOR_LT:
+			case Operator::LessThan:
 			{
 				return current < required;
 			}
-			case KPP_OPERATOR_LTEQ:
+			case Operator::LessThanOrEqual:
 			{
 				return current <= required;
 			}
@@ -394,7 +394,7 @@ namespace Kortex::PackageProject
 			RequirementGroup* group = FindGroupWithID(id);
 			if (group)
 			{
-				checker(group->CalcGroupStatus(), KPP_OPERATOR_AND);
+				checker(group->CalcGroupStatus(), Operator::And);
 			}
 		}
 		return checker.GetResult();

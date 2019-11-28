@@ -50,7 +50,7 @@ namespace Kortex
 				KxFileItem item;
 				if (m_Archive.FindFile("KortexPackage.xml", item))
 				{
-					m_PackageType = PackageProject::KPP_PACCKAGE_NATIVE;
+					m_PackageType = PackageProject::PackageType::Native;
 					m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item);
 					LoadConfigNative(project, item.GetExtraData<size_t>());
 					return;
@@ -67,7 +67,7 @@ namespace Kortex
 				}
 				if (item.IsOK())
 				{
-					m_PackageType = PackageProject::KPP_PACCKAGE_LEGACY;
+					m_PackageType = PackageProject::PackageType::Legacy;
 					m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item, rootFolder);
 					LoadConfigSMI(project, item.GetExtraData<size_t>());
 					return;
@@ -100,13 +100,13 @@ namespace Kortex
 					if (!moduleConfigItem.IsOK() && TryScriptedFOMod() != ms_InvalidIndex)
 					{
 						// Set as scripted but load available XMLs
-						m_PackageType = PackageProject::KPP_PACCKAGE_FOMOD_CSHARP;
+						m_PackageType = PackageProject::PackageType::FOModCSharp;
 						LoadConfigFOMod(project, infoItem.GetExtraData<size_t>(), moduleConfigItem.GetExtraData<size_t>());
 						return;
 					}
 
 					// This is valid configurable FOMod
-					m_PackageType = PackageProject::KPP_PACCKAGE_FOMOD_XML;
+					m_PackageType = PackageProject::PackageType::FOModXML;
 					LoadConfigFOMod(project, infoItem.GetExtraData<size_t>(), moduleConfigItem.GetExtraData<size_t>());
 					return;
 				}
@@ -115,7 +115,7 @@ namespace Kortex
 			// FOMod (Scripted)
 			if (TryScriptedFOMod() != ms_InvalidIndex)
 			{
-				m_PackageType = PackageProject::KPP_PACCKAGE_FOMOD_CSHARP;
+				m_PackageType = PackageProject::PackageType::FOModCSharp;
 			}
 		}
 	}
@@ -284,14 +284,14 @@ namespace Kortex
 	{
 		return !m_PackageFilePath.IsEmpty() &&
 			m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown &&
-			m_PackageType != PackageProject::KPP_PACCKAGE_UNKNOWN &&
+			m_PackageType != PackageProject::PackageType::Unknown &&
 			!m_Config.GetModID().IsEmpty();
 	}
 	bool ModPackage::IsTypeSupported() const
 	{
-		return m_PackageType == PackageProject::KPP_PACCKAGE_NATIVE ||
-			m_PackageType == PackageProject::KPP_PACCKAGE_LEGACY ||
-			m_PackageType == PackageProject::KPP_PACCKAGE_FOMOD_XML;
+		return m_PackageType == PackageProject::PackageType::Native ||
+			m_PackageType == PackageProject::PackageType::Legacy ||
+			m_PackageType == PackageProject::PackageType::FOModXML;
 	}
 
 	void ModPackage::LoadResources()

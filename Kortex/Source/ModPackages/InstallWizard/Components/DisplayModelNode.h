@@ -100,7 +100,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 			{
 				if (const PackageProject::ComponentItem* entry = GetEntry())
 				{
-					return entry->GetTDCurrentValue() == PackageProject::KPPC_DESCRIPTOR_REQUIRED;
+					return entry->GetTDCurrentValue() == PackageProject::TypeDescriptor::Required;
 				}
 				return false;
 			}

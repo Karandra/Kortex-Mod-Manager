@@ -19,7 +19,7 @@ namespace Kortex
 			ModPackageProject m_Config;
 			wxString m_PackageFilePath;
 			wxString m_EffectiveArchiveRoot;
-			PackageProject::PackageType m_PackageType = PackageProject::KPP_PACCKAGE_UNKNOWN;
+			PackageProject::PackageType m_PackageType = PackageProject::PackageType::Unknown;
 
 			KArchive::BufferMap m_DocumentsBuffer;
 			bool m_DocumentsLoaded = false;

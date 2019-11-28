@@ -56,7 +56,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 				const wxString& object = item.GetObject();
 				PackageProject::ObjectFunction objectFunc = item.GetObjectFunction();
 				wxBitmap icon = GetIconByState(item.GetObjectFunctionResult());
-				const bool objFunction = objectFunc == PackageProject::KPPR_OBJFUNC_FILE_EXIST || objectFunc == PackageProject::KPPR_OBJFUNC_FILE_NOT_EXIST;
+				const bool objFunction = objectFunc == PackageProject::ObjectFunction::FileExist || objectFunc == PackageProject::ObjectFunction::FileNotExist;
 
 				// There's not much sense displaying required state string under this conditions
 				if (objFunction && object.IsEmpty())
@@ -142,7 +142,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 				{
 					// No need to show requirements with no object function and no required version.
 					// They always be true.
-					if (entry->GetObjectFunction() == PackageProject::KPPR_OBJFUNC_NONE && !entry->GetRequiredVersion().IsOK())
+					if (entry->GetObjectFunction() == PackageProject::ObjectFunction::None && !entry->GetRequiredVersion().IsOK())
 					{
 						break;
 					}

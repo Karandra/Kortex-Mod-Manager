@@ -52,35 +52,35 @@ namespace Kortex
 
 		switch (operatorType)
 		{
-			case KPP_OPERATOR_EQ:
+			case Operator::Equal:
 			{
 				return OperatorConst::EQ;
 			}
-			case KPP_OPERATOR_NOT_EQ:
+			case Operator::NotEqual:
 			{
 				return OperatorConst::NOT_EQ;
 			}
-			case KPP_OPERATOR_LT:
+			case Operator::LessThan:
 			{
 				return OperatorConst::LT;
 			}
-			case KPP_OPERATOR_LTEQ:
+			case Operator::LessThanOrEqual:
 			{
 				return OperatorConst::LTEQ;
 			}
-			case KPP_OPERATOR_GT:
+			case Operator::GreaterThan:
 			{
 				return OperatorConst::GT;
 			}
-			case KPP_OPERATOR_GTEQ:
+			case Operator::GreaterThanOrEqual:
 			{
 				return OperatorConst::GTEQ;
 			}
-			case KPP_OPERATOR_AND:
+			case Operator::And:
 			{
 				return OperatorConst::AND;
 			}
-			case KPP_OPERATOR_OR:
+			case Operator::Or:
 			{
 				return OperatorConst::OR;
 			}
@@ -93,35 +93,35 @@ namespace Kortex
 
 		switch (operatorType)
 		{
-			case KPP_OPERATOR_EQ:
+			case Operator::Equal:
 			{
 				return OperatorConst::EQ_STRING;
 			}
-			case KPP_OPERATOR_NOT_EQ:
+			case Operator::NotEqual:
 			{
 				return OperatorConst::NOT_EQ_STRING;
 			}
-			case KPP_OPERATOR_LT:
+			case Operator::LessThan:
 			{
 				return OperatorConst::LT_STRING;
 			}
-			case KPP_OPERATOR_LTEQ:
+			case Operator::LessThanOrEqual:
 			{
 				return OperatorConst::LTEQ_STRING;
 			}
-			case KPP_OPERATOR_GT:
+			case Operator::GreaterThan:
 			{
 				return OperatorConst::GT_STRING;
 			}
-			case KPP_OPERATOR_GTEQ:
+			case Operator::GreaterThanOrEqual:
 			{
 				return OperatorConst::GTEQ_STRING;
 			}
-			case KPP_OPERATOR_AND:
+			case Operator::And:
 			{
 				return OperatorConst::AND_STRING;
 			}
-			case KPP_OPERATOR_OR:
+			case Operator::Or:
 			{
 				return OperatorConst::OR_STRING;
 			}
@@ -134,39 +134,39 @@ namespace Kortex
 
 		if (name == OperatorConst::EQ_STRING)
 		{
-			return KPP_OPERATOR_EQ;
+			return Operator::Equal;
 		}
 		if (name == OperatorConst::NOT_EQ_STRING)
 		{
-			return KPP_OPERATOR_NOT_EQ;
+			return Operator::NotEqual;
 		}
 		if (name == OperatorConst::LT_STRING)
 		{
-			return KPP_OPERATOR_LT;
+			return Operator::LessThan;
 		}
 		if (name == OperatorConst::LTEQ_STRING)
 		{
-			return KPP_OPERATOR_LTEQ;
+			return Operator::LessThanOrEqual;
 		}
 		if (name == OperatorConst::GT_STRING)
 		{
-			return KPP_OPERATOR_GT;
+			return Operator::GreaterThan;
 		}
 		if (name == OperatorConst::GTEQ_STRING)
 		{
-			return KPP_OPERATOR_GTEQ;
+			return Operator::GreaterThanOrEqual;
 		}
 		if (name == OperatorConst::AND_STRING)
 		{
-			return KPP_OPERATOR_AND;
+			return Operator::And;
 		}
 		if (name == OperatorConst::OR_STRING)
 		{
-			return KPP_OPERATOR_OR;
+			return Operator::Or;
 		}
 		if (allowNone && name == OperatorConst::NONE_STRING)
 		{
-			return KPP_OPERATOR_NONE;
+			return Operator::None;
 		}
 		return default;
 	}
@@ -262,7 +262,7 @@ namespace Kortex::PackageProject
 		}
 		else
 		{
-			if (operatorType == KPP_OPERATOR_OR)
+			if (operatorType == Operator::Or)
 			{
 				m_Result = value || m_Result;
 			}

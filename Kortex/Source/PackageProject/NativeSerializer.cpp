@@ -46,7 +46,7 @@ namespace Kortex::PackageProject
 		
 		void ReadCondition(Condition& condition, const KxXMLNode& conditionNode)
 		{
-			condition.SetOperator(ModPackageProject::StringToOperator(conditionNode.GetAttribute("Operator"), false, KPP_OPERATOR_AND));
+			condition.SetOperator(ModPackageProject::StringToOperator(conditionNode.GetAttribute("Operator"), false, Operator::And));
 			for (KxXMLNode node = conditionNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
 				condition.GetFlags().emplace_back(node.GetValue(), node.GetAttribute("Name"));
@@ -54,7 +54,7 @@ namespace Kortex::PackageProject
 		}
 		void ReadConditionGroup(ConditionGroup& conditionGroup, const KxXMLNode& groupNode)
 		{
-			conditionGroup.SetOperator(ModPackageProject::StringToOperator(groupNode.GetAttribute("Operator"), false, KPP_OPERATOR_AND));
+			conditionGroup.SetOperator(ModPackageProject::StringToOperator(groupNode.GetAttribute("Operator"), false, Operator::And));
 			for (KxXMLNode conditionNode = groupNode.GetFirstChildElement(); conditionNode.IsOK(); conditionNode = conditionNode.GetNextSiblingElement())
 			{
 				Condition& condition = conditionGroup.GetConditions().emplace_back();
@@ -304,7 +304,7 @@ namespace Kortex::PackageProject
 						// Type descriptor
 						KxXMLNode typeDescriptorNode = entryNode.GetFirstChildElement("TypeDescriptor");
 						entry->SetTDDefaultValue(components.StringToTypeDescriptor(typeDescriptorNode.GetAttribute("DefaultValue")));
-						entry->SetTDConditionalValue(components.StringToTypeDescriptor(typeDescriptorNode.GetAttribute("ConditionalValue"), KPPC_DESCRIPTOR_INVALID));
+						entry->SetTDConditionalValue(components.StringToTypeDescriptor(typeDescriptorNode.GetAttribute("ConditionalValue"), TypeDescriptor::Invalid));
 						
 						if (m_ProjectLoad->GetFormatVersion() < KxVersion("1.3"))
 						{
@@ -315,8 +315,8 @@ namespace Kortex::PackageProject
 								Condition& condition = conditionGroup.GetOrCreateFirstCondition();
 								ReadCondition(condition, conditionsNode);
 	
-								conditionGroup.SetOperator(KPP_OPERATOR_AND);
-								condition.SetOperator(KPP_OPERATOR_AND);
+								conditionGroup.SetOperator(Operator::And);
+								condition.SetOperator(Operator::And);
 							}
 						}
 						else
@@ -327,7 +327,7 @@ namespace Kortex::PackageProject
 						// If condition list is empty and type descriptor values are equal, clear 'ConditionalValue'
 						if (!entry->GetTDConditionGroup().HasConditions() && entry->GetTDDefaultValue() == entry->GetTDConditionalValue())
 						{
-							entry->SetTDConditionalValue(KPPC_DESCRIPTOR_INVALID);
+							entry->SetTDConditionalValue(TypeDescriptor::Invalid);
 						}
 	
 						KAux::LoadStringArray(entry->GetFileData(), entryNode.GetFirstChildElement("Files"));
@@ -421,7 +421,7 @@ namespace Kortex::PackageProject
 		{
 			WriteLabeledValueArray(info.GetDocuments(), infoNode.NewElement("Documents"), [this](const KLabeledValue& value)
 			{
-				return m_AsProject ? value.GetValue() : PathNameToPackage(value.GetValue(), KPP_CONTENT_DOCUMENTS);
+				return m_AsProject ? value.GetValue() : PathNameToPackage(value.GetValue(), ContentType::Documents);
 			});
 		}
 	
@@ -465,7 +465,7 @@ namespace Kortex::PackageProject
 				if (!isListEntry || entry->HasPath())
 				{
 					KxXMLNode node = rootNode.NewElement(name);
-					node.SetAttribute("Path", m_AsProject ? entry->GetPath() : PathNameToPackage(entry->GetPath(), KPP_CONTENT_IMAGES));
+					node.SetAttribute("Path", m_AsProject ? entry->GetPath() : PathNameToPackage(entry->GetPath(), ContentType::Images));
 					node.SetAttribute("Visible", entry->IsVisible());
 	
 					if (isListEntry)
@@ -515,7 +515,7 @@ namespace Kortex::PackageProject
 					{
 						entryNode.SetAttribute("ID", entry->GetID());
 					}
-					entryNode.SetAttribute("Source", PathNameToPackage(entry->GetSource(), KPP_CONTENT_FILEDATA));
+					entryNode.SetAttribute("Source", PathNameToPackage(entry->GetSource(), ContentType::FileData));
 				}
 				else
 				{
@@ -649,7 +649,7 @@ namespace Kortex::PackageProject
 								// Image
 								if (!entry->GetImage().IsEmpty())
 								{
-									wxString image = m_AsProject ? entry->GetImage() : PathNameToPackage(entry->GetImage(), KPP_CONTENT_IMAGES);
+									wxString image = m_AsProject ? entry->GetImage() : PathNameToPackage(entry->GetImage(), ContentType::Images);
 									entryNode.NewElement("Image").SetAttribute("Path", image);
 								}
 	
@@ -662,7 +662,7 @@ namespace Kortex::PackageProject
 								// Type descriptor
 								KxXMLNode typeDescriptorNode = entryNode.NewElement("TypeDescriptor");
 								typeDescriptorNode.SetAttribute("DefaultValue", components.TypeDescriptorToString(entry->GetTDDefaultValue()));
-								if (entry->GetTDConditionalValue() != KPPC_DESCRIPTOR_INVALID)
+								if (entry->GetTDConditionalValue() != TypeDescriptor::Invalid)
 								{
 									typeDescriptorNode.SetAttribute("ConditionalValue", components.TypeDescriptorToString(entry->GetTDConditionalValue()));
 								}

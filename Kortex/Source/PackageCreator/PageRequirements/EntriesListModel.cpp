@@ -138,7 +138,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			{
 				case ColumnID::Type:
 				{
-					value = m_TypeEditor->GetItems()[entry->GetTypeDescriptor()];
+					value = m_TypeEditor->GetItems()[ToInt(entry->GetTypeDescriptor())];
 					break;
 				}
 				case ColumnID::ID:
@@ -168,7 +168,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				case ColumnID::RequiredState:
 				{
 					KxFormat format("%1 %2 %3");
-					format(m_ObjectFunctionEditor->GetItems()[entry->GetObjectFunction()]);
+					format(m_ObjectFunctionEditor->GetItems()[ToInt(entry->GetObjectFunction())]);
 					format(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
 					format(entry->GetObjectFunctionResult() == PackageProject::ReqState::True);
 	
@@ -334,10 +334,10 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					if (entry)
 					{
 						KxMenu menu;
-						for (int i = PackageProject::KPP_OPERATOR_MIN; i < PackageProject::KPP_OPERATOR_COUNT_COMPARISON; i++)
+						for (int i = ToInt(PackageProject::Operator::MIN); i < ToInt(PackageProject::Operator::MAX_COMPARISON); i++)
 						{
 							KxMenuItem* item = menu.Add(new KxMenuItem(i, ModPackageProject::OperatorToSymbolicName((PackageProject::Operator)i), wxEmptyString, wxITEM_CHECK));
-							item->Check(i == entry->GetRVFunction());
+							item->Check(i == ToInt(entry->GetRVFunction()));
 						}
 	
 						wxWindowID id = menu.Show(GetView(), GetView()->GetDropdownMenuPosition(item, column) + wxPoint(0, 1));
@@ -502,7 +502,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	
 	void EntriesListModel::OnAddEntry()
 	{
-		GetDataVector()->emplace_back(new PackageProject::RequirementItem(PackageProject::KPPR_TYPE_USER));
+		GetDataVector()->emplace_back(new PackageProject::RequirementItem(PackageProject::ReqType::User));
 	
 		KxDataViewItem item = GetItem(GetItemCount() - 1);
 		NotifyAddedItem(item);

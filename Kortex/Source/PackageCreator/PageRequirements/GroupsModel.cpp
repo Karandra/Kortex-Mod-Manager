@@ -54,7 +54,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
 		{
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
-			info.GetEditor()->SetItems(ModPackageProject::CreateOperatorSymNamesList({PackageProject::KPP_OPERATOR_AND, PackageProject::KPP_OPERATOR_OR}));
+			info.GetEditor()->SetItems(ModPackageProject::CreateOperatorSymNamesList({PackageProject::Operator::And, PackageProject::Operator::Or}));
 		}
 	}
 	
@@ -72,7 +72,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				case ColumnID::Operator:
 				{
-					value = group->GetOperator() == PackageProject::KPP_OPERATOR_AND ? 0 : 1;
+					value = group->GetOperator() == PackageProject::Operator::And ? 0 : 1;
 					break;
 				}
 			};
@@ -126,7 +126,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				case ColumnID::Operator:
 				{
-					group->SetOperator(value.As<int>() == 0 ? PackageProject::KPP_OPERATOR_AND : PackageProject::KPP_OPERATOR_OR);
+					group->SetOperator(value.As<int>() == 0 ? PackageProject::Operator::And : PackageProject::Operator::Or);
 					return true;
 				}
 			};

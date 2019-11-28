@@ -143,8 +143,8 @@ namespace Kortex::PackageProject
 			KxStringVector m_FileData;
 			KxStringVector m_Requirements;
 			TypeDescriptor m_TypeDescriptorDefault;
-			TypeDescriptor m_TypeDescriptorConditional = KPPC_DESCRIPTOR_INVALID;
-			TypeDescriptor m_TypeDescriptorCurrent = KPPC_DESCRIPTOR_INVALID;
+			TypeDescriptor m_TypeDescriptorConditional = TypeDescriptor::Invalid;
+			TypeDescriptor m_TypeDescriptorCurrent = TypeDescriptor::Invalid;
 			ConditionGroup m_TypeDescriptorConditions;
 			Condition m_ConditionalFlags;
 	
@@ -209,7 +209,7 @@ namespace Kortex::PackageProject
 			
 			TypeDescriptor GetTDCurrentValue() const
 			{
-				return m_TypeDescriptorCurrent != KPPC_DESCRIPTOR_INVALID ? m_TypeDescriptorCurrent : GetTDDefaultValue();
+				return m_TypeDescriptorCurrent != TypeDescriptor::Invalid ? m_TypeDescriptorCurrent : GetTDDefaultValue();
 			}
 			void SetTDCurrentValue(TypeDescriptor type)
 			{
@@ -349,9 +349,9 @@ namespace Kortex::PackageProject
 	class ComponentsSection: public ProjectSection
 	{
 		public:
-			static const Operator ms_DefaultFlagsOperator = KPP_OPERATOR_AND;
-			static const SelectionMode ms_DefaultSelectionMode = KPPC_SELECT_ANY;
-			static const TypeDescriptor ms_DefaultTypeDescriptor = KPPC_DESCRIPTOR_OPTIONAL;
+			static const Operator ms_DefaultFlagsOperator = Operator::And;
+			static const SelectionMode ms_DefaultSelectionMode = SelectionMode::Any;
+			static const TypeDescriptor ms_DefaultTypeDescriptor = TypeDescriptor::Optional;
 	
 		public:
 			static TypeDescriptor StringToTypeDescriptor(const wxString& name, TypeDescriptor default = ms_DefaultTypeDescriptor);

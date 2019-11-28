@@ -83,23 +83,23 @@ namespace Kortex::PackageProject
 	{
 		if (name == KPPC_DESCRIPTOR_OPTIONAL_STRING)
 		{
-			return KPPC_DESCRIPTOR_OPTIONAL;
+			return TypeDescriptor::Optional;
 		}
 		if (name == KPPC_DESCRIPTOR_REQUIRED_STRING)
 		{
-			return KPPC_DESCRIPTOR_REQUIRED;
+			return TypeDescriptor::Required;
 		}
 		if (name == KPPC_DESCRIPTOR_RECOMMENDED_STRING)
 		{
-			return KPPC_DESCRIPTOR_RECOMMENDED;
+			return TypeDescriptor::Recommended;
 		}
 		if (name == KPPC_DESCRIPTOR_COULD_BE_USABLE_STRING)
 		{
-			return KPPC_DESCRIPTOR_COULD_BE_USABLE;
+			return TypeDescriptor::CouldBeUsable;
 		}
 		if (name == KPPC_DESCRIPTOR_NOT_USABLE_STRING)
 		{
-			return KPPC_DESCRIPTOR_NOT_USABLE;
+			return TypeDescriptor::NotUsable;
 		}
 		return default;
 	}
@@ -107,23 +107,23 @@ namespace Kortex::PackageProject
 	{
 		switch (type)
 		{
-			case KPPC_DESCRIPTOR_OPTIONAL:
+			case TypeDescriptor::Optional:
 			{
 				return KPPC_DESCRIPTOR_OPTIONAL_STRING;
 			}
-			case KPPC_DESCRIPTOR_REQUIRED:
+			case TypeDescriptor::Required:
 			{
 				return KPPC_DESCRIPTOR_REQUIRED_STRING;
 			}
-			case KPPC_DESCRIPTOR_RECOMMENDED:
+			case TypeDescriptor::Recommended:
 			{
 				return KPPC_DESCRIPTOR_RECOMMENDED_STRING;
 			}
-			case KPPC_DESCRIPTOR_COULD_BE_USABLE:
+			case TypeDescriptor::CouldBeUsable:
 			{
 				return KPPC_DESCRIPTOR_COULD_BE_USABLE_STRING;
 			}
-			case KPPC_DESCRIPTOR_NOT_USABLE:
+			case TypeDescriptor::NotUsable:
 			{
 				return KPPC_DESCRIPTOR_NOT_USABLE_STRING;
 			}
@@ -139,23 +139,23 @@ namespace Kortex::PackageProject
 	{
 		if (name == KPPC_SELECT_ANY_STRING)
 		{
-			return KPPC_SELECT_ANY;
+			return SelectionMode::Any;
 		}
 		if (name == KPPC_SELECT_ALL_STRING)
 		{
-			return KPPC_SELECT_ALL;
+			return SelectionMode::All;
 		}
 		if (name == KPPC_SELECT_EXACTLY_ONE_STRING)
 		{
-			return KPPC_SELECT_EXACTLY_ONE;
+			return SelectionMode::ExactlyOne;
 		}
 		if (name == KPPC_SELECT_AT_LEAST_ONE_STRING)
 		{
-			return KPPC_SELECT_AT_LEAST_ONE;
+			return SelectionMode::AtLeastOne;
 		}
 		if (name == KPPC_SELECT_AT_MOST_ONE_STRING)
 		{
-			return KPPC_SELECT_AT_MOST_ONE;
+			return SelectionMode::AtMostOne;
 		}
 		return ms_DefaultSelectionMode;
 	}
@@ -163,23 +163,23 @@ namespace Kortex::PackageProject
 	{
 		switch (type)
 		{
-			case KPPC_SELECT_ANY:
+			case SelectionMode::Any:
 			{
 				return KPPC_SELECT_ANY_STRING;
 			}
-			case KPPC_SELECT_ALL:
+			case SelectionMode::All:
 			{
 				return KPPC_SELECT_ALL_STRING;
 			}
-			case KPPC_SELECT_EXACTLY_ONE:
+			case SelectionMode::ExactlyOne:
 			{
 				return KPPC_SELECT_EXACTLY_ONE_STRING;
 			}
-			case KPPC_SELECT_AT_LEAST_ONE:
+			case SelectionMode::AtLeastOne:
 			{
 				return KPPC_SELECT_AT_LEAST_ONE_STRING;
 			}
-			case KPPC_SELECT_AT_MOST_ONE:
+			case SelectionMode::AtMostOne:
 			{
 				return KPPC_SELECT_AT_MOST_ONE_STRING;
 			}

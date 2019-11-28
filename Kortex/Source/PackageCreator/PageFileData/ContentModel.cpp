@@ -8,7 +8,6 @@
 
 namespace
 {
-	
 	enum ColumnID
 	{
 		Source,
@@ -33,7 +32,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	
 	void ContentModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const KPPFFolderEntryItem* entry = GetDataEntry(row);
+		const PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -53,7 +52,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	void ContentModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const KPPFFolderEntryItem* entry = GetDataEntry(row);
+		const PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -86,7 +85,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	bool ContentModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		KPPFFolderEntryItem* entry = GetDataEntry(row);
+		PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -114,7 +113,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		{
 			if (event.GetColumn()->GetID() == ColumnID::Source)
 			{
-				KPPFFolderEntryItem* entry = GetDataEntry(GetRow(event.GetItem()));
+				PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(GetRow(event.GetItem()));
 				if (entry)
 				{
 					KxFileBrowseDialog dialog(GetView(), KxID_NONE, KxFBD_OPEN);
@@ -136,7 +135,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	void ContentModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const KPPFFolderEntryItem* entry = GetDataEntry(GetRow(item));
+		const PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -183,7 +182,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			wxWindowUpdateLocker lock(GetView());
 			for (const wxString& source: dialog.GetResults())
 			{
-				KPPFFolderEntryItem& entry = GetDataVector()->emplace_back();
+				PackageProject::KPPFFolderEntryItem& entry = GetDataVector()->emplace_back();
 				entry.SetSource(source);
 				entry.SetDestination(source.AfterLast('\\'));
 	

@@ -5,7 +5,27 @@
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 
-namespace Kortex::PackageDesigner
+namespace
+{
+	namespace ObjFuncConst
+	{
+		constexpr const auto NONE_STRING = wxS("");
+		constexpr const auto MOD_ACTIVE_STRING = wxS("ModActive");
+		constexpr const auto MOD_INACTIVE_STRING = wxS("ModInactive");
+		constexpr const auto PLUGIN_ACTIVE_STRING = wxS("PluginActive");
+		constexpr const auto PLUGIN_INACTIVE_STRING = wxS("PluginInactive");
+		constexpr const auto FILE_EXIST_STRING = wxS("FileExist");
+		constexpr const auto FILE_NOT_EXIST_STRING = wxS("FileNotExist");
+	}
+	namespace TypeConst
+	{
+		constexpr const auto USER_STRING = wxS("User");
+		constexpr const auto SYSTEM_STRING = wxS("System");
+		constexpr const auto AUTO_STRING = wxS("Auto");
+	}
+}
+
+namespace Kortex::PackageProject
 {
 	KPPRRequirementEntry::KPPRRequirementEntry(KPPRTypeDescriptor typeDescriptor)
 		:m_ObjectFunction(KPackageProjectRequirements::ms_DefaultObjectFunction),
@@ -130,7 +150,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	wxString KPPRRequirementsGroup::GetFlagNamePrefix()
 	{
@@ -180,24 +200,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace ObjFuncConst
-{
-	constexpr const auto NONE_STRING = wxS("");
-	constexpr const auto MOD_ACTIVE_STRING = wxS("ModActive");
-	constexpr const auto MOD_INACTIVE_STRING = wxS("ModInactive");
-	constexpr const auto PLUGIN_ACTIVE_STRING = wxS("PluginActive");
-	constexpr const auto PLUGIN_INACTIVE_STRING = wxS("PluginInactive");
-	constexpr const auto FILE_EXIST_STRING = wxS("FileExist");
-	constexpr const auto FILE_NOT_EXIST_STRING = wxS("FileNotExist");
-}
-namespace TypeConst
-{
-	constexpr const auto USER_STRING = wxS("User");
-	constexpr const auto SYSTEM_STRING = wxS("System");
-	constexpr const auto AUTO_STRING = wxS("Auto");
-}
-
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPRObjectFunction KPackageProjectRequirements::StringToObjectFunction(const wxString& name)
 	{

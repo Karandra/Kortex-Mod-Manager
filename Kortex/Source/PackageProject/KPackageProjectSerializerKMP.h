@@ -3,9 +3,13 @@
 #include "KPackageProjectSerializer.h"
 #include <KxFramework/KxXML.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject;
+}
+
+namespace Kortex::PackageProject
+{
 	class KPackageProjectSerializerKMP: public KPackageProjectSerializer
 	{
 		private:

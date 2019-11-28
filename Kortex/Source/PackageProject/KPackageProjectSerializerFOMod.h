@@ -5,14 +5,17 @@
 #include "KPackageProjectComponents.h"
 #include <KxFramework/KxXML.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject;
+}
+namespace Kortex::PackageProject
+{
 	class KPPFFileEntry;
 	class KPPRRequirementsGroup;
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPackageProjectSerializerFOMod: public KPackageProjectSerializer
 	{
@@ -40,8 +43,8 @@ namespace Kortex::PackageDesigner
 			}
 			wxString GetDataFolderName(bool withSeparator) const;
 			wxString MakeProjectPath(const wxString& path) const;
-			KPPCSelectionMode ConvertSelectionMode(const wxString& mode) const;
-			wxString ConvertSelectionMode(KPPCSelectionMode mode) const;
+			PackageProject::KPPCSelectionMode ConvertSelectionMode(const wxString& mode) const;
+			wxString ConvertSelectionMode(PackageProject::KPPCSelectionMode mode) const;
 			template<class T> void UniqueStringArray(T& array)
 			{
 				auto it = std::unique(array.begin(), array.end());

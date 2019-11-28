@@ -6,7 +6,7 @@
 #include "GameMods/ModTagStore.h"
 #include "GameMods/TagManager/DefaultTag.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPackageProjectInfo: public KPackageProjectPart
 	{
@@ -99,7 +99,7 @@ namespace Kortex::PackageDesigner
 			{
 				return m_Documents;
 			}
-	
+			
 			const ModSourceStore& GetModSourceStore() const
 			{
 				return m_ModSourceStore;
@@ -108,12 +108,12 @@ namespace Kortex::PackageDesigner
 			{
 				return m_ModSourceStore;
 			}
-	
+			
 			const ModTagStore& GetTagStore() const
 			{
 				return m_TagStore;
 			}
-			virtual ModTagStore& GetTagStore()
+			ModTagStore& GetTagStore()
 			{
 				return m_TagStore;
 			}

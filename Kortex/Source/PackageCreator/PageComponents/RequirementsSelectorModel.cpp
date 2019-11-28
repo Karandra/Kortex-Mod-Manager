@@ -59,7 +59,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		m_DataVector.clear();
 		VectorModel::SetDataVector();
 	}
-	void RequirementsSelectorModel::SetDataVector(const KxStringVector& data, KPackageProjectRequirements* reqData)
+	void RequirementsSelectorModel::SetDataVector(const KxStringVector& data, PackageProject::KPackageProjectRequirements* reqData)
 	{
 		SetDataVector();
 		m_ReqData = reqData;
@@ -69,7 +69,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			// Add selected first
 			for (const wxString& id: data)
 			{
-				if (KPPRRequirementsGroup* entry = m_ReqData->FindGroupWithID(id))
+				if (PackageProject::KPPRRequirementsGroup* entry = m_ReqData->FindGroupWithID(id))
 				{
 					m_DataVector.emplace_back(std::make_pair(entry, true));
 				}

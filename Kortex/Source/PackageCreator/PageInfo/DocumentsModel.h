@@ -9,7 +9,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	class DocumentsModel: public VectorModel<KLabeledValue::Vector>
 	{
 		private:
-			KPackageProjectInfo* m_InfoData = nullptr;
+			PackageProject::KPackageProjectInfo* m_InfoData = nullptr;
 	
 		private:
 			void OnInitControl() override;
@@ -49,7 +49,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 			}
 	
 			void SetDataVector();
-			void SetDataVector(VectorType& data, KPackageProjectInfo* info);
+			void SetDataVector(VectorType& data, PackageProject::KPackageProjectInfo* info);
 	};
 }
 

@@ -112,9 +112,9 @@ namespace Kortex::InstallWizard
 			void OnGoForward(wxCommandEvent& event);
 
 			void SetModData();
-			KxUInt32Vector GetFilesOfFolder(const PackageDesigner::KPPFFolderEntry* folder) const;
-			wxString GetFinalPath(uint32_t index, const wxString& installLocation, const PackageDesigner::KPPFFileEntry* fileEntry) const;
-			KxStringVector GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const PackageDesigner::KPPFFolderEntry* folder) const;
+			KxUInt32Vector GetFilesOfFolder(const PackageProject::KPPFFolderEntry* folder) const;
+			wxString GetFinalPath(uint32_t index, const wxString& installLocation, const PackageProject::KPPFFileEntry* fileEntry) const;
+			KxStringVector GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const PackageProject::KPPFFolderEntry* folder) const;
 			void RunInstall();
 
 		public:
@@ -125,11 +125,11 @@ namespace Kortex::InstallWizard
 			~WizardDialog();
 
 		public:
-			const PackageDesigner::KPackageProject& GetConfig() const
+			const KPackageProject& GetConfig() const
 			{
 				return m_Package->GetConfig();
 			}
-			PackageDesigner::KPackageProject& GetConfig()
+			KPackageProject& GetConfig()
 			{
 				return m_Package->GetConfig();
 			}

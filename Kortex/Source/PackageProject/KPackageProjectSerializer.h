@@ -4,9 +4,13 @@
 #include <Kortex/ModManager.hpp>
 #include "Network/ModSourceStore.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject;
+}
+
+namespace Kortex::PackageProject
+{
 	class KPackageProjectSerializer
 	{
 		public:

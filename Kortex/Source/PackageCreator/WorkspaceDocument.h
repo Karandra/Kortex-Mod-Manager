@@ -8,14 +8,15 @@ namespace Kortex
 	class ModPackage;
 	class IGameMod;
 }
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
-	class Workspace;
 	class KPackageProjectSerializer;
 }
 
 namespace Kortex::PackageDesigner
 {
+	class Workspace;
+
 	class WorkspaceDocument: public KxRTTI::ExtendInterface<WorkspaceDocument, IWorkspaceDocument>
 	{
 		public:
@@ -70,8 +71,8 @@ namespace Kortex::PackageDesigner
 			void SaveProject(const wxString& filePath);
 			void ImportProjectFromPackage(const wxString& packagePath);
 			void CreateProjectFromModEntry(const Kortex::IGameMod& modEntry);
-			void ImportProject(KPackageProjectSerializer& serializer);
-			void ExportProject(KPackageProjectSerializer& serializer);
+			void ImportProject(PackageProject::KPackageProjectSerializer& serializer);
+			void ExportProject(PackageProject::KPackageProjectSerializer& serializer);
 			void BuildProject(bool buildPreview = false);
 
 			void Reload();

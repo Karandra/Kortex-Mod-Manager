@@ -21,14 +21,14 @@ namespace Kortex::PackageDesigner
 	{
 		return array.empty() ? wxEmptyString : KxString::Join(array, wxS(", "));
 	}
-	wxString PageComponents::ConditionToString(const KPPCCondition& condition, bool isRequired)
+	wxString PageComponents::ConditionToString(const PackageProject::KPPCCondition& condition, bool isRequired)
 	{
 		wxString out;
 
-		const KPPCFlagEntry::Vector& flags = condition.GetFlags();
+		const PackageProject::KPPCFlagEntry::Vector& flags = condition.GetFlags();
 		for (size_t i = 0; i < flags.size(); i++)
 		{
-			const KPPCFlagEntry& flag = flags[i];
+			const PackageProject::KPPCFlagEntry& flag = flags[i];
 			out.Append(KxString::Format(wxS("%1 %2 \"%3\""), flag.GetName(), (isRequired ? wxS("==") : wxS("=")), flag.GetValue()));
 
 			if (i + 1 != flags.size())
@@ -47,12 +47,12 @@ namespace Kortex::PackageDesigner
 		}
 		return out;
 	}
-	wxString PageComponents::ConditionGroupToString(const KPPCConditionGroup& conditionGroup)
+	wxString PageComponents::ConditionGroupToString(const PackageProject::KPPCConditionGroup& conditionGroup)
 	{
 		wxString out;
 		if (conditionGroup.HasConditions())
 		{
-			const KPPCCondition::Vector& conditions = conditionGroup.GetConditions();
+			const PackageProject::KPPCCondition::Vector& conditions = conditionGroup.GetConditions();
 			for (size_t i = 0; i < conditions.size(); i++)
 			{
 				out.Append(wxS('(') + ConditionToString(conditions[i], true) + wxS(')'));
@@ -67,11 +67,11 @@ namespace Kortex::PackageDesigner
 		return out;
 	}
 
-	KPackageProjectComponents& PageComponents::GetProjectComponents() const
+	PackageProject::KPackageProjectComponents& PageComponents::GetProjectComponents() const
 	{
 		return GetProject()->GetComponents();
 	}
-	void PageComponents::OnLoadProject(KPackageProjectComponents& projectComponents)
+	void PageComponents::OnLoadProject(PackageProject::KPackageProjectComponents& projectComponents)
 	{
 		wxWindowUpdateLocker lock(this);
 		m_ComponentsModel->SetProject(projectComponents.GetProject());
@@ -108,7 +108,7 @@ namespace Kortex::PackageDesigner
 		m_EntryImage->Bind(wxEVT_LEFT_DCLICK, [this](wxMouseEvent& event)
 		{
 			event.Skip();
-			if (const KPPIImageEntry* imageEntry = static_cast<const KPPIImageEntry*>(m_EntryImage->GetClientData()))
+			if (const PackageProject::KPPIImageEntry* imageEntry = static_cast<const PackageProject::KPPIImageEntry*>(m_EntryImage->GetClientData()))
 			{
 				UI::ImageViewerDialog dialog(this);
 
@@ -155,7 +155,7 @@ namespace Kortex::PackageDesigner
 	}
 	bool PageComponents::OnOpenWorkspace()
 	{
-		KPackageProjectComponents& projectComponents = GetProjectComponents();
+		PackageProject::KPackageProjectComponents& projectComponents = GetProjectComponents();
 		m_RequiredFilesModel->SetDataVector(projectComponents.GetRequiredFileData(), &projectComponents.GetProject().GetFileData());
 		return true;
 	}

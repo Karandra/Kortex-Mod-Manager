@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	enum KPPContentType
 	{

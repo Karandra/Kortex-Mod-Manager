@@ -3,7 +3,6 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 
-using namespace Kortex::PackageDesigner;
 namespace
 {
 	enum class ColumnRef
@@ -18,7 +17,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 {
 	wxAny DisplayModel::GetValue(const Node& node, const Column& column) const
 	{
-		const KPPRRequirementEntry& item = GetItem(node);
+		const PackageProject::KPPRRequirementEntry& item = GetItem(node);
 		switch (column.GetID<ColumnRef>())
 		{
 			case ColumnRef::Name:
@@ -55,9 +54,9 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 			case ColumnRef::ObjectState:
 			{
 				const wxString& object = item.GetObject();
-				KPPRObjectFunction objectFunc = item.GetObjectFunction();
+				PackageProject::KPPRObjectFunction objectFunc = item.GetObjectFunction();
 				wxBitmap icon = GetIconByState(item.GetObjectFunctionResult());
-				const bool objFunction = objectFunc == KPPR_OBJFUNC_FILE_EXIST || objectFunc == KPPR_OBJFUNC_FILE_NOT_EXIST;
+				const bool objFunction = objectFunc == PackageProject::KPPR_OBJFUNC_FILE_EXIST || objectFunc == PackageProject::KPPR_OBJFUNC_FILE_NOT_EXIST;
 
 				// There's not much sense displaying required state string under this conditions
 				if (objFunction && object.IsEmpty())
@@ -66,7 +65,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 				}
 				else
 				{
-					wxString label = KTr("PackageCreator.PageRequirements.RequiredState." + KPackageProjectRequirements::ObjectFunctionToString(objectFunc));
+					wxString label = KTr("PackageCreator.PageRequirements.RequiredState." + PackageProject::KPackageProjectRequirements::ObjectFunctionToString(objectFunc));
 					if (!object.IsEmpty())
 					{
 						return KxDataView2::BitmapTextValue(KxString::Format("%1: \"%2\"", label, object), icon);
@@ -82,7 +81,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 	}
 	auto DisplayModel::GetToolTip(const Node& node, const Column& column) const -> ToolTip
 	{
-		const KPPRRequirementEntry& item = GetItem(node);
+		const PackageProject::KPPRRequirementEntry& item = GetItem(node);
 		if (const wxString& text = item.GetDescription(); !text.IsEmpty())
 		{
 			return ToolTip(GetValue(node, column).As<KxDataView2::BitmapTextValue>().GetText(), text);
@@ -94,15 +93,15 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 		return false;
 	}
 
-	wxBitmap DisplayModel::GetIconByState(KPPReqState state) const
+	wxBitmap DisplayModel::GetIconByState(PackageProject::KPPReqState state) const
 	{
 		switch (state)
 		{
-			case KPPReqState::False:
+			case PackageProject::KPPReqState::False:
 			{
 				return ImageProvider::GetBitmap(ImageResourceID::CrossCircleFrame);
 			}
-			case KPPReqState::Unknown:
+			case PackageProject::KPPReqState::Unknown:
 			{
 				return ImageProvider::GetBitmap(ImageResourceID::Exclamation);
 			}
@@ -136,14 +135,14 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 		m_Items.clear();
 		for (const wxString& id: groupIDs)
 		{
-			KPPRRequirementsGroup* group = m_Page.GetPackageConfig().GetRequirements().FindGroupWithID(id);
+			PackageProject::KPPRRequirementsGroup* group = m_Page.GetPackageConfig().GetRequirements().FindGroupWithID(id);
 			if (group)
 			{
 				for (const auto& entry: group->GetEntries())
 				{
 					// No need to show requirements with no object function and no required version.
 					// They always be true.
-					if (entry->GetObjectFunction() == KPPR_OBJFUNC_NONE && !entry->GetRequiredVersion().IsOK())
+					if (entry->GetObjectFunction() == PackageProject::KPPR_OBJFUNC_NONE && !entry->GetRequiredVersion().IsOK())
 					{
 						break;
 					}

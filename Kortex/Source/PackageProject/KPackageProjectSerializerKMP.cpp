@@ -14,7 +14,7 @@
 #include "GameInstance/IGameInstance.h"
 #include "Utility/KAux.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	namespace
 	{
@@ -82,7 +82,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	void KPackageProjectSerializerKMP::ReadBase()
 	{

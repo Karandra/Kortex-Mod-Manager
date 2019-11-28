@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "KPackageProjectPart.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPackageProjectConfig: public KPackageProjectPart
 	{

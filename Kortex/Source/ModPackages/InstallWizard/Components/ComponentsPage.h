@@ -89,23 +89,23 @@ namespace Kortex::InstallWizard
 			bool BeginComponents();
 
 			void StoreRequirementsFlags();
-			void StoreStepFlags(const PackageDesigner::KPPCEntry::RefVector& checkedEntries);
-			void RestoreStepFlagsUpToThis(const PackageDesigner::KPPCStep& step);
+			void StoreStepFlags(const PackageProject::KPPCEntry::RefVector& checkedEntries);
+			void RestoreStepFlagsUpToThis(const PackageProject::KPPCStep& step);
 
-			bool IsConditionSatisfied(const PackageDesigner::KPPCFlagEntry& flagEntry) const;
-			bool IsConditionsSatisfied(const PackageDesigner::KPPCConditionGroup& conditionGroup) const;
-			bool IsStepSatisfiesConditions(const PackageDesigner::KPPCStep& step) const;
+			bool IsConditionSatisfied(const PackageProject::KPPCFlagEntry& flagEntry) const;
+			bool IsConditionsSatisfied(const PackageProject::KPPCConditionGroup& conditionGroup) const;
+			bool IsStepSatisfiesConditions(const PackageProject::KPPCStep& step) const;
 			bool CheckIsManualComponentsAvailable() const;
-			PackageDesigner::KPPCStep* GetFirstStepSatisfiesConditions() const;
-			PackageDesigner::KPPCStep* GetFirstStepSatisfiesConditions(const PackageDesigner::KPPCStep* afterThis) const;
+			PackageProject::KPPCStep* GetFirstStepSatisfiesConditions() const;
+			PackageProject::KPPCStep* GetFirstStepSatisfiesConditions(const PackageProject::KPPCStep* afterThis) const;
 			
 			const StepStack& GetInstallSteps() const
 			{
 				return m_InstallSteps;
 			}
-			PackageDesigner::KPPCStep* GetCurrentStep() const;
+			PackageProject::KPPCStep* GetCurrentStep() const;
 			const StepStackItem* GetCurrentStepItem() const;
-			void LoadManualStep(PackageDesigner::KPPCStep& step);
+			void LoadManualStep(PackageProject::KPPCStep& step);
 
 			bool HasManualComponents() const
 			{

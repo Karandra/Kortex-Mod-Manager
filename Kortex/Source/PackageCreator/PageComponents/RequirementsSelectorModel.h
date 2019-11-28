@@ -7,12 +7,12 @@
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
-	using RequirementsSelectorItem = std::pair<KPPRRequirementsGroup*, bool>;
+	using RequirementsSelectorItem = std::pair<PackageProject::KPPRRequirementsGroup*, bool>;
 
 	class RequirementsSelectorModel: public VectorModel<std::vector<RequirementsSelectorItem>>
 	{
 		private:
-			KPackageProjectRequirements* m_ReqData = nullptr;
+			PackageProject::KPackageProjectRequirements* m_ReqData = nullptr;
 			std::vector<RequirementsSelectorItem> m_DataVector;
 	
 		private:
@@ -45,7 +45,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 	
 			void SetDataVector();
-			void SetDataVector(const KxStringVector& data, KPackageProjectRequirements* reqData);
+			void SetDataVector(const KxStringVector& data, PackageProject::KPackageProjectRequirements* reqData);
 			KxStringVector GetSelectedItems() const;
 	};
 }

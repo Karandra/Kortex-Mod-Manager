@@ -68,7 +68,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		m_DataVector.clear();
 		VectorModel::SetDataVector();
 	}
-	void FileDataSelectorModel::SetDataVector(const KxStringVector& data, KPackageProjectFileData* fileData)
+	void FileDataSelectorModel::SetDataVector(const KxStringVector& data, PackageProject::KPackageProjectFileData* fileData)
 	{
 		SetDataVector();
 		m_FileData = fileData;
@@ -78,7 +78,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			// Add selected first
 			for (const wxString& id: data)
 			{
-				if (KPPFFileEntry* entry = m_FileData->FindEntryWithID(id))
+				if (PackageProject::KPPFFileEntry* entry = m_FileData->FindEntryWithID(id))
 				{
 					m_DataVector.emplace_back(std::make_pair(entry, true));
 				}
@@ -153,7 +153,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		FileDataSelectorModel::SetDataVector();
 	}
-	void FileDataSelectorComboBox::SetDataVector(KxStringVector& data, KPackageProjectFileData* fileData)
+	void FileDataSelectorComboBox::SetDataVector(KxStringVector& data, PackageProject::KPackageProjectFileData* fileData)
 	{
 		m_RequiredFiles = &data;
 		FileDataSelectorModel::SetDataVector(data, fileData);

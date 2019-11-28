@@ -7,13 +7,15 @@ class KxListBox;
 class KxComboBox;
 class KxSlider;
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class Workspace;
+}
+namespace Kortex::PackageProject
+{
 	class KPackageProjectInfo;
 	class KPackageProjectConfig;
 }
-
 namespace Kortex::PackageDesigner::PageInfoNS
 {
 	class TagsListModel;
@@ -58,9 +60,9 @@ namespace Kortex::PackageDesigner
 			wxCheckBox* m_CompressionSolidArchive = nullptr;
 
 		private:
-			KPackageProjectInfo& GetProjectInfo() const;
-			KPackageProjectConfig& GetProjectConfig() const;
-			void OnLoadProject(KPackageProjectInfo& tProjectInfo);
+			PackageProject::KPackageProjectInfo& GetProjectInfo() const;
+			PackageProject::KPackageProjectConfig& GetProjectConfig() const;
+			void OnLoadProject(PackageProject::KPackageProjectInfo& tProjectInfo);
 
 			void CreateBasicInfoControls();
 			void CreateSitesControls();

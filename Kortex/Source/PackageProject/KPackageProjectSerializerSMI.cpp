@@ -16,7 +16,7 @@
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxShell.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	namespace
 	{
@@ -30,7 +30,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	wxString KPackageProjectSerializerSMI::ConvertMultiLine(const wxString& source) const
 	{

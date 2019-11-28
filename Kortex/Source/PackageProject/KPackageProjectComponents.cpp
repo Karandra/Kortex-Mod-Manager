@@ -19,7 +19,7 @@ namespace
 	constexpr auto KPPC_SELECT_ALL_STRING = wxS("All");
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	wxString KPPCFlagEntry::GetDeletedFlagPrefix()
 	{
@@ -35,7 +35,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPCEntry::KPPCEntry()
 		:m_TypeDescriptorDefault(KPackageProjectComponents::ms_DefaultTypeDescriptor)
@@ -46,7 +46,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPCGroup::KPPCGroup()
 		:m_SelectionMode(KPackageProjectComponents::ms_DefaultSelectionMode)
@@ -57,7 +57,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPCStep::KPPCStep()
 	{
@@ -67,7 +67,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPCConditionalStep::KPPCConditionalStep()
 	{
@@ -77,7 +77,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPCTypeDescriptor KPackageProjectComponents::StringToTypeDescriptor(const wxString& name, KPPCTypeDescriptor default)
 	{

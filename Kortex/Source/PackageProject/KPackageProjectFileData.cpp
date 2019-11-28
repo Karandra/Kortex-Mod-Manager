@@ -5,7 +5,7 @@
 #include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPFFileEntry::KPPFFileEntry()
 		:m_Priority(KPackageProjectFileData::ms_DefaultPriority)
@@ -41,7 +41,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPFFolderEntry::KPPFFolderEntry()
 	{
@@ -51,7 +51,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	bool KPackageProjectFileData::IsPriorityValid(int32_t value)
 	{

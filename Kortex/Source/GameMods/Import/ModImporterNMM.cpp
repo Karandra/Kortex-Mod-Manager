@@ -21,7 +21,7 @@ namespace Kortex::ModManager
 	wxString ModImporterNMM::ProcessDescription(const wxString& path) const
 	{
 		// Convert BB code
-		return PackageDesigner::KPackageProjectSerializer::ConvertBBCode(path);
+		return PackageProject::KPackageProjectSerializer::ConvertBBCode(path);
 	}
 
 	GameID ModImporterNMM::GetGameID(const wxString& name)

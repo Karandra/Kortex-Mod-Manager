@@ -4,7 +4,7 @@
 #include "Utility/KLabeledValue.h"
 #include "Utility/KWithIDName.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	enum KPPCSelectionMode
 	{
@@ -26,7 +26,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPCFlagEntry: public KLabeledValue, public wxObject
 	{
@@ -71,7 +71,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPCCondition: public wxObject
 	{
@@ -107,7 +107,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPCConditionGroup
 	{
@@ -151,7 +151,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPCEntry: public KWithName
 	{
@@ -258,7 +258,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPCGroup: public KWithName
 	{
@@ -294,7 +294,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPCStep: public KWithName
 	{
@@ -330,7 +330,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPCConditionalStep
 	{
@@ -366,7 +366,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPackageProjectComponents: public KPackageProjectPart
 	{

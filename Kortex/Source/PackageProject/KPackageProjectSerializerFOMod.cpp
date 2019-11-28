@@ -26,7 +26,7 @@
 #include "Utility/KUnsortedUnique.h"
 #include <KxFramework/KxString.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	namespace
 	{
@@ -292,7 +292,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	wxString KPackageProjectSerializerFOMod::GetDataFolderName(bool withSeparator) const
 	{

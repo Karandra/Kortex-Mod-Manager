@@ -26,22 +26,22 @@ namespace Kortex::PackageDesigner
 	}
 	wxString PackageBuilder::GetImagePath(const wxString& fileName) const
 	{
-		return KPackageProjectSerializer::GetDefaultFOModRoot() + "\\Images\\" + fileName.AfterLast('\\');
+		return PackageProject::KPackageProjectSerializer::GetDefaultFOModRoot() + "\\Images\\" + fileName.AfterLast('\\');
 	}
 	wxString PackageBuilder::GetDocumentPath(const wxString& fileName) const
 	{
-		return KPackageProjectSerializer::GetDefaultFOModRoot() + "\\Documents\\" + fileName.AfterLast('\\');
+		return PackageProject::KPackageProjectSerializer::GetDefaultFOModRoot() + "\\Documents\\" + fileName.AfterLast('\\');
 	}
-	wxString PackageBuilder::GetFileDataEntryPath(const KPPFFileEntry* fileDataEntry, const wxString& fileName) const
+	wxString PackageBuilder::GetFileDataEntryPath(const PackageProject::KPPFFileEntry* fileDataEntry, const wxString& fileName) const
 	{
 		return fileDataEntry->GetID() + "\\" + fileName;
 	}
 
 	void PackageBuilder::CheckProject()
 	{
-		const KPackageProjectInfo& info = m_Project->GetInfo();
-		const KPackageProjectInterface& interfaceConfig = m_Project->GetInterface();
-		const KPackageProjectFileData& fileData = m_Project->GetFileData();
+		const PackageProject::KPackageProjectInfo& info = m_Project->GetInfo();
+		const PackageProject::KPackageProjectInterface& interfaceConfig = m_Project->GetInterface();
+		const PackageProject::KPackageProjectFileData& fileData = m_Project->GetFileData();
 
 		m_Status = KPCB_STATUS_OK;
 		auto CheckAndAddMissingFile = [this](const wxString& path)
@@ -76,7 +76,7 @@ namespace Kortex::PackageDesigner
 		}
 
 		// Check images
-		for (const KPPIImageEntry& entry: interfaceConfig.GetImages())
+		for (const PackageProject::KPPIImageEntry& entry: interfaceConfig.GetImages())
 		{
 			TestContinue();
 			CheckAndAddMissingFile(entry.GetPath());
@@ -86,7 +86,7 @@ namespace Kortex::PackageDesigner
 		for (const auto& fileEntry: fileData.GetData())
 		{
 			TestContinue();
-			if (const KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
+			if (const PackageProject::KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
 			{
 				CheckAndAddMissingFolder(folderEntry->GetSource());
 				for (const auto& entry: folderEntry->GetFiles())
@@ -124,7 +124,7 @@ namespace Kortex::PackageDesigner
 			return KArchiveNS::Method::LZMA;
 		};
 
-		const KPackageProjectConfig& config = m_Project->GetConfig();
+		const PackageProject::KPackageProjectConfig& config = m_Project->GetConfig();
 
 		m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsSolidArchive());
 		m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsMultithreadingUsed());
@@ -137,13 +137,13 @@ namespace Kortex::PackageDesigner
 		// Create KMP config
 		{
 			wxString packageConfigFile = CreateTempFile();
-			KPackageProjectSerializerKMP serializer(false);
-			serializer.SetPackageDataRoot(KPackageProjectSerializer::GetDefaultFOModRoot());
+			PackageProject::KPackageProjectSerializerKMP serializer(false);
+			serializer.SetPackageDataRoot(PackageProject::KPackageProjectSerializer::GetDefaultFOModRoot());
 			serializer.Serialize(m_Project);
 			KxTextFile::WriteToFile(packageConfigFile, serializer.GetData());
 
 			m_SourceFiles.push_back(packageConfigFile);
-			m_ArchivePaths.push_back("KortexPackage.xml");
+			m_ArchivePaths.emplace_back("KortexPackage.xml");
 		}
 
 		// Create FOMod config
@@ -151,23 +151,23 @@ namespace Kortex::PackageDesigner
 			wxString infoFile = CreateTempFile();
 			wxString sModuleConfigFile = CreateTempFile();
 
-			KPackageProjectSerializerFOMod serializer;
+			PackageProject::KPackageProjectSerializerFOMod serializer;
 			serializer.ExportToNativeFormat(true);
-			serializer.SetPackageDataRoot(KPackageProjectSerializer::GetDefaultFOModRoot());
+			serializer.SetPackageDataRoot(PackageProject::KPackageProjectSerializer::GetDefaultFOModRoot());
 			serializer.Serialize(m_Project);
 			KxTextFile::WriteToFile(infoFile, serializer.GetInfoXML());
 			KxTextFile::WriteToFile(sModuleConfigFile, serializer.GetModuleConfigXML());
 
 			m_SourceFiles.push_back(infoFile);
-			m_ArchivePaths.push_back("FOMod\\Info.xml");
+			m_ArchivePaths.emplace_back("FOMod\\Info.xml");
 
 			m_SourceFiles.push_back(sModuleConfigFile);
-			m_ArchivePaths.push_back("FOMod\\ModuleConfig.xml");
+			m_ArchivePaths.emplace_back("FOMod\\ModuleConfig.xml");
 		}
 	}
 	void PackageBuilder::ProcessInfo()
 	{
-		const KPackageProjectInfo& info = m_Project->GetInfo();
+		const PackageProject::KPackageProjectInfo& info = m_Project->GetInfo();
 		for (const KLabeledValue& entry: info.GetDocuments())
 		{
 			TestContinue();
@@ -178,8 +178,8 @@ namespace Kortex::PackageDesigner
 	}
 	void PackageBuilder::ProcessInterface()
 	{
-		const KPackageProjectInterface& interfaceConfig = m_Project->GetInterface();
-		for (const KPPIImageEntry& entry: interfaceConfig.GetImages())
+		const PackageProject::KPackageProjectInterface& interfaceConfig = m_Project->GetInterface();
+		for (const PackageProject::KPPIImageEntry& entry: interfaceConfig.GetImages())
 		{
 			TestContinue();
 
@@ -194,12 +194,12 @@ namespace Kortex::PackageDesigner
 			return;
 		}
 
-		const KPackageProjectFileData& fileData = m_Project->GetFileData();
+		const PackageProject::KPackageProjectFileData& fileData = m_Project->GetFileData();
 		for (const auto& fileEntry: fileData.GetData())
 		{
 			TestContinue();
 
-			if (const KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
+			if (const PackageProject::KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
 			{
 				for (const auto& folderItem: folderEntry->GetFiles())
 				{

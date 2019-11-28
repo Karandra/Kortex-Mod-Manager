@@ -23,7 +23,7 @@ namespace Kortex::PackageDesigner
 		}
 	}
 	
-	void IDTracker::TrackID_ReplaceInFlagVector(const wxString& trackedID, const wxString& newID, KPPCFlagEntry::Vector& list) const
+	void IDTracker::TrackID_ReplaceInFlagVector(const wxString& trackedID, const wxString& newID, PackageProject::KPPCFlagEntry::Vector& list) const
 	{
 		for (auto it = list.begin(); it != list.end(); ++it)
 		{
@@ -34,9 +34,9 @@ namespace Kortex::PackageDesigner
 			}
 		}
 	}
-	void IDTracker::TrackID_RemoveFromFlagVector(const wxString& trackedID, KPPCFlagEntry::Vector& list) const
+	void IDTracker::TrackID_RemoveFromFlagVector(const wxString& trackedID, PackageProject::KPPCFlagEntry::Vector& list) const
 	{
-		auto it = std::find_if(list.begin(), list.end(), [&trackedID](const KPPCFlagEntry& flagEntry)
+		auto it = std::find_if(list.begin(), list.end(), [&trackedID](const PackageProject::KPPCFlagEntry& flagEntry)
 		{
 			return flagEntry.GetName() == trackedID;
 		});

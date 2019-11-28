@@ -4,16 +4,20 @@
 class KxMenu;
 class KxMenuItem;
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject;
+}
+namespace Kortex::PackageDesigner
+{
 	class WorkspaceDocument;
-	class IDTracker;
 }
 
 namespace Kortex::PackageDesigner
 {
+	class IDTracker;
 	class ListModelDataObject;
+
 	class ListModel: public KxDataViewListModelEx, public KxDataViewModelExDragDropEnabled<ListModelDataObject>
 	{
 		protected:

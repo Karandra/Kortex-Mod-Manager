@@ -3,12 +3,10 @@
 #include "PageBase.h"
 class KxComboBox;
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
-	class Workspace;
 	class KPackageProjectInterface;
 }
-
 namespace Kortex::PackageDesigner::PageInterfaceNS
 {
 	class ImageListModel;
@@ -27,8 +25,8 @@ namespace Kortex::PackageDesigner
 			//KProgramOptionAI m_ListOptions;
 
 		private:
-			KPackageProjectInterface& GetProjectInterface() const;
-			void OnLoadProject(KPackageProjectInterface& projectInterface);
+			PackageProject::KPackageProjectInterface& GetProjectInterface() const;
+			void OnLoadProject(PackageProject::KPackageProjectInterface& projectInterface);
 			void CreateImageListControls();
 
 		protected:

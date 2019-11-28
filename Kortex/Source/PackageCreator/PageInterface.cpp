@@ -10,11 +10,11 @@
 
 namespace Kortex::PackageDesigner
 {
-	KPackageProjectInterface& PageInterface::GetProjectInterface() const
+	PackageProject::KPackageProjectInterface& PageInterface::GetProjectInterface() const
 	{
 		return GetProject()->GetInterface();
 	}
-	void PageInterface::OnLoadProject(KPackageProjectInterface& projectInterface)
+	void PageInterface::OnLoadProject(PackageProject::KPackageProjectInterface& projectInterface)
 	{
 		wxWindowUpdateLocker lock(this);
 

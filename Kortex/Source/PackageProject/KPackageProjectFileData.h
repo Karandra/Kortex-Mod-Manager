@@ -2,9 +2,13 @@
 #include "stdafx.h"
 #include "KPackageProjectPart.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPFFolderEntry;
+}
+
+namespace Kortex::PackageProject
+{
 	class KPPFFileEntry
 	{
 		private:
@@ -72,7 +76,7 @@ namespace Kortex::PackageDesigner
 	using KPPFFileEntryRefArray = std::vector<KPPFFileEntry*>;
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPFFolderEntryItem
 	{
@@ -110,7 +114,7 @@ namespace Kortex::PackageDesigner
 	using KPPFFolderItemsArray = std::vector<KPPFFolderEntryItem>;
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPFFolderEntry: public KPPFFileEntry
 	{
@@ -143,7 +147,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPackageProjectFileData: public KPackageProjectPart
 	{

@@ -9,7 +9,7 @@
 #include "KPackageProjectDefs.h"
 #include <KxFramework/KxVersion.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPackageProjectConditionChecker final
 	{
@@ -28,17 +28,17 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject
 	{
 		public:
-			static wxString OperatorToSymbolicName(KPPOperator operatorType);
-			static wxString OperatorToString(KPPOperator operatorType);
-			static KPPOperator StringToOperator(const wxString& name, bool allowNone, KPPOperator default);
+			static wxString OperatorToSymbolicName(PackageProject::KPPOperator operatorType);
+			static wxString OperatorToString(PackageProject::KPPOperator operatorType);
+			static PackageProject::KPPOperator StringToOperator(const wxString& name, bool allowNone, PackageProject::KPPOperator default);
 	
-			static KxStringVector CreateOperatorSymNamesList(const std::initializer_list<KPPOperator>& operators);
-			static KxStringVector CreateOperatorNamesList(const std::initializer_list<KPPOperator>& operators);
+			static KxStringVector CreateOperatorSymNamesList(const std::initializer_list<PackageProject::KPPOperator>& operators);
+			static KxStringVector CreateOperatorNamesList(const std::initializer_list<PackageProject::KPPOperator>& operators);
 	
 		private:
 			KxVersion m_FormatVersion;
@@ -46,12 +46,12 @@ namespace Kortex::PackageDesigner
 			wxString m_ModID;
 	
 			// Project parts
-			KPackageProjectConfig m_Config;
-			KPackageProjectInfo m_Info;
-			KPackageProjectFileData m_FileData;
-			KPackageProjectInterface m_Interface;
-			KPackageProjectRequirements m_Requirements;
-			KPackageProjectComponents m_Components;
+			PackageProject::KPackageProjectConfig m_Config;
+			PackageProject::KPackageProjectInfo m_Info;
+			PackageProject::KPackageProjectFileData m_FileData;
+			PackageProject::KPackageProjectInterface m_Interface;
+			PackageProject::KPackageProjectRequirements m_Requirements;
+			PackageProject::KPackageProjectComponents m_Components;
 	
 		public:
 			KPackageProject();
@@ -81,56 +81,56 @@ namespace Kortex::PackageDesigner
 			wxString GetModName() const;
 			wxString GetSignature() const;
 	
-			KPackageProjectConfig& GetConfig()
+			PackageProject::KPackageProjectConfig& GetConfig()
 			{
 				return m_Config;
 			}
-			const KPackageProjectConfig& GetConfig() const
+			const PackageProject::KPackageProjectConfig& GetConfig() const
 			{
 				return m_Config;
 			}
 			
-			KPackageProjectInfo& GetInfo()
+			PackageProject::KPackageProjectInfo& GetInfo()
 			{
 				return m_Info;
 			}
-			const KPackageProjectInfo& GetInfo() const
+			const PackageProject::KPackageProjectInfo& GetInfo() const
 			{
 				return m_Info;
 			}
 			
-			KPackageProjectFileData& GetFileData()
+			PackageProject::KPackageProjectFileData& GetFileData()
 			{
 				return m_FileData;
 			}
-			const KPackageProjectFileData& GetFileData() const
+			const PackageProject::KPackageProjectFileData& GetFileData() const
 			{
 				return m_FileData;
 			}
 			
-			KPackageProjectInterface& GetInterface()
+			PackageProject::KPackageProjectInterface& GetInterface()
 			{
 				return m_Interface;
 			}
-			const KPackageProjectInterface& GetInterface() const
+			const PackageProject::KPackageProjectInterface& GetInterface() const
 			{
 				return m_Interface;
 			}
 			
-			KPackageProjectRequirements& GetRequirements()
+			PackageProject::KPackageProjectRequirements& GetRequirements()
 			{
 				return m_Requirements;
 			}
-			const KPackageProjectRequirements& GetRequirements() const
+			const PackageProject::KPackageProjectRequirements& GetRequirements() const
 			{
 				return m_Requirements;
 			}
 			
-			KPackageProjectComponents& GetComponents()
+			PackageProject::KPackageProjectComponents& GetComponents()
 			{
 				return m_Components;
 			}
-			const KPackageProjectComponents& GetComponents() const
+			const PackageProject::KPackageProjectComponents& GetComponents() const
 			{
 				return m_Components;
 			}

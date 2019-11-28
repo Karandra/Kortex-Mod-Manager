@@ -16,6 +16,7 @@
 namespace Kortex
 {
 	class IGameMod;
+	class KPackageProject;
 }
 namespace Kortex::PackageDesigner
 {
@@ -27,7 +28,6 @@ namespace Kortex::PackageDesigner
 	class PageInterface;
 	class PageRequirements;
 	class PageComponents;
-	class KPackageProject;
 }
 
 namespace Kortex::PackageDesigner

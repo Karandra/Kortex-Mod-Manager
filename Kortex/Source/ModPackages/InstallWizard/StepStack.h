@@ -7,25 +7,25 @@ namespace Kortex::InstallWizard
 	class StepStackItem
 	{
 		private:
-			PackageDesigner::KPPCStep* m_Step = nullptr;
-			PackageDesigner::KPPCEntry::RefVector m_CheckedEntries;
+			PackageProject::KPPCStep* m_Step = nullptr;
+			PackageProject::KPPCEntry::RefVector m_CheckedEntries;
 
 		public:
-			StepStackItem(PackageDesigner::KPPCStep* step, const PackageDesigner::KPPCEntry::RefVector& checked = {})
+			StepStackItem(PackageProject::KPPCStep* step, const PackageProject::KPPCEntry::RefVector& checked = {})
 				:m_Step(step), m_CheckedEntries(checked)
 			{
 			}
 			
 		public:
-			PackageDesigner::KPPCStep* GetStep() const
+			PackageProject::KPPCStep* GetStep() const
 			{
 				return m_Step;
 			}
-			const PackageDesigner::KPPCEntry::RefVector& GetChecked() const
+			const PackageProject::KPPCEntry::RefVector& GetChecked() const
 			{
 				return m_CheckedEntries;
 			}
-			PackageDesigner::KPPCEntry::RefVector& GetChecked()
+			PackageProject::KPPCEntry::RefVector& GetChecked()
 			{
 				return m_CheckedEntries;
 			}
@@ -46,7 +46,7 @@ namespace Kortex::InstallWizard
 			~StepStack() = default;
 
 		public:
-			void PushStep(PackageDesigner::KPPCStep* step, const PackageDesigner::KPPCEntry::RefVector& checked = {})
+			void PushStep(PackageProject::KPPCStep* step, const PackageProject::KPPCEntry::RefVector& checked = {})
 			{
 				push({step, checked});
 			}
@@ -63,7 +63,7 @@ namespace Kortex::InstallWizard
 			{
 				return !empty() ? &top() : nullptr;
 			}
-			PackageDesigner::KPPCStep* GetTopStep() const
+			PackageProject::KPPCStep* GetTopStep() const
 			{
 				return !empty() ? top().GetStep() : nullptr;
 			}

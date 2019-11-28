@@ -39,7 +39,7 @@ namespace Kortex
 		}
 	}
 
-	void ModPackage::LoadConfig(PackageDesigner::KPackageProject& project)
+	void ModPackage::LoadConfig(KPackageProject& project)
 	{
 		if (m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown)
 		{
@@ -50,7 +50,7 @@ namespace Kortex
 				KxFileItem item;
 				if (m_Archive.FindFile("KortexPackage.xml", item))
 				{
-					m_PackageType = PackageDesigner::KPP_PACCKAGE_NATIVE;
+					m_PackageType = PackageProject::KPP_PACCKAGE_NATIVE;
 					m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item);
 					LoadConfigNative(project, item.GetExtraData<size_t>());
 					return;
@@ -67,7 +67,7 @@ namespace Kortex
 				}
 				if (item.IsOK())
 				{
-					m_PackageType = PackageDesigner::KPP_PACCKAGE_LEGACY;
+					m_PackageType = PackageProject::KPP_PACCKAGE_LEGACY;
 					m_EffectiveArchiveRoot = DetectEffectiveArchiveRoot(item, rootFolder);
 					LoadConfigSMI(project, item.GetExtraData<size_t>());
 					return;
@@ -100,13 +100,13 @@ namespace Kortex
 					if (!moduleConfigItem.IsOK() && TryScriptedFOMod() != ms_InvalidIndex)
 					{
 						// Set as scripted but load available XMLs
-						m_PackageType = PackageDesigner::KPP_PACCKAGE_FOMOD_CSHARP;
+						m_PackageType = PackageProject::KPP_PACCKAGE_FOMOD_CSHARP;
 						LoadConfigFOMod(project, infoItem.GetExtraData<size_t>(), moduleConfigItem.GetExtraData<size_t>());
 						return;
 					}
 
 					// This is valid configurable FOMod
-					m_PackageType = PackageDesigner::KPP_PACCKAGE_FOMOD_XML;
+					m_PackageType = PackageProject::KPP_PACCKAGE_FOMOD_XML;
 					LoadConfigFOMod(project, infoItem.GetExtraData<size_t>(), moduleConfigItem.GetExtraData<size_t>());
 					return;
 				}
@@ -115,26 +115,26 @@ namespace Kortex
 			// FOMod (Scripted)
 			if (TryScriptedFOMod() != ms_InvalidIndex)
 			{
-				m_PackageType = PackageDesigner::KPP_PACCKAGE_FOMOD_CSHARP;
+				m_PackageType = PackageProject::KPP_PACCKAGE_FOMOD_CSHARP;
 			}
 		}
 	}
-	void ModPackage::LoadConfigNative(PackageDesigner::KPackageProject& project, size_t index)
+	void ModPackage::LoadConfigNative(KPackageProject& project, size_t index)
 	{
-		PackageDesigner::KPackageProjectSerializerKMP serializer(false);
+		PackageProject::KPackageProjectSerializerKMP serializer(false);
 		serializer.SetData(ReadString(index));
 		serializer.Structurize(&project);
 	}
-	void ModPackage::LoadConfigSMI(PackageDesigner::KPackageProject& project, size_t index)
+	void ModPackage::LoadConfigSMI(KPackageProject& project, size_t index)
 	{
-		PackageDesigner::KPackageProjectSerializerSMI serializer;
+		PackageProject::KPackageProjectSerializerSMI serializer;
 		serializer.SetData(ReadString(index, true));
 		serializer.Structurize(&project);
 	}
-	void ModPackage::LoadConfigFOMod(PackageDesigner::KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex)
+	void ModPackage::LoadConfigFOMod(KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex)
 	{
 		KArchive::BufferMap buffers = m_Archive.ExtractToMemory({(uint32_t)infoIndex, (uint32_t)moduleConfigIndex});
-		PackageDesigner::KPackageProjectSerializerFOMod serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
+		PackageProject::KPackageProjectSerializerFOMod serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
 		serializer.SetEffectiveArchiveRoot(m_EffectiveArchiveRoot);
 		serializer.Structurize(&project);
 	}
@@ -168,7 +168,7 @@ namespace Kortex
 
 	void ModPackage::LoadBasicResources()
 	{
-		PackageDesigner::KPPIImageEntry* logo = m_Config.GetInterface().GetMainImageEntry();
+		PackageProject::KPPIImageEntry* logo = m_Config.GetInterface().GetMainImageEntry();
 		if (logo)
 		{
 			KxFileItem item;
@@ -181,8 +181,8 @@ namespace Kortex
 	void ModPackage::LoadImageResources()
 	{
 		KxUInt32Vector indexes;
-		std::unordered_map<size_t, PackageDesigner::KPPIImageEntry*> entriesMap;
-		for (PackageDesigner::KPPIImageEntry& entry: m_Config.GetInterface().GetImages())
+		std::unordered_map<size_t, PackageProject::KPPIImageEntry*> entriesMap;
+		for (PackageProject::KPPIImageEntry& entry: m_Config.GetInterface().GetImages())
 		{
 			KxFileItem item;
 			if (m_Archive.FindFile(entry.GetPath(), item))
@@ -246,7 +246,7 @@ namespace Kortex
 	{
 		Create(archivePath);
 	}
-	ModPackage::ModPackage(const wxString& archivePath, PackageDesigner::KPackageProject& project)
+	ModPackage::ModPackage(const wxString& archivePath, KPackageProject& project)
 	{
 		Create(archivePath, project);
 	}
@@ -265,7 +265,7 @@ namespace Kortex
 		}
 		return false;
 	}
-	bool ModPackage::Create(const wxString& archivePath, PackageDesigner::KPackageProject& project)
+	bool ModPackage::Create(const wxString& archivePath, KPackageProject& project)
 	{
 		Init(archivePath);
 
@@ -284,14 +284,14 @@ namespace Kortex
 	{
 		return !m_PackageFilePath.IsEmpty() &&
 			m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown &&
-			m_PackageType != PackageDesigner::KPP_PACCKAGE_UNKNOWN &&
+			m_PackageType != PackageProject::KPP_PACCKAGE_UNKNOWN &&
 			!m_Config.GetModID().IsEmpty();
 	}
 	bool ModPackage::IsTypeSupported() const
 	{
-		return m_PackageType == PackageDesigner::KPP_PACCKAGE_NATIVE ||
-			m_PackageType == PackageDesigner::KPP_PACCKAGE_LEGACY ||
-			m_PackageType == PackageDesigner::KPP_PACCKAGE_FOMOD_XML;
+		return m_PackageType == PackageProject::KPP_PACCKAGE_NATIVE ||
+			m_PackageType == PackageProject::KPP_PACCKAGE_LEGACY ||
+			m_PackageType == PackageProject::KPP_PACCKAGE_FOMOD_XML;
 	}
 
 	void ModPackage::LoadResources()

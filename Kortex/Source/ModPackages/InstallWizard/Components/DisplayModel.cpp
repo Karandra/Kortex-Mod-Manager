@@ -7,7 +7,6 @@
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxUxTheme.h>
 
-using namespace Kortex::PackageDesigner;
 namespace
 {
 	enum ColumnRef
@@ -66,7 +65,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 		// Group item, read entries
 		const DisplayModelNode* node = GetNode(item);
-		if (const KPPCGroup* group = node->GetGroup())
+		if (const PackageProject::KPPCGroup* group = node->GetGroup())
 		{
 			for (size_t i = node->GetBegin(); i < node->GetSize(); i++)
 			{
@@ -83,7 +82,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		const DisplayModelNode* node = GetNode(item);
 		if (node)
 		{
-			if (const KPPCGroup* group = node->GetGroup())
+			if (const PackageProject::KPPCGroup* group = node->GetGroup())
 			{
 				switch (column->GetID())
 				{
@@ -95,7 +94,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 					}
 				};
 			}
-			else if (const KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				switch (column->GetID())
 				{
@@ -103,9 +102,9 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 					{
 						switch (entry->GetTDCurrentValue())
 						{
-							case KPPC_DESCRIPTOR_RECOMMENDED:
+							case PackageProject::KPPC_DESCRIPTOR_RECOMMENDED:
 							{
-								attibutes.SetItalic(true);
+								attibutes.SetItalic();
 								break;
 							}
 						}
@@ -119,7 +118,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 	{
 		if (const DisplayModelNode* node = GetNode(item))
 		{
-			if (const KPPCGroup* group = node->GetGroup())
+			if (const PackageProject::KPPCGroup* group = node->GetGroup())
 			{
 				switch (column->GetID())
 				{
@@ -130,7 +129,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 					}
 				};
 			}
-			else if (const KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				switch (column->GetID())
 				{
@@ -151,11 +150,11 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		DisplayModelNode* entryNode = GetNode(item);
 		if (entryNode)
 		{
-			if (const KPPCEntry* entry = entryNode->GetEntry())
+			if (const PackageProject::KPPCEntry* entry = entryNode->GetEntry())
 			{
-				const KPPCGroup* group = entryNode->GetParentNode()->GetGroup();
-				KPPCSelectionMode selMode = group->GetSelectionMode();
-				KPPCTypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
+				const PackageProject::KPPCGroup* group = entryNode->GetParentNode()->GetGroup();
+				PackageProject::KPPCSelectionMode selMode = group->GetSelectionMode();
+				PackageProject::KPPCTypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
 
 				if (column->GetID() == ColumnRef::Name)
 				{
@@ -182,13 +181,13 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 					switch (selMode)
 					{
-						case KPPC_SELECT_ANY:
+						case PackageProject::KPPC_SELECT_ANY:
 						{
 							entryNode->ToggleCheck();
 							NodeChanged(entryNode);
 							return true;
 						}
-						case KPPC_SELECT_EXACTLY_ONE:
+						case PackageProject::KPPC_SELECT_EXACTLY_ONE:
 						{
 							// Is this entry is going to be checked, then uncheck all entries in this group
 							// and check this one.
@@ -205,7 +204,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 							}
 							break;
 						}
-						case KPPC_SELECT_AT_LEAST_ONE:
+						case PackageProject::KPPC_SELECT_AT_LEAST_ONE:
 						{
 							if (!entryNode->IsChecked())
 							{
@@ -219,7 +218,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 							}
 							return true;
 						}
-						case KPPC_SELECT_AT_MOST_ONE:
+						case PackageProject::KPPC_SELECT_AT_MOST_ONE:
 						{
 							if (!entryNode->IsChecked())
 							{
@@ -238,7 +237,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 							}
 							return true;
 						}
-						case KPPC_SELECT_ALL:
+						case PackageProject::KPPC_SELECT_ALL:
 						{
 							entryNode->SetChecked(true);
 							NodeChanged(entryNode);
@@ -262,66 +261,66 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		return true;
 	}
 
-	wxBitmap DisplayModel::GetImageByTypeDescriptor(KPPCTypeDescriptor type) const
+	wxBitmap DisplayModel::GetImageByTypeDescriptor(PackageProject::KPPCTypeDescriptor type) const
 	{
 		switch (type)
 		{
-			case KPPC_DESCRIPTOR_NOT_USABLE:
+			case PackageProject::KPPC_DESCRIPTOR_NOT_USABLE:
 			{
 				return ImageProvider::GetBitmap(ImageResourceID::CrossCircleFrame);
 			}
-			case KPPC_DESCRIPTOR_COULD_BE_USABLE:
+			case PackageProject::KPPC_DESCRIPTOR_COULD_BE_USABLE:
 			{
 				return ImageProvider::GetBitmap(ImageResourceID::Exclamation);
 			}
 		};
 		return wxNullBitmap;
 	}
-	wxString DisplayModel::GetMessageTypeDescriptor(KPPCTypeDescriptor type) const
+	wxString DisplayModel::GetMessageTypeDescriptor(PackageProject::KPPCTypeDescriptor type) const
 	{
-		return KTr("PackageCreator.TypeDescriptor." + KPackageProjectComponents::TypeDescriptorToString(type));
+		return KTr("PackageCreator.TypeDescriptor." + PackageProject::KPackageProjectComponents::TypeDescriptorToString(type));
 	}
-	KxDataViewBitmapTextToggleValue::ToggleType DisplayModel::GetToggleType(KPPCSelectionMode mode) const
+	KxDataViewBitmapTextToggleValue::ToggleType DisplayModel::GetToggleType(PackageProject::KPPCSelectionMode mode) const
 	{
 		switch (mode)
 		{
-			case KPPC_SELECT_EXACTLY_ONE:
-			case KPPC_SELECT_AT_MOST_ONE:
+			case PackageProject::KPPC_SELECT_EXACTLY_ONE:
+			case PackageProject::KPPC_SELECT_AT_MOST_ONE:
 			{
 				return KxDataViewBitmapTextToggleValue::RadioBox;
 			}
 		};
 		return KxDataViewBitmapTextToggleValue::CheckBox;
 	}
-	const wxString& DisplayModel::GetSelectionModeString(const KPPCGroup& group) const
+	const wxString& DisplayModel::GetSelectionModeString(const PackageProject::KPPCGroup& group) const
 	{
 		static const wxString ms_Select = KTr("Generic.Select");
-		auto MakeString = [](KPPCSelectionMode mode) -> wxString
+		auto MakeString = [](PackageProject::KPPCSelectionMode mode) -> wxString
 		{
-			return ms_Select + ' ' + KxString::MakeLower(KPackageProjectComponents::SelectionModeToTranslation(mode));
+			return ms_Select + ' ' + KxString::MakeLower(PackageProject::KPackageProjectComponents::SelectionModeToTranslation(mode));
 		};
 
-		static const wxString ms_Any = MakeString(KPPC_SELECT_ANY);
-		static const wxString ms_ExactlyOne = MakeString(KPPC_SELECT_EXACTLY_ONE);
-		static const wxString ms_AtLeastOne = MakeString(KPPC_SELECT_AT_LEAST_ONE);
-		static const wxString ms_AtMostOne = MakeString(KPPC_SELECT_AT_MOST_ONE);
-		static const wxString ms_All = MakeString(KPPC_SELECT_ALL);
+		static const wxString ms_Any = MakeString(PackageProject::KPPC_SELECT_ANY);
+		static const wxString ms_ExactlyOne = MakeString(PackageProject::KPPC_SELECT_EXACTLY_ONE);
+		static const wxString ms_AtLeastOne = MakeString(PackageProject::KPPC_SELECT_AT_LEAST_ONE);
+		static const wxString ms_AtMostOne = MakeString(PackageProject::KPPC_SELECT_AT_MOST_ONE);
+		static const wxString ms_All = MakeString(PackageProject::KPPC_SELECT_ALL);
 
 		switch (group.GetSelectionMode())
 		{
-			case KPPC_SELECT_EXACTLY_ONE:
+			case PackageProject::KPPC_SELECT_EXACTLY_ONE:
 			{
 				return ms_ExactlyOne;
 			}
-			case KPPC_SELECT_AT_LEAST_ONE:
+			case PackageProject::KPPC_SELECT_AT_LEAST_ONE:
 			{
 				return ms_AtLeastOne;
 			}
-			case KPPC_SELECT_AT_MOST_ONE:
+			case PackageProject::KPPC_SELECT_AT_MOST_ONE:
 			{
 				return ms_AtMostOne;
 			}
-			case KPPC_SELECT_ALL:
+			case PackageProject::KPPC_SELECT_ALL:
 			{
 				return ms_All;
 			}
@@ -343,16 +342,16 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		}
 		return items;
 	}
-	bool DisplayModel::IsEntryShouldBeChecked(const KPPCEntry* entry) const
+	bool DisplayModel::IsEntryShouldBeChecked(const PackageProject::KPPCEntry* entry) const
 	{
-		KPPCTypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
-		if (typeDescriptor == KPPC_DESCRIPTOR_REQUIRED || typeDescriptor == KPPC_DESCRIPTOR_RECOMMENDED)
+		PackageProject::KPPCTypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
+		if (typeDescriptor == PackageProject::KPPC_DESCRIPTOR_REQUIRED || typeDescriptor == PackageProject::KPPC_DESCRIPTOR_RECOMMENDED)
 		{
 			return true;
 		}
 		else
 		{
-			return std::any_of(m_CheckedEntries.begin(), m_CheckedEntries.end(), [entry](const KPPCEntry* v)
+			return std::any_of(m_CheckedEntries.begin(), m_CheckedEntries.end(), [entry](const PackageProject::KPPCEntry* v)
 			{
 				return v == entry;
 			});
@@ -364,7 +363,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		KxDataViewItem item = event.GetItem();
 		if (const DisplayModelNode* node = GetNode(item))
 		{
-			if (const KPPCGroup* group = node->GetGroup())
+			if (const PackageProject::KPPCGroup* group = node->GetGroup())
 			{
 				if (GetView()->IsExpanded(item))
 				{
@@ -375,7 +374,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 					GetView()->Expand(item);
 				}
 			}
-			else if (const KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTr(KxID_INFO), GetMessageTypeDescriptor(entry->GetTDCurrentValue()), KxBTN_OK, KxICON_INFORMATION);
 				dialog.ShowModal();
@@ -387,7 +386,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		KxDataViewItem item = event.GetItem();
 		if (const DisplayModelNode* node = GetNode(item))
 		{
-			if (const KPPCEntry* entry = node->GetEntry())
+			if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				m_HotItem = entry;
 				return;
@@ -423,7 +422,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		ItemsCleared();
 		GetView()->Disable();
 	}
-	void DisplayModel::SetDataVector(const KPackageProjectComponents* compInfo, const KPPCStep* step, const KPPCEntry::RefVector& checkedEntries)
+	void DisplayModel::SetDataVector(const PackageProject::KPackageProjectComponents* compInfo, const PackageProject::KPPCStep* step, const PackageProject::KPPCEntry::RefVector& checkedEntries)
 	{
 		SetDataVector();
 
@@ -470,7 +469,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 				// Check entries of this group if all of them needs to be checked.
 				// Or if this is required or recommended item.
-				if (group->GetSelectionMode() == KPPC_SELECT_ALL || IsEntryShouldBeChecked(entry.get()))
+				if (group->GetSelectionMode() == PackageProject::KPPC_SELECT_ALL || IsEntryShouldBeChecked(entry.get()))
 				{
 					checkedCount++;
 					entryNode.SetChecked(true);
@@ -483,8 +482,8 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 			{
 				switch (group->GetSelectionMode())
 				{
-					case KPPC_SELECT_AT_LEAST_ONE:
-					case KPPC_SELECT_EXACTLY_ONE:
+					case PackageProject::KPPC_SELECT_AT_LEAST_ONE:
+					case PackageProject::KPPC_SELECT_EXACTLY_ONE:
 					{
 						GetNode(entryItems[0])->SetChecked(true);
 						break;
@@ -508,13 +507,13 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		SelectItem(selection);
 		GetView()->SetFocus();
 	}
-	bool DisplayModel::OnLeaveStep(KPPCEntry::RefVector& checkedEntries)
+	bool DisplayModel::OnLeaveStep(PackageProject::KPPCEntry::RefVector& checkedEntries)
 	{
 		checkedEntries = GetCheckedEntries();
 		return true;
 	}
 
-	const KPPCEntry* DisplayModel::GetSelectedEntry() const
+	const PackageProject::KPPCEntry* DisplayModel::GetSelectedEntry() const
 	{
 		DisplayModelNode* node = GetNode(GetView()->GetSelection());
 		if (node)
@@ -532,14 +531,14 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 	{
 		return item.GetValuePtr<DisplayModelNode>();
 	}
-	KPPCEntry::RefVector DisplayModel::GetCheckedEntries() const
+	PackageProject::KPPCEntry::RefVector DisplayModel::GetCheckedEntries() const
 	{
-		KPPCEntry::RefVector entries;
+		PackageProject::KPPCEntry::RefVector entries;
 		for (const DisplayModelNode& node: m_DataVector)
 		{
 			if (node.IsEntry() && node.IsChecked())
 			{
-				entries.push_back(const_cast<KPPCEntry*>(node.GetEntry()));
+				entries.push_back(const_cast<PackageProject::KPPCEntry*>(node.GetEntry()));
 			}
 		}
 		return entries;

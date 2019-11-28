@@ -4,7 +4,7 @@
 #include "Utility/KWithIDName.h"
 #include <KxFramework/KxVersion.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	enum KPPRObjectFunction
 	{
@@ -26,7 +26,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPRRequirementEntry: public KWithIDName
 	{
@@ -166,8 +166,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-//////////////////////////////////////////////////////////////////////////
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPRRequirementsGroup
 	{
@@ -237,7 +236,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPackageProjectRequirements: public KPackageProjectPart
 	{

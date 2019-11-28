@@ -2,12 +2,14 @@
 #include "stdafx.h"
 #include "PageBase.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class Workspace;
+}
+namespace Kortex::PackageProject
+{
 	class KPackageProjectFileData;
 }
-
 namespace Kortex::PackageDesigner::PageFileDataNS
 {
 	class MainListModel;
@@ -35,8 +37,8 @@ namespace Kortex::PackageDesigner
 			//KProgramOptionAI m_ContentListModelOptions;
 
 		private:
-			void OnLoadProject(KPackageProjectFileData& projectFileData);
-			KPackageProjectFileData& GetProjectFileData() const;
+			void OnLoadProject(PackageProject::KPackageProjectFileData& projectFileData);
+			PackageProject::KPackageProjectFileData& GetProjectFileData() const;
 
 			void CreateMainListControls();
 			void CreateFolderContentControls();

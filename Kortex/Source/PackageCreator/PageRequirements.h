@@ -4,10 +4,13 @@
 class KxComboBox;
 class KxButton;
 
+namespace Kortex::PackageProject
+{
+	class KPackageProjectRequirements;
+}
 namespace Kortex::PackageDesigner
 {
 	class Workspace;
-	class KPackageProjectRequirements;
 }
 namespace Kortex::PackageDesigner::PageRequirementsNS
 {
@@ -41,8 +44,8 @@ namespace Kortex::PackageDesigner
 			KxButton* m_StdReqs_Add = nullptr;
 
 		private:
-			void OnLoadProject(KPackageProjectRequirements& projectRequirements);
-			KPackageProjectRequirements& GetProjectRequirements() const;
+			void OnLoadProject(PackageProject::KPackageProjectRequirements& projectRequirements);
+			PackageProject::KPackageProjectRequirements& GetProjectRequirements() const;
 			void SelectComboBoxItem(KxComboBox* control, int itemIndex);
 		
 			void CreateGroupsControls();

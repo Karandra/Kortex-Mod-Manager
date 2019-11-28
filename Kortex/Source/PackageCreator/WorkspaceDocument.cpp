@@ -87,7 +87,7 @@ namespace Kortex::PackageDesigner
 	}
 	void WorkspaceDocument::SaveChanges()
 	{
-		KPackageProjectSerializerKMP serializer(true);
+		PackageProject::KPackageProjectSerializerKMP serializer(true);
 		serializer.Serialize(m_Project.get());
 		KxTextFile::WriteToFile(m_ProjectFile, serializer.GetData());
 
@@ -115,7 +115,7 @@ namespace Kortex::PackageDesigner
 		m_ProjectFile = filePath;
 		m_Project = std::make_unique<KPackageProject>();
 
-		KPackageProjectSerializerKMP serializer(true);
+		PackageProject::KPackageProjectSerializerKMP serializer(true);
 		serializer.SetData(KxTextFile::ReadToString(filePath));
 		serializer.Structurize(m_Project.get());
 
@@ -150,7 +150,7 @@ namespace Kortex::PackageDesigner
 
 		m_Project->GetConfig().SetInstallPackageFile(modEntry.GetPackageFile());
 
-		KPackageProjectInfo& info = m_Project->GetInfo();
+		PackageProject::KPackageProjectInfo& info = m_Project->GetInfo();
 		info.SetName(modEntry.GetName());
 		info.SetVersion(modEntry.GetVersion());
 		info.SetAuthor(modEntry.GetAuthor());
@@ -159,7 +159,7 @@ namespace Kortex::PackageDesigner
 		info.GetTagStore() = modEntry.GetTagStore();
 
 		/* Interface */
-		KPPIImageEntry& imageEntry = m_Project->GetInterface().GetImages().emplace_back(KPPIImageEntry());
+		PackageProject::KPPIImageEntry& imageEntry = m_Project->GetInterface().GetImages().emplace_back(PackageProject::KPPIImageEntry());
 		imageEntry.SetPath(modEntry.GetInfoFile());
 		imageEntry.SetVisible(true);
 
@@ -167,14 +167,14 @@ namespace Kortex::PackageDesigner
 
 		Reload();
 	}
-	void WorkspaceDocument::ImportProject(KPackageProjectSerializer& serializer)
+	void WorkspaceDocument::ImportProject(PackageProject::KPackageProjectSerializer& serializer)
 	{
 		m_ProjectFile.Clear();
 		m_Project = std::make_unique<KPackageProject>();
 		serializer.Structurize(m_Project.get());
 		Reload();
 	}
-	void WorkspaceDocument::ExportProject(KPackageProjectSerializer& serializer)
+	void WorkspaceDocument::ExportProject(PackageProject::KPackageProjectSerializer& serializer)
 	{
 		serializer.Serialize(m_Project.get());
 	}

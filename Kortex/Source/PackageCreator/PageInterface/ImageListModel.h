@@ -7,14 +7,14 @@
 
 namespace Kortex::PackageDesigner::PageInterfaceNS
 {
-	class ImageListModel: public VectorModel<KPPIImageEntryArray>, public IDTracker
+	class ImageListModel: public VectorModel<PackageProject::KPPIImageEntryArray>, public IDTracker
 	{
 		public:
 			static KBitmapSize GetThumbnailSize(const wxWindow* window = nullptr);
-			static void LoadBitmap(KPPIImageEntry* entry, const wxWindow* window = nullptr);
+			static void LoadBitmap(PackageProject::KPPIImageEntry* entry, const wxWindow* window = nullptr);
 	
 		private:
-			KPackageProjectInterface* m_Interface = nullptr;
+			PackageProject::KPackageProjectInterface* m_Interface = nullptr;
 	
 		private:
 			void OnInitControl() override;
@@ -54,7 +54,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 			}
 	
 		public:
-			const KPPIImageEntry* GetDataEntry(size_t index) const
+			const PackageProject::KPPIImageEntry* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{
@@ -62,7 +62,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 				}
 				return nullptr;
 			}
-			KPPIImageEntry* GetDataEntry(size_t index)
+			PackageProject::KPPIImageEntry* GetDataEntry(size_t index)
 			{
 				if (index < GetItemCount())
 				{
@@ -71,7 +71,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 				return nullptr;
 			}
 	
-			const KPPIImageEntry* GetDataEntry(const KxDataViewItem& item) const
+			const PackageProject::KPPIImageEntry* GetDataEntry(const KxDataViewItem& item) const
 			{
 				return GetDataEntry(GetRow(item));
 			}

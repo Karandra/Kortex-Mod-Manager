@@ -7,7 +7,7 @@
 class KxLabel;
 class KxTextBox;
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class WorkspaceDocument;
 	class KPackageProject;

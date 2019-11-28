@@ -4,22 +4,24 @@
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KTempFolderKeeper.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject;
+}
+namespace Kortex::PackageProject
+{
 	class KPPFFileEntry;
-	class KPackageCreatorBuilderOperation;
+}
 
+namespace Kortex::PackageDesigner
+{
 	enum KPCBStatus
 	{
 		KPCB_STATUS_OK = 0,
 		KPCB_STATUS_ERROR_GENERIC,
 		KPCB_STATUS_ERROR_PACKAGE_PATH,
 	};
-}
-
-namespace Kortex::PackageDesigner
-{
+	
 	class PackageBuilder: public KTempFolderKeeper
 	{
 		friend class KPackageCreatorBuilderOperation;
@@ -41,7 +43,7 @@ namespace Kortex::PackageDesigner
 			wxString GetTempPackagePath() const;
 			wxString GetImagePath(const wxString& fileName) const;
 			wxString GetDocumentPath(const wxString& fileName) const;
-			wxString GetFileDataEntryPath(const KPPFFileEntry* fileDataEntry, const wxString& fileName) const;
+			wxString GetFileDataEntryPath(const PackageProject::KPPFFileEntry* fileDataEntry, const wxString& fileName) const;
 
 			void SetPackagePath(const wxString& path)
 			{

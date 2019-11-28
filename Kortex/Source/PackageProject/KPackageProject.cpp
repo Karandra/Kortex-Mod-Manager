@@ -6,7 +6,7 @@
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 
-namespace 
+namespace Kortex::PackageProject
 {
 	namespace OperatorConst
 	{
@@ -19,7 +19,7 @@ namespace
 		constexpr auto GTEQ = wxS(">=");
 		constexpr auto AND = wxS("&&");
 		constexpr auto OR = wxS("||");
-	
+
 		constexpr auto NONE_STRING = wxS("");
 		constexpr auto EQ_STRING = wxS("EQ");
 		constexpr auto NOT_EQ_STRING = wxS("NOTEQ");
@@ -30,25 +30,21 @@ namespace
 		constexpr auto AND_STRING = wxS("AND");
 		constexpr auto OR_STRING = wxS("OR");
 	}
-	namespace Util
-	{
-		KxStringVector CreateOperatorList(const std::initializer_list<Kortex::PackageDesigner::KPPOperator>& operators, bool names)
-		{
-			using namespace Kortex::PackageDesigner;
 
-			KxStringVector list;
-			list.reserve(operators.size());
-	
-			for (KPPOperator value: operators)
-			{
-				list.push_back(names ? KPackageProject::OperatorToString(value) : KPackageProject::OperatorToSymbolicName(value));
-			}
-			return list;
+	KxStringVector CreateOperatorList(const std::initializer_list<PackageProject::KPPOperator>& operators, bool names)
+	{
+		KxStringVector list;
+		list.reserve(operators.size());
+
+		for (PackageProject::KPPOperator value : operators)
+		{
+			list.push_back(names ? KPackageProject::OperatorToString(value) : KPackageProject::OperatorToSymbolicName(value));
 		}
+		return list;
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	void KPackageProjectConditionChecker::operator()(bool value, KPPOperator operatorType)
 	{
@@ -71,10 +67,12 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
-	wxString KPackageProject::OperatorToSymbolicName(KPPOperator operatorType)
+	wxString KPackageProject::OperatorToSymbolicName(PackageProject::KPPOperator operatorType)
 	{
+		using namespace PackageProject;
+
 		switch (operatorType)
 		{
 			case KPP_OPERATOR_EQ:
@@ -112,8 +110,10 @@ namespace Kortex::PackageDesigner
 		};
 		return OperatorConst::NONE;
 	}
-	wxString KPackageProject::OperatorToString(KPPOperator operatorType)
+	wxString KPackageProject::OperatorToString(PackageProject::KPPOperator operatorType)
 	{
+		using namespace PackageProject;
+
 		switch (operatorType)
 		{
 			case KPP_OPERATOR_EQ:
@@ -151,8 +151,10 @@ namespace Kortex::PackageDesigner
 		};
 		return OperatorConst::NONE_STRING;
 	}
-	KPPOperator KPackageProject::StringToOperator(const wxString& name, bool allowNone, KPPOperator default)
+	PackageProject::KPPOperator KPackageProject::StringToOperator(const wxString& name, bool allowNone, PackageProject::KPPOperator default)
 	{
+		using namespace PackageProject;
+
 		if (name == OperatorConst::EQ_STRING)
 		{
 			return KPP_OPERATOR_EQ;
@@ -192,13 +194,13 @@ namespace Kortex::PackageDesigner
 		return default;
 	}
 	
-	KxStringVector KPackageProject::CreateOperatorSymNamesList(const std::initializer_list<KPPOperator>& operators)
+	KxStringVector KPackageProject::CreateOperatorSymNamesList(const std::initializer_list<PackageProject::KPPOperator>& operators)
 	{
-		return Util::CreateOperatorList(operators, false);
+		return CreateOperatorList(operators, false);
 	}
-	KxStringVector KPackageProject::CreateOperatorNamesList(const std::initializer_list<KPPOperator>& operators)
+	KxStringVector KPackageProject::CreateOperatorNamesList(const std::initializer_list<PackageProject::KPPOperator>& operators)
 	{
-		return Util::CreateOperatorList(operators, true);
+		return CreateOperatorList(operators, true);
 	}
 	
 	KPackageProject::KPackageProject()
@@ -209,8 +211,8 @@ namespace Kortex::PackageDesigner
 		m_Requirements(*this),
 		m_Components(*this),
 	
-		m_FormatVersion(Kortex::ModPackagesModule::GetInstance()->GetModuleInfo().GetVersion()),
-		m_TargetProfileID(Kortex::IGameInstance::GetActive()->GetGameID())
+		m_FormatVersion(ModPackagesModule::GetInstance()->GetModuleInfo().GetVersion()),
+		m_TargetProfileID(IGameInstance::GetActive()->GetGameID())
 	{
 	}
 	KPackageProject::~KPackageProject()

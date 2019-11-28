@@ -44,7 +44,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 		}
 		return size;
 	}
-	void ImageListModel::LoadBitmap(KPPIImageEntry* entry, const wxWindow* window)
+	void ImageListModel::LoadBitmap(PackageProject::KPPIImageEntry* entry, const wxWindow* window)
 	{
 		wxImage image(entry->GetPath(), wxBITMAP_TYPE_ANY);
 		if (image.IsOk())
@@ -87,7 +87,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 	
 	void ImageListModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const KPPIImageEntry* entry = GetDataEntry(row);
+		const PackageProject::KPPIImageEntry* entry = GetDataEntry(row);
 		if (entry)
 		{
 			auto IsChecked = [entry](const wxString& path)
@@ -132,7 +132,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 	}
 	bool ImageListModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		KPPIImageEntry* entry = GetDataEntry(row);
+		PackageProject::KPPIImageEntry* entry = GetDataEntry(row);
 		if (entry)
 		{
 			auto SetChecked = [&value, entry]() -> wxString
@@ -167,7 +167,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 	
 	bool ImageListModel::DoTrackImagePath(const wxString& trackedID, const wxString& newID, bool remove) const
 	{
-		KPackageProjectInterface& interfaceConfig = GetProject().GetInterface();
+		PackageProject::KPackageProjectInterface& interfaceConfig = GetProject().GetInterface();
 	
 		// Main image
 		if (interfaceConfig.GetMainImage() == trackedID)
@@ -203,7 +203,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 	{
 		if (event.GetColumn())
 		{
-			KPPIImageEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+			PackageProject::KPPIImageEntry* entry = GetDataEntry(GetRow(event.GetItem()));
 			switch (event.GetColumn()->GetID())
 			{
 				case ColumnID::Bitmap:
@@ -260,7 +260,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 	void ImageListModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const KPPIImageEntry* entry = GetDataEntry(GetRow(item));
+		const PackageProject::KPPIImageEntry* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -316,7 +316,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 		for (size_t row = event.GetCacheHintFrom(); row <= event.GetCacheHintTo(); row++)
 		{
 			KxDataViewItem item = GetView()->GetMainWindow()->GetItemByRow(row);
-			KPPIImageEntry* entry = GetDataEntry(GetRow(item));
+			PackageProject::KPPIImageEntry* entry = GetDataEntry(GetRow(item));
 			if (entry && !entry->HasBitmap() && !entry->IsNoBitmap())
 			{
 				GetView()->CallAfter([this, item, entry]()
@@ -367,7 +367,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 				{
 					if (self->CanContinue())
 					{
-						GetDataVector()->emplace_back(KPPIImageEntry(path, wxEmptyString, true));
+						GetDataVector()->emplace_back(PackageProject::KPPIImageEntry(path, wxEmptyString, true));
 					}
 					else
 					{
@@ -394,7 +394,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 		{
 			for (const wxString& path: dialog.GetResults())
 			{
-				GetDataVector()->emplace_back(KPPIImageEntry(path, wxEmptyString, true));
+				GetDataVector()->emplace_back(PackageProject::KPPIImageEntry(path, wxEmptyString, true));
 			}
 			RefreshItems();
 			ChangeNotify();
@@ -402,7 +402,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 	}
 	void ImageListModel::OnRemoveEntry(const KxDataViewItem& item)
 	{
-		if (KPPIImageEntry* entry = GetDataEntry(GetRow(item)))
+		if (PackageProject::KPPIImageEntry* entry = GetDataEntry(GetRow(item)))
 		{
 			TrackRemoveID(entry->GetPath());
 			RemoveItemAndNotify(*GetDataVector(), item);

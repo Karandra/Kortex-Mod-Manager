@@ -9,7 +9,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	class SitesModel: public VectorModel<KLabeledValue::Vector>
 	{
 		private:
-			KPackageProjectInfo* m_InfoData = nullptr;
+			PackageProject::KPackageProjectInfo* m_InfoData = nullptr;
 			bool m_UseInlineEditor = false;
 	
 		private:
@@ -50,7 +50,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 			}
 	
 			void SetDataVector();
-			void SetDataVector(VectorType& data, KPackageProjectInfo* info);
+			void SetDataVector(VectorType& data, PackageProject::KPackageProjectInfo* info);
 	
 			void UseInlineEditor(bool value)
 			{

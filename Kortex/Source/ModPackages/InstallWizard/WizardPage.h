@@ -110,7 +110,7 @@ namespace Kortex::InstallWizard
 
 			wxWindow* GetPageContainer() const;
 			ModPackage& GetPackage() const;
-			PackageDesigner::KPackageProject& GetPackageConfig() const;
+			KPackageProject& GetPackageConfig() const;
 
 		public:
 			virtual wxWindow* Create() = 0;

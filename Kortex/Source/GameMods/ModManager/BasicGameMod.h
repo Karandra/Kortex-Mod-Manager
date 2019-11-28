@@ -58,7 +58,7 @@ namespace Kortex::ModManager
 
 			bool LoadUsingSignature(const wxString& signature) override;
 			bool LoadUsingID(const wxString& id) override;
-			bool CreateFromProject(const PackageDesigner::KPackageProject& config) override;
+			bool CreateFromProject(const KPackageProject& config) override;
 
 			wxString GetSignature() const override
 			{

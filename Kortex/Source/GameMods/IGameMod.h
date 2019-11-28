@@ -6,17 +6,16 @@
 #include "Utility/KAux.h"
 #include <KxFramework/KxVersion.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject;
+	class FileTreeNode;
+	class ModTagStore;
+	class ModSourceStore;
 }
 
 namespace Kortex
 {
-	class FileTreeNode;
-	class ModTagStore;
-	class ModSourceStore;
-
 	class IGameMod: public KxRTTI::Interface<IGameMod>
 	{
 		friend class IModManager;
@@ -49,7 +48,7 @@ namespace Kortex
 
 			virtual bool LoadUsingSignature(const wxString& signature) = 0;
 			virtual bool LoadUsingID(const wxString& id);
-			virtual bool CreateFromProject(const PackageDesigner::KPackageProject& config);
+			virtual bool CreateFromProject(const KPackageProject& config);
 			
 			intptr_t GetPriority() const
 			{

@@ -32,19 +32,19 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		EntryT* thisEntry = nullptr;
 		EntryT* draggedEntry = nullptr;
 
-		if constexpr(std::is_same<EntryT, KPPCStep>::value)
+		if constexpr(std::is_same<EntryT, PackageProject::KPPCStep>::value)
 		{
 			thisEntry = thisNode->GetStep();
 			draggedEntry = draggedNode->GetStep();
 		}
-		else if constexpr(std::is_same<EntryT, KPPCGroup>::value)
+		else if constexpr(std::is_same<EntryT, PackageProject::KPPCGroup>::value)
 		{
 			entries = &thisNode->GetParent()->GetStep()->GetGroups();
 
 			thisEntry = thisNode->GetGroup();
 			draggedEntry = draggedNode->GetGroup();
 		}
-		else if constexpr(std::is_same<EntryT, KPPCEntry>::value)
+		else if constexpr(std::is_same<EntryT, PackageProject::KPPCEntry>::value)
 		{
 			entries = &thisNode->GetParent()->GetGroup()->GetEntries();
 
@@ -67,7 +67,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		EntryT* thisEntry = nullptr;
 		EntryT* draggedEntry = nullptr;
 
-		if constexpr(std::is_same<EntryT, KPPCGroup>::value)
+		if constexpr(std::is_same<EntryT, PackageProject::KPPCGroup>::value)
 		{
 			thisItems = &thisNode->GetParent()->GetStep()->GetGroups();
 			draggedItems = &draggedNode->GetParent()->GetStep()->GetGroups();
@@ -75,7 +75,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			thisEntry = thisNode->GetGroup();
 			draggedEntry = draggedNode->GetGroup();
 		}
-		else if constexpr(std::is_same<EntryT, KPPCEntry>::value)
+		else if constexpr(std::is_same<EntryT, PackageProject::KPPCEntry>::value)
 		{
 			thisItems = &thisNode->GetParent()->GetGroup()->GetEntries();
 			draggedItems = &draggedNode->GetParent()->GetGroup()->GetEntries();
@@ -277,15 +277,15 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		if (ComponentsModelNode* node = GetNode(item))
 		{
-			if (const KPPCStep* step = node->GetStep())
+			if (const PackageProject::KPPCStep* step = node->GetStep())
 			{
 				return column->GetID() == ColumnID::Name;
 			}
-			else if (const KPPCGroup* group = node->GetGroup())
+			else if (const PackageProject::KPPCGroup* group = node->GetGroup())
 			{
 				return true;
 			}
-			else if (const KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				return column->GetID() == ColumnID::Name;
 			}
@@ -300,15 +300,15 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		if (ComponentsModelNode* node = GetNode(item))
 		{
-			if (const KPPCStep* step = node->GetStep())
+			if (const PackageProject::KPPCStep* step = node->GetStep())
 			{
 				GetStepValue(value, column, step, true);
 			}
-			else if (const KPPCGroup* group = node->GetGroup())
+			else if (const PackageProject::KPPCGroup* group = node->GetGroup())
 			{
 				GetGroupValue(value, column, group, true);
 			}
-			else if (const KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				GetEntryValue(value, column, entry, true);
 			}
@@ -322,15 +322,15 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		if (ComponentsModelNode* node = GetNode(item))
 		{
-			if (const KPPCStep* step = node->GetStep())
+			if (const PackageProject::KPPCStep* step = node->GetStep())
 			{
 				GetStepValue(value, column, step);
 			}
-			else if (const KPPCGroup* group = node->GetGroup())
+			else if (const PackageProject::KPPCGroup* group = node->GetGroup())
 			{
 				GetGroupValue(value, column, group);
 			}
-			else if (const KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				GetEntryValue(value, column, entry);
 			}
@@ -345,15 +345,15 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		if (ComponentsModelNode* node = GetNode(item))
 		{
 			bool itemChanged = false;
-			if (KPPCStep* step = node->GetStep())
+			if (PackageProject::KPPCStep* step = node->GetStep())
 			{
 				itemChanged = SetStepValue(value, column, step);
 			}
-			else if (KPPCGroup* group = node->GetGroup())
+			else if (PackageProject::KPPCGroup* group = node->GetGroup())
 			{
 				itemChanged = SetGroupValue(value, column, group);
 			}
-			else if (KPPCEntry* entry = node->GetEntry())
+			else if (PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				itemChanged = SetEntryValue(value, column, entry);
 			}
@@ -384,7 +384,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		return false;
 	}
 	
-	void ComponentsModel::GetStepValue(wxAny& value, const KxDataViewColumn* column, const KPPCStep* step, bool editor) const
+	void ComponentsModel::GetStepValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::KPPCStep* step, bool editor) const
 	{
 		switch (column->GetID())
 		{
@@ -412,7 +412,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 		};
 	}
-	void ComponentsModel::GetGroupValue(wxAny& value, const KxDataViewColumn* column, const KPPCGroup* group, bool editor) const
+	void ComponentsModel::GetGroupValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::KPPCGroup* group, bool editor) const
 	{
 		switch (column->GetID())
 		{
@@ -442,7 +442,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 		};
 	}
-	void ComponentsModel::GetEntryValue(wxAny& value, const KxDataViewColumn* column, const KPPCEntry* entry, bool editor) const
+	void ComponentsModel::GetEntryValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::KPPCEntry* entry, bool editor) const
 	{
 		switch (column->GetID())
 		{
@@ -460,7 +460,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 		};
 	}
-	void ComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn* column, const KPPCEntry* entry, EntryID id, bool editor) const
+	void ComponentsModel::GetEntryItemValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::KPPCEntry* entry, EntryID id, bool editor) const
 	{
 		switch (id)
 		{
@@ -535,11 +535,11 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					{
 						if (editor)
 						{
-							const KPPIImageEntry* imageEntry = GetInterface().FindEntryWithValue(entry->GetImage());
+							const PackageProject::KPPIImageEntry* imageEntry = GetInterface().FindEntryWithValue(entry->GetImage());
 							if (imageEntry)
 							{
-								const KPPIImageEntryArray& images = GetInterface().GetImages();
-								auto it = std::find_if(images.begin(), images.end(), [imageEntry](const KPPIImageEntry& value)
+								const PackageProject::KPPIImageEntryArray& images = GetInterface().GetImages();
+								auto it = std::find_if(images.begin(), images.end(), [imageEntry](const PackageProject::KPPIImageEntry& value)
 								{
 									return &value == imageEntry;
 								});
@@ -604,14 +604,14 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 							conditions = KAux::MakeNoneLabel();
 						}
 	
-						if (entry->GetTDConditionalValue() != KPPC_DESCRIPTOR_INVALID)
+						if (entry->GetTDConditionalValue() != PackageProject::KPPC_DESCRIPTOR_INVALID)
 						{
 							if (entry->GetTDConditionGroup().GetConditions().size() > 1)
 							{
 								conditions.Prepend(wxS("("));
 								conditions.Append(wxS(")"));
 							}
-							value = conditions + wxS(' ') + KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT) + wxS(' ') + KPackageProjectComponents::TypeDescriptorToTranslation(entry->GetTDConditionalValue());
+							value = conditions + wxS(' ') + KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT) + wxS(' ') + PackageProject::KPackageProjectComponents::TypeDescriptorToTranslation(entry->GetTDConditionalValue());
 						}
 						else
 						{
@@ -647,7 +647,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		};
 	}
 	
-	bool ComponentsModel::SetStepValue(const wxAny& value, const KxDataViewColumn* column, KPPCStep* step)
+	bool ComponentsModel::SetStepValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::KPPCStep* step)
 	{
 		switch (column->GetID())
 		{
@@ -659,7 +659,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		};
 		return false;
 	}
-	bool ComponentsModel::SetGroupValue(const wxAny& value, const KxDataViewColumn* column, KPPCGroup* group)
+	bool ComponentsModel::SetGroupValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::KPPCGroup* group)
 	{
 		switch (column->GetID())
 		{
@@ -670,13 +670,13 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 			case ColumnID::Value:
 			{
-				group->SetSelectionMode(value.As<KPPCSelectionMode>());
+				group->SetSelectionMode(value.As<PackageProject::KPPCSelectionMode>());
 				return true;
 			}
 		};
 		return false;
 	}
-	bool ComponentsModel::SetEntryValue(const wxAny& value, const KxDataViewColumn* column, KPPCEntry* entry)
+	bool ComponentsModel::SetEntryValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::KPPCEntry* entry)
 	{
 		switch (column->GetID())
 		{
@@ -688,7 +688,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		};
 		return false;
 	}
-	bool ComponentsModel::SetEntryItemValue(const wxAny& value, const KxDataViewColumn* column, KPPCEntry* entry, EntryID id)
+	bool ComponentsModel::SetEntryItemValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::KPPCEntry* entry, EntryID id)
 	{
 		if (column->GetID() == ColumnID::Value)
 		{
@@ -696,7 +696,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			{
 				case EntryID::TypeDescriptor:
 				{
-					entry->SetTDDefaultValue(value.As<KPPCTypeDescriptor>());
+					entry->SetTDDefaultValue(value.As<PackageProject::KPPCTypeDescriptor>());
 					return true;
 				}
 				case EntryID::Image:
@@ -704,13 +704,13 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					// Account for <None> image
 					int index = value.As<int>() - 1;
 	
-					const KPPIImageEntryArray& images = GetInterface().GetImages();
+					const PackageProject::KPPIImageEntryArray& images = GetInterface().GetImages();
 					if (index >= 0 && (size_t)index < images.size())
 					{
-						const KPPIImageEntry& imageEntry = images[index];
+						const PackageProject::KPPIImageEntry& imageEntry = images[index];
 	
 						entry->SetImage(imageEntry.GetPath());
-						m_EntryImageView->SetClientData(const_cast<KPPIImageEntry*>(&imageEntry));
+						m_EntryImageView->SetClientData(const_cast<PackageProject::KPPIImageEntry*>(&imageEntry));
 						m_EntryImageView->SetBitmap(imageEntry.GetBitmap());
 					}
 					else
@@ -735,7 +735,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		{
 			node = GetParentEntry(node);
 			
-			KPPIImageEntry* imageEntry = m_Controller->GetProject()->GetInterface().FindEntryWithValue(node->GetEntry()->GetImage());
+			PackageProject::KPPIImageEntry* imageEntry = m_Controller->GetProject()->GetInterface().FindEntryWithValue(node->GetEntry()->GetImage());
 			if (imageEntry)
 			{
 				if (!imageEntry->HasBitmap())
@@ -758,7 +758,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		ComponentsModelNode* node = GetNode(event.GetItem());
 		if (node && column->GetID() == ColumnID::Value)
 		{
-			if (KPPCStep* step = node->GetStep())
+			if (PackageProject::KPPCStep* step = node->GetStep())
 			{
 				ConditionGroupDialog dialog(GetView(), column->GetTitle(), m_Controller, step->GetConditionGroup());
 				dialog.ShowModal();
@@ -774,7 +774,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					return value.As<wxString>();
 				};
 	
-				KPPCEntry* entry = node->GetParent()->GetEntry();
+				PackageProject::KPPCEntry* entry = node->GetParent()->GetEntry();
 				switch (node->GetEntryItemID())
 				{
 					case EntryID::ConditionFlags:
@@ -933,14 +933,14 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				menuItemRemove = contextMenu.Add(new KxMenuItem(KxID_REMOVE));
 				menuItemRemove->Enable(false);
 	
-				if (const KPPCStep* step = node->GetStep())
+				if (const PackageProject::KPPCStep* step = node->GetStep())
 				{
 					menuItemRemove->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DirectionMinus));
 					menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveStep"), step->GetName()));
 					menuItemRemove->SetClientData(node);
 					menuItemRemove->Enable(true);
 				}
-				else if (const KPPCGroup* group = node->GetGroup())
+				else if (const PackageProject::KPPCGroup* group = node->GetGroup())
 				{
 					menuItemRemove->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderMinus));
 					menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveGroup"), group->GetName()));
@@ -949,7 +949,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 				else if (node->GetEntry() || node->IsEntryItem())
 				{
-					const KPPCEntry* entry = node->GetEntry() ? node->GetEntry() : node->GetParent()->GetEntry();
+					const PackageProject::KPPCEntry* entry = node->GetEntry() ? node->GetEntry() : node->GetParent()->GetEntry();
 	
 					menuItemRemove->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::BlockMinus));
 					menuItemRemove->SetItemLabel(wxString::Format("%s \"%s\"", KTr("PackageCreator.PageComponents.RemoveEntry"), entry->GetName()));
@@ -984,15 +984,15 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				case KxID_REMOVE:
 				{
 					ComponentsModelNode* node = static_cast<ComponentsModelNode*>(menuItemRemove->GetClientData());
-					if (const KPPCStep* step = node->GetStep())
+					if (const PackageProject::KPPCStep* step = node->GetStep())
 					{
 						RemoveStep(node, step);
 					}
-					else if (const KPPCGroup* group = node->GetGroup())
+					else if (const PackageProject::KPPCGroup* group = node->GetGroup())
 					{
 						RemoveGroup(node, group);
 					}
-					else if (const KPPCEntry* entry = node->GetEntry())
+					else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 					{
 						RemoveEntry(node, entry);
 					}
@@ -1007,14 +1007,14 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		KxDataViewColumn* column = event.GetColumn();
 		if (ComponentsModelNode* node = GetNode(event.GetItem()))
 		{
-			if (const KPPCStep* step = node->GetStep())
+			if (const PackageProject::KPPCStep* step = node->GetStep())
 			{
 				if (column->GetID() == ColumnID::Name)
 				{
 					column->SetEditor(&m_TextEditor);
 				}
 			}
-			else if (const KPPCGroup* group = node->GetGroup())
+			else if (const PackageProject::KPPCGroup* group = node->GetGroup())
 			{
 				if (column->GetID() == ColumnID::Name)
 				{
@@ -1025,7 +1025,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					column->SetEditor(&m_SelectionModeEditor);
 				}
 			}
-			else if (const KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				if (column->GetID() == ColumnID::Name)
 				{
@@ -1100,17 +1100,17 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				if (GetView()->GetMainWindow()->SwapTreeNodes(GetItem(thisNode), draggedItem))
 				{
 					// Nodes was swapped, it's safe to swap actual items. Node types are equal.
-					if (const KPPCStep* step = thisNode->GetStep())
+					if (const PackageProject::KPPCStep* step = thisNode->GetStep())
 					{
-						SwapNodesInSameBranch<KPPCStep>(thisNode, draggedNode, &GetComponents().GetSteps());
+						SwapNodesInSameBranch<PackageProject::KPPCStep>(thisNode, draggedNode, &GetComponents().GetSteps());
 					}
-					else if (const KPPCGroup* group = thisNode->GetGroup())
+					else if (const PackageProject::KPPCGroup* group = thisNode->GetGroup())
 					{
-						SwapNodesInSameBranch<KPPCGroup>(thisNode, draggedNode);
+						SwapNodesInSameBranch<PackageProject::KPPCGroup>(thisNode, draggedNode);
 					}
-					else if (const KPPCEntry* entry = thisNode->GetEntry())
+					else if (const PackageProject::KPPCEntry* entry = thisNode->GetEntry())
 					{
-						SwapNodesInSameBranch<KPPCEntry>(thisNode, draggedNode);
+						SwapNodesInSameBranch<PackageProject::KPPCEntry>(thisNode, draggedNode);
 					}
 	
 					GetView()->Select(draggedItem);
@@ -1121,13 +1121,13 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			else
 			{
 				// Step nodes will be handled in 'SameBranch'
-				if (const KPPCGroup* group = thisNode->GetGroup())
+				if (const PackageProject::KPPCGroup* group = thisNode->GetGroup())
 				{
-					MoveNodeToDifferentBranch<KPPCGroup>(thisNode, draggedNode, this);
+					MoveNodeToDifferentBranch<PackageProject::KPPCGroup>(thisNode, draggedNode, this);
 				}
-				else if (const KPPCEntry* group = thisNode->GetEntry())
+				else if (const PackageProject::KPPCEntry* group = thisNode->GetEntry())
 				{
-					MoveNodeToDifferentBranch<KPPCEntry>(thisNode, draggedNode, this);
+					MoveNodeToDifferentBranch<PackageProject::KPPCEntry>(thisNode, draggedNode, this);
 				}
 	
 				GetView()->Select(draggedItem);
@@ -1148,7 +1148,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	void ComponentsModel::AddStep(ComponentsModelNode* node, const KxDataViewItem& item)
 	{
 		GetView()->Expand(item);
-		auto& step = GetComponents().GetSteps().emplace_back(std::make_unique<KPPCStep>());
+		auto& step = GetComponents().GetSteps().emplace_back(std::make_unique<PackageProject::KPPCStep>());
 		auto& newNode = m_Steps.emplace_back(std::make_unique<ComponentsModelNode>(step.get()));
 	
 		KxDataViewItem newItem = GetItem(newNode.get());
@@ -1163,7 +1163,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		if (parent && parent->GetStep())
 		{
 			GetView()->Expand(item);
-			auto& group = parent->GetStep()->GetGroups().emplace_back(std::make_unique<KPPCGroup>());
+			auto& group = parent->GetStep()->GetGroups().emplace_back(std::make_unique<PackageProject::KPPCGroup>());
 			auto& newNode = parent->GetChildren().emplace_back(std::make_unique<ComponentsModelNode>(group.get(), parent));
 	
 			KxDataViewItem newItem = GetItem(newNode.get());
@@ -1179,7 +1179,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		if (parent && parent->GetGroup())
 		{
 			GetView()->Expand(item);
-			auto& entry = parent->GetGroup()->GetEntries().emplace_back(std::make_unique<KPPCEntry>());
+			auto& entry = parent->GetGroup()->GetEntries().emplace_back(std::make_unique<PackageProject::KPPCEntry>());
 			auto& newNode = parent->GetChildren().emplace_back(std::make_unique<ComponentsModelNode>(entry.get(), parent));
 			newNode->CreateFullEntryNode();
 	
@@ -1198,7 +1198,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		{
 			for (const auto& fileEntry: m_Controller->GetProject()->GetFileData().GetData())
 			{
-				auto& entry = parent->GetGroup()->GetEntries().emplace_back(std::make_unique<KPPCEntry>());
+				auto& entry = parent->GetGroup()->GetEntries().emplace_back(std::make_unique<PackageProject::KPPCEntry>());
 				auto& newNode = parent->GetChildren().emplace_back(std::make_unique<ComponentsModelNode>(entry.get(), parent));
 				newNode->CreateFullEntryNode();
 	
@@ -1213,12 +1213,12 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			ChangeNotify();
 		}
 	}
-	void ComponentsModel::RemoveStep(ComponentsModelNode* node, const KPPCStep* step)
+	void ComponentsModel::RemoveStep(ComponentsModelNode* node, const PackageProject::KPPCStep* step)
 	{
 		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveStepDialog", step->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (dialog.ShowModal() == KxID_YES)
 		{
-			KPPCStep::Vector& steps = GetComponents().GetSteps();
+			PackageProject::KPPCStep::Vector& steps = GetComponents().GetSteps();
 	
 			steps.erase(FindElement(steps, step));
 			m_Steps.erase(FindElement(m_Steps, node));
@@ -1231,12 +1231,12 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			ExapndAndSelect(this, GetView(), expandedItems, selectedItem);
 		}
 	}
-	void ComponentsModel::RemoveGroup(ComponentsModelNode* node, const KPPCGroup* group)
+	void ComponentsModel::RemoveGroup(ComponentsModelNode* node, const PackageProject::KPPCGroup* group)
 	{
 		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveGroupDialog", group->GetName()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (dialog.ShowModal() == KxID_YES)
 		{
-			KPPCGroup::Vector& groups = node->GetParent()->GetStep()->GetGroups();
+			PackageProject::KPPCGroup::Vector& groups = node->GetParent()->GetStep()->GetGroups();
 			ComponentsModelNode::Vector& nodes = node->GetParent()->GetChildren();
 	
 			groups.erase(FindElement(groups, group));
@@ -1250,9 +1250,9 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			ExapndAndSelect(this, GetView(), expandedItems, selectedItem);
 		}
 	}
-	void ComponentsModel::RemoveEntry(ComponentsModelNode* node, const KPPCEntry* entry)
+	void ComponentsModel::RemoveEntry(ComponentsModelNode* node, const PackageProject::KPPCEntry* entry)
 	{
-		KPPCEntry::Vector& entries = node->GetParent()->GetGroup()->GetEntries();
+		PackageProject::KPPCEntry::Vector& entries = node->GetParent()->GetGroup()->GetEntries();
 		ComponentsModelNode::Vector& nodes = node->GetParent()->GetChildren();
 	
 		entries.erase(FindElement(entries, entry));
@@ -1296,7 +1296,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllSteps_Conditions(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry tempEntry;
+		PackageProject::KPPCEntry tempEntry;
 		ConditionGroupDialog dialog(GetViewTLW(), name, m_Controller, tempEntry.GetTDConditionGroup());
 		if (dialog.ShowModal() == KxID_OK)
 		{
@@ -1310,7 +1310,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	
 	void ComponentsModel::AllGroups_Name(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCGroup::Vector& groups = node->GetStep()->GetGroups();
+		PackageProject::KPPCGroup::Vector& groups = node->GetStep()->GetGroups();
 	
 		KxTextBoxDialog dialog(GetViewTLW(), KxID_NONE, name);
 		if (dialog.ShowModal() == KxID_OK)
@@ -1324,7 +1324,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllGroups_SelectionMode(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCGroup::Vector& groups = node->GetStep()->GetGroups();
+		PackageProject::KPPCGroup::Vector& groups = node->GetStep()->GetGroups();
 	
 		KxComboBoxDialog dialog(GetView(), KxID_NONE, name);
 		dialog.SetItems(m_SelectionModeEditor.GetItems());
@@ -1332,7 +1332,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		{
 			for (auto& entry: groups)
 			{
-				entry->SetSelectionMode((KPPCSelectionMode)dialog.GetSelection());
+				entry->SetSelectionMode((PackageProject::KPPCSelectionMode)dialog.GetSelection());
 			}
 			GetView()->Refresh();
 		}
@@ -1340,7 +1340,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	
 	void ComponentsModel::AllEntries_Name(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 	
 		KxTextBoxDialog dialog(GetView(), KxID_NONE, name);
 		if (dialog.ShowModal() == KxID_OK)
@@ -1354,7 +1354,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_DefaultTypeDescriptor(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 	
 		KxComboBoxDialog dialog(GetView(), KxID_NONE, name);
 		dialog.SetItems(m_TypeDescriptorEditor.GetItems());
@@ -1362,14 +1362,14 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		{
 			for (auto& entry: entries)
 			{
-				entry->SetTDDefaultValue((KPPCTypeDescriptor)dialog.GetSelection());
+				entry->SetTDDefaultValue((PackageProject::KPPCTypeDescriptor)dialog.GetSelection());
 			}
 			GetView()->Refresh();
 		}
 	}
 	void ComponentsModel::AllEntries_FileData(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 	
 		FileDataSelectorDialog dialog(GetView(), name, m_Controller);
 		dialog.SetDataVector({}, &m_Controller->GetProject()->GetFileData());
@@ -1384,7 +1384,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_Requirements(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 	
 		RequirementsSelectorDialog dialog(GetView(), name, m_Controller);
 		dialog.SetDataVector({}, &m_Controller->GetProject()->GetRequirements());
@@ -1399,8 +1399,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_Image(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
-		const KPPIImageEntryArray& images = GetInterface().GetImages();
+		PackageProject::KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
+		const PackageProject::KPPIImageEntryArray& images = GetInterface().GetImages();
 		KxComboBoxDialog dialog(GetView(), KxID_NONE, name, wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, KxComboBoxDialog::DefaultStyle);
 	
 		UpdateImageEditorList();
@@ -1421,8 +1421,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_Conditions(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
-		KPPCEntry tempEntry;
+		PackageProject::KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::KPPCEntry tempEntry;
 	
 		ConditionGroupDialogWithTypeDescriptor dialog(GetView(), name, m_Controller, tempEntry.GetTDConditionGroup(), tempEntry);
 		if (dialog.ShowModal() == KxID_OK)
@@ -1437,8 +1437,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_AssignedFlags(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
-		KPPCEntry tempEntry;
+		PackageProject::KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::KPPCEntry tempEntry;
 	
 		AssignedConditionalsDialog dialog(GetView(), name, m_Controller);
 		dialog.SetDataVector(tempEntry.GetConditionalFlags());
@@ -1453,7 +1453,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_Description(ComponentsModelNode* node, const wxString& name)
 	{
-		KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::KPPCEntry::Vector& entries = node->GetGroup()->GetEntries();
 	
 		UI::TextEditDialog dialog(GetView());
 		if (dialog.ShowModal() == KxID_OK)
@@ -1466,11 +1466,11 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		}
 	}
 	
-	KPackageProjectInterface& ComponentsModel::GetInterface() const
+	PackageProject::KPackageProjectInterface& ComponentsModel::GetInterface() const
 	{
 		return m_Controller->GetProject()->GetInterface();
 	}
-	KPackageProjectComponents& ComponentsModel::GetComponents() const
+	PackageProject::KPackageProjectComponents& ComponentsModel::GetComponents() const
 	{
 		return m_Controller->GetProject()->GetComponents();
 	}
@@ -1483,15 +1483,15 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		// Type Descriptor
 		{
 			KxStringVector tChoices;
-			auto AddMode = [&tChoices](KPPCTypeDescriptor type)
+			auto AddMode = [&tChoices](PackageProject::KPPCTypeDescriptor type)
 			{
-				tChoices.push_back(KPackageProjectComponents::TypeDescriptorToTranslation(type));
+				tChoices.push_back(PackageProject::KPackageProjectComponents::TypeDescriptorToTranslation(type));
 			};
-			AddMode(KPPC_DESCRIPTOR_OPTIONAL);
-			AddMode(KPPC_DESCRIPTOR_REQUIRED);
-			AddMode(KPPC_DESCRIPTOR_RECOMMENDED);
-			AddMode(KPPC_DESCRIPTOR_COULD_BE_USABLE);
-			AddMode(KPPC_DESCRIPTOR_NOT_USABLE);
+			AddMode(PackageProject::KPPC_DESCRIPTOR_OPTIONAL);
+			AddMode(PackageProject::KPPC_DESCRIPTOR_REQUIRED);
+			AddMode(PackageProject::KPPC_DESCRIPTOR_RECOMMENDED);
+			AddMode(PackageProject::KPPC_DESCRIPTOR_COULD_BE_USABLE);
+			AddMode(PackageProject::KPPC_DESCRIPTOR_NOT_USABLE);
 			m_TypeDescriptorEditor.SetItems(tChoices);
 			m_TypeDescriptorEditor.EndEditOnCloseup(true);
 		}
@@ -1499,15 +1499,15 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		// Selection Mode
 		{
 			KxStringVector tChoices;
-			auto AddMode = [&tChoices](KPPCSelectionMode mode)
+			auto AddMode = [&tChoices](PackageProject::KPPCSelectionMode mode)
 			{
-				tChoices.push_back(KPackageProjectComponents::SelectionModeToTranslation(mode));
+				tChoices.push_back(PackageProject::KPackageProjectComponents::SelectionModeToTranslation(mode));
 			};
-			AddMode(KPPC_SELECT_ANY);
-			AddMode(KPPC_SELECT_EXACTLY_ONE);
-			AddMode(KPPC_SELECT_AT_LEAST_ONE);
-			AddMode(KPPC_SELECT_AT_MOST_ONE);
-			AddMode(KPPC_SELECT_ALL);
+			AddMode(PackageProject::KPPC_SELECT_ANY);
+			AddMode(PackageProject::KPPC_SELECT_EXACTLY_ONE);
+			AddMode(PackageProject::KPPC_SELECT_AT_LEAST_ONE);
+			AddMode(PackageProject::KPPC_SELECT_AT_MOST_ONE);
+			AddMode(PackageProject::KPPC_SELECT_ALL);
 			m_SelectionModeEditor.SetItems(tChoices);
 			m_SelectionModeEditor.EndEditOnCloseup(true);
 		}

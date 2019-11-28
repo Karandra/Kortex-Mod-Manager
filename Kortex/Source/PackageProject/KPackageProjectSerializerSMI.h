@@ -4,14 +4,15 @@
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxVersion.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject;
-	class KPPRRequirementEntry;
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
+	class KPPRRequirementEntry;
+
 	class KPackageProjectSerializerSMI: public KPackageProjectSerializer
 	{
 		private:

@@ -11,56 +11,55 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 {
 	class ConditionGroupModel:
 		public KxDataViewModelExBase<KxDataViewModel>,
-		//public KxDataViewModelExDragDropEnabled<ListModelDataObject>,
 		public IDTracker
 	{
 		protected:
 			WorkspaceDocument* m_Controller = nullptr;
 			KPackageProject& m_Project;
-			KPPCConditionGroup& m_ConditionGroup;
+			PackageProject::KPPCConditionGroup& m_ConditionGroup;
 	
 			KxDataViewComboBoxEditor* m_LabelEditor = nullptr;
 			KxDataViewComboBoxEditor* m_ValueEditor = nullptr;
 			KxColor m_ConditionColor;
 	
 		private:
-			virtual void OnInitControl() override;
+			void OnInitControl() override;
 	
-			virtual bool IsContainer(const KxDataViewItem& item) const override;
-			virtual void GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const override;
-			virtual KxDataViewItem GetParent(const KxDataViewItem& item) const override;
+			bool IsContainer(const KxDataViewItem& item) const override;
+			void GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const override;
+			KxDataViewItem GetParent(const KxDataViewItem& item) const override;
 	
-			virtual bool IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
-			virtual bool IsEditorEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
-			virtual void GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const override;
-			virtual void GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const override;
-			virtual bool SetValue(const wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) override;
-			virtual bool GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
+			bool IsEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
+			bool IsEditorEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const override;
+			void GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const override;
+			void GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const override;
+			bool SetValue(const wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) override;
+			bool GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
 	
 			void OnActivateItem(KxDataViewEvent& event);
 			void OnContextMenu(KxDataViewEvent& event);
 	
-			void OnAddFlag(KPPCCondition& condition);
+			void OnAddFlag(PackageProject::KPPCCondition& condition);
 			void OnAddCondition();
-			void OnRemoveFlag(KPPCCondition& condition, KPPCFlagEntry& flag);
-			void OnRemoveCondition(KPPCCondition& condition);
+			void OnRemoveFlag(PackageProject::KPPCCondition& condition, PackageProject::KPPCFlagEntry& flag);
+			void OnRemoveCondition(PackageProject::KPPCCondition& condition);
 			void OnRemoveAllConditions();
 			
 			int AskRemoveOption() const;
 			bool DoTrackID(wxString trackedID, const wxString& newID, bool remove) const;
-			void DoRemoveFlag(KPPCCondition& condition, KPPCFlagEntry& flag);
-			void DoRemoveCondition(KPPCCondition& condition);
+			void DoRemoveFlag(PackageProject::KPPCCondition& condition, PackageProject::KPPCFlagEntry& flag);
+			void DoRemoveCondition(PackageProject::KPPCCondition& condition);
 	
 		protected:
-			virtual IDTracker* GetTracker()
+			IDTracker* GetTracker()
 			{
 				return this;
 			}
-			virtual bool TrackChangeID(const wxString& trackedID, const wxString& newID) override
+			bool TrackChangeID(const wxString& trackedID, const wxString& newID) override
 			{
 				return DoTrackID(trackedID, newID, false);
 			}
-			virtual bool TrackRemoveID(const wxString& trackedID) override
+			bool TrackRemoveID(const wxString& trackedID) override
 			{
 				return DoTrackID(trackedID, wxEmptyString, true);
 			}
@@ -69,21 +68,21 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void RemoveEmptyConditions();
 	
 		public:
-			ConditionGroupModel(WorkspaceDocument* controller, KPPCConditionGroup& conditionGroup);
+			ConditionGroupModel(WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup);
 	
 		public:
-			KxDataViewItem MakeItem(const KPPCFlagEntry& flag) const
+			KxDataViewItem MakeItem(const PackageProject::KPPCFlagEntry& flag) const
 			{
 				return KxDataViewItem(static_cast<const wxObject*>(&flag));
 			}
-			KxDataViewItem MakeItem(const KPPCCondition& condition) const
+			KxDataViewItem MakeItem(const PackageProject::KPPCCondition& condition) const
 			{
 				return KxDataViewItem(static_cast<const wxObject*>(&condition));
 			}
-			KPPCFlagEntry* GetFlagEntry(const KxDataViewItem& item) const;
-			KPPCCondition* GetConditionEntry(const KxDataViewItem& item) const;
+			PackageProject::KPPCFlagEntry* GetFlagEntry(const KxDataViewItem& item) const;
+			PackageProject::KPPCCondition* GetConditionEntry(const KxDataViewItem& item) const;
 	
-			virtual void RefreshItems() override;
+			void RefreshItems() override;
 	};
 }
 
@@ -110,7 +109,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void LoadWindowSizes();
 	
 		public:
-			ConditionGroupDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, KPPCConditionGroup& conditionGroup);
+			ConditionGroupDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup);
 			virtual ~ConditionGroupDialog();
 	
 		public:
@@ -124,7 +123,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		private:
 			KxComboBox* m_NewTypeDescriptorCB = nullptr;
-			KPPCEntry& m_Entry;
+			PackageProject::KPPCEntry& m_Entry;
 	
 		private:
 			wxWindow* GetDialogFocusCtrl() const override
@@ -134,7 +133,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void OnSelectNewTypeDescriptor(wxCommandEvent& event);
 	
 		public:
-			ConditionGroupDialogWithTypeDescriptor(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, KPPCConditionGroup& conditionGroup, KPPCEntry& entry);
+			ConditionGroupDialogWithTypeDescriptor(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup, PackageProject::KPPCEntry& entry);
 			virtual ~ConditionGroupDialogWithTypeDescriptor();
 	};
 }

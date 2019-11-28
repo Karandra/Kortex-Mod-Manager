@@ -8,12 +8,12 @@ class KxDataViewComboBox;
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
-	using FileDataSelectorItem = std::pair<KPPFFileEntry*, bool>;
+	using FileDataSelectorItem = std::pair<PackageProject::KPPFFileEntry*, bool>;
 
 	class FileDataSelectorModel: public VectorModel<std::vector<FileDataSelectorItem>>
 	{
 		private:
-			KPackageProjectFileData* m_FileData = nullptr;
+		PackageProject::KPackageProjectFileData* m_FileData = nullptr;
 			std::vector<FileDataSelectorItem> m_DataVector;
 	
 		private:
@@ -46,7 +46,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 	
 			void SetDataVector();
-			void SetDataVector(const KxStringVector& data, KPackageProjectFileData* fileData);
+			void SetDataVector(const KxStringVector& data, PackageProject::KPackageProjectFileData* fileData);
 			KxStringVector GetSelectedItems() const;
 	};
 }
@@ -67,7 +67,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	
 		public:
 			void SetDataVector();
-			void SetDataVector(KxStringVector& data, KPackageProjectFileData* fileData);
+			void SetDataVector(KxStringVector& data, PackageProject::KPackageProjectFileData* fileData);
 	};
 }
 

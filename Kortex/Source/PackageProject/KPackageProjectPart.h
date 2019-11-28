@@ -2,9 +2,13 @@
 #include "stdafx.h"
 #include "KPackageProjectDefs.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex
 {
 	class KPackageProject;
+}
+
+namespace Kortex::PackageProject
+{
 	class KPackageProjectPart
 	{
 		private:

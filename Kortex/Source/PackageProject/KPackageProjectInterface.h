@@ -5,7 +5,7 @@
 #include "Utility/KWithBitmap.h"
 #include <KxFramework/KxColor.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPIImageEntry: public KWithBitmap
 	{
@@ -81,7 +81,7 @@ namespace Kortex::PackageDesigner
 	using KPPIImageEntryArray = std::vector<KPPIImageEntry>;
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPPITitleConfig
 	{
@@ -132,7 +132,7 @@ namespace Kortex::PackageDesigner
 	};
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	class KPackageProjectInterface: public KPackageProjectPart
 	{

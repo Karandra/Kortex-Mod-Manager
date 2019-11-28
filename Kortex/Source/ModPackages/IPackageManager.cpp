@@ -64,7 +64,7 @@ namespace Kortex
 	{
 		return path.IsEmpty() || (path.Length() >= 2 && path[1] == wxS(':'));
 	}
-	wxString IPackageManager::GetRequirementFilePath(const PackageDesigner::KPPRRequirementEntry* entry)
+	wxString IPackageManager::GetRequirementFilePath(const PackageProject::KPPRRequirementEntry* entry)
 	{
 		wxString path = KVarExp(entry->GetObject());
 		if (IsPathAbsolute(path))
@@ -78,9 +78,10 @@ namespace Kortex
 		}
 	}
 
-	PackageDesigner::KPPReqState IPackageManager::CheckRequirementState(const PackageDesigner::KPPRRequirementEntry* entry)
+	PackageProject::KPPReqState IPackageManager::CheckRequirementState(const PackageProject::KPPRRequirementEntry* entry)
 	{
 		using namespace PackageDesigner;
+		using namespace PackageProject;
 
 		KPPRObjectFunction objectFunc = entry->GetObjectFunction();
 		switch (objectFunc)
@@ -132,7 +133,7 @@ namespace Kortex
 		};
 		return KPPReqState::Unknown;
 	}
-	KxVersion IPackageManager::GetRequirementVersionFromBinaryFile(const PackageDesigner::KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersionFromBinaryFile(const PackageProject::KPPRRequirementEntry* entry)
 	{
 		KxVersion version;
 
@@ -179,7 +180,7 @@ namespace Kortex
 		}
 		return version;
 	}
-	KxVersion IPackageManager::GetRequirementVersionFromModManager(const PackageDesigner::KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersionFromModManager(const PackageProject::KPPRRequirementEntry* entry)
 	{
 		const IGameMod* modEntry = IModManager::GetInstance()->FindModByID(entry->GetID());
 		if (modEntry)
@@ -188,15 +189,16 @@ namespace Kortex
 		}
 		return KxNullVersion;
 	}
-	KxVersion IPackageManager::GetRequirementVersion(const PackageDesigner::KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersion(const PackageProject::KPPRRequirementEntry* entry)
 	{
 		KxVersion modVersion = GetRequirementVersionFromModManager(entry);
 		return modVersion.IsOK() ? modVersion : GetRequirementVersionFromBinaryFile(entry);
 	}
 
-	void IPackageManager::LoadRequirementsGroup(PackageDesigner::KPPRRequirementsGroup& group, const KxXMLNode& rootNode)
+	void IPackageManager::LoadRequirementsGroup(PackageProject::KPPRRequirementsGroup& group, const KxXMLNode& rootNode)
 	{
 		using namespace PackageDesigner;
+		using namespace PackageProject;
 
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{

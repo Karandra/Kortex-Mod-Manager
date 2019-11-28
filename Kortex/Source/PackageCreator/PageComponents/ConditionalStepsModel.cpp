@@ -66,7 +66,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		KxDataViewColumn* column = event.GetColumn();
 		if (column)
 		{
-			KPPCConditionalStep* step = GetDataEntry(GetRow(event.GetItem()));
+			PackageProject::KPPCConditionalStep* step = GetDataEntry(GetRow(event.GetItem()));
 			switch (column->GetID())
 			{
 				case ColumnID::Conditions:
@@ -99,7 +99,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	void ConditionalStepsModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const KPPCConditionalStep* entry = GetDataEntry(GetRow(item));
+		const PackageProject::KPPCConditionalStep* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -138,7 +138,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	
 	void ConditionalStepsModel::OnAddStep()
 	{
-		GetDataVector()->emplace_back(new KPPCConditionalStep());
+		GetDataVector()->emplace_back(new PackageProject::KPPCConditionalStep());
 	
 		KxDataViewItem item = GetItem(GetItemCount() - 1);
 		NotifyAddedItem(item);

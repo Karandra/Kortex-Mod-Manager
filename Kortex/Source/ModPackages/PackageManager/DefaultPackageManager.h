@@ -9,14 +9,14 @@ namespace Kortex::PackageDesigner
 	class WithScriptExtender: public IWithScriptExtender
 	{
 		private:
-			KPPRRequirementEntry* m_Entry = nullptr;
+			PackageProject::KPPRRequirementEntry* m_Entry = nullptr;
 
 		public:
-			void Assign(KPPRRequirementEntry& entry)
+			void Assign(PackageProject::KPPRRequirementEntry& entry)
 			{
 				m_Entry = &entry;
 			}
-			const KPPRRequirementEntry& GetEntry() const override
+			const PackageProject::KPPRRequirementEntry& GetEntry() const override
 			{
 				return *m_Entry;
 			}
@@ -28,7 +28,7 @@ namespace Kortex::PackageDesigner
 	class DefaultPackageManager: public IPackageManager
 	{
 		private:
-			KPPRRequirementsGroup m_StandardRequirements;
+			PackageProject::KPPRRequirementsGroup m_StandardRequirements;
 			WithScriptExtender m_WithScriptExtender;
 
 		protected:
@@ -40,11 +40,11 @@ namespace Kortex::PackageDesigner
 		public:
 			IWorkspace::RefVector EnumWorkspaces() const override;
 
-			const KPPRRequirementEntry::Vector& GetStdRequirements() const override
+			const PackageProject::KPPRRequirementEntry::Vector& GetStdRequirements() const override
 			{
 				return m_StandardRequirements.GetEntries();
 			}
-			const KPPRRequirementEntry* FindStdReqirement(const wxString& id) const override
+			const PackageProject::KPPRRequirementEntry* FindStdReqirement(const wxString& id) const override
 			{
 				return m_StandardRequirements.FindEntry(id);
 			}

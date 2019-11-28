@@ -8,7 +8,7 @@
 #include "Utility/KAux.h"
 #include <KxFramework/KxTextFile.h>
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
 	{

@@ -7,7 +7,6 @@
 #include <Kortex/InstallWizard.hpp>
 #include <KxFramework/KxTaskDialog.h>
 
-using namespace Kortex::PackageDesigner;
 namespace
 {
 	enum class TabIndex
@@ -65,7 +64,7 @@ namespace Kortex::InstallWizard
 
 		if (node)
 		{
-			if (const KPPCEntry* entry = node->GetEntry())
+			if (const PackageProject::KPPCEntry* entry = node->GetEntry())
 			{
 				const wxString& description = entry->GetDescription();
 				const bool isDescriptionEmpty = description.IsEmpty();
@@ -93,10 +92,10 @@ namespace Kortex::InstallWizard
 					m_TabView->SetPageImage((size_t)TabIndex::Requirements, (int)ImageResourceID::InformationFrameEmpty);
 				}
 
-				const KPPIImageEntry* pImageEntry = GetPackageConfig().GetInterface().FindEntryWithValue(entry->GetImage());
-				if (pImageEntry && pImageEntry->HasBitmap())
+				const PackageProject::KPPIImageEntry* imageEntry = GetPackageConfig().GetInterface().FindEntryWithValue(entry->GetImage());
+				if (imageEntry && imageEntry->HasBitmap())
 				{
-					m_ImageView->SetBitmap(pImageEntry->GetBitmap());
+					m_ImageView->SetBitmap(imageEntry->GetBitmap());
 					m_ImageView->Enable();
 				}
 
@@ -148,7 +147,7 @@ namespace Kortex::InstallWizard
 	{
 		if (GetCurrentStep())
 		{
-			KPPCEntry::RefVector checkedEntries;
+			PackageProject::KPPCEntry::RefVector checkedEntries;
 			if (m_ComponentsModel->OnLeaveStep(checkedEntries))
 			{
 				// Store flags from checked entries and save list of checked entries to current step.
@@ -156,7 +155,7 @@ namespace Kortex::InstallWizard
 				StoreStepFlags(checkedEntries);
 				m_InstallSteps.GetTopItem()->GetChecked() = checkedEntries;
 
-				KPPCStep* step = GetFirstStepSatisfiesConditions(GetCurrentStep());
+				PackageProject::KPPCStep* step = GetFirstStepSatisfiesConditions(GetCurrentStep());
 				if (step)
 				{
 					m_InstallSteps.PushStep(step);
@@ -200,9 +199,9 @@ namespace Kortex::InstallWizard
 		m_ImageView->Bind(wxEVT_LEFT_DCLICK, [this](wxMouseEvent& event)
 		{
 			event.Skip();
-			if (const KPPCEntry* pComponent = m_ComponentsModel->GetHotTrackedEntry())
+			if (const PackageProject::KPPCEntry* pComponent = m_ComponentsModel->GetHotTrackedEntry())
 			{
-				const KPPIImageEntry* entry = GetPackageConfig().GetInterface().FindEntryWithValue(pComponent->GetImage());
+				const PackageProject::KPPIImageEntry* entry = GetPackageConfig().GetInterface().FindEntryWithValue(pComponent->GetImage());
 				if (entry)
 				{
 					UI::ImageViewerEvent evt;
@@ -261,7 +260,7 @@ namespace Kortex::InstallWizard
 			{
 				for (auto& entry: group->GetEntries())
 				{
-					entry->SetTDCurrentValue(KPPC_DESCRIPTOR_INVALID);
+					entry->SetTDCurrentValue(PackageProject::KPPC_DESCRIPTOR_INVALID);
 				}
 			}
 		}
@@ -274,7 +273,7 @@ namespace Kortex::InstallWizard
 		ResetComponents();
 		StoreRequirementsFlags();
 
-		KPPCStep* step = GetFirstStepSatisfiesConditions();
+		PackageProject::KPPCStep* step = GetFirstStepSatisfiesConditions();
 		if (step)
 		{
 			m_InstallSteps.PushStep(step);
@@ -295,17 +294,17 @@ namespace Kortex::InstallWizard
 		}
 	}
 
-	void ComponentsPage::StoreStepFlags(const KPPCEntry::RefVector& checkedEntries)
+	void ComponentsPage::StoreStepFlags(const PackageProject::KPPCEntry::RefVector& checkedEntries)
 	{
-		for (KPPCEntry* entry: checkedEntries)
+		for (PackageProject::KPPCEntry* entry: checkedEntries)
 		{
-			for (const KPPCFlagEntry& flagEntry: entry->GetConditionalFlags().GetFlags())
+			for (const PackageProject::KPPCFlagEntry& flagEntry: entry->GetConditionalFlags().GetFlags())
 			{
 				m_FlagsStorage.insert_or_assign(flagEntry.GetName(), flagEntry.GetValue());
 			}
 		}
 	}
-	void ComponentsPage::RestoreStepFlagsUpToThis(const KPPCStep& step)
+	void ComponentsPage::RestoreStepFlagsUpToThis(const PackageProject::KPPCStep& step)
 	{
 		m_FlagsStorage.clear();
 		StoreRequirementsFlags();
@@ -323,7 +322,7 @@ namespace Kortex::InstallWizard
 		}
 	}
 
-	bool ComponentsPage::IsConditionSatisfied(const KPPCFlagEntry& flagEntry) const
+	bool ComponentsPage::IsConditionSatisfied(const PackageProject::KPPCFlagEntry& flagEntry) const
 	{
 		auto it = m_FlagsStorage.find(flagEntry.GetName());
 		if (it != m_FlagsStorage.end())
@@ -332,19 +331,19 @@ namespace Kortex::InstallWizard
 		}
 		return !flagEntry.HasValue();
 	}
-	bool ComponentsPage::IsConditionsSatisfied(const KPPCConditionGroup& conditionGroup) const
+	bool ComponentsPage::IsConditionsSatisfied(const PackageProject::KPPCConditionGroup& conditionGroup) const
 	{
 		if (conditionGroup.HasConditions())
 		{
-			KPackageProjectConditionChecker groupChecker;
-			for (const KPPCCondition& condition: conditionGroup.GetConditions())
+			PackageProject::KPackageProjectConditionChecker groupChecker;
+			for (const PackageProject::KPPCCondition& condition: conditionGroup.GetConditions())
 			{
 				// Evaluate each condition
-				KPackageProjectConditionChecker conditionChecker;
-				for (const KPPCFlagEntry& flag: condition.GetFlags())
+				PackageProject::KPackageProjectConditionChecker conditionChecker;
+				for (const PackageProject::KPPCFlagEntry& flag: condition.GetFlags())
 				{
 					conditionChecker(IsConditionSatisfied(flag), condition.GetOperator());
-					if (condition.GetOperator() == KPP_OPERATOR_AND && !conditionChecker.GetResult())
+					if (condition.GetOperator() == PackageProject::KPP_OPERATOR_AND && !conditionChecker.GetResult())
 					{
 						break;
 					}
@@ -352,7 +351,7 @@ namespace Kortex::InstallWizard
 
 				// Then combine it
 				groupChecker(conditionChecker.GetResult(), conditionGroup.GetOperator());
-				if (conditionGroup.GetOperator() == KPP_OPERATOR_AND && !groupChecker.GetResult())
+				if (conditionGroup.GetOperator() == PackageProject::KPP_OPERATOR_AND && !groupChecker.GetResult())
 				{
 					break;
 				}
@@ -361,13 +360,13 @@ namespace Kortex::InstallWizard
 		}
 		return true;
 	}
-	bool ComponentsPage::IsStepSatisfiesConditions(const KPPCStep& step) const
+	bool ComponentsPage::IsStepSatisfiesConditions(const PackageProject::KPPCStep& step) const
 	{
 		return IsConditionsSatisfied(step.GetConditionGroup());
 	}
 	bool ComponentsPage::CheckIsManualComponentsAvailable() const
 	{
-		const KPackageProjectComponents& components = GetPackageConfig().GetComponents();
+		const PackageProject::KPackageProjectComponents& components = GetPackageConfig().GetComponents();
 		if (!components.GetSteps().empty())
 		{
 			// Iterate over all steps from the beginning
@@ -382,12 +381,12 @@ namespace Kortex::InstallWizard
 		}
 		return false;
 	}
-	KPPCStep* ComponentsPage::GetFirstStepSatisfiesConditions() const
+	PackageProject::KPPCStep* ComponentsPage::GetFirstStepSatisfiesConditions() const
 	{
-		const KPPCStep::Vector& steps = GetPackageConfig().GetComponents().GetSteps();
+		const PackageProject::KPPCStep::Vector& steps = GetPackageConfig().GetComponents().GetSteps();
 		for (size_t i = 0; i < steps.size(); i++)
 		{
-			KPPCStep* pCurrentStep = steps[i].get();
+			PackageProject::KPPCStep* pCurrentStep = steps[i].get();
 			if (IsStepSatisfiesConditions(*pCurrentStep))
 			{
 				return pCurrentStep;
@@ -395,9 +394,9 @@ namespace Kortex::InstallWizard
 		}
 		return nullptr;
 	}
-	KPPCStep* ComponentsPage::GetFirstStepSatisfiesConditions(const KPPCStep* afterThis) const
+	PackageProject::KPPCStep* ComponentsPage::GetFirstStepSatisfiesConditions(const PackageProject::KPPCStep* afterThis) const
 	{
-		const KPPCStep::Vector& steps = GetPackageConfig().GetComponents().GetSteps();
+		const PackageProject::KPPCStep::Vector& steps = GetPackageConfig().GetComponents().GetSteps();
 		const auto itAfterThis = std::find_if(steps.begin(), steps.end(), [afterThis](const auto& step)
 		{
 			return step.get() == afterThis;
@@ -408,7 +407,7 @@ namespace Kortex::InstallWizard
 		{
 			for (auto it = itNextAfterThis; it != steps.end(); ++it)
 			{
-				KPPCStep& currentStep = **it;
+				PackageProject::KPPCStep& currentStep = **it;
 				if (IsStepSatisfiesConditions(currentStep))
 				{
 					return &currentStep;
@@ -418,7 +417,7 @@ namespace Kortex::InstallWizard
 		return nullptr;
 	}
 
-	KPPCStep* ComponentsPage::GetCurrentStep() const
+	PackageProject::KPPCStep* ComponentsPage::GetCurrentStep() const
 	{
 		return m_InstallSteps.GetTopStep();
 	}
@@ -426,7 +425,7 @@ namespace Kortex::InstallWizard
 	{
 		return m_InstallSteps.GetTopItem();
 	}
-	void ComponentsPage::LoadManualStep(KPPCStep& step)
+	void ComponentsPage::LoadManualStep(PackageProject::KPPCStep& step)
 	{
 		// Set step name if any
 		if (!step.GetName().IsEmpty())
@@ -443,7 +442,7 @@ namespace Kortex::InstallWizard
 		{
 			for (auto& entry: group->GetEntries())
 			{
-				entry->SetTDCurrentValue(KPPC_DESCRIPTOR_INVALID);
+				entry->SetTDCurrentValue(PackageProject::KPPC_DESCRIPTOR_INVALID);
 				if (IsConditionsSatisfied(entry->GetTDConditionGroup()))
 				{
 					entry->SetTDCurrentValue(entry->GetTDConditionalValue());

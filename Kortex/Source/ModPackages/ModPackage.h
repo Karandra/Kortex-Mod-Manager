@@ -16,10 +16,10 @@ namespace Kortex
 		private:
 			KArchive m_Archive;
 			KxFileStream m_Stream;
-			PackageDesigner::KPackageProject m_Config;
+			KPackageProject m_Config;
 			wxString m_PackageFilePath;
 			wxString m_EffectiveArchiveRoot;
-			PackageDesigner::KPPPackageType m_PackageType = PackageDesigner::KPP_PACCKAGE_UNKNOWN;
+			PackageProject::KPPPackageType m_PackageType = PackageProject::KPP_PACCKAGE_UNKNOWN;
 
 			KArchive::BufferMap m_DocumentsBuffer;
 			bool m_DocumentsLoaded = false;
@@ -45,10 +45,10 @@ namespace Kortex
 			}
 
 		private:
-			void LoadConfig(PackageDesigner::KPackageProject& project);
-			void LoadConfigNative(PackageDesigner::KPackageProject& project, size_t index);
-			void LoadConfigSMI(PackageDesigner::KPackageProject& project, size_t index);
-			void LoadConfigFOMod(PackageDesigner::KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex);
+			void LoadConfig(KPackageProject& project);
+			void LoadConfigNative(KPackageProject& project, size_t index);
+			void LoadConfigSMI(KPackageProject& project, size_t index);
+			void LoadConfigFOMod(KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex);
 		
 			wxString DetectEffectiveArchiveRoot(const KxFileItem& item, const wxString& subPath = {}) const;
 			void SetModIDIfNone();
@@ -63,9 +63,9 @@ namespace Kortex
 		public:
 			ModPackage();
 			ModPackage(const wxString& archivePath);
-			ModPackage(const wxString& archivePath, PackageDesigner::KPackageProject& project);
+			ModPackage(const wxString& archivePath, KPackageProject& project);
 			bool Create(const wxString& archivePath);
-			bool Create(const wxString& archivePath, PackageDesigner::KPackageProject& project);
+			bool Create(const wxString& archivePath, KPackageProject& project);
 			~ModPackage();
 
 		public:
@@ -84,15 +84,15 @@ namespace Kortex
 			{
 				return m_Archive;
 			}
-			PackageDesigner::KPPPackageType GetType() const
+			PackageProject::KPPPackageType GetType() const
 			{
 				return m_PackageType;
 			}
-			const PackageDesigner::KPackageProject& GetConfig() const
+			const KPackageProject& GetConfig() const
 			{
 				return m_Config;
 			}
-			PackageDesigner::KPackageProject& GetConfig()
+			KPackageProject& GetConfig()
 			{
 				return m_Config;
 			}
@@ -103,7 +103,7 @@ namespace Kortex
 			{
 				return m_Config.GetModName();
 			}
-			const PackageDesigner::KPPIImageEntry* GetLogoImage() const
+			const PackageProject::KPPIImageEntry* GetLogoImage() const
 			{
 				return m_Config.GetInterface().GetMainImageEntry();
 			}

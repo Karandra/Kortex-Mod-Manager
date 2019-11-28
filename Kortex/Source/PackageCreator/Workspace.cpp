@@ -231,11 +231,11 @@ namespace Kortex::PackageDesigner
 		item = menu->Add(new KxMenuItem(KxID_SAVEAS, KTr("PackageCreator.MenuProject.SaveAs")));
 		item->Bind(KxEVT_MENU_SELECT, &Workspace::OnSaveProject, this);
 
-		item = menu->Add(new KxMenuItem(KxID_HIGHEST + KPP_PACCKAGE_FOMOD_XML, KTr("PackageCreator.MenuProject.SaveAsFOMod")));
+		item = menu->Add(new KxMenuItem(KxID_HIGHEST + PackageProject::KPP_PACCKAGE_FOMOD_XML, KTr("PackageCreator.MenuProject.SaveAsFOMod")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentExport));
 		item->Bind(KxEVT_MENU_SELECT, &Workspace::OnExportProject, this);
 
-		item = menu->Add(new KxMenuItem(KxID_HIGHEST + KPP_PACCKAGE_NATIVE, KTr("PackageCreator.MenuProject.SaveAsKMP")));
+		item = menu->Add(new KxMenuItem(KxID_HIGHEST + PackageProject::KPP_PACCKAGE_NATIVE, KTr("PackageCreator.MenuProject.SaveAsKMP")));
 		item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::DocumentExport));
 		item->Bind(KxEVT_MENU_SELECT, &Workspace::OnExportProject, this);
 	}
@@ -335,7 +335,7 @@ namespace Kortex::PackageDesigner
 		{
 			KxMenuItem* item = event.GetItem();
 
-			KPPPackageType type = (KPPPackageType)(item->GetId() - KxID_HIGHEST);
+			PackageProject::KPPPackageType type = (PackageProject::KPPPackageType)(item->GetId() - KxID_HIGHEST);
 			switch (type)
 			{
 				case 0:
@@ -346,8 +346,8 @@ namespace Kortex::PackageDesigner
 						wxString info = KxTextFile::ReadToString(dialog.GetInfoFile());
 						wxString sModuleConfig = KxTextFile::ReadToString(dialog.GetModuleConfigFile());
 
-						KPackageProjectSerializerFOMod tSerailizer(info, sModuleConfig, dialog.GetProjectFolder());
-						m_WorkspaceDocument.ImportProject(tSerailizer);
+						PackageProject::KPackageProjectSerializerFOMod serailizer(info, sModuleConfig, dialog.GetProjectFolder());
+						m_WorkspaceDocument.ImportProject(serailizer);
 					}
 					break;
 				}
@@ -367,10 +367,10 @@ namespace Kortex::PackageDesigner
 	}
 	void Workspace::OnExportProject(KxMenuEvent& event)
 	{
-		KPPPackageType type = (KPPPackageType)(event.GetItem()->GetId() - KxID_HIGHEST);
+		PackageProject::KPPPackageType type = (PackageProject::KPPPackageType)(event.GetItem()->GetId() - KxID_HIGHEST);
 		switch (type)
 		{
-			case KPP_PACCKAGE_NATIVE:
+			case PackageProject::KPP_PACCKAGE_NATIVE:
 			{
 				KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 				dialog.SetDefaultExtension("xml");
@@ -380,18 +380,18 @@ namespace Kortex::PackageDesigner
 
 				if (dialog.ShowModal() == KxID_OK)
 				{
-					KPackageProjectSerializerKMP serializer(false);
+					PackageProject::KPackageProjectSerializerKMP serializer(false);
 					m_WorkspaceDocument.ExportProject(serializer);
 					KxTextFile::WriteToFile(dialog.GetResult(), serializer.GetData());
 				}
 				break;
 			}
-			case KPP_PACCKAGE_FOMOD_XML:
+			case PackageProject::KPP_PACCKAGE_FOMOD_XML:
 			{
 				FOModImportExportDialog dialog(this, true);
 				if (dialog.ShowModal() == KxID_OK)
 				{
-					KPackageProjectSerializerFOMod serializer(dialog.GetProjectFolder());
+					PackageProject::KPackageProjectSerializerFOMod serializer(dialog.GetProjectFolder());
 					serializer.ExportToNativeFormat(true);
 					m_WorkspaceDocument.ExportProject(serializer);
 

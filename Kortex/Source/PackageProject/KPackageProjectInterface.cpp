@@ -4,7 +4,7 @@
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPPIImageEntry::KPPIImageEntry(const wxString& path, const wxString& description, bool isVisible)
 		:m_Path(path), m_Description(description), m_IsVisiable(isVisible)
@@ -15,7 +15,7 @@ namespace Kortex::PackageDesigner
 	}
 }
 
-namespace Kortex::PackageDesigner
+namespace Kortex::PackageProject
 {
 	KPackageProjectInterface::KPackageProjectInterface(KPackageProject& project)
 		:KPackageProjectPart(project)

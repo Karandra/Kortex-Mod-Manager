@@ -54,13 +54,13 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 		GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewTextEditor>(KTr("Generic.Name"), ColumnID::Name, KxDATAVIEW_CELL_EDITABLE);
 		{
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewComboBoxEditor>(KTr("Generic.Operator"), ColumnID::Operator, KxDATAVIEW_CELL_EDITABLE);
-			info.GetEditor()->SetItems(KPackageProject::CreateOperatorSymNamesList({KPP_OPERATOR_AND, KPP_OPERATOR_OR}));
+			info.GetEditor()->SetItems(KPackageProject::CreateOperatorSymNamesList({PackageProject::KPP_OPERATOR_AND, PackageProject::KPP_OPERATOR_OR}));
 		}
 	}
 	
 	void GroupsModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		KPPRRequirementsGroup* group = GetDataEntry(row);
+		PackageProject::KPPRRequirementsGroup* group = GetDataEntry(row);
 		if (group)
 		{
 			switch (column->GetID())
@@ -72,7 +72,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				case ColumnID::Operator:
 				{
-					value = group->GetOperator() == KPP_OPERATOR_AND ? 0 : 1;
+					value = group->GetOperator() == PackageProject::KPP_OPERATOR_AND ? 0 : 1;
 					break;
 				}
 			};
@@ -80,7 +80,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	}
 	void GroupsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		KPPRRequirementsGroup* group = GetDataEntry(row);
+		PackageProject::KPPRRequirementsGroup* group = GetDataEntry(row);
 		if (group)
 		{
 			switch (column->GetID())
@@ -100,7 +100,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	}
 	bool GroupsModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		KPPRRequirementsGroup* group = GetDataEntry(row);
+		PackageProject::KPPRRequirementsGroup* group = GetDataEntry(row);
 		if (group)
 		{
 			switch (column->GetID())
@@ -126,7 +126,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				case ColumnID::Operator:
 				{
-					group->SetOperator(value.As<int>() == 0 ? KPP_OPERATOR_AND : KPP_OPERATOR_OR);
+					group->SetOperator(value.As<int>() == 0 ? PackageProject::KPP_OPERATOR_AND : PackageProject::KPP_OPERATOR_OR);
 					return true;
 				}
 			};
@@ -139,7 +139,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 		KxDataViewItem item = event.GetItem();
 		m_RemoveButton->Enable(item.IsOK());
 	
-		KPPRRequirementsGroup* group = GetDataEntry(item);
+		PackageProject::KPPRRequirementsGroup* group = GetDataEntry(item);
 		if (group)
 		{
 			m_EntriesModel->SetRequirementsGroup(group);
@@ -164,7 +164,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	void GroupsModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const KPPRRequirementsGroup* entry = GetDataEntry(item);
+		const PackageProject::KPPRRequirementsGroup* entry = GetDataEntry(item);
 	
 		KxMenu menu;
 		{
@@ -202,14 +202,14 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	};
 	void GroupsModel::OnGetStringValue(KxDataViewEvent& event)
 	{
-		KPPRRequirementsGroup* group = GetDataEntry(GetView()->GetSelection());
+		PackageProject::KPPRRequirementsGroup* group = GetDataEntry(GetView()->GetSelection());
 		event.SetString(group ? group->GetID() : KAux::MakeNoneLabel());
 	}
 	
 	bool GroupsModel::DoTrackID(const wxString& trackedID, const wxString& newID, bool remove) const
 	{
-		const wxString trackedFlagName = KPPRRequirementsGroup::GetFlagName(trackedID);
-		const wxString newFlagName = KPPRRequirementsGroup::GetFlagName(newID);
+		const wxString trackedFlagName = PackageProject::KPPRRequirementsGroup::GetFlagName(trackedID);
+		const wxString newFlagName = PackageProject::KPPRRequirementsGroup::GetFlagName(newID);
 	
 		// Default groups
 		TrackID_ReplaceOrRemove(trackedID, newID, GetProject().GetRequirements().GetDefaultGroup(), remove);
@@ -225,7 +225,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	
 					// Flags
 					TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, entry->GetConditionalFlags().GetFlags(), remove);
-					for (KPPCCondition& condition: entry->GetTDConditionGroup().GetConditions())
+					for (PackageProject::KPPCCondition& condition: entry->GetTDConditionGroup().GetConditions())
 					{
 						TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);
 					}
@@ -236,7 +236,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 		// Conditional steps flags
 		for (auto& step: GetProject().GetComponents().GetConditionalSteps())
 		{
-			for (KPPCCondition& condition : step->GetConditionGroup().GetConditions())
+			for (PackageProject::KPPCCondition& condition : step->GetConditionGroup().GetConditions())
 			{
 				TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);
 			}
@@ -274,7 +274,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			}
 		}
 	
-		auto& group = GetDataVector()->emplace_back(new KPPRRequirementsGroup());
+		auto& group = GetDataVector()->emplace_back(new PackageProject::KPPRRequirementsGroup());
 		group->SetID(name);
 	
 		KxDataViewItem item = GetItem(GetItemCount() - 1);
@@ -286,7 +286,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	}
 	void GroupsModel::OnRemoveGroup(const KxDataViewItem& item)
 	{
-		if (KPPRRequirementsGroup* group = GetDataEntry(item))
+		if (PackageProject::KPPRRequirementsGroup* group = GetDataEntry(item))
 		{
 			KxTaskDialog dialog(GetView(), KxID_NONE, KTrf("PackageCreator.RemoveGroupDialog", group->GetID()), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 			if (dialog.ShowModal() == KxID_YES)

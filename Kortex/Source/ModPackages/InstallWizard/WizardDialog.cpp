@@ -4,7 +4,7 @@
 #include <Kortex/NetworkManager.hpp>
 #include "Common.h"
 #include "WizardDialog.h"
-#include "PackageCreator/KPackageCreatorPageBase.h"
+#include "PackageCreator/PageBase.h"
 #include "UI/ImageViewerDialog.h"
 #include "UI/TextEditDialog.h"
 #include "Utility/KAux.h"

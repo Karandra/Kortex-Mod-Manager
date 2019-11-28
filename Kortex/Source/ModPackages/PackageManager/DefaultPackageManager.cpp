@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DefaultPackageManager.h"
-#include "PackageCreator/KPackageCreatorWorkspace.h"
+#include "PackageCreator/Workspace.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
@@ -30,12 +30,12 @@ namespace Kortex::PackageDesigner
 	}
 	void DefaultPackageManager::CreateWorkspaces()
 	{
-		new KPackageCreatorWorkspace();
+		new Workspace();
 	}
 
 	IWorkspace::RefVector DefaultPackageManager::EnumWorkspaces() const
 	{
-		return ToWorkspacesList(KPackageCreatorWorkspace::GetInstance());
+		return ToWorkspacesList(Workspace::GetInstance());
 	}
 
 	void DefaultPackageManager::OnModListMenu(KxMenu& menu, const std::vector<IGameMod*>& selectedMods, IGameMod* focusedMod)
@@ -120,10 +120,10 @@ namespace Kortex::PackageDesigner
 		}
 		{
 			KxMenuItem* item = packageMenu->Add(new KxMenuItem(KTr("ModManager.Menu.Package.ImportProject")));
-			item->Enable(isPackageExist && KPackageCreatorWorkspace::GetInstance() != nullptr);
+			item->Enable(isPackageExist && Workspace::GetInstance() != nullptr);
 			item->Bind(KxEVT_MENU_SELECT, [focusedMod](KxMenuEvent& event)
 			{
-				KPackageCreatorWorkspace* workspace = KPackageCreatorWorkspace::GetInstance();
+				Workspace* workspace = Workspace::GetInstance();
 
 				workspace->ImportProjectFromPackage(focusedMod->GetPackageFile());
 				workspace->SwitchHere();
@@ -134,7 +134,7 @@ namespace Kortex::PackageDesigner
 			item->Enable(isPackageExist);
 			item->Bind(KxEVT_MENU_SELECT, [focusedMod](KxMenuEvent& event)
 			{
-				KPackageCreatorWorkspace* workspace = KPackageCreatorWorkspace::GetInstance();
+				Workspace* workspace = Workspace::GetInstance();
 
 				workspace->CreateProjectFromModEntry(*focusedMod);
 				workspace->SwitchHere();

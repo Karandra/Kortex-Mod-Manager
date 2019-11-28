@@ -8,7 +8,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/Common/Packages.hpp>
 #include "PackageProject/KPackageProject.h"
-#include "PackageCreator/KPackageCreatorWorkspace.h"
+#include "PackageCreator/Workspace.h"
 #include "Archive/KArchive.h"
 #include "Utility/KAux.h"
 #include "Utility/KOperationWithProgress.h"

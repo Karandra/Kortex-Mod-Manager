@@ -2,7 +2,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
 #include "InfoDisplayModel.h"
-#include "PackageCreator/KPackageCreatorPageComponents.h"
+#include "PackageCreator/PageComponents.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include "UI/TextEditDialog.h"
@@ -64,7 +64,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 					case InfoKind::Tags:
 					{
 						const ModTagStore& tags = packageConfig.GetInfo().GetTagStore();
-						return PackageDesigner::KPackageCreatorPageComponents::FormatArrayToText(tags.GetNames());
+						return PackageDesigner::PageComponents::FormatArrayToText(tags.GetNames());
 					}
 					case InfoKind::ID:
 					{

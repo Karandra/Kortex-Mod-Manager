@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CompletedPage.h"
-#include "PackageCreator/KPackageCreatorPageBase.h"
+#include "PackageCreator/PageBase.h"
 #include <Kortex/InstallWizard.hpp>
 
 namespace Kortex::InstallWizard
@@ -27,7 +27,7 @@ namespace Kortex::InstallWizard
 		m_Panel = new KxPanel(GetPageContainer(), KxID_NONE);
 		m_Panel->SetSizer(sizer);
 
-		m_Label = PackageDesigner::KPackageCreatorPageBase::CreateCaptionLabel(m_Panel, wxEmptyString);
+		m_Label = PackageDesigner::PageBase::CreateCaptionLabel(m_Panel, wxEmptyString);
 		m_Label->ToggleWindowStyle(KxLABEL_LINE);
 		m_Label->SetForegroundColour(m_Panel->GetForegroundColour());
 

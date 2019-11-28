@@ -2,7 +2,7 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/PackageManager.hpp>
 #include "DisplayModel.h"
-#include "PackageCreator/KPackageCreatorPageBase.h"
+#include "PackageCreator/PageBase.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxUxTheme.h>

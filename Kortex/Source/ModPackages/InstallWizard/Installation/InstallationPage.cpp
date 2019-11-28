@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "InstallationPage.h"
-#include "PackageCreator/KPackageCreatorPageBase.h"
+#include "PackageCreator/PageBase.h"
 #include <Kortex/InstallWizard.hpp>
 #include <Kortex/ModManager.hpp>
 #include <KxFramework/KxTaskDialog.h>
@@ -160,8 +160,8 @@ namespace Kortex::InstallWizard
 
 		m_MinorProgress = new KxProgressBar(m_PagePanel, KxID_NONE, 100);
 		m_MajorProgress = new KxProgressBar(m_PagePanel, KxID_NONE, 100);
-		m_MinorStatus = KPackageCreatorPageBase::CreateNormalLabel(m_PagePanel, wxEmptyString, false);
-		m_MajorStatus = KPackageCreatorPageBase::CreateNormalLabel(m_PagePanel, wxEmptyString, false);
+		m_MinorStatus = PageBase::CreateNormalLabel(m_PagePanel, wxEmptyString, false);
+		m_MajorStatus = PageBase::CreateNormalLabel(m_PagePanel, wxEmptyString, false);
 
 		sizer->Add(m_MinorStatus, 0, wxEXPAND);
 		sizer->Add(m_MinorProgress, 0, wxEXPAND);

@@ -429,15 +429,6 @@
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorWorkspace.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageBase.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageInfo.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageProject\KPackageProject.cpp">
       <Filter>Code\Source\PackageProject</Filter>
     </ClCompile>
@@ -459,23 +450,8 @@
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerKMP.cpp">
       <Filter>Code\Source\PackageProject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorController.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageProject\KPackageProjectFileData.cpp">
       <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageFileData.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageInterface.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorListModel.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageRequirements.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\KPackageProjectRequirements.cpp">
       <Filter>Code\Source\PackageProject</Filter>
@@ -483,44 +459,8 @@
     <ClCompile Include="Source\PackageProject\KPackageProjectComponents.cpp">
       <Filter>Code\Source\PackageProject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorPageComponents.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageRequirements\KPCREntriesListModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageRequirements</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageInterface\KPCIImagesListModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoTagsListModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageFileData\KPCFileDataFolderContentModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageFileData</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageFileData\KPCFileDataMainListModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageFileData</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCFileDataSelectorModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCRequirementsSelectorModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoDocumentsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerFOMod.cpp">
       <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorFOModIEDialog.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCConditionalStepsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageRequirements\KPCRGroupsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageRequirements</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\KPackageProjectSerializerSMI.cpp">
       <Filter>Code\Source\PackageProject</Filter>
@@ -528,41 +468,17 @@
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorBuilder.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\KTempFolderKeeper.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Archive\KArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\KPackageCreatorIDTracker.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageInfo\KPCInfoAdditionalInfoModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\KBitmapSize.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCAssignedConditionalsEditor.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\KPCCConditionGroupEditor.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\EmptySaveFile.cpp">
       <Filter>Code\Source\GameData\SaveManager</Filter>
@@ -1284,6 +1200,90 @@
     <ClCompile Include="Source\UI\ProgressOverlay.cpp">
       <Filter>Code\Source\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PackageCreator\WorkspaceDocument.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\Workspace.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageRequirements.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageInterface.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageInfo.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageFileData.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageBase.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\ListModel.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\IDTracker.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\FOModImportExportDialog.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PackageBuilder.cpp">
+      <Filter>Code\Source\PackageCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\ConditionGroupModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\AssignedConditionalsModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\ComponentsModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\ComponentsModelNode.cpp">
+      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\RequirementsSelectorModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageFileData\MainListModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageFileData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageFileData\ContentModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageFileData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageInfo\TagsListModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageInfo\SitesModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageInfo\DocumentsModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageInfo\AdditionalInfoModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageInterface\ImageListModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageRequirements\GroupsModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageRequirements</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageRequirements\EntriesListModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageRequirements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1306,15 +1306,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorWorkspace.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageBase.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageInfo.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
     </ClInclude>
     <ClInclude Include="Source\PackageProject\KPackageProject.h">
       <Filter>Code\Headers\PackageProject</Filter>
@@ -1340,32 +1331,11 @@
     <ClInclude Include="Source\PackageProject\KPackageProjectSerializerKMP.h">
       <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorController.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PackageProject\KPackageProjectFileData.h">
       <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageFileData.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageInterface.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorListModel.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorVectorModel.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageRequirements.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PackageProject\KPackageProjectComponents.h">
       <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorPageComponents.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KWithIDName.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -1373,53 +1343,17 @@
     <ClInclude Include="Source\PackageProject\KPackageProjectDefs.h">
       <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageRequirements\KPCREntriesListModel.h">
-      <Filter>Code\Headers\PackageCreator\PageRequirements</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInterface\KPCIImagesListModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoTagsListModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageFileData\KPCFileDataMainListModel.h">
-      <Filter>Code\Headers\PackageCreator\PageFileData</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageFileData\KPCFileDataFolderContentModel.h">
-      <Filter>Code\Headers\PackageCreator\PageFileData</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCFileDataSelectorModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCRequirementsSelectorModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoDocumentsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PackageProject\KPackageProjectSerializerFOMod.h">
       <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorFOModIEDialog.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utility\KDataViewListModel.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCConditionalStepsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageRequirements\KPCRGroupsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageRequirements</Filter>
     </ClInclude>
     <ClInclude Include="Source\PackageProject\KPackageProjectSerializerSMI.h">
       <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KOperationWithProgress.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorBuilder.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KTempFolderKeeper.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -1439,21 +1373,6 @@
     <ClInclude Include="Source\Utility\KUnsortedUnique.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoSitesModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\KPackageCreatorIDTracker.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo\KPCInfoAdditionalInfoModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\KPCComponentsModelNode.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utility\KBitmapSize.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
@@ -1465,12 +1384,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\KVectorForwarder.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCAssignedConditionalsEditor.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\KPCCConditionGroupEditor.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameData\SaveManager\EmptySaveFile.h">
       <Filter>Code\Headers\GameData\SaveManager</Filter>
@@ -2428,6 +2341,93 @@
     </ClInclude>
     <ClInclude Include="Source\UI\ProgressOverlay.h">
       <Filter>Code\Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\WorkspaceDocument.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\Workspace.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageRequirements.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInterface.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageFileData.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageBase.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\ListModel.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\VectorModel.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\IDTracker.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\FOModImportExportDialog.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PackageBuilder.h">
+      <Filter>Code\Headers\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ConditionGroupModel.h">
+      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.h">
+      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\AssignedConditionalsModel.h">
+      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.h">
+      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModel.h">
+      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModelNode.h">
+      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\RequirementsSelectorModel.h">
+      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageFileData\MainListModel.h">
+      <Filter>Code\Headers\PackageCreator\PageFileData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageFileData\ContentModel.h">
+      <Filter>Code\Headers\PackageCreator\PageFileData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo\TagsListModel.h">
+      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo\SitesModel.h">
+      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo\DocumentsModel.h">
+      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo\AdditionalInfoModel.h">
+      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInterface\ImageListModel.h">
+      <Filter>Code\Headers\PackageCreator\PageInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageRequirements\GroupsModel.h">
+      <Filter>Code\Headers\PackageCreator\PageRequirements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageRequirements\EntriesListModel.h">
+      <Filter>Code\Headers\PackageCreator\PageRequirements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

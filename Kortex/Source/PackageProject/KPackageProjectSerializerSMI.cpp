@@ -20,7 +20,7 @@ namespace Kortex::PackageProject
 {
 	namespace
 	{
-		void ReadConditionGroup(KPPCConditionGroup& conditionGroup, const KxXMLNode& flagsNode, bool isRequired)
+		void ReadConditionGroup(ConditionGroup& conditionGroup, const KxXMLNode& flagsNode, bool isRequired)
 		{
 			for (KxXMLNode node = flagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
@@ -32,7 +32,7 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	wxString KPackageProjectSerializerSMI::ConvertMultiLine(const wxString& source) const
+	wxString LegacySerializer::ConvertMultiLine(const wxString& source) const
 	{
 		// Convert terrible line separator used in 3.x versions to normal line separator
 	
@@ -40,7 +40,7 @@ namespace Kortex::PackageProject
 		out.Replace("[NewLine]", "\r\n", true);
 		return out;
 	}
-	wxString KPackageProjectSerializerSMI::ConvertVariable(const wxString& sOldVariable) const
+	wxString LegacySerializer::ConvertVariable(const wxString& sOldVariable) const
 	{
 		using namespace Kortex;
 		using namespace Kortex::Variables;
@@ -122,7 +122,7 @@ namespace Kortex::PackageProject
 		#undef SHVAR
 		return wxEmptyString;
 	}
-	void KPackageProjectSerializerSMI::AddSite(const wxString& url)
+	void LegacySerializer::AddSite(const wxString& url)
 	{
 		Kortex::ModSourceStore& store = m_Project->GetInfo().GetModSourceStore();
 	
@@ -137,7 +137,7 @@ namespace Kortex::PackageProject
 			store.TryAddWith(siteName, url);
 		}
 	}
-	void KPackageProjectSerializerSMI::FixRequirementID(KPPRRequirementEntry* entry) const
+	void LegacySerializer::FixRequirementID(RequirementItem* entry) const
 	{
 		if (m_Project->GetTargetProfileID() == "Skyrim" || m_Project->GetTargetProfileID() == "SkyrimSE")
 		{
@@ -219,15 +219,15 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	bool KPackageProjectSerializerSMI::IsComponentsUsed() const
+	bool LegacySerializer::IsComponentsUsed() const
 	{
 		return m_XML.QueryElement("SetupInfo/Installer/Settings/ComponentsEnabled").GetValueBool() ||
 			m_XML.QueryElement("SetupInfo/Installer/Settings/Components").GetValueBool() ||
 			m_XML.QueryElement("SetupInfo/Installer/Settings/UseComponents").GetValueBool();
 	}
-	void KPackageProjectSerializerSMI::ReadInterface3x4x5x(const wxString& sLogoNodeName)
+	void LegacySerializer::ReadInterface3x4x5x(const wxString& sLogoNodeName)
 	{
-		KPackageProjectInterface& interfaceConfig = m_Project->GetInterface();
+		InterfaceSection& interfaceConfig = m_Project->GetInterface();
 	
 		KxXMLNode interfaceNode = m_XML.QueryElement("SetupInfo/Installer/Interface");
 		if (interfaceNode.IsOK())
@@ -239,7 +239,7 @@ namespace Kortex::PackageProject
 	
 			for (KxXMLNode node = interfaceNode.GetFirstChildElement("Images").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
-				interfaceConfig.GetImages().emplace_back(KPPIImageEntry(path + node.GetValue(), wxEmptyString, true));
+				interfaceConfig.GetImages().emplace_back(ImageItem(path + node.GetValue(), wxEmptyString, true));
 			}
 	
 			// Set main image or if main image not set in this installer choose first available
@@ -260,17 +260,17 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadFiles3x4x()
+	void LegacySerializer::ReadFiles3x4x()
 	{
 		KxXMLNode fileDataNode = m_XML.QueryElement("SetupInfo/Installer/Files");
 		if (fileDataNode.IsOK())
 		{
 			bool bNestedStructure = fileDataNode.GetAttributeInt("StructureType", 0) == 0;
-			KPackageProjectFileData& fileData = m_Project->GetFileData();
+			FileDataSection& fileData = m_Project->GetFileData();
 	
 			for (KxXMLNode folderNode = fileDataNode.GetFirstChildElement(); folderNode.IsOK(); folderNode = folderNode.GetNextSiblingElement())
 			{
-				KPPFFolderEntry* folderEntry = fileData.AddFolder(new KPPFFolderEntry());
+				FolderItem* folderEntry = fileData.AddFolder(new FolderItem());
 				folderEntry->SetID(folderNode.GetAttribute("ID", folderNode.GetAttribute("Source")));
 	
 				// Source
@@ -287,7 +287,7 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	KxVersion KPackageProjectSerializerSMI::ReadBase()
+	KxVersion LegacySerializer::ReadBase()
 	{
 		KxXMLNode baseNode = m_XML.QueryElement("SetupInfo");
 		if (baseNode.IsOK())
@@ -302,12 +302,12 @@ namespace Kortex::PackageProject
 		}
 		return KxNullVersion;
 	}
-	void KPackageProjectSerializerSMI::ReadConfig()
+	void LegacySerializer::ReadConfig()
 	{
 		KxXMLNode configNode = m_XML.QueryElement("SetupInfo/Installer/Settings");
 		if (configNode.IsOK())
 		{
-			KPackageProjectConfig& config = m_Project->GetConfig();
+			ConfigSection& config = m_Project->GetConfig();
 	
 			config.SetInstallPackageFile(configNode.GetFirstChildElement("InstallerPath").GetValue());
 			config.SetCompressionMethod(configNode.GetFirstChildElement("CompressionMethod").GetValue());
@@ -318,9 +318,9 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void KPackageProjectSerializerSMI::ReadInfo3x()
+	void LegacySerializer::ReadInfo3x()
 	{
-		KPackageProjectInfo& info = m_Project->GetInfo();
+		InfoSection& info = m_Project->GetInfo();
 	
 		// Basic info
 		KxXMLNode basicInfoNode = m_XML.QueryElement("SetupInfo/Installer/Info/Plugin");
@@ -377,22 +377,22 @@ namespace Kortex::PackageProject
 			info.GetCustomFields().emplace_back(node.GetAttribute("Value"), node.GetAttribute("Name"));
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadInterface3x()
+	void LegacySerializer::ReadInterface3x()
 	{
 		ReadInterface3x4x5x("InstallerLogo");
 	}
-	void KPackageProjectSerializerSMI::ReadFiles3x()
+	void LegacySerializer::ReadFiles3x()
 	{
 		ReadFiles3x4x();
 	}
-	void KPackageProjectSerializerSMI::ReadRequirements3x()
+	void LegacySerializer::ReadRequirements3x()
 	{
-		KPackageProjectRequirements& requirements = m_Project->GetRequirements();
+		RequirementsSection& requirements = m_Project->GetRequirements();
 	
 		KxXMLNode requirementsNode = m_XML.QueryElement("SetupInfo/Installer/Dependencies");
 		if (requirementsNode.IsOK())
 		{
-			KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(std::make_unique<KPPRRequirementsGroup>()).get();
+			RequirementGroup* requirementGroup = requirements.GetGroups().emplace_back(std::make_unique<RequirementGroup>()).get();
 			requirementGroup->SetID("Main");
 			requirements.GetDefaultGroup().push_back(requirementGroup->GetID());
 	
@@ -401,7 +401,7 @@ namespace Kortex::PackageProject
 			{
 				if (node.HasChildren())
 				{
-					KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>()).get();
+					RequirementItem* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
 					entry->SetID(node.GetValue());
 					entry->SetObjectFunction(KPPR_OBJFUNC_FILE_EXIST);
 					entry->SetRequiredVersion(node.GetAttribute("RequiredVersion"));
@@ -419,9 +419,9 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadComponents3x()
+	void LegacySerializer::ReadComponents3x()
 	{
-		KPackageProjectComponents& components = m_Project->GetComponents();
+		ComponentsSection& components = m_Project->GetComponents();
 	
 		KxXMLNode componentsNode = m_XML.QueryElement("SetupInfo/Installer/Components");
 		if (componentsNode.IsOK() && componentsNode.HasChildren())
@@ -429,16 +429,16 @@ namespace Kortex::PackageProject
 			// Ignore bool attribute 'Use' as it almost always just reflect existence of components array
 	
 			// Version 3.x supports only one step and one group
-			KPPCStep* step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>()).get();
+			ComponentStep* step = components.GetSteps().emplace_back(std::make_unique<ComponentStep>()).get();
 			step->SetName("Select options");
 	
-			KPPCGroup* group = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>()).get();
+			ComponentGroup* group = step->GetGroups().emplace_back(std::make_unique<ComponentGroup>()).get();
 			group->SetName("Options");
 			group->SetSelectionMode(KPPC_SELECT_ANY);
 	
 			for (KxXMLNode entryNode = componentsNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 			{
-				KPPCEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPCEntry>()).get();
+				ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
 				entry->SetName(entryNode.GetAttribute("Name"));
 				entry->SetDescription(entryNode.GetAttribute("Description"));
 				entry->SetTDDefaultValue(entryNode.GetAttributeBool("Main") ? KPPC_DESCRIPTOR_RECOMMENDED : KPPC_DESCRIPTOR_OPTIONAL);
@@ -463,9 +463,9 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void KPackageProjectSerializerSMI::ReadInfo4x()
+	void LegacySerializer::ReadInfo4x()
 	{
-		KPackageProjectInfo& info = m_Project->GetInfo();
+		InfoSection& info = m_Project->GetInfo();
 	
 		// Basic info
 		// Word 'Standart' is not a typo here, but typo in 4.x versions
@@ -520,17 +520,17 @@ namespace Kortex::PackageProject
 			info.GetDocuments().emplace_back("SetupInfo\\Documents\\" + node.GetValue(), node.GetAttribute("Name"));
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadInterface4x()
+	void LegacySerializer::ReadInterface4x()
 	{
 		ReadInterface3x4x5x("Logo");
 	}
-	void KPackageProjectSerializerSMI::ReadFiles4x()
+	void LegacySerializer::ReadFiles4x()
 	{
 		ReadFiles3x4x();
 	}
-	void KPackageProjectSerializerSMI::ReadRequirements4x()
+	void LegacySerializer::ReadRequirements4x()
 	{
-		KPackageProjectRequirements& requirements = m_Project->GetRequirements();
+		RequirementsSection& requirements = m_Project->GetRequirements();
 	
 		KxXMLNode requirementsNode = m_XML.QueryElement("SetupInfo/Installer/Requirements");
 		if (requirementsNode.IsOK())
@@ -543,7 +543,7 @@ namespace Kortex::PackageProject
 			{
 				if (setNode.HasChildren())
 				{
-					KPPRRequirementsGroup* requirementGroup = requirements.GetGroups().emplace_back(std::make_unique<KPPRRequirementsGroup>()).get();
+					RequirementGroup* requirementGroup = requirements.GetGroups().emplace_back(std::make_unique<RequirementGroup>()).get();
 					requirementGroup->SetID(setNode.GetAttribute("ID"));
 	
 					// ID of '---' denotes main set
@@ -556,7 +556,7 @@ namespace Kortex::PackageProject
 					{
 						if (entryNode.HasChildren())
 						{
-							KPPRRequirementEntry* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>()).get();
+							RequirementItem* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
 							entry->SetID(entryNode.GetAttribute("ID"));
 							entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 							entry->SetRequiredVersion(entryNode.GetFirstChildElement("RequiredVersion").GetValue());
@@ -577,21 +577,21 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadComponents4x()
+	void LegacySerializer::ReadComponents4x()
 	{
 		if (IsComponentsUsed())
 		{
 			// For additional info see 'ReadComponents3x' function
-			KPackageProjectComponents& components = m_Project->GetComponents();
+			ComponentsSection& components = m_Project->GetComponents();
 	
 			KxXMLNode componentsNode = m_XML.QueryElement("SetupInfo/Installer/Components");
 			if (componentsNode.IsOK())
 			{
-				auto ReadEntriesArray = [&components](KPPCGroup* group, const KxXMLNode& groupNode)
+				auto ReadEntriesArray = [&components](ComponentGroup* group, const KxXMLNode& groupNode)
 				{
 					for (KxXMLNode entryNode = groupNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 					{
-						KPPCEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPCEntry>()).get();
+						ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
 						entry->SetName(KAux::StrOr(entryNode.GetFirstChildElement("Name").GetValue(), entryNode.GetAttribute("ID")));
 						if (entry->GetName() == "---")
 						{
@@ -624,10 +624,10 @@ namespace Kortex::PackageProject
 				// Versions before 4.3 supports only one group
 				if (m_ProjectVersion < KxVersion("4.3"))
 				{
-					KPPCStep* step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>()).get();
+					ComponentStep* step = components.GetSteps().emplace_back(std::make_unique<ComponentStep>()).get();
 					step->SetName("Select options");
 	
-					KPPCGroup* group = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>()).get();
+					ComponentGroup* group = step->GetGroups().emplace_back(std::make_unique<ComponentGroup>()).get();
 					group->SetName("Options");
 	
 					ReadEntriesArray(group, componentsNode);
@@ -639,12 +639,12 @@ namespace Kortex::PackageProject
 	
 					if (componentsNode.HasChildren())
 					{
-						KPPCStep* step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>()).get();
+						ComponentStep* step = components.GetSteps().emplace_back(std::make_unique<ComponentStep>()).get();
 						step->SetName("Select options");
 	
 						for (KxXMLNode groupNode = componentsNode.GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 						{
-							KPPCGroup* group = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>()).get();
+							ComponentGroup* group = step->GetGroups().emplace_back(std::make_unique<ComponentGroup>()).get();
 							group->SetName(KAux::StrOr(groupNode.GetFirstChildElement("Name").GetValue(), groupNode.GetAttribute("ID")));
 							group->SetSelectionMode(components.StringToSelectionMode(groupNode.GetAttribute("SelectionMode")));
 	
@@ -656,9 +656,9 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void KPackageProjectSerializerSMI::ReadInfo5x()
+	void LegacySerializer::ReadInfo5x()
 	{
-		KPackageProjectInfo& info = m_Project->GetInfo();
+		InfoSection& info = m_Project->GetInfo();
 	
 		// Basic info
 		// Seems like this variant somehow get into 5.x version
@@ -719,29 +719,29 @@ namespace Kortex::PackageProject
 			info.GetDocuments().emplace_back("SetupInfo\\Documents\\" + node.GetValue(), node.GetAttribute("Name"));
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadInterface5x()
+	void LegacySerializer::ReadInterface5x()
 	{
 		ReadInterface3x4x5x("Logo");
 	}
-	void KPackageProjectSerializerSMI::ReadFiles5x()
+	void LegacySerializer::ReadFiles5x()
 	{
 		KxXMLNode fileDataNode = m_XML.QueryElement("SetupInfo/Installer/Files");
 		if (fileDataNode.IsOK())
 		{
-			KPackageProjectFileData& fileData = m_Project->GetFileData();
+			FileDataSection& fileData = m_Project->GetFileData();
 			bool isNestedStructure = fileDataNode.GetAttribute("StructureType") == "Nested";
 	
 			// Folder
 			for (KxXMLNode entryNode = fileDataNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 			{
-				KPPFFileEntry* fileEntry = nullptr;
+				FileItem* fileEntry = nullptr;
 				if (entryNode.GetName() == "Folder")
 				{
-					fileEntry = fileData.AddFolder(new KPPFFolderEntry());
+					fileEntry = fileData.AddFolder(new FolderItem());
 				}
 				else
 				{
-					fileEntry = fileData.AddFile(new KPPFFileEntry());
+					fileEntry = fileData.AddFile(new FileItem());
 				}
 	
 				fileEntry->SetID(entryNode.GetAttribute("ID", entryNode.GetAttribute("Source")));
@@ -757,9 +757,9 @@ namespace Kortex::PackageProject
 			// or if XML has been modified manually (but no one did this to SKSM and KMM 1.x formats).
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadRequirements5x()
+	void LegacySerializer::ReadRequirements5x()
 	{
-		KPackageProjectRequirements& requirements = m_Project->GetRequirements();
+		RequirementsSection& requirements = m_Project->GetRequirements();
 	
 		KxXMLNode requirementsNode = m_XML.QueryElement("SetupInfo/Installer/Requirements");
 		if (requirementsNode.IsOK())
@@ -770,7 +770,7 @@ namespace Kortex::PackageProject
 			{
 				if (setsNode.HasChildren())
 				{
-					KPPRRequirementsGroup* group = requirements.GetGroups().emplace_back(std::make_unique<KPPRRequirementsGroup>()).get();
+					RequirementGroup* group = requirements.GetGroups().emplace_back(std::make_unique<RequirementGroup>()).get();
 					group->SetID(setsNode.GetAttribute("ID"));
 					group->SetOperator(setsNode.GetAttribute("Operator") == "Or" ? KPP_OPERATOR_OR : KPP_OPERATOR_AND);
 	
@@ -784,7 +784,7 @@ namespace Kortex::PackageProject
 					{
 						if (entryNode.HasChildren())
 						{
-							KPPRRequirementEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>()).get();
+							RequirementItem* entry = group->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
 							entry->SetID(entryNode.GetFirstChildElement("ID").GetValue());
 							entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 							entry->SetRequiredVersion(entryNode.GetFirstChildElement("RequiredVersion").GetValue());
@@ -809,7 +809,7 @@ namespace Kortex::PackageProject
 	
 							// Required state
 							wxString state = entryNode.GetFirstChildElement("State").GetValue();
-							KPPRObjectFunction objectFunction = KPPR_OBJFUNC_INVALID;
+							ObjectFunction objectFunction = KPPR_OBJFUNC_INVALID;
 							if (state == "Active")
 							{
 								objectFunction = KPPR_OBJFUNC_PLUGIN_ACTIVE;
@@ -836,7 +836,7 @@ namespace Kortex::PackageProject
 	
 							// Operator
 							wxString operatorRVName = entryNode.GetFirstChildElement("Operator").GetValue();
-							KPPOperator operatorRVType = KPP_OPERATOR_INVALID;
+							Operator operatorRVType = KPP_OPERATOR_INVALID;
 							if (operatorRVName == "==")
 							{
 								operatorRVType = KPP_OPERATOR_EQ;
@@ -875,13 +875,13 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadComponents5x()
+	void LegacySerializer::ReadComponents5x()
 	{
 		if (IsComponentsUsed())
 		{
-			KPackageProjectComponents& components = m_Project->GetComponents();
+			ComponentsSection& components = m_Project->GetComponents();
 	
-			auto ReadFlagsArray = [](KPPCCondition& conditions, const KxXMLNode& flagsNode)
+			auto ReadFlagsArray = [](Condition& conditions, const KxXMLNode& flagsNode)
 			{
 				for (KxXMLNode node = flagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 				{
@@ -903,9 +903,9 @@ namespace Kortex::PackageProject
 					groupsIDArray.emplace_back(groupNode.GetAttribute("ID"), groupNode);
 				}
 	
-				auto ReadGroup = [&components, &ReadFlagsArray](const KxXMLNode& groupNode) -> KPPCGroup*
+				auto ReadGroup = [&components, &ReadFlagsArray](const KxXMLNode& groupNode) -> ComponentGroup*
 				{
-					KPPCGroup* group = new KPPCGroup();
+					ComponentGroup* group = new ComponentGroup();
 	
 					/* Attributes. ID not used now */
 					group->SetName(groupNode.GetAttribute("Name"));
@@ -916,7 +916,7 @@ namespace Kortex::PackageProject
 					/* Entries */
 					for (KxXMLNode entryNode = groupNode.GetFirstChildElement("Data").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 					{
-						KPPCEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPCEntry>()).get();
+						ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
 						entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 						entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
 	
@@ -938,7 +938,7 @@ namespace Kortex::PackageProject
 						/* Required flags and type descriptor*/
 						// In version 5.x entry is shown if it's required flags checking succeed or required flags list is empty and hidden otherwise.
 						// In KMP required flags (now TDConditions) changes type descriptor if check is successful.
-						KPPCTypeDescriptor typeDescriptor = components.StringToTypeDescriptor(entryNode.GetFirstChildElement("TypeDescriptor").GetValue());
+						TypeDescriptor typeDescriptor = components.StringToTypeDescriptor(entryNode.GetFirstChildElement("TypeDescriptor").GetValue());
 	
 						ReadFlagsArray(entry->GetTDConditionGroup().GetOrCreateFirstCondition(), entryNode.GetFirstChildElement("RequiredFlags"));
 						if (entry->GetTDConditionGroup().HasConditions())
@@ -961,7 +961,7 @@ namespace Kortex::PackageProject
 				// Read steps
 				for (KxXMLNode stepNode = componentsNode.GetFirstChildElement("Steps").GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 				{
-					KPPCStep* step = components.GetSteps().emplace_back(std::make_unique<KPPCStep>()).get();
+					ComponentStep* step = components.GetSteps().emplace_back(std::make_unique<ComponentStep>()).get();
 					step->SetName(stepNode.GetAttribute("Name"));
 					ReadFlagsArray(step->GetConditionGroup().GetOrCreateFirstCondition(), stepNode.GetFirstChildElement("RequiredFlags"));
 	
@@ -988,7 +988,7 @@ namespace Kortex::PackageProject
 				{
 					for (KxXMLNode stepNode = componentsNode.GetFirstChildElement(sRootNodeName).GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 					{
-						auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<KPPCConditionalStep>());
+						auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<ConditionalComponentStep>());
 						ReadFlagsArray(step->GetConditionGroup().GetOrCreateFirstCondition(), stepNode.GetFirstChildElement("RequiredFlags"));
 						KAux::LoadStringArray(step->GetEntries(), stepNode.GetFirstChildElement(sNodeName));
 					}
@@ -997,9 +997,9 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	void KPackageProjectSerializerSMI::ReadINI5x()
+	void LegacySerializer::ReadINI5x()
 	{
-		KPackageProjectInfo& info = m_Project->GetInfo();
+		InfoSection& info = m_Project->GetInfo();
 	
 		// Current version of package format don't support storing game config edits
 		// as ConfigManager doesn't currently support external modifying requests.
@@ -1033,7 +1033,7 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void KPackageProjectSerializerSMI::Structurize(KPackageProject* project)
+	void LegacySerializer::Structurize(ModPackageProject* project)
 	{
 		m_Project = project;
 		m_XML.Load(m_Data);

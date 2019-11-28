@@ -6,33 +6,11 @@
 
 namespace Kortex::PackageProject
 {
-	enum KPPRObjectFunction
-	{
-		KPPR_OBJFUNC_INVALID = -1,
-		KPPR_OBJFUNC_NONE = 0,
-	
-		KPPR_OBJFUNC_MOD_ACTIVE,
-		KPPR_OBJFUNC_MOD_INACTIVE,
-		KPPR_OBJFUNC_FILE_EXIST,
-		KPPR_OBJFUNC_FILE_NOT_EXIST,
-		KPPR_OBJFUNC_PLUGIN_ACTIVE,
-		KPPR_OBJFUNC_PLUGIN_INACTIVE,
-	};
-	enum KPPRTypeDescriptor
-	{
-		KPPR_TYPE_USER = 0,
-		KPPR_TYPE_SYSTEM = 1,
-		KPPR_TYPE_AUTO = 2,
-	};
-}
-
-namespace Kortex::PackageProject
-{
-	class KPPRRequirementEntry: public KWithIDName
+	class RequirementItem: public KWithIDName
 	{
 		public:
-			using Vector = std::vector<std::unique_ptr<KPPRRequirementEntry>>;
-			using RefVector = std::vector<KPPRRequirementEntry*>;
+			using Vector = std::vector<std::unique_ptr<RequirementItem>>;
+			using RefVector = std::vector<RequirementItem*>;
 	
 		private:
 			wxString m_Object;
@@ -41,11 +19,11 @@ namespace Kortex::PackageProject
 			mutable bool m_CurrentVersionChecked = false;
 			mutable KxVersion m_CurrentVersion;
 			
-			KPPOperator m_RequiredVersionFunction;
-			KPPRObjectFunction m_ObjectFunction;
+			Operator m_RequiredVersionFunction;
+			ObjectFunction m_ObjectFunction;
 	
 			mutable bool m_ObjectFunctionResultChecked = false;
-			mutable KPPReqState m_ObjectFunctionResult = KPPReqState::Unknown;
+			mutable ReqState m_ObjectFunctionResult = ReqState::Unknown;
 	
 			wxString m_Description;
 			wxString m_BinaryVersionKind = "FileVersion";
@@ -53,13 +31,13 @@ namespace Kortex::PackageProject
 			bool m_OverallStatusCalculated = false;
 			bool m_OverallStatus = false;
 	
-			KPPRTypeDescriptor m_TypeDescriptor = KPPR_TYPE_AUTO;
+			ReqType m_TypeDescriptor = KPPR_TYPE_AUTO;
 			wxString m_Category;
 			KxStringVector m_Dependencies;
 	
 		public:
-			KPPRRequirementEntry(KPPRTypeDescriptor typeDescriptor = KPPR_TYPE_AUTO);
-			~KPPRRequirementEntry();
+			RequirementItem(ReqType typeDescriptor = KPPR_TYPE_AUTO);
+			~RequirementItem();
 	
 		public:
 			const wxString& GetObject() const
@@ -75,7 +53,7 @@ namespace Kortex::PackageProject
 			{
 				return m_RequiredVersion;
 			}
-			KPPOperator GetRVFunction() const
+			Operator GetRVFunction() const
 			{
 				return m_RequiredVersionFunction;
 			}
@@ -83,7 +61,7 @@ namespace Kortex::PackageProject
 			{
 				m_RequiredVersion = value;
 			}
-			void SetRVFunction(KPPOperator operatorType)
+			void SetRVFunction(Operator operatorType)
 			{
 				m_RequiredVersionFunction = operatorType;
 			}
@@ -96,15 +74,15 @@ namespace Kortex::PackageProject
 			void ResetCurrentVersion();
 			bool CheckVersion() const;
 	
-			KPPRObjectFunction GetObjectFunction() const
+			ObjectFunction GetObjectFunction() const
 			{
 				return m_ObjectFunction;
 			}
-			void SetObjectFunction(KPPRObjectFunction state)
+			void SetObjectFunction(ObjectFunction state)
 			{
 				m_ObjectFunction = state;
 			}
-			KPPReqState GetObjectFunctionResult() const;
+			ReqState GetObjectFunctionResult() const;
 			void ResetObjectFunctionResult();
 			
 			const wxString& GetDescription() const
@@ -129,15 +107,15 @@ namespace Kortex::PackageProject
 			bool IsSystem() const;
 			bool IsUserEditable() const;
 	
-			KPPRTypeDescriptor GetTypeDescriptor() const
+			ReqType GetTypeDescriptor() const
 			{
 				return m_TypeDescriptor;
 			}
-			void SetTypeDescriptorUnchecked(KPPRTypeDescriptor type)
+			void SetTypeDescriptorUnchecked(ReqType type)
 			{
 				m_TypeDescriptor = type;
 			}
-			void TrySetTypeDescriptor(KPPRTypeDescriptor type);
+			void TrySetTypeDescriptor(ReqType type);
 			bool ConformToTypeDescriptor();
 	
 			const wxString& GetCategory() const
@@ -168,11 +146,11 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPPRRequirementsGroup
+	class RequirementGroup
 	{
 		public:
-			using Vector = std::vector<std::unique_ptr<KPPRRequirementsGroup>>;
-			using RefVector = std::vector<KPPRRequirementsGroup*>;
+			using Vector = std::vector<std::unique_ptr<RequirementGroup>>;
+			using RefVector = std::vector<RequirementGroup*>;
 	
 		public:
 			static wxString GetFlagNamePrefix();
@@ -180,15 +158,15 @@ namespace Kortex::PackageProject
 	
 		private:
 			wxString m_ID;
-			KPPOperator m_Operator;
-			KPPRRequirementEntry::Vector m_Entries;
+			Operator m_Operator;
+			RequirementItem::Vector m_Entries;
 	
 			bool m_GroupStatus = false;
 			bool m_GroupStatusCalculated = false;
 	
 		public:
-			KPPRRequirementsGroup();
-			~KPPRRequirementsGroup();
+			RequirementGroup();
+			~RequirementGroup();
 	
 		public:
 			const wxString& GetID() const
@@ -204,25 +182,25 @@ namespace Kortex::PackageProject
 				return GetFlagName(GetID());
 			}
 	
-			KPPOperator GetOperator() const
+			Operator GetOperator() const
 			{
 				return m_Operator;
 			}
-			void SetOperator(KPPOperator value)
+			void SetOperator(Operator value)
 			{
 				m_Operator = value;
 			}
 	
-			KPPRRequirementEntry::Vector& GetEntries()
+			RequirementItem::Vector& GetEntries()
 			{
 				return m_Entries;
 			}
-			const KPPRRequirementEntry::Vector& GetEntries() const
+			const RequirementItem::Vector& GetEntries() const
 			{
 				return m_Entries;
 			}
 	
-			KPPRRequirementEntry* FindEntry(const wxString& id) const;
+			RequirementItem* FindEntry(const wxString& id) const;
 			bool HasEntryWithID(const wxString& id) const
 			{
 				return FindEntry(id) != nullptr;
@@ -238,37 +216,37 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectRequirements: public KPackageProjectPart
+	class RequirementsSection: public ProjectSection
 	{
 		public:
-			static const KPPOperator ms_DefaultGroupOperator = KPP_OPERATOR_AND;
-			static const KPPOperator ms_DefaultVersionOperator = KPP_OPERATOR_GTEQ;
-			static const KPPRObjectFunction ms_DefaultObjectFunction = KPPR_OBJFUNC_NONE;
-			static const KPPRTypeDescriptor ms_DefaultTypeDescriptor = KPPR_TYPE_AUTO;
+			static const Operator ms_DefaultGroupOperator = KPP_OPERATOR_AND;
+			static const Operator ms_DefaultVersionOperator = KPP_OPERATOR_GTEQ;
+			static const ObjectFunction ms_DefaultObjectFunction = KPPR_OBJFUNC_NONE;
+			static const ReqType ms_DefaultTypeDescriptor = KPPR_TYPE_AUTO;
 	
 		public:
-			static KPPRObjectFunction StringToObjectFunction(const wxString& name);
-			static wxString ObjectFunctionToString(KPPRObjectFunction state);
+			static ObjectFunction StringToObjectFunction(const wxString& name);
+			static wxString ObjectFunctionToString(ObjectFunction state);
 	
-			static KPPRTypeDescriptor StringToTypeDescriptor(const wxString& name);
-			static wxString TypeDescriptorToString(KPPRTypeDescriptor type);
+			static ReqType StringToTypeDescriptor(const wxString& name);
+			static wxString TypeDescriptorToString(ReqType type);
 	
-			static bool CompareVersions(KPPOperator operatorType, const KxVersion& current, const KxVersion& required);
+			static bool CompareVersions(Operator operatorType, const KxVersion& current, const KxVersion& required);
 	
 		private:
-			KPPRRequirementsGroup::Vector m_Groups;
+			RequirementGroup::Vector m_Groups;
 			KxStringVector m_DefaultGroup;
 	
 		public:
-			KPackageProjectRequirements(KPackageProject& project);
-			virtual ~KPackageProjectRequirements();
+			RequirementsSection(ModPackageProject& project);
+			virtual ~RequirementsSection();
 	
 		public:
-			KPPRRequirementsGroup::Vector& GetGroups()
+			RequirementGroup::Vector& GetGroups()
 			{
 				return m_Groups;
 			}
-			const KPPRRequirementsGroup::Vector& GetGroups() const
+			const RequirementGroup::Vector& GetGroups() const
 			{
 				return m_Groups;
 			}
@@ -287,7 +265,7 @@ namespace Kortex::PackageProject
 			}
 			bool IsDefaultGroupContains(const wxString& groupID) const;
 	
-			KPPRRequirementsGroup* FindGroupWithID(const wxString& id) const;
+			RequirementGroup* FindGroupWithID(const wxString& id) const;
 			bool HasSetWithID(const wxString& id) const
 			{
 				return FindGroupWithID(id) != nullptr;

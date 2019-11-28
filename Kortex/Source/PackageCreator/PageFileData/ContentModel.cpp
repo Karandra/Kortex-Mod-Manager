@@ -32,7 +32,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	
 	void ContentModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(row);
+		const PackageProject::FolderItemElement* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -52,7 +52,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	void ContentModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(row);
+		const PackageProject::FolderItemElement* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -85,7 +85,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	bool ContentModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(row);
+		PackageProject::FolderItemElement* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -113,7 +113,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		{
 			if (event.GetColumn()->GetID() == ColumnID::Source)
 			{
-				PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(GetRow(event.GetItem()));
+				PackageProject::FolderItemElement* entry = GetDataEntry(GetRow(event.GetItem()));
 				if (entry)
 				{
 					KxFileBrowseDialog dialog(GetView(), KxID_NONE, KxFBD_OPEN);
@@ -135,7 +135,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	void ContentModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const PackageProject::KPPFFolderEntryItem* entry = GetDataEntry(GetRow(item));
+		const PackageProject::FolderItemElement* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -182,7 +182,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			wxWindowUpdateLocker lock(GetView());
 			for (const wxString& source: dialog.GetResults())
 			{
-				PackageProject::KPPFFolderEntryItem& entry = GetDataVector()->emplace_back();
+				PackageProject::FolderItemElement& entry = GetDataVector()->emplace_back();
 				entry.SetSource(source);
 				entry.SetDestination(source.AfterLast('\\'));
 	
@@ -199,7 +199,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		ClearItemsAndNotify(*GetDataVector());
 	}
 	
-	void ContentModel::SetProject(KPackageProject& projectData)
+	void ContentModel::SetProject(ModPackageProject& projectData)
 	{
 		m_FileData = &projectData.GetFileData();
 	}

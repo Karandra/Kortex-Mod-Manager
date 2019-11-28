@@ -21,14 +21,14 @@ namespace Kortex::PackageDesigner
 	{
 		return array.empty() ? wxEmptyString : KxString::Join(array, wxS(", "));
 	}
-	wxString PageComponents::ConditionToString(const PackageProject::KPPCCondition& condition, bool isRequired)
+	wxString PageComponents::ConditionToString(const PackageProject::Condition& condition, bool isRequired)
 	{
 		wxString out;
 
-		const PackageProject::KPPCFlagEntry::Vector& flags = condition.GetFlags();
+		const PackageProject::FlagItem::Vector& flags = condition.GetFlags();
 		for (size_t i = 0; i < flags.size(); i++)
 		{
-			const PackageProject::KPPCFlagEntry& flag = flags[i];
+			const PackageProject::FlagItem& flag = flags[i];
 			out.Append(KxString::Format(wxS("%1 %2 \"%3\""), flag.GetName(), (isRequired ? wxS("==") : wxS("=")), flag.GetValue()));
 
 			if (i + 1 != flags.size())
@@ -36,7 +36,7 @@ namespace Kortex::PackageDesigner
 				if (isRequired)
 				{
 					out += wxS(" ");
-					out += KPackageProject::OperatorToSymbolicName(condition.GetOperator());
+					out += ModPackageProject::OperatorToSymbolicName(condition.GetOperator());
 					out += wxS(" ");
 				}
 				else
@@ -47,19 +47,19 @@ namespace Kortex::PackageDesigner
 		}
 		return out;
 	}
-	wxString PageComponents::ConditionGroupToString(const PackageProject::KPPCConditionGroup& conditionGroup)
+	wxString PageComponents::ConditionGroupToString(const PackageProject::ConditionGroup& conditionGroup)
 	{
 		wxString out;
 		if (conditionGroup.HasConditions())
 		{
-			const PackageProject::KPPCCondition::Vector& conditions = conditionGroup.GetConditions();
+			const PackageProject::Condition::Vector& conditions = conditionGroup.GetConditions();
 			for (size_t i = 0; i < conditions.size(); i++)
 			{
 				out.Append(wxS('(') + ConditionToString(conditions[i], true) + wxS(')'));
 				if (i + 1 != conditions.size())
 				{
 					out += wxS(" ");
-					out += KPackageProject::OperatorToSymbolicName(conditionGroup.GetOperator());
+					out += ModPackageProject::OperatorToSymbolicName(conditionGroup.GetOperator());
 					out += wxS(" ");
 				}
 			}
@@ -67,11 +67,11 @@ namespace Kortex::PackageDesigner
 		return out;
 	}
 
-	PackageProject::KPackageProjectComponents& PageComponents::GetProjectComponents() const
+	PackageProject::ComponentsSection& PageComponents::GetProjectComponents() const
 	{
 		return GetProject()->GetComponents();
 	}
-	void PageComponents::OnLoadProject(PackageProject::KPackageProjectComponents& projectComponents)
+	void PageComponents::OnLoadProject(PackageProject::ComponentsSection& projectComponents)
 	{
 		wxWindowUpdateLocker lock(this);
 		m_ComponentsModel->SetProject(projectComponents.GetProject());
@@ -108,7 +108,7 @@ namespace Kortex::PackageDesigner
 		m_EntryImage->Bind(wxEVT_LEFT_DCLICK, [this](wxMouseEvent& event)
 		{
 			event.Skip();
-			if (const PackageProject::KPPIImageEntry* imageEntry = static_cast<const PackageProject::KPPIImageEntry*>(m_EntryImage->GetClientData()))
+			if (const PackageProject::ImageItem* imageEntry = static_cast<const PackageProject::ImageItem*>(m_EntryImage->GetClientData()))
 			{
 				UI::ImageViewerDialog dialog(this);
 
@@ -155,7 +155,7 @@ namespace Kortex::PackageDesigner
 	}
 	bool PageComponents::OnOpenWorkspace()
 	{
-		PackageProject::KPackageProjectComponents& projectComponents = GetProjectComponents();
+		PackageProject::ComponentsSection& projectComponents = GetProjectComponents();
 		m_RequiredFilesModel->SetDataVector(projectComponents.GetRequiredFileData(), &projectComponents.GetProject().GetFileData());
 		return true;
 	}

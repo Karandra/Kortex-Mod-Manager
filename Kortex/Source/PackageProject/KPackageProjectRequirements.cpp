@@ -27,17 +27,17 @@ namespace
 
 namespace Kortex::PackageProject
 {
-	KPPRRequirementEntry::KPPRRequirementEntry(KPPRTypeDescriptor typeDescriptor)
-		:m_ObjectFunction(KPackageProjectRequirements::ms_DefaultObjectFunction),
-		m_RequiredVersionFunction(KPackageProjectRequirements::ms_DefaultVersionOperator),
+	RequirementItem::RequirementItem(ReqType typeDescriptor)
+		:m_ObjectFunction(RequirementsSection::ms_DefaultObjectFunction),
+		m_RequiredVersionFunction(RequirementsSection::ms_DefaultVersionOperator),
 		m_TypeDescriptor(typeDescriptor)
 	{
 	}
-	KPPRRequirementEntry::~KPPRRequirementEntry()
+	RequirementItem::~RequirementItem()
 	{
 	}
 	
-	const KxVersion& KPPRRequirementEntry::GetCurrentVersion() const
+	const KxVersion& RequirementItem::GetCurrentVersion() const
 	{
 		if (!m_CurrentVersionChecked)
 		{
@@ -46,17 +46,17 @@ namespace Kortex::PackageProject
 		}
 		return m_CurrentVersion;
 	}
-	void KPPRRequirementEntry::ResetCurrentVersion()
+	void RequirementItem::ResetCurrentVersion()
 	{
 		m_CurrentVersion = KxNullVersion;
 		m_CurrentVersionChecked = false;
 	}
-	bool KPPRRequirementEntry::CheckVersion() const
+	bool RequirementItem::CheckVersion() const
 	{
-		return KPackageProjectRequirements::CompareVersions(GetRVFunction(), GetCurrentVersion(), GetRequiredVersion());
+		return RequirementsSection::CompareVersions(GetRVFunction(), GetCurrentVersion(), GetRequiredVersion());
 	}
 	
-	KPPReqState KPPRRequirementEntry::GetObjectFunctionResult() const
+	ReqState RequirementItem::GetObjectFunctionResult() const
 	{
 		if (!m_ObjectFunctionResultChecked)
 		{
@@ -65,17 +65,17 @@ namespace Kortex::PackageProject
 		}
 		return m_ObjectFunctionResult;
 	}
-	void KPPRRequirementEntry::ResetObjectFunctionResult()
+	void RequirementItem::ResetObjectFunctionResult()
 	{
-		m_ObjectFunctionResult = KPPReqState::Unknown;
+		m_ObjectFunctionResult = ReqState::Unknown;
 		m_ObjectFunctionResultChecked = false;
 	}
 	
-	bool KPPRRequirementEntry::IsStd() const
+	bool RequirementItem::IsStd() const
 	{
 		return Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID()) != nullptr;
 	}
-	bool KPPRRequirementEntry::IsSystem() const
+	bool RequirementItem::IsSystem() const
 	{
 		switch (m_TypeDescriptor)
 		{
@@ -94,12 +94,12 @@ namespace Kortex::PackageProject
 		};
 		return false;
 	}
-	bool KPPRRequirementEntry::IsUserEditable() const
+	bool RequirementItem::IsUserEditable() const
 	{
 		return !IsSystem();
 	}
 	
-	void KPPRRequirementEntry::TrySetTypeDescriptor(KPPRTypeDescriptor type)
+	void RequirementItem::TrySetTypeDescriptor(ReqType type)
 	{
 		switch (type)
 		{
@@ -120,11 +120,11 @@ namespace Kortex::PackageProject
 		};
 		ConformToTypeDescriptor();
 	}
-	bool KPPRRequirementEntry::ConformToTypeDescriptor()
+	bool RequirementItem::ConformToTypeDescriptor()
 	{
 		if (m_TypeDescriptor == KPPR_TYPE_SYSTEM || m_TypeDescriptor == KPPR_TYPE_AUTO)
 		{
-			const KPPRRequirementEntry* stdEntry = Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID());
+			const RequirementItem* stdEntry = Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID());
 			if (stdEntry)
 			{
 				SetName(stdEntry->GetName());
@@ -139,11 +139,11 @@ namespace Kortex::PackageProject
 		return false;
 	}
 	
-	bool KPPRRequirementEntry::CalcOverallStatus()
+	bool RequirementItem::CalcOverallStatus()
 	{
 		if (!m_OverallStatusCalculated)
 		{
-			m_OverallStatus = CheckVersion() && GetObjectFunctionResult() == KPPReqState::True;
+			m_OverallStatus = CheckVersion() && GetObjectFunctionResult() == ReqState::True;
 			m_OverallStatusCalculated = true;
 		}
 		return m_OverallStatus;
@@ -152,26 +152,26 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	wxString KPPRRequirementsGroup::GetFlagNamePrefix()
+	wxString RequirementGroup::GetFlagNamePrefix()
 	{
 		return "REQFLAG_";
 	}
-	wxString KPPRRequirementsGroup::GetFlagName(const wxString& id)
+	wxString RequirementGroup::GetFlagName(const wxString& id)
 	{
 		return GetFlagNamePrefix() + id;
 	}
 	
-	KPPRRequirementsGroup::KPPRRequirementsGroup()
-		:m_Operator(KPackageProjectRequirements::ms_DefaultGroupOperator)
+	RequirementGroup::RequirementGroup()
+		:m_Operator(RequirementsSection::ms_DefaultGroupOperator)
 	{
 	}
-	KPPRRequirementsGroup::~KPPRRequirementsGroup()
+	RequirementGroup::~RequirementGroup()
 	{
 	}
 	
-	KPPRRequirementEntry* KPPRRequirementsGroup::FindEntry(const wxString& id) const
+	RequirementItem* RequirementGroup::FindEntry(const wxString& id) const
 	{
-		auto it = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const KPPRRequirementEntry::Vector::value_type& entry)
+		auto it = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const RequirementItem::Vector::value_type& entry)
 		{
 			return entry->GetID() == id;
 		});
@@ -183,11 +183,11 @@ namespace Kortex::PackageProject
 		return nullptr;
 	}
 	
-	bool KPPRRequirementsGroup::CalcGroupStatus()
+	bool RequirementGroup::CalcGroupStatus()
 	{
 		if (!m_GroupStatusCalculated)
 		{
-			KPackageProjectConditionChecker checker;
+			ConditionChecker checker;
 			for (auto& entry: m_Entries)
 			{
 				checker(entry->CalcOverallStatus(), m_Operator);
@@ -202,7 +202,7 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	KPPRObjectFunction KPackageProjectRequirements::StringToObjectFunction(const wxString& name)
+	ObjectFunction RequirementsSection::StringToObjectFunction(const wxString& name)
 	{
 		if (name == ObjFuncConst::NONE_STRING)
 		{
@@ -234,7 +234,7 @@ namespace Kortex::PackageProject
 		}
 		return ms_DefaultObjectFunction;
 	}
-	wxString KPackageProjectRequirements::ObjectFunctionToString(KPPRObjectFunction state)
+	wxString RequirementsSection::ObjectFunctionToString(ObjectFunction state)
 	{
 		switch (state)
 		{
@@ -270,7 +270,7 @@ namespace Kortex::PackageProject
 		return wxEmptyString;
 	}
 	
-	KPPRTypeDescriptor KPackageProjectRequirements::StringToTypeDescriptor(const wxString& name)
+	ReqType RequirementsSection::StringToTypeDescriptor(const wxString& name)
 	{
 		if (name == TypeConst::USER_STRING)
 		{
@@ -286,7 +286,7 @@ namespace Kortex::PackageProject
 		}
 		return ms_DefaultTypeDescriptor;
 	}
-	wxString KPackageProjectRequirements::TypeDescriptorToString(KPPRTypeDescriptor type)
+	wxString RequirementsSection::TypeDescriptorToString(ReqType type)
 	{
 		switch (type)
 		{
@@ -306,7 +306,7 @@ namespace Kortex::PackageProject
 		return wxEmptyString;
 	}
 	
-	bool KPackageProjectRequirements::CompareVersions(KPPOperator operatorType, const KxVersion& current, const KxVersion& required)
+	bool RequirementsSection::CompareVersions(Operator operatorType, const KxVersion& current, const KxVersion& required)
 	{
 		// Always return true when requested to compare against invalid (or unspecified) version.
 		// Or operator is unspecified, which should mean that caller is not interested in this check.
@@ -347,15 +347,15 @@ namespace Kortex::PackageProject
 		return false;
 	}
 	
-	KPackageProjectRequirements::KPackageProjectRequirements(KPackageProject& project)
-		:KPackageProjectPart(project)
+	RequirementsSection::RequirementsSection(ModPackageProject& project)
+		:ProjectSection(project)
 	{
 	}
-	KPackageProjectRequirements::~KPackageProjectRequirements()
+	RequirementsSection::~RequirementsSection()
 	{
 	}
 	
-	KPPRRequirementsGroup* KPackageProjectRequirements::FindGroupWithID(const wxString& id) const
+	RequirementGroup* RequirementsSection::FindGroupWithID(const wxString& id) const
 	{
 		auto it = std::find_if(m_Groups.cbegin(), m_Groups.cend(), [id](const auto& entry)
 		{
@@ -369,7 +369,7 @@ namespace Kortex::PackageProject
 		return nullptr;
 	}
 	
-	bool KPackageProjectRequirements::IsDefaultGroupContains(const wxString& groupID) const
+	bool RequirementsSection::IsDefaultGroupContains(const wxString& groupID) const
 	{
 		auto it = std::find_if(m_DefaultGroup.begin(), m_DefaultGroup.end(), [&groupID](const wxString& id)
 		{
@@ -377,7 +377,7 @@ namespace Kortex::PackageProject
 		});
 		return it != m_DefaultGroup.end();
 	}
-	KxStringVector KPackageProjectRequirements::GetFlagNames() const
+	KxStringVector RequirementsSection::GetFlagNames() const
 	{
 		KxStringVector flagNames;
 		for (const auto& group: m_Groups)
@@ -386,12 +386,12 @@ namespace Kortex::PackageProject
 		}
 		return flagNames;
 	}
-	bool KPackageProjectRequirements::CalcOverallStatus(const KxStringVector& groups) const
+	bool RequirementsSection::CalcOverallStatus(const KxStringVector& groups) const
 	{
-		KPackageProjectConditionChecker checker;
+		ConditionChecker checker;
 		for (const wxString& id: groups)
 		{
-			KPPRRequirementsGroup* group = FindGroupWithID(id);
+			RequirementGroup* group = FindGroupWithID(id);
 			if (group)
 			{
 				checker(group->CalcGroupStatus(), KPP_OPERATOR_AND);

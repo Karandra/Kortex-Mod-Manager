@@ -87,7 +87,7 @@ namespace Kortex::PackageDesigner
 	}
 	void WorkspaceDocument::SaveChanges()
 	{
-		PackageProject::KPackageProjectSerializerKMP serializer(true);
+		PackageProject::NativeSerializer serializer(true);
 		serializer.Serialize(m_Project.get());
 		KxTextFile::WriteToFile(m_ProjectFile, serializer.GetData());
 
@@ -107,15 +107,15 @@ namespace Kortex::PackageDesigner
 	void WorkspaceDocument::NewProject()
 	{
 		m_ProjectFile.Clear();
-		m_Project = std::make_unique<KPackageProject>();
+		m_Project = std::make_unique<ModPackageProject>();
 		Reload();
 	}
 	void WorkspaceDocument::OpenProject(const wxString& filePath)
 	{
 		m_ProjectFile = filePath;
-		m_Project = std::make_unique<KPackageProject>();
+		m_Project = std::make_unique<ModPackageProject>();
 
-		PackageProject::KPackageProjectSerializerKMP serializer(true);
+		PackageProject::NativeSerializer serializer(true);
 		serializer.SetData(KxTextFile::ReadToString(filePath));
 		serializer.Structurize(m_Project.get());
 
@@ -133,7 +133,7 @@ namespace Kortex::PackageDesigner
 	void WorkspaceDocument::ImportProjectFromPackage(const wxString& packagePath)
 	{
 		m_ProjectFile.Clear();
-		m_Project = std::make_unique<KPackageProject>();
+		m_Project = std::make_unique<ModPackageProject>();
 
 		ModPackage(packagePath, *m_Project);
 		m_Project->GetConfig().SetInstallPackageFile(packagePath);
@@ -143,14 +143,14 @@ namespace Kortex::PackageDesigner
 	void WorkspaceDocument::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
 	{
 		m_ProjectFile.Clear();
-		m_Project = std::make_unique<KPackageProject>();
+		m_Project = std::make_unique<ModPackageProject>();
 
 		/* Info and config */
 		m_Project->SetModID(modEntry.GetID());
 
 		m_Project->GetConfig().SetInstallPackageFile(modEntry.GetPackageFile());
 
-		PackageProject::KPackageProjectInfo& info = m_Project->GetInfo();
+		PackageProject::InfoSection& info = m_Project->GetInfo();
 		info.SetName(modEntry.GetName());
 		info.SetVersion(modEntry.GetVersion());
 		info.SetAuthor(modEntry.GetAuthor());
@@ -159,7 +159,7 @@ namespace Kortex::PackageDesigner
 		info.GetTagStore() = modEntry.GetTagStore();
 
 		/* Interface */
-		PackageProject::KPPIImageEntry& imageEntry = m_Project->GetInterface().GetImages().emplace_back(PackageProject::KPPIImageEntry());
+		PackageProject::ImageItem& imageEntry = m_Project->GetInterface().GetImages().emplace_back(PackageProject::ImageItem());
 		imageEntry.SetPath(modEntry.GetInfoFile());
 		imageEntry.SetVisible(true);
 
@@ -167,14 +167,14 @@ namespace Kortex::PackageDesigner
 
 		Reload();
 	}
-	void WorkspaceDocument::ImportProject(PackageProject::KPackageProjectSerializer& serializer)
+	void WorkspaceDocument::ImportProject(PackageProject::Serializer& serializer)
 	{
 		m_ProjectFile.Clear();
-		m_Project = std::make_unique<KPackageProject>();
+		m_Project = std::make_unique<ModPackageProject>();
 		serializer.Structurize(m_Project.get());
 		Reload();
 	}
-	void WorkspaceDocument::ExportProject(PackageProject::KPackageProjectSerializer& serializer)
+	void WorkspaceDocument::ExportProject(PackageProject::Serializer& serializer)
 	{
 		serializer.Serialize(m_Project.get());
 	}

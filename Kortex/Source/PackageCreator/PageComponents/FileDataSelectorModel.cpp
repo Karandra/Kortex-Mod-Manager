@@ -39,7 +39,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 				case ColumnID::ID:
 				{
-					value = KxDataViewBitmapTextValue(entry->first->GetID(), ImageProvider::GetBitmap(entry->first->ToFolderEntry() ? ImageResourceID::Folder : ImageResourceID::Document));
+					value = KxDataViewBitmapTextValue(entry->first->GetID(), ImageProvider::GetBitmap(entry->first->ToFolderItem() ? ImageResourceID::Folder : ImageResourceID::Document));
 					break;
 				}
 				case ColumnID::Source:
@@ -68,7 +68,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		m_DataVector.clear();
 		VectorModel::SetDataVector();
 	}
-	void FileDataSelectorModel::SetDataVector(const KxStringVector& data, PackageProject::KPackageProjectFileData* fileData)
+	void FileDataSelectorModel::SetDataVector(const KxStringVector& data, PackageProject::FileDataSection* fileData)
 	{
 		SetDataVector();
 		m_FileData = fileData;
@@ -78,7 +78,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			// Add selected first
 			for (const wxString& id: data)
 			{
-				if (PackageProject::KPPFFileEntry* entry = m_FileData->FindEntryWithID(id))
+				if (PackageProject::FileItem* entry = m_FileData->FindEntryWithID(id))
 				{
 					m_DataVector.emplace_back(std::make_pair(entry, true));
 				}
@@ -153,7 +153,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		FileDataSelectorModel::SetDataVector();
 	}
-	void FileDataSelectorComboBox::SetDataVector(KxStringVector& data, PackageProject::KPackageProjectFileData* fileData)
+	void FileDataSelectorComboBox::SetDataVector(KxStringVector& data, PackageProject::FileDataSection* fileData)
 	{
 		m_RequiredFiles = &data;
 		FileDataSelectorModel::SetDataVector(data, fileData);

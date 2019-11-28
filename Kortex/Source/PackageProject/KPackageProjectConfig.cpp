@@ -6,22 +6,22 @@
 
 namespace Kortex::PackageProject
 {
-	const wxString KPackageProjectConfig::ms_DefaultCompressionMethod = "LZMA2";
+	const wxString ConfigSection::ms_DefaultCompressionMethod = "LZMA2";
 	
-	bool KPackageProjectConfig::IsCompressionMethodSupported(const wxString& value)
+	bool ConfigSection::IsCompressionMethodSupported(const wxString& value)
 	{
 		return value == "LZMA" || value == "LZMA2" || value == "BZip2" || value == "PPMd";
 	}
 	
-	KPackageProjectConfig::KPackageProjectConfig(KPackageProject& project)
-		:KPackageProjectPart(project)
+	ConfigSection::ConfigSection(ModPackageProject& project)
+		:ProjectSection(project)
 	{
 	}
-	KPackageProjectConfig::~KPackageProjectConfig()
+	ConfigSection::~ConfigSection()
 	{
 	}
 	
-	void KPackageProjectConfig::SetCompressionMethod(const wxString& value)
+	void ConfigSection::SetCompressionMethod(const wxString& value)
 	{
 		if (IsCompressionMethodSupported(value))
 		{
@@ -32,7 +32,7 @@ namespace Kortex::PackageProject
 			m_CompressionMethod = ms_DefaultCompressionMethod;
 		}
 	}
-	void KPackageProjectConfig::SetCompressionLevel(int value)
+	void ConfigSection::SetCompressionLevel(int value)
 	{
 		if (value >= ms_MinCompressionLevel && value <= ms_MaxCompressionLevel)
 		{
@@ -43,7 +43,7 @@ namespace Kortex::PackageProject
 			m_CompressionLevel = ms_DefaultCompressionLevel;
 		}
 	}
-	void KPackageProjectConfig::SetCompressionDictionarySize(int value)
+	void ConfigSection::SetCompressionDictionarySize(int value)
 	{
 		if (value >= ms_MinDictionarySize && value <= ms_MaxDictionarySize)
 		{

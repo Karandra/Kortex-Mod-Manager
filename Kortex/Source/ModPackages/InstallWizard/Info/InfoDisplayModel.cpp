@@ -58,7 +58,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 			}
 			case ColumnRef::Value:
 			{
-				KPackageProject& packageConfig = m_Page.GetPackageConfig();
+				ModPackageProject& packageConfig = m_Page.GetPackageConfig();
 				switch (item.Type)
 				{
 					case InfoKind::Tags:
@@ -85,7 +85,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		if (column.GetID<ColumnRef>() == ColumnRef::Value)
 		{
 			const Item& item = m_Items[node.GetRow()];
-			KPackageProject& packageConfig = m_Page.GetPackageConfig();
+			ModPackageProject& packageConfig = m_Page.GetPackageConfig();
 
 			switch (item.Type)
 			{
@@ -106,7 +106,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		if (column.GetID<ColumnRef>() == ColumnRef::Value)
 		{
 			const Item& item = m_Items[node.GetRow()];
-			KPackageProject& packageConfig = m_Page.GetPackageConfig();
+			ModPackageProject& packageConfig = m_Page.GetPackageConfig();
 
 			switch (item.Type)
 			{
@@ -208,7 +208,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 				}
 				case InfoKind::Tags:
 				{
-					KPackageProject& packageConfig = m_Page.GetPackageConfig();
+					ModPackageProject& packageConfig = m_Page.GetPackageConfig();
 					ModTagStore& tags = packageConfig.GetInfo().GetTagStore();
 
 					ModTagManager::SelectorDialog dialog(GetView(), itemValue.GetLabel());

@@ -16,7 +16,7 @@
 namespace Kortex
 {
 	class IGameMod;
-	class KPackageProject;
+	class ModPackageProject;
 }
 namespace Kortex::PackageDesigner
 {
@@ -139,7 +139,7 @@ namespace Kortex::PackageDesigner
 				// TODO: update window title
 			}
 			PageBase* GetCurrentPage() const;
-			KPackageProject& ImportProjectFromPackage(const wxString& path);
-			KPackageProject& CreateProjectFromModEntry(const IGameMod& modEntry);
+			ModPackageProject& ImportProjectFromPackage(const wxString& path);
+			ModPackageProject& CreateProjectFromModEntry(const IGameMod& modEntry);
 	};
 }

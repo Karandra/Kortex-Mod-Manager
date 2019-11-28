@@ -65,7 +65,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 		// Group item, read entries
 		const DisplayModelNode* node = GetNode(item);
-		if (const PackageProject::KPPCGroup* group = node->GetGroup())
+		if (const PackageProject::ComponentGroup* group = node->GetGroup())
 		{
 			for (size_t i = node->GetBegin(); i < node->GetSize(); i++)
 			{
@@ -82,7 +82,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		const DisplayModelNode* node = GetNode(item);
 		if (node)
 		{
-			if (const PackageProject::KPPCGroup* group = node->GetGroup())
+			if (const PackageProject::ComponentGroup* group = node->GetGroup())
 			{
 				switch (column->GetID())
 				{
@@ -94,7 +94,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 					}
 				};
 			}
-			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::ComponentItem* entry = node->GetEntry())
 			{
 				switch (column->GetID())
 				{
@@ -118,7 +118,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 	{
 		if (const DisplayModelNode* node = GetNode(item))
 		{
-			if (const PackageProject::KPPCGroup* group = node->GetGroup())
+			if (const PackageProject::ComponentGroup* group = node->GetGroup())
 			{
 				switch (column->GetID())
 				{
@@ -129,7 +129,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 					}
 				};
 			}
-			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::ComponentItem* entry = node->GetEntry())
 			{
 				switch (column->GetID())
 				{
@@ -150,11 +150,11 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		DisplayModelNode* entryNode = GetNode(item);
 		if (entryNode)
 		{
-			if (const PackageProject::KPPCEntry* entry = entryNode->GetEntry())
+			if (const PackageProject::ComponentItem* entry = entryNode->GetEntry())
 			{
-				const PackageProject::KPPCGroup* group = entryNode->GetParentNode()->GetGroup();
-				PackageProject::KPPCSelectionMode selMode = group->GetSelectionMode();
-				PackageProject::KPPCTypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
+				const PackageProject::ComponentGroup* group = entryNode->GetParentNode()->GetGroup();
+				PackageProject::SelectionMode selMode = group->GetSelectionMode();
+				PackageProject::TypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
 
 				if (column->GetID() == ColumnRef::Name)
 				{
@@ -261,7 +261,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		return true;
 	}
 
-	wxBitmap DisplayModel::GetImageByTypeDescriptor(PackageProject::KPPCTypeDescriptor type) const
+	wxBitmap DisplayModel::GetImageByTypeDescriptor(PackageProject::TypeDescriptor type) const
 	{
 		switch (type)
 		{
@@ -276,11 +276,11 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		};
 		return wxNullBitmap;
 	}
-	wxString DisplayModel::GetMessageTypeDescriptor(PackageProject::KPPCTypeDescriptor type) const
+	wxString DisplayModel::GetMessageTypeDescriptor(PackageProject::TypeDescriptor type) const
 	{
-		return KTr("PackageCreator.TypeDescriptor." + PackageProject::KPackageProjectComponents::TypeDescriptorToString(type));
+		return KTr("PackageCreator.TypeDescriptor." + PackageProject::ComponentsSection::TypeDescriptorToString(type));
 	}
-	KxDataViewBitmapTextToggleValue::ToggleType DisplayModel::GetToggleType(PackageProject::KPPCSelectionMode mode) const
+	KxDataViewBitmapTextToggleValue::ToggleType DisplayModel::GetToggleType(PackageProject::SelectionMode mode) const
 	{
 		switch (mode)
 		{
@@ -292,12 +292,12 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		};
 		return KxDataViewBitmapTextToggleValue::CheckBox;
 	}
-	const wxString& DisplayModel::GetSelectionModeString(const PackageProject::KPPCGroup& group) const
+	const wxString& DisplayModel::GetSelectionModeString(const PackageProject::ComponentGroup& group) const
 	{
 		static const wxString ms_Select = KTr("Generic.Select");
-		auto MakeString = [](PackageProject::KPPCSelectionMode mode) -> wxString
+		auto MakeString = [](PackageProject::SelectionMode mode) -> wxString
 		{
-			return ms_Select + ' ' + KxString::MakeLower(PackageProject::KPackageProjectComponents::SelectionModeToTranslation(mode));
+			return ms_Select + ' ' + KxString::MakeLower(PackageProject::ComponentsSection::SelectionModeToTranslation(mode));
 		};
 
 		static const wxString ms_Any = MakeString(PackageProject::KPPC_SELECT_ANY);
@@ -342,16 +342,16 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		}
 		return items;
 	}
-	bool DisplayModel::IsEntryShouldBeChecked(const PackageProject::KPPCEntry* entry) const
+	bool DisplayModel::IsEntryShouldBeChecked(const PackageProject::ComponentItem* entry) const
 	{
-		PackageProject::KPPCTypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
+		PackageProject::TypeDescriptor typeDescriptor = entry->GetTDCurrentValue();
 		if (typeDescriptor == PackageProject::KPPC_DESCRIPTOR_REQUIRED || typeDescriptor == PackageProject::KPPC_DESCRIPTOR_RECOMMENDED)
 		{
 			return true;
 		}
 		else
 		{
-			return std::any_of(m_CheckedEntries.begin(), m_CheckedEntries.end(), [entry](const PackageProject::KPPCEntry* v)
+			return std::any_of(m_CheckedEntries.begin(), m_CheckedEntries.end(), [entry](const PackageProject::ComponentItem* v)
 			{
 				return v == entry;
 			});
@@ -363,7 +363,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		KxDataViewItem item = event.GetItem();
 		if (const DisplayModelNode* node = GetNode(item))
 		{
-			if (const PackageProject::KPPCGroup* group = node->GetGroup())
+			if (const PackageProject::ComponentGroup* group = node->GetGroup())
 			{
 				if (GetView()->IsExpanded(item))
 				{
@@ -374,7 +374,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 					GetView()->Expand(item);
 				}
 			}
-			else if (const PackageProject::KPPCEntry* entry = node->GetEntry())
+			else if (const PackageProject::ComponentItem* entry = node->GetEntry())
 			{
 				KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTr(KxID_INFO), GetMessageTypeDescriptor(entry->GetTDCurrentValue()), KxBTN_OK, KxICON_INFORMATION);
 				dialog.ShowModal();
@@ -386,7 +386,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		KxDataViewItem item = event.GetItem();
 		if (const DisplayModelNode* node = GetNode(item))
 		{
-			if (const PackageProject::KPPCEntry* entry = node->GetEntry())
+			if (const PackageProject::ComponentItem* entry = node->GetEntry())
 			{
 				m_HotItem = entry;
 				return;
@@ -422,7 +422,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		ItemsCleared();
 		GetView()->Disable();
 	}
-	void DisplayModel::SetDataVector(const PackageProject::KPackageProjectComponents* compInfo, const PackageProject::KPPCStep* step, const PackageProject::KPPCEntry::RefVector& checkedEntries)
+	void DisplayModel::SetDataVector(const PackageProject::ComponentsSection* compInfo, const PackageProject::ComponentStep* step, const PackageProject::ComponentItem::RefVector& checkedEntries)
 	{
 		SetDataVector();
 
@@ -507,13 +507,13 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		SelectItem(selection);
 		GetView()->SetFocus();
 	}
-	bool DisplayModel::OnLeaveStep(PackageProject::KPPCEntry::RefVector& checkedEntries)
+	bool DisplayModel::OnLeaveStep(PackageProject::ComponentItem::RefVector& checkedEntries)
 	{
 		checkedEntries = GetCheckedEntries();
 		return true;
 	}
 
-	const PackageProject::KPPCEntry* DisplayModel::GetSelectedEntry() const
+	const PackageProject::ComponentItem* DisplayModel::GetSelectedEntry() const
 	{
 		DisplayModelNode* node = GetNode(GetView()->GetSelection());
 		if (node)
@@ -531,14 +531,14 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 	{
 		return item.GetValuePtr<DisplayModelNode>();
 	}
-	PackageProject::KPPCEntry::RefVector DisplayModel::GetCheckedEntries() const
+	PackageProject::ComponentItem::RefVector DisplayModel::GetCheckedEntries() const
 	{
-		PackageProject::KPPCEntry::RefVector entries;
+		PackageProject::ComponentItem::RefVector entries;
 		for (const DisplayModelNode& node: m_DataVector)
 		{
 			if (node.IsEntry() && node.IsChecked())
 			{
-				entries.push_back(const_cast<PackageProject::KPPCEntry*>(node.GetEntry()));
+				entries.push_back(const_cast<PackageProject::ComponentItem*>(node.GetEntry()));
 			}
 		}
 		return entries;

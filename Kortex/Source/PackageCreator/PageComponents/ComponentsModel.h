@@ -13,8 +13,8 @@ namespace Kortex::PackageDesigner
 }
 namespace Kortex::PackageProject
 {
-	class KPackageProjectInterface;
-	class KPackageProjectComponents;
+	class InterfaceSection;
+	class ComponentsSection;
 }
 
 namespace Kortex::PackageDesigner::PageComponentsNS
@@ -52,15 +52,15 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			bool SetValue(const wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) override;
 			bool GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
 	
-			void GetStepValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::KPPCStep* step, bool editor = false) const;
-			void GetGroupValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::KPPCGroup* group, bool editor = false) const;
-			void GetEntryValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::KPPCEntry* entry, bool editor = false) const;
-			void GetEntryItemValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::KPPCEntry* entry, EntryID id, bool editor = false) const;
+			void GetStepValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::ComponentStep* step, bool editor = false) const;
+			void GetGroupValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::ComponentGroup* group, bool editor = false) const;
+			void GetEntryValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::ComponentItem* entry, bool editor = false) const;
+			void GetEntryItemValue(wxAny& value, const KxDataViewColumn* column, const PackageProject::ComponentItem* entry, EntryID id, bool editor = false) const;
 	
-			bool SetStepValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::KPPCStep* step);
-			bool SetGroupValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::KPPCGroup* group);
-			bool SetEntryValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::KPPCEntry* entry);
-			bool SetEntryItemValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::KPPCEntry* entry, EntryID id);
+			bool SetStepValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::ComponentStep* step);
+			bool SetGroupValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::ComponentGroup* group);
+			bool SetEntryValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::ComponentItem* entry);
+			bool SetEntryItemValue(const wxAny& value, const KxDataViewColumn* column, PackageProject::ComponentItem* entry, EntryID id);
 	
 		private:
 			void OnSelectItem(KxDataViewEvent& event);
@@ -83,9 +83,9 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void AddGroup(ComponentsModelNode* node, const KxDataViewItem& item);
 			void AddEntry(ComponentsModelNode* node, KxDataViewItem& item);
 			void AddEntriesFromFiles(ComponentsModelNode* node, KxDataViewItem& item);
-			void RemoveStep(ComponentsModelNode* node, const PackageProject::KPPCStep* step);
-			void RemoveGroup(ComponentsModelNode* node, const PackageProject::KPPCGroup* group);
-			void RemoveEntry(ComponentsModelNode* node, const PackageProject::KPPCEntry* entry);
+			void RemoveStep(ComponentsModelNode* node, const PackageProject::ComponentStep* step);
+			void RemoveGroup(ComponentsModelNode* node, const PackageProject::ComponentGroup* group);
+			void RemoveEntry(ComponentsModelNode* node, const PackageProject::ComponentItem* entry);
 	
 			KxMenu* CreateAllItemsMenu();
 			void CreateAllItemsMenuEntry(KxMenu* menu, ComponentsModelNode* node, const wxString& name, AllItemsFunc func);
@@ -105,8 +105,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void AllEntries_AssignedFlags(ComponentsModelNode* node, const wxString& name);
 			void AllEntries_Description(ComponentsModelNode* node, const wxString& name);
 	
-			PackageProject::KPackageProjectInterface& GetInterface() const;
-			PackageProject::KPackageProjectComponents& GetComponents() const;
+			PackageProject::InterfaceSection& GetInterface() const;
+			PackageProject::ComponentsSection& GetComponents() const;
 	
 		public:
 			ComponentsModel(WorkspaceDocument* controller);
@@ -129,6 +129,6 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 			
 			void RefreshItems() override;
-			void SetProject(KPackageProject& project);
+			void SetProject(ModPackageProject& project);
 	};
 }

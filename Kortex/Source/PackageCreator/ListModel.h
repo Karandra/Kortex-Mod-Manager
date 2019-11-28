@@ -6,7 +6,7 @@ class KxMenuItem;
 
 namespace Kortex
 {
-	class KPackageProject;
+	class ModPackageProject;
 }
 namespace Kortex::PackageDesigner
 {
@@ -75,7 +75,7 @@ namespace Kortex::PackageDesigner
 
 		public:
 			/* Misc */
-			KPackageProject& GetProject() const;
+			ModPackageProject& GetProject() const;
 			wxRect GetItemRect(const KxDataViewItem& item, const KxDataViewColumn* column) const
 			{
 				return GetView()->GetAdjustedItemRect(item, column);

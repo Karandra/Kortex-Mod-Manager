@@ -4,7 +4,7 @@
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectConfig: public KPackageProjectPart
+	class ConfigSection: public ProjectSection
 	{
 		public:
 			static bool IsCompressionMethodSupported(const wxString& value);
@@ -29,8 +29,8 @@ namespace Kortex::PackageProject
 			bool m_CompressionSolidArchive = false;
 	
 		public:
-			KPackageProjectConfig(KPackageProject& project);
-			virtual ~KPackageProjectConfig();
+			ConfigSection(ModPackageProject& project);
+			~ConfigSection();
 	
 		public:
 			const wxString& GetInstallPackageFile() const

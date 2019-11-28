@@ -121,7 +121,7 @@ namespace Kortex::InstallWizard
 		SetImageViewerNavigationInfo(event);
 		if (m_CurrentImageIndex >= 0 && (size_t)m_CurrentImageIndex < m_ImagesMap.size())
 		{
-			const PackageProject::KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
+			const PackageProject::ImageItem* entry = m_ImagesMap.at(m_CurrentImageIndex);
 			event.SetBitmap(entry->GetBitmap());
 			event.SetDescription(entry->GetDescription());
 		}
@@ -175,7 +175,7 @@ namespace Kortex::InstallWizard
 				dialog.Bind(UI::ImageViewerEvent::EvtPrevious, &InfoPage::OnNavigateImageViewer, this);
 				dialog.Bind(UI::ImageViewerEvent::EvtNext, &InfoPage::OnNavigateImageViewer, this);
 
-				const PackageProject::KPPIImageEntry* entry = m_ImagesMap.at(m_CurrentImageIndex);
+				const PackageProject::ImageItem* entry = m_ImagesMap.at(m_CurrentImageIndex);
 				UI::ImageViewerEvent evt;
 				evt.SetBitmap(entry->GetBitmap());
 				evt.SetDescription(entry->GetDescription());
@@ -191,10 +191,10 @@ namespace Kortex::InstallWizard
 		return m_ScreenshotsView;
 	}
 
-	void InfoPage::LoadInfoTab(const KPackageProject& package)
+	void InfoPage::LoadInfoTab(const ModPackageProject& package)
 	{
 		using InfoPageNS::InfoKind;
-		const PackageProject::KPackageProjectInfo& info = package.GetInfo();
+		const PackageProject::InfoSection& info = package.GetInfo();
 
 		auto AddString = [this](const wxString& name, const wxString& value, InfoKind type = InfoKind::None, bool isRequired = false, ResourceID image = {})
 		{
@@ -236,11 +236,11 @@ namespace Kortex::InstallWizard
 
 		m_InfoDisplayModel->ItemsChanged();
 	}
-	void InfoPage::LoadDescriptionTab(const KPackageProject& package)
+	void InfoPage::LoadDescriptionTab(const ModPackageProject& package)
 	{
 		m_DescriptionView.LoadText(package.GetInfo().GetDescription());
 	}
-	void InfoPage::LoadDocumentsTab(const KPackageProject& package)
+	void InfoPage::LoadDocumentsTab(const ModPackageProject& package)
 	{
 		for (const KLabeledValue& item: package.GetInfo().GetDocuments())
 		{
@@ -253,9 +253,9 @@ namespace Kortex::InstallWizard
 			m_DocumentsList->HandleWindowEvent(event);
 		}
 	}
-	void InfoPage::LoadScreenshotsTab(const KPackageProject& package)
+	void InfoPage::LoadScreenshotsTab(const ModPackageProject& package)
 	{
-		for (const PackageProject::KPPIImageEntry& item: package.GetInterface().GetImages())
+		for (const PackageProject::ImageItem& item: package.GetInterface().GetImages())
 		{
 			if (item.IsVisible() && item.HasBitmap())
 			{
@@ -277,7 +277,7 @@ namespace Kortex::InstallWizard
 	}
 	void InfoPage::OnPackageLoaded()
 	{
-		const KPackageProject& package = GetPackageConfig();
+		const ModPackageProject& package = GetPackageConfig();
 
 		LoadInfoTab(package);
 		LoadDocumentsTab(package);

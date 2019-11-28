@@ -36,15 +36,15 @@
 
 namespace Kortex::PackageDesigner
 {
-	PackageProject::KPackageProjectInfo& PageInfo::GetProjectInfo() const
+	PackageProject::InfoSection& PageInfo::GetProjectInfo() const
 	{
 		return GetProject()->GetInfo();
 	}
-	PackageProject::KPackageProjectConfig& PageInfo::GetProjectConfig() const
+	PackageProject::ConfigSection& PageInfo::GetProjectConfig() const
 	{
 		return GetProject()->GetConfig();
 	}
-	void PageInfo::OnLoadProject(PackageProject::KPackageProjectInfo& projectInfo)
+	void PageInfo::OnLoadProject(PackageProject::InfoSection& projectInfo)
 	{
 		wxWindowUpdateLocker lock(this);
 
@@ -316,7 +316,7 @@ namespace Kortex::PackageDesigner
 		m_CompressionMethod->AddItem("BZip2");
 
 		// Dictionary size
-		m_CompressionDictionarySize = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.Config.DictionarySize"), new KxSlider(collapsePane->GetPane(), KxID_NONE, PackageProject::KPackageProjectConfig::ms_DefaultDictionarySize, PackageProject::KPackageProjectConfig::ms_MinDictionarySize, PackageProject::KPackageProjectConfig::ms_MaxDictionarySize, KxSlider::DefaultStyle|wxSL_TICKS));
+		m_CompressionDictionarySize = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.Config.DictionarySize"), new KxSlider(collapsePane->GetPane(), KxID_NONE, PackageProject::ConfigSection::ms_DefaultDictionarySize, PackageProject::ConfigSection::ms_MinDictionarySize, PackageProject::ConfigSection::ms_MaxDictionarySize, KxSlider::DefaultStyle|wxSL_TICKS));
 		m_CompressionDictionarySize->SetMaxSize(wxSize(wxDefaultCoord, 23));
 		m_CompressionDictionarySizeMemory = AddControlsRow(collapsePaneSizer, KTr("PackageCreator.PageInfo.Config.DictionarySize.Memory"), CreateNormalLabel(collapsePane->GetPane(), wxEmptyString));
 

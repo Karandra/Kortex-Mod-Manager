@@ -7,7 +7,7 @@
 
 namespace Kortex::PackageProject
 {
-	class KPPIImageEntry: public KWithBitmap
+	class ImageItem: public KWithBitmap
 	{
 		private:
 			wxString m_Path;
@@ -17,8 +17,8 @@ namespace Kortex::PackageProject
 			wxSize m_Size = wxDefaultSize;
 	
 		public:
-			KPPIImageEntry(const wxString& path = wxEmptyString, const wxString& description = wxEmptyString, bool isVisible = true);
-			~KPPIImageEntry();
+			ImageItem(const wxString& path = wxEmptyString, const wxString& description = wxEmptyString, bool isVisible = true);
+			~ImageItem();
 	
 		public:
 			bool HasPath() const
@@ -78,32 +78,32 @@ namespace Kortex::PackageProject
 				m_Size = tSize;
 			}
 	};
-	using KPPIImageEntryArray = std::vector<KPPIImageEntry>;
+	using KPPIImageEntryArray = std::vector<ImageItem>;
 }
 
 namespace Kortex::PackageProject
 {
-	class KPPITitleConfig
+	class TitleConfig
 	{
 		public:
 			static const wxAlignment ms_InvalidAlignment = wxALIGN_INVALID;
-	
+			
 		private:
 			wxAlignment m_Alignment = ms_InvalidAlignment;
 			KxColor m_Color = wxNullColour;
 	
 		public:
-			KPPITitleConfig(wxAlignment alignment = ms_InvalidAlignment, const KxColor& color = wxNullColour)
+			TitleConfig(wxAlignment alignment = ms_InvalidAlignment, const KxColor& color = wxNullColour)
 				:m_Alignment(alignment), m_Color(color)
 			{
 			}
-	
+			
 		public:
 			bool IsOK() const
 			{
 				return HasAlignment() && HasColor();
 			}
-	
+			
 			bool HasAlignment() const
 			{
 				return m_Alignment != ms_InvalidAlignment;
@@ -116,7 +116,7 @@ namespace Kortex::PackageProject
 			{
 				m_Alignment = value;
 			}
-	
+			
 			bool HasColor() const
 			{
 				return m_Color.IsOk();
@@ -134,17 +134,17 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectInterface: public KPackageProjectPart
+	class InterfaceSection: public ProjectSection
 	{
 		private:
 			wxString m_MainImage;
 			wxString m_HeaderImage;
 			KPPIImageEntryArray m_Images;
-			KPPITitleConfig m_TitleConfig;
-	
+			TitleConfig m_TitleConfig;
+			
 		public:
-			KPackageProjectInterface(KPackageProject& project);
-			virtual ~KPackageProjectInterface();
+			InterfaceSection(ModPackageProject& project);
+			~InterfaceSection();
 	
 		public:
 			const KPPIImageEntryArray& GetImages() const
@@ -174,32 +174,32 @@ namespace Kortex::PackageProject
 				m_HeaderImage = path;
 			}
 	
-			const KPPIImageEntry* FindEntryWithValue(const wxString& path) const;
-			KPPIImageEntry* FindEntryWithValue(const wxString& path);
+			const ImageItem* FindEntryWithValue(const wxString& path) const;
+			ImageItem* FindEntryWithValue(const wxString& path);
 			
-			const KPPIImageEntry* GetMainImageEntry() const
+			const ImageItem* GetMainImageEntry() const
 			{
 				return FindEntryWithValue(m_MainImage);
 			}
-			KPPIImageEntry* GetMainImageEntry()
+			ImageItem* GetMainImageEntry()
 			{
 				return FindEntryWithValue(m_MainImage);
 			}
 	
-			const KPPIImageEntry* GetHeaderImageEntry() const
+			const ImageItem* GetHeaderImageEntry() const
 			{
 				return FindEntryWithValue(m_HeaderImage);
 			}
-			KPPIImageEntry* GetHeaderImageEntry()
+			ImageItem* GetHeaderImageEntry()
 			{
 				return FindEntryWithValue(m_HeaderImage);
 			}
 	
-			const KPPITitleConfig& GetTitleConfig() const
+			const TitleConfig& GetTitleConfig() const
 			{
 				return m_TitleConfig;
 			}
-			KPPITitleConfig& GetTitleConfig()
+			TitleConfig& GetTitleConfig()
 			{
 				return m_TitleConfig;
 			}

@@ -24,7 +24,7 @@ namespace Kortex::InstallWizard
 			KxLabel* m_MinorStatus = nullptr;
 			KxLabel* m_MajorStatus = nullptr;
 
-			PackageProject::KPPFFileEntryRefArray m_InstallableFiles;
+			PackageProject::FileItem::RefVector m_InstallableFiles;
 			InstallOperation* m_InstallThread = nullptr;
 
 			bool m_ShouldCancel = false;
@@ -87,7 +87,7 @@ namespace Kortex::InstallWizard
 			void CollectAllInstallableEntries();
 			void SortInstallableFiles();
 			void ShowInstallableFilesPreview();
-			const PackageProject::KPPFFileEntryRefArray& GetInstallableFiles() const
+			const PackageProject::FileItem::RefVector& GetInstallableFiles() const
 			{
 				return  m_InstallableFiles;
 			}

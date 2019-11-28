@@ -13,8 +13,8 @@ namespace Kortex
 }
 namespace Kortex::PackageProject
 {
-	class KPackageProjectInfo;
-	class KPackageProjectConfig;
+	class InfoSection;
+	class ConfigSection;
 }
 namespace Kortex::PackageDesigner::PageInfoNS
 {
@@ -60,9 +60,9 @@ namespace Kortex::PackageDesigner
 			wxCheckBox* m_CompressionSolidArchive = nullptr;
 
 		private:
-			PackageProject::KPackageProjectInfo& GetProjectInfo() const;
-			PackageProject::KPackageProjectConfig& GetProjectConfig() const;
-			void OnLoadProject(PackageProject::KPackageProjectInfo& tProjectInfo);
+			PackageProject::InfoSection& GetProjectInfo() const;
+			PackageProject::ConfigSection& GetProjectConfig() const;
+			void OnLoadProject(PackageProject::InfoSection& tProjectInfo);
 
 			void CreateBasicInfoControls();
 			void CreateSitesControls();

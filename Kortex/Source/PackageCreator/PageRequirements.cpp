@@ -36,7 +36,7 @@ namespace Kortex::PackageDesigner
 	{
 		return true;
 	}
-	void PageRequirements::OnLoadProject(PackageProject::KPackageProjectRequirements& projectRequirements)
+	void PageRequirements::OnLoadProject(PackageProject::RequirementsSection& projectRequirements)
 	{
 		wxWindowUpdateLocker lock(this);
 
@@ -61,7 +61,7 @@ namespace Kortex::PackageDesigner
 		}
 	}
 
-	PackageProject::KPackageProjectRequirements& PageRequirements::GetProjectRequirements() const
+	PackageProject::RequirementsSection& PageRequirements::GetProjectRequirements() const
 	{
 		return GetProject()->GetRequirements();
 	}
@@ -207,13 +207,13 @@ namespace Kortex::PackageDesigner
 		int index = m_StdReqs_List->GetSelection();
 		if (index != -1)
 		{
-			if (PackageProject::KPPRRequirementEntry* stdEntry = static_cast<PackageProject::KPPRRequirementEntry*>(m_StdReqs_List->GetClientData(index)))
+			if (PackageProject::RequirementItem* stdEntry = static_cast<PackageProject::RequirementItem*>(m_StdReqs_List->GetClientData(index)))
 			{
-				if (PackageProject::KPPRRequirementsGroup* pSet = m_EntriesModel->GetRequirementsGroup())
+				if (PackageProject::RequirementGroup* pSet = m_EntriesModel->GetRequirementsGroup())
 				{
 					if (!pSet->HasEntryWithID(stdEntry->GetID()))
 					{
-						auto& newEntry = pSet->GetEntries().emplace_back(std::make_unique<PackageProject::KPPRRequirementEntry>(*stdEntry));
+						auto& newEntry = pSet->GetEntries().emplace_back(std::make_unique<PackageProject::RequirementItem>(*stdEntry));
 						newEntry->ResetObjectFunctionResult();
 						newEntry->SetCurrentVersion(KxNullVersion);
 

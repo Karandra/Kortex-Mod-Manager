@@ -94,7 +94,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				case ColumnID::Name:
 				{
 					wxString newName = value.As<wxString>();
-					if (newName.StartsWith(PackageProject::KPPRRequirementsGroup::GetFlagNamePrefix()))
+					if (newName.StartsWith(PackageProject::RequirementGroup::GetFlagNamePrefix()))
 					{
 						wxRect rect = GetView()->GetAdjustedItemRect(GetItem(row), column);
 						PageBase::ShowTooltipWarning(GetView(), KTr("PackageCreator.InvalidFlagName"), rect);
@@ -135,7 +135,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	void AssignedConditionalsModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const PackageProject::KPPCFlagEntry* entry = GetDataEntry(GetRow(item));
+		const PackageProject::FlagItem* entry = GetDataEntry(GetRow(item));
 
 		KxMenu menu;
 		{
@@ -183,7 +183,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void AssignedConditionalsModel::OnRemoveFlag(const KxDataViewItem& item)
 	{
-		if (PackageProject::KPPCFlagEntry* entry = GetDataEntry(GetRow(item)))
+		if (PackageProject::FlagItem* entry = GetDataEntry(GetRow(item)))
 		{
 			wxString deletedName = entry->GetDeletedName();
 			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveFlagDialog.Caption", entry->GetName()), KTrf("PackageCreator.RemoveFlagDialog.Message", deletedName), KxBTN_CANCEL, KxICON_WARNING);
@@ -232,7 +232,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				for (auto& entry: group->GetEntries())
 				{
 					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetConditionalFlags().GetFlags(), remove);
-					for (PackageProject::KPPCCondition& condition : entry->GetTDConditionGroup().GetConditions())
+					for (PackageProject::Condition& condition : entry->GetTDConditionGroup().GetConditions())
 					{
 						TrackID_ReplaceOrRemove(trackedID, newID, condition.GetFlags(), remove);
 					}
@@ -243,7 +243,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		// Conditional steps flags
 		for (auto& step : GetProject().GetComponents().GetConditionalSteps())
 		{
-			for (PackageProject::KPPCCondition& condition: step->GetConditionGroup().GetConditions())
+			for (PackageProject::Condition& condition: step->GetConditionGroup().GetConditions())
 			{
 				TrackID_ReplaceOrRemove(trackedID, newID, condition.GetFlags(), remove);
 			}
@@ -257,12 +257,12 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		m_Condition = nullptr;
 		VectorModel::SetDataVector();
 	}
-	void AssignedConditionalsModel::SetDataVector(PackageProject::KPPCCondition& data)
+	void AssignedConditionalsModel::SetDataVector(PackageProject::Condition& data)
 	{
 		m_Condition = &data;
 		VectorModel::SetDataVector(&m_Condition->GetFlags());
 
-		PackageProject::KPackageProjectComponents& components = m_Controller->GetProject()->GetComponents();
+		PackageProject::ComponentsSection& components = m_Controller->GetProject()->GetComponents();
 		m_LabelEditor->SetItems(components.GetFlagsNames());
 		m_ValueEditor->SetItems(components.GetFlagsValues());
 	}

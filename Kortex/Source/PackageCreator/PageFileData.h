@@ -8,7 +8,7 @@ namespace Kortex
 }
 namespace Kortex::PackageProject
 {
-	class KPackageProjectFileData;
+	class FileDataSection;
 }
 namespace Kortex::PackageDesigner::PageFileDataNS
 {
@@ -37,8 +37,8 @@ namespace Kortex::PackageDesigner
 			//KProgramOptionAI m_ContentListModelOptions;
 
 		private:
-			void OnLoadProject(PackageProject::KPackageProjectFileData& projectFileData);
-			PackageProject::KPackageProjectFileData& GetProjectFileData() const;
+			void OnLoadProject(PackageProject::FileDataSection& projectFileData);
+			PackageProject::FileDataSection& GetProjectFileData() const;
 
 			void CreateMainListControls();
 			void CreateFolderContentControls();

@@ -3,13 +3,13 @@
 
 namespace Kortex::PackageProject
 {
-	enum KPPContentType
+	enum ContentType
 	{
 		KPP_CONTENT_FILEDATA,
 		KPP_CONTENT_IMAGES,
 		KPP_CONTENT_DOCUMENTS,
 	};
-	enum KPPPackageType
+	enum PackageType
 	{
 		KPP_PACCKAGE_UNKNOWN = -1,
 	
@@ -20,7 +20,33 @@ namespace Kortex::PackageProject
 		KPP_PACCKAGE_BAIN,
 		KPP_PACCKAGE_OMOD,
 	};
-	enum KPPOperator
+
+	enum class ReqState
+	{
+		Unknown = -1,
+		True = 1,
+		False = 0
+	};
+	enum ObjectFunction
+	{
+		KPPR_OBJFUNC_INVALID = -1,
+		KPPR_OBJFUNC_NONE = 0,
+
+		KPPR_OBJFUNC_MOD_ACTIVE,
+		KPPR_OBJFUNC_MOD_INACTIVE,
+		KPPR_OBJFUNC_FILE_EXIST,
+		KPPR_OBJFUNC_FILE_NOT_EXIST,
+		KPPR_OBJFUNC_PLUGIN_ACTIVE,
+		KPPR_OBJFUNC_PLUGIN_INACTIVE,
+	};
+	enum ReqType
+	{
+		KPPR_TYPE_USER = 0,
+		KPPR_TYPE_SYSTEM = 1,
+		KPPR_TYPE_AUTO = 2,
+	};
+
+	enum Operator
 	{
 		KPP_OPERATOR_INVALID = -1,
 		KPP_OPERATOR_NONE = 0,
@@ -39,10 +65,22 @@ namespace Kortex::PackageProject
 		KPP_OPERATOR_COUNT_COMPARISON = KPP_OPERATOR_AND,
 		KPP_OPERATOR_MIN = KPP_OPERATOR_NONE + 1,
 	};
-	enum class KPPReqState
+	enum SelectionMode
 	{
-		Unknown = -1,
-		True = 1,
-		False = 0
+		KPPC_SELECT_ANY,
+		KPPC_SELECT_EXACTLY_ONE, // Only one
+		KPPC_SELECT_AT_LEAST_ONE, // One or more
+		KPPC_SELECT_AT_MOST_ONE, // One or nothing
+		KPPC_SELECT_ALL, // All entries must be selected (pretty useless)
+	};
+	enum TypeDescriptor
+	{
+		KPPC_DESCRIPTOR_INVALID = -1,
+
+		KPPC_DESCRIPTOR_OPTIONAL,
+		KPPC_DESCRIPTOR_REQUIRED,
+		KPPC_DESCRIPTOR_RECOMMENDED,
+		KPPC_DESCRIPTOR_COULD_BE_USABLE,
+		KPPC_DESCRIPTOR_NOT_USABLE,
 	};
 }

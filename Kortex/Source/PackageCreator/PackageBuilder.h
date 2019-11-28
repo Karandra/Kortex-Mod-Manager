@@ -6,11 +6,11 @@
 
 namespace Kortex
 {
-	class KPackageProject;
+	class ModPackageProject;
 }
 namespace Kortex::PackageProject
 {
-	class KPPFFileEntry;
+	class FileItem;
 }
 
 namespace Kortex::PackageDesigner
@@ -27,7 +27,7 @@ namespace Kortex::PackageDesigner
 		friend class KPackageCreatorBuilderOperation;
 
 		private:
-			const KPackageProject* m_Project = nullptr;
+			const ModPackageProject* m_Project = nullptr;
 			KOperationWithProgressBase* m_Thread = nullptr;	
 			wxString m_PackagePath;
 			const bool m_BuildPreview = false;
@@ -43,7 +43,7 @@ namespace Kortex::PackageDesigner
 			wxString GetTempPackagePath() const;
 			wxString GetImagePath(const wxString& fileName) const;
 			wxString GetDocumentPath(const wxString& fileName) const;
-			wxString GetFileDataEntryPath(const PackageProject::KPPFFileEntry* fileDataEntry, const wxString& fileName) const;
+			wxString GetFileDataEntryPath(const PackageProject::FileItem* fileDataEntry, const wxString& fileName) const;
 
 			void SetPackagePath(const wxString& path)
 			{
@@ -59,7 +59,7 @@ namespace Kortex::PackageDesigner
 			virtual void ProcessFileData();
 
 		public:
-			PackageBuilder(const KPackageProject* project, KOperationWithProgressBase* thread, bool previewBuild = false);
+			PackageBuilder(const ModPackageProject* project, KOperationWithProgressBase* thread, bool previewBuild = false);
 			~PackageBuilder();
 
 		public:
@@ -91,7 +91,7 @@ namespace Kortex::PackageDesigner
 	class KPackageCreatorBuilderOperation: public KOperationWithProgressDialog<KxArchiveEvent>
 	{
 		private:
-			const KPackageProject* m_Project = nullptr;
+			const ModPackageProject* m_Project = nullptr;
 			bool m_BuildPreview = false;
 			wxString m_PackagePath;
 
@@ -105,7 +105,7 @@ namespace Kortex::PackageDesigner
 			void OnEndHandler();
 
 		public:
-			KPackageCreatorBuilderOperation(const KPackageProject* project, bool previewBuild = false);
+			KPackageCreatorBuilderOperation(const ModPackageProject* project, bool previewBuild = false);
 
 		public:
 			void SetPrevievBuild(bool value)

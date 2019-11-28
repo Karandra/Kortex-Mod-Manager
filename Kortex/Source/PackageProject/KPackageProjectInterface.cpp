@@ -6,36 +6,36 @@
 
 namespace Kortex::PackageProject
 {
-	KPPIImageEntry::KPPIImageEntry(const wxString& path, const wxString& description, bool isVisible)
+	ImageItem::ImageItem(const wxString& path, const wxString& description, bool isVisible)
 		:m_Path(path), m_Description(description), m_IsVisiable(isVisible)
 	{
 	}
-	KPPIImageEntry::~KPPIImageEntry()
+	ImageItem::~ImageItem()
 	{
 	}
 }
 
 namespace Kortex::PackageProject
 {
-	KPackageProjectInterface::KPackageProjectInterface(KPackageProject& project)
-		:KPackageProjectPart(project)
+	InterfaceSection::InterfaceSection(ModPackageProject& project)
+		:ProjectSection(project)
 	{
 	}
-	KPackageProjectInterface::~KPackageProjectInterface()
+	InterfaceSection::~InterfaceSection()
 	{
 	}
 	
-	const KPPIImageEntry* KPackageProjectInterface::FindEntryWithValue(const wxString& path) const
+	const ImageItem* InterfaceSection::FindEntryWithValue(const wxString& path) const
 	{
-		auto it = std::find_if(m_Images.begin(), m_Images.end(), [path](const KPPIImageEntry& v)
+		auto it = std::find_if(m_Images.begin(), m_Images.end(), [path](const ImageItem& v)
 		{
 			return v.GetPath().IsSameAs(path, false);
 		});
 		return it != m_Images.end() ? &(*it) : nullptr;
 	}
-	KPPIImageEntry* KPackageProjectInterface::FindEntryWithValue(const wxString& path)
+	ImageItem* InterfaceSection::FindEntryWithValue(const wxString& path)
 	{
-		auto it = std::find_if(m_Images.begin(), m_Images.end(), [path](const KPPIImageEntry& v)
+		auto it = std::find_if(m_Images.begin(), m_Images.end(), [path](const ImageItem& v)
 		{
 			return v.GetPath().IsSameAs(path, false);
 		});

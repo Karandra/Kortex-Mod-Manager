@@ -7,7 +7,7 @@
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
-	class ConditionalStepsModel: public VectorModel<PackageProject::KPPCConditionalStep::Vector>
+	class ConditionalStepsModel: public VectorModel<PackageProject::ConditionalComponentStep::Vector>
 	{
 		private:
 			void OnInitControl() override;
@@ -34,7 +34,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 	
 		public:
-			PackageProject::KPPCConditionalStep* GetDataEntry(size_t index) const
+			PackageProject::ConditionalComponentStep* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{

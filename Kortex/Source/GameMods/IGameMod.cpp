@@ -39,7 +39,7 @@ namespace Kortex
 		SetID(id);
 		return LoadUsingSignature(GetSignature());
 	}
-	bool IGameMod::CreateFromProject(const KPackageProject& config)
+	bool IGameMod::CreateFromProject(const ModPackageProject& config)
 	{
 		return false;
 	}

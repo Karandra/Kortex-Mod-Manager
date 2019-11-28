@@ -12,7 +12,7 @@ namespace Kortex::InstallWizard
 	{
 		return *m_Wizard.m_Package;
 	}
-	KPackageProject& WizardPage::GetPackageConfig() const
+	ModPackageProject& WizardPage::GetPackageConfig() const
 	{
 		return m_Wizard.GetConfig();
 	}

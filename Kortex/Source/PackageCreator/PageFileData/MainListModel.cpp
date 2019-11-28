@@ -46,7 +46,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			auto info = GetView()->AppendColumn<KxDataViewTextRenderer, KxDataViewSpinEditor>(KTr("Generic.Priority"), ColumnID::Priority, KxDATAVIEW_CELL_EDITABLE, 50);
 			m_PriorityRenderer = info.GetEditor();
 			m_PriorityRenderer->SetIntergerType();
-			m_PriorityRenderer->SetRangeInt(PackageProject::KPackageProjectFileData::ms_MinUserPriority, PackageProject::KPackageProjectFileData::ms_MaxUserPriority);
+			m_PriorityRenderer->SetRangeInt(PackageProject::FileDataSection::ms_MinUserPriority, PackageProject::FileDataSection::ms_MaxUserPriority);
 	
 			wxIntegerValidator<int32_t> tValidator;
 			tValidator.SetMin(m_PriorityRenderer->GetMinInt());
@@ -57,7 +57,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	
 	void MainListModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const PackageProject::KPPFFileEntry* entry = GetDataEntry(row);
+		const PackageProject::FileItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -87,14 +87,14 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	void MainListModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const PackageProject::KPPFFileEntry* entry = GetDataEntry(row);
+		const PackageProject::FileItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::ID:
 				{
-					value = KxDataViewBitmapTextValue(entry->GetID(), ImageProvider::GetBitmap(entry->ToFolderEntry() ? ImageResourceID::Folder : ImageResourceID::Document));
+					value = KxDataViewBitmapTextValue(entry->GetID(), ImageProvider::GetBitmap(entry->ToFolderItem() ? ImageResourceID::Folder : ImageResourceID::Document));
 					break;
 				}
 				case ColumnID::Source:
@@ -117,7 +117,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	bool MainListModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		PackageProject::KPPFFileEntry* entry = GetDataEntry(row);
+		PackageProject::FileItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -127,7 +127,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 					wxString newID = value.As<wxString>();
 					if (newID != entry->GetID())
 					{
-						if (!PackageProject::KPackageProjectFileData::IsFileIDValid(newID))
+						if (!PackageProject::FileDataSection::IsFileIDValid(newID))
 						{
 							PageBase::ShowTooltipWarning(GetView(), KTr("Generic.IDInvalid"), GetItemRect(GetItem(row), column));
 						}
@@ -168,13 +168,13 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		return false;
 	}
 	
-	void MainListModel::AddEverythingFromPath(const wxString& filePath, PackageProject::KPPFFolderEntry* fileEntry, KOperationWithProgressBase* context)
+	void MainListModel::AddEverythingFromPath(const wxString& filePath, PackageProject::FolderItem* fileEntry, KOperationWithProgressBase* context)
 	{
 		KxEvtFile source(filePath);
 		context->LinkHandler(&source, KxEVT_FILEOP_SEARCH);
 		KxStringVector files = source.Find(KxFile::NullFilter, KxFS_FILE, true);
 	
-		PackageProject::KPPFFolderItemsArray& tEntryFiles = fileEntry->GetFiles();
+		PackageProject::FolderItemElement::Vector& tEntryFiles = fileEntry->GetFiles();
 		for (const wxString& path: files)
 		{
 			wxString target = path;
@@ -184,7 +184,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 				target.Remove(0, 1);
 			}
 	
-			PackageProject::KPPFFolderEntryItem& entry = tEntryFiles.emplace_back(PackageProject::KPPFFolderEntryItem());
+			PackageProject::FolderItemElement& entry = tEntryFiles.emplace_back(PackageProject::FolderItemElement());
 			entry.SetSource(path);
 			entry.SetDestination(target);
 		}
@@ -225,11 +225,11 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			{
 				case ColumnID::Source:
 				{
-					PackageProject::KPPFFileEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+					PackageProject::FileItem* entry = GetDataEntry(GetRow(event.GetItem()));
 					if (entry)
 					{
 						KxFileBrowseDialog dialog(GetView(), KxID_NONE, KxFBD_OPEN);
-						if (entry->ToFolderEntry())
+						if (entry->ToFolderItem())
 						{
 							dialog.SetFolder(entry->GetSource());
 							dialog.SetOptionEnabled(KxFBD_PICK_FOLDERS);
@@ -265,7 +265,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	
 			if (IsItemValid(item))
 			{
-				PackageProject::KPPFFolderEntry* folderEntry = GetDataEntry(GetRow(item))->ToFolderEntry();
+				PackageProject::FolderItem* folderEntry = GetDataEntry(GetRow(item))->ToFolderItem();
 				if (folderEntry)
 				{
 					m_ContentModel->SetDataVector(folderEntry);
@@ -279,7 +279,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	void MainListModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		PackageProject::KPPFFileEntry* entry = GetDataEntry(GetRow(item));
+		PackageProject::FileItem* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -303,7 +303,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		}
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(MenuID::ReplaceFolderContent, KTr("PackageCreator.PageFileData.ReplaceFolderContent")));
-			item->Enable(entry && entry->ToFolderEntry());
+			item->Enable(entry && entry->ToFolderItem());
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::FolderArrow));
 		}
 		menu.AddSeparator();
@@ -335,7 +335,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			}
 			case MenuID::ReplaceFolderContent:
 			{
-				OnReplaceFolderContent(item, entry->ToFolderEntry());
+				OnReplaceFolderContent(item, entry->ToFolderItem());
 				break;
 			}
 			case KxID_REMOVE:
@@ -398,7 +398,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			wxString target = source.AfterLast('\\');
 			bool bCanUseID = m_FileData->CanUseThisIDForNewEntry(target);
 	
-			PackageProject::KPPFFileEntry* entry = m_FileData->AddFile(new PackageProject::KPPFFileEntry());
+			PackageProject::FileItem* entry = m_FileData->AddFile(new PackageProject::FileItem());
 			entry->SetSource(source);
 			entry->SetDestination(target);
 			
@@ -423,7 +423,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			wxString id = source.AfterLast('\\');
 			bool bCanUseID = m_FileData->CanUseThisIDForNewEntry(id);
 	
-			PackageProject::KPPFFolderEntry* entry = m_FileData->AddFolder(new PackageProject::KPPFFolderEntry());
+			PackageProject::FolderItem* entry = m_FileData->AddFolder(new PackageProject::FolderItem());
 			entry->SetID(id);
 			entry->SetSource(source);
 	
@@ -463,7 +463,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 					wxString id = folderPath.AfterLast('\\');
 					bool bCanUseID = m_FileData->CanUseThisIDForNewEntry(id);
 	
-					PackageProject::KPPFFolderEntry* entry = m_FileData->AddFolder(new PackageProject::KPPFFolderEntry());
+					PackageProject::FolderItem* entry = m_FileData->AddFolder(new PackageProject::FolderItem());
 					entry->SetID(id);
 					entry->SetSource(folderPath);
 	
@@ -484,7 +484,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			operation->Run();
 		}
 	}
-	void MainListModel::OnReplaceFolderContent(const KxDataViewItem& item, PackageProject::KPPFFolderEntry* folderEntry)
+	void MainListModel::OnReplaceFolderContent(const KxDataViewItem& item, PackageProject::FolderItem* folderEntry)
 	{
 		KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN_FOLDER);
 		if (dialog.ShowModal() == KxID_OK)
@@ -509,7 +509,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	void MainListModel::OnRemoveElement(const KxDataViewItem& item)
 	{
-		if (PackageProject::KPPFFileEntry* entry = GetDataEntry(GetRow(item)))
+		if (PackageProject::FileItem* entry = GetDataEntry(GetRow(item)))
 		{
 			TrackRemoveID(entry->GetID());
 			RemoveItemAndNotify(*GetDataVector(), item);
@@ -524,7 +524,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		ClearItemsAndNotify(*GetDataVector());
 	}
 	
-	void MainListModel::SetProject(KPackageProject& projectData)
+	void MainListModel::SetProject(ModPackageProject& projectData)
 	{
 		m_FileData = &projectData.GetFileData();
 	}

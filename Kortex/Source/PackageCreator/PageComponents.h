@@ -10,7 +10,7 @@ namespace Kortex::PackageDesigner
 }
 namespace Kortex::PackageProject
 {
-	class KPackageProjectComponents;
+	class ComponentsSection;
 }
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
@@ -26,8 +26,8 @@ namespace Kortex::PackageDesigner
 
 		public:
 			static wxString FormatArrayToText(const KxStringVector& array);
-			static wxString ConditionToString(const PackageProject::KPPCCondition& condition, bool isRequired);
-			static wxString ConditionGroupToString(const PackageProject::KPPCConditionGroup& conditionGroup);
+			static wxString ConditionToString(const PackageProject::Condition& condition, bool isRequired);
+			static wxString ConditionGroupToString(const PackageProject::ConditionGroup& conditionGroup);
 
 		private:
 			//KProgramOptionAI m_MainOptions;
@@ -41,8 +41,8 @@ namespace Kortex::PackageDesigner
 			KxImageView* m_EntryImage = nullptr;
 
 		private:
-			PackageProject::KPackageProjectComponents& GetProjectComponents() const;
-			void OnLoadProject(PackageProject::KPackageProjectComponents& projectComponents);
+			PackageProject::ComponentsSection& GetProjectComponents() const;
+			void OnLoadProject(PackageProject::ComponentsSection& projectComponents);
 			
 			void CreateComponentsView();
 			void CreateMiscControls();

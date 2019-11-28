@@ -11,10 +11,10 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 	{
 		public:
 			static KBitmapSize GetThumbnailSize(const wxWindow* window = nullptr);
-			static void LoadBitmap(PackageProject::KPPIImageEntry* entry, const wxWindow* window = nullptr);
+			static void LoadBitmap(PackageProject::ImageItem* entry, const wxWindow* window = nullptr);
 	
 		private:
-			PackageProject::KPackageProjectInterface* m_Interface = nullptr;
+			PackageProject::InterfaceSection* m_Interface = nullptr;
 	
 		private:
 			void OnInitControl() override;
@@ -54,7 +54,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 			}
 	
 		public:
-			const PackageProject::KPPIImageEntry* GetDataEntry(size_t index) const
+			const PackageProject::ImageItem* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{
@@ -62,7 +62,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 				}
 				return nullptr;
 			}
-			PackageProject::KPPIImageEntry* GetDataEntry(size_t index)
+			PackageProject::ImageItem* GetDataEntry(size_t index)
 			{
 				if (index < GetItemCount())
 				{
@@ -71,11 +71,11 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 				return nullptr;
 			}
 	
-			const PackageProject::KPPIImageEntry* GetDataEntry(const KxDataViewItem& item) const
+			const PackageProject::ImageItem* GetDataEntry(const KxDataViewItem& item) const
 			{
 				return GetDataEntry(GetRow(item));
 			}
 	
-			void SetProject(KPackageProject& projectData);
+			void SetProject(ModPackageProject& projectData);
 	};
 }

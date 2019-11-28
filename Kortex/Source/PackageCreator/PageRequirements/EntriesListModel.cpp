@@ -86,7 +86,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	
 	void EntriesListModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const PackageProject::KPPRRequirementEntry* entry = GetDataEntry(row);
+		const PackageProject::RequirementItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -131,7 +131,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	}
 	void EntriesListModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const PackageProject::KPPRRequirementEntry* entry = GetDataEntry(row);
+		const PackageProject::RequirementItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -158,7 +158,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				case ColumnID::CurrentVersion:
 				{
-					wxString operatorName = KPackageProject::OperatorToSymbolicName(entry->GetRVFunction());
+					wxString operatorName = ModPackageProject::OperatorToSymbolicName(entry->GetRVFunction());
 					wxString cv = entry->GetCurrentVersion();
 					wxString rv = entry->GetRequiredVersion();
 	
@@ -170,7 +170,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					KxFormat format("%1 %2 %3");
 					format(m_ObjectFunctionEditor->GetItems()[entry->GetObjectFunction()]);
 					format(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
-					format(entry->GetObjectFunctionResult() == PackageProject::KPPReqState::True);
+					format(entry->GetObjectFunctionResult() == PackageProject::ReqState::True);
 	
 					value = format.ToString();
 					break;
@@ -190,7 +190,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	}
 	bool EntriesListModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 	{
-		PackageProject::KPPRRequirementEntry* entry = GetDataEntry(row);
+		PackageProject::RequirementItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -200,7 +200,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					entry->ResetCurrentVersion();
 					entry->ResetObjectFunctionResult();
 	
-					entry->TrySetTypeDescriptor(data.As<PackageProject::KPPRTypeDescriptor>());
+					entry->TrySetTypeDescriptor(data.As<PackageProject::ReqType>());
 					ChangeNotify();
 					break;
 				}
@@ -248,7 +248,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				{
 					entry->ResetObjectFunctionResult();
 	
-					entry->SetObjectFunction(data.As<PackageProject::KPPRObjectFunction>());
+					entry->SetObjectFunction(data.As<PackageProject::ObjectFunction>());
 					ChangeNotify();
 					break;
 				}
@@ -274,7 +274,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			case ColumnID::RequiredState:
 			case ColumnID::Object:
 			{
-				if (PackageProject::KPPRRequirementEntry* entry = GetDataEntry(row))
+				if (PackageProject::RequirementItem* entry = GetDataEntry(row))
 				{
 					return entry->IsUserEditable();
 				}
@@ -285,7 +285,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	}
 	bool EntriesListModel::GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const
 	{
-		const PackageProject::KPPRRequirementEntry* entry = GetDataEntry(row);
+		const PackageProject::RequirementItem* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -317,7 +317,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	{
 		KxDataViewItem item = event.GetItem();
 		KxDataViewColumn* column = event.GetColumn();
-		PackageProject::KPPRRequirementEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+		PackageProject::RequirementItem* entry = GetDataEntry(GetRow(event.GetItem()));
 	
 		if (column)
 		{
@@ -336,14 +336,14 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 						KxMenu menu;
 						for (int i = PackageProject::KPP_OPERATOR_MIN; i < PackageProject::KPP_OPERATOR_COUNT_COMPARISON; i++)
 						{
-							KxMenuItem* item = menu.Add(new KxMenuItem(i, KPackageProject::OperatorToSymbolicName((PackageProject::KPPOperator)i), wxEmptyString, wxITEM_CHECK));
+							KxMenuItem* item = menu.Add(new KxMenuItem(i, ModPackageProject::OperatorToSymbolicName((PackageProject::Operator)i), wxEmptyString, wxITEM_CHECK));
 							item->Check(i == entry->GetRVFunction());
 						}
 	
 						wxWindowID id = menu.Show(GetView(), GetView()->GetDropdownMenuPosition(item, column) + wxPoint(0, 1));
 						if (id != KxID_NONE)
 						{
-							entry->SetRVFunction((PackageProject::KPPOperator)id);
+							entry->SetRVFunction((PackageProject::Operator)id);
 							NotifyChangedItem(item);
 						}
 					}
@@ -390,7 +390,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			case ColumnID::RequiredState:
 			case ColumnID::Object:
 			{
-				PackageProject::KPPRRequirementEntry* entry = GetDataEntry(GetRow(event.GetItem()));
+				PackageProject::RequirementItem* entry = GetDataEntry(GetRow(event.GetItem()));
 				if (entry && !entry->IsUserEditable())
 				{
 					event.Veto();
@@ -403,7 +403,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	void EntriesListModel::OnContextMenuItem(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const PackageProject::KPPRRequirementEntry* entry = GetDataEntry(GetRow(item));
+		const PackageProject::RequirementItem* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -502,7 +502,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	
 	void EntriesListModel::OnAddEntry()
 	{
-		GetDataVector()->emplace_back(new PackageProject::KPPRRequirementEntry(PackageProject::KPPR_TYPE_USER));
+		GetDataVector()->emplace_back(new PackageProject::RequirementItem(PackageProject::KPPR_TYPE_USER));
 	
 		KxDataViewItem item = GetItem(GetItemCount() - 1);
 		NotifyAddedItem(item);
@@ -518,7 +518,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 		ClearItemsAndNotify(*GetDataVector());
 	}
 	
-	void EntriesListModel::SetProject(KPackageProject& projectData)
+	void EntriesListModel::SetProject(ModPackageProject& projectData)
 	{
 		m_Requirements = &projectData.GetRequirements();
 	}

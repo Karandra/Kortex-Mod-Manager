@@ -64,7 +64,7 @@ namespace Kortex
 	{
 		return path.IsEmpty() || (path.Length() >= 2 && path[1] == wxS(':'));
 	}
-	wxString IPackageManager::GetRequirementFilePath(const PackageProject::KPPRRequirementEntry* entry)
+	wxString IPackageManager::GetRequirementFilePath(const PackageProject::RequirementItem* entry)
 	{
 		wxString path = KVarExp(entry->GetObject());
 		if (IsPathAbsolute(path))
@@ -78,17 +78,17 @@ namespace Kortex
 		}
 	}
 
-	PackageProject::KPPReqState IPackageManager::CheckRequirementState(const PackageProject::KPPRRequirementEntry* entry)
+	PackageProject::ReqState IPackageManager::CheckRequirementState(const PackageProject::RequirementItem* entry)
 	{
 		using namespace PackageDesigner;
 		using namespace PackageProject;
 
-		KPPRObjectFunction objectFunc = entry->GetObjectFunction();
+		ObjectFunction objectFunc = entry->GetObjectFunction();
 		switch (objectFunc)
 		{
 			case KPPR_OBJFUNC_NONE:
 			{
-				return KPPReqState::True;
+				return ReqState::True;
 			}
 			case KPPR_OBJFUNC_MOD_ACTIVE:
 			case KPPR_OBJFUNC_MOD_INACTIVE:
@@ -96,9 +96,9 @@ namespace Kortex
 				if (!entry->GetID().IsEmpty())
 				{
 					bool isActive = IModManager::GetInstance()->IsModActive(entry->GetID());
-					return (KPPReqState)(objectFunc == KPPR_OBJFUNC_MOD_ACTIVE ? isActive : !isActive);
+					return (ReqState)(objectFunc == KPPR_OBJFUNC_MOD_ACTIVE ? isActive : !isActive);
 				}
-				return KPPReqState::False;
+				return ReqState::False;
 			}
 			case KPPR_OBJFUNC_PLUGIN_ACTIVE:
 			case KPPR_OBJFUNC_PLUGIN_INACTIVE:
@@ -114,11 +114,11 @@ namespace Kortex
 						}
 
 						bool isActive = manager->IsPluginActive(entry->GetObject());
-						return (KPPReqState)(objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? isActive : !isActive);
+						return (ReqState)(objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE ? isActive : !isActive);
 					}
-					return KPPReqState::Unknown;
+					return ReqState::Unknown;
 				}
-				return KPPReqState::False;
+				return ReqState::False;
 			}
 			case KPPR_OBJFUNC_FILE_EXIST:
 			case KPPR_OBJFUNC_FILE_NOT_EXIST:
@@ -126,14 +126,14 @@ namespace Kortex
 				if (!entry->GetObject().IsEmpty())
 				{
 					bool isExist = KxFile(GetRequirementFilePath(entry)).IsExist();
-					return (KPPReqState)(objectFunc == KPPR_OBJFUNC_FILE_EXIST ? isExist : !isExist);
+					return (ReqState)(objectFunc == KPPR_OBJFUNC_FILE_EXIST ? isExist : !isExist);
 				}
-				return KPPReqState::False;
+				return ReqState::False;
 			}
 		};
-		return KPPReqState::Unknown;
+		return ReqState::Unknown;
 	}
-	KxVersion IPackageManager::GetRequirementVersionFromBinaryFile(const PackageProject::KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersionFromBinaryFile(const PackageProject::RequirementItem* entry)
 	{
 		KxVersion version;
 
@@ -180,7 +180,7 @@ namespace Kortex
 		}
 		return version;
 	}
-	KxVersion IPackageManager::GetRequirementVersionFromModManager(const PackageProject::KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersionFromModManager(const PackageProject::RequirementItem* entry)
 	{
 		const IGameMod* modEntry = IModManager::GetInstance()->FindModByID(entry->GetID());
 		if (modEntry)
@@ -189,20 +189,20 @@ namespace Kortex
 		}
 		return KxNullVersion;
 	}
-	KxVersion IPackageManager::GetRequirementVersion(const PackageProject::KPPRRequirementEntry* entry)
+	KxVersion IPackageManager::GetRequirementVersion(const PackageProject::RequirementItem* entry)
 	{
 		KxVersion modVersion = GetRequirementVersionFromModManager(entry);
 		return modVersion.IsOK() ? modVersion : GetRequirementVersionFromBinaryFile(entry);
 	}
 
-	void IPackageManager::LoadRequirementsGroup(PackageProject::KPPRRequirementsGroup& group, const KxXMLNode& rootNode)
+	void IPackageManager::LoadRequirementsGroup(PackageProject::RequirementGroup& group, const KxXMLNode& rootNode)
 	{
 		using namespace PackageDesigner;
 		using namespace PackageProject;
 
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			auto& entry = group.GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>(KPPR_TYPE_SYSTEM));
+			auto& entry = group.GetEntries().emplace_back(std::make_unique<RequirementItem>(KPPR_TYPE_SYSTEM));
 			entry->SetID(KVarExp(node.GetAttribute("ID")));
 			entry->SetCategory(KVarExp(node.GetAttribute("Category")));
 			entry->SetName(KVarExp(node.GetFirstChildElement("Name").GetValue()));
@@ -210,12 +210,12 @@ namespace Kortex
 			// Object
 			KxXMLNode objectNode = node.GetFirstChildElement("Object");
 			entry->SetObject(objectNode.GetValue());
-			entry->SetObjectFunction(KPackageProjectRequirements::StringToObjectFunction(objectNode.GetAttribute("Function")));
+			entry->SetObjectFunction(RequirementsSection::StringToObjectFunction(objectNode.GetAttribute("Function")));
 
 			// Version
 			KxXMLNode versionNode = node.GetFirstChildElement("Version");
 			entry->SetRequiredVersion(versionNode.GetValue());
-			entry->SetRVFunction(KPackageProject::StringToOperator(versionNode.GetAttribute("Function"), false, KPackageProjectRequirements::ms_DefaultVersionOperator));
+			entry->SetRVFunction(ModPackageProject::StringToOperator(versionNode.GetAttribute("Function"), false, RequirementsSection::ms_DefaultVersionOperator));
 			entry->SetBinaryVersionKind(versionNode.GetAttribute("BinaryVersionKind"));
 
 			// Description

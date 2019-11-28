@@ -8,7 +8,7 @@
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectInfo: public KPackageProjectPart
+	class InfoSection: public ProjectSection
 	{
 		private:
 			wxString m_Name;
@@ -24,8 +24,8 @@ namespace Kortex::PackageProject
 			ModTagStore m_TagStore;
 	
 		public:
-			KPackageProjectInfo(KPackageProject& project);
-			virtual ~KPackageProjectInfo();
+			InfoSection(ModPackageProject& project);
+			virtual ~InfoSection();
 	
 		public:
 			const wxString& GetName() const

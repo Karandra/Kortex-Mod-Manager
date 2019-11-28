@@ -33,20 +33,20 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			};
 	
 		private:
-			std::variant<PackageProject::KPPCStep*, PackageProject::KPPCGroup*, PackageProject::KPPCEntry*, EntryID> m_Value;
+			std::variant<PackageProject::ComponentStep*, PackageProject::ComponentGroup*, PackageProject::ComponentItem*, EntryID> m_Value;
 			ComponentsModelNode* m_Parent = nullptr;
 			Vector m_Children;
 	
 		public:
-			ComponentsModelNode(PackageProject::KPPCStep* value)
+			ComponentsModelNode(PackageProject::ComponentStep* value)
 				:m_Value(value)
 			{
 			}
-			ComponentsModelNode(PackageProject::KPPCGroup* value, ComponentsModelNode* parent)
+			ComponentsModelNode(PackageProject::ComponentGroup* value, ComponentsModelNode* parent)
 				:m_Value(value), m_Parent(parent)
 			{
 			}
-			ComponentsModelNode(PackageProject::KPPCEntry* value, ComponentsModelNode* parent)
+			ComponentsModelNode(PackageProject::ComponentItem* value, ComponentsModelNode* parent)
 				:m_Value(value), m_Parent(parent)
 			{
 			}
@@ -56,19 +56,19 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 	
 		public:
-			PackageProject::KPPCStep* GetStep() const
+			PackageProject::ComponentStep* GetStep() const
 			{
-				auto value = std::get_if<PackageProject::KPPCStep*>(&m_Value);
+				auto value = std::get_if<PackageProject::ComponentStep*>(&m_Value);
 				return value ? *value : nullptr;
 			}
-			PackageProject::KPPCGroup* GetGroup() const
+			PackageProject::ComponentGroup* GetGroup() const
 			{
-				auto value = std::get_if<PackageProject::KPPCGroup*>(&m_Value);
+				auto value = std::get_if<PackageProject::ComponentGroup*>(&m_Value);
 				return value ? *value : nullptr;
 			}
-			PackageProject::KPPCEntry* GetEntry() const
+			PackageProject::ComponentItem* GetEntry() const
 			{
-				auto value = std::get_if<PackageProject::KPPCEntry*>(&m_Value);
+				auto value = std::get_if<PackageProject::ComponentItem*>(&m_Value);
 				return value ? *value : nullptr;
 			}
 	

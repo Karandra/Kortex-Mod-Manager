@@ -7,11 +7,11 @@
 
 namespace Kortex::PackageProject
 {
-	KPackageProjectInfo::KPackageProjectInfo(KPackageProject& project)
-		:KPackageProjectPart(project)
+	InfoSection::InfoSection(ModPackageProject& project)
+		:ProjectSection(project)
 	{
 	}
-	KPackageProjectInfo::~KPackageProjectInfo()
+	InfoSection::~InfoSection()
 	{
 	}
 }

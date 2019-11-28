@@ -15,8 +15,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		protected:
 			WorkspaceDocument* m_Controller = nullptr;
-			KPackageProject& m_Project;
-			PackageProject::KPPCConditionGroup& m_ConditionGroup;
+			ModPackageProject& m_Project;
+			PackageProject::ConditionGroup& m_ConditionGroup;
 	
 			KxDataViewComboBoxEditor* m_LabelEditor = nullptr;
 			KxDataViewComboBoxEditor* m_ValueEditor = nullptr;
@@ -39,16 +39,16 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void OnActivateItem(KxDataViewEvent& event);
 			void OnContextMenu(KxDataViewEvent& event);
 	
-			void OnAddFlag(PackageProject::KPPCCondition& condition);
+			void OnAddFlag(PackageProject::Condition& condition);
 			void OnAddCondition();
-			void OnRemoveFlag(PackageProject::KPPCCondition& condition, PackageProject::KPPCFlagEntry& flag);
-			void OnRemoveCondition(PackageProject::KPPCCondition& condition);
+			void OnRemoveFlag(PackageProject::Condition& condition, PackageProject::FlagItem& flag);
+			void OnRemoveCondition(PackageProject::Condition& condition);
 			void OnRemoveAllConditions();
 			
 			int AskRemoveOption() const;
 			bool DoTrackID(wxString trackedID, const wxString& newID, bool remove) const;
-			void DoRemoveFlag(PackageProject::KPPCCondition& condition, PackageProject::KPPCFlagEntry& flag);
-			void DoRemoveCondition(PackageProject::KPPCCondition& condition);
+			void DoRemoveFlag(PackageProject::Condition& condition, PackageProject::FlagItem& flag);
+			void DoRemoveCondition(PackageProject::Condition& condition);
 	
 		protected:
 			IDTracker* GetTracker()
@@ -68,19 +68,19 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void RemoveEmptyConditions();
 	
 		public:
-			ConditionGroupModel(WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup);
+			ConditionGroupModel(WorkspaceDocument* controller, PackageProject::ConditionGroup& conditionGroup);
 	
 		public:
-			KxDataViewItem MakeItem(const PackageProject::KPPCFlagEntry& flag) const
+			KxDataViewItem MakeItem(const PackageProject::FlagItem& flag) const
 			{
 				return KxDataViewItem(static_cast<const wxObject*>(&flag));
 			}
-			KxDataViewItem MakeItem(const PackageProject::KPPCCondition& condition) const
+			KxDataViewItem MakeItem(const PackageProject::Condition& condition) const
 			{
 				return KxDataViewItem(static_cast<const wxObject*>(&condition));
 			}
-			PackageProject::KPPCFlagEntry* GetFlagEntry(const KxDataViewItem& item) const;
-			PackageProject::KPPCCondition* GetConditionEntry(const KxDataViewItem& item) const;
+			PackageProject::FlagItem* GetFlagEntry(const KxDataViewItem& item) const;
+			PackageProject::Condition* GetConditionEntry(const KxDataViewItem& item) const;
 	
 			void RefreshItems() override;
 	};
@@ -109,7 +109,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void LoadWindowSizes();
 	
 		public:
-			ConditionGroupDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup);
+			ConditionGroupDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::ConditionGroup& conditionGroup);
 			virtual ~ConditionGroupDialog();
 	
 		public:
@@ -123,7 +123,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		private:
 			KxComboBox* m_NewTypeDescriptorCB = nullptr;
-			PackageProject::KPPCEntry& m_Entry;
+			PackageProject::ComponentItem& m_Entry;
 	
 		private:
 			wxWindow* GetDialogFocusCtrl() const override
@@ -133,7 +133,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			void OnSelectNewTypeDescriptor(wxCommandEvent& event);
 	
 		public:
-			ConditionGroupDialogWithTypeDescriptor(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup, PackageProject::KPPCEntry& entry);
+			ConditionGroupDialogWithTypeDescriptor(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::ConditionGroup& conditionGroup, PackageProject::ComponentItem& entry);
 			virtual ~ConditionGroupDialogWithTypeDescriptor();
 	};
 }

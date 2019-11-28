@@ -81,7 +81,7 @@ namespace Kortex::PackageDesigner
 	{
 	}
 
-	KPackageProject& ListModel::GetProject() const
+	ModPackageProject& ListModel::GetProject() const
 	{
 		return *m_Controller->GetProject();
 	}

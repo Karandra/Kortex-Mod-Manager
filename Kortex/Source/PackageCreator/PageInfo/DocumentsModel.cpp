@@ -188,7 +188,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 		m_InfoData = nullptr;
 		VectorModel::SetDataVector();
 	}
-	void DocumentsModel::SetDataVector(VectorType& data, PackageProject::KPackageProjectInfo* info)
+	void DocumentsModel::SetDataVector(VectorType& data, PackageProject::InfoSection* info)
 	{
 		m_InfoData = info;
 		VectorModel::SetDataVector(&data);

@@ -6,48 +6,48 @@
 
 namespace Kortex
 {
-	class KPackageProject;
+	class ModPackageProject;
 }
 
 namespace Kortex::PackageProject
 {
-	class KPPRRequirementEntry;
+	class RequirementItem;
 
-	class KPackageProjectSerializerSMI: public KPackageProjectSerializer
+	class LegacySerializer: public Serializer
 	{
 		private:
 			KxVersion m_ProjectVersion;
-			KPackageProject* m_Project = nullptr;
+			ModPackageProject* m_Project = nullptr;
 			wxString m_Data;
 			KxXMLDocument m_XML;
-	
+			
 		private:
 			wxString ConvertMultiLine(const wxString& source) const;
 			wxString ConvertVariable(const wxString& sOldVariable) const;
 			void AddSite(const wxString& url);
-			void FixRequirementID(KPPRRequirementEntry* entry) const;
+			void FixRequirementID(RequirementItem* entry) const;
 			bool IsComponentsUsed() const;
 			void ReadInterface3x4x5x(const wxString& sLogoNodeName);
 			void ReadFiles3x4x();
-	
+			
 		private:
 			KxVersion ReadBase();
 			void ReadConfig();
-	
+			
 			// 3.0+
 			void ReadInfo3x();
 			void ReadFiles3x();
 			void ReadInterface3x();
 			void ReadRequirements3x();
 			void ReadComponents3x();
-	
+			
 			// 4.0+
 			void ReadInfo4x();
 			void ReadFiles4x();
 			void ReadInterface4x();
 			void ReadRequirements4x();
 			void ReadComponents4x();
-	
+			
 			// 5.0+
 			void ReadInfo5x();
 			void ReadInterface5x();
@@ -57,11 +57,11 @@ namespace Kortex::PackageProject
 			void ReadINI5x();
 	
 		public:
-			void Serialize(const KPackageProject* project) override
+			void Serialize(const ModPackageProject* project) override
 			{
 			}
-			void Structurize(KPackageProject* project) override;
-	
+			void Structurize(ModPackageProject* project) override;
+			
 			const wxString& GetData() const
 			{
 				return m_Data;

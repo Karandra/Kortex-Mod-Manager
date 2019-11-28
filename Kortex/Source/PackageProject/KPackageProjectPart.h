@@ -4,29 +4,29 @@
 
 namespace Kortex
 {
-	class KPackageProject;
+	class ModPackageProject;
 }
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectPart
+	class ProjectSection
 	{
 		private:
-			KPackageProject& m_Project;
+			ModPackageProject& m_Project;
 	
 		public:
-			KPackageProjectPart(KPackageProject& project)
+			ProjectSection(ModPackageProject& project)
 				:m_Project(project)
 			{
 			}
-			virtual ~KPackageProjectPart() = default;
+			virtual ~ProjectSection() = default;
 	
 		public:
-			KPackageProject& GetProject()
+			ModPackageProject& GetProject()
 			{
 				return m_Project;
 			}
-			const KPackageProject& GetProject() const
+			const ModPackageProject& GetProject() const
 			{
 				return m_Project;
 			}

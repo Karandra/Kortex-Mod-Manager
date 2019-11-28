@@ -21,65 +21,65 @@ namespace
 
 namespace Kortex::PackageProject
 {
-	wxString KPPCFlagEntry::GetDeletedFlagPrefix()
+	wxString FlagItem::GetDeletedFlagPrefix()
 	{
 		return wxS("DELETED_");
 	}
 	
-	KPPCFlagEntry::KPPCFlagEntry(const wxString& value, const wxString& name)
+	FlagItem::FlagItem(const wxString& value, const wxString& name)
 		:KLabeledValue(value, name)
 	{
 	}
-	KPPCFlagEntry::~KPPCFlagEntry()
+	FlagItem::~FlagItem()
 	{
 	}
 }
 
 namespace Kortex::PackageProject
 {
-	KPPCEntry::KPPCEntry()
-		:m_TypeDescriptorDefault(KPackageProjectComponents::ms_DefaultTypeDescriptor)
+	ComponentItem::ComponentItem()
+		:m_TypeDescriptorDefault(ComponentsSection::ms_DefaultTypeDescriptor)
 	{
 	}
-	KPPCEntry::~KPPCEntry()
-	{
-	}
-}
-
-namespace Kortex::PackageProject
-{
-	KPPCGroup::KPPCGroup()
-		:m_SelectionMode(KPackageProjectComponents::ms_DefaultSelectionMode)
-	{
-	}
-	KPPCGroup::~KPPCGroup()
+	ComponentItem::~ComponentItem()
 	{
 	}
 }
 
 namespace Kortex::PackageProject
 {
-	KPPCStep::KPPCStep()
+	ComponentGroup::ComponentGroup()
+		:m_SelectionMode(ComponentsSection::ms_DefaultSelectionMode)
 	{
 	}
-	KPPCStep::~KPPCStep()
-	{
-	}
-}
-
-namespace Kortex::PackageProject
-{
-	KPPCConditionalStep::KPPCConditionalStep()
-	{
-	}
-	KPPCConditionalStep::~KPPCConditionalStep()
+	ComponentGroup::~ComponentGroup()
 	{
 	}
 }
 
 namespace Kortex::PackageProject
 {
-	KPPCTypeDescriptor KPackageProjectComponents::StringToTypeDescriptor(const wxString& name, KPPCTypeDescriptor default)
+	ComponentStep::ComponentStep()
+	{
+	}
+	ComponentStep::~ComponentStep()
+	{
+	}
+}
+
+namespace Kortex::PackageProject
+{
+	ConditionalComponentStep::ConditionalComponentStep()
+	{
+	}
+	ConditionalComponentStep::~ConditionalComponentStep()
+	{
+	}
+}
+
+namespace Kortex::PackageProject
+{
+	TypeDescriptor ComponentsSection::StringToTypeDescriptor(const wxString& name, TypeDescriptor default)
 	{
 		if (name == KPPC_DESCRIPTOR_OPTIONAL_STRING)
 		{
@@ -103,7 +103,7 @@ namespace Kortex::PackageProject
 		}
 		return default;
 	}
-	wxString KPackageProjectComponents::TypeDescriptorToString(KPPCTypeDescriptor type)
+	wxString ComponentsSection::TypeDescriptorToString(TypeDescriptor type)
 	{
 		switch (type)
 		{
@@ -130,12 +130,12 @@ namespace Kortex::PackageProject
 		};
 		return wxEmptyString;
 	}
-	wxString KPackageProjectComponents::TypeDescriptorToTranslation(KPPCTypeDescriptor type)
+	wxString ComponentsSection::TypeDescriptorToTranslation(TypeDescriptor type)
 	{
-		return KTr(KxString::Format("PackageCreator.PageComponents.TypeDescriptor.%1", KPackageProjectComponents::TypeDescriptorToString(type)));
+		return KTr(KxString::Format("PackageCreator.PageComponents.TypeDescriptor.%1", ComponentsSection::TypeDescriptorToString(type)));
 	}
 	
-	KPPCSelectionMode KPackageProjectComponents::StringToSelectionMode(const wxString& name)
+	SelectionMode ComponentsSection::StringToSelectionMode(const wxString& name)
 	{
 		if (name == KPPC_SELECT_ANY_STRING)
 		{
@@ -159,7 +159,7 @@ namespace Kortex::PackageProject
 		}
 		return ms_DefaultSelectionMode;
 	}
-	wxString KPackageProjectComponents::SelectionModeToString(KPPCSelectionMode type)
+	wxString ComponentsSection::SelectionModeToString(SelectionMode type)
 	{
 		switch (type)
 		{
@@ -186,12 +186,12 @@ namespace Kortex::PackageProject
 		};
 		return wxEmptyString;
 	}
-	wxString KPackageProjectComponents::SelectionModeToTranslation(KPPCSelectionMode type)
+	wxString ComponentsSection::SelectionModeToTranslation(SelectionMode type)
 	{
 		return KTr(KxString::Format("PackageCreator.PageComponents.SelectionMode.%1", SelectionModeToString(type)));
 	}
 	
-	KxStringVector KPackageProjectComponents::GetFlagsAttributes(FlagAttribute index) const
+	KxStringVector ComponentsSection::GetFlagsAttributes(FlagAttribute index) const
 	{
 		KxStringVector outList;
 	
@@ -218,7 +218,7 @@ namespace Kortex::PackageProject
 			{
 				for (const auto& entry: group->GetEntries())
 				{
-					for (const KPPCFlagEntry& flagEntry: entry->GetConditionalFlags().GetFlags())
+					for (const FlagItem& flagEntry: entry->GetConditionalFlags().GetFlags())
 					{
 						outList.push_back(index == FlagAttribute::Name ? flagEntry.GetName() : flagEntry.GetValue());
 					}
@@ -231,19 +231,19 @@ namespace Kortex::PackageProject
 		return outList;
 	}
 	
-	KPackageProjectComponents::KPackageProjectComponents(KPackageProject& project)
-		:KPackageProjectPart(project)
+	ComponentsSection::ComponentsSection(ModPackageProject& project)
+		:ProjectSection(project)
 	{
 	}
-	KPackageProjectComponents::~KPackageProjectComponents()
+	ComponentsSection::~ComponentsSection()
 	{
 	}
 	
-	KxStringVector KPackageProjectComponents::GetFlagsNames() const
+	KxStringVector ComponentsSection::GetFlagsNames() const
 	{
 		return GetFlagsAttributes(FlagAttribute::Name);
 	}
-	KxStringVector KPackageProjectComponents::GetFlagsValues() const
+	KxStringVector ComponentsSection::GetFlagsValues() const
 	{
 		return GetFlagsAttributes(FlagAttribute::Value);
 	}

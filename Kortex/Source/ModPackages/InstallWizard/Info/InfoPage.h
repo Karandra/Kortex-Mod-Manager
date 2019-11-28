@@ -35,7 +35,7 @@ namespace Kortex::InstallWizard
 			UI::WebView m_DocumentAdvanced;
 
 			KxThumbView* m_ScreenshotsView = nullptr;
-			std::unordered_map<int, const PackageProject::KPPIImageEntry*> m_ImagesMap;
+			std::unordered_map<int, const PackageProject::ImageItem*> m_ImagesMap;
 			int m_CurrentImageIndex = -1;
 
 			bool m_PageVisited = false;
@@ -47,10 +47,10 @@ namespace Kortex::InstallWizard
 			wxWindow* CreateDocumentsTab();
 			wxWindow* CreateScreenshotsTab();
 
-			void LoadInfoTab(const KPackageProject& package);
-			void LoadDescriptionTab(const KPackageProject& package);
-			void LoadDocumentsTab(const KPackageProject& package);
-			void LoadScreenshotsTab(const KPackageProject& package);
+			void LoadInfoTab(const ModPackageProject& package);
+			void LoadDescriptionTab(const ModPackageProject& package);
+			void LoadDocumentsTab(const ModPackageProject& package);
+			void LoadScreenshotsTab(const ModPackageProject& package);
 			
 			void OnTabOpened(wxAuiNotebookEvent& event);
 			void OnSelectDocument(int index, bool useAdvancedEditor = false);

@@ -31,45 +31,22 @@ namespace Kortex::PackageProject
 		constexpr auto OR_STRING = wxS("OR");
 	}
 
-	KxStringVector CreateOperatorList(const std::initializer_list<PackageProject::KPPOperator>& operators, bool names)
+	KxStringVector CreateOperatorList(const std::initializer_list<PackageProject::Operator>& operators, bool names)
 	{
 		KxStringVector list;
 		list.reserve(operators.size());
 
-		for (PackageProject::KPPOperator value : operators)
+		for (PackageProject::Operator value : operators)
 		{
-			list.push_back(names ? KPackageProject::OperatorToString(value) : KPackageProject::OperatorToSymbolicName(value));
+			list.push_back(names ? ModPackageProject::OperatorToString(value) : ModPackageProject::OperatorToSymbolicName(value));
 		}
 		return list;
 	}
 }
 
-namespace Kortex::PackageProject
-{
-	void KPackageProjectConditionChecker::operator()(bool value, KPPOperator operatorType)
-	{
-		if (m_IsFirstElement)
-		{
-			m_Result = value;
-			m_IsFirstElement = false;
-		}
-		else
-		{
-			if (operatorType == KPP_OPERATOR_OR)
-			{
-				m_Result = value || m_Result;
-			}
-			else
-			{
-				m_Result = value && m_Result;
-			}
-		}
-	}
-}
-
 namespace Kortex
 {
-	wxString KPackageProject::OperatorToSymbolicName(PackageProject::KPPOperator operatorType)
+	wxString ModPackageProject::OperatorToSymbolicName(PackageProject::Operator operatorType)
 	{
 		using namespace PackageProject;
 
@@ -110,7 +87,7 @@ namespace Kortex
 		};
 		return OperatorConst::NONE;
 	}
-	wxString KPackageProject::OperatorToString(PackageProject::KPPOperator operatorType)
+	wxString ModPackageProject::OperatorToString(PackageProject::Operator operatorType)
 	{
 		using namespace PackageProject;
 
@@ -151,7 +128,7 @@ namespace Kortex
 		};
 		return OperatorConst::NONE_STRING;
 	}
-	PackageProject::KPPOperator KPackageProject::StringToOperator(const wxString& name, bool allowNone, PackageProject::KPPOperator default)
+	PackageProject::Operator ModPackageProject::StringToOperator(const wxString& name, bool allowNone, PackageProject::Operator default)
 	{
 		using namespace PackageProject;
 
@@ -194,16 +171,16 @@ namespace Kortex
 		return default;
 	}
 	
-	KxStringVector KPackageProject::CreateOperatorSymNamesList(const std::initializer_list<PackageProject::KPPOperator>& operators)
+	KxStringVector ModPackageProject::CreateOperatorSymNamesList(const std::initializer_list<PackageProject::Operator>& operators)
 	{
 		return CreateOperatorList(operators, false);
 	}
-	KxStringVector KPackageProject::CreateOperatorNamesList(const std::initializer_list<PackageProject::KPPOperator>& operators)
+	KxStringVector ModPackageProject::CreateOperatorNamesList(const std::initializer_list<PackageProject::Operator>& operators)
 	{
 		return CreateOperatorList(operators, true);
 	}
 	
-	KPackageProject::KPackageProject()
+	ModPackageProject::ModPackageProject()
 		:m_Config(*this),
 		m_Info(*this),
 		m_FileData(*this),
@@ -215,15 +192,15 @@ namespace Kortex
 		m_TargetProfileID(IGameInstance::GetActive()->GetGameID())
 	{
 	}
-	KPackageProject::~KPackageProject()
+	ModPackageProject::~ModPackageProject()
 	{
 	}
 	
-	void KPackageProject::SetModID(const wxString& id)
+	void ModPackageProject::SetModID(const wxString& id)
 	{
 		m_ModID = id;
 	}
-	wxString KPackageProject::GetModID() const
+	wxString ModPackageProject::GetModID() const
 	{
 		// ID -> Name -> translated name -> package file name
 		if (!m_ModID.IsEmpty())
@@ -249,7 +226,7 @@ namespace Kortex
 		}
 		return wxEmptyString;
 	}
-	wxString KPackageProject::GetModName() const
+	wxString ModPackageProject::GetModName() const
 	{
 		// Name -> translated name -> ID (using 'GetModID')
 		const wxString& name = GetInfo().GetName();
@@ -268,8 +245,31 @@ namespace Kortex
 		}
 		return wxEmptyString;
 	}
-	wxString KPackageProject::GetSignature() const
+	wxString ModPackageProject::GetSignature() const
 	{
 		return Kortex::ModManager::BasicGameMod::GetSignatureFromID(GetModID());
+	}
+}
+
+namespace Kortex::PackageProject
+{
+	void ConditionChecker::operator()(bool value, Operator operatorType)
+	{
+		if (m_IsFirstElement)
+		{
+			m_Result = value;
+			m_IsFirstElement = false;
+		}
+		else
+		{
+			if (operatorType == KPP_OPERATOR_OR)
+			{
+				m_Result = value || m_Result;
+			}
+			else
+			{
+				m_Result = value && m_Result;
+			}
+		}
 	}
 }

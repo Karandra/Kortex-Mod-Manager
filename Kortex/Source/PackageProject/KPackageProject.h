@@ -9,36 +9,17 @@
 #include "KPackageProjectDefs.h"
 #include <KxFramework/KxVersion.h>
 
-namespace Kortex::PackageProject
-{
-	class KPackageProjectConditionChecker final
-	{
-		private:
-			bool m_Result = false;
-			bool m_IsFirstElement = true;
-	
-		public:
-			void operator()(bool value, KPPOperator operatorType);
-			
-		public:
-			bool GetResult() const
-			{
-				return m_Result;
-			}
-	};
-}
-
 namespace Kortex
 {
-	class KPackageProject
+	class ModPackageProject
 	{
 		public:
-			static wxString OperatorToSymbolicName(PackageProject::KPPOperator operatorType);
-			static wxString OperatorToString(PackageProject::KPPOperator operatorType);
-			static PackageProject::KPPOperator StringToOperator(const wxString& name, bool allowNone, PackageProject::KPPOperator default);
+			static wxString OperatorToSymbolicName(PackageProject::Operator operatorType);
+			static wxString OperatorToString(PackageProject::Operator operatorType);
+			static PackageProject::Operator StringToOperator(const wxString& name, bool allowNone, PackageProject::Operator default);
 	
-			static KxStringVector CreateOperatorSymNamesList(const std::initializer_list<PackageProject::KPPOperator>& operators);
-			static KxStringVector CreateOperatorNamesList(const std::initializer_list<PackageProject::KPPOperator>& operators);
+			static KxStringVector CreateOperatorSymNamesList(const std::initializer_list<PackageProject::Operator>& operators);
+			static KxStringVector CreateOperatorNamesList(const std::initializer_list<PackageProject::Operator>& operators);
 	
 		private:
 			KxVersion m_FormatVersion;
@@ -46,16 +27,16 @@ namespace Kortex
 			wxString m_ModID;
 	
 			// Project parts
-			PackageProject::KPackageProjectConfig m_Config;
-			PackageProject::KPackageProjectInfo m_Info;
-			PackageProject::KPackageProjectFileData m_FileData;
-			PackageProject::KPackageProjectInterface m_Interface;
-			PackageProject::KPackageProjectRequirements m_Requirements;
-			PackageProject::KPackageProjectComponents m_Components;
+			PackageProject::ConfigSection m_Config;
+			PackageProject::InfoSection m_Info;
+			PackageProject::FileDataSection m_FileData;
+			PackageProject::InterfaceSection m_Interface;
+			PackageProject::RequirementsSection m_Requirements;
+			PackageProject::ComponentsSection m_Components;
 	
 		public:
-			KPackageProject();
-			virtual ~KPackageProject();
+			ModPackageProject();
+			virtual ~ModPackageProject();
 	
 		public:
 			const KxVersion& GetFormatVersion() const
@@ -81,58 +62,77 @@ namespace Kortex
 			wxString GetModName() const;
 			wxString GetSignature() const;
 	
-			PackageProject::KPackageProjectConfig& GetConfig()
+			PackageProject::ConfigSection& GetConfig()
 			{
 				return m_Config;
 			}
-			const PackageProject::KPackageProjectConfig& GetConfig() const
+			const PackageProject::ConfigSection& GetConfig() const
 			{
 				return m_Config;
 			}
 			
-			PackageProject::KPackageProjectInfo& GetInfo()
+			PackageProject::InfoSection& GetInfo()
 			{
 				return m_Info;
 			}
-			const PackageProject::KPackageProjectInfo& GetInfo() const
+			const PackageProject::InfoSection& GetInfo() const
 			{
 				return m_Info;
 			}
 			
-			PackageProject::KPackageProjectFileData& GetFileData()
+			PackageProject::FileDataSection& GetFileData()
 			{
 				return m_FileData;
 			}
-			const PackageProject::KPackageProjectFileData& GetFileData() const
+			const PackageProject::FileDataSection& GetFileData() const
 			{
 				return m_FileData;
 			}
 			
-			PackageProject::KPackageProjectInterface& GetInterface()
+			PackageProject::InterfaceSection& GetInterface()
 			{
 				return m_Interface;
 			}
-			const PackageProject::KPackageProjectInterface& GetInterface() const
+			const PackageProject::InterfaceSection& GetInterface() const
 			{
 				return m_Interface;
 			}
 			
-			PackageProject::KPackageProjectRequirements& GetRequirements()
+			PackageProject::RequirementsSection& GetRequirements()
 			{
 				return m_Requirements;
 			}
-			const PackageProject::KPackageProjectRequirements& GetRequirements() const
+			const PackageProject::RequirementsSection& GetRequirements() const
 			{
 				return m_Requirements;
 			}
 			
-			PackageProject::KPackageProjectComponents& GetComponents()
+			PackageProject::ComponentsSection& GetComponents()
 			{
 				return m_Components;
 			}
-			const PackageProject::KPackageProjectComponents& GetComponents() const
+			const PackageProject::ComponentsSection& GetComponents() const
 			{
 				return m_Components;
+			}
+	};
+}
+
+namespace Kortex::PackageProject
+{
+	class ConditionChecker final
+	{
+		private:
+			bool m_Result = false;
+			bool m_IsFirstElement = true;
+
+		public:
+			void operator()(bool value, Operator operatorType);
+
+		public:
+			bool GetResult() const
+			{
+				return m_Result;
 			}
 	};
 }

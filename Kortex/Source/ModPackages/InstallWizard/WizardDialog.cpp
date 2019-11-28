@@ -130,8 +130,8 @@ namespace Kortex::InstallWizard
 	{
 		if (m_Package->IsOK() && m_Package->IsTypeSupported())
 		{
-			const PackageProject::KPackageProjectInfo& info = GetConfig().GetInfo();
-			const PackageProject::KPackageProjectInterface& interfaceConfig = GetConfig().GetInterface();
+			const PackageProject::InfoSection& info = GetConfig().GetInfo();
+			const PackageProject::InterfaceSection& interfaceConfig = GetConfig().GetInterface();
 
 			// Window caption
 			SetCaption(KTrf("InstallWizard.WindowCaption", m_Package->GetName()) + ' ' + info.GetVersion());
@@ -185,7 +185,7 @@ namespace Kortex::InstallWizard
 	void WizardDialog::AcceptExistingMod(const IGameMod& mod)
 	{
 		// Info
-		PackageProject::KPackageProjectInfo& packageInfo = GetConfig().GetInfo();
+		PackageProject::InfoSection& packageInfo = GetConfig().GetInfo();
 
 		// Tags
 		packageInfo.GetTagStore() = mod.GetTagStore();
@@ -208,8 +208,8 @@ namespace Kortex::InstallWizard
 	}
 	void WizardDialog::LoadHeaderImage()
 	{
-		const PackageProject::KPackageProjectInterface& interfaceConfig = m_Package->GetConfig().GetInterface();
-		if (const PackageProject::KPPIImageEntry* pHeaderImage = interfaceConfig.GetHeaderImageEntry())
+		const PackageProject::InterfaceSection& interfaceConfig = m_Package->GetConfig().GetInterface();
+		if (const PackageProject::ImageItem* pHeaderImage = interfaceConfig.GetHeaderImageEntry())
 		{
 			if (pHeaderImage->HasBitmap())
 			{
@@ -332,7 +332,7 @@ namespace Kortex::InstallWizard
 		m_Mod->SetInstallTime(wxDateTime::Now());
 		m_Mod->SetPackageFile(m_Package->GetPackageFilePath());
 	}
-	KxUInt32Vector WizardDialog::GetFilesOfFolder(const PackageProject::KPPFFolderEntry* folder) const
+	KxUInt32Vector WizardDialog::GetFilesOfFolder(const PackageProject::FolderItem* folder) const
 	{
 		KxUInt32Vector indexes;
 		const wxString path = folder->GetSource();
@@ -346,7 +346,7 @@ namespace Kortex::InstallWizard
 		}
 		return indexes;
 	}
-	wxString WizardDialog::GetFinalPath(uint32_t index, const wxString& installLocation, const PackageProject::KPPFFileEntry* fileEntry) const
+	wxString WizardDialog::GetFinalPath(uint32_t index, const wxString& installLocation, const PackageProject::FileItem* fileEntry) const
 	{
 		// Remove "in archive" source path from final file path
 		wxString path = GetArchive().GetItemName(index).Remove(0, fileEntry->GetSource().Length());
@@ -368,7 +368,7 @@ namespace Kortex::InstallWizard
 
 		return installLocation + wxS('\\') + path;
 	}
-	KxStringVector WizardDialog::GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const PackageProject::KPPFFolderEntry* folder) const
+	KxStringVector WizardDialog::GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const PackageProject::FolderItem* folder) const
 	{
 		KxStringVector finalPaths;
 		for (uint32_t index : filePaths)
@@ -398,14 +398,14 @@ namespace Kortex::InstallWizard
 		};
 
 		size_t processed = 0;
-		const PackageProject::KPPFFileEntryRefArray& installableFiles = m_PageInstallation.GetInstallableFiles();
-		for (const PackageProject::KPPFFileEntry* fileEntry: installableFiles)
+		const PackageProject::FileItem::RefVector& installableFiles = m_PageInstallation.GetInstallableFiles();
+		for (const PackageProject::FileItem* fileEntry: installableFiles)
 		{
 			if (m_PageInstallation.m_InstallThread->CanContinue())
 			{
 				NotifyMajor(processed, installableFiles.size(), fileEntry->GetSource());
 
-				if (const PackageProject::KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
+				if (const PackageProject::FolderItem* folderEntry = fileEntry->ToFolderItem())
 				{
 					KxUInt32Vector filesIndexes = GetFilesOfFolder(folderEntry);
 					KxStringVector finalPaths = GetFinalPaths(filesIndexes, installLocation, folderEntry);

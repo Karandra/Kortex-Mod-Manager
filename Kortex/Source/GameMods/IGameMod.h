@@ -8,7 +8,7 @@
 
 namespace Kortex
 {
-	class KPackageProject;
+	class ModPackageProject;
 	class FileTreeNode;
 	class ModTagStore;
 	class ModSourceStore;
@@ -48,7 +48,7 @@ namespace Kortex
 
 			virtual bool LoadUsingSignature(const wxString& signature) = 0;
 			virtual bool LoadUsingID(const wxString& id);
-			virtual bool CreateFromProject(const KPackageProject& config);
+			virtual bool CreateFromProject(const ModPackageProject& config);
 			
 			intptr_t GetPriority() const
 			{

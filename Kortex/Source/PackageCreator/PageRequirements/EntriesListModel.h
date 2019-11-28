@@ -5,11 +5,11 @@
 
 namespace Kortex::PackageDesigner::PageRequirementsNS
 {
-	class EntriesListModel: public VectorModel<PackageProject::KPPRRequirementEntry::Vector>
+	class EntriesListModel: public VectorModel<PackageProject::RequirementItem::Vector>
 	{
 		private:
-			PackageProject::KPackageProjectRequirements* m_Requirements = nullptr;
-			PackageProject::KPPRRequirementsGroup* m_Group = nullptr;
+			PackageProject::RequirementsSection* m_Requirements = nullptr;
+			PackageProject::RequirementGroup* m_Group = nullptr;
 	
 			KxDataViewComboBoxEditor* m_TypeEditor = nullptr;
 			KxDataViewComboBoxEditor* m_OperatorEditor = nullptr;
@@ -39,18 +39,18 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			}
 	
 		public:
-			void SetProject(KPackageProject& projectData);
+			void SetProject(ModPackageProject& projectData);
 			
-			PackageProject::KPPRRequirementsGroup* GetRequirementsGroup()
+			PackageProject::RequirementGroup* GetRequirementsGroup()
 			{
 				return m_Group;
 			}
-			void SetRequirementsGroup(PackageProject::KPPRRequirementsGroup* group)
+			void SetRequirementsGroup(PackageProject::RequirementGroup* group)
 			{
 				m_Group = group;
 			}
 	
-			PackageProject::KPPRRequirementEntry* GetDataEntry(size_t index) const
+			PackageProject::RequirementItem* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{

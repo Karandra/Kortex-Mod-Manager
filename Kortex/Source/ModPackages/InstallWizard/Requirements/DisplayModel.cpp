@@ -17,7 +17,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 {
 	wxAny DisplayModel::GetValue(const Node& node, const Column& column) const
 	{
-		const PackageProject::KPPRRequirementEntry& item = GetItem(node);
+		const PackageProject::RequirementItem& item = GetItem(node);
 		switch (column.GetID<ColumnRef>())
 		{
 			case ColumnRef::Name:
@@ -47,14 +47,14 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 				{
 					wxString cv = item.GetCurrentVersion().ToString();
 					wxString rv = item.GetRequiredVersion().ToString();
-					wxString operatorSymbol = KPackageProject::OperatorToSymbolicName(item.GetRVFunction());
+					wxString operatorSymbol = ModPackageProject::OperatorToSymbolicName(item.GetRVFunction());
 					return KxDataView2::BitmapTextValue(KxString::Format("%1 %2 %3", cv, operatorSymbol, rv), icon);
 				}
 			}
 			case ColumnRef::ObjectState:
 			{
 				const wxString& object = item.GetObject();
-				PackageProject::KPPRObjectFunction objectFunc = item.GetObjectFunction();
+				PackageProject::ObjectFunction objectFunc = item.GetObjectFunction();
 				wxBitmap icon = GetIconByState(item.GetObjectFunctionResult());
 				const bool objFunction = objectFunc == PackageProject::KPPR_OBJFUNC_FILE_EXIST || objectFunc == PackageProject::KPPR_OBJFUNC_FILE_NOT_EXIST;
 
@@ -65,7 +65,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 				}
 				else
 				{
-					wxString label = KTr("PackageCreator.PageRequirements.RequiredState." + PackageProject::KPackageProjectRequirements::ObjectFunctionToString(objectFunc));
+					wxString label = KTr("PackageCreator.PageRequirements.RequiredState." + PackageProject::RequirementsSection::ObjectFunctionToString(objectFunc));
 					if (!object.IsEmpty())
 					{
 						return KxDataView2::BitmapTextValue(KxString::Format("%1: \"%2\"", label, object), icon);
@@ -81,7 +81,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 	}
 	auto DisplayModel::GetToolTip(const Node& node, const Column& column) const -> ToolTip
 	{
-		const PackageProject::KPPRRequirementEntry& item = GetItem(node);
+		const PackageProject::RequirementItem& item = GetItem(node);
 		if (const wxString& text = item.GetDescription(); !text.IsEmpty())
 		{
 			return ToolTip(GetValue(node, column).As<KxDataView2::BitmapTextValue>().GetText(), text);
@@ -93,15 +93,15 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 		return false;
 	}
 
-	wxBitmap DisplayModel::GetIconByState(PackageProject::KPPReqState state) const
+	wxBitmap DisplayModel::GetIconByState(PackageProject::ReqState state) const
 	{
 		switch (state)
 		{
-			case PackageProject::KPPReqState::False:
+			case PackageProject::ReqState::False:
 			{
 				return ImageProvider::GetBitmap(ImageResourceID::CrossCircleFrame);
 			}
-			case PackageProject::KPPReqState::Unknown:
+			case PackageProject::ReqState::Unknown:
 			{
 				return ImageProvider::GetBitmap(ImageResourceID::Exclamation);
 			}
@@ -135,7 +135,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 		m_Items.clear();
 		for (const wxString& id: groupIDs)
 		{
-			PackageProject::KPPRRequirementsGroup* group = m_Page.GetPackageConfig().GetRequirements().FindGroupWithID(id);
+			PackageProject::RequirementGroup* group = m_Page.GetPackageConfig().GetRequirements().FindGroupWithID(id);
 			if (group)
 			{
 				for (const auto& entry: group->GetEntries())

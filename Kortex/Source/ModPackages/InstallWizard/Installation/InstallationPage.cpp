@@ -78,8 +78,8 @@ namespace Kortex::InstallWizard
 		if (mod->Save())
 		{
 			// Save main or header image
-			const PackageProject::KPackageProjectInterface& interfaceConfig = GetPackageConfig().GetInterface();
-			const PackageProject::KPPIImageEntry* imageEntry = interfaceConfig.GetMainImageEntry();
+			const PackageProject::InterfaceSection& interfaceConfig = GetPackageConfig().GetInterface();
+			const PackageProject::ImageItem* imageEntry = interfaceConfig.GetMainImageEntry();
 			imageEntry = imageEntry ? imageEntry : interfaceConfig.GetHeaderImageEntry();
 			if (imageEntry && imageEntry->HasBitmap())
 			{
@@ -179,7 +179,7 @@ namespace Kortex::InstallWizard
 		{
 			for (const wxString& id: list)
 			{
-				PackageProject::KPPFFileEntry* entry = GetPackageConfig().GetFileData().FindEntryWithID(id);
+				PackageProject::FileItem* entry = GetPackageConfig().GetFileData().FindEntryWithID(id);
 				if (entry)
 				{
 					if (pushBack)
@@ -218,7 +218,7 @@ namespace Kortex::InstallWizard
 			{
 				for (const StepStackItem& step: componentsPage.GetInstallSteps())
 				{
-					for (const PackageProject::KPPCEntry* entry: step.GetChecked())
+					for (const PackageProject::ComponentItem* entry: step.GetChecked())
 					{
 						AddFilesFromList(entry->GetFileData());
 					}
@@ -255,9 +255,9 @@ namespace Kortex::InstallWizard
 		// Sort arrays with non-default priorities.
 		// Merge the two arrays. First sorted, then unsorted.
 
-		PackageProject::KPPFFileEntryRefArray defaultPriority;
-		PackageProject::KPPFFileEntryRefArray nonDefaultPriority;
-		for (PackageProject::KPPFFileEntry* entry: m_InstallableFiles)
+		PackageProject::FileItem::RefVector defaultPriority;
+		PackageProject::FileItem::RefVector nonDefaultPriority;
+		for (PackageProject::FileItem* entry: m_InstallableFiles)
 		{
 			if (entry->IsDefaultPriority())
 			{
@@ -270,18 +270,18 @@ namespace Kortex::InstallWizard
 		}
 
 		// Sort non-default
-		std::sort(nonDefaultPriority.begin(), nonDefaultPriority.end(), [](const PackageProject::KPPFFileEntry* entry1, const PackageProject::KPPFFileEntry* entry2)
+		std::sort(nonDefaultPriority.begin(), nonDefaultPriority.end(), [](const PackageProject::FileItem* entry1, const PackageProject::FileItem* entry2)
 		{
 			return entry1->GetPriority() < entry2->GetPriority();
 		});
 
 		// Merge back
 		m_InstallableFiles.clear();
-		for (PackageProject::KPPFFileEntry* entry: nonDefaultPriority)
+		for (PackageProject::FileItem* entry: nonDefaultPriority)
 		{
 			m_InstallableFiles.push_back(entry);
 		}
-		for (PackageProject::KPPFFileEntry* entry: defaultPriority)
+		for (PackageProject::FileItem* entry: defaultPriority)
 		{
 			m_InstallableFiles.push_back(entry);
 		}

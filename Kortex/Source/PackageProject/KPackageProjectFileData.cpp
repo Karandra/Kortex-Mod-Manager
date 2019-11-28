@@ -7,15 +7,15 @@
 
 namespace Kortex::PackageProject
 {
-	KPPFFileEntry::KPPFFileEntry()
-		:m_Priority(KPackageProjectFileData::ms_DefaultPriority)
+	FileItem::FileItem()
+		:m_Priority(FileDataSection::ms_DefaultPriority)
 	{
 	}
-	KPPFFileEntry::~KPPFFileEntry()
+	FileItem::~FileItem()
 	{
 	}
 	
-	void KPPFFileEntry::MakeUniqueID()
+	void FileItem::MakeUniqueID()
 	{
 		if (m_ID.IsEmpty())
 		{
@@ -27,41 +27,41 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	bool KPPFFileEntry::IsDefaultPriority() const
+	bool FileItem::IsDefaultPriority() const
 	{
-		return m_Priority == KPackageProjectFileData::ms_DefaultPriority;
+		return m_Priority == FileDataSection::ms_DefaultPriority;
 	}
-	int32_t KPPFFileEntry::GetPriority() const
+	int32_t FileItem::GetPriority() const
 	{
 		return m_Priority;
 	}
-	void KPPFFileEntry::SetPriority(int32_t value)
+	void FileItem::SetPriority(int32_t value)
 	{
-		m_Priority = KPackageProjectFileData::CorrectPriority(value);
+		m_Priority = FileDataSection::CorrectPriority(value);
 	}
 }
 
 namespace Kortex::PackageProject
 {
-	KPPFFolderEntry::KPPFFolderEntry()
+	FolderItem::FolderItem()
 	{
 	}
-	KPPFFolderEntry::~KPPFFolderEntry()
+	FolderItem::~FolderItem()
 	{
 	}
 }
 
 namespace Kortex::PackageProject
 {
-	bool KPackageProjectFileData::IsPriorityValid(int32_t value)
+	bool FileDataSection::IsPriorityValid(int32_t value)
 	{
-		return value >= KPackageProjectFileData::ms_MinUserPriority && value <= KPackageProjectFileData::ms_MaxUserPriority;
+		return value >= FileDataSection::ms_MinUserPriority && value <= FileDataSection::ms_MaxUserPriority;
 	}
-	int32_t KPackageProjectFileData::CorrectPriority(int32_t value)
+	int32_t FileDataSection::CorrectPriority(int32_t value)
 	{
 		return std::clamp(value, ms_MinUserPriority, ms_MaxUserPriority);
 	}
-	bool KPackageProjectFileData::IsFileIDValid(const wxString& id)
+	bool FileDataSection::IsFileIDValid(const wxString& id)
 	{
 		if (!id.IsEmpty() && !KAux::HasForbiddenFileNameChars(id))
 		{
@@ -71,18 +71,18 @@ namespace Kortex::PackageProject
 		return false;
 	}
 	
-	KPackageProjectFileData::KPackageProjectFileData(KPackageProject& project)
-		:KPackageProjectPart(project)
+	FileDataSection::FileDataSection(ModPackageProject& project)
+		:ProjectSection(project)
 	{
 	}
-	KPackageProjectFileData::~KPackageProjectFileData()
+	FileDataSection::~FileDataSection()
 	{
 	}
 	
-	KPPFFileEntry* KPackageProjectFileData::FindEntryWithID(const wxString& id, size_t* index) const
+	FileItem* FileDataSection::FindEntryWithID(const wxString& id, size_t* index) const
 	{
 		const wxString idLower = KxString::ToLower(id);
-		auto it = std::find_if(m_Data.cbegin(), m_Data.cend(), [&idLower](const KPPFFileEntryArray::value_type& entry)
+		auto it = std::find_if(m_Data.cbegin(), m_Data.cend(), [&idLower](const FileItem::Vector::value_type& entry)
 		{
 			return KxString::ToLower(entry->GetID()) == idLower;
 		});

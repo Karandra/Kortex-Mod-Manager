@@ -10,7 +10,7 @@ namespace Kortex
 }
 namespace Kortex::PackageProject
 {
-	class KPackageProjectSerializer;
+	class Serializer;
 }
 
 namespace Kortex::PackageDesigner
@@ -24,7 +24,7 @@ namespace Kortex::PackageDesigner
 
 		private:
 			Workspace& m_Workspace;
-			std::unique_ptr<KPackageProject> m_Project = nullptr;
+			std::unique_ptr<ModPackageProject> m_Project = nullptr;
 			wxString m_ProjectFile;
 			bool m_HasChanges = false;
 
@@ -42,7 +42,7 @@ namespace Kortex::PackageDesigner
 			using KxIObject::QueryInterface;
 			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override;
 
-			KPackageProject* GetProject() const
+			ModPackageProject* GetProject() const
 			{
 				return m_Project.get();
 			}
@@ -71,8 +71,8 @@ namespace Kortex::PackageDesigner
 			void SaveProject(const wxString& filePath);
 			void ImportProjectFromPackage(const wxString& packagePath);
 			void CreateProjectFromModEntry(const Kortex::IGameMod& modEntry);
-			void ImportProject(PackageProject::KPackageProjectSerializer& serializer);
-			void ExportProject(PackageProject::KPackageProjectSerializer& serializer);
+			void ImportProject(PackageProject::Serializer& serializer);
+			void ExportProject(PackageProject::Serializer& serializer);
 			void BuildProject(bool buildPreview = false);
 
 			void Reload();

@@ -82,7 +82,7 @@ namespace Kortex::ModManager
 		}
 
 		// Convert BB code
-		path = PackageProject::KPackageProjectSerializer::ConvertBBCode(path);
+		path = PackageProject::Serializer::ConvertBBCode(path);
 		return path;
 	}
 

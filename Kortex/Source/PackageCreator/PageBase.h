@@ -10,7 +10,7 @@ class KxTextBox;
 namespace Kortex
 {
 	class WorkspaceDocument;
-	class KPackageProject;
+	class ModPackageProject;
 }
 
 namespace Kortex::PackageDesigner
@@ -30,7 +30,7 @@ namespace Kortex::PackageDesigner
 			bool OnCloseWorkspace() override;
 			void OnReloadWorkspace() override;
 
-			KPackageProject* GetProject() const;
+			ModPackageProject* GetProject() const;
 
 		public:
 			PageBase(Workspace& mainWorkspace, WorkspaceDocument& controller);

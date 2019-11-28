@@ -30,29 +30,29 @@ namespace Kortex::PackageProject
 {
 	namespace
 	{
-		wxString ToFOModOperator(KPPOperator value)
+		wxString ToFOModOperator(Operator value)
 		{
 			return value == KPP_OPERATOR_OR ? wxS("Or") : wxS("And");
 		}
-		KPPOperator FromFOModOperator(const wxString& value)
+		Operator FromFOModOperator(const wxString& value)
 		{
 			return value == wxS("Or") ? KPP_OPERATOR_OR : KPP_OPERATOR_AND;
 		}
 	
-		void WriteCondition(const KPPCCondition& condition, KxXMLNode& conditionNode)
+		void WriteCondition(const Condition& condition, KxXMLNode& conditionNode)
 		{
-			for (const KPPCFlagEntry& flag: condition.GetFlags())
+			for (const FlagItem& flag: condition.GetFlags())
 			{
 				KxXMLNode entryNode = conditionNode.NewElement("flagDependency");
 				entryNode.SetAttribute("flag", flag.GetName());
 				entryNode.SetAttribute("value", flag.GetValue());
 			}
 		}
-		void WriteConditionGroup(const KPPCConditionGroup& conditionGroup, KxXMLNode& groupNode)
+		void WriteConditionGroup(const ConditionGroup& conditionGroup, KxXMLNode& groupNode)
 		{
 			groupNode.SetAttribute("operator", ToFOModOperator(conditionGroup.GetOperator()));
 	
-			const KPPCCondition::Vector& conditions = conditionGroup.GetConditions();
+			const Condition::Vector& conditions = conditionGroup.GetConditions();
 			if (conditions.size() == 1)
 			{
 				if (conditions.front().HasFlags())
@@ -62,7 +62,7 @@ namespace Kortex::PackageProject
 			}
 			else
 			{
-				for (const KPPCCondition& condition: conditions)
+				for (const Condition& condition: conditions)
 				{
 					if (condition.HasFlags())
 					{
@@ -72,17 +72,17 @@ namespace Kortex::PackageProject
 			}
 		}
 	
-		void ReadAssignedFlags(KPPCCondition& condition, const KxXMLNode& conditionNode)
+		void ReadAssignedFlags(Condition& condition, const KxXMLNode& conditionNode)
 		{
 			for (KxXMLNode node = conditionNode.GetFirstChildElement("flag"); node.IsOK(); node = node.GetNextSiblingElement("flag"))
 			{
 				condition.GetFlags().emplace_back(node.GetValue(), node.GetAttribute("name"));
 			}
 		}
-		void WriteAssignedFlags(const KPPCCondition& condition, KxXMLNode& conditionNode)
+		void WriteAssignedFlags(const Condition& condition, KxXMLNode& conditionNode)
 		{
 			conditionNode.SetAttribute("operator", ToFOModOperator(condition.GetOperator()));
-			for (const KPPCFlagEntry& flag : condition.GetFlags())
+			for (const FlagItem& flag : condition.GetFlags())
 			{
 				KxXMLNode entryNode = conditionNode.NewElement("flag");
 				entryNode.SetValue(flag.GetValue());
@@ -90,22 +90,22 @@ namespace Kortex::PackageProject
 			}
 		}
 	
-		void ReadCompositeDependenciesAux(KPackageProject& project,
+		void ReadCompositeDependenciesAux(ModPackageProject& project,
 										  const KxXMLNode& dependenciesNode,
-										  KPPCConditionGroup* conditionGroup,
-										  KPPCEntry* componentEntry,
+										  ConditionGroup* conditionGroup,
+										  ComponentItem* componentEntry,
 										  bool alwaysCreateReqGroup,
 										  const wxString& createdReqGroupID,
-										  KPPRRequirementsGroup*& requirementsGroup
+										  RequirementGroup*& requirementsGroup
 		)
 		{
-			KPPOperator operatorType = FromFOModOperator(dependenciesNode.GetAttribute("operator"));
+			Operator operatorType = FromFOModOperator(dependenciesNode.GetAttribute("operator"));
 	
 			auto CreateOrGetRequirementsGroup = [&project, &createdReqGroupID, &requirementsGroup, operatorType]()
 			{
 				if (!requirementsGroup)
 				{
-					requirementsGroup = project.GetRequirements().GetGroups().emplace_back(new KPPRRequirementsGroup()).get();
+					requirementsGroup = project.GetRequirements().GetGroups().emplace_back(new RequirementGroup()).get();
 					requirementsGroup->SetID(createdReqGroupID);
 					requirementsGroup->SetOperator(operatorType);
 				}
@@ -118,12 +118,12 @@ namespace Kortex::PackageProject
 	
 			for (KxXMLNode depNode = dependenciesNode.GetFirstChildElement(); depNode.IsOK(); depNode = depNode.GetNextSiblingElement())
 			{
-				std::unique_ptr<KPPRRequirementEntry> reqEntry;
+				std::unique_ptr<RequirementItem> reqEntry;
 	
 				wxString name = depNode.GetName();
 				if (name == "fileDependency")
 				{
-					reqEntry = std::make_unique<KPPRRequirementEntry>();
+					reqEntry = std::make_unique<RequirementItem>();
 					reqEntry->SetObject(depNode.GetAttribute("file"));
 	
 					// FOMod support only these three required states
@@ -147,10 +147,10 @@ namespace Kortex::PackageProject
 				}
 				else if (name == "gameDependency")
 				{
-					reqEntry = std::make_unique<KPPRRequirementEntry>();
+					reqEntry = std::make_unique<RequirementItem>();
 	
 					// Copy std requirement for current game and set required version from FOMod
-					const KPPRRequirementEntry* stdEntry = IPackageManager::GetInstance()->FindStdReqirement(Kortex::IGameInstance::GetActive()->GetGameID());
+					const RequirementItem* stdEntry = IPackageManager::GetInstance()->FindStdReqirement(Kortex::IGameInstance::GetActive()->GetGameID());
 	
 					// This check probably redundant, but just in case
 					if (stdEntry)
@@ -167,7 +167,7 @@ namespace Kortex::PackageProject
 				{
 					// Although it's named 'fose' I will interpret this as generic Script Extender requirement.
 					// What else can I do? Check game ID and continue only if it's Fallout 3?
-					reqEntry = std::make_unique<KPPRRequirementEntry>();
+					reqEntry = std::make_unique<RequirementItem>();
 	
 					// There may be no Script Extender
 					if (auto se = IPackageManager::GetInstance()->TryGetComponent<PackageDesigner::IWithScriptExtender>())
@@ -243,17 +243,17 @@ namespace Kortex::PackageProject
 				componentEntry->GetRequirements().emplace_back(requirementsGroup->GetID());
 			}
 		}
-		KPPRRequirementsGroup* ReadCompositeDependencies(KPackageProject& project,
+		RequirementGroup* ReadCompositeDependencies(ModPackageProject& project,
 														 const KxXMLNode& dependenciesNode,
-														 KPPCConditionGroup* conditionGroup,
-														 KPPCEntry* componentsEntry,
+														 ConditionGroup* conditionGroup,
+														 ComponentItem* componentsEntry,
 														 bool alwaysCreateReqGroup = false,
 														 const wxString& createdReqGroupID = wxEmptyString
 		)
 		{
 			// If we have child dependencies read them all to condition group.
 			// Else read them from this node.
-			KPPRRequirementsGroup* requirementsGroup = nullptr;
+			RequirementGroup* requirementsGroup = nullptr;
 			KxXMLNode childDependenciesNode = dependenciesNode.GetFirstChildElement("dependencies");
 			if (childDependenciesNode.IsOK())
 			{
@@ -294,7 +294,7 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	wxString KPackageProjectSerializerFOMod::GetDataFolderName(bool withSeparator) const
+	wxString FOModSerializer::GetDataFolderName(bool withSeparator) const
 	{
 		wxString folder;
 		if (m_IsMorrowind)
@@ -312,7 +312,7 @@ namespace Kortex::PackageProject
 		}
 		return folder;
 	}
-	wxString KPackageProjectSerializerFOMod::MakeProjectPath(const wxString& path) const
+	wxString FOModSerializer::MakeProjectPath(const wxString& path) const
 	{
 		if (!path.IsEmpty())
 		{
@@ -325,24 +325,24 @@ namespace Kortex::PackageProject
 		}
 		return wxEmptyString;
 	}
-	KPPCSelectionMode KPackageProjectSerializerFOMod::ConvertSelectionMode(const wxString& mode) const
+	SelectionMode FOModSerializer::ConvertSelectionMode(const wxString& mode) const
 	{
 		// Remove 'Select' (first 6 chars) from string and use internal conversion function.
-		return KPackageProjectComponents::StringToSelectionMode(wxString(mode).Remove(0, 6));
+		return ComponentsSection::StringToSelectionMode(wxString(mode).Remove(0, 6));
 	}
-	wxString KPackageProjectSerializerFOMod::ConvertSelectionMode(KPPCSelectionMode mode) const
+	wxString FOModSerializer::ConvertSelectionMode(SelectionMode mode) const
 	{
 		// Append internal conversion function result to 'Select'
-		return wxS("Select") + KPackageProjectComponents::SelectionModeToString(mode);
+		return wxS("Select") + ComponentsSection::SelectionModeToString(mode);
 	}
 	
 	/* Structurize */
-	void KPackageProjectSerializerFOMod::ReadInfo()
+	void FOModSerializer::ReadInfo()
 	{
 		KxXMLNode infoNode = m_XML.QueryElement("fomod");
 		if (infoNode.IsOK())
 		{
-			KPackageProjectInfo& info = m_ProjectLoad->GetInfo();
+			InfoSection& info = m_ProjectLoad->GetInfo();
 	
 			// Basic info
 			info.SetName(infoNode.GetFirstChildElement("Name").GetValue());
@@ -397,12 +397,12 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void KPackageProjectSerializerFOMod::ReadInstallSteps()
+	void FOModSerializer::ReadInstallSteps()
 	{
-		KPackageProjectInfo& info = m_ProjectLoad->GetInfo();
-		KPackageProjectInterface& interfaceConfig = m_ProjectLoad->GetInterface();
-		KPackageProjectRequirements& requirements = m_ProjectLoad->GetRequirements();
-		KPackageProjectComponents& components = m_ProjectLoad->GetComponents();
+		InfoSection& info = m_ProjectLoad->GetInfo();
+		InterfaceSection& interfaceConfig = m_ProjectLoad->GetInterface();
+		RequirementsSection& requirements = m_ProjectLoad->GetRequirements();
+		ComponentsSection& components = m_ProjectLoad->GetComponents();
 	
 		KxXMLNode configRootNode = m_XML.QueryElement("config");
 		if (configRootNode.IsOK())
@@ -428,7 +428,7 @@ namespace Kortex::PackageProject
 				}
 	
 				// Read title customization
-				KPPITitleConfig& titleConfig = interfaceConfig.GetTitleConfig();
+				TitleConfig& titleConfig = interfaceConfig.GetTitleConfig();
 	
 				int64_t color = moduleNameNode.GetAttributeInt("colour", -1);
 				if (color != -1)
@@ -459,7 +459,7 @@ namespace Kortex::PackageProject
 			KxXMLNode headerImageNode = configRootNode.GetFirstChildElement("moduleImage");
 			if (headerImageNode.IsOK())
 			{
-				KPPIImageEntry& entry = interfaceConfig.GetImages().emplace_back();
+				ImageItem& entry = interfaceConfig.GetImages().emplace_back();
 				entry.SetPath(MakeProjectPath(headerImageNode.GetAttribute("path")));
 				entry.SetVisible(headerImageNode.GetAttributeBool("showImage", true));
 				entry.SetFadeEnabled(headerImageNode.GetAttributeBool("showFade", entry.IsVisible()));
@@ -474,13 +474,13 @@ namespace Kortex::PackageProject
 			{
 				moduleReqsNode = configRootNode.GetFirstChildElement("moduleDependencies");
 			}
-			KPPRRequirementsGroup* mainReqsGroup = ReadCompositeDependencies(*m_ProjectLoad, moduleReqsNode, nullptr, nullptr, true, "Main");
+			RequirementGroup* mainReqsGroup = ReadCompositeDependencies(*m_ProjectLoad, moduleReqsNode, nullptr, nullptr, true, "Main");
 			if (mainReqsGroup)
 			{
 				// If main requirements group is empty - add current game with no required version
 				if (mainReqsGroup->GetEntries().empty())
 				{
-					KPPRRequirementEntry* entry = mainReqsGroup->GetEntries().emplace_back(std::make_unique<KPPRRequirementEntry>()).get();
+					RequirementItem* entry = mainReqsGroup->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
 					entry->SetID(Kortex::IGameInstance::GetActive()->GetGameID());
 					entry->ConformToTypeDescriptor();
 				}
@@ -494,7 +494,7 @@ namespace Kortex::PackageProject
 			wxString stepsOrder = tInstallStepsArrayNode.GetAttribute("order");
 			for (KxXMLNode stepNode = tInstallStepsArrayNode.GetFirstChildElement("installStep"); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement("installStep"))
 			{
-				KPPCStep* step = steps.emplace_back(std::make_unique<KPPCStep>()).get();
+				ComponentStep* step = steps.emplace_back(std::make_unique<ComponentStep>()).get();
 				step->SetName(stepNode.GetAttribute("name"));
 	
 				// Step conditions
@@ -512,7 +512,7 @@ namespace Kortex::PackageProject
 				{
 					for (KxXMLNode groupNode = optionalFileGroupsNode.GetFirstChildElement("group"); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement("group"))
 					{
-						KPPCGroup* group = step->GetGroups().emplace_back(std::make_unique<KPPCGroup>()).get();
+						ComponentGroup* group = step->GetGroups().emplace_back(std::make_unique<ComponentGroup>()).get();
 						group->SetName(groupNode.GetAttribute("name"));
 						group->SetSelectionMode(ConvertSelectionMode(groupNode.GetAttribute("type")));
 	
@@ -521,7 +521,7 @@ namespace Kortex::PackageProject
 	
 						for (KxXMLNode pluginNode = pluginsArrayNode.GetFirstChildElement("plugin"); pluginNode.IsOK(); pluginNode = pluginNode.GetNextSiblingElement("plugin"))
 						{
-							KPPCEntry* entry = group->GetEntries().emplace_back(std::make_unique<KPPCEntry>()).get();
+							ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
 							entry->SetName(pluginNode.GetAttribute("name"));
 	
 							// Description
@@ -532,7 +532,7 @@ namespace Kortex::PackageProject
 							wxString pluginImage = MakeProjectPath(pluginNode.GetFirstChildElement("image").GetAttribute("path"));
 							if (!pluginImage.IsEmpty())
 							{
-								interfaceConfig.GetImages().emplace_back(KPPIImageEntry(pluginImage, wxEmptyString, true));
+								interfaceConfig.GetImages().emplace_back(ImageItem(pluginImage, wxEmptyString, true));
 								entry->SetImage(pluginImage);
 							}
 	
@@ -543,7 +543,7 @@ namespace Kortex::PackageProject
 							{
 								// Simple variant
 								wxString typeDescriptor = typeDescriptorNode.GetAttribute("name");
-								entry->SetTDDefaultValue(KPackageProjectComponents::StringToTypeDescriptor(typeDescriptor));
+								entry->SetTDDefaultValue(ComponentsSection::StringToTypeDescriptor(typeDescriptor));
 							}
 							else if (typeDescriptorNodeName == "dependencyType")
 							{
@@ -552,8 +552,8 @@ namespace Kortex::PackageProject
 								// By scheme there may be multiple 'pattern' nodes inside 'patterns' but I haven't seen any FOMod that uses such configuration
 								// nor there is any sense in doing this.
 								KxXMLNode node = typeDescriptorNode.GetFirstChildElement("patterns").GetFirstChildElement("pattern");
-								entry->SetTDDefaultValue(KPackageProjectComponents::StringToTypeDescriptor(typeDescriptorNode.GetFirstChildElement("defaultType").GetAttribute("name")));
-								entry->SetTDConditionalValue(KPackageProjectComponents::StringToTypeDescriptor(node.GetFirstChildElement("type").GetAttribute("name")));
+								entry->SetTDDefaultValue(ComponentsSection::StringToTypeDescriptor(typeDescriptorNode.GetFirstChildElement("defaultType").GetAttribute("name")));
+								entry->SetTDConditionalValue(ComponentsSection::StringToTypeDescriptor(node.GetFirstChildElement("type").GetAttribute("name")));
 	
 								wxString reqGroupID = KxString::Format("%1::%2::%3", step->GetName(), group->GetName(), entry->GetName());
 								ReadCompositeDependencies(*m_ProjectLoad, node.GetFirstChildElement("dependencies"), &entry->GetTDConditionGroup(), entry, false, reqGroupID);
@@ -586,16 +586,16 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	void KPackageProjectSerializerFOMod::ReadConditionalSteps(const KxXMLNode& stepsArrayNode)
+	void FOModSerializer::ReadConditionalSteps(const KxXMLNode& stepsArrayNode)
 	{
-		KPackageProjectRequirements& requirements = m_ProjectLoad->GetRequirements();
-		KPackageProjectComponents& components = m_ProjectLoad->GetComponents();
+		RequirementsSection& requirements = m_ProjectLoad->GetRequirements();
+		ComponentsSection& components = m_ProjectLoad->GetComponents();
 		auto& tConditionalSteps = components.GetConditionalSteps();
 	
 		size_t index = 1;
 		for (KxXMLNode stepNode = stepsArrayNode.GetFirstChildElement("pattern"); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement("pattern"))
 		{
-			KPPCConditionalStep* step = tConditionalSteps.emplace_back(std::make_unique<KPPCConditionalStep>()).get();
+			ConditionalComponentStep* step = tConditionalSteps.emplace_back(std::make_unique<ConditionalComponentStep>()).get();
 	
 			// Files
 			for (const auto& v: ReadFileData(stepNode.GetFirstChildElement("files")))
@@ -604,35 +604,35 @@ namespace Kortex::PackageProject
 			}
 	
 			// Conditions
-			KPPRRequirementsGroup* reqSet = ReadCompositeDependencies(*m_ProjectLoad, stepNode.GetFirstChildElement("dependencies"), &step->GetConditionGroup(), nullptr);
+			RequirementGroup* reqSet = ReadCompositeDependencies(*m_ProjectLoad, stepNode.GetFirstChildElement("dependencies"), &step->GetConditionGroup(), nullptr);
 			if (reqSet)
 			{
 				reqSet->SetID(KxString::Format("ConditionalStep#%1", index));
-				step->GetConditionGroup().GetOrCreateFirstCondition().GetFlags().emplace_back(KPPCFlagEntry("true", reqSet->GetFlagName()));
+				step->GetConditionGroup().GetOrCreateFirstCondition().GetFlags().emplace_back(FlagItem("true", reqSet->GetFlagName()));
 			}
 		}
 	}
-	KPackageProjectSerializerFOMod::FilePriorityArray KPackageProjectSerializerFOMod::ReadFileData(const KxXMLNode& filesArrayNode, KPPCEntry* entry)
+	FOModSerializer::FilePriorityArray FOModSerializer::ReadFileData(const KxXMLNode& filesArrayNode, ComponentItem* entry)
 	{
 		FilePriorityArray priorityList;
 		if (filesArrayNode.IsOK())
 		{
 			for (KxXMLNode fileDataNode = filesArrayNode.GetFirstChildElement(); fileDataNode.IsOK(); fileDataNode = fileDataNode.GetNextSiblingElement())
 			{
-				KPPFFileEntry* fileEntry = nullptr;
+				FileItem* fileEntry = nullptr;
 				if (fileDataNode.GetName() == "folder")
 				{
-					fileEntry = new KPPFFolderEntry();
+					fileEntry = new FolderItem();
 				}
 				else
 				{
-					fileEntry = new KPPFFileEntry();
+					fileEntry = new FileItem();
 				}
 	
 				wxString source = fileDataNode.GetAttribute("source");
 				fileEntry->SetID(source);
 				fileEntry->SetSource(MakeProjectPath(source));
-				fileEntry->SetPriority(fileDataNode.GetAttributeInt("priority", KPackageProjectFileData::ms_DefaultPriority));
+				fileEntry->SetPriority(fileDataNode.GetAttributeInt("priority", FileDataSection::ms_DefaultPriority));
 	
 				wxString destination = fileDataNode.GetAttribute("destination");
 				fileEntry->SetDestination(GetDataFolderName(true) + (!destination.IsEmpty() ? destination : wxEmptyString));
@@ -664,7 +664,7 @@ namespace Kortex::PackageProject
 			}
 	
 			// Add to project
-			KPackageProjectFileData& fileData = m_ProjectLoad->GetFileData();
+			FileDataSection& fileData = m_ProjectLoad->GetFileData();
 			for (const auto& v: priorityList)
 			{
 				fileData.AddFile(v.first);
@@ -672,7 +672,7 @@ namespace Kortex::PackageProject
 		}
 		return priorityList;
 	}
-	void KPackageProjectSerializerFOMod::UniqueFileData()
+	void FOModSerializer::UniqueFileData()
 	{
 		auto& files = m_ProjectLoad->GetFileData().GetData();
 		auto it = std::unique(files.begin(), files.end(), [](const auto& v1, const auto& v2)
@@ -681,14 +681,14 @@ namespace Kortex::PackageProject
 		});
 		files.erase(it, files.end());
 	}
-	void KPackageProjectSerializerFOMod::UniqueImages()
+	void FOModSerializer::UniqueImages()
 	{
 		KPPIImageEntryArray& images = m_ProjectLoad->GetInterface().GetImages();
-		auto it = KUnsortedUnique(images.begin(), images.end(), [](const KPPIImageEntry& v1, const KPPIImageEntry& v2)
+		auto it = KUnsortedUnique(images.begin(), images.end(), [](const ImageItem& v1, const ImageItem& v2)
 		{
 			return v1.GetPath() == v2.GetPath();
 		},
-		[](const KPPIImageEntry& v1, const KPPIImageEntry& v2)
+		[](const ImageItem& v1, const ImageItem& v2)
 		{
 			return v1.GetPath() < v2.GetPath();
 		});
@@ -696,9 +696,9 @@ namespace Kortex::PackageProject
 	}
 	
 	/* Serialize */
-	void KPackageProjectSerializerFOMod::WriteInfo()
+	void FOModSerializer::WriteInfo()
 	{
-		const KPackageProjectInfo& info = m_ProjectSave->GetInfo();
+		const InfoSection& info = m_ProjectSave->GetInfo();
 		KxXMLNode infoNode = m_XML.NewElement("fomod");
 	
 		infoNode.NewElement("Name").SetValue(info.GetName());
@@ -724,7 +724,7 @@ namespace Kortex::PackageProject
 			return true;
 		});
 	}
-	void KPackageProjectSerializerFOMod::WriteSites(KxXMLNode& infoNode, KxXMLNode& sitesNode)
+	void FOModSerializer::WriteSites(KxXMLNode& infoNode, KxXMLNode& sitesNode)
 	{
 		using namespace NetworkManager;
 
@@ -752,13 +752,13 @@ namespace Kortex::PackageProject
 		// Ignore all others sites
 	}
 	
-	void KPackageProjectSerializerFOMod::WriteInstallSteps()
+	void FOModSerializer::WriteInstallSteps()
 	{
 		using namespace Application;
 
-		const KPackageProjectInterface& interfaceConfig = m_ProjectSave->GetInterface();
-		const KPackageProjectRequirements& requirements = m_ProjectSave->GetRequirements();
-		const KPackageProjectComponents& components = m_ProjectSave->GetComponents();
+		const InterfaceSection& interfaceConfig = m_ProjectSave->GetInterface();
+		const RequirementsSection& requirements = m_ProjectSave->GetRequirements();
+		const ComponentsSection& components = m_ProjectSave->GetComponents();
 	
 		KxXMLNode configRootNode = m_XML.NewElement("config");
 	
@@ -779,7 +779,7 @@ namespace Kortex::PackageProject
 		moduleNameNode.SetValue(m_ProjectSave->GetModID());
 	
 		// Write title customization
-		const KPPITitleConfig& titleConfig = interfaceConfig.GetTitleConfig();
+		const TitleConfig& titleConfig = interfaceConfig.GetTitleConfig();
 		if (titleConfig.HasAlignment())
 		{
 			if (titleConfig.GetAlignment() == wxALIGN_LEFT)
@@ -801,7 +801,7 @@ namespace Kortex::PackageProject
 		}
 	
 		// Write header image
-		if (const KPPIImageEntry* headerImageEntry = interfaceConfig.GetHeaderImageEntry())
+		if (const ImageItem* headerImageEntry = interfaceConfig.GetHeaderImageEntry())
 		{
 			KxXMLNode node = configRootNode.NewElement("moduleImage");
 			node.SetAttribute("path", PathNameToPackage(headerImageEntry->GetPath(), KPP_CONTENT_IMAGES));
@@ -847,7 +847,7 @@ namespace Kortex::PackageProject
 				stepNode.SetAttribute("name", step->GetName());
 	
 				// Write step conditions
-				const KPPCConditionGroup& conditions = step->GetConditionGroup();
+				const ConditionGroup& conditions = step->GetConditionGroup();
 				if (conditions.HasConditions())
 				{
 					KxXMLNode stepConditionsNode = stepNode.NewElement("visible").NewElement("dependencies");
@@ -915,7 +915,7 @@ namespace Kortex::PackageProject
 								WriteRequirements(dependenciesNode, entry->GetRequirements());
 	
 								// New type descriptor
-								KPPCTypeDescriptor conditionalTD = entry->GetTDConditionalValue() != KPPC_DESCRIPTOR_INVALID ? entry->GetTDConditionalValue() : entry->GetTDDefaultValue();
+								TypeDescriptor conditionalTD = entry->GetTDConditionalValue() != KPPC_DESCRIPTOR_INVALID ? entry->GetTDConditionalValue() : entry->GetTDDefaultValue();
 								patternNode.NewElement("type").SetAttribute("name", components.TypeDescriptorToString(conditionalTD));
 							}
 						}
@@ -960,7 +960,7 @@ namespace Kortex::PackageProject
 				entryNode.NewElement("description").SetValue(m_ProjectSave->GetInfo().GetDescription());
 			}
 	
-			if (const KPPIImageEntry* imageEntry = m_ProjectSave->GetInterface().GetMainImageEntry())
+			if (const ImageItem* imageEntry = m_ProjectSave->GetInterface().GetMainImageEntry())
 			{
 				entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(imageEntry->GetPath(), KPP_CONTENT_IMAGES));
 			}
@@ -976,9 +976,9 @@ namespace Kortex::PackageProject
 			WriteFileData(entryNode.NewElement("files"), fileNames, true);
 		}
 	}
-	void KPackageProjectSerializerFOMod::WriteConditionalSteps(KxXMLNode& stepsArrayNode)
+	void FOModSerializer::WriteConditionalSteps(KxXMLNode& stepsArrayNode)
 	{
-		const KPackageProjectComponents& components = m_ProjectSave->GetComponents();
+		const ComponentsSection& components = m_ProjectSave->GetComponents();
 		for (const auto& step: components.GetConditionalSteps())
 		{
 			KxXMLNode stepNode = stepsArrayNode.NewElement("pattern");
@@ -990,15 +990,15 @@ namespace Kortex::PackageProject
 			WriteFileData(stepNode.NewElement("files"), step->GetEntries());
 		}
 	}
-	void KPackageProjectSerializerFOMod::WriteFileData(KxXMLNode& node, const KxStringVector& files, bool alwaysInstall)
+	void FOModSerializer::WriteFileData(KxXMLNode& node, const KxStringVector& files, bool alwaysInstall)
 	{
-		const KPackageProjectFileData& fileData = m_ProjectSave->GetFileData();
+		const FileDataSection& fileData = m_ProjectSave->GetFileData();
 		for (const wxString& id: files)
 		{
-			const KPPFFileEntry* file = fileData.FindEntryWithID(id);
+			const FileItem* file = fileData.FindEntryWithID(id);
 			if (file)
 			{
-				KxXMLNode fileNode = node.NewElement(file->ToFolderEntry() ? "folder" : "file");
+				KxXMLNode fileNode = node.NewElement(file->ToFolderItem() ? "folder" : "file");
 	
 				// Source
 				fileNode.SetAttribute("source", file->GetID());
@@ -1045,14 +1045,14 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	void KPackageProjectSerializerFOMod::WriteRequirements(KxXMLNode& node, const KxStringVector& requiremetSets)
+	void FOModSerializer::WriteRequirements(KxXMLNode& node, const KxStringVector& requiremetSets)
 	{
-		const KPackageProjectRequirements& requirements = m_ProjectSave->GetRequirements();
+		const RequirementsSection& requirements = m_ProjectSave->GetRequirements();
 		const PackageDesigner::IWithScriptExtender* se = IPackageManager::GetInstance()->TryGetComponent<PackageDesigner::IWithScriptExtender>();
 	
 		for (const wxString& id: requiremetSets)
 		{
-			KPPRRequirementsGroup* group = requirements.FindGroupWithID(id);
+			RequirementGroup* group = requirements.FindGroupWithID(id);
 			if (group)
 			{
 				node.SetAttribute("operator", group->GetOperator() == KPP_OPERATOR_AND ? "And" : "Or");
@@ -1068,7 +1068,7 @@ namespace Kortex::PackageProject
 					}
 					else
 					{
-						KPPRObjectFunction objectFunc = entry->GetObjectFunction();
+						ObjectFunction objectFunc = entry->GetObjectFunction();
 						if (objectFunc == KPPR_OBJFUNC_PLUGIN_ACTIVE || objectFunc == KPPR_OBJFUNC_PLUGIN_INACTIVE)
 						{
 							KxXMLNode tDepNode = node.NewElement("fileDependency");
@@ -1081,7 +1081,7 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void KPackageProjectSerializerFOMod::InitDataFolderInfo()
+	void FOModSerializer::InitDataFolderInfo()
 	{
 		using namespace Kortex;
 	
@@ -1099,17 +1099,17 @@ namespace Kortex::PackageProject
 			id == GameIDs::Fallout4 ||
 			id == GameIDs::Fallout4VR;
 	}
-	void KPackageProjectSerializerFOMod::Init()
+	void FOModSerializer::Init()
 	{
 		InitDataFolderInfo();
 	}
 	
-	KPackageProjectSerializerFOMod::KPackageProjectSerializerFOMod(const wxString& projectFolder)
+	FOModSerializer::FOModSerializer(const wxString& projectFolder)
 		:m_ProjectFolder(projectFolder)
 	{
 		Init();
 	}
-	KPackageProjectSerializerFOMod::KPackageProjectSerializerFOMod(const wxString& sInfoXML, const wxString& moduleConfigXML, const wxString& projectFolder)
+	FOModSerializer::FOModSerializer(const wxString& sInfoXML, const wxString& moduleConfigXML, const wxString& projectFolder)
 		:m_InfoXML(sInfoXML), m_ModuleConfigXML(moduleConfigXML), m_ProjectFolder(projectFolder)
 	{
 		Init();
@@ -1120,7 +1120,7 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void KPackageProjectSerializerFOMod::Serialize(const KPackageProject* project)
+	void FOModSerializer::Serialize(const ModPackageProject* project)
 	{
 		m_ProjectSave = project;
 		m_XML.Load(wxEmptyString);
@@ -1134,7 +1134,7 @@ namespace Kortex::PackageProject
 		WriteInstallSteps();
 		m_ModuleConfigXML = m_XML.GetXML();
 	}
-	void KPackageProjectSerializerFOMod::Structurize(KPackageProject* project)
+	void FOModSerializer::Structurize(ModPackageProject* project)
 	{
 		m_ProjectLoad = project;
 		if (m_XML.Load(m_InfoXML))

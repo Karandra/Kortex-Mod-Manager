@@ -26,22 +26,22 @@ namespace Kortex::PackageDesigner
 	}
 	wxString PackageBuilder::GetImagePath(const wxString& fileName) const
 	{
-		return PackageProject::KPackageProjectSerializer::GetDefaultFOModRoot() + "\\Images\\" + fileName.AfterLast('\\');
+		return PackageProject::Serializer::GetDefaultFOModRoot() + "\\Images\\" + fileName.AfterLast('\\');
 	}
 	wxString PackageBuilder::GetDocumentPath(const wxString& fileName) const
 	{
-		return PackageProject::KPackageProjectSerializer::GetDefaultFOModRoot() + "\\Documents\\" + fileName.AfterLast('\\');
+		return PackageProject::Serializer::GetDefaultFOModRoot() + "\\Documents\\" + fileName.AfterLast('\\');
 	}
-	wxString PackageBuilder::GetFileDataEntryPath(const PackageProject::KPPFFileEntry* fileDataEntry, const wxString& fileName) const
+	wxString PackageBuilder::GetFileDataEntryPath(const PackageProject::FileItem* fileDataEntry, const wxString& fileName) const
 	{
 		return fileDataEntry->GetID() + "\\" + fileName;
 	}
 
 	void PackageBuilder::CheckProject()
 	{
-		const PackageProject::KPackageProjectInfo& info = m_Project->GetInfo();
-		const PackageProject::KPackageProjectInterface& interfaceConfig = m_Project->GetInterface();
-		const PackageProject::KPackageProjectFileData& fileData = m_Project->GetFileData();
+		const PackageProject::InfoSection& info = m_Project->GetInfo();
+		const PackageProject::InterfaceSection& interfaceConfig = m_Project->GetInterface();
+		const PackageProject::FileDataSection& fileData = m_Project->GetFileData();
 
 		m_Status = KPCB_STATUS_OK;
 		auto CheckAndAddMissingFile = [this](const wxString& path)
@@ -76,7 +76,7 @@ namespace Kortex::PackageDesigner
 		}
 
 		// Check images
-		for (const PackageProject::KPPIImageEntry& entry: interfaceConfig.GetImages())
+		for (const PackageProject::ImageItem& entry: interfaceConfig.GetImages())
 		{
 			TestContinue();
 			CheckAndAddMissingFile(entry.GetPath());
@@ -86,7 +86,7 @@ namespace Kortex::PackageDesigner
 		for (const auto& fileEntry: fileData.GetData())
 		{
 			TestContinue();
-			if (const PackageProject::KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
+			if (const PackageProject::FolderItem* folderEntry = fileEntry->ToFolderItem())
 			{
 				CheckAndAddMissingFolder(folderEntry->GetSource());
 				for (const auto& entry: folderEntry->GetFiles())
@@ -124,7 +124,7 @@ namespace Kortex::PackageDesigner
 			return KArchiveNS::Method::LZMA;
 		};
 
-		const PackageProject::KPackageProjectConfig& config = m_Project->GetConfig();
+		const PackageProject::ConfigSection& config = m_Project->GetConfig();
 
 		m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsSolidArchive());
 		m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsMultithreadingUsed());
@@ -137,8 +137,8 @@ namespace Kortex::PackageDesigner
 		// Create KMP config
 		{
 			wxString packageConfigFile = CreateTempFile();
-			PackageProject::KPackageProjectSerializerKMP serializer(false);
-			serializer.SetPackageDataRoot(PackageProject::KPackageProjectSerializer::GetDefaultFOModRoot());
+			PackageProject::NativeSerializer serializer(false);
+			serializer.SetPackageDataRoot(PackageProject::Serializer::GetDefaultFOModRoot());
 			serializer.Serialize(m_Project);
 			KxTextFile::WriteToFile(packageConfigFile, serializer.GetData());
 
@@ -151,9 +151,9 @@ namespace Kortex::PackageDesigner
 			wxString infoFile = CreateTempFile();
 			wxString sModuleConfigFile = CreateTempFile();
 
-			PackageProject::KPackageProjectSerializerFOMod serializer;
+			PackageProject::FOModSerializer serializer;
 			serializer.ExportToNativeFormat(true);
-			serializer.SetPackageDataRoot(PackageProject::KPackageProjectSerializer::GetDefaultFOModRoot());
+			serializer.SetPackageDataRoot(PackageProject::Serializer::GetDefaultFOModRoot());
 			serializer.Serialize(m_Project);
 			KxTextFile::WriteToFile(infoFile, serializer.GetInfoXML());
 			KxTextFile::WriteToFile(sModuleConfigFile, serializer.GetModuleConfigXML());
@@ -167,7 +167,7 @@ namespace Kortex::PackageDesigner
 	}
 	void PackageBuilder::ProcessInfo()
 	{
-		const PackageProject::KPackageProjectInfo& info = m_Project->GetInfo();
+		const PackageProject::InfoSection& info = m_Project->GetInfo();
 		for (const KLabeledValue& entry: info.GetDocuments())
 		{
 			TestContinue();
@@ -178,8 +178,8 @@ namespace Kortex::PackageDesigner
 	}
 	void PackageBuilder::ProcessInterface()
 	{
-		const PackageProject::KPackageProjectInterface& interfaceConfig = m_Project->GetInterface();
-		for (const PackageProject::KPPIImageEntry& entry: interfaceConfig.GetImages())
+		const PackageProject::InterfaceSection& interfaceConfig = m_Project->GetInterface();
+		for (const PackageProject::ImageItem& entry: interfaceConfig.GetImages())
 		{
 			TestContinue();
 
@@ -194,12 +194,12 @@ namespace Kortex::PackageDesigner
 			return;
 		}
 
-		const PackageProject::KPackageProjectFileData& fileData = m_Project->GetFileData();
+		const PackageProject::FileDataSection& fileData = m_Project->GetFileData();
 		for (const auto& fileEntry: fileData.GetData())
 		{
 			TestContinue();
 
-			if (const PackageProject::KPPFFolderEntry* folderEntry = fileEntry->ToFolderEntry())
+			if (const PackageProject::FolderItem* folderEntry = fileEntry->ToFolderItem())
 			{
 				for (const auto& folderItem: folderEntry->GetFiles())
 				{
@@ -217,7 +217,7 @@ namespace Kortex::PackageDesigner
 		}
 	}
 
-	PackageBuilder::PackageBuilder(const KPackageProject* project, KOperationWithProgressBase* thread, bool previewBuild)
+	PackageBuilder::PackageBuilder(const ModPackageProject* project, KOperationWithProgressBase* thread, bool previewBuild)
 		:m_Project(project), m_Thread(thread), m_BuildPreview(previewBuild)
 	{
 		m_Thread->LinkHandler(&m_Archive, KxEVT_ARCHIVE);
@@ -336,7 +336,7 @@ namespace Kortex::PackageDesigner
 		}
 	}
 
-	KPackageCreatorBuilderOperation::KPackageCreatorBuilderOperation(const KPackageProject* project, bool previewBuild)
+	KPackageCreatorBuilderOperation::KPackageCreatorBuilderOperation(const ModPackageProject* project, bool previewBuild)
 		:KOperationWithProgressDialog(true, nullptr), m_Project(project), m_BuildPreview(previewBuild)
 	{
 		if (previewBuild)

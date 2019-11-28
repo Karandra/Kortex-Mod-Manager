@@ -12,7 +12,7 @@
 
 namespace Kortex::PackageDesigner
 {
-	void PageFileData::OnLoadProject(PackageProject::KPackageProjectFileData& projectFileData)
+	void PageFileData::OnLoadProject(PackageProject::FileDataSection& projectFileData)
 	{
 		wxWindowUpdateLocker lock(this);
 
@@ -22,7 +22,7 @@ namespace Kortex::PackageDesigner
 		m_ContentListModel->SetProject(projectFileData.GetProject());
 		m_ContentListModel->SetDataVector();
 	}
-	PackageProject::KPackageProjectFileData& PageFileData::GetProjectFileData() const
+	PackageProject::FileDataSection& PageFileData::GetProjectFileData() const
 	{
 		return GetProject()->GetFileData();
 	}

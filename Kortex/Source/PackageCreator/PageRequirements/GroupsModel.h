@@ -10,10 +10,10 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 {
 	class EntriesListModel;
 
-	class GroupsModel: public VectorModel<PackageProject::KPPRRequirementsGroup::Vector>, public IDTracker
+	class GroupsModel: public VectorModel<PackageProject::RequirementGroup::Vector>, public IDTracker
 	{
 		private:
-			PackageProject::KPackageProjectRequirements* m_Requirements = nullptr;
+			PackageProject::RequirementsSection* m_Requirements = nullptr;
 			KxDataViewComboBox* m_ComboView = nullptr;
 			EntriesListModel* m_EntriesModel = nullptr;
 			KxButton* m_AddButton = nullptr;
@@ -63,7 +63,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			void Create(WorkspaceDocument* controller, wxWindow* window, wxSizer* sizer) override;
 			void ChangeNotify() override;
 	
-			PackageProject::KPPRRequirementsGroup* GetDataEntry(size_t index) const
+			PackageProject::RequirementGroup* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{
@@ -71,12 +71,12 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				return nullptr;
 			}
-			PackageProject::KPPRRequirementsGroup* GetDataEntry(const KxDataViewItem& item) const
+			PackageProject::RequirementGroup* GetDataEntry(const KxDataViewItem& item) const
 			{
 				return GetDataEntry(GetRow(item));
 			}
 			
-			void SetProject(KPackageProject& projectData);
+			void SetProject(ModPackageProject& projectData);
 			void SetEntriesModel(EntriesListModel* model)
 			{
 				m_EntriesModel = model;

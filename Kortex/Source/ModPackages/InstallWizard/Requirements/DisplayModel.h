@@ -9,17 +9,17 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 	{
 		private:
 			RequirementsPage& m_Page;
-			PackageProject::KPPRRequirementEntry::RefVector m_Items;
+			PackageProject::RequirementItem::RefVector m_Items;
 
 		private:
 			wxAny GetValue(const Node& node, const Column& column) const override;
 			ToolTip GetToolTip(const Node& node, const Column& column) const override;
 			bool IsEnabled(const Node& node, const Column& column) const override;
 
-			wxBitmap GetIconByState(PackageProject::KPPReqState state) const;
+			wxBitmap GetIconByState(PackageProject::ReqState state) const;
 			wxBitmap GetIconByState(bool state) const
 			{
-				return GetIconByState(state ? PackageProject::KPPReqState::True : PackageProject::KPPReqState::False);
+				return GetIconByState(state ? PackageProject::ReqState::True : PackageProject::ReqState::False);
 			}
 
 		public:
@@ -33,11 +33,11 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 			void ShowGroups(const KxStringVector& groupIDs);
 			void ClearDisplay();
 
-			const PackageProject::KPPRRequirementEntry& GetItem(const Node& node) const
+			const PackageProject::RequirementItem& GetItem(const Node& node) const
 			{
 				return *m_Items[node.GetRow()];
 			}
-			PackageProject::KPPRRequirementEntry& GetItem(Node& node)
+			PackageProject::RequirementItem& GetItem(Node& node)
 			{
 				return *m_Items[node.GetRow()];
 			}

@@ -64,7 +64,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	
 	bool ConditionGroupModel::IsContainer(const KxDataViewItem& item) const
 	{
-		if (const PackageProject::KPPCCondition* condition = GetConditionEntry(item))
+		if (const PackageProject::Condition* condition = GetConditionEntry(item))
 		{
 			return condition->HasFlags();
 		}
@@ -74,14 +74,14 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		if (item.IsTreeRootItem())
 		{
-			for (const PackageProject::KPPCCondition& condition: m_ConditionGroup.GetConditions())
+			for (const PackageProject::Condition& condition: m_ConditionGroup.GetConditions())
 			{
 				children.push_back(MakeItem(condition));
 			}
 		}
-		else if (const PackageProject::KPPCCondition* condition = GetConditionEntry(item))
+		else if (const PackageProject::Condition* condition = GetConditionEntry(item))
 		{
-			for (const PackageProject::KPPCFlagEntry& flag: condition->GetFlags())
+			for (const PackageProject::FlagItem& flag: condition->GetFlags())
 			{
 				children.push_back(MakeItem(flag));
 			}
@@ -89,11 +89,11 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	KxDataViewItem ConditionGroupModel::GetParent(const KxDataViewItem& item) const
 	{
-		if (const PackageProject::KPPCFlagEntry* itemFlag = GetFlagEntry(item))
+		if (const PackageProject::FlagItem* itemFlag = GetFlagEntry(item))
 		{
-			for (PackageProject::KPPCCondition& condition: m_ConditionGroup.GetConditions())
+			for (PackageProject::Condition& condition: m_ConditionGroup.GetConditions())
 			{
-				for (const PackageProject::KPPCFlagEntry& flag: condition.GetFlags())
+				for (const PackageProject::FlagItem& flag: condition.GetFlags())
 				{
 					if (&flag == itemFlag)
 					{
@@ -111,7 +111,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	bool ConditionGroupModel::IsEditorEnabled(const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		if (const PackageProject::KPPCCondition* condition = GetConditionEntry(item))
+		if (const PackageProject::Condition* condition = GetConditionEntry(item))
 		{
 			switch (column->GetID())
 			{
@@ -121,7 +121,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 			};
 		}
-		else if (const PackageProject::KPPCFlagEntry* flag = GetFlagEntry(item))
+		else if (const PackageProject::FlagItem* flag = GetFlagEntry(item))
 		{
 			switch (column->GetID())
 			{
@@ -136,13 +136,13 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ConditionGroupModel::GetEditorValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		if (const PackageProject::KPPCCondition* condition = GetConditionEntry(item))
+		if (const PackageProject::Condition* condition = GetConditionEntry(item))
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Name:
 				{
-					m_LabelEditor->SetItems(KPackageProject::CreateOperatorSymNamesList({PackageProject::KPP_OPERATOR_AND, PackageProject::KPP_OPERATOR_OR}));
+					m_LabelEditor->SetItems(ModPackageProject::CreateOperatorSymNamesList({PackageProject::KPP_OPERATOR_AND, PackageProject::KPP_OPERATOR_OR}));
 					m_LabelEditor->SetEditable(false);
 	
 					value = condition->GetOperator() == PackageProject::KPP_OPERATOR_AND ? 0 : 1;
@@ -150,7 +150,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 			};
 		}
-		else if (const PackageProject::KPPCFlagEntry* flag = GetFlagEntry(item))
+		else if (const PackageProject::FlagItem* flag = GetFlagEntry(item))
 		{
 			switch (column->GetID())
 			{
@@ -175,18 +175,18 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ConditionGroupModel::GetValue(wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column) const
 	{
-		if (const PackageProject::KPPCCondition* condition = GetConditionEntry(item))
+		if (const PackageProject::Condition* condition = GetConditionEntry(item))
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Name:
 				{
-					value = KxString::Format(wxS("%1: %2"), KTr(wxS("Generic.Operator")), KPackageProject::OperatorToSymbolicName(condition->GetOperator()));
+					value = KxString::Format(wxS("%1: %2"), KTr(wxS("Generic.Operator")), ModPackageProject::OperatorToSymbolicName(condition->GetOperator()));
 					break;
 				}
 			};
 		}
-		else if (const PackageProject::KPPCFlagEntry* flag = GetFlagEntry(item))
+		else if (const PackageProject::FlagItem* flag = GetFlagEntry(item))
 		{
 			switch (column->GetID())
 			{
@@ -205,7 +205,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	bool ConditionGroupModel::SetValue(const wxAny& value, const KxDataViewItem& item, const KxDataViewColumn* column)
 	{
-		if (PackageProject::KPPCCondition* condition = GetConditionEntry(item))
+		if (PackageProject::Condition* condition = GetConditionEntry(item))
 		{
 			switch (column->GetID())
 			{
@@ -216,7 +216,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 			};
 		}
-		else if (PackageProject::KPPCFlagEntry* flag = GetFlagEntry(item))
+		else if (PackageProject::FlagItem* flag = GetFlagEntry(item))
 		{
 			switch (column->GetID())
 			{
@@ -240,7 +240,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	bool ConditionGroupModel::GetItemAttributes(const KxDataViewItem& item, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const
 	{
-		if (const PackageProject::KPPCCondition* condition = GetConditionEntry(item))
+		if (const PackageProject::Condition* condition = GetConditionEntry(item))
 		{
 			attributes.SetForegroundColor(m_ConditionColor);
 			return true;
@@ -266,8 +266,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	void ConditionGroupModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		PackageProject::KPPCFlagEntry* flag = GetFlagEntry(item);
-		PackageProject::KPPCCondition* condition = GetConditionEntry(item);
+		PackageProject::FlagItem* flag = GetFlagEntry(item);
+		PackageProject::Condition* condition = GetConditionEntry(item);
 		if (flag && !condition)
 		{
 			condition = GetConditionEntry(GetParent(item));
@@ -330,9 +330,9 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		};
 	};
 	
-	void ConditionGroupModel::OnAddFlag(PackageProject::KPPCCondition& condition)
+	void ConditionGroupModel::OnAddFlag(PackageProject::Condition& condition)
 	{
-		PackageProject::KPPCFlagEntry& flag = condition.GetFlags().emplace_back(wxEmptyString, wxEmptyString);
+		PackageProject::FlagItem& flag = condition.GetFlags().emplace_back(wxEmptyString, wxEmptyString);
 		ChangeNotify();
 		RefreshItems();
 	
@@ -342,7 +342,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ConditionGroupModel::OnAddCondition()
 	{
-		PackageProject::KPPCCondition& condition = m_ConditionGroup.GetConditions().emplace_back();
+		PackageProject::Condition& condition = m_ConditionGroup.GetConditions().emplace_back();
 		ChangeNotify();
 		RefreshItems();
 	
@@ -350,7 +350,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		SelectItem(item);
 		GetView()->EditItem(item, GetView()->GetColumn(ColumnID::Name));
 	}
-	void ConditionGroupModel::OnRemoveFlag(PackageProject::KPPCCondition& condition, PackageProject::KPPCFlagEntry& flag)
+	void ConditionGroupModel::OnRemoveFlag(PackageProject::Condition& condition, PackageProject::FlagItem& flag)
 	{
 		switch (AskRemoveOption())
 		{
@@ -381,7 +381,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 		};
 	}
-	void ConditionGroupModel::OnRemoveCondition(PackageProject::KPPCCondition& condition)
+	void ConditionGroupModel::OnRemoveCondition(PackageProject::Condition& condition)
 	{
 		switch (AskRemoveOption())
 		{
@@ -394,7 +394,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 			case RemoveMode::RemoveTrack:
 			{
-				for (PackageProject::KPPCFlagEntry& flag: condition.GetFlags())
+				for (PackageProject::FlagItem& flag: condition.GetFlags())
 				{
 					TrackRemoveID(flag.GetName());
 				}
@@ -404,7 +404,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 			case RemoveMode::RemoveRename:
 			{
-				for (PackageProject::KPPCFlagEntry& flag: condition.GetFlags())
+				for (PackageProject::FlagItem& flag: condition.GetFlags())
 				{
 					wxString name = flag.GetName();
 					wxString newName = flag.GetDeletedName();
@@ -430,9 +430,9 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 			case RemoveMode::RemoveTrack:
 			{
-				for (PackageProject::KPPCCondition& condition: m_ConditionGroup.GetConditions())
+				for (PackageProject::Condition& condition: m_ConditionGroup.GetConditions())
 				{
-					for (const PackageProject::KPPCFlagEntry& flag: condition.GetFlags())
+					for (const PackageProject::FlagItem& flag: condition.GetFlags())
 					{
 						TrackRemoveID(flag.GetName());
 					}
@@ -445,9 +445,9 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 			case RemoveMode::RemoveRename:
 			{
-				for (PackageProject::KPPCCondition& condition: m_ConditionGroup.GetConditions())
+				for (PackageProject::Condition& condition: m_ConditionGroup.GetConditions())
 				{
-					for (const PackageProject::KPPCFlagEntry& flag: condition.GetFlags())
+					for (const PackageProject::FlagItem& flag: condition.GetFlags())
 					{
 						TrackChangeID(flag.GetName(), flag.GetDeletedName());
 					}
@@ -463,7 +463,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	
 	int ConditionGroupModel::AskRemoveOption() const
 	{
-		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTr("PackageCreator.Conditions.RemoveFlagDialog.Caption"), KTrf("PackageCreator.Conditions.RemoveFlagDialog.Message", PackageProject::KPPCFlagEntry::GetDeletedFlagPrefix()), KxBTN_CANCEL, KxICON_WARNING);
+		KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTr("PackageCreator.Conditions.RemoveFlagDialog.Caption"), KTrf("PackageCreator.Conditions.RemoveFlagDialog.Message", PackageProject::FlagItem::GetDeletedFlagPrefix()), KxBTN_CANCEL, KxICON_WARNING);
 		dialog.AddButton(RemoveMode::Remove, KTr("PackageCreator.Conditions.RemoveFlagDialog.Remove"));
 		dialog.AddButton(RemoveMode::RemoveTrack, KTr("PackageCreator.Conditions.RemoveFlagDialog.RemoveTrack"));
 		dialog.AddButton(RemoveMode::RemoveRename, KTr("PackageCreator.Conditions.RemoveFlagDialog.RemoveRename"));
@@ -480,7 +480,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				for (auto& entry: group->GetEntries())
 				{
 					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetConditionalFlags().GetFlags(), remove);
-					for (PackageProject::KPPCCondition& condition: entry->GetTDConditionGroup().GetConditions())
+					for (PackageProject::Condition& condition: entry->GetTDConditionGroup().GetConditions())
 					{
 						TrackID_ReplaceOrRemove(trackedID, newID, condition.GetFlags(), remove);
 					}
@@ -491,7 +491,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		// Conditional steps flags
 		for (auto& step: m_Project.GetComponents().GetConditionalSteps())
 		{
-			for (PackageProject::KPPCCondition& condition: step->GetConditionGroup().GetConditions())
+			for (PackageProject::Condition& condition: step->GetConditionGroup().GetConditions())
 			{
 				TrackID_ReplaceOrRemove(trackedID, newID, condition.GetFlags(), remove);
 			}
@@ -499,19 +499,19 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	
 		return true;
 	}
-	void ConditionGroupModel::DoRemoveFlag(PackageProject::KPPCCondition& condition, PackageProject::KPPCFlagEntry& flag)
+	void ConditionGroupModel::DoRemoveFlag(PackageProject::Condition& condition, PackageProject::FlagItem& flag)
 	{
-		PackageProject::KPPCFlagEntry::Vector& flags = condition.GetFlags();
-		auto it = std::remove_if(flags.begin(), flags.end(), [&flag](const PackageProject::KPPCFlagEntry& thisFlag)
+		PackageProject::FlagItem::Vector& flags = condition.GetFlags();
+		auto it = std::remove_if(flags.begin(), flags.end(), [&flag](const PackageProject::FlagItem& thisFlag)
 		{
 			return &thisFlag == &flag;
 		});
 		flags.erase(it, flags.end());
 	}
-	void ConditionGroupModel::DoRemoveCondition(PackageProject::KPPCCondition& condition)
+	void ConditionGroupModel::DoRemoveCondition(PackageProject::Condition& condition)
 	{
-		PackageProject::KPPCCondition::Vector& conditions = m_ConditionGroup.GetConditions();
-		auto it = std::remove_if(conditions.begin(), conditions.end(), [&condition](const PackageProject::KPPCCondition& thisCondition)
+		PackageProject::Condition::Vector& conditions = m_ConditionGroup.GetConditions();
+		auto it = std::remove_if(conditions.begin(), conditions.end(), [&condition](const PackageProject::Condition& thisCondition)
 		{
 			return &thisCondition == &condition;
 		});
@@ -524,7 +524,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ConditionGroupModel::RemoveEmptyConditions()
 	{
-		PackageProject::KPPCCondition::Vector& conditions = m_ConditionGroup.GetConditions();
+		PackageProject::Condition::Vector& conditions = m_ConditionGroup.GetConditions();
 		for (size_t i = conditions.size(); i != 0; i--)
 		{
 			if (!conditions[i].HasFlags())
@@ -534,27 +534,27 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		}
 	}
 	
-	ConditionGroupModel::ConditionGroupModel(WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup)
+	ConditionGroupModel::ConditionGroupModel(WorkspaceDocument* controller, PackageProject::ConditionGroup& conditionGroup)
 		:m_Controller(controller), m_Project(*controller->GetProject()), m_ConditionGroup(conditionGroup)
 	{
 	}
 	
-	PackageProject::KPPCFlagEntry* ConditionGroupModel::GetFlagEntry(const KxDataViewItem& item) const
+	PackageProject::FlagItem* ConditionGroupModel::GetFlagEntry(const KxDataViewItem& item) const
 	{
-		return dynamic_cast<PackageProject::KPPCFlagEntry*>(item.GetValuePtr<wxObject>());
+		return dynamic_cast<PackageProject::FlagItem*>(item.GetValuePtr<wxObject>());
 	}
-	PackageProject::KPPCCondition* ConditionGroupModel::GetConditionEntry(const KxDataViewItem& item) const
+	PackageProject::Condition* ConditionGroupModel::GetConditionEntry(const KxDataViewItem& item) const
 	{
-		return dynamic_cast<PackageProject::KPPCCondition*>(item.GetValuePtr<wxObject>());
+		return dynamic_cast<PackageProject::Condition*>(item.GetValuePtr<wxObject>());
 	}
 	
 	void ConditionGroupModel::RefreshItems()
 	{
 		KxDataViewModelExBase::RefreshItems();
-		for (PackageProject::KPPCCondition& condition: m_ConditionGroup.GetConditions())
+		for (PackageProject::Condition& condition: m_ConditionGroup.GetConditions())
 		{
 			ItemAdded(MakeItem(condition));
-			for (const PackageProject::KPPCFlagEntry& flag: condition.GetFlags())
+			for (const PackageProject::FlagItem& flag: condition.GetFlags())
 			{
 				ItemAdded(MakeItem(condition), MakeItem(flag));
 			}
@@ -570,7 +570,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		int index = event.GetInt();
 		if (index != -1)
 		{
-			m_ConditionGroup.SetOperator((PackageProject::KPPOperator)reinterpret_cast<size_t>(m_GlobalOperatorCB->GetClientData(index)));
+			m_ConditionGroup.SetOperator((PackageProject::Operator)reinterpret_cast<size_t>(m_GlobalOperatorCB->GetClientData(index)));
 			ChangeNotify();
 		}
 	}
@@ -580,7 +580,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 	}
 	
-	ConditionGroupDialog::ConditionGroupDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup)
+	ConditionGroupDialog::ConditionGroupDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::ConditionGroup& conditionGroup)
 		:ConditionGroupModel(controller, conditionGroup)
 		//m_WindowOptions("ConditionGroupDialog", "Window"), m_ViewOptions("ConditionGroupDialog", "View")
 	{
@@ -604,9 +604,9 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			m_GlobalOperatorCB = PageBase::AddControlsRow(sizer, KTr("Generic.Operator"), new KxComboBox(m_ViewPane, KxID_NONE), 1);
 			m_GlobalOperatorCB->Bind(wxEVT_COMBOBOX, &ConditionGroupDialogWithTypeDescriptor::OnSelectGlobalOperator, this);
 	
-			auto AddItem = [this](PackageProject::KPPOperator value)
+			auto AddItem = [this](PackageProject::Operator value)
 			{
-				int index = m_GlobalOperatorCB->Append(KPackageProject::OperatorToSymbolicName(value), reinterpret_cast<void*>(value));
+				int index = m_GlobalOperatorCB->Append(ModPackageProject::OperatorToSymbolicName(value), reinterpret_cast<void*>(value));
 				if (value == m_ConditionGroup.GetOperator())
 				{
 					m_GlobalOperatorCB->SetSelection(index);
@@ -643,12 +643,12 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		int index = event.GetInt();
 		if (index != -1)
 		{
-			m_Entry.SetTDConditionalValue((PackageProject::KPPCTypeDescriptor)reinterpret_cast<size_t>(m_NewTypeDescriptorCB->GetClientData(index)));
+			m_Entry.SetTDConditionalValue((PackageProject::TypeDescriptor)reinterpret_cast<size_t>(m_NewTypeDescriptorCB->GetClientData(index)));
 			ChangeNotify();
 		}
 	}
 	
-	ConditionGroupDialogWithTypeDescriptor::ConditionGroupDialogWithTypeDescriptor(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::KPPCConditionGroup& conditionGroup, PackageProject::KPPCEntry& entry)
+	ConditionGroupDialogWithTypeDescriptor::ConditionGroupDialogWithTypeDescriptor(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller, PackageProject::ConditionGroup& conditionGroup, PackageProject::ComponentItem& entry)
 		:ConditionGroupDialog(parent, caption, controller, conditionGroup), m_Entry(entry)
 	{
 		wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -658,7 +658,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		m_NewTypeDescriptorCB = PageBase::AddControlsRow(sizer, KTr("PackageCreator.PageComponents.TypeDescriptorConditional"), new KxComboBox(m_ViewPane, KxID_NONE), 1);
 		m_NewTypeDescriptorCB->Bind(wxEVT_COMBOBOX, &ConditionGroupDialogWithTypeDescriptor::OnSelectNewTypeDescriptor, this);
 	
-		auto AddItem = [this](const wxString& id, PackageProject::KPPCTypeDescriptor value)
+		auto AddItem = [this](const wxString& id, PackageProject::TypeDescriptor value)
 		{
 			int index = m_NewTypeDescriptorCB->Append(id, (void*)value);
 			if (value == m_Entry.GetTDConditionalValue())

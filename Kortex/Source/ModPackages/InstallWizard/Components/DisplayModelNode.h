@@ -21,8 +21,8 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		private:
 			union
 			{
-				const PackageProject::KPPCGroup* m_Group = nullptr;
-				const PackageProject::KPPCEntry* m_Entry;
+				const PackageProject::ComponentGroup* m_Group = nullptr;
+				const PackageProject::ComponentItem* m_Entry;
 			};
 			const DisplayModelNode* m_ParentNode = nullptr;
 
@@ -33,11 +33,11 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 		public:
 			DisplayModelNode() = default;
-			DisplayModelNode(const PackageProject::KPPCGroup& group)
+			DisplayModelNode(const PackageProject::ComponentGroup& group)
 				:m_Group(&group), m_Type(Group)
 			{
 			}
-			DisplayModelNode(const PackageProject::KPPCEntry& entry)
+			DisplayModelNode(const PackageProject::ComponentItem& entry)
 				:m_Entry(&entry), m_Type(Entry)
 			{
 			}
@@ -56,11 +56,11 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 				return m_Type == Entry;
 			}
 
-			const PackageProject::KPPCGroup* GetGroup() const
+			const PackageProject::ComponentGroup* GetGroup() const
 			{
 				return IsGroup() ? m_Group : nullptr;
 			}
-			const PackageProject::KPPCEntry* GetEntry() const
+			const PackageProject::ComponentItem* GetEntry() const
 			{
 				return IsEntry() ? m_Entry : nullptr;
 			}
@@ -98,7 +98,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 
 			bool IsRequiredEntry() const
 			{
-				if (const PackageProject::KPPCEntry* entry = GetEntry())
+				if (const PackageProject::ComponentItem* entry = GetEntry())
 				{
 					return entry->GetTDCurrentValue() == PackageProject::KPPC_DESCRIPTOR_REQUIRED;
 				}

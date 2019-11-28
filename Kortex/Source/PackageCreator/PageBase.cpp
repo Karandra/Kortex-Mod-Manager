@@ -34,7 +34,7 @@ namespace Kortex::PackageDesigner
 	{
 	}
 
-	KPackageProject* PageBase::GetProject() const
+	ModPackageProject* PageBase::GetProject() const
 	{
 		return m_Controller->GetProject();
 	}

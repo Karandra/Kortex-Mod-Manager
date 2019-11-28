@@ -4,13 +4,17 @@
 
 namespace Kortex::PackageProject
 {
-	class KPPFFolderEntry;
+	class FolderItem;
 }
 
 namespace Kortex::PackageProject
 {
-	class KPPFFileEntry
+	class FileItem
 	{
+		public:
+			using Vector = std::vector<std::unique_ptr<FileItem>>;
+			using RefVector = std::vector<FileItem*>;
+
 		private:
 			wxString m_ID;
 			wxString m_Source;
@@ -18,25 +22,25 @@ namespace Kortex::PackageProject
 			int32_t m_Priority;
 	
 		public:
-			KPPFFileEntry();
-			virtual ~KPPFFileEntry();
+			FileItem();
+			virtual ~FileItem();
 	
 		public:
-			virtual KPPFFolderEntry* ToFolderEntry()
+			virtual FolderItem* ToFolderItem()
 			{
 				return nullptr;
 			}
-			virtual const KPPFFolderEntry* ToFolderEntry() const
+			const FolderItem* ToFolderItem() const
 			{
-				return nullptr;
+				return const_cast<FileItem&>(*this).ToFolderItem();
 			}
-			virtual KPPFFileEntry* ToFileEntry()
+			virtual FileItem* ToFileItem()
 			{
 				return this;
 			}
-			virtual const KPPFFileEntry* ToFileEntry() const
+			const FileItem* ToFileItem() const
 			{
-				return this;
+				return const_cast<FileItem&>(*this).ToFileItem();
 			}
 	
 		public:
@@ -72,23 +76,24 @@ namespace Kortex::PackageProject
 			int32_t GetPriority() const;
 			void SetPriority(int32_t value);
 	};
-	using KPPFFileEntryArray = std::vector<std::unique_ptr<KPPFFileEntry>>;
-	using KPPFFileEntryRefArray = std::vector<KPPFFileEntry*>;
 }
 
 namespace Kortex::PackageProject
 {
-	class KPPFFolderEntryItem
+	class FolderItemElement
 	{
+		public:
+			using Vector = std::vector<FolderItemElement>;
+
 		private:
 			wxString m_Source;
-			wxString m_Target;
+			wxString m_Destination;
 	
 		public:
-			KPPFFolderEntryItem()
+			FolderItemElement()
 			{
 			}
-			~KPPFFolderEntryItem()
+			~FolderItemElement()
 			{
 			}
 	
@@ -104,43 +109,38 @@ namespace Kortex::PackageProject
 			
 			const wxString& GetDestination() const
 			{
-				return m_Target;
+				return m_Destination;
 			}
 			void SetDestination(const wxString& value)
 			{
-				m_Target = value;
+				m_Destination = value;
 			}
 	};
-	using KPPFFolderItemsArray = std::vector<KPPFFolderEntryItem>;
 }
 
 namespace Kortex::PackageProject
 {
-	class KPPFFolderEntry: public KPPFFileEntry
+	class FolderItem: public FileItem
 	{
 		private:
-			KPPFFolderItemsArray m_Files;
+			FolderItemElement::Vector m_Files;
 	
 		public:
-			KPPFFolderEntry();
-			virtual ~KPPFFolderEntry();
+			FolderItem();
+			~FolderItem();
 	
 		public:
-			KPPFFolderEntry* ToFolderEntry() override
-			{
-				return this;
-			}
-			const KPPFFolderEntry* ToFolderEntry() const override
+			FolderItem* ToFolderItem() override
 			{
 				return this;
 			}
 	
 		public:
-			KPPFFolderItemsArray& GetFiles()
+			FolderItemElement::Vector& GetFiles()
 			{
 				return m_Files;
 			}
-			const KPPFFolderItemsArray& GetFiles() const
+			const FolderItemElement::Vector& GetFiles() const
 			{
 				return m_Files;
 			}
@@ -149,7 +149,7 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectFileData: public KPackageProjectPart
+	class FileDataSection: public ProjectSection
 	{
 		public:
 			static const int ms_RequiredFilesPriority = std::numeric_limits<int>::min();
@@ -163,37 +163,37 @@ namespace Kortex::PackageProject
 			static bool IsFileIDValid(const wxString& id);
 	
 		private:
-			KPPFFileEntryArray m_Data;
+			FileItem::Vector m_Data;
 	
 		public:
-			KPackageProjectFileData(KPackageProject& project);
-			virtual ~KPackageProjectFileData();
+			FileDataSection(ModPackageProject& project);
+			virtual ~FileDataSection();
 	
 		public:
-			KPPFFileEntryArray& GetData()
+			FileItem::Vector& GetData()
 			{
 				return m_Data;
 			}
-			const KPPFFileEntryArray& GetData() const
+			const FileItem::Vector& GetData() const
 			{
 				return m_Data;
 			}
 	
-			KPPFFileEntry* AddFile(KPPFFileEntry* entry)
+			FileItem* AddFile(FileItem* entry)
 			{
-				m_Data.push_back(std::unique_ptr<KPPFFileEntry>(entry));
+				m_Data.push_back(std::unique_ptr<FileItem>(entry));
 				return entry;
 			}
-			KPPFFolderEntry* AddFolder(KPPFFolderEntry* entry)
+			FolderItem* AddFolder(FolderItem* entry)
 			{
-				m_Data.push_back(std::unique_ptr<KPPFFolderEntry>(entry));
+				m_Data.push_back(std::unique_ptr<FolderItem>(entry));
 				return entry;
 			}
-	
-			KPPFFileEntry* FindEntryWithID(const wxString& id, size_t* index = nullptr) const;
-			bool HasEntryWithID(const wxString& id, const KPPFFileEntry* ignoreThis = nullptr) const
+			
+			FileItem* FindEntryWithID(const wxString& id, size_t* index = nullptr) const;
+			bool HasEntryWithID(const wxString& id, const FileItem* ignoreThis = nullptr) const
 			{
-				KPPFFileEntry* entry = FindEntryWithID(id);
+				FileItem* entry = FindEntryWithID(id);
 				return entry != nullptr && entry != ignoreThis;
 			}
 			bool CanUseThisIDForNewEntry(const wxString& id) const

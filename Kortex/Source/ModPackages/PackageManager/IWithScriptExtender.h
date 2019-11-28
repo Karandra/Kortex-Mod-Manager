@@ -5,7 +5,7 @@
 
 namespace Kortex::PackageProject
 {
-	class KPPRRequirementEntry;
+	class RequirementItem;
 }
 
 namespace Kortex::PackageDesigner
@@ -13,6 +13,6 @@ namespace Kortex::PackageDesigner
 	class IWithScriptExtender: public KxComponentOf<IPackageManager>
 	{
 		public:
-			virtual const PackageProject::KPPRRequirementEntry& GetEntry() const = 0;
+			virtual const PackageProject::RequirementItem& GetEntry() const = 0;
 	};
 }

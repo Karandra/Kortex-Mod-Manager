@@ -6,32 +6,10 @@
 
 namespace Kortex::PackageProject
 {
-	enum KPPCSelectionMode
-	{
-		KPPC_SELECT_ANY,
-		KPPC_SELECT_EXACTLY_ONE,
-		KPPC_SELECT_AT_LEAST_ONE, /* One or more */
-		KPPC_SELECT_AT_MOST_ONE, /* One or nothing */
-		KPPC_SELECT_ALL, /* All entries must be selected (pretty useless) */
-	};
-	enum KPPCTypeDescriptor
-	{
-		KPPC_DESCRIPTOR_INVALID = -1,
-	
-		KPPC_DESCRIPTOR_OPTIONAL,
-		KPPC_DESCRIPTOR_REQUIRED,
-		KPPC_DESCRIPTOR_RECOMMENDED,
-		KPPC_DESCRIPTOR_COULD_BE_USABLE,
-		KPPC_DESCRIPTOR_NOT_USABLE,
-	};
-}
-
-namespace Kortex::PackageProject
-{
-	class KPPCFlagEntry: public KLabeledValue, public wxObject
+	class FlagItem: public KLabeledValue, public wxObject
 	{
 		public:
-			using Vector = std::vector<KPPCFlagEntry>;
+			using Vector = std::vector<FlagItem>;
 	
 		public:
 			static wxString GetDeletedFlagPrefix();
@@ -43,8 +21,8 @@ namespace Kortex::PackageProject
 			void SetLabel(const wxString& label) = delete;
 	
 		public:
-			KPPCFlagEntry(const wxString& value, const wxString& name = wxEmptyString);
-			virtual ~KPPCFlagEntry();
+			FlagItem(const wxString& value, const wxString& name = wxEmptyString);
+			virtual ~FlagItem();
 	
 		public:
 			const wxString& GetValue() const
@@ -73,34 +51,34 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPPCCondition: public wxObject
+	class Condition: public wxObject
 	{
 		public:
-			using Vector = std::vector<KPPCCondition>;
+			using Vector = std::vector<Condition>;
 	
 		private:
-			KPPCFlagEntry::Vector m_Flags;
-			KPPOperator m_Operator;
+			FlagItem::Vector m_Flags;
+			Operator m_Operator;
 	
 		public:
 			bool HasFlags() const
 			{
 				return !m_Flags.empty();
 			}
-			KPPCFlagEntry::Vector& GetFlags()
+			FlagItem::Vector& GetFlags()
 			{
 				return m_Flags;
 			}
-			const KPPCFlagEntry::Vector& GetFlags() const
+			const FlagItem::Vector& GetFlags() const
 			{
 				return m_Flags;
 			}
 	
-			KPPOperator GetOperator() const
+			Operator GetOperator() const
 			{
 				return m_Operator;
 			}
-			void SetOperator(KPPOperator value)
+			void SetOperator(Operator value)
 			{
 				m_Operator = value;
 			}
@@ -109,26 +87,26 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPPCConditionGroup
+	class ConditionGroup
 	{
 		private:
-			KPPCCondition::Vector m_Conditions;
-			KPPOperator m_Operator;
+			Condition::Vector m_Conditions;
+			Operator m_Operator;
 	
 		public:
 			bool HasConditions() const
 			{
 				return !m_Conditions.empty();
 			}
-			KPPCCondition::Vector& GetConditions()
+			Condition::Vector& GetConditions()
 			{
 				return m_Conditions;
 			}
-			const KPPCCondition::Vector& GetConditions() const
+			const Condition::Vector& GetConditions() const
 			{
 				return m_Conditions;
 			}
-			KPPCCondition& GetOrCreateFirstCondition()
+			Condition& GetOrCreateFirstCondition()
 			{
 				if (m_Conditions.empty())
 				{
@@ -140,11 +118,11 @@ namespace Kortex::PackageProject
 				}
 			}
 	
-			KPPOperator GetOperator() const
+			Operator GetOperator() const
 			{
 				return m_Operator;
 			}
-			void SetOperator(KPPOperator value)
+			void SetOperator(Operator value)
 			{
 				m_Operator = value;
 			}
@@ -153,26 +131,26 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPPCEntry: public KWithName
+	class ComponentItem: public KWithName
 	{
 		public:
-			using Vector = std::vector<std::unique_ptr<KPPCEntry>>;
-			using RefVector = std::vector<KPPCEntry*>;
+			using Vector = std::vector<std::unique_ptr<ComponentItem>>;
+			using RefVector = std::vector<ComponentItem*>;
 	
 		private:
 			wxString m_Image;
 			wxString m_Description;
 			KxStringVector m_FileData;
 			KxStringVector m_Requirements;
-			KPPCTypeDescriptor m_TypeDescriptorDefault;
-			KPPCTypeDescriptor m_TypeDescriptorConditional = KPPC_DESCRIPTOR_INVALID;
-			KPPCTypeDescriptor m_TypeDescriptorCurrent = KPPC_DESCRIPTOR_INVALID;
-			KPPCConditionGroup m_TypeDescriptorConditions;
-			KPPCCondition m_ConditionalFlags;
+			TypeDescriptor m_TypeDescriptorDefault;
+			TypeDescriptor m_TypeDescriptorConditional = KPPC_DESCRIPTOR_INVALID;
+			TypeDescriptor m_TypeDescriptorCurrent = KPPC_DESCRIPTOR_INVALID;
+			ConditionGroup m_TypeDescriptorConditions;
+			Condition m_ConditionalFlags;
 	
 		public:
-			KPPCEntry();
-			~KPPCEntry();
+			ComponentItem();
+			~ComponentItem();
 	
 		public:
 			const wxString& GetImage() const
@@ -211,47 +189,47 @@ namespace Kortex::PackageProject
 				return m_Requirements;
 			}
 	
-			KPPCTypeDescriptor GetTDDefaultValue() const
+			TypeDescriptor GetTDDefaultValue() const
 			{
 				return m_TypeDescriptorDefault;
 			}
-			void SetTDDefaultValue(KPPCTypeDescriptor type)
+			void SetTDDefaultValue(TypeDescriptor type)
 			{
 				m_TypeDescriptorDefault = type;
 			}
 			
-			KPPCTypeDescriptor GetTDConditionalValue() const
+			TypeDescriptor GetTDConditionalValue() const
 			{
 				return m_TypeDescriptorConditional;
 			}
-			void SetTDConditionalValue(KPPCTypeDescriptor type)
+			void SetTDConditionalValue(TypeDescriptor type)
 			{
 				m_TypeDescriptorConditional = type;
 			}
 			
-			KPPCTypeDescriptor GetTDCurrentValue() const
+			TypeDescriptor GetTDCurrentValue() const
 			{
 				return m_TypeDescriptorCurrent != KPPC_DESCRIPTOR_INVALID ? m_TypeDescriptorCurrent : GetTDDefaultValue();
 			}
-			void SetTDCurrentValue(KPPCTypeDescriptor type)
+			void SetTDCurrentValue(TypeDescriptor type)
 			{
 				m_TypeDescriptorCurrent = type;
 			}
 	
-			KPPCConditionGroup& GetTDConditionGroup()
+			ConditionGroup& GetTDConditionGroup()
 			{
 				return m_TypeDescriptorConditions;
 			}
-			const KPPCConditionGroup& GetTDConditionGroup() const
+			const ConditionGroup& GetTDConditionGroup() const
 			{
 				return m_TypeDescriptorConditions;
 			}
 	
-			KPPCCondition& GetConditionalFlags()
+			Condition& GetConditionalFlags()
 			{
 				return m_ConditionalFlags;
 			}
-			const KPPCCondition& GetConditionalFlags() const
+			const Condition& GetConditionalFlags() const
 			{
 				return m_ConditionalFlags;
 			}
@@ -260,34 +238,34 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPPCGroup: public KWithName
+	class ComponentGroup: public KWithName
 	{
 		public:
-			using Vector = std::vector<std::unique_ptr<KPPCGroup>>;
+			using Vector = std::vector<std::unique_ptr<ComponentGroup>>;
 	
 		private:
-			KPPCSelectionMode m_SelectionMode;
-			KPPCEntry::Vector m_Entries;
+			SelectionMode m_SelectionMode;
+			ComponentItem::Vector m_Entries;
 	
 		public:
-			KPPCGroup();
-			~KPPCGroup();
+			ComponentGroup();
+			~ComponentGroup();
 	
 		public:
-			KPPCSelectionMode GetSelectionMode() const
+			SelectionMode GetSelectionMode() const
 			{
 				return m_SelectionMode;
 			}
-			void SetSelectionMode(KPPCSelectionMode type)
+			void SetSelectionMode(SelectionMode type)
 			{
 				m_SelectionMode = type;
 			}
 	
-			KPPCEntry::Vector& GetEntries()
+			ComponentItem::Vector& GetEntries()
 			{
 				return m_Entries;
 			}
-			const KPPCEntry::Vector& GetEntries() const
+			const ComponentItem::Vector& GetEntries() const
 			{
 				return m_Entries;
 			}
@@ -296,34 +274,34 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPPCStep: public KWithName
+	class ComponentStep: public KWithName
 	{
 		public:
-			using Vector = std::vector<std::unique_ptr<KPPCStep>>;
+			using Vector = std::vector<std::unique_ptr<ComponentStep>>;
 	
 		private:
-			KPPCConditionGroup m_Conditions;
-			KPPCGroup::Vector m_Entries;
+			ConditionGroup m_Conditions;
+			ComponentGroup::Vector m_Entries;
 	
 		public:
-			KPPCStep();
-			~KPPCStep();
+			ComponentStep();
+			~ComponentStep();
 	
 		public:
-			KPPCConditionGroup& GetConditionGroup()
+			ConditionGroup& GetConditionGroup()
 			{
 				return m_Conditions;
 			}
-			const KPPCConditionGroup& GetConditionGroup() const
+			const ConditionGroup& GetConditionGroup() const
 			{
 				return m_Conditions;
 			}
 	
-			KPPCGroup::Vector& GetGroups()
+			ComponentGroup::Vector& GetGroups()
 			{
 				return m_Entries;
 			}
-			const KPPCGroup::Vector& GetGroups() const
+			const ComponentGroup::Vector& GetGroups() const
 			{
 				return m_Entries;
 			}		
@@ -332,25 +310,25 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPPCConditionalStep
+	class ConditionalComponentStep
 	{
 		public:
-			using Vector = std::vector<std::unique_ptr<KPPCConditionalStep>>;
+			using Vector = std::vector<std::unique_ptr<ConditionalComponentStep>>;
 	
 		private:
-			KPPCConditionGroup m_Conditions;
+			ConditionGroup m_Conditions;
 			KxStringVector m_Entries;
 	
 		public:
-			KPPCConditionalStep();
-			~KPPCConditionalStep();
-	
+			ConditionalComponentStep();
+			~ConditionalComponentStep();
+			
 		public:
-			KPPCConditionGroup& GetConditionGroup()
+			ConditionGroup& GetConditionGroup()
 			{
 				return m_Conditions;
 			}
-			const KPPCConditionGroup& GetConditionGroup() const
+			const ConditionGroup& GetConditionGroup() const
 			{
 				return m_Conditions;
 			}
@@ -368,21 +346,21 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectComponents: public KPackageProjectPart
+	class ComponentsSection: public ProjectSection
 	{
 		public:
-			static const KPPOperator ms_DefaultFlagsOperator = KPP_OPERATOR_AND;
-			static const KPPCSelectionMode ms_DefaultSelectionMode = KPPC_SELECT_ANY;
-			static const KPPCTypeDescriptor ms_DefaultTypeDescriptor = KPPC_DESCRIPTOR_OPTIONAL;
+			static const Operator ms_DefaultFlagsOperator = KPP_OPERATOR_AND;
+			static const SelectionMode ms_DefaultSelectionMode = KPPC_SELECT_ANY;
+			static const TypeDescriptor ms_DefaultTypeDescriptor = KPPC_DESCRIPTOR_OPTIONAL;
 	
 		public:
-			static KPPCTypeDescriptor StringToTypeDescriptor(const wxString& name, KPPCTypeDescriptor default = ms_DefaultTypeDescriptor);
-			static wxString TypeDescriptorToString(KPPCTypeDescriptor type);
-			static wxString TypeDescriptorToTranslation(KPPCTypeDescriptor type);
+			static TypeDescriptor StringToTypeDescriptor(const wxString& name, TypeDescriptor default = ms_DefaultTypeDescriptor);
+			static wxString TypeDescriptorToString(TypeDescriptor type);
+			static wxString TypeDescriptorToTranslation(TypeDescriptor type);
 	
-			static KPPCSelectionMode StringToSelectionMode(const wxString& name);
-			static wxString SelectionModeToString(KPPCSelectionMode type);
-			static wxString SelectionModeToTranslation(KPPCSelectionMode type);
+			static SelectionMode StringToSelectionMode(const wxString& name);
+			static wxString SelectionModeToString(SelectionMode type);
+			static wxString SelectionModeToTranslation(SelectionMode type);
 	
 		private:
 			enum class FlagAttribute
@@ -393,15 +371,15 @@ namespace Kortex::PackageProject
 	
 		private:
 			KxStringVector m_RequiredFileData;
-			KPPCStep::Vector m_Steps;
-			KPPCConditionalStep::Vector m_ConditionalSteps;
+			ComponentStep::Vector m_Steps;
+			ConditionalComponentStep::Vector m_ConditionalSteps;
 	
 		private:
 			KxStringVector GetFlagsAttributes(FlagAttribute index) const;
 	
 		public:
-			KPackageProjectComponents(KPackageProject& project);
-			virtual ~KPackageProjectComponents();
+			ComponentsSection(ModPackageProject& project);
+			~ComponentsSection();
 	
 		public:
 			KxStringVector& GetRequiredFileData()
@@ -412,25 +390,25 @@ namespace Kortex::PackageProject
 			{
 				return m_RequiredFileData;
 			}
-	
-			KPPCStep::Vector& GetSteps()
+			
+			ComponentStep::Vector& GetSteps()
 			{
 				return m_Steps;
 			}
-			const KPPCStep::Vector& GetSteps() const
+			const ComponentStep::Vector& GetSteps() const
 			{
 				return m_Steps;
 			}
-	
-			KPPCConditionalStep::Vector& GetConditionalSteps()
+			
+			ConditionalComponentStep::Vector& GetConditionalSteps()
 			{
 				return m_ConditionalSteps;
 			}
-			const KPPCConditionalStep::Vector& GetConditionalSteps() const
+			const ConditionalComponentStep::Vector& GetConditionalSteps() const
 			{
 				return m_ConditionalSteps;
 			}
-	
+			
 			KxStringVector GetFlagsNames() const;
 			KxStringVector GetFlagsValues() const;
 	};

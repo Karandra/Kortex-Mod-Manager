@@ -39,7 +39,7 @@ namespace Kortex
 		}
 	}
 
-	void ModPackage::LoadConfig(KPackageProject& project)
+	void ModPackage::LoadConfig(ModPackageProject& project)
 	{
 		if (m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown)
 		{
@@ -119,22 +119,22 @@ namespace Kortex
 			}
 		}
 	}
-	void ModPackage::LoadConfigNative(KPackageProject& project, size_t index)
+	void ModPackage::LoadConfigNative(ModPackageProject& project, size_t index)
 	{
-		PackageProject::KPackageProjectSerializerKMP serializer(false);
+		PackageProject::NativeSerializer serializer(false);
 		serializer.SetData(ReadString(index));
 		serializer.Structurize(&project);
 	}
-	void ModPackage::LoadConfigSMI(KPackageProject& project, size_t index)
+	void ModPackage::LoadConfigSMI(ModPackageProject& project, size_t index)
 	{
-		PackageProject::KPackageProjectSerializerSMI serializer;
+		PackageProject::LegacySerializer serializer;
 		serializer.SetData(ReadString(index, true));
 		serializer.Structurize(&project);
 	}
-	void ModPackage::LoadConfigFOMod(KPackageProject& project, size_t infoIndex, size_t moduleConfigIndex)
+	void ModPackage::LoadConfigFOMod(ModPackageProject& project, size_t infoIndex, size_t moduleConfigIndex)
 	{
 		KArchive::BufferMap buffers = m_Archive.ExtractToMemory({(uint32_t)infoIndex, (uint32_t)moduleConfigIndex});
-		PackageProject::KPackageProjectSerializerFOMod serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
+		PackageProject::FOModSerializer serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
 		serializer.SetEffectiveArchiveRoot(m_EffectiveArchiveRoot);
 		serializer.Structurize(&project);
 	}
@@ -168,7 +168,7 @@ namespace Kortex
 
 	void ModPackage::LoadBasicResources()
 	{
-		PackageProject::KPPIImageEntry* logo = m_Config.GetInterface().GetMainImageEntry();
+		PackageProject::ImageItem* logo = m_Config.GetInterface().GetMainImageEntry();
 		if (logo)
 		{
 			KxFileItem item;
@@ -181,8 +181,8 @@ namespace Kortex
 	void ModPackage::LoadImageResources()
 	{
 		KxUInt32Vector indexes;
-		std::unordered_map<size_t, PackageProject::KPPIImageEntry*> entriesMap;
-		for (PackageProject::KPPIImageEntry& entry: m_Config.GetInterface().GetImages())
+		std::unordered_map<size_t, PackageProject::ImageItem*> entriesMap;
+		for (PackageProject::ImageItem& entry: m_Config.GetInterface().GetImages())
 		{
 			KxFileItem item;
 			if (m_Archive.FindFile(entry.GetPath(), item))
@@ -246,7 +246,7 @@ namespace Kortex
 	{
 		Create(archivePath);
 	}
-	ModPackage::ModPackage(const wxString& archivePath, KPackageProject& project)
+	ModPackage::ModPackage(const wxString& archivePath, ModPackageProject& project)
 	{
 		Create(archivePath, project);
 	}
@@ -265,7 +265,7 @@ namespace Kortex
 		}
 		return false;
 	}
-	bool ModPackage::Create(const wxString& archivePath, KPackageProject& project)
+	bool ModPackage::Create(const wxString& archivePath, ModPackageProject& project)
 	{
 		Init(archivePath);
 

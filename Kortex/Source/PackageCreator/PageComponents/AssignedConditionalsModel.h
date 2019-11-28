@@ -9,10 +9,10 @@ class KxComboBox;
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
-	class AssignedConditionalsModel: public VectorModel<PackageProject::KPPCFlagEntry::Vector>, public IDTracker
+	class AssignedConditionalsModel: public VectorModel<PackageProject::FlagItem::Vector>, public IDTracker
 	{
 		protected:
-			PackageProject::KPPCCondition* m_Condition = nullptr;
+			PackageProject::Condition* m_Condition = nullptr;
 			KxDataViewComboBoxEditor* m_LabelEditor = nullptr;
 			KxDataViewComboBoxEditor* m_ValueEditor = nullptr;
 			
@@ -58,7 +58,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 			
 		public:
-			PackageProject::KPPCFlagEntry* GetDataEntry(size_t index)
+			PackageProject::FlagItem* GetDataEntry(size_t index)
 			{
 				if (index < GetItemCount())
 				{
@@ -66,7 +66,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 				return nullptr;
 			}
-			const PackageProject::KPPCFlagEntry* GetDataEntry(size_t index) const
+			const PackageProject::FlagItem* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{
@@ -76,7 +76,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 	
 			void SetDataVector();
-			void SetDataVector(PackageProject::KPPCCondition& data);
+			void SetDataVector(PackageProject::Condition& data);
 	};
 }
 

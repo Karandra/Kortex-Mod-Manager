@@ -10,10 +10,10 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 {
 	class ContentModel;
 
-	class MainListModel: public VectorModel<PackageProject::KPPFFileEntryArray>, public IDTracker
+	class MainListModel: public VectorModel<PackageProject::FileItem::Vector>, public IDTracker
 	{
 		private:
-			PackageProject::KPackageProjectFileData* m_FileData = nullptr;
+			PackageProject::FileDataSection* m_FileData = nullptr;
 			ContentModel* m_ContentModel = nullptr;
 			
 			KxDataViewSpinEditor* m_PriorityRenderer = nullptr;
@@ -25,7 +25,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
 			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
 	
-			void AddEverythingFromPath(const wxString& filePath, PackageProject::KPPFFolderEntry* fileEntry, KOperationWithProgressBase* context);
+			void AddEverythingFromPath(const wxString& filePath, PackageProject::FolderItem* fileEntry, KOperationWithProgressBase* context);
 			bool DoTrackID(const wxString& trackedID, const wxString& newID, bool remove);
 	
 			void OnActivateItem(KxDataViewEvent& event);
@@ -36,7 +36,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			void OnAddFile();
 			void OnAddFolder();
 			void OnAddMultipleFolders();
-			void OnReplaceFolderContent(const KxDataViewItem& item, PackageProject::KPPFFolderEntry* folderEntry);
+			void OnReplaceFolderContent(const KxDataViewItem& item, PackageProject::FolderItem* folderEntry);
 			void OnRemoveElement(const KxDataViewItem& item);
 			void OnClearList();
 			bool OnInsertItem(KxDataViewItem& currentItem, KxDataViewItem& droppedItem) override
@@ -60,7 +60,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			}
 	
 		public:
-			PackageProject::KPPFFileEntry* GetDataEntry(size_t index) const
+			PackageProject::FileItem* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{
@@ -69,7 +69,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 				return nullptr;
 			}
 	
-			void SetProject(KPackageProject& projectData);
+			void SetProject(ModPackageProject& projectData);
 			void SetContentModel(ContentModel* content)
 			{
 				m_ContentModel = content;

@@ -10,7 +10,7 @@
 
 namespace Kortex::PackageProject
 {
-	ModSourceItem KPackageProjectSerializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
+	ModSourceItem Serializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
 	{
 		using namespace Kortex::NetworkManager;
 	
@@ -49,13 +49,13 @@ namespace Kortex::PackageProject
 		}
 		return Kortex::ModSourceItem();
 	}
-	wxString KPackageProjectSerializer::ConvertBBCode(const wxString& bbSource)
+	wxString Serializer::ConvertBBCode(const wxString& bbSource)
 	{
 		wxString copy = bbSource;
 		Kortex::NetworkManager::NexusModNetwork::GetInstance()->ConvertDescriptionText(copy);
 		return copy;
 	}
-	wxString KPackageProjectSerializer::PathNameToPackage(const wxString& pathName, KPPContentType type) const
+	wxString Serializer::PathNameToPackage(const wxString& pathName, ContentType type) const
 	{
 		switch (type)
 		{
@@ -76,15 +76,15 @@ namespace Kortex::PackageProject
 		};
 		return wxEmptyString;
 	}
-	bool KPackageProjectSerializer::CheckTag(const wxString& tagName) const
+	bool Serializer::CheckTag(const wxString& tagName) const
 	{
 		return Kortex::IModTagManager::GetInstance()->FindTagByName(tagName) != nullptr;
 	}
 	
-	KPackageProjectSerializer::KPackageProjectSerializer()
+	Serializer::Serializer()
 	{
 	}
-	KPackageProjectSerializer::~KPackageProjectSerializer()
+	Serializer::~Serializer()
 	{
 	}
 }

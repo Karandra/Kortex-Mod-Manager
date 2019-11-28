@@ -17,7 +17,7 @@ namespace Kortex::InstallWizard
 	{
 		GetWizard().GetComponentsPage().StoreRequirementsFlags();
 
-		const KPackageProject& package = GetPackageConfig();
+		const ModPackageProject& package = GetPackageConfig();
 		m_DisplayModel->ShowGroups(package.GetRequirements().GetDefaultGroup());
 	}
 

@@ -5,17 +5,17 @@
 
 namespace Kortex
 {
-	class KPackageProject;
+	class ModPackageProject;
 }
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectSerializerKMP: public KPackageProjectSerializer
+	class NativeSerializer: public Serializer
 	{
 		private:
 			const bool m_AsProject = false;
-			KPackageProject* m_ProjectLoad = nullptr;
-			const KPackageProject* m_ProjectSave = nullptr;
+			ModPackageProject* m_ProjectLoad = nullptr;
+			const ModPackageProject* m_ProjectSave = nullptr;
 			wxString m_Data;
 			KxXMLDocument m_XML;
 			
@@ -37,15 +37,15 @@ namespace Kortex::PackageProject
 			void WriteComponents(KxXMLNode& baseNode);
 	
 		public:
-			KPackageProjectSerializerKMP(bool bAsProject = false)
+			NativeSerializer(bool bAsProject = false)
 				:m_AsProject(bAsProject)
 			{
 				SetPackageDataRoot(GetDefaultFOModRoot());
 			}
 			
 		public:
-			void Serialize(const KPackageProject* project) override;
-			void Structurize(KPackageProject* project) override;
+			void Serialize(const ModPackageProject* project) override;
+			void Structurize(ModPackageProject* project) override;
 			
 			const wxString& GetData() const
 			{

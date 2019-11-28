@@ -335,7 +335,7 @@ namespace Kortex::PackageDesigner
 		{
 			KxMenuItem* item = event.GetItem();
 
-			PackageProject::KPPPackageType type = (PackageProject::KPPPackageType)(item->GetId() - KxID_HIGHEST);
+			PackageProject::PackageType type = (PackageProject::PackageType)(item->GetId() - KxID_HIGHEST);
 			switch (type)
 			{
 				case 0:
@@ -346,7 +346,7 @@ namespace Kortex::PackageDesigner
 						wxString info = KxTextFile::ReadToString(dialog.GetInfoFile());
 						wxString sModuleConfig = KxTextFile::ReadToString(dialog.GetModuleConfigFile());
 
-						PackageProject::KPackageProjectSerializerFOMod serailizer(info, sModuleConfig, dialog.GetProjectFolder());
+						PackageProject::FOModSerializer serailizer(info, sModuleConfig, dialog.GetProjectFolder());
 						m_WorkspaceDocument.ImportProject(serailizer);
 					}
 					break;
@@ -367,7 +367,7 @@ namespace Kortex::PackageDesigner
 	}
 	void Workspace::OnExportProject(KxMenuEvent& event)
 	{
-		PackageProject::KPPPackageType type = (PackageProject::KPPPackageType)(event.GetItem()->GetId() - KxID_HIGHEST);
+		PackageProject::PackageType type = (PackageProject::PackageType)(event.GetItem()->GetId() - KxID_HIGHEST);
 		switch (type)
 		{
 			case PackageProject::KPP_PACCKAGE_NATIVE:
@@ -380,7 +380,7 @@ namespace Kortex::PackageDesigner
 
 				if (dialog.ShowModal() == KxID_OK)
 				{
-					PackageProject::KPackageProjectSerializerKMP serializer(false);
+					PackageProject::NativeSerializer serializer(false);
 					m_WorkspaceDocument.ExportProject(serializer);
 					KxTextFile::WriteToFile(dialog.GetResult(), serializer.GetData());
 				}
@@ -391,7 +391,7 @@ namespace Kortex::PackageDesigner
 				FOModImportExportDialog dialog(this, true);
 				if (dialog.ShowModal() == KxID_OK)
 				{
-					PackageProject::KPackageProjectSerializerFOMod serializer(dialog.GetProjectFolder());
+					PackageProject::FOModSerializer serializer(dialog.GetProjectFolder());
 					serializer.ExportToNativeFormat(true);
 					m_WorkspaceDocument.ExportProject(serializer);
 
@@ -439,14 +439,14 @@ namespace Kortex::PackageDesigner
 	{
 		return static_cast<PageBase*>(m_PagesContainer.GetCurrentWorkspace());
 	}
-	KPackageProject& Workspace::ImportProjectFromPackage(const wxString& path)
+	ModPackageProject& Workspace::ImportProjectFromPackage(const wxString& path)
 	{
 		EnsureCreated();
 
 		m_WorkspaceDocument.ImportProjectFromPackage(path);
 		return *m_WorkspaceDocument.GetProject();
 	}
-	KPackageProject& Workspace::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
+	ModPackageProject& Workspace::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
 	{
 		EnsureCreated();
 

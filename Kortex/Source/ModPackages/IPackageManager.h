@@ -33,14 +33,14 @@ namespace Kortex
 
 		public:
 			static bool IsPathAbsolute(const wxString& path);
-			static wxString GetRequirementFilePath(const PackageProject::KPPRRequirementEntry* entry);
-			static PackageProject::KPPReqState CheckRequirementState(const PackageProject::KPPRRequirementEntry* entry);
-			static KxVersion GetRequirementVersionFromBinaryFile(const PackageProject::KPPRRequirementEntry* entry);
-			static KxVersion GetRequirementVersionFromModManager(const PackageProject::KPPRRequirementEntry* entry);
-			static KxVersion GetRequirementVersion(const PackageProject::KPPRRequirementEntry* entry);
+			static wxString GetRequirementFilePath(const PackageProject::RequirementItem* entry);
+			static PackageProject::ReqState CheckRequirementState(const PackageProject::RequirementItem* entry);
+			static KxVersion GetRequirementVersionFromBinaryFile(const PackageProject::RequirementItem* entry);
+			static KxVersion GetRequirementVersionFromModManager(const PackageProject::RequirementItem* entry);
+			static KxVersion GetRequirementVersion(const PackageProject::RequirementItem* entry);
 
 		protected:
-			void LoadRequirementsGroup(PackageProject::KPPRRequirementsGroup& group, const KxXMLNode& rootNode);
+			void LoadRequirementsGroup(PackageProject::RequirementGroup& group, const KxXMLNode& rootNode);
 
 		public:
 			IPackageManager();
@@ -50,8 +50,8 @@ namespace Kortex
 			void SetPackagesFolder(const wxString& path) const;
 
 		public:
-			virtual const PackageProject::KPPRRequirementEntry::Vector& GetStdRequirements() const = 0;
-			virtual const PackageProject::KPPRRequirementEntry* FindStdReqirement(const wxString& id) const = 0;
+			virtual const PackageProject::RequirementItem::Vector& GetStdRequirements() const = 0;
+			virtual const PackageProject::RequirementItem* FindStdReqirement(const wxString& id) const = 0;
 
 			virtual void OnModListMenu(KxMenu& menu, const std::vector<IGameMod*>& selectedMods, IGameMod* focusedMod) = 0;
 	};

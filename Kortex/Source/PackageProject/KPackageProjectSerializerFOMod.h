@@ -7,28 +7,28 @@
 
 namespace Kortex
 {
-	class KPackageProject;
+	class ModPackageProject;
 }
 namespace Kortex::PackageProject
 {
-	class KPPFFileEntry;
-	class KPPRRequirementsGroup;
+	class FileItem;
+	class RequirementGroup;
 }
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectSerializerFOMod: public KPackageProjectSerializer
+	class FOModSerializer: public Serializer
 	{
 		private:
-			using FilePriorityArray = std::vector<std::pair<KPPFFileEntry*, int64_t>>;
+			using FilePriorityArray = std::vector<std::pair<FileItem*, int64_t>>;
 			
 		private:
 			wxString m_InfoXML;
 			wxString m_ModuleConfigXML;
 			wxString m_ProjectFolder;
 	
-			KPackageProject* m_ProjectLoad = nullptr;
-			const KPackageProject* m_ProjectSave = nullptr;
+			ModPackageProject* m_ProjectLoad = nullptr;
+			const ModPackageProject* m_ProjectSave = nullptr;
 			KxXMLDocument m_XML;
 			bool m_ExportToNativeFormat = false;
 	
@@ -43,8 +43,8 @@ namespace Kortex::PackageProject
 			}
 			wxString GetDataFolderName(bool withSeparator) const;
 			wxString MakeProjectPath(const wxString& path) const;
-			PackageProject::KPPCSelectionMode ConvertSelectionMode(const wxString& mode) const;
-			wxString ConvertSelectionMode(PackageProject::KPPCSelectionMode mode) const;
+			PackageProject::SelectionMode ConvertSelectionMode(const wxString& mode) const;
+			wxString ConvertSelectionMode(PackageProject::SelectionMode mode) const;
 			template<class T> void UniqueStringArray(T& array)
 			{
 				auto it = std::unique(array.begin(), array.end());
@@ -52,16 +52,16 @@ namespace Kortex::PackageProject
 			}
 	
 		private:
-			/* Structurize */
+			// Structurize
 			void ReadInfo();
 	
 			void ReadInstallSteps();
 			void ReadConditionalSteps(const KxXMLNode& stepsArrayNode);
-			FilePriorityArray ReadFileData(const KxXMLNode& filesArrayNode, KPPCEntry* entry = nullptr);
+			FilePriorityArray ReadFileData(const KxXMLNode& filesArrayNode, ComponentItem* entry = nullptr);
 			void UniqueFileData();
 			void UniqueImages();
 	
-			/* Serialize */
+			// Serialize
 			void WriteInfo();
 			void WriteSites(KxXMLNode& infoNode, KxXMLNode& sitesNode);
 	
@@ -75,12 +75,12 @@ namespace Kortex::PackageProject
 			void Init();
 	
 		public:
-			KPackageProjectSerializerFOMod(const wxString& projectFolder = wxEmptyString);
-			KPackageProjectSerializerFOMod(const wxString& sInfoXML, const wxString& moduleConfigXML, const wxString& projectFolder = wxEmptyString);
+			FOModSerializer(const wxString& projectFolder = wxEmptyString);
+			FOModSerializer(const wxString& sInfoXML, const wxString& moduleConfigXML, const wxString& projectFolder = wxEmptyString);
 	
 		public:
-			void Serialize(const KPackageProject* project) override;
-			void Structurize(KPackageProject* project) override;
+			void Serialize(const ModPackageProject* project) override;
+			void Structurize(ModPackageProject* project) override;
 	
 			void ExportToNativeFormat(bool value)
 			{

@@ -5,7 +5,7 @@ class KxComboBox;
 
 namespace Kortex::PackageProject
 {
-	class KPackageProjectInterface;
+	class InterfaceSection;
 }
 namespace Kortex::PackageDesigner::PageInterfaceNS
 {
@@ -25,8 +25,8 @@ namespace Kortex::PackageDesigner
 			//KProgramOptionAI m_ListOptions;
 
 		private:
-			PackageProject::KPackageProjectInterface& GetProjectInterface() const;
-			void OnLoadProject(PackageProject::KPackageProjectInterface& projectInterface);
+			PackageProject::InterfaceSection& GetProjectInterface() const;
+			void OnLoadProject(PackageProject::InterfaceSection& projectInterface);
 			void CreateImageListControls();
 
 		protected:

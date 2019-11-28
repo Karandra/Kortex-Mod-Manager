@@ -429,42 +429,6 @@
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProject.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectInfo.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectConfig.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectInterface.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectPart.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectSerializer.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectSerializerKMP.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectFileData.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectRequirements.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectComponents.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectSerializerFOMod.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PackageProject\KPackageProjectSerializerSMI.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
@@ -1284,6 +1248,42 @@
     <ClCompile Include="Source\PackageCreator\PageRequirements\EntriesListModel.cpp">
       <Filter>Code\Source\PackageCreator\PageRequirements</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PackageProject\ModPackageProject.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\ComponentsSection.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\ConfigSection.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\FileDataSection.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\InfoSection.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\InterfaceSection.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\ProjectSection.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\RequirementsSection.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\Serializer.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\FOModSerializer.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\NativeSerializer.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageProject\LegacySerializer.cpp">
+      <Filter>Code\Source\PackageProject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1307,50 +1307,11 @@
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProject.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectInfo.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectConfig.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectInterface.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectRequirements.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectPart.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectSerializer.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectSerializerKMP.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectFileData.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectComponents.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utility\KWithIDName.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectDefs.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectSerializerFOMod.h">
-      <Filter>Code\Headers\PackageProject</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utility\KDataViewListModel.h">
       <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PackageProject\KPackageProjectSerializerSMI.h">
-      <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KOperationWithProgress.h">
       <Filter>Code\Headers\Utility</Filter>
@@ -2428,6 +2389,45 @@
     </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageRequirements\EntriesListModel.h">
       <Filter>Code\Headers\PackageCreator\PageRequirements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\ModPackageProject.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\ComponentsSection.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\ConfigSection.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\Common.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\FileDataSection.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\InfoSection.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\InterfaceSection.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\ProjectSection.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\RequirementsSection.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\Serializer.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\FOModSerializer.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\NativeSerializer.h">
+      <Filter>Code\Headers\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\LegacySerializer.h">
+      <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

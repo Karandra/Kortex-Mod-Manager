@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "ModPackages/IPackageManager.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include "Archive/KArchive.h"
 #include "Utility/KLabeledValue.h"
 #include <KxFramework/KxFileStream.h>

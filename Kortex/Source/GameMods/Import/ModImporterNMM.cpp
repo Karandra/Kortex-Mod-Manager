@@ -10,7 +10,7 @@
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
-#include "PackageProject/KPackageProjectSerializer.h"
+#include "PackageProject/Serializer.h"
 #include "Utility/KOperationWithProgress.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxFileFinder.h>

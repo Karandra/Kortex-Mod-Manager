@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "PackageCreator/VectorModel.h"
 #include "PackageCreator/PageComponents/ComponentsModelNode.h"
-#include "PackageProject/KPackageProject.h"
-#include "PackageProject/KPackageProjectComponents.h"
+#include "PackageProject/ModPackageProject.h"
+#include "PackageProject/ComponentsSection.h"
 #include <KxFramework/KxDataView.h>
 class KxImageView;
 

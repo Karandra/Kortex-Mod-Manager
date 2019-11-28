@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KPackageProjectDefs.h"
+#include "Common.h"
 #include <Kortex/ModManager.hpp>
 #include "Network/ModSourceStore.h"
 

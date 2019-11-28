@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "PackageProject/KPackageProjectComponents.h"
+#include "PackageProject/ComponentsSection.h"
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {

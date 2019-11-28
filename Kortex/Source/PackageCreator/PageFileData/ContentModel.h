@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "PackageCreator/VectorModel.h"
-#include "PackageProject/KPackageProjectFileData.h"
+#include "PackageProject/FileDataSection.h"
 class KxAuiToolBar;
 class KxAuiToolBarItem;
 class KxAuiToolBarEvent;

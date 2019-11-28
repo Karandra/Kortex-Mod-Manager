@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/IManager.h"
-#include "PackageProject/KPackageProjectDefs.h"
-#include "PackageProject/KPackageProjectRequirements.h"
+#include "PackageProject/Common.h"
+#include "PackageProject/RequirementsSection.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxComponentSystem.h>
 class KxMenu;

@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KPackageProjectDefs.h"
+#include "Common.h"
 
 namespace Kortex
 {

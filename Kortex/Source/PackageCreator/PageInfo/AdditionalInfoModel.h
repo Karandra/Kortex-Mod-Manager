@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "PackageCreator/VectorModel.h"
-#include "PackageProject/KPackageProjectInfo.h"
+#include "PackageProject/InfoSection.h"
 #include <KxFramework/KxStdDialog.h>
 
 namespace Kortex::PackageDesigner::PageInfoNS

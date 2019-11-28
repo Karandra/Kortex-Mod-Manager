@@ -6,7 +6,7 @@
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include "Utility/KAux.h"
 #include <KxFramework/KxCrypto.h>
 #include <KxFramework/KxXML.h>

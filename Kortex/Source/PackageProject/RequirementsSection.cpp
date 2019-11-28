@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "KPackageProjectRequirements.h"
-#include "KPackageProject.h"
+#include "RequirementsSection.h"
+#include "ModPackageProject.h"
 #include "ModPackages/IPackageManager.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"

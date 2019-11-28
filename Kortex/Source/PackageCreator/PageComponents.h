@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "PageBase.h"
-#include "PackageProject/KPackageProjectComponents.h"
+#include "PackageProject/ComponentsSection.h"
 class KxImageView;
 
 namespace Kortex::PackageDesigner

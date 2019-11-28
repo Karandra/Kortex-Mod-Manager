@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/Resources/ImageResourceID.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 
 namespace Kortex
 {

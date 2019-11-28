@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "KPackageProjectSerializerFOMod.h"
-#include "KPackageProjectSerializer.h"
-#include "KPackageProject.h"
-#include "KPackageProjectConfig.h"
-#include "KPackageProjectInfo.h"
-#include "KPackageProjectInterface.h"
-#include "KPackageProjectFileData.h"
-#include "KPackageProjectRequirements.h"
-#include "KPackageProjectComponents.h"
+#include "FOModSerializer.h"
+#include "Serializer.h"
+#include "ModPackageProject.h"
+#include "ConfigSection.h"
+#include "InfoSection.h"
+#include "InterfaceSection.h"
+#include "FileDataSection.h"
+#include "RequirementsSection.h"
+#include "ComponentsSection.h"
 #include "ModPackages/IPackageManager.h"
 
 #include <Kortex/Application.hpp>
@@ -683,7 +683,7 @@ namespace Kortex::PackageProject
 	}
 	void FOModSerializer::UniqueImages()
 	{
-		KPPIImageEntryArray& images = m_ProjectLoad->GetInterface().GetImages();
+		ImageItem::Vector& images = m_ProjectLoad->GetInterface().GetImages();
 		auto it = KUnsortedUnique(images.begin(), images.end(), [](const ImageItem& v1, const ImageItem& v2)
 		{
 			return v1.GetPath() == v2.GetPath();

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GroupsModel.h"
 #include "EntriesListModel.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include "PackageCreator/PageBase.h"
 #include "PackageCreator/WorkspaceDocument.h"
 #include <Kortex/Application.hpp>

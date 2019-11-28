@@ -2,7 +2,7 @@
 #include "ConditionalStepsModel.h"
 #include "FileDataSelectorModel.h"
 #include "ConditionGroupModel.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include "PackageCreator/PageBase.h"
 #include "PackageCreator/PageComponents.h"
 #include "PackageCreator/WorkspaceDocument.h"

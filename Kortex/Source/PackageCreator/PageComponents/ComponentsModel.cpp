@@ -538,7 +538,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 							const PackageProject::ImageItem* imageEntry = GetInterface().FindEntryWithValue(entry->GetImage());
 							if (imageEntry)
 							{
-								const PackageProject::KPPIImageEntryArray& images = GetInterface().GetImages();
+								const PackageProject::ImageItem::Vector& images = GetInterface().GetImages();
 								auto it = std::find_if(images.begin(), images.end(), [imageEntry](const PackageProject::ImageItem& value)
 								{
 									return &value == imageEntry;
@@ -704,7 +704,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					// Account for <None> image
 					int index = value.As<int>() - 1;
 	
-					const PackageProject::KPPIImageEntryArray& images = GetInterface().GetImages();
+					const PackageProject::ImageItem::Vector& images = GetInterface().GetImages();
 					if (index >= 0 && (size_t)index < images.size())
 					{
 						const PackageProject::ImageItem& imageEntry = images[index];
@@ -1400,7 +1400,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	void ComponentsModel::AllEntries_Image(ComponentsModelNode* node, const wxString& name)
 	{
 		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
-		const PackageProject::KPPIImageEntryArray& images = GetInterface().GetImages();
+		const PackageProject::ImageItem::Vector& images = GetInterface().GetImages();
 		KxComboBoxDialog dialog(GetView(), KxID_NONE, name, wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, KxComboBoxDialog::DefaultStyle);
 	
 		UpdateImageEditorList();

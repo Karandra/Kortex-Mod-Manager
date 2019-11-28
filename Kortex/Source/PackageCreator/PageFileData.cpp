@@ -5,8 +5,8 @@
 #include "WorkspaceDocument.h"
 #include "PageFileData/MainListModel.h"
 #include "PageFileData/ContentModel.h"
-#include "PackageProject/KPackageProject.h"
-#include "PackageProject/KPackageProjectFileData.h"
+#include "PackageProject/ModPackageProject.h"
+#include "PackageProject/FileDataSection.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxLabel.h>
 

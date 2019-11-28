@@ -4,9 +4,9 @@
 #include "PackageBuilder.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
-#include "PackageProject/KPackageProjectDefs.h"
-#include "PackageProject/KPackageProjectSerializerKMP.h"
-#include "PackageProject/KPackageProjectSerializerFOMod.h"
+#include "PackageProject/Common.h"
+#include "PackageProject/NativeSerializer.h"
+#include "PackageProject/FOModSerializer.h"
 #include "ModPackages/ModPackage.h"
 #include "Archive/KArchive.h"
 #include "Utility/KOperationWithProgress.h"

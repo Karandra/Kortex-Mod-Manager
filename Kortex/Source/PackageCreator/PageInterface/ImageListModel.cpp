@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <Kortex/ScreenshotsGallery.hpp>
 #include "ImageListModel.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include "UI/TextEditDialog.h"
 #include "UI/ImageViewerDialog.h"
 #include "Utility/KOperationWithProgress.h"

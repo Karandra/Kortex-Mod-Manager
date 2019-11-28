@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KPackageProjectPart.h"
+#include "ProjectSection.h"
 #include "Utility/KLabeledValue.h"
 #include "Utility/KWithIDName.h"
 

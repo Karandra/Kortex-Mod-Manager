@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KPackageProjectPart.h"
+#include "ProjectSection.h"
 #include "Utility/KLabeledValue.h"
 #include "Utility/KWithBitmap.h"
 #include <KxFramework/KxColor.h>
@@ -9,6 +9,9 @@ namespace Kortex::PackageProject
 {
 	class ImageItem: public KWithBitmap
 	{
+		public:
+			using Vector = std::vector<ImageItem>;
+
 		private:
 			wxString m_Path;
 			wxString m_Description;
@@ -78,7 +81,6 @@ namespace Kortex::PackageProject
 				m_Size = tSize;
 			}
 	};
-	using KPPIImageEntryArray = std::vector<ImageItem>;
 }
 
 namespace Kortex::PackageProject
@@ -139,7 +141,7 @@ namespace Kortex::PackageProject
 		private:
 			wxString m_MainImage;
 			wxString m_HeaderImage;
-			KPPIImageEntryArray m_Images;
+			ImageItem::Vector m_Images;
 			TitleConfig m_TitleConfig;
 			
 		public:
@@ -147,11 +149,11 @@ namespace Kortex::PackageProject
 			~InterfaceSection();
 	
 		public:
-			const KPPIImageEntryArray& GetImages() const
+			const ImageItem::Vector& GetImages() const
 			{
 				return m_Images;
 			}
-			KPPIImageEntryArray& GetImages()
+			ImageItem::Vector& GetImages()
 			{
 				return m_Images;
 			}

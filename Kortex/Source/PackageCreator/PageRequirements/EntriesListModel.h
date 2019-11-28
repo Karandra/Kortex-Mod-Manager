@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "PackageCreator/VectorModel.h"
-#include "PackageProject/KPackageProjectRequirements.h"
+#include "PackageProject/RequirementsSection.h"
 
 namespace Kortex::PackageDesigner::PageRequirementsNS
 {

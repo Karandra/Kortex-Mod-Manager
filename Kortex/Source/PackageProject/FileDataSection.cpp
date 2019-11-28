@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "KPackageProjectFileData.h"
-#include "KPackageProject.h"
+#include "FileDataSection.h"
+#include "ModPackageProject.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include <KxFramework/KxString.h>

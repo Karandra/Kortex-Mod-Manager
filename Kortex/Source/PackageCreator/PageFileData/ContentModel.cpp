@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ContentModel.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include "Application/Resources/ImageResourceID.h"
 #include "Application/Resources/IImageProvider.h"
 #include <Kortex/Application.hpp>

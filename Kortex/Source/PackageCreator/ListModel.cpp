@@ -2,7 +2,7 @@
 #include "ListModel.h"
 #include "WorkspaceDocument.h"
 #include "PageBase.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxString.h>
 

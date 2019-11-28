@@ -1,13 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "PackageCreator/VectorModel.h"
-#include "PackageProject/KPackageProjectInterface.h"
+#include "PackageProject/InterfaceSection.h"
 #include "PackageCreator/IDTracker.h"
 #include "Utility/KBitmapSize.h"
 
 namespace Kortex::PackageDesigner::PageInterfaceNS
 {
-	class ImageListModel: public VectorModel<PackageProject::KPPIImageEntryArray>, public IDTracker
+	class ImageListModel: public VectorModel<PackageProject::ImageItem::Vector>, public IDTracker
 	{
 		public:
 			static KBitmapSize GetThumbnailSize(const wxWindow* window = nullptr);

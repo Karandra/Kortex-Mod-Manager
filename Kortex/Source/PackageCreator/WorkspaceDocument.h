@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/IWorkspaceDocument.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 
 namespace Kortex
 {

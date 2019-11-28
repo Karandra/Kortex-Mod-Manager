@@ -2,7 +2,7 @@
 #include <Kortex/PluginManager.hpp>
 #include "EntriesListModel.h"
 #include "PackageCreator/PageBase.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include "ModPackages/IPackageManager.h"
 #include "UI/TextEditDialog.h"
 #include "UI/ImageViewerDialog.h"

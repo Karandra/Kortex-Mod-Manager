@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "ModPackage.h"
-#include "PackageProject/KPackageProjectSerializerKMP.h"
-#include "PackageProject/KPackageProjectSerializerSMI.h"
-#include "PackageProject/KPackageProjectSerializerFOMod.h"
+#include "PackageProject/NativeSerializer.h"
+#include "PackageProject/LegacySerializer.h"
+#include "PackageProject/FOModSerializer.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileStream.h>

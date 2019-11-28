@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KPackageProject.h"
+#include "ModPackageProject.h"
 #include <Kortex/ModManager.hpp>
 #include <Kortex/PackageManager.hpp>
 #include <Kortex/GameInstance.hpp>

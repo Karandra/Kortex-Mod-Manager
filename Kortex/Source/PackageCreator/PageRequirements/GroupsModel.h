@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "PackageCreator/VectorModel.h"
 #include "PackageCreator/IDTracker.h"
-#include "PackageProject/KPackageProjectRequirements.h"
+#include "PackageProject/RequirementsSection.h"
 class KxButton;
 class KxDataViewComboBox;
 

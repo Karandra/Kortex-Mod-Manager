@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "PackageCreator/VectorModel.h"
-#include "PackageProject/KPackageProjectComponents.h"
-#include "PackageProject/KPackageProjectRequirements.h"
+#include "PackageProject/ComponentsSection.h"
+#include "PackageProject/RequirementsSection.h"
 #include "PackageCreator/IDTracker.h"
 #include <KxFramework/KxStdDialog.h>
 class KxComboBox;

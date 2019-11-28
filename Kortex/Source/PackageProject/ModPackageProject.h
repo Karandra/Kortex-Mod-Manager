@@ -1,12 +1,12 @@
 #pragma once
 #include "stdafx.h"
-#include "KPackageProjectConfig.h"
-#include "KPackageProjectInfo.h"
-#include "KPackageProjectFileData.h"
-#include "KPackageProjectInterface.h"
-#include "KPackageProjectRequirements.h"
-#include "KPackageProjectComponents.h"
-#include "KPackageProjectDefs.h"
+#include "ConfigSection.h"
+#include "InfoSection.h"
+#include "FileDataSection.h"
+#include "InterfaceSection.h"
+#include "RequirementsSection.h"
+#include "ComponentsSection.h"
+#include "Common.h"
 #include <KxFramework/KxVersion.h>
 
 namespace Kortex

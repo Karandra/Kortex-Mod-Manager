@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "PackageProject/KPackageProjectComponents.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ComponentsSection.h"
+#include "PackageProject/ModPackageProject.h"
 
 namespace Kortex::PackageDesigner
 {

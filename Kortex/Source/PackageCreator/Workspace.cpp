@@ -9,9 +9,9 @@
 #include "PageRequirements.h"
 #include "PageComponents.h"
 #include "FOModImportExportDialog.h"
-#include "PackageProject/KPackageProjectDefs.h"
-#include "PackageProject/KPackageProjectSerializerKMP.h"
-#include "PackageProject/KPackageProjectSerializerFOMod.h"
+#include "PackageProject/Common.h"
+#include "PackageProject/NativeSerializer.h"
+#include "PackageProject/FOModSerializer.h"
 #include "ModPackages/ModPackage.h"
 #include "GameMods/ModManager/Workspace.h"
 #include <KxFramework/KxFileBrowseDialog.h>

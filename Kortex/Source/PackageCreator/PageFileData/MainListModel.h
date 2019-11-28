@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "PackageCreator/VectorModel.h"
 #include "PackageCreator/IDTracker.h"
-#include "PackageProject/KPackageProjectFileData.h"
+#include "PackageProject/FileDataSection.h"
 class KxDataViewSpinRenderer;
 class KOperationWithProgressBase;
 

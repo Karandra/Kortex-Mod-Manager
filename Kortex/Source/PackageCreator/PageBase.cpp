@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "PageBase.h"
-#include "PackageProject/KPackageProject.h"
+#include "PackageProject/ModPackageProject.h"
 #include "Workspace.h"
 #include "WorkspaceDocument.h"
 #include "ModPackages/IPackageManager.h"

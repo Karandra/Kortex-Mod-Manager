@@ -2,7 +2,7 @@
 #include "ConditionGroupModel.h"
 #include "PackageCreator/WorkspaceDocument.h"
 #include "PackageCreator/PageBase.h"
-#include "PackageProject/KPackageProjectComponents.h"
+#include "PackageProject/ComponentsSection.h"
 #include <Kortex/Application.hpp>
 #include "Utility/KAux.h"
 #include "Utility/KBitmapSize.h"

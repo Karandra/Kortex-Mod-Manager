@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "KPackageProjectSerializer.h"
+#include "Serializer.h"
 #include <KxFramework/KxXML.h>
 
 namespace Kortex

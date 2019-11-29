@@ -39,7 +39,7 @@ namespace Kortex::PluginManager
 {
 	wxString LibLoot::GetLibraryName()
 	{
-		return wxS("LOOT API");
+		return wxS("LibLoot");
 	}
 	KxVersion LibLoot::GetLibraryVersion()
 	{
@@ -172,8 +172,8 @@ namespace Kortex::PluginManager
 			int gameID = GetLootGameID();
 			if (gameID != (int)INVALID_GAME_ID)
 			{
-				std::locale locale("");
-				loot::InitialiseLocale("en.UTF-8");
+				//std::locale locale("");
+				//loot::InitialiseLocale("en.UTF-8"); // Removed in v15.0
 				loot::SetLoggingCallback([this, context](loot::LogLevel level, const char* s)
 				{
 					LoggerCallback((int)level, s, context);

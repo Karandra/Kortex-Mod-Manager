@@ -49,7 +49,7 @@ public:
    * Construct a PluginMetadata object with a blank plugin name and no metadata.
    * @return A PluginMetadata object.
    */
-  LOOT_API PluginMetadata();
+  LOOT_API explicit PluginMetadata();
 
   /**
    * Construct a PluginMetadata object with no metadata for a plugin with the
@@ -58,7 +58,7 @@ public:
    *         The filename of the plugin that the object is constructed for.
    * @return A PluginMetadata object.
    */
-  LOOT_API PluginMetadata(const std::string& name);
+  LOOT_API explicit PluginMetadata(const std::string& name);
 
   /**
    * Merge metadata from the given PluginMetadata object into this object.
@@ -88,12 +88,6 @@ public:
    * @return The plugin name.
    */
   LOOT_API std::string GetName() const;
-
-  /**
-   * Get the lowercased plugin name.
-   * @return The lowercased plugin name.
-   */
-  LOOT_API std::string GetLowercasedName() const;
 
   /**
    * Check if the plugin metadata is enabled for use during sorting.
@@ -297,23 +291,6 @@ private:
   std::set<PluginCleaningData> dirtyInfo_;
   std::set<PluginCleaningData> cleanInfo_;
   std::set<Location> locations_;
-};
-}
-
-namespace std {
-/**
- * A specialisation of std::hash for loot::PluginMetadata.
- */
-template<>
-struct hash<loot::PluginMetadata> {
-  /**
-   * Calculate a hash value for an object of a class that implements
-   * loot::PluginMetadata.
-   * @return The hash generated from the plugin's lowercased filename.
-   */
-  size_t operator()(const loot::PluginMetadata& plugin) const {
-    return hash<string>()(plugin.GetLowercasedName());
-  }
 };
 }
 

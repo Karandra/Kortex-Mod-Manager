@@ -19,20 +19,118 @@
 
 namespace
 {
-	std::string ToLootString(const wxString& s)
+	KxEVENT_DEFINE_LOCAL(LibLoot, KxFileOperationEvent);
+
+	std::string ToLootString(const wxString& value)
 	{
-		auto utf8 = s.ToUTF8();
+		auto utf8 = value.ToUTF8();
 		return std::string(utf8.data(), utf8.length());
 	}
-	wxString FromLootString(const std::string& s)
+	wxString FromLootString(const std::string& value)
 	{
-		return wxString::FromUTF8(s.data(), s.length());
+		return wxString::FromUTF8(value.data(), value.length());
 	}
-}
 
-namespace Kortex::Events
-{
-	wxDEFINE_EVENT(LibLoot, KxFileOperationEvent);
+	std::optional<loot::GameType> GetLootGameType(const Kortex::GameID& gameID)
+	{
+		using namespace Kortex;
+		using namespace loot;
+
+		if (IPluginManager::GetInstance() && IGameInstance::GetActive())
+		{
+			// TES
+			if (gameID == GameIDs::Morrowind)
+			{
+				return GameType::tes3;
+			}
+			else if (gameID == GameIDs::Oblivion)
+			{
+				return GameType::tes4;
+			}
+			else if (gameID == GameIDs::Skyrim)
+			{
+				return GameType::tes5;
+			}
+			else if (gameID == GameIDs::SkyrimSE)
+			{
+				return GameType::tes5se;
+			}
+			else if (gameID == GameIDs::SkyrimVR)
+			{
+				return GameType::tes5vr;
+			}
+
+			// Fallout
+			else if (gameID == GameIDs::Fallout3)
+			{
+				return GameType::fo3;
+			}
+			else if (gameID == GameIDs::FalloutNV)
+			{
+				return GameType::fonv;
+			}
+			else if (gameID == GameIDs::Fallout4)
+			{
+				return GameType::fo4;
+			}
+			else if (gameID == GameIDs::Fallout4VR)
+			{
+				return GameType::fo4vr;
+			}
+		}
+		return std::nullopt;
+	}
+	void LoggerCallback(loot::LogLevel level, const char* message, KOperationWithProgressDialogBase* context = nullptr)
+	{
+		using namespace Kortex;
+		using namespace loot;
+
+		switch (level)
+		{
+			case LogLevel::trace:
+			{
+				Utility::Log::LogTrace("[LOOT API] %1", message);
+				break;
+			}
+			case LogLevel::debug:
+			{
+				Utility::Log::LogDebug("[LOOT API] %1", message);
+				break;
+			}
+			case LogLevel::info:
+			{
+				Utility::Log::LogInfo("[LOOT API] %1", message);
+
+				if (context)
+				{
+					KxFileOperationEvent event(EvtLibLoot);
+					event.SetEventObject(context->GetEventHandler());
+					event.SetCurrent(message);
+					context->ProcessEvent(event);
+				}
+				break;
+			}
+			case LogLevel::warning:
+			{
+				Utility::Log::LogWarning("[LOOT API] %1", message);
+				break;
+			}
+			case LogLevel::error:
+			{
+				Utility::Log::LogError("[LOOT API] %1", message);
+				break;
+			}
+			case LogLevel::fatal:
+			{
+				Utility::Log::LogMessage("Fatal Error: [LOOT API] %1", message);
+				break;
+			}
+		};
+	}
+	void ThrowError(const wxString& message)
+	{
+		throw std::runtime_error(ToLootString(message));
+	};
 }
 
 namespace Kortex::PluginManager
@@ -46,113 +144,24 @@ namespace Kortex::PluginManager
 		return FromLootString(loot::LootVersion().GetVersionString());
 	}
 
-	int LibLoot::GetLootGameID() const
-	{
-		loot::GameType gameType = (loot::GameType)INVALID_GAME_ID;
-		if (IPluginManager::GetInstance() && IGameInstance::GetActive())
-		{
-			const GameID gameID = IGameInstance::GetActive()->GetGameID();
-
-			// TES
-			if (gameID == GameIDs::Oblivion)
-			{
-				gameType = loot::GameType::tes4;
-			}
-			else if (gameID == GameIDs::Skyrim)
-			{
-				gameType = loot::GameType::tes5;
-			}
-			else if (gameID == GameIDs::SkyrimSE)
-			{
-				gameType = loot::GameType::tes5se;
-			}
-			else if (gameID == GameIDs::SkyrimVR)
-			{
-				gameType = loot::GameType::tes5vr;
-			}
-
-			// Fallout
-			else if (gameID == GameIDs::Fallout3)
-			{
-				gameType = loot::GameType::fo3;
-			}
-			else if (gameID == GameIDs::FalloutNV)
-			{
-				gameType = loot::GameType::fonv;
-			}
-			else if (gameID == GameIDs::Fallout4)
-			{
-				gameType = loot::GameType::fo4;
-			}
-			else if (gameID == GameIDs::Fallout4VR)
-			{
-				gameType = loot::GameType::fo4vr;
-			}
-		}
-		return (int)gameType;
-	}
-	void LibLoot::LoggerCallback(int level, const char* value, KOperationWithProgressDialogBase* context)
-	{
-		using LogLevel = loot::LogLevel;
-		switch (level)
-		{
-			case (int)LogLevel::trace:
-			{
-				Utility::Log::LogTrace("[LOOT API] %1", value);
-				break;
-			}
-			case (int)LogLevel::debug:
-			{
-				Utility::Log::LogDebug("[LOOT API] %1", value);
-				break;
-			}
-			case (int)LogLevel::info:
-			{
-				Utility::Log::LogInfo("[LOOT API] %1", value);
-
-				KxFileOperationEvent event(Events::LibLoot);
-				event.SetEventObject(context->GetEventHandler());
-				event.SetCurrent(value);
-				context->ProcessEvent(event);
-				break;
-			}
-			case (int)LogLevel::warning:
-			{
-				Utility::Log::LogWarning("[LOOT API] %1", value);
-				break;
-			}
-			case (int)LogLevel::error:
-			{
-				Utility::Log::LogError("[LOOT API] %1", value);
-				break;
-			}
-			case (int)LogLevel::fatal:
-			{
-				Utility::Log::LogMessage("Fatal Error: [LOOT API] %1", value);
-				break;
-			}
-		};
-	}
-
-	LibLoot::LibLoot()
-		:m_PluginManager(IPluginManager::GetInstance()->QueryInterface<BethesdaPluginManager>()),
-		m_LootConfig(m_PluginManager->GetLibLootConfig()), m_ManagerConfig(m_PluginManager->GetConfig())
-	{
-	}
-
 	wxString LibLoot::GetDataPath() const
 	{
-		KxFile folder(KxShell::GetFolder(KxSHF_APPLICATIONDATA_LOCAL) + wxS("\\LOOT\\") + m_PluginManager->GetLibLootConfig().GetFolderName());
-		folder.CreateFolder();
-		return folder.GetFullPath();
+		BethesdaPluginManager* pluginManager = nullptr;
+		if (IPluginManager::GetInstance()->QueryInterface(pluginManager))
+		{
+			KxFile folder(KxShell::GetFolder(KxSHF_APPLICATIONDATA_LOCAL) + wxS("\\LOOT\\") + pluginManager->GetLibLootConfig().GetFolderName());
+			folder.CreateFolder();
+			return folder.GetFullPath();
+		}
+		return wxEmptyString;
 	}
 	wxString LibLoot::GetMasterListPath() const
 	{
-		return GetDataPath() + wxS("\\MasterList.yaml");
+		return GetDataPath() + wxS("\\masterlist.yaml");
 	}
 	wxString LibLoot::GetUserListPath() const
 	{
-		return GetDataPath() + wxS("\\UserList.yaml");
+		return GetDataPath() + wxS("\\userlist.yaml");
 	}
 
 	bool LibLoot::CanSortNow() const
@@ -161,38 +170,35 @@ namespace Kortex::PluginManager
 	}
 	bool LibLoot::SortPlugins(KxStringVector& sortedList, KOperationWithProgressDialogBase* context)
 	{
-		context->GetEventHandler()->Bind(Events::LibLoot, &KOperationWithProgressDialogBase::OnFileOperation, context);
-		auto ThrowError = [](const wxString& s)
-		{
-			throw std::runtime_error(ToLootString(s));
-		};
-
 		try
 		{
-			int gameID = GetLootGameID();
-			if (gameID != (int)INVALID_GAME_ID)
+			if (context)
 			{
-				//std::locale locale("");
-				//loot::InitialiseLocale("en.UTF-8"); // Removed in v15.0
-				loot::SetLoggingCallback([this, context](loot::LogLevel level, const char* s)
-				{
-					LoggerCallback((int)level, s, context);
-				});
+				context->GetEventHandler()->Bind(EvtLibLoot, &KOperationWithProgressDialogBase::OnFileOperation, context);
+			}
+			loot::SetLoggingCallback([context](loot::LogLevel level, const char* s)
+			{
+				LoggerCallback(level, s, context);
+			});
 
+			BethesdaPluginManager* pluginManager = IPluginManager::GetInstance()->QueryInterface<BethesdaPluginManager>();
+			const Config& managerConfig = pluginManager->GetConfig();
+			const LootAPIConfig& lootConfig = pluginManager->GetLibLootConfig();
+
+			if (auto gameType = GetLootGameType(IGameInstance::GetActive()->GetGameID()))
+			{
 				const std::string virtualGameDir = ToLootString(IGameInstance::GetActive()->GetVirtualGameDir());
-				auto gameInterface = loot::CreateGameHandle((loot::GameType)gameID, virtualGameDir, ToLootString(m_LootConfig.GetLocalGamePath()));
-				if (gameInterface)
+				if (auto gameInterface = loot::CreateGameHandle(*gameType, virtualGameDir, ToLootString(lootConfig.GetLocalGamePath())))
 				{
-					auto dataBase = gameInterface->GetDatabase();
-					if (dataBase)
+					if (auto dataBase = gameInterface->GetDatabase())
 					{
 						const std::string masterListPath = ToLootString(GetMasterListPath());
 						const std::string userListPath = ToLootString(GetUserListPath());
-						const std::string repositoryBranch = ToLootString(m_LootConfig.GetBranch());
-						const std::string repositoryURL = ToLootString(m_LootConfig.GetRepository());
+						const std::string repositoryBranch = ToLootString(lootConfig.GetBranch());
+						const std::string repositoryURL = ToLootString(lootConfig.GetRepository());
 
 						// Update masterlist
-						bool isMasterListUpdated = dataBase->UpdateMasterlist(masterListPath, repositoryURL, repositoryBranch);
+						const bool isMasterListUpdated = dataBase->UpdateMasterlist(masterListPath, repositoryURL, repositoryBranch);
 						if (isMasterListUpdated && !dataBase->IsLatestMasterlist(masterListPath, repositoryBranch))
 						{
 							ThrowError(KTr("PluginManager.LibLoot.CanNotUpdateMasterlist"));
@@ -202,22 +208,22 @@ namespace Kortex::PluginManager
 						dataBase->LoadLists(masterListPath, KxFile(userListPath).IsFileExist() ? userListPath : "");
 
 						// Main ESM
-						if (m_ManagerConfig.HasMainStdContentID())
+						if (managerConfig.HasMainStdContentID())
 						{
-							gameInterface->IdentifyMainMasterFile(ToLootString(m_ManagerConfig.GetMainStdContentID()));
+							gameInterface->IdentifyMainMasterFile(ToLootString(managerConfig.GetMainStdContentID()));
 						}
 
-						KxStdStringVector pluginList;
-						for (const auto& plugnEntry: m_PluginManager->GetPlugins())
+						std::vector<std::string> pluginList;
+						for (const auto& plugin: pluginManager->GetPlugins())
 						{
-							std::string name = ToLootString(plugnEntry->GetName());
+							std::string name = ToLootString(plugin->GetName());
 							if (gameInterface->IsValidPlugin(name))
 							{
-								pluginList.push_back(name);
+								pluginList.emplace_back(std::move(name));
 							}
 						}
 
-						m_PluginManager->Save();
+						pluginManager->Save();
 						gameInterface->LoadCurrentLoadOrderState();
 						pluginList = gameInterface->SortPlugins(pluginList);
 
@@ -226,7 +232,7 @@ namespace Kortex::PluginManager
 						sortedList.reserve(pluginList.size());
 						for (const std::string& s: pluginList)
 						{
-							sortedList.push_back(FromLootString(s));
+							sortedList.emplace_back(FromLootString(s));
 						}
 						return !sortedList.empty();
 					}
@@ -235,7 +241,7 @@ namespace Kortex::PluginManager
 		}
 		catch (const std::exception& e)
 		{
-			LoggerCallback((int)loot::LogLevel::fatal, e.what(), context);
+			LoggerCallback(loot::LogLevel::fatal, e.what(), context);
 			sortedList.clear();
 
 			BroadcastProcessor::Get().ProcessEvent(LogEvent::EvtError, FromLootString(e.what()));

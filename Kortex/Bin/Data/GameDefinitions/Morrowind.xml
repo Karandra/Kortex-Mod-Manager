@@ -33,9 +33,8 @@
 					<Executable>Morrowind Launcher.exe</Executable>
 				</Entry>
 				<Entry>
-					<Name>Construction Set</Name>
+					<Name>$(GameEditorName)</Name>
 					<Executable>TES Construction Set.exe</Executable>
-					<Arguments></Arguments>
 				</Entry>
 				<Entry>
 					<Name>Morrowind Code Patch</Name>
@@ -235,6 +234,19 @@
 
 			<ChangeFileModificationDate>1</ChangeFileModificationDate>
 			<SortByFileModificationDate>0</SortByFileModificationDate>
+
+			<SortingTools>
+				<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+					<Command><![CDATA[--game=Morrowind]]></Command>
+				</Entry>
+			</SortingTools>
+
+			<LibLoot>
+				<Branch>v0.14</Branch>
+				<Repository>https://github.com/loot/morrowind.git</Repository>
+				<FolderName>Morrowind</FolderName>
+				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
+			</LibLoot>
 
 			<StandardContent MainID="Morrowind.esm">
 				<Entry ID="Morrowind.esm" Name="$(GameShortName)" Logo="Morrowind.png"/>

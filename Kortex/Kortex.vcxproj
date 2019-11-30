@@ -273,7 +273,9 @@
     <ClCompile Include="Source\PackageCreator\PackageBuilder.cpp" />
     <ClCompile Include="Source\PackageCreator\WorkspaceDocument.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.cpp" />
-    <ClCompile Include="Source\PackageProject\LegacySerializer.cpp" />
+    <ClCompile Include="Source\PackageProject\Serializer\FOModSerializer.cpp" />
+    <ClCompile Include="Source\PackageProject\Serializer\LegacySerializer.cpp" />
+    <ClCompile Include="Source\PackageProject\Serializer\NativeSerializer.cpp" />
     <ClCompile Include="Source\Programs\IProgramItem.cpp" />
     <ClCompile Include="Source\Programs\IProgramManager.cpp" />
     <ClCompile Include="Source\Programs\ProgramEvent.cpp" />
@@ -300,7 +302,6 @@
     <ClCompile Include="Source\PackageCreator\PageRequirements.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageInfo\AdditionalInfoModel.cpp" />
-    <ClCompile Include="Source\PackageProject\FOModSerializer.cpp" />
     <ClCompile Include="Source\PackageCreator\PageInfo\DocumentsModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\ConditionGroupModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\RequirementsSelectorModel.cpp" />
@@ -322,7 +323,6 @@
     <ClCompile Include="Source\PackageProject\ProjectSection.cpp" />
     <ClCompile Include="Source\PackageProject\RequirementsSection.cpp" />
     <ClCompile Include="Source\PackageProject\Serializer.cpp" />
-    <ClCompile Include="Source\PackageProject\NativeSerializer.cpp" />
     <ClCompile Include="Source\UI\TextEditDialog.cpp" />
     <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
     <ClCompile Include="Source\UI\ImageViewerDialog.cpp" />
@@ -638,6 +638,9 @@
     <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModel.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModelNode.h" />
     <ClInclude Include="Source\PackageCreator\PageInfo\SitesModel.h" />
+    <ClInclude Include="Source\PackageProject\Serializer\FOModSerializer.h" />
+    <ClInclude Include="Source\PackageProject\Serializer\LegacySerializer.h" />
+    <ClInclude Include="Source\PackageProject\Serializer\NativeSerializer.h" />
     <ClInclude Include="Source\Programs\IProgramItem.h" />
     <ClInclude Include="Source\Programs\IProgramManager.h" />
     <ClInclude Include="Source\Programs\ProgramEvent.h" />
@@ -665,7 +668,6 @@
     <ClInclude Include="Source\PackageCreator\PackageBuilder.h" />
     <ClInclude Include="Source\PackageCreator\WorkspaceDocument.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.h" />
-    <ClInclude Include="Source\PackageProject\LegacySerializer.h" />
     <ClInclude Include="Source\Utility\KDataViewModelBase.h" />
     <ClInclude Include="Source\Utility\KDataViewTreeModel.h" />
     <ClInclude Include="Source\Utility\KOperationWithProgress.h" />
@@ -679,7 +681,6 @@
     <ClInclude Include="Source\PackageCreator\PageRequirements.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.h" />
     <ClInclude Include="Source\PackageCreator\PageInfo\AdditionalInfoModel.h" />
-    <ClInclude Include="Source\PackageProject\FOModSerializer.h" />
     <ClInclude Include="Source\PackageCreator\PageInfo\DocumentsModel.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\ConditionGroupModel.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\RequirementsSelectorModel.h" />
@@ -704,7 +705,6 @@
     <ClInclude Include="Source\PackageProject\ProjectSection.h" />
     <ClInclude Include="Source\PackageProject\RequirementsSection.h" />
     <ClInclude Include="Source\PackageProject\Serializer.h" />
-    <ClInclude Include="Source\PackageProject\NativeSerializer.h" />
     <ClInclude Include="Source\UI\TextEditDialog.h" />
     <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
     <ClInclude Include="Source\UI\ImageViewerDialog.h" />

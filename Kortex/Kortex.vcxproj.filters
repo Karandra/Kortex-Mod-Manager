@@ -415,6 +415,12 @@
     <Filter Include="Code\Source\ModPackages\InstallWizard\Requirements">
       <UniqueIdentifier>{2ec8edb0-1e7d-44ec-b80c-f9d7d281be3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Headers\PackageProject\Serializer">
+      <UniqueIdentifier>{bc66260b-c5bb-48c3-9ee9-413909e94a03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\PackageProject\Serializer">
+      <UniqueIdentifier>{260be8da-c79f-4293-9227-0a9cb09eab33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -1275,14 +1281,14 @@
     <ClCompile Include="Source\PackageProject\Serializer.cpp">
       <Filter>Code\Source\PackageProject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageProject\FOModSerializer.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+    <ClCompile Include="Source\PackageProject\Serializer\LegacySerializer.cpp">
+      <Filter>Code\Source\PackageProject\Serializer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageProject\NativeSerializer.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+    <ClCompile Include="Source\PackageProject\Serializer\NativeSerializer.cpp">
+      <Filter>Code\Source\PackageProject\Serializer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageProject\LegacySerializer.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+    <ClCompile Include="Source\PackageProject\Serializer\FOModSerializer.cpp">
+      <Filter>Code\Source\PackageProject\Serializer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2420,14 +2426,14 @@
     <ClInclude Include="Source\PackageProject\Serializer.h">
       <Filter>Code\Headers\PackageProject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\FOModSerializer.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\PackageProject\Serializer\FOModSerializer.h">
+      <Filter>Code\Headers\PackageProject\Serializer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\NativeSerializer.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\PackageProject\Serializer\LegacySerializer.h">
+      <Filter>Code\Headers\PackageProject\Serializer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\LegacySerializer.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\PackageProject\Serializer\NativeSerializer.h">
+      <Filter>Code\Headers\PackageProject\Serializer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

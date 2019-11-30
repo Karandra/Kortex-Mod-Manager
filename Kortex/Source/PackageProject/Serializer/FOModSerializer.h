@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "Serializer.h"
-#include "Common.h"
-#include "ComponentsSection.h"
+#include "PackageProject/Serializer.h"
+#include "PackageProject/Common.h"
+#include "PackageProject/ComponentsSection.h"
 #include <KxFramework/KxXML.h>
 
 namespace Kortex

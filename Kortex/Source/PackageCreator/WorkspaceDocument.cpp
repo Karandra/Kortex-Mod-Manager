@@ -5,8 +5,8 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include "PackageProject/Common.h"
-#include "PackageProject/NativeSerializer.h"
-#include "PackageProject/FOModSerializer.h"
+#include "PackageProject/Serializer/NativeSerializer.h"
+#include "PackageProject/Serializer/FOModSerializer.h"
 #include "ModPackages/ModPackage.h"
 #include "Archive/KArchive.h"
 #include "Utility/KOperationWithProgress.h"

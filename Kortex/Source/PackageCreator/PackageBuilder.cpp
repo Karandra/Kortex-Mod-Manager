@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "PackageBuilder.h"
 #include "PackageProject/ModPackageProject.h"
-#include "PackageProject/NativeSerializer.h"
-#include "PackageProject/FOModSerializer.h"
+#include "PackageProject/Serializer/NativeSerializer.h"
+#include "PackageProject/Serializer/FOModSerializer.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
 #include "Utility/KAux.h"

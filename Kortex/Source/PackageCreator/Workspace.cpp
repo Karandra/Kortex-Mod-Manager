@@ -10,8 +10,8 @@
 #include "PageComponents.h"
 #include "FOModImportExportDialog.h"
 #include "PackageProject/Common.h"
-#include "PackageProject/NativeSerializer.h"
-#include "PackageProject/FOModSerializer.h"
+#include "PackageProject/Serializer/NativeSerializer.h"
+#include "PackageProject/Serializer/FOModSerializer.h"
 #include "ModPackages/ModPackage.h"
 #include "GameMods/ModManager/Workspace.h"
 #include <KxFramework/KxFileBrowseDialog.h>

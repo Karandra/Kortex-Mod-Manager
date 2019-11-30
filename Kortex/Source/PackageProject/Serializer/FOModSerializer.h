@@ -79,8 +79,8 @@ namespace Kortex::PackageProject
 			FOModSerializer(const wxString& sInfoXML, const wxString& moduleConfigXML, const wxString& projectFolder = wxEmptyString);
 	
 		public:
-			void Serialize(const ModPackageProject* project) override;
-			void Structurize(ModPackageProject* project) override;
+			void Serialize(const ModPackageProject& project) override;
+			void Structurize(ModPackageProject& project) override;
 	
 			void ExportToNativeFormat(bool value)
 			{

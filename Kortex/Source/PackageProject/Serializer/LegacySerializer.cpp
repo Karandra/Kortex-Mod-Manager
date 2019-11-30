@@ -1024,9 +1024,9 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void LegacySerializer::Structurize(ModPackageProject* project)
+	void LegacySerializer::Structurize(ModPackageProject& project)
 	{
-		m_Project = project;
+		m_Project = &project;
 		m_XML.Load(m_Data);
 	
 		m_ProjectVersion = ReadBase();

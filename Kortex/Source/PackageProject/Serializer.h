@@ -36,12 +36,11 @@ namespace Kortex::PackageProject
 			bool CheckTag(const wxString& tagName) const;
 			
 		public:
-			Serializer();
-			virtual ~Serializer();
+			virtual ~Serializer() = default;
 			
 		public:
-			virtual void Serialize(const ModPackageProject* project) = 0;
-			virtual void Structurize(ModPackageProject* project) = 0;
+			virtual void Serialize(const ModPackageProject& project) = 0;
+			virtual void Structurize(ModPackageProject& project) = 0;
 			
 			const wxString& GetPackageDataRoot(const wxString& path) const
 			{

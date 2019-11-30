@@ -12,7 +12,7 @@ namespace Kortex::PackageProject
 {
 	ModSourceItem Serializer::TryParseWebSite(const wxString& url, wxString* domainNameOut)
 	{
-		using namespace Kortex::NetworkManager;
+		using namespace NetworkManager;
 	
 		long long id = -1;
 		Kortex::IModNetwork* modNetwork = nullptr;
@@ -27,15 +27,15 @@ namespace Kortex::PackageProject
 			wxString siteName = KAux::ExtractDomainName(url);
 			if (siteName == "tesall.ru")
 			{
-				modNetwork = Kortex::NetworkManager::TESALLModNetwork::GetInstance();
+				modNetwork = TESALLModNetwork::GetInstance();
 			}
 			else if (siteName == "nexusmods.com" || siteName.AfterFirst('.') == "nexusmods.com" || siteName.Contains("nexus"))
 			{
-				modNetwork = Kortex::NetworkManager::NexusModNetwork::GetInstance();
+				modNetwork = NexusModNetwork::GetInstance();
 			}
 			else if (siteName == "loverslab.com")
 			{
-				modNetwork = Kortex::NetworkManager::LoversLabModNetwork::GetInstance();
+				modNetwork = LoversLabModNetwork::GetInstance();
 			}
 			KxUtility::SetIfNotNull(domainNameOut, siteName);
 	
@@ -45,14 +45,14 @@ namespace Kortex::PackageProject
 	
 		if (modNetwork)
 		{
-			return Kortex::ModSourceItem(modNetwork->GetName(), Kortex::ModID(id));
+			return ModSourceItem(modNetwork->GetName(), Kortex::ModID(id));
 		}
-		return Kortex::ModSourceItem();
+		return {};
 	}
 	wxString Serializer::ConvertBBCode(const wxString& bbSource)
 	{
 		wxString copy = bbSource;
-		Kortex::NetworkManager::NexusModNetwork::GetInstance()->ConvertDescriptionText(copy);
+		NetworkManager::NexusModNetwork::GetInstance()->ConvertDescriptionText(copy);
 		return copy;
 	}
 	wxString Serializer::PathNameToPackage(const wxString& pathName, ContentType type) const
@@ -78,13 +78,6 @@ namespace Kortex::PackageProject
 	}
 	bool Serializer::CheckTag(const wxString& tagName) const
 	{
-		return Kortex::IModTagManager::GetInstance()->FindTagByName(tagName) != nullptr;
-	}
-	
-	Serializer::Serializer()
-	{
-	}
-	Serializer::~Serializer()
-	{
+		return IModTagManager::GetInstance()->FindTagByName(tagName) != nullptr;
 	}
 }

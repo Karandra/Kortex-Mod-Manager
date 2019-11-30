@@ -123,20 +123,20 @@ namespace Kortex
 	{
 		PackageProject::NativeSerializer serializer(false);
 		serializer.SetData(ReadString(index));
-		serializer.Structurize(&project);
+		serializer.Structurize(project);
 	}
 	void ModPackage::LoadConfigSMI(ModPackageProject& project, size_t index)
 	{
 		PackageProject::LegacySerializer serializer;
 		serializer.SetData(ReadString(index, true));
-		serializer.Structurize(&project);
+		serializer.Structurize(project);
 	}
 	void ModPackage::LoadConfigFOMod(ModPackageProject& project, size_t infoIndex, size_t moduleConfigIndex)
 	{
 		KArchive::BufferMap buffers = m_Archive.ExtractToMemory({(uint32_t)infoIndex, (uint32_t)moduleConfigIndex});
 		PackageProject::FOModSerializer serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
 		serializer.SetEffectiveArchiveRoot(m_EffectiveArchiveRoot);
-		serializer.Structurize(&project);
+		serializer.Structurize(project);
 	}
 
 	wxString ModPackage::DetectEffectiveArchiveRoot(const KxFileItem& item, const wxString& subPath) const

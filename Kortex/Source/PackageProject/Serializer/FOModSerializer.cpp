@@ -1118,9 +1118,9 @@ namespace Kortex::PackageProject
 		}
 	}
 	
-	void FOModSerializer::Serialize(const ModPackageProject* project)
+	void FOModSerializer::Serialize(const ModPackageProject& project)
 	{
-		m_ProjectSave = project;
+		m_ProjectSave = &project;
 		m_XML.Load(wxEmptyString);
 	
 		// Info.xml
@@ -1132,9 +1132,9 @@ namespace Kortex::PackageProject
 		WriteInstallSteps();
 		m_ModuleConfigXML = m_XML.GetXML();
 	}
-	void FOModSerializer::Structurize(ModPackageProject* project)
+	void FOModSerializer::Structurize(ModPackageProject& project)
 	{
-		m_ProjectLoad = project;
+		m_ProjectLoad = &project;
 		if (m_XML.Load(m_InfoXML))
 		{
 			ReadInfo();

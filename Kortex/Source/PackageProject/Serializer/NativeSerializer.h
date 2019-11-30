@@ -37,15 +37,15 @@ namespace Kortex::PackageProject
 			void WriteComponents(KxXMLNode& baseNode);
 	
 		public:
-			NativeSerializer(bool bAsProject = false)
-				:m_AsProject(bAsProject)
+			NativeSerializer(bool asProject = false)
+				:m_AsProject(asProject)
 			{
 				SetPackageDataRoot(GetDefaultFOModRoot());
 			}
 			
 		public:
-			void Serialize(const ModPackageProject* project) override;
-			void Structurize(ModPackageProject* project) override;
+			void Serialize(const ModPackageProject& project) override;
+			void Structurize(ModPackageProject& project) override;
 			
 			const wxString& GetData() const
 			{

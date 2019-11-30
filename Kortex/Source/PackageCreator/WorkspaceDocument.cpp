@@ -88,7 +88,7 @@ namespace Kortex::PackageDesigner
 	void WorkspaceDocument::SaveChanges()
 	{
 		PackageProject::NativeSerializer serializer(true);
-		serializer.Serialize(m_Project.get());
+		serializer.Serialize(*m_Project);
 		KxTextFile::WriteToFile(m_ProjectFile, serializer.GetData());
 
 		m_HasChanges = false;
@@ -117,7 +117,7 @@ namespace Kortex::PackageDesigner
 
 		PackageProject::NativeSerializer serializer(true);
 		serializer.SetData(KxTextFile::ReadToString(filePath));
-		serializer.Structurize(m_Project.get());
+		serializer.Structurize(*m_Project);
 
 		Reload();
 	}
@@ -171,12 +171,12 @@ namespace Kortex::PackageDesigner
 	{
 		m_ProjectFile.Clear();
 		m_Project = std::make_unique<ModPackageProject>();
-		serializer.Structurize(m_Project.get());
+		serializer.Structurize(*m_Project);
 		Reload();
 	}
 	void WorkspaceDocument::ExportProject(PackageProject::Serializer& serializer)
 	{
-		serializer.Serialize(m_Project.get());
+		serializer.Serialize(*m_Project);
 	}
 	void WorkspaceDocument::BuildProject(bool buildPreview)
 	{

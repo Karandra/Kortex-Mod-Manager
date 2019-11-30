@@ -713,9 +713,9 @@ namespace Kortex::PackageProject
 		WriteConditionalSteps(components.GetConditionalSteps(), "ConditionalSteps", "Files");
 	}
 	
-	void NativeSerializer::Serialize(const ModPackageProject* project)
+	void NativeSerializer::Serialize(const ModPackageProject& project)
 	{
-		m_ProjectSave = project;
+		m_ProjectSave = &project;
 		m_XML.Load(wxEmptyString);
 	
 		KxXMLNode baseNode = WriteBase();
@@ -728,9 +728,9 @@ namespace Kortex::PackageProject
 	
 		m_Data = m_XML.Save();
 	}
-	void NativeSerializer::Structurize(ModPackageProject* project)
+	void NativeSerializer::Structurize(ModPackageProject& project)
 	{
-		m_ProjectLoad = project;
+		m_ProjectLoad = &project;
 		m_XML.Load(m_Data);
 	
 		ReadBase();

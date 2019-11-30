@@ -57,10 +57,10 @@ namespace Kortex::PackageProject
 			void ReadINI5x();
 	
 		public:
-			void Serialize(const ModPackageProject* project) override
+			void Serialize(const ModPackageProject& project) override
 			{
 			}
-			void Structurize(ModPackageProject* project) override;
+			void Structurize(ModPackageProject& project) override;
 			
 			const wxString& GetData() const
 			{

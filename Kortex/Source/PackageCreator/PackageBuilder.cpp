@@ -139,7 +139,7 @@ namespace Kortex::PackageDesigner
 			wxString packageConfigFile = CreateTempFile();
 			PackageProject::NativeSerializer serializer(false);
 			serializer.SetPackageDataRoot(PackageProject::Serializer::GetDefaultFOModRoot());
-			serializer.Serialize(m_Project);
+			serializer.Serialize(*m_Project);
 			KxTextFile::WriteToFile(packageConfigFile, serializer.GetData());
 
 			m_SourceFiles.push_back(packageConfigFile);
@@ -154,7 +154,7 @@ namespace Kortex::PackageDesigner
 			PackageProject::FOModSerializer serializer;
 			serializer.ExportToNativeFormat(true);
 			serializer.SetPackageDataRoot(PackageProject::Serializer::GetDefaultFOModRoot());
-			serializer.Serialize(m_Project);
+			serializer.Serialize(*m_Project);
 			KxTextFile::WriteToFile(infoFile, serializer.GetInfoXML());
 			KxTextFile::WriteToFile(sModuleConfigFile, serializer.GetModuleConfigXML());
 

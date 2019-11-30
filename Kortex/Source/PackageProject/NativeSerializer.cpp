@@ -256,15 +256,22 @@ namespace Kortex::PackageProject
 					KxXMLNode objectNode = entryNode.GetFirstChildElement("Object");
 					entry->SetObject(objectNode.GetValue());
 					entry->SetObjectFunction(requirements.StringToObjectFunction(objectNode.GetAttribute("Function")));
-	
+					
 					// Version
 					KxXMLNode versionNode = entryNode.GetFirstChildElement("Version");
 					entry->SetRequiredVersion(versionNode.GetValue());
-					entry->SetRVFunction(ModPackageProject::StringToOperator(versionNode.GetAttribute("Function"), false, requirements.ms_DefaultVersionOperator));
-	
+
+					wxString operatorString = versionNode.GetAttribute("Operator");
+					if (operatorString.IsEmpty())
+					{
+						// There was an error with required version operator were written as 'Function'.
+						operatorString = versionNode.GetAttribute("Function");
+					}
+					entry->SetRequiredVersionOperator(ModPackageProject::StringToOperator(operatorString, false, requirements.ms_DefaultVersionOperator));
+					
 					// Description
 					entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
-	
+					
 					// Conform
 					entry->ConformToTypeDescriptor();
 				}
@@ -580,7 +587,7 @@ namespace Kortex::PackageProject
 						// Version
 						KxXMLNode versionNode = entryNode.NewElement("Version");
 						versionNode.SetValue(entry->GetRequiredVersion());
-						versionNode.SetAttribute("Function", ModPackageProject::OperatorToString(entry->GetRVFunction()));
+						versionNode.SetAttribute("Operator", ModPackageProject::OperatorToString(entry->GetRequiredVersionOperator()));
 	
 						// Description
 						if (!entry->GetDescription().IsEmpty())

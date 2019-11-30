@@ -215,7 +215,7 @@ namespace Kortex
 			// Version
 			KxXMLNode versionNode = node.GetFirstChildElement("Version");
 			entry->SetRequiredVersion(versionNode.GetValue());
-			entry->SetRVFunction(ModPackageProject::StringToOperator(versionNode.GetAttribute("Function"), false, RequirementsSection::ms_DefaultVersionOperator));
+			entry->SetRequiredVersionOperator(ModPackageProject::StringToOperator(versionNode.GetAttribute("Operator"), false, RequirementsSection::ms_DefaultVersionOperator));
 			entry->SetBinaryVersionKind(versionNode.GetAttribute("BinaryVersionKind"));
 
 			// Description

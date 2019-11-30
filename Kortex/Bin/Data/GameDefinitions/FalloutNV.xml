@@ -4,77 +4,77 @@
 
 	<Variables>
 		<!--Required-->
-		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
 			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Bethesda Softworks\FalloutNV</Path>
 			<Name>Installed Path</Name>
 			<Type>REG_SZ</Type>
-		</Entry>
-		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\FalloutNV</Entry>
-		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		</Item>
+		<Item ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\FalloutNV</Item>
+		<Item ID="ActualSavesDir">$(ActualConfigDir)\Saves</Item>
 		
-		<Entry ID="GameEditorName">GECK</Entry>
-		<Entry ID="ScriptExtenderID">NVSE</Entry>
+		<Item ID="GameEditorName">GECK</Item>
+		<Item ID="ScriptExtenderID">NVSE</Item>
 
-		<Entry ID="xEditID">fnv</Entry>
-		<Entry ID="SteamID" Type="Integer">22490</Entry>
-		<Entry ID="NexusDomainName">NewVegas</Entry>
+		<Item ID="xEditID">fnv</Item>
+		<Item ID="SteamID" Type="Integer">22490</Item>
+		<Item ID="NexusDomainName">NewVegas</Item>
 
 		<!-- INI -->
-		<Entry ID="FalloutNVINI">$(ConfigRootLocal)\Fallout.ini</Entry>
-		<Entry ID="FalloutNVPrefsINI">$(ConfigRootLocal)\FalloutPrefs.ini</Entry>
-		<Entry ID="FalloutNVEditorINI">$(ConfigRootLocal)\GECKCustom.ini</Entry>
-		<Entry ID="FalloutNVEditorPrefsINI">$(ConfigRootLocal)\GECKPrefs.ini</Entry>
+		<Item ID="FalloutNVINI">$(ConfigRootLocal)\Fallout.ini</Item>
+		<Item ID="FalloutNVPrefsINI">$(ConfigRootLocal)\FalloutPrefs.ini</Item>
+		<Item ID="FalloutNVEditorINI">$(ConfigRootLocal)\GECKCustom.ini</Item>
+		<Item ID="FalloutNVEditorPrefsINI">$(ConfigRootLocal)\GECKPrefs.ini</Item>
 
 		<!--Misc-->
-		<Entry ID="GameLauncherPath">$(VirtualGameRoot)\$(GameID)Launcher.exe</Entry>
-		<Entry ID="GameEditorPath">$(VirtualGameRoot)\GECK.exe</Entry>
-		<Entry ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderID)_Loader.exe</Entry>
-		<Entry ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Entry>
+		<Item ID="GameLauncherPath">$(VirtualGameRoot)\$(GameID)Launcher.exe</Item>
+		<Item ID="GameEditorPath">$(VirtualGameRoot)\GECK.exe</Item>
+		<Item ID="ScriptExtenderPath">$(VirtualGameRoot)\$(ScriptExtenderID)_Loader.exe</Item>
+		<Item ID="ENBInjectorPath">$(VirtualGameRoot)\ENB_Injector.exe</Item>
 	</Variables>
 
 	<Virtualization>
 		<MirroredLocations>
-			<Entry>
+			<Item>
 				<Sources>
-					<Entry>$(SavesDir)</Entry>
-					<Entry>$(ConfigDir)</Entry>
+					<Item>$(SavesDir)</Item>
+					<Item>$(ConfigDir)</Item>
 				</Sources>
 				<Target>$(ActualConfigDir)</Target>
-			</Entry>
-			<Entry>
+			</Item>
+			<Item>
 				<Sources>
-					<Entry>$(ProfileDir)\Plugins</Entry>
+					<Item>$(ProfileDir)\Plugins</Item>
 				</Sources>
 				<Target>$SHF(APPLICATIONDATA_LOCAL)\FalloutNV</Target>
-			</Entry>
+			</Item>
 		</MirroredLocations>
 	</Virtualization>
 
 	<Programs>
 		<ProgramManager>
 			<DefaultPrograms>
-				<Entry ShowInMainMenu="1">
+				<Item ShowInMainMenu="1">
 					<Name>$(GameShortName)</Name>
 					<Executable>FalloutNV.exe</Executable>
-				</Entry>
-				<Entry ShowInMainMenu="1">
+				</Item>
+				<Item ShowInMainMenu="1">
 					<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
 					<Executable>NVSE_Loader.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>$(GameShortName) Launcher</Name>
 					<Executable>FalloutNVLauncher.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>Creation Kit</Name>
 					<Executable>GECK.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>ENB Injector</Name>
 					<Executable>ENBInjector.exe</Executable>
-				</Entry>
+				</Item>
 			</DefaultPrograms>
 		</ProgramManager>
 	</Programs>
@@ -130,9 +130,9 @@
 			</OrderListHeader>
 
 			<SortingTools>
-				<Entry ID="LOOT" Name="LOOT - Load Order Optimization">
+				<Item ID="LOOT" Name="LOOT - Load Order Optimization">
 					<Command><![CDATA[--game=FalloutNV]]></Command>
-				</Entry>
+				</Item>
 			</SortingTools>
 
 			<LibLoot>
@@ -143,47 +143,47 @@
 			</LibLoot>
 
 			<StandardContent MainID="FalloutNV.esm">
-				<Entry ID="FalloutNV.esm" Name="$(GameShortName)" Logo="FalloutNV.png"/>
-				<Entry ID="FalloutNV_lang.esp" Name="$(GameShortName)" Logo="FalloutNV.png"/>
-				<Entry ID="OldWorldBlues.esm" Name="$(GameShortName): Old World Blues" Logo="OldWorldBlues.png"/>
-				<Entry ID="OldWorldBlues_lang.esp" Name="$(GameShortName): Old World Blues" Logo="OldWorldBlues.png"/>
-				<Entry ID="DeadMoney.esm" Name="$(GameShortName): Dead Money" Logo="DeadMoney.png"/>
-				<Entry ID="DeadMoney_lang.esp" Name="$(GameShortName): Dead Money" Logo="DeadMoney.png"/>
-				<Entry ID="LonesomeRoad.esm" Name="$(GameShortName): Lonesome Road" Logo="LonesomeRoad.png"/>
-				<Entry ID="LonesomeRoad_lang.esp" Name="$(GameShortName): Lonesome Road" Logo="LonesomeRoad.png"/>
-				<Entry ID="HonestHearts.esm" Name="$(GameShortName): Honest Hearts" Logo="HonestHearts.png"/>
-				<Entry ID="HonestHearts_lang.esp" Name="$(GameShortName): Honest Hearts" Logo="HonestHearts.png"/>
-				<Entry ID="GunRunnersArsenal.esm" Name="$(GameShortName): Gun Runners Arsenal" Logo="GunRunnersArsenal.png"/>
-				<Entry ID="GunRunnersArsenal_lang.esp" Name="$(GameShortName): Gun Runners Arsenal" Logo="GunRunnersArsenal.png"/>
-				<Entry ID="ClassicPack.esm" Name="$(GameShortName): Courier's Stash - Classic Pack" Logo="CouriersStash.png"/>
-				<Entry ID="ClassicPack_lang.esp" Name="$(GameShortName): Courier's Stash - Classic Pack" Logo="CouriersStash.png"/>
-				<Entry ID="MercenaryPack.esm" Name="$(GameShortName): Courier's Stash - Mercenary Pack" Logo="CouriersStash.png"/>
-				<Entry ID="MercenaryPack_lang.esp" Name="$(GameShortName): Courier's Stash - Mercenary Pack" Logo="CouriersStash.png"/>
-				<Entry ID="CaravanPack.esm" Name="$(GameShortName): Courier's Stash - Caravan Pack" Logo="CouriersStash.png"/>
-				<Entry ID="CaravanPack_lang.esp" Name="$(GameShortName): Courier's Stash - Caravan Pack" Logo="CouriersStash.png"/>
-				<Entry ID="TribalPack.esm" Name="$(GameShortName): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
-				<Entry ID="TribalPack_lang.esp" Name="$(GameShortName): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
+				<Item ID="FalloutNV.esm" Name="$(GameShortName)" Logo="FalloutNV.png"/>
+				<Item ID="FalloutNV_lang.esp" Name="$(GameShortName)" Logo="FalloutNV.png"/>
+				<Item ID="OldWorldBlues.esm" Name="$(GameShortName): Old World Blues" Logo="OldWorldBlues.png"/>
+				<Item ID="OldWorldBlues_lang.esp" Name="$(GameShortName): Old World Blues" Logo="OldWorldBlues.png"/>
+				<Item ID="DeadMoney.esm" Name="$(GameShortName): Dead Money" Logo="DeadMoney.png"/>
+				<Item ID="DeadMoney_lang.esp" Name="$(GameShortName): Dead Money" Logo="DeadMoney.png"/>
+				<Item ID="LonesomeRoad.esm" Name="$(GameShortName): Lonesome Road" Logo="LonesomeRoad.png"/>
+				<Item ID="LonesomeRoad_lang.esp" Name="$(GameShortName): Lonesome Road" Logo="LonesomeRoad.png"/>
+				<Item ID="HonestHearts.esm" Name="$(GameShortName): Honest Hearts" Logo="HonestHearts.png"/>
+				<Item ID="HonestHearts_lang.esp" Name="$(GameShortName): Honest Hearts" Logo="HonestHearts.png"/>
+				<Item ID="GunRunnersArsenal.esm" Name="$(GameShortName): Gun Runners Arsenal" Logo="GunRunnersArsenal.png"/>
+				<Item ID="GunRunnersArsenal_lang.esp" Name="$(GameShortName): Gun Runners Arsenal" Logo="GunRunnersArsenal.png"/>
+				<Item ID="ClassicPack.esm" Name="$(GameShortName): Courier's Stash - Classic Pack" Logo="CouriersStash.png"/>
+				<Item ID="ClassicPack_lang.esp" Name="$(GameShortName): Courier's Stash - Classic Pack" Logo="CouriersStash.png"/>
+				<Item ID="MercenaryPack.esm" Name="$(GameShortName): Courier's Stash - Mercenary Pack" Logo="CouriersStash.png"/>
+				<Item ID="MercenaryPack_lang.esp" Name="$(GameShortName): Courier's Stash - Mercenary Pack" Logo="CouriersStash.png"/>
+				<Item ID="CaravanPack.esm" Name="$(GameShortName): Courier's Stash - Caravan Pack" Logo="CouriersStash.png"/>
+				<Item ID="CaravanPack_lang.esp" Name="$(GameShortName): Courier's Stash - Caravan Pack" Logo="CouriersStash.png"/>
+				<Item ID="TribalPack.esm" Name="$(GameShortName): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
+				<Item ID="TribalPack_lang.esp" Name="$(GameShortName): Courier's Stash - Tribal Pack" Logo="CouriersStash.png"/>
 			</StandardContent>
 
 		</PluginManager>
 
 		<ScreenshotsGallery>
 			<Locations>
-				<Entry>$(ActualGameDir)</Entry>
-				<Entry>$(ActualGameDir)\Screenshots</Entry>
-				<Entry>$(ConfigDir)</Entry>
-				<Entry>$(ConfigDir)\Screenshots</Entry>
-				<Entry>$(OverwritesDir)</Entry>
-				<Entry>$(OverwritesDir)\Screenshots</Entry>
+				<Item>$(ActualGameDir)</Item>
+				<Item>$(ActualGameDir)\Screenshots</Item>
+				<Item>$(ConfigDir)</Item>
+				<Item>$(ConfigDir)\Screenshots</Item>
+				<Item>$(OverwritesDir)</Item>
+				<Item>$(OverwritesDir)\Screenshots</Item>
 			</Locations>
 		</ScreenshotsGallery>
 
 		<SaveManager SaveFileFormat="BethesdaFalloutNV">
 			<Location>$(SavesDir)\Saves</Location>
 			<FileFilters>
-				<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
-				<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
-				<Entry Label="$T(SaveManager.Filter.CoSaves) (*.nvse)">*.nvse</Entry>
+				<Item Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Item>
+				<Item Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Item>
+				<Item Label="$T(SaveManager.Filter.CoSaves) (*.nvse)">*.nvse</Item>
 			</FileFilters>
 
 			<PrimaryExtension>fos</PrimaryExtension>
@@ -195,115 +195,115 @@
 		<PackageManager>
 			<Requirements>
 				<!-- General -->
-				<Entry ID="FalloutNV" Category="$T(PackageManager.ReqCategory.General)">
+				<Item ID="FalloutNV" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">FalloutNV.exe</Object>
 					<Version Function="GTEQ">1.4.0.525</Version>
-				</Entry>
-				<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+				</Item>
+				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">NVSE_Loader.exe</Object>
 					<Version Function="GTEQ">0.5.1.4</Version>
-				</Entry>
+				</Item>
 
 				<!-- DLC -->
-				<Entry ID="DLC-DeadMoney" Category="$T(PackageManager.ReqCategory.DLC)">
+				<Item ID="DLC-DeadMoney" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Dead Money</Name>
 					<Object Function="PluginActive">DeadMoney.esm</Object>
-				</Entry>
-				<Entry ID="DLC-HonestHearts" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-HonestHearts" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Honest Hearts</Name>
 					<Object Function="PluginActive">HonestHearts.esm</Object>
-				</Entry>
-				<Entry ID="DLC-OldWorldBlues" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-OldWorldBlues" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Old World Blues</Name>
 					<Object Function="PluginActive">OldWorldBlues.esm</Object>
-				</Entry>
-				<Entry ID="DLC-LonesomeRoad" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-LonesomeRoad" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Lonesome Road</Name>
 					<Object Function="PluginActive">LonesomeRoad.esm</Object>
-				</Entry>
-				<Entry ID="DLC-GunRunnersArsenal" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-GunRunnersArsenal" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Gun Runners Arsenal</Name>
 					<Object Function="PluginActive">GunRunnersArsenal.esm</Object>
-				</Entry>
-				<Entry ID="DLC-CouriersStash" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-CouriersStash" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Courier's Stash</Name>
 					<Dependencies>
-						<Entry>DLC-CS-ClassicPack</Entry>
-						<Entry>DLC-CS-MercenaryPack</Entry>
-						<Entry>DLC-CS-CaravanPack</Entry>
-						<Entry>DLC-CS-TribalPack</Entry>
+						<Item>DLC-CS-ClassicPack</Item>
+						<Item>DLC-CS-MercenaryPack</Item>
+						<Item>DLC-CS-CaravanPack</Item>
+						<Item>DLC-CS-TribalPack</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="DLC-CS-ClassicPack" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-CS-ClassicPack" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Courier's Stash - Classic Pack</Name>
 					<Object Function="PluginActive">ClassicPack.esm</Object>
-				</Entry>
-				<Entry ID="DLC-CS-MercenaryPack" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-CS-MercenaryPack" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Courier's Stash - Mercenary Pack</Name>
 					<Object Function="PluginActive">MercenaryPack.esm</Object>
-				</Entry>
-				<Entry ID="DLC-CS-CaravanPack" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-CS-CaravanPack" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Courier's Stash - Caravan Pack</Name>
 					<Object Function="PluginActive">CaravanPack.esm</Object>
-				</Entry>
-				<Entry ID="DLC-CS-TribalPack" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-CS-TribalPack" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Courier's Stash - Tribal Pack</Name>
 					<Object Function="PluginActive">TribalPack.esm</Object>
-				</Entry>
+				</Item>
 
 				<!-- Frameworks -->
-				<Entry ID="MCM" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				<Item ID="MCM" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Mod Configuration Menu</Name>
 					<Object Function="FileExist">Data\NVSE\Plugins\MCM.dll</Object>
 					<Version Function="GTEQ">1.5</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="Lutana" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="Lutana" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Lutana NVSE Plugin</Name>
 					<Object Function="FileExist">NVSE\Plugins\Lutana_NVSE.dll</Object>
 					<Version Function="GTEQ">16.2</Version>
 					<Description>Look for JIP LN NVSE Plugin v40.0+</Description>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="JIP-LN" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="JIP-LN" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>JIP LN NVSE Plugin</Name>
 					<Object Function="FileExist">NVSE\Plugins\JIP_NVSE.dll</Object>
 					<Version Function="GTEQ">53.6</Version>
 					<Description>As of v40.0, this plugin also includes all the functions from the (now defunct) Lutana NVSE Plugin</Description>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
+				</Item>
 
 				<!-- Body replacers -->
-				<Entry ID="Type3" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				<Item ID="Type3" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Dimonized TYPE3 Female Body</Name>
 					<Object Function="ModActive"/>
-				</Entry>
-				<Entry ID="T6M" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				</Item>
+				<Item ID="T6M" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Type 6 Modification Body</Name>
 					<Object Function="ModActive"/>
-				</Entry>
-				<Entry ID="RM" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				</Item>
+				<Item ID="RM" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Robert Male Body Replacer</Name>
 					<Object Function="ModActive"/>
-				</Entry>
+				</Item>
 
 				<!-- Misc -->
-				<Entry ID="Project Nevada" Category="$T(PackageManager.ReqCategory.Misc)">
+				<Item ID="Project Nevada" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Object Function="ModActive">NVSE\Plugins\PN_NVSE.dll</Object>
 					<Version Function="GTEQ">2.5</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
-						<Entry>MCM</Entry>
+						<Item>$(ScriptExtenderID)</Item>
+						<Item>MCM</Item>
 					</Dependencies>
-				</Entry>
+				</Item>
 			</Requirements>
 		</PackageManager>
 	</Packages>

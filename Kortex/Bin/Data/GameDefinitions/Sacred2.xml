@@ -4,203 +4,203 @@
 	
 	<Variables>
 		<!--Required-->
-		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
 			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Ascaron Entertainment\Sacred 2</Path>
 			<Name>InstallPath</Name>
 			<Type>REG_SZ</Type>
-		</Entry>
-		<Entry ID="ActualConfigDir">$SHF(SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Entry>
+		</Item>
+		<Item ID="ActualConfigDir">$SHF(SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Item>
 
-		<Entry ID="SteamID" Type="Integer">225640</Entry>
-		<Entry ID="NexusDomainName">Sacred2</Entry>
+		<Item ID="SteamID" Type="Integer">225640</Item>
+		<Item ID="NexusDomainName">Sacred2</Item>
 	</Variables>>
 	
 	<GameMods>
 		<ModManager>
 			<MirroredLocations>
-				<Entry>
+				<Item>
 					<Sources>
-						<Entry>$(SavesDir)</Entry>
-						<!--<Entry>$(ConfigDir)</Entry>-->
+						<Item>$(SavesDir)</Item>
+						<!--<Item>$(ConfigDir)</Item>-->
 					</Sources>
 					<Target>$(ActualConfigDir)</Target>
-				</Entry>
+				</Item>
 			</MirroredLocations>
 		</ModManager>
 		<TagManager>
 			<DefaultTags>
-				<Entry ID="Animation">
+				<Item ID="Animation">
 					<NexusID>51</NexusID>
-				</Entry>
-				<Entry ID="Armor">
+				</Item>
+				<Item ID="Armor">
 					<NexusID>54</NexusID>
-				</Entry>
-				<Entry ID="Clothing">
+				</Item>
+				<Item ID="Clothing">
 					<NexusID>60</NexusID>
-				</Entry>
-				<Entry ID="Jewelry">
+				</Item>
+				<Item ID="Jewelry">
 					<NexusID>102</NexusID>
-				</Entry>
-				<Entry ID="Weapons">
+				</Item>
+				<Item ID="Weapons">
 					<NexusID>55</NexusID>
-				</Entry>
-				<Entry ID="Gameplay">
+				</Item>
+				<Item ID="Gameplay">
 					<NexusID>24</NexusID>
-				</Entry>
-				<Entry ID="Immersion">
+				</Item>
+				<Item ID="Immersion">
 					<NexusID>78</NexusID>
-				</Entry>
-				<Entry ID="Environment">
+				</Item>
+				<Item ID="Environment">
 					<NexusID>74</NexusID>
-				</Entry>
-				<Entry ID="SkillsAndLeveling">
+				</Item>
+				<Item ID="SkillsAndLeveling">
 					<NexusID>73</NexusID>
-				</Entry>
-				<Entry ID="GuildsAndFactions">
+				</Item>
+				<Item ID="GuildsAndFactions">
 					<NexusID>25</NexusID>
-				</Entry>
-				<Entry ID="Stealth">
+				</Item>
+				<Item ID="Stealth">
 					<NexusID>76</NexusID>
-				</Entry>
-				<Entry ID="Combat">
+				</Item>
+				<Item ID="Combat">
 					<NexusID>77</NexusID>
-				</Entry>
-				<Entry ID="Crafting">
+				</Item>
+				<Item ID="Crafting">
 					<NexusID>100</NexusID>
-				</Entry>
-				<Entry ID="Magic">
+				</Item>
+				<Item ID="Magic">
 					<NexusID>75</NexusID>
-				</Entry>
-				<Entry ID="MagicGameplay">
+				</Item>
+				<Item ID="MagicGameplay">
 					<NexusID>93</NexusID>
-				</Entry>
-				<Entry ID="BooksAndScrolls">
+				</Item>
+				<Item ID="BooksAndScrolls">
 					<NexusID>98</NexusID>
-				</Entry>
-				<Entry ID="Alchemy">
+				</Item>
+				<Item ID="Alchemy">
 					<NexusID>94</NexusID>
-				</Entry>
-				<Entry ID="Quests">
+				</Item>
+				<Item ID="Quests">
 					<NexusID>35</NexusID>
-				</Entry>
-				<Entry ID="Buildings">
+				</Item>
+				<Item ID="Buildings">
 					<NexusID>95</NexusID>
-				</Entry>
-				<Entry ID="Settlements">
+				</Item>
+				<Item ID="Settlements">
 					<NexusID>53</NexusID>
-				</Entry>
-				<Entry ID="Mercantiles">
+				</Item>
+				<Item ID="Mercantiles">
 					<NexusID>69</NexusID>
-				</Entry>
-				<Entry ID="NewLands">
+				</Item>
+				<Item ID="NewLands">
 					<NexusID>30</NexusID>
-				</Entry>
-				<Entry ID="Dungeons">
+				</Item>
+				<Item ID="Dungeons">
 					<NexusID>88</NexusID>
-				</Entry>
-				<Entry ID="AbandonedStructures">
+				</Item>
+				<Item ID="AbandonedStructures">
 					<NexusID>70</NexusID>
-				</Entry>
-				<Entry ID="PlayerHomes">
+				</Item>
+				<Item ID="PlayerHomes">
 					<NexusID>67</NexusID>
-				</Entry>
-				<Entry ID="Landscape">
+				</Item>
+				<Item ID="Landscape">
 					<NexusID>58</NexusID>
-				</Entry>
-				<Entry ID="Overhauls">
+				</Item>
+				<Item ID="Overhauls">
 					<NexusID>79</NexusID>
-				</Entry>
-				<Entry ID="Conversions">
+				</Item>
+				<Item ID="Conversions">
 					<NexusID>-1</NexusID>
-				</Entry>
-				<Entry ID="Audio">
+				</Item>
+				<Item ID="Audio">
 					<NexusID>61</NexusID>
-				</Entry>
-				<Entry ID="UserInterface">
+				</Item>
+				<Item ID="UserInterface">
 					<NexusID>42</NexusID>
-				</Entry>
-				<Entry ID="NPC">
+				</Item>
+				<Item ID="NPC">
 					<NexusID>33</NexusID>
-				</Entry>
-				<Entry ID="Body">
+				</Item>
+				<Item ID="Body">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Face">
+				</Item>
+				<Item ID="Face">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Hair">
+				</Item>
+				<Item ID="Hair">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Races">
+				</Item>
+				<Item ID="Races">
 					<NexusID>34</NexusID>
-				</Entry>
-				<Entry ID="Followers">
+				</Item>
+				<Item ID="Followers">
 					<NexusID>66</NexusID>
-				</Entry>
-				<Entry ID="Creatures">
+				</Item>
+				<Item ID="Creatures">
 					<NexusID>83</NexusID>
-				</Entry>
-				<Entry ID="Mounts">
+				</Item>
+				<Item ID="Mounts">
 					<NexusID>101</NexusID>
-				</Entry>
-				<Entry ID="ModelsAndTextures">
+				</Item>
+				<Item ID="ModelsAndTextures">
 					<NexusID>29</NexusID>
-				</Entry>
-				<Entry ID="Graphics">
+				</Item>
+				<Item ID="Graphics">
 					<NexusID>62</NexusID>
-				</Entry>
-				<Entry ID="ENBPresets">
+				</Item>
+				<Item ID="ENBPresets">
 					<NexusID>97</NexusID>
-				</Entry>
-				<Entry ID="Collectables">
+				</Item>
+				<Item ID="Collectables">
 					<NexusID>92</NexusID>
-				</Entry>
-				<Entry ID="ItemsAndObjects">
+				</Item>
+				<Item ID="ItemsAndObjects">
 					<NexusID>85</NexusID>
-				</Entry>
-				<Entry ID="Cheats">
+				</Item>
+				<Item ID="Cheats">
 					<NexusID>40</NexusID>
-				</Entry>
-				<Entry ID="Fixes">
+				</Item>
+				<Item ID="Fixes">
 					<NexusID>95</NexusID>
-				</Entry>
-				<Entry ID="Utilities">
+				</Item>
+				<Item ID="Utilities">
 					<NexusID>39</NexusID>
-				</Entry>
-				<Entry ID="Configuration">
+				</Item>
+				<Item ID="Configuration">
 					<NexusID>116</NexusID>
-				</Entry>
-				<Entry ID="Resources">
+				</Item>
+				<Item ID="Resources">
 					<NexusID>82</NexusID>
-				</Entry>
-				<Entry ID="SaveGames">
+				</Item>
+				<Item ID="SaveGames">
 					<NexusID>43</NexusID>
-				</Entry>
-				<Entry ID="Misc">
+				</Item>
+				<Item ID="Misc">
 					<NexusID>28</NexusID>
-				</Entry>
+				</Item>
 			</DefaultTags>
 		</TagManager>
 	</GameMods>
 
 	<ProgramManager>
 		<Programs>
-			<Entry>
+			<Item>
 				<Name>$(GameShortName)</Name>
 				<Executable>System\Sacred2.exe</Executable>
-			</Entry>
+			</Item>
 		</Programs>
 	</ProgramManager>
 
 	<Programs>
 		<ProgramManager>
 			<DefaultPrograms>
-				<Entry ShowInMainMenu="1">
+				<Item ShowInMainMenu="1">
 					<Name>$(GameShortName)</Name>
 					<Executable>System\Sacred2.exe</Executable>
-				</Entry>
+				</Item>
 			</DefaultPrograms>
 		</ProgramManager>
 	</Programs>
@@ -208,21 +208,21 @@
 	<GameData>
 		<ScreenshotsGallery>
 			<Locations>
-				<Entry>$SHF(PICTURES)\Ascaron Entertainment\Sacred 2</Entry>
-				<Entry>$(ActualGameDir)</Entry>
-				<Entry>$(ActualGameDir)\Screenshots</Entry>
-				<Entry>$(ConfigDir)</Entry>
-				<Entry>$(ConfigDir)\Screenshots</Entry>
-				<Entry>$(OverwritesDir)</Entry>
-				<Entry>$(OverwritesDir)\Screenshots</Entry>
+				<Item>$SHF(PICTURES)\Ascaron Entertainment\Sacred 2</Item>
+				<Item>$(ActualGameDir)</Item>
+				<Item>$(ActualGameDir)\Screenshots</Item>
+				<Item>$(ConfigDir)</Item>
+				<Item>$(ConfigDir)\Screenshots</Item>
+				<Item>$(OverwritesDir)</Item>
+				<Item>$(OverwritesDir)\Screenshots</Item>
 			</Locations>
 		</ScreenshotsGallery>
 
 		<SaveManager SaveFileFormat="Sacred2">
 			<Location>$(SavesDir)</Location>
 			<FileFilters>
-				<Entry Label="$T(SaveManager.Filter.Saves) (*.sacred2save)">*.sacred2save</Entry>
-				<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
+				<Item Label="$T(SaveManager.Filter.Saves) (*.sacred2save)">*.sacred2save</Item>
+				<Item Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Item>
 			</FileFilters>
 			<PrimaryExtension>sacred2save</PrimaryExtension>
 		</SaveManager>
@@ -232,18 +232,18 @@
 		<PackageManager>
 			<Requirements>
 				<!-- General -->
-				<Entry ID="Sacred2" Category="$T(PackageManager.ReqCategory.General)">
+				<Item ID="Sacred2" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">System\Sacred2.exe</Object>
 					<Version Function="GTEQ">2.65.1.0</Version>
-				</Entry>
-				<Entry ID="CommunityPatch" Category="$T(PackageManager.ReqCategory.General)">
+				</Item>
+				<Item ID="CommunityPatch" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>Community Patch</Name>
 					<Object Function="ModActive"/>
 					<Dependencies>
-						<Entry>$(GameID)</Entry>
+						<Item>$(GameID)</Item>
 					</Dependencies>
-				</Entry>
+				</Item>
 			</Requirements>
 		</PackageManager>
 	</Packages>

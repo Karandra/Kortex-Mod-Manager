@@ -4,63 +4,63 @@
 
 	<Variables>
 		<!--Required-->
-		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
 			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Bethesda Softworks\Fallout 4 VR</Path>
 			<Name>Installed Path</Name>
 			<Type>REG_SZ</Type>
-		</Entry>
-		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Fallout4VR</Entry>
-		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		</Item>
+		<Item ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Fallout4VR</Item>
+		<Item ID="ActualSavesDir">$(ActualConfigDir)\Saves</Item>
 		
-		<Entry ID="GameEditorName">Creation Kit</Entry>
+		<Item ID="GameEditorName">Creation Kit</Item>
 
-		<Entry ID="xEditID">fo4vr</Entry>
-		<Entry ID="SteamID" Type="Integer">611660</Entry>
-		<Entry ID="NexusDomainName">Fallout4</Entry>
+		<Item ID="xEditID">fo4vr</Item>
+		<Item ID="SteamID" Type="Integer">611660</Item>
+		<Item ID="NexusDomainName">Fallout4</Item>
 	</Variables>
 
 	<Virtualization>
 		<MirroredLocations>
-			<Entry>
+			<Item>
 				<Sources>
-					<Entry>$(SavesDir)</Entry>
-					<Entry>$(ConfigDir)</Entry>
+					<Item>$(SavesDir)</Item>
+					<Item>$(ConfigDir)</Item>
 				</Sources>
 				<Target>$(ActualConfigDir)</Target>
-			</Entry>
-			<Entry>
+			</Item>
+			<Item>
 				<Sources>
-					<Entry>$(ProfileDir)\Plugins</Entry>
+					<Item>$(ProfileDir)\Plugins</Item>
 				</Sources>
 				<Target>$SHF(APPLICATIONDATA_LOCAL)\Fallout4VR</Target>
-			</Entry>
+			</Item>
 		</MirroredLocations>
 	</Virtualization>
 
 	<ProgramManager>
 		<Programs>
-			<Entry>
+			<Item>
 				<Name>$(GameShortName)</Name>
 				<Executable>Fallout4VR.exe</Executable>
-			</Entry>
-			<!--<Entry>
+			</Item>
+			<!--<Item>
 				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
 				<Executable>F4SEVR_Loader.exe</Executable>
-			</Entry>-->
-			<Entry>
+			</Item>-->
+			<Item>
 				<Name>$(GameShortName) Launcher</Name>
 				<Executable>Fallout4VRLauncher.exe</Executable>
-			</Entry>
-			<Entry>
+			</Item>
+			<Item>
 				<Name>Creation Kit</Name>
 				<Executable>CreationKit.exe</Executable>
-			</Entry>
-			<Entry>
+			</Item>
+			<Item>
 				<Name>ENB Injector</Name>
 				<Executable>ENBInjector.exe</Executable>
-			</Entry>
+			</Item>
 		</Programs>
 	</ProgramManager>
 
@@ -116,9 +116,9 @@
 		</OrderListHeader>
 
 		<SortingTools>
-			<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+			<Item ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
 				<Command><![CDATA[--game=Fallout4VR]]></Command>
-			</Entry>
+			</Item>
 		</SortingTools>
 
 		<LibLoot>
@@ -129,36 +129,36 @@
 		</LibLoot>
 
 		<StandardContent MainID="Fallout4.esm">
-			<Entry ID="Fallout4.esm" Name="$(GameShortName)" Logo="Fallout4.png"/>
-			<Entry ID="Fallout4_VR.esm" Name="$(GameShortName)" Logo="Fallout4.png"/>
-			<Entry ID="DLCWorkshop01.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop01.png"/>
-			<Entry ID="DLCWorkshop02.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop02.png"/>
-			<Entry ID="DLCWorkshop03.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop03.png"/>
-			<Entry ID="DLCRobot.esm" Name="$(GameShortName): Automatron" Logo="Automatron.png"/>
-			<Entry ID="DLCCoast.esm" Name="$(GameShortName): Far Harbor" Logo="FarHarbor.png"/>
-			<Entry ID="DLCNukaWorld.esm" Name="$(GameShortName): Nuka World" Logo="NukaWorld.png"/>
-			<Entry ID="DLCUltraHighResolution.esm" Name="$(GameShortName): High Resolution Texture Pack" Logo="Fallout4.png"/>
+			<Item ID="Fallout4.esm" Name="$(GameShortName)" Logo="Fallout4.png"/>
+			<Item ID="Fallout4_VR.esm" Name="$(GameShortName)" Logo="Fallout4.png"/>
+			<Item ID="DLCWorkshop01.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop01.png"/>
+			<Item ID="DLCWorkshop02.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop02.png"/>
+			<Item ID="DLCWorkshop03.esm" Name="$(GameShortName): Wasteland Workshop" Logo="WastelandWorkshop03.png"/>
+			<Item ID="DLCRobot.esm" Name="$(GameShortName): Automatron" Logo="Automatron.png"/>
+			<Item ID="DLCCoast.esm" Name="$(GameShortName): Far Harbor" Logo="FarHarbor.png"/>
+			<Item ID="DLCNukaWorld.esm" Name="$(GameShortName): Nuka World" Logo="NukaWorld.png"/>
+			<Item ID="DLCUltraHighResolution.esm" Name="$(GameShortName): High Resolution Texture Pack" Logo="Fallout4.png"/>
 		</StandardContent>
 	
 </PluginManager>
 
 	<ScreenshotsGallery Enabled="1" RequiresVFS="0">
 		<Locations>
-			<Entry>$(ActualGameDir)</Entry>
-			<Entry>$(ActualGameDir)\Screenshots</Entry>
-			<Entry>$(ConfigDir)</Entry>
-			<Entry>$(ConfigDir)\Screenshots</Entry>
-			<Entry>$(OverwritesDir)</Entry>
-			<Entry>$(OverwritesDir)\Screenshots</Entry>
+			<Item>$(ActualGameDir)</Item>
+			<Item>$(ActualGameDir)\Screenshots</Item>
+			<Item>$(ConfigDir)</Item>
+			<Item>$(ConfigDir)\Screenshots</Item>
+			<Item>$(OverwritesDir)</Item>
+			<Item>$(OverwritesDir)\Screenshots</Item>
 		</Locations>
 	</ScreenshotsGallery>
 
 	<SaveManager Enabled="1" RequiresVFS="0" SaveFileFormat="BethesdaFallout4">
 		<Location>$(SavesDir)\Saves</Location>
 		<FileFilters>
-			<Entry Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Entry>
-			<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
-			<Entry Label="$T(SaveManager.Filter.CoSaves) (*.f4se)">*.f4se</Entry>
+			<Item Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Item>
+			<Item Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Item>
+			<Item Label="$T(SaveManager.Filter.CoSaves) (*.f4se)">*.f4se</Item>
 		</FileFilters>
 
 		<PrimaryExtension>fos</PrimaryExtension>
@@ -169,101 +169,101 @@
 		<PackageManager>
 			<Requirements>
 				<!-- General -->
-				<Entry ID="Fallout4VR" Category="$T(PackageManager.ReqCategory.General)">
+				<Item ID="Fallout4VR" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">Fallout4.exe</Object>
 					<Version Function="GTEQ">1.10.106.0</Version>
-				</Entry>
-				<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+				</Item>
+				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">F4SE_Loader.exe</Object>
 					<Version Function="GTEQ">0.0.6.11</Version>
-				</Entry>
-				<Entry ID="xSE PluginPreloader" Category="$T(PackageManager.ReqCategory.General)">
+				</Item>
+				<Item ID="xSE PluginPreloader" Category="$T(PackageManager.ReqCategory.General)">
 					<Object Function="FileExist">IpHlpAPI.dll</Object>
 					<Version Function="GTEQ">0.1.2</Version>
-				</Entry>
+				</Item>
 
 				<!-- DLC -->
-				<Entry ID="DLC-FarHarbor" Category="$T(PackageManager.ReqCategory.DLC)">
+				<Item ID="DLC-FarHarbor" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Far Harbor</Name>
 					<Object Function="PluginActive">DLCCoast.esm</Object>
-				</Entry>
-				<Entry ID="DLC-Automatron" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-Automatron" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Automatron</Name>
 					<Object Function="PluginActive">DLCRobot.esm</Object>
-				</Entry>
-				<Entry ID="DLC-NukaWorld" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-NukaWorld" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Nuka World</Name>
 					<Object Function="PluginActive">DLCNukaWorld.esm</Object>
-				</Entry>
-				<Entry ID="DLC-WastelandWorkshop" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-WastelandWorkshop" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Wasteland Workshop</Name>
 					<Dependencies>
-						<Entry>DLC-WastelandWorkshop1</Entry>
-						<Entry>DLC-WastelandWorkshop2</Entry>
-						<Entry>DLC-WastelandWorkshop3</Entry>
+						<Item>DLC-WastelandWorkshop1</Item>
+						<Item>DLC-WastelandWorkshop2</Item>
+						<Item>DLC-WastelandWorkshop3</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="DLC-WastelandWorkshop1" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-WastelandWorkshop1" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Wasteland Workshop 1</Name>
 					<Object Function="PluginActive">DLCWorkshop01.esm</Object>
-				</Entry>
-				<Entry ID="DLC-WastelandWorkshop2" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-WastelandWorkshop2" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>Wasteland Workshop 2</Name>
 					<Object Function="PluginActive">DLCWorkshop02.esm</Object>
-				</Entry>
-				<Entry ID="DLC-WastelandWorkshop3" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-WastelandWorkshop3" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>Wasteland Workshop 3</Name>
 					<Object Function="PluginActive">DLCWorkshop03.esm</Object>
-				</Entry>
-				<Entry ID="DLC-HRTP" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-HRTP" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: High Resolution Texture Pack</Name>
 					<Object Function="PluginActive">DLCUltraHighResolution.esm</Object>
-				</Entry>
+				</Item>
 
 				<!-- Frameworks -->
-				<Entry ID="LooksMenu" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				<Item ID="LooksMenu" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>LooksMenu</Name>
 					<Object Function="PluginActive">LooksMenu.esp</Object>
 					<Version Function="GTEQ">1.6</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="AWKCR" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="AWKCR" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Armor and Weapon Keywords Community Resource</Name>
 					<Object Function="PluginActive">ArmorKeywords.esm</Object>
 					<Version Function="GTEQ">4.0</Version>
-				</Entry>
-				<Entry ID="Armorsmith Extended" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="Armorsmith Extended" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="PluginActive">Armorsmith Extended.esp</Object>
 					<Version Function="GTEQ">3.0</Version>
 					<Dependencies>
-						<Entry>AWKCR</Entry>
+						<Item>AWKCR</Item>
 					</Dependencies>
-				</Entry>
+				</Item>
 
 				<!-- Body replacers -->
-				<Entry ID="CBBE" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				<Item ID="CBBE" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Caliente's Beautiful Bodies Enhancer</Name>
 					<Object Function="ModActive"/>
-				</Entry>
+				</Item>
 
 				<!-- Pacthes -->
-				<Entry ID="UFO4P" Category="$T(PackageManager.ReqCategory.Patches)">
+				<Item ID="UFO4P" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Fallout 4 Patch</Name>
 					<Object Function="PluginActive">Unofficial Fallout 4 Patch.esp</Object>
 					<Version Function="GTEQ">2.0</Version>
 					<Dependencies>
-						<Entry>DLC-FarHarbor</Entry>
-						<Entry>DLC-NukaWorld</Entry>
-						<Entry>DLC-Automatron</Entry>
-						<Entry>DLC-WastelandWorkshop1</Entry>
-						<Entry>DLC-WastelandWorkshop2</Entry>
-						<Entry>DLC-WastelandWorkshop3</Entry>
+						<Item>DLC-FarHarbor</Item>
+						<Item>DLC-NukaWorld</Item>
+						<Item>DLC-Automatron</Item>
+						<Item>DLC-WastelandWorkshop1</Item>
+						<Item>DLC-WastelandWorkshop2</Item>
+						<Item>DLC-WastelandWorkshop3</Item>
 					</Dependencies>
-				</Entry>
+				</Item>
 			</Requirements>
 		</PackageManager>
 	</Packages>

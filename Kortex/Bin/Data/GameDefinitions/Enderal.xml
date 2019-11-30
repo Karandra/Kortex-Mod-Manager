@@ -4,49 +4,49 @@
 
 	<Variables>
 		<!--Required-->
-		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
 			<Branch>32</Branch>
 			<Root>HKEY_CURRENT_USER</Root>
 			<Path>Software\SureAI\Enderal</Path>
 			<Name>Installed Path</Name>
 			<Type>REG_SZ</Type>
-		</Entry>
-		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Enderal</Entry>
-		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		</Item>
+		<Item ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Enderal</Item>
+		<Item ID="ActualSavesDir">$(ActualConfigDir)\Saves</Item>
 		
-		<Entry ID="GameEditorName">Creation Kit</Entry>
-		<Entry ID="ScriptExtenderID">SKSE</Entry>
+		<Item ID="GameEditorName">Creation Kit</Item>
+		<Item ID="ScriptExtenderID">SKSE</Item>
 
-		<Entry ID="xEditID">enderal</Entry>
-		<Entry ID="SteamID" Type="Integer">933480</Entry>
-		<Entry ID="NexusDomainName">Enderal</Entry>
+		<Item ID="xEditID">enderal</Item>
+		<Item ID="SteamID" Type="Integer">933480</Item>
+		<Item ID="NexusDomainName">Enderal</Item>
 	</Variables>
 
 	<Programs>
 		<ProgramManager>
 			<DefaultPrograms>
-				<Entry ShowInMainMenu="1">
+				<Item ShowInMainMenu="1">
 					<Name>$(GameShortName) $(ScriptExtenderID)</Name>
 					<Executable>SKSE_Loader.exe</Executable>
-				</Entry>
-				<Entry ShowInMainMenu="1">
+				</Item>
+				<Item ShowInMainMenu="1">
 					<Name>$(GameShortName) Launcher</Name>
 					<Executable>Enderal Launcher.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>BOSS</Name>
 					<Executable>BOSS/BOSS.exe</Executable>
 					<Arguments></Arguments>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>Creation Kit</Name>
 					<Executable>CreationKit.exe</Executable>
 					<Arguments></Arguments>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>ENB Injector</Name>
 					<Executable>ENBInjector.exe</Executable>
-				</Entry>
+				</Item>
 			</DefaultPrograms>
 		</ProgramManager>
 	</Programs>
@@ -87,47 +87,47 @@
 	<GameMods>
 		<ModManager>
 			<MirroredLocations>
-				<Entry>
+				<Item>
 					<Sources>
-						<Entry>$(SavesDir)</Entry>
-						<Entry>$(ConfigDir)</Entry>
+						<Item>$(SavesDir)</Item>
+						<Item>$(ConfigDir)</Item>
 					</Sources>
 					<Target>$(ActualConfigDir)</Target>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Sources>
-						<Entry>$(ProfileDir)\Plugins</Entry>
+						<Item>$(ProfileDir)\Plugins</Item>
 					</Sources>
 					<Target>$SHF(APPLICATIONDATA_LOCAL)\Enderal</Target>
-				</Entry>
+				</Item>
 			</MirroredLocations>
 		</ModManager>
 		<TagManager>
 			<DefaultTags>
-				<Entry ID="Armor">
+				<Item ID="Armor">
 					<NexusID>111</NexusID>
-				</Entry>
-				<Entry ID="Weapons">
+				</Item>
+				<Item ID="Weapons">
 					<NexusID>112</NexusID>
-				</Entry>
-				<Entry ID="Magic">
+				</Item>
+				<Item ID="Magic">
 					<NexusID>113</NexusID>
-				</Entry>
-				<Entry ID="PlayerHomes">
+				</Item>
+				<Item ID="PlayerHomes">
 					<NexusID>107</NexusID>
-				</Entry>
-				<Entry ID="UserInterface">
+				</Item>
+				<Item ID="UserInterface">
 					<NexusID>109</NexusID>
-				</Entry>
-				<Entry ID="Cheats">
+				</Item>
+				<Item ID="Cheats">
 					<NexusID>108</NexusID>
-				</Entry>
-				<Entry ID="Fixes">
+				</Item>
+				<Item ID="Fixes">
 					<NexusID>110</NexusID>
-				</Entry>
-				<Entry ID="Utilities">
+				</Item>
+				<Item ID="Utilities">
 					<NexusID>114</NexusID>
-				</Entry>
+				</Item>
 			</DefaultTags>
 		</TagManager>
 	</GameMods>
@@ -148,9 +148,9 @@
 # Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></OrderListHeader>
 
 			<SortingTools>
-				<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+				<Item ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
 					<Command><![CDATA[--game=Skyrim]]></Command>
-				</Entry>
+				</Item>
 			</SortingTools>
 
 			<LibLoot>
@@ -161,25 +161,25 @@
 			</LibLoot>
 
 			<StandardContent MainID="Skyrim.esm">
-				<Entry ID="Skyrim.esm" Name="Skyrim" Logo="Skyrim.png"/>
-				<Entry ID="Update.esm" Name="Skyrim: Update" Logo="Skyrim.png"/>
-				<Entry ID="Dawnguard.esm" Name="Skyrim: Dawnguard" Logo="Dawnguard.png"/>
-				<Entry ID="HearthFires.esm" Name="Skyrim: HearthFires" Logo="HearthFires.png"/>
-				<Entry ID="Dragonborn.esm" Name="Skyrim: Dragonborn" Logo="Dragonborn.png"/>
-				<Entry ID="HighResTexturePack01.esp" Name="Skyrim: High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
-				<Entry ID="HighResTexturePack02.esp" Name="Skyrim: High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
-				<Entry ID="HighResTexturePack03.esp" Name="Skyrim: High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
+				<Item ID="Skyrim.esm" Name="Skyrim" Logo="Skyrim.png"/>
+				<Item ID="Update.esm" Name="Skyrim: Update" Logo="Skyrim.png"/>
+				<Item ID="Dawnguard.esm" Name="Skyrim: Dawnguard" Logo="Dawnguard.png"/>
+				<Item ID="HearthFires.esm" Name="Skyrim: HearthFires" Logo="HearthFires.png"/>
+				<Item ID="Dragonborn.esm" Name="Skyrim: Dragonborn" Logo="Dragonborn.png"/>
+				<Item ID="HighResTexturePack01.esp" Name="Skyrim: High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
+				<Item ID="HighResTexturePack02.esp" Name="Skyrim: High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
+				<Item ID="HighResTexturePack03.esp" Name="Skyrim: High Resolution Texture Pack" Logo="HighResTexturePack.png"/>
 				
-				<Entry ID="Enderal - Forgotten Stories.esm" Name="$(GameShortName): Forgotten Stories.esm" Logo="Enderal.png"/>
+				<Item ID="Enderal - Forgotten Stories.esm" Name="$(GameShortName): Forgotten Stories.esm" Logo="Enderal.png"/>
 			</StandardContent>
 		</PluginManager>
 
 		<SaveManager SaveImplementation="BethesdaSkyrim">
 			<Location>$(SavesDir)\Saves</Location>
 			<FileFilters>
-				<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
-				<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
-				<Entry Label="$T(SaveManager.Filter.CoSaves) (*.skse)">*.skse</Entry>
+				<Item Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Item>
+				<Item Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Item>
+				<Item Label="$T(SaveManager.Filter.CoSaves) (*.skse)">*.skse</Item>
 			</FileFilters>
 
 			<PrimaryExtension>ess</PrimaryExtension>
@@ -188,12 +188,12 @@
 
 		<ScreenshotsGallery>
 			<Locations>
-				<Entry>$(ActualGameDir)</Entry>
-				<Entry>$(ActualGameDir)\Screenshots</Entry>
-				<Entry>$(ConfigDir)</Entry>
-				<Entry>$(ConfigDir)\Screenshots</Entry>
-				<Entry>$(OverwritesDir)</Entry>
-				<Entry>$(OverwritesDir)\Screenshots</Entry>
+				<Item>$(ActualGameDir)</Item>
+				<Item>$(ActualGameDir)\Screenshots</Item>
+				<Item>$(ConfigDir)</Item>
+				<Item>$(ConfigDir)\Screenshots</Item>
+				<Item>$(OverwritesDir)</Item>
+				<Item>$(OverwritesDir)\Screenshots</Item>
 			</Locations>
 		</ScreenshotsGallery>
 	</GameData>
@@ -202,55 +202,55 @@
 		<PackageManager>
 			<Requirements>
 				<!-- General -->
-				<Entry ID="Enderal" Category="$T(PackageManager.ReqCategory.General)">
+				<Item ID="Enderal" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">TESV.exe</Object>
 					<Version Function="GTEQ">1.9.32.0</Version>
-				</Entry>
-				<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+				</Item>
+				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">SKSE_Loader.exe</Object>
 					<Version Function="GTEQ">0.1.7.3</Version>
-				</Entry>
-				<Entry ID="ScriptDragon" Category="$T(PackageManager.ReqCategory.General)">
+				</Item>
+				<Item ID="ScriptDragon" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>ScriptDragon</Name>
 					<Object Function="FileExist">ScriptDragon.dll</Object>
 					<Version Function="GTEQ">0.1.7.3</Version>
-				</Entry>
+				</Item>
 
 				<!-- DLC -->
-				<Entry ID="DLC-DG" Category="$T(PackageManager.ReqCategory.DLC)">
+				<Item ID="DLC-DG" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Dawnguard</Name>
 					<Object Function="PluginActive">Dawnguard.esm</Object>
-				</Entry>
-				<Entry ID="DLC-HF" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-HF" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: HearthFire</Name>
 					<Object Function="PluginActive">HearthFires.esm</Object>
-				</Entry>
-				<Entry ID="DLC-DB" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-DB" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Dragonborn</Name>
 					<Object Function="PluginActive">Dragonborn.esm</Object>
-				</Entry>
-				<Entry ID="DLC-HRTP" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-HRTP" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: High Resolution Texture Pack</Name>
 					<Dependencies>
-						<Entry>DLC-HRTP1</Entry>
-						<Entry>DLC-HRTP2</Entry>
-						<Entry>DLC-HRTP3</Entry>
+						<Item>DLC-HRTP1</Item>
+						<Item>DLC-HRTP2</Item>
+						<Item>DLC-HRTP3</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="DLC-HRTP1" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-HRTP1" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: High Resolution Texture Pack 1</Name>
 					<Object Function="PluginActive">HighResTexturePack01.esp</Object>
-				</Entry>
-				<Entry ID="DLC-HRTP2" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-HRTP2" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: High Resolution Texture Pack 2</Name>
 					<Object Function="PluginActive">HighResTexturePack02.esp</Object>
-				</Entry>
-				<Entry ID="DLC-HRTP3" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-HRTP3" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: High Resolution Texture Pack 3</Name>
 					<Object Function="PluginActive">HighResTexturePack03.esp</Object>
-				</Entry>
+				</Item>
 			</Requirements>
 		</PackageManager>
 	</Packages>

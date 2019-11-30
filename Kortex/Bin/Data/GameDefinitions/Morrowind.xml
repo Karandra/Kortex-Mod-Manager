@@ -4,46 +4,46 @@
 	
 	<Variables>
 		<!--Required-->
-		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
 			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 22320</Path>
 			<Name>InstallLocation</Name>
 			<Type>REG_SZ</Type>
-		</Entry>
-		<Entry ID="ActualConfigDir">$(ActualGameDir)</Entry>
-		<Entry ID="ActualSavesDir">$(ActualGameDir)\Saves</Entry>
+		</Item>
+		<Item ID="ActualConfigDir">$(ActualGameDir)</Item>
+		<Item ID="ActualSavesDir">$(ActualGameDir)\Saves</Item>
 
-		<Entry ID="GameEditorName">Construction Set</Entry>
+		<Item ID="GameEditorName">Construction Set</Item>
 
-		<Entry ID="xEditID">tes3</Entry>
-		<Entry ID="SteamID" Type="Integer">22320</Entry>
-		<Entry ID="NexusDomainName">Morrowind</Entry>
+		<Item ID="xEditID">tes3</Item>
+		<Item ID="SteamID" Type="Integer">22320</Item>
+		<Item ID="NexusDomainName">Morrowind</Item>
 	</Variables>
 
 	<Programs>
 		<ProgramManager>
 			<DefaultPrograms>
-				<Entry ShowInMainMenu="1">
+				<Item ShowInMainMenu="1">
 					<Name>$(GameShortName)</Name>
 					<Executable>Morrowind.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>$(GameShortName) Launcher</Name>
 					<Executable>Morrowind Launcher.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>$(GameEditorName)</Name>
 					<Executable>TES Construction Set.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>Morrowind Code Patch</Name>
 					<Executable>Morrowind Code Patch.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>Morrowind Graphics Extender XE</Name>
 					<Executable>MGEXEGUI.exe</Executable>
-				</Entry>
+				</Item>
 			</DefaultPrograms>
 		</ProgramManager>
 	</Programs>
@@ -65,165 +65,165 @@
 	<GameMods>
 		<ModManager>
 			<MandatoryLocations>
-				<Entry Name="$T(GameConfigModule.Name)">$(ConfigDir)</Entry>
-				<Entry Name="$T(SaveManager.NameShort)">$(SavesDir)</Entry>
+				<Item Name="$T(GameConfigModule.Name)">$(ConfigDir)</Item>
+				<Item Name="$T(SaveManager.NameShort)">$(SavesDir)</Item>
 			</MandatoryLocations>
 		</ModManager>
 		<TagManager>
 			<DefaultTags>
-				<Entry ID="Animation">
+				<Item ID="Animation">
 					<NexusID>51</NexusID>
-				</Entry>
-				<Entry ID="Armor">
+				</Item>
+				<Item ID="Armor">
 					<NexusID>54</NexusID>
-				</Entry>
-				<Entry ID="Clothing">
+				</Item>
+				<Item ID="Clothing">
 					<NexusID>60</NexusID>
-				</Entry>
-				<Entry ID="Jewelry">
+				</Item>
+				<Item ID="Jewelry">
 					<NexusID>102</NexusID>
-				</Entry>
-				<Entry ID="Weapons">
+				</Item>
+				<Item ID="Weapons">
 					<NexusID>55</NexusID>
-				</Entry>
-				<Entry ID="Gameplay">
+				</Item>
+				<Item ID="Gameplay">
 					<NexusID>24</NexusID>
-				</Entry>
-				<Entry ID="Immersion">
+				</Item>
+				<Item ID="Immersion">
 					<NexusID>78</NexusID>
-				</Entry>
-				<Entry ID="Environment">
+				</Item>
+				<Item ID="Environment">
 					<NexusID>74</NexusID>
-				</Entry>
-				<Entry ID="SkillsAndLeveling">
+				</Item>
+				<Item ID="SkillsAndLeveling">
 					<NexusID>73</NexusID>
-				</Entry>
-				<Entry ID="GuildsAndFactions">
+				</Item>
+				<Item ID="GuildsAndFactions">
 					<NexusID>25</NexusID>
-				</Entry>
-				<Entry ID="Stealth">
+				</Item>
+				<Item ID="Stealth">
 					<NexusID>76</NexusID>
-				</Entry>
-				<Entry ID="Combat">
+				</Item>
+				<Item ID="Combat">
 					<NexusID>77</NexusID>
-				</Entry>
-				<Entry ID="Crafting">
+				</Item>
+				<Item ID="Crafting">
 					<NexusID>100</NexusID>
-				</Entry>
-				<Entry ID="Magic">
+				</Item>
+				<Item ID="Magic">
 					<NexusID>75</NexusID>
-				</Entry>
-				<Entry ID="MagicGameplay">
+				</Item>
+				<Item ID="MagicGameplay">
 					<NexusID>93</NexusID>
-				</Entry>
-				<Entry ID="BooksAndScrolls">
+				</Item>
+				<Item ID="BooksAndScrolls">
 					<NexusID>98</NexusID>
-				</Entry>
-				<Entry ID="Alchemy">
+				</Item>
+				<Item ID="Alchemy">
 					<NexusID>94</NexusID>
-				</Entry>
-				<Entry ID="Quests">
+				</Item>
+				<Item ID="Quests">
 					<NexusID>35</NexusID>
-				</Entry>
-				<Entry ID="Buildings">
+				</Item>
+				<Item ID="Buildings">
 					<NexusID>95</NexusID>
-				</Entry>
-				<Entry ID="Settlements">
+				</Item>
+				<Item ID="Settlements">
 					<NexusID>53</NexusID>
-				</Entry>
-				<Entry ID="Mercantiles">
+				</Item>
+				<Item ID="Mercantiles">
 					<NexusID>69</NexusID>
-				</Entry>
-				<Entry ID="NewLands">
+				</Item>
+				<Item ID="NewLands">
 					<NexusID>30</NexusID>
-				</Entry>
-				<Entry ID="Dungeons">
+				</Item>
+				<Item ID="Dungeons">
 					<NexusID>88</NexusID>
-				</Entry>
-				<Entry ID="AbandonedStructures">
+				</Item>
+				<Item ID="AbandonedStructures">
 					<NexusID>70</NexusID>
-				</Entry>
-				<Entry ID="PlayerHomes">
+				</Item>
+				<Item ID="PlayerHomes">
 					<NexusID>67</NexusID>
-				</Entry>
-				<Entry ID="Landscape">
+				</Item>
+				<Item ID="Landscape">
 					<NexusID>58</NexusID>
-				</Entry>
-				<Entry ID="Overhauls">
+				</Item>
+				<Item ID="Overhauls">
 					<NexusID>79</NexusID>
-				</Entry>
-				<Entry ID="Conversions">
+				</Item>
+				<Item ID="Conversions">
 					<NexusID>-1</NexusID>
-				</Entry>
-				<Entry ID="Audio">
+				</Item>
+				<Item ID="Audio">
 					<NexusID>61</NexusID>
-				</Entry>
-				<Entry ID="UserInterface">
+				</Item>
+				<Item ID="UserInterface">
 					<NexusID>42</NexusID>
-				</Entry>
-				<Entry ID="NPC">
+				</Item>
+				<Item ID="NPC">
 					<NexusID>33</NexusID>
-				</Entry>
-				<Entry ID="Body">
+				</Item>
+				<Item ID="Body">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Face">
+				</Item>
+				<Item ID="Face">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Hair">
+				</Item>
+				<Item ID="Hair">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Races">
+				</Item>
+				<Item ID="Races">
 					<NexusID>34</NexusID>
-				</Entry>
-				<Entry ID="Followers">
+				</Item>
+				<Item ID="Followers">
 					<NexusID>66</NexusID>
-				</Entry>
-				<Entry ID="Creatures">
+				</Item>
+				<Item ID="Creatures">
 					<NexusID>83</NexusID>
-				</Entry>
-				<Entry ID="Mounts">
+				</Item>
+				<Item ID="Mounts">
 					<NexusID>101</NexusID>
-				</Entry>
-				<Entry ID="ModelsAndTextures">
+				</Item>
+				<Item ID="ModelsAndTextures">
 					<NexusID>29</NexusID>
-				</Entry>
-				<Entry ID="Graphics">
+				</Item>
+				<Item ID="Graphics">
 					<NexusID>62</NexusID>
-				</Entry>
-				<Entry ID="ENBPresets">
+				</Item>
+				<Item ID="ENBPresets">
 					<NexusID>97</NexusID>
-				</Entry>
-				<Entry ID="Collectables">
+				</Item>
+				<Item ID="Collectables">
 					<NexusID>92</NexusID>
-				</Entry>
-				<Entry ID="ItemsAndObjects">
+				</Item>
+				<Item ID="ItemsAndObjects">
 					<NexusID>85</NexusID>
-				</Entry>
-				<Entry ID="Cheats">
+				</Item>
+				<Item ID="Cheats">
 					<NexusID>40</NexusID>
-				</Entry>
-				<Entry ID="Fixes">
+				</Item>
+				<Item ID="Fixes">
 					<NexusID>95</NexusID>
-				</Entry>
-				<Entry ID="xSEPlugins" RequiresScriptExtender="1">
+				</Item>
+				<Item ID="xSEPlugins" RequiresScriptExtender="1">
 					<NexusID>-1</NexusID>
-				</Entry>
-				<Entry ID="Utilities">
+				</Item>
+				<Item ID="Utilities">
 					<NexusID>39</NexusID>
-				</Entry>
-				<Entry ID="Configuration">
+				</Item>
+				<Item ID="Configuration">
 					<NexusID>116</NexusID>
-				</Entry>
-				<Entry ID="Resources">
+				</Item>
+				<Item ID="Resources">
 					<NexusID>82</NexusID>
-				</Entry>
-				<Entry ID="SaveGames">
+				</Item>
+				<Item ID="SaveGames">
 					<NexusID>43</NexusID>
-				</Entry>
-				<Entry ID="Misc">
+				</Item>
+				<Item ID="Misc">
 					<NexusID>28</NexusID>
-				</Entry>
+				</Item>
 			</DefaultTags>
 		</TagManager>
 	</GameMods>
@@ -236,9 +236,9 @@
 			<SortByFileModificationDate>0</SortByFileModificationDate>
 
 			<SortingTools>
-				<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+				<Item ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
 					<Command><![CDATA[--game=Morrowind]]></Command>
-				</Entry>
+				</Item>
 			</SortingTools>
 
 			<LibLoot>
@@ -249,16 +249,16 @@
 			</LibLoot>
 
 			<StandardContent MainID="Morrowind.esm">
-				<Entry ID="Morrowind.esm" Name="$(GameShortName)" Logo="Morrowind.png"/>
-				<Entry ID="Tribunal.esm" Name="$(GameShortName): Tribunal" Logo="MTB.png"/>
-				<Entry ID="Bloodmoon.esm" Name="$(GameShortName): Bloodmoon" Logo="MTB.png"/>
+				<Item ID="Morrowind.esm" Name="$(GameShortName)" Logo="Morrowind.png"/>
+				<Item ID="Tribunal.esm" Name="$(GameShortName): Tribunal" Logo="MTB.png"/>
+				<Item ID="Bloodmoon.esm" Name="$(GameShortName): Bloodmoon" Logo="MTB.png"/>
 			</StandardContent>
 		</PluginManager>
 
 		<SaveManager SaveImplementation="BethesdaMorrowind">
 			<Location>$(SavesDir)\Saves</Location>
 			<FileFilters>
-				<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
+				<Item Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Item>
 			</FileFilters>
 
 			<PrimaryExtension>ess</PrimaryExtension>
@@ -267,10 +267,10 @@
 
 		<ScreenshotsGallery>
 			<Locations>
-				<Entry>$(ActualGameDir)</Entry>
-				<Entry>$(ActualGameDir)\Screenshots</Entry>
-				<Entry>$(OverwritesDir)</Entry>
-				<Entry>$(OverwritesDir)\Screenshots</Entry>
+				<Item>$(ActualGameDir)</Item>
+				<Item>$(ActualGameDir)\Screenshots</Item>
+				<Item>$(OverwritesDir)</Item>
+				<Item>$(OverwritesDir)\Screenshots</Item>
 			</Locations>
 		</ScreenshotsGallery>
 	</GameData>
@@ -279,63 +279,63 @@
 		<PackageManager>
 			<Requirements>
 				<!-- General -->
-				<Entry ID="Morrowind" Category="$T(PackageManager.ReqCategory.General)">
+				<Item ID="Morrowind" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">Morrowind.exe</Object>
 					<Version Function="GTEQ">1.6.0.1820</Version>
-				</Entry>
-				<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+				</Item>
+				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">MWSE.dll</Object>
 					<Version Function="GTEQ">0.9.4</Version>
-				</Entry>
+				</Item>
 
 				<!-- DLC -->
-				<Entry ID="DLC-Tribunal" Category="$T(PackageManager.ReqCategory.DLC)">
+				<Item ID="DLC-Tribunal" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Tribunal</Name>
 					<Object Function="PluginActive">Tribunal.esm</Object>
-				</Entry>
-				<Entry ID="DLC-Bloodmoon" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-Bloodmoon" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Bloodmoon</Name>
 					<Object Function="PluginActive">Bloodmoon.esp</Object>
-				</Entry>
+				</Item>
 
 				<!-- Frameworks -->
-				<Entry ID="MCP" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				<Item ID="MCP" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Morrowind Code Patch</Name>
 					<Object Function="FileExist">Morrowind Code Patch.exe</Object>
 					<Version Function="GTEQ">2.4</Version>
-				</Entry>
-				<Entry ID="MGE" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="MGE" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Morrowind Graphics Extender</Name>
 					<Object Function="FileExist">MGEgui.exe</Object>
 					<Version Function="GTEQ">3.8</Version>
-				</Entry>
-				<Entry ID="MGE-XE" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="MGE-XE" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Morrowind Graphics Extender: XE</Name>
 					<Object Function="FileExist">MGEgui.exe</Object>
 					<Version Function="GTEQ">0.9</Version>
-				</Entry>
+				</Item>
 
 				<!-- Body replacers -->
-				<Entry ID="BetterBodies" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				<Item ID="BetterBodies" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Better Bodies</Name>
 					<Object Function="PluginActive">Better Bodies.esp</Object>
-				</Entry>
-				<Entry ID="BetterHeads" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				</Item>
+				<Item ID="BetterHeads" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Better Heads</Name>
 					<Object Function="PluginActive">Better Heads.esp</Object>
-				</Entry>
+				</Item>
 
 				<!-- Misc -->
-				<Entry ID="TR" Category="$T(PackageManager.ReqCategory.Misc)">
+				<Item ID="TR" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Tamriel Rebuilt</Name>
 					<Object Function="PluginActive">TR_Data.esm</Object>
-				</Entry>
-				<Entry ID="CH" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="CH" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Chaos Heart</Name>
 					<Object Function="PluginActive">ChaosHeart.esp</Object>
-				</Entry>
+				</Item>
 			</Requirements>
 		</PackageManager>
 	</Packages>

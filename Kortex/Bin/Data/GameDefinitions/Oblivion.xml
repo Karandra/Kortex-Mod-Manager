@@ -4,75 +4,75 @@
 	
 	<Variables>
 		<!--Required-->
-		<Entry ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
 			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>SOFTWARE\Bethesda Softworks\Oblivion</Path>
 			<Name>Installed Path</Name>
 			<Type>REG_SZ</Type>
-		</Entry>
-		<Entry ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Oblivion</Entry>
-		<Entry ID="ActualSavesDir">$(ActualConfigDir)\Saves</Entry>
+		</Item>
+		<Item ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Oblivion</Item>
+		<Item ID="ActualSavesDir">$(ActualConfigDir)\Saves</Item>
 		
-		<Entry ID="GameEditorName">Construction Set</Entry>
-		<Entry ID="ScriptExtenderID">OBSE</Entry>
+		<Item ID="GameEditorName">Construction Set</Item>
+		<Item ID="ScriptExtenderID">OBSE</Item>
 
-		<Entry ID="xEditID">tes4</Entry>
-		<Entry ID="SteamID" Type="Integer">22330</Entry>
-		<Entry ID="NexusDomainName">Oblivion</Entry>
+		<Item ID="xEditID">tes4</Item>
+		<Item ID="SteamID" Type="Integer">22330</Item>
+		<Item ID="NexusDomainName">Oblivion</Item>
 	</Variables>
 
 	<Programs>
 		<ProgramManager>
 			<DefaultPrograms>
-				<Entry ShowInMainMenu="1">
+				<Item ShowInMainMenu="1">
 					<Name>$(GameShortName)</Name>
 					<Executable>Oblivion.exe</Executable>
-				</Entry>
-				<Entry ShowInMainMenu="1">
+				</Item>
+				<Item ShowInMainMenu="1">
 					<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
 					<Executable>OBSE_Loader.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>$(GameShortName) Launcher</Name>
 					<Executable>Oblivion Launcher.exe</Executable>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>Construction Set</Name>
 					<Executable>TESConstructionSet.exe</Executable>
 					<Arguments></Arguments>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Name>ENB Injector</Name>
 					<Executable>ENBInjector.exe</Executable>
-				</Entry>
+				</Item>
 			</DefaultPrograms>
 		</ProgramManager>
 	</Programs>
 
 	<ProgramManager>
 		<Programs>
-			<Entry>
+			<Item>
 				<Name>$(GameShortName)</Name>
 				<Executable>Oblivion.exe</Executable>
-			</Entry>
-			<Entry>
+			</Item>
+			<Item>
 				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
 				<Executable>OBSE_Loader.exe</Executable>
-			</Entry>
-			<Entry>
+			</Item>
+			<Item>
 				<Name>$(GameShortName) Launcher</Name>
 				<Executable>Oblivion Launcher.exe</Executable>
-			</Entry>
-			<Entry>
+			</Item>
+			<Item>
 				<Name>Construction Set</Name>
 				<Executable>TESConstructionSet.exe</Executable>
 				<Arguments></Arguments>
-			</Entry>
-			<Entry>
+			</Item>
+			<Item>
 				<Name>ENB Injector</Name>
 				<Executable>ENBInjector.exe</Executable>
-			</Entry>
+			</Item>
 		</Programs>
 	</ProgramManager>
 
@@ -106,176 +106,176 @@
 	<GameMods>
 		<ModManager>
 			<MirroredLocations>
-				<Entry>
+				<Item>
 					<Sources>
-						<Entry>$(SavesDir)</Entry>
-						<Entry>$(ConfigDir)</Entry>
+						<Item>$(SavesDir)</Item>
+						<Item>$(ConfigDir)</Item>
 					</Sources>
 					<Target>$(ActualConfigDir)</Target>
-				</Entry>
-				<Entry>
+				</Item>
+				<Item>
 					<Sources>
-						<Entry>$(ProfileDir)\Plugins</Entry>
+						<Item>$(ProfileDir)\Plugins</Item>
 					</Sources>
 					<Target>$SHF(APPLICATIONDATA_LOCAL)\Oblivion</Target>
-				</Entry>
+				</Item>
 			</MirroredLocations>
 		</ModManager>
 		<TagManager>
 			<DefaultTags>
-				<Entry ID="Animation">
+				<Item ID="Animation">
 					<NexusID>51</NexusID>
-				</Entry>
-				<Entry ID="Armor">
+				</Item>
+				<Item ID="Armor">
 					<NexusID>54</NexusID>
-				</Entry>
-				<Entry ID="Clothing">
+				</Item>
+				<Item ID="Clothing">
 					<NexusID>60</NexusID>
-				</Entry>
-				<Entry ID="Jewelry">
+				</Item>
+				<Item ID="Jewelry">
 					<NexusID>102</NexusID>
-				</Entry>
-				<Entry ID="Weapons">
+				</Item>
+				<Item ID="Weapons">
 					<NexusID>55</NexusID>
-				</Entry>
-				<Entry ID="Gameplay">
+				</Item>
+				<Item ID="Gameplay">
 					<NexusID>24</NexusID>
-				</Entry>
-				<Entry ID="Immersion">
+				</Item>
+				<Item ID="Immersion">
 					<NexusID>78</NexusID>
-				</Entry>
-				<Entry ID="Environment">
+				</Item>
+				<Item ID="Environment">
 					<NexusID>74</NexusID>
-				</Entry>
-				<Entry ID="SkillsAndLeveling">
+				</Item>
+				<Item ID="SkillsAndLeveling">
 					<NexusID>73</NexusID>
-				</Entry>
-				<Entry ID="GuildsAndFactions">
+				</Item>
+				<Item ID="GuildsAndFactions">
 					<NexusID>25</NexusID>
-				</Entry>
-				<Entry ID="Stealth">
+				</Item>
+				<Item ID="Stealth">
 					<NexusID>76</NexusID>
-				</Entry>
-				<Entry ID="Combat">
+				</Item>
+				<Item ID="Combat">
 					<NexusID>77</NexusID>
-				</Entry>
-				<Entry ID="Crafting">
+				</Item>
+				<Item ID="Crafting">
 					<NexusID>100</NexusID>
-				</Entry>
-				<Entry ID="Magic">
+				</Item>
+				<Item ID="Magic">
 					<NexusID>75</NexusID>
-				</Entry>
-				<Entry ID="MagicGameplay">
+				</Item>
+				<Item ID="MagicGameplay">
 					<NexusID>93</NexusID>
-				</Entry>
-				<Entry ID="BooksAndScrolls">
+				</Item>
+				<Item ID="BooksAndScrolls">
 					<NexusID>98</NexusID>
-				</Entry>
-				<Entry ID="Alchemy">
+				</Item>
+				<Item ID="Alchemy">
 					<NexusID>94</NexusID>
-				</Entry>
-				<Entry ID="Quests">
+				</Item>
+				<Item ID="Quests">
 					<NexusID>35</NexusID>
-				</Entry>
-				<Entry ID="Buildings">
+				</Item>
+				<Item ID="Buildings">
 					<NexusID>95</NexusID>
-				</Entry>
-				<Entry ID="Settlements">
+				</Item>
+				<Item ID="Settlements">
 					<NexusID>53</NexusID>
-				</Entry>
-				<Entry ID="Mercantiles">
+				</Item>
+				<Item ID="Mercantiles">
 					<NexusID>69</NexusID>
-				</Entry>
-				<Entry ID="NewLands">
+				</Item>
+				<Item ID="NewLands">
 					<NexusID>30</NexusID>
-				</Entry>
-				<Entry ID="Dungeons">
+				</Item>
+				<Item ID="Dungeons">
 					<NexusID>88</NexusID>
-				</Entry>
-				<Entry ID="AbandonedStructures">
+				</Item>
+				<Item ID="AbandonedStructures">
 					<NexusID>70</NexusID>
-				</Entry>
-				<Entry ID="PlayerHomes">
+				</Item>
+				<Item ID="PlayerHomes">
 					<NexusID>67</NexusID>
-				</Entry>
-				<Entry ID="Landscape">
+				</Item>
+				<Item ID="Landscape">
 					<NexusID>58</NexusID>
-				</Entry>
-				<Entry ID="Overhauls">
+				</Item>
+				<Item ID="Overhauls">
 					<NexusID>79</NexusID>
-				</Entry>
-				<Entry ID="Conversions">
+				</Item>
+				<Item ID="Conversions">
 					<NexusID>-1</NexusID>
-				</Entry>
-				<Entry ID="Audio">
+				</Item>
+				<Item ID="Audio">
 					<NexusID>61</NexusID>
-				</Entry>
-				<Entry ID="UserInterface">
+				</Item>
+				<Item ID="UserInterface">
 					<NexusID>42</NexusID>
-				</Entry>
-				<Entry ID="NPC">
+				</Item>
+				<Item ID="NPC">
 					<NexusID>33</NexusID>
-				</Entry>
-				<Entry ID="Body">
+				</Item>
+				<Item ID="Body">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Face">
+				</Item>
+				<Item ID="Face">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Hair">
+				</Item>
+				<Item ID="Hair">
 					<NexusID>26</NexusID>
-				</Entry>
-				<Entry ID="Races">
+				</Item>
+				<Item ID="Races">
 					<NexusID>34</NexusID>
-				</Entry>
-				<Entry ID="Followers">
+				</Item>
+				<Item ID="Followers">
 					<NexusID>66</NexusID>
-				</Entry>
-				<Entry ID="Creatures">
+				</Item>
+				<Item ID="Creatures">
 					<NexusID>83</NexusID>
-				</Entry>
-				<Entry ID="Mounts">
+				</Item>
+				<Item ID="Mounts">
 					<NexusID>101</NexusID>
-				</Entry>
-				<Entry ID="ModelsAndTextures">
+				</Item>
+				<Item ID="ModelsAndTextures">
 					<NexusID>29</NexusID>
-				</Entry>
-				<Entry ID="Graphics">
+				</Item>
+				<Item ID="Graphics">
 					<NexusID>62</NexusID>
-				</Entry>
-				<Entry ID="ENBPresets">
+				</Item>
+				<Item ID="ENBPresets">
 					<NexusID>97</NexusID>
-				</Entry>
-				<Entry ID="Collectables">
+				</Item>
+				<Item ID="Collectables">
 					<NexusID>92</NexusID>
-				</Entry>
-				<Entry ID="ItemsAndObjects">
+				</Item>
+				<Item ID="ItemsAndObjects">
 					<NexusID>85</NexusID>
-				</Entry>
-				<Entry ID="Cheats">
+				</Item>
+				<Item ID="Cheats">
 					<NexusID>40</NexusID>
-				</Entry>
-				<Entry ID="Fixes">
+				</Item>
+				<Item ID="Fixes">
 					<NexusID>95</NexusID>
-				</Entry>
-				<Entry ID="xSEPlugins" RequiresScriptExtender="1">
+				</Item>
+				<Item ID="xSEPlugins" RequiresScriptExtender="1">
 					<NexusID>-1</NexusID>
-				</Entry>
-				<Entry ID="Utilities">
+				</Item>
+				<Item ID="Utilities">
 					<NexusID>39</NexusID>
-				</Entry>
-				<Entry ID="Configuration">
+				</Item>
+				<Item ID="Configuration">
 					<NexusID>116</NexusID>
-				</Entry>
-				<Entry ID="Resources">
+				</Item>
+				<Item ID="Resources">
 					<NexusID>82</NexusID>
-				</Entry>
-				<Entry ID="SaveGames">
+				</Item>
+				<Item ID="SaveGames">
 					<NexusID>43</NexusID>
-				</Entry>
-				<Entry ID="Misc">
+				</Item>
+				<Item ID="Misc">
 					<NexusID>28</NexusID>
-				</Entry>
+				</Item>
 			</DefaultTags>
 		</TagManager>
 	</GameMods>
@@ -296,9 +296,9 @@
 # Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></OrderListHeader>
 
 			<SortingTools>
-				<Entry ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+				<Item ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
 					<Command><![CDATA[--game=Oblivion]]></Command>
-				</Entry>
+				</Item>
 			</SortingTools>
 
 			<LibLoot>
@@ -309,38 +309,38 @@
 			</LibLoot>
 
 			<StandardContent MainID="Oblivion.esm">
-				<Entry ID="Oblivion.esm" Name="$(GameShortName)" Logo="Oblivion.png"/>
-				<Entry ID="OblivionMsg.esp" Name="$(GameShortName)" Logo="Oblivion.png"/>
-				<Entry ID="DLCShiveringIsles.esp" Name="$(GameShortName): Shivering Isles" Logo="ShiveringIsles.png"/>
-				<Entry ID="Knights.esp" Name="$(GameShortName): Knights of the Nine" Logo="Knights.png"/>
-				<Entry ID="DLCSpellTomes.esp" Name="$(GameShortName): Spell Tomes" Logo="Oblivion.png"/>
-				<Entry ID="DLCVileLair.esp" Name="$(GameShortName): The Vile Lair" Logo="Oblivion.png"/>
-				<Entry ID="DLCMehrunesRazor.esp" Name="$(GameShortName): Mehrunes Razor" Logo="Oblivion.png"/>
-				<Entry ID="DLCThievesDen.esp" Name="$(GameShortName): The Thieves Den" Logo="Oblivion.png"/>
-				<Entry ID="DLCFrostcrag.esp" Name="$(GameShortName): Wizard's Tower" Logo="Oblivion.png"/>
-				<Entry ID="DLCOrrery.esp" Name="$(GameShortName): Orrery" Logo="Oblivion.png"/>
-				<Entry ID="DLCHorseArmor.esp" Name="$(GameShortName): Horse Armor" Logo="Oblivion.png"/>
-				<Entry ID="DLCFightersStronghold.esp" Name="$(GameShortName): Fighter's Stronghold" Logo="Oblivion.png"/>
+				<Item ID="Oblivion.esm" Name="$(GameShortName)" Logo="Oblivion.png"/>
+				<Item ID="OblivionMsg.esp" Name="$(GameShortName)" Logo="Oblivion.png"/>
+				<Item ID="DLCShiveringIsles.esp" Name="$(GameShortName): Shivering Isles" Logo="ShiveringIsles.png"/>
+				<Item ID="Knights.esp" Name="$(GameShortName): Knights of the Nine" Logo="Knights.png"/>
+				<Item ID="DLCSpellTomes.esp" Name="$(GameShortName): Spell Tomes" Logo="Oblivion.png"/>
+				<Item ID="DLCVileLair.esp" Name="$(GameShortName): The Vile Lair" Logo="Oblivion.png"/>
+				<Item ID="DLCMehrunesRazor.esp" Name="$(GameShortName): Mehrunes Razor" Logo="Oblivion.png"/>
+				<Item ID="DLCThievesDen.esp" Name="$(GameShortName): The Thieves Den" Logo="Oblivion.png"/>
+				<Item ID="DLCFrostcrag.esp" Name="$(GameShortName): Wizard's Tower" Logo="Oblivion.png"/>
+				<Item ID="DLCOrrery.esp" Name="$(GameShortName): Orrery" Logo="Oblivion.png"/>
+				<Item ID="DLCHorseArmor.esp" Name="$(GameShortName): Horse Armor" Logo="Oblivion.png"/>
+				<Item ID="DLCFightersStronghold.esp" Name="$(GameShortName): Fighter's Stronghold" Logo="Oblivion.png"/>
 			</StandardContent>
 		</PluginManager>
 
 		<ScreenshotsGallery>
 			<Locations>
-				<Entry>$(ActualGameDir)</Entry>
-				<Entry>$(ActualGameDir)\Screenshots</Entry>
-				<Entry>$(ConfigDir)</Entry>
-				<Entry>$(ConfigDir)\Screenshots</Entry>
-				<Entry>$(OverwritesDir)</Entry>
-				<Entry>$(OverwritesDir)\Screenshots</Entry>
+				<Item>$(ActualGameDir)</Item>
+				<Item>$(ActualGameDir)\Screenshots</Item>
+				<Item>$(ConfigDir)</Item>
+				<Item>$(ConfigDir)\Screenshots</Item>
+				<Item>$(OverwritesDir)</Item>
+				<Item>$(OverwritesDir)\Screenshots</Item>
 			</Locations>
 		</ScreenshotsGallery>
 
 		<SaveManager SaveImplementation="BethesdaOblivion">
 			<Location>$(SavesDir)\Saves</Location>
 			<FileFilters>
-				<Entry Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Entry>
-				<Entry Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Entry>
-				<Entry Label="$T(SaveManager.Filter.CoSaves) (*.obse)">*.obse</Entry>
+				<Item Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Item>
+				<Item Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Item>
+				<Item Label="$T(SaveManager.Filter.CoSaves) (*.obse)">*.obse</Item>
 			</FileFilters>
 
 			<PrimaryExtension>ess</PrimaryExtension>
@@ -352,241 +352,241 @@
 		<PackageManager>
 			<Requirements>
 				<!-- General -->
-				<Entry ID="Oblivion" Category="$T(PackageManager.ReqCategory.General)">
+				<Item ID="Oblivion" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">Oblivion.exe</Object>
 					<Version Function="GTEQ">1.2.0.416</Version>
-				</Entry>
-				<Entry ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+				</Item>
+				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">OBSE_Loader.exe</Object>
 					<Version Function="GTEQ">0.0.21.4</Version>
-				</Entry>
+				</Item>
 
 				<!-- DLC -->
-				<Entry ID="DLC-SI" Category="$T(PackageManager.ReqCategory.DLC)">
+				<Item ID="DLC-SI" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Shivering Isles</Name>
 					<Object Function="PluginActive">DLCShiveringIsles.esp</Object>
-				</Entry>
-				<Entry ID="DLC-KotN" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-KotN" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Knights of the Nine</Name>
 					<Object Function="PluginActive">Knights.esp</Object>
-				</Entry>
-				<Entry ID="DLC-SpellTomes" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-SpellTomes" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Spell Tomes</Name>
 					<Object Function="PluginActive">DLCSpellTomes.esp</Object>
-				</Entry>
-				<Entry ID="DLC-TheVileLair" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-TheVileLair" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: The Vile Lair</Name>
 					<Object Function="PluginActive">DLCVileLair.esp</Object>
-				</Entry>
-				<Entry ID="DLC-MehrunesRazor" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-MehrunesRazor" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Mehrunes Razor</Name>
 					<Object Function="PluginActive">DLCMehrunesRazor.esp</Object>
-				</Entry>
-				<Entry ID="DLC-TheThievesDen" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-TheThievesDen" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: The Thieves Den</Name>
 					<Object Function="PluginActive">DLCThievesDen.esp</Object>
-				</Entry>
-				<Entry ID="DLC-Frostcrag" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-Frostcrag" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Wizard's Tower</Name>
 					<Object Function="PluginActive">DLCFrostcrag.esp</Object>
-				</Entry>
-				<Entry ID="DLC-Orrery" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-Orrery" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Orrery</Name>
 					<Object Function="PluginActive">DLCOrrery.esp.esp</Object>
-				</Entry>
-				<Entry ID="DLC-HorseArmor" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-HorseArmor" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Horse Armor</Name>
 					<Object Function="PluginActive">DLCHorseArmor.esp.esp</Object>
-				</Entry>
-				<Entry ID="DLC-FightersStronghold" Category="$T(PackageManager.ReqCategory.DLC)">
+				</Item>
+				<Item ID="DLC-FightersStronghold" Category="$T(PackageManager.ReqCategory.DLC)">
 					<Name>DLC: Fighter's Stronghold</Name>
 					<Object Function="PluginActive">DLCFightersStronghold.esp</Object>
-				</Entry>
+				</Item>
 
 				<!-- Conversions -->
-				<Entry ID="Nehrim" Category="$T(PackageManager.ReqCategory.Conversions)">
+				<Item ID="Nehrim" Category="$T(PackageManager.ReqCategory.Conversions)">
 					<Name>Nehrim: At Fate's Edge</Name>
 					<Object Function="PluginActive">Nehrim.esm</Object>
 					<Version Function="GTEQ">1.5</Version>
-				</Entry>
+				</Item>
 
 				<!-- Frameworks -->
-				<Entry ID="VipCxjPluginCollection" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				<Item ID="VipCxjPluginCollection" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Vipcxj's Plugin Collection</Name>
 					<Object Function="FileExist">Data\OBSE\Plugins\VipCxj_Plugin_Collection.dll</Object>
 					<Version Function="GTEQ">3.0</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="RHHS" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="RHHS" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>VipCxj's Real High Heels System</Name>
 					<Object Function="PluginActive">VipCxj_HighHeels.esp</Object>
 					<Version Function="GTEQ">0.93</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
-						<Entry>VipCxjPluginCollection</Entry>
+						<Item>$(ScriptExtenderID)</Item>
+						<Item>VipCxjPluginCollection</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="MenuQue" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="MenuQue" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="FileExist">Data\OBSE\Plugins\MenuQue.dll</Object>
 					<Version Function="GTEQ">16</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="TSFC" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="TSFC" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Tibixe's String Function Collection</Name>
 					<Object Function="ModActive"/>
 					<Version Function="GTEQ">0.5</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="Pluggy" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="Pluggy" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="ModActive"/>
 					<Version Function="GTEQ">1.32</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="Blockhead" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="Blockhead" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="PluginActive">Data\OBSE\Plugins\Blockhead.dll</Object>
 					<Version Function="GTEQ">10.3</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="DarNifiedUI" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="DarNifiedUI" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>DarNified UI</Name>
 					<Object Function="ModActive"/>
 					<Version Function="GTEQ">1.3</Version>
-				</Entry>
-				<Entry ID="DarkUIdDarN" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="DarkUIdDarN" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>DarkUId DarN</Name>
 					<Object Function="ModActive"/>
 					<Version Function="GTEQ">1.6</Version>
-				</Entry>
-				<Entry ID="OBGE" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="OBGE" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Oblivion Graphics Extender</Name>
 					<Object Function="FileExist">Data\OBSE\Plugins\OBGEv2.dll</Object>
 					<Version Function="GTEQ">3.0</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="OR" Category="$T(PackageManager.ReqCategory.Frameworks)">
+				</Item>
+				<Item ID="OR" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Oblivion Reloaded</Name>
 					<Object Function="FileExist">Data\OBSE\Plugins\OblivionReloaded.dll</Object>
 					<Version Function="GTEQ">4.0</Version>
 					<Dependencies>
-						<Entry>$(ScriptExtenderID)</Entry>
+						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
-				</Entry>
+				</Item>
 
 				<!-- Body replacers -->
-				<Entry ID="HGEC" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				<Item ID="HGEC" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Hentai Gentlemen's EyeCandy Body</Name>
 					<Object Function="ModActive"/>
-				</Entry>
-				<Entry ID="FF" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				</Item>
+				<Item ID="FF" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Fantasy Figures</Name>
 					<Object Function="ModActive"/>
-				</Entry>
-				<Entry ID="RM" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				</Item>
+				<Item ID="RM" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Robert Male Body Replacer</Name>
 					<Object Function="ModActive"/>
-				</Entry>
-				<Entry ID="RF" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				</Item>
+				<Item ID="RF" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Robert Female Body Replacer</Name>
 					<Object Function="ModActive"/>
-				</Entry>
-				<Entry ID="DMRA" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+				</Item>
+				<Item ID="DMRA" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
 					<Name>Double Melon and Round Ass</Name>
 					<Object Function="ModActive"/>
-				</Entry>
+				</Item>
 
 				<!-- Pacthes -->
-				<Entry ID="UOB" Category="$T(PackageManager.ReqCategory.Patches)">
+				<Item ID="UOB" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Oblivion Patch</Name>
 					<Object Function="PluginActive">Unofficial Oblivion Patch.esp</Object>
 					<Version Function="GTEQ">3.5</Version>
-				</Entry>
-				<Entry ID="USIP" Category="$T(PackageManager.ReqCategory.Patches)">
+				</Item>
+				<Item ID="USIP" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Shivering Isles Patch</Name>
 					<Object Function="PluginActive">Unofficial Shivering Isles Patch.esp</Object>
 					<Version Function="GTEQ">1.5</Version>
-				</Entry>
-				<Entry ID="UODLCP" Category="$T(PackageManager.ReqCategory.Patches)">
+				</Item>
+				<Item ID="UODLCP" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Oblivion DLC Patches</Name>
 					<Object Function="ModActive"/>
 					<Version Function="GTEQ">24</Version>
-				</Entry>
+				</Item>
 
 				<!-- Misc -->
-				<Entry ID="CMCS" Category="$T(PackageManager.ReqCategory.Misc)">
+				<Item ID="CMCS" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Coronerras Maximum Compatibility Skeletons</Name>
 					<Object Function="ModActive"/>
-				</Entry>
-				<Entry ID="UniqueLandscapesCompilation" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="UniqueLandscapesCompilation" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Unique Landscapes Compilation</Name>
 					<Object Function="ModActive"/>
-				</Entry>
-				<Entry ID="OXP" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="OXP" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Oblivion XP</Name>
 					<Object Function="PluginActive">Oblivion XP.esp</Object>
 					<Version Function="GTEQ">4.3</Version>
-				</Entry>
+				</Item>
 
-				<Entry ID="FLCI" Category="$T(PackageManager.ReqCategory.Misc)">
+				<Item ID="FLCI" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Francesco's Leveled Creatures-Items Mod</Name>
 					<Object Function="PluginActive">Francesco's Leveled Creatures-Items Mod.esm</Object>
 					<Version Function="GTEQ">5.0</Version>
-				</Entry>
-				<Entry ID="OWC" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="OWC" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Oblivion WarCry</Name>
 					<Object Function="PluginActive">Oblivion WarCry.esp</Object>
 					<Version Function="GTEQ">1.09</Version>
-				</Entry>
-				<Entry ID="OWC-ND" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="OWC-ND" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Oblivion WarCry - New Dimension</Name>
 					<Object Function="PluginActive">OWC - New Dimension.esp</Object>
 					<Version Function="EQ">SILVER</Version>
 					<Dependencies>
-						<Entry>SI</Entry>
+						<Item>SI</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="OOO" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="OOO" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Oscuro's Oblivion Overhaul</Name>
 					<Object Function="PluginActive">Oscuro's_Oblivion_Overhau.esm</Object>
 					<Version Function="GTEQ">1.36</Version>
-				</Entry>
-				<Entry ID="MMM" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="MMM" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Martigen's Monster Mod</Name>
 					<Object Function="PluginActive">Mart's Monster Mod.esm</Object>
 					<Version Function="GTEQ">3.8</Version>
-				</Entry>
-				<Entry ID="FCOM" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="FCOM" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>FCOM Convergence</Name>
 					<Object Function="PluginActive">FCOM_Convergence.esm</Object>
 					<Version Function="GTEQ">1.0</Version>
-				</Entry>
-				<Entry ID="COBL" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="COBL" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Common Oblivion</Name>
 					<Object Function="PluginActive">Cobl Main.esm</Object>
 					<Version Function="GTEQ">1.72</Version>
 					<Dependencies>
-						<Entry>TSFC</Entry>
-						<Entry>Pluggy</Entry>
+						<Item>TSFC</Item>
+						<Item>Pluggy</Item>
 					</Dependencies>
-				</Entry>
-				<Entry ID="AliveAndDead" Category="$T(PackageManager.ReqCategory.Misc)">
+				</Item>
+				<Item ID="AliveAndDead" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Alive and Dead</Name>
 					<Object Function="PluginActive">7roads.esp</Object>
 					<Version Function="GTEQ">2013.09.17</Version>
-				</Entry>
+				</Item>
 			</Requirements>
 		</PackageManager>
 	</Packages>

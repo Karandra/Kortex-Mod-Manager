@@ -235,7 +235,7 @@
 				<Item ID="Sacred2" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">System\Sacred2.exe</Object>
-					<Version Function="GTEQ">2.65.1.0</Version>
+					<Version Operator="GTEQ">2.65.1.0</Version>
 				</Item>
 				<Item ID="CommunityPatch" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>Community Patch</Name>

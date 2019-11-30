@@ -205,17 +205,17 @@
 				<Item ID="Enderal" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">TESV.exe</Object>
-					<Version Function="GTEQ">1.9.32.0</Version>
+					<Version Operator="GTEQ">1.9.32.0</Version>
 				</Item>
 				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">SKSE_Loader.exe</Object>
-					<Version Function="GTEQ">0.1.7.3</Version>
+					<Version Operator="GTEQ">0.1.7.3</Version>
 				</Item>
 				<Item ID="ScriptDragon" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>ScriptDragon</Name>
 					<Object Function="FileExist">ScriptDragon.dll</Object>
-					<Version Function="GTEQ">0.1.7.3</Version>
+					<Version Operator="GTEQ">0.1.7.3</Version>
 				</Item>
 
 				<!-- DLC -->

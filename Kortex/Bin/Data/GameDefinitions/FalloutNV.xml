@@ -198,12 +198,12 @@
 				<Item ID="FalloutNV" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">FalloutNV.exe</Object>
-					<Version Function="GTEQ">1.4.0.525</Version>
+					<Version Operator="GTEQ">1.4.0.525</Version>
 				</Item>
 				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">NVSE_Loader.exe</Object>
-					<Version Function="GTEQ">0.5.1.4</Version>
+					<Version Operator="GTEQ">0.5.1.4</Version>
 				</Item>
 
 				<!-- DLC -->
@@ -257,7 +257,7 @@
 				<Item ID="MCM" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Mod Configuration Menu</Name>
 					<Object Function="FileExist">Data\NVSE\Plugins\MCM.dll</Object>
-					<Version Function="GTEQ">1.5</Version>
+					<Version Operator="GTEQ">1.5</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -265,7 +265,7 @@
 				<Item ID="Lutana" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Lutana NVSE Plugin</Name>
 					<Object Function="FileExist">NVSE\Plugins\Lutana_NVSE.dll</Object>
-					<Version Function="GTEQ">16.2</Version>
+					<Version Operator="GTEQ">16.2</Version>
 					<Description>Look for JIP LN NVSE Plugin v40.0+</Description>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
@@ -274,7 +274,7 @@
 				<Item ID="JIP-LN" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>JIP LN NVSE Plugin</Name>
 					<Object Function="FileExist">NVSE\Plugins\JIP_NVSE.dll</Object>
-					<Version Function="GTEQ">53.6</Version>
+					<Version Operator="GTEQ">53.6</Version>
 					<Description>As of v40.0, this plugin also includes all the functions from the (now defunct) Lutana NVSE Plugin</Description>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
@@ -298,7 +298,7 @@
 				<!-- Misc -->
 				<Item ID="Project Nevada" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Object Function="ModActive">NVSE\Plugins\PN_NVSE.dll</Object>
-					<Version Function="GTEQ">2.5</Version>
+					<Version Operator="GTEQ">2.5</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 						<Item>MCM</Item>

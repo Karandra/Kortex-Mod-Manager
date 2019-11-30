@@ -355,12 +355,12 @@
 				<Item ID="Oblivion" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">Oblivion.exe</Object>
-					<Version Function="GTEQ">1.2.0.416</Version>
+					<Version Operator="GTEQ">1.2.0.416</Version>
 				</Item>
 				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">OBSE_Loader.exe</Object>
-					<Version Function="GTEQ">0.0.21.4</Version>
+					<Version Operator="GTEQ">0.0.21.4</Version>
 				</Item>
 
 				<!-- DLC -->
@@ -409,14 +409,14 @@
 				<Item ID="Nehrim" Category="$T(PackageManager.ReqCategory.Conversions)">
 					<Name>Nehrim: At Fate's Edge</Name>
 					<Object Function="PluginActive">Nehrim.esm</Object>
-					<Version Function="GTEQ">1.5</Version>
+					<Version Operator="GTEQ">1.5</Version>
 				</Item>
 
 				<!-- Frameworks -->
 				<Item ID="VipCxjPluginCollection" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Vipcxj's Plugin Collection</Name>
 					<Object Function="FileExist">Data\OBSE\Plugins\VipCxj_Plugin_Collection.dll</Object>
-					<Version Function="GTEQ">3.0</Version>
+					<Version Operator="GTEQ">3.0</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -424,7 +424,7 @@
 				<Item ID="RHHS" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>VipCxj's Real High Heels System</Name>
 					<Object Function="PluginActive">VipCxj_HighHeels.esp</Object>
-					<Version Function="GTEQ">0.93</Version>
+					<Version Operator="GTEQ">0.93</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 						<Item>VipCxjPluginCollection</Item>
@@ -432,7 +432,7 @@
 				</Item>
 				<Item ID="MenuQue" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="FileExist">Data\OBSE\Plugins\MenuQue.dll</Object>
-					<Version Function="GTEQ">16</Version>
+					<Version Operator="GTEQ">16</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -440,21 +440,21 @@
 				<Item ID="TSFC" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Tibixe's String Function Collection</Name>
 					<Object Function="ModActive"/>
-					<Version Function="GTEQ">0.5</Version>
+					<Version Operator="GTEQ">0.5</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
 				</Item>
 				<Item ID="Pluggy" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="ModActive"/>
-					<Version Function="GTEQ">1.32</Version>
+					<Version Operator="GTEQ">1.32</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
 				</Item>
 				<Item ID="Blockhead" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="PluginActive">Data\OBSE\Plugins\Blockhead.dll</Object>
-					<Version Function="GTEQ">10.3</Version>
+					<Version Operator="GTEQ">10.3</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -462,17 +462,17 @@
 				<Item ID="DarNifiedUI" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>DarNified UI</Name>
 					<Object Function="ModActive"/>
-					<Version Function="GTEQ">1.3</Version>
+					<Version Operator="GTEQ">1.3</Version>
 				</Item>
 				<Item ID="DarkUIdDarN" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>DarkUId DarN</Name>
 					<Object Function="ModActive"/>
-					<Version Function="GTEQ">1.6</Version>
+					<Version Operator="GTEQ">1.6</Version>
 				</Item>
 				<Item ID="OBGE" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Oblivion Graphics Extender</Name>
 					<Object Function="FileExist">Data\OBSE\Plugins\OBGEv2.dll</Object>
-					<Version Function="GTEQ">3.0</Version>
+					<Version Operator="GTEQ">3.0</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -480,7 +480,7 @@
 				<Item ID="OR" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Oblivion Reloaded</Name>
 					<Object Function="FileExist">Data\OBSE\Plugins\OblivionReloaded.dll</Object>
-					<Version Function="GTEQ">4.0</Version>
+					<Version Operator="GTEQ">4.0</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -512,17 +512,17 @@
 				<Item ID="UOB" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Oblivion Patch</Name>
 					<Object Function="PluginActive">Unofficial Oblivion Patch.esp</Object>
-					<Version Function="GTEQ">3.5</Version>
+					<Version Operator="GTEQ">3.5</Version>
 				</Item>
 				<Item ID="USIP" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Shivering Isles Patch</Name>
 					<Object Function="PluginActive">Unofficial Shivering Isles Patch.esp</Object>
-					<Version Function="GTEQ">1.5</Version>
+					<Version Operator="GTEQ">1.5</Version>
 				</Item>
 				<Item ID="UODLCP" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Oblivion DLC Patches</Name>
 					<Object Function="ModActive"/>
-					<Version Function="GTEQ">24</Version>
+					<Version Operator="GTEQ">24</Version>
 				</Item>
 
 				<!-- Misc -->
@@ -537,23 +537,23 @@
 				<Item ID="OXP" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Oblivion XP</Name>
 					<Object Function="PluginActive">Oblivion XP.esp</Object>
-					<Version Function="GTEQ">4.3</Version>
+					<Version Operator="GTEQ">4.3</Version>
 				</Item>
 
 				<Item ID="FLCI" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Francesco's Leveled Creatures-Items Mod</Name>
 					<Object Function="PluginActive">Francesco's Leveled Creatures-Items Mod.esm</Object>
-					<Version Function="GTEQ">5.0</Version>
+					<Version Operator="GTEQ">5.0</Version>
 				</Item>
 				<Item ID="OWC" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Oblivion WarCry</Name>
 					<Object Function="PluginActive">Oblivion WarCry.esp</Object>
-					<Version Function="GTEQ">1.09</Version>
+					<Version Operator="GTEQ">1.09</Version>
 				</Item>
 				<Item ID="OWC-ND" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Oblivion WarCry - New Dimension</Name>
 					<Object Function="PluginActive">OWC - New Dimension.esp</Object>
-					<Version Function="EQ">SILVER</Version>
+					<Version Operator="EQ">SILVER</Version>
 					<Dependencies>
 						<Item>SI</Item>
 					</Dependencies>
@@ -561,22 +561,22 @@
 				<Item ID="OOO" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Oscuro's Oblivion Overhaul</Name>
 					<Object Function="PluginActive">Oscuro's_Oblivion_Overhau.esm</Object>
-					<Version Function="GTEQ">1.36</Version>
+					<Version Operator="GTEQ">1.36</Version>
 				</Item>
 				<Item ID="MMM" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Martigen's Monster Mod</Name>
 					<Object Function="PluginActive">Mart's Monster Mod.esm</Object>
-					<Version Function="GTEQ">3.8</Version>
+					<Version Operator="GTEQ">3.8</Version>
 				</Item>
 				<Item ID="FCOM" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>FCOM Convergence</Name>
 					<Object Function="PluginActive">FCOM_Convergence.esm</Object>
-					<Version Function="GTEQ">1.0</Version>
+					<Version Operator="GTEQ">1.0</Version>
 				</Item>
 				<Item ID="COBL" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Common Oblivion</Name>
 					<Object Function="PluginActive">Cobl Main.esm</Object>
-					<Version Function="GTEQ">1.72</Version>
+					<Version Operator="GTEQ">1.72</Version>
 					<Dependencies>
 						<Item>TSFC</Item>
 						<Item>Pluggy</Item>
@@ -585,7 +585,7 @@
 				<Item ID="AliveAndDead" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Alive and Dead</Name>
 					<Object Function="PluginActive">7roads.esp</Object>
-					<Version Function="GTEQ">2013.09.17</Version>
+					<Version Operator="GTEQ">2013.09.17</Version>
 				</Item>
 			</Requirements>
 		</PackageManager>

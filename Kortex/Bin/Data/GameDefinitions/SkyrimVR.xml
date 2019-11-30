@@ -334,41 +334,41 @@
 				<Item ID="SkyrimVR" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">SkyrimVR.exe</Object>
-					<Version Function="GTEQ">1.4.15</Version>
+					<Version Operator="GTEQ">1.4.15</Version>
 				</Item>
 				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">SKSEVR_Loader.exe</Object>
-					<Version Function="GTEQ">0.2.0.12</Version>
+					<Version Operator="GTEQ">0.2.0.12</Version>
 				</Item>
 				<Item ID="SSE Engine Fixes" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="FileExist">Data\SKSE\Plugins\EngineFixes.dll</Object>
-					<Version Function="GTEQ">3.03</Version>
+					<Version Operator="GTEQ">3.03</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
 				</Item>
 				<Item ID="DLL Preloader" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="FileExist">d3dx9_42.dll</Object>
-					<Version Function="GTEQ">2.0</Version>
+					<Version Operator="GTEQ">2.0</Version>
 				</Item>
 				<Item ID="xSHADOWMANx's Dll Loader" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="FileExist">DInput8.dll</Object>
-					<Version Function="GTEQ">1.0.0.4</Version>
+					<Version Operator="GTEQ">1.0.0.4</Version>
 				</Item>
 
 				<!-- Frameworks -->
 				<Item ID="SkyUI" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>SkyUI</Name>
 					<Object Function="PluginActive">SkyUI_SE.esp</Object>
-					<Version Function="GTEQ">5.2</Version>
+					<Version Operator="GTEQ">5.2</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
 				</Item>
 				<Item ID="UIExtensions" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="PluginActive">UIExtensions.esp</Object>
-					<Version Function="GTEQ">1.2</Version>
+					<Version Operator="GTEQ">1.2</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -376,7 +376,7 @@
 				<Item ID="NetImmerse Override" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>NetImmerse Override</Name>
 					<Object Function="FileExist">Data\SKSE\Plugins\SKEE64.dll</Object>
-					<Version Function="GTEQ">3.4.5</Version>
+					<Version Operator="GTEQ">3.4.5</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -384,7 +384,7 @@
 				<Item ID="RaceMenu" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>RaceMenu</Name>
 					<Object Function="PluginActive">RaceMenu.esp</Object>
-					<Version Function="GTEQ">0.3.1</Version>
+					<Version Operator="GTEQ">0.3.1</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -392,7 +392,7 @@
 				<Item ID="FNIS" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Fores New Idles in Skyrim</Name>
 					<Object Function="FileExist">Data\Tools\GenerateFNIS_for_Users\GenerateFNISforUsers.exe</Object>
-					<Version Function="GTEQ">7.4.5</Version>
+					<Version Operator="GTEQ">7.4.5</Version>
 				</Item>
 				<Item ID="HDT-Framework" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>HDT Framework</Name>
@@ -433,7 +433,7 @@
 				<Item ID="SexLab" Category="SexLab">
 					<Name>SexLab</Name>
 					<Object Function="PluginActive">SexLab.esm</Object>
-					<Version Function="GTEQ">1.63</Version>
+					<Version Operator="GTEQ">1.63</Version>
 					<Dependencies>
 						<Item>SkyUI</Item>
 						<Item>FNIS</Item>
@@ -442,7 +442,7 @@
 				<Item ID="SexLab Aroused" Category="SexLab">
 					<Name>SexLab Aroused</Name>
 					<Object Function="PluginActive">SexLabAroused.esm</Object>
-					<Version Function="GTEQ">04.0b10</Version>
+					<Version Operator="GTEQ">04.0b10</Version>
 					<Dependencies>
 						<Item>SexLab</Item>
 					</Dependencies>
@@ -450,7 +450,7 @@
 				<Item ID="ZAP" Category="SexLab">
 					<Name>ZaZ Animation Pack</Name>
 					<Object Function="PluginActive">ZaZAnimationPack.esm</Object>
-					<Version Function="GTEQ">1.0</Version>
+					<Version Operator="GTEQ">1.0</Version>
 					<Dependencies>
 						<Item>FNIS</Item>
 						<Item>SexLab</Item>
@@ -459,7 +459,7 @@
 				<Item ID="DDa" Category="SexLab">
 					<Name>Devious Devices - Assets</Name>
 					<Object Function="PluginActive">Devious Devices - Assets.esm</Object>
-					<Version Function="GTEQ">3.0e</Version>
+					<Version Operator="GTEQ">3.0e</Version>
 					<Dependencies>
 						<Item>SexLab</Item>
 					</Dependencies>
@@ -467,7 +467,7 @@
 				<Item ID="DDi" Category="SexLab">
 					<Name>Devious Devices - Integration</Name>
 					<Object Function="PluginActive">Devious Devices - Integration.esm</Object>
-					<Version Function="GTEQ">4.1</Version>
+					<Version Operator="GTEQ">4.1</Version>
 					<Dependencies>
 						<Item>SexLabAroused</Item>
 						<Item>ZAP</Item>
@@ -479,14 +479,14 @@
 				<Item ID="USSEP" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Skyrim Special Edition Patch</Name>
 					<Object Function="PluginActive"> Unofficial Skyrim Special Edition Patch.esp</Object>
-					<Version Function="GTEQ">4.1.6</Version>
+					<Version Operator="GTEQ">4.1.6</Version>
 				</Item>
 
 				<!-- Misc -->
 				<Item ID="XPMSE" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>XP32 Maximum Skeleton Extended</Name>
 					<Object Function="PluginActive">XPMSE.esp</Object>
-					<Version Function="GTEQ">4.51</Version>
+					<Version Operator="GTEQ">4.51</Version>
 					<Dependencies>
 						<Item>FNIS</Item>
 						<Item>RM</Item>
@@ -494,36 +494,36 @@
 				</Item>
 				<Item ID="Realistic Ragdolls and Force" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Object Function="ModActive"/>
-					<Version Function="GTEQ">1.32</Version>
+					<Version Operator="GTEQ">1.32</Version>
 				</Item>
 				<Item ID="Fuz-Ro-Doh" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Fuz Ro D'oh - Silent Voice</Name>
 					<Object Function="FileExist">Data\SKSE\Plugins\Fuz Ro D'oh.dll</Object>
-					<Version Function="GTEQ">1.4.11.1209</Version>
+					<Version Operator="GTEQ">1.4.11.1209</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
 				</Item>
 				<Item ID="Player Voicesets" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Object Function="PluginActive">chfshPlayerVoicesets.esp</Object>
-					<Version Function="GTEQ">0.51</Version>
+					<Version Operator="GTEQ">0.51</Version>
 					<Dependencies>
 						<Item>SkyUI</Item>
 					</Dependencies>
 				</Item>
 				<Item ID="Apachii SkyHair" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Object Function="PluginActive">ApachiiHair.esm</Object>
-					<Version Function="GTEQ">1.6</Version>
+					<Version Operator="GTEQ">1.6</Version>
 				</Item>
 				<Item ID="Alternate Start - Live Another Life" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Alternate Start - Live Another Life</Name>
 					<Object Function="PluginActive">Alternate Start - Live Another Life.esp</Object>
-					<Version Function="GTEQ">4.0.8</Version>
+					<Version Operator="GTEQ">4.0.8</Version>
 				</Item>
 				<Item ID="Requiem" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Requiem - The Roleplaying Overhaul</Name>
 					<Object Function="PluginActive">Requiem.esp</Object>
-					<Version Function="GTEQ">2.02</Version>
+					<Version Operator="GTEQ">2.02</Version>
 					<Dependencies>
 						<Item>SkyUI</Item>
 						<Item>USSEP</Item>
@@ -533,7 +533,7 @@
 				<Item ID="RND" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Realistic Needs and Diseases</Name>
 					<Object Function="PluginActive">RealisticNeedsAndDiseases.esp</Object>
-					<Version Function="GTEQ">1.0.4</Version>
+					<Version Operator="GTEQ">1.0.4</Version>
 					<Dependencies>
 						<Item>USSEP</Item>
 					</Dependencies>
@@ -541,7 +541,7 @@
 				<Item ID="Skyrim Skill Uncapper" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Skyrim Skill Uncapper</Name>
 					<Object Function="FileExist">Data\SKSE\Plugins\SkyrimUncapper.dll</Object>
-					<Version Function="GTEQ">1.1.0</Version>
+					<Version Operator="GTEQ">1.1.0</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 						<Item>xSHADOWMANx's Dll Loader</Item>
@@ -550,7 +550,7 @@
 				<Item ID="PCEA2" Category="$T(PackageManager.ReqCategory.Misc)">
 					<Name>Player Exclusive Animations - Dynamic</Name>
 					<Object Function="PluginActive">FNIS_PCEA2.esp</Object>
-					<Version Function="GTEQ">7.2</Version>
+					<Version Operator="GTEQ">7.2</Version>
 					<Dependencies>
 						<Item>FNIS</Item>
 						<Item>SkyUI</Item>

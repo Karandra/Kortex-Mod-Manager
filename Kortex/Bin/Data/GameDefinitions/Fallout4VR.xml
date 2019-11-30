@@ -172,16 +172,16 @@
 				<Item ID="Fallout4VR" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">Fallout4.exe</Object>
-					<Version Function="GTEQ">1.10.106.0</Version>
+					<Version Operator="GTEQ">1.10.106.0</Version>
 				</Item>
 				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">F4SE_Loader.exe</Object>
-					<Version Function="GTEQ">0.0.6.11</Version>
+					<Version Operator="GTEQ">0.0.6.11</Version>
 				</Item>
 				<Item ID="xSE PluginPreloader" Category="$T(PackageManager.ReqCategory.General)">
 					<Object Function="FileExist">IpHlpAPI.dll</Object>
-					<Version Function="GTEQ">0.1.2</Version>
+					<Version Operator="GTEQ">0.1.2</Version>
 				</Item>
 
 				<!-- DLC -->
@@ -226,7 +226,7 @@
 				<Item ID="LooksMenu" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>LooksMenu</Name>
 					<Object Function="PluginActive">LooksMenu.esp</Object>
-					<Version Function="GTEQ">1.6</Version>
+					<Version Operator="GTEQ">1.6</Version>
 					<Dependencies>
 						<Item>$(ScriptExtenderID)</Item>
 					</Dependencies>
@@ -234,11 +234,11 @@
 				<Item ID="AWKCR" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Armor and Weapon Keywords Community Resource</Name>
 					<Object Function="PluginActive">ArmorKeywords.esm</Object>
-					<Version Function="GTEQ">4.0</Version>
+					<Version Operator="GTEQ">4.0</Version>
 				</Item>
 				<Item ID="Armorsmith Extended" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Object Function="PluginActive">Armorsmith Extended.esp</Object>
-					<Version Function="GTEQ">3.0</Version>
+					<Version Operator="GTEQ">3.0</Version>
 					<Dependencies>
 						<Item>AWKCR</Item>
 					</Dependencies>
@@ -254,7 +254,7 @@
 				<Item ID="UFO4P" Category="$T(PackageManager.ReqCategory.Patches)">
 					<Name>Unofficial Fallout 4 Patch</Name>
 					<Object Function="PluginActive">Unofficial Fallout 4 Patch.esp</Object>
-					<Version Function="GTEQ">2.0</Version>
+					<Version Operator="GTEQ">2.0</Version>
 					<Dependencies>
 						<Item>DLC-FarHarbor</Item>
 						<Item>DLC-NukaWorld</Item>

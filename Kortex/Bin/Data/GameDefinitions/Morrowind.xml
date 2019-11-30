@@ -282,12 +282,12 @@
 				<Item ID="Morrowind" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameName)</Name>
 					<Object Function="FileExist">Morrowind.exe</Object>
-					<Version Function="GTEQ">1.6.0.1820</Version>
+					<Version Operator="GTEQ">1.6.0.1820</Version>
 				</Item>
 				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
 					<Name>$(GameShortName) Script Extender</Name>
 					<Object Function="FileExist">MWSE.dll</Object>
-					<Version Function="GTEQ">0.9.4</Version>
+					<Version Operator="GTEQ">0.9.4</Version>
 				</Item>
 
 				<!-- DLC -->
@@ -304,17 +304,17 @@
 				<Item ID="MCP" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Morrowind Code Patch</Name>
 					<Object Function="FileExist">Morrowind Code Patch.exe</Object>
-					<Version Function="GTEQ">2.4</Version>
+					<Version Operator="GTEQ">2.4</Version>
 				</Item>
 				<Item ID="MGE" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Morrowind Graphics Extender</Name>
 					<Object Function="FileExist">MGEgui.exe</Object>
-					<Version Function="GTEQ">3.8</Version>
+					<Version Operator="GTEQ">3.8</Version>
 				</Item>
 				<Item ID="MGE-XE" Category="$T(PackageManager.ReqCategory.Frameworks)">
 					<Name>Morrowind Graphics Extender: XE</Name>
 					<Object Function="FileExist">MGEgui.exe</Object>
-					<Version Function="GTEQ">0.9</Version>
+					<Version Operator="GTEQ">0.9</Version>
 				</Item>
 
 				<!-- Body replacers -->

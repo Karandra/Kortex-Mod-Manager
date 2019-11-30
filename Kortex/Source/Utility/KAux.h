@@ -65,7 +65,7 @@ class KAux
 		static void LoadLabeledValueArray(KLabeledValue::Vector& array, const KxXMLNode& arrayNode, const wxString& labelName = "Label");
 
 		// Saves KxStringVector into specified node, clearing the node first.
-		static void SaveStringArray(const KxStringVector& array, KxXMLNode& arrayNode, const wxString& elementNodeName = "Entry");
+		static void SaveStringArray(const KxStringVector& array, KxXMLNode& arrayNode, const wxString& elementNodeName = "Item");
 
 		// Loads KxStringVector from specified node.
 		// Does NOT clears 'array'.

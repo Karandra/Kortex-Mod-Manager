@@ -32,19 +32,18 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	
 	void ContentModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const PackageProject::FolderItemElement* entry = GetDataEntry(row);
-		if (entry)
+		if (const PackageProject::FileItem* item = GetDataEntry(row))
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Source:
 				{
-					value = entry->GetSource();
+					value = item->GetSource();
 					return;
 				}
 				case ColumnID::Destination:
 				{
-					value = entry->GetDestination();
+					value = item->GetDestination();
 					return;
 				}
 			};
@@ -52,20 +51,19 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	void ContentModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
-		const PackageProject::FolderItemElement* entry = GetDataEntry(row);
-		if (entry)
+		if (const PackageProject::FileItem* item = GetDataEntry(row))
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Source:
 				{
-					value = entry->GetSource();
+					value = item->GetSource();
 					break;
 				}
 				case ColumnID::Destination:
 				{
 					const wxString& sFolderDest = m_Folder->GetDestination();
-					const wxString& sFileDest = entry->GetDestination();
+					const wxString& sFileDest = item->GetDestination();
 					if (sFolderDest.IsEmpty())
 					{
 						value = sFileDest;
@@ -85,20 +83,19 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	}
 	bool ContentModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
-		PackageProject::FolderItemElement* entry = GetDataEntry(row);
-		if (entry)
+		if (PackageProject::FileItem* item = GetDataEntry(row))
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Source:
 				{
-					entry->SetSource(value.As<wxString>());
+					item->SetSource(value.As<wxString>());
 					ChangeNotify();
 					return true;
 				}
 				case ColumnID::Destination:
 				{
-					entry->SetDestination(value.As<wxString>());
+					item->SetDestination(value.As<wxString>());
 					ChangeNotify();
 					return true;
 				}
@@ -112,16 +109,15 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		if (event.GetColumn())
 		{
 			if (event.GetColumn()->GetID() == ColumnID::Source)
-			{
-				PackageProject::FolderItemElement* entry = GetDataEntry(GetRow(event.GetItem()));
-				if (entry)
+			{	
+				if (PackageProject::FileItem* item = GetDataEntry(GetRow(event.GetItem())))
 				{
 					KxFileBrowseDialog dialog(GetView(), KxID_NONE, KxFBD_OPEN);
-					dialog.SetFolder(entry->GetSource().BeforeLast('\\'));
+					dialog.SetFolder(item->GetSource().BeforeLast('\\'));
 					dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 					if (dialog.ShowModal() == KxID_OK)
 					{
-						entry->SetSource(dialog.GetResult());
+						item->SetSource(dialog.GetResult());
 						NotifyChangedItem(event.GetItem());
 					}
 				}
@@ -135,7 +131,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 	void ContentModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const PackageProject::FolderItemElement* entry = GetDataEntry(GetRow(item));
+		const PackageProject::FileItem* fileItem = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -145,7 +141,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		menu.AddSeparator();
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_REMOVE, KTr(KxID_REMOVE)));
-			item->Enable(entry != nullptr);
+			item->Enable(fileItem != nullptr);
 		}
 		{
 			KxMenuItem* item = menu.Add(new KxMenuItem(KxID_CLEAR, KTr(KxID_CLEAR)));
@@ -182,10 +178,10 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			wxWindowUpdateLocker lock(GetView());
 			for (const wxString& source: dialog.GetResults())
 			{
-				PackageProject::FolderItemElement& entry = GetDataVector()->emplace_back();
-				entry.SetSource(source);
-				entry.SetDestination(source.AfterLast('\\'));
-	
+				PackageProject::FileItem& item = m_Folder->AddFile();
+				item.SetSource(source);
+				item.SetDestination(source.AfterLast('\\'));
+				
 				NotifyAddedItem(GetItem(GetItemCount() - 1));
 			}
 		}

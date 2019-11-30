@@ -199,30 +199,19 @@ namespace Kortex::PackageProject
 			// Folder
 			for (KxXMLNode folderNode = fileDataNode.GetFirstChildElement(); folderNode.IsOK(); folderNode = folderNode.GetNextSiblingElement())
 			{
-				FileItem* fileEntry = nullptr;
-				FolderItem* folderEntry = nullptr;
-				if (folderNode.GetName() == "Folder")
-				{
-					folderEntry = new FolderItem();
-					fileEntry = fileData.AddFolder(folderEntry);
-				}
-				else
-				{
-					fileEntry = fileData.AddFile(new FileItem());
-				}
-	
-				fileEntry->SetID(folderNode.GetAttribute("ID"));
-				fileEntry->SetSource(folderNode.GetAttribute("Source"));
-				fileEntry->SetDestination(folderNode.GetAttribute("Destination"));
-				fileEntry->SetPriority(folderNode.GetAttributeInt("Priority", FileDataSection::ms_DefaultPriority));
-	
-				if (m_AsProject && folderEntry)
+				FileItem& item = folderNode.GetName() == "Folder" ? fileData.AddFolder(std::make_unique<FolderItem>()) : fileData.AddFile(std::make_unique<FileItem>());
+				item.SetID(folderNode.GetAttribute("ID"));
+				item.SetSource(folderNode.GetAttribute("Source"));
+				item.SetDestination(folderNode.GetAttribute("Destination"));
+				item.SetPriority(folderNode.GetAttributeInt("Priority", FileDataSection::ms_DefaultPriority));
+				
+				if (FolderItem* folderItem; m_AsProject && item.QueryInterface(folderItem))
 				{
 					for (KxXMLNode fileNode = folderNode.GetFirstChildElement(); fileNode.IsOK(); fileNode = fileNode.GetNextSiblingElement())
 					{
-						FolderItemElement& fileEntry = folderEntry->GetFiles().emplace_back(FolderItemElement());
-						fileEntry.SetDestination(fileNode.GetValue());
-						fileEntry.SetSource(fileNode.GetAttribute("Source"));
+						FileItem& fileItem = folderItem->AddFile();
+						fileItem.SetDestination(fileNode.GetValue());
+						fileItem.SetSource(fileNode.GetAttribute("Source"));
 					}
 				}
 			}
@@ -508,35 +497,35 @@ namespace Kortex::PackageProject
 		const FileDataSection& fileData = m_ProjectSave->GetFileData();
 	
 		// Folders
-		if (!fileData.GetData().empty())
+		if (!fileData.GetItems().empty())
 		{
-			for (const auto& entry: fileData.GetData())
+			for (const auto& item: fileData.GetItems())
 			{
-				const FolderItem* folderEntry = entry->ToFolderItem();
-				KxXMLNode entryNode = fileDataNode.NewElement(folderEntry ? "Folder" : "File");
+				const FolderItem* folderItem = item->QueryInterface<FolderItem>();
+				KxXMLNode entryNode = fileDataNode.NewElement(folderItem ? "Folder" : "File");
 	
 				if (m_AsProject)
 				{
-					if (entry->GetID() != entry->GetSource())
+					if (item->GetID() != item->GetSource())
 					{
-						entryNode.SetAttribute("ID", entry->GetID());
+						entryNode.SetAttribute("ID", item->GetID());
 					}
-					entryNode.SetAttribute("Source", PathNameToPackage(entry->GetSource(), ContentType::FileData));
+					entryNode.SetAttribute("Source", PathNameToPackage(item->GetSource(), ContentType::FileData));
 				}
 				else
 				{
-					entryNode.SetAttribute("Source", entry->GetID());
+					entryNode.SetAttribute("Source", item->GetID());
 				}
-				entryNode.SetAttribute("Destination", entry->GetDestination());
+				entryNode.SetAttribute("Destination", item->GetDestination());
 	
-				if (!entry->IsDefaultPriority())
+				if (!item->IsDefaultPriority())
 				{
-					entryNode.SetAttribute("Priority", entry->GetPriority());
+					entryNode.SetAttribute("Priority", item->GetPriority());
 				}
 	
-				if (m_AsProject && folderEntry && !folderEntry->GetFiles().empty())
+				if (m_AsProject && folderItem && !folderItem->GetFiles().empty())
 				{
-					for (const FolderItemElement& fileEntry: folderEntry->GetFiles())
+					for (const FileItem& fileEntry: folderItem->GetFiles())
 					{
 						KxXMLNode fileEntryNode = entryNode.NewElement("Entry");
 						fileEntryNode.SetValue(fileEntry.GetDestination());

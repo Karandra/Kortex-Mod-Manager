@@ -405,7 +405,7 @@ namespace Kortex::InstallWizard
 			{
 				NotifyMajor(processed, installableFiles.size(), fileEntry->GetSource());
 
-				if (const PackageProject::FolderItem* folderEntry = fileEntry->ToFolderItem())
+				if (const PackageProject::FolderItem* folderEntry; fileEntry->QueryInterface(folderEntry))
 				{
 					KxUInt32Vector filesIndexes = GetFilesOfFolder(folderEntry);
 					KxStringVector finalPaths = GetFinalPaths(filesIndexes, installLocation, folderEntry);

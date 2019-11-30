@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Common.h"
+#include <Kx/RTTI.hpp>
 
 namespace Kortex
 {
@@ -20,7 +21,7 @@ namespace Kortex::PackageProject
 			{
 			}
 			virtual ~ProjectSection() = default;
-	
+			
 		public:
 			ModPackageProject& GetProject()
 			{

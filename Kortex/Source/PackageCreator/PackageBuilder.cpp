@@ -83,10 +83,10 @@ namespace Kortex::PackageDesigner
 		}
 
 		// Check files
-		for (const auto& fileEntry: fileData.GetData())
+		for (const auto& fileEntry: fileData.GetItems())
 		{
 			TestContinue();
-			if (const PackageProject::FolderItem* folderEntry = fileEntry->ToFolderItem())
+			if (const PackageProject::FolderItem* folderEntry; fileEntry->QueryInterface(folderEntry))
 			{
 				CheckAndAddMissingFolder(folderEntry->GetSource());
 				for (const auto& entry: folderEntry->GetFiles())
@@ -195,11 +195,11 @@ namespace Kortex::PackageDesigner
 		}
 
 		const PackageProject::FileDataSection& fileData = m_Project->GetFileData();
-		for (const auto& fileEntry: fileData.GetData())
+		for (const auto& fileEntry: fileData.GetItems())
 		{
 			TestContinue();
 
-			if (const PackageProject::FolderItem* folderEntry = fileEntry->ToFolderItem())
+			if (const PackageProject::FolderItem* folderEntry; fileEntry->QueryInterface(folderEntry))
 			{
 				for (const auto& folderItem: folderEntry->GetFiles())
 				{

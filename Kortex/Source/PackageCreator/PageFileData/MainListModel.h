@@ -25,7 +25,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
 			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
 	
-			void AddEverythingFromPath(const wxString& filePath, PackageProject::FolderItem* fileEntry, KOperationWithProgressBase* context);
+			void AddEverythingFromPath(const wxString& filePath, PackageProject::FolderItem& fileEntry, KOperationWithProgressBase& context);
 			bool DoTrackID(const wxString& trackedID, const wxString& newID, bool remove);
 	
 			void OnActivateItem(KxDataViewEvent& event);
@@ -36,7 +36,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			void OnAddFile();
 			void OnAddFolder();
 			void OnAddMultipleFolders();
-			void OnReplaceFolderContent(const KxDataViewItem& item, PackageProject::FolderItem* folderEntry);
+			void OnReplaceFolderContent(const KxDataViewItem& item, PackageProject::FolderItem& folderEntry);
 			void OnRemoveElement(const KxDataViewItem& item);
 			void OnClearList();
 			bool OnInsertItem(KxDataViewItem& currentItem, KxDataViewItem& droppedItem) override

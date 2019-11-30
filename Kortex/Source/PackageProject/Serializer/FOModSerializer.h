@@ -20,7 +20,7 @@ namespace Kortex::PackageProject
 	class FOModSerializer: public Serializer
 	{
 		private:
-			using FilePriorityArray = std::vector<std::pair<FileItem*, int64_t>>;
+			using FilePriorityArray = std::vector<std::pair<std::unique_ptr<FileItem>, int64_t>>;
 			
 		private:
 			wxString m_InfoXML;

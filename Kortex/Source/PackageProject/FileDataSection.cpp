@@ -11,9 +11,6 @@ namespace Kortex::PackageProject
 		:m_Priority(FileDataSection::ms_DefaultPriority)
 	{
 	}
-	FileItem::~FileItem()
-	{
-	}
 	
 	void FileItem::MakeUniqueID()
 	{
@@ -43,16 +40,6 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	FolderItem::FolderItem()
-	{
-	}
-	FolderItem::~FolderItem()
-	{
-	}
-}
-
-namespace Kortex::PackageProject
-{
 	bool FileDataSection::IsPriorityValid(int32_t value)
 	{
 		return value >= FileDataSection::ms_MinUserPriority && value <= FileDataSection::ms_MaxUserPriority;
@@ -75,23 +62,20 @@ namespace Kortex::PackageProject
 		:ProjectSection(project)
 	{
 	}
-	FileDataSection::~FileDataSection()
-	{
-	}
 	
-	FileItem* FileDataSection::FindEntryWithID(const wxString& id, size_t* index) const
+	FileItem* FileDataSection::FindItemWithID(const wxString& id, size_t* index) const
 	{
 		const wxString idLower = KxString::ToLower(id);
-		auto it = std::find_if(m_Data.cbegin(), m_Data.cend(), [&idLower](const FileItem::Vector::value_type& entry)
+		auto it = std::find_if(m_Items.begin(), m_Items.end(), [&idLower](const auto& entry)
 		{
 			return KxString::ToLower(entry->GetID()) == idLower;
 		});
 	
-		if (it != m_Data.cend())
+		if (it != m_Items.end())
 		{
 			if (index)
 			{
-				*index = std::distance(m_Data.cbegin(), it);
+				*index = std::distance(m_Items.begin(), it);
 			}
 			return it->get();
 		}

@@ -269,17 +269,17 @@ namespace Kortex::PackageProject
 	
 			for (KxXMLNode folderNode = fileDataNode.GetFirstChildElement(); folderNode.IsOK(); folderNode = folderNode.GetNextSiblingElement())
 			{
-				FolderItem* folderEntry = fileData.AddFolder(new FolderItem());
-				folderEntry->SetID(folderNode.GetAttribute("ID", folderNode.GetAttribute("Source")));
+				FolderItem& folderEntry = fileData.AddFolder(std::make_unique<FolderItem>());
+				folderEntry.SetID(folderNode.GetAttribute("ID", folderNode.GetAttribute("Source")));
 	
 				// Source
-				wxString source = folderNode.GetAttribute("Source", folderEntry->GetID());
-				folderEntry->SetSource(bNestedStructure ? "SetupData\\" + source : source);
+				wxString source = folderNode.GetAttribute("Source", folderEntry.GetID());
+				folderEntry.SetSource(bNestedStructure ? "SetupData\\" + source : source);
 				
 				// ExtractingPath == 0 -> Game root, ExtractingPath == 1 -> Data folder (0 is the default).
-				// Boolean attribute 'Install' and enum 'OverwriteMode' is ignored as they was removed in KMP.
-				int nExtractingPath = folderNode.GetAttributeInt("ExtractingPath", 0);
-				folderEntry->SetDestination(nExtractingPath == 1 ? wxS("Data") : wxEmptyString);
+				// Boolean attribute 'Install' and enum 'OverwriteMode' are ignored as they was removed in KMP.
+				int extractingPathType = folderNode.GetAttributeInt("ExtractingPath", 0);
+				folderEntry.SetDestination(extractingPathType == 1 ? wxS("Data") : wxEmptyString);
 	
 				// Files list also ignored
 			}
@@ -733,21 +733,13 @@ namespace Kortex::PackageProject
 			// Folder
 			for (KxXMLNode entryNode = fileDataNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 			{
-				FileItem* fileEntry = nullptr;
-				if (entryNode.GetName() == "Folder")
-				{
-					fileEntry = fileData.AddFolder(new FolderItem());
-				}
-				else
-				{
-					fileEntry = fileData.AddFile(new FileItem());
-				}
-	
-				fileEntry->SetID(entryNode.GetAttribute("ID", entryNode.GetAttribute("Source")));
-				fileEntry->SetDestination(entryNode.GetAttribute("Destination"));
+				FileItem& item = entryNode.GetName() == "Folder" ? fileData.AddFolder(std::make_unique<FolderItem>()) : fileData.AddFile(std::make_unique<FileItem>());
+
+				item.SetID(entryNode.GetAttribute("ID", entryNode.GetAttribute("Source")));
+				item.SetDestination(entryNode.GetAttribute("Destination"));
 				
-				wxString source = entryNode.GetAttribute("Source", fileEntry->GetID());
-				fileEntry->SetSource(isNestedStructure ? "SetupData\\" + source : source);
+				wxString source = entryNode.GetAttribute("Source", item.GetID());
+				item.SetSource(isNestedStructure ? "SetupData\\" + source : source);
 			}
 	
 			// Versions 5.x supports file entries inside 'Files' list,

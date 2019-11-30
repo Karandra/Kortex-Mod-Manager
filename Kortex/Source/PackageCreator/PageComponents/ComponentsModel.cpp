@@ -1196,7 +1196,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		ComponentsModelNode* parent = GetParentGroup(node);
 		if (parent && parent->GetGroup())
 		{
-			for (const auto& fileEntry: m_Controller->GetProject()->GetFileData().GetData())
+			for (const auto& fileEntry: m_Controller->GetProject()->GetFileData().GetItems())
 			{
 				auto& entry = parent->GetGroup()->GetItems().emplace_back(std::make_unique<PackageProject::ComponentItem>());
 				auto& newNode = parent->GetChildren().emplace_back(std::make_unique<ComponentsModelNode>(entry.get(), parent));

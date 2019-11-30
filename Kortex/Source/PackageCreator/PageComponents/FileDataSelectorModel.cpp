@@ -39,7 +39,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 				case ColumnID::ID:
 				{
-					value = KxDataViewBitmapTextValue(entry->first->GetID(), ImageProvider::GetBitmap(entry->first->ToFolderItem() ? ImageResourceID::Folder : ImageResourceID::Document));
+					value = KxDataViewBitmapTextValue(entry->first->GetID(), ImageProvider::GetBitmap(entry->first->QueryInterface<PackageProject::FolderItem>() ? ImageResourceID::Folder : ImageResourceID::Document));
 					break;
 				}
 				case ColumnID::Source:
@@ -78,14 +78,14 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			// Add selected first
 			for (const wxString& id: data)
 			{
-				if (PackageProject::FileItem* entry = m_FileData->FindEntryWithID(id))
+				if (PackageProject::FileItem* entry = m_FileData->FindItemWithID(id))
 				{
 					m_DataVector.emplace_back(std::make_pair(entry, true));
 				}
 			}
 	
 			// Add others
-			for (const auto& entry: m_FileData->GetData())
+			for (const auto& entry: m_FileData->GetItems())
 			{
 				if (std::find(data.cbegin(), data.cend(), entry->GetID()) == data.cend())
 				{

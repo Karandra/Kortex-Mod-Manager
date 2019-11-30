@@ -8,11 +8,11 @@ class KxAuiToolBarEvent;
 
 namespace Kortex::PackageDesigner::PageFileDataNS
 {
-	class ContentModel: public VectorModel<PackageProject::FolderItemElement::Vector>
+	class ContentModel: public VectorModel<std::vector<PackageProject::FileItem>>
 	{
 		private:
-			PackageProject::FolderItem* m_Folder = nullptr;
 			PackageProject::FileDataSection* m_FileData = nullptr;
+			PackageProject::FolderItem* m_Folder = nullptr;
 	
 		private:
 			void OnInitControl() override;
@@ -47,7 +47,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 				VectorModel::SetDataVector(&folder->GetFiles());
 			}
 	
-			const PackageProject::FolderItemElement* GetDataEntry(size_t index) const
+			const PackageProject::FileItem* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{
@@ -55,7 +55,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 				}
 				return nullptr;
 			}
-			PackageProject::FolderItemElement* GetDataEntry(size_t index)
+			PackageProject::FileItem* GetDataEntry(size_t index)
 			{
 				if (index < GetItemCount())
 				{

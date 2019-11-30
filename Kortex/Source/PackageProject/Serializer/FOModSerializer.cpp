@@ -618,14 +618,14 @@ namespace Kortex::PackageProject
 		{
 			for (KxXMLNode fileDataNode = filesArrayNode.GetFirstChildElement(); fileDataNode.IsOK(); fileDataNode = fileDataNode.GetNextSiblingElement())
 			{
-				FileItem* fileEntry = nullptr;
+				std::unique_ptr<FileItem> fileEntry;
 				if (fileDataNode.GetName() == "folder")
 				{
-					fileEntry = new FolderItem();
+					fileEntry = std::make_unique<FolderItem>();
 				}
 				else
 				{
-					fileEntry = new FileItem();
+					fileEntry = std::make_unique<FileItem>();
 				}
 	
 				wxString source = fileDataNode.GetAttribute("source");
@@ -635,9 +635,7 @@ namespace Kortex::PackageProject
 	
 				wxString destination = fileDataNode.GetAttribute("destination");
 				fileEntry->SetDestination(GetDataFolderName(true) + (!destination.IsEmpty() ? destination : wxEmptyString));
-	
-				priorityList.push_back(std::make_pair(fileEntry, fileDataNode.GetAttributeInt("priority", std::numeric_limits<int64_t>::max())));
-	
+
 				// Decide whether to add this item to required files or not
 				bool shouldAlwaysInstall = fileDataNode.GetAttributeBool("alwaysInstall", false);
 				bool shouldInstallIfUsable = fileDataNode.GetAttributeBool("installIfUsable", false);
@@ -645,6 +643,8 @@ namespace Kortex::PackageProject
 				{
 					m_ProjectLoad->GetComponents().GetRequiredFileData().emplace_back(fileEntry->GetID());
 				}
+
+				priorityList.emplace_back(std::move(fileEntry), fileDataNode.GetAttributeInt("priority", std::numeric_limits<int64_t>::max()));
 			}
 	
 			// Sort by priority
@@ -664,16 +664,16 @@ namespace Kortex::PackageProject
 	
 			// Add to project
 			FileDataSection& fileData = m_ProjectLoad->GetFileData();
-			for (const auto& v: priorityList)
+			for (auto& v: priorityList)
 			{
-				fileData.AddFile(v.first);
+				fileData.AddFile(std::move(v.first));
 			}
 		}
 		return priorityList;
 	}
 	void FOModSerializer::UniqueFileData()
 	{
-		auto& files = m_ProjectLoad->GetFileData().GetData();
+		auto& files = m_ProjectLoad->GetFileData().GetItems();
 		auto it = std::unique(files.begin(), files.end(), [](const auto& v1, const auto& v2)
 		{
 			return v1->GetID() == v2->GetID();
@@ -968,7 +968,7 @@ namespace Kortex::PackageProject
 			typeDescriptorNode.NewElement("type").SetAttribute("name", components.TypeDescriptorToString(TypeDescriptor::Required));
 	
 			KxStringVector fileNames;
-			for (const auto& fileEntry: m_ProjectSave->GetFileData().GetData())
+			for (const auto& fileEntry: m_ProjectSave->GetFileData().GetItems())
 			{
 				fileNames.push_back(fileEntry->GetID());
 			}
@@ -994,10 +994,9 @@ namespace Kortex::PackageProject
 		const FileDataSection& fileData = m_ProjectSave->GetFileData();
 		for (const wxString& id: files)
 		{
-			const FileItem* file = fileData.FindEntryWithID(id);
-			if (file)
+			if (const FileItem* file = fileData.FindItemWithID(id))
 			{
-				KxXMLNode fileNode = node.NewElement(file->ToFolderItem() ? "folder" : "file");
+				KxXMLNode fileNode = node.NewElement(file->QueryInterface<PackageProject::FolderItem>() ? "folder" : "file");
 	
 				// Source
 				fileNode.SetAttribute("source", file->GetID());

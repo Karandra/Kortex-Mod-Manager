@@ -1,15 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "ProjectSection.h"
+#include <Kx/RTTI.hpp>
 
 namespace Kortex::PackageProject
 {
-	class FolderItem;
-}
-
-namespace Kortex::PackageProject
-{
-	class FileItem
+	class FileItem: public KxRTTI::Interface<FileItem>
 	{
 		public:
 			using Vector = std::vector<std::unique_ptr<FileItem>>;
@@ -19,30 +15,12 @@ namespace Kortex::PackageProject
 			wxString m_ID;
 			wxString m_Source;
 			wxString m_Destination;
-			int32_t m_Priority;
-	
+			int32_t m_Priority = -1;
+			
 		public:
 			FileItem();
-			virtual ~FileItem();
-	
-		public:
-			virtual FolderItem* ToFolderItem()
-			{
-				return nullptr;
-			}
-			const FolderItem* ToFolderItem() const
-			{
-				return const_cast<FileItem&>(*this).ToFolderItem();
-			}
-			virtual FileItem* ToFileItem()
-			{
-				return this;
-			}
-			const FileItem* ToFileItem() const
-			{
-				return const_cast<FileItem&>(*this).ToFileItem();
-			}
-	
+			virtual ~FileItem() = default;
+
 		public:
 			const wxString& GetID() const
 			{
@@ -53,7 +31,7 @@ namespace Kortex::PackageProject
 				m_ID = id;
 			}
 			void MakeUniqueID();
-	
+			
 			const wxString& GetSource() const
 			{
 				return m_Source;
@@ -71,7 +49,7 @@ namespace Kortex::PackageProject
 			{
 				m_Destination = value;
 			}
-	
+			
 			bool IsDefaultPriority() const;
 			int32_t GetPriority() const;
 			void SetPriority(int32_t value);
@@ -80,69 +58,28 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class FolderItemElement
+	class FolderItem: public KxRTTI::ExtendInterface<FolderItem, FileItem>
 	{
-		public:
-			using Vector = std::vector<FolderItemElement>;
-
 		private:
-			wxString m_Source;
-			wxString m_Destination;
-	
+			std::vector<FileItem> m_Files;
+			
 		public:
-			FolderItemElement()
-			{
-			}
-			~FolderItemElement()
-			{
-			}
-	
+			FolderItem() = default;
+			~FolderItem() = default;
+
 		public:
-			const wxString& GetSource() const
+			std::vector<FileItem>& GetFiles()
 			{
-				return m_Source;
+				return m_Files;
 			}
-			void SetSource(const wxString& value)
+			const std::vector<FileItem>& GetFiles() const
 			{
-				m_Source = value;
+				return m_Files;
 			}
 			
-			const wxString& GetDestination() const
+			FileItem& AddFile(FileItem item = {})
 			{
-				return m_Destination;
-			}
-			void SetDestination(const wxString& value)
-			{
-				m_Destination = value;
-			}
-	};
-}
-
-namespace Kortex::PackageProject
-{
-	class FolderItem: public FileItem
-	{
-		private:
-			FolderItemElement::Vector m_Files;
-	
-		public:
-			FolderItem();
-			~FolderItem();
-	
-		public:
-			FolderItem* ToFolderItem() override
-			{
-				return this;
-			}
-	
-		public:
-			FolderItemElement::Vector& GetFiles()
-			{
-				return m_Files;
-			}
-			const FolderItemElement::Vector& GetFiles() const
-			{
-				return m_Files;
+				return m_Files.emplace_back(std::move(item));
 			}
 	};
 }
@@ -163,40 +100,40 @@ namespace Kortex::PackageProject
 			static bool IsFileIDValid(const wxString& id);
 	
 		private:
-			FileItem::Vector m_Data;
+			FileItem::Vector m_Items;
 	
 		public:
 			FileDataSection(ModPackageProject& project);
-			virtual ~FileDataSection();
+			~FileDataSection() = default;
 	
 		public:
-			FileItem::Vector& GetData()
+			FileItem::Vector& GetItems()
 			{
-				return m_Data;
+				return m_Items;
 			}
-			const FileItem::Vector& GetData() const
+			const FileItem::Vector& GetItems() const
 			{
-				return m_Data;
+				return m_Items;
 			}
 	
-			FileItem* AddFile(FileItem* entry)
+			FileItem& AddFile(std::unique_ptr<FileItem> item)
 			{
-				m_Data.push_back(std::unique_ptr<FileItem>(entry));
-				return entry;
+				return *m_Items.emplace_back(std::move(item));
 			}
-			FolderItem* AddFolder(FolderItem* entry)
+			FolderItem& AddFolder(std::unique_ptr<FolderItem> item)
 			{
-				m_Data.push_back(std::unique_ptr<FolderItem>(entry));
-				return entry;
+				FolderItem& ref = *item;
+				m_Items.emplace_back(std::move(item));
+				return ref;
 			}
 			
-			FileItem* FindEntryWithID(const wxString& id, size_t* index = nullptr) const;
+			FileItem* FindItemWithID(const wxString& id, size_t* index = nullptr) const;
 			bool HasItemWithID(const wxString& id, const FileItem* ignoreThis = nullptr) const
 			{
-				FileItem* entry = FindEntryWithID(id);
+				FileItem* entry = FindItemWithID(id);
 				return entry != nullptr && entry != ignoreThis;
 			}
-			bool CanUseThisIDForNewEntry(const wxString& id) const
+			bool IsUnusedID(const wxString& id) const
 			{
 				return IsFileIDValid(id) && !HasItemWithID(id);
 			}

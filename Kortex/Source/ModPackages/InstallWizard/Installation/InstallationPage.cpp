@@ -179,7 +179,7 @@ namespace Kortex::InstallWizard
 		{
 			for (const wxString& id: list)
 			{
-				PackageProject::FileItem* entry = GetPackageConfig().GetFileData().FindEntryWithID(id);
+				PackageProject::FileItem* entry = GetPackageConfig().GetFileData().FindItemWithID(id);
 				if (entry)
 				{
 					if (pushBack)
@@ -205,7 +205,7 @@ namespace Kortex::InstallWizard
 		const ComponentsPage& componentsPage = GetWizard().GetComponentsPage();
 		if (!componentsPage.HasManualComponents() && !componentsPage.HasConditionalInstall())
 		{
-			for (const auto& entry: GetPackageConfig().GetFileData().GetData())
+			for (const auto& entry: GetPackageConfig().GetFileData().GetItems())
 			{
 				m_InstallableFiles.push_back(entry.get());
 			}

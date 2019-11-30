@@ -17,7 +17,7 @@ namespace Kortex::PackageDesigner
 		wxWindowUpdateLocker lock(this);
 
 		m_MainListModel->SetProject(projectFileData.GetProject());
-		m_MainListModel->SetDataVector(&projectFileData.GetData());
+		m_MainListModel->SetDataVector(&projectFileData.GetItems());
 
 		m_ContentListModel->SetProject(projectFileData.GetProject());
 		m_ContentListModel->SetDataVector();

@@ -42,11 +42,11 @@ namespace Kortex::PackageDesigner
 
 			const PackageProject::RequirementItem::Vector& GetStdRequirements() const override
 			{
-				return m_StandardRequirements.GetEntries();
+				return m_StandardRequirements.GetItems();
 			}
 			const PackageProject::RequirementItem* FindStdReqirement(const wxString& id) const override
 			{
-				return m_StandardRequirements.FindEntry(id);
+				return m_StandardRequirements.FindItem(id);
 			}
 
 			void OnModListMenu(KxMenu& menu, const std::vector<IGameMod*>& selectedMods, IGameMod* focusedMod) override;

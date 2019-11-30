@@ -407,7 +407,7 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		{
 			for (const auto& group: m_Step->GetGroups())
 			{
-				count += group->GetEntries().size() + 1;
+				count += group->GetItems().size() + 1;
 			}
 		}
 		return count;
@@ -446,16 +446,16 @@ namespace Kortex::InstallWizard::ComponentsPageNS
 		{
 			DisplayModelNode& groupNode = m_DataVector.emplace_back(*group);
 
-			size_t groupSize = group->GetEntries().size();
+			size_t groupSize = group->GetItems().size();
 			groupNode.SetBounds(m_DataVector.size(), (m_DataVector.size() - 1) + groupSize + 1);
 
 			KxDataViewItem groupItem = MakeItem(groupNode);
 			groupItems.push_back(groupItem);
 
 			KxDataViewItem::Vector entryItems;
-			entryItems.reserve(group->GetEntries().size());
+			entryItems.reserve(group->GetItems().size());
 			size_t checkedCount = 0;
-			for (const auto& entry: group->GetEntries())
+			for (const auto& entry: group->GetItems())
 			{
 				DisplayModelNode& entryNode = m_DataVector.emplace_back(*entry);
 				entryNode.SetParentNode(groupNode);

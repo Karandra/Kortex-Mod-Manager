@@ -143,7 +143,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 		if (group)
 		{
 			m_EntriesModel->SetRequirementsGroup(group);
-			m_EntriesModel->SetDataVector(&group->GetEntries());
+			m_EntriesModel->SetDataVector(&group->GetItems());
 		}
 		else
 		{
@@ -219,7 +219,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 		{
 			for (auto& group: step->GetGroups())
 			{
-				for (auto& entry: group->GetEntries())
+				for (auto& entry: group->GetItems())
 				{
 					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetRequirements(), remove);
 	

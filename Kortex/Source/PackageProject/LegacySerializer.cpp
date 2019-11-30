@@ -254,7 +254,7 @@ namespace Kortex::PackageProject
 			}
 	
 			// If main image not in the images list for some reason, add it there
-			if (interfaceConfig.GetMainImageEntry() == nullptr)
+			if (!interfaceConfig.GetMainItem())
 			{
 				interfaceConfig.GetImages().emplace_back(interfaceConfig.GetMainImage());
 			}
@@ -401,7 +401,7 @@ namespace Kortex::PackageProject
 			{
 				if (node.HasChildren())
 				{
-					RequirementItem* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
+					RequirementItem* entry = requirementGroup->GetItems().emplace_back(std::make_unique<RequirementItem>()).get();
 					entry->SetID(node.GetValue());
 					entry->SetObjectFunction(ObjectFunction::FileExist);
 					entry->SetRequiredVersion(node.GetAttribute("RequiredVersion"));
@@ -412,7 +412,7 @@ namespace Kortex::PackageProject
 	
 					// This will likely work, since 3.x not support user requirements,
 					// but since then system ID's may have changed. 
-					entry->TrySetTypeDescriptor(ReqType::System);
+					entry->SetType(ReqType::System);
 	
 					// Bool attribute 'Necessary' is ignored
 				}
@@ -438,7 +438,7 @@ namespace Kortex::PackageProject
 	
 			for (KxXMLNode entryNode = componentsNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 			{
-				ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
+				ComponentItem* entry = group->GetItems().emplace_back(std::make_unique<ComponentItem>()).get();
 				entry->SetName(entryNode.GetAttribute("Name"));
 				entry->SetDescription(entryNode.GetAttribute("Description"));
 				entry->SetTDDefaultValue(entryNode.GetAttributeBool("Main") ? TypeDescriptor::Recommended : TypeDescriptor::Optional);
@@ -556,7 +556,7 @@ namespace Kortex::PackageProject
 					{
 						if (entryNode.HasChildren())
 						{
-							RequirementItem* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
+							RequirementItem* entry = requirementGroup->GetItems().emplace_back(std::make_unique<RequirementItem>()).get();
 							entry->SetID(entryNode.GetAttribute("ID"));
 							entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 							entry->SetRequiredVersion(entryNode.GetFirstChildElement("RequiredVersion").GetValue());
@@ -570,7 +570,7 @@ namespace Kortex::PackageProject
 	
 							// Version 4.x supports user requirements. They are denoted by bool attribute 'Standart' (typo in this version again).
 							// But it's better to ignore this flag, as system ID's have changed and list of system requirements have been extended.
-							entry->TrySetTypeDescriptor(ReqType::System);
+							entry->SetType(ReqType::System);
 						}
 					}
 				}
@@ -591,7 +591,7 @@ namespace Kortex::PackageProject
 				{
 					for (KxXMLNode entryNode = groupNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 					{
-						ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
+						ComponentItem* entry = group->GetItems().emplace_back(std::make_unique<ComponentItem>()).get();
 						entry->SetName(KAux::StrOr(entryNode.GetFirstChildElement("Name").GetValue(), entryNode.GetAttribute("ID")));
 						if (entry->GetName() == "---")
 						{
@@ -784,7 +784,7 @@ namespace Kortex::PackageProject
 					{
 						if (entryNode.HasChildren())
 						{
-							RequirementItem* entry = group->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
+							RequirementItem* entry = group->GetItems().emplace_back(std::make_unique<RequirementItem>()).get();
 							entry->SetID(entryNode.GetFirstChildElement("ID").GetValue());
 							entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 							entry->SetRequiredVersion(entryNode.GetFirstChildElement("RequiredVersion").GetValue());
@@ -868,7 +868,7 @@ namespace Kortex::PackageProject
 							}
 	
 							FixRequirementID(entry);
-							entry->TrySetTypeDescriptor(ReqType::System);
+							entry->SetType(ReqType::System);
 						}
 					}
 				}
@@ -916,7 +916,7 @@ namespace Kortex::PackageProject
 					/* Entries */
 					for (KxXMLNode entryNode = groupNode.GetFirstChildElement("Data").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 					{
-						ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
+						ComponentItem* entry = group->GetItems().emplace_back(std::make_unique<ComponentItem>()).get();
 						entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 						entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
 	
@@ -990,7 +990,7 @@ namespace Kortex::PackageProject
 					{
 						auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<ConditionalComponentStep>());
 						ReadFlagsArray(step->GetConditionGroup().GetOrCreateFirstCondition(), stepNode.GetFirstChildElement("RequiredFlags"));
-						KAux::LoadStringArray(step->GetEntries(), stepNode.GetFirstChildElement(sNodeName));
+						KAux::LoadStringArray(step->GetItems(), stepNode.GetFirstChildElement(sNodeName));
 					}
 				};
 				ReadConditionalSteps("ConditionalInstall", "Data");

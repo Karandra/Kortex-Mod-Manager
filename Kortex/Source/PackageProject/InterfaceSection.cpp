@@ -25,7 +25,7 @@ namespace Kortex::PackageProject
 	{
 	}
 	
-	const ImageItem* InterfaceSection::FindEntryWithValue(const wxString& path) const
+	const ImageItem* InterfaceSection::FindImageByPath(const wxString& path) const
 	{
 		auto it = std::find_if(m_Images.begin(), m_Images.end(), [path](const ImageItem& v)
 		{
@@ -33,7 +33,7 @@ namespace Kortex::PackageProject
 		});
 		return it != m_Images.end() ? &(*it) : nullptr;
 	}
-	ImageItem* InterfaceSection::FindEntryWithValue(const wxString& path)
+	ImageItem* InterfaceSection::FindImageByPath(const wxString& path)
 	{
 		auto it = std::find_if(m_Images.begin(), m_Images.end(), [path](const ImageItem& v)
 		{

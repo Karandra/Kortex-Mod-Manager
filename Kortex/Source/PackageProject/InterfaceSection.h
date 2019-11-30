@@ -176,25 +176,25 @@ namespace Kortex::PackageProject
 				m_HeaderImage = path;
 			}
 	
-			const ImageItem* FindEntryWithValue(const wxString& path) const;
-			ImageItem* FindEntryWithValue(const wxString& path);
+			const ImageItem* FindImageByPath(const wxString& path) const;
+			ImageItem* FindImageByPath(const wxString& path);
 			
-			const ImageItem* GetMainImageEntry() const
+			const ImageItem* GetMainItem() const
 			{
-				return FindEntryWithValue(m_MainImage);
+				return FindImageByPath(m_MainImage);
 			}
-			ImageItem* GetMainImageEntry()
+			ImageItem* GetMainItem()
 			{
-				return FindEntryWithValue(m_MainImage);
+				return FindImageByPath(m_MainImage);
 			}
 	
-			const ImageItem* GetHeaderImageEntry() const
+			const ImageItem* GetHeaderItem() const
 			{
-				return FindEntryWithValue(m_HeaderImage);
+				return FindImageByPath(m_HeaderImage);
 			}
-			ImageItem* GetHeaderImageEntry()
+			ImageItem* GetHeaderItem()
 			{
-				return FindEntryWithValue(m_HeaderImage);
+				return FindImageByPath(m_HeaderImage);
 			}
 	
 			const TitleConfig& GetTitleConfig() const

@@ -46,7 +46,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		}
 		else if constexpr(std::is_same<EntryT, PackageProject::ComponentItem>::value)
 		{
-			entries = &thisNode->GetParent()->GetGroup()->GetEntries();
+			entries = &thisNode->GetParent()->GetGroup()->GetItems();
 
 			thisEntry = thisNode->GetEntry();
 			draggedEntry = draggedNode->GetEntry();
@@ -77,8 +77,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		}
 		else if constexpr(std::is_same<EntryT, PackageProject::ComponentItem>::value)
 		{
-			thisItems = &thisNode->GetParent()->GetGroup()->GetEntries();
-			draggedItems = &draggedNode->GetParent()->GetGroup()->GetEntries();
+			thisItems = &thisNode->GetParent()->GetGroup()->GetItems();
+			draggedItems = &draggedNode->GetParent()->GetGroup()->GetItems();
 
 			thisEntry = thisNode->GetEntry();
 			draggedEntry = draggedNode->GetEntry();
@@ -535,7 +535,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					{
 						if (editor)
 						{
-							const PackageProject::ImageItem* imageEntry = GetInterface().FindEntryWithValue(entry->GetImage());
+							const PackageProject::ImageItem* imageEntry = GetInterface().FindImageByPath(entry->GetImage());
 							if (imageEntry)
 							{
 								const PackageProject::ImageItem::Vector& images = GetInterface().GetImages();
@@ -735,7 +735,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		{
 			node = GetParentEntry(node);
 			
-			PackageProject::ImageItem* imageEntry = m_Controller->GetProject()->GetInterface().FindEntryWithValue(node->GetEntry()->GetImage());
+			PackageProject::ImageItem* imageEntry = m_Controller->GetProject()->GetInterface().FindImageByPath(node->GetEntry()->GetImage());
 			if (imageEntry)
 			{
 				if (!imageEntry->HasBitmap())
@@ -1179,7 +1179,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		if (parent && parent->GetGroup())
 		{
 			GetView()->Expand(item);
-			auto& entry = parent->GetGroup()->GetEntries().emplace_back(std::make_unique<PackageProject::ComponentItem>());
+			auto& entry = parent->GetGroup()->GetItems().emplace_back(std::make_unique<PackageProject::ComponentItem>());
 			auto& newNode = parent->GetChildren().emplace_back(std::make_unique<ComponentsModelNode>(entry.get(), parent));
 			newNode->CreateFullEntryNode();
 	
@@ -1198,7 +1198,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		{
 			for (const auto& fileEntry: m_Controller->GetProject()->GetFileData().GetData())
 			{
-				auto& entry = parent->GetGroup()->GetEntries().emplace_back(std::make_unique<PackageProject::ComponentItem>());
+				auto& entry = parent->GetGroup()->GetItems().emplace_back(std::make_unique<PackageProject::ComponentItem>());
 				auto& newNode = parent->GetChildren().emplace_back(std::make_unique<ComponentsModelNode>(entry.get(), parent));
 				newNode->CreateFullEntryNode();
 	
@@ -1252,7 +1252,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::RemoveEntry(ComponentsModelNode* node, const PackageProject::ComponentItem* entry)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetParent()->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetParent()->GetGroup()->GetItems();
 		ComponentsModelNode::Vector& nodes = node->GetParent()->GetChildren();
 	
 		entries.erase(FindElement(entries, entry));
@@ -1340,7 +1340,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	
 	void ComponentsModel::AllEntries_Name(ComponentsModelNode* node, const wxString& name)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 	
 		KxTextBoxDialog dialog(GetView(), KxID_NONE, name);
 		if (dialog.ShowModal() == KxID_OK)
@@ -1354,7 +1354,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_DefaultTypeDescriptor(ComponentsModelNode* node, const wxString& name)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 	
 		KxComboBoxDialog dialog(GetView(), KxID_NONE, name);
 		dialog.SetItems(m_TypeDescriptorEditor.GetItems());
@@ -1369,7 +1369,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_FileData(ComponentsModelNode* node, const wxString& name)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 	
 		FileDataSelectorDialog dialog(GetView(), name, m_Controller);
 		dialog.SetDataVector({}, &m_Controller->GetProject()->GetFileData());
@@ -1384,7 +1384,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_Requirements(ComponentsModelNode* node, const wxString& name)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 	
 		RequirementsSelectorDialog dialog(GetView(), name, m_Controller);
 		dialog.SetDataVector({}, &m_Controller->GetProject()->GetRequirements());
@@ -1399,7 +1399,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_Image(ComponentsModelNode* node, const wxString& name)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 		const PackageProject::ImageItem::Vector& images = GetInterface().GetImages();
 		KxComboBoxDialog dialog(GetView(), KxID_NONE, name, wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL, KxComboBoxDialog::DefaultStyle);
 	
@@ -1421,7 +1421,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_Conditions(ComponentsModelNode* node, const wxString& name)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 		PackageProject::ComponentItem tempEntry;
 	
 		ConditionGroupDialogWithTypeDescriptor dialog(GetView(), name, m_Controller, tempEntry.GetTDConditionGroup(), tempEntry);
@@ -1437,7 +1437,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_AssignedFlags(ComponentsModelNode* node, const wxString& name)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 		PackageProject::ComponentItem tempEntry;
 	
 		AssignedConditionalsDialog dialog(GetView(), name, m_Controller);
@@ -1453,7 +1453,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	}
 	void ComponentsModel::AllEntries_Description(ComponentsModelNode* node, const wxString& name)
 	{
-		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetEntries();
+		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 	
 		UI::TextEditDialog dialog(GetView());
 		if (dialog.ShowModal() == KxID_OK)
@@ -1538,7 +1538,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			for (const auto& group: step->GetGroups())
 			{
 				auto& groupNode = stepNode->GetChildren().emplace_back(std::make_unique<ComponentsModelNode>(group.get(), stepNode.get()));
-				for (const auto& entry: group->GetEntries())
+				for (const auto& entry: group->GetItems())
 				{
 					auto& entryNode = groupNode->GetChildren().emplace_back(std::make_unique<ComponentsModelNode>(entry.get(), groupNode.get()));
 					entryNode->CreateFullEntryNode();

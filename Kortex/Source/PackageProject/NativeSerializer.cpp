@@ -248,7 +248,7 @@ namespace Kortex::PackageProject
 				{
 					ReqType type = requirements.StringToTypeDescriptor(entryNode.GetAttribute("Type"));
 	
-					RequirementItem* entry = requirementGroup->GetEntries().emplace_back(std::make_unique<RequirementItem>(type)).get();
+					RequirementItem* entry = requirementGroup->GetItems().emplace_back(std::make_unique<RequirementItem>(type)).get();
 					entry->SetID(entryNode.GetAttribute("ID"));
 					entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 	
@@ -273,7 +273,7 @@ namespace Kortex::PackageProject
 					entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
 					
 					// Conform
-					entry->ConformToTypeDescriptor();
+					entry->ConformToType();
 				}
 			}
 		}
@@ -303,7 +303,7 @@ namespace Kortex::PackageProject
 	
 					for (KxXMLNode entryNode = groupNode.GetFirstChildElement("Entries").GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 					{
-						auto& entry = pSet->GetEntries().emplace_back(std::make_unique<ComponentItem>());
+						auto& entry = pSet->GetItems().emplace_back(std::make_unique<ComponentItem>());
 						entry->SetName(entryNode.GetFirstChildElement("Name").GetValue());
 						entry->SetImage(entryNode.GetFirstChildElement("Image").GetAttribute("Path"));
 						entry->SetDescription(entryNode.GetFirstChildElement("Description").GetValue());
@@ -358,7 +358,7 @@ namespace Kortex::PackageProject
 				{
 					auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<ConditionalComponentStep>());
 					ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("Conditions"));
-					KAux::LoadStringArray(step->GetEntries(), stepNode.GetFirstChildElement(sNodeName));
+					KAux::LoadStringArray(step->GetItems(), stepNode.GetFirstChildElement(sNodeName));
 				}
 			};
 			ReadConditionalSteps("ConditionalSteps", "Files");
@@ -490,8 +490,8 @@ namespace Kortex::PackageProject
 				}
 			}
 		};
-		WriteImageConfig(interfaceNode, "MainImage", interfaceConfig.GetMainImageEntry(), false);
-		WriteImageConfig(interfaceNode, "HeaderImage", interfaceConfig.GetHeaderImageEntry(), false);
+		WriteImageConfig(interfaceNode, "MainImage", interfaceConfig.GetMainItem(), false);
+		WriteImageConfig(interfaceNode, "HeaderImage", interfaceConfig.GetHeaderItem(), false);
 	
 		// Write images list
 		if (!interfaceConfig.GetImages().empty())
@@ -565,16 +565,16 @@ namespace Kortex::PackageProject
 				requirementsGroupNode.SetAttribute("ID", group->GetID());
 				requirementsGroupNode.SetAttribute("Operator", ModPackageProject::OperatorToString(group->GetOperator()));
 	
-				if (!group->GetEntries().empty())
+				if (!group->GetItems().empty())
 				{
-					for (const auto& entry: group->GetEntries())
+					for (const auto& entry: group->GetItems())
 					{
 						KxXMLNode entryNode = requirementsGroupNode.NewElement("Entry");
 						if (!entry->IsEmptyID())
 						{
 							entryNode.SetAttribute("ID", entry->RawGetID());
 						}
-						entryNode.SetAttribute("Type", requirements.TypeDescriptorToString(entry->GetTypeDescriptor()));
+						entryNode.SetAttribute("Type", requirements.TypeDescriptorToString(entry->GetType()));
 	
 						// Name
 						entryNode.NewElement("Name").SetValue(entry->RawGetName());
@@ -643,10 +643,10 @@ namespace Kortex::PackageProject
 						groupNode.SetAttribute("SelectionMode", components.SelectionModeToString(group->GetSelectionMode()));
 	
 						// Group entries
-						if (!group->GetEntries().empty())
+						if (!group->GetItems().empty())
 						{
 							KxXMLNode tEntriesArrayNode = groupNode.NewElement("Entries");
-							for (const auto& entry: group->GetEntries())
+							for (const auto& entry: group->GetItems())
 							{
 								KxXMLNode entryNode = tEntriesArrayNode.NewElement("Entry");
 	
@@ -715,9 +715,9 @@ namespace Kortex::PackageProject
 					}
 	
 					/* Entries */
-					if (!step->GetEntries().empty())
+					if (!step->GetItems().empty())
 					{
-						KAux::SaveStringArray(step->GetEntries(), setNode.NewElement(sNodeName));
+						KAux::SaveStringArray(step->GetItems(), setNode.NewElement(sNodeName));
 					}
 				}
 			}

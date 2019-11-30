@@ -186,7 +186,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 		{
 			for (auto& group: step->GetGroups())
 			{
-				for (auto& entry: group->GetEntries())
+				for (auto& entry: group->GetItems())
 				{
 					if (entry->GetImage() == trackedID)
 					{

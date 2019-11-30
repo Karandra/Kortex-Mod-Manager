@@ -131,7 +131,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 						{
 							PageBase::ShowTooltipWarning(GetView(), KTr("Generic.IDInvalid"), GetItemRect(GetItem(row), column));
 						}
-						else if (m_FileData->HasEntryWithID(newID, entry))
+						else if (m_FileData->HasItemWithID(newID, entry))
 						{
 							PageBase::WarnIDCollision(GetView(), GetItemRect(GetItem(row), column));
 						}
@@ -200,7 +200,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		{
 			for (auto& group: step->GetGroups())
 			{
-				for (auto& entry: group->GetEntries())
+				for (auto& entry: group->GetItems())
 				{
 					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetFileData(), remove);
 				}
@@ -210,7 +210,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		// Conditional install
 		for (auto& step: GetProject().GetComponents().GetConditionalSteps())
 		{
-			TrackID_ReplaceOrRemove(trackedID, newID, step->GetEntries(), remove);
+			TrackID_ReplaceOrRemove(trackedID, newID, step->GetItems(), remove);
 		}
 	
 		return true;

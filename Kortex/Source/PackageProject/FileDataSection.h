@@ -191,14 +191,14 @@ namespace Kortex::PackageProject
 			}
 			
 			FileItem* FindEntryWithID(const wxString& id, size_t* index = nullptr) const;
-			bool HasEntryWithID(const wxString& id, const FileItem* ignoreThis = nullptr) const
+			bool HasItemWithID(const wxString& id, const FileItem* ignoreThis = nullptr) const
 			{
 				FileItem* entry = FindEntryWithID(id);
 				return entry != nullptr && entry != ignoreThis;
 			}
 			bool CanUseThisIDForNewEntry(const wxString& id) const
 			{
-				return IsFileIDValid(id) && !HasEntryWithID(id);
+				return IsFileIDValid(id) && !HasItemWithID(id);
 			}
 	};
 }

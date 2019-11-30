@@ -279,7 +279,7 @@ namespace Kortex::PluginManager
 		const IGamePlugin* anchorPlugin = GetDataEntry(GetRow(event.GetItem()));
 		if (anchorPlugin && HasDragDropDataObject())
 		{
-			const IGamePlugin::RefVector& toMove = GetDragDropDataObject()->GetEntries();
+			const IGamePlugin::RefVector& toMove = GetDragDropDataObject()->GetItems();
 
 			// Move and refresh
 			if (IPluginManager::GetInstance()->MovePlugins(toMove, *anchorPlugin))
@@ -310,7 +310,7 @@ namespace Kortex::PluginManager
 	}
 
 	PluginViewModel::PluginViewModel()
-		:m_Entries(IPluginManager::GetInstance()->GetPlugins())
+		:m_Items(IPluginManager::GetInstance()->GetPlugins())
 	{
 		SetDataViewFlags(KxDataViewCtrl::DefaultStyle|KxDV_MULTIPLE_SELECTION|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES);
 	}
@@ -330,7 +330,7 @@ namespace Kortex::PluginManager
 	}
 	void PluginViewModel::SetDataVector(IGamePlugin::Vector& array)
 	{
-		KDataViewVectorListModel::SetDataVector(&m_Entries);
+		KDataViewVectorListModel::SetDataVector(&m_Items);
 	}
 	IDisplayModel* PluginViewModel::GetDisplayModel() const
 	{

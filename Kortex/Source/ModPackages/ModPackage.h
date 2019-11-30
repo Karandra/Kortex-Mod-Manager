@@ -105,7 +105,7 @@ namespace Kortex
 			}
 			const PackageProject::ImageItem* GetLogoImage() const
 			{
-				return m_Config.GetInterface().GetMainImageEntry();
+				return m_Config.GetInterface().GetMainItem();
 			}
 			const wxString& GetDescription() const
 			{

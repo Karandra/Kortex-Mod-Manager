@@ -27,10 +27,10 @@ namespace
 
 namespace Kortex::PackageProject
 {
-	RequirementItem::RequirementItem(ReqType typeDescriptor)
+	RequirementItem::RequirementItem(ReqType type)
 		:m_ObjectFunction(RequirementsSection::ms_DefaultObjectFunction),
 		m_RequiredVersionFunction(RequirementsSection::ms_DefaultVersionOperator),
-		m_TypeDescriptor(typeDescriptor)
+		m_Type(type)
 	{
 	}
 	RequirementItem::~RequirementItem()
@@ -71,13 +71,13 @@ namespace Kortex::PackageProject
 		m_ObjectFunctionResultChecked = false;
 	}
 	
-	bool RequirementItem::IsStd() const
+	bool RequirementItem::IsTypeStd() const
 	{
 		return Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID()) != nullptr;
 	}
-	bool RequirementItem::IsSystem() const
+	bool RequirementItem::IsTypeSystem() const
 	{
-		switch (m_TypeDescriptor)
+		switch (m_Type)
 		{
 			case ReqType::System:
 			{
@@ -89,40 +89,56 @@ namespace Kortex::PackageProject
 			}
 			case ReqType::Auto:
 			{
-				return IsStd();
+				return IsTypeStd();
 			}
 		};
 		return false;
 	}
-	bool RequirementItem::IsUserEditable() const
+	bool RequirementItem::IsTypeUserEditable() const
 	{
-		return !IsSystem();
+		return !IsTypeSystem();
 	}
 	
-	void RequirementItem::TrySetTypeDescriptor(ReqType type)
+	bool RequirementItem::SetType(ReqType type, bool force)
 	{
-		switch (type)
+		bool changed = false;
+		if (!force)
 		{
-			case ReqType::User:
-			case ReqType::Auto:
+			switch (type)
 			{
-				m_TypeDescriptor = type;
-				break;
-			}
-			case ReqType::System:
-			{
-				if (IsStd())
+				case ReqType::User:
+				case ReqType::Auto:
 				{
-					m_TypeDescriptor = type;
+					m_Type = type;
+					break;
 				}
-				break;
-			}
-		};
-		ConformToTypeDescriptor();
+				case ReqType::System:
+				{
+					if (IsTypeStd())
+					{
+						m_Type = type;
+					}
+					break;
+				}
+			};
+			changed = ConformToType();
+		}
+		else
+		{
+			changed = m_Type != type;
+			m_Type = type;
+		}
+
+		if (changed)
+		{
+			ResetObjectFunctionResult();
+		}
+		
+		return changed;
 	}
-	bool RequirementItem::ConformToTypeDescriptor()
+	bool RequirementItem::ConformToType()
 	{
-		if (m_TypeDescriptor == ReqType::System || m_TypeDescriptor == ReqType::Auto)
+		if (m_Type == ReqType::System || m_Type == ReqType::Auto)
 		{
 			const RequirementItem* stdEntry = Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID());
 			if (stdEntry)
@@ -169,14 +185,14 @@ namespace Kortex::PackageProject
 	{
 	}
 	
-	RequirementItem* RequirementGroup::FindEntry(const wxString& id) const
+	RequirementItem* RequirementGroup::FindItem(const wxString& id) const
 	{
-		auto it = std::find_if(m_Entries.cbegin(), m_Entries.cend(), [id](const RequirementItem::Vector::value_type& entry)
+		auto it = std::find_if(m_Items.cbegin(), m_Items.cend(), [id](const RequirementItem::Vector::value_type& entry)
 		{
 			return entry->GetID() == id;
 		});
 	
-		if (it != m_Entries.cend())
+		if (it != m_Items.cend())
 		{
 			return it->get();
 		}
@@ -188,7 +204,7 @@ namespace Kortex::PackageProject
 		if (!m_GroupStatusCalculated)
 		{
 			ConditionChecker checker;
-			for (auto& entry: m_Entries)
+			for (auto& entry: m_Items)
 			{
 				checker(entry->CalcOverallStatus(), m_Operator);
 			}

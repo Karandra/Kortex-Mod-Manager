@@ -138,7 +138,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 			PackageProject::RequirementGroup* group = m_Page.GetPackageConfig().GetRequirements().FindGroupWithID(id);
 			if (group)
 			{
-				for (const auto& entry: group->GetEntries())
+				for (const auto& entry: group->GetItems())
 				{
 					// No need to show requirements with no object function and no required version.
 					// They always be true.

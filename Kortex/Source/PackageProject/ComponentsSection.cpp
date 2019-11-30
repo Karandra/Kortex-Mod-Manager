@@ -216,7 +216,7 @@ namespace Kortex::PackageProject
 		{
 			for (const auto& group: step->GetGroups())
 			{
-				for (const auto& entry: group->GetEntries())
+				for (const auto& entry: group->GetItems())
 				{
 					for (const FlagItem& flagEntry: entry->GetConditionalFlags().GetFlags())
 					{

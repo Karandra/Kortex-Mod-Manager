@@ -168,7 +168,7 @@ namespace Kortex
 
 	void ModPackage::LoadBasicResources()
 	{
-		PackageProject::ImageItem* logo = m_Config.GetInterface().GetMainImageEntry();
+		PackageProject::ImageItem* logo = m_Config.GetInterface().GetMainItem();
 		if (logo)
 		{
 			KxFileItem item;

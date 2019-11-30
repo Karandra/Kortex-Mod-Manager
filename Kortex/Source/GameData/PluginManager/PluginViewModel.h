@@ -14,7 +14,7 @@ namespace Kortex::PluginManager
 		public KxDataViewModelExDragDropEnabled<PluginViewDNDObject>
 	{
 		private:
-			IGamePlugin::Vector& m_Entries;
+			IGamePlugin::Vector& m_Items;
 			std::unique_ptr<IDisplayModel> m_DisplayModel;
 			wxString m_SearchMask;
 
@@ -56,21 +56,21 @@ namespace Kortex::PluginManager
 
 			const IGamePlugin* GetDataEntry(size_t index) const
 			{
-				return index < m_Entries.size() ? &*m_Entries[index] : nullptr;
+				return index < m_Items.size() ? &*m_Items[index] : nullptr;
 			}
 			IGamePlugin* GetDataEntry(size_t index)
 			{
-				return index < m_Entries.size() ? &*m_Entries[index] : nullptr;
+				return index < m_Items.size() ? &*m_Items[index] : nullptr;
 			}
 			KxDataViewItem GetItemByEntry(const IGamePlugin* entry) const
 			{
-				auto it = std::find_if(m_Entries.begin(), m_Entries.end(), [entry](const auto& v)
+				auto it = std::find_if(m_Items.begin(), m_Items.end(), [entry](const auto& v)
 				{
 					return v.get() == entry;
 				});
-				if (it != m_Entries.end())
+				if (it != m_Items.end())
 				{
-					return GetItem(std::distance(m_Entries.begin(), it));
+					return GetItem(std::distance(m_Items.begin(), it));
 				}
 				return KxDataViewItem();
 			}
@@ -96,22 +96,22 @@ namespace Kortex::PluginManager
 	class PluginViewDNDObject: public KxDataViewModelExDragDropData
 	{
 		private:
-			IGamePlugin::RefVector m_Entries;
+			IGamePlugin::RefVector m_Items;
 
 		public:
 			PluginViewDNDObject(size_t count = 0)
 			{
-				m_Entries.reserve(count);
+				m_Items.reserve(count);
 			}
 
 		public:
-			const IGamePlugin::RefVector& GetEntries() const
+			const IGamePlugin::RefVector& GetItems() const
 			{
-				return m_Entries;
+				return m_Items;
 			}
 			void AddEntry(IGamePlugin* entry)
 			{
-				m_Entries.push_back(entry);
+				m_Items.push_back(entry);
 			}
 	};
 }

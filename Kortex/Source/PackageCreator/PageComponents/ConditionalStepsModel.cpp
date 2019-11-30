@@ -50,7 +50,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				}
 				case ColumnID::StepData:
 				{
-					value = PageComponents::FormatArrayToText(entry->GetEntries());
+					value = PageComponents::FormatArrayToText(entry->GetItems());
 					break;
 				}
 			};
@@ -84,10 +84,10 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					if (step)
 					{
 						FileDataSelectorDialog dialog(GetView(), column->GetTitle(), m_Controller);
-						dialog.SetDataVector(step->GetEntries(), &m_Controller->GetProject()->GetFileData());
+						dialog.SetDataVector(step->GetItems(), &m_Controller->GetProject()->GetFileData());
 						if (dialog.ShowModal() == KxID_OK)
 						{
-							step->GetEntries() = dialog.GetSelectedItems();
+							step->GetItems() = dialog.GetSelectedItems();
 							NotifyChangedItem(event.GetItem());
 						}
 					}

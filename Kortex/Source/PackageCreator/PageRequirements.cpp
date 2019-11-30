@@ -211,9 +211,9 @@ namespace Kortex::PackageDesigner
 			{
 				if (PackageProject::RequirementGroup* pSet = m_EntriesModel->GetRequirementsGroup())
 				{
-					if (!pSet->HasEntryWithID(stdEntry->GetID()))
+					if (!pSet->HasItemWithID(stdEntry->GetID()))
 					{
-						auto& newEntry = pSet->GetEntries().emplace_back(std::make_unique<PackageProject::RequirementItem>(*stdEntry));
+						auto& newEntry = pSet->GetItems().emplace_back(std::make_unique<PackageProject::RequirementItem>(*stdEntry));
 						newEntry->ResetObjectFunctionResult();
 						newEntry->SetCurrentVersion(KxNullVersion);
 

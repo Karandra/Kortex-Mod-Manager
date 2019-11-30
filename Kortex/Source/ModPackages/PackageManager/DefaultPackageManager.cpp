@@ -16,7 +16,7 @@ namespace Kortex::PackageDesigner
 		
 		// Find script extender
 		wxString xSEID = instance.GetVariables().GetVariable(Variables::KVAR_SCRIPT_EXTENDER_ID).AsString();
-		if (PackageProject::RequirementItem* xSE = m_StandardRequirements.FindEntry(xSEID))
+		if (PackageProject::RequirementItem* xSE = m_StandardRequirements.FindItem(xSEID))
 		{
 			m_WithScriptExtender.Assign(*xSE);
 			AddComponent<IWithScriptExtender>(m_WithScriptExtender);

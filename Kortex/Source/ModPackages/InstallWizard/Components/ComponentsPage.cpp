@@ -92,7 +92,7 @@ namespace Kortex::InstallWizard
 					m_TabView->SetPageImage((size_t)TabIndex::Requirements, (int)ImageResourceID::InformationFrameEmpty);
 				}
 
-				const PackageProject::ImageItem* imageEntry = GetPackageConfig().GetInterface().FindEntryWithValue(entry->GetImage());
+				const PackageProject::ImageItem* imageEntry = GetPackageConfig().GetInterface().FindImageByPath(entry->GetImage());
 				if (imageEntry && imageEntry->HasBitmap())
 				{
 					m_ImageView->SetBitmap(imageEntry->GetBitmap());
@@ -201,7 +201,7 @@ namespace Kortex::InstallWizard
 			event.Skip();
 			if (const PackageProject::ComponentItem* pComponent = m_ComponentsModel->GetHotTrackedEntry())
 			{
-				const PackageProject::ImageItem* entry = GetPackageConfig().GetInterface().FindEntryWithValue(pComponent->GetImage());
+				const PackageProject::ImageItem* entry = GetPackageConfig().GetInterface().FindImageByPath(pComponent->GetImage());
 				if (entry)
 				{
 					UI::ImageViewerEvent evt;
@@ -258,7 +258,7 @@ namespace Kortex::InstallWizard
 		{
 			for (auto& group: step->GetGroups())
 			{
-				for (auto& entry: group->GetEntries())
+				for (auto& entry: group->GetItems())
 				{
 					entry->SetTDCurrentValue(PackageProject::TypeDescriptor::Invalid);
 				}
@@ -440,7 +440,7 @@ namespace Kortex::InstallWizard
 		// Check entries conditions and set its type descriptors current value
 		for (auto& group: step.GetGroups())
 		{
-			for (auto& entry: group->GetEntries())
+			for (auto& entry: group->GetItems())
 			{
 				entry->SetTDCurrentValue(PackageProject::TypeDescriptor::Invalid);
 				if (IsConditionsSatisfied(entry->GetTDConditionGroup()))

@@ -224,10 +224,10 @@ namespace Kortex::PackageProject
 					}
 	
 					// Try change type to system. Most likely will fail.
-					reqEntry->TrySetTypeDescriptor(ReqType::System);
+					reqEntry->SetType(ReqType::System);
 	
 					// Add the entry to its group
-					requirementsGroup->GetEntries().emplace_back(std::move(reqEntry));
+					requirementsGroup->GetItems().emplace_back(std::move(reqEntry));
 				}
 			}
 	
@@ -478,11 +478,11 @@ namespace Kortex::PackageProject
 			if (mainReqsGroup)
 			{
 				// If main requirements group is empty - add current game with no required version
-				if (mainReqsGroup->GetEntries().empty())
+				if (mainReqsGroup->GetItems().empty())
 				{
-					RequirementItem* entry = mainReqsGroup->GetEntries().emplace_back(std::make_unique<RequirementItem>()).get();
+					RequirementItem* entry = mainReqsGroup->GetItems().emplace_back(std::make_unique<RequirementItem>()).get();
 					entry->SetID(Kortex::IGameInstance::GetActive()->GetGameID());
-					entry->ConformToTypeDescriptor();
+					entry->ConformToType();
 				}
 				requirements.GetDefaultGroup().push_back(mainReqsGroup->GetID());
 			}
@@ -521,7 +521,7 @@ namespace Kortex::PackageProject
 	
 						for (KxXMLNode pluginNode = pluginsArrayNode.GetFirstChildElement("plugin"); pluginNode.IsOK(); pluginNode = pluginNode.GetNextSiblingElement("plugin"))
 						{
-							ComponentItem* entry = group->GetEntries().emplace_back(std::make_unique<ComponentItem>()).get();
+							ComponentItem* entry = group->GetItems().emplace_back(std::make_unique<ComponentItem>()).get();
 							entry->SetName(pluginNode.GetAttribute("name"));
 	
 							// Description
@@ -567,7 +567,7 @@ namespace Kortex::PackageProject
 						}
 	
 						// Sort entries in set
-						SortEntries(group->GetEntries(), pluginsOrder);
+						SortEntries(group->GetItems(), pluginsOrder);
 					}
 				}
 			}
@@ -600,7 +600,7 @@ namespace Kortex::PackageProject
 			// Files
 			for (const auto& v: ReadFileData(stepNode.GetFirstChildElement("files")))
 			{
-				step->GetEntries().emplace_back(v.first->GetID());
+				step->GetItems().emplace_back(v.first->GetID());
 			}
 	
 			// Conditions
@@ -801,7 +801,7 @@ namespace Kortex::PackageProject
 		}
 	
 		// Write header image
-		if (const ImageItem* headerImageEntry = interfaceConfig.GetHeaderImageEntry())
+		if (const ImageItem* headerImageEntry = interfaceConfig.GetHeaderItem())
 		{
 			KxXMLNode node = configRootNode.NewElement("moduleImage");
 			node.SetAttribute("path", PathNameToPackage(headerImageEntry->GetPath(), ContentType::Images));
@@ -868,7 +868,7 @@ namespace Kortex::PackageProject
 						KxXMLNode pluginsNode = setNode.NewElement("plugins");
 						pluginsNode.SetAttribute("order", "Explicit");
 	
-						for (const auto& entry: group->GetEntries())
+						for (const auto& entry: group->GetItems())
 						{
 							KxXMLNode entryNode = pluginsNode.NewElement("plugin");
 							entryNode.SetAttribute("name", entry->GetName());
@@ -960,9 +960,9 @@ namespace Kortex::PackageProject
 				entryNode.NewElement("description").SetValue(m_ProjectSave->GetInfo().GetDescription());
 			}
 	
-			if (const ImageItem* imageEntry = m_ProjectSave->GetInterface().GetMainImageEntry())
+			if (const ImageItem* imageItem = m_ProjectSave->GetInterface().GetMainItem())
 			{
-				entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(imageEntry->GetPath(), ContentType::Images));
+				entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(imageItem->GetPath(), ContentType::Images));
 			}
 	
 			KxXMLNode typeDescriptorNode = entryNode.NewElement("typeDescriptor");
@@ -987,7 +987,7 @@ namespace Kortex::PackageProject
 			WriteConditionGroup(step->GetConditionGroup(), stepNode.NewElement("dependencies"));
 	
 			// Files
-			WriteFileData(stepNode.NewElement("files"), step->GetEntries());
+			WriteFileData(stepNode.NewElement("files"), step->GetItems());
 		}
 	}
 	void FOModSerializer::WriteFileData(KxXMLNode& node, const KxStringVector& files, bool alwaysInstall)
@@ -1056,7 +1056,7 @@ namespace Kortex::PackageProject
 			if (group)
 			{
 				node.SetAttribute("operator", group->GetOperator() == Operator::And ? "And" : "Or");
-				for (const auto& entry: group->GetEntries())
+				for (const auto& entry: group->GetItems())
 				{
 					if (entry->GetID() == IGameInstance::GetActive()->GetGameID())
 					{

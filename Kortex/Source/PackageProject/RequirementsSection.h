@@ -31,12 +31,12 @@ namespace Kortex::PackageProject
 			bool m_OverallStatusCalculated = false;
 			bool m_OverallStatus = false;
 	
-			ReqType m_TypeDescriptor = ReqType::Auto;
+			ReqType m_Type = ReqType::Auto;
 			wxString m_Category;
 			KxStringVector m_Dependencies;
 	
 		public:
-			RequirementItem(ReqType typeDescriptor = ReqType::Auto);
+			RequirementItem(ReqType type = ReqType::Auto);
 			~RequirementItem();
 	
 		public:
@@ -103,20 +103,16 @@ namespace Kortex::PackageProject
 				m_BinaryVersionKind = value;
 			}
 			
-			bool IsStd() const;
-			bool IsSystem() const;
-			bool IsUserEditable() const;
+			bool IsTypeStd() const;
+			bool IsTypeSystem() const;
+			bool IsTypeUserEditable() const;
 			
-			ReqType GetTypeDescriptor() const
+			ReqType GetType() const
 			{
-				return m_TypeDescriptor;
+				return m_Type;
 			}
-			void SetTypeDescriptorUnchecked(ReqType type)
-			{
-				m_TypeDescriptor = type;
-			}
-			void TrySetTypeDescriptor(ReqType type);
-			bool ConformToTypeDescriptor();
+			bool SetType(ReqType type, bool force = false);
+			bool ConformToType();
 			
 			const wxString& GetCategory() const
 			{
@@ -159,7 +155,7 @@ namespace Kortex::PackageProject
 		private:
 			wxString m_ID;
 			Operator m_Operator;
-			RequirementItem::Vector m_Entries;
+			RequirementItem::Vector m_Items;
 	
 			bool m_GroupStatus = false;
 			bool m_GroupStatusCalculated = false;
@@ -191,19 +187,19 @@ namespace Kortex::PackageProject
 				m_Operator = value;
 			}
 	
-			RequirementItem::Vector& GetEntries()
+			RequirementItem::Vector& GetItems()
 			{
-				return m_Entries;
+				return m_Items;
 			}
-			const RequirementItem::Vector& GetEntries() const
+			const RequirementItem::Vector& GetItems() const
 			{
-				return m_Entries;
+				return m_Items;
 			}
 	
-			RequirementItem* FindEntry(const wxString& id) const;
-			bool HasEntryWithID(const wxString& id) const
+			RequirementItem* FindItem(const wxString& id) const;
+			bool HasItemWithID(const wxString& id) const
 			{
-				return FindEntry(id) != nullptr;
+				return FindItem(id) != nullptr;
 			}
 	
 			bool CalcGroupStatus();

@@ -229,7 +229,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		{
 			for (auto& group: step->GetGroups())
 			{
-				for (auto& entry: group->GetEntries())
+				for (auto& entry: group->GetItems())
 				{
 					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetConditionalFlags().GetFlags(), remove);
 					for (PackageProject::Condition& condition : entry->GetTDConditionGroup().GetConditions())

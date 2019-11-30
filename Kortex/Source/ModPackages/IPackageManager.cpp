@@ -202,7 +202,7 @@ namespace Kortex
 
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			auto& entry = group.GetEntries().emplace_back(std::make_unique<RequirementItem>(ReqType::System));
+			auto& entry = group.GetItems().emplace_back(std::make_unique<RequirementItem>(ReqType::System));
 			entry->SetID(KVarExp(node.GetAttribute("ID")));
 			entry->SetCategory(KVarExp(node.GetAttribute("Category")));
 			entry->SetName(KVarExp(node.GetFirstChildElement("Name").GetValue()));

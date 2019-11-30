@@ -79,11 +79,11 @@ namespace Kortex::InstallWizard
 		{
 			// Save main or header image
 			const PackageProject::InterfaceSection& interfaceConfig = GetPackageConfig().GetInterface();
-			const PackageProject::ImageItem* imageEntry = interfaceConfig.GetMainImageEntry();
-			imageEntry = imageEntry ? imageEntry : interfaceConfig.GetHeaderImageEntry();
-			if (imageEntry && imageEntry->HasBitmap())
+			const PackageProject::ImageItem* imageItem = interfaceConfig.GetMainItem();
+			imageItem = imageItem ? imageItem : interfaceConfig.GetHeaderItem();
+			if (imageItem && imageItem->HasBitmap())
 			{
-				const wxBitmap& bitmap = imageEntry->GetBitmap();
+				const wxBitmap& bitmap = imageItem->GetBitmap();
 				bitmap.SaveFile(mod->GetImageFile(), bitmap.HasAlpha() ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG);
 			}
 
@@ -232,7 +232,7 @@ namespace Kortex::InstallWizard
 				{
 					if (componentsPage.IsConditionsSatisfied(step->GetConditionGroup()))
 					{
-						AddFilesFromList(step->GetEntries());
+						AddFilesFromList(step->GetItems());
 					}
 				}
 			}

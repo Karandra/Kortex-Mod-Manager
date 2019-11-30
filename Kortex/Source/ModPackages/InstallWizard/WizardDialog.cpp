@@ -209,7 +209,7 @@ namespace Kortex::InstallWizard
 	void WizardDialog::LoadHeaderImage()
 	{
 		const PackageProject::InterfaceSection& interfaceConfig = m_Package->GetConfig().GetInterface();
-		if (const PackageProject::ImageItem* pHeaderImage = interfaceConfig.GetHeaderImageEntry())
+		if (const PackageProject::ImageItem* pHeaderImage = interfaceConfig.GetHeaderItem())
 		{
 			if (pHeaderImage->HasBitmap())
 			{

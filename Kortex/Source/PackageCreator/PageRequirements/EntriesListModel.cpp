@@ -93,7 +93,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			{
 				case ColumnID::Type:
 				{
-					value = entry->GetTypeDescriptor();
+					value = entry->GetType();
 					return;
 				}
 				case ColumnID::ID:
@@ -138,7 +138,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			{
 				case ColumnID::Type:
 				{
-					value = m_TypeEditor->GetItems()[ToInt(entry->GetTypeDescriptor())];
+					value = m_TypeEditor->GetItems()[ToInt(entry->GetType())];
 					break;
 				}
 				case ColumnID::ID:
@@ -200,7 +200,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					entry->ResetCurrentVersion();
 					entry->ResetObjectFunctionResult();
 	
-					entry->TrySetTypeDescriptor(data.As<PackageProject::ReqType>());
+					entry->SetType(data.As<PackageProject::ReqType>());
 					ChangeNotify();
 					break;
 				}
@@ -209,13 +209,13 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					wxString newID = data.As<wxString>();
 					if (newID != entry->GetID())
 					{
-						if (newID.IsEmpty() || !m_Group->HasEntryWithID(newID))
+						if (newID.IsEmpty() || !m_Group->HasItemWithID(newID))
 						{
 							entry->ResetCurrentVersion();
 							entry->ResetObjectFunctionResult();
 	
 							entry->SetID(newID);
-							entry->ConformToTypeDescriptor();
+							entry->ConformToType();
 							ChangeNotify();
 						}
 						else
@@ -232,7 +232,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					entry->ResetObjectFunctionResult();
 	
 					entry->SetName(data.As<wxString>());
-					entry->ConformToTypeDescriptor();
+					entry->ConformToType();
 					ChangeNotify();
 					break;
 				}
@@ -276,7 +276,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			{
 				if (PackageProject::RequirementItem* entry = GetDataEntry(row))
 				{
-					return entry->IsUserEditable();
+					return entry->IsTypeUserEditable();
 				}
 				break;
 			}
@@ -354,7 +354,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				case ColumnID::RequiredState:
 				case ColumnID::Object:
 				{
-					if (entry && entry->IsUserEditable())
+					if (entry && entry->IsTypeUserEditable())
 					{
 						GetView()->EditItem(item, column);
 					}
@@ -391,7 +391,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			case ColumnID::Object:
 			{
 				PackageProject::RequirementItem* entry = GetDataEntry(GetRow(event.GetItem()));
-				if (entry && !entry->IsUserEditable())
+				if (entry && !entry->IsTypeUserEditable())
 				{
 					event.Veto();
 					wxBell();
@@ -463,7 +463,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					{
 						if (column->GetID() == ColumnID::Name)
 						{
-							if (entry->IsUserEditable())
+							if (entry->IsTypeUserEditable())
 							{
 								entry->SetName(dialog.GetValue());
 							}
@@ -474,7 +474,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 						}
 						else if (column->GetID() == ColumnID::Object)
 						{
-							if (entry->IsUserEditable())
+							if (entry->IsTypeUserEditable())
 							{
 								entry->SetObject(dialog.GetValue());
 							}

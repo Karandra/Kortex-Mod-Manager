@@ -245,7 +245,7 @@ namespace Kortex::PackageProject
 	
 		private:
 			SelectionMode m_SelectionMode;
-			ComponentItem::Vector m_Entries;
+			ComponentItem::Vector m_Items;
 	
 		public:
 			ComponentGroup();
@@ -261,13 +261,13 @@ namespace Kortex::PackageProject
 				m_SelectionMode = type;
 			}
 	
-			ComponentItem::Vector& GetEntries()
+			ComponentItem::Vector& GetItems()
 			{
-				return m_Entries;
+				return m_Items;
 			}
-			const ComponentItem::Vector& GetEntries() const
+			const ComponentItem::Vector& GetItems() const
 			{
-				return m_Entries;
+				return m_Items;
 			}
 	};
 }
@@ -281,7 +281,7 @@ namespace Kortex::PackageProject
 	
 		private:
 			ConditionGroup m_Conditions;
-			ComponentGroup::Vector m_Entries;
+			ComponentGroup::Vector m_Items;
 	
 		public:
 			ComponentStep();
@@ -299,11 +299,11 @@ namespace Kortex::PackageProject
 	
 			ComponentGroup::Vector& GetGroups()
 			{
-				return m_Entries;
+				return m_Items;
 			}
 			const ComponentGroup::Vector& GetGroups() const
 			{
-				return m_Entries;
+				return m_Items;
 			}		
 	};
 }
@@ -317,7 +317,7 @@ namespace Kortex::PackageProject
 	
 		private:
 			ConditionGroup m_Conditions;
-			KxStringVector m_Entries;
+			KxStringVector m_Items;
 	
 		public:
 			ConditionalComponentStep();
@@ -333,13 +333,13 @@ namespace Kortex::PackageProject
 				return m_Conditions;
 			}
 	
-			KxStringVector& GetEntries()
+			KxStringVector& GetItems()
 			{
-				return m_Entries;
+				return m_Items;
 			}
-			const KxStringVector& GetEntries() const
+			const KxStringVector& GetItems() const
 			{
-				return m_Entries;
+				return m_Items;
 			}
 	};
 }

@@ -47,7 +47,7 @@ namespace Kortex::InstallWizard::RequirementsPageNS
 				{
 					wxString cv = item.GetCurrentVersion().ToString();
 					wxString rv = item.GetRequiredVersion().ToString();
-					wxString operatorSymbol = ModPackageProject::OperatorToSymbolicName(item.GetRVFunction());
+					wxString operatorSymbol = ModPackageProject::OperatorToSymbolicName(item.GetRequiredVersionOperator());
 					return KxDataView2::BitmapTextValue(KxString::Format("%1 %2 %3", cv, operatorSymbol, rv), icon);
 				}
 			}

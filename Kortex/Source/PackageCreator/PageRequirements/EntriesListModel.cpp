@@ -158,7 +158,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				case ColumnID::CurrentVersion:
 				{
-					wxString operatorName = ModPackageProject::OperatorToSymbolicName(entry->GetRVFunction());
+					wxString operatorName = ModPackageProject::OperatorToSymbolicName(entry->GetRequiredVersionOperator());
 					wxString cv = entry->GetCurrentVersion();
 					wxString rv = entry->GetRequiredVersion();
 	
@@ -337,13 +337,13 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 						for (int i = ToInt(PackageProject::Operator::MIN); i < ToInt(PackageProject::Operator::MAX_COMPARISON); i++)
 						{
 							KxMenuItem* item = menu.Add(new KxMenuItem(i, ModPackageProject::OperatorToSymbolicName((PackageProject::Operator)i), wxEmptyString, wxITEM_CHECK));
-							item->Check(i == ToInt(entry->GetRVFunction()));
+							item->Check(i == ToInt(entry->GetRequiredVersionOperator()));
 						}
 	
 						wxWindowID id = menu.Show(GetView(), GetView()->GetDropdownMenuPosition(item, column) + wxPoint(0, 1));
 						if (id != KxID_NONE)
 						{
-							entry->SetRVFunction((PackageProject::Operator)id);
+							entry->SetRequiredVersionOperator((PackageProject::Operator)id);
 							NotifyChangedItem(item);
 						}
 					}

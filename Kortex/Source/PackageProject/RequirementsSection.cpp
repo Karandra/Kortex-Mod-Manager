@@ -53,7 +53,7 @@ namespace Kortex::PackageProject
 	}
 	bool RequirementItem::CheckVersion() const
 	{
-		return RequirementsSection::CompareVersions(GetRVFunction(), GetCurrentVersion(), GetRequiredVersion());
+		return RequirementsSection::CompareVersions(GetRequiredVersionOperator(), GetCurrentVersion(), GetRequiredVersion());
 	}
 	
 	ReqState RequirementItem::GetObjectFunctionResult() const

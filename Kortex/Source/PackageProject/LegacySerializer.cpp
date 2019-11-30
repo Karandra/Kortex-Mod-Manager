@@ -864,7 +864,7 @@ namespace Kortex::PackageProject
 	
 							if (operatorRVType != Operator::Invalid)
 							{
-								entry->SetRVFunction(operatorRVType);
+								entry->SetRequiredVersionOperator(operatorRVType);
 							}
 	
 							FixRequirementID(entry);

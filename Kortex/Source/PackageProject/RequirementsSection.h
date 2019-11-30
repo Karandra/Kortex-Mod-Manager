@@ -49,19 +49,30 @@ namespace Kortex::PackageProject
 				m_Object = value;
 			}
 			
+			ObjectFunction GetObjectFunction() const
+			{
+				return m_ObjectFunction;
+			}
+			void SetObjectFunction(ObjectFunction state)
+			{
+				m_ObjectFunction = state;
+			}
+			ReqState GetObjectFunctionResult() const;
+			void ResetObjectFunctionResult();
+
 			const KxVersion& GetRequiredVersion() const
 			{
 				return m_RequiredVersion;
-			}
-			Operator GetRVFunction() const
-			{
-				return m_RequiredVersionFunction;
 			}
 			void SetRequiredVersion(const wxString& value)
 			{
 				m_RequiredVersion = value;
 			}
-			void SetRVFunction(Operator operatorType)
+			Operator GetRequiredVersionOperator() const
+			{
+				return m_RequiredVersionFunction;
+			}
+			void SetRequiredVersionOperator(Operator operatorType)
 			{
 				m_RequiredVersionFunction = operatorType;
 			}
@@ -73,17 +84,6 @@ namespace Kortex::PackageProject
 			}
 			void ResetCurrentVersion();
 			bool CheckVersion() const;
-	
-			ObjectFunction GetObjectFunction() const
-			{
-				return m_ObjectFunction;
-			}
-			void SetObjectFunction(ObjectFunction state)
-			{
-				m_ObjectFunction = state;
-			}
-			ReqState GetObjectFunctionResult() const;
-			void ResetObjectFunctionResult();
 			
 			const wxString& GetDescription() const
 			{
@@ -93,7 +93,7 @@ namespace Kortex::PackageProject
 			{
 				m_Description = value;
 			}
-	
+			
 			const wxString& GetBinaryVersionKind() const
 			{
 				return m_BinaryVersionKind;
@@ -102,11 +102,11 @@ namespace Kortex::PackageProject
 			{
 				m_BinaryVersionKind = value;
 			}
-	
+			
 			bool IsStd() const;
 			bool IsSystem() const;
 			bool IsUserEditable() const;
-	
+			
 			ReqType GetTypeDescriptor() const
 			{
 				return m_TypeDescriptor;
@@ -117,7 +117,7 @@ namespace Kortex::PackageProject
 			}
 			void TrySetTypeDescriptor(ReqType type);
 			bool ConformToTypeDescriptor();
-	
+			
 			const wxString& GetCategory() const
 			{
 				return m_Category;
@@ -135,7 +135,7 @@ namespace Kortex::PackageProject
 			{
 				return m_Dependencies;
 			}
-	
+			
 			bool GetOverallStatus() const
 			{
 				return m_OverallStatus;

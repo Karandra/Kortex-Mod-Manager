@@ -41,7 +41,7 @@ namespace Kortex::PackageProject
 	{
 		if (!m_CurrentVersionChecked)
 		{
-			m_CurrentVersion = Kortex::IPackageManager::GetInstance()->GetRequirementVersion(this);
+			m_CurrentVersion = IPackageManager::GetInstance()->GetRequirementVersion(this);
 			m_CurrentVersionChecked = true;
 		}
 		return m_CurrentVersion;
@@ -60,7 +60,7 @@ namespace Kortex::PackageProject
 	{
 		if (!m_ObjectFunctionResultChecked)
 		{
-			m_ObjectFunctionResult = Kortex::IPackageManager::GetInstance()->CheckRequirementState(this);
+			m_ObjectFunctionResult = IPackageManager::GetInstance()->CheckRequirementState(this);
 			m_ObjectFunctionResultChecked = true;
 		}
 		return m_ObjectFunctionResult;
@@ -73,7 +73,7 @@ namespace Kortex::PackageProject
 	
 	bool RequirementItem::IsTypeStd() const
 	{
-		return Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID()) != nullptr;
+		return IPackageManager::GetInstance()->FindStdReqirement(GetID()) != nullptr;
 	}
 	bool RequirementItem::IsTypeSystem() const
 	{
@@ -140,7 +140,7 @@ namespace Kortex::PackageProject
 	{
 		if (m_Type == ReqType::System || m_Type == ReqType::Auto)
 		{
-			const RequirementItem* stdEntry = Kortex::IPackageManager::GetInstance()->FindStdReqirement(GetID());
+			const RequirementItem* stdEntry = IPackageManager::GetInstance()->FindStdReqirement(GetID());
 			if (stdEntry)
 			{
 				SetName(stdEntry->GetName());

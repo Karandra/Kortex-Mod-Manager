@@ -130,7 +130,7 @@ namespace Kortex::PackageDesigner
 			wxString GetName() const override;
 			ResourceID GetIcon() const override
 			{
-				return Kortex::ImageResourceID::Box;
+				return ImageResourceID::Box;
 			}
 			IWorkspaceContainer* GetPreferredContainer() const override;
 

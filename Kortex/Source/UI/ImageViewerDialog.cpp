@@ -34,7 +34,7 @@ namespace Kortex::UI
 
 	bool ImageViewerEvent::IsAnimationFile() const
 	{
-		return HasFilePath() && Kortex::IScreenshotsGallery::IsAnimationFile(GetFilePath());
+		return HasFilePath() && IScreenshotsGallery::IsAnimationFile(GetFilePath());
 	}
 	bool ImageViewerEvent::HasFilePath() const
 	{
@@ -88,7 +88,7 @@ namespace Kortex::UI
 
 	void ImageViewerDialog::OnLoadFromDisk(const wxString& filePath)
 	{
-		if (Kortex::IScreenshotsGallery::IsAnimationFile(filePath))
+		if (IScreenshotsGallery::IsAnimationFile(filePath))
 		{
 			m_ImageView->LoadFile(filePath);
 		}
@@ -166,7 +166,7 @@ namespace Kortex::UI
 	{
 		KxFileBrowseDialog dialog(this, KxID_NONE, KxFBD_SAVE);
 		const KxStringVector& exts = Kortex::IScreenshotsGallery::GetSupportedExtensions();
-		const Kortex::ScreenshotsGallery::SupportedTypesVector& formats = Kortex::IScreenshotsGallery::GetSupportedFormats();
+		const ScreenshotsGallery::SupportedTypesVector& formats = IScreenshotsGallery::GetSupportedFormats();
 		for (const wxString& ext: exts)
 		{
 			dialog.AddFilter(ext, wxString::Format("%s %s", KTr("FileFilter.Image"), ext.AfterFirst('.').MakeUpper()));

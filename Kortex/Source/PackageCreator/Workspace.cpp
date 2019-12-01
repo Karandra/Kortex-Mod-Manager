@@ -444,7 +444,7 @@ namespace Kortex::PackageDesigner
 		m_WorkspaceDocument.ImportProjectFromPackage(path);
 		return *m_WorkspaceDocument.GetProject();
 	}
-	ModPackageProject& Workspace::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
+	ModPackageProject& Workspace::CreateProjectFromModEntry(const IGameMod& modEntry)
 	{
 		EnsureCreated();
 

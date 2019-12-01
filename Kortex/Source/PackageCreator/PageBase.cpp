@@ -73,7 +73,7 @@ namespace Kortex::PackageDesigner
 		toolBar->SetMargins(0, 0, 0, 0);
 		toolBar->SetToolSeparation(0);
 
-		Kortex::IThemeManager::GetActive().Apply(static_cast<wxWindow*>(toolBar));
+		IThemeManager::GetActive().Apply(static_cast<wxWindow*>(toolBar));
 		return toolBar;
 	}
 	void PageBase::ShowTooltipWarning(wxWindow* window, const wxString& message, const wxRect& rect)

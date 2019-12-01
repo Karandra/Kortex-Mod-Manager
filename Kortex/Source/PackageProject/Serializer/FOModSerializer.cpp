@@ -149,7 +149,7 @@ namespace Kortex::PackageProject
 					reqEntry = std::make_unique<RequirementItem>();
 	
 					// Copy std requirement for current game and set required version from FOMod
-					const RequirementItem* stdEntry = IPackageManager::GetInstance()->FindStdReqirement(Kortex::IGameInstance::GetActive()->GetGameID());
+					const RequirementItem* stdEntry = IPackageManager::GetInstance()->FindStdReqirement(IGameInstance::GetActive()->GetGameID());
 	
 					// This check probably redundant, but just in case
 					if (stdEntry)
@@ -350,12 +350,12 @@ namespace Kortex::PackageProject
 			info.SetDescription(ConvertBBCode(KxString::Trim(infoNode.GetFirstChildElement("Description").GetValue(), true, true)));
 	
 			// Web-site
-			Kortex::ModSourceStore& modSourceStore = info.GetModSourceStore();
+			ModSourceStore& modSourceStore = info.GetModSourceStore();
 	
 			ModID nexusID = infoNode.GetFirstChildElement("Id").GetValueInt(ModID::GetInvalidValue());
 			if (nexusID.HasValue())
 			{
-				modSourceStore.TryAddWith<Kortex::NetworkManager::NexusModNetwork>(nexusID);
+				modSourceStore.TryAddWith<NetworkManager::NexusModNetwork>(nexusID);
 			}
 	
 			wxString siteURL = infoNode.GetFirstChildElement("Website").GetValue();
@@ -367,12 +367,12 @@ namespace Kortex::PackageProject
 				};
 	
 				wxString siteName;
-				Kortex::ModSourceItem webSite = TryParseWebSite(siteURL, &siteName);
+				ModSourceItem webSite = TryParseWebSite(siteURL, &siteName);
 				if (webSite.IsOK())
 				{
 					// Site for Nexus already retrieved, so add as generic
-					Kortex::IModNetwork* modNetwork = nullptr;
-					if (webSite.TryGetModNetwork(modNetwork) && modNetwork == Kortex::NetworkManager::NexusModNetwork::GetInstance())
+					IModNetwork* modNetwork = nullptr;
+					if (webSite.TryGetModNetwork(modNetwork) && modNetwork == NetworkManager::NexusModNetwork::GetInstance())
 					{
 						AddAsGenericSite(siteName);
 					}
@@ -388,10 +388,10 @@ namespace Kortex::PackageProject
 			}
 	
 			// Load tags
-			Kortex::ModTagStore& tagStore = info.GetTagStore();
+			ModTagStore& tagStore = info.GetTagStore();
 			for (KxXMLNode node = infoNode.GetFirstChildElement("Groups"); node.IsOK(); node = node.GetNextSiblingElement())
 			{
-				tagStore.AddTag(Kortex::ModTagManager::DefaultTag(node.GetValue()));
+				tagStore.AddTag(ModTagManager::DefaultTag(node.GetValue()));
 			}
 		}
 	}
@@ -480,7 +480,7 @@ namespace Kortex::PackageProject
 				if (mainReqsGroup->GetItems().empty())
 				{
 					RequirementItem* entry = mainReqsGroup->GetItems().emplace_back(std::make_unique<RequirementItem>()).get();
-					entry->SetID(Kortex::IGameInstance::GetActive()->GetGameID());
+					entry->SetID(IGameInstance::GetActive()->GetGameID());
 					entry->ConformToType();
 				}
 				requirements.GetDefaultGroup().push_back(mainReqsGroup->GetID());
@@ -717,7 +717,7 @@ namespace Kortex::PackageProject
 	
 		// Tags
 		KxXMLNode tagsNode = infoNode.NewElement("Groups");
-		info.GetTagStore().Visit([&tagsNode](const Kortex::IModTag& tag)
+		info.GetTagStore().Visit([&tagsNode](const IModTag& tag)
 		{
 			tagsNode.NewElement("element").SetValue(tag.GetID());
 			return true;
@@ -1081,9 +1081,7 @@ namespace Kortex::PackageProject
 	
 	void FOModSerializer::InitDataFolderInfo()
 	{
-		using namespace Kortex;
-	
-		const GameID id = Kortex::IGameInstance::GetActive()->GetGameID();
+		const GameID id = IGameInstance::GetActive()->GetGameID();
 	
 		m_IsMorrowind = id == GameIDs::Morrowind;
 		m_HasDataFolderAsRoot =

@@ -140,7 +140,7 @@ namespace Kortex::PackageDesigner
 
 		Reload();
 	}
-	void WorkspaceDocument::CreateProjectFromModEntry(const Kortex::IGameMod& modEntry)
+	void WorkspaceDocument::CreateProjectFromModEntry(const IGameMod& modEntry)
 	{
 		m_ProjectFile.Clear();
 		m_Project = std::make_unique<ModPackageProject>();
@@ -180,7 +180,7 @@ namespace Kortex::PackageDesigner
 	}
 	void WorkspaceDocument::BuildProject(bool buildPreview)
 	{
-		auto thread = new KPackageCreatorBuilderOperation(m_Project.get(), buildPreview);
+		auto thread = new PackageBuilderOperation(*m_Project, buildPreview);
 		thread->SetDialogCaption(KTrf("PackageCreator.Build.Caption", GetProjectName()));
 		thread->Run();
 	}

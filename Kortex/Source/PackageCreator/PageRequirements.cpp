@@ -153,12 +153,12 @@ namespace Kortex::PackageDesigner
 		m_StdReqs_Categories->AddItem(KVarExp("<$T(Generic.All)>"));
 
 		std::unordered_set<wxString> categoriesSet;
-		for (const auto& entry: Kortex::IPackageManager::GetInstance()->GetStdRequirements())
+		for (const auto& item: IPackageManager::GetInstance()->GetStdRequirements())
 		{
-			if (categoriesSet.emplace(entry->GetCategory()).second)
+			if (categoriesSet.emplace(item->GetCategory()).second)
 			{
-				int index = m_StdReqs_Categories->AddItem(entry->GetCategory());
-				m_StdReqs_Categories->SetClientObject(index, new wxStringClientData(entry->GetCategory()));
+				int index = m_StdReqs_Categories->AddItem(item->GetCategory());
+				m_StdReqs_Categories->SetClientObject(index, new wxStringClientData(item->GetCategory()));
 			}
 		}
 		SelectComboBoxItem(m_StdReqs_Categories, 0);
@@ -177,18 +177,18 @@ namespace Kortex::PackageDesigner
 
 			m_StdReqs_List->Clear();
 
-			for (const auto& entry: Kortex::IPackageManager::GetInstance()->GetStdRequirements())
+			for (const auto& item: IPackageManager::GetInstance()->GetStdRequirements())
 			{
-				if (requestedCategory.IsEmpty() || requestedCategory == entry->GetCategory())
+				if (requestedCategory.IsEmpty() || requestedCategory == item->GetCategory())
 				{
-					if (lastCategory != entry->GetCategory() && requestedCategory.IsEmpty())
+					if (lastCategory != item->GetCategory() && requestedCategory.IsEmpty())
 					{
-						m_StdReqs_List->AddItem(wxString::Format("-- %s", entry->GetCategory()));
+						m_StdReqs_List->AddItem(wxString::Format("-- %s", item->GetCategory()));
 					}
-					lastCategory = entry->GetCategory();
+					lastCategory = item->GetCategory();
 
-					int index = m_StdReqs_List->AddItem(wxString::Format("%s - \"%s\"", entry->GetID(), entry->GetName()));
-					m_StdReqs_List->SetClientData(index, entry.get());
+					int index = m_StdReqs_List->AddItem(wxString::Format("%s - \"%s\"", item->GetID(), item->GetName()));
+					m_StdReqs_List->SetClientData(index, item.get());
 				}
 			}
 

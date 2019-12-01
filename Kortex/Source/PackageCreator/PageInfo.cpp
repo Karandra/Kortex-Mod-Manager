@@ -239,8 +239,8 @@ namespace Kortex::PackageDesigner
 
 		m_WebSitesButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event)
 		{
-			Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
-			Kortex::ModSource::StoreDialog dialog(this, store);
+			ModSourceStore& store = GetProjectInfo().GetModSourceStore();
+			ModSource::StoreDialog dialog(this, store);
 			dialog.ShowModal();
 
 			// Update "free" inputs

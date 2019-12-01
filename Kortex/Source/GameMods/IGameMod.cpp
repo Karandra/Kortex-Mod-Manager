@@ -9,7 +9,9 @@ namespace
 {
 	wxString GetRootPath(const wxString& signature)
 	{
-		if (const Kortex::IGameInstance* instance = Kortex::IGameInstance::GetActive())
+		using namespace Kortex;
+
+		if (const IGameInstance* instance = IGameInstance::GetActive())
 		{
 			return instance->GetModsDir() + wxS('\\') + signature;
 		}

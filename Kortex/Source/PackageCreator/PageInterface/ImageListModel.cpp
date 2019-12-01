@@ -226,7 +226,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 					{
 						KxFileBrowseDialog dialog(GetView(), KxID_NONE, KxFBD_OPEN);
 						dialog.SetFolder(entry->GetPath().BeforeLast('\\'));
-						dialog.AddFilter(KxString::Join(Kortex::IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+						dialog.AddFilter(KxString::Join(IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
 						dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 						if (dialog.ShowModal() == KxID_OK)
 						{
@@ -359,7 +359,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 			{
 				KxEvtFile source(source);
 				self->LinkHandler(&source, KxEVT_FILEOP_SEARCH);
-				KxStringVector files = source.Find(Kortex::IScreenshotsGallery::GetSupportedExtensions(), KxFS_FILE, true);
+				KxStringVector files = source.Find(IScreenshotsGallery::GetSupportedExtensions(), KxFS_FILE, true);
 	
 				size_t count = files.size();
 				size_t processed = 0;
@@ -388,7 +388,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 	{
 		KxFileBrowseDialog dialog(GetView(), KxID_NONE, KxFBD_OPEN);
 		dialog.SetOptionEnabled(KxFBD_ALLOW_MULTISELECT);
-		dialog.AddFilter(KxString::Join(Kortex::IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+		dialog.AddFilter(KxString::Join(IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
 		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 		if (dialog.ShowModal() == KxID_OK)
 		{

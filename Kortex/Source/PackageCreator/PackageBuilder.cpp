@@ -12,7 +12,7 @@
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxTaskDialog.h>
 
-#define TestContinue()		if (!m_Thread->CanContinue()) { return; }
+#define TestContinue()		if (!m_Thread.CanContinue()) { return; }
 
 namespace Kortex::PackageDesigner
 {
@@ -39,16 +39,16 @@ namespace Kortex::PackageDesigner
 
 	void PackageBuilder::CheckProject()
 	{
-		const PackageProject::InfoSection& info = m_Project->GetInfo();
-		const PackageProject::InterfaceSection& interfaceConfig = m_Project->GetInterface();
-		const PackageProject::FileDataSection& fileData = m_Project->GetFileData();
+		const PackageProject::InfoSection& info = m_Project.GetInfo();
+		const PackageProject::InterfaceSection& interfaceConfig = m_Project.GetInterface();
+		const PackageProject::FileDataSection& fileData = m_Project.GetFileData();
 
-		m_Status = KPCB_STATUS_OK;
+		m_Status = BuildError::Success;
 		auto CheckAndAddMissingFile = [this](const wxString& path)
 		{
 			if (!KxFile(path).IsFileExist())
 			{
-				m_Status = KPCB_STATUS_ERROR_GENERIC;
+				m_Status = BuildError::Generic;
 				m_MissingFiles.push_back(path);
 			}
 		};
@@ -56,7 +56,7 @@ namespace Kortex::PackageDesigner
 		{
 			if (!KxFile(path).IsFolderExist())
 			{
-				m_Status = KPCB_STATUS_ERROR_GENERIC;
+				m_Status = BuildError::Generic;
 				m_MissingFiles.push_back(path);
 			}
 		};
@@ -64,7 +64,7 @@ namespace Kortex::PackageDesigner
 		// Check temporary and real package paths
 		if (!wxFileName(GetTempPackagePath()).IsOk() || !wxFileName(GetPackagePath()).IsOk())
 		{
-			m_Status = KPCB_STATUS_ERROR_PACKAGE_PATH;
+			m_Status = BuildError::PackagePath;
 			return;
 		}
 
@@ -124,7 +124,7 @@ namespace Kortex::PackageDesigner
 			return KArchiveNS::Method::LZMA;
 		};
 
-		const PackageProject::ConfigSection& config = m_Project->GetConfig();
+		const PackageProject::ConfigSection& config = m_Project.GetConfig();
 
 		m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsSolidArchive());
 		m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsMultithreadingUsed());
@@ -139,7 +139,7 @@ namespace Kortex::PackageDesigner
 			wxString packageConfigFile = CreateTempFile();
 			PackageProject::NativeSerializer serializer(false);
 			serializer.SetPackageDataRoot(PackageProject::Serializer::GetDefaultFOModRoot());
-			serializer.Serialize(*m_Project);
+			serializer.Serialize(m_Project);
 			KxTextFile::WriteToFile(packageConfigFile, serializer.GetData());
 
 			m_SourceFiles.push_back(packageConfigFile);
@@ -149,25 +149,25 @@ namespace Kortex::PackageDesigner
 		// Create FOMod config
 		{
 			wxString infoFile = CreateTempFile();
-			wxString sModuleConfigFile = CreateTempFile();
+			wxString moduleConfigFile = CreateTempFile();
 
 			PackageProject::FOModSerializer serializer;
 			serializer.ExportToNativeFormat(true);
 			serializer.SetPackageDataRoot(PackageProject::Serializer::GetDefaultFOModRoot());
-			serializer.Serialize(*m_Project);
+			serializer.Serialize(m_Project);
 			KxTextFile::WriteToFile(infoFile, serializer.GetInfoXML());
-			KxTextFile::WriteToFile(sModuleConfigFile, serializer.GetModuleConfigXML());
+			KxTextFile::WriteToFile(moduleConfigFile, serializer.GetModuleConfigXML());
 
 			m_SourceFiles.push_back(infoFile);
 			m_ArchivePaths.emplace_back("FOMod\\Info.xml");
 
-			m_SourceFiles.push_back(sModuleConfigFile);
+			m_SourceFiles.push_back(moduleConfigFile);
 			m_ArchivePaths.emplace_back("FOMod\\ModuleConfig.xml");
 		}
 	}
 	void PackageBuilder::ProcessInfo()
 	{
-		const PackageProject::InfoSection& info = m_Project->GetInfo();
+		const PackageProject::InfoSection& info = m_Project.GetInfo();
 		for (const KLabeledValue& entry: info.GetDocuments())
 		{
 			TestContinue();
@@ -178,7 +178,7 @@ namespace Kortex::PackageDesigner
 	}
 	void PackageBuilder::ProcessInterface()
 	{
-		const PackageProject::InterfaceSection& interfaceConfig = m_Project->GetInterface();
+		const PackageProject::InterfaceSection& interfaceConfig = m_Project.GetInterface();
 		for (const PackageProject::ImageItem& entry: interfaceConfig.GetImages())
 		{
 			TestContinue();
@@ -194,7 +194,7 @@ namespace Kortex::PackageDesigner
 			return;
 		}
 
-		const PackageProject::FileDataSection& fileData = m_Project->GetFileData();
+		const PackageProject::FileDataSection& fileData = m_Project.GetFileData();
 		for (const auto& fileEntry: fileData.GetItems())
 		{
 			TestContinue();
@@ -217,10 +217,10 @@ namespace Kortex::PackageDesigner
 		}
 	}
 
-	PackageBuilder::PackageBuilder(const ModPackageProject* project, KOperationWithProgressBase* thread, bool previewBuild)
+	PackageBuilder::PackageBuilder(const ModPackageProject& project, KOperationWithProgressBase& thread, bool previewBuild)
 		:m_Project(project), m_Thread(thread), m_BuildPreview(previewBuild)
 	{
-		m_Thread->LinkHandler(&m_Archive, KxEVT_ARCHIVE);
+		m_Thread.LinkHandler(&m_Archive, KxEVT_ARCHIVE);
 	}
 	PackageBuilder::~PackageBuilder()
 	{
@@ -264,15 +264,15 @@ namespace Kortex::PackageDesigner
 
 	const wxString& PackageBuilder::GetPackagePath() const
 	{
-		return m_PackagePath.IsEmpty() ? m_Project->GetConfig().GetInstallPackageFile() : m_PackagePath;
+		return m_PackagePath.IsEmpty() ? m_Project.GetConfig().GetInstallPackageFile() : m_PackagePath;
 	}
 }
 
 namespace Kortex::PackageDesigner
 {
-	void KPackageCreatorBuilderOperation::EntryHandler()
+	void PackageBuilderOperation::EntryHandler()
 	{
-		PackageBuilder builder(m_Project, this, m_BuildPreview);
+		PackageBuilder builder(m_Project, *this, m_BuildPreview);
 		if (m_BuildPreview)
 		{
 			builder.SetPackagePath(m_PackagePath);
@@ -280,19 +280,19 @@ namespace Kortex::PackageDesigner
 
 		m_BuildOK = builder.Run();
 		m_CheckStatus = builder.GetStatus();
-		if (m_CheckStatus != KPCB_STATUS_OK)
+		if (m_CheckStatus != BuildError::Success)
 		{
 			m_MissingFiles = builder.GetMissingFiles();
 		}
 	}
-	void KPackageCreatorBuilderOperation::OnEndHandler()
+	void PackageBuilderOperation::OnEndHandler()
 	{
-		if (m_CheckStatus != KPCB_STATUS_OK)
+		if (m_CheckStatus != BuildError::Success)
 		{
 			wxString message;
 			switch (m_CheckStatus)
 			{
-				case KPCB_STATUS_ERROR_PACKAGE_PATH:
+				case BuildError::PackagePath:
 				{
 					message = KTr("PackageCreator.Build.CheckError.PackagePath");
 					break;
@@ -304,7 +304,7 @@ namespace Kortex::PackageDesigner
 				}
 			};
 
-			KxTaskDialog dialog(Kortex::IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.CheckError"), message, KxBTN_OK, KxICON_WARNING);
+			KxTaskDialog dialog(IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.CheckError"), message, KxBTN_OK, KxICON_WARNING);
 			dialog.SetExMessage(KxString::Join(m_MissingFiles, "\r\n"));
 			dialog.ShowModal();
 		}
@@ -323,7 +323,7 @@ namespace Kortex::PackageDesigner
 				}
 				else
 				{
-					wxString path = m_Project->GetConfig().GetInstallPackageFile();
+					wxString path = m_Project.GetConfig().GetInstallPackageFile();
 					wxString size = KxFile(path).GetFormattedFileSize(2);
 					wxString info = wxString::Format("%s: \"%s\"\r\n%s: %s", KTr(KxID_FILE), path, KTr("Generic.Size"), size);
 					KxTaskDialog(IApplication::GetInstance()->GetTopWindow(), KxID_NONE, KTr("PackageCreator.Build.Complete"), info, KxBTN_OK, KxICON_INFORMATION).ShowModal();
@@ -336,12 +336,12 @@ namespace Kortex::PackageDesigner
 		}
 	}
 
-	KPackageCreatorBuilderOperation::KPackageCreatorBuilderOperation(const ModPackageProject* project, bool previewBuild)
+	PackageBuilderOperation::PackageBuilderOperation(const ModPackageProject& project, bool previewBuild)
 		:KOperationWithProgressDialog(true, nullptr), m_Project(project), m_BuildPreview(previewBuild)
 	{
 		if (previewBuild)
 		{
-			m_PackagePath = KTempFolderKeeper::CreateGlobalTempFile(".kmp");
+			m_PackagePath = Utility::TempFolderKeeper::CreateGlobalTempFile(".kmp");
 		}
 
 		OnRun([this](KOperationWithProgressBase* self)

@@ -16,7 +16,9 @@ namespace
 
 	wxString GetFSControllerPath()
 	{
-		const auto app = Kortex::IApplication::GetInstance();
+		using namespace Kortex;
+
+		const IApplication* app = IApplication::GetInstance();
 		if (app->IsSystem64Bit())
 		{
 			return app->GetRootFolder() + wxS("\\FileSystemController x64.exe");

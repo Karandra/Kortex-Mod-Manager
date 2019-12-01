@@ -38,8 +38,8 @@ namespace Kortex::GameInstance
 		});
 
 		// Load instance modules
-		m_GameDataModule = InitModule<Kortex::GameDataModule>(instanceConfig);
-		m_GameConfigModule = InitModule<Kortex::GameConfigModule>(instanceConfig);
+		m_GameDataModule = InitModule<GameDataModule>(instanceConfig);
+		m_GameConfigModule = InitModule<GameConfigModule>(instanceConfig);
 	}
 	void ActiveGameInstance::InitVariables(const IGameProfile& profile)
 	{

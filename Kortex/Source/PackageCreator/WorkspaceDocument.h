@@ -70,7 +70,7 @@ namespace Kortex::PackageDesigner
 			void SaveProject();
 			void SaveProject(const wxString& filePath);
 			void ImportProjectFromPackage(const wxString& packagePath);
-			void CreateProjectFromModEntry(const Kortex::IGameMod& modEntry);
+			void CreateProjectFromModEntry(const IGameMod& modEntry);
 			void ImportProject(PackageProject::Serializer& serializer);
 			void ExportProject(PackageProject::Serializer& serializer);
 			void BuildProject(bool buildPreview = false);

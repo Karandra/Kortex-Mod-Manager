@@ -6,7 +6,7 @@ namespace Kortex::Utility::UI
 {
 	KxAuiToolBarItem* CreateToolBarButton(KxAuiToolBar* toolBar,
 										  const wxString& label,
-										  const Kortex::ResourceID& imageID,
+										  const ResourceID& imageID,
 										  wxItemKind kind,
 										  int index
 	)

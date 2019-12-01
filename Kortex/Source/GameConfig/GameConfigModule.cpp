@@ -20,7 +20,7 @@ namespace Kortex
 		m_GameConfigManager = CreateGameConfigManager(GetManagerNode<IGameConfigManager>(node));
 	}
 
-	std::unique_ptr<Kortex::IGameConfigManager> GameConfigModule::CreateGameConfigManager(const KxXMLNode& node) const
+	std::unique_ptr<IGameConfigManager> GameConfigModule::CreateGameConfigManager(const KxXMLNode& node) const
 	{
 		if (IsEnabledInTemplate(node))
 		{

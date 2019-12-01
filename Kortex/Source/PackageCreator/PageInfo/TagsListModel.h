@@ -15,7 +15,7 @@ namespace Kortex::PackageDesigner
 
 namespace Kortex::PackageDesigner::PageInfoNS
 {
-	class TagsListModel: public Kortex::ModTagManager::SelectorDisplayModelCB
+	class TagsListModel: public ModTagManager::SelectorDisplayModelCB
 	{
 		private:
 			WorkspaceDocument* m_Controller = nullptr;

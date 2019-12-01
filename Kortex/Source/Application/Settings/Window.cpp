@@ -20,7 +20,7 @@ namespace Kortex::Application::Settings
 	}
 	void Window::OnPrepareUninstall(wxCommandEvent& event)
 	{
-		KxTaskDialog askDialog(this, KxID_NONE, KTrf("Settings.PrepareUninstall.Caption", Kortex::IApplication::GetInstance()->GetName()), KTr("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
+		KxTaskDialog askDialog(this, KxID_NONE, KTrf("Settings.PrepareUninstall.Caption", IApplication::GetInstance()->GetName()), KTr("Settings.PrepareUninstall.Message"), KxBTN_YES|KxBTN_NO, KxICON_WARNING);
 		if (askDialog.ShowModal() == KxID_YES)
 		{
 			if (IApplication::GetInstance()->Uninstall())

@@ -123,10 +123,10 @@ namespace Kortex::PackageProject
 	}
 	void LegacySerializer::AddSite(const wxString& url)
 	{
-		Kortex::ModSourceStore& store = m_Project->GetInfo().GetModSourceStore();
+		ModSourceStore& store = m_Project->GetInfo().GetModSourceStore();
 	
 		wxString siteName;
-		Kortex::ModSourceItem item = TryParseWebSite(url, &siteName);
+		ModSourceItem item = TryParseWebSite(url, &siteName);
 		if (item.IsOK())
 		{
 			store.TryAddItem(std::move(item));
@@ -502,7 +502,7 @@ namespace Kortex::PackageProject
 			wxString category = basicInfoNode.GetFirstChildElement("Category").GetValue();
 			if (!category.IsEmpty() && category != "---" && CheckTag(category))
 			{
-				info.GetTagStore().AddTag(Kortex::ModTagManager::DefaultTag(category));
+				info.GetTagStore().AddTag(ModTagManager::DefaultTag(category));
 			}
 		}
 	
@@ -701,7 +701,7 @@ namespace Kortex::PackageProject
 			wxString category = basicInfoNode.GetFirstChildElement("Category").GetValue();
 			if (!category.IsEmpty() && category != "---" && CheckTag(category))
 			{
-				info.GetTagStore().AddTag(Kortex::ModTagManager::DefaultTag(category));
+				info.GetTagStore().AddTag(ModTagManager::DefaultTag(category));
 			}
 		}
 	

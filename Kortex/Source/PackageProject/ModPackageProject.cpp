@@ -247,7 +247,7 @@ namespace Kortex
 	}
 	wxString ModPackageProject::GetSignature() const
 	{
-		return Kortex::ModManager::BasicGameMod::GetSignatureFromID(GetModID());
+		return ModManager::BasicGameMod::GetSignatureFromID(GetModID());
 	}
 }
 

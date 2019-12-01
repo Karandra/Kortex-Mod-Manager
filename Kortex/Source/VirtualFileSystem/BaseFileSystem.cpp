@@ -2,7 +2,10 @@
 #include "BaseFileSystem.h"
 #include "IPC/Common.h"
 
-using Kortex::IPC::RequestID;
+namespace
+{
+	using Kortex::IPC::RequestID;
+}
 
 namespace Kortex::VirtualFileSystem
 {

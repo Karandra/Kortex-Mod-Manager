@@ -15,7 +15,7 @@ namespace Kortex::PackageProject
 		using namespace NetworkManager;
 	
 		long long id = -1;
-		Kortex::IModNetwork* modNetwork = nullptr;
+		IModNetwork* modNetwork = nullptr;
 	
 		// https://regex101.com
 		wxString regEx = wxString::FromUTF8Unchecked(u8R"((?:http:\/\/)?(?:https:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)(?:.*\/)(?:[^\d]+)(\d+))");
@@ -45,7 +45,7 @@ namespace Kortex::PackageProject
 	
 		if (modNetwork)
 		{
-			return ModSourceItem(modNetwork->GetName(), Kortex::ModID(id));
+			return ModSourceItem(modNetwork->GetName(), ModID(id));
 		}
 		return {};
 	}

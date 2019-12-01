@@ -70,7 +70,7 @@ namespace Kortex::PackageDesigner
 			void CalculateMemoryRequiredForCompression(int nPower);
 			template<class T> void OnOpenSite(wxTextUrlEvent& event)
 			{
-				Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
+				ModSourceStore& store = GetProjectInfo().GetModSourceStore();
 
 				KxURI uri = store.GetModPageURI(T::GetInstance()->GetName());
 				if (uri.IsOk())
@@ -82,7 +82,7 @@ namespace Kortex::PackageDesigner
 			template<class T> void OnEditSite(wxCommandEvent& event)
 			{
 				KxTextBox* textBox = static_cast<KxTextBox*>(event.GetEventObject());
-				Kortex::ModSourceStore& store = GetProjectInfo().GetModSourceStore();
+				ModSourceStore& store = GetProjectInfo().GetModSourceStore();
 
 				NetworkModInfo modInfo;
 				modInfo.FromString(textBox->GetValue());
@@ -92,10 +92,9 @@ namespace Kortex::PackageDesigner
 			}
 			template<class T> KxTextBox* AddModSourceControl(wxSizer* sizer)
 			{
-				Kortex::IModNetwork* modNetwork = T::GetInstance();
+				IModNetwork* modNetwork = T::GetInstance();
 				if (modNetwork)
 				{
-				
 					wxString name = modNetwork->GetName().BeforeLast('.');
 					if (name.IsEmpty())
 					{

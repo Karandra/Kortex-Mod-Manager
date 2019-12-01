@@ -457,7 +457,7 @@ namespace Kortex::ProgramManager
 	{
 		KxFileBrowseDialog dialog(GetViewTLW(), KxID_NONE, KxFBD_OPEN);
 		dialog.SetFolder(entry.GetIconPath());
-		dialog.AddFilter(KxString::Join(Kortex::IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
+		dialog.AddFilter(KxString::Join(IScreenshotsGallery::GetSupportedExtensions(), ";"), KTr("FileFilter.Images"));
 		dialog.AddFilter("*", KTr("FileFilter.AllFiles"));
 
 		if (dialog.ShowModal())

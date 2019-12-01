@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Archive/KArchive.h"
 #include "Utility/KOperationWithProgress.h"
-#include "Utility/KTempFolderKeeper.h"
+#include "Utility/TempFolderKeeper.h"
 
 namespace Kortex
 {
@@ -15,20 +15,20 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageDesigner
 {
-	enum KPCBStatus
+	enum class BuildError
 	{
-		KPCB_STATUS_OK = 0,
-		KPCB_STATUS_ERROR_GENERIC,
-		KPCB_STATUS_ERROR_PACKAGE_PATH,
+		Success = 0,
+		Generic,
+		PackagePath,
 	};
-	
-	class PackageBuilder: public KTempFolderKeeper
+
+	class PackageBuilder: public Utility::TempFolderKeeper
 	{
-		friend class KPackageCreatorBuilderOperation;
+		friend class PackageBuilderOperation;
 
 		private:
-			const ModPackageProject* m_Project = nullptr;
-			KOperationWithProgressBase* m_Thread = nullptr;	
+			const ModPackageProject& m_Project;
+			KOperationWithProgressBase& m_Thread;	
 			wxString m_PackagePath;
 			const bool m_BuildPreview = false;
 
@@ -36,7 +36,7 @@ namespace Kortex::PackageDesigner
 			KxStringVector m_SourceFiles;
 			KxStringVector m_ArchivePaths;
 			KxStringVector m_MissingFiles;
-			KPCBStatus m_Status = KPCB_STATUS_ERROR_GENERIC;
+			BuildError m_Status = BuildError::Generic;
 
 		private:
 			wxString GetTempFolder() const;
@@ -59,17 +59,17 @@ namespace Kortex::PackageDesigner
 			virtual void ProcessFileData();
 
 		public:
-			PackageBuilder(const ModPackageProject* project, KOperationWithProgressBase* thread, bool previewBuild = false);
+			PackageBuilder(const ModPackageProject& project, KOperationWithProgressBase& thread, bool previewBuild = false);
 			~PackageBuilder();
 
 		public:
-			KPCBStatus GetStatus() const
+			BuildError GetStatus() const
 			{
 				return m_Status;
 			}
 			bool IsOK() const
 			{
-				return m_Status == KPCB_STATUS_OK;
+				return m_Status == BuildError::Success;
 			}	
 			KxStringVector GetMissingFiles() const
 			{
@@ -88,15 +88,15 @@ namespace Kortex::PackageDesigner
 
 namespace Kortex::PackageDesigner
 {
-	class KPackageCreatorBuilderOperation: public KOperationWithProgressDialog<KxArchiveEvent>
+	class PackageBuilderOperation: public KOperationWithProgressDialog<KxArchiveEvent>
 	{
 		private:
-			const ModPackageProject* m_Project = nullptr;
-			bool m_BuildPreview = false;
+			const ModPackageProject& m_Project;
 			wxString m_PackagePath;
+			bool m_BuildPreview = false;
 
 			KxStringVector m_MissingFiles;
-			KPCBStatus m_CheckStatus = KPCB_STATUS_ERROR_GENERIC;
+			BuildError m_CheckStatus = BuildError::Generic;
 			bool m_BuildOK = false;
 			bool m_Cancelled = false;
 
@@ -105,7 +105,7 @@ namespace Kortex::PackageDesigner
 			void OnEndHandler();
 
 		public:
-			KPackageCreatorBuilderOperation(const ModPackageProject* project, bool previewBuild = false);
+			PackageBuilderOperation(const ModPackageProject& project, bool previewBuild = false);
 
 		public:
 			void SetPrevievBuild(bool value)

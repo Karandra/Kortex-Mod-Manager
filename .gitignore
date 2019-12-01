@@ -3,6 +3,7 @@
 *.vcxproj.user
 *.DotSettings
 *.DotSettings.user
+*.aps
 
 # Output binaries
 Junk/*

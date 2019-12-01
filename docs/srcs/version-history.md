@@ -6,6 +6,26 @@
 
 More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/commits/master).
 
+### Version 2.0a8 - 02.12.2019
+- [General] UI component to run programs and VFS added to the main window.
+- [General] Currently active workspace (tab or window) is now remembered.
+- [General] Fixed UI on HiDPI displays.
+- [General] Removed VFS drivers from the main package.
+- [General] KxVirtualFileSystem updated to v2.1.1.
+- [General] Various small fixes and refactoring.
+- [Mod Manager] Added automatic creation of "ModFiles" folder when empty mod folder is created.
+- [Mod Manager] Added handling of VFS mount process failure.
+- [Mod Manager] Added check for programs started from the VFS on file system termination request.
+- [Mod Manager] Added progress indicator for list refresh action.
+- [Plugin Manager] LibLoot updated to v15.0.
+- [Plugin Manager] Integrated LibLoot now supports Morrowind.
+- [Network Manager] Fixed primary NXM handler registering when there is no handler registered yet in the system.
+- [Network Manager] Fixed registration of the NXM handler as URL protocol.
+- [Network Manager] Disabled annoying mods automatic update check notifications.
+- [Package Manager] Fixed wrong required version operator attribute name in package XML file.
+- [Package Manager] Fixed some crashes in Package Designer UI.
+- [Package Manager] Version 1.3.1.
+
 ### Version 2.0a7 - 25.08.2019
 - [General] Added network functionality, sign-in, updates, download system for NexusMods.
 - [General] Removed refresh button from toolbar.
@@ -99,8 +119,8 @@ More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/c
 - [Plugin Manager] Version 1.2
 - [Save Manager] The workspace is moved to the "Mod manager" window.
 - [Save Manager] Version 1.0.1
-- [Run Manager] The ability to specify the working folder of the program is added.
-- [Run Manager] Version 1.0.1.
+- [Program Manager] The ability to specify the working folder of the program is added.
+- [Program Manager] Version 1.0.1.
 
 ### Version 1.2 - 02.05.2018
 - [Package Manager] Fixed bug due to which conditions for the installation step were not saved.

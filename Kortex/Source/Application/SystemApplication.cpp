@@ -79,11 +79,12 @@ namespace Kortex
 		const constexpr wxChar ID[] = wxS("KortexModManager");
 		const constexpr wxChar Name[] = wxS("Kortex Mod Manager");
 		const constexpr wxChar ShortName[] = wxS("Kortex");
-		const constexpr wxChar Version[] = wxS("2.0");
+		const constexpr wxChar Version[] = wxS("2.0a8");
 		const constexpr wxChar Developer[] = wxS("Kerber");
 		const constexpr wxChar GUID[] = wxS("B5E8047C-9239-45C4-86F6-6C83A842063E");
 
-		template<class T> wxString RemoveWhitespace(T&& value)
+		template<class T>
+		wxString RemoveWhitespace(T&& value)
 		{
 			wxString data(value, std::size(value) - 1);
 			return KxString::Trim(data, true, true);

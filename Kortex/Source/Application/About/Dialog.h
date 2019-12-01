@@ -51,13 +51,13 @@ namespace Kortex::Application
 
 		private:
 			wxSize GetLogoSize() const;
-			wxString GetCaption() const;
+			wxString GetCaption() const override;
 
 			wxWindow* CreateTab_Info();
 			wxWindow* CreateTab_Components();
 			wxWindow* CreateTab_License();
 
-			KxHTMLWindow* CreateHTMLWindow();
+			KxHTMLWindow* CreateHTMLWindow(wxWindow* parent = nullptr);
 			void CreateTemporaryTab(wxWindow* window, const wxString& label, const wxBitmap& bitmap = wxNullBitmap);
 			void OnTabChanged(wxAuiNotebookEvent& event);
 			void OnLinkClicked(wxHtmlLinkEvent& event);

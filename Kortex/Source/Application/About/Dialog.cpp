@@ -12,28 +12,43 @@ namespace
 	using namespace Kortex;
 	using namespace Kortex::Application;
 
-	enum TabID
+	enum class TabID
 	{
 		Info,
 		Components,
 		License
 	};
-
-	wxString CreateInfoText(int yearBegin, int yearEnd, const About::INode& info)
+	enum class InfoText
 	{
-		const wxChar* formatString = wxS("$T(Generic.Version): $(AppVersion)\n"
-										 "$T(Generic.Revision): $(AppRevision)\n"
-										 "\n\n\n\n\n\n\n\n\n\n\n\n"
+		Version,
+		LicenseNotice
+	};
 
-										 "This program is distributed in the hope that it will be useful, "
-										 "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-										 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
-										 "GNU General Public License for more details.\n\n"
+	wxString CreateInfoText(const About::INode& info, InfoText infoVariant, int yearBegin = -1, int yearEnd = -1)
+	{
+		switch (infoVariant)
+		{
+			case InfoText::Version:
+			{
+				return ITranslator::ExpandVariables(wxS("$T(Generic.Version): $(AppVersion)\n$T(Generic.Revision): $(AppRevision)\n"));
+			}
+			case InfoText::LicenseNotice:
+			{
+				const wxChar* formatString = wxS("This program is distributed in the hope that it will be useful, "
+												 "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+												 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
+												 "GNU General Public License for more details.\n\n"
 
-										 "Copyright %1-%2 $(AppDeveloper).\n\n"
-										 "$T(About.SourceCodeLocation) <a href=\"%3\">GitHub</a>."
-		);
-		return KxString::Format(KVarExp(formatString), yearBegin, yearEnd, info.GetURI().BuildUnescapedURI());
+												 "<div align='right'>"
+												 "Copyright %1-%2 $(AppDeveloper)\n"
+												 "</div>"
+
+												 "$T(About.SourceCodeLocation) <a href=\"%3\">GitHub</a>"
+				);
+				return KxString::Format(KVarExp(formatString), yearBegin, yearEnd, info.GetURI().BuildUnescapedURI());
+			}
+		};
+		return {};
 	}
 }
 
@@ -50,9 +65,19 @@ namespace Kortex::Application
 
 	wxWindow* AboutDialog::CreateTab_Info()
 	{
-		KxHTMLWindow* info = CreateHTMLWindow();
-		info->SetValue(CreateInfoText(2018, 2019, *m_AppInfo));
-		return info;
+		KxPanel* panel = new KxPanel(m_TabView, KxID_NONE);
+		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+		panel->SetSizer(sizer);
+
+		KxHTMLWindow* info = CreateHTMLWindow(panel);
+		info->SetValue(CreateInfoText(*m_AppInfo, InfoText::Version));
+		sizer->Add(info, 3, wxEXPAND);
+
+		KxHTMLWindow* licenseNotice = CreateHTMLWindow(panel);
+		licenseNotice->SetValue(CreateInfoText(*m_AppInfo, InfoText::LicenseNotice, 2018, 2019));
+		sizer->Add(licenseNotice, 2, wxEXPAND);
+
+		return panel;
 	}
 	wxWindow* AboutDialog::CreateTab_Components()
 	{
@@ -64,21 +89,21 @@ namespace Kortex::Application
 	}
 	wxWindow* AboutDialog::CreateTab_License()
 	{
-		KxHTMLWindow* info = CreateHTMLWindow();
+		KxHTMLWindow* info = CreateHTMLWindow(m_TabView);
 		info->SetValue(m_AppInfo->GetLicense());
 
 		return info;
 	}
 
-	KxHTMLWindow* AboutDialog::CreateHTMLWindow()
+	KxHTMLWindow* AboutDialog::CreateHTMLWindow(wxWindow* parent)
 	{
-		KxHTMLWindow* window = new KxHTMLWindow(m_TabView, KxID_NONE, wxEmptyString, wxBORDER_NONE);
+		KxHTMLWindow* window = new KxHTMLWindow(parent ? parent : m_TabView, KxID_NONE, wxEmptyString, wxBORDER_NONE);
 		window->Bind(wxEVT_HTML_LINK_CLICKED, &AboutDialog::OnLinkClicked, this);
 		return window;
 	}
 	void AboutDialog::CreateTemporaryTab(wxWindow* window, const wxString& label, const wxBitmap& bitmap)
 	{
-		m_TabView->InsertPage(TabID::License, window, label, true, bitmap);
+		m_TabView->InsertPage((int)TabID::License, window, label, true, bitmap);
 		m_TemporaryTab = window;
 	}
 	void AboutDialog::OnTabChanged(wxAuiNotebookEvent& event)
@@ -116,9 +141,9 @@ namespace Kortex::Application
 			m_TabView = new KxAuiNotebook(m_ContentPanel, KxID_NONE);
 			m_TabView->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &AboutDialog::OnTabChanged, this);
 
-			m_TabView->InsertPage(TabID::Info, CreateTab_Info(), KTr("Generic.Info"), true);
-			m_TabView->InsertPage(TabID::Components, CreateTab_Components(), KTr("About.Components"));
-			m_TabView->InsertPage(TabID::License, CreateTab_License(), KTr("Generic.License"));
+			m_TabView->InsertPage((int)TabID::Info, CreateTab_Info(), KTr("Generic.Info"), true);
+			m_TabView->InsertPage((int)TabID::Components, CreateTab_Components(), KTr("About.Components"));
+			m_TabView->InsertPage((int)TabID::License, CreateTab_License(), KTr("Generic.License"));
 
 			PostCreate(wxDefaultPosition);
 			GetContentWindowSizer()->Prepend(m_Logo, 0, wxEXPAND)->SetMinSize(GetLogoSize());

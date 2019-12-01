@@ -7,7 +7,7 @@ namespace Kortex
 {
 	namespace Internal
 	{
-		const SimpleModuleInfo ModPackagesModuleTypeInfo("Packages", "PackagesModule.Name", "1.4", ImageResourceID::Box);
+		const SimpleModuleInfo ModPackagesModuleTypeInfo("Packages", "PackagesModule.Name", "1.3.1", ImageResourceID::Box);
 	}
 
 	void ModPackagesModule::OnLoadInstance(IGameInstance& instance, const KxXMLNode& node)

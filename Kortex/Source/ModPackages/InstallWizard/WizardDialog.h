@@ -8,7 +8,7 @@
 #include "Completed/CompletedPage.h"
 #include "ModPackages/ModPackage.h"
 #include "GameMods/ModManager/BasicGameMod.h"
-#include "Utility/KTempFolderKeeper.h"
+#include "Utility/TempFolderKeeper.h"
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxStdDialog.h>
 #include <KxFramework/KxNotebook.h>
@@ -31,7 +31,7 @@ namespace Kortex::InstallWizard
 {
 	class WizardDialog:
 		public KxStdDialog,
-		public KTempFolderKeeper,
+		public Utility::TempFolderKeeper,
 		public KxWithOptions<DialogOptions, DialogOptions::None>
 	{
 		friend class WizardPage;
@@ -102,7 +102,7 @@ namespace Kortex::InstallWizard
 			bool LoadPackage();
 			bool ProcessLoadPackage();
 			void FindExistingMod();
-			void AcceptExistingMod(const Kortex::IGameMod& mod);
+			void AcceptExistingMod(const IGameMod& mod);
 			void LoadHeaderImage();
 
 			bool AskCancel(bool canCancel);

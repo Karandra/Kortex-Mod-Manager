@@ -438,9 +438,6 @@
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utility\KTempFolderKeeper.cpp">
-      <Filter>Code\Source\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Archive\KArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
     </ClCompile>
@@ -1290,6 +1287,9 @@
     <ClCompile Include="Source\PackageProject\Serializer\FOModSerializer.cpp">
       <Filter>Code\Source\PackageProject\Serializer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utility\TempFolderKeeper.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -1320,9 +1320,6 @@
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KOperationWithProgress.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KTempFolderKeeper.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\KDataViewTreeModel.h">
@@ -2434,6 +2431,9 @@
     </ClInclude>
     <ClInclude Include="Source\PackageProject\Serializer\NativeSerializer.h">
       <Filter>Code\Headers\PackageProject\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\TempFolderKeeper.h">
+      <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

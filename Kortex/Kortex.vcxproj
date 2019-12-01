@@ -293,7 +293,7 @@
     <ClCompile Include="Source\Utility\DateTime.cpp" />
     <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
     <ClCompile Include="Source\Utility\KOperationWithProgress.cpp" />
-    <ClCompile Include="Source\Utility\KTempFolderKeeper.cpp" />
+    <ClCompile Include="Source\Utility\TempFolderKeeper.cpp" />
     <ClCompile Include="Source\PackageCreator\FOModImportExportDialog.cpp" />
     <ClCompile Include="Source\PackageCreator\ListModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageBase.cpp" />
@@ -671,7 +671,7 @@
     <ClInclude Include="Source\Utility\KDataViewModelBase.h" />
     <ClInclude Include="Source\Utility\KDataViewTreeModel.h" />
     <ClInclude Include="Source\Utility\KOperationWithProgress.h" />
-    <ClInclude Include="Source\Utility\KTempFolderKeeper.h" />
+    <ClInclude Include="Source\Utility\TempFolderKeeper.h" />
     <ClInclude Include="Source\Utility\KDataViewListModel.h" />
     <ClInclude Include="Source\PackageCreator\FOModImportExportDialog.h" />
     <ClInclude Include="Source\PackageCreator\ListModel.h" />

@@ -86,6 +86,7 @@ namespace Kortex::Application
 
 		LoadItem(ImageResourceID::LOOT, wxS("LOOT"));
 		LoadItem(ImageResourceID::JSON, wxS("JSON"));
+		LoadItem(ImageResourceID::Dokany, wxS("Dokany"));
 		LoadItem(ImageResourceID::LibCURL, wxS("curl"));
 		LoadItem(ImageResourceID::WebSocket, wxS("websocket"));
 

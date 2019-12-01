@@ -145,10 +145,10 @@ namespace Kortex::Application::About
 		IVFSService* vfsService = IVFSService::GetInstance();
 		if (vfsService)
 		{
-			AddSoftwareNode(vfsService->GetLibraryName(), vfsService->GetLibraryVersion(), vfsService->GetLibraryURL(), ImageResourceID::JarEmpty);
+			AddSoftwareNode(vfsService->GetLibraryName(), vfsService->GetLibraryVersion(), vfsService->GetLibraryURL(), ImageResourceID::Jar);
 			if (vfsService->HasNativeLibrary())
 			{
-				AddSoftwareNode(vfsService->GetNativeLibraryName(), vfsService->GetNativeLibraryVersion(), vfsService->GetNativeLibraryURL(), ImageResourceID::Jar);
+				AddSoftwareNode(vfsService->GetNativeLibraryName(), vfsService->GetNativeLibraryVersion(), vfsService->GetNativeLibraryURL(), ImageResourceID::Dokany);
 			}
 		}
 

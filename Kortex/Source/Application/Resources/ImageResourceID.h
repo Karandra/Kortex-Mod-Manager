@@ -30,6 +30,7 @@ namespace Kortex
 
 		LOOT,
 		JSON,
+		Dokany,
 		LibCURL,
 		WebSocket,
 

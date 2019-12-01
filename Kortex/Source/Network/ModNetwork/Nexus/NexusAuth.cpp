@@ -3,17 +3,21 @@
 #include "Nexus.h"
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Application.hpp>
+#include "Utility/Common.h"
 #include "Utility/String.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxWebSocket.h>
+#include <KxFramework/KxButton.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxTextBoxDialog.h>
 
 namespace
 {
+	constexpr size_t MaxAPIKeyDisplayLength = 48;
+
 	void AddMessage(wxString& message, const wxString& label, const wxString& value)
 	{
 		if (!message.IsEmpty())
@@ -72,10 +76,41 @@ namespace Kortex::NetworkManager
 				wxString message;
 				AddMessage(message, KTr("Generic.UserName"), m_LastValidationReply->UserName);
 				AddMessage(message, KTr("Generic.EMailAddress"), m_LastValidationReply->EMailAddress);
-				AddMessage(message, KTr("NetworkManager.Nexus.APIKey"), m_LastValidationReply->APIKey);
+
+				if (m_LastValidationReply->APIKey.Length() > MaxAPIKeyDisplayLength)
+				{
+					AddMessage(message, KTr("NetworkManager.Nexus.APIKey"), m_LastValidationReply->APIKey.Left(MaxAPIKeyDisplayLength) + wxS("..."));
+				}
+				else
+				{
+					AddMessage(message, KTr("NetworkManager.Nexus.APIKey"), m_LastValidationReply->APIKey);
+				}
+				
 				AddMessage(message, KTr("NetworkManager.Nexus.UserIsPremium"), m_LastValidationReply->IsPremium);
 				AddMessage(message, KTr("NetworkManager.Nexus.UserIsSupporter"), m_LastValidationReply->IsSupporter);
 				dialog.SetMessage(message);
+
+				// Add Copy button
+				KxStdDialogControl copyButton = dialog.AddButton(wxID_COPY);
+				dialog.Bind(KxEVT_STDDIALOG_BUTTON, [this, &dialog, copyButton](wxNotifyEvent& event)
+				{
+					KxMenu menu;
+					menu.AddItem(KTr("Generic.UserName"))->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+					{
+						Utility::CopyTextToClipboard(m_LastValidationReply->UserName);
+					});
+					menu.AddItem(KTr("Generic.EMailAddress"))->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+					{
+						Utility::CopyTextToClipboard(m_LastValidationReply->EMailAddress);
+					});
+					menu.AddItem(KTr("NetworkManager.Nexus.APIKey"))->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+					{
+						Utility::CopyTextToClipboard(m_LastValidationReply->APIKey);
+					});
+
+					menu.Show(&dialog, dialog.ScreenToClient(::wxGetMousePosition()));
+					event.Veto();
+				}, wxID_COPY, wxID_COPY);
 
 				// Show the dialog
 				dialog.ShowModal();

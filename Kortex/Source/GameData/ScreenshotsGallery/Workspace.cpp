@@ -44,6 +44,10 @@ namespace Kortex::ScreenshotsGallery
 		LoadData();
 	}
 
+	Workspace::Workspace()
+	{
+		IMainWindow::GetInstance()->AddToolBarMenuItem(*this);
+	}
 	Workspace::~Workspace()
 	{
 	}
@@ -147,12 +151,7 @@ namespace Kortex::ScreenshotsGallery
 	}
 	IWorkspaceContainer* Workspace::GetPreferredContainer() const
 	{
-		IWorkspaceContainer* result = nullptr;
-		IWorkspace::CallIfCreated<ModManager::Workspace>([&](ModManager::Workspace& workspace)
-		{
-			result = &workspace.GetWorkspaceContainer();
-		});
-		return result;
+		return &IMainWindow::GetInstance()->GetWorkspaceContainer();
 	}
 
 	void Workspace::DisplayInfo(const wxString& filePath)

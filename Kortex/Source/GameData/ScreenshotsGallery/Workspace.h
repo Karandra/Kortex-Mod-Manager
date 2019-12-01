@@ -32,6 +32,7 @@ namespace Kortex::ScreenshotsGallery
 			void OnReloadWorkspace() override;
 
 		public:
+			Workspace();
 			~Workspace();
 
 		private:

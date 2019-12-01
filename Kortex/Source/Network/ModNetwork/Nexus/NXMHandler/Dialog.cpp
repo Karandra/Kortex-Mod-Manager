@@ -103,7 +103,7 @@ namespace Kortex::NetworkManager::NXMHandler
 		info.SetIcon(app->GetExecutablePath());
 		info.SetDescription("URL:NXM Protocol");
 		info.SetShortDescription("nxm");
-		info.AddExtension("nxm");
+		info.AddExtension("nxm", true);
 		info.SetOpenCommand(KxString::Format("\"%1\" -%2", app->GetExecutablePath(), CmdLineName::DownloadLink));
 
 		m_NXMFileType = m_FileTypeManager.Associate(info);

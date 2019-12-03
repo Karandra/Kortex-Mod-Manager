@@ -9,6 +9,7 @@
 #include <KxFramework/KxStyledTextBox.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxBitmapComboBox.h>
+#include <KxFramework/KxComboBox.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxString.h>
@@ -109,6 +110,65 @@ namespace Kortex::UI
 				m_Editor->SetFocus();
 			});
 
+			m_ToolBar->AddStretchSpacer();
+
+			// Background color
+			wxColourPickerCtrl* backgroundColorPicker = new wxColourPickerCtrl(m_ToolBar, KxID_NONE);
+			backgroundColorPicker->Bind(wxEVT_COLOURPICKER_CHANGED, [this](wxColourPickerEvent& event)
+			{
+				if (KxHTMLWindow* htmlWindow = GetHTMLBackend())
+				{
+					htmlWindow->SetHTMLBackgroundColour(event.GetColour());
+					htmlWindow->SetBackgroundColour(event.GetColour());
+				}
+				else if (UI::IWebView* backend = m_Preview.GetBackend())
+				{
+					backend->GetWindow()->SetBackgroundColour(event.GetColour());
+				}
+
+				if (m_Editor)
+				{
+					// It's probably not a good idea to change background color of the editor
+					//m_Editor->SetBackgroundColour(event.GetColour());
+				}
+			});
+			m_ToolBar->AddControl(backgroundColorPicker);
+
+			// Rendering mode
+			{
+				KxComboBox* rendererList = new KxComboBox(m_ToolBar, KxID_NONE);
+				rendererList->Bind(wxEVT_COMBOBOX, [this, rendererList](wxCommandEvent& event)
+				{
+					wxGraphicsRenderer* renderer = static_cast<wxGraphicsRenderer*>(rendererList->GetClientData(event.GetSelection()));
+					if (KxHTMLWindow* htmlWindow = GetHTMLBackend())
+					{
+						htmlWindow->SetRenderer(renderer);
+					}
+					if (m_Editor)
+					{
+						// Changing rendering backend is fine, especially that Scintilla doesn't have HiDPI text scaling bug unlike wxWidgets own Direct2D renderer.
+						m_Editor->SetTechnology(renderer == wxGraphicsRenderer::GetDirect2DRenderer() ? wxSTC_TECHNOLOGY_DIRECTWRITE : wxSTC_TECHNOLOGY_DEFAULT);
+						m_Editor->Refresh();
+					}
+				});
+				m_ToolBar->AddControl(rendererList);
+
+				auto AddRenderer = [&](wxGraphicsRenderer* renderer, const wxString& name, bool allowNull = false)
+				{
+					if (renderer || allowNull)
+					{
+						int index = rendererList->AddItem(name);
+						rendererList->SetClientData(index, renderer);
+					}
+				};
+
+				AddRenderer(nullptr, wxS("GDI"), true);
+				AddRenderer(wxGraphicsRenderer::GetGDIPlusRenderer(), wxS("GDI+"));
+				AddRenderer(wxGraphicsRenderer::GetDirect2DRenderer(), wxS("Direct2D"));
+				AddRenderer(wxGraphicsRenderer::GetCairoRenderer(), wxS("Cairo"));
+				rendererList->SetSelection(0);
+			}
+
 			m_ToolBar->Realize();
 
 			// Tabs
@@ -121,6 +181,7 @@ namespace Kortex::UI
 			/* Editor page */
 			m_Editor = new KxStyledTextBox(m_Container, KxID_NONE);
 			m_Container->AddPage(m_Editor, wxEmptyString, true);
+			backgroundColorPicker->SetColour(m_Editor->GetBackgroundColour());
 
 			/* Preview page */
 			m_Preview.Create(m_Container);
@@ -135,6 +196,11 @@ namespace Kortex::UI
 			return true;
 		}
 		return false;
+	}
+	KxHTMLWindow* TextEditDialog::GetHTMLBackend()
+	{
+		UI::IWebView* backend = m_Preview.GetBackend();
+		return backend ? dynamic_cast<KxHTMLWindow*>(backend->GetWindow()) : nullptr;
 	}
 
 	void TextEditDialog::OnNewTextSet()

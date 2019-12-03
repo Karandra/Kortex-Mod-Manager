@@ -3,6 +3,7 @@
 #include <KxFramework/KxStdDialog.h>
 #include "WebView.h"
 class KxPanel;
+class KxHTMLWindow;
 class KxBitmapComboBox;
 class KxStyledTextBox;
 class KxAuiToolBar;
@@ -33,25 +34,26 @@ namespace Kortex::UI
 
 		private:
 			bool Create(wxWindow* parent);
+			KxHTMLWindow* GetHTMLBackend();
 
 		private:
-			virtual int GetViewSizerProportion() const override
+			int GetViewSizerProportion() const override
 			{
 				return 1;
 			}
-			virtual wxOrientation GetViewSizerOrientation() const override
+			wxOrientation GetViewSizerOrientation() const override
 			{
 				return wxVERTICAL;
 			}
-			virtual wxOrientation GetViewLabelSizerOrientation() const override
+			wxOrientation GetViewLabelSizerOrientation() const override
 			{
 				return wxHORIZONTAL;
 			}
-			virtual bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
+			bool IsEnterAllowed(wxKeyEvent& event, wxWindowID* id = nullptr) const override
 			{
 				return true;
 			}
-			virtual wxWindow* GetDialogMainCtrl() const override
+			wxWindow* GetDialogMainCtrl() const override
 			{
 				return m_View;
 			}

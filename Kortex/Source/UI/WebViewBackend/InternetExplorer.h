@@ -41,7 +41,7 @@ namespace Kortex::UI::WebViewBackend
 			{
 				return m_WebView->GetBackgroundColour();
 			}
-			bool SetBackgroundColor(const KxColor& color)
+			bool SetBackgroundColor(const KxColor& color) override
 			{
 				return m_WebView->SetBackgroundColour(color);
 			}

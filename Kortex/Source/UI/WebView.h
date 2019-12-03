@@ -48,7 +48,7 @@ namespace Kortex::UI
 			{
 				return m_Backend->GetBackgroundColor();
 			}
-			bool SetBackgroundColor(const KxColor& color)
+			bool SetBackgroundColor(const KxColor& color) override
 			{
 				return m_Backend->SetBackgroundColor(color);
 			}

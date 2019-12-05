@@ -70,7 +70,8 @@ namespace Kortex::Application
 		m_InstancesFolder = m_UserSettingsFolder + "\\Instances";
 
 		// Setup DPI awareness
-		m_ThreadDPIContext = std::make_unique<KxDPIAwareness::ThreadContextChanger>(KxDPIAwareness::AwarenessContext::PerMonitor2);
+		using namespace KxDPIAwareness;
+		m_ThreadDPIContext = std::make_unique<ThreadContextChanger>(AwarenessContext::PerMonitor2);
 	}
 	void DefaultApplication::OnDestroy()
 	{

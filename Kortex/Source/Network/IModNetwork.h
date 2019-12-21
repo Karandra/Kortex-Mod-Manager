@@ -24,6 +24,8 @@ namespace Kortex
 {
 	class IModNetwork: public KxRTTI::Interface<IModNetwork>, public KxComponentContainer
 	{
+		KxDecalreIID(IModNetwork, {0xc58037c8, 0x9e52, 0x45df, {0xac, 0xd5, 0xa5, 0xb7, 0x4e, 0x3f, 0x88, 0x5f}});
+
 		friend class INetworkManager;
 		friend class NetworkModule;
 

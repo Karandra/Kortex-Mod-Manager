@@ -34,6 +34,8 @@ namespace Kortex
 		public KxRTTI::Interface<IGameInstance>,
 		public Application::WithInstanceOptions<IGameInstance>
 	{
+		KxDecalreIID(IGameInstance, {0x6fe63d61, 0x8666, 0x44fc, {0xbb, 0x4e, 0x4f, 0xcd, 0x93, 0x82, 0x82, 0xfc}});
+
 		friend class GameInstance::TemplateLoader;
 
 		public:
@@ -162,6 +164,8 @@ namespace Kortex
 		public KxRTTI::Interface<IConfigurableGameInstance>,
 		public Application::IWithConfig
 	{
+		KxDecalreIID(IConfigurableGameInstance, {0x2ef792f5, 0x69e7, 0x4f81, {0xb1, 0xbc, 0xfd, 0xfb, 0xc5, 0x4c, 0xe0, 0xda}});
+
 		public:
 			virtual void OnExit() = 0;
 	};

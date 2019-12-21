@@ -33,8 +33,8 @@ namespace Kortex
 	}
 
 	IModManager::IModManager()
-		:ManagerWithTypeInfo(GameModsModule::GetInstance())
 	{
+		AssignModule(*GameModsModule::GetInstance());
 	}
 
 	void IModManager::ResortMods()

@@ -19,6 +19,8 @@ namespace Kortex::NetworkManager
 		public KxRTTI::ExtendInterface<NexusModNetwork, IModNetwork>,
 		public KxSingletonPtr<NexusModNetwork>
 	{
+		KxDecalreIID(NexusModNetwork, {0x8da1cedb, 0x3c16, 0x4ca8, {0x8b, 0x4f, 0xf6, 0x4b, 0x19, 0xf, 0xcb, 0xe3}});
+
 		friend class NexusAuth;
 		friend class NexusRepository;
 		friend class NexusUpdateChecker;

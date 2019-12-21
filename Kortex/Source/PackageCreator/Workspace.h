@@ -123,9 +123,6 @@ namespace Kortex::PackageDesigner
 			~Workspace();
 
 		public:
-			using KxIObject::QueryInterface;
-			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override;
-
 			wxString GetID() const override;
 			wxString GetName() const override;
 			ResourceID GetIcon() const override

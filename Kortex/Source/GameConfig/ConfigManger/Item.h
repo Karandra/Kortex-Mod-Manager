@@ -42,6 +42,8 @@ namespace Kortex::GameConfig
 
 	class Item: public KxRTTI::ExtendInterface<Item, IViewItem, KxDataView2::Node>
 	{
+		KxDecalreIID(Item, {0xb2b4382c, 0x2bf1, 0x4d4a, {0x91, 0xf6, 0x26, 0xd0, 0x83, 0xf4, 0xfc, 0x30}});
+
 		friend class ItemGroup;
 
 		private:

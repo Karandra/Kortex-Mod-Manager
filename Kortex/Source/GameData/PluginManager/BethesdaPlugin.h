@@ -8,7 +8,7 @@ namespace Kortex::PluginManager
 {
 	class IPluginReader;
 
-	class BethesdaPlugin: public KxRTTI::ExtendInterface<BethesdaPlugin, BaseGamePlugin, IBethesdaGamePlugin>
+	class BethesdaPlugin: public KxRTTI::ImplementInterface<BethesdaPlugin, BaseGamePlugin, IBethesdaGamePlugin>
 	{
 		public:
 			using HeaderFlags = BethesdaPluginData::HeaderFlags;
@@ -61,7 +61,7 @@ namespace Kortex::PluginManager
 				ReadDataIfNeeded();
 				return m_Data.m_FormVersion;
 			}
-	
+			
 			KxStringVector GetRequiredPlugins() const override
 			{
 				ReadDataIfNeeded();

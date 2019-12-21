@@ -30,11 +30,6 @@ namespace Kortex::PackageDesigner
 		return KTr("PackageCreator.SaveChanges.Message");
 	}
 
-	bool WorkspaceDocument::QueryInterface(const KxIID& iid, void*& ptr) noexcept
-	{
-		return UseAnyOf<IWorkspace>(iid, ptr, m_Workspace) || QuerySelf(iid, ptr, *this);
-	}
-
 	wxString WorkspaceDocument::GetProjectFileName() const
 	{
 		wxString name = m_ProjectFile.AfterLast('\\');

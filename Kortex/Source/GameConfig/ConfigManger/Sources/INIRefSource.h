@@ -5,7 +5,7 @@
 
 namespace Kortex::GameConfig
 {
-	class INIRefSource: public KxRTTI::ExtendInterface<INIRefSource, ISource>
+	class INIRefSource: public ISource
 	{
 		private:
 			KxINI& m_INI;

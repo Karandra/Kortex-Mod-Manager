@@ -6,6 +6,8 @@ namespace Kortex::ModTagManager
 {
 	class DefaultTag: public KxRTTI::ExtendInterface<DefaultTag, IModTag, INexusModTag>
 	{
+		KxDecalreIID(DefaultTag, {0x4903903, 0x7cb8, 0x423a, {0x9b, 0x6d, 0x92, 0x5, 0xb6, 0x99, 0xe7, 0x9e}});
+
 		private:
 			wxString m_ID;
 			wxString m_Name;
@@ -30,7 +32,7 @@ namespace Kortex::ModTagManager
 				return std::make_unique<DefaultTag>(*this);
 			}
 			
-			bool IsExpanded() const
+			bool IsExpanded() const override
 			{
 				return m_IsExpanded;
 			}

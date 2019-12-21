@@ -8,6 +8,8 @@ namespace Kortex::GameConfig
 {
 	class ISamplingFunction: public KxRTTI::Interface<ISamplingFunction>
 	{
+		KxDecalreIID(ISamplingFunction, {0xfbb85618, 0x10be, 0x4046, {0x8e, 0x3, 0x33, 0x1a, 0x29, 0x1c, 0xb7, 0x9a}});
+
 		protected:
 			virtual void OnCall(const ItemValue::Vector& arguments) = 0;
 

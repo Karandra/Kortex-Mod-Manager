@@ -415,11 +415,6 @@ namespace Kortex::PackageDesigner
 		m_WorkspaceDocument.BuildProject(true);
 	}
 
-	bool Workspace::QueryInterface(const KxIID& iid, void*& ptr) noexcept
-	{
-		return UseAnyOf<IWorkspaceDocument, IWorkspaceContainer>(iid, ptr, m_WorkspaceDocument, m_PagesContainer) || QuerySelf(iid, ptr, *this);
-	}
-
 	wxString Workspace::GetID() const
 	{
 		return "PackageDesigner::Workspace";

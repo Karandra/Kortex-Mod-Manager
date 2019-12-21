@@ -50,6 +50,8 @@ namespace Kortex::GameConfig
 {
 	class StructItem: public KxRTTI::ExtendInterface<StructItem, Item>
 	{
+		KxDecalreIID(StructItem, {0x3ca50288, 0xb99d, 0x4eb8, {0xbd, 0x81, 0x79, 0xdf, 0x45, 0x6b, 0xf8, 0x7}});
+
 		friend class StructSubItem;
 
 		private:

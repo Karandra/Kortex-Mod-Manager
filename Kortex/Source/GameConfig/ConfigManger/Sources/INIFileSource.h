@@ -5,7 +5,7 @@
 
 namespace Kortex::GameConfig
 {
-	class INIFileSource: public KxRTTI::ExtendInterface<INIFileSource, INISource, IFileSource>
+	class INIFileSource: public KxRTTI::ImplementInterface<INIFileSource, INISource, IFileSource>
 	{
 		private:
 			wxString m_FilePath;
@@ -18,7 +18,7 @@ namespace Kortex::GameConfig
 			}
 
 		public:
-			// IFSSource
+			// IFileSource
 			wxString GetFileName() const override
 			{
 				return m_FileName;

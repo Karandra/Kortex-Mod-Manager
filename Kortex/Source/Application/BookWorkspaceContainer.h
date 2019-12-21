@@ -6,6 +6,8 @@ namespace Kortex::Application
 {
 	class BookWorkspaceContainer: public KxRTTI::ExtendInterface<BookWorkspaceContainer, IWorkspaceContainer>
 	{
+		KxDecalreIID(BookWorkspaceContainer, {0x1b6cdd23, 0xff47, 0x4cf9, {0x87, 0x5a, 0x21, 0x15, 0xde, 0x1, 0x2b, 0x5b}});
+
 		private:
 			bool m_HasCurrentWorkspace = false;
 

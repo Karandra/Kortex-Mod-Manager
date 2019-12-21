@@ -7,6 +7,8 @@ namespace Kortex::PluginManager
 {
 	class BethesdaPluginManagerMW: public KxRTTI::ExtendInterface<BethesdaPluginManagerMW, BethesdaPluginManager>
 	{
+		KxDecalreIID(BethesdaPluginManagerMW, {0xc7657504, 0x9232, 0x4e79, {0x8f, 0xf7, 0xf9, 0x8d, 0x9, 0x73, 0x92, 0x74}});
+
 		private:
 			const wxString m_PluginsListFile;
 

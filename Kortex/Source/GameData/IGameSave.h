@@ -12,6 +12,8 @@ namespace Kortex
 
 	class IGameSave: public KxRTTI::Interface<IGameSave>
 	{
+		KxDecalreIID(IGameSave, {0xe59b723b, 0x1e64, 0x4f45, {0xad, 0x8b, 0x7b, 0x35, 0x6e, 0x81, 0x95, 0x7a}});
+
 		friend class SaveManager::DisplayModel;
 
 		public:

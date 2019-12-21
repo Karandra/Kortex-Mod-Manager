@@ -7,6 +7,8 @@ namespace Kortex::PackageProject
 {
 	class FileItem: public KxRTTI::Interface<FileItem>
 	{
+		KxDecalreIID(FileItem, {0x88e3075, 0xe7d5, 0x44af, {0x8d, 0xeb, 0xd, 0x71, 0xd7, 0x3c, 0x46, 0x5}});
+
 		public:
 			using Vector = std::vector<std::unique_ptr<FileItem>>;
 			using RefVector = std::vector<FileItem*>;
@@ -60,6 +62,8 @@ namespace Kortex::PackageProject
 {
 	class FolderItem: public KxRTTI::ExtendInterface<FolderItem, FileItem>
 	{
+		KxDecalreIID(FolderItem, {0x6c8ec67, 0x9913, 0x404e, {0x97, 0xd4, 0x3c, 0xd3, 0x83, 0xfc, 0xd3, 0xd7}});
+
 		private:
 			std::vector<FileItem> m_Files;
 			

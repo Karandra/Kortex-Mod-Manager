@@ -16,6 +16,8 @@ namespace Kortex::GameInstance
 {
 	class DefaultGameInstance: public KxRTTI::ExtendInterface<DefaultGameInstance, IGameInstance>
 	{
+		KxDecalreIID(DefaultGameInstance, {0x73a46d8d, 0x1a8b, 0x4adc, {0xa5, 0x50, 0xbb, 0xfd, 0x36, 0x2c, 0x31, 0x83}});
+
 		friend class IGameInstance;
 
 		protected:
@@ -155,7 +157,7 @@ namespace Kortex::GameInstance
 
 namespace Kortex::GameInstance
 {
-	class ConfigurableGameInstance: public KxRTTI::ExtendInterface<ConfigurableGameInstance, DefaultGameInstance, IConfigurableGameInstance>
+	class ConfigurableGameInstance: public KxRTTI::ImplementInterface<ConfigurableGameInstance, DefaultGameInstance, IConfigurableGameInstance>
 	{
 		private:
 			KxXMLDocument m_Config;

@@ -18,6 +18,8 @@ namespace Kortex
 {
 	class IGameMod: public KxRTTI::Interface<IGameMod>
 	{
+		KxDecalreIID(IGameMod, {0xaa4f8b27, 0xdb94, 0x4e34, {0x92, 0x3d, 0xe9, 0x4c, 0x82, 0xf8, 0xf3, 0xf5}});
+
 		friend class IModManager;
 		friend class IModDispatcher;
 

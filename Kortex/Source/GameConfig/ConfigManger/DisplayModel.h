@@ -14,6 +14,8 @@ namespace Kortex::GameConfig
 {
 	class DisplayModel: public KxRTTI::ExtendInterface<DisplayModel, KxDataView2::Model>
 	{
+		KxDecalreIID(DisplayModel, {0x4e969610, 0x6494, 0x48c8, {0x96, 0xdb, 0x3a, 0x50, 0x37, 0xb9, 0xc8, 0x54}});
+
 		private:
 			IConfigManager& m_Manager;
 			const ITranslator& m_Translator;

@@ -16,6 +16,8 @@ namespace Kortex
 {
 	class IWorkspace: public KxRTTI::Interface<IWorkspace>, public Application::WithOptions<IWorkspace>
 	{
+		KxDecalreIID(IWorkspace, {0x9c8ee9bb, 0xaad3, 0x45df, {0xb8, 0x9c, 0xd6, 0x7b, 0x48, 0x47, 0x39, 0xfb}});
+
 		friend class IWorkspaceContainer;
 		friend class KxIObject;
 

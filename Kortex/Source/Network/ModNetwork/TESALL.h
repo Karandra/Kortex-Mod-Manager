@@ -11,6 +11,8 @@ namespace Kortex::NetworkManager
 		public KxRTTI::ExtendInterface<TESALLModNetwork, IModNetwork>,
 		public KxSingletonPtr<TESALLModNetwork>
 	{
+		KxDecalreIID(TESALLModNetwork, {0xc4255aa9, 0x9087, 0x49e5, {0xb3, 0xf5, 0x36, 0x67, 0x21, 0x60, 0x6f, 0xbc}});
+
 		protected:
 			void OnInit() override
 			{

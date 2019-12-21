@@ -6,6 +6,8 @@ namespace Kortex::GameConfig
 {
 	class SimpleItem: public KxRTTI::ExtendInterface<SimpleItem, Item>
 	{
+		KxDecalreIID(SimpleItem, {0x72c89da9, 0xb654, 0x491e, {0xa3, 0x74, 0x72, 0xc, 0x40, 0x3c, 0x39, 0x90}});
+
 		private:
 			ItemValue m_Value;
 			HashStore m_HashStore;

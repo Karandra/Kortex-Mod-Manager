@@ -27,6 +27,8 @@ namespace Kortex
 
 	class IManager: public KxRTTI::Interface<IManager>, public Application::WithOptions<IManager>
 	{
+		KxDecalreIID(IManager, {0x80d27f02, 0x98d6, 0x47cb, {0x84, 0xc5, 0x62, 0xd3, 0x7f, 0xa7, 0x91, 0xbf}});
+
 		friend class IModule;
 		friend class IMainWindow;
 		friend class IApplication;
@@ -56,7 +58,7 @@ namespace Kortex
 			}
 
 		private:
-			IModule& m_Module;
+			IModule* m_Module = nullptr;
 
 		protected:
 			virtual void OnLoadInstance(IGameInstance& instance, const KxXMLNode& managerNode) = 0;
@@ -66,9 +68,14 @@ namespace Kortex
 			{
 			}
 
+			void AssignModule(IModule& module)
+			{
+				m_Module = &module;
+			}
+
 		public:
 			IManager(IModule* module)
-				:m_Module(*module)
+				:m_Module(module)
 			{
 			}
 			virtual ~IManager() = default;
@@ -76,11 +83,11 @@ namespace Kortex
 		public:
 			IModule& GetModule()
 			{
-				return m_Module;
+				return *m_Module;
 			}
 			const IModule& GetModule() const
 			{
-				return m_Module;
+				return *m_Module;
 			}
 			
 			virtual const IManagerInfo& GetManagerInfo() const = 0;
@@ -105,7 +112,7 @@ namespace Kortex
 			}
 
 		protected:
-			ManagerWithTypeInfo(IModule* module)
+			ManagerWithTypeInfo(IModule* module = nullptr)
 				:t_Base(module)
 			{
 			}

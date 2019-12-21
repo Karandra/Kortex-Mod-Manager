@@ -50,9 +50,11 @@ namespace Kortex::PluginManager
 namespace Kortex
 {
 	class IPluginManager:
-		public ManagerWithTypeInfo<IManager, PluginManager::Internal::TypeInfo>,
+		public KxRTTI::ExtendInterface<IPluginManager, ManagerWithTypeInfo<IManager, PluginManager::Internal::TypeInfo>>,
 		public KxSingletonPtr<IPluginManager>
 	{
+		KxDecalreIID(IPluginManager, {0x2afbf097, 0x2a6d, 0x42e0, {0x8e, 0xe7, 0x37, 0x39, 0x6, 0xf3, 0x28, 0x11}});
+
 		friend class IGamePlugin;
 
 		public:
@@ -77,12 +79,6 @@ namespace Kortex
 			IPluginManager();
 
 		public:
-			using KxIObject::QueryInterface;
-			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
-			{
-				return KxIObject::QuerySelf(iid, ptr, *this);
-			}
-
 			virtual const PluginManager::Config& GetConfig() const = 0;
 
 			virtual std::unique_ptr<PluginManager::IPluginReader> CreatePluginReader() = 0;

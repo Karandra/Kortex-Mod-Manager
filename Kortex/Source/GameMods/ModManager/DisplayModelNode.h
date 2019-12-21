@@ -41,6 +41,8 @@ namespace Kortex::ModManager
 {
 	class DisplayModelModNode: public KxRTTI::ExtendInterface<DisplayModelModNode, KxDataView2::Node>
 	{
+		KxDecalreIID(DisplayModelModNode, {0x5795df7, 0x666, 0x42b7, {0xae, 0xc2, 0xd1, 0x23, 0x4, 0xa8, 0xbf, 0x78}});
+
 		friend class DisplayModel;
 
 		public:
@@ -96,6 +98,8 @@ namespace Kortex::ModManager
 {
 	class DisplayModelTagNode: public KxRTTI::ExtendInterface<DisplayModelTagNode, KxDataView2::Node>
 	{
+		KxDecalreIID(DisplayModelTagNode, {0x8fefcea3, 0xd433, 0x4862, {0x9e, 0x39, 0x65, 0xda, 0xd9, 0x34, 0x1c, 0xe4}});
+
 		friend class DisplayModel;
 
 		public:

@@ -11,6 +11,8 @@ namespace Kortex::NetworkManager
 		public KxRTTI::ExtendInterface<LoversLabModNetwork, IModNetwork>,
 		public KxSingletonPtr<LoversLabModNetwork>
 	{
+		KxDecalreIID(LoversLabModNetwork, {0xfd953e5d, 0x2c04, 0x4e82, {0x9f, 0x59, 0x6c, 0xc6, 0x91, 0xb6, 0xa3, 0x73}});
+
 		private:
 			wxString GetAPIURL() const;
 

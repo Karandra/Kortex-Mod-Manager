@@ -23,6 +23,8 @@ namespace Kortex::ModManager
 
 	class BasicGameMod: public KxRTTI::ExtendInterface<BasicGameMod, IGameMod>
 	{
+		KxDecalreIID(BasicGameMod, {0x29e82e8c, 0xb63b, 0x4955, {0xba, 0xd9, 0xa7, 0x69, 0xc5, 0xae, 0x74, 0xbb}});
+
 		private:
 			wxString m_Signature;
 			wxString m_ID;

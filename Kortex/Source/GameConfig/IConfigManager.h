@@ -22,8 +22,11 @@ namespace Kortex
 		extern const SimpleManagerInfo TypeInfo;
 	};
 
-	class IConfigManager: public ManagerWithTypeInfo<IManager, ConfigManager::Internal::TypeInfo>
+	class IConfigManager:
+		public KxRTTI::ExtendInterface<IConfigManager, ManagerWithTypeInfo<IManager, ConfigManager::Internal::TypeInfo>>
 	{
+		KxDecalreIID(IConfigManager, {0x7a3622ac, 0xf11, 0x4999, {0x9c, 0xe5, 0xad, 0x8d, 0xd4, 0xf, 0xf9, 0xa5}});
+
 		friend class GameConfig::Item;
 		friend class GameConfig::DisplayModel;
 

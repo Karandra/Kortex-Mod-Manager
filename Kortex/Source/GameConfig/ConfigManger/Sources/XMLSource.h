@@ -4,21 +4,18 @@
 
 namespace Kortex::GameConfig
 {
-	class XMLSource: public KxRTTI::ExtendInterface<XMLSource, XMLRefSource>
+	class XMLSource: public XMLRefSource
 	{
-		private:
-			using Base = KxRTTI::ExtendInterface<XMLSource, XMLRefSource>;
-
 		private:
 			KxXMLDocument m_XML;
 
 		public:
 			XMLSource(const wxString& xmlText = {})
-				:Base(m_XML), m_XML(xmlText)
+				:XMLRefSource(m_XML), m_XML(xmlText)
 			{
 			}
 			XMLSource(wxInputStream& stream)
-				:Base(m_XML), m_XML(stream)
+				:XMLRefSource(m_XML), m_XML(stream)
 			{
 			}
 	};

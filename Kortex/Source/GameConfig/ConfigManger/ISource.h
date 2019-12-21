@@ -15,6 +15,8 @@ namespace Kortex::GameConfig
 {
 	class ISource: public KxRTTI::Interface<ISource>
 	{
+		KxDecalreIID(ISource, {0x838e049b, 0xb217, 0x4a11, {0xa9, 0x94, 0x4e, 0x14, 0xf1, 0x48, 0xcf, 0xe5}});
+
 		protected:
 			template<class TFunctor> TypeID InvokeTypeDetectors(const ItemGroup& group, TFunctor&& func)
 			{

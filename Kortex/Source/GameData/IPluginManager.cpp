@@ -35,8 +35,9 @@ namespace Kortex
 	}
 
 	IPluginManager::IPluginManager()
-		:ManagerWithTypeInfo(GameDataModule::GetInstance())
 	{
+		AssignModule(*GameDataModule::GetInstance());
+
 		m_BroadcastReciever.Bind(ProfileEvent::EvtSelected, &IPluginManager::OnVirtualTreeInvalidated, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtVirtualTreeInvalidated, &IPluginManager::OnVirtualTreeInvalidated, this);
 	}

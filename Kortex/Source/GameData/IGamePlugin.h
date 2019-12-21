@@ -13,6 +13,8 @@ namespace Kortex
 	class IPluginManager;
 	class IGamePlugin: public KxRTTI::Interface<IGamePlugin>
 	{
+		KxDecalreIID(IGamePlugin, {0x977a3069, 0xf8e8, 0x4f7e, {0xb4, 0xd1, 0xe0, 0x94, 0xaa, 0x91, 0x22, 0xbc}});
+
 		friend class IPluginManager;
 
 		public:

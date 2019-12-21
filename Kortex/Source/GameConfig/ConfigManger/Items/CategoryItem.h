@@ -7,6 +7,8 @@ namespace Kortex::GameConfig
 {
 	class CategoryItem: public KxRTTI::ExtendInterface<CategoryItem, IViewItem, KxDataView2::Node>
 	{
+		KxDecalreIID(CategoryItem, {0x1b227221, 0xe3ff, 0x4196, {0x96, 0x14, 0x94, 0xbc, 0x97, 0x71, 0xa0, 0x3a}});
+
 		private:
 			wxString m_CategoryPath;
 			wxString m_CategoryName;

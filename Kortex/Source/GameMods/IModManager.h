@@ -25,9 +25,11 @@ namespace Kortex::ModManager
 namespace Kortex
 {
 	class IModManager:
-		public ManagerWithTypeInfo<IManager, ModManager::Internal::TypeInfo>,
+		public KxRTTI::ExtendInterface<IModManager, ManagerWithTypeInfo<IManager, ModManager::Internal::TypeInfo>>,
 		public KxSingletonPtr<IModManager>
 	{
+		KxDecalreIID(IModManager, {0xec61c172, 0xa750, 0x4be9, {0xb0, 0x9d, 0x27, 0xe8, 0x8c, 0x49, 0x36, 0xb2}});
+
 		public:
 			using GetModsFlags = ModManager::GetModsFlags;
 
@@ -42,12 +44,6 @@ namespace Kortex
 			IModManager();
 
 		public:
-			using KxIObject::QueryInterface;
-			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override
-			{
-				return QuerySelf(iid, ptr, *this);
-			}
-
 			virtual const ModManager::Config& GetOptions() const = 0;
 
 			virtual std::unique_ptr<IGameMod> NewMod() = 0;

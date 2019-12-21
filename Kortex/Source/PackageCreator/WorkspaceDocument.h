@@ -17,7 +17,7 @@ namespace Kortex::PackageDesigner
 {
 	class Workspace;
 
-	class WorkspaceDocument: public KxRTTI::ExtendInterface<WorkspaceDocument, IWorkspaceDocument>
+	class WorkspaceDocument: public IWorkspaceDocument
 	{
 		public:
 			static wxString GetNewProjectName();
@@ -39,9 +39,6 @@ namespace Kortex::PackageDesigner
 			}
 
 		public:
-			using KxIObject::QueryInterface;
-			bool QueryInterface(const KxIID& iid, void*& ptr) noexcept override;
-
 			ModPackageProject* GetProject() const
 			{
 				return m_Project.get();

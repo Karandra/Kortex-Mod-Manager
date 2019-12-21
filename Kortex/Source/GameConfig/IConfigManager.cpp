@@ -52,8 +52,8 @@ namespace Kortex
 	}
 
 	IConfigManager::IConfigManager()
-		:ManagerWithTypeInfo(GameConfigModule::GetInstance())
 	{
+		AssignModule(*GameConfigModule::GetInstance());
 	}
 
 	wxString IConfigManager::TranslateItemLabel(const wxString& name, const wxString& perfix) const

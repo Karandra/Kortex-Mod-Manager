@@ -37,6 +37,8 @@ namespace Kortex::PluginManager
 
 	class BethesdaPluginManager: public KxRTTI::ExtendInterface<BethesdaPluginManager, BasePluginManager>
 	{
+		KxDecalreIID(BethesdaPluginManager, {0xa3eb91ce, 0x513d, 0x4da8, {0xa4, 0x42, 0xf5, 0xb7, 0x10, 0xd4, 0x98, 0x78}});
+
 		protected:
 			LootAPIConfig m_LibLootConfig;
 			std::unique_ptr<LibLoot> m_LootAPI;

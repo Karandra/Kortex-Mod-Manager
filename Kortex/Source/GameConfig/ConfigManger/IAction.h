@@ -33,6 +33,8 @@ namespace Kortex::GameConfig
 
 	class IAction: public KxRTTI::Interface<IAction>
 	{
+		KxDecalreIID(IAction, {0x1f517242, 0xafe0, 0x41e7, {0x84, 0x6b, 0x1e, 0x67, 0x97, 0xe, 0x16, 0xf1}});
+
 		public:
 			static bool InvokeIntrinsicAction(IntrinsicActionID id, Item& item, ItemValue& value);
 

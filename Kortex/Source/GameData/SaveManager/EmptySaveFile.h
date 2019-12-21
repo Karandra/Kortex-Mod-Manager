@@ -4,23 +4,23 @@
 
 namespace Kortex::SaveManager
 {
-	class EmptySaveFile: public KxRTTI::ExtendInterface<EmptySaveFile, BaseGameSave>
+	class EmptySaveFile: public BaseGameSave
 	{
 		private:
 			InfoPairVector m_Info;
 
 		protected:
-			virtual bool OnRead(const KxFileItem& fileItem) override
+			bool OnRead(const KxFileItem& fileItem) override
 			{
 				return fileItem.IsOK();
 			}
 
 		public:
-			virtual wxBitmap GetBitmap() const override
+			wxBitmap GetBitmap() const override
 			{
 				return wxNullBitmap;
 			}
-			virtual const InfoPairVector& GetBasicInfo() const override
+			const InfoPairVector& GetBasicInfo() const override
 			{
 				return m_Info;
 			}

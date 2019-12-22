@@ -2,7 +2,6 @@
 #include "DocumentsModel.h"
 #include "PackageCreator/PageBase.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
@@ -39,7 +38,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 			{
 				case ColumnID::Name:
 				{
-					value = entry->GetLabelRaw();
+					value = entry->GetRawLabel();
 					break;
 				}
 				case ColumnID::Value:
@@ -106,7 +105,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	void DocumentsModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const KLabeledValue* entry = GetDataEntry(GetRow(item));
+		const Utility::LabeledValue* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -152,7 +151,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 		{
 			if (!value.IsEmpty())
 			{
-				GetDataVector()->emplace_back(KLabeledValue(value, value.AfterLast('\\')));
+				GetDataVector()->emplace_back(Utility::LabeledValue(value, value.AfterLast('\\')));
 				item = GetItem(GetItemCount() - 1);
 				NotifyAddedItem(item);
 			}

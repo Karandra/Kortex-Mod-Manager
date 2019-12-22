@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "SelectorDisplayModel.h"
 #include "Application/Resources/IImageProvider.h"
+#include "Network/ModNetwork/Nexus.h"
+#include "Utility/Common.h"
 #include <Kortex/ModTagManager.hpp>
 #include <Kortex/NetworkManager.hpp>
-#include "Network/ModNetwork/Nexus.h"
 
 namespace Kortex::ModTagManager
 {
@@ -107,14 +108,14 @@ namespace Kortex::ModTagManager
 					}
 					else
 					{
-						value = KAux::MakeNoneLabel();
+						value = Utility::MakeNoneLabel();
 					}
 					break;
 				}
 				case ColumnID::Color:
 				{
 					KxColor color = tag->GetColor();
-					value = color.IsOk() ? color.ToString(KxColor::C2S::HTML) : KAux::MakeNoneLabel();
+					value = color.IsOk() ? color.ToString(KxColor::C2S::HTML) : Utility::MakeNoneLabel();
 					break;
 				}
 			};

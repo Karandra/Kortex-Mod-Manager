@@ -2,7 +2,7 @@
 #include "IModImporter.h"
 #include "GameMods/Import/ModImporterMO.h"
 #include "GameMods/Import/ModImporterNMM.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include "Utility/Log.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
@@ -40,8 +40,7 @@ namespace Kortex
 		KxFileBrowseDialog fileDialog(window, KxID_NONE, KxFBD_OPEN_FOLDER);
 		if (fileDialog.ShowModal() == KxID_OK)
 		{
-			auto importer = IModImporter::CreateImporter(type);
-			if (importer)
+			if (auto importer = IModImporter::CreateImporter(type))
 			{
 				importer->SetDirectory(fileDialog.GetResult());
 				if (importer->CanImport())
@@ -82,13 +81,13 @@ namespace Kortex
 							importer->m_SelectedProfile = profilesList[selectedProfileIndex];
 						}
 
-						auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, window);
-						operation->OnRun([operation, importer = importer.get()](KOperationWithProgressBase* self)
+						auto operation = new Utility::OperationWithProgressDialog<KxFileOperationEvent>(true, window);
+						operation->OnRun([operation, importer = importer.release()]() mutable
 						{
 							std::unique_ptr<IModImporter> temp(importer);
 							temp->Import(operation);
 						});
-						operation->OnEnd([](KOperationWithProgressBase* self)
+						operation->OnEnd([]()
 						{
 							IModManager::GetInstance()->ScheduleWorkspacesReload();
 							IDownloadManager::GetInstance()->ScheduleWorkspacesReload();
@@ -96,9 +95,8 @@ namespace Kortex
 							IWorkspace::ScheduleReloadOf<VirtualGameFolder::Workspace>();
 						});
 						operation->SetDialogCaption(KTr("ModManager.Import.Caption"));
-						operation->SetOptionEnabled(KOWPD_OPTION_RUN_ONEND_BEFORE_DIALOG_DESTRUCTION);
+						operation->SetOptionEnabled(Utility::OperationWithProgressDialogOptions::RunOnEndBeforeDialogDestruction);
 
-						importer.release();
 						operation->Run();
 					}
 					return;

@@ -2,6 +2,7 @@
 #include "SelectorDialog.h"
 #include <Kortex/ModTagManager.hpp>
 #include <Kortex/ApplicationOptions.hpp>
+#include "Utility/Common.h"
 #include <KxFramework/KxDataViewComboBox.h>
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxTaskDialog.h>
@@ -33,7 +34,7 @@ namespace Kortex::ModTagManager
 	}
 	void SelectorDialog::OnAddTag(wxCommandEvent& event)
 	{
-		IModTagManager::GetInstance()->EmplaceTagWith(wxEmptyString, KAux::MakeBracketedLabel(KTr(KxID_NEW)));
+		IModTagManager::GetInstance()->EmplaceTagWith(wxEmptyString, Utility::MakeBracketedLabel(KTr(KxID_NEW)));
 		RefreshItems();
 
 		KxDataViewItem newItem = GetItem(GetItemCount() - 1);

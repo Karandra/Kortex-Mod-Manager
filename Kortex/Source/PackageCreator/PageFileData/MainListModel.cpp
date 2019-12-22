@@ -4,7 +4,7 @@
 #include "PackageCreator/PageBase.h"
 #include "PackageCreator/WorkspaceDocument.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileOperationEvent.h>
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -167,7 +167,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		return false;
 	}
 	
-	void MainListModel::AddEverythingFromPath(const wxString& filePath, PackageProject::FolderItem& folderItem, KOperationWithProgressBase& context)
+	void MainListModel::AddEverythingFromPath(const wxString& filePath, PackageProject::FolderItem& folderItem, Utility::OperationWithProgressBase& context)
 	{
 		KxEvtFile source(filePath);
 		context.LinkHandler(&source, KxEVT_FILEOP_SEARCH);
@@ -423,12 +423,12 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 				folderItem.MakeUniqueID();
 			}
 	
-			auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
-			operation->OnRun([this, &folderItem, source](KOperationWithProgressBase* self)
+			auto operation = new Utility::OperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
+			operation->OnRun([this, operation, &folderItem, source]()
 			{
-				AddEverythingFromPath(source, folderItem, *self);
+				AddEverythingFromPath(source, folderItem, *operation);
 			});
-			operation->OnEnd([this](KOperationWithProgressBase* self)
+			operation->OnEnd([this]()
 			{
 				KxDataViewItem item = GetItem(GetItemCount() - 1);
 				NotifyAddedItem(item);
@@ -444,8 +444,8 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		if (dialog.ShowModal() == KxID_OK)
 		{
 			wxString source = dialog.GetResult();
-			auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
-			operation->OnRun([this, source](KOperationWithProgressBase* self)
+			auto operation = new Utility::OperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
+			operation->OnRun([this, operation, source]()
 			{
 				KxStringVector folders = KxFile(source).Find(KxFile::NullFilter, KxFS_FOLDER, false);
 				for (const wxString& folderPath: folders)
@@ -462,10 +462,10 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 						folderItem.MakeUniqueID();
 					}
 	
-					AddEverythingFromPath(folderPath, folderItem, *self);
+					AddEverythingFromPath(folderPath, folderItem, *operation);
 				}
 			});
-			operation->OnEnd([this](KOperationWithProgressBase* self)
+			operation->OnEnd([this]()
 			{
 				RefreshItems();
 				ChangeNotify();
@@ -481,14 +481,14 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 		{
 			wxString source = dialog.GetResult();
 	
-			auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
-			operation->OnRun([this, &folderEntry, source](KOperationWithProgressBase* self)
+			auto operation = new Utility::OperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
+			operation->OnRun([this, operation, &folderEntry, source]()
 			{
 				folderEntry.SetSource(source);
 				folderEntry.GetFiles().clear();
-				AddEverythingFromPath(source, folderEntry, *self);
+				AddEverythingFromPath(source, folderEntry, *operation);
 			});
-			operation->OnEnd([this, item](KOperationWithProgressBase* self)
+			operation->OnEnd([this, item]()
 			{
 				NotifyChangedItem(item);
 				SelectItem(item);

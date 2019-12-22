@@ -5,8 +5,7 @@
 #include "PackageProject/Serializer/FOModSerializer.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
-#include "Utility/KAux.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxTextFile.h>
@@ -69,7 +68,7 @@ namespace Kortex::PackageDesigner
 		}
 
 		// Check documents
-		for (const KLabeledValue& entry: info.GetDocuments())
+		for (const Utility::LabeledValue& entry: info.GetDocuments())
 		{
 			TestContinue();
 			CheckAndAddMissingFile(entry.GetValue());
@@ -168,7 +167,7 @@ namespace Kortex::PackageDesigner
 	void PackageBuilder::ProcessInfo()
 	{
 		const PackageProject::InfoSection& info = m_Project.GetInfo();
-		for (const KLabeledValue& entry: info.GetDocuments())
+		for (const Utility::LabeledValue& entry: info.GetDocuments())
 		{
 			TestContinue();
 
@@ -217,7 +216,7 @@ namespace Kortex::PackageDesigner
 		}
 	}
 
-	PackageBuilder::PackageBuilder(const ModPackageProject& project, KOperationWithProgressBase& thread, bool previewBuild)
+	PackageBuilder::PackageBuilder(const ModPackageProject& project, Utility::OperationWithProgressBase& thread, bool previewBuild)
 		:m_Project(project), m_Thread(thread), m_BuildPreview(previewBuild)
 	{
 		m_Thread.LinkHandler(&m_Archive, KxEVT_ARCHIVE);
@@ -337,22 +336,22 @@ namespace Kortex::PackageDesigner
 	}
 
 	PackageBuilderOperation::PackageBuilderOperation(const ModPackageProject& project, bool previewBuild)
-		:KOperationWithProgressDialog(true, nullptr), m_Project(project), m_BuildPreview(previewBuild)
+		:OperationWithProgressDialog(true, nullptr), m_Project(project), m_BuildPreview(previewBuild)
 	{
 		if (previewBuild)
 		{
 			m_PackagePath = Utility::TempFolderKeeper::CreateGlobalTempFile(".kmp");
 		}
 
-		OnRun([this](KOperationWithProgressBase* self)
+		OnRun([this]()
 		{
 			EntryHandler();
 		});
-		OnEnd([this](KOperationWithProgressBase* self)
+		OnEnd([this]()
 		{
 			OnEndHandler();
 		});
-		OnCancel([this](KOperationWithProgressBase* self)
+		OnCancel([this]()
 		{
 			m_Cancelled = true;
 		});

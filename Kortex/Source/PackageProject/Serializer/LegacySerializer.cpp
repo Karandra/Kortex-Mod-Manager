@@ -11,7 +11,7 @@
 #include "GameInstance/IGameInstance.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModTagManager.hpp>
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxShell.h>
 
@@ -19,6 +19,13 @@ namespace Kortex::PackageProject
 {
 	namespace
 	{
+		void LoadStringArray(KxStringVector& array, const KxXMLNode& arrayNode)
+		{
+			for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+			{
+				array.emplace_back(node.GetValue());
+			}
+		}
 		void ReadConditionGroup(ConditionGroup& conditionGroup, const KxXMLNode& flagsNode, bool isRequired)
 		{
 			for (KxXMLNode node = flagsNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
@@ -591,7 +598,7 @@ namespace Kortex::PackageProject
 					for (KxXMLNode entryNode = groupNode.GetFirstChildElement(); entryNode.IsOK(); entryNode = entryNode.GetNextSiblingElement())
 					{
 						ComponentItem* entry = group->GetItems().emplace_back(std::make_unique<ComponentItem>()).get();
-						entry->SetName(KAux::StrOr(entryNode.GetFirstChildElement("Name").GetValue(), entryNode.GetAttribute("ID")));
+						entry->SetName(Utility::String::StrOr(entryNode.GetFirstChildElement("Name").GetValue(), entryNode.GetAttribute("ID")));
 						if (entry->GetName() == "---")
 						{
 							entry->SetName("Options");
@@ -644,7 +651,7 @@ namespace Kortex::PackageProject
 						for (KxXMLNode groupNode = componentsNode.GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 						{
 							ComponentGroup* group = step->GetGroups().emplace_back(std::make_unique<ComponentGroup>()).get();
-							group->SetName(KAux::StrOr(groupNode.GetFirstChildElement("Name").GetValue(), groupNode.GetAttribute("ID")));
+							group->SetName(Utility::String::StrOr(groupNode.GetFirstChildElement("Name").GetValue(), groupNode.GetAttribute("ID")));
 							group->SetSelectionMode(components.StringToSelectionMode(groupNode.GetAttribute("SelectionMode")));
 	
 							ReadEntriesArray(group, groupNode);
@@ -783,7 +790,7 @@ namespace Kortex::PackageProject
 	
 							// File path
 							wxString path = entryNode.GetFirstChildElement("Path").GetValue();
-							if (KAux::IsSingleFileExtensionMatches(path, "esp") || KAux::IsSingleFileExtensionMatches(path, "esm"))
+							if (Utility::SingleFileExtensionMatches(path, "esp") || Utility::SingleFileExtensionMatches(path, "esm"))
 							{
 								entry->SetObject(path);
 							}
@@ -884,7 +891,7 @@ namespace Kortex::PackageProject
 			if (componentsNode.IsOK())
 			{
 				// Read required files
-				KAux::LoadStringArray(components.GetRequiredFileData(), componentsNode.GetFirstChildElement("RequiredFiles"));
+				LoadStringArray(components.GetRequiredFileData(), componentsNode.GetFirstChildElement("RequiredFiles"));
 	
 				// Read sets
 				std::vector<std::pair<wxString, KxXMLNode>> groupsIDArray;
@@ -924,7 +931,7 @@ namespace Kortex::PackageProject
 						}
 	
 						// Files
-						KAux::LoadStringArray(entry->GetFileData(), entryNode.GetFirstChildElement("Files"));
+						LoadStringArray(entry->GetFileData(), entryNode.GetFirstChildElement("Files"));
 	
 						/* Required flags and type descriptor*/
 						// In version 5.x entry is shown if it's required flags checking succeed or required flags list is empty and hidden otherwise.
@@ -959,7 +966,7 @@ namespace Kortex::PackageProject
 					// KMP stores groups inside steps.
 					// Version 5.x stores groups separately and links them by IDs.
 					KxStringVector groups;
-					KAux::LoadStringArray(groups, stepNode.GetFirstChildElement("Data"));
+					LoadStringArray(groups, stepNode.GetFirstChildElement("Data"));
 					for (const wxString& groupID: groups)
 					{
 						auto it = std::find_if(groupsIDArray.begin(), groupsIDArray.end(), [&groupID](const auto& v)
@@ -981,7 +988,7 @@ namespace Kortex::PackageProject
 					{
 						auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<ConditionalComponentStep>());
 						ReadFlagsArray(step->GetConditionGroup().GetOrCreateFirstCondition(), stepNode.GetFirstChildElement("RequiredFlags"));
-						KAux::LoadStringArray(step->GetItems(), stepNode.GetFirstChildElement(sNodeName));
+						LoadStringArray(step->GetItems(), stepNode.GetFirstChildElement(sNodeName));
 					}
 				};
 				ReadConditionalSteps("ConditionalInstall", "Data");

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "ProjectSection.h"
-#include "Utility/KLabeledValue.h"
+#include "Utility/LabeledValue.h"
 #include "Network/ModSourceStore.h"
 #include "GameMods/ModTagStore.h"
 #include "GameMods/TagManager/DefaultTag.h"
@@ -17,9 +17,9 @@ namespace Kortex::PackageProject
 			wxString m_Author;
 			wxString m_Translator;
 			wxString m_Description;
-			KLabeledValue::Vector m_CustomFields;
-			KLabeledValue::Vector m_Documents;
-			KLabeledValue::Vector m_WebSites;
+			Utility::LabeledValue::Vector m_CustomFields;
+			Utility::LabeledValue::Vector m_Documents;
+			Utility::LabeledValue::Vector m_WebSites;
 			ModSourceStore m_ModSourceStore;
 			ModTagStore m_TagStore;
 	
@@ -82,20 +82,20 @@ namespace Kortex::PackageProject
 				m_Description = value;
 			}
 			
-			const KLabeledValue::Vector& GetCustomFields() const
+			const Utility::LabeledValue::Vector& GetCustomFields() const
 			{
 				return m_CustomFields;
 			}
-			KLabeledValue::Vector& GetCustomFields()
+			Utility::LabeledValue::Vector& GetCustomFields()
 			{
 				return m_CustomFields;
 			}
 			
-			const KLabeledValue::Vector& GetDocuments() const
+			const Utility::LabeledValue::Vector& GetDocuments() const
 			{
 				return m_Documents;
 			}
-			KLabeledValue::Vector& GetDocuments()
+			Utility::LabeledValue::Vector& GetDocuments()
 			{
 				return m_Documents;
 			}

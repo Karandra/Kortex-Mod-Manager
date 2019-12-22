@@ -3,7 +3,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxCheckBox.h>

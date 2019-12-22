@@ -133,13 +133,13 @@ namespace Kortex::SaveManager
 				int height = sizeNode.GetAttributeInt("Height");
 				if (width > 0 && height > 0)
 				{
-					m_BitmapSize = KBitmapSize(width, height);
+					m_BitmapSize = Utility::BitmapSize(width, height);
 				}
 			}
 		}
 		if (!m_BitmapSize.IsFullySpecified())
 		{
-			m_BitmapSize.FromHeight(defaultScreenshotHeight, KBitmapSize::r16_9);
+			m_BitmapSize.FromHeight(defaultScreenshotHeight, Utility::BitmapSize::r16_9);
 		}
 	}
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SimpleNotification.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/BitmapSize.h"
 
 namespace Kortex
 {
@@ -11,7 +11,7 @@ namespace Kortex
 	SimpleNotification::SimpleNotification(const wxString& caption, const wxString& message, const wxBitmap& bitmap)
 		: m_Caption(caption), m_Message(message)
 	{
-		KBitmapSize bitmapSize;
+		Utility::BitmapSize bitmapSize;
 		bitmapSize.FromSystemIcon();
 
 		if (m_Bitmap.GetWidth() != bitmapSize.GetWidth() || m_Bitmap.GetHeight() != bitmapSize.GetHeight())

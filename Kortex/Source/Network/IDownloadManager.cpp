@@ -3,7 +3,7 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxDrive.h>
@@ -260,7 +260,7 @@ namespace Kortex
 		{
 			if (fileItem.IsNormalItem() && fileItem.IsFile())
 			{
-				if (!KAux::IsSingleFileExtensionMatches(fileItem.GetFileExtension(), tempExt))
+				if (!Utility::SingleFileExtensionMatches(fileItem.GetFileExtension(), tempExt))
 				{
 					DownloadItem& download = *m_Downloads.emplace_back(std::make_unique<DownloadItem>());
 					if (!download.Load(fileItem))

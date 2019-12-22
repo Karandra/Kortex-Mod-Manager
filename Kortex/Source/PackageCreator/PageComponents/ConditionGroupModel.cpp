@@ -4,8 +4,8 @@
 #include "PackageCreator/PageBase.h"
 #include "PackageProject/ComponentsSection.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/Common.h"
+#include "Utility/BitmapSize.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxComboBox.h>
 #include <KxFramework/KxDataViewComboBox.h>
@@ -666,7 +666,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				m_NewTypeDescriptorCB->SetSelection(index);
 			}
 		};
-		AddItem(KAux::MakeNoneLabel(), PackageProject::TypeDescriptor::Invalid);
+		AddItem(Utility::MakeNoneLabel(), PackageProject::TypeDescriptor::Invalid);
 		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Optional"), PackageProject::TypeDescriptor::Optional);
 		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Required"), PackageProject::TypeDescriptor::Required);
 		AddItem(KTr("PackageCreator.PageComponents.TypeDescriptor.Recommended"), PackageProject::TypeDescriptor::Recommended);

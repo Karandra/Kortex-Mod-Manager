@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KDataViewListModel.h"
+#include "KxFramework/KxDataViewListModelEx.h"
 #include "Programs/IProgramItem.h"
 #include "Programs/IProgramManager.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/BitmapSize.h"
 
 namespace Kortex::ProgramManager
 {
@@ -33,7 +33,7 @@ namespace Kortex::ProgramManager
 		public KxDataViewModelExDragDropEnabled<DisplayModelDND>
 	{
 		private:
-			KBitmapSize m_BitmapSize;
+			Utility::BitmapSize m_BitmapSize;
 			bool m_ShowExpandedValues = false;
 
 		private:

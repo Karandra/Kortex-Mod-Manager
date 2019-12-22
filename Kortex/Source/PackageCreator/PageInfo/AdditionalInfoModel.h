@@ -6,7 +6,7 @@
 
 namespace Kortex::PackageDesigner::PageInfoNS
 {
-	class AdditionalInfoModel: public VectorModel<KLabeledValue::Vector>
+	class AdditionalInfoModel: public VectorModel<Utility::LabeledValue::Vector>
 	{
 		private:
 			PackageProject::InfoSection* m_InfoData = nullptr;
@@ -31,7 +31,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 			}
 			
 		public:
-			const KLabeledValue* GetDataEntry(size_t index) const
+			const Utility::LabeledValue* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{
@@ -39,7 +39,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 				}
 				return nullptr;
 			}
-			KLabeledValue* GetDataEntry(size_t index)
+			Utility::LabeledValue* GetDataEntry(size_t index)
 			{
 				if (index < GetItemCount())
 				{
@@ -48,11 +48,11 @@ namespace Kortex::PackageDesigner::PageInfoNS
 				return nullptr;
 			}
 	
-			KLabeledValue* GetDataEntry(const KxDataViewItem& item)
+			Utility::LabeledValue* GetDataEntry(const KxDataViewItem& item)
 			{
 				return GetDataEntry(GetRow(item));
 			}
-			const KLabeledValue* GetDataEntry(const KxDataViewItem& item) const
+			const Utility::LabeledValue* GetDataEntry(const KxDataViewItem& item) const
 			{
 				return GetDataEntry(GetRow(item));
 			}

@@ -2,8 +2,8 @@
 #include "IProgramManager.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/Common/Programs.hpp>
-#include "Utility/KBitmapSize.h"
-#include "Utility/KAux.h"
+#include "Utility/BitmapSize.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxFileItem.h>
 #include <KxFramework/KxMenu.h>
@@ -131,8 +131,8 @@ namespace Kortex
 		wxBitmap bitmap;
 		wxString iconPath = entry.GetIconPath();
 
-		// If icon points at 'exe' ask system for its icon, otherwise load ourselves.
-		if (KAux::IsSingleFileExtensionMatches(iconPath, wxS("exe")))
+		// If icon points to an 'exe' ask system for its icon, otherwise load it ourselves.
+		if (Utility::SingleFileExtensionMatches(iconPath, wxS("exe")))
 		{
 			bitmap = KxShell::GetFileIcon(iconPath, bitmapVariant == BitmapVariant::Small);
 		}
@@ -151,7 +151,7 @@ namespace Kortex
 		}
 
 		// If bitmap is loaded it should be in required size (by 'bitmapVariant'), but if not, correct that.
-		KBitmapSize bitmapSize;
+		Utility::BitmapSize bitmapSize;
 		if (bitmapVariant == BitmapVariant::Small)
 		{
 			bitmapSize.FromSystemSmallIcon();

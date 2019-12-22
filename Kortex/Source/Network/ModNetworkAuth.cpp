@@ -4,8 +4,8 @@
 #include "INetworkManager.h"
 #include "Application/IApplication.h"
 #include "Application/INotificationCenter.h"
-#include "Utility/KAux.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/BitmapSize.h"
+#include "Utility/Drawing.h"
 #include <KxFramework/KxCredentialsDialog.h>
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxFile.h>
@@ -49,8 +49,8 @@ namespace Kortex
 		KxCURLBinaryReply reply = connection->Download();
 		wxMemoryInputStream stream(reply.GetData(), reply.GetSize());
 
-		wxSize size = KBitmapSize().FromSystemSmallIcon().GetSize();
-		return wxBitmap(KAux::ScaleImageAspect(wxImage(stream), -1, size.GetHeight()), 32);
+		wxSize size = Utility::BitmapSize().FromSystemSmallIcon().GetSize();
+		return wxBitmap(Utility::Drawing::ScaleImageAspect(wxImage(stream), -1, size.GetHeight()), 32);
 	}
 
 	auto ModNetworkAuth::ShowCredentialsDialog(wxWindow* parent) const -> std::optional<Credentials>

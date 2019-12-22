@@ -5,7 +5,7 @@
 #include "PackageCreator/PageBase.h"
 #include "PackageCreator/WorkspaceDocument.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxButton.h>
 #include <KxFramework/KxDataViewComboBox.h>
 #include <KxFramework/KxTextBoxDialog.h>
@@ -203,7 +203,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 	void GroupsModel::OnGetStringValue(KxDataViewEvent& event)
 	{
 		PackageProject::RequirementGroup* group = GetDataEntry(GetView()->GetSelection());
-		event.SetString(group ? group->GetID() : KAux::MakeNoneLabel());
+		event.SetString(group ? group->GetID() : Utility::MakeNoneLabel());
 	}
 	
 	bool GroupsModel::DoTrackID(const wxString& trackedID, const wxString& newID, bool remove) const

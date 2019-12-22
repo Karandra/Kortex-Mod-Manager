@@ -3,7 +3,6 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxTextFile.h>

@@ -8,8 +8,9 @@
 #include "GameMods/IGameMod.h"
 #include "Application/IApplication.h"
 #include "Application/INotificationCenter.h"
-#include "Utility/DateTime.h"
+#include "Utility/Common.h"
 #include "Utility/Log.h"
+#include "Utility/DateTime.h"
 #include <KxFramework/KxCURL.h>
 #include <KxFramework/KxJSON.h>
 #include <KxFramework/KxXML.h>
@@ -122,7 +123,7 @@ namespace Kortex::NetworkManager
 
 	wxString NexusUpdateChecker::GetUpdateInfoFile() const
 	{
-		return m_Nexus.GetLocationInCache(KxString::Format(wxS("UpdateInfo-%1.xml"), KAux::MakeSafeFileName(m_Nexus.TranslateGameIDToNetwork())));
+		return m_Nexus.GetLocationInCache(KxString::Format(wxS("UpdateInfo-%1.xml"), Utility::MakeSafeFileName(m_Nexus.TranslateGameIDToNetwork())));
 	}
 	bool NexusUpdateChecker::SaveUpdateInfo()
 	{

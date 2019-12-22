@@ -13,8 +13,8 @@
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
 #include "PackageProject/Serializer.h"
-#include "Utility/KOperationWithProgress.h"
-#include "Utility/KAux.h"
+#include "Utility/String.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxTextFile.h>
 #include <KxFramework/KxINI.h>
@@ -183,7 +183,7 @@ namespace Kortex::ModManager
 		return m_ProfilesDirectory + '\\' + GetSelectedProfile();
 	}
 
-	void ModImporterMO::ReadExecutables(KOperationWithProgressDialogBase* context)
+	void ModImporterMO::ReadExecutables(Utility::OperationWithProgressDialogBase* context)
 	{
 		context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), IProgramManager::GetInstance()->GetManagerInfo().GetName()));
 
@@ -216,7 +216,7 @@ namespace Kortex::ModManager
 			}
 		}
 	}
-	void ModImporterMO::CopySaves(KOperationWithProgressDialogBase* context)
+	void ModImporterMO::CopySaves(Utility::OperationWithProgressDialogBase* context)
 	{
 		if (ISaveManager* saveManager = ISaveManager::GetInstance())
 		{
@@ -229,7 +229,7 @@ namespace Kortex::ModManager
 			saveManager->ScheduleWorkspacesReload();
 		}
 	}
-	void ModImporterMO::CopyMods(KOperationWithProgressDialogBase* context)
+	void ModImporterMO::CopyMods(Utility::OperationWithProgressDialogBase* context)
 	{
 		IGameProfile* profile = IGameInstance::GetActiveProfile();
 		GameInstance::ProfileMod::Vector& currentModList = profile->GetMods();
@@ -340,7 +340,7 @@ namespace Kortex::ModManager
 		profile->SaveConfig();
 		IModDispatcher::GetInstance()->UpdateVirtualTree();
 	}
-	void ModImporterMO::ReadPlugins(KOperationWithProgressDialogBase* context)
+	void ModImporterMO::ReadPlugins(Utility::OperationWithProgressDialogBase* context)
 	{
 		if (IPluginManager* pluginManager = IPluginManager::GetInstance())
 		{
@@ -367,7 +367,7 @@ namespace Kortex::ModManager
 						name.Remove(0, 1);
 					}
 				}
-				currentPluginsList.emplace_back(name, KAux::IsStringsContain(activePlugins, name, false));
+				currentPluginsList.emplace_back(name, Utility::String::IsStringsContain(activePlugins, name, false));
 			}
 			profile->SaveConfig();
 
@@ -375,7 +375,7 @@ namespace Kortex::ModManager
 			pluginManager->ScheduleWorkspacesReload();
 		}
 	}
-	void ModImporterMO::CopyGameConfig(KOperationWithProgressDialogBase* context)
+	void ModImporterMO::CopyGameConfig(Utility::OperationWithProgressDialogBase* context)
 	{
 		if (IGameConfigManager* configManager = IGameConfigManager::GetInstance())
 		{
@@ -400,7 +400,7 @@ namespace Kortex::ModManager
 			configManager->ScheduleWorkspacesReload();
 		}
 	}
-	void ModImporterMO::CopyDownloads(KOperationWithProgressDialogBase* context)
+	void ModImporterMO::CopyDownloads(Utility::OperationWithProgressDialogBase* context)
 	{
 		IDownloadManager* manager = IDownloadManager::GetInstance();
 		manager->PauseAllActive();
@@ -465,7 +465,7 @@ namespace Kortex::ModManager
 			}
 		}
 	}
-	void ModImporterMO::Import(KOperationWithProgressDialogBase* context)
+	void ModImporterMO::Import(Utility::OperationWithProgressDialogBase* context)
 	{
 		if (context->CanContinue())
 		{

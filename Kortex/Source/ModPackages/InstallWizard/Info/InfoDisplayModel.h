@@ -19,12 +19,12 @@ namespace Kortex::InstallWizard::InfoPageNS
 		friend class InfoDisplayModel;
 
 		private:
-			KLabeledValue Value;
+			Utility::LabeledValue Value;
 			ResourceID IconID;
 			InfoKind Type = InfoKind::None;
 
 		public:
-			Item(const KLabeledValue& value)
+			Item(const Utility::LabeledValue& value)
 				:Value(value)
 			{
 			}
@@ -58,6 +58,6 @@ namespace Kortex::InstallWizard::InfoPageNS
 
 		public:
 			void CreateView(wxWindow* parent);
-			void AddItem(const KLabeledValue& value, const ResourceID& image = {}, InfoKind type = InfoKind::None);
+			void AddItem(const Utility::LabeledValue& value, const ResourceID& image = {}, InfoKind type = InfoKind::None);
 	};
 }

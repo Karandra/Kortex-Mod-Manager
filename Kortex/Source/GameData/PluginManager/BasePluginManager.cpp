@@ -5,7 +5,7 @@
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ProgramManager.hpp>
 #include <Kortex/PluginManager.hpp>
-#include "Utility/KUPtrVectorUtil.h"
+#include "Utility/UniquePtrVector.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxTaskDialog.h>
@@ -61,11 +61,11 @@ namespace Kortex::PluginManager
 	{
 		if (moveMode == MoveMode::Before)
 		{
-			return KUPtrVectorUtil::MoveBefore(m_Plugins, entriesToMove, anchor);
+			return Utility::UniquePtrVector::MoveBefore(m_Plugins, entriesToMove, anchor);
 		}
 		else
 		{
-			return KUPtrVectorUtil::MoveAfter(m_Plugins, entriesToMove, anchor);
+			return Utility::UniquePtrVector::MoveAfter(m_Plugins, entriesToMove, anchor);
 		}
 	}
 	void BasePluginManager::SyncWithPluginsList(const KxStringVector& pluginNamesList, SyncListMode mode)

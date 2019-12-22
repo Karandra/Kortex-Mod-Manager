@@ -25,4 +25,37 @@ namespace Kortex::Utility::DateTime
 	{
 		return IsEarlierThanBy(Now(), date, span);
 	}
+
+	wxString FormatDate(const wxDateTime& dateTime)
+	{
+		if (dateTime.IsValid())
+		{
+			return dateTime.Format(wxS("%d.%m.%Y"));
+		}
+		return wxEmptyString;
+	}
+	wxString FormatTime(const wxDateTime& dateTime)
+	{
+		if (dateTime.IsValid())
+		{
+			return dateTime.FormatISOTime();
+		}
+		return wxEmptyString;
+	}
+	wxString FormatDateTime(const wxDateTime& dateTime, wxChar sep)
+	{
+		if (dateTime.IsValid())
+		{
+			return FormatDate(dateTime) + sep + FormatTime(dateTime);
+		}
+		return wxEmptyString;
+	}
+	wxString FormatDateTimeFS(const wxDateTime& dateTime)
+	{
+		if (dateTime.IsValid())
+		{
+			return dateTime.Format(wxS("%d-%m-%Y %H-%M-%S"));
+		}
+		return wxEmptyString;
+	}
 }

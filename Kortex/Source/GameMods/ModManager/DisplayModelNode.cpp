@@ -3,6 +3,7 @@
 #include "Network/ModNetworkUpdateChecker.h"
 #include "Workspace.h"
 #include "DisplayModel.h"
+#include "Utility/DateTime.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
@@ -234,11 +235,11 @@ namespace Kortex::ModManager
 				}
 				case ColumnID::DateInstall:
 				{
-					return KAux::FormatDateTime(m_Mod->GetInstallTime());
+					return Utility::DateTime::FormatDateTime(m_Mod->GetInstallTime());
 				}
 				case ColumnID::DateUninstall:
 				{
-					return KAux::FormatDateTime(m_Mod->GetUninstallTime());
+					return Utility::DateTime::FormatDateTime(m_Mod->GetUninstallTime());
 				}
 				case ColumnID::ModFolder:
 				{

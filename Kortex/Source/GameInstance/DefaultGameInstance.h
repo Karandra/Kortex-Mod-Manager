@@ -4,7 +4,6 @@
 #include "Application/VariablesTable/VariablesDatabase.h"
 #include "Application/VariablesTable/StaticVariableTable.h"
 #include "GameID.h"
-#include "Utility/KAux.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxFileStream.h>
 class KActiveGameInstance;

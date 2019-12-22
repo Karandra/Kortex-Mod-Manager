@@ -2,7 +2,7 @@
 #include "Dialog.h"
 #include <Kortex/Application.hpp>
 #include "Application/Options/CmdLineDatabase.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/INetworkManager.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -46,7 +46,7 @@ namespace Kortex::NetworkManager::NXMHandler
 	{
 		auto ResetLabel = [this]()
 		{
-			m_RegisteredToLabel->SetLabel(KTrf("NetworkManager.NXMHandler.RegisteredToLabel", KAux::MakeNoneLabel()));
+			m_RegisteredToLabel->SetLabel(KTrf("NetworkManager.NXMHandler.RegisteredToLabel", Utility::MakeNoneLabel()));
 		};
 
 		if (m_NXMFileType)

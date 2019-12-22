@@ -3,6 +3,7 @@
 #include "DisplayModel.h"
 #include "../Requirements/DisplayModel.h"
 #include "UI/ImageViewerDialog.h"
+#include "Utility/UI.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
 #include <KxFramework/KxTaskDialog.h>
@@ -75,7 +76,7 @@ namespace Kortex::InstallWizard
 				}
 				else
 				{
-					m_Description->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
+					m_Description->SetValue(Utility::UI::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
 				}
 				m_TabView->SetPageImage((size_t)TabIndex::Description, (int)(!isDescriptionEmpty ? ImageResourceID::InformationFrame : ImageResourceID::InformationFrameEmpty));
 
@@ -118,7 +119,7 @@ namespace Kortex::InstallWizard
 		m_TabView->SetPageImage((size_t)TabIndex::Description, (int)ImageResourceID::InformationFrameEmpty);
 		m_TabView->SetPageImage((size_t)TabIndex::Requirements, (int)ImageResourceID::InformationFrameEmpty);
 
-		m_Description->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectComponentHint"), m_Description));
+		m_Description->SetValue(Utility::UI::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectComponentHint"), m_Description));
 		m_Description->Disable();
 
 		m_ImageView->SetBitmap(wxNullBitmap);
@@ -223,7 +224,7 @@ namespace Kortex::InstallWizard
 		m_Description = new KxHTMLWindow(m_TabView, KxID_NONE, wxEmptyString, KxHTMLWindow::DefaultStyle|wxBORDER_NONE);
 		m_Description->Bind(wxEVT_HTML_LINK_CLICKED, [this](wxHtmlLinkEvent& event)
 		{
-			KAux::AskOpenURL(event.GetLinkInfo().GetHref(), &GetWizard());
+			Utility::UI::AskOpenURL(event.GetLinkInfo().GetHref(), &GetWizard());
 		});
 		m_TabView->InsertPage((size_t)TabIndex::Description, m_Description, KTr("Generic.Description"), true);
 

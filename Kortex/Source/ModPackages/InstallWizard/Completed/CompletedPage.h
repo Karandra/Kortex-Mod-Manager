@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "../WizardPage.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxLabel.h>
 

@@ -2,7 +2,11 @@
 #include "stdafx.h"
 #include <KxFramework/KxSingleton.h>
 #include <KxFramework/KxVersion.h>
-class KOperationWithProgressDialogBase;
+
+namespace Kortex::Utility
+{
+	class OperationWithProgressDialogBase;
+}
 
 namespace Kortex::PluginManager
 {
@@ -21,6 +25,6 @@ namespace Kortex::PluginManager
 			wxString GetUserListPath() const;
 
 			bool CanSortNow() const;
-			bool SortPlugins(KxStringVector& sortedList, KOperationWithProgressDialogBase* context = nullptr);
+			bool SortPlugins(KxStringVector& sortedList, Utility::OperationWithProgressDialogBase* context = nullptr);
 	};
 }

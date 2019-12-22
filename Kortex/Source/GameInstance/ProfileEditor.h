@@ -1,8 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "IGameProfile.h"
-#include "Utility/KDataViewListModel.h"
-#include "Utility/KLabeledValue.h"
+#include "KxFramework/KxDataViewListModelEx.h"
 #include <KxFramework/KxStdDialog.h>
 class KxButton;
 class KxCheckBox;
@@ -16,12 +15,12 @@ namespace Kortex::ProfileEditor
 			wxString m_NewCurrentProfile;
 
 		protected:
-			virtual void OnInitControl() override;
+			void OnInitControl() override;
 
-			virtual void GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
-			virtual void GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
-			virtual bool SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column) override;
-			virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
+			void GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
+			void GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const override;
+			bool SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column) override;
+			bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
 
 			void OnActivate(KxDataViewEvent& event);
 			void MarkModified()

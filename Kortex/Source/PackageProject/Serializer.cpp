@@ -5,8 +5,8 @@
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
-#include "Utility/KAux.h"
 #include <KxFramework/KxTextFile.h>
+#include <KxFramework/KxURI.h>
 
 namespace Kortex::PackageProject
 {
@@ -23,8 +23,7 @@ namespace Kortex::PackageProject
 		if (reURL.Matches(url))
 		{
 			// Site name
-			//wxString siteName = reURL.GetMatch(url, 1).MakeLower();
-			wxString siteName = KAux::ExtractDomainName(url);
+			wxString siteName = KxURI(url).GetServer();
 			if (siteName == "tesall.ru")
 			{
 				modNetwork = TESALLModNetwork::GetInstance();

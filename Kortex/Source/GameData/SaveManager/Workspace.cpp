@@ -7,7 +7,6 @@
 #include <Kortex/GameInstance.hpp>
 #include "GameMods/ModManager/Workspace.h"
 #include "UI/ImageViewerDialog.h"
-#include "Utility/KAux.h"
 #include "Utility/Common.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxAuiNotebook.h>
@@ -26,7 +25,7 @@ namespace
 	using namespace Kortex;
 	using namespace Kortex::Application;
 
-	wxString FilterNameToSignature(const KLabeledValue& filter)
+	wxString FilterNameToSignature(const Utility::LabeledValue& filter)
 	{
 		wxStringInputStream stream(filter.GetValue());
 		return wxS("Filter-") + KxCrypto::CRC32(stream);
@@ -40,7 +39,7 @@ namespace
 	{
 		return GetAInstanceOptionOf<ISaveManager>(OName::Workspace, OName::FileFilters);
 	}
-	auto GetFilterOption(const KLabeledValue& filter)
+	auto GetFilterOption(const Utility::LabeledValue& filter)
 	{
 		return GetAInstanceOptionOf<ISaveManager>(OName::Workspace, OName::FileFilters, FilterNameToSignature(filter));
 	}
@@ -135,7 +134,7 @@ namespace Kortex::SaveManager
 		}
 		else
 		{
-			for (const KLabeledValue& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
+			for (const Utility::LabeledValue& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
 			{
 				m_ActiveFilters.insert(filter.GetValue());
 			}
@@ -146,7 +145,7 @@ namespace Kortex::SaveManager
 	{
 		// Add or remove this filter
 		const KxMenuItem* item = event.GetItem();
-		const KLabeledValue* pFilter = static_cast<const KLabeledValue*>(item->GetClientData());
+		const Utility::LabeledValue* pFilter = static_cast<const Utility::LabeledValue*>(item->GetClientData());
 		if (item->IsChecked())
 		{
 			m_ActiveFilters.insert(pFilter->GetValue());
@@ -280,7 +279,7 @@ namespace Kortex::SaveManager
 				const auto& basicInfo = save->GetBasicInfo();
 				basicInfoMenuItem->Enable(!basicInfo.empty());
 
-				for (const KLabeledValue& entry: basicInfo)
+				for (const Utility::LabeledValue& entry: basicInfo)
 				{
 					KxMenuItem* item = basicInfoMenu->AddItem(KxString::Format(wxS("%1: %2"), entry.GetLabel(), entry.GetValue()));
 				}
@@ -330,11 +329,11 @@ namespace Kortex::SaveManager
 			filtersMenu->AddSeparator();
 
 			// Specific
-			for (const KLabeledValue& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
+			for (const Utility::LabeledValue& filter: ISaveManager::GetInstance()->GetConfig().GetFileFilters())
 			{
 				KxMenuItem* item = filtersMenu->Add(new KxMenuItem(filter.GetLabel(), wxEmptyString, wxITEM_CHECK));
 				item->Bind(KxEVT_MENU_SELECT, &Workspace::FiltersMenu_SpecificFilter, this);
-				item->SetClientData(const_cast<KLabeledValue*>(&filter));
+				item->SetClientData(const_cast<Utility::LabeledValue*>(&filter));
 				item->Check(FiltersMenu_IsFilterActive(filter.GetValue()));
 			}
 		}

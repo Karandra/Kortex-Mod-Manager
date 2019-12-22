@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KWithBitmap.h"
+#include "Utility/WithBitmap.h"
 #include <KxFramework/KxXML.h>
 
 namespace Kortex
@@ -61,14 +61,14 @@ namespace Kortex
 			virtual wxString GetWorkingDirectory() const = 0;
 			virtual void SetWorkingDirectory(const wxString& value) = 0;
 
-			virtual KWithBitmap& GetSmallBitmap() = 0;
-			const KWithBitmap& GetSmallBitmap() const
+			virtual Utility::WithBitmap& GetSmallBitmap() = 0;
+			const Utility::WithBitmap& GetSmallBitmap() const
 			{
 				return const_cast<IProgramItem&>(*this).GetSmallBitmap();
 			}
 
-			virtual KWithBitmap& GetLargeBitmap() = 0;
-			const KWithBitmap& GetLargeBitmap() const
+			virtual Utility::WithBitmap& GetLargeBitmap() = 0;
+			const Utility::WithBitmap& GetLargeBitmap() const
 			{
 				return const_cast<IProgramItem&>(*this).GetLargeBitmap();
 			}

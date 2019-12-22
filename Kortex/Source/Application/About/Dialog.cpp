@@ -2,8 +2,8 @@
 #include "Dialog.h"
 #include "DisplayModel.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/UI.h"
+#include "Utility/BitmapSize.h"
 #include <KxFramework/KxURI.h>
 #include <KxFramework/KxHTMLWindow.h>
 
@@ -56,7 +56,7 @@ namespace Kortex::Application
 {
 	wxSize AboutDialog::GetLogoSize() const
 	{
-		return FromDIP(KBitmapSize().FromSystemIcon().GetSize() * 4);
+		return FromDIP(Utility::BitmapSize().FromSystemIcon().GetSize() * 4);
 	}
 	wxString AboutDialog::GetCaption() const
 	{
@@ -120,7 +120,7 @@ namespace Kortex::Application
 	}
 	void AboutDialog::OnLinkClicked(wxHtmlLinkEvent& event)
 	{
-		KAux::AskOpenURL(event.GetLinkInfo().GetHref(), this);
+		Utility::UI::AskOpenURL(event.GetLinkInfo().GetHref(), this);
 	}
 
 	AboutDialog::AboutDialog(wxWindow* parent)

@@ -426,23 +426,8 @@
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Code\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utility\KAux.cpp">
-      <Filter>Code\Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\KQuickThread.cpp">
-      <Filter>Code\Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp">
-      <Filter>Code\Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\KOperationWithProgress.cpp">
-      <Filter>Code\Source\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Archive\KArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility\KBitmapSize.cpp">
-      <Filter>Code\Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
@@ -1290,64 +1275,31 @@
     <ClCompile Include="Source\Utility\TempFolderKeeper.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utility\BitmapSize.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\OperationWithProgress.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\QuickThread.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\String.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\Drawing.cpp">
+      <Filter>Code\Source\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
       <Filter>Code\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\KAux.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KQuickThread.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KThemeManager.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KEntryRefT.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KLabeledValue.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KSetEnabledWrapper.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KWithIDName.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KDataViewListModel.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KOperationWithProgress.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KDataViewTreeModel.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KDataViewModelBase.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Archive\KArchive.h">
       <Filter>Code\Headers\Archive</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\KWithBitmap.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KUnsortedUnique.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KBitmapSize.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Archive\KBethesdaArchive.h">
       <Filter>Code\Headers\Archive</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KUPtrVectorUtil.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\KVectorForwarder.h">
-      <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameData\SaveManager\EmptySaveFile.h">
       <Filter>Code\Headers\GameData\SaveManager</Filter>
@@ -2433,6 +2385,33 @@
       <Filter>Code\Headers\PackageProject\Serializer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\TempFolderKeeper.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\WithNameAndID.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\WithBitmap.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\UniquePtrVector.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\UnsortedUnique.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\BitmapSize.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\LabeledValue.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\OperationWithProgress.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\QuickThread.h">
+      <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Drawing.h">
       <Filter>Code\Headers\Utility</Filter>
     </ClInclude>
   </ItemGroup>

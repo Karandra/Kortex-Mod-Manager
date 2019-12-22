@@ -5,7 +5,6 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include "VirtualFileSystem/VirtualFSEvent.h"
 #include "GameMods/ModManager/Workspace.h"
-#include "Utility/KAux.h"
 
 namespace
 {

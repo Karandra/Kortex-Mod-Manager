@@ -3,7 +3,7 @@
 #include <Kortex/ScreenshotsGallery.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 
 namespace Kortex::ScreenshotsGallery
 {
@@ -40,6 +40,6 @@ namespace Kortex::ScreenshotsGallery
 	}
 	KxStringVector Config::GetLocations() const
 	{
-		return KAux::ExpandVariablesInVector(m_Locations);
+		return Utility::ExpandVariablesInVector(m_Locations);
 	}
 }

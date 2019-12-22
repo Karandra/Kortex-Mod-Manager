@@ -6,7 +6,7 @@
 #include "Network/IModNetwork.h"
 #include "GameInstance/GameID.h"
 #include "Utility/Collection.h"
-#include "Utility/KLabeledValue.h"
+#include "Utility/LabeledValue.h"
 #include <KxFramework/KxURI.h>
 
 namespace Kortex
@@ -254,7 +254,7 @@ namespace Kortex
 			}
 			
 			std::vector<KxURI> GetModURIs(const GameID& gameID = GameIDs::NullGameID) const;
-			KLabeledValue::Vector GetLabeledModURIs(const GameID& gameID = GameIDs::NullGameID) const;
+			Utility::LabeledValue::Vector GetLabeledModURIs(const GameID& gameID = GameIDs::NullGameID) const;
 
 			// Serialization
 			void LoadTryAdd(const KxXMLNode& arrayNode);

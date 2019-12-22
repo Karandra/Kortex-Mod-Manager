@@ -18,8 +18,7 @@
 #include "Programs/ProgramEvent.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
 #include "UI/TextEditDialog.h"
-#include "Utility/KOperationWithProgress.h"
-#include "Utility/KAux.h"
+#include "Utility/OperationWithProgress.h"
 #include "Utility/UI.h"
 #include "Utility/MenuSeparator.h"
 #include <KxFramework/KxFile.h>
@@ -391,7 +390,7 @@ namespace Kortex::ModManager
 	{
 		m_RightPane_Programs = new KxBitmapComboBox(m_RightPaneWindow, KxID_NONE);
 		m_RightPane_Programs->SetImageList(&ImageProvider::GetImageList());
-		m_RightPane_Programs->SetDefaultBitmapSize(KBitmapSize().FromSystemIcon().GetSize());
+		m_RightPane_Programs->SetDefaultBitmapSize(Utility::BitmapSize().FromSystemIcon().GetSize());
 		m_RightPane_Programs->Bind(wxEVT_COMBOBOX, &Workspace::OnSelectProgram, this);
 		m_RightPaneSizer->Add(m_RightPane_Programs, 1, wxEXPAND);
 

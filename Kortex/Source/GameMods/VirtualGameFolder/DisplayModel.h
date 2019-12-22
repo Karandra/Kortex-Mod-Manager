@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <Kortex/ModManager.hpp>
-#include "Utility/KDataViewListModel.h"
+#include "KxFramework/KxDataViewListModelEx.h"
 
 namespace Kortex
 {

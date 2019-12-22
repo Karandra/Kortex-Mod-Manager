@@ -2,14 +2,14 @@
 #include "stdafx.h"
 #include <KxFramework/DataView2/DataView2.h>
 #include "BaseNotification.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/BitmapSize.h"
 
 namespace Kortex::Notifications
 {
 	class DisplayModel: public KxDataView2::VirtualListModel, public KxDataView2::TypeAliases
 	{
 		private:
-			KBitmapSize m_BitmapSize;
+			Utility::BitmapSize m_BitmapSize;
 			INotification::Vector& m_Notifications;
 
 		private:

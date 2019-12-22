@@ -3,7 +3,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxSystem.h>
@@ -80,7 +80,7 @@ namespace
 		}
 		return std::nullopt;
 	}
-	void LoggerCallback(loot::LogLevel level, const char* message, KOperationWithProgressDialogBase* context = nullptr)
+	void LoggerCallback(loot::LogLevel level, const char* message,  Kortex::Utility::OperationWithProgressDialogBase* context = nullptr)
 	{
 		using namespace Kortex;
 		using namespace loot;
@@ -168,13 +168,13 @@ namespace Kortex::PluginManager
 	{
 		return IModManager::GetInstance()->GetFileSystem().IsEnabled();
 	}
-	bool LibLoot::SortPlugins(KxStringVector& sortedList, KOperationWithProgressDialogBase* context)
+	bool LibLoot::SortPlugins(KxStringVector& sortedList, Utility::OperationWithProgressDialogBase* context)
 	{
 		try
 		{
 			if (context)
 			{
-				context->GetEventHandler()->Bind(EvtLibLoot, &KOperationWithProgressDialogBase::OnFileOperation, context);
+				context->GetEventHandler()->Bind(EvtLibLoot, &Utility::OperationWithProgressDialogBase::OnFileOperation, context);
 			}
 			loot::SetLoggingCallback([context](loot::LogLevel level, const char* s)
 			{

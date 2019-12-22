@@ -3,8 +3,8 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include <Kortex/ScreenshotsGallery.hpp>
 #include "ImageViewerDialog.h"
-#include "Utility/KAux.h"
 #include "Utility/UI.h"
+#include "Utility/String.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxFileBrowseDialog.h>
 #include <KxFramework/KxString.h>
@@ -138,7 +138,7 @@ namespace Kortex::UI
 				m_Splitter->Unsplit(m_Description);
 				m_Splitter->Initialize(m_ImageView);
 
-				m_Description->SetValue(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
+				m_Description->SetValue(Utility::UI::MakeHTMLWindowPlaceholder(KTr("InstallWizard.NoDescriptionHint"), m_Description));
 				m_Description->Enable(false);
 			}
 
@@ -213,7 +213,7 @@ namespace Kortex::UI
 
 	bool ImageViewerDialog::Create(wxWindow* parent, const wxString& caption)
 	{
-		if (KxStdDialog::Create(parent, KxID_NONE, KAux::StrOr(caption, KTr("ImageViewer.Caption")), wxDefaultPosition, wxDefaultSize, KxBTN_CLOSE))
+		if (KxStdDialog::Create(parent, KxID_NONE, Utility::String::StrOr(caption, KTr("ImageViewer.Caption")), wxDefaultPosition, wxDefaultSize, KxBTN_CLOSE))
 		{
 			AddButton(KxID_SAVE, wxEmptyString, true).GetControl()->Bind(wxEVT_BUTTON, &ImageViewerDialog::OnSaveImage, this);
 

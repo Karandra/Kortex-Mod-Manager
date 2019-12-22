@@ -2,7 +2,7 @@
 #include <Kortex/PluginManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/ModManager.hpp>
-#include "Utility/KUPtrVectorUtil.h"
+#include "Utility/UniquePtrVector.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
 #include <KxFramework/KxProgressDialog.h>

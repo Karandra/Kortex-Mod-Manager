@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DefaultImageProvider.h"
 #include "ImageResourceID.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/BitmapSize.h"
 #include <KxFramework/KxFileItem.h>
 #include <KxFramework/KxShell.h>
 
@@ -9,7 +9,7 @@ namespace
 {
 	wxSize GetIconSIze()
 	{
-		return KBitmapSize().FromSystemSmallIcon();
+		return Kortex::Utility::BitmapSize().FromSystemSmallIcon();
 	}
 	int GetIconCount()
 	{

@@ -2,7 +2,7 @@
 #include "DisplayModel.h"
 #include "DisplayModelNode.h"
 #include "OptionStore.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxDualInputDialog.h>
@@ -40,7 +40,7 @@ namespace Kortex::NetworkManager::NXMHandler
 					}
 					return value->Executable;
 				}
-				return KAux::MakeNoneLabel();
+				return Utility::MakeNoneLabel();
 			}
 		};
 		return {};

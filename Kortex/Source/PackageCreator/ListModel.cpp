@@ -74,7 +74,7 @@ namespace Kortex::PackageDesigner
 		m_Controller = controller;
 
 		SetDataViewFlags(GetDataViewFlags()|KxDV_NO_TIMEOUT_EDIT|KxDV_VERT_RULES);
-		KDataViewListModel::Create(window, sizer);
+		KxDataViewListModelEx::Create(window, sizer);
 		EnableDragAndDrop();
 	}
 	ListModel::~ListModel()

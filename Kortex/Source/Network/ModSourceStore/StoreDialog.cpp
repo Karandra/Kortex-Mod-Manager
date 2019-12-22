@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "StoreDialog.h"
 #include "Application/Resources/IImageProvider.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <Kortex/NetworkManager.hpp>
 #include <KxFramework/KxButton.h>
 
@@ -24,7 +24,7 @@ namespace Kortex::ModSource
 
 		// Add generic
 		m_AddButtonMenu.AddSeparator();
-		KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(KAux::MakeBracketedLabel(KTr(KxID_NEW))));
+		KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(Utility::MakeBracketedLabel(KTr(KxID_NEW))));
 		item->SetBitmap(ImageProvider::GetBitmap(IModNetwork::GetGenericIcon()));
 		item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 		{

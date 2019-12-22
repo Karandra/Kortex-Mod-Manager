@@ -13,8 +13,9 @@
 #include "GameMods/VirtualGameFolder/Workspace.h"
 #include "DisplayModel.h"
 #include "BasicGameMod.h"
-#include "Utility/KOperationWithProgress.h"
-#include "Utility/KUPtrVectorUtil.h"
+#include "Utility/Common.h"
+#include "Utility/UniquePtrVector.h"
+#include "Utility/OperationWithProgress.h"
 #include "UI/ProgressOverlay.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxFile.h>
@@ -77,14 +78,14 @@ namespace Kortex::ModManager
 			}
 			const wxString path = erase ? mod.GetRootDir() : mod.GetModFilesDir();
 
-			auto operation = new KOperationWithProgressDialogBase(true, Workspace::GetInstance());
-			operation->OnRun([path = path.Clone()](KOperationWithProgressBase* self)
+			auto operation = new Utility::OperationWithProgressDialogBase(true, Workspace::GetInstance());
+			operation->OnRun([operation, path = path.Clone()]()
 			{
 				KxEvtFile folder(path);
-				self->LinkHandler(&folder, KxEVT_FILEOP_REMOVE_FOLDER);
+				operation->LinkHandler(&folder, KxEVT_FILEOP_REMOVE_FOLDER);
 				folder.RemoveFolderTree(true);
 			});
-			operation->OnEnd([this, &mod, erase](KOperationWithProgressBase* self)
+			operation->OnEnd([this, &mod, erase]()
 			{
 				BroadcastProcessor::Get().CallAfter([this, &mod, erase]()
 				{
@@ -576,16 +577,16 @@ namespace Kortex::ModManager
 			{
 				// Copy files
 				wxString destinationPath = mod.GetModFilesDir();
-				auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, Workspace::GetInstance());
-				operation->OnRun([sourcePath, destinationPath](KOperationWithProgressBase* self)
+				auto operation = new Utility::OperationWithProgressDialog<KxFileOperationEvent>(true, Workspace::GetInstance());
+				operation->OnRun([operation, sourcePath, destinationPath]()
 				{
 					KxEvtFile folder(sourcePath);
-					self->LinkHandler(&folder, KxEVT_FILEOP_COPY_FOLDER);
+					operation->LinkHandler(&folder, KxEVT_FILEOP_COPY_FOLDER);
 					folder.CopyFolder(KxFile::NullFilter, destinationPath, true, true);
 				});
 
 				// If canceled, remove entire mod folder
-				operation->OnCancel([&mod](KOperationWithProgressBase* self)
+				operation->OnCancel([&mod]()
 				{
 					KxFile(mod.GetRootDir()).RemoveFolderTree(true);
 
@@ -595,7 +596,7 @@ namespace Kortex::ModManager
 				});
 
 				// Reload after task is completed (successfully or not)
-				operation->OnEnd([&mod](KOperationWithProgressBase* self)
+				operation->OnEnd([&mod]()
 				{
 					BroadcastProcessor::Get().QueueEvent(ModEvent::EvtInstalled, mod);
 				});
@@ -630,7 +631,7 @@ namespace Kortex::ModManager
 
 	KxStringVector MirroredLocation::GetSources() const
 	{
-		return KAux::ExpandVariablesInVector(m_Sources);
+		return Utility::ExpandVariablesInVector(m_Sources);
 	}
 	wxString MirroredLocation::GetSource() const
 	{

@@ -3,7 +3,7 @@
 #include "ModPackages/IPackageManager.h"
 #include "PackageProject/ModPackageProject.h"
 #include "Archive/KArchive.h"
-#include "Utility/KLabeledValue.h"
+#include "Utility/LabeledValue.h"
 #include <KxFramework/KxFileStream.h>
 
 namespace Kortex
@@ -116,11 +116,11 @@ namespace Kortex
 			{
 				return m_DocumentsBuffer;
 			}
-			const KArchive::Buffer& GetDocumentBuffer(const KLabeledValue& entry) const
+			const KArchive::Buffer& GetDocumentBuffer(const Utility::LabeledValue& entry) const
 			{
 				return m_DocumentsBuffer.at((size_t)entry.GetClientData());
 			}
-			wxString GetSimpleDocument(const KLabeledValue& entry) const
+			wxString GetSimpleDocument(const Utility::LabeledValue& entry) const
 			{
 				return ReadString(GetDocumentBuffer(entry));
 			}

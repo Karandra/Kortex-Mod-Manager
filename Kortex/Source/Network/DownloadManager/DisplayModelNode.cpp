@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DisplayModelNode.h"
 #include "DownloadItem.h"
-#include "Utility/KAux.h"
+#include "Utility/DateTime.h"
 #include <Kortex/Resources.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/NetworkManager.hpp>
@@ -65,7 +65,7 @@ namespace Kortex::DownloadManager
 			}
 			case ColumnID::Date:
 			{
-				return KAux::FormatDateTime(m_Item.GetDownloadDate());
+				return Utility::DateTime::FormatDateTime(m_Item.GetDownloadDate());
 			}
 			case ColumnID::Status:
 			{

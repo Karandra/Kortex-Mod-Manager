@@ -4,7 +4,7 @@
 #include "PackageProject/ModPackageProject.h"
 #include "UI/TextEditDialog.h"
 #include "UI/ImageViewerDialog.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxString.h>
@@ -33,10 +33,10 @@ namespace
 
 namespace Kortex::PackageDesigner::PageInterfaceNS
 {
-	KBitmapSize ImageListModel::GetThumbnailSize(const wxWindow* window)
+	Utility::BitmapSize ImageListModel::GetThumbnailSize(const wxWindow* window)
 	{
-		KBitmapSize size;
-		size.FromHeight(64, KBitmapSize::r16_9);
+		Utility::BitmapSize size;
+		size.FromHeight(64, Utility::BitmapSize::r16_9);
 
 		if (window)
 		{
@@ -53,13 +53,13 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 		}
 		else
 		{
-			entry->SetNoBitmap(true);
+			entry->SetCanNotHaveBitmap(true);
 		}
 	}
 	
 	void ImageListModel::OnInitControl()
 	{
-		KBitmapSize bitmapSize = GetThumbnailSize(GetView());
+		Utility::BitmapSize bitmapSize = GetThumbnailSize(GetView());
 
 		GetView()->SetUniformRowHeight(bitmapSize.GetHeight() + 4);
 		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &ImageListModel::OnActivateItem, this);
@@ -317,7 +317,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 		{
 			KxDataViewItem item = GetView()->GetMainWindow()->GetItemByRow(row);
 			PackageProject::ImageItem* entry = GetDataEntry(GetRow(item));
-			if (entry && !entry->HasBitmap() && !entry->IsNoBitmap())
+			if (entry && !entry->HasBitmap() && !entry->CanNotHaveBitmap())
 			{
 				GetView()->CallAfter([this, item, entry]()
 				{
@@ -354,18 +354,18 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 		if (dialog.ShowModal() == KxID_OK)
 		{
 			wxString source = dialog.GetResult();
-			auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
-			operation->OnRun([this, source](KOperationWithProgressBase* self)
+			auto operation = new Utility::OperationWithProgressDialog<KxFileOperationEvent>(true, GetView());
+			operation->OnRun([this, operation, source]()
 			{
 				KxEvtFile source(source);
-				self->LinkHandler(&source, KxEVT_FILEOP_SEARCH);
+				operation->LinkHandler(&source, KxEVT_FILEOP_SEARCH);
 				KxStringVector files = source.Find(IScreenshotsGallery::GetSupportedExtensions(), KxFS_FILE, true);
 	
 				size_t count = files.size();
 				size_t processed = 0;
 				for (const wxString& path: files)
 				{
-					if (self->CanContinue())
+					if (operation->CanContinue())
 					{
 						GetDataVector()->emplace_back(PackageProject::ImageItem(path, wxEmptyString, true));
 					}
@@ -375,7 +375,7 @@ namespace Kortex::PackageDesigner::PageInterfaceNS
 					}
 				}
 			});
-			operation->OnEnd([this](KOperationWithProgressBase* self)
+			operation->OnEnd([this]()
 			{
 				RefreshItems();
 				ChangeNotify();

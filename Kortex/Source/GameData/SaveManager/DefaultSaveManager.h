@@ -2,18 +2,18 @@
 #include "stdafx.h"
 #include "GameData/ISaveManager.h"
 #include "Application/IWorkspace.h"
-#include "Utility/KLabeledValue.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/LabeledValue.h"
+#include "Utility/BitmapSize.h"
 
 namespace Kortex::SaveManager
 {
 	class Config
 	{
 		private:
-			KLabeledValue::Vector m_FileFilters;
+			Utility::LabeledValue::Vector m_FileFilters;
 			wxString m_SaveImplementation;
 			wxString m_Location;
-			KBitmapSize m_BitmapSize;
+			Utility::BitmapSize m_BitmapSize;
 
 			wxString m_PrimarySaveExt;
 			wxString m_SecondarySaveExt;
@@ -24,7 +24,7 @@ namespace Kortex::SaveManager
 		public:
 			wxString GetSaveImplementation() const;
 			wxString GetLocation() const;
-			KBitmapSize GetBitmapSize() const
+			Utility::BitmapSize GetBitmapSize() const
 			{
 				return m_BitmapSize;
 			}
@@ -33,7 +33,7 @@ namespace Kortex::SaveManager
 			{
 				return !m_FileFilters.empty();
 			}
-			const KLabeledValue::Vector& GetFileFilters() const
+			const Utility::LabeledValue::Vector& GetFileFilters() const
 			{
 				return m_FileFilters;
 			}

@@ -140,9 +140,9 @@ namespace Kortex
 		}
 		return items;
 	}
-	KLabeledValue::Vector ModSourceStore::GetLabeledModURIs(const GameID& gameID) const
+	Utility::LabeledValue::Vector ModSourceStore::GetLabeledModURIs(const GameID& gameID) const
 	{
-		KLabeledValue::Vector items;
+		Utility::LabeledValue::Vector items;
 		items.reserve(m_Items.size());
 
 		for (const ModSourceItem& item: m_Items)

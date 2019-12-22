@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KDataViewListModel.h"
+#include "KxFramework/KxDataViewListModelEx.h"
 #include "GameMods/IModStatistics.h"
 
 namespace Kortex::ModStatistics
@@ -12,10 +12,10 @@ namespace Kortex::ModStatistics
 			KxStringVector m_DataVector;
 
 		protected:
-			virtual void OnInitControl() override;
+			void OnInitControl() override;
 
-			virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
-			virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
+			void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
+			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
 
 		private:
 			wxString GetStatName(size_t index) const;
@@ -25,10 +25,10 @@ namespace Kortex::ModStatistics
 			DisplayModel();
 
 		public:
-			virtual size_t GetItemCount() const override
+			size_t GetItemCount() const override
 			{
 				return m_Stats->GetStatCount();
 			}
-			virtual void RefreshItems() override;
+			void RefreshItems() override;
 	};
 }

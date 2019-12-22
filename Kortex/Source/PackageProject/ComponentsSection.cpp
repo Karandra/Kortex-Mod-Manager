@@ -2,7 +2,6 @@
 #include "ComponentsSection.h"
 #include "ModPackageProject.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 
 namespace
 {
@@ -27,10 +26,7 @@ namespace Kortex::PackageProject
 	}
 	
 	FlagItem::FlagItem(const wxString& value, const wxString& name)
-		:KLabeledValue(value, name)
-	{
-	}
-	FlagItem::~FlagItem()
+		:LabeledValue(value, name)
 	{
 	}
 }

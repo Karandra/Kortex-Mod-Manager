@@ -13,8 +13,7 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include <Kortex/GameInstance.hpp>
-#include "Utility/KBitmapSize.h"
-#include "Utility/KAux.h"
+#include "Utility/BitmapSize.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -108,7 +107,7 @@ namespace Kortex::Application
 		if (!anotherInstanceRunning)
 		{
 			// Set default table-tree-list like controls
-			const int defaultRowHeight = KBitmapSize().FromSystemSmallIcon().GetHeight() + m_InitProgressDialog->FromDIP(4);
+			const int defaultRowHeight = Utility::BitmapSize().FromSystemSmallIcon().GetHeight() + m_InitProgressDialog->FromDIP(4);
 			wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", defaultRowHeight);
 			wxSystemOptions::SetOption("KxDataView2::DefaultRowHeight", defaultRowHeight);
 

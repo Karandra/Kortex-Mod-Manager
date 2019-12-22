@@ -5,7 +5,6 @@
 #include <Kortex/Notification.hpp>
 #include <Kortex/DownloadManager.hpp>
 #include "GameMods/ModManager/Workspace.h"
-#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>

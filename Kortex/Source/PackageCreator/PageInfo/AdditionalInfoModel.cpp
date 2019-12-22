@@ -3,7 +3,6 @@
 #include "PackageCreator/PageBase.h"
 #include "UI/TextEditDialog.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
@@ -40,7 +39,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 			{
 				case ColumnID::Name:
 				{
-					value = entry->GetLabelRaw();
+					value = entry->GetRawLabel();
 					break;
 				}
 				case ColumnID::Value:
@@ -95,7 +94,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 					}
 					else
 					{
-						KLabeledValue* entry = GetDataEntry(GetRow(event.GetItem()));
+						Utility::LabeledValue* entry = GetDataEntry(GetRow(event.GetItem()));
 						if (entry)
 						{
 							UI::TextEditDialog dialog(GetView());
@@ -115,7 +114,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	void AdditionalInfoModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const KLabeledValue* entry = GetDataEntry(GetRow(item));
+		const Utility::LabeledValue* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -154,7 +153,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	
 	void AdditionalInfoModel::OnAddEntry()
 	{
-		GetDataVector()->emplace_back(KLabeledValue(wxEmptyString));
+		GetDataVector()->emplace_back(Utility::LabeledValue(wxEmptyString));
 	
 		KxDataViewItem item = GetItem(GetItemCount() - 1);
 		NotifyAddedItem(item);

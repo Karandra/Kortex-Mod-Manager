@@ -2,6 +2,7 @@
 #include "IGameMod.h"
 #include "IModManager.h"
 #include <Kortex/GameInstance.hpp>
+#include "Utility/Common.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxCrypto.h>
 
@@ -48,7 +49,7 @@ namespace Kortex
 	
 	wxString IGameMod::GetSafeName() const
 	{
-		return KAux::MakeSafeFileName(GetName());
+		return Utility::MakeSafeFileName(GetName());
 	}
 	bool IGameMod::IsPackageFileExist() const
 	{

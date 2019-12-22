@@ -5,8 +5,8 @@
 #include <Kortex/Application.hpp>
 #include "GameMods/ModManager/Workspace.h"
 #include "UI/TextEditDialog.h"
-#include "Utility/KAux.h"
 #include "Utility/MenuSeparator.h"
+#include "Utility/UI.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxComparator.h>
@@ -42,7 +42,7 @@ namespace Kortex::PluginManager
 			for (size_t i = 0; i < GetItemCount(); i++)
 			{
 				const IGamePlugin* plugin = GetDataEntry(i);
-				if (plugin && KAux::CheckSearchMask(m_SearchMask, plugin->GetName()))
+				if (plugin && Utility::UI::CheckSearchMask(m_SearchMask, plugin->GetName()))
 				{
 					children.push_back(GetItem(i));
 				}
@@ -125,7 +125,7 @@ namespace Kortex::PluginManager
 	}
 	void PluginViewModel::OnContextMenu(KxDataViewEvent& event)
 	{
-		using namespace Utility;
+		using Utility::MenuSeparatorBefore;
 
 		KxDataViewItem item = event.GetItem();
 		KxDataViewColumn* column = event.GetColumn();
@@ -326,11 +326,11 @@ namespace Kortex::PluginManager
 	}
 	void PluginViewModel::SetDataVector()
 	{
-		KDataViewVectorListModel::SetDataVector();
+		KxDataViewVectorListModelEx::SetDataVector();
 	}
 	void PluginViewModel::SetDataVector(IGamePlugin::Vector& array)
 	{
-		KDataViewVectorListModel::SetDataVector(&m_Items);
+		KxDataViewVectorListModelEx::SetDataVector(&m_Items);
 	}
 	IDisplayModel* PluginViewModel::GetDisplayModel() const
 	{
@@ -349,6 +349,6 @@ namespace Kortex::PluginManager
 	}
 	bool PluginViewModel::SetSearchMask(const wxString& mask)
 	{
-		return KAux::SetSearchMask(m_SearchMask, mask);
+		return Utility::UI::SetSearchMask(m_SearchMask, mask);
 	}
 }

@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "TextEditDialog.h"
-#include "Utility/KAux.h"
-#include "Utility/UI.h"
 #include <Kortex/Application.hpp>
 #include "Application/Resources/ImageResourceID.h"
+#include "Utility/UI.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxStyledTextBox.h>

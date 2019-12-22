@@ -2,7 +2,6 @@
 #include "ConfigSection.h"
 #include "ModPackageProject.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 
 namespace Kortex::PackageProject
 {

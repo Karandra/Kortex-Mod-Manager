@@ -2,7 +2,7 @@
 #include "FileDataSelectorModel.h"
 #include "PackageCreator/PageBase.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxDataViewComboBox.h>
 
@@ -146,7 +146,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				return;
 			}
 		}
-		event.SetString(KAux::MakeNoneLabel());
+		event.SetString(Utility::MakeNoneLabel());
 	}
 	
 	void FileDataSelectorComboBox::SetDataVector()

@@ -3,8 +3,8 @@
 #include "PackageCreator/PageBase.h"
 #include "UI/TextEditDialog.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
+#include <KxFramework/KxURI.h>
 #include <KxFramework/KxFileBrowseDialog.h>
 
 namespace
@@ -33,14 +33,14 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	
 	void SitesModel::GetEditorValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
 	{
-		const KLabeledValue* entry = GetDataEntry(row);
+		const Utility::LabeledValue* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Name:
 				{
-					data = entry->GetLabelRaw();
+					data = entry->GetRawLabel();
 					return;
 				}
 				case ColumnID::Value:
@@ -53,14 +53,14 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	}
 	void SitesModel::GetValueByRow(wxAny& data, size_t row, const KxDataViewColumn* column) const
 	{
-		const KLabeledValue* entry = GetDataEntry(row);
+		const Utility::LabeledValue* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
 			{
 				case ColumnID::Name:
 				{
-					data = entry->HasLabel() ? entry->GetLabelRaw() : KAux::ExtractDomainName(entry->GetValue());
+					data = entry->HasLabel() ? entry->GetRawLabel() : KxURI(entry->GetValue()).GetServer();
 					break;
 				}
 				case ColumnID::Value:
@@ -73,7 +73,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	}
 	bool SitesModel::SetValueByRow(const wxAny& data, size_t row, const KxDataViewColumn* column)
 	{
-		KLabeledValue* entry = GetDataEntry(row);
+		Utility::LabeledValue* entry = GetDataEntry(row);
 		if (entry)
 		{
 			switch (column->GetID())
@@ -116,7 +116,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 					}
 					else
 					{
-						if (KLabeledValue* entry = GetDataEntry(GetRow(item)))
+						if (Utility::LabeledValue* entry = GetDataEntry(GetRow(item)))
 						{
 							UI::TextEditDialog dialog(GetView());
 							dialog.SetText(entry->GetValue());
@@ -135,7 +135,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	void SitesModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
-		const KLabeledValue* entry = GetDataEntry(GetRow(item));
+		const Utility::LabeledValue* entry = GetDataEntry(GetRow(item));
 	
 		KxMenu menu;
 		{
@@ -174,7 +174,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 	
 	void SitesModel::OnAddSite()
 	{
-		GetDataVector()->emplace_back(KLabeledValue(wxEmptyString));
+		GetDataVector()->emplace_back(Utility::LabeledValue(wxEmptyString));
 	
 		KxDataViewItem item = GetItem(GetItemCount() - 1);
 		NotifyAddedItem(item);

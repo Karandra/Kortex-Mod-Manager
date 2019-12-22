@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KDataViewListModel.h"
+#include "KxFramework/KxDataViewListModelEx.h"
 #include "Store.h"
 
 namespace Kortex::ModSource

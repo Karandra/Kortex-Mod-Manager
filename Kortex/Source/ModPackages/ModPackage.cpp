@@ -207,8 +207,8 @@ namespace Kortex
 		if (!m_DocumentsLoaded)
 		{
 			KxUInt32Vector indexes;
-			std::unordered_map<size_t, KLabeledValue*> entriesMap;
-			for (KLabeledValue& entry: m_Config.GetInfo().GetDocuments())
+			std::unordered_map<size_t, Utility::LabeledValue*> entriesMap;
+			for (Utility::LabeledValue& entry: m_Config.GetInfo().GetDocuments())
 			{
 				KxFileItem item;
 				if (m_Archive.FindFile(entry.GetValue(), item))

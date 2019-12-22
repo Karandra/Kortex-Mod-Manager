@@ -1,7 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "GameInstance/GameID.h"
-class KOperationWithProgressDialogBase;
+
+namespace Kortex::Utility
+{
+	class OperationWithProgressDialogBase;
+}
 
 namespace Kortex
 {
@@ -46,7 +50,7 @@ namespace Kortex
 			virtual void SetDirectory(const wxString& path) = 0;
 
 			// Implement actual import here.
-			virtual void Import(KOperationWithProgressDialogBase* context) = 0;
+			virtual void Import(Utility::OperationWithProgressDialogBase* context) = 0;
 
 			// Check if data can be imported at all.
 			virtual bool CanImport() const = 0;

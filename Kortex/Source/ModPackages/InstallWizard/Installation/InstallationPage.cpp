@@ -50,12 +50,12 @@ namespace Kortex::InstallWizard
 		if (!m_InstallableFiles.empty())
 		{
 			m_InstallThread = new InstallOperation(*this);
-			m_InstallThread->OnRun([this](KOperationWithProgressBase* self)
+			m_InstallThread->OnRun([this]()
 			{
-				self->LinkHandler(&GetWizard().GetArchive(), KxEVT_ARCHIVE);
+				m_InstallThread->LinkHandler(&GetWizard().GetArchive(), KxEVT_ARCHIVE);
 				GetWizard().RunInstall();
 			});
-			m_InstallThread->OnEnd([this](KOperationWithProgressBase* self)
+			m_InstallThread->OnEnd([this]()
 			{
 				m_InstallThread = nullptr;
 				OnEndInstall();

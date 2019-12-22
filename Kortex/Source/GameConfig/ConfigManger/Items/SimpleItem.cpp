@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SimpleItem.h"
 #include "GameConfig/ConfigManger/ItemGroup.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/DataView2/DataView2.h>
 
 namespace
@@ -154,11 +154,11 @@ namespace Kortex::GameConfig
 					{
 						if (value.GetType().IsString())
 						{
-							return KAux::MakeBracketedLabel(GetManager().GetTranslator().GetString(wxS("ConfigManager.View.EmptyStringValue")));
+							return Utility::MakeBracketedLabel(GetManager().GetTranslator().GetString(wxS("ConfigManager.View.EmptyStringValue")));
 						}
 						else
 						{
-							return KAux::MakeNoneLabel();
+							return Utility::MakeNoneLabel();
 						}
 					}
 					return serializedValue;

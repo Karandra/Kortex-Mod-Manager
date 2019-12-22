@@ -10,8 +10,9 @@
 #include "ConditionGroupModel.h"
 #include "UI/TextEditDialog.h"
 #include "UI/ImageViewerDialog.h"
+#include "Utility/Common.h"
+#include "Utility/String.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxComboBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
@@ -405,7 +406,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 				wxString conditions = PageComponents::ConditionGroupToString(step->GetConditionGroup());
 				if (conditions.IsEmpty())
 				{
-					conditions = KAux::MakeNoneLabel();
+					conditions = Utility::MakeNoneLabel();
 				}
 				value = KTr(wxS("PackageCreator.PageComponents.Conditions")) + wxS(": ") + conditions;
 				break;
@@ -552,7 +553,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 						}
 						else
 						{
-							value = entry->GetImage().IsEmpty() ? KAux::MakeNoneLabel() : entry->GetImage();
+							value = entry->GetImage().IsEmpty() ? Utility::MakeNoneLabel() : entry->GetImage();
 						}
 						break;
 					}
@@ -576,7 +577,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 						}
 						else if (entry->GetDescription().IsEmpty())
 						{
-							value = KAux::MakeNoneLabel();
+							value = Utility::MakeNoneLabel();
 						}
 						else
 						{
@@ -601,7 +602,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 						wxString conditions = PageComponents::ConditionGroupToString(entry->GetTDConditionGroup());
 						if (conditions.IsEmpty())
 						{
-							conditions = KAux::MakeNoneLabel();
+							conditions = Utility::MakeNoneLabel();
 						}
 	
 						if (entry->GetTDConditionalValue() != PackageProject::TypeDescriptor::Invalid)
@@ -611,7 +612,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 								conditions.Prepend(wxS("("));
 								conditions.Append(wxS(")"));
 							}
-							value = conditions + wxS(' ') + KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT) + wxS(' ') + PackageProject::ComponentsSection::TypeDescriptorToTranslation(entry->GetTDConditionalValue());
+							value = conditions + wxS(' ') + Utility::String::GetUnicodeChar(Utility::CharCode::ArrowRight) + wxS(' ') + PackageProject::ComponentsSection::TypeDescriptorToTranslation(entry->GetTDConditionalValue());
 						}
 						else
 						{
@@ -636,7 +637,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 						wxString flags = PageComponents::ConditionToString(entry->GetConditionalFlags(), false);
 						if (flags.IsEmpty())
 						{
-							flags = KAux::MakeNoneLabel();
+							flags = Utility::MakeNoneLabel();
 						}
 						value = flags;
 						break;
@@ -1059,7 +1060,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 	{
 		KxStringVector imagesList;
 		imagesList.reserve(GetInterface().GetImages().size() + 1);
-		imagesList.push_back(KAux::MakeNoneLabel());
+		imagesList.push_back(Utility::MakeNoneLabel());
 	
 		for (auto& image: GetInterface().GetImages())
 		{

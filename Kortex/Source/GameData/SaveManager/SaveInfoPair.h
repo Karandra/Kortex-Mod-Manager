@@ -1,10 +1,10 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KLabeledValue.h"
+#include "Utility/LabeledValue.h"
 
 namespace Kortex::SaveManager
 {
-	class SaveInfoPair: public KLabeledValue
+	class SaveInfoPair: public Utility::LabeledValue
 	{
 		public:
 			using Vector = std::vector<SaveInfoPair>;
@@ -17,7 +17,7 @@ namespace Kortex::SaveManager
 		public:
 			SaveInfoPair() = default;
 			SaveInfoPair(const wxString& value, const wxString& label = {})
-				:KLabeledValue(value, label)
+				:Utility::LabeledValue(value, label)
 			{
 			}
 

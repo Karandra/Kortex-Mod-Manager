@@ -6,8 +6,7 @@
 #include <Kortex/ScreenshotsGallery.hpp>
 #include "ProgramEditorDialog.h"
 #include "Programs/ProgramEvent.h"
-#include "Utility/KAux.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxMenu.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxFileBrowseDialog.h>

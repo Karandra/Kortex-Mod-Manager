@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Archive/KArchive.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include "Utility/TempFolderKeeper.h"
 
 namespace Kortex
@@ -28,7 +28,7 @@ namespace Kortex::PackageDesigner
 
 		private:
 			const ModPackageProject& m_Project;
-			KOperationWithProgressBase& m_Thread;	
+			Utility::OperationWithProgressBase& m_Thread;	
 			wxString m_PackagePath;
 			const bool m_BuildPreview = false;
 
@@ -59,7 +59,7 @@ namespace Kortex::PackageDesigner
 			virtual void ProcessFileData();
 
 		public:
-			PackageBuilder(const ModPackageProject& project, KOperationWithProgressBase& thread, bool previewBuild = false);
+			PackageBuilder(const ModPackageProject& project, Utility::OperationWithProgressBase& thread, bool previewBuild = false);
 			~PackageBuilder();
 
 		public:
@@ -88,7 +88,7 @@ namespace Kortex::PackageDesigner
 
 namespace Kortex::PackageDesigner
 {
-	class PackageBuilderOperation: public KOperationWithProgressDialog<KxArchiveEvent>
+	class PackageBuilderOperation: public Utility::OperationWithProgressDialog<KxArchiveEvent>
 	{
 		private:
 			const ModPackageProject& m_Project;

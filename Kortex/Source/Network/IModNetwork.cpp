@@ -2,7 +2,7 @@
 #include "IModNetwork.h"
 #include <Kortex/NetworkManager.hpp>
 #include "GameMods/IGameMod.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxCredentialsDialog.h>
@@ -36,7 +36,7 @@ namespace Kortex
 	}
 	wxString IModNetwork::GetCacheDirectory() const
 	{
-		return INetworkManager::GetInstance()->GetCacheDirectory() + wxS('\\') + KAux::MakeSafeFileName(GetName());
+		return INetworkManager::GetInstance()->GetCacheDirectory() + wxS('\\') + Utility::MakeSafeFileName(GetName());
 	}
 	wxString IModNetwork::GetLocationInCache(const wxString& relativePath) const
 	{

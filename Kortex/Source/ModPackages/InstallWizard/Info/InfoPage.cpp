@@ -4,7 +4,9 @@
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
 #include "UI/ImageViewerDialog.h"
+#include "Utility/Common.h"
 #include "Utility/Log.h"
+#include "Utility/UI.h"
 #include <KxFramework/KxTaskDialog.h>
 
 namespace
@@ -56,15 +58,15 @@ namespace Kortex::InstallWizard
 			m_DocumentsContainer->SplitVertically(m_DocumentsList, m_DocumentAdvanced, m_DocumentsContainer->GetSashPosition());
 		};
 
-		const KLabeledValue::Vector& documents = GetPackageConfig().GetInfo().GetDocuments();
+		const Utility::LabeledValue::Vector& documents = GetPackageConfig().GetInfo().GetDocuments();
 		if (index != -1 && (size_t)index < documents.size())
 		{
 			try
 			{
 				const ModPackage& package = GetWizard().GetPackage();
-				const KLabeledValue& entry = documents[index];
+				const Utility::LabeledValue& entry = documents[index];
 
-				if (useAdvancedEditor || KAux::IsFileExtensionMatches(entry.GetValue(), {"pdf", "xml", "htm", "html", "doc", "docx"}))
+				if (useAdvancedEditor || Utility::FileExtensionMatches(entry.GetValue(), {"pdf", "xml", "htm", "html", "doc", "docx"}))
 				{
 					KxFileStream file(GetWizard().CreateTempFile(entry.GetValue().AfterLast('\\')), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Everything);
 					const KArchive::Buffer& fileBuffer = package.GetDocumentBuffer(entry);
@@ -98,7 +100,7 @@ namespace Kortex::InstallWizard
 		else
 		{
 			SwitchSimple();
-			m_DocumentSimple.LoadHTML(KAux::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectDocumentHint"), m_DocumentSimple));
+			m_DocumentSimple.LoadHTML(Utility::UI::MakeHTMLWindowPlaceholder(KTr("InstallWizard.SelectDocumentHint"), m_DocumentSimple));
 			m_DocumentSimple.GetWindow()->Disable();
 		}
 	}
@@ -200,7 +202,7 @@ namespace Kortex::InstallWizard
 		{
 			if (isRequired || !value.IsEmpty())
 			{
-				m_InfoDisplayModel->AddItem(KLabeledValue(value, name), image, type);
+				m_InfoDisplayModel->AddItem(Utility::LabeledValue(value, name), image, type);
 			}
 		};
 		auto AddSites = [this, &info, &AddString]()
@@ -211,14 +213,14 @@ namespace Kortex::InstallWizard
 				{
 					IModNetwork* modNetwork = nullptr;
 					ResourceID icon = item.TryGetModNetwork(modNetwork) ? modNetwork->GetIcon() : IModNetwork::GetGenericIcon();
-					m_InfoDisplayModel->AddItem(KLabeledValue(item.GetURI().BuildUnescapedURI(), item.GetName()), icon, InfoKind::ModSource);
+					m_InfoDisplayModel->AddItem(Utility::LabeledValue(item.GetURI().BuildUnescapedURI(), item.GetName()), icon, InfoKind::ModSource);
 				}
 				return true;
 			});
 		};
 		auto AddUserData = [this, &info, &AddString]()
 		{
-			for (const KLabeledValue& item: info.GetCustomFields())
+			for (const Utility::LabeledValue& item: info.GetCustomFields())
 			{
 				m_InfoDisplayModel->AddItem(item);
 			}
@@ -242,7 +244,7 @@ namespace Kortex::InstallWizard
 	}
 	void InfoPage::LoadDocumentsTab(const ModPackageProject& package)
 	{
-		for (const KLabeledValue& item: package.GetInfo().GetDocuments())
+		for (const Utility::LabeledValue& item: package.GetInfo().GetDocuments())
 		{
 			m_DocumentsList->AddItem(item.GetLabel());
 		}

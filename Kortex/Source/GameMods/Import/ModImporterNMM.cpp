@@ -11,8 +11,7 @@
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
 #include "PackageProject/Serializer.h"
-#include "Utility/KOperationWithProgress.h"
-#include "Utility/KAux.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxTextFile.h>
 
@@ -123,7 +122,7 @@ namespace Kortex::ModManager
 		return wxEmptyString;
 	}
 
-	void ModImporterNMM::CopySavesAndConfig(KOperationWithProgressDialogBase* context)
+	void ModImporterNMM::CopySavesAndConfig(Utility::OperationWithProgressDialogBase* context)
 	{
 		context->SetDialogCaption(KxString::Format("%1 \"%2\"", KTr("Generic.Import"), ISaveManager::GetInstance()->GetManagerInfo().GetName()));
 
@@ -159,7 +158,7 @@ namespace Kortex::ModManager
 			configManager->ScheduleWorkspacesReload();
 		}
 	}
-	void ModImporterNMM::CopyMods(KOperationWithProgressDialogBase* context)
+	void ModImporterNMM::CopyMods(Utility::OperationWithProgressDialogBase* context)
 	{
 		IGameProfile* profile = IGameInstance::GetActive()->GetActiveProfile();
 		GameInstance::ProfileMod::Vector& currentModList = profile->GetMods();
@@ -249,7 +248,7 @@ namespace Kortex::ModManager
 		profile->SaveConfig();
 		IModDispatcher::GetInstance()->UpdateVirtualTree();
 	}
-	void ModImporterNMM::ReadPlugins(KOperationWithProgressDialogBase* context)
+	void ModImporterNMM::ReadPlugins(Utility::OperationWithProgressDialogBase* context)
 	{
 		if (IPluginManager* pluginManager = IPluginManager::GetInstance())
 		{
@@ -277,7 +276,7 @@ namespace Kortex::ModManager
 			pluginManager->ScheduleWorkspacesReload();
 		}
 	}
-	void ModImporterNMM::CopyDownloads(KOperationWithProgressDialogBase* context)
+	void ModImporterNMM::CopyDownloads(Utility::OperationWithProgressDialogBase* context)
 	{
 		IDownloadManager* manager = IDownloadManager::GetInstance();
 		manager->PauseAllActive();
@@ -333,7 +332,7 @@ namespace Kortex::ModManager
 			}
 		}
 	}
-	void ModImporterNMM::Import(KOperationWithProgressDialogBase* context)
+	void ModImporterNMM::Import(Utility::OperationWithProgressDialogBase* context)
 	{
 		if (context->CanContinue())
 		{

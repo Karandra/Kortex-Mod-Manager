@@ -4,7 +4,11 @@
 #include "PackageCreator/IDTracker.h"
 #include "PackageProject/FileDataSection.h"
 class KxDataViewSpinRenderer;
-class KOperationWithProgressBase;
+
+namespace Kortex::Utility
+{
+	class OperationWithProgressBase;
+}
 
 namespace Kortex::PackageDesigner::PageFileDataNS
 {
@@ -25,7 +29,7 @@ namespace Kortex::PackageDesigner::PageFileDataNS
 			void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
 			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
 	
-			void AddEverythingFromPath(const wxString& filePath, PackageProject::FolderItem& fileEntry, KOperationWithProgressBase& context);
+			void AddEverythingFromPath(const wxString& filePath, PackageProject::FolderItem& fileEntry, Utility::OperationWithProgressBase& context);
 			bool DoTrackID(const wxString& trackedID, const wxString& newID, bool remove);
 	
 			void OnActivateItem(KxDataViewEvent& event);

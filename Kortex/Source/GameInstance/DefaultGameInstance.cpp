@@ -6,9 +6,9 @@
 #include <Kortex/ApplicationOptions.hpp>
 #include "IGameProfile.h"
 #include "ProfileEvent.h"
-#include "Utility/KOperationWithProgress.h"
-#include "Utility/KBitmapSize.h"
-#include "Utility/KAux.h"
+#include "Utility/OperationWithProgress.h"
+#include "Utility/BitmapSize.h"
+#include "Utility/Common.h"
 #include "Utility/Log.h"
 #include "Util.h"
 #include <KxFramework/KxFile.h>
@@ -78,8 +78,8 @@ namespace Kortex::GameInstance
 
 			// Set base variables
 			m_Variables.SetVariable(wxS("GameID"), VariableValue(m_GameID));
-			m_Variables.SetVariable(wxS("GameName"), KAux::StrOr(m_GameName, m_GameShortName, m_GameID));
-			m_Variables.SetVariable(wxS("GameShortName"), KAux::StrOr(m_GameShortName, m_GameName, m_GameID));
+			m_Variables.SetVariable(wxS("GameName"), Utility::String::StrOr(m_GameName, m_GameShortName, m_GameID));
+			m_Variables.SetVariable(wxS("GameShortName"), Utility::String::StrOr(m_GameShortName, m_GameName, m_GameID));
 			m_Variables.SetVariable(wxS("GameSortOrder"), VariableValue(KxString::Format(wxS("%1"), m_SortOrder)));
 
 			if (IsTemplate())
@@ -215,8 +215,8 @@ namespace Kortex::GameInstance
 		IVariableTable& variables = GetVariables();
 		bool is64Bit = KxFile(variables.GetVariable("GameExecutable").AsString()).GetBinaryType() == KxFBF_WIN64;
 
-		variables.SetVariable("GameArchitecture", KAux::ArchitectureToNumber(is64Bit));
-		variables.SetVariable("GameArchitectureName", KAux::ArchitectureToString(is64Bit));
+		variables.SetVariable("GameArchitecture", Utility::ArchitectureToNumber(is64Bit));
+		variables.SetVariable("GameArchitectureName", Utility::ArchitectureToString(is64Bit));
 	}
 
 	// Variables
@@ -305,8 +305,8 @@ namespace Kortex::GameInstance
 			newProfile.SaveConfig();
 
 			// Do copy
-			KOperationWithProgressDialogBase* operation = new KOperationWithProgressDialog<KxFileOperationEvent>(false);
-			operation->OnRun([this, baseProfile, &newProfile, copyOptions](KOperationWithProgressBase* self)
+			Utility::OperationWithProgressDialogBase* operation = new Utility::OperationWithProgressDialog<KxFileOperationEvent>(false);
+			operation->OnRun([this, operation, baseProfile, &newProfile, copyOptions]()
 			{
 				// Begin copying data
 				if (baseProfile)
@@ -314,20 +314,20 @@ namespace Kortex::GameInstance
 					if (copyOptions & CopyOptionsProfile::GameConfig)
 					{
 						KxEvtFile source(baseProfile->GetConfigDir());
-						self->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
+						operation->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
 						source.CopyFolder(KxFile::NullFilter, newProfile.GetConfigDir(), true, true);
 					}
 					if (copyOptions & CopyOptionsProfile::GameSaves)
 					{
 						KxEvtFile source(baseProfile->GetSavesDir());
-						self->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
+						operation->LinkHandler(&source, KxEVT_FILEOP_COPY_FOLDER);
 						source.CopyFolder(KxFile::NullFilter, newProfile.GetSavesDir(), true, true);
 					}
 				}
 			});
 
 			// Reload after task is completed (successfully or not)
-			operation->OnEnd([this, &newProfile](KOperationWithProgressBase* self)
+			operation->OnEnd([this, &newProfile]()
 			{
 				BroadcastProcessor::Get().QueueEvent(ProfileEvent::EvtAdded, newProfile);
 				BroadcastProcessor::Get().QueueEvent(ProfileEvent::EvtRefreshList);

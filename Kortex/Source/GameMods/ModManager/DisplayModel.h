@@ -1,8 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "DisplayModelNode.h"
-#include "Utility/KBitmapSize.h"
-#include "Utility/KAux.h"
+#include "Utility/BitmapSize.h"
 #include <KxFramework/DataView2/DataView2.h>
 
 namespace Kortex
@@ -126,11 +125,7 @@ namespace Kortex::ModManager
 			void SetPriorityGroupLabelAlignment(PriorityGroupLabelAlignment value);
 
 			void CreateSearchColumnsMenu(KxMenu& menu);
-			bool SetSearchMask(const wxString& mask)
-			{
-				KAux::SetSearchMask(m_SearchMask, mask);
-				return true;
-			}
+			bool SetSearchMask(const wxString& mask);
 			void SetSearchColumns(const std::vector<KxDataView2::Column*>& columns);
 			bool FilterMod(const IGameMod& mod) const;
 

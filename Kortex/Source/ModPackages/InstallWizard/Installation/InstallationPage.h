@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "../WizardPage.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxLabel.h>
 #include <KxFramework/KxProgressBar.h>
@@ -105,14 +105,14 @@ namespace Kortex::InstallWizard
 
 namespace Kortex::InstallWizard
 {
-	class InstallOperation: public KOperationWithProgressBase
+	class InstallOperation: public Utility::OperationWithProgressBase
 	{
 		private:
 			InstallationPage& m_InstallPage;
 
 		public:
 			InstallOperation(InstallationPage& page)
-				:KOperationWithProgressBase(true), m_InstallPage(page)
+				:Utility::OperationWithProgressBase(true), m_InstallPage(page)
 			{
 			}
 
@@ -121,7 +121,7 @@ namespace Kortex::InstallWizard
 			{
 				using T = wxEventTypeTag<KxFileOperationEvent>;
 				GetEventHandler()->Bind(static_cast<T>(type), &InstallationPage::OnMinorProgress, &m_InstallPage);
-				KOperationWithProgressBase::LinkHandler(eventHandler, type);
+				Utility::OperationWithProgressBase::LinkHandler(eventHandler, type);
 			}
 	};
 }

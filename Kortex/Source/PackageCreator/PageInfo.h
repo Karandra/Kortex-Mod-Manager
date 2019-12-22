@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "PageBase.h"
 #include "Network/Common.h"
+#include "Utility/UI.h"
 class KxTextBox;
 class KxListBox;
 class KxComboBox;
@@ -75,7 +76,7 @@ namespace Kortex::PackageDesigner
 				KxURI uri = store.GetModPageURI(T::GetInstance()->GetName());
 				if (uri.IsOk())
 				{
-					KAux::AskOpenURL(uri, this);
+					Utility::UI::AskOpenURL(uri, this);
 				}
 				event.Skip();
 			}

@@ -30,31 +30,31 @@ namespace Kortex::ModManager
 			wxString GetDataFolderName() const;
 			wxString GetProfileDirectory() const;
 
-			void ReadExecutables(KOperationWithProgressDialogBase* context);
-			void CopySaves(KOperationWithProgressDialogBase* context);
-			void CopyMods(KOperationWithProgressDialogBase* context);
-			void ReadPlugins(KOperationWithProgressDialogBase* context);
-			void CopyGameConfig(KOperationWithProgressDialogBase* context);
-			void CopyDownloads(KOperationWithProgressDialogBase* context);
+			void ReadExecutables(Utility::OperationWithProgressDialogBase* context);
+			void CopySaves(Utility::OperationWithProgressDialogBase* context);
+			void CopyMods(Utility::OperationWithProgressDialogBase* context);
+			void ReadPlugins(Utility::OperationWithProgressDialogBase* context);
+			void CopyGameConfig(Utility::OperationWithProgressDialogBase* context);
+			void CopyDownloads(Utility::OperationWithProgressDialogBase* context);
 
 		public:
-			virtual void SetDirectory(const wxString& path) override;
-			virtual void Import(KOperationWithProgressDialogBase* context) override;
-		
-			virtual bool CanImport() const override;
-			virtual GameID GetTargetGameID() const override
+			void SetDirectory(const wxString& path) override;
+			void Import(Utility::OperationWithProgressDialogBase* context) override;
+			
+			bool CanImport() const override;
+			GameID GetTargetGameID() const override
 			{
 				return m_TargetGameID;
 			}
-			virtual wxString GetModManagerName() const override
+			wxString GetModManagerName() const override
 			{
 				return m_ModManagerName;
 			}
-			virtual wxString GetAdditionalInfo() const;
-			virtual wxString GetCurrentProfile() const override
+			wxString GetAdditionalInfo() const override;
+			wxString GetCurrentProfile() const override
 			{
 				return m_CurrentProfile;
 			}
-			virtual KxStringVector GetAvailableProfiles() const override;
+			KxStringVector GetAvailableProfiles() const override;
 	};
 }

@@ -1,12 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "ProjectSection.h"
-#include "Utility/KLabeledValue.h"
-#include "Utility/KWithIDName.h"
+#include "Utility/LabeledValue.h"
+#include "Utility/WithNameAndID.h"
 
 namespace Kortex::PackageProject
 {
-	class FlagItem: public KLabeledValue, public wxObject
+	class FlagItem: public Utility::LabeledValue, public wxObject
 	{
 		public:
 			using Vector = std::vector<FlagItem>;
@@ -16,27 +16,27 @@ namespace Kortex::PackageProject
 	
 		private:
 			bool HasLabel() const = delete;
-			const wxString& GetLabelRaw() const = delete;
+			const wxString& GetRawLabel() const = delete;
 			const wxString& GetLabel() const = delete;
 			void SetLabel(const wxString& label) = delete;
 	
 		public:
 			FlagItem(const wxString& value, const wxString& name = wxEmptyString);
-			virtual ~FlagItem();
+			virtual ~FlagItem() = default;
 	
 		public:
 			const wxString& GetValue() const
 			{
-				return KLabeledValue::GetValue();
+				return Utility::LabeledValue::GetValue();
 			}
 			void SetValue(const wxString& value)
 			{
-				KLabeledValue::SetValue(value);
+				Utility::LabeledValue::SetValue(value);
 			}
 	
 			const wxString& GetName() const
 			{
-				return KLabeledValue::GetLabelRaw();
+				return Utility::LabeledValue::GetRawLabel();
 			}
 			wxString GetDeletedName() const
 			{
@@ -44,7 +44,7 @@ namespace Kortex::PackageProject
 			}
 			void SetName(const wxString& value)
 			{
-				KLabeledValue::SetLabel(value);
+				Utility::LabeledValue::SetLabel(value);
 			}
 	};
 }
@@ -131,7 +131,7 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class ComponentItem: public KWithName
+	class ComponentItem: public Utility::WithName
 	{
 		public:
 			using Vector = std::vector<std::unique_ptr<ComponentItem>>;
@@ -238,7 +238,7 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class ComponentGroup: public KWithName
+	class ComponentGroup: public Utility::WithName
 	{
 		public:
 			using Vector = std::vector<std::unique_ptr<ComponentGroup>>;
@@ -274,7 +274,7 @@ namespace Kortex::PackageProject
 
 namespace Kortex::PackageProject
 {
-	class ComponentStep: public KWithName
+	class ComponentStep: public Utility::WithName
 	{
 		public:
 			using Vector = std::vector<std::unique_ptr<ComponentStep>>;

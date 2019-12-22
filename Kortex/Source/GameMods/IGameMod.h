@@ -1,9 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "Application/Resources/ImageResourceID.h"
-#include "Utility/KLabeledValue.h"
-#include "Utility/KWithBitmap.h"
-#include "Utility/KAux.h"
+#include "Utility/LabeledValue.h"
+#include "Utility/WithBitmap.h"
 #include <KxFramework/KxVersion.h>
 
 namespace Kortex

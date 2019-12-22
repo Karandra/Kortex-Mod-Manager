@@ -6,7 +6,7 @@
 
 namespace Kortex::PackageDesigner::PageInfoNS
 {
-	class SitesModel: public VectorModel<KLabeledValue::Vector>
+	class SitesModel: public VectorModel<Utility::LabeledValue::Vector>
 	{
 		private:
 			PackageProject::InfoSection* m_InfoData = nullptr;
@@ -32,7 +32,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 			}
 	
 		public:
-			KLabeledValue* GetDataEntry(size_t index)
+			Utility::LabeledValue* GetDataEntry(size_t index)
 			{
 				if (index < GetItemCount())
 				{
@@ -40,7 +40,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 				}
 				return nullptr;
 			}
-			const KLabeledValue* GetDataEntry(size_t index) const
+			const Utility::LabeledValue* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{

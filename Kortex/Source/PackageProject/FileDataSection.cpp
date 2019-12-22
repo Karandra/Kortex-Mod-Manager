@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "FileDataSection.h"
 #include "ModPackageProject.h"
+#include "Utility/Common.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 
 namespace Kortex::PackageProject
@@ -50,10 +50,10 @@ namespace Kortex::PackageProject
 	}
 	bool FileDataSection::IsFileIDValid(const wxString& id)
 	{
-		if (!id.IsEmpty() && !KAux::HasForbiddenFileNameChars(id))
+		if (!id.IsEmpty() && !Utility::HasForbiddenFileNameChars(id))
 		{
 			wxString idLower = KxString::ToLower(id);
-			return idLower != "fomod";
+			return idLower != wxS("fomod");
 		}
 		return false;
 	}

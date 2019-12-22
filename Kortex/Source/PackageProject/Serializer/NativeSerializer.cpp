@@ -11,10 +11,51 @@
 #include <Kortex/ModTagManager.hpp>
 #include <Kortex/PackageManager.hpp>
 #include "GameInstance/IGameInstance.h"
-#include "Utility/KAux.h"
+#include "Utility/LabeledValue.h"
 
 namespace Kortex::PackageProject
 {
+	namespace
+	{
+		void SaveLabeledValueArray(const Utility::LabeledValue::Vector& array, KxXMLNode& arrayNode, const wxString& labelName = wxS("Label"))
+		{
+			arrayNode.ClearChildren();
+
+			for (const Utility::LabeledValue& value: array)
+			{
+				KxXMLNode elementNode = arrayNode.NewElement("Entry");
+
+				elementNode.SetValue(value.GetValue());
+				if (value.HasLabel())
+				{
+					elementNode.SetAttribute(labelName, value.GetLabel());
+				}
+			}
+		}
+		void LoadLabeledValueArray(Utility::LabeledValue::Vector& array, const KxXMLNode& arrayNode, const wxString& labelName = wxS("Label"))
+		{
+			for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+			{
+				array.emplace_back(Utility::LabeledValue(node.GetValue(), node.GetAttribute(labelName)));
+			}
+		}
+	
+		void SaveStringArray(const KxStringVector& array, KxXMLNode& arrayNode, const wxString& elementNodeName = wxS("Item"))
+		{
+			arrayNode.ClearChildren();
+			for (const wxString& value: array)
+			{
+				arrayNode.NewElement(elementNodeName).SetValue(value);
+			}
+		}
+		void LoadStringArray(KxStringVector& array, const KxXMLNode& arrayNode)
+		{
+			for (KxXMLNode node = arrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+			{
+				array.emplace_back(node.GetValue());
+			}
+		}
+	}
 	namespace
 	{
 		void WriteCondition(const Condition& condition, KxXMLNode& conditionNode, bool writeOperator)
@@ -65,9 +106,9 @@ namespace Kortex::PackageProject
 			}
 		}
 	
-		template<class T> void WriteLabeledValueArray(const KLabeledValue::Vector& array, KxXMLNode& arrayNode, const T& Func, bool isCDATA = false)
+		template<class T> void WriteLabeledValueArray(const Utility::LabeledValue::Vector& array, KxXMLNode& arrayNode, const T& Func, bool isCDATA = false)
 		{
-			for (const KLabeledValue& value: array)
+			for (const Utility::LabeledValue& value: array)
 			{
 				KxXMLNode elementNode = arrayNode.NewElement("Item");
 	
@@ -126,7 +167,7 @@ namespace Kortex::PackageProject
 			info.SetDescription(infoNode.GetFirstChildElement("Description").GetValue());
 	
 			// Custom info
-			KAux::LoadLabeledValueArray(info.GetCustomFields(), infoNode.GetFirstChildElement("Custom"));
+			LoadLabeledValueArray(info.GetCustomFields(), infoNode.GetFirstChildElement("Custom"));
 	
 			// Source
 			using namespace NetworkManager;
@@ -134,7 +175,7 @@ namespace Kortex::PackageProject
 			store.LoadAssign(infoNode.GetFirstChildElement("Source"));
 	
 			// Documents
-			KAux::LoadLabeledValueArray(info.GetDocuments(), infoNode.GetFirstChildElement("Documents"), "Name");
+			LoadLabeledValueArray(info.GetDocuments(), infoNode.GetFirstChildElement("Documents"), "Name");
 	
 			// Tags
 			ModTagStore& tagStore = info.GetTagStore();
@@ -224,7 +265,7 @@ namespace Kortex::PackageProject
 		KxXMLNode requirementsNode = m_XML.QueryElement("Package/Requirements");
 		if (requirementsNode.IsOK())
 		{
-			KAux::LoadStringArray(requirements.GetDefaultGroup(), requirementsNode.GetFirstChildElement("DefaultGroups"));
+			LoadStringArray(requirements.GetDefaultGroup(), requirementsNode.GetFirstChildElement("DefaultGroups"));
 	
 			for (KxXMLNode groupNode = requirementsNode.GetFirstChildElement("Groups").GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 			{
@@ -274,7 +315,7 @@ namespace Kortex::PackageProject
 		if (componentsNode.IsOK())
 		{
 			// Read required files
-			KAux::LoadStringArray(components.GetRequiredFileData(), componentsNode.GetFirstChildElement("RequiredFiles"));
+			LoadStringArray(components.GetRequiredFileData(), componentsNode.GetFirstChildElement("RequiredFiles"));
 	
 			// Read steps
 			for (KxXMLNode stepNode = componentsNode.GetFirstChildElement("Steps").GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
@@ -331,8 +372,8 @@ namespace Kortex::PackageProject
 							item->SetTDConditionalValue(TypeDescriptor::Invalid);
 						}
 	
-						KAux::LoadStringArray(item->GetFileData(), itemNode.GetFirstChildElement("Files"));
-						KAux::LoadStringArray(item->GetRequirements(), itemNode.GetFirstChildElement("Requirements"));
+						LoadStringArray(item->GetFileData(), itemNode.GetFirstChildElement("Files"));
+						LoadStringArray(item->GetRequirements(), itemNode.GetFirstChildElement("Requirements"));
 						
 						// Conditional flags
 						KxXMLNode conditionalFlagsNode = itemNode.GetFirstChildElement("ConditionalFlags");
@@ -352,7 +393,7 @@ namespace Kortex::PackageProject
 				{
 					auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<ConditionalComponentStep>());
 					ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("Conditions"));
-					KAux::LoadStringArray(step->GetItems(), stepNode.GetFirstChildElement(nodeName));
+					LoadStringArray(step->GetItems(), stepNode.GetFirstChildElement(nodeName));
 				}
 			};
 			ReadConditionalSteps("ConditionalSteps", "Files");
@@ -410,7 +451,7 @@ namespace Kortex::PackageProject
 		// Custom info
 		if (!info.GetCustomFields().empty())
 		{
-			KAux::SaveLabeledValueArray(info.GetCustomFields(), infoNode.NewElement("Custom"));
+			SaveLabeledValueArray(info.GetCustomFields(), infoNode.NewElement("Custom"));
 		}
 	
 		// Source
@@ -420,7 +461,7 @@ namespace Kortex::PackageProject
 		// Documents
 		if (!info.GetDocuments().empty())
 		{
-			WriteLabeledValueArray(info.GetDocuments(), infoNode.NewElement("Documents"), [this](const KLabeledValue& value)
+			WriteLabeledValueArray(info.GetDocuments(), infoNode.NewElement("Documents"), [this](const Utility::LabeledValue& value)
 			{
 				return m_AsProject ? value.GetValue() : PathNameToPackage(value.GetValue(), ContentType::Documents);
 			});
@@ -545,7 +586,7 @@ namespace Kortex::PackageProject
 		KxXMLNode requirementsNode = baseNode.NewElement("Requirements");
 		if (!requirements.IsDefaultGroupEmpty())
 		{
-			KAux::SaveStringArray(requirements.GetDefaultGroup(), requirementsNode.NewElement("DefaultGroups"));
+			SaveStringArray(requirements.GetDefaultGroup(), requirementsNode.NewElement("DefaultGroups"));
 		}
 
 		KxXMLNode groupsArrayNode = groupsArrayNode = requirementsNode.NewElement("Groups");
@@ -595,7 +636,7 @@ namespace Kortex::PackageProject
 		// Write required files
 		if (!components.GetRequiredFileData().empty())
 		{
-			KAux::SaveStringArray(components.GetRequiredFileData(), componentsNode.NewElement("RequiredFiles"));
+			SaveStringArray(components.GetRequiredFileData(), componentsNode.NewElement("RequiredFiles"));
 		}
 	
 		// Write steps
@@ -667,12 +708,12 @@ namespace Kortex::PackageProject
 
 							if (!item->GetFileData().empty())
 							{
-								KAux::SaveStringArray(item->GetFileData(), itemNode.NewElement("Files"));
+								SaveStringArray(item->GetFileData(), itemNode.NewElement("Files"));
 							}
 
 							if (!item->GetRequirements().empty())
 							{
-								KAux::SaveStringArray(item->GetRequirements(), itemNode.NewElement("Requirements"));
+								SaveStringArray(item->GetRequirements(), itemNode.NewElement("Requirements"));
 							}
 
 							if (item->GetConditionalFlags().HasFlags())
@@ -702,7 +743,7 @@ namespace Kortex::PackageProject
 					// Entries
 					if (!step->GetItems().empty())
 					{
-						KAux::SaveStringArray(step->GetItems(), setNode.NewElement(nodeName));
+						SaveStringArray(step->GetItems(), setNode.NewElement(nodeName));
 					}
 				}
 			}

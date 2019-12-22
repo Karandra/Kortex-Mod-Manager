@@ -7,7 +7,6 @@
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
 #include "PackageProject/ModPackageProject.h"
-#include "Utility/KAux.h"
 #include <KxFramework/KxCrypto.h>
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxFile.h>
@@ -241,10 +240,10 @@ namespace Kortex::ModManager
 				}
 				return arrayNode;
 			};
-			auto SaveLabeledValueArray = [&xml](KxXMLNode& node, const KLabeledValue::Vector& array, const wxString& name)
+			auto SaveLabeledValueArray = [&xml](KxXMLNode& node, const Utility::LabeledValue::Vector& array, const wxString& name)
 			{
 				KxXMLNode arrayNode = node.NewElement(name);
-				for (const KLabeledValue& value: array)
+				for (const Utility::LabeledValue& value: array)
 				{
 					KxXMLNode elementNode = arrayNode.NewElement("Entry");
 					elementNode.SetValue(value.GetValue());

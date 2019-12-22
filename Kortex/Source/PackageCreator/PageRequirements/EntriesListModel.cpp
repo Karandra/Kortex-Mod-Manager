@@ -6,8 +6,8 @@
 #include "ModPackages/IPackageManager.h"
 #include "UI/TextEditDialog.h"
 #include "UI/ImageViewerDialog.h"
+#include "Utility/Common.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxAuiToolBar.h>
 #include <KxFramework/KxFileBrowseDialog.h>
@@ -66,7 +66,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 			m_ObjectFunctionEditor = info.GetEditor();
 	
 			KxStringVector choices;
-			choices.push_back(KAux::MakeNoneLabel());
+			choices.push_back(Utility::MakeNoneLabel());
 			choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.ModActive"));
 			choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.ModInactive"));
 			choices.push_back(KTr("PackageCreator.PageRequirements.RequiredState.FileExist"));
@@ -143,17 +143,17 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				case ColumnID::ID:
 				{
-					value = entry->IsEmptyID() ? KAux::MakeNoneLabel() : entry->GetID();
+					value = entry->IsEmptyID() ? Utility::MakeNoneLabel() : entry->GetID();
 					break;
 				}
 				case ColumnID::Name:
 				{
-					value = entry->IsEmptyName() ? KAux::MakeNoneLabel() : entry->GetName();
+					value = entry->IsEmptyName() ? Utility::MakeNoneLabel() : entry->GetName();
 					break;
 				}
 				case ColumnID::RequiredVersion:
 				{
-					value = entry->GetRequiredVersion().IsOK() ? entry->GetRequiredVersion().ToString() : KAux::MakeNoneLabel();
+					value = entry->GetRequiredVersion().IsOK() ? entry->GetRequiredVersion().ToString() : Utility::MakeNoneLabel();
 					break;
 				}
 				case ColumnID::CurrentVersion:
@@ -162,14 +162,14 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					wxString cv = entry->GetCurrentVersion();
 					wxString rv = entry->GetRequiredVersion();
 	
-					value = KxString::Format("CV(%1) %2 RV(%3) %4 %5", cv, operatorName, rv, KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT), entry->CheckVersion());
+					value = KxString::Format("CV(%1) %2 RV(%3) %4 %5", cv, operatorName, rv, Utility::String::GetUnicodeChar(Utility::CharCode::ArrowRight), entry->CheckVersion());
 					break;
 				}
 				case ColumnID::RequiredState:
 				{
 					KxFormat format("%1 %2 %3");
 					format(m_ObjectFunctionEditor->GetItems()[ToInt(entry->GetObjectFunction())]);
-					format(KAux::GetUnicodeChar(KAUX_CHAR_ARROW_RIGHT));
+					format(Utility::String::GetUnicodeChar(Utility::CharCode::ArrowRight));
 					format(entry->GetObjectFunctionResult() == PackageProject::ReqState::True);
 	
 					value = format.ToString();
@@ -177,12 +177,12 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 				}
 				case ColumnID::Object:
 				{
-					value = entry->GetObject().IsEmpty() ? KAux::MakeNoneLabel() : entry->GetObject();
+					value = entry->GetObject().IsEmpty() ? Utility::MakeNoneLabel() : entry->GetObject();
 					break;
 				}
 				case ColumnID::Description:
 				{
-					value = entry->GetDescription().IsEmpty() ? KAux::MakeNoneLabel() : entry->GetDescription();
+					value = entry->GetDescription().IsEmpty() ? Utility::MakeNoneLabel() : entry->GetDescription();
 					break;
 				}
 			};

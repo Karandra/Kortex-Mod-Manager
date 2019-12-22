@@ -2,7 +2,6 @@
 #include "DisplayModel.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProgressDialog.h>
 
@@ -65,6 +64,6 @@ namespace Kortex::ModStatistics
 		{
 			m_DataVector[i] = m_Stats->GetStatValue(i);
 		}
-		KDataViewVectorListModel::RefreshItems();
+		KxDataViewVectorListModelEx::RefreshItems();
 	}
 }

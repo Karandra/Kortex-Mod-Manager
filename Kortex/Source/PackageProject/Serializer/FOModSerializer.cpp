@@ -20,9 +20,7 @@
 #include "Network/ModNetwork/Nexus.h"
 #include "Network/ModNetwork/LoversLab.h"
 #include "Network/ModNetwork/TESALL.h"
-
-#include "Utility/KAux.h"
-#include "Utility/KUnsortedUnique.h"
+#include "Utility/UnsortedUnique.h"
 #include <KxFramework/KxString.h>
 
 namespace Kortex::PackageProject
@@ -683,7 +681,7 @@ namespace Kortex::PackageProject
 	void FOModSerializer::UniqueImages()
 	{
 		ImageItem::Vector& images = m_ProjectLoad->GetInterface().GetImages();
-		auto it = KUnsortedUnique(images.begin(), images.end(), [](const ImageItem& v1, const ImageItem& v2)
+		auto it = Utility::UnsortedUnique(images.begin(), images.end(), [](const ImageItem& v1, const ImageItem& v2)
 		{
 			return v1.GetPath() == v2.GetPath();
 		},

@@ -3,7 +3,7 @@
 #include "IMainWindow.h"
 #include "IWorkspace.h"
 #include "BookWorkspaceContainer.h"
-#include "Utility/KLabeledValue.h"
+#include "Utility/LabeledValue.h"
 #include <KxFramework/KxFrame.h>
 #include <KxFramework/KxPanel.h>
 #include <KxFramework/KxSplitterWindow.h>
@@ -64,7 +64,7 @@ namespace Kortex::Application
 		private:
 			BroadcastReciever m_BroadcastReciever;
 			MainWindowWorkspaceContainer m_WorkspaceContainer;
-			KLabeledValue::Vector m_Locations;
+			Utility::LabeledValue::Vector m_Locations;
 			KxMenu m_WorkspacesMenu;
 
 			wxBoxSizer* m_MainSizer = nullptr;

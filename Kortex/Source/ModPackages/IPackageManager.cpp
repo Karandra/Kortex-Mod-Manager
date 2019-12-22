@@ -10,8 +10,8 @@
 #include "PackageProject/ModPackageProject.h"
 #include "PackageCreator/Workspace.h"
 #include "Archive/KArchive.h"
-#include "Utility/KAux.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/Common.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxXML.h>
 #include <KxFramework/KxLibrary.h>
 #include <KxFramework/KxShell.h>
@@ -33,24 +33,24 @@ namespace Kortex
 	}
 	wxString IPackageManager::GetSuppoptedExtensionsFilter()
 	{
-		return KAux::MakeExtensionsFilter(GetSuppoptedExtensions());
+		return Utility::MakeExtensionsFilter(GetSuppoptedExtensions());
 	}
 	void IPackageManager::ExtractAcrhiveWithProgress(wxWindow* window, const wxString& filePath, const wxString& outPath)
 	{
-		auto thread = new KOperationWithProgressDialog<KxArchiveEvent>(true, wxGetTopLevelParent(window));
-		thread->OnRun([filePath, outPath](KOperationWithProgressBase* self)
+		auto thread = new Utility::OperationWithProgressDialog<KxArchiveEvent>(true, wxGetTopLevelParent(window));
+		thread->OnRun([thread, filePath, outPath]()
 		{
 			KArchive archive(filePath);
-			self->LinkHandler(&archive, KxEVT_ARCHIVE);
+			thread->LinkHandler(&archive, KxEVT_ARCHIVE);
 			const bool success = archive.ExtractAll(outPath);
 
 			// Set extraction successfulness status
-			self->SetClientData(success ? reinterpret_cast<void*>(1) : nullptr);
+			thread->SetClientData(success ? reinterpret_cast<void*>(1) : nullptr);
 		});
-		thread->OnEnd([window, outPath](KOperationWithProgressBase* self)
+		thread->OnEnd([thread, window, outPath]()
 		{
 			// Show warning message if something went wrong
-			if (self->GetClientData() == nullptr)
+			if (thread->GetClientData() == nullptr)
 			{
 				KxTaskDialog dialog(window, KxID_NONE, KTrf("InstallWizard.LoadFailed.Caption", outPath), KTr("InstallWizard.LoadFailed.Message"), KxBTN_OK, KxICON_ERROR);
 				dialog.ShowModal();
@@ -202,27 +202,31 @@ namespace Kortex
 
 		for (KxXMLNode node = rootNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 		{
-			auto& entry = group.GetItems().emplace_back(std::make_unique<RequirementItem>(ReqType::System));
-			entry->SetID(KVarExp(node.GetAttribute("ID")));
-			entry->SetCategory(KVarExp(node.GetAttribute("Category")));
-			entry->SetName(KVarExp(node.GetFirstChildElement("Name").GetValue()));
+			auto& item = group.GetItems().emplace_back(std::make_unique<RequirementItem>(ReqType::System));
+			item->SetID(KVarExp(node.GetAttribute("ID")));
+			item->SetCategory(KVarExp(node.GetAttribute("Category")));
+			item->SetName(KVarExp(node.GetFirstChildElement("Name").GetValue()));
 
 			// Object
 			KxXMLNode objectNode = node.GetFirstChildElement("Object");
-			entry->SetObject(objectNode.GetValue());
-			entry->SetObjectFunction(RequirementsSection::StringToObjectFunction(objectNode.GetAttribute("Function")));
+			item->SetObject(objectNode.GetValue());
+			item->SetObjectFunction(RequirementsSection::StringToObjectFunction(objectNode.GetAttribute("Function")));
 
 			// Version
 			KxXMLNode versionNode = node.GetFirstChildElement("Version");
-			entry->SetRequiredVersion(versionNode.GetValue());
-			entry->SetRequiredVersionOperator(ModPackageProject::StringToOperator(versionNode.GetAttribute("Operator"), false, RequirementsSection::ms_DefaultVersionOperator));
-			entry->SetBinaryVersionKind(versionNode.GetAttribute("BinaryVersionKind"));
+			item->SetRequiredVersion(versionNode.GetValue());
+			item->SetRequiredVersionOperator(ModPackageProject::StringToOperator(versionNode.GetAttribute("Operator"), false, RequirementsSection::ms_DefaultVersionOperator));
+			item->SetBinaryVersionKind(versionNode.GetAttribute("BinaryVersionKind"));
 
 			// Description
-			entry->SetDescription(node.GetFirstChildElement("Description").GetValue());
+			item->SetDescription(node.GetFirstChildElement("Description").GetValue());
 
 			// Dependencies
-			KAux::LoadStringArray(entry->GetDependencies(), node.GetFirstChildElement("Dependencies"));
+			KxXMLNode dependenciesArrayNode = node.GetFirstChildElement("Dependencies");
+			for (KxXMLNode node = dependenciesArrayNode.GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
+			{
+				item->GetDependencies().emplace_back(node.GetValue());
+			}
 		}
 	}
 

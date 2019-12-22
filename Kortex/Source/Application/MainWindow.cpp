@@ -11,7 +11,6 @@
 #include "Application/About/Dialog.h"
 #include "Application/Settings/Window.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
-#include "Utility/KAux.h"
 #include "Utility/Log.h"
 #include "Utility/UI.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -92,7 +91,7 @@ namespace Kortex::Application
 			});
 
 			wxImage icon = ImageProvider::GetImage(wxS("kortex-logo"));
-			wxSize size = KBitmapSize().FromSystemSmallIcon();
+			wxSize size = Utility::BitmapSize().FromSystemSmallIcon();
 			size.Scale(1.15, 1.15);
 			m_ToolBar_MainMenu->SetBitmap(icon.Rescale(size.GetWidth(), size.GetHeight(), wxIMAGE_QUALITY_HIGH));
 
@@ -116,7 +115,7 @@ namespace Kortex::Application
 	}
 	void MainWindow::CreateStatusBar()
 	{
-		const int iconWidth = KBitmapSize().FromSystemSmallIcon().GetWidth();
+		const int iconWidth = Utility::BitmapSize().FromSystemSmallIcon().GetWidth();
 
 		m_StatusBar = new KxStatusBarEx(this, KxID_NONE, 5);
 		m_StatusBar->SetImageList(&ImageProvider::GetImageList());
@@ -146,7 +145,7 @@ namespace Kortex::Application
 
 		// Add workspaces menu
 		KxAuiToolBarItem* toolBarButton = Utility::UI::CreateToolBarButton(m_ToolBar, ITranslator::GetVariable(Variables::KVAR_GAME_NAME));
-		toolBarButton->SetBitmap(KBitmapSize(m_ToolBar->GetToolBitmapSize()).ScaleMaintainRatio(IGameInstance::GetActive()->GetIcon()));
+		toolBarButton->SetBitmap(Utility::BitmapSize(m_ToolBar->GetToolBitmapSize()).ScaleMaintainRatio(IGameInstance::GetActive()->GetIcon()));
 		toolBarButton->SetOptionEnabled(KxAUI_TBITEM_OPTION_LCLICK_MENU);
 		toolBarButton->SetDropdownMenu(&m_WorkspacesMenu);
 
@@ -236,7 +235,7 @@ namespace Kortex::Application
 	}
 
 		KxMenu* locationsMenu = new KxMenu();
-		for (const KLabeledValue& entry: m_Locations)
+		for (const Utility::LabeledValue& entry: m_Locations)
 		{
 			if (!entry.HasLabel() && !entry.HasValue())
 			{

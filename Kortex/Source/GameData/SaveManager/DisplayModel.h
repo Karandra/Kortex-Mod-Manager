@@ -31,10 +31,10 @@ namespace Kortex::SaveManager
 			Workspace* m_Workspace = nullptr;
 
 			KxDataView2::Column* m_BitmapColumn = nullptr;
-			KBitmapSize m_DefaultBitmapSize;
-			KBitmapSize m_NativeBitmapSize;
-			KBitmapSize m_MinBitmapSize;
-			KBitmapSize m_BitmapSize;
+			Utility::BitmapSize m_DefaultBitmapSize;
+			Utility::BitmapSize m_NativeBitmapSize;
+			Utility::BitmapSize m_MinBitmapSize;
+			Utility::BitmapSize m_BitmapSize;
 			double m_BitmapRatio = 0;
 			int m_MaxWidth = 0;
 

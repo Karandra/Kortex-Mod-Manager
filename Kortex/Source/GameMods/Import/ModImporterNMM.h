@@ -24,29 +24,29 @@ namespace Kortex::ModManager
 			wxString GetDataFolderName() const;
 			wxString GetProfileDirectory() const;
 
-			void CopySavesAndConfig(KOperationWithProgressDialogBase* context);
-			void CopyMods(KOperationWithProgressDialogBase* context);
-			void ReadPlugins(KOperationWithProgressDialogBase* context);
-			void CopyDownloads(KOperationWithProgressDialogBase* context);
+			void CopySavesAndConfig(Utility::OperationWithProgressDialogBase* context);
+			void CopyMods(Utility::OperationWithProgressDialogBase* context);
+			void ReadPlugins(Utility::OperationWithProgressDialogBase* context);
+			void CopyDownloads(Utility::OperationWithProgressDialogBase* context);
 
 		public:
-			virtual void SetDirectory(const wxString& path) override;
-			virtual void Import(KOperationWithProgressDialogBase* context) override;
-		
-			virtual bool CanImport() const override;
-			virtual GameID GetTargetGameID() const override
+			void SetDirectory(const wxString& path) override;
+			void Import(Utility::OperationWithProgressDialogBase* context) override;
+			
+			bool CanImport() const override;
+			GameID GetTargetGameID() const override
 			{
 				return m_TargetGameID;
 			}
-			virtual wxString GetModManagerName() const override
+			wxString GetModManagerName() const override
 			{
 				return "Nexus Mod Manager";
 			}
-			virtual wxString GetAdditionalInfo() const;
-			virtual wxString GetCurrentProfile() const override
+			wxString GetAdditionalInfo() const override;
+			wxString GetCurrentProfile() const override
 			{
 				return wxEmptyString;
 			}
-			virtual KxStringVector GetAvailableProfiles() const override;
+			KxStringVector GetAvailableProfiles() const override;
 	};
 }

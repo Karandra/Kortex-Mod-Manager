@@ -2,7 +2,6 @@
 #include "CategoryItem.h"
 #include "GameConfig/IGameConfigManager.h"
 #include "GameConfig/ConfigManger/Common.h"
-#include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 
 namespace Kortex::GameConfig

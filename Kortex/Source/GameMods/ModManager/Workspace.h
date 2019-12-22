@@ -36,7 +36,7 @@ namespace Kortex::ModManager
 	class VFSProgramItem: public IProgramItem
 	{
 		private:
-			KWithBitmap m_Bitmap;
+			Utility::WithBitmap m_Bitmap;
 			Workspace& m_Workspace;
 			IVirtualFileSystem& m_FileSystem;
 
@@ -110,12 +110,12 @@ namespace Kortex::ModManager
 			{
 			}
 
-			KWithBitmap& GetSmallBitmap() override
+			Utility::WithBitmap& GetSmallBitmap() override
 			{
 				OnRequestBitmap();
 				return m_Bitmap;
 			}
-			KWithBitmap& GetLargeBitmap() override
+			Utility::WithBitmap& GetLargeBitmap() override
 			{
 				OnRequestBitmap();
 				return m_Bitmap;

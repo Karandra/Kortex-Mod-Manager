@@ -3,7 +3,7 @@
 #include <Kortex/ScreenshotsGallery.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 
 namespace Kortex
 {
@@ -24,7 +24,7 @@ namespace Kortex
 	}
 	bool IScreenshotsGallery::IsAnimationFile(const wxString& filePath)
 	{
-		return KAux::IsSingleFileExtensionMatches(filePath, wxS("gif")) || KAux::IsSingleFileExtensionMatches(filePath, wxS("ani"));
+		return Utility::SingleFileExtensionMatches(filePath, wxS("gif")) || Utility::SingleFileExtensionMatches(filePath, wxS("ani"));
 	}
 
 	IScreenshotsGallery::IScreenshotsGallery()

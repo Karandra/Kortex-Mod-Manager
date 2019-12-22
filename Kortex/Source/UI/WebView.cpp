@@ -2,7 +2,7 @@
 #include "WebView.h"
 #include "WebViewBackend/Generic.h"
 #include "WebViewBackend/InternetExplorer.h"
-#include "Utility/KAux.h"
+#include "Utility/UI.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxURI.h>
 
@@ -13,7 +13,7 @@ namespace Kortex::UI
 		// If event wasn't processed by outside code ask to open the url in external browser
 		if (!ProcessEvent(event))
 		{
-			KAux::AskOpenURL(event.GetURL(), GetWindow());
+			Utility::UI::AskOpenURL(event.GetURL(), GetWindow());
 
 			// And disallow to open this url in the web view
 			event.Veto();

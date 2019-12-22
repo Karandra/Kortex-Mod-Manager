@@ -5,7 +5,8 @@
 #include "DefaultGameInstance.h"
 #include <Kortex/Application.hpp>
 #include "Application/SystemApplication.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/BitmapSize.h"
+#include "Utility/Common.h"
 #include "Util.h"
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLibrary.h>
@@ -20,7 +21,7 @@ namespace
 		wxBitmap bitmap(path, wxBITMAP_TYPE_ANY);
 		if (bitmap.IsOk())
 		{
-			KBitmapSize size;
+			Utility::BitmapSize size;
 			size.FromSystemIcon();
 			if (bitmap.GetWidth() != size.GetWidth() || bitmap.GetHeight() != size.GetHeight())
 			{
@@ -73,7 +74,7 @@ namespace Kortex
 		// Restrict max ID length to 64 symbols
 		if (!id.IsEmpty() && id.Length() <= 64)
 		{
-			return !KAux::HasForbiddenFileNameChars(id);
+			return !Utility::HasForbiddenFileNameChars(id);
 		}
 		return false;
 	}

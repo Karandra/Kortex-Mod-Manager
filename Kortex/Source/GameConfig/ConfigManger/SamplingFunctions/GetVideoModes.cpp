@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GetVideoModes.h"
 #include "GameConfig/IConfigManager.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxIndexedEnum.h>
 #include <KxFramework/KxSystemSettings.h>
 
@@ -54,7 +54,7 @@ namespace Kortex::GameConfig::SamplingFunction
 					SampleValue* sample = AddValueIfUnique(hashValue, KxString::Format(format, videoMode.Width, videoMode.Height));
 					if (sample)
 					{
-						sample->SetLabel(KAux::GetResolutionRatio(wxSize(videoMode.Width, videoMode.Height)));
+						sample->SetLabel(Utility::GetResolutionRatio(wxSize(videoMode.Width, videoMode.Height)));
 						if (!sample->HasLabel())
 						{
 							sample->SetLabel(m_Manager.TranslateItemLabel(wxS("VideoMode.RatioUnknown"), wxS("SampleValue")));

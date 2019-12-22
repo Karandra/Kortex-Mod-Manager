@@ -27,7 +27,7 @@ namespace Kortex::SaveManager::BethesdaSave
 				{
 					if (value.ShouldDisplayLabel() && value.HasLabel())
 					{
-						displayName += KxString::Format(wxS("%1: %2"), value.GetLabelRaw(), value.GetValue());
+						displayName += KxString::Format(wxS("%1: %2"), value.GetRawLabel(), value.GetValue());
 					}
 					else
 					{

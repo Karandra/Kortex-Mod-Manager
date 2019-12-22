@@ -9,8 +9,9 @@
 #include "DisplayModelNode.h"
 #include "Workspace.h"
 #include "PriorityGroup.h"
+#include "Utility/Common.h"
+#include "Utility/UI.h"
 #include "UI/ImageViewerDialog.h"
-#include "Utility/KAux.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxUxTheme.h>
 
@@ -319,7 +320,7 @@ namespace Kortex::ModManager
 						const ModSourceStore& store = modNode->GetMod().GetModSourceStore();
 						if (!store.IsEmpty())
 						{
-							KAux::AskOpenURL(store.GetLabeledModURIs(), GetView());
+							Utility::UI::AskOpenURL(store.GetLabeledModURIs(), GetView());
 						}
 						break;
 					}
@@ -524,7 +525,7 @@ namespace Kortex::ModManager
 	DisplayModel::DisplayModel()
 	{
 		m_NoneTag = IModTagManager::GetInstance()->NewTag();
-		m_NoneTag->SetName(KAux::MakeNoneLabel());
+		m_NoneTag->SetName(Utility::MakeNoneLabel());
 	}
 
 	void DisplayModel::SetDisplayMode(DisplayModelType mode)
@@ -606,6 +607,10 @@ namespace Kortex::ModManager
 		AddItem(ColumnID::PackagePath);
 		AddItem(ColumnID::Signature);
 	}
+	bool DisplayModel::SetSearchMask(const wxString& mask)
+	{
+		return Utility::UI::SetSearchMask(m_SearchMask, mask);
+	}
 	void DisplayModel::SetSearchColumns(const std::vector<KxDataView2::Column*>& columns)
 	{
 		auto Save = [this](bool value)
@@ -638,32 +643,32 @@ namespace Kortex::ModManager
 			{
 				case ColumnID::Name:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, mod.GetName()) || KAux::CheckSearchMask(m_SearchMask, mod.GetID());
+					found = Utility::UI::CheckSearchMask(m_SearchMask, mod.GetName()) || Utility::UI::CheckSearchMask(m_SearchMask, mod.GetID());
 					break;
 				}
 				case ColumnID::Author:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, mod.GetAuthor());
+					found = Utility::UI::CheckSearchMask(m_SearchMask, mod.GetAuthor());
 					break;
 				}
 				case ColumnID::Version:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, mod.GetVersion());
+					found = Utility::UI::CheckSearchMask(m_SearchMask, mod.GetVersion());
 					break;
 				}
 				case ColumnID::Tags:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, FormatTagList(mod));
+					found = Utility::UI::CheckSearchMask(m_SearchMask, FormatTagList(mod));
 					break;
 				}
 				case ColumnID::PackagePath:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, mod.GetPackageFile());
+					found = Utility::UI::CheckSearchMask(m_SearchMask, mod.GetPackageFile());
 					break;
 				}
 				case ColumnID::Signature:
 				{
-					found = KAux::CheckSearchMask(m_SearchMask, mod.GetSignature());
+					found = Utility::UI::CheckSearchMask(m_SearchMask, mod.GetSignature());
 					break;
 				}
 			};

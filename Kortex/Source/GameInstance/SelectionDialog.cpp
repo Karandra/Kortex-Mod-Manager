@@ -5,8 +5,8 @@
 #include <Kortex/GameInstance.hpp>
 #include "Application/Resources/ImageResourceID.h"
 #include "Application/Options/CmdLineDatabase.h"
-#include "Utility/KBitmapSize.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
+#include "Utility/BitmapSize.h"
 #include <KxFramework/KxTaskDialog.h>
 #include <KxFramework/KxSplitterWindow.h>
 #include <KxFramework/KxBitmapComboBox.h>
@@ -125,12 +125,12 @@ namespace Kortex::GameInstance
 	}
 	void SelectionDialog::LoadGameFilter(const GameID& gameID)
 	{
-		KBitmapSize bitmapSize = KBitmapSize().FromSystemIcon();
+		Utility::BitmapSize bitmapSize = Utility::BitmapSize().FromSystemIcon();
 		m_GameFilterImageList = new KxImageList(bitmapSize, IGameInstance::GetTemplatesCount());
 		m_GameFilter->AssignImageList(m_GameFilterImageList);
 
 		int imageID = m_GameFilterImageList->Add(IGameInstance::GetGenericIcon());
-		m_GameFilter->AddItem(KAux::MakeBracketedLabel(KTr("Generic.All")), imageID);
+		m_GameFilter->AddItem(Utility::MakeBracketedLabel(KTr("Generic.All")), imageID);
 
 		int select = 0;
 		for (const auto& currentTemplate: IGameInstance::GetTemplates())

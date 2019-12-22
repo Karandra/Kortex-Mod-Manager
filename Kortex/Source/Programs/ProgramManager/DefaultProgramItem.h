@@ -7,8 +7,8 @@ namespace Kortex::ProgramManager
 	class DefaultProgramItem: public IProgramItem
 	{
 		private:
-			KWithBitmap m_SmallBitmap;
-			KWithBitmap m_LargeBitmap;
+			Utility::WithBitmap m_SmallBitmap;
+			Utility::WithBitmap m_LargeBitmap;
 
 			wxString m_Name;
 			wxString m_IconPath;
@@ -89,11 +89,11 @@ namespace Kortex::ProgramManager
 				m_WorkingDirectory = value;
 			}
 
-			KWithBitmap& GetSmallBitmap() override
+			Utility::WithBitmap& GetSmallBitmap() override
 			{
 				return m_SmallBitmap;
 			}
-			KWithBitmap& GetLargeBitmap() override
+			Utility::WithBitmap& GetLargeBitmap() override
 			{
 				return m_LargeBitmap;
 			}

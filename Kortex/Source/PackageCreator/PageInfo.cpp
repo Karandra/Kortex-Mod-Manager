@@ -9,9 +9,7 @@
 #include "PageInfo/AdditionalInfoModel.h"
 #include "PackageProject/ModPackageProject.h"
 #include "PackageProject/InfoSection.h"
-
 #include "UI/TextEditDialog.h"
-#include "Utility/KAux.h"
 
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>

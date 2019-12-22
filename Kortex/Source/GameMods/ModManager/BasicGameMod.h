@@ -5,9 +5,6 @@
 #include "GameMods/ModTagStore.h"
 #include "Network/Common.h"
 #include "Network/ModSourceStore.h"
-#include "Utility/KLabeledValue.h"
-#include "Utility/KWithBitmap.h"
-#include "Utility/KAux.h"
 #include <KxFramework/KxVersion.h>
 
 namespace Kortex
@@ -53,7 +50,7 @@ namespace Kortex::ModManager
 			bool IsInstalledReal() const;
 
 		public:
-			bool IsOK() const;
+			bool IsOK() const override;
 
 			void CreateAllFolders();
 			bool Save() override;
@@ -112,7 +109,7 @@ namespace Kortex::ModManager
 				return m_IsDescriptionChanged;
 			}
 			wxString GetDescription() const override;
-			void SetDescription(const wxString& value);
+			void SetDescription(const wxString& value) override;
 
 			wxDateTime GetInstallTime() const override
 			{
@@ -188,7 +185,7 @@ namespace Kortex::ModManager
 			{
 				m_Color = color;
 			}
-			ResourceID BasicGameMod::GetIcon() const
+			ResourceID BasicGameMod::GetIcon() const override
 			{
 				return {};
 			}

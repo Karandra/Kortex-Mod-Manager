@@ -1,12 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "ProjectSection.h"
-#include "Utility/KWithIDName.h"
+#include "Utility/WithNameAndID.h"
 #include <KxFramework/KxVersion.h>
 
 namespace Kortex::PackageProject
 {
-	class RequirementItem: public KWithIDName
+	class RequirementItem: public Utility::WithNameAndID
 	{
 		public:
 			using Vector = std::vector<std::unique_ptr<RequirementItem>>;

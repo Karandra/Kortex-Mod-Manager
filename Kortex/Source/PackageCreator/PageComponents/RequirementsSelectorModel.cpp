@@ -2,7 +2,6 @@
 #include "RequirementsSelectorModel.h"
 #include "PackageCreator/PageBase.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 
 namespace
 {

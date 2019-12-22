@@ -3,7 +3,6 @@
 #include "ModPackageProject.h"
 #include "ModPackages/IPackageManager.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 
 namespace
 {

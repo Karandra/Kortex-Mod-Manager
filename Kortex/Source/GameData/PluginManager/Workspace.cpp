@@ -8,8 +8,7 @@
 #include "GameMods/ModEvent.h"
 #include "GameMods/ModManager/Workspace.h"
 #include "UI/ImageViewerDialog.h"
-#include "Utility/KAux.h"
-#include "Utility/KOperationWithProgress.h"
+#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxSearchBox.h>
 #include <KxFramework/KxNotebook.h>
 #include <KxFramework/KxAuiNotebook.h>
@@ -175,8 +174,8 @@ namespace Kortex::PluginManager
 	}
 	void Workspace::OnRunLootAPI(KxMenuEvent& event)
 	{
-		auto operation = new KOperationWithProgressDialog<KxFileOperationEvent>(true, this);
-		operation->OnRun([operation](KOperationWithProgressBase* self)
+		auto operation = new Utility::OperationWithProgressDialog<KxFileOperationEvent>(true, this);
+		operation->OnRun([operation]()
 		{
 			KxStringVector sortedList;
 			if (LibLoot::GetInstance()->SortPlugins(sortedList, operation))
@@ -185,7 +184,7 @@ namespace Kortex::PluginManager
 				IPluginManager::GetInstance()->Save();
 			}
 		});
-		operation->OnEnd([this](KOperationWithProgressBase* self)
+		operation->OnEnd([this]()
 		{
 			BroadcastProcessor::Get().ProcessEvent(PluginEvent::EvtReordered);
 		});

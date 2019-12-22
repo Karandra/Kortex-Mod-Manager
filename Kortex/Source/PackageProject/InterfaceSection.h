@@ -1,13 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "ProjectSection.h"
-#include "Utility/KLabeledValue.h"
-#include "Utility/KWithBitmap.h"
+#include "Utility/LabeledValue.h"
+#include "Utility/WithBitmap.h"
 #include <KxFramework/KxColor.h>
 
 namespace Kortex::PackageProject
 {
-	class ImageItem: public KWithBitmap
+	class ImageItem: public Utility::WithBitmap
 	{
 		public:
 			using Vector = std::vector<ImageItem>;

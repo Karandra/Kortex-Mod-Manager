@@ -6,8 +6,9 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/ModTagManager.hpp>
 #include "UI/TextEditDialog.h"
-#include "Utility/KAux.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/Common.h"
+#include "Utility/UI.h"
+#include "Utility/BitmapSize.h"
 #include <KxFramework/KxTextBoxDialog.h>
 #include <KxFramework/KxTaskDialog.h>
 
@@ -26,7 +27,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 	wxAny InfoDisplayModel::GetValue(const Node& node, const Column& column) const
 	{
 		const Item& item = m_Items[node.GetRow()];
-		const KLabeledValue& itemValue = item.Value;
+		const Utility::LabeledValue& itemValue = item.Value;
 
 		switch (column.GetID<ColumnRef>())
 		{
@@ -37,7 +38,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 				// Label
 				if (!itemValue.HasLabel())
 				{
-					value.SetText(KAux::ExtractDomainName(itemValue.GetValue()));
+					value.SetText(KxURI(itemValue.GetValue()).GetServer());
 				}
 				else
 				{
@@ -51,7 +52,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 				}
 				else
 				{
-					value.SetDefaultBitmapWidth(KBitmapSize().FromSystemSmallIcon().GetWidth());
+					value.SetDefaultBitmapWidth(Utility::BitmapSize().FromSystemSmallIcon().GetWidth());
 				}
 
 				return value;
@@ -185,7 +186,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		{
 			Node* node = event.GetNode();
 			const Item& item = m_Items[node->GetRow()];
-			const KLabeledValue& itemValue = item.Value;
+			const Utility::LabeledValue& itemValue = item.Value;
 
 			switch (item.Type)
 			{
@@ -202,7 +203,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 				{
 					if (itemValue.HasValue())
 					{
-						KAux::AskOpenURL(itemValue.GetValue(), GetView());
+						Utility::UI::AskOpenURL(itemValue.GetValue(), GetView());
 					}
 					break;
 				}
@@ -252,7 +253,7 @@ namespace Kortex::InstallWizard::InfoPageNS
 		// Events
 		view->Bind(EvtITEM_ACTIVATED, &InfoDisplayModel::OnActivateItem, this);
 	}
-	void InfoDisplayModel::AddItem(const KLabeledValue& value, const ResourceID& image, InfoKind type)
+	void InfoDisplayModel::AddItem(const Utility::LabeledValue& value, const ResourceID& image, InfoKind type)
 	{
 		Item& item = m_Items.emplace_back(value);
 		item.IconID = image;

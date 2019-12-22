@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DynamicVariableTable.h"
-#include "Utility/KAux.h"
+#include "Utility/DateTime.h"
 
 namespace Kortex
 {
@@ -20,15 +20,15 @@ namespace Kortex
 	{
 		DoSetDynamicVariable(wxS("CurrentDate"), []()
 		{
-			return KAux::FormatDate(wxDateTime::Now());
+			return Utility::DateTime::FormatDate(wxDateTime::Now());
 		});
 		DoSetDynamicVariable(wxS("CurrentTime"), []()
 		{
-			return KAux::FormatTime(wxDateTime::Now());
+			return Utility::DateTime::FormatTime(wxDateTime::Now());
 		});
 		DoSetDynamicVariable(wxS("CurrentDateTime"), []()
 		{
-			return KAux::FormatDateTime(wxDateTime::Now());
+			return Utility::DateTime::FormatDateTime(wxDateTime::Now());
 		});
 	}
 

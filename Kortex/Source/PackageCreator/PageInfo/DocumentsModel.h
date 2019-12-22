@@ -6,7 +6,7 @@
 
 namespace Kortex::PackageDesigner::PageInfoNS
 {
-	class DocumentsModel: public VectorModel<KLabeledValue::Vector>
+	class DocumentsModel: public VectorModel<Utility::LabeledValue::Vector>
 	{
 		private:
 			PackageProject::InfoSection* m_InfoData = nullptr;
@@ -31,7 +31,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 			KxStringVector OpenFileDialog(bool isMultiple = true) const;
 	
 		public:
-			const KLabeledValue* GetDataEntry(size_t index) const
+			const Utility::LabeledValue* GetDataEntry(size_t index) const
 			{
 				if (index < GetItemCount())
 				{
@@ -39,7 +39,7 @@ namespace Kortex::PackageDesigner::PageInfoNS
 				}
 				return nullptr;
 			}
-			KLabeledValue* GetDataEntry(size_t index)
+			Utility::LabeledValue* GetDataEntry(size_t index)
 			{
 				if (index < GetItemCount())
 				{

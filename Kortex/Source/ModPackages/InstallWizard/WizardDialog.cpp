@@ -7,7 +7,6 @@
 #include "PackageCreator/PageBase.h"
 #include "UI/ImageViewerDialog.h"
 #include "UI/TextEditDialog.h"
-#include "Utility/KAux.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxImageView.h>
 #include <KxFramework/KxTaskDialog.h>
@@ -109,17 +108,17 @@ namespace Kortex::InstallWizard
 
 	void WizardDialog::OpenPackage(const wxString& packagePath)
 	{
-		auto thread = new KOperationWithProgressDialog<KxArchiveEvent>(true, GetParent());
-		thread->OnRun([this, packagePath = packagePath.Clone()](KOperationWithProgressBase* self)
+		auto thread = new Utility::OperationWithProgressDialog<KxArchiveEvent>(true, GetParent());
+		thread->OnRun([this, thread, packagePath = packagePath.Clone()]()
 		{
-			self->LinkHandler(&m_Package->GetArchive(), KxEVT_ARCHIVE);
+			thread->LinkHandler(&m_Package->GetArchive(), KxEVT_ARCHIVE);
 			if (!packagePath.IsEmpty())
 			{
 				m_Package->Create(packagePath);
 			}
 			m_Package->LoadResources();
 		});
-		thread->OnEnd([this](KOperationWithProgressBase* self)
+		thread->OnEnd([this]()
 		{
 			ProcessLoadPackage();
 		});

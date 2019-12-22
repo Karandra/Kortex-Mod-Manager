@@ -6,7 +6,6 @@
 #include <Kortex/InstallWizard.hpp>
 #include <Kortex/NetworkManager.hpp>
 #include "Network/ModNetwork/Nexus.h"
-#include "Utility/KAux.h"
 #include "Utility/MenuSeparator.h"
 #include "Utility/Common.h"
 #include <KxFramework/KxMenu.h>

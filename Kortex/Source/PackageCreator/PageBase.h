@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Application/DefaultWorkspace.h"
 #include "Workspace.h"
-#include "Utility/KLabeledValue.h"
+#include "Utility/LabeledValue.h"
 #include <KxFramework/KxPanel.h>
 class KxLabel;
 class KxTextBox;

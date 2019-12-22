@@ -3,7 +3,6 @@
 #include "PackageCreator/WorkspaceDocument.h"
 #include "PackageCreator/PageBase.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxComboBox.h>
 #include <KxFramework/KxDataViewComboBox.h>

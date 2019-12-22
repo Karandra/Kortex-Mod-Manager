@@ -3,14 +3,14 @@
 #include "PackageCreator/VectorModel.h"
 #include "PackageProject/InterfaceSection.h"
 #include "PackageCreator/IDTracker.h"
-#include "Utility/KBitmapSize.h"
+#include "Utility/BitmapSize.h"
 
 namespace Kortex::PackageDesigner::PageInterfaceNS
 {
 	class ImageListModel: public VectorModel<PackageProject::ImageItem::Vector>, public IDTracker
 	{
 		public:
-			static KBitmapSize GetThumbnailSize(const wxWindow* window = nullptr);
+			static Utility::BitmapSize GetThumbnailSize(const wxWindow* window = nullptr);
 			static void LoadBitmap(PackageProject::ImageItem* entry, const wxWindow* window = nullptr);
 	
 		private:

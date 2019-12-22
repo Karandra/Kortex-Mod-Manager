@@ -3,7 +3,7 @@
 #include "Dialog.h"
 #include "Archive/KArchive.h"
 #include "VirtualFileSystem/IVFSService.h"
-#include "Utility/KAux.h"
+#include "Utility/UI.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/PluginManager.hpp>
 #include <KxFramework/KxHTMLWindow.h>
@@ -116,7 +116,7 @@ namespace Kortex::Application::About
 				{
 					if (KxURI uri = item.GetURI())
 					{
-						KAux::AskOpenURL(uri, GetView());
+						Utility::UI::AskOpenURL(uri, GetView());
 					}
 					break;
 				}

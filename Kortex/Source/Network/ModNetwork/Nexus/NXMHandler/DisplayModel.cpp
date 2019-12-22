@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <Kortex/GameInstance.hpp>
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxMenu.h>
@@ -43,8 +43,8 @@ namespace Kortex::NetworkManager::NXMHandler
 			editor.SetEditable(false);
 			editor.AutoPopup();
 
-			editor.AddItem(KAux::MakeNoneLabel());
-			editor.AddItem(KAux::MakeBracketedLabel(KTr("NetworkManager.NXMHandler.ExternalProgram")));
+			editor.AddItem(Utility::MakeNoneLabel());
+			editor.AddItem(Utility::MakeBracketedLabel(KTr("NetworkManager.NXMHandler.ExternalProgram")));
 			for (const auto& instance: IGameInstance::GetShallowInstances())
 			{
 				editor.AddItem(instance->GetInstanceID());

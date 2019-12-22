@@ -291,8 +291,10 @@
     <ClCompile Include="Source\UI\WebViewBackend\InternetExplorer.cpp" />
     <ClCompile Include="Source\Utility\Common.cpp" />
     <ClCompile Include="Source\Utility\DateTime.cpp" />
-    <ClCompile Include="Source\Utility\KBitmapSize.cpp" />
-    <ClCompile Include="Source\Utility\KOperationWithProgress.cpp" />
+    <ClCompile Include="Source\Utility\BitmapSize.cpp" />
+    <ClCompile Include="Source\Utility\Drawing.cpp" />
+    <ClCompile Include="Source\Utility\OperationWithProgress.cpp" />
+    <ClCompile Include="Source\Utility\String.cpp" />
     <ClCompile Include="Source\Utility\TempFolderKeeper.cpp" />
     <ClCompile Include="Source\PackageCreator\FOModImportExportDialog.cpp" />
     <ClCompile Include="Source\PackageCreator\ListModel.cpp" />
@@ -324,7 +326,6 @@
     <ClCompile Include="Source\PackageProject\RequirementsSection.cpp" />
     <ClCompile Include="Source\PackageProject\Serializer.cpp" />
     <ClCompile Include="Source\UI\TextEditDialog.cpp" />
-    <ClCompile Include="Source\Utility\KSetEnabledWrapper.cpp" />
     <ClCompile Include="Source\UI\ImageViewerDialog.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -332,8 +333,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\Utility\KAux.cpp" />
-    <ClCompile Include="Source\Utility\KQuickThread.cpp" />
+    <ClCompile Include="Source\Utility\QuickThread.cpp" />
     <ClCompile Include="Source\Utility\Log.cpp" />
     <ClCompile Include="Source\Utility\MenuSeparator.cpp" />
     <ClCompile Include="Source\Utility\UI.cpp" />
@@ -658,21 +658,18 @@
     <ClInclude Include="Source\Utility\Collection.h" />
     <ClInclude Include="Source\Utility\Common.h" />
     <ClInclude Include="Source\Utility\DateTime.h" />
+    <ClInclude Include="Source\Utility\Drawing.h" />
     <ClInclude Include="Source\Utility\EnumClassOperations.h" />
-    <ClInclude Include="Source\Utility\KBitmapSize.h" />
-    <ClInclude Include="Source\Utility\KUnsortedUnique.h" />
-    <ClInclude Include="Source\Utility\KUPtrVectorUtil.h" />
-    <ClInclude Include="Source\Utility\KVectorForwarder.h" />
-    <ClInclude Include="Source\Utility\KWithBitmap.h" />
+    <ClInclude Include="Source\Utility\BitmapSize.h" />
+    <ClInclude Include="Source\Utility\UnsortedUnique.h" />
+    <ClInclude Include="Source\Utility\UniquePtrVector.h" />
+    <ClInclude Include="Source\Utility\WithBitmap.h" />
     <ClInclude Include="Source\Archive\KArchive.h" />
     <ClInclude Include="Source\PackageCreator\PackageBuilder.h" />
     <ClInclude Include="Source\PackageCreator\WorkspaceDocument.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.h" />
-    <ClInclude Include="Source\Utility\KDataViewModelBase.h" />
-    <ClInclude Include="Source\Utility\KDataViewTreeModel.h" />
-    <ClInclude Include="Source\Utility\KOperationWithProgress.h" />
+    <ClInclude Include="Source\Utility\OperationWithProgress.h" />
     <ClInclude Include="Source\Utility\TempFolderKeeper.h" />
-    <ClInclude Include="Source\Utility\KDataViewListModel.h" />
     <ClInclude Include="Source\PackageCreator\FOModImportExportDialog.h" />
     <ClInclude Include="Source\PackageCreator\ListModel.h" />
     <ClInclude Include="Source\PackageCreator\PageBase.h" />
@@ -692,7 +689,7 @@
     <ClInclude Include="Source\PackageCreator\PageRequirements\GroupsModel.h" />
     <ClInclude Include="Source\PackageProject\ComponentsSection.h" />
     <ClInclude Include="Source\PackageProject\Common.h" />
-    <ClInclude Include="Source\Utility\KWithIDName.h" />
+    <ClInclude Include="Source\Utility\WithNameAndID.h" />
     <ClInclude Include="Source\PackageCreator\PageInfo.h" />
     <ClInclude Include="Source\PackageCreator\PageInterface.h" />
     <ClInclude Include="Source\PackageCreator\VectorModel.h" />
@@ -706,19 +703,15 @@
     <ClInclude Include="Source\PackageProject\RequirementsSection.h" />
     <ClInclude Include="Source\PackageProject\Serializer.h" />
     <ClInclude Include="Source\UI\TextEditDialog.h" />
-    <ClInclude Include="Source\Utility\KSetEnabledWrapper.h" />
     <ClInclude Include="Source\UI\ImageViewerDialog.h" />
-    <ClInclude Include="Source\Utility\KLabeledValue.h" />
-    <ClInclude Include="Source\Utility\KEntryRefT.h" />
+    <ClInclude Include="Source\Utility\LabeledValue.h" />
     <ClInclude Include="Source\Utility\Log.h" />
     <ClInclude Include="Source\Utility\MenuSeparator.h" />
     <ClInclude Include="Source\Utility\String.h" />
     <ClInclude Include="Source\Utility\UI.h" />
     <ClInclude Include="Source\Utility\UniqueID.h" />
     <ClInclude Include="Source\stdafx.h" />
-    <ClInclude Include="Source\Utility\KAux.h" />
-    <ClInclude Include="Source\Utility\KQuickThread.h" />
-    <ClInclude Include="Source\Utility\KThemeManager.h" />
+    <ClInclude Include="Source\Utility\QuickThread.h" />
     <ClInclude Include="Source\VirtualFileSystem\BaseFileSystem.h" />
     <ClInclude Include="Source\VirtualFileSystem\Convergence.h" />
     <ClInclude Include="Source\VirtualFileSystem\DefaultVFSService.h" />

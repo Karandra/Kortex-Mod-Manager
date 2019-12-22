@@ -10,7 +10,7 @@
 #include "Theme/VisualStudio.h"
 #include "MainWindow.h"
 #include "Archive/KArchive.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxProcess.h>
@@ -203,8 +203,8 @@ namespace Kortex
 		variables.SetVariable("AppModProjectProgID", "KMM.ModProject.1");
 		variables.SetVariable("AppModPackageProgID", "KMM.ModPackage.1");
 		variables.SetVariable("AppData", m_Application->GetDataFolder());
-		variables.SetVariable("SystemArchitecture", KAux::ArchitectureToNumber(m_Application->IsSystem64Bit()));
-		variables.SetVariable("SystemArchitectureName", KAux::ArchitectureToString(m_Application->IsSystem64Bit()));
+		variables.SetVariable("SystemArchitecture", Utility::ArchitectureToNumber(m_Application->IsSystem64Bit()));
+		variables.SetVariable("SystemArchitectureName", Utility::ArchitectureToString(m_Application->IsSystem64Bit()));
 	}
 	SystemApplication::~SystemApplication()
 	{

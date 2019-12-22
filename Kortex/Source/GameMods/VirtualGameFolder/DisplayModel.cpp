@@ -3,7 +3,8 @@
 #include <Kortex/ModManager.hpp>
 #include <Kortex/Application.hpp>
 #include "GameMods/ModManager/Workspace.h"
-#include "Utility/KAux.h"
+#include "Utility/DateTime.h"
+#include "Utility/UI.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxShell.h>
 #include <KxFramework/KxLibrary.h>
@@ -179,7 +180,7 @@ namespace Kortex::VirtualGameFolder
 				}
 				case ColumnID::ModificationDate:
 				{
-					value = KAux::FormatDateTime(node->GetItem().GetModificationTime());
+					value = Utility::DateTime::FormatDateTime(node->GetItem().GetModificationTime());
 					break;
 				}
 				case ColumnID::SourceLocation:
@@ -337,6 +338,6 @@ namespace Kortex::VirtualGameFolder
 
 	bool DisplayModel::SetSearchMask(const wxString& mask)
 	{
-		return KAux::SetSearchMask(m_SearchMask, mask);
+		return Utility::UI::SetSearchMask(m_SearchMask, mask);
 	}
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Utility/KDataViewListModel.h"
+#include "KxFramework/KxDataViewListModelEx.h"
 #include "GameData/IPluginManager.h"
 #include "BethesdaPluginManager.h"
 
@@ -19,30 +19,30 @@ namespace Kortex::PluginManager
 			wxString m_SearchMask;
 
 		private:
-			virtual void OnInitControl() override;
+			void OnInitControl() override;
 
-			virtual void GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const override;
-			virtual void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
-			virtual bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
-			virtual bool IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
-			virtual bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
-			virtual bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
-			virtual bool HasDefaultCompare() const override
+			void GetChildren(const KxDataViewItem& item, KxDataViewItem::Vector& children) const override;
+			void GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const override;
+			bool SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column) override;
+			bool IsEditorEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
+			bool IsEnabledByRow(size_t row, const KxDataViewColumn* column) const override;
+			bool GetItemAttributesByRow(size_t row, const KxDataViewColumn* column, KxDataViewItemAttributes& attributes, KxDataViewCellState cellState) const override;
+			bool HasDefaultCompare() const override
 			{
 				return true;
 			}
-			virtual bool CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const override;
+			bool CompareByRow(size_t row1, size_t row2, const KxDataViewColumn* column) const override;
 
 			void OnSelectItem(KxDataViewEvent& event);
 			void OnActivateItem(KxDataViewEvent& event);
 			void OnContextMenu(KxDataViewEvent& event);
 
-			virtual KxDataViewCtrl* GetViewCtrl() const override
+			KxDataViewCtrl* GetViewCtrl() const override
 			{
 				return GetView();
 			}
-			virtual bool OnDragItems(KxDataViewEventDND& event) override;
-			virtual bool OnDropItems(KxDataViewEventDND& event) override;
+			bool OnDragItems(KxDataViewEventDND& event) override;
+			bool OnDropItems(KxDataViewEventDND& event) override;
 			bool CanDragDropNow() const;
 
 		public:

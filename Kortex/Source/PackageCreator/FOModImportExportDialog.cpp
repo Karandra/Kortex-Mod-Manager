@@ -2,7 +2,6 @@
 #include "FOModImportExportDialog.h"
 #include "PackageCreator/PageBase.h"
 #include <Kortex/Application.hpp>
-#include "Utility/KAux.h"
 #include <KxFramework/KxFileBrowseDialog.h>
 
 namespace Kortex::PackageDesigner

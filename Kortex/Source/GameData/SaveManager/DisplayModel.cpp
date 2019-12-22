@@ -4,7 +4,7 @@
 #include "GameMods/IModManager.h"
 #include "VirtualFileSystem/VirtualFSEvent.h"
 #include "UI/ImageViewerDialog.h"
-#include "Utility/KAux.h"
+#include "Utility/DateTime.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxComparator.h>
 
@@ -53,7 +53,7 @@ namespace Kortex::SaveManager
 			}
 			case ColumnID::ModificationDate:
 			{
-				return KAux::FormatDateTime(save.GetFileItem().GetModificationTime());
+				return Utility::DateTime::FormatDateTime(save.GetFileItem().GetModificationTime());
 			}
 			case ColumnID::Size:
 			{
@@ -209,7 +209,7 @@ namespace Kortex::SaveManager
 		}
 		else
 		{
-			const KBitmapSize oldSize = m_BitmapSize;
+			const Utility::BitmapSize oldSize = m_BitmapSize;
 			m_BitmapSize.FromWidth(width, m_BitmapRatio);
 			if (m_BitmapSize.GetHeight() < m_MinBitmapSize.GetHeight())
 			{
@@ -241,7 +241,7 @@ namespace Kortex::SaveManager
 	}
 	void DisplayModel::UpdateNativeBitmapSize()
 	{
-		KBitmapSize& size = m_NativeBitmapSize.IsFullySpecified() ? m_NativeBitmapSize : m_DefaultBitmapSize;
+		Utility::BitmapSize& size = m_NativeBitmapSize.IsFullySpecified() ? m_NativeBitmapSize : m_DefaultBitmapSize;
 		m_BitmapSize = size;
 		m_BitmapRatio = size.GetRatio();
 		m_MaxWidth = size.GetWidth() * 2;

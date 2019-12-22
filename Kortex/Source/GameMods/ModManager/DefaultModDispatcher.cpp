@@ -2,7 +2,6 @@
 #include "DefaultModDispatcher.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/ModManager.hpp>
-#include "Utility/KAux.h"
 #include "Utility/Log.h"
 #include "UI/ProgressOverlay.h"
 #include <KxFramework/KxComparator.h>

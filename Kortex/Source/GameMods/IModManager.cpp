@@ -3,7 +3,7 @@
 #include "IModDispatcher.h"
 #include "GameMods/GameModsModule.h"
 #include <Kortex/GameInstance.hpp>
-#include "Utility/KUPtrVectorUtil.h"
+#include "Utility/UniquePtrVector.h"
 
 namespace Kortex
 {
@@ -76,7 +76,7 @@ namespace Kortex
 
 	bool IModManager::MoveModsBefore(const IGameMod::RefVector& movedMods, const IGameMod& anchor)
 	{
-		if (KUPtrVectorUtil::MoveBefore(m_Mods, movedMods, anchor))
+		if (Utility::UniquePtrVector::MoveBefore(m_Mods, movedMods, anchor))
 		{
 			RecalculatePriority();
 			return true;
@@ -85,7 +85,7 @@ namespace Kortex
 	}
 	bool IModManager::MoveModsAfter(const IGameMod::RefVector& movedMods, const IGameMod& anchor)
 	{
-		if (KUPtrVectorUtil::MoveAfter(m_Mods, movedMods, anchor))
+		if (Utility::UniquePtrVector::MoveAfter(m_Mods, movedMods, anchor))
 		{
 			RecalculatePriority();
 			return true;

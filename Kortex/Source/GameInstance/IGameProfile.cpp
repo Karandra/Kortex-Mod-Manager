@@ -4,7 +4,7 @@
 #include <Kortex/Application.hpp>
 #include "IGameInstance.h"
 #include "IGameProfile.h"
-#include "Utility/KAux.h"
+#include "Utility/Common.h"
 #include <KxFramework/KxFileStream.h>
 
 namespace
@@ -51,7 +51,7 @@ namespace Kortex
 	}
 	wxString IGameProfile::ProcessID(const wxString& id)
 	{
-		return KAux::MakeSafeFileName(id);
+		return Utility::MakeSafeFileName(id);
 	}
 	bool IGameProfile::CreateLocalFolder(const wxString& id, const wxString& name)
 	{

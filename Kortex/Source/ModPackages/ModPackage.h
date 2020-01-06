@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "ModPackages/IPackageManager.h"
 #include "PackageProject/ModPackageProject.h"
-#include "Archive/KArchive.h"
+#include "Archive/GenericArchive.h"
 #include "Utility/LabeledValue.h"
 #include <KxFramework/KxFileStream.h>
 
@@ -14,35 +14,31 @@ namespace Kortex
 			static const size_t ms_InvalidIndex = std::numeric_limits<size_t>::max();
 
 		private:
-			KArchive m_Archive;
+			GenericArchive m_Archive;
 			KxFileStream m_Stream;
 			ModPackageProject m_Config;
 			wxString m_PackageFilePath;
 			wxString m_EffectiveArchiveRoot;
 			PackageProject::PackageType m_PackageType = PackageProject::PackageType::Unknown;
 
-			KArchive::BufferMap m_DocumentsBuffer;
+			std::unordered_map<KxArchive::FileIndex, std::unique_ptr<wxMemoryOutputStream>> m_DocumentsBuffer;
 			bool m_DocumentsLoaded = false;
 
 		public:
-			wxBitmap ReadImage(const KArchive::Buffer& buffer) const;
-			wxBitmap ReadImage(size_t index) const
+			wxBitmap ReadImage(wxInputStream& stream) const;
+			wxBitmap ReadImage(wxMemoryOutputStream& stream) const
 			{
-				if (index != ms_InvalidIndex)
-				{
-					return ReadImage(m_Archive.ExtractToMemory(index));
-				}
-				return wxNullBitmap;
+				wxMemoryInputStream inStream(stream);
+				return ReadImage(inStream);
 			}
-			wxString ReadString(const KArchive::Buffer& buffer, bool isASCII = false) const;
-			wxString ReadString(size_t index, bool isASCII = false) const
+			wxBitmap ReadImage(size_t index) const;
+			wxString ReadString(wxInputStream& stream, bool isASCII = false) const;
+			wxString ReadString(wxMemoryOutputStream& stream, bool isASCII = false) const
 			{
-				if (index != ms_InvalidIndex)
-				{
-					return ReadString(m_Archive.ExtractToMemory(index), isASCII);
-				}
-				return wxEmptyString;
+				wxMemoryInputStream inStream(stream);
+				return ReadString(inStream, isASCII);
 			}
+			wxString ReadString(size_t index, bool isASCII = false) const;
 
 		private:
 			void LoadConfig(ModPackageProject& project);
@@ -76,11 +72,11 @@ namespace Kortex
 			{
 				return m_PackageFilePath;
 			}
-			const KArchive& GetArchive() const
+			const GenericArchive& GetArchive() const
 			{
 				return m_Archive;
 			}
-			KArchive& GetArchive()
+			GenericArchive& GetArchive()
 			{
 				return m_Archive;
 			}
@@ -111,18 +107,15 @@ namespace Kortex
 			{
 				return m_Config.GetInfo().GetDescription();
 			}
-		
-			const KArchive::BufferMap& GetDocumentsBuffer() const
+
+			std::unique_ptr<wxInputStream> GetDocumentStream(const Utility::LabeledValue& item) const;
+			wxString GetSimpleDocument(const Utility::LabeledValue& item) const
 			{
-				return m_DocumentsBuffer;
-			}
-			const KArchive::Buffer& GetDocumentBuffer(const Utility::LabeledValue& entry) const
-			{
-				return m_DocumentsBuffer.at((size_t)entry.GetClientData());
-			}
-			wxString GetSimpleDocument(const Utility::LabeledValue& entry) const
-			{
-				return ReadString(GetDocumentBuffer(entry));
+				if (auto stream = GetDocumentStream(item))
+				{
+					return ReadString(*stream);
+				}
+				return {};
 			}
 	};
 }

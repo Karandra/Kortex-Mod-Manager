@@ -61,25 +61,26 @@ namespace Kortex::InstallWizard
 		const Utility::LabeledValue::Vector& documents = GetPackageConfig().GetInfo().GetDocuments();
 		if (index != -1 && (size_t)index < documents.size())
 		{
-			try
-			{
-				const ModPackage& package = GetWizard().GetPackage();
-				const Utility::LabeledValue& entry = documents[index];
+			const ModPackage& package = GetWizard().GetPackage();
+			const Utility::LabeledValue& entry = documents[index];
 
-				if (useAdvancedEditor || Utility::FileExtensionMatches(entry.GetValue(), {"pdf", "xml", "htm", "html", "doc", "docx"}))
+			if (useAdvancedEditor || Utility::FileExtensionMatches(entry.GetValue(), {"pdf", "xml", "htm", "html", "doc", "docx"}))
+			{
+				KxFileStream file(GetWizard().CreateTempFile(entry.GetValue().AfterLast('\\')), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Everything);
+				if (auto documentStream = package.GetDocumentStream(entry))
 				{
-					KxFileStream file(GetWizard().CreateTempFile(entry.GetValue().AfterLast('\\')), KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Everything);
-					const KArchive::Buffer& fileBuffer = package.GetDocumentBuffer(entry);
-					file.Write(fileBuffer.data(), fileBuffer.size());
+					file.Write(*documentStream);
 
 					m_DocumentAdvanced.LoadURL(file.GetFileName());
 					SwitchAdvanced();
 				}
-				else
+			}
+			else
+			{
+				if (auto documentStream = package.GetDocumentStream(entry))
 				{
-					const KArchive::Buffer& buffer = package.GetDocumentBuffer(entry);
-					wxString text = package.ReadString(buffer);
-					if (text.IsEmpty() && !buffer.empty())
+					wxString text = package.ReadString(*documentStream);
+					if (text.IsEmpty() && documentStream->IsOk())
 					{
 						// Couldn't load the document, maybe unsupported encoding. Try WebView.
 						OnSelectDocument(index, true);
@@ -90,11 +91,6 @@ namespace Kortex::InstallWizard
 						SwitchSimple();
 					}
 				}
-			}
-			catch (const std::out_of_range& e)
-			{
-				// Getting the document can throw
-				Utility::Log::LogInfo("Can't load document at index %1: %2", index, e.what());
 			}
 		}
 		else

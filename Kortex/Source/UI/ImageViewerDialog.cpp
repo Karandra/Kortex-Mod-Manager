@@ -53,21 +53,17 @@ namespace Kortex::UI
 	{
 		return GetType() == InputStream;
 	}
-	wxMemoryInputStream ImageViewerEvent::GetInputSteram()
+	wxInputStream* ImageViewerEvent::GetInputSteram()
 	{
 		if (IsInputStream())
 		{
-			const KArchive::Buffer* buffer = std::get<InputStream>(m_Data);
-			if (buffer)
-			{
-				return wxMemoryInputStream(buffer->data(), buffer->size());
-			}
+			return std::get<InputStream>(m_Data);
 		}
-		return wxMemoryInputStream(nullptr, 0);
+		return nullptr;
 	}
-	void ImageViewerEvent::SetInputStream(const KArchive::Buffer& buffer)
+	void ImageViewerEvent::SetInputStream(wxInputStream& stream)
 	{
-		m_Data = &buffer;
+		m_Data = &stream;
 	}
 }
 

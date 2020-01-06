@@ -8,7 +8,7 @@
 #include <KxFramework/KxHTMLWindow.h>
 #include <KxFramework/KxSplitterWindow.h>
 #include <Kx/EventSystem/Event.h>
-#include "Archive/KArchive.h"
+#include "Archive/GenericArchive.h"
 
 namespace Kortex::UI
 {
@@ -27,7 +27,7 @@ namespace Kortex::UI
 			KxEVENT_MEMBER(ImageViewerEvent, Previous);
 
 		private:
-			std::variant<wxString, wxBitmap, const KArchive::Buffer*> m_Data;
+			std::variant<wxString, wxBitmap, wxInputStream*> m_Data;
 			bool m_HasPrev = false;
 			bool m_HasNext = false;
 			
@@ -47,7 +47,7 @@ namespace Kortex::UI
 			{
 				SetFilePath(filePath);
 			}
-			ImageViewerEvent(wxEventType type, const KArchive::Buffer& buffer)
+			ImageViewerEvent(wxEventType type, wxInputStream& buffer)
 				:wxNotifyEvent(type)
 			{
 				SetInputStream(buffer);
@@ -96,8 +96,8 @@ namespace Kortex::UI
 			void SetFilePath(const wxString& filePath);
 			
 			bool IsInputStream() const;
-			wxMemoryInputStream GetInputSteram();
-			void SetInputStream(const KArchive::Buffer& buffer);
+			wxInputStream* GetInputSteram();
+			void SetInputStream(wxInputStream& stream);
 	};
 }
 

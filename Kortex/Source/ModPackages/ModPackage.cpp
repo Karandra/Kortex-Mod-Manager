@@ -6,42 +6,91 @@
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFileStream.h>
+#include <KxFramework/KxStreamDelegate.h>
 #include <KxFramework/KxShell.h>
+
+namespace
+{
+	std::vector<uint8_t> ReadStringBuffer(wxInputStream& stream)
+	{
+		std::vector<uint8_t> buffer;
+		buffer.resize(stream.GetLength());
+
+		if (!stream.ReadAll(buffer.data(), buffer.size()))
+		{
+			buffer.clear();
+		}
+		return buffer;
+	}
+}
 
 namespace Kortex
 {
-	wxBitmap ModPackage::ReadImage(const KArchive::Buffer& buffer) const
+	wxBitmap ModPackage::ReadImage(wxInputStream& stream) const
 	{
-		wxMemoryInputStream stream(buffer.data(), buffer.size());
 		wxImage image;
 		image.LoadFile(stream);
 
 		return wxBitmap(image, 32);
 	}
-	wxString ModPackage::ReadString(const KArchive::Buffer& buffer, bool isASCII) const
+	wxBitmap ModPackage::ReadImage(size_t index) const
+	{
+		if (index != ms_InvalidIndex)
+		{
+			wxMemoryOutputStream stream;
+			if (m_Archive.ExtractToStream(index, stream))
+			{
+				wxMemoryInputStream inputStream(stream);
+				return ReadImage(inputStream);
+			}
+		}
+		return wxNullBitmap;
+	}
+
+	wxString ModPackage::ReadString(wxInputStream& stream, bool isASCII) const
 	{
 		if (!isASCII)
 		{
+			constexpr uint8_t BOM[] = {0xFF, 0xFE};
+
 			// Try to detect if this is UTF-16LE (using byte order mark)
-			if (buffer.size() >= 2)
+			if (stream.GetLength() >= 2)
 			{
-				uint8_t bom[2] = {buffer[0], buffer[1]};
-				if (bom[0] == 0xFF && bom[1] == 0xFE)
+				if (stream.GetC() == BOM[0] && stream.GetC() == BOM[1])
 				{
-					return wxString((const wchar_t*)buffer.data(), buffer.size() / sizeof(wchar_t));
+					auto buffer = ReadStringBuffer(stream);
+					return wxString(reinterpret_cast<const wchar_t*>(buffer.data()), buffer.size() / sizeof(wchar_t));
 				}
+
+				stream.SeekI(0, wxSeekMode::wxFromStart);
 			}
-			return wxString::FromUTF8((const char*)buffer.data(), buffer.size());
+
+			auto buffer = ReadStringBuffer(stream);
+			return wxString::FromUTF8(reinterpret_cast<const char*>(buffer.data()), buffer.size());
 		}
 		else
 		{
-			return wxString((const char*)buffer.data(), buffer.size());
+			auto buffer = ReadStringBuffer(stream);
+			return wxString(reinterpret_cast<const char*>(buffer.data()), buffer.size());
 		}
+	}
+	wxString ModPackage::ReadString(size_t index, bool isASCII) const
+	{
+		if (index != ms_InvalidIndex)
+		{
+			wxMemoryOutputStream stream;
+			if (m_Archive.ExtractToStream(index, stream))
+			{
+				wxMemoryInputStream inputStream(stream);
+				return ReadString(inputStream, isASCII);
+			}
+		}
+		return wxEmptyString;
 	}
 
 	void ModPackage::LoadConfig(ModPackageProject& project)
 	{
-		if (m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown)
+		if (m_Archive.GetPropertyInt(Archive::PropertyInt::Format) != (int)Archive::Format::Unknown)
 		{
 			SetModIDIfNone();
 
@@ -133,8 +182,32 @@ namespace Kortex
 	}
 	void ModPackage::LoadConfigFOMod(ModPackageProject& project, size_t infoIndex, size_t moduleConfigIndex)
 	{
-		KArchive::BufferMap buffers = m_Archive.ExtractToMemory({(uint32_t)infoIndex, (uint32_t)moduleConfigIndex});
-		PackageProject::FOModSerializer serializer(ReadString(buffers[infoIndex]), ReadString(buffers[moduleConfigIndex]));
+		wxMemoryOutputStream infoOutStream;
+		wxMemoryOutputStream moduleConfigOutStream;
+		m_Archive.ExtractWith().OnGetStream([&](size_t fileIndex) -> KxDelegateOutputStream
+		{
+			if (fileIndex == infoIndex || fileIndex == moduleConfigIndex)
+			{
+				KxFileItem fileItem = m_Archive.GetItem(fileIndex);
+				if (fileItem && !fileItem.IsDirectory())
+				{
+					if (fileIndex == infoIndex)
+					{
+						return infoOutStream;
+					}
+					else if (fileIndex == moduleConfigIndex)
+					{
+						return moduleConfigOutStream;
+					}
+				}
+			}
+			return nullptr;
+		}).Execute();
+
+		wxMemoryInputStream infoStream(infoOutStream);
+		wxMemoryInputStream moduleConfigStream(moduleConfigOutStream);
+
+		PackageProject::FOModSerializer serializer(ReadString(infoStream), ReadString(moduleConfigStream));
 		serializer.SetEffectiveArchiveRoot(m_EffectiveArchiveRoot);
 		serializer.Structurize(project);
 	}
@@ -180,7 +253,7 @@ namespace Kortex
 	}
 	void ModPackage::LoadImageResources()
 	{
-		KxUInt32Vector indexes;
+		KxArchive::FileIndexVector files;
 		std::unordered_map<size_t, PackageProject::ImageItem*> entriesMap;
 		for (PackageProject::ImageItem& entry: m_Config.GetInterface().GetImages())
 		{
@@ -189,24 +262,24 @@ namespace Kortex
 			{
 				size_t index = item.GetExtraData<size_t>();
 				entriesMap.insert_or_assign(index, &entry);
-				indexes.push_back(index);
+				files.push_back(index);
 			}
 		}
 
-		if (!indexes.empty())
+		m_Archive.ExtractWith<wxMemoryOutputStream>().OnGetStream([&](size_t fileIndex) -> KxDelegateOutputStream
 		{
-			KArchive::BufferMap buffers = m_Archive.ExtractToMemory(indexes);
-			for (auto& v: buffers)
-			{
-				entriesMap[v.first]->SetBitmap(ReadImage(v.second));
-			}
-		}
+			return std::make_unique<wxMemoryOutputStream>();
+		}).OnOperationCompleted([&](size_t fileIndex, wxMemoryOutputStream& stream)
+		{
+			entriesMap[fileIndex]->SetBitmap(ReadImage(stream));
+			return true;
+		}).Execute(files);
 	}
 	void ModPackage::LoadDocumentResources()
 	{
 		if (!m_DocumentsLoaded)
 		{
-			KxUInt32Vector indexes;
+			KxUInt32Vector files;
 			std::unordered_map<size_t, Utility::LabeledValue*> entriesMap;
 			for (Utility::LabeledValue& entry: m_Config.GetInfo().GetDocuments())
 			{
@@ -215,19 +288,18 @@ namespace Kortex
 				{
 					size_t index = item.GetExtraData<size_t>();
 					entriesMap.insert_or_assign(index, &entry);
-					indexes.push_back(index);
+					files.push_back(index);
 				}
 			}
 
-			if (!indexes.empty())
+			m_Archive.ExtractWith().OnGetStream([&](size_t fileIndex) -> KxDelegateOutputStream
 			{
-				m_DocumentsBuffer = m_Archive.ExtractToMemory(indexes);
-				for (auto& v: m_DocumentsBuffer)
-				{
-					entriesMap[v.first]->SetClientData((void*)v.first);
-				}
-				m_DocumentsLoaded = true;
-			}
+				entriesMap[fileIndex]->SetClientData(reinterpret_cast<void*>(fileIndex));
+
+				auto it = m_DocumentsBuffer.insert_or_assign(fileIndex, std::make_unique<wxMemoryOutputStream>());
+				return *it.first->second;
+			}).Execute(files);
+			m_DocumentsLoaded = !m_DocumentsBuffer.empty();
 		}
 	}
 
@@ -283,7 +355,7 @@ namespace Kortex
 	bool ModPackage::IsOK() const
 	{
 		return !m_PackageFilePath.IsEmpty() &&
-			m_Archive.GetPropertyInt(KArchiveNS::PropertyInt::Format) != (int)KArchiveNS::Format::Unknown &&
+			m_Archive.GetPropertyInt(Archive::PropertyInt::Format) != (int)Archive::Format::Unknown &&
 			m_PackageType != PackageProject::PackageType::Unknown &&
 			!m_Config.GetModID().IsEmpty();
 	}
@@ -298,5 +370,15 @@ namespace Kortex
 	{
 		LoadImageResources();
 		LoadDocumentResources();
+	}
+
+	std::unique_ptr<wxInputStream> ModPackage::GetDocumentStream(const Utility::LabeledValue& item) const
+	{
+		auto it = m_DocumentsBuffer.find(reinterpret_cast<size_t>(item.GetClientData()));
+		if (it != m_DocumentsBuffer.end())
+		{
+			return std::make_unique<wxMemoryInputStream>(*it->second);
+		}
+		return nullptr;
 	}
 }

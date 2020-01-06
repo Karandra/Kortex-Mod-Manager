@@ -9,7 +9,7 @@
 #include <Kortex/Common/Packages.hpp>
 #include "PackageProject/ModPackageProject.h"
 #include "PackageCreator/Workspace.h"
-#include "Archive/KArchive.h"
+#include "Archive/GenericArchive.h"
 #include "Utility/Common.h"
 #include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxXML.h>
@@ -40,9 +40,9 @@ namespace Kortex
 		auto thread = new Utility::OperationWithProgressDialog<KxArchiveEvent>(true, wxGetTopLevelParent(window));
 		thread->OnRun([thread, filePath, outPath]()
 		{
-			KArchive archive(filePath);
-			thread->LinkHandler(&archive, KxEVT_ARCHIVE);
-			const bool success = archive.ExtractAll(outPath);
+			GenericArchive archive(filePath);
+			thread->LinkHandler(&archive, KxArchiveEvent::EvtProcess);
+			const bool success = archive.ExtractToDirectory(outPath);
 
 			// Set extraction successfulness status
 			thread->SetClientData(success ? reinterpret_cast<void*>(1) : nullptr);

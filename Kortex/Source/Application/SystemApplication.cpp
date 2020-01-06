@@ -9,7 +9,7 @@
 #include "Theme/Default.h"
 #include "Theme/VisualStudio.h"
 #include "MainWindow.h"
-#include "Archive/KArchive.h"
+#include "Archive/GenericArchive.h"
 #include "Utility/Common.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxFile.h>
@@ -112,7 +112,7 @@ namespace Kortex
 	{
 		Utility::Log::LogInfo("SystemApplication::InitComponents");
 
-		KArchive::Init();
+		GenericArchive::Init();
 		m_ThemeManager = std::make_unique<Theme::Default>();
 		m_NotificationCenter = std::make_unique<Notifications::DefaultNotificationCenter>();
 	}
@@ -120,7 +120,7 @@ namespace Kortex
 	{
 		Utility::Log::LogInfo("SystemApplication::UninitComponents");
 
-		KArchive::UnInit();
+		GenericArchive::UnInit();
 	}
 	void SystemApplication::SetPostCreateVariables()
 	{

@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Archive/KArchive.h"
+#include "Archive/GenericArchive.h"
 #include "Utility/OperationWithProgress.h"
 #include "Utility/TempFolderKeeper.h"
 
@@ -32,7 +32,7 @@ namespace Kortex::PackageDesigner
 			wxString m_PackagePath;
 			const bool m_BuildPreview = false;
 
-			KArchive m_Archive;
+			GenericArchive m_Archive;
 			KxStringVector m_SourceFiles;
 			KxStringVector m_ArchivePaths;
 			KxStringVector m_MissingFiles;

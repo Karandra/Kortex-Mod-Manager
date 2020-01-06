@@ -8,7 +8,6 @@
 #include "PackageProject/Serializer/NativeSerializer.h"
 #include "PackageProject/Serializer/FOModSerializer.h"
 #include "ModPackages/ModPackage.h"
-#include "Archive/KArchive.h"
 #include "Utility/OperationWithProgress.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxTaskDialog.h>

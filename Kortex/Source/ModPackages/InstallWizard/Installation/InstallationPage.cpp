@@ -52,7 +52,7 @@ namespace Kortex::InstallWizard
 			m_InstallThread = new InstallOperation(*this);
 			m_InstallThread->OnRun([this]()
 			{
-				m_InstallThread->LinkHandler(&GetWizard().GetArchive(), KxEVT_ARCHIVE);
+				m_InstallThread->LinkHandler(&GetWizard().GetArchive(), KxArchiveEvent::EvtProcess);
 				GetWizard().RunInstall();
 			});
 			m_InstallThread->OnEnd([this]()
@@ -169,7 +169,7 @@ namespace Kortex::InstallWizard
 		sizer->Add(m_MajorStatus, 0, wxEXPAND);
 		sizer->Add(m_MajorProgress, 0, wxEXPAND);
 
-		Bind(KxEVT_ARCHIVE, &InstallationPage::OnMajorProgress, this);
+		Bind(KxArchiveEvent::EvtProcess, &InstallationPage::OnMajorProgress, this);
 		return m_PagePanel;
 	}
 

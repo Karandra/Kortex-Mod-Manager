@@ -106,30 +106,30 @@ namespace Kortex::PackageDesigner
 		{
 			if (methodName == "LZMA")
 			{
-				return KArchiveNS::Method::LZMA;
+				return Archive::Method::LZMA;
 			}
 			if (methodName == "LZMA2")
 			{
-				return KArchiveNS::Method::LZMA2;
+				return Archive::Method::LZMA2;
 			}
 			if (methodName == "PPMd")
 			{
-				return KArchiveNS::Method::PPMd;
+				return Archive::Method::PPMd;
 			}
 			if (methodName == "BZip2")
 			{
-				return KArchiveNS::Method::BZip2;
+				return Archive::Method::BZip2;
 			}
-			return KArchiveNS::Method::LZMA;
+			return Archive::Method::LZMA;
 		};
 
 		const PackageProject::ConfigSection& config = m_Project.GetConfig();
 
-		m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsSolidArchive());
-		m_Archive.SetPropertyBool(KArchiveNS::PropertyBool::Solid, config.IsMultithreadingUsed());
-		m_Archive.SetPropertyInt(KArchiveNS::PropertyInt::Method, ConvertMethod(config.GetCompressionMethod()));
-		m_Archive.SetPropertyInt(KArchiveNS::PropertyInt::CompressionLevel, config.GetCompressionLevel());
-		m_Archive.SetPropertyInt(KArchiveNS::PropertyInt::DictionarySize, config.GetCompressionDictionarySize());
+		m_Archive.SetPropertyBool(Archive::PropertyBool::Solid, config.IsSolidArchive());
+		m_Archive.SetPropertyBool(Archive::PropertyBool::Solid, config.IsMultithreadingUsed());
+		m_Archive.SetPropertyInt(Archive::PropertyInt::Method, (int)ConvertMethod(config.GetCompressionMethod()));
+		m_Archive.SetPropertyInt(Archive::PropertyInt::CompressionLevel, config.GetCompressionLevel());
+		m_Archive.SetPropertyInt(Archive::PropertyInt::DictionarySize, config.GetCompressionDictionarySize());
 	}
 	void PackageBuilder::WritePackageConfig()
 	{
@@ -219,7 +219,7 @@ namespace Kortex::PackageDesigner
 	PackageBuilder::PackageBuilder(const ModPackageProject& project, Utility::OperationWithProgressBase& thread, bool previewBuild)
 		:m_Project(project), m_Thread(thread), m_BuildPreview(previewBuild)
 	{
-		m_Thread.LinkHandler(&m_Archive, KxEVT_ARCHIVE);
+		m_Thread.LinkHandler(&m_Archive, KxArchiveEvent::EvtProcess);
 	}
 	PackageBuilder::~PackageBuilder()
 	{

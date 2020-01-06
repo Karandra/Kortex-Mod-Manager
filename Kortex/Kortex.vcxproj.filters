@@ -426,12 +426,6 @@
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Code\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Archive\KArchive.cpp">
-      <Filter>Code\Source\Archive</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Archive\KBethesdaArchive.cpp">
-      <Filter>Code\Source\Archive</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\EmptySaveFile.cpp">
       <Filter>Code\Source\GameData\SaveManager</Filter>
     </ClCompile>
@@ -1290,16 +1284,16 @@
     <ClCompile Include="Source\Utility\Drawing.cpp">
       <Filter>Code\Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Archive\BethesdaArchive.cpp">
+      <Filter>Code\Source\Archive</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Archive\GenericArchive.cpp">
+      <Filter>Code\Source\Archive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
       <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Archive\KArchive.h">
-      <Filter>Code\Headers\Archive</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Archive\KBethesdaArchive.h">
-      <Filter>Code\Headers\Archive</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameData\SaveManager\EmptySaveFile.h">
       <Filter>Code\Headers\GameData\SaveManager</Filter>
@@ -2413,6 +2407,12 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\Drawing.h">
       <Filter>Code\Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Archive\BethesdaArchive.h">
+      <Filter>Code\Headers\Archive</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Archive\GenericArchive.h">
+      <Filter>Code\Headers\Archive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

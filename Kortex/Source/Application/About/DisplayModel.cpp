@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DisplayModel.h"
 #include "Dialog.h"
-#include "Archive/KArchive.h"
+#include "Archive/GenericArchive.h"
 #include "VirtualFileSystem/IVFSService.h"
 #include "Utility/UI.h"
 #include <Kortex/Application.hpp>
@@ -155,7 +155,7 @@ namespace Kortex::Application::About
 		AddSoftwareNode(KxINI::GetLibraryName(), KxINI::GetLibraryVersion(), "https://github.com/brofield/simpleini", ImageResourceID::DocumentPencil);
 		AddSoftwareNode(KxXMLDocument::GetLibraryName(), KxXMLDocument::GetLibraryVersion(), "https://github.com/leethomason/tinyxml2", ImageResourceID::EditCode);
 		AddSoftwareNode("OpenSSL", KxCrypto::GetOpenSSLVersion(), "https://www.openssl.org", ImageResourceID::LockSSL);
-		AddSoftwareNode("7-Zip", KArchive::GetLibraryVersion(), "https://www.7-zip.org", ImageResourceID::SevenZip);
+		AddSoftwareNode("7-Zip", GenericArchive::GetLibraryVersion(), "https://www.7-zip.org", ImageResourceID::SevenZip);
 		AddSoftwareNode(KxCURL::GetLibraryName(), KxCURL::GetLibraryVersion(), "https://curl.haxx.se", ImageResourceID::LibCURL);
 		AddSoftwareNode(KxWebSocket::GetLibraryName(), KxWebSocket::GetLibraryVersion(), "https://github.com/zaphoyd/websocketpp", ImageResourceID::WebSocket);
 		AddSoftwareNode(KxJSON::GetLibraryName(), KxJSON::GetLibraryVersion(), "https://github.com/nlohmann/json", ImageResourceID::JSON);

@@ -4,7 +4,6 @@
 #include "Options/CmdLineDatabase.h"
 #include <Kortex/Application.hpp>
 #include "IMainWindow.h"
-#include "Archive/KArchive.h"
 #include "Utility/Log.h"
 #include <KxFramework/KxSystem.h>
 #include <KxFramework/KxTaskScheduler.h>

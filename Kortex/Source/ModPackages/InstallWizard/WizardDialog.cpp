@@ -111,7 +111,7 @@ namespace Kortex::InstallWizard
 		auto thread = new Utility::OperationWithProgressDialog<KxArchiveEvent>(true, GetParent());
 		thread->OnRun([this, thread, packagePath = packagePath.Clone()]()
 		{
-			thread->LinkHandler(&m_Package->GetArchive(), KxEVT_ARCHIVE);
+			thread->LinkHandler(&m_Package->GetArchive(), KxArchiveEvent::EvtProcess);
 			if (!packagePath.IsEmpty())
 			{
 				m_Package->Create(packagePath);
@@ -331,12 +331,12 @@ namespace Kortex::InstallWizard
 		m_Mod->SetInstallTime(wxDateTime::Now());
 		m_Mod->SetPackageFile(m_Package->GetPackageFilePath());
 	}
-	KxUInt32Vector WizardDialog::GetFilesOfFolder(const PackageProject::FolderItem* folder) const
+	KxArchive::FileIndexVector WizardDialog::GetFilesOfFolder(const PackageProject::FolderItem* folder) const
 	{
 		KxUInt32Vector indexes;
-		const wxString path = folder->GetSource();
+		const wxString& path = folder->GetSource();
 
-		KxArchiveFileFinder finder(GetArchive(), path, wxS('*'));
+		KxArchive::FileFinder finder(GetArchive(), path, wxS('*'));
 		KxFileItem item = finder.FindNext();
 		while (item.IsOK())
 		{
@@ -345,36 +345,34 @@ namespace Kortex::InstallWizard
 		}
 		return indexes;
 	}
-	wxString WizardDialog::GetFinalPath(uint32_t index, const wxString& installLocation, const PackageProject::FileItem* fileEntry) const
+	wxString WizardDialog::GetFinalPath(const KxFileItem& fileItem, const wxString& installLocation, const PackageProject::FileItem* fileEntry) const
 	{
-		// Remove "in archive" source path from final file path
-		wxString path = GetArchive().GetItemName(index).Remove(0, fileEntry->GetSource().Length());
-		if (!path.IsEmpty() && path[0] == wxS('\\'))
+		if (fileItem)
 		{
-			path.Remove(0, 1);
-		}
-
-		// Perpend destination path if needed
-		const wxString& destination = fileEntry->GetDestination();
-		if (!fileEntry->GetDestination().IsEmpty())
-		{
-			if (!destination.IsEmpty() && destination[0] != wxS('\\'))
+			// Remove "in archive" source path from final file path
+			wxString targetPath = fileItem.GetFullPath().Remove(0, fileEntry->GetSource().Length());
+			if (!targetPath.IsEmpty() && targetPath[0] == wxS('\\'))
 			{
-				path.Prepend(wxS('\\'));
+				targetPath.Remove(0, 1);
 			}
-			path.Prepend(fileEntry->GetDestination());
-		}
 
-		return installLocation + wxS('\\') + path;
-	}
-	KxStringVector WizardDialog::GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const PackageProject::FolderItem* folder) const
-	{
-		KxStringVector finalPaths;
-		for (uint32_t index : filePaths)
-		{
-			finalPaths.emplace_back(GetFinalPath(index, installLocation, folder));
+			// Perpend destination path if needed
+			const wxString& destinationPrefix = fileEntry->GetDestination();
+			if (!destinationPrefix.IsEmpty())
+			{
+				if (!destinationPrefix.IsEmpty() && destinationPrefix[0] != wxS('\\'))
+				{
+					targetPath.Prepend(wxS('\\'));
+				}
+				targetPath.Prepend(destinationPrefix);
+			}
+
+			if (!targetPath.IsEmpty())
+			{
+				return installLocation + wxS('\\') + targetPath;
+			}
 		}
-		return finalPaths;
+		return {};
 	}
 	void WizardDialog::RunInstall()
 	{
@@ -388,7 +386,7 @@ namespace Kortex::InstallWizard
 
 		auto NotifyMajor = [this](size_t current, size_t max, const wxString& status)
 		{
-			KxFileOperationEvent* event = new KxFileOperationEvent(KxEVT_ARCHIVE);
+			KxFileOperationEvent* event = new KxFileOperationEvent(KxArchiveEvent::EvtProcess);
 			event->SetEventObject(this);
 			event->SetSource(status.Clone());
 			event->SetMajorProcessed(current);
@@ -404,19 +402,61 @@ namespace Kortex::InstallWizard
 			{
 				NotifyMajor(processed, installableFiles.size(), fileEntry->GetSource());
 
+				const GenericArchive& archive = GetArchive();
 				if (const PackageProject::FolderItem* folderEntry; fileEntry->QueryInterface(folderEntry))
 				{
-					KxUInt32Vector filesIndexes = GetFilesOfFolder(folderEntry);
-					KxStringVector finalPaths = GetFinalPaths(filesIndexes, installLocation, folderEntry);
-					GetArchive().ExtractToFiles(filesIndexes, finalPaths);
+					const KxArchive::FileIndexVector files = GetFilesOfFolder(folderEntry);
+					bool shouldCancel = false;
+					
+					auto extractor = archive.ExtractWith<KxFileStream>();
+					extractor.ShouldCancel([&]()
+					{
+						return shouldCancel || !m_PageInstallation.m_InstallThread->CanContinue();
+					});
+					extractor.OnGetStream([&](KxArchive::FileIndex index) -> KxDelegateOutputStream
+					{
+						if (KxFileItem fileItem = GetArchive().GetItem(index))
+						{
+							wxString targetPath = GetFinalPath(fileItem, installLocation, folderEntry);
+							if (!targetPath.IsEmpty())
+							{
+								if (fileItem.IsDirectory())
+								{
+									KxFile(targetPath).CreateFolder();
+								}
+								else
+								{
+									KxFile(targetPath.BeforeLast(wxS('\\'))).CreateFolder();
+									return std::make_unique<KxFileStream>(targetPath, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+								}
+							}
+							else
+							{
+								shouldCancel = true;
+							}
+						}
+						return nullptr;
+					});
+					extractor.OnOperationCompleted([&](KxArchive::FileIndex index, KxFileStream& stream)
+					{
+						if (KxFileItem fileItem = GetArchive().GetItem(index))
+						{
+							stream.SetFileTime(fileItem.GetCreationTime(), fileItem.GetModificationTime(), fileItem.GetLastAccessTime());
+							stream.SetAttributes(fileItem.GetAttributes());
+							stream.Close();
+
+							return true;
+						}
+					});
+					extractor.Execute(files);
 				}
 				else
 				{
 					KxFileItem item;
-					if (GetArchive().FindFile(fileEntry->GetSource(), item))
+					if (archive.FindFile(fileEntry->GetSource(), item))
 					{
 						wxString path = installLocation + wxS('\\') + fileEntry->GetDestination();
-						GetArchive().ExtractToFiles({item.GetExtraData<uint32_t>()}, {path});
+						archive.ExtractToFile(item.GetExtraData<KxArchive::FileIndex>(), path);
 					}
 				}
 

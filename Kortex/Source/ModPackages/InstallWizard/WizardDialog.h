@@ -112,9 +112,8 @@ namespace Kortex::InstallWizard
 			void OnGoForward(wxCommandEvent& event);
 
 			void SetModData();
-			KxUInt32Vector GetFilesOfFolder(const PackageProject::FolderItem* folder) const;
-			wxString GetFinalPath(uint32_t index, const wxString& installLocation, const PackageProject::FileItem* fileEntry) const;
-			KxStringVector GetFinalPaths(const KxUInt32Vector& filePaths, const wxString& installLocation, const PackageProject::FolderItem* folder) const;
+			KxArchive::FileIndexVector GetFilesOfFolder(const PackageProject::FolderItem* folder) const;
+			wxString GetFinalPath(const KxFileItem& fileItem, const wxString& installLocation, const PackageProject::FileItem* fileEntry) const;
 			void RunInstall();
 
 		public:
@@ -133,11 +132,11 @@ namespace Kortex::InstallWizard
 			{
 				return m_Package->GetConfig();
 			}
-			const KArchive& GetArchive() const
+			const GenericArchive& GetArchive() const
 			{
 				return m_Package->GetArchive();
 			}
-			KArchive& GetArchive()
+			GenericArchive& GetArchive()
 			{
 				return m_Package->GetArchive();
 			}

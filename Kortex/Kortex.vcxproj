@@ -447,6 +447,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Source\Archive\Common.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.h" />
     <ClInclude Include="Source\GameConfig\ConfigManger\Actions\PickColor.h" />

@@ -169,162 +169,162 @@ namespace
 {
 	namespace FormatNS
 	{
-		using KAEnum = Kortex::Archive::Format;
-		using SZEnum = SevenZip::CompressionFormat;
+		using KortexEnum = Kortex::Archive::Format;
+		using NativeEnum = SevenZip::CompressionFormat;
 
-		KAEnum Convert(SZEnum type)
+		KortexEnum FromNative(NativeEnum type)
 		{
 			switch (type)
 			{
-				case SZEnum::SevenZip:
+				case NativeEnum::SevenZip:
 				{
-					return KAEnum::SevenZip;
+					return KortexEnum::SevenZip;
 				}
-				case SZEnum::Zip:
+				case NativeEnum::Zip:
 				{
-					return KAEnum::Zip;
+					return KortexEnum::Zip;
 				}
-				case SZEnum::Rar:
+				case NativeEnum::Rar:
 				{
-					return KAEnum::RAR;
+					return KortexEnum::RAR;
 				}
-				case SZEnum::Rar5:
+				case NativeEnum::Rar5:
 				{
-					return KAEnum::RAR5;
+					return KortexEnum::RAR5;
 				}
-				case SZEnum::GZip:
+				case NativeEnum::GZip:
 				{
-					return KAEnum::GZip;
+					return KortexEnum::GZip;
 				}
-				case SZEnum::BZip2:
+				case NativeEnum::BZip2:
 				{
-					return KAEnum::BZip2;
+					return KortexEnum::BZip2;
 				}
-				case SZEnum::Tar:
+				case NativeEnum::Tar:
 				{
-					return KAEnum::Tar;
+					return KortexEnum::Tar;
 				}
-				case SZEnum::Iso:
+				case NativeEnum::Iso:
 				{
-					return KAEnum::ISO;
+					return KortexEnum::ISO;
 				}
-				case SZEnum::Cab:
+				case NativeEnum::Cab:
 				{
-					return KAEnum::CAB;
+					return KortexEnum::CAB;
 				}
-				case SZEnum::Lzma:
+				case NativeEnum::Lzma:
 				{
-					return KAEnum::LZMA;
+					return KortexEnum::LZMA;
 				}
-				case SZEnum::Lzma86:
+				case NativeEnum::Lzma86:
 				{
-					return KAEnum::LZMA86;
+					return KortexEnum::LZMA86;
 				}
 			};
-			return KAEnum::Unknown;
+			return KortexEnum::Unknown;
 		}
-		SZEnum Convert(KAEnum type)
+		NativeEnum ToNative(KortexEnum type)
 		{
 			switch (type)
 			{
-				case KAEnum::SevenZip:
+				case KortexEnum::SevenZip:
 				{
-					return SZEnum::SevenZip;
+					return NativeEnum::SevenZip;
 				}
-				case KAEnum::Zip:
+				case KortexEnum::Zip:
 				{
-					return SZEnum::Zip;
+					return NativeEnum::Zip;
 				}
-				case KAEnum::RAR:
+				case KortexEnum::RAR:
 				{
-					return SZEnum::Rar;
+					return NativeEnum::Rar;
 				}
-				case KAEnum::RAR5:
+				case KortexEnum::RAR5:
 				{
-					return SZEnum::Rar5;
+					return NativeEnum::Rar5;
 				}
-				case KAEnum::GZip:
+				case KortexEnum::GZip:
 				{
-					return SZEnum::GZip;
+					return NativeEnum::GZip;
 				}
-				case KAEnum::BZip2:
+				case KortexEnum::BZip2:
 				{
-					return SZEnum::BZip2;
+					return NativeEnum::BZip2;
 				}
-				case KAEnum::Tar:
+				case KortexEnum::Tar:
 				{
-					return SZEnum::Tar;
+					return NativeEnum::Tar;
 				}
-				case KAEnum::ISO:
+				case KortexEnum::ISO:
 				{
-					return SZEnum::Iso;
+					return NativeEnum::Iso;
 				}
-				case KAEnum::CAB:
+				case KortexEnum::CAB:
 				{
-					return SZEnum::Cab;
+					return NativeEnum::Cab;
 				}
-				case KAEnum::LZMA:
+				case KortexEnum::LZMA:
 				{
-					return SZEnum::Lzma;
+					return NativeEnum::Lzma;
 				}
-				case KAEnum::LZMA86:
+				case KortexEnum::LZMA86:
 				{
-					return SZEnum::Lzma86;
+					return NativeEnum::Lzma86;
 				}
 			}
-			return SZEnum::Unknown;
+			return NativeEnum::Unknown;
 		}
 	}
 	namespace MethodNS
 	{
-		using KAEnum = Kortex::Archive::Method;
-		using SZEnum = SevenZip::CompressionMethod;
+		using KortexEnum = Kortex::Archive::Method;
+		using NativeEnum = SevenZip::CompressionMethod;
 
-		KAEnum Convert(SZEnum type)
+		KortexEnum FromNative(NativeEnum type)
 		{
 			switch (type)
 			{
-				case SZEnum::LZMA:
+				case NativeEnum::LZMA:
 				{
-					return KAEnum::LZMA;
+					return KortexEnum::LZMA;
 				}
-				case SZEnum::LZMA2:
+				case NativeEnum::LZMA2:
 				{
-					return KAEnum::LZMA2;
+					return KortexEnum::LZMA2;
 				}
-				case SZEnum::PPMD:
+				case NativeEnum::PPMD:
 				{
-					return KAEnum::PPMd;
+					return KortexEnum::PPMd;
 				}
-				case SZEnum::BZIP2:
+				case NativeEnum::BZIP2:
 				{
-					return KAEnum::BZip2;
+					return KortexEnum::BZip2;
 				}
 			};
-			return KAEnum::Unknown;
+			return KortexEnum::Unknown;
 		}
-		SZEnum Convert(KAEnum type)
+		NativeEnum ToNative(KortexEnum type)
 		{
 			switch (type)
 			{
-				case KAEnum::LZMA:
+				case KortexEnum::LZMA:
 				{
-					return SZEnum::LZMA;
+					return NativeEnum::LZMA;
 				}
-				case KAEnum::LZMA2:
+				case KortexEnum::LZMA2:
 				{
-					return SZEnum::LZMA2;
+					return NativeEnum::LZMA2;
 				}
-				case KAEnum::PPMd:
+				case KortexEnum::PPMd:
 				{
-					return SZEnum::PPMD;
+					return NativeEnum::PPMD;
 				}
-				case KAEnum::BZip2:
+				case KortexEnum::BZip2:
 				{
-					return SZEnum::BZIP2;
+					return NativeEnum::BZIP2;
 				}
 			}
-			return SZEnum::Unknown;
+			return NativeEnum::Unknown;
 		}
 	}
 }
@@ -751,90 +751,133 @@ namespace Kortex
 		return m_Archive->CompressFile(ToTString(sourcePath), ToTString(archivePath));
 	}
 
-	// IBoolProperties
-	bool GenericArchive::GetPropertyBool(const TBoolPropertyIndex& property) const
+	// IArchiveProperties
+	std::optional<bool> GenericArchive::GetPropertyBool(wxStringView property) const
 	{
-		switch (property)
+		using namespace KxArchive;
+
+		// Compression
+		if (property == Property::Compression_Solid)
 		{
-			case TBoolPropertyIndex::Solid:
-			{
-				return m_Archive->GetProperty_Solid();
-			}
-			case TBoolPropertyIndex::MultiThreaded:
-			{
-				return m_Archive->GetProperty_MultiThreaded();
-			}
-		};
+			return m_Archive->GetProperty_Solid();
+		}
+		if (property == Property::Compression_MultiThreaded)
+		{
+			return m_Archive->GetProperty_MultiThreaded();
+		}
+
+		return std::nullopt;
+	}
+	bool GenericArchive::SetPropertyBool(wxStringView property, bool value)
+	{
+		using namespace KxArchive;
+
+		// Compression
+		if (property == Property::Compression_Solid)
+		{
+			m_Archive->SetProperty_Solid(value);
+			return true;
+		}
+		if (property == Property::Compression_MultiThreaded)
+		{
+			m_Archive->SetProperty_MultiThreaded(value);
+			return true;
+		}
+		
 		return false;
 	}
-	void GenericArchive::SetPropertyBool(const TBoolPropertyIndex& property, bool value)
+
+	std::optional<int64_t> GenericArchive::GetPropertyInt(wxStringView property) const
 	{
-		switch (property)
+		using namespace KxArchive;
+
+		// Common
+		if (property == Property::Common_ItemCount)
 		{
-			case TBoolPropertyIndex::Solid:
+			return GetItemCount();
+		}
+		if (property == Property::Common_OriginalSize)
+		{
+			return GetOriginalSize();
+		}
+		if (property == Property::Common_CompressedSize)
+		{
+			return GetOriginalSize();
+		}
+
+		// Compression
+		if (property == Property::Compression_Level)
+		{
+			return m_Archive->GetProperty_CompressionLevel();
+		}
+		if (property == Property::Compression_Format)
+		{
+			Archive::Format format = FormatNS::FromNative(m_Archive->GetProperty_CompressionFormat());
+
+			// This library can't detect 7z archive for some reason, but can perfectly read other data from it.
+			// So check for original size validity and set format manually.
+			if (format == Archive::Format::Unknown && GetOriginalSize() > 0)
 			{
-				return m_Archive->SetProperty_Solid(value);
+				format = Archive::Format::SevenZip;
 			}
-			case TBoolPropertyIndex::MultiThreaded:
-			{
-				return m_Archive->SetProperty_MultiThreaded(value);
-			}
-		};
+			return (int)format;
+		}
+		if (property == Property::Compression_Method)
+		{
+			return (int)MethodNS::FromNative(m_Archive->GetProperty_CompressionMethod());
+		}
+		if (property == Property::Compression_DictionarySize)
+		{
+			return m_Archive->GetProperty_DictionarySize();
+		}
+
+		return std::nullopt;
+	}
+	bool GenericArchive::SetPropertyInt(wxStringView property, int64_t value)
+	{
+		using namespace KxArchive;
+
+		// Compression
+		if (property == Property::Compression_Level)
+		{
+			m_Archive->SetProperty_CompressionLevel(value);
+			return true;
+		}
+		if (property == Property::Compression_Format)
+		{
+			m_Archive->SetProperty_CompressionFormat(FormatNS::ToNative(static_cast<FormatNS::KortexEnum>(value)));
+			return true;
+		}
+		if (property == Property::Compression_Method)
+		{
+			m_Archive->SetProperty_CompressionMethod(MethodNS::ToNative(static_cast<MethodNS::KortexEnum>(value)));
+			return true;
+		}
+		if (property == Property::Compression_DictionarySize)
+		{
+			m_Archive->SetProperty_DictionarySize(value);
+			return true;
+		}
+
+		return false;
 	}
 
-	// IIntProperties
-	int GenericArchive::GetPropertyInt(const TIntPropertyIndex& property) const
+	std::optional<double> GenericArchive::GetPropertyFloat(wxStringView property) const
 	{
-		switch (property)
-		{
-			case TIntPropertyIndex::CompressionLevel:
-			{
-				return m_Archive->GetProperty_CompressionLevel();
-			}
-			case TIntPropertyIndex::DictionarySize:
-			{
-				return m_Archive->GetProperty_DictionarySize();
-			}
-			case TIntPropertyIndex::Format:
-			{
-				Archive::Format format = FormatNS::Convert(m_Archive->GetProperty_CompressionFormat());
-
-				// This library can't detect 7z archive for some reason, but can perfectly read other data from it.
-				// So check for original size validity and set format manually.
-				if (format == Archive::Format::Unknown && GetOriginalSize() > 0)
-				{
-					format = Archive::Format::SevenZip;
-				}
-				return (int)format;
-			}
-			case TIntPropertyIndex::Method:
-			{
-				return (int)MethodNS::Convert(m_Archive->GetProperty_CompressionMethod());
-			}
-		};
-		return -1;
+		return std::nullopt;
 	}
-	void GenericArchive::SetPropertyInt(const TIntPropertyIndex& property, int value)
+	bool GenericArchive::SetPropertyFloat(wxStringView property, double value)
 	{
-		switch (property)
-		{
-			case TIntPropertyIndex::CompressionLevel:
-			{
-				return m_Archive->SetProperty_CompressionLevel(value);
-			}
-			case TIntPropertyIndex::DictionarySize:
-			{
-				return m_Archive->SetProperty_DictionarySize(value);
-			}
-			case TIntPropertyIndex::Format:
-			{
-				return m_Archive->SetProperty_CompressionFormat(FormatNS::Convert((Archive::Format)value));
-			}
-			case TIntPropertyIndex::Method:
-			{
-				return m_Archive->SetProperty_CompressionMethod(MethodNS::Convert((Archive::Method)value));
-			}
-		};
+		return false;
+	}
+
+	std::optional<wxString> GenericArchive::GetPropertyString(wxStringView property) const
+	{
+		return std::nullopt;
+	}
+	bool GenericArchive::SetPropertyString(wxStringView property, wxStringView value)
+	{
+		return false;
 	}
 
 	GenericArchive& GenericArchive::operator=(GenericArchive&& other)

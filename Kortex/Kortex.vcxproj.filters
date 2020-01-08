@@ -2414,6 +2414,9 @@
     <ClInclude Include="Source\Archive\GenericArchive.h">
       <Filter>Code\Headers\Archive</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Archive\Common.h">
+      <Filter>Code\Headers\Archive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Kortex.rc">

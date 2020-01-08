@@ -125,11 +125,11 @@ namespace Kortex::PackageDesigner
 
 		const PackageProject::ConfigSection& config = m_Project.GetConfig();
 
-		m_Archive.SetPropertyBool(Archive::PropertyBool::Solid, config.IsSolidArchive());
-		m_Archive.SetPropertyBool(Archive::PropertyBool::Solid, config.IsMultithreadingUsed());
-		m_Archive.SetPropertyInt(Archive::PropertyInt::Method, (int)ConvertMethod(config.GetCompressionMethod()));
-		m_Archive.SetPropertyInt(Archive::PropertyInt::CompressionLevel, config.GetCompressionLevel());
-		m_Archive.SetPropertyInt(Archive::PropertyInt::DictionarySize, config.GetCompressionDictionarySize());
+		m_Archive.SetProperty(KxArchive::Property::Compression_Solid, config.IsSolidArchive());
+		m_Archive.SetProperty(KxArchive::Property::Compression_MultiThreaded, config.IsMultithreadingUsed());
+		m_Archive.SetProperty(KxArchive::Property::Compression_Method, ConvertMethod(config.GetCompressionMethod()));
+		m_Archive.SetProperty(KxArchive::Property::Compression_Level, config.GetCompressionLevel());
+		m_Archive.SetProperty(KxArchive::Property::Compression_DictionarySize, config.GetCompressionDictionarySize());
 	}
 	void PackageBuilder::WritePackageConfig()
 	{

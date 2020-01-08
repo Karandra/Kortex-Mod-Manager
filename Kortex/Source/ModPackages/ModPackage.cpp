@@ -90,7 +90,7 @@ namespace Kortex
 
 	void ModPackage::LoadConfig(ModPackageProject& project)
 	{
-		if (m_Archive.GetPropertyInt(Archive::PropertyInt::Format) != (int)Archive::Format::Unknown)
+		if (m_Archive)
 		{
 			SetModIDIfNone();
 
@@ -355,7 +355,7 @@ namespace Kortex
 	bool ModPackage::IsOK() const
 	{
 		return !m_PackageFilePath.IsEmpty() &&
-			m_Archive.GetPropertyInt(Archive::PropertyInt::Format) != (int)Archive::Format::Unknown &&
+			m_Archive.GetProperty<Archive::Format>(KxArchive::Property::Compression_Format) != Archive::Format::Unknown &&
 			m_PackageType != PackageProject::PackageType::Unknown &&
 			!m_Config.GetModID().IsEmpty();
 	}

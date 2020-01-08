@@ -3,53 +3,13 @@
 #include <KxFramework/KxArchive.h>
 #include <KxFramework/KxArchiveEvent.h>
 #include <KxFramework/KxFileItem.h>
+#include "Common.h"
 
 namespace SevenZip
 {
 	class Archive;
 	class Library;
 	class ProgressNotifier;
-}
-
-namespace Kortex::Archive
-{
-	enum class PropertyBool
-	{
-		Solid,
-		MultiThreaded,
-	};
-	enum class PropertyInt
-	{
-		CompressionLevel,
-		DictionarySize,
-		Format,
-		Method,
-	};
-
-	enum class Method
-	{
-		Unknown = -1,
-
-		LZMA,
-		LZMA2,
-		PPMd,
-		BZip2,
-	};
-	enum class Format
-	{
-		Unknown = -1,
-		SevenZip,
-		Zip,
-		RAR,
-		RAR5,
-		GZip,
-		BZip2,
-		Tar,
-		ISO,
-		CAB,
-		LZMA,
-		LZMA86,
-	};
 }
 
 namespace Kortex
@@ -64,11 +24,9 @@ namespace Kortex
 			KxArchive::IArchiveItems,
 			KxArchive::IArchiveSearch,
 			KxArchive::IArchiveExtraction,
-			KxArchive::IArchiveCompression
-		>,
-
-		public KxArchive::IBoolProperties<Archive::PropertyBool>,
-		public KxArchive::IIntProperties<Archive::PropertyInt>
+			KxArchive::IArchiveCompression,
+			KxArchive::IArchiveProperties
+		>
 	{
 		public:
 			using FileIndex = KxArchive::FileIndex;
@@ -140,13 +98,18 @@ namespace Kortex
 			bool CompressFile(const wxString& sourcePath, const wxString& archivePath) override;
 
 		public:
-			// IBoolProperties
-			bool GetPropertyBool(const TBoolPropertyIndex& property) const override;
-			void SetPropertyBool(const TBoolPropertyIndex& property, bool value) override;
+			// IArchiveProperties
+			std::optional<bool> GetPropertyBool(wxStringView property) const override;
+			bool SetPropertyBool(wxStringView property, bool value) override;
 
-			// IIntProperties
-			int GetPropertyInt(const TIntPropertyIndex& property) const override;
-			void SetPropertyInt(const TIntPropertyIndex& property, int value) override;
+			std::optional<int64_t> GetPropertyInt(wxStringView property) const override;
+			bool SetPropertyInt(wxStringView property, int64_t value)  override;
+
+			std::optional<double> GetPropertyFloat(wxStringView property) const override;
+			bool SetPropertyFloat(wxStringView property, double value) override;
+
+			std::optional<wxString> GetPropertyString(wxStringView property) const override;
+			bool SetPropertyString(wxStringView property, wxStringView value) override;
 
 		public:
 			GenericArchive& operator=(const GenericArchive&) = delete;

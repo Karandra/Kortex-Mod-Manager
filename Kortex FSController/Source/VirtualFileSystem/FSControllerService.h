@@ -103,7 +103,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			wxString GetLibraryURL() const override
 			{
-				return wxS("https://github.com/dokan-dev/dokany");
+				return wxS("https://github.com/KerberX/KxVirtualFileSystem");
 			}
 			KxVersion GetLibraryVersion() const override
 			{
@@ -120,7 +120,7 @@ namespace Kortex::VirtualFileSystem
 			}
 			wxString GetNativeLibraryURL() const override
 			{
-				return wxS("https://github.com/KerberX/KxVirtualFileSystem");
+				return wxS("https://github.com/dokan-dev/dokany");
 			}
 			KxVersion GetNativeLibraryVersion() const override
 			{

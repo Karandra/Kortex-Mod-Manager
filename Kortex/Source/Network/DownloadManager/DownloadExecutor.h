@@ -47,7 +47,6 @@ namespace Kortex::DownloadManager
 			void QueueNotifyEvent(KxEventTag<DownloadEvent> eventType);
 			void Terminate();
 
-			wxString GetTempFile() const;
 			bool RenameTempFile();
 			bool DeleteTempFile();
 
@@ -90,10 +89,13 @@ namespace Kortex::DownloadManager
 			{
 				return m_DownloadedSize;
 			}
-			int64_t RequestContentLength() const override;
 			wxDateTime GetStartDate() const override
 			{
 				return m_StartDate;
 			}
+			
+			std::optional<int64_t> RequestContentLength() const override;
+			wxString GetLocalPath() const override;
+			wxString GetLocalTempPath() const override;
 	};
 }

@@ -33,7 +33,10 @@ namespace Kortex
 			virtual int64_t GetSpeed() const = 0;
 			virtual int64_t GetTotalSize() const = 0;
 			virtual int64_t GetDownloadedSize() const = 0;
-			virtual int64_t RequestContentLength() const = 0;
 			virtual wxDateTime GetStartDate() const = 0;
+
+			virtual std::optional<int64_t> RequestContentLength() const = 0;
+			virtual wxString GetLocalPath() const = 0;
+			virtual wxString GetLocalTempPath() const = 0;
 	};
 }

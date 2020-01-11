@@ -35,7 +35,11 @@ namespace Kortex
 			// Download
 			ModFileReply m_FileInfo;
 			ModDownloadReply m_DownloadInfo;
-			
+
+			wxString m_LocalPathName;
+			wxString m_LocalFullPath;
+			wxString m_LocalFullTempPath;
+
 			int64_t m_DownloadedSize = 0;
 			int64_t m_DownloadSpeed = 0;
 			wxDateTime m_DownloadDate;
@@ -55,6 +59,7 @@ namespace Kortex
 			bool Serialize(wxOutputStream& stream) const;
 			bool Deserialize(wxInputStream& stream);
 
+			wxString ConstructFileName() const;
 			bool DoStart(int64_t startAt = 0);
 			void SetWaiting(bool value = true)
 			{
@@ -75,7 +80,9 @@ namespace Kortex
 
 		public:
 			bool IsOK() const;
-			wxString GetFullPath() const;
+			wxString GetLocalPath() const;
+			wxString GetLocalTempPath() const;
+			wxString GetTempPathSuffix() const;
 
 			KxURI GetURI() const
 			{
@@ -109,11 +116,13 @@ namespace Kortex
 
 			wxString GetName() const
 			{
-				return m_FileInfo.Name;
+				wxString name = !m_FileInfo.Name.IsEmpty() ? m_FileInfo.Name : m_FileInfo.DisplayName;
+				return name.IsEmpty() ? ConstructFileName() : name;
 			}
 			wxString GetDisplayName() const
 			{
-				return !m_FileInfo.DisplayName.IsEmpty() ? m_FileInfo.DisplayName : m_FileInfo.Name;
+				wxString name = !m_FileInfo.DisplayName.IsEmpty() ? m_FileInfo.DisplayName : m_FileInfo.Name;
+				return name.IsEmpty() ? ConstructFileName() : name;
 			}
 			KxVersion GetVersion() const
 			{

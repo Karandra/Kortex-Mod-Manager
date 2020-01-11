@@ -235,7 +235,7 @@ namespace Kortex
 			if (it != m_Downloads.end())
 			{
 				// Remove download file
-				KxFile(download.GetFullPath()).RemoveFile(true);
+				KxFile(download.GetLocalPath()).RemoveFile(true);
 
 				// Erase the item
 				auto temp = std::move(*it);

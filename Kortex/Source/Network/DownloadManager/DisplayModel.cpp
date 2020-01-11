@@ -51,7 +51,7 @@ namespace Kortex::DownloadManager
 		DownloadItem* download = GetItem(event.GetNode());
 		if (download && download->IsCompleted())
 		{
-			KxShell::Execute(GetView(), download->GetFullPath());
+			KxShell::Execute(GetView(), download->GetLocalPath());
 		}
 	}
 	void DisplayModel::OnContextMenu(KxDataView2::Event& event)
@@ -166,7 +166,7 @@ namespace Kortex::DownloadManager
 				KxTaskDialog dialog(GetView(), KxID_NONE, download->GetDisplayName(), wxEmptyString, KxBTN_OK, KxICON_NONE);
 				dialog.SetMessage(KxString::Format("%1 %2", KTr("Generic.Version"), download->GetVersion()));
 				dialog.SetExMessage(download->GetChangeLog());
-				dialog.SetMainIcon(KxShell::GetFileIcon(download->GetFullPath()));
+				dialog.SetMainIcon(KxShell::GetFileIcon(download->GetLocalPath()));
 				dialog.SetOptionEnabled(KxTD_EXMESSAGE_EXPANDED);
 				dialog.ShowModal();
 			});
@@ -258,7 +258,7 @@ namespace Kortex::DownloadManager
 			{
 				if (download)
 				{
-					KxShell::OpenFolderAndSelectItem(download->GetFullPath());
+					KxShell::OpenFolderAndSelectItem(download->GetLocalPath());
 				}
 				else
 				{
@@ -432,7 +432,7 @@ namespace Kortex::DownloadManager
 	void DisplayModel::Install(DownloadItem& item)
 	{
 		item.Save();
-		new InstallWizard::WizardDialog(GetView(), item.GetFullPath());
+		new InstallWizard::WizardDialog(GetView(), item.GetLocalPath());
 	}
 
 	DisplayModel::DisplayModel()

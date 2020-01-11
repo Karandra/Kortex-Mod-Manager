@@ -25,7 +25,7 @@ namespace Kortex::DownloadManager
 	void DownloadExecutor::OnStart()
 	{
 		KxFileStream::Disposition disposition = m_StartDownloadAt > 0 ? KxFileStream::Disposition::OpenExisting : KxFileStream::Disposition::CreateAlways;
-		m_Stream = std::make_unique<KxFileStream>(GetTempFile(), KxFileStream::Access::Write, disposition, KxFileStream::Share::Read);
+		m_Stream = std::make_unique<KxFileStream>(GetLocalTempPath(), KxFileStream::Access::Write, disposition, KxFileStream::Share::Read);
 		if (m_Stream->IsOk())
 		{
 			// Notify download manager about start of download
@@ -132,17 +132,13 @@ namespace Kortex::DownloadManager
 		}
 	}
 
-	wxString DownloadExecutor::GetTempFile() const
-	{
-		return m_LocalPath + wxS(".tmp");
-	}
 	bool DownloadExecutor::RenameTempFile()
 	{
-		return KxFile(GetTempFile()).Rename(m_LocalPath, true);
+		return KxFile(GetLocalTempPath()).Rename(m_LocalPath, true);
 	}
 	bool DownloadExecutor::DeleteTempFile()
 	{
-		return KxFile(GetTempFile()).RemoveFile();
+		return KxFile(GetLocalTempPath()).RemoveFile();
 	}
 
 	DownloadExecutor::DownloadExecutor(DownloadItem& item, const KxURI& uri, const wxString& localPath)
@@ -209,16 +205,32 @@ namespace Kortex::DownloadManager
 		}
 	}
 
-	int64_t DownloadExecutor::RequestContentLength() const
+	std::optional<int64_t> DownloadExecutor::RequestContentLength() const
 	{
-		int64_t contentLength = -1;
-
 		auto session = INetworkManager::GetInstance()->NewCURLSession(m_URI);
-		session->Bind(KxEVT_CURL_DOWNLOAD, [&session, &contentLength](KxCURLEvent& event)
+		if (session)
 		{
-			contentLength = event.GetMajorTotal();
-			session->Stop();
-		});
-		return contentLength;
+			int64_t contentLength = -1;
+			session->Bind(KxEVT_CURL_DOWNLOAD, [&session, &contentLength](KxCURLEvent& event)
+			{
+				contentLength = event.GetMajorTotal();
+				session->Stop();
+			});
+
+			if (contentLength > 0)
+			{
+				return contentLength;
+			}
+		}
+		return std::nullopt;
+	}
+	wxString DownloadExecutor::GetLocalPath() const
+	{
+		return m_LocalPath;
+	}
+	wxString DownloadExecutor::GetLocalTempPath() const
+	{
+		// In most cases this path would be 'm_Item.GetLocalTempPath()' but executor could be given different local path than its item
+		return m_LocalPath + m_Item.GetTempPathSuffix();
 	}
 }

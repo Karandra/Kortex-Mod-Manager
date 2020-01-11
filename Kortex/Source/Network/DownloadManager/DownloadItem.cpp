@@ -4,11 +4,12 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <KxFramework/KxFileItem.h>
+#include "Utility/Common.h"
 
 namespace
 {
 	constexpr wxChar StreamName[] = wxS(":Kortex.Download");
-	constexpr wxChar TempDownloadExt[] = wxS(".tmp");
+	constexpr wxChar TempDownloadSuffix[] = wxS(".tmp");
 }
 
 namespace Kortex
@@ -98,7 +99,7 @@ namespace Kortex
 			if (KxXMLNode stateNode = rootNode.GetFirstChildElement("State"); stateNode.IsOK())
 			{
 				m_IsHidden = stateNode.GetFirstChildElement("Hidden").GetValueBool();
-				m_IsFailed = stateNode.GetFirstChildElement("Failed").GetValueBool(m_DownloadedSize != m_FileInfo.Size) || !KxFile(GetFullPath()).IsFileExist();
+				m_IsFailed = stateNode.GetFirstChildElement("Failed").GetValueBool(m_DownloadedSize != m_FileInfo.Size) || !KxFile(GetLocalPath()).IsFileExist();
 				m_ShouldResume = stateNode.GetFirstChildElement().GetValueBool("Paused");
 			}
 
@@ -107,9 +108,23 @@ namespace Kortex
 		return false;
 	}
 
+	wxString DownloadItem::ConstructFileName() const
+	{
+		wxString name = m_FileInfo.DisplayName;
+		if (name.IsEmpty())
+		{
+			name = m_FileInfo.Name;
+			if (name.IsEmpty())
+			{
+				name = m_DownloadInfo.URI.GetPath().AfterLast(wxS('/'));
+			}
+		}
+
+		return name;
+	}
 	bool DownloadItem::DoStart(int64_t startAt)
 	{
-		m_Executor = IDownloadManager::GetInstance()->NewDownloadExecutor(*this, m_DownloadInfo.URI, GetFullPath());
+		m_Executor = IDownloadManager::GetInstance()->NewDownloadExecutor(*this, m_DownloadInfo.URI, GetLocalPath());
 		m_IsWaiting = false;
 		m_IsFailed = false;
 		m_ShouldResume = false;
@@ -140,6 +155,16 @@ namespace Kortex
 		m_DownloadedSize = m_Executor->GetDownloadedSize();
 		m_FileInfo.Size = m_Executor->GetTotalSize();
 		m_DownloadDate = m_Executor->GetStartDate();
+
+		if (m_LocalFullPath.IsEmpty())
+		{
+			m_LocalFullPath = m_Executor->GetLocalPath();
+			m_LocalPathName = m_LocalFullPath.AfterLast(wxS('\\'));
+		}
+		if (!m_LocalFullTempPath.IsEmpty())
+		{
+			m_LocalFullTempPath = m_Executor->GetLocalTempPath();
+		}
 	}
 
 	DownloadItem::DownloadItem(const ModDownloadReply& downloadInfo,
@@ -150,15 +175,32 @@ namespace Kortex
 		:m_DownloadInfo(downloadInfo), m_FileInfo(fileInfo), m_TargetGame(id)
 	{
 		SetModRepository(modRepository);
+		m_LocalPathName = Utility::MakeSafeFileName(ConstructFileName());
 	}
 
 	bool DownloadItem::IsOK() const
 	{
-		return m_FileInfo.IsOK() && m_DownloadInfo.URI.IsOk();
+		return m_FileInfo.IsOK() && m_DownloadInfo.URI.IsOk() && !m_LocalPathName.IsEmpty();
 	}
-	wxString DownloadItem::GetFullPath() const
+	wxString DownloadItem::GetLocalPath() const
 	{
-		return IDownloadManager::GetInstance()->GetDownloadsLocation() + wxS('\\') + m_FileInfo.Name;
+		if (!m_LocalFullPath.IsEmpty())
+		{
+			return m_LocalFullPath;
+		}
+		return IDownloadManager::GetInstance()->GetDownloadsLocation() + wxS('\\') + m_LocalPathName;
+	}
+	wxString DownloadItem::GetLocalTempPath() const
+	{
+		if (!m_LocalFullTempPath.IsEmpty())
+		{
+			return m_LocalFullTempPath;
+		}
+		return GetLocalPath() + TempDownloadSuffix;
+	}
+	wxString DownloadItem::GetTempPathSuffix() const
+	{
+		return TempDownloadSuffix;
 	}
 
 	const IGameMod* DownloadItem::GetMod() const
@@ -205,7 +247,7 @@ namespace Kortex
 		if (CanQueryInfo())
 		{
 			ModNetworkRepository* repository = GetModRepository();
-			return repository->QueryDownload(KxFileItem(GetFullPath()), *this, m_FileInfo);
+			return repository->QueryDownload(KxFileItem(GetLocalPath()), *this, m_FileInfo);
 		}
 		return false;
 	}
@@ -245,7 +287,7 @@ namespace Kortex
 				// Try to use temp file to get downloaded size if the download were paused
 				if (m_ShouldResume)
 				{
-					KxFileItem tempFile(fileItem.GetFullPath() + TempDownloadExt);
+					KxFileItem tempFile(fileItem.GetFullPath() + TempDownloadSuffix);
 					if (tempFile.IsNormalItem() && tempFile.IsFile())
 					{
 						m_DownloadedSize = tempFile.GetFileSize();
@@ -265,7 +307,7 @@ namespace Kortex
 	}
 	bool DownloadItem::Save() const
 	{
-		KxFileStream stream(GetFullPath() + StreamName, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+		KxFileStream stream(GetLocalPath() + StreamName, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 		return stream.IsOk() && Serialize(stream);
 	}
 

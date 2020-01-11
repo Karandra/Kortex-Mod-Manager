@@ -445,7 +445,7 @@ namespace Kortex::ModManager
 				if (DownloadItem* item = download.Save())
 				{
 					context->LinkHandler(&archiveFile, KxEVT_FILEOP_COPY);
-					archiveFile.CopyFile(item->GetFullPath(), false);
+					archiveFile.CopyFile(item->GetLocalPath(), false);
 				}
 			}
 		}

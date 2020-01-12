@@ -36,7 +36,6 @@ namespace Kortex
 			ModFileReply m_FileInfo;
 			ModDownloadReply m_DownloadInfo;
 
-			wxString m_LocalPathName;
 			wxString m_LocalFullPath;
 			wxString m_LocalFullTempPath;
 
@@ -60,6 +59,8 @@ namespace Kortex
 			bool Deserialize(wxInputStream& stream);
 
 			wxString ConstructFileName() const;
+			bool ChangeFileName(const wxString& newName);
+
 			bool DoStart(int64_t startAt = 0);
 			void SetWaiting(bool value = true)
 			{
@@ -114,16 +115,8 @@ namespace Kortex
 				return m_FileInfo.Size;
 			}
 
-			wxString GetName() const
-			{
-				wxString name = !m_FileInfo.Name.IsEmpty() ? m_FileInfo.Name : m_FileInfo.DisplayName;
-				return name.IsEmpty() ? ConstructFileName() : name;
-			}
-			wxString GetDisplayName() const
-			{
-				wxString name = !m_FileInfo.DisplayName.IsEmpty() ? m_FileInfo.DisplayName : m_FileInfo.Name;
-				return name.IsEmpty() ? ConstructFileName() : name;
-			}
+			wxString GetName() const;
+			wxString GetDisplayName() const;
 			KxVersion GetVersion() const
 			{
 				return m_FileInfo.Version;

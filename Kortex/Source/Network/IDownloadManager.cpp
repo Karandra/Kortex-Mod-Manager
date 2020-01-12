@@ -328,12 +328,18 @@ namespace Kortex
 		}
 		return nullptr;
 	}
-	void IDownloadManager::AutoRenameIncrement(DownloadItem& item) const
+	bool IDownloadManager::AutoRenameIncrement(DownloadItem& item) const
 	{
+		size_t count = 0;
 		while (FindDownloadByFileName(item.GetName(), &item))
 		{
-			item.m_FileInfo.Name = RenameIncrement(item.GetName());
+			if (item.ChangeFileName(RenameIncrement(item.GetName())))
+			{
+				count++;
+			}
 		}
+
+		return count != 0;
 	}
 
 	bool IDownloadManager::QueueUnknownDownload(const wxString& link)

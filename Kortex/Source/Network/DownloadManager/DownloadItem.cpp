@@ -4,12 +4,13 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <KxFramework/KxFileItem.h>
+#include "Archive/Common.h"
 #include "Utility/Common.h"
 
 namespace
 {
-	constexpr wxChar StreamName[] = wxS(":Kortex.Download");
-	constexpr wxChar TempDownloadSuffix[] = wxS(".tmp");
+	constexpr wxChar g_StreamName[] = wxS(":Kortex.Download");
+	constexpr wxChar g_TempDownloadSuffix[] = wxS(".tmp");
 }
 
 namespace Kortex
@@ -45,7 +46,7 @@ namespace Kortex
 
 			if (KxXMLNode infoNode = rootNode.NewElement("Info"); true)
 			{
-				infoNode.NewElement("DisplayName").SetValue(m_FileInfo.DisplayName);
+				infoNode.NewElement("DisplayName").SetValue(GetDisplayName());
 				infoNode.NewElement("Version").SetValue(m_FileInfo.Version);
 				infoNode.NewElement("TotalSize").SetValue(m_FileInfo.Size);
 
@@ -110,17 +111,26 @@ namespace Kortex
 
 	wxString DownloadItem::ConstructFileName() const
 	{
-		wxString name = m_FileInfo.DisplayName;
+		wxString name = m_FileInfo.Name;
 		if (name.IsEmpty())
 		{
-			name = m_FileInfo.Name;
+			name = m_FileInfo.DisplayName;
 			if (name.IsEmpty())
 			{
 				name = m_DownloadInfo.URI.GetPath().AfterLast(wxS('/'));
 			}
 		}
 
-		return name;
+		return Utility::MakeSafeFileName(name);
+	}
+	bool DownloadItem::ChangeFileName(const wxString& newName)
+	{
+		if (IsCompleted())
+		{
+			m_FileInfo.Name = newName;
+			return true;
+		}
+		return false;
 	}
 	bool DownloadItem::DoStart(int64_t startAt)
 	{
@@ -145,6 +155,43 @@ namespace Kortex
 			m_FileInfo.Size = -1;
 			Save();
 		}
+		else if (IsCompleted())
+		{
+			// If the extension isn't present try to detect archive format and add appropriate extension.
+			// File is renamed to its real name by this time.
+			if (!m_LocalFullPath.IsEmpty())
+			{
+				wxString ext = m_LocalFullPath.AfterLast(wxS('.'));
+				if (ext.IsEmpty() || ext == m_LocalFullPath)
+				{
+					ext = Archive::GetExtensionFromFormat(Archive::DetectFormat(m_LocalFullPath));
+					if (!ext.IsEmpty())
+					{
+						// Remember old path
+						const wxString oldPath = m_LocalFullPath;
+
+						// Update names
+						m_LocalFullPath += wxS('.');
+						m_LocalFullPath += ext;
+						m_FileInfo.Name = m_LocalFullPath.AfterLast(wxS('\\'));
+
+						// Invoke auto-rename
+						if (IDownloadManager::GetInstance()->AutoRenameIncrement(*this))
+						{
+							// Apply name changes to full path
+							KxFileItem item;
+							item.SetFullPath(m_LocalFullPath);
+							item.SetName(m_FileInfo.Name);
+
+							m_LocalFullPath = item.GetFullPath();
+						}
+
+						// Do rename
+						KxFile(oldPath).Rename(m_LocalFullPath, true);
+					}
+				}
+			}
+		}
 
 		return std::move(m_Executor);
 	}
@@ -159,7 +206,6 @@ namespace Kortex
 		if (m_LocalFullPath.IsEmpty())
 		{
 			m_LocalFullPath = m_Executor->GetLocalPath();
-			m_LocalPathName = m_LocalFullPath.AfterLast(wxS('\\'));
 		}
 		if (!m_LocalFullTempPath.IsEmpty())
 		{
@@ -175,12 +221,16 @@ namespace Kortex
 		:m_DownloadInfo(downloadInfo), m_FileInfo(fileInfo), m_TargetGame(id)
 	{
 		SetModRepository(modRepository);
-		m_LocalPathName = Utility::MakeSafeFileName(ConstructFileName());
+
+		if (m_FileInfo.Name.IsEmpty() && m_FileInfo.DisplayName.IsEmpty())
+		{
+			m_FileInfo.Name = ConstructFileName();
+		}
 	}
 
 	bool DownloadItem::IsOK() const
 	{
-		return m_FileInfo.IsOK() && m_DownloadInfo.URI.IsOk() && !m_LocalPathName.IsEmpty();
+		return m_FileInfo.IsOK() && (!m_FileInfo.Name.IsEmpty() || !m_FileInfo.DisplayName.IsEmpty()) && m_DownloadInfo.URI.IsOk();
 	}
 	wxString DownloadItem::GetLocalPath() const
 	{
@@ -188,7 +238,7 @@ namespace Kortex
 		{
 			return m_LocalFullPath;
 		}
-		return IDownloadManager::GetInstance()->GetDownloadsLocation() + wxS('\\') + m_LocalPathName;
+		return IDownloadManager::GetInstance()->GetDownloadsLocation() + wxS('\\') + GetName();
 	}
 	wxString DownloadItem::GetLocalTempPath() const
 	{
@@ -196,11 +246,20 @@ namespace Kortex
 		{
 			return m_LocalFullTempPath;
 		}
-		return GetLocalPath() + TempDownloadSuffix;
+		return GetLocalPath() + g_TempDownloadSuffix;
 	}
 	wxString DownloadItem::GetTempPathSuffix() const
 	{
-		return TempDownloadSuffix;
+		return g_TempDownloadSuffix;
+	}
+
+	wxString DownloadItem::GetName() const
+	{
+		return Utility::MakeSafeFileName(!m_FileInfo.Name.IsEmpty() ? m_FileInfo.Name : m_FileInfo.DisplayName);
+	}
+	wxString DownloadItem::GetDisplayName() const
+	{
+		return !m_FileInfo.DisplayName.IsEmpty() ? m_FileInfo.DisplayName : m_FileInfo.Name;
 	}
 
 	const IGameMod* DownloadItem::GetMod() const
@@ -278,7 +337,7 @@ namespace Kortex
 
 		if (fileItem.IsOK())
 		{
-			KxFileStream stream(fileItem.GetFullPath() + StreamName, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
+			KxFileStream stream(fileItem.GetFullPath() + g_StreamName, KxFileStream::Access::Read, KxFileStream::Disposition::OpenExisting, KxFileStream::Share::Read);
 			if (stream.IsOk() && Deserialize(stream))
 			{
 				m_FileInfo.Name = fileItem.GetName();
@@ -287,7 +346,7 @@ namespace Kortex
 				// Try to use temp file to get downloaded size if the download were paused
 				if (m_ShouldResume)
 				{
-					KxFileItem tempFile(fileItem.GetFullPath() + TempDownloadSuffix);
+					KxFileItem tempFile(fileItem.GetFullPath() + g_TempDownloadSuffix);
 					if (tempFile.IsNormalItem() && tempFile.IsFile())
 					{
 						m_DownloadedSize = tempFile.GetFileSize();
@@ -307,7 +366,7 @@ namespace Kortex
 	}
 	bool DownloadItem::Save() const
 	{
-		KxFileStream stream(GetLocalPath() + StreamName, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
+		KxFileStream stream(GetLocalPath() + g_StreamName, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways, KxFileStream::Share::Read);
 		return stream.IsOk() && Serialize(stream);
 	}
 

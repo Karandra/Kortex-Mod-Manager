@@ -20,7 +20,7 @@ namespace Kortex::DownloadManager
 		OnStart();
 		OnEnd();
 
-		return 0;
+		return nullptr;
 	}
 	void DownloadExecutor::OnStart()
 	{
@@ -89,10 +89,6 @@ namespace Kortex::DownloadManager
 			// Close the stream now to allow download item or manager to manipulate the file
 			m_Stream->Close();
 
-			// Download item relinquished ownership to the executor to us.
-			// It will be deleted when we are done executing events dispatching below.
-			auto executor = OnTaskEnd(m_Item);
-
 			// Send event to download manager
 			if (m_IsCompleted)
 			{
@@ -109,6 +105,10 @@ namespace Kortex::DownloadManager
 				DeleteTempFile();
 				NotifyEvent(DownloadEvent::EvtFailed);
 			}
+
+			// Download item relinquished ownership of its executor to us.
+			// It's exactly this object so at the end of this function an equivalent of 'delete this;' will be called.
+			auto executor = OnTaskEnd(m_Item);
 		});
 	}
 

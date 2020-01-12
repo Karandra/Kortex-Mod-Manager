@@ -32,6 +32,14 @@ namespace Kortex::Archive
 	};
 }
 
+namespace Kortex::Archive
+{
+	Format DetectFormat(const wxString& filePath);
+
+	wxString GetExtensionFromFormat(Format format);
+	wxString GetFormatName(Format format);
+}
+
 namespace Kortex::Archive::Property
 {
 	//KxArchiveDeclareUserProperty(Compression, Solid);

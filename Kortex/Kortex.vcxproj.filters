@@ -1290,6 +1290,9 @@
     <ClCompile Include="Source\Archive\GenericArchive.cpp">
       <Filter>Code\Source\Archive</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Archive\Common.cpp">
+      <Filter>Code\Source\Archive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">

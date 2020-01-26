@@ -3,9 +3,10 @@
 #include "PackageProject/ModPackageProject.h"
 #include "PackageProject/Serializer/NativeSerializer.h"
 #include "PackageProject/Serializer/FOModSerializer.h"
+#include "Archive/GenericArchive.h"
+#include "Utility/OperationWithProgress.h"
 #include <Kortex/Application.hpp>
 #include <Kortex/InstallWizard.hpp>
-#include "Utility/OperationWithProgress.h"
 #include <KxFramework/KxFile.h>
 #include <KxFramework/KxString.h>
 #include <KxFramework/KxTextFile.h>
@@ -104,32 +105,33 @@ namespace Kortex::PackageDesigner
 	{
 		auto ConvertMethod = [](const wxString& methodName)
 		{
-			if (methodName == "LZMA")
+			if (methodName == wxS("LZMA"))
 			{
 				return Archive::Method::LZMA;
 			}
-			if (methodName == "LZMA2")
+			if (methodName == wxS("LZMA2"))
 			{
 				return Archive::Method::LZMA2;
 			}
-			if (methodName == "PPMd")
+			if (methodName == wxS("PPMd"))
 			{
 				return Archive::Method::PPMd;
 			}
-			if (methodName == "BZip2")
+			if (methodName == wxS("BZip2"))
 			{
 				return Archive::Method::BZip2;
 			}
-			return Archive::Method::LZMA;
+			return Archive::Method::LZMA2;
 		};
 
 		const PackageProject::ConfigSection& config = m_Project.GetConfig();
 
-		m_Archive.SetProperty(KxArchive::Property::Compression_Solid, config.IsSolidArchive());
-		m_Archive.SetProperty(KxArchive::Property::Compression_MultiThreaded, config.IsMultithreadingUsed());
-		m_Archive.SetProperty(KxArchive::Property::Compression_Method, ConvertMethod(config.GetCompressionMethod()));
-		m_Archive.SetProperty(KxArchive::Property::Compression_Level, config.GetCompressionLevel());
-		m_Archive.SetProperty(KxArchive::Property::Compression_DictionarySize, config.GetCompressionDictionarySize());
+		m_Archive->SetProperty(KxArchive::Property::Compression_Format, Archive::Format::SevenZip);
+		m_Archive->SetProperty(KxArchive::Property::Compression_Solid, config.IsSolidArchive());
+		m_Archive->SetProperty(KxArchive::Property::Compression_MultiThreaded, config.IsMultithreadingUsed());
+		m_Archive->SetProperty(KxArchive::Property::Compression_Method, ConvertMethod(config.GetCompressionMethod()));
+		m_Archive->SetProperty(KxArchive::Property::Compression_Level, config.GetCompressionLevel());
+		m_Archive->SetProperty(KxArchive::Property::Compression_DictionarySize, config.GetCompressionDictionarySize());
 	}
 	void PackageBuilder::WritePackageConfig()
 	{
@@ -219,7 +221,6 @@ namespace Kortex::PackageDesigner
 	PackageBuilder::PackageBuilder(const ModPackageProject& project, Utility::OperationWithProgressBase& thread, bool previewBuild)
 		:m_Project(project), m_Thread(thread), m_BuildPreview(previewBuild)
 	{
-		m_Thread.LinkHandler(&m_Archive, KxArchiveEvent::EvtProcess);
 	}
 	PackageBuilder::~PackageBuilder()
 	{
@@ -236,26 +237,26 @@ namespace Kortex::PackageDesigner
 			// Create containing folder
 			KxFile(wxFileName(tempPackagePath).GetPath()).CreateFolder();
 
-			if (m_Archive.Open(tempPackagePath))
-			{
-				Configure();
-				WritePackageConfig();
-				ProcessInfo();
-				ProcessInterface();
-				ProcessFileData();
+			m_Archive = std::make_unique<GenericArchive>(tempPackagePath);
+			m_Thread.LinkHandler(m_Archive.get(), KxArchiveEvent::EvtProcess);
 
-				// Compress now
-				if (m_Archive.CompressSpecifiedFiles(m_SourceFiles, m_ArchivePaths))
-				{
-					// Compression successful, rename temp file to real file
-					KxFile(tempPackagePath).Rename(GetPackagePath(), true);
-					return true;
-				}
-				else
-				{
-					// Archive is incorrect if compression was aborted
-					KxFile(tempPackagePath).RemoveFile();
-				}
+			Configure();
+			WritePackageConfig();
+			ProcessInfo();
+			ProcessInterface();
+			ProcessFileData();
+
+			// Compress now
+			if (m_Archive->CompressSpecifiedFiles(m_SourceFiles, m_ArchivePaths))
+			{
+				// Compression successful, rename temp file to real file
+				KxFile(tempPackagePath).Rename(GetPackagePath(), true);
+				return true;
+			}
+			else
+			{
+				// Archive is incorrect if compression was aborted
+				KxFile(tempPackagePath).RemoveFile();
 			}
 		}
 		return false;

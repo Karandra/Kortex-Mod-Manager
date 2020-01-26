@@ -1,12 +1,13 @@
 #pragma once
 #include "stdafx.h"
-#include "Archive/GenericArchive.h"
 #include "Utility/OperationWithProgress.h"
 #include "Utility/TempFolderKeeper.h"
+#include <KxFramework/KxArchiveEvent.h>
 
 namespace Kortex
 {
 	class ModPackageProject;
+	class GenericArchive;
 }
 namespace Kortex::PackageProject
 {
@@ -32,7 +33,7 @@ namespace Kortex::PackageDesigner
 			wxString m_PackagePath;
 			const bool m_BuildPreview = false;
 
-			GenericArchive m_Archive;
+			std::unique_ptr<GenericArchive> m_Archive;
 			KxStringVector m_SourceFiles;
 			KxStringVector m_ArchivePaths;
 			KxStringVector m_MissingFiles;

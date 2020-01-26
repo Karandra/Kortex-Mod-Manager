@@ -158,7 +158,7 @@ namespace Kortex::Utility
 			{
 				GetEventHandler()->Bind(type, &OperationWithProgressDialog::OnFileOperation, this);
 			}
-			virtual void LinkHandler(wxEvtHandler* eventHandler, wxEventType type) override
+			void LinkHandler(wxEvtHandler* eventHandler, wxEventType type) override
 			{
 				OperationWithProgressDialogBase::LinkHandler(eventHandler, type);
 				AddEvent(static_cast<EventTypeTag>(type));

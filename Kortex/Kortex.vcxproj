@@ -295,6 +295,7 @@
     <ClCompile Include="Source\UI\WebView.cpp" />
     <ClCompile Include="Source\UI\WebViewBackend\Generic.cpp" />
     <ClCompile Include="Source\UI\WebViewBackend\InternetExplorer.cpp" />
+    <ClCompile Include="Source\UI\WebViewBackend\Sciter.cpp" />
     <ClCompile Include="Source\Utility\Common.cpp" />
     <ClCompile Include="Source\Utility\DateTime.cpp" />
     <ClCompile Include="Source\Utility\BitmapSize.cpp" />
@@ -667,6 +668,7 @@
     <ClInclude Include="Source\UI\WebViewBackend\Generic.h" />
     <ClInclude Include="Source\UI\WebViewBackend\InternetExplorer.h" />
     <ClInclude Include="Source\UI\WebViewBackend\IWebView.h" />
+    <ClInclude Include="Source\UI\WebViewBackend\Sciter.h" />
     <ClInclude Include="Source\Utility\Collection.h" />
     <ClInclude Include="Source\Utility\Common.h" />
     <ClInclude Include="Source\Utility\DateTime.h" />

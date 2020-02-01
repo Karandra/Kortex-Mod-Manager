@@ -12,6 +12,7 @@ namespace Kortex::UI
 			{
 				Default = 0,
 				Generic,
+				Sciter,
 				InternetExplorer
 			};
 

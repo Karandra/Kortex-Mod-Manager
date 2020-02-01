@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "WebView.h"
 #include "WebViewBackend/Generic.h"
+#include "WebViewBackend/Sciter.h"
 #include "WebViewBackend/InternetExplorer.h"
 #include "Utility/UI.h"
 #include <KxFramework/KxTaskDialog.h>
@@ -53,6 +54,11 @@ namespace Kortex::UI
 				case Backend::Generic:
 				{
 					m_Backend = new WebViewBackend::Generic(parent, m_EvtHandler, style);
+					break;
+				}
+				case Backend::Sciter:
+				{
+					m_Backend = new WebViewBackend::Sciter(parent, m_EvtHandler, style);
 					break;
 				}
 				case Backend::InternetExplorer:

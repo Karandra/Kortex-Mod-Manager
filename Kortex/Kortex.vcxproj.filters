@@ -1293,6 +1293,9 @@
     <ClCompile Include="Source\Archive\Common.cpp">
       <Filter>Code\Source\Archive</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\WebViewBackend\Sciter.cpp">
+      <Filter>Code\Source\UI\WebViewBackend</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -2419,6 +2422,9 @@
     </ClInclude>
     <ClInclude Include="Source\Archive\Common.h">
       <Filter>Code\Headers\Archive</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebViewBackend\Sciter.h">
+      <Filter>Code\Headers\UI\WebViewBackend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

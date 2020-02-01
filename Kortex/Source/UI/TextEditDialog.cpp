@@ -183,7 +183,7 @@ namespace Kortex::UI
 			backgroundColorPicker->SetColour(m_Editor->GetBackgroundColour());
 
 			/* Preview page */
-			m_Preview.Create(m_Container);
+			m_Preview.Create(m_Container, WebView::Backend::Sciter);
 			m_Container->AddPage(m_Preview, wxEmptyString);
 
 			/* Complete creation */

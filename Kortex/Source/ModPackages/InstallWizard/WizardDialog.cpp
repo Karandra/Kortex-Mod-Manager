@@ -447,6 +447,7 @@ namespace Kortex::InstallWizard
 
 							return true;
 						}
+						return false;
 					});
 					extractor.Execute(files);
 				}

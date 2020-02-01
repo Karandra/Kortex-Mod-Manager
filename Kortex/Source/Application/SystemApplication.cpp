@@ -19,6 +19,7 @@
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxFileStream.h>
 #include <KxFramework/KxSystem.h>
+#include <Kx/Sciter.hpp>
 
 namespace
 {
@@ -112,6 +113,13 @@ namespace Kortex
 	{
 		Utility::Log::LogInfo("SystemApplication::InitComponents");
 
+		// Load Sciter
+		#ifdef _WIN64
+		KxSciter::LoadLibrary(m_RootFolder + wxS("\\Data\\Sciter x64.dll"));
+		#else
+		KxSciter::LoadLibrary(m_RootFolder + wxS("\\Data\\Sciter.dll"));
+		#endif
+
 		GenericArchive::Init();
 		m_ThemeManager = std::make_unique<Theme::Default>();
 		m_NotificationCenter = std::make_unique<Notifications::DefaultNotificationCenter>();
@@ -121,6 +129,7 @@ namespace Kortex
 		Utility::Log::LogInfo("SystemApplication::UninitComponents");
 
 		GenericArchive::UnInit();
+		KxSciter::FreeLibrary();
 	}
 	void SystemApplication::SetPostCreateVariables()
 	{

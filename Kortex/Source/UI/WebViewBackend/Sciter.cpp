@@ -40,7 +40,7 @@ namespace Kortex::UI::WebViewBackend
 
 		auto FormatElement = [&](const wxString& html)
 		{
-			return KxString::Format(wxS("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset = utf-8\"/></head><body>%1</body></html>"), html);
+			return KxString::Format(wxS("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/></head><body>%1</body></html>"), html);
 		};
 		return WindowWrapper::LoadHTML(FormatElement(KxHTMLWindow::ProcessPlainText(text)));
 	}

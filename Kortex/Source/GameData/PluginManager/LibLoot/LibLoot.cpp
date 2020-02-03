@@ -19,7 +19,7 @@
 
 namespace
 {
-	KxEVENT_DEFINE_LOCAL(LibLoot, KxFileOperationEvent);
+	KxEVENT_DEFINE_LOCAL(KxFileOperationEvent, LibLoot);
 
 	std::string ToLootString(const wxString& value)
 	{

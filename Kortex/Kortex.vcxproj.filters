@@ -27,9 +27,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Code\Source\UI">
-      <UniqueIdentifier>{51d2b7a4-c61f-41fb-afcb-6710b7efdfa3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Source\Utility">
       <UniqueIdentifier>{3d4221b7-0197-4472-840f-106f30da65c6}</UniqueIdentifier>
     </Filter>
@@ -385,9 +382,6 @@
     <Filter Include="Code\Source\ModPackages\InstallWizard\Completed">
       <UniqueIdentifier>{c3d782e6-426f-4cc0-b980-a88823a76545}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\UI\WebViewBackend">
-      <UniqueIdentifier>{3f78e5b9-b576-42ab-ae3d-fecfdbf8f903}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Headers\UI\WebViewBackend">
       <UniqueIdentifier>{6b550dfd-87c7-43d8-9bfb-1bd193595c94}</UniqueIdentifier>
     </Filter>
@@ -420,6 +414,12 @@
     </Filter>
     <Filter Include="Code\Source\PackageProject\Serializer">
       <UniqueIdentifier>{260be8da-c79f-4293-9227-0a9cb09eab33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Programs\UI">
+      <UniqueIdentifier>{51d2b7a4-c61f-41fb-afcb-6710b7efdfa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source\Programs\UI\WebViewBackend">
+      <UniqueIdentifier>{3f78e5b9-b576-42ab-ae3d-fecfdbf8f903}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1030,16 +1030,16 @@
       <Filter>Code\Source\ModPackages\InstallWizard\Completed</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\WebView.cpp">
-      <Filter>Code\Source\UI</Filter>
+      <Filter>Code\Source\Programs\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\TextEditDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
+      <Filter>Code\Source\Programs\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\WebViewBackend\InternetExplorer.cpp">
-      <Filter>Code\Source\UI\WebViewBackend</Filter>
+      <Filter>Code\Source\Programs\UI\WebViewBackend</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\WebViewBackend\Generic.cpp">
-      <Filter>Code\Source\UI\WebViewBackend</Filter>
+      <Filter>Code\Source\Programs\UI\WebViewBackend</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DownloadItem.cpp">
       <Filter>Code\Source\Network\DownloadManager</Filter>
@@ -1129,7 +1129,7 @@
       <Filter>Code\Source\ModPackages\InstallWizard\Requirements</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\ImageViewerDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
+      <Filter>Code\Source\Programs\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp">
       <Filter>Code\Source\Application</Filter>
@@ -1144,7 +1144,7 @@
       <Filter>Code\Source\Programs\ProgramManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\ProgressOverlay.cpp">
-      <Filter>Code\Source\UI</Filter>
+      <Filter>Code\Source\Programs\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\WorkspaceDocument.cpp">
       <Filter>Code\Source\PackageCreator</Filter>
@@ -1294,7 +1294,7 @@
       <Filter>Code\Source\Archive</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\WebViewBackend\Sciter.cpp">
-      <Filter>Code\Source\UI\WebViewBackend</Filter>
+      <Filter>Code\Source\Programs\UI\WebViewBackend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

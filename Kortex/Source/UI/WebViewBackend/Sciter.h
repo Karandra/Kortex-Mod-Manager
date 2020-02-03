@@ -13,7 +13,10 @@ namespace Kortex::UI::WebViewBackend
 			wxEvtHandler& m_EvtHandler;
 
 		private:
-			void OnLinkClicked(wxHtmlLinkEvent& event);
+			void OnLoaded(KxSciter::BehaviorEvent& event);
+			void OnHyperlink(KxSciter::BehaviorEvent& event);
+			void OnButton(KxSciter::BehaviorEvent& event);
+
 			bool SendEvent(wxEventTypeTag<wxWebViewEvent> eventID, const wxString& url = {}, const wxString& target = {});
 
 		public:

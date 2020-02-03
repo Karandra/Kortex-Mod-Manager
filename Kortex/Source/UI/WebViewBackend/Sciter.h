@@ -11,11 +11,12 @@ namespace Kortex::UI::WebViewBackend
 	{
 		private:
 			wxEvtHandler& m_EvtHandler;
+			wxEvtHandler m_SpoilerButtonHandler;
 
 		private:
 			void OnLoaded(KxSciter::BehaviorEvent& event);
 			void OnHyperlink(KxSciter::BehaviorEvent& event);
-			void OnButton(KxSciter::BehaviorEvent& event);
+			void OnSpoilerButton(KxSciter::BehaviorEvent& event);
 
 			bool SendEvent(wxEventTypeTag<wxWebViewEvent> eventID, const wxString& url = {}, const wxString& target = {});
 

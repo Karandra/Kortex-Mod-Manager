@@ -45,32 +45,34 @@ namespace Kortex::UI::WebViewBackend
 		});
 
 		// Make images fit into client area
-		root.Select("img", [](Element node)
+		root.Select("img", [](Element image)
 		{
-			node.SetStyleAttribute("max-width", 100, SizeUnit::Percent);
-			node.SetStyleAttribute("margin-left", "auto");
-			node.SetStyleAttribute("margin-right", "auto");
-			node.SetStyleAttribute("cursor", "arrow");
+			image.SetStyleAttribute("max-width", 100, SizeUnit::Percent);
+			image.SetStyleAttribute("margin-left", "auto");
+			image.SetStyleAttribute("margin-right", "auto");
+			image.SetStyleAttribute("cursor", "arrow");
 
 			return true;
 		});
 
-		// Process spoilers
-		root.Select("div.bbc_spoiler_show", [](Element node)
+		// Convert spoiler buttons to Sciter button control
+		root.Select("div.bbc_spoiler_show", [&](Element button)
 		{
-			node.SetStyleAttribute("display", "block");
-			node.SetTagName("input");
-			node.SetAttribute("type", "button");
-			node.AttachEventHandler();
+			button.SetTagName("button");
+			button.SetStyleAttribute("display", "flex");
+			button.SetAttribute("type", "button");
+			button.SetText(KTr(KxID_OPEN));
 
+			button.AttachEventHandler(m_SpoilerButtonHandler);
 			return true;
 		});
-		root.Select("div.bbc_spoiler_content", [this](Element node)
+		root.Select("div.bbc_spoiler_content", [this](Element content)
 		{
-			node.SetStyleAttribute("border", "2dip dashed");
-			node.SetStyleAttribute("border-color", GetForegroundColor().MakeDisabled());
-			node.SetStyleAttribute("padding", KLC_HORIZONTAL_SPACING, SizeUnit::dip);
-			node.SetStyleAttribute("margin", KLC_HORIZONTAL_SPACING, SizeUnit::dip);
+			content.SetStyleAttribute("display", "none");
+			content.SetStyleAttribute("border", "2dip dashed");
+			content.SetStyleAttribute("border-color", GetForegroundColor().MakeDisabled());
+			content.SetStyleAttribute("padding", KLC_HORIZONTAL_SPACING, SizeUnit::dip);
+			content.SetStyleAttribute("margin", KLC_HORIZONTAL_SPACING, SizeUnit::dip);
 
 			return true;
 		});
@@ -88,21 +90,23 @@ namespace Kortex::UI::WebViewBackend
 	}
 	void Sciter::OnHyperlink(KxSciter::BehaviorEvent& event)
 	{
-		SendEvent(IWebView::EvtNavigating, event.GetElement().GetAttribute("href"));
+		KxSciter::Element link = event.GetElement();
+		SendEvent(IWebView::EvtNavigating, link.GetAttribute("href"), link.GetAttribute("target"));
 	}
-	void Sciter::OnButton(KxSciter::BehaviorEvent& event)
+	void Sciter::OnSpoilerButton(KxSciter::BehaviorEvent& event)
 	{
-		if (KxSciter::Element element = event.GetElement().GetParent().SelectAny("div.bbc_spoiler_content"))
+		if (KxSciter::Element content = event.GetElement().GetParent().SelectAny("div.bbc_spoiler_content"))
 		{
-			if (element.GetStyleAttribute("display") == "block")
+			KxSciter::Element button = event.GetElement();
+			if (content.GetStyleAttribute("display") == "block")
 			{
-				element.SetStyleAttribute("display", "none");
-				event.GetElement().SetText("Show");
+				content.SetStyleAttribute("display", "none");
+				button.SetText(KTr(KxID_OPEN));
 			}
 			else
 			{
-				element.SetStyleAttribute("display", "block");
-				event.GetElement().SetText("Hide");
+				content.SetStyleAttribute("display", "block");
+				button.SetText(KTr(KxID_CLOSE));
 			}
 		}
 	}
@@ -123,7 +127,8 @@ namespace Kortex::UI::WebViewBackend
 		{
 			Bind(KxSciter::BehaviorEvent::EvtHyperlinkClick, &Sciter::OnHyperlink, this);
 			Bind(KxSciter::BehaviorEvent::EvtDocumentReady, &Sciter::OnLoaded, this);
-			Bind(KxSciter::BehaviorEvent::EvtButtonPress, &Sciter::OnButton, this);
+
+			m_SpoilerButtonHandler.Bind(KxSciter::BehaviorEvent::EvtButtonPress, &Sciter::OnSpoilerButton, this);
 		}
 	}
 

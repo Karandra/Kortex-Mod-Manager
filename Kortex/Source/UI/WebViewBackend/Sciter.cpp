@@ -8,8 +8,8 @@ namespace Kortex::UI::WebViewBackend
 	{
 		using namespace KxSciter;
 
-		// Override primary font parent window font 
-		SetFont(GetParent()->GetFont());
+		// Override primary document font to parent window font (but a bit bigger)
+		SetFont(GetParent()->GetFont().Scaled(1.1f));
 
 		// Make text selectable
 		Element root = GetRootElement();
@@ -123,6 +123,7 @@ namespace Kortex::UI::WebViewBackend
 	Sciter::Sciter(wxWindow* parent, wxEvtHandler& evthandler, long style)
 		:m_EvtHandler(evthandler)
 	{
+		Host::SetWindowRenderer(KxSciter::WindowRenderer::DirectX);
 		if (WindowWrapper::Create(parent, KxID_NONE, wxDefaultPosition, wxDefaultSize, style))
 		{
 			Bind(KxSciter::BehaviorEvent::EvtHyperlinkClick, &Sciter::OnHyperlink, this);

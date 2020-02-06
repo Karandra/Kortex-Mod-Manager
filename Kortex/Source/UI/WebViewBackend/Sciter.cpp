@@ -123,7 +123,6 @@ namespace Kortex::UI::WebViewBackend
 	Sciter::Sciter(wxWindow* parent, wxEvtHandler& evthandler, long style)
 		:m_EvtHandler(evthandler)
 	{
-		Host::SetWindowRenderer(KxSciter::WindowRenderer::DirectX);
 		if (WindowWrapper::Create(parent, KxID_NONE, wxDefaultPosition, wxDefaultSize, style))
 		{
 			Bind(KxSciter::BehaviorEvent::EvtHyperlinkClick, &Sciter::OnHyperlink, this);

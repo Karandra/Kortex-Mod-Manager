@@ -10,13 +10,13 @@ namespace Kortex::ModSource
 	void StoreDialog::CreateAddMenu()
 	{
 		// Add known mod networks
-		for (const auto& modNetwork: INetworkManager::GetInstance()->GetModNetworks())
+		for (IModNetwork* modNetwork: INetworkManager::GetInstance()->GetModNetworks())
 		{
 			KxMenuItem* item = m_AddButtonMenu.Add(new KxMenuItem(modNetwork->GetName()));
 			item->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));
 			item->Enable(!m_ModSourceStore.HasItem(*modNetwork));
 
-			item->Bind(KxEVT_MENU_SELECT, [this, &modNetwork](KxMenuEvent& event)
+			item->Bind(KxEVT_MENU_SELECT, [this, modNetwork](KxMenuEvent& event)
 			{
 				OnAddItem(m_ModSourceStore.AssignWith(*modNetwork, ModID()));
 			});

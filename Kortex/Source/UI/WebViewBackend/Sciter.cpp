@@ -47,7 +47,7 @@ namespace Kortex::UI::WebViewBackend
 		// Make images fit into client area
 		root.Select("img", [](Element image)
 		{
-			image.SetStyleAttribute("max-width", 100, SizeUnit::Percent);
+			image.SetStyleAttribute("max-width", 100, SizeUnit::pr);
 			image.SetStyleAttribute("margin-left", "auto");
 			image.SetStyleAttribute("margin-right", "auto");
 			image.SetStyleAttribute("cursor", "arrow");

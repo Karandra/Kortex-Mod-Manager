@@ -362,18 +362,16 @@ namespace Kortex::ModManager
 	{
 		ClearFileTree();
 
-		auto BuildTreeBranch = [this](FileTreeNode::RefVector& directories, const wxString& path, FileTreeNode& treeNode, FileTreeNode* parentNode)
+		auto BuildTreeBranch = [&](FileTreeNode::RefVector& directories, const wxString& path, FileTreeNode& treeNode, FileTreeNode* parentNode)
 		{
 			KxFileFinder finder(path, wxS("*"));
-			KxFileItem item = finder.FindNext();
-			while (item.IsOK())
+			for (KxFileItem item = finder.FindNext(); item.IsOK(); item = finder.FindNext())
 			{
 				if (item.IsNormalItem())
 				{
 					FileTreeNode& node = treeNode.GetChildren().emplace_back(*this, item, parentNode);
 					node.ComputeHash();
 				}
-				item = finder.FindNext();
 			}
 
 			for (FileTreeNode& node: treeNode.GetChildren())
@@ -398,6 +396,7 @@ namespace Kortex::ModManager
 			for (FileTreeNode* node: directories)
 			{
 				BuildTreeBranch(roundDirectories, node->GetFullPath(), *node, node);
+				
 			}
 			directories = std::move(roundDirectories);
 		}

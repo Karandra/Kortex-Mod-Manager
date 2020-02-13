@@ -164,6 +164,7 @@ namespace Kortex::ModManager
 
 		private:
 			BroadcastReciever m_BroadcastReciever;
+			bool m_InitiallyDisabled = true;
 
 			wxBoxSizer* m_MainSizer = nullptr;
 			KxSplitterWindow* m_SplitterLeftRight = nullptr;

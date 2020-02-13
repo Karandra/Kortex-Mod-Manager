@@ -489,13 +489,21 @@ namespace Kortex::ModManager
 	}
 	void Workspace::OnBeginReload(ModEvent& event)
 	{
-		Disable();
-		m_DisplayModel->ClearView();
+		if (IsCreated())
+		{
+			m_SplitterLeftRight->Disable();
+			m_DisplayModel->ClearView();
+		}
 	}
 	void Workspace::OnEndReload(ModEvent& event)
 	{
-		m_DisplayModel->LoadView();
-		Enable();
+		m_InitiallyDisabled = false;
+
+		if (IsCreated())
+		{
+			m_DisplayModel->LoadView();
+			m_SplitterLeftRight->Enable();
+		}
 	}
 
 	void Workspace::OnDisplayModeMenu(KxAuiToolBarEvent& event)
@@ -954,13 +962,11 @@ namespace Kortex::ModManager
 		m_MainSizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(m_MainSizer);
 
-		// Initially disabled
-		Disable();
-
 		// Main view
 		m_SplitterLeftRight = new KxSplitterWindow(this, KxID_NONE);
 		m_SplitterLeftRight->SetName("Horizontal");
 		m_SplitterLeftRight->SetMinimumPaneSize(250);
+		m_SplitterLeftRight->Enable(!m_InitiallyDisabled);
 		m_MainSizer->Add(m_SplitterLeftRight, 1, wxEXPAND);
 		IThemeManager::GetActive().Apply(m_SplitterLeftRight);
 
@@ -983,8 +989,6 @@ namespace Kortex::ModManager
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
 		m_BroadcastReciever.Bind(ModEvent::EvtFilesChanged, &Workspace::OnUpdateModLayoutNeeded, this);
 
-		m_BroadcastReciever.Bind(ModEvent::EvtBeginReload, &Workspace::OnBeginReload, this);
-		m_BroadcastReciever.Bind(ModEvent::EvtEndReload, &Workspace::OnEndReload, this);
 		return true;
 	}
 	bool Workspace::OnOpenWorkspace()
@@ -1024,6 +1028,10 @@ namespace Kortex::ModManager
 		:m_RightPaneContainer(*this)
 	{
 		IMainWindow::GetInstance()->AddToolBarItem(*this);
+
+		// Events
+		m_BroadcastReciever.Bind(ModEvent::EvtBeginReload, &Workspace::OnBeginReload, this);
+		m_BroadcastReciever.Bind(ModEvent::EvtEndReload, &Workspace::OnEndReload, this);
 	}
 	Workspace::~Workspace()
 	{

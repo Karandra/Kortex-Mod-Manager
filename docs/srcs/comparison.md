@@ -63,7 +63,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="Vortex">
-				MO2, MO1, NMM.
+				MO1, MO2, NMM.
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -77,17 +77,14 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="MO1">
 				One instance for one MO installation, multiple profiles per instance.
 			</td>
-			<td id="Vortex">
+			<td id="Vortex.NMM" colspan="2">
 				Multiple profiles per game
-			</td>
-			<td id="NMM">
-				Multiple profiles per game.
 			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Assets conflict management</td>
 			<td id="KMM">
-				<div class="cmp-no" />
+				<div class="cmp-yes" />
 			</td>
 			<td id="MO2">
 				<div class="cmp-yes" /> 
@@ -103,39 +100,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Conflict visualization</td>
-			<td id="KMM">
-				<div class="cmp-no" />
-			</td>
-			<td id="MO2">
-        		Different conflict flags on modlist for different conflict types (winning/losing/both).
-				Highlighting of mods that have conflict with the currently selected mod.
-				Listing of losing, winning and non-conflicted files for each mod.
-				Ability to preview and cycle alternatives of textures and other file types.
-				Advanced per-mod conflict views with alternatives, sorting, search, etc.
-			</td>
-			<td id="MO1">
-				Different conflict flags on modlist for different conflict types (winning/losing/both).
-				Highlighting of mods that have conflict with the currently selected mod.
-				Listing of losing, winning and non-conflicted files for each mod.
-				Ability to preview and cycle alternatives of textures and other file types.
-			</td>
-			<td id="Vortex">
-				Single generic flag on modlist for all conflicts types.
-				Only an "active-rule" icon once conflict has been resolved through a rule.
-				Popup when installing mod with conflicts.
-                Simple conflict resulution window (rules) with tooltip of conflicted files.
-				Avanced per-mod file tree structure of conflicts with alternatives from other mods.
-			</td>
-			<td id="NMM">
-				No visualization of conflicts as there can't be, just one time popup during mod installation to either overwrite or keep old files.
-			</td>
-		</tr>
-		<tr>
 			<td class="feature-name">Conflict resolution</td>
 			<td id="KMM">
 				Using mod <b>priority</b> that can be changed by <b>drag & dropping</b> mods in a specific order<br>
-				?
 			</td>
 			<td id="MO2">
 				Using mod <b>priority</b> that can be changed by <b>drag & dropping</b> mods in a specific order.<br>
@@ -150,24 +117,59 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Per file resolution through advanced conflict view (this can be different per-profile)
 			</td>
 			<td id="NMM">
-				One time popup during installation to decide whther to keep or overwrite other mods files.
+				One time popup during installation to decide whether to keep or overwrite other mods files.
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Game archives (BSA) management</td>
+			<td class="feature-name">Conflict visualization</td>
 			<td id="KMM">
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
-				Extraction, 
-				Creation, 
-				Content preview,
-				Experimental conflict detection.
+				<ul>Same as MO1 plus:
+					<li>Advanced per-mod conflict views with alternatives, sorting, search, etc.</li>
+				</ul>
 			</td>
 			<td id="MO1">
-				Extraction, 
-				Conflict detection,
-				Loading without plugins.
+				<ul>
+					<li>Different conflict flags on modlist for different conflict types (winning/losing/both).</li>
+					<li>Highlighting of mods that have conflict with the currently selected mod.</li>
+					<li>Listing of losing, winning and non-conflicted files for each mod.</li>
+					<li>Ability to preview and cycle alternatives of textures and other file types.</li>
+				</ul>
+			</td>
+			<td id="Vortex">
+				<ul>
+					<li>Single generic flag on modlist for all conflicts types.</li>
+					<li>Only an "active-rule" icon once conflict has been resolved through a rule.</li>
+					<li>Popup when installing mod with conflicts.</li>
+					<li>Simple conflict resolution window (rules) with tooltip of conflicted files.</li>
+					<li>Advanced per-mod file tree structure of conflicts with alternatives from other mods.</li>
+				</ul>
+			</td>
+			<td id="NMM">
+				No visualization of conflicts as there can't be, just one time popup during mod installation to either overwrite or keep old files.
+			</td>
+		</tr>
+		<tr>
+			<td class="feature-name">Game archives <span tooltip="Bethesda Softworks Archive" flow="right">(BSA)</span> management</td>
+			<td id="KMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="MO2">
+				<ul>
+					<li>Extraction</li>
+					<li>Creation</li>
+					<li>Content preview</li>
+					<li>Experimental conflict detection</li>
+				</ul>
+			</td>
+			<td id="MO1">
+				<ul>
+					<li>Extraction</li>
+					<li>Conflict detection</li>
+					<li>Loading without plugins</li>
+				</ul>
 			</td>
 			<td id="Vortex">
 				<div class="cmp-no" />
@@ -182,12 +184,12 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
-				Only experimental WIP conflict visualization of archives through BSA specific conflict flags. BSA order is decided by plugin order like normal.
+				Only experimental <span tooltip="Work in progress">WIP</span> conflict visualization of archives through BSA specific conflict flags. BSA order is decided by plugins order like normal.
 			</td>
 			<td id="MO1">
 				Change of how the game handles BSAs to allow BSA files to be loaded without plugins, in a different order, and allow BSA contents to overwrite loose files.
 				Order is decided through mod priority and conflicts are shown as part of the normal loose assets conflicts.
-				Cons: some mods and programs relayed on the previous game behavior.
+				<b>Cons</b>: some mods and programs relied on the previous game behavior.
 			</td>
 			<td id="Vortex">
 				<div class="cmp-no" />
@@ -236,26 +238,28 @@ There are many mod managers around these days and it's may be a bit difficult to
 		<tr>
 			<td class="feature-name">Integrated LOOT support</td>
 			<td id="KMM">
-				<div class="cmp-yes" />
+				One click sort.
 			</td>
 			<td id="MO2">
-				One click sort, detailed loot report, visualization of loot info on pluginlist through flags and tooltips.
+				One click sort, detailed loot report, visualization of loot info on plugins list through flags and tooltips.
 			</td>
 			<td id="MO1">
-				One click sort, detailed loot report. (! severely outdated version of integrated Loot)
+				One click sort, detailed loot report. <b>Severely outdated version of integrated LOOT.</b>
 			</td>
-			<td id="Vortex">
-				drag & drop dependency icon for specific "load after" rules
-				full features native to loot
-				group management including:
-					adding groups
-					removing groups
-					changing a plugins groups
-					order of groups
-				loot defaults
-				automatic loot updates
-				plugin details visible by double clicking plugin
-				visualization of info through flags
+			<td id="Vortex" class="text-left">
+				Drag & drop dependency icon for specific "load after" rules.
+				<br/>
+				Full features native to LOOT.
+				<br/>
+				Group management including:	adding and removing groups, changing a plugins groups, order of groups.
+				<br/>
+				LOOT defaults
+				<br/>
+				Automatic LOOT updates
+				<br/>
+				Plugin details visible by double clicking plugin.
+				<br/>
+				Visualization of info through flags.
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -266,14 +270,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="KMM">
 				<div class="cmp-no" />
 			</td>
-			<td id="MO2">
-				Modlist loadorder,
-				Plugin loadorder,
-				Individual mod folder backup.
-			</td>
-			<td id="MO1">
-				Modlist loadorder,
-				Plugin loadorder,
+			<td id="MO2.MO1" colspan="2">
+				Modlist order,
+				Plugin order,
 				Individual mod folder backup.
 			</td>
 			<td id="Vortex">
@@ -333,10 +332,10 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<b><a href="https://github.com/KerberX/KxVirtualFileSystem">KxVFS</a></b> - based on <b><a href="https://github.com/dokan-dev/dokany">Dokany</a></b> - kernel-mode file system driver.
 			</td>
 			<td id="MO2">
-				<b><a href="https://github.com/ModOrganizer2/usvfs">USVFS</a></b> - user-mode WinAPI hooks, a successor to the <b>hook.dll to support 64bit</b>.
+				<b><a href="https://github.com/ModOrganizer2/usvfs">USVFS</a></b> - user-mode WinAPI hooks, a successor to the <b>hook.dll</b> to support 64-bit applications.
 			</td>
 			<td id="MO1">
-				<b>Hook.dll</b> - a user-mode WinAPI hooks (32bit only).
+				<b>Hook.dll</b> - a user-mode WinAPI hooks (32-bit only).
 			</td>
 			<td id="Vortex">
 				Hardlinks by default,
@@ -344,7 +343,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<b>USVFS</b> as an experimental extension (no overwrite support for now).
 			</td>
 			<td id="NMM">
-				Symlinks
+				Symbolic links (symlinks).
 			</td>
 		</tr>
 		<tr>
@@ -353,21 +352,21 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<ul><b>Pros:</b>
 					<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
     				<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
-					<li class="li-pro">Mounter VFS visible to all processes on the system (it's kind of a con too).</li>
+					<li class="li-pro">Mounted VFS is visible to all processes on the system (it's kind of a con too).</li>
 					<li class="li-pro">Can link mods across different drives.</li>
-					<li class="li-pro">Allows top-level virtualization.</li>
+					<li class="li-pro">Allows top-level folder virtualization.</li>
 				</ul>
 				<ul><b>Cons:</b>
 					<li class="li-con">Slower than alternatives.</li>
-					<li class="li-con">Requires target folder to be empty.</li>
-					<li class="li-con">Huge memory consumption on large mod setups (~5 GB for 975k files).</li>
+					<li class="li-con">Requires target folder (mount point) to be empty.</li>
+					<li class="li-con">Huge memory consumption on large mod setups (~200 MB for 50k files, ~5 GB for 975k files).</li>
 					<li class="li-con">Program startup overhead for VFS initialization.</li>
 					<li class="li-con">Kernel-mode driver, requires administrator privileges to install.</li>
 				</ul>
 			</td>
 			<td id="MO2">
 				<ul><b>Pros:</b>
-					<li class="li-pro">Supports 64bit programs.</li>
+					<li class="li-pro">Supports 64-bit programs.</li>
     				<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
     				<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
     				<li class="li-pro">Doesn't require write access to destination.</li>
@@ -376,7 +375,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				</ul>
 				<ul><b>Cons:</b>
 					<li class="li-con">Can be less intuitive to users since only the programs can see the mods.</li>
-					<li class="li-con">Can often be flagged by antiviruses.</li>
+					<li class="li-con">Can often be flagged by anti-viruses.</li>
 					<li class="li-con">Can't virtualize some top level files like load-time linked .dll.</li>
 					<li class="li-con">Can lead to hard to diagnose issues in case there is a bug.</li>
 					<li class="li-con">Small memory and computation overhead at runtime.</li>
@@ -394,9 +393,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li class="li-pro">Intercepts creation of new files in overwrite, keeping game folder clean</li>
 				</ul>
 				<ul><b>Cons:</b>
-					<li class="li-con">Can't be used for 64 bit programs.</li>
+					<li class="li-con">Can't be used for 64-bit programs.</li>
 					<li class="li-con">Can be less intuitive to users since only the programs can see the mods.</li>
-					<li class="li-con">Can often be flagged by antiviruses.</li>
+					<li class="li-con">Can often be flagged by anti-viruses.</li>
 					<li class="li-con">Can't virtualize some top level files like load-time linked .dll.</li>
 					<li class="li-con">Can lead to hard to diagnose issues in case there is a bug.</li>
 					<li class="li-con">Small memory and computation overhead at runtime.</li>
@@ -429,7 +428,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li class="li-pro">Mostly same as Hardlinks (assuming good implementation)</li>
 				</ul>
 				<ul><b>Cons:</b>
-					<li class="li-con">Requires Admin Rights to create Symlinks.</li>
+					<li class="li-con">Requires administrator privileges to create symlinks.</li>
 					<li class="li-con">Can leave the game folder with mess in case stuff goes wrong</li>
 					<li class="li-con">Mostly the same cons as Hardlinks</li>
 				</ul>
@@ -483,7 +482,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 		<tr>
 			<td class="feature-name">VFS persistence</td>
 			<td id="KMM">
-				Manager runtime.
+				Mod manager runtime.
 			<td id="MO2.MO1" colspan="2">
 				Only present for programs started through the manager and their child applications.
 			</td>
@@ -501,7 +500,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Using any file explorer (when VFS is enabled) or with dedicated Data tab.
 			</td>
 			<td id="MO2">
-				Through dedicated Data tab, or running Explorer++ and similar programs through Mo2.
+				Through dedicated Data tab, or running Explorer++ and similar programs through MO2.
 			</td>
 			<td id="MO1">
 				Through dedicated Data tab.
@@ -565,7 +564,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 		</tr>
 		<tr>
 			<td class="feature-name">
-				Auto-update check
+				Self auto-update check
 			</td>
 			<td id="KMM">
 				<div class="cmp-no" />
@@ -602,7 +601,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Mod Categories</td>
+			<td class="feature-name">Mod categorization</td>
 			<td id="KMM">
 				Custom tag system.
 			</td>
@@ -670,7 +669,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Exporting modlist/pluginlist</td>
+			<td class="feature-name">Exporting mod/plugins list</td>
 			<td id="KMM">
 				Non-customizable export of modlist to HTML file.
 				Import and export of plugins list.
@@ -683,7 +682,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Less customizable modlist export to CSV file.
 			</td>
 			<td id="Vortex">
-				?
+				<div class="cmp-unknown" />
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -692,8 +691,10 @@ There are many mod managers around these days and it's may be a bit difficult to
 		<tr>
 			<td class="feature-name">Modlist features</td>
 			<td id="KMM">
-				can color mod, no filtering that I see. ask kerber tomorrow.
-				<b>Mod metadata:</b>
+				Color-coding of each mod, 
+				collapsible separators (using tag system).
+				<br/><br/>
+				<b>Mod metadata:</b> 
 				name,
 				priority,
 				version,
@@ -704,52 +705,54 @@ There are many mod managers around these days and it's may be a bit difficult to
 				date uninstalled,
 				folder,
 				install package,
-				signature
+				signature.
 			</td>
 			<td id="MO2">
-				Grouping by Category or Nexus Id.
-				Filtering with advanced filters and regex search.
-				Colored separators.
-				Avanced mod counters.
-				Conflict highlighting on selection.
-				Plugin Highlighting on selection.
-				Full refresh from disk.
-				Backup, export as CSV.
-				Update check.
-				Various Keyboard shortcuts and support for multi selection operations.
+				Grouping by category or Nexus ID.<br/>
+				Filtering with advanced filters and RegEx search.<br/>
+				Colored separators.<br/>
+				Advanced mod counters.<br/>
+				Conflict highlighting on selection.<br/>
+				Plugin Highlighting on selection.<br/>
+				Full refresh from disk.<br/>
+				Backup, export as CSV.<br/>
+				Update check.<br/>
+				Various Keyboard shortcuts and support for multi selection operations.<br/>
+				<br/>
 				<b>Mod metadata:</b>
-				Conflits,
-				Catagories,
-				Contents,
-				Version,
-				Target Game,
-				Custom Notes,
-				Install time,
+				conflicts,
+				categories,
+				contents,
+				version,
+				target game,
+				custom notes,
+				install time,
 				Nexus ID,
-				Flags: Endorsed,Tracked,hiddenFiles,valid
+				flags (endorsed, tracked, hidden files, valid).
 			</td>
 			<td id="MO1">
-				Mostly same as Mo2, but somethings are missing like separators and notes.
+				Mostly same as MO2, but somethings are missing like separators and notes.
 			</td>
 			<td id="Vortex">
-				grouping by state, category, content, author, version, source.
-				filter by state, name, version, install time, category, endorsed state, content, dependency resolution.
-				update check, install from file, manage rules. 
+				Grouping by state, category, content, author, version, source..<br/>
+				Filter by state, name, version, install time, category, endorsed state, content, dependency resolution.<br/>
+				Update check, install from file, manage rules.<br/>
+				<br/>
 				<b>Mod metadata:</b>
 				mod name,
-				version number,
+				version number, 
 				author,
 				install time,
 				source (nexus or not),
 				category,
 				endorsed,
-				Content,
+				content,
 				priority,
 				dependencies,
 				highlight
 			</td>
 			<td id="NMM">
-				I dont know, if someone cares let me know
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -758,12 +761,12 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
-				.DDS Textures complete preview support.
-				BSA/BA2 content preview.
-				Normal images and text (txt, ini, cfg, log, json) files.
+				.DDS Textures complete preview support.<br/>
+				BSA/BA2 content preview.<br/>
+				Normal images and text (.txt, .ini, .cfg, .log, .json) files.
 			</td>
 			<td id="MO1">
-				.DDS Textures partial preview support
+				.DDS Textures partial preview support.<br/>
 				Normal images and .txt files.
 			</td>
 			<td id="Vortex">
@@ -775,7 +778,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 		</tr>
 		<tr class="tooltip">
 			<td class="feature-name">
-				Available translation
+				Available translations
 				<br>
 				<i>default distribution</i>
 			</td>
@@ -836,26 +839,26 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Current Development State and maintainers</td>
+			<td class="feature-name">Current development state and maintainers</td>
 			<td id="KMM">
-				Open Source, Fully released. 
-				Maintained and not-actively developed on by Kerber (non-payed developer), with highly irregular feature updates.
+				Open Source, fully released. 
+				Maintained and not so much actively developed on by Kerber (non-payed developer), with highly irregular feature updates.
 			</td>
 			<td id="MO2">
-				Open Source, Fully released.
+				Open Source, fully released.
 				Maintained and actively developed on by MO2 Team (community non-payed developers), with regular feature updates.
 			</td>
 			<td id="MO1">
-				Open Source, Fully released.
+				Open Source, fully released.
 				No longer maintained or updated.
 			</td>
 			<td id="Vortex">
-				Open Source, Fully released.
+				Open Source, fully released.
 				Maintained and actively developed by NexusMods (payed professionals), with frequent feature updates and fixes.
 			</td>
 			<td id="NMM">
-				Open Source, Beta release.
-				Discontinued by NexusMods in favour of Vortex.
+				Open Source, beta release.
+				Discontinued by NexusMods in favor of Vortex.
 				Currently maintained by a few members of the community.
 			</td>
 		</tr>
@@ -866,8 +869,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 2. Just some files such as **.esm**/**.esp** and/or **Data** folder inside the mod archive.
 
 ## Page Contributors
-* Kerber (Kortex Author)
-* AL (MO2 Dev)
-* yggdrasil75 (Vortex virtuoso)
+* [Kerber](https://www.nexusmods.com/users/2734453) (Kortex developer)
+* [AL](https://www.nexusmods.com/users/6409802) (MO2 Dev)
+* [Yggdrasil75](https://www.nexusmods.com/users/25321034) (Vortex virtuoso)
 * We found no one for NMM yet :/
-* We would also need somene for Wrye Bash
+* We would also need someone for Wrye Bash

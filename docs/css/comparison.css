@@ -1,42 +1,68 @@
-table, td, th {
+table, td, th
+{
 	border: 1px solid;
 	border-collapse: collapse;
-	padding: 0.50rem;
+	padding: 0.5rem;
+	font-size: 95%;
 }
-/* table {
-	border-collapse: collapse;
-}
-td, th {
-	border: 1px solid;
-	border-collapse: collapse;
-	padding: 0.50rem;
-} */
 
-tr {
+th
+{
+	top: -0.1rem;
+	position: sticky;
+	box-shadow: 0 2rem 2rem -1rem rgba(0, 0, 0, 0.4);
+	background: var(--color-background-main);
+	font-weight: bold;
 	text-align: center;
 }
 
-ul {
+tr
+{
+	text-align: center;
+}
+
+	tr:first-child > th:first-child
+	{
+		border: 0;
+	}
+
+.text-left
+{
 	text-align: left;
 }
-li {
+
+ul
+{
+	text-align: left;
+	list-style-type: "- ";
+	list-style-position: inside;
+	margin: 1rem;
+	padding: 0;
+}
+
+li
+{
 	word-wrap: hyphenate;
 }
 
-th {
-	font-weight: bold;
-	text-align: center;
-}
-tr:first-child > th:first-child {
-	border: 0;
-}
+	li.li-pro
+	{
+		/*color: var(--color-text-success);*/
+	}
 
-.feature-name {
+	li.li-con
+	{
+		/*color: var(--color-text-failure);*/
+	}
+
+.feature-name
+{
 	text-align: left;
 	font-weight: bold;
 }
 
-.cmp-no, .cmp-unknown, .cmp-yes {
+.cmp-no, .cmp-unknown, .cmp-yes
+{
 	background-repeat: no-repeat;
 	width: 3.2rem;
 	height: 3.2rem;
@@ -45,29 +71,39 @@ tr:first-child > th:first-child {
 }
 
 
-.cmp-yes {
+.cmp-yes
+{
 	background-image: url(../res/tick.png);
 }
-.cmp-no {
+
+.cmp-no
+{
 	background-image: url(../res/cross.png);
 }
-.cmp-unknown {
+
+.cmp-unknown
+{
 	background-image: url(../res/question.png);
 }
 
-cmp-legend {
+cmp-legend
+{
 }
 
-.cmp-notes {
+.cmp-notes
+{
 	padding-left: 2rem;
 	font-size: 80%;
 	margin: 0;
 }
 
-ol, sup {
+ol, sup
+{
 	font-size: 1.2rem;
 }
-ol {
+
+ol
+{
 	margin: 1.9rem 0 0;
 	padding-left: 1.6rem;
 }

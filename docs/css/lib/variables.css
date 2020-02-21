@@ -1,15 +1,13 @@
 /********************
 * Variables
 ********************/
-:root {
+:root
+{
 	/* Colors */
 	--color-background-main: rgba(23,26,29,0.800);
 	--color-background-page: rgba(23,26,29,1.000);
 	--color-background-page-ends-fallback: rgba(135,105,92,0.175);
-	--color-background-page-ends-radial-gradient: radial-gradient(
-		var(--color-background-page-ends-radial-start),
-		var(--color-background-page-ends-radial-end)
-	);
+	--color-background-page-ends-radial-gradient: radial-gradient( var(--color-background-page-ends-radial-start), var(--color-background-page-ends-radial-end) );
 	--color-background-page-ends-radial-end: rgba(230,152,133,0.150);
 	--color-background-page-ends-radial-start: rgba(39,57,50,0.200);
 	--color-borders: rgba(255,255,255,0.15);
@@ -21,8 +19,12 @@
 	--color-white-base: rgba(202,202,202,1.000);
 	--color-white-hover: rgba(255,224,224,1.000);
 	--color-white-codebg: rgba(249,251,255,1.000);
+	--color-text-success: forestgreen;
+	--color-text-failure: red;
 }
-:root {
+
+:root
+{
 	/* Dimensions */
 	--size--root-1px: 0.1rem;
 	--size--root-5px: 0.5rem;
@@ -50,20 +52,26 @@
 	--size-page-max-width: 132rem;
 	--size-spacing-standard: 2.4rem;
 }
-:root {
+
+:root
+{
 	/* Flex Self */
 	--flex-self-grow-shrink: 1 1;
 	--flex-self-grow-noshrink: 1 0;
 	--flex-self-nogrow-noshrink: 0 0;
 	--flex-self-nogrow-shrink: 0 1;
 }
-:root {
+
+:root
+{
 	/* Images */
 	--image-menu-toggle: url(../res/arrow-left.svg);
 	--image-page-bg: url(../res/nebula-1897595.jpg);
 	--image-quote-bg: url(../res/icon-quote.svg);
 }
-:root {
+
+:root
+{
 	/* Transitions */
 	--transition--short: 0.15s;
 	--transition-color: color var(--transition--short);
@@ -72,7 +80,9 @@
 	--transition-transform: transform 0.25s;
 	--transition-width-menu: width 0.4s;
 }
-:root {
+
+:root
+{
 	/* Shorthand */
 	--short-borders-init: 0 solid var(--color-borders);
 	--short-code-margins: 0.4rem 0.8rem 0.4rem 0.2rem;

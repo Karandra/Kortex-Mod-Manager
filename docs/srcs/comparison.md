@@ -278,8 +278,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Individual mod folder backup.
 			</td>
 			<td id="Vortex">
-				Via Extension only:
-				https://github.com/Garethp/Vortex-Modlist-Backup
+				Via <a href="https://github.com/Garethp/Vortex-Modlist-Backup">extension</a> only.
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />

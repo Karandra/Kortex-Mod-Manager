@@ -844,11 +844,11 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Current development state and maintainers</td>
 			<td id="KMM">
 				Open Source, fully released. 
-				Maintained and not so much actively developed on by Kerber (non-payed developer), with highly irregular feature updates.
+				Maintained and not so much actively developed on by Kerber (non-paid developer), with highly irregular feature updates.
 			</td>
 			<td id="MO2">
 				Open Source, fully released.
-				Maintained and actively developed on by MO2 Team (community non-payed developers), with regular feature updates.
+				Maintained and actively developed on by MO2 Team (community non-paid developers), with regular feature updates.
 			</td>
 			<td id="MO1">
 				Open Source, fully released.
@@ -856,7 +856,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				Open Source, fully released.
-				Maintained and actively developed by NexusMods (payed professionals), with frequent feature updates and fixes.
+				Maintained and actively developed by NexusMods (paid professionals), with frequent feature updates and fixes.
 			</td>
 			<td id="NMM">
 				Open Source, beta release.

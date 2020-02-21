@@ -25,9 +25,11 @@ There are many mod managers around these days and it's may be a bit difficult to
 		<tr>
 			<td class="feature-name">Supported games</td>
 			<td id="KMM">
-				TES games starting from Morrowind.
-				<br>
-				Fallout series starting from <b>Fallout 3</b> and <b>Sacred 2</b>.
+				<span tooltip="Morrowind, Oblivion, Skyrim (LE, SE, VR, Enderal)">TES series</span> starting from <b>Morrowind</b>.
+				<br/>
+				<span tooltip="Fallout 3, Fallout: New Vegas, Fallout 4 (VR)">Fallout series</span> starting from <b>Fallout 3</b>.
+				<br/>
+				<b>Sacred 2</b>.
 			</td>
 			<td id="MO2">
 				<b>Morrowind,</b>
@@ -665,7 +667,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Change colors and fonts via a setting menu.
 			</td>
 			<td id="NMM">
-				<div class="cmp-no" />?
+				<div class="cmp-no" />
 			</td>
 		</tr>
 		<tr>

@@ -278,7 +278,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Individual mod folder backup.
 			</td>
 			<td id="Vortex">
-				Via extension only.
+				Via Extension only:
+				https://github.com/Garethp/Vortex-Modlist-Backup
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -834,7 +835,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				Additional extensions are available at <b>NexusMods</b>.
-				Supports JavaScript, C++, and various other electron extensions
+				Supports JavaScript, C++, and various other electron extensions.
+				Extensions are available to install from within the program.
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />

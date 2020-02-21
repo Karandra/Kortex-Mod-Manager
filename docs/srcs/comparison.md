@@ -833,7 +833,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
-			<tr>
+		</tr>
+		<tr>
 			<td class="feature-name">Current Development State and maintainers</td>
 			<td id="KMM">
 				Open Source, Fully released. 
@@ -856,7 +857,6 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Discontinued by NexusMods in favour of Vortex.
 				Currently maintained by a few members of the community.
 			</td>
-		</tr>
 		</tr>
 	</tbody>
 </table>

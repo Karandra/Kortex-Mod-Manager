@@ -21,6 +21,9 @@
 	--color-white-codebg: rgba(249,251,255,1.000);
 	--color-text-success: forestgreen;
 	--color-text-failure: red;
+
+	/* Fonts */
+	--text-font: "Roboto", sans-serif;
 }
 
 :root

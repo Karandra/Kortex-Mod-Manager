@@ -388,7 +388,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="MO1">
 				<ul><b>Pros:</b>
     				<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
-    				<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li></ul>
+    				<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
 					<li class="li-pro">Doesn't require write access to destination.</li>
     				<li class="li-pro">Sources and target can be linked across different drives.</li>
 					<li class="li-pro">Intercepts creation of new files in overwrite, keeping game folder clean</li>
@@ -833,6 +833,30 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<tr>
+			<td class="feature-name">Current Development State and maintainers</td>
+			<td id="KMM">
+				Open Source, Fully released. 
+				Maintained and not-actively developed on by Kerber (non-payed developer), with highly irregular feature updates.
+			</td>
+			<td id="MO2">
+				Open Source, Fully released.
+				Maintained and actively developed on by MO2 Team (community non-payed developers), with regular feature updates.
+			</td>
+			<td id="MO1">
+				Open Source, Fully released.
+				No longer maintained or updated.
+			</td>
+			<td id="Vortex">
+				Open Source, Fully released.
+				Maintained and actively developed by NexusMods (payed professionals), with frequent feature updates and fixes.
+			</td>
+			<td id="NMM">
+				Open Source, Beta release.
+				Discontinued by NexusMods in favour of Vortex.
+				Currently maintained by a few members of the community.
+			</td>
+		</tr>
 		</tr>
 	</tbody>
 </table>
@@ -845,3 +869,4 @@ There are many mod managers around these days and it's may be a bit difficult to
 * AL (MO2 Dev)
 * yggdrasil75 (Vortex virtuoso)
 * We found no one for NMM yet :/
+* We would also need somene for Wrye Bash

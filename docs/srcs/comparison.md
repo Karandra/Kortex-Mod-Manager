@@ -392,6 +392,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li class="li-pro">Doesn't require write access to destination.</li>
     				<li class="li-pro">Sources and target can be linked across different drives.</li>
 					<li class="li-pro">Intercepts creation of new files in overwrite, keeping game folder clean</li>
+				</ul>
 				<ul><b>Cons:</b>
 					<li class="li-con">Can't be used for 64 bit programs.</li>
 					<li class="li-con">Can be less intuitive to users since only the programs can see the mods.</li>

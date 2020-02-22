@@ -9,6 +9,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 * **MO2** - [Mod Organizer 2](https://www.nexusmods.com/skyrimspecialedition/mods/6194) (version 2.x).
 * **NMM** - [Nexus Mod Manager](https://www.nexusmods.com/site/mods/4).
 * [**Vortex**](https://www.nexusmods.com/about/vortex) - a successor to **NMM** by Nexus Mods.
+* [**Wrye Bash**](https://github.com/wrye-bash/wrye-bash) - one of the oldest mod manager among them all.
 
 ## Features
 
@@ -21,6 +22,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<th>MO1</th>
 			<th>Vortex</th>
 			<th>NMM</th>
+			<th>Wrye Bash</th>
 		</tr>
 		<tr>
 			<td class="feature-name">Supported games</td>
@@ -29,7 +31,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<br/>
 				<span tooltip="Fallout 3, Fallout: New Vegas, Fallout 4 (VR)">Fallout series</span> starting from <b>Fallout 3</b>.
 				<br/>
-				<b>Sacred 2</b>.
+				<span tooltip="Non Bethesda game as an experiment"><b>Sacred 2</b></span>.
 			</td>
 			<td id="MO2">
 				<b>Morrowind,</b>
@@ -53,6 +55,12 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				Supports many games including TES and Fallout games.
 			</td>
+			<td id="WB">
+				<span tooltip="Morrowind, Oblivion, Skyrim (LE, SE, VR, Enderal)">TES series</span> starting from <b>Morrowind</b>.
+				<br/>
+				<span tooltip="Fallout 3, Fallout: New Vegas, Fallout 4 (VR)">Fallout series</span> starting from <b>Fallout 3</b>.
+				<br/>
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Importing from other managers</td>
@@ -70,6 +78,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Profile management</td>
@@ -81,6 +92,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex.NMM" colspan="2">
 				Multiple profiles per game
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -99,6 +113,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -120,6 +137,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				One time popup during installation to decide whether to keep or overwrite other mods files.
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -152,6 +172,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				No visualization of conflicts as there can't be, just one time popup during mod installation to either overwrite or keep old files.
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Game archives <span tooltip="Bethesda Softworks Archive" flow="right">(BSA)</span> management</td>
@@ -179,6 +202,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Game archives (BSA) Conflicts</td>
@@ -199,6 +225,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Saves management</td>
@@ -207,6 +236,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -223,6 +255,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Load order management scheme</td>
@@ -235,6 +270,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				Drag and Drop for plugins.
 				Mods ..?
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -266,6 +304,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Backup features</td>
@@ -282,6 +323,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -301,6 +345,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Mod package creator</td>
@@ -319,6 +366,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Supported mod package formats</td>
@@ -327,6 +377,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 				FOMod (XML, C#), freeform<sup>1</sup>, simple<sup>2</sup>.
 			</td>
 			<td id="Vortex.NMM" colspan="2">FOMod (XML, C#), simple.</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Virtualization scheme</td>
@@ -346,6 +399,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				Symbolic links (symlinks).
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -435,6 +491,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li class="li-con">Mostly the same cons as Hardlinks</li>
 				</ul>
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Game root directory virtualization</td>
@@ -452,6 +511,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -480,6 +542,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">VFS persistence</td>
@@ -494,6 +559,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				Symlinks - persists until purged.
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -510,12 +578,18 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="Vortex.NMM" colspan="2">
 				Not needed as Explorer already shows the correct final result.
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Websites-integrations</td>
 			<td id="KMM"><b>NexusMods</b>, partially <b>LoversLab</b> and <b>tesall.ru</b></td>
 			<td id="MO2.MO1.Vortex.NMM" colspan="4">
 				<b>NexusMods</b>
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -551,6 +625,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Mod endorsements,
 				Mod meta info like categories etc.
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Web-integration extent</td>
@@ -562,6 +639,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="MO2.MO1.Vortex.NMM" colspan="4">
 				Account, mod updates, mod source, metadata query, downloads, endorsements.
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -583,6 +663,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-yes" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name" align="left">Integrated download manager</td>
@@ -601,6 +684,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-yes" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Mod categorization</td>
@@ -618,6 +704,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				Import from nexus, custom categories?
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -647,6 +736,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				Missing masters.
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">GUI customization</td>
@@ -669,6 +761,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Exporting mod/plugins list</td>
@@ -688,6 +783,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -756,6 +854,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-unknown" />
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Game files preview</td>
@@ -776,6 +877,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr class="tooltip">
@@ -822,6 +926,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>English</li>
 				</ul>
 			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Extensions</td>
@@ -839,6 +946,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 		<tr>
@@ -863,6 +973,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Open Source, beta release.
 				Discontinued by NexusMods in favor of Vortex.
 				Currently maintained by a few members of the community.
+			</td>
+			<td id="WB">
+				<div class="cmp-unknown" />
 			</td>
 		</tr>
 	</tbody>

@@ -26,6 +26,11 @@ tr
 		border: 0;
 	}
 
+	tr:hover
+	{
+		background-color: var(--color-quote-background);
+	}
+
 .text-left
 {
 	text-align: left;

@@ -1,3 +1,9 @@
+.page
+{
+	/* Override max width to allow more content to be visible */
+	max-width: 175rem;
+}
+
 table, td, th
 {
 	border: 1px solid;

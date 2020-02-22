@@ -21,9 +21,13 @@
 	--color-white-codebg: rgba(249,251,255,1.000);
 	--color-text-success: forestgreen;
 	--color-text-failure: red;
+}
 
+:root
+{
 	/* Fonts */
 	--text-font: "Roboto", sans-serif;
+	--text-font-code: "Inconsolata", "Consolas", monospace;
 }
 
 :root
@@ -52,7 +56,7 @@
 	--size-menu-toggle-pos-top: 0.4rem;
 	--size-quote-margins: 2.1rem;
 	--size-quote-padding: var(--size--root-25px);
-	--size-page-max-width: 160rem;
+	--size-page-max-width: 132rem;
 	--size-spacing-standard: 2.4rem;
 }
 

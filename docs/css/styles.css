@@ -31,7 +31,7 @@ body
 	margin: 0;
 	padding: 0;
 	/* General */
-	font-family: "Roboto", sans-serif;
+	font-family: var(--text-font);
 	font-size: 1.6rem;
 	/* Reset general font sizes to comparative 16px default */
 	overflow: hidden;
@@ -99,7 +99,7 @@ code
 	background-color: var(--color-white-codebg);
 	border: var(--size--root-1px) solid var(--color-borders-code);
 	display: block;
-	font-family: "Inconsolata", Consolas, monospace;
+	font-family: var(--text-font-code);
 	font-size: 10pt;
 	white-space: pre-wrap;
 }

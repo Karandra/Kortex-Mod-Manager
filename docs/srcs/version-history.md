@@ -9,7 +9,7 @@ More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/c
 ### Version 2.0a9 - 13.02.2020
 - [General] Added experimental WebView based on [Sciter](https://sciter.com) to display mod descriptions.
 - [General] Fixed disabled mods workspace when it's not the initial workspace.
-- [General] Fixed missing buttons on 100% DPI (the fix should have been in 2.0a8 but it's not there apparently).
+- [General] Fixed missing buttons on 100% scaling (the fix should have been in 2.0a8 but it's not there apparently).
 - [General] Some minor changes.
 
 ### Version 2.0a8 - 02.12.2019

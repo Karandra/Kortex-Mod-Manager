@@ -6,6 +6,12 @@
 
 More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/commits/master).
 
+### Version 2.0a9 - 13.02.2020
+- [General] Added experimental WebView based on [Sciter](https://sciter.com) to display mod descriptions.
+- [General] Fixed disabled mods workspace when it's not the initial workspace.
+- [General] Fixed missing buttons on 100% DPI (the fix should have been in 2.0a8 but it's not there apparently).
+- [General] Some minor changes.
+
 ### Version 2.0a8 - 02.12.2019
 - [General] UI component to run programs and VFS added to the main window.
 - [General] Currently active workspace (tab or window) is now remembered.
@@ -143,7 +149,7 @@ More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/c
 - [General] English localization is added. Thank you Monday for the translation.
 - [Package Manager] Fixed display of images in the interface of creating installers.
 - [Package Manager] Importing the project from the installer now specifies this installer as the destination path for the build.
-- [Package Manager] Fixed the name of the Required Files item in the project XML file. This means that the list of required installer files will be empty and - such installers must be rebuilt with the reassignment of the required files (if they were used). Excuse me.
+- [Package Manager] Fixed the name of the Required Files item in the project XML file. This means that the list of required installer files will be empty and - such installers must be rebuilt with the reassignment of the required files (if they were used). Sorry.
 - [Package Manager] Added an explicit indication of priorities for folders and files when creating the installer.
 - [Package Manager] Added context menu items for importing the project and unpacking the archive in the list of available installers.
 - [Package Manager] Added the ability to import information to create a project from the installation log.

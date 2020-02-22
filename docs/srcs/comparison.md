@@ -871,7 +871,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 1. Any content inside the mod archive. This installation mode usually requires user input to some extent.
 2. Just some files such as **.esm**/**.esp** and/or **Data** folder inside the mod archive.
 
-## Page Contributors
+## Page contributors
 * [Kerber](https://www.nexusmods.com/users/2734453) (Kortex developer)
 * [AL](https://www.nexusmods.com/users/6409802) (MO2 Dev)
 * [Yggdrasil75](https://www.nexusmods.com/users/25321034) (Vortex virtuoso)

@@ -244,7 +244,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				Create separate folders for each playthrough or for easy management of save games and eliminate clutter in your save game list.
+				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#saves">Saves Tab</a> Allows you to create separate folders for each playthrough and easy management of save games to eliminate clutter in your save game list.
 			</td>
 		</tr>
 		<tr>
@@ -594,7 +594,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<b>Pros:</b>
 					<li>Does not add complexity and potential failure points with virtualization, hardlinks, or symbolic links and uses a simple and reliable file copy.</li>
 					<li>100% Reliable with 0% chance for issues installing files into the Data folder. No problems with leftover/broken links and other inconsistencies, just normal files (that are all kept track of).</li>
-					<li>Allows you to have Game and your downloaded mods on different drives.</li>
+					<li>Allows you to have your Game and downloaded mods on different drives.</li>
 				</ul>
 				<ul class="ul-con">
 					<b>Cons:</b>
@@ -970,7 +970,27 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-unknown" />
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				<ul>
+					<b><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods">Mod context menu</a></b>
+					<li>Duplicate, Hide, Rename, Backup, Create Snapshot, Revert to Backup or Snapshot</li>
+					<li>List Bash Tags</li>
+					<li>Mod Info Report of plugin name, installer, modified data, file size, author, CRC</li>
+					<li>List file dependencies</li>
+					<li>Jump to assigned Installer from Mods List</li>
+					<li>Check ESL Qualifications for ESL enabled games</li>
+					<li>Export Editor IDs to SCV File</li>
+					<li>List LOOT Cleaning Information</li>
+					<li>Copy .esp to .esm file (Creates file in Data Folder)</li>
+					<li>Add Remove ESL or ESM flags</li>
+					<li>Add ESM Flag to Masters (ESM flag(s) must be manually removed)</li>
+					<li>Create empty plugins for missing masters</li>
+				</ul>
+				<ul>
+					<b>Mod metadata</b>
+					<li>Import, Export, Edit, Assign to group</li>
+					<li>List ObjectIDs with Editor ID by record type</li>
+					<li>View, Edit, or Assign Readme Files</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>

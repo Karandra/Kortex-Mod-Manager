@@ -244,7 +244,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#saves">Saves Tab</a> Allsow you to create separate folders for each playthrough and easy management of save games to eliminate clutter in your save game list.
+				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#saves">Saves Tab</a> Allows you to create separate folders for each playthrough and easy management of save games to eliminate clutter in your save game list.
 			</td>
 		</tr>
 		<tr>
@@ -971,7 +971,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="WB">
 				<ul>
-					<b><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods">Mods Centext Menu</a></b>
+					<b><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods">Mod context menu</a></b>
 					<li>Duplicate, Hide, Rename, Backup, Create Snapshot, Revert to Backup or Snapshot</li>
 					<li>List Bash Tags</li>
 					<li>Mod Info Report of plugin name, installer, modified data, file size, author, CRC</li>

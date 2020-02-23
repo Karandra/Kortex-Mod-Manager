@@ -31,12 +31,13 @@
 		content: attr(tooltip); /* magic! */
 		/* most of the rest of this is opinion */
 		font-family: var(--text-font);
+		font-weight: normal;
 		text-align: center;
 		/* 
 		Let the content set the size of the tooltips 
 		but this will also keep them from being obnoxious
 		*/
-		min-width: 16ch;
+		min-width: 24ch;
 		max-width: 64ch;
 		white-space: pre-line;
 		overflow: hidden;

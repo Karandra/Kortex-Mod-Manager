@@ -273,11 +273,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="KMM">
 				<div class="cmp-yes" />
 			</td>
-			<td id="MO2">
-				<div class="cmp-yes" />
-			</td>
-			<td id="MO1">
-				<div class="cmp-yes" />
+			<td id="MO2.MO1" colspan="2">
+				Through tooltip. Warning icon if current load order is missing files for them.
 			</td>
 			<td id="Vortex">
 				<div class="cmp-unknown" />
@@ -317,7 +314,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				Drag and Drop for plugins.
-				Mods ..?
+				For mods it's the install order.
 			</td>
 			<td id="WB">
 				Order plugins in your Data folder with Drag and Drop. Activate plugins based on save game. Lock Load Order to prevent external applications from makes changes.
@@ -328,14 +325,11 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="KMM">
 				<div class="cmp-no" />
 			</td>
-			<td id="MO2">
-				<div class="cmp-unknown" />
-			</td>
-			<td id="MO1">
-				<div class="cmp-unknown" />
+			<td id="MO2.MO1" colspan="2">
+				<div class="cmp-no" />
 			</td>
 			<td id="Vortex">
-				<div class="cmp-unknown" />
+				ESL flag.
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -419,7 +413,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Program list<sup>3</sup></td>
+			<td class="feature-name"><span flow="right" tooltip="Program list means a toolbar of some sort that allows you to execute programs and tools from the mod manager for convenience or need">Program list</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
 			</td>
@@ -462,13 +456,17 @@ There are many mod managers around these days and it's may be a bit difficult to
 		</tr>
 		<tr>
 			<td class="feature-name">Supported mod package formats</td>
-			<td id="KMM">FOMod (XML), KMP.</td>
-			<td id="MO2.MO1" colspan="2">
-				FOMod (XML, C#), freeform<sup>1</sup>, simple<sup>2</sup>.
+			<td id="KMM">
+				FOMod (XML), KMP.
 			</td>
-			<td id="Vortex.NMM" colspan="2">FOMod (XML, C#), simple.</td>
+			<td id="MO2.MO1" colspan="2">
+				Same as Vortex/NMM plus freeform<sup>1</sup>.
+			</td>
+			<td id="Vortex.NMM" colspan="2">
+				FOMod (XML, C#), BAIN Wizard, BAIN Package, simple<sup>2</sup>.
+			</td>
 			<td id="WB">
-				FOMod (XML) Beta, BAIN Wizard, BAIN Package, simple2.
+				FOMod (XML) Beta, BAIN Wizard, BAIN Package, simple<sup>2</sup>.
 			</td>
 		</tr>
 		<tr>
@@ -491,123 +489,125 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Symbolic links (symlinks).
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				No virtualization, files are installed in the Data folder.
 			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Virtualization Pros and Cons</td>
 			<td id="KMM">
-				<ul>
+				<ul class="ul-pro">
 					<b>Pros:</b>
-					<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
-					<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
-					<li class="li-pro">Mounted VFS is visible to all processes on the system (it's kind of a con too).</li>
-					<li class="li-pro">Can link mods across different drives.</li>
-					<li class="li-pro">Allows top-level folder virtualization.</li>
+					<li>Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
+					<li>Zero overhead when installing/enabling mods or switching profiles.</li>
+					<li>Mounted VFS is visible to all processes on the system (it's kind of a con too).</li>
+					<li>Can link mods across different drives.</li>
+					<li>Allows top-level folder virtualization.</li>
 				</ul>
-				<ul>
+				<ul class="ul-con">
 					<b>Cons:</b>
-					<li class="li-con">Slower than alternatives.</li>
-					<li class="li-con">Requires target folder (mount point) to be empty.</li>
-					<li class="li-con">Huge memory consumption on large mod setups (~200 MB for 50k files, ~5 GB for 975k files).</li>
-					<li class="li-con">Program startup overhead for VFS initialization.</li>
-					<li class="li-con">Kernel-mode driver, requires administrator privileges to install.</li>
+					<li>Slower than alternatives.</li>
+					<li>Requires target folder (mount point) to be empty.</li>
+					<li>Huge memory consumption on large mod setups (~200 MB for 50k files, ~5 GB for 975k files).</li>
+					<li>Program startup overhead for VFS initialization.</li>
+					<li>Kernel-mode driver, requires administrator privileges to install.</li>
 				</ul>
 			</td>
 			<td id="MO2">
-				<ul>
+				<ul class="ul-pro">
 					<b>Pros:</b>
-					<li class="li-pro">Supports 64-bit programs.</li>
-					<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
-					<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
-					<li class="li-pro">Doesn't require write access to destination.</li>
-					<li class="li-pro">Sources and target can be linked across different drives.</li>
-					<li class="li-pro">Intercepts creation of new files in overwrite, keeping game folder clean</li>
+					<li>Supports 64-bit programs.</li>
+					<li>Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
+					<li>Zero overhead when installing/enabling mods or switching profiles.</li>
+					<li>Doesn't require write access to destination.</li>
+					<li>Sources and target can be linked across different drives.</li>
+					<li>Intercepts creation of new files in overwrite, keeping game folder clean</li>
 				</ul>
-				<ul>
+				<ul class="ul-con">
 					<b>Cons:</b>
-					<li class="li-con">Can be less intuitive to users since only the programs can see the mods.</li>
-					<li class="li-con">Can often be flagged by anti-viruses.</li>
-					<li class="li-con">Can't virtualize some top level files like load-time linked .dll.</li>
-					<li class="li-con">Can lead to hard to diagnose issues in case there is a bug.</li>
-					<li class="li-con">Small memory and computation overhead at runtime.</li>
-					<li class="li-con">Program startup overhead for VFS initialization.</li>
-					<li class="li-con">Can potentially break if Windows changes something.</li>
-					<li class="li-con">Uses Overwrite folder that can require some user cleanup and management</li>
+					<li>Can be less intuitive to users since only the programs can see the mods.</li>
+					<li>Can often be flagged by anti-viruses.</li>
+					<li>Can't virtualize some top level files like load-time linked .dll.</li>
+					<li>Can lead to hard to diagnose issues in case there is a bug.</li>
+					<li>Small memory and computation overhead at runtime.</li>
+					<li>Program startup overhead for VFS initialization.</li>
+					<li>Can potentially break if Windows changes something.</li>
+					<li>Uses Overwrite folder that can require some user cleanup and management</li>
 				</ul>
 			</td>
 			<td id="MO1">
-				<ul>
+				<ul class="ul-pro">
 					<b>Pros:</b>
-					<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
-					<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
-					<li class="li-pro">Doesn't require write access to destination.</li>
-					<li class="li-pro">Sources and target can be linked across different drives.</li>
-					<li class="li-pro">Intercepts creation of new files in overwrite, keeping game folder clean</li>
+					<li>Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
+					<li>Zero overhead when installing/enabling mods or switching profiles.</li>
+					<li>Doesn't require write access to destination.</li>
+					<li>Sources and target can be linked across different drives.</li>
+					<li>Intercepts creation of new files in overwrite, keeping game folder clean</li>
 				</ul>
-				<ul>
+				<ul class="ul-con">
 					<b>Cons:</b>
-					<li class="li-con">Can't be used for 64-bit programs.</li>
-					<li class="li-con">Can be less intuitive to users since only the programs can see the mods.</li>
-					<li class="li-con">Can often be flagged by anti-viruses.</li>
-					<li class="li-con">Can't virtualize some top level files like load-time linked .dll.</li>
-					<li class="li-con">Can lead to hard to diagnose issues in case there is a bug.</li>
-					<li class="li-con">Small memory and computation overhead at runtime.</li>
-					<li class="li-con">Program startup overhead for VFS initialization.</li>
-					<li class="li-con">Can potentially break if Windows changes something</li>
-					<li class="li-con">Uses Overwrite folder that can require some user cleanup and management</li>
+					<li>Can't be used for 64-bit programs.</li>
+					<li>Can be less intuitive to users since only the programs can see the mods.</li>
+					<li>Can often be flagged by anti-viruses.</li>
+					<li>Can't virtualize some top level files like load-time linked .dll.</li>
+					<li>Can lead to hard to diagnose issues in case there is a bug.</li>
+					<li>Small memory and computation overhead at runtime.</li>
+					<li>Program startup overhead for VFS initialization.</li>
+					<li>Can potentially break if Windows changes something</li>
+					<li>Uses Overwrite folder that can require some user cleanup and management</li>
 				</ul>
 			</td>
 			<td id="Vortex">
-				<ul>
+				<ul class="ul-pro">
 					<b>Pros:</b>
-					<li class="li-pro">Remains even when the program is not running</li>
-					<li class="li-pro">Faster than alternatives because NTFS</li>
-					<li class="li-pro">Deployment only necessary when adding/removing mods "set and forget"</li>
-					<li class="li-pro">Windows updates shouldn't break it.</li>
+					<li>Remains even when the program is not running</li>
+					<li>Faster than alternatives because NTFS</li>
+					<li>Deployment only necessary when adding/removing mods "set and forget"</li>
+					<li>Windows updates shouldn't break it.</li>
 				</ul>
-				<ul>
+				<ul class="ul-con">
 					<b>Cons:</b>
-					<li class="li-con">Improper removal of mod will cause mods to remain</li>
-					<li class="li-con">"Dirty" data folder</li>
-					<li class="li-con">Some applications may see the hardlinks as duplicates and count them as used disk space</li>
-					<li class="li-con">Requires deployment</li>
-					<li class="li-con">Requires full write/read access to target folder</li>
-					<li class="li-con">Takes time (based on file count) to switch profiles and enable/disable mods</li>
-					<li class="li-con">Can't link across drives</li>
-					<li class="li-con">Can be less convenient to use for mod authors messing with mod files</li>
+					<li>Improper removal of mod will cause mods to remain</li>
+					<li>"Dirty" data folder</li>
+					<li>Some applications may see the hardlinks as duplicates and count them as used disk space</li>
+					<li>Requires deployment</li>
+					<li>Requires full write/read access to target folder</li>
+					<li>Takes time (based on file count) to switch profiles and enable/disable mods</li>
+					<li>Can't link across drives</li>
+					<li>Can be less convenient to use for mod authors messing with mod files</li>
 				</ul>
 			</td>
 			<td id="NMM">
-				<ul>
+				<ul class="ul-pro">
 					<b>Pros:</b>
-					<li class="li-pro">Can link across partitions.</li>
-					<li class="li-pro">Mostly same as Hardlinks (assuming good implementation)</li>
+					<li>Can link across partitions.</li>
+					<li>Mostly same as Hardlinks (assuming good implementation)</li>
 				</ul>
-				<ul>
+				<ul class="ul-con">
 					<b>Cons:</b>
-					<li class="li-con">Requires administrator privileges to create symlinks.</li>
-					<li class="li-con">Can leave the game folder with mess in case stuff goes wrong</li>
-					<li class="li-con">Mostly the same cons as Hardlinks</li>
+					<li>Requires administrator privileges to create symlinks.</li>
+					<li>Can leave the game folder with mess in case stuff goes wrong</li>
+					<li>Mostly the same cons as Hardlinks</li>
 				</ul>
 			</td>
 			<td id="WB">
-				<ul>
+				<ul class="ul-pro">
 					<b>Pros:</b>
-					<li class="li-pro">Uses no Virtualization, Hardlinks, or Symbolic links.</li>
-					<li class="li-pro">100% Reliable with 0% chance for issues installing files into the Data folder.</li>
-					<li class="li-pro">Customize location of downloaded mods with the bash.ini.</li>
-					<li class="li-pro">Allows you to have Game and your downloaded mods on different drives.</li>
+					<li>Does not add complexity and potential failure points with virtualization, hardlinks, or symbolic links and uses a simple and reliable file copy.</li>
+					<li>100% Reliable with 0% chance for issues installing files into the Data folder. No problems with leftover/broken links and other inconsistencies, just normal files (that are all kept track of).</li>
+					<li>Allows you to have Game and your downloaded mods on different drives.</li>
 				</ul>
-				<ul>
+				<ul class="ul-con">
 					<b>Cons:</b>
-					<li class="li-con">Depending on the amount and size of files copying files to the Data folder may take a reasonable amount of time to an extended amount of time.</li>
-					<li class="li-con">Installing 3GB mods like Interesting NPCs can take a very extended amount of time.</li>
+					<li>Depending on the amount and size of files copying files to the Data folder may take a reasonable amount of time to an extended amount of time.</li>
+					<li>Installing 3 GB mods like Interesting NPCs can take a very extended amount of time.</li>
+					<li>Changing order, enabling/disabling mods, clearing to vanilla, requires file transfers to update Data tab contents (user decides when to apply changes so multiple ones can be applied in one step).</li>
+					<li>Requires full write/read access to target folder</li>
+					<li>Requires more space as mod archives can't be deleted (source of files to be copied in Data)</li>
 				</ul>
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Game root directory virtualization<sup>4</sup></td>
+			<td class="feature-name"><span flow="right" tooltip="Game root directory virtualization means that the files are not installed into the game folder where the game EXE is located such as TESV.exe. Rather they use an actual Virtual File System. Vortex and NMM use links to achieve similar results as virtualization, but it's not actually virtualization">Game root directory virtualization</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
 			</td>
@@ -676,7 +676,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Symlinks - persists until purged.
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				Uses file copy - persists until purged.
 			</td>
 		</tr>
 		<tr>
@@ -780,7 +780,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name" align="left">Integrated download manager <sup>5</sup></td>
+			<td class="feature-name"><span flow="right" tooltip="Integrated download manager meaning the mod manager has internal download capabilities and uses can see the files being downloaded">Integrated download manager</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
 			</td>
@@ -1097,10 +1097,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="WB">
 				Open Source, fully released.
-				Maintained and actively developed by Wrye Bash Team made up of Utumno, Ganda, Infernio.
-				Record decoding by Sharlikran.
-				Rare updates by Lojack.
-				Documentation updates by Felis and Wrye Bash team.
+				Maintained and actively developed by <span tooltip="Made up of Utumno, Ganda, Infernio. Record decoding by Sharlikran. Rare updates by Lojack. Documentation updates by Felis and Wrye Bash team">Wrye Bash Team</span> (community non-paid developers) with improvement updates.
 			</td>
 		</tr>
 	</tbody>
@@ -1109,9 +1106,6 @@ There are many mod managers around these days and it's may be a bit difficult to
 ## Supplementary information
 1. Any content inside the mod archive. This installation mode usually requires user input to some extent.
 2. Just some files such as **.esm**/**.esp** and/or **Data** folder inside the mod archive.
-3. Program list means a toolbar of some sort that allows you to execute programs and tools from the mod manager.
-4. Game root directory virtualization means that the files are not installed into the game folder where the game EXE is located such as TESV.exe. Rather they use an actual Virtual File System. Vortex and NMM use links to achieve similar results as virtualization, but it's not actually virtualization.
-5. Integrated download manager meaning the mod manager has internal download capabilities and uses can see the files being downloaded.
 
 ## Page contributors
 * [Kerber](https://www.nexusmods.com/users/2734453) (Kortex developer)

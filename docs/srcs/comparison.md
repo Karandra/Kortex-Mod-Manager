@@ -9,7 +9,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 * **MO2** - [Mod Organizer 2](https://www.nexusmods.com/skyrimspecialedition/mods/6194) (version 2.x).
 * **NMM** - [Nexus Mod Manager](https://www.nexusmods.com/site/mods/4).
 * [**Vortex**](https://www.nexusmods.com/about/vortex) - a successor to **NMM** by Nexus Mods.
-* [**Wrye Bash**](https://github.com/wrye-bash/wrye-bash) - one of the oldest mod manager among them all.
+* [**Wrye Bash**](https://github.com/wrye-bash/wrye-bash) - one of the oldest mod managers among them all.
 
 ## Features
 
@@ -56,10 +56,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Supports many games including TES and Fallout games.
             </td>
             <td id="WB">
-                <span tooltip="Morrowind, Oblivion, Skyrim (LE, SE, VR, Enderal)">TES series</span> starting from <b>Morrowind</b>.
-                <br/>
-                <span tooltip="Fallout 3, Fallout: New Vegas, Fallout 4 (VR)">Fallout series</span> starting from <b>Fallout 3</b>.
-                <br/>
+                Morrowind using <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a>, <a href="https://www.nexusmods.com/fallout3/mods/11336">Fallout 3</a>/<a href="https://www.nexusmods.com/newvegas/mods/35003">Fallout NV</a> Using Valda's Wrye Flash. Oblivion, Skyrim (LE, SE, VR, Enderal) Fallout 4 (VR) Using <a href="https://www.dropbox.com/sh/iazpayeexiyazeh/AAAbGeVHrlIksp2AFgI4w48Oa?dl=0">Wrye Bash</a>
             </td>
         </tr>
         <tr>
@@ -79,7 +76,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -94,7 +91,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Multiple profiles per game
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -115,7 +112,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-yes" />
             </td>
         </tr>
         <tr>
@@ -139,7 +136,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 One time popup during installation to decide whether to keep or overwrite other mods files.
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Using mod priority that can be changed by drag &amp; dropping mods in a specific order.
             </td>
         </tr>
         <tr>
@@ -174,7 +171,11 @@ There are many mod managers around these days and it's may be a bit difficult to
                 No visualization of conflicts as there can't be, just one time popup during mod installation to either overwrite or keep old files.
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <ul>
+                    <li>Colored checkboxes indicate conflict.</li>
+                    <li>Tabs can be selected to see detailed list of conflicts for both loose files and BSA/BA2 files.</li>
+                    <li>The mod archive or package name is shown.</li>
+                </ul>
             </td>
         </tr>
         <tr>
@@ -204,7 +205,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -227,7 +228,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-yes" />
             </td>
         </tr>
         <tr>
@@ -239,8 +240,48 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
+                Create separate folders for each playthrough or for easy management of save games and eliminate clutter in your save game list.
+            </td>
+        </tr>
+        <tr>
+            <td class="feature-name">Change master name in header of save game from save game manager <sup>6</sup></td>
+            <td id="KMM">
                 <div class="cmp-unknown" />
             </td>
+            <td id="MO2">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="MO1">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="Vortex">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="NMM">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="WB">
+                <div class="cmp-yes" />
+            </td>
+        </tr>
+        <tr>
+            <td class="feature-name">List files used in a save game</td>
+            <td id="KMM">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="MO2">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="MO1">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="Vortex">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="NMM">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="WB">Copied to Clipboard</td>
         </tr>
         <tr>
             <td class="feature-name">Config (INI) management</td>
@@ -257,7 +298,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Easily alter game INI files by placing a checkmark in a list of changes. Restore INI files back to default.
             </td>
         </tr>
         <tr>
@@ -273,7 +314,70 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Mods ..?
             </td>
             <td id="WB">
+                Order plugins in your Data folder with Drag and Drop. Activate plugins based on save game. Lock Load Order to prevent external applications from makes changes.
+            </td>
+        </tr>
+        <tr>
+            <td class="feature-name">Add or Remove ESL Flag from plugin list</td>
+            <td id="KMM">
                 <div class="cmp-unknown" />
+            </td>
+            <td id="MO2">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="MO1">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="Vortex">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="NMM">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="WB">
+                <div class="cmp-yes" />
+            </td>
+        </tr>
+        <tr>
+            <td class="feature-name">Add or Remove ESM Flag from plugin list</td>
+            <td id="KMM">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="MO2">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="MO1">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="Vortex">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="NMM">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="WB">
+                <div class="cmp-yes" />
+            </td>
+        </tr>
+        <tr>
+            <td class="feature-name">Change master name in header of plugin from plugin list</td>
+            <td id="KMM">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="MO2">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="MO1">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="Vortex">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="NMM">
+                <div class="cmp-unknown" />
+            </td>
+            <td id="WB">
+                <div class="cmp-yes" />
             </td>
         </tr>
         <tr>
@@ -306,7 +410,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -326,11 +430,11 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Modlist order, Plugin order, Settings.
             </td>
         </tr>
         <tr>
-            <td class="feature-name">Program list</td>
+            <td class="feature-name">Program list <sup>3</sup></td>
             <td id="KMM">
                 <div class="cmp-yes" />
             </td>
@@ -347,7 +451,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Add shortcuts to the Apps folder and Tools or other Programs show up in the Toolbar.
             </td>
         </tr>
         <tr>
@@ -368,7 +472,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -379,7 +483,7 @@ There are many mod managers around these days and it's may be a bit difficult to
             </td>
             <td id="Vortex.NMM" colspan="2">FOMod (XML, C#), simple.</td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                FOMod (XML) Beta, BAIN Wizard, BAIN Package, simple2.
             </td>
         </tr>
         <tr>
@@ -402,7 +506,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Symbolic links (symlinks).
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -503,11 +607,22 @@ There are many mod managers around these days and it's may be a bit difficult to
                 </ul>
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <ul>
+                    <b>Pros:</b>
+                    <li class="li-pro">Uses no Virtualization, Hardlinks, or Symbolic links.</li>
+                    <li class="li-pro">100% Reliable with 0% chance for issues installing files into the Data folder.</li>
+                    <li class="li-pro">Customize location of downloaded mods with the bash.ini.</li>
+                    <li class="li-pro">Allows you to have Game and your downloaded mods on different drives.</li>
+                </ul>
+                <ul>
+                    <b>Cons:</b>
+                    <li class="li-con">Depending on the amount and size of files copying files to the Data folder may take a reasonable amount of time to an extended amount of time.</li>
+                    <li class="li-con">Installing 3GB mods like Interesting NPCs can take a very extended amount of time.</li>
+                </ul>
             </td>
         </tr>
         <tr>
-            <td class="feature-name">Game root directory virtualization</td>
+            <td class="feature-name">Game root directory virtualization <sup>4</sup></td>
             <td id="KMM">
                 <div class="cmp-yes" />
             </td>
@@ -524,7 +639,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -551,10 +666,14 @@ There are many mod managers around these days and it's may be a bit difficult to
                 A popup for deleted/recreated files will ask user whether to use mod version or game version.
             </td>
             <td id="NMM">
-                <div class="cmp-no" />
+                <div class="cmp-unknown" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Files added or altered in the Data folder are tracked. New files become orphaned files.
+                Changed files that belong to an installer can be easily synced with the Installer (Package Only).
+                Orphaned files can be removed using Clean Data.
+                Using Monitor External Installation during an install of a mod from a 3rd part utility other then Wrye Bash will track the changes and add them to a Package to be used for installation.
+                Using Monitor External Installation while using the CK or other Tools like FNIS, Wrye Bash will track the changes and add both new and altered files to a Package to be used for installation.
             </td>
         </tr>
         <tr>
@@ -572,7 +691,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Symlinks - persists until purged.
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -586,11 +705,8 @@ There are many mod managers around these days and it's may be a bit difficult to
             <td id="MO1">
                 Through dedicated Data tab.
             </td>
-            <td id="Vortex.NMM" colspan="2">
+            <td id="Vortex.NMM.WB" colspan="3">
                 Not needed as Explorer already shows the correct final result.
-            </td>
-            <td id="WB">
-                <div class="cmp-unknown" />
             </td>
         </tr>
         <tr>
@@ -600,7 +716,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <b>NexusMods</b>
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -610,8 +726,8 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Download with manager,
                 Mod update check
             <td id="MO2">
-                Account login, 
-                Download with manager, 
+                Account login,
+                Download with manager,
                 Mod update check,
                 Mod endorsements,
                 Mod tracking,
@@ -621,8 +737,8 @@ There are many mod managers around these days and it's may be a bit difficult to
             <td id="MO1">
                 Integration no longer works since Nexus API update.
             <td id="Vortex">
-                Account login, 
-                Download with manager, 
+                Account login,
+                Download with manager,
                 Mod update check,
                 Automatic mod update for premium users,
                 Mod endorsements,
@@ -631,13 +747,13 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Browser for mod description,
             </td>
             <td id="NMM">
-                Account login, 
-                Download with manager, 
+                Account login,
+                Download with manager,
                 Mod endorsements,
                 Mod meta info like categories etc.
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -652,7 +768,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Account, mod updates, mod source, metadata query, downloads, endorsements.
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -675,11 +791,11 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-yes" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
-            <td class="feature-name" align="left">Integrated download manager</td>
+            <td class="feature-name" align="left">Integrated download manager <sup>5</sup></td>
             <td id="KMM">
                 <div class="cmp-yes" />
             </td>
@@ -696,7 +812,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-yes" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -717,7 +833,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Import from nexus, custom categories?
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Custom marker system.
             </td>
         </tr>
         <tr>
@@ -748,7 +864,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Missing masters.
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Missing masters, out of order masters, missing strings files, Form 43 plugins for Skyrim SE, ESL verification, File using same date for games that utilize a time date stamp, ghosted plugin, dirty edits, improperly configured plugins marked with Deactivate or NoMerge.
             </td>
         </tr>
         <tr>
@@ -773,7 +889,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Change colors via a settings menu.
             </td>
         </tr>
         <tr>
@@ -793,19 +909,22 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-unknown" />
             </td>
             <td id="NMM">
-                <div class="cmp-no" />
+                Can export mod list.
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <ul>
+                    <li>Can export list of installed mods from Mods tab.</li>
+                    <li>Can view and list files in an archive or package from Installers Tab.</li>
+                </ul>
             </td>
         </tr>
         <tr>
             <td class="feature-name">Modlist features</td>
             <td id="KMM">
-                Color-coding of each mod, 
+                Color-coding of each mod,
                 collapsible separators (using tag system).
                 <br/><br/>
-                <b>Mod metadata:</b> 
+                <b>Mod metadata:</b>
                 name,
                 priority,
                 version,
@@ -851,7 +970,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <br/>
                 <b>Mod metadata:</b>
                 mod name,
-                version number, 
+                version number,
                 author,
                 install time,
                 source (nexus or not),
@@ -866,7 +985,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-unknown" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
@@ -890,10 +1009,13 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <ul>
+                    <li>Can preview contents of archive or Package.</li>
+                    <li>Doc Browser for Readme files and custom Docs or Notes added to mods.</li>
+                </ul>
             </td>
         </tr>
-        <tr class="tooltip">
+        <tr><!-- class="tooltip" -->
             <td class="feature-name">
                 Available translations
                 <br>
@@ -938,7 +1060,10 @@ There are many mod managers around these days and it's may be a bit difficult to
                 </ul>
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <ul>
+                    <li>English</li>
+                    <li>Localization can be easily exported and edited with Notepad++ or Poedit. Language changes are very outdated.</li>
+                </ul>
             </td>
         </tr>
         <tr>
@@ -959,13 +1084,13 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                <div class="cmp-no" />
             </td>
         </tr>
         <tr>
             <td class="feature-name">Current development state and maintainers</td>
             <td id="KMM">
-                Open Source, fully released. 
+                Open Source, fully released.
                 Maintained and not so much actively developed on by Kerber (non-paid developer), with highly irregular feature updates.
             </td>
             <td id="MO2">
@@ -986,18 +1111,27 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Currently maintained by a few members of the community.
             </td>
             <td id="WB">
-                <div class="cmp-unknown" />
+                Open Source, fully released.
+                Maintained and actively developed by Wrye Bash Team made up of Utumno, Ganda, Infernio.
+                Record decoding by Sharlikran.
+                Rare updates by Lojack.
+                Documentation updates by Felis and Wrye Bash team.
             </td>
         </tr>
     </tbody>
 </table>
 
+## Supplementary information
 1. Any content inside the mod archive. This installation mode usually requires user input to some extent.
 2. Just some files such as **.esm**/**.esp** and/or **Data** folder inside the mod archive.
+3. Program List means a toolbar of some sort that allows you to execute programs and tools from the mod manager.
+4. Game root directory virtualization means that the files are not installed into the game folder where the game EXE is located such as TESV.exe. Rather they use an actual Virtual File System. Vortex and NMM use links to achieve similar results as Virtualization, but it's not actually virtualization.
+5. Integrated download manager meaning the mod manager has internal download capabilities and uses can see the files being downloaded.
+6. Not supported for compressed save game headers like Skyrim SE.
 
 ## Page contributors
 * [Kerber](https://www.nexusmods.com/users/2734453) (Kortex developer)
 * [AL](https://www.nexusmods.com/users/6409802) (MO2 Dev)
 * [Yggdrasil75](https://www.nexusmods.com/users/25321034) (Vortex virtuoso)
 * We found no one for NMM yet :/
-* We would also need someone for Wrye Bash
+* [Sharlikran](https://www.nexusmods.com/users/25321034) (Wrye Bash Contributor)

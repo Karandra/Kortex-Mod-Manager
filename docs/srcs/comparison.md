@@ -56,7 +56,11 @@ There are many mod managers around these days and it's may be a bit difficult to
                 Supports many games including TES and Fallout games.
             </td>
             <td id="WB">
-                Morrowind using <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a>, <a href="https://www.nexusmods.com/fallout3/mods/11336">Fallout 3</a>/<a href="https://www.nexusmods.com/newvegas/mods/35003">Fallout NV</a> Using Valda's Wrye Flash. Oblivion, Skyrim (LE, SE, VR, Enderal) Fallout 4 (VR) Using <a href="https://www.dropbox.com/sh/iazpayeexiyazeh/AAAbGeVHrlIksp2AFgI4w48Oa?dl=0">Wrye Bash</a>
+                Morrowind using <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a>.
+                <br/>
+                <a href="https://www.nexusmods.com/fallout3/mods/11336">Fallout 3</a>/<a href="https://www.nexusmods.com/newvegas/mods/35003">Fallout NV</a> Using Valda's Wrye Flash.
+                <br/>
+                Oblivion, Skyrim (LE, SE, VR, Enderal) Fallout 4 (VR) Using <a href="https://www.dropbox.com/sh/iazpayeexiyazeh/AAAbGeVHrlIksp2AFgI4w48Oa?dl=0">Wrye Bash</a>.
             </td>
         </tr>
         <tr>
@@ -244,7 +248,7 @@ There are many mod managers around these days and it's may be a bit difficult to
             </td>
         </tr>
         <tr>
-            <td class="feature-name">Change master name in header of save game from save game manager <sup>6</sup></td>
+            <td class="feature-name">Change master name in header of save game from save game manager</td>
             <td id="KMM">
                 <div class="cmp-unknown" />
             </td>
@@ -261,7 +265,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-unknown" />
             </td>
             <td id="WB">
-                <div class="cmp-yes" />
+                <div class="cmp-yes" tooltip="Not supported for compressed save game headers like in Skyrim SE"/>
             </td>
         </tr>
         <tr>
@@ -430,7 +434,7 @@ There are many mod managers around these days and it's may be a bit difficult to
                 <div class="cmp-no" />
             </td>
             <td id="WB">
-                Modlist order, Plugin order, Settings.
+                Modlist order, plugin order, settings.
             </td>
         </tr>
         <tr>
@@ -622,7 +626,7 @@ There are many mod managers around these days and it's may be a bit difficult to
             </td>
         </tr>
         <tr>
-            <td class="feature-name">Game root directory virtualization <sup>4</sup></td>
+            <td class="feature-name">Game root directory virtualization<sup>4</sup></td>
             <td id="KMM">
                 <div class="cmp-yes" />
             </td>
@@ -1015,11 +1019,11 @@ There are many mod managers around these days and it's may be a bit difficult to
                 </ul>
             </td>
         </tr>
-        <tr><!-- class="tooltip" -->
+        <tr>
             <td class="feature-name">
                 Available translations
                 <br>
-                <i>default distribution</i>
+                <i>(default distribution)</i>
             </td>
             <td id="KMM">
                 <ul>
@@ -1124,14 +1128,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 ## Supplementary information
 1. Any content inside the mod archive. This installation mode usually requires user input to some extent.
 2. Just some files such as **.esm**/**.esp** and/or **Data** folder inside the mod archive.
-3. Program List means a toolbar of some sort that allows you to execute programs and tools from the mod manager.
-4. Game root directory virtualization means that the files are not installed into the game folder where the game EXE is located such as TESV.exe. Rather they use an actual Virtual File System. Vortex and NMM use links to achieve similar results as Virtualization, but it's not actually virtualization.
+3. Program list means a toolbar of some sort that allows you to execute programs and tools from the mod manager.
+4. Game root directory virtualization means that the files are not installed into the game folder where the game EXE is located such as TESV.exe. Rather they use an actual Virtual File System. Vortex and NMM use links to achieve similar results as virtualization, but it's not actually virtualization.
 5. Integrated download manager meaning the mod manager has internal download capabilities and uses can see the files being downloaded.
-6. Not supported for compressed save game headers like Skyrim SE.
 
 ## Page contributors
 * [Kerber](https://www.nexusmods.com/users/2734453) (Kortex developer)
 * [AL](https://www.nexusmods.com/users/6409802) (MO2 Dev)
 * [Yggdrasil75](https://www.nexusmods.com/users/25321034) (Vortex virtuoso)
+* [Sharlikran](https://www.nexusmods.com/users/25321034) (Wrye Bash contributor)
 * We found no one for NMM yet :/
-* [Sharlikran](https://www.nexusmods.com/users/25321034) (Wrye Bash Contributor)

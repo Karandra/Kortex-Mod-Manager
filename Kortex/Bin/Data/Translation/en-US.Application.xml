@@ -106,7 +106,7 @@
 		<String ID="Generic.Terminate">Terminate</String>
 		<String ID="Generic.All">All</String>
 		<String ID="Generic.using">using</String>
-		<String ID="Generic.MilliSec">MS</String>
+		<String ID="Generic.MilliSec">ms</String>
 		<String ID="Generic.Sec">s</String>
 		<String ID="Generic.Min">min</String>
 		<String ID="Generic.Browse">Browse</String>

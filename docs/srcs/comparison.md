@@ -53,7 +53,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Supports over 90 games including TES and Fallout games.
 			</td>
 			<td id="NMM">
-				Supports many games including TES and Fallout games.
+				Supports many games including Elder Scrolls (plus Enderal) and Fallout series.
 			</td>
 			<td id="WB">
 				Morrowind using <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a>.
@@ -176,7 +176,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="WB">
 				<ul>
-					<li>Colored checkboxes indicate conflict.</li>
+					<li><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20General%20Readme.html#bain-symbols">Colored checkboxes</a> indicate conflict.</li>
 					<li>Tabs can be selected to see detailed list of conflicts for both loose files and BSA/BA2 files.</li>
 					<li>The mod archive or package name is shown.</li>
 				</ul>
@@ -406,10 +406,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Via <a href="https://github.com/Garethp/Vortex-Modlist-Backup">extension</a> only.
 			</td>
 			<td id="NMM">
-				<div class="cmp-no" />
+				<ul>
+					<li>Import Export Load Order</li>
+					<li>Backup and Restore Mod Instalation</li>
+				</ul>
 			</td>
 			<td id="WB">
-				Modlist order, plugin order, settings.
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#tools-settings">Backs up all the parts of Wrye Bash that can be changed by the user to a location of the user's choosing</a>.
 			</td>
 		</tr>
 		<tr>
@@ -427,10 +430,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-yes" />
 			</td>
 			<td id="NMM">
-				<div class="cmp-no" />
+				<ul>
+					<li>No method to add custom launcher and you must choose from a predetermined list.</li>
+					<li>Program List varies depending on selected game mode.</li>
+				<ul>
 			</td>
 			<td id="WB">
-				Add shortcuts to the Apps folder and Tools or other Programs show up in the Toolbar.
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#launchers">Add shortcuts to the Apps folder and Tools or other Programs show up in the Toolbar</a>.
 			</td>
 		</tr>
 		<tr>
@@ -462,8 +468,11 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="MO2.MO1" colspan="2">
 				FOMod (XML, C#), BAIN Package, freeform<sup>1</sup>, simple<sup>2</sup>.
 			</td>
-			<td id="Vortex.NMM" colspan="2">
-				FOMod (XML, C#), BAIN Wizard, BAIN Package, simple<sup>2</sup>.
+			<td id="Vortex">
+				FOMod (XML, C#), simple<sup>2</sup>.
+			</td>
+			<td id="NMM">
+				FOMod (XML, C#), OMOD, simple<sup>2</sup>.
 			</td>
 			<td id="WB">
 				FOMod (XML) Beta, BAIN Wizard, BAIN Package, simple<sup>2</sup>.
@@ -654,11 +663,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-unknown" />
 			</td>
 			<td id="WB">
-				Files added or altered in the Data folder are tracked. New files become orphaned files.
-				Changed files that belong to an installer can be easily synced with the Installer (Package Only).
-				Orphaned files can be removed using Clean Data.
-				Using Monitor External Installation during an install of a mod from a 3rd part utility other then Wrye Bash will track the changes and add them to a Package to be used for installation.
-				Using Monitor External Installation while using the CK or other Tools like FNIS, Wrye Bash will track the changes and add both new and altered files to a Package to be used for installation.
+				<ul>
+					<li>Files added or altered in the Data folder are tracked.</li>
+					<li>New files become orphaned files.</li>
+					<li>Orphaned files can be removed using <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bain-CleanData">Clean Data</a>.</li>
+					<li>Changed files that belong to an installer can be easily synced with the Installer (Package Only).</li>
+					<li><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bain-monitor">Monitor External Installation</a> tracks changes in the data folder. Wrye Bash creates an installer from both new and altered files. This can be used to track instalation from other mod managers such as OBMM, FOMM, NMM. It can also be used when making changes with the CK or other tools such as FNIS or BodySlide.</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
@@ -815,10 +826,10 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Import from Nexus, support for custom categories.
 			</td>
 			<td id="NMM">
-				Import from nexus, custom categories?
+				Import from nexus, and create custom categories.
 			</td>
 			<td id="WB">
-				Custom marker system.
+				<a href="https://wrye-bash.github.io/docs/Wrye Bash Advanced Readme.html#bainAddMarker">Custom marker system</a>.
 			</td>
 		</tr>
 		<tr>
@@ -874,7 +885,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				Change colors via a settings menu.
+				<a href="https://wrye-bash.github.io/docs/Wrye Bash Advanced Readme.html#tools-colors">Change colors via a settings menu</a>.
 			</td>
 		</tr>
 		<tr>
@@ -894,7 +905,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-unknown" />
 			</td>
 			<td id="NMM">
-				Can export mod list.
+				Export plugin and mod list to clipboard or text file.
 			</td>
 			<td id="WB">
 				<ul>
@@ -967,18 +978,26 @@ There are many mod managers around these days and it's may be a bit difficult to
 				highlight
 			</td>
 			<td id="NMM">
-				<div class="cmp-unknown" />
+				<ul>
+					<li>Filter by category</li>
+					<li>Sort mod list by Name, Cetegory, Install Date, Download Data, Endorsment, Download ID, Mod version, Author</li>
+					<li>List plugin dependencies (Plugin Tab)</li>
+				</ul>
+				<ul>
+					<b>Mod metadata</b>
+					<li>Name, Version, Author, Website, Description</li>
+				</ul>
 			</td>
 			<td id="WB">
 				<ul>
 					<b><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods">Mod context menu</a></b>
-					<li>Duplicate, Hide, Rename, Backup, Create Snapshot, Revert to Backup or Snapshot</li>
+					<li>Duplicate, Hide, Rename, Backup, Create Snapshot, Revert to Backup or Snapshot for plugins from the Mods tab.</li>
 					<li>List Bash Tags</li>
-					<li>Mod Info Report of plugin name, installer, modified data, file size, author, CRC</li>
+					<li>Mod Info Report of plugin name, installer, modified date, file size, author, CRC</li>
 					<li>List file dependencies</li>
 					<li>Jump to assigned Installer from Mods List</li>
 					<li>Check ESL Qualifications for ESL enabled games</li>
-					<li>Export Editor IDs to SCV File</li>
+					<li>Export Editor IDs to .csv File</li>
 					<li>List LOOT Cleaning Information</li>
 					<li>Copy .esp to .esm file (Creates file in Data Folder)</li>
 					<li>Add Remove ESL or ESM flags</li>
@@ -1062,12 +1081,14 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<ul>
 					<li>English</li>
+					<li>German</li>
 				</ul>
 			</td>
 			<td id="WB">
 				<ul>
 					<li>English</li>
-					<li>Localization can be easily exported and edited with Notepad++ or Poedit. Language changes are very outdated.</li>
+					<li><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#international">Localization can be easily exported</a> and edited with Notepad++ or Poedit.</li>
+					<li>Language changes are very outdated.</li>
 				</ul>
 			</td>
 		</tr>
@@ -1132,4 +1153,4 @@ There are many mod managers around these days and it's may be a bit difficult to
 * [AL](https://www.nexusmods.com/users/6409802) (MO2 Dev)
 * [Yggdrasil75](https://www.nexusmods.com/users/25321034) (Vortex virtuoso)
 * [Sharlikran](https://www.nexusmods.com/users/25321034) (Wrye Bash contributor)
-* We found no one for NMM yet :/
+* NMM updates by Sharlikran

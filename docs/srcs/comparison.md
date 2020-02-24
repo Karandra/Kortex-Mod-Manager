@@ -1153,4 +1153,4 @@ There are many mod managers around these days and it's may be a bit difficult to
 * [AL](https://www.nexusmods.com/users/6409802) (MO2 Dev)
 * [Yggdrasil75](https://www.nexusmods.com/users/25321034) (Vortex virtuoso)
 * [Sharlikran](https://www.nexusmods.com/users/25321034) (Wrye Bash contributor)
-* NMM updates by Sharlikran
+* [FelesNoctis](https://www.nexusmods.com/users/336042) (Generalist contributor)

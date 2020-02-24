@@ -460,7 +460,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				FOMod (XML), KMP.
 			</td>
 			<td id="MO2.MO1" colspan="2">
-				Same as Vortex/NMM plus freeform<sup>1</sup>.
+				FOMod (XML, C#), BAIN Package, simple, plus freeform<sup>1</sup>.
 			</td>
 			<td id="Vortex.NMM" colspan="2">
 				FOMod (XML, C#), BAIN Wizard, BAIN Package, simple<sup>2</sup>.

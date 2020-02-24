@@ -7,7 +7,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 * **KMM** - Kortex Mod Manager.
 * **MO1** - [Mod Organizer 1](https://www.nexusmods.com/skyrim/mods/1334) (version 1.x).
 * **MO2** - [Mod Organizer 2](https://www.nexusmods.com/skyrimspecialedition/mods/6194) (version 2.x).
-* **NMM** - [Nexus Mod Manager](https://www.nexusmods.com/site/mods/4).
+* **NMM** - [Nexus Mod Manager](https://github.com/Nexus-Mods/Nexus-Mod-Manager/releases).
 * [**Vortex**](https://www.nexusmods.com/about/vortex) - a successor to **NMM** by Nexus Mods.
 * [**Wrye Bash**](https://github.com/wrye-bash/wrye-bash) - one of the oldest mod managers among them all.
 

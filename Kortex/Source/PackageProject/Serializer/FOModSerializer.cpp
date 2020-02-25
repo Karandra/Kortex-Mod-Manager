@@ -447,9 +447,9 @@ namespace Kortex::PackageProject
 			}
 	
 			// Add required files to project and link them to components' required files
-			for (const auto& v: ReadFileData(configRootNode.GetFirstChildElement("requiredInstallFiles")))
+			for (const FileItem* fileItem: ReadFileData(configRootNode.GetFirstChildElement("requiredInstallFiles")))
 			{
-				components.GetRequiredFileData().emplace_back(v.first->GetID());
+				components.GetRequiredFileData().emplace_back(fileItem->GetID());
 			}
 	
 			// Header image
@@ -587,17 +587,17 @@ namespace Kortex::PackageProject
 	{
 		RequirementsSection& requirements = m_ProjectLoad->GetRequirements();
 		ComponentsSection& components = m_ProjectLoad->GetComponents();
-		auto& tConditionalSteps = components.GetConditionalSteps();
+		auto& conditionalSteps = components.GetConditionalSteps();
 	
 		size_t index = 1;
 		for (KxXMLNode stepNode = stepsArrayNode.GetFirstChildElement("pattern"); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement("pattern"))
 		{
-			ConditionalComponentStep* step = tConditionalSteps.emplace_back(std::make_unique<ConditionalComponentStep>()).get();
+			ConditionalComponentStep* step = conditionalSteps.emplace_back(std::make_unique<ConditionalComponentStep>()).get();
 	
 			// Files
-			for (const auto& v: ReadFileData(stepNode.GetFirstChildElement("files")))
+			for (const FileItem* fileItem: ReadFileData(stepNode.GetFirstChildElement("files")))
 			{
-				step->GetItems().emplace_back(v.first->GetID());
+				step->GetItems().emplace_back(fileItem->GetID());
 			}
 	
 			// Conditions
@@ -609,15 +609,15 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	FOModSerializer::FilePriorityArray FOModSerializer::ReadFileData(const KxXMLNode& filesArrayNode, ComponentItem* entry)
+	std::vector<FileItem*> FOModSerializer::ReadFileData(const KxXMLNode& filesArrayNode, ComponentItem* entry)
 	{
-		FilePriorityArray priorityList;
+		std::vector<std::pair<std::unique_ptr<FileItem>, int64_t>> priorityList;
 		if (filesArrayNode.IsOK())
 		{
 			for (KxXMLNode fileDataNode = filesArrayNode.GetFirstChildElement(); fileDataNode.IsOK(); fileDataNode = fileDataNode.GetNextSiblingElement())
 			{
 				std::unique_ptr<FileItem> fileEntry;
-				if (fileDataNode.GetName() == "folder")
+				if (fileDataNode.GetName() == wxS("folder"))
 				{
 					fileEntry = std::make_unique<FolderItem>();
 				}
@@ -646,28 +646,26 @@ namespace Kortex::PackageProject
 			}
 	
 			// Sort by priority
-			std::sort(priorityList.begin(), priorityList.end(), [](const auto& v1, const auto& v2)
+			std::sort(priorityList.begin(), priorityList.end(), [](const auto& left, const auto& right)
 			{
-				return v1.second < v2.second;
+				return left.second < right.second;
 			});
-	
-			// Link these files to entry
-			if (entry)
+			
+			// Add to project and link these files to component if needed
+			std::vector<FileItem*> refVector;
+			for (auto& [fileItem, filePriority]: priorityList)
 			{
-				for (const auto& v: priorityList)
+				refVector.push_back(fileItem.get());
+
+				if (entry)
 				{
-					entry->GetFileData().emplace_back(v.first->GetID());
+					entry->GetFileData().emplace_back(fileItem->GetID());
 				}
+				m_ProjectLoad->GetFileData().AddFile(std::move(fileItem));
 			}
-	
-			// Add to project
-			FileDataSection& fileData = m_ProjectLoad->GetFileData();
-			for (auto& v: priorityList)
-			{
-				fileData.AddFile(std::move(v.first));
-			}
+			return refVector;
 		}
-		return priorityList;
+		return {};
 	}
 	void FOModSerializer::UniqueFileData()
 	{

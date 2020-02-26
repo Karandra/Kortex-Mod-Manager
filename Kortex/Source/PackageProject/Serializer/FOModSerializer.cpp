@@ -791,6 +791,7 @@ namespace Kortex::PackageProject
 			wxString colorValue = titleConfig.GetColor().ToString(KxColor::C2S::HTML).AfterFirst('#');
 			if (!colorValue.IsEmpty())
 			{
+				// It's "colour" in FOMod. Yes, British spelling.
 				moduleNameNode.SetAttribute("colour", colorValue);
 			}
 		}
@@ -867,19 +868,16 @@ namespace Kortex::PackageProject
 						{
 							KxXMLNode entryNode = pluginsNode.NewElement("plugin");
 							entryNode.SetAttribute("name", entry->GetName());
-	
-							// Description
-							if (!entry->GetDescription().IsEmpty())
-							{
-								entryNode.NewElement("description").SetValue(entry->GetDescription());
-							}
-	
+							
+							// Description. XML scheme requires the node to be always present even if the description is empty. 
+							entryNode.NewElement("description").SetValue(entry->GetDescription());
+							
 							// Image
 							if (!entry->GetImage().IsEmpty())
 							{
 								entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(entry->GetImage(), ContentType::Images));
 							}
-	
+
 							// FOMod always requires 'files' node, so no check for empty array
 							WriteFileData(entryNode.NewElement("files"), entry->GetFileData());
 	
@@ -1018,11 +1016,8 @@ namespace Kortex::PackageProject
 					fileNode.SetAttribute("destination", file->GetDestination());
 				}
 	
-				// Priority
-				if (!file->IsDefaultPriority())
-				{
-					fileNode.SetAttribute("priority", file->GetPriority());
-				}
+				// Priority. XML scheme requires this attribute to be always present. Default value is 0.
+				fileNode.SetAttribute("priority", !file->IsDefaultPriority() ? file->GetPriority() : 0);
 	
 				// Always install
 				if (alwaysInstall)

@@ -994,15 +994,15 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="PackageCreator.TypeDescriptor.NotUsable">This component cannot be used in the current configuration. For example, some of the required mods are missing.</String>
 		<String ID="PackageCreator.TypeDescriptor.CouldBeUsable">This component can be used in the current configuration, but its correct operation is not guaranteed. For example, the versions of the required mods do not match.</String>
 
-		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Caption">Remove flags</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Caption">Remove flag</String>
 		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Message">
-			<![CDATA[Remove flags from the whole project? Deleting will remove all references to flags in the project.
+			<![CDATA[Remove flag from the entire project? Deletion will remove all references to the flag in the project.
 
-You can also rename references to a deleted flag by adding the prefix "%1" to them.]]>
+You can also rename references to the deleted flag by adding a prefix in their name (%1).]]>
 		</String>
 		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Remove">Remove only</String>
 		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveTrack">Remove in entire project</String>
-		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveRename">Rename flags</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveRename">Rename</String>
 
 		<String ID="PackageCreator.Conditions.AddNewCondition">Add new condition</String>
 		<String ID="PackageCreator.Conditions.AddToCondition">Add to condition</String>

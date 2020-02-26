@@ -185,9 +185,9 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		if (PackageProject::FlagItem* entry = GetDataEntry(GetRow(item)))
 		{
 			wxString deletedName = entry->GetDeletedName();
-			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveFlagDialog.Caption", entry->GetName()), KTrf("PackageCreator.RemoveFlagDialog.Message", deletedName), KxBTN_CANCEL, KxICON_WARNING);
-			dialog.AddButton(KxID_REMOVE, KTr("PackageCreator.RemoveFlagDialog.Remove"));
-			dialog.AddButton(KxID_RENAME, KTr("PackageCreator.RemoveFlagDialog.Rename"));
+			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.Conditions.RemoveFlagDialog.Caption", entry->GetName()), KTrf("PackageCreator.Conditions.RemoveFlagDialog.Message", deletedName), KxBTN_CANCEL, KxICON_WARNING);
+			dialog.AddButton(KxID_REMOVE, KTr("PackageCreator.Conditions.RemoveFlagDialog.Remove"));
+			dialog.AddButton(KxID_RENAME, KTr("PackageCreator.Conditions.RemoveFlagDialog.RemoveRename"));
 
 			switch (dialog.ShowModal())
 			{

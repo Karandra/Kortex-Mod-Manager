@@ -4,7 +4,7 @@
 
 namespace Kortex
 {
-	wxTextValidator NetworkModInfo::GetValidator()
+	wxTextValidator NetworkModInfo::CreateValidator()
 	{
 		wxTextValidator validator(wxFILTER_INCLUDE_CHAR_LIST);
 		validator.SetCharIncludes(wxS(":0123456789"));

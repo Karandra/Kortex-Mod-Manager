@@ -6,7 +6,7 @@
 
 More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/commits/master).
 
-### Version 2.0a10 - 03.03.2020
+### Version 2.0a10 - 04.03.2020
 - [Mod Manager] Fixed `ERROR(76): Attempted to access a path that is not on the disk.` in FNIS. The error was caused by VFS when there was a file copy/move operation but target directory tree doesn't exist in *non*-virtual mod directory (or overwrite).
 - [Package Manager] Fixed crash during FOMod loading.
 - [Package Manager] Fixed missing nodes in FOMod XML files when their value is empty to conform to the FOMod's XML scheme.

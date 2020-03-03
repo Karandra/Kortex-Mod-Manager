@@ -119,7 +119,7 @@ namespace Kortex::GameInstance
 			}
 			
 			wxString GetIconLocation() const override;
-			wxBitmap GetIcon() const override;
+			wxBitmap GetIcon(const wxSize& iconSize = wxDefaultSize) const override;
 
 			wxString GetInstanceTemplateDir() const override;
 			wxString GetInstanceDir() const override;

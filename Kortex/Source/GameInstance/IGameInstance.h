@@ -108,7 +108,7 @@ namespace Kortex
 			virtual int GetSortOrder() const = 0;
 			virtual bool IsSystemTemplate() const = 0;
 			virtual wxString GetIconLocation() const = 0;
-			virtual wxBitmap GetIcon() const = 0;
+			virtual wxBitmap GetIcon(const wxSize& iconSize = wxDefaultSize) const = 0;
 			bool IsActiveInstance() const;
 
 			virtual wxString GetInstanceTemplateDir() const = 0;

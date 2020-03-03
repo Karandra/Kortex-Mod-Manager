@@ -234,10 +234,20 @@ namespace Kortex::GameInstance
 	{
 		return GetDefaultIconLocation();
 	}
-	wxBitmap DefaultGameInstance::GetIcon() const
+	wxBitmap DefaultGameInstance::GetIcon(const wxSize& iconSize) const
 	{
 		wxBitmap bitmap = LoadIcon(GetIconLocation());
-		return bitmap.IsOk() ? bitmap : GetGenericIcon();
+		return [&](const wxBitmap& bitmap)
+		{
+			if (!iconSize.IsFullySpecified() || iconSize == bitmap.GetSize())
+			{
+				return bitmap;
+			}
+			else
+			{
+				return wxBitmap(bitmap.ConvertToImage().Rescale(iconSize.GetWidth(), iconSize.GetHeight()));
+			}
+		}(bitmap.IsOk() ? bitmap : GetGenericIcon());
 	}
 
 	wxString DefaultGameInstance::GetInstanceTemplateDir() const

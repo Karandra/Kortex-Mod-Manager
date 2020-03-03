@@ -671,6 +671,9 @@ Are you really sure you want to refresh the list?]]></String>
 		<String ID="DownloadManager.Menu.Abort">Abort</String>
 
 		<String ID="DownloadManager.Menu.SetSource">Change source</String>
+		<String ID="DownloadManager.Menu.SetSource.Message">Enter new network ID for this download</String>
+
+		<String ID="DownloadManager.Menu.SetTargetGame">Change target game</String>
 		<String ID="DownloadManager.Menu.QueryInfo">Query info</String>
 		<String ID="DownloadManager.Menu.ShowChangeLog">Show change log</String>
 		<String ID="DownloadManager.Menu.ResetDownloadLink">Reset download link</String>

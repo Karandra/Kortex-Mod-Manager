@@ -4,6 +4,7 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/GameInstance.hpp>
 #include <KxFramework/KxFileItem.h>
+#include <KxFramework/KxCallAtScopeExit.h>
 #include "Archive/Common.h"
 #include "Utility/Common.h"
 
@@ -287,9 +288,14 @@ namespace Kortex
 	{
 		return m_ModNetwork ? &m_ModNetwork->GetComponent<ModNetworkRepository>() : nullptr;
 	}
-	void DownloadItem::SetModRepository(ModNetworkRepository& modRepository)
+	void DownloadItem::SetModRepository(ModNetworkRepository& modRepository, std::optional<NetworkModInfo> networkModInfo)
 	{
 		m_ModNetwork = &modRepository.GetContainer();
+		if (networkModInfo)
+		{
+			m_FileInfo.ModID = networkModInfo->GetModID();
+			m_FileInfo.ID = networkModInfo->GetFileID();
+		}
 	}
 
 	bool DownloadItem::CanVisitSource() const
@@ -299,22 +305,30 @@ namespace Kortex
 	bool DownloadItem::CanQueryInfo() const
 	{
 		const ModNetworkRepository* repository = GetModRepository();
-		return repository && m_TargetGame && !IsRunning();
+		return repository && GetNetworkModInfo().HasModID() && m_TargetGame && !IsRunning();
 	}
 	bool DownloadItem::QueryInfo()
 	{
 		if (CanQueryInfo())
 		{
+			const KxFileItem fileItem(GetLocalPath());
+
+			// We shouldn't change file name during query
+			KxCallAtScopeExit atExit = [&]()
+			{
+				m_FileInfo.Name = fileItem.GetName();
+			};
+
 			ModNetworkRepository* repository = GetModRepository();
-			return repository->QueryDownload(KxFileItem(GetLocalPath()), *this, m_FileInfo);
+			return repository->QueryDownload(fileItem, *this, m_FileInfo);
 		}
 		return false;
 	}
 
 	void DownloadItem::LoadDefault(const KxFileItem& fileItem)
 	{
-		m_ModNetwork = INetworkManager::GetInstance()->GetDefaultModNetwork();
 		m_TargetGame = {};
+		m_ModNetwork = nullptr;
 		m_DownloadDate = fileItem.GetModificationTime();
 		m_FileInfo.Name = fileItem.GetName();
 

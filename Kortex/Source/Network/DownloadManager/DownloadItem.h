@@ -93,10 +93,6 @@ namespace Kortex
 			{
 				return !m_DownloadInfo.ShortName.IsEmpty() ? m_DownloadInfo.ShortName : m_DownloadInfo.Name;
 			}
-			NetworkModInfo GetNetworkModInfo() const
-			{
-				return NetworkModInfo(m_FileInfo.ModID, m_FileInfo.ID);
-			}
 
 			wxDateTime GetDownloadDate() const
 			{
@@ -143,6 +139,10 @@ namespace Kortex
 			const IGameMod* GetMod() const;
 			bool IsInstalled() const;
 
+			NetworkModInfo GetNetworkModInfo() const
+			{
+				return NetworkModInfo(m_FileInfo.ModID, m_FileInfo.ID);
+			}
 			IModNetwork* GetModNetwork() const
 			{
 				return m_ModNetwork;
@@ -152,7 +152,7 @@ namespace Kortex
 			{
 				return m_ModNetwork != nullptr;
 			}
-			void SetModRepository(ModNetworkRepository& modRepository);
+			void SetModRepository(ModNetworkRepository& modRepository, std::optional<NetworkModInfo> networkModInfo = {});
 			
 			bool IsHidden() const
 			{

@@ -678,6 +678,9 @@
 		<String ID="DownloadManager.Menu.Abort">Прервать</String>
 
 		<String ID="DownloadManager.Menu.SetSource">Сменить источник</String>
+		<String ID="DownloadManager.Menu.SetSource.Message">Введите новый ID источника для этой загрузки</String>
+
+		<String ID="DownloadManager.Menu.SetTargetGame">Сменить целевую игру</String>
 		<String ID="DownloadManager.Menu.QueryInfo">Запросить информацию</String>
 		<String ID="DownloadManager.Menu.ShowChangeLog">Показать список изменений</String>
 		<String ID="DownloadManager.Menu.ResetDownloadLink">Сбросить ссылку для загрузки</String>

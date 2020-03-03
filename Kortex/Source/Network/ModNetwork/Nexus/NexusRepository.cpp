@@ -160,11 +160,8 @@ namespace Kortex::NetworkManager
 		bool nameParsed = false;
 		if (!download.IsOK())
 		{
-			if (!ParseDownloadName(fileItem.GetName(), fileReply))
-			{
-				return false;
-			}
-			nameParsed = true;
+			nameParsed = ParseDownloadName(fileItem.GetName(), fileReply);
+			// Don't return here if the name wasn't parsed successfully. The download can still contain mod and/or file ID which we can use.
 		}
 
 		// Query new mod file info

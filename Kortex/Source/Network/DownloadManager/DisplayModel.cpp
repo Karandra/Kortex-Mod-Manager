@@ -131,13 +131,25 @@ namespace Kortex::DownloadManager
 			{
 				for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 				{
+					const ModNetworkRepository* modRepository = download->GetModRepository();
+
 					KxMenuItem* item = providerMenu->AddItem(repository->GetContainer().GetName(), wxEmptyString, wxITEM_CHECK);
-					item->Check(repository == download->GetModRepository());
-					item->Enable(!item->IsChecked());
-					item->Bind(KxEVT_MENU_SELECT, [download, repository](KxMenuEvent& event)
+					item->Check(repository == modRepository);
+					item->SetBitmap(ImageProvider::GetBitmap(repository->GetContainer().GetIcon()));
+					item->Bind(KxEVT_MENU_SELECT, [this, download, repository](KxMenuEvent& event)
 					{
-						download->SetModRepository(*repository);
-						download->Save();
+						NetworkModInfo networkModInfo = download->GetNetworkModInfo();
+
+						KxTextBoxDialog dialog(GetView(), KxID_NONE, KTr("DownloadManager.Menu.SetSource.Message"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL);
+						dialog.SetIcon(ImageProvider::GetIcon(repository->GetContainer().GetIcon()));
+						dialog.SetValue(networkModInfo.ToString());
+						dialog.GetTextBox()->SetValidator(NetworkModInfo::CreateValidator());
+						if (dialog.ShowModal() == KxID_OK)
+						{
+							networkModInfo.FromString(dialog.GetValue());
+							download->SetModRepository(*repository, std::move(networkModInfo));
+							download->Save();
+						}
 					});
 				}
 			}
@@ -146,11 +158,38 @@ namespace Kortex::DownloadManager
 			item->Enable(providerMenu->GetMenuItemCount() != 0);
 		}
 		{
+			KxMenu* targetGameMenu = new KxMenu();
+			if (download && !isRunning)
+			{
+				for (const auto& gameTemplate: IGameInstance::GetTemplates())
+				{
+					const GameID gameID = download->GetTargetGame();
+
+					KxMenuItem* item = targetGameMenu->AddItem(gameTemplate->GetGameName(), wxEmptyString, wxITEM_CHECK);
+					item->Check(gameID == gameTemplate->GetGameID());
+					item->Enable(!gameID || !item->IsChecked());
+					item->SetBitmap(gameTemplate->GetIcon(ImageProvider::GetImageList().GetSize()));
+					item->Bind(KxEVT_MENU_SELECT, [download, &gameTemplate = *gameTemplate](KxMenuEvent& event)
+					{
+						download->SetTargetGame(gameTemplate.GetGameID());
+						download->Save();
+					});
+				}
+			}
+
+			KxMenuItem* item = contextMenu.Add(targetGameMenu, KTr("DownloadManager.Menu.SetTargetGame"));
+			item->Enable(targetGameMenu->GetMenuItemCount() != 0);
+		}
+		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.QueryInfo"));
 			item->Enable(download && download->CanQueryInfo());
 			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
 			{
-				if (!download->QueryInfo())
+				if (download->QueryInfo())
+				{
+					download->Save();
+				}
+				else
 				{
 					wxString message = KTrf("DownloadManager.Notification.QueryDownloadInfoFailed", download->GetName());
 					INotificationCenter::NotifyUsing<IDownloadManager>(message, KxICON_WARNING);

@@ -110,6 +110,7 @@ namespace Kortex::Application
 			const int defaultRowHeight = Utility::BitmapSize().FromSystemSmallIcon().GetHeight() + m_InitProgressDialog->FromDIP(4);
 			wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", defaultRowHeight);
 			wxSystemOptions::SetOption("KxDataView2::DefaultRowHeight", defaultRowHeight);
+			wxSystemOptions::SetOption("KxMenu::AllowOwnerDraw", false);
 
 			// Init systems
 			Utility::Log::LogInfo("Begin initializing core systems");

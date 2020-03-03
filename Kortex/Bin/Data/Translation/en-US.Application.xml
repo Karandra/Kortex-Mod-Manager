@@ -653,6 +653,11 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.ConcurrentDownloads.Label">Concurrent downloads</String>
 		<String ID="DownloadManager.ConcurrentDownloads.Unlimited">Unlimited</String>
 
+		<String ID="DownloadManager.RefreshItems.Caption">Refresh download list</String>
+		<String ID="DownloadManager.RefreshItems.Message"><![CDATA[Refreshing downloads list will cause any running downloads to be paused. If the download source doesn't suport resuming you would have to restart the download.
+
+Are you really sure you want to refresh the list?]]></String>
+
 		<!-- Context menu -->
 		<String ID="DownloadManager.Menu.Install">Install</String>
 		<String ID="DownloadManager.Menu.Add">Add download</String>
@@ -680,7 +685,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.HideAll">Hide all downloads</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Hide all installed downloads</String>
 		<String ID="DownloadManager.Menu.UnhideAll">Unhide all downloads</String>
+
 		<String ID="DownloadManager.Menu.AlwaysShowHidden">Always show hidden downloads</String>
+		<String ID="DownloadManager.Menu.ShowArchivesOnly">Show archives only</String>
 
 		<String ID="DownloadManager.Menu.CopyLink">Copy link</String>
 

@@ -47,6 +47,7 @@ namespace Kortex
 		private:
 			int m_MaxConcurrentDownloads = -1;
 			bool m_ShowHiddenDownloads = true;
+			bool m_ShowArchivesOnly = false;
 
 		protected:
 			void OnInit() override;
@@ -78,10 +79,12 @@ namespace Kortex
 				return m_ShowHiddenDownloads;
 			}
 			void ShowHiddenDownloads(bool show = true);
-			void ToggleHiddenDownloads()
+
+			bool ShouldShowArchivesOnly() const
 			{
-				ShowHiddenDownloads(!m_ShowHiddenDownloads);
+				return m_ShowArchivesOnly;
 			}
+			void SetShowArchivesOnly(bool show = true);
 
 			wxString GetDownloadsLocation() const;
 			void SetDownloadsLocation(const wxString& location);

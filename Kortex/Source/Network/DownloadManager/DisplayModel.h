@@ -61,6 +61,7 @@ namespace Kortex::DownloadManager
 			DisplayModelNode* AddNode(DownloadItem& item);
 			bool RemoveNode(DownloadItem& item);
 
+			bool AskRefresh();
 			void RemoveAll(bool installedOnly = false);
 			void SetAllHidden(bool isHidden, bool installedOnly = false);
 			void Install(DownloadItem& item);

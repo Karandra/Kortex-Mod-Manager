@@ -23,22 +23,28 @@ namespace
 			}
 		}
 	}
-	void DoUpdateProgress(int64_t current, int64_t total)
+	void DoUpdateProgress(int64_t current, int64_t total, bool forceRefresh)
 	{
 		using namespace Kortex;
 
 		if (IMainWindow* mainWindow = IMainWindow::GetInstance())
 		{
-			if (wxThread::IsMain())
+			auto DoUpdate = [=]()
 			{
 				mainWindow->SetStatusProgress(current, total);
+				if (forceRefresh)
+				{
+					mainWindow->GetStatusBar().Refresh();
+				}
+			};
+
+			if (wxThread::IsMain())
+			{
+				DoUpdate();
 			}
 			else
 			{
-				BroadcastProcessor::Get().CallAfter([mainWindow, current, total]()
-				{
-					mainWindow->SetStatusProgress(current, total);
-				});
+				BroadcastProcessor::Get().CallAfter(DoUpdate);
 			}
 		}
 	}
@@ -64,8 +70,8 @@ namespace Kortex::UI
 	{
 		DoUpdateProgress(current);
 	}
-	void ProgressOverlay::UpdateProgress(int64_t current, int64_t total)
+	void ProgressOverlay::UpdateProgress(int64_t current, int64_t total, bool forceRefresh)
 	{
-		DoUpdateProgress(current, total);
+		DoUpdateProgress(current, total, forceRefresh);
 	}
 }

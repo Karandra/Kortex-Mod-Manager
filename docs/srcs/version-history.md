@@ -6,6 +6,16 @@
 
 More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/commits/master).
 
+### Version 2.0a10 - 03.03.2020
+- [Mod Manager] Fixed `ERROR(76): Attempted to access a path that is not on the disk.` in FNIS. The error was caused by VFS when there was a file copy/move operation but target directory tree doesn't exist in *non*-virtual mod directory (or overwrite).
+- [Package Manager] Fixed crash during FOMod loading.
+- [Package Manager] Fixed missing nodes in FOMod XML files when their value is empty to conform to the FOMod's XML scheme.
+- [Download Manager] Fixed query download info
+- [Download Manager] Fixed changing download source
+- [Download Manager] Added an option to change download target game
+- [Download Manager] Added an option to show only archives in the downloads list
+- [Download Manager] Added a warning before refreshing downloads list if there are any downloads running
+
 ### Version 2.0a9 - 13.02.2020
 - [General] Added experimental WebView based on [Sciter](https://sciter.com) to display mod descriptions.
 - [General] Fixed disabled mods workspace when it's not the initial workspace.

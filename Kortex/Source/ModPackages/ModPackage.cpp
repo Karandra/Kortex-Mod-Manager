@@ -14,9 +14,14 @@ namespace
 	std::vector<uint8_t> ReadStringBuffer(wxInputStream& stream)
 	{
 		std::vector<uint8_t> buffer;
-		buffer.resize(stream.GetLength());
+		buffer.resize(stream.GetLength(), 0);
 
-		if (!stream.ReadAll(buffer.data(), buffer.size()))
+		size_t lastRead = stream.Read(buffer.data(), buffer.size()).LastRead();
+		if (lastRead != 0)
+		{
+			buffer.resize(lastRead);
+		}
+		else
 		{
 			buffer.clear();
 		}
@@ -54,7 +59,7 @@ namespace Kortex
 			constexpr uint8_t BOM[] = {0xFF, 0xFE};
 
 			// Try to detect if this is UTF-16LE (using byte order mark)
-			if (stream.GetLength() >= 2)
+			if (stream.GetLength() >= std::size(BOM))
 			{
 				if (stream.GetC() == BOM[0] && stream.GetC() == BOM[1])
 				{
@@ -184,25 +189,24 @@ namespace Kortex
 	{
 		wxMemoryOutputStream infoOutStream;
 		wxMemoryOutputStream moduleConfigOutStream;
+
+		const KxArchive::FileIndex files[] = {infoIndex, moduleConfigIndex};
 		m_Archive.ExtractWith().OnGetStream([&](size_t fileIndex) -> KxDelegateOutputStream
 		{
-			if (fileIndex == infoIndex || fileIndex == moduleConfigIndex)
+			KxFileItem fileItem = m_Archive.GetItem(fileIndex);
+			if (fileItem && !fileItem.IsDirectory())
 			{
-				KxFileItem fileItem = m_Archive.GetItem(fileIndex);
-				if (fileItem && !fileItem.IsDirectory())
+				if (fileIndex == infoIndex)
 				{
-					if (fileIndex == infoIndex)
-					{
-						return infoOutStream;
-					}
-					else if (fileIndex == moduleConfigIndex)
-					{
-						return moduleConfigOutStream;
-					}
+					return infoOutStream;
+				}
+				else if (fileIndex == moduleConfigIndex)
+				{
+					return moduleConfigOutStream;
 				}
 			}
 			return nullptr;
-		}).Execute();
+		}).Execute(files);
 
 		wxMemoryInputStream infoStream(infoOutStream);
 		wxMemoryInputStream moduleConfigStream(moduleConfigOutStream);

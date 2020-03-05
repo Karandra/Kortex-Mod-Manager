@@ -92,10 +92,10 @@
 {
 	/* Shorthand */
 	--short-borders-init: 0 solid var(--color-borders);
-	--short-code-block-margins: 0.4rem 0.8rem 0.4rem 0.2rem;
-	--short-code-block-padding: 0.4rem 0.6rem 0.2rem;
+	--short-code-block-margins: 0.2rem 0.2rem 0.2rem 0.2rem;
+	--short-code-block-padding: 0.2rem 0.2rem 0.2rem;
 	--short-code-margins: 0 0.2rem;
-	--short-code-padding: 0.2rem 0.6rem 0;
+	--short-code-padding: 0.2rem 0.2rem 0;
 	--short-content-padding: 0 var(--size-spacing-standard);
 	--short-copyright-margins: 0 var(--size-spacing-standard);
 	--short-heading-anchor-margins: var(--size--root-10px) var(--size--root-10px) var(--size-heading-anchor-padding-bottom);

@@ -4,6 +4,7 @@
 :root
 {
 	/* Colors */
+	--color-background-code: rgba(23,26,29,0.66);
 	--color-background-main: rgba(23,26,29,0.800);
 	--color-background-page: rgba(23,26,29,1.000);
 	--color-background-page-ends-fallback: rgba(135,105,92,0.175);
@@ -11,14 +12,13 @@
 	--color-background-page-ends-radial-end: rgba(230,152,133,0.150);
 	--color-background-page-ends-radial-start: rgba(39,57,50,0.200);
 	--color-borders: rgba(255,255,255,0.15);
-	--color-borders-code: rgba(153,187,255,1.000);
+	--color-borders-code: rgba(153,187,255,0.15);
 	--color-heading-anchor-hover: rgba(109,173,237,1.000);
 	--color-quote-background: rgba(56,56,56,0.250);
 	--color-quote-border-left: rgba(125,25,25,1.000);
 	--color-text-shadow: rgba(49,113,167,1.000);
 	--color-white-base: rgba(202,202,202,1.000);
 	--color-white-hover: rgba(255,224,224,1.000);
-	--color-white-codebg: rgba(249,251,255,1.000);
 	--color-text-success: forestgreen;
 	--color-text-failure: red;
 }
@@ -92,8 +92,10 @@
 {
 	/* Shorthand */
 	--short-borders-init: 0 solid var(--color-borders);
-	--short-code-margins: 0.4rem 0.8rem 0.4rem 0.2rem;
-	--short-code-padding: 0.4rem 0.6rem;
+	--short-code-block-margins: 0.4rem 0.8rem 0.4rem 0.2rem;
+	--short-code-block-padding: 0.4rem 0.6rem 0.2rem;
+	--short-code-margins: 0 0.2rem;
+	--short-code-padding: 0.2rem 0.6rem 0;
 	--short-content-padding: 0 var(--size-spacing-standard);
 	--short-copyright-margins: 0 var(--size-spacing-standard);
 	--short-heading-anchor-margins: var(--size--root-10px) var(--size--root-10px) var(--size-heading-anchor-padding-bottom);

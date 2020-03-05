@@ -281,7 +281,6 @@ namespace Kortex
 					if (!download.Load(fileItem))
 					{
 						download.LoadDefault(fileItem);
-						download.Save();
 					}
 				}
 			}

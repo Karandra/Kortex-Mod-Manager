@@ -26,27 +26,56 @@ namespace Kortex::Utility::DateTime
 		return IsEarlierThanBy(Now(), date, span);
 	}
 
-	wxString FormatDate(const wxDateTime& dateTime)
+	wxString FormatDate(const wxDateTime& dateTime, FormatFlags formatFlags)
 	{
 		if (dateTime.IsValid())
 		{
-			return dateTime.Format(wxS("%d.%m.%Y"));
+			SYSTEMTIME localTime = {};
+			dateTime.GetAsMSWSysTime(&localTime);
+
+			wchar_t formattedDateTime[1024] = {};
+			const DWORD flags = DATE_AUTOLAYOUT|(formatFlags & FormatFlags::Long ? DATE_LONGDATE : DATE_SHORTDATE);
+			if (::GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, flags, &localTime, nullptr, formattedDateTime, std::size(formattedDateTime), nullptr) != 0)
+			{
+				return formattedDateTime;
+			}
 		}
 		return wxEmptyString;
 	}
-	wxString FormatTime(const wxDateTime& dateTime)
+	wxString FormatTime(const wxDateTime& dateTime, FormatFlags formatFlags)
 	{
 		if (dateTime.IsValid())
 		{
-			return dateTime.FormatISOTime();
+			DWORD flags = 0;
+			if (!(formatFlags & FormatFlags::Long))
+			{
+				flags |= TIME_NOSECONDS;
+			}
+			if (formatFlags & FormatFlags::Force24Hours)
+			{
+				flags |= TIME_FORCE24HOURFORMAT;
+			}
+			if (formatFlags & FormatFlags::NoTimeMarker)
+			{
+				flags |= TIME_NOTIMEMARKER;
+			}
+
+			SYSTEMTIME localTime = {};
+			dateTime.GetAsMSWSysTime(&localTime);
+
+			wchar_t formattedDateTime[1024] = {};
+			if (::GetTimeFormatEx(LOCALE_NAME_USER_DEFAULT, flags, &localTime, nullptr, formattedDateTime, std::size(formattedDateTime)) != 0)
+			{
+				return formattedDateTime;
+			}
 		}
 		return wxEmptyString;
 	}
-	wxString FormatDateTime(const wxDateTime& dateTime, wxChar sep)
+	wxString FormatDateTime(const wxDateTime& dateTime, FormatFlags formatFlags, const wxString& sep)
 	{
 		if (dateTime.IsValid())
 		{
-			return FormatDate(dateTime) + sep + FormatTime(dateTime);
+			return FormatDate(dateTime, formatFlags) + sep + FormatTime(dateTime, formatFlags);
 		}
 		return wxEmptyString;
 	}
@@ -54,7 +83,7 @@ namespace Kortex::Utility::DateTime
 	{
 		if (dateTime.IsValid())
 		{
-			return dateTime.Format(wxS("%d-%m-%Y %H-%M-%S"));
+			return dateTime.Format(wxS("%Y-%m-%d %H-%M-%S"));
 		}
 		return wxEmptyString;
 	}

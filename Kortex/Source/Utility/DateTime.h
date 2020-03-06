@@ -8,8 +8,8 @@ namespace Kortex::Utility::DateTime
 	{
 		None = 0,
 		Long = 1 << 0,
-		Force24Hours = 1 << 2,
-		NoTimeMarker = 1 << 3
+		Force24Hours = 1 << 1,
+		NoTimeMarker = 1 << 2
 	};
 }
 
@@ -32,7 +32,7 @@ namespace Kortex::Utility::DateTime
 	// Combined version of 'FormatDate' and 'FormatTime' with a separator (space by default). Returns empty string if 'dateTime' is invalid.
 	wxString FormatDateTime(const wxDateTime& dateTime, FormatFlags formatFlags = FormatFlags::None, const wxString& sep = wxS(' '));
 
-	// Formats date and time as 'DD-MM-YYYY HH-MM-SS'. Term 'FS' stands for 'File System' or 'File Safe'. Returns empty string if 'dateTime' is invalid.
+	// Formats date and time as 'YYYY-MM-DD HH-MM-SS'. Term 'FS' stands for 'File System' or 'File Safe'. Returns empty string if 'dateTime' is invalid.
 	wxString FormatDateTimeFS(const wxDateTime& dateTime);
 }
 

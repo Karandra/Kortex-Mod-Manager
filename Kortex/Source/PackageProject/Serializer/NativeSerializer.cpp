@@ -106,7 +106,8 @@ namespace Kortex::PackageProject
 			}
 		}
 	
-		template<class T> void WriteLabeledValueArray(const Utility::LabeledValue::Vector& array, KxXMLNode& arrayNode, const T& Func, bool isCDATA = false)
+		template<class T>
+		void WriteLabeledValueArray(const Utility::LabeledValue::Vector& array, KxXMLNode& arrayNode, const T& Func, bool isCDATA = false)
 		{
 			for (const Utility::LabeledValue& value: array)
 			{
@@ -322,7 +323,7 @@ namespace Kortex::PackageProject
 			{
 				auto& step = components.GetSteps().emplace_back(std::make_unique<ComponentStep>());
 				step->SetName(stepNode.GetAttribute("Name"));
-				ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("Conditions"));
+				ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("ConditionGroup"));
 				
 				for (KxXMLNode groupNode = stepNode.GetFirstChildElement("Groups").GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 				{

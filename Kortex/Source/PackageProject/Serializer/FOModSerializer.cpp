@@ -398,7 +398,7 @@ namespace Kortex::PackageProject
 	
 			// Load tags
 			ModTagStore& tagStore = info.GetTagStore();
-			for (KxXMLNode node = infoNode.GetFirstChildElement("Groups"); node.IsOK(); node = node.GetNextSiblingElement())
+			for (KxXMLNode node = infoNode.GetFirstChildElement("Groups").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
 				auto tag = IModTagManager::GetInstance()->NewTag();
 				tag->SetID(node.GetValue());

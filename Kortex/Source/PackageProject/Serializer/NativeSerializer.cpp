@@ -176,7 +176,7 @@ namespace Kortex::PackageProject
 			
 			// Tags
 			ModTagStore& tagStore = info.GetTagStore();
-			for (KxXMLNode node = infoNode.GetFirstChildElement("Tags"); node; node = node.GetNextSiblingElement())
+			for (KxXMLNode node = infoNode.GetFirstChildElement("Tags").GetFirstChildElement(); node; node = node.GetNextSiblingElement())
 			{
 				auto tag = IModTagManager::GetInstance()->NewTag();
 				tag->SetID(node.GetValue());

@@ -57,16 +57,16 @@ namespace Kortex::PackageProject
 	}
 	namespace
 	{
-		void WriteCondition(const Condition& condition, KxXMLNode& conditionNode, bool writeOperator)
+		void WriteCondition(const Condition& condition, KxXMLNode& conditionNode, bool confitionFlags)
 		{
-			if (writeOperator)
+			if (!confitionFlags)
 			{
 				conditionNode.SetAttribute("Operator", ModPackageProject::OperatorToString(condition.GetOperator()));
 			}
-	
+			
 			for (const FlagItem& flag: condition.GetFlags())
 			{
-				if (flag.HasValue())
+				if (flag.HasName())
 				{
 					KxXMLNode flagNode = conditionNode.NewElement("Flag");
 					flagNode.SetValue(flag.GetValue());
@@ -81,7 +81,7 @@ namespace Kortex::PackageProject
 			{
 				if (condition.HasFlags())
 				{
-					WriteCondition(condition, groupNode.NewElement("Condition"), true);
+					WriteCondition(condition, groupNode.NewElement("Condition"), false);
 				}
 			}
 		}
@@ -389,7 +389,7 @@ namespace Kortex::PackageProject
 						{
 							conditionFlagsNode = itemNode.GetFirstChildElement("AssignedFlags");
 						}
-						ReadCondition(item->GetConditionalFlags(), conditionFlagsNode);
+						ReadCondition(item->GetConditionFlags(), conditionFlagsNode);
 					}
 				}
 			}
@@ -714,9 +714,9 @@ namespace Kortex::PackageProject
 								SaveStringArray(item->GetRequirements(), itemNode.NewElement("Requirements"));
 							}
 
-							if (item->GetConditionalFlags().HasFlags())
+							if (item->GetConditionFlags().HasFlags())
 							{
-								WriteCondition(item->GetConditionalFlags(), itemNode.NewElement("ConditionFlags"), false);
+								WriteCondition(item->GetConditionFlags(), itemNode.NewElement("ConditionFlags"), true);
 							}
 						}
 					}

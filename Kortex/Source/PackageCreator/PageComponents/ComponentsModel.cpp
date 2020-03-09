@@ -6,7 +6,7 @@
 #include "PackageCreator/PageInterface/ImageListModel.h"
 #include "FileDataSelectorModel.h"
 #include "RequirementsSelectorModel.h"
-#include "AssignedConditionalsModel.h"
+#include "ConditionFlagsModel.h"
 #include "ConditionGroupModel.h"
 #include "UI/TextEditDialog.h"
 #include "UI/ImageViewerDialog.h"
@@ -634,7 +634,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					}
 					case ColumnID::Value:
 					{
-						wxString flags = PageComponents::ConditionToString(entry->GetConditionalFlags(), false);
+						wxString flags = PageComponents::ConditionToString(entry->GetConditionFlags(), false);
 						if (flags.IsEmpty())
 						{
 							flags = Utility::MakeNoneLabel();
@@ -782,8 +782,8 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 					{
 						if (entry)
 						{
-							AssignedConditionalsDialog dialog(GetView(), GetItemLabel(), m_Controller);
-							dialog.SetDataVector(entry->GetConditionalFlags());
+							ConditionFlagsDialog dialog(GetView(), GetItemLabel(), m_Controller);
+							dialog.SetDataVector(entry->GetConditionFlags());
 							dialog.ShowModal();
 							NotifyChangedItem(item);
 						}
@@ -1441,13 +1441,13 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		PackageProject::ComponentItem::Vector& entries = node->GetGroup()->GetItems();
 		PackageProject::ComponentItem tempEntry;
 	
-		AssignedConditionalsDialog dialog(GetView(), name, m_Controller);
-		dialog.SetDataVector(tempEntry.GetConditionalFlags());
+		ConditionFlagsDialog dialog(GetView(), name, m_Controller);
+		dialog.SetDataVector(tempEntry.GetConditionFlags());
 		if (dialog.ShowModal() == KxID_OK)
 		{
 			for (auto& entry: entries)
 			{
-				entry->GetConditionalFlags() = tempEntry.GetConditionalFlags();
+				entry->GetConditionFlags() = tempEntry.GetConditionFlags();
 			}
 			GetView()->Refresh();
 		}

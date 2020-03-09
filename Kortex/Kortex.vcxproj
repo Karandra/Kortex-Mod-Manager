@@ -271,7 +271,7 @@
     <ClCompile Include="Source\Network\NetworkModUpdateInfo.cpp" />
     <ClCompile Include="Source\Network\NetworkWxFSHandler.cpp" />
     <ClCompile Include="Source\PackageCreator\IDTracker.cpp" />
-    <ClCompile Include="Source\PackageCreator\PageComponents\AssignedConditionalsModel.cpp" />
+    <ClCompile Include="Source\PackageCreator\PageComponents\ConditionFlagsModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\ComponentsModel.cpp" />
     <ClCompile Include="Source\PackageCreator\PageComponents\ComponentsModelNode.cpp" />
     <ClCompile Include="Source\PackageCreator\PageInfo\SitesModel.cpp" />
@@ -647,7 +647,7 @@
     <ClInclude Include="Source\Network\NetworkModUpdateInfo.h" />
     <ClInclude Include="Source\Network\NetworkWxFSHandler.h" />
     <ClInclude Include="Source\PackageCreator\IDTracker.h" />
-    <ClInclude Include="Source\PackageCreator\PageComponents\AssignedConditionalsModel.h" />
+    <ClInclude Include="Source\PackageCreator\PageComponents\ConditionFlagsModel.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModel.h" />
     <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModelNode.h" />
     <ClInclude Include="Source\PackageCreator\PageInfo\SitesModel.h" />

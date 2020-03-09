@@ -9,7 +9,7 @@ class KxComboBox;
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
-	class AssignedConditionalsModel: public VectorModel<PackageProject::FlagItem::Vector>, public IDTracker
+	class ConditionFlagsModel: public VectorModel<PackageProject::FlagItem::Vector>, public IDTracker
 	{
 		protected:
 			PackageProject::Condition* m_Condition = nullptr;
@@ -52,7 +52,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 	
 		public:
-			AssignedConditionalsModel(WorkspaceDocument* controller)
+			ConditionFlagsModel(WorkspaceDocument* controller)
 			{
 				m_Controller = controller;
 			}
@@ -82,7 +82,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
-	class AssignedConditionalsDialog: public KxStdDialog, public AssignedConditionalsModel
+	class ConditionFlagsDialog: public KxStdDialog, public ConditionFlagsModel
 	{
 		protected:
 			wxWindow* m_ViewPane = nullptr;
@@ -98,7 +98,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			}
 	
 		public:
-			AssignedConditionalsDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller);
-			~AssignedConditionalsDialog();
+			ConditionFlagsDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller);
+			~ConditionFlagsDialog();
 	};
 }

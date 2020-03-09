@@ -214,7 +214,7 @@ namespace Kortex::PackageProject
 			{
 				for (const auto& entry: group->GetItems())
 				{
-					for (const FlagItem& flagEntry: entry->GetConditionalFlags().GetFlags())
+					for (const FlagItem& flagEntry: entry->GetConditionFlags().GetFlags())
 					{
 						outList.push_back(index == FlagAttribute::Name ? flagEntry.GetName() : flagEntry.GetValue());
 					}

@@ -300,7 +300,7 @@ namespace Kortex::InstallWizard
 	{
 		for (PackageProject::ComponentItem* entry: checkedEntries)
 		{
-			for (const PackageProject::FlagItem& flagEntry: entry->GetConditionalFlags().GetFlags())
+			for (const PackageProject::FlagItem& flagEntry: entry->GetConditionFlags().GetFlags())
 			{
 				m_FlagsStorage.insert_or_assign(flagEntry.GetName(), flagEntry.GetValue());
 			}

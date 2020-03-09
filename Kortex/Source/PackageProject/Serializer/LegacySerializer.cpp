@@ -950,7 +950,7 @@ namespace Kortex::PackageProject
 						}
 	
 						/* Assigned flags */
-						ReadFlagsArray(entry->GetConditionalFlags(), entryNode.GetFirstChildElement("SetFlags"));
+						ReadFlagsArray(entry->GetConditionFlags(), entryNode.GetFirstChildElement("SetFlags"));
 					}
 	
 					return group;

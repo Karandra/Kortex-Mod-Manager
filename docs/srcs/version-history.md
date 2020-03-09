@@ -6,6 +6,15 @@
 
 More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/commits/master).
 
+### Version 2.0a11 - 09.03.2020
+- [General] Using user-specific settings to format date and time instead of hardcoded fixed format.
+- [General] Fixed initial config dialog which allows to choose instances folder. Default folder location was always used unless another path was specified in the settings file.
+- [Plugin Manager] Fixed standalone LOOT sorting.
+- [Package Manager] Fixed reading condition group block for native package serializer.
+- [Package Manager] Fixed reading of tags array from the project file.
+- [Package Manager] Fixed mod name and ID pair logic in project config and package creator.
+- [Download Manager] Disabled saving of default download meta-info if it didn't contain it on load.
+
 ### Version 2.0a10 - 04.03.2020
 - [Mod Manager] Fixed `ERROR(76): Attempted to access a path that is not on the disk.` in FNIS. The error was caused by VFS when there was a file copy/move operation but target directory tree doesn't exist in *non*-virtual mod directory (or overwrite).
 - [Package Manager] Fixed crash during FOMod loading.

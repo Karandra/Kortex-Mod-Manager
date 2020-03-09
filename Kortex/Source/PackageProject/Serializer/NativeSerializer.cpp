@@ -322,12 +322,12 @@ namespace Kortex::PackageProject
 				auto& step = components.GetSteps().emplace_back(std::make_unique<ComponentStep>());
 				step->SetName(stepNode.GetAttribute("Name"));
 
-				KxXMLNode conditionGroupNode = stepNode.GetFirstChildElement("ConditionGroup");
-				if (!conditionGroupNode)
+				KxXMLNode stepConditionGroupNode = stepNode.GetFirstChildElement("ConditionGroup");
+				if (!stepConditionGroupNode)
 				{
-					conditionGroupNode = stepNode.GetFirstChildElement("Conditions");
+					stepConditionGroupNode = stepNode.GetFirstChildElement("Conditions");
 				}
-				ReadConditionGroup(step->GetConditionGroup(), conditionGroupNode);
+				ReadConditionGroup(step->GetConditionGroup(), stepConditionGroupNode);
 				
 				for (KxXMLNode groupNode = stepNode.GetFirstChildElement("Groups").GetFirstChildElement(); groupNode.IsOK(); groupNode = groupNode.GetNextSiblingElement())
 				{
@@ -367,12 +367,12 @@ namespace Kortex::PackageProject
 						}
 						else
 						{
-							KxXMLNode conditionGroupNode = typeDescriptorNode.GetFirstChildElement("ConditionGroup");
-							if (!conditionGroupNode)
+							KxXMLNode itemConditionGroupNode = typeDescriptorNode.GetFirstChildElement("ConditionGroup");
+							if (!itemConditionGroupNode)
 							{
-								conditionGroupNode = typeDescriptorNode.GetFirstChildElement("Conditions");
+								itemConditionGroupNode = typeDescriptorNode.GetFirstChildElement("Conditions");
 							}
-							ReadConditionGroup(item->GetTDConditionGroup(), conditionGroupNode);
+							ReadConditionGroup(item->GetTDConditionGroup(), itemConditionGroupNode);
 						}
 						
 						// If condition list is empty and type descriptor values are equal, clear 'ConditionalValue'

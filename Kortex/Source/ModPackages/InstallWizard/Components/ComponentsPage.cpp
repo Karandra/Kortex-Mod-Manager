@@ -34,10 +34,10 @@ namespace Kortex::InstallWizard
 	}
 	void ComponentsPage::OnSaveUIOptions(Application::ActiveInstanceOption& option) const
 	{
-		option.QueryOrCreateElement(OName::Splitter).SaveSplitterLayout(m_SplitterV);
-		option.QueryOrCreateElement(OName::Splitter).SaveSplitterLayout(m_SplitterHRight);
-		option.QueryOrCreateElement(OName::ComponentsView).SaveDataViewLayout(m_ComponentsModel->GetView());
-		option.QueryOrCreateElement(OName::RequirementsView).SaveDataViewLayout(m_RequirementsModel->GetView());
+		option.ConstructElement(OName::Splitter).SaveSplitterLayout(m_SplitterV);
+		option.ConstructElement(OName::Splitter).SaveSplitterLayout(m_SplitterHRight);
+		option.ConstructElement(OName::ComponentsView).SaveDataViewLayout(m_ComponentsModel->GetView());
+		option.ConstructElement(OName::RequirementsView).SaveDataViewLayout(m_RequirementsModel->GetView());
 	}
 	void ComponentsPage::OnPackageLoaded()
 	{

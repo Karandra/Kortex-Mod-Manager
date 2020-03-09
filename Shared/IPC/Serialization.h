@@ -65,7 +65,7 @@ namespace Kortex::IPC
 			Serializer(const wxString& serializedData)
 				:m_XML(serializedData)
 			{
-				m_RootNode = m_XML.QueryOrCreateElement(m_RootName);
+				m_RootNode = m_XML.ConstructElement(m_RootName);
 			}
 
 		public:

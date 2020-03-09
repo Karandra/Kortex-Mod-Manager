@@ -8,10 +8,12 @@
 #include "UI/ProgressOverlay.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFile.h>
-#include <KxFramework/KxDrive.h>
+#include <Kx/FileSystem/LegacyDrive.h>
 #include <KxFramework/KxRegistry.h>
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxUtility.h>
+
+using namespace KxFileSystem;
 
 namespace
 {
@@ -127,7 +129,7 @@ namespace Kortex
 		}
 		
 		// Check volume capabilities
-		KxDrive drive(directoryPath);
+		LegacyDrive drive = LegacyDrive::FromChar(directoryPath);
 
 		// Add one megabyte because it's probably impossible to safely save a file
 		// with exactly the same size as the free space left on the disk.

@@ -11,9 +11,9 @@ namespace Kortex
 	{
 		return m_ConfigNode.GetValue(defaultValue);
 	}
-	bool AppOption::DoSetValue(const wxString& value, AsCDATA asCDATA)
+	bool AppOption::DoSetValue(const wxString& value, WriteEmpty writeEmpty, AsCDATA asCDATA)
 	{
-		const bool res = m_ConfigNode.SetValue(value, asCDATA);
+		const bool res = m_ConfigNode.SetValue(value, WriteEmpty::Never, asCDATA);
 		NotifyChange();
 		return res;
 	}
@@ -22,9 +22,9 @@ namespace Kortex
 	{
 		return m_ConfigNode.GetAttribute(name, defaultValue);
 	}
-	bool AppOption::DoSetAttribute(const wxString& name, const wxString& value)
+	bool AppOption::DoSetAttribute(const wxString& name, const wxString& value, WriteEmpty writeEmpty)
 	{
-		const bool res = m_ConfigNode.SetAttribute(name, value);
+		const bool res = m_ConfigNode.SetAttribute(name, value, WriteEmpty::Never);
 		NotifyChange();
 		return res;
 	}
@@ -76,10 +76,9 @@ namespace Kortex
 		}
 		return {};
 	}
-	AppOption AppOption::QueryOrCreateElement(const wxString& XPath)
+	AppOption AppOption::ConstructElement(const wxString& XPath)
 	{
-		KxXMLNode node = m_ConfigNode.QueryOrCreateElement(XPath);
-		if (node.IsOK())
+		if (KxXMLNode node = m_ConfigNode.ConstructElement(XPath))
 		{
 			return AppOption(*this, node);
 		}

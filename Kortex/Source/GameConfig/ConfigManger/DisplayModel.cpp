@@ -196,11 +196,11 @@ namespace Kortex::GameConfig
 					// Add next part
 					if (categoryPath.IsEmpty())
 					{
-						categoryPath = Utility::String::FromWxStringView(category);
+						categoryPath = Utility::String::FromStringView(category);
 					}
 					else
 					{
-						categoryPath = Utility::String::ConcatWithSeparator(wxS('/'), categoryPath, Utility::String::FromWxStringView(category));
+						categoryPath = Utility::String::ConcatWithSeparator(wxS('/'), categoryPath, Utility::String::FromStringView(category));
 					}
 
 					// See if that branch already exist

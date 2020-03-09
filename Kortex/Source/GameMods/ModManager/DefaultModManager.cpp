@@ -479,7 +479,7 @@ namespace Kortex::ModManager
 		{
 			node.SetAttribute("align", "center");
 
-			KxXMLNode checkBoxNode = node.NewElement("input", KxXML_INSERT_AS_FIRST_CHILD);
+			KxXMLNode checkBoxNode = node.NewElement("input", KxXMLInsertNode::AsFirstChild);
 			checkBoxNode.SetAttribute("type", "checkbox");
 			checkBoxNode.SetAttribute("readonly", "true");
 			checkBoxNode.SetAttribute("disabled", "true");
@@ -545,7 +545,7 @@ namespace Kortex::ModManager
 		}
 
 		KxFileStream stream(outputFilePath, KxFileStream::Access::Write, KxFileStream::Disposition::CreateAlways);
-		stream.WriteStringUTF8(xml.GetXML(KxXML_PRINT_HTML5));
+		stream.WriteStringUTF8(xml.GetXML(KxXMLPrintMode::HTML5));
 	}
 
 	void DefaultModManager::InstallEmptyMod(const wxString& name)

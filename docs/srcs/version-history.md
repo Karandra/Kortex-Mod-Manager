@@ -6,7 +6,7 @@
 
 More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/commits/master).
 
-### Version 2.0a11 - 09.03.2020
+### Version 2.0a11 - 10.03.2020
 - [General] Using user-specific settings to format date and time instead of hardcoded fixed format.
 - [General] Fixed initial config dialog which allows to choose instances folder. Default folder location was always used unless another path was specified in the settings file.
 - [Plugin Manager] Fixed standalone LOOT sorting.

@@ -404,7 +404,14 @@ namespace Kortex::PackageProject
 				for (KxXMLNode stepNode = componentsNode.GetFirstChildElement(rootNodeName).GetFirstChildElement(); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement())
 				{
 					auto& step = components.GetConditionalSteps().emplace_back(std::make_unique<ConditionalComponentStep>());
-					ReadConditionGroup(step->GetConditionGroup(), stepNode.GetFirstChildElement("Conditions"));
+
+					KxXMLNode stepConditionGroupNode = stepNode.GetFirstChildElement("ConditionGroup");
+					if (!stepConditionGroupNode)
+					{
+						stepConditionGroupNode = stepNode.GetFirstChildElement("Conditions");
+					}
+					ReadConditionGroup(step->GetConditionGroup(), stepConditionGroupNode);
+
 					LoadStringArray(step->GetItems(), stepNode.GetFirstChildElement(nodeName));
 				}
 			};

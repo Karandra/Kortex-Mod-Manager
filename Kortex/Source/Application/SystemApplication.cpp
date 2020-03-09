@@ -80,7 +80,7 @@ namespace Kortex
 		const constexpr wxChar ID[] = wxS("KortexModManager");
 		const constexpr wxChar Name[] = wxS("Kortex Mod Manager");
 		const constexpr wxChar ShortName[] = wxS("Kortex");
-		const constexpr wxChar Version[] = wxS("2.0a8");
+		const constexpr wxChar Version[] = wxS("2.0a11");
 		const constexpr wxChar Developer[] = wxS("Kerber");
 		const constexpr wxChar GUID[] = wxS("B5E8047C-9239-45C4-86F6-6C83A842063E");
 

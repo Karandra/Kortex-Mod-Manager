@@ -13,7 +13,9 @@ namespace Kortex::IPC
 		protected:
 			KxSharedMemoryBuffer DoSendMessage(const Message& message, const void* userData = nullptr, size_t dataSize = 0);
 			KxSharedMemoryBuffer DoSendStringMessage(const Message& message, const wxString& value);
-			template<class T> KxSharedMemoryBuffer DoSendValueMessage(const Message& message, const T& value)
+			
+			template<class T>
+			KxSharedMemoryBuffer DoSendValueMessage(const Message& message, const T& value)
 			{
 				if constexpr(std::is_same_v<T, wxString>)
 				{
@@ -47,7 +49,9 @@ namespace Kortex::IPC
 
 			KxSharedMemoryBuffer SendExit();
 			KxSharedMemoryBuffer Send(const Message& message, const void* userData = nullptr, size_t dataSize = 0);
-			template<class... Args> KxSharedMemoryBuffer Send(const Message& message, Args&&... arg)
+			
+			template<class... Args>
+			KxSharedMemoryBuffer Send(const Message& message, Args&&... arg)
 			{
 				constexpr size_t count = sizeof...(Args);
 				if constexpr(count == 0)
@@ -63,7 +67,9 @@ namespace Kortex::IPC
 					return DoSendStringMessage(message, IPC::Serializer::Serialize(std::forward<Args>(arg)...));
 				}
 			}
-			template<class T> KxSharedMemoryBuffer Send(const Message& message, const T& value)
+			
+			template<class T>
+			KxSharedMemoryBuffer Send(const Message& message, const T& value)
 			{
 				return DoSendValueMessage(message, value);
 			}

@@ -6,7 +6,7 @@
 
 namespace Kortex::IPC
 {
-	class Message
+	class Message final
 	{
 		private:
 			using Protection = KxSharedMemoryNS::Protection;
@@ -82,20 +82,26 @@ namespace Kortex::IPC
 				return sharedBuffer;
 			}
 
-			template<class T> T GetPayload() const
+			template<class T>
+			T GetPayload() const
 			{
 				return GetSharedBuffer().GetAs<T>();
 			}
-			template<class T> void SetPayload(const T& payload) const
+			
+			template<class T>
+			void SetPayload(const T& payload) const
 			{
 				GetSharedBuffer(sizeof(T)).WriteData(payload);
 			}
-			template<> void SetPayload(const wxString& payload) const
+			
+			template<>
+			void SetPayload(const wxString& payload) const
 			{
 				GetSharedBuffer(payload.length() * sizeof(wxChar) + sizeof(wxChar)).WriteData(payload);
 			}
 
-			template<class... Args> std::tuple<Args...> DeserializePayload() const
+			template<class... Args>
+			std::tuple<Args...> DeserializePayload() const
 			{
 				if constexpr((sizeof...(Args)) <= 1)
 				{
@@ -106,7 +112,9 @@ namespace Kortex::IPC
 					return IPC::Serializer::Deserialize<Args...>(GetPayload<wxString>());
 				}
 			}
-			template<class... Args> void SerializePayload(Args&&... arg) const
+			
+			template<class... Args>
+			void SerializePayload(Args&&... arg) const
 			{
 				if constexpr((sizeof...(Args)) <= 1)
 				{

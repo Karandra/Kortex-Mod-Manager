@@ -76,10 +76,6 @@ namespace Kortex::IPC
 		return m_ProcessHandle != nullptr || m_IsProcessIdle;
 	}
 
-	void FSController::Run()
-	{
-		m_Process.Run(KxPROCESS_RUN_SYNC);
-	}
 	void FSController::SetProcessingWindow(const ProcessingWindow& processingWindow)
 	{
 		const size_t handle = reinterpret_cast<size_t>(processingWindow.GetHandle());
@@ -115,5 +111,9 @@ namespace Kortex::IPC
 			return true;
 		}
 		return false;
+	}
+	void FSController::Run()
+	{
+		m_Process.Run(KxPROCESS_RUN_SYNC);
 	}
 }

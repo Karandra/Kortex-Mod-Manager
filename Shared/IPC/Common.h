@@ -55,7 +55,6 @@ namespace Kortex::IPC
 		GetNativeLibraryURL,
 		GetNativeLibraryVersion,
 	};
-
 	enum class FileSystemID
 	{
 		Mirror,

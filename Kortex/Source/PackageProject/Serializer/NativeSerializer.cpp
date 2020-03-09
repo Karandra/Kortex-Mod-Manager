@@ -162,6 +162,11 @@ namespace Kortex::PackageProject
 			info.SetAuthor(infoNode.GetFirstChildElement("Author").GetValue());
 			info.SetTranslator(infoNode.GetFirstChildElement("Translator").GetValue());
 			info.SetDescription(infoNode.GetFirstChildElement("Description").GetValue());
+
+			if (info.GetName() == m_ProjectLoad->GetModID())
+			{
+				m_ProjectLoad->SetModID(wxEmptyString);
+			}
 			
 			// Custom info
 			LoadLabeledValueArray(info.GetCustomFields(), infoNode.GetFirstChildElement("Custom"));
@@ -411,8 +416,13 @@ namespace Kortex::PackageProject
 	{
 		KxXMLNode baseNode = m_XML.NewElement("Package");
 		baseNode.SetAttribute("FormatVersion", ModPackagesModule::GetInstance()->GetModuleInfo().GetVersion());
-		baseNode.SetAttribute("ID", m_ProjectSave->GetModID(), WriteEmpty::Never);
-	
+
+		if (m_ProjectSave->GetModID() != m_ProjectSave->GetInfo().GetName())
+		{
+			baseNode.SetAttribute("ID", m_ProjectSave->GetModID(), WriteEmpty::Never);
+		}
+		
+		// Install engine version
 		KxXMLNode targetProfileNode = baseNode.NewElement("TargetProfile");
 		targetProfileNode.SetAttribute("ID", IGameInstance::GetActive()->GetGameID());
 	

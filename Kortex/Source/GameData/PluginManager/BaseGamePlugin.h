@@ -9,7 +9,7 @@ namespace Kortex::PluginManager
 	{
 		private:
 			KxFileItem m_FileItem;
-			mutable const StdContentEntry* m_StdContent = nullptr;
+			mutable const StdContentItem* m_StdContent = nullptr;
 			bool m_IsActive = false;
 
 		protected:
@@ -50,6 +50,6 @@ namespace Kortex::PluginManager
 				m_IsActive = isActive;
 			}
 			
-			const StdContentEntry* GetStdContentEntry() const override;
+			const StdContentItem* GetStdContentEntry() const override;
 	};
 }

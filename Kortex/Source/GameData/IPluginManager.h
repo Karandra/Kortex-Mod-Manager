@@ -110,7 +110,7 @@ namespace Kortex
 			bool IsPluginActive(const wxString& pluginName) const;
 			void SetAllPluginsActive(bool isActive);
 
-			virtual bool CheckSortingTool(const PluginManager::SortingToolEntry& entry) = 0;
-			virtual void RunSortingTool(const PluginManager::SortingToolEntry& entry) = 0;
+			virtual bool CheckSortingTool(const PluginManager::SortingToolItem& toolItem) = 0;
+			virtual void RunSortingTool(const PluginManager::SortingToolItem& toolItem) = 0;
 	};
 }

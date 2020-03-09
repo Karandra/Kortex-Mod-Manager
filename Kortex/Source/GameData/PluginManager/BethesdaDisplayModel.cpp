@@ -107,7 +107,7 @@ namespace Kortex::PluginManager
 						attributes.SetUnderlined(true);
 					}
 
-					const StdContentEntry* standardContentEntry = plugin.GetStdContentEntry();
+					const StdContentItem* standardContentEntry = plugin.GetStdContentEntry();
 					if (modEntry->QueryInterface<ModManager::FixedGameMod>() && !standardContentEntry)
 					{
 						attributes.SetItalic(true);
@@ -152,7 +152,7 @@ namespace Kortex::PluginManager
 
 	wxString BethesdaDisplayModel::GetPartOfName(const IGamePlugin& plugin) const
 	{
-		if (const StdContentEntry* standardContentEntry = plugin.GetStdContentEntry())
+		if (const StdContentItem* standardContentEntry = plugin.GetStdContentEntry())
 		{
 			return standardContentEntry->GetName();
 		}

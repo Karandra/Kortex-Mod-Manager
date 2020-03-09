@@ -367,7 +367,6 @@ namespace Kortex::PluginManager
 	void BethesdaPluginManager::LoadNativeOrder()
 	{
 		LoadNativeOrderBG();
-		Save();
 	}
 }
 

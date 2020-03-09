@@ -41,7 +41,7 @@ namespace Kortex::PluginManager
 			KxStringVector GetPluginsList(bool activeOnly = false) const override;
 			IGamePlugin* FindPluginByName(const wxString& name) const override;
 
-			bool CheckSortingTool(const PluginManager::SortingToolEntry& entry) override;
-			void RunSortingTool(const PluginManager::SortingToolEntry& entry) override;
+			bool CheckSortingTool(const PluginManager::SortingToolItem& toolItem) override;
+			void RunSortingTool(const PluginManager::SortingToolItem& toolItem) override;
 	};
 }

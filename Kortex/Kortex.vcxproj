@@ -885,7 +885,7 @@
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACUIAccess>false</UACUIAccess>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
@@ -928,7 +928,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACUIAccess>false</UACUIAccess>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
@@ -974,7 +974,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <SetChecksum>true</SetChecksum>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
       <Profile>true</Profile>
@@ -1028,7 +1028,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <SetChecksum>true</SetChecksum>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
       <Profile>true</Profile>

@@ -970,7 +970,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Libraries\LibLoot\x64;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Libraries\LibLoot\x86;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>

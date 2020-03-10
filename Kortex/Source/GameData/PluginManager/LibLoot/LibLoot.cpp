@@ -10,12 +10,7 @@
 #include "loot/api.h"
 #include "loot/enum/game_type.h"
 #include "loot/loot_version.h"
-
-#if _WIN64
-	#pragma comment(lib, "LibLoot/x64/loot.lib")
-#else
-	#pragma comment(lib, "LibLoot/x86/loot.lib")
-#endif
+#pragma comment(lib, "loot.lib")
 
 namespace
 {

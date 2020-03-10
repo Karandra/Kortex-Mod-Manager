@@ -960,7 +960,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LibLoot;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\7z\CPP;$(SolutionDir)..\7zip-cpp\7z\C;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)Libraries\LibLoot\Include;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\7z\CPP;$(SolutionDir)..\7zip-cpp\7z\C;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
@@ -970,7 +970,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Libraries\LibLoot\x64;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\Win32;$(SolutionDir)..\wxWidgets\lib\vc_lib;$(BOOST_ROOT)\lib32-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -1015,7 +1015,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LibLoot;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\7z\CPP;$(SolutionDir)..\7zip-cpp\7z\C;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)Libraries\LibLoot\Include;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\7z\CPP;$(SolutionDir)..\7zip-cpp\7z\C;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
@@ -1024,7 +1024,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)Lib;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Libraries\LibLoot\x64;$(SolutionDir)..\KxFramework;$(SolutionDir)..\7zip-cpp\Lib\x64;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib;$(BOOST_ROOT)\lib64-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>

@@ -136,7 +136,7 @@
 			</SortingTools>
 
 			<LibLoot>
-				<Branch>v0.14</Branch>
+				<Branch>v0.15</Branch>
 				<Repository>https://github.com/loot/falloutnv.git</Repository>
 				<FolderName>FalloutNV</FolderName>
 				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>

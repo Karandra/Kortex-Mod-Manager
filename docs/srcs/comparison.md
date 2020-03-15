@@ -265,7 +265,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<div class="cmp-yes" tooltip="Not supported for compressed save game headers like in Skyrim SE"/>
+				<div class="cmp-yes" tooltip="Compressed save game headers like in Skyrim SE only supported in WIP version"/>
 			</td>
 		</tr>
 		<tr>
@@ -389,7 +389,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				Visualization of dirty plugins via underlining on the plugin list, automatic retrieval of LOOT's Bash Tag suggestions.
 			</td>
 		</tr>
 		<tr>
@@ -829,7 +829,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Import from nexus, and create custom categories.
 			</td>
 			<td id="WB">
-				<a href="https://wrye-bash.github.io/docs/Wrye Bash Advanced Readme.html#bainAddMarker">Custom marker system</a>.
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bainAddMarker">Customizable marker system</a> for archives,
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods-commands">Customizable groups system</a> for plugins.
 			</td>
 		</tr>
 		<tr>
@@ -860,7 +861,16 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Missing masters.
 			</td>
 			<td id="WB">
-				Missing masters, out of order masters, missing strings files, Form 43 plugins for Skyrim SE, ESL verification, File using same date for games that utilize a time date stamp, ghosted plugin, dirty edits, improperly configured plugins marked with Deactivate or NoMerge.
+				Missing masters,
+				Out of order masters,
+				Missing strings files,
+				Form 43 plugins for Skyrim SE,
+				ESL verification,
+				File using same date for games that utilize a time date stamp,
+				Ghosted plugin verification,
+				Dirty edit scanning,
+				Deactivate and NoMerge verification,
+				<span tooltip="WIP version only">Mismatched BSA version detection</span>.
 			</td>
 		</tr>
 		<tr>
@@ -997,7 +1007,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>List file dependencies</li>
 					<li>Jump to assigned Installer from Mods List</li>
 					<li>Check ESL Qualifications for ESL enabled games</li>
-					<li>Export Editor IDs to .csv File</li>
+					<li>Export/import various subrecords to/from .csv files</li>
 					<li>List LOOT Cleaning Information</li>
 					<li>Copy .esp to .esm file (Creates file in Data Folder)</li>
 					<li>Add Remove ESL or ESM flags</li>
@@ -1087,8 +1097,15 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="WB">
 				<ul>
 					<li>English</li>
+					<li>Chinese (Simplified)</li>
+					<li>Chinese (Traditional)</li>
+					<li>German</li>
+					<li>Italian</li>
+					<li>Japanese</li>
+					<li>Portuguese</li>
+					<li>Russian</li>
+					<li>Non-English languages are <b>very</b> outdated, and further localization efforts are currently postponed until Wrye Bash has been ported to Python 3.</li>
 					<li><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#international">Localization can be easily exported</a> and edited with Notepad++ or Poedit.</li>
-					<li>Language changes are very outdated.</li>
 				</ul>
 			</td>
 		</tr>

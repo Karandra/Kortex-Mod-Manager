@@ -721,6 +721,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Account login,
 				Download with manager,
 				Mod update check
+			</td>
 			<td id="MO2">
 				Account login,
 				Download with manager,
@@ -732,6 +733,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="MO1">
 				Integration no longer works since Nexus API update.
+			</td>
 			<td id="Vortex">
 				Account login,
 				Download with manager,
@@ -830,7 +832,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="WB">
 				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bainAddMarker">Customizable marker system</a> for archives,
-				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods-commands">Customizable groups system</a> for plugins.
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods-commands">customizable groups system</a> for plugins.
 			</td>
 		</tr>
 		<tr>
@@ -839,38 +841,48 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
-				Plugins with missing masters,
-				Files in overwrite,
-				Form 43 plugins for Skyrim SE,
-				Script Extender plugin load failure,
-				Need to run FNIS,
-				Presence of files with attributes that the game can't handle.
+				<ul>
+					<li>Plugins with missing masters</li>
+					<li>Files in overwrite</li>
+					<li>Form 43 plugins for Skyrim SE</li>
+					<li>Script Extender plugin load failure</li>
+					<li>Need to run FNIS</li>
+					<li>Presence of files with attributes that the game can't handle</li>
+				</ul>
 			</td>
 			<td id="MO1">
-				Plugins with missing masters,
-				Files in overwrite,
-				Need to run FNIS.
+				<ul>
+					<li>Plugins with missing masters</li>
+					<li>Files in overwrite</li>
+					<li>Need to run FNIS</li>
+				</ul>
 			</td>
 			<td id="Vortex">
-				Bug report automation in menu.
-				Notifications in the bell icon including xSE error notifications.
-				Missing masters?
-				Form 43 with loot?
+				<ul>
+					<li>Bug report automation in menu</li>
+					<li>Notifications in the bell icon including xSE error notifications.</li>
+					<li>Missing masters?</li>
+					<li>Form 43 with LOOT?</li>
+				</ul>
 			</td>
 			<td id="NMM">
-				Missing masters.
+				<ul>
+					<li>Missing masters</li>
+				</ul>
 			</td>
 			<td id="WB">
-				Missing masters,
-				Out of order masters,
-				Missing strings files,
-				Form 43 plugins for Skyrim SE,
-				ESL verification,
-				File using same date for games that utilize a time date stamp,
-				Ghosted plugin verification,
-				Dirty edit scanning,
-				Deactivate and NoMerge verification,
-				<span tooltip="WIP version only">Mismatched BSA version detection</span>.
+				<ul>
+					<li>Missing masters</li>
+					<li>Out of order masters</li>
+					<li>Missing strings files</li>
+					<li>Form 43 plugins for Skyrim SE</li>
+					<li>ESL verification</li>
+					<li>File using same date for games that utilize a time date stamp</li>
+					<li>Ghosted plugin verification</li>
+					<li>Dirty edit scanning</li>
+					<li>Deactivate and NoMerge verification</li>
+					<li><span tooltip="WIP version only">Mismatched BSA version detection</span></li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
@@ -1104,9 +1116,10 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>Japanese</li>
 					<li>Portuguese</li>
 					<li>Russian</li>
-					<li>Non-English languages are <b>very</b> outdated, and further localization efforts are currently postponed until Wrye Bash has been ported to Python 3.</li>
-					<li><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#international">Localization can be easily exported</a> and edited with Notepad++ or Poedit.</li>
 				</ul>
+				<br/>
+				Non-English languages are <b>very</b> outdated, and further localization efforts are currently postponed until Wrye Bash has been ported to Python 3.
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#international">Localization can be easily exported</a> and edited with Notepad++ or Poedit.
 			</td>
 		</tr>
 		<tr>

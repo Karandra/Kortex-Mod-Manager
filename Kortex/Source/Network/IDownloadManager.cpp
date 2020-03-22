@@ -139,8 +139,8 @@ namespace Kortex
 			return LocationStatus::InsufficientVolumeSpace;
 		}
 
-		// Check if the volume supports file streams
-		if (!(drive.GetInfo().FileSystemFlags & FILE_NAMED_STREAMS))
+		// Check if the volume supports alternate file streams
+		if (!(drive.GetFileSystemFeatures() & FileSystemFeature::NamedStreams))
 		{
 			return LocationStatus::InsufficientVolumeCapabilities;
 		}

@@ -409,7 +409,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="Vortex">
 				<ul><b>Pros:</b>
 					<li class="li-pro">Remains even when the program is not running</li>
-					<li class="li-pro">Faster than alternatives because NTFS handles hardlinks directly instead of indirectly when using kxvfs and usvfs</li>
+					<li class="li-pro">Faster than alternatives because NTFS handles hardlinks directly instead of indirectly when using KxVFS or USVFS</li>
 					<li class="li-pro">Deployment only necessary when adding/removing mods "set and forget"</li>
 					<li class="li-pro">Windows updates shouldn't break it.</li>
 				</ul>

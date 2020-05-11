@@ -253,13 +253,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
-				<div class="cmp-unknown" />
+				<div class="cmp-no" />
 			</td>
 			<td id="MO1">
-				<div class="cmp-unknown" />
+				<div class="cmp-no" />
 			</td>
 			<td id="Vortex">
-				<div class="cmp-unknown" />
+				<div class="cmp-no" />
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -277,7 +277,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Through tooltip. Warning icon if current load order is missing files for them.
 			</td>
 			<td id="Vortex">
-				<div class="cmp-unknown" />
+				<div class="cmp-yes" />
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -344,13 +344,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
-				<div class="cmp-unknown" />
+				<div class="cmp-no" />
 			</td>
 			<td id="MO1">
-				<div class="cmp-unknown" />
+				<div class="cmp-no" />
 			</td>
 			<td id="Vortex">
-				<div class="cmp-unknown" />
+				<div class="cmp-no" />
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />

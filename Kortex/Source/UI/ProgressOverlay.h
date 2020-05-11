@@ -13,7 +13,7 @@ namespace Kortex::UI
 			bool IsAvailablle() const;
 
 			void UpdateProgress(int current);
-			void UpdateProgress(int64_t current, int64_t total);
+			void UpdateProgress(int64_t current, int64_t total, bool forceRefresh = false);
 
 		public:
 			explicit operator bool() const

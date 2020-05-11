@@ -66,7 +66,7 @@ namespace Kortex::Application
 		m_UserSettingsFolder = KxShell::GetFolder(KxSHF_APPLICATIONDATA_LOCAL) + '\\' + GetID();
 		m_UserSettingsFile = m_UserSettingsFolder + "\\Settings.xml";
 		m_LogsFolder = m_UserSettingsFolder + "\\Logs";
-		m_InstancesFolder = m_UserSettingsFolder + "\\Instances";
+		m_DefaultInstancesFolder = m_UserSettingsFolder + "\\Instances";
 
 		// Setup DPI awareness
 		using namespace KxDPIAwareness;
@@ -110,6 +110,7 @@ namespace Kortex::Application
 			const int defaultRowHeight = Utility::BitmapSize().FromSystemSmallIcon().GetHeight() + m_InitProgressDialog->FromDIP(4);
 			wxSystemOptions::SetOption("KxDataViewCtrl::DefaultRowHeight", defaultRowHeight);
 			wxSystemOptions::SetOption("KxDataView2::DefaultRowHeight", defaultRowHeight);
+			wxSystemOptions::SetOption("KxMenu::AllowOwnerDraw", false);
 
 			// Init systems
 			Utility::Log::LogInfo("Begin initializing core systems");
@@ -394,7 +395,7 @@ namespace Kortex::Application
 
 		// Init some application-wide variables
 		auto options = GetGlobalOption(OName::Instances, OName::Location);
-		m_InstancesFolder = options.GetValue(m_InstancesFolder);
+		m_InstancesFolder = options.GetValue();
 
 		// Show first time config dialog if needed and save new 'ProfilesFolder'
 		if (IsPreStartConfigNeeded())
@@ -427,23 +428,21 @@ namespace Kortex::Application
 	}
 	bool DefaultApplication::ShowFirstTimeConfigDialog(wxWindow* parent)
 	{
-		const wxString defaultPath = GetUserSettingsFolder() + wxS("\\Instances");
-
-		wxString message = wxString::Format("%s\r\n\r\n%s: %s", KTr("Init.ProfilesPath2"), KTr("Generic.DefaultValue"), defaultPath);
+		wxString message = wxString::Format("%s\r\n\r\n%s: %s", KTr("Init.ProfilesPath2"), KTr("Generic.DefaultValue"), m_DefaultInstancesFolder);
 		KxTaskDialog messageDialog(parent, KxID_NONE, KTr("Init.ProfilesPath1"), message, KxBTN_NONE);
 		messageDialog.AddButton(KxID_YES, KTr("Generic.UseDefaultValue"));
 		messageDialog.AddButton(KxID_NO, KTr("Generic.BrowseFolder"));
 
 		if (messageDialog.ShowModal() == KxID_YES)
 		{
-			m_InstancesFolder = defaultPath;
+			m_InstancesFolder = m_DefaultInstancesFolder;
 			m_Variables.SetVariable(Variables::KVAR_INSTANCES_DIR, m_InstancesFolder);
 			return true;
 		}
 		else
 		{
 			KxFileBrowseDialog folderDialog(m_InitProgressDialog, KxID_NONE, KxFBD_OPEN_FOLDER);
-			folderDialog.SetFolder(defaultPath);
+			folderDialog.SetFolder(m_DefaultInstancesFolder);
 			if (folderDialog.ShowModal() == KxID_OK)
 			{
 				m_InstancesFolder = folderDialog.GetResult();

@@ -148,15 +148,17 @@ namespace
 		{
 		}
 	};
-	bool SearchFiles(const SevenZip::FileInfo::Vector& files, const wxString& filter, KxFileItem& item, size_t startAt, size_t& nextIndex)
+	bool SearchFiles(const SevenZip::Archive& archive, const wxString& filter, KxFileItem& item, size_t startAt, size_t& nextIndex)
 	{
-		for (size_t i = startAt; i < files.size(); i++)
+		const size_t itemCount = archive.GetItemCount();
+		for (size_t fileIndex = startAt; fileIndex < itemCount; fileIndex++)
 		{
-			if (KxComparator::Matches(std::wstring_view(files[i].FileName), ToTStringView(filter)))
+			auto archiveItem = archive.GetItem(fileIndex);
+			if (KxComparator::Matches(std::wstring_view(archiveItem->FileName), ToTStringView(filter)))
 			{
-				item = ToKxFileItem(files[i], i);
+				item = ToKxFileItem(*archiveItem, fileIndex);
+				nextIndex = fileIndex + 1;
 
-				nextIndex = i + 1;
 				return true;
 			}
 		}
@@ -636,15 +638,7 @@ namespace Kortex
 	{
 		if (!m_OriginalSize)
 		{
-			int64_t total = 0;
-			for (const SevenZip::FileInfo& info: m_Archive->GetItems())
-			{
-				if (!info.IsDirectory && info.Size > 0)
-				{
-					total += info.Size;
-				}
-			}
-			m_OriginalSize = total;
+			m_OriginalSize = m_Archive->GetOriginalSize();
 		}
 		return *m_OriginalSize;
 	}
@@ -652,15 +646,7 @@ namespace Kortex
 	{
 		if (!m_CompressedSize)
 		{
-			int64_t total = 0;
-			for (const SevenZip::FileInfo& info: m_Archive->GetItems())
-			{
-				if (!info.IsDirectory && info.CompressedSize > 0)
-				{
-					total += info.CompressedSize;
-				}
-			}
-			m_CompressedSize = total;
+			m_CompressedSize = m_Archive->GetCompressedSize();
 		}
 		return *m_CompressedSize;
 	}
@@ -672,10 +658,9 @@ namespace Kortex
 	}
 	KxFileItem GenericArchive::GetItem(size_t fileIndex) const
 	{
-		const auto& items = m_Archive->GetItems();
-		if (fileIndex < items.size())
+		if (auto item = m_Archive->GetItem(fileIndex))
 		{
-			return ToKxFileItem(items[fileIndex], fileIndex);
+			return ToKxFileItem(*item, fileIndex);
 		}
 		return {};
 	}
@@ -688,7 +673,7 @@ namespace Kortex
 		
 		wxString filterCopy = filter;
 		filterCopy.Replace(wxS('/'), wxS('\\'), true);
-		if (SearchFiles(m_Archive->GetItems(), filterCopy, fileItem, 0, nextIndex))
+		if (SearchFiles(*m_Archive, filterCopy, fileItem, 0, nextIndex))
 		{
 			return std::make_unique<SearchData>(filterCopy, nextIndex).release();
 		}
@@ -702,7 +687,7 @@ namespace Kortex
 			SearchData& searchData = *reinterpret_cast<SearchData*>(handle);
 
 			size_t nextIndex = SearchData::InvalidIndex;
-			if (SearchFiles(m_Archive->GetItems(), searchData.m_SearchQuery, item, searchData.m_NextIndex, nextIndex))
+			if (SearchFiles(*m_Archive, searchData.m_SearchQuery, item, searchData.m_NextIndex, nextIndex))
 			{
 				searchData.m_NextIndex = nextIndex;
 				return true;

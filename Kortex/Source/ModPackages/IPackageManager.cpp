@@ -29,7 +29,7 @@ namespace Kortex
 
 	KxStringVector IPackageManager::GetSuppoptedExtensions()
 	{
-		return {wxS("kmp"), wxS("smi"), wxS("fomod"), wxS("7z"), wxS("zip")};
+		return {wxS("kmp"), wxS("smi"), wxS("fomod"), wxS("7z"), wxS("zip"), wxS("rar")};
 	}
 	wxString IPackageManager::GetSuppoptedExtensionsFilter()
 	{

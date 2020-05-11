@@ -11,8 +11,8 @@ namespace Kortex::InstallWizard
 			PackageProject::ComponentItem::RefVector m_CheckedEntries;
 
 		public:
-			StepStackItem(PackageProject::ComponentStep* step, const PackageProject::ComponentItem::RefVector& checked = {})
-				:m_Step(step), m_CheckedEntries(checked)
+			StepStackItem(PackageProject::ComponentStep& step, const PackageProject::ComponentItem::RefVector& checked = {})
+				:m_Step(&step), m_CheckedEntries(checked)
 			{
 			}
 			
@@ -46,7 +46,7 @@ namespace Kortex::InstallWizard
 			~StepStack() = default;
 
 		public:
-			void PushStep(PackageProject::ComponentStep* step, const PackageProject::ComponentItem::RefVector& checked = {})
+			void PushStep(PackageProject::ComponentStep& step, const PackageProject::ComponentItem::RefVector& checked = {})
 			{
 				push({step, checked});
 			}

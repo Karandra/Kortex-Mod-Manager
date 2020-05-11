@@ -302,7 +302,7 @@
 			</SortingTools>
 
 			<LibLoot>
-				<Branch>v0.14</Branch>
+				<Branch>v0.15</Branch>
 				<Repository>https://github.com/loot/oblivion.git</Repository>
 				<FolderName>Oblivion</FolderName>
 				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>

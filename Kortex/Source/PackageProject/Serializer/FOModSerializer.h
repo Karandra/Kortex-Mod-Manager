@@ -20,9 +20,6 @@ namespace Kortex::PackageProject
 	class FOModSerializer: public Serializer
 	{
 		private:
-			using FilePriorityArray = std::vector<std::pair<std::unique_ptr<FileItem>, int64_t>>;
-			
-		private:
 			wxString m_InfoXML;
 			wxString m_ModuleConfigXML;
 			wxString m_ProjectFolder;
@@ -43,8 +40,8 @@ namespace Kortex::PackageProject
 			}
 			wxString GetDataFolderName(bool withSeparator) const;
 			wxString MakeProjectPath(const wxString& path) const;
-			PackageProject::SelectionMode ConvertSelectionMode(const wxString& mode) const;
-			wxString ConvertSelectionMode(PackageProject::SelectionMode mode) const;
+			SelectionMode ConvertSelectionMode(const wxString& mode) const;
+			wxString ConvertSelectionMode(SelectionMode mode) const;
 			template<class T> void UniqueStringArray(T& array)
 			{
 				auto it = std::unique(array.begin(), array.end());
@@ -57,7 +54,7 @@ namespace Kortex::PackageProject
 	
 			void ReadInstallSteps();
 			void ReadConditionalSteps(const KxXMLNode& stepsArrayNode);
-			FilePriorityArray ReadFileData(const KxXMLNode& filesArrayNode, ComponentItem* entry = nullptr);
+			std::vector<FileItem*> ReadFileData(const KxXMLNode& filesArrayNode, ComponentItem* entry = nullptr);
 			void UniqueFileData();
 			void UniqueImages();
 	

@@ -97,7 +97,7 @@ namespace Kortex::InstallWizard
 			bool IsStepSatisfiesConditions(const PackageProject::ComponentStep& step) const;
 			bool CheckIsManualComponentsAvailable() const;
 			PackageProject::ComponentStep* GetFirstStepSatisfiesConditions() const;
-			PackageProject::ComponentStep* GetFirstStepSatisfiesConditions(const PackageProject::ComponentStep* afterThis) const;
+			PackageProject::ComponentStep* GetFirstStepSatisfiesConditions(const PackageProject::ComponentStep& afterThis) const;
 			
 			const StepStack& GetInstallSteps() const
 			{

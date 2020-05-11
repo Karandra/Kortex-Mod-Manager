@@ -4,7 +4,7 @@
 
 namespace Kortex::PluginManager
 {
-	const StdContentEntry* BaseGamePlugin::GetStdContentEntry() const
+	const StdContentItem* BaseGamePlugin::GetStdContentEntry() const
 	{
 		if (m_StdContent == nullptr)
 		{

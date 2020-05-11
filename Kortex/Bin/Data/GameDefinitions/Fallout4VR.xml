@@ -122,7 +122,7 @@
 		</SortingTools>
 
 		<LibLoot>
-			<Branch>v0.14</Branch>
+			<Branch>v0.15</Branch>
 			<Repository>https://github.com/loot/fallout4.git</Repository>
 			<FolderName>Fallout4VR</FolderName>
 			<LocalGamePath>$(ModListRoot)\LocalPlugins</LocalGamePath>

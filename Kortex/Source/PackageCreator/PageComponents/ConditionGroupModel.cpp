@@ -479,7 +479,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			{
 				for (auto& entry: group->GetItems())
 				{
-					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetConditionalFlags().GetFlags(), remove);
+					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetConditionFlags().GetFlags(), remove);
 					for (PackageProject::Condition& condition: entry->GetTDConditionGroup().GetConditions())
 					{
 						TrackID_ReplaceOrRemove(trackedID, newID, condition.GetFlags(), remove);

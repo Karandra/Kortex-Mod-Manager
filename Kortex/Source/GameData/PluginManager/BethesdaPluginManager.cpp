@@ -182,8 +182,8 @@ namespace Kortex::PluginManager
 
 		// Initialize starting time point to (current time - entries count) minutes,
 		// so incrementing it by one minute gives no "overflows" into future.
-		wxDateTime fileTime = wxDateTime::Now() - wxTimeSpan(0, GetPlugins().size());
-		const wxTimeSpan timeStep(0, 1);
+		wxDateTime fileTime = wxDateTime::Now() - wxTimeSpan::Minutes(GetPlugins().size());
+		const wxTimeSpan timeStep = wxTimeSpan::Minutes(1);
 
 		// Lists
 		KxStringVector loadOrder;
@@ -209,7 +209,7 @@ namespace Kortex::PluginManager
 				if (modFileDate)
 				{
 					KxFile(plugin->GetFullPath()).SetFileTime(fileTime, KxFILETIME_MODIFICATION);
-					fileTime.Add(timeStep);
+					fileTime += timeStep;
 				}
 			}
 		}
@@ -367,7 +367,6 @@ namespace Kortex::PluginManager
 	void BethesdaPluginManager::LoadNativeOrder()
 	{
 		LoadNativeOrderBG();
-		Save();
 	}
 }
 

@@ -10,20 +10,20 @@ namespace Kortex::PackageProject
 	{
 		public:
 			using Vector = std::vector<FlagItem>;
-	
+			
 		public:
 			static wxString GetDeletedFlagPrefix();
-	
+			
 		private:
 			bool HasLabel() const = delete;
 			const wxString& GetRawLabel() const = delete;
 			const wxString& GetLabel() const = delete;
 			void SetLabel(const wxString& label) = delete;
-	
+			
 		public:
 			FlagItem(const wxString& value, const wxString& name = wxEmptyString);
-			virtual ~FlagItem() = default;
-	
+			~FlagItem() = default;
+			
 		public:
 			const wxString& GetValue() const
 			{
@@ -33,7 +33,11 @@ namespace Kortex::PackageProject
 			{
 				Utility::LabeledValue::SetValue(value);
 			}
-	
+			
+			bool HasName() const
+			{
+				return Utility::LabeledValue::HasLabel();
+			}
 			const wxString& GetName() const
 			{
 				return Utility::LabeledValue::GetRawLabel();
@@ -146,7 +150,7 @@ namespace Kortex::PackageProject
 			TypeDescriptor m_TypeDescriptorConditional = TypeDescriptor::Invalid;
 			TypeDescriptor m_TypeDescriptorCurrent = TypeDescriptor::Invalid;
 			ConditionGroup m_TypeDescriptorConditions;
-			Condition m_ConditionalFlags;
+			Condition m_ConditionFlags;
 	
 		public:
 			ComponentItem();
@@ -225,13 +229,13 @@ namespace Kortex::PackageProject
 				return m_TypeDescriptorConditions;
 			}
 	
-			Condition& GetConditionalFlags()
+			Condition& GetConditionFlags()
 			{
-				return m_ConditionalFlags;
+				return m_ConditionFlags;
 			}
-			const Condition& GetConditionalFlags() const
+			const Condition& GetConditionFlags() const
 			{
-				return m_ConditionalFlags;
+				return m_ConditionFlags;
 			}
 	};
 }

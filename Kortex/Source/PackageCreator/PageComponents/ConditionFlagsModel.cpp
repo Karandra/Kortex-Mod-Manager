@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "AssignedConditionalsModel.h"
+#include "ConditionFlagsModel.h"
 #include "PackageCreator/WorkspaceDocument.h"
 #include "PackageCreator/PageBase.h"
 #include <Kortex/Application.hpp>
@@ -23,10 +23,10 @@ namespace
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
-	void AssignedConditionalsModel::OnInitControl()
+	void ConditionFlagsModel::OnInitControl()
 	{
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &AssignedConditionalsModel::OnActivateItem, this);
-		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &AssignedConditionalsModel::OnContextMenu, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_ACTIVATED, &ConditionFlagsModel::OnActivateItem, this);
+		GetView()->Bind(KxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &ConditionFlagsModel::OnContextMenu, this);
 
 		// Label
 		{
@@ -43,7 +43,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		}
 	}
 
-	void AssignedConditionalsModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+	void ConditionFlagsModel::GetEditorValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
 		auto entry = GetDataEntry(row);
 		if (entry)
@@ -63,7 +63,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			};
 		}
 	}
-	void AssignedConditionalsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
+	void ConditionFlagsModel::GetValueByRow(wxAny& value, size_t row, const KxDataViewColumn* column) const
 	{
 		auto entry = GetDataEntry(row);
 		if (entry)
@@ -83,7 +83,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			};
 		}
 	}
-	bool AssignedConditionalsModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
+	bool ConditionFlagsModel::SetValueByRow(const wxAny& value, size_t row, const KxDataViewColumn* column)
 	{
 		auto entry = GetDataEntry(row);
 		if (entry)
@@ -116,7 +116,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		return false;
 	}
 
-	void AssignedConditionalsModel::OnActivateItem(KxDataViewEvent& event)
+	void ConditionFlagsModel::OnActivateItem(KxDataViewEvent& event)
 	{
 		KxDataViewColumn* column = event.GetColumn();
 		if (column)
@@ -131,7 +131,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			};
 		}
 	}
-	void AssignedConditionalsModel::OnContextMenu(KxDataViewEvent& event)
+	void ConditionFlagsModel::OnContextMenu(KxDataViewEvent& event)
 	{
 		KxDataViewItem item = event.GetItem();
 		const PackageProject::FlagItem* entry = GetDataEntry(GetRow(item));
@@ -171,7 +171,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		};
 	};
 
-	void AssignedConditionalsModel::OnAddFlag()
+	void ConditionFlagsModel::OnAddFlag()
 	{
 		GetDataVector()->emplace_back(wxEmptyString, wxEmptyString);
 
@@ -180,14 +180,14 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		SelectItem(item);
 		GetView()->EditItem(item, GetView()->GetColumn(ColumnID::Name));
 	}
-	void AssignedConditionalsModel::OnRemoveFlag(const KxDataViewItem& item)
+	void ConditionFlagsModel::OnRemoveFlag(const KxDataViewItem& item)
 	{
 		if (PackageProject::FlagItem* entry = GetDataEntry(GetRow(item)))
 		{
 			wxString deletedName = entry->GetDeletedName();
-			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.RemoveFlagDialog.Caption", entry->GetName()), KTrf("PackageCreator.RemoveFlagDialog.Message", deletedName), KxBTN_CANCEL, KxICON_WARNING);
-			dialog.AddButton(KxID_REMOVE, KTr("PackageCreator.RemoveFlagDialog.Remove"));
-			dialog.AddButton(KxID_RENAME, KTr("PackageCreator.RemoveFlagDialog.Rename"));
+			KxTaskDialog dialog(GetViewTLW(), KxID_NONE, KTrf("PackageCreator.Conditions.RemoveFlagDialog.Caption", entry->GetName()), KTrf("PackageCreator.Conditions.RemoveFlagDialog.Message", deletedName), KxBTN_CANCEL, KxICON_WARNING);
+			dialog.AddButton(KxID_REMOVE, KTr("PackageCreator.Conditions.RemoveFlagDialog.Remove"));
+			dialog.AddButton(KxID_RENAME, KTr("PackageCreator.Conditions.RemoveFlagDialog.RemoveRename"));
 
 			switch (dialog.ShowModal())
 			{
@@ -212,7 +212,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			};
 		}
 	}
-	void AssignedConditionalsModel::OnClearList()
+	void ConditionFlagsModel::OnClearList()
 	{
 		for (size_t i = 0; i < GetItemCount(); i++)
 		{
@@ -221,7 +221,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		NotifyCleared();
 	}
 
-	bool AssignedConditionalsModel::DoTrackID(wxString trackedID, const wxString& newID, bool remove) const
+	bool ConditionFlagsModel::DoTrackID(wxString trackedID, const wxString& newID, bool remove) const
 	{
 		// Manual components
 		for (auto& step: GetProject().GetComponents().GetSteps())
@@ -230,7 +230,7 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			{
 				for (auto& entry: group->GetItems())
 				{
-					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetConditionalFlags().GetFlags(), remove);
+					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetConditionFlags().GetFlags(), remove);
 					for (PackageProject::Condition& condition : entry->GetTDConditionGroup().GetConditions())
 					{
 						TrackID_ReplaceOrRemove(trackedID, newID, condition.GetFlags(), remove);
@@ -251,12 +251,12 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 		return true;
 	}
 
-	void AssignedConditionalsModel::SetDataVector()
+	void ConditionFlagsModel::SetDataVector()
 	{
 		m_Condition = nullptr;
 		VectorModel::SetDataVector();
 	}
-	void AssignedConditionalsModel::SetDataVector(PackageProject::Condition& data)
+	void ConditionFlagsModel::SetDataVector(PackageProject::Condition& data)
 	{
 		m_Condition = &data;
 		VectorModel::SetDataVector(&m_Condition->GetFlags());
@@ -269,9 +269,9 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 
 namespace Kortex::PackageDesigner::PageComponentsNS
 {
-	AssignedConditionalsDialog::AssignedConditionalsDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller)
-		:AssignedConditionalsModel(controller)
-		//m_WindowOptions("AssignedConditionalsDialog", "Window"), m_ViewOptions("ConditionGroupDialog", "View")
+	ConditionFlagsDialog::ConditionFlagsDialog(wxWindow* parent, const wxString& caption, WorkspaceDocument* controller)
+		:ConditionFlagsModel(controller)
+		//m_WindowOptions("ConditionFlagsDialog", "Window"), m_ViewOptions("ConditionGroupDialog", "View")
 	{
 		if (KxStdDialog::Create(parent, KxID_NONE, caption, wxDefaultPosition, wxDefaultSize, KxBTN_OK))
 		{
@@ -284,14 +284,14 @@ namespace Kortex::PackageDesigner::PageComponentsNS
 			PostCreate();
 
 			// List
-			AssignedConditionalsModel::Create(controller, m_ViewPane, m_Sizer);
+			ConditionFlagsModel::Create(controller, m_ViewPane, m_Sizer);
 
 			AdjustWindow(wxDefaultPosition, FromDIP(wxSize(700, 400)));
 			//KProgramOptionSerializer::LoadDataViewLayout(GetView(), m_ViewOptions);
 			//KProgramOptionSerializer::LoadWindowSize(this, m_WindowOptions);
 		}
 	}
-	AssignedConditionalsDialog::~AssignedConditionalsDialog()
+	ConditionFlagsDialog::~ConditionFlagsDialog()
 	{
 		IncRef();
 

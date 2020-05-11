@@ -16,7 +16,8 @@
 
 namespace
 {
-	template<class T> bool GetCmdArgIntValue(const wxCmdLineParser& parser, const wxString& name, T& value)
+	template<class T>
+	bool GetCmdArgIntValue(const wxCmdLineParser& parser, const wxString& name, T& value)
 	{
 		wxString stringValue;
 		unsigned long long intValue = 0;

@@ -7,8 +7,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 * **KMM** - Kortex Mod Manager.
 * **MO1** - [Mod Organizer 1](https://www.nexusmods.com/skyrim/mods/1334) (version 1.x).
 * **MO2** - [Mod Organizer 2](https://www.nexusmods.com/skyrimspecialedition/mods/6194) (version 2.x).
-* **NMM** - [Nexus Mod Manager](https://www.nexusmods.com/site/mods/4).
+* **NMM** - [Nexus Mod Manager](https://github.com/Nexus-Mods/Nexus-Mod-Manager/releases).
 * [**Vortex**](https://www.nexusmods.com/about/vortex) - a successor to **NMM** by Nexus Mods.
+* [**Wrye Bash**](https://github.com/wrye-bash/wrye-bash) - one of the oldest mod managers among them all.
 
 ## Features
 
@@ -21,6 +22,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<th>MO1</th>
 			<th>Vortex</th>
 			<th>NMM</th>
+			<th>Wrye Bash</th>
 		</tr>
 		<tr>
 			<td class="feature-name">Supported games</td>
@@ -29,20 +31,20 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<br/>
 				<span tooltip="Fallout 3, Fallout: New Vegas, Fallout 4 (VR)">Fallout series</span> starting from <b>Fallout 3</b>.
 				<br/>
-				<b>Sacred 2</b>.
+				<span tooltip="Non Bethesda game as an experiment"><b>Sacred 2</b></span>.
 			</td>
 			<td id="MO2">
 				<b>Morrowind,</b>
- 				<b>Oblivion,</b>
- 				<b>Fallout 3,</b>
- 				<b>Fallout NV,</b>
- 				<b>Tale of Two Wastelands (TTW),</b>
- 				<b>Skyrim,</b>
- 				<b>Skyrim SE,</b>
- 				<b>Skyrim VR,</b>
- 				<b>Fallout 4,</b>
- 				<b>Fallout 4 VR,</b>
- 				<b>Enderal (Steam Edition)</b>
+				<b>Oblivion,</b>
+				<b>Fallout 3,</b>
+				<b>Fallout NV,</b>
+				<b>Tale of Two Wastelands (TTW),</b>
+				<b>Skyrim,</b>
+				<b>Skyrim SE,</b>
+				<b>Skyrim VR,</b>
+				<b>Fallout 4,</b>
+				<b>Fallout 4 VR,</b>
+				<b>Enderal (Steam Edition)</b>
 			</td>
 			<td id="MO1">
 				<b>Oblivion, Skyrim, Fallout 3, Fallout: New Vegas</b>.
@@ -51,13 +53,20 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Supports over 90 games including TES and Fallout games.
 			</td>
 			<td id="NMM">
-				Supports many games including TES and Fallout games.
+				Supports many games including Elder Scrolls (plus Enderal) and Fallout series.
+			</td>
+			<td id="WB">
+				Morrowind using <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a>.
+				<br/>
+				<a href="https://www.nexusmods.com/fallout3/mods/11336">Fallout 3</a>/<a href="https://www.nexusmods.com/newvegas/mods/35003">Fallout NV</a> Using Valda's Wrye Flash.
+				<br/>
+				Oblivion, Skyrim (LE, SE, VR, Enderal) Fallout 4 (VR) Using <a href="https://www.dropbox.com/sh/iazpayeexiyazeh/AAAbGeVHrlIksp2AFgI4w48Oa?dl=0">Wrye Bash</a>.
 			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Importing from other managers</td>
 			<td id="KMM">
-				 Nexus Mod Manager, MO1, MO2.
+				Nexus Mod Manager, MO1, MO2.
 			<td id="MO2">
 				<div class="cmp-no" />
 			</td>
@@ -68,6 +77,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 				MO1, MO2, NMM.
 			</td>
 			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="WB">
 				<div class="cmp-no" />
 			</td>
 		</tr>
@@ -82,6 +94,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="Vortex.NMM" colspan="2">
 				Multiple profiles per game
 			</td>
+			<td id="WB">
+				<div class="cmp-no" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Assets conflict management</td>
@@ -89,7 +104,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-yes" />
 			</td>
 			<td id="MO2">
-				<div class="cmp-yes" /> 
+				<div class="cmp-yes" />
 			</td>
 			<td id="MO1">
 				<div class="cmp-yes" />
@@ -99,6 +114,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-yes" />
 			</td>
 		</tr>
 		<tr>
@@ -121,6 +139,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				One time popup during installation to decide whether to keep or overwrite other mods files.
 			</td>
+			<td id="WB">
+				Using mod priority that can be changed by drag &amp; dropping mods in a specific order.
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Conflict visualization</td>
@@ -128,7 +149,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
-				<ul>Same as MO1 plus:
+				<ul>
+					Same as MO1 plus:
 					<li>Advanced per-mod conflict views with alternatives, sorting, search, etc.</li>
 				</ul>
 			</td>
@@ -151,6 +173,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				No visualization of conflicts as there can't be, just one time popup during mod installation to either overwrite or keep old files.
+			</td>
+			<td id="WB">
+				<ul>
+					<li><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20General%20Readme.html#bain-symbols">Colored checkboxes</a> indicate conflict.</li>
+					<li>Tabs can be selected to see detailed list of conflicts for both loose files and BSA/BA2 files.</li>
+					<li>The mod archive or package name is shown.</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
@@ -179,6 +208,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-no" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Game archives (BSA) Conflicts</td>
@@ -199,6 +231,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-yes" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Saves management</td>
@@ -207,6 +242,48 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#saves">Saves Tab</a> Allows you to create separate folders for each playthrough and easy management of save games to eliminate clutter in your save game list.
+			</td>
+		</tr>
+		<tr>
+			<td class="feature-name">Change master name in header of save game from save game manager</td>
+			<td id="KMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="MO2">
+				<div class="cmp-no" />
+			</td>
+			<td id="MO1">
+				<div class="cmp-no" />
+			</td>
+			<td id="Vortex">
+				<div class="cmp-no" />
+			</td>
+			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-yes" tooltip="Compressed save game headers like in Skyrim SE only supported in WIP version"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="feature-name">List plugins used in a save game</td>
+			<td id="KMM">
+				<div class="cmp-yes" />
+			</td>
+			<td id="MO2.MO1" colspan="2">
+				Through tooltip. Warning icon if current load order is missing files for them.
+			</td>
+			<td id="Vortex">
+				<div class="cmp-yes" />
+			</td>
+			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-yes" tooltip="Copied to Clipboard"/>
 			</td>
 		</tr>
 		<tr>
@@ -223,6 +300,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				Easily alter game INI files by placing a checkmark in a list of changes. Restore INI files back to default.
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Load order management scheme</td>
@@ -234,7 +314,49 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				Drag and Drop for plugins.
-				Mods ..?
+				For mods it's the install order.
+			</td>
+			<td id="WB">
+				Order plugins in your Data folder with Drag and Drop. Activate plugins based on save game. Lock Load Order to prevent external applications from makes changes.
+			</td>
+		</tr>
+		<tr>
+			<td class="feature-name">Add or remove plugin flags from plugin list</td>
+			<td id="KMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="MO2.MO1" colspan="2">
+				<div class="cmp-no" />
+			</td>
+			<td id="Vortex">
+				ESL flag.
+			</td>
+			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				ESM and ESL flags.
+			</td>
+		</tr>
+		<tr>
+			<td class="feature-name">Change master name in header of plugin from plugin list</td>
+			<td id="KMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="MO2">
+				<div class="cmp-no" />
+			</td>
+			<td id="MO1">
+				<div class="cmp-no" />
+			</td>
+			<td id="Vortex">
+				<div class="cmp-no" />
+			</td>
+			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<div class="cmp-yes" />
 			</td>
 		</tr>
 		<tr>
@@ -266,6 +388,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				Visualization of dirty plugins via underlining on the plugin list, automatic retrieval of LOOT's Bash Tag suggestions.
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Backup features</td>
@@ -278,14 +403,20 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Individual mod folder backup.
 			</td>
 			<td id="Vortex">
-				Via extension only.
+				Via <a href="https://github.com/Garethp/Vortex-Modlist-Backup">extension</a> only.
 			</td>
 			<td id="NMM">
-				<div class="cmp-no" />
+				<ul>
+					<li>Import Export Load Order</li>
+					<li>Backup and Restore Mod Instalation</li>
+				</ul>
+			</td>
+			<td id="WB">
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#tools-settings">Backs up all the parts of Wrye Bash that can be changed by the user to a location of the user's choosing</a>.
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Program list</td>
+			<td class="feature-name"><span flow="right" tooltip="Program list means a toolbar of some sort that allows you to execute programs and tools from the mod manager for convenience or need">Program list</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
 			</td>
@@ -299,7 +430,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-yes" />
 			</td>
 			<td id="NMM">
-				<div class="cmp-no" />
+				<ul>
+					<li>No method to add custom launcher and you must choose from a predetermined list.</li>
+					<li>Program List varies depending on selected game mode.</li>
+				<ul>
+			</td>
+			<td id="WB">
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#launchers">Add shortcuts to the Apps folder and Tools or other Programs show up in the Toolbar</a>.
 			</td>
 		</tr>
 		<tr>
@@ -319,14 +456,27 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<div class="cmp-no" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Supported mod package formats</td>
-			<td id="KMM">FOMod (XML), KMP.</td>
-			<td id="MO2.MO1" colspan="2">
-				FOMod (XML, C#), freeform<sup>1</sup>, simple<sup>2</sup>.
+			<td id="KMM">
+				FOMod (XML), KMP.
 			</td>
-			<td id="Vortex.NMM" colspan="2">FOMod (XML, C#), simple.</td>
+			<td id="MO2.MO1" colspan="2">
+				FOMod (XML, C#), BAIN Package, freeform<sup>1</sup>, simple<sup>2</sup>.
+			</td>
+			<td id="Vortex">
+				FOMod (XML, C#), simple<sup>2</sup>.
+			</td>
+			<td id="NMM">
+				FOMod (XML, C#), OMOD, simple<sup>2</sup>.
+			</td>
+			<td id="WB">
+				FOMod (XML) Beta, BAIN Wizard, BAIN Package, simple<sup>2</sup>.
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Virtualization scheme</td>
@@ -347,97 +497,126 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				Symbolic links (symlinks).
 			</td>
+			<td id="WB">
+				No virtualization, files are installed in the Data folder.
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Virtualization Pros and Cons</td>
 			<td id="KMM">
-				<ul><b>Pros:</b>
-					<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
-    				<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
-					<li class="li-pro">Mounted VFS is visible to all processes on the system (it's kind of a con too).</li>
-					<li class="li-pro">Can link mods across different drives.</li>
-					<li class="li-pro">Allows top-level folder virtualization.</li>
+				<ul class="ul-pro">
+					<b>Pros:</b>
+					<li>Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
+					<li>Zero overhead when installing/enabling mods or switching profiles.</li>
+					<li>Mounted VFS is visible to all processes on the system (it's kind of a con too).</li>
+					<li>Can link mods across different drives.</li>
+					<li>Allows top-level folder virtualization.</li>
 				</ul>
-				<ul><b>Cons:</b>
-					<li class="li-con">Slower than alternatives.</li>
-					<li class="li-con">Requires target folder (mount point) to be empty.</li>
-					<li class="li-con">Huge memory consumption on large mod setups (~200 MB for 50k files, ~5 GB for 975k files).</li>
-					<li class="li-con">Program startup overhead for VFS initialization.</li>
-					<li class="li-con">Kernel-mode driver, requires administrator privileges to install.</li>
+				<ul class="ul-con">
+					<b>Cons:</b>
+					<li>Slower than alternatives.</li>
+					<li>Requires target folder (mount point) to be empty.</li>
+					<li>Huge memory consumption on large mod setups (~200 MB for 50k files, ~5 GB for 975k files).</li>
+					<li>Program startup overhead for VFS initialization.</li>
+					<li>Kernel-mode driver, requires administrator privileges to install.</li>
 				</ul>
 			</td>
 			<td id="MO2">
-				<ul><b>Pros:</b>
-					<li class="li-pro">Supports 64-bit programs.</li>
-    				<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
-    				<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
-    				<li class="li-pro">Doesn't require write access to destination.</li>
-    				<li class="li-pro">Sources and target can be linked across different drives.</li>
-					<li class="li-pro">Intercepts creation of new files in overwrite, keeping game folder clean</li>
+				<ul class="ul-pro">
+					<b>Pros:</b>
+					<li>Supports 64-bit programs.</li>
+					<li>Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
+					<li>Zero overhead when installing/enabling mods or switching profiles.</li>
+					<li>Doesn't require write access to destination.</li>
+					<li>Sources and target can be linked across different drives.</li>
+					<li>Intercepts creation of new files in overwrite, keeping game folder clean</li>
 				</ul>
-				<ul><b>Cons:</b>
-					<li class="li-con">Can be less intuitive to users since only the programs can see the mods.</li>
-					<li class="li-con">Can often be flagged by anti-viruses.</li>
-					<li class="li-con">Can't virtualize some top level files like load-time linked .dll.</li>
-					<li class="li-con">Can lead to hard to diagnose issues in case there is a bug.</li>
-					<li class="li-con">Small memory and computation overhead at runtime.</li>
-					<li class="li-con">Program startup overhead for VFS initialization.</li>
-					<li class="li-con">Can potentially break if Windows changes something.</li>
-					<li class="li-con">Uses Overwrite folder that can require some user cleanup and management</li>
+				<ul class="ul-con">
+					<b>Cons:</b>
+					<li>Can be less intuitive to users since only the programs can see the mods.</li>
+					<li>Can often be flagged by anti-viruses.</li>
+					<li>Can't virtualize some top level files like load-time linked .dll.</li>
+					<li>Can lead to hard to diagnose issues in case there is a bug.</li>
+					<li>Small memory and computation overhead at runtime.</li>
+					<li>Program startup overhead for VFS initialization.</li>
+					<li>Can potentially break if Windows changes something.</li>
+					<li>Uses Overwrite folder that can require some user cleanup and management</li>
 				</ul>
 			</td>
 			<td id="MO1">
-				<ul><b>Pros:</b>
-    				<li class="li-pro">Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
-    				<li class="li-pro">Zero overhead when installing/enabling mods or switching profiles.</li>
-					<li class="li-pro">Doesn't require write access to destination.</li>
-    				<li class="li-pro">Sources and target can be linked across different drives.</li>
-					<li class="li-pro">Intercepts creation of new files in overwrite, keeping game folder clean</li>
+				<ul class="ul-pro">
+					<b>Pros:</b>
+					<li>Game folder remains clean all the time as exclusively hooked programs see the mods.</li>
+					<li>Zero overhead when installing/enabling mods or switching profiles.</li>
+					<li>Doesn't require write access to destination.</li>
+					<li>Sources and target can be linked across different drives.</li>
+					<li>Intercepts creation of new files in overwrite, keeping game folder clean</li>
 				</ul>
-				<ul><b>Cons:</b>
-					<li class="li-con">Can't be used for 64-bit programs.</li>
-					<li class="li-con">Can be less intuitive to users since only the programs can see the mods.</li>
-					<li class="li-con">Can often be flagged by anti-viruses.</li>
-					<li class="li-con">Can't virtualize some top level files like load-time linked .dll.</li>
-					<li class="li-con">Can lead to hard to diagnose issues in case there is a bug.</li>
-					<li class="li-con">Small memory and computation overhead at runtime.</li>
-					<li class="li-con">Program startup overhead for VFS initialization.</li>
-        			<li class="li-con">Can potentially break if Windows changes something</li>
-					<li class="li-con">Uses Overwrite folder that can require some user cleanup and management</li>
+				<ul class="ul-con">
+					<b>Cons:</b>
+					<li>Can't be used for 64-bit programs.</li>
+					<li>Can be less intuitive to users since only the programs can see the mods.</li>
+					<li>Can often be flagged by anti-viruses.</li>
+					<li>Can't virtualize some top level files like load-time linked .dll.</li>
+					<li>Can lead to hard to diagnose issues in case there is a bug.</li>
+					<li>Small memory and computation overhead at runtime.</li>
+					<li>Program startup overhead for VFS initialization.</li>
+					<li>Can potentially break if Windows changes something</li>
+					<li>Uses Overwrite folder that can require some user cleanup and management</li>
 				</ul>
 			</td>
 			<td id="Vortex">
-				<ul><b>Pros:</b>
+				<ul class="ul-pro">
+					<b>Pros:</b>
 					<li class="li-pro">Remains even when the program is not running</li>
 					<li class="li-pro">Faster than alternatives because NTFS handles hardlinks directly instead of indirectly when using KxVFS or USVFS</li>
 					<li class="li-pro">Deployment only necessary when adding/removing mods "set and forget"</li>
 					<li class="li-pro">Windows updates shouldn't break it.</li>
 				</ul>
-				<ul><b>Cons:</b>
-					<li class="li-con">Improper removal of mod will cause mods to remain</li>
-					<li class="li-con">"Dirty" data folder</li>
-					<li class="li-con">Some applications may see the hardlinks as duplicates and count them as used disk space</li>
-					<li class="li-con">Requires deployment</li>
-					<li class="li-con">Requires full write/read access to target folder</li>
-					<li class="li-con">Takes time (based on file count) to switch profiles and enable/disable mods</li>
-					<li class="li-con">Can't link across drives</li>
-					<li class="li-con">Can be less convenient to use for mod authors messing with mod files</li>
+				<ul class="ul-con">
+					<b>Cons:</b>
+					<li>Improper removal of mod will cause mods to remain</li>
+					<li>"Dirty" data folder</li>
+					<li>Some applications may see the hardlinks as duplicates and count them as used disk space</li>
+					<li>Requires deployment</li>
+					<li>Requires full write/read access to target folder</li>
+					<li>Takes time (based on file count) to switch profiles and enable/disable mods</li>
+					<li>Can't link across drives</li>
+					<li>Can be less convenient to use for mod authors messing with mod files</li>
 				</ul>
 			</td>
 			<td id="NMM">
-				<ul><b>Pros:</b>
-					<li class="li-pro">Can link across partitions.</li>
-					<li class="li-pro">Mostly same as Hardlinks (assuming good implementation)</li>
+				<ul class="ul-pro">
+					<b>Pros:</b>
+					<li>Can link across partitions.</li>
+					<li>Mostly same as Hardlinks (assuming good implementation)</li>
 				</ul>
-				<ul><b>Cons:</b>
-					<li class="li-con">Requires administrator privileges to create symlinks.</li>
-					<li class="li-con">Can leave the game folder with mess in case stuff goes wrong</li>
-					<li class="li-con">Mostly the same cons as Hardlinks</li>
+				<ul class="ul-con">
+					<b>Cons:</b>
+					<li>Requires administrator privileges to create symlinks.</li>
+					<li>Can leave the game folder with mess in case stuff goes wrong</li>
+					<li>Mostly the same cons as Hardlinks</li>
+				</ul>
+			</td>
+			<td id="WB">
+				<ul class="ul-pro">
+					<b>Pros:</b>
+					<li>Does not add complexity and potential failure points with virtualization, hardlinks, or symbolic links and uses a simple and reliable file copy.</li>
+					<li>100% Reliable with 0% chance for issues installing files into the Data folder. No problems with leftover/broken links and other inconsistencies, just normal files (that are all kept track of).</li>
+					<li>Allows you to have your Game and downloaded mods on different drives.</li>
+				</ul>
+				<ul class="ul-con">
+					<b>Cons:</b>
+					<li>Depending on the amount and size of files copying files to the Data folder may take a reasonable amount of time to an extended amount of time.</li>
+					<li>Installing 3 GB mods like Interesting NPCs can take a very extended amount of time.</li>
+					<li>Changing order, enabling/disabling mods, clearing to vanilla, requires file transfers to update Data tab contents (user decides when to apply changes so multiple ones can be applied in one step).</li>
+					<li>Requires full write/read access to target folder</li>
+					<li>Requires more space as mod archives can't be deleted (source of files to be copied in Data)</li>
 				</ul>
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Game root directory virtualization</td>
+			<td class="feature-name"><span flow="right" tooltip="Game root directory virtualization means that the files are not installed into the game folder where the game EXE is located such as TESV.exe. Rather they use an actual Virtual File System. Vortex and NMM use links to achieve similar results as virtualization, but it's not actually virtualization">Game root directory virtualization</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
 			</td>
@@ -451,6 +630,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-yes" />
 			</td>
 			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="WB">
 				<div class="cmp-no" />
 			</td>
 		</tr>
@@ -478,7 +660,16 @@ There are many mod managers around these days and it's may be a bit difficult to
 				A popup for deleted/recreated files will ask user whether to use mod version or game version.
 			</td>
 			<td id="NMM">
-				<div class="cmp-no" />
+				<div class="cmp-unknown" />
+			</td>
+			<td id="WB">
+				<ul>
+					<li>Files added or altered in the Data folder are tracked.</li>
+					<li>New files become orphaned files.</li>
+					<li>Orphaned files can be removed using <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bain-CleanData">Clean Data</a>.</li>
+					<li>Changed files that belong to an installer can be easily synced with the Installer (Package Only).</li>
+					<li><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bain-monitor">Monitor External Installation</a> tracks changes in the data folder. Wrye Bash creates an installer from both new and altered files. This can be used to track instalation from other mod managers such as OBMM, FOMM, NMM. It can also be used when making changes with the CK or other tools such as FNIS or BodySlide.</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
@@ -495,6 +686,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				Symlinks - persists until purged.
 			</td>
+			<td id="WB">
+				Uses file copy - persists until purged.
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Game (virtual) folder layout visualization</td>
@@ -507,7 +701,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="MO1">
 				Through dedicated Data tab.
 			</td>
-			<td id="Vortex.NMM" colspan="2">
+			<td id="Vortex.NMM.WB" colspan="3">
 				Not needed as Explorer already shows the correct final result.
 			</td>
 		</tr>
@@ -517,6 +711,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="MO2.MO1.Vortex.NMM" colspan="4">
 				<b>NexusMods</b>
 			</td>
+			<td id="WB">
+				<div class="cmp-no" />
+			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Nexus Mods Integration features</td>
@@ -524,9 +721,10 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Account login,
 				Download with manager,
 				Mod update check
+			</td>
 			<td id="MO2">
-				Account login, 
-				Download with manager, 
+				Account login,
+				Download with manager,
 				Mod update check,
 				Mod endorsements,
 				Mod tracking,
@@ -535,9 +733,10 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="MO1">
 				Integration no longer works since Nexus API update.
+			</td>
 			<td id="Vortex">
-				Account login, 
-				Download with manager, 
+				Account login,
+				Download with manager,
 				Mod update check,
 				Automatic mod update for premium users,
 				Mod endorsements,
@@ -546,10 +745,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Browser for mod description,
 			</td>
 			<td id="NMM">
-				Account login, 
-				Download with manager, 
+				Account login,
+				Download with manager,
 				Mod endorsements,
 				Mod meta info like categories etc.
+			</td>
+			<td id="WB">
+				<div class="cmp-no" />
 			</td>
 		</tr>
 		<tr>
@@ -562,6 +764,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="MO2.MO1.Vortex.NMM" colspan="4">
 				Account, mod updates, mod source, metadata query, downloads, endorsements.
+			</td>
+			<td id="WB">
+				<div class="cmp-no" />
 			</td>
 		</tr>
 		<tr>
@@ -583,9 +788,12 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-yes" />
 			</td>
+			<td id="WB">
+				<div class="cmp-no" />
+			</td>
 		</tr>
 		<tr>
-			<td class="feature-name" align="left">Integrated download manager</td>
+			<td class="feature-name"><span flow="right" tooltip="Integrated download manager meaning the mod manager has internal download capabilities and uses can see the files being downloaded">Integrated download manager</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
 			</td>
@@ -600,6 +808,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-yes" />
+			</td>
+			<td id="WB">
+				<div class="cmp-no" />
 			</td>
 		</tr>
 		<tr>
@@ -617,7 +828,11 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Import from Nexus, support for custom categories.
 			</td>
 			<td id="NMM">
-				Import from nexus, custom categories?
+				Import from nexus, and create custom categories.
+			</td>
+			<td id="WB">
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bainAddMarker">Customizable marker system</a> for archives,
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods-commands">customizable groups system</a> for plugins.
 			</td>
 		</tr>
 		<tr>
@@ -626,32 +841,54 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
-				Plugins with missing masters,
-				Files in overwrite,
-				Form 43 plugins for Skyrim SE,
-				Script Extender plugin load failure,
-				Need to run FNIS,
-				Presence of files with attributes that the game can't handle.
+				<ul>
+					<li>Plugins with missing masters</li>
+					<li>Files in overwrite</li>
+					<li>Form 43 plugins for Skyrim SE</li>
+					<li>Script Extender plugin load failure</li>
+					<li>Need to run FNIS</li>
+					<li>Presence of files with attributes that the game can't handle</li>
+				</ul>
 			</td>
 			<td id="MO1">
-				Plugins with missing masters,
-				Files in overwrite,
-				Need to run FNIS.
+				<ul>
+					<li>Plugins with missing masters</li>
+					<li>Files in overwrite</li>
+					<li>Need to run FNIS</li>
+				</ul>
 			</td>
 			<td id="Vortex">
-				Bug report automation in menu.
-				Notifications in the bell icon including xSE error notifications.
-				Missing masters?
-				Form 43 with loot?
+				<ul>
+					<li>Bug report automation in menu</li>
+					<li>Notifications in the bell icon including xSE error notifications.</li>
+					<li>Missing masters?</li>
+					<li>Form 43 with LOOT?</li>
+				</ul>
 			</td>
 			<td id="NMM">
-				Missing masters.
+				<ul>
+					<li>Missing masters</li>
+				</ul>
+			</td>
+			<td id="WB">
+				<ul>
+					<li>Missing masters</li>
+					<li>Out of order masters</li>
+					<li>Missing strings files</li>
+					<li>Form 43 plugins for Skyrim SE</li>
+					<li>ESL verification</li>
+					<li>File using same date for games that utilize a time date stamp</li>
+					<li>Ghosted plugin verification</li>
+					<li>Dirty edit scanning</li>
+					<li>Deactivate and NoMerge verification</li>
+					<li><span tooltip="WIP version only">Mismatched BSA version detection</span></li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">GUI customization</td>
 			<td id="KMM">
-				<div class="cmp-no" /> 
+				<div class="cmp-no" />
 			</td>
 			<td id="MO2">
 				Comes with 15+ built in styles, more available on Nexus.
@@ -668,6 +905,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				<a href="https://wrye-bash.github.io/docs/Wrye Bash Advanced Readme.html#tools-colors">Change colors via a settings menu</a>.
 			</td>
 		</tr>
 		<tr>
@@ -687,16 +927,22 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-unknown" />
 			</td>
 			<td id="NMM">
-				<div class="cmp-no" />
+				Export plugin and mod list to clipboard or text file.
+			</td>
+			<td id="WB">
+				<ul>
+					<li>Can export list of installed mods from Mods tab.</li>
+					<li>Can view and list files in an archive or package from Installers Tab.</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Modlist features</td>
 			<td id="KMM">
-				Color-coding of each mod, 
+				Color-coding of each mod,
 				collapsible separators (using tag system).
 				<br/><br/>
-				<b>Mod metadata:</b> 
+				<b>Mod metadata:</b>
 				name,
 				priority,
 				version,
@@ -742,7 +988,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<br/>
 				<b>Mod metadata:</b>
 				mod name,
-				version number, 
+				version number,
 				author,
 				install time,
 				source (nexus or not),
@@ -754,7 +1000,38 @@ There are many mod managers around these days and it's may be a bit difficult to
 				highlight
 			</td>
 			<td id="NMM">
-				<div class="cmp-unknown" />
+				<ul>
+					<li>Filter by category</li>
+					<li>Sort mod list by Name, Cetegory, Install Date, Download Data, Endorsment, Download ID, Mod version, Author</li>
+					<li>List plugin dependencies (Plugin Tab)</li>
+				</ul>
+				<ul>
+					<b>Mod metadata</b>
+					<li>Name, Version, Author, Website, Description</li>
+				</ul>
+			</td>
+			<td id="WB">
+				<ul>
+					<b><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#mods">Mod context menu</a></b>
+					<li>Duplicate, Hide, Rename, Backup, Create Snapshot, Revert to Backup or Snapshot for plugins from the Mods tab.</li>
+					<li>List Bash Tags</li>
+					<li>Mod Info Report of plugin name, installer, modified date, file size, author, CRC</li>
+					<li>List file dependencies</li>
+					<li>Jump to assigned Installer from Mods List</li>
+					<li>Check ESL Qualifications for ESL enabled games</li>
+					<li>Export/import various subrecords to/from .csv files</li>
+					<li>List LOOT Cleaning Information</li>
+					<li>Copy .esp to .esm file (Creates file in Data Folder)</li>
+					<li>Add Remove ESL or ESM flags</li>
+					<li>Add ESM Flag to Masters (ESM flag(s) must be manually removed)</li>
+					<li>Create empty plugins for missing masters</li>
+				</ul>
+				<ul>
+					<b>Mod metadata</b>
+					<li>Import, Export, Edit, Assign to group</li>
+					<li>List ObjectIDs with Editor ID by record type</li>
+					<li>View, Edit, or Assign Readme Files</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
@@ -777,12 +1054,18 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
+			<td id="WB">
+				<ul>
+					<li>Can preview contents of archive or Package.</li>
+					<li>Doc Browser for Readme files and custom Docs or Notes added to mods.</li>
+				</ul>
+			</td>
 		</tr>
-		<tr class="tooltip">
+		<tr>
 			<td class="feature-name">
 				Available translations
 				<br>
-				<i>default distribution</i>
+				<i>(default distribution)</i>
 			</td>
 			<td id="KMM">
 				<ul>
@@ -820,7 +1103,23 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<ul>
 					<li>English</li>
+					<li>German</li>
 				</ul>
+			</td>
+			<td id="WB">
+				<ul>
+					<li>English</li>
+					<li>Chinese (Simplified)</li>
+					<li>Chinese (Traditional)</li>
+					<li>German</li>
+					<li>Italian</li>
+					<li>Japanese</li>
+					<li>Portuguese</li>
+					<li>Russian</li>
+				</ul>
+				<br/>
+				Non-English languages are <b>very</b> outdated, and further localization efforts are currently postponed until Wrye Bash has been ported to Python 3.
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#international">Localization can be easily exported</a> and edited with Notepad++ or Poedit.
 			</td>
 		</tr>
 		<tr>
@@ -834,16 +1133,20 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				Additional extensions are available at <b>NexusMods</b>.
-				Supports JavaScript, C++, and various other electron extensions
+				Supports JavaScript, C++, and various other electron extensions.
+				Extensions are available to install from within the program.
 			</td>
 			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="WB">
 				<div class="cmp-no" />
 			</td>
 		</tr>
 		<tr>
 			<td class="feature-name">Current development state and maintainers</td>
 			<td id="KMM">
-				Open Source, fully released. 
+				Open Source, fully released.
 				Maintained and not so much actively developed on by Kerber (non-paid developer), with highly irregular feature updates.
 			</td>
 			<td id="MO2">
@@ -863,16 +1166,21 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Discontinued by NexusMods in favor of Vortex.
 				Currently maintained by a few members of the community.
 			</td>
+			<td id="WB">
+				Open Source, fully released.
+				Maintained and actively developed by <span tooltip="Made up of Utumno, Ganda, Infernio. Record decoding by Sharlikran. Rare updates by Lojack. Documentation updates by Felis and Wrye Bash team">Wrye Bash Team</span> (community non-paid developers) with improvement updates.
+			</td>
 		</tr>
 	</tbody>
 </table>
 
+## Supplementary information
 1. Any content inside the mod archive. This installation mode usually requires user input to some extent.
 2. Just some files such as **.esm**/**.esp** and/or **Data** folder inside the mod archive.
 
-## Page Contributors
+## Page contributors
 * [Kerber](https://www.nexusmods.com/users/2734453) (Kortex developer)
 * [AL](https://www.nexusmods.com/users/6409802) (MO2 Dev)
 * [Yggdrasil75](https://www.nexusmods.com/users/25321034) (Vortex virtuoso)
-* We found no one for NMM yet :/
-* We would also need someone for Wrye Bash
+* [Sharlikran](https://www.nexusmods.com/users/25321034) (Wrye Bash contributor)
+* [FelesNoctis](https://www.nexusmods.com/users/336042) (Generalist contributor)

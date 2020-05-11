@@ -1,3 +1,9 @@
+.page
+{
+	/* Override max width to allow more content to be visible */
+	max-width: 175rem;
+}
+
 table, td, th
 {
 	border: 1px solid;
@@ -26,6 +32,20 @@ tr
 		border: 0;
 	}
 
+	tr:hover
+	{
+		background-color: var(--color-quote-background);
+	}
+
+td
+{
+	max-width: 64ch;
+}
+td.feature-name
+{
+	min-width: 16ch;
+}
+
 .text-left
 {
 	text-align: left;
@@ -34,24 +54,21 @@ tr
 ul
 {
 	text-align: left;
-	list-style-type: "- ";
+	list-style-type: "• ";
 	list-style-position: inside;
 	margin: 1rem;
 	padding: 0;
 }
 
-li
-{
-	word-wrap: hyphenate;
-}
-
-	li.li-pro
+	ul.ul-pro
 	{
+		list-style-type: "+ ";
 		/*color: var(--color-text-success);*/
 	}
 
-	li.li-con
+	ul.ul-con
 	{
+		list-style-type: "- ";
 		/*color: var(--color-text-failure);*/
 	}
 

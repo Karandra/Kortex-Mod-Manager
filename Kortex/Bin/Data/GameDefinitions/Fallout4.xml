@@ -286,7 +286,7 @@
 			</SortingTools>
 
 			<LibLoot>
-				<Branch>v0.14</Branch>
+				<Branch>v0.15</Branch>
 				<Repository>https://github.com/loot/fallout4.git</Repository>
 				<FolderName>Fallout4</FolderName>
 				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>

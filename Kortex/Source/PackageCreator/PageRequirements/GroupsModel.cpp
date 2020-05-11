@@ -224,7 +224,7 @@ namespace Kortex::PackageDesigner::PageRequirementsNS
 					TrackID_ReplaceOrRemove(trackedID, newID, entry->GetRequirements(), remove);
 	
 					// Flags
-					TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, entry->GetConditionalFlags().GetFlags(), remove);
+					TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, entry->GetConditionFlags().GetFlags(), remove);
 					for (PackageProject::Condition& condition: entry->GetTDConditionGroup().GetConditions())
 					{
 						TrackID_ReplaceOrRemove(trackedFlagName, newFlagName, condition.GetFlags(), remove);

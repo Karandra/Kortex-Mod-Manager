@@ -334,14 +334,14 @@ namespace Kortex::PluginManager
 					sortingMenu->AddSeparator();
 				}
 
-				for (const SortingToolEntry& entry: sortingTools)
+				for (const SortingToolItem& toolItem: sortingTools)
 				{
-					KxMenuItem* item = sortingMenu->Add(new KxMenuItem(entry.GetName()));
-					item->SetBitmap(KxShell::GetFileIcon(entry.GetExecutable(), true));
-					item->Bind(KxEVT_MENU_SELECT, [this, entry](KxMenuEvent& event)
+					KxMenuItem* item = sortingMenu->Add(new KxMenuItem(toolItem.GetName()));
+					item->SetBitmap(KxShell::GetFileIcon(toolItem.GetExecutable(), true));
+					item->Bind(KxEVT_MENU_SELECT, [this, toolItem](KxMenuEvent& event)
 					{
 						IPluginManager::GetInstance()->Save();
-						IPluginManager::GetInstance()->RunSortingTool(entry);
+						IPluginManager::GetInstance()->RunSortingTool(toolItem);
 					});
 				}
 			}

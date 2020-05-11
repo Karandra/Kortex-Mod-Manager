@@ -1,32 +1,38 @@
 #include "stdafx.h"
 #include "Common.h"
 #include "GameData/IPluginManager.h"
+#include "Application/AppOption.h"
 #include <Kortex/Application.hpp>
 #include <KxFramework/KxComparator.h>
 
+namespace
+{
+	KortexDefOption(SortingTools);
+}
+
 namespace Kortex::PluginManager
 {
-	StdContentEntry::StdContentEntry(const KxXMLNode& node)
+	StdContentItem::StdContentItem(const KxXMLNode& node)
 	{
 		m_ID = node.GetAttribute(wxS("ID"));
 		m_Name = node.GetAttribute(wxS("Name"));
 		m_Logo = node.GetAttribute(wxS("Logo"));
 	}
 
-	wxString StdContentEntry::GetID() const
+	wxString StdContentItem::GetID() const
 	{
 		return m_ID;
 	}
-	wxString StdContentEntry::GetName() const
+	wxString StdContentItem::GetName() const
 	{
 		return KVarExp(m_Name);
 	}
-	wxString StdContentEntry::GetLogo() const
+	wxString StdContentItem::GetLogo() const
 	{
 		return KVarExp(m_Logo);
 	}
 
-	wxString StdContentEntry::GetLogoFullPath() const
+	wxString StdContentItem::GetLogoFullPath() const
 	{
 		return KVarExp(KxString::Format("%1\\PluginManager\\Logos\\%2\\%3", IApplication::GetInstance()->GetDataFolder(), "$(GameID)", GetLogo()));
 	}
@@ -34,39 +40,70 @@ namespace Kortex::PluginManager
 
 namespace Kortex::PluginManager
 {
-	SortingToolEntry::SortingToolEntry(const KxXMLNode& node)
+	SortingToolItem::SortingToolItem(const KxXMLNode& node)
 	{
 		m_ID = node.GetAttribute("ID");
 		m_Name = node.GetAttribute("Name");
 		m_Command = node.GetFirstChildElement("Command").GetValue();
 	}
 
-	wxString SortingToolEntry::GetID() const
+	wxString SortingToolItem::GetID() const
 	{
 		return m_ID;
 	}
-	wxString SortingToolEntry::GetName() const
+	wxString SortingToolItem::GetName() const
 	{
 		return KVarExp(m_Name);
 	}
 
-	wxString SortingToolEntry::GetExecutable() const
+	wxString SortingToolItem::GetExecutable() const
 	{
-		if (IPluginManager* manager = IPluginManager::GetInstance())
+		if (m_Executable.IsEmpty())
 		{
-			//return manager->GetSortingToolsOptions().GetAttribute(m_ID);
+			if (IPluginManager* manager = IPluginManager::GetInstance())
+			{
+				KxXMLNode option = manager->GetAInstanceOption(SortingTools).GetNode();
+				for (KxXMLNode node = option.GetFirstChildElement(); node; node = node.GetNextSiblingElement())
+				{
+					if (node.GetAttribute("ID") == m_ID)
+					{
+						m_Executable = node.GetFirstChildElement("Executable").GetValue();
+						break;
+					}
+				}
+			}
 		}
-		return wxEmptyString;
+		return m_Executable;
 	}
-	void SortingToolEntry::SetExecutable(const wxString& path) const
+	void SortingToolItem::SetExecutable(const wxString& path) const
 	{
-		if (IPluginManager* manager = IPluginManager::GetInstance())
+		if (m_Executable != path)
 		{
-			//manager->GetSortingToolsOptions().SetAttribute(m_ID, path);
+			m_Executable = path;
+
+			if (IPluginManager* manager = IPluginManager::GetInstance())
+			{
+				KxXMLNode option = manager->GetAInstanceOption(SortingTools).GetNode();
+				for (KxXMLNode node = option.GetFirstChildElement(); node; node = node.GetFirstChildElement())
+				{
+					if (node.GetAttribute("ID") == m_ID)
+					{
+						node.GetFirstChildElement("Executable").SetValue(path);
+						return;
+					}
+				}
+
+				if (!path.IsEmpty())
+				{
+					KxXMLNode node = option.NewElement("Item");
+					node.SetAttribute("ID", m_ID);
+					node.NewElement("Executable").SetValue(path);
+				}
+			}
 		}
 	}
 
-	wxString SortingToolEntry::GetArguments() const
+	wxString SortingToolItem::GetArguments() const
 	{
 		return KVarExp(m_Command);
 	}
@@ -103,9 +140,9 @@ namespace Kortex::PluginManager
 	{
 		return KVarExp(m_StdandardContent_MainID);
 	}
-	const StdContentEntry* Config::GetStandardContent(const wxString& id) const
+	const StdContentItem* Config::GetStandardContent(const wxString& id) const
 	{
-		auto it = std::find_if(m_StandardContent.begin(), m_StandardContent.end(), [&id](const StdContentEntry& entry)
+		auto it = std::find_if(m_StandardContent.begin(), m_StandardContent.end(), [&id](const StdContentItem& entry)
 		{
 			return KxComparator::IsEqual(entry.GetID(), id);
 		});

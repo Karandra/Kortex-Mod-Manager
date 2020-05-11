@@ -17,7 +17,21 @@ namespace Kortex::DownloadManager
 		{
 			case ColumnID::Name:
 			{
-				return BitmapTextValue(m_Item.GetName(), GetStateBitmap());
+				wxString name = m_Item.GetName();
+				wxString displayName = m_Item.GetDisplayName();
+
+				if (name == displayName)
+				{
+					return BitmapTextValue(name, GetStateBitmap());
+				}
+				else if (name.IsEmpty() || displayName.IsEmpty())
+				{
+					return BitmapTextValue(displayName, GetStateBitmap());
+				}
+				else
+				{
+					return BitmapTextValue(KxString::Format(wxS("%1 (%2)"), name, displayName), GetStateBitmap());
+				}
 			}
 			case ColumnID::Version:
 			{

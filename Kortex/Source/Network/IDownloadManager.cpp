@@ -3,13 +3,17 @@
 #include <Kortex/NetworkManager.hpp>
 #include <Kortex/Application.hpp>
 #include <Kortex/GameInstance.hpp>
+#include "Archive/Common.h"
 #include "Utility/Common.h"
+#include "UI/ProgressOverlay.h"
 #include <KxFramework/KxComparator.h>
 #include <KxFramework/KxFile.h>
-#include <KxFramework/KxDrive.h>
+#include <Kx/FileSystem/LegacyDrive.h>
 #include <KxFramework/KxRegistry.h>
 #include <KxFramework/KxFileFinder.h>
 #include <KxFramework/KxUtility.h>
+
+using namespace KxFileSystem;
 
 namespace
 {
@@ -29,6 +33,7 @@ namespace Kortex::Application
 		KortexDefOption(Downloads);
 		KortexDefOption(ShowHidden);
 		KortexDefOption(MaxConcurrentDownloads);
+		KortexDefOption(ShowArchivesOnly);
 	}
 }
 
@@ -92,6 +97,7 @@ namespace Kortex
 	{
 		using namespace Application;
 		m_ShowHiddenDownloads = GetAInstanceOption(OName::ShowHidden).GetValueBool(m_ShowHiddenDownloads);
+		m_ShowArchivesOnly = GetAInstanceOption(OName::ShowArchivesOnly).GetValueBool(m_ShowArchivesOnly);
 		m_MaxConcurrentDownloads = GetAInstanceOption(OName::MaxConcurrentDownloads).GetValueInt(m_MaxConcurrentDownloads);
 
 		KxFile(GetDownloadsLocation()).CreateFolder();
@@ -100,6 +106,7 @@ namespace Kortex
 	{
 		using namespace Application;
 		GetAInstanceOption(OName::ShowHidden).SetValue(m_ShowHiddenDownloads);
+		GetAInstanceOption(OName::ShowArchivesOnly).SetValue(m_ShowArchivesOnly);
 		GetAInstanceOption(OName::MaxConcurrentDownloads).SetValue(m_MaxConcurrentDownloads);
 
 		PauseAllActive();
@@ -122,7 +129,7 @@ namespace Kortex
 		}
 		
 		// Check volume capabilities
-		KxDrive drive(directoryPath);
+		LegacyDrive drive = LegacyDrive::FromChar(directoryPath);
 
 		// Add one megabyte because it's probably impossible to safely save a file
 		// with exactly the same size as the free space left on the disk.
@@ -132,8 +139,8 @@ namespace Kortex
 			return LocationStatus::InsufficientVolumeSpace;
 		}
 
-		// Check if the volume supports file streams
-		if (!(drive.GetInfo().FileSystemFlags & FILE_NAMED_STREAMS))
+		// Check if the volume supports alternate file streams
+		if (!(drive.GetFileSystemFeatures() & FileSystemFeature::NamedStreams))
 		{
 			return LocationStatus::InsufficientVolumeCapabilities;
 		}
@@ -255,18 +262,27 @@ namespace Kortex
 
 		const wxString tempExt = wxS("tmp");
 		KxFileFinder finder(GetDownloadsLocation(), wxS("*"));
-
 		for (KxFileItem fileItem = finder.FindNext(); fileItem.IsOK(); fileItem = finder.FindNext())
 		{
 			if (fileItem.IsNormalItem() && fileItem.IsFile())
 			{
 				if (!Utility::SingleFileExtensionMatches(fileItem.GetFileExtension(), tempExt))
 				{
+					// Skip all non-archive files if needed
+					if (m_ShowArchivesOnly && Archive::DetectFormat(fileItem.GetFullPath()) == Archive::Format::Unknown)
+					{
+						// Don't skip if it's non-archive temp file for unfinished download
+						KxFileItem item(fileItem.GetSource(), fileItem.GetName() + wxS('.') + tempExt);
+						if (!item || !item.IsFile())
+						{
+							continue;
+						}
+					}
+
 					DownloadItem& download = *m_Downloads.emplace_back(std::make_unique<DownloadItem>());
 					if (!download.Load(fileItem))
 					{
 						download.LoadDefault(fileItem);
-						download.Save();
 					}
 				}
 			}
@@ -292,11 +308,14 @@ namespace Kortex
 			}
 		}
 	}
-	
+
 	void IDownloadManager::ShowHiddenDownloads(bool show)
 	{
 		m_ShowHiddenDownloads = show;
-		BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
+	}
+	void IDownloadManager::SetShowArchivesOnly(bool show)
+	{
+		m_ShowArchivesOnly = show;
 	}
 
 	wxString IDownloadManager::GetDownloadsLocation() const

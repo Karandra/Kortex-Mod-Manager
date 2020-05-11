@@ -128,18 +128,18 @@ namespace Kortex::PluginManager
 		return nullptr;
 	}
 
-	bool BasePluginManager::CheckSortingTool(const PluginManager::SortingToolEntry& entry)
+	bool BasePluginManager::CheckSortingTool(const PluginManager::SortingToolItem& toolItem)
 	{
-		if (entry.GetExecutable().IsEmpty() || !KxFile(entry.GetExecutable()).IsFileExist())
+		if (toolItem.GetExecutable().IsEmpty() || !KxFile(toolItem.GetExecutable()).IsFileExist())
 		{
-			KxTaskDialog dalog(Workspace::GetInstance(), KxID_NONE, KTrf("PluginManager.Sorting.Missing.Caption", entry.GetName()), KTr("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
+			KxTaskDialog dalog(Workspace::GetInstance(), KxID_NONE, KTrf("PluginManager.Sorting.Missing.Caption", toolItem.GetName()), KTr("PluginManager.Sorting.Missing.Message"), KxBTN_OK|KxBTN_CANCEL, KxICON_WARNING);
 			if (dalog.ShowModal() == KxID_OK)
 			{
 				KxFileBrowseDialog browseDialog(Workspace::GetInstance(), KxID_NONE, KxFBD_OPEN);
 				browseDialog.AddFilter("*.exe", KTr("FileFilter.Programs"));
 				if (browseDialog.ShowModal() == KxID_OK)
 				{
-					entry.SetExecutable(browseDialog.GetResult());
+					toolItem.SetExecutable(browseDialog.GetResult());
 					return true;
 				}
 			}
@@ -147,38 +147,46 @@ namespace Kortex::PluginManager
 		}
 		return true;
 	}
-	void BasePluginManager::RunSortingTool(const PluginManager::SortingToolEntry& entry)
+	void BasePluginManager::RunSortingTool(const PluginManager::SortingToolItem& toolItem)
 	{
-		if (CheckSortingTool(entry))
+		if (CheckSortingTool(toolItem))
 		{
-			ProgramManager::DefaultProgramItem runEntry;
-			runEntry.SetName(entry.GetName());
-			runEntry.SetExecutable(entry.GetExecutable());
-			runEntry.SetArguments(entry.GetArguments());
+			ProgramManager::DefaultProgramItem runItem;
+			runItem.SetName(toolItem.GetName());
+			runItem.SetExecutable(toolItem.GetExecutable());
+			runItem.SetArguments(toolItem.GetArguments());
 
-			KxProcess* process = IProgramManager::GetInstance()->CreateProcess(runEntry).release();
+			auto process = IProgramManager::GetInstance()->CreateProcess(runItem);
 			process->SetOptionEnabled(KxPROCESS_WAIT_END, true);
 			process->SetOptionEnabled(KxPROCESS_DETACHED, false);
+			KxProcess& processRef = *process;
 
 			KxProgressDialog* dialog = new KxProgressDialog(Workspace::GetInstance(), KxID_NONE, KTr("PluginManager.Sorting.Waiting.Caption"), wxDefaultPosition, wxDefaultSize, KxBTN_CANCEL);
-			dialog->Bind(KxEVT_STDDIALOG_BUTTON, [process](wxNotifyEvent& event)
+			dialog->Bind(KxEVT_STDDIALOG_BUTTON, [&process = *process](wxNotifyEvent& event)
 			{
 				if (event.GetId() == KxID_CANCEL)
 				{
-					process->Terminate(-1, true);
+					process.Terminate(-1, true);
 				}
 				event.Veto();
 			});
-			process->Bind(KxEVT_PROCESS_END, [this, process, dialog](wxProcessEvent& event)
+			process->Bind(KxEVT_PROCESS_END, [this, dialog, ptr = process.release()](wxProcessEvent& event) mutable
 			{
+				BroadcastProcessor::Get().CallAfter([this, process = std::unique_ptr<KxProcess>(ptr)]() mutable
+				{
+					process.reset();
+					Invalidate();
+				});
+
+				// Reload plugins order from the native source
 				LoadNativeOrder();
+
+				// Copy new order into profile plugin list
+				IGameProfile::GetActive()->SyncWithCurrentState();
+				Save();
+
 				dialog->Destroy();
 				IMainWindow::GetInstance()->GetFrame().Enable();
-
-				BroadcastProcessor::Get().CallAfter([&process]()
-				{
-					delete process;
-				});
 			});
 
 			IMainWindow::GetInstance()->GetFrame().Disable();
@@ -186,7 +194,8 @@ namespace Kortex::PluginManager
 			dialog->Pulse();
 			dialog->Show();
 
-			process->Run(KxPROCESS_RUN_ASYNC);
+			Save();
+			processRef.Run(KxPROCESS_RUN_ASYNC);
 		}
 	}
 }

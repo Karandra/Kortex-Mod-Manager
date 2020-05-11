@@ -123,7 +123,7 @@
 		<String ID="Generic.IDInvalid">Invalid identifier</String>
 		<String ID="Generic.Invalid">Invalid</String>
 		<String ID="Generic.Name">Name</String>
-		<String ID="Generic.UserName">User name</String>
+		<String ID="Generic.UserName">Username</String>
 		<String ID="Generic.EMailAddress">Email address</String>
 		<String ID="Generic.Index">Index</String>
 		<String ID="Generic.PartOf">Part of</String>
@@ -206,7 +206,7 @@ Using the default folder is not recommended because profile data can occupy a lo
 
 		<!-- Settings Window -->
 		<String ID="Settings.Caption">Application settings</String>
-		<String ID="Settings.SaveMessage">Some changes won't take effect untill the application has been restarted</String>
+		<String ID="Settings.SaveMessage">Some changes won't take effect until the application has been restarted</String>
 
 		<String ID="Settings.PrepareUninstall">Uninstall</String>
 		<String ID="Settings.PrepareUninstall.Button">Prepare to uninstall</String>
@@ -461,7 +461,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="ModManager.Profile">Profile</String>
 		<String ID="ModManager.Profile.Configure">Configure profiles</String>
 		<String ID="ModManager.Profile.Export">Export profile</String>
-		<String ID="ModManager.Profile.RemoveDialog">Are you sure you want to delete this profile? This operation can not be undone.</String>
+		<String ID="ModManager.Profile.RemoveDialog">Are you sure you want to delete this profile? This operation cannot be undone.</String>
 		<String ID="ModManager.Profile.AlreadyExist">Profile with this name already exist</String>
 		<String ID="ModManager.Profile.RenameFailed">Failed to rename profile list</String>
 
@@ -505,7 +505,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="TagManager.PrimaryTag">Primary tag</String>
 
 		<String ID="TagManager.LoadDefaultTags">Load default tags</String>
-		<String ID="TagManager.LoadDefaultTags.Message">Are you sure you want to laod default tags?</String>
+		<String ID="TagManager.LoadDefaultTags.Message">Are you sure you want to load default tags?</String>
 		<String ID="TagManager.RemoveTag.Message">Are you sure you want to delete this tag? This will remove him from the system and break its connection with all mods.</String>
 
 		<String ID="TagManager.Tag.Animation">Animation</String>
@@ -653,6 +653,11 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.ConcurrentDownloads.Label">Concurrent downloads</String>
 		<String ID="DownloadManager.ConcurrentDownloads.Unlimited">Unlimited</String>
 
+		<String ID="DownloadManager.RefreshItems.Caption">Refresh download list</String>
+		<String ID="DownloadManager.RefreshItems.Message"><![CDATA[Refreshing downloads list will cause any running downloads to be paused. If the download source doesn't suport resuming you would have to restart the download.
+
+Are you really sure you want to refresh the list?]]></String>
+
 		<!-- Context menu -->
 		<String ID="DownloadManager.Menu.Install">Install</String>
 		<String ID="DownloadManager.Menu.Add">Add download</String>
@@ -666,6 +671,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.Abort">Abort</String>
 
 		<String ID="DownloadManager.Menu.SetSource">Change source</String>
+		<String ID="DownloadManager.Menu.SetSource.Message">Enter new network ID for this download</String>
+
+		<String ID="DownloadManager.Menu.SetTargetGame">Change target game</String>
 		<String ID="DownloadManager.Menu.QueryInfo">Query info</String>
 		<String ID="DownloadManager.Menu.ShowChangeLog">Show change log</String>
 		<String ID="DownloadManager.Menu.ResetDownloadLink">Reset download link</String>
@@ -680,7 +688,9 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="DownloadManager.Menu.HideAll">Hide all downloads</String>
 		<String ID="DownloadManager.Menu.HideInstalled">Hide all installed downloads</String>
 		<String ID="DownloadManager.Menu.UnhideAll">Unhide all downloads</String>
+
 		<String ID="DownloadManager.Menu.AlwaysShowHidden">Always show hidden downloads</String>
+		<String ID="DownloadManager.Menu.ShowArchivesOnly">Show archives only</String>
 
 		<String ID="DownloadManager.Menu.CopyLink">Copy link</String>
 
@@ -691,7 +701,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="VFS.Service.InstallCaption">Install virtual file system service</String>
 		<String ID="VFS.Service.InstallMessage">Virtual file system (VFS) service has not been installed. After this window has been closed, VFS service and driver will be installed.</String>
 		<String ID="VFS.Service.InstallFailed">Failed to install the virtual file system service.</String>
-		<String ID="VFS.Service.UnhandledException">Unhandled exception occured in virtual file system (VFS) service. The service will be restarted.</String>
+		<String ID="VFS.Service.UnhandledException">Unhandled exception occurred in virtual file system (VFS) service. The service will be restarted.</String>
 
 		<String ID="VFS.MountingCaptionEnable">Mounting the virtual file system</String>
 		<String ID="VFS.MountingCaptionDisable">Unmounting the virtual file system</String>
@@ -755,7 +765,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="PluginManager.Sorting.Missing.Message">Specify the program's location to perform the sorting.</String>
 		<String ID="PluginManager.Sorting.Waiting.Caption">Waiting to complete</String>
 
-		<String ID="PluginManager.LootAPI.CanNotUpdateMasterlist">Can't update masterlist</String>
+		<String ID="PluginManager.LootAPI.CanNotUpdateMasterlist">Can't update master list</String>
 
 		<!-- Screenshots Gallery -->
 		<String ID="ScreenshotsGallery.Name">Screenshot gallery</String>
@@ -813,7 +823,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="PackageManager.ReqCategory.BodyReplacers">Body replacers</String>
 		<String ID="PackageManager.ReqCategory.Patches">Patches</String>
 		<String ID="PackageManager.ReqCategory.Extra">Extra</String>
-		<String ID="PackageManager.ReqCategory.Misc">Misc</String>
+		<String ID="PackageManager.ReqCategory.Misc">Misc.</String>
 
 		<!-- Package Creator -->
 		<String ID="PackageCreator.MenuBar.Project">Project</String>
@@ -835,7 +845,7 @@ This folder and all its contents will be deleted: %1]]>
 		<String ID="PackageCreator.MenuBuild.Preview">Build for preview</String>
 
 		<String ID="PackageCreator.Build.Caption">Building "%1"</String>
-		<String ID="PackageCreator.Build.Complete">Build comolete</String>
+		<String ID="PackageCreator.Build.Complete">Build complete</String>
 		<String ID="PackageCreator.Build.BuildError">Failed to build</String>
 		<String ID="PackageCreator.Build.CheckError">Some errors have been found while checking the project</String>
 		<String ID="PackageCreator.Build.CheckError.PackagePath">Invalid installation package name</String>
@@ -856,7 +866,7 @@ This folder and all its contents will be deleted: %1]]>
 
 		<String ID="PackageCreator.ImportFOMod">Import FOMod</String>
 		<String ID="PackageCreator.ExportFOMod">Export FOMod</String>
-		<String ID="PackageCreator.ProjectFolder">Rroject folder</String>
+		<String ID="PackageCreator.ProjectFolder">Project folder</String>
 		<String ID="PackageCreator.NewStepDialog">Add new step</String>
 		<String ID="PackageCreator.NewGroupDialog">Add new group</String>
 		<String ID="PackageCreator.RemoveStepDialog">Are you sure you want to delete the step "%1"? All groups in this step will be deleted as well.</String>
@@ -990,19 +1000,19 @@ This folder and all its contents will be deleted: %1]]>
 
 		<String ID="PackageCreator.TypeDescriptor.Optional">This option is not required</String>
 		<String ID="PackageCreator.TypeDescriptor.Required">This option is required</String>
-		<String ID="PackageCreator.TypeDescriptor.Recommended">This component is optional, but is recommended for the current configuration.</String>
-		<String ID="PackageCreator.TypeDescriptor.NotUsable">This component can not be used in the current configuration. For example, some of the required mods are missing.</String>
+		<String ID="PackageCreator.TypeDescriptor.Recommended">This component is optional but is recommended for the current configuration.</String>
+		<String ID="PackageCreator.TypeDescriptor.NotUsable">This component cannot be used in the current configuration. For example, some of the required mods are missing.</String>
 		<String ID="PackageCreator.TypeDescriptor.CouldBeUsable">This component can be used in the current configuration, but its correct operation is not guaranteed. For example, the versions of the required mods do not match.</String>
 
-		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Caption">Remove flags</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Caption">Remove flag</String>
 		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Message">
-			<![CDATA[Remove flags from the whole project? Deleting will remove all references to flags in the project.
+			<![CDATA[Remove flag from the entire project? Deletion will remove all references to the flag in the project.
 
-You can also rename references to a deleted flags by adding the prefix "%1" to them.]]>
+You can also rename references to the deleted flag by adding a prefix in their name (%1).]]>
 		</String>
 		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Remove">Remove only</String>
 		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveTrack">Remove in entire project</String>
-		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveRename">Rename flags</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveRename">Rename</String>
 
 		<String ID="PackageCreator.Conditions.AddNewCondition">Add new condition</String>
 		<String ID="PackageCreator.Conditions.AddToCondition">Add to condition</String>
@@ -1043,7 +1053,7 @@ This might be because:
 		<String ID="InstallWizard.Page.Done">Done</String>
 
 		<String ID="InstallWizard.LoadFailed.Caption">Failed to load "%1" installation package</String>
-		<String ID="InstallWizard.LoadFailed.Message">The file might be corrupted or its format is not supported.</String>
+		<String ID="InstallWizard.LoadFailed.Message">The file might be corrupted, or its format is not supported.</String>
 
 		<String ID="InstallWizard.Reinstall.Caption">Mod reinstalling</String>
 		<String ID="InstallWizard.Reinstall.Message">

@@ -270,8 +270,8 @@ namespace Kortex::InstallWizard
 	}
 	void InfoPage::OnSaveUIOptions(Application::ActiveInstanceOption& option) const
 	{
-		option.QueryOrCreateElement(OName::GeneralInfo).SaveDataViewLayout(m_InfoDisplayModel->GetView());
-		option.QueryOrCreateElement(OName::Documents).SaveSplitterLayout(m_DocumentsContainer);
+		option.ConstructElement(OName::GeneralInfo).SaveDataViewLayout(m_InfoDisplayModel->GetView());
+		option.ConstructElement(OName::Documents).SaveSplitterLayout(m_DocumentsContainer);
 	}
 	void InfoPage::OnPackageLoaded()
 	{

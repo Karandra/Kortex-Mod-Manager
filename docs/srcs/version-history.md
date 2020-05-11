@@ -6,6 +6,31 @@
 
 More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/commits/master).
 
+### Version 2.0a11 - 10.03.2020
+- [General] Using user-specific settings to format date and time instead of hardcoded fixed format.
+- [General] Fixed initial config dialog which allows to choose instances folder. Default folder location was always used unless another path was specified in the settings file.
+- [Plugin Manager] Fixed standalone LOOT sorting.
+- [Package Manager] Fixed reading condition group block for native package serializer.
+- [Package Manager] Fixed reading of tags array from the project file.
+- [Package Manager] Fixed mod name and ID pair logic in project config and package creator.
+- [Download Manager] Disabled saving of default download meta-info if it didn't contain it on load.
+
+### Version 2.0a10 - 04.03.2020
+- [Mod Manager] Fixed `ERROR(76): Attempted to access a path that is not on the disk.` in FNIS. The error was caused by VFS when there was a file copy/move operation but target directory tree doesn't exist in *non*-virtual mod directory (or overwrite).
+- [Package Manager] Fixed crash during FOMod loading.
+- [Package Manager] Fixed missing nodes in FOMod XML files when their value is empty to conform to the FOMod's XML scheme.
+- [Download Manager] Fixed query download info.
+- [Download Manager] Fixed changing download source.
+- [Download Manager] Added an option to change download target game.
+- [Download Manager] Added an option to show only archives in the downloads list.
+- [Download Manager] Added a warning before refreshing downloads list if there are any downloads running.
+
+### Version 2.0a9 - 13.02.2020
+- [General] Added experimental WebView based on [Sciter](https://sciter.com) to display mod descriptions.
+- [General] Fixed disabled mods workspace when it's not the initial workspace.
+- [General] Fixed missing buttons on 100% scaling (the fix should have been in 2.0a8 but it's not there apparently).
+- [General] Some minor changes.
+
 ### Version 2.0a8 - 02.12.2019
 - [General] UI component to run programs and VFS added to the main window.
 - [General] Currently active workspace (tab or window) is now remembered.
@@ -143,7 +168,7 @@ More changes in [commit history](https://github.com/KerberX/Kortex-Mod-Manager/c
 - [General] English localization is added. Thank you Monday for the translation.
 - [Package Manager] Fixed display of images in the interface of creating installers.
 - [Package Manager] Importing the project from the installer now specifies this installer as the destination path for the build.
-- [Package Manager] Fixed the name of the Required Files item in the project XML file. This means that the list of required installer files will be empty and - such installers must be rebuilt with the reassignment of the required files (if they were used). Excuse me.
+- [Package Manager] Fixed the name of the Required Files item in the project XML file. This means that the list of required installer files will be empty and - such installers must be rebuilt with the reassignment of the required files (if they were used). Sorry.
 - [Package Manager] Added an explicit indication of priorities for folders and files when creating the installer.
 - [Package Manager] Added context menu items for importing the project and unpacking the archive in the list of available installers.
 - [Package Manager] Added the ability to import information to create a project from the installation log.

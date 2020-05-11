@@ -131,13 +131,25 @@ namespace Kortex::DownloadManager
 			{
 				for (ModNetworkRepository* repository: INetworkManager::GetInstance()->GetModRepositories())
 				{
+					const ModNetworkRepository* modRepository = download->GetModRepository();
+
 					KxMenuItem* item = providerMenu->AddItem(repository->GetContainer().GetName(), wxEmptyString, wxITEM_CHECK);
-					item->Check(repository == download->GetModRepository());
-					item->Enable(!item->IsChecked());
-					item->Bind(KxEVT_MENU_SELECT, [download, repository](KxMenuEvent& event)
+					item->Check(repository == modRepository);
+					item->SetBitmap(ImageProvider::GetBitmap(repository->GetContainer().GetIcon()));
+					item->Bind(KxEVT_MENU_SELECT, [this, download, repository](KxMenuEvent& event)
 					{
-						download->SetModRepository(*repository);
-						download->Save();
+						NetworkModInfo networkModInfo = download->GetNetworkModInfo();
+
+						KxTextBoxDialog dialog(GetView(), KxID_NONE, KTr("DownloadManager.Menu.SetSource.Message"), wxDefaultPosition, wxDefaultSize, KxBTN_OK|KxBTN_CANCEL);
+						dialog.SetIcon(ImageProvider::GetIcon(repository->GetContainer().GetIcon()));
+						dialog.SetValue(networkModInfo.ToString());
+						dialog.GetTextBox()->SetValidator(NetworkModInfo::CreateValidator());
+						if (dialog.ShowModal() == KxID_OK)
+						{
+							networkModInfo.FromString(dialog.GetValue());
+							download->SetModRepository(*repository, std::move(networkModInfo));
+							download->Save();
+						}
 					});
 				}
 			}
@@ -146,11 +158,38 @@ namespace Kortex::DownloadManager
 			item->Enable(providerMenu->GetMenuItemCount() != 0);
 		}
 		{
+			KxMenu* targetGameMenu = new KxMenu();
+			if (download && !isRunning)
+			{
+				for (const auto& gameTemplate: IGameInstance::GetTemplates())
+				{
+					const GameID gameID = download->GetTargetGame();
+
+					KxMenuItem* item = targetGameMenu->AddItem(gameTemplate->GetGameName(), wxEmptyString, wxITEM_CHECK);
+					item->Check(gameID == gameTemplate->GetGameID());
+					item->Enable(!gameID || !item->IsChecked());
+					item->SetBitmap(gameTemplate->GetIcon(ImageProvider::GetImageList().GetSize()));
+					item->Bind(KxEVT_MENU_SELECT, [download, &gameTemplate = *gameTemplate](KxMenuEvent& event)
+					{
+						download->SetTargetGame(gameTemplate.GetGameID());
+						download->Save();
+					});
+				}
+			}
+
+			KxMenuItem* item = contextMenu.Add(targetGameMenu, KTr("DownloadManager.Menu.SetTargetGame"));
+			item->Enable(targetGameMenu->GetMenuItemCount() != 0);
+		}
+		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.QueryInfo"));
 			item->Enable(download && download->CanQueryInfo());
 			item->Bind(KxEVT_MENU_SELECT, [download](KxMenuEvent& event)
 			{
-				if (!download->QueryInfo())
+				if (download->QueryInfo())
+				{
+					download->Save();
+				}
+				else
 				{
 					wxString message = KTrf("DownloadManager.Notification.QueryDownloadInfoFailed", download->GetName());
 					INotificationCenter::NotifyUsing<IDownloadManager>(message, KxICON_WARNING);
@@ -181,7 +220,7 @@ namespace Kortex::DownloadManager
 			{
 				if (m_DownloadManager.RemoveDownload(*download))
 				{
-					RefreshItems();
+					BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
 				}
 			});
 		}
@@ -214,7 +253,7 @@ namespace Kortex::DownloadManager
 			{
 				download->Show(!isVisible);
 				download->Save();
-				RefreshItems();
+				BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
 			});
 		}
 		{
@@ -240,13 +279,29 @@ namespace Kortex::DownloadManager
 				SetAllHidden(false);
 			});
 		}
+		contextMenu.AddSeparator();
+
 		{
 			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.AlwaysShowHidden"), wxEmptyString, wxITEM_CHECK);
 			item->Check(m_DownloadManager.ShouldShowHiddenDownloads());
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
-				m_DownloadManager.ToggleHiddenDownloads();
-				RefreshItems();
+				m_DownloadManager.ShowHiddenDownloads(!m_DownloadManager.ShouldShowHiddenDownloads());
+				BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
+			});
+		}
+		{
+			KxMenuItem* item = contextMenu.AddItem(KTr("DownloadManager.Menu.ShowArchivesOnly"), wxEmptyString, wxITEM_CHECK);
+			item->Check(m_DownloadManager.ShouldShowArchivesOnly());
+			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
+			{
+				if (AskRefresh())
+				{
+					m_DownloadManager.SetShowArchivesOnly(!m_DownloadManager.ShouldShowArchivesOnly());
+					m_DownloadManager.LoadDownloads();
+
+					BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
+				}
 			});
 		}
 		contextMenu.AddSeparator();
@@ -281,8 +336,11 @@ namespace Kortex::DownloadManager
 			item->SetBitmap(ImageProvider::GetBitmap(ImageResourceID::ArrowCircleDouble));
 			item->Bind(KxEVT_MENU_SELECT, [this](KxMenuEvent& event)
 			{
-				m_DownloadManager.LoadDownloads();
-				RefreshItems();
+				if (AskRefresh())
+				{
+					m_DownloadManager.LoadDownloads();
+					BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
+				}
 			});
 		}
 		contextMenu.AddSeparator();
@@ -396,6 +454,19 @@ namespace Kortex::DownloadManager
 		return false;
 	}
 
+	bool DisplayModel::AskRefresh()
+	{
+		if (m_DownloadManager.GetActiveDownloadsCount() != 0)
+		{
+			KxTaskDialog dialog(GetView(), KxID_NONE, KTr("DownloadManager.RefreshItems.Caption"), KTr("DownloadManager.RefreshItems.Message"), KxBTN_NONE, KxICON_WARNING);
+			dialog.AddButton(KxID_REFRESH);
+			dialog.AddButton(KxID_NO);
+			dialog.SetDefaultButton(KxID_NO);
+			
+			return dialog.ShowModal() == KxID_REFRESH;
+		}
+		return true;
+	}
 	void DisplayModel::RemoveAll(bool installedOnly)
 	{
 		KxTaskDialog dialog(GetView(), KxID_NONE, KTr("DownloadManager.RemoveDownloadsCaption"), wxEmptyString, KxBTN_YES|KxBTN_NO, KxICON_WARNING);
@@ -411,7 +482,7 @@ namespace Kortex::DownloadManager
 				{
 					IDownloadManager::GetInstance()->RemoveDownload(*entry);
 				}
-				RefreshItems();
+				BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
 			}
 		}
 	}
@@ -426,7 +497,7 @@ namespace Kortex::DownloadManager
 				item->Hide(isHidden);
 				item->Save();
 			}
-			RefreshItems();
+			BroadcastProcessor::Get().ProcessEvent(DownloadEvent::EvtRefreshItems);
 		}
 	}
 	void DisplayModel::Install(DownloadItem& item)

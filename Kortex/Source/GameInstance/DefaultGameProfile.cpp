@@ -15,15 +15,15 @@ namespace Kortex::GameInstance
 	}
 	void DefaultGameProfile::SaveConfig()
 	{
-		KxXMLNode rootNode = m_Config.QueryOrCreateElement("Profile");
+		KxXMLNode rootNode = m_Config.ConstructElement("Profile");
 
-		KxXMLNode configNode = rootNode.QueryOrCreateElement("Config");
-		configNode.QueryOrCreateElement("LocalSaves").SetAttribute("Enabled", m_LocalSavesEnabled);
-		configNode.QueryOrCreateElement("LocalConfig").SetAttribute("Enabled", m_LocalConfigEnabled);
+		KxXMLNode configNode = rootNode.ConstructElement("Config");
+		configNode.ConstructElement("LocalSaves").SetAttribute("Enabled", m_LocalSavesEnabled);
+		configNode.ConstructElement("LocalConfig").SetAttribute("Enabled", m_LocalConfigEnabled);
 
 		if (IModManager::GetInstance())
 		{
-			KxXMLNode modsNode = rootNode.QueryOrCreateElement("Mods");
+			KxXMLNode modsNode = rootNode.ConstructElement("Mods");
 			modsNode.ClearChildren();
 
 			for (const ProfileMod& mod: m_Mods)
@@ -36,7 +36,7 @@ namespace Kortex::GameInstance
 
 		if (IPluginManager::GetInstance())
 		{
-			KxXMLNode pluginsNode = rootNode.QueryOrCreateElement("Plugins");
+			KxXMLNode pluginsNode = rootNode.ConstructElement("Plugins");
 			pluginsNode.ClearChildren();
 
 			for (const ProfilePlugin& plugin: m_Plugins)

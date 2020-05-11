@@ -49,7 +49,7 @@ namespace Kortex::Application::OptionSerializer
 	void UILayout::DataViewLayout(AppOption& option, SerializationMode mode, KxDataViewCtrl* dataView)
 	{
 		const int screenWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X);
-		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(OName::Columns);
+		KxXMLNode columnsNode = option.GetNode().ConstructElement(OName::Columns);
 
 		if (mode == SerializationMode::Save)
 		{
@@ -110,7 +110,7 @@ namespace Kortex::Application::OptionSerializer
 	{
 		using namespace KxDataView2;
 
-		KxXMLNode columnsNode = option.GetNode().QueryOrCreateElement(OName::Columns);
+		KxXMLNode columnsNode = option.GetNode().ConstructElement(OName::Columns);
 		if (mode == SerializationMode::Save)
 		{
 			columnsNode.ClearNode();
@@ -166,7 +166,7 @@ namespace Kortex::Application::OptionSerializer
 			int value = window->GetSashPosition();
 			value = isVertical ? ToDIPX(window, value) : ToDIPY(window, value);
 
-			KxXMLNode node = option.GetNode().QueryOrCreateElement(window->GetName());
+			KxXMLNode node = option.GetNode().ConstructElement(window->GetName());
 			node.SetAttribute(OName::UIOption, true);
 			node.SetAttribute(OName::SashPosition, value);
 		}
@@ -182,7 +182,7 @@ namespace Kortex::Application::OptionSerializer
 	}
 	void UILayout::WorkspaceContainerLayout(AppOption& option, SerializationMode mode, IWorkspaceContainer& container)
 	{
-		KxXMLNode pagesNode = option.GetNode().QueryOrCreateElement(OName::Pages);
+		KxXMLNode pagesNode = option.GetNode().ConstructElement(OName::Pages);
 
 		if (mode == SerializationMode::Save)
 		{
@@ -231,7 +231,7 @@ namespace Kortex::Application::OptionSerializer
 	}
 	void UILayout::WindowGeometry(AppOption& option, SerializationMode mode, wxTopLevelWindow* window)
 	{
-		KxXMLNode geometryNode = option.GetNode().QueryOrCreateElement(wxS("WindowGeometry"));
+		KxXMLNode geometryNode = option.GetNode().ConstructElement(wxS("WindowGeometry"));
 
 		if (mode == SerializationMode::Save)
 		{

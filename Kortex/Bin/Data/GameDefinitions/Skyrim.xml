@@ -282,7 +282,7 @@
 			</SortingTools>
 
 			<LibLoot>
-				<Branch>v0.14</Branch>
+				<Branch>v0.15</Branch>
 				<Repository>https://github.com/loot/skyrim.git</Repository>
 				<FolderName>Skyrim</FolderName>
 				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>

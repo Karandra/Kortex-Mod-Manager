@@ -53,7 +53,7 @@ namespace Kortex::IPC
 				m_Library = library;
 			}
 			void SetProcessingWindow(const ProcessingWindow& processingWindow);
-			void Run();
 			bool WaitForTermination(std::function<void()> func = {});
+			void Run();
 	};
 }

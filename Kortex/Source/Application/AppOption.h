@@ -52,10 +52,10 @@ namespace Kortex
 			
 		protected:
 			wxString DoGetValue(const wxString& defaultValue = wxEmptyString) const override;
-			bool DoSetValue(const wxString& value, AsCDATA asCDATA = AsCDATA::Auto) override;
+			bool DoSetValue(const wxString& value, WriteEmpty writeEmpty, AsCDATA asCDATA = AsCDATA::Auto) override;
 
 			wxString DoGetAttribute(const wxString& name, const wxString& defaultValue = wxEmptyString) const override;
-			bool DoSetAttribute(const wxString& name, const wxString& value) override;
+			bool DoSetAttribute(const wxString& name, const wxString& value, WriteEmpty writeEmpty) override;
 
 			void AssignNode(const KxXMLNode& node)
 			{
@@ -80,7 +80,7 @@ namespace Kortex
 			// General
 			bool IsOK() const override;
 			AppOption QueryElement(const wxString& XPath) const override;
-			AppOption QueryOrCreateElement(const wxString& XPath) override;
+			AppOption ConstructElement(const wxString& XPath) override;
 
 			Disposition GetDisposition() const
 			{
@@ -177,4 +177,3 @@ namespace Kortex::Application
 			virtual void SaveConfig() = 0;
 	};
 }
-

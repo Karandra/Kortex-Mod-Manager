@@ -47,8 +47,14 @@ namespace Kortex::PackageDesigner
 		wxWindowUpdateLocker lock(this);
 
 		/* Basic info */
-		m_IDInput->SetValue(projectInfo.GetProject().GetModID());
-		m_NameInput->SetValue(projectInfo.GetName());
+		const wxString id = projectInfo.GetProject().GetModID();
+		const wxString name = projectInfo.GetName();
+
+		if (id != name)
+		{
+			m_IDInput->SetValue(id);
+		}
+		m_NameInput->SetValue(name);
 		m_TranslatedNameInput->SetValue(projectInfo.GetTranslatedName());
 		m_VersionInput->SetValue(projectInfo.GetVersion());
 		m_AuthorInput->SetValue(projectInfo.GetAuthor());

@@ -35,7 +35,7 @@ namespace
 
 		wxString xPath = AppOption::MakeXPath(root, std::forward<Args>(arg)...);
 		xPath.Replace(wxS("::"), wxS("-"));
-		return xml.QueryOrCreateElement(xPath);
+		return xml.ConstructElement(xPath);
 	}
 	template<class... Args> KxXMLNode InitNodeUsingModule(Disposition disposition, KxXMLDocument& xml, const  IModule& module, Args&&... arg)
 	{

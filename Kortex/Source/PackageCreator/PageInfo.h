@@ -104,7 +104,7 @@ namespace Kortex::PackageDesigner
 
 					KxLabel* label = nullptr;
 					KxTextBox* control = AddControlsRow(sizer, name + "ID", CreateInputField(m_Pane), 1, &label);
-					control->SetValidator(NetworkModInfo::GetValidator());
+					control->SetValidator(NetworkModInfo::CreateValidator());
 
 					label->ToggleWindowStyle(KxLABEL_HYPERLINK);
 					label->SetBitmap(ImageProvider::GetBitmap(modNetwork->GetIcon()));

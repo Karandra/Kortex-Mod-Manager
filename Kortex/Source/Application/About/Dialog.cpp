@@ -74,7 +74,7 @@ namespace Kortex::Application
 		sizer->Add(info, 3, wxEXPAND);
 
 		KxHTMLWindow* licenseNotice = CreateHTMLWindow(panel);
-		licenseNotice->SetValue(CreateInfoText(*m_AppInfo, InfoText::LicenseNotice, 2018, 2019));
+		licenseNotice->SetValue(CreateInfoText(*m_AppInfo, InfoText::LicenseNotice, 2018, 2020));
 		sizer->Add(licenseNotice, 2, wxEXPAND);
 
 		return panel;

@@ -6,7 +6,7 @@ namespace Kortex
 	namespace PluginManager
 	{
 		class IPluginReader;
-		class StdContentEntry;
+		class StdContentItem;
 	}
 	
 	class IGameMod;
@@ -42,7 +42,7 @@ namespace Kortex
 			bool CanToggleActive() const;
 
 			const IGameMod* GetOwningMod() const;
-			virtual const PluginManager::StdContentEntry* GetStdContentEntry() const = 0;
+			virtual const PluginManager::StdContentItem* GetStdContentEntry() const = 0;
 			bool IsStdContent() const
 			{
 				return GetStdContentEntry() != nullptr;

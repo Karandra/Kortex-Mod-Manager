@@ -25,6 +25,8 @@
 
 namespace Kortex::PackageProject
 {
+	using WriteEmpty = KxIXDocumentNode::WriteEmpty;
+
 	namespace
 	{
 		wxString ToFOModOperator(Operator value)
@@ -40,9 +42,12 @@ namespace Kortex::PackageProject
 		{
 			for (const FlagItem& flag: condition.GetFlags())
 			{
-				KxXMLNode entryNode = conditionNode.NewElement("flagDependency");
-				entryNode.SetAttribute("flag", flag.GetName());
-				entryNode.SetAttribute("value", flag.GetValue());
+				if (flag.HasName())
+				{
+					KxXMLNode entryNode = conditionNode.NewElement("flagDependency");
+					entryNode.SetAttribute("flag", flag.GetName());
+					entryNode.SetAttribute("value", flag.GetValue());
+				}
 			}
 		}
 		void WriteConditionGroup(const ConditionGroup& conditionGroup, KxXMLNode& groupNode)
@@ -81,9 +86,12 @@ namespace Kortex::PackageProject
 			conditionNode.SetAttribute("operator", ToFOModOperator(condition.GetOperator()));
 			for (const FlagItem& flag : condition.GetFlags())
 			{
-				KxXMLNode entryNode = conditionNode.NewElement("flag");
-				entryNode.SetValue(flag.GetValue());
-				entryNode.SetAttribute("name", flag.GetName());
+				if (flag.HasName())
+				{
+					KxXMLNode entryNode = conditionNode.NewElement("flag");
+					entryNode.SetValue(flag.GetValue());
+					entryNode.SetAttribute("name", flag.GetName());
+				}
 			}
 		}
 	
@@ -266,7 +274,8 @@ namespace Kortex::PackageProject
 			return requirementsGroup;
 		}
 	
-		template<class T> void SortEntries(T& array, const wxString& order)
+		template<class T>
+		void SortEntries(T& array, const wxString& order)
 		{
 			if (order != wxS("Explicit"))
 			{
@@ -277,11 +286,13 @@ namespace Kortex::PackageProject
 				});
 			}
 		}
-		template<class T> bool WriteSite(const ModSourceStore& modSourceStore, KxXMLNode& node)
+		
+		template<class T>
+		bool WriteSite(const ModSourceStore& modSourceStore, KxXMLNode& node)
 		{
 			if (const ModSourceItem* item = modSourceStore.GetItem<T>())
 			{
-				node.SetValue(item->GetURI().BuildUnescapedURI());
+				node.SetValue(item->GetURI().BuildUnescapedURI(), WriteEmpty::Never);
 				return true;
 			}
 			return false;
@@ -387,9 +398,11 @@ namespace Kortex::PackageProject
 	
 			// Load tags
 			ModTagStore& tagStore = info.GetTagStore();
-			for (KxXMLNode node = infoNode.GetFirstChildElement("Groups"); node.IsOK(); node = node.GetNextSiblingElement())
+			for (KxXMLNode node = infoNode.GetFirstChildElement("Groups").GetFirstChildElement(); node.IsOK(); node = node.GetNextSiblingElement())
 			{
-				tagStore.AddTag(ModTagManager::DefaultTag(node.GetValue()));
+				auto tag = IModTagManager::GetInstance()->NewTag();
+				tag->SetID(node.GetValue());
+				tagStore.AddTag(*tag);
 			}
 		}
 	}
@@ -447,9 +460,9 @@ namespace Kortex::PackageProject
 			}
 	
 			// Add required files to project and link them to components' required files
-			for (const auto& v: ReadFileData(configRootNode.GetFirstChildElement("requiredInstallFiles")))
+			for (const FileItem* fileItem: ReadFileData(configRootNode.GetFirstChildElement("requiredInstallFiles")))
 			{
-				components.GetRequiredFileData().emplace_back(v.first->GetID());
+				components.GetRequiredFileData().emplace_back(fileItem->GetID());
 			}
 	
 			// Header image
@@ -557,7 +570,7 @@ namespace Kortex::PackageProject
 							}
 	
 							// Assigned flags
-							ReadAssignedFlags(entry->GetConditionalFlags(), pluginNode.GetFirstChildElement("conditionFlags"));
+							ReadAssignedFlags(entry->GetConditionFlags(), pluginNode.GetFirstChildElement("conditionFlags"));
 	
 							// Files
 							ReadFileData(pluginNode.GetFirstChildElement("files"), entry);
@@ -587,17 +600,17 @@ namespace Kortex::PackageProject
 	{
 		RequirementsSection& requirements = m_ProjectLoad->GetRequirements();
 		ComponentsSection& components = m_ProjectLoad->GetComponents();
-		auto& tConditionalSteps = components.GetConditionalSteps();
+		auto& conditionalSteps = components.GetConditionalSteps();
 	
 		size_t index = 1;
 		for (KxXMLNode stepNode = stepsArrayNode.GetFirstChildElement("pattern"); stepNode.IsOK(); stepNode = stepNode.GetNextSiblingElement("pattern"))
 		{
-			ConditionalComponentStep* step = tConditionalSteps.emplace_back(std::make_unique<ConditionalComponentStep>()).get();
+			ConditionalComponentStep* step = conditionalSteps.emplace_back(std::make_unique<ConditionalComponentStep>()).get();
 	
 			// Files
-			for (const auto& v: ReadFileData(stepNode.GetFirstChildElement("files")))
+			for (const FileItem* fileItem: ReadFileData(stepNode.GetFirstChildElement("files")))
 			{
-				step->GetItems().emplace_back(v.first->GetID());
+				step->GetItems().emplace_back(fileItem->GetID());
 			}
 	
 			// Conditions
@@ -609,15 +622,15 @@ namespace Kortex::PackageProject
 			}
 		}
 	}
-	FOModSerializer::FilePriorityArray FOModSerializer::ReadFileData(const KxXMLNode& filesArrayNode, ComponentItem* entry)
+	std::vector<FileItem*> FOModSerializer::ReadFileData(const KxXMLNode& filesArrayNode, ComponentItem* entry)
 	{
-		FilePriorityArray priorityList;
+		std::vector<std::pair<std::unique_ptr<FileItem>, int64_t>> priorityList;
 		if (filesArrayNode.IsOK())
 		{
 			for (KxXMLNode fileDataNode = filesArrayNode.GetFirstChildElement(); fileDataNode.IsOK(); fileDataNode = fileDataNode.GetNextSiblingElement())
 			{
 				std::unique_ptr<FileItem> fileEntry;
-				if (fileDataNode.GetName() == "folder")
+				if (fileDataNode.GetName() == wxS("folder"))
 				{
 					fileEntry = std::make_unique<FolderItem>();
 				}
@@ -646,28 +659,26 @@ namespace Kortex::PackageProject
 			}
 	
 			// Sort by priority
-			std::sort(priorityList.begin(), priorityList.end(), [](const auto& v1, const auto& v2)
+			std::sort(priorityList.begin(), priorityList.end(), [](const auto& left, const auto& right)
 			{
-				return v1.second < v2.second;
+				return left.second < right.second;
 			});
-	
-			// Link these files to entry
-			if (entry)
+			
+			// Add to project and link these files to component if needed
+			std::vector<FileItem*> refVector;
+			for (auto& [fileItem, filePriority]: priorityList)
 			{
-				for (const auto& v: priorityList)
+				refVector.push_back(fileItem.get());
+
+				if (entry)
 				{
-					entry->GetFileData().emplace_back(v.first->GetID());
+					entry->GetFileData().emplace_back(fileItem->GetID());
 				}
+				m_ProjectLoad->GetFileData().AddFile(std::move(fileItem));
 			}
-	
-			// Add to project
-			FileDataSection& fileData = m_ProjectLoad->GetFileData();
-			for (auto& v: priorityList)
-			{
-				fileData.AddFile(std::move(v.first));
-			}
+			return refVector;
 		}
-		return priorityList;
+		return {};
 	}
 	void FOModSerializer::UniqueFileData()
 	{
@@ -793,6 +804,7 @@ namespace Kortex::PackageProject
 			wxString colorValue = titleConfig.GetColor().ToString(KxColor::C2S::HTML).AfterFirst('#');
 			if (!colorValue.IsEmpty())
 			{
+				// It's "colour" in FOMod. Yes, British spelling.
 				moduleNameNode.SetAttribute("colour", colorValue);
 			}
 		}
@@ -869,26 +881,23 @@ namespace Kortex::PackageProject
 						{
 							KxXMLNode entryNode = pluginsNode.NewElement("plugin");
 							entryNode.SetAttribute("name", entry->GetName());
-	
-							// Description
-							if (!entry->GetDescription().IsEmpty())
-							{
-								entryNode.NewElement("description").SetValue(entry->GetDescription());
-							}
-	
+							
+							// Description. XML scheme requires the node to be always present even if the description is empty. 
+							entryNode.NewElement("description").SetValue(entry->GetDescription());
+							
 							// Image
 							if (!entry->GetImage().IsEmpty())
 							{
 								entryNode.NewElement("image").SetAttribute("path", PathNameToPackage(entry->GetImage(), ContentType::Images));
 							}
-	
+
 							// FOMod always requires 'files' node, so no check for empty array
 							WriteFileData(entryNode.NewElement("files"), entry->GetFileData());
 	
 							// Assigned flags
-							if (entry->GetConditionalFlags().HasFlags())
+							if (entry->GetConditionFlags().HasFlags())
 							{
-								WriteAssignedFlags(entry->GetConditionalFlags(), entryNode.NewElement("conditionFlags"));
+								WriteAssignedFlags(entry->GetConditionFlags(), entryNode.NewElement("conditionFlags"));
 							}
 	
 							// Type descriptor
@@ -927,14 +936,14 @@ namespace Kortex::PackageProject
 			WriteConditionalSteps(configRootNode.NewElement("conditionalFileInstalls").NewElement("patterns"));
 		}
 	
-		// Make simple installation if no components present
+		// Make simple installation if no components are present
 		if (components.GetSteps().empty() && components.GetConditionalSteps().empty())
 		{
 			wxString name = m_ProjectSave->GetModName();
-	
+			
 			KxXMLNode stepsArrayNode = configRootNode.NewElement("installSteps");
 			stepsArrayNode.SetAttribute("order", "Explicit");
-	
+			
 			KxXMLNode stepNode = stepsArrayNode.NewElement("installStep");
 			stepNode.SetAttribute("name", name);
 	
@@ -1020,11 +1029,8 @@ namespace Kortex::PackageProject
 					fileNode.SetAttribute("destination", file->GetDestination());
 				}
 	
-				// Priority
-				if (!file->IsDefaultPriority())
-				{
-					fileNode.SetAttribute("priority", file->GetPriority());
-				}
+				// Priority. XML scheme requires this attribute to be always present. Default value is 0.
+				fileNode.SetAttribute("priority", !file->IsDefaultPriority() ? file->GetPriority() : 0);
 	
 				// Always install
 				if (alwaysInstall)
@@ -1048,28 +1054,27 @@ namespace Kortex::PackageProject
 	
 		for (const wxString& id: requiremetSets)
 		{
-			RequirementGroup* group = requirements.FindGroupWithID(id);
-			if (group)
+			if (RequirementGroup* group = requirements.FindGroupWithID(id))
 			{
 				node.SetAttribute("operator", group->GetOperator() == Operator::And ? "And" : "Or");
-				for (const auto& entry: group->GetItems())
+				for (const auto& item: group->GetItems())
 				{
-					if (entry->GetID() == IGameInstance::GetActive()->GetGameID())
+					if (item->GetID() == IGameInstance::GetActive()->GetGameID())
 					{
-						node.NewElement("gameDependency").SetAttribute("version", entry->GetRequiredVersion());
+						node.NewElement("gameDependency").SetAttribute("version", item->GetRequiredVersion());
 					}
-					else if (se && entry->GetID() == se->GetEntry().GetID())
+					else if (se && item->GetID() == se->GetEntry().GetID())
 					{
-						node.NewElement("foseDependency").SetAttribute("version", entry->GetRequiredVersion());
+						node.NewElement("foseDependency").SetAttribute("version", item->GetRequiredVersion());
 					}
 					else
 					{
-						ObjectFunction objectFunc = entry->GetObjectFunction();
+						ObjectFunction objectFunc = item->GetObjectFunction();
 						if (objectFunc == ObjectFunction::PluginActive || objectFunc == ObjectFunction::PluginInactive)
 						{
-							KxXMLNode tDepNode = node.NewElement("fileDependency");
-							tDepNode.SetAttribute("file", entry->GetObject());
-							tDepNode.SetAttribute("state", objectFunc == ObjectFunction::PluginActive ? "Active" : "Inactive");
+							KxXMLNode dependencyNode = node.NewElement("fileDependency");
+							dependencyNode.SetAttribute("file", item->GetObject());
+							dependencyNode.SetAttribute("state", objectFunc == ObjectFunction::PluginActive ? "Active" : "Inactive");
 						}
 					}
 				}

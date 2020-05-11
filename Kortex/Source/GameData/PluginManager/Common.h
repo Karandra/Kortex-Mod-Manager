@@ -4,10 +4,10 @@
 
 namespace Kortex::PluginManager
 {
-	class StdContentEntry
+	class StdContentItem final
 	{
 		public:
-			using Vector = std::vector<StdContentEntry>;
+			using Vector = std::vector<StdContentItem>;
 
 		private:
 			wxString m_ID;
@@ -15,7 +15,7 @@ namespace Kortex::PluginManager
 			wxString m_Logo;
 
 		public:
-			StdContentEntry(const KxXMLNode& node);
+			StdContentItem(const KxXMLNode& node);
 
 		public:
 			wxString GetID() const;
@@ -23,29 +23,30 @@ namespace Kortex::PluginManager
 			wxString GetLogo() const;
 			wxString GetLogoFullPath() const;
 	};
-	class SortingToolEntry
+	class SortingToolItem final
 	{
 		public:
-			using Vector = std::vector<SortingToolEntry>;
+			using Vector = std::vector<SortingToolItem>;
 
 		private:
 			wxString m_ID;
 			wxString m_Name;
 			wxString m_Command;
+			mutable wxString m_Executable;
 
 		public:
-			SortingToolEntry(const KxXMLNode& node);
+			SortingToolItem(const KxXMLNode& node);
 
 		public:
 			wxString GetID() const;
 			wxString GetName() const;
-		
+			
 			wxString GetExecutable() const;
 			void SetExecutable(const wxString& path) const;
-		
+			
 			wxString GetArguments() const;
 	};
-	class Config
+	class Config final
 	{
 		private:
 			wxString m_Implementation;
@@ -53,8 +54,8 @@ namespace Kortex::PluginManager
 
 			int m_PluginLimit = -1;
 			wxString m_StdandardContent_MainID;
-			StdContentEntry::Vector m_StandardContent;
-			SortingToolEntry::Vector m_SortingTools;
+			StdContentItem::Vector m_StandardContent;
+			SortingToolItem::Vector m_SortingTools;
 
 		public:
 			void OnLoadInstance(IGameInstance& instance, const KxXMLNode& node);
@@ -81,7 +82,7 @@ namespace Kortex::PluginManager
 			bool HasMainStdContentID() const;
 			wxString GetMainStdContentID() const;
 
-			const StdContentEntry* GetStandardContent(const wxString& id) const;
+			const StdContentItem* GetStandardContent(const wxString& id) const;
 			bool IsStandardContent(const wxString& id) const
 			{
 				return GetStandardContent(id) != nullptr;
@@ -91,7 +92,7 @@ namespace Kortex::PluginManager
 			{
 				return !m_SortingTools.empty();
 			}
-			const SortingToolEntry::Vector& GetSortingTools() const
+			const SortingToolItem::Vector& GetSortingTools() const
 			{
 				return m_SortingTools;
 			}

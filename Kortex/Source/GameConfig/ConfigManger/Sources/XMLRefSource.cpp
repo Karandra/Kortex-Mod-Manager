@@ -45,7 +45,7 @@ namespace Kortex::GameConfig
 		}
 		else
 		{
-			if (KxXMLNode node = m_XML.QueryOrCreateElement(item.GetPath()); node.IsOK())
+			if (KxXMLNode node = m_XML.ConstructElement(item.GetPath()); node.IsOK())
 			{
 				wxString attributeName = item.GetName();
 				if (attributeName.IsEmpty())

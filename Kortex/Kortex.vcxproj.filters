@@ -1188,9 +1188,6 @@
     <ClCompile Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.cpp">
       <Filter>Code\Source\PackageCreator\PageComponents</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PackageCreator\PageComponents\AssignedConditionalsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.cpp">
       <Filter>Code\Source\PackageCreator\PageComponents</Filter>
     </ClCompile>
@@ -1295,6 +1292,9 @@
     </ClCompile>
     <ClCompile Include="Source\UI\WebViewBackend\Sciter.cpp">
       <Filter>Code\Source\UI\WebViewBackend</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PackageCreator\PageComponents\ConditionFlagsModel.cpp">
+      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2303,9 +2303,6 @@
     <ClInclude Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.h">
       <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\AssignedConditionalsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.h">
       <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
     </ClInclude>
@@ -2425,6 +2422,9 @@
     </ClInclude>
     <ClInclude Include="Source\UI\WebViewBackend\Sciter.h">
       <Filter>Code\Headers\UI\WebViewBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ConditionFlagsModel.h">
+      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,7 @@ namespace Kortex::Application
 			wxString m_UserSettingsFolder;
 			wxString m_UserSettingsFile;
 			wxString m_InstancesFolder;
+			wxString m_DefaultInstancesFolder;
 
 			wxWindow* m_InitProgressDialog = nullptr;
 			MainWindow* m_MainWindow = nullptr;

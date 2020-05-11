@@ -34,10 +34,10 @@ namespace Kortex::InstallWizard
 	}
 	void ComponentsPage::OnSaveUIOptions(Application::ActiveInstanceOption& option) const
 	{
-		option.QueryOrCreateElement(OName::Splitter).SaveSplitterLayout(m_SplitterV);
-		option.QueryOrCreateElement(OName::Splitter).SaveSplitterLayout(m_SplitterHRight);
-		option.QueryOrCreateElement(OName::ComponentsView).SaveDataViewLayout(m_ComponentsModel->GetView());
-		option.QueryOrCreateElement(OName::RequirementsView).SaveDataViewLayout(m_RequirementsModel->GetView());
+		option.ConstructElement(OName::Splitter).SaveSplitterLayout(m_SplitterV);
+		option.ConstructElement(OName::Splitter).SaveSplitterLayout(m_SplitterHRight);
+		option.ConstructElement(OName::ComponentsView).SaveDataViewLayout(m_ComponentsModel->GetView());
+		option.ConstructElement(OName::RequirementsView).SaveDataViewLayout(m_RequirementsModel->GetView());
 	}
 	void ComponentsPage::OnPackageLoaded()
 	{
@@ -134,8 +134,9 @@ namespace Kortex::InstallWizard
 		{
 			m_InstallSteps.PopItem();
 
-			RestoreStepFlagsUpToThis(*m_InstallSteps.GetTopStep());
-			LoadManualStep(*m_InstallSteps.GetTopStep());
+			PackageProject::ComponentStep& previousStep = *m_InstallSteps.GetTopStep();
+			RestoreStepFlagsUpToThis(previousStep);
+			LoadManualStep(previousStep);
 		}
 		else
 		{
@@ -146,7 +147,7 @@ namespace Kortex::InstallWizard
 	}
 	void ComponentsPage::OnGoStepForward(wxCommandEvent& event)
 	{
-		if (GetCurrentStep())
+		if (PackageProject::ComponentStep* currentStep = GetCurrentStep())
 		{
 			PackageProject::ComponentItem::RefVector checkedEntries;
 			if (m_ComponentsModel->OnLeaveStep(checkedEntries))
@@ -154,13 +155,14 @@ namespace Kortex::InstallWizard
 				// Store flags from checked entries and save list of checked entries to current step.
 				// This is needed for reverting checked status and correctly resetting flags when going step back.
 				StoreStepFlags(checkedEntries);
+
+				// Save checked items to restore check state when going step back
 				m_InstallSteps.GetTopItem()->GetChecked() = checkedEntries;
 
-				PackageProject::ComponentStep* step = GetFirstStepSatisfiesConditions(GetCurrentStep());
-				if (step)
+				if (PackageProject::ComponentStep* nextStep = GetFirstStepSatisfiesConditions(*currentStep))
 				{
-					m_InstallSteps.PushStep(step);
-					LoadManualStep(*step);
+					m_InstallSteps.PushStep(*nextStep);
+					LoadManualStep(*nextStep);
 				}
 				else
 				{
@@ -274,11 +276,10 @@ namespace Kortex::InstallWizard
 		ResetComponents();
 		StoreRequirementsFlags();
 
-		PackageProject::ComponentStep* step = GetFirstStepSatisfiesConditions();
-		if (step)
+		if (PackageProject::ComponentStep* firstStep = GetFirstStepSatisfiesConditions())
 		{
-			m_InstallSteps.PushStep(step);
-			LoadManualStep(*step);
+			m_InstallSteps.PushStep(*firstStep);
+			LoadManualStep(*firstStep);
 			return true;
 		}
 		else
@@ -299,7 +300,7 @@ namespace Kortex::InstallWizard
 	{
 		for (PackageProject::ComponentItem* entry: checkedEntries)
 		{
-			for (const PackageProject::FlagItem& flagEntry: entry->GetConditionalFlags().GetFlags())
+			for (const PackageProject::FlagItem& flagEntry: entry->GetConditionFlags().GetFlags())
 			{
 				m_FlagsStorage.insert_or_assign(flagEntry.GetName(), flagEntry.GetValue());
 			}
@@ -384,26 +385,24 @@ namespace Kortex::InstallWizard
 	}
 	PackageProject::ComponentStep* ComponentsPage::GetFirstStepSatisfiesConditions() const
 	{
-		const PackageProject::ComponentStep::Vector& steps = GetPackageConfig().GetComponents().GetSteps();
-		for (size_t i = 0; i < steps.size(); i++)
+		for (const auto& step: GetPackageConfig().GetComponents().GetSteps())
 		{
-			PackageProject::ComponentStep* pCurrentStep = steps[i].get();
-			if (IsStepSatisfiesConditions(*pCurrentStep))
+			if (IsStepSatisfiesConditions(*step))
 			{
-				return pCurrentStep;
+				return step.get();
 			}
 		}
 		return nullptr;
 	}
-	PackageProject::ComponentStep* ComponentsPage::GetFirstStepSatisfiesConditions(const PackageProject::ComponentStep* afterThis) const
+	PackageProject::ComponentStep* ComponentsPage::GetFirstStepSatisfiesConditions(const PackageProject::ComponentStep& afterThis) const
 	{
 		const PackageProject::ComponentStep::Vector& steps = GetPackageConfig().GetComponents().GetSteps();
-		const auto itAfterThis = std::find_if(steps.begin(), steps.end(), [afterThis](const auto& step)
+		const auto itAfterThis = std::find_if(steps.begin(), steps.end(), [&afterThis](const auto& step)
 		{
-			return step.get() == afterThis;
+			return step.get() == &afterThis;
 		});
 
-		auto itNextAfterThis = itAfterThis + 1;
+		const auto itNextAfterThis = itAfterThis + 1;
 		if (itAfterThis != steps.end() && itNextAfterThis != steps.end())
 		{
 			for (auto it = itNextAfterThis; it != steps.end(); ++it)
@@ -441,12 +440,12 @@ namespace Kortex::InstallWizard
 		// Check entries conditions and set its type descriptors current value
 		for (auto& group: step.GetGroups())
 		{
-			for (auto& entry: group->GetItems())
+			for (auto& item: group->GetItems())
 			{
-				entry->SetTDCurrentValue(PackageProject::TypeDescriptor::Invalid);
-				if (IsConditionsSatisfied(entry->GetTDConditionGroup()))
+				item->SetTDCurrentValue(PackageProject::TypeDescriptor::Invalid);
+				if (IsConditionsSatisfied(item->GetTDConditionGroup()))
 				{
-					entry->SetTDCurrentValue(entry->GetTDConditionalValue());
+					item->SetTDCurrentValue(item->GetTDConditionalValue());
 				}
 			}
 		}

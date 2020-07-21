@@ -50,7 +50,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<b>Oblivion, Skyrim, Fallout 3, Fallout: New Vegas</b>.
 			</td>
 			<td id="Vortex">
-				Supports over 90 games including TES and Fallout games.
+				Supports over 100 games including TES and Fallout games.
 			</td>
 			<td id="NMM">
 				Supports many games including Elder Scrolls (plus Enderal) and Fallout series.
@@ -67,6 +67,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Importing from other managers</td>
 			<td id="KMM">
 				Nexus Mod Manager, MO1, MO2.
+			</td>
 			<td id="MO2">
 				<div class="cmp-no" />
 			</td>
@@ -203,7 +204,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 				</ul>
 			</td>
 			<td id="Vortex">
-				<div class="cmp-no" />
+				<ul>
+					<li>Archive version checking via https://www.nexusmods.com/site/mods/126</li>
+				</ul>
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -371,19 +374,15 @@ There are many mod managers around these days and it's may be a bit difficult to
 				One click sort, detailed loot report. <b>Severely outdated version of integrated LOOT.</b>
 			</td>
 			<td id="Vortex" class="text-left">
-				Drag & drop dependency icon for specific "load after" rules.
-				<br/>
-				Full features native to LOOT.
-				<br/>
-				Group management including:	adding and removing groups, changing a plugins groups, order of groups.
-				<br/>
-				LOOT defaults
-				<br/>
-				Automatic LOOT updates
-				<br/>
-				Plugin details visible by double clicking plugin.
-				<br/>
-				Visualization of info through flags.
+				<ul>
+				<li>Drag & drop dependency icon for specific "load after" rules.</li>
+				<li>Full features native to LOOT.</li>
+				<li>Group management including:	adding and removing groups, changing a plugins groups, order of groups.</li>
+				<li>LOOT defaults</li>
+				<li>Automatic LOOT updates</li>
+				<li>Plugin details visible by double clicking plugin.</li>
+				<li>Visualization of info through flags.</li>
+				</ul>
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -433,7 +432,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<ul>
 					<li>No method to add custom launcher and you must choose from a predetermined list.</li>
 					<li>Program List varies depending on selected game mode.</li>
-				<ul>
+				</ul>
 			</td>
 			<td id="WB">
 				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#launchers">Add shortcuts to the Apps folder and Tools or other Programs show up in the Toolbar</a>.
@@ -492,7 +491,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="Vortex">
 				Hardlinks by default,
 				Symlinks or move deployment as an option on specific games,
-				<b>USVFS</b> as an experimental extension (no overwrite support for now).
+				<b>USVFS</b> as an experimental extension (no new file support for now).
 			</td>
 			<td id="NMM">
 				Symbolic links (symlinks).
@@ -676,6 +675,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">VFS persistence</td>
 			<td id="KMM">
 				Mod manager runtime.
+			</td>
 			<td id="MO2.MO1" colspan="2">
 				Only present for programs started through the manager and their child applications.
 			</td>
@@ -735,14 +735,17 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Integration no longer works since Nexus API update.
 			</td>
 			<td id="Vortex">
-				Account login,
-				Download with manager,
-				Mod update check,
-				Automatic mod update for premium users,
-				Mod endorsements,
-				Mod tracking,
-				Mod meta info like categories etc,
-				Browser for mod description,
+				<ul>
+					<li>Account login</li>
+					<li>Download with manager</li>
+					<li>Mod update check</li>
+					<li>Automatic mod update for premium users</li>
+					<li>Mod endorsements</li>
+					<li>Mod tracking</li>
+					<li>Mod meta info like categories etc</li>
+					<li>Browser for mod description</li>
+					<li>New mods list</li>
+				</ul>
 			</td>
 			<td id="NMM">
 				Account login,
@@ -770,9 +773,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">
-				Self auto-update check
-			</td>
+			<td class="feature-name">Self auto-update check</td>
 			<td id="KMM">
 				<div class="cmp-no" />
 			</td>
@@ -861,8 +862,10 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<ul>
 					<li>Bug report automation in menu</li>
 					<li>Notifications in the bell icon including xSE error notifications.</li>
-					<li>Missing masters?</li>
-					<li>Form 43 with LOOT?</li>
+					<li>Plugins with missing masters</li>
+					<li>Form 43 plugins for Skyrim SE</li>
+					<li>Incompatible BSA/BA2 detection</li>
+					<li>Generate Report option to generate shareable report about mods installed, including details of selected mod</li>
 				</ul>
 			</td>
 			<td id="NMM">
@@ -924,7 +927,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Less customizable modlist export to CSV file.
 			</td>
 			<td id="Vortex">
-				<div class="cmp-unknown" />
+				Generate Report option generates a online document with list of plugins
 			</td>
 			<td id="NMM">
 				Export plugin and mod list to clipboard or text file.
@@ -982,9 +985,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Mostly same as MO2, but somethings are missing like separators and notes.
 			</td>
 			<td id="Vortex">
+				Advanced mod counters.<br/>
+				Update check.<br/>
 				Grouping by state, category, content, author, version, source..<br/>
 				Filter by state, name, version, install time, category, endorsed state, content, dependency resolution.<br/>
+				collapsible separators<br/>
 				Update check, install from file, manage rules.<br/>
+				Various Keyboard shortcuts and support for multi selection operations.<br/>
 				<br/>
 				<b>Mod metadata:</b>
 				mod name,
@@ -1049,7 +1056,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Normal images and .txt files.
 			</td>
 			<td id="Vortex">
-				<div class="cmp-no" />
+				Will attempt to open in default program for the file type
+				ie: nif in bodyslide, dds in gimp or WTV, txt in notepad
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />

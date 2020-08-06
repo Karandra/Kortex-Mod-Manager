@@ -60,7 +60,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<br/>
 				<a href="https://www.nexusmods.com/fallout3/mods/11336">Fallout 3</a>/<a href="https://www.nexusmods.com/newvegas/mods/35003">Fallout NV</a> Using Valda's Wrye Flash.
 				<br/>
-				Oblivion, Skyrim (LE, SE, VR, Enderal) Fallout 4 (VR) Using <a href="https://www.dropbox.com/sh/iazpayeexiyazeh/AAAbGeVHrlIksp2AFgI4w48Oa?dl=0">Wrye Bash</a>.
+				Oblivion, Nehrim, Skyrim (LE, SE, VR), Enderal and Fallout 4 (Regular & VR) Using <a href="https://www.dropbox.com/sh/iazpayeexiyazeh/AAAbGeVHrlIksp2AFgI4w48Oa?dl=0">Wrye Bash</a>.
 			</td>
 		</tr>
 		<tr>
@@ -212,7 +212,10 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				<ul>
+					<li>Archive version checking</li>
+					<li>Conflict detection</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
@@ -247,7 +250,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#saves">Saves Tab</a> Allows you to create separate folders for each playthrough and easy management of save games to eliminate clutter in your save game list.
+				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#saves">Saves Tab</a> allows you to switch between different 'save profiles'.
 			</td>
 		</tr>
 		<tr>
@@ -268,7 +271,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<div class="cmp-yes" tooltip="Compressed save game headers like in Skyrim SE only supported in WIP version"/>
+				<div class="cmp-yes" />
 			</td>
 		</tr>
 		<tr>
@@ -286,7 +289,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<div class="cmp-yes" tooltip="Copied to Clipboard"/>
+				<div class="cmp-yes" />
 			</td>
 		</tr>
 		<tr>
@@ -304,7 +307,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				Easily alter game INI files by placing a checkmark in a list of changes. Restore INI files back to default.
+				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20General%20Readme.html#ini">INI Edits Tab</a> allows applying and undoing 'INI Edits', small INI files that can be installed via BAIN and then applied to INIs.
+				Comes packaged with many default INI tweaks that have been tested and verified.
 			</td>
 		</tr>
 		<tr>
@@ -320,7 +324,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 				For mods it's the install order.
 			</td>
 			<td id="WB">
-				Order plugins in your Data folder with Drag and Drop. Activate plugins based on save game. Lock Load Order to prevent external applications from makes changes.
+				Drag and Drop for mods and plugins.
+				Allows locking load order to prevent external applications from making changes.
 			</td>
 		</tr>
 		<tr>
@@ -339,6 +344,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="WB">
 				ESM and ESL flags.
+				Also generates correct ONAM data when adding/removing ESM flags.
 			</td>
 		</tr>
 		<tr>
@@ -389,6 +395,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="WB">
 				Visualization of dirty plugins via underlining on the plugin list, automatic retrieval of LOOT's Bash Tag suggestions.
+				Allows you to export your applied tags for contribution to the LOOT masterlist.
 			</td>
 		</tr>
 		<tr>
@@ -407,7 +414,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="NMM">
 				<ul>
 					<li>Import Export Load Order</li>
-					<li>Backup and Restore Mod Instalation</li>
+					<li>Backup and Restore Mod Installation</li>
 				</ul>
 			</td>
 			<td id="WB">
@@ -435,7 +442,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				</ul>
 			</td>
 			<td id="WB">
-				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#launchers">Add shortcuts to the Apps folder and Tools or other Programs show up in the Toolbar</a>.
+				<div class="cmp-yes" />
 			</td>
 		</tr>
 		<tr>
@@ -456,7 +463,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				Only BAIN wizards, and only via simple text editors.
 			</td>
 		</tr>
 		<tr>
@@ -474,7 +481,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				FOMod (XML, C#), OMOD, simple<sup>2</sup>.
 			</td>
 			<td id="WB">
-				FOMod (XML) Beta, BAIN Wizard, BAIN Package, simple<sup>2</sup>.
+				FOMod (XML), OMOD (by repackaging to BAIN), BAIN Wizard, BAIN Package, simple<sup>2</sup>.
 			</td>
 		</tr>
 		<tr>
@@ -632,7 +639,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				<div class="cmp-no" tooltip="Not applicable, WB does no virtualization." />
 			</td>
 		</tr>
 		<tr>
@@ -662,13 +669,11 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-unknown" />
 			</td>
 			<td id="WB">
-				<ul>
-					<li>Files added or altered in the Data folder are tracked.</li>
-					<li>New files become orphaned files.</li>
-					<li>Orphaned files can be removed using <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bain-CleanData">Clean Data</a>.</li>
-					<li>Changed files that belong to an installer can be easily synced with the Installer (Package Only).</li>
-					<li><a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bain-monitor">Monitor External Installation</a> tracks changes in the data folder. Wrye Bash creates an installer from both new and altered files. This can be used to track instalation from other mod managers such as OBMM, FOMM, NMM. It can also be used when making changes with the CK or other tools such as FNIS or BodySlide.</li>
-				</ul>
+				Files added or altered in the Data folder are tracked.
+				New files become orphaned files.
+				Orphaned files can be captured and/or removed using <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bain-CleanData">Clean Data</a>.
+				Changed files that belong to an installer can be easily synced with the installer (e.g. to copy the cleaned version of a plugin back into its archive).
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#bain-monitor">Monitor External Installation</a> tracks changes in the data folder. Wrye Bash creates an installer from both new and altered files. This can be used to track instalation from other mod managers such as OBMM, FOMM, NMM. It can also be used to manage the changes made by the CK or other tools such as FNIS or BodySlide through BAIN.
 			</td>
 		</tr>
 		<tr>
@@ -687,7 +692,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Symlinks - persists until purged.
 			</td>
 			<td id="WB">
-				Uses file copy - persists until purged.
+				N/A - WB uses direct file copies, so no persistence issues are possible.
 			</td>
 		</tr>
 		<tr>
@@ -712,7 +717,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<b>NexusMods</b>
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				Opening mod pages on NexusMods.
+				Searching on Google for mods.
 			</td>
 		</tr>
 		<tr>
@@ -754,7 +760,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Mod meta info like categories etc.
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				Opening mod pages
 			</td>
 		</tr>
 		<tr>
@@ -769,7 +775,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Account, mod updates, mod source, metadata query, downloads, endorsements.
 			</td>
 			<td id="WB">
-				<div class="cmp-no" />
+				Mod source, searching on Google.
 			</td>
 		</tr>
 		<tr>
@@ -880,11 +886,15 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>Missing strings files</li>
 					<li>Form 43 plugins for Skyrim SE</li>
 					<li>ESL verification</li>
-					<li>File using same date for games that utilize a time date stamp</li>
+					<li>File timestamp conflicts</li>
 					<li>Ghosted plugin verification</li>
-					<li>Dirty edit scanning</li>
+					<li>Dirty edits</li>
 					<li>Deactivate and NoMerge verification</li>
-					<li><span tooltip="WIP version only">Mismatched BSA version detection</span></li>
+					<li>Mismatched BSA versions</li>
+					<li>Directory thrashing in Oblivion</li>
+					<li>Encoding problems</li>
+					<li>Load order verification & sanitization</li>
+					<li>Unrecognized save and plugin headers</li>
 				</ul>
 			</td>
 		</tr>
@@ -910,7 +920,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<a href="https://wrye-bash.github.io/docs/Wrye Bash Advanced Readme.html#tools-colors">Change colors via a settings menu</a>.
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#tools-colors">Change colors via a settings menu</a>.
 			</td>
 		</tr>
 		<tr>
@@ -933,10 +943,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Export plugin and mod list to clipboard or text file.
 			</td>
 			<td id="WB">
-				<ul>
-					<li>Can export list of installed mods from Mods tab.</li>
-					<li>Can view and list files in an archive or package from Installers Tab.</li>
-				</ul>
+				Export plugin and/or mod list to clipboard.
+				Export of various other lists (e.g. applied tags) to clipboard, text files or CSV files.
 			</td>
 		</tr>
 		<tr>
@@ -1063,10 +1071,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<ul>
-					<li>Can preview contents of archive or Package.</li>
-					<li>Doc Browser for Readme files and custom Docs or Notes added to mods.</li>
-				</ul>
+				<div class="cmp-no" />
 			</td>
 		</tr>
 		<tr>
@@ -1176,7 +1181,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="WB">
 				Open Source, fully released.
-				Maintained and actively developed by <span tooltip="Made up of Utumno, Ganda, Infernio. Record decoding by Sharlikran. Rare updates by Lojack. Documentation updates by Felis and Wrye Bash team">Wrye Bash Team</span> (community non-paid developers) with improvement updates.
+				Maintained and actively developed by <span tooltip="Made up of Utumno, Ganda, Infernio. Record decoding by Sharlikran. Rare updates by Lojack. Documentation updates by Felis and Wrye Bash team">Wrye Bash Team</span> (community non-paid developers) with regular feature updates.
 			</td>
 		</tr>
 	</tbody>

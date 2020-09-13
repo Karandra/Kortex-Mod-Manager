@@ -55,7 +55,7 @@ Kortex have built-in installer creation tool. This tool can be used to create fu
 - Download manager
 - More features are covered in the [comparison table](https://kerberx.github.io/Kortex-Mod-Manager/?page=comparison).
 
-# Chnage log
+# Change log
 Look here: https://kerberx.github.io/Kortex-Mod-Manager/?page=version-history
 
 # Usage info
@@ -72,6 +72,7 @@ Close the program, delete the VFS service by typing the command `sc delete Korte
 
 ## Update
 1.x -> 1.3: Plugins order and activation state will be reset, mod order and state should remain untouched.
+1.3 -> 2.x: Should probably work without significant issues.
 
 # Download location
 - Nexus: https://www.nexusmods.com/skyrim/mods/90868
@@ -87,5 +88,5 @@ Close the program, delete the VFS service by typing the command `sc delete Korte
 
 ### MSVC2019+
 - Install **KxFramework** (using [VCPkg](https://github.com/microsoft/vcpkg)) following its building instructions.
-- Install additional packages with PCPkg: `kxvfs`, ~~`libloot`~~ (not available yet,manual installation is required for now).
+- Install additional packages with VCPkg: `kxvfs`, ~~`libloot`~~ (not available yet, manual installation is required for now).
 - Build **Release** configuration for x86 and x64.

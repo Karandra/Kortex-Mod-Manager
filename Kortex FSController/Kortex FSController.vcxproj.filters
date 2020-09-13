@@ -1,153 +1,133 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Code">
-      <UniqueIdentifier>{19675054-ea55-4a6b-b1ca-3771af10d1e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Code\Headers">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Code">
+      <UniqueIdentifier>{e39fe171-5830-41b1-b28a-d823a99e8d6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Code\Source code">
+      <UniqueIdentifier>{19675054-ea55-4a6b-b1ca-3771af10d1e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\VirtualFileSystem">
+    <Filter Include="Code\Source code\VirtualFileSystem">
       <UniqueIdentifier>{f38c57e6-7f40-46fa-a20d-0e6f2ff3e74c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\VirtualFileSystem">
-      <UniqueIdentifier>{45f5a63a-ad72-4f19-aebb-38acff649418}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code">
+    <Filter Include="Code\Shared Code">
       <UniqueIdentifier>{940e64fe-ead2-430d-b873-0d4b0926e0eb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shared Code\Headers">
-      <UniqueIdentifier>{2fd2e2ee-cede-41b9-bc02-8f85d83a27f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Headers\IPC">
+    <Filter Include="Code\Shared Code\IPC">
       <UniqueIdentifier>{b3c18bd5-61e1-4b36-add5-1e985f35ac10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shared Code\Headers\VirtualFileSystem">
+    <Filter Include="Code\Shared Code\VirtualFileSystem">
       <UniqueIdentifier>{c70e0f08-6daf-49e8-a7ba-77ed1e99eb58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shared Code\Source">
-      <UniqueIdentifier>{8f2e5276-082c-4a13-9432-cf18c49cb37d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Source\IPC">
-      <UniqueIdentifier>{f9ac4faf-6ec8-498a-a872-83949c0bb788}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Source\VirtualFileSystem">
-      <UniqueIdentifier>{0b536f74-9ba8-4f54-9c29-215481dd9a4a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\stdafx.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\RecievingWindow.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\Mirror.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\MultiMirror.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\Convergence.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\FSControllerService.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application.cpp">
+      <Filter>Code\Source code</Filter>
     </ClCompile>
     <ClCompile Include="Source\MainApplicationLink.cpp">
-      <Filter>Code\Source</Filter>
+      <Filter>Code\Source code</Filter>
     </ClCompile>
-    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp">
-      <Filter>Shared Code\Source\VirtualFileSystem</Filter>
+    <ClCompile Include="Source\RecievingWindow.cpp">
+      <Filter>Code\Source code</Filter>
     </ClCompile>
-    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp">
-      <Filter>Shared Code\Source\VirtualFileSystem</Filter>
+    <ClCompile Include="Source\stdafx.cpp">
+      <Filter>Code\Source code</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\IPC\MainApplication.cpp">
-      <Filter>Shared Code\Source\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp">
-      <Filter>Shared Code\Source\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp">
-      <Filter>Shared Code\Source\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\IPC\FSController.cpp">
-      <Filter>Shared Code\Source\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp">
+      <Filter>Code\Shared Code\VirtualFileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp">
+      <Filter>Code\Shared Code\VirtualFileSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\stdafx.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\RecievingWindow.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\Common.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\Convergence.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\KxVFSWrapper.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\Mirror.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\MultiMirror.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\FSControllerService.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MainApplicationLink.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.h">
-      <Filter>Shared Code\Headers\VirtualFileSystem</Filter>
+      <Filter>Code\Shared Code\VirtualFileSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\VirtualFileSystem\IVFSService.h">
-      <Filter>Shared Code\Headers\VirtualFileSystem</Filter>
+      <Filter>Code\Shared Code\VirtualFileSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\IPC\Serialization.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\IPC\Common.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\IPC\FSController.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\IPC\MainApplication.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\IPC\Message.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\IPC\MessageExchanger.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\IPC\ProcessingWindow.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
+      <Filter>Code\Shared Code\IPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Common.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Convergence.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\FSControllerService.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\KxVFSWrapper.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Mirror.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\MultiMirror.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application.h">
+      <Filter>Code\Source code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainApplicationLink.h">
+      <Filter>Code\Source code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RecievingWindow.h">
+      <Filter>Code\Source code</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Code\Headers</Filter>
+      <Filter>Code\Source code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stdafx.h">
+      <Filter>Code\Source code</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

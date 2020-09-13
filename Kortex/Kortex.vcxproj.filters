@@ -1,254 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Code">
-      <UniqueIdentifier>{14717b7c-cc54-4eb7-b777-c94e153d0b8e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Misc">
       <UniqueIdentifier>{e71fb8a4-c382-4b81-8669-76d39e1ed34b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc\Translation">
       <UniqueIdentifier>{643fe7f0-efc0-4c29-850b-62cd63e54149}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Include">
-      <UniqueIdentifier>{436ca353-622d-47ba-8ce9-0a12a11ed7ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Include\Common">
-      <UniqueIdentifier>{298c3ea3-670b-4970-b457-8979fa133a09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Include\Components">
-      <UniqueIdentifier>{0e6585f1-0446-486e-a20e-898fbf8495ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Code\Source">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Code\Source\Utility">
-      <UniqueIdentifier>{3d4221b7-0197-4472-840f-106f30da65c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\PackageCreator">
-      <UniqueIdentifier>{b0551a4e-5415-4a53-bb31-dfc298c1730a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\PackageCreator\PageComponents">
-      <UniqueIdentifier>{ae29b88e-890d-4a53-91e4-65ff7cf5c8de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\PackageCreator\PageFileData">
-      <UniqueIdentifier>{226a655b-accc-49aa-a677-1ed20214f833}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\PackageCreator\PageInfo">
-      <UniqueIdentifier>{a58ee1d1-cf38-45cd-894b-5220ddee7c19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\PackageCreator\PageInterface">
-      <UniqueIdentifier>{cf3c03ac-9b4f-4b92-9738-05a6d983811c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\PackageCreator\PageRequirements">
-      <UniqueIdentifier>{4ae81249-fa93-4d8f-bae6-4bfeee352b6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\PackageProject">
-      <UniqueIdentifier>{e9e9b99d-3ac0-4aa0-9a95-630b6d728d15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Archive">
-      <UniqueIdentifier>{b222a7fd-1abb-453b-b9eb-023d5b3820f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Network">
-      <UniqueIdentifier>{1cf732ae-1aa0-424c-94d5-446352cdfb8c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Network\DownloadManager">
-      <UniqueIdentifier>{2aa0000a-d18a-4bd0-bf20-e5ff1ba9483b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Network\NetworkManager">
-      <UniqueIdentifier>{ba4aef9b-dff3-45d6-883a-b1f6f45e534a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameInstance">
-      <UniqueIdentifier>{baf9614d-07aa-47eb-8665-ead79d31a066}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameData">
-      <UniqueIdentifier>{34b15e23-e6b7-434d-a450-7ef713e39793}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameData\PluginManager">
-      <UniqueIdentifier>{0ad972bf-4485-4d8a-b74d-b63ba58f3519}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameData\SaveManager">
-      <UniqueIdentifier>{aee8af18-99c8-4b9b-9cbc-b59054bed2ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameData\SaveManager\BethesdaSave">
-      <UniqueIdentifier>{8e447ca2-ff57-4ff7-a96f-20b092471491}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameData\ScreenshotsGallery">
-      <UniqueIdentifier>{17cea417-2fd9-4783-a51a-6a37bf5b7f43}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameMods">
-      <UniqueIdentifier>{91051d91-4ca1-47a5-9a4e-c9c731b52de8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameMods\ModManager">
-      <UniqueIdentifier>{37014eaf-5d5a-4492-a183-bca26ccedd22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameMods\Import">
-      <UniqueIdentifier>{d97017c3-8343-4ab0-b654-f88a17d59587}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameMods\VirtualGameFolder">
-      <UniqueIdentifier>{37be731d-69f6-4022-b07c-e49505a396d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameMods\ModStatistics">
-      <UniqueIdentifier>{10108bd6-7c58-4ad2-949b-9e14bdbf9bf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameMods\TagManager">
-      <UniqueIdentifier>{e4193127-2ce3-4d9f-b523-ef484ace238a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application">
-      <UniqueIdentifier>{0f73dc8b-efce-481a-abf3-24442642de86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\Themes">
-      <UniqueIdentifier>{340bc6e8-5807-47be-8b57-94e7771d7471}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\Module">
-      <UniqueIdentifier>{0d93b033-71af-4aad-bdcd-6e20c527f95e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\VariablesTable">
-      <UniqueIdentifier>{02830dd7-ef18-4a8a-b6f5-c84b75a0c5c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Code\Headers\UI">
-      <UniqueIdentifier>{68fa5ef4-f841-4a93-98e7-fc49c7beef2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Utility">
-      <UniqueIdentifier>{9abd253e-e468-46a2-9094-58a7460a16c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\PackageCreator">
-      <UniqueIdentifier>{422b5703-ecad-46d0-907b-45d21d9d2d6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\PackageCreator\PageRequirements">
-      <UniqueIdentifier>{603570a9-0ff1-4465-bad6-1130409f8498}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\PackageCreator\PageInterface">
-      <UniqueIdentifier>{adf46f0b-79f2-4b1b-89aa-b89a8a10c3ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\PackageCreator\PageInfo">
-      <UniqueIdentifier>{31afaee6-84de-4221-a8b2-8ac4da92a126}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\PackageCreator\PageFileData">
-      <UniqueIdentifier>{f6d5a06e-f9db-4f45-8377-ed88128784ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\PackageCreator\PageComponents">
-      <UniqueIdentifier>{3c83164a-8171-4df5-8019-be48b28e2527}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\PackageProject">
-      <UniqueIdentifier>{5bd24315-33cb-4c78-bbab-9287412ccf1a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Archive">
-      <UniqueIdentifier>{57fb0d5f-55ad-4aee-9227-f22eef7feeb3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Network">
-      <UniqueIdentifier>{73439ed9-5d64-4c3e-b8c6-d01d9f165780}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Network\DownloadManager">
-      <UniqueIdentifier>{c5804ff6-af46-4872-bda6-96d02611cc67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Network\NetworkManager">
-      <UniqueIdentifier>{61f8b170-0cd5-453a-9f61-8f3048510036}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameInstance">
-      <UniqueIdentifier>{1e072cee-0e2c-4fc2-9f84-f016c2f83098}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameData">
-      <UniqueIdentifier>{c2418d72-d34b-4a75-9979-cb2e26cd962f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameData\PluginManager">
-      <UniqueIdentifier>{889054e8-6ce3-4142-bdcf-f3ceffebe391}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameData\SaveManager">
-      <UniqueIdentifier>{cdb84733-3aa4-4b4c-bfd2-25d34f8a55ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameData\SaveManager\BethesdaSave">
-      <UniqueIdentifier>{8103ad82-fbe6-46d4-9ad6-ab8c89f8ff29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameData\ScreenshotsGallery">
-      <UniqueIdentifier>{80dc93d1-26a0-4cc9-b6c3-cbd6eaffe22a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameMods">
-      <UniqueIdentifier>{6bef732e-d938-474c-926e-4447efbf0469}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameMods\ModManager">
-      <UniqueIdentifier>{3795c7be-af4f-4170-9c89-3167029520b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameMods\Import">
-      <UniqueIdentifier>{0896803a-ffb6-4747-b00e-fd0480d4dbc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameMods\VirtualGameFolder">
-      <UniqueIdentifier>{2c6306f7-c8df-4277-853b-53ee0526f95f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameMods\ModStatistics">
-      <UniqueIdentifier>{54424f0b-d8ea-4ad0-886d-a51025017ecf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameMods\TagManager">
-      <UniqueIdentifier>{c4902872-1559-4470-b800-a0afa9709cec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Application">
-      <UniqueIdentifier>{cdc8b6c9-a0f5-4aab-b19b-1d5acc28ef34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Application\Themes">
-      <UniqueIdentifier>{8a0fbc76-53f5-4f4b-b194-8f3b0428de97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Application\Module">
-      <UniqueIdentifier>{8b5a5679-a39d-49d5-baa6-7523f84590f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Application\VariablesTable">
-      <UniqueIdentifier>{e029bab9-2e50-48a1-a98a-720023d325bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Programs">
-      <UniqueIdentifier>{12602aa1-3fe1-499e-8830-e016580559ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Programs">
-      <UniqueIdentifier>{ea90ff45-611e-4a67-9994-23816ff6b21a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Programs\ProgramManager">
-      <UniqueIdentifier>{c3ddbced-ebb9-4c58-8363-a05a68abc265}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Programs\ProgramManager">
-      <UniqueIdentifier>{b25a0b02-b256-4184-aa30-ed283a17b3e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Application\About">
-      <UniqueIdentifier>{ee9ec590-f7b4-48d1-a0ea-7b6da8cbc8bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\About">
-      <UniqueIdentifier>{846945b4-fcb7-4075-9a10-7aff9aa2bf86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\VirtualFileSystem">
-      <UniqueIdentifier>{939c8d3a-ef4f-4d1a-9de6-9478181a804b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\VirtualFileSystem">
-      <UniqueIdentifier>{7f6171b5-f739-4be0-b2ad-bda3e7a42979}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code">
-      <UniqueIdentifier>{2115c87c-576c-47c9-bedd-e0d7df5d3886}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Headers">
-      <UniqueIdentifier>{61b47c97-a0ef-4c1f-9556-3809e2adf6ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Headers\IPC">
-      <UniqueIdentifier>{84e8e5ed-cc7f-4831-a1cb-c203362b0c87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Headers\VirtualFileSystem">
-      <UniqueIdentifier>{f99cdd01-168e-493d-a114-fad82410e929}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Source">
-      <UniqueIdentifier>{36a44a92-fdae-4855-944c-c659f535e636}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Source\IPC">
-      <UniqueIdentifier>{6ba9e007-972f-4f26-92d9-2cdbc2e087e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared Code\Source\VirtualFileSystem">
-      <UniqueIdentifier>{8c67519b-0440-43b1-b57e-cea7caeddc63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Include\Git">
-      <UniqueIdentifier>{7c678c2c-c543-48d7-a8db-f24f5b579fb5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc\Game Definitions">
       <UniqueIdentifier>{0989cc56-192d-4358-962b-2f3822e190b2}</UniqueIdentifier>
@@ -256,2175 +17,2220 @@
     <Filter Include="Misc\Game Definitions\Icons">
       <UniqueIdentifier>{62a74ac0-dd4d-4d27-8025-329b14e7bec3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\GameData\PluginManager\LibLoot">
-      <UniqueIdentifier>{1eeda770-0c32-43fb-a8f4-6ac671cbf3e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameData\PluginManager\LibLoot">
-      <UniqueIdentifier>{662a5b88-3f29-4336-bc6a-74a3408927e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Misc\ConfigDefinitions">
       <UniqueIdentifier>{cafe45f4-7e48-45e5-8f88-8cdc8457cb09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameConfig">
-      <UniqueIdentifier>{67adfd80-5134-413c-9269-79e037903bd8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameConfig">
-      <UniqueIdentifier>{39d97edc-8536-4db1-ba52-08c3a498f1a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameConfig\ConfigManger">
-      <UniqueIdentifier>{48eb0151-affe-41bf-825a-37acd492bf6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameConfig\ConfigManger">
-      <UniqueIdentifier>{a9415759-d16c-4b15-9583-65f5841112fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameConfig\ConfigManger\Items">
-      <UniqueIdentifier>{3ca8163e-eaa9-4bf5-bf2c-548749e35194}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameConfig\ConfigManger\Items">
-      <UniqueIdentifier>{e3fd558d-96e0-47aa-a71b-5b3ba6623c97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\GameConfig\ConfigManger\SamplingFunctions">
-      <UniqueIdentifier>{a171eb37-ac0c-4c1e-aadc-fac09fa4f4ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\GameConfig\ConfigManger\SamplingFunctions">
-      <UniqueIdentifier>{a221830e-d859-44a1-96f1-8a0c011282d0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc\ConfigDefinitions\Games">
       <UniqueIdentifier>{d6f7b275-a549-4902-9852-bc41949ffb8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\GameConfig\ConfigManger\Sources">
-      <UniqueIdentifier>{c35ca882-6f5e-44af-b0ac-ef80104862a7}</UniqueIdentifier>
+    <Filter Include="Code">
+      <UniqueIdentifier>{00d56a50-fd97-4f22-9983-3c22ec921125}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\GameConfig\ConfigManger\Sources">
-      <UniqueIdentifier>{d441cc9e-18f3-461e-8b28-2762735d2b8f}</UniqueIdentifier>
+    <Filter Include="Code\Source code">
+      <UniqueIdentifier>{14717b7c-cc54-4eb7-b777-c94e153d0b8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\Application\Settings">
-      <UniqueIdentifier>{e905e6c3-93c4-4dfe-a7e4-e8e63dfc9180}</UniqueIdentifier>
+    <Filter Include="Code\Source code\Application">
+      <UniqueIdentifier>{0f73dc8b-efce-481a-abf3-24442642de86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\GameConfig\ConfigManger\Actions">
-      <UniqueIdentifier>{790e4434-58df-4b1b-94c5-136bedb156ad}</UniqueIdentifier>
+    <Filter Include="Code\Source code\Application\Themes">
+      <UniqueIdentifier>{340bc6e8-5807-47be-8b57-94e7771d7471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\GameConfig\ConfigManger\Actions">
-      <UniqueIdentifier>{8eefe203-9c27-4975-a461-886f0746b901}</UniqueIdentifier>
+    <Filter Include="Code\Source code\Application\Module">
+      <UniqueIdentifier>{0d93b033-71af-4aad-bdcd-6e20c527f95e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\Network\ModSourceStore">
-      <UniqueIdentifier>{ddb971f4-4b34-4a56-9ee2-9b11f69b5e26}</UniqueIdentifier>
+    <Filter Include="Code\Source code\Application\VariablesTable">
+      <UniqueIdentifier>{02830dd7-ef18-4a8a-b6f5-c84b75a0c5c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\Network\ModSourceStore">
-      <UniqueIdentifier>{d7143fe2-6431-46fd-b4c2-d14686be856d}</UniqueIdentifier>
+    <Filter Include="Code\Source code\Application\About">
+      <UniqueIdentifier>{846945b4-fcb7-4075-9a10-7aff9aa2bf86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\Network\ModNetwork">
-      <UniqueIdentifier>{63e0bdce-a29b-447e-b830-1079bfc9e801}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Network\ModNetwork">
-      <UniqueIdentifier>{fece819f-3c96-4b34-bea2-7c4f8866dba7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Network\ModNetwork\Nexus">
-      <UniqueIdentifier>{4d0dc77a-8a7d-4db1-91c0-3e0f372c5e4b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Network\ModNetwork\Nexus">
-      <UniqueIdentifier>{bd590061-5931-40cf-bf48-8108a9f8cb45}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Application\Resources">
-      <UniqueIdentifier>{11c1661f-9f2d-468a-9b85-87ad07e85567}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\Resources">
+    <Filter Include="Code\Source code\Application\Resources">
       <UniqueIdentifier>{75a165eb-9ac1-447b-8c15-e14bd8fe9023}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\Application\Notifications">
+    <Filter Include="Code\Source code\Application\Notifications">
       <UniqueIdentifier>{41f68988-7646-4ebc-ad46-f6ec722fc3ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\Application\Notifications">
-      <UniqueIdentifier>{4bcd5849-822a-4fb6-b85a-97c10b1dc01c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\ModPackages">
-      <UniqueIdentifier>{766cd037-14aa-4ecc-8fe5-11de0a7c3a3e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\ModPackages">
-      <UniqueIdentifier>{799e5445-21d6-4b47-adf6-b065c1f11073}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\ModPackages\PackageManager">
-      <UniqueIdentifier>{fee31dc7-735c-40af-bda6-91e47285bb7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\ModPackages\PackageManager">
-      <UniqueIdentifier>{6627ffce-bf5f-48a0-b6db-7af51ec1e115}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\ModPackages\InstallWizard">
-      <UniqueIdentifier>{56b3d8e2-4a4a-44d5-92f7-7a4701e4108a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\ModPackages\InstallWizard">
-      <UniqueIdentifier>{eb1f8d1e-9c5c-4fd8-b7b4-b6c475b9d12f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\ModPackages\InstallWizard\Info">
-      <UniqueIdentifier>{55ee647c-7f11-44ee-9601-266a3824a782}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\ModPackages\InstallWizard\Info">
-      <UniqueIdentifier>{1477e059-642f-494d-895d-a6b47847a993}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\ModPackages\InstallWizard\Requiremets">
-      <UniqueIdentifier>{6ffb82b6-d585-4be7-a482-3aadee3b0411}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\ModPackages\InstallWizard\Components">
-      <UniqueIdentifier>{e6b25946-94d8-4d18-9f69-01959c28f4fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\ModPackages\InstallWizard\Components">
-      <UniqueIdentifier>{4cda8c9a-a77d-4a07-ae0e-7bff13d2d2f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\ModPackages\InstallWizard\Installation">
-      <UniqueIdentifier>{d0f6496a-3be3-45f6-a128-e3b92c2739eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\ModPackages\InstallWizard\Installation">
-      <UniqueIdentifier>{3499a9af-2030-4407-856a-c5619e8d3302}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\ModPackages\InstallWizard\Completed">
-      <UniqueIdentifier>{b3295fe8-86cc-48d1-a8ab-41a11cd51ea8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\ModPackages\InstallWizard\Completed">
-      <UniqueIdentifier>{c3d782e6-426f-4cc0-b980-a88823a76545}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\UI\WebViewBackend">
-      <UniqueIdentifier>{6b550dfd-87c7-43d8-9bfb-1bd193595c94}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Headers\Application\Events">
-      <UniqueIdentifier>{ba91d700-872c-407c-a5c6-46fadb8ab5e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\Events">
+    <Filter Include="Code\Source code\Application\Events">
       <UniqueIdentifier>{d536f7e4-3332-4aec-b729-de1d6c7a1ff2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\Application\Options">
-      <UniqueIdentifier>{fcc4e747-5513-4819-91ee-7888fbb62841}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\Options">
+    <Filter Include="Code\Source code\Application\Options">
       <UniqueIdentifier>{f8dee2e9-4626-42bf-95eb-0f0d1f9534f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\Network\ModNetwork\Nexus\NXMHandler">
-      <UniqueIdentifier>{f89fe98c-af20-4fc6-ace3-a8791652ef3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Network\ModNetwork\Nexus\NXMHandler">
-      <UniqueIdentifier>{f264d46b-471a-4d2d-97be-3451701a6ab9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\Source\Application\Settings">
+    <Filter Include="Code\Source code\Application\Settings">
       <UniqueIdentifier>{e9b8debe-3e5f-4a98-b530-52a2df3ad7a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\ModPackages\InstallWizard\Requirements">
+    <Filter Include="Code\Source code\Archive">
+      <UniqueIdentifier>{b222a7fd-1abb-453b-b9eb-023d5b3820f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameConfig">
+      <UniqueIdentifier>{67adfd80-5134-413c-9269-79e037903bd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameConfig\ConfigManger">
+      <UniqueIdentifier>{a9415759-d16c-4b15-9583-65f5841112fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameConfig\ConfigManger\Items">
+      <UniqueIdentifier>{e3fd558d-96e0-47aa-a71b-5b3ba6623c97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameConfig\ConfigManger\SamplingFunctions">
+      <UniqueIdentifier>{a221830e-d859-44a1-96f1-8a0c011282d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameConfig\ConfigManger\Sources">
+      <UniqueIdentifier>{c35ca882-6f5e-44af-b0ac-ef80104862a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameConfig\ConfigManger\Actions">
+      <UniqueIdentifier>{8eefe203-9c27-4975-a461-886f0746b901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameData">
+      <UniqueIdentifier>{34b15e23-e6b7-434d-a450-7ef713e39793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameData\PluginManager">
+      <UniqueIdentifier>{0ad972bf-4485-4d8a-b74d-b63ba58f3519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameData\PluginManager\LibLoot">
+      <UniqueIdentifier>{1eeda770-0c32-43fb-a8f4-6ac671cbf3e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameData\SaveManager">
+      <UniqueIdentifier>{aee8af18-99c8-4b9b-9cbc-b59054bed2ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameData\SaveManager\BethesdaSave">
+      <UniqueIdentifier>{8e447ca2-ff57-4ff7-a96f-20b092471491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameData\ScreenshotsGallery">
+      <UniqueIdentifier>{17cea417-2fd9-4783-a51a-6a37bf5b7f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameInstance">
+      <UniqueIdentifier>{baf9614d-07aa-47eb-8665-ead79d31a066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameMods">
+      <UniqueIdentifier>{91051d91-4ca1-47a5-9a4e-c9c731b52de8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameMods\ModManager">
+      <UniqueIdentifier>{37014eaf-5d5a-4492-a183-bca26ccedd22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameMods\Import">
+      <UniqueIdentifier>{d97017c3-8343-4ab0-b654-f88a17d59587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameMods\VirtualGameFolder">
+      <UniqueIdentifier>{37be731d-69f6-4022-b07c-e49505a396d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameMods\ModStatistics">
+      <UniqueIdentifier>{10108bd6-7c58-4ad2-949b-9e14bdbf9bf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\GameMods\TagManager">
+      <UniqueIdentifier>{e4193127-2ce3-4d9f-b523-ef484ace238a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\ModPackages">
+      <UniqueIdentifier>{766cd037-14aa-4ecc-8fe5-11de0a7c3a3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\ModPackages\PackageManager">
+      <UniqueIdentifier>{6627ffce-bf5f-48a0-b6db-7af51ec1e115}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\ModPackages\InstallWizard">
+      <UniqueIdentifier>{eb1f8d1e-9c5c-4fd8-b7b4-b6c475b9d12f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\ModPackages\InstallWizard\Info">
+      <UniqueIdentifier>{55ee647c-7f11-44ee-9601-266a3824a782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\ModPackages\InstallWizard\Components">
+      <UniqueIdentifier>{e6b25946-94d8-4d18-9f69-01959c28f4fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\ModPackages\InstallWizard\Installation">
+      <UniqueIdentifier>{3499a9af-2030-4407-856a-c5619e8d3302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\ModPackages\InstallWizard\Completed">
+      <UniqueIdentifier>{c3d782e6-426f-4cc0-b980-a88823a76545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\ModPackages\InstallWizard\Requirements">
       <UniqueIdentifier>{2ec8edb0-1e7d-44ec-b80c-f9d7d281be3c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Headers\PackageProject\Serializer">
-      <UniqueIdentifier>{bc66260b-c5bb-48c3-9ee9-413909e94a03}</UniqueIdentifier>
+    <Filter Include="Code\Source code\Network">
+      <UniqueIdentifier>{1cf732ae-1aa0-424c-94d5-446352cdfb8c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\PackageProject\Serializer">
+    <Filter Include="Code\Source code\Network\DownloadManager">
+      <UniqueIdentifier>{2aa0000a-d18a-4bd0-bf20-e5ff1ba9483b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\Network\NetworkManager">
+      <UniqueIdentifier>{ba4aef9b-dff3-45d6-883a-b1f6f45e534a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\Network\ModSourceStore">
+      <UniqueIdentifier>{d7143fe2-6431-46fd-b4c2-d14686be856d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\Network\ModNetwork">
+      <UniqueIdentifier>{fece819f-3c96-4b34-bea2-7c4f8866dba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\Network\ModNetwork\Nexus">
+      <UniqueIdentifier>{4d0dc77a-8a7d-4db1-91c0-3e0f372c5e4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\Network\ModNetwork\Nexus\NXMHandler">
+      <UniqueIdentifier>{f264d46b-471a-4d2d-97be-3451701a6ab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\PackageCreator">
+      <UniqueIdentifier>{b0551a4e-5415-4a53-bb31-dfc298c1730a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\PackageCreator\PageComponents">
+      <UniqueIdentifier>{ae29b88e-890d-4a53-91e4-65ff7cf5c8de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\PackageCreator\PageFileData">
+      <UniqueIdentifier>{226a655b-accc-49aa-a677-1ed20214f833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\PackageCreator\PageInfo">
+      <UniqueIdentifier>{a58ee1d1-cf38-45cd-894b-5220ddee7c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\PackageCreator\PageInterface">
+      <UniqueIdentifier>{cf3c03ac-9b4f-4b92-9738-05a6d983811c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\PackageCreator\PageRequirements">
+      <UniqueIdentifier>{4ae81249-fa93-4d8f-bae6-4bfeee352b6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\PackageProject">
+      <UniqueIdentifier>{e9e9b99d-3ac0-4aa0-9a95-630b6d728d15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\PackageProject\Serializer">
       <UniqueIdentifier>{260be8da-c79f-4293-9227-0a9cb09eab33}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\UI">
+    <Filter Include="Code\Source code\Programs">
+      <UniqueIdentifier>{ea90ff45-611e-4a67-9994-23816ff6b21a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\Programs\ProgramManager">
+      <UniqueIdentifier>{c3ddbced-ebb9-4c58-8363-a05a68abc265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\UI">
       <UniqueIdentifier>{51d2b7a4-c61f-41fb-afcb-6710b7efdfa3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source\UI\WebViewBackend">
+    <Filter Include="Code\Source code\UI\WebViewBackend">
       <UniqueIdentifier>{3f78e5b9-b576-42ab-ae3d-fecfdbf8f903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\Utility">
+      <UniqueIdentifier>{3d4221b7-0197-4472-840f-106f30da65c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Source code\VirtualFileSystem">
+      <UniqueIdentifier>{939c8d3a-ef4f-4d1a-9de6-9478181a804b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Shared code">
+      <UniqueIdentifier>{2115c87c-576c-47c9-bedd-e0d7df5d3886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Shared code\IPC">
+      <UniqueIdentifier>{6ba9e007-972f-4f26-92d9-2cdbc2e087e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Shared code\VirtualFileSystem">
+      <UniqueIdentifier>{8c67519b-0440-43b1-b57e-cea7caeddc63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Includes">
+      <UniqueIdentifier>{436ca353-622d-47ba-8ce9-0a12a11ed7ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Includes\Common">
+      <UniqueIdentifier>{298c3ea3-670b-4970-b457-8979fa133a09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Includes\Components">
+      <UniqueIdentifier>{0e6585f1-0446-486e-a20e-898fbf8495ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Includes\Git">
+      <UniqueIdentifier>{7c678c2c-c543-48d7-a8db-f24f5b579fb5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\stdafx.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\EmptySaveFile.cpp">
-      <Filter>Code\Source\GameData\SaveManager</Filter>
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\Fallout3.cpp">
-      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\Fallout4.cpp">
-      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\FalloutNV.cpp">
-      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\Morrowind.cpp">
-      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\Oblivion.cpp">
-      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\Skyrim.cpp">
-      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\SkyrimSE.cpp">
-      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\DisplayModel.cpp">
-      <Filter>Code\Source\GameData\SaveManager</Filter>
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\Workspace.cpp">
-      <Filter>Code\Source\GameData\SaveManager</Filter>
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPlugin.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPlugin2.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\Workspace.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\IPluginReader.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\PluginViewModel.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaDisplayModel.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\ScreenshotsGallery\Workspace.cpp">
-      <Filter>Code\Source\GameData\ScreenshotsGallery</Filter>
+      <Filter>Code\Source code\GameData\ScreenshotsGallery</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BaseGamePlugin.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPluginReaderOblivion.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPluginReaderSkyrim.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\Common.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPluginReaderMorrowind.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPluginManager.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPluginManager2.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BethesdaPluginManagerMW.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\IGameMod.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\IModManager.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\DefaultModManager.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\Workspace.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\BasicGameMod.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\PriorityGroup.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\DisplayModel.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\FileTreeNode.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\IModDispatcher.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\DefaultModDispatcher.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\Import\ModImporterNMM.cpp">
-      <Filter>Code\Source\GameMods\Import</Filter>
+      <Filter>Code\Source code\GameMods\Import</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\Import\ModImporterMO.cpp">
-      <Filter>Code\Source\GameMods\Import</Filter>
+      <Filter>Code\Source code\GameMods\Import</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\NetworkManager\DefaultNetworkManager.cpp">
-      <Filter>Code\Source\Network\NetworkManager</Filter>
+      <Filter>Code\Source code\Network\NetworkManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\INetworkManager.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\IDownloadManager.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DefaultDownloadManager.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DisplayModel.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\Workspace.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\IGameInstance.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\IGameProfile.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\DefaultGameInstance.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\ActiveGameInstance.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\DefaultGameProfile.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\ProfileEditor.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\BasePluginManager.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.cpp">
-      <Filter>Code\Source\GameData\ScreenshotsGallery</Filter>
+      <Filter>Code\Source code\GameData\ScreenshotsGallery</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\IScreenshotsGallery.cpp">
-      <Filter>Code\Source\GameData</Filter>
+      <Filter>Code\Source code\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\IGameSave.cpp">
-      <Filter>Code\Source\GameData</Filter>
+      <Filter>Code\Source code\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BaseGameSave.cpp">
-      <Filter>Code\Source\GameData\SaveManager</Filter>
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\DefaultSaveManager.cpp">
-      <Filter>Code\Source\GameData\SaveManager</Filter>
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\ISaveManager.cpp">
-      <Filter>Code\Source\GameData</Filter>
+      <Filter>Code\Source code\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IApplication.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\GameID.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\SystemApplication.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\DefaultApplication.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\VirtualGameFolder\DisplayModel.cpp">
-      <Filter>Code\Source\GameMods\VirtualGameFolder</Filter>
+      <Filter>Code\Source code\GameMods\VirtualGameFolder</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\VirtualGameFolder\Workspace.cpp">
-      <Filter>Code\Source\GameMods\VirtualGameFolder</Filter>
+      <Filter>Code\Source code\GameMods\VirtualGameFolder</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModStatistics\DisplayModel.cpp">
-      <Filter>Code\Source\GameMods\ModStatistics</Filter>
+      <Filter>Code\Source code\GameMods\ModStatistics</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModStatistics\Dialog.cpp">
-      <Filter>Code\Source\GameMods\ModStatistics</Filter>
+      <Filter>Code\Source code\GameMods\ModStatistics</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModStatistics\DefaultStatistics.cpp">
-      <Filter>Code\Source\GameMods\ModStatistics</Filter>
+      <Filter>Code\Source code\GameMods\ModStatistics</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\GameModsModule.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\IModTagManager.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\TagManager\DefaultTagManager.cpp">
-      <Filter>Code\Source\GameMods\TagManager</Filter>
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\TagManager\SelectorDisplayModelCB.cpp">
-      <Filter>Code\Source\GameMods\TagManager</Filter>
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\TagManager\SelectorDisplayModel.cpp">
-      <Filter>Code\Source\GameMods\TagManager</Filter>
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\TagManager\SelectorDialog.cpp">
-      <Filter>Code\Source\GameMods\TagManager</Filter>
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\NetworkModule.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\GameDataModule.cpp">
-      <Filter>Code\Source\GameData</Filter>
+      <Filter>Code\Source code\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModTagStore.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\TagManager\DefaultTag.cpp">
-      <Filter>Code\Source\GameMods\TagManager</Filter>
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\INotification.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\INotificationCenter.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Theme\VisualStudio.cpp">
-      <Filter>Code\Source\Application\Themes</Filter>
+      <Filter>Code\Source code\Application\Themes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Theme\Default.cpp">
-      <Filter>Code\Source\Application\Themes</Filter>
+      <Filter>Code\Source code\Application\Themes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IThemeManager.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\IModImporter.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IModule.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IManager.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Translation.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\VariablesTable\VariableValue.cpp">
-      <Filter>Code\Source\Application\VariablesTable</Filter>
+      <Filter>Code\Source code\Application\VariablesTable</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\VariablesTable\StaticVariableTable.cpp">
-      <Filter>Code\Source\Application\VariablesTable</Filter>
+      <Filter>Code\Source code\Application\VariablesTable</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\VariablesTable\DynamicVariableTable.cpp">
-      <Filter>Code\Source\Application\VariablesTable</Filter>
+      <Filter>Code\Source code\Application\VariablesTable</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IVariableTable.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp">
-      <Filter>Code\Source\Application\Options</Filter>
+      <Filter>Code\Source code\Application\Options</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Options\Option.cpp">
-      <Filter>Code\Source\Application\Options</Filter>
+      <Filter>Code\Source code\Application\Options</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\IProgramManager.cpp">
-      <Filter>Code\Source\Programs</Filter>
+      <Filter>Code\Source code\Programs</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\ProgramsModule.cpp">
-      <Filter>Code\Source\Programs</Filter>
+      <Filter>Code\Source code\Programs</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\ProgramManager\Workspace.cpp">
-      <Filter>Code\Source\Programs\ProgramManager</Filter>
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\ProgramManager\DisplayModel.cpp">
-      <Filter>Code\Source\Programs\ProgramManager</Filter>
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramManager.cpp">
-      <Filter>Code\Source\Programs\ProgramManager</Filter>
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\IModTag.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\About\Dialog.cpp">
-      <Filter>Code\Source\Application\About</Filter>
+      <Filter>Code\Source code\Application\About</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\About\DisplayModel.cpp">
-      <Filter>Code\Source\Application\About</Filter>
+      <Filter>Code\Source code\Application\About</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\About\DisplayModelNode.cpp">
-      <Filter>Code\Source\Application\About</Filter>
+      <Filter>Code\Source code\Application\About</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\DefaultVFSService.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\RecievingWindow.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\Convergence.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\Mirror.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\MultiMirror.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\IPC\FSController.cpp">
-      <Filter>Shared Code\Source\IPC</Filter>
+      <Filter>Code\Shared code\IPC</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\IPC\MainApplication.cpp">
-      <Filter>Shared Code\Source\IPC</Filter>
+      <Filter>Code\Shared code\IPC</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\IPC\MessageExchanger.cpp">
-      <Filter>Shared Code\Source\IPC</Filter>
+      <Filter>Code\Shared code\IPC</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\IPC\ProcessingWindow.cpp">
-      <Filter>Shared Code\Source\IPC</Filter>
+      <Filter>Code\Shared code\IPC</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\VirtualFileSystem\IVFSService.cpp">
-      <Filter>Shared Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Shared code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.cpp">
-      <Filter>Shared Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Shared code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\SelectionDialog.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\CreationDialog.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\Bethesda2DisplayModel.cpp">
-      <Filter>Code\Source\GameData\PluginManager</Filter>
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\Log.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginManager\LibLoot\LibLoot.cpp">
-      <Filter>Code\Source\GameData\PluginManager\LibLoot</Filter>
+      <Filter>Code\Source code\GameData\PluginManager\LibLoot</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\GameConfigModule.cpp">
-      <Filter>Code\Source\GameConfig</Filter>
+      <Filter>Code\Source code\GameConfig</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\IConfigManager.cpp">
-      <Filter>Code\Source\GameConfig</Filter>
+      <Filter>Code\Source code\GameConfig</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\IGameConfigManager.cpp">
-      <Filter>Code\Source\GameConfig</Filter>
+      <Filter>Code\Source code\GameConfig</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Definition.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\DataType.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ITypeDetector.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemOptions.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ISource.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemGroup.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Item.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemSamples.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ItemValue.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\ITranslator.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\RefTranslator.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\RefStackTranslator.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\SimpleItem.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Items</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Workspace.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\CategoryItem.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Items</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\DisplayModel.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\WorkspaceController.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\StructItem.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Items</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Items\StructSubItem.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Items</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Items</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\ISamplingFunction.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoModes.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\FindFiles.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoAdapters.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\IFileSource.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Settings\Window.cpp">
-      <Filter>Code\Source\Application\Settings</Filter>
+      <Filter>Code\Source code\Application\Settings</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Settings\ConfigManager.cpp">
-      <Filter>Code\Source\Application\Settings</Filter>
+      <Filter>Code\Source code\Application\Settings</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetAvailableTranslations.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetStartupWorkspaces.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\SamplingFunctions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\IAction.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Actions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Actions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Actions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Actions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Actions\PickColor.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Actions</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Actions</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLFileSource.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INIRefSource.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameConfig\ConfigManger\Sources\INIFileSource.cpp">
-      <Filter>Code\Source\GameConfig\ConfigManger\Sources</Filter>
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\NetworkModInfo.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\VirtualFileSystem\BaseFileSystem.cpp">
-      <Filter>Code\Source\VirtualFileSystem</Filter>
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\NewModDialog.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\ProgramManager\ProgramEditorDialog.cpp">
-      <Filter>Code\Source\Programs\ProgramManager</Filter>
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Module\Info.cpp">
-      <Filter>Code\Source\Application\Module</Filter>
+      <Filter>Code\Source code\Application\Module</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModSourceStore\Item.cpp">
-      <Filter>Code\Source\Network\ModSourceStore</Filter>
+      <Filter>Code\Source code\Network\ModSourceStore</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModSourceStore\Store.cpp">
-      <Filter>Code\Source\Network\ModSourceStore</Filter>
+      <Filter>Code\Source code\Network\ModSourceStore</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModSourceStore\StoreDisplayModel.cpp">
-      <Filter>Code\Source\Network\ModSourceStore</Filter>
+      <Filter>Code\Source code\Network\ModSourceStore</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModSourceStore\StoreDialog.cpp">
-      <Filter>Code\Source\Network\ModSourceStore</Filter>
+      <Filter>Code\Source code\Network\ModSourceStore</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\IModNetwork.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\TESALL.cpp">
-      <Filter>Code\Source\Network\ModNetwork</Filter>
+      <Filter>Code\Source code\Network\ModNetwork</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\LoversLab.cpp">
-      <Filter>Code\Source\Network\ModNetwork</Filter>
+      <Filter>Code\Source code\Network\ModNetwork</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.cpp">
-      <Filter>Code\Source\GameData\SaveManager\BethesdaSave</Filter>
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\DisplayModelNode.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\NetworkWxFSHandler.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModManager\MainFileSystem.cpp">
-      <Filter>Code\Source\GameMods\ModManager</Filter>
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetworkAuth.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\Nexus.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusAuth.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusRepository.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUtility.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Resources\DefaultImageProvider.cpp">
-      <Filter>Code\Source\Application\Resources</Filter>
+      <Filter>Code\Source code\Application\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Resources\IImageProvider.cpp">
-      <Filter>Code\Source\Application\Resources</Filter>
+      <Filter>Code\Source code\Application\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\MenuSeparator.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUpdateChecker.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetworkUpdateChecker.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\DateTime.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\NetworkModUpdateInfo.cpp">
-      <Filter>Code\Source\Network</Filter>
+      <Filter>Code\Source code\Network</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\BaseNotification.cpp">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\DefaultNotificationCenter.cpp">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\DisplayModel.cpp">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\SimpleNotification.cpp">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\ApplicationModule.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\ModPackagesModule.cpp">
-      <Filter>Code\Source\ModPackages</Filter>
+      <Filter>Code\Source code\ModPackages</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\IPackageManager.cpp">
-      <Filter>Code\Source\ModPackages</Filter>
+      <Filter>Code\Source code\ModPackages</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\PackageManager\DefaultPackageManager.cpp">
-      <Filter>Code\Source\ModPackages\PackageManager</Filter>
+      <Filter>Code\Source code\ModPackages\PackageManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\ModPackage.cpp">
-      <Filter>Code\Source\ModPackages</Filter>
+      <Filter>Code\Source code\ModPackages</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\WizardDialog.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\WizardPage.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoPage.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Info</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard\Info</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Info</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard\Info</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Components</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Components\DisplayModel.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Components</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Installation</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard\Installation</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Completed\CompletedPage.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Completed</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard\Completed</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\WebView.cpp">
-      <Filter>Code\Source\UI</Filter>
+      <Filter>Code\Source code\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\TextEditDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
+      <Filter>Code\Source code\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\WebViewBackend\InternetExplorer.cpp">
-      <Filter>Code\Source\UI\WebViewBackend</Filter>
+      <Filter>Code\Source code\UI\WebViewBackend</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\WebViewBackend\Generic.cpp">
-      <Filter>Code\Source\UI\WebViewBackend</Filter>
+      <Filter>Code\Source code\UI\WebViewBackend</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DownloadItem.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DownloadExecutor.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DownloadItemBuilder.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DisplayModelNode.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\DownloadManager\DownloadEvent.cpp">
-      <Filter>Code\Source\Network\DownloadManager</Filter>
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\Common.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\BroadcastProcessor.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameMods\ModEvent.cpp">
-      <Filter>Code\Source\GameMods</Filter>
+      <Filter>Code\Source code\GameMods</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\PluginEvent.cpp">
-      <Filter>Code\Source\GameData</Filter>
+      <Filter>Code\Source code\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\IGamePlugin.cpp">
-      <Filter>Code\Source\GameData</Filter>
+      <Filter>Code\Source code\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\IPluginManager.cpp">
-      <Filter>Code\Source\GameData</Filter>
+      <Filter>Code\Source code\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameData\SaveEvent.cpp">
-      <Filter>Code\Source\GameData</Filter>
+      <Filter>Code\Source code\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\ProfileEvent.cpp">
-      <Filter>Code\Source\GameInstance</Filter>
+      <Filter>Code\Source code\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\Dialog.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModel.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModelNode.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NXMHandler\OptionStore.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus\NXMHandler</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus\NXMHandler</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.cpp">
-      <Filter>Code\Source\Network\ModNetwork\Nexus</Filter>
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\Notifications\TrayPopup.cpp">
-      <Filter>Code\Source\Application\Notifications</Filter>
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\AppOption.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\DefaultWorkspace.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IWorkspace.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\MainWindow.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IWorkspaceContainer.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IMainWindow.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\UI.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IWorkspaceDocument.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Requirements\DisplayModel.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Requirements</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard\Requirements</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModPackages\InstallWizard\Requirements\RequirementsPage.cpp">
-      <Filter>Code\Source\ModPackages\InstallWizard\Requirements</Filter>
+      <Filter>Code\Source code\ModPackages\InstallWizard\Requirements</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\ImageViewerDialog.cpp">
-      <Filter>Code\Source\UI</Filter>
+      <Filter>Code\Source code\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp">
-      <Filter>Code\Source\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\IProgramItem.cpp">
-      <Filter>Code\Source\Programs</Filter>
+      <Filter>Code\Source code\Programs</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\ProgramEvent.cpp">
-      <Filter>Code\Source\Programs</Filter>
+      <Filter>Code\Source code\Programs</Filter>
     </ClCompile>
     <ClCompile Include="Source\Programs\ProgramManager\DefaultProgramItem.cpp">
-      <Filter>Code\Source\Programs\ProgramManager</Filter>
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\ProgressOverlay.cpp">
-      <Filter>Code\Source\UI</Filter>
+      <Filter>Code\Source code\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\WorkspaceDocument.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\Workspace.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageRequirements.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInterface.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageFileData.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageBase.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\ListModel.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\IDTracker.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\FOModImportExportDialog.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PackageBuilder.cpp">
-      <Filter>Code\Source\PackageCreator</Filter>
+      <Filter>Code\Source code\PackageCreator</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\ConditionGroupModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\ComponentsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\ComponentsModelNode.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\RequirementsSelectorModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageFileData\MainListModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageFileData</Filter>
+      <Filter>Code\Source code\PackageCreator\PageFileData</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageFileData\ContentModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageFileData</Filter>
+      <Filter>Code\Source code\PackageCreator\PageFileData</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo\TagsListModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
+      <Filter>Code\Source code\PackageCreator\PageInfo</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo\SitesModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
+      <Filter>Code\Source code\PackageCreator\PageInfo</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo\DocumentsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
+      <Filter>Code\Source code\PackageCreator\PageInfo</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInfo\AdditionalInfoModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInfo</Filter>
+      <Filter>Code\Source code\PackageCreator\PageInfo</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageInterface\ImageListModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageInterface</Filter>
+      <Filter>Code\Source code\PackageCreator\PageInterface</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageRequirements\GroupsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageRequirements</Filter>
+      <Filter>Code\Source code\PackageCreator\PageRequirements</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageRequirements\EntriesListModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageRequirements</Filter>
+      <Filter>Code\Source code\PackageCreator\PageRequirements</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\ModPackageProject.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\ComponentsSection.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\ConfigSection.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\FileDataSection.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\InfoSection.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\InterfaceSection.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\ProjectSection.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\RequirementsSection.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\Serializer.cpp">
-      <Filter>Code\Source\PackageProject</Filter>
+      <Filter>Code\Source code\PackageProject</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\Serializer\LegacySerializer.cpp">
-      <Filter>Code\Source\PackageProject\Serializer</Filter>
+      <Filter>Code\Source code\PackageProject\Serializer</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\Serializer\NativeSerializer.cpp">
-      <Filter>Code\Source\PackageProject\Serializer</Filter>
+      <Filter>Code\Source code\PackageProject\Serializer</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageProject\Serializer\FOModSerializer.cpp">
-      <Filter>Code\Source\PackageProject\Serializer</Filter>
+      <Filter>Code\Source code\PackageProject\Serializer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\TempFolderKeeper.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\BitmapSize.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\OperationWithProgress.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\QuickThread.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\String.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\Drawing.cpp">
-      <Filter>Code\Source\Utility</Filter>
+      <Filter>Code\Source code\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Archive\BethesdaArchive.cpp">
-      <Filter>Code\Source\Archive</Filter>
+      <Filter>Code\Source code\Archive</Filter>
     </ClCompile>
     <ClCompile Include="Source\Archive\GenericArchive.cpp">
-      <Filter>Code\Source\Archive</Filter>
+      <Filter>Code\Source code\Archive</Filter>
     </ClCompile>
     <ClCompile Include="Source\Archive\Common.cpp">
-      <Filter>Code\Source\Archive</Filter>
+      <Filter>Code\Source code\Archive</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\WebViewBackend\Sciter.cpp">
-      <Filter>Code\Source\UI\WebViewBackend</Filter>
+      <Filter>Code\Source code\UI\WebViewBackend</Filter>
     </ClCompile>
     <ClCompile Include="Source\PackageCreator\PageComponents\ConditionFlagsModel.cpp">
-      <Filter>Code\Source\PackageCreator\PageComponents</Filter>
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stdafx.cpp">
+      <Filter>Code\Source code</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\stdafx.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\EmptySaveFile.h">
-      <Filter>Code\Headers\GameData\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Oblivion.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Skyrim.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\SkyrimSE.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Fallout3.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Fallout4.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\FalloutNV.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Morrowind.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\DisplayModel.h">
-      <Filter>Code\Headers\GameData\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\Workspace.h">
-      <Filter>Code\Headers\GameData\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaPlugin.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaPlugin2.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\Workspace.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\IPluginReader.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\PluginViewModel.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaDisplayModel.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\IDisplayModel.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\ScreenshotsGallery\Workspace.h">
-      <Filter>Code\Headers\GameData\ScreenshotsGallery</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BaseGamePlugin.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\IBethesdaGamePlugin.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\IBethesdaPluginReader.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginReaderOblivion.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginReaderSkyrim.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\Common.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginReaderMorrowind.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginManager.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginManager2.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginManagerMW.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\IGameMod.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\IModManager.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\DefaultModManager.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\Workspace.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\BasicGameMod.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\MandatoryModEntry.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\FixedGameMod.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\PriorityGroup.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\DisplayModel.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\DisplayModelNode.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\FileTreeNode.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\IModDispatcher.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\Import\ModImporterNMM.h">
-      <Filter>Code\Headers\GameMods\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\Import\ModImporterMO.h">
-      <Filter>Code\Headers\GameMods\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\NetworkManager\DefaultNetworkManager.h">
-      <Filter>Code\Headers\Network\NetworkManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\INetworkManager.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\IDownloadManager.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadManager.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\DisplayModel.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\Workspace.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\IGameInstance.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\Util.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\IGameProfile.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\DefaultGameInstance.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\ActiveGameInstance.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\DefaultGameProfile.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\ProfileEditor.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\BasePluginManager.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Kortex\Common\Network.hpp">
-      <Filter>Code\Include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.h">
-      <Filter>Code\Headers\GameData\ScreenshotsGallery</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\IScreenshotsGallery.h">
-      <Filter>Code\Headers\GameData</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\IGameSave.h">
-      <Filter>Code\Headers\GameData</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BaseGameSave.h">
-      <Filter>Code\Headers\GameData\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\IBethesdaGameSave.h">
-      <Filter>Code\Headers\GameData\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\DefaultSaveManager.h">
-      <Filter>Code\Headers\GameData\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\ISaveManager.h">
-      <Filter>Code\Headers\GameData</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IApplication.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\GameID.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\SystemApplication.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\DefaultApplication.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\VirtualGameFolder\DisplayModel.h">
-      <Filter>Code\Headers\GameMods\VirtualGameFolder</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\VirtualGameFolder\Workspace.h">
-      <Filter>Code\Headers\GameMods\VirtualGameFolder</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModStatistics\DisplayModel.h">
-      <Filter>Code\Headers\GameMods\ModStatistics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModStatistics\Dialog.h">
-      <Filter>Code\Headers\GameMods\ModStatistics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\IModStatistics.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModStatistics\DefaultStatistics.h">
-      <Filter>Code\Headers\GameMods\ModStatistics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\GameModsModule.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\IModTagManager.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\IModTag.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\TagManager\DefaultTagManager.h">
-      <Filter>Code\Headers\GameMods\TagManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\TagManager\SelectorDisplayModel.h">
-      <Filter>Code\Headers\GameMods\TagManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\TagManager\SelectorDisplayModelCB.h">
-      <Filter>Code\Headers\GameMods\TagManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\TagManager\SelectorDialog.h">
-      <Filter>Code\Headers\GameMods\TagManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\NetworkModule.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\GameDataModule.h">
-      <Filter>Code\Headers\GameData</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\Collection.h">
-      <Filter>Code\Headers\Utility</Filter>
+      <Filter>Code\Includes\Common</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Common\GameMods.hpp">
-      <Filter>Code\Include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModTagStore.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\TagManager\DefaultTag.h">
-      <Filter>Code\Headers\GameMods\TagManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\INotification.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\INotificationCenter.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IThemeManager.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Theme\Default.h">
-      <Filter>Code\Headers\Application\Themes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Theme\VisualStudio.h">
-      <Filter>Code\Headers\Application\Themes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\IModImporter.h">
-      <Filter>Code\Headers\GameMods</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Module\ManagerInfo.h">
-      <Filter>Code\Headers\Application\Module</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Module\ModuleInfo.h">
-      <Filter>Code\Headers\Application\Module</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IManager.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IModule.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Translation.h">
-      <Filter>Code\Headers\Application</Filter>
+      <Filter>Code\Includes\Common</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Application.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\DownloadManager.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\GameInstance.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ModImporter.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ModManager.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ModStatistics.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ModTagManager.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\NetworkManager.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Notification.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\PluginManager.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\SaveManager.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ScreenshotsGallery.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Theme.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Translation.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Utility.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\VirtualGameFolder.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Core.hpp">
-      <Filter>Code\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\VariablesTable\VariableValue.h">
-      <Filter>Code\Headers\Application\VariablesTable</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\VariablesTable\StaticVariableTable.h">
-      <Filter>Code\Headers\Application\VariablesTable</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\VariablesTable\DynamicVariableTable.h">
-      <Filter>Code\Headers\Application\VariablesTable</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IVariableTable.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\VariablesTable\VariablesDatabase.h">
-      <Filter>Code\Headers\Application\VariablesTable</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Options\OptionSerializer.h">
-      <Filter>Code\Headers\Application\Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Options\Option.h">
-      <Filter>Code\Headers\Application\Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Options\OptionDatabase.h">
-      <Filter>Code\Headers\Application\Options</Filter>
+      <Filter>Code\Includes</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ApplicationOptions.hpp">
-      <Filter>Code\Include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Programs\IProgramManager.h">
-      <Filter>Code\Headers\Programs</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Programs\ProgramsModule.h">
-      <Filter>Code\Headers\Programs</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\ProgramManager.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Common\Programs.hpp">
-      <Filter>Code\Include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Programs\ProgramManager\Workspace.h">
-      <Filter>Code\Headers\Programs\ProgramManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Programs\ProgramManager\DisplayModel.h">
-      <Filter>Code\Headers\Programs\ProgramManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramManager.h">
-      <Filter>Code\Headers\Programs\ProgramManager</Filter>
+      <Filter>Code\Includes\Common</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Common\Packages.hpp">
-      <Filter>Code\Include\Common</Filter>
+      <Filter>Code\Includes\Common</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Common\GameData.hpp">
-      <Filter>Code\Include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Options\Macros.h">
-      <Filter>Code\Headers\Application\Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\Common.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\UniqueID.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\String.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\About\Dialog.h">
-      <Filter>Code\Headers\Application\About</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\About\DisplayModel.h">
-      <Filter>Code\Headers\Application\About</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\About\DisplayModelNode.h">
-      <Filter>Code\Headers\Application\About</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\DefaultVFSService.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\RecievingWindow.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\Convergence.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\Mirror.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\MultiMirror.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\IPC\FSController.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\IPC\MainApplication.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\IPC\Message.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\IPC\MessageExchanger.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\IPC\ProcessingWindow.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\IPC\Serialization.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\IPC\Common.h">
-      <Filter>Shared Code\Headers\IPC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.h">
-      <Filter>Shared Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\VirtualFileSystem\IVFSService.h">
-      <Filter>Shared Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\SelectionDialog.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\CreationDialog.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Code\Headers</Filter>
+      <Filter>Code\Includes\Common</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Git\Constants.h">
-      <Filter>Code\Include\Git</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\Bethesda2DisplayModel.h">
-      <Filter>Code\Headers\GameData\PluginManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\Log.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\PluginManager\LibLoot\LibLoot.h">
-      <Filter>Code\Headers\GameData\PluginManager\LibLoot</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\GameConfigModule.h">
-      <Filter>Code\Headers\GameConfig</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\IConfigManager.h">
-      <Filter>Code\Headers\GameConfig</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\IGameConfigManager.h">
-      <Filter>Code\Headers\GameConfig</Filter>
+      <Filter>Code\Includes\Git</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Common\GameConfig.hpp">
-      <Filter>Code\Include\Common</Filter>
+      <Filter>Code\Includes\Common</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\GameConfig.hpp">
-      <Filter>Code\Include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Definition.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\DataType.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\ITypeDetector.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Common.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\ItemOptions.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\ISource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Item.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\ItemSamples.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\ItemValue.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\ITranslator.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\RefTranslator.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\RefStackTranslator.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Items\SimpleItem.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Workspace.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Items\CategoryItem.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\IViewItem.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\DisplayModel.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\WorkspaceController.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructItem.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructSubItem.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\ISamplingFunction.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\Generic.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoModes.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\FindFiles.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoAdapters.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\NullSource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\IFileSource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Settings\Window.h">
-      <Filter>Code\Headers\Application\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Settings\ConfigManager.h">
-      <Filter>Code\Headers\Application\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetAvailableTranslations.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetStartupWorkspaces.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\SamplingFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\IAction.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\PickColor.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLFileSource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLSource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INIRefSource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INIFileSource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h">
-      <Filter>Code\Headers\GameConfig\ConfigManger\Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\NetworkModInfo.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\BaseFileSystem.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\NewModDialog.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h">
-      <Filter>Code\Headers\Programs\ProgramManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSourceStore\Item.h">
-      <Filter>Code\Headers\Network\ModSourceStore</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSourceStore\Store.h">
-      <Filter>Code\Headers\Network\ModSourceStore</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSourceStore.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSourceStore\StoreDisplayModel.h">
-      <Filter>Code\Headers\Network\ModSourceStore</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModSourceStore\StoreDialog.h">
-      <Filter>Code\Headers\Network\ModSourceStore</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModRepositoryReply.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModRepositoryRequest.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModRepositoryLimits.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\IModNetwork.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\TESALL.h">
-      <Filter>Code\Headers\Network\ModNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\LoversLab.h">
-      <Filter>Code\Headers\Network\ModNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.h">
-      <Filter>Code\Headers\GameData\SaveManager\BethesdaSave</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameData\SaveManager\SaveInfoPair.h">
-      <Filter>Code\Headers\GameData\SaveManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\DisplayModelDND.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\NetworkWxFSHandler.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\MainFileSystem.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetworkRepository.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetworkAuth.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\Nexus.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusAuth.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusRepository.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUtility.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus.h">
-      <Filter>Code\Headers\Network\ModNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Resources\IImageProvider.h">
-      <Filter>Code\Headers\Application\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Resources\ResourceID.h">
-      <Filter>Code\Headers\Application\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Resources\DefaultImageProvider.h">
-      <Filter>Code\Headers\Application\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Resources\ImageResourceID.h">
-      <Filter>Code\Headers\Application\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\MenuSeparator.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateChecker.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetworkUpdateChecker.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\NetworkModUpdateInfo.h">
-      <Filter>Code\Headers\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\DateTime.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusNetworkReply.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notifications\BaseNotification.h">
-      <Filter>Code\Headers\Application\Notifications</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notifications\DefaultNotificationCenter.h">
-      <Filter>Code\Headers\Application\Notifications</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notifications\DisplayModel.h">
-      <Filter>Code\Headers\Application\Notifications</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notifications\SimpleNotification.h">
-      <Filter>Code\Headers\Application\Notifications</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\ApplicationModule.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\ModPackagesModule.h">
-      <Filter>Code\Headers\ModPackages</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\IPackageManager.h">
-      <Filter>Code\Headers\ModPackages</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\PackageManager\DefaultPackageManager.h">
-      <Filter>Code\Headers\ModPackages\PackageManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\PackageManager\IWithScriptExtender.h">
-      <Filter>Code\Headers\ModPackages\PackageManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\ModPackage.h">
-      <Filter>Code\Headers\ModPackages</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\PackageManager.hpp">
-      <Filter>Code\Include\Components</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\InstallWizard.hpp">
-      <Filter>Code\Include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\StepStack.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Common.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\WizardDialog.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\WizardPage.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoPage.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Info</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Info</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModel.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModelNode.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Installation</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Completed\CompletedPage.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Completed</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\WebView.h">
-      <Filter>Code\Headers\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\TextEditDialog.h">
-      <Filter>Code\Headers\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\WebViewBackend\Generic.h">
-      <Filter>Code\Headers\UI\WebViewBackend</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\WebViewBackend\InternetExplorer.h">
-      <Filter>Code\Headers\UI\WebViewBackend</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\WebViewBackend\IWebView.h">
-      <Filter>Code\Headers\UI\WebViewBackend</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\DownloadItem.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\DownloadExecutor.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\IDownloadExecutor.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\IDownloadItem.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\DownloadItemBuilder.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\DisplayModelNode.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
+      <Filter>Code\Includes\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Kortex\Resources.hpp">
-      <Filter>Code\Include\Common</Filter>
+      <Filter>Code\Includes\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\DownloadManager\DownloadEvent.h">
-      <Filter>Code\Headers\Network\DownloadManager</Filter>
+    <ClInclude Include="..\Shared\VirtualFileSystem\IVFSService.h">
+      <Filter>Code\Shared code\VirtualFileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\Common.h">
-      <Filter>Code\Headers\Utility</Filter>
+    <ClInclude Include="..\Shared\VirtualFileSystem\IVirtualFileSystem.h">
+      <Filter>Code\Shared code\VirtualFileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\BroadcastProcessor.h">
-      <Filter>Code\Headers\Application</Filter>
+    <ClInclude Include="..\Shared\IPC\Serialization.h">
+      <Filter>Code\Shared code\IPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\Events\LogEvent.h">
-      <Filter>Code\Headers\Application\Events</Filter>
+    <ClInclude Include="..\Shared\IPC\Common.h">
+      <Filter>Code\Shared code\IPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\VirtualFileSystem\VirtualFSEvent.h">
-      <Filter>Code\Headers\VirtualFileSystem</Filter>
+    <ClInclude Include="..\Shared\IPC\FSController.h">
+      <Filter>Code\Shared code\IPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameMods\ModEvent.h">
-      <Filter>Code\Headers\GameMods</Filter>
+    <ClInclude Include="..\Shared\IPC\MainApplication.h">
+      <Filter>Code\Shared code\IPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameData\PluginEvent.h">
-      <Filter>Code\Headers\GameData</Filter>
+    <ClInclude Include="..\Shared\IPC\Message.h">
+      <Filter>Code\Shared code\IPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameData\IGamePlugin.h">
-      <Filter>Code\Headers\GameData</Filter>
+    <ClInclude Include="..\Shared\IPC\MessageExchanger.h">
+      <Filter>Code\Shared code\IPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameData\IPluginManager.h">
-      <Filter>Code\Headers\GameData</Filter>
+    <ClInclude Include="..\Shared\IPC\ProcessingWindow.h">
+      <Filter>Code\Shared code\IPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameData\SaveEvent.h">
-      <Filter>Code\Headers\GameData</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameInstance\ProfileEvent.h">
-      <Filter>Code\Headers\GameInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Options\CmdLineDatabase.h">
-      <Filter>Code\Headers\Application\Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\Dialog.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModel.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModelNode.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\OptionStore.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus\NXMHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\DefaultModDispatcher.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\EnumClassOperations.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameMods\ModManager\Common.h">
-      <Filter>Code\Headers\GameMods\ModManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.h">
-      <Filter>Code\Headers\Network\ModNetwork\Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\Notifications\TrayPopup.h">
-      <Filter>Code\Headers\Application\Notifications</Filter>
+    <ClInclude Include="Source\Application\ApplicationModule.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\AppOption.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\DefaultWorkspace.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IMainWindow.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IWorkspace.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IWorkspaceContainer.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\MainWindow.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\UI.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IWorkspaceDocument.h">
-      <Filter>Code\Headers\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\RequirementsPage.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\DisplayModel.h">
-      <Filter>Code\Headers\ModPackages\InstallWizard\Requiremets</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\ImageViewerDialog.h">
-      <Filter>Code\Headers\UI</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
     <ClInclude Include="Source\Application\BookWorkspaceContainer.h">
-      <Filter>Code\Headers\Application</Filter>
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Programs\IProgramItem.h">
-      <Filter>Code\Headers\Programs</Filter>
+    <ClInclude Include="Source\Application\BroadcastProcessor.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Programs\ProgramEvent.h">
-      <Filter>Code\Headers\Programs</Filter>
+    <ClInclude Include="Source\Application\DefaultApplication.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramItem.h">
-      <Filter>Code\Headers\Programs\ProgramManager</Filter>
+    <ClInclude Include="Source\Application\DefaultWorkspace.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UI\ProgressOverlay.h">
-      <Filter>Code\Headers\UI</Filter>
+    <ClInclude Include="Source\Application\IApplication.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\WorkspaceDocument.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\IMainWindow.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\Workspace.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\IManager.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageRequirements.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\IModule.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInterface.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\INotification.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\INotificationCenter.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageFileData.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\IThemeManager.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\ITranslator.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageBase.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\IVariableTable.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\ListModel.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\IWorkspace.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\VectorModel.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\IWorkspaceContainer.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\IDTracker.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\IWorkspaceDocument.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\FOModImportExportDialog.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\MainWindow.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PackageBuilder.h">
-      <Filter>Code\Headers\PackageCreator</Filter>
+    <ClInclude Include="Source\Application\RefStackTranslator.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\ConditionGroupModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    <ClInclude Include="Source\Application\RefTranslator.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    <ClInclude Include="Source\Application\SystemApplication.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    <ClInclude Include="Source\Application\Translation.h">
+      <Filter>Code\Source code\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    <ClInclude Include="Source\Application\About\Dialog.h">
+      <Filter>Code\Source code\Application\About</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModelNode.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    <ClInclude Include="Source\Application\About\DisplayModel.h">
+      <Filter>Code\Source code\Application\About</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageComponents\RequirementsSelectorModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+    <ClInclude Include="Source\Application\About\DisplayModelNode.h">
+      <Filter>Code\Source code\Application\About</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageFileData\MainListModel.h">
-      <Filter>Code\Headers\PackageCreator\PageFileData</Filter>
+    <ClInclude Include="Source\Application\Events\LogEvent.h">
+      <Filter>Code\Source code\Application\Events</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageFileData\ContentModel.h">
-      <Filter>Code\Headers\PackageCreator\PageFileData</Filter>
+    <ClInclude Include="Source\Application\Module\ManagerInfo.h">
+      <Filter>Code\Source code\Application\Module</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo\TagsListModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
+    <ClInclude Include="Source\Application\Module\ModuleInfo.h">
+      <Filter>Code\Source code\Application\Module</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo\SitesModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
+    <ClInclude Include="Source\Application\Notifications\BaseNotification.h">
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo\DocumentsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
+    <ClInclude Include="Source\Application\Notifications\DefaultNotificationCenter.h">
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInfo\AdditionalInfoModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInfo</Filter>
+    <ClInclude Include="Source\Application\Notifications\DisplayModel.h">
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageInterface\ImageListModel.h">
-      <Filter>Code\Headers\PackageCreator\PageInterface</Filter>
+    <ClInclude Include="Source\Application\Notifications\SimpleNotification.h">
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageRequirements\GroupsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageRequirements</Filter>
+    <ClInclude Include="Source\Application\Notifications\TrayPopup.h">
+      <Filter>Code\Source code\Application\Notifications</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageCreator\PageRequirements\EntriesListModel.h">
-      <Filter>Code\Headers\PackageCreator\PageRequirements</Filter>
+    <ClInclude Include="Source\Application\Options\CmdLineDatabase.h">
+      <Filter>Code\Source code\Application\Options</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\ModPackageProject.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Options\Macros.h">
+      <Filter>Code\Source code\Application\Options</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\ComponentsSection.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Options\Option.h">
+      <Filter>Code\Source code\Application\Options</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\ConfigSection.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Options\OptionDatabase.h">
+      <Filter>Code\Source code\Application\Options</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\Common.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Options\OptionSerializer.h">
+      <Filter>Code\Source code\Application\Options</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\FileDataSection.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Resources\DefaultImageProvider.h">
+      <Filter>Code\Source code\Application\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\InfoSection.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Resources\IImageProvider.h">
+      <Filter>Code\Source code\Application\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\InterfaceSection.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Resources\ImageResourceID.h">
+      <Filter>Code\Source code\Application\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\ProjectSection.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Resources\ResourceID.h">
+      <Filter>Code\Source code\Application\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\RequirementsSection.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Settings\ConfigManager.h">
+      <Filter>Code\Source code\Application\Settings</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\Serializer.h">
-      <Filter>Code\Headers\PackageProject</Filter>
+    <ClInclude Include="Source\Application\Settings\Window.h">
+      <Filter>Code\Source code\Application\Settings</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\Serializer\FOModSerializer.h">
-      <Filter>Code\Headers\PackageProject\Serializer</Filter>
+    <ClInclude Include="Source\Application\Theme\Default.h">
+      <Filter>Code\Source code\Application\Themes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\Serializer\LegacySerializer.h">
-      <Filter>Code\Headers\PackageProject\Serializer</Filter>
+    <ClInclude Include="Source\Application\Theme\VisualStudio.h">
+      <Filter>Code\Source code\Application\Themes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PackageProject\Serializer\NativeSerializer.h">
-      <Filter>Code\Headers\PackageProject\Serializer</Filter>
+    <ClInclude Include="Source\Application\VariablesTable\DynamicVariableTable.h">
+      <Filter>Code\Source code\Application\VariablesTable</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\TempFolderKeeper.h">
-      <Filter>Code\Headers\Utility</Filter>
+    <ClInclude Include="Source\Application\VariablesTable\StaticVariableTable.h">
+      <Filter>Code\Source code\Application\VariablesTable</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\WithNameAndID.h">
-      <Filter>Code\Headers\Utility</Filter>
+    <ClInclude Include="Source\Application\VariablesTable\VariablesDatabase.h">
+      <Filter>Code\Source code\Application\VariablesTable</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\WithBitmap.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\UniquePtrVector.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\UnsortedUnique.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\BitmapSize.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\LabeledValue.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\OperationWithProgress.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\QuickThread.h">
-      <Filter>Code\Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility\Drawing.h">
-      <Filter>Code\Headers\Utility</Filter>
+    <ClInclude Include="Source\Application\VariablesTable\VariableValue.h">
+      <Filter>Code\Source code\Application\VariablesTable</Filter>
     </ClInclude>
     <ClInclude Include="Source\Archive\BethesdaArchive.h">
-      <Filter>Code\Headers\Archive</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Archive\GenericArchive.h">
-      <Filter>Code\Headers\Archive</Filter>
+      <Filter>Code\Source code\Archive</Filter>
     </ClInclude>
     <ClInclude Include="Source\Archive\Common.h">
-      <Filter>Code\Headers\Archive</Filter>
+      <Filter>Code\Source code\Archive</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UI\WebViewBackend\Sciter.h">
-      <Filter>Code\Headers\UI\WebViewBackend</Filter>
+    <ClInclude Include="Source\Archive\GenericArchive.h">
+      <Filter>Code\Source code\Archive</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\IGameConfigManager.h">
+      <Filter>Code\Source code\GameConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\GameConfigModule.h">
+      <Filter>Code\Source code\GameConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\IConfigManager.h">
+      <Filter>Code\Source code\GameConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Common.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\DataType.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\DefaultGameConfigManager.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Definition.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\DisplayModel.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\IAction.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\IFileSource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ISamplingFunction.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ISource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Item.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemGroup.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemOptions.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemSamples.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ItemValue.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\ITypeDetector.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\IViewItem.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Workspace.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\WorkspaceController.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INIFileSource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INIRefSource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\INISource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\NullSource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLFileSource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLRefSource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Sources\XMLSource.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\FindFiles.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\Generic.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetAvailableTranslations.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetStartupWorkspaces.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoAdapters.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVideoModes.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\SamplingFunctions\GetVirtualKeys.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\SamplingFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\CategoryItem.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\SimpleItem.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructItem.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Items\StructSubItem.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFile.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\BrowseFolder.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameConfig\ConfigManger\Actions\PickColor.h">
+      <Filter>Code\Source code\GameConfig\ConfigManger\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\GameDataModule.h">
+      <Filter>Code\Source code\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\IGamePlugin.h">
+      <Filter>Code\Source code\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\IGameSave.h">
+      <Filter>Code\Source code\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\IPluginManager.h">
+      <Filter>Code\Source code\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\ISaveManager.h">
+      <Filter>Code\Source code\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\IScreenshotsGallery.h">
+      <Filter>Code\Source code\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginEvent.h">
+      <Filter>Code\Source code\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveEvent.h">
+      <Filter>Code\Source code\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\LibLoot\LibLoot.h">
+      <Filter>Code\Source code\GameData\PluginManager\LibLoot</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BaseGamePlugin.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BasePluginManager.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\Bethesda2DisplayModel.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaDisplayModel.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaPlugin.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaPlugin2.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginManager.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginManager2.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginManagerMW.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginReaderMorrowind.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginReaderOblivion.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\BethesdaPluginReaderSkyrim.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\Common.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\IBethesdaGamePlugin.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\IBethesdaPluginReader.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\IDisplayModel.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\IPluginReader.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\PluginViewModel.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\PluginManager\Workspace.h">
+      <Filter>Code\Source code\GameData\PluginManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\BethesdaBasicSave.h">
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Fallout3.h">
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Fallout4.h">
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\FalloutNV.h">
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Morrowind.h">
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Oblivion.h">
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\Skyrim.h">
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BethesdaSave\SkyrimSE.h">
+      <Filter>Code\Source code\GameData\SaveManager\BethesdaSave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\BaseGameSave.h">
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\DefaultSaveManager.h">
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\DisplayModel.h">
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\EmptySaveFile.h">
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\IBethesdaGameSave.h">
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\SaveInfoPair.h">
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\SaveManager\Workspace.h">
+      <Filter>Code\Source code\GameData\SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\ScreenshotsGallery\DefaultScreenshotsGallery.h">
+      <Filter>Code\Source code\GameData\ScreenshotsGallery</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameData\ScreenshotsGallery\Workspace.h">
+      <Filter>Code\Source code\GameData\ScreenshotsGallery</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\ActiveGameInstance.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\CreationDialog.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\DefaultGameInstance.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\DefaultGameProfile.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\GameID.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\IGameInstance.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\IGameProfile.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\ProfileEditor.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\ProfileEvent.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\SelectionDialog.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Util.h">
+      <Filter>Code\Source code\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\FileTreeNode.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\GameModsModule.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\IGameMod.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\IModDispatcher.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\IModImporter.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\IModManager.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\IModStatistics.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\IModTag.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\IModTagManager.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModEvent.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModTagStore.h">
+      <Filter>Code\Source code\GameMods</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\VirtualGameFolder\DisplayModel.h">
+      <Filter>Code\Source code\GameMods\VirtualGameFolder</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\VirtualGameFolder\Workspace.h">
+      <Filter>Code\Source code\GameMods\VirtualGameFolder</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\TagManager\DefaultTag.h">
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\TagManager\DefaultTagManager.h">
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\TagManager\SelectorDialog.h">
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\TagManager\SelectorDisplayModel.h">
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\TagManager\SelectorDisplayModelCB.h">
+      <Filter>Code\Source code\GameMods\TagManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModStatistics\DefaultStatistics.h">
+      <Filter>Code\Source code\GameMods\ModStatistics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModStatistics\Dialog.h">
+      <Filter>Code\Source code\GameMods\ModStatistics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModStatistics\DisplayModel.h">
+      <Filter>Code\Source code\GameMods\ModStatistics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\BasicGameMod.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\Common.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\DefaultModDispatcher.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\DefaultModManager.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\DisplayModel.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\DisplayModelDND.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\DisplayModelNode.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\FixedGameMod.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\MainFileSystem.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\MandatoryModEntry.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\NewModDialog.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\PriorityGroup.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\ModManager\Workspace.h">
+      <Filter>Code\Source code\GameMods\ModManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\Import\ModImporterMO.h">
+      <Filter>Code\Source code\GameMods\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameMods\Import\ModImporterNMM.h">
+      <Filter>Code\Source code\GameMods\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\IPackageManager.h">
+      <Filter>Code\Source code\ModPackages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\ModPackage.h">
+      <Filter>Code\Source code\ModPackages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\ModPackagesModule.h">
+      <Filter>Code\Source code\ModPackages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\PackageManager\DefaultPackageManager.h">
+      <Filter>Code\Source code\ModPackages\PackageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\PackageManager\IWithScriptExtender.h">
+      <Filter>Code\Source code\ModPackages\PackageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Common.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\StepStack.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\WizardDialog.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\WizardPage.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\DisplayModel.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Requirements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Requirements\RequirementsPage.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Requirements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Installation\InstallationPage.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Installation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoDisplayModel.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Info\InfoPage.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Components\ComponentsPage.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModel.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Components\DisplayModelNode.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModPackages\InstallWizard\Completed\CompletedPage.h">
+      <Filter>Code\Source code\ModPackages\InstallWizard\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\Common.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\IDownloadManager.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\IModNetwork.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\INetworkManager.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetworkAuth.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetworkRepository.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetworkUpdateChecker.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModRepositoryLimits.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModRepositoryReply.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModRepositoryRequest.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkModInfo.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkModule.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkModUpdateInfo.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkWxFSHandler.h">
+      <Filter>Code\Source code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetworkManager\DefaultNetworkManager.h">
+      <Filter>Code\Source code\Network\NetworkManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore\Item.h">
+      <Filter>Code\Source code\Network\ModSourceStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore\Store.h">
+      <Filter>Code\Source code\Network\ModSourceStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore\StoreDialog.h">
+      <Filter>Code\Source code\Network\ModSourceStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModSourceStore\StoreDisplayModel.h">
+      <Filter>Code\Source code\Network\ModSourceStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DefaultDownloadManager.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DisplayModel.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DisplayModelNode.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DownloadEvent.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DownloadExecutor.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DownloadItem.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\DownloadItemBuilder.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\IDownloadExecutor.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\IDownloadItem.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\DownloadManager\Workspace.h">
+      <Filter>Code\Source code\Network\DownloadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\LoversLab.h">
+      <Filter>Code\Source code\Network\ModNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus.h">
+      <Filter>Code\Source code\Network\ModNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\TESALL.h">
+      <Filter>Code\Source code\Network\ModNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\Nexus.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusAuth.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusNetworkReply.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusRepository.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateChecker.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUpdateThread.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NexusUtility.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\Dialog.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModel.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\DisplayModelNode.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\ModNetwork\Nexus\NXMHandler\OptionStore.h">
+      <Filter>Code\Source code\Network\ModNetwork\Nexus\NXMHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\FOModImportExportDialog.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\IDTracker.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\ListModel.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PackageBuilder.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageBase.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageFileData.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInterface.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageRequirements.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\VectorModel.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\Workspace.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\WorkspaceDocument.h">
+      <Filter>Code\Source code\PackageCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageRequirements\EntriesListModel.h">
+      <Filter>Code\Source code\PackageCreator\PageRequirements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageRequirements\GroupsModel.h">
+      <Filter>Code\Source code\PackageCreator\PageRequirements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInterface\ImageListModel.h">
+      <Filter>Code\Source code\PackageCreator\PageInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo\AdditionalInfoModel.h">
+      <Filter>Code\Source code\PackageCreator\PageInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo\DocumentsModel.h">
+      <Filter>Code\Source code\PackageCreator\PageInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo\SitesModel.h">
+      <Filter>Code\Source code\PackageCreator\PageInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageInfo\TagsListModel.h">
+      <Filter>Code\Source code\PackageCreator\PageInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageFileData\ContentModel.h">
+      <Filter>Code\Source code\PackageCreator\PageFileData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageFileData\MainListModel.h">
+      <Filter>Code\Source code\PackageCreator\PageFileData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModel.h">
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ComponentsModelNode.h">
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ConditionalStepsModel.h">
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
     </ClInclude>
     <ClInclude Include="Source\PackageCreator\PageComponents\ConditionFlagsModel.h">
-      <Filter>Code\Headers\PackageCreator\PageComponents</Filter>
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\ConditionGroupModel.h">
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\FileDataSelectorModel.h">
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageCreator\PageComponents\RequirementsSelectorModel.h">
+      <Filter>Code\Source code\PackageCreator\PageComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\Common.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\ComponentsSection.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\ConfigSection.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\FileDataSection.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\InfoSection.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\InterfaceSection.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\ModPackageProject.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\ProjectSection.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\RequirementsSection.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\Serializer.h">
+      <Filter>Code\Source code\PackageProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\Serializer\FOModSerializer.h">
+      <Filter>Code\Source code\PackageProject\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\Serializer\LegacySerializer.h">
+      <Filter>Code\Source code\PackageProject\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PackageProject\Serializer\NativeSerializer.h">
+      <Filter>Code\Source code\PackageProject\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\IProgramItem.h">
+      <Filter>Code\Source code\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\IProgramManager.h">
+      <Filter>Code\Source code\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramEvent.h">
+      <Filter>Code\Source code\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramsModule.h">
+      <Filter>Code\Source code\Programs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramItem.h">
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\DefaultProgramManager.h">
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\DisplayModel.h">
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\ProgramEditorDialog.h">
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Programs\ProgramManager\Workspace.h">
+      <Filter>Code\Source code\Programs\ProgramManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\ImageViewerDialog.h">
+      <Filter>Code\Source code\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\ProgressOverlay.h">
+      <Filter>Code\Source code\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\TextEditDialog.h">
+      <Filter>Code\Source code\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebView.h">
+      <Filter>Code\Source code\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebViewBackend\Generic.h">
+      <Filter>Code\Source code\UI\WebViewBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebViewBackend\InternetExplorer.h">
+      <Filter>Code\Source code\UI\WebViewBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebViewBackend\IWebView.h">
+      <Filter>Code\Source code\UI\WebViewBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\WebViewBackend\Sciter.h">
+      <Filter>Code\Source code\UI\WebViewBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\BitmapSize.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Collection.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Common.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\DateTime.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Drawing.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\EnumClassOperations.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\LabeledValue.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Log.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\MenuSeparator.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\OperationWithProgress.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\QuickThread.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\String.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\TempFolderKeeper.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\UI.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\UniqueID.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\UniquePtrVector.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\UnsortedUnique.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\WithBitmap.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\WithNameAndID.h">
+      <Filter>Code\Source code\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\BaseFileSystem.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Convergence.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\DefaultVFSService.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\Mirror.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\MultiMirror.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\RecievingWindow.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VirtualFileSystem\VirtualFSEvent.h">
+      <Filter>Code\Source code\VirtualFileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Code\Source code</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stdafx.h">
+      <Filter>Code\Source code</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2543,7 +2349,7 @@
       <Filter>Resources</Filter>
     </Text>
     <Text Include="Include\Kortex\Git\LatestCommit.txt">
-      <Filter>Code\Include\Git</Filter>
+      <Filter>Code\Includes\Git</Filter>
     </Text>
     <Text Include="Bin\Data\GameDefinitions\SortOrdersNote.txt">
       <Filter>Misc\Game Definitions</Filter>

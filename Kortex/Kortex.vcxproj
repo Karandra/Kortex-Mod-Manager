@@ -787,7 +787,7 @@
     <Text Include="Resources\ChangeLog RU.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="..\..\KxVirtualFileSystem\KxVirtualFileSystem\Utility\KxDynamicString\KxBasicDynamicString.natvis" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

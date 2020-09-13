@@ -2356,8 +2356,8 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="..\..\KxVirtualFileSystem\KxVirtualFileSystem\Utility\KxDynamicString\KxBasicDynamicString.natvis">
+    <None Include="..\README.md">
       <Filter>Resources</Filter>
-    </Natvis>
+    </None>
   </ItemGroup>
 </Project>

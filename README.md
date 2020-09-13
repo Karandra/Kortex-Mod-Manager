@@ -71,8 +71,8 @@ Unpack from the archive to any directory (not in the directory with the game). A
 Close the program, delete the VFS service by typing the command `sc delete KortexVFS` in Windows console (cmd.exe, run it as administrator), restart the computer and delete the program's files.
 
 ## Update
-1.x -> 1.3: Plugins order and activation state will be reset, mod order and state should remain untouched.
-1.3 -> 2.x: Should probably work without significant issues.
+- 1.x -> 1.3: Plugins order and activation state will be reset, mod order and state should remain untouched.
+- 1.3 -> 2.x: Should probably work without significant issues.
 
 # Download location
 - Nexus: https://www.nexusmods.com/skyrim/mods/90868

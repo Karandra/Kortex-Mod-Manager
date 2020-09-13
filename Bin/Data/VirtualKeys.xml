@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VirtualKeys>
+	<Entry VKID="VK_NONE" Name="None">0x0</Entry>
+	<Entry VKID="VK_LBUTTON" Name="Left mouse button">0x01</Entry>
+	<Entry VKID="VK_RBUTTON" Name="Right mouse button">0x02</Entry>
+	<Entry VKID="VK_CANCEL" Name="Break">0x03</Entry>
+	<Entry VKID="VK_MBUTTON" Name="Middle mouse button">0x04</Entry>
+	<Entry VKID="VK_XBUTTON1" Name="X1 mouse button">0x05</Entry>
+	<Entry VKID="VK_XBUTTON2" Name="X2 mouse button">0x06</Entry>
+	<Entry VKID="VK_BACK" Name="Backspace">0x08</Entry>
+	<Entry VKID="VK_TAB" Name="Tab">0x09</Entry>
+	<Entry VKID="VK_CLEAR" Name="Clear">0x0C</Entry>
+	<Entry VKID="VK_RETURN" Name="Enter">0x0D</Entry>
+	<Entry VKID="VK_SHIFT" Name="Shift">0x10</Entry>
+	<Entry VKID="VK_CONTROL" Name="Ctrl">0x11</Entry>
+	<Entry VKID="VK_MENU" Name="Alt">0x12</Entry>
+	<Entry VKID="VK_PAUSE" Name="Pause">0x13</Entry>
+	<Entry VKID="VK_CAPITAL" Name="Caps Lock">0x14</Entry>
+	<Entry VKID="VK_ESCAPE" Name="Esc">0x1B</Entry>
+	<Entry VKID="VK_SPACE" Name="Spacebar">0x20</Entry>
+	<Entry VKID="VK_PRIOR" Name="Page Up">0x21</Entry>
+	<Entry VKID="VK_NEXT" Name="Page Down">0x22</Entry>
+	<Entry VKID="VK_END" Name="End">0x23</Entry>
+	<Entry VKID="VK_HOME" Name="Home">0x24</Entry>
+	<Entry VKID="VK_LEFT" Name="Left arrow">0x25</Entry>
+	<Entry VKID="VK_UP" Name="Up arrow">0x26</Entry>
+	<Entry VKID="VK_RIGHT" Name="Right arrow">0x27</Entry>
+	<Entry VKID="VK_DOWN" Name="Down arrow">0x28</Entry>
+	<Entry VKID="VK_SELECT" Name="Select">0x29</Entry>
+	<Entry VKID="VK_PRINT" Name="Print">0x2A</Entry>
+	<Entry VKID="VK_EXECUTE" Name="Execute">0x2B</Entry>
+	<Entry VKID="VK_SNAPSHOT" Name="Print Screen">0x2C</Entry>
+	<Entry VKID="VK_INSERT" Name="Insert">0x2D</Entry>
+	<Entry VKID="VK_DELETE" Name="Delete">0x2E</Entry>
+	<Entry VKID="VK_HELP" Name="Help">0x2F</Entry>
+	<Entry Name="0">0x30</Entry>
+	<Entry Name="1">0x31</Entry>
+	<Entry Name="2">0x32</Entry>
+	<Entry Name="3">0x33</Entry>
+	<Entry Name="4">0x34</Entry>
+	<Entry Name="5">0x35</Entry>
+	<Entry Name="6">0x36</Entry>
+	<Entry Name="7">0x37</Entry>
+	<Entry Name="8">0x38</Entry>
+	<Entry Name="9">0x39</Entry>
+	<Entry Name="A">0x41</Entry>
+	<Entry Name="B">0x42</Entry>
+	<Entry Name="C">0x43</Entry>
+	<Entry Name="D">0x44</Entry>
+	<Entry Name="E">0x45</Entry>
+	<Entry Name="F">0x46</Entry>
+	<Entry Name="G">0x47</Entry>
+	<Entry Name="H">0x48</Entry>
+	<Entry Name="I">0x49</Entry>
+	<Entry Name="J">0x4A</Entry>
+	<Entry Name="K">0x4B</Entry>
+	<Entry Name="L">0x4C</Entry>
+	<Entry Name="M">0x4D</Entry>
+	<Entry Name="N">0x4E</Entry>
+	<Entry Name="O">0x4F</Entry>
+	<Entry Name="P">0x50</Entry>
+	<Entry Name="Q">0x51</Entry>
+	<Entry Name="R">0x52</Entry>
+	<Entry Name="S">0x53</Entry>
+	<Entry Name="T">0x54</Entry>
+	<Entry Name="U">0x55</Entry>
+	<Entry Name="V">0x56</Entry>
+	<Entry Name="W">0x57</Entry>
+	<Entry Name="X">0x58</Entry>
+	<Entry Name="Y">0x59</Entry>
+	<Entry Name="Z">0x5A</Entry>
+	<Entry VKID="VK_LWIN" Name="Left Windows">0x5B</Entry>
+	<Entry VKID="VK_RWIN" Name="Right Windows">0x5C</Entry>
+	<Entry VKID="VK_APPS" Name="Application Menu">0x5D</Entry>
+	<Entry VKID="VK_SLEEP" Name="Sleep">0x5F</Entry>
+	<Entry VKID="VK_NUMPAD0" Name="NumPad 0">0x60</Entry>
+	<Entry VKID="VK_NUMPAD1" Name="NumPad 1">0x61</Entry>
+	<Entry VKID="VK_NUMPAD2" Name="NumPad 2">0x62</Entry>
+	<Entry VKID="VK_NUMPAD3" Name="NumPad 3">0x63</Entry>
+	<Entry VKID="VK_NUMPAD4" Name="NumPad 4">0x64</Entry>
+	<Entry VKID="VK_NUMPAD5" Name="NumPad 5">0x65</Entry>
+	<Entry VKID="VK_NUMPAD6" Name="NumPad 6">0x66</Entry>
+	<Entry VKID="VK_NUMPAD7" Name="NumPad 7">0x67</Entry>
+	<Entry VKID="VK_NUMPAD8" Name="NumPad 8">0x68</Entry>
+	<Entry VKID="VK_NUMPAD9" Name="NumPad 9">0x69</Entry>
+	<Entry VKID="VK_MULTIPLY" Name="NumPad *">0x6A</Entry>
+	<Entry VKID="VK_ADD" Name="NumPad +">0x6B</Entry>
+	<Entry VKID="VK_SEPARATOR" Name="Separator">0x6C</Entry>
+	<Entry VKID="VK_SUBTRACT" Name="NumPad -">0x6D</Entry>
+	<Entry VKID="VK_DECIMAL" Name="NumPad .">0x6E</Entry>
+	<Entry VKID="VK_DIVIDE" Name="NumPad /">0x6F</Entry>
+	<Entry VKID="VK_F1" Name="F1">0x70</Entry>
+	<Entry VKID="VK_F2" Name="F2">0x71</Entry>
+	<Entry VKID="VK_F3" Name="F3">0x72</Entry>
+	<Entry VKID="VK_F4" Name="F4">0x73</Entry>
+	<Entry VKID="VK_F5" Name="F5">0x74</Entry>
+	<Entry VKID="VK_F6" Name="F6">0x75</Entry>
+	<Entry VKID="VK_F7" Name="F7">0x76</Entry>
+	<Entry VKID="VK_F8" Name="F8">0x77</Entry>
+	<Entry VKID="VK_F9" Name="F9">0x78</Entry>
+	<Entry VKID="VK_F10" Name="F10">0x79</Entry>
+	<Entry VKID="VK_F11" Name="F11">0x7A</Entry>
+	<Entry VKID="VK_F12" Name="F12">0x7B</Entry>
+	<Entry VKID="VK_F13" Name="F13">0x7C</Entry>
+	<Entry VKID="VK_F14" Name="F14">0x7D</Entry>
+	<Entry VKID="VK_F15" Name="F15">0x7E</Entry>
+	<Entry VKID="VK_F16" Name="F16">0x7F</Entry>
+	<Entry VKID="VK_F17" Name="F17">0x80</Entry>
+	<Entry VKID="VK_F18" Name="F18">0x81</Entry>
+	<Entry VKID="VK_F19" Name="F19">0x82</Entry>
+	<Entry VKID="VK_F20" Name="F20">0x83</Entry>
+	<Entry VKID="VK_F21" Name="F21">0x84</Entry>
+	<Entry VKID="VK_F22" Name="F22">0x85</Entry>
+	<Entry VKID="VK_F23" Name="F23">0x86</Entry>
+	<Entry VKID="VK_F24" Name="F24">0x87</Entry>
+	<Entry VKID="VK_NUMLOCK" Name="Num Lock">0x90</Entry>
+	<Entry VKID="VK_SCROLL" Name="Scroll Lock">0x91</Entry>
+	<Entry VKID="VK_LSHIFT" Name="Left Shift">0xA0</Entry>
+	<Entry VKID="VK_RSHIFT" Name="Right Shift">0xA1</Entry>
+	<Entry VKID="VK_LCONTROL" Name="Left Ctrl">0xA2</Entry>
+	<Entry VKID="VK_RCONTROL" Name="Right Ctrl">0xA3</Entry>
+	<Entry VKID="VK_LMENU" Name="Left Alt">0xA4</Entry>
+	<Entry VKID="VK_RMENU" Name="Right Alt">0xA5</Entry>
+	<Entry VKID="VK_BROWSER_BACK" Name="Browser back">0xA6</Entry>
+	<Entry VKID="VK_BROWSER_FORWARD" Name="Browser forward">0xA7</Entry>
+	<Entry VKID="VK_BROWSER_REFRESH" Name="Browser refresh">0xA8</Entry>
+	<Entry VKID="VK_BROWSER_STOP" Name="Browser stop">0xA9</Entry>
+	<Entry VKID="VK_BROWSER_SEARCH" Name="Browser search">0xAA</Entry>
+	<Entry VKID="VK_BROWSER_FAVORITES" Name="Browser favorites">0xAB</Entry>
+	<Entry VKID="VK_BROWSER_HOME" Name="Browser start and home">0xAC</Entry>
+	<Entry VKID="VK_VOLUME_MUTE" Name="Volume mute">0xAD</Entry>
+	<Entry VKID="VK_VOLUME_DOWN" Name="Volume down">0xAE</Entry>
+	<Entry VKID="VK_VOLUME_UP" Name="Volume up">0xAF</Entry>
+	<Entry VKID="VK_MEDIA_NEXT_TRACK" Name="Next track">0xB0</Entry>
+	<Entry VKID="VK_MEDIA_PREV_TRACK" Name="Previous track">0xB1</Entry>
+	<Entry VKID="VK_MEDIA_STOP" Name="Stop media">0xB2</Entry>
+	<Entry VKID="VK_MEDIA_PLAY_PAUSE" Name="Play/pause media">0xB3</Entry>
+	<Entry VKID="VK_LAUNCH_MAIL" Name="Start mail">0xB4</Entry>
+	<Entry VKID="VK_LAUNCH_MEDIA_SELECT" Name="Select media">0xB5</Entry>
+	<Entry VKID="VK_LAUNCH_APP1" Name="Start application 1">0xB6</Entry>
+	<Entry VKID="VK_LAUNCH_APP2" Name="Start application 2">0xB7</Entry>
+	<Entry VKID="VK_OEM_1" Name="; :">0xBA</Entry>
+	<Entry VKID="VK_OEM_PLUS" Name="+">0xBB</Entry>
+	<Entry VKID="VK_OEM_COMMA" Name="&lt; ,">0xBC</Entry>
+	<Entry VKID="VK_OEM_MINUS" Name="-">0xBD</Entry>
+	<Entry VKID="VK_OEM_PERIOD" Name="&gt; .">0xBE</Entry>
+	<Entry VKID="VK_OEM_2" Name="/ ?">0xBF</Entry>
+	<Entry VKID="VK_OEM_3" Name="` ~">0xC0</Entry>
+	<Entry VKID="VK_OEM_4" Name="[ {">0xDB</Entry>
+	<Entry VKID="VK_OEM_5" Name="\ |">0xDC</Entry>
+	<Entry VKID="VK_OEM_6" Name="] }">0xDD</Entry>
+	<Entry VKID="VK_OEM_7" Name="&quot; &apos;">0xDE</Entry>
+	<Entry VKID="VK_OEM_102" Name="| \">0xE2</Entry>
+</VirtualKeys>

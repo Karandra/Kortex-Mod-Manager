@@ -7,20 +7,16 @@
 
 # Output binaries
 Junk/*
+Build/*
 Kortex/Junk/*
-Kortex/Release/*
-Kortex/Debug/*
+Kortex/Build/*
 
 Kortex FSController/Junk/*
-Kortex FSController/Release/*
-Kortex FSController/Debug/*
+Kortex FSController/Build/*
 
-Kortex/Release/*
-Kortex/Debug/*
-Kortex/Bin/FileSystemController x64.exe
-Kortex/Bin/FileSystemController.exe
-Kortex/Bin/Kortex x64.exe
-Kortex/Bin/Kortex.exe
+# Kortex main directory
+Bin/*
+!Bin/Data
 
 #Misc files
 Kortex/Include/Kortex/Git/LatestCommit.txt

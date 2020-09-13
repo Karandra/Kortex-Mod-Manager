@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definition GameID="SkyrimSE" SortOrder="13200">
+	<Name ShortName="Skyrim SE">The Elder Scrolls V: Skyrim - Special Edition</Name>
+	
+	<Variables>
+		<!--Required-->
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+			<Branch>32</Branch>
+			<Root>HKEY_LOCAL_MACHINE</Root>
+			<Path>SOFTWARE\Bethesda Softworks\Skyrim Special Edition</Path>
+			<Name>Installed Path</Name>
+			<Type>REG_SZ</Type>
+		</Item>
+		<Item ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Skyrim Special Edition</Item>
+		<Item ID="ActualSavesDir">$(ActualConfigDir)\Saves</Item>
+		
+		<Item ID="GameEditorName">Creation Kit</Item>
+		<Item ID="ScriptExtenderID">SKSE64</Item>
+
+		<Item ID="xEditID">sse</Item>
+		<Item ID="SteamID" Type="Integer">489830</Item>
+		<Item ID="NexusDomainName">SkyrimSpecialEdition</Item>
+	</Variables>
+
+	<Programs>
+		<ProgramManager>
+			<DefaultPrograms>
+				<Item ShowInMainMenu="1">
+					<Name>$(GameShortName)</Name>
+					<Executable>SkyrimSE.exe</Executable>
+				</Item>
+				<Item ShowInMainMenu="1">
+					<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+					<Executable>SKSE64_Loader.exe</Executable>
+				</Item>
+				<Item>
+					<Name>$(GameShortName) Launcher</Name>
+					<Executable>SkyrimSELauncher.exe</Executable>
+				</Item>
+				<Item>
+					<Name>Creation Kit</Name>
+					<Executable>CreationKit.exe</Executable>
+					<Arguments></Arguments>
+				</Item>
+				<Item>
+					<Name>ENB Injector</Name>
+					<Executable>ENBInjector.exe</Executable>
+				</Item>
+			</DefaultPrograms>
+		</ProgramManager>
+	</Programs>
+
+	<GameMods>
+		<ModManager>
+			<MirroredLocations>
+				<Item>
+					<Sources>
+						<Item>$(SavesDir)</Item>
+						<Item>$(ConfigDir)</Item>
+					</Sources>
+					<Target>$(ActualConfigDir)</Target>
+				</Item>
+				<Item>
+					<Sources>
+						<Item>$(ProfileDir)\Plugins</Item>
+					</Sources>
+					<Target>$SHF(APPLICATIONDATA_LOCAL)\Skyrim Special Edition</Target>
+				</Item>
+			</MirroredLocations>
+		</ModManager>
+		<TagManager>
+			<DefaultTags>
+				<Item ID="Animation">
+					<NexusID>51</NexusID>
+				</Item>
+				<Item ID="Armor">
+					<NexusID>54</NexusID>
+				</Item>
+				<Item ID="Clothing">
+					<NexusID>60</NexusID>
+				</Item>
+				<Item ID="Jewelry">
+					<NexusID>102</NexusID>
+				</Item>
+				<Item ID="Weapons">
+					<NexusID>55</NexusID>
+				</Item>
+				<Item ID="Gameplay">
+					<NexusID>24</NexusID>
+				</Item>
+				<Item ID="Immersion">
+					<NexusID>78</NexusID>
+				</Item>
+				<Item ID="Environment">
+					<NexusID>74</NexusID>
+				</Item>
+				<Item ID="SkillsAndLeveling">
+					<NexusID>73</NexusID>
+				</Item>
+				<Item ID="GuildsAndFactions">
+					<NexusID>25</NexusID>
+				</Item>
+				<Item ID="Stealth">
+					<NexusID>76</NexusID>
+				</Item>
+				<Item ID="Combat">
+					<NexusID>77</NexusID>
+				</Item>
+				<Item ID="Crafting">
+					<NexusID>100</NexusID>
+				</Item>
+				<Item ID="Magic">
+					<NexusID>75</NexusID>
+				</Item>
+				<Item ID="MagicGameplay">
+					<NexusID>93</NexusID>
+				</Item>
+				<Item ID="BooksAndScrolls">
+					<NexusID>98</NexusID>
+				</Item>
+				<Item ID="Alchemy">
+					<NexusID>94</NexusID>
+				</Item>
+				<Item ID="Quests">
+					<NexusID>35</NexusID>
+				</Item>
+				<Item ID="Buildings">
+					<NexusID>95</NexusID>
+				</Item>
+				<Item ID="Settlements">
+					<NexusID>53</NexusID>
+				</Item>
+				<Item ID="Mercantiles">
+					<NexusID>69</NexusID>
+				</Item>
+				<Item ID="NewLands">
+					<NexusID>30</NexusID>
+				</Item>
+				<Item ID="Dungeons">
+					<NexusID>88</NexusID>
+				</Item>
+				<Item ID="AbandonedStructures">
+					<NexusID>70</NexusID>
+				</Item>
+				<Item ID="PlayerHomes">
+					<NexusID>67</NexusID>
+				</Item>
+				<Item ID="Landscape">
+					<NexusID>58</NexusID>
+				</Item>
+				<Item ID="Overhauls">
+					<NexusID>79</NexusID>
+				</Item>
+				<Item ID="Conversions">
+					<NexusID>-1</NexusID>
+				</Item>
+				<Item ID="Audio">
+					<NexusID>61</NexusID>
+				</Item>
+				<Item ID="UserInterface">
+					<NexusID>42</NexusID>
+				</Item>
+				<Item ID="NPC">
+					<NexusID>33</NexusID>
+				</Item>
+				<Item ID="Body">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Face">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Hair">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Races">
+					<NexusID>34</NexusID>
+				</Item>
+				<Item ID="Followers">
+					<NexusID>66</NexusID>
+				</Item>
+				<Item ID="Creatures">
+					<NexusID>83</NexusID>
+				</Item>
+				<Item ID="Mounts">
+					<NexusID>101</NexusID>
+				</Item>
+				<Item ID="ModelsAndTextures">
+					<NexusID>29</NexusID>
+				</Item>
+				<Item ID="Graphics">
+					<NexusID>62</NexusID>
+				</Item>
+				<Item ID="ENBPresets">
+					<NexusID>97</NexusID>
+				</Item>
+				<Item ID="Collectables">
+					<NexusID>92</NexusID>
+				</Item>
+				<Item ID="ItemsAndObjects">
+					<NexusID>85</NexusID>
+				</Item>
+				<Item ID="Cheats">
+					<NexusID>40</NexusID>
+				</Item>
+				<Item ID="Fixes">
+					<NexusID>95</NexusID>
+				</Item>
+				<Item ID="xSEPlugins" RequiresScriptExtender="1">
+					<NexusID>-1</NexusID>
+				</Item>
+				<Item ID="Utilities">
+					<NexusID>39</NexusID>
+				</Item>
+				<Item ID="Configuration">
+					<NexusID>116</NexusID>
+				</Item>
+				<Item ID="Resources">
+					<NexusID>82</NexusID>
+				</Item>
+				<Item ID="SaveGames">
+					<NexusID>43</NexusID>
+				</Item>
+				<Item ID="Misc">
+					<NexusID>28</NexusID>
+				</Item>
+			</DefaultTags>
+		</TagManager>
+	</GameMods>
+
+	<GameConfigModule>
+		<ConfigManager>
+			<Definitions>
+				<Definition ID="Games/Skyrim">
+					<Groups>
+						<Group ID="Game">
+							<Source Type="FSPath">$(ConfigDir)\Skyrim.ini</Source>
+						</Group>
+						<Group ID="GamePrefs">
+							<Source Type="FSPath">$(ConfigDir)\SkyrimPrefs.ini</Source>
+						</Group>
+						<Group ID="GameCustom">
+							<Source Type="FSPath">$(ConfigDir)\SkyrimCustom.ini</Source>
+						</Group>
+						<Group ID="Editor">
+							<Source Type="FSPath">CreationKit.ini</Source>
+						</Group>
+						<Group ID="EditorPrefs">
+							<Source Type="FSPath">CreationKitPrefs.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+				<Definition ID="ENB">
+					<Groups>
+						<Group ID="ENBLocal">
+							<Source Type="FSPath">ENBLocal.ini</Source>
+						</Group>
+						<Group ID="ENBSeries">
+							<Source Type="FSPath">ENBSeries.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+			</Definitions>
+		</ConfigManager>
+	</GameConfigModule>
+
+	<GameData>
+		<PluginManager Implementation="Bethesda2" PluginImplementation="BethesdaSkyrim">
+			<Limit Value="253"/>
+
+			<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
+			<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
+
+			<ChangeFileModificationDate>0</ChangeFileModificationDate>
+			<SortByFileModificationDate>0</SortByFileModificationDate>
+
+			<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
+			<OrderListHeader><![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
+# Please do not modify this file.
+# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></OrderListHeader>
+
+			<SortingTools>
+				<Item ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+					<Command><![CDATA[--game=SkyrimSE]]></Command>
+				</Item>
+			</SortingTools>
+
+			<LibLoot>
+				<Branch>v0.15</Branch>
+				<Repository>https://github.com/loot/skyrimse.git</Repository>
+				<FolderName>Skyrim Special Edition</FolderName>
+				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
+			</LibLoot>
+
+			<StandardContent MainID="Skyrim.esm">
+				<Item ID="Skyrim.esm" Name="$(GameShortName)" Logo="Skyrim.png"/>
+				<Item ID="Update.esm" Name="$(GameShortName): Update" Logo="Skyrim.png"/>
+				<Item ID="Dawnguard.esm" Name="$(GameShortName): Dawnguard" Logo="Dawnguard.png"/>
+				<Item ID="HearthFires.esm" Name="$(GameShortName): HearthFires" Logo="HearthFires.png"/>
+				<Item ID="Dragonborn.esm" Name="$(GameShortName): Dragonborn" Logo="Dragonborn.png"/>
+			</StandardContent>
+		</PluginManager>
+
+		<ScreenshotsGallery>
+			<Locations>
+				<Item>$(ActualGameDir)</Item>
+				<Item>$(ActualGameDir)\Screenshots</Item>
+				<Item>$(ConfigDir)</Item>
+				<Item>$(ConfigDir)\Screenshots</Item>
+				<Item>$(OverwritesDir)</Item>
+				<Item>$(OverwritesDir)\Screenshots</Item>
+			</Locations>
+		</ScreenshotsGallery>
+
+		<SaveManager SaveImplementation="BethesdaSkyrimSE">
+			<Location>$(SavesDir)\Saves</Location>
+			<FileFilters>
+				<Item Label="$T(SaveManager.Filter.Saves) (*.ess)">*.ess</Item>
+				<Item Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Item>
+				<Item Label="$T(SaveManager.Filter.CoSaves) (*.skse)">*.skse</Item>
+			</FileFilters>
+
+			<PrimaryExtension>ess</PrimaryExtension>
+			<SecondaryExtension>skse</SecondaryExtension>
+		</SaveManager>
+	</GameData>
+
+	<Packages>
+		<PackageManager>
+			<Requirements>
+				<!-- General -->
+				<Item ID="SkyrimSE" Category="$T(PackageManager.ReqCategory.General)">
+					<Name>$(GameName)</Name>
+					<Object Function="FileExist">SkyrimSE.exe</Object>
+					<Version Operator="GTEQ">1.5.62</Version>
+				</Item>
+				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+					<Name>$(GameShortName) Script Extender</Name>
+					<Object Function="FileExist">SKSE64_Loader.exe</Object>
+					<Version Operator="GTEQ">0.2.0.12</Version>
+				</Item>
+				<Item ID="SSE Engine Fixes" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Object Function="FileExist">Data\SKSE\Plugins\EngineFixes.dll</Object>
+					<Version Operator="GTEQ">3.03</Version>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="DLL Preloader" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Object Function="FileExist">d3dx9_42.dll</Object>
+					<Version Operator="GTEQ">2.0</Version>
+				</Item>
+				<Item ID="xSHADOWMANx's Dll Loader" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Object Function="FileExist">DInput8.dll</Object>
+					<Version Operator="GTEQ">1.0.0.4</Version>
+				</Item>
+
+				<!-- Frameworks -->
+				<Item ID="SkyUI" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Name>SkyUI</Name>
+					<Object Function="PluginActive">SkyUI_SE.esp</Object>
+					<Version Operator="GTEQ">5.2</Version>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="UIExtensions" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Object Function="PluginActive">UIExtensions.esp</Object>
+					<Version Operator="GTEQ">1.2</Version>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="NetImmerse Override" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Name>NetImmerse Override</Name>
+					<Object Function="FileExist">Data\SKSE\Plugins\SKEE64.dll</Object>
+					<Version Operator="GTEQ">3.4.5</Version>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="RaceMenu" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Name>RaceMenu</Name>
+					<Object Function="PluginActive">RaceMenu.esp</Object>
+					<Version Operator="GTEQ">0.3.1</Version>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="FNIS" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Name>Fores New Idles in Skyrim</Name>
+					<Object Function="FileExist">Data\Tools\GenerateFNIS_for_Users\GenerateFNISforUsers.exe</Object>
+					<Version Operator="GTEQ">7.4.5</Version>
+				</Item>
+				<Item ID="HDT-Framework" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Name>HDT Framework</Name>
+					<Object Function="FileExist">Data\SKSE\Plugins\hdtSSEFramework.dll</Object>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="HDT-HHS" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Name>HDT HighHeels System</Name>
+					<Object Function="PluginActive">hdtHighHeel.esm</Object>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="HDT-SMP" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Name>HDT Skinned Mesh Physics</Name>
+					<Object Function="FileExist">Data\SKSE\Plugins\hdtSSEPhysics.dll</Object>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="ECE" Category="$T(PackageManager.ReqCategory.Frameworks)">
+					<Name>Enhanced Character Edit</Name>
+					<Object Function="PluginActive">CharacterMakingExtender.esp</Object>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+
+				<!-- Body replacers -->
+				<Item ID="CBBE" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+					<Name>Caliente's Beautiful Bodies Edition</Name>
+					<Object Function="ModActive"/>
+				</Item>
+
+				<!-- SexLab -->
+				<Item ID="SexLab" Category="SexLab">
+					<Name>SexLab</Name>
+					<Object Function="PluginActive">SexLab.esm</Object>
+					<Version Operator="GTEQ">1.63</Version>
+					<Dependencies>
+						<Item>SkyUI</Item>
+						<Item>FNIS</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="SexLab Aroused" Category="SexLab">
+					<Name>SexLab Aroused</Name>
+					<Object Function="PluginActive">SexLabAroused.esm</Object>
+					<Version Operator="GTEQ">04.0b10</Version>
+					<Dependencies>
+						<Item>SexLab</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="ZAP" Category="SexLab">
+					<Name>ZaZ Animation Pack</Name>
+					<Object Function="PluginActive">ZaZAnimationPack.esm</Object>
+					<Version Operator="GTEQ">1.0</Version>
+					<Dependencies>
+						<Item>FNIS</Item>
+						<Item>SexLab</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="DDa" Category="SexLab">
+					<Name>Devious Devices - Assets</Name>
+					<Object Function="PluginActive">Devious Devices - Assets.esm</Object>
+					<Version Operator="GTEQ">3.0e</Version>
+					<Dependencies>
+						<Item>SexLab</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="DDi" Category="SexLab">
+					<Name>Devious Devices - Integration</Name>
+					<Object Function="PluginActive">Devious Devices - Integration.esm</Object>
+					<Version Operator="GTEQ">4.1</Version>
+					<Dependencies>
+						<Item>SexLabAroused</Item>
+						<Item>ZAP</Item>
+						<Item>DDa</Item>
+					</Dependencies>
+				</Item>
+
+				<!-- Pacthes -->
+				<Item ID="USSEP" Category="$T(PackageManager.ReqCategory.Patches)">
+					<Name>Unofficial Skyrim Special Edition Patch</Name>
+					<Object Function="PluginActive"> Unofficial Skyrim Special Edition Patch.esp</Object>
+					<Version Operator="GTEQ">4.1.6</Version>
+				</Item>
+
+				<!-- Misc -->
+				<Item ID="XPMSE" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Name>XP32 Maximum Skeleton Extended</Name>
+					<Object Function="PluginActive">XPMSE.esp</Object>
+					<Version Operator="GTEQ">4.51</Version>
+					<Dependencies>
+						<Item>FNIS</Item>
+						<Item>RM</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="Realistic Ragdolls and Force" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Object Function="ModActive"/>
+					<Version Operator="GTEQ">1.32</Version>
+				</Item>
+				<Item ID="Fuz-Ro-Doh" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Name>Fuz Ro D'oh - Silent Voice</Name>
+					<Object Function="FileExist">Data\SKSE\Plugins\Fuz Ro D'oh.dll</Object>
+					<Version Operator="GTEQ">1.4.11.1209</Version>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="Player Voicesets" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Object Function="PluginActive">chfshPlayerVoicesets.esp</Object>
+					<Version Operator="GTEQ">0.51</Version>
+					<Dependencies>
+						<Item>SkyUI</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="Apachii SkyHair" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Object Function="PluginActive">ApachiiHair.esm</Object>
+					<Version Operator="GTEQ">1.6</Version>
+				</Item>
+				<Item ID="Alternate Start - Live Another Life" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Name>Alternate Start - Live Another Life</Name>
+					<Object Function="PluginActive">Alternate Start - Live Another Life.esp</Object>
+					<Version Operator="GTEQ">4.0.8</Version>
+				</Item>
+				<Item ID="Requiem" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Name>Requiem - The Roleplaying Overhaul</Name>
+					<Object Function="PluginActive">Requiem.esp</Object>
+					<Version Operator="GTEQ">2.02</Version>
+					<Dependencies>
+						<Item>SkyUI</Item>
+						<Item>USSEP</Item>
+						<Item>SSE Engine Fixes</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="RND" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Name>Realistic Needs and Diseases</Name>
+					<Object Function="PluginActive">RealisticNeedsAndDiseases.esp</Object>
+					<Version Operator="GTEQ">1.0.4</Version>
+					<Dependencies>
+						<Item>USSEP</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="Skyrim Skill Uncapper" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Name>Skyrim Skill Uncapper</Name>
+					<Object Function="FileExist">Data\SKSE\Plugins\SkyrimUncapper.dll</Object>
+					<Version Operator="GTEQ">1.1.0</Version>
+					<Dependencies>
+						<Item>$(ScriptExtenderID)</Item>
+						<Item>xSHADOWMANx's Dll Loader</Item>
+					</Dependencies>
+				</Item>
+				<Item ID="PCEA2" Category="$T(PackageManager.ReqCategory.Misc)">
+					<Name>Player Exclusive Animations - Dynamic</Name>
+					<Object Function="PluginActive">FNIS_PCEA2.esp</Object>
+					<Version Operator="GTEQ">7.2</Version>
+					<Dependencies>
+						<Item>FNIS</Item>
+						<Item>SkyUI</Item>
+					</Dependencies>
+				</Item>
+			</Requirements>
+		</PackageManager>
+	</Packages>
+</Definition>

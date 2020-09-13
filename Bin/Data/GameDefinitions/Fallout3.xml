@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definition GameID="Fallout3" SortOrder="21100">
+	<Name>Fallout 3</Name>
+
+	<Variables>
+		<!--Required-->
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+			<Branch>32</Branch>
+			<Root>HKEY_LOCAL_MACHINE</Root>
+			<Path>SOFTWARE\Bethesda Softworks\Fallout3</Path>
+			<Name>Installed Path</Name>
+			<Type>REG_SZ</Type>
+		</Item>
+		<Item ID="ActualConfigDir">$SHF(DOCUMENTS)\My Games\Fallout3</Item>
+		<Item ID="ActualSavesDir">$(ActualConfigDir)\Saves</Item>
+		
+		<Item ID="GameEditorName">GECK</Item>
+		<Item ID="ScriptExtenderID">FOSE</Item>
+
+		<Item ID="xEditID">fo3</Item>
+		<Item ID="SteamID" Type="Integer">22370</Item>
+		<Item ID="NexusDomainName">Fallout3</Item>
+	</Variables>
+
+	<GameMods>
+		<ModManager>
+			<MirroredLocations>
+				<Item>
+					<Sources>
+						<Item>$(SavesDir)</Item>
+						<Item>$(ConfigDir)</Item>
+					</Sources>
+					<Target>$(ActualConfigDir)</Target>
+				</Item>
+				<Item>
+					<Sources>
+						<Item>$(ProfileDir)\Plugins</Item>
+					</Sources>
+					<Target>$SHF(APPLICATIONDATA_LOCAL)\Fallout3</Target>
+				</Item>
+			</MirroredLocations>
+		</ModManager>
+		<TagManager>
+			<DefaultTags>
+				<Item ID="Animation">
+					<NexusID>51</NexusID>
+				</Item>
+				<Item ID="Armor">
+					<NexusID>54</NexusID>
+				</Item>
+				<Item ID="Clothing">
+					<NexusID>60</NexusID>
+				</Item>
+				<Item ID="Jewelry">
+					<NexusID>102</NexusID>
+				</Item>
+				<Item ID="Weapons">
+					<NexusID>55</NexusID>
+				</Item>
+				<Item ID="Gameplay">
+					<NexusID>24</NexusID>
+				</Item>
+				<Item ID="Immersion">
+					<NexusID>78</NexusID>
+				</Item>
+				<Item ID="Environment">
+					<NexusID>74</NexusID>
+				</Item>
+				<Item ID="SkillsAndLeveling">
+					<NexusID>73</NexusID>
+				</Item>
+				<Item ID="GuildsAndFactions">
+					<NexusID>25</NexusID>
+				</Item>
+				<Item ID="Stealth">
+					<NexusID>76</NexusID>
+				</Item>
+				<Item ID="Combat">
+					<NexusID>77</NexusID>
+				</Item>
+				<Item ID="Crafting">
+					<NexusID>100</NexusID>
+				</Item>
+				<Item ID="Magic">
+					<NexusID>75</NexusID>
+				</Item>
+				<Item ID="MagicGameplay">
+					<NexusID>93</NexusID>
+				</Item>
+				<Item ID="BooksAndScrolls">
+					<NexusID>98</NexusID>
+				</Item>
+				<Item ID="Alchemy">
+					<NexusID>94</NexusID>
+				</Item>
+				<Item ID="Quests">
+					<NexusID>35</NexusID>
+				</Item>
+				<Item ID="Buildings">
+					<NexusID>95</NexusID>
+				</Item>
+				<Item ID="Settlements">
+					<NexusID>53</NexusID>
+				</Item>
+				<Item ID="Mercantiles">
+					<NexusID>69</NexusID>
+				</Item>
+				<Item ID="NewLands">
+					<NexusID>30</NexusID>
+				</Item>
+				<Item ID="Dungeons">
+					<NexusID>88</NexusID>
+				</Item>
+				<Item ID="AbandonedStructures">
+					<NexusID>70</NexusID>
+				</Item>
+				<Item ID="PlayerHomes">
+					<NexusID>67</NexusID>
+				</Item>
+				<Item ID="Landscape">
+					<NexusID>58</NexusID>
+				</Item>
+				<Item ID="Overhauls">
+					<NexusID>79</NexusID>
+				</Item>
+				<Item ID="Conversions">
+					<NexusID>-1</NexusID>
+				</Item>
+				<Item ID="Audio">
+					<NexusID>61</NexusID>
+				</Item>
+				<Item ID="UserInterface">
+					<NexusID>42</NexusID>
+				</Item>
+				<Item ID="NPC">
+					<NexusID>33</NexusID>
+				</Item>
+				<Item ID="Body">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Face">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Hair">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Races">
+					<NexusID>34</NexusID>
+				</Item>
+				<Item ID="Followers">
+					<NexusID>66</NexusID>
+				</Item>
+				<Item ID="Creatures">
+					<NexusID>83</NexusID>
+				</Item>
+				<Item ID="Mounts">
+					<NexusID>101</NexusID>
+				</Item>
+				<Item ID="ModelsAndTextures">
+					<NexusID>29</NexusID>
+				</Item>
+				<Item ID="Graphics">
+					<NexusID>62</NexusID>
+				</Item>
+				<Item ID="ENBPresets">
+					<NexusID>97</NexusID>
+				</Item>
+				<Item ID="Collectables">
+					<NexusID>92</NexusID>
+				</Item>
+				<Item ID="ItemsAndObjects">
+					<NexusID>85</NexusID>
+				</Item>
+				<Item ID="Cheats">
+					<NexusID>40</NexusID>
+				</Item>
+				<Item ID="Fixes">
+					<NexusID>95</NexusID>
+				</Item>
+				<Item ID="xSEPlugins" RequiresScriptExtender="1">
+					<NexusID>-1</NexusID>
+				</Item>
+				<Item ID="Utilities">
+					<NexusID>39</NexusID>
+				</Item>
+				<Item ID="Configuration">
+					<NexusID>116</NexusID>
+				</Item>
+				<Item ID="Resources">
+					<NexusID>82</NexusID>
+				</Item>
+				<Item ID="SaveGames">
+					<NexusID>43</NexusID>
+				</Item>
+				<Item ID="Misc">
+					<NexusID>28</NexusID>
+				</Item>
+			</DefaultTags>
+		</TagManager>
+	</GameMods>
+
+	<ProgramManager>
+		<Programs>
+			<Item>
+				<Name>$(GameShortName)</Name>
+				<Executable>Fallout3.exe</Executable>
+			</Item>
+			<Item>
+				<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+				<Executable>FOSE_Loader.exe</Executable>
+			</Item>
+			<Item>
+				<Name>$(GameShortName) Launcher</Name>
+				<Executable>FalloutLauncher.exe</Executable>
+			</Item>
+			<Item>
+				<Name>Creation Kit</Name>
+				<Executable>GECK.exe</Executable>
+			</Item>
+			<Item>
+				<Name>ENB Injector</Name>
+				<Executable>ENBInjector.exe</Executable>
+			</Item>
+		</Programs>
+	</ProgramManager>
+
+	<GameConfigModule>
+		<ConfigManager>
+			<Definitions>
+				<Definition ID="Games/Skyrim">
+					<Groups>
+						<Group ID="Game">
+							<Source Type="FSPath">$(ConfigDir)\Fallout.ini</Source>
+						</Group>
+						<Group ID="GamePrefs">
+							<Source Type="FSPath">$(ConfigDir)\FalloutPrefs.ini</Source>
+						</Group>
+						<Group ID="Editor">
+							<Source Type="FSPath">GECKPrefs.ini</Source>
+						</Group>
+						<Group ID="EditorPrefs">
+							<Source Type="FSPath">GECKCustom.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+				<Definition ID="ENB">
+					<Groups>
+						<Group ID="ENBLocal">
+							<Source Type="FSPath">ENBLocal.ini</Source>
+						</Group>
+						<Group ID="ENBSeries">
+							<Source Type="FSPath">ENBSeries.ini</Source>
+						</Group>
+					</Groups>
+				</Definition>
+			</Definitions>
+		</ConfigManager>
+	</GameConfigModule>
+	
+	<GameData>
+		<PluginManager Implementation="Bethesda" PluginImplementation="BethesdaSkyrim">
+			<Limit Value="254"/>
+
+			<ActiveList>$(ProfileDir)\Plugins\Plugins.txt</ActiveList>
+			<OrderList>$(ProfileDir)\Plugins\LoadOrder.txt</OrderList>
+
+			<ChangeFileModificationDate>1</ChangeFileModificationDate>
+			<SortByFileModificationDate>0</SortByFileModificationDate>
+
+			<ActiveListHeader><![CDATA[# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]></ActiveListHeader>
+			<OrderListHeader>
+				<![CDATA[# This file is used by $(GameShortName) to keep track of your downloaded content.
+# Please do not modify this file.
+# Last modified by $(AppName) $(AppVersion) at $(CurrentDateTime).]]>
+			</OrderListHeader>
+
+			<SortingTools>
+				<Item ID="LOOT" Name="Load Order Optimization Tool (LOOT)">
+					<Command><![CDATA[--game=Fallout3]]></Command>
+				</Item>
+			</SortingTools>
+
+			<LibLoot>
+				<Branch>v0.15</Branch>
+				<Repository>https://github.com/loot/fallout3.git</Repository>
+				<FolderName>Fallout3</FolderName>
+				<LocalGamePath>$(ProfileDir)\Plugins</LocalGamePath>
+			</LibLoot>
+
+			<StandardContent MainID="Fallout3.esm">
+				<Item ID="Fallout3.esm" Name="$(GameShortName)" Logo="Fallout3.png"/>
+				<Item ID="Anchorage.esm" Name="$(GameShortName): Operation Anchorage" Logo="Anchorage.png"/>
+				<Item ID="ThePitt.esm" Name="$(GameShortName): The Pitt" Logo="ThePitt.png"/>
+				<Item ID="BrokenSteel.esm" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+				<Item ID="BrokenSteel1.esp" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+				<Item ID="BrokenSteel2.esp" Name="$(GameShortName): Broken Steel" Logo="BrokenSteel.png"/>
+				<Item ID="PointLookout.esm" Name="$(GameShortName): Point Lookout" Logo="PointLookout.png"/>
+				<Item ID="Zeta.esm" Name="$(GameShortName): Mothership Zeta" Logo="Zeta.png"/>
+			</StandardContent>
+
+		</PluginManager>
+
+		<ScreenshotsGallery>
+			<Locations>
+				<Item>$(ActualGameDir)</Item>
+				<Item>$(ActualGameDir)\Screenshots</Item>
+				<Item>$(ConfigDir)</Item>
+				<Item>$(ConfigDir)\Screenshots</Item>
+				<Item>$(OverwritesDir)</Item>
+				<Item>$(OverwritesDir)\Screenshots</Item>
+			</Locations>
+		</ScreenshotsGallery>
+
+		<SaveManager SaveFileFormat="BethesdaFallout3">
+			<Location>$(SavesDir)\Saves</Location>
+			<FileFilters>
+				<Item Label="$T(SaveManager.Filter.Saves) (*.fos)">*.fos</Item>
+				<Item Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Item>
+				<Item Label="$T(SaveManager.Filter.CoSaves) (*.fose)">*.fose</Item>
+			</FileFilters>
+
+			<PrimaryExtension>fos</PrimaryExtension>
+			<SecondaryExtension>fose</SecondaryExtension>
+		</SaveManager>
+	</GameData>
+
+	<Packages>
+		<PackageManager>
+			<Requirements>
+				<!-- General -->
+				<Item ID="Fallout3" Category="$T(PackageManager.ReqCategory.General)">
+					<Name>$(GameName)</Name>
+					<Object Function="FileExist">Fallout3.exe</Object>
+					<Version Operator="GTEQ">1.7.0.3</Version>
+				</Item>
+				<Item ID="$(ScriptExtenderID)" Category="$T(PackageManager.ReqCategory.General)">
+					<Name>$(GameShortName) Script Extender</Name>
+					<Object Function="FileExist">FOSE_Loader.exe</Object>
+					<Version Operator="GTEQ">0.1.2.2</Version>
+				</Item>
+
+				<!-- DLC -->
+				<Item ID="DLC-Anchorage" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: Operation Anchorage</Name>
+					<Object Function="PluginActive">Anchorage.esm</Object>
+				</Item>
+				<Item ID="DLC-ThePitt" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: The Pitt</Name>
+					<Object Function="PluginActive">ThePitt.esm</Object>
+				</Item>
+				<Item ID="DLC-BrokenSteel" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: Broken Steel</Name>
+					<Object Function="PluginActive">BrokenSteel.esm</Object>
+				</Item>
+				<Item ID="DLC-PointLookout" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: Point Lookout</Name>
+					<Object Function="PluginActive">PointLookout.esm</Object>
+				</Item>
+				<Item ID="DLC-Zeta" Category="$T(PackageManager.ReqCategory.DLC)">
+					<Name>DLC: Mothership Zeta</Name>
+					<Object Function="PluginActive">Zeta.esm</Object>
+				</Item>
+
+				<!-- Body replacers -->
+				<Item ID="Type3" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+					<Name>Dimonized Type3 Female Body</Name>
+					<RequiredState>ModActive</RequiredState>
+				</Item>
+				<Item ID="T6M" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+					<Name>Type 6 Modification Body</Name>
+					<RequiredState>ModActive</RequiredState>
+				</Item>
+				<Item ID="BreezeBody" Category="$T(PackageManager.ReqCategory.BodyReplacers)">
+					<Name>Breezes FO3 Males</Name>
+					<RequiredState>ModActive</RequiredState>
+				</Item>
+			</Requirements>
+		</PackageManager>
+	</Packages>
+</Definition>

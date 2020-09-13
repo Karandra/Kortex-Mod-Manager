@@ -1,0 +1,1065 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Lang>
+	<Info>
+		<Translator>Monday, Kerber</Translator>
+	</Info>
+	<StringTable>
+		<!-- Stock IDs -->
+		<String ID="ID_ABOUT">About</String>
+		<String ID="ID_ADD">Add</String>
+		<String ID="ID_APPLY">Apply</String>
+		<String ID="ID_BACKWARD">Back</String>
+		<String ID="ID_IGNORE">Ignore</String>
+		<String ID="ID_BOLD">Bold</String>
+		<String ID="ID_BOTTOM">Bottom</String>
+		<String ID="ID_CANCEL">Cancel</String>
+		<String ID="ID_CDROM">CD-ROM</String>
+		<String ID="ID_CLEAR">Clear</String>
+		<String ID="ID_CLOSE">Close</String>
+		<String ID="ID_CONVERT">Convert</String>
+		<String ID="ID_MOVE">Move</String>
+		<String ID="ID_COPY">Copy</String>
+		<String ID="ID_COPY_LINK">Copy link</String>
+		<String ID="ID_CUT">Cut</String>
+		<String ID="ID_DELETE">Delete</String>
+		<String ID="ID_DOWN">Down</String>
+		<String ID="ID_EDIT">Edit</String>
+		<String ID="ID_EXECUTE">Execute</String>
+		<String ID="ID_EXIT">Quit</String>
+		<String ID="ID_FILE">File</String>
+		<String ID="ID_FOLDER">Folder</String>
+		<String ID="ID_FIND">Find</String>
+		<String ID="ID_SEARCH">Search</String>
+		<String ID="ID_FIRST">First</String>
+		<String ID="ID_FLOPPY">Floppy</String>
+		<String ID="ID_FORWARD">Forward</String>
+		<String ID="ID_HARDDISK">Hard disk</String>
+		<String ID="ID_HELP">Help</String>
+		<String ID="ID_HOME">Home</String>
+		<String ID="ID_INDENT">Indent</String>
+		<String ID="ID_INDEX">Index</String>
+		<String ID="ID_INFO">Info</String>
+		<String ID="ID_ITALIC">Italic</String>
+		<String ID="ID_JUMP_TO">Jump to</String>
+		<String ID="ID_JUSTIFY_CENTER">Centered</String>
+		<String ID="ID_JUSTIFY_FILL">Justified</String>
+		<String ID="ID_JUSTIFY_LEFT">Align left</String>
+		<String ID="ID_JUSTIFY_RIGHT">Align right</String>
+		<String ID="ID_LAST">Last</String>
+		<String ID="ID_NETWORK">Network</String>
+		<String ID="ID_NEW">New</String>
+		<String ID="ID_NO">No</String>
+		<String ID="ID_NONE">None</String>
+		<String ID="ID_OK">OK</String>
+		<String ID="ID_OPEN">Open</String>
+		<String ID="ID_PASTE">Paste</String>
+		<String ID="ID_PREFERENCES">Preferences</String>
+		<String ID="ID_PREVIEW">Preview</String>
+		<String ID="ID_PRINT">Print</String>
+		<String ID="ID_PROPERTIES">Properties</String>
+		<String ID="ID_REDO">Redo</String>
+		<String ID="ID_REFRESH">Refresh</String>
+		<String ID="ID_REMOVE">Remove</String>
+		<String ID="ID_REPLACE">Replace</String>
+		<String ID="ID_RENAME">Rename</String>
+		<String ID="ID_REVERT_TO_SAVED">Revert to saved</String>
+		<String ID="ID_SAVE">Save</String>
+		<String ID="ID_SAVEAS">Save as</String>
+		<String ID="ID_SELECTALL">Select all</String>
+		<String ID="ID_SELECT_COLOR">Select color</String>
+		<String ID="ID_SELECT_FONT">Select font</String>
+		<String ID="ID_SELECT_FILE">Select file</String>
+		<String ID="ID_SELECT_FOLDER">Select folder</String>
+		<String ID="ID_SORT_ASCENDING">Ascending</String>
+		<String ID="ID_SORT_DESCENDING">Descending</String>
+		<String ID="ID_SPELL_CHECK">Spell check</String>
+		<String ID="ID_STOP">Stop</String>
+		<String ID="ID_STRIKETHROUGH">Strikethrough</String>
+		<String ID="ID_TOP">Top</String>
+		<String ID="ID_UNDELETE">Undelete</String>
+		<String ID="ID_UNDERLINE">Underline</String>
+		<String ID="ID_UNDO">Undo</String>
+		<String ID="ID_UNINDENT">Unindent</String>
+		<String ID="ID_UP">Up</String>
+		<String ID="ID_YES">Yes</String>
+		<String ID="ID_ZOOM_100">Actual size</String>
+		<String ID="ID_ZOOM_FIT">Zoom to fit</String>
+		<String ID="ID_ZOOM_IN">Zoom in</String>
+		<String ID="ID_ZOOM_OUT">Zoom out</String>
+		<String ID="ID_ERROR">Error</String>
+
+		<String ID="ID_ABOUT_LONG">Show about dialog</String>
+		<String ID="ID_COPY_LONG">Copy selection</String>
+		<String ID="ID_CUT_LONG">Cut selection</String>
+		<String ID="ID_DELETE_LONG">Delete selection</String>
+		<String ID="ID_REPLACE_LONG">Replace selection</String>
+		<String ID="ID_PASTE_LONG">Paste selection</String>
+		<String ID="ID_EXIT_LONG">Quit this program</String>
+		<String ID="ID_UNDO_LONG">Undo last action</String>
+		<String ID="ID_REDO_LONG">Redo last action</String>
+		<String ID="ID_CLOSE_LONG">Close current document</String>
+		<String ID="ID_SAVE_LONG">Save current document</String>
+		<String ID="ID_SAVEAS_LONG">Save current document with a different filename</String>
+
+		<!-- Generic -->
+		<String ID="Generic.Run">Run</String>
+		<String ID="Generic.Terminate">Terminate</String>
+		<String ID="Generic.All">All</String>
+		<String ID="Generic.using">using</String>
+		<String ID="Generic.MilliSec">ms</String>
+		<String ID="Generic.Sec">s</String>
+		<String ID="Generic.Min">min</String>
+		<String ID="Generic.Browse">Browse</String>
+		<String ID="Generic.BrowseFile">Browse file</String>
+		<String ID="Generic.BrowseFolder">Browse folder</String>
+		<String ID="Generic.Select">Select</String>
+		<String ID="Generic.Import">Import</String>
+		<String ID="Generic.Export">Export</String>
+		<String ID="Generic.Info">Information</String>
+		<String ID="Generic.Description">Description</String>
+		<String ID="Generic.Size">Size</String>
+		<String ID="Generic.Author">Author</String>
+		<String ID="Generic.ID">Identifier</String>
+		<String ID="Generic.IDInvalid">Invalid identifier</String>
+		<String ID="Generic.Invalid">Invalid</String>
+		<String ID="Generic.Name">Name</String>
+		<String ID="Generic.UserName">Username</String>
+		<String ID="Generic.EMailAddress">Email address</String>
+		<String ID="Generic.Index">Index</String>
+		<String ID="Generic.PartOf">Part of</String>
+		<String ID="Generic.Value">Value</String>
+		<String ID="Generic.Address">Address</String>
+		<String ID="Generic.Source">Source</String>
+		<String ID="Generic.Size">Size</String>
+		<String ID="Generic.Type">Type</String>
+		<String ID="Generic.Priority">Priority</String>
+		<String ID="Generic.Status">Status</String>
+		<String ID="Generic.Date">Date</String>
+		<String ID="Generic.Game">Game</String>
+		<String ID="Generic.Image">Image</String>
+		<String ID="Generic.Color">Color</String>
+		<String ID="Generic.Assign">Assign</String>
+		<String ID="Generic.Reset">Reset</String>
+		<String ID="Generic.Screenshot">Screenshot</String>
+		<String ID="Generic.ModificationDate">Date modified</String>
+		<String ID="Generic.Location">Location</String>
+		<String ID="Generic.FileLocation">File location</String>
+		<String ID="Generic.FolderLocation">Folder location</String>
+		<String ID="Generic.SourceLocation">Source location</String>
+		<String ID="Generic.Version">Version</String>
+		<String ID="Generic.Revision">Revision</String>
+		<String ID="Generic.Developer">Developer</String>
+		<String ID="Generic.EnterData">Enter data</String>
+		<String ID="Generic.DefaultValue">Default value</String>
+		<String ID="Generic.UseDefaultValue">Use default value</String>
+		<String ID="Generic.SystemMenu">System menu</String>
+		<String ID="Generic.Operator">Operator</String>
+		<String ID="Generic.Operators">Operators</String>
+		<String ID="Generic.Argument">Argument</String>
+		<String ID="Generic.Arguments">Arguments</String>
+		<String ID="Generic.Parameter">Parameter</String>
+		<String ID="Generic.Parameters">Parameters</String>
+		<String ID="Generic.Expanded">Expanded</String>
+		<String ID="Generic.Collapsed">Collapsed</String>
+		<String ID="Generic.License">License</String>
+		<String ID="Generic.CriticalError">The application has encountered a critical error and will be closed.</String>
+		<String ID="Generic.OpenWebSiteDialog.Caption">Do you want to open this webpage?</String>
+		<String ID="Generic.OpenWebSiteListDialog.Caption">Choose a webpage you want to open</String>
+		<String ID="Generic.FileSearchInProgress">File search in progress</String>
+		<String ID="Generic.FileCopyInProgress">File copy in progress</String>
+		<String ID="Generic.NoItemsToDisplay">No items to display</String>
+		<String ID="Generic.Install">Install</String>
+		<String ID="Generic.DoNotInstall">Don't install</String>
+
+		<String ID="FileFilter">File filter</String>
+		<String ID="FileFilter.AllFiles">All files</String>
+		<String ID="FileFilter.AllSupportedFormats">All supported formats</String>
+		<String ID="FileFilter.ModPackage">Installation package</String>
+		<String ID="FileFilter.ModPackageSMI">Installation package for KMM 1.x and SKSM</String>
+		<String ID="FileFilter.ModPackageFOMod">FOMod</String>
+		<String ID="FileFilter.ModProject">Installation package project</String>
+		<String ID="FileFilter.ModProjectSMP">Installation package project for KMM 1.x and SKSM</String>
+		<String ID="FileFilter.XML">XML files</String>
+		<String ID="FileFilter.Programs">Programs</String>
+		<String ID="FileFilter.Image">Image</String>
+		<String ID="FileFilter.Images">Images</String>
+		<String ID="FileFilter.Text">Text files</String>
+		<String ID="FileFilter.HTML">HTML documents</String>
+		<String ID="FileFilter.Shortcuts">Shortcuts</String>
+		<String ID="FileFilter.Archives">Archives</String>
+		<String ID="FileFilter.7ZipArchive">7-Zip archive</String>
+
+		<String ID="Init.AnotherInstanceRunning">Another instance of this application is already running.</String>
+		<String ID="Init.Caption">Initializing settings</String>
+		<String ID="Init.Status1">Reading parameters</String>
+		<String ID="Init.Status2">Loading profile data</String>
+		<String ID="Init.StatusDone">Initialization complete</String>
+		<String ID="Init.Error1">Profile configuration hasn't been loaded. Unable to continue.</String>
+		<String ID="Init.Error2">Configuration file for profile "%1" not found. Default configuration will be used.</String>
+		<String ID="Init.Error3">Failed to create workspace</String>
+		<String ID="Init.ProfilesPath1">Profile folder not specified or doesn't exist</String>
+		<String ID="Init.ProfilesPath2">
+			<![CDATA[You can use the default folder or select a different one.
+Using the default folder is not recommended because profile data can occupy a lot of space, which may be undesirable for the system drive.]]>
+		</String>
+		<String ID="Init.DownloadLinkDispatchFailed">Couldn't dispatch download link: %1</String>
+
+		<!-- Settings Window -->
+		<String ID="Settings.Caption">Application settings</String>
+		<String ID="Settings.SaveMessage">Some changes won't take effect until the application has been restarted</String>
+
+		<String ID="Settings.PrepareUninstall">Uninstall</String>
+		<String ID="Settings.PrepareUninstall.Button">Prepare to uninstall</String>
+		<String ID="Settings.PrepareUninstall.Caption">Are you sure you want to uninstall %1</String>
+		<String ID="Settings.PrepareUninstall.Message">This action will uninstall the virtual file system service and allow you to uninstall this appliction correctly. Afterwards, you should delete all application files and restart your computer.</String>
+		<String ID="Settings.PrepareUninstall.Success">Virtual file system has been successfully uninstalled. Restart your computer to complete the uninstallation procedure.</String>
+		<String ID="Settings.PrepareUninstall.Error">Failed to uninstall the virtual file system service.</String>
+		<String ID="Settings.PrepareUninstall.RebootNow">Restart now</String>
+		<String ID="Settings.PrepareUninstall.RebootLater">Restart later</String>
+
+		<String ID="Settings.ValueName.Language">UI language</String>
+		<String ID="Settings.ValueName.StartupWorkspace">Start page</String>
+		<String ID="Settings.ValueName.InstancesLocation">Instances folder</String>
+		<String ID="Settings.ValueName.PackagesLocation">Installation package folder</String>
+		<String ID="Settings.ValueName.AutoShowPackageInfo">Automatically show information about the installation package</String>
+		<String ID="Settings.ValueName.FOModUseHTTPSForXMLScheme">Use HTTPS protocol in FOMod XML-scheme</String>
+		<String ID="Settings.ValueName.DownloadsFolder">Downloads folder</String>
+
+		<String ID="Settings.ValueName.VirtualFileSystem.Library">Library</String>
+		<String ID="Settings.ValueName.VirtualFileSystem.Log">Enable Log</String>
+
+		<String ID="Settings.ValueName.Var.ActualGameDir">$(GameShortName) installation folder</String>
+
+		<!-- Notification Center -->
+		<String ID="NotificationCenter.Name">Notification center</String>
+
+		<!-- About dialog -->
+		<String ID="About.SourceCodeLocation">Source code can be found on</String>
+		<String ID="About.Components">Components</String>
+
+		<!-- Instance selection -->
+		<String ID="InstanceSelection.Caption">Select instance</String>
+		<String ID="InstanceSelection.CreateInstance">Create instance</String>
+		<String ID="InstanceSelection.RemoveInstance">Delete instance</String>
+		<String ID="InstanceSelection.CreateShortcut">Create shortcut</String>
+		<String ID="InstanceSelection.InvalidInstance">Invalid instance</String>
+
+		<String ID="InstanceSelection.GameNotFound.Caption">Failed to locate %1</String>
+		<String ID="InstanceSelection.GameNotFound.Message">%1 installation folder not found or doesn't exist. Select the folder manually to continue.</String>
+
+		<String ID="InstanceSelection.ChangeInstanceDialog.Caption">To change instance, the application must be restarted</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Message">Do you want to restart now?</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Yes">Restart now</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.No">Don't restart</String>
+		<String ID="InstanceSelection.ChangeInstanceDialog.Cancel">Cancel instance change</String>
+
+		<String ID="InstanceSelection.ConfirmRemoving.Caption">Are you sure you want to delete instance "%1"?</String>
+		<String ID="InstanceSelection.ConfirmRemoving.Message">
+			<![CDATA[This cannot be undone.
+
+This folder and all its contents will be deleted: %1]]>
+		</String>
+
+		<!-- Instance creation/editing -->
+		<String ID="InstanceCreatorDialog.Caption">Create new instance for "%1"</String>
+		<String ID="InstanceCreatorDialog.NameLabel">Instance name</String>
+
+		<String ID="InstanceCreatorDialog.CopyFrom">Copy data from instance</String>
+		<String ID="InstanceCreatorDialog.CopyInstanceConfig">Copy instance settings</String>
+		<String ID="InstanceCreatorDialog.CopyModTags">Copy mod tags</String>
+		<String ID="InstanceCreatorDialog.CopyPrograms">Copy programs list</String>
+
+		<String ID="InstanceCreatorDialog.InstanceNameInvalid">Invalid Instance name. Choose another name.</String>
+		<String ID="InstanceCreatorDialog.InstanceNameCollision">A instance with this name already exists. Specify a different name.</String>
+		<String ID="InstanceCreatorDialog.CreationError">Failed to create a new instance</String>
+		<String ID="InstanceCreatorDialog.DeletionError">Failed to delete this instance</String>
+
+		<String ID="OpenLocation.AppSettings">Manager settings</String>
+		<String ID="OpenLocation.GameRoot">Game folder</String>
+		<String ID="OpenLocation.VirtualGameRoot">Virtual game folder</String>
+		<String ID="OpenLocation.ConfigRootTarget">Game settings folder</String>
+		<String ID="OpenLocation.VirtualConfigRoot">Virtual game settings folder</String>
+		<String ID="OpenLocation.WriteTargetRoot">Overwrite folder</String>
+		<String ID="OpenLocation.CurrentProfileRoot">Current profile folder</String>
+		<String ID="OpenLocation.ProfilesRoot">Profiles folder</String>
+		<String ID="OpenLocation.ModsRoot">Mods folder</String>
+		<String ID="OpenLocation.ModPackages">Installation packages</String>
+		<String ID="OpenLocation.Saves">Saves folder</String>
+
+		<!-- ToolBar -->
+		<String ID="ToolBar.QuickSettingsMenu">Quick settings menu</String>
+		<String ID="ToolBar.Help">Help</String>
+
+		<!-- Main menu -->
+		<String ID="MainMenu.Settings">Settings</String>
+		<String ID="MainMenu.ChangeInstance">Change instance. Current: $(GameShortName) - $(InstanceID)</String>
+		<String ID="MainMenu.Run">Run</String>
+		<String ID="MainMenu.OpenLocation">Open location</String>
+		<String ID="MainMenu.About">About</String>
+
+		<!-- Notification Center -->
+		<String ID="NotificationCenter.Name">Notification center</String>
+		<String ID="NotificationCenter.NameShort">Notifications</String>
+
+		<String ID="NotificationCenter.ClearNotifications">Clear notifications</String>
+		<String ID="NotificationCenter.RemoveNotification">Remove notification</String>
+		<String ID="NotificationCenter.NoNotifications">No new notifications</String>
+
+		<!-- Workspace controller -->
+		<String ID="Controller.SaveChanges.Caption">You have unsaved changes</String>
+		<String ID="Controller.SaveChanges.Message">Do you want to save changes?</String>
+		<String ID="Controller.SaveChanges.Save">Save changes</String>
+		<String ID="Controller.SaveChanges.Discard">Discard changes</String>
+
+		<!-- Image viewer -->
+		<String ID="ImageViewer.Caption">Image viewer</String>
+
+		<!-- Text editor -->
+		<String ID="TextEditor.Caption">View and edit text</String>
+		<String ID="TextEditor.ToolBar.Mode">Switch editor mode</String>
+		<String ID="TextEditor.ToolBar.Heading">Header</String>
+
+		<!-- GameConfig module -->
+		<String ID="GameConfigModule.Name">Game configuration</String>
+		<String ID="GameConfigModule.NameShort">Configurator</String>
+
+		<!-- Program module -->
+		<String ID="ProgramsModule.Name">Program manager</String>
+
+		<!-- Program Manager -->
+		<String ID="ProgramManager.Name">Program manager</String>
+		<String ID="ProgramManager.NameShort">Programs</String>
+
+		<String ID="ProgramManager.FileNotFound">File not found</String>
+		<String ID="ProgramManager.PreMainFileNotFound1">Some additional software could not be found on your computer</String>
+		<String ID="ProgramManager.PreMainFileNotFound2">Install this software or disable it in the manager.</String>
+		<String ID="ProgramManager.NoPrograms">No programs are available</String>
+		<String ID="ProgramManager.ExecutingPreMain">Launching additional software</String>
+		<String ID="ProgramManager.ExecutingMain">Launching the game</String>
+		<String ID="ProgramManager.Executing">Launching $(GameName)</String>
+		<String ID="ProgramManager.PreparingRun">Preparing</String>
+		<String ID="ProgramManager.RunFailed">Failed to create process</String>
+		<String ID="ProgramManager.WaitingReturn">Waiting to complete</String>
+		<String ID="ProgramManager.WaitingReturnAttach">Waiting for the additional software to terminate in order to attach it to the main process</String>
+		<String ID="ProgramManager.TryAttach">Attaching to the main process</String>
+		<String ID="ProgramManager.TryAttachFailed">Failed to attach to the main process</String>
+		<String ID="ProgramManager.Terminated">The program completed processing %1 code</String>
+
+		<String ID="ProgramManager.List.RequiresVFS">Requires VFS</String>
+		<String ID="ProgramManager.List.ShowInMainMenu">Show in main menu</String>
+		<String ID="ProgramManager.List.Arguments">Arguments</String>
+		<String ID="ProgramManager.List.Executable">Executable</String>
+		<String ID="ProgramManager.List.WorkingDirectory">Working directory</String>
+
+		<String ID="ProgramManager.Menu.RunProgram">Run program</String>
+		<String ID="ProgramManager.Menu.AddProgram">Add program</String>
+		<String ID="ProgramManager.Menu.EditProgram">Edit program</String>
+		<String ID="ProgramManager.Menu.RemoveProgram">Remove program</String>
+
+		<String ID="ProgramManager.Menu.ClearPrograms">Clear programs</String>
+		<String ID="ProgramManager.Menu.ClearPrograms.Message">Are you sure you want to remove all programs? This action cannot be undone.</String>
+		<String ID="ProgramManager.Menu.LoadDefaultPrograms">Load default programs</String>
+
+		<String ID="ProgramManager.Menu.EditProgram">Edit "%1"</String>
+		<String ID="ProgramManager.Menu.ChooseIcon">Choose icon</String>
+		<String ID="ProgramManager.Menu.ChooseExecutable">Choose executable file</String>
+		<String ID="ProgramManager.Menu.ChooseWorkingDirectory">Choose working directory</String>
+
+		<String ID="ProgramManager.Menu.ShowExpandedValues">Show expanded values</String>
+
+		<!-- Game Mods Module -->
+		<String ID="GameModsModule.Name">Game mods module</String>
+
+		<!-- Mod Manager -->
+		<String ID="ModManager.Name">Mod manager</String>
+		<String ID="ModManager.NameShort">Mods</String>
+
+		<String ID="ModManager.ExtractingPackageFiles">Extract installer files</String>
+		<String ID="ModManager.TagsDialog">Edit tags</String>
+		<String ID="ModManager.SitesEditor">Edit websites</String>
+		<String ID="ModManager.Tools">Tools</String>
+
+		<String ID="ModManager.ModList.Name">Name</String>
+		<String ID="ModManager.ModList.ID">ID</String>
+		<String ID="ModManager.ModList.Version">Version</String>
+		<String ID="ModManager.ModList.Author">Author</String>
+		<String ID="ModManager.ModList.Tags">Tags</String>
+		<String ID="ModManager.ModList.Sources">Sources</String>
+		<String ID="ModManager.ModList.DateInstall">Date installed</String>
+		<String ID="ModManager.ModList.DateUninstall">Date uninstalled</String>
+		<String ID="ModManager.ModList.ModFolder">Folder</String>
+		<String ID="ModManager.ModList.PackagePath">Installation package</String>
+		<String ID="ModManager.ModList.Signature">Signature</String>
+
+		<String ID="ModManager.DisplayMode.Caption">Change display mode</String>
+		<String ID="ModManager.DisplayMode.Connector">Activation</String>
+		<String ID="ModManager.DisplayMode.Log">Log</String>
+		<String ID="ModManager.DisplayMode.ShowPriorityGroups">Show priority groups</String>
+		<String ID="ModManager.DisplayMode.ShowNotInstalledMods">Show not installed mods</String>
+		<String ID="ModManager.DisplayMode.BoldPriorityGroupLabels">Bold priority group labels</String>
+		<String ID="ModManager.DisplayMode.PriorityGroupLabelsAlignment">Priority group labels alignment</String>
+
+		<String ID="ModManager.VFS.Enable">Run VFS</String>
+		<String ID="ModManager.VFS.Disable">Terminate VFS</String>
+		<String ID="ModManager.VFSActiveWarning">This action cannot be completed as long as the VFS is active</String>
+		<String ID="ModManager.WriteTargetName">Overwrites folder</String>
+
+		<String ID="ModManager.NewMod.NewEmptyMod">New empty mod</String>
+		<String ID="ModManager.NewMod.NewModFromFolder">New mod from folder</String>
+		<String ID="ModManager.NewMod.InstallPackage">Select installer</String>
+		<String ID="ModManager.NewMod.ImportFrom">Import from %1</String>
+
+		<String ID="ModManager.NewMod.DialogCaption">Add new mod</String>
+		<String ID="ModManager.NewMod.DialogMessage">Enter mod name</String>
+		<String ID="ModManager.NewMod.NameInvalid">Invalid mod name</String>
+		<String ID="ModManager.NewMod.NameCollision">There is already a mod with the same name as you specified. Specify a different name.</String>
+		<String ID="ModManager.NewMod.CopyDialogCaption">Copy mod data</String>
+		<String ID="ModManager.NewMod.FromFolderMessageCopy">The contents of the selected folder will be copied to the folder where mod data are located</String>
+		<String ID="ModManager.NewMod.FromFolderMessageLink">The contents of the selected folder will be used as mod files</String>
+		<String ID="ModManager.NewMod.SelectedFolder">Selected folder</String>
+		<String ID="ModManager.NewMod.SelectedFolderNone">No folder selected</String>
+		<String ID="ModManager.NewMod.CreateAsLinkedMod">Create as linked mod</String>
+
+		<String ID="ModManager.RemoveMod.CaptionUninstall">Are you sure you want to uninstall "%1"?</String>
+		<String ID="ModManager.RemoveMod.CaptionUninstallAndErase">Are you sure you want to uninstall "%1" and delete the corresponding log entry?</String>
+		<String ID="ModManager.RemoveMod.CaptionErase">Are you sure you want to delete "%1" entry from log?</String>
+		<String ID="ModManager.RemoveMod.Message">This action cannot be undone</String>
+		<String ID="ModManager.RemoveMod.RemovingMessage">Delete mod data</String>
+
+		<String ID="ModManager.Menu.InstallMod">Install</String>
+		<String ID="ModManager.Menu.UninstallMod">Uninstall</String>
+		<String ID="ModManager.Menu.UninstallAndErase">Unistall and delete from log</String>
+		<String ID="ModManager.Menu.Erase">Delete from log</String>
+		<String ID="ModManager.Menu.OpenModFilesLocation">Mod files location</String>
+		<String ID="ModManager.Menu.ChangeModFilesLocation">Change mod files location</String>
+		<String ID="ModManager.Menu.RevertModFilesLocation">Move mod files into profile</String>
+		<String ID="ModManager.Menu.Image">Image</String>
+		<String ID="ModManager.Menu.Image.Show">Show image</String>
+		<String ID="ModManager.Menu.Image.Assign">Assign image</String>
+		<String ID="ModManager.Menu.Image.ScaleAspect">Scale maintaining aspect ratio</String>
+		<String ID="ModManager.Menu.Image.Stretch">Stretch</String>
+		<String ID="ModManager.Menu.Image.Fill">Fill</String>
+		<String ID="ModManager.Menu.EditDescription">Edit description</String>
+		<String ID="ModManager.Menu.EditTags">Edit tags</String>
+		<String ID="ModManager.Menu.EditSites">Edit websites</String>
+		<String ID="ModManager.Menu.ChangeID">Change identifier</String>
+		<String ID="ModManager.Menu.ExploreFiles">Show files</String>
+		<String ID="ModManager.Menu.ShowCollisions">Show collisions</String>
+		<String ID="ModManager.Menu.Properties">Properties</String>
+		<String ID="ModManager.Menu.Package">Installer</String>
+		<String ID="ModManager.Menu.Package.Open">Open</String>
+		<String ID="ModManager.Menu.Package.OpenLocation">File location</String>
+		<String ID="ModManager.Menu.Package.Assign">Assign file</String>
+		<String ID="ModManager.Menu.Package.Remove">Delete file</String>
+		<String ID="ModManager.Menu.Package.Extract">Extract files</String>
+		<String ID="ModManager.Menu.Package.ImportProject">Import project</String>
+		<String ID="ModManager.Menu.Package.CreateProject">Create project</String>
+
+		<String ID="ModManager.Menu.Tag.ActivateAll">Activate all</String>
+		<String ID="ModManager.Menu.Tag.DeactivateAll">Deactivate all</String>
+
+		<String ID="ModManager.Profile">Profile</String>
+		<String ID="ModManager.Profile.Configure">Configure profiles</String>
+		<String ID="ModManager.Profile.Export">Export profile</String>
+		<String ID="ModManager.Profile.RemoveDialog">Are you sure you want to delete this profile? This operation cannot be undone.</String>
+		<String ID="ModManager.Profile.AlreadyExist">Profile with this name already exist</String>
+		<String ID="ModManager.Profile.RenameFailed">Failed to rename profile list</String>
+
+		<String ID="ModManager.Profile.LocalSaves">Local saves</String>
+		<String ID="ModManager.Profile.LocalConfig">Local game config</String>
+
+		<String ID="ModManager.Statistics">Statistics</String>
+		<String ID="ModManager.Statistics.Status">Calculating statistics</String>
+		<String ID="ModManager.Statistics.ModCountTotal">All mods</String>
+		<String ID="ModManager.Statistics.ModCountActive">Active mods</String>
+		<String ID="ModManager.Statistics.ModCountInactive">Inactive mods</String>
+		<String ID="ModManager.Statistics.FilesCount">Total files</String>
+		<String ID="ModManager.Statistics.FoldersCount">Total folders</String>
+		<String ID="ModManager.Statistics.FilesAndFoldersCount">Files and folders count</String>
+		<String ID="ModManager.Statistics.UsedSpace">Space used by mods</String>
+
+		<String ID="ModManager.Import.Caption">Import from another mod manager</String>
+		<String ID="ModManager.Import.ManagedGame">Managed game</String>
+		<String ID="ModManager.Import.OverwriteWarning">Importing data from another mod manager can result in loss of data in this instance.</String>
+		<String ID="ModManager.Import.TargetProfileMismatch">The current selected game does not match the game controlled by this mod-manager. Import at your own risk.</String>
+		<String ID="ModManager.Import.TargetProfileNotFound">Data on the game managed by this mod manager is not found. Import at your own risk.</String>
+		<String ID="ModManager.Import.SkipExisingMods">Skip existing mods</String>
+		<String ID="ModManager.Import.InfoFound">Data from %1 was found. Begin import?</String>
+		<String ID="ModManager.Import.CanNotImport">Can't find data to import</String>
+
+		<String ID="ModExplorer.Caption">Show mod files</String>
+		<String ID="ModExplorer.Collisions">Collisions</String>
+		<String ID="ModExplorer.Collisions.Count">Total collisions</String>
+		<String ID="ModExplorer.Collisions.Searching">Searching collisions</String>
+		<String ID="ModExplorer.Collisions.NoneFound">No collisions found</String>
+
+		<String ID="ModExplorer.Collision.Unknown">Unknown collision</String>
+		<String ID="ModExplorer.Collision.Overwritten">Overwritten by "%1"</String>
+		<String ID="ModExplorer.Collision.Owerwrites">Owerwrites "%1"</String>
+
+		<String ID="VirtualGameFolderWS.Name">Virtual game folder</String>
+		<String ID="VirtualGameFolderWS.NameShort">Game data</String>
+
+		<!-- Tag Manager -->
+		<String ID="TagManager.Name">Tag manager</String>
+		<String ID="TagManager.PrimaryTag">Primary tag</String>
+
+		<String ID="TagManager.LoadDefaultTags">Load default tags</String>
+		<String ID="TagManager.LoadDefaultTags.Message">Are you sure you want to load default tags?</String>
+		<String ID="TagManager.RemoveTag.Message">Are you sure you want to delete this tag? This will remove him from the system and break its connection with all mods.</String>
+
+		<String ID="TagManager.Tag.Animation">Animation</String>
+		<String ID="TagManager.Tag.Armor">Armor</String>
+		<String ID="TagManager.Tag.Clothing">Clothing</String>
+		<String ID="TagManager.Tag.Jewelry">Jewelry</String>
+		<String ID="TagManager.Tag.Weapons">Weapons</String>
+		<String ID="TagManager.Tag.Gameplay">Gameplay</String>
+		<String ID="TagManager.Tag.Immersion">Immersion</String>
+		<String ID="TagManager.Tag.Environment">Environment</String>
+		<String ID="TagManager.Tag.SkillsAndLeveling">Skills and Leveling</String>
+		<String ID="TagManager.Tag.GuildsAndFactions">Guilds and Factions</String>
+		<String ID="TagManager.Tag.Stealth">Stealth</String>
+		<String ID="TagManager.Tag.Combat">Combat</String>
+		<String ID="TagManager.Tag.Crafting">Crafting</String>
+		<String ID="TagManager.Tag.Magic">Magic - Spells and Enchantments</String>
+		<String ID="TagManager.Tag.MagicGameplay">Magic - Gameplay</String>
+		<String ID="TagManager.Tag.BooksAndScrolls">Books and Scrolls</String>
+		<String ID="TagManager.Tag.Alchemy">Alchemy</String>
+		<String ID="TagManager.Tag.Quests">Quests and Adventures</String>
+		<String ID="TagManager.Tag.Buildings">Castles, Palaces, Mansions and Estates</String>
+		<String ID="TagManager.Tag.Settlements">Cities, Towns, Villages and Hamlets</String>
+		<String ID="TagManager.Tag.Mercantiles">Shops, Stores, Inns and Taverns</String>
+		<String ID="TagManager.Tag.NewLands">New Lands</String>
+		<String ID="TagManager.Tag.Dungeons">Dungeons</String>
+		<String ID="TagManager.Tag.AbandonedStructures">Forts, Ruins and Abandoned Structures</String>
+		<String ID="TagManager.Tag.PlayerHomes">Player homes</String>
+		<String ID="TagManager.Tag.Landscape">Landscape</String>
+		<String ID="TagManager.Tag.Overhauls">Overhauls</String>
+		<String ID="TagManager.Tag.Conversions">Total conversions</String>
+		<String ID="TagManager.Tag.Audio">Music, SFX and voices</String>
+		<String ID="TagManager.Tag.UserInterface">User Interface and Controls</String>
+		<String ID="TagManager.Tag.NPC">NPC</String>
+		<String ID="TagManager.Tag.Body">Body</String>
+		<String ID="TagManager.Tag.Face">Face</String>
+		<String ID="TagManager.Tag.Hair">Hair</String>
+		<String ID="TagManager.Tag.Races">Races</String>
+		<String ID="TagManager.Tag.Followers">Followers</String>
+		<String ID="TagManager.Tag.Creatures">Creatures</String>
+		<String ID="TagManager.Tag.Mounts">Mounts</String>
+		<String ID="TagManager.Tag.ModelsAndTextures">Models and Textures</String>
+		<String ID="TagManager.Tag.Graphics">Graphics and visuals</String>
+		<String ID="TagManager.Tag.ENBPresets">ENB presets</String>
+		<String ID="TagManager.Tag.Collectables">Collectables</String>
+		<String ID="TagManager.Tag.ItemsAndObjects">Items and objects</String>
+		<String ID="TagManager.Tag.Cheats">Cheats and God items</String>
+		<String ID="TagManager.Tag.Fixes">Bug fixes</String>
+		<String ID="TagManager.Tag.xSEPlugins">Plugins for $(ScriptExtenderID)</String>
+		<String ID="TagManager.Tag.Utilities">Utilities</String>
+		<String ID="TagManager.Tag.Configuration">Configuration</String>
+		<String ID="TagManager.Tag.Resources">Modders resources and tutorials</String>
+		<String ID="TagManager.Tag.SaveGames">Save Games</String>
+		<String ID="TagManager.Tag.Misc">Miscellaneous</String>
+
+		<!-- Network module-->
+		<String ID="NetworkModule.Name">Network</String>
+
+		<!-- NetworkManager -->
+		<String ID="NetworkManager.Name">Network manager</String>>
+		<String ID="NetworkManager.ModNetwork">Mod network</String>
+		<String ID="NetworkManager.ModNetwork.Default">Default mod network</String>
+		<String ID="NetworkManager.ModNetwork.MakeDefault">Make default</String>
+
+		<String ID="NetworkManager.ModNetwork.AccountInfo">Account information</String>
+		<String ID="NetworkManager.ModNetwork.ShowAccountInfo">Show account information</String>
+
+		<String ID="NetworkManager.AuthCaption">Authentication on %1</String>
+		<String ID="NetworkManager.AuthMessage">Enter your username and password to log in to your account.</String>
+		<String ID="NetworkManager.AuthSuccess">Authentication on %1 completed successfully</String>
+		<String ID="NetworkManager.AuthFail">Authentication on %1 failed</String>
+		<String ID="NetworkManager.AuthReset">Authentication on %1 was reset</String>
+
+		<String ID="NetworkManager.SignIn">Sign in</String>
+		<String ID="NetworkManager.RetrySignIn">Retry sign in</String>
+		<String ID="NetworkManager.SignOut">Sign out</String>
+		<String ID="NetworkManager.SignedIn">Signed in</String>
+		<String ID="NetworkManager.NotSignedIn">Not signed in</String>
+		<String ID="NetworkManager.SignOutMessage">Are you sure you want to sign out of "%1" account?</String>
+
+		<String ID="NetworkManager.QueryLimits">Query limits</String>
+		<String ID="NetworkManager.QueryLimits.Hourly">Hourly: %1/%2</String>
+		<String ID="NetworkManager.QueryLimits.Daily">Daily: %1/%2</String>
+		<String ID="NetworkManager.QueryLimits.Description"><![CDATA[This display tracks the number of queued requests to %1 and the remaining daily and hourly requests. The %1 API limits you to a pool of requests per day and requests per hour. It is dynamically updated every time a request is completed. If you run out of requests, you will be unable to queue downloads, check updates, query mod info and so on. Both pools must be consumed before this happens.]]></String>
+		<String ID="NetworkManager.RequestQuotaReched">Query limit to %1 has been reached for a period of time</String>
+
+		<String ID="NetworkManager.UpdateCheck.AutoCheckStarted">Automatic check for mods updates started</String>
+		<String ID="NetworkManager.UpdateCheck.AutoCheckDone">Automatic check for mod updates done. %1 mod(s) updated</String>
+		<String ID="NetworkManager.UpdateCheck.AutoCheckQuoteReqched">Unable to start the automatic mods update check because the available number of requests has been exhausted</String>
+		
+		<String ID="NetworkManager.Nexus.UserIsPremium">Premium user</String>
+		<String ID="NetworkManager.Nexus.UserIsSupporter">Supporter user</String>
+		<String ID="NetworkManager.Nexus.APIKey">API Key</String>
+		<String ID="NetworkManager.Nexus.EnterAPIKey">Enter API Key</String>
+
+		<String ID="NetworkManager.UpdateTooltip.Caption">Updates information available</String>
+		<String ID="NetworkManager.UpdateTooltip.AnyUpdates">There's a new version (%1) of this mod available on %2</String>
+		<String ID="NetworkManager.UpdateTooltip.AnyDeletions">This mod was not found on %1</String>
+
+		<String ID="NetworkManager.Nexus.CopyNXM">Copy NXM-link</String>
+
+		<!-- NXMHandler -->
+		<String ID="NetworkManager.NXMHandler.Caption">Configure NXM-handler</String>
+
+		<String ID="NetworkManager.NXMHandler.RegisterAssociations">Register associations</String>
+		<String ID="NetworkManager.NXMHandler.UnregisterAssociations">Unregister associations</String>
+		<String ID="NetworkManager.NXMHandler.RegisteredToLabel">Currently registered to: %1</String>
+
+		<String ID="NetworkManager.NXMHandler.GetAssociationsFailed">Failed to get file association information</String>
+		<String ID="NetworkManager.NXMHandler.RegisterAssociationsFailed">Failed to register file associations</String>
+		<String ID="NetworkManager.NXMHandler.UnregisterAssociationsFailed">Failed to unregister file associations</String>
+
+		<String ID="NetworkManager.NXMHandler.PrimaryHandler.Caption">Register as primary NXM handler</String>
+		<String ID="NetworkManager.NXMHandler.PrimaryHandler.Message">There is no primary NXM handler registered in the system. Install %1 as the primary handler?</String>
+
+		<String ID="NetworkManager.NXMHandler.Game">Game</String>
+		<String ID="NetworkManager.NXMHandler.NexusID">Nexus ID</String>
+		<String ID="NetworkManager.NXMHandler.Target">Target</String>
+
+		<String ID="NetworkManager.NXMHandler.ExternalProgram">External program</String>
+		<String ID="NetworkManager.NXMHandler.ConfigureExecutable">Configure executable</String>
+		<String ID="NetworkManager.NXMHandler.InvalidExecutable">Invalid executable</String>
+
+		<!-- Download Manager -->
+		<String ID="DownloadManager.Name">Download manager</String>
+		<String ID="DownloadManager.NameShort">Downloads</String>
+
+		<String ID="DownloadManager.DownloadLocation">Downloads folder</String>
+		<String ID="DownloadManager.DownloadLocation.Invalid">The downloads folder is not specified or does not exist. Select the folder where you want to store the downloads</String>
+		<String ID="DownloadManager.DownloadLocation.InsufficientSpace">Not enough space to save the file</String>
+		<String ID="DownloadManager.DownloadLocation.InsufficientCapabilities">The device does not support the features required to save the file</String>
+
+		<String ID="DownloadManager.RemoveDownloadsCaption">Deleting downloads</String>
+		<String ID="DownloadManager.RemoveDownloadsMessage">Are you sure you want to delete all downloads?</String>
+		<String ID="DownloadManager.RemoveInstalledDownloadsMessage">Are you sure you want to delete all installed downloads?</String>
+
+		<String ID="DownloadManager.Notification.DownloadStarted">Download started</String>
+		<String ID="DownloadManager.Notification.DownloadStartedEx">%1</String>
+		<String ID="DownloadManager.Notification.DownloadCompleted">Download completed</String>
+		<String ID="DownloadManager.Notification.DownloadCompletedEx">%1</String>
+		<String ID="DownloadManager.Notification.DownloadFailed">Download failed</String>
+		<String ID="DownloadManager.Notification.DownloadFailedEx">%1</String>
+		<String ID="DownloadManager.Notification.QueryDownloadInfoFailed">Could not request download information for %1</String>
+		<String ID="DownloadManager.Notification.RestoreDownloadFailed">Failed to restore download information from %1</String>
+
+		<String ID="DownloadManager.ConcurrentDownloads.Label">Concurrent downloads</String>
+		<String ID="DownloadManager.ConcurrentDownloads.Unlimited">Unlimited</String>
+
+		<String ID="DownloadManager.RefreshItems.Caption">Refresh download list</String>
+		<String ID="DownloadManager.RefreshItems.Message"><![CDATA[Refreshing downloads list will cause any running downloads to be paused. If the download source doesn't suport resuming you would have to restart the download.
+
+Are you really sure you want to refresh the list?]]></String>
+
+		<!-- Context menu -->
+		<String ID="DownloadManager.Menu.Install">Install</String>
+		<String ID="DownloadManager.Menu.Add">Add download</String>
+
+		<String ID="DownloadManager.Menu.AddFromURL">Add download from URL</String>
+		<String ID="DownloadManager.Menu.AddFromURL.Message">Enter a URL to start download</String>
+
+		<String ID="DownloadManager.Menu.Start">Start</String>
+		<String ID="DownloadManager.Menu.Resume">Resume</String>
+		<String ID="DownloadManager.Menu.Pause">Pause</String>
+		<String ID="DownloadManager.Menu.Abort">Abort</String>
+
+		<String ID="DownloadManager.Menu.SetSource">Change source</String>
+		<String ID="DownloadManager.Menu.SetSource.Message">Enter new network ID for this download</String>
+
+		<String ID="DownloadManager.Menu.SetTargetGame">Change target game</String>
+		<String ID="DownloadManager.Menu.QueryInfo">Query info</String>
+		<String ID="DownloadManager.Menu.ShowChangeLog">Show change log</String>
+		<String ID="DownloadManager.Menu.ResetDownloadLink">Reset download link</String>
+		<String ID="DownloadManager.Menu.VisitOnWebSite">Visit on %1</String>
+
+		<String ID="DownloadManager.Menu.Remove">Remove download</String>
+		<String ID="DownloadManager.Menu.RemoveAll">Remove all downloads</String>
+		<String ID="DownloadManager.Menu.RemoveInstalled">Remove all installed</String>
+
+		<String ID="DownloadManager.Menu.Hide">Hide</String>
+		<String ID="DownloadManager.Menu.Unhide">Unhide</String>
+		<String ID="DownloadManager.Menu.HideAll">Hide all downloads</String>
+		<String ID="DownloadManager.Menu.HideInstalled">Hide all installed downloads</String>
+		<String ID="DownloadManager.Menu.UnhideAll">Unhide all downloads</String>
+
+		<String ID="DownloadManager.Menu.AlwaysShowHidden">Always show hidden downloads</String>
+		<String ID="DownloadManager.Menu.ShowArchivesOnly">Show archives only</String>
+
+		<String ID="DownloadManager.Menu.CopyLink">Copy link</String>
+
+		<!-- VFS -->
+		<String ID="VFS.Caption">Virtual File System</String>
+
+		<String ID="VFS.Service.InitFailed">Failed to load the virtual file system library. Unable to continue.</String>
+		<String ID="VFS.Service.InstallCaption">Install virtual file system service</String>
+		<String ID="VFS.Service.InstallMessage">Virtual file system (VFS) service has not been installed. After this window has been closed, VFS service and driver will be installed.</String>
+		<String ID="VFS.Service.InstallFailed">Failed to install the virtual file system service.</String>
+		<String ID="VFS.Service.UnhandledException">Unhandled exception occurred in virtual file system (VFS) service. The service will be restarted.</String>
+
+		<String ID="VFS.MountingCaptionEnable">Mounting the virtual file system</String>
+		<String ID="VFS.MountingCaptionDisable">Unmounting the virtual file system</String>
+		<String ID="VFS.MountingMessage">This might take some time.</String>
+		<String ID="VFS.MountFailed">Failed to mount the virtual file system.</String>
+		<String ID="VFS.UnMountFailed">Failed to unmount virtual file system.</String>
+		<String ID="VFS.PrepareMountPointFailed">Failed to prepare the mount point.</String>
+
+		<String ID="VFS.MountPoint">Mount point</String>
+		<String ID="VFS.MountPointNotEmpty.Caption">File system can't be mounted in a folder that is not empty</String>
+		<String ID="VFS.MountPointNotEmpty.Message">Either delete this folder or delete all files from there and try again.</String>
+		<String ID="VFS.AskUnmountOnExit">Do you want to unmount VFS and exit the program?</String>
+
+		<String ID="VFS.Status.Active">Virtual file system is active</String>
+		<String ID="VFS.Status.Inactive">Virtual file system is not active</String>
+
+		<String ID="VFS.WriteMode.Caption">VFS writing mode</String>
+		<String ID="VFS.WriteMode.Disabled">Writing disabled</String>
+		<String ID="VFS.WriteMode.TargetFile">Overwrite</String>
+		<String ID="VFS.WriteMode.FileCopy">Write to a copy</String>
+
+		<String ID="VFS.ActiveProcesses.Caption">Active processes</String>
+		<String ID="VFS.ActiveProcesses.Message">Following applications were launched from the VFS. Close them and retry.</String>
+
+		<String ID="VFS.Error0">Virtual file system successfully mounted.</String>
+		<String ID="VFS.Error1">Unable to mount.</String>
+		<String ID="VFS.Error2">Invalid drive.</String>
+		<String ID="VFS.Error3">Unable to install the driver. The driver might not be installed.</String>
+		<String ID="VFS.Error4">Initialization error.</String>
+		<String ID="VFS.Error5">Unable to assign drive letter or mount point. This might be because mount point is not empty or is assigned to a different device.</String>
+		<String ID="VFS.Error6">Invalid mount point.</String>
+		<String ID="VFS.Error7">Incompatible version.</String>
+		<String ID="VFS.Error1000">Virtual file system is not running.</String>
+		<String ID="VFS.Error10000">Unknown error.</String>
+
+		<!-- GameData module -->
+		<String ID="GameDataModule.Name">Game data module</String>
+
+		<!-- PluginManager -->
+		<String ID="PluginManager.Name">Plugin manager</String>
+		<String ID="PluginManager.NameShort">Plugins</String>
+
+		<String ID="PluginManager.PluginCounter.Total">Total</String>
+		<String ID="PluginManager.PluginCounter.Active">Active</String>
+
+		<String ID="PluginManager.PluginType.Normal">Normal</String>
+		<String ID="PluginManager.PluginType.Master">Master</String>
+		<String ID="PluginManager.PluginType.Light">Light</String>
+
+		<String ID="PluginManager.ActivateAll">Activate all plugins</String>
+		<String ID="PluginManager.DeactivateAll">Deactivate all plugins</String>
+		<String ID="PluginManager.Sorting">Sorting</String>
+		<String ID="PluginManager.PluginDependencies">Plugin dependencies</String>
+		<String ID="PluginManager.DependentPlugins">Dependent plugins</String>
+
+		<String ID="PluginManager.Tools.ImportList">Import plugins list</String>
+		<String ID="PluginManager.Tools.ExportList">Export plugins list</String>
+		<String ID="PluginManager.Tools.ExportListActive">Export active plugins list</String>
+
+		<String ID="PluginManager.Sorting.Missing.Caption">Program "%1" could not be found on your computer</String>
+		<String ID="PluginManager.Sorting.Missing.Message">Specify the program's location to perform the sorting.</String>
+		<String ID="PluginManager.Sorting.Waiting.Caption">Waiting to complete</String>
+
+		<String ID="PluginManager.LootAPI.CanNotUpdateMasterlist">Can't update master list</String>
+
+		<!-- Screenshots Gallery -->
+		<String ID="ScreenshotsGallery.Name">Screenshot gallery</String>
+		<String ID="ScreenshotsGallery.NameShort">Screenshots</String>
+
+		<!-- Save Manager -->
+		<String ID="SaveManager.Name">Saves manager</String>
+		<String ID="SaveManager.NameShort">Saves</String>
+
+		<String ID="SaveManager.InvalidFile">Invalid file format</String>
+
+		<String ID="SaveManager.SyncPluginsList">Synchronize plugin list</String>
+		<String ID="SaveManager.SavePluginsList">Save plugin list</String>
+
+		<String ID="SaveManager.Filter.Saves">Saves</String>
+		<String ID="SaveManager.Filter.CoSaves">Complementary save files</String>
+		<String ID="SaveManager.Filter.Backups">Backups</String>
+
+		<String ID="SaveManager.List.File">File</String>
+		<String ID="SaveManager.List.Size">Size</String>
+		<String ID="SaveManager.List.ModificationDate">Date modified</String>
+
+		<String ID="SaveManager.InfoList.Label">Parameter</String>
+		<String ID="SaveManager.InfoList.Value">Value</String>
+
+		<String ID="SaveManager.Tab.BasicInfo">Info</String>
+		<String ID="SaveManager.Tab.PluginsList">Plugin list</String>
+
+		<String ID="SaveManager.Info.SaveIndex">Save</String>
+		<String ID="SaveManager.Info.SaveName">Save name</String>
+		<String ID="SaveManager.Info.GameVersion">Game version</String>
+		<String ID="SaveManager.Info.Language">Language</String>
+		<String ID="SaveManager.Info.Name">Name</String>
+		<String ID="SaveManager.Info.Level">Level</String>
+		<String ID="SaveManager.Info.Location">Location</String>
+		<String ID="SaveManager.Info.TimeInGame">Time played</String>
+		<String ID="SaveManager.Info.Sex">Sex</String>
+		<String ID="SaveManager.Info.SexMale">Male</String>
+		<String ID="SaveManager.Info.SexFemale">Female</String>
+		<String ID="SaveManager.Info.Race">Race</String>
+		<String ID="SaveManager.Info.Karma">Karma</String>
+
+		<!-- Packages module -->
+		<String ID="PackagesModule.Name">Packages module</String>
+
+		<!-- Package Manager -->
+		<String ID="PackageManager.Name">Package manager</String>
+		<String ID="PackageManager.CreatorName">Package creator</String>
+		<String ID="PackageManager.PackagesListName">Installation packages</String>
+
+		<String ID="PackageManager.ReqCategory.General">General</String>
+		<String ID="PackageManager.ReqCategory.DLC">DLC</String>
+		<String ID="PackageManager.ReqCategory.Conversions">Conversions</String>
+		<String ID="PackageManager.ReqCategory.Frameworks">Frameworks</String>
+		<String ID="PackageManager.ReqCategory.BodyReplacers">Body replacers</String>
+		<String ID="PackageManager.ReqCategory.Patches">Patches</String>
+		<String ID="PackageManager.ReqCategory.Extra">Extra</String>
+		<String ID="PackageManager.ReqCategory.Misc">Misc.</String>
+
+		<!-- Package Creator -->
+		<String ID="PackageCreator.MenuBar.Project">Project</String>
+		<String ID="PackageCreator.MenuBar.Import">Import</String>
+		<String ID="PackageCreator.MenuBar.Build">Build</String>
+
+		<String ID="PackageCreator.MenuProject.New">New</String>
+		<String ID="PackageCreator.MenuProject.Open">Open</String>
+		<String ID="PackageCreator.MenuProject.Save">Save</String>
+		<String ID="PackageCreator.MenuProject.SaveAs">Save as</String>
+		<String ID="PackageCreator.MenuProject.SaveAsFOMod">Save as FOMod</String>
+		<String ID="PackageCreator.MenuProject.SaveAsKMP">Save as KMP</String>
+
+		<String ID="PackageCreator.MenuImport.FOModXML">Import from FOMod (XML)</String>
+		<String ID="PackageCreator.MenuImport.Package">Import from installation package</String>
+
+		<String ID="PackageCreator.MenuBuild.Build">Build</String>
+		<String ID="PackageCreator.MenuBuild.UpdateInfo">Update info</String>
+		<String ID="PackageCreator.MenuBuild.Preview">Build for preview</String>
+
+		<String ID="PackageCreator.Build.Caption">Building "%1"</String>
+		<String ID="PackageCreator.Build.Complete">Build complete</String>
+		<String ID="PackageCreator.Build.BuildError">Failed to build</String>
+		<String ID="PackageCreator.Build.CheckError">Some errors have been found while checking the project</String>
+		<String ID="PackageCreator.Build.CheckError.PackagePath">Invalid installation package name</String>
+		<String ID="PackageCreator.Build.CheckError.MissingFiles">These files are missing</String>
+
+		<String ID="PackageCreator.NewProjectName">New project</String>
+		<String ID="PackageCreator.SaveChanges.Caption">Project not saved</String>
+		<String ID="PackageCreator.SaveChanges.Message">Do you want to save now?</String>
+		<String ID="PackageCreator.IDCollision">An element with this ID already exists in the project.</String>
+		<String ID="PackageCreator.InvalidFlagName">Invalid flag name</String>
+
+		<String ID="PackageCreator.AddFile">Add file</String>
+		<String ID="PackageCreator.AddMultipleFiles">Add files</String>
+		<String ID="PackageCreator.AddFolder">Add folder</String>
+		<String ID="PackageCreator.AddMultipleFolders">Add folders</String>
+		<String ID="PackageCreator.ImportFiles">Import files</String>
+		<String ID="PackageCreator.ImportFromFiles">Import from files</String>
+
+		<String ID="PackageCreator.ImportFOMod">Import FOMod</String>
+		<String ID="PackageCreator.ExportFOMod">Export FOMod</String>
+		<String ID="PackageCreator.ProjectFolder">Project folder</String>
+		<String ID="PackageCreator.NewStepDialog">Add new step</String>
+		<String ID="PackageCreator.NewGroupDialog">Add new group</String>
+		<String ID="PackageCreator.RemoveStepDialog">Are you sure you want to delete the step "%1"? All groups in this step will be deleted as well.</String>
+		<String ID="PackageCreator.RemoveGroupDialog">Are you sure you want to delete the group "%1"? All elements in this group will be deleted as well.</String>
+
+		<!-- Page: Info -->
+		<String ID="PackageCreator.PageInfo.Name">Information</String>
+
+		<String ID="PackageCreator.PageInfo.BasicInfo">Basic info</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.ID">Mod ID</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Name">Name</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Version">Version</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Author">Author</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Description">Description</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Tags">Tags</String>
+
+		<String ID="PackageCreator.PageInfo.BasicInfo.AdditionalData">Additional data</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Documents">Documents</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.TranslatedName">Localized name</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.Translatior">Localizer</String>
+		<String ID="PackageCreator.PageInfo.BasicInfo.UserData">User data</String>
+
+		<String ID="PackageCreator.PageInfo.Sites">Websites</String>
+		<String ID="PackageCreator.PageInfo.Sites.AdditionalSites">Additional websites</String>
+
+		<String ID="PackageCreator.PageInfo.Config">Settings</String>
+		<String ID="PackageCreator.PageInfo.Config.PackageOutputFile">Installation package file</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel">Compression level</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.None">None</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Fastest">Fastest</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Fast">Fast</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Normal">Normal</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Maximum">Maximum</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionLevel.Ultra">Ultra</String>
+
+		<String ID="PackageCreator.PageInfo.Config.CompressionAdvanced">Advanced compression configuration</String>
+		<String ID="PackageCreator.PageInfo.Config.CompressionMethod">Compression method</String>
+		<String ID="PackageCreator.PageInfo.Config.DictionarySize">Dictionary size</String>
+		<String ID="PackageCreator.PageInfo.Config.DictionarySize.Memory">Memory required for compression</String>
+		<String ID="PackageCreator.PageInfo.Config.UseMultithreadedCompression">Multithreaded compression</String>
+		<String ID="PackageCreator.PageInfo.Config.SolidArchive">Solid archive</String>
+
+		<!-- Page: FileData -->
+		<String ID="PackageCreator.PageFileData.Name">Files</String>
+		<String ID="PackageCreator.PageFileData.FolderContent">Folder contents</String>
+		<String ID="PackageCreator.PageFileData.ReplaceFolderContent">Replace folder content</String>
+
+		<String ID="PackageCreator.PageFileData.MainList">Files and folders</String>
+		<String ID="PackageCreator.PageFileData.MainList.InPackagePath">Location in the installer</String>
+		<String ID="PackageCreator.PageFileData.MainList.Source">Source</String>
+		<String ID="PackageCreator.PageFileData.MainList.Destination">Destination</String>
+
+		<!-- Page: Interface -->
+		<String ID="PackageCreator.PageInterface.Name">Interface</String>
+
+		<String ID="PackageCreator.PageInterface.ImageList">Image list</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Main">Main</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Header">Header</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Show">Show</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Value">File</String>
+		<String ID="PackageCreator.PageInterface.ImageList.Label">Description</String>
+
+		<!-- Page: Requirements -->
+		<String ID="PackageCreator.PageRequirements.Name">Requirements</String>
+		<String ID="PackageCreator.PageRequirements.Groups">Groups</String>
+		<String ID="PackageCreator.PageRequirements.DefaultGroups">Default groups</String>
+
+		<String ID="PackageCreator.PageRequirements.Type">Type</String>
+		<String ID="PackageCreator.PageRequirements.Type.System">System</String>
+		<String ID="PackageCreator.PageRequirements.Type.User">User</String>
+		<String ID="PackageCreator.PageRequirements.Type.Auto">Auto</String>
+		<String ID="PackageCreator.PageRequirements.CurrentVersion">Current version</String>
+		<String ID="PackageCreator.PageRequirements.RequiredVersion">Required version</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState">Required state</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.ModActive">Mod active</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.ModInactive">Mod inactive</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.PluginActive">Plugin active</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.PluginInactive">Plugin inactive</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.FileExist">File exists</String>
+		<String ID="PackageCreator.PageRequirements.RequiredState.FileNotExist">File doesn't exist</String>
+		<String ID="PackageCreator.PageRequirements.CurrentState">Current state</String>
+		<String ID="PackageCreator.PageRequirements.Object">Object</String>
+
+		<String ID="PackageCreator.PageRequirements.StdReqs">Standard requirements</String>
+
+		<!-- Page: Components -->
+		<String ID="PackageCreator.PageComponents.Name">Components</String>
+
+		<String ID="PackageCreator.PageComponents.Step">Step</String>
+		<String ID="PackageCreator.PageComponents.Group">Group</String>
+		<String ID="PackageCreator.PageComponents.Entry">Component</String>
+
+		<String ID="PackageCreator.PageComponents.AddStep">Add step</String>
+		<String ID="PackageCreator.PageComponents.AddGroup">Add group</String>
+		<String ID="PackageCreator.PageComponents.AddEntry">Add component</String>
+		<String ID="PackageCreator.PageComponents.AddEntriesFromFiles">Add components from files</String>
+
+		<String ID="PackageCreator.PageComponents.RemoveStep">Remove step</String>
+		<String ID="PackageCreator.PageComponents.RemoveGroup">Remove group</String>
+		<String ID="PackageCreator.PageComponents.RemoveEntry">Remove component</String>
+
+		<String ID="PackageCreator.PageComponents.AllSteps">All steps</String>
+		<String ID="PackageCreator.PageComponents.AllGroupsOf">All groups of "%1"</String>
+		<String ID="PackageCreator.PageComponents.AllEntriesOf">All components of "%1"</String>
+
+		<String ID="PackageCreator.PageComponents.FileData">Files</String>
+		<String ID="PackageCreator.PageComponents.Requirements">Requirements</String>
+		<String ID="PackageCreator.PageComponents.Image">Image</String>
+		<String ID="PackageCreator.PageComponents.Description">Description</String>
+		<String ID="PackageCreator.PageComponents.Conditions">Conditions</String>
+		<String ID="PackageCreator.PageComponents.ConditionFlags">Condition flags</String>
+
+		<String ID="PackageCreator.PageComponents.SelectionMode">Selection mode</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.Any">Any</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.ExactlyOne">Exactly one</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.AtLeastOne">At least one</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.AtMostOne">At most one</String>
+		<String ID="PackageCreator.PageComponents.SelectionMode.All">All</String>
+
+		<String ID="PackageCreator.PageComponents.TypeDescriptor">Default type descriptor</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptorConditional">New type descriptor</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.Optional">Optional</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.Required">Required</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.Recommended">Recommended</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.CouldBeUsable">Could be usable</String>
+		<String ID="PackageCreator.PageComponents.TypeDescriptor.NotUsable">Not usable</String>
+
+		<String ID="PackageCreator.PageComponents.Advanced">Advanced</String>
+		<String ID="PackageCreator.PageComponents.RequiredFiles">Required files</String>
+		<String ID="PackageCreator.PageComponents.ConditionalInstall">Conditional install</String>
+
+		<String ID="PackageCreator.TypeDescriptor.Optional">This option is not required</String>
+		<String ID="PackageCreator.TypeDescriptor.Required">This option is required</String>
+		<String ID="PackageCreator.TypeDescriptor.Recommended">This component is optional but is recommended for the current configuration.</String>
+		<String ID="PackageCreator.TypeDescriptor.NotUsable">This component cannot be used in the current configuration. For example, some of the required mods are missing.</String>
+		<String ID="PackageCreator.TypeDescriptor.CouldBeUsable">This component can be used in the current configuration, but its correct operation is not guaranteed. For example, the versions of the required mods do not match.</String>
+
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Caption">Remove flag</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Message">
+			<![CDATA[Remove flag from the entire project? Deletion will remove all references to the flag in the project.
+
+You can also rename references to the deleted flag by adding a prefix in their name (%1).]]>
+		</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.Remove">Remove only</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveTrack">Remove in entire project</String>
+		<String ID="PackageCreator.Conditions.RemoveFlagDialog.RemoveRename">Rename</String>
+
+		<String ID="PackageCreator.Conditions.AddNewCondition">Add new condition</String>
+		<String ID="PackageCreator.Conditions.AddToCondition">Add to condition</String>
+		<String ID="PackageCreator.Conditions.RemoveCondition">Remove condition</String>
+		<String ID="PackageCreator.Conditions.RemoveFromCondition">Remove from condition</String>
+		<String ID="PackageCreator.Conditions.RemoveAll">Remove all conditions</String>
+
+		<!-- Install Wizard -->
+		<String ID="InstallWizard.WindowCaption">Installing "%1"</String>
+		<String ID="InstallWizard.CancelMessage">Are you sure you want to cancel the installation?</String>
+		<String ID="InstallWizard.InstallationComplete">"%1" successfully installed</String>
+		<String ID="InstallWizard.InstalledXOfY">%1 of %2 elements installed</String>
+		<String ID="InstallWizard.BackwardButton">Back</String>
+		<String ID="InstallWizard.ForwardButton">Next</String>
+		<String ID="InstallWizard.SelectDocumentHint">Select a document to browse</String>
+		<String ID="InstallWizard.SelectComponentHint">Select an element to view the description</String>
+		<String ID="InstallWizard.NoDescriptionHint">This element has no description</String>
+		<String ID="InstallWizard.InvalidStepsConfig.Caption">Invalid installation options</String>
+		<String ID="InstallWizard.InvalidStepsConfig.Message">Installation will be aborted.</String>
+		<String ID="InstallWizard.NoFiles.Caption">No files to install</String>
+		<String ID="InstallWizard.NoFiles.Message">
+			<![CDATA[Installation Wizard didn't find any valid files to install.
+
+This might be because:
+- Your $(GameShortName) copy and installed mods do not match this mod's requirements.
+- The components configuration is invalid. In order to solve this problem, contact either the mod's author or the installer's author.]]>
+		</String>
+		<String ID="InstallWizard.ChangeID.Invalid">Invalid ID</String>
+		<String ID="InstallWizard.ChangeID.Used">This ID is already used by "%1"</String>
+		<String ID="InstallWizard.CollectedFiles.Caption">Following files will be installed</String>
+
+		<String ID="InstallWizard.Page.Info">Information</String>
+		<String ID="InstallWizard.Page.Documnets">Documents</String>
+		<String ID="InstallWizard.Page.Screenshots">Screenshots</String>
+		<String ID="InstallWizard.Page.Requirements">Requirements</String>
+		<String ID="InstallWizard.Page.Components">Components</String>
+		<String ID="InstallWizard.Page.Installing">Install</String>
+		<String ID="InstallWizard.Page.Done">Done</String>
+
+		<String ID="InstallWizard.LoadFailed.Caption">Failed to load "%1" installation package</String>
+		<String ID="InstallWizard.LoadFailed.Message">The file might be corrupted, or its format is not supported.</String>
+
+		<String ID="InstallWizard.Reinstall.Caption">Mod reinstalling</String>
+		<String ID="InstallWizard.Reinstall.Message">
+			<![CDATA[This mod is already installed. To reinstall, it is recommended that you uninstall it and then run the installation again.
+
+Are you sure you want to reinstall this mod on top of the existing files?]]>
+		</String>
+	</StringTable>
+</Lang>

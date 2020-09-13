@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Lang>
+	<Info>
+		<Translator>Monday, Kerber</Translator>
+	</Info>
+	<StringTable>
+		<!-- Categories -->
+		<String ID="Category.Game">Game</String>
+		<String ID="Category.Graphics">Graphics</String>
+		<String ID="Category.Shadows">Shadows</String>
+		<String ID="Category.Water">Water</String>
+		<String ID="Category.Audio">Sound</String>
+		<String ID="Category.Gameplay">Gameplay</String>
+		<String ID="Category.Interface">Interface</String>
+		<String ID="Category.Vegetation">Vegetation</String>
+		<String ID="Category.LevelOfDetail">Level of Detail</String>
+		<String ID="Category.Grass">Grass</String>
+		<String ID="Category.Trees">Trees</String>
+		<String ID="Category.Misc">Misc</String>
+		<String ID="Category.Archives">Archives</String>
+		<String ID="Category.MemoryManagement">Memory management</String>
+		<String ID="Category.BackgroudLoading">Background loading</String>
+		<String ID="Category.Debug">Debug</String>
+		
+		<String ID="Category.Editor">Editor</String>
+		<String ID="Category.Messages">Messages</String>
+		
+		<String ID="Category.ENB">ENB</String>
+		<String ID="Category.General">General</String>
+		<String ID="Category.Effects">Effects</String>
+		<String ID="Category.Bloom">Bloom</String>
+		<String ID="Category.AmbientOcclusion">Ambient Occlusion</String>
+		<String ID="Category.ProxyLibrary">Proxy library</String>
+		<String ID="Category.FPSLimit">FPS limit</String>
+		<String ID="Category.Controls">Controls</String>
+		<String ID="Category.Antialiasing">Antialiasing</String>
+		<String ID="Category.Fixes">Fixes</String>
+		<String ID="Category.Performance">Performance</String>
+		<String ID="Category.Memory">Memory</String>
+		<String ID="Category.AdaptiveQuality">Adaptive quality</String>
+		<String ID="Category.Multihead">Multihead</String>
+		<String ID="Category.ColorCorrection">Color correction</String>
+		<String ID="Category.Weather">Weather</String>
+
+		<!-- Sample values -->
+		<String ID="SampleValue.IncreasedDetail">Increased detail</String>
+		
+		<String ID="SampleValue.Difficulty0">Novice</String>
+		<String ID="SampleValue.Difficulty1">Apprentice</String>
+		<String ID="SampleValue.Difficulty2">Adept</String>
+		<String ID="SampleValue.Difficulty3">Expert</String>
+		<String ID="SampleValue.Difficulty4">Master</String>
+		<String ID="SampleValue.Difficulty5">Legendary</String>
+
+		<String ID="SampleValue.Language.RUSSIAN">Russian</String>
+		<String ID="SampleValue.Language.ENGLISH">English</String>
+		<String ID="SampleValue.Language.GERMAN">German</String>
+		<String ID="SampleValue.Language.FRENCH">French</String>
+		<String ID="SampleValue.Language.CZECH">Czech</String>
+		<String ID="SampleValue.Language.ITALIAN">Italian</String>
+		<String ID="SampleValue.Language.POLISH">Polish</String>
+		<String ID="SampleValue.Language.SPANISH">Spanish</String>
+		<String ID="SampleValue.Language.CHINESE">Chinese</String>
+		<String ID="SampleValue.Language.DANISH">Danish</String>
+		<String ID="SampleValue.Language.FINNISH">Finnish</String>
+		<String ID="SampleValue.Language.GREEK">Greek</String>
+		<String ID="SampleValue.Language.JAPANESE">Japanese</String>
+		<String ID="SampleValue.Language.NORWEGIAN">Norwegian</String>
+		<String ID="SampleValue.Language.PORTUGUESE">Portuguese</String>
+		<String ID="SampleValue.Language.SWEDISH">Swedish</String>
+		<String ID="SampleValue.Language.TURKISH">Turkish</String>
+
+		<!-- Graphics -->
+		<String ID="ValueName.sD3DDevice">Graphics adapter</String>
+		<String ID="ValueName.bFull Screen">Fullscreen mode</String>
+		<String ID="ValueName.bFXAAEnabled">Enable FXAA</String>
+		<String ID="ValueName.iPresentInterval">Vertical synchronization</String>
+		<String ID="ValueName.bTransparencyMultisampling">Transparency multisampling</String>
+		<String ID="ValueName.bDoHighDynamicRange">Use HDR</String>
+		<String ID="ValueName.bUseBlurShader">Use blur shader</String>
+		<String ID="ValueName.bDoDepthOfField">Depth of field</String>
+		<String ID="ValueName.bDoRadialBlur">Radial blur</String>
+		<String ID="ValueName.bDisableAllGore">Disable all gore</String>
+		<String ID="ValueName.bBloodSplatterEnabled">Blood splatter</String>
+		<String ID="ValueName.bFloatPointRenderTarget">bFloatPointRenderTarget</String>
+		<String ID="ValueName.iMultiSample">Antialiasing</String>
+		<String ID="ValueName.iMaxAnisotropy">Anisotropic filtering</String>
+		<String ID="ValueName.iTexMipMapSkip">Texture quality</String>
+		<String ID="ValueName.fGamma">Gamma</String>
+		
+		<String ID="ValueName.ScreenResolution">Screen resolution</String>
+		<String ID="ValueName.iSize W">Screen width</String>
+		<String ID="ValueName.iSize H">Screen height</String>
+
+		<!-- Shadows -->
+		<String ID="ValueName.bTreesReceiveShadows">Shadows on trees</String>
+		<String ID="ValueName.bDrawLandShadows">Land shadows</String>
+		<String ID="ValueName.bActorSelfShadowing">Actor self shadowing</String>
+		<String ID="ValueName.iShadowMapResolution">Shadow resolution</String>
+		<String ID="ValueName.iBlurDeferredShadowMask">Shadow blur</String>
+		<String ID="ValueName.iShadowMaskQuarter">Shadow detail</String>
+		<String ID="ValueName.fShadowDistance">Shadow distance</String>
+		<String ID="ValueName.fInteriorShadowDistance">Shadow distance in interiors</String>
+		<String ID="ValueName.fShadowBiasScale">Shadow bias scale</String>
+		<String ID="ValueName.fSunUpdateThreshold">Shadow update frequency</String>
+		<String ID="ValueName.fSunShadowUpdateTime">Shadow update time</String>
+
+		<!-- Water -->
+		<String ID="ValueName.bUseWaterReflections">Water reflections</String>
+		<String ID="ValueName.bReflectLODObjects">Reflect objects</String>
+		<String ID="ValueName.bReflectLODLand">Reflect land</String>
+		<String ID="ValueName.bReflectSky">Reflect sky</String>
+		<String ID="ValueName.bReflectLODTrees">Reflect trees</String>
+		<String ID="ValueName.bUseWaterRefractions">Water refractions</String>
+		<String ID="ValueName.bUseWaterDepth">Water depth</String>
+		<String ID="ValueName.bUseWaterDisplacements">Water displacements</String>
+		<String ID="ValueName.iWaterMultiSamples">Water antialiasing</String>
+		
+		<String ID="ValueName.WaterReflectionResolution">Water reflections resolution</String>
+		<String ID="ValueName.iWaterReflectWidth">Width</String>
+		<String ID="ValueName.iWaterReflectHeight">Height</String>
+
+		<!-- Audio -->
+		<String ID="ValueName.bEnableAudio">Enable audio</String>
+		<String ID="ValueName.fAudioMasterVolume">Master volume</String>
+		<String ID="ValueName.fVal0">Effects</String>
+		<String ID="ValueName.fVal1">Footsteps</String>
+		<String ID="ValueName.fVal2">Voice</String>
+		<String ID="ValueName.fVal3">Music</String>
+		<String ID="ValueName.fVal4">NPC footsteps</String>
+		<String ID="ValueName.fVal5">Menu</String>
+		<String ID="ValueName.fVal6">Magic</String>
+		<String ID="ValueName.fVal7">Voice</String>
+
+		<!-- Gameplay -->
+		<String ID="ValueName.bGamepadEnable">Enable gamepad</String>
+		<String ID="ValueName.bGamePadRumble">Vibration</String>
+		<String ID="ValueName.bSaveOnPause">Save in pause menu</String>
+		<String ID="ValueName.bSaveOnWait">Save on wait</String>
+		<String ID="ValueName.bSaveOnTravel">Save on fast travel</String>
+		<String ID="ValueName.bSaveOnRest">Save on rest</String>
+		<String ID="ValueName.iDifficulty">Difficulty</String>
+		<String ID="ValueName.fAutosaveEveryXMins">Autosave interval (min)</String>
+
+		<!-- Interface -->
+		<String ID="ValueName.sLanguage">Language</String>
+		<String ID="ValueName.bDialogueSubtitles">Dialogue subtitles</String>
+		<String ID="ValueName.bGeneralSubtitles">General subtitles</String>
+		<String ID="ValueName.bShowCompass">Show compass</String>
+		<String ID="ValueName.bShowQuestMarkers">Show quest markers</String>
+		<String ID="ValueName.bShowFloatingQuestMarkers">Show floating quest markers</String>
+		<String ID="ValueName.bCrosshairEnabled">Enable crosshair</String>
+		<String ID="ValueName.bShowHUDMessages">Show HUD messages</String>
+		<String ID="ValueName.bShowTutorials">Show tutorial messages</String>
+		<String ID="ValueName.bShowSubtitleSpeakerName">Show speaker name in subtitles</String>
+		<String ID="ValueName.bTrackProgress">Level progress bar</String>
+		<String ID="ValueName.bHealthBarShowing">Enemy health bar</String>
+		<String ID="ValueName.fHUDOpacity">HUD Opacity</String>
+		<String ID="ValueName.fMaxSubtitleDistance">Subtitle visibility distance</String>
+		<String ID="ValueName.fMouseCursorSpeed">Mouse speed</String>
+		<String ID="ValueName.sIntroSequence">Intro sequence</String>
+
+		<!-- Vegetation -->
+		<String ID="ValueName.bAllowCreateGrass">Enable grass</String>
+		<String ID="ValueName.bGrassPointLighting">Point lighting</String>
+		<String ID="ValueName.bDrawShaderGrass">Improved grass shader</String>
+		<String ID="ValueName.fGrassFadeRange">Grass fade</String>
+		<String ID="ValueName.iMinGrassSize">Grass density</String>
+		<String ID="ValueName.iMaxGrassTypesPerTexure">Grass diversity</String>
+		<String ID="ValueName.bRenderSkinnedTrees">Skinned trees</String>
+		<String ID="ValueName.uiMaxSkinnedTreesToRender">Maximum skinned trees</String>
+		<String ID="ValueName.fTreeLoadDistance">Tree fade</String>
+
+		<!-- Level of Detail -->
+		<String ID="ValueName.bPrecipitation">Weather</String>
+		<String ID="ValueName.bDecals">Enable decals</String>
+		<String ID="ValueName.fLODFadeOutMultObjects">Object fade</String>
+		<String ID="ValueName.fLODFadeOutMultItems">Item fade</String>
+		<String ID="ValueName.fLODFadeOutMultActors">Actor fade</String>
+		<String ID="ValueName.fSkyCellRefFadeDistance">Clouds fade</String>
+		<String ID="ValueName.fBlockMaximumDistance">fBlockMaximumDistance</String>
+		<String ID="ValueName.fBlockLevel1Distance">fBlockLevel1Distance</String>
+		<String ID="ValueName.fBlockLevel0Distance">fBlockLevel0Distance</String>
+		<String ID="ValueName.fSplitDistanceMult">fSplitDistanceMult</String>
+		<String ID="ValueName.uGridsToLoad">Grids to load</String>
+		<String ID="ValueName.iMaxDesired">Decal count</String>
+		<String ID="ValueName.fTreesMidLODSwitchDist">Tree detail</String>
+
+		<!-- Misc -->
+		<String ID="ValueName.bAlwaysRunByDefault">Always run by default</String>
+		<String ID="ValueName.bMouseAcceleration">Mouse acceleration</String>
+		<String ID="ValueName.bInvertYValues">Invert Y axis</String>
+		<String ID="ValueName.bEnableFileSelection">Enable plugin selection in $(GameShortName) Launcher</String>
+		<String ID="ValueName.bAllowScreenshot">Allow screenshot</String>
+		<String ID="ValueName.bAlwaysActive">Always active</String>
+		<String ID="ValueName.bPreemptivelyUnloadCells">Preemptively unload cells</String>
+		<String ID="ValueName.bPreCullActors">Preemptively cull actors</String>
+		<String ID="ValueName.bSelectivePurgeUnusedOnFastTravel">Selective purge unused on fast travel</String>
+		<String ID="ValueName.bEnableLogging">Enable logging</String>
+		<String ID="ValueName.bEnableTrace">Enable tracing</String>
+		<String ID="ValueName.bEnableProfiling">Enable profiling</String>
+		<String ID="ValueName.bEnableStoryManagerLogging">Enable story manager</String>
+		<String ID="ValueName.bUseBackgroundFileLoader">Use background file loader</String>
+		<String ID="ValueName.bBackgroundLoadLipFiles">Load lip files in background</String>
+		<String ID="ValueName.bLoadBackgroundFaceGen">Load FaceGen in background</String>
+		<String ID="ValueName.bUseMultiThreadedFaceGen">Use multithreaded FaceGen</String>
+		<String ID="ValueName.bBackgroundCellLoads">Load cells in background</String>
+		<String ID="ValueName.bLoadHelmetsInBackground">Load helmets in background</String>
+		<String ID="ValueName.bUseMultiThreadedTrees">Use multithreaded trees</String>
+		<String ID="ValueName.fMouseHeadingSensitivity">Mouse sensitivity</String>
+		<String ID="ValueName.fMouseWheelZoomSpeed">Camera zoom speed</String>
+		<String ID="ValueName.iScreenShotIndex">Screenshot index</String>
+		<String ID="ValueName.fInAirFallingCharGravityMult">Falling speed</String>
+		<String ID="ValueName.bInvalidateOlderFiles">Archive invalidation</String>
+
+		<!-- ENB: General -->
+		<String ID="ValueName.MaxAnisotropy">Anisotropic filtering</String>
+		<String ID="ValueName.ForceAnisotropicFiltering">Force anisotropic filtering</String>
+		<String ID="ValueName.UseDefferedRendering">Deferred rendering</String>
+		<String ID="ValueName.ForceBorderless">Borderless window</String>
+		<String ID="ValueName.ForceBorderlessFullscreen">Borderless fullscreen window</String>
+		<String ID="ValueName.EnableVSync">Vertical synchronization</String>
+		<String ID="ValueName.VSyncSkipNumFrames">Number of frames skipped when vertical synchronization is enabled</String>
+		<String ID="ValueName.ForceLodBias">Use LOD bias</String>
+		<String ID="ValueName.LodBias">LOD bias</String>
+		<String ID="ValueName.AddDisplaySuperSamplingResolutions">Enable downsampling</String>
+
+		<!-- ENB: Effects -->
+		<String ID="ValueName.UseEffect">Enable graphical effects</String>
+		<String ID="ValueName.UseOriginalPostProcessing">Enable original post processing</String>
+		<String ID="ValueName.UseOriginalObjectsProcessing">Enable original objects processing</String>
+		<String ID="ValueName.EnableAdaptation">Enable adaptation</String>
+		<String ID="ValueName.EnableAmbientOcclusion">Enable ambient occlusion (AO)</String>
+		<String ID="ValueName.EnableDepthOfField">Enable depth of field</String>
+		<String ID="ValueName.EnableDetailedShadow">Enable detailed shadows</String>
+		<String ID="ValueName.EnableCloudShadows">Enable cloud shadows</String>
+		<String ID="ValueName.EnableImageBasedLighting">Enable image based lighting</String>
+		<String ID="ValueName.EnableSunRays">Enable sun rays</String>
+		<String ID="ValueName.EnableSunGlare">Enable sun glare</String>
+		<String ID="ValueName.EnableSkyLighting">Enable sky lighting</String>
+		<String ID="ValueName.EnableReflection">Enable reflection</String>
+		<String ID="ValueName.EnableLens">Enable lens</String>
+		<String ID="ValueName.EnableMist">Enable mist</String>
+		<String ID="ValueName.EnableParticleLights">Enable particle lights</String>
+		<String ID="ValueName.EnableSoftParticles">Enable soft particles</String>
+		<String ID="ValueName.EnableProceduralSun">Enable procedural sun</String>
+		<String ID="ValueName.EnableSubSurfaceScattering">Enable subsurface scattering (SSS)</String>
+		<String ID="ValueName.EnableWater">Enable water effects</String>
+		<String ID="ValueName.EnableUnderwater">Enable underwater effects</String>
+		<String ID="ValueName.EnableVolumetricRays">Enable volumetric rays</String>
+
+		<!-- ENB: Bloom -->
+		<String ID="ValueName.EnableBloom">Enable bloom</String>
+		<String ID="ValueName.BloomQuality">Bloom quality</String>
+
+		<!-- ENB: Ambient Occlusion -->
+		<String ID="ValueName.UseIndirectLighting">Use indirect lighting (IL)</String>
+		<String ID="ValueName.UseComplexIndirectLighting">Use complex indirect lighting</String>
+		<String ID="ValueName.UseComplexAmbientOcclusion">Use complex AO</String>
+		<String ID="ValueName.UseAmbientIndirectLighting">Use ambient IL</String>
+		<String ID="ValueName.SamplingQuality">Sampling quality</String>
+		<String ID="ValueName.FilterQuality">Filter quality</String>
+		<String ID="ValueName.FilterType">Filter type</String>
+		<String ID="ValueName.SamplingRange">Sampling range</String>
+		<String ID="ValueName.SamplingPrecision">Sampling precision</String>
+		<String ID="ValueName.EnableDenoiser">Enable denoiser</String>
+		<String ID="ValueName.EnableSupersampling">Enable supersampling</String>
+		<String ID="ValueName.EnableComplexFilter">Enable complex filter</String>
+		<String ID="ValueName.AOType">AO type</String>
+		<String ID="ValueName.ILType">IL type</String>
+		<String ID="ValueName.AOMixingType">AO mixing type</String>
+		<String ID="ValueName.AOMixingTypeInterior">AO mixing type in interiors</String>
+
+		<!-- ENB: Shadows -->
+		<String ID="ValueName.UseShadowFilter">Use shadow filter</String>
+		<String ID="ValueName.ShadowObjectsFix">Shadow objects fix</String>
+		<String ID="ValueName.ShadowCastersFix">Shadow casters fix</String>
+		<String ID="ValueName.UseBilateralShadowFilter">Use bilateral shadow filter</String>
+		<String ID="ValueName.ShadowQualityFix">Shadow quality fix</String>
+		<String ID="ValueName.ShadowFilterQuality">Shadow filter quality</String>
+		<String ID="ValueName.DetailedShadowQuality">Detailed Shadow quality</String>
+		<String ID="ValueName.ShadowBlurRange">Shadow blur range</String>
+		<String ID="ValueName.ShadowBlurRangeInterior">Shadow blur range in interiors</String>
+
+		<!-- ENB: FPS Limit -->
+		<String ID="ValueName.EnableFPSLimit">Enable FPS limit</String>
+		<String ID="ValueName.WaitBusyRenderer">Wait busy renderer</String>
+		<String ID="ValueName.FPSLimit">FPS limit</String>
+
+		<!-- ENB: ProxyLibrary -->
+		<String ID="ValueName.EnableProxyLibrary">Enable proxy library</String>
+		<String ID="ValueName.InitProxyFunctions">Initialize proxy functions</String>
+		<String ID="ValueName.ProxyLibrary">Proxy library</String>
+
+		<!-- ENB: Controls -->
+		<String ID="ValueName.KeyReadConfig">Read configuration</String>
+		<String ID="ValueName.KeyCombination">Combination</String>
+		<String ID="ValueName.KeyUseEffect">Use effects</String>
+		<String ID="ValueName.KeyFPSLimit">FPS limit</String>
+		<String ID="ValueName.KeyShowFPS">Show FPS</String>
+		<String ID="ValueName.KeyScreenshot">Take screenshot</String>
+		<String ID="ValueName.KeyEditor">Show editor</String>
+		<String ID="ValueName.KeyFreeVRAM">Free VRAM</String>
+		<String ID="ValueName.KeyBruteForce">Activate "Brute Force" preset</String>
+		
+		<!-- ENB: Fixes -->
+		<String ID="ValueName.FixPhysics">Fix physics</String>
+		<String ID="ValueName.FixGameBugs">Fix game bugs</String>
+		<String ID="ValueName.FixParallaxBugs">Fix parallax bugs</String>
+		<String ID="ValueName.FixAliasedTextures">Fix aliased textures</String>
+		<String ID="ValueName.IgnoreLoadingScreen">Ignore loading screens</String>
+		<String ID="ValueName.IgnoreInventory">Ignore inventory</String>
+		<String ID="ValueName.FixSsaoWaterTransparency">Fix SSAO water transparency</String>
+		<String ID="ValueName.FixSsaoHairTransparency">Fix SSAO hair transparency</String>
+		<String ID="ValueName.FixTintGamma">Fix tint gamma</String>
+		<String ID="ValueName.RemoveBlur">Remove blur</String>
+		<String ID="ValueName.FixSubSurfaceScattering">Fix subsurface scattering (SSS)</String>
+		<String ID="ValueName.FixParallaxTerrain">Fix terrain parallax </String>
+		<String ID="ValueName.FixSkyReflection">Fix sky reflection</String>
+		<String ID="ValueName.FixCursorVisibility">Fix cursor visibility</String>
+		<String ID="ValueName.FixLag">Fix lag</String>
+		<String ID="ValueName.IgnoreCreationKit">Ignore $(GameEditorName)</String>
+
+		<!-- ENB: Antialiasing -->
+		<String ID="ValueName.EnableEdgeAA">Enable edge AA</String>
+		<String ID="ValueName.EnableSubPixelAA">Enable subpixel AA</String>
+		<String ID="ValueName.EnableTemporalAA">Enable temporal AA</String>
+
+		<!-- ENB: Performance -->
+		<String ID="ValueName.UsePatchSpeedhackWithoutGraphics">Use patch speedhack without graphics</String>
+		<String ID="ValueName.SpeedHack">SpeedHack</String>
+		<String ID="ValueName.EnableOcclusionCulling">Enable occlusion culling</String>
+		<String ID="ValueName.DataSyncMode">Data sync mode</String>
+		<String ID="ValueName.PriorityMode">Priority mode</String>
+
+		<!-- ENB: Memory -->
+		<String ID="ValueName.ExpandSystemMemoryX64">Expand system memory x64</String>
+		<String ID="ValueName.ReduceSystemMemoryUsage">Reduce system memory usage</String>
+		<String ID="ValueName.DisableDriverMemoryManager">Disable driver memory manager</String>
+		<String ID="ValueName.DisablePreloadToVRAM">Disable preload to VRAM</String>
+		<String ID="ValueName.ReservedMemorySizeMb">Reserved memory Size (Mb)</String>
+		<String ID="ValueName.AutodetectVideoMemorySize">Autodetect video memory Size</String>
+		<String ID="ValueName.VideoMemorySizeMb">Video memory Size (Mb)</String>
+		<String ID="ValueName.EnableCompression">Enable compression</String>
+		<String ID="ValueName.EnableUnsafeMemoryHacks">Enable unsafe memory hacks</String>
+
+		<!-- ENB: AdaptiveQuality -->
+		<String ID="ValueName.EnableAdaptiveQuality">Enable adaptive quality</String>
+		<String ID="ValueName.AdaptiveQuality">Adaptive quality</String>
+		<String ID="ValueName.AdaptiveQualityDesiredFPS">Desired FPS</String>
+
+		<!-- ENB: ColorCorrection -->
+		<String ID="ValueName.UsePaletteTexture">Use palette texture</String>
+		<String ID="ValueName.UseProceduralCorrection">Use procedural correction</String>
+		<String ID="ValueName.Brightness">Brightness</String>
+		<String ID="ValueName.GammaCurve">Gamma</String>
+
+		<!-- ENB: Multihead -->
+		<String ID="ValueName.ForceVideoAdapterIndex">Use selected video adapter</String>
+		<String ID="ValueName.VideoAdapterIndex">Video adapter index</String>
+
+		<!-- ENB: Weather -->
+		<String ID="ValueName.EnableMultipleWeathers">Enable multiple weathers</String>
+		<String ID="ValueName.EnableLocationWeather">Enable location weather</String>
+	</StringTable>
+</Lang>

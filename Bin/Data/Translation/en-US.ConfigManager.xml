@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Lang>
+	<Info>
+		<Translator>Monday, Kerber</Translator>
+	</Info>
+	<StringTable>
+		<String ID="ConfigManager.Menu.EditValue">Edit value</String>
+		<String ID="ConfigManager.Menu.DiscardChange">Discard change</String>
+		<String ID="ConfigManager.Menu.CreateValue">Add parameter</String>
+		<String ID="ConfigManager.Menu.RemoveValue">Delete parameter</String>
+
+		<String ID="ConfigManager.View.Path">Path</String>
+		<String ID="ConfigManager.View.Name">Parameter</String>
+		<String ID="ConfigManager.View.Type">Type</String>
+		<String ID="ConfigManager.View.Value">Value</String>
+		<String ID="ConfigManager.View.EmptyStringValue">Empty string</String>
+
+		<String ID="ConfigManager.VirtualKey.VK_NONE">Not assigned</String>
+		<String ID="ConfigManager.VirtualKey.VK_LBUTTON">Left mouse button</String>
+		<String ID="ConfigManager.VirtualKey.VK_RBUTTON">Right mouse button</String>
+		<String ID="ConfigManager.VirtualKey.VK_MBUTTON">Middle mouse button</String>
+		<String ID="ConfigManager.VirtualKey.VK_XBUTTON1">Mouse button X1</String>
+		<String ID="ConfigManager.VirtualKey.VK_XBUTTON2">Mouse button X2</String>
+		<String ID="ConfigManager.VirtualKey.VK_SPACE">Space</String>
+		<String ID="ConfigManager.VirtualKey.VK_LWIN">Left Windows key</String>
+		<String ID="ConfigManager.VirtualKey.VK_RWIN">Right Windows key</String>
+		<String ID="ConfigManager.VirtualKey.VK_LSHIFT">Left Shift</String>
+		<String ID="ConfigManager.VirtualKey.VK_RSHIFT">Right Shift</String>
+		<String ID="ConfigManager.VirtualKey.VK_LCONTROL">Left Ctrl</String>
+		<String ID="ConfigManager.VirtualKey.VK_RCONTROL">Right Ctrl</String>
+		<String ID="ConfigManager.VirtualKey.VK_LMENU">Left Alt</String>
+		<String ID="ConfigManager.VirtualKey.VK_RMENU">Right Alt</String>
+		<String ID="ConfigManager.VirtualKey.VK_LEFT">Page Left</String>
+		<String ID="ConfigManager.VirtualKey.VK_UP">Page Up</String>
+		<String ID="ConfigManager.VirtualKey.VK_RIGHT">Page Right</String>
+		<String ID="ConfigManager.VirtualKey.VK_DOWN">Page Down</String>
+
+		<!-- Categories -->
+		<String ID="Category.None">Unknown parameters</String>
+		<String ID="Category.General">General</String>
+		<String ID="Category.Global">Global parameters</String>
+		<String ID="Category.Instance">Instance parameters</String>
+		<String ID="Category.Variables">Variables</String>
+		<String ID="Category.DownloadManager">Download manager</String>
+		<String ID="Category.PackageManager">Package manager</String>
+		<String ID="Category.VirtualFileSystem">Virtual file system (VFS)</String>
+
+		<String ID="SampleValue.None">None</String>
+		<String ID="SampleValue.VeryLow">Very low</String>
+		<String ID="SampleValue.Low">Low</String>
+		<String ID="SampleValue.Mid">Medium</String>
+		<String ID="SampleValue.High">High</String>
+		<String ID="SampleValue.VeryHigh">Very high</String>
+		<String ID="SampleValue.Ultra">Ultra</String>
+		<String ID="SampleValue.Extreme">Extreme</String>
+		<String ID="SampleValue.VideoMode.RatioUnknown">Unknown aspect ratio</String>
+	</StringTable>
+</Lang>

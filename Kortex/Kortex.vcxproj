@@ -844,24 +844,24 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
-    <TargetName>$(ProjectName) x64</TargetName>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -872,7 +872,7 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LibLoot;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\7z\CPP;$(SolutionDir)..\7zip-cpp\7z\C;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)Libraries\LibLoot\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
@@ -883,12 +883,13 @@
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <AdditionalDependencies>delayimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACUIAccess>false</UACUIAccess>
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"
+copy /Y "$(VcpkgCurrentInstalledDir)bin\KxVirtualFileSystem.dll" "$(SolutionDir)Bin\KxVirtualFileSystem $(PlatformShortName).dll"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
     <Manifest>
@@ -915,7 +916,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(ProjectDir)Source\GameDataModule\PluginManager\LibLoot;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\7z\CPP;$(SolutionDir)..\7zip-cpp\7z\C;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)Libraries\LibLoot\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
@@ -926,12 +927,13 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <ShowProgress>NotSet</ShowProgress>
       <DelayLoadDLLs>loot.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <AdditionalDependencies>delayimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACUIAccess>false</UACUIAccess>
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"
+copy /Y "$(VcpkgCurrentInstalledDir)bin\KxVirtualFileSystem.dll" "$(SolutionDir)Bin\KxVirtualFileSystem $(PlatformShortName).dll"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
     <Manifest>
@@ -960,7 +962,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)Libraries\LibLoot\Include;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\7z\CPP;$(SolutionDir)..\7zip-cpp\7z\C;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)Libraries\LibLoot\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
@@ -984,7 +986,8 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"
+copy /Y "$(VcpkgCurrentInstalledDir)bin\KxVirtualFileSystem.dll" "$(SolutionDir)Bin\KxVirtualFileSystem $(PlatformShortName).dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying to Bin</Message>
@@ -1015,7 +1018,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)Libraries\LibLoot\Include;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\7zip-cpp\7z\CPP;$(SolutionDir)..\7zip-cpp\7z\C;$(SolutionDir)..\7zip-cpp\Include;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)Libraries\LibLoot\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4275</DisableSpecificWarnings>
     </ClCompile>
@@ -1035,7 +1038,8 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\Kortex\Git\LatestCommit.txt"</Command>
       <UACUIAccess>false</UACUIAccess>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)Bin\$(TargetName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"
+copy /Y "$(VcpkgCurrentInstalledDir)bin\KxVirtualFileSystem.dll" "$(SolutionDir)Bin\KxVirtualFileSystem $(PlatformShortName).dll"</Command>
       <Message>Copying to Bin</Message>
     </PostBuildEvent>
     <Manifest>

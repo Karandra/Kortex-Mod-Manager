@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definition GameID="Sacred2" SortOrder="110200">
+	<Name ShortName="Sacred 2">Sacred 2: Fallen Angel</Name>
+	
+	<Variables>
+		<!--Required-->
+		<Item ID="ActualGameDir" Source="Registry" Type="FSPath" SaveAsOverride="1">
+			<Branch>32</Branch>
+			<Root>HKEY_LOCAL_MACHINE</Root>
+			<Path>SOFTWARE\Ascaron Entertainment\Sacred 2</Path>
+			<Name>InstallPath</Name>
+			<Type>REG_SZ</Type>
+		</Item>
+		<Item ID="ActualConfigDir">$SHF(SAVED_GAMES)\Ascaron Entertainment\Sacred 2</Item>
+
+		<Item ID="SteamID" Type="Integer">225640</Item>
+		<Item ID="NexusDomainName">Sacred2</Item>
+	</Variables>>
+	
+	<GameMods>
+		<ModManager>
+			<MirroredLocations>
+				<Item>
+					<Sources>
+						<Item>$(SavesDir)</Item>
+						<!--<Item>$(ConfigDir)</Item>-->
+					</Sources>
+					<Target>$(ActualConfigDir)</Target>
+				</Item>
+			</MirroredLocations>
+		</ModManager>
+		<TagManager>
+			<DefaultTags>
+				<Item ID="Animation">
+					<NexusID>51</NexusID>
+				</Item>
+				<Item ID="Armor">
+					<NexusID>54</NexusID>
+				</Item>
+				<Item ID="Clothing">
+					<NexusID>60</NexusID>
+				</Item>
+				<Item ID="Jewelry">
+					<NexusID>102</NexusID>
+				</Item>
+				<Item ID="Weapons">
+					<NexusID>55</NexusID>
+				</Item>
+				<Item ID="Gameplay">
+					<NexusID>24</NexusID>
+				</Item>
+				<Item ID="Immersion">
+					<NexusID>78</NexusID>
+				</Item>
+				<Item ID="Environment">
+					<NexusID>74</NexusID>
+				</Item>
+				<Item ID="SkillsAndLeveling">
+					<NexusID>73</NexusID>
+				</Item>
+				<Item ID="GuildsAndFactions">
+					<NexusID>25</NexusID>
+				</Item>
+				<Item ID="Stealth">
+					<NexusID>76</NexusID>
+				</Item>
+				<Item ID="Combat">
+					<NexusID>77</NexusID>
+				</Item>
+				<Item ID="Crafting">
+					<NexusID>100</NexusID>
+				</Item>
+				<Item ID="Magic">
+					<NexusID>75</NexusID>
+				</Item>
+				<Item ID="MagicGameplay">
+					<NexusID>93</NexusID>
+				</Item>
+				<Item ID="BooksAndScrolls">
+					<NexusID>98</NexusID>
+				</Item>
+				<Item ID="Alchemy">
+					<NexusID>94</NexusID>
+				</Item>
+				<Item ID="Quests">
+					<NexusID>35</NexusID>
+				</Item>
+				<Item ID="Buildings">
+					<NexusID>95</NexusID>
+				</Item>
+				<Item ID="Settlements">
+					<NexusID>53</NexusID>
+				</Item>
+				<Item ID="Mercantiles">
+					<NexusID>69</NexusID>
+				</Item>
+				<Item ID="NewLands">
+					<NexusID>30</NexusID>
+				</Item>
+				<Item ID="Dungeons">
+					<NexusID>88</NexusID>
+				</Item>
+				<Item ID="AbandonedStructures">
+					<NexusID>70</NexusID>
+				</Item>
+				<Item ID="PlayerHomes">
+					<NexusID>67</NexusID>
+				</Item>
+				<Item ID="Landscape">
+					<NexusID>58</NexusID>
+				</Item>
+				<Item ID="Overhauls">
+					<NexusID>79</NexusID>
+				</Item>
+				<Item ID="Conversions">
+					<NexusID>-1</NexusID>
+				</Item>
+				<Item ID="Audio">
+					<NexusID>61</NexusID>
+				</Item>
+				<Item ID="UserInterface">
+					<NexusID>42</NexusID>
+				</Item>
+				<Item ID="NPC">
+					<NexusID>33</NexusID>
+				</Item>
+				<Item ID="Body">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Face">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Hair">
+					<NexusID>26</NexusID>
+				</Item>
+				<Item ID="Races">
+					<NexusID>34</NexusID>
+				</Item>
+				<Item ID="Followers">
+					<NexusID>66</NexusID>
+				</Item>
+				<Item ID="Creatures">
+					<NexusID>83</NexusID>
+				</Item>
+				<Item ID="Mounts">
+					<NexusID>101</NexusID>
+				</Item>
+				<Item ID="ModelsAndTextures">
+					<NexusID>29</NexusID>
+				</Item>
+				<Item ID="Graphics">
+					<NexusID>62</NexusID>
+				</Item>
+				<Item ID="ENBPresets">
+					<NexusID>97</NexusID>
+				</Item>
+				<Item ID="Collectables">
+					<NexusID>92</NexusID>
+				</Item>
+				<Item ID="ItemsAndObjects">
+					<NexusID>85</NexusID>
+				</Item>
+				<Item ID="Cheats">
+					<NexusID>40</NexusID>
+				</Item>
+				<Item ID="Fixes">
+					<NexusID>95</NexusID>
+				</Item>
+				<Item ID="Utilities">
+					<NexusID>39</NexusID>
+				</Item>
+				<Item ID="Configuration">
+					<NexusID>116</NexusID>
+				</Item>
+				<Item ID="Resources">
+					<NexusID>82</NexusID>
+				</Item>
+				<Item ID="SaveGames">
+					<NexusID>43</NexusID>
+				</Item>
+				<Item ID="Misc">
+					<NexusID>28</NexusID>
+				</Item>
+			</DefaultTags>
+		</TagManager>
+	</GameMods>
+
+	<ProgramManager>
+		<Programs>
+			<Item>
+				<Name>$(GameShortName)</Name>
+				<Executable>System\Sacred2.exe</Executable>
+			</Item>
+		</Programs>
+	</ProgramManager>
+
+	<Programs>
+		<ProgramManager>
+			<DefaultPrograms>
+				<Item ShowInMainMenu="1">
+					<Name>$(GameShortName)</Name>
+					<Executable>System\Sacred2.exe</Executable>
+				</Item>
+			</DefaultPrograms>
+		</ProgramManager>
+	</Programs>
+
+	<GameData>
+		<ScreenshotsGallery>
+			<Locations>
+				<Item>$SHF(PICTURES)\Ascaron Entertainment\Sacred 2</Item>
+				<Item>$(ActualGameDir)</Item>
+				<Item>$(ActualGameDir)\Screenshots</Item>
+				<Item>$(ConfigDir)</Item>
+				<Item>$(ConfigDir)\Screenshots</Item>
+				<Item>$(OverwritesDir)</Item>
+				<Item>$(OverwritesDir)\Screenshots</Item>
+			</Locations>
+		</ScreenshotsGallery>
+
+		<SaveManager SaveFileFormat="Sacred2">
+			<Location>$(SavesDir)</Location>
+			<FileFilters>
+				<Item Label="$T(SaveManager.Filter.Saves) (*.sacred2save)">*.sacred2save</Item>
+				<Item Label="$T(SaveManager.Filter.Backups) (*.bak)">*.bak</Item>
+			</FileFilters>
+			<PrimaryExtension>sacred2save</PrimaryExtension>
+		</SaveManager>
+	</GameData>
+
+	<Packages>
+		<PackageManager>
+			<Requirements>
+				<!-- General -->
+				<Item ID="Sacred2" Category="$T(PackageManager.ReqCategory.General)">
+					<Name>$(GameName)</Name>
+					<Object Function="FileExist">System\Sacred2.exe</Object>
+					<Version Operator="GTEQ">2.65.1.0</Version>
+				</Item>
+				<Item ID="CommunityPatch" Category="$T(PackageManager.ReqCategory.General)">
+					<Name>Community Patch</Name>
+					<Object Function="ModActive"/>
+					<Dependencies>
+						<Item>$(GameID)</Item>
+					</Dependencies>
+				</Item>
+			</Requirements>
+		</PackageManager>
+	</Packages>
+</Definition>

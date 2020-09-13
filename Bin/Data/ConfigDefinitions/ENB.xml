@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definition>
+	<DataTypes>
+		<Item Type="bool">
+			<Input As="any"/>
+			<Output As="bool"/>
+		</Item>
+		<Item Type="int">
+			<Input As="any"/>
+			<Output As="int"/>
+		</Item>
+		<Item Type="float">
+			<Input As="any"/>
+			<Output As="float" Precision="2"/>
+		</Item>
+	</DataTypes>
+	
+	<TypeDetection>
+		<DataAnalysis/>
+	</TypeDetection>
+
+	<Options>
+		<SourceFormat Value="INI"/>
+		<TypeDetection Value="DataAnalysis"/>
+	</Options>
+
+	<Groups>
+		<Group ID="ENBLocal">
+			<!-- General -->
+			<Item Category="ENB/General" Path="ENGINE" Name="ForceAnisotropicFiltering" Type="bool"/>
+			<Item Category="ENB/General" Path="GLOBAL" Name="UseDefferedRendering" Type="bool"/>
+			<Item Category="ENB/General" Path="WINDOW" Name="ForceBorderless" Type="bool"/>
+			<Item Category="ENB/General" Path="WINDOW" Name="ForceBorderlessFullscreen" Type="bool"/>
+			<Item Category="ENB/General" Path="ENGINE" Name="EnableVSync" Type="bool"/>
+			<Item Category="ENB/General" Path="ENGINE" Name="VSyncSkipNumFrames" Type="int32">
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
+				<Samples Source="Range" Min="0" Max="3" Step="1"/>
+			</Item>
+			<Item Category="ENB/General" Path="ENGINE" Name="MaxAnisotropy" Type="int32">
+				<Samples Source="ImmediateItems">
+					<Item Label="None">0</Item>
+					<Item Label="Low">2</Item>
+					<Item Label="Mid">4</Item>
+					<Item Label="High">8</Item>
+					<Item Label="Ultra">12</Item>
+					<Item Label="Extreme">16</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/General" Path="ENGINE" Name="AddDisplaySuperSamplingResolutions" Type="bool"/>
+
+			<!-- Effects -->
+			<Item Category="ENB/Effects" Path="GLOBAL" Name="UseEffect" Type="bool"/>
+
+			<!-- FPS Limit -->
+			<Item Category="ENB/FPSLimit" Path="LIMITER" Name="EnableFPSLimit" Type="bool"/>
+			<Item Category="ENB/FPSLimit" Path="LIMITER" Name="WaitBusyRenderer" Type="bool"/>
+			<Item Category="ENB/FPSLimit" Path="LIMITER" Name="FPSLimit" Type="float32">
+				<Samples Source="Range" Min="0" Max="60" Step="10"/>
+			</Item>
+
+			<!-- ProxyLibrary -->
+			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="EnableProxyLibrary" Type="bool"/>
+			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="InitProxyFunctions" Type="bool"/>
+			<Item Category="ENB/ProxyLibrary" Path="PROXY" Name="ProxyLibrary" Type="string">
+				<Action Name="Intrinsic/BrowseFile"/>
+			</Item>
+
+			<!-- Controls -->
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyReadConfig" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyCombination" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyUseEffect" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyFPSLimit" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyShowFPS" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyScreenshot" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyEditor" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyFreeVRAM" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Controls" Path="INPUT" Name="KeyBruteForce" Type="int32">
+				<Samples Source="Function">
+					<Function Name="Intrinsic/GetVirtualKeys"/>
+				</Samples>
+			</Item>
+
+			<!-- Fixes -->
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixPhysics" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixGameBugs" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixParallaxBugs" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixAliasedTextures" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="IgnoreLoadingScreen" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="IgnoreInventory" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixSsaoWaterTransparency" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixSsaoHairTransparency" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixTintGamma" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="RemoveBlur" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixSubSurfaceScattering" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixParallaxTerrain" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixSkyReflection" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixCursorVisibility" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="FIX" Name="FixLag" Type="bool"/>
+			<Item Category="ENB/Fixes" Path="GLOBAL" Name="IgnoreCreationKit" Type="bool"/>
+
+			<!-- Antialiasing -->
+			<Item Category="ENB/Antialiasing" Path="ANTIALIASING" Name="EnableEdgeAA" Type="bool"/>
+			<Item Category="ENB/Antialiasing" Path="ANTIALIASING" Name="EnableSubPixelAA" Type="bool"/>
+			<Item Category="ENB/Antialiasing" Path="ANTIALIASING" Name="EnableTemporalAA" Type="bool"/>
+
+			<!-- Performance -->
+			<Item Category="ENB/Performance" Path="GLOBAL" Name="UsePatchSpeedhackWithoutGraphics" Type="bool"/>
+			<Item Category="ENB/Performance" Path="PERFORMANCE" Name="SpeedHack" Type="bool"/>
+			<Item Category="ENB/Performance" Path="PERFORMANCE" Name="EnableOcclusionCulling" Type="bool"/>
+			<Item Category="ENB/Performance" Path="THREADS" Name="DataSyncMode" Type="int32">
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
+				<Samples Source="Range" Min="0" Max="2" Step="1"/>
+			</Item>
+			<Item Category="ENB/Performance" Path="THREADS" Name="PriorityMode" Type="int32">
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
+				<Samples Source="Range" Min="0" Max="4" Step="1"/>
+			</Item>
+
+			<!-- Memory -->
+			<Item Category="ENB/Memory" Path="MEMORY" Name="ExpandSystemMemoryX64" Type="bool"/>
+			<Item Category="ENB/Memory" Path="MEMORY" Name="ReduceSystemMemoryUsage" Type="bool"/>
+			<Item Category="ENB/Memory" Path="MEMORY" Name="DisableDriverMemoryManager" Type="bool"/>
+			<Item Category="ENB/Memory" Path="MEMORY" Name="DisablePreloadToVRAM" Type="bool"/>
+			<Item Category="ENB/Memory" Path="MEMORY" Name="ReservedMemorySizeMb" Type="uint32">
+				<Samples Source="ImmediateItems">
+					<Item>64</Item>
+					<Item>128</Item>
+					<Item>256</Item>
+					<Item>384</Item>
+					<Item>512</Item>
+					<Item>640</Item>
+					<Item>768</Item>
+					<Item>1024</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Memory" Path="MEMORY" Name="VideoMemorySizeMb" Type="uint32">
+				<Samples Source="Range" Min="0" Max="16384" Step="1024"/>
+			</Item>
+			<Item Category="ENB/Memory" Path="MEMORY" Name="EnableCompression" Type="bool"/>
+			<Item Category="ENB/Memory" Path="MEMORY" Name="AutodetectVideoMemorySize" Type="bool"/>
+			<Item Category="ENB/Memory" Path="MEMORY" Name="EnableUnsafeMemoryHacks" Type="bool"/>
+
+			<!-- Adaptive Quality -->
+			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="Enable" Type="bool">
+				<Label>EnableAdaptiveQuality</Label>
+			</Item>
+			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="Quality" Type="int32">
+				<Label>AdaptiveQuality</Label>
+				<Samples Source="ImmediateItems">
+					<Item Label="Low">2</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">0</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/AdaptiveQuality" Path="ADAPTIVEQUALITY" Name="DesiredFPS" Type="float32">
+				<Label>AdaptiveQualityDesiredFPS</Label>
+				<Samples Source="Range" Min="0" Max="60" Step="10"/>
+			</Item>
+
+			<!-- Multihead -->
+			<Item Category="ENB/Multihead" Path="MULTIHEAD" Name="ForceVideoAdapterIndex" Type="bool"/>
+			<Item Category="ENB/Multihead" Path="MULTIHEAD" Name="VideoAdapterIndex" Type="uint32"/>
+
+			<!-- Misc -->
+			<Item Category="ENB/Misc" Path="ENGINE" Name="ForceLodBias" Type="bool"/>
+			<Item Category="ENB/Misc" Path="ENGINE" Name="LodBias" Type="int32">
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
+				<Samples Source="Range" Min="-4" Max="4" Step="1"/>
+			</Item>
+		</Group>
+
+		<Group ID="ENBSeries">
+			<!-- Effects -->
+			<Item Category="ENB/Effects" Path="EFFECT" Name="UseOriginalPostProcessing" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="UseOriginalObjectsProcessing" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableAdaptation" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableDepthOfField" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableDetailedShadow" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableSunRays" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableSkyLighting" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableImageBasedLighting" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableReflection" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableSoftParticles" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableParticleLights" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableSunGlare" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableSubSurfaceScattering" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableLens" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableWater" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableUnderwater" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableCloudShadows" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableVolumetricRays" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableProceduralSun" Type="bool"/>
+			<Item Category="ENB/Effects" Path="EFFECT" Name="EnableMist" Type="bool"/>
+
+			<!-- Bloom -->
+			<Item Category="ENB/Bloom" Path="EFFECT" Name="EnableBloom" Type="bool"/>
+			<Item Category="ENB/Bloom" Path="BLOOM" Name="Quality" Type="int32">
+				<Label>BloomQuality</Label>
+				<Samples Source="ImmediateItems">
+					<Item Label="Low">2</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">0</Item>
+				</Samples>
+			</Item>
+
+			<!-- Ambient Occlusion -->
+			<Item Category="ENB/AmbientOcclusion" Path="EFFECT" Name="EnableAmbientOcclusion" Type="bool"/>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="UseIndirectLighting" Type="bool"/>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="UseComplexIndirectLighting" Type="bool"/>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="UseComplexAmbientOcclusion" Type="bool"/>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="UseAmbientIndirectLighting" Type="bool"/>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="EnableDenoiser" Type="bool"/>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="EnableSupersampling" Type="bool"/>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="EnableComplexFilter" Type="bool"/>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="SamplingQuality" Type="int32">
+				<Samples Source="ImmediateItems">
+					<Item Label="Low">2</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">0</Item>
+					<Item Label="Ultra">-1</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="SamplingPrecision" Type="int32">
+				<Samples Source="ImmediateItems">
+					<Item Label="Low">2</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">0</Item>
+					<Item Label="Ultra">-1</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="FilterQuality" Type="int32">
+				<Samples Source="ImmediateItems">
+					<Item Label="VeryLow">-1</Item>
+					<Item Label="Low">0</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">2</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="FilterType" Type="int32">
+				<Samples Source="ImmediateItems">
+					<Item Label="VeryLow">4</Item>
+					<Item Label="Low">3</Item>
+					<Item Label="Mid">2</Item>
+					<Item Label="High">1</Item>
+					<Item Label="Ultra">0</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="AOType" Type="int32">
+				<Samples Source="ImmediateItems">
+					<Item Label="Low">0</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">2</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="ILType" Type="int32">
+				<Samples Source="ImmediateItems">
+					<Item Label="Low">0</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">2</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="AOMixingType" Type="int32">
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
+				<Samples Source="Range" Min="0" Max="7" Step="1"/>
+			</Item>
+			<Item Category="ENB/AmbientOcclusion" Path="SSAO_SSIL" Name="AOMixingTypeInterior" Type="int32">
+				<Options>
+					<EditableBehavior Value="Selectable"/>
+				</Options>
+				<Samples Source="Range" Min="0" Max="7" Step="1"/>
+			</Item>
+
+			<!-- Shadows -->
+			<Item Category="ENB/Shadows" Path="SHADOW" Name="ShadowFilterQuality" Type="int32">
+				<Samples>
+					<Item Label="Low">2</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">0</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Shadows" Path="SHADOW" Name="DetailedShadowQuality" Type="int32">
+				<Samples>
+					<Item Label="Low">2</Item>
+					<Item Label="Mid">1</Item>
+					<Item Label="High">0</Item>
+					<Item Label="Ultra">-1</Item>
+				</Samples>
+			</Item>
+			<Item Category="ENB/Shadows" Path="SHADOW" Name="UseBilateralShadowFilter" Type="bool"/>
+			<Item Category="ENB/Shadows" Path="SHADOW" Name="UseShadowFilter" Type="bool"/>
+			<Item Category="ENB/Shadows" Path="SHADOW" Name="ShadowCastersFix" Type="bool"/>
+			<Item Category="ENB/Shadows" Path="SHADOW" Name="ShadowQualityFix" Type="bool"/>
+			<Item Category="ENB/Shadows" Path="SHADOW" Name="ShadowBlurRange" Type="float32">
+				<Samples Source="Range" Min="0.1" Max="8" Step="1"/>
+			</Item>
+			<Item Category="ENB/Shadows" Path="SHADOW" Name="ShadowBlurRangeInterior" Type="float32">
+				<Samples Source="Range" Min="0.1" Max="8" Step="1"/>
+			</Item>
+
+			<!-- ColorCorrection -->
+			<Item Category="ENB/ColorCorrection" Path="COLORCORRECTION" Name="UsePaletteTexture" Type="bool"/>
+			<Item Category="ENB/ColorCorrection" Path="COLORCORRECTION" Name="UseProceduralCorrection" Type="bool"/>
+			<Item Category="ENB/ColorCorrection" Path="COLORCORRECTION" Name="Brightness" Type="float32">
+				<Samples Source="Range" Min="0" Max="5" Step="0.5"/>
+			</Item>
+			<Item Category="ENB/ColorCorrection" Path="COLORCORRECTION" Name="GammaCurve" Type="float32">
+				<Samples Source="Range" Min="1" Max="2.5" Step="0.5"/>
+			</Item>
+
+			<!-- Weather -->
+			<Item Category="ENB/Weather" Path="WEATHER" Name="EnableMultipleWeathers" Type="bool"/>
+			<Item Category="ENB/Weather" Path="WEATHER" Name="EnableLocationWeather" Type="bool"/>
+
+			<!-- Misc -->
+		</Group>
+	</Groups>
+</Definition>

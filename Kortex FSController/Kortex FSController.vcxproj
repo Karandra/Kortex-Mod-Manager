@@ -144,24 +144,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
-    <TargetName>FileSystemController</TargetName>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
-    <TargetName>FileSystemController x64</TargetName>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
-    <TargetName>FileSystemController x64</TargetName>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Junk\$(Platform)\</IntDir>
-    <TargetName>FileSystemController</TargetName>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -171,7 +171,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -187,7 +187,7 @@
       </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(SolutionDir)Kortex\Bin\$(TargetName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -196,7 +196,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
@@ -207,7 +207,7 @@
       </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(SolutionDir)Kortex\Bin\$(TargetName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -216,7 +216,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\wxWidgets\lib\vc_x64_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
@@ -227,7 +227,7 @@
       </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(SolutionDir)Kortex\Bin\$(TargetName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -238,7 +238,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;$(SolutionDir)..\KxFramework;$(SolutionDir)..\KxFramework\KxFramework;$(SolutionDir)..\wxWidgets\lib\vc_lib\mswu;$(SolutionDir)..\wxWidgets\include;$(SolutionDir)..\wxWidgets;$(SolutionDir)..\KxVirtualFileSystem;$(SolutionDir)..\Dokany2\sys;$(SolutionDir)..\Dokany2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Source;$(SolutionDir)Shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -254,7 +254,7 @@
       </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(SolutionDir)Kortex\Bin\$(TargetName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -4,25 +4,3 @@
 *.DotSettings
 *.DotSettings.user
 *.aps
-
-# Output binaries
-Junk/*
-Build/*
-Kortex/Junk/*
-Kortex/Build/*
-
-Kortex FSController/Junk/*
-Kortex FSController/Build/*
-
-# Kortex main directory
-Bin/*
-!Bin/Data
-
-#Misc files
-Kortex/Include/Kortex/Git/LatestCommit.txt
-
-# Resourses
-Resources/*
-
-# Libraries
-Libraries/*

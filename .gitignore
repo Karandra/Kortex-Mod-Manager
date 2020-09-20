@@ -6,8 +6,9 @@
 *.aps
 
 # Output binaries
-Junk/*
-Build/*
+Mod Manager/Junk/*
+Mod Manager/Build/*
+
 Kortex/Junk/*
 Kortex/Build/*
 

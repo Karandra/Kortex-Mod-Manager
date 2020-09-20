@@ -7,27 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kortex", "Kortex\Kortex.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kortex FSController", "Kortex FSController\Kortex FSController.vcxproj", "{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "docs", "docs\", "{11996E36-5516-4B3C-9B21-5B0C08A6C71B}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_51323"
-		Debug.AspNetCompiler.PhysicalPath = "docs\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_51323\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_51323"
-		Release.AspNetCompiler.PhysicalPath = "docs\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_51323\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "51323"
-		SlnRelativePath = "docs\"
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,12 +37,6 @@ Global
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x64.Build.0 = Release|x64
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x86.ActiveCfg = Release|Win32
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x86.Build.0 = Release|Win32
-		{11996E36-5516-4B3C-9B21-5B0C08A6C71B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11996E36-5516-4B3C-9B21-5B0C08A6C71B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{11996E36-5516-4B3C-9B21-5B0C08A6C71B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{11996E36-5516-4B3C-9B21-5B0C08A6C71B}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{11996E36-5516-4B3C-9B21-5B0C08A6C71B}.Release|x64.ActiveCfg = Debug|Any CPU
-		{11996E36-5516-4B3C-9B21-5B0C08A6C71B}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

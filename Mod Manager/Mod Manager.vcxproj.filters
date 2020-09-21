@@ -11,6 +11,9 @@
     <Filter Include="Source\Application">
       <UniqueIdentifier>{751e34c9-5532-4ce6-b223-273e111e71c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Utility">
+      <UniqueIdentifier>{cc015180-43bd-4876-9b87-af540de06538}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EmbeddedResources.h">
@@ -19,11 +22,20 @@
     <ClInclude Include="Source\Framework.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\pch.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\SystemApplication.h">
       <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\BroadcastProcessor.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Log.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IApplication.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\pch.hpp">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +43,15 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\SystemApplication.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\BroadcastProcessor.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Log.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IApplication.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>
   </ItemGroup>

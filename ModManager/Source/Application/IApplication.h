@@ -16,7 +16,6 @@ namespace kxf
 namespace Kortex
 {
 	class LogEvent;
-	class SystemApplication;
 	class BroadcastProcessor;
 	class IGameInstance;
 	class IGameProfile;
@@ -26,12 +25,13 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IApplication: public kxf::SingletonPtr<IApplication>//, public Application::WithOptions<IApplication>
+	class IApplication: public kxf::RTTI::Interface<IApplication>//, public Application::WithOptions<IApplication>
 	{
+		KxRTTI_DeclareIID(IApplication, {0xb5e8047c, 0x9239, 0x45c4, {0x86, 0xf6, 0x6c, 0x83, 0xa8, 0x42, 0x06, 0x3e}});
+
 		friend class SystemApplication;
 
 		public:
-			static SystemApplication& GetSystemApp() noexcept;
 			static IApplication& GetInstance() noexcept;
 
 		private:
@@ -52,15 +52,12 @@ namespace Kortex
 			//virtual void OnProfileConfigChanged(AppOption& option, IGameProfile& profile) = 0;
 
 		public:
-			kxf::String GetRootFolder() const;
-			kxf::String GetExecutablePath() const;
-			kxf::String GetExecutableName() const;
-
-			virtual kxf::String GetDataFolder() const = 0;
-			virtual kxf::String GetLogsFolder() const = 0;
-			virtual kxf::String GetUserSettingsFolder() const = 0;
-			virtual kxf::String GetUserSettingsFile() const = 0;
-			virtual kxf::String GetInstancesFolder() const = 0;
+			kxf::FSPath GetRootDirectory() const;
+			virtual kxf::FSPath GetDataDirectory() const = 0;
+			virtual kxf::FSPath GetLogsDirectory() const = 0;
+			virtual kxf::FSPath GetUserSettingsDirectory() const = 0;
+			virtual kxf::FSPath GetUserSettingsFile() const = 0;
+			virtual kxf::FSPath GetInstancesDirectory() const = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
 
 			virtual const kxf::ILocalizationPackage& GetLocalizationPackage() const = 0;
@@ -91,7 +88,6 @@ namespace Kortex
 			kxf::String GetShortName() const;
 			kxf::String GetDeveloper() const;
 			kxf::Version GetVersion() const;
-			kxf::Version GetWxWidgetsVersion() const;
 			kxf::XMLDocument& GetGlobalConfig() const;
 
 			wxWindow* GetActiveWindow() const;

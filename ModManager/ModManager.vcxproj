@@ -72,6 +72,7 @@
     <ProjectGuid>{c3ee4b94-d317-46ec-bc24-796fd7afb1db}</ProjectGuid>
     <RootNamespace>ModManager</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ModManager</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

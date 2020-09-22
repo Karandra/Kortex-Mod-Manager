@@ -2,23 +2,20 @@
 #include "IApplication.h"
 #include "SystemApplication.h"
 #include <kxf/System/TaskScheduler.h>
+#include <kxf/System/DynamicLibrary.h>
 #include <kxf/System/SystemInformation.h>
 #include <wx/cmdline.h>
 
 namespace Kortex::OName
 {
-	//KortexDefOption(RestartDelay);
+	Kortex_DefOption(RestartDelay);
 }
 
 namespace Kortex
 {
-	SystemApplication& IApplication::GetSystemApp() noexcept
-	{
-		return SystemApplication::GetInstance();
-	}
 	IApplication& IApplication::GetInstance() noexcept
 	{
-		return *GetSystemApp().GetApplication();
+		return *SystemApplication::GetInstance().GetApplication();
 	}
 
 	void IApplication::OnConfigureCommandLine()
@@ -30,23 +27,13 @@ namespace Kortex
 		//cmdLineParser.AddOption(CmdLineName::GlobalConfigPath, {}, "Folder path for app-wide config");
 		//cmdLineParser.AddOption(CmdLineName::DownloadLink, {}, "Download link");
 	}
-
 	kxf::String IApplication::ExamineCaughtException() const
 	{
-		return GetSystemApp().ExamineCaughtException();
+		return SystemApplication::GetInstance().ExamineCaughtException();
 	}
-
-	kxf::String IApplication::GetRootFolder() const
+	kxf::FSPath IApplication::GetRootDirectory() const
 	{
-		//return GetSystemApp().GetRootFolder();
-	}
-	kxf::String IApplication::GetExecutablePath() const
-	{
-		//return GetSystemApp().GetExecutablePath();
-	}
-	kxf::String IApplication::GetExecutableName() const
-	{
-		//return GetSystemApp().GetExecutableName();
+		return SystemApplication::GetInstance().GetRootDirectory();
 	}
 
 	bool IApplication::Is64Bit() const
@@ -63,12 +50,12 @@ namespace Kortex
 	}
 	bool IApplication::IsAnotherInstanceRunning() const
 	{
-		return GetSystemApp().IsAnotherInstanceRunning();
+		return SystemApplication::GetInstance().IsAnotherInstanceRunning();
 	}
 
 	bool IApplication::QueueDownloadToMainProcess(const kxf::String& link)
 	{
-		//return GetSystemApp().QueueDownloadToMainProcess(link);
+		//return SystemApplication::GetInstance().QueueDownloadToMainProcess(link);
 	}
 	std::optional<kxf::String> IApplication::GetLinkFromCommandLine() const
 	{
@@ -86,7 +73,7 @@ namespace Kortex
 
 	wxCmdLineParser& IApplication::GetCommandLineParser() const
 	{
-		return GetSystemApp().GetCommandLineParser();
+		return SystemApplication::GetInstance().GetCommandLineParser();
 	}
 	kxf::String IApplication::FormatCommandLine(const CmdLineParameters& parameters)
 	{
@@ -105,12 +92,12 @@ namespace Kortex
 			}
 			else
 			{
-				//delay = wxTimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(3));
+				//delay = kxf::TimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(3));
 			}
 
 			ScheduledTask task = taskSheduler.NewTask();
-			task.SetExecutable(GetExecutablePath(), commandLine);
-			task.SetRegistrationTrigger("Restart", delay, wxDateTime::Now() + delay * 2);
+			task.SetExecutable(kxf::DynamicLibrary::GetExecutingModule().GetFilePath(), commandLine);
+			task.SetRegistrationTrigger("Restart", delay, kxf::DateTime::Now() + delay * 2);
 			task.DeleteExpiredTaskAfter(delay);
 
 			const kxf::String taskName = wxS("Kortex.ScheduleRestart");
@@ -121,36 +108,32 @@ namespace Kortex
 	}
 	void IApplication::Exit(int exitCode)
 	{
-		GetSystemApp().Exit(exitCode);
+		SystemApplication::GetInstance().Exit(exitCode);
 	}
 
 	kxf::String IApplication::GetID() const
 	{
-		return GetSystemApp().GetName();
+		return SystemApplication::GetInstance().GetName();
 	}
 	kxf::String IApplication::GetName() const
 	{
-		return GetSystemApp().GetDisplayName();
+		return SystemApplication::GetInstance().GetDisplayName();
 	}
 	kxf::String IApplication::GetShortName() const
 	{
-		return GetSystemApp().GetShortName();
+		return SystemApplication::GetInstance().GetShortName();
 	}
 	kxf::String IApplication::GetDeveloper() const
 	{
-		return GetSystemApp().GetVendorName();
+		return SystemApplication::GetInstance().GetVendorName();
 	}
 	kxf::Version IApplication::GetVersion() const
 	{
-		return GetSystemApp().GetVersion();
-	}
-	kxf::Version IApplication::GetWxWidgetsVersion() const
-	{
-		return wxGetLibraryVersionInfo();
+		return SystemApplication::GetInstance().GetVersion();
 	}
 	kxf::XMLDocument& IApplication::GetGlobalConfig() const
 	{
-		//return GetSystemApp().GetGlobalConfig();
+		//return SystemApplication::GetInstance().GetGlobalConfig();
 	}
 
 	wxWindow* IApplication::GetActiveWindow() const
@@ -159,15 +142,15 @@ namespace Kortex
 	}
 	wxWindow* IApplication::GetTopWindow() const
 	{
-		return GetSystemApp().GetTopWindow();
+		return SystemApplication::GetInstance().GetTopWindow();
 	}
 	void IApplication::SetTopWindow(wxWindow* window)
 	{
-		return GetSystemApp().SetTopWindow(window);
+		return SystemApplication::GetInstance().SetTopWindow(window);
 	}
 	bool IApplication::IsActive() const
 	{
-		return GetSystemApp().IsActive();
+		return SystemApplication::GetInstance().IsActive();
 	}
 	bool IApplication::IsMainWindowActive() const
 	{
@@ -186,10 +169,10 @@ namespace Kortex
 
 	wxLog& IApplication::GetLogger()
 	{
-		return GetSystemApp().GetLogger();
+		return SystemApplication::GetInstance().GetLogger();
 	}
 	BroadcastProcessor& IApplication::GetBroadcastProcessor()
 	{
-		return GetSystemApp().GetBroadcastProcessor();
+		return SystemApplication::GetInstance().GetBroadcastProcessor();
 	}
 }

@@ -23,9 +23,8 @@ namespace Kortex::SystemApplicationInfo
 	const constexpr kxf::XChar ID[] = wxS("Kortex.ModManager");
 	const constexpr kxf::XChar Name[] = wxS("Kortex Mod Manager");
 	const constexpr kxf::XChar ShortName[] = wxS("Kortex");
-	const constexpr kxf::XChar Version[] = wxS("2.0");
 	const constexpr kxf::XChar Developer[] = wxS("Kerber");
-	const constexpr kxf::XChar GUID[] = wxS("B5E8047C-9239-45C4-86F6-6C83A842063E");
+	const constexpr kxf::XChar Version[] = wxS("2.0");
 }
 
 namespace Kortex
@@ -35,8 +34,8 @@ namespace Kortex
 	{
 		Log::Trace("Trying to extract message form current exception");
 
-		kxf::String message = "Unknown";
-		kxf::String type = "Unknown";
+		kxf::String message;
+		kxf::String type;
 		try
 		{
 			throw;
@@ -102,6 +101,8 @@ namespace Kortex
 		}
 		catch (...)
 		{
+			message = "Unknown";
+			type = "Unknown";
 		}
 
 		kxf::String value = kxf::String::Format("Unexpected exception has occurred: %1.\r\n\r\nThe program will terminate.\r\n\r\nException type: %2", message, type);
@@ -113,7 +114,7 @@ namespace Kortex
 		Log::Info("SystemApplication::OnException");
 		if (wxIsDebuggerRunning())
 		{
-			Log::Info("Debugger is running, rethrowing exception");
+			Log::Info("Debugger is running, rethrowing exception to let debugger handle it");
 
 			throw;
 			return false;
@@ -135,7 +136,7 @@ namespace Kortex
 		SetVersion(SystemApplicationInfo::Version);
 		SetVendorName(SystemApplicationInfo::Developer);
 
-		// Initialize root folder
+		// Initialize the root directory
 		m_RootDirectory = kxf::NativeFileSystem::GetExecutableDirectory();
 
 		// Create default application
@@ -143,18 +144,21 @@ namespace Kortex
 
 		// Initialize main variables
 		kxf::IVariablesCollection& variables = m_Application->GetVariables();
-		variables.SetItem("AppID", SystemApplicationInfo::ID);
-		variables.SetItem("AppName", SystemApplicationInfo::Name);
-		variables.SetItem("AppShortName", SystemApplicationInfo::ShortName);
-		variables.SetItem("AppVersion", SystemApplicationInfo::Version);
-		variables.SetItem("AppDeveloper", SystemApplicationInfo::Developer);
-		variables.SetItem("AppGUID", SystemApplicationInfo::GUID);
-		//variables.SetItem("AppCommitHash", SystemApplicationInfo::RemoveWhitespace(SystemApplicationInfo::GitCommitHash));
-		variables.SetItem("AppModProjectProgID", kxf::String::Format("%1.Project.1", SystemApplicationInfo::ID));
-		variables.SetItem("AppModPackageProgID", kxf::String::Format("%1.Package.1", SystemApplicationInfo::ID));
-		variables.SetItem("AppData", m_Application->GetDataFolder());
-		//variables.SetItem("SystemArchitecture", Utility::ArchitectureToNumber(m_Application->IsSystem64Bit()));
-		//variables.SetItem("SystemArchitectureName", Utility::ArchitectureToString(m_Application->IsSystem64Bit()));
+		variables.SetItem("App", "ID", SystemApplicationInfo::ID);
+		variables.SetItem("App", "Name", SystemApplicationInfo::Name);
+		variables.SetItem("App", "ShortName", SystemApplicationInfo::ShortName);
+		variables.SetItem("App", "Developer", SystemApplicationInfo::Developer);
+		variables.SetItem("App", "Version", SystemApplicationInfo::Version);
+		variables.SetItem("App", "UniqueID", kxf::UniversallyUniqueID(kxf::RTTI::GetInterfaceID<IApplication>().ToNativeUUID()).ToString());
+		//variables.SetItem("App", "CommitHash", kxf::String(SystemApplicationInfo::GitCommitHash).Trim().Trim(kxf::StringOpFlag::FromEnd));
+		variables.SetItem("App", "RootDirectory", m_RootDirectory);
+		variables.SetItem("App", "DataDirectory", m_Application->GetDataDirectory());
+
+		variables.SetItem("App", "Platform", m_Application->Is64Bit() ? "Win64" : "Win32");
+		variables.SetItem("App", "Architecture", m_Application->Is64Bit() ? "x64" : "x86");
+
+		variables.SetItem("System", "Platform", m_Application->IsSystem64Bit() ? "Win64" : "Win32");
+		variables.SetItem("System", "Architecture", m_Application->IsSystem64Bit() ? "x64" : "x86");
 
 		return true;
 	}
@@ -195,7 +199,13 @@ namespace Kortex
 	}
 	void SystemApplication::OnAssertFailure(kxf::String file, int line, kxf::String function, kxf::String condition, kxf::String message)
 	{
-		wxMessageBox("OnAssertFailure", file);
+		Log::Info("SystemApplication::OnAssertFailure");
+		Log::Debug("%1:%2; [Function=%3][Condition=%4][Message=%5]", file, line, function, condition, message);
+	}
+
+	const kxf::ILocalizationPackage& SystemApplication::GetLocalizationPackage() const
+	{
+		return m_Application ? m_Application->GetLocalizationPackage() : m_EmptyLocalizationPackage;
 	}
 
 	kxf::String SystemApplication::GetShortName() const

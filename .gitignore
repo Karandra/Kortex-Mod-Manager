@@ -6,8 +6,8 @@
 *.aps
 
 # Output binaries
-Mod Manager/Junk/*
-Mod Manager/Build/*
+ModManager/Junk/*
+ModManager/Build/*
 
 Kortex/Junk/*
 Kortex/Build/*
@@ -17,7 +17,7 @@ Kortex FSController/Build/*
 
 # Kortex main directory
 Bin/*
-!Bin/Data
+!Bin/ModManager
 
 #Misc files
 Kortex/Include/Kortex/Git/LatestCommit.txt

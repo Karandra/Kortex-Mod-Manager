@@ -2,7 +2,7 @@
 #include "Framework.hpp"
 #include "BroadcastProcessor.h"
 #include <kxf/Application/GUIApplication.h>
-#include <kxf/Localization/LocalizationPackageStack.h>
+#include <kxf/Localization/AndroidLocalizationPackage.h>
 #include <wx/snglinst.h>
 
 namespace Kortex
@@ -23,15 +23,13 @@ namespace Kortex
 			}
 
 		private:
-			kxf::LocalizationPackageStack m_LocalizationPackages;
 			BroadcastProcessor m_BroadcastProcessor;
-
-			kxf::FSPath m_RootDirectory;
-			kxf::FSPath m_ExecutablePath;
+			kxf::AndroidLocalizationPackage m_EmptyLocalizationPackage;
 
 			std::unique_ptr<IApplication> m_Application;
 			wxSingleInstanceChecker m_SingleInstance;
 			wxCmdLineParser* m_CommandLineParser;
+			kxf::FSPath m_RootDirectory;
 
 		private:
 			// SystemApplication
@@ -48,10 +46,7 @@ namespace Kortex
 			void OnUnhandledException() override;
 			void OnAssertFailure(kxf::String file, int line, kxf::String function, kxf::String condition, kxf::String message) override;
 
-			const kxf::ILocalizationPackage& GetLocalizationPackage() const override
-			{
-				return m_LocalizationPackages;
-			}
+			const kxf::ILocalizationPackage& GetLocalizationPackage() const override;
 
 		public:
 			// SystemApplication
@@ -59,15 +54,19 @@ namespace Kortex
 			{
 				return m_SingleInstance.IsAnotherRunning();
 			}
+			kxf::FSPath GetRootDirectory() const
+			{
+				return m_RootDirectory;
+			}
 			kxf::String GetShortName() const;
 
-			BroadcastProcessor& GetBroadcastProcessor()
-			{
-				return m_BroadcastProcessor;
-			}
 			IApplication* GetApplication() const
 			{
 				return m_Application.get();
+			}
+			BroadcastProcessor& GetBroadcastProcessor()
+			{
+				return m_BroadcastProcessor;
 			}
 			wxCmdLineParser& GetCommandLineParser() const
 			{

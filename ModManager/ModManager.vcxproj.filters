@@ -37,6 +37,15 @@
     <ClInclude Include="Source\pch.hpp">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\IMainWindow.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IWorkspace.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IWorkspaceContainer.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -52,6 +61,15 @@
       <Filter>Source\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\IApplication.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IMainWindow.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IWorkspace.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IWorkspaceContainer.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>
   </ItemGroup>

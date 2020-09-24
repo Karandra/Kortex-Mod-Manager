@@ -17,7 +17,11 @@
 #include <kxf/General/StringFormatter.h>
 #include <kxf/General/DateTime.h>
 #include <kxf/General/BinarySize.h>
+#include <kxf/General/ResourceID.h>
 #include <kxf/General/Color.h>
+
+#include <kxf/EventSystem/Common.h>
+#include <kxf/EventSystem/IEvtHandler.h>
 
 #include <kxf/RTTI/Common.h>
 #include <kxf/RTTI/QueryInterface.h>

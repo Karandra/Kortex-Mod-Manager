@@ -624,6 +624,9 @@
   <ItemGroup>
     <ClInclude Include="Source\Application\BroadcastProcessor.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
+    <ClInclude Include="Source\Application\IMainWindow.h" />
+    <ClInclude Include="Source\Application\IWorkspace.h" />
+    <ClInclude Include="Source\Application\IWorkspaceContainer.h" />
     <ClInclude Include="Source\Application\Log.h" />
     <ClInclude Include="Source\Application\SystemApplication.h" />
     <ClInclude Include="Source\EmbeddedResources.h" />
@@ -633,6 +636,9 @@
   <ItemGroup>
     <ClCompile Include="Source\Application\BroadcastProcessor.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
+    <ClCompile Include="Source\Application\IMainWindow.cpp" />
+    <ClCompile Include="Source\Application\IWorkspace.cpp" />
+    <ClCompile Include="Source\Application\IWorkspaceContainer.cpp" />
     <ClCompile Include="Source\Application\Log.cpp" />
     <ClCompile Include="Source\Application\SystemApplication.cpp" />
     <ClCompile Include="Source\pch.cpp">

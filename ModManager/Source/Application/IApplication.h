@@ -1,6 +1,5 @@
 #pragma once
 #include "Framework.hpp"
-#include <kxf/General/Singleton.h>
 #include <kxf/General/Version.h>
 #include <kxf/General/IVariablesCollection.h>
 #include <kxf/Localization/Locale.h>
@@ -59,6 +58,8 @@ namespace Kortex
 			virtual kxf::FSPath GetUserSettingsFile() const = 0;
 			virtual kxf::FSPath GetInstancesDirectory() const = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
+
+			virtual IMainWindow* GetMainWindow() const = 0;
 
 			virtual const kxf::ILocalizationPackage& GetLocalizationPackage() const = 0;
 			virtual size_t EnumLocalizationPackages(std::function<bool(kxf::Locale, kxf::FileItem)> func) const = 0;

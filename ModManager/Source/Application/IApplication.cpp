@@ -1,6 +1,7 @@
 #include "pch.hpp"
 #include "IApplication.h"
 #include "SystemApplication.h"
+#include "IMainWindow.h"
 #include <kxf/System/TaskScheduler.h>
 #include <kxf/System/DynamicLibrary.h>
 #include <kxf/System/SystemInformation.h>
@@ -156,12 +157,10 @@ namespace Kortex
 	{
 		if (IsActive())
 		{
-			#if 0
 			if (const IMainWindow* mainWindow = IMainWindow::GetInstance())
 			{
 				return mainWindow->GetFrame().GetHandle() == ::GetForegroundWindow();
 			}
-			#endif
 			return true;
 		}
 		return false;

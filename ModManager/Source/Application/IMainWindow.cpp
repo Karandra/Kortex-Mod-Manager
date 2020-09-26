@@ -1,6 +1,8 @@
 #include "pch.hpp"
 #include "IMainWindow.h"
 #include "IApplication.h"
+#include "IModule.h"
+#include "IManager.h"
 #include <kxf/System/SystemInformation.h>
 #include "IWorkspace.h"
 
@@ -15,32 +17,25 @@ namespace Kortex
 		return kxf::System::GetMetric(kxf::SystemSizeMetric::Screen).Scale(0.8);
 	}
 
-	void IMainWindow::InitializeWorkspaces()
+	void IMainWindow::CreateWorkspaces()
 	{
-		#if 0
-		for (IModule* module: IModule::GetInstances())
+		IApplication::GetInstance().EnumLoadedManagers([](IManager& manager)
 		{
-			for (IManager* manager: module->GetManagers())
+			// Create workspace instances if we don't have them yet
+			if (manager.OnCreateWorkspaces() != 0)
 			{
-				// Create workspace instances if we don't have them yet
-				IWorkspace::RefVector workspaces = manager->EnumWorkspaces();
-				if (workspaces.empty())
+				// Add them to preferred container if the workspace defines one
+				manager.EnumWorkspaces([](IWorkspace& workspace)
 				{
-					manager->CreateWorkspaces();
-				}
-
-				// Add them to containers if the workspace isn't added
-				workspaces = manager->EnumWorkspaces();
-				for (IWorkspace* workspace: workspaces)
-				{
-					IWorkspaceContainer* preferredContainer = workspace->GetPreferredContainer();
-					if (preferredContainer && !workspace->GetCurrentContainer())
+					IWorkspaceContainer* preferredContainer = workspace.GetPreferredContainer();
+					if (preferredContainer && !workspace.GetCurrentContainer())
 					{
-						preferredContainer->AddWorkspace(*workspace);
+						preferredContainer->AddWorkspace(workspace);
 					}
-				}
+					return true;
+				});
 			}
-		}
-		#endif
+			return true;
+		});
 	}
 }

@@ -57,21 +57,21 @@ namespace Kortex
 			virtual ~IWorkspace() = default;
 
 		public:
-			bool EvtOnCreateWorkspace()
+			bool OnCreateWorkspace()
 			{
-				return QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::EvtOnCreateWorkspace);
+				return QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::OnCreateWorkspace);
 			}
-			void EvtOnReloadWorkspace()
+			void OnReloadWorkspace()
 			{
-				QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::EvtOnReloadWorkspace);
+				QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::OnReloadWorkspace);
 			}
-			bool EvtOnOpenWorkspace()
+			bool OnOpenWorkspace()
 			{
-				return QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::EvtOnOpenWorkspace);
+				return QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::OnOpenWorkspace);
 			}
-			bool EvtOnCloseWorkspace()
+			bool OnCloseWorkspace()
 			{
-				return QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::EvtOnCloseWorkspace);
+				return QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::OnCloseWorkspace);
 			}
 
 		public:

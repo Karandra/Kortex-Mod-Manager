@@ -67,6 +67,12 @@
     <ClInclude Include="Source\Application\Options\OptionSerializer.h">
       <Filter>Source\Application\Options</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\IManager.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IModule.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -101,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp">
       <Filter>Source\Application\Options</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IManager.cpp">
+      <Filter>Source\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

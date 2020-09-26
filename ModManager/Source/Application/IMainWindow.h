@@ -26,6 +26,9 @@ namespace Kortex
 			static kxf::Size GetDialogBestSize(const wxWindow& dialog);
 
 		public:
+			void CreateWorkspaces();
+
+		public:
 			virtual kxf::UI::Frame& GetFrame() = 0;
 			const kxf::UI::Frame& GetFrame() const
 			{
@@ -50,7 +53,5 @@ namespace Kortex
 
 			virtual kxf::UI::AuiToolBarItem* AddToolBarItem(IWorkspace& workspace) = 0;
 			virtual kxf::UI::MenuItem* AddToolBarMenuItem(IWorkspace& workspace) = 0;
-
-			void InitializeWorkspaces();
 	};
 }

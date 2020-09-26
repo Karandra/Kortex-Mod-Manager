@@ -14,6 +14,9 @@
     <Filter Include="Source\Utility">
       <UniqueIdentifier>{cc015180-43bd-4876-9b87-af540de06538}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Application\Options">
+      <UniqueIdentifier>{5546396e-0e58-4a25-8198-b047376a4752}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EmbeddedResources.h">
@@ -46,6 +49,24 @@
     <ClInclude Include="Source\Application\IWorkspaceContainer.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\AppOption.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Options\CmdLineDatabase.h">
+      <Filter>Source\Application\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Options\Macros.h">
+      <Filter>Source\Application\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Options\Option.h">
+      <Filter>Source\Application\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Options\OptionDatabase.h">
+      <Filter>Source\Application\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Options\OptionSerializer.h">
+      <Filter>Source\Application\Options</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -71,6 +92,15 @@
     </ClCompile>
     <ClCompile Include="Source\Application\IWorkspaceContainer.cpp">
       <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\AppOption.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Options\Option.cpp">
+      <Filter>Source\Application\Options</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Options\OptionSerializer.cpp">
+      <Filter>Source\Application\Options</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

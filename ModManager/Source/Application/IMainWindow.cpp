@@ -2,7 +2,7 @@
 #include "IMainWindow.h"
 #include "IApplication.h"
 #include <kxf/System/SystemInformation.h>
-//#include "IWorkspace.h"
+#include "IWorkspace.h"
 
 namespace Kortex
 {

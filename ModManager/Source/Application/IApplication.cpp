@@ -1,6 +1,8 @@
 #include "pch.hpp"
 #include "IApplication.h"
 #include "SystemApplication.h"
+#include "Options/Macros.h"
+#include "Options/CmdLineDatabase.h"
 #include "IMainWindow.h"
 #include <kxf/System/TaskScheduler.h>
 #include <kxf/System/DynamicLibrary.h>
@@ -78,6 +80,32 @@ namespace Kortex
 	}
 	kxf::String IApplication::FormatCommandLine(const CmdLineParameters& parameters)
 	{
+		kxf::String commandLine;
+		auto AddCommand = [&commandLine](const kxf::String& command)
+		{
+			if (!command.IsEmpty())
+			{
+				if (!commandLine.IsEmpty())
+				{
+					commandLine += wxS(' ');
+				}
+				commandLine += command;
+			}
+		};
+
+		if (!parameters.InstanceID.IsEmpty())
+		{
+			AddCommand(kxf::String::Format(wxS("-%1 \"%2\""), CmdLineName::InstanceID, parameters.InstanceID));
+		}
+		if (!parameters.DownloadLink.IsEmpty())
+		{
+			AddCommand(kxf::String::Format(wxS("-%1 \"%2\""), CmdLineName::DownloadLink, parameters.DownloadLink));
+		}
+		if (!parameters.GlobalConfigPath.IsEmpty())
+		{
+			AddCommand(kxf::String::Format(wxS("-%1 \"%2\""), CmdLineName::GlobalConfigPath, parameters.GlobalConfigPath));
+		}
+		return commandLine;
 	}
 	bool IApplication::ScheduleRestart(const kxf::String& commandLine, std::optional<kxf::TimeSpan> timeout)
 	{
@@ -93,7 +121,7 @@ namespace Kortex
 			}
 			else
 			{
-				//delay = kxf::TimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(3));
+				delay = kxf::TimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(3));
 			}
 
 			ScheduledTask task = taskSheduler.NewTask();

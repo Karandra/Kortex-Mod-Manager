@@ -1,7 +1,7 @@
 #pragma once
 #include "Framework.hpp"
-//#include "Options/Option.h"
-//#include "IWorkspaceContainer.h"
+#include "Options/Option.h"
+#include "IWorkspaceContainer.h"
 #include <kxf/UI/Controls/AUI/AuiToolBar.h>
 #include <kxf/UI/Controls/StatusBarEx.h>
 #include <kxf/UI/Windows/Frame.h>
@@ -17,7 +17,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IMainWindow: public kxf::RTTI::Interface<IMainWindow>//, public Application::WithOptions<IMainWindow>
+	class IMainWindow: public kxf::RTTI::Interface<IMainWindow>, public Application::WithOptions<IMainWindow>
 	{
 		KxRTTI_DeclareIID(IMainWindow, {0x2efd7947, 0x5371, 0x4cf8, {0xbf, 0x5b, 0x94, 0x13, 0x1, 0x72, 0x8, 0x7c}});
 

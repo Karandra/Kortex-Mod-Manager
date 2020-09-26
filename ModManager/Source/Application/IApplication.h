@@ -1,5 +1,6 @@
 #pragma once
 #include "Framework.hpp"
+#include "Options/Option.h"
 #include <kxf/General/Version.h>
 #include <kxf/General/IVariablesCollection.h>
 #include <kxf/Localization/Locale.h>
@@ -24,11 +25,12 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IApplication: public kxf::RTTI::Interface<IApplication>//, public Application::WithOptions<IApplication>
+	class IApplication: public kxf::RTTI::Interface<IApplication>, public Application::WithOptions<IApplication>
 	{
 		KxRTTI_DeclareIID(IApplication, {0xb5e8047c, 0x9239, 0x45c4, {0x86, 0xf6, 0x6c, 0x83, 0xa8, 0x42, 0x06, 0x3e}});
 
 		friend class SystemApplication;
+		friend class AppOption;
 
 		public:
 			static IApplication& GetInstance() noexcept;
@@ -46,9 +48,9 @@ namespace Kortex
 			virtual bool OnException() = 0;
 			kxf::String ExamineCaughtException() const;
 
-			//virtual void OnGlobalConfigChanged(AppOption& option) = 0;
-			//virtual void OnInstanceConfigChanged(AppOption& option, IGameInstance& instance) = 0;
-			//virtual void OnProfileConfigChanged(AppOption& option, IGameProfile& profile) = 0;
+			virtual void OnGlobalConfigChanged(AppOption& option) = 0;
+			virtual void OnInstanceConfigChanged(AppOption& option, IGameInstance& instance) = 0;
+			virtual void OnProfileConfigChanged(AppOption& option, IGameProfile& profile) = 0;
 
 		public:
 			kxf::FSPath GetRootDirectory() const;

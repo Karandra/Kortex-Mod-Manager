@@ -19,12 +19,12 @@ namespace Kortex
 		};
 
 		wxWindow& containerWindow = GetWindow();
-		if (workspace.GetCurrentContainer() == nullptr && EnsureWindowCreated(workspace, containerWindow))
+		if (!workspace.GetCurrentContainer() && EnsureWindowCreated(workspace, containerWindow))
 		{
 			workspace.SetCurrentContainer(this);
 
 			wxWindow& workspaceWindow = workspace.GetWindow();
-			workspaceWindow.SetClientObject(new Application::WorkspaceClientData(workspace));
+			workspaceWindow.SetClientObject(std::make_unique<Application::WorkspaceClientData>(workspace).release());
 			workspaceWindow.Reparent(&containerWindow);
 
 			return true;

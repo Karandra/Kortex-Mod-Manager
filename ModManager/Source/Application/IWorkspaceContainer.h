@@ -16,15 +16,15 @@ namespace Kortex
 
 			bool CallOnCreate(IWorkspace& workspace)
 			{
-				return workspace.CallOnCreateWorkspace();
+				return workspace.DoOnCreateWorkspace();
 			}
 			bool CallOnOpen(IWorkspace& workspace)
 			{
-				return workspace.CallOnOpenWorkspace();
+				return workspace.DoOnOpenWorkspace();
 			}
 			bool CallOnClose(IWorkspace& workspace)
 			{
-				return workspace.CallOnCloseWorkspace();
+				return workspace.DoOnCloseWorkspace();
 			}
 
 		public:
@@ -50,11 +50,12 @@ namespace Kortex
 				return GetParentContainer() != nullptr;
 			}
 
-			virtual size_t EnumWorkspaces(std::function<bool(IWorkspace&)> func) = 0;
 			virtual IWorkspace* GetWorkspaceByID(const kxf::String& id) const = 0;
 			virtual IWorkspace* GetWorkspaceByIndex(size_t index) const = 0;
 			virtual IWorkspace* GetCurrentWorkspace() const = 0;
+
 			virtual size_t GetWorkspaceCount() const = 0;
+			virtual size_t EnumWorkspaces(std::function<bool(IWorkspace&)> func) = 0;
 			virtual std::optional<size_t> GetWorkspaceIndex(const IWorkspace& workspace) const = 0;
 			virtual bool ChangeWorkspaceIndex(IWorkspace& workspace, size_t newIndex) = 0;
 

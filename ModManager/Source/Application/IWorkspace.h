@@ -21,31 +21,10 @@ namespace Kortex
 		public:
 			static IWorkspace* FromWindow(wxWindow& window);
 
-			template<class T>
-			static void ScheduleReloadOf()
-			{
-				if (T* workspace = T::GetInstance())
-				{
-					workspace->ScheduleReload();
-				}
-			}
-
-			template<class TWorkspace, class TFunc>
-			static bool CallIfCreated(TFunc&& func)
-			{
-				TWorkspace* workspace = TWorkspace::GetInstance();
-				if (workspace && workspace->IsCreated())
-				{
-					std::invoke(func, static_cast<TWorkspace&>(*workspace));
-					return true;
-				}
-				return false;
-			}
-
 		protected:
-			virtual bool CallOnCreateWorkspace() = 0;
-			virtual bool CallOnOpenWorkspace() = 0;
-			virtual bool CallOnCloseWorkspace() = 0;
+			virtual bool DoOnCreateWorkspace() = 0;
+			virtual bool DoOnOpenWorkspace() = 0;
+			virtual bool DoOnCloseWorkspace() = 0;
 
 			virtual void CreateWorkspaceWindow(wxWindow& parent) = 0;
 			virtual void SetCurrentContainer(IWorkspaceContainer* contianer) = 0;

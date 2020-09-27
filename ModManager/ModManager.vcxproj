@@ -627,13 +627,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application\AppOption.h" />
+    <ClInclude Include="Source\Application\BookWorkspaceContainer.h" />
     <ClInclude Include="Source\Application\BroadcastProcessor.h" />
+    <ClInclude Include="Source\Application\DefaultWorkspace.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IMainWindow.h" />
     <ClInclude Include="Source\Application\IManager.h" />
     <ClInclude Include="Source\Application\IModule.h" />
     <ClInclude Include="Source\Application\IWorkspace.h" />
     <ClInclude Include="Source\Application\IWorkspaceContainer.h" />
+    <ClInclude Include="Source\Application\IWorkspaceDocument.h" />
+    <ClInclude Include="Source\Application\Localization.h" />
     <ClInclude Include="Source\Application\Log.h" />
     <ClInclude Include="Source\Application\Options\CmdLineDatabase.h" />
     <ClInclude Include="Source\Application\Options\Macros.h" />
@@ -647,12 +651,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\AppOption.cpp" />
+    <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp" />
     <ClCompile Include="Source\Application\BroadcastProcessor.cpp" />
+    <ClCompile Include="Source\Application\DefaultWorkspace.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
     <ClCompile Include="Source\Application\IMainWindow.cpp" />
     <ClCompile Include="Source\Application\IManager.cpp" />
     <ClCompile Include="Source\Application\IWorkspace.cpp" />
     <ClCompile Include="Source\Application\IWorkspaceContainer.cpp" />
+    <ClCompile Include="Source\Application\IWorkspaceDocument.cpp" />
+    <ClCompile Include="Source\Application\Localization.cpp" />
     <ClCompile Include="Source\Application\Log.cpp" />
     <ClCompile Include="Source\Application\Options\Option.cpp" />
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp" />

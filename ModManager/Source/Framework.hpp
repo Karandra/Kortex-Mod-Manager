@@ -30,3 +30,12 @@
 #include <kxf/FileSystem/FileItem.h>
 #include <kxf/FileSystem/FSPath.h>
 #include <kxf/FileSystem/IFileSystem.h>
+
+namespace Kortex::LayoutConstant
+{
+	constexpr int HorizontalSpacing = 3;
+	constexpr int VerticalSpacing = 3;
+
+	constexpr int HorizontalSpacingSmall = 2;
+	constexpr int VerticalSpacingSmall = 2;
+}

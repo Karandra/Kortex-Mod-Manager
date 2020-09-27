@@ -17,6 +17,9 @@
     <Filter Include="Source\Application\Options">
       <UniqueIdentifier>{5546396e-0e58-4a25-8198-b047376a4752}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Application\&lt;Workspace&gt;">
+      <UniqueIdentifier>{b76ab6d3-a568-4ecc-82e1-7b2132b8d26a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EmbeddedResources.h">
@@ -43,12 +46,6 @@
     <ClInclude Include="Source\Application\IMainWindow.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\IWorkspace.h">
-      <Filter>Source\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application\IWorkspaceContainer.h">
-      <Filter>Source\Application</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\AppOption.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
@@ -73,6 +70,24 @@
     <ClInclude Include="Source\Application\IModule.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\IWorkspace.h">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IWorkspaceContainer.h">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\DefaultWorkspace.h">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\IWorkspaceDocument.h">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Localization.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\BookWorkspaceContainer.h">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -93,12 +108,6 @@
     <ClCompile Include="Source\Application\IMainWindow.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Application\IWorkspace.cpp">
-      <Filter>Source\Application</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application\IWorkspaceContainer.cpp">
-      <Filter>Source\Application</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application\AppOption.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>
@@ -110,6 +119,24 @@
     </ClCompile>
     <ClCompile Include="Source\Application\IManager.cpp">
       <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IWorkspace.cpp">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IWorkspaceContainer.cpp">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\DefaultWorkspace.cpp">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IWorkspaceDocument.cpp">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Localization.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

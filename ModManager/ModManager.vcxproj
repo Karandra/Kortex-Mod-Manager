@@ -466,6 +466,7 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <SetChecksum>true</SetChecksum>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"</Command>
@@ -474,6 +475,15 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\LatestCommit.txt"
+git rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"
+echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
+    </PreBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)Resources/Mod Manager.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -516,6 +526,7 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <SetChecksum>true</SetChecksum>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"</Command>
@@ -524,6 +535,15 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\LatestCommit.txt"
+git rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"
+echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
+    </PreBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)Resources/Mod Manager.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -566,6 +586,7 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <SetChecksum>true</SetChecksum>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"</Command>
@@ -574,6 +595,15 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\LatestCommit.txt"
+git rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"
+echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
+    </PreBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)Resources/Mod Manager.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -616,6 +646,7 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <SetChecksum>true</SetChecksum>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName) $(PlatformShortName)$(TargetExt)"</Command>
@@ -624,11 +655,21 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\LatestCommit.txt"
+git rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"
+echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
+    </PreBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)Resources/Mod Manager.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application\AppOption.h" />
     <ClInclude Include="Source\Application\BookWorkspaceContainer.h" />
     <ClInclude Include="Source\Application\BroadcastProcessor.h" />
+    <ClInclude Include="Source\Application\DefaultApplication.h" />
     <ClInclude Include="Source\Application\DefaultWorkspace.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IMainWindow.h" />
@@ -653,6 +694,7 @@
     <ClCompile Include="Source\Application\AppOption.cpp" />
     <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp" />
     <ClCompile Include="Source\Application\BroadcastProcessor.cpp" />
+    <ClCompile Include="Source\Application\DefaultApplication.cpp" />
     <ClCompile Include="Source\Application\DefaultWorkspace.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
     <ClCompile Include="Source\Application\IMainWindow.cpp" />

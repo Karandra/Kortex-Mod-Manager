@@ -1,6 +1,6 @@
 #include "pch.hpp"
 #include "SystemApplication.h"
-#include "IApplication.h"
+#include "DefaultApplication.h"
 #include "Log.h"
 #include "kxf/Application/ApplicationInitializer.h"
 #include "kxf/FileSystem/NativeFileSystem.h"
@@ -25,6 +25,10 @@ namespace Kortex::SystemApplicationInfo
 	const constexpr kxf::XChar ShortName[] = wxS("Kortex");
 	const constexpr kxf::XChar Developer[] = wxS("Kerber");
 	const constexpr kxf::XChar Version[] = wxS("2.0");
+
+	const constexpr kxf::XChar GitCommitHash[] =
+		#include "../Include/LatestCommit.txt"
+		;
 }
 
 namespace Kortex
@@ -140,7 +144,7 @@ namespace Kortex
 		m_RootDirectory = kxf::NativeFileSystem::GetExecutableDirectory();
 
 		// Create default application
-		//m_Application = std::make_unique<Application::DefaultApplication>();
+		m_Application = std::make_unique<Application::DefaultApplication>();
 
 		// Initialize main variables
 		kxf::IVariablesCollection& variables = m_Application->GetVariables();
@@ -150,9 +154,8 @@ namespace Kortex
 		variables.SetItem("App", "Developer", SystemApplicationInfo::Developer);
 		variables.SetItem("App", "Version", SystemApplicationInfo::Version);
 		variables.SetItem("App", "UniqueID", kxf::UniversallyUniqueID(kxf::RTTI::GetInterfaceID<IApplication>().ToNativeUUID()).ToString());
-		//variables.SetItem("App", "CommitHash", kxf::String(SystemApplicationInfo::GitCommitHash).Trim().Trim(kxf::StringOpFlag::FromEnd));
+		variables.SetItem("App", "CommitHash", kxf::String(SystemApplicationInfo::GitCommitHash).Trim().Trim(kxf::StringOpFlag::FromEnd));
 		variables.SetItem("App", "RootDirectory", m_RootDirectory);
-		variables.SetItem("App", "DataDirectory", m_Application->GetDataDirectory());
 
 		variables.SetItem("App", "Platform", m_Application->Is64Bit() ? "Win64" : "Win32");
 		variables.SetItem("App", "Architecture", m_Application->Is64Bit() ? "x64" : "x86");

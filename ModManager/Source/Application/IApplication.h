@@ -21,7 +21,6 @@ namespace Kortex
 	class IGameProfile;
 	class IMainWindow;
 
-	class LogEvent;
 	class BroadcastProcessor;
 	struct CmdLineParameters;
 }
@@ -46,8 +45,6 @@ namespace Kortex
 			virtual void OnDestroy() = 0;
 			virtual bool OnInit() = 0;
 			virtual int OnExit() = 0;
-
-			virtual void OnError(LogEvent& event) = 0;
 			virtual bool OnException() = 0;
 			kxf::String ExamineCaughtException() const;
 
@@ -59,8 +56,8 @@ namespace Kortex
 			kxf::FSPath GetRootDirectory() const;
 			virtual kxf::FSPath GetDataDirectory() const = 0;
 			virtual kxf::FSPath GetLogsDirectory() const = 0;
-			virtual kxf::FSPath GetUserSettingsDirectory() const = 0;
-			virtual kxf::FSPath GetUserSettingsFile() const = 0;
+			virtual kxf::FSPath GetSettingsDirectory() const = 0;
+			virtual kxf::FSPath GetSettingsFile() const = 0;
 			virtual kxf::FSPath GetInstancesDirectory() const = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
 			virtual IMainWindow* GetMainWindow() const = 0;

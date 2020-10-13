@@ -88,6 +88,9 @@
     <ClInclude Include="Source\Application\BookWorkspaceContainer.h">
       <Filter>Source\Application\&lt;Workspace&gt;</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\DefaultApplication.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -137,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp">
       <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\DefaultApplication.cpp">
+      <Filter>Source\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

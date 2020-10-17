@@ -1,11 +1,14 @@
 #include "pch.hpp"
 #include "DefaultApplication.h"
 #include "SystemApplication.h"
+#include "Options/CmdLineDatabase.h"
 #include "Log.h"
 #include <kxf/System/ShellOperations.h>
+#include <wx/cmdline.h>
 
 namespace Kortex::Application
 {
+	// IApplication
 	void DefaultApplication::OnCreate()
 	{
 		m_BroadcastReciever = std::make_unique<BroadcastReciever>();
@@ -57,10 +60,6 @@ namespace Kortex::Application
 	{
 	}
 
-	kxf::String DefaultApplication::ExpandVariablesLocally(const kxf::String& variables) const
-	{
-		return m_Variables.Expand(variables);
-	}
 	kxf::String DefaultApplication::ExpandVariables(const kxf::String& variables) const
 	{
 		//if (IGameInstance* instance = IGameInstance::GetActive())
@@ -69,6 +68,10 @@ namespace Kortex::Application
 		//}
 		return ExpandVariablesLocally(variables);
 	}
+	kxf::String DefaultApplication::ExpandVariablesLocally(const kxf::String& variables) const
+	{
+		return m_Variables.Expand(variables);
+	}
 
 	bool DefaultApplication::OpenInstanceSelectionDialog()
 	{
@@ -76,6 +79,54 @@ namespace Kortex::Application
 	}
 	bool DefaultApplication::Uninstall()
 	{
+		return false;
+	}
+
+	// kxf::Application::ICommandLine
+	size_t DefaultApplication::EnumCommandLineArgs(std::function<bool(kxf::String)> func) const
+	{
+		if (m_CommandLineParser)
+		{
+			size_t count = 0;
+			for (size_t i = 0; i < m_CommandLineParser->GetParamCount(); i++)
+			{
+				count++;
+				if (!std::invoke(func, m_CommandLineParser->GetParam(i)))
+				{
+					break;
+				}
+			}
+			return count;
+		}
+		return 0;
+	}
+	void DefaultApplication::OnCommandLineInit(wxCmdLineParser& parser)
+	{
+		m_CommandLineParser = &parser;
+
+		parser.SetSwitchChars("-");
+		parser.AddOption(CmdLineName::GameInstance, {}, "Game instance ID");
+		parser.AddOption(CmdLineName::AddDownload, {}, "Download URI");
+		parser.AddOption(CmdLineName::SettingsDirectory, {}, "Directory path for application-wide config");
+	}
+	bool DefaultApplication::OnCommandLineParsed(wxCmdLineParser& parser)
+	{
+		return true;
+	}
+	bool DefaultApplication::OnCommandLineError(wxCmdLineParser& parser)
+	{
+		if (m_CommandLineParser)
+		{
+			m_CommandLineParser->Usage();
+		}
+		return false;
+	}
+	bool DefaultApplication::OnCommandLineHelp(wxCmdLineParser& parser)
+	{
+		if (m_CommandLineParser)
+		{
+			m_CommandLineParser->Usage();
+		}
 		return false;
 	}
 }

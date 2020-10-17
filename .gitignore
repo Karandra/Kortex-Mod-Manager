@@ -21,6 +21,7 @@ Bin/*
 
 #Misc files
 Kortex/Include/Kortex/Git/LatestCommit.txt
+ModManager/Include/LatestCommit.txt
 
 # Resourses
 Resources/*

@@ -28,7 +28,6 @@ namespace Kortex
 
 			std::unique_ptr<IApplication> m_Application;
 			wxSingleInstanceChecker m_SingleInstance;
-			wxCmdLineParser* m_CommandLineParser;
 			kxf::FSPath m_RootDirectory;
 
 		private:
@@ -47,6 +46,13 @@ namespace Kortex
 			void OnAssertFailure(kxf::String file, int line, kxf::String function, kxf::String condition, kxf::String message) override;
 
 			const kxf::ILocalizationPackage& GetLocalizationPackage() const override;
+			
+			// ICoreApplication -> ICommandLine
+			size_t EnumCommandLineArgs(std::function<bool(kxf::String)> func) const override;
+			void OnCommandLineInit(wxCmdLineParser& parser) override;
+			bool OnCommandLineParsed(wxCmdLineParser& parser) override;
+			bool OnCommandLineError(wxCmdLineParser& parser) override;
+			bool OnCommandLineHelp(wxCmdLineParser& parser) override;
 
 		public:
 			// SystemApplication
@@ -67,10 +73,6 @@ namespace Kortex
 			BroadcastProcessor& GetBroadcastProcessor()
 			{
 				return m_BroadcastProcessor;
-			}
-			wxCmdLineParser& GetCommandLineParser() const
-			{
-				return *m_CommandLineParser;
 			}
 			wxLog& GetLogger() const
 			{

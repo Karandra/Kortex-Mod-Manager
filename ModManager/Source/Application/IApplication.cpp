@@ -21,15 +21,6 @@ namespace Kortex
 		return *SystemApplication::GetInstance().GetApplication();
 	}
 
-	void IApplication::OnConfigureCommandLine()
-	{
-		wxCmdLineParser& parser = GetCommandLineParser();
-
-		parser.SetSwitchChars("-");
-		//cmdLineParser.AddOption(CmdLineName::InstanceID, {}, "Instance ID");
-		//cmdLineParser.AddOption(CmdLineName::GlobalConfigPath, {}, "Folder path for app-wide config");
-		//cmdLineParser.AddOption(CmdLineName::DownloadLink, {}, "Download link");
-	}
 	kxf::String IApplication::ExamineCaughtException() const
 	{
 		return SystemApplication::GetInstance().ExamineCaughtException();
@@ -56,29 +47,7 @@ namespace Kortex
 		return SystemApplication::GetInstance().IsAnotherInstanceRunning();
 	}
 
-	bool IApplication::QueueDownloadToMainProcess(const kxf::String& link)
-	{
-		//return SystemApplication::GetInstance().QueueDownloadToMainProcess(link);
-	}
-	std::optional<kxf::String> IApplication::GetLinkFromCommandLine() const
-	{
-		#if 0
-		using namespace Application;
-
-		kxf::String link;
-		if (GetCommandLineParser().Found(CmdLineName::DownloadLink, &link) && !link.IsEmpty())
-		{
-			return link;
-		}
-		return {};
-		#endif
-	}
-
-	wxCmdLineParser& IApplication::GetCommandLineParser() const
-	{
-		return SystemApplication::GetInstance().GetCommandLineParser();
-	}
-	kxf::String IApplication::FormatCommandLine(const CmdLineParameters& parameters)
+	kxf::String IApplication::FormatCommandLine(const std::unordered_map<kxf::String, kxf::String>& parameters)
 	{
 		kxf::String commandLine;
 		auto AddCommand = [&commandLine](const kxf::String& command)
@@ -93,17 +62,12 @@ namespace Kortex
 			}
 		};
 
-		if (!parameters.InstanceID.IsEmpty())
+		for (auto&& [name, value]: parameters)
 		{
-			AddCommand(kxf::String::Format(wxS("-%1 \"%2\""), CmdLineName::InstanceID, parameters.InstanceID));
-		}
-		if (!parameters.DownloadLink.IsEmpty())
-		{
-			AddCommand(kxf::String::Format(wxS("-%1 \"%2\""), CmdLineName::DownloadLink, parameters.DownloadLink));
-		}
-		if (!parameters.GlobalConfigPath.IsEmpty())
-		{
-			AddCommand(kxf::String::Format(wxS("-%1 \"%2\""), CmdLineName::GlobalConfigPath, parameters.GlobalConfigPath));
+			if (!name.IsEmptyOrWhitespace() && !value.IsEmptyOrWhitespace())
+			{
+				AddCommand(kxf::String::Format(wxS("-%1 \"%2\""), name, value));
+			}
 		}
 		return commandLine;
 	}

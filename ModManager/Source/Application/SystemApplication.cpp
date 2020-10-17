@@ -132,6 +132,7 @@ namespace Kortex
 		return true;
 	}
 
+	// ICoreApplication
 	bool SystemApplication::OnCreate()
 	{
 		// Set basic info
@@ -170,9 +171,6 @@ namespace Kortex
 		// Call creation function
 		m_Application->OnCreate();
 
-		// Configure command line and parse it
-		m_Application->OnConfigureCommandLine();
-
 		return true;
 	}
 
@@ -202,8 +200,7 @@ namespace Kortex
 	}
 	void SystemApplication::OnAssertFailure(kxf::String file, int line, kxf::String function, kxf::String condition, kxf::String message)
 	{
-		Log::Info("SystemApplication::OnAssertFailure");
-		Log::Debug("%1:%2; [Function=%3][Condition=%4][Message=%5]", file, line, function, condition, message);
+		Log::Debug("<SystemApplication::OnAssertFailure> %1:%2; [Function=%3][Condition=%4][Message=%5]", file, line, function, condition, message);
 	}
 
 	const kxf::ILocalizationPackage& SystemApplication::GetLocalizationPackage() const
@@ -211,6 +208,48 @@ namespace Kortex
 		return m_Application ? m_Application->GetLocalizationPackage() : m_EmptyLocalizationPackage;
 	}
 
+	// ICoreApplication -> ICommandLine
+	size_t SystemApplication::EnumCommandLineArgs(std::function<bool(kxf::String)> func) const
+	{
+		return GUIApplication::EnumCommandLineArgs(std::move(func));
+	}
+	void SystemApplication::OnCommandLineInit(wxCmdLineParser& parser)
+	{
+		GUIApplication::OnCommandLineInit(parser);
+		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())
+		{
+			commandLine->OnCommandLineInit(parser);
+		}
+	}
+	bool SystemApplication::OnCommandLineParsed(wxCmdLineParser& parser)
+	{
+		bool result = false;
+		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())
+		{
+			result = commandLine->OnCommandLineParsed(parser);
+		}
+		return result || GUIApplication::OnCommandLineParsed(parser);
+	}
+	bool SystemApplication::OnCommandLineError(wxCmdLineParser& parser)
+	{
+		bool result = false;
+		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())
+		{
+			result = commandLine->OnCommandLineError(parser);
+		}
+		return result || GUIApplication::OnCommandLineError(parser);
+	}
+	bool SystemApplication::OnCommandLineHelp(wxCmdLineParser& parser)
+	{
+		bool result = false;
+		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())
+		{
+			result = commandLine->OnCommandLineHelp(parser);
+		}
+		return result || GUIApplication::OnCommandLineHelp(parser);
+	}
+
+	// SystemApplication
 	kxf::String SystemApplication::GetShortName() const
 	{
 		return SystemApplicationInfo::ShortName;

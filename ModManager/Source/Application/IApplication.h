@@ -22,7 +22,6 @@ namespace Kortex
 	class IMainWindow;
 
 	class BroadcastProcessor;
-	struct CmdLineParameters;
 }
 
 namespace Kortex
@@ -36,9 +35,6 @@ namespace Kortex
 
 		public:
 			static IApplication& GetInstance() noexcept;
-
-		private:
-			void OnConfigureCommandLine();
 
 		protected:
 			virtual void OnCreate() = 0;
@@ -69,8 +65,8 @@ namespace Kortex
 			virtual size_t EnumLocalizationPackages(std::function<bool(kxf::Locale, kxf::FileItem)> func) const = 0;
 
 			virtual kxf::IVariablesCollection& GetVariables() = 0;
-			virtual kxf::String ExpandVariablesLocally(const kxf::String& variables) const = 0;
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;
+			virtual kxf::String ExpandVariablesLocally(const kxf::String& variables) const = 0;
 			
 			virtual bool OpenInstanceSelectionDialog() = 0;
 			virtual bool Uninstall() = 0;
@@ -80,11 +76,7 @@ namespace Kortex
 			bool IsSystem64Bit() const;
 			bool IsAnotherInstanceRunning() const;
 
-			bool QueueDownloadToMainProcess(const kxf::String& link);
-			std::optional<kxf::String> GetLinkFromCommandLine() const;
-
-			wxCmdLineParser& GetCommandLineParser() const;
-			kxf::String FormatCommandLine(const CmdLineParameters& parameters);
+			kxf::String FormatCommandLine(const std::unordered_map<kxf::String, kxf::String>& parameters);
 			bool ScheduleRestart(const kxf::String& commandLine = {}, std::optional<kxf::TimeSpan> timeout = {});
 			void Exit(int exitCode = 0);
 

@@ -1,7 +1,8 @@
 #include "pch.hpp"
 #include "AppOption.h"
 #include "IApplication.h"
-//#include <Kortex/GameInstance.hpp>
+#include "GameInstance/IGameProfile.h"
+#include "GameInstance/IGameInstance.h"
 #include "Log.h"
 
 namespace Kortex
@@ -28,15 +29,14 @@ namespace Kortex
 		return res;
 	}
 	
-	bool AppOption::AssignInstance(const IConfigurableGameInstance& instance)
+	bool AppOption::AssignInstance(IGameInstance& instance)
 	{
-		m_Instance = &const_cast<IConfigurableGameInstance&>(instance);
-		return true;
+		instance.QueryInterface(m_Instance);
+		return !m_Instance.is_null();
 	}
 	bool AppOption::AssignActiveInstance()
 	{
-		#if 0
-		IGameInstance* instance = IGameInstance::GetActive();
+		auto instance = IApplication::GetInstance().GetActiveGameInstance();
 		if (instance && instance->QueryInterface(m_Instance))
 		{
 			return true;
@@ -46,23 +46,28 @@ namespace Kortex
 			Log::Error("Failed to assign 'IConfigurableGameInstance' interface from active game instance to an 'AppOption' object");
 			return false;
 		}
-		#endif
 	}
 	
 	void AppOption::AssignProfile(IGameProfile& profile)
 	{
-		m_Profile = &profile;
+		profile.QueryInterface(m_Profile);
 	}
 	void AppOption::AssignActiveProfile()
 	{
-		//m_Profile = IGameProfile::GetActive();
+		if (auto instance = IApplication::GetInstance().GetActiveGameInstance())
+		{
+			m_Profile = instance->GetActiveProfile();
+		}
 	}
 
+	AppOption::AppOption() = default;
 	AppOption::AppOption(const AppOption& other, const kxf::XMLNode& node)
 	{
 		*this = other;
 		m_ConfigNode = node;
 	}
+	AppOption::AppOption(const AppOption&) noexcept = default;
+	AppOption::~AppOption() = default;
 
 	bool AppOption::IsNull() const
 	{
@@ -92,7 +97,7 @@ namespace Kortex
 			}
 			case Disposition::Instance:
 			{
-				//app.OnInstanceConfigChanged(*this, *m_Instance->QueryInterface<IGameInstance>());
+				app.OnInstanceConfigChanged(*this, *m_Instance->QueryInterface<IGameInstance>());
 				break;
 			}
 			case Disposition::Profile:
@@ -102,4 +107,6 @@ namespace Kortex
 			}
 		};
 	}
+
+	AppOption& AppOption::operator=(const AppOption&) noexcept = default;
 }

@@ -3,6 +3,10 @@
 #include "SystemApplication.h"
 #include "Options/CmdLineDatabase.h"
 #include "Log.h"
+
+#include "GameInstance/IGameProfile.h"
+#include "GameInstance/IGameInstance.h"
+
 #include <kxf/System/ShellOperations.h>
 #include <wx/cmdline.h>
 
@@ -60,17 +64,25 @@ namespace Kortex::Application
 	{
 	}
 
+	DefaultApplication::DefaultApplication() = default;
+	DefaultApplication::~DefaultApplication() = default;
+
 	kxf::String DefaultApplication::ExpandVariables(const kxf::String& variables) const
 	{
-		//if (IGameInstance* instance = IGameInstance::GetActive())
-		//{
-		//	return instance->ExpandVariables(variables);
-		//}
+		if (m_ActiveGameInstance)
+		{
+			return m_ActiveGameInstance->ExpandVariables(variables);
+		}
 		return ExpandVariablesLocally(variables);
 	}
 	kxf::String DefaultApplication::ExpandVariablesLocally(const kxf::String& variables) const
 	{
 		return m_Variables.Expand(variables);
+	}
+
+	kxf::object_ptr<IGameInstance> DefaultApplication::GetActiveGameInstance() const
+	{
+		return m_ActiveGameInstance;
 	}
 
 	bool DefaultApplication::OpenInstanceSelectionDialog()

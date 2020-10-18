@@ -67,6 +67,8 @@ namespace Kortex
 			virtual kxf::IVariablesCollection& GetVariables() = 0;
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;
 			virtual kxf::String ExpandVariablesLocally(const kxf::String& variables) const = 0;
+
+			virtual kxf::object_ptr<IGameInstance> GetActiveGameInstance() const = 0;
 			
 			virtual bool OpenInstanceSelectionDialog() = 0;
 			virtual bool Uninstall() = 0;

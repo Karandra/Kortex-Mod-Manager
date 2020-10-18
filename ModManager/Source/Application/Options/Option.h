@@ -83,7 +83,7 @@ namespace Kortex::Application
 	class ActiveInstanceOption: public InstanceOption
 	{
 		private:
-			IGameInstance* GetActiveInstance() const;
+			kxf::object_ptr<IGameInstance> GetActiveInstance() const;
 
 		public:
 			template<class... Args>
@@ -96,16 +96,19 @@ namespace Kortex::Application
 	class ProfileOption: public BasicOption
 	{
 		private:
-			kxf::XMLDocument& GetXML(IGameProfile& profile) const;
+			kxf::XMLDocument* GetXML(IGameProfile& profile) const;
 
 		protected:
 			template<class... Args>
-			void Initialize(IGameProfile* profile, Args&&... arg)
+			void Initialize(kxf::object_ptr<IGameProfile> profile, Args&&... arg)
 			{
 				if (profile)
 				{
-					Create(Disposition::Profile, GetXML(*profile), std::forward<Args>(arg)...);
-					AssignProfile(*profile);
+					if (auto xml = GetXML(*profile))
+					{
+						Create(Disposition::Profile, *xml, std::forward<Args>(arg)...);
+					}
+					AssignProfile(std::move(profile));
 				}
 			}
 
@@ -114,9 +117,9 @@ namespace Kortex::Application
 
 		public:
 			template<class... Args>
-			ProfileOption(IGameProfile& profile, Args&&... arg)
+			ProfileOption(kxf::object_ptr<IGameProfile> profile, Args&&... arg)
 			{
-				Initialize(&profile, std::forward<Args>(arg)...);
+				Initialize(std::move(profile), std::forward<Args>(arg)...);
 			}
 	};
 

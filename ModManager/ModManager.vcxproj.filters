@@ -20,6 +20,9 @@
     <Filter Include="Source\Application\&lt;Workspace&gt;">
       <UniqueIdentifier>{b76ab6d3-a568-4ecc-82e1-7b2132b8d26a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\GameInstance">
+      <UniqueIdentifier>{9b46f019-9bbd-4293-aa83-65fe1b317d7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EmbeddedResources.h">
@@ -91,6 +94,21 @@
     <ClInclude Include="Source\Application\DefaultApplication.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameInstance\GameID.h">
+      <Filter>Source\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\IGameInstance.h">
+      <Filter>Source\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\IGameProfile.h">
+      <Filter>Source\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\IGameMod.h">
+      <Filter>Source\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\IGamePlugin.h">
+      <Filter>Source\GameInstance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -143,6 +161,21 @@
     </ClCompile>
     <ClCompile Include="Source\Application\DefaultApplication.cpp">
       <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\GameID.cpp">
+      <Filter>Source\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\IGameInstance.cpp">
+      <Filter>Source\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\IGameProfile.cpp">
+      <Filter>Source\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\IGameMod.cpp">
+      <Filter>Source\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\IGamePlugin.cpp">
+      <Filter>Source\GameInstance</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

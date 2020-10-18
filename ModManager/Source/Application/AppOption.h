@@ -2,6 +2,7 @@
 #include "Framework.hpp"
 #include "Options/OptionSerializer.h"
 #include <kxf/Serialization/XML.h>
+#include <kxf/RTTI/QueryInterface.h>
 class wxTopLevelWindow;
 
 namespace Kortex
@@ -38,8 +39,8 @@ namespace Kortex
 
 		private:
 			kxf::XMLNode m_ConfigNode;
-			IConfigurableGameInstance* m_Instance = nullptr;
-			IGameProfile* m_Profile = nullptr;
+			kxf::object_ptr<IConfigurableGameInstance> m_Instance;
+			kxf::object_ptr<IGameProfile> m_Profile;
 			Disposition m_Disposition = Disposition::None;
 
 			Application::OptionSerializer::UILayout m_UISerializer;
@@ -60,15 +61,17 @@ namespace Kortex
 				m_Disposition = disposition;
 			}
 			
-			bool AssignInstance(const IConfigurableGameInstance& instance);
+			bool AssignInstance(IGameInstance& instance);
 			bool AssignActiveInstance();
 			
 			void AssignProfile(IGameProfile& profile);
 			void AssignActiveProfile();
 
 		protected:
+			AppOption();
 			AppOption(const AppOption& other, const kxf::XMLNode& node);
-			AppOption() = default;
+			AppOption(const AppOption&) noexcept;
+			~AppOption();
 
 		public:
 			// General
@@ -144,13 +147,18 @@ namespace Kortex
 			{
 				m_UISerializer.WindowGeometry(const_cast<AppOption&>(*this), SerializationMode::Load, window);
 			}
+
+		public:
+			AppOption& operator=(const AppOption&) noexcept;
 	};
 }
 
 namespace Kortex::Application
 {
-	class IWithConfig
+	class IWithConfig: public kxf::RTTI::Interface<IWithConfig>
 	{
+		KxRTTI_DeclareIID(IWithConfig, {0xeff53acc, 0xbd93, 0x49d0, {0x84, 0x9b, 0x49, 0xde, 0x3e, 0xc3, 0x8a, 0xce}});
+
 		protected:
 			virtual ~IWithConfig() = default;
 

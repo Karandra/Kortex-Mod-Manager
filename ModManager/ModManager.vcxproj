@@ -688,6 +688,11 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClInclude Include="Source\Application\SystemApplication.h" />
     <ClInclude Include="Source\EmbeddedResources.h" />
     <ClInclude Include="Source\Framework.hpp" />
+    <ClInclude Include="Source\GameInstance\GameID.h" />
+    <ClInclude Include="Source\GameInstance\IGameInstance.h" />
+    <ClInclude Include="Source\GameInstance\IGameMod.h" />
+    <ClInclude Include="Source\GameInstance\IGamePlugin.h" />
+    <ClInclude Include="Source\GameInstance\IGameProfile.h" />
     <ClInclude Include="Source\pch.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -707,6 +712,11 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClCompile Include="Source\Application\Options\Option.cpp" />
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp" />
     <ClCompile Include="Source\Application\SystemApplication.cpp" />
+    <ClCompile Include="Source\GameInstance\GameID.cpp" />
+    <ClCompile Include="Source\GameInstance\IGameInstance.cpp" />
+    <ClCompile Include="Source\GameInstance\IGameMod.cpp" />
+    <ClCompile Include="Source\GameInstance\IGamePlugin.cpp" />
+    <ClCompile Include="Source\GameInstance\IGameProfile.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

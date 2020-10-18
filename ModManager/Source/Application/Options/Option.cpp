@@ -3,7 +3,8 @@
 #include "OptionDatabase.h"
 #include "../IApplication.h"
 #include "../IWorkspace.h"
-//#include <Kortex/GameInstance.hpp>
+#include "GameInstance/IGameInstance.h"
+#include "GameInstance/IGameProfile.h"
 //#include <Kortex/PackageManager.hpp>
 //#include <Kortex/InstallWizard.hpp>
 
@@ -114,10 +115,9 @@ namespace Kortex::Application
 
 namespace Kortex::Application
 {
-	IGameInstance* ActiveInstanceOption::GetActiveInstance() const
+	kxf::object_ptr<IGameInstance> ActiveInstanceOption::GetActiveInstance() const
 	{
-		//return IGameInstance::GetActive();
-		return nullptr;
+		return IApplication::GetInstance().GetActiveGameInstance();
 	}
 }
 
@@ -133,20 +133,23 @@ namespace Kortex::Application
 {
 	IConfigurableGameInstance* InstanceOption::GetConfigurableInstance(IGameInstance& instance) const
 	{
-		return nullptr;
-		//return instance.QueryInterface<IConfigurableGameInstance>();
+		return instance.QueryInterface<IConfigurableGameInstance>().get();
 	}
 	kxf::XMLDocument& InstanceOption::GetXML(IConfigurableGameInstance& instance) const
 	{
-		//return instance->GetConfig();
+		return instance.GetConfig();
 	}
 }
 
 namespace Kortex::Application
 {
-	kxf::XMLDocument& ProfileOption::GetXML(IGameProfile& profile) const
+	kxf::XMLDocument* ProfileOption::GetXML(IGameProfile& profile) const
 	{
-		//return profile.GetConfig();
+		if (auto withConfig = profile.QueryInterface<IWithConfig>())
+		{
+			return &withConfig->GetConfig();
+		}
+		return nullptr;
 	}
 }
 
@@ -154,7 +157,10 @@ namespace Kortex::Application
 {
 	IGameProfile* ActiveProfileOption::GetActiveProfile() const
 	{
-		//return IGameProfile::GetActive();
+		if (auto instance = IApplication::GetInstance().GetActiveGameInstance())
+		{
+			return instance->GetActiveProfile().get();
+		}
 		return nullptr;
 	}
 }

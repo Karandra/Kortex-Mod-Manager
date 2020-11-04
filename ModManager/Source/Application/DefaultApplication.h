@@ -28,7 +28,7 @@ namespace Kortex::Application
 			kxf::FSPath m_DefaultInstancesDirectory;
 			IMainWindow* m_MainWindow = nullptr;
 
-			kxf::object_ptr<IGameInstance> m_ActiveGameInstance;
+			std::unique_ptr<IGameInstance> m_ActiveGameInstance;
 
 		protected:
 			// IApplication
@@ -101,7 +101,10 @@ namespace Kortex::Application
 			kxf::String ExpandVariables(const kxf::String& variables) const override;
 			kxf::String ExpandVariablesLocally(const kxf::String& variables) const override;
 
-			kxf::object_ptr<IGameInstance> GetActiveGameInstance() const override;
+			IGameInstance* GetActiveGameInstance() const override
+			{
+				return m_ActiveGameInstance.get();
+			}
 
 			bool OpenInstanceSelectionDialog() override;
 			bool Uninstall() override;

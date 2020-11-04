@@ -148,8 +148,8 @@ namespace Kortex
 			virtual bool IsNull() const = 0;
 			bool IsActive() const;
 
-			virtual kxf::object_ptr<IGameProfile> Clone() const = 0;
-			virtual kxf::object_ptr<IGameInstance> GetOwningInstance() const = 0;
+			virtual std::unique_ptr<IGameProfile> Clone() const = 0;
+			virtual IGameInstance* GetOwningInstance() const = 0;
 			
 			virtual kxf::String GetID() const = 0;
 			virtual kxf::FSPath GetLocation(Location locationID) const = 0;
@@ -158,8 +158,8 @@ namespace Kortex
 			virtual bool SetOptionEnabled(Option option, bool enabled = true) = 0;
 
 			virtual void SyncWithCurrentState() = 0;
-			virtual size_t EnumMods(std::function<bool(ProfileMod gameMod)> func) = 0;
-			virtual size_t EnumPlugins(std::function<bool(ProfilePlugin gamePlugin)> func) = 0;
+			virtual size_t EnumMods(std::function<bool(const ProfileMod& gameMod)> func) = 0;
+			virtual size_t EnumPlugins(std::function<bool(const ProfilePlugin& gamePlugin)> func) = 0;
 	};
 }
 

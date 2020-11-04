@@ -115,7 +115,7 @@ namespace Kortex::Application
 
 namespace Kortex::Application
 {
-	kxf::object_ptr<IGameInstance> ActiveInstanceOption::GetActiveInstance() const
+	IGameInstance* ActiveInstanceOption::GetActiveInstance() const
 	{
 		return IApplication::GetInstance().GetActiveGameInstance();
 	}
@@ -157,9 +157,9 @@ namespace Kortex::Application
 {
 	IGameProfile* ActiveProfileOption::GetActiveProfile() const
 	{
-		if (auto instance = IApplication::GetInstance().GetActiveGameInstance())
+		if (IGameInstance* instance = IApplication::GetInstance().GetActiveGameInstance())
 		{
-			return instance->GetActiveProfile().get();
+			return instance->GetActiveProfile();
 		}
 		return nullptr;
 	}

@@ -67,11 +67,11 @@ namespace Kortex
 			virtual wxBitmap GetIcon(const kxf::Size& iconSize = kxf::Size::UnspecifiedSize()) const = 0;
 
 			// Profiles
-			virtual kxf::object_ptr<IGameProfile> GetActiveProfile() = 0;
-			virtual size_t EnumProfiles(std::function<bool(kxf::object_ptr<IGameProfile> profile)> func) = 0;
-			kxf::object_ptr<IGameProfile> GetProfile(const kxf::String& id);
+			virtual IGameProfile* GetActiveProfile() = 0;
+			virtual size_t EnumProfiles(std::function<bool(IGameProfile& profile)> func) = 0;
+			IGameProfile* GetProfile(const kxf::String& id);
 
-			virtual kxf::object_ptr<IGameProfile> CreateProfile(const kxf::String& profileID, kxf::object_ptr<const IGameProfile> baseProfile = {}, kxf::FlagSet<CopyFlag> copyFlags = {}) = 0;
+			virtual std::unique_ptr<IGameProfile> CreateProfile(const kxf::String& profileID, const IGameProfile* baseProfile = nullptr, kxf::FlagSet<CopyFlag> copyFlags = {}) = 0;
 			virtual bool RemoveProfile(IGameProfile& profile) = 0;
 			virtual bool RenameProfile(IGameProfile& profile, const kxf::String& newID) = 0;
 			virtual bool SwitchActiveProfile(IGameProfile& profile) = 0;

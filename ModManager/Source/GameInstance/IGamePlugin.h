@@ -20,7 +20,7 @@ namespace Kortex
 
 			virtual kxf::String GetName() const = 0;
 			virtual kxf::FSPath GetPath() const = 0;
-			virtual kxf::object_ptr<IGameMod> GetOwningMod() const = 0;
+			virtual IGameMod* GetOwningMod() const = 0;
 
 			virtual bool IsActive() const = 0;
 			virtual void SetActive(bool isActive) = 0;
@@ -29,8 +29,8 @@ namespace Kortex
 			virtual int GetOrderIndex() const = 0;
 			virtual int GetPriority() const = 0;
 
-			virtual size_t EnumMasterPlugins(std::function<bool(kxf::object_ptr<IGamePlugin> gamePlugin)> func) = 0;
-			virtual size_t EnumDependentPlugins(std::function<bool(kxf::object_ptr<IGamePlugin> gamePlugin)> func) = 0;
+			virtual size_t EnumMasterPlugins(std::function<bool(IGamePlugin& gamePlugin)> func) = 0;
+			virtual size_t EnumDependentPlugins(std::function<bool(IGamePlugin& gamePlugin)> func) = 0;
 
 		public:
 			explicit operator bool() const noexcept

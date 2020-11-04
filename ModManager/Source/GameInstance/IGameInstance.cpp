@@ -85,14 +85,14 @@ namespace Kortex
 	{
 		return IApplication::GetInstance().GetActiveGameInstance() == this;
 	}
-	kxf::object_ptr<IGameProfile> IGameInstance::GetProfile(const kxf::String& id)
+	IGameProfile* IGameInstance::GetProfile(const kxf::String& id)
 	{
-		kxf::object_ptr<IGameProfile> result;
-		EnumProfiles([&](kxf::object_ptr<IGameProfile> profile)
+		IGameProfile* result = nullptr;
+		EnumProfiles([&](IGameProfile& profile)
 		{
-			if (profile->GetID() == id)
+			if (profile.GetID() == id)
 			{
-				result = std::move(profile);
+				result = &profile;
 				return false;
 			}
 			return true;

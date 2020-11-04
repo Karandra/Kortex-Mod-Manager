@@ -39,8 +39,8 @@ namespace Kortex
 
 		private:
 			kxf::XMLNode m_ConfigNode;
-			kxf::object_ptr<IConfigurableGameInstance> m_Instance;
-			kxf::object_ptr<IGameProfile> m_Profile;
+			IGameInstance* m_Instance = nullptr;
+			IGameProfile* m_Profile = nullptr;
 			Disposition m_Disposition = Disposition::None;
 
 			Application::OptionSerializer::UILayout m_UISerializer;

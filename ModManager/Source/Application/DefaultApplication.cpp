@@ -80,11 +80,6 @@ namespace Kortex::Application
 		return m_Variables.Expand(variables);
 	}
 
-	kxf::object_ptr<IGameInstance> DefaultApplication::GetActiveGameInstance() const
-	{
-		return m_ActiveGameInstance;
-	}
-
 	bool DefaultApplication::OpenInstanceSelectionDialog()
 	{
 		return false;

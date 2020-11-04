@@ -31,14 +31,15 @@ namespace Kortex
 	
 	bool AppOption::AssignInstance(IGameInstance& instance)
 	{
-		instance.QueryInterface(m_Instance);
-		return !m_Instance.is_null();
+		m_Instance = &instance;
+		return true;
 	}
 	bool AppOption::AssignActiveInstance()
 	{
-		auto instance = IApplication::GetInstance().GetActiveGameInstance();
-		if (instance && instance->QueryInterface(m_Instance))
+		IGameInstance* instance = IApplication::GetInstance().GetActiveGameInstance();
+		if (instance && instance->QueryInterface<IConfigurableGameInstance>())
 		{
+			m_Instance = instance;
 			return true;
 		}
 		else
@@ -50,7 +51,7 @@ namespace Kortex
 	
 	void AppOption::AssignProfile(IGameProfile& profile)
 	{
-		profile.QueryInterface(m_Profile);
+		m_Profile = &profile;
 	}
 	void AppOption::AssignActiveProfile()
 	{

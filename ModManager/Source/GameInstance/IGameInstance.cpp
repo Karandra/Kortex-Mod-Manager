@@ -5,33 +5,33 @@
 #include "Application/SystemApplication.h"
 #include <kxf/FileSystem/FileItem.h>
 #include <kxf/System/ShellOperations.h>
-#include <kxf/Drawing/SizeRatio.h>
+#include <kxf/Drawing/Common.h>
 
 namespace
 {
 	constexpr size_t g_MaxInstanceNameLength = 64;
 
-	wxBitmap LoadIconFromFile(const kxf::FSPath& path)
+	std::unique_ptr<kxf::IImage2D> LoadIconFromFile(const kxf::IFileSystem& fs, const kxf::FSPath& path)
 	{
-		wxBitmap bitmap(path.GetFullPath(), wxBITMAP_TYPE_ANY);
-		if (bitmap.IsOk())
+		std::unique_ptr<kxf::IImage2D> image;
+		if (auto stream = fs.OpenToRead(path))
 		{
-			auto ratio = kxf::Geometry::SizeRatio::FromSystemIcon();
-			if (bitmap.GetWidth() != ratio.GetWidth() || bitmap.GetHeight() != ratio.GetHeight())
-			{
-				ratio = ratio.ScaleMaintainRatio(bitmap.GetSize());
-				bitmap = bitmap.ConvertToImage().Rescale(ratio.GetWidth(), ratio.GetHeight(), wxIMAGE_QUALITY_HIGH);
-			}
+			image = kxf::Drawing::LoadImage(*stream);
+		}
+		
+		if (image)
+		{
+			return image;
 		}
 		else
 		{
+			// If everything failed, use default application icon
 			kxf::FileItem item;
-			item.SetFileExtension("exe");
+			item.SetFileExtension(wxS("exe"));
 			item.SetAttributes(kxf::FileAttribute::Normal);
 
-			bitmap = kxf::Shell::GetFileIcon(item, kxf::SHGetFileIconFlag::Large);
+			return kxf::Shell::GetFileIcon(item, kxf::SHGetFileIconFlag::Large).CloneImage2D();
 		}
-		return bitmap;
 	}
 }
 
@@ -63,18 +63,18 @@ namespace Kortex
 		return true;
 	}
 
-	wxBitmap IGameInstance::GetGenericIcon()
+	kxf::object_ptr<kxf::IImage2D> IGameInstance::GetGenericIcon()
 	{
-		return LoadIconFromFile(GetGenericIconLocation());
+		return LoadIconFromFile(IApplication::GetInstance().GetFileSystem(FileSystemOrigin::AppResources), GetGenericIconLocation());
 	}
 	kxf::FSPath IGameInstance::GetGenericIconLocation()
 	{
-		return IApplication::GetInstance().GetDataDirectory() / "UI/kortex-logo-icon.ico";
+		return wxS("UI/kortex-logo-icon.ico");
 	}
 
-	wxBitmap IGameInstance::LoadIcon(const kxf::String& path) const
+	kxf::object_ptr<kxf::IImage2D> IGameInstance::LoadIcon(const kxf::IFileSystem& fs, const kxf::String& path) const
 	{
-		return LoadIconFromFile(path);
+		return LoadIconFromFile(fs, path);
 	}
 	kxf::FSPath IGameInstance::GetDefaultIconLocation() const
 	{

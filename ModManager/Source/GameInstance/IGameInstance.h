@@ -5,7 +5,12 @@
 #include "Application/Options/Option.h"
 #include <kxf/RTTI/QueryInterface.h>
 #include <kxf/General/IVariablesCollection.h>
+#include <kxf/FileSystem/IFileSystem.h>
 
+namespace kxf
+{
+	class IImage2D;
+}
 namespace Kortex
 {
 	class IGameProfile;
@@ -20,15 +25,12 @@ namespace Kortex
 		public:
 			enum class Location
 			{
-				Unknown = -1,
+				None = -1,
 
-				RootDirectory,
-				ProfilesDirectory,
-				ModsDirectory,
-				GameDirectory,
-
-				IconFile,
-				ConfigFile,
+				Root,
+				Profiles,
+				Mods,
+				Game,
 			};
 			enum class CopyFlag: uint32_t
 			{
@@ -40,11 +42,11 @@ namespace Kortex
 		public:
 			static bool ValidateID(const kxf::String& id, kxf::String* validID = nullptr);
 
-			static wxBitmap GetGenericIcon();
+			static kxf::object_ptr<kxf::IImage2D> GetGenericIcon();
 			static kxf::FSPath GetGenericIconLocation();
 
 		protected:
-			wxBitmap LoadIcon(const kxf::String& path) const;
+			kxf::object_ptr<kxf::IImage2D> LoadIcon(const kxf::IFileSystem& fs, const kxf::String& path) const;
 			kxf::FSPath GetDefaultIconLocation() const;
 
 		public:
@@ -63,8 +65,8 @@ namespace Kortex
 			virtual kxf::String GetID() const = 0;
 			virtual kxf::String GetGameName() const = 0;
 			virtual kxf::String GetGameShortName() const = 0;
-			virtual kxf::FSPath GetLocation(Location locationID) const = 0;
-			virtual wxBitmap GetIcon(const kxf::Size& iconSize = kxf::Size::UnspecifiedSize()) const = 0;
+			virtual kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;
+			virtual kxf::object_ptr<kxf::IImage2D> GetIcon() const = 0;
 
 			// Profiles
 			virtual IGameProfile* GetActiveProfile() = 0;

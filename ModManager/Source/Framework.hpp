@@ -20,7 +20,6 @@
 #include <kxf/General/ResourceID.h>
 #include <kxf/General/FlagSet.h>
 #include <kxf/General/Version.h>
-#include <kxf/General/Color.h>
 
 #include <kxf/EventSystem/Common.h>
 #include <kxf/EventSystem/IEvtHandler.h>
@@ -32,6 +31,10 @@
 #include <kxf/FileSystem/FileItem.h>
 #include <kxf/FileSystem/FSPath.h>
 #include <kxf/FileSystem/IFileSystem.h>
+
+#include <kxf/Drawing/Color.h>
+#include <kxf/Drawing/Angle.h>
+#include <kxf/Drawing/BitmapImage.h>
 
 namespace Kortex::LayoutConstant
 {

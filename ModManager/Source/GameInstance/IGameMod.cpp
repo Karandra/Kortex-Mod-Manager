@@ -3,6 +3,7 @@
 #include "IGameInstance.h"
 #include "Application/IApplication.h"
 #include <kxf/Crypto/Crypto.h>
+#include <kxf/FileSystem/NativeFileSystem.h>
 #include <kxf/IO/MemoryStream.h>
 
 namespace
@@ -13,7 +14,7 @@ namespace
 
 		if (auto instance = IApplication::GetInstance().GetActiveGameInstance())
 		{
-			return instance->GetLocation(IGameInstance::Location::ModsDirectory) / signature;
+			return instance->GetFileSystem(IGameInstance::Location::Mods).GetCurrentDirectory() / signature;
 		}
 		return {};
 	}
@@ -32,17 +33,18 @@ namespace Kortex
 		return {};
 	}
 
-	kxf::FSPath IGameMod::GetLocation(Location locationID) const
+	kxf::IFileSystem& IGameMod::GetFileSystem(Location locationID) const
 	{
+		/*
 		switch (locationID)
 		{
-			case Location::RootDirectory:
+			case Location::Root:
 			{
-				return GetRootDirectory(GetSignature());
+				return std::make_unique<kxf::NativeFileSystem>(GetRootDirectory(GetSignature()));
 			}
-			case Location::ContentDirectory:
+			case Location::Content:
 			{
-				return GetRootDirectory(GetSignature()) / wxS("Content");
+				return std::make_unique<kxf::NativeFileSystem>(GetRootDirectory(GetSignature()) / wxS("Content"));
 			}
 			case Location::MetaFile:
 			{
@@ -57,6 +59,7 @@ namespace Kortex
 				return GetRootDirectory(GetSignature()) / wxS("Content-Picture.dat");
 			}
 		};
-		return {};
+		*/
+		return kxf::FileSystem::GetNullFileSystem();
 	}
 }

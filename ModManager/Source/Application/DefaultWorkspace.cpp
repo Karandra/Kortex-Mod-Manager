@@ -2,7 +2,7 @@
 #include "DefaultWorkspace.h"
 #include "BroadcastProcessor.h"
 #include "IWorkspaceContainer.h"
-#include <kxf/Utility/CallAtScopeExit.h>
+#include <kxf/Utility/ScopeGuard.h>
 
 namespace Kortex::Application
 {
@@ -56,7 +56,7 @@ namespace Kortex::Application
 		else
 		{
 			m_InsideOnCreate = true;
-			kxf::Utility::CallAtScopeExit atExit([&]()
+			kxf::Utility::ScopeGuard atExit([&]()
 			{
 				m_InsideOnCreate = false;
 			});

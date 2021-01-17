@@ -18,14 +18,10 @@ namespace Kortex
 		public:
 			enum class Location
 			{
-				Unknown = -1,
+				None = -1,
 
-				RootDirectory,
-				ContentDirectory,
-
-				MetaFile,
-				DescriptionFile,
-				PictureFile,
+				Root,
+				Content
 			};
 			enum class TimeAttribute
 			{
@@ -91,7 +87,7 @@ namespace Kortex
 			virtual kxf::Color GetColor() const = 0;
 			virtual void SetColor(const kxf::Color& color) = 0;
 
-			virtual kxf::FSPath GetLocation(Location locationID) const;
+			virtual kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;
 			virtual bool IsContentDirectoryLinked() const = 0;
 			virtual void UnlinkContentDirectory() = 0;
 			virtual void LinkContentDirectory(const kxf::FSPath& path) = 0;

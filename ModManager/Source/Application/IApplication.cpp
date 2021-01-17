@@ -25,10 +25,6 @@ namespace Kortex
 	{
 		return SystemApplication::GetInstance().ExamineCaughtException();
 	}
-	kxf::FSPath IApplication::GetRootDirectory() const
-	{
-		return SystemApplication::GetInstance().GetRootDirectory();
-	}
 
 	bool IApplication::Is64Bit() const
 	{

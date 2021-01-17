@@ -5,6 +5,7 @@
 #include <kxf/Application/ICoreApplication.h>
 #include <kxf/General/DynamicVariablesCollection.h>
 #include <kxf/Localization/LocalizationPackageStack.h>
+#include <kxf/FileSystem/NativeFileSystem.h>
 
 namespace Kortex::Application
 {
@@ -21,13 +22,14 @@ namespace Kortex::Application
 			kxf::DynamicVariablesCollection m_Variables;
 			wxCmdLineParser* m_CommandLineParser = nullptr;
 
-			kxf::FSPath m_DataDirectory;
-			kxf::FSPath m_SettingsDirectory;
+			kxf::NativeFileSystem m_AppRootFS;
+			kxf::NativeFileSystem m_AppResourcesFS;
+			kxf::NativeFileSystem m_AppLogsFS;
+			kxf::NativeFileSystem m_UserConfigFS;
+			kxf::NativeFileSystem m_GameInstancesFS;
 			kxf::FSPath m_SettingsFile;
-			kxf::FSPath m_LogsDirectory;
-			kxf::FSPath m_DefaultInstancesDirectory;
-			IMainWindow* m_MainWindow = nullptr;
 
+			IMainWindow* m_MainWindow = nullptr;
 			std::unique_ptr<IGameInstance> m_ActiveGameInstance;
 
 		protected:
@@ -47,25 +49,10 @@ namespace Kortex::Application
 			~DefaultApplication();
 
 		public:
-			kxf::FSPath GetDataDirectory() const override
-			{
-				return m_DataDirectory;
-			}
-			kxf::FSPath GetLogsDirectory() const override
-			{
-				return m_LogsDirectory;
-			}
-			kxf::FSPath GetSettingsDirectory() const override
-			{
-				return m_SettingsDirectory;
-			}
+			kxf::IFileSystem& GetFileSystem(FileSystemOrigin fsOrigin) override;
 			kxf::FSPath GetSettingsFile() const override
 			{
 				return m_SettingsFile;
-			}
-			kxf::FSPath GetInstancesDirectory() const override
-			{
-				return m_DefaultInstancesDirectory;
 			}
 			kxf::String GetStartupInstanceID() const override
 			{

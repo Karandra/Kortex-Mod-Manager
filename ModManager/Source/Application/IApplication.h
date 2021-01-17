@@ -3,6 +3,7 @@
 #include "Options/Option.h"
 #include <kxf/General/Version.h>
 #include <kxf/General/IVariablesCollection.h>
+#include <kxf/FileSystem/IFileSystem.h>
 #include <kxf/Localization/Locale.h>
 #include <kxf/Localization/ILocalizationPackage.h>
 class wxLog;
@@ -12,7 +13,6 @@ namespace kxf
 {
 	class XMLDocument;
 }
-
 namespace Kortex
 {
 	class IModule;
@@ -20,8 +20,18 @@ namespace Kortex
 	class IGameInstance;
 	class IGameProfile;
 	class IMainWindow;
-
 	class BroadcastProcessor;
+
+	enum class FileSystemOrigin
+	{
+		None = -1,
+
+		AppRoot,
+		AppLogs,
+		AppResources,
+		UserConfig,
+		GameInstances
+	};
 }
 
 namespace Kortex
@@ -49,12 +59,8 @@ namespace Kortex
 			virtual void OnProfileConfigChanged(AppOption& option, IGameProfile& profile) = 0;
 
 		public:
-			kxf::FSPath GetRootDirectory() const;
-			virtual kxf::FSPath GetDataDirectory() const = 0;
-			virtual kxf::FSPath GetLogsDirectory() const = 0;
-			virtual kxf::FSPath GetSettingsDirectory() const = 0;
+			virtual kxf::IFileSystem& GetFileSystem(FileSystemOrigin fsOrigin) = 0;
 			virtual kxf::FSPath GetSettingsFile() const = 0;
-			virtual kxf::FSPath GetInstancesDirectory() const = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
 			virtual IMainWindow* GetMainWindow() const = 0;
 

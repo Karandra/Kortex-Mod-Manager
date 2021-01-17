@@ -8,6 +8,7 @@
 #include "GameInstance/IGameInstance.h"
 
 #include <kxf/System/ShellOperations.h>
+#include <kxf/FileSystem/NativeFileSystem.h>
 #include <wx/cmdline.h>
 
 namespace Kortex::Application
@@ -18,14 +19,16 @@ namespace Kortex::Application
 		m_BroadcastReciever = std::make_unique<BroadcastReciever>();
 
 		// Setup paths
-		m_DataDirectory = GetRootDirectory() / "Data";
-		m_SettingsDirectory = kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
-		m_SettingsFile = m_SettingsDirectory / "Settings.xml";
-		m_LogsDirectory = m_SettingsDirectory / "Logs";
-		m_DefaultInstancesDirectory = m_SettingsDirectory / "Instances";
+		m_AppRootFS = SystemApplication::GetInstance().GetRootDirectory();
+		m_AppResourcesFS = m_AppRootFS.GetCurrentDirectory() / wxS("Data");
+		m_UserConfigFS = kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
+		m_AppLogsFS = m_UserConfigFS.GetCurrentDirectory() / wxS("Logs");
+		m_GameInstancesFS = m_UserConfigFS.GetCurrentDirectory() / wxS("Instances");
+
+		m_SettingsFile = wxS("Settings.xml");
 
 		// Variables
-		m_Variables.SetItem("App", "DataDirectory", m_DataDirectory);
+		m_Variables.SetItem("App", "AppResourcesDirectory", m_AppResourcesFS.GetCurrentDirectory());
 		m_Variables.SetDynamicItem("App", "Revision", [this]()
 		{
 			return m_Variables.GetItem("App", "CommitHash").GetAs<kxf::String>().Left(7);
@@ -66,6 +69,40 @@ namespace Kortex::Application
 
 	DefaultApplication::DefaultApplication() = default;
 	DefaultApplication::~DefaultApplication() = default;
+
+	kxf::IFileSystem& DefaultApplication::GetFileSystem(FileSystemOrigin fsOrigin)
+	{
+		const SystemApplication& systemApp = SystemApplication::GetInstance();
+		auto GetUserConfigBaseDirectory = [this]()
+		{
+			return kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
+		};
+
+		switch (fsOrigin)
+		{
+			case FileSystemOrigin::AppRoot:
+			{
+				return m_AppRootFS;
+			}
+			case FileSystemOrigin::AppResources:
+			{
+				return m_AppResourcesFS;
+			}
+			case FileSystemOrigin::UserConfig:
+			{
+				return m_UserConfigFS;
+			}
+			case FileSystemOrigin::AppLogs:
+			{
+				return m_AppLogsFS;
+			}
+			case FileSystemOrigin::GameInstances:
+			{
+				return m_GameInstancesFS;
+			}
+		};
+		return kxf::FileSystem::GetNullFileSystem();
+	}
 
 	kxf::String DefaultApplication::ExpandVariables(const kxf::String& variables) const
 	{

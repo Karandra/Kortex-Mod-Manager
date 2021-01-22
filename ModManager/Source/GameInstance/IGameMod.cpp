@@ -33,7 +33,7 @@ namespace Kortex
 		return {};
 	}
 
-	kxf::IFileSystem& IGameMod::GetFileSystem(Location locationID) const
+	kxf::IFileSystem& IGameMod::GetFileSystem(Location locationID)
 	{
 		/*
 		switch (locationID)

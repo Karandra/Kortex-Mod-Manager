@@ -14,18 +14,16 @@
 namespace Kortex::Application
 {
 	// IApplication
-	void DefaultApplication::OnCreate()
+	bool DefaultApplication::OnCreate()
 	{
 		m_BroadcastReciever = std::make_unique<BroadcastReciever>();
 
 		// Setup paths
 		m_AppRootFS = SystemApplication::GetInstance().GetRootDirectory();
 		m_AppResourcesFS = m_AppRootFS.GetCurrentDirectory() / wxS("Data");
-		m_UserConfigFS = kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
-		m_AppLogsFS = m_UserConfigFS.GetCurrentDirectory() / wxS("Logs");
-		m_GameInstancesFS = m_UserConfigFS.GetCurrentDirectory() / wxS("Instances");
-
-		m_SettingsFile = wxS("Settings.xml");
+		m_GlobalConfigFS = m_GlobalConfigOverride ? m_GlobalConfigOverride : kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
+		m_AppLogsFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("Logs");
+		m_GameInstancesFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("Instances");
 
 		// Variables
 		m_Variables.SetItem("App", "AppResourcesDirectory", m_AppResourcesFS.GetCurrentDirectory());
@@ -33,6 +31,8 @@ namespace Kortex::Application
 		{
 			return m_Variables.GetItem("App", "CommitHash").GetAs<kxf::String>().Left(7);
 		});
+
+		return true;
 	}
 	void DefaultApplication::OnDestroy()
 	{
@@ -41,8 +41,21 @@ namespace Kortex::Application
 
 	bool DefaultApplication::OnInit()
 	{
-		const bool anotherInstanceRunning = IsAnotherInstanceRunning();
+		// Load global config
+		const kxf::FSPath globalConfigPath = m_GlobalConfigFS.ResolvePath(wxS("Settings.xml"));
+		Log::Info("Loading global config from: '%1'", globalConfigPath.GetFullPath());
 
+		if (auto stream = m_GlobalConfigFS.OpenToRead(globalConfigPath); !stream || !m_GlobalConfig.Load(*stream))
+		{
+			throw std::runtime_error("Couldn't load global config");
+		}
+
+		// Do initialization procedure
+		const bool anotherInstanceRunning = IsAnotherInstanceRunning();
+		if (!anotherInstanceRunning)
+		{
+			return true;
+		}
 		return false;
 	}
 	int DefaultApplication::OnExit()
@@ -88,9 +101,9 @@ namespace Kortex::Application
 			{
 				return m_AppResourcesFS;
 			}
-			case FileSystemOrigin::UserConfig:
+			case FileSystemOrigin::GlobalConfig:
 			{
-				return m_UserConfigFS;
+				return m_GlobalConfigFS;
 			}
 			case FileSystemOrigin::AppLogs:
 			{
@@ -155,6 +168,11 @@ namespace Kortex::Application
 	}
 	bool DefaultApplication::OnCommandLineParsed(wxCmdLineParser& parser)
 	{
+		if (kxf::String path; parser.Found(CmdLineName::SettingsDirectory, &path.GetWxString()))
+		{
+			m_GlobalConfigOverride = std::move(path);
+		}
+
 		return true;
 	}
 	bool DefaultApplication::OnCommandLineError(wxCmdLineParser& parser)

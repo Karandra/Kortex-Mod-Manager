@@ -6,6 +6,7 @@
 #include <kxf/General/DynamicVariablesCollection.h>
 #include <kxf/Localization/LocalizationPackageStack.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
+#include <kxf/Serialization/XML.h>
 
 namespace Kortex::Application
 {
@@ -25,16 +26,18 @@ namespace Kortex::Application
 			kxf::NativeFileSystem m_AppRootFS;
 			kxf::NativeFileSystem m_AppResourcesFS;
 			kxf::NativeFileSystem m_AppLogsFS;
-			kxf::NativeFileSystem m_UserConfigFS;
+			kxf::NativeFileSystem m_GlobalConfigFS;
 			kxf::NativeFileSystem m_GameInstancesFS;
-			kxf::FSPath m_SettingsFile;
+
+			kxf::XMLDocument m_GlobalConfig;
+			kxf::FSPath m_GlobalConfigOverride;
 
 			IMainWindow* m_MainWindow = nullptr;
 			std::unique_ptr<IGameInstance> m_ActiveGameInstance;
 
 		protected:
 			// IApplication
-			void OnCreate() override;
+		bool OnCreate() override;
 			void OnDestroy() override;
 			bool OnInit() override;
 			int OnExit() override;
@@ -50,9 +53,9 @@ namespace Kortex::Application
 
 		public:
 			kxf::IFileSystem& GetFileSystem(FileSystemOrigin fsOrigin) override;
-			kxf::FSPath GetSettingsFile() const override
+			kxf::XMLDocument& GetGlobalConfig() override
 			{
-				return m_SettingsFile;
+				return m_GlobalConfig;
 			}
 			kxf::String GetStartupInstanceID() const override
 			{

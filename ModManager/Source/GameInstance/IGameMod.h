@@ -38,10 +38,8 @@ namespace Kortex
 		public:
 			virtual bool IsNull() const = 0;
 
-			virtual bool LoadUsingID(const kxf::String& id) = 0;
-			virtual bool LoadUsingSignature(const kxf::String& signature) = 0;
-			virtual bool CreateFromProject(const ModPackageProject& config) = 0;
-			virtual bool Save() = 0;
+			virtual bool Load(const kxf::IFileSystem& fileSystem) = 0;
+			virtual bool Save(kxf::IFileSystem& fileSystem) = 0;
 			
 			virtual int GetDisplayOrder() const = 0;
 			virtual int GetPriority() const = 0;
@@ -87,7 +85,7 @@ namespace Kortex
 			virtual kxf::Color GetColor() const = 0;
 			virtual void SetColor(const kxf::Color& color) = 0;
 
-			virtual kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;
+			virtual kxf::IFileSystem& GetFileSystem(Location locationID) = 0;
 			virtual bool IsContentDirectoryLinked() const = 0;
 			virtual void UnlinkContentDirectory() = 0;
 			virtual void LinkContentDirectory(const kxf::FSPath& path) = 0;

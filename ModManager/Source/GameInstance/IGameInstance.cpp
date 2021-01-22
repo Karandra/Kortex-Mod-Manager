@@ -45,18 +45,18 @@ namespace Kortex
 		}
 
 		// Restrict max ID length to 64 symbols
-		const kxf::String forbiddenCharacters = kxf::FileSystem::GetForbiddenChars();
-		if (id.length() > g_MaxInstanceNameLength || id.Contains(forbiddenCharacters))
+		const kxf::String forbiddenCharacters = IApplication::GetInstance().GetFileSystem(FileSystemOrigin::GameInstances).GetForbiddenPathNameCharacters();
+		if (id.length() > g_MaxInstanceNameLength || id.ContainsAnyOfCharacters(forbiddenCharacters))
 		{
 			if (validID)
 			{
 				*validID = id;
+				validID->Truncate(g_MaxInstanceNameLength);
 
 				for (const auto& c: forbiddenCharacters)
 				{
-					validID->Replace(c, wxS(""));
+					validID->Replace(c, wxS('_'));
 				}
-				validID->Truncate(g_MaxInstanceNameLength);
 			}
 			return false;
 		}

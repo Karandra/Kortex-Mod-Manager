@@ -65,7 +65,7 @@ namespace Kortex
 			virtual kxf::String GetID() const = 0;
 			virtual kxf::String GetGameName() const = 0;
 			virtual kxf::String GetGameShortName() const = 0;
-			virtual kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;
+			virtual kxf::IFileSystem& GetFileSystem(Location locationID) = 0;
 			virtual kxf::object_ptr<kxf::IImage2D> GetIcon() const = 0;
 
 			// Profiles

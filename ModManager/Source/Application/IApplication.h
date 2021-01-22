@@ -29,7 +29,7 @@ namespace Kortex
 		AppRoot,
 		AppLogs,
 		AppResources,
-		UserConfig,
+		GlobalConfig,
 		GameInstances
 	};
 }
@@ -47,7 +47,7 @@ namespace Kortex
 			static IApplication& GetInstance() noexcept;
 
 		protected:
-			virtual void OnCreate() = 0;
+			virtual bool OnCreate() = 0;
 			virtual void OnDestroy() = 0;
 			virtual bool OnInit() = 0;
 			virtual int OnExit() = 0;
@@ -60,7 +60,7 @@ namespace Kortex
 
 		public:
 			virtual kxf::IFileSystem& GetFileSystem(FileSystemOrigin fsOrigin) = 0;
-			virtual kxf::FSPath GetSettingsFile() const = 0;
+			virtual kxf::XMLDocument& GetGlobalConfig() = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
 			virtual IMainWindow* GetMainWindow() const = 0;
 

@@ -85,9 +85,6 @@ namespace Kortex
 
 	void AppOption::NotifyChange()
 	{
-		// Disable for now
-		return;
-
 		IApplication& app = IApplication::GetInstance();
 		switch (m_Disposition)
 		{

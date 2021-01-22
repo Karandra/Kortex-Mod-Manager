@@ -8,6 +8,7 @@
 #include "kxf/System/Win32Error.h"
 #include "kxf/System/NtStatus.h"
 #include "kxf/System/HResult.h"
+#include "kxf/IO/StreamReaderWriter.h"
 #include <wx/msgdlg.h>
 
 #include "kxf/System/Private/BeginIncludeCOM.h"
@@ -55,7 +56,7 @@ namespace Kortex
 			message = e.ErrorMessage();
 			if (!message.IsEmpty())
 			{
-				message += wxS("\r\n");
+				message += wxS('\n');
 				message += e.Description().GetBSTR();
 			}
 			else
@@ -109,20 +110,13 @@ namespace Kortex
 			type = "Unknown";
 		}
 
-		kxf::String value = kxf::String::Format("Unexpected exception has occurred: %1.\r\n\r\nThe program will terminate.\r\n\r\nException type: %2", message, type);
+		kxf::String value = kxf::String::Format("Unexpected exception has occurred: %1.\n\nThe program will terminate.\n\nException type: %2", message, type);
 		Log::FatalError(value);
 		return value;
 	}
 	bool SystemApplication::OnException()
 	{
 		Log::Info("SystemApplication::OnException");
-		if (wxIsDebuggerRunning())
-		{
-			Log::Info("Debugger is running, rethrowing exception to let debugger handle it");
-
-			throw;
-			return false;
-		}
 
 		if (!m_Application->OnException())
 		{
@@ -130,6 +124,61 @@ namespace Kortex
 			return false;
 		}
 		return true;
+	}
+
+	void SystemApplication::InitializeLogTarget()
+	{
+		class LogTarget final: public wxLog
+		{
+			private:
+				std::unique_ptr<kxf::IOutputStream> m_Stream;
+
+			protected:
+				void DoLogText(const wxString& message) override
+				{
+					kxf::IO::OutputStreamWriter writer(*m_Stream);
+					writer.WriteStringUTF8(message);
+					writer.WriteStringUTF8(wxS('\n'));
+
+					m_Stream->Flush();
+				}
+
+			public:
+				LogTarget(std::unique_ptr<kxf::IOutputStream> stream)
+					:m_Stream(std::move(stream))
+				{
+				}
+				~LogTarget()
+				{
+					Log::Info("Log closed");
+				}
+
+			public:
+				void Flush() override
+				{
+					m_Stream->Flush();
+				}
+		};
+
+		kxf::IFileSystem& fs = m_Application->GetFileSystem(FileSystemOrigin::AppLogs);
+
+		// Make a vlaid log file name
+		kxf::String name = kxf::String::Format(wxS("Log[%1].log"), kxf::DateTime::Now().FormatISOCombined(' '));
+		for (kxf::XChar c: fs.GetForbiddenPathNameCharacters())
+		{
+			name.Replace(c, wxS('.'));
+		}
+
+		// Create the log target or use a default one
+		if (auto stream = fs.OpenToWrite(std::move(name), kxf::IOStreamDisposition::CreateAlways, kxf::IOStreamShare::Read, kxf::FSActionFlag::CreateDirectoryTree))
+		{
+			kxf::Log::SetActiveTarget(std::make_unique<LogTarget>(std::move(stream)));
+			Log::Info("Log opened");
+		}
+		else
+		{
+			Log::Error("Couldn't open log file in write mode");
+		}
 	}
 
 	// ICoreApplication
@@ -142,7 +191,7 @@ namespace Kortex
 		SetVendorName(SystemApplicationInfo::Developer);
 
 		// Initialize the root directory
-		m_RootDirectory = kxf::NativeFileSystem::GetExecutableDirectory();
+		m_RootDirectory = kxf::NativeFileSystem::GetExecutingModuleRootDirectory();
 
 		// Create default application
 		m_Application = std::make_unique<Application::DefaultApplication>();
@@ -169,9 +218,12 @@ namespace Kortex
 	bool SystemApplication::OnInit()
 	{
 		// Call creation function
-		m_Application->OnCreate();
-
-		return true;
+		if (m_Application->OnCreate())
+		{
+			InitializeLogTarget();
+			return m_Application->OnInit();
+		}
+		return false;
 	}
 
 	void SystemApplication::OnFatalException()
@@ -215,11 +267,12 @@ namespace Kortex
 	}
 	void SystemApplication::OnCommandLineInit(wxCmdLineParser& parser)
 	{
-		GUIApplication::OnCommandLineInit(parser);
 		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())
 		{
 			commandLine->OnCommandLineInit(parser);
 		}
+
+		GUIApplication::OnCommandLineInit(parser);
 	}
 	bool SystemApplication::OnCommandLineParsed(wxCmdLineParser& parser)
 	{

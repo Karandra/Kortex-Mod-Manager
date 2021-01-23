@@ -689,6 +689,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClInclude Include="Source\EmbeddedResources.h" />
     <ClInclude Include="Source\Framework.hpp" />
     <ClInclude Include="Source\GameInstance\GameID.h" />
+    <ClInclude Include="Source\GameInstance\IGameDefinition.h" />
     <ClInclude Include="Source\GameInstance\IGameInstance.h" />
     <ClInclude Include="Source\GameInstance\IGameMod.h" />
     <ClInclude Include="Source\GameInstance\IGamePlugin.h" />
@@ -713,6 +714,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp" />
     <ClCompile Include="Source\Application\SystemApplication.cpp" />
     <ClCompile Include="Source\GameInstance\GameID.cpp" />
+    <ClCompile Include="Source\GameInstance\IGameDefinition.cpp" />
     <ClCompile Include="Source\GameInstance\IGameInstance.cpp" />
     <ClCompile Include="Source\GameInstance\IGameMod.cpp" />
     <ClCompile Include="Source\GameInstance\IGamePlugin.cpp" />

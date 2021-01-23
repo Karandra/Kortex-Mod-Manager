@@ -2,6 +2,10 @@
 #include "Framework.hpp"
 #include "Application/AppOption.h"
 
+namespace kxf
+{
+	class XMLDocument;
+}
 namespace Kortex
 {
 	class IApplication;
@@ -52,8 +56,7 @@ namespace Kortex::Application
 	class InstanceOption: public BasicOption
 	{
 		private:
-			IConfigurableGameInstance* GetConfigurableInstance(IGameInstance& instance) const;
-			kxf::XMLDocument& GetXML(IConfigurableGameInstance& instance) const;
+			kxf::XMLDocument& GetXML(IGameInstance& instance) const;
 
 		protected:
 			template<class... Args>
@@ -61,11 +64,8 @@ namespace Kortex::Application
 			{
 				if (instance)
 				{
-					if (IConfigurableGameInstance* configurableInstance = GetConfigurableInstance(*instance))
-					{
-						Create(Disposition::Instance, GetXML(*configurableInstance), std::forward<Args>(arg)...);
-						AssignInstance(*configurableInstance);
-					}
+					Create(Disposition::Instance, GetXML(*instance), std::forward<Args>(arg)...);
+					AssignInstance(*instance);
 				}
 			}
 

@@ -109,6 +109,9 @@
     <ClInclude Include="Source\GameInstance\IGamePlugin.h">
       <Filter>Source\GameInstance</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameInstance\IGameDefinition.h">
+      <Filter>Source\GameInstance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -175,6 +178,9 @@
       <Filter>Source\GameInstance</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameInstance\IGamePlugin.cpp">
+      <Filter>Source\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\IGameDefinition.cpp">
       <Filter>Source\GameInstance</Filter>
     </ClCompile>
   </ItemGroup>

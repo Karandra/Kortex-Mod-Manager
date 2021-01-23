@@ -131,13 +131,9 @@ namespace Kortex::Application
 
 namespace Kortex::Application
 {
-	IConfigurableGameInstance* InstanceOption::GetConfigurableInstance(IGameInstance& instance) const
+	kxf::XMLDocument& InstanceOption::GetXML(IGameInstance& instance) const
 	{
-		return instance.QueryInterface<IConfigurableGameInstance>().get();
-	}
-	kxf::XMLDocument& InstanceOption::GetXML(IConfigurableGameInstance& instance) const
-	{
-		return instance.GetConfig();
+		return instance.GetUserConfig();
 	}
 }
 

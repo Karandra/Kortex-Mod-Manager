@@ -36,17 +36,8 @@ namespace Kortex
 	}
 	bool AppOption::AssignActiveInstance()
 	{
-		IGameInstance* instance = IApplication::GetInstance().GetActiveGameInstance();
-		if (instance && instance->QueryInterface<IConfigurableGameInstance>())
-		{
-			m_Instance = instance;
-			return true;
-		}
-		else
-		{
-			Log::Error("Failed to assign 'IConfigurableGameInstance' interface from active game instance to an 'AppOption' object");
-			return false;
-		}
+		m_Instance = IApplication::GetInstance().GetActiveGameInstance();
+		return true;
 	}
 	
 	void AppOption::AssignProfile(IGameProfile& profile)

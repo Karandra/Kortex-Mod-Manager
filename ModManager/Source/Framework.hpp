@@ -20,18 +20,22 @@
 #include <kxf/General/ResourceID.h>
 #include <kxf/General/FlagSet.h>
 #include <kxf/General/Version.h>
-
-#include <kxf/EventSystem/Common.h>
-#include <kxf/EventSystem/IEvtHandler.h>
+#include <kxf/General/IVariablesCollection.h>
 
 #include <kxf/RTTI/Common.h>
 #include <kxf/RTTI/QueryInterface.h>
 
+#include <kxf/EventSystem/Common.h>
+#include <kxf/EventSystem/IEvtHandler.h>
+
 #include <kxf/FileSystem/Common.h>
-#include <kxf/FileSystem/FileItem.h>
 #include <kxf/FileSystem/FSPath.h>
+#include <kxf/FileSystem/FileItem.h>
 #include <kxf/FileSystem/IFileSystem.h>
 
+#include <kxf/System/Common.h>
+
+#include <kxf/Drawing/Common.h>
 #include <kxf/Drawing/Color.h>
 #include <kxf/Drawing/Angle.h>
 #include <kxf/Drawing/BitmapImage.h>

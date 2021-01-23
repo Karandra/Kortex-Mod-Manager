@@ -23,6 +23,8 @@ namespace Kortex::Application
 		m_AppResourcesFS = m_AppRootFS.GetCurrentDirectory() / wxS("Data");
 		m_GlobalConfigFS = m_GlobalConfigOverride ? m_GlobalConfigOverride : kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
 		m_AppLogsFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("Logs");
+		m_GameDefinitionsFS = m_AppResourcesFS.GetCurrentDirectory() / wxS("GameDefinitions");
+		m_GameDefinitionsUserFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("GameDefinitions");
 		m_GameInstancesFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("Instances");
 
 		// Variables
@@ -112,6 +114,14 @@ namespace Kortex::Application
 			case FileSystemOrigin::GameInstances:
 			{
 				return m_GameInstancesFS;
+			}
+			case FileSystemOrigin::GameDefinitions:
+			{
+				return m_GameDefinitionsFS;
+			}
+			case FileSystemOrigin::GameDefinitionsUser:
+			{
+				return m_GameDefinitionsUserFS;
 			}
 		};
 		return kxf::FileSystem::GetNullFileSystem();

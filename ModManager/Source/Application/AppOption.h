@@ -9,7 +9,6 @@ namespace Kortex
 {
 	class IGameProfile;
 	class IGameInstance;
-	class IConfigurableGameInstance;
 
 	class IWorkspaceContainer;
 }

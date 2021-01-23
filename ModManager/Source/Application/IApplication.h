@@ -30,6 +30,8 @@ namespace Kortex
 		AppLogs,
 		AppResources,
 		GlobalConfig,
+		GameDefinitions,
+		GameDefinitionsUser,
 		GameInstances
 	};
 }

@@ -27,6 +27,8 @@ namespace Kortex::Application
 			kxf::NativeFileSystem m_AppResourcesFS;
 			kxf::NativeFileSystem m_AppLogsFS;
 			kxf::NativeFileSystem m_GlobalConfigFS;
+			kxf::NativeFileSystem m_GameDefinitionsFS;
+			kxf::NativeFileSystem m_GameDefinitionsUserFS;
 			kxf::NativeFileSystem m_GameInstancesFS;
 
 			kxf::XMLDocument m_GlobalConfig;
@@ -37,7 +39,7 @@ namespace Kortex::Application
 
 		protected:
 			// IApplication
-		bool OnCreate() override;
+			bool OnCreate() override;
 			void OnDestroy() override;
 			bool OnInit() override;
 			int OnExit() override;

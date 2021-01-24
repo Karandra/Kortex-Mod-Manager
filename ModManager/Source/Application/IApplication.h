@@ -18,6 +18,7 @@ namespace Kortex
 	class IModule;
 	class IManager;
 	class IGameInstance;
+	class IGameDefinition;
 	class IGameProfile;
 	class IMainWindow;
 	class BroadcastProcessor;
@@ -25,6 +26,7 @@ namespace Kortex
 	enum class FileSystemOrigin
 	{
 		None = -1,
+		Unscoped = 0,
 
 		AppRoot,
 		AppLogs,
@@ -76,6 +78,8 @@ namespace Kortex
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;
 			virtual kxf::String ExpandVariablesLocally(const kxf::String& variables) const = 0;
 
+			virtual size_t EnumGameDefinitions(std::function<bool(IGameDefinition&)> func) = 0;
+			virtual size_t EnumGameInstances(std::function<bool(IGameInstance&)> func) = 0;
 			virtual IGameInstance* GetActiveGameInstance() const = 0;
 			
 			virtual bool OpenInstanceSelectionDialog() = 0;

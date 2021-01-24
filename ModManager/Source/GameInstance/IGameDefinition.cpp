@@ -64,13 +64,8 @@ namespace Kortex
 		return LoadIconFromFile(IApplication::GetInstance().GetFileSystem(FileSystemOrigin::AppResources), wxS("UI/kortex-logo-icon.ico"));
 	}
 
-	std::unique_ptr<kxf::IImage2D> IGameDefinition::LoadIcon(const kxf::IFileSystem& fs, const kxf::String& path) const
+	std::unique_ptr<kxf::IImage2D> IGameDefinition::LoadIcon(const kxf::IFileSystem& fs, const kxf::FSPath& path) const
 	{
 		return LoadIconFromFile(fs, path);
-	}
-	std::unique_ptr<kxf::IImage2D> IGameDefinition::LoadDefaultIcon() const
-	{
-		const kxf::IFileSystem& fs = IApplication::GetInstance().GetFileSystem(FileSystemOrigin::GameDefinitions);
-		return LoadIconFromFile(fs, kxf::String::Format(wxS("Icons/%1.ico"), "", GetGameID().ToString()));
 	}
 }

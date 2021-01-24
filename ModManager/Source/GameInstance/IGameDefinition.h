@@ -20,8 +20,9 @@ namespace Kortex
 				None = -1,
 
 				Root,
-				Mods,
+				Resources,
 				Game,
+				Mods,
 				Profiles
 			};
 
@@ -30,8 +31,7 @@ namespace Kortex
 			static std::unique_ptr<kxf::IImage2D> GetGenericIcon();
 
 		protected:
-			std::unique_ptr<kxf::IImage2D> LoadIcon(const kxf::IFileSystem& fs, const kxf::String& path) const;
-			std::unique_ptr<kxf::IImage2D> LoadDefaultIcon() const;
+			std::unique_ptr<kxf::IImage2D> LoadIcon(const kxf::IFileSystem& fs, const kxf::FSPath& path) const;
 
 		public:
 			virtual ~IGameDefinition() = default;
@@ -45,11 +45,15 @@ namespace Kortex
 
 			virtual int GetSortOrder() const = 0;
 			virtual GameID GetGameID() const = 0;
-			virtual kxf::String GetID() const = 0;
 			virtual kxf::String GetGameName() const = 0;
 			virtual kxf::String GetGameShortName() const = 0;
-			virtual kxf::object_ptr<kxf::IImage2D> GetIcon() const = 0;
+			virtual const kxf::IImage2D& GetIcon() const = 0;
+			
 			virtual kxf::IFileSystem& GetFileSystem(Location locationID) = 0;
+			const kxf::IFileSystem& GetFileSystem(Location locationID) const
+			{
+				return const_cast<IGameDefinition&>(*this).GetFileSystem(locationID);
+			}
 
 		public:
 			explicit operator bool() const noexcept
@@ -70,8 +74,8 @@ namespace Kortex
 		KxRTTI_DeclareIID(IEditableGameDefinition, {0x2ef792f5, 0x69e7, 0x4f81, {0xb1, 0xbc, 0xfd, 0xfb, 0xc5, 0x4c, 0xe0, 0xda}});
 
 		public:
-			virtual kxf::XMLDocument& GetDefititionData() = 0;
-			virtual const kxf::XMLDocument& GetDefititionData() const = 0;
-			virtual void SaveDefititionData() = 0;
+			virtual kxf::XMLDocument& GetDefinitionData() = 0;
+			virtual const kxf::XMLDocument& GetDefinitionData() const = 0;
+			virtual bool SaveDefinitionData() = 0;
 	};
 }

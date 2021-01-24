@@ -39,6 +39,8 @@ namespace Kortex
 		public:
 			bool IsActive() const;
 
+			virtual IGameDefinition& GetDefinition() const = 0;
+			virtual kxf::String GetInstanceID() const = 0;
 			virtual kxf::XMLDocument& GetUserConfig() = 0;
 			virtual const kxf::XMLDocument& GetUserConfig() const = 0;
 

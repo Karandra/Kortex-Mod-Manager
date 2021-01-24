@@ -35,7 +35,8 @@ namespace Kortex
 			kxf::String ExamineCaughtException() const;
 			bool OnException();
 
-			void InitializeLogTarget();
+			void InitializeLogging();
+			void InitializeFramework();
 
 		public:
 			// ICoreApplication

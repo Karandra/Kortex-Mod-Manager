@@ -2,18 +2,19 @@
 #include "Framework.hpp"
 #include "IApplication.h"
 #include "BroadcastProcessor.h"
+#include "GameInstance/GameID.h"
 #include <kxf/Application/ICoreApplication.h>
 #include <kxf/General/DynamicVariablesCollection.h>
 #include <kxf/Localization/LocalizationPackageStack.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
 #include <kxf/Serialization/XML.h>
 
-namespace Kortex::Application
+namespace Kortex
 {
-	class MainWindow;
+	class DefaultGameDefinition;
 }
 
-namespace Kortex::Application
+namespace Kortex
 {
 	class DefaultApplication: public kxf::RTTI::ImplementInterface<DefaultApplication, IApplication, kxf::Application::ICommandLine>
 	{
@@ -23,19 +24,24 @@ namespace Kortex::Application
 			kxf::DynamicVariablesCollection m_Variables;
 			wxCmdLineParser* m_CommandLineParser = nullptr;
 
-			kxf::NativeFileSystem m_AppRootFS;
-			kxf::NativeFileSystem m_AppResourcesFS;
-			kxf::NativeFileSystem m_AppLogsFS;
-			kxf::NativeFileSystem m_GlobalConfigFS;
-			kxf::NativeFileSystem m_GameDefinitionsFS;
-			kxf::NativeFileSystem m_GameDefinitionsUserFS;
-			kxf::NativeFileSystem m_GameInstancesFS;
+			kxf::NativeFileSystem m_UnscopedFS;
+			kxf::ScopedNativeFileSystem m_AppRootFS;
+			kxf::ScopedNativeFileSystem m_AppResourcesFS;
+			kxf::ScopedNativeFileSystem m_AppLogsFS;
+			kxf::ScopedNativeFileSystem m_GlobalConfigFS;
+			kxf::ScopedNativeFileSystem m_GameDefinitionsFS;
+			kxf::ScopedNativeFileSystem m_GameDefinitionsUserFS;
+			kxf::ScopedNativeFileSystem m_GameInstancesFS;
 
 			kxf::XMLDocument m_GlobalConfig;
 			kxf::FSPath m_GlobalConfigOverride;
 
 			IMainWindow* m_MainWindow = nullptr;
+			std::unordered_map<GameID, std::unique_ptr<DefaultGameDefinition>> m_GameDefinitions;
 			std::unique_ptr<IGameInstance> m_ActiveGameInstance;
+
+		private:
+			void LoadGameDefinitions();
 
 		protected:
 			// IApplication
@@ -93,10 +99,9 @@ namespace Kortex::Application
 			kxf::String ExpandVariables(const kxf::String& variables) const override;
 			kxf::String ExpandVariablesLocally(const kxf::String& variables) const override;
 
-			IGameInstance* GetActiveGameInstance() const override
-			{
-				return m_ActiveGameInstance.get();
-			}
+			size_t EnumGameDefinitions(std::function<bool(IGameDefinition&)> func) override;
+			size_t EnumGameInstances(std::function<bool(IGameInstance&)> func) override;
+			IGameInstance* GetActiveGameInstance() const override;
 
 			bool OpenInstanceSelectionDialog() override;
 			bool Uninstall() override;

@@ -112,6 +112,9 @@
     <ClInclude Include="Source\GameInstance\IGameDefinition.h">
       <Filter>Source\GameInstance</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameInstance\DefaultGameDefinition.h">
+      <Filter>Source\GameInstance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -183,6 +186,9 @@
     <ClCompile Include="Source\GameInstance\IGameDefinition.cpp">
       <Filter>Source\GameInstance</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameInstance\DefaultGameDefinition.cpp">
+      <Filter>Source\GameInstance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Mod Manager.rc">
@@ -193,5 +199,10 @@
     <Image Include="Resources\Mod Manager.ico">
       <Filter>Resources</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint">
+      <Filter>Resources</Filter>
+    </None>
   </ItemGroup>
 </Project>

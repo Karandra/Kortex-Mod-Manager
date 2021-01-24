@@ -6,13 +6,36 @@
 
 #include "GameInstance/IGameProfile.h"
 #include "GameInstance/IGameInstance.h"
+#include "GameInstance/DefaultGameDefinition.h"
 
 #include <kxf/System/ShellOperations.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
 #include <wx/cmdline.h>
 
-namespace Kortex::Application
+namespace Kortex
 {
+	void DefaultApplication::LoadGameDefinitions()
+	{
+		auto DoLoad = [&](kxf::FileItem item)
+		{
+			if (item.IsNormalItem())
+			{
+				auto definition = std::make_unique<DefaultGameDefinition>();
+
+				kxf::NativeFileSystem fs(item.GetFullPath());
+				if (definition->LoadDefinition(fs))
+				{
+					// We allow user-defined definitions to replace the system ones so using 'insert_or_assign' here
+					m_GameDefinitions.insert_or_assign(definition->GetGameID(), std::move(definition));
+				}
+			}
+			return true;
+		};
+
+		m_GameDefinitionsFS.EnumItems({}, DoLoad, {}, kxf::FSActionFlag::LimitToDirectories);
+		m_GameDefinitionsUserFS.EnumItems({}, DoLoad, {}, kxf::FSActionFlag::LimitToDirectories);
+	}
+
 	// IApplication
 	bool DefaultApplication::OnCreate()
 	{
@@ -20,7 +43,7 @@ namespace Kortex::Application
 
 		// Setup paths
 		m_AppRootFS = SystemApplication::GetInstance().GetRootDirectory();
-		m_AppResourcesFS = m_AppRootFS.GetCurrentDirectory() / wxS("Data");
+		m_AppResourcesFS = m_AppRootFS.GetCurrentDirectory() / wxS("ModManager");
 		m_GlobalConfigFS = m_GlobalConfigOverride ? m_GlobalConfigOverride : kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
 		m_AppLogsFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("Logs");
 		m_GameDefinitionsFS = m_AppResourcesFS.GetCurrentDirectory() / wxS("GameDefinitions");
@@ -56,6 +79,8 @@ namespace Kortex::Application
 		const bool anotherInstanceRunning = IsAnotherInstanceRunning();
 		if (!anotherInstanceRunning)
 		{
+			LoadGameDefinitions();
+
 			return true;
 		}
 		return false;
@@ -95,6 +120,10 @@ namespace Kortex::Application
 
 		switch (fsOrigin)
 		{
+			case FileSystemOrigin::Unscoped:
+			{
+				return m_UnscopedFS;
+			}
 			case FileSystemOrigin::AppRoot:
 			{
 				return m_AppRootFS;
@@ -131,13 +160,42 @@ namespace Kortex::Application
 	{
 		if (m_ActiveGameInstance)
 		{
-			return m_ActiveGameInstance->ExpandVariables(variables);
+			return m_Variables.Expand(m_ActiveGameInstance->ExpandVariablesLocally(variables));
 		}
 		return ExpandVariablesLocally(variables);
 	}
 	kxf::String DefaultApplication::ExpandVariablesLocally(const kxf::String& variables) const
 	{
 		return m_Variables.Expand(variables);
+	}
+
+	size_t DefaultApplication::EnumGameDefinitions(std::function<bool(IGameDefinition&)> func)
+	{
+		if (func)
+		{
+			size_t count = 0;
+			for (auto&& [id, item]: m_GameDefinitions)
+			{
+				count++;
+				if (!std::invoke(func, *item))
+				{
+					break;
+				}
+			}
+			return count;
+		}
+		else
+		{
+			return m_GameDefinitions.size();
+		}
+	}
+	size_t DefaultApplication::EnumGameInstances(std::function<bool(IGameInstance&)> func)
+	{
+		return 0;
+	}
+	IGameInstance* DefaultApplication::GetActiveGameInstance() const
+	{
+		return m_ActiveGameInstance.get();
 	}
 
 	bool DefaultApplication::OpenInstanceSelectionDialog()

@@ -3,7 +3,7 @@
 
 namespace Kortex
 {
-	class IGameInstance;
+	class IGameDefinition;
 }
 
 namespace Kortex
@@ -14,11 +14,11 @@ namespace Kortex
 			kxf::String m_ID;
 
 		public:
-			GameID(const kxf::String& id = {})
-				:m_ID(id)
+			GameID(kxf::String id = {})
+				:m_ID(std::move(id))
 			{
 			}
-			GameID(const IGameInstance& instance);
+			GameID(const IGameDefinition& definition);
 			GameID(const GameID&) = default;
 			GameID(GameID&&) noexcept = default;
 
@@ -28,13 +28,22 @@ namespace Kortex
 				return m_ID.IsEmpty();
 			}
 
-			kxf::String ToString() const
+			const kxf::String& ToString() const& noexcept
 			{
 				return m_ID;
 			}
-			operator kxf::String() const
+			kxf::String ToString() && noexcept
+			{
+				return std::move(m_ID);
+			}
+
+			operator const kxf::String&() const& noexcept
 			{
 				return m_ID;
+			}
+			operator kxf::String() && noexcept
+			{
+				return std::move(m_ID);
 			}
 
 		public:
@@ -69,23 +78,14 @@ namespace Kortex
 	};
 }
 
-namespace Kortex::GameIDs
+namespace std
 {
-	namespace TheElderScrolls
+	template<>
+	struct hash<Kortex::GameID>
 	{
-		extern const GameID Morrowind;
-		extern const GameID Oblivion;
-		extern const GameID Skyrim;
-		extern const GameID SkyrimSE;
-		extern const GameID SkyrimVR;
-	}
-	namespace Fallout
-	{
-		extern const GameID Fallout3;
-		extern const GameID FalloutNV;
-		extern const GameID Fallout4;
-		extern const GameID Fallout4VR;
-	}
-	
-	extern const GameID Sacred2;
-};
+		size_t operator()(const Kortex::GameID& id) const noexcept
+		{
+			return std::hash<kxf::String>()(id.ToString());
+		}
+	};
+}

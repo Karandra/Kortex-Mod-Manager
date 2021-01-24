@@ -126,7 +126,7 @@ namespace Kortex
 		return true;
 	}
 
-	void SystemApplication::InitializeLogTarget()
+	void SystemApplication::InitializeLogging()
 	{
 		class LogTarget final: public wxLog
 		{
@@ -180,6 +180,10 @@ namespace Kortex
 			Log::Error("Couldn't open log file in write mode");
 		}
 	}
+	void SystemApplication::InitializeFramework()
+	{
+		kxf::Drawing::InitalizeImageHandlers();
+	}
 
 	// ICoreApplication
 	bool SystemApplication::OnCreate()
@@ -194,7 +198,7 @@ namespace Kortex
 		m_RootDirectory = kxf::NativeFileSystem::GetExecutingModuleRootDirectory();
 
 		// Create default application
-		m_Application = std::make_unique<Application::DefaultApplication>();
+		m_Application = std::make_unique<DefaultApplication>();
 
 		// Initialize main variables
 		kxf::IVariablesCollection& variables = m_Application->GetVariables();
@@ -220,7 +224,9 @@ namespace Kortex
 		// Call creation function
 		if (m_Application->OnCreate())
 		{
-			InitializeLogTarget();
+			InitializeLogging();
+			InitializeFramework();
+
 			return m_Application->OnInit();
 		}
 		return false;

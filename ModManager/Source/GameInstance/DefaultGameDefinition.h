@@ -15,7 +15,7 @@ namespace Kortex
 			kxf::ScopedNativeFileSystem m_GameFS;
 			kxf::XMLDocument m_DefitionData;
 
-			GameID m_GameID;
+			kxf::String m_Name;
 			kxf::String m_GameName;
 			kxf::String m_GameNameShort;
 			mutable std::unique_ptr<kxf::IImage2D> m_Icon;
@@ -25,7 +25,6 @@ namespace Kortex
 
 		private:
 			void MakeNull();
-			kxf::FSPath GetDefinitionFileName() const;
 
 			bool LoadDefinition();
 			void SetupVariables(const kxf::XMLNode& variablesRoot);
@@ -37,7 +36,7 @@ namespace Kortex
 			// IGameDefinition
 			bool IsNull() const override
 			{
-				return m_GameID.IsNull() || m_DefitionData.IsNull();
+				return m_Name.IsEmpty() || m_DefitionData.IsNull();
 			}
 
 			kxf::XMLDocument& GetDefinitionData() override
@@ -68,9 +67,9 @@ namespace Kortex
 			{
 				return m_SortOrder;
 			}
-			GameID GetGameID() const override
+			kxf::String GetName() const override
 			{
-				return m_GameID;
+				return m_Name;
 			}
 			kxf::String GetGameName() const override
 			{
@@ -82,7 +81,7 @@ namespace Kortex
 				{
 					return m_GameNameShort;
 				}
-				return m_GameID;
+				return m_Name;
 			}
 			kxf::String GetGameShortName() const override
 			{
@@ -94,12 +93,11 @@ namespace Kortex
 				{
 					return m_GameName;
 				}
-				return m_GameID;
+				return m_Name;
 			}
 			const kxf::IImage2D& GetIcon() const override;
 			
 			using IGameDefinition::GetFileSystem;
 			kxf::IFileSystem& GetFileSystem(Location locationID) override;
-			
 	};
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Definition ID="Game.TES.SkyrimSE" SortOrder="13200">
+<Definition Name="Game.TES.SkyrimSE" SortOrder="13200">
 	<Variables>
 		<!-- Required -->
-		<Item Type="String" ID="GameName">The Elder Scrolls V: Skyrim - Special Edition</Item>
-		<Item Type="String" ID="GameNameShort">SkyrimSE</Item>
-		<Item Type="Integer" ID="SortOrder">13200</Item>
+		<Item Type="String" Name="GameName">The Elder Scrolls V: Skyrim - Special Edition</Item>
+		<Item Type="String" Name="GameNameShort">SkyrimSE</Item>
+		<Item Type="Integer" Name="SortOrder">13200</Item>
 		
-		<Item Type="FSPath" ID="GameDirectory" Source="Registry">
+		<Item Type="FSPath" Name="GameDirectory" Source="Registry">
 			<Branch>32</Branch>
 			<Root>HKEY_LOCAL_MACHINE</Root>
 			<Path>Software\Bethesda Softworks\Skyrim Special Edition</Path>
@@ -14,21 +14,21 @@
 			<Type>REG_SZ</Type>
 		</Item>
 		
-		<Item Type="FSPath" Namespace="Resource" ID="Directory"/>
-		<Item Type="FSPath" Namespace="Resource" ID="Icon">Icon.svg</Item>
+		<Item Type="FSPath" Namespace="Resource" Name="Directory"/>
+		<Item Type="FSPath" Namespace="Resource" Name="Icon">Icon.svg</Item>
 		
 		<!-- Definition-specific -->
-		<Item Type="FSPath" ID="GameConfigDirectory">$SHDir(Documents)\My Games\Skyrim Special Edition</Item>
-		<Item Type="FSPath" ID="GameSavesDirectory">$(GameConfigDirectory)\Saves</Item>
+		<Item Type="FSPath" Name="GameConfigDirectory">$SHDir(Documents)\My Games\Skyrim Special Edition</Item>
+		<Item Type="FSPath" Name="GameSavesDirectory">$(GameConfigDirectory)\Saves</Item>
 		
-		<Item Type="String" ID="GameEditorName">Creation Kit</Item>
-		<Item Type="String" ID="ScriptExtenderID">SKSE64</Item>
+		<Item Type="String" Name="GameEditorName">Creation Kit</Item>
+		<Item Type="String" Name="ScriptExtenderID">SKSE64</Item>
 
-		<Item Type="String" ID="xEditID">sse</Item>
-		<Item Type="Integer" ID="SteamID">489830</Item>
+		<Item Type="String" Name="xEditID">sse</Item>
+		<Item Type="Integer" Name="SteamID">489830</Item>
 		
-		<Item Type="Integer" ID="NexusID">1704</Item>
-		<Item Type="String" ID="NexusDomainName">SkyrimSpecialEdition</Item>
+		<Item Type="Integer" Name="NexusID">1704</Item>
+		<Item Type="String" Name="NexusDomainName">SkyrimSpecialEdition</Item>
 	</Variables>
 
 	<Programs>

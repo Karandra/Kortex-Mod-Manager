@@ -1,6 +1,8 @@
 #include "pch.hpp"
 #include "IApplication.h"
 #include "SystemApplication.h"
+#include "GameInstance/IGameInstance.h"
+#include "GameInstance/IGameDefinition.h"
 #include "Options/Macros.h"
 #include "Options/CmdLineDatabase.h"
 #include "IMainWindow.h"
@@ -24,6 +26,33 @@ namespace Kortex
 	kxf::String IApplication::ExamineCaughtException() const
 	{
 		return SystemApplication::GetInstance().ExamineCaughtException();
+	}
+
+	IGameDefinition* IApplication::FindGameDefinition(const kxf::String& name)
+	{
+		IGameDefinition* result = nullptr;
+		EnumGameDefinitions([&](IGameDefinition& definition)
+		{
+			if (definition.GetName() == name)
+			{
+				result = &definition;
+			}
+			return result == nullptr;
+		});
+		return result;
+	}
+	IGameInstance* IApplication::FindGameInstance(const kxf::String& name)
+	{
+		IGameInstance* result = nullptr;
+		EnumGameInstances([&](IGameInstance& instance)
+		{
+			if (instance.GetName() == name)
+			{
+				result = &instance;
+			}
+			return result == nullptr;
+		});
+		return result;
 	}
 
 	bool IApplication::Is64Bit() const

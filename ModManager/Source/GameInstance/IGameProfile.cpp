@@ -6,10 +6,10 @@
 
 namespace Kortex
 {
-	bool IGameProfile::ValidateID(const kxf::String& id, kxf::String* validID)
+	bool IGameProfile::ValidateName(const kxf::String& name, kxf::String* validName)
 	{
 		// Using same rules
-		return IGameInstance::ValidateID(id, validID);
+		return IGameInstance::ValidateName(name, validName);
 	}
 
 	bool IGameProfile::IsActive() const

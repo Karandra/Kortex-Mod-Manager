@@ -1,6 +1,5 @@
 #pragma once
 #include "Framework.hpp"
-#include "GameID.h"
 
 namespace kxf
 {
@@ -17,17 +16,13 @@ namespace Kortex
 		public:
 			enum class Location
 			{
-				None = -1,
-
 				Root,
-				Resources,
 				Game,
-				Mods,
-				Profiles
+				Resources
 			};
 
 		public:
-			static bool ValidateID(const kxf::String& id, kxf::String* validID = nullptr);
+			static bool ValidateName(const kxf::String& name, kxf::String* validName = nullptr);
 			static std::unique_ptr<kxf::IImage2D> GetGenericIcon();
 
 		protected:
@@ -49,7 +44,7 @@ namespace Kortex
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;
 
 			virtual int GetSortOrder() const = 0;
-			virtual GameID GetGameID() const = 0;
+			virtual kxf::String GetName() const = 0;
 			virtual kxf::String GetGameName() const = 0;
 			virtual kxf::String GetGameShortName() const = 0;
 			virtual const kxf::IImage2D& GetIcon() const = 0;

@@ -114,18 +114,16 @@ namespace Kortex
 
 			enum class Location
 			{
-				Unknown = -1,
+				None = -1,
 
-				RootDirectory,
-				SavesDirectory,
-				ConfigDirectory,
-				WriteTargetDirectory,
-
-				ConfigFile
+				Root,
+				Saves,
+				Config,
+				WriteTarget,
 			};
 			enum class Option
 			{
-				Unknown = -1,
+				None = -1,
 
 				LocalSaves,
 				LocalConfig,
@@ -139,7 +137,7 @@ namespace Kortex
 			};
 
 		public:
-			static bool ValidateID(const kxf::String& id, kxf::String* validID = nullptr);
+			static bool ValidateName(const kxf::String& name, kxf::String* validName = nullptr);
 
 		public:
 			virtual ~IGameProfile() = default;
@@ -151,8 +149,8 @@ namespace Kortex
 			virtual std::unique_ptr<IGameProfile> Clone() const = 0;
 			virtual IGameInstance* GetOwningInstance() const = 0;
 			
-			virtual kxf::String GetID() const = 0;
-			virtual kxf::FSPath GetLocation(Location locationID) const = 0;
+			virtual kxf::String GetName() const = 0;
+			virtual kxf::IFileSystem& GetLocation(Location locationID) = 0;
 
 			virtual bool IsOptionEnabled(Option option) const = 0;
 			virtual bool SetOptionEnabled(Option option, bool enabled = true) = 0;

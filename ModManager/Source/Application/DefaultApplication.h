@@ -2,7 +2,6 @@
 #include "Framework.hpp"
 #include "IApplication.h"
 #include "BroadcastProcessor.h"
-#include "GameInstance/GameID.h"
 #include <kxf/Application/ICoreApplication.h>
 #include <kxf/General/DynamicVariablesCollection.h>
 #include <kxf/Localization/LocalizationPackageStack.h>
@@ -37,7 +36,7 @@ namespace Kortex
 			kxf::FSPath m_GlobalConfigOverride;
 
 			IMainWindow* m_MainWindow = nullptr;
-			std::unordered_map<GameID, std::unique_ptr<DefaultGameDefinition>> m_GameDefinitions;
+			std::unordered_map<kxf::String, std::unique_ptr<DefaultGameDefinition>> m_GameDefinitions;
 			std::unique_ptr<IGameInstance> m_ActiveGameInstance;
 
 		private:

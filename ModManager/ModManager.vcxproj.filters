@@ -23,6 +23,9 @@
     <Filter Include="Source\GameInstance">
       <UniqueIdentifier>{9b46f019-9bbd-4293-aa83-65fe1b317d7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\GameInstance\Private">
+      <UniqueIdentifier>{fa462c43-86a3-40f6-9bf3-d9ce1ca64868}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EmbeddedResources.h">
@@ -94,9 +97,6 @@
     <ClInclude Include="Source\Application\DefaultApplication.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameInstance\GameID.h">
-      <Filter>Source\GameInstance</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameInstance\IGameInstance.h">
       <Filter>Source\GameInstance</Filter>
     </ClInclude>
@@ -114,6 +114,12 @@
     </ClInclude>
     <ClInclude Include="Source\GameInstance\DefaultGameDefinition.h">
       <Filter>Source\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\DefaultGameInstance.h">
+      <Filter>Source\GameInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameInstance\Private\VariableLoader.h">
+      <Filter>Source\GameInstance\Private</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +174,6 @@
     <ClCompile Include="Source\Application\DefaultApplication.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameInstance\GameID.cpp">
-      <Filter>Source\GameInstance</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameInstance\IGameInstance.cpp">
       <Filter>Source\GameInstance</Filter>
     </ClCompile>
@@ -188,6 +191,12 @@
     </ClCompile>
     <ClCompile Include="Source\GameInstance\DefaultGameDefinition.cpp">
       <Filter>Source\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\DefaultGameInstance.cpp">
+      <Filter>Source\GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameInstance\Private\VariableLoader.cpp">
+      <Filter>Source\GameInstance\Private</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

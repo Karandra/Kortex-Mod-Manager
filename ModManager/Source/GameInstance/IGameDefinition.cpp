@@ -34,25 +34,25 @@ namespace
 
 namespace Kortex
 {
-	bool IGameDefinition::ValidateID(const kxf::String& id, kxf::String* validID)
+	bool IGameDefinition::ValidateName(const kxf::String& name, kxf::String* validName)
 	{
-		if (id.IsEmpty())
+		if (name.IsEmpty())
 		{
 			return false;
 		}
 
 		// Restrict max ID length to 64 symbols
-		const kxf::String forbiddenCharacters = IApplication::GetInstance().GetFileSystem(FileSystemOrigin::GameInstances).GetForbiddenPathNameCharacters();
-		if (id.length() > g_MaxInstanceNameLength || id.ContainsAnyOfCharacters(forbiddenCharacters))
+		const kxf::String forbiddenCharacters = IApplication::GetInstance().GetFileSystem(FileSystemOrigin::Unscoped).GetForbiddenPathNameCharacters();
+		if (name.length() > g_MaxInstanceNameLength || name.ContainsAnyOfCharacters(forbiddenCharacters))
 		{
-			if (validID)
+			if (validName)
 			{
-				*validID = id;
-				validID->Truncate(g_MaxInstanceNameLength);
+				*validName = name;
+				validName->Truncate(g_MaxInstanceNameLength);
 
 				for (const auto& c: forbiddenCharacters)
 				{
-					validID->Replace(c, wxS('_'));
+					validName->Replace(c, wxS('_'));
 				}
 			}
 			return false;

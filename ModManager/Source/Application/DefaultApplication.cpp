@@ -26,7 +26,7 @@ namespace Kortex
 				if (definition->LoadDefinitionData(fs))
 				{
 					// We allow user-defined definitions to replace the system ones so using 'insert_or_assign' here
-					m_GameDefinitions.insert_or_assign(definition->GetGameID(), std::move(definition));
+					m_GameDefinitions.insert_or_assign(definition->GetName(), std::move(definition));
 				}
 			}
 			return true;

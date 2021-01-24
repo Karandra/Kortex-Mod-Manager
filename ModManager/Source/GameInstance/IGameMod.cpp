@@ -14,7 +14,7 @@ namespace
 
 		if (auto instance = IApplication::GetInstance().GetActiveGameInstance())
 		{
-			return instance->GetFileSystem(IGameInstance::Location::Mods).GetCurrentDirectory() / signature;
+			return instance->GetFileSystem(IGameInstance::Location::Mods).GetLookupDirectory() / signature;
 		}
 		return {};
 	}

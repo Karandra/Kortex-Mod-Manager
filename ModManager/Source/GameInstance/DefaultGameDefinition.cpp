@@ -166,27 +166,7 @@ namespace Kortex
 		return {};
 	}
 
-	bool DefaultGameDefinition::LoadDefinition(const kxf::IFileSystem& rootFileSystem)
-	{
-		if (m_RootFS = rootFileSystem.GetCurrentDirectory())
-		{
-			m_ResourcesFS = m_RootFS.GetCurrentDirectory();
-
-			if (auto stream = rootFileSystem.OpenToRead("Definition.xml"); stream && m_DefitionData.Load(*stream))
-			{
-				if (LoadDefinitionData() && m_GameID == rootFileSystem.GetCurrentDirectory().GetName())
-				{
-					return true;
-				}
-				else
-				{
-					MakeNull();
-				}
-			}
-		}
-		return false;
-	}
-	bool DefaultGameDefinition::LoadDefinitionData()
+	bool DefaultGameDefinition::LoadDefinition()
 	{
 		const auto rootNode = m_DefitionData.QueryElement("Definition");
 
@@ -201,15 +181,15 @@ namespace Kortex
 	{
 		// Basic variables
 		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.FileName, GetDefinitionFileName());
-		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.RootDirectory, m_RootFS.GetCurrentDirectory());
-		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.GameDirectory, m_GameFS.GetCurrentDirectory());
+		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.RootDirectory, m_RootFS.GetLookupDirectory());
+		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.GameDirectory, m_GameFS.GetLookupDirectory());
 
 		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.GameID, m_GameID.ToString());
 		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.GameName, DefaultGameDefinition::GetGameName());
 		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.GameNameShort, DefaultGameDefinition::GetGameShortName());
 		m_Variables.SetItem(g_DefinitionNames.Namespace, g_DefinitionNames.SortOrder, m_SortOrder);
 
-		m_Variables.SetItem(g_ResourceNames.Namespace, g_ResourceNames.Directory, m_ResourcesFS.GetCurrentDirectory());
+		m_Variables.SetItem(g_ResourceNames.Namespace, g_ResourceNames.Directory, m_ResourcesFS.GetLookupDirectory());
 
 		// Variables from the XML
 		variablesRoot.EnumChildElements([&](const kxf::XMLNode& itemNode)
@@ -254,14 +234,14 @@ namespace Kortex
 						{
 							if (*id == g_DefinitionNames.GameDirectory)
 							{
-								m_GameFS.SetCurrentDirectory(*value);
+								m_GameFS.SetLookupDirectory(*value);
 							}
 						}
 						else if (ns == g_ResourceNames.Namespace)
 						{
 							if (*id == g_ResourceNames.Directory)
 							{
-								m_ResourcesFS.SetCurrentDirectory(*value);
+								m_ResourcesFS.SetLookupDirectory(*value);
 							}
 						}
 						m_Variables.SetItem(std::move(ns), std::move(*id), kxf::FSPath(std::move(*value)));
@@ -288,13 +268,45 @@ namespace Kortex
 	}
 
 	// IGameDefinition
-	kxf::String DefaultGameDefinition::ExpandVariables(const kxf::String& variables) const
+	bool DefaultGameDefinition::LoadDefinitionData(const kxf::IFileSystem& fileSystem)
 	{
-		return m_Variables.Expand(IApplication::GetInstance().ExpandVariablesLocally(variables));
+		if (!IsNull() || !fileSystem.IsLookupScoped())
+		{
+			return false;
+		}
+
+		if (m_RootFS = fileSystem.GetLookupDirectory())
+		{
+			m_ResourcesFS = m_RootFS.GetLookupDirectory();
+
+			if (auto stream = fileSystem.OpenToRead("Definition.xml"); stream && m_DefitionData.Load(*stream))
+			{
+				if (LoadDefinition() && m_GameID == fileSystem.GetLookupDirectory().GetName())
+				{
+					return true;
+				}
+				else
+				{
+					MakeNull();
+				}
+			}
+		}
+		return false;
 	}
-	kxf::String DefaultGameDefinition::ExpandVariablesLocally(const kxf::String& variables) const
+	bool DefaultGameDefinition::SaveDefinitionData()
 	{
-		return m_Variables.Expand(variables);
+		if (!IsNull())
+		{
+			if (auto stream = m_RootFS.OpenToWrite(GetDefinitionFileName()); stream && m_DefitionData.Save(*stream))
+			{
+				// Reload definition to keep this object's data consistent with the XML on disk
+
+				MakeNull();
+				m_Variables.ClearItems();
+				return LoadDefinition();
+			}
+		}
+		return false;
 	}
 
 	const kxf::IImage2D& DefaultGameDefinition::GetIcon() const
@@ -309,7 +321,6 @@ namespace Kortex
 		}
 		return *m_Icon;
 	}
-
 	kxf::IFileSystem& DefaultGameDefinition::GetFileSystem(Location locationID)
 	{
 		switch (locationID)
@@ -328,21 +339,5 @@ namespace Kortex
 			}
 		};
 		return kxf::FileSystem::GetNullFileSystem();
-	}
-
-	bool DefaultGameDefinition::SaveDefinitionData()
-	{
-		if (!IsNull())
-		{
-			if (auto stream = m_RootFS.OpenToWrite(GetDefinitionFileName()); stream && m_DefitionData.Save(*stream))
-			{
-				// Reload definition to keep this object's data consistent with the XML on disk
-
-				MakeNull();
-				m_Variables.ClearItems();
-				return LoadDefinitionData();
-			}
-		}
-		return false;
 	}
 }

@@ -39,9 +39,14 @@ namespace Kortex
 		public:
 			virtual bool IsNull() const = 0;
 
+			virtual kxf::XMLDocument& GetDefinitionData() = 0;
+			virtual const kxf::XMLDocument& GetDefinitionData() const = 0;
+			virtual bool LoadDefinitionData(const kxf::IFileSystem& fileSystem) = 0;
+			virtual bool SaveDefinitionData() = 0;
+
 			virtual kxf::IVariablesCollection& GetVariables() = 0;
+			virtual const kxf::IVariablesCollection& GetVariables() const = 0;
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;
-			virtual kxf::String ExpandVariablesLocally(const kxf::String& variables) const = 0;
 
 			virtual int GetSortOrder() const = 0;
 			virtual GameID GetGameID() const = 0;
@@ -64,18 +69,5 @@ namespace Kortex
 			{
 				return IsNull();
 			}
-	};
-}
-
-namespace Kortex
-{
-	class IEditableGameDefinition: public kxf::RTTI::Interface<IEditableGameDefinition>
-	{
-		KxRTTI_DeclareIID(IEditableGameDefinition, {0x2ef792f5, 0x69e7, 0x4f81, {0xb1, 0xbc, 0xfd, 0xfb, 0xc5, 0x4c, 0xe0, 0xda}});
-
-		public:
-			virtual kxf::XMLDocument& GetDefinitionData() = 0;
-			virtual const kxf::XMLDocument& GetDefinitionData() const = 0;
-			virtual bool SaveDefinitionData() = 0;
 	};
 }

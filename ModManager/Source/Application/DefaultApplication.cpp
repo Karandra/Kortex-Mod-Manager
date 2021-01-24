@@ -23,7 +23,7 @@ namespace Kortex
 				auto definition = std::make_unique<DefaultGameDefinition>();
 
 				kxf::NativeFileSystem fs(item.GetFullPath());
-				if (definition->LoadDefinition(fs))
+				if (definition->LoadDefinitionData(fs))
 				{
 					// We allow user-defined definitions to replace the system ones so using 'insert_or_assign' here
 					m_GameDefinitions.insert_or_assign(definition->GetGameID(), std::move(definition));
@@ -43,15 +43,15 @@ namespace Kortex
 
 		// Setup paths
 		m_AppRootFS = SystemApplication::GetInstance().GetRootDirectory();
-		m_AppResourcesFS = m_AppRootFS.GetCurrentDirectory() / wxS("ModManager");
+		m_AppResourcesFS = m_AppRootFS.GetLookupDirectory() / wxS("ModManager");
 		m_GlobalConfigFS = m_GlobalConfigOverride ? m_GlobalConfigOverride : kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
-		m_AppLogsFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("Logs");
-		m_GameDefinitionsFS = m_AppResourcesFS.GetCurrentDirectory() / wxS("GameDefinitions");
-		m_GameDefinitionsUserFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("GameDefinitions");
-		m_GameInstancesFS = m_GlobalConfigFS.GetCurrentDirectory() / wxS("Instances");
+		m_AppLogsFS = m_GlobalConfigFS.GetLookupDirectory() / wxS("Logs");
+		m_GameDefinitionsFS = m_AppResourcesFS.GetLookupDirectory() / wxS("GameDefinitions");
+		m_GameDefinitionsUserFS = m_GlobalConfigFS.GetLookupDirectory() / wxS("GameDefinitions");
+		m_GameInstancesFS = m_GlobalConfigFS.GetLookupDirectory() / wxS("Instances");
 
 		// Variables
-		m_Variables.SetItem("App", "AppResourcesDirectory", m_AppResourcesFS.GetCurrentDirectory());
+		m_Variables.SetItem("App", "AppResourcesDirectory", m_AppResourcesFS.GetLookupDirectory());
 		m_Variables.SetDynamicItem("App", "Revision", [this]()
 		{
 			return m_Variables.GetItem("App", "CommitHash").GetAs<kxf::String>().Left(7);
@@ -160,9 +160,9 @@ namespace Kortex
 	{
 		if (m_ActiveGameInstance)
 		{
-			return m_Variables.Expand(m_ActiveGameInstance->ExpandVariablesLocally(variables));
+			return m_Variables.Expand(m_ActiveGameInstance->ExpandVariables(variables));
 		}
-		return ExpandVariablesLocally(variables);
+		return m_Variables.Expand(variables);
 	}
 	kxf::String DefaultApplication::ExpandVariablesLocally(const kxf::String& variables) const
 	{

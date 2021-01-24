@@ -7,10 +7,8 @@
 
 namespace Kortex
 {
-	class DefaultGameDefinition: public kxf::RTTI::ImplementInterface<DefaultGameDefinition, IGameDefinition, IEditableGameDefinition>
+	class DefaultGameDefinition: public IGameDefinition
 	{
-		friend class DefaultApplication;
-
 		private:
 			kxf::ScopedNativeFileSystem m_RootFS;
 			kxf::ScopedNativeFileSystem m_ResourcesFS;
@@ -29,8 +27,7 @@ namespace Kortex
 			void MakeNull();
 			kxf::FSPath GetDefinitionFileName() const;
 
-			bool LoadDefinition(const kxf::IFileSystem& rootFileSystem);
-			bool LoadDefinitionData();
+			bool LoadDefinition();
 			void SetupVariables(const kxf::XMLNode& variablesRoot);
 
 		public:
@@ -43,12 +40,29 @@ namespace Kortex
 				return m_GameID.IsNull() || m_DefitionData.IsNull();
 			}
 
+			kxf::XMLDocument& GetDefinitionData() override
+			{
+				return m_DefitionData;
+			}
+			const kxf::XMLDocument& GetDefinitionData() const override
+			{
+				return m_DefitionData;
+			}
+			bool LoadDefinitionData(const kxf::IFileSystem& fileSystem) override;
+			bool SaveDefinitionData() override;
+
 			kxf::IVariablesCollection& GetVariables() override
 			{
 				return m_Variables;
 			}
-			kxf::String ExpandVariables(const kxf::String& variables) const override;
-			kxf::String ExpandVariablesLocally(const kxf::String& variables) const override;
+			const kxf::IVariablesCollection& GetVariables() const override
+			{
+				return m_Variables;
+			}
+			kxf::String ExpandVariables(const kxf::String& variables) const override
+			{
+				return m_Variables.Expand(variables);
+			}
 
 			int GetSortOrder() const override
 			{
@@ -86,16 +100,6 @@ namespace Kortex
 			
 			using IGameDefinition::GetFileSystem;
 			kxf::IFileSystem& GetFileSystem(Location locationID) override;
-
-			// IEditableGameDefinition
-			kxf::XMLDocument& GetDefinitionData() override
-			{
-				return m_DefitionData;
-			}
-			const kxf::XMLDocument& GetDefinitionData() const override
-			{
-				return m_DefitionData;
-			}
-			bool SaveDefinitionData() override;
+			
 	};
 }

@@ -61,8 +61,8 @@ namespace Kortex
 
 			virtual kxf::XMLDocument& GetUserConfig() = 0;
 			virtual const kxf::XMLDocument& GetUserConfig() const = 0;
-			virtual bool LoadUserConfig(const kxf::IFileSystem& fileSystem);
-			virtual bool SaveUserConfig() = 0;
+			virtual bool LoadInstanceData(const kxf::IFileSystem& fileSystem) = 0;
+			virtual bool SaveInstanceData() = 0;
 
 			virtual kxf::IVariablesCollection& GetVariables() = 0;
 			virtual const kxf::IVariablesCollection& GetVariables() const = 0;

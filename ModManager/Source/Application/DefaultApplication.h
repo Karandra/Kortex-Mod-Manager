@@ -10,7 +10,8 @@
 
 namespace Kortex
 {
-	class DefaultGameDefinition;
+	class IGameDefinition;
+	class IGameInstance;
 }
 
 namespace Kortex
@@ -36,11 +37,14 @@ namespace Kortex
 			kxf::FSPath m_GlobalConfigOverride;
 
 			IMainWindow* m_MainWindow = nullptr;
-			std::unordered_map<kxf::String, std::unique_ptr<DefaultGameDefinition>> m_GameDefinitions;
+			std::unordered_map<kxf::String, std::unique_ptr<IGameDefinition>> m_GameDefinitions;
+			std::unordered_map<kxf::String, std::unique_ptr<IGameInstance>> m_GameInstances;
 			std::unique_ptr<IGameInstance> m_ActiveGameInstance;
 
 		private:
+			void LoadGlobalConfiguration();
 			void LoadGameDefinitions();
+			void LoadGameInstances();
 
 		protected:
 			// IApplication

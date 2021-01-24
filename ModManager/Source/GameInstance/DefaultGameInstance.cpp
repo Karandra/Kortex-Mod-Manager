@@ -34,8 +34,6 @@ namespace Kortex
 	bool DefaultGameInstance::LoadInstance()
 	{
 		const auto rootNode = m_InstanceData.QueryElement("Instance");
-
-		m_Name = rootNode.GetAttribute("Name");
 		if (!m_Name.IsEmpty() && ResolveDefinition(rootNode.GetAttribute("ParentDefinition")))
 		{
 			SetupVariables(rootNode.QueryElement("Variables"));
@@ -125,7 +123,7 @@ namespace Kortex
 	}
 
 	// IGameInstance
-	bool DefaultGameInstance::LoadUserConfig(const kxf::IFileSystem& fileSystem)
+	bool DefaultGameInstance::LoadInstanceData(const kxf::IFileSystem& fileSystem)
 	{
 		if (!IsNull() || !fileSystem.IsLookupScoped() || !fileSystem)
 		{
@@ -136,6 +134,8 @@ namespace Kortex
 		{
 			m_ModsFS = m_RootFS.GetLookupDirectory() / wxS("Mods");
 			m_ProfilesFS = m_RootFS.GetLookupDirectory() / wxS("Profiles");
+			m_DownloadsFS = m_RootFS.GetLookupDirectory() / wxS("Downloads");
+			m_MountedGameFS = m_RootFS.GetLookupDirectory() / wxS("MountedGame");
 
 			if (auto stream = fileSystem.OpenToRead(g_InstanceNames.XMLFileName); stream && m_InstanceData.Load(*stream))
 			{
@@ -152,7 +152,7 @@ namespace Kortex
 		}
 		return false;
 	}
-	bool DefaultGameInstance::SaveUserConfig()
+	bool DefaultGameInstance::SaveInstanceData()
 	{
 		return false;
 	}

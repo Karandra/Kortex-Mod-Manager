@@ -7,6 +7,7 @@
 #include "GameInstance/IGameProfile.h"
 #include "GameInstance/IGameInstance.h"
 #include "GameInstance/DefaultGameDefinition.h"
+#include "GameInstance/DefaultGameInstance.h"
 
 #include <kxf/System/ShellOperations.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
@@ -14,6 +15,16 @@
 
 namespace Kortex
 {
+	void DefaultApplication::LoadGlobalConfiguration()
+	{
+		const kxf::FSPath globalConfigPath = m_GlobalConfigFS.ResolvePath(wxS("Settings.xml"));
+		Log::Info("Loading global config from: '%1'", globalConfigPath.GetFullPath());
+
+		if (auto stream = m_GlobalConfigFS.OpenToRead(globalConfigPath); !stream || !m_GlobalConfig.Load(*stream))
+		{
+			throw std::runtime_error("Couldn't load global config");
+		}
+	}
 	void DefaultApplication::LoadGameDefinitions()
 	{
 		auto DoLoad = [&](kxf::FileItem item)
@@ -22,7 +33,7 @@ namespace Kortex
 			{
 				auto definition = std::make_unique<DefaultGameDefinition>();
 
-				kxf::NativeFileSystem fs(item.GetFullPath());
+				kxf::ScopedNativeFileSystem fs(item.GetFullPath());
 				if (definition->LoadDefinitionData(fs))
 				{
 					// We allow user-defined definitions to replace the system ones so using 'insert_or_assign' here
@@ -34,6 +45,24 @@ namespace Kortex
 
 		m_GameDefinitionsFS.EnumItems({}, DoLoad, {}, kxf::FSActionFlag::LimitToDirectories);
 		m_GameDefinitionsUserFS.EnumItems({}, DoLoad, {}, kxf::FSActionFlag::LimitToDirectories);
+	}
+	void DefaultApplication::LoadGameInstances()
+	{
+		m_GameInstancesFS.EnumItems({}, [&](kxf::FileItem item)
+		{
+			if (item.IsNormalItem())
+			{
+				auto instance = std::make_unique<DefaultGameInstance>();
+
+				kxf::ScopedNativeFileSystem fs(item.GetFullPath());
+				if (instance->LoadInstanceData(fs))
+				{
+					// We allow user-defined definitions to replace the system ones so using 'insert_or_assign' here
+					m_GameInstances.insert_or_assign(instance->GetName(), std::move(instance));
+				}
+			}
+			return true;
+		}, {}, kxf::FSActionFlag::LimitToDirectories);
 	}
 
 	// IApplication
@@ -67,19 +96,14 @@ namespace Kortex
 	bool DefaultApplication::OnInit()
 	{
 		// Load global config
-		const kxf::FSPath globalConfigPath = m_GlobalConfigFS.ResolvePath(wxS("Settings.xml"));
-		Log::Info("Loading global config from: '%1'", globalConfigPath.GetFullPath());
-
-		if (auto stream = m_GlobalConfigFS.OpenToRead(globalConfigPath); !stream || !m_GlobalConfig.Load(*stream))
-		{
-			throw std::runtime_error("Couldn't load global config");
-		}
+		LoadGlobalConfiguration();
 
 		// Do initialization procedure
 		const bool anotherInstanceRunning = IsAnotherInstanceRunning();
 		if (!anotherInstanceRunning)
 		{
 			LoadGameDefinitions();
+			LoadGameInstances();
 
 			return true;
 		}

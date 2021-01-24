@@ -62,8 +62,8 @@ namespace Kortex
 			{
 				return m_InstanceData;
 			}
-			bool LoadUserConfig(const kxf::IFileSystem& fileSystem) override;
-			bool SaveUserConfig() override;
+			bool LoadInstanceData(const kxf::IFileSystem& fileSystem) override;
+			bool SaveInstanceData() override;
 
 			kxf::IVariablesCollection& GetVariables() override
 			{

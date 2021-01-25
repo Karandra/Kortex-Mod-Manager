@@ -1,8 +1,8 @@
 #include "pch.hpp"
 #include "AppOption.h"
 #include "IApplication.h"
-#include "GameInstance/IGameProfile.h"
-#include "GameInstance/IGameInstance.h"
+#include "GameDefinition/IGameProfile.h"
+#include "GameDefinition/IGameInstance.h"
 #include "Log.h"
 
 namespace Kortex

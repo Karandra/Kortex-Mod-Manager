@@ -688,14 +688,14 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClInclude Include="Source\Application\SystemApplication.h" />
     <ClInclude Include="Source\EmbeddedResources.h" />
     <ClInclude Include="Source\Framework.hpp" />
-    <ClInclude Include="Source\GameInstance\DefaultGameDefinition.h" />
-    <ClInclude Include="Source\GameInstance\DefaultGameInstance.h" />
-    <ClInclude Include="Source\GameInstance\IGameDefinition.h" />
-    <ClInclude Include="Source\GameInstance\IGameInstance.h" />
-    <ClInclude Include="Source\GameInstance\IGameMod.h" />
-    <ClInclude Include="Source\GameInstance\IGamePlugin.h" />
-    <ClInclude Include="Source\GameInstance\IGameProfile.h" />
-    <ClInclude Include="Source\GameInstance\Private\VariableSerialization.h" />
+    <ClInclude Include="Source\GameDefinition\DefaultGameDefinition.h" />
+    <ClInclude Include="Source\GameDefinition\DefaultGameInstance.h" />
+    <ClInclude Include="Source\GameDefinition\IGameDefinition.h" />
+    <ClInclude Include="Source\GameDefinition\IGameInstance.h" />
+    <ClInclude Include="Source\GameDefinition\IGameMod.h" />
+    <ClInclude Include="Source\GameDefinition\IGamePlugin.h" />
+    <ClInclude Include="Source\GameDefinition\IGameProfile.h" />
+    <ClInclude Include="Source\GameDefinition\Private\VariableSerialization.h" />
     <ClInclude Include="Source\pch.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -715,14 +715,14 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClCompile Include="Source\Application\Options\Option.cpp" />
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp" />
     <ClCompile Include="Source\Application\SystemApplication.cpp" />
-    <ClCompile Include="Source\GameInstance\DefaultGameDefinition.cpp" />
-    <ClCompile Include="Source\GameInstance\DefaultGameInstance.cpp" />
-    <ClCompile Include="Source\GameInstance\IGameDefinition.cpp" />
-    <ClCompile Include="Source\GameInstance\IGameInstance.cpp" />
-    <ClCompile Include="Source\GameInstance\IGameMod.cpp" />
-    <ClCompile Include="Source\GameInstance\IGamePlugin.cpp" />
-    <ClCompile Include="Source\GameInstance\IGameProfile.cpp" />
-    <ClCompile Include="Source\GameInstance\Private\VariableSerialization.cpp" />
+    <ClCompile Include="Source\GameDefinition\DefaultGameDefinition.cpp" />
+    <ClCompile Include="Source\GameDefinition\DefaultGameInstance.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGameDefinition.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGameInstance.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGameMod.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGamePlugin.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGameProfile.cpp" />
+    <ClCompile Include="Source\GameDefinition\Private\VariableSerialization.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

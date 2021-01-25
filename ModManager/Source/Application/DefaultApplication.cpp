@@ -4,10 +4,10 @@
 #include "Options/CmdLineDatabase.h"
 #include "Log.h"
 
-#include "GameInstance/IGameProfile.h"
-#include "GameInstance/IGameInstance.h"
-#include "GameInstance/DefaultGameDefinition.h"
-#include "GameInstance/DefaultGameInstance.h"
+#include "GameDefinition/IGameProfile.h"
+#include "GameDefinition/IGameInstance.h"
+#include "GameDefinition/DefaultGameDefinition.h"
+#include "GameDefinition/DefaultGameInstance.h"
 
 #include <kxf/System/ShellOperations.h>
 #include <kxf/FileSystem/NativeFileSystem.h>

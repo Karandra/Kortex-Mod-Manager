@@ -3,8 +3,8 @@
 #include "OptionDatabase.h"
 #include "../IApplication.h"
 #include "../IWorkspace.h"
-#include "GameInstance/IGameInstance.h"
-#include "GameInstance/IGameProfile.h"
+#include "GameDefinition/IGameInstance.h"
+#include "GameDefinition/IGameProfile.h"
 //#include <Kortex/PackageManager.hpp>
 //#include <Kortex/InstallWizard.hpp>
 

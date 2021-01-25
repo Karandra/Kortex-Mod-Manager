@@ -1,6 +1,6 @@
 #include "pch.hpp"
 #include "DefaultGameDefinition.h"
-#include "Private/VariableLoader.h"
+#include "Private/VariableSerialization.h"
 
 namespace
 {
@@ -31,6 +31,7 @@ namespace Kortex
 {
 	void DefaultGameDefinition::MakeNull()
 	{
+		m_Variables.ClearItems();
 		m_Name = kxf::NullString;
 		m_DefitionData.ClearChildren();
 	}
@@ -141,12 +142,14 @@ namespace Kortex
 	{
 		if (!IsNull())
 		{
+			GameInstance::Private::VariableSaver saver(m_Variables, m_DefitionData.ConstructElement("Variables"));
+			saver.Invoke();
+
 			if (auto stream = m_RootFS.OpenToWrite(g_DefinitionNames.XMLFileName); stream && m_DefitionData.Save(*stream))
 			{
 				// Reload definition to keep this object's data consistent with the XML on disk
 
 				MakeNull();
-				m_Variables.ClearItems();
 				return LoadDefinition();
 			}
 		}

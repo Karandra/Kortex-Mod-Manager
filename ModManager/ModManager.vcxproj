@@ -695,7 +695,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClInclude Include="Source\GameInstance\IGameMod.h" />
     <ClInclude Include="Source\GameInstance\IGamePlugin.h" />
     <ClInclude Include="Source\GameInstance\IGameProfile.h" />
-    <ClInclude Include="Source\GameInstance\Private\VariableLoader.h" />
+    <ClInclude Include="Source\GameInstance\Private\VariableSerialization.h" />
     <ClInclude Include="Source\pch.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -722,7 +722,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClCompile Include="Source\GameInstance\IGameMod.cpp" />
     <ClCompile Include="Source\GameInstance\IGamePlugin.cpp" />
     <ClCompile Include="Source\GameInstance\IGameProfile.cpp" />
-    <ClCompile Include="Source\GameInstance\Private\VariableLoader.cpp" />
+    <ClCompile Include="Source\GameInstance\Private\VariableSerialization.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

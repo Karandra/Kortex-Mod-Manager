@@ -118,7 +118,7 @@
     <ClInclude Include="Source\GameInstance\DefaultGameInstance.h">
       <Filter>Source\GameInstance</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameInstance\Private\VariableLoader.h">
+    <ClInclude Include="Source\GameInstance\Private\VariableSerialization.h">
       <Filter>Source\GameInstance\Private</Filter>
     </ClInclude>
   </ItemGroup>
@@ -195,7 +195,7 @@
     <ClCompile Include="Source\GameInstance\DefaultGameInstance.cpp">
       <Filter>Source\GameInstance</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameInstance\Private\VariableLoader.cpp">
+    <ClCompile Include="Source\GameInstance\Private\VariableSerialization.cpp">
       <Filter>Source\GameInstance\Private</Filter>
     </ClCompile>
   </ItemGroup>

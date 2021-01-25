@@ -1,5 +1,5 @@
 #include "pch.hpp"
-#include "VariableLoader.h"
+#include "VariableSerialization.h"
 #include "Application/IApplication.h"
 #include <kxf/General/IndexedEnum.h>
 #include <kxf/System/Registry.h>
@@ -185,5 +185,13 @@ namespace Kortex::GameInstance::Private
 			return true;
 		}, wxS("Item"));
 		return count;
+	}
+}
+
+namespace Kortex::GameInstance::Private
+{
+	size_t VariableSaver::DoSaveVariables()
+	{
+		return 0;
 	}
 }

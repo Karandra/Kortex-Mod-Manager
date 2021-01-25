@@ -44,4 +44,26 @@ namespace Kortex::GameInstance::Private
 				m_OnInteger = std::move(func);
 			}
 	};
+
+	class VariableSaver final
+	{
+		private:
+			const kxf::IVariablesCollection& m_Collection;
+			kxf::XMLNode m_VariablesRoot;
+
+		private:
+			size_t DoSaveVariables();
+
+		public:
+			VariableSaver(const kxf::IVariablesCollection& collection, const kxf::XMLNode& variablesRoot)
+				:m_VariablesRoot(variablesRoot), m_Collection(collection)
+			{
+			}
+
+		public:
+			size_t Invoke()
+			{
+				return DoSaveVariables();
+			}
+	};
 }

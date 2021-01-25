@@ -2,7 +2,7 @@
 #include "DefaultGameInstance.h"
 #include "IGameDefinition.h"
 #include "Application/IApplication.h"
-#include "Private/VariableLoader.h"
+#include "Private/VariableSerialization.h"
 
 namespace
 {
@@ -26,6 +26,7 @@ namespace Kortex
 {
 	void DefaultGameInstance::MakeNull()
 	{
+		m_Variables.ClearItems();
 		m_InstanceData.ClearChildren();
 		m_RootFS = {};
 		m_Name = kxf::NullString;
@@ -154,6 +155,19 @@ namespace Kortex
 	}
 	bool DefaultGameInstance::SaveInstanceData()
 	{
+		if (!IsNull())
+		{
+			GameInstance::Private::VariableSaver saver(m_Variables, m_InstanceData.ConstructElement("Variables"));
+			saver.Invoke();
+
+			if (auto stream = m_RootFS.OpenToWrite(g_InstanceNames.XMLFileName); stream && m_InstanceData.Save(*stream))
+			{
+				// Reload instance to keep this object's data consistent with the XML on disk
+
+				MakeNull();
+				return LoadInstance();
+			}
+		}
 		return false;
 	}
 

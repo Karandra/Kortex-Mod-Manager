@@ -91,7 +91,7 @@ namespace Kortex
 			}
 			size_t EnumProfiles(std::function<bool(IGameProfile& profile)> func) override;
 
-			IGameProfile* CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile = nullptr, kxf::FlagSet<CopyFlag> copyFlags = {}) override;
+			IGameProfile* CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile = nullptr) override;
 			bool RemoveProfile(IGameProfile& profile) override;
 			bool RenameProfile(IGameProfile& profile, const kxf::String& newName) override;
 			bool SwitchActiveProfile(IGameProfile& profile) override;

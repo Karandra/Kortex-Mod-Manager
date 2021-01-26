@@ -6,6 +6,10 @@ namespace kxf
 	class IImage2D;
 	class XMLDocument;
 }
+namespace Kortex
+{
+	class IGameInstance;
+}
 
 namespace Kortex
 {
@@ -51,6 +55,10 @@ namespace Kortex
 			
 			virtual kxf::IFileSystem& GetFileSystem(Location locationID) = 0;
 			virtual const kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;
+
+		public:
+			size_t EnumLinkedInstances(std::function<bool(IGameInstance& instance)> func) const;
+			IGameInstance* GetLinkedInstanceByName(const kxf::String& name) const;
 
 		public:
 			explicit operator bool() const noexcept

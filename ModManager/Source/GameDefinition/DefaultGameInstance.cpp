@@ -44,7 +44,7 @@ namespace Kortex
 	}
 	bool DefaultGameInstance::ResolveDefinition(const kxf::String& name)
 	{
-		m_Definition = IApplication::GetInstance().FindGameDefinition(name);
+		m_Definition = IApplication::GetInstance().GetGameDefinitionByName(name);
 		return m_Definition != nullptr;
 	}
 	void DefaultGameInstance::SetupVariables(const kxf::XMLNode& variablesRoot)
@@ -192,7 +192,7 @@ namespace Kortex
 		}
 	}
 
-	IGameProfile* DefaultGameInstance::CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile, kxf::FlagSet<CopyFlag> copyFlags)
+	IGameProfile* DefaultGameInstance::CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile)
 	{
 		return nullptr;
 	}

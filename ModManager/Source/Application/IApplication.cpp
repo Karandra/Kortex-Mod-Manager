@@ -28,7 +28,7 @@ namespace Kortex
 		return SystemApplication::GetInstance().ExamineCaughtException();
 	}
 
-	IGameDefinition* IApplication::FindGameDefinition(const kxf::String& name)
+	IGameDefinition* IApplication::GetGameDefinitionByName(const kxf::String& name)
 	{
 		IGameDefinition* result = nullptr;
 		EnumGameDefinitions([&](IGameDefinition& definition)
@@ -41,7 +41,7 @@ namespace Kortex
 		});
 		return result;
 	}
-	IGameInstance* IApplication::FindGameInstance(const kxf::String& name)
+	IGameInstance* IApplication::GetGameInstanceByName(const kxf::String& name)
 	{
 		IGameInstance* result = nullptr;
 		EnumGameInstances([&](IGameInstance& instance)

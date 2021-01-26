@@ -79,8 +79,8 @@ namespace Kortex
 			virtual size_t EnumGameDefinitions(std::function<bool(IGameDefinition&)> func) = 0;
 			virtual size_t EnumGameInstances(std::function<bool(IGameInstance&)> func) = 0;
 			virtual IGameInstance* GetActiveGameInstance() const = 0;
-			IGameDefinition* FindGameDefinition(const kxf::String& name);
-			IGameInstance* FindGameInstance(const kxf::String& name);
+			IGameDefinition* GetGameDefinitionByName(const kxf::String& name);
+			IGameInstance* GetGameInstanceByName(const kxf::String& name);
 			
 			virtual IGameInstance* OpenInstanceSelectionDialog() = 0;
 			virtual bool Uninstall() = 0;

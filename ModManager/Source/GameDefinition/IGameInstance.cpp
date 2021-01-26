@@ -19,7 +19,7 @@ namespace Kortex
 	{
 		return IApplication::GetInstance().GetActiveGameInstance() == this;
 	}
-	IGameProfile* IGameInstance::GetProfile(const kxf::String& profileName)
+	IGameProfile* IGameInstance::GetProfileByName(const kxf::String& profileName)
 	{
 		IGameProfile* result = nullptr;
 		EnumProfiles([&](IGameProfile& profile)

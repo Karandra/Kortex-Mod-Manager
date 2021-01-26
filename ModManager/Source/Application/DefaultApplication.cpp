@@ -25,6 +25,37 @@ namespace Kortex
 			throw std::runtime_error("Couldn't load global config");
 		}
 	}
+	void DefaultApplication::LoadLocalizationPackages()
+	{
+		kxf::Locale activeLocale = this->GetGlobalOption("Language").GetAttribute("Locale");
+		if (!activeLocale)
+		{
+			activeLocale = kxf::Locale::GetSystemPreferred();
+		}
+
+		kxf::Localization::SearchPackages(m_AppResourcesFS, "LocalizationPacks", [&](kxf::Locale locale, kxf::FileItem fileItem)
+		{
+			if (locale == activeLocale)
+			{
+				if (auto stream = m_AppResourcesFS.OpenToRead(fileItem.GetFullPath()))
+				{
+					auto package = std::make_unique<kxf::AndroidLocalizationPackage>();
+					if (package->Load(*stream, std::move(locale)))
+					{
+						m_LocalizationPackages.Add(std::move(package));
+					}
+				}
+				return true;
+			}
+			return true;
+		});
+
+		if (m_LocalizationPackages.IsEmpty())
+		{
+			throw std::runtime_error("No localization packages found");
+		}
+	}
+
 	void DefaultApplication::LoadGameDefinitions()
 	{
 		auto DoLoad = [&](kxf::FileItem item)
@@ -97,6 +128,7 @@ namespace Kortex
 	{
 		// Load global config
 		LoadGlobalConfiguration();
+		LoadLocalizationPackages();
 
 		// Do initialization procedure
 		const bool anotherInstanceRunning = IsAnotherInstanceRunning();
@@ -106,6 +138,10 @@ namespace Kortex
 			LoadGameInstances();
 
 			return true;
+		}
+		else
+		{
+			throw std::runtime_error("Another instance is running");
 		}
 		return false;
 	}
@@ -222,9 +258,9 @@ namespace Kortex
 		return m_ActiveGameInstance.get();
 	}
 
-	bool DefaultApplication::OpenInstanceSelectionDialog()
+	IGameInstance* DefaultApplication::OpenInstanceSelectionDialog()
 	{
-		return false;
+		return nullptr;
 	}
 	bool DefaultApplication::Uninstall()
 	{

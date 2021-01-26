@@ -63,6 +63,7 @@ namespace Kortex
 			virtual void OnProfileConfigChanged(AppOption& option, IGameProfile& profile) = 0;
 
 		public:
+			virtual const kxf::ILocalizationPackage& GetLocalizationPackage() const = 0;
 			virtual kxf::IFileSystem& GetFileSystem(FileSystemOrigin fsOrigin) = 0;
 			virtual kxf::XMLDocument& GetGlobalConfig() = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
@@ -70,9 +71,6 @@ namespace Kortex
 
 			virtual size_t EnumLoadedModules(std::function<bool(IModule&)> func) = 0;
 			virtual size_t EnumLoadedManagers(std::function<bool(IManager&)> func) = 0;
-
-			virtual const kxf::ILocalizationPackage& GetLocalizationPackage() const = 0;
-			virtual size_t EnumLocalizationPackages(std::function<bool(kxf::Locale, kxf::FileItem)> func) const = 0;
 
 			virtual kxf::IVariablesCollection& GetVariables() = 0;
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;
@@ -84,7 +82,7 @@ namespace Kortex
 			IGameDefinition* FindGameDefinition(const kxf::String& name);
 			IGameInstance* FindGameInstance(const kxf::String& name);
 			
-			virtual bool OpenInstanceSelectionDialog() = 0;
+			virtual IGameInstance* OpenInstanceSelectionDialog() = 0;
 			virtual bool Uninstall() = 0;
 
 		public:

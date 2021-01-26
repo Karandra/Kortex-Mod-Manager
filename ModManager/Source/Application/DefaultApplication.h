@@ -43,6 +43,8 @@ namespace Kortex
 
 		private:
 			void LoadGlobalConfiguration();
+			void LoadLocalizationPackages();
+
 			void LoadGameDefinitions();
 			void LoadGameInstances();
 
@@ -63,6 +65,10 @@ namespace Kortex
 			~DefaultApplication();
 
 		public:
+			const kxf::ILocalizationPackage& GetLocalizationPackage() const override
+			{
+				return m_LocalizationPackages;
+			}
 			kxf::IFileSystem& GetFileSystem(FileSystemOrigin fsOrigin) override;
 			kxf::XMLDocument& GetGlobalConfig() override
 			{
@@ -86,15 +92,6 @@ namespace Kortex
 				return 0;
 			}
 
-			const kxf::ILocalizationPackage& GetLocalizationPackage() const override
-			{
-				return m_LocalizationPackages;
-			}
-			size_t EnumLocalizationPackages(std::function<bool(kxf::Locale, kxf::FileItem)> func) const override
-			{
-				return 0;
-			}
-
 			kxf::IVariablesCollection& GetVariables() override
 			{
 				return m_Variables;
@@ -106,7 +103,7 @@ namespace Kortex
 			size_t EnumGameInstances(std::function<bool(IGameInstance&)> func) override;
 			IGameInstance* GetActiveGameInstance() const override;
 
-			bool OpenInstanceSelectionDialog() override;
+			IGameInstance* OpenInstanceSelectionDialog() override;
 			bool Uninstall() override;
 
 		public:

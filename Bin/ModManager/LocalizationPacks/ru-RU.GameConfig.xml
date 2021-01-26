@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Categories -->
+	<string name="Category.Game">Игра</string>
+	<string name="Category.Graphics">Графика</string>
+	<string name="Category.Shadows">Тени</string>
+	<string name="Category.Water">Вода</string>
+	<string name="Category.Audio">Звук</string>
+	<string name="Category.Gameplay">Геймплей</string>
+	<string name="Category.Interface">Интерфейс</string>
+	<string name="Category.Vegetation">Растительность</string>
+	<string name="Category.LevelOfDetail">Уровень детализации</string>
+	<string name="Category.Grass">Трава</string>
+	<string name="Category.Trees">Деревья</string>
+	<string name="Category.Misc">Разное</string>
+	<string name="Category.Archives">Архивы</string>
+	<string name="Category.MemoryManagement">Управление памятью</string>
+	<string name="Category.BackgroudLoading">Фоновая загрузка</string>
+	<string name="Category.Debug">Отладка</string>
+	
+	<string name="Category.Editor">Редактор</string>
+	<string name="Category.Messages">Сообщения</string>
+	
+	<string name="Category.ENB">ENB</string>
+	<string name="Category.General">Общие параметры</string>
+	<string name="Category.Effects">Эффекты</string>
+	<string name="Category.Bloom">Свечение (Bloom)</string>
+	<string name="Category.AmbientOcclusion">Ambient Occlusion</string>
+	<string name="Category.ProxyLibrary">Прокси-библиотека</string>
+	<string name="Category.FPSLimit">Ограничение FPS</string>
+	<string name="Category.Controls">Настройка управления</string>
+	<string name="Category.Antialiasing">Сглаживание</string>
+	<string name="Category.Fixes">Исправления</string>
+	<string name="Category.Performance">Производительность</string>
+	<string name="Category.Memory">Память</string>
+	<string name="Category.AdaptiveQuality">Адаптивное качество</string>
+	<string name="Category.Multihead">Настройки для нескольких GPU</string>
+	<string name="Category.ColorCorrection">Коррекция цвета</string>
+	<string name="Category.Weather">Погода</string>
+
+	<!-- Sample values -->
+	<string name="SampleValue.IncreasedDetail">Повышенная резкость</string>
+	
+	<string name="SampleValue.Difficulty0">Новичок</string>
+	<string name="SampleValue.Difficulty1">Ученик</string>
+	<string name="SampleValue.Difficulty2">Адепт</string>
+	<string name="SampleValue.Difficulty3">Эксперт</string>
+	<string name="SampleValue.Difficulty4">Мастер</string>
+	<string name="SampleValue.Difficulty5">Легендарный</string>
+
+	<string name="SampleValue.Language.RUSSIAN">Русский</string>
+	<string name="SampleValue.Language.ENGLISH">Английский</string>
+	<string name="SampleValue.Language.GERMAN">Немецкий</string>
+	<string name="SampleValue.Language.FRENCH">Французский</string>
+	<string name="SampleValue.Language.CZECH">Чешский</string>
+	<string name="SampleValue.Language.ITALIAN">Итальянский</string>
+	<string name="SampleValue.Language.POLISH">Польский</string>
+	<string name="SampleValue.Language.SPANISH">Испанский</string>
+	<string name="SampleValue.Language.CHINESE">Китайский</string>
+	<string name="SampleValue.Language.DANISH">Датский</string>
+	<string name="SampleValue.Language.FINNISH">Финский</string>
+	<string name="SampleValue.Language.GREEK">Греческий</string>
+	<string name="SampleValue.Language.JAPANESE">Японский</string>
+	<string name="SampleValue.Language.NORWEGIAN">Норвежский</string>
+	<string name="SampleValue.Language.PORTUGUESE">Португальский</string>
+	<string name="SampleValue.Language.SWEDISH">Шведский</string>
+	<string name="SampleValue.Language.TURKISH">Турецкий</string>
+
+	<!-- Graphics -->
+	<string name="ValueName.sD3DDevice">Название видеоадаптера</string>
+	<string name="ValueName.bFull Screen">Полноэкранный режим</string>
+	<string name="ValueName.bFXAAEnabled">Использовать FXAA сглаживание</string>
+	<string name="ValueName.iPresentInterval">Вертикальная синхронизация</string>
+	<string name="ValueName.bTransparencyMultisampling">Сглаживание прозрачных поверхностей</string>
+	<string name="ValueName.bDoHighDynamicRange">Использовать HDR</string>
+	<string name="ValueName.bUseBlurShader">Использовать шейдер размытия</string>
+	<string name="ValueName.bDoDepthOfField">Глубина резкости</string>
+	<string name="ValueName.bDoRadialBlur">Радиальное размытие</string>
+	<string name="ValueName.bDisableAllGore">Отключить все эффекты насилия</string>
+	<string name="ValueName.bBloodSplatterEnabled">Брызги крови на экране</string>
+	<string name="ValueName.bFloatPointRenderTarget">bFloatPointRenderTarget</string>
+	<string name="ValueName.iMultiSample">Сглаживание</string>
+	<string name="ValueName.iMaxAnisotropy">Анизотропная фильтрация</string>
+	<string name="ValueName.iTexMipMapSkip">Качество текстур</string>
+	<string name="ValueName.fGamma">Гамма-коррекция</string>
+	
+	<string name="ValueName.ScreenResolution">Разрешение экрана</string>
+	<string name="ValueName.iSize W">Ширина экрана</string>
+	<string name="ValueName.iSize H">Высота экрана</string>
+
+	<!-- Shadows -->
+	<string name="ValueName.bTreesReceiveShadows">Тени на деревьях</string>
+	<string name="ValueName.bDrawLandShadows">Тени от ландшафта</string>
+	<string name="ValueName.bActorSelfShadowing">Тени на персонажах</string>
+	<string name="ValueName.iShadowMapResolution">Разрешение теней</string>
+	<string name="ValueName.iBlurDeferredShadowMask">Размытие теней</string>
+	<string name="ValueName.iShadowMaskQuarter">Чёткость теней</string>
+	<string name="ValueName.fShadowDistance">Дистанция теней</string>
+	<string name="ValueName.fInteriorShadowDistance">Дистанция в интерьерах</string>
+	<string name="ValueName.fShadowBiasScale">Смещение теней</string>
+	<string name="ValueName.fSunUpdateThreshold">Допуск обновления теней от солнца</string>
+	<string name="ValueName.fSunShadowUpdateTime">Длительность обновления теней от солнца</string>
+
+	<!-- Water -->
+	<string name="ValueName.bUseWaterReflections">Отражения на воде</string>
+	<string name="ValueName.bReflectLODObjects">Отражать удалённые объекты</string>
+	<string name="ValueName.bReflectLODLand">Отражать удалённый ландшафт</string>
+	<string name="ValueName.bReflectSky">Отражать небо</string>
+	<string name="ValueName.bReflectLODTrees">Отражать удалённые деревья</string>
+	<string name="ValueName.bUseWaterRefractions">Преломление света в воде</string>
+	<string name="ValueName.bUseWaterDepth">Эффекты глубины</string>
+	<string name="ValueName.bUseWaterDisplacements">Эффекты водоизмещения</string>
+	<string name="ValueName.iWaterMultiSamples">Сглаживание</string>
+	
+	<string name="ValueName.WaterReflectionResolution">Разрешение отражений</string>
+	<string name="ValueName.iWaterReflectWidth">Ширина</string>
+	<string name="ValueName.iWaterReflectHeight">Высота</string>
+
+	<!-- Audio -->
+	<string name="ValueName.bEnableAudio">Включить звук</string>
+	<string name="ValueName.fAudioMasterVolume">Общая громкость</string>
+	<string name="ValueName.fVal0">Эффекты</string>
+	<string name="ValueName.fVal1">Шаги</string>
+	<string name="ValueName.fVal2">Голос</string>
+	<string name="ValueName.fVal3">Музыка</string>
+	<string name="ValueName.fVal4">Шаги NPC</string>
+	<string name="ValueName.fVal5">Меню</string>
+	<string name="ValueName.fVal6">Магия</string>
+	<string name="ValueName.fVal7">Голос</string>
+
+	<!-- Gameplay -->
+	<string name="ValueName.bGamepadEnable">Активировать геймпад</string>
+	<string name="ValueName.bGamePadRumble">Вибрация геймпада</string>
+	<string name="ValueName.bSaveOnPause">Сохранять в меню паузы</string>
+	<string name="ValueName.bSaveOnWait">Сохранять при ожидании</string>
+	<string name="ValueName.bSaveOnTravel">Сохранять при путешествии</string>
+	<string name="ValueName.bSaveOnRest">Сохранять при отдыхе</string>
+	<string name="ValueName.iDifficulty">Уровень сложности</string>
+	<string name="ValueName.fAutosaveEveryXMins">Интервал автосохранения (в минутах)</string>
+
+	<!-- Interface -->
+	<string name="ValueName.sLanguage">Язык</string>
+	<string name="ValueName.bDialogueSubtitles">Субтитры диалогов</string>
+	<string name="ValueName.bGeneralSubtitles">Общие субтитры</string>
+	<string name="ValueName.bShowCompass">Показывать компас</string>
+	<string name="ValueName.bShowQuestMarkers">Показывать квестовые маркеры</string>
+	<string name="ValueName.bShowFloatingQuestMarkers">Показывать плавающие квестовые маркеры</string>
+	<string name="ValueName.bCrosshairEnabled">Включить перекрестие</string>
+	<string name="ValueName.bShowHUDMessages">Показывать HUD-сообщения</string>
+	<string name="ValueName.bShowTutorials">Показывать обучающие сообщения</string>
+	<string name="ValueName.bShowSubtitleSpeakerName">Показывать имя говорящего персонажа в субтитрах</string>
+	<string name="ValueName.bTrackProgress">Показывать шкалу прогресса уровня</string>
+	<string name="ValueName.bHealthBarShowing">Показывать шкалу здоровья</string>
+	<string name="ValueName.fHUDOpacity">Прозрачность HUD</string>
+	<string name="ValueName.fMaxSubtitleDistance">Максимальное расстояние отображения субтитров</string>
+	<string name="ValueName.fMouseCursorSpeed">Скорость указателя мыши</string>
+	<string name="ValueName.sIntroSequence">Вступительные видео</string>
+
+	<!-- Vegetation -->
+	<string name="ValueName.bAllowCreateGrass">Включить траву</string>
+	<string name="ValueName.bGrassPointLighting">Точечное освещение травы</string>
+	<string name="ValueName.bDrawShaderGrass">Улучшенный шейдер травы</string>
+	<string name="ValueName.fGrassFadeRange">Дистанция исчезновения травы</string>
+	<string name="ValueName.iMinGrassSize">Плотность травяного покрова</string>
+	<string name="ValueName.iMaxGrassTypesPerTexure">Разнообразие типов травы</string>
+	<string name="ValueName.bRenderSkinnedTrees">Использовать скиннинг деревьев</string>
+	<string name="ValueName.uiMaxSkinnedTreesToRender">Максимальное количество отскиненных деревьев</string>
+	<string name="ValueName.fTreeLoadDistance">Расстояние видимости деревьев</string>
+
+	<!-- Level of Detail -->
+	<string name="ValueName.bPrecipitation">Погодные эффекты</string>
+	<string name="ValueName.bDecals">Включить декали</string>
+	<string name="ValueName.fLODFadeOutMultObjects">Видимость объектов</string>
+	<string name="ValueName.fLODFadeOutMultItems">Видимость предметов</string>
+	<string name="ValueName.fLODFadeOutMultActors">Видимость персонажей</string>
+	<string name="ValueName.fSkyCellRefFadeDistance">Видимость облаков</string>
+	<string name="ValueName.fBlockMaximumDistance">fBlockMaximumDistance</string>
+	<string name="ValueName.fBlockLevel1Distance">fBlockLevel1Distance</string>
+	<string name="ValueName.fBlockLevel0Distance">fBlockLevel0Distance</string>
+	<string name="ValueName.fSplitDistanceMult">fSplitDistanceMult</string>
+	<string name="ValueName.uGridsToLoad">Ячеек для загрузки</string>
+	<string name="ValueName.iMaxDesired">Количество частиц</string>
+	<string name="ValueName.fTreesMidLODSwitchDist">Расстояние переключения детализации деревьев</string>
+
+	<!-- Misc -->
+	<string name="ValueName.bAlwaysRunByDefault">Бег включен по умолчанию</string>
+	<string name="ValueName.bMouseAcceleration">Ускорение мыши</string>
+	<string name="ValueName.bInvertYValues">Инверсия мыши по оси Y</string>
+	<string name="ValueName.bEnableFileSelection">Активировать подключение плагинов в $(GameShortName) Launcher</string>
+	<string name="ValueName.bAllowScreenshot">Разрешить скриншоты</string>
+	<string name="ValueName.bAlwaysActive">Игра всегда активна</string>
+	<string name="ValueName.bPreemptivelyUnloadCells">Выгружать ненужные ячейки</string>
+	<string name="ValueName.bPreCullActors">Предварительная отбраковка персонажей</string>
+	<string name="ValueName.bSelectivePurgeUnusedOnFastTravel">Выборочная очистка неиспользуемых данных при быстром путешествии</string>
+	<string name="ValueName.bEnableLogging">Включить журналирование</string>
+	<string name="ValueName.bEnableTrace">Включить трассировку</string>
+	<string name="ValueName.bEnableProfiling">Включить профайлинг</string>
+	<string name="ValueName.bEnableStoryManagerLogging">Включить журналирование менеджера событий</string>
+	<string name="ValueName.bUseBackgroundFileLoader">Использовать фоновый загрузчик файлов</string>
+	<string name="ValueName.bBackgroundLoadLipFiles">Загрузка LIP файлов</string>
+	<string name="ValueName.bLoadBackgroundFaceGen">Загрузка файлов FaceGen</string>
+	<string name="ValueName.bUseMultiThreadedFaceGen">Многопоточность FaceGen</string>
+	<string name="ValueName.bBackgroundCellLoads">Использовать фоновую загрузку локаций</string>
+	<string name="ValueName.bLoadHelmetsInBackground">Использовать фоновую загрузку для шлемов</string>
+	<string name="ValueName.bUseMultiThreadedTrees">Многопоточность для деревьев</string>
+	<string name="ValueName.fMouseHeadingSensitivity">Чувствительность мыши</string>
+	<string name="ValueName.fMouseWheelZoomSpeed">Скорость масштабирования камеры</string>
+	<string name="ValueName.iScreenShotIndex">Индекс файла скриншота</string>
+	<string name="ValueName.fInAirFallingCharGravityMult">Множитель силы гравитации для персонажей</string>
+	<string name="ValueName.bInvalidateOlderFiles">Инвалидация архивов</string>
+
+	<!-- ENB: General -->
+	<string name="ValueName.MaxAnisotropy">Анизотропная фильтрация</string>
+	<string name="ValueName.ForceAnisotropicFiltering">Принудительная анизотропная фильтрация</string>
+	<string name="ValueName.UseDefferedRendering">Отложенный рендеринг</string>
+	<string name="ValueName.ForceBorderless">Окно без рамки</string>
+	<string name="ValueName.ForceBorderlessFullscreen">Окно без рамки и полноэкранный режим</string>
+	<string name="ValueName.EnableVSync">Вертикальная синхронизация</string>
+	<string name="ValueName.VSyncSkipNumFrames">Количество пропускаемых кадров в режиме вертикальной синхронизации</string>
+	<string name="ValueName.ForceLodBias">Использовать смещение для LOD текстур</string>
+	<string name="ValueName.LodBias">Величина смещения для LOD текстур</string>
+	<string name="ValueName.AddDisplaySuperSamplingResolutions">Активировать даунсемплинг</string>
+
+	<!-- ENB: Effects -->
+	<string name="ValueName.UseEffect">Включить графические эффекты</string>
+	<string name="ValueName.UseOriginalPostProcessing">Оригинальная постобработка</string>
+	<string name="ValueName.UseOriginalObjectsProcessing">Оригинальная постобработка объектов</string>
+	<string name="ValueName.EnableAdaptation">Включить эффект адаптации к освещению</string>
+	<string name="ValueName.EnableAmbientOcclusion">Включить Ambient Occlusion (AO)</string>
+	<string name="ValueName.EnableDepthOfField">Глубина резкости</string>
+	<string name="ValueName.EnableDetailedShadow">Детальные тени</string>
+	<string name="ValueName.EnableCloudShadows">Тени от облаков</string>
+	<string name="ValueName.EnableImageBasedLighting">Включить ImageBased-освещение</string>
+	<string name="ValueName.EnableSunRays">Солнечные лучи</string>
+	<string name="ValueName.EnableSunGlare">Солнечные блики</string>
+	<string name="ValueName.EnableSkyLighting">Освещение неба</string>
+	<string name="ValueName.EnableReflection">Отражения</string>
+	<string name="ValueName.EnableLens">Эффект линз</string>
+	<string name="ValueName.EnableMist">Туман</string>
+	<string name="ValueName.EnableParticleLights">Освещение частицами</string>
+	<string name="ValueName.EnableSoftParticles">Сглаживание эффектов частиц</string>
+	<string name="ValueName.EnableProceduralSun">Процедурная генерация солнечных эффектов</string>
+	<string name="ValueName.EnableSubSurfaceScattering">Подповерхностное рассеивание (SSS)</string>
+	<string name="ValueName.EnableWater">Включить водные эффекты</string>
+	<string name="ValueName.EnableUnderwater">Включить подводные эффекты</string>
+	<string name="ValueName.EnableVolumetricRays">Объёмные лучи</string>
+
+	<!-- ENB: Bloom -->
+	<string name="ValueName.EnableBloom">Включить свечение</string>
+	<string name="ValueName.BloomQuality">Качество свечения</string>
+
+	<!-- ENB: Ambient Occlusion -->
+	<string name="ValueName.UseIndirectLighting">Использовать отражённое освещение (IL)</string>
+	<string name="ValueName.UseComplexIndirectLighting">Использовать сложное отражённое освещение</string>
+	<string name="ValueName.UseComplexAmbientOcclusion">Использовать комплексный AO</string>
+	<string name="ValueName.UseAmbientIndirectLighting">Использовать IL окружения</string>
+	<string name="ValueName.SamplingQuality">Качество выборки</string>
+	<string name="ValueName.FilterQuality">Качество фильтрации</string>
+	<string name="ValueName.FilterType">Тип фильтра</string>
+	<string name="ValueName.SamplingRange">Диапазон выборки</string>
+	<string name="ValueName.SamplingPrecision">Точность выборки</string>
+	<string name="ValueName.EnableDenoiser">Включить фильтр шумов</string>
+	<string name="ValueName.EnableSupersampling">Включить избыточную выборку</string>
+	<string name="ValueName.EnableComplexFilter">Включить комплексный фильтр</string>
+	<string name="ValueName.AOType">Тип AO</string>
+	<string name="ValueName.ILType">Тип IL</string>
+	<string name="ValueName.AOMixingType">Тип смешивания AO</string>
+	<string name="ValueName.AOMixingTypeInterior">Тип смешивания AO в интерьерах</string>
+
+	<!-- ENB: Shadows -->
+	<string name="ValueName.UseShadowFilter">Использовать фильтрацию</string>
+	<string name="ValueName.ShadowObjectsFix">Исправление теней на объектах</string>
+	<string name="ValueName.ShadowCastersFix">Исправление ступенчатости</string>
+	<string name="ValueName.UseBilateralShadowFilter">Двустронняя фильтрация теней</string>
+	<string name="ValueName.ShadowQualityFix">Исправление качества</string>
+	<string name="ValueName.ShadowFilterQuality">Качество фильтрации</string>
+	<string name="ValueName.DetailedShadowQuality">Качество детализации</string>
+	<string name="ValueName.ShadowBlurRange">Диапазон размытия</string>
+	<string name="ValueName.ShadowBlurRangeInterior">Диапазон размытия в интерьерах</string>
+
+	<!-- ENB: FPS Limit -->
+	<string name="ValueName.EnableFPSLimit">Включить ограничение FPS</string>
+	<string name="ValueName.WaitBusyRenderer">Ждать завершения рендеринга кадра</string>
+	<string name="ValueName.FPSLimit">Максимум FPS</string>
+
+	<!-- ENB: ProxyLibrary -->
+	<string name="ValueName.EnableProxyLibrary">Активировать прокси-библиотеку</string>
+	<string name="ValueName.InitProxyFunctions">Инициализация функций прокси</string>
+	<string name="ValueName.ProxyLibrary">Путь к файлу библиотеки</string>
+
+	<!-- ENB: Controls -->
+	<string name="ValueName.KeyReadConfig">Чтение параметров</string>
+	<string name="ValueName.KeyCombination">Клавиша комбинации</string>
+	<string name="ValueName.KeyUseEffect">Переключение использования графических эффектов</string>
+	<string name="ValueName.KeyFPSLimit">Переключение ограничения FPS</string>
+	<string name="ValueName.KeyShowFPS">Включение отображения FPS на экране</string>
+	<string name="ValueName.KeyScreenshot">Сделать скриншот</string>
+	<string name="ValueName.KeyEditor">Вызов внутриигрового редактора параметров</string>
+	<string name="ValueName.KeyFreeVRAM">Освободить видеопамять</string>
+	<string name="ValueName.KeyBruteForce">Активация пресета "грубая сила"</string>
+	
+	<!-- ENB: Fixes -->
+	<string name="ValueName.FixPhysics">Исправлять физику</string>
+	<string name="ValueName.FixGameBugs">Исправлять ошибки игры</string>
+	<string name="ValueName.FixParallaxBugs">Исправлять ошибки параллакса</string>
+	<string name="ValueName.FixAliasedTextures">Исправлять несглаженные текстуры</string>
+	<string name="ValueName.IgnoreLoadingScreen">Игнорировать загрузочные экраны</string>
+	<string name="ValueName.IgnoreInventory">Игнорировать инвентарь</string>
+	<string name="ValueName.FixSsaoWaterTransparency">Исправлять прозрачность воды для SSAO</string>
+	<string name="ValueName.FixSsaoHairTransparency">Исправлять прозрачность волос для SSAO</string>
+	<string name="ValueName.FixTintGamma">Исправлять гамму оттенков</string>
+	<string name="ValueName.RemoveBlur">Убрать размытие</string>
+	<string name="ValueName.FixSubSurfaceScattering">Исправлять подповерхностное рассеивание (SSS)</string>
+	<string name="ValueName.FixParallaxTerrain">Исправлять параллакс местности</string>
+	<string name="ValueName.FixSkyReflection">Исправлять отражения неба</string>
+	<string name="ValueName.FixCursorVisibility">Исправлять отображение курсора мыши</string>
+	<string name="ValueName.FixLag">Исправлять зависания</string>
+	<string name="ValueName.IgnoreCreationKit">Игнорировать $(GameEditorName)</string>
+
+	<!-- ENB: Antialiasing -->
+	<string name="ValueName.EnableEdgeAA">Сглаживание рёбер</string>
+	<string name="ValueName.EnableSubPixelAA">Субпиксельное сглаживание</string>
+	<string name="ValueName.EnableTemporalAA">Временно́е сглаживание</string>
+
+	<!-- ENB: Performance -->
+	<string name="ValueName.UsePatchSpeedhackWithoutGraphics">Использовать ускорение без графических эффектов</string>
+	<string name="ValueName.SpeedHack">SpeedHack</string>
+	<string name="ValueName.EnableOcclusionCulling">Отбраковка невидимых объектов</string>
+	<string name="ValueName.DataSyncMode">DataSyncMode</string>
+	<string name="ValueName.PriorityMode">PriorityMode</string>
+
+	<!-- ENB: Memory -->
+	<string name="ValueName.ExpandSystemMemoryX64">Расширить системную память для платформы x64</string>
+	<string name="ValueName.ReduceSystemMemoryUsage">Уменьшить потребление памяти системой</string>
+	<string name="ValueName.DisableDriverMemoryManager">Отключить управление памятью драйвером</string>
+	<string name="ValueName.DisablePreloadToVRAM">Отключить предзагрузку в видеопамять</string>
+	<string name="ValueName.ReservedMemorySizeMb">Количество зарезервированной видеопамяти (МБ)</string>
+	<string name="ValueName.AutodetectVideoMemorySize">Автоопределение количества видеопамяти</string>
+	<string name="ValueName.VideoMemorySizeMb">Размер видеопамяти (МБ)</string>
+	<string name="ValueName.EnableCompression">Использовать сжатие данных в памяти</string>
+	<string name="ValueName.EnableUnsafeMemoryHacks">Активировать небезопасные правки памяти</string>
+
+	<!-- ENB: AdaptiveQuality -->
+	<string name="ValueName.EnableAdaptiveQuality">Активировать адаптивное качество</string>
+	<string name="ValueName.AdaptiveQuality">Требуемое качество</string>
+	<string name="ValueName.AdaptiveQualityDesiredFPS">Желаемый FPS</string>
+
+	<!-- ENB: ColorCorrection -->
+	<string name="ValueName.UsePaletteTexture">Использовать текстуру палитры</string>
+	<string name="ValueName.UseProceduralCorrection">Процедурная коррекция цвета</string>
+	<string name="ValueName.Brightness">Яркость</string>
+	<string name="ValueName.GammaCurve">Гамма</string>
+
+	<!-- ENB: Multihead -->
+	<string name="ValueName.ForceVideoAdapterIndex">Использовать указанный видеоадаптер</string>
+	<string name="ValueName.VideoAdapterIndex">Индекс видеоадаптера</string>
+
+	<!-- ENB: Weather -->
+	<string name="ValueName.EnableMultipleWeathers">Использовать разные погодные конфигурации</string>
+	<string name="ValueName.EnableLocationWeather">Использовать погодные конфигурации в зависимости от локации</string>
+</resources>

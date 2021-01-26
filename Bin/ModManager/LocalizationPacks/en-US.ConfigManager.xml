@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="ConfigManager.Menu.EditValue">Edit value</string>
+	<string name="ConfigManager.Menu.DiscardChange">Discard change</string>
+	<string name="ConfigManager.Menu.CreateValue">Add parameter</string>
+	<string name="ConfigManager.Menu.RemoveValue">Delete parameter</string>
+
+	<string name="ConfigManager.View.Path">Path</string>
+	<string name="ConfigManager.View.Name">Parameter</string>
+	<string name="ConfigManager.View.Type">Type</string>
+	<string name="ConfigManager.View.Value">Value</string>
+	<string name="ConfigManager.View.EmptyStringValue">Empty string</string>
+
+	<string name="ConfigManager.VirtualKey.VK_NONE">Not assigned</string>
+	<string name="ConfigManager.VirtualKey.VK_LBUTTON">Left mouse button</string>
+	<string name="ConfigManager.VirtualKey.VK_RBUTTON">Right mouse button</string>
+	<string name="ConfigManager.VirtualKey.VK_MBUTTON">Middle mouse button</string>
+	<string name="ConfigManager.VirtualKey.VK_XBUTTON1">Mouse button X1</string>
+	<string name="ConfigManager.VirtualKey.VK_XBUTTON2">Mouse button X2</string>
+	<string name="ConfigManager.VirtualKey.VK_SPACE">Space</string>
+	<string name="ConfigManager.VirtualKey.VK_LWIN">Left Windows key</string>
+	<string name="ConfigManager.VirtualKey.VK_RWIN">Right Windows key</string>
+	<string name="ConfigManager.VirtualKey.VK_LSHIFT">Left Shift</string>
+	<string name="ConfigManager.VirtualKey.VK_RSHIFT">Right Shift</string>
+	<string name="ConfigManager.VirtualKey.VK_LCONTROL">Left Ctrl</string>
+	<string name="ConfigManager.VirtualKey.VK_RCONTROL">Right Ctrl</string>
+	<string name="ConfigManager.VirtualKey.VK_LMENU">Left Alt</string>
+	<string name="ConfigManager.VirtualKey.VK_RMENU">Right Alt</string>
+	<string name="ConfigManager.VirtualKey.VK_LEFT">Page Left</string>
+	<string name="ConfigManager.VirtualKey.VK_UP">Page Up</string>
+	<string name="ConfigManager.VirtualKey.VK_RIGHT">Page Right</string>
+	<string name="ConfigManager.VirtualKey.VK_DOWN">Page Down</string>
+
+	<!-- Categories -->
+	<string name="Category.None">Unknown parameters</string>
+	<string name="Category.General">General</string>
+	<string name="Category.Global">Global parameters</string>
+	<string name="Category.Instance">Instance parameters</string>
+	<string name="Category.Variables">Variables</string>
+	<string name="Category.DownloadManager">Download manager</string>
+	<string name="Category.PackageManager">Package manager</string>
+	<string name="Category.VirtualFileSystem">Virtual file system (VFS)</string>
+
+	<string name="SampleValue.None">None</string>
+	<string name="SampleValue.VeryLow">Very low</string>
+	<string name="SampleValue.Low">Low</string>
+	<string name="SampleValue.Mid">Medium</string>
+	<string name="SampleValue.High">High</string>
+	<string name="SampleValue.VeryHigh">Very high</string>
+	<string name="SampleValue.Ultra">Ultra</string>
+	<string name="SampleValue.Extreme">Extreme</string>
+	<string name="SampleValue.VideoMode.RatioUnknown">Unknown aspect ratio</string>
+</resources>

@@ -1,0 +1,1058 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Stock IDs -->
+	<string name="ID_ABOUT">О программе</string>
+	<string name="ID_ADD">Добавить</string>
+	<string name="ID_APPLY">Применить</string>
+	<string name="ID_BACKWARD">Назад</string>
+	<string name="ID_IGNORE">Пропустить</string>
+	<string name="ID_BOLD">Полужирный</string>
+	<string name="ID_BOTTOM">Низ</string>
+	<string name="ID_CANCEL">Отмена</string>
+	<string name="ID_CDROM">CD-ROM</string>
+	<string name="ID_CLEAR">Очистить</string>
+	<string name="ID_CLOSE">Закрыть</string>
+	<string name="ID_CONVERT">Конвертировать</string>
+	<string name="ID_MOVE">Переместить</string>
+	<string name="ID_COPY">Копировать</string>
+	<string name="ID_COPY_LINK">Копировать ссылку</string>
+	<string name="ID_CUT">Вырезать</string>
+	<string name="ID_DELETE">Удалить</string>
+	<string name="ID_DOWN">Вниз</string>
+	<string name="ID_EDIT">Изменить</string>
+	<string name="ID_EXECUTE">Выполнить</string>
+	<string name="ID_EXIT">Выход</string>
+	<string name="ID_FILE">Файл</string>
+	<string name="ID_FOLDER">Папка</string>
+	<string name="ID_FIND">Искать</string>
+	<string name="ID_SEARCH">Поиск</string>
+	<string name="ID_FIRST">Первый</string>
+	<string name="ID_FLOPPY">Дискета</string>
+	<string name="ID_FORWARD">Вперёд</string>
+	<string name="ID_HARDDISK">Жёсткий диск</string>
+	<string name="ID_HELP">Справка</string>
+	<string name="ID_HOME">Домой</string>
+	<string name="ID_INDENT">Отступ</string>
+	<string name="ID_INDEX">Индекс</string>
+	<string name="ID_INFO">Информация</string>
+	<string name="ID_ITALIC">Курсив</string>
+	<string name="ID_JUMP_TO">Перейти к</string>
+	<string name="ID_JUSTIFY_CENTER">По центру</string>
+	<string name="ID_JUSTIFY_FILL">По ширине</string>
+	<string name="ID_JUSTIFY_LEFT">По левому краю</string>
+	<string name="ID_JUSTIFY_RIGHT">По правому краю</string>
+	<string name="ID_LAST">Последний</string>
+	<string name="ID_NETWORK">Сеть</string>
+	<string name="ID_NEW">Новый</string>
+	<string name="ID_NO">Нет</string>
+	<string name="ID_NONE">Нет</string>
+	<string name="ID_OK">OK</string>
+	<string name="ID_OPEN">Открыть</string>
+	<string name="ID_PASTE">Вставить</string>
+	<string name="ID_PREFERENCES">Предпочтения</string>
+	<string name="ID_PREVIEW">Предпросмотр</string>
+	<string name="ID_PRINT">Печать</string>
+	<string name="ID_PROPERTIES">Свойства</string>
+	<string name="ID_REDO">Вернуть</string>
+	<string name="ID_REFRESH">Перезагрузить</string>
+	<string name="ID_REMOVE">Удалить</string>
+	<string name="ID_REPLACE">Заменить</string>
+	<string name="ID_RENAME">Переименовать</string>
+	<string name="ID_REVERT_TO_SAVED">Вернуть к сохранённому состоянию</string>
+	<string name="ID_SAVE">Сохранить</string>
+	<string name="ID_SAVEAS">Сохранить как</string>
+	<string name="ID_SELECTALL">Выбрать всё</string>
+	<string name="ID_SELECT_COLOR">Выбрать цвет</string>
+	<string name="ID_SELECT_FONT">Выбрать шрифт</string>
+	<string name="ID_SELECT_FILE">Выбрать файл</string>
+	<string name="ID_SELECT_FOLDER">Выбрать папку</string>
+	<string name="ID_SORT_ASCENDING">По возрастанию</string>
+	<string name="ID_SORT_DESCENDING">По убыванию</string>
+	<string name="ID_SPELL_CHECK">Проверка орфографии</string>
+	<string name="ID_STOP">Стоп</string>
+	<string name="ID_STRIKETHROUGH">Зачёркнутый</string>
+	<string name="ID_TOP">Верх</string>
+	<string name="ID_UNDELETE">Отменить удаление</string>
+	<string name="ID_UNDERLINE">Подчёркнутый</string>
+	<string name="ID_UNDO">Отменить</string>
+	<string name="ID_UNINDENT">Убрать отступ</string>
+	<string name="ID_UP">Верх</string>
+	<string name="ID_YES">Да</string>
+	<string name="ID_ZOOM_100">Фактический размер</string>
+	<string name="ID_ZOOM_FIT">Подогнать по размеру</string>
+	<string name="ID_ZOOM_IN">Увеличить масштаб</string>
+	<string name="ID_ZOOM_OUT">Уменьшить масштаб</string>
+	<string name="ID_ERROR">Ошибка</string>
+
+	<string name="ID_ABOUT_LONG">Показать информацию о программе</string>
+	<string name="ID_COPY_LONG">Копировать выделенное</string>
+	<string name="ID_CUT_LONG">Вырезать выделенное</string>
+	<string name="ID_DELETE_LONG">Удалить выделенное</string>
+	<string name="ID_REPLACE_LONG">Заменить выделенное</string>
+	<string name="ID_PASTE_LONG">Вставить выделенное</string>
+	<string name="ID_EXIT_LONG">Выйти из программы</string>
+	<string name="ID_UNDO_LONG">Отменить последнее действие</string>
+	<string name="ID_REDO_LONG">Вернуть последнее действие</string>
+	<string name="ID_CLOSE_LONG">Закрыть текущий документ</string>
+	<string name="ID_SAVE_LONG">Сохранить текущий документ</string>
+	<string name="ID_SAVEAS_LONG">Сохранить текущий документ под другим именем</string>
+
+	<!-- Generic -->
+	<string name="Generic.Run">Запустить</string>
+	<string name="Generic.Terminate">Завершить</string>
+	<string name="Generic.All">Все</string>
+	<string name="Generic.using">используя</string>
+	<string name="Generic.MilliSec">мс</string>
+	<string name="Generic.Sec">с</string>
+	<string name="Generic.Min">мин</string>
+	<string name="Generic.Browse">Обзор</string>
+	<string name="Generic.BrowseFile">Выбор файла</string>
+	<string name="Generic.BrowseFolder">Выбор папки</string>
+	<string name="Generic.Select">Выбрать</string>
+	<string name="Generic.Import">Импорт</string>
+	<string name="Generic.Export">Экспорт</string>
+	<string name="Generic.Info">Информация</string>
+	<string name="Generic.Description">Описание</string>
+	<string name="Generic.Author">Автор</string>
+	<string name="Generic.ID">Идентификатор</string>
+	<string name="Generic.IDInvalid">Некорретный идентификатор</string>
+	<string name="Generic.Invalid">Некорретный</string>
+	<string name="Generic.Name">Название</string>
+	<string name="Generic.UserName">Имя пользователя</string>
+	<string name="Generic.EMailAddress">Адрес электронной почты</string>
+	<string name="Generic.Index">Индекс</string>
+	<string name="Generic.PartOf">Часть</string>
+	<string name="Generic.Value">Значение</string>
+	<string name="Generic.Address">Адрес</string>
+	<string name="Generic.Source">Источник</string>
+	<string name="Generic.Size">Размер</string>
+	<string name="Generic.Type">Тип</string>
+	<string name="Generic.Priority">Приоритет</string>
+	<string name="Generic.Status">Статус</string>
+	<string name="Generic.Date">Дата</string>
+	<string name="Generic.Game">Игра</string>
+	<string name="Generic.Image">Изображение</string>
+	<string name="Generic.Color">Цвет</string>
+	<string name="Generic.Assign">Назначить</string>
+	<string name="Generic.Reset">Сбросить</string>
+	<string name="Generic.Screenshot">Скриншот</string>
+	<string name="Generic.ModificationDate">Дата изменения</string>
+	<string name="Generic.Location">Расположение</string>
+	<string name="Generic.FileLocation">Расположение файла</string>
+	<string name="Generic.FolderLocation">Расположение папки</string>
+	<string name="Generic.SourceLocation">Исходное расположение</string>
+	<string name="Generic.Version">Версия</string>
+	<string name="Generic.Revision">Ревизия</string>
+	<string name="Generic.Developer">Разработчик</string>
+	<string name="Generic.EnterData">Введите данные</string>
+	<string name="Generic.DefaultValue">Значение по умолчанию</string>
+	<string name="Generic.UseDefaultValue">Использовать значение по умолчанию</string>
+	<string name="Generic.SystemMenu">Системное меню</string>
+	<string name="Generic.Operator">Оператор</string>
+	<string name="Generic.Operators">Операторы</string>
+	<string name="Generic.Argument">Аргумент</string>
+	<string name="Generic.Arguments">Аргументы</string>
+	<string name="Generic.Parameter">Параметр</string>
+	<string name="Generic.Parameters">Параметры</string>
+	<string name="Generic.Expanded">Раскрыт</string>
+	<string name="Generic.Collapsed">Свёрнут</string>
+	<string name="Generic.License">Лицензия</string>
+	<string name="Generic.CriticalError">Произошла критическая ошибка. Программа будет завершена.</string>
+	<string name="Generic.OpenWebSiteDialog.Caption">Открыть данную веб-страницу?</string>
+	<string name="Generic.OpenWebSiteListDialog.Caption">Выберите веб-страницу, которую хотите открыть</string>
+	<string name="Generic.FileSearchInProgress">Выполняется поиск файлов</string>
+	<string name="Generic.FileCopyInProgress">Выполняется копирование файлов</string>
+	<string name="Generic.NoItemsToDisplay">Нет элементов для отображения</string>
+	<string name="Generic.Install">Установить</string>
+	<string name="Generic.DoNotInstall">Не устанавливать</string>
+
+	<string name="FileFilter">Фильтр файлов</string>
+	<string name="FileFilter.AllFiles">Все файлы</string>
+	<string name="FileFilter.AllSupportedFormats">Все поддерживаемые форматы</string>
+	<string name="FileFilter.ModPackage">Установочный пакет</string>
+	<string name="FileFilter.ModPackageSMI">Установочный пакет для KMM 1.x и SKSM</string>
+	<string name="FileFilter.ModPackageFOMod">FOMod</string>
+	<string name="FileFilter.ModProject">Проект установочного пакета</string>
+	<string name="FileFilter.ModProjectSMP">Проект установочного пакета для KMM 1.x и SKSM</string>
+	<string name="FileFilter.XML">Файлы XML</string>
+	<string name="FileFilter.Programs">Программы</string>
+	<string name="FileFilter.Image">Изображение</string>
+	<string name="FileFilter.Images">Изображения</string>
+	<string name="FileFilter.Text">Текстовые файлы</string>
+	<string name="FileFilter.HTML">HTML документы</string>
+	<string name="FileFilter.Shortcuts">Ярлыки</string>
+	<string name="FileFilter.Archives">Архивы</string>
+	<string name="FileFilter.7ZipArchive">Архив 7-Zip</string>
+
+	<string name="Init.AnotherInstanceRunning">Другая копия программы уже запущена.</string>
+	<string name="Init.Caption">Инициализация настроек</string>
+	<string name="Init.Status1">Чтение параметров</string>
+	<string name="Init.Status2">Загрузка данных профиля</string>
+	<string name="Init.StatusDone">Инициализация завершена</string>
+	<string name="Init.Error1">Конфигурация профиля не загружена. Продолжение невозможно.</string>
+	<string name="Init.Error2">Файл конфигурации для профиля "%1" не найден. Будет использована конфигурация по умолчанию.</string>
+	<string name="Init.Error3">Не удалось создать рабочее пространство</string>
+	<string name="Init.ProfilesPath1">Папка с данными профилей не указана или не существует</string>
+	<string name="Init.ProfilesPath2">
+		<![CDATA[Вы можете использовать папку по умолчанию или выбрать другую.
+Использование папки по умолчанию не рекомендуется так как данные профилей могут занимать значительный размер, что может быть нежелательно для системного диска.]]>
+	</string>
+	<string name="Init.DownloadLinkDispatchFailed">Невозможно диспетчеризовать ссылку на загрузку: %1</string>
+
+	<!-- Settings Window -->
+	<string name="Settings.Caption">Настройки программы</string>
+	<string name="Settings.SaveMessage">Некоторые изменения будут применены только после перезапуска программы</string>
+
+	<string name="Settings.PrepareUninstall">Удаление программы</string>
+	<string name="Settings.PrepareUninstall.Button">Подготовить к удалению</string>
+	<string name="Settings.PrepareUninstall.Caption">Вы уверены, что хотите удалить %1?</string>
+	<string name="Settings.PrepareUninstall.Message">Это действие удалит службу виртуальной файловой системы и позволит корректно выполнить удаление программы. После этого требуется удалить все файлы программы и перезагрузить компьютер.</string>
+	<string name="Settings.PrepareUninstall.Success">Удаление службы виртуальной файловой системы успешно завершено. Для полного завершения процесса удаления необходимо перезагрузить компьютер.</string>
+	<string name="Settings.PrepareUninstall.Error">Не удалось выполнить удаление службы виртуальной файловой системы.</string>
+	<string name="Settings.PrepareUninstall.RebootNow">Перезагрузить сейчас</string>
+	<string name="Settings.PrepareUninstall.RebootLater">Перезагрузить позже</string>
+
+	<string name="Settings.ValueName.Language">Язык интерфейса</string>
+	<string name="Settings.ValueName.StartupWorkspace">Начальная страница</string>
+	<string name="Settings.ValueName.InstancesLocation">Папка инстансов</string>
+	<string name="Settings.ValueName.PackagesLocation">Папка установочных пакетов</string>
+	<string name="Settings.ValueName.AutoShowPackageInfo">Автоматически показывать информацию об установочном пакете</string>
+	<string name="Settings.ValueName.FOModUseHTTPSForXMLScheme">Использовать протокол HTTPS в XML-схеме для FOMod</string>
+	<string name="Settings.ValueName.DownloadsFolder">Папка загрузок</string>
+
+	<string name="Settings.ValueName.VirtualFileSystem.Library">Библиотека</string>
+	<string name="Settings.ValueName.VirtualFileSystem.Log">Включить ведение лога</string>
+
+	<string name="Settings.ValueName.Var.ActualGameDir">Установочная папка $(GameShortName)</string>
+
+	<!-- About dialog -->
+	<string name="About.SourceCodeLocation">Исходный код может быть найден на</string>
+	<string name="About.Components">Компоненты</string>
+
+	<!-- Instance selection -->
+	<string name="InstanceSelection.Caption">Выбор инстанса</string>
+	<string name="InstanceSelection.CreateInstance">Создать инстанс</string>
+	<string name="InstanceSelection.RemoveInstance">Удалить инстанс</string>
+	<string name="InstanceSelection.CreateShortcut">Создать ярлык</string>
+	<string name="InstanceSelection.InvalidInstance">Некорректный инстанс</string>
+
+	<string name="InstanceSelection.GameNotFound.Caption">Расположение %1 не найдено</string>
+	<string name="InstanceSelection.GameNotFound.Message">Установочная папка %1 не найдена или не существует. Укажите папку вручную, чтобы продолжить.</string>
+
+	<string name="InstanceSelection.ChangeInstanceDialog.Caption">Для смены инстанса требуется перезапуск программы</string>
+	<string name="InstanceSelection.ChangeInstanceDialog.Message">Выполнить перезапуск?</string>
+	<string name="InstanceSelection.ChangeInstanceDialog.Yes">Перезапустить сейчас</string>
+	<string name="InstanceSelection.ChangeInstanceDialog.No">Не перезапускать</string>
+	<string name="InstanceSelection.ChangeInstanceDialog.Cancel">Отменить смену инстанса</string>
+
+	<string name="InstanceSelection.ConfirmRemoving.Caption">Вы уверены, что хотите удалить инстанс "%1"?</string>
+	<string name="InstanceSelection.ConfirmRemoving.Message">
+		<![CDATA[Эту операцию невозможно отменить.
+
+Будет удалена следующая папка и всё её содержимое: %1]]>
+	</string>
+
+	<!-- Instance creation/editing -->
+	<string name="InstanceCreatorDialog.Caption">Создание нового инстанса для "%1"</string>
+	<string name="InstanceCreatorDialog.NameLabel">Название инстанса</string>
+
+	<string name="InstanceCreatorDialog.CopyFrom">Скопировать данные из инстанса</string>
+	<string name="InstanceCreatorDialog.CopyInstanceConfig">Копировать настройки инстанса</string>
+	<string name="InstanceCreatorDialog.CopyModTags">Копировать теги модов</string>
+	<string name="InstanceCreatorDialog.CopyPrograms">Копировать программы</string>
+
+	<string name="InstanceCreatorDialog.InstanceNameInvalid">Некорректное название инсстанса. Выберите другое название.</string>
+	<string name="InstanceCreatorDialog.InstanceNameCollision">Инстанс с данным названием уже существует. Выберите другое название.</string>
+	<string name="InstanceCreatorDialog.CreationError">Не удалось создать новый инстанс</string>
+	<string name="InstanceCreatorDialog.DeletionError">Не удалось удалить этот инстанс</string>
+
+	<string name="OpenLocation.AppSettings">Настройки программы</string>
+	<string name="OpenLocation.GameRoot">Папка игры</string>
+	<string name="OpenLocation.VirtualGameRoot">Виртуальная папка игры</string>
+	<string name="OpenLocation.ConfigRootTarget">Папка настроек игры</string>
+	<string name="OpenLocation.VirtualConfigRoot">Виртуальная папка настроек игры</string>
+	<string name="OpenLocation.WriteTargetRoot">Папка перезаписи</string>
+	<string name="OpenLocation.CurrentProfileRoot">Папка выбранного профиля</string>
+	<string name="OpenLocation.ProfilesRoot">Папка хранения данных профилей</string>
+	<string name="OpenLocation.ModsRoot">Папка с модами</string>
+	<string name="OpenLocation.ModPackages">Установочные пакеты</string>
+	<string name="OpenLocation.Saves">Папка с сохранениями</string>
+
+	<!-- ToolBar -->
+	<string name="ToolBar.QuickSettingsMenu">Меню быстрых настроек</string>
+	<string name="ToolBar.Help">Справка</string>
+
+	<!-- Main menu -->
+	<string name="MainMenu.Settings">Настройки программы</string>
+	<string name="MainMenu.ChangeInstance">Сменить инстанс. Выбран: $(GameShortName) - $(InstanceID)</string>
+	<string name="MainMenu.Run">Запустить</string>
+	<string name="MainMenu.OpenLocation">Открыть расположение</string>
+	<string name="MainMenu.About">О программе</string>
+
+	<!-- Notification Center -->
+	<string name="NotificationCenter.Name">Центр уведомлений</string>
+	<string name="NotificationCenter.NameShort">Уведомления</string>
+
+	<string name="NotificationCenter.ClearNotifications">Удалить все уведомления</string>
+	<string name="NotificationCenter.RemoveNotification">Удалить уведомление</string>
+	<string name="NotificationCenter.NoNotifications">Нет новых уведомлений</string>
+
+	<!-- Workspace controller -->
+	<string name="Controller.SaveChanges.Caption">Имеются несохранённые изменения</string>
+	<string name="Controller.SaveChanges.Message">Сохранить внесённые изменения?</string>
+	<string name="Controller.SaveChanges.Save">Сохранить изменения</string>
+	<string name="Controller.SaveChanges.Discard">Отменить изменения</string>
+
+	<!-- Image viewer -->
+	<string name="ImageViewer.Caption">Просмотр изображения</string>
+
+	<!-- Text editor -->
+	<string name="TextEditor.Caption">Просмотр и редактирование текста</string>
+	<string name="TextEditor.ToolBar.Mode">Переключить режим редактора</string>
+	<string name="TextEditor.ToolBar.Heading">Заголовок</string>
+
+	<!-- GameConfig module -->
+	<string name="GameConfigModule.Name">Конфигурация игры</string>
+	<string name="GameConfigModule.NameShort">Конфиругатор</string>
+
+	<!-- Program module -->
+	<string name="ProgramsModule.Name">Менеджер программ</string>
+
+	<!-- Program Manager -->
+	<string name="ProgramManager.Name">Менеджер программ</string>
+	<string name="ProgramManager.NameShort">Программы</string>
+
+	<string name="ProgramManager.FileNotFound">Не удалось найти файл для запуска</string>
+	<string name="ProgramManager.PreMainFileNotFound1">Не удалось найти некоторые программы для предварительного запуска</string>
+	<string name="ProgramManager.PreMainFileNotFound2">Установите требуемые программы или отключите их запуск.</string>
+	<string name="ProgramManager.NoPrograms">Нет доступных программ</string>
+	<string name="ProgramManager.ExecutingPreMain">Запуск предварительных программ</string>
+	<string name="ProgramManager.ExecutingMain">Запуск основной программы</string>
+	<string name="ProgramManager.Executing">Запуск $(GameName)</string>
+	<string name="ProgramManager.PreparingRun">Подготовка</string>
+	<string name="ProgramManager.RunFailed">Не удалось создать процесс</string>
+	<string name="ProgramManager.WaitingReturn">Ожидание завершения</string>
+	<string name="ProgramManager.WaitingReturnAttach">Ожидание завершения вспомогательной программы для присоединения к основному процессу</string>
+	<string name="ProgramManager.TryAttach">Попытка прикрепления к основному процессу</string>
+	<string name="ProgramManager.TryAttachFailed">Не удалось прикрепиться к основному процессу</string>
+	<string name="ProgramManager.Terminated">Программа завершила работу с кодом %1</string>
+
+	<string name="ProgramManager.List.RequiresVFS">Требует VFS</string>
+	<string name="ProgramManager.List.ShowInMainMenu">Показывать в главном меню</string>
+	<string name="ProgramManager.List.Arguments">Параметры</string>
+	<string name="ProgramManager.List.Executable">Исполняемый файл</string>
+	<string name="ProgramManager.List.WorkingDirectory">Рабочая папка</string>
+
+	<string name="ProgramManager.Menu.RunProgram">Запустить программу</string>
+	<string name="ProgramManager.Menu.AddProgram">Добавить программу</string>
+	<string name="ProgramManager.Menu.EditProgram">Изменить программу</string>
+	<string name="ProgramManager.Menu.RemoveProgram">Удалить программу</string>
+
+	<string name="ProgramManager.Menu.ClearPrograms">Удалить все программы</string>
+	<string name="ProgramManager.Menu.ClearPrograms.Message">Вы уверены, что хотите удалить все программы? Это действие невозможно отменить.</string>
+	<string name="ProgramManager.Menu.LoadDefaultPrograms">Загрузить программы по умолчанию</string>
+
+	<string name="ProgramManager.Menu.ChooseProgram">Изменить "%1"</string>
+	<string name="ProgramManager.Menu.ChooseIcon">Выбрать иконку</string>
+	<string name="ProgramManager.Menu.ChooseExecutable">Выбрать исполняемый файл</string>
+	<string name="ProgramManager.Menu.ChooseWorkingDirectory">Выбрать рабочую папку</string>
+
+	<string name="ProgramManager.Menu.ShowExpandedValues">Показывать раскрытые значения</string>
+
+	<!-- Game Mods Module -->
+	<string name="GameModsModule.Name">Модуль управления модами</string>
+
+	<!-- Mod Manager -->
+	<string name="ModManager.Name">Менеджер модов</string>
+	<string name="ModManager.NameShort">Моды</string>
+
+	<string name="ModManager.ExtractingPackageFiles">Распаковка файлов установщика</string>
+	<string name="ModManager.TagsDialog">Изменение тегов</string>
+	<string name="ModManager.SitesEditor">Изменение сайтов</string>
+	<string name="ModManager.Tools">Инструменты</string>
+
+	<string name="ModManager.ModList.Name">Название</string>
+	<string name="ModManager.ModList.ID">Идентификатор</string>
+	<string name="ModManager.ModList.Version">Версия</string>
+	<string name="ModManager.ModList.Author">Автор</string>
+	<string name="ModManager.ModList.Tags">Теги</string>
+	<string name="ModManager.ModList.Sources">Источники</string>
+	<string name="ModManager.ModList.DateInstall">Дата установки</string>
+	<string name="ModManager.ModList.DateUninstall">Дата деинсталляции</string>
+	<string name="ModManager.ModList.ModFolder">Папка</string>
+	<string name="ModManager.ModList.PackagePath">Установочный пакет</string>
+	<string name="ModManager.ModList.Signature">Сигнатура</string>
+
+	<string name="ModManager.DisplayMode.Caption">Сменить представление</string>
+	<string name="ModManager.DisplayMode.Connector">Режим активации</string>
+	<string name="ModManager.DisplayMode.Log">Режим журнала</string>
+	<string name="ModManager.DisplayMode.ShowPriorityGroups">Показывать группы приоритетов</string>
+	<string name="ModManager.DisplayMode.ShowNotInstalledMods">Показывать не установленные моды</string>
+	<string name="ModManager.DisplayMode.BoldPriorityGroupLabels">Полужирный текст меток групп приоритета</string>
+	<string name="ModManager.DisplayMode.PriorityGroupLabelsAlignment">Выравнивание меток групп приоритета</string>
+
+	<string name="ModManager.VFS.Enable">Запустить VFS</string>
+	<string name="ModManager.VFS.Disable">Выключить VFS</string>
+	<string name="ModManager.VFSActiveWarning">Это действие не может быть выполнено, пока VFS активна</string>
+	<string name="ModManager.WriteTargetName">Папка перезаписи</string>
+
+	<string name="ModManager.NewMod.NewEmptyMod">Новый пустой мод</string>
+	<string name="ModManager.NewMod.NewModFromFolder">Новый мод из имеющихся файлов</string>
+	<string name="ModManager.NewMod.InstallPackage">Выбрать установщик</string>
+	<string name="ModManager.NewMod.ImportFrom">Импорт из %1</string>
+
+	<string name="ModManager.NewMod.DialogCaption">Добавление нового мода</string>
+	<string name="ModManager.NewMod.DialogMessage">Введите название мода</string>
+	<string name="ModManager.NewMod.NameInvalid">Некорректное название мода</string>
+	<string name="ModManager.NewMod.NameCollision">Мод с данным названием уже существует. Выберите другое название.</string>
+	<string name="ModManager.NewMod.CopyDialogCaption">Копирование данных мода</string>
+	<string name="ModManager.NewMod.FromFolderMessageCopy">Содержимое указанной папки будет скопировано в папку с файлами мода</string>
+	<string name="ModManager.NewMod.FromFolderMessageLink">Содержимое указанной папки будет использовано в качесве файлов мода</string>
+	<string name="ModManager.NewMod.SelectedFolder">Выбранная папка</string>
+	<string name="ModManager.NewMod.SelectedFolderNone">Папка не выбрана</string>
+	<string name="ModManager.NewMod.CreateAsLinkedMod">Создать как ссылку</string>
+
+	<string name="ModManager.RemoveMod.CaptionUninstall">Вы действительно хотите удалить "%1"?</string>
+	<string name="ModManager.RemoveMod.CaptionUninstallAndErase">Вы действительно хотите удалить "%1" и стереть запись о нём из журнала?</string>
+	<string name="ModManager.RemoveMod.CaptionErase">Вы действительно хотите стереть запись о моде "%1" из журнала?</string>
+	<string name="ModManager.RemoveMod.Message">Это действие невозможно отменить</string>
+	<string name="ModManager.RemoveMod.RemovingMessage">Удаление данных мода</string>
+
+	<string name="ModManager.Menu.InstallMod">Установить</string>
+	<string name="ModManager.Menu.UninstallMod">Деинсталляция</string>
+	<string name="ModManager.Menu.UninstallAndErase">Деинсталляция и удаление из журнала</string>
+	<string name="ModManager.Menu.Erase">Удаление из журнала</string>
+	<string name="ModManager.Menu.OpenModFilesLocation">Расположение файлов мода</string>
+	<string name="ModManager.Menu.ChangeModFilesLocation">Изменить расположение файлов мода</string>
+	<string name="ModManager.Menu.RevertModFilesLocation">Переместить файлы мода в профиль</string>
+	<string name="ModManager.Menu.Image">Изображение</string>
+	<string name="ModManager.Menu.Image.Show">Открыть изображение</string>
+	<string name="ModManager.Menu.Image.Assign">Изменить изображение</string>
+	<string name="ModManager.Menu.Image.ScaleAspect">Сохранять соотношение сторон</string>
+	<string name="ModManager.Menu.Image.Stretch">Растянуть</string>
+	<string name="ModManager.Menu.Image.Fill">Заполнить</string>
+	<string name="ModManager.Menu.EditDescription">Изменить описание</string>
+	<string name="ModManager.Menu.EditTags">Изменить теги</string>
+	<string name="ModManager.Menu.EditSites">Изменить список сайтов</string>
+	<string name="ModManager.Menu.ChangeID">Сменить идентификатор</string>
+	<string name="ModManager.Menu.ExploreFiles">Просмотр файлов</string>
+	<string name="ModManager.Menu.ShowCollisions">Просмотр коллизий</string>
+	<string name="ModManager.Menu.Properties">Свойства</string>
+	<string name="ModManager.Menu.Package">Установщик</string>
+	<string name="ModManager.Menu.Package.Open">Открыть</string>
+	<string name="ModManager.Menu.Package.OpenLocation">Расположение файла</string>
+	<string name="ModManager.Menu.Package.Assign">Назначить файл</string>
+	<string name="ModManager.Menu.Package.Remove">Удалить файл</string>
+	<string name="ModManager.Menu.Package.Extract">Извлечь файлы</string>
+	<string name="ModManager.Menu.Package.ImportProject">Импортировать проект</string>
+	<string name="ModManager.Menu.Package.CreateProject">Создать проект</string>
+
+	<string name="ModManager.Menu.Tag.ActivateAll">Активировать все</string>
+	<string name="ModManager.Menu.Tag.DeactivateAll">Деактивировать все</string>
+
+	<string name="ModManager.Profile">Профиль</string>
+	<string name="ModManager.Profile.Configure">Настроить профили</string>
+	<string name="ModManager.Profile.Export">Экспорт профиля</string>
+	<string name="ModManager.Profile.RemoveDialog">Вы уверены, что хотите удалить этот профиль? Эту операцию невозможно отменить.</string>
+	<string name="ModManager.Profile.AlreadyExist">Профиль с таким названием уже существует</string>
+	<string name="ModManager.Profile.RenameFailed">Не удалось переименовать профиль</string>
+
+	<string name="ModManager.Profile.LocalSaves">Локальные сохранения</string>
+	<string name="ModManager.Profile.LocalConfig">Локальные настройки игры</string>
+
+	<string name="ModManager.Statistics">Статистика</string>
+	<string name="ModManager.Statistics.Status">Подсчёт статистики</string>
+	<string name="ModManager.Statistics.ModCountTotal">Всего модов</string>
+	<string name="ModManager.Statistics.ModCountActive">Активно модов</string>
+	<string name="ModManager.Statistics.ModCountInactive">Неактивные моды</string>
+	<string name="ModManager.Statistics.FilesCount">Всего файлов</string>
+	<string name="ModManager.Statistics.FoldersCount">Всего папок</string>
+	<string name="ModManager.Statistics.FilesAndFoldersCount">Всего файлов и папок</string>
+	<string name="ModManager.Statistics.UsedSpace">Занимаемое модами пространство</string>
+
+	<string name="ModManager.Import.Caption">Импорт из другого мод-менеджера</string>
+	<string name="ModManager.Import.ManagedGame">Управляемая игра</string>
+	<string name="ModManager.Import.OverwriteWarning">Импорт данных из другого мод-менеджера может повлечь потерю данных в этом инстансе.</string>
+	<string name="ModManager.Import.TargetProfileMismatch">Текущая выбранная игра не совпадает с игрой, управляемой данным мод-менеджером. Выполняйте импорт на свой страх и риск.</string>
+	<string name="ModManager.Import.TargetProfileNotFound">Не обнаружены данные об игре, управляемой данным мод-менеджером. Выполняйте импорт на свой страх и риск.</string>
+	<string name="ModManager.Import.SkipExisingMods">Пропускать существующие моды</string>
+	<string name="ModManager.Import.InfoFound">Обнаружены данные от %1. Выполнить импорт?</string>
+	<string name="ModManager.Import.CanNotImport">Не обнаружены данные для импорта</string>
+
+	<string name="ModExplorer.Caption">Просмотр файлов</string>
+	<string name="ModExplorer.Collisions">Коллизии</string>
+	<string name="ModExplorer.Collisions.Count">Всего коллизий</string>
+	<string name="ModExplorer.Collisions.Searching">Поиск коллизий</string>
+	<string name="ModExplorer.Collisions.NoneFound">Коллизий не найдено</string>
+
+	<string name="ModExplorer.Collision.Unknown">Неизвестный тип коллизии</string>
+	<string name="ModExplorer.Collision.Overwritten">Перезаписан "%1"</string>
+	<string name="ModExplorer.Collision.Owerwrites">Перезаписывает "%1"</string>
+
+	<string name="VirtualGameFolderWS.Name">Виртуальная папка игры</string>
+	<string name="VirtualGameFolderWS.NameShort">Данные игры</string>
+
+	<!-- Tag Manager -->
+	<string name="TagManager.Name">Теги</string>
+	<string name="TagManager.PrimaryTag">Основной тег</string>
+
+	<string name="TagManager.LoadDefaultTags">Загрузить теги по умолчанию</string>
+	<string name="TagManager.LoadDefaultTags.Message">Вы уверены, что хотите загрузить теги по умолчанию?</string>
+	<string name="TagManager.RemoveTag.Message">Вы уверены, что хотите удалить этот тег? Это удалит его из системы и разорвёт его связь со всеми модами.</string>
+
+	<string name="TagManager.Tag.Animation">Анимация</string>
+	<string name="TagManager.Tag.Armor">Броня</string>
+	<string name="TagManager.Tag.Clothing">Одежда</string>
+	<string name="TagManager.Tag.Jewelry">Украшения</string>
+	<string name="TagManager.Tag.Weapons">Оружие</string>
+	<string name="TagManager.Tag.Gameplay">Геймплей</string>
+	<string name="TagManager.Tag.Immersion">Атмосфера и погружение</string>
+	<string name="TagManager.Tag.Environment">Окружающая обстановка</string>
+	<string name="TagManager.Tag.SkillsAndLeveling">Навыки и получение уровней</string>
+	<string name="TagManager.Tag.GuildsAndFactions">Гильдии и фракции</string>
+	<string name="TagManager.Tag.Stealth">Скрытность</string>
+	<string name="TagManager.Tag.Combat">Схватки и сражения</string>
+	<string name="TagManager.Tag.Crafting">Создание вещей и ремёсла</string>
+	<string name="TagManager.Tag.Magic">Магия - заклинания и зачарования</string>
+	<string name="TagManager.Tag.MagicGameplay">Магия - геймплей</string>
+	<string name="TagManager.Tag.BooksAndScrolls">Книги и свитки</string>
+	<string name="TagManager.Tag.Alchemy">Алхимия</string>
+	<string name="TagManager.Tag.Quests">Квесты и приключения</string>
+	<string name="TagManager.Tag.Buildings">Замки, дворцы, особняки и поместья</string>
+	<string name="TagManager.Tag.Settlements">Города, деревни и поселения</string>
+	<string name="TagManager.Tag.Mercantiles">Магазины, лавки и таверны</string>
+	<string name="TagManager.Tag.NewLands">Новые миры</string>
+	<string name="TagManager.Tag.Dungeons">Подземелья</string>
+	<string name="TagManager.Tag.AbandonedStructures">Форты, руины и заброшенные места</string>
+	<string name="TagManager.Tag.PlayerHomes">Дома для игрока</string>
+	<string name="TagManager.Tag.Landscape">Ландшафт</string>
+	<string name="TagManager.Tag.Overhauls">Глобальные изменения</string>
+	<string name="TagManager.Tag.Conversions">Тотальные конверсии</string>
+	<string name="TagManager.Tag.Audio">Музыка, звуки SFX и голос</string>
+	<string name="TagManager.Tag.UserInterface">Интерфейс и управление</string>
+	<string name="TagManager.Tag.NPC">Неигровые персонажи (NPC)</string>
+	<string name="TagManager.Tag.Body">Тела</string>
+	<string name="TagManager.Tag.Face">Лица</string>
+	<string name="TagManager.Tag.Hair">Причёски</string>
+	<string name="TagManager.Tag.Races">Расы</string>
+	<string name="TagManager.Tag.Followers">Компаньоны</string>
+	<string name="TagManager.Tag.Creatures">Существа</string>
+	<string name="TagManager.Tag.Mounts">Ездовые животные</string>
+	<string name="TagManager.Tag.ModelsAndTextures">Модели и текстуры</string>
+	<string name="TagManager.Tag.Graphics">Графика и визуальные эффекты</string>
+	<string name="TagManager.Tag.ENBPresets">Пресеты для ENB</string>
+	<string name="TagManager.Tag.Collectables">Сокровища и коллекционные предметы</string>
+	<string name="TagManager.Tag.ItemsAndObjects">Разные предметы и объекты</string>
+	<string name="TagManager.Tag.Cheats">Читы и "божественные" вещи</string>
+	<string name="TagManager.Tag.Fixes">Исправления и патчи</string>
+	<string name="TagManager.Tag.xSEPlugins">Плагины для $(ScriptExtenderID)</string>
+	<string name="TagManager.Tag.Utilities">Программы</string>
+	<string name="TagManager.Tag.Configuration">Настройки</string>
+	<string name="TagManager.Tag.Resources">Инструкции и ресурсы для модмейкеров</string>
+	<string name="TagManager.Tag.SaveGames">Сохранения игры</string>
+	<string name="TagManager.Tag.Misc">Разное</string>
+
+	<!-- Network module-->
+	<string name="NetworkModule.Name">Сетевое взаимодействие</string>
+
+	<!-- NetworkManager -->
+	<string name="NetworkManager.Name">Менеджер сети</string>
+	<string name="NetworkManager.ModNetwork">Мод-сеть</string>
+	<string name="NetworkManager.ModNetwork.Default">Мод-сеть по умолчанию</string>
+	<string name="NetworkManager.ModNetwork.MakeDefault">Использовать по умолчанию</string>
+
+	<string name="NetworkManager.ModNetwork.AccountInfo">Информация об аккаунте</string>
+	<string name="NetworkManager.ModNetwork.ShowAccountInfo">Показать информацию об аккаунте</string>
+
+	<string name="NetworkManager.AuthCaption">Аутентификация на %1</string>
+	<string name="NetworkManager.AuthMessage">Введите имя пользователя и пароль для выполнения входа в ваш аккаунт.</string>
+	<string name="NetworkManager.AuthSuccess">Аутентификация на %1 успешно выполнена</string>
+	<string name="NetworkManager.AuthFail">Не удалось выполнить аутентификацию на %1</string>
+	<string name="NetworkManager.AuthReset">Аутентификация на %1 была сброшена</string>
+
+	<string name="NetworkManager.SignIn">Выполнить вход</string>
+	<string name="NetworkManager.RetrySignIn">Повторить попытку входа</string>
+	<string name="NetworkManager.SignOut">Выйти из аккаунта</string>
+	<string name="NetworkManager.SignedIn">Вход выполнен</string>
+	<string name="NetworkManager.NotSignedIn">Вход не выполнен</string>
+	<string name="NetworkManager.SignOutMessage">Вы действительно хотите выйти из аккаунта %1?</string>
+
+	<string name="NetworkManager.QueryLimits">Предел запросов</string>
+	<string name="NetworkManager.QueryLimits.Hourly">За час: %1/%2</string>
+	<string name="NetworkManager.QueryLimits.Daily">За день: %1/%2</string>
+	<string name="NetworkManager.QueryLimits.Description"><![CDATA[Этот индикатор отслеживает количество отправленных запросов к %1 и количество оставшееся запросов на текущий день и час. %1 API предоставляет ограниченное количество (пул) запросов в день и в час. Эти значения динамически обновляется каждый раз при выполнении запроса. Если пул запросов будет исчерпан, вы не сможете ставить в очередь загрузки, проверять обновления, запрашивать информацию о моде и так далее. Оба пула должны быть использованы до того, как это произойдет.]]></string>
+	<string name="NetworkManager.RequestQuotaReched">Достигнут предел запросов к %1 за период времени</string>
+
+	<string name="NetworkManager.UpdateCheck.AutoCheckStarted">Начата автоматическая проверка обновлений модов</string>
+	<string name="NetworkManager.UpdateCheck.AutoCheckDone">Автоматическая проверка обновлений мода завершена. Найдено обновлений: %1.</string>
+	<string name="NetworkManager.UpdateCheck.AutoCheckQuoteReqched">Невозможно начать автоматическую проверка обновлений модов так как исчерпано доступное количество запросов</string>
+	
+	<string name="NetworkManager.Nexus.UserIsPremium">Премиум-пользователь</string>
+	<string name="NetworkManager.Nexus.UserIsSupporter">Supporter-пользователь</string>
+	<string name="NetworkManager.Nexus.APIKey">API-ключ</string>
+	<string name="NetworkManager.Nexus.EnterAPIKey">Ввести API-ключ</string>
+
+	<string name="NetworkManager.UpdateTooltip.Caption">Доступна информация об обновленииях</string>
+	<string name="NetworkManager.UpdateTooltip.AnyUpdates">Новая версия (%1) этого мода доступна на %2</string>
+	<string name="NetworkManager.UpdateTooltip.AnyDeletions">Этот мод не был найден на %1</string>
+
+	<string name="NetworkManager.Nexus.CopyNXM">Скопировать NXM-ссылку</string>
+
+	<!-- NXMHandler -->
+	<string name="NetworkManager.NXMHandler.Caption">Настроить обработчик NXM-ссылок</string>
+
+	<string name="NetworkManager.NXMHandler.RegisterAssociations">Зарегистрировать ассоциации</string>
+	<string name="NetworkManager.NXMHandler.UnregisterAssociations">Удалить ассоциации</string>
+	<string name="NetworkManager.NXMHandler.RegisteredToLabel">Зарегистрировано на: %1</string>
+
+	<string name="NetworkManager.NXMHandler.GetAssociationsFailed">Не удалось получить информацию о файловых ассоциациях</string>
+	<string name="NetworkManager.NXMHandler.RegisterAssociationsFailed">Не удалось зарегистрировать файловые ассоциации</string>
+	<string name="NetworkManager.NXMHandler.UnregisterAssociationsFailed">Не удалось удалить файловые ассоциации</string>
+
+	<string name="NetworkManager.NXMHandler.PrimaryHandler.Caption">Зарегистрировать обработчик NXM-ссылок</string>
+	<string name="NetworkManager.NXMHandler.PrimaryHandler.Message">В системе не обнаружен обработчик NXM-ссылок. Установить %1 в качестве основного обработчика?</string>
+
+	<string name="NetworkManager.NXMHandler.Game">Игра</string>
+	<string name="NetworkManager.NXMHandler.NexusID">Nexus ID</string>
+	<string name="NetworkManager.NXMHandler.Target">Цель</string>
+
+	<string name="NetworkManager.NXMHandler.ExternalProgram">Внешняя программа</string>
+	<string name="NetworkManager.NXMHandler.ConfigureExecutable">Настройка программы</string>
+	<string name="NetworkManager.NXMHandler.InvalidExecutable">Некорректная программа</string>
+
+	<!-- Download Manager -->
+	<string name="DownloadManager.Name">Менеджер загрузок</string>
+	<string name="DownloadManager.NameShort">Загрузки</string>
+
+	<string name="DownloadManager.DownloadLocation">Папка загрузок</string>
+	<string name="DownloadManager.DownloadLocation.Invalid">Папка загрузок не указана или не существует. Выберите папку для сохранения загрузок</string>
+	<string name="DownloadManager.DownloadLocation.InsufficientSpace">Недостаточно места для сохранения файла</string>
+	<string name="DownloadManager.DownloadLocation.InsufficientCapabilities">Устройство не поддерживает функции, необходимые для сохранения файла</string>
+
+	<string name="DownloadManager.RemoveDownloadsCaption">Удаление загрузок</string>
+	<string name="DownloadManager.RemoveDownloadsMessage">Вы действительно хотите удалить все загрузки?</string>
+	<string name="DownloadManager.RemoveInstalledDownloadsMessage">Вы действительно хотите удалить все загрузки с установленными модами?</string>
+
+	<string name="DownloadManager.Notification.DownloadStarted">Загрузка начата</string>
+	<string name="DownloadManager.Notification.DownloadStartedEx">%1</string>
+	<string name="DownloadManager.Notification.DownloadCompleted">Загрузка завершена</string>
+	<string name="DownloadManager.Notification.DownloadCompletedEx">%1</string>
+	<string name="DownloadManager.Notification.DownloadFailed">Загрузка не удалась</string>
+	<string name="DownloadManager.Notification.DownloadFailedEx">%1</string>
+	<string name="DownloadManager.Notification.QueryDownloadInfoFailed">Не удалось запросить информацию о загрузке для %1</string>
+	<string name="DownloadManager.Notification.RestoreDownloadFailed">Не удалось восстановить информацию о загрузке для %1</string>
+
+	<string name="DownloadManager.ConcurrentDownloads.Label">Одновременные загрузки</string>
+	<string name="DownloadManager.ConcurrentDownloads.Unlimited">Неограниченно</string>
+
+	<string name="DownloadManager.RefreshItems.Caption">Обновление списка загрузок</string>
+	<string name="DownloadManager.RefreshItems.Message">
+		<![CDATA[Обновление списка загрузок приведёт к приостановке всех загрузок. Если источник загрузки не поддерживает продолжание вам придётся запустить её сначала.
+
+Вы действительно уверены, что хотите перезагрузить список?]]>
+	</string>
+
+	<!-- Context menu -->
+	<string name="DownloadManager.Menu.Install">Установить</string>
+	<string name="DownloadManager.Menu.Add">Добавить загрузку</string>
+
+	<string name="DownloadManager.Menu.AddFromURL">Добавить загрузку из URL</string>
+	<string name="DownloadManager.Menu.AddFromURL.Message">Введите URL для загрузки</string>
+
+	<string name="DownloadManager.Menu.Start">Запустить</string>
+	<string name="DownloadManager.Menu.Resume">Продолжить</string>
+	<string name="DownloadManager.Menu.Pause">Приостановить</string>
+	<string name="DownloadManager.Menu.Abort">Прервать</string>
+
+	<string name="DownloadManager.Menu.SetSource">Сменить источник</string>
+	<string name="DownloadManager.Menu.SetSource.Message">Введите новый ID источника для этой загрузки</string>
+
+	<string name="DownloadManager.Menu.SetTargetGame">Сменить целевую игру</string>
+	<string name="DownloadManager.Menu.QueryInfo">Запросить информацию</string>
+	<string name="DownloadManager.Menu.ShowChangeLog">Показать список изменений</string>
+	<string name="DownloadManager.Menu.ResetDownloadLink">Сбросить ссылку для загрузки</string>
+	<string name="DownloadManager.Menu.VisitOnWebSite">Открыть на %1</string>
+
+	<string name="DownloadManager.Menu.Remove">Удалить загрузку</string>
+	<string name="DownloadManager.Menu.RemoveAll">Удалить все загрузки</string>
+	<string name="DownloadManager.Menu.RemoveInstalled">Удалить все загрузки с установленными модами</string>
+
+	<string name="DownloadManager.Menu.Hide">Скрыть</string>
+	<string name="DownloadManager.Menu.Unhide">Не скрывать</string>
+	<string name="DownloadManager.Menu.HideAll">Скрыть все загрузки</string>
+	<string name="DownloadManager.Menu.HideInstalled">Скрыть все загрузки с установленными модами</string>
+	<string name="DownloadManager.Menu.UnhideAll">Показать все загрузки</string>
+
+	<string name="DownloadManager.Menu.AlwaysShowHidden">Всегда показывать скрытые загрузки</string>
+	<string name="DownloadManager.Menu.ShowArchivesOnly">Показывать только архивы</string>
+
+	<string name="DownloadManager.Menu.CopyLink">Скопировать ссылку</string>
+
+	<!-- VFS -->
+	<string name="VFS.Caption">Виртуальная файловая система</string>
+
+	<string name="VFS.Service.InitFailed">Не удалось загрузить библиотеку виртуальной файловой системы. Продолжение невозможно.</string>
+	<string name="VFS.Service.InstallCaption">Установка службы виртуальной файловой системы</string>
+	<string name="VFS.Service.InstallMessage">Служба виртуальной файловой системы (VFS) не установлена. После закрытия этого окна будет произведена установка службы и драйвера ФС.</string>
+	<string name="VFS.Service.InstallFailed">Не удалось установить службу виртуальной файловой системы.</string>
+	<string name="VFS.Service.UnhandledException">Необработанное исключение возникло в службе виртуальной файловой системы (VFS). Служба будет перезапущена.</string>
+
+	<string name="VFS.MountingCaptionEnable">Монтирование виртуальной файловой системы</string>
+	<string name="VFS.MountingCaptionDisable">Размонтирование виртуальной файловой системы</string>
+	<string name="VFS.MountingMessage">Это может занять некоторое время.</string>
+	<string name="VFS.MountFailed">Не удалось смонтировать виртуальную файловую систему.</string>
+	<string name="VFS.UnMountFailed">Не удалось размонтировать виртуальную файловую систему.</string>
+	<string name="VFS.PrepareMountPointFailed">Ошибка подготовки точки монтирования.</string>
+
+	<string name="VFS.MountPoint">Точка монтирования</string>
+	<string name="VFS.MountPointNotEmpty.Caption">Невозможно смонтировать файловую систему в непустую папку</string>
+	<string name="VFS.MountPointNotEmpty.Message">Удалите эту папку целиком или удалите из неё все файлы и повторите попытку.</string>
+	<string name="VFS.AskUnmountOnExit">Размонтировать VFS и завершить работу программы?</string>
+
+	<string name="VFS.Status.Active">Виртуальная файловая система активна</string>
+	<string name="VFS.Status.Inactive">Виртуальная файловая система не активна</string>
+
+	<string name="VFS.WriteMode.Caption">Режим записи VFS</string>
+	<string name="VFS.WriteMode.Disabled">Запись запрещена</string>
+	<string name="VFS.WriteMode.TargetFile">В исходный файл</string>
+	<string name="VFS.WriteMode.FileCopy">В копию исходного файла</string>
+
+	<string name="VFS.ActiveProcesses.Caption">Активные процессы</string>
+	<string name="VFS.ActiveProcesses.Message">Следующие программы запущены из VFS. Завершите их выполнение и повторите попытку.</string>
+
+	<string name="VFS.Error0">Виртуальная файловую систему успешно смонтирована.</string>
+	<string name="VFS.Error1">Ошибка монтирования.</string>
+	<string name="VFS.Error2">Неверная буква диска.</string>
+	<string name="VFS.Error3">Ошибка установки драйвера. Возможно, драйвер не установлен.</string>
+	<string name="VFS.Error4">Ошибка инициализации.</string>
+	<string name="VFS.Error5">Невозможно назначить букву диска или точку монтирования. Возможно, точка монтирования не является пустой папкой или занята другим устройством.</string>
+	<string name="VFS.Error6">Неверная точка монтирования.</string>
+	<string name="VFS.Error7">Запрошена несовместимая версия.</string>
+	<string name="VFS.Error1000">Виртуальная файловая система не была запущена.</string>
+	<string name="VFS.Error10000">Неизвестная ошибка.</string>
+
+	<!-- GameData module -->
+	<string name="GameDataModule.Name">Модуль игровых данных</string>
+
+	<!-- PluginManager -->
+	<string name="PluginManager.Name">Менеджер плагинов</string>
+	<string name="PluginManager.NameShort">Плагины</string>
+
+	<string name="PluginManager.PluginCounter.Total">Всего</string>
+	<string name="PluginManager.PluginCounter.Active">Активные</string>
+
+	<string name="PluginManager.PluginType.Normal">Обычный</string>
+	<string name="PluginManager.PluginType.Master">Мастер</string>
+	<string name="PluginManager.PluginType.Light">Лёгкий</string>
+
+	<string name="PluginManager.ActivateAll">Включить все</string>
+	<string name="PluginManager.DeactivateAll">Отключить все</string>
+	<string name="PluginManager.Sorting">Сортировка</string>
+	<string name="PluginManager.PluginDependencies">Зависимости плагина</string>
+	<string name="PluginManager.DependentPlugins">Зависимые плагины</string>
+
+	<string name="PluginManager.Tools.ImportList">Импорт списка плагинов</string>
+	<string name="PluginManager.Tools.ExportList">Экспорт списка плагинов</string>
+	<string name="PluginManager.Tools.ExportListActive">Экспорт списка активных плагинов</string>
+
+	<string name="PluginManager.Sorting.Missing.Caption">Программа "%1" не найдена на вашем компьютере</string>
+	<string name="PluginManager.Sorting.Missing.Message">Укажите путь к программе, чтобы выполнить сортировку.</string>
+	<string name="PluginManager.Sorting.Waiting.Caption">Ожидание завершения</string>
+
+	<string name="PluginManager.LootAPI.CanNotUpdateMasterlist">Невозможно обновить мастерлист</string>
+
+	<!-- Screenshots Gallery -->
+	<string name="ScreenshotsGallery.Name">Галерея скриншотов</string>
+	<string name="ScreenshotsGallery.NameShort">Скриншоты</string>
+
+	<!-- Save Manager -->
+	<string name="SaveManager.Name">Менеджер сохранений</string>
+	<string name="SaveManager.NameShort">Сохранения</string>
+
+	<string name="SaveManager.InvalidFile">Неподдерживаемый формат файла</string>
+
+	<string name="SaveManager.SyncPluginsList">Синхронизировать список плагинов</string>
+	<string name="SaveManager.SavePluginsList">Сохранить список плагинов</string>
+
+	<string name="SaveManager.Filter.Saves">Сохранения</string>
+	<string name="SaveManager.Filter.CoSaves">Дополняющие файлы сохранений</string>
+	<string name="SaveManager.Filter.Backups">Резервные копии</string>
+
+	<string name="SaveManager.List.File">Файл</string>
+	<string name="SaveManager.List.Size">Размер</string>
+	<string name="SaveManager.List.ModificationDate">Дата изменения</string>
+
+	<string name="SaveManager.InfoList.Label">Параметр</string>
+	<string name="SaveManager.InfoList.Value">Значение</string>
+
+	<string name="SaveManager.Tab.BasicInfo">Информация</string>
+	<string name="SaveManager.Tab.PluginsList">Список плагинов</string>
+
+	<string name="SaveManager.Info.SaveIndex">Сохранение</string>
+	<string name="SaveManager.Info.SaveName">Название сохранения</string>
+	<string name="SaveManager.Info.GameVersion">Версия игры</string>
+	<string name="SaveManager.Info.Language">Язык</string>
+	<string name="SaveManager.Info.Name">Имя</string>
+	<string name="SaveManager.Info.Level">Уровень</string>
+	<string name="SaveManager.Info.Location">Локация</string>
+	<string name="SaveManager.Info.TimeInGame">Время в игре</string>
+	<string name="SaveManager.Info.Sex">Пол</string>
+	<string name="SaveManager.Info.SexMale">Мужской</string>
+	<string name="SaveManager.Info.SexFemale">Женский</string>
+	<string name="SaveManager.Info.Race">Раса</string>
+	<string name="SaveManager.Info.Karma">Карма</string>
+
+	<!-- Packages module -->
+	<string name="PackagesModule.Name">Модуль установочных пакетов</string>
+
+	<!-- Package Manager -->
+	<string name="PackageManager.Name">Менеджер пакетов</string>
+	<string name="PackageManager.CreatorName">Создание установщиков</string>
+	<string name="PackageManager.PackagesListName">Установочные пакеты</string>
+
+	<string name="PackageManager.ReqCategory.General">Основное</string>
+	<string name="PackageManager.ReqCategory.DLC">DLC</string>
+	<string name="PackageManager.ReqCategory.Conversions">Конверсии</string>
+	<string name="PackageManager.ReqCategory.Frameworks">Фреймворки</string>
+	<string name="PackageManager.ReqCategory.BodyReplacers">Реплейсеры тел</string>
+	<string name="PackageManager.ReqCategory.Patches">Исправления и патчи</string>
+	<string name="PackageManager.ReqCategory.Extra">Дополнительно</string>
+	<string name="PackageManager.ReqCategory.Misc">Разное</string>
+
+	<!-- Package Creator -->
+	<string name="PackageCreator.MenuBar.Project">Проект</string>
+	<string name="PackageCreator.MenuBar.Import">Импорт</string>
+	<string name="PackageCreator.MenuBar.Build">Сборка</string>
+
+	<string name="PackageCreator.MenuProject.New">Новый</string>
+	<string name="PackageCreator.MenuProject.Open">Открыть</string>
+	<string name="PackageCreator.MenuProject.Save">Сохранить</string>
+	<string name="PackageCreator.MenuProject.SaveAs">Сохранить как</string>
+	<string name="PackageCreator.MenuProject.SaveAsFOMod">Сохранить как FOMod</string>
+	<string name="PackageCreator.MenuProject.SaveAsKMP">Сохранить как KMP</string>
+
+	<string name="PackageCreator.MenuImport.FOModXML">Импорт из FOMod (XML)</string>
+	<string name="PackageCreator.MenuImport.Package">Импорт из установочного пакета</string>
+
+	<string name="PackageCreator.MenuBuild.Build">Собрать</string>
+	<string name="PackageCreator.MenuBuild.UpdateInfo">Обновить информацию</string>
+	<string name="PackageCreator.MenuBuild.Preview">Собрать для предпросмотра</string>
+
+	<string name="PackageCreator.Build.Caption">Сборка "%1"</string>
+	<string name="PackageCreator.Build.Complete">Сборка завершена</string>
+	<string name="PackageCreator.Build.BuildError">Ошибка сборки</string>
+	<string name="PackageCreator.Build.CheckError">При проверке проекта найдены ошибки</string>
+	<string name="PackageCreator.Build.CheckError.PackagePath">Некорректное имя файла установочного пакета</string>
+	<string name="PackageCreator.Build.CheckError.MissingFiles">Не найдены следующие файлы</string>
+
+	<string name="PackageCreator.NewProjectName">Новый проект</string>
+	<string name="PackageCreator.SaveChanges.Caption">Проект не сохранён</string>
+	<string name="PackageCreator.SaveChanges.Message">Сохранить сейчас?</string>
+	<string name="PackageCreator.IDCollision">Элемент с таким идентификатором уже есть в проекте.</string>
+	<string name="PackageCreator.InvalidFlagName">Некорректное название флага</string>
+
+	<string name="PackageCreator.AddFile">Добавить файл</string>
+	<string name="PackageCreator.AddMultipleFiles">Добавить файлы</string>
+	<string name="PackageCreator.AddFolder">Добавить папку</string>
+	<string name="PackageCreator.AddMultipleFolders">Добавить несколько папок</string>
+	<string name="PackageCreator.ImportFiles">Импорт файлов</string>
+	<string name="PackageCreator.ImportFromFiles">Импорт из файлов</string>
+
+	<string name="PackageCreator.ImportFOMod">Импорт FOMod</string>
+	<string name="PackageCreator.ExportFOMod">Экспорт FOMod</string>
+	<string name="PackageCreator.ProjectFolder">Папка проекта</string>
+	<string name="PackageCreator.NewStepDialog">Добавление нового этапа</string>
+	<string name="PackageCreator.NewGroupDialog">Добавление новой группы</string>
+	<string name="PackageCreator.RemoveStepDialog">Вы уверены, что хотите удалить этап "%1"? Все группы, входящие в этот этап, также будут удалены.</string>
+	<string name="PackageCreator.RemoveGroupDialog">Вы уверены, что хотите удалить группу "%1"? Все элементы, входящие в эту группу, также будут удалены.</string>
+
+	<!-- Page: Info -->
+	<string name="PackageCreator.PageInfo.Name">Информация</string>
+
+	<string name="PackageCreator.PageInfo.BasicInfo">Базовая информация</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.ID">Идентификатор мода</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.Name">Название</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.Version">Версия</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.Author">Автор</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.Description">Описание</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.Tags">Теги</string>
+
+	<string name="PackageCreator.PageInfo.BasicInfo.AdditionalData">Дополнительные данные</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.Documents">Документы</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.TranslatedName">Локализованное название</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.Translatior">Переводчик</string>
+	<string name="PackageCreator.PageInfo.BasicInfo.UserData">Пользовательские данные</string>
+
+	<string name="PackageCreator.PageInfo.Sites">Сайты</string>
+	<string name="PackageCreator.PageInfo.Sites.AdditionalSites">Дополнительные сайты</string>
+
+	<string name="PackageCreator.PageInfo.Config">Конфигурация</string>
+	<string name="PackageCreator.PageInfo.Config.PackageOutputFile">Файл установочного пакета</string>
+	<string name="PackageCreator.PageInfo.Config.CompressionLevel">Уровень сжатия</string>
+	<string name="PackageCreator.PageInfo.Config.CompressionLevel.None">Без сжатия</string>
+	<string name="PackageCreator.PageInfo.Config.CompressionLevel.Fastest">Скоростной</string>
+	<string name="PackageCreator.PageInfo.Config.CompressionLevel.Fast">Быстрый</string>
+	<string name="PackageCreator.PageInfo.Config.CompressionLevel.Normal">Обычный</string>
+	<string name="PackageCreator.PageInfo.Config.CompressionLevel.Maximum">Максимальный</string>
+	<string name="PackageCreator.PageInfo.Config.CompressionLevel.Ultra">Ультра</string>
+
+	<string name="PackageCreator.PageInfo.Config.CompressionAdvanced">Дополнительные настройки сжатия</string>
+	<string name="PackageCreator.PageInfo.Config.CompressionMethod">Метод сжатия</string>
+	<string name="PackageCreator.PageInfo.Config.DictionarySize">Размер словаря</string>
+	<string name="PackageCreator.PageInfo.Config.DictionarySize.Memory">Объём памяти для упаковки</string>
+	<string name="PackageCreator.PageInfo.Config.UseMultithreadedCompression">Многопоточное сжатие</string>
+	<string name="PackageCreator.PageInfo.Config.SolidArchive">Непрерывный архив</string>
+
+	<!-- Page: FileData -->
+	<string name="PackageCreator.PageFileData.Name">Файлы</string>
+	<string name="PackageCreator.PageFileData.FolderContent">Содержимое папки</string>
+	<string name="PackageCreator.PageFileData.ReplaceFolderContent">Заменить содержимое папки</string>
+
+	<string name="PackageCreator.PageFileData.MainList">Файлы и папки</string>
+	<string name="PackageCreator.PageFileData.MainList.InPackagePath">Путь в установщике</string>
+	<string name="PackageCreator.PageFileData.MainList.Source">Исходный объект</string>
+	<string name="PackageCreator.PageFileData.MainList.Destination">Целевое расположение</string>
+
+	<!-- Page: Interface -->
+	<string name="PackageCreator.PageInterface.Name">Интерфейс</string>
+
+	<string name="PackageCreator.PageInterface.ImageList">Список изображений</string>
+	<string name="PackageCreator.PageInterface.ImageList.Main">Основное</string>
+	<string name="PackageCreator.PageInterface.ImageList.Header">Заголовок</string>
+	<string name="PackageCreator.PageInterface.ImageList.Show">Показывать</string>
+	<string name="PackageCreator.PageInterface.ImageList.Value">Файл</string>
+	<string name="PackageCreator.PageInterface.ImageList.Label">Описание</string>
+
+	<!-- Page: Requirements -->
+	<string name="PackageCreator.PageRequirements.Name">Требования</string>
+	<string name="PackageCreator.PageRequirements.Groups">Группы</string>
+	<string name="PackageCreator.PageRequirements.DefaultGroups">Группы по умолчанию</string>
+
+	<string name="PackageCreator.PageRequirements.Type">Тип</string>
+	<string name="PackageCreator.PageRequirements.Type.System">Системный</string>
+	<string name="PackageCreator.PageRequirements.Type.User">Пользовательский</string>
+	<string name="PackageCreator.PageRequirements.Type.Auto">Автоматический</string>
+	<string name="PackageCreator.PageRequirements.CurrentVersion">Текущая версия</string>
+	<string name="PackageCreator.PageRequirements.RequiredVersion">Требуемая версия</string>
+	<string name="PackageCreator.PageRequirements.RequiredState">Требуемое состояние</string>
+	<string name="PackageCreator.PageRequirements.RequiredState.ModActive">Мод активен</string>
+	<string name="PackageCreator.PageRequirements.RequiredState.ModInactive">Мод не активен</string>
+	<string name="PackageCreator.PageRequirements.RequiredState.PluginActive">Плагин активен</string>
+	<string name="PackageCreator.PageRequirements.RequiredState.PluginInactive">Плагин не активен</string>
+	<string name="PackageCreator.PageRequirements.RequiredState.FileExist">Файл существует</string>
+	<string name="PackageCreator.PageRequirements.RequiredState.FileNotExist">Файл не существует</string>
+	<string name="PackageCreator.PageRequirements.CurrentState">Текущее состояние</string>
+	<string name="PackageCreator.PageRequirements.Object">Объект</string>
+
+	<string name="PackageCreator.PageRequirements.StdReqs">Стандартные требования</string>
+
+	<!-- Page: Components -->
+	<string name="PackageCreator.PageComponents.Name">Компоненты</string>
+
+	<string name="PackageCreator.PageComponents.Step">Этап</string>
+	<string name="PackageCreator.PageComponents.Group">Группа</string>
+	<string name="PackageCreator.PageComponents.Entry">Компонент</string>
+
+	<string name="PackageCreator.PageComponents.AddStep">Добавить этап</string>
+	<string name="PackageCreator.PageComponents.AddGroup">Добавить группу</string>
+	<string name="PackageCreator.PageComponents.AddEntry">Добавить компонент</string>
+	<string name="PackageCreator.PageComponents.AddEntriesFromFiles">Добавить компоненты из файлов</string>
+
+	<string name="PackageCreator.PageComponents.RemoveStep">Удалить этап</string>
+	<string name="PackageCreator.PageComponents.RemoveGroup">Удалить группу</string>
+	<string name="PackageCreator.PageComponents.RemoveEntry">Удалить компонент</string>
+
+	<string name="PackageCreator.PageComponents.AllSteps">Все этапы</string>
+	<string name="PackageCreator.PageComponents.AllGroupsOf">Все группы этапа "%1"</string>
+	<string name="PackageCreator.PageComponents.AllEntriesOf">Все компоненты группы "%1"</string>
+
+	<string name="PackageCreator.PageComponents.FileData">Файлы</string>
+	<string name="PackageCreator.PageComponents.Requirements">Требования</string>
+	<string name="PackageCreator.PageComponents.Image">Изображение</string>
+	<string name="PackageCreator.PageComponents.Description">Описание</string>
+	<string name="PackageCreator.PageComponents.Conditions">Условия</string>
+	<string name="PackageCreator.PageComponents.ConditionFlags">Флаги условий</string>
+
+	<string name="PackageCreator.PageComponents.SelectionMode">Режим выбора</string>
+	<string name="PackageCreator.PageComponents.SelectionMode.Any">Любой</string>
+	<string name="PackageCreator.PageComponents.SelectionMode.ExactlyOne">Только один</string>
+	<string name="PackageCreator.PageComponents.SelectionMode.AtLeastOne">Не менее одного</string>
+	<string name="PackageCreator.PageComponents.SelectionMode.AtMostOne">Не более одного</string>
+	<string name="PackageCreator.PageComponents.SelectionMode.All">Все</string>
+
+	<string name="PackageCreator.PageComponents.TypeDescriptor">Десксриптор типа по умолчанию</string>
+	<string name="PackageCreator.PageComponents.TypeDescriptorConditional">Новый дескриптор типа</string>
+	<string name="PackageCreator.PageComponents.TypeDescriptor.Optional">Необязательный</string>
+	<string name="PackageCreator.PageComponents.TypeDescriptor.Required">Необходимый</string>
+	<string name="PackageCreator.PageComponents.TypeDescriptor.Recommended">Рекомендуемый</string>
+	<string name="PackageCreator.PageComponents.TypeDescriptor.CouldBeUsable">Может быть использован</string>
+	<string name="PackageCreator.PageComponents.TypeDescriptor.NotUsable">Не используемый</string>
+
+	<string name="PackageCreator.PageComponents.Advanced">Дополнительно</string>
+	<string name="PackageCreator.PageComponents.RequiredFiles">Требуемые файлы</string>
+	<string name="PackageCreator.PageComponents.ConditionalInstall">Условная установка</string>
+
+	<string name="PackageCreator.TypeDescriptor.Optional">Этот компонент не является обязательным</string>
+	<string name="PackageCreator.TypeDescriptor.Required">Этот компонент обязателен к установке</string>
+	<string name="PackageCreator.TypeDescriptor.Recommended">Этот компонент не является обязательным, но рекомендуется для текущей конфигурации.</string>
+	<string name="PackageCreator.TypeDescriptor.NotUsable">Этот компонент не может быть использован в текущей конфигурации. Например, отсутствуют некоторые требуемые моды.</string>
+	<string name="PackageCreator.TypeDescriptor.CouldBeUsable">Этот компонент может быть использован в текущей конфигурации, но его правильная работа не гарантируется. Например, не совпадают версии требуемых модов.</string>
+
+	<string name="PackageCreator.Conditions.RemoveFlagDialog.Caption">Удаление флагов</string>
+	<string name="PackageCreator.Conditions.RemoveFlagDialog.Message">
+		<![CDATA[Удалить флаги из всего проекта? Удаление приведёт к удалению всех ссылок на флаги в проекте.
+
+Также можно с переименовать сслыки на удалённый флаг добавив к ним префикс "%1".]]>
+	</string>
+	<string name="PackageCreator.Conditions.RemoveFlagDialog.Remove">Просто удалить</string>
+	<string name="PackageCreator.Conditions.RemoveFlagDialog.RemoveTrack">Удалить во всём проекте</string>
+	<string name="PackageCreator.Conditions.RemoveFlagDialog.RemoveRename">Выполнить переименование</string>
+
+	<string name="PackageCreator.Conditions.AddNewCondition">Добавить новое условие</string>
+	<string name="PackageCreator.Conditions.AddToCondition">Добавить в условие</string>
+	<string name="PackageCreator.Conditions.RemoveCondition">Удалить условие</string>
+	<string name="PackageCreator.Conditions.RemoveFromCondition">Удалить из условия</string>
+	<string name="PackageCreator.Conditions.RemoveAll">Удалить все условия</string>
+
+	<!-- Install Wizard -->
+	<string name="InstallWizard.WindowCaption">Установка "%1"></string>
+	<string name="InstallWizard.CancelMessage">Вы уверены, что хотите отменить установку?</string>
+	<string name="InstallWizard.InstallationComplete">Установка "%1" завершена></string>
+	<string name="InstallWizard.InstalledXOfY">Установлено %1 из %2 элементов</string>
+	<string name="InstallWizard.BackwardButton">Назад</string>
+	<string name="InstallWizard.ForwardButton">Далее</string>
+	<string name="InstallWizard.SelectDocumentHint">Выберите документ для просмотра</string>
+	<string name="InstallWizard.SelectComponentHint">Выберите элемент для просмотра информации о нём</string>
+	<string name="InstallWizard.NoDescriptionHint">Для этого элемента нет описания</string>
+	<string name="InstallWizard.InvalidStepsConfig.Caption">Некорректная конфигурация этапов установки</string>
+	<string name="InstallWizard.InvalidStepsConfig.Message">Выполнение мастера установки будет прервано.</string>
+	<string name="InstallWizard.NoFiles.Caption">Нет файлов для установки</string>
+	<string name="InstallWizard.NoFiles.Message">
+		<![CDATA[Мастер установки не обнаружил файлов подходящих для установки.
+
+Возможные причины:
+- Ваша копия $(GameShortName) и набор установленных модов не удовлетворяют требованиям данного мода.
+- Вы выбрали неверную конфигурацию компонентов. В этом случае обратитесь к автору мода или создателю установочного пакета для решения проблемы.]]>
+	</string>
+	<string name="InstallWizard.ChangeID.Invalid">Некорретный идентификатор</string>
+	<string name="InstallWizard.ChangeID.Used">Указанный идентификатор уже используется модом "%1"</string>
+	<string name="InstallWizard.CollectedFiles.Caption">Будут установлены следующие файлы</string>
+
+	<string name="InstallWizard.Page.Info">Информация</string>
+	<string name="InstallWizard.Page.Documnets">Документы</string>
+	<string name="InstallWizard.Page.Screenshots">Скриншоты</string>
+	<string name="InstallWizard.Page.Requirements">Требования</string>
+	<string name="InstallWizard.Page.Components">Компоненты</string>
+	<string name="InstallWizard.Page.Installing">Установка</string>
+	<string name="InstallWizard.Page.Done">Завершение</string>
+
+	<string name="InstallWizard.LoadFailed.Caption">Не удалось загрузить установочный пакет "%1"</string>
+	<string name="InstallWizard.LoadFailed.Message">Возможно, файл повреждён или его формат не поддерживается.</string>
+
+	<string name="InstallWizard.Reinstall.Caption">Переустановка мода</string>
+	<string name="InstallWizard.Reinstall.Message">
+		<![CDATA[Данный мод уже установлен. Для переустановки рекомендуется выполнить деинсталляцию и заново запустить установку.
+	
+Вы уверены, что хотите переустановить этот мод поверх существующих файлов?]]>
+	</string>
+</resources>

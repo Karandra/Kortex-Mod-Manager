@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="ConfigManager.Menu.EditValue">Изменить значение</string>
+	<string name="ConfigManager.Menu.DiscardChange">Отменить изменение</string>
+	<string name="ConfigManager.Menu.CreateValue">Добавить параметр</string>
+	<string name="ConfigManager.Menu.RemoveValue">Удалить параметр</string>
+
+	<string name="ConfigManager.View.Path">Путь</string>
+	<string name="ConfigManager.View.Name">Параметр</string>
+	<string name="ConfigManager.View.Type">Тип</string>
+	<string name="ConfigManager.View.Value">Значение</string>
+	<string name="ConfigManager.View.EmptyStringValue">Пустая строка</string>
+
+	<string name="ConfigManager.VirtualKey.VK_NONE">Не назначено</string>
+	<string name="ConfigManager.VirtualKey.VK_LBUTTON">Левая кнопка мыши</string>
+	<string name="ConfigManager.VirtualKey.VK_RBUTTON">Правая кнопка мыши</string>
+	<string name="ConfigManager.VirtualKey.VK_MBUTTON">Средняя кнопка мыши</string>
+	<string name="ConfigManager.VirtualKey.VK_XBUTTON1">Кнопка мыши X1</string>
+	<string name="ConfigManager.VirtualKey.VK_XBUTTON2">Кнопка мыши X2</string>
+	<string name="ConfigManager.VirtualKey.VK_SPACE">Пробел</string>
+	<string name="ConfigManager.VirtualKey.VK_LWIN">Левая кнопка Windows</string>
+	<string name="ConfigManager.VirtualKey.VK_RWIN">Правая кнопка Windows</string>
+	<string name="ConfigManager.VirtualKey.VK_LSHIFT">Левый Shift</string>
+	<string name="ConfigManager.VirtualKey.VK_RSHIFT">Правый Shift</string>
+	<string name="ConfigManager.VirtualKey.VK_LCONTROL">Левый Ctrl</string>
+	<string name="ConfigManager.VirtualKey.VK_RCONTROL">Правый Ctrl</string>
+	<string name="ConfigManager.VirtualKey.VK_LMENU">Левый Alt</string>
+	<string name="ConfigManager.VirtualKey.VK_RMENU">Правый Alt</string>
+	<string name="ConfigManager.VirtualKey.VK_LEFT">Стрелка влево</string>
+	<string name="ConfigManager.VirtualKey.VK_UP">Стрелка вверх</string>
+	<string name="ConfigManager.VirtualKey.VK_RIGHT">Стрелка вправо</string>
+	<string name="ConfigManager.VirtualKey.VK_DOWN">Стрелка вниз</string>
+
+	<!-- Categories -->
+	<string name="Category.None">Неизвестные параметры</string>
+	<string name="Category.General">Общие параметры</string>
+	<string name="Category.Global">Глобальные параметры</string>
+	<string name="Category.Instance">Параметры инстанса</string>
+	<string name="Category.Variables">Переменные</string>
+	<string name="Category.DownloadManager">Менеджер загрузок</string>
+	<string name="Category.PackageManager">Менеджер установщиков</string>
+	<string name="Category.VirtualFileSystem">Виртуальная файловая система (VFS)</string>
+
+	<string name="SampleValue.None">Нет</string>
+	<string name="SampleValue.VeryLow">Очень низкий</string>
+	<string name="SampleValue.Low">Низкий</string>
+	<string name="SampleValue.Mid">Средний</string>
+	<string name="SampleValue.High">Высокий</string>
+	<string name="SampleValue.VeryHigh">Очень высокий</string>
+	<string name="SampleValue.Ultra">Ультра</string>
+	<string name="SampleValue.Extreme">Экстремальный</string>
+	<string name="SampleValue.VideoMode.RatioUnknown">Неизвестное соотношение сторон</string>
+</resources>

@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Categories -->
+	<string name="Category.Game">Game</string>
+	<string name="Category.Graphics">Graphics</string>
+	<string name="Category.Shadows">Shadows</string>
+	<string name="Category.Water">Water</string>
+	<string name="Category.Audio">Sound</string>
+	<string name="Category.Gameplay">Gameplay</string>
+	<string name="Category.Interface">Interface</string>
+	<string name="Category.Vegetation">Vegetation</string>
+	<string name="Category.LevelOfDetail">Level of Detail</string>
+	<string name="Category.Grass">Grass</string>
+	<string name="Category.Trees">Trees</string>
+	<string name="Category.Misc">Misc</string>
+	<string name="Category.Archives">Archives</string>
+	<string name="Category.MemoryManagement">Memory management</string>
+	<string name="Category.BackgroudLoading">Background loading</string>
+	<string name="Category.Debug">Debug</string>
+	
+	<string name="Category.Editor">Editor</string>
+	<string name="Category.Messages">Messages</string>
+	
+	<string name="Category.ENB">ENB</string>
+	<string name="Category.General">General</string>
+	<string name="Category.Effects">Effects</string>
+	<string name="Category.Bloom">Bloom</string>
+	<string name="Category.AmbientOcclusion">Ambient Occlusion</string>
+	<string name="Category.ProxyLibrary">Proxy library</string>
+	<string name="Category.FPSLimit">FPS limit</string>
+	<string name="Category.Controls">Controls</string>
+	<string name="Category.Antialiasing">Antialiasing</string>
+	<string name="Category.Fixes">Fixes</string>
+	<string name="Category.Performance">Performance</string>
+	<string name="Category.Memory">Memory</string>
+	<string name="Category.AdaptiveQuality">Adaptive quality</string>
+	<string name="Category.Multihead">Multihead</string>
+	<string name="Category.ColorCorrection">Color correction</string>
+	<string name="Category.Weather">Weather</string>
+
+	<!-- Sample values -->
+	<string name="SampleValue.IncreasedDetail">Increased detail</string>
+	
+	<string name="SampleValue.Difficulty0">Novice</string>
+	<string name="SampleValue.Difficulty1">Apprentice</string>
+	<string name="SampleValue.Difficulty2">Adept</string>
+	<string name="SampleValue.Difficulty3">Expert</string>
+	<string name="SampleValue.Difficulty4">Master</string>
+	<string name="SampleValue.Difficulty5">Legendary</string>
+
+	<string name="SampleValue.Language.RUSSIAN">Russian</string>
+	<string name="SampleValue.Language.ENGLISH">English</string>
+	<string name="SampleValue.Language.GERMAN">German</string>
+	<string name="SampleValue.Language.FRENCH">French</string>
+	<string name="SampleValue.Language.CZECH">Czech</string>
+	<string name="SampleValue.Language.ITALIAN">Italian</string>
+	<string name="SampleValue.Language.POLISH">Polish</string>
+	<string name="SampleValue.Language.SPANISH">Spanish</string>
+	<string name="SampleValue.Language.CHINESE">Chinese</string>
+	<string name="SampleValue.Language.DANISH">Danish</string>
+	<string name="SampleValue.Language.FINNISH">Finnish</string>
+	<string name="SampleValue.Language.GREEK">Greek</string>
+	<string name="SampleValue.Language.JAPANESE">Japanese</string>
+	<string name="SampleValue.Language.NORWEGIAN">Norwegian</string>
+	<string name="SampleValue.Language.PORTUGUESE">Portuguese</string>
+	<string name="SampleValue.Language.SWEDISH">Swedish</string>
+	<string name="SampleValue.Language.TURKISH">Turkish</string>
+
+	<!-- Graphics -->
+	<string name="ValueName.sD3DDevice">Graphics adapter</string>
+	<string name="ValueName.bFull Screen">Fullscreen mode</string>
+	<string name="ValueName.bFXAAEnabled">Enable FXAA</string>
+	<string name="ValueName.iPresentInterval">Vertical synchronization</string>
+	<string name="ValueName.bTransparencyMultisampling">Transparency multisampling</string>
+	<string name="ValueName.bDoHighDynamicRange">Use HDR</string>
+	<string name="ValueName.bUseBlurShader">Use blur shader</string>
+	<string name="ValueName.bDoDepthOfField">Depth of field</string>
+	<string name="ValueName.bDoRadialBlur">Radial blur</string>
+	<string name="ValueName.bDisableAllGore">Disable all gore</string>
+	<string name="ValueName.bBloodSplatterEnabled">Blood splatter</string>
+	<string name="ValueName.bFloatPointRenderTarget">bFloatPointRenderTarget</string>
+	<string name="ValueName.iMultiSample">Antialiasing</string>
+	<string name="ValueName.iMaxAnisotropy">Anisotropic filtering</string>
+	<string name="ValueName.iTexMipMapSkip">Texture quality</string>
+	<string name="ValueName.fGamma">Gamma</string>
+	
+	<string name="ValueName.ScreenResolution">Screen resolution</string>
+	<string name="ValueName.iSize W">Screen width</string>
+	<string name="ValueName.iSize H">Screen height</string>
+
+	<!-- Shadows -->
+	<string name="ValueName.bTreesReceiveShadows">Shadows on trees</string>
+	<string name="ValueName.bDrawLandShadows">Land shadows</string>
+	<string name="ValueName.bActorSelfShadowing">Actor self shadowing</string>
+	<string name="ValueName.iShadowMapResolution">Shadow resolution</string>
+	<string name="ValueName.iBlurDeferredShadowMask">Shadow blur</string>
+	<string name="ValueName.iShadowMaskQuarter">Shadow detail</string>
+	<string name="ValueName.fShadowDistance">Shadow distance</string>
+	<string name="ValueName.fInteriorShadowDistance">Shadow distance in interiors</string>
+	<string name="ValueName.fShadowBiasScale">Shadow bias scale</string>
+	<string name="ValueName.fSunUpdateThreshold">Shadow update frequency</string>
+	<string name="ValueName.fSunShadowUpdateTime">Shadow update time</string>
+
+	<!-- Water -->
+	<string name="ValueName.bUseWaterReflections">Water reflections</string>
+	<string name="ValueName.bReflectLODObjects">Reflect objects</string>
+	<string name="ValueName.bReflectLODLand">Reflect land</string>
+	<string name="ValueName.bReflectSky">Reflect sky</string>
+	<string name="ValueName.bReflectLODTrees">Reflect trees</string>
+	<string name="ValueName.bUseWaterRefractions">Water refractions</string>
+	<string name="ValueName.bUseWaterDepth">Water depth</string>
+	<string name="ValueName.bUseWaterDisplacements">Water displacements</string>
+	<string name="ValueName.iWaterMultiSamples">Water antialiasing</string>
+	
+	<string name="ValueName.WaterReflectionResolution">Water reflections resolution</string>
+	<string name="ValueName.iWaterReflectWidth">Width</string>
+	<string name="ValueName.iWaterReflectHeight">Height</string>
+
+	<!-- Audio -->
+	<string name="ValueName.bEnableAudio">Enable audio</string>
+	<string name="ValueName.fAudioMasterVolume">Master volume</string>
+	<string name="ValueName.fVal0">Effects</string>
+	<string name="ValueName.fVal1">Footsteps</string>
+	<string name="ValueName.fVal2">Voice</string>
+	<string name="ValueName.fVal3">Music</string>
+	<string name="ValueName.fVal4">NPC footsteps</string>
+	<string name="ValueName.fVal5">Menu</string>
+	<string name="ValueName.fVal6">Magic</string>
+	<string name="ValueName.fVal7">Voice</string>
+
+	<!-- Gameplay -->
+	<string name="ValueName.bGamepadEnable">Enable gamepad</string>
+	<string name="ValueName.bGamePadRumble">Vibration</string>
+	<string name="ValueName.bSaveOnPause">Save in pause menu</string>
+	<string name="ValueName.bSaveOnWait">Save on wait</string>
+	<string name="ValueName.bSaveOnTravel">Save on fast travel</string>
+	<string name="ValueName.bSaveOnRest">Save on rest</string>
+	<string name="ValueName.iDifficulty">Difficulty</string>
+	<string name="ValueName.fAutosaveEveryXMins">Autosave interval (min)</string>
+
+	<!-- Interface -->
+	<string name="ValueName.sLanguage">Language</string>
+	<string name="ValueName.bDialogueSubtitles">Dialogue subtitles</string>
+	<string name="ValueName.bGeneralSubtitles">General subtitles</string>
+	<string name="ValueName.bShowCompass">Show compass</string>
+	<string name="ValueName.bShowQuestMarkers">Show quest markers</string>
+	<string name="ValueName.bShowFloatingQuestMarkers">Show floating quest markers</string>
+	<string name="ValueName.bCrosshairEnabled">Enable crosshair</string>
+	<string name="ValueName.bShowHUDMessages">Show HUD messages</string>
+	<string name="ValueName.bShowTutorials">Show tutorial messages</string>
+	<string name="ValueName.bShowSubtitleSpeakerName">Show speaker name in subtitles</string>
+	<string name="ValueName.bTrackProgress">Level progress bar</string>
+	<string name="ValueName.bHealthBarShowing">Enemy health bar</string>
+	<string name="ValueName.fHUDOpacity">HUD Opacity</string>
+	<string name="ValueName.fMaxSubtitleDistance">Subtitle visibility distance</string>
+	<string name="ValueName.fMouseCursorSpeed">Mouse speed</string>
+	<string name="ValueName.sIntroSequence">Intro sequence</string>
+
+	<!-- Vegetation -->
+	<string name="ValueName.bAllowCreateGrass">Enable grass</string>
+	<string name="ValueName.bGrassPointLighting">Point lighting</string>
+	<string name="ValueName.bDrawShaderGrass">Improved grass shader</string>
+	<string name="ValueName.fGrassFadeRange">Grass fade</string>
+	<string name="ValueName.iMinGrassSize">Grass density</string>
+	<string name="ValueName.iMaxGrassTypesPerTexure">Grass diversity</string>
+	<string name="ValueName.bRenderSkinnedTrees">Skinned trees</string>
+	<string name="ValueName.uiMaxSkinnedTreesToRender">Maximum skinned trees</string>
+	<string name="ValueName.fTreeLoadDistance">Tree fade</string>
+
+	<!-- Level of Detail -->
+	<string name="ValueName.bPrecipitation">Weather</string>
+	<string name="ValueName.bDecals">Enable decals</string>
+	<string name="ValueName.fLODFadeOutMultObjects">Object fade</string>
+	<string name="ValueName.fLODFadeOutMultItems">Item fade</string>
+	<string name="ValueName.fLODFadeOutMultActors">Actor fade</string>
+	<string name="ValueName.fSkyCellRefFadeDistance">Clouds fade</string>
+	<string name="ValueName.fBlockMaximumDistance">fBlockMaximumDistance</string>
+	<string name="ValueName.fBlockLevel1Distance">fBlockLevel1Distance</string>
+	<string name="ValueName.fBlockLevel0Distance">fBlockLevel0Distance</string>
+	<string name="ValueName.fSplitDistanceMult">fSplitDistanceMult</string>
+	<string name="ValueName.uGridsToLoad">Grids to load</string>
+	<string name="ValueName.iMaxDesired">Decal count</string>
+	<string name="ValueName.fTreesMidLODSwitchDist">Tree detail</string>
+
+	<!-- Misc -->
+	<string name="ValueName.bAlwaysRunByDefault">Always run by default</string>
+	<string name="ValueName.bMouseAcceleration">Mouse acceleration</string>
+	<string name="ValueName.bInvertYValues">Invert Y axis</string>
+	<string name="ValueName.bEnableFileSelection">Enable plugin selection in $(GameShortName) Launcher</string>
+	<string name="ValueName.bAllowScreenshot">Allow screenshot</string>
+	<string name="ValueName.bAlwaysActive">Always active</string>
+	<string name="ValueName.bPreemptivelyUnloadCells">Preemptively unload cells</string>
+	<string name="ValueName.bPreCullActors">Preemptively cull actors</string>
+	<string name="ValueName.bSelectivePurgeUnusedOnFastTravel">Selective purge unused on fast travel</string>
+	<string name="ValueName.bEnableLogging">Enable logging</string>
+	<string name="ValueName.bEnableTrace">Enable tracing</string>
+	<string name="ValueName.bEnableProfiling">Enable profiling</string>
+	<string name="ValueName.bEnableStoryManagerLogging">Enable story manager</string>
+	<string name="ValueName.bUseBackgroundFileLoader">Use background file loader</string>
+	<string name="ValueName.bBackgroundLoadLipFiles">Load lip files in background</string>
+	<string name="ValueName.bLoadBackgroundFaceGen">Load FaceGen in background</string>
+	<string name="ValueName.bUseMultiThreadedFaceGen">Use multithreaded FaceGen</string>
+	<string name="ValueName.bBackgroundCellLoads">Load cells in background</string>
+	<string name="ValueName.bLoadHelmetsInBackground">Load helmets in background</string>
+	<string name="ValueName.bUseMultiThreadedTrees">Use multithreaded trees</string>
+	<string name="ValueName.fMouseHeadingSensitivity">Mouse sensitivity</string>
+	<string name="ValueName.fMouseWheelZoomSpeed">Camera zoom speed</string>
+	<string name="ValueName.iScreenShotIndex">Screenshot index</string>
+	<string name="ValueName.fInAirFallingCharGravityMult">Falling speed</string>
+	<string name="ValueName.bInvalidateOlderFiles">Archive invalidation</string>
+
+	<!-- ENB: General -->
+	<string name="ValueName.MaxAnisotropy">Anisotropic filtering</string>
+	<string name="ValueName.ForceAnisotropicFiltering">Force anisotropic filtering</string>
+	<string name="ValueName.UseDefferedRendering">Deferred rendering</string>
+	<string name="ValueName.ForceBorderless">Borderless window</string>
+	<string name="ValueName.ForceBorderlessFullscreen">Borderless fullscreen window</string>
+	<string name="ValueName.EnableVSync">Vertical synchronization</string>
+	<string name="ValueName.VSyncSkipNumFrames">Number of frames skipped when vertical synchronization is enabled</string>
+	<string name="ValueName.ForceLodBias">Use LOD bias</string>
+	<string name="ValueName.LodBias">LOD bias</string>
+	<string name="ValueName.AddDisplaySuperSamplingResolutions">Enable downsampling</string>
+
+	<!-- ENB: Effects -->
+	<string name="ValueName.UseEffect">Enable graphical effects</string>
+	<string name="ValueName.UseOriginalPostProcessing">Enable original post processing</string>
+	<string name="ValueName.UseOriginalObjectsProcessing">Enable original objects processing</string>
+	<string name="ValueName.EnableAdaptation">Enable adaptation</string>
+	<string name="ValueName.EnableAmbientOcclusion">Enable ambient occlusion (AO)</string>
+	<string name="ValueName.EnableDepthOfField">Enable depth of field</string>
+	<string name="ValueName.EnableDetailedShadow">Enable detailed shadows</string>
+	<string name="ValueName.EnableCloudShadows">Enable cloud shadows</string>
+	<string name="ValueName.EnableImageBasedLighting">Enable image based lighting</string>
+	<string name="ValueName.EnableSunRays">Enable sun rays</string>
+	<string name="ValueName.EnableSunGlare">Enable sun glare</string>
+	<string name="ValueName.EnableSkyLighting">Enable sky lighting</string>
+	<string name="ValueName.EnableReflection">Enable reflection</string>
+	<string name="ValueName.EnableLens">Enable lens</string>
+	<string name="ValueName.EnableMist">Enable mist</string>
+	<string name="ValueName.EnableParticleLights">Enable particle lights</string>
+	<string name="ValueName.EnableSoftParticles">Enable soft particles</string>
+	<string name="ValueName.EnableProceduralSun">Enable procedural sun</string>
+	<string name="ValueName.EnableSubSurfaceScattering">Enable subsurface scattering (SSS)</string>
+	<string name="ValueName.EnableWater">Enable water effects</string>
+	<string name="ValueName.EnableUnderwater">Enable underwater effects</string>
+	<string name="ValueName.EnableVolumetricRays">Enable volumetric rays</string>
+
+	<!-- ENB: Bloom -->
+	<string name="ValueName.EnableBloom">Enable bloom</string>
+	<string name="ValueName.BloomQuality">Bloom quality</string>
+
+	<!-- ENB: Ambient Occlusion -->
+	<string name="ValueName.UseIndirectLighting">Use indirect lighting (IL)</string>
+	<string name="ValueName.UseComplexIndirectLighting">Use complex indirect lighting</string>
+	<string name="ValueName.UseComplexAmbientOcclusion">Use complex AO</string>
+	<string name="ValueName.UseAmbientIndirectLighting">Use ambient IL</string>
+	<string name="ValueName.SamplingQuality">Sampling quality</string>
+	<string name="ValueName.FilterQuality">Filter quality</string>
+	<string name="ValueName.FilterType">Filter type</string>
+	<string name="ValueName.SamplingRange">Sampling range</string>
+	<string name="ValueName.SamplingPrecision">Sampling precision</string>
+	<string name="ValueName.EnableDenoiser">Enable denoiser</string>
+	<string name="ValueName.EnableSupersampling">Enable supersampling</string>
+	<string name="ValueName.EnableComplexFilter">Enable complex filter</string>
+	<string name="ValueName.AOType">AO type</string>
+	<string name="ValueName.ILType">IL type</string>
+	<string name="ValueName.AOMixingType">AO mixing type</string>
+	<string name="ValueName.AOMixingTypeInterior">AO mixing type in interiors</string>
+
+	<!-- ENB: Shadows -->
+	<string name="ValueName.UseShadowFilter">Use shadow filter</string>
+	<string name="ValueName.ShadowObjectsFix">Shadow objects fix</string>
+	<string name="ValueName.ShadowCastersFix">Shadow casters fix</string>
+	<string name="ValueName.UseBilateralShadowFilter">Use bilateral shadow filter</string>
+	<string name="ValueName.ShadowQualityFix">Shadow quality fix</string>
+	<string name="ValueName.ShadowFilterQuality">Shadow filter quality</string>
+	<string name="ValueName.DetailedShadowQuality">Detailed Shadow quality</string>
+	<string name="ValueName.ShadowBlurRange">Shadow blur range</string>
+	<string name="ValueName.ShadowBlurRangeInterior">Shadow blur range in interiors</string>
+
+	<!-- ENB: FPS Limit -->
+	<string name="ValueName.EnableFPSLimit">Enable FPS limit</string>
+	<string name="ValueName.WaitBusyRenderer">Wait busy renderer</string>
+	<string name="ValueName.FPSLimit">FPS limit</string>
+
+	<!-- ENB: ProxyLibrary -->
+	<string name="ValueName.EnableProxyLibrary">Enable proxy library</string>
+	<string name="ValueName.InitProxyFunctions">Initialize proxy functions</string>
+	<string name="ValueName.ProxyLibrary">Proxy library</string>
+
+	<!-- ENB: Controls -->
+	<string name="ValueName.KeyReadConfig">Read configuration</string>
+	<string name="ValueName.KeyCombination">Combination</string>
+	<string name="ValueName.KeyUseEffect">Use effects</string>
+	<string name="ValueName.KeyFPSLimit">FPS limit</string>
+	<string name="ValueName.KeyShowFPS">Show FPS</string>
+	<string name="ValueName.KeyScreenshot">Take screenshot</string>
+	<string name="ValueName.KeyEditor">Show editor</string>
+	<string name="ValueName.KeyFreeVRAM">Free VRAM</string>
+	<string name="ValueName.KeyBruteForce">Activate "Brute Force" preset</string>
+	
+	<!-- ENB: Fixes -->
+	<string name="ValueName.FixPhysics">Fix physics</string>
+	<string name="ValueName.FixGameBugs">Fix game bugs</string>
+	<string name="ValueName.FixParallaxBugs">Fix parallax bugs</string>
+	<string name="ValueName.FixAliasedTextures">Fix aliased textures</string>
+	<string name="ValueName.IgnoreLoadingScreen">Ignore loading screens</string>
+	<string name="ValueName.IgnoreInventory">Ignore inventory</string>
+	<string name="ValueName.FixSsaoWaterTransparency">Fix SSAO water transparency</string>
+	<string name="ValueName.FixSsaoHairTransparency">Fix SSAO hair transparency</string>
+	<string name="ValueName.FixTintGamma">Fix tint gamma</string>
+	<string name="ValueName.RemoveBlur">Remove blur</string>
+	<string name="ValueName.FixSubSurfaceScattering">Fix subsurface scattering (SSS)</string>
+	<string name="ValueName.FixParallaxTerrain">Fix terrain parallax </string>
+	<string name="ValueName.FixSkyReflection">Fix sky reflection</string>
+	<string name="ValueName.FixCursorVisibility">Fix cursor visibility</string>
+	<string name="ValueName.FixLag">Fix lag</string>
+	<string name="ValueName.IgnoreCreationKit">Ignore $(GameEditorName)</string>
+
+	<!-- ENB: Antialiasing -->
+	<string name="ValueName.EnableEdgeAA">Enable edge AA</string>
+	<string name="ValueName.EnableSubPixelAA">Enable subpixel AA</string>
+	<string name="ValueName.EnableTemporalAA">Enable temporal AA</string>
+
+	<!-- ENB: Performance -->
+	<string name="ValueName.UsePatchSpeedhackWithoutGraphics">Use patch speedhack without graphics</string>
+	<string name="ValueName.SpeedHack">SpeedHack</string>
+	<string name="ValueName.EnableOcclusionCulling">Enable occlusion culling</string>
+	<string name="ValueName.DataSyncMode">Data sync mode</string>
+	<string name="ValueName.PriorityMode">Priority mode</string>
+
+	<!-- ENB: Memory -->
+	<string name="ValueName.ExpandSystemMemoryX64">Expand system memory x64</string>
+	<string name="ValueName.ReduceSystemMemoryUsage">Reduce system memory usage</string>
+	<string name="ValueName.DisableDriverMemoryManager">Disable driver memory manager</string>
+	<string name="ValueName.DisablePreloadToVRAM">Disable preload to VRAM</string>
+	<string name="ValueName.ReservedMemorySizeMb">Reserved memory Size (Mb)</string>
+	<string name="ValueName.AutodetectVideoMemorySize">Autodetect video memory Size</string>
+	<string name="ValueName.VideoMemorySizeMb">Video memory Size (Mb)</string>
+	<string name="ValueName.EnableCompression">Enable compression</string>
+	<string name="ValueName.EnableUnsafeMemoryHacks">Enable unsafe memory hacks</string>
+
+	<!-- ENB: AdaptiveQuality -->
+	<string name="ValueName.EnableAdaptiveQuality">Enable adaptive quality</string>
+	<string name="ValueName.AdaptiveQuality">Adaptive quality</string>
+	<string name="ValueName.AdaptiveQualityDesiredFPS">Desired FPS</string>
+
+	<!-- ENB: ColorCorrection -->
+	<string name="ValueName.UsePaletteTexture">Use palette texture</string>
+	<string name="ValueName.UseProceduralCorrection">Use procedural correction</string>
+	<string name="ValueName.Brightness">Brightness</string>
+	<string name="ValueName.GammaCurve">Gamma</string>
+
+	<!-- ENB: Multihead -->
+	<string name="ValueName.ForceVideoAdapterIndex">Use selected video adapter</string>
+	<string name="ValueName.VideoAdapterIndex">Video adapter index</string>
+
+	<!-- ENB: Weather -->
+	<string name="ValueName.EnableMultipleWeathers">Enable multiple weathers</string>
+	<string name="ValueName.EnableLocationWeather">Enable location weather</string>
+</resources>

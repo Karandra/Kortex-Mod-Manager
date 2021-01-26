@@ -121,6 +121,9 @@
     <ClInclude Include="Source\GameDefinition\Private\VariableSerialization.h">
       <Filter>Source\GameDefinition\Private</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameDefinition\DefaultGameProfile.h">
+      <Filter>Source\GameDefinition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -197,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="Source\GameDefinition\Private\VariableSerialization.cpp">
       <Filter>Source\GameDefinition\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameDefinition\DefaultGameProfile.cpp">
+      <Filter>Source\GameDefinition</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

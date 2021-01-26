@@ -50,10 +50,7 @@ namespace Kortex
 			virtual const kxf::IImage2D& GetIcon() const = 0;
 			
 			virtual kxf::IFileSystem& GetFileSystem(Location locationID) = 0;
-			const kxf::IFileSystem& GetFileSystem(Location locationID) const
-			{
-				return const_cast<IGameDefinition&>(*this).GetFileSystem(locationID);
-			}
+			virtual const kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;
 
 		public:
 			explicit operator bool() const noexcept

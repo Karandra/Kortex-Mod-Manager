@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework.hpp"
 #include "Application/AppOption.h"
+#include "Application/Options/Option.h"
 
 namespace Kortex
 {
@@ -9,9 +10,9 @@ namespace Kortex
 	class IGameInstance;
 }
 
-namespace Kortex::GameInstance
+namespace Kortex
 {
-	class ProfileMod final
+	class GameProfileMod final
 	{
 		private:
 			kxf::String m_Signature;
@@ -19,8 +20,8 @@ namespace Kortex::GameInstance
 			bool m_IsActive = false;
 
 		public:
-			ProfileMod(const IGameMod& mod, bool active);
-			ProfileMod(const kxf::String& signature, bool active, int priority = -1);
+			GameProfileMod(const IGameMod& mod, bool active);
+			GameProfileMod(kxf::String signature, bool active, int priority = -1);
 
 		public:
 			bool IsNull() const noexcept
@@ -36,11 +37,16 @@ namespace Kortex::GameInstance
 				return m_Priority;
 			}
 
-			kxf::String GetSignature() const
+			const kxf::String& GetSignature() const&
 			{
 				return m_Signature;
 			}
-			kxf::object_ptr<IGameMod> GetMod() const;
+			kxf::String GetSignature() && noexcept
+			{
+				return std::move(m_Signature);
+			}
+
+			IGameMod* ResolveMod() const;
 
 		public:
 			explicit operator bool() const noexcept
@@ -54,9 +60,9 @@ namespace Kortex::GameInstance
 	};
 }
 
-namespace Kortex::GameInstance
+namespace Kortex
 {
-	class ProfilePlugin final
+	class GameProfilePlugin final
 	{
 		private:
 			kxf::String m_Name;
@@ -64,8 +70,8 @@ namespace Kortex::GameInstance
 			bool m_IsActive = false;
 
 		public:
-			ProfilePlugin(const IGamePlugin& plugin, bool active);
-			ProfilePlugin(const kxf::String& name, bool active, int priority = -1);
+			GameProfilePlugin(const IGamePlugin& plugin, bool active);
+			GameProfilePlugin(kxf::String name, bool active, int priority = -1);
 
 		public:
 			bool IsNull() const
@@ -81,11 +87,16 @@ namespace Kortex::GameInstance
 				return m_Priority;
 			}
 
-			const kxf::String& GetName() const
+			const kxf::String& GetName() const&
 			{
 				return m_Name;
 			}
-			kxf::object_ptr<IGamePlugin> GetPlugin() const;
+			kxf::String GetName() && noexcept
+			{
+				return std::move(m_Name);
+			}
+
+			IGamePlugin* ResolvePlugin() const;
 
 		public:
 			explicit operator bool() const noexcept
@@ -105,20 +116,14 @@ namespace Kortex
 	{
 		KxRTTI_DeclareIID(IGameProfile, {0xb1081844, 0x310c, 0x4773, {0x8c, 0x77, 0xb2, 0x8e, 0xa2, 0x9a, 0x66, 0xd5}});
 
-		friend class IGameInstance;
-		friend class AppOption;
-
 		public:
-			using ProfileMod = GameInstance::ProfileMod;
-			using ProfilePlugin = GameInstance::ProfilePlugin;
-
 			enum class Location
 			{
 				None = -1,
 
 				Root,
-				Saves,
-				Config,
+				GameSaves,
+				GameConfig,
 				WriteTarget,
 			};
 			enum class Option
@@ -127,13 +132,6 @@ namespace Kortex
 
 				LocalSaves,
 				LocalConfig,
-			};
-			enum class CopyFlag: uint32_t
-			{
-				None = 0,
-
-				Config = 1 << 0,
-				Saves = 1 << 1
 			};
 
 		public:
@@ -144,24 +142,29 @@ namespace Kortex
 
 		public:
 			virtual bool IsNull() const = 0;
+			virtual IGameInstance& GetOwningInstance() const = 0;
 			bool IsActive() const;
 
-			virtual std::unique_ptr<IGameProfile> Clone() const = 0;
-			virtual IGameInstance* GetOwningInstance() const = 0;
+			virtual kxf::XMLDocument& GetProfileData() = 0;
+			virtual const kxf::XMLDocument& GetProfileData() const = 0;
+			virtual bool LoadProfileData(IGameInstance& owningIntsance, const kxf::IFileSystem& fileSystem) = 0;
+			virtual bool SaveProfileData() const = 0;
 			
 			virtual kxf::String GetName() const = 0;
 			virtual kxf::IFileSystem& GetLocation(Location locationID) = 0;
 
-			virtual bool IsOptionEnabled(Option option) const = 0;
-			virtual bool SetOptionEnabled(Option option, bool enabled = true) = 0;
-
 			virtual void SyncWithCurrentState() = 0;
-			virtual size_t EnumMods(std::function<bool(const ProfileMod& gameMod)> func) = 0;
-			virtual size_t EnumPlugins(std::function<bool(const ProfilePlugin& gamePlugin)> func) = 0;
-	};
-}
+			virtual size_t EnumMods(std::function<bool(const GameProfileMod& gameMod)> func) const = 0;
+			virtual size_t EnumPlugins(std::function<bool(const GameProfilePlugin& gamePlugin)> func) const = 0;
 
-namespace kxf
-{
-	KxFlagSet_Declare(Kortex::IGameProfile::CopyFlag);
+		public:
+			explicit operator bool() const noexcept
+			{
+				return !IsNull();
+			}
+			bool operator!() const noexcept
+			{
+				return IsNull();
+			}
+	};
 }

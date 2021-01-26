@@ -133,7 +133,7 @@ namespace Kortex::Application
 {
 	kxf::XMLDocument& InstanceOption::GetXML(IGameInstance& instance) const
 	{
-		return instance.GetUserConfig();
+		return instance.GetnstanceData();
 	}
 }
 

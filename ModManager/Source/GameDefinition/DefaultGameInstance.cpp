@@ -192,7 +192,7 @@ namespace Kortex
 		}
 	}
 
-	std::unique_ptr<IGameProfile> DefaultGameInstance::CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile, kxf::FlagSet<CopyFlag> copyFlags)
+	IGameProfile* DefaultGameInstance::CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile, kxf::FlagSet<CopyFlag> copyFlags)
 	{
 		return nullptr;
 	}

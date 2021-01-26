@@ -97,7 +97,10 @@ namespace Kortex
 			}
 			const kxf::IImage2D& GetIcon() const override;
 			
-			using IGameDefinition::GetFileSystem;
 			kxf::IFileSystem& GetFileSystem(Location locationID) override;
+			const kxf::IFileSystem& GetFileSystem(Location locationID) const override
+			{
+				return const_cast<DefaultGameDefinition&>(*this).DefaultGameDefinition::GetFileSystem(locationID);
+			}
 	};
 }

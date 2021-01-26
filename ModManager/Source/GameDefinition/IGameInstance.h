@@ -59,8 +59,8 @@ namespace Kortex
 			virtual IGameDefinition& GetDefinition() const = 0;
 			virtual kxf::String GetName() const = 0;
 
-			virtual kxf::XMLDocument& GetUserConfig() = 0;
-			virtual const kxf::XMLDocument& GetUserConfig() const = 0;
+			virtual kxf::XMLDocument& GetnstanceData() = 0;
+			virtual const kxf::XMLDocument& GetnstanceData() const = 0;
 			virtual bool LoadInstanceData(const kxf::IFileSystem& fileSystem) = 0;
 			virtual bool SaveInstanceData() = 0;
 
@@ -69,20 +69,27 @@ namespace Kortex
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;
 
 			virtual kxf::IFileSystem& GetFileSystem(Location locationID) = 0;
-			const kxf::IFileSystem& GetFileSystem(Location locationID) const
-			{
-				return const_cast<IGameInstance&>(*this).GetFileSystem(locationID);
-			}
+			virtual const kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;
 
 		public:
 			virtual IGameProfile* GetActiveProfile() const = 0;
 			virtual size_t EnumProfiles(std::function<bool(IGameProfile& profile)> func) = 0;
 			IGameProfile* GetProfile(const kxf::String& profileName);
 
-			virtual std::unique_ptr<IGameProfile> CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile = nullptr, kxf::FlagSet<CopyFlag> copyFlags = {}) = 0;
+			virtual IGameProfile* CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile = nullptr, kxf::FlagSet<CopyFlag> copyFlags = {}) = 0;
 			virtual bool RemoveProfile(IGameProfile& profile) = 0;
 			virtual bool RenameProfile(IGameProfile& profile, const kxf::String& newName) = 0;
 			virtual bool SwitchActiveProfile(IGameProfile& profile) = 0;
+
+		public:
+			explicit operator bool() const noexcept
+			{
+				return !IsNull();
+			}
+			bool operator!() const noexcept
+			{
+				return IsNull();
+			}
 	};
 }
 

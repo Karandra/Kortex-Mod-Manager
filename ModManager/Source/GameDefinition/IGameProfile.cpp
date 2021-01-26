@@ -14,26 +14,26 @@ namespace Kortex
 
 	bool IGameProfile::IsActive() const
 	{
-		if (auto instance = GetOwningInstance())
+		if (!IsNull())
 		{
-			return instance->GetActiveProfile() == this;
+			return GetOwningInstance().GetActiveProfile() == this;
 		}
 		return false;
 	}
 }
 
-namespace Kortex::GameInstance
+namespace Kortex
 {
-	ProfileMod::ProfileMod(const kxf::String& signature, bool active, int priority)
-		:m_Signature(signature), m_Priority(priority >= 0 ? priority : std::numeric_limits<int>::max()), m_IsActive(active)
+	GameProfileMod::GameProfileMod(kxf::String signature, bool active, int priority)
+		:m_Signature(std::move(signature)), m_Priority(priority >= 0 ? priority : std::numeric_limits<int>::max()), m_IsActive(active)
 	{
 	}
-	ProfileMod::ProfileMod(const IGameMod& mod, bool active)
+	GameProfileMod::GameProfileMod(const IGameMod& mod, bool active)
 		:m_Signature(mod.GetSignature()), m_Priority(mod.GetPriority()), m_IsActive(active)
 	{
 	}
 
-	kxf::object_ptr<IGameMod> ProfileMod::GetMod() const
+	IGameMod* GameProfileMod::ResolveMod() const
 	{
 		//if (IModManager* manager = IModManager::GetInstance())
 		//{
@@ -43,18 +43,18 @@ namespace Kortex::GameInstance
 	}
 }
 
-namespace Kortex::GameInstance
+namespace Kortex
 {
-	ProfilePlugin::ProfilePlugin(const IGamePlugin& plugin, bool active)
+	GameProfilePlugin::GameProfilePlugin(const IGamePlugin& plugin, bool active)
 		:m_Name(plugin.GetName()), m_Priority(plugin.GetPriority()), m_IsActive(active)
 	{
 	}
-	ProfilePlugin::ProfilePlugin(const kxf::String& name, bool active, int priority)
-		: m_Name(name), m_Priority(priority >= 0 ? priority : std::numeric_limits<int>::max()), m_IsActive(active)
+	GameProfilePlugin::GameProfilePlugin(kxf::String name, bool active, int priority)
+		: m_Name(std::move(name)), m_Priority(priority >= 0 ? priority : std::numeric_limits<int>::max()), m_IsActive(active)
 	{
 	}
 
-	kxf::object_ptr<IGamePlugin> ProfilePlugin::GetPlugin() const
+	IGamePlugin* GameProfilePlugin::ResolvePlugin() const
 	{
 		//if (IPluginManager* manager = IPluginManager::GetInstance())
 		//{

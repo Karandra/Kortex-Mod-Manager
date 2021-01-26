@@ -54,11 +54,11 @@ namespace Kortex
 				return m_Name;
 			}
 
-			kxf::XMLDocument& GetUserConfig() override
+			kxf::XMLDocument& GetnstanceData() override
 			{
 				return m_InstanceData;
 			}
-			const kxf::XMLDocument& GetUserConfig() const override
+			const kxf::XMLDocument& GetnstanceData() const override
 			{
 				return m_InstanceData;
 			}
@@ -78,8 +78,11 @@ namespace Kortex
 				return m_CombinedVariables.Expand(variables);
 			}
 
-			using IGameInstance::GetFileSystem;
 			kxf::IFileSystem& GetFileSystem(Location locationID) override;
+			const kxf::IFileSystem& GetFileSystem(Location locationID) const override
+			{
+				return const_cast<DefaultGameInstance&>(*this).DefaultGameInstance::GetFileSystem(locationID);
+			}
 
 		public:
 			IGameProfile* GetActiveProfile() const override
@@ -88,7 +91,7 @@ namespace Kortex
 			}
 			size_t EnumProfiles(std::function<bool(IGameProfile& profile)> func) override;
 
-			std::unique_ptr<IGameProfile> CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile = nullptr, kxf::FlagSet<CopyFlag> copyFlags = {}) override;
+			IGameProfile* CreateProfile(const kxf::String& profileName, const IGameProfile* baseProfile = nullptr, kxf::FlagSet<CopyFlag> copyFlags = {}) override;
 			bool RemoveProfile(IGameProfile& profile) override;
 			bool RenameProfile(IGameProfile& profile, const kxf::String& newName) override;
 			bool SwitchActiveProfile(IGameProfile& profile) override;

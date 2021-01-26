@@ -251,7 +251,23 @@ namespace Kortex
 	}
 	size_t DefaultApplication::EnumGameInstances(std::function<bool(IGameInstance&)> func)
 	{
-		return 0;
+		if (func)
+		{
+			size_t count = 0;
+			for (auto&& [id, item]: m_GameInstances)
+			{
+				count++;
+				if (!std::invoke(func, *item))
+				{
+					break;
+				}
+			}
+			return count;
+		}
+		else
+		{
+			return m_GameInstances.size();
+		}
 	}
 	IGameInstance* DefaultApplication::GetActiveGameInstance() const
 	{

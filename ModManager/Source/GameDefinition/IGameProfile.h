@@ -154,8 +154,8 @@ namespace Kortex
 			virtual kxf::IFileSystem& GetLocation(Location locationID) = 0;
 
 			virtual void SyncWithCurrentState() = 0;
-			virtual size_t EnumMods(std::function<bool(const GameProfileMod& gameMod)> func) const = 0;
-			virtual size_t EnumPlugins(std::function<bool(const GameProfilePlugin& gamePlugin)> func) const = 0;
+			virtual size_t EnumGameMods(std::function<bool(const GameProfileMod& gameMod)> func) const = 0;
+			virtual size_t EnumGamePlugins(std::function<bool(const GameProfilePlugin& gamePlugin)> func) const = 0;
 
 		public:
 			explicit operator bool() const noexcept

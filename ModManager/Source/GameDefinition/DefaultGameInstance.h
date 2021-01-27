@@ -35,6 +35,7 @@ namespace Kortex
 			bool LoadInstance();
 			bool ResolveDefinition(const kxf::String& name);
 			void SetupVariables(const kxf::XMLNode& variablesRoot);
+			void LoadProfiles();
 
 		public:
 			DefaultGameInstance()

@@ -1,5 +1,6 @@
 #include "pch.hpp"
 #include "DefaultGameInstance.h"
+#include "DefaultGameProfile.h"
 #include "IGameDefinition.h"
 #include "Application/IApplication.h"
 #include "Private/VariableSerialization.h"
@@ -85,6 +86,23 @@ namespace Kortex
 
 		loader.Invoke();
 	}
+	void DefaultGameInstance::LoadProfiles()
+	{
+		m_ProfilesFS.EnumItems({}, [&](kxf::FileItem item)
+		{
+			if (item.IsNormalItem())
+			{
+				auto profile = std::make_unique<DefaultGameProfile>();
+
+				kxf::ScopedNativeFileSystem fs(item.GetFullPath());
+				if (profile->LoadProfileData(*this, fs))
+				{
+					m_Profiles.emplace_back(std::move(profile));
+				}
+			}
+			return true;
+		}, {}, kxf::FSActionFlag::LimitToDirectories);
+	}
 
 	// IGameDefinition
 	bool DefaultGameInstance::IsNull() const
@@ -143,6 +161,7 @@ namespace Kortex
 				m_Name = fileSystem.GetLookupDirectory().GetName();
 				if (LoadInstance())
 				{
+					LoadProfiles();
 					return true;
 				}
 				else

@@ -18,12 +18,13 @@ namespace Kortex
 			mutable kxf::ScopedNativeFileSystem m_GameConfigFS;
 			mutable kxf::ScopedNativeFileSystem m_WriteTargetFS;
 
-			kxf::XMLDocument m_ProfileData;
-			std::vector<GameProfileMod> m_Mods;
-			std::vector<GameProfilePlugin> m_Plugins;
+			mutable kxf::XMLDocument m_ProfileData;
+			std::vector<GameProfileMod> m_GameMods;
+			std::vector<GameProfilePlugin> m_GamePlugins;
 
 		private:
 			bool LoadProfile();
+			bool SaveProfile() const;
 
 		public:
 			DefaultGameProfile() = default;
@@ -57,7 +58,7 @@ namespace Kortex
 			kxf::IFileSystem& GetLocation(Location locationID) override;
 
 			void SyncWithCurrentState() override;
-			size_t EnumMods(std::function<bool(const GameProfileMod& gameMod)> func) const override;
-			size_t EnumPlugins(std::function<bool(const GameProfilePlugin& gamePlugin)> func) const override;
+			size_t EnumGameMods(std::function<bool(const GameProfileMod& gameMod)> func) const override;
+			size_t EnumGamePlugins(std::function<bool(const GameProfilePlugin& gamePlugin)> func) const override;
 	};
 }

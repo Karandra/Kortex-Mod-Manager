@@ -35,11 +35,12 @@ namespace Kortex
 
 			kxf::XMLDocument m_GlobalConfig;
 			kxf::FSPath m_GlobalConfigOverride;
+			bool m_GlobalConfigChanged = false;
 
 			IMainWindow* m_MainWindow = nullptr;
 			std::unordered_map<kxf::String, std::unique_ptr<IGameDefinition>> m_GameDefinitions;
 			std::unordered_map<kxf::String, std::unique_ptr<IGameInstance>> m_GameInstances;
-			std::unique_ptr<IGameInstance> m_ActiveGameInstance;
+			IGameInstance* m_ActiveGameInstance = nullptr;
 
 		private:
 			void LoadGlobalConfiguration();

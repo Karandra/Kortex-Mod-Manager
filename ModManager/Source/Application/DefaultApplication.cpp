@@ -13,6 +13,18 @@
 #include <kxf/FileSystem/NativeFileSystem.h>
 #include <wx/cmdline.h>
 
+namespace
+{
+	constexpr struct
+	{
+		static constexpr kxf::XChar Language[] = wxS("Language");
+		static constexpr kxf::XChar Locale[] = wxS("Locale");
+		static constexpr kxf::XChar Active[] = wxS("Active");
+
+		static constexpr kxf::XChar GameInstances[] = wxS("GameInstances");
+	} g_OptionNames;
+}
+
 namespace Kortex
 {
 	void DefaultApplication::LoadGlobalConfiguration()
@@ -27,7 +39,7 @@ namespace Kortex
 	}
 	void DefaultApplication::LoadLocalizationPackages()
 	{
-		kxf::Locale activeLocale = this->GetGlobalOption("Language").GetAttribute("Locale");
+		kxf::Locale activeLocale = this->GetGlobalOption(g_OptionNames.Language).GetAttribute(g_OptionNames.Locale);
 		if (!activeLocale)
 		{
 			activeLocale = kxf::Locale::GetSystemPreferred();
@@ -79,7 +91,8 @@ namespace Kortex
 	}
 	void DefaultApplication::LoadGameInstances()
 	{
-		m_GameInstancesFS.EnumItems({}, [&](kxf::FileItem item)
+		auto option = GetGlobalOption(g_OptionNames.GameInstances);
+		m_GameInstancesFS.EnumItems({}, [&, activeName = option.GetAttribute(g_OptionNames.Active)](kxf::FileItem item)
 		{
 			if (item.IsNormalItem())
 			{
@@ -88,7 +101,10 @@ namespace Kortex
 				kxf::ScopedNativeFileSystem fs(item.GetFullPath());
 				if (instance->LoadInstanceData(fs))
 				{
-					// We allow user-defined definitions to replace the system ones so using 'insert_or_assign' here
+					if (!m_ActiveGameInstance && instance->GetName() == activeName)
+					{
+						m_ActiveGameInstance = instance.get();
+					}
 					m_GameInstances.insert_or_assign(instance->GetName(), std::move(instance));
 				}
 			}
@@ -159,6 +175,7 @@ namespace Kortex
 	
 	void DefaultApplication::OnGlobalConfigChanged(AppOption& option)
 	{
+		m_GlobalConfigChanged = true;
 	}
 	void DefaultApplication::OnInstanceConfigChanged(AppOption& option, IGameInstance& instance)
 	{
@@ -271,7 +288,7 @@ namespace Kortex
 	}
 	IGameInstance* DefaultApplication::GetActiveGameInstance() const
 	{
-		return m_ActiveGameInstance.get();
+		return m_ActiveGameInstance;
 	}
 
 	IGameInstance* DefaultApplication::OpenInstanceSelectionDialog()

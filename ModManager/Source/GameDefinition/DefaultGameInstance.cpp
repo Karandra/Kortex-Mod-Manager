@@ -21,6 +21,13 @@ namespace
 		static constexpr kxf::XChar DownloadsDirectory[] = wxS("DownloadsDirectory");
 		static constexpr kxf::XChar MountedGame[] = wxS("MountedGame");
 	} g_InstanceNames;
+
+	constexpr struct
+	{
+		static constexpr kxf::XChar Active[] = wxS("Active");
+
+		static constexpr kxf::XChar GameProfiles[] = wxS("GameProfiles");
+	} g_OptionNames;
 }
 
 namespace Kortex
@@ -88,7 +95,8 @@ namespace Kortex
 	}
 	void DefaultGameInstance::LoadProfiles()
 	{
-		m_ProfilesFS.EnumItems({}, [&](kxf::FileItem item)
+		auto option = GetInstanceOption(g_OptionNames.GameProfiles);
+		m_ProfilesFS.EnumItems({}, [&, activeName = option.GetAttribute(g_OptionNames.Active)](kxf::FileItem item)
 		{
 			if (item.IsNormalItem())
 			{
@@ -97,6 +105,10 @@ namespace Kortex
 				kxf::ScopedNativeFileSystem fs(item.GetFullPath());
 				if (profile->LoadProfileData(*this, fs))
 				{
+					if (!m_ActiveProfile && profile->GetName() == activeName)
+					{
+						m_ActiveProfile = profile.get();
+					}
 					m_Profiles.emplace_back(std::move(profile));
 				}
 			}

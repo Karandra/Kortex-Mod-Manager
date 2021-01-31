@@ -148,10 +148,6 @@ namespace Kortex
 					:m_Stream(std::move(stream))
 				{
 				}
-				~LogTarget()
-				{
-					Log::Info("Log closed");
-				}
 
 			public:
 				void Flush() override
@@ -218,6 +214,11 @@ namespace Kortex
 		variables.SetItem("System", "Architecture", m_Application->IsSystem64Bit() ? "x64" : "x86");
 
 		return true;
+	}
+	void SystemApplication::OnDestroy()
+	{
+		Log::Info("Log closed");
+		kxf::Log::SetActiveTarget(nullptr);
 	}
 	bool SystemApplication::OnInit()
 	{

@@ -154,9 +154,7 @@ namespace Kortex
 			LoadGameDefinitions();
 			LoadGameInstances();
 
-			OpenInstanceSelectionDialog();
-
-			return true;
+			return OpenInstanceSelectionDialog() != nullptr;
 		}
 		else
 		{
@@ -297,9 +295,11 @@ namespace Kortex
 	IGameInstance* DefaultApplication::OpenInstanceSelectionDialog(wxWindow* parent)
 	{
 		GameDefinition::UI::InstanceSelectionDialog dialog(parent);
-		dialog.ShowModal();
-
-		return dialog.GetSelectedInstance();
+		if (dialog.ShowModalDialog() == kxf::StdID::OK)
+		{
+			return dialog.GetSelectedInstance();
+		}
+		return nullptr;
 	}
 	bool DefaultApplication::Uninstall()
 	{

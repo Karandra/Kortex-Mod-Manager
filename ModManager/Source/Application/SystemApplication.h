@@ -41,6 +41,7 @@ namespace Kortex
 		public:
 			// ICoreApplication
 			bool OnCreate() override;
+			void OnDestroy() override;
 			bool OnInit() override;
 
 			void OnFatalException() override;

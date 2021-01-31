@@ -104,7 +104,7 @@ namespace Kortex
 			size_t EnumGameInstances(std::function<bool(IGameInstance&)> func) override;
 			IGameInstance* GetActiveGameInstance() const override;
 
-			IGameInstance* OpenInstanceSelectionDialog() override;
+			IGameInstance* OpenInstanceSelectionDialog(wxWindow* parent = nullptr) override;
 			bool Uninstall() override;
 
 		public:

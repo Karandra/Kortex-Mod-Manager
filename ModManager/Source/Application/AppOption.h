@@ -2,7 +2,7 @@
 #include "Framework.hpp"
 #include "Options/OptionSerializer.h"
 #include <kxf/Serialization/XML.h>
-#include <kxf/RTTI/QueryInterface.h>
+#include <kxf/RTTI/RTTI.h>
 class wxTopLevelWindow;
 
 namespace Kortex

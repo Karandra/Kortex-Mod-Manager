@@ -1,5 +1,6 @@
 #pragma once
 #include "Framework.hpp"
+#include "FrameworkUI.hpp"
 #include "IWorkspace.h"
 #include "IWorkspaceContainer.h"
 

@@ -8,6 +8,7 @@
 #include "GameDefinition/IGameInstance.h"
 #include "GameDefinition/DefaultGameDefinition.h"
 #include "GameDefinition/DefaultGameInstance.h"
+#include "GameDefinition/UI/InstanceSelectionDialog.h"
 
 #include <kxf/System/ShellOperations.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
@@ -153,6 +154,8 @@ namespace Kortex
 			LoadGameDefinitions();
 			LoadGameInstances();
 
+			OpenInstanceSelectionDialog();
+
 			return true;
 		}
 		else
@@ -291,9 +294,12 @@ namespace Kortex
 		return m_ActiveGameInstance;
 	}
 
-	IGameInstance* DefaultApplication::OpenInstanceSelectionDialog()
+	IGameInstance* DefaultApplication::OpenInstanceSelectionDialog(wxWindow* parent)
 	{
-		return nullptr;
+		GameDefinition::UI::InstanceSelectionDialog dialog(parent);
+		dialog.ShowModal();
+
+		return dialog.GetSelectedInstance();
 	}
 	bool DefaultApplication::Uninstall()
 	{

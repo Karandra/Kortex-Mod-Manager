@@ -82,7 +82,7 @@ namespace Kortex
 			IGameDefinition* GetGameDefinitionByName(const kxf::String& name);
 			IGameInstance* GetGameInstanceByName(const kxf::String& name);
 			
-			virtual IGameInstance* OpenInstanceSelectionDialog() = 0;
+			virtual IGameInstance* OpenInstanceSelectionDialog(wxWindow* parent = nullptr) = 0;
 			virtual bool Uninstall() = 0;
 
 		public:

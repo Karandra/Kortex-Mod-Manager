@@ -12,6 +12,7 @@
 // KxFramework
 #include <kxf/Common.hpp>
 
+// kxf: General
 #include <kxf/General/Common.h>
 #include <kxf/General/String.h>
 #include <kxf/General/StringFormatter.h>
@@ -22,29 +23,27 @@
 #include <kxf/General/Version.h>
 #include <kxf/General/IVariablesCollection.h>
 
+// kxf: RTTI
 #include <kxf/RTTI/Common.h>
-#include <kxf/RTTI/QueryInterface.h>
+#include <kxf/RTTI/RTTI.h>
 
+// kxf: EventSystem
 #include <kxf/EventSystem/Common.h>
 #include <kxf/EventSystem/IEvtHandler.h>
 
+// kxf: FileSystem
 #include <kxf/FileSystem/Common.h>
 #include <kxf/FileSystem/FSPath.h>
 #include <kxf/FileSystem/FileItem.h>
 #include <kxf/FileSystem/IFileSystem.h>
 
+// kxf: System
 #include <kxf/System/Common.h>
+#include <kxf/System/SystemInformation.h>
+#include <kxf/System/SystemAppearance.h>
 
+// kxf: Drawing
 #include <kxf/Drawing/Common.h>
 #include <kxf/Drawing/Color.h>
 #include <kxf/Drawing/Angle.h>
 #include <kxf/Drawing/BitmapImage.h>
-
-namespace Kortex::LayoutConstant
-{
-	constexpr int HorizontalSpacing = 3;
-	constexpr int VerticalSpacing = 3;
-
-	constexpr int HorizontalSpacingSmall = 2;
-	constexpr int VerticalSpacingSmall = 2;
-}

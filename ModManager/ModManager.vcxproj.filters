@@ -26,6 +26,9 @@
     <Filter Include="Source\GameDefinition\Private">
       <UniqueIdentifier>{f4e9e994-f2f4-473c-b7e1-42919c18c0bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\GameDefinition\UI">
+      <UniqueIdentifier>{891e4dd2-d9e0-4681-b0d3-5b238e3e7651}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EmbeddedResources.h">
@@ -124,6 +127,12 @@
     <ClInclude Include="Source\GameDefinition\DefaultGameProfile.h">
       <Filter>Source\GameDefinition</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameDefinition\UI\InstanceSelectionDialog.h">
+      <Filter>Source\GameDefinition\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FrameworkUI.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -203,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="Source\GameDefinition\DefaultGameProfile.cpp">
       <Filter>Source\GameDefinition</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameDefinition\UI\InstanceSelectionDialog.cpp">
+      <Filter>Source\GameDefinition\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

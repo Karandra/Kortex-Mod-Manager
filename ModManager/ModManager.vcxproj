@@ -688,6 +688,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClInclude Include="Source\Application\SystemApplication.h" />
     <ClInclude Include="Source\EmbeddedResources.h" />
     <ClInclude Include="Source\Framework.hpp" />
+    <ClInclude Include="Source\FrameworkUI.hpp" />
     <ClInclude Include="Source\GameDefinition\DefaultGameDefinition.h" />
     <ClInclude Include="Source\GameDefinition\DefaultGameInstance.h" />
     <ClInclude Include="Source\GameDefinition\DefaultGameProfile.h" />
@@ -697,6 +698,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClInclude Include="Source\GameDefinition\IGamePlugin.h" />
     <ClInclude Include="Source\GameDefinition\IGameProfile.h" />
     <ClInclude Include="Source\GameDefinition\Private\VariableSerialization.h" />
+    <ClInclude Include="Source\GameDefinition\UI\InstanceSelectionDialog.h" />
     <ClInclude Include="Source\pch.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -725,6 +727,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClCompile Include="Source\GameDefinition\IGamePlugin.cpp" />
     <ClCompile Include="Source\GameDefinition\IGameProfile.cpp" />
     <ClCompile Include="Source\GameDefinition\Private\VariableSerialization.cpp" />
+    <ClCompile Include="Source\GameDefinition\UI\InstanceSelectionDialog.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

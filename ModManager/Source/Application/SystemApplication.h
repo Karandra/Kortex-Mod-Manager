@@ -12,7 +12,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class SystemApplication: public kxf::RTTI::ImplementInterface<SystemApplication, kxf::GUIApplication>
+	class SystemApplication: public kxf::RTTI::Implementation<SystemApplication, kxf::GUIApplication>
 	{
 		friend class IApplication;
 
@@ -37,6 +37,10 @@ namespace Kortex
 
 			void InitializeLogging();
 			void InitializeFramework();
+
+		public:
+			SystemApplication();
+			~SystemApplication();
 
 		public:
 			// ICoreApplication

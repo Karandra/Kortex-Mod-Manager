@@ -181,6 +181,9 @@ namespace Kortex
 		kxf::Drawing::InitalizeImageHandlers();
 	}
 
+	SystemApplication::SystemApplication() = default;
+	SystemApplication::~SystemApplication() = default;
+
 	// ICoreApplication
 	bool SystemApplication::OnCreate()
 	{

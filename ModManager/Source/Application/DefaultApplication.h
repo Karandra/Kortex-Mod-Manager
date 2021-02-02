@@ -16,9 +16,9 @@ namespace Kortex
 
 namespace Kortex
 {
-	class DefaultApplication: public kxf::RTTI::ImplementInterface<DefaultApplication, IApplication, kxf::Application::ICommandLine>
+	class DefaultApplication: public kxf::RTTI::DynamicImplementation<DefaultApplication, IApplication, kxf::Application::ICommandLine>
 	{
-		private:
+		public:
 			std::unique_ptr<BroadcastReciever> m_BroadcastReciever;
 			kxf::LocalizationPackageStack m_LocalizationPackages;
 			kxf::DynamicVariablesCollection m_Variables;

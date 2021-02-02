@@ -21,6 +21,7 @@
 #include <kxf/General/ResourceID.h>
 #include <kxf/General/FlagSet.h>
 #include <kxf/General/Version.h>
+#include <kxf/General/UniversallyUniqueID.h>
 #include <kxf/General/IVariablesCollection.h>
 
 // kxf: RTTI

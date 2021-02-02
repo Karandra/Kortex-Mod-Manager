@@ -515,6 +515,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
       <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -635,6 +636,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
       <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

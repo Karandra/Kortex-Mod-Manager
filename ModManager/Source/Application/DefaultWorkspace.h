@@ -6,7 +6,7 @@
 
 namespace Kortex::Application
 {
-	class DefaultWorkspace: public kxf::RTTI::ImplementInterface<DefaultWorkspace, IWorkspace>
+	class DefaultWorkspace: public kxf::RTTI::Implementation<DefaultWorkspace, IWorkspace>
 	{
 		private:
 			IWorkspaceContainer* m_Container = nullptr;

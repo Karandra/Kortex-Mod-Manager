@@ -75,7 +75,7 @@ namespace Kortex::GameDefinition::UI
 			}
 	};
 
-	class InstanceSelectionDialog::DataModel: public kxf::RTTI::ImplementInterface<DataModel, DataView::Model, DataView::RootNode>
+	class InstanceSelectionDialog::DataModel: public kxf::RTTI::Implementation<DataModel, DataView::Model, DataView::RootNode>
 	{
 		friend class DataItem;
 

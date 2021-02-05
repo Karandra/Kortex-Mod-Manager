@@ -24,8 +24,17 @@ namespace
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar Active[] = wxS("Active");
+		static constexpr kxf::XChar Namespace[] = wxS("ActiveProfile");
 
+		static constexpr kxf::XChar RootDirectory[] = wxS("RootDirectory");
+		static constexpr kxf::XChar GameSavesDirectory[] = wxS("GameSavesDirectory");
+		static constexpr kxf::XChar GameConfigDirectory[] = wxS("GameConfigDirectory");
+		static constexpr kxf::XChar WriteTargetDirectory[] = wxS("WriteTargetDirectory");
+	} g_ActiveProfileNames;
+
+	constexpr struct
+	{
+		static constexpr kxf::XChar Active[] = wxS("Active");
 		static constexpr kxf::XChar GameProfiles[] = wxS("GameProfiles");
 	} g_OptionNames;
 }
@@ -60,6 +69,23 @@ namespace Kortex
 		// Set basic variables
 		m_Variables.SetItem(g_InstanceNames.Namespace, g_InstanceNames.Name, m_Name);
 		m_Variables.SetItem(g_InstanceNames.Namespace, g_InstanceNames.DefinitionName, m_Definition->GetName());
+
+		// Set dynamic variables
+		auto AddActiveProfileFSPath = [&](IGameProfile::Location locationID, const auto& name)
+		{
+			m_Variables.SetDynamicItem(g_ActiveProfileNames.Namespace, name, [this, locationID]() -> kxf::Any
+			{
+				if (m_ActiveProfile)
+				{
+					return m_ActiveProfile->GetFileSystem(locationID).GetLookupDirectory();
+				}
+				return {};
+			});
+		};
+		AddActiveProfileFSPath(IGameProfile::Location::Root, g_ActiveProfileNames.RootDirectory);
+		AddActiveProfileFSPath(IGameProfile::Location::GameSaves, g_ActiveProfileNames.GameSavesDirectory);
+		AddActiveProfileFSPath(IGameProfile::Location::GameConfig, g_ActiveProfileNames.GameConfigDirectory);
+		AddActiveProfileFSPath(IGameProfile::Location::WriteTarget, g_ActiveProfileNames.WriteTargetDirectory);
 
 		// Load variables from the XML
 		GameInstance::Private::VariableLoader loader(m_Variables, variablesRoot, g_InstanceNames.Namespace);

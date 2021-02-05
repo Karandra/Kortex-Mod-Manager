@@ -151,7 +151,7 @@ namespace Kortex
 			virtual bool SaveProfileData() const = 0;
 			
 			virtual kxf::String GetName() const = 0;
-			virtual kxf::IFileSystem& GetLocation(Location locationID) = 0;
+			virtual kxf::IFileSystem& GetFileSystem(Location locationID) = 0;
 
 			virtual void SyncWithCurrentState() = 0;
 			virtual size_t EnumGameMods(std::function<bool(const GameProfileMod& gameMod)> func) const = 0;

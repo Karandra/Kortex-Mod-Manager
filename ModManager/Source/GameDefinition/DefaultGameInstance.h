@@ -2,7 +2,7 @@
 #include "Framework.hpp"
 #include "IGameInstance.h"
 #include "IGameProfile.h"
-#include <kxf/General/StaticVariablesCollection.h>
+#include <kxf/General/DynamicVariablesCollection.h>
 #include <kxf/General/CombinedVariablesCollection.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
 #include <kxf/Serialization/XML.h>
@@ -16,7 +16,7 @@ namespace Kortex
 
 			kxf::String m_Name;
 			kxf::XMLDocument m_InstanceData;
-			kxf::StaticVariablesCollection m_Variables;
+			kxf::DynamicVariablesCollection m_Variables;
 			kxf::CombinedVariablesCollection m_CombinedVariables;
 
 			kxf::ScopedNativeFileSystem m_RootFS;

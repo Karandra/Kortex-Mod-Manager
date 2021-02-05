@@ -127,7 +127,7 @@ namespace Kortex
 		return false;
 	}
 
-	kxf::IFileSystem& DefaultGameProfile::GetLocation(Location locationID)
+	kxf::IFileSystem& DefaultGameProfile::GetFileSystem(Location locationID)
 	{
 		switch (locationID)
 		{

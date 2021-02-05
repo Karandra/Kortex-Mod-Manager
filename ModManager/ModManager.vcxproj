@@ -744,7 +744,13 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <Image Include="Resources\Mod Manager.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Bin\ModManager\GameDefinitions\Game.TES.SkyrimSE\Icon.svg" />
+    <None Include="..\Bin\ModManager\GameDefinitions\Game.TES.Skyrim\Icon.svg" />
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Bin\ModManager\GameDefinitions\Game.TES.SkyrimSE\Definition.xml" />
+    <Xml Include="..\Bin\ModManager\GameDefinitions\Game.TES.Skyrim\Definition.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

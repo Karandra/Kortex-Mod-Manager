@@ -31,19 +31,37 @@
 		<Item Type="String" Name="NexusDomainName">Skyrim</Item>
 	</Variables>
 
-	<Programs>
-		<ProgramManager>
-			<DefaultPrograms>
-				<Item ShowInMainMenu="1">
-					<Name>$(GameShortName)</Name>
+	<Modules>
+		<Module IID="{0xec61c172, 0xa750, 0x4be9, {0xb0, 0x9d, 0x27, 0xe8, 0x8c, 0x49, 0x36, 0xb2}}" Name="Kortex::IModManager">
+			<MirroredLocations>
+				<Item>
+					<Sources>
+						<Item>$Definition(GameSavesDirectory)</Item>
+						<Item>$Definition(GameConfigDirectory)</Item>
+					</Sources>
+					<Target>$ActiveProfile(GameConfigDirectory)</Target>
+				</Item>
+				<Item>
+					<Sources>
+						<Item>$ActiveProfile(RootDirectory)\Plugins</Item>
+					</Sources>
+					<Target>$SHDir(ApplicationDataLocal)\Skyrim</Target>
+				</Item>
+			</MirroredLocations>
+		</Module>
+
+		<Module IID="{0xa0ea38c8, 0xa988, 0x4792, {0xbb, 0xa5, 0x5d, 0x2c, 0xf5, 0x4a, 0x98, 0xdc}}" Name="Kortex::IShortcutManager">
+			<DefaultShortcuts>
+				<Item QuickAccess="true">
+					<Name>$Definition(GameNameShort)</Name>
 					<Executable>TESV.exe</Executable>
 				</Item>
-				<Item ShowInMainMenu="1">
-					<Name>$(GameShortName) ($(ScriptExtenderID))</Name>
+				<Item QuickAccess="true">
+					<Name>$Definition(GameNameShort) ($Definition(ScriptExtenderID))</Name>
 					<Executable>SKSE_Loader.exe</Executable>
 				</Item>
 				<Item>
-					<Name>$(GameShortName) Launcher</Name>
+					<Name>$Definition(GameNameShort) Launcher</Name>
 					<Executable>SkyrimLauncher.exe</Executable>
 				</Item>
 				<Item>
@@ -55,9 +73,9 @@
 					<Name>ENB Injector</Name>
 					<Executable>ENBInjector.exe</Executable>
 				</Item>
-			</DefaultPrograms>
-		</ProgramManager>
-	</Programs>
+			</DefaultShortcuts>
+		</Module>
+	</Modules>
 
 	<GameConfigModule>
 		<ConfigManager>

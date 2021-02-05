@@ -29,6 +29,15 @@
     <Filter Include="Source\GameDefinition\UI">
       <UniqueIdentifier>{891e4dd2-d9e0-4681-b0d3-5b238e3e7651}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\GameDefinition">
+      <UniqueIdentifier>{76f8b434-8a2c-471d-a806-cbd75a82804a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\GameDefinition\Game.TES.Skyrim">
+      <UniqueIdentifier>{c61449cd-55ea-4589-8f1d-5171a3ae7823}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\GameDefinition\Game.TES.SkyrimSE">
+      <UniqueIdentifier>{6d270575-c172-4592-805b-dfab9a6294f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EmbeddedResources.h">
@@ -231,5 +240,19 @@
     <None Include="cpp.hint">
       <Filter>Resources</Filter>
     </None>
+    <None Include="..\Bin\ModManager\GameDefinitions\Game.TES.Skyrim\Icon.svg">
+      <Filter>Resources\GameDefinition\Game.TES.Skyrim</Filter>
+    </None>
+    <None Include="..\Bin\ModManager\GameDefinitions\Game.TES.SkyrimSE\Icon.svg">
+      <Filter>Resources\GameDefinition\Game.TES.SkyrimSE</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Bin\ModManager\GameDefinitions\Game.TES.Skyrim\Definition.xml">
+      <Filter>Resources\GameDefinition\Game.TES.Skyrim</Filter>
+    </Xml>
+    <Xml Include="..\Bin\ModManager\GameDefinitions\Game.TES.SkyrimSE\Definition.xml">
+      <Filter>Resources\GameDefinition\Game.TES.SkyrimSE</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

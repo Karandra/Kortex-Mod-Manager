@@ -3,10 +3,9 @@
 #include "OptionDatabase.h"
 #include "../IApplication.h"
 #include "../IWorkspace.h"
+#include "../IModule.h"
 #include "GameDefinition/IGameInstance.h"
 #include "GameDefinition/IGameProfile.h"
-//#include <Kortex/PackageManager.hpp>
-//#include <Kortex/InstallWizard.hpp>
 
 namespace
 {
@@ -45,13 +44,7 @@ namespace
 	template<class... Args>
 	kxf::XMLNode InitNodeUsingModule(Disposition disposition, kxf::XMLDocument& xml, const  IModule& module, Args&&... arg)
 	{
-		//return InitNode(disposition, xml, module.GetModuleInfo().GetID(), std::forward<Args>(arg)...);
-	}
-
-	template<class... Args>
-	kxf::XMLNode InitNodeUsingManager(Disposition disposition, kxf::XMLDocument& xml, const IManager& manager, Args&&... arg)
-	{
-		//return InitNodeUsingModule(disposition, xml, manager.GetModule(), manager.GetManagerInfo().GetID(), std::forward<Args>(arg)...);
+		return InitNode(disposition, xml, module.QueryInterface<kxf::RTTI::ClassInfo>()->GetFullyQualifiedName(), std::forward<Args>(arg)...);
 	}
 }
 
@@ -83,15 +76,9 @@ namespace Kortex::Application
 	}
 	void BasicOption::Create(Disposition disposition, kxf::XMLDocument& xml, const IModule& module, const kxf::String& branch)
 	{
-		//kxf::XMLNode node = InitNodeUsingModule(disposition, xml, module, branch);
-		//AssignDisposition(disposition);
-		//AssignNode(node);
-	}
-	void BasicOption::Create(Disposition disposition, kxf::XMLDocument& xml, const IManager& manager, const kxf::String& branch)
-	{
-		//kxf::XMLNode node = InitNodeUsingManager(disposition, xml, manager, branch);
-		//AssignDisposition(disposition);
-		//AssignNode(node);
+		kxf::XMLNode node = InitNodeUsingModule(disposition, xml, module, branch);
+		AssignDisposition(disposition);
+		AssignNode(node);
 	}
 	void BasicOption::Create(Disposition disposition, kxf::XMLDocument& xml, const IWorkspace& workspace, const kxf::String& branch)
 	{
@@ -104,12 +91,6 @@ namespace Kortex::Application
 		kxf::XMLNode node = InitNode(disposition, xml, wxS("Application/MainWindow"), branch);
 		AssignDisposition(disposition);
 		AssignNode(node);
-	}
-	void BasicOption::Create(Disposition disposition, kxf::XMLDocument& xml, const InstallWizard::WizardDialog& installWizard, const kxf::String& branch)
-	{
-		//kxf::XMLNode node = InitNodeUsingManager(disposition, xml, *IPackageManager::GetInstance(), wxS("InstallWizard"), branch);
-		//AssignDisposition(disposition);
-		//AssignNode(node);
 	}
 }
 

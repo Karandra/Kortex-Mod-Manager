@@ -2,16 +2,11 @@
 #include "IMainWindow.h"
 #include "IApplication.h"
 #include "IModule.h"
-#include "IManager.h"
 #include <kxf/System/SystemInformation.h>
 #include "IWorkspace.h"
 
 namespace Kortex
 {
-	IMainWindow* IMainWindow::GetInstance() noexcept
-	{
-		return IApplication::GetInstance().GetMainWindow();
-	}
 	kxf::Size IMainWindow::GetDialogBestSize(const wxWindow& dialog)
 	{
 		return kxf::System::GetMetric(kxf::SystemSizeMetric::Screen).Scale(0.8);
@@ -19,22 +14,29 @@ namespace Kortex
 
 	void IMainWindow::CreateWorkspaces()
 	{
-		IApplication::GetInstance().EnumLoadedManagers([](IManager& manager)
+		IApplication::GetInstance().EnumLoadedModules([&](IModule& module)
 		{
-			// Create workspace instances if we don't have them yet
-			if (manager.OnCreateWorkspaces() != 0)
+			// Add them to preferred container if the workspace defines one
+			IWorkspaceContainer& defaultContainer = GetWorkspaceContainer();
+			module.EnumWorkspaces([&](IWorkspace& workspace)
 			{
-				// Add them to preferred container if the workspace defines one
-				manager.EnumWorkspaces([](IWorkspace& workspace)
+				IWorkspaceContainer* preferredContainer = workspace.GetPreferredContainer();
+				if (workspace.GetCurrentContainer() == nullptr)
 				{
-					IWorkspaceContainer* preferredContainer = workspace.GetPreferredContainer();
-					if (preferredContainer && !workspace.GetCurrentContainer())
+					if (workspace.EnsureCreated())
 					{
-						preferredContainer->AddWorkspace(workspace);
+						if (preferredContainer)
+						{
+							preferredContainer->AttachWorkspace(workspace);
+						}
+						else
+						{
+							defaultContainer.AttachWorkspace(workspace);
+						}
 					}
-					return true;
-				});
-			}
+				}
+				return true;
+			});
 			return true;
 		});
 	}

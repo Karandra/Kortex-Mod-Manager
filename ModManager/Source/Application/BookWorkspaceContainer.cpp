@@ -114,7 +114,7 @@ namespace Kortex::Application
 		return nullptr;
 	}
 	
-	size_t BookWorkspaceContainer::GetWorkspaceCount() const
+	size_t BookWorkspaceContainer::GetWorkspacesCount() const
 	{
 		return GetBookCtrl().GetPageCount();
 	}
@@ -173,21 +173,21 @@ namespace Kortex::Application
 		return false;
 	}
 
-	bool BookWorkspaceContainer::AddWorkspace(IWorkspace& workspace)
+	bool BookWorkspaceContainer::AttachWorkspace(IWorkspace& workspace)
 	{
-		if (IWorkspaceContainer::AddWorkspace(workspace))
+		if (IWorkspaceContainer::AttachWorkspace(workspace))
 		{
 			return DoInsertWorkspacePage(workspace, GetBookCtrl().GetPageCount());
 		}
 		else
 		{
-			IWorkspaceContainer::RemoveWorkspace(workspace);
+			IWorkspaceContainer::DetachWorkspace(workspace);
 			return false;
 		}
 	}
-	bool BookWorkspaceContainer::RemoveWorkspace(IWorkspace& workspace)
+	bool BookWorkspaceContainer::DetachWorkspace(IWorkspace& workspace)
 	{
-		if (IWorkspaceContainer::RemoveWorkspace(workspace))
+		if (IWorkspaceContainer::DetachWorkspace(workspace))
 		{
 			if (auto index = GetWorkspaceIndex(workspace))
 			{

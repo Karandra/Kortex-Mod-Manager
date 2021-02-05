@@ -22,14 +22,13 @@ namespace Kortex::Application
 
 		if (OnOpenWorkspace())
 		{
-			m_OpenCount++;
-
-			ShowWorkspace();
-
 			wxWindow& window = GetWindow();
 			window.Show();
 			window.PostSizeEvent();
 			window.PostSizeEventToParent();
+
+			Show();
+			m_OpenCount++;
 			return true;
 		}
 		return false;
@@ -38,11 +37,10 @@ namespace Kortex::Application
 	{
 		if (OnCloseWorkspace())
 		{
-			HideWorkspace();
-
 			wxWindow& window = GetWindow();
 			window.Hide();
 
+			Hide();
 			return true;
 		}
 		return false;

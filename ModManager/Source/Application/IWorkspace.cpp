@@ -13,19 +13,12 @@ namespace Kortex
 		return nullptr;
 	}
 
-	void IWorkspace::ShowWorkspace()
+	kxf::String IWorkspace::GetID() const
 	{
-		if (IWorkspaceContainer* container = GetCurrentContainer())
-		{
-			container->ShowWorkspace(*this);
-		}
-	}
-	void IWorkspace::HideWorkspace()
-	{
-		if (IWorkspaceContainer* container = GetCurrentContainer())
-		{
-			container->HideWorkspace(*this);
-		}
+		using namespace kxf::RTTI;
+
+		auto classInfo = QueryInterface<ClassInfo>();
+		return classInfo->GetTraits().Contains(ClassTrait::Implementation) ? classInfo->GetFullyQualifiedName() : kxf::NullString;
 	}
 
 	bool IWorkspace::IsCurrent() const
@@ -48,6 +41,7 @@ namespace Kortex
 		}
 		return false;
 	}
+	
 	bool IWorkspace::SwitchHere()
 	{
 		if (IWorkspaceContainer* container = GetCurrentContainer())
@@ -55,5 +49,19 @@ namespace Kortex
 			return container->SwitchWorkspace(*this);
 		}
 		return false;
+	}
+	void IWorkspace::Show()
+	{
+		if (IWorkspaceContainer* container = GetCurrentContainer())
+		{
+			container->ShowWorkspace(*this);
+		}
+	}
+	void IWorkspace::Hide()
+	{
+		if (IWorkspaceContainer* container = GetCurrentContainer())
+		{
+			container->HideWorkspace(*this);
+		}
 	}
 }

@@ -83,12 +83,7 @@ namespace Kortex
 			{
 				return m_MainWindow;
 			}
-
 			size_t EnumLoadedModules(std::function<bool(IModule&)> func) override
-			{
-				return 0;
-			}
-			size_t EnumLoadedManagers(std::function<bool(IManager&)> func) override
 			{
 				return 0;
 			}

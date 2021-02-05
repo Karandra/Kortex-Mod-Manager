@@ -147,7 +147,7 @@ namespace Kortex::Application::OptionSerializer
 		}
 		else
 		{
-			if (pagesNode.GetChildrenCount() == container.GetWorkspaceCount())
+			if (pagesNode.GetChildrenCount() == container.GetWorkspacesCount())
 			{
 				IWorkspace* currentWorkspace = nullptr;
 

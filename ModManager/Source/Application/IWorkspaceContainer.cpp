@@ -5,14 +5,24 @@
 
 namespace Kortex
 {
-	bool IWorkspaceContainer::AddWorkspace(IWorkspace& workspace)
+	bool IWorkspaceContainer::ContainsWorkspace(const IWorkspace& workspace) const
 	{
+		return workspace.GetCurrentContainer() == this;
+	}
+
+	bool IWorkspaceContainer::AttachWorkspace(IWorkspace& workspace)
+	{
+		if (ContainsWorkspace(workspace))
+		{
+			return false;
+		}
+
 		auto EnsureWindowCreated = [](IWorkspace& workspace, wxWindow& containerWindow)
 		{
 			wxWindow& window = workspace.GetWindow();
 			if (!window.GetHandle())
 			{
-				workspace.CreateWorkspaceWindow(containerWindow);
+				workspace.DoCreateWorkspaceWindow(containerWindow);
 			}
 
 			return window.GetHandle() != nullptr;
@@ -21,26 +31,28 @@ namespace Kortex
 		wxWindow& containerWindow = GetWindow();
 		if (!workspace.GetCurrentContainer() && EnsureWindowCreated(workspace, containerWindow))
 		{
-			workspace.SetCurrentContainer(this);
+			workspace.DoSetCurrentContainer(this);
 
 			wxWindow& workspaceWindow = workspace.GetWindow();
 			workspaceWindow.SetClientObject(std::make_unique<Application::WorkspaceClientData>(workspace).release());
 			workspaceWindow.Reparent(&containerWindow);
 
+			workspace.OnWorkspaceAttached();
 			return true;
 		}
 		return false;
 	}
-	bool IWorkspaceContainer::RemoveWorkspace(IWorkspace& workspace)
+	bool IWorkspaceContainer::DetachWorkspace(IWorkspace& workspace)
 	{
-		if (workspace.GetCurrentContainer() == this)
+		if (ContainsWorkspace(workspace))
 		{
-			workspace.SetCurrentContainer(nullptr);
+			workspace.DoSetCurrentContainer(nullptr);
 
 			wxWindow& workspaceWindow = workspace.GetWindow();
 			workspaceWindow.SetClientObject(nullptr);
 			workspaceWindow.Reparent(&IMainWindow::GetInstance()->GetFrame());
 
+			workspace.OnWorkspaceDetached();
 			return true;
 		}
 		return false;

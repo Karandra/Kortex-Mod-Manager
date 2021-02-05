@@ -675,7 +675,6 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClInclude Include="Source\Application\DefaultWorkspace.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IMainWindow.h" />
-    <ClInclude Include="Source\Application\IManager.h" />
     <ClInclude Include="Source\Application\IModule.h" />
     <ClInclude Include="Source\Application\IWorkspace.h" />
     <ClInclude Include="Source\Application\IWorkspaceContainer.h" />
@@ -711,7 +710,7 @@ echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
     <ClCompile Include="Source\Application\DefaultWorkspace.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
     <ClCompile Include="Source\Application\IMainWindow.cpp" />
-    <ClCompile Include="Source\Application\IManager.cpp" />
+    <ClCompile Include="Source\Application\IModule.cpp" />
     <ClCompile Include="Source\Application\IWorkspace.cpp" />
     <ClCompile Include="Source\Application\IWorkspaceContainer.cpp" />
     <ClCompile Include="Source\Application\IWorkspaceDocument.cpp" />

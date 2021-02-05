@@ -1,6 +1,6 @@
 #include "pch.hpp"
 #include "SystemApplication.h"
-#include "DefaultApplication.h"
+#include "IApplication.h"
 #include "Log.h"
 #include "kxf/Application/ApplicationInitializer.h"
 #include "kxf/FileSystem/NativeFileSystem.h"
@@ -197,26 +197,28 @@ namespace Kortex
 		m_RootDirectory = kxf::NativeFileSystem::GetExecutingModuleRootDirectory();
 
 		// Create default application
-		m_Application = std::make_unique<DefaultApplication>();
+		if (m_Application = kxf::RTTI::GetClassInfo<IApplication>().CreateAnyImplementation<IApplication>())
+		{
+			// Initialize main variables
+			kxf::IVariablesCollection& variables = m_Application->GetVariables();
+			variables.SetItem("App", "ID", SystemApplicationInfo::ID);
+			variables.SetItem("App", "Name", SystemApplicationInfo::Name);
+			variables.SetItem("App", "ShortName", SystemApplicationInfo::ShortName);
+			variables.SetItem("App", "Developer", SystemApplicationInfo::Developer);
+			variables.SetItem("App", "Version", SystemApplicationInfo::Version);
+			variables.SetItem("App", "UniqueID", kxf::UniversallyUniqueID(kxf::RTTI::GetInterfaceID<IApplication>().ToNativeUUID()).ToString());
+			variables.SetItem("App", "CommitHash", kxf::String(SystemApplicationInfo::GitCommitHash).Trim().Trim(kxf::StringOpFlag::FromEnd));
+			variables.SetItem("App", "RootDirectory", m_RootDirectory);
 
-		// Initialize main variables
-		kxf::IVariablesCollection& variables = m_Application->GetVariables();
-		variables.SetItem("App", "ID", SystemApplicationInfo::ID);
-		variables.SetItem("App", "Name", SystemApplicationInfo::Name);
-		variables.SetItem("App", "ShortName", SystemApplicationInfo::ShortName);
-		variables.SetItem("App", "Developer", SystemApplicationInfo::Developer);
-		variables.SetItem("App", "Version", SystemApplicationInfo::Version);
-		variables.SetItem("App", "UniqueID", kxf::UniversallyUniqueID(kxf::RTTI::GetInterfaceID<IApplication>().ToNativeUUID()).ToString());
-		variables.SetItem("App", "CommitHash", kxf::String(SystemApplicationInfo::GitCommitHash).Trim().Trim(kxf::StringOpFlag::FromEnd));
-		variables.SetItem("App", "RootDirectory", m_RootDirectory);
+			variables.SetItem("App", "Platform", m_Application->Is64Bit() ? "Win64" : "Win32");
+			variables.SetItem("App", "Architecture", m_Application->Is64Bit() ? "x64" : "x86");
 
-		variables.SetItem("App", "Platform", m_Application->Is64Bit() ? "Win64" : "Win32");
-		variables.SetItem("App", "Architecture", m_Application->Is64Bit() ? "x64" : "x86");
+			variables.SetItem("System", "Platform", m_Application->IsSystem64Bit() ? "Win64" : "Win32");
+			variables.SetItem("System", "Architecture", m_Application->IsSystem64Bit() ? "x64" : "x86");
 
-		variables.SetItem("System", "Platform", m_Application->IsSystem64Bit() ? "Win64" : "Win32");
-		variables.SetItem("System", "Architecture", m_Application->IsSystem64Bit() ? "x64" : "x86");
-
-		return true;
+			return true;
+		}
+		return false;
 	}
 	void SystemApplication::OnDestroy()
 	{

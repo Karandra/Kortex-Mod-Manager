@@ -26,11 +26,8 @@ namespace Kortex
 			virtual bool DoOnOpenWorkspace() = 0;
 			virtual bool DoOnCloseWorkspace() = 0;
 
-			virtual void CreateWorkspaceWindow(wxWindow& parent) = 0;
-			virtual void SetCurrentContainer(IWorkspaceContainer* contianer) = 0;
-
-			void ShowWorkspace();
-			void HideWorkspace();
+			virtual void DoCreateWorkspaceWindow(wxWindow& parent) = 0;
+			virtual void DoSetCurrentContainer(IWorkspaceContainer* contianer) = 0;
 
 		public:
 			virtual ~IWorkspace() = default;
@@ -53,6 +50,15 @@ namespace Kortex
 				return QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::OnCloseWorkspace);
 			}
 
+			void OnWorkspaceAttached()
+			{
+				QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::OnWorkspaceAttached);
+			}
+			void OnWorkspaceDetached()
+			{
+				QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IWorkspace::OnWorkspaceDetached);
+			}
+
 		public:
 			virtual IWorkspaceContainer* GetCurrentContainer() const = 0;
 			virtual IWorkspaceContainer* GetPreferredContainer() const
@@ -66,11 +72,11 @@ namespace Kortex
 				return const_cast<IWorkspace&>(*this).GetWindow();
 			}
 
-			virtual kxf::String GetID() const = 0;
+			kxf::String GetID() const;
 			virtual kxf::String GetName() const = 0;
 			virtual kxf::ResourceID GetIcon() const = 0;
+			virtual size_t GetOpenCount() const = 0;
 			virtual bool IsCreated() const = 0;
-			virtual bool OpenedOnce() const = 0;
 			
 			virtual bool Reload() = 0;
 			virtual void ScheduleReload() = 0;
@@ -80,7 +86,10 @@ namespace Kortex
 			bool IsCurrent() const;
 			bool IsActive() const;
 			bool IsSubWorkspace() const;
+
 			bool SwitchHere();
+			void Show();
+			void Hide();
 	};
 }
 

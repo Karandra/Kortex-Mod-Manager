@@ -25,7 +25,7 @@ namespace Kortex::Application
 			bool DoOnOpenWorkspace() override;
 			bool DoOnCloseWorkspace() override;
 
-			void SetCurrentContainer(IWorkspaceContainer* contianer) override
+			void DoSetCurrentContainer(IWorkspaceContainer* contianer) override
 			{
 				m_Container = contianer;
 			}
@@ -41,9 +41,9 @@ namespace Kortex::Application
 			{
 				return m_IsCreated;
 			}
-			bool OpenedOnce() const override
+			size_t GetOpenCount() const override
 			{
-				return m_OpenCount != 0;
+				return m_OpenCount;
 			}
 
 			bool Reload() override;
@@ -60,7 +60,7 @@ namespace Kortex::Application
 	{
 		protected:
 			// IWorkspace
-			void CreateWorkspaceWindow(wxWindow& parent) override
+			void DoCreateWorkspaceWindow(wxWindow& parent) override
 			{
 				if (TWindow::Create(&parent, wxID_NONE))
 				{
@@ -73,7 +73,7 @@ namespace Kortex::Application
 			DefaultWindowWorkspace(Args&&... arg)
 				:TWindow(std::forward<Args>(arg)...)
 			{
-				static_assert(std::is_base_of_v<wxWindow, TWindow>, "TWindow is not a wxWindow");
+				static_assert(std::is_base_of_v<wxWindow, TWindow>, "wxWindow descendant is required");
 			}
 
 		public:

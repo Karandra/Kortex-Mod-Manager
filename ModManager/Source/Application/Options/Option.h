@@ -31,10 +31,8 @@ namespace Kortex::Application
 			void Create(Disposition disposition, kxf::XMLDocument& xml, const IGameInstance& instance, const kxf::String& branch = {});
 			void Create(Disposition disposition, kxf::XMLDocument& xml, const IGameProfile& profile, const kxf::String& branch = {});
 			void Create(Disposition disposition, kxf::XMLDocument& xml, const IModule& module, const kxf::String& branch = {});
-			void Create(Disposition disposition, kxf::XMLDocument& xml, const IManager& manager, const kxf::String& branch = {});
 			void Create(Disposition disposition, kxf::XMLDocument& xml, const IWorkspace& workspace, const kxf::String& branch = {});
 			void Create(Disposition disposition, kxf::XMLDocument& xml, const IMainWindow& mainWindow, const kxf::String& branch = {});
-			void Create(Disposition disposition, kxf::XMLDocument& xml, const InstallWizard::WizardDialog& installWizard, const kxf::String& branch = {});
 	};
 }
 

@@ -11,9 +11,6 @@ namespace Kortex
 		friend class IWorkspace;
 
 		protected:
-			virtual void ShowWorkspace(IWorkspace& workspace) = 0;
-			virtual void HideWorkspace(IWorkspace& workspace) = 0;
-
 			bool CallOnCreate(IWorkspace& workspace)
 			{
 				return workspace.DoOnCreateWorkspace();
@@ -49,29 +46,23 @@ namespace Kortex
 			{
 				return GetParentContainer() != nullptr;
 			}
+			bool ContainsWorkspace(const IWorkspace& workspace) const;
 
 			virtual IWorkspace* GetWorkspaceByID(const kxf::String& id) const = 0;
 			virtual IWorkspace* GetWorkspaceByIndex(size_t index) const = 0;
 			virtual IWorkspace* GetCurrentWorkspace() const = 0;
 
-			virtual size_t GetWorkspaceCount() const = 0;
+			virtual size_t GetWorkspacesCount() const = 0;
 			virtual size_t EnumWorkspaces(std::function<bool(IWorkspace&)> func) = 0;
 			virtual std::optional<size_t> GetWorkspaceIndex(const IWorkspace& workspace) const = 0;
 			virtual bool ChangeWorkspaceIndex(IWorkspace& workspace, size_t newIndex) = 0;
 
-			virtual bool AddWorkspace(IWorkspace& workspace) = 0;
-			virtual bool RemoveWorkspace(IWorkspace& workspace) = 0;
+			virtual bool AttachWorkspace(IWorkspace& workspace) = 0;
+			virtual bool DetachWorkspace(IWorkspace& workspace) = 0;
+
+			virtual void HideWorkspace(IWorkspace& workspace) = 0;
+			virtual void ShowWorkspace(IWorkspace& workspace) = 0;
 			virtual bool SwitchWorkspace(IWorkspace& nextWorkspace) = 0;
 			bool SwitchWorkspaceByID(const kxf::String& id);
-			
-			template<class TWorkspace, class... Args>
-			TWorkspace& MakeWorkspace(Args&&... arg)
-			{
-				static_assert(std::is_base_of_v<wxWindow, TWorkspace>, "Must be a window");
-
-				TWorkspace* workspace = new TWorkspace(std::forward<Args>(arg)...);
-				AddWorkspace(*workspace);
-				return *workspace;
-			}
 	};
 }

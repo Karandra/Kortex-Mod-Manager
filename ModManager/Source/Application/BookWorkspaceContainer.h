@@ -19,10 +19,6 @@ namespace Kortex::Application
 		protected:
 			bool DoSwitchWorkspace(IWorkspace* fromWorkspace, IWorkspace& toWorkspace);
 
-			// IWorkspaceContainer
-			void ShowWorkspace(IWorkspace& workspace) override;
-			void HideWorkspace(IWorkspace& workspace) override;
-
 		public:
 			// BookWorkspaceContainer
 			wxBookCtrlBase& GetBookCtrl()
@@ -39,14 +35,16 @@ namespace Kortex::Application
 			IWorkspace* GetWorkspaceByIndex(size_t index) const override;
 			IWorkspace* GetCurrentWorkspace() const override;
 
-			size_t GetWorkspaceCount() const override;
+			size_t GetWorkspacesCount() const override;
 			size_t EnumWorkspaces(std::function<bool(IWorkspace&)> func) override;
 			std::optional<size_t> GetWorkspaceIndex(const IWorkspace& workspace) const override;
 			bool ChangeWorkspaceIndex(IWorkspace& workspace, size_t newIndex) override;
 
-			bool AddWorkspace(IWorkspace& workspace) override;
-			bool RemoveWorkspace(IWorkspace& workspace) override;
-			bool SwitchWorkspace(IWorkspace& nextWorkspace) override;
+			bool AttachWorkspace(IWorkspace& workspace) override;
+			bool DetachWorkspace(IWorkspace& workspace) override;
 
+			void ShowWorkspace(IWorkspace& workspace) override;
+			void HideWorkspace(IWorkspace& workspace) override;
+			bool SwitchWorkspace(IWorkspace& nextWorkspace) override;
 	};
 }

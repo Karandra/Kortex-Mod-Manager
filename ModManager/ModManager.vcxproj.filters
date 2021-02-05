@@ -82,9 +82,6 @@
     <ClInclude Include="Source\Application\Options\OptionSerializer.h">
       <Filter>Source\Application\Options</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Application\IManager.h">
-      <Filter>Source\Application</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application\IModule.h">
       <Filter>Source\Application</Filter>
     </ClInclude>
@@ -171,9 +168,6 @@
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp">
       <Filter>Source\Application\Options</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Application\IManager.cpp">
-      <Filter>Source\Application</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application\IWorkspace.cpp">
       <Filter>Source\Application\&lt;Workspace&gt;</Filter>
     </ClCompile>
@@ -224,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="Source\GameDefinition\UI\InstanceSelectionDialog.cpp">
       <Filter>Source\GameDefinition\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\IModule.cpp">
+      <Filter>Source\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

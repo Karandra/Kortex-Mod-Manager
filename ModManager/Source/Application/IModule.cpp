@@ -1,10 +1,10 @@
 #include "pch.hpp"
-#include "IManager.h"
+#include "IModule.h"
 #include "IWorkspace.h"
 
 namespace Kortex
 {
-	void IManager::ScheduleWorkspacesReload()
+	void IModule::ScheduleWorkspacesReload()
 	{
 		EnumWorkspaces([](IWorkspace& workspace)
 		{

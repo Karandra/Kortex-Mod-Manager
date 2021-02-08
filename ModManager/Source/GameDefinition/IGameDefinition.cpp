@@ -4,6 +4,7 @@
 #include "Application/IApplication.h"
 #include "Application/SystemApplication.h"
 #include <kxf/System/ShellOperations.h>
+#include <kxf/Utility/Enumerator.h>
 
 namespace
 {
@@ -70,40 +71,34 @@ namespace Kortex
 		return LoadIconFromFile(fs, path);
 	}
 
-	size_t IGameDefinition::EnumLinkedInstances(std::function<bool(IGameInstance& instance)> func) const
+	kxf::Enumerator<IGameInstance&> IGameDefinition::EnumLinkedInstances() const
 	{
 		if (!IsNull())
 		{
-			size_t count = 0;
-			kxf::String name = name = GetName();
-
-			IApplication::GetInstance().EnumGameInstances([&](IGameInstance& instance)
+			return kxf::Utility::MakeForwardingEnumerator([name = GetName()](auto& enumerator) -> kxf::optional_ref<IGameInstance>
 			{
+				IGameInstance& instance = *enumerator;
 				if (instance.GetDefinition().GetName() == name)
 				{
-					count++;
-					return !func || std::invoke(func, instance);
+					return instance;
 				}
-				return true;
-			});
-			return count;
+				else
+				{
+					enumerator.SkipCurrent();
+					return {};
+				}
+			}, IApplication::GetInstance(), &IApplication::EnumGameInstances);
 		}
-		return 0;
+		return {};
 	}
 	IGameInstance* IGameDefinition::GetLinkedInstanceByName(const kxf::String& name) const
 	{
-		if (!IsNull())
+		for (IGameInstance& instance: EnumLinkedInstances())
 		{
-			IGameInstance* result = nullptr;
-			EnumLinkedInstances([&](IGameInstance& instance)
+			if (instance.GetName() == name)
 			{
-				if (instance.GetName() == name)
-				{
-					result = &instance;
-				}
-				return result == nullptr;
-			});
-			return result;
+				return &instance;
+			}
 		}
 		return nullptr;
 	}

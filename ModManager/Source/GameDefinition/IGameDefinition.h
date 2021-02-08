@@ -57,7 +57,7 @@ namespace Kortex
 			virtual const kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;
 
 		public:
-			size_t EnumLinkedInstances(std::function<bool(IGameInstance& instance)> func) const;
+			kxf::Enumerator<IGameInstance&> EnumLinkedInstances() const;
 			IGameInstance* GetLinkedInstanceByName(const kxf::String& name) const;
 
 		public:

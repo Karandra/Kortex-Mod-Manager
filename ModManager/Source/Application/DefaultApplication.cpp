@@ -12,6 +12,7 @@
 
 #include <kxf/System/ShellOperations.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
+#include <kxf/Utility/Enumerator.h>
 #include <wx/cmdline.h>
 
 namespace
@@ -247,45 +248,19 @@ namespace Kortex
 		return m_Variables.Expand(variables);
 	}
 
-	size_t DefaultApplication::EnumGameDefinitions(std::function<bool(IGameDefinition&)> func)
+	kxf::Enumerator<IGameDefinition&> DefaultApplication::EnumGameDefinitions()
 	{
-		if (func)
+		return kxf::Utility::EnumerateStandardMap<IGameDefinition&>(m_GameDefinitions, [](auto& object) -> IGameDefinition&
 		{
-			size_t count = 0;
-			for (auto&& [id, item]: m_GameDefinitions)
-			{
-				count++;
-				if (!std::invoke(func, *item))
-				{
-					break;
-				}
-			}
-			return count;
-		}
-		else
-		{
-			return m_GameDefinitions.size();
-		}
+			return *object;
+		});
 	}
-	size_t DefaultApplication::EnumGameInstances(std::function<bool(IGameInstance&)> func)
+	kxf::Enumerator<IGameInstance&> DefaultApplication::EnumGameInstances()
 	{
-		if (func)
+		return kxf::Utility::EnumerateStandardMap<IGameInstance&>(m_GameInstances, [](auto& object) -> IGameInstance&
 		{
-			size_t count = 0;
-			for (auto&& [id, item]: m_GameInstances)
-			{
-				count++;
-				if (!std::invoke(func, *item))
-				{
-					break;
-				}
-			}
-			return count;
-		}
-		else
-		{
-			return m_GameInstances.size();
-		}
+			return *object;
+		});
 	}
 	IGameInstance* DefaultApplication::GetActiveGameInstance() const
 	{

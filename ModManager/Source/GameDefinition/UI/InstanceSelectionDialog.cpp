@@ -121,11 +121,13 @@ namespace Kortex::GameDefinition::UI
 			DataModel()
 				:m_IconSize(kxf::System::GetMetric(kxf::SystemSizeMetric::Icon) * 2)
 			{
-				IApplication::GetInstance().EnumGameInstances([&](IGameInstance& instance)
+				auto enumerator = IApplication::GetInstance().EnumGameInstances();
+				m_Items.reserve(enumerator.GetTotalCount().value_or(0));
+
+				for (IGameInstance& instance: enumerator)
 				{
 					m_Items.emplace_back(*this, instance);
-					return true;
-				});
+				};
 			}
 
 		public:

@@ -21,6 +21,7 @@
 #include <kxf/General/ResourceID.h>
 #include <kxf/General/FlagSet.h>
 #include <kxf/General/Version.h>
+#include <kxf/General/Enumerator.h>
 #include <kxf/General/UniversallyUniqueID.h>
 #include <kxf/General/IVariablesCollection.h>
 
@@ -48,3 +49,13 @@
 #include <kxf/Drawing/Color.h>
 #include <kxf/Drawing/Angle.h>
 #include <kxf/Drawing/BitmapImage.h>
+
+// kxf: Utility
+#include <kxf/Utility/Common.h>
+#include <kxf/Utility/Literals.h>
+
+namespace Kortex
+{
+	// Import all literal operators
+	using namespace kxf::Literals;
+}

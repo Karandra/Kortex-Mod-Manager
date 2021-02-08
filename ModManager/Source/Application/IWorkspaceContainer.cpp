@@ -1,5 +1,6 @@
 #include "pch.hpp"
 #include "IWorkspaceContainer.h"
+#include "IApplication.h"
 #include "IMainWindow.h"
 #include "Log.h"
 
@@ -50,7 +51,7 @@ namespace Kortex
 
 			wxWindow& workspaceWindow = workspace.GetWindow();
 			workspaceWindow.SetClientObject(nullptr);
-			workspaceWindow.Reparent(&IMainWindow::GetInstance()->GetFrame());
+			workspaceWindow.Reparent(&IApplication::GetInstance().GetMainWindow()->GetFrame());
 
 			workspace.OnWorkspaceDetached();
 			return true;

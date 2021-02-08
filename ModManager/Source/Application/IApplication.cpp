@@ -30,29 +30,25 @@ namespace Kortex
 
 	IGameDefinition* IApplication::GetGameDefinitionByName(const kxf::String& name)
 	{
-		IGameDefinition* result = nullptr;
-		EnumGameDefinitions([&](IGameDefinition& definition)
+		for (IGameDefinition& definition: EnumGameDefinitions())
 		{
 			if (definition.GetName() == name)
 			{
-				result = &definition;
+				return &definition;
 			}
-			return result == nullptr;
-		});
-		return result;
+		}
+		return nullptr;
 	}
 	IGameInstance* IApplication::GetGameInstanceByName(const kxf::String& name)
 	{
-		IGameInstance* result = nullptr;
-		EnumGameInstances([&](IGameInstance& instance)
+		for (IGameInstance& instance: EnumGameInstances())
 		{
 			if (instance.GetName() == name)
 			{
-				result = &instance;
+				return &instance;
 			}
-			return result == nullptr;
-		});
-		return result;
+		}
+		return nullptr;
 	}
 
 	bool IApplication::Is64Bit() const
@@ -174,7 +170,7 @@ namespace Kortex
 	{
 		if (IsActive())
 		{
-			if (const IMainWindow* mainWindow = IMainWindow::GetInstance())
+			if (const IMainWindow* mainWindow = GetMainWindow())
 			{
 				return mainWindow->GetFrame().GetHandle() == ::GetForegroundWindow();
 			}

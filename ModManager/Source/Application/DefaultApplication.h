@@ -95,8 +95,8 @@ namespace Kortex
 			kxf::String ExpandVariables(const kxf::String& variables) const override;
 			kxf::String ExpandVariablesLocally(const kxf::String& variables) const override;
 
-			size_t EnumGameDefinitions(std::function<bool(IGameDefinition&)> func) override;
-			size_t EnumGameInstances(std::function<bool(IGameInstance&)> func) override;
+			kxf::Enumerator<IGameDefinition&> EnumGameDefinitions() override;
+			kxf::Enumerator<IGameInstance&> EnumGameInstances() override;
 			IGameInstance* GetActiveGameInstance() const override;
 
 			IGameInstance* OpenInstanceSelectionDialog(wxWindow* parent = nullptr) override;

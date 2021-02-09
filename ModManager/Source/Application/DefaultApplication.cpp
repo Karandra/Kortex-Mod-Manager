@@ -236,7 +236,7 @@ namespace Kortex
 	}
 	kxf::Enumerator<IModule&> DefaultApplication::EnumModules()
 	{
-		return kxf::Utility::EnumerateIterableContainer<IModule&, kxf::Utility::Unfancy>(m_LoadedModules);
+		return kxf::Utility::EnumerateIterableContainer<IModule&, kxf::Utility::ReferenceOf>(m_LoadedModules);
 	}
 
 	kxf::String DefaultApplication::ExpandVariables(const kxf::String& variables) const
@@ -254,11 +254,11 @@ namespace Kortex
 
 	kxf::Enumerator<IGameDefinition&> DefaultApplication::EnumGameDefinitions()
 	{
-		return kxf::Utility::EnumerateStandardMap<IGameDefinition&, kxf::Utility::Unfancy>(m_GameDefinitions);
+		return kxf::Utility::EnumerateStandardMap<IGameDefinition&, kxf::Utility::ReferenceOf>(m_GameDefinitions);
 	}
 	kxf::Enumerator<IGameInstance&> DefaultApplication::EnumGameInstances()
 	{
-		return kxf::Utility::EnumerateStandardMap<IGameInstance&, kxf::Utility::Unfancy>(m_GameInstances);
+		return kxf::Utility::EnumerateStandardMap<IGameInstance&, kxf::Utility::ReferenceOf>(m_GameInstances);
 	}
 	IGameInstance* DefaultApplication::GetActiveGameInstance() const
 	{

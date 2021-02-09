@@ -1,5 +1,7 @@
 #include "pch.hpp"
 #include "DefaultGameProfile.h"
+#include "Application/IApplication.h"
+#include "Modules/GameModManager/IGameModManager.h"
 #include <kxf/Utility/Enumerator.h>
 
 namespace
@@ -154,7 +156,17 @@ namespace Kortex
 
 	void DefaultGameProfile::SyncWithCurrentState()
 	{
-		
+		m_GameMods.clear();
+		if (auto manager = IApplication::GetInstance().GetModule<IGameModManager>())
+		{
+			for (const IGameMod& mod: manager->EnumMods())
+			{
+				m_GameMods.emplace_back(mod);
+			}
+		}
+
+		m_GamePlugins.clear();
+		// if () ...
 	}
 	kxf::Enumerator<const GameProfileMod&> DefaultGameProfile::EnumGameMods() const
 	{

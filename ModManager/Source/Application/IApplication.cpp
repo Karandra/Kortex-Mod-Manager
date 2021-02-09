@@ -1,11 +1,12 @@
 #include "pch.hpp"
 #include "IApplication.h"
 #include "SystemApplication.h"
+#include "IModule.h"
+#include "IMainWindow.h"
 #include "GameDefinition/IGameInstance.h"
 #include "GameDefinition/IGameDefinition.h"
 #include "Options/Macros.h"
 #include "Options/CmdLineDatabase.h"
-#include "IMainWindow.h"
 #include <kxf/System/TaskScheduler.h>
 #include <kxf/System/DynamicLibrary.h>
 #include <kxf/System/SystemInformation.h>
@@ -26,6 +27,18 @@ namespace Kortex
 	kxf::String IApplication::ExamineCaughtException() const
 	{
 		return SystemApplication::GetInstance().ExamineCaughtException();
+	}
+
+	IModule* IApplication::GetModuleByID(const kxf::IID& iid)
+	{
+		for (IModule& module: EnumModules())
+		{
+			if (module.QueryInterface<kxf::RTTI::ClassInfo>()->GetIID() == iid)
+			{
+				return &module;
+			}
+		}
+		return nullptr;
 	}
 
 	IGameDefinition* IApplication::GetGameDefinitionByName(const kxf::String& name)

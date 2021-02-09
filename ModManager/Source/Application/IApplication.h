@@ -67,7 +67,19 @@ namespace Kortex
 			virtual kxf::XMLDocument& GetGlobalConfig() = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
 			virtual IMainWindow* GetMainWindow() const = 0;
+
 			virtual kxf::Enumerator<IModule&> EnumModules() = 0;
+			IModule* GetModuleByID(const kxf::IID& iid);
+
+			template<class T>
+			T* GetModule()
+			{
+				if (IModule* module = GetModuleByID(kxf::RTTI::GetInterfaceID<T>()))
+				{
+					return module->QueryInterface<T>().get();
+				}
+				return nullptr;
+			}
 
 			virtual kxf::IVariablesCollection& GetVariables() = 0;
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;

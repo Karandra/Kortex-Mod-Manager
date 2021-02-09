@@ -3,6 +3,16 @@
 #include "IGameProfile.h"
 #include "IGameMod.h"
 #include "IGamePlugin.h"
+#include "Application/IApplication.h"
+#include "Modules/GameModManager/IGameModManager.h"
+
+namespace
+{
+	constexpr int CorrectOrder(int order) noexcept
+	{
+		return order >= 0 ? order : std::numeric_limits<int>::max();
+	}
+}
 
 namespace Kortex
 {
@@ -24,33 +34,41 @@ namespace Kortex
 
 namespace Kortex
 {
-	GameProfileMod::GameProfileMod(kxf::String signature, bool active, int priority)
-		:m_Signature(std::move(signature)), m_Priority(priority >= 0 ? priority : std::numeric_limits<int>::max()), m_IsActive(active)
+	GameProfileMod::GameProfileMod(const IGameMod& mod)
+		:m_Signature(mod.GetSignature()), m_Order(mod.GetOrder()), m_IsActive(mod.IsActive())
 	{
 	}
-	GameProfileMod::GameProfileMod(const IGameMod& mod, bool active)
-		:m_Signature(mod.GetSignature()), m_Priority(mod.GetPriority()), m_IsActive(active)
+	GameProfileMod::GameProfileMod(const IGameMod& mod, bool active, int order)
+		:m_Signature(mod.GetSignature()), m_Order(CorrectOrder(order)), m_IsActive(active)
+	{
+	}
+	GameProfileMod::GameProfileMod(kxf::String signature, bool active, int order)
+		:m_Signature(std::move(signature)), m_Order(CorrectOrder(order)), m_IsActive(active)
 	{
 	}
 
 	IGameMod* GameProfileMod::ResolveMod() const
 	{
-		//if (IModManager* manager = IModManager::GetInstance())
-		//{
-		//	return manager->FindModBySignature(m_Signature);
-		//}
+		if (auto manager = IApplication::GetInstance().GetModule<IGameModManager>())
+		{
+			return manager->GetModBySignature(m_Signature);
+		}
 		return nullptr;
 	}
 }
 
 namespace Kortex
 {
-	GameProfilePlugin::GameProfilePlugin(const IGamePlugin& plugin, bool active)
-		:m_Name(plugin.GetName()), m_Priority(plugin.GetPriority()), m_IsActive(active)
+	GameProfilePlugin::GameProfilePlugin(const IGamePlugin& plugin)
+		:m_Name(plugin.GetName()), m_Order(plugin.GetOrder()), m_IsActive(plugin.IsActive())
 	{
 	}
-	GameProfilePlugin::GameProfilePlugin(kxf::String name, bool active, int priority)
-		: m_Name(std::move(name)), m_Priority(priority >= 0 ? priority : std::numeric_limits<int>::max()), m_IsActive(active)
+	GameProfilePlugin::GameProfilePlugin(const IGamePlugin& plugin, bool active, int order)
+		:m_Name(plugin.GetName()), m_Order(CorrectOrder(order)), m_IsActive(active)
+	{
+	}
+	GameProfilePlugin::GameProfilePlugin(kxf::String name, bool active, int order)
+		: m_Name(std::move(name)), m_Order(CorrectOrder(order)), m_IsActive(active)
 	{
 	}
 

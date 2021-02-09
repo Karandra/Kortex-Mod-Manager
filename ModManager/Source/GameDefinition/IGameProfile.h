@@ -16,12 +16,13 @@ namespace Kortex
 	{
 		private:
 			kxf::String m_Signature;
-			int m_Priority = -1;
+			int m_Order = -1;
 			bool m_IsActive = false;
 
 		public:
-			GameProfileMod(const IGameMod& mod, bool active);
-			GameProfileMod(kxf::String signature, bool active, int priority = -1);
+			GameProfileMod(const IGameMod& mod);
+			GameProfileMod(const IGameMod& mod, bool active, int order = -1);
+			GameProfileMod(kxf::String signature, bool active, int order = -1);
 
 		public:
 			bool IsNull() const noexcept
@@ -32,9 +33,9 @@ namespace Kortex
 			{
 				return m_IsActive;
 			}
-			int GetPriority() const
+			int GetOrder() const
 			{
-				return m_Priority;
+				return m_Order;
 			}
 
 			const kxf::String& GetSignature() const&
@@ -66,12 +67,13 @@ namespace Kortex
 	{
 		private:
 			kxf::String m_Name;
-			int m_Priority = -1;
+			int m_Order = -1;
 			bool m_IsActive = false;
 
 		public:
-			GameProfilePlugin(const IGamePlugin& plugin, bool active);
-			GameProfilePlugin(kxf::String name, bool active, int priority = -1);
+			GameProfilePlugin(const IGamePlugin& plugin);
+			GameProfilePlugin(const IGamePlugin& plugin, bool active, int order = -1);
+			GameProfilePlugin(kxf::String name, bool active, int order = -1);
 
 		public:
 			bool IsNull() const
@@ -82,9 +84,9 @@ namespace Kortex
 			{
 				return m_IsActive;
 			}
-			int GetPriority() const
+			int GetOrder() const
 			{
-				return m_Priority;
+				return m_Order;
 			}
 
 			const kxf::String& GetName() const&

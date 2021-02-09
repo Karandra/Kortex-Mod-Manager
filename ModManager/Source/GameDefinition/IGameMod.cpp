@@ -22,17 +22,6 @@ namespace
 
 namespace Kortex
 {
-	kxf::String IGameMod::GetSignatureFromID(const kxf::String& id)
-	{
-		auto utf8 = id.ToUTF8();
-		kxf::MemoryInputStream stream(utf8.data(), utf8.length());
-		if (auto hash = kxf::Crypto::MD5(stream))
-		{
-			return hash->ToString();
-		}
-		return {};
-	}
-
 	kxf::IFileSystem& IGameMod::GetFileSystem(Location locationID)
 	{
 		/*

@@ -25,9 +25,8 @@ namespace Kortex
 			virtual bool IsActive() const = 0;
 			virtual void SetActive(bool isActive) = 0;
 	
+			virtual int GetOrder() const = 0;
 			virtual int GetDisplayOrder() const = 0;
-			virtual int GetOrderIndex() const = 0;
-			virtual int GetPriority() const = 0;
 
 			virtual kxf::Enumerator<IGamePlugin&> EnumMasterPlugins() = 0;
 			virtual kxf::Enumerator<IGamePlugin&> EnumDependentPlugins() = 0;

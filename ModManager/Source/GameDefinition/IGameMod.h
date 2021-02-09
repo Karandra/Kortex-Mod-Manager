@@ -33,22 +33,15 @@ namespace Kortex
 			};
 
 		public:
-			static kxf::String GetSignatureFromID(const kxf::String& id);
-
-		public:
 			virtual bool IsNull() const = 0;
 
 			virtual bool Load(const kxf::IFileSystem& fileSystem) = 0;
 			virtual bool Save(kxf::IFileSystem& fileSystem) = 0;
 			
+			virtual int GetOrder() const = 0;
 			virtual int GetDisplayOrder() const = 0;
-			virtual int GetPriority() const = 0;
-			virtual void SetPriority(int value) = 0;
 
 			virtual kxf::String GetSignature() const = 0;
-			virtual kxf::String GetID() const = 0;
-			virtual void SetID(const kxf::String& id) = 0;
-			
 			virtual kxf::String GetName() const = 0;
 			virtual void SetName(const kxf::String& value) = 0;
 			

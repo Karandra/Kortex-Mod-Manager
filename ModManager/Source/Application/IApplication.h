@@ -67,7 +67,7 @@ namespace Kortex
 			virtual kxf::XMLDocument& GetGlobalConfig() = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
 			virtual IMainWindow* GetMainWindow() const = 0;
-			virtual size_t EnumLoadedModules(std::function<bool(IModule&)> func) = 0;
+			virtual kxf::Enumerator<IModule&> EnumModules() = 0;
 
 			virtual kxf::IVariablesCollection& GetVariables() = 0;
 			virtual kxf::String ExpandVariables(const kxf::String& variables) const = 0;

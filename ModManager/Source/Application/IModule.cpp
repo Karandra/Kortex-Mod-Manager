@@ -6,10 +6,9 @@ namespace Kortex
 {
 	void IModule::ScheduleWorkspacesReload()
 	{
-		EnumWorkspaces([](IWorkspace& workspace)
+		for (IWorkspace& workspace: EnumWorkspaces())
 		{
 			workspace.ScheduleReload();
-			return true;
-		});
+		};
 	}
 }

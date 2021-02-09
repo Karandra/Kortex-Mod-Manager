@@ -37,7 +37,7 @@ namespace Kortex
 			virtual kxf::Version GetVersion() const = 0;
 			virtual kxf::ResourceID GetIcon() const = 0;
 
-			virtual size_t EnumWorkspaces(std::function<bool(IWorkspace&)> func) const = 0;
+			virtual kxf::Enumerator<IWorkspace&> EnumWorkspaces() const = 0;
 			void ScheduleWorkspacesReload();
 	};
 }

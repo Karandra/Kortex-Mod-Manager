@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework.hpp"
 #include "IApplication.h"
+#include "IModule.h"
 #include "BroadcastProcessor.h"
 #include <kxf/Application/ICoreApplication.h>
 #include <kxf/General/DynamicVariablesCollection.h>
@@ -38,6 +39,8 @@ namespace Kortex
 			bool m_GlobalConfigChanged = false;
 
 			IMainWindow* m_MainWindow = nullptr;
+			std::vector<std::unique_ptr<IModule>> m_LoadedModules;
+
 			std::unordered_map<kxf::String, std::unique_ptr<IGameDefinition>> m_GameDefinitions;
 			std::unordered_map<kxf::String, std::unique_ptr<IGameInstance>> m_GameInstances;
 			IGameInstance* m_ActiveGameInstance = nullptr;
@@ -83,10 +86,7 @@ namespace Kortex
 			{
 				return m_MainWindow;
 			}
-			size_t EnumLoadedModules(std::function<bool(IModule&)> func) override
-			{
-				return 0;
-			}
+			kxf::Enumerator<IModule&> EnumModules() override;
 
 			kxf::IVariablesCollection& GetVariables() override
 			{

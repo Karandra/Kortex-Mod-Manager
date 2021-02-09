@@ -29,8 +29,8 @@ namespace Kortex
 			virtual int GetOrderIndex() const = 0;
 			virtual int GetPriority() const = 0;
 
-			virtual size_t EnumMasterPlugins(std::function<bool(IGamePlugin& gamePlugin)> func) = 0;
-			virtual size_t EnumDependentPlugins(std::function<bool(IGamePlugin& gamePlugin)> func) = 0;
+			virtual kxf::Enumerator<IGamePlugin&> EnumMasterPlugins() = 0;
+			virtual kxf::Enumerator<IGamePlugin&> EnumDependentPlugins() = 0;
 
 		public:
 			explicit operator bool() const noexcept

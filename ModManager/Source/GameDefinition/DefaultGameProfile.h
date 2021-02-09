@@ -58,7 +58,7 @@ namespace Kortex
 			kxf::IFileSystem& GetFileSystem(Location locationID) override;
 
 			void SyncWithCurrentState() override;
-			size_t EnumGameMods(std::function<bool(const GameProfileMod& gameMod)> func) const override;
-			size_t EnumGamePlugins(std::function<bool(const GameProfilePlugin& gamePlugin)> func) const override;
+			kxf::Enumerator<const GameProfileMod&> EnumGameMods() const override;
+			kxf::Enumerator<const GameProfilePlugin&> EnumGamePlugins() const override;
 	};
 }

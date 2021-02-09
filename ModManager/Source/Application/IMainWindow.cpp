@@ -14,18 +14,17 @@ namespace Kortex
 
 	void IMainWindow::CreateWorkspaces()
 	{
-		IApplication::GetInstance().EnumLoadedModules([&](IModule& module)
+		for (IModule& module: IApplication::GetInstance().EnumModules())
 		{
 			// Add them to preferred container if the workspace defines one
 			IWorkspaceContainer& defaultContainer = GetWorkspaceContainer();
-			module.EnumWorkspaces([&](IWorkspace& workspace)
+			for (IWorkspace& workspace: module.EnumWorkspaces())
 			{
-				IWorkspaceContainer* preferredContainer = workspace.GetPreferredContainer();
 				if (workspace.GetCurrentContainer() == nullptr)
 				{
 					if (workspace.EnsureCreated())
 					{
-						if (preferredContainer)
+						if (IWorkspaceContainer* preferredContainer = workspace.GetPreferredContainer())
 						{
 							preferredContainer->AttachWorkspace(workspace);
 						}
@@ -35,9 +34,7 @@ namespace Kortex
 						}
 					}
 				}
-				return true;
-			});
-			return true;
-		});
+			}
+		}
 	}
 }

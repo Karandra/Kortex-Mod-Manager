@@ -1,5 +1,6 @@
 #include "pch.hpp"
 #include "DefaultGameProfile.h"
+#include <kxf/Utility/Enumerator.h>
 
 namespace
 {
@@ -155,44 +156,12 @@ namespace Kortex
 	{
 		
 	}
-	size_t DefaultGameProfile::EnumGameMods(std::function<bool(const GameProfileMod& gameMod)> func) const
+	kxf::Enumerator<const GameProfileMod&> DefaultGameProfile::EnumGameMods() const
 	{
-		if (func)
-		{
-			size_t count = 0;
-			for (const auto& item: m_GameMods)
-			{
-				count++;
-				if (!std::invoke(func, item))
-				{
-					break;
-				}
-			}
-			return count;
-		}
-		else
-		{
-			return m_GameMods.size();
-		}
+		return kxf::Utility::EnumerateIndexableContainer<const GameProfileMod&>(m_GameMods);
 	}
-	size_t DefaultGameProfile::EnumGamePlugins(std::function<bool(const GameProfilePlugin& gamePlugin)> func) const
+	kxf::Enumerator<const GameProfilePlugin&> DefaultGameProfile::EnumGamePlugins() const
 	{
-		if (func)
-		{
-			size_t count = 0;
-			for (const auto& item: m_GamePlugins)
-			{
-				count++;
-				if (!std::invoke(func, item))
-				{
-					break;
-				}
-			}
-			return count;
-		}
-		else
-		{
-			return m_GamePlugins.size();
-		}
+		return kxf::Utility::EnumerateIndexableContainer<const GameProfilePlugin&>(m_GamePlugins);
 	}
 }

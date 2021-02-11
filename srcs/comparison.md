@@ -50,7 +50,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<b>Oblivion, Skyrim, Fallout 3, Fallout: New Vegas</b>.
 			</td>
 			<td id="Vortex">
-				Supports over 100 games including TES and Fallout games.
+				Supports over 150 games including Cyberpunk 2077, the TES Series, and the Fallout serie.
 			</td>
 			<td id="NMM">
 				Supports many games including Elder Scrolls (plus Enderal) and Fallout series.
@@ -168,7 +168,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>Single generic flag on modlist for all conflicts types.</li>
 					<li>Only an "active-rule" icon once conflict has been resolved through a rule.</li>
 					<li>Popup when installing mod with conflicts.</li>
-					<li>Simple conflict resolution window (rules) with tooltip of conflicted files.</li>
+					<li>Simple conflict resolution window (rules) with tooltip of conflicted files. - searchable and filterable as of 1.4</li>
 					<li>Advanced per-mod file tree structure of conflicts with alternatives from other mods.</li>
 				</ul>
 			</td>
@@ -205,7 +205,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				<ul>
-					<li>Archive version checking via https://www.nexusmods.com/site/mods/126</li>
+					<li>Archive version checking builtin as of 1.4</li>
 				</ul>
 			</td>
 			<td id="NMM">
@@ -485,6 +485,44 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
+			<td class="feature-name">Event Logging</td>
+			<td id="kmm">
+				external logs
+			</td>
+			<td id="mo2.mo1" colspan="2">
+				logs viewable within program
+			</td>
+			<td id="Vortex">
+				external logging,
+				internal event viewer for order of recently install/enabled/disabled mods
+			</td>
+			<td id="NMM">
+				<div class="cmp-unknown" />
+			</td>
+			<td id="WB">
+				External logs
+			</td>
+		</tr>
+		<tr>
+			<td class="feature-name">Mod Merging</td>
+			<td id="KMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="mo2.mo1" colspan="2">
+				Merge "mods" (assets) from the same mod page during install
+			</td>
+			<td id="Vortex">
+				merge "mods" (assets) from the same mod page during install and any mods after install
+				merge plugins via extension
+			</td>
+			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="WB">
+				merge overwrite-only plugins for certain games during patch creation
+			</td>
+		</tr>
+		<tr>
 			<td class="feature-name">Virtualization scheme</td>
 			<td id="KMM">
 				<b><a href="https://github.com/KerberX/KxVirtualFileSystem">KxVFS</a></b> - based on <b><a href="https://github.com/dokan-dev/dokany">Dokany</a></b> - kernel-mode file system driver.
@@ -751,6 +789,8 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>Mod meta info like categories etc</li>
 					<li>Browser for mod description</li>
 					<li>New mods list</li>
+					<li>download rate limiter</li>
+					<li>mod tracking</li>
 				</ul>
 			</td>
 			<td id="NMM">
@@ -812,6 +852,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				<div class="cmp-yes" />
+				Download rate limiter available
 			</td>
 			<td id="NMM">
 				<div class="cmp-yes" />
@@ -915,6 +956,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td id="Vortex">
 				Comes with 3 built in styles, several on nexus, customizable via CSS/SASS.
 				Change colors and fonts via a setting menu.
+				MO-esque extension available to make your vortex appear as if it was mo2
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -938,6 +980,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				Generate Report option generates a online document with list of plugins
+				extension automatically uploads to modwatch
 			</td>
 			<td id="NMM">
 				Export plugin and mod list to clipboard or text file.
@@ -993,26 +1036,27 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Mostly same as MO2, but somethings are missing like separators and notes.
 			</td>
 			<td id="Vortex">
-				Advanced mod counters.<br/>
-				Update check.<br/>
-				Grouping by state, category, content, author, version, source..<br/>
-				Filter by state, name, version, install time, category, endorsed state, content, dependency resolution.<br/>
-				collapsible separators<br/>
-				Update check, install from file, manage rules.<br/>
-				Various Keyboard shortcuts and support for multi selection operations.<br/>
-				<br/>
-				<b>Mod metadata:</b>
-				mod name,
-				version number,
-				author,
-				install time,
-				source (nexus or not),
-				category,
-				endorsed,
-				content,
-				priority,
-				dependencies,
-				highlight
+				<ul>
+				<li>Advanced mod counters.</li>
+				<li>Update check.</li>
+				<li>Grouping by state, category, content, author, version, source.</li>
+				<li>Filter by state, name, version, install time, category, endorsed state, content, dependency resolution.</li>
+				<li>collapsible separators</li>
+				<li>Update check, install from file, manage rules.</li>
+				<li>Various Keyboard shortcuts and support for multi selection operations.</li>
+				<li><ul><b>Mod metadata:</b>
+				<li>mod name,</li>
+				<li>version number,</li>
+				<li>author,</li>
+				<li>install time,</li>
+				<li>source (nexus or not),</li>
+				<li>category,</li>
+				<li>endorsed,</li>
+				<li>content,</li>
+				<li>priority,</li>
+				<li>dependencies,</li>
+				<li>highlight</li></ul></li>
+				</ul>
 			</td>
 			<td id="NMM">
 				<ul>
@@ -1107,11 +1151,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				</ul>
 			</td>
 			<td id="Vortex">
-				<ul>
-					<li>English</li>
-					<li>German</li>
-					<li>Various Extensions</li>
-				</ul>
+				many available via extensions
 			</td>
 			<td id="NMM">
 				<ul>

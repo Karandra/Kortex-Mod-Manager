@@ -50,17 +50,17 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<b>Oblivion, Skyrim, Fallout 3, Fallout: New Vegas</b>.
 			</td>
 			<td id="Vortex">
-				Supports over 150 games including Cyberpunk 2077, the TES Series, and the Fallout serie.
+				Supports over 150 games including Cyberpunk 2077, the TES Series, and the Fallout series.
 			</td>
 			<td id="NMM">
 				Supports many games including Elder Scrolls (plus Enderal) and Fallout series.
 			</td>
 			<td id="WB">
-				Morrowind using <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a>.
+				Oblivion, Nehrim, Skyrim (LE, SE, VR) &amp; Enderal
 				<br/>
-				<a href="https://www.nexusmods.com/fallout3/mods/11336">Fallout 3</a>/<a href="https://www.nexusmods.com/newvegas/mods/35003">Fallout NV</a> Using Valda's Wrye Flash.
+				Fallout 3, Fallout: New Vegas &amp; Fallout 4 (VR)
 				<br/>
-				Oblivion, Nehrim, Skyrim (LE, SE, VR), Enderal and Fallout 4 (Regular & VR) Using <a href="https://www.dropbox.com/sh/iazpayeexiyazeh/AAAbGeVHrlIksp2AFgI4w48Oa?dl=0">Wrye Bash</a>.
+				Very early Morrowind support, use <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a> for now.
 			</td>
 		</tr>
 		<tr>

@@ -150,7 +150,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 				</td>
 			<td id="MO2">
-        		Different conflict flags on modlist for different conflict types (winning/losing/both).
+				Different conflict flags on modlist for different conflict types (winning/losing/both).
 				Highlighting of mods that have conflict with the currently selected mod.
 				Listing of losing, winning and non-conflicted files for each mod.
 				Ability to preview and cycle alternatives of textures and other file types.
@@ -854,13 +854,33 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				<div class="cmp-yes" />
-				Download rate limiter available
 			</td>
 			<td id="NMM">
 				<div class="cmp-yes" />
 			</td>
 			<td id="WB">
 				<div class="cmp-no" />
+			</td>
+		</tr>
+		<tr>
+			<td class="feature-name">Download rate limiter</td>
+			<td id="KMM">
+				<div class="cmp-unknown" />
+			</td>
+			<td id="MO2">
+				<div class="cmp-unknown" />
+			</td>
+			<td id="MO1">
+				N/A
+			</td>
+			<td id="Vortex">
+				<div class="cmp-yes" />
+			</td>
+			<td id="NMM">
+				<div class="cmp-unknown" />
+			</td>
+			<td id="WB">
+				N/A
 			</td>
 		</tr>
 		<tr>

@@ -4,3 +4,27 @@
 *.DotSettings
 *.DotSettings.user
 *.aps
+
+# Output binaries
+ModManager/Junk/*
+ModManager/Build/*
+
+Kortex/Junk/*
+Kortex/Build/*
+
+Kortex FSController/Junk/*
+Kortex FSController/Build/*
+
+# Kortex main directory
+Bin/*
+!Bin/ModManager
+
+#Misc files
+Kortex/Include/Kortex/Git/LatestCommit.txt
+ModManager/Include/LatestCommit.txt
+
+# Resourses
+Resources/*
+
+# Libraries
+Libraries/*

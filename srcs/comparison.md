@@ -148,12 +148,14 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Conflict visualization</td>
 			<td id="KMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO2">
-				<ul>
-					Same as MO1 plus:
-					<li>Advanced per-mod conflict views with alternatives, sorting, search, etc.</li>
-				</ul>
+        		Different conflict flags on modlist for different conflict types (winning/losing/both).
+				Highlighting of mods that have conflict with the currently selected mod.
+				Listing of losing, winning and non-conflicted files for each mod.
+				Ability to preview and cycle alternatives of textures and other file types.
+				Advanced per-mod conflict views with alternatives, sorting, search, etc.
 			</td>
 			<td id="MO1">
 				<ul>
@@ -219,9 +221,33 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
+			<td class="feature-name">Game archives (BSA) management</td>
+			<td id="KMM">
+				<div class="cmp-no" />
+			</td>
+			<td id="MO2">
+				Extraction, 
+				Creation, 
+				Content preview,
+				Experimental conflict detection.
+			</td>
+			<td id="MO1">
+				Extraction, 
+				Conflict detection,
+				Loading without plugins.
+			</td>
+			<td id="Vortex">
+				<div class="cmp-no" />
+			</td>
+			<td id="NMM">
+				<div class="cmp-no" />
+			</td>
+		</tr>
+		<tr>
 			<td class="feature-name">Game archives (BSA) Conflicts</td>
 			<td id="KMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO2">
 				Only experimental <span tooltip="Work in progress">WIP</span> conflict visualization of archives through BSA specific conflict flags. BSA order is decided by plugins order like normal.
@@ -233,9 +259,11 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="WB">
 				<div class="cmp-yes" />
@@ -248,6 +276,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="WB">
 				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#saves">Saves Tab</a> allows you to switch between different 'save profiles'.
@@ -257,18 +286,23 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Change master name in header of save game from save game manager</td>
 			<td id="KMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO2">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO1">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="Vortex">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="WB">
 				<div class="cmp-yes" />
@@ -305,6 +339,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="WB">
 				The <a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20General%20Readme.html#ini">INI Edits Tab</a> allows applying and undoing 'INI Edits', small INI files that can be installed via BAIN and then applied to INIs.
@@ -372,6 +407,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Integrated LOOT support</td>
 			<td id="KMM">
 				One click sort.
+																									  
 			</td>
 			<td id="MO2">
 				One click sort, detailed loot report, visualization of loot info on plugins list through flags and tooltips.
@@ -392,6 +428,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="WB">
 				Visualization of dirty plugins via underlining on the plugin list, automatic retrieval of LOOT's Bash Tag suggestions.
@@ -402,6 +439,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Backup features</td>
 			<td id="KMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO2.MO1" colspan="2">
 				Modlist order,
@@ -409,6 +447,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Individual mod folder backup.
 			</td>
 			<td id="Vortex">
+					   
 				Via <a href="https://github.com/Garethp/Vortex-Modlist-Backup">extension</a> only.
 			</td>
 			<td id="NMM">
@@ -425,15 +464,19 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name"><span flow="right" tooltip="Program list means a toolbar of some sort that allows you to execute programs and tools from the mod manager for convenience or need">Program list</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="MO2">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="MO1">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="Vortex">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="NMM">
 				<ul>
@@ -452,15 +495,19 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="MO2">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO1">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="Vortex">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="WB">
 				Only BAIN wizards, and only via simple text editors.
@@ -663,15 +710,19 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name"><span flow="right" tooltip="Game root directory virtualization means that the files are not installed into the game folder where the game EXE is located such as TESV.exe. Rather they use an actual Virtual File System. Vortex and NMM use links to achieve similar results as virtualization, but it's not actually virtualization">Game root directory virtualization</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="MO2">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO1">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="Vortex">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
@@ -705,6 +756,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-unknown" />
+																									   
 			</td>
 			<td id="WB">
 				Files added or altered in the Data folder are tracked.
@@ -820,20 +872,27 @@ There are many mod managers around these days and it's may be a bit difficult to
 		</tr>
 		<tr>
 			<td class="feature-name">Self auto-update check</td>
+					 
+		
 			<td id="KMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO2">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="MO1">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="Vortex">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="NMM">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="WB">
 				<div class="cmp-no" />
@@ -843,12 +902,15 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name"><span flow="right" tooltip="Integrated download manager meaning the mod manager has internal download capabilities and uses can see the files being downloaded">Integrated download manager</span></td>
 			<td id="KMM">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="MO2">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="MO1">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="Vortex">
 				<div class="cmp-yes" />
@@ -856,6 +918,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-yes" />
+																									  
 			</td>
 			<td id="WB">
 				<div class="cmp-no" />
@@ -887,6 +950,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Problem detection</td>
 			<td id="KMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO2">
 				<ul>
@@ -943,6 +1007,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">GUI customization</td>
 			<td id="KMM">
 				<div class="cmp-no" />
+																										
 			</td>
 			<td id="MO2">
 				Comes with 15+ built in styles, more available on Nexus.
@@ -960,9 +1025,11 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																										
 			</td>
 			<td id="WB">
 				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#tools-colors">Change colors via a settings menu</a>.
+   
 			</td>
 		</tr>
 		<tr>
@@ -1097,14 +1164,15 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Game files preview</td>
 			<td id="KMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="MO2">
-				.DDS Textures complete preview support.<br/>
-				BSA/BA2 content preview.<br/>
+				.DDS Textures complete preview support.
+				BSA/BA2 content preview.
 				Normal images and text (.txt, .ini, .cfg, .log, .json) files.
 			</td>
 			<td id="MO1">
-				.DDS Textures partial preview support.<br/>
+				.DDS Textures partial preview support.
 				Normal images and .txt files.
 			</td>
 			<td id="Vortex">
@@ -1113,6 +1181,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="WB">
 				<div class="cmp-no" />
@@ -1157,6 +1226,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<ul>
 					<li>English</li>
 					<li>German</li>
+		
 				</ul>
 			</td>
 			<td id="WB">
@@ -1191,6 +1261,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
+																									   
 			</td>
 			<td id="WB">
 				<div class="cmp-no" />

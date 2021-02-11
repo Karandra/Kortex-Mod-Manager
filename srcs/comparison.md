@@ -220,29 +220,6 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 		</tr>
 		<tr>
-			<td class="feature-name">Game archives (BSA) management</td>
-			<td id="KMM">
-				<div class="cmp-no" />
-			</td>
-			<td id="MO2">
-				Extraction, 
-				Creation, 
-				Content preview,
-				Experimental conflict detection.
-			</td>
-			<td id="MO1">
-				Extraction, 
-				Conflict detection,
-				Loading without plugins.
-			</td>
-			<td id="Vortex">
-				<div class="cmp-no" />
-			</td>
-			<td id="NMM">
-				<div class="cmp-no" />
-			</td>
-		</tr>
-		<tr>
 			<td class="feature-name">Game archives (BSA) Conflicts</td>
 			<td id="KMM">
 				<div class="cmp-no" />

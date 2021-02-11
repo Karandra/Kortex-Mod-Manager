@@ -50,17 +50,17 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<b>Oblivion, Skyrim, Fallout 3, Fallout: New Vegas</b>.
 			</td>
 			<td id="Vortex">
-				Supports over 150 games including Cyberpunk 2077, the TES Series, and the Fallout serie.
+				Supports over 150 games including Cyberpunk 2077, the TES Series, and the Fallout series.
 			</td>
 			<td id="NMM">
 				Supports many games including Elder Scrolls (plus Enderal) and Fallout series.
 			</td>
 			<td id="WB">
-				Morrowind using <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a>.
+				Oblivion, Nehrim, Skyrim (LE, SE, VR) &amp; Enderal
 				<br/>
-				<a href="https://www.nexusmods.com/fallout3/mods/11336">Fallout 3</a>/<a href="https://www.nexusmods.com/newvegas/mods/35003">Fallout NV</a> Using Valda's Wrye Flash.
+				Fallout 3, Fallout: New Vegas &amp; Fallout 4 (VR)
 				<br/>
-				Oblivion, Nehrim, Skyrim (LE, SE, VR), Enderal and Fallout 4 (Regular & VR) Using <a href="https://www.dropbox.com/sh/iazpayeexiyazeh/AAAbGeVHrlIksp2AFgI4w48Oa?dl=0">Wrye Bash</a>.
+				Very early Morrowind support, use <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a> for now.
 			</td>
 		</tr>
 		<tr>
@@ -217,29 +217,6 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>Archive version checking</li>
 					<li>Conflict detection</li>
 				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td class="feature-name">Game archives (BSA) management</td>
-			<td id="KMM">
-				<div class="cmp-no" />
-			</td>
-			<td id="MO2">
-				Extraction, 
-				Creation, 
-				Content preview,
-				Experimental conflict detection.
-			</td>
-			<td id="MO1">
-				Extraction, 
-				Conflict detection,
-				Loading without plugins.
-			</td>
-			<td id="Vortex">
-				<div class="cmp-no" />
-			</td>
-			<td id="NMM">
-				<div class="cmp-no" />
 			</td>
 		</tr>
 		<tr>
@@ -442,7 +419,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				</ul>
 			</td>
 			<td id="WB">
-				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#tools-settings">Backs up all the parts of Wrye Bash that can be changed by the user to a location of the user's choosing</a>.
+				<a href="https://wrye-bash.github.io/docs/Wrye%20Bash%20Advanced%20Readme.html#settings-backups">Backs up all the parts of Wrye Bash that can be changed by the user to a location of the user's choosing</a>.
 			</td>
 		</tr>
 		<tr>
@@ -487,7 +464,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				Only BAIN wizards, and only via simple text editors.
+				Only BAIN wizards, and only via text editor.
 			</td>
 		</tr>
 		<tr>
@@ -511,14 +488,14 @@ There are many mod managers around these days and it's may be a bit difficult to
 		<tr>
 			<td class="feature-name">Event Logging</td>
 			<td id="kmm">
-				external logs
+				External logs
 			</td>
 			<td id="mo2.mo1" colspan="2">
-				logs viewable within program
+				Logs viewable within program
 			</td>
 			<td id="Vortex">
-				external logging,
-				internal event viewer for order of recently install/enabled/disabled mods
+				External logs,
+				Internal event viewer for order of recently install/enabled/disabled mods
 			</td>
 			<td id="NMM">
 				<div class="cmp-unknown" />
@@ -672,6 +649,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>Does not add complexity and potential failure points with virtualization, hardlinks, or symbolic links and uses a simple and reliable file copy.</li>
 					<li>100% Reliable with 0% chance for issues installing files into the Data folder. No problems with leftover/broken links and other inconsistencies, just normal files (that are all kept track of).</li>
 					<li>Allows you to have your Game and downloaded mods on different drives.</li>
+					<li>Gives a level of redundancy in the data</li>
 				</ul>
 				<ul class="ul-con">
 					<b>Cons:</b>
@@ -701,7 +679,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				<div class="cmp-no" tooltip="Not applicable, WB does no virtualization." />
+				<span tooltip="Wrye Bash does no virtualization.">N/A</span>
 			</td>
 		</tr>
 		<tr>
@@ -960,6 +938,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>Encoding problems</li>
 					<li>Load order verification & sanitization</li>
 					<li>Unrecognized save and plugin headers</li>
+					<li>BA2 filename hash collisions</li>
 				</ul>
 			</td>
 		</tr>

@@ -224,7 +224,6 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Game archives (BSA) management</td>
 			<td id="KMM">
 				<div class="cmp-no" />
-				<img src="https://cdn.discordapp.com/attachments/347329036084707330/680203972564484176/cross.png"/>
 			</td>
 			<td id="MO2">
 				Extraction, 
@@ -239,11 +238,9 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="Vortex">
 				<div class="cmp-no" />
-				<img src="https://cdn.discordapp.com/attachments/347329036084707330/680203972564484176/cross.png"/>
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
-				<img src="https://cdn.discordapp.com/attachments/347329036084707330/680203972564484176/cross.png"/>
 			</td>
 		</tr>
 		<tr>
@@ -1188,7 +1185,6 @@ There are many mod managers around these days and it's may be a bit difficult to
 			</td>
 			<td id="WB">
 				<div class="cmp-no" />
-				<img src="https://cdn.discordapp.com/attachments/347329036084707330/680203972564484176/cross.png"/>
 			</td>
 		</tr>
 		<tr>

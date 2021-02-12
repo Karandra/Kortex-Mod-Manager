@@ -122,7 +122,9 @@ namespace Kortex
 	void DefaultGameInstance::LoadProfiles()
 	{
 		auto option = GetInstanceOption(g_OptionNames.GameProfiles);
-		m_ProfilesFS.EnumItems({}, [&, activeName = option.GetAttribute(g_OptionNames.Active)](kxf::FileItem item)
+		const kxf::String activeName = option.GetAttribute(g_OptionNames.Active);
+
+		for (const kxf::FileItem& item: m_ProfilesFS.EnumItems({}, {}, kxf::FSActionFlag::LimitToDirectories))
 		{
 			if (item.IsNormalItem())
 			{
@@ -138,8 +140,7 @@ namespace Kortex
 					m_Profiles.emplace_back(std::move(profile));
 				}
 			}
-			return true;
-		}, {}, kxf::FSActionFlag::LimitToDirectories);
+		}
 	}
 
 	// IGameDefinition

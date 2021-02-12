@@ -72,7 +72,7 @@ namespace Kortex
 
 	void DefaultApplication::LoadGameDefinitions()
 	{
-		auto DoLoad = [&](kxf::FileItem item)
+		auto DoLoad = [&](const kxf::FileItem& item)
 		{
 			if (item.IsNormalItem())
 			{
@@ -88,13 +88,21 @@ namespace Kortex
 			return true;
 		};
 
-		m_GameDefinitionsFS.EnumItems({}, DoLoad, {}, kxf::FSActionFlag::LimitToDirectories);
-		m_GameDefinitionsUserFS.EnumItems({}, DoLoad, {}, kxf::FSActionFlag::LimitToDirectories);
+		for (const kxf::FileItem& item: m_GameDefinitionsFS.EnumItems({}, {}, kxf::FSActionFlag::LimitToDirectories))
+		{
+			DoLoad(item);
+		}
+		for (const kxf::FileItem& item: m_GameDefinitionsUserFS.EnumItems({}, {}, kxf::FSActionFlag::LimitToDirectories))
+		{
+			DoLoad(item);
+		}
 	}
 	void DefaultApplication::LoadGameInstances()
 	{
 		auto option = GetGlobalOption(g_OptionNames.GameInstances);
-		m_GameInstancesFS.EnumItems({}, [&, activeName = option.GetAttribute(g_OptionNames.Active)](kxf::FileItem item)
+		const kxf::String activeName = option.GetAttribute(g_OptionNames.Active);
+
+		for (const kxf::FileItem& item: m_GameInstancesFS.EnumItems({}, {}, kxf::FSActionFlag::LimitToDirectories))
 		{
 			if (item.IsNormalItem())
 			{
@@ -110,8 +118,7 @@ namespace Kortex
 					m_GameInstances.insert_or_assign(instance->GetName(), std::move(instance));
 				}
 			}
-			return true;
-		}, {}, kxf::FSActionFlag::LimitToDirectories);
+		}
 	}
 
 	// IApplication

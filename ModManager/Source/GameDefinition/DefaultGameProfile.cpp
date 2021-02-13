@@ -41,30 +41,35 @@ namespace Kortex
 
 		// Load mods
 		m_GameMods.clear();
-		rootNode.QueryElement(g_GameModNames.ItemsRoot).EnumChildElements([&, priority = 0](kxf::XMLNode node) mutable
 		{
-			if (!m_GameMods.emplace_back(node.GetAttribute(g_AttributeNames.Signature), node.GetAttributeBool(g_AttributeNames.Active), priority))
+			int priority = 0;
+			for (const kxf::XMLNode& node: rootNode.QueryElement(g_GameModNames.ItemsRoot).EnumChildElements(g_ProfileNames.Item))
 			{
-				m_GameMods.pop_back();
-			}
-			priority++;
+				if (!m_GameMods.emplace_back(node.GetAttribute(g_AttributeNames.Signature), node.GetAttributeBool(g_AttributeNames.Active), priority))
+				{
+					m_GameMods.pop_back();
+				}
+				priority++;
 
-			return true;
-		}, g_ProfileNames.Item);
+				return true;
+			}
+		}
 
 		// Load plugins
 		m_GamePlugins.clear();
-		rootNode.QueryElement(g_GamePluginNames.ItemsRoot).EnumChildElements([&, priority = 0](kxf::XMLNode node) mutable
 		{
-			if (!m_GamePlugins.emplace_back(node.GetAttribute(g_AttributeNames.Name), node.GetAttributeBool(g_AttributeNames.Active), priority))
+			int priority = 0;
+			for (const kxf::XMLNode& node: rootNode.QueryElement(g_GamePluginNames.ItemsRoot).EnumChildElements(g_ProfileNames.Item))
 			{
-				m_GamePlugins.pop_back();
+				if (!m_GamePlugins.emplace_back(node.GetAttribute(g_AttributeNames.Name), node.GetAttributeBool(g_AttributeNames.Active), priority))
+				{
+					m_GamePlugins.pop_back();
+				}
+				priority++;
+
+				return true;
 			}
-			priority++;
-
-			return true;
-		}, g_ProfileNames.Item);
-
+		}
 		return true;
 	}
 	bool DefaultGameProfile::SaveProfile() const

@@ -133,7 +133,7 @@ namespace Kortex::GameInstance::Private
 	size_t VariableLoader::DoLoadVariables()
 	{
 		size_t count = 0;
-		m_VariablesRoot.EnumChildElements([&](const kxf::XMLNode& itemNode)
+		for (const kxf::XMLNode& itemNode: m_VariablesRoot.EnumChildElements(wxS("Item")))
 		{
 			if (auto name = itemNode.QueryAttribute(g_AttributeNames.Name))
 			{
@@ -182,8 +182,7 @@ namespace Kortex::GameInstance::Private
 					}
 				}
 			}
-			return true;
-		}, wxS("Item"));
+		}
 		return count;
 	}
 }

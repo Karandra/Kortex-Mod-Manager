@@ -76,7 +76,7 @@ namespace Kortex::Application::OptionSerializer
 		else
 		{
 			size_t i = 0;
-			columnsNode.EnumChildElements([&](kxf::XMLNode node)
+			for (const kxf::XMLNode& node: columnsNode.EnumChildElements())
 			{
 				if (Column* column = dataView.GetColumn(i))
 				{
@@ -85,13 +85,9 @@ namespace Kortex::Application::OptionSerializer
 					column->SetDisplayIndex(node.GetAttributeInt(OName::DisplayAt, i));
 
 					i++;
-					return true;
 				}
-				else
-				{
-					return false;
-				}
-			});
+				break;
+			};
 
 			dataView.SendSizeEventToParent();
 			dataView.SendSizeEvent();
@@ -152,7 +148,7 @@ namespace Kortex::Application::OptionSerializer
 				IWorkspace* currentWorkspace = nullptr;
 
 				size_t index = 0;
-				pagesNode.EnumChildElements([&](kxf::XMLNode node)
+				for (const kxf::XMLNode& node: pagesNode.EnumChildElements())
 				{
 					if (IWorkspace* workspace = container.GetWorkspaceByID(node.GetAttribute(OName::ID)))
 					{
@@ -162,10 +158,8 @@ namespace Kortex::Application::OptionSerializer
 							currentWorkspace = workspace;
 						}
 					}
-
 					index++;
-					return true;
-				});
+				}
 
 				if (currentWorkspace)
 				{

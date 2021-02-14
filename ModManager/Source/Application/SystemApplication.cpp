@@ -326,8 +326,3 @@ int main(int argc, char** argv)
 	Kortex::SystemApplication app;
 	return kxf::ApplicationInitializer(app, argc, argv).Run();
 }
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
-{
-	Kortex::SystemApplication app;
-	return kxf::ApplicationInitializer(app).Run();
-}

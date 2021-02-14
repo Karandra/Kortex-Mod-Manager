@@ -11,7 +11,7 @@ namespace Kortex
 
 namespace Kortex::GameDefinition::UI
 {
-	class InstanceSelectionDialog: public kxf::UI::StdDialog
+	class KORTEX_API InstanceSelectionDialog: public kxf::UI::StdDialog
 	{
 		private:
 			class DataModel;

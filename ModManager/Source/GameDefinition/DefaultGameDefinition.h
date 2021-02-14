@@ -7,7 +7,7 @@
 
 namespace Kortex
 {
-	class DefaultGameDefinition: public IGameDefinition
+	class KORTEX_API DefaultGameDefinition: public IGameDefinition
 	{
 		private:
 			kxf::ScopedNativeFileSystem m_RootFS;

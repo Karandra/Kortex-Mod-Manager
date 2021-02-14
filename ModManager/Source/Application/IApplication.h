@@ -39,7 +39,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IApplication: public kxf::RTTI::Interface<IApplication>, public Application::WithOptions<IApplication>
+	class KORTEX_API IApplication: public kxf::RTTI::Interface<IApplication>, public Application::WithOptions<IApplication>
 	{
 		KxRTTI_DeclareIID(IApplication, {0xb5e8047c, 0x9239, 0x45c4, {0x86, 0xf6, 0x6c, 0x83, 0xa8, 0x42, 0x06, 0x3e}});
 
@@ -108,7 +108,6 @@ namespace Kortex
 			kxf::String GetShortName() const;
 			kxf::String GetDeveloper() const;
 			kxf::Version GetVersion() const;
-			kxf::XMLDocument& GetGlobalConfig() const;
 
 			wxWindow* GetActiveWindow() const;
 			wxWindow* GetTopWindow() const;

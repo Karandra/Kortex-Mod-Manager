@@ -15,7 +15,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IGameInstance: public kxf::RTTI::Interface<IGameInstance>, public Application::WithInstanceOptions<IGameInstance>
+	class KORTEX_API IGameInstance: public kxf::RTTI::Interface<IGameInstance>, public Application::WithInstanceOptions<IGameInstance>
 	{
 		KxRTTI_DeclareIID(IGameInstance, {0x6fe63d61, 0x8666, 0x44fc, {0xbb, 0x4e, 0x4f, 0xcd, 0x93, 0x82, 0x82, 0xfc}});
 

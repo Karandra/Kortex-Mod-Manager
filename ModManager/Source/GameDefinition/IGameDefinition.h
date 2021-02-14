@@ -13,7 +13,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IGameDefinition: public kxf::RTTI::Interface<IGameDefinition>
+	class KORTEX_API IGameDefinition: public kxf::RTTI::Interface<IGameDefinition>
 	{
 		KxRTTI_DeclareIID(IGameDefinition, {0xdc0d3d32, 0x72fa, 0x4ab3, {0xbc, 0xfc, 0x3c, 0x19, 0x8, 0x1f, 0x56, 0x2}});
 

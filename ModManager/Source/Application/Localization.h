@@ -4,8 +4,8 @@
 
 namespace Kortex
 {
-	kxf::String Localize(const kxf::ResourceID& id);
-	kxf::LocalizationItem LocalizeItem(const kxf::ResourceID& id);
+	KORTEX_API kxf::String Localize(const kxf::ResourceID& id);
+	KORTEX_API kxf::LocalizationItem LocalizeItem(const kxf::ResourceID& id);
 
 	template<class... Args>
 	kxf::String Localize(const kxf::ResourceID& id, Args&&... arg)

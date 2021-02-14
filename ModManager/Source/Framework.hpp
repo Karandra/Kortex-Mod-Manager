@@ -9,7 +9,16 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-// KxFramework
+// Kortex
+#if defined KORTEX_LIBRARY
+#define KORTEX_API __declspec(dllexport)
+#elif defined KORTEX_MODULE
+#define KORTEX_API __declspec(dllimport)
+#else
+#define KORTEX_API
+#endif
+
+// kxf
 #include <kxf/Common.hpp>
 
 // kxf: General

@@ -9,7 +9,7 @@
 
 namespace Kortex
 {
-	class DefaultGameInstance: public IGameInstance
+	class KORTEX_API DefaultGameInstance: public IGameInstance
 	{
 		private:
 			IGameDefinition* m_Definition = nullptr;

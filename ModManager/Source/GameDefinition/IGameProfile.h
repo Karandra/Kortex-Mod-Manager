@@ -12,7 +12,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class GameProfileMod final
+	class KORTEX_API GameProfileMod final
 	{
 		private:
 			kxf::String m_Signature;
@@ -63,7 +63,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class GameProfilePlugin final
+	class KORTEX_API GameProfilePlugin final
 	{
 		private:
 			kxf::String m_Name;
@@ -114,7 +114,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IGameProfile: public kxf::RTTI::Interface<IGameProfile>, public Application::WithProfileOptions<IGameProfile>
+	class KORTEX_API IGameProfile: public kxf::RTTI::Interface<IGameProfile>, public Application::WithProfileOptions<IGameProfile>
 	{
 		KxRTTI_DeclareIID(IGameProfile, {0xb1081844, 0x310c, 0x4773, {0x8c, 0x77, 0xb2, 0x8e, 0xa2, 0x9a, 0x66, 0xd5}});
 

@@ -7,7 +7,7 @@
 
 namespace Kortex
 {
-	class DefaultGameProfile: public IGameProfile
+	class KORTEX_API DefaultGameProfile: public IGameProfile
 	{
 		private:
 			IGameInstance* m_OwningInstance = nullptr;

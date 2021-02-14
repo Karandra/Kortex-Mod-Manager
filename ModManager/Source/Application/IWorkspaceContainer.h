@@ -4,7 +4,7 @@
 
 namespace Kortex
 {
-	class IWorkspaceContainer: public kxf::RTTI::Interface<IWorkspaceContainer>
+	class KORTEX_API IWorkspaceContainer: public kxf::RTTI::Interface<IWorkspaceContainer>
 	{
 		KxRTTI_DeclareIID(IWorkspaceContainer, {0xef898b45, 0x2a8a, 0x4290, {0xb3, 0x7b, 0xc5, 0xfb, 0xff, 0x34, 0x28, 0xb6}});
 

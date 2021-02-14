@@ -5,7 +5,7 @@
 
 namespace Kortex::GameInstance::Private
 {
-	class VariableLoader final
+	class KORTEX_API VariableLoader final
 	{
 		private:
 			kxf::IVariablesCollection& m_Collection;
@@ -45,7 +45,7 @@ namespace Kortex::GameInstance::Private
 			}
 	};
 
-	class VariableSaver final
+	class KORTEX_API VariableSaver final
 	{
 		private:
 			const kxf::IVariablesCollection& m_Collection;

@@ -9,7 +9,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class BroadcastProcessor: public kxf::EventBroadcastProcessor
+	class KORTEX_API BroadcastProcessor: public kxf::EventBroadcastProcessor
 	{
 		public:
 			static BroadcastProcessor& Get();
@@ -25,7 +25,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class BroadcastReciever: public kxf::EventBroadcastReciever
+	class KORTEX_API BroadcastReciever: public kxf::EventBroadcastReciever
 	{
 		public:
 			BroadcastReciever()
@@ -51,7 +51,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class BroadcastEvent: public kxf::BasicEvent
+	class KORTEX_API BroadcastEvent: public kxf::BasicEvent
 	{
 		public:
 			BroadcastEvent() noexcept = default;

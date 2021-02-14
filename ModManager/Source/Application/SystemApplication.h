@@ -12,7 +12,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class SystemApplication: public kxf::RTTI::Implementation<SystemApplication, kxf::GUIApplication>
+	class KORTEX_API SystemApplication: public kxf::RTTI::Implementation<SystemApplication, kxf::GUIApplication>
 	{
 		friend class IApplication;
 

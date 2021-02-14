@@ -158,10 +158,6 @@ namespace Kortex
 	{
 		return SystemApplication::GetInstance().GetVersion();
 	}
-	kxf::XMLDocument& IApplication::GetGlobalConfig() const
-	{
-		//return SystemApplication::GetInstance().GetGlobalConfig();
-	}
 
 	wxWindow* IApplication::GetActiveWindow() const
 	{

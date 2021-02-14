@@ -151,6 +151,11 @@ namespace Kortex
 
 	bool DefaultApplication::OnInit()
 	{
+		for (auto&& classInfo: kxf::RTTI::EnumClassInfo())
+		{
+			Log::Info(classInfo.GetFullyQualifiedName());
+		}
+
 		// Load global config
 		LoadGlobalConfiguration();
 		LoadLocalizationPackages();

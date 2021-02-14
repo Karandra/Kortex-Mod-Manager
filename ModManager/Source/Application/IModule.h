@@ -10,13 +10,12 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IModule: public kxf::RTTI::Interface<IModule>, public Application::WithOptions<IModule>
+	class KORTEX_API IModule: public kxf::RTTI::Interface<IModule>, public Application::WithOptions<IModule>
 	{
 		KxRTTI_DeclareIID(IModule, {0x6406fcf7, 0xbb23, 0x4f35, {0xbd, 0xf1, 0xdc, 0x19, 0x65, 0x84, 0x85, 0x33}});
 
 		public:
-			IModule() noexcept = default;
-			virtual ~IModule();
+			virtual ~IModule() = default;
 
 		public:
 			void OnLoadInstance(IGameInstance& instance, const kxf::XMLNode& node)

@@ -9,7 +9,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IGameModManager: public kxf::RTTI::ExtendInterface<IGameModManager, IModule>
+	class KORTEX_API IGameModManager: public kxf::RTTI::ExtendInterface<IGameModManager, IModule>
 	{
 		KxRTTI_DeclareIID(IGameModManager, {0xec61c172, 0xa750, 0x4be9, {0xb0, 0x9d, 0x27, 0xe8, 0x8c, 0x49, 0x36, 0xb2}});
 

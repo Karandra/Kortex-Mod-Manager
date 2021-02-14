@@ -23,7 +23,7 @@ namespace Kortex::InstallWizard
 
 namespace Kortex::Application
 {
-	class BasicOption: public AppOption
+	class KORTEX_API BasicOption: public AppOption
 	{
 		protected:
 			void Create(Disposition disposition, kxf::XMLDocument& xml, const kxf::String& branch = {});
@@ -38,7 +38,7 @@ namespace Kortex::Application
 
 namespace Kortex::Application
 {
-	class GlobalOption: public BasicOption
+	class KORTEX_API GlobalOption: public BasicOption
 	{
 		private:
 			kxf::XMLDocument& GetXML() const;
@@ -51,7 +51,7 @@ namespace Kortex::Application
 			}
 	};
 
-	class InstanceOption: public BasicOption
+	class KORTEX_API InstanceOption: public BasicOption
 	{
 		private:
 			kxf::XMLDocument& GetXML(IGameInstance& instance) const;
@@ -78,7 +78,7 @@ namespace Kortex::Application
 			}
 	};
 
-	class ActiveInstanceOption: public InstanceOption
+	class KORTEX_API ActiveInstanceOption: public InstanceOption
 	{
 		private:
 			IGameInstance* GetActiveInstance() const;
@@ -91,7 +91,7 @@ namespace Kortex::Application
 			}
 	};
 
-	class ProfileOption: public BasicOption
+	class KORTEX_API ProfileOption: public BasicOption
 	{
 		private:
 			kxf::XMLDocument* GetXML(IGameProfile& profile) const;
@@ -121,7 +121,7 @@ namespace Kortex::Application
 			}
 	};
 
-	class ActiveProfileOption: public ProfileOption
+	class KORTEX_API ActiveProfileOption: public ProfileOption
 	{
 		private:
 			IGameProfile* GetActiveProfile() const;

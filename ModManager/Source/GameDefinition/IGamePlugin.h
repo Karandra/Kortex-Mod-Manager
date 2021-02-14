@@ -8,7 +8,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IGamePlugin: public kxf::RTTI::Interface<IGamePlugin>
+	class KORTEX_API IGamePlugin: public kxf::RTTI::Interface<IGamePlugin>
 	{
 		KxRTTI_DeclareIID(IGamePlugin, {0x977a3069, 0xf8e8, 0x4f7e, {0xb4, 0xd1, 0xe0, 0x94, 0xaa, 0x91, 0x22, 0xbc}});
 

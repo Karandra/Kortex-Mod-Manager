@@ -12,7 +12,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class IWorkspace: public kxf::RTTI::Interface<IWorkspace>, public Application::WithOptions<IWorkspace>
+	class KORTEX_API IWorkspace: public kxf::RTTI::Interface<IWorkspace>, public Application::WithOptions<IWorkspace>
 	{
 		KxRTTI_DeclareIID(IWorkspace, {0x9c8ee9bb, 0xaad3, 0x45df, {0xb8, 0x9c, 0xd6, 0x7b, 0x48, 0x47, 0x39, 0xfb}});
 

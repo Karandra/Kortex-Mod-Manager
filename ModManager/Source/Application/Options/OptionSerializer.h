@@ -28,7 +28,7 @@ namespace Kortex::Application::OptionSerializer
 
 namespace Kortex::Application::OptionSerializer
 {
-	class UILayout final
+	class KORTEX_API UILayout final
 	{
 		public:
 			static void DataViewLayout(AppOption& option, SerializationMode mode, kxf::UI::DataView::View& dataView);

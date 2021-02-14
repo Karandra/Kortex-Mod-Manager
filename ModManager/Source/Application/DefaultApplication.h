@@ -6,6 +6,7 @@
 #include <kxf/Application/ICoreApplication.h>
 #include <kxf/General/DynamicVariablesCollection.h>
 #include <kxf/Localization/LocalizationPackageStack.h>
+#include <kxf/Localization/QtLocalizationPackage.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
 #include <kxf/Serialization/XML.h>
 
@@ -17,7 +18,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class DefaultApplication: public kxf::RTTI::DynamicImplementation<DefaultApplication, IApplication, kxf::Application::ICommandLine>
+	class KORTEX_API DefaultApplication: public kxf::RTTI::DynamicImplementation<DefaultApplication, IApplication, kxf::Application::ICommandLine>
 	{
 		public:
 			std::unique_ptr<BroadcastReciever> m_BroadcastReciever;

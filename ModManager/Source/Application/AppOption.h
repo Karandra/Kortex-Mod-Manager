@@ -15,7 +15,7 @@ namespace Kortex
 
 namespace Kortex
 {
-	class AppOption: public kxf::XDocument::XNode<AppOption>
+	class KORTEX_API AppOption: public kxf::XDocument::XNode<AppOption>
 	{
 		friend class kxf::XDocument::XNode<AppOption>;
 
@@ -154,7 +154,7 @@ namespace Kortex
 
 namespace Kortex::Application
 {
-	class IWithConfig: public kxf::RTTI::Interface<IWithConfig>
+	class KORTEX_API IWithConfig: public kxf::RTTI::Interface<IWithConfig>
 	{
 		KxRTTI_DeclareIID(IWithConfig, {0xeff53acc, 0xbd93, 0x49d0, {0x84, 0x9b, 0x49, 0xde, 0x3e, 0xc3, 0x8a, 0xce}});
 

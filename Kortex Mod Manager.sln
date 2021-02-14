@@ -16,33 +16,19 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Debug|x64.ActiveCfg = Debug|x64
-		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Debug|x86.ActiveCfg = Debug|Win32
-		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Debug|x86.Build.0 = Debug|Win32
 		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x64.ActiveCfg = Release|x64
 		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x64.Build.0 = Release|x64
-		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x86.ActiveCfg = Release|Win32
-		{29B2F888-3832-48E9-9EDA-DE8A4D7A8ED5}.Release|x86.Build.0 = Release|Win32
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Debug|x64.ActiveCfg = Debug|x64
-		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Debug|x86.ActiveCfg = Debug|Win32
-		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Debug|x86.Build.0 = Debug|Win32
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x64.ActiveCfg = Release|x64
 		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x64.Build.0 = Release|x64
-		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x86.ActiveCfg = Release|Win32
-		{EC06864F-E5A4-4C7E-AEF3-3D249331CCCA}.Release|x86.Build.0 = Release|Win32
 		{C3EE4B94-D317-46EC-BC24-796FD7AFB1DB}.Debug|x64.ActiveCfg = Release|x64
 		{C3EE4B94-D317-46EC-BC24-796FD7AFB1DB}.Debug|x64.Build.0 = Release|x64
-		{C3EE4B94-D317-46EC-BC24-796FD7AFB1DB}.Debug|x86.ActiveCfg = Debug|Win32
-		{C3EE4B94-D317-46EC-BC24-796FD7AFB1DB}.Debug|x86.Build.0 = Debug|Win32
 		{C3EE4B94-D317-46EC-BC24-796FD7AFB1DB}.Release|x64.ActiveCfg = Release|x64
 		{C3EE4B94-D317-46EC-BC24-796FD7AFB1DB}.Release|x64.Build.0 = Release|x64
-		{C3EE4B94-D317-46EC-BC24-796FD7AFB1DB}.Release|x86.ActiveCfg = Release|Win32
-		{C3EE4B94-D317-46EC-BC24-796FD7AFB1DB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

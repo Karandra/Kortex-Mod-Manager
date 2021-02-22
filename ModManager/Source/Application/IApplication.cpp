@@ -119,7 +119,7 @@ namespace Kortex
 			}
 			else
 			{
-				delay = kxf::TimeSpan::Seconds(GetGlobalOption(OName::RestartDelay).GetValueInt(3));
+				delay = kxf::TimeSpan::Seconds(ReadGlobalOption(OName::RestartDelay).GetValueInt(3));
 			}
 
 			ScheduledTask task = taskSheduler.NewTask();

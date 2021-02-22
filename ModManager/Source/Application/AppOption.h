@@ -40,65 +40,43 @@ namespace Kortex
 			kxf::XMLNode m_ConfigNode;
 			IGameInstance* m_Instance = nullptr;
 			IGameProfile* m_Profile = nullptr;
-			Disposition m_Disposition = Disposition::None;
 
 			Application::OptionSerializer::UILayout m_UISerializer;
 			
 		protected:
+			// kxf::IXNode
 			std::optional<kxf::String> DoGetValue() const override;
 			bool DoSetValue(const kxf::String& value, WriteEmpty writeEmpty, AsCDATA asCDATA = AsCDATA::Auto) override;
 
 			std::optional<kxf::String> DoGetAttribute(const kxf::String& name) const override;
 			bool DoSetAttribute(const kxf::String& name, const kxf::String& value, WriteEmpty writeEmpty) override;
 
-			void AssignNode(const kxf::XMLNode& node)
+			// AppOption
+			void AssignNode(kxf::XMLNode node)
 			{
-				m_ConfigNode = node;
+				m_ConfigNode = std::move(node);
 			}
-			void AssignDisposition(Disposition disposition)
+			void AssignInstance(IGameInstance& instance)
 			{
-				m_Disposition = disposition;
+				m_Instance = &instance;
 			}
-			
-			bool AssignInstance(IGameInstance& instance);
-			bool AssignActiveInstance();
-			
-			void AssignProfile(IGameProfile& profile);
-			void AssignActiveProfile();
-
-		protected:
-			AppOption();
-			AppOption(const AppOption& other, const kxf::XMLNode& node);
-			AppOption(const AppOption&) noexcept;
-			~AppOption();
+			void AssignProfile(IGameProfile& profile)
+			{
+				m_Profile = &profile;
+			}
 
 		public:
-			// General
+			AppOption();
+			~AppOption();
+
+		protected:
+			AppOption(const AppOption& other, const kxf::XMLNode& node);
+			AppOption(const AppOption&) noexcept;
+
+		public:
+			// kxf::IXNode
 			bool IsNull() const override;
-			AppOption QueryElement(const kxf::String& XPath) const override;
-			AppOption ConstructElement(const kxf::String& XPath) override;
 
-			Disposition GetDisposition() const
-			{
-				return m_Disposition;
-			}
-			bool IsGlobalOption() const
-			{
-				return m_Disposition == Disposition::Global;
-			}
-			bool IsInstanceOption() const
-			{
-				return m_Disposition == Disposition::Instance;
-			}
-			bool IsProfileOption() const
-			{
-				return m_Disposition == Disposition::Profile;
-			}
-
-			kxf::XMLNode GetNode() const
-			{
-				return m_ConfigNode;
-			}
 			kxf::String GetXPath() const override
 			{
 				return m_ConfigNode.GetXPath();
@@ -108,6 +86,15 @@ namespace Kortex
 				return m_ConfigNode.GetName();
 			}
 
+			// kxf::XNode<T>
+			AppOption QueryElement(const kxf::String& XPath) const override;
+			AppOption ConstructElement(const kxf::String& XPath) override;
+
+			// AppOption
+			kxf::XMLNode GetNode() const
+			{
+				return m_ConfigNode;
+			}
 			void NotifyChange();
 
 		public:
@@ -149,23 +136,5 @@ namespace Kortex
 
 		public:
 			AppOption& operator=(const AppOption&) noexcept;
-	};
-}
-
-namespace Kortex::Application
-{
-	class KORTEX_API IWithConfig: public kxf::RTTI::Interface<IWithConfig>
-	{
-		KxRTTI_DeclareIID(IWithConfig, {0xeff53acc, 0xbd93, 0x49d0, {0x84, 0x9b, 0x49, 0xde, 0x3e, 0xc3, 0x8a, 0xce}});
-
-		protected:
-			virtual ~IWithConfig() = default;
-
-		public:
-			virtual const kxf::XMLDocument& GetConfig() const = 0;
-			virtual kxf::XMLDocument& GetConfig() = 0;
-
-			virtual void OnConfigChanged(AppOption& option) = 0;
-			virtual void SaveConfig() = 0;
 	};
 }

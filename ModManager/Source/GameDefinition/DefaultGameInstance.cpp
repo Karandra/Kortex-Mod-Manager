@@ -121,7 +121,7 @@ namespace Kortex
 	}
 	void DefaultGameInstance::LoadProfiles()
 	{
-		auto option = GetInstanceOption(g_OptionNames.GameProfiles);
+		auto option = ReadInstanceOption(g_OptionNames.GameProfiles);
 		const kxf::String activeName = option.GetAttribute(g_OptionNames.Active);
 
 		for (const kxf::FileItem& item: m_ProfilesFS.EnumItems({}, {}, kxf::FSActionFlag::LimitToDirectories))

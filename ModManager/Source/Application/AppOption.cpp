@@ -29,29 +29,6 @@ namespace Kortex
 		return res;
 	}
 	
-	bool AppOption::AssignInstance(IGameInstance& instance)
-	{
-		m_Instance = &instance;
-		return true;
-	}
-	bool AppOption::AssignActiveInstance()
-	{
-		m_Instance = IApplication::GetInstance().GetActiveGameInstance();
-		return true;
-	}
-	
-	void AppOption::AssignProfile(IGameProfile& profile)
-	{
-		m_Profile = &profile;
-	}
-	void AppOption::AssignActiveProfile()
-	{
-		if (auto instance = IApplication::GetInstance().GetActiveGameInstance())
-		{
-			m_Profile = instance->GetActiveProfile();
-		}
-	}
-
 	AppOption::AppOption() = default;
 	AppOption::AppOption(const AppOption& other, const kxf::XMLNode& node)
 	{
@@ -63,7 +40,7 @@ namespace Kortex
 
 	bool AppOption::IsNull() const
 	{
-		return m_ConfigNode.IsNull() || m_Disposition == Disposition::None;
+		return m_ConfigNode.IsNull();
 	}
 	AppOption AppOption::QueryElement(const kxf::String& XPath) const
 	{
@@ -77,24 +54,19 @@ namespace Kortex
 	void AppOption::NotifyChange()
 	{
 		IApplication& app = IApplication::GetInstance();
-		switch (m_Disposition)
+
+		if (m_Instance)
 		{
-			case Disposition::Global:
-			{
-				app.OnGlobalConfigChanged(*this);
-				break;
-			}
-			case Disposition::Instance:
-			{
-				app.OnInstanceConfigChanged(*this, *m_Instance->QueryInterface<IGameInstance>());
-				break;
-			}
-			case Disposition::Profile:
-			{
-				app.OnProfileConfigChanged(*this, *m_Profile);
-				break;
-			}
-		};
+			app.OnInstanceConfigChanged(*this, *m_Instance);
+		}
+		else if (m_Profile)
+		{
+			app.OnProfileConfigChanged(*this, *m_Profile);
+		}
+		else
+		{
+			app.OnGlobalConfigChanged(*this);
+		}
 	}
 
 	AppOption& AppOption::operator=(const AppOption&) noexcept = default;

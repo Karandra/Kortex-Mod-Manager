@@ -24,4 +24,5 @@ namespace Kortex::Application::OName
 	Kortex_DefOption(Attribute);
 	Kortex_DefOption(Location);
 	Kortex_DefOption(Default);
+	Kortex_DefOption(Geometry);
 }

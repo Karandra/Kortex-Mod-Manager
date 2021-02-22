@@ -51,7 +51,8 @@ namespace Kortex
 			void LoadLocalizationPackages();
 
 			void LoadGameDefinitions();
-			void LoadGameInstances();
+			IGameInstance* LoadGameInstances();
+			void InitializeActiveInstance(IGameInstance& activeInstance);
 
 		protected:
 			// IApplication

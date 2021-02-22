@@ -1,8 +1,9 @@
 #include "pch.hpp"
 #include "DefaultApplication.h"
 #include "SystemApplication.h"
-#include "Options/CmdLineDatabase.h"
+#include "MainWindow.h"
 #include "Log.h"
+#include "Options/CmdLineDatabase.h"
 
 #include "GameDefinition/IGameProfile.h"
 #include "GameDefinition/IGameInstance.h"
@@ -41,7 +42,7 @@ namespace Kortex
 	}
 	void DefaultApplication::LoadLocalizationPackages()
 	{
-		kxf::Locale activeLocale = this->GetGlobalOption(g_OptionNames.Language).GetAttribute(g_OptionNames.Locale);
+		kxf::Locale activeLocale = ReadGlobalOption(g_OptionNames.Language).GetAttribute(g_OptionNames.Locale);
 		if (!activeLocale)
 		{
 			activeLocale = kxf::Locale::GetSystemPreferred();
@@ -97,11 +98,12 @@ namespace Kortex
 			DoLoad(item);
 		}
 	}
-	void DefaultApplication::LoadGameInstances()
+	IGameInstance* DefaultApplication::LoadGameInstances()
 	{
-		auto option = GetGlobalOption(g_OptionNames.GameInstances);
+		auto option = ReadGlobalOption(g_OptionNames.GameInstances);
 		const kxf::String activeName = option.GetAttribute(g_OptionNames.Active);
 
+		IGameInstance* activeInstance = nullptr;
 		for (const kxf::FileItem& item: m_GameInstancesFS.EnumItems({}, {}, kxf::FSActionFlag::LimitToDirectories))
 		{
 			if (item.IsNormalItem())
@@ -111,14 +113,19 @@ namespace Kortex
 				kxf::ScopedNativeFileSystem fs(item.GetFullPath());
 				if (instance->LoadInstanceData(fs))
 				{
-					if (!m_ActiveGameInstance && instance->GetName() == activeName)
+					if (!activeInstance && instance->GetName() == activeName)
 					{
-						m_ActiveGameInstance = instance.get();
+						activeInstance = instance.get();
 					}
 					m_GameInstances.insert_or_assign(instance->GetName(), std::move(instance));
 				}
 			}
 		}
+		return activeInstance;
+	}
+	void DefaultApplication::InitializeActiveInstance(IGameInstance& activeInstance)
+	{
+		m_ActiveGameInstance = &activeInstance;
 	}
 
 	// IApplication
@@ -160,9 +167,32 @@ namespace Kortex
 		if (!anotherInstanceRunning)
 		{
 			LoadGameDefinitions();
-			LoadGameInstances();
+			IGameInstance* activeInstance = LoadGameInstances();
 
-			return OpenInstanceSelectionDialog() != nullptr;
+			// If the active instance wasn't detected inside 'LoadGameInstances' ask the user to choose it
+			if (!activeInstance)
+			{
+				activeInstance = OpenInstanceSelectionDialog();
+			}
+
+			if (activeInstance)
+			{
+				InitializeActiveInstance(*activeInstance);
+
+				// Create and show the main window
+				auto mainWindow = new Application::MainWindow();
+				mainWindow->BindSignal(&IMainWindow::OnDestroyed, [this]()
+				{
+					m_MainWindow = nullptr;
+				});
+
+				m_MainWindow = mainWindow;
+				return m_MainWindow->GetFrame().Show();
+			}
+			else
+			{
+				throw std::runtime_error("No active instance is selected");
+			}
 		}
 		else
 		{

@@ -1,212 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup Label="ProjectConfigurations">
-		<ProjectConfiguration Include="Debug|x64">
-			<Configuration>Debug</Configuration>
-			<Platform>x64</Platform>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|x64">
-			<Configuration>Release</Configuration>
-			<Platform>x64</Platform>
-		</ProjectConfiguration>
-	</ItemGroup>
-	<PropertyGroup Label="Globals">
-		<VCProjectVersion>16.0</VCProjectVersion>
-		<Keyword>Win32Proj</Keyword>
-		<ProjectGuid>{c3ee4b94-d317-46ec-bc24-796fd7afb1db}</ProjectGuid>
-		<RootNamespace>ModManager</RootNamespace>
-		<WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-		<ProjectName>ModManager</ProjectName>
-	</PropertyGroup>
-	<PropertyGroup Label="UserMacros"/>
-	
-	<PropertyGroup Label="Configuration">
-		<ConfigurationType>Application</ConfigurationType>
-		<PlatformToolset>v142</PlatformToolset>
-		<CharacterSet>Unicode</CharacterSet>
-		<PreferredToolArchitecture>x64</PreferredToolArchitecture>
-	</PropertyGroup>
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)'=='Debug'">
-		<UseDebugLibraries>true</UseDebugLibraries>
-	</PropertyGroup>
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)'=='Release'">
-		<UseDebugLibraries>false</UseDebugLibraries>
-	</PropertyGroup>
-	<PropertyGroup>
-		<IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
-		<OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
-	</PropertyGroup>
-	
-	<ImportGroup Label="Shared"/>
-	<ImportGroup Label="ExtensionSettings"/>
-	<ImportGroup Label="PropertySheets">
-		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-	</ImportGroup>
-	
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
-
-	<ItemDefinitionGroup>
-		<ClCompile>
-			<PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;KXF_STATIC_LIBRARY;KORTEX_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-		</ClCompile>
-	</ItemDefinitionGroup>
-	
-	<ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
-		<ClCompile>
-			<PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-		</ClCompile>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
-		<ClCompile>
-			<PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-		</ClCompile>
-	</ItemDefinitionGroup>
-	
-	<ItemDefinitionGroup>
-		<ClCompile>
-			<WarningLevel>Level3</WarningLevel>
-			<FunctionLevelLinking>true</FunctionLevelLinking>
-			<IntrinsicFunctions>true</IntrinsicFunctions>
-			<SDLCheck>true</SDLCheck>
-			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
-			<ConformanceMode>true</ConformanceMode>
-			<PrecompiledHeader>Use</PrecompiledHeader>
-			<PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
-			<LanguageStandard>stdcpp17</LanguageStandard>
-			<AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
-			<ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-			<MultiProcessorCompilation>true</MultiProcessorCompilation>
-		</ClCompile>
-		<Link>
-			<SubSystem>Windows</SubSystem>
-			<EnableCOMDATFolding>true</EnableCOMDATFolding>
-			<OptimizeReferences>true</OptimizeReferences>
-			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<AdditionalDependencies>delayimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-			<DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
-			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			<EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-			<SetChecksum>true</SetChecksum>
-		</Link>
-		<ResourceCompile>
-			<AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
-		</ResourceCompile>
-		<PostBuildEvent>
-			<Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName)$(TargetExt)"</Command>
-			<Message>Copying to Bin</Message>
-		</PostBuildEvent>
-		<PreBuildEvent>
-			<Command>echo LR^"==( &gt; "$(ProjectDir)Include\LatestCommit.txt"
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{c3ee4b94-d317-46ec-bc24-796fd7afb1db}</ProjectGuid>
+    <RootNamespace>ModManager</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ModManager</ProjectName>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)'=='Debug'">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)'=='Release'">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
+    <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
+  </PropertyGroup>
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;KXF_STATIC_LIBRARY;KORTEX_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>delayimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <SetChecksum>true</SetChecksum>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)Bin\$(TargetName)$(TargetExt)"</Command>
+      <Message>Copying to Bin</Message>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>echo LR^"==( &gt; "$(ProjectDir)Include\LatestCommit.txt"
 				git rev-parse HEAD &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"
 				echo )==^" &gt;&gt; "$(ProjectDir)Include\LatestCommit.txt"</Command>
-		</PreBuildEvent>
-		<Manifest>
-			<EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
-			<AdditionalManifestFiles>$(ProjectDir)Resources/Mod Manager.manifest</AdditionalManifestFiles>
-		</Manifest>
-	</ItemDefinitionGroup>
-	
-	<ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
-		<ClCompile>
-			<Optimization>MaxSpeed</Optimization>
-			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-			<PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-		</ClCompile>
-	</ItemDefinitionGroup>
-	
-	<ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
-		<ClCompile>
-			<Optimization>Disabled</Optimization>
-			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
-		</ClCompile>
-	</ItemDefinitionGroup>
-	
-	<ItemGroup>
-		<ClInclude Include="Source\Application\AppOption.h"/>
-		<ClInclude Include="Source\Application\BookWorkspaceContainer.h"/>
-		<ClInclude Include="Source\Application\BroadcastProcessor.h"/>
-		<ClInclude Include="Source\Application\DefaultApplication.h"/>
-		<ClInclude Include="Source\Application\DefaultWorkspace.h"/>
-		<ClInclude Include="Source\Application\IApplication.h"/>
-		<ClInclude Include="Source\Application\IMainWindow.h"/>
-		<ClInclude Include="Source\Application\IModule.h"/>
-		<ClInclude Include="Source\Application\IWorkspace.h"/>
-		<ClInclude Include="Source\Application\IWorkspaceContainer.h"/>
-		<ClInclude Include="Source\Application\IWorkspaceDocument.h"/>
-		<ClInclude Include="Source\Application\Localization.h"/>
-		<ClInclude Include="Source\Application\Log.h"/>
-		<ClInclude Include="Source\Application\Options\CmdLineDatabase.h"/>
-		<ClInclude Include="Source\Application\Options\Macros.h"/>
-		<ClInclude Include="Source\Application\Options\Option.h"/>
-		<ClInclude Include="Source\Application\Options\OptionDatabase.h"/>
-		<ClInclude Include="Source\Application\Options\OptionSerializer.h"/>
-		<ClInclude Include="Source\Application\SystemApplication.h"/>
-		<ClInclude Include="Source\EmbeddedResources.h"/>
-		<ClInclude Include="Source\Framework.hpp"/>
-		<ClInclude Include="Source\FrameworkUI.hpp"/>
-		<ClInclude Include="Source\GameDefinition\DefaultGameDefinition.h"/>
-		<ClInclude Include="Source\GameDefinition\DefaultGameInstance.h"/>
-		<ClInclude Include="Source\GameDefinition\DefaultGameProfile.h"/>
-		<ClInclude Include="Source\GameDefinition\IGameDefinition.h"/>
-		<ClInclude Include="Source\GameDefinition\IGameInstance.h"/>
-		<ClInclude Include="Source\GameDefinition\IGameMod.h"/>
-		<ClInclude Include="Source\GameDefinition\IGamePlugin.h"/>
-		<ClInclude Include="Source\GameDefinition\IGameProfile.h"/>
-		<ClInclude Include="Source\GameDefinition\Private\VariableSerialization.h"/>
-		<ClInclude Include="Source\GameDefinition\UI\InstanceSelectionDialog.h"/>
-		<ClInclude Include="Source\Modules\GameModManager\IGameModManager.h"/>
-		<ClInclude Include="Source\pch.hpp"/>
-	</ItemGroup>
-	<ItemGroup>
-		<ClCompile Include="Source\Application\AppOption.cpp"/>
-		<ClCompile Include="Source\Application\BookWorkspaceContainer.cpp"/>
-		<ClCompile Include="Source\Application\BroadcastProcessor.cpp"/>
-		<ClCompile Include="Source\Application\DefaultApplication.cpp"/>
-		<ClCompile Include="Source\Application\DefaultWorkspace.cpp"/>
-		<ClCompile Include="Source\Application\IApplication.cpp"/>
-		<ClCompile Include="Source\Application\IMainWindow.cpp"/>
-		<ClCompile Include="Source\Application\IModule.cpp"/>
-		<ClCompile Include="Source\Application\IWorkspace.cpp"/>
-		<ClCompile Include="Source\Application\IWorkspaceContainer.cpp"/>
-		<ClCompile Include="Source\Application\IWorkspaceDocument.cpp"/>
-		<ClCompile Include="Source\Application\Localization.cpp"/>
-		<ClCompile Include="Source\Application\Log.cpp"/>
-		<ClCompile Include="Source\Application\Options\Option.cpp"/>
-		<ClCompile Include="Source\Application\Options\OptionSerializer.cpp"/>
-		<ClCompile Include="Source\Application\SystemApplication.cpp"/>
-		<ClCompile Include="Source\GameDefinition\DefaultGameDefinition.cpp"/>
-		<ClCompile Include="Source\GameDefinition\DefaultGameInstance.cpp"/>
-		<ClCompile Include="Source\GameDefinition\DefaultGameProfile.cpp"/>
-		<ClCompile Include="Source\GameDefinition\IGameDefinition.cpp"/>
-		<ClCompile Include="Source\GameDefinition\IGameInstance.cpp"/>
-		<ClCompile Include="Source\GameDefinition\IGameMod.cpp"/>
-		<ClCompile Include="Source\GameDefinition\IGamePlugin.cpp"/>
-		<ClCompile Include="Source\GameDefinition\IGameProfile.cpp"/>
-		<ClCompile Include="Source\GameDefinition\Private\VariableSerialization.cpp"/>
-		<ClCompile Include="Source\GameDefinition\UI\InstanceSelectionDialog.cpp"/>
-		<ClCompile Include="Source\Modules\GameModManager\IGameModManager.cpp"/>
-		<ClCompile Include="Source\pch.cpp">
-			<PrecompiledHeader>Create</PrecompiledHeader>
-		</ClCompile>
-	</ItemGroup>
-	<ItemGroup>
-		<ResourceCompile Include="Resources\Mod Manager.rc"/>
-	</ItemGroup>
-	<ItemGroup>
-		<Image Include="Resources\Mod Manager.ico"/>
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="..\Bin\ModManager\GameDefinitions\Game.TES.SkyrimSE\Icon.svg"/>
-		<None Include="..\Bin\ModManager\GameDefinitions\Game.TES.Skyrim\Icon.svg"/>
-		<None Include="cpp.hint"/>
-	</ItemGroup>
-	<ItemGroup>
-		<Xml Include="..\Bin\ModManager\GameDefinitions\Game.TES.SkyrimSE\Definition.xml"/>
-		<Xml Include="..\Bin\ModManager\GameDefinitions\Game.TES.Skyrim\Definition.xml"/>
-	</ItemGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-	<ImportGroup Label="ExtensionTargets">
-	</ImportGroup>
+    </PreBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)Resources/Mod Manager.manifest</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Application\AppOption.h" />
+    <ClInclude Include="Source\Application\BookSimpleWorkspaceContainer.h" />
+    <ClInclude Include="Source\Application\BookWorkspaceContainer.h" />
+    <ClInclude Include="Source\Application\BroadcastProcessor.h" />
+    <ClInclude Include="Source\Application\DefaultApplication.h" />
+    <ClInclude Include="Source\Application\DefaultWorkspace.h" />
+    <ClInclude Include="Source\Application\IApplication.h" />
+    <ClInclude Include="Source\Application\IMainWindow.h" />
+    <ClInclude Include="Source\Application\IModule.h" />
+    <ClInclude Include="Source\Application\IWorkspace.h" />
+    <ClInclude Include="Source\Application\IWorkspaceContainer.h" />
+    <ClInclude Include="Source\Application\IWorkspaceDocument.h" />
+    <ClInclude Include="Source\Application\Localization.h" />
+    <ClInclude Include="Source\Application\Log.h" />
+    <ClInclude Include="Source\Application\MainWindow.h" />
+    <ClInclude Include="Source\Application\Options\CmdLineDatabase.h" />
+    <ClInclude Include="Source\Application\Options\Macros.h" />
+    <ClInclude Include="Source\Application\Options\Option.h" />
+    <ClInclude Include="Source\Application\Options\OptionDatabase.h" />
+    <ClInclude Include="Source\Application\Options\OptionSerializer.h" />
+    <ClInclude Include="Source\Application\SystemApplication.h" />
+    <ClInclude Include="Source\EmbeddedResources.h" />
+    <ClInclude Include="Source\Framework.hpp" />
+    <ClInclude Include="Source\FrameworkUI.hpp" />
+    <ClInclude Include="Source\GameDefinition\DefaultGameDefinition.h" />
+    <ClInclude Include="Source\GameDefinition\DefaultGameInstance.h" />
+    <ClInclude Include="Source\GameDefinition\DefaultGameProfile.h" />
+    <ClInclude Include="Source\GameDefinition\IGameDefinition.h" />
+    <ClInclude Include="Source\GameDefinition\IGameInstance.h" />
+    <ClInclude Include="Source\GameDefinition\IGameMod.h" />
+    <ClInclude Include="Source\GameDefinition\IGamePlugin.h" />
+    <ClInclude Include="Source\GameDefinition\IGameProfile.h" />
+    <ClInclude Include="Source\GameDefinition\Private\VariableSerialization.h" />
+    <ClInclude Include="Source\GameDefinition\UI\InstanceSelectionDialog.h" />
+    <ClInclude Include="Source\Modules\GameModManager\IGameModManager.h" />
+    <ClInclude Include="Source\pch.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Application\AppOption.cpp" />
+    <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp" />
+    <ClCompile Include="Source\Application\BroadcastProcessor.cpp" />
+    <ClCompile Include="Source\Application\DefaultApplication.cpp" />
+    <ClCompile Include="Source\Application\DefaultWorkspace.cpp" />
+    <ClCompile Include="Source\Application\IApplication.cpp" />
+    <ClCompile Include="Source\Application\IMainWindow.cpp" />
+    <ClCompile Include="Source\Application\IModule.cpp" />
+    <ClCompile Include="Source\Application\IWorkspace.cpp" />
+    <ClCompile Include="Source\Application\IWorkspaceContainer.cpp" />
+    <ClCompile Include="Source\Application\IWorkspaceDocument.cpp" />
+    <ClCompile Include="Source\Application\Localization.cpp" />
+    <ClCompile Include="Source\Application\Log.cpp" />
+    <ClCompile Include="Source\Application\MainWindow.cpp" />
+    <ClCompile Include="Source\Application\Options\Option.cpp" />
+    <ClCompile Include="Source\Application\Options\OptionSerializer.cpp" />
+    <ClCompile Include="Source\Application\SystemApplication.cpp" />
+    <ClCompile Include="Source\GameDefinition\DefaultGameDefinition.cpp" />
+    <ClCompile Include="Source\GameDefinition\DefaultGameInstance.cpp" />
+    <ClCompile Include="Source\GameDefinition\DefaultGameProfile.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGameDefinition.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGameInstance.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGameMod.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGamePlugin.cpp" />
+    <ClCompile Include="Source\GameDefinition\IGameProfile.cpp" />
+    <ClCompile Include="Source\GameDefinition\Private\VariableSerialization.cpp" />
+    <ClCompile Include="Source\GameDefinition\UI\InstanceSelectionDialog.cpp" />
+    <ClCompile Include="Source\Modules\GameModManager\IGameModManager.cpp" />
+    <ClCompile Include="Source\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Mod Manager.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Mod Manager.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Bin\ModManager\GameDefinitions\Game.TES.SkyrimSE\Icon.svg" />
+    <None Include="..\Bin\ModManager\GameDefinitions\Game.TES.Skyrim\Icon.svg" />
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Bin\ModManager\GameDefinitions\Game.TES.SkyrimSE\Definition.xml" />
+    <Xml Include="..\Bin\ModManager\GameDefinitions\Game.TES.Skyrim\Definition.xml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
 </Project>

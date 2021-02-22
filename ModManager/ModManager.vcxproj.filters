@@ -148,6 +148,12 @@
     <ClInclude Include="Source\Modules\GameModManager\IGameModManager.h">
       <Filter>Source\Modules\GameModManager</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\MainWindow.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\BookSimpleWorkspaceContainer.h">
+      <Filter>Source\Application\&lt;Workspace&gt;</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -233,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="Source\Modules\GameModManager\IGameModManager.cpp">
       <Filter>Source\Modules\GameModManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\MainWindow.cpp">
+      <Filter>Source\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

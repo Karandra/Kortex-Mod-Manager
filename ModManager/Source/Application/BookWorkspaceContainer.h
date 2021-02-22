@@ -31,6 +31,15 @@ namespace Kortex::Application
 			}
 
 			// IWorkspaceContainer
+			IWorkspaceContainer* GetParentContainer()
+			{
+				return dynamic_cast<IWorkspaceContainer*>(GetWindow().GetParent());
+			}
+			const IWorkspaceContainer* GetParentContainer() const
+			{
+				return dynamic_cast<const IWorkspaceContainer*>(GetWindow().GetParent());
+			}
+
 			IWorkspace* GetWorkspaceByID(const kxf::String& id) const override;
 			IWorkspace* GetWorkspaceByIndex(size_t index) const override;
 			IWorkspace* GetCurrentWorkspace() const override;

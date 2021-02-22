@@ -29,18 +29,15 @@ namespace Kortex
 
 		public:
 			virtual wxWindow& GetWindow() = 0;
-			const wxWindow& GetWindow() const
-			{
-				return const_cast<IWorkspaceContainer&>(*this).GetWindow();
-			}
+			virtual const wxWindow& GetWindow() const = 0;
 
 			virtual IWorkspaceContainer* GetParentContainer()
 			{
 				return nullptr;
 			}
-			const IWorkspaceContainer* GetParentContainer() const
+			virtual const IWorkspaceContainer* GetParentContainer() const
 			{
-				return const_cast<IWorkspaceContainer&>(*this).GetParentContainer();
+				return nullptr;
 			}
 			bool IsSubContainer() const
 			{

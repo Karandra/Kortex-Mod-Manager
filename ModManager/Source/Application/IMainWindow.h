@@ -1,5 +1,6 @@
 #pragma once
 #include "Framework.hpp"
+#include "FrameworkUI.hpp"
 #include "Options/Option.h"
 #include "IWorkspaceContainer.h"
 #include <kxf/UI/Controls/AUI/AuiToolBar.h>
@@ -11,8 +12,6 @@ namespace Kortex
 {
 	class IWorkspace;
 	class IWorkspaceContainer;
-
-	class VirtualFSEvent;
 }
 
 namespace Kortex
@@ -25,14 +24,21 @@ namespace Kortex
 			static kxf::Size GetDialogBestSize(const wxWindow& dialog);
 
 		public:
+			void OnCreated()
+			{
+				QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IMainWindow::OnCreated);
+			}
+			void OnDestroyed()
+			{
+				QueryInterface<kxf::IEvtHandler>()->ProcessSignal(&IMainWindow::OnDestroyed);
+			}
+
+		public:
 			void CreateWorkspaces();
 
 		public:
 			virtual kxf::UI::Frame& GetFrame() = 0;
-			const kxf::UI::Frame& GetFrame() const
-			{
-				return const_cast<IMainWindow&>(*this).GetFrame();
-			}
+			virtual const kxf::UI::Frame& GetFrame() const = 0;
 
 			virtual kxf::UI::AuiToolBar& GetMainToolBar() = 0;
 			virtual kxf::UI::AuiToolBar& GetQuickToolBar() = 0;
@@ -40,10 +46,7 @@ namespace Kortex
 			virtual kxf::UI::Menu& GetWorkspacesMenu() = 0;
 
 			virtual IWorkspaceContainer& GetWorkspaceContainer() = 0;
-			const IWorkspaceContainer& GetWorkspaceContainer() const
-			{
-				return const_cast<IMainWindow&>(*this).GetWorkspaceContainer();
-			}
+			virtual const IWorkspaceContainer& GetWorkspaceContainer() const = 0;
 
 			virtual void ClearStatus(int index = 0) = 0;
 			virtual void SetStatus(const kxf::String& label, int index = 0, const kxf::ResourceID& image = {}) = 0;

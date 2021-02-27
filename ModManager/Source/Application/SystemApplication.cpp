@@ -8,6 +8,7 @@
 #include "kxf/System/Win32Error.h"
 #include "kxf/System/NtStatus.h"
 #include "kxf/System/HResult.h"
+#include "kxf/System/COM.h"
 #include "kxf/IO/StreamReaderWriter.h"
 #include <wx/msgdlg.h>
 

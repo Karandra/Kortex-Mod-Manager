@@ -75,9 +75,8 @@ namespace Kortex
 	{
 		if (!IsNull())
 		{
-			return kxf::Utility::MakeForwardingEnumerator([name = GetName()](auto& enumerator) -> kxf::optional_ref<IGameInstance>
+			return kxf::Utility::MakeForwardingEnumerator([name = GetName()](IGameInstance& instance, kxf::IEnumerator& enumerator) -> kxf::optional_ref<IGameInstance>
 			{
-				IGameInstance& instance = *enumerator;
 				if (instance.GetDefinition().GetName() == name)
 				{
 					return instance;

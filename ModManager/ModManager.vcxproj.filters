@@ -154,6 +154,12 @@
     <ClInclude Include="Source\Application\BookSimpleWorkspaceContainer.h">
       <Filter>Source\Application\&lt;Workspace&gt;</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\IResourceManager.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\DefaultResourceManager.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -241,6 +247,9 @@
       <Filter>Source\Modules\GameModManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application\MainWindow.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\DefaultResourceManager.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>
   </ItemGroup>

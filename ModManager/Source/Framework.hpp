@@ -9,6 +9,17 @@
 #define KORTEX_API
 #endif
 
+// C++ standard library
+#include <cstdint>
+#include <memory>
+#include <optional>
+#include <functional>
+#include <algorithm>
+#include <type_traits>
+#include <utility>
+#include <tuple>
+#include <unordered_map>
+
 // kxf
 #include <kxf/Common.hpp>
 

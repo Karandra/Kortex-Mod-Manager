@@ -179,6 +179,9 @@ namespace Kortex
 			{
 				InitializeActiveInstance(*activeInstance);
 
+				// Initialize resources
+				m_ResourceManager = kxf::RTTI::GetClassInfo<IResourceManager>().CreateAnyImplementation<IResourceManager>();
+
 				// Create and show the main window
 				auto mainWindow = new Application::MainWindow();
 				mainWindow->BindSignal(&IMainWindow::OnDestroyed, [this]()

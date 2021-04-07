@@ -1,0 +1,46 @@
+#pragma once
+#include "Framework.hpp"
+#include "IResourceManager.h"
+#include <kxf/Drawing/GDIRenderer/GDIBitmap.h>
+
+namespace Kortex
+{
+	class KORTEX_API DefaultResourceManager: public kxf::RTTI::DynamicImplementation<DefaultResourceManager, IResourceManager>
+	{
+		private:
+			std::unordered_map<kxf::ResourceID, std::unique_ptr<kxf::IImage2D>> m_Images;
+			kxf::InterpolationQuality m_InterpolationQuality = kxf::InterpolationQuality::Default;
+
+		private:
+			kxf::IImage2D* FindObjectExact(const kxf::ResourceID& id) const;
+			void LoadFrom(const kxf::IFileSystem& fs, const kxf::FSPath& directory);
+
+		public:
+			DefaultResourceManager();
+			DefaultResourceManager(const DefaultResourceManager&) = delete;
+
+		public:
+			// IResourceManager
+			kxf::IImage2D* GetImage(const kxf::ResourceID& id) const;
+
+			kxf::BitmapImage GetBitmapImage(const kxf::ResourceID& id, const kxf::Size& size = kxf::Size::UnspecifiedSize()) const
+			{
+				if (auto image = GetImage(id))
+				{
+					return image->ToBitmapImage(size, m_InterpolationQuality);
+				}
+				return {};
+			}
+			kxf::GDIBitmap GetGDIImage(const kxf::ResourceID& id, const kxf::Size& size = kxf::Size::UnspecifiedSize()) const
+			{
+				if (auto image = GetImage(id))
+				{
+					return image->ToGDIBitmap(size, m_InterpolationQuality);
+				}
+				return {};
+			}
+
+		public:
+			DefaultResourceManager& operator=(const DefaultResourceManager&) = delete;
+	};
+}

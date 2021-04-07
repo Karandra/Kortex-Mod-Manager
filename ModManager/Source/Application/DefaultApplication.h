@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework.hpp"
 #include "IApplication.h"
+#include "IResourceManager.h"
 #include "IModule.h"
 #include "BroadcastProcessor.h"
 #include <kxf/Application/ICoreApplication.h>
@@ -9,12 +10,6 @@
 #include <kxf/Localization/QtLocalizationPackage.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
 #include <kxf/Serialization/XML.h>
-
-namespace Kortex
-{
-	class IGameDefinition;
-	class IGameInstance;
-}
 
 namespace Kortex
 {
@@ -40,6 +35,7 @@ namespace Kortex
 			bool m_GlobalConfigChanged = false;
 
 			IMainWindow* m_MainWindow = nullptr;
+			std::unique_ptr<IResourceManager> m_ResourceManager;
 			std::vector<std::unique_ptr<IModule>> m_LoadedModules;
 
 			std::unordered_map<kxf::String, std::unique_ptr<IGameDefinition>> m_GameDefinitions;
@@ -87,6 +83,10 @@ namespace Kortex
 			IMainWindow* GetMainWindow() const override
 			{
 				return m_MainWindow;
+			}
+			IResourceManager& GetResourceManager() const override
+			{
+				return *m_ResourceManager;
 			}
 			kxf::Enumerator<IModule&> EnumModules() override;
 

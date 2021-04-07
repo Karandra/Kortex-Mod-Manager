@@ -20,6 +20,7 @@ namespace Kortex
 	class IGameDefinition;
 	class IGameProfile;
 	class IMainWindow;
+	class IResourceManager;
 	class BroadcastProcessor;
 
 	enum class FileSystemOrigin
@@ -67,6 +68,7 @@ namespace Kortex
 			virtual kxf::XMLDocument& GetGlobalConfig() = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
 			virtual IMainWindow* GetMainWindow() const = 0;
+			virtual IResourceManager& GetResourceManager() const = 0;
 
 			virtual kxf::Enumerator<IModule&> EnumModules() = 0;
 			IModule* GetModuleByID(const kxf::IID& iid);

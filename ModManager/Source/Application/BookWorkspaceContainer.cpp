@@ -11,7 +11,7 @@ namespace Kortex::Application
 		wxBookCtrlBase& bookCtrl = GetBookCtrl();
 		if (bookCtrl.InsertPage(index, &workspace.GetWindow(), workspace.GetName(), false))
 		{
-			if (auto iconID = workspace.GetIcon().QueryInt())
+			if (auto iconID = workspace.GetIcon().ToInt())
 			{
 				bookCtrl.SetPageImage(index, *iconID);
 			}

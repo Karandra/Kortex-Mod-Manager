@@ -35,6 +35,12 @@
     <IntDir>$(ProjectDir)Junk\$(Configuration) $(Platform)\</IntDir>
     <OutDir>$(ProjectDir)Build\$(Configuration) $(Platform)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
   <ImportGroup Label="Shared" />
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="PropertySheets">
@@ -120,10 +126,12 @@
     <ClInclude Include="Source\Application\BookWorkspaceContainer.h" />
     <ClInclude Include="Source\Application\BroadcastProcessor.h" />
     <ClInclude Include="Source\Application\DefaultApplication.h" />
+    <ClInclude Include="Source\Application\DefaultResourceManager.h" />
     <ClInclude Include="Source\Application\DefaultWorkspace.h" />
     <ClInclude Include="Source\Application\IApplication.h" />
     <ClInclude Include="Source\Application\IMainWindow.h" />
     <ClInclude Include="Source\Application\IModule.h" />
+    <ClInclude Include="Source\Application\IResourceManager.h" />
     <ClInclude Include="Source\Application\IWorkspace.h" />
     <ClInclude Include="Source\Application\IWorkspaceContainer.h" />
     <ClInclude Include="Source\Application\IWorkspaceDocument.h" />
@@ -157,6 +165,7 @@
     <ClCompile Include="Source\Application\BookWorkspaceContainer.cpp" />
     <ClCompile Include="Source\Application\BroadcastProcessor.cpp" />
     <ClCompile Include="Source\Application\DefaultApplication.cpp" />
+    <ClCompile Include="Source\Application\DefaultResourceManager.cpp" />
     <ClCompile Include="Source\Application\DefaultWorkspace.cpp" />
     <ClCompile Include="Source\Application\IApplication.cpp" />
     <ClCompile Include="Source\Application\IMainWindow.cpp" />

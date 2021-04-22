@@ -88,7 +88,7 @@ namespace Kortex
 		AddActiveProfileFSPath(IGameProfile::Location::WriteTarget, g_ActiveProfileNames.WriteTargetDirectory);
 
 		// Load variables from the XML
-		GameInstance::Private::VariableLoader loader(m_Variables, variablesRoot, g_InstanceNames.Namespace);
+		GameInstance::Private::VariableLoader loader(m_Variables, variablesRoot, g_InstanceNames.Namespace, m_Definition->GetName() + wxS('/') + m_Name);
 		loader.OnFSPath([&](const kxf::String& type, const kxf::String& ns, const kxf::String& name, const kxf::FSPath& value)
 		{
 			if (ns == g_InstanceNames.Namespace)

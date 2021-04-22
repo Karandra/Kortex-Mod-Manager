@@ -252,6 +252,9 @@
     <ClCompile Include="Source\Application\DefaultResourceManager.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Application\IResourceManager.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Mod Manager.rc">

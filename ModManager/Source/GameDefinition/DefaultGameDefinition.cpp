@@ -62,7 +62,7 @@ namespace Kortex
 		m_Variables.SetItem(g_ResourceNames.Namespace, g_ResourceNames.Directory, m_ResourcesFS.GetLookupDirectory());
 
 		// Load variables from the XML
-		GameInstance::Private::VariableLoader loader(m_Variables, variablesRoot, g_DefinitionNames.Namespace);
+		GameInstance::Private::VariableLoader loader(m_Variables, variablesRoot, g_DefinitionNames.Namespace, m_Name);
 		loader.OnString([&](const kxf::String& type, const kxf::String& ns, const kxf::String& name, const kxf::String& value)
 		{
 			if (ns == g_DefinitionNames.Namespace)
@@ -156,17 +156,9 @@ namespace Kortex
 		return false;
 	}
 
-	const kxf::IImage2D& DefaultGameDefinition::GetIcon() const
+	kxf::ResourceID DefaultGameDefinition::GetIcon() const
 	{
-		if (!m_Icon)
-		{
-			m_Icon = IGameDefinition::LoadIcon(m_ResourcesFS, m_Variables.GetItem(g_ResourceNames.Namespace, g_ResourceNames.Icon).GetAs<kxf::FSPath>());
-			if (!m_Icon)
-			{
-				m_Icon = IGameDefinition::GetGenericIcon();
-			}
-		}
-		return *m_Icon;
+		return m_Variables.GetItem(g_ResourceNames.Namespace, g_ResourceNames.Icon).GetAs<kxf::ResourceID>();
 	}
 	kxf::IFileSystem& DefaultGameDefinition::GetFileSystem(Location locationID)
 	{

@@ -55,6 +55,10 @@
 #include <kxf/System/SystemInformation.h>
 #include <kxf/System/SystemAppearance.h>
 
+// kxf: Network
+#include <kxf/Network/Common.h>
+#include <kxf/Network/URI.h>
+
 // kxf: Drawing
 #include <kxf/Drawing/Common.h>
 #include <kxf/Drawing/Color.h>

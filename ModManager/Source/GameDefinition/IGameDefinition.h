@@ -27,10 +27,6 @@ namespace Kortex
 
 		public:
 			static bool ValidateName(const kxf::String& name, kxf::String* validName = nullptr);
-			static std::unique_ptr<kxf::IImage2D> GetGenericIcon();
-
-		protected:
-			std::unique_ptr<kxf::IImage2D> LoadIcon(const kxf::IFileSystem& fs, const kxf::FSPath& path) const;
 
 		public:
 			virtual ~IGameDefinition() = default;
@@ -51,7 +47,7 @@ namespace Kortex
 			virtual kxf::String GetName() const = 0;
 			virtual kxf::String GetGameName() const = 0;
 			virtual kxf::String GetGameShortName() const = 0;
-			virtual const kxf::IImage2D& GetIcon() const = 0;
+			virtual kxf::ResourceID GetIcon() const = 0;
 			
 			virtual kxf::IFileSystem& GetFileSystem(Location locationID) = 0;
 			virtual const kxf::IFileSystem& GetFileSystem(Location locationID) const = 0;

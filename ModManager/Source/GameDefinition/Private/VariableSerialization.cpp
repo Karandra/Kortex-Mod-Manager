@@ -1,6 +1,7 @@
 #include "pch.hpp"
 #include "VariableSerialization.h"
 #include "Application/IApplication.h"
+#include "Application/IResourceManager.h"
 #include <kxf/General/IndexedEnum.h>
 #include <kxf/System/Registry.h>
 
@@ -10,6 +11,8 @@ namespace
 	{
 		static constexpr kxf::XChar String[] = wxS("String");
 		static constexpr kxf::XChar FSPath[] = wxS("FSPath");
+		static constexpr kxf::XChar URI[] = wxS("URI");
+		static constexpr kxf::XChar ResourceID[] = wxS("ResourceID");
 		static constexpr kxf::XChar Integer[] = wxS("Integer");
 
 		static constexpr kxf::XChar Registry[] = wxS("Registry");
@@ -167,6 +170,24 @@ namespace Kortex::GameInstance::Private
 						{
 							count++;
 							m_Collection.SetItem(std::move(ns), std::move(*name), std::move(fsPathValue));
+						}
+					}
+					else if (*type == g_TypeNames.URI)
+					{
+						kxf::URI uriValue = std::move(*value);
+						if (!m_OnURI || m_OnURI(*type, ns, *name, uriValue))
+						{
+							count++;
+							m_Collection.SetItem(std::move(ns), std::move(*name), std::move(uriValue));
+						}
+					}
+					else if (*type == g_TypeNames.ResourceID)
+					{
+						kxf::ResourceID resValue = IResourceManager::MakeResourceIDWithCategory(m_ResourcesCategory, std::move(*value));
+						if (!m_OnResourceID || m_OnResourceID(*type, ns, *name, resValue))
+						{
+							count++;
+							m_Collection.SetItem(std::move(ns), std::move(*name), std::move(resValue));
 						}
 					}
 					else if (*type == g_TypeNames.Integer)

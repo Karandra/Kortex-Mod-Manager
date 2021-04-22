@@ -15,7 +15,7 @@
 		</Item>
 		
 		<Item Type="FSPath" Namespace="Resource" Name="Directory"/>
-		<Item Type="FSPath" Namespace="Resource" Name="Icon">Icon.svg</Item>
+		<Item Type="ResourceID" Namespace="Resource" Name="Icon">Icon</Item>
 		
 		<!-- Definition-specific -->
 		<Item Type="FSPath" Name="GameConfigDirectory">$SHDir(Documents)\My Games\Skyrim Special Edition</Item>

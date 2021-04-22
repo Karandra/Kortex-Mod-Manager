@@ -3,6 +3,7 @@
 #include "GameDefinition/IGameInstance.h"
 #include "GameDefinition/IGameDefinition.h"
 #include "Application/IApplication.h"
+#include "Application/IResourceManager.h"
 #include "Application/Localization.h"
 
 namespace
@@ -38,7 +39,13 @@ namespace Kortex::GameDefinition::UI
 						if (!m_Icon)
 						{
 							int height = GetView().GetUniformRowHeight();
-							m_Icon = m_Instance.GetDefinition().GetIcon().ToBitmapImage({height, height});
+							auto& resourceManager = IApplication::GetInstance().GetResourceManager();
+
+							m_Icon = resourceManager.GetBitmapImage(m_Instance.GetDefinition().GetIcon(), {height, height});
+							if (!m_Icon)
+							{
+								m_Icon = resourceManager.GetBitmapImage(IResourceManager::MakeResourceID("ui/generic-game-logo"), {height, height});
+							}
 						}
 						return DataView::ImageTextValue(m_Instance.GetName(), m_Icon);
 					}

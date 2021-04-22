@@ -169,6 +169,9 @@ namespace Kortex
 			LoadGameDefinitions();
 			IGameInstance* activeInstance = LoadGameInstances();
 
+			// Initialize resources
+			m_ResourceManager = kxf::RTTI::GetClassInfo<IResourceManager>().CreateAnyImplementation<IResourceManager>();
+
 			// If the active instance wasn't detected inside 'LoadGameInstances' ask the user to choose it
 			if (!activeInstance)
 			{
@@ -178,9 +181,6 @@ namespace Kortex
 			if (activeInstance)
 			{
 				InitializeActiveInstance(*activeInstance);
-
-				// Initialize resources
-				m_ResourceManager = kxf::RTTI::GetClassInfo<IResourceManager>().CreateAnyImplementation<IResourceManager>();
 
 				// Create and show the main window
 				auto mainWindow = new Application::MainWindow();

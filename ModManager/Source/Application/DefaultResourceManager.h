@@ -8,12 +8,15 @@ namespace Kortex
 	class KORTEX_API DefaultResourceManager: public kxf::RTTI::DynamicImplementation<DefaultResourceManager, IResourceManager>
 	{
 		private:
-			std::unordered_map<kxf::ResourceID, std::unique_ptr<kxf::IImage2D>> m_Images;
+			std::unordered_map<kxf::ResourceID, std::shared_ptr<kxf::IImage2D>> m_Images;
 			kxf::InterpolationQuality m_InterpolationQuality = kxf::InterpolationQuality::Default;
 
 		private:
-			kxf::IImage2D* FindObjectExact(const kxf::ResourceID& id) const;
-			void LoadFrom(const kxf::IFileSystem& fs, const kxf::FSPath& directory);
+			std::shared_ptr<kxf::IImage2D> FindObjectExact(const kxf::ResourceID& id) const;
+
+			void LoadFrom(const kxf::IFileSystem& fs, const kxf::FSPath& directory, const kxf::String& category = {});
+			void LoadGameDefinitions();
+			void LoadDynamic();
 
 		public:
 			DefaultResourceManager();
@@ -21,7 +24,10 @@ namespace Kortex
 
 		public:
 			// IResourceManager
-			kxf::IImage2D* GetImage(const kxf::ResourceID& id) const;
+			kxf::String GetSchemeFromImage(const kxf::IImage2D& image) const override;
+
+		public:
+			std::shared_ptr<kxf::IImage2D> GetImage(const kxf::ResourceID& id) const;
 
 			kxf::BitmapImage GetBitmapImage(const kxf::ResourceID& id, const kxf::Size& size = kxf::Size::UnspecifiedSize()) const
 			{

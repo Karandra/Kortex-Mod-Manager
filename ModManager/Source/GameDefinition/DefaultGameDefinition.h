@@ -18,7 +18,6 @@ namespace Kortex
 			kxf::String m_Name;
 			kxf::String m_GameName;
 			kxf::String m_GameNameShort;
-			mutable std::unique_ptr<kxf::IImage2D> m_Icon;
 			int m_SortOrder = -1;
 
 			kxf::StaticVariablesCollection m_Variables;
@@ -95,7 +94,7 @@ namespace Kortex
 				}
 				return m_Name;
 			}
-			const kxf::IImage2D& GetIcon() const override;
+			kxf::ResourceID GetIcon() const override;
 			
 			kxf::IFileSystem& GetFileSystem(Location locationID) override;
 			const kxf::IFileSystem& GetFileSystem(Location locationID) const override

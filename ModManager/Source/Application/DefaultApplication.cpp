@@ -131,7 +131,7 @@ namespace Kortex
 	// IApplication
 	bool DefaultApplication::OnCreate()
 	{
-		m_BroadcastReciever = std::make_unique<BroadcastReciever>();
+		m_BroadcastReceiver = std::make_unique<BroadcastReceiver>();
 
 		// Setup paths
 		m_AppRootFS = SystemApplication::GetInstance().GetRootDirectory();
@@ -153,7 +153,7 @@ namespace Kortex
 	}
 	void DefaultApplication::OnDestroy()
 	{
-		m_BroadcastReciever = nullptr;
+		m_BroadcastReceiver = nullptr;
 	}
 
 	bool DefaultApplication::OnInit()

@@ -16,7 +16,7 @@ namespace Kortex
 	class KORTEX_API DefaultApplication: public kxf::RTTI::DynamicImplementation<DefaultApplication, IApplication, kxf::Application::ICommandLine>
 	{
 		public:
-			std::unique_ptr<BroadcastReciever> m_BroadcastReciever;
+			std::unique_ptr<BroadcastReceiver> m_BroadcastReceiver;
 			kxf::LocalizationPackageStack m_LocalizationPackages;
 			kxf::DynamicVariablesCollection m_Variables;
 			wxCmdLineParser* m_CommandLineParser = nullptr;

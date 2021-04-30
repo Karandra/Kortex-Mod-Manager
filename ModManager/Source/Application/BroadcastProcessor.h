@@ -4,7 +4,7 @@
 
 namespace Kortex
 {
-	class BroadcastReciever;
+	class BroadcastReceiver;
 }
 
 namespace Kortex
@@ -18,33 +18,33 @@ namespace Kortex
 			BroadcastProcessor() = default;
 
 		public:
-			bool AddReciever(BroadcastReciever& reciever);
-			bool RemoveReciever(BroadcastReciever& reciever);
+			bool AddReceiver(BroadcastReceiver& reciever);
+			bool RemoveReceiver(BroadcastReceiver& reciever);
 	};
 }
 
 namespace Kortex
 {
-	class KORTEX_API BroadcastReciever: public kxf::EventBroadcastReciever
+	class KORTEX_API BroadcastReceiver: public kxf::EventBroadcastReceiver
 	{
 		public:
-			BroadcastReciever()
-				:BroadcastReciever(BroadcastProcessor::Get())
+			BroadcastReceiver()
+				:BroadcastReceiver(BroadcastProcessor::Get())
 			{
 			}
-			BroadcastReciever(BroadcastProcessor& processor)
-				:EventBroadcastReciever(processor)
+			BroadcastReceiver(BroadcastProcessor& processor)
+				:EventBroadcastReceiver(processor)
 			{
 			}
 	
 		public:
 			BroadcastProcessor& GetProcessor()
 			{
-				return static_cast<BroadcastProcessor&>(EventBroadcastReciever::GetProcessor());
+				return static_cast<BroadcastProcessor&>(EventBroadcastReceiver::GetProcessor());
 			}
 			const BroadcastProcessor& GetProcessor() const
 			{
-				return static_cast<const BroadcastProcessor&>(EventBroadcastReciever::GetProcessor());
+				return static_cast<const BroadcastProcessor&>(EventBroadcastReceiver::GetProcessor());
 			}
 	};
 }

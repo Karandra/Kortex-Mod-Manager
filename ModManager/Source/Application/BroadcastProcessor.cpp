@@ -9,12 +9,12 @@ namespace Kortex
 		return SystemApplication::GetInstance().GetBroadcastProcessor();
 	}
 
-	bool BroadcastProcessor::AddReciever(BroadcastReciever& reciever)
+	bool BroadcastProcessor::AddReceiver(BroadcastReceiver& reciever)
 	{
-		return EventBroadcastProcessor::AddReciever(reciever);
+		return EventBroadcastProcessor::AddReceiver(reciever);
 	}
-	bool BroadcastProcessor::RemoveReciever(BroadcastReciever& reciever)
+	bool BroadcastProcessor::RemoveReceiver(BroadcastReceiver& reciever)
 	{
-		return EventBroadcastProcessor::RemoveReciever(reciever);
+		return EventBroadcastProcessor::RemoveReceiver(reciever);
 	}
 }

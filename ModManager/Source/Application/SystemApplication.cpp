@@ -180,6 +180,7 @@ namespace Kortex
 	void SystemApplication::InitializeFramework()
 	{
 		kxf::Drawing::InitalizeImageHandlers();
+		GetThreadPool().Run();
 	}
 
 	SystemApplication::SystemApplication() = default;

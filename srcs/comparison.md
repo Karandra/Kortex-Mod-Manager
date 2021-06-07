@@ -56,11 +56,13 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Supports many games including Elder Scrolls (plus Enderal) and Fallout series.
 			</td>
 			<td id="WB">
-				Oblivion, Nehrim, Skyrim (LE, SE, VR) &amp; Enderal
-				<br/>
-				Fallout 3, Fallout: New Vegas &amp; Fallout 4 (VR)
-				<br/>
+				Oblivion, Nehrim, Skyrim (LE, SE &amp; VR) &amp; Enderal (LE &amp; SE)
+				<br>
+				Fallout 3, Fallout: New Vegas &amp; Fallout 4 (FO4 &amp; FO4VR)
+				<br>
 				Very early Morrowind support, use <a href="https://github.com/Wrye-Code-Collection/Wrye-Mash/releases">Wrye Mash</a> for now.
+				<br>
+				Also supports the Windows Store versions of Morrowind, Oblivion, Skyrim SE &amp; Fallout 4
 			</td>
 		</tr>
 		<tr>

@@ -513,14 +513,14 @@ There are many mod managers around these days and it's may be a bit difficult to
 				Merge "mods" (assets) from the same mod page during install
 			</td>
 			<td id="Vortex">
-				merge "mods" (assets) from the same mod page during install and any mods after install
-				merge plugins via extension
+				Merge "mods" (assets) from the same mod page during install and any mods after install
+				Merge plugins via extension
 			</td>
 			<td id="NMM">
 				<div class="cmp-no" />
 			</td>
 			<td id="WB">
-				merge overwrite-only plugins for certain games during patch creation
+				Merge overwrite-only plugins for certain games during patch creation
 			</td>
 		</tr>
 		<tr>
@@ -943,15 +943,15 @@ There are many mod managers around these days and it's may be a bit difficult to
 				</ul>
 			</td>
 			<td id="WB">
+				Automatic (on startup and alt-tab):
 				<ul>
 					<li>Missing masters</li>
-					<li>Out of order masters</li>
+					<li>Delinquent masters</li>
 					<li>Missing strings files</li>
 					<li>Form 43 plugins for Skyrim SE</li>
-					<li>ESL verification</li>
 					<li>File timestamp conflicts</li>
 					<li>Ghosted plugin verification</li>
-					<li>Dirty edits</li>
+					<li>Dirty edits check via LOOT</li>
 					<li>Deactivate and NoMerge verification</li>
 					<li>Mismatched BSA versions</li>
 					<li>Directory thrashing in Oblivion</li>
@@ -959,6 +959,17 @@ There are many mod managers around these days and it's may be a bit difficult to
 					<li>Load order verification & sanitization</li>
 					<li>Unrecognized save and plugin headers</li>
 					<li>BA2 filename hash collisions</li>
+				</ul>
+				On demand (via Plugin Checker):
+				<ul>
+					<li>Incorrect ESL flags</li>
+					<li>Deleted references</li>
+					<li>Deleted navmeshes</li>
+					<li>Deleted base records</li>
+					<li>Old WEAP records for Skyrim SE</li>
+					<li>HITMEs</li>
+					<li>Record type collisions</li>
+					<li>Probable injected collisions</li>
 				</ul>
 			</td>
 		</tr>

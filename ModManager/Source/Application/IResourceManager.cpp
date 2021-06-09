@@ -12,11 +12,11 @@ namespace Kortex
 
 		if (!scheme.IsEmpty())
 		{
-			return kxf::String::Format(wxS("%1://%2"), scheme, path).MakeLower();
+			return kxf::Format(wxS("{}://{}"), scheme, path).MakeLower();
 		}
 		else
 		{
-			return kxf::String::Format(wxS("any://%1://%2"), scheme, path).MakeLower();
+			return kxf::Format(wxS("any://{}://{}"), scheme, path).MakeLower();
 		}
 	}
 	kxf::ResourceID IResourceManager::MakeResourceIDWithCategory(const kxf::String& category, const kxf::String& path, const kxf::String& scheme)
@@ -34,9 +34,9 @@ namespace Kortex
 		{
 			if (!scheme.IsEmpty())
 			{
-				return kxf::String::Format(wxS("%1://%2/%3"), scheme, category, path).MakeLower();
+				return kxf::Format(wxS("{}://{}/{}"), scheme, category, path).MakeLower();
 			}
-			return kxf::String::Format(wxS("any://%1/%2"), category, path).MakeLower();
+			return kxf::Format(wxS("any://{}/{}"), category, path).MakeLower();
 		}
 	}
 }

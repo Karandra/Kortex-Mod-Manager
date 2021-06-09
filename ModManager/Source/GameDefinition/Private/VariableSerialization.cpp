@@ -81,7 +81,7 @@ namespace
 				{
 					if (value)
 					{
-						return kxf::String::Format(wxS("%1"), *value);
+						return kxf::ToString(*value);
 					}
 					return {};
 				};

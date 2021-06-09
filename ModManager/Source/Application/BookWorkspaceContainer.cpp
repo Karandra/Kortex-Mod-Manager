@@ -22,7 +22,7 @@ namespace Kortex::Application
 
 	bool BookWorkspaceContainer::DoSwitchWorkspace(IWorkspace* fromWorkspace, IWorkspace& toWorkspace)
 	{
-		Log::Info("%1: switching from %2 to %3", __FUNCTION__, fromWorkspace ? fromWorkspace->GetID() : "null", toWorkspace.GetID());
+		Log::Info("{}: switching from {} to {}", __FUNCTION__, fromWorkspace ? fromWorkspace->GetID() : "null", toWorkspace.GetID());
 
 		if (fromWorkspace == &toWorkspace)
 		{
@@ -38,33 +38,33 @@ namespace Kortex::Application
 		// Close current workspace
 		if (fromWorkspace && !CallOnClose(*fromWorkspace))
 		{
-			Log::Info("%1: %2 refused to close", __FUNCTION__, fromWorkspace->GetID());
+			Log::Info("{}: {} refused to close", __FUNCTION__, fromWorkspace->GetID());
 			return false;
 		}
 
 		// Create next workspace if needed
 		if (!toWorkspace.IsCreated() && !CallOnCreate(toWorkspace))
 		{
-			Log::Info("%1: unable to create %2 workspace", __FUNCTION__, toWorkspace.GetID());
+			Log::Info("{}: unable to create {} workspace", __FUNCTION__, toWorkspace.GetID());
 			return false;
 		}
 
 		// Open next workspace
 		if (CallOnOpen(toWorkspace))
 		{
-			Log::Info("%1: %2 opened. Process switching", __FUNCTION__, toWorkspace.GetID());
+			Log::Info("{}: {} opened. Process switching", __FUNCTION__, toWorkspace.GetID());
 			return true;
 		}
 		else
 		{
-			Log::Info("%1: %2 refused to open", __FUNCTION__, toWorkspace.GetID());
+			Log::Info("{}: {} refused to open", __FUNCTION__, toWorkspace.GetID());
 		}
 
 		return false;
 	}
 	void BookWorkspaceContainer::ShowWorkspace(IWorkspace& workspace)
 	{
-		Log::Info("%1: displaying workspace \"%2\"", __FUNCTION__, workspace.GetID());
+		Log::Info("{}: displaying workspace \"{}\"", __FUNCTION__, workspace.GetID());
 
 		if (auto index = GetWorkspaceIndex(workspace))
 		{
@@ -74,14 +74,14 @@ namespace Kortex::Application
 	}
 	void BookWorkspaceContainer::HideWorkspace(IWorkspace& workspace)
 	{
-		Log::Info("%1: hiding workspace \"%2\"", __FUNCTION__, workspace.GetID());
+		Log::Info("{}: hiding workspace \"{}\"", __FUNCTION__, workspace.GetID());
 
 		// Nothing to do
 	}
 
 	IWorkspace* BookWorkspaceContainer::GetWorkspaceByID(const kxf::String& id) const
 	{
-		Log::Info("Attempt to convert workspace ID (%1) to workspace instance", id);
+		Log::Info("Attempt to convert workspace ID ({}) to workspace instance", id);
 
 		const wxBookCtrlBase& bookCtrl = GetBookCtrl();
 		for (size_t i = 0; i < bookCtrl.GetPageCount(); i++)
@@ -198,7 +198,7 @@ namespace Kortex::Application
 	}
 	bool BookWorkspaceContainer::SwitchWorkspace(IWorkspace& nextWorkspace)
 	{
-		Log::Info("Attempt to switch workspace to %1", nextWorkspace.GetID());
+		Log::Info("Attempt to switch workspace to {}", nextWorkspace.GetID());
 
 		return DoSwitchWorkspace(GetCurrentWorkspace(), nextWorkspace);
 	}

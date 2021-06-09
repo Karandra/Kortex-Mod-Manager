@@ -10,7 +10,7 @@ namespace Kortex
 	kxf::String IWorkspaceDocument::GetSaveConfirmationCaption() const
 	{
 		auto workspace = QueryInterface<IWorkspace>();
-		return kxf::String::Format(wxS("%1 – %2"), workspace->GetName(), Localize("WorkspaceDocument.SaveChanges.Caption"));
+		return kxf::Format(wxS("{} – {}"), workspace->GetName(), Localize("WorkspaceDocument.SaveChanges.Caption"));
 	}
 	kxf::String IWorkspaceDocument::GetSaveConfirmationMessage() const
 	{

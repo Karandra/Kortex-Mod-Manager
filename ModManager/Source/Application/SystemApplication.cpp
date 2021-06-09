@@ -111,7 +111,7 @@ namespace Kortex
 			type = "Unknown";
 		}
 
-		kxf::String value = kxf::String::Format("Unexpected exception has occurred: %1.\n\nThe program will terminate.\n\nException type: %2", message, type);
+		kxf::String value = kxf::Format("Unexpected exception has occurred: {}.\n\nThe program will terminate.\n\nException type: {}", message, type);
 		Log::FatalError(value);
 		return value;
 	}
@@ -121,7 +121,7 @@ namespace Kortex
 
 		if (!m_Application->OnException())
 		{
-			Log::Info("Exception info: %1", ExamineCaughtException());
+			Log::Info("Exception info: {}", ExamineCaughtException());
 			return false;
 		}
 		return true;
@@ -160,7 +160,7 @@ namespace Kortex
 		kxf::IFileSystem& fs = m_Application->GetFileSystem(FileSystemOrigin::AppLogs);
 
 		// Make a vlaid log file name
-		kxf::String name = kxf::String::Format(wxS("Log[%1].log"), kxf::DateTime::Now().FormatISOCombined(' '));
+		kxf::String name = kxf::Format(wxS("Log[{}].log"), kxf::DateTime::Now().FormatISOCombined(' '));
 		for (kxf::XChar c: fs.GetForbiddenPathNameCharacters())
 		{
 			name.Replace(c, wxS('.'));
@@ -260,13 +260,13 @@ namespace Kortex
 		if (!OnException())
 		{
 			int exitCode = GetExitCode().value_or(std::numeric_limits<int>::min());
-			Log::Info("Terminating with code: %1", exitCode);
+			Log::Info("Terminating with code: {}", exitCode);
 			Exit(exitCode);
 		}
 	}
 	void SystemApplication::OnAssertFailure(kxf::String file, int line, kxf::String function, kxf::String condition, kxf::String message)
 	{
-		Log::Debug("<SystemApplication::OnAssertFailure> %1:%2; [Function=%3][Condition=%4][Message=%5]", file, line, function, condition, message);
+		Log::Debug("<SystemApplication::OnAssertFailure> {}:{}; [Function={}][Condition={}][Message={}]", file, line, function, condition, message);
 	}
 
 	const kxf::ILocalizationPackage& SystemApplication::GetLocalizationPackage() const

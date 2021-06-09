@@ -10,12 +10,12 @@ namespace Kortex
 	template<class... Args>
 	kxf::String Localize(const kxf::ResourceID& id, Args&&... arg)
 	{
-		return kxf::String::Format(Localize(id), std::forward<Args>(arg)...);
+		return kxf::Format(Localize(id), std::forward<Args>(arg)...);
 	}
 
 	template<class... Args>
 	kxf::LocalizationItem LocalizeItem(const kxf::ResourceID& id, Args&&... arg)
 	{
-		return kxf::String::Format(LocalizeItem(id), std::forward<Args>(arg)...);
+		return kxf::Format(LocalizeItem(id), std::forward<Args>(arg)...);
 	}
 }

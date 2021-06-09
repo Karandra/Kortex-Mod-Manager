@@ -56,7 +56,7 @@ namespace
 		auto classInfo = module.QueryInterface<kxf::RTTI::ClassInfo>();
 		if (auto iid = classInfo->GetIID().ToUniversallyUniqueID())
 		{
-			kxf::String moduleDescriptor = kxf::String::Format(wxS("Module-[%1]"), iid.ToString());
+			kxf::String moduleDescriptor = kxf::Format(wxS("Module-[{}]"), iid.ToString());
 
 			kxf::XMLNode node = InitNode(disposition, std::forward<TXML>(xml), wxS("Modules"), std::move(moduleDescriptor), std::forward<Args>(arg)...);
 			if constexpr(!std::is_const_v<std::remove_reference_t<TXML>>)

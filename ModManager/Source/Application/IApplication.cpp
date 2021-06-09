@@ -100,7 +100,7 @@ namespace Kortex
 		{
 			if (!name.IsEmptyOrWhitespace() && !value.IsEmptyOrWhitespace())
 			{
-				AddCommand(kxf::String::Format(wxS("-%1 \"%2\""), name, value));
+				AddCommand(kxf::Format(wxS("-{} \"{}\""), name, value));
 			}
 		}
 		return commandLine;

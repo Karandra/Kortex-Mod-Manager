@@ -33,7 +33,7 @@ namespace Kortex
 	void DefaultApplication::LoadGlobalConfiguration()
 	{
 		const kxf::FSPath globalConfigPath = m_GlobalConfigFS.ResolvePath(wxS("Settings.xml"));
-		Log::Info("Loading global config from: '%1'", globalConfigPath.GetFullPath());
+		Log::Info("Loading global config from: '{}'", globalConfigPath.GetFullPath());
 
 		if (auto stream = m_GlobalConfigFS.OpenToRead(globalConfigPath); !stream || !m_GlobalConfig.Load(*stream))
 		{

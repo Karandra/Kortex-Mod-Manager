@@ -26,7 +26,7 @@
 // kxf: General
 #include <kxf/General/Common.h>
 #include <kxf/General/String.h>
-#include <kxf/General/StringFormatter.h>
+#include <kxf/General/Format.h>
 #include <kxf/General/DateTime.h>
 #include <kxf/General/BinarySize.h>
 #include <kxf/General/ResourceID.h>

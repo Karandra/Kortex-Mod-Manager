@@ -528,7 +528,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 		<tr>
 			<td class="feature-name">Virtualization scheme</td>
 			<td id="KMM">
-				<b><a href="https://github.com/KerberX/KxVirtualFileSystem">KxVFS</a></b> - based on <b><a href="https://github.com/dokan-dev/dokany">Dokany</a></b> - kernel-mode file system driver.
+				<b><a href="https://github.com/Karandra/KxVirtualFileSystem">KxVFS</a></b> - based on <b><a href="https://github.com/dokan-dev/dokany">Dokany</a></b> - kernel-mode file system driver.
 			</td>
 			<td id="MO2">
 				<b><a href="https://github.com/ModOrganizer2/usvfs">USVFS</a></b> - user-mode WinAPI hooks, a successor to the <b>hook.dll</b> to support 64-bit applications.
@@ -1236,7 +1236,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 			<td class="feature-name">Current development state and maintainers</td>
 			<td id="KMM">
 				Open Source, fully released.
-				Maintained and not so much actively developed on by Kerber (non-paid developer), with highly irregular feature updates.
+				Maintained and not so much actively developed on by Karandra (non-paid developer), with highly irregular feature updates.
 			</td>
 			<td id="MO2">
 				Open Source, fully released.
@@ -1268,7 +1268,7 @@ There are many mod managers around these days and it's may be a bit difficult to
 2. Just some files such as **.esm**/**.esp** and/or **Data** folder inside the mod archive.
 
 ## Page contributors
-* [Kerber](https://www.nexusmods.com/users/2734453) (Kortex developer)
+* [Karandra](https://www.nexusmods.com/users/2734453) (Kortex developer)
 * [AL](https://www.nexusmods.com/users/6409802) (MO2 Dev)
 * [Yggdrasil75](https://www.nexusmods.com/users/25321034) (Vortex virtuoso)
 * [Sharlikran](https://www.nexusmods.com/users/25321034) (Wrye Bash contributor)

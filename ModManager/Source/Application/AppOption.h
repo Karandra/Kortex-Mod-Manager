@@ -3,7 +3,6 @@
 #include "Options/OptionSerializer.h"
 #include <kxf/Serialization/XML.h>
 #include <kxf/RTTI/RTTI.h>
-class wxTopLevelWindow;
 
 namespace Kortex
 {
@@ -33,7 +32,7 @@ namespace Kortex
 			template<class... Args>
 			static kxf::String MakeXPath(Args&&... arg)
 			{
-				return kxf::String::ConcatWithSeparator(wxS('/'), std::forward<Args>(arg)...);
+				return kxf::String::ConcatWithSeparator(kxS('/'), std::forward<Args>(arg)...);
 			}
 
 		private:
@@ -125,13 +124,13 @@ namespace Kortex
 				m_UISerializer.WorkspaceContainerLayout(const_cast<AppOption&>(*this), SerializationMode::Load, container);
 			}
 
-			void SaveWindowGeometry(const wxTopLevelWindow& window)
+			void SaveWidgetGeometry(const kxf::IWidget& widget)
 			{
-				m_UISerializer.WindowGeometry(*this, SerializationMode::Save, const_cast<wxTopLevelWindow&>(window));
+				m_UISerializer.WidgetGeometry(*this, SerializationMode::Save, const_cast<kxf::IWidget&>(widget));
 			}
-			void LoadWindowGeometry(wxTopLevelWindow& window) const
+			void LoadWidgetGeometry(kxf::IWidget& widget) const
 			{
-				m_UISerializer.WindowGeometry(const_cast<AppOption&>(*this), SerializationMode::Load, window);
+				m_UISerializer.WidgetGeometry(const_cast<AppOption&>(*this), SerializationMode::Load, widget);
 			}
 
 		public:

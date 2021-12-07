@@ -17,9 +17,6 @@
 #include <kxf/UI/Dialogs/TaskDialog.h>
 #include <kxf/UI/Dialogs/FileBrowseDialog.h>
 
-#include <kxf/UI/Menus/Menu.h>
-#include <kxf/UI/Menus/MenuItem.h>
-
 #include <kxf/UI/Controls/Button.h>
 #include <kxf/UI/Controls/DataView.h>
 

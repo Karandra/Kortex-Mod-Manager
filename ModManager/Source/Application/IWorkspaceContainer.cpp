@@ -20,7 +20,7 @@ namespace Kortex
 
 		auto EnsureWindowCreated = [](IWorkspace& workspace, wxWindow& containerWindow)
 		{
-			wxWindow& window = workspace.GetWindow();
+			wxWindow& window = *workspace.GetWidget().GetWxWindow();
 			if (!window.GetHandle())
 			{
 				workspace.DoCreateWorkspaceWindow(containerWindow);
@@ -29,12 +29,12 @@ namespace Kortex
 			return window.GetHandle() != nullptr;
 		};
 
-		wxWindow& containerWindow = GetWindow();
+		wxWindow& containerWindow = *GetWidget().GetWxWindow();
 		if (!workspace.GetCurrentContainer() && EnsureWindowCreated(workspace, containerWindow))
 		{
 			workspace.DoSetCurrentContainer(this);
 
-			wxWindow& workspaceWindow = workspace.GetWindow();
+			wxWindow& workspaceWindow = *workspace.GetWidget().GetWxWindow();
 			workspaceWindow.SetClientObject(std::make_unique<Application::WorkspaceClientData>(workspace).release());
 			workspaceWindow.Reparent(&containerWindow);
 
@@ -49,9 +49,9 @@ namespace Kortex
 		{
 			workspace.DoSetCurrentContainer(nullptr);
 
-			wxWindow& workspaceWindow = workspace.GetWindow();
+			wxWindow& workspaceWindow = *workspace.GetWidget().GetWxWindow();
 			workspaceWindow.SetClientObject(nullptr);
-			workspaceWindow.Reparent(&IApplication::GetInstance().GetMainWindow()->GetFrame());
+			workspaceWindow.Reparent(IApplication::GetInstance().GetMainWindow()->GetWidget().GetWxWindow());
 
 			workspace.OnWorkspaceDetached();
 			return true;

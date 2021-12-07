@@ -3,6 +3,7 @@
 #include "FrameworkUI.hpp"
 #include <kxf/UI/Dialogs/StdDialog.h>
 #include <kxf/UI/Controls/DataView.h>
+#include <kxf/UI/IMenuWidget.h>
 
 namespace Kortex
 {
@@ -23,8 +24,11 @@ namespace Kortex::GameDefinition::UI
 
 			IGameInstance* m_SelectedInstance = nullptr;
 
+			std::shared_ptr<kxf::IMenuWidget> m_Menu;
+
 		private:
 			void OnSelectItem(DataView::ItemEvent& event);
+			void OnContextMenu(DataView::ItemEvent& event);
 			
 		public:
 			InstanceSelectionDialog(wxWindow* parent);

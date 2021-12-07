@@ -31,7 +31,7 @@ namespace Kortex
 
 				for (const auto& c: forbiddenCharacters)
 				{
-					validName->Replace(c, wxS('_'));
+					validName->Replace(c, kxS('_'));
 				}
 			}
 			return false;

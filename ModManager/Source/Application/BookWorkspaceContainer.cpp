@@ -9,7 +9,7 @@ namespace Kortex::Application
 	bool BookWorkspaceContainer::DoInsertWorkspacePage(IWorkspace& workspace, size_t index)
 	{
 		wxBookCtrlBase& bookCtrl = GetBookCtrl();
-		if (bookCtrl.InsertPage(index, &workspace.GetWindow(), workspace.GetName(), false))
+		if (bookCtrl.InsertPage(index, workspace.GetWidget().GetWxWindow(), workspace.GetName(), false))
 		{
 			if (auto iconID = workspace.GetIcon().ToInt())
 			{
@@ -147,11 +147,11 @@ namespace Kortex::Application
 		if (bookCtrl.IsKindOf(wxCLASSINFO(wxAuiNotebook)))
 		{
 			// wxAuiNotebook implements pages sifferentely and, for some weird reason, 'wxBookCtrlBase::FindPage' isn't virtual.
-			index = static_cast<const wxAuiNotebook&>(bookCtrl).GetPageIndex(const_cast<wxWindow*>(&workspace.GetWindow()));
+			index = static_cast<const wxAuiNotebook&>(bookCtrl).GetPageIndex(const_cast<wxWindow*>(workspace.GetWidget().GetWxWindow()));
 		}
 		else
 		{
-			index = bookCtrl.FindPage(&workspace.GetWindow());
+			index = bookCtrl.FindPage(workspace.GetWidget().GetWxWindow());
 		}
 
 		if (index != wxNOT_FOUND)

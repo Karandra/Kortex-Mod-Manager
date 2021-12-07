@@ -33,19 +33,19 @@ namespace Kortex
 			}
 			case Location::Content:
 			{
-				return std::make_unique<kxf::NativeFileSystem>(GetRootDirectory(GetSignature()) / wxS("Content"));
+				return std::make_unique<kxf::NativeFileSystem>(GetRootDirectory(GetSignature()) / kxS("Content"));
 			}
 			case Location::MetaFile:
 			{
-				return GetRootDirectory(GetSignature()) / wxS("Content-Meta.xml");
+				return GetRootDirectory(GetSignature()) / kxS("Content-Meta.xml");
 			}
 			case Location::DescriptionFile:
 			{
-				return GetRootDirectory(GetSignature()) / wxS("Content-Description.txt");
+				return GetRootDirectory(GetSignature()) / kxS("Content-Description.txt");
 			}
 			case Location::PictureFile:
 			{
-				return GetRootDirectory(GetSignature()) / wxS("Content-Picture.dat");
+				return GetRootDirectory(GetSignature()) / kxS("Content-Picture.dat");
 			}
 		};
 		*/

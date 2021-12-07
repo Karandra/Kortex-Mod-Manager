@@ -9,41 +9,41 @@ namespace
 {
 	constexpr struct
 	{
-		static constexpr kxf::XChar String[] = wxS("String");
-		static constexpr kxf::XChar FSPath[] = wxS("FSPath");
-		static constexpr kxf::XChar URI[] = wxS("URI");
-		static constexpr kxf::XChar ResourceID[] = wxS("ResourceID");
-		static constexpr kxf::XChar Integer[] = wxS("Integer");
+		static constexpr kxf::XChar String[] = kxS("String");
+		static constexpr kxf::XChar FSPath[] = kxS("FSPath");
+		static constexpr kxf::XChar URI[] = kxS("URI");
+		static constexpr kxf::XChar ResourceID[] = kxS("ResourceID");
+		static constexpr kxf::XChar Integer[] = kxS("Integer");
 
-		static constexpr kxf::XChar Registry[] = wxS("Registry");
+		static constexpr kxf::XChar Registry[] = kxS("Registry");
 	} g_TypeNames;
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar Name[] = wxS("Name");
-		static constexpr kxf::XChar Source[] = wxS("Source");
+		static constexpr kxf::XChar Name[] = kxS("Name");
+		static constexpr kxf::XChar Source[] = kxS("Source");
 	} g_AttributeNames;
 
 	struct NameToRegistryRoot final: public kxf::IndexedEnumDefinition<NameToRegistryRoot, kxf::RegistryRootKey, kxf::String>
 	{
 		inline static const TItem Items[] =
 		{
-			{kxf::RegistryRootKey::Users, wxS("HKEY_USERS")},
-			{kxf::RegistryRootKey::ClassesRoot, wxS("HKEY_CLASSES_ROOT")},
-			{kxf::RegistryRootKey::CurrentUser, wxS("HKEY_CURRENT_USER")},
-			{kxf::RegistryRootKey::LocalMachine, wxS("HKEY_LOCAL_MACHINE")},
-			{kxf::RegistryRootKey::CurrentConfig, wxS("HKEY_CURRENT_CONFIG")},
+			{kxf::RegistryRootKey::Users, kxS("HKEY_USERS")},
+			{kxf::RegistryRootKey::ClassesRoot, kxS("HKEY_CLASSES_ROOT")},
+			{kxf::RegistryRootKey::CurrentUser, kxS("HKEY_CURRENT_USER")},
+			{kxf::RegistryRootKey::LocalMachine, kxS("HKEY_LOCAL_MACHINE")},
+			{kxf::RegistryRootKey::CurrentConfig, kxS("HKEY_CURRENT_CONFIG")},
 		};
 	};
 	struct NameToRegistryValueType final: public kxf::IndexedEnumDefinition<NameToRegistryValueType, kxf::RegistryValueType, kxf::String>
 	{
 		inline static const TItem Items[] =
 		{
-			{kxf::RegistryValueType::String, wxS("REG_VALUE_SZ")},
-			{kxf::RegistryValueType::StringExpand, wxS("REG_VALUE_EXPAND_SZ")},
-			{kxf::RegistryValueType::StringArray, wxS("REG_VALUE_MULTI_SZ")},
-			{kxf::RegistryValueType::UInt32, wxS("REG_VALUE_DWORD")},
-			{kxf::RegistryValueType::UInt64, wxS("REG_VALUE_QWORD")},
+			{kxf::RegistryValueType::String, kxS("REG_VALUE_SZ")},
+			{kxf::RegistryValueType::StringExpand, kxS("REG_VALUE_EXPAND_SZ")},
+			{kxf::RegistryValueType::StringArray, kxS("REG_VALUE_MULTI_SZ")},
+			{kxf::RegistryValueType::UInt32, kxS("REG_VALUE_DWORD")},
+			{kxf::RegistryValueType::UInt64, kxS("REG_VALUE_QWORD")},
 		};
 	};
 
@@ -103,7 +103,7 @@ namespace
 						{
 							if (!result.IsEmpty())
 							{
-								result += wxS('|');
+								result += kxS('|');
 							}
 							result += std::move(value);
 
@@ -136,7 +136,7 @@ namespace Kortex::GameInstance::Private
 	size_t VariableLoader::DoLoadVariables()
 	{
 		size_t count = 0;
-		for (const kxf::XMLNode& itemNode: m_VariablesRoot.EnumChildElements(wxS("Item")))
+		for (const kxf::XMLNode& itemNode: m_VariablesRoot.EnumChildElements(kxS("Item")))
 		{
 			if (auto name = itemNode.QueryAttribute(g_AttributeNames.Name))
 			{
@@ -192,7 +192,7 @@ namespace Kortex::GameInstance::Private
 					}
 					else if (*type == g_TypeNames.Integer)
 					{
-						if (auto valueInt = value->ToInt<int64_t>())
+						if (auto valueInt = value->ToInteger<int64_t>())
 						{
 							if (!m_OnInteger || m_OnInteger(*type, ns, *name, *valueInt))
 							{

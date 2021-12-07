@@ -10,7 +10,7 @@
 #include <kxf/System/TaskScheduler.h>
 #include <kxf/System/DynamicLibrary.h>
 #include <kxf/System/SystemInformation.h>
-#include <wx/cmdline.h>
+#include <kxf/UI/INativeWidget.h>
 
 namespace Kortex::OName
 {
@@ -90,7 +90,7 @@ namespace Kortex
 			{
 				if (!commandLine.IsEmpty())
 				{
-					commandLine += wxS(' ');
+					commandLine += kxS(' ');
 				}
 				commandLine += command;
 			}
@@ -100,7 +100,7 @@ namespace Kortex
 		{
 			if (!name.IsEmptyOrWhitespace() && !value.IsEmptyOrWhitespace())
 			{
-				AddCommand(kxf::Format(wxS("-{} \"{}\""), name, value));
+				AddCommand(kxf::Format(kxS("-{} \"{}\""), name, value));
 			}
 		}
 		return commandLine;
@@ -127,7 +127,7 @@ namespace Kortex
 			task.SetRegistrationTrigger("Restart", delay, kxf::DateTime::Now() + delay * 2);
 			task.DeleteExpiredTaskAfter(delay);
 
-			const kxf::String taskName = wxS("Kortex.ScheduleRestart");
+			const kxf::String taskName = kxS("Kortex.ScheduleRestart");
 			taskSheduler.DeleteTask(taskName);
 			return taskSheduler.SaveTask(task, taskName).IsSuccess();
 		}
@@ -179,11 +179,13 @@ namespace Kortex
 	{
 		if (IsActive())
 		{
-			if (const IMainWindow* mainWindow = GetMainWindow())
+			if (auto mainWindow = GetMainWindow())
 			{
-				return mainWindow->GetFrame().GetHandle() == ::GetForegroundWindow();
+				if (auto nativeWidget = mainWindow->GetWidget().QueryInterface<kxf::INativeWidget>())
+				{
+					return nativeWidget->IsForegroundWindow();
+				}
 			}
-			return true;
 		}
 		return false;
 	}

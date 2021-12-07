@@ -5,6 +5,11 @@
 #include "Application/IApplication.h"
 #include "Application/IResourceManager.h"
 #include "Application/Localization.h"
+#include <kxf/UI/Menus/MenuWidget.h>
+#include <kxf/UI/Menus/ShellMenuWidget.h>
+#include <kxf/UI/Menus/ShellMenuWidgetItem.h>
+#include <kxf/UI/Events/MenuWidgetEvent.h>
+#include <kxf/System/DynamicLibrary.h>
 
 namespace
 {
@@ -161,6 +166,89 @@ namespace Kortex::GameDefinition::UI
 
 		m_ButtonOK->Enable(m_SelectedInstance != nullptr);
 	}
+	void InstanceSelectionDialog::OnContextMenu(DataView::ItemEvent& event)
+	{
+		using namespace kxf::Widgets;
+
+		auto GetIcon = [](const kxf::String& name) -> kxf::BitmapImage
+		{
+			auto& app = IApplication::GetInstance();
+			auto& resourceManager = app.GetResourceManager();
+
+			if (auto definition = app.GetGameDefinitionByName(name))
+			{
+				return resourceManager.GetBitmapImage(definition->GetIcon());
+			}
+			return {};
+		};
+
+		if (!m_Menu)
+		{
+			//kxf::Drawing::SetDefaultRenderer(kxf::Drawing::GetGDIRenderer());
+
+			m_Menu = kxf::NewWidget<MenuWidget>(nullptr);
+			m_Menu->Bind(kxf::MenuWidgetEvent::EvtClick, [](kxf::MenuWidgetEvent& event)
+			{
+				auto item = event.GetMenuWidgetItem();
+				if (item->IsCheckItem())
+				{
+					item->SetChecked(!item->IsChecked());
+				}
+				else if (item->IsRadioItem())
+				{
+					item->SetChecked(true);
+				}
+				else if (auto shellItem = item->QueryInterface<kxf::IShellMenuWidgetItem>())
+				{
+					wxMessageBox(shellItem->GetHelpString(), item->GetLabel());
+					wxMessageBox(shellItem->GetIconString(), item->GetLabel());
+					wxMessageBox(shellItem->GetCommandString(), item->GetLabel());
+					//shellItem->InvokeShellCommand();
+				}
+				wxMessageBox(item->GetDescription(), item->GetLabel());
+			});
+			//m_Menu->SetFont(kxf::Font(10.0f, kxf::FontFamily::Default, kxf::FontStyle::Normal, kxf::FontWeight::Normal, "Consolas"));
+			//m_Menu->SetColor(kxf::Drawing::GetStockColor(kxf::StockColor::Purple), kxf::WidgetColorFlag::Background);
+			//m_Menu->SetColor(kxf::Drawing::GetStockColor(kxf::StockColor::Green), kxf::WidgetColorFlag::Text);
+
+			m_Menu->InsertMenu(*kxf::NewWidget<MenuWidget>(m_Menu), "Вид");
+			m_Menu->InsertMenu(*kxf::NewWidget<MenuWidget>(m_Menu), "Сортировка\tCtrl + Q");
+			m_Menu->InsertItem("Обновить")->SetDefaultItem();
+			m_Menu->InsertSeparator();
+			m_Menu->InsertCheckItem("&Вставить")->SetEnabled(false);
+			m_Menu->InsertCheckItem("В&ставить ярлык");
+			m_Menu->InsertMenu(*kxf::NewWidget<MenuWidget>(m_Menu), "Power Shell 7")->SetIcon(GetIcon("Game.TES.Skyrim"));
+			m_Menu->InsertRadioItem("Открыть в Windows Terminal");
+			m_Menu->InsertRadioItem("Открыть с помощью Visual Studio")->SetIcon(GetIcon("Game.TES.SkyrimSE"));
+			m_Menu->InsertRadioItem("TreeSize Free");
+			m_Menu->InsertRadioItem("Следующее фоновое изображение рабочего стола");
+			m_Menu->InsertSeparator();
+			if (auto subMenu = kxf::NewWidget<ShellMenuWidget>(m_Menu))
+			{
+				m_Menu->InsertMenu(*subMenu, "Создать");
+
+				//auto item = subMenu->InsertItem("Папку");
+				//item->SetItemIcon(GetIcon("Game.TES.Skyrim"));
+				//item->SetEnabled(false);
+
+				//subMenu->InsertItem("Ярлык");
+				//subMenu->InsertSeparator();
+				//subMenu->InsertItem("Документ Microsoft Word");
+				//subMenu->InsertItem("Презентацию Microsoft PowerPoint");
+				//subMenu->InsertSeparator();
+				subMenu->InitializeFromFSObject(kxf::DynamicLibrary::GetExecutingModule().GetFilePath());
+			}
+			m_Menu->InsertSeparator();
+			m_Menu->InsertItem("Параметры экрана");
+			m_Menu->InsertItem("Персонализация");
+
+		}
+
+		CallAfter([&]
+		{
+			m_Menu->Show();
+		});
+	}
 
 	InstanceSelectionDialog::InstanceSelectionDialog(wxWindow* parent)
 		:StdDialog(parent, wxID_NONE, Localize("GameInstanceSelection.Caption"))
@@ -169,9 +257,10 @@ namespace Kortex::GameDefinition::UI
 
 		m_View = new DataView::View(this, wxID_NONE, DataView::CtrlStyle::NoHeader);
 		m_View->Bind(DataView::ItemEvent::EvtItemSelected.ToWxTag(), &InstanceSelectionDialog::OnSelectItem, this);
+		m_View->Bind(DataView::ItemEvent::EvtItemContextMenu.ToWxTag(), &InstanceSelectionDialog::OnContextMenu, this);
 		m_View->AssignModel(std::make_unique<DataModel>());
 
-		SetMinSize(FromDIP(SizeRatio::FromWidth(720, SizeRatio::r16_9)));
+		SetMinSize(FromDIP(kxf::Size(SizeRatio::FromWidth(720, SizeRatio::r16_9))));
 		SetMainIcon(kxf::StdIcon::None);
 		PostCreate();
 

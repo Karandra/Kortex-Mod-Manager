@@ -14,17 +14,23 @@
 #include <kxf/System/ShellOperations.h>
 #include <kxf/FileSystem/NativeFileSystem.h>
 #include <kxf/Utility/Enumerator.h>
-#include <wx/cmdline.h>
+
+#include <kxf/UI/Widgets/Button.h>
+#include <kxf/UI/Events/ButtonWidgetEvent.h>
+#include <kxf/UI/Events/WidgetLifetimeEvent.h>
+#include <kxf/UI/Events/WidgetSizeEvent.h>
+#include <kxf/UI/Events/WidgetMouseEvent.h>
+#include <kxf/UI/Events/WidgetDrawEvent.h>
 
 namespace
 {
 	constexpr struct
 	{
-		static constexpr kxf::XChar Language[] = wxS("Language");
-		static constexpr kxf::XChar Locale[] = wxS("Locale");
-		static constexpr kxf::XChar Active[] = wxS("Active");
+		static constexpr kxf::XChar Language[] = kxS("Language");
+		static constexpr kxf::XChar Locale[] = kxS("Locale");
+		static constexpr kxf::XChar Active[] = kxS("Active");
 
-		static constexpr kxf::XChar GameInstances[] = wxS("GameInstances");
+		static constexpr kxf::XChar GameInstances[] = kxS("GameInstances");
 	} g_OptionNames;
 }
 
@@ -32,7 +38,7 @@ namespace Kortex
 {
 	void DefaultApplication::LoadGlobalConfiguration()
 	{
-		const kxf::FSPath globalConfigPath = m_GlobalConfigFS.ResolvePath(wxS("Settings.xml"));
+		const kxf::FSPath globalConfigPath = m_GlobalConfigFS.ResolvePath(kxS("Settings.xml"));
 		Log::Info("Loading global config from: '{}'", globalConfigPath.GetFullPath());
 
 		if (auto stream = m_GlobalConfigFS.OpenToRead(globalConfigPath); !stream || !m_GlobalConfig.Load(*stream))
@@ -135,18 +141,18 @@ namespace Kortex
 
 		// Setup paths
 		m_AppRootFS = SystemApplication::GetInstance().GetRootDirectory();
-		m_AppResourcesFS = m_AppRootFS.GetLookupDirectory() / wxS("ModManager");
+		m_AppResourcesFS = m_AppRootFS.GetLookupDirectory() / kxS("ModManager");
 		m_GlobalConfigFS = m_GlobalConfigOverride ? m_GlobalConfigOverride : kxf::Shell::GetKnownDirectory(kxf::KnownDirectoryID::ApplicationDataLocal) / GetID();
-		m_AppLogsFS = m_GlobalConfigFS.GetLookupDirectory() / wxS("Logs");
-		m_GameDefinitionsFS = m_AppResourcesFS.GetLookupDirectory() / wxS("GameDefinitions");
-		m_GameDefinitionsUserFS = m_GlobalConfigFS.GetLookupDirectory() / wxS("GameDefinitions");
-		m_GameInstancesFS = m_GlobalConfigFS.GetLookupDirectory() / wxS("Instances");
+		m_AppLogsFS = m_GlobalConfigFS.GetLookupDirectory() / kxS("Logs");
+		m_GameDefinitionsFS = m_AppResourcesFS.GetLookupDirectory() / kxS("GameDefinitions");
+		m_GameDefinitionsUserFS = m_GlobalConfigFS.GetLookupDirectory() / kxS("GameDefinitions");
+		m_GameInstancesFS = m_GlobalConfigFS.GetLookupDirectory() / kxS("Instances");
 
 		// Variables
 		m_Variables.SetItem("App", "AppResourcesDirectory", m_AppResourcesFS.GetLookupDirectory());
 		m_Variables.SetDynamicItem("App", "Revision", [this]()
 		{
-			return m_Variables.GetItem("App", "CommitHash").GetAs<kxf::String>().Left(7);
+			return m_Variables.GetItem("App", "CommitHash").GetAs<kxf::String>().SubLeft(7);
 		});
 
 		return true;
@@ -183,14 +189,27 @@ namespace Kortex
 				InitializeActiveInstance(*activeInstance);
 
 				// Create and show the main window
-				auto mainWindow = new Application::MainWindow();
-				mainWindow->BindSignal(&IMainWindow::OnDestroyed, [this]()
+				auto mainWindow = kxf::NewWidget<Application::MainWindow>(nullptr);
+				
+				auto button = kxf::NewWidget<kxf::Widgets::Button>(mainWindow, "Test button");
+				//button->SetDropdownEnbled();
+				button->Bind(kxf::ButtonWidgetEvent::EvtClick, [](kxf::ButtonWidgetEvent& event)
 				{
-					m_MainWindow = nullptr;
+					wxMessageBox(event.GetButtonWidget()->GetWidgetText(), "EvtClick");
+				});
+				button->Bind(kxf::WidgetMouseEvent::EvtLeftDown, [](kxf::WidgetMouseEvent& event)
+				{
+					wxMessageBox(event.GetWidget()->GetWidgetText(), "WidgetMouseEvent");
+				});
+				button->Bind(kxf::WidgetDrawEvent::EvtDrawContent, [](kxf::WidgetDrawEvent& event)
+				{
+					auto rect = event.GetWidget()->GetRect();
+					wxMessageBox(kxf::Format("[[x:{}, y:{}], [w:{}, h:{}]]", rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight()), "EvtSize");
 				});
 
 				m_MainWindow = mainWindow;
-				return m_MainWindow->GetFrame().Show();
+				mainWindow->GetWidget().Show();
+				return true;
 			}
 			else
 			{
@@ -320,54 +339,45 @@ namespace Kortex
 	}
 
 	// kxf::Application::ICommandLine
-	size_t DefaultApplication::EnumCommandLineArgs(std::function<bool(kxf::String)> func) const
+	kxf::Enumerator<kxf::String> DefaultApplication::EnumCommandLineArgs() const
 	{
 		if (m_CommandLineParser)
 		{
-			size_t count = 0;
-			for (size_t i = 0; i < m_CommandLineParser->GetParamCount(); i++)
-			{
-				count++;
-				if (!std::invoke(func, m_CommandLineParser->GetParam(i)))
-				{
-					break;
-				}
-			}
-			return count;
+			return m_CommandLineParser->EnumParameters();
 		}
-		return 0;
+		return {};
 	}
-	void DefaultApplication::OnCommandLineInit(wxCmdLineParser& parser)
+	void DefaultApplication::OnCommandLineInit(kxf::CommandLineParser& parser)
 	{
 		m_CommandLineParser = &parser;
 
-		parser.SetSwitchChars("-");
+		parser.SetSwitchCharacters("-");
 		parser.AddOption(CmdLineName::GameInstance, {}, "Game instance ID");
 		parser.AddOption(CmdLineName::AddDownload, {}, "Download URI");
 		parser.AddOption(CmdLineName::SettingsDirectory, {}, "Directory path for application-wide config");
 	}
-	bool DefaultApplication::OnCommandLineParsed(wxCmdLineParser& parser)
+	bool DefaultApplication::OnCommandLineParsed(kxf::CommandLineParser& parser)
 	{
-		if (kxf::String path; parser.Found(CmdLineName::SettingsDirectory, &path.GetWxString()))
+		if (auto path = parser.GetStringOption(CmdLineName::SettingsDirectory))
 		{
-			m_GlobalConfigOverride = std::move(path);
+			m_GlobalConfigOverride = std::move(*path);
 		}
 
 		return true;
 	}
-	bool DefaultApplication::OnCommandLineError(wxCmdLineParser& parser)
+	bool DefaultApplication::OnCommandLineError(kxf::CommandLineParser& parser)
 	{
 		if (m_CommandLineParser)
 		{
-			m_CommandLineParser->Usage();
+			m_CommandLineParser->ShowUsage();
 		}
 		return false;
 	}
-	bool DefaultApplication::OnCommandLineHelp(wxCmdLineParser& parser)
+	bool DefaultApplication::OnCommandLineHelp(kxf::CommandLineParser& parser)
 	{
 		if (m_CommandLineParser)
 		{
-			m_CommandLineParser->Usage();
+			m_CommandLineParser->ShowUsage();
 		}
 		return false;
 	}

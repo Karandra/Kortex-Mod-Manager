@@ -26,7 +26,7 @@ namespace Kortex
 			BroadcastProcessor m_BroadcastProcessor;
 			kxf::AndroidLocalizationPackage m_EmptyLocalizationPackage;
 
-			std::unique_ptr<IApplication> m_Application;
+			std::shared_ptr<IApplication> m_Application;
 			wxSingleInstanceChecker m_SingleInstance;
 			kxf::FSPath m_RootDirectory;
 
@@ -51,16 +51,16 @@ namespace Kortex
 			void OnFatalException() override;
 			bool OnMainLoopException() override;
 			void OnUnhandledException() override;
-			void OnAssertFailure(kxf::String file, int line, kxf::String function, kxf::String condition, kxf::String message) override;
+			void OnAssertFailure(const kxf::String& file, int line, const kxf::String& function, const kxf::String& condition, const kxf::String& message) override;
 
 			const kxf::ILocalizationPackage& GetLocalizationPackage() const override;
 			
 			// ICoreApplication -> ICommandLine
-			size_t EnumCommandLineArgs(std::function<bool(kxf::String)> func) const override;
-			void OnCommandLineInit(wxCmdLineParser& parser) override;
-			bool OnCommandLineParsed(wxCmdLineParser& parser) override;
-			bool OnCommandLineError(wxCmdLineParser& parser) override;
-			bool OnCommandLineHelp(wxCmdLineParser& parser) override;
+			kxf::Enumerator<kxf::String> EnumCommandLineArgs() const override;
+			void OnCommandLineInit(kxf::CommandLineParser& parser) override;
+			bool OnCommandLineParsed(kxf::CommandLineParser& parser) override;
+			bool OnCommandLineError(kxf::CommandLineParser& parser) override;
+			bool OnCommandLineHelp(kxf::CommandLineParser& parser) override;
 
 		public:
 			// SystemApplication

@@ -1,7 +1,6 @@
 #pragma once
 #include "Framework.hpp"
 #include "IResourceManager.h"
-#include <kxf/Drawing/GDIRenderer/GDIBitmap.h>
 
 namespace Kortex
 {
@@ -34,14 +33,6 @@ namespace Kortex
 				if (auto image = GetImage(id))
 				{
 					return image->ToBitmapImage(size, m_InterpolationQuality);
-				}
-				return {};
-			}
-			kxf::GDIBitmap GetGDIImage(const kxf::ResourceID& id, const kxf::Size& size = kxf::Size::UnspecifiedSize()) const
-			{
-				if (auto image = GetImage(id))
-				{
-					return image->ToGDIBitmap(size, m_InterpolationQuality);
 				}
 				return {};
 			}

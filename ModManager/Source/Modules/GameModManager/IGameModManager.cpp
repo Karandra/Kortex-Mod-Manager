@@ -12,7 +12,7 @@ namespace Kortex
 		kxf::MemoryInputStream stream(utf8.data(), utf8.length());
 		if (auto hash = kxf::Crypto::MD5(stream))
 		{
-			return hash->ToString();
+			return hash.ToString();
 		}
 		return {};
 	}

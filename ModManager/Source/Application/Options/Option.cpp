@@ -17,7 +17,7 @@ namespace
 	template<class TXML, class... Args>
 	kxf::XMLNode InitNode(Disposition disposition, TXML&& xml, Args&&... arg)
 	{
-		const kxf::XChar* root = wxS("");
+		const kxf::XChar* root = kxS("");
 		switch (disposition)
 		{
 			case Disposition::Global:
@@ -38,7 +38,7 @@ namespace
 		};
 
 		kxf::String xPath = AppOption::MakeXPath(root, std::forward<Args>(arg)...);
-		xPath.Replace(wxS("::"), wxS("-"));
+		xPath.Replace(kxS("::"), kxS("-"));
 
 		if constexpr(std::is_const_v<std::remove_reference_t<TXML>>)
 		{
@@ -56,13 +56,13 @@ namespace
 		auto classInfo = module.QueryInterface<kxf::RTTI::ClassInfo>();
 		if (auto iid = classInfo->GetIID().ToUniversallyUniqueID())
 		{
-			kxf::String moduleDescriptor = kxf::Format(wxS("Module-[{}]"), iid.ToString());
+			kxf::String moduleDescriptor = kxf::Format(kxS("Module-[{}]"), iid.ToString());
 
-			kxf::XMLNode node = InitNode(disposition, std::forward<TXML>(xml), wxS("Modules"), std::move(moduleDescriptor), std::forward<Args>(arg)...);
+			kxf::XMLNode node = InitNode(disposition, std::forward<TXML>(xml), kxS("Modules"), std::move(moduleDescriptor), std::forward<Args>(arg)...);
 			if constexpr(!std::is_const_v<std::remove_reference_t<TXML>>)
 			{
-				node.SetAttribute(wxS("IID"), iid.ToString(kxf::UUIDFormat::CurlyBraces|kxf::UUIDFormat::HexPrefix|kxf::UUIDFormat::Grouped, wxS(", ")));
-				node.SetAttribute(wxS("Name"), classInfo->GetFullyQualifiedName());
+				node.SetAttribute(kxS("IID"), iid.ToString(kxf::UUIDFormat::CurlyBraces|kxf::UUIDFormat::HexPrefix|kxf::UUIDFormat::Grouped, kxS(", ")));
+				node.SetAttribute(kxS("Name"), classInfo->GetFullyQualifiedName());
 			}
 			return node;
 		}
@@ -82,11 +82,11 @@ namespace Kortex::Application
 			}
 			else if (ref.QueryInterface<IApplication>())
 			{
-				AssignNode(InitNode(disposition, xml, wxS("Application"), branch));
+				AssignNode(InitNode(disposition, xml, kxS("Application"), branch));
 			}
 			else if (ref.QueryInterface<IMainWindow>())
 			{
-				AssignNode(InitNode(disposition, xml, wxS("MainWindow"), branch));
+				AssignNode(InitNode(disposition, xml, kxS("MainWindow"), branch));
 			}
 			else
 			{

@@ -1,29 +1,29 @@
 #pragma once
 #include "Framework.hpp"
 #include "IMainWindow.h"
+#include <kxf/UI/TopLevelWidgets/Window.h>
 
 namespace Kortex::Application
 {
-	class KORTEX_API MainWindow: private kxf::UI::Frame, public kxf::RTTI::Implementation<MainWindow, IMainWindow, kxf::EvtHandler>
+	class KORTEX_API MainWindow: public kxf::RTTI::Implementation<MainWindow, kxf::Widgets::Window, IMainWindow>
 	{
 		private:
-			kxf::UI::Frame* m_Frame = nullptr;
+			kxf::Widgets::Window* m_Frame = nullptr;
 			kxf::UI::AuiToolBar* m_MainToolBar = nullptr;
 			kxf::UI::AuiToolBar* m_QuickToolBar = nullptr;
 			kxf::UI::StatusBarEx* m_StatusBar = nullptr;
-			kxf::UI::Menu m_WorkspacesMenu;
+			//kxf::UI::Menu m_WorkspacesMenu;
 			IWorkspaceContainer* m_WorkspaceContainer = nullptr;
 
 		public:
-			MainWindow();
-			~MainWindow();
+			MainWindow() = default;;
 
 		public:
-			kxf::UI::Frame& GetFrame() override
-			{
-				return *m_Frame;
-			}
-			const kxf::UI::Frame& GetFrame() const override
+			// IWidget
+			bool CreateWidget(std::shared_ptr<IWidget> parent, const kxf::String& text = {}, kxf::Point pos = {}, kxf::Size size = {}) override;
+
+		public:
+			kxf::ITopLevelWidget& GetWidget() const override
 			{
 				return *m_Frame;
 			}
@@ -40,10 +40,10 @@ namespace Kortex::Application
 			{
 				return *m_StatusBar;
 			}
-			kxf::UI::Menu& GetWorkspacesMenu() override
-			{
-				return m_WorkspacesMenu;
-			}
+			//kxf::UI::Menu& GetWorkspacesMenu() override
+			//{
+			//	return m_WorkspacesMenu;
+			//}
 
 			IWorkspaceContainer& GetWorkspaceContainer() override
 			{
@@ -71,9 +71,9 @@ namespace Kortex::Application
 			{
 				return nullptr;
 			}
-			kxf::UI::MenuItem* AddToolBarMenuItem(IWorkspace& workspace) override
-			{
-				return nullptr;
-			}
+			//kxf::UI::MenuItem* AddToolBarMenuItem(IWorkspace& workspace) override
+			//{
+			//	return nullptr;
+			//}
 	};
 }

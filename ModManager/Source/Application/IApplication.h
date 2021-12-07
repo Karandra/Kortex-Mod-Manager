@@ -67,7 +67,7 @@ namespace Kortex
 			virtual kxf::IFileSystem& GetFileSystem(FileSystemOrigin fsOrigin) = 0;
 			virtual kxf::XMLDocument& GetGlobalConfig() = 0;
 			virtual kxf::String GetStartupInstanceID() const = 0;
-			virtual IMainWindow* GetMainWindow() const = 0;
+			virtual std::shared_ptr<IMainWindow> GetMainWindow() const = 0;
 			virtual IResourceManager& GetResourceManager() const = 0;
 
 			virtual kxf::Enumerator<IModule&> EnumModules() = 0;

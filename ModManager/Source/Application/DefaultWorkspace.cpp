@@ -22,10 +22,8 @@ namespace Kortex::Application
 
 		if (OnOpenWorkspace())
 		{
-			wxWindow& window = GetWindow();
-			window.Show();
-			window.PostSizeEvent();
-			window.PostSizeEventToParent();
+			auto& widget = GetWidget();
+			widget.Show();
 
 			Show();
 			m_OpenCount++;
@@ -37,8 +35,8 @@ namespace Kortex::Application
 	{
 		if (OnCloseWorkspace())
 		{
-			wxWindow& window = GetWindow();
-			window.Hide();
+			auto& widget = GetWidget();
+			widget.Hide();
 
 			Hide();
 			return true;
@@ -64,11 +62,11 @@ namespace Kortex::Application
 				m_IsCreated = true;
 
 				// Insert window's sizer into our own sizer
-				wxWindow& window = GetWindow();
+				auto& widget = GetWidget();
 				wxBoxSizer* workspaceSizer = new wxBoxSizer(wxVERTICAL);
 
-				wxSizer* windowSizer = window.GetSizer();
-				window.SetSizer(workspaceSizer, false);
+				wxSizer* windowSizer = widget.GetWxWindow()->GetSizer();
+				widget.GetWxWindow()->SetSizer(workspaceSizer, false);
 
 				if (windowSizer)
 				{
@@ -76,9 +74,9 @@ namespace Kortex::Application
 				}
 				else
 				{
-					for (wxWindow* window: window.GetChildren())
+					for (auto childWidget: widget.EnumChildWidgets())
 					{
-						workspaceSizer->Add(window, 1, wxEXPAND|wxALL, std::min(LayoutConstant::HorizontalSpacing, LayoutConstant::VerticalSpacing));
+						workspaceSizer->Add(childWidget->GetWxWindow(), 1, wxEXPAND|wxALL, std::min(LayoutConstant::HorizontalSpacing, LayoutConstant::VerticalSpacing));
 					}
 				}
 

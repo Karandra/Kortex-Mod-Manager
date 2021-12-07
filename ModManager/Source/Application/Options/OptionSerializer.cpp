@@ -7,6 +7,8 @@
 #include <kxf/UI/Controls/DataView.h>
 #include <kxf/UI/Controls/DataView/MainWindow.h>
 #include <kxf/UI/Windows/SplitterWindow.h>
+#include <kxf/UI/IWidget.h>
+#include <kxf/UI/ITopLevelWidget.h>
 
 namespace
 {
@@ -47,6 +49,48 @@ namespace Kortex::Application::OName
 
 namespace Kortex::Application::OptionSerializer
 {
+	void UILayout::WidgetGeometry(AppOption& option, SerializationMode mode, kxf::IWidget& widget)
+	{
+		kxf::XMLNode geometryNode = option.GetNode().ConstructElement("WidgetGeometry");
+
+		auto topLevelWidget = widget.QueryInterface<kxf::ITopLevelWidget>();
+		if (mode == SerializationMode::Save)
+		{
+			geometryNode.ClearNode();
+			geometryNode.SetAttribute(OName::UIOption, true);
+
+			
+			const bool isMaximized = topLevelWidget ? topLevelWidget->IsMaximized() : false;
+			geometryNode.NewElement("Maximized").SetValue(isMaximized);
+			if (!isMaximized)
+			{
+				kxf::Size size = widget.ToDIP(widget.GetSize());
+
+				kxf::XMLNode sizeNode = geometryNode.NewElement("Size");
+				sizeNode.SetAttribute("Width", size.GetWidth());
+				sizeNode.SetAttribute("Height", size.GetHeight());
+			}
+		}
+		else
+		{
+			kxf::XMLNode sizeNode = geometryNode.GetFirstChildElement("Size");
+
+			kxf::Size size = {sizeNode.GetAttributeInt<int>("Width", kxf::Geometry::DefaultCoord), sizeNode.GetAttributeInt<int>("Height", kxf::Geometry::DefaultCoord)};
+			widget.SetSize(widget.FromDIP(size));
+
+			if (topLevelWidget)
+			{
+				if (geometryNode.GetFirstChildElement("Maximized").GetValueBool())
+				{
+					topLevelWidget->Maximize();
+				}
+				else
+				{
+					topLevelWidget->Center();
+				}
+			}
+		}
+	}
 	void UILayout::DataViewLayout(AppOption& option, SerializationMode mode, kxf::UI::DataView::View& dataView)
 	{
 		using namespace kxf::UI::DataView;
@@ -165,47 +209,6 @@ namespace Kortex::Application::OptionSerializer
 				{
 					container.SwitchWorkspace(*currentWorkspace);
 				}
-			}
-		}
-	}
-	void UILayout::WindowGeometry(AppOption& option, SerializationMode mode, wxTopLevelWindow& window)
-	{
-		kxf::XMLNode geometryNode = option.GetNode().ConstructElement(wxS("WindowGeometry"));
-
-		if (mode == SerializationMode::Save)
-		{
-			geometryNode.ClearNode();
-			geometryNode.SetAttribute(OName::UIOption, true);
-
-			const bool isMaximized = window.IsMaximized();
-			geometryNode.NewElement(wxS("Maximized")).SetValue(isMaximized);
-			if (!isMaximized)
-			{
-				kxf::Size size = window.GetSize();
-
-				kxf::XMLNode sizeNode = geometryNode.NewElement(wxS("Size"));
-				sizeNode.SetAttribute(wxS("Width"), ToDIPX(window, size.GetWidth()));
-				sizeNode.SetAttribute(wxS("Height"), ToDIPX(window, size.GetHeight()));
-			}
-		}
-		else
-		{
-			kxf::XMLNode sizeNode = geometryNode.GetFirstChildElement(wxS("Size"));
-
-			kxf::Size size;
-			size.SetWidth(FromDIPX(window, sizeNode.GetAttributeInt(wxS("Width"), wxDefaultCoord)));
-			size.SetHeight(FromDIPY(window, sizeNode.GetAttributeInt(wxS("Height"), wxDefaultCoord)));
-			size.DecToIfSpecified(window.GetMaxSize());
-			size.IncTo(window.GetMinSize());
-			window.SetSize(size);
-
-			if (geometryNode.GetFirstChildElement(wxS("Maximized")).GetValueBool())
-			{
-				window.Maximize();
-			}
-			else
-			{
-				window.Center();
 			}
 		}
 	}

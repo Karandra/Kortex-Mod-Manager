@@ -3,6 +3,7 @@
 #include "IApplication.h"
 #include "Log.h"
 #include "kxf/Application/ApplicationInitializer.h"
+#include "kxf/Application/CommandLineParser.h"
 #include "kxf/FileSystem/NativeFileSystem.h"
 #include "kxf/FileSystem/FSActionEvent.h"
 #include "kxf/System/Win32Error.h"
@@ -22,11 +23,11 @@ namespace
 
 namespace Kortex::SystemApplicationInfo
 {
-	const constexpr kxf::XChar ID[] = wxS("Kortex.ModManager");
-	const constexpr kxf::XChar Name[] = wxS("Kortex Mod Manager");
-	const constexpr kxf::XChar ShortName[] = wxS("Kortex");
-	const constexpr kxf::XChar Developer[] = wxS("Kerber");
-	const constexpr kxf::XChar Version[] = wxS("2.0");
+	const constexpr kxf::XChar ID[] = kxS("Kortex.ModManager");
+	const constexpr kxf::XChar Name[] = kxS("Kortex Mod Manager");
+	const constexpr kxf::XChar ShortName[] = kxS("Kortex");
+	const constexpr kxf::XChar Developer[] = kxS("Kerber");
+	const constexpr kxf::XChar Version[] = kxS("2.0");
 
 	const constexpr kxf::XChar GitCommitHash[] =
 		#include "../Include/LatestCommit.txt"
@@ -57,7 +58,7 @@ namespace Kortex
 			message = e.ErrorMessage();
 			if (!message.IsEmpty())
 			{
-				message += wxS('\n');
+				message += kxS('\n');
 				message += e.Description().GetBSTR();
 			}
 			else
@@ -139,7 +140,7 @@ namespace Kortex
 				{
 					kxf::IO::OutputStreamWriter writer(*m_Stream);
 					writer.WriteStringUTF8(message);
-					writer.WriteStringUTF8(wxS('\n'));
+					writer.WriteStringUTF8(kxS('\n'));
 
 					m_Stream->Flush();
 				}
@@ -160,10 +161,10 @@ namespace Kortex
 		kxf::IFileSystem& fs = m_Application->GetFileSystem(FileSystemOrigin::AppLogs);
 
 		// Make a vlaid log file name
-		kxf::String name = kxf::Format(wxS("Log[{}].log"), kxf::DateTime::Now().FormatISOCombined(' '));
+		kxf::String name = kxf::Format(kxS("Log[{}].log"), kxf::DateTime::Now().FormatISOCombined(' '));
 		for (kxf::XChar c: fs.GetForbiddenPathNameCharacters())
 		{
-			name.Replace(c, wxS('.'));
+			name.Replace(c, kxS('.'));
 		}
 
 		// Create the log target or use a default one
@@ -209,7 +210,7 @@ namespace Kortex
 			variables.SetItem("App", "Developer", SystemApplicationInfo::Developer);
 			variables.SetItem("App", "Version", SystemApplicationInfo::Version);
 			variables.SetItem("App", "UniqueID", kxf::UniversallyUniqueID(kxf::RTTI::GetInterfaceID<IApplication>().ToNativeUUID()).ToString());
-			variables.SetItem("App", "CommitHash", kxf::String(SystemApplicationInfo::GitCommitHash).Trim().Trim(kxf::StringOpFlag::FromEnd));
+			variables.SetItem("App", "CommitHash", kxf::String(SystemApplicationInfo::GitCommitHash).Trim().Trim(kxf::StringActionFlag::FromEnd));
 			variables.SetItem("App", "RootDirectory", m_RootDirectory);
 
 			variables.SetItem("App", "Platform", m_Application->Is64Bit() ? "Win64" : "Win32");
@@ -264,7 +265,7 @@ namespace Kortex
 			Exit(exitCode);
 		}
 	}
-	void SystemApplication::OnAssertFailure(kxf::String file, int line, kxf::String function, kxf::String condition, kxf::String message)
+	void SystemApplication::OnAssertFailure(const kxf::String& file, int line, const kxf::String& function, const kxf::String& condition, const kxf::String& message)
 	{
 		Log::Debug("<SystemApplication::OnAssertFailure> {}:{}; [Function={}][Condition={}][Message={}]", file, line, function, condition, message);
 	}
@@ -275,11 +276,11 @@ namespace Kortex
 	}
 
 	// ICoreApplication -> ICommandLine
-	size_t SystemApplication::EnumCommandLineArgs(std::function<bool(kxf::String)> func) const
+	kxf::Enumerator<kxf::String> SystemApplication::EnumCommandLineArgs() const
 	{
-		return GUIApplication::EnumCommandLineArgs(std::move(func));
+		return GUIApplication::EnumCommandLineArgs();
 	}
-	void SystemApplication::OnCommandLineInit(wxCmdLineParser& parser)
+	void SystemApplication::OnCommandLineInit(kxf::CommandLineParser& parser)
 	{
 		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())
 		{
@@ -288,7 +289,7 @@ namespace Kortex
 
 		GUIApplication::OnCommandLineInit(parser);
 	}
-	bool SystemApplication::OnCommandLineParsed(wxCmdLineParser& parser)
+	bool SystemApplication::OnCommandLineParsed(kxf::CommandLineParser& parser)
 	{
 		bool result = false;
 		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())
@@ -297,7 +298,7 @@ namespace Kortex
 		}
 		return result || GUIApplication::OnCommandLineParsed(parser);
 	}
-	bool SystemApplication::OnCommandLineError(wxCmdLineParser& parser)
+	bool SystemApplication::OnCommandLineError(kxf::CommandLineParser& parser)
 	{
 		bool result = false;
 		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())
@@ -306,7 +307,7 @@ namespace Kortex
 		}
 		return result || GUIApplication::OnCommandLineError(parser);
 	}
-	bool SystemApplication::OnCommandLineHelp(wxCmdLineParser& parser)
+	bool SystemApplication::OnCommandLineHelp(kxf::CommandLineParser& parser)
 	{
 		bool result = false;
 		if (auto commandLine = m_Application->QueryInterface<kxf::Application::ICommandLine>())

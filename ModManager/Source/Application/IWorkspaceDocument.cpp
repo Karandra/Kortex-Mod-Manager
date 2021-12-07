@@ -4,13 +4,14 @@
 #include "IApplication.h"
 #include "Localization.h"
 #include <kxf/UI/Dialogs/TaskDialog.h>
+#include <kxf/UI/IWidget.h>
 
 namespace Kortex
 {
 	kxf::String IWorkspaceDocument::GetSaveConfirmationCaption() const
 	{
 		auto workspace = QueryInterface<IWorkspace>();
-		return kxf::Format(wxS("{} – {}"), workspace->GetName(), Localize("WorkspaceDocument.SaveChanges.Caption"));
+		return kxf::Format(kxS("{} – {}"), workspace->GetName(), Localize("WorkspaceDocument.SaveChanges.Caption"));
 	}
 	kxf::String IWorkspaceDocument::GetSaveConfirmationMessage() const
 	{
@@ -24,7 +25,7 @@ namespace Kortex
 		auto workspace = QueryInterface<IWorkspace>();
 		if (workspace && HasUnsavedChanges())
 		{
-			UI::TaskDialog dialog(&workspace->GetWindow(), wxID_NONE, GetSaveConfirmationCaption(), GetSaveConfirmationMessage(), canCancel ? StdButton::Cancel : StdButton::None);
+			UI::TaskDialog dialog(workspace->GetWidget().GetWxWindow(), wxID_NONE, GetSaveConfirmationCaption(), GetSaveConfirmationMessage(), canCancel ? StdButton::Cancel : StdButton::None);
 			dialog.SetMainIcon(StdIcon::Warning);
 			dialog.AddButton(StdID::Yes, Localize("Controller.SaveChanges.Save"));
 			dialog.AddButton(StdID::No, Localize("Controller.SaveChanges.Discard"));

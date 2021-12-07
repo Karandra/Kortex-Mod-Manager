@@ -5,8 +5,7 @@
 #include "IWorkspaceContainer.h"
 #include <kxf/UI/Controls/AUI/AuiToolBar.h>
 #include <kxf/UI/Controls/StatusBarEx.h>
-#include <kxf/UI/Windows/Frame.h>
-#include <kxf/UI/Menus/Menu.h>
+#include <kxf/UI/ITopLevelWidget.h>
 
 namespace Kortex
 {
@@ -37,13 +36,12 @@ namespace Kortex
 			void CreateWorkspaces();
 
 		public:
-			virtual kxf::UI::Frame& GetFrame() = 0;
-			virtual const kxf::UI::Frame& GetFrame() const = 0;
+			virtual kxf::ITopLevelWidget& GetWidget() const = 0;
 
 			virtual kxf::UI::AuiToolBar& GetMainToolBar() = 0;
 			virtual kxf::UI::AuiToolBar& GetQuickToolBar() = 0;
 			virtual kxf::UI::StatusBarEx& GetStatusBar() = 0;
-			virtual kxf::UI::Menu& GetWorkspacesMenu() = 0;
+			//virtual kxf::UI::Menu& GetWorkspacesMenu() = 0;
 
 			virtual IWorkspaceContainer& GetWorkspaceContainer() = 0;
 			virtual const IWorkspaceContainer& GetWorkspaceContainer() const = 0;
@@ -54,6 +52,6 @@ namespace Kortex
 			virtual void SetStatusProgress(int64_t current, int64_t total) = 0;
 
 			virtual kxf::UI::AuiToolBarItem* AddToolBarItem(IWorkspace& workspace) = 0;
-			virtual kxf::UI::MenuItem* AddToolBarMenuItem(IWorkspace& workspace) = 0;
+			//virtual kxf::UI::MenuItem* AddToolBarMenuItem(IWorkspace& workspace) = 0;
 	};
 }

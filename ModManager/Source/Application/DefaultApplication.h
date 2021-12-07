@@ -19,7 +19,7 @@ namespace Kortex
 			std::unique_ptr<BroadcastReceiver> m_BroadcastReceiver;
 			kxf::LocalizationPackageStack m_LocalizationPackages;
 			kxf::DynamicVariablesCollection m_Variables;
-			wxCmdLineParser* m_CommandLineParser = nullptr;
+			kxf::CommandLineParser* m_CommandLineParser = nullptr;
 
 			kxf::NativeFileSystem m_UnscopedFS;
 			kxf::ScopedNativeFileSystem m_AppRootFS;
@@ -34,9 +34,9 @@ namespace Kortex
 			kxf::FSPath m_GlobalConfigOverride;
 			bool m_GlobalConfigChanged = false;
 
-			IMainWindow* m_MainWindow = nullptr;
-			std::unique_ptr<IResourceManager> m_ResourceManager;
-			std::vector<std::unique_ptr<IModule>> m_LoadedModules;
+			std::weak_ptr<IMainWindow> m_MainWindow;
+			std::shared_ptr<IResourceManager> m_ResourceManager;
+			std::vector<std::shared_ptr<IModule>> m_LoadedModules;
 
 			std::unordered_map<kxf::String, std::unique_ptr<IGameDefinition>> m_GameDefinitions;
 			std::unordered_map<kxf::String, std::unique_ptr<IGameInstance>> m_GameInstances;
@@ -80,9 +80,9 @@ namespace Kortex
 			{
 				return {};
 			}
-			IMainWindow* GetMainWindow() const override
+			std::shared_ptr<IMainWindow> GetMainWindow() const override
 			{
-				return m_MainWindow;
+				return m_MainWindow.lock();
 			}
 			IResourceManager& GetResourceManager() const override
 			{
@@ -113,10 +113,10 @@ namespace Kortex
 			{
 			}
 
-			size_t EnumCommandLineArgs(std::function<bool(kxf::String)> func) const override;
-			void OnCommandLineInit(wxCmdLineParser& parser) override;
-			bool OnCommandLineParsed(wxCmdLineParser& parser) override;
-			bool OnCommandLineError(wxCmdLineParser& parser) override;
-			bool OnCommandLineHelp(wxCmdLineParser& parser) override;
+			kxf::Enumerator<kxf::String> EnumCommandLineArgs() const override;
+			void OnCommandLineInit(kxf::CommandLineParser& parser) override;
+			bool OnCommandLineParsed(kxf::CommandLineParser& parser) override;
+			bool OnCommandLineError(kxf::CommandLineParser& parser) override;
+			bool OnCommandLineHelp(kxf::CommandLineParser& parser) override;
 	};
 }

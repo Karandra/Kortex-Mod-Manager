@@ -6,24 +6,24 @@ namespace
 {
 	constexpr struct
 	{
-		static constexpr kxf::XChar Namespace[] = wxS("Definition");
-		static constexpr kxf::XChar XMLFileName[] = wxS("Definition.xml");
+		static constexpr kxf::XChar Namespace[] = kxS("Definition");
+		static constexpr kxf::XChar XMLFileName[] = kxS("Definition.xml");
 
-		static constexpr kxf::XChar Name[] = wxS("Name");
-		static constexpr kxf::XChar GameName[] = wxS("GameName");
-		static constexpr kxf::XChar GameNameShort[] = wxS("GameNameShort");
-		static constexpr kxf::XChar SortOrder[] = wxS("SortOrder");
+		static constexpr kxf::XChar Name[] = kxS("Name");
+		static constexpr kxf::XChar GameName[] = kxS("GameName");
+		static constexpr kxf::XChar GameNameShort[] = kxS("GameNameShort");
+		static constexpr kxf::XChar SortOrder[] = kxS("SortOrder");
 
-		static constexpr kxf::XChar RootDirectory[] = wxS("RootDirectory");
-		static constexpr kxf::XChar GameDirectory[] = wxS("GameDirectory");
+		static constexpr kxf::XChar RootDirectory[] = kxS("RootDirectory");
+		static constexpr kxf::XChar GameDirectory[] = kxS("GameDirectory");
 	} g_DefinitionNames;
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar Namespace[] = wxS("Resource");
+		static constexpr kxf::XChar Namespace[] = kxS("Resource");
 
-		static constexpr kxf::XChar Directory[] = wxS("Directory");
-		static constexpr kxf::XChar Icon[] = wxS("Icon");
+		static constexpr kxf::XChar Directory[] = kxS("Directory");
+		static constexpr kxf::XChar Icon[] = kxS("Icon");
 	} g_ResourceNames;
 }
 

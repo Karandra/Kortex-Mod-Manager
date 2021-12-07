@@ -171,9 +171,6 @@
     <ClCompile Include="Source\Application\BroadcastProcessor.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Application\Log.cpp">
-      <Filter>Source\Application</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application\IApplication.cpp">
       <Filter>Source\Application</Filter>
     </ClCompile>

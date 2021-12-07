@@ -21,23 +21,19 @@ namespace Kortex::Application
 
 		public:
 			// BookWorkspaceContainer
-			wxBookCtrlBase& GetBookCtrl()
+			wxBookCtrlBase& GetBookCtrl() const
 			{
-				return static_cast<wxBookCtrlBase&>(GetWindow());
-			}
-			const wxBookCtrlBase& GetBookCtrl() const
-			{
-				return static_cast<const wxBookCtrlBase&>(GetWindow());
+				return static_cast<wxBookCtrlBase&>(*GetWidget().GetWxWindow());
 			}
 
 			// IWorkspaceContainer
 			IWorkspaceContainer* GetParentContainer()
 			{
-				return dynamic_cast<IWorkspaceContainer*>(GetWindow().GetParent());
+				return dynamic_cast<IWorkspaceContainer*>(GetWidget().GetWxWindow()->GetParent());
 			}
 			const IWorkspaceContainer* GetParentContainer() const
 			{
-				return dynamic_cast<const IWorkspaceContainer*>(GetWindow().GetParent());
+				return dynamic_cast<const IWorkspaceContainer*>(GetWidget().GetWxWindow()->GetParent());
 			}
 
 			IWorkspace* GetWorkspaceByID(const kxf::String& id) const override;

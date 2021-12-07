@@ -1,7 +1,10 @@
 #pragma once
 #include "Framework.hpp"
 
-class wxTopLevelWindow;
+namespace kxf
+{
+	class IWidget;
+}
 namespace kxf::UI
 {
 	class SplitterWindow;
@@ -31,9 +34,9 @@ namespace Kortex::Application::OptionSerializer
 	class KORTEX_API UILayout final
 	{
 		public:
+			static void WidgetGeometry(AppOption& option, SerializationMode mode, kxf::IWidget& widget);
 			static void DataViewLayout(AppOption& option, SerializationMode mode, kxf::UI::DataView::View& dataView);
 			static void SplitterLayout(AppOption& option, SerializationMode mode, kxf::UI::SplitterWindow& window);
 			static void WorkspaceContainerLayout(AppOption& option, SerializationMode mode, IWorkspaceContainer& container);
-			static void WindowGeometry(AppOption& option, SerializationMode mode, wxTopLevelWindow& window);
 	};
 }

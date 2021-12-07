@@ -8,28 +8,28 @@ namespace
 {
 	constexpr struct
 	{
-		static constexpr kxf::XChar XMLFileName[] = wxS("Profile.xml");
+		static constexpr kxf::XChar XMLFileName[] = kxS("Profile.xml");
 
-		static constexpr kxf::XChar Item[] = wxS("Item");
+		static constexpr kxf::XChar Item[] = kxS("Item");
 	} g_ProfileNames;
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar Root[] = wxS("GameMods");
-		static constexpr kxf::XChar ItemsRoot[] = wxS("GameMods/Items");
+		static constexpr kxf::XChar Root[] = kxS("GameMods");
+		static constexpr kxf::XChar ItemsRoot[] = kxS("GameMods/Items");
 	} g_GameModNames;
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar Root[] = wxS("GamePlugins");
-		static constexpr kxf::XChar ItemsRoot[] = wxS("GamePlugins/Items");
+		static constexpr kxf::XChar Root[] = kxS("GamePlugins");
+		static constexpr kxf::XChar ItemsRoot[] = kxS("GamePlugins/Items");
 	} g_GamePluginNames;
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar Name[] = wxS("Name");
-		static constexpr kxf::XChar Signature[] = wxS("Signature");
-		static constexpr kxf::XChar Active[] = wxS("Active");
+		static constexpr kxf::XChar Name[] = kxS("Name");
+		static constexpr kxf::XChar Signature[] = kxS("Signature");
+		static constexpr kxf::XChar Active[] = kxS("Active");
 	} g_AttributeNames;
 }
 
@@ -109,9 +109,9 @@ namespace Kortex
 
 		if (m_RootFS = fileSystem.GetLookupDirectory())
 		{
-			m_GameSavesFS = m_RootFS.GetLookupDirectory() / wxS("GameSaves");
-			m_GameConfigFS = m_RootFS.GetLookupDirectory() / wxS("GameConfig");
-			m_WriteTargetFS = m_RootFS.GetLookupDirectory() / wxS("WriteTarget");
+			m_GameSavesFS = m_RootFS.GetLookupDirectory() / kxS("GameSaves");
+			m_GameConfigFS = m_RootFS.GetLookupDirectory() / kxS("GameConfig");
+			m_WriteTargetFS = m_RootFS.GetLookupDirectory() / kxS("WriteTarget");
 
 			if (auto stream = fileSystem.OpenToRead(g_ProfileNames.XMLFileName); stream && m_ProfileData.Load(*stream))
 			{

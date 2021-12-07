@@ -175,7 +175,6 @@
     <ClCompile Include="Source\Application\IWorkspaceContainer.cpp" />
     <ClCompile Include="Source\Application\IWorkspaceDocument.cpp" />
     <ClCompile Include="Source\Application\Localization.cpp" />
-    <ClCompile Include="Source\Application\Log.cpp" />
     <ClCompile Include="Source\Application\MainWindow.cpp" />
     <ClCompile Include="Source\Application\Options\Option.cpp" />
     <ClCompile Include="Source\Application\Options\OptionSerializer.cpp" />

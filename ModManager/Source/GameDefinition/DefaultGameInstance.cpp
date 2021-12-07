@@ -9,33 +9,33 @@ namespace
 {
 	constexpr struct
 	{
-		static constexpr kxf::XChar Namespace[] = wxS("Instance");
-		static constexpr kxf::XChar XMLFileName[] = wxS("Instance.xml");
+		static constexpr kxf::XChar Namespace[] = kxS("Instance");
+		static constexpr kxf::XChar XMLFileName[] = kxS("Instance.xml");
 
-		static constexpr kxf::XChar Name[] = wxS("Name");
-		static constexpr kxf::XChar DefinitionName[] = wxS("DefinitionName");
+		static constexpr kxf::XChar Name[] = kxS("Name");
+		static constexpr kxf::XChar DefinitionName[] = kxS("DefinitionName");
 
-		static constexpr kxf::XChar GameDirectory[] = wxS("GameDirectory");
-		static constexpr kxf::XChar ModsDirectory[] = wxS("ModsDirectory");
-		static constexpr kxf::XChar ProfilesDirectory[] = wxS("ProfilesDirectory");
-		static constexpr kxf::XChar DownloadsDirectory[] = wxS("DownloadsDirectory");
-		static constexpr kxf::XChar MountedGame[] = wxS("MountedGame");
+		static constexpr kxf::XChar GameDirectory[] = kxS("GameDirectory");
+		static constexpr kxf::XChar ModsDirectory[] = kxS("ModsDirectory");
+		static constexpr kxf::XChar ProfilesDirectory[] = kxS("ProfilesDirectory");
+		static constexpr kxf::XChar DownloadsDirectory[] = kxS("DownloadsDirectory");
+		static constexpr kxf::XChar MountedGame[] = kxS("MountedGame");
 	} g_InstanceNames;
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar Namespace[] = wxS("ActiveProfile");
+		static constexpr kxf::XChar Namespace[] = kxS("ActiveProfile");
 
-		static constexpr kxf::XChar RootDirectory[] = wxS("RootDirectory");
-		static constexpr kxf::XChar GameSavesDirectory[] = wxS("GameSavesDirectory");
-		static constexpr kxf::XChar GameConfigDirectory[] = wxS("GameConfigDirectory");
-		static constexpr kxf::XChar WriteTargetDirectory[] = wxS("WriteTargetDirectory");
+		static constexpr kxf::XChar RootDirectory[] = kxS("RootDirectory");
+		static constexpr kxf::XChar GameSavesDirectory[] = kxS("GameSavesDirectory");
+		static constexpr kxf::XChar GameConfigDirectory[] = kxS("GameConfigDirectory");
+		static constexpr kxf::XChar WriteTargetDirectory[] = kxS("WriteTargetDirectory");
 	} g_ActiveProfileNames;
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar Active[] = wxS("Active");
-		static constexpr kxf::XChar GameProfiles[] = wxS("GameProfiles");
+		static constexpr kxf::XChar Active[] = kxS("Active");
+		static constexpr kxf::XChar GameProfiles[] = kxS("GameProfiles");
 	} g_OptionNames;
 }
 
@@ -88,7 +88,7 @@ namespace Kortex
 		AddActiveProfileFSPath(IGameProfile::Location::WriteTarget, g_ActiveProfileNames.WriteTargetDirectory);
 
 		// Load variables from the XML
-		GameInstance::Private::VariableLoader loader(m_Variables, variablesRoot, g_InstanceNames.Namespace, m_Definition->GetName() + wxS('/') + m_Name);
+		GameInstance::Private::VariableLoader loader(m_Variables, variablesRoot, g_InstanceNames.Namespace, m_Definition->GetName() + kxS('/') + m_Name);
 		loader.OnFSPath([&](const kxf::String& type, const kxf::String& ns, const kxf::String& name, const kxf::FSPath& value)
 		{
 			if (ns == g_InstanceNames.Namespace)
@@ -190,10 +190,10 @@ namespace Kortex
 		
 		if (m_RootFS = fileSystem.GetLookupDirectory())
 		{
-			m_ModsFS = m_RootFS.GetLookupDirectory() / wxS("Mods");
-			m_ProfilesFS = m_RootFS.GetLookupDirectory() / wxS("Profiles");
-			m_DownloadsFS = m_RootFS.GetLookupDirectory() / wxS("Downloads");
-			m_MountedGameFS = m_RootFS.GetLookupDirectory() / wxS("MountedGame");
+			m_ModsFS = m_RootFS.GetLookupDirectory() / kxS("Mods");
+			m_ProfilesFS = m_RootFS.GetLookupDirectory() / kxS("Profiles");
+			m_DownloadsFS = m_RootFS.GetLookupDirectory() / kxS("Downloads");
+			m_MountedGameFS = m_RootFS.GetLookupDirectory() / kxS("MountedGame");
 
 			if (auto stream = fileSystem.OpenToRead(g_InstanceNames.XMLFileName); stream && m_InstanceData.Load(*stream))
 			{

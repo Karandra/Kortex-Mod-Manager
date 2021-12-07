@@ -66,11 +66,7 @@ namespace Kortex
 				return nullptr;
 			}
 
-			virtual wxWindow& GetWindow() = 0;
-			const wxWindow& GetWindow() const
-			{
-				return const_cast<IWorkspace&>(*this).GetWindow();
-			}
+			virtual kxf::IWidget& GetWidget() const = 0;
 
 			kxf::String GetID() const;
 			virtual kxf::String GetName() const = 0;

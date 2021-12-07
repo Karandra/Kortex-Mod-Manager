@@ -4,11 +4,6 @@
 #include <kxf/Drawing/IBitmapImage.h>
 #include <kxf/Drawing/BitmapImage.h>
 
-namespace kxf
-{
-	class GDIBitmap;
-}
-
 namespace Kortex
 {
 	class KORTEX_API IResourceManager: public kxf::RTTI::Interface<IResourceManager>
@@ -26,6 +21,5 @@ namespace Kortex
 			virtual std::shared_ptr<kxf::IImage2D> GetImage(const kxf::ResourceID& id) const = 0;
 
 			virtual kxf::BitmapImage GetBitmapImage(const kxf::ResourceID& id, const kxf::Size& size = kxf::Size::UnspecifiedSize()) const = 0;
-			virtual kxf::GDIBitmap GetGDIImage(const kxf::ResourceID& id, const kxf::Size& size = kxf::Size::UnspecifiedSize()) const = 0;
 	};
 }

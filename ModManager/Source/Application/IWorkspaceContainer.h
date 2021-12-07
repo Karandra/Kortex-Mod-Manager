@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework.hpp"
 #include "IWorkspace.h"
+#include <kxf/UI/IWidget.h>
 
 namespace Kortex
 {
@@ -28,8 +29,7 @@ namespace Kortex
 			virtual ~IWorkspaceContainer() = default;
 
 		public:
-			virtual wxWindow& GetWindow() = 0;
-			virtual const wxWindow& GetWindow() const = 0;
+			virtual kxf::IWidget& GetWidget() const = 0;
 
 			virtual IWorkspaceContainer* GetParentContainer()
 			{

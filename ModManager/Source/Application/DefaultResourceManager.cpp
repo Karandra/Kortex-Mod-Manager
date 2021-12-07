@@ -8,14 +8,14 @@ namespace
 {
 	constexpr struct
 	{
-		static constexpr kxf::XChar Any[] = wxS("any");
-		static constexpr kxf::XChar Vector[] = wxS("vector");
-		static constexpr kxf::XChar Bitmap[] = wxS("bitmap");
+		static constexpr kxf::XChar Any[] = kxS("any");
+		static constexpr kxf::XChar Vector[] = kxS("vector");
+		static constexpr kxf::XChar Bitmap[] = kxS("bitmap");
 	} g_SchemeNames;
 
 	constexpr struct
 	{
-		static constexpr kxf::XChar UI[] = wxS("ui");
+		static constexpr kxf::XChar UI[] = kxS("ui");
 	} g_ServerNames;
 }
 
@@ -60,10 +60,10 @@ namespace Kortex
 	}
 	void DefaultResourceManager::LoadDynamic()
 	{
-		m_Images.insert_or_assign(MakeResourceIDWithCategory(g_ServerNames.UI, wxS("generic-game-logo"), g_SchemeNames.Bitmap), []()
+		m_Images.insert_or_assign(MakeResourceIDWithCategory(g_ServerNames.UI, kxS("generic-game-logo"), g_SchemeNames.Bitmap), []()
 		{
 			kxf::FileItem item;
-			item.SetFileExtension(wxS("exe"));
+			item.SetFileExtension(kxS("exe"));
 			item.SetAttributes(kxf::FileAttribute::Normal);
 
 			return std::make_shared<kxf::BitmapImage>(kxf::Shell::GetFileIcon(item, kxf::SHGetFileIconFlag::Large));

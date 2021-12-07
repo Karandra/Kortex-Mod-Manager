@@ -31,7 +31,7 @@ namespace Kortex
 	}
 	bool IWorkspace::IsActive() const
 	{
-		return IsCurrent() && GetWindow().IsShown();
+		return IsCurrent() && GetWidget().IsDisplayed();
 	}
 	bool IWorkspace::IsSubWorkspace() const
 	{

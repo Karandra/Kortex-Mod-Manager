@@ -13,19 +13,16 @@ namespace Kortex::Application
 			{
 			}
 			BookSimpleWorkspaceContainer(IWorkspaceContainer& parent)
-				:wxSimplebook(&parent.GetWindow(), wxID_NONE)
+				:wxSimplebook(parent.GetWidget().GetWxWindow(), wxID_NONE)
 			{
 			}
 
 		public:
 			// IWorkspaceContainer
-			wxWindow& GetWindow() override
+			kxf::IWidget& GetWidget() const override
 			{
-				return *this;
-			}
-			const wxWindow& GetWindow() const override
-			{
-				return *this;
+				// TODO: Dirty hack for a test!!!!
+				return *reinterpret_cast<kxf::IWidget*>(const_cast<BookSimpleWorkspaceContainer*>(this));
 			}
 	};
 }
